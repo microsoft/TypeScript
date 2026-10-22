@@ -1,10 +1,11 @@
 package wasmreactor
 
 import (
-	"bytes"
 	"context"
+	"io"
 	"testing"
 
+	"github.com/microsoft/TypeScript/tsc/internal/api"
 	"github.com/microsoft/TypeScript/tsc/internal/json"
 	"github.com/microsoft/TypeScript/tsc/internal/tspath"
 	"gotest.tools/v3/assert"
@@ -16,45 +17,44 @@ func TestReactor(t *testing.T) {
 	reactor := New(context.Background(), Options{Cwd: "/"})
 	defer reactor.Close()
 
-	if err := reactor.SetFile("/src/index.ts", "export const value = 1;"); err != nil {
-		t.Fatal(err)
-	}
-	if contents, ok := reactor.ReadFile("/src/index.ts"); !ok || contents != "export const value = 1;" {
-		t.Fatalf("ReadFile() = %q, %v", contents, ok)
-	}
-	if _, ok := reactor.ReadFile("/src/missing.ts"); ok {
-		t.Fatal("ReadFile() found a missing file")
+	assert.NilError(t, reactor.SetFile("/src/index.ts", "export const value = 1;"))
+	contents, ok := reactor.ReadFile("/src/index.ts")
+	assert.Assert(t, ok)
+	assert.Equal(t, contents, "export const value = 1;")
+	_, ok = reactor.ReadFile("/src/missing.ts")
+	assert.Assert(t, !ok)
+
+	assert.Assert(t, reactor.Send(Message{Type: api.MessageTypeRequest, Method: "echo"}) != nil)
+	assert.NilError(t, reactor.Start(nil))
+	assert.Assert(t, reactor.Start(nil) != nil)
+
+	request := func(method string, payload []byte) Message {
+		t.Helper()
+		assert.NilError(t, reactor.Send(Message{Type: api.MessageTypeRequest, Method: method, Payload: payload}))
+		response, err := reactor.Receive()
+		assert.NilError(t, err)
+		assert.Equal(t, response.Type, api.MessageTypeResponse)
+		assert.Equal(t, response.Method, method)
+		return response
 	}
 
-	initialize, err := reactor.HandleRequest("initialize", nil)
-	if err != nil {
-		t.Fatal(err)
-	}
 	var initializeResponse struct {
 		CurrentDirectory string `json:"currentDirectory"`
 	}
-	if unmarshalErr := json.Unmarshal(initialize, &initializeResponse); unmarshalErr != nil {
-		t.Fatal(unmarshalErr)
-	}
-	if initializeResponse.CurrentDirectory != "/" {
-		t.Fatalf("currentDirectory = %q, want /", initializeResponse.CurrentDirectory)
-	}
+	assert.NilError(t, json.Unmarshal(request("initialize", nil).Payload, &initializeResponse))
+	assert.Equal(t, initializeResponse.CurrentDirectory, "/")
+	assert.DeepEqual(t, request("echo", []byte("reactor")).Payload, []byte("reactor"))
 
-	payload := []byte("reactor")
-	echo, err := reactor.HandleRequest("echo", payload)
-	if err != nil {
-		t.Fatal(err)
-	}
-	if !bytes.Equal(echo, payload) {
-		t.Fatalf("echo = %q", echo)
-	}
+	_, err := reactor.Receive()
+	assert.Equal(t, err, ErrIdle)
 
-	if err := reactor.RemoveFile("/src/index.ts"); err != nil {
-		t.Fatal(err)
-	}
-	if _, ok := reactor.files.ReadFile("/src/index.ts"); ok {
-		t.Fatal("removed file still exists")
-	}
+	assert.NilError(t, reactor.RemoveFile("/src/index.ts"))
+	_, ok = reactor.ReadFile("/src/index.ts")
+	assert.Assert(t, !ok)
+
+	reactor.Close()
+	_, err = reactor.Receive()
+	assert.Equal(t, err, io.EOF)
 }
 
 func TestMemFS(t *testing.T) {

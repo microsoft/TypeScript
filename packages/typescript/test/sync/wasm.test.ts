@@ -270,36 +270,21 @@ describe("API over WebAssembly", () => {
         assert.ok(!WebAssembly.Module.exports(module).some((value: { name: string; }) => value.name === "_initialize"));
         const instance = await instantiateWasm(module, { stdout: undefined, stderr: undefined });
 
-        assert.throws(
-            () =>
-                new WasmTransport({
-                    instance: { exports: instance.exports },
-                    cwd: undefined,
-                    useCaseSensitiveFileNames: undefined,
-                    collectTiming: undefined,
-                    fs: { writeFile() {} },
-                }),
-            /was not created by instantiateWasm/,
-        );
-
         const emittedFiles = new Map<string, string>();
-        const memory = Reflect.get(instance.exports, "memory");
-        assert.ok(memory instanceof WebAssembly.Memory);
-        let transport!: WasmTransport;
-        transport = new WasmTransport({
+        const transport: WasmTransport = new WasmTransport({
             instance,
             cwd: "/",
             fs: {
+                directoryExists: serverFS.useOS,
+                fileExists: serverFS.useOS,
+                getAccessibleEntries: serverFS.useOS,
+                readFile: serverFS.useOS,
+                realpath: serverFS.useOS,
+                stat: serverFS.useOS,
+                removeFile: serverFS.useOS,
                 writeFile(path, data) {
-                    memory.grow(0);
-                    assert.throws(
-                        () => transport.close(),
-                        /TypeScript WASM callbacks cannot close the same API transport/,
-                    );
-                    assert.throws(
-                        () => transport.readFile("/src/index.ts"),
-                        /TypeScript WASM callbacks cannot call the same API transport/,
-                    );
+                    // Callbacks may make nested requests, as with a separate server process.
+                    assert.strictEqual(transport.requestSync("echo", "nested"), "nested");
                     emittedFiles.set(path, data);
                 },
             },
@@ -328,11 +313,7 @@ describe("API over WebAssembly", () => {
         const project = snapshot.getDefaultProjectForFile("/src/index.ts");
         assert.ok(project);
         assert.throws(
-            () =>
-                new WasmTransport({
-                    instance,
-                    fs: { writeFile() {} },
-                }),
+            () => new WasmTransport({ instance }),
             /session already created/,
         );
         assert.deepStrictEqual(project.program.emit(), {
@@ -344,25 +325,10 @@ describe("API over WebAssembly", () => {
         assert.strictEqual(emittedFiles.get("/src/index.js"), "\uFEFFexport const value = 42;\n");
         assert.strictEqual(transport.requestSync("echo", "after callback"), "after callback");
 
-        transport.setFileSystem({ writeFile: () => serverFS.useOS });
-        project.program.emit();
-        assert.strictEqual(transport.readFile("/src/index.js"), "\uFEFFexport const value = 42;\n");
-        transport.setFileSystem({ writeFile: serverFS.error });
-        assert.match(
-            project.program.emit().diagnostics[0]?.text ?? "",
-            /Could not write file '\/src\/index\.js': filesystem callback returned serverFS\.error/,
+        assert.throws(
+            () => transport.setFileSystem(undefined),
+            /must be configured before the first request/,
         );
-
-        const largeResolution = { resolvedFileName: "/large.d.ts", padding: "x".repeat(100_000) };
-        let resolverCalls = 0;
-        const resolver = api.createModuleResolver({}, {
-            resolveModuleName: () => {
-                resolverCalls++;
-                return largeResolution;
-            },
-        });
-        assert.strictEqual(resolver.resolveModuleName("large", "/src", undefined).resolvedModule?.resolvedFileName, "/large.d.ts");
-        assert.strictEqual(resolverCalls, 1);
 
         api.close();
 

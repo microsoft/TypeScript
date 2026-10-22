@@ -1,110 +1,153 @@
-// Package wasmreactor hosts an API session without an IPC transport.
+// Package wasmreactor runs an API server inside the current process and
+// exchanges its protocol messages through direct calls instead of a pipe.
 package wasmreactor
 
 import (
 	"context"
-	"time"
+	"errors"
+	"io"
+	"sync"
 
 	"github.com/microsoft/TypeScript/tsc/internal/api"
 	"github.com/microsoft/TypeScript/tsc/internal/bundled"
-	"github.com/microsoft/TypeScript/tsc/internal/ipc"
-	"github.com/microsoft/TypeScript/tsc/internal/json"
-	"github.com/microsoft/TypeScript/tsc/internal/lsp/lsproto"
-	"github.com/microsoft/TypeScript/tsc/internal/project"
 	"github.com/microsoft/TypeScript/tsc/internal/tspath"
-	"github.com/microsoft/TypeScript/tsc/internal/vfs"
 )
 
 type Options struct {
-	Cwd                       string              `json:"cwd"`
-	UseCaseSensitiveFileNames *bool               `json:"useCaseSensitiveFileNames"`
-	CollectTiming             bool                `json:"collectTiming"`
-	WrapFS                    func(vfs.FS) vfs.FS `json:"-"`
-	Conn                      ipc.Conn            `json:"-"`
+	Cwd                       string `json:"cwd"`
+	UseCaseSensitiveFileNames *bool  `json:"useCaseSensitiveFileNames"`
+	CollectTiming             bool   `json:"collectTiming"`
 }
 
+// Message is a protocol tuple exchanged with the server.
+type Message struct {
+	Type    api.MessageType
+	Method  string
+	Payload []byte
+}
+
+// ErrIdle is returned by Receive when the server is waiting for a message
+// instead of producing one.
+var ErrIdle = errors.New("the server is waiting for a message")
+
+// Reactor hosts an API server whose base file system is in memory. The
+// server runs on its own goroutine and is driven by Send and Receive, so the
+// client can serve callbacks and make nested requests exactly as it would
+// over a pipe, even on single-threaded hosts where blocking with no runnable
+// goroutine would be fatal.
 type Reactor struct {
 	ctx     context.Context
 	cancel  context.CancelFunc
-	session *api.Session
-	files   vfs.FS
+	options Options
+	files   *memFS
 	cwd     tspath.RootedDirectoryPath
-	timing  *ipc.ServerTimingCollector
+
+	mu      sync.Mutex
+	inbox   chan Message
+	outbox  chan Message
+	idle    chan struct{}
+	closed  chan struct{}
+	started bool
+	done    chan struct{}
+	err     error
 }
 
 func New(ctx context.Context, options Options) *Reactor {
 	if options.Cwd == "" {
 		options.Cwd = "/"
 	}
-	cwd := tspath.RootedDirectoryPathFromAbsolute(options.Cwd)
 	caseSensitivity := tspath.CaseSensitive
 	if options.UseCaseSensitiveFileNames != nil && !*options.UseCaseSensitiveFileNames {
 		caseSensitivity = tspath.CaseInsensitive
 	}
-	files := newMemFS(caseSensitivity)
-	var projectFiles vfs.FS = files
-	if options.WrapFS != nil {
-		projectFiles = options.WrapFS(projectFiles)
-	}
 	ctx, cancel := context.WithCancel(ctx)
-	sessionInit := &project.SessionInit{
-		BackgroundCtx: ctx,
-		FS:            bundled.WrapFS(projectFiles),
-		Options: &project.SessionOptions{
-			CurrentDirectory:   cwd,
-			DefaultLibraryPath: bundled.LibPath(),
-			PositionEncoding:   lsproto.PositionEncodingKindUTF8,
-			LoggingEnabled:     false,
-		},
-	}
-	session := api.NewStandaloneSession(sessionInit, &api.SessionOptions{UseBinaryResponses: true})
-	if options.Conn != nil {
-		session.SetConnection(options.Conn)
-	}
-	reactor := &Reactor{
+	return &Reactor{
 		ctx:     ctx,
 		cancel:  cancel,
-		session: session,
-		files:   files,
-		cwd:     cwd,
+		options: options,
+		files:   newMemFS(caseSensitivity),
+		cwd:     tspath.RootedDirectoryPathFromAbsolute(options.Cwd),
+		inbox:   make(chan Message, 1),
+		outbox:  make(chan Message),
+		idle:    make(chan struct{}, 1),
+		closed:  make(chan struct{}),
+		done:    make(chan struct{}),
 	}
-	if options.CollectTiming {
-		reactor.timing = ipc.NewServerTimingCollector()
-	}
-	return reactor
 }
 
-func (r *Reactor) HandleRequest(method string, payload []byte) ([]byte, error) {
-	switch method {
-	case ipc.MethodGetServerTiming:
-		return marshalResponse(ipc.ServerTimingSnapshot(r.timing))
-	case ipc.MethodResetServerTiming:
-		if r.timing != nil {
-			r.timing.Reset()
+// Start runs the server, delegating the named file system operations to the
+// client. It must be called once, before the first Send.
+func (r *Reactor) Start(callbacks []string) error {
+	if r.started {
+		return errors.New("the server has already started")
+	}
+	r.started = true
+	server := api.NewStdioServer(&api.StdioServerOptions{
+		Cwd:                       r.cwd,
+		DefaultLibraryPath:        bundled.LibPath(),
+		Callbacks:                 callbacks,
+		UseCaseSensitiveFileNames: r.options.UseCaseSensitiveFileNames,
+		CollectTiming:             r.options.CollectTiming,
+		FS:                        r.files,
+		Tuples:                    (*tupleTransport)(r),
+	})
+	go func() {
+		defer close(r.done)
+		r.err = server.Run(r.ctx)
+	}()
+	return nil
+}
+
+// Started reports whether Start has been called.
+func (r *Reactor) Started() bool {
+	return r.started
+}
+
+// Send delivers a message to the server without running it.
+func (r *Reactor) Send(message Message) error {
+	if !r.started {
+		return errors.New("the server has not started")
+	}
+	r.mu.Lock()
+	defer r.mu.Unlock()
+	select {
+	case <-r.idle:
+		// The server is about to receive this message, so it is no longer idle.
+	default:
+		// The server has not reported being idle.
+	}
+	select {
+	case r.inbox <- message:
+		return nil
+	default:
+		return errors.New("a message is already waiting for the server")
+	}
+}
+
+// Receive runs the server until it produces its next message. It returns
+// ErrIdle if the server needs a message first, or io.EOF with the server's
+// result once it has stopped.
+func (r *Reactor) Receive() (Message, error) {
+	if !r.started {
+		return Message{}, errors.New("the server has not started")
+	}
+	select {
+	case message := <-r.outbox:
+		return message, nil
+	default:
+		// Run the server until it writes, waits, or stops.
+	}
+	select {
+	case message := <-r.outbox:
+		return message, nil
+	case <-r.idle:
+		return Message{}, ErrIdle
+	case <-r.done:
+		if r.err != nil {
+			return Message{}, r.err
 		}
-		return marshalResponse(nil)
+		return Message{}, io.EOF
 	}
-
-	start := time.Now()
-	result, err := r.session.HandleRequest(r.ctx, method, json.Value(payload))
-	if r.timing != nil {
-		r.timing.Record(method, time.Since(start))
-	}
-	if err != nil {
-		return nil, err
-	}
-	if raw, ok := result.(api.RawBinary); ok {
-		return []byte(raw), nil
-	}
-	return marshalResponse(result)
-}
-
-func marshalResponse(result any) ([]byte, error) {
-	encoded, err := json.Marshal(result)
-	if err != nil {
-		return nil, err
-	}
-	return encoded, nil
 }
 
 func (r *Reactor) SetFile(path string, content string) error {
@@ -119,7 +162,53 @@ func (r *Reactor) RemoveFile(path string) error {
 	return r.files.Remove(tspath.ToRootedPath(path, r.cwd))
 }
 
+// Close stops the server and waits for it to exit.
 func (r *Reactor) Close() {
+	select {
+	case <-r.closed:
+		return
+	default:
+		// Not yet closed.
+	}
 	r.cancel()
-	r.session.Close()
+	close(r.closed)
+	if r.started {
+		<-r.done
+	}
+}
+
+// tupleTransport is the server's end of the reactor's message channels.
+type tupleTransport Reactor
+
+func (t *tupleTransport) ReadTuple() (api.MessageType, string, []byte, error) {
+	t.mu.Lock()
+	select {
+	case message := <-t.inbox:
+		t.mu.Unlock()
+		return message.Type, message.Method, message.Payload, nil
+	default:
+		// No message is waiting, so the server is idle.
+	}
+	select {
+	case t.idle <- struct{}{}:
+		// Receive may now report that the server is waiting.
+	default:
+		// An idle signal is already pending.
+	}
+	t.mu.Unlock()
+	select {
+	case message := <-t.inbox:
+		return message.Type, message.Method, message.Payload, nil
+	case <-t.closed:
+		return 0, "", nil, io.EOF
+	}
+}
+
+func (t *tupleTransport) WriteTuple(msgType api.MessageType, method string, payload []byte) error {
+	select {
+	case t.outbox <- Message{Type: msgType, Method: method, Payload: payload}:
+		return nil
+	case <-t.closed:
+		return io.ErrClosedPipe
+	}
 }

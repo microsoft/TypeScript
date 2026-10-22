@@ -1,10 +1,3 @@
-import type { FileSystemCallbacks } from "../api/fs.ts";
-import {
-    encodeFileSystemCallbackResult,
-    serverFS,
-} from "../api/fsCallbacks.ts";
-import { Wtf8Decoder } from "../api/node/wtf8.ts";
-import type { RootedFilePath } from "../ast/index.ts";
 import type { WasmReactorInstance } from "./transport.ts";
 
 declare namespace WebAssembly {
@@ -42,57 +35,14 @@ interface StreamingTextDecoder {
 const errnoSuccess = 0;
 const errnoBadFileDescriptor = 8;
 const errnoInvalidArgument = 28;
-const errnoIo = 29;
-const errnoNoBuffers = 42;
 const errnoNoSys = 52;
 const fileTypeCharacterDevice = 2;
 const eventTypeClock = 0;
 const subscriptionClockAbstime = 1;
-const hostCallbackFD = 0x7fff_fffd;
-const hostWriteFileFD = 0x7fff_fffe;
-const textDecoder = new TextDecoder();
-const fileContentDecoder = new Wtf8Decoder("utf-8", { ignoreBOM: true });
 
 export interface InstantiateWasmOptions {
     stdout?: ((text: string) => void) | undefined;
     stderr?: ((text: string) => void) | undefined;
-}
-
-export interface WasmFileSystem {
-    writeFile?: FileSystemCallbacks["writeFile"] | undefined;
-}
-
-interface WasmHost {
-    setFileSystem(fs: WasmFileSystem | undefined): void;
-    registerCallback(name: string, callback: (name: string, payload: string) => string): void;
-    unregisterCallback(name: string): void;
-}
-
-const wasmHosts = new WeakMap<object, WasmHost>();
-
-export function setWasmFileSystem(instance: WasmReactorInstance, fs: WasmFileSystem | undefined): void {
-    const host = wasmHosts.get(instance);
-    if (!host) {
-        if (fs === undefined) return;
-        throw new Error("The TypeScript WASM reactor was not created by instantiateWasm");
-    }
-    host.setFileSystem(fs);
-}
-
-export function registerWasmCallback(
-    instance: WasmReactorInstance,
-    name: string,
-    callback: (name: string, payload: string) => string,
-): void {
-    const host = wasmHosts.get(instance);
-    if (!host) {
-        throw new Error("The TypeScript WASM reactor was not created by instantiateWasm");
-    }
-    host.registerCallback(name, callback);
-}
-
-export function unregisterWasmCallback(instance: WasmReactorInstance, name: string): void {
-    wasmHosts.get(instance)?.unregisterCallback(name);
 }
 
 /** Instantiate and initialize the TypeScript reactor with its minimal WASI host. */
@@ -128,11 +78,7 @@ function createWasiHost(options: InstantiateWasmOptions): {
     const stdout = options.stdout ?? (text => console.log(text));
     const stderr = options.stderr ?? (text => console.error(text));
     const decoders = new Map<number, StreamingTextDecoder>();
-    const encoder = new TextEncoder();
-    const callbacks = new Map<string, (name: string, payload: string) => string>();
-    let pendingCallbackResult: Uint8Array | undefined;
     const closedDescriptors = new Set<number>();
-    let fileSystem: WasmFileSystem | undefined;
 
     function getMemory(): WebAssembly.Memory {
         const memory = instance?.exports.memory;
@@ -198,12 +144,6 @@ function createWasiHost(options: InstantiateWasmOptions): {
     function fdWrite(fd: number, iovsPointer: number, iovsLength: number, writtenPointer: number): number {
         iovsPointer >>>= 0;
         writtenPointer >>>= 0;
-        if (fd === hostWriteFileFD) {
-            return hostWriteFile(iovsPointer, iovsLength, writtenPointer);
-        }
-        if (fd === hostCallbackFD) {
-            return hostCallback(iovsPointer, iovsLength, writtenPointer);
-        }
         if ((fd !== 1 && fd !== 2) || closedDescriptors.has(fd)) return errnoBadFileDescriptor;
         const memory = getMemory();
         const view = new DataView(memory.buffer);
@@ -242,76 +182,6 @@ function createWasiHost(options: InstantiateWasmOptions): {
         return fd >= 0 && fd <= 2 && !closedDescriptors.has(fd);
     }
 
-    function hostCallback(iovsPointer: number, iovsLength: number, writtenPointer: number): number {
-        if (iovsLength !== 1) return errnoInvalidArgument;
-        const memory = getMemory();
-        const view = new DataView(memory.buffer);
-        const bufferPointer = view.getUint32(iovsPointer, true);
-        const bufferLength = view.getUint32(iovsPointer + 4, true);
-        if (bufferLength < 16) return errnoInvalidArgument;
-        const methodLength = view.getUint32(bufferPointer, true);
-        const payloadLength = view.getUint32(bufferPointer + 4, true);
-        const resultCapacity = view.getUint32(bufferPointer + 8, true);
-        const errorCapacity = view.getUint32(bufferPointer + 12, true);
-        if (16 + methodLength + payloadLength + resultCapacity + errorCapacity > bufferLength) {
-            return errnoInvalidArgument;
-        }
-        const methodPointer = bufferPointer + 16;
-        const payloadPointer = methodPointer + methodLength;
-        const resultPointer = payloadPointer + payloadLength;
-        const errorPointer = resultPointer + resultCapacity;
-        const decoder = new TextDecoder();
-        const method = decoder.decode(new Uint8Array(memory.buffer, methodPointer, methodLength));
-        const payload = decoder.decode(new Uint8Array(memory.buffer, payloadPointer, payloadLength));
-        const pending = pendingCallbackResult;
-        pendingCallbackResult = undefined;
-        try {
-            let result: Uint8Array;
-            if (methodLength === 0) {
-                // An empty method fetches a result that did not fit the previous call's buffer.
-                if (!pending || pending.length > resultCapacity) return errnoInvalidArgument;
-                result = pending;
-            }
-            else {
-                const callback = callbacks.get(method);
-                if (!callback) {
-                    throw new Error(`No callback is registered for ${method}`);
-                }
-                result = encoder.encode(callback(method, payload));
-                if (result.length > resultCapacity) {
-                    pendingCallbackResult = result;
-                    const resultView = new DataView(getMemory().buffer);
-                    resultView.setUint32(bufferPointer + 8, result.length, true);
-                    resultView.setUint32(bufferPointer + 12, 0, true);
-                    resultView.setUint32(writtenPointer, 0, true);
-                    return errnoNoBuffers;
-                }
-            }
-            const resultMemory = getMemory();
-            const resultView = new DataView(resultMemory.buffer);
-            new Uint8Array(resultMemory.buffer, resultPointer, result.length).set(result);
-            resultView.setUint32(bufferPointer + 8, result.length, true);
-            resultView.setUint32(bufferPointer + 12, 0, true);
-            resultView.setUint32(writtenPointer, bufferLength, true);
-            return errnoSuccess;
-        }
-        catch (error) {
-            const errorView = new DataView(getMemory().buffer);
-            errorView.setUint32(bufferPointer + 8, 0, true);
-            errorView.setUint32(bufferPointer + 12, writeHostError(error, errorPointer, errorCapacity), true);
-            errorView.setUint32(writtenPointer, 0, true);
-            return errnoIo;
-        }
-    }
-
-    /** Writes as much of the error message as fits and returns its length. */
-    function writeHostError(error: unknown, pointer: number, capacity: number): number {
-        const bytes = encoder.encode(error instanceof Error ? error.message : String(error));
-        const length = Math.min(bytes.length, capacity);
-        new Uint8Array(getMemory().buffer, pointer, length).set(bytes.subarray(0, length));
-        return length;
-    }
-
     function randomGet(bufferPointer: number, bufferLength: number): number {
         bufferPointer >>>= 0;
         const buffer = new Uint8Array(getMemory().buffer, bufferPointer, bufferLength);
@@ -319,42 +189,6 @@ function createWasiHost(options: InstantiateWasmOptions): {
             crypto.getRandomValues(buffer.subarray(offset, Math.min(offset + 65_536, buffer.length)));
         }
         return errnoSuccess;
-    }
-
-    function hostWriteFile(iovsPointer: number, iovsLength: number, writtenPointer: number): number {
-        iovsPointer >>>= 0;
-        writtenPointer >>>= 0;
-        const writeFile = fileSystem?.writeFile;
-        if (writeFile === undefined || writeFile === serverFS.useOS) return errnoBadFileDescriptor;
-        if (iovsLength !== 1) return errnoInvalidArgument;
-        const memory = getMemory();
-        const view = new DataView(memory.buffer);
-        const bufferPointer = view.getUint32(iovsPointer, true);
-        const bufferLength = view.getUint32(iovsPointer + 4, true);
-        if (bufferLength < 12) return errnoInvalidArgument;
-        const pathLength = view.getUint32(bufferPointer, true);
-        const dataLength = view.getUint32(bufferPointer + 4, true);
-        const errorCapacity = view.getUint32(bufferPointer + 8, true);
-        if (12 + pathLength + dataLength + errorCapacity !== bufferLength) return errnoInvalidArgument;
-        const pathPointer = bufferPointer + 12;
-        const dataPointer = pathPointer + pathLength;
-        const errorPointer = dataPointer + dataLength;
-        const path = textDecoder.decode(new Uint8Array(memory.buffer, pathPointer, pathLength));
-        const data = fileContentDecoder.decode(new Uint8Array(memory.buffer, dataPointer, dataLength));
-        try {
-            const result = typeof writeFile === "function" ? writeFile(path as RootedFilePath, data) : writeFile;
-            const response = encodeFileSystemCallbackResult("writeFile", result);
-            if (response.kind === "useOS") return errnoBadFileDescriptor;
-            if (response.kind === "error") throw new Error("filesystem callback returned serverFS.error: writeFile");
-            new DataView(getMemory().buffer).setUint32(writtenPointer, bufferLength, true);
-            return errnoSuccess;
-        }
-        catch (error) {
-            const errorView = new DataView(getMemory().buffer);
-            errorView.setUint32(bufferPointer + 8, writeHostError(error, errorPointer, errorCapacity), true);
-            errorView.setUint32(writtenPointer, 0, true);
-            return errnoIo;
-        }
     }
 
     function pollOneoff(
@@ -450,17 +284,6 @@ function createWasiHost(options: InstantiateWasmOptions): {
                 throw new Error("TypeScript WASM reactor did not export typescript_initialize");
             }
             initialize();
-            wasmHosts.set(instance, {
-                setFileSystem(value) {
-                    fileSystem = value;
-                },
-                registerCallback(name, callback) {
-                    callbacks.set(name, callback);
-                },
-                unregisterCallback(name) {
-                    callbacks.delete(name);
-                },
-            });
             return instance;
         },
     };
