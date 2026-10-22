@@ -1,0 +1,50 @@
+//// [tests/cases/compiler/indexedAccessAccessFlagsUnionOrder.ts] ////
+
+=== indexedAccessAccessFlagsUnionOrder.ts ===
+function f<T extends Record<string, string>, K extends keyof T>(obj: T, k: K, b: boolean) {
+>f : Symbol(f, Decl(indexedAccessAccessFlagsUnionOrder.ts, 0, 0))
+>T : Symbol(T, Decl(indexedAccessAccessFlagsUnionOrder.ts, 0, 11))
+>Record : Symbol(Record, Decl(lib.es5.d.ts, --, --))
+>K : Symbol(K, Decl(indexedAccessAccessFlagsUnionOrder.ts, 0, 44))
+>T : Symbol(T, Decl(indexedAccessAccessFlagsUnionOrder.ts, 0, 11))
+>obj : Symbol(obj, Decl(indexedAccessAccessFlagsUnionOrder.ts, 0, 64))
+>T : Symbol(T, Decl(indexedAccessAccessFlagsUnionOrder.ts, 0, 11))
+>k : Symbol(k, Decl(indexedAccessAccessFlagsUnionOrder.ts, 0, 71))
+>K : Symbol(K, Decl(indexedAccessAccessFlagsUnionOrder.ts, 0, 44))
+>b : Symbol(b, Decl(indexedAccessAccessFlagsUnionOrder.ts, 0, 77))
+
+    const x = b ? obj[k] : g<T, K>();
+>x : Symbol(x, Decl(indexedAccessAccessFlagsUnionOrder.ts, 1, 9))
+>b : Symbol(b, Decl(indexedAccessAccessFlagsUnionOrder.ts, 0, 77))
+>obj : Symbol(obj, Decl(indexedAccessAccessFlagsUnionOrder.ts, 0, 64))
+>k : Symbol(k, Decl(indexedAccessAccessFlagsUnionOrder.ts, 0, 71))
+>g : Symbol(g, Decl(indexedAccessAccessFlagsUnionOrder.ts, 5, 1))
+>T : Symbol(T, Decl(indexedAccessAccessFlagsUnionOrder.ts, 0, 11))
+>K : Symbol(K, Decl(indexedAccessAccessFlagsUnionOrder.ts, 0, 44))
+
+    const s1: string = x;
+>s1 : Symbol(s1, Decl(indexedAccessAccessFlagsUnionOrder.ts, 2, 9))
+>x : Symbol(x, Decl(indexedAccessAccessFlagsUnionOrder.ts, 1, 9))
+
+    const y = b ? g<T, K>() : obj[k];
+>y : Symbol(y, Decl(indexedAccessAccessFlagsUnionOrder.ts, 3, 9))
+>b : Symbol(b, Decl(indexedAccessAccessFlagsUnionOrder.ts, 0, 77))
+>g : Symbol(g, Decl(indexedAccessAccessFlagsUnionOrder.ts, 5, 1))
+>T : Symbol(T, Decl(indexedAccessAccessFlagsUnionOrder.ts, 0, 11))
+>K : Symbol(K, Decl(indexedAccessAccessFlagsUnionOrder.ts, 0, 44))
+>obj : Symbol(obj, Decl(indexedAccessAccessFlagsUnionOrder.ts, 0, 64))
+>k : Symbol(k, Decl(indexedAccessAccessFlagsUnionOrder.ts, 0, 71))
+
+    const s2: string = y;
+>s2 : Symbol(s2, Decl(indexedAccessAccessFlagsUnionOrder.ts, 4, 9))
+>y : Symbol(y, Decl(indexedAccessAccessFlagsUnionOrder.ts, 3, 9))
+}
+
+declare function g<T, K extends keyof T>(): T[K];
+>g : Symbol(g, Decl(indexedAccessAccessFlagsUnionOrder.ts, 5, 1))
+>T : Symbol(T, Decl(indexedAccessAccessFlagsUnionOrder.ts, 7, 19))
+>K : Symbol(K, Decl(indexedAccessAccessFlagsUnionOrder.ts, 7, 21))
+>T : Symbol(T, Decl(indexedAccessAccessFlagsUnionOrder.ts, 7, 19))
+>T : Symbol(T, Decl(indexedAccessAccessFlagsUnionOrder.ts, 7, 19))
+>K : Symbol(K, Decl(indexedAccessAccessFlagsUnionOrder.ts, 7, 21))
+

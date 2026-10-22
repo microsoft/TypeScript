@@ -1,0 +1,50 @@
+expression.ts(10,7): error TS2322: Type 'typeof A' is not assignable to type 'new () => A'.
+  Type 'A' is not assignable to type 'A'. Two different types with this name exist, but they are unrelated.
+    Types of property 'c' are incompatible.
+      Type '() => () => A | A' is not assignable to type 'A'.
+
+
+==== expression.ts (1 errors) ====
+    // Subtype reduction of rebuild's return type relates the class to A,
+    // which needs b's return type, which needs rebuild's: a cycle. Both
+    // members report it, whichever return type is requested first, as if
+    // rebuild's, declared first, were requested first.
+    interface A {
+        b(): A;
+        c: A;
+    }
+    declare const flag: boolean;
+    const A: new () => A = class {
+          ~
+!!! error TS2322: Type 'typeof A' is not assignable to type 'new () => A'.
+!!! error TS2322:   Type 'A' is not assignable to type 'A'. Two different types with this name exist, but they are unrelated.
+!!! error TS2322:     Types of property 'c' are incompatible.
+!!! error TS2322:       Type '() => () => A | A' is not assignable to type 'A'.
+        rebuild() {
+            return flag ? this : new A();
+        }
+        b() {
+            return this.rebuild();
+        }
+        c() {
+            return this.rebuild;
+        }
+    };
+    export {};
+    
+==== declaration.ts (0 errors) ====
+    interface B {
+        b(): B;
+    }
+    declare const flag: boolean;
+    class K {
+        rebuild() {
+            return flag ? this : new B();
+        }
+        b() {
+            return this.rebuild();
+        }
+    }
+    const B: new () => B = K;
+    export {};
+    

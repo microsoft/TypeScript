@@ -1,0 +1,37 @@
+//// [tests/cases/compiler/varianceSupersededMeasurementKeepsOtherComparisons.ts] ////
+
+=== varianceSupersededMeasurementKeepsOtherComparisons.ts ===
+// Reduced from zod v4 with LangGraph's `register` augmentation
+// (langchain-ai/openwiki). Measuring the variance of B reaches A, which is
+// smaller, so the measurement is superseded and measured again from A. While
+// it finishes, comparing the parameters of `m` re-enters B, and its return
+// type resolves `Check<B<number>>`, whose comparison is not part of the
+// measurement. It must still compare as it would from scratch, as the
+// resolved conditional type is kept.
+
+declare let b1: B<string>;
+>b1 : B<string>
+
+declare let b2: B<"s">;
+>b2 : B<"s">
+
+b1 = b2;
+>b1 = b2 : B<"s">
+>b1 : B<string>
+>b2 : B<"s">
+
+interface A<T> { m(x: B<T>): Check<B<number>>; }
+>m : (x: B<T>) => Check<B<number>>
+>x : B<T>
+
+interface B<T> { a: A<T>; }
+>a : A<T>
+
+type Check<U> = U extends { a: unknown } ? "yes" : "no";
+>Check : Check<U>
+>a : unknown
+
+const v: Check<B<number>> = "yes";
+>v : "yes"
+>"yes" : "yes"
+

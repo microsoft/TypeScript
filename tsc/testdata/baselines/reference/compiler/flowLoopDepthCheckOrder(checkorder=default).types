@@ -1,0 +1,3069 @@
+//// [tests/cases/compiler/flowLoopDepthCheckOrder.ts] ////
+
+=== flowLoopDepthCheckOrder.ts ===
+// A loop is analyzed once for all references to the same name and the
+// result is cached, so its analysis must not depend on the reference that
+// reached it first. 'deep' reaches the loop with little depth left.
+// Analyzing the loop from there must not make 'x' inside it give up when
+// 'deep' is queried first.
+
+declare function cond(): boolean;
+>cond : () => boolean
+
+declare let b: boolean;
+>b : boolean
+
+let x: string | number = 0;
+>x : string | number
+>0 : 0
+
+while (cond()) {
+>cond() : boolean
+>cond : () => boolean
+
+    if (typeof x === "string") { x = 1; } else { x = "a"; }
+>typeof x === "string" : boolean
+>typeof x : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
+>x : string | number
+>"string" : "string"
+>x = 1 : 1
+>x : string | number
+>1 : 1
+>x = "a" : "a"
+>x : string | number
+>"a" : "a"
+
+    if (b) {}
+>b : boolean
+
+    if (b) {}
+>b : boolean
+
+    if (b) {}
+>b : boolean
+
+    if (b) {}
+>b : boolean
+
+    if (b) {}
+>b : boolean
+
+    if (b) {}
+>b : boolean
+
+    if (b) {}
+>b : boolean
+
+    if (b) {}
+>b : boolean
+
+    if (b) {}
+>b : boolean
+
+    if (b) {}
+>b : boolean
+
+    if (b) {}
+>b : boolean
+
+    if (b) {}
+>b : boolean
+
+    if (b) {}
+>b : boolean
+
+    if (b) {}
+>b : boolean
+
+    if (b) {}
+>b : boolean
+
+    if (b) {}
+>b : boolean
+
+    if (b) {}
+>b : boolean
+
+    if (b) {}
+>b : boolean
+
+    if (b) {}
+>b : boolean
+
+    if (b) {}
+>b : boolean
+}
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+if (b) {}
+>b : boolean
+
+const deep = x;
+>deep : string | number
+>x : string | number
+

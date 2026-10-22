@@ -1,0 +1,51 @@
+// @strict: true
+// @target: esnext
+// @noEmit: true
+// @checkOrder: default,typesfirst
+
+// AstObject and AstValue form a variance circularity. AstValue is covariant
+// in T through typeBrand, and AstObject reaches it through getValue, so
+// AstObject<Empty> is not assignable to AstObject<WithDecorators> and the
+// call below must be an error. Checking getValue first infers the type
+// arguments of `new AstValue` from its return type, which measures AstValue
+// first; AstObject, measured inside it, then sees T only in references to
+// the types in progress, and main recorded it as independent of T and
+// accepted the call. Main reports the error when AstObject's variance is
+// measured first.
+
+export {};
+
+type ObjectType<T> = T extends object ? T : never;
+
+class AstObject<T extends object, E> {
+    constructor(private host: E) {}
+
+    getObject<K extends keyof T & string>(key: K): AstObject<ObjectType<T>, E> {
+        return new AstObject<ObjectType<T>, E>(this.host);
+    }
+
+    getValue<K extends keyof T & string>(key: K): AstValue<T[K], E> {
+        return new AstValue(this.host);
+    }
+}
+
+class AstValue<T, E> {
+    declare typeBrand: T;
+
+    constructor(private host: E) {}
+
+    getObject(): AstObject<ObjectType<T>, E> {
+        return new AstObject(this.host);
+    }
+}
+
+interface Empty {}
+interface WithDecorators {
+    decorators: string;
+}
+
+declare function useDerived<E>(obj: AstObject<WithDecorators, E>): void;
+
+function useBase<E>(obj: AstObject<Empty, E>) {
+    useDerived(obj);
+}

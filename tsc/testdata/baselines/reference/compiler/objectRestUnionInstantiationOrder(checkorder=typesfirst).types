@@ -1,0 +1,50 @@
+//// [tests/cases/compiler/objectRestUnionInstantiationOrder.ts] ////
+
+=== objectRestUnionInstantiationOrder.ts ===
+function f<T>(v: { k: "a"; a: T } | { k: "b"; b: number }) {
+>f : <T>(v: { k: "a"; a: T; } | { k: "b"; b: number; }) => { all: { a: T; } | { b: number; }; onlyB: { b: number; } | undefined; }
+>v : { k: "a"; a: T; } | { k: "b"; b: number; }
+>k : "a"
+>a : T
+>k : "b"
+>b : number
+
+    const { k, ...rest } = v;
+>k : "a" | "b"
+>rest : { a: T; } | { b: number; }
+>v : { k: "a"; a: T; } | { k: "b"; b: number; }
+
+    return { all: rest, onlyB: "b" in rest ? rest : undefined };
+>{ all: rest, onlyB: "b" in rest ? rest : undefined } : { all: { a: T; } | { b: number; }; onlyB: { b: number; } | undefined; }
+>all : { a: T; } | { b: number; }
+>rest : { a: T; } | { b: number; }
+>onlyB : { b: number; } | undefined
+>"b" in rest ? rest : undefined : { b: number; } | undefined
+>"b" in rest : boolean
+>"b" : "b"
+>rest : { a: T; } | { b: number; }
+>rest : { b: number; }
+>undefined : undefined
+}
+const o = f({ k: "a", a: "s" });
+>o : { all: { b: number; } | { a: string; }; onlyB: { b: number; } | undefined; }
+>f({ k: "a", a: "s" }) : { all: { b: number; } | { a: string; }; onlyB: { b: number; } | undefined; }
+>f : <T>(v: { k: "a"; a: T; } | { k: "b"; b: number; }) => { all: { a: T; } | { b: number; }; onlyB: { b: number; } | undefined; }
+>{ k: "a", a: "s" } : { k: "a"; a: string; }
+>k : "a"
+>"a" : "a"
+>a : string
+>"s" : "s"
+
+const all = o.all;
+>all : { b: number; } | { a: string; }
+>o.all : { b: number; } | { a: string; }
+>o : { all: { b: number; } | { a: string; }; onlyB: { b: number; } | undefined; }
+>all : { b: number; } | { a: string; }
+
+const onlyB = o.onlyB;
+>onlyB : { b: number; } | undefined
+>o.onlyB : { b: number; } | undefined
+>o : { all: { b: number; } | { a: string; }; onlyB: { b: number; } | undefined; }
+>onlyB : { b: number; } | undefined
+

@@ -1,0 +1,739 @@
+//// [tests/cases/compiler/relationDepthSharedCheckOrder.ts] ////
+
+=== relationDepthSharedCheckOrder.ts ===
+// Relating I0 to J0 fresh nests a comparison 100 levels deep, where it is
+// cut short and so succeeds. In program order Mid has already found that
+// I60 is not related to J60. Whether I0 is related to J0 must not depend
+// on which comes first. Conditional types relate without reporting errors,
+// which would compute the comparison again.
+
+interface I0 { next: I1 }
+>next : I1
+
+interface J0 { next: J1 }
+>next : J1
+
+interface I1 { next: I2 }
+>next : I2
+
+interface J1 { next: J2 }
+>next : J2
+
+interface I2 { next: I3 }
+>next : I3
+
+interface J2 { next: J3 }
+>next : J3
+
+interface I3 { next: I4 }
+>next : I4
+
+interface J3 { next: J4 }
+>next : J4
+
+interface I4 { next: I5 }
+>next : I5
+
+interface J4 { next: J5 }
+>next : J5
+
+interface I5 { next: I6 }
+>next : I6
+
+interface J5 { next: J6 }
+>next : J6
+
+interface I6 { next: I7 }
+>next : I7
+
+interface J6 { next: J7 }
+>next : J7
+
+interface I7 { next: I8 }
+>next : I8
+
+interface J7 { next: J8 }
+>next : J8
+
+interface I8 { next: I9 }
+>next : I9
+
+interface J8 { next: J9 }
+>next : J9
+
+interface I9 { next: I10 }
+>next : I10
+
+interface J9 { next: J10 }
+>next : J10
+
+interface I10 { next: I11 }
+>next : I11
+
+interface J10 { next: J11 }
+>next : J11
+
+interface I11 { next: I12 }
+>next : I12
+
+interface J11 { next: J12 }
+>next : J12
+
+interface I12 { next: I13 }
+>next : I13
+
+interface J12 { next: J13 }
+>next : J13
+
+interface I13 { next: I14 }
+>next : I14
+
+interface J13 { next: J14 }
+>next : J14
+
+interface I14 { next: I15 }
+>next : I15
+
+interface J14 { next: J15 }
+>next : J15
+
+interface I15 { next: I16 }
+>next : I16
+
+interface J15 { next: J16 }
+>next : J16
+
+interface I16 { next: I17 }
+>next : I17
+
+interface J16 { next: J17 }
+>next : J17
+
+interface I17 { next: I18 }
+>next : I18
+
+interface J17 { next: J18 }
+>next : J18
+
+interface I18 { next: I19 }
+>next : I19
+
+interface J18 { next: J19 }
+>next : J19
+
+interface I19 { next: I20 }
+>next : I20
+
+interface J19 { next: J20 }
+>next : J20
+
+interface I20 { next: I21 }
+>next : I21
+
+interface J20 { next: J21 }
+>next : J21
+
+interface I21 { next: I22 }
+>next : I22
+
+interface J21 { next: J22 }
+>next : J22
+
+interface I22 { next: I23 }
+>next : I23
+
+interface J22 { next: J23 }
+>next : J23
+
+interface I23 { next: I24 }
+>next : I24
+
+interface J23 { next: J24 }
+>next : J24
+
+interface I24 { next: I25 }
+>next : I25
+
+interface J24 { next: J25 }
+>next : J25
+
+interface I25 { next: I26 }
+>next : I26
+
+interface J25 { next: J26 }
+>next : J26
+
+interface I26 { next: I27 }
+>next : I27
+
+interface J26 { next: J27 }
+>next : J27
+
+interface I27 { next: I28 }
+>next : I28
+
+interface J27 { next: J28 }
+>next : J28
+
+interface I28 { next: I29 }
+>next : I29
+
+interface J28 { next: J29 }
+>next : J29
+
+interface I29 { next: I30 }
+>next : I30
+
+interface J29 { next: J30 }
+>next : J30
+
+interface I30 { next: I31 }
+>next : I31
+
+interface J30 { next: J31 }
+>next : J31
+
+interface I31 { next: I32 }
+>next : I32
+
+interface J31 { next: J32 }
+>next : J32
+
+interface I32 { next: I33 }
+>next : I33
+
+interface J32 { next: J33 }
+>next : J33
+
+interface I33 { next: I34 }
+>next : I34
+
+interface J33 { next: J34 }
+>next : J34
+
+interface I34 { next: I35 }
+>next : I35
+
+interface J34 { next: J35 }
+>next : J35
+
+interface I35 { next: I36 }
+>next : I36
+
+interface J35 { next: J36 }
+>next : J36
+
+interface I36 { next: I37 }
+>next : I37
+
+interface J36 { next: J37 }
+>next : J37
+
+interface I37 { next: I38 }
+>next : I38
+
+interface J37 { next: J38 }
+>next : J38
+
+interface I38 { next: I39 }
+>next : I39
+
+interface J38 { next: J39 }
+>next : J39
+
+interface I39 { next: I40 }
+>next : I40
+
+interface J39 { next: J40 }
+>next : J40
+
+interface I40 { next: I41 }
+>next : I41
+
+interface J40 { next: J41 }
+>next : J41
+
+interface I41 { next: I42 }
+>next : I42
+
+interface J41 { next: J42 }
+>next : J42
+
+interface I42 { next: I43 }
+>next : I43
+
+interface J42 { next: J43 }
+>next : J43
+
+interface I43 { next: I44 }
+>next : I44
+
+interface J43 { next: J44 }
+>next : J44
+
+interface I44 { next: I45 }
+>next : I45
+
+interface J44 { next: J45 }
+>next : J45
+
+interface I45 { next: I46 }
+>next : I46
+
+interface J45 { next: J46 }
+>next : J46
+
+interface I46 { next: I47 }
+>next : I47
+
+interface J46 { next: J47 }
+>next : J47
+
+interface I47 { next: I48 }
+>next : I48
+
+interface J47 { next: J48 }
+>next : J48
+
+interface I48 { next: I49 }
+>next : I49
+
+interface J48 { next: J49 }
+>next : J49
+
+interface I49 { next: I50 }
+>next : I50
+
+interface J49 { next: J50 }
+>next : J50
+
+interface I50 { next: I51 }
+>next : I51
+
+interface J50 { next: J51 }
+>next : J51
+
+interface I51 { next: I52 }
+>next : I52
+
+interface J51 { next: J52 }
+>next : J52
+
+interface I52 { next: I53 }
+>next : I53
+
+interface J52 { next: J53 }
+>next : J53
+
+interface I53 { next: I54 }
+>next : I54
+
+interface J53 { next: J54 }
+>next : J54
+
+interface I54 { next: I55 }
+>next : I55
+
+interface J54 { next: J55 }
+>next : J55
+
+interface I55 { next: I56 }
+>next : I56
+
+interface J55 { next: J56 }
+>next : J56
+
+interface I56 { next: I57 }
+>next : I57
+
+interface J56 { next: J57 }
+>next : J57
+
+interface I57 { next: I58 }
+>next : I58
+
+interface J57 { next: J58 }
+>next : J58
+
+interface I58 { next: I59 }
+>next : I59
+
+interface J58 { next: J59 }
+>next : J59
+
+interface I59 { next: I60 }
+>next : I60
+
+interface J59 { next: J60 }
+>next : J60
+
+interface I60 { next: I61 }
+>next : I61
+
+interface J60 { next: J61 }
+>next : J61
+
+interface I61 { next: I62 }
+>next : I62
+
+interface J61 { next: J62 }
+>next : J62
+
+interface I62 { next: I63 }
+>next : I63
+
+interface J62 { next: J63 }
+>next : J63
+
+interface I63 { next: I64 }
+>next : I64
+
+interface J63 { next: J64 }
+>next : J64
+
+interface I64 { next: I65 }
+>next : I65
+
+interface J64 { next: J65 }
+>next : J65
+
+interface I65 { next: I66 }
+>next : I66
+
+interface J65 { next: J66 }
+>next : J66
+
+interface I66 { next: I67 }
+>next : I67
+
+interface J66 { next: J67 }
+>next : J67
+
+interface I67 { next: I68 }
+>next : I68
+
+interface J67 { next: J68 }
+>next : J68
+
+interface I68 { next: I69 }
+>next : I69
+
+interface J68 { next: J69 }
+>next : J69
+
+interface I69 { next: I70 }
+>next : I70
+
+interface J69 { next: J70 }
+>next : J70
+
+interface I70 { next: I71 }
+>next : I71
+
+interface J70 { next: J71 }
+>next : J71
+
+interface I71 { next: I72 }
+>next : I72
+
+interface J71 { next: J72 }
+>next : J72
+
+interface I72 { next: I73 }
+>next : I73
+
+interface J72 { next: J73 }
+>next : J73
+
+interface I73 { next: I74 }
+>next : I74
+
+interface J73 { next: J74 }
+>next : J74
+
+interface I74 { next: I75 }
+>next : I75
+
+interface J74 { next: J75 }
+>next : J75
+
+interface I75 { next: I76 }
+>next : I76
+
+interface J75 { next: J76 }
+>next : J76
+
+interface I76 { next: I77 }
+>next : I77
+
+interface J76 { next: J77 }
+>next : J77
+
+interface I77 { next: I78 }
+>next : I78
+
+interface J77 { next: J78 }
+>next : J78
+
+interface I78 { next: I79 }
+>next : I79
+
+interface J78 { next: J79 }
+>next : J79
+
+interface I79 { next: I80 }
+>next : I80
+
+interface J79 { next: J80 }
+>next : J80
+
+interface I80 { next: I81 }
+>next : I81
+
+interface J80 { next: J81 }
+>next : J81
+
+interface I81 { next: I82 }
+>next : I82
+
+interface J81 { next: J82 }
+>next : J82
+
+interface I82 { next: I83 }
+>next : I83
+
+interface J82 { next: J83 }
+>next : J83
+
+interface I83 { next: I84 }
+>next : I84
+
+interface J83 { next: J84 }
+>next : J84
+
+interface I84 { next: I85 }
+>next : I85
+
+interface J84 { next: J85 }
+>next : J85
+
+interface I85 { next: I86 }
+>next : I86
+
+interface J85 { next: J86 }
+>next : J86
+
+interface I86 { next: I87 }
+>next : I87
+
+interface J86 { next: J87 }
+>next : J87
+
+interface I87 { next: I88 }
+>next : I88
+
+interface J87 { next: J88 }
+>next : J88
+
+interface I88 { next: I89 }
+>next : I89
+
+interface J88 { next: J89 }
+>next : J89
+
+interface I89 { next: I90 }
+>next : I90
+
+interface J89 { next: J90 }
+>next : J90
+
+interface I90 { next: I91 }
+>next : I91
+
+interface J90 { next: J91 }
+>next : J91
+
+interface I91 { next: I92 }
+>next : I92
+
+interface J91 { next: J92 }
+>next : J92
+
+interface I92 { next: I93 }
+>next : I93
+
+interface J92 { next: J93 }
+>next : J93
+
+interface I93 { next: I94 }
+>next : I94
+
+interface J93 { next: J94 }
+>next : J94
+
+interface I94 { next: I95 }
+>next : I95
+
+interface J94 { next: J95 }
+>next : J95
+
+interface I95 { next: I96 }
+>next : I96
+
+interface J95 { next: J96 }
+>next : J96
+
+interface I96 { next: I97 }
+>next : I97
+
+interface J96 { next: J97 }
+>next : J97
+
+interface I97 { next: I98 }
+>next : I98
+
+interface J97 { next: J98 }
+>next : J98
+
+interface I98 { next: I99 }
+>next : I99
+
+interface J98 { next: J99 }
+>next : J99
+
+interface I99 { next: I100 }
+>next : I100
+
+interface J99 { next: J100 }
+>next : J100
+
+interface I100 { next: I101 }
+>next : I101
+
+interface J100 { next: J101 }
+>next : J101
+
+interface I101 { next: I102 }
+>next : I102
+
+interface J101 { next: J102 }
+>next : J102
+
+interface I102 { next: I103 }
+>next : I103
+
+interface J102 { next: J103 }
+>next : J103
+
+interface I103 { next: I104 }
+>next : I104
+
+interface J103 { next: J104 }
+>next : J104
+
+interface I104 { next: I105 }
+>next : I105
+
+interface J104 { next: J105 }
+>next : J105
+
+interface I105 { next: I106 }
+>next : I106
+
+interface J105 { next: J106 }
+>next : J106
+
+interface I106 { next: I107 }
+>next : I107
+
+interface J106 { next: J107 }
+>next : J107
+
+interface I107 { next: I108 }
+>next : I108
+
+interface J107 { next: J108 }
+>next : J108
+
+interface I108 { next: I109 }
+>next : I109
+
+interface J108 { next: J109 }
+>next : J109
+
+interface I109 { next: I110 }
+>next : I110
+
+interface J109 { next: J110 }
+>next : J110
+
+interface I110 { next: I111 }
+>next : I111
+
+interface J110 { next: J111 }
+>next : J111
+
+interface I111 { next: I112 }
+>next : I112
+
+interface J111 { next: J112 }
+>next : J112
+
+interface I112 { next: I113 }
+>next : I113
+
+interface J112 { next: J113 }
+>next : J113
+
+interface I113 { next: I114 }
+>next : I114
+
+interface J113 { next: J114 }
+>next : J114
+
+interface I114 { next: I115 }
+>next : I115
+
+interface J114 { next: J115 }
+>next : J115
+
+interface I115 { next: I116 }
+>next : I116
+
+interface J115 { next: J116 }
+>next : J116
+
+interface I116 { next: I117 }
+>next : I117
+
+interface J116 { next: J117 }
+>next : J117
+
+interface I117 { next: I118 }
+>next : I118
+
+interface J117 { next: J118 }
+>next : J118
+
+interface I118 { next: I119 }
+>next : I119
+
+interface J118 { next: J119 }
+>next : J119
+
+interface I119 { leaf: string }
+>leaf : string
+
+interface J119 { leaf: number }
+>leaf : number
+
+type Mid = I60 extends J60 ? true : false;
+>Mid : true
+>true : true
+>false : false
+
+type All = I0 extends J0 ? true : false;
+>All : true
+>true : true
+>false : false
+

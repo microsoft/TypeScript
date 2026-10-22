@@ -1,0 +1,36 @@
+//// [tests/cases/compiler/indexSignatureWithIndexedAccessOfDerivedInterface.ts] ////
+
+=== indexSignatureWithIndexedAccessOfDerivedInterface.ts ===
+// The type of data in TokenNode is assignable to its inherited index
+// signature, which mentions it through an indexed access.
+
+interface BaseNode {
+  kind: string;
+>kind : string
+
+  [key: string]: string | TokenNode["data"];
+>key : string
+}
+
+interface TokenNode extends BaseNode {
+  kind: 'token';
+>kind : "token"
+
+  data: TokenData;
+>data : TokenData
+}
+
+interface TokenData {
+  offset: number;
+>offset : number
+
+  width: number;
+>width : number
+
+  leading_width: number;
+>leading_width : number
+
+  trailing_width: number;
+>trailing_width : number
+}
+

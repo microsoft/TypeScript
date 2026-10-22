@@ -1,0 +1,45 @@
+//// [tests/cases/compiler/contextualParameterInCircularVariableInitializer.ts] ////
+
+=== contextualParameterInCircularVariableInitializer.ts ===
+// The initializer of `store` refers to `store` from a callback, so resolving
+// the type of `store` re-enters itself. `y` must still get its contextual
+// type `string` from `Store` (zustand `create<T>()(...)` pattern), with no
+// TS7006, as in main and TS 6.0.
+
+declare function create<T>(init: () => T): T;
+>create : Symbol(create, Decl(contextualParameterInCircularVariableInitializer.ts, 0, 0))
+>T : Symbol(T, Decl(contextualParameterInCircularVariableInitializer.ts, 5, 24))
+>init : Symbol(init, Decl(contextualParameterInCircularVariableInitializer.ts, 5, 27))
+>T : Symbol(T, Decl(contextualParameterInCircularVariableInitializer.ts, 5, 24))
+>T : Symbol(T, Decl(contextualParameterInCircularVariableInitializer.ts, 5, 24))
+
+interface Store {
+>Store : Symbol(Store, Decl(contextualParameterInCircularVariableInitializer.ts, 5, 45))
+
+    a: (x: boolean) => void;
+>a : Symbol(Store.a, Decl(contextualParameterInCircularVariableInitializer.ts, 7, 17))
+>x : Symbol(x, Decl(contextualParameterInCircularVariableInitializer.ts, 8, 8))
+
+    b: (y: string) => void;
+>b : Symbol(Store.b, Decl(contextualParameterInCircularVariableInitializer.ts, 8, 28))
+>y : Symbol(y, Decl(contextualParameterInCircularVariableInitializer.ts, 9, 8))
+}
+
+const store = create<Store>(() => ({
+>store : Symbol(store, Decl(contextualParameterInCircularVariableInitializer.ts, 12, 5))
+>create : Symbol(create, Decl(contextualParameterInCircularVariableInitializer.ts, 0, 0))
+>Store : Symbol(Store, Decl(contextualParameterInCircularVariableInitializer.ts, 5, 45))
+
+    a: (x) => store.b(""),
+>a : Symbol(a, Decl(contextualParameterInCircularVariableInitializer.ts, 12, 36))
+>x : Symbol(x, Decl(contextualParameterInCircularVariableInitializer.ts, 13, 8))
+>store.b : Symbol(Store.b, Decl(contextualParameterInCircularVariableInitializer.ts, 8, 28))
+>store : Symbol(store, Decl(contextualParameterInCircularVariableInitializer.ts, 12, 5))
+>b : Symbol(Store.b, Decl(contextualParameterInCircularVariableInitializer.ts, 8, 28))
+
+    b: (y) => {},
+>b : Symbol(b, Decl(contextualParameterInCircularVariableInitializer.ts, 13, 26))
+>y : Symbol(y, Decl(contextualParameterInCircularVariableInitializer.ts, 14, 8))
+
+}));
+

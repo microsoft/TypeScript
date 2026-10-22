@@ -1,0 +1,34 @@
+//// [tests/cases/compiler/cycleYieldThroughVarianceCheckOrder.ts] ////
+
+=== cycleYieldThroughVarianceCheckOrder.ts ===
+// Resolving the base of E measures the variances of B, which needs the type
+// of p, which needs the members of E. Whether p is circular must not depend
+// on whether B is checked before the type of arg is queried.
+
+declare class B<T> {
+>B : B<T>
+
+    p: E["p"];
+>p : number
+}
+declare class E extends mix(Base) {
+>E : E
+>mix(Base) : Base
+>mix : <T extends new () => object>(x: T) => T
+>Base : typeof Base
+
+    p: number;
+>p : number
+}
+declare function mix<T extends new () => object>(x: T): T;
+>mix : <T extends new () => object>(x: T) => T
+>x : T
+
+declare class Base {
+>Base : Base
+
+    constructor(arg?: InstanceType<typeof B>);
+>arg : B<unknown> | undefined
+>B : typeof B
+}
+

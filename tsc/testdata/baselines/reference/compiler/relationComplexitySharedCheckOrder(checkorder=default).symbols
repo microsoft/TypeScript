@@ -1,0 +1,101 @@
+//// [tests/cases/compiler/relationComplexitySharedCheckOrder.ts] ////
+
+=== relationComplexitySharedCheckOrder.ts ===
+// Relating y to x fresh caches too many comparisons. In program order the
+// comparisons before it have cached all but a seventh of them. Whether
+// relating y is too complex must not depend on which comes first.
+
+type D = '0' | '1' | '2' | '3' | '4' | '5' | '6';
+>D : Symbol(D, Decl(relationComplexitySharedCheckOrder.ts, 0, 0))
+
+type T1 = `${D}${D}${D}${D}` | undefined;
+>T1 : Symbol(T1, Decl(relationComplexitySharedCheckOrder.ts, 4, 49))
+>D : Symbol(D, Decl(relationComplexitySharedCheckOrder.ts, 0, 0))
+>D : Symbol(D, Decl(relationComplexitySharedCheckOrder.ts, 0, 0))
+>D : Symbol(D, Decl(relationComplexitySharedCheckOrder.ts, 0, 0))
+>D : Symbol(D, Decl(relationComplexitySharedCheckOrder.ts, 0, 0))
+
+type T2 = { a: string } | { b: number };
+>T2 : Symbol(T2, Decl(relationComplexitySharedCheckOrder.ts, 5, 41))
+>a : Symbol(a, Decl(relationComplexitySharedCheckOrder.ts, 6, 11))
+>b : Symbol(b, Decl(relationComplexitySharedCheckOrder.ts, 6, 27))
+
+declare let x: T1 | null;
+>x : Symbol(x, Decl(relationComplexitySharedCheckOrder.ts, 7, 11))
+>T1 : Symbol(T1, Decl(relationComplexitySharedCheckOrder.ts, 4, 49))
+
+declare const y1: (`${'0'}${D}${D}${D}` | undefined) & T2;
+>y1 : Symbol(y1, Decl(relationComplexitySharedCheckOrder.ts, 8, 13))
+>D : Symbol(D, Decl(relationComplexitySharedCheckOrder.ts, 0, 0))
+>D : Symbol(D, Decl(relationComplexitySharedCheckOrder.ts, 0, 0))
+>D : Symbol(D, Decl(relationComplexitySharedCheckOrder.ts, 0, 0))
+>T2 : Symbol(T2, Decl(relationComplexitySharedCheckOrder.ts, 5, 41))
+
+x = y1;
+>x : Symbol(x, Decl(relationComplexitySharedCheckOrder.ts, 7, 11))
+>y1 : Symbol(y1, Decl(relationComplexitySharedCheckOrder.ts, 8, 13))
+
+declare const y2: (`${'0' | '1'}${D}${D}${D}` | undefined) & T2;
+>y2 : Symbol(y2, Decl(relationComplexitySharedCheckOrder.ts, 10, 13))
+>D : Symbol(D, Decl(relationComplexitySharedCheckOrder.ts, 0, 0))
+>D : Symbol(D, Decl(relationComplexitySharedCheckOrder.ts, 0, 0))
+>D : Symbol(D, Decl(relationComplexitySharedCheckOrder.ts, 0, 0))
+>T2 : Symbol(T2, Decl(relationComplexitySharedCheckOrder.ts, 5, 41))
+
+x = y2;
+>x : Symbol(x, Decl(relationComplexitySharedCheckOrder.ts, 7, 11))
+>y2 : Symbol(y2, Decl(relationComplexitySharedCheckOrder.ts, 10, 13))
+
+declare const y3: (`${'0' | '1' | '2'}${D}${D}${D}` | undefined) & T2;
+>y3 : Symbol(y3, Decl(relationComplexitySharedCheckOrder.ts, 12, 13))
+>D : Symbol(D, Decl(relationComplexitySharedCheckOrder.ts, 0, 0))
+>D : Symbol(D, Decl(relationComplexitySharedCheckOrder.ts, 0, 0))
+>D : Symbol(D, Decl(relationComplexitySharedCheckOrder.ts, 0, 0))
+>T2 : Symbol(T2, Decl(relationComplexitySharedCheckOrder.ts, 5, 41))
+
+x = y3;
+>x : Symbol(x, Decl(relationComplexitySharedCheckOrder.ts, 7, 11))
+>y3 : Symbol(y3, Decl(relationComplexitySharedCheckOrder.ts, 12, 13))
+
+declare const y4: (`${'0' | '1' | '2' | '3'}${D}${D}${D}` | undefined) & T2;
+>y4 : Symbol(y4, Decl(relationComplexitySharedCheckOrder.ts, 14, 13))
+>D : Symbol(D, Decl(relationComplexitySharedCheckOrder.ts, 0, 0))
+>D : Symbol(D, Decl(relationComplexitySharedCheckOrder.ts, 0, 0))
+>D : Symbol(D, Decl(relationComplexitySharedCheckOrder.ts, 0, 0))
+>T2 : Symbol(T2, Decl(relationComplexitySharedCheckOrder.ts, 5, 41))
+
+x = y4;
+>x : Symbol(x, Decl(relationComplexitySharedCheckOrder.ts, 7, 11))
+>y4 : Symbol(y4, Decl(relationComplexitySharedCheckOrder.ts, 14, 13))
+
+declare const y5: (`${'0' | '1' | '2' | '3' | '4'}${D}${D}${D}` | undefined) & T2;
+>y5 : Symbol(y5, Decl(relationComplexitySharedCheckOrder.ts, 16, 13))
+>D : Symbol(D, Decl(relationComplexitySharedCheckOrder.ts, 0, 0))
+>D : Symbol(D, Decl(relationComplexitySharedCheckOrder.ts, 0, 0))
+>D : Symbol(D, Decl(relationComplexitySharedCheckOrder.ts, 0, 0))
+>T2 : Symbol(T2, Decl(relationComplexitySharedCheckOrder.ts, 5, 41))
+
+x = y5;
+>x : Symbol(x, Decl(relationComplexitySharedCheckOrder.ts, 7, 11))
+>y5 : Symbol(y5, Decl(relationComplexitySharedCheckOrder.ts, 16, 13))
+
+declare const y6: (`${'0' | '1' | '2' | '3' | '4' | '5'}${D}${D}${D}` | undefined) & T2;
+>y6 : Symbol(y6, Decl(relationComplexitySharedCheckOrder.ts, 18, 13))
+>D : Symbol(D, Decl(relationComplexitySharedCheckOrder.ts, 0, 0))
+>D : Symbol(D, Decl(relationComplexitySharedCheckOrder.ts, 0, 0))
+>D : Symbol(D, Decl(relationComplexitySharedCheckOrder.ts, 0, 0))
+>T2 : Symbol(T2, Decl(relationComplexitySharedCheckOrder.ts, 5, 41))
+
+x = y6;
+>x : Symbol(x, Decl(relationComplexitySharedCheckOrder.ts, 7, 11))
+>y6 : Symbol(y6, Decl(relationComplexitySharedCheckOrder.ts, 18, 13))
+
+declare const y: T1 & T2;
+>y : Symbol(y, Decl(relationComplexitySharedCheckOrder.ts, 20, 13))
+>T1 : Symbol(T1, Decl(relationComplexitySharedCheckOrder.ts, 4, 49))
+>T2 : Symbol(T2, Decl(relationComplexitySharedCheckOrder.ts, 5, 41))
+
+x = y;
+>x : Symbol(x, Decl(relationComplexitySharedCheckOrder.ts, 7, 11))
+>y : Symbol(y, Decl(relationComplexitySharedCheckOrder.ts, 20, 13))
+

@@ -1,0 +1,76 @@
+//// [tests/cases/compiler/typeParameterDefaultInCallInsideGenericCallback.ts] ////
+
+=== typeParameterDefaultInCallInsideGenericCallback.ts ===
+// The default of T applies to the call inside the callback passed to another
+// generic function as it does elsewhere, so data is accepted.
+
+declare function fetcher<D>(cfg: unknown): Promise<D>;
+>fetcher : Symbol(fetcher, Decl(typeParameterDefaultInCallInsideGenericCallback.ts, 0, 0))
+>D : Symbol(D, Decl(typeParameterDefaultInCallInsideGenericCallback.ts, 3, 25))
+>cfg : Symbol(cfg, Decl(typeParameterDefaultInCallInsideGenericCallback.ts, 3, 28))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2018.promise.d.ts, --, --))
+>D : Symbol(D, Decl(typeParameterDefaultInCallInsideGenericCallback.ts, 3, 25))
+
+type Routes<R> = R extends 'x' ? { IN: { v: number }, OUT: string } : never;
+>Routes : Symbol(Routes, Decl(typeParameterDefaultInCallInsideGenericCallback.ts, 3, 54))
+>R : Symbol(R, Decl(typeParameterDefaultInCallInsideGenericCallback.ts, 5, 12))
+>R : Symbol(R, Decl(typeParameterDefaultInCallInsideGenericCallback.ts, 5, 12))
+>IN : Symbol(IN, Decl(typeParameterDefaultInCallInsideGenericCallback.ts, 5, 34))
+>v : Symbol(v, Decl(typeParameterDefaultInCallInsideGenericCallback.ts, 5, 40))
+>OUT : Symbol(OUT, Decl(typeParameterDefaultInCallInsideGenericCallback.ts, 5, 53))
+
+function executeFetch<R extends string, T = Routes<R>>(
+>executeFetch : Symbol(executeFetch, Decl(typeParameterDefaultInCallInsideGenericCallback.ts, 5, 76))
+>R : Symbol(R, Decl(typeParameterDefaultInCallInsideGenericCallback.ts, 7, 22))
+>T : Symbol(T, Decl(typeParameterDefaultInCallInsideGenericCallback.ts, 7, 39))
+>Routes : Symbol(Routes, Decl(typeParameterDefaultInCallInsideGenericCallback.ts, 3, 54))
+>R : Symbol(R, Decl(typeParameterDefaultInCallInsideGenericCallback.ts, 7, 22))
+
+  route: R,
+>route : Symbol(route, Decl(typeParameterDefaultInCallInsideGenericCallback.ts, 7, 55))
+>R : Symbol(R, Decl(typeParameterDefaultInCallInsideGenericCallback.ts, 7, 22))
+
+  body?: T extends Record<'IN', any> ? T['IN'] : never
+>body : Symbol(body, Decl(typeParameterDefaultInCallInsideGenericCallback.ts, 8, 11))
+>T : Symbol(T, Decl(typeParameterDefaultInCallInsideGenericCallback.ts, 7, 39))
+>Record : Symbol(Record, Decl(lib.es5.d.ts, --, --))
+>T : Symbol(T, Decl(typeParameterDefaultInCallInsideGenericCallback.ts, 7, 39))
+
+) {
+  return fetcher<T extends Record<'OUT', any> ? T['OUT'] : T>({ route, body });
+>fetcher : Symbol(fetcher, Decl(typeParameterDefaultInCallInsideGenericCallback.ts, 0, 0))
+>T : Symbol(T, Decl(typeParameterDefaultInCallInsideGenericCallback.ts, 7, 39))
+>Record : Symbol(Record, Decl(lib.es5.d.ts, --, --))
+>T : Symbol(T, Decl(typeParameterDefaultInCallInsideGenericCallback.ts, 7, 39))
+>T : Symbol(T, Decl(typeParameterDefaultInCallInsideGenericCallback.ts, 7, 39))
+>route : Symbol(route, Decl(typeParameterDefaultInCallInsideGenericCallback.ts, 11, 63))
+>body : Symbol(body, Decl(typeParameterDefaultInCallInsideGenericCallback.ts, 11, 70))
+}
+
+declare function useCallback<T extends Function>(cb: T, deps: unknown[]): T;
+>useCallback : Symbol(useCallback, Decl(typeParameterDefaultInCallInsideGenericCallback.ts, 12, 1))
+>T : Symbol(T, Decl(typeParameterDefaultInCallInsideGenericCallback.ts, 14, 29))
+>Function : Symbol(Function, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.esnext.decorators.d.ts, --, --))
+>cb : Symbol(cb, Decl(typeParameterDefaultInCallInsideGenericCallback.ts, 14, 49))
+>T : Symbol(T, Decl(typeParameterDefaultInCallInsideGenericCallback.ts, 14, 29))
+>deps : Symbol(deps, Decl(typeParameterDefaultInCallInsideGenericCallback.ts, 14, 55))
+>T : Symbol(T, Decl(typeParameterDefaultInCallInsideGenericCallback.ts, 14, 29))
+
+export const cb = useCallback((data: { v: number }) => {
+>cb : Symbol(cb, Decl(typeParameterDefaultInCallInsideGenericCallback.ts, 16, 12))
+>useCallback : Symbol(useCallback, Decl(typeParameterDefaultInCallInsideGenericCallback.ts, 12, 1))
+>data : Symbol(data, Decl(typeParameterDefaultInCallInsideGenericCallback.ts, 16, 31))
+>v : Symbol(v, Decl(typeParameterDefaultInCallInsideGenericCallback.ts, 16, 38))
+
+  return executeFetch('x', data);
+>executeFetch : Symbol(executeFetch, Decl(typeParameterDefaultInCallInsideGenericCallback.ts, 5, 76))
+>data : Symbol(data, Decl(typeParameterDefaultInCallInsideGenericCallback.ts, 16, 31))
+
+}, []);
+
+export const check: Promise<string> = cb({ v: 1 });
+>check : Symbol(check, Decl(typeParameterDefaultInCallInsideGenericCallback.ts, 20, 12))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2018.promise.d.ts, --, --))
+>cb : Symbol(cb, Decl(typeParameterDefaultInCallInsideGenericCallback.ts, 16, 12))
+>v : Symbol(v, Decl(typeParameterDefaultInCallInsideGenericCallback.ts, 20, 42))
+

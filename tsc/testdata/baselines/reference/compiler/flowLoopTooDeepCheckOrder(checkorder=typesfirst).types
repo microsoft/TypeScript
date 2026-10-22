@@ -1,0 +1,3361 @@
+//// [tests/cases/compiler/flowLoopTooDeepCheckOrder.ts] ////
+
+=== flowLoopTooDeepCheckOrder.ts ===
+// The loop is too deep to analyze from any reference, so 'narrowed' gives
+// up whether or not the reference in the loop analyzed the loop first.
+
+declare function cond(): boolean;
+>cond : () => boolean
+
+declare function isString(value: unknown): value is string;
+>isString : (value: unknown) => value is string
+>value : unknown
+
+declare let b: boolean;
+>b : boolean
+
+let w: string | number = 0;
+>w : string | number
+>0 : 0
+
+while (cond()) {
+>cond() : boolean
+>cond : () => boolean
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (typeof w === "string") { w = 1; } else { w = "a"; }
+>typeof w === "string" : boolean
+>typeof w : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
+>w : any
+>"string" : "string"
+>w = 1 : 1
+>w : string | number
+>1 : 1
+>w = "a" : "a"
+>w : string | number
+>"a" : "a"
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+
+    if (b) {}
+>b : any
+}
+if (isString(w)) {
+>isString(w) : boolean
+>isString : (value: unknown) => value is string
+>w : any
+
+    const narrowed = w;
+>narrowed : any
+>w : string
+}
+

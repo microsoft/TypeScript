@@ -1,0 +1,344 @@
+//// [tests/cases/compiler/recursiveVarianceFixedPoint.ts] ////
+
+=== storeFirst.ts ===
+export {};
+
+interface Store<T> {
+    value: T;
+>value : T
+
+    listener: Listener<T>;
+>listener : Listener<T>
+}
+type Listener<T> = (batch: Store<T[]>) => void;
+>Listener : Listener<T>
+>batch : Store<T[]>
+
+declare let strings: Store<string>;
+>strings : Store<string>
+
+declare let unknowns: Store<unknown>;
+>unknowns : Store<unknown>
+
+declare let stringListener: Listener<string>;
+>stringListener : Listener<string>
+
+declare let unknownListener: Listener<unknown>;
+>unknownListener : Listener<unknown>
+
+unknowns = strings; // Error
+>unknowns = strings : Store<string>
+>unknowns : Store<unknown>
+>strings : Store<string>
+
+unknownListener = stringListener; // Error
+>unknownListener = stringListener : Listener<string>
+>unknownListener : Listener<unknown>
+>stringListener : Listener<string>
+
+=== listenerFirst.ts ===
+export {};
+
+type Listener<T> = (batch: Store<T[]>) => void;
+>Listener : Listener<T>
+>batch : Store<T[]>
+
+interface Store<T> {
+    listener: Listener<T>;
+>listener : Listener<T>
+
+    value: T;
+>value : T
+}
+
+declare let strings: Store<string>;
+>strings : Store<string>
+
+declare let unknowns: Store<unknown>;
+>unknowns : Store<unknown>
+
+declare let stringListener: Listener<string>;
+>stringListener : Listener<string>
+
+declare let unknownListener: Listener<unknown>;
+>unknownListener : Listener<unknown>
+
+unknownListener = stringListener; // Error
+>unknownListener = stringListener : Listener<string>
+>unknownListener : Listener<unknown>
+>stringListener : Listener<string>
+
+unknowns = strings; // Error
+>unknowns = strings : Store<string>
+>unknowns : Store<unknown>
+>strings : Store<string>
+
+=== columnDefFirst.ts ===
+export {};
+
+interface ColumnDef<Row, Value = unknown> {
+    cell?: (column: Column<Row, Value>) => void;
+>cell : ((column: Column<Row, Value>) => void) | undefined
+>column : Column<Row, Value>
+}
+interface Column<Row, Value = unknown> {
+    accessorFn?: (row: Row) => Value;
+>accessorFn : ((row: Row) => Value) | undefined
+>row : Row
+
+    columnDef: ColumnDef<Row, Value>;
+>columnDef : ColumnDef<Row, Value>
+}
+
+declare let stringColumn: ColumnDef<{ name: string }, string>;
+>stringColumn : ColumnDef<{ name: string; }, string>
+>name : string
+
+declare let unknownColumn: ColumnDef<{ name: string }, unknown>;
+>unknownColumn : ColumnDef<{ name: string; }, unknown>
+>name : string
+
+unknownColumn = stringColumn; // Error
+>unknownColumn = stringColumn : ColumnDef<{ name: string; }, string>
+>unknownColumn : ColumnDef<{ name: string; }, unknown>
+>stringColumn : ColumnDef<{ name: string; }, string>
+
+stringColumn = unknownColumn; // Error
+>stringColumn = unknownColumn : ColumnDef<{ name: string; }, unknown>
+>stringColumn : ColumnDef<{ name: string; }, string>
+>unknownColumn : ColumnDef<{ name: string; }, unknown>
+
+=== columnFirst.ts ===
+export {};
+
+interface Column<Row, Value = unknown> {
+    columnDef: ColumnDef<Row, Value>;
+>columnDef : ColumnDef<Row, Value>
+
+    accessorFn?: (row: Row) => Value;
+>accessorFn : ((row: Row) => Value) | undefined
+>row : Row
+}
+interface ColumnDef<Row, Value = unknown> {
+    cell?: (column: Column<Row, Value>) => void;
+>cell : ((column: Column<Row, Value>) => void) | undefined
+>column : Column<Row, Value>
+}
+
+declare let stringColumn: ColumnDef<{ name: string }, string>;
+>stringColumn : ColumnDef<{ name: string; }, string>
+>name : string
+
+declare let unknownColumn: ColumnDef<{ name: string }, unknown>;
+>unknownColumn : ColumnDef<{ name: string; }, unknown>
+>name : string
+
+unknownColumn = stringColumn; // Error
+>unknownColumn = stringColumn : ColumnDef<{ name: string; }, string>
+>unknownColumn : ColumnDef<{ name: string; }, unknown>
+>stringColumn : ColumnDef<{ name: string; }, string>
+
+stringColumn = unknownColumn; // Error
+>stringColumn = unknownColumn : ColumnDef<{ name: string; }, unknown>
+>stringColumn : ColumnDef<{ name: string; }, string>
+>unknownColumn : ColumnDef<{ name: string; }, unknown>
+
+=== positiveRecursion.ts ===
+export {};
+
+interface Tree<T> {
+    readonly value: T;
+>value : T
+
+    readonly children: readonly Tree<T>[];
+>children : readonly Tree<T>[]
+
+    readonly metadata: Map<string, number>;
+>metadata : Map<string, number>
+}
+interface Phantom<T> {
+    next: Phantom<T>;
+>next : Phantom<T>
+}
+
+declare let stringTree: Tree<string>;
+>stringTree : Tree<string>
+
+declare let unknownTree: Tree<unknown>;
+>unknownTree : Tree<unknown>
+
+declare let stringPhantom: Phantom<string>;
+>stringPhantom : Phantom<string>
+
+declare let numberPhantom: Phantom<number>;
+>numberPhantom : Phantom<number>
+
+unknownTree = stringTree;
+>unknownTree = stringTree : Tree<string>
+>unknownTree : Tree<unknown>
+>stringTree : Tree<string>
+
+stringTree = unknownTree; // Error
+>stringTree = unknownTree : Tree<unknown>
+>stringTree : Tree<string>
+>unknownTree : Tree<unknown>
+
+stringPhantom = numberPhantom;
+>stringPhantom = numberPhantom : Phantom<number>
+>stringPhantom : Phantom<string>
+>numberPhantom : Phantom<number>
+
+numberPhantom = stringPhantom;
+>numberPhantom = stringPhantom : Phantom<string>
+>numberPhantom : Phantom<number>
+>stringPhantom : Phantom<string>
+
+=== nestedComposition.ts ===
+export {};
+
+interface Outer<T> {
+    value: T;
+>value : T
+
+    next: Inner<Outer<T>>;
+>next : Inner<Outer<T>>
+}
+interface Inner<T> {
+    consume: (value: T) => void;
+>consume : (value: T) => void
+>value : T
+}
+
+declare let strings: Outer<string>;
+>strings : Outer<string>
+
+declare let unknowns: Outer<unknown>;
+>unknowns : Outer<unknown>
+
+unknowns = strings; // Error
+>unknowns = strings : Outer<string>
+>unknowns : Outer<unknown>
+>strings : Outer<string>
+
+strings = unknowns; // Error
+>strings = unknowns : Outer<unknown>
+>strings : Outer<string>
+>unknowns : Outer<unknown>
+
+=== annotations.ts ===
+export {};
+
+interface AnnotatedTree<out T> {
+    readonly value: T;
+>value : T
+
+    readonly children: AnnotatedTree<T>[];
+>children : AnnotatedTree<T>[]
+}
+interface AnnotatedStore<in out T> {
+    value: T;
+>value : T
+
+    listener: (batch: AnnotatedStore<T[]>) => void;
+>listener : (batch: AnnotatedStore<T[]>) => void
+>batch : AnnotatedStore<T[]>
+}
+
+declare let stringTree: AnnotatedTree<string>;
+>stringTree : AnnotatedTree<string>
+
+declare let unknownTree: AnnotatedTree<unknown>;
+>unknownTree : AnnotatedTree<unknown>
+
+declare let stringStore: AnnotatedStore<string>;
+>stringStore : AnnotatedStore<string>
+
+declare let unknownStore: AnnotatedStore<unknown>;
+>unknownStore : AnnotatedStore<unknown>
+
+unknownTree = stringTree;
+>unknownTree = stringTree : AnnotatedTree<string>
+>unknownTree : AnnotatedTree<unknown>
+>stringTree : AnnotatedTree<string>
+
+stringTree = unknownTree; // Error
+>stringTree = unknownTree : AnnotatedTree<unknown>
+>stringTree : AnnotatedTree<string>
+>unknownTree : AnnotatedTree<unknown>
+
+unknownStore = stringStore; // Error
+>unknownStore = stringStore : AnnotatedStore<string>
+>unknownStore : AnnotatedStore<unknown>
+>stringStore : AnnotatedStore<string>
+
+stringStore = unknownStore; // Error
+>stringStore = unknownStore : AnnotatedStore<unknown>
+>stringStore : AnnotatedStore<string>
+>unknownStore : AnnotatedStore<unknown>
+
+=== structuralMeasurement.ts ===
+export {};
+
+interface GenericMethod<T> {
+    value: T;
+>value : T
+
+    next: <U>(value: U) => GenericMethod<T>;
+>next : <U>(value: U) => GenericMethod<T>
+>value : U
+}
+interface Projected<T extends { value: unknown }> {
+>value : unknown
+
+    value: T["value"];
+>value : T["value"]
+
+    next: Projected<T>;
+>next : Projected<T>
+}
+interface Method<T> {
+    value: T;
+>value : T
+
+    accept(value: Method<T>): void;
+>accept : (value: Method<T>) => void
+>value : Method<T>
+}
+
+declare let strings: GenericMethod<string>;
+>strings : GenericMethod<string>
+
+declare let unknowns: GenericMethod<unknown>;
+>unknowns : GenericMethod<unknown>
+
+declare let stringMethod: Method<string>;
+>stringMethod : Method<string>
+
+declare let unknownMethod: Method<unknown>;
+>unknownMethod : Method<unknown>
+
+declare let projected: Projected<{ value: string; extra: number }>;
+>projected : Projected<{ value: string; extra: number; }>
+>value : string
+>extra : number
+
+unknowns = strings;
+>unknowns = strings : GenericMethod<string>
+>unknowns : GenericMethod<unknown>
+>strings : GenericMethod<string>
+
+strings = unknowns; // Error
+>strings = unknowns : GenericMethod<unknown>
+>strings : GenericMethod<string>
+>unknowns : GenericMethod<unknown>
+
+unknownMethod = stringMethod;
+>unknownMethod = stringMethod : Method<string>
+>unknownMethod : Method<unknown>
+>stringMethod : Method<string>
+
+const widened: Projected<{ value: string }> = projected;
+>widened : Projected<{ value: string; }>
+>value : string
+>projected : Projected<{ value: string; extra: number; }>
+

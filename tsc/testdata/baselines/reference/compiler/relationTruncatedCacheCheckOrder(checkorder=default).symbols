@@ -1,0 +1,48 @@
+//// [tests/cases/compiler/relationTruncatedCacheCheckOrder.ts] ////
+
+=== relationTruncatedCacheCheckOrder.ts ===
+// Relating 'S<[string]>' to 'R<[string]>' from scratch reaches 'next.leaf'
+// before giving up on deeply nested types, and fails there. Inside the
+// relation of 'S<string>' to 'R<string>' it is one level deeper and is cut
+// short instead. That truncated result must not be cached, so the error for
+// 'q = p' must be reported whether or not 'y = x' was checked first.
+
+type S<T> = { next: S<[T]>; leaf: T extends [[unknown]] ? number : T };
+>S : Symbol(S, Decl(relationTruncatedCacheCheckOrder.ts, 0, 0))
+>T : Symbol(T, Decl(relationTruncatedCacheCheckOrder.ts, 6, 7))
+>next : Symbol(next, Decl(relationTruncatedCacheCheckOrder.ts, 6, 13))
+>S : Symbol(S, Decl(relationTruncatedCacheCheckOrder.ts, 0, 0))
+>T : Symbol(T, Decl(relationTruncatedCacheCheckOrder.ts, 6, 7))
+>leaf : Symbol(leaf, Decl(relationTruncatedCacheCheckOrder.ts, 6, 27))
+>T : Symbol(T, Decl(relationTruncatedCacheCheckOrder.ts, 6, 7))
+>T : Symbol(T, Decl(relationTruncatedCacheCheckOrder.ts, 6, 7))
+
+type R<T> = { next: R<[T]>; leaf: T };
+>R : Symbol(R, Decl(relationTruncatedCacheCheckOrder.ts, 6, 71))
+>T : Symbol(T, Decl(relationTruncatedCacheCheckOrder.ts, 7, 7))
+>next : Symbol(next, Decl(relationTruncatedCacheCheckOrder.ts, 7, 13))
+>R : Symbol(R, Decl(relationTruncatedCacheCheckOrder.ts, 6, 71))
+>T : Symbol(T, Decl(relationTruncatedCacheCheckOrder.ts, 7, 7))
+>leaf : Symbol(leaf, Decl(relationTruncatedCacheCheckOrder.ts, 7, 27))
+>T : Symbol(T, Decl(relationTruncatedCacheCheckOrder.ts, 7, 7))
+
+declare let x: S<string>, y: R<string>;
+>x : Symbol(x, Decl(relationTruncatedCacheCheckOrder.ts, 9, 11))
+>S : Symbol(S, Decl(relationTruncatedCacheCheckOrder.ts, 0, 0))
+>y : Symbol(y, Decl(relationTruncatedCacheCheckOrder.ts, 9, 25))
+>R : Symbol(R, Decl(relationTruncatedCacheCheckOrder.ts, 6, 71))
+
+declare let p: S<[string]>, q: R<[string]>;
+>p : Symbol(p, Decl(relationTruncatedCacheCheckOrder.ts, 10, 11))
+>S : Symbol(S, Decl(relationTruncatedCacheCheckOrder.ts, 0, 0))
+>q : Symbol(q, Decl(relationTruncatedCacheCheckOrder.ts, 10, 27))
+>R : Symbol(R, Decl(relationTruncatedCacheCheckOrder.ts, 6, 71))
+
+y = x;
+>y : Symbol(y, Decl(relationTruncatedCacheCheckOrder.ts, 9, 25))
+>x : Symbol(x, Decl(relationTruncatedCacheCheckOrder.ts, 9, 11))
+
+q = p;
+>q : Symbol(q, Decl(relationTruncatedCacheCheckOrder.ts, 10, 27))
+>p : Symbol(p, Decl(relationTruncatedCacheCheckOrder.ts, 10, 11))
+
