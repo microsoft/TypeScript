@@ -1287,7 +1287,7 @@ func TestRealpathAliasLifecycle(t *testing.T) {
 		t.Parallel()
 		files := map[string]any{
 			"/project/node_modules/pkg": vfstest.Symlink("/packages/pkg"),
-			"/project/src/index.ts":      "export {}",
+			"/project/src/index.ts":     "export {}",
 		}
 		for i := range 1001 {
 			files["/packages/pkg/file"+strconv.Itoa(i)+".ts"] = "export {}"
