@@ -1023,7 +1023,6 @@ async function runTestAPIWasm() {
         "updateSnapshot file systems (?:full file system is total and does not invoke host callbacks|file system layer bypasses callbacks on hits and falls back on misses)",
         // The reactor mirrors input files but does not mirror build output changes.
         "BuildOrchestrator (?:returns build response information after clean|returns deleted files from a clean response|rebuilds projects after multiple file system changes|clean removes build outputs|builds and cleans selected projects after file system changes|cleans only references of a selected project|handles invalidated projects and cleans the last built configuration)",
-        "parseJsonConfigFileContent accepts non-object JSON|parseConfigFile$|project exposes parsedCommandLine",
         "Benchmarks|Parse-clone-emit roundtrip",
     ].join("|");
     for (const mode of ["async", "sync"]) {

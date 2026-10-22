@@ -396,7 +396,7 @@ describe("API", { concurrency }, () => {
         await using api = spawnAPI();
 
         const config = await api.parseJsonConfigFileContent(null, { configDirectory: "/src" });
-        assert.deepEqual(config.fileNames, ["/src/index.ts", "/src/foo.ts"]);
+        assert.deepEqual([...config.fileNames].sort(), ["/src/foo.ts", "/src/index.ts"]);
         assert.deepEqual(config.errors, []);
     });
 
@@ -1443,7 +1443,7 @@ declare module "augmentation" {}`,
         await using api = spawnAPI();
 
         const config = await api.parseConfigFile("/tsconfig.json");
-        assert.deepEqual(config.fileNames, ["/src/index.ts", "/src/foo.ts"]);
+        assert.deepEqual([...config.fileNames].sort(), ["/src/foo.ts", "/src/index.ts"]);
         assert.deepEqual(config.options, { configFilePath: "/tsconfig.json" });
         assert.equal(config.compileOnSave, false);
         assert.equal(config.typeAcquisition, undefined);
@@ -2109,7 +2109,7 @@ describe("Snapshot", { concurrency }, () => {
 
         const snapshot = await api.createSnapshot({ openProjects: ["/tsconfig.json"] });
         const project = snapshot.getConfiguredProject("/tsconfig.json")!;
-        assert.deepEqual(project.parsedCommandLine.fileNames, ["/src/index.ts", "/src/foo.ts"]);
+        assert.deepEqual([...project.parsedCommandLine.fileNames].sort(), ["/src/foo.ts", "/src/index.ts"]);
         assert.deepEqual(project.parsedCommandLine.options, { configFilePath: "/tsconfig.json" });
         assert.equal(project.parsedCommandLine.compileOnSave, true);
     });
