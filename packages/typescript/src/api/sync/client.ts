@@ -25,6 +25,7 @@ import {
     TimingCollector,
     type TimingInfo,
 } from "../timing.ts";
+import { TimingDump } from "../timingDump.ts";
 
 export type { ClientOptions, ClientSocketOptions, ClientSpawnOptions };
 
@@ -32,6 +33,8 @@ export class Client {
     private channel: SyncRpcChannel;
     private encoder = new TextEncoder();
     private timing: TimingCollector | undefined;
+    private timingDump: TimingDump | undefined;
+    private closed = false;
     private maxResponseBytesPerPage: number | undefined;
 
     constructor(options: ClientOptions) {
@@ -39,6 +42,10 @@ export class Client {
             throw new Error("Socket connections are not yet supported in the sync client");
         }
 
+        this.timingDump = TimingDump.fromEnvironment("sync", "spawn");
+        if (this.timingDump) {
+            options = { ...options, collectTiming: true };
+        }
         const args = getAPIProcessArgs(options, false);
         this.maxResponseBytesPerPage = options.maxResponseBytesPerPage;
 
@@ -184,6 +191,24 @@ export class Client {
     }
 
     close(): void {
-        this.channel.close();
+        if (this.closed) return;
+        this.closed = true;
+        try {
+            if (this.timingDump && this.timing) {
+                const local = this.timing.getInfo();
+                let server: ServerTimingInfo | undefined;
+                let serverTimingError: string | undefined;
+                try {
+                    server = JSON.parse(this.channel.requestSync("getServerTiming", "")) as ServerTimingInfo;
+                }
+                catch (error) {
+                    serverTimingError = String(error);
+                }
+                this.timingDump.write(local, server, serverTimingError);
+            }
+        }
+        finally {
+            this.channel.close();
+        }
     }
 }

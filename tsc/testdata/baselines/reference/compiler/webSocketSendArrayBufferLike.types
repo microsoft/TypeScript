@@ -1,0 +1,25 @@
+//// [tests/cases/compiler/webSocketSendArrayBufferLike.ts] ////
+
+=== webSocketSendArrayBufferLike.ts ===
+declare const socket: WebSocket;
+>socket : WebSocket
+
+declare const bytes: Uint8Array;
+>bytes : Uint8Array<ArrayBufferLike>
+
+socket.send(bytes);
+>socket.send(bytes) : void
+>socket.send : (data: BufferSource | Blob | string) => void
+>socket : WebSocket
+>send : (data: BufferSource | Blob | string) => void
+>bytes : Uint8Array<ArrayBufferLike>
+
+socket.send(new Uint8Array(8));
+>socket.send(new Uint8Array(8)) : void
+>socket.send : (data: BufferSource | Blob | string) => void
+>socket : WebSocket
+>send : (data: BufferSource | Blob | string) => void
+>new Uint8Array(8) : Uint8Array<ArrayBuffer>
+>Uint8Array : Uint8ArrayConstructor
+>8 : 8
+

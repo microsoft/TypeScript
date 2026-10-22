@@ -108,6 +108,7 @@ export const title = "Profile";
 	}
 	initMsg, _, ok := client.SendRequest(t, lsproto.InitializeInfo, &lsproto.InitializeParams{
 		Capabilities: caps,
+		RootUri:      lsproto.DocumentUriOrNull{DocumentUri: new(lsproto.DocumentUri("file:///home/project"))},
 		InitializationOptions: &lsproto.InitializationOptionsOrNull{InitializationOptions: &lsproto.InitializationOptions{
 			RunExternalCode: new(true),
 		}},
