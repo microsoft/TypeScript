@@ -1227,6 +1227,7 @@ type InterfaceType struct {
 	allTypeParameters           []*Type // Type parameters (outer + local + thisType)
 	outerTypeParameterCount     int     // Count of outer type parameters
 	thisType                    *Type   // The "this" type (nil if none)
+	thislessMembers             bool    // Completed non-generic interface members are unaffected by a this argument
 	baseTypesResolved           bool
 	declaredMembersResolved     bool
 	resolvedBaseConstructorType *Type
@@ -1326,6 +1327,7 @@ type MappedType struct {
 	templateType         *Type
 	modifiersType        *Type
 	resolvedApparentType *Type
+	membersFinalized     bool
 	containsError        bool
 }
 

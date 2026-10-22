@@ -19549,6 +19549,13 @@ func (c *Checker) resolveObjectTypeMembers(t *Type, source *Type, typeParameters
 	var constructSignatures []*Signature
 	var indexInfos []*IndexInfo
 	var instantiated bool
+	thislessMembers := source.objectFlags&ObjectFlagsClassOrInterface == ObjectFlagsInterface &&
+		source.symbol.Flags()&(ast.SymbolFlagsClass|ast.SymbolFlagsInterface) == ast.SymbolFlagsInterface &&
+		len(source.AsInterfaceType().TypeParameters()) == 0 &&
+		len(source.symbol.Declarations()) != 0 &&
+		core.Every(source.symbol.Declarations(), func(d *ast.Node) bool {
+			return ast.IsInterfaceDeclaration(d) && d.Flags&ast.NodeFlagsContainsThis == 0
+		})
 	resolved := c.resolveDeclaredMembers(source)
 	if slices.Equal(typeParameters, typeArguments) {
 		members = resolved.declaredMembers
@@ -19586,9 +19593,33 @@ func (c *Checker) resolveObjectTypeMembers(t *Type, source *Type, typeParameters
 			indexInfos = core.Concatenate(indexInfos, core.Filter(inheritedIndexInfos, func(info *IndexInfo) bool {
 				return findIndexInfo(indexInfos, info.keyType) == nil
 			}))
+			thislessMembers = thislessMembers && c.isThislessResolvedBase(baseType, instantiatedBaseType)
 		}
 	}
 	c.setStructuredTypeMembers(t, members, callSignatures, constructSignatures, indexInfos)
+	if thislessMembers && source.AsInterfaceType().baseTypesResolved {
+		source.AsInterfaceType().thislessMembers = true
+	}
+}
+
+// Prove this independence only from completed bases. In particular, mapped types
+// publish an empty member table during resolution; that placeholder is not a proof.
+func (c *Checker) isThislessResolvedBase(base *Type, resolved *Type) bool {
+	if resolved.objectFlags&ObjectFlagsMembersResolved == 0 {
+		return false
+	}
+	if base.objectFlags&ObjectFlagsMapped != 0 {
+		return base == resolved && base.AsMappedType().membersFinalized && !base.AsMappedType().containsError &&
+			!c.couldContainTypeVariables(base) &&
+			(base.alias == nil || !core.Some(base.alias.typeArguments, c.couldContainTypeVariables))
+	}
+	if base.objectFlags&(ObjectFlagsClassOrInterface|ObjectFlagsReference) != 0 {
+		target := getTargetType(base)
+		return target.objectFlags&ObjectFlagsClassOrInterface == ObjectFlagsInterface &&
+			target.AsInterfaceType().baseTypesResolved && len(target.AsInterfaceType().TypeParameters()) == 0 &&
+			(target.AsInterfaceType().thisType == nil || target.AsInterfaceType().thislessMembers)
+	}
+	return false
 }
 
 func findIndexInfo(indexInfos []*IndexInfo, keyType *Type) *IndexInfo {
@@ -20011,7 +20042,7 @@ func (c *Checker) getTypeWithThisArgument(t *Type, thisArgument *Type, needAppar
 		target := t.Target()
 		typeArguments := c.getTypeArguments(t)
 		if len(target.AsInterfaceType().TypeParameters()) == len(typeArguments) {
-			if thisArgument == nil {
+			if thisArgument == nil || target.AsInterfaceType().thislessMembers {
 				thisArgument = target.AsInterfaceType().thisType
 			}
 			return c.createTypeReference(target, core.Concatenate(typeArguments, []*Type{thisArgument}))
@@ -21420,6 +21451,7 @@ func (c *Checker) resolveMappedTypeMembers(t *Type) {
 		forEachType(c.getLowerBoundOfKeyType(constraintType), addMemberForKeyType)
 	}
 	c.setStructuredTypeMembers(t, members, nil, nil, indexInfos)
+	t.AsMappedType().membersFinalized = true
 }
 
 func (c *Checker) getTypeOfMappedSymbol(symbol *ast.Symbol) *Type {

@@ -1,0 +1,649 @@
+//// [tests/cases/compiler/thisIndependentInterfaceMembers.ts] ////
+
+=== thisIndependentInterfaceMembers.ts ===
+// The member reuse optimization must preserve real, outer and foreign `this`.
+namespace capturedOuterThis {
+>capturedOuterThis : Symbol(capturedOuterThis, Decl(thisIndependentInterfaceMembers.ts, 0, 0))
+
+    class Owner {
+>Owner : Symbol(Owner, Decl(thisIndependentInterfaceMembers.ts, 1, 29))
+
+        read() {
+>read : Symbol(Owner.read, Decl(thisIndependentInterfaceMembers.ts, 2, 17))
+
+            type OuterMap = { readonly [K in "owner"]: this };
+>OuterMap : Symbol(OuterMap, Decl(thisIndependentInterfaceMembers.ts, 3, 16))
+>K : Symbol(K, Decl(thisIndependentInterfaceMembers.ts, 4, 40))
+
+            interface Base extends OuterMap {}
+>Base : Symbol(Base, Decl(thisIndependentInterfaceMembers.ts, 4, 62))
+>OuterMap : Symbol(OuterMap, Decl(thisIndependentInterfaceMembers.ts, 3, 16))
+
+            interface Derived extends Base { readonly derived: "derived" }
+>Derived : Symbol(Derived, Decl(thisIndependentInterfaceMembers.ts, 5, 46))
+>Base : Symbol(Base, Decl(thisIndependentInterfaceMembers.ts, 4, 62))
+>derived : Symbol(Derived.derived, Decl(thisIndependentInterfaceMembers.ts, 6, 44))
+
+            const value = null! as Derived;
+>value : Symbol(value, Decl(thisIndependentInterfaceMembers.ts, 7, 17))
+>Derived : Symbol(Derived, Decl(thisIndependentInterfaceMembers.ts, 5, 46))
+
+            const exact: this = value.owner;
+>exact : Symbol(exact, Decl(thisIndependentInterfaceMembers.ts, 8, 17))
+>value.owner : Symbol(owner)
+>value : Symbol(value, Decl(thisIndependentInterfaceMembers.ts, 7, 17))
+>owner : Symbol(owner)
+
+            // @ts-expect-error The owner is not the mapped property's interface.
+            const wrong: Derived = value.owner;
+>wrong : Symbol(wrong, Decl(thisIndependentInterfaceMembers.ts, 10, 17))
+>Derived : Symbol(Derived, Decl(thisIndependentInterfaceMembers.ts, 5, 46))
+>value.owner : Symbol(owner)
+>value : Symbol(value, Decl(thisIndependentInterfaceMembers.ts, 7, 17))
+>owner : Symbol(owner)
+
+            return exact;
+>exact : Symbol(exact, Decl(thisIndependentInterfaceMembers.ts, 8, 17))
+        }
+    }
+    class SpecialOwner extends Owner { readonly special = "special" }
+>SpecialOwner : Symbol(SpecialOwner, Decl(thisIndependentInterfaceMembers.ts, 13, 5))
+>Owner : Symbol(Owner, Decl(thisIndependentInterfaceMembers.ts, 1, 29))
+>special : Symbol(SpecialOwner.special, Decl(thisIndependentInterfaceMembers.ts, 14, 38))
+
+    declare const owner: SpecialOwner;
+>owner : Symbol(owner, Decl(thisIndependentInterfaceMembers.ts, 15, 17))
+>SpecialOwner : Symbol(SpecialOwner, Decl(thisIndependentInterfaceMembers.ts, 13, 5))
+
+    const exactOwner: SpecialOwner = owner.read();
+>exactOwner : Symbol(exactOwner, Decl(thisIndependentInterfaceMembers.ts, 16, 9))
+>SpecialOwner : Symbol(SpecialOwner, Decl(thisIndependentInterfaceMembers.ts, 13, 5))
+>owner.read : Symbol(Owner.read, Decl(thisIndependentInterfaceMembers.ts, 2, 17))
+>owner : Symbol(owner, Decl(thisIndependentInterfaceMembers.ts, 15, 17))
+>read : Symbol(Owner.read, Decl(thisIndependentInterfaceMembers.ts, 2, 17))
+}
+
+namespace fluentAlias {
+>fluentAlias : Symbol(fluentAlias, Decl(thisIndependentInterfaceMembers.ts, 17, 1))
+
+    interface Fluent { self(): this }
+>Fluent : Symbol(Fluent, Decl(thisIndependentInterfaceMembers.ts, 19, 23))
+>self : Symbol(Fluent.self, Decl(thisIndependentInterfaceMembers.ts, 20, 22))
+
+    type FluentAlias = Fluent;
+>FluentAlias : Symbol(FluentAlias, Decl(thisIndependentInterfaceMembers.ts, 20, 37))
+>Fluent : Symbol(Fluent, Decl(thisIndependentInterfaceMembers.ts, 19, 23))
+
+    type Marker = { readonly [K in "marker"]: "marker" };
+>Marker : Symbol(Marker, Decl(thisIndependentInterfaceMembers.ts, 21, 30))
+>K : Symbol(K, Decl(thisIndependentInterfaceMembers.ts, 22, 30))
+
+    interface Mixed extends Marker, FluentAlias {}
+>Mixed : Symbol(Mixed, Decl(thisIndependentInterfaceMembers.ts, 22, 57))
+>Marker : Symbol(Marker, Decl(thisIndependentInterfaceMembers.ts, 21, 30))
+>FluentAlias : Symbol(FluentAlias, Decl(thisIndependentInterfaceMembers.ts, 20, 37))
+
+    interface Derived extends Mixed { readonly derived: "derived" }
+>Derived : Symbol(Derived, Decl(thisIndependentInterfaceMembers.ts, 23, 50))
+>Mixed : Symbol(Mixed, Decl(thisIndependentInterfaceMembers.ts, 22, 57))
+>derived : Symbol(Derived.derived, Decl(thisIndependentInterfaceMembers.ts, 24, 37))
+
+    declare const value: Derived;
+>value : Symbol(value, Decl(thisIndependentInterfaceMembers.ts, 25, 17))
+>Derived : Symbol(Derived, Decl(thisIndependentInterfaceMembers.ts, 23, 50))
+
+    const exact: Derived = value.self();
+>exact : Symbol(exact, Decl(thisIndependentInterfaceMembers.ts, 26, 9))
+>Derived : Symbol(Derived, Decl(thisIndependentInterfaceMembers.ts, 23, 50))
+>value.self : Symbol(Fluent.self, Decl(thisIndependentInterfaceMembers.ts, 20, 22))
+>value : Symbol(value, Decl(thisIndependentInterfaceMembers.ts, 25, 17))
+>self : Symbol(Fluent.self, Decl(thisIndependentInterfaceMembers.ts, 20, 22))
+}
+
+namespace foreignMappedThis {
+>foreignMappedThis : Symbol(foreignMappedThis, Decl(thisIndependentInterfaceMembers.ts, 27, 1))
+
+    interface Foreign { self(): this; readonly foreign: "foreign" }
+>Foreign : Symbol(Foreign, Decl(thisIndependentInterfaceMembers.ts, 29, 29))
+>self : Symbol(Foreign.self, Decl(thisIndependentInterfaceMembers.ts, 30, 23))
+>foreign : Symbol(Foreign.foreign, Decl(thisIndependentInterfaceMembers.ts, 30, 37))
+
+    type Copy<T> = { readonly [K in keyof T]: T[K] };
+>Copy : Symbol(Copy, Decl(thisIndependentInterfaceMembers.ts, 30, 67))
+>T : Symbol(T, Decl(thisIndependentInterfaceMembers.ts, 31, 14))
+>K : Symbol(K, Decl(thisIndependentInterfaceMembers.ts, 31, 31))
+>T : Symbol(T, Decl(thisIndependentInterfaceMembers.ts, 31, 14))
+>T : Symbol(T, Decl(thisIndependentInterfaceMembers.ts, 31, 14))
+>K : Symbol(K, Decl(thisIndependentInterfaceMembers.ts, 31, 31))
+
+    interface Copied extends Copy<Foreign> {}
+>Copied : Symbol(Copied, Decl(thisIndependentInterfaceMembers.ts, 31, 53))
+>Copy : Symbol(Copy, Decl(thisIndependentInterfaceMembers.ts, 30, 67))
+>Foreign : Symbol(Foreign, Decl(thisIndependentInterfaceMembers.ts, 29, 29))
+
+    interface Derived extends Copied { readonly derived: "derived" }
+>Derived : Symbol(Derived, Decl(thisIndependentInterfaceMembers.ts, 32, 45))
+>Copied : Symbol(Copied, Decl(thisIndependentInterfaceMembers.ts, 31, 53))
+>derived : Symbol(Derived.derived, Decl(thisIndependentInterfaceMembers.ts, 33, 38))
+
+    declare const value: Derived;
+>value : Symbol(value, Decl(thisIndependentInterfaceMembers.ts, 34, 17))
+>Derived : Symbol(Derived, Decl(thisIndependentInterfaceMembers.ts, 32, 45))
+
+    const exact: Foreign = value.self();
+>exact : Symbol(exact, Decl(thisIndependentInterfaceMembers.ts, 35, 9))
+>Foreign : Symbol(Foreign, Decl(thisIndependentInterfaceMembers.ts, 29, 29))
+>value.self : Symbol(self, Decl(thisIndependentInterfaceMembers.ts, 30, 23))
+>value : Symbol(value, Decl(thisIndependentInterfaceMembers.ts, 34, 17))
+>self : Symbol(self, Decl(thisIndependentInterfaceMembers.ts, 30, 23))
+
+    // @ts-expect-error A concrete map does not rebind the foreign method's this.
+    const wrong: Derived = value.self();
+>wrong : Symbol(wrong, Decl(thisIndependentInterfaceMembers.ts, 37, 9))
+>Derived : Symbol(Derived, Decl(thisIndependentInterfaceMembers.ts, 32, 45))
+>value.self : Symbol(self, Decl(thisIndependentInterfaceMembers.ts, 30, 23))
+>value : Symbol(value, Decl(thisIndependentInterfaceMembers.ts, 34, 17))
+>self : Symbol(self, Decl(thisIndependentInterfaceMembers.ts, 30, 23))
+}
+
+namespace mergedDeclarations {
+>mergedDeclarations : Symbol(mergedDeclarations, Decl(thisIndependentInterfaceMembers.ts, 38, 1))
+
+    type Marker = { readonly [K in "marker"]: "marker" };
+>Marker : Symbol(Marker, Decl(thisIndependentInterfaceMembers.ts, 40, 30))
+>K : Symbol(K, Decl(thisIndependentInterfaceMembers.ts, 41, 30))
+
+    interface Merged extends Marker {}
+>Merged : Symbol(Merged, Decl(thisIndependentInterfaceMembers.ts, 41, 57), Decl(thisIndependentInterfaceMembers.ts, 42, 38))
+>Marker : Symbol(Marker, Decl(thisIndependentInterfaceMembers.ts, 40, 30))
+
+    interface Merged { self(): this }
+>Merged : Symbol(Merged, Decl(thisIndependentInterfaceMembers.ts, 41, 57), Decl(thisIndependentInterfaceMembers.ts, 42, 38))
+>self : Symbol(Merged.self, Decl(thisIndependentInterfaceMembers.ts, 43, 22))
+
+    interface Derived extends Merged { readonly derived: "derived" }
+>Derived : Symbol(Derived, Decl(thisIndependentInterfaceMembers.ts, 43, 37))
+>Merged : Symbol(Merged, Decl(thisIndependentInterfaceMembers.ts, 41, 57), Decl(thisIndependentInterfaceMembers.ts, 42, 38))
+>derived : Symbol(Derived.derived, Decl(thisIndependentInterfaceMembers.ts, 44, 38))
+
+    declare const value: Derived;
+>value : Symbol(value, Decl(thisIndependentInterfaceMembers.ts, 45, 17))
+>Derived : Symbol(Derived, Decl(thisIndependentInterfaceMembers.ts, 43, 37))
+
+    const exact: Derived = value.self();
+>exact : Symbol(exact, Decl(thisIndependentInterfaceMembers.ts, 46, 9))
+>Derived : Symbol(Derived, Decl(thisIndependentInterfaceMembers.ts, 43, 37))
+>value.self : Symbol(Merged.self, Decl(thisIndependentInterfaceMembers.ts, 43, 22))
+>value : Symbol(value, Decl(thisIndependentInterfaceMembers.ts, 45, 17))
+>self : Symbol(Merged.self, Decl(thisIndependentInterfaceMembers.ts, 43, 22))
+
+    const marker: "marker" = value.marker;
+>marker : Symbol(marker, Decl(thisIndependentInterfaceMembers.ts, 47, 9))
+>value.marker : Symbol(marker)
+>value : Symbol(value, Decl(thisIndependentInterfaceMembers.ts, 45, 17))
+>marker : Symbol(marker)
+
+    interface Plain extends Marker {}
+>Plain : Symbol(Plain, Decl(thisIndependentInterfaceMembers.ts, 47, 42), Decl(thisIndependentInterfaceMembers.ts, 49, 37))
+>Marker : Symbol(Marker, Decl(thisIndependentInterfaceMembers.ts, 40, 30))
+
+    interface Plain { readonly merged: "merged" }
+>Plain : Symbol(Plain, Decl(thisIndependentInterfaceMembers.ts, 47, 42), Decl(thisIndependentInterfaceMembers.ts, 49, 37))
+>merged : Symbol(Plain.merged, Decl(thisIndependentInterfaceMembers.ts, 50, 21))
+
+    interface PlainDerived extends Plain { readonly derived: "derived" }
+>PlainDerived : Symbol(PlainDerived, Decl(thisIndependentInterfaceMembers.ts, 50, 49))
+>Plain : Symbol(Plain, Decl(thisIndependentInterfaceMembers.ts, 47, 42), Decl(thisIndependentInterfaceMembers.ts, 49, 37))
+>derived : Symbol(PlainDerived.derived, Decl(thisIndependentInterfaceMembers.ts, 51, 42))
+
+    declare const plain: PlainDerived;
+>plain : Symbol(plain, Decl(thisIndependentInterfaceMembers.ts, 52, 17))
+>PlainDerived : Symbol(PlainDerived, Decl(thisIndependentInterfaceMembers.ts, 50, 49))
+
+    const inherited: "merged" = plain.merged;
+>inherited : Symbol(inherited, Decl(thisIndependentInterfaceMembers.ts, 53, 9))
+>plain.merged : Symbol(Plain.merged, Decl(thisIndependentInterfaceMembers.ts, 50, 21))
+>plain : Symbol(plain, Decl(thisIndependentInterfaceMembers.ts, 52, 17))
+>merged : Symbol(Plain.merged, Decl(thisIndependentInterfaceMembers.ts, 50, 21))
+}
+
+namespace genericInterfaces {
+>genericInterfaces : Symbol(genericInterfaces, Decl(thisIndependentInterfaceMembers.ts, 54, 1))
+
+    type Marker<T> = { readonly [K in "value"]: T };
+>Marker : Symbol(Marker, Decl(thisIndependentInterfaceMembers.ts, 56, 29))
+>T : Symbol(T, Decl(thisIndependentInterfaceMembers.ts, 57, 16))
+>K : Symbol(K, Decl(thisIndependentInterfaceMembers.ts, 57, 33))
+>T : Symbol(T, Decl(thisIndependentInterfaceMembers.ts, 57, 16))
+
+    interface Generic<T> extends Marker<T> { self(): this }
+>Generic : Symbol(Generic, Decl(thisIndependentInterfaceMembers.ts, 57, 52))
+>T : Symbol(T, Decl(thisIndependentInterfaceMembers.ts, 58, 22))
+>Marker : Symbol(Marker, Decl(thisIndependentInterfaceMembers.ts, 56, 29))
+>T : Symbol(T, Decl(thisIndependentInterfaceMembers.ts, 58, 22))
+>self : Symbol(Generic.self, Decl(thisIndependentInterfaceMembers.ts, 58, 44))
+
+    interface NumberValue extends Generic<number> { readonly numeric: "numeric" }
+>NumberValue : Symbol(NumberValue, Decl(thisIndependentInterfaceMembers.ts, 58, 59))
+>Generic : Symbol(Generic, Decl(thisIndependentInterfaceMembers.ts, 57, 52))
+>numeric : Symbol(NumberValue.numeric, Decl(thisIndependentInterfaceMembers.ts, 59, 51))
+
+    interface StringValue extends Generic<string> { readonly textual: "textual" }
+>StringValue : Symbol(StringValue, Decl(thisIndependentInterfaceMembers.ts, 59, 81))
+>Generic : Symbol(Generic, Decl(thisIndependentInterfaceMembers.ts, 57, 52))
+>textual : Symbol(StringValue.textual, Decl(thisIndependentInterfaceMembers.ts, 60, 51))
+
+    declare const numeric: NumberValue;
+>numeric : Symbol(numeric, Decl(thisIndependentInterfaceMembers.ts, 61, 17))
+>NumberValue : Symbol(NumberValue, Decl(thisIndependentInterfaceMembers.ts, 58, 59))
+
+    declare const textual: StringValue;
+>textual : Symbol(textual, Decl(thisIndependentInterfaceMembers.ts, 62, 17))
+>StringValue : Symbol(StringValue, Decl(thisIndependentInterfaceMembers.ts, 59, 81))
+
+    const numberValue: number = numeric.value;
+>numberValue : Symbol(numberValue, Decl(thisIndependentInterfaceMembers.ts, 63, 9))
+>numeric.value : Symbol(value)
+>numeric : Symbol(numeric, Decl(thisIndependentInterfaceMembers.ts, 61, 17))
+>value : Symbol(value)
+
+    const stringValue: string = textual.value;
+>stringValue : Symbol(stringValue, Decl(thisIndependentInterfaceMembers.ts, 64, 9))
+>textual.value : Symbol(value)
+>textual : Symbol(textual, Decl(thisIndependentInterfaceMembers.ts, 62, 17))
+>value : Symbol(value)
+
+    const exact: NumberValue = numeric.self();
+>exact : Symbol(exact, Decl(thisIndependentInterfaceMembers.ts, 65, 9))
+>NumberValue : Symbol(NumberValue, Decl(thisIndependentInterfaceMembers.ts, 58, 59))
+>numeric.self : Symbol(Generic.self, Decl(thisIndependentInterfaceMembers.ts, 58, 44))
+>numeric : Symbol(numeric, Decl(thisIndependentInterfaceMembers.ts, 61, 17))
+>self : Symbol(Generic.self, Decl(thisIndependentInterfaceMembers.ts, 58, 44))
+
+    // @ts-expect-error Distinct type arguments may not share member substitutions.
+    const wrong: number = textual.value;
+>wrong : Symbol(wrong, Decl(thisIndependentInterfaceMembers.ts, 67, 9))
+>textual.value : Symbol(value)
+>textual : Symbol(textual, Decl(thisIndependentInterfaceMembers.ts, 62, 17))
+>value : Symbol(value)
+
+    function enclosing<T>(input: T) {
+>enclosing : Symbol(enclosing, Decl(thisIndependentInterfaceMembers.ts, 67, 40))
+>T : Symbol(T, Decl(thisIndependentInterfaceMembers.ts, 69, 23))
+>input : Symbol(input, Decl(thisIndependentInterfaceMembers.ts, 69, 26))
+>T : Symbol(T, Decl(thisIndependentInterfaceMembers.ts, 69, 23))
+
+        type OuterMap = { readonly [K in "value"]: T };
+>OuterMap : Symbol(OuterMap, Decl(thisIndependentInterfaceMembers.ts, 69, 37))
+>K : Symbol(K, Decl(thisIndependentInterfaceMembers.ts, 70, 36))
+>T : Symbol(T, Decl(thisIndependentInterfaceMembers.ts, 69, 23))
+
+        interface Local extends OuterMap {}
+>Local : Symbol(Local, Decl(thisIndependentInterfaceMembers.ts, 70, 55))
+>OuterMap : Symbol(OuterMap, Decl(thisIndependentInterfaceMembers.ts, 69, 37))
+
+        interface Derived extends Local { readonly local: "local" }
+>Derived : Symbol(Derived, Decl(thisIndependentInterfaceMembers.ts, 71, 43))
+>Local : Symbol(Local, Decl(thisIndependentInterfaceMembers.ts, 70, 55))
+>local : Symbol(Derived.local, Decl(thisIndependentInterfaceMembers.ts, 72, 41))
+
+        const value = null! as Derived;
+>value : Symbol(value, Decl(thisIndependentInterfaceMembers.ts, 73, 13))
+>Derived : Symbol(Derived, Decl(thisIndependentInterfaceMembers.ts, 71, 43))
+
+        const exact: T = value.value;
+>exact : Symbol(exact, Decl(thisIndependentInterfaceMembers.ts, 74, 13))
+>T : Symbol(T, Decl(thisIndependentInterfaceMembers.ts, 69, 23))
+>value.value : Symbol(value)
+>value : Symbol(value, Decl(thisIndependentInterfaceMembers.ts, 73, 13))
+>value : Symbol(value)
+
+        return { input, exact };
+>input : Symbol(input, Decl(thisIndependentInterfaceMembers.ts, 75, 16))
+>exact : Symbol(exact, Decl(thisIndependentInterfaceMembers.ts, 75, 23))
+    }
+    const numericOuter: number = enclosing(1).exact;
+>numericOuter : Symbol(numericOuter, Decl(thisIndependentInterfaceMembers.ts, 77, 9))
+>enclosing(1).exact : Symbol(exact, Decl(thisIndependentInterfaceMembers.ts, 75, 23))
+>enclosing : Symbol(enclosing, Decl(thisIndependentInterfaceMembers.ts, 67, 40))
+>exact : Symbol(exact, Decl(thisIndependentInterfaceMembers.ts, 75, 23))
+
+    const stringOuter: string = enclosing("text").exact;
+>stringOuter : Symbol(stringOuter, Decl(thisIndependentInterfaceMembers.ts, 78, 9))
+>enclosing("text").exact : Symbol(exact, Decl(thisIndependentInterfaceMembers.ts, 75, 23))
+>enclosing : Symbol(enclosing, Decl(thisIndependentInterfaceMembers.ts, 67, 40))
+>exact : Symbol(exact, Decl(thisIndependentInterfaceMembers.ts, 75, 23))
+
+    // @ts-expect-error An enclosing generic remains specific to the invocation.
+    const wrongOuter: number = enclosing("text").exact;
+>wrongOuter : Symbol(wrongOuter, Decl(thisIndependentInterfaceMembers.ts, 80, 9))
+>enclosing("text").exact : Symbol(exact, Decl(thisIndependentInterfaceMembers.ts, 75, 23))
+>enclosing : Symbol(enclosing, Decl(thisIndependentInterfaceMembers.ts, 67, 40))
+>exact : Symbol(exact, Decl(thisIndependentInterfaceMembers.ts, 75, 23))
+}
+
+namespace mappedAliasArguments {
+>mappedAliasArguments : Symbol(mappedAliasArguments, Decl(thisIndependentInterfaceMembers.ts, 81, 1))
+
+    type Value<T> = { readonly [K in "value"]: T };
+>Value : Symbol(Value, Decl(thisIndependentInterfaceMembers.ts, 83, 32))
+>T : Symbol(T, Decl(thisIndependentInterfaceMembers.ts, 84, 15))
+>K : Symbol(K, Decl(thisIndependentInterfaceMembers.ts, 84, 32))
+>T : Symbol(T, Decl(thisIndependentInterfaceMembers.ts, 84, 15))
+
+    type Alias<T> = Value<T>;
+>Alias : Symbol(Alias, Decl(thisIndependentInterfaceMembers.ts, 84, 51))
+>T : Symbol(T, Decl(thisIndependentInterfaceMembers.ts, 85, 15))
+>Value : Symbol(Value, Decl(thisIndependentInterfaceMembers.ts, 83, 32))
+>T : Symbol(T, Decl(thisIndependentInterfaceMembers.ts, 85, 15))
+
+    interface Generic<T> extends Alias<T> {}
+>Generic : Symbol(Generic, Decl(thisIndependentInterfaceMembers.ts, 85, 29))
+>T : Symbol(T, Decl(thisIndependentInterfaceMembers.ts, 86, 22))
+>Alias : Symbol(Alias, Decl(thisIndependentInterfaceMembers.ts, 84, 51))
+>T : Symbol(T, Decl(thisIndependentInterfaceMembers.ts, 86, 22))
+
+    interface NumberValue extends Generic<number> {}
+>NumberValue : Symbol(NumberValue, Decl(thisIndependentInterfaceMembers.ts, 86, 44))
+>Generic : Symbol(Generic, Decl(thisIndependentInterfaceMembers.ts, 85, 29))
+
+    interface StringValue extends Generic<string> {}
+>StringValue : Symbol(StringValue, Decl(thisIndependentInterfaceMembers.ts, 87, 52))
+>Generic : Symbol(Generic, Decl(thisIndependentInterfaceMembers.ts, 85, 29))
+
+    declare const numeric: NumberValue;
+>numeric : Symbol(numeric, Decl(thisIndependentInterfaceMembers.ts, 89, 17))
+>NumberValue : Symbol(NumberValue, Decl(thisIndependentInterfaceMembers.ts, 86, 44))
+
+    declare const textual: StringValue;
+>textual : Symbol(textual, Decl(thisIndependentInterfaceMembers.ts, 90, 17))
+>StringValue : Symbol(StringValue, Decl(thisIndependentInterfaceMembers.ts, 87, 52))
+
+    const numberValue: number = numeric.value;
+>numberValue : Symbol(numberValue, Decl(thisIndependentInterfaceMembers.ts, 91, 9))
+>numeric.value : Symbol(value)
+>numeric : Symbol(numeric, Decl(thisIndependentInterfaceMembers.ts, 89, 17))
+>value : Symbol(value)
+
+    const stringValue: string = textual.value;
+>stringValue : Symbol(stringValue, Decl(thisIndependentInterfaceMembers.ts, 92, 9))
+>textual.value : Symbol(value)
+>textual : Symbol(textual, Decl(thisIndependentInterfaceMembers.ts, 90, 17))
+>value : Symbol(value)
+
+    // @ts-expect-error A mapped alias must retain its variable-containing argument.
+    const wrong: number = textual.value;
+>wrong : Symbol(wrong, Decl(thisIndependentInterfaceMembers.ts, 94, 9))
+>textual.value : Symbol(value)
+>textual : Symbol(textual, Decl(thisIndependentInterfaceMembers.ts, 90, 17))
+>value : Symbol(value)
+
+    interface Foreign { self(): this; readonly foreign: "foreign" }
+>Foreign : Symbol(Foreign, Decl(thisIndependentInterfaceMembers.ts, 94, 40))
+>self : Symbol(Foreign.self, Decl(thisIndependentInterfaceMembers.ts, 96, 23))
+>foreign : Symbol(Foreign.foreign, Decl(thisIndependentInterfaceMembers.ts, 96, 37))
+
+    type Copy<T> = { readonly [K in keyof T]: T[K] };
+>Copy : Symbol(Copy, Decl(thisIndependentInterfaceMembers.ts, 96, 67))
+>T : Symbol(T, Decl(thisIndependentInterfaceMembers.ts, 97, 14))
+>K : Symbol(K, Decl(thisIndependentInterfaceMembers.ts, 97, 31))
+>T : Symbol(T, Decl(thisIndependentInterfaceMembers.ts, 97, 14))
+>T : Symbol(T, Decl(thisIndependentInterfaceMembers.ts, 97, 14))
+>K : Symbol(K, Decl(thisIndependentInterfaceMembers.ts, 97, 31))
+
+    type ConcreteAlias = Copy<Foreign>;
+>ConcreteAlias : Symbol(ConcreteAlias, Decl(thisIndependentInterfaceMembers.ts, 97, 53))
+>Copy : Symbol(Copy, Decl(thisIndependentInterfaceMembers.ts, 96, 67))
+>Foreign : Symbol(Foreign, Decl(thisIndependentInterfaceMembers.ts, 94, 40))
+
+    interface Copied extends ConcreteAlias {}
+>Copied : Symbol(Copied, Decl(thisIndependentInterfaceMembers.ts, 98, 39))
+>ConcreteAlias : Symbol(ConcreteAlias, Decl(thisIndependentInterfaceMembers.ts, 97, 53))
+
+    interface Derived extends Copied { readonly derived: "derived" }
+>Derived : Symbol(Derived, Decl(thisIndependentInterfaceMembers.ts, 99, 45))
+>Copied : Symbol(Copied, Decl(thisIndependentInterfaceMembers.ts, 98, 39))
+>derived : Symbol(Derived.derived, Decl(thisIndependentInterfaceMembers.ts, 100, 38))
+
+    declare const derived: Derived;
+>derived : Symbol(derived, Decl(thisIndependentInterfaceMembers.ts, 101, 17))
+>Derived : Symbol(Derived, Decl(thisIndependentInterfaceMembers.ts, 99, 45))
+
+    const foreign: Foreign = derived.self();
+>foreign : Symbol(foreign, Decl(thisIndependentInterfaceMembers.ts, 102, 9))
+>Foreign : Symbol(Foreign, Decl(thisIndependentInterfaceMembers.ts, 94, 40))
+>derived.self : Symbol(self, Decl(thisIndependentInterfaceMembers.ts, 96, 23))
+>derived : Symbol(derived, Decl(thisIndependentInterfaceMembers.ts, 101, 17))
+>self : Symbol(self, Decl(thisIndependentInterfaceMembers.ts, 96, 23))
+
+    // @ts-expect-error Mapping must preserve foreign-this even behind an alias.
+    const notDerived: Derived = derived.self();
+>notDerived : Symbol(notDerived, Decl(thisIndependentInterfaceMembers.ts, 104, 9))
+>Derived : Symbol(Derived, Decl(thisIndependentInterfaceMembers.ts, 99, 45))
+>derived.self : Symbol(self, Decl(thisIndependentInterfaceMembers.ts, 96, 23))
+>derived : Symbol(derived, Decl(thisIndependentInterfaceMembers.ts, 101, 17))
+>self : Symbol(self, Decl(thisIndependentInterfaceMembers.ts, 96, 23))
+}
+
+namespace recursiveMembers {
+>recursiveMembers : Symbol(recursiveMembers, Decl(thisIndependentInterfaceMembers.ts, 105, 1))
+
+    type Links = { readonly [K in "next"]: Node };
+>Links : Symbol(Links, Decl(thisIndependentInterfaceMembers.ts, 107, 28))
+>K : Symbol(K, Decl(thisIndependentInterfaceMembers.ts, 108, 29))
+>Node : Symbol(Node, Decl(thisIndependentInterfaceMembers.ts, 108, 50))
+
+    interface Node extends Links { readonly value: number }
+>Node : Symbol(Node, Decl(thisIndependentInterfaceMembers.ts, 108, 50))
+>Links : Symbol(Links, Decl(thisIndependentInterfaceMembers.ts, 107, 28))
+>value : Symbol(Node.value, Decl(thisIndependentInterfaceMembers.ts, 109, 34))
+
+    interface Derived extends Node { readonly own: string }
+>Derived : Symbol(Derived, Decl(thisIndependentInterfaceMembers.ts, 109, 59))
+>Node : Symbol(Node, Decl(thisIndependentInterfaceMembers.ts, 108, 50))
+>own : Symbol(Derived.own, Decl(thisIndependentInterfaceMembers.ts, 110, 36))
+
+    declare const value: Derived;
+>value : Symbol(value, Decl(thisIndependentInterfaceMembers.ts, 111, 17))
+>Derived : Symbol(Derived, Decl(thisIndependentInterfaceMembers.ts, 109, 59))
+
+    const next: Node = value.next;
+>next : Symbol(next, Decl(thisIndependentInterfaceMembers.ts, 112, 9))
+>Node : Symbol(Node, Decl(thisIndependentInterfaceMembers.ts, 108, 50))
+>value.next : Symbol(next)
+>value : Symbol(value, Decl(thisIndependentInterfaceMembers.ts, 111, 17))
+>next : Symbol(next)
+
+    const nested: number = value.next.next.value;
+>nested : Symbol(nested, Decl(thisIndependentInterfaceMembers.ts, 113, 9))
+>value.next.next.value : Symbol(Node.value, Decl(thisIndependentInterfaceMembers.ts, 109, 34))
+>value.next.next : Symbol(next)
+>value.next : Symbol(next)
+>value : Symbol(value, Decl(thisIndependentInterfaceMembers.ts, 111, 17))
+>next : Symbol(next)
+>next : Symbol(next)
+>value : Symbol(Node.value, Decl(thisIndependentInterfaceMembers.ts, 109, 34))
+
+    // @ts-expect-error Recursive members retain the declared Node, not Derived.
+    const wrong: Derived = value.next;
+>wrong : Symbol(wrong, Decl(thisIndependentInterfaceMembers.ts, 115, 9))
+>Derived : Symbol(Derived, Decl(thisIndependentInterfaceMembers.ts, 109, 59))
+>value.next : Symbol(next)
+>value : Symbol(value, Decl(thisIndependentInterfaceMembers.ts, 111, 17))
+>next : Symbol(next)
+
+    // This forces lookup of a mapped member through a recursively referenced type.
+    type Reenter<T> = { readonly [K in "item"]: T };
+>Reenter : Symbol(Reenter, Decl(thisIndependentInterfaceMembers.ts, 115, 38))
+>T : Symbol(T, Decl(thisIndependentInterfaceMembers.ts, 118, 17))
+>K : Symbol(K, Decl(thisIndependentInterfaceMembers.ts, 118, 34))
+>T : Symbol(T, Decl(thisIndependentInterfaceMembers.ts, 118, 17))
+
+    interface Recursive extends Reenter<Recursive> { readonly own: "own" }
+>Recursive : Symbol(Recursive, Decl(thisIndependentInterfaceMembers.ts, 118, 52))
+>Reenter : Symbol(Reenter, Decl(thisIndependentInterfaceMembers.ts, 115, 38))
+>Recursive : Symbol(Recursive, Decl(thisIndependentInterfaceMembers.ts, 118, 52))
+>own : Symbol(Recursive.own, Decl(thisIndependentInterfaceMembers.ts, 119, 52))
+
+    interface RecursiveDerived extends Recursive { readonly more: "more" }
+>RecursiveDerived : Symbol(RecursiveDerived, Decl(thisIndependentInterfaceMembers.ts, 119, 74))
+>Recursive : Symbol(Recursive, Decl(thisIndependentInterfaceMembers.ts, 118, 52))
+>more : Symbol(RecursiveDerived.more, Decl(thisIndependentInterfaceMembers.ts, 120, 50))
+
+    declare const recursive: RecursiveDerived;
+>recursive : Symbol(recursive, Decl(thisIndependentInterfaceMembers.ts, 121, 17))
+>RecursiveDerived : Symbol(RecursiveDerived, Decl(thisIndependentInterfaceMembers.ts, 119, 74))
+
+    const own: "own" = recursive.item.item.own;
+>own : Symbol(own, Decl(thisIndependentInterfaceMembers.ts, 122, 9))
+>recursive.item.item.own : Symbol(Recursive.own, Decl(thisIndependentInterfaceMembers.ts, 119, 52))
+>recursive.item.item : Symbol(item)
+>recursive.item : Symbol(item)
+>recursive : Symbol(recursive, Decl(thisIndependentInterfaceMembers.ts, 121, 17))
+>item : Symbol(item)
+>item : Symbol(item)
+>own : Symbol(Recursive.own, Decl(thisIndependentInterfaceMembers.ts, 119, 52))
+
+    // @ts-expect-error A re-entrant lookup does not substitute a descendant.
+    const wrongRecursive: RecursiveDerived = recursive.item;
+>wrongRecursive : Symbol(wrongRecursive, Decl(thisIndependentInterfaceMembers.ts, 124, 9))
+>RecursiveDerived : Symbol(RecursiveDerived, Decl(thisIndependentInterfaceMembers.ts, 119, 74))
+>recursive.item : Symbol(item)
+>recursive : Symbol(recursive, Decl(thisIndependentInterfaceMembers.ts, 121, 17))
+>item : Symbol(item)
+}
+
+namespace rejectedBases {
+>rejectedBases : Symbol(rejectedBases, Decl(thisIndependentInterfaceMembers.ts, 125, 1))
+
+    type LeftMap = { readonly [K in "value"]: number };
+>LeftMap : Symbol(LeftMap, Decl(thisIndependentInterfaceMembers.ts, 127, 25))
+>K : Symbol(K, Decl(thisIndependentInterfaceMembers.ts, 128, 31))
+
+    type RightMap = { readonly [K in "value"]: string };
+>RightMap : Symbol(RightMap, Decl(thisIndependentInterfaceMembers.ts, 128, 55))
+>K : Symbol(K, Decl(thisIndependentInterfaceMembers.ts, 129, 32))
+
+    interface Left extends LeftMap {}
+>Left : Symbol(Left, Decl(thisIndependentInterfaceMembers.ts, 129, 56))
+>LeftMap : Symbol(LeftMap, Decl(thisIndependentInterfaceMembers.ts, 127, 25))
+
+    interface Right extends RightMap {}
+>Right : Symbol(Right, Decl(thisIndependentInterfaceMembers.ts, 130, 37))
+>RightMap : Symbol(RightMap, Decl(thisIndependentInterfaceMembers.ts, 128, 55))
+
+    // @ts-expect-error Conflicting inherited properties must still reject.
+    interface Conflict extends Left, Right {}
+>Conflict : Symbol(Conflict, Decl(thisIndependentInterfaceMembers.ts, 131, 39))
+>Left : Symbol(Left, Decl(thisIndependentInterfaceMembers.ts, 129, 56))
+>Right : Symbol(Right, Decl(thisIndependentInterfaceMembers.ts, 130, 37))
+
+    // @ts-expect-error A circular mapped constraint remains an error.
+    type Reentered = { [K in keyof Circular]: Circular[K] };
+>Reentered : Symbol(Reentered, Decl(thisIndependentInterfaceMembers.ts, 133, 45))
+>K : Symbol(K, Decl(thisIndependentInterfaceMembers.ts, 136, 24))
+>Circular : Symbol(Circular, Decl(thisIndependentInterfaceMembers.ts, 136, 60))
+>Circular : Symbol(Circular, Decl(thisIndependentInterfaceMembers.ts, 136, 60))
+>K : Symbol(K, Decl(thisIndependentInterfaceMembers.ts, 136, 24))
+
+    // @ts-expect-error Resolution placeholders must not prove valid ancestry.
+    interface Circular extends Reentered { readonly own: string }
+>Circular : Symbol(Circular, Decl(thisIndependentInterfaceMembers.ts, 136, 60))
+>Reentered : Symbol(Reentered, Decl(thisIndependentInterfaceMembers.ts, 133, 45))
+>own : Symbol(Circular.own, Decl(thisIndependentInterfaceMembers.ts, 138, 42))
+
+    // @ts-expect-error An unresolved mapped key still reports its error.
+    type ErrorMap = { [K in MissingKey]: number };
+>ErrorMap : Symbol(ErrorMap, Decl(thisIndependentInterfaceMembers.ts, 138, 65))
+>K : Symbol(K, Decl(thisIndependentInterfaceMembers.ts, 141, 23))
+>MissingKey : Symbol(MissingKey)
+
+    interface ErrorBase extends ErrorMap {}
+>ErrorBase : Symbol(ErrorBase, Decl(thisIndependentInterfaceMembers.ts, 141, 50))
+>ErrorMap : Symbol(ErrorMap, Decl(thisIndependentInterfaceMembers.ts, 138, 65))
+
+    // @ts-expect-error The erroneous key must not erase the numeric index contract.
+    interface ErrorDerived extends ErrorBase { readonly own: "own" }
+>ErrorDerived : Symbol(ErrorDerived, Decl(thisIndependentInterfaceMembers.ts, 142, 43))
+>ErrorBase : Symbol(ErrorBase, Decl(thisIndependentInterfaceMembers.ts, 141, 50))
+>own : Symbol(ErrorDerived.own, Decl(thisIndependentInterfaceMembers.ts, 144, 46))
+}
+
+namespace concreteMappedMembers {
+>concreteMappedMembers : Symbol(concreteMappedMembers, Decl(thisIndependentInterfaceMembers.ts, 145, 1))
+
+    type Value<T> = { readonly [K in "value"]: T };
+>Value : Symbol(Value, Decl(thisIndependentInterfaceMembers.ts, 147, 33))
+>T : Symbol(T, Decl(thisIndependentInterfaceMembers.ts, 148, 15))
+>K : Symbol(K, Decl(thisIndependentInterfaceMembers.ts, 148, 32))
+>T : Symbol(T, Decl(thisIndependentInterfaceMembers.ts, 148, 15))
+
+    interface Plain extends Value<number> {}
+>Plain : Symbol(Plain, Decl(thisIndependentInterfaceMembers.ts, 148, 51))
+>Value : Symbol(Value, Decl(thisIndependentInterfaceMembers.ts, 147, 33))
+
+    interface Derived extends Plain { readonly own: "own" }
+>Derived : Symbol(Derived, Decl(thisIndependentInterfaceMembers.ts, 149, 44))
+>Plain : Symbol(Plain, Decl(thisIndependentInterfaceMembers.ts, 148, 51))
+>own : Symbol(Derived.own, Decl(thisIndependentInterfaceMembers.ts, 150, 37))
+
+    declare const value: Derived;
+>value : Symbol(value, Decl(thisIndependentInterfaceMembers.ts, 151, 17))
+>Derived : Symbol(Derived, Decl(thisIndependentInterfaceMembers.ts, 149, 44))
+
+    const exact: number = value.value;
+>exact : Symbol(exact, Decl(thisIndependentInterfaceMembers.ts, 152, 9))
+>value.value : Symbol(value)
+>value : Symbol(value, Decl(thisIndependentInterfaceMembers.ts, 151, 17))
+>value : Symbol(value)
+
+    // @ts-expect-error Concrete mapped properties keep their exact type.
+    const wrong: string = value.value;
+>wrong : Symbol(wrong, Decl(thisIndependentInterfaceMembers.ts, 154, 9))
+>value.value : Symbol(value)
+>value : Symbol(value, Decl(thisIndependentInterfaceMembers.ts, 151, 17))
+>value : Symbol(value)
+
+    interface WithIndex { readonly [key: string]: number }
+>WithIndex : Symbol(WithIndex, Decl(thisIndependentInterfaceMembers.ts, 154, 38))
+>key : Symbol(key, Decl(thisIndependentInterfaceMembers.ts, 156, 36))
+
+    interface IndexBase extends WithIndex {}
+>IndexBase : Symbol(IndexBase, Decl(thisIndependentInterfaceMembers.ts, 156, 58))
+>WithIndex : Symbol(WithIndex, Decl(thisIndependentInterfaceMembers.ts, 154, 38))
+
+    interface IndexDerived extends IndexBase { readonly own: 1 }
+>IndexDerived : Symbol(IndexDerived, Decl(thisIndependentInterfaceMembers.ts, 157, 44))
+>IndexBase : Symbol(IndexBase, Decl(thisIndependentInterfaceMembers.ts, 156, 58))
+>own : Symbol(IndexDerived.own, Decl(thisIndependentInterfaceMembers.ts, 158, 46))
+
+    declare const indexed: IndexDerived;
+>indexed : Symbol(indexed, Decl(thisIndependentInterfaceMembers.ts, 159, 17))
+>IndexDerived : Symbol(IndexDerived, Decl(thisIndependentInterfaceMembers.ts, 157, 44))
+
+    const entry: number = indexed["arbitrary"];
+>entry : Symbol(entry, Decl(thisIndependentInterfaceMembers.ts, 160, 9))
+>indexed : Symbol(indexed, Decl(thisIndependentInterfaceMembers.ts, 159, 17))
+
+    type Callable = { (): number; readonly [K: string]: unknown };
+>Callable : Symbol(Callable, Decl(thisIndependentInterfaceMembers.ts, 160, 47))
+>K : Symbol(K, Decl(thisIndependentInterfaceMembers.ts, 162, 44))
+
+    interface CallBase extends Callable {}
+>CallBase : Symbol(CallBase, Decl(thisIndependentInterfaceMembers.ts, 162, 66))
+>Callable : Symbol(Callable, Decl(thisIndependentInterfaceMembers.ts, 160, 47))
+
+    interface CallDerived extends CallBase { readonly own: "own" }
+>CallDerived : Symbol(CallDerived, Decl(thisIndependentInterfaceMembers.ts, 163, 42))
+>CallBase : Symbol(CallBase, Decl(thisIndependentInterfaceMembers.ts, 162, 66))
+>own : Symbol(CallDerived.own, Decl(thisIndependentInterfaceMembers.ts, 164, 44))
+
+    declare const callable: CallDerived;
+>callable : Symbol(callable, Decl(thisIndependentInterfaceMembers.ts, 165, 17))
+>CallDerived : Symbol(CallDerived, Decl(thisIndependentInterfaceMembers.ts, 163, 42))
+
+    const result: number = callable();
+>result : Symbol(result, Decl(thisIndependentInterfaceMembers.ts, 166, 9))
+>callable : Symbol(callable, Decl(thisIndependentInterfaceMembers.ts, 165, 17))
+}
+
