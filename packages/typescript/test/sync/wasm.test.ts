@@ -163,7 +163,7 @@ describe("API over WebAssembly", () => {
         }
     });
 
-    test("waits for LSP stdin without repeatedly reading", { timeout: 10_000 }, async () => {
+    test("waits for LSP stdin without repeatedly reading", { timeout: 10_000 }, async t => {
         const childSource = `
             import { readFileSync } from "node:fs";
             import { WASI } from "node:wasi";
@@ -190,6 +190,9 @@ describe("API over WebAssembly", () => {
             cwd: process.cwd(),
             stdio: ["pipe", "pipe", "pipe"],
         });
+        t.after(() => {
+            if (child.exitCode === null && child.signalCode === null) child.kill("SIGKILL");
+        });
         let stdout = "";
         let stderr = "";
         child.stdout.setEncoding("utf8");
@@ -211,7 +214,7 @@ describe("API over WebAssembly", () => {
         });
         child.stdin.write(`Content-Length: ${Buffer.byteLength(request)}\r\n\r\n${request}`);
 
-        while (!stdout.includes("Resolved client capabilities") && child.exitCode === null) {
+        while (!stdout.includes("Resolved client capabilities") && child.exitCode === null && !t.signal.aborted) {
             await new Promise(resolve => setTimeout(resolve, 10));
         }
         child.stdin.end();
@@ -220,7 +223,7 @@ describe("API over WebAssembly", () => {
         assert.match(stdout, /Resolved client capabilities/);
     });
 
-    test("waits for API stdin without repeatedly reading", { timeout: 10_000 }, async () => {
+    test("waits for API stdin without repeatedly reading", { timeout: 10_000 }, async t => {
         const childSource = `
             import { readFileSync } from "node:fs";
             import { WASI } from "node:wasi";
@@ -246,6 +249,9 @@ describe("API over WebAssembly", () => {
         const child = spawn(process.execPath, ["--input-type=module", "-e", childSource], {
             cwd: process.cwd(),
             stdio: ["pipe", "pipe", "pipe"],
+        });
+        t.after(() => {
+            if (child.exitCode === null && child.signalCode === null) child.kill("SIGKILL");
         });
         let stderr = "";
         child.stderr.setEncoding("utf8");
