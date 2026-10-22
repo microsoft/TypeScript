@@ -36,7 +36,6 @@ recursiveMappedTypes.ts(73,13): error TS2615: Type of property '"each"' circular
         [K in keyof Recurse1]: Recurse1[K]
               ~~~~~~~~~~~~~~
 !!! error TS2313: Type parameter 'K' has a circular constraint.
-!!! related TS2751 recursiveMappedTypes.ts:8:17: Circularity originates in type at this location.
     }
     
     // Repro from #27881
