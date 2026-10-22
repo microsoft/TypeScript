@@ -2281,7 +2281,21 @@ func (c *Checker) addTypeOnlyDeclarationRelatedInfo(diagnostic *ast.Diagnostic, 
 
 func (c *Checker) getSymbol(symbols ast.SymbolTable, name string, meaning ast.SymbolFlags) *ast.Symbol {
 	if meaning&ast.SymbolFlagsAll != 0 {
-		symbol := c.getMergedSymbol(symbols.Get(name))
+		symbol := symbols.Get(name)
+		if symbol == nil {
+			return nil
+		}
+		// Late binding can only merge member declarations into a symbol, so
+		// skip it when those could not make the symbol match. Resolving the
+		// late-bound members here would otherwise be circular when looking up
+		// a name inside one of their computed property names.
+		if merged := c.mergedSymbols.TryGet(symbol); merged != nil && *merged != nil {
+			symbol = *merged
+		}
+		if symbol.Flags()&(meaning|ast.SymbolFlagsAlias) == 0 && meaning&(ast.SymbolFlagsClassMember|ast.SymbolFlagsAssignment) == 0 {
+			return nil
+		}
+		symbol = c.getMergedSymbol(symbol)
 		if symbol != nil {
 			if symbol.Flags()&meaning != 0 {
 				return symbol
