@@ -39,6 +39,13 @@ func (this *SymbolTrackerImpl) TrackSymbol(symbol *ast.Symbol, enclosingDeclarat
 	return false
 }
 
+func (this *SymbolTrackerImpl) GetRemappedSymbol(symbol *ast.Symbol) *ast.Symbol {
+	if remapper, ok := this.inner.(nodebuilder.SymbolRemapper); ok {
+		return remapper.GetRemappedSymbol(symbol)
+	}
+	return nil
+}
+
 func (this *SymbolTrackerImpl) ReportInaccessibleThisError() {
 	this.onDiagnosticReported()
 	if this.inner == nil {

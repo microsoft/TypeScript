@@ -78,6 +78,9 @@ type DeclarationTransformer struct {
 	expandoHosts                     map[ast.NodeId]*ast.Node               // store the result of transforming expando hosts so they can be inserted later if the host is actually referenced
 	expandoMembers                   map[ast.NodeId][]*ast.Node             // store any found expando _members_ after transforming them so *if* the host is referenced, they can be emitted alongside it
 	deferredExpandoAssignments       map[ast.NodeId][]*ast.BinaryExpression // expando assignments whose host wasn't visible when collected, processed if the host is late-marked visible
+	generatedSymbolImports           []*ast.Node
+	generatedSymbolImportIds         map[ast.SymbolId]*ast.Symbol
+	generatedSymbolImportNames       map[string]bool
 	seenProperties                   collections.Set[thisPropertyAssignmentKey]
 	thisPropertyAssignmentsCollected []*ast.Node
 	rawReferencedFiles               []ReferencedFilePair
@@ -113,6 +116,7 @@ func NewDeclarationTransformer(host DeclarationEmitHost, resolver printer.EmitRe
 		resolver:            resolver,
 		declarationFilePath: declarationFilePath,
 	}
+	tx.state.addUniqueSymbolImport = tx.addUniqueSymbolImport
 	tx.state.reportExpandoFunctionErrors = func(node *ast.Node) {
 		if !tx.state.isolatedDeclarations {
 			return
@@ -290,6 +294,10 @@ func (tx *DeclarationTransformer) visitSourceFile(node *ast.SourceFile) *ast.Nod
 	tx.resultHasExternalModuleIndicator = false
 	tx.suppressNewDiagnosticContexts = false
 	tx.state.lateMarkedStatements = make([]*ast.Node, 0)
+	tx.generatedSymbolImports = nil
+	tx.generatedSymbolImportIds = make(map[ast.SymbolId]*ast.Symbol)
+	tx.generatedSymbolImportNames = make(map[string]bool)
+	tx.state.remappedSymbols = make(map[ast.SymbolId]*ast.Symbol)
 	tx.lateStatementReplacementMap = make(map[ast.NodeId]*ast.Node)
 	tx.expandoHosts = make(map[ast.NodeId]*ast.Node)
 	tx.expandoMembers = make(map[ast.NodeId][]*ast.Node)
@@ -351,6 +359,10 @@ func (tx *DeclarationTransformer) transformSourceFile(node *ast.SourceFile) *ast
 	var combinedStatements *ast.StatementList
 	statements := tx.Visitor().VisitNodes(node.Statements)
 	combinedStatements = tx.transformAndReplaceLatePaintedStatements(statements)
+	if len(tx.generatedSymbolImports) > 0 {
+		combinedStatements = tx.Factory().NewNodeList(append(tx.generatedSymbolImports, combinedStatements.Nodes...))
+		tx.resultHasExternalModuleIndicator = true
+	}
 	combinedStatements = tx.appendCjsExports(combinedStatements)
 	combinedStatements.Loc = statements.Loc // setTextRange
 	if ast.IsExternalOrCommonJSModule(node) {
@@ -375,6 +387,60 @@ func (tx *DeclarationTransformer) transformSourceFile(node *ast.SourceFile) *ast
 	result.AsSourceFile().IsDeclarationFile = true
 	result.AsSourceFile().ReferencedFiles = tx.getReferencedFiles(tx.declarationFilePath.Directory())
 	return result.AsNode()
+}
+
+func (tx *DeclarationTransformer) addUniqueSymbolImport(symbol *ast.Symbol) bool {
+	if symbol == nil {
+		return false
+	}
+	var exportedSymbol *ast.Symbol
+	for _, declaration := range symbol.Declarations() {
+		file := ast.GetSourceFileOfNode(declaration)
+		if file != nil && file.Symbol != nil {
+			if candidate := file.Symbol.Exports()[symbol.Name()]; candidate != nil {
+				if slices.Contains(candidate.Declarations(), declaration) {
+					exportedSymbol = candidate
+					break
+				}
+			}
+		}
+	}
+	if exportedSymbol == nil {
+		return false
+	}
+	symbolId := ast.GetSymbolId(symbol)
+	exportedSymbolId := ast.GetSymbolId(exportedSymbol)
+	if importedAlias := tx.generatedSymbolImportIds[exportedSymbolId]; importedAlias != nil {
+		tx.state.remappedSymbols[symbolId] = importedAlias
+		return true
+	}
+	specifier := tx.resolver.GetModuleSpecifierForSymbol(exportedSymbol, tx.enclosingDeclaration)
+	if specifier == "" {
+		return false
+	}
+	localName := exportedSymbol.Name()
+	for suffix := 1; tx.state.currentSourceFile.Locals[localName] != nil || tx.generatedSymbolImportNames[localName]; suffix++ {
+		localName = fmt.Sprintf("%s_%d", exportedSymbol.Name(), suffix)
+	}
+	importedName := tx.Factory().NewIdentifier(exportedSymbol.Name())
+	localIdentifier := tx.Factory().NewIdentifier(localName)
+	var propertyName *ast.Node
+	if localName != exportedSymbol.Name() {
+		propertyName = importedName.AsNode()
+	}
+	importSpecifier := tx.Factory().NewImportSpecifier(false, propertyName, localIdentifier)
+	namedImports := tx.Factory().NewNamedImports(tx.Factory().NewNodeList([]*ast.Node{importSpecifier}))
+	importClause := tx.Factory().NewImportClause(ast.KindTypeKeyword, nil, namedImports)
+	moduleSpecifier := tx.Factory().NewStringLiteral(specifier, ast.TokenFlagsNone)
+	importDeclaration := tx.Factory().NewImportDeclaration(nil, importClause, moduleSpecifier, nil)
+	tx.generatedSymbolImports = append(tx.generatedSymbolImports, importDeclaration)
+	tx.generatedSymbolImportNames[localName] = true
+	alias := ast.NewSymbol()
+	alias.SetName(localName)
+	tx.generatedSymbolImportIds[exportedSymbolId] = alias
+	tx.state.remappedSymbols[symbolId] = alias
+	tx.state.remappedSymbols[exportedSymbolId] = alias
+	return true
 }
 
 func createEmptyExports(factory *ast.NodeFactory) *ast.Node {

@@ -45,3 +45,8 @@ export interface Interface {
     readonly [SYMBOL]: string;
 }
 export declare function createInstance(): Interface;
+//// [index.d.ts]
+import type { SYMBOL } from "./bug";
+export declare const spread: {
+    [SYMBOL]: string;
+};

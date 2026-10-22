@@ -1,0 +1,40 @@
+//// [tests/cases/compiler/uniqueSymbolDeclarationEmitImportsTag.ts] ////
+
+=== /brand.ts ===
+export declare const tag: unique symbol;
+>tag : unique symbol
+
+export type Branded<Type, Name extends string> = Type & { readonly [tag]: Name };
+>Branded : Branded<Type, Name>
+>[tag] : Name
+>tag : unique symbol
+
+=== /otherBrand.ts ===
+export declare const tag: unique symbol;
+>tag : unique symbol
+
+export type OtherBranded = { readonly [tag]: "Other" };
+>OtherBranded : OtherBranded
+>[tag] : "Other"
+>tag : unique symbol
+
+=== /index.ts ===
+import type { Branded } from "./brand.js";
+>Branded : Branded<Type, Name>
+
+import type { OtherBranded } from "./otherBrand.js";
+>OtherBranded : OtherBranded
+
+declare const user: Branded<{ name: string }, "User"> & OtherBranded;
+>user : { name: string; } & { readonly [tag]: "User"; } & OtherBranded
+>name : string
+
+const tag = "local";
+>tag : "local"
+>"local" : "local"
+
+export const copy = { ...user };
+>copy : { [tag]: "User"; [tag]: "Other"; name: string; }
+>{ ...user } : { [tag]: "User"; [tag]: "Other"; name: string; }
+>user : { name: string; } & { readonly [tag]: "User"; } & OtherBranded
+
