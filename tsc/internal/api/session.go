@@ -561,7 +561,7 @@ type Session struct {
 
 	closeOnce sync.Once
 
-	// This is set to true when using MessagePackProtocol.
+	// This is set to true when using TupleProtocol.
 	useBinaryResponses      bool
 	batchResponsePages      sync.Map
 	nextBatchResponsePageID atomic.Uint64
