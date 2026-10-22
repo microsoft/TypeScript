@@ -354,8 +354,10 @@ func getExistingNodeTreeVisitor(b *NodeBuilderImpl, bound *recoveryBoundary) *as
 			symAtLocation == b.ch.unknownSymbol ||
 				// If the symbol is not found, but was not found in the original scope either we probably have an error, don't reuse the node
 				(symAtLocation == nil && sym != nil) ||
-				// If the symbol is found both in declaration scope and in current scope then it should point to the same reference
-				(symAtLocation != nil && sym != nil && b.ch.getSymbolIfSameReference(b.ch.getExportSymbolOfValueSymbolIfExported(symAtLocation), sym) == nil) {
+				// If the symbol is found both in declaration scope and in current scope then it should point to the same reference.
+				// A parameter in scope may be an instantiation of the one in the declaration, depending on whether
+				// its type was resolved before its signature was instantiated, so compare what they instantiate.
+				(symAtLocation != nil && sym != nil && b.ch.getSymbolIfSameReference(b.ch.getTargetSymbol(b.ch.getExportSymbolOfValueSymbolIfExported(symAtLocation)), b.ch.getTargetSymbol(sym)) == nil) {
 				// In isolated declaration we will not do rest parameter expansion so there is no need to report on these.
 				if symAtLocation != b.ch.unknownSymbol {
 					b.ctx.tracker.ReportInferenceFallback(node)
