@@ -291,10 +291,10 @@ func TestIntersectionReductionAllocations(t *testing.T) { //nolint:paralleltest
 		t.Skip("race instrumentation changes hashing allocations")
 	}
 	c, _ := newCompositeTestChecker()
-	members := make(ast.SymbolTable)
+	members := ast.NewSymbolTable(0)
 	for i := range 128 {
 		name := strconv.Itoa(i)
-		members[name] = c.newSymbol(ast.SymbolFlagsProperty, name)
+		members.Set(name, c.newSymbol(ast.SymbolFlagsProperty, name))
 	}
 	object := c.newAnonymousType(nil, members, nil, nil, nil)
 	intersection := c.newIntersectionType(ObjectFlagsNone, []*Type{object, object})
@@ -349,7 +349,7 @@ func TestIntersectionReductionReentrancy(t *testing.T) {
 	t.Parallel()
 	c, _ := newCompositeTestChecker()
 	property := c.newSymbol(ast.SymbolFlagsProperty, "value")
-	object := c.newAnonymousType(nil, ast.SymbolTable{"value": property}, nil, nil, nil)
+	object := c.newAnonymousType(nil, ast.SymbolTableOf("value", property), nil, nil, nil)
 	inner := c.newIntersectionType(ObjectFlagsNone, []*Type{object, object})
 	outer := c.newIntersectionType(ObjectFlagsNone, []*Type{inner, object})
 	assert.Equal(t, c.getReducedType(outer), outer)
@@ -359,7 +359,7 @@ func TestIntersectionReductionReentrancy(t *testing.T) {
 	assert.Assert(t, c.freePropertyCounts.next != nil)
 	workspace := c.freePropertyCounts
 	conflicting := c.newSymbolEx(ast.SymbolFlagsProperty, "value", ast.CheckFlagsContainsPrivate)
-	outer.AsUnionOrIntersectionType().propertyCacheWithoutFunctionPropertyAugment["value"] = conflicting
+	outer.AsUnionOrIntersectionType().propertyCacheWithoutFunctionPropertyAugment.Set("value", conflicting)
 	assert.Assert(t, c.somePropertyReducesToNever(outer))
 	assert.Equal(t, c.freePropertyCounts, workspace)
 	for counts := c.freePropertyCounts; counts != nil; counts = counts.next {

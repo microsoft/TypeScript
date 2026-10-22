@@ -144,7 +144,7 @@ func (c *Checker) getWithAlternativeContainers(container *ast.Symbol, symbol *as
 		c.getDeclaredTypeOfSymbol(container).flags&TypeFlagsObject != 0 {
 		c.someSymbolTableInScope(enclosingDeclaration, func(t ast.SymbolTable, _ symbolTableID, _ bool, _ bool, _ *ast.Node) bool {
 			found := false
-			for _, s := range t {
+			for _, s := range t.All() {
 				if s.Flags()&leftMeaning != 0 && c.getTypeOfSymbol(s) == c.getDeclaredTypeOfSymbol(container) {
 					variableMatches = append(variableMatches, s)
 					found = true
@@ -262,10 +262,10 @@ func (c *Checker) buildExternalModuleContainerIndex() {
 		}
 		container := c.getSymbolOfDeclaration(file.AsNode())
 		index.moduleOrder[container] = len(index.moduleOrder)
-		for _, exported := range c.getExportsOfSymbol(container) {
+		for _, exported := range c.getExportsOfSymbol(container).All() {
 			index.add(c.getResolvedTarget(exported), container)
 		}
-		if exportEquals := container.Exports()[ast.InternalSymbolNameExportEquals]; exportEquals != nil {
+		if exportEquals := container.Exports().Get(ast.InternalSymbolNameExportEquals); exportEquals != nil {
 			index.add(c.getResolvedTarget(exportEquals), container)
 		}
 	}
@@ -325,7 +325,7 @@ func (c *Checker) getFileSymbolIfFileSymbolExportEqualsContainer(d *ast.Node, co
 	if fileSymbol == nil || fileSymbol.Exports() == nil {
 		return nil
 	}
-	exported, ok := fileSymbol.Exports()[ast.InternalSymbolNameExportEquals]
+	exported, ok := fileSymbol.Exports().Lookup(ast.InternalSymbolNameExportEquals)
 	if !ok || exported == nil {
 		return nil
 	}
@@ -409,18 +409,18 @@ func (c *Checker) getAliasForSymbolInContainer(container *ast.Symbol, symbol *as
 	// Check if container is a thing with an `export=` which points directly at `symbol`, and if so, return
 	// the container itself as the alias for the symbol
 	if container.Exports() != nil {
-		exportEquals, ok := container.Exports()[ast.InternalSymbolNameExportEquals]
+		exportEquals, ok := container.Exports().Lookup(ast.InternalSymbolNameExportEquals)
 		if ok && exportEquals != nil && c.getSymbolIfSameReference(exportEquals, symbol) != nil {
 			return container
 		}
 	}
 	exports := c.getExportsOfSymbol(container)
-	quick, ok := exports[symbol.Name()]
+	quick, ok := exports.Lookup(symbol.Name())
 	if ok && quick != nil && c.getSymbolIfSameReference(quick, symbol) != nil {
 		return quick
 	}
 	var candidates []*ast.Symbol
-	for _, exported := range exports {
+	for _, exported := range exports.All() {
 		if c.getSymbolIfSameReference(exported, symbol) != nil {
 			candidates = append(candidates, exported)
 		}
@@ -580,7 +580,7 @@ func (c *Checker) getSymbolTableAliases(symbols ast.SymbolTable, tableId symbolT
 		}
 	}
 	var aliases []*ast.Symbol
-	for _, sym := range symbols {
+	for _, sym := range symbols.All() {
 		if sym.Flags()&ast.SymbolFlagsAlias != 0 {
 			aliases = append(aliases, sym)
 		}
@@ -603,7 +603,7 @@ func (c *Checker) trySymbolTable(
 ) []*ast.Symbol {
 	isGlobals := tableId == stKindGlobals
 	// If symbol is directly available by its name in the symbol table
-	res, ok := symbols[ctx.symbol.Name()]
+	res, ok := symbols.Lookup(ctx.symbol.Name())
 	if ok && res != nil && c.isAccessible(ctx, res /*resolvedAliasSymbol*/, nil, ignoreQualification) {
 		return []*ast.Symbol{ctx.symbol}
 	}
@@ -762,7 +762,7 @@ func (c *Checker) needsQualification(symbol *ast.Symbol, enclosingDeclaration *a
 	qualify := false
 	c.someSymbolTableInScope(enclosingDeclaration, func(symbolTable ast.SymbolTable, _ symbolTableID, _ bool, _ bool, _ *ast.Node) bool {
 		// If symbol of this name is not available in the symbol table we are ok
-		res, ok := symbolTable[symbol.Name()]
+		res, ok := symbolTable.Lookup(symbol.Name())
 		if !ok || res == nil {
 			return false
 		}
@@ -847,12 +847,12 @@ func (c *Checker) someSymbolTableInScope(
 			var table ast.SymbolTable
 			sym := c.getSymbolOfDeclaration(location)
 			// TODO: Should this filtered table be cached in some way?
-			for key, memberSymbol := range sym.Members() {
+			for key, memberSymbol := range sym.Members().All() {
 				if memberSymbol.Flags()&(ast.SymbolFlagsType & ^ast.SymbolFlagsAssignment) != 0 {
 					if table == nil {
-						table = make(ast.SymbolTable)
+						table = ast.NewSymbolTable(0)
 					}
-					table[key] = memberSymbol
+					table.Set(key, memberSymbol)
 				}
 			}
 			if table != nil && callback(table, symbolTableIDFromMembers(sym), false, false, location) {
@@ -892,7 +892,7 @@ func (c *Checker) getClassExpressionNameTable(location *ast.Node) ast.SymbolTabl
 	if len(nameText) == 0 || classSymbol == nil {
 		return nil
 	}
-	table := ast.SymbolTable{nameText: classSymbol}
+	table := ast.SymbolTableOf(nameText, classSymbol)
 	if c.classExpressionNameTables == nil {
 		c.classExpressionNameTables = make(map[ast.NodeId]ast.SymbolTable)
 	}

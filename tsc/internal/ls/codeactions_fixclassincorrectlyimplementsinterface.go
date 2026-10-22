@@ -190,10 +190,10 @@ func getMissingMembers(typeChecker *checker.Checker, classDeclaration *ast.Node,
 			if symbol == nil {
 				continue
 			}
-			if classMembers != nil && classMembers[symbol.Name()] != nil {
+			if classMembers != nil && classMembers.Get(symbol.Name()) != nil {
 				continue
 			}
-			if inheritedMembers[symbol.Name()] != nil || seenMembers[symbol.Name()] != nil {
+			if inheritedMembers.Get(symbol.Name()) != nil || seenMembers[symbol.Name()] != nil {
 				continue
 			}
 			flags := checker.GetDeclarationModifierFlagsFromSymbol(symbol)
@@ -209,22 +209,22 @@ func getMissingMembers(typeChecker *checker.Checker, classDeclaration *ast.Node,
 func getInheritedMembers(typeChecker *checker.Checker, classDeclaration *ast.Node) ast.SymbolTable {
 	typeNode := ast.GetClassExtendsHeritageElement(classDeclaration)
 	if typeNode == nil {
-		return ast.SymbolTable{}
+		return ast.NewSymbolTable(0)
 	}
 
 	baseType := typeChecker.GetTypeAtLocation(typeNode.AsNode())
 	if baseType == nil {
-		return ast.SymbolTable{}
+		return ast.NewSymbolTable(0)
 	}
 
-	inheritedMembers := make(ast.SymbolTable)
+	inheritedMembers := ast.NewSymbolTable(0)
 	for _, symbol := range typeChecker.GetPropertiesOfType(baseType) {
 		if symbol == nil {
 			continue
 		}
 		flags := checker.GetDeclarationModifierFlagsFromSymbol(symbol)
 		if flags&ast.ModifierFlagsPrivate == 0 {
-			inheritedMembers[symbol.Name()] = symbol
+			inheritedMembers.Set(symbol.Name(), symbol)
 		}
 	}
 	return inheritedMembers
