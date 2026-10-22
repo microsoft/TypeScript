@@ -3920,6 +3920,8 @@ var The_typescript_contentMapper_outputExtensions_of_the_content_mapper_package_
 
 var Content_mapper_extension_0_must_not_contain_path_separators = &Message{code: 18123, category: CategoryError, key: "Content_mapper_extension_0_must_not_contain_path_separators_18123", text: "Content mapper extension '{0}' must not contain path separators."}
 
+var The_content_mapper_package_0_is_outside_the_open_workspace_and_will_not_be_loaded = &Message{code: 18124, category: CategoryError, key: "The_content_mapper_package_0_is_outside_the_open_workspace_and_will_not_be_loaded_18124", text: "The content mapper package '{0}' is outside the open workspace and will not be loaded."}
+
 var X_nodenext_if_module_is_nodenext_node16_if_module_is_node16_or_node18_otherwise_bundler = &Message{code: 69010, category: CategoryMessage, key: "nodenext_if_module_is_nodenext_node16_if_module_is_node16_or_node18_otherwise_bundler_69010", text: "`nodenext` if `module` is `nodenext`; `node16` if `module` is `node16` or `node18`; otherwise, `bundler`."}
 
 var File_is_a_CommonJS_module_it_may_be_converted_to_an_ES_module = &Message{code: 80001, category: CategorySuggestion, key: "File_is_a_CommonJS_module_it_may_be_converted_to_an_ES_module_80001", text: "File is a CommonJS module; it may be converted to an ES module."}
@@ -6420,6 +6422,7 @@ var allMessages = [...]**Message{
 	&The_typescript_contentMapper_outputExtensions_of_the_content_mapper_package_0_contains_an_invalid_mapping_from_1_to_2_Extensions_must_be_non_empty_and_begin_with_a,
 	&The_typescript_contentMapper_outputExtensions_of_the_content_mapper_package_0_must_be_an_object_with_string_values,
 	&Content_mapper_extension_0_must_not_contain_path_separators,
+	&The_content_mapper_package_0_is_outside_the_open_workspace_and_will_not_be_loaded,
 	&X_nodenext_if_module_is_nodenext_node16_if_module_is_node16_or_node18_otherwise_bundler,
 	&File_is_a_CommonJS_module_it_may_be_converted_to_an_ES_module,
 	&This_constructor_function_may_be_converted_to_a_class_declaration,
