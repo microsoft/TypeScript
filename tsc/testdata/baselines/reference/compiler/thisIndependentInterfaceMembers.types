@@ -1,0 +1,493 @@
+//// [tests/cases/compiler/thisIndependentInterfaceMembers.ts] ////
+
+=== thisIndependentInterfaceMembers.ts ===
+// The member reuse optimization must preserve real, outer and foreign `this`.
+namespace capturedOuterThis {
+>capturedOuterThis : typeof capturedOuterThis
+
+    class Owner {
+>Owner : Owner
+
+        read() {
+>read : () => this
+
+            type OuterMap = { readonly [K in "owner"]: this };
+>OuterMap : { readonly owner: this; }
+
+            interface Base extends OuterMap {}
+            interface Derived extends Base { readonly derived: "derived" }
+>derived : "derived"
+
+            const value = null! as Derived;
+>value : Derived
+>null! as Derived : Derived
+>null! : never
+
+            const exact: this = value.owner;
+>exact : this
+>value.owner : this
+>value : Derived
+>owner : this
+
+            // @ts-expect-error The owner is not the mapped property's interface.
+            const wrong: Derived = value.owner;
+>wrong : Derived
+>value.owner : this
+>value : Derived
+>owner : this
+
+            return exact;
+>exact : this
+        }
+    }
+    class SpecialOwner extends Owner { readonly special = "special" }
+>SpecialOwner : SpecialOwner
+>Owner : Owner
+>special : "special"
+>"special" : "special"
+
+    declare const owner: SpecialOwner;
+>owner : SpecialOwner
+
+    const exactOwner: SpecialOwner = owner.read();
+>exactOwner : SpecialOwner
+>owner.read() : SpecialOwner
+>owner.read : () => SpecialOwner
+>owner : SpecialOwner
+>read : () => SpecialOwner
+}
+
+namespace fluentAlias {
+>fluentAlias : typeof fluentAlias
+
+    interface Fluent { self(): this }
+>self : () => this
+
+    type FluentAlias = Fluent;
+>FluentAlias : Fluent
+
+    type Marker = { readonly [K in "marker"]: "marker" };
+>Marker : Marker
+
+    interface Mixed extends Marker, FluentAlias {}
+    interface Derived extends Mixed { readonly derived: "derived" }
+>derived : "derived"
+
+    declare const value: Derived;
+>value : Derived
+
+    const exact: Derived = value.self();
+>exact : Derived
+>value.self() : Derived
+>value.self : () => Derived
+>value : Derived
+>self : () => Derived
+}
+
+namespace foreignMappedThis {
+>foreignMappedThis : typeof foreignMappedThis
+
+    interface Foreign { self(): this; readonly foreign: "foreign" }
+>self : () => this
+>foreign : "foreign"
+
+    type Copy<T> = { readonly [K in keyof T]: T[K] };
+>Copy : Copy<T>
+
+    interface Copied extends Copy<Foreign> {}
+    interface Derived extends Copied { readonly derived: "derived" }
+>derived : "derived"
+
+    declare const value: Derived;
+>value : Derived
+
+    const exact: Foreign = value.self();
+>exact : Foreign
+>value.self() : Foreign
+>value.self : () => Foreign
+>value : Derived
+>self : () => Foreign
+
+    // @ts-expect-error A concrete map does not rebind the foreign method's this.
+    const wrong: Derived = value.self();
+>wrong : Derived
+>value.self() : Foreign
+>value.self : () => Foreign
+>value : Derived
+>self : () => Foreign
+}
+
+namespace mergedDeclarations {
+>mergedDeclarations : typeof mergedDeclarations
+
+    type Marker = { readonly [K in "marker"]: "marker" };
+>Marker : Marker
+
+    interface Merged extends Marker {}
+    interface Merged { self(): this }
+>self : () => this
+
+    interface Derived extends Merged { readonly derived: "derived" }
+>derived : "derived"
+
+    declare const value: Derived;
+>value : Derived
+
+    const exact: Derived = value.self();
+>exact : Derived
+>value.self() : Derived
+>value.self : () => Derived
+>value : Derived
+>self : () => Derived
+
+    const marker: "marker" = value.marker;
+>marker : "marker"
+>value.marker : "marker"
+>value : Derived
+>marker : "marker"
+
+    interface Plain extends Marker {}
+    interface Plain { readonly merged: "merged" }
+>merged : "merged"
+
+    interface PlainDerived extends Plain { readonly derived: "derived" }
+>derived : "derived"
+
+    declare const plain: PlainDerived;
+>plain : PlainDerived
+
+    const inherited: "merged" = plain.merged;
+>inherited : "merged"
+>plain.merged : "merged"
+>plain : PlainDerived
+>merged : "merged"
+}
+
+namespace genericInterfaces {
+>genericInterfaces : typeof genericInterfaces
+
+    type Marker<T> = { readonly [K in "value"]: T };
+>Marker : Marker<T>
+
+    interface Generic<T> extends Marker<T> { self(): this }
+>self : () => this
+
+    interface NumberValue extends Generic<number> { readonly numeric: "numeric" }
+>numeric : "numeric"
+
+    interface StringValue extends Generic<string> { readonly textual: "textual" }
+>textual : "textual"
+
+    declare const numeric: NumberValue;
+>numeric : NumberValue
+
+    declare const textual: StringValue;
+>textual : StringValue
+
+    const numberValue: number = numeric.value;
+>numberValue : number
+>numeric.value : number
+>numeric : NumberValue
+>value : number
+
+    const stringValue: string = textual.value;
+>stringValue : string
+>textual.value : string
+>textual : StringValue
+>value : string
+
+    const exact: NumberValue = numeric.self();
+>exact : NumberValue
+>numeric.self() : NumberValue
+>numeric.self : () => NumberValue
+>numeric : NumberValue
+>self : () => NumberValue
+
+    // @ts-expect-error Distinct type arguments may not share member substitutions.
+    const wrong: number = textual.value;
+>wrong : number
+>textual.value : string
+>textual : StringValue
+>value : string
+
+    function enclosing<T>(input: T) {
+>enclosing : <T>(input: T) => { input: T; exact: T; }
+>input : T
+
+        type OuterMap = { readonly [K in "value"]: T };
+>OuterMap : { readonly value: T; }
+
+        interface Local extends OuterMap {}
+        interface Derived extends Local { readonly local: "local" }
+>local : "local"
+
+        const value = null! as Derived;
+>value : Derived
+>null! as Derived : Derived
+>null! : never
+
+        const exact: T = value.value;
+>exact : T
+>value.value : T
+>value : Derived
+>value : T
+
+        return { input, exact };
+>{ input, exact } : { input: T; exact: T; }
+>input : T
+>exact : T
+    }
+    const numericOuter: number = enclosing(1).exact;
+>numericOuter : number
+>enclosing(1).exact : number
+>enclosing(1) : { input: number; exact: number; }
+>enclosing : <T>(input: T) => { input: T; exact: T; }
+>1 : 1
+>exact : number
+
+    const stringOuter: string = enclosing("text").exact;
+>stringOuter : string
+>enclosing("text").exact : string
+>enclosing("text") : { input: string; exact: string; }
+>enclosing : <T>(input: T) => { input: T; exact: T; }
+>"text" : "text"
+>exact : string
+
+    // @ts-expect-error An enclosing generic remains specific to the invocation.
+    const wrongOuter: number = enclosing("text").exact;
+>wrongOuter : number
+>enclosing("text").exact : string
+>enclosing("text") : { input: string; exact: string; }
+>enclosing : <T>(input: T) => { input: T; exact: T; }
+>"text" : "text"
+>exact : string
+}
+
+namespace mappedAliasArguments {
+>mappedAliasArguments : typeof mappedAliasArguments
+
+    type Value<T> = { readonly [K in "value"]: T };
+>Value : Value<T>
+
+    type Alias<T> = Value<T>;
+>Alias : Alias<T>
+
+    interface Generic<T> extends Alias<T> {}
+    interface NumberValue extends Generic<number> {}
+    interface StringValue extends Generic<string> {}
+    declare const numeric: NumberValue;
+>numeric : NumberValue
+
+    declare const textual: StringValue;
+>textual : StringValue
+
+    const numberValue: number = numeric.value;
+>numberValue : number
+>numeric.value : number
+>numeric : NumberValue
+>value : number
+
+    const stringValue: string = textual.value;
+>stringValue : string
+>textual.value : string
+>textual : StringValue
+>value : string
+
+    // @ts-expect-error A mapped alias must retain its variable-containing argument.
+    const wrong: number = textual.value;
+>wrong : number
+>textual.value : string
+>textual : StringValue
+>value : string
+
+    interface Foreign { self(): this; readonly foreign: "foreign" }
+>self : () => this
+>foreign : "foreign"
+
+    type Copy<T> = { readonly [K in keyof T]: T[K] };
+>Copy : Copy<T>
+
+    type ConcreteAlias = Copy<Foreign>;
+>ConcreteAlias : Copy<Foreign>
+
+    interface Copied extends ConcreteAlias {}
+    interface Derived extends Copied { readonly derived: "derived" }
+>derived : "derived"
+
+    declare const derived: Derived;
+>derived : Derived
+
+    const foreign: Foreign = derived.self();
+>foreign : Foreign
+>derived.self() : Foreign
+>derived.self : () => Foreign
+>derived : Derived
+>self : () => Foreign
+
+    // @ts-expect-error Mapping must preserve foreign-this even behind an alias.
+    const notDerived: Derived = derived.self();
+>notDerived : Derived
+>derived.self() : Foreign
+>derived.self : () => Foreign
+>derived : Derived
+>self : () => Foreign
+}
+
+namespace recursiveMembers {
+>recursiveMembers : typeof recursiveMembers
+
+    type Links = { readonly [K in "next"]: Node };
+>Links : Links
+
+    interface Node extends Links { readonly value: number }
+>value : number
+
+    interface Derived extends Node { readonly own: string }
+>own : string
+
+    declare const value: Derived;
+>value : Derived
+
+    const next: Node = value.next;
+>next : Node
+>value.next : Node
+>value : Derived
+>next : Node
+
+    const nested: number = value.next.next.value;
+>nested : number
+>value.next.next.value : number
+>value.next.next : Node
+>value.next : Node
+>value : Derived
+>next : Node
+>next : Node
+>value : number
+
+    // @ts-expect-error Recursive members retain the declared Node, not Derived.
+    const wrong: Derived = value.next;
+>wrong : Derived
+>value.next : Node
+>value : Derived
+>next : Node
+
+    // This forces lookup of a mapped member through a recursively referenced type.
+    type Reenter<T> = { readonly [K in "item"]: T };
+>Reenter : Reenter<T>
+
+    interface Recursive extends Reenter<Recursive> { readonly own: "own" }
+>own : "own"
+
+    interface RecursiveDerived extends Recursive { readonly more: "more" }
+>more : "more"
+
+    declare const recursive: RecursiveDerived;
+>recursive : RecursiveDerived
+
+    const own: "own" = recursive.item.item.own;
+>own : "own"
+>recursive.item.item.own : "own"
+>recursive.item.item : Recursive
+>recursive.item : Recursive
+>recursive : RecursiveDerived
+>item : Recursive
+>item : Recursive
+>own : "own"
+
+    // @ts-expect-error A re-entrant lookup does not substitute a descendant.
+    const wrongRecursive: RecursiveDerived = recursive.item;
+>wrongRecursive : RecursiveDerived
+>recursive.item : Recursive
+>recursive : RecursiveDerived
+>item : Recursive
+}
+
+namespace rejectedBases {
+    type LeftMap = { readonly [K in "value"]: number };
+>LeftMap : LeftMap
+
+    type RightMap = { readonly [K in "value"]: string };
+>RightMap : RightMap
+
+    interface Left extends LeftMap {}
+    interface Right extends RightMap {}
+    // @ts-expect-error Conflicting inherited properties must still reject.
+    interface Conflict extends Left, Right {}
+
+    // @ts-expect-error A circular mapped constraint remains an error.
+    type Reentered = { [K in keyof Circular]: Circular[K] };
+>Reentered : error
+
+    // @ts-expect-error Resolution placeholders must not prove valid ancestry.
+    interface Circular extends Reentered { readonly own: string }
+>own : string
+
+    // @ts-expect-error An unresolved mapped key still reports its error.
+    type ErrorMap = { [K in MissingKey]: number };
+>ErrorMap : ErrorMap
+
+    interface ErrorBase extends ErrorMap {}
+    // @ts-expect-error The erroneous key must not erase the numeric index contract.
+    interface ErrorDerived extends ErrorBase { readonly own: "own" }
+>own : "own"
+}
+
+namespace concreteMappedMembers {
+>concreteMappedMembers : typeof concreteMappedMembers
+
+    type Value<T> = { readonly [K in "value"]: T };
+>Value : Value<T>
+
+    interface Plain extends Value<number> {}
+    interface Derived extends Plain { readonly own: "own" }
+>own : "own"
+
+    declare const value: Derived;
+>value : Derived
+
+    const exact: number = value.value;
+>exact : number
+>value.value : number
+>value : Derived
+>value : number
+
+    // @ts-expect-error Concrete mapped properties keep their exact type.
+    const wrong: string = value.value;
+>wrong : string
+>value.value : number
+>value : Derived
+>value : number
+
+    interface WithIndex { readonly [key: string]: number }
+>key : string
+
+    interface IndexBase extends WithIndex {}
+    interface IndexDerived extends IndexBase { readonly own: 1 }
+>own : 1
+
+    declare const indexed: IndexDerived;
+>indexed : IndexDerived
+
+    const entry: number = indexed["arbitrary"];
+>entry : number
+>indexed["arbitrary"] : number
+>indexed : IndexDerived
+>"arbitrary" : "arbitrary"
+
+    type Callable = { (): number; readonly [K: string]: unknown };
+>Callable : Callable
+>K : string
+
+    interface CallBase extends Callable {}
+    interface CallDerived extends CallBase { readonly own: "own" }
+>own : "own"
+
+    declare const callable: CallDerived;
+>callable : CallDerived
+
+    const result: number = callable();
+>result : number
+>callable() : number
+>callable : CallDerived
+}
+
