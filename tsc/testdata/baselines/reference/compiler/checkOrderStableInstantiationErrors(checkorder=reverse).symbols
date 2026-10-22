@@ -1,0 +1,48 @@
+//// [tests/cases/compiler/checkOrderStableInstantiationErrors.ts] ////
+
+=== lib.ts ===
+export type Dec<N extends number> =
+>Dec : Symbol(Dec, Decl(lib.ts, 0, 0))
+>N : Symbol(N, Decl(lib.ts, 0, 16))
+
+    N extends 5 ? 4 : N extends 4 ? 3 : N extends 3 ? 2 :
+>N : Symbol(N, Decl(lib.ts, 0, 16))
+>N : Symbol(N, Decl(lib.ts, 0, 16))
+>N : Symbol(N, Decl(lib.ts, 0, 16))
+
+    N extends 2 ? any :
+>N : Symbol(N, Decl(lib.ts, 0, 16))
+
+    N extends 1 ? 0 : 0;
+>N : Symbol(N, Decl(lib.ts, 0, 16))
+
+export type Recur<N extends number, S extends string> =
+>Recur : Symbol(Recur, Decl(lib.ts, 3, 24))
+>N : Symbol(N, Decl(lib.ts, 4, 18))
+>S : Symbol(S, Decl(lib.ts, 4, 35))
+
+    N extends 0 ? S : Recur<Dec<N>, `${S}_${S}`>;
+>N : Symbol(N, Decl(lib.ts, 4, 18))
+>S : Symbol(S, Decl(lib.ts, 4, 35))
+>Recur : Symbol(Recur, Decl(lib.ts, 3, 24))
+>Dec : Symbol(Dec, Decl(lib.ts, 0, 0))
+>N : Symbol(N, Decl(lib.ts, 4, 18))
+>S : Symbol(S, Decl(lib.ts, 4, 35))
+>S : Symbol(S, Decl(lib.ts, 4, 35))
+
+=== a.ts ===
+import { Recur } from "./lib";
+>Recur : Symbol(Recur, Decl(a.ts, 0, 8))
+
+export let a: Recur<5, "a">;
+>a : Symbol(a, Decl(a.ts, 1, 10))
+>Recur : Symbol(Recur, Decl(a.ts, 0, 8))
+
+=== b.ts ===
+import { Recur } from "./lib";
+>Recur : Symbol(Recur, Decl(b.ts, 0, 8))
+
+export let b: Recur<5, "a">;
+>b : Symbol(b, Decl(b.ts, 1, 10))
+>Recur : Symbol(Recur, Decl(b.ts, 0, 8))
+
