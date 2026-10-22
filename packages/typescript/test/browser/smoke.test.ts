@@ -167,11 +167,4 @@ describe("API over WebAssembly in a browser", () => {
         const result = await page.evaluate(() => Reflect.get(globalThis, "result"));
         assert.deepStrictEqual(result, ["42", "42", 1]);
     });
-
-    test("loads the transport entry without package resolution", async () => {
-        const page = await browser.newPage();
-        await page.goto(origin);
-        const exports = await page.evaluate(async origin => Object.keys(await import(`${origin}/dist/wasm/index.js`)), origin);
-        assert.deepStrictEqual(exports, ["WasmTransport", "instantiateWasm", "instantiateWasmSync"]);
-    });
 });

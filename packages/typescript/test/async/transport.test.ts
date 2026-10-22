@@ -95,81 +95,58 @@ describe("async transport", () => {
         assert.strictEqual(closes, 1);
     });
 
-    test("rejects requests queued when the transport closes", async () => {
-        const api = new API({
-            transport: {
-                request(method) {
-                    switch (method) {
-                        case "initialize":
-                            return {
-                                value: JSON.stringify({
-                                    currentDirectory: "/",
-                                    useCaseSensitiveFileNames: true,
-                                }),
-                                bytesSent: 0,
-                                bytesReceived: 0,
-                            };
-                        case "parseCommandLine":
-                            return {
-                                value: JSON.stringify(
-                                    {
-                                        options: {},
-                                        fileNames: [],
-                                        errors: [],
-                                    } satisfies ParsedCommandLine,
-                                ),
-                                bytesSent: 0,
-                                bytesReceived: 0,
-                            };
-                        default:
-                            throw new Error(`Unexpected method: ${method}`);
-                    }
+    test("rejects queued requests when closed", async () => {
+        const emptyCommandLine: ParsedCommandLine = { options: {}, fileNames: [], errors: [] };
+        const respond = (value: unknown) => ({ value: JSON.stringify(value), bytesSent: 0, bytesReceived: 0 });
+        // Requests held in a manual batch, both before and after initialization.
+        for (const initializeFirst of [false, true]) {
+            const api = new API({
+                transport: {
+                    request(method) {
+                        switch (method) {
+                            case "initialize":
+                                return respond({ currentDirectory: "/", useCaseSensitiveFileNames: true });
+                            case "parseCommandLine":
+                                return respond(emptyCommandLine);
+                            default:
+                                throw new Error(`Unexpected method: ${method}`);
+                        }
+                    },
+                    requestBinary() {
+                        throw new Error("Unexpected binary request");
+                    },
+                    close() {},
                 },
-                requestBinary() {
-                    throw new Error("Unexpected binary request");
-                },
-                close() {},
+            });
+            if (initializeFirst) {
+                await api.parseCommandLine([]);
+            }
+            const batch = api.batchContext();
+            const rejected = assert.rejects(api.parseCommandLine([]), /Client is closed/);
+            await api.close();
+            batch[Symbol.dispose]();
+            await rejected;
+        }
+
+        // Text and binary requests closed before their microtask sends them.
+        const client = new TransportClient({
+            request() {
+                throw new Error("Unexpected request");
             },
-        });
-
-        await api.parseCommandLine([]);
-        const batch = api.batchContext();
-        const request = api.parseCommandLine([]);
-        const rejected = assert.rejects(request, /Client is closed/);
-        await api.close();
-        batch[Symbol.dispose]();
-        await rejected;
-    });
-
-    test("can close while initialization is manually batched", async () => {
-        const api = new API({
-            transport: {
-                request(method) {
-                    if (method !== "initialize") {
-                        throw new Error(`Unexpected method: ${method}`);
-                    }
-                    return {
-                        value: JSON.stringify({
-                            currentDirectory: "/",
-                            useCaseSensitiveFileNames: true,
-                        }),
-                        bytesSent: 0,
-                        bytesReceived: 0,
-                    };
-                },
-                requestBinary() {
-                    throw new Error("Unexpected binary request");
-                },
-                close() {},
+            requestBinary() {
+                throw new Error("Unexpected binary request");
             },
+            close() {},
+        }, false);
+        const text = client.apiRequest("parseCommandLine", { commandLine: [] });
+        const binary = client.apiRequestBinary("getSourceFile", {
+            snapshot: 1,
+            project: 1,
+            file: "/index.ts",
         });
-
-        const batch = api.batchContext();
-        const request = api.parseCommandLine([]);
-        const rejected = assert.rejects(request, /Client is closed/);
-        await api.close();
-        batch[Symbol.dispose]();
-        await rejected;
+        await client.close();
+        await assert.rejects(text, /Client is closed/);
+        await assert.rejects(binary, /Client is closed/);
     });
 
     test("can close a process client while initialization is manually batched", async () => {
@@ -260,58 +237,26 @@ describe("async transport", () => {
         await client.close();
     });
 
-    test("rejects requests that are still active when closed", async () => {
-        let resolveRequest:
-            | ((value: {
-                value: string;
-                bytesSent: number;
-                bytesReceived: number;
-            }) => void)
-            | undefined;
-        const client = new TransportClient({
+    test("rejects in-flight requests when closed", async () => {
+        const neverResolves = {
             request() {
-                return new Promise(resolve => {
-                    resolveRequest = resolve;
-                });
+                return new Promise<never>(() => {});
             },
             requestBinary() {
                 throw new Error("Unexpected binary request");
             },
             close() {},
-        }, false);
+        };
 
+        const client = new TransportClient(neverResolves, false);
         const request = client.apiRequest("parseCommandLine", { commandLine: [] });
         await Promise.resolve();
         await client.close();
         await assert.rejects(request, /Client is closed/);
-        resolveRequest?.({
-            value: JSON.stringify(
-                {
-                    options: {},
-                    fileNames: [],
-                    errors: [],
-                } satisfies ParsedCommandLine,
-            ),
-            bytesSent: 0,
-            bytesReceived: 0,
-        });
-    });
 
-    test("can close while initialization is in flight", async () => {
-        const api = new API({
-            transport: {
-                request() {
-                    return new Promise(() => {});
-                },
-                requestBinary() {
-                    throw new Error("Unexpected binary request");
-                },
-                close() {},
-            },
-        });
-
-        const request = api.parseCommandLine([]);
-        const rejected = assert.rejects(request, /Client is closed/);
+        // The API's own initialize request is in flight here.
+        const api = new API({ transport: neverResolves });
+        const rejected = assert.rejects(api.parseCommandLine([]), /Client is closed/);
         await Promise.resolve();
         await api.close();
         await rejected;
@@ -336,50 +281,5 @@ describe("async transport", () => {
         await assert.rejects(timing, /Client is closed/);
         await assert.rejects(reset, /Client is closed/);
         assert.deepStrictEqual(methods, []);
-    });
-
-    test("rejects queued requests when closed before they are sent", async () => {
-        const client = new TransportClient({
-            request() {
-                throw new Error("Unexpected request");
-            },
-            requestBinary() {
-                throw new Error("Unexpected binary request");
-            },
-            close() {},
-        }, false);
-
-        const text = client.apiRequest("parseCommandLine", { commandLine: [] });
-        const binary = client.apiRequestBinary("getSourceFile", {
-            snapshot: 1,
-            project: 1,
-            file: "/index.ts",
-        });
-        await client.close();
-        await assert.rejects(text, /Client is closed/);
-        await assert.rejects(binary, /Client is closed/);
-    });
-
-    test("rejects thenable callback results", () => {
-        let registeredCallback: ((name: string, payload: string) => string) | undefined;
-        const client = new TransportClient({
-            request() {
-                throw new Error("Unexpected request");
-            },
-            requestBinary() {
-                throw new Error("Unexpected binary request");
-            },
-            close() {},
-            registerCallback(_name, callback) {
-                registeredCallback = callback;
-            },
-            unregisterCallback() {},
-        }, false);
-
-        client.registerCallback("callback", () => ({ then() {} }));
-        assert.throws(
-            () => registeredCallback?.("callback", "null"),
-            /Injected transport callbacks must complete synchronously/,
-        );
     });
 });

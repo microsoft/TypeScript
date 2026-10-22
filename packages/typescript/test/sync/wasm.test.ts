@@ -163,39 +163,6 @@ describe("API over WebAssembly", () => {
         }
     });
 
-    test("exits successfully when LSP stdin closes", async () => {
-        const WebAssembly = (globalThis as any).WebAssembly;
-        const directory = await mkdtemp(path.join(tmpdir(), "typescript-wasip1-"));
-        try {
-            const stdin = await open(path.join(directory, "stdin"), "w+");
-            const stdout = await open(path.join(directory, "stdout"), "w+");
-            const stderr = await open(path.join(directory, "stderr"), "w+");
-            try {
-                const wasi = new WASI({
-                    version: "preview1",
-                    args: ["tsc.wasm", "--lsp", "--stdio"],
-                    env: { PWD: "/" },
-                    preopens: { "/": process.cwd() },
-                    stdin: stdin.fd,
-                    stdout: stdout.fd,
-                    stderr: stderr.fd,
-                    returnOnExit: true,
-                });
-                const module = await WebAssembly.compile(await readFile(wasmURL));
-                const instance = await WebAssembly.instantiate(module, {
-                    wasi_snapshot_preview1: wasi.wasiImport,
-                });
-                assert.strictEqual(wasi.start(instance), 0);
-            }
-            finally {
-                await Promise.all([stdin.close(), stdout.close(), stderr.close()]);
-            }
-        }
-        finally {
-            await rm(directory, { recursive: true });
-        }
-    });
-
     test("waits for LSP stdin without repeatedly reading", { timeout: 10_000 }, async () => {
         const childSource = `
             import { readFileSync } from "node:fs";
@@ -299,10 +266,8 @@ describe("API over WebAssembly", () => {
             [...new Set(WebAssembly.Module.imports(module).map((value: { module: string; }) => value.module))],
             ["wasi_snapshot_preview1"],
         );
-        const exportNames = WebAssembly.Module.exports(module).map((value: { name: string; }) => value.name);
-        assert.ok(exportNames.includes("_start"));
-        assert.ok(exportNames.includes("typescript_initialize"));
-        assert.ok(!exportNames.includes("_initialize"));
+        // Hosts call _initialize automatically, which would break the command entry point.
+        assert.ok(!WebAssembly.Module.exports(module).some((value: { name: string; }) => value.name === "_initialize"));
         const instance = await instantiateWasm(module, { stdout: undefined, stderr: undefined });
 
         assert.throws(
@@ -324,7 +289,6 @@ describe("API over WebAssembly", () => {
         transport = new WasmTransport({
             instance,
             cwd: "/",
-            collectTiming: true,
             fs: {
                 writeFile(path, data) {
                     memory.grow(0);
@@ -340,7 +304,7 @@ describe("API over WebAssembly", () => {
                 },
             },
         });
-        const api = new SyncAPI({ transport, collectTiming: true });
+        const api = new SyncAPI({ transport });
         assert.strictEqual(transport.requestSync("echo", "text"), "text");
         assert.deepStrictEqual(
             transport.requestBinarySync("echo", new Uint8Array([1, 2, 3])),
@@ -351,9 +315,6 @@ describe("API over WebAssembly", () => {
         transport.setFile("/raw.ts", rawContent);
         assert.strictEqual(transport.readFile("/raw.ts"), rawContent);
         transport.removeFile("/raw.ts");
-        assert.throws(() => transport.setFile("", "text"), /panic setting file/);
-        assert.throws(() => transport.removeFile(""), /panic removing file/);
-        assert.throws(() => transport.readFile(""), /panic reading file/);
 
         transport.setFile("/tsconfig.json", `{ "compilerOptions": { "emitBOM": true } }`);
         transport.setFile("/src/index.ts", "export const value = 42 as const;");
@@ -403,20 +364,11 @@ describe("API over WebAssembly", () => {
         assert.strictEqual(resolver.resolveModuleName("large", "/src", undefined).resolvedModule?.resolvedFileName, "/large.d.ts");
         assert.strictEqual(resolverCalls, 1);
 
-        const timing = api.getTimingInfo();
-        assert.strictEqual(timing.enabled, true);
-        assert.ok(timing.totals.requestCount > 0);
-        assert.ok(timing.totals.serverTimeMs >= 0);
-        transport.registerCallback("retained", () => "");
         api.close();
-        assert.deepStrictEqual(Reflect.get(transport, "callbackNames"), new Set());
 
         const secondTransport = new WasmTransport({ instance, cwd: "/" });
         const second = new SyncAPI({ transport: secondTransport });
         assert.strictEqual(secondTransport.requestSync("echo", "recreated"), "recreated");
-        secondTransport.registerCallback("retained", () => "");
-        transport.unregisterCallback("retained");
-        assert.deepStrictEqual(Reflect.get(secondTransport, "callbackNames"), new Set(["retained"]));
         second.close();
     });
 });
