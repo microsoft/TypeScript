@@ -18,6 +18,13 @@
 // | ```typescript
 // | (property) Foo.name: string
 // | ```
+// | this is the name of blabla 
+// | - use blabla
+// | 
+// | *@example*
+// | ```tsx
+// | blabla
+// | ```
 // | 
 // | ----------------------------------------------------------------------
 //   ) {
@@ -53,7 +60,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```typescript\n(property) Foo.name: string\n```\n"
+        "value": "```typescript\n(property) Foo.name: string\n```\nthis is the name of blabla \n- use blabla\n\n*@example*\n```tsx\nblabla\n```\n"
       },
       "range": {
         "start": {
