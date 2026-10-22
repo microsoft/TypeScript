@@ -8,7 +8,7 @@ export interface A<T = B> { a: T }
 >a : T
 
 export declare const a: A;
->a : A<unknown>
+>a : A<B<unknown>>
 
 === b.ts ===
 import type { A } from "./a";
