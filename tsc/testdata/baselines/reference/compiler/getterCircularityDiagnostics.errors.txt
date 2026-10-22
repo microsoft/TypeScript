@@ -1,0 +1,17 @@
+getterCircularityDiagnostics.ts(4,9): error TS7023: 'options' implicitly has return type 'any' because it does not have a return type annotation and is referenced directly or indirectly in one of its return expressions.
+
+
+==== getterCircularityDiagnostics.ts (1 errors) ====
+    declare const props: Options;
+    
+    class Container {
+        get options() {
+            ~~~~~~~
+!!! error TS7023: 'options' implicitly has return type 'any' because it does not have a return type annotation and is referenced directly or indirectly in one of its return expressions.
+            return { container: this, ...props } as Options;
+        }
+    }
+    
+    interface Options {
+        container?: Container;
+    }
