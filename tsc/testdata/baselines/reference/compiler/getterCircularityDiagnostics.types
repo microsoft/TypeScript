@@ -1,0 +1,25 @@
+//// [tests/cases/compiler/getterCircularityDiagnostics.ts] ////
+
+=== getterCircularityDiagnostics.ts ===
+declare const props: Options;
+>props : Options
+
+class Container {
+>Container : Container
+
+    get options() {
+>options : any
+
+        return { container: this, ...props } as Options;
+>{ container: this, ...props } as Options : Options
+>{ container: this, ...props } : { container: Container; }
+>container : this
+>this : this
+>props : Options
+    }
+}
+
+interface Options {
+    container?: Container;
+>container : Container | undefined
+}

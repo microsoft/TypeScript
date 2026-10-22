@@ -1,0 +1,131 @@
+//// [tests/cases/compiler/varianceCircularityChartjsPlugin.ts] ////
+
+=== varianceCircularityChartjsPlugin.ts ===
+// Reduced from chart.js typings (PeerTube, Unleash). Chart, TooltipModel and
+// ScriptableContext form a variance circularity. ScriptableContext<T> is in
+// fact invariant: ScriptableContext<"bar" | "line"> is not assignable to
+// ScriptableContext<"bar"> ('dataset.data' differs), so Chart<"bar"> is not
+// assignable to Chart<ChartType> and the assignment below must be an error.
+// Measuring variances from the circularity's entry, main recorded
+// ScriptableContext/TooltipModel as bivariant (measured mid-cycle) and
+// accepted it; main reports this error too when ScriptableContext's variance
+// is measured first (e.g. after checking a ScriptableContext assignment).
+
+declare class Element<T, O> { options: O }
+>Element : Element<T, O>
+>options : O
+
+type DeepPartial<T> = T extends Function ? T : T extends object ? _DeepPartialObject<T> : undefined
+>DeepPartial : DeepPartial<T>
+
+type _DeepPartialObject<T> = { [P in keyof T]?: DeepPartial<T[P]> }
+>_DeepPartialObject : _DeepPartialObject<T>
+
+type UnionToIntersection<U> = (U extends unknown ? (k: U) => void : never) extends (k: infer I) => void ? I : never
+>UnionToIntersection : UnionToIntersection<U>
+>k : U
+>k : I
+
+type AnyObject = Record<string, any>
+>AnyObject : AnyObject
+
+interface ScriptableContext<TType extends ChartType> {
+    dataset: UnionToIntersection<ChartDataset<TType>>
+>dataset : UnionToIntersection<ChartDataset<TType, TType>>
+}
+type Scriptable<T, TContext> = (ctx: TContext) => T
+>Scriptable : Scriptable<T, TContext>
+>ctx : TContext
+
+declare class Chart<TType extends ChartType = ChartType, TData = TType> {
+>Chart : Chart<TType, TData>
+
+    config: ChartConfigurationCustomTypesPerDataset<TType>
+>config : ChartConfigurationCustomTypesPerDataset<TType>
+}
+interface Plugin<TType extends ChartType> {
+    id: string;
+>id : string
+
+    beforeDraw(chart: Chart<TType>): void
+>beforeDraw : (chart: Chart<TType>) => void
+>chart : Chart<TType, TType>
+}
+interface CoreChartOptions<TType extends ChartType> {
+    backgroundColor: Scriptable<number, ScriptableContext<TType>>
+>backgroundColor : Scriptable<number, ScriptableContext<TType>>
+}
+interface AnimationSpec<TType extends ChartType> {
+    delay: Scriptable<number, ScriptableContext<TType>>
+>delay : Scriptable<number, ScriptableContext<TType>>
+}
+interface TooltipModel<TType extends ChartType> extends Element<AnyObject, TooltipOptions<TType>> {
+    chart: Chart<TType>
+>chart : Chart<TType, TType>
+}
+interface TooltipDatasetCallbacks<TType extends ChartType, Model = TooltipModel<TType>> {
+    (this: Model): void
+>this : Model
+}
+interface TooltipOptions<TType extends ChartType> {
+    animation: AnimationSpec<TType>
+>animation : AnimationSpec<TType>
+}
+interface TooltipDatasetOptions<TType extends ChartType> {
+    callbacks: TooltipDatasetCallbacks<TType>
+>callbacks : TooltipDatasetCallbacks<TType, TooltipModel<TType>>
+}
+interface PluginDatasetOptionsByType<TType extends ChartType> {
+    tooltip: TooltipDatasetOptions<TType>
+>tooltip : TooltipDatasetOptions<TType>
+}
+interface ChartTypeRegistry {
+    bar: { defaultDataPoint: [] }
+>bar : { defaultDataPoint: []; }
+>defaultDataPoint : []
+
+    line: { defaultDataPoint: null }
+>line : { defaultDataPoint: null; }
+>defaultDataPoint : null
+}
+type ChartType = keyof ChartTypeRegistry
+>ChartType : keyof ChartTypeRegistry
+
+type DatasetChartOptions<TType extends ChartType> = { [key in TType]: {} }
+>DatasetChartOptions : DatasetChartOptions<TType>
+
+type ChartOptions<TType extends ChartType> = Exclude<DeepPartial<CoreChartOptions<TType> & DatasetChartOptions<TType> & TType>, undefined>
+>ChartOptions : ChartOptions<TType>
+
+interface ChartDatasetProperties<TType, TData> {
+    data: TData
+>data : TData
+}
+type ChartDataset<TType extends ChartType, TData = TType> =
+>ChartDataset : ChartDataset<TType, TData>
+
+    DeepPartial<ChartTypeRegistry[TType] & PluginDatasetOptionsByType<TType>> & ChartDatasetProperties<TType, TData>
+type ChartDatasetCustomTypesPerDataset<TType extends ChartType> = DeepPartial<PluginDatasetOptionsByType<TType>>
+>ChartDatasetCustomTypesPerDataset : _DeepPartialObject<PluginDatasetOptionsByType<TType>>
+
+interface ChartDataCustomTypesPerDataset<TType extends ChartType> {
+    datasets: ChartDatasetCustomTypesPerDataset<TType>
+>datasets : _DeepPartialObject<PluginDatasetOptionsByType<TType>>
+}
+export interface ChartConfigurationCustomTypesPerDataset<TType extends ChartType> {
+    data: ChartDataCustomTypesPerDataset<TType>
+>data : ChartDataCustomTypesPerDataset<TType>
+
+    options: ChartOptions<TType>
+>options : Exclude<DeepPartial<CoreChartOptions<TType> & DatasetChartOptions<TType> & TType>, undefined>
+}
+
+const p: Plugin<"bar"> = { id: "x", beforeDraw: (chart: Chart) => {} };
+>p : Plugin<"bar">
+>{ id: "x", beforeDraw: (chart: Chart) => {} } : { id: string; beforeDraw: (chart: Chart) => void; }
+>id : string
+>"x" : "x"
+>beforeDraw : (chart: Chart) => void
+>(chart: Chart) => {} : (chart: Chart) => void
+>chart : Chart<keyof ChartTypeRegistry, keyof ChartTypeRegistry>
+

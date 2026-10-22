@@ -1,0 +1,30 @@
+//// [tests/cases/compiler/enumMemberTypeCacheConsistency.ts] ////
+
+=== enumMemberTypeCacheConsistency.ts ===
+enum E {
+>E : E
+
+    A = 0,
+>A : E.A
+>0 : 0
+
+    B = E.A.valueOf(),
+>B : E.B
+>E.A.valueOf() : number
+>E.A.valueOf : () => number
+>E.A : E.A
+>E : typeof E
+>A : E.A
+>valueOf : () => number
+
+    C = 1,
+>C : E.C
+>1 : 1
+}
+
+const member: Extract<E, 1> = E.C;
+>member : E.C
+>E.C : E.C
+>E : typeof E
+>C : E.C
+

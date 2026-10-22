@@ -1,0 +1,31 @@
+//// [tests/cases/compiler/constAssertionBindingPatternQueryOrder.ts] ////
+
+=== constAssertionBindingPatternQueryOrder.ts ===
+declare function settle<T extends readonly unknown[]>(fn: () => T): Promise<{ [K in keyof T]: [Awaited<T[K]>] }>;
+>settle : <T extends readonly unknown[]>(fn: () => T) => Promise<{ [K in keyof T]: [Awaited<T[K]>]; }>
+>fn : () => T
+
+async function f() {
+>f : () => Promise<void>
+
+  const [[a], b] = await settle(() => [Promise.resolve(0), Promise.reject(1)] as const);
+>a : number
+>b : [never]
+>await settle(() => [Promise.resolve(0), Promise.reject(1)] as const) : [[number], [never]]
+>settle(() => [Promise.resolve(0), Promise.reject(1)] as const) : Promise<[[number], [never]]>
+>settle : <T extends readonly unknown[]>(fn: () => T) => Promise<{ [K in keyof T]: [Awaited<T[K]>]; }>
+>() => [Promise.resolve(0), Promise.reject(1)] as const : () => [Promise<number>, Promise<never>]
+>[Promise.resolve(0), Promise.reject(1)] as const : [Promise<number>, Promise<never>]
+>[Promise.resolve(0), Promise.reject(1)] : [Promise<number>, Promise<never>]
+>Promise.resolve(0) : Promise<number>
+>Promise.resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T>(value: T | PromiseLike<T>): Promise<Awaited<T>>; }
+>Promise : PromiseConstructor
+>resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T>(value: T | PromiseLike<T>): Promise<Awaited<T>>; }
+>0 : 0
+>Promise.reject(1) : Promise<never>
+>Promise.reject : <T = never>(reason?: any) => Promise<T>
+>Promise : PromiseConstructor
+>reject : <T = never>(reason?: any) => Promise<T>
+>1 : 1
+}
+

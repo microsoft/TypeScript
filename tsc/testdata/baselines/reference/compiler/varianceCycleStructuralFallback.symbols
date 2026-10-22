@@ -1,0 +1,120 @@
+//// [tests/cases/compiler/varianceCycleStructuralFallback.ts] ////
+
+=== maFirst.ts ===
+export {};
+
+type MA<T> = { x: { [K in keyof T]-?: T[K] }; b: MB<MA<T>> };
+>MA : Symbol(MA, Decl(maFirst.ts, 0, 10))
+>T : Symbol(T, Decl(maFirst.ts, 2, 8))
+>x : Symbol(x, Decl(maFirst.ts, 2, 14))
+>K : Symbol(K, Decl(maFirst.ts, 2, 21))
+>T : Symbol(T, Decl(maFirst.ts, 2, 8))
+>T : Symbol(T, Decl(maFirst.ts, 2, 8))
+>K : Symbol(K, Decl(maFirst.ts, 2, 21))
+>b : Symbol(b, Decl(maFirst.ts, 2, 45))
+>MB : Symbol(MB, Decl(maFirst.ts, 2, 61))
+>MA : Symbol(MA, Decl(maFirst.ts, 0, 10))
+>T : Symbol(T, Decl(maFirst.ts, 2, 8))
+
+type MB<U> = { f: (u: U) => void; a: MA<MB<U>> };
+>MB : Symbol(MB, Decl(maFirst.ts, 2, 61))
+>U : Symbol(U, Decl(maFirst.ts, 3, 8))
+>f : Symbol(f, Decl(maFirst.ts, 3, 14))
+>u : Symbol(u, Decl(maFirst.ts, 3, 19))
+>U : Symbol(U, Decl(maFirst.ts, 3, 8))
+>a : Symbol(a, Decl(maFirst.ts, 3, 33))
+>MA : Symbol(MA, Decl(maFirst.ts, 0, 10))
+>MB : Symbol(MB, Decl(maFirst.ts, 2, 61))
+>U : Symbol(U, Decl(maFirst.ts, 3, 8))
+
+declare let as: MA<{ p: string }>, al: MA<{ p: "lit" }>;
+>as : Symbol(as, Decl(maFirst.ts, 5, 11))
+>MA : Symbol(MA, Decl(maFirst.ts, 0, 10))
+>p : Symbol(p, Decl(maFirst.ts, 5, 20))
+>al : Symbol(al, Decl(maFirst.ts, 5, 34))
+>MA : Symbol(MA, Decl(maFirst.ts, 0, 10))
+>p : Symbol(p, Decl(maFirst.ts, 5, 43))
+
+declare let bs: MB<{ p: string }>, bl: MB<{ p: "lit" }>;
+>bs : Symbol(bs, Decl(maFirst.ts, 6, 11))
+>MB : Symbol(MB, Decl(maFirst.ts, 2, 61))
+>p : Symbol(p, Decl(maFirst.ts, 6, 20))
+>bl : Symbol(bl, Decl(maFirst.ts, 6, 34))
+>MB : Symbol(MB, Decl(maFirst.ts, 2, 61))
+>p : Symbol(p, Decl(maFirst.ts, 6, 43))
+
+al = as;
+>al : Symbol(al, Decl(maFirst.ts, 5, 34))
+>as : Symbol(as, Decl(maFirst.ts, 5, 11))
+
+as = al;
+>as : Symbol(as, Decl(maFirst.ts, 5, 11))
+>al : Symbol(al, Decl(maFirst.ts, 5, 34))
+
+bl = bs;
+>bl : Symbol(bl, Decl(maFirst.ts, 6, 34))
+>bs : Symbol(bs, Decl(maFirst.ts, 6, 11))
+
+bs = bl;
+>bs : Symbol(bs, Decl(maFirst.ts, 6, 11))
+>bl : Symbol(bl, Decl(maFirst.ts, 6, 34))
+
+=== mbFirst.ts ===
+export {};
+
+type MA<T> = { x: { [K in keyof T]-?: T[K] }; b: MB<MA<T>> };
+>MA : Symbol(MA, Decl(mbFirst.ts, 0, 10))
+>T : Symbol(T, Decl(mbFirst.ts, 2, 8))
+>x : Symbol(x, Decl(mbFirst.ts, 2, 14))
+>K : Symbol(K, Decl(mbFirst.ts, 2, 21))
+>T : Symbol(T, Decl(mbFirst.ts, 2, 8))
+>T : Symbol(T, Decl(mbFirst.ts, 2, 8))
+>K : Symbol(K, Decl(mbFirst.ts, 2, 21))
+>b : Symbol(b, Decl(mbFirst.ts, 2, 45))
+>MB : Symbol(MB, Decl(mbFirst.ts, 2, 61))
+>MA : Symbol(MA, Decl(mbFirst.ts, 0, 10))
+>T : Symbol(T, Decl(mbFirst.ts, 2, 8))
+
+type MB<U> = { f: (u: U) => void; a: MA<MB<U>> };
+>MB : Symbol(MB, Decl(mbFirst.ts, 2, 61))
+>U : Symbol(U, Decl(mbFirst.ts, 3, 8))
+>f : Symbol(f, Decl(mbFirst.ts, 3, 14))
+>u : Symbol(u, Decl(mbFirst.ts, 3, 19))
+>U : Symbol(U, Decl(mbFirst.ts, 3, 8))
+>a : Symbol(a, Decl(mbFirst.ts, 3, 33))
+>MA : Symbol(MA, Decl(mbFirst.ts, 0, 10))
+>MB : Symbol(MB, Decl(mbFirst.ts, 2, 61))
+>U : Symbol(U, Decl(mbFirst.ts, 3, 8))
+
+declare let as: MA<{ p: string }>, al: MA<{ p: "lit" }>;
+>as : Symbol(as, Decl(mbFirst.ts, 5, 11))
+>MA : Symbol(MA, Decl(mbFirst.ts, 0, 10))
+>p : Symbol(p, Decl(mbFirst.ts, 5, 20))
+>al : Symbol(al, Decl(mbFirst.ts, 5, 34))
+>MA : Symbol(MA, Decl(mbFirst.ts, 0, 10))
+>p : Symbol(p, Decl(mbFirst.ts, 5, 43))
+
+declare let bs: MB<{ p: string }>, bl: MB<{ p: "lit" }>;
+>bs : Symbol(bs, Decl(mbFirst.ts, 6, 11))
+>MB : Symbol(MB, Decl(mbFirst.ts, 2, 61))
+>p : Symbol(p, Decl(mbFirst.ts, 6, 20))
+>bl : Symbol(bl, Decl(mbFirst.ts, 6, 34))
+>MB : Symbol(MB, Decl(mbFirst.ts, 2, 61))
+>p : Symbol(p, Decl(mbFirst.ts, 6, 43))
+
+bl = bs;
+>bl : Symbol(bl, Decl(mbFirst.ts, 6, 34))
+>bs : Symbol(bs, Decl(mbFirst.ts, 6, 11))
+
+bs = bl;
+>bs : Symbol(bs, Decl(mbFirst.ts, 6, 11))
+>bl : Symbol(bl, Decl(mbFirst.ts, 6, 34))
+
+al = as;
+>al : Symbol(al, Decl(mbFirst.ts, 5, 34))
+>as : Symbol(as, Decl(mbFirst.ts, 5, 11))
+
+as = al;
+>as : Symbol(as, Decl(mbFirst.ts, 5, 11))
+>al : Symbol(al, Decl(mbFirst.ts, 5, 34))
+

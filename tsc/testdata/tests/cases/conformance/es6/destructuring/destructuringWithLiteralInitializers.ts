@@ -1,3 +1,4 @@
+// @checkOrder: default, typesfirst
 // @target: es2015
 // @strict: false
 // (arg: { x: any, y: any }) => void

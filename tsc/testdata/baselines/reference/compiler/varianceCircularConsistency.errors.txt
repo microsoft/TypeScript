@@ -1,0 +1,48 @@
+varianceCircularConsistency.ts(26,7): error TS2322: Type 'Ref<EntryPointComponent<{ q: { readonly variables: { slug: string; }; }; }, never, never, {}>>' is not assignable to type 'Ref<EntryPointComponent<Record<string, Query>, never, never, {}>>'.
+  Type 'EntryPointComponent<{ q: { readonly variables: { slug: string; }; }; }, never, never, {}>' is not assignable to type 'EntryPointComponent<Record<string, Query>, never, never, {}>'.
+    Type '(props: Props<{ q: { readonly variables: { slug: string; }; }; }, never, never, {}>) => void' is not assignable to type 'EntryPointComponent<Record<string, Query>, never, never, {}>'.
+      Type '(props: Props<{ q: { readonly variables: { slug: string; }; }; }, never, never, {}>) => void' is not assignable to type '(props: Props<Record<string, Query>, never, never, {}>) => void'.
+        Types of parameters 'props' and 'props' are incompatible.
+          Type 'Props<Record<string, Query>, never, never, {}>' is not assignable to type 'Props<{ q: { readonly variables: { slug: string; }; }; }, never, never, {}>'.
+            Types of property 'queries' are incompatible.
+              Property 'q' is missing in type 'Record<string, Query>' but required in type '{ q: { readonly variables: { slug: string; }; }; }'.
+
+
+==== varianceCircularConsistency.ts (1 errors) ====
+    // Variances of these mutually recursive generics must not depend on values
+    // measured mid-cycle. Assigning `e` to `EntryPoint<any, any>` must agree with
+    // assigning `e.root` to `EntryPoint<any, any>["root"]`.
+    
+    interface Query {}
+    type Component<P> = P | ((props: P) => void);
+    interface Ref<T> {
+        value: T;
+    }
+    interface Rep<Params, Queries extends Record<string, Query>, Nested, Runtime, Extra> extends Readonly<{
+        root: Ref<EntryPointComponent<Queries, Nested, Runtime>>;
+    }> {}
+    type Preloaded<T> = T extends Record<string, Rep<any, any, any, any, any>> ? { [K in keyof T]: Unwrap<GetComponent<T>> } : never;
+    interface Props<Queries, Nested, Runtime, Extra> extends Readonly<{
+        nested: Preloaded<Nested>;
+        queries: Queries;
+    }> {}
+    type EntryPointComponent<Queries extends Record<string, Query>, Nested, Runtime, Extra = {}> = Component<Props<Queries, Nested, Runtime, Extra>>;
+    type Unwrap<C> = C extends EntryPointComponent<infer Q, infer N, infer R> ? Readonly<{}> : {};
+    type EntryPoint<C, Params> = Rep<Params, C extends EntryPointComponent<infer Q, any, any> ? Q : never, never, never, never>;
+    type GetComponent<T> = T extends EntryPoint<infer C, infer P> ? C : never;
+    
+    declare const c: EntryPointComponent<{ q: { readonly variables: { slug: string } } }, {}, { onClick: () => void }>;
+    declare const e: EntryPoint<typeof c, { slug: string }>;
+    const whole: EntryPoint<any, any> = e;
+    const root: EntryPoint<any, any>["root"] = e.root;
+          ~~~~
+!!! error TS2322: Type 'Ref<EntryPointComponent<{ q: { readonly variables: { slug: string; }; }; }, never, never, {}>>' is not assignable to type 'Ref<EntryPointComponent<Record<string, Query>, never, never, {}>>'.
+!!! error TS2322:   Type 'EntryPointComponent<{ q: { readonly variables: { slug: string; }; }; }, never, never, {}>' is not assignable to type 'EntryPointComponent<Record<string, Query>, never, never, {}>'.
+!!! error TS2322:     Type '(props: Props<{ q: { readonly variables: { slug: string; }; }; }, never, never, {}>) => void' is not assignable to type 'EntryPointComponent<Record<string, Query>, never, never, {}>'.
+!!! error TS2322:       Type '(props: Props<{ q: { readonly variables: { slug: string; }; }; }, never, never, {}>) => void' is not assignable to type '(props: Props<Record<string, Query>, never, never, {}>) => void'.
+!!! error TS2322:         Types of parameters 'props' and 'props' are incompatible.
+!!! error TS2322:           Type 'Props<Record<string, Query>, never, never, {}>' is not assignable to type 'Props<{ q: { readonly variables: { slug: string; }; }; }, never, never, {}>'.
+!!! error TS2322:             Types of property 'queries' are incompatible.
+!!! error TS2322:               Property 'q' is missing in type 'Record<string, Query>' but required in type '{ q: { readonly variables: { slug: string; }; }; }'.
+!!! related TS2728 varianceCircularConsistency.ts:23:40: 'q' is declared here.
+    
