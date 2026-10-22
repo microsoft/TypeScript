@@ -1184,7 +1184,7 @@ func TestRealpathAliasLifecycle(t *testing.T) {
 		change := FileChangeSummary{}
 		change.Changed.Add("file:///packages/mylib/package.json")
 
-		expanded := snapshot.expandRealpathAliases(change, builder.fs)
+		expanded := snapshot.expandRealpathAliases(change)
 
 		// Should now also contain the symlink path.
 		assert.Assert(t, expanded.Changed.Has("file:///packages/mylib/package.json"), "original event should remain")
@@ -1214,7 +1214,7 @@ func TestRealpathAliasLifecycle(t *testing.T) {
 		change := FileChangeSummary{}
 		change.Deleted.Add("file:///packages/mylib/package.json")
 
-		expanded := snapshot.expandRealpathAliases(change, builder.fs)
+		expanded := snapshot.expandRealpathAliases(change)
 
 		assert.Assert(t, expanded.Deleted.Has("file:///project/node_modules/mylib/package.json"), "symlink deletion should be added")
 	})
@@ -1278,15 +1278,16 @@ func TestRealpathAliasLifecycle(t *testing.T) {
 		change := FileChangeSummary{}
 		change.Changed.Add("file:///some/file.ts")
 
-		expanded := snapshot.expandRealpathAliases(change, snapshot.fs)
+		expanded := snapshot.expandRealpathAliases(change)
 		assert.Equal(t, expanded.Changed.Len(), 1)
 		assert.Assert(t, expanded.Changed.Has("file:///some/file.ts"))
 	})
 
-	t.Run("created path uses current filesystem kind", func(t *testing.T) {
+	t.Run("created cache expansion does not change excessive event classification", func(t *testing.T) {
 		t.Parallel()
 		files := map[string]any{
 			"/project/node_modules/pkg": vfstest.Symlink("/packages/pkg"),
+			"/project/src/index.ts":      "export {}",
 		}
 		for i := range 1001 {
 			files["/packages/pkg/file"+strconv.Itoa(i)+".ts"] = "export {}"
@@ -1304,7 +1305,7 @@ func TestRealpathAliasLifecycle(t *testing.T) {
 		for i := range 1001 {
 			assert.Assert(t, builder1.GetFile(tspath.RootedFilePathFromAbsolute("/project/node_modules/pkg/file"+strconv.Itoa(i)+".ts")) != nil)
 		}
-		assert.Assert(t, builder1.fs.DirectoryExists(tspath.RootedDirectoryPath("/packages/pkg")))
+		assert.Assert(t, builder1.GetFile("/project/src/index.ts") != nil)
 		snapshot1, _ := builder1.Finalize()
 
 		assert.NilError(t, testFS.Remove("/packages/pkg"))
@@ -1318,14 +1319,19 @@ func TestRealpathAliasLifecycle(t *testing.T) {
 			snapshot1.nodeModulesRealpathAliases,
 			lsproto.PositionEncodingKindUTF16,
 		)
-		change := FileChangeSummary{}
+		snapshot := &Snapshot{
+			fs:                 snapshot1,
+			ProjectCollection:  &ProjectCollection{},
+			ConfigFileRegistry: &ConfigFileRegistry{},
+		}
+		change := FileChangeSummary{IncludesWatchChangeOutsideNodeModules: true}
 		change.Created.Add("file:///packages/pkg")
 
-		expanded := snapshot1.expandRealpathAliases(change, builder2.fs)
+		change = snapshot.processFileChanges(builder2, change, nil, nil, nil, nil)
 
-		assert.Equal(t, expanded.Created.Len(), 1)
-		assert.Assert(t, expanded.Created.Has("file:///packages/pkg"))
-		assert.Assert(t, !expanded.HasExcessiveWatchEvents())
+		assert.Assert(t, change.HasExcessiveWatchEvents())
+		_, unrelatedCached := builder2.cacheFiles.Load(tspath.PathKey("/project/src/index.ts"))
+		assert.Assert(t, unrelatedCached, "the original event batch should use the normal path")
 	})
 
 	t.Run("markDirtyFiles invalidates symlinked file via realpath event", func(t *testing.T) {
@@ -1369,7 +1375,7 @@ func TestRealpathAliasLifecycle(t *testing.T) {
 		change.Changed.Add("file:///packages/mylib/package.json")
 
 		// Expand the realpath event to include the symlink path.
-		change = snapshot1.expandRealpathAliases(change, builder2.fs)
+		change = snapshot1.expandRealpathAliases(change)
 		// Now mark dirty — should find the file under the symlink key.
 		builder2.markDirtyFiles(change)
 
@@ -1421,7 +1427,7 @@ func TestRealpathAliasLifecycle(t *testing.T) {
 		change := FileChangeSummary{}
 		change.Created.Add("file:///packages/mylib")
 
-		change = snapshot1.expandRealpathAliases(change, builder2.fs)
+		change = snapshot1.expandRealpathAliases(change)
 		assert.Assert(t, change.Created.Has("file:///project/node_modules/mylib/package.json"))
 		change = builder2.markDirtyFiles(change)
 		assert.Assert(t, change.Created.Has("file:///project/node_modules/mylib/package.json"))
@@ -1449,7 +1455,7 @@ func TestRealpathAliasLifecycle(t *testing.T) {
 		}
 		excessiveChange.Created.Add("file:///packages/mylib")
 		assert.Assert(t, excessiveChange.HasExcessiveWatchEvents())
-		excessiveChange = snapshot2.expandRealpathAliases(excessiveChange, builder3.fs)
+		excessiveChange = snapshot2.expandRealpathAliases(excessiveChange)
 		assert.Assert(t, excessiveChange.Created.Has("file:///project/node_modules/mylib/package.json"))
 		assert.Assert(t, builder3.watchChangesOverlapCache(excessiveChange, nil, nil))
 

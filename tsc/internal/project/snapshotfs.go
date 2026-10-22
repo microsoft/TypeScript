@@ -487,12 +487,10 @@ func (s *snapshotFSBuilder) expandCreatedCacheEntries(change FileChangeSummary) 
 	}
 	createdDirectories := collections.NewSetWithSizeHint[tspath.PathKey](change.Created.Len())
 	for uri := range change.Created.Keys() {
-		if s.fs.DirectoryExists(tspath.RootedDirectoryPathFromPath(uri.FileName().AsPath())) {
-			createdDirectories.Add(s.caseSensitivity.PathKey(uri.FileName().AsPath()))
+		path := s.caseSensitivity.PathKey(uri.FileName().AsPath())
+		if _, ok := s.cacheDirectories.Get(path); ok {
+			createdDirectories.Add(path)
 		}
-	}
-	if createdDirectories.Len() == 0 {
-		return change
 	}
 	for path := range createdDirectories.Keys() {
 		s.collectFilesRecursive(path, &change.Created, nil, nil)
@@ -530,6 +528,10 @@ func (s *snapshotFSBuilder) markDirtyFiles(change FileChangeSummary) FileChangeS
 		for uri := range changes.Keys() {
 			path := s.caseSensitivity.PathKey(uri.FileName().AsPath())
 			if created {
+				// Cached Created paths represent replacements of files we already knew about.
+				// If the disk content is unchanged, registries already contain the path and
+				// there is no filesystem change to propagate. Open overlays remain authoritative,
+				// so a Created event cannot change their active contents either.
 				if s.fs.Overlays()[path] != nil {
 					continue
 				}
@@ -606,7 +608,7 @@ func (s *snapshotFSBuilder) reloadEntryIfContentChanged(entry *dirty.SyncMapEntr
 // files that were accessed through node_modules symlinks. When a watch event arrives
 // using a realpath, this expands it to include the symlink-based path so that
 // downstream consumers (markDirtyFiles, markFilesChanged) can find cached entries.
-func (s *SnapshotFS) expandRealpathAliases(change FileChangeSummary, currentFS LayeredFileSystem) FileChangeSummary {
+func (s *SnapshotFS) expandRealpathAliases(change FileChangeSummary) FileChangeSummary {
 	if len(s.nodeModulesRealpathAliases) == 0 {
 		return change
 	}
@@ -636,12 +638,7 @@ func (s *SnapshotFS) expandRealpathAliases(change FileChangeSummary, currentFS L
 	if change.Created.Len() > 0 {
 		createdDirectories := collections.NewSetWithSizeHint[tspath.PathKey](change.Created.Len())
 		for uri := range change.Created.Keys() {
-			if currentFS.DirectoryExists(tspath.RootedDirectoryPathFromPath(uri.FileName().AsPath())) {
-				createdDirectories.Add(s.caseSensitivity.PathKey(uri.FileName().AsPath()))
-			}
-		}
-		if createdDirectories.Len() == 0 {
-			return change
+			createdDirectories.Add(s.caseSensitivity.PathKey(uri.FileName().AsPath()))
 		}
 		for realpath, aliases := range s.nodeModulesRealpathAliases {
 			path := realpath
