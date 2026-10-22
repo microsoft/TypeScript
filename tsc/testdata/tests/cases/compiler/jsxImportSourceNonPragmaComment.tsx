@@ -1,3 +1,4 @@
+// @checkOrder: default, typesfirst
 // @module: commonjs
 // @target: es2015
 // @jsx: preserve

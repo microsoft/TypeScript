@@ -1,3 +1,4 @@
+// @checkOrder: default, typesfirst
 // @strict: false
 // @target: es2015
 

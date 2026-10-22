@@ -101,3 +101,20 @@ const obj: { f: <T>(x: T) => void } = {
     }
 };
 
+f(function self(t) {
+>f(function self(t) {    const s = self;    type P = Parameters<typeof s>;}) : void
+>f : (fun: <T>(t: T) => void) => void
+>function self(t) {    const s = self;    type P = Parameters<typeof s>;} : <T>(t: T) => void
+>self : <T>(t: T) => void
+>t : T
+
+    const s = self;
+>s : <T>(t: T) => void
+>self : <T>(t: T) => void
+
+    type P = Parameters<typeof s>;
+>P : [t: unknown]
+>s : <T>(t: T) => void
+
+});
+

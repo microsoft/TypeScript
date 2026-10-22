@@ -88,3 +88,19 @@ const obj: { f: <T>(x: T) => void } = {
     }
 };
 
+f(function self(t) {
+>f : Symbol(f, Decl(contextualOuterTypeParameters.ts, 0, 0))
+>self : Symbol(self, Decl(contextualOuterTypeParameters.ts, 26, 2))
+>t : Symbol(t, Decl(contextualOuterTypeParameters.ts, 26, 16))
+
+    const s = self;
+>s : Symbol(s, Decl(contextualOuterTypeParameters.ts, 27, 9))
+>self : Symbol(self, Decl(contextualOuterTypeParameters.ts, 26, 2))
+
+    type P = Parameters<typeof s>;
+>P : Symbol(P, Decl(contextualOuterTypeParameters.ts, 27, 19))
+>Parameters : Symbol(Parameters, Decl(lib.es5.d.ts, --, --))
+>s : Symbol(s, Decl(contextualOuterTypeParameters.ts, 27, 9))
+
+});
+

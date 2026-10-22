@@ -1,3 +1,4 @@
+// @checkOrder: default, typesfirst
 // @target: es2015
 // @checkJs: true
 // @allowJs: true
