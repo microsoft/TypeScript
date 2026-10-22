@@ -249,11 +249,14 @@ func (c *Checker) inferFromTypes(n *InferenceState, source *Type, target *Type) 
 	case target.flags&TypeFlagsUnionOrIntersection != 0:
 		c.inferToUnionOrIntersectionType(n, source, target)
 	case source.flags&TypeFlagsUnion != 0:
+		sources := source.Types()
 		if discriminants := c.getInferenceDiscriminants(source, target); len(discriminants) != 0 {
 			discriminator := &TypeDiscriminator{c: c, props: discriminants, reverse: true, isRelatedTo: c.compareTypesComparableSimple}
-			source = c.discriminateTypeByDiscriminableItems(source, discriminator)
+			if filtered := c.discriminateTypesByDiscriminableItems(source, discriminator); filtered != nil {
+				sources = filtered
+			}
 		}
-		for _, sourceType := range source.Distributed() {
+		for _, sourceType := range sources {
 			c.inferFromTypes(n, sourceType, target)
 		}
 	case target.flags&TypeFlagsTemplateLiteral != 0:
@@ -469,8 +472,8 @@ func (c *Checker) inferToUnionOrIntersectionType(n *InferenceState, source *Type
 		for i, s := range sources {
 			if discriminants := c.getInferenceDiscriminants(target, s); len(discriminants) != 0 {
 				discriminator := &TypeDiscriminator{c: c, props: discriminants, isRelatedTo: c.compareTypesComparableSimple}
-				if filtered := c.discriminateTypeByDiscriminableItems(target, discriminator); filtered != target {
-					filteredTargetsBySource[i] = filtered.Distributed()
+				if filtered := c.discriminateTypesByDiscriminableItems(target, discriminator); filtered != nil {
+					filteredTargetsBySource[i] = filtered
 				}
 			}
 		}

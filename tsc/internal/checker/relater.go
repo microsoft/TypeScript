@@ -1219,6 +1219,15 @@ type Discriminator interface {
 }
 
 func (c *Checker) discriminateTypeByDiscriminableItems(target *Type, discriminator Discriminator) *Type {
+	if filtered := c.discriminateTypesByDiscriminableItems(target, discriminator); filtered != nil {
+		return c.getUnionTypeEx(filtered, UnionReductionNone, nil, nil)
+	}
+	return target
+}
+
+// Returns the constituents of the union target that are not ruled out by the discriminator, in union order,
+// or nil when the discriminator rules out nothing (or everything, which is treated the same way).
+func (c *Checker) discriminateTypesByDiscriminableItems(target *Type, discriminator Discriminator) []*Type {
 	types := target.Types()
 	include := make([]Ternary, len(types))
 	for i, t := range types {
@@ -1269,12 +1278,11 @@ func (c *Checker) discriminateTypeByDiscriminableItems(target *Type, discriminat
 				filteredTypes = append(filteredTypes, t)
 			}
 		}
-		filtered := c.getUnionTypeEx(filteredTypes, UnionReductionNone, nil, nil)
-		if filtered.flags&TypeFlagsNever == 0 {
-			return filtered
+		if len(filteredTypes) != 0 {
+			return filteredTypes
 		}
 	}
-	return target
+	return nil
 }
 
 func (c *Checker) filterPrimitivesIfContainsNonPrimitive(unionType *Type) *Type {
