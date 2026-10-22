@@ -31176,9 +31176,20 @@ func (c *Checker) resolveBaseConstraint(t *Type, stack []baseConstraintFrame, pr
 				// circularity is intrinsic to the declarations, so it is reported once
 				// and the circular result is kept. Discarding it would let a later
 				// computation reuse cycle participants that hide the cycle.
+				// Only the cycle of an instantiation originates at a use; that of a
+				// declared type parameter is found by checking its declaration, and
+				// whichever use happens to find it first is no origin.
+				instantiated := t.AsTypeParameter().target != nil
 				c.reportAtCurrentNodeOnce(func(c *Checker, node *ast.Node) {
+					if instantiated && node != nil && ast.GetSourceFileOfNode(node) != ast.GetSourceFileOfNode(errorNode) {
+						// The cycle is found only while checking the file of the
+						// use, which may come after the diagnostics of the
+						// declaration's file were collected, so whether an error
+						// there is seen would depend on the order files are checked.
+						return
+					}
 					diagnostic := c.error(errorNode, diagnostics.Type_parameter_0_has_a_circular_constraint, typeString)
-					if node != nil && !isNodeDescendantOf(errorNode, node) && !isNodeDescendantOf(node, errorNode) {
+					if instantiated && node != nil && !isNodeDescendantOf(errorNode, node) && !isNodeDescendantOf(node, errorNode) {
 						diagnostic.AddRelatedInfo(NewDiagnosticForNode(node, diagnostics.Circularity_originates_in_type_at_this_location))
 					}
 				})
