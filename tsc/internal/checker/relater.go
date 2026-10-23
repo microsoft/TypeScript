@@ -1069,6 +1069,23 @@ func isDiscriminableUnion(t *Type) bool {
 	return false
 }
 
+// Discriminating a union always drops its primitive and never constituents, even when there are no
+// discriminants to go by. Callers that skip the discrimination for unions that cannot be narrowed still
+// rely on that, for instance when looking up a contextual property, so this reproduces just that part.
+func (c *Checker) removeNonDiscriminableConstituents(t *Type) *Type {
+	types := t.Types()
+	filtered := make([]*Type, 0, len(types))
+	for _, s := range types {
+		if s.flags&TypeFlagsPrimitive == 0 && c.getReducedType(s).flags&TypeFlagsNever == 0 {
+			filtered = append(filtered, s)
+		}
+	}
+	if len(filtered) == 0 || len(filtered) == len(types) {
+		return t
+	}
+	return c.getUnionTypeEx(filtered, UnionReductionNone, nil, nil)
+}
+
 // Keep this up-to-date with the same logic within `getApparentTypeOfContextualType`, since they should behave similarly
 func (c *Checker) findMatchingDiscriminantType(source *Type, target *Type, isRelatedTo func(source *Type, target *Type) Ternary) *Type {
 	if target.flags&TypeFlagsUnion != 0 && source.flags&(TypeFlagsIntersection|TypeFlagsObject) != 0 && isDiscriminableUnion(target) {
