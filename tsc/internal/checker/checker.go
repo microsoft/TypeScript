@@ -692,6 +692,8 @@ type Checker struct {
 	outerTypeParameterListArena                 core.Arena[[]*Type]
 	valueSymbolExtraArena                       core.Arena[valueSymbolExtra]
 	structuredTypeExtraArena                    core.Arena[structuredTypeExtra]
+	memberLayoutArena                           core.Arena[MemberLayout]
+	layoutMemberInfos                           map[string]MemberInfo
 	freeTypeSets                                *temporaryTypeSet
 	freePropertyCounts                          *temporaryPropertyCounts
 	mergedSymbols                               map[*ast.Symbol]*ast.Symbol
@@ -19637,7 +19639,7 @@ func (c *Checker) getMemberLayoutKey(t *Type, baseTypes []*Type) CacheHashKey {
 		if baseType.objectFlags&ObjectFlagsReference != 0 {
 			c.resolveStructuredTypeMembers(baseType)
 			b.writeByte('+')
-			b.writeUint32(baseType.AsTypeReference().lazy.layout.layoutId)
+			b.writeUint32(baseType.AsTypeReference().lazy.layout.id)
 		} else {
 			b.writeByte('-')
 			b.writeType(baseType)
@@ -19647,13 +19649,14 @@ func (c *Checker) getMemberLayoutKey(t *Type, baseTypes []*Type) CacheHashKey {
 }
 
 func (c *Checker) createMemberLayout(t *Type, baseTypes []*Type) *MemberLayout {
-	var memberInfoMap map[string]*MemberInfo
+	layoutMemberInfos := c.layoutMemberInfos
+	c.layoutMemberInfos = nil
 	addMember := func(symbol *ast.Symbol, baseIndex int) {
-		if _, ok := memberInfoMap[symbol.Name()]; !ok {
-			if memberInfoMap == nil {
-				memberInfoMap = make(map[string]*MemberInfo)
+		if _, ok := layoutMemberInfos[symbol.Name()]; !ok {
+			if layoutMemberInfos == nil {
+				layoutMemberInfos = make(map[string]MemberInfo)
 			}
-			memberInfoMap[symbol.Name()] = &MemberInfo{symbol: symbol, baseIndex: int32(baseIndex)}
+			layoutMemberInfos[symbol.Name()] = MemberInfo{symbol: symbol, baseIndex: int32(baseIndex)}
 		}
 	}
 	// Add declared members
@@ -19679,9 +19682,11 @@ func (c *Checker) createMemberLayout(t *Type, baseTypes []*Type) *MemberLayout {
 			}
 		}
 	}
-	memberInfos := slices.Collect(maps.Values(memberInfoMap))
+	memberInfos := slices.AppendSeq(make([]MemberInfo, 0, len(layoutMemberInfos)), maps.Values(layoutMemberInfos))
+	clear(layoutMemberInfos)
+	c.layoutMemberInfos = layoutMemberInfos
 	// Sort by symbols, but put declared members (baseIndex < 0) first
-	slices.SortFunc(memberInfos, func(a, b *MemberInfo) int {
+	slices.SortFunc(memberInfos, func(a, b MemberInfo) int {
 		if a.baseIndex < 0 && b.baseIndex >= 0 {
 			return -1
 		}
@@ -19692,15 +19697,18 @@ func (c *Checker) createMemberLayout(t *Type, baseTypes []*Type) *MemberLayout {
 	})
 	// Store slot indices in the sorted memberInfos. These indices are used to identify
 	// slots in the instantiated type's properties list.
-	for i, info := range memberInfos {
-		info.slotIndex = int32(i)
+	memberInfoMap := make(map[string]*MemberInfo, len(memberInfos))
+	for i := range memberInfos {
+		memberInfo := &memberInfos[i]
+		memberInfo.slotIndex = int32(i)
+		memberInfoMap[memberInfo.symbol.Name()] = memberInfo
 	}
+	layout := c.memberLayoutArena.New()
+	layout.id = c.memberLayoutCount
+	layout.memberInfoMap = memberInfoMap
+	layout.memberInfos = memberInfos
 	c.memberLayoutCount++
-	return &MemberLayout{
-		layoutId:      c.memberLayoutCount,
-		memberInfoMap: memberInfoMap,
-		memberInfos:   memberInfos,
-	}
+	return layout
 }
 
 func findIndexInfo(indexInfos []*IndexInfo, keyType *Type) *IndexInfo {
