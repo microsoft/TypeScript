@@ -1,0 +1,52 @@
+relationComplexityError.ts(10,5): error TS2859: Excessive complexity comparing types '{ p: T1 & T2; }' and '{ p: T1 | null; }'.
+relationComplexityError.ts(10,5): error TS2859: Excessive complexity comparing types '{ p: T1 & T2; }' and '{ p: T1 | null; }'.
+relationComplexityError.ts(18,5): error TS2859: Excessive complexity comparing types 'T1 & T2' and 'T1 | null'.
+relationComplexityError.ts(22,5): error TS2859: Excessive complexity comparing types 'T1 & T2' and 'T1 | null'.
+relationComplexityError.ts(22,5): error TS2859: Excessive complexity comparing types 'T1 & T2' and 'T1 | null'.
+relationComplexityError.ts(26,5): error TS2859: Excessive complexity comparing types '{ p: T1 & T2; }' and '{ p: T1 | null; }'.
+relationComplexityError.ts(26,5): error TS2859: Excessive complexity comparing types '{ p: T1 & T2; }' and '{ p: T1 | null; }'.
+
+
+==== relationComplexityError.ts (7 errors) ====
+    // Repro from #55630
+    // Every comparison that needs a comparison that is too complex is too complex
+    // itself, whether or not that comparison happened before.
+    
+    type Digits = '0' | '1' | '2' | '3' | '4' | '5' | '6' | '7';
+    type T1 = `${Digits}${Digits}${Digits}${Digits}` | undefined;
+    type T2 = { a: string } | { b: number };
+    
+    function f0(x: { p: T1 | null }, y: { p: T1 & T2 }) {
+        x = y;  // Complexity error
+        ~
+!!! error TS2859: Excessive complexity comparing types '{ p: T1 & T2; }' and '{ p: T1 | null; }'.
+        ~~~~~
+!!! error TS2859: Excessive complexity comparing types '{ p: T1 & T2; }' and '{ p: T1 | null; }'.
+    }
+    
+    function f1(x: T1, y: T1 & T2) {
+        x = y;
+    }
+    
+    function f2(x: T1 | null, y: T1 & T2) {
+        x = y;  // Complexity error
+        ~
+!!! error TS2859: Excessive complexity comparing types 'T1 & T2' and 'T1 | null'.
+    }
+    
+    function f3(x: T1 | null, y: T1 & T2) {
+        x = y;  // Complexity error
+        ~
+!!! error TS2859: Excessive complexity comparing types 'T1 & T2' and 'T1 | null'.
+        ~~~~~
+!!! error TS2859: Excessive complexity comparing types 'T1 & T2' and 'T1 | null'.
+    }
+    
+    function f4(x: { p: T1 | null }, y: { p: T1 & T2 }) {
+        x = y;  // Complexity error
+        ~
+!!! error TS2859: Excessive complexity comparing types '{ p: T1 & T2; }' and '{ p: T1 | null; }'.
+        ~~~~~
+!!! error TS2859: Excessive complexity comparing types '{ p: T1 & T2; }' and '{ p: T1 | null; }'.
+    }
+    
