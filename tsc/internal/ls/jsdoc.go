@@ -31,6 +31,11 @@ func GetSymbolDocumentationComment(c *checker.Checker, symbol *ast.Symbol) strin
 	}
 	var parts []string
 	var seen collections.Set[*ast.Node]
+	addPart := func(doc string) {
+		if doc != "" && !slices.Contains(parts, doc) {
+			parts = append(parts, doc)
+		}
+	}
 	for _, decl := range symbol.Declarations() {
 		if decl == nil {
 			continue
@@ -38,9 +43,23 @@ func GetSymbolDocumentationComment(c *checker.Checker, symbol *ast.Symbol) strin
 		if !seen.AddIfAbsent(decl) {
 			continue
 		}
-		if doc := getDocumentationFromDeclaration(noMappedLocation, c, symbol, decl, decl, lsproto.MarkupKindPlainText, true /*commentOnly*/); doc != "" && !slices.Contains(parts, doc) {
-			parts = append(parts, doc)
+		if ast.IsParameterDeclaration(decl) {
+			// Strada collects every comment-having node of a parameter: its own JSDoc
+			// and each matching `@param` tag of the hosting declaration (nearest first),
+			// deduplicating identical comments.
+			seenSymbols := &collections.Set[*ast.Symbol]{}
+			seenSymbols.Add(symbol)
+			for _, node := range parameterDocumentationNodes(c, decl, seenSymbols) {
+				if node.Kind == ast.KindJSDoc && containsTypedefTag(node) {
+					continue
+				}
+				var b strings.Builder
+				writeComments(noMappedLocation, &b, c, node.Comments(), false /*isMarkdown*/)
+				addPart(b.String())
+			}
+			continue
 		}
+		addPart(getDocumentationFromDeclaration(noMappedLocation, c, symbol, decl, decl, lsproto.MarkupKindPlainText, true /*commentOnly*/))
 	}
 	return strings.Join(parts, "\n")
 }
@@ -52,6 +71,15 @@ func GetSymbolJSDocTags(c *checker.Checker, symbol *ast.Symbol) []JSDocTagInfo {
 	if symbol == nil {
 		return nil
 	}
+	// The guard is shared across the whole lookup, including the base-property
+	// fallback for constructor parameters: `class C implements C { constructor(public x: number) {} }`
+	// resolves the implemented type's `x` back to the very parameter property being queried.
+	seenSymbols := &collections.Set[*ast.Symbol]{}
+	seenSymbols.Add(symbol)
+	return getSymbolJSDocTagsWorker(c, symbol, seenSymbols)
+}
+
+func getSymbolJSDocTagsWorker(c *checker.Checker, symbol *ast.Symbol, seenSymbols *collections.Set[*ast.Symbol]) []JSDocTagInfo {
 	var infos []JSDocTagInfo
 	var seen collections.Set[*ast.Node]
 	for _, decl := range symbol.Declarations() {
@@ -61,15 +89,26 @@ func GetSymbolJSDocTags(c *checker.Checker, symbol *ast.Symbol) []JSDocTagInfo {
 		if !seen.AddIfAbsent(decl) {
 			continue
 		}
-		if ast.IsParameterDeclaration(decl) && decl.Name() != nil && ast.IsIdentifier(decl.Name()) {
-			// Strada: a parameter symbol's tags are its matching `@param` tag(s)
-			// from the hosting declaration's OWN JSDoc (getJSDocParameterTags);
-			// when there is none, a CONSTRUCTOR parameter inherits the tags of a
-			// same-named property on the class's super types (findBaseOfDeclaration).
-			if tag := findOwnParameterTag(decl.Parent, decl.Name().Text()); tag != nil {
+		if ast.IsParameterDeclaration(decl) {
+			// Strada (getJSDocCommentsAndTags for a parameter): the tags of the
+			// parameter's own JSDoc first, then the hosting declaration's matching
+			// `@param` tags (getJSDocParameterTags: by name for identifiers, by
+			// position for binding patterns; nearest comment location first). Only
+			// when that yields nothing does a CONSTRUCTOR parameter inherit the tags
+			// of a same-named property on the class's super types (findBaseOfDeclaration).
+			var tags []*ast.Node
+			if jsdoc := getJSDoc(decl); jsdoc != nil && jsdoc.Kind == ast.KindJSDoc && jsdoc.AsJSDoc().Tags != nil {
+				tags = append(tags, jsdoc.AsJSDoc().Tags.Nodes...)
+			}
+			tags = append(tags, ownParameterTags(decl)...)
+			if len(tags) == 0 {
+				if prop := findConstructorParamBaseProperty(c, decl, seenSymbols); prop != nil {
+					infos = append(infos, getSymbolJSDocTagsWorker(c, prop, seenSymbols)...)
+				}
+				continue
+			}
+			for _, tag := range tags {
 				infos = append(infos, JSDocTagInfo{Name: tag.TagName().Text(), Text: getJSDocTagText(tag)})
-			} else if prop := findConstructorParamBaseProperty(c, decl, decl.Name().Text(), &collections.Set[*ast.Symbol]{}); prop != nil {
-				infos = append(infos, GetSymbolJSDocTags(c, prop)...)
 			}
 			continue
 		}
@@ -181,31 +220,15 @@ func getJSDocOrTag(c *checker.Checker, node *ast.Node, seenSymbols *collections.
 	if node == nil {
 		return nil
 	}
+	if ast.IsParameterDeclaration(node) {
+		// Single-node consumers (hover) get the nearest documentation node a
+		// parameter has; see parameterDocumentationNodes for the Strada rules.
+		return core.FirstOrNil(parameterDocumentationNodes(c, node, seenSymbols))
+	}
 	if jsdoc := getJSDoc(node); jsdoc != nil {
 		return jsdoc
 	}
 	switch {
-	case ast.IsParameterDeclaration(node):
-		name := node.Name()
-		if ast.IsBindingPattern(name) {
-			// For binding patterns, match JSDoc @param tags by position rather than by name
-			return getJSDocParameterTagByPosition(c, node)
-		}
-		// Strada semantics for parameter documentation (services.ts):
-		//   - `@param` is only taken from the hosting declaration's OWN JSDoc
-		//     (getJSDocParameterTags) — parameters of an overriding method never
-		//     inherit `@param` docs from base signatures, even when the override
-		//     has no JSDoc at all;
-		//   - a CONSTRUCTOR parameter without its own `@param` inherits the
-		//     documentation of a same-named property on the class's super types
-		//     (findBaseOfDeclaration), recursing through undocumented overrides.
-		if tag := findOwnParameterTag(node.Parent, name.Text()); tag != nil {
-			return tag
-		}
-		if prop := findConstructorParamBaseProperty(c, node, name.Text(), seenSymbols); prop != nil && prop.ValueDeclaration() != nil {
-			return getJSDocOrTag(c, prop.ValueDeclaration(), seenSymbols)
-		}
-		return nil
 	case ast.IsTypeParameterDeclaration(node):
 		return getMatchingJSDocTag(c, node.Parent, node.Name().Text(), isMatchingTemplateTag, seenSymbols)
 	case ast.IsVariableDeclaration(node) && ast.IsVariableDeclarationList(node.Parent) && core.FirstOrNil(node.Parent.AsVariableDeclarationList().Declarations.Nodes) == node:
@@ -262,44 +285,58 @@ func getJSDocOrTag(c *checker.Checker, node *ast.Node, seenSymbols *collections.
 	return nil
 }
 
-// ownJSDocOf returns the hosting declaration's own JSDoc: the last JSDoc along
-// the comment location chain of the declaration itself or, for an overload
-// implementation, of the symbol's first function-like declaration. Unlike
-// getJSDocOrTag it never falls back to base-class members.
-func ownJSDocOf(host *ast.Node) *ast.Node {
-	if host == nil {
-		return nil
+// parameterDocumentationNodes returns the comment-having nodes Strada's
+// getDocumentationComment consults for a parameter (getJSDocCommentsAndTags):
+// the parameter's own JSDoc when it carries a comment, followed by every matching
+// `@param` tag of the hosting declaration, nearest comment location first. Only
+// when there is none does a CONSTRUCTOR parameter fall back to the documentation
+// of a same-named property on the class's super types (findBaseOfDeclaration).
+// Parameters of an overriding method never inherit `@param` docs from base
+// signatures, even when the override has no JSDoc at all.
+func parameterDocumentationNodes(c *checker.Checker, param *ast.Node, seenSymbols *collections.Set[*ast.Symbol]) []*ast.Node {
+	var nodes []*ast.Node
+	if jsdoc := getJSDoc(param); jsdoc != nil && len(jsdoc.Comments()) > 0 {
+		nodes = append(nodes, jsdoc)
 	}
-	for current := host; current != nil; current = ast.GetNextJSDocCommentLocation(current) {
-		if jsdoc := getJSDoc(current); jsdoc != nil {
-			return jsdoc
-		}
+	nodes = append(nodes, ownParameterTags(param)...)
+	if len(nodes) > 0 {
+		return nodes
 	}
-	if symbol := host.Symbol(); symbol != nil &&
-		(ast.IsFunctionDeclaration(host) || ast.IsMethodDeclaration(host) || ast.IsMethodSignatureDeclaration(host) || ast.IsConstructorDeclaration(host) || ast.IsConstructSignatureDeclaration(host)) {
-		firstSignature := core.Find(symbol.Declarations(), ast.IsFunctionLike)
-		if firstSignature != nil && firstSignature != host {
-			for current := firstSignature; current != nil; current = ast.GetNextJSDocCommentLocation(current) {
-				if jsdoc := getJSDoc(current); jsdoc != nil {
-					return jsdoc
-				}
-			}
+	if prop := findConstructorParamBaseProperty(c, param, seenSymbols); prop != nil && prop.ValueDeclaration() != nil {
+		if jsdoc := getJSDocOrTag(c, prop.ValueDeclaration(), seenSymbols); jsdoc != nil {
+			return []*ast.Node{jsdoc}
 		}
 	}
 	return nil
 }
 
-// findOwnParameterTag finds the `@param` tag matching `name` in the hosting
-// declaration's own JSDoc (Strada's getJSDocParameterTags).
-func findOwnParameterTag(host *ast.Node, name string) *ast.Node {
-	if jsdoc := ownJSDocOf(host); jsdoc != nil && jsdoc.Kind == ast.KindJSDoc {
-		if tags := jsdoc.AsJSDoc().Tags; tags != nil {
-			for _, tag := range tags.Nodes {
-				if isMatchingParameterTag(tag, name) {
-					return tag
+// ownParameterTags implements Strada's getJSDocParameterTags: the `@param` tags
+// that the hosting declaration's own JSDoc comment chain attributes to `param`,
+// nearest comment location first. Each location contributes the tags of its last
+// JSDoc block (filterOwnedJSDocTags). Identifier parameters match by name and may
+// yield several tags; binding patterns are matched by position among the `@param`
+// tags, so out-of-order or missing tags yield nothing.
+func ownParameterTags(param *ast.Node) []*ast.Node {
+	host := param.Parent
+	name := param.Name()
+	if host == nil || name == nil {
+		return nil
+	}
+	var paramTags []*ast.Node
+	for current := host; current != nil; current = ast.GetNextJSDocCommentLocation(current) {
+		if jsdoc := getJSDoc(current); jsdoc != nil && jsdoc.Kind == ast.KindJSDoc && jsdoc.AsJSDoc().Tags != nil {
+			for _, tag := range jsdoc.AsJSDoc().Tags.Nodes {
+				if tag.Kind == ast.KindJSDocParameterTag {
+					paramTags = append(paramTags, tag)
 				}
 			}
 		}
+	}
+	if ast.IsIdentifier(name) {
+		return core.Filter(paramTags, func(tag *ast.Node) bool { return isMatchingParameterTag(tag, name.Text()) })
+	}
+	if i := slices.Index(host.Parameters(), param); i >= 0 && i < len(paramTags) {
+		return paramTags[i : i+1]
 	}
 	return nil
 }
@@ -308,10 +345,13 @@ func findOwnParameterTag(host *ast.Node, name string) *ast.Node {
 // constructor parameters: the first super type (extends and implements clauses,
 // in source order) that has a property named like the parameter contributes that
 // property — even when its documentation turns out to be empty, the search stops
-// there. Returns nil for non-constructor hosts (method parameters never inherit).
-func findConstructorParamBaseProperty(c *checker.Checker, param *ast.Node, name string, seenSymbols *collections.Set[*ast.Symbol]) *ast.Symbol {
+// there. Returns nil for non-constructor hosts (method parameters never inherit)
+// and for properties already visited by this lookup, which also covers a class
+// that implements itself resolving back to the queried parameter property.
+func findConstructorParamBaseProperty(c *checker.Checker, param *ast.Node, seenSymbols *collections.Set[*ast.Symbol]) *ast.Symbol {
 	host := param.Parent
-	if host == nil || !ast.IsConstructorDeclaration(host) || host.Parent == nil || !ast.IsClassLike(host.Parent) {
+	name := param.Name()
+	if host == nil || name == nil || !ast.IsIdentifier(name) || !ast.IsConstructorDeclaration(host) || host.Parent == nil || !ast.IsClassLike(host.Parent) {
 		return nil
 	}
 	superTypeNodes := append(
@@ -323,7 +363,7 @@ func findConstructorParamBaseProperty(c *checker.Checker, param *ast.Node, name 
 		if baseType == nil {
 			continue
 		}
-		if prop := c.GetPropertyOfType(baseType, name); prop != nil && seenSymbols.AddIfAbsent(prop) {
+		if prop := c.GetPropertyOfType(baseType, name.Text()); prop != nil && seenSymbols.AddIfAbsent(prop) {
 			return prop
 		}
 	}
@@ -338,51 +378,6 @@ func getMatchingJSDocTag(c *checker.Checker, node *ast.Node, name string, match 
 					return tag
 				}
 			}
-		}
-	}
-	return nil
-}
-
-// getJSDocParameterTagByPosition finds a JSDoc @param tag for a binding pattern parameter by position.
-// Since binding patterns don't have a simple name, we match the @param tag at the same index as the parameter.
-func getJSDocParameterTagByPosition(c *checker.Checker, param *ast.Node) *ast.Node {
-	parent := param.Parent
-	if parent == nil {
-		return nil
-	}
-
-	// Find the parameter's index in the parent's parameters list
-	params := parent.Parameters()
-	paramIndex := -1
-	for i, p := range params {
-		if p.AsNode() == param {
-			paramIndex = i
-			break
-		}
-	}
-	if paramIndex < 0 {
-		return nil
-	}
-
-	// Get the JSDoc for the parent function/method
-	jsdoc := getJSDocOrTag(c, parent, &collections.Set[*ast.Symbol]{})
-	if jsdoc == nil || jsdoc.Kind != ast.KindJSDoc {
-		return nil
-	}
-
-	// Collect all @param tags in order
-	tags := jsdoc.AsJSDoc().Tags
-	if tags == nil {
-		return nil
-	}
-
-	paramTagIndex := 0
-	for _, tag := range tags.Nodes {
-		if tag.Kind == ast.KindJSDocParameterTag {
-			if paramTagIndex == paramIndex {
-				return tag
-			}
-			paramTagIndex++
 		}
 	}
 	return nil
