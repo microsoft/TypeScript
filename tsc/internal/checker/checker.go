@@ -598,6 +598,7 @@ type Checker struct {
 	SignatureCount                              uint32
 	TotalInstantiationCount                     uint32
 	instantiationCount                          uint32
+	memberLayoutCount                           uint32
 	instantiationStack                          []*Type
 	conditionalConstraintDepth                  uint32
 	inlineLevel                                 int
@@ -19585,6 +19586,7 @@ func (c *Checker) resolveObjectTypeMembers(t *Type) {
 			instantiatedBaseTypes[i] = c.getTypeWithThisArgument(c.instantiateType(baseType, mapper), thisArgument, false /*needsApparentType*/)
 		}
 	}
+	// Member layout must be computed before inherited signatures, which may circularly depend on it
 	layout := c.getMemberLayout(t, instantiatedBaseTypes)
 	for _, instantiatedBaseType := range instantiatedBaseTypes {
 		callSignatures = core.Concatenate(callSignatures, c.getSignaturesOfType(instantiatedBaseType, SignatureKindCall))
@@ -19626,15 +19628,18 @@ func (c *Checker) getMemberLayout(t *Type, baseTypes []*Type) *MemberLayout {
 
 func (c *Checker) getMemberLayoutKey(t *Type, baseTypes []*Type) CacheHashKey {
 	var b keyBuilder
-	b.reserve(20 + 4*len(baseTypes))
+	b.reserve(20 + 5*len(baseTypes))
 	b.writeType(t)
 	// Late binding may add new declared members, so include the declared member count in the key
 	b.writeInt(len(t.AsInterfaceType().declaredMembers))
 	b.writeInt(len(baseTypes))
 	for _, baseType := range baseTypes {
 		if baseType.objectFlags&ObjectFlagsReference != 0 {
-			b.writeType(c.getTargetType(baseType))
+			c.resolveStructuredTypeMembers(baseType)
+			b.writeByte('+')
+			b.writeUint32(baseType.AsTypeReference().lazy.layout.layoutId)
 		} else {
+			b.writeByte('-')
 			b.writeType(baseType)
 		}
 	}
@@ -19690,7 +19695,9 @@ func (c *Checker) createMemberLayout(t *Type, baseTypes []*Type) *MemberLayout {
 	for i, info := range memberInfos {
 		info.slotIndex = int32(i)
 	}
+	c.memberLayoutCount++
 	return &MemberLayout{
+		layoutId:      c.memberLayoutCount,
 		memberInfoMap: memberInfoMap,
 		memberInfos:   memberInfos,
 	}
