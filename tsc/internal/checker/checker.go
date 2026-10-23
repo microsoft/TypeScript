@@ -31547,7 +31547,7 @@ func (d *ObjectLiteralDiscriminator) matches(index int, t *Type, _ bool) bool {
 
 func (c *Checker) discriminateContextualTypeByObjectMembers(node *ast.Node, contextualType *Type) *Type {
 	if !isDiscriminableUnion(contextualType) {
-		return contextualType
+		return c.removeNonDiscriminableConstituents(contextualType)
 	}
 	key := DiscriminatedContextualTypeKey{nodeId: ast.GetNodeId(node), typeId: contextualType.id}
 	if discriminated := c.discriminatedContextualTypes[key]; discriminated != nil {
