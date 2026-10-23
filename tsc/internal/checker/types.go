@@ -1184,7 +1184,7 @@ func (t *StructuredType) getPropertyAt(index int) *ast.Symbol {
 		if memberInfo.baseIndex < 0 {
 			member = t.checker.instantiateSymbol(memberInfo.symbol, lazy.mapper)
 		} else {
-			member = t.checker.getPropertyOfTypeEx(lazy.baseTypes[memberInfo.baseIndex], memberInfo.symbol.Name(), true, false)
+			member = t.checker.getPropertyOfType(lazy.baseTypes[memberInfo.baseIndex], memberInfo.symbol.Name())
 		}
 		t.properties[index] = member
 	}
