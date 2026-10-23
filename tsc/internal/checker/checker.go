@@ -627,7 +627,6 @@ type Checker struct {
 	inlineLevel                                 depthLimit
 	serializationLevel                          depthLimit
 	currentNode                                 *ast.Node
-	simplifyingIndexedAccess                    collections.Set[CachedTypeKey]
 	currentNodeResolution                       int // 1-based index in resolutions of the resolution of currentNode, or 0; see enterCurrentNode
 	varianceTypeParameter                       *Type
 	isInferencePartiallyBlocked                 bool
@@ -30183,14 +30182,11 @@ func (c *Checker) getSimplifiedIndexedAccessType(t *Type, writing bool) *Type {
 		return cached
 	}
 	propertyName := core.IfElse(writing, TypeSystemPropertyNameSimplifiedForWriting, TypeSystemPropertyNameSimplifiedForReading)
-	if c.simplifyingIndexedAccess.Has(key) {
-		// Resolve circular references to t itself while simplifying, which
-		// depends on the simplification in progress.
-		c.isResolutionInProgress(t, propertyName)
+	if c.isResolvingAnywhere(t, propertyName) {
+		// Resolve circular references to t itself while simplifying.
 		return t
 	}
 	c.cachedTypes.begin(c, key)
-	c.simplifyingIndexedAccess.Add(key)
 	c.beginTypeResolution(t, propertyName)
 	result := c.getSimplifiedIndexedAccessTypeWorker(t, writing)
 	if result != t {
@@ -30198,7 +30194,6 @@ func (c *Checker) getSimplifiedIndexedAccessType(t *Type, writing bool) *Type {
 		result = c.removeType(result, t)
 	}
 	c.cachedTypes.set(c, key, result)
-	c.simplifyingIndexedAccess.Delete(key)
 	c.popTypeResolution()
 	c.endMemo()
 	return result
