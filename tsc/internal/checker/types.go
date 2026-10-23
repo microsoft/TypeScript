@@ -1292,7 +1292,7 @@ type TypeReference struct {
 	ObjectType
 	node                  *ast.Node // TypeReferenceNode | ArrayTypeNode | TupleTypeNode when deferred, else nil
 	resolvedTypeArguments []*Type
-	lazy                  *LazyState // Resolved member layout
+	lazy                  *LazyState // Resolved member layout and instantiation state
 }
 
 type LazyState struct {
@@ -1303,10 +1303,10 @@ type LazyState struct {
 }
 
 type MemberLayout struct {
-	id               uint32
+	id               uint32                 // Unique identifier for the member layout
 	memberInfoMap    map[string]*MemberInfo // MemberInfos keyed by property name
 	memberInfos      []MemberInfo           // MemberInfos in sorted order
-	layoutProperties []*ast.Symbol          // Lazily created list of layout properties
+	layoutProperties []*ast.Symbol          // Lazily created list of layout properties (symbols corresponding to memberInfos)
 }
 
 type MemberInfo struct {

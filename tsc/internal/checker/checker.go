@@ -649,7 +649,7 @@ type Checker struct {
 	reverseMappedCache                          map[ReverseMappedTypeKey]*Type
 	reverseHomomorphicMappedCache               map[ReverseMappedTypeKey]*Type
 	iterationTypesCache                         map[IterationTypesKey]IterationTypes
-	memberLayouts                               map[CacheHashKey]*MemberLayout
+	memberLayoutCache                           map[CacheHashKey]*MemberLayout
 	markerTypes                                 collections.Set[*Type]
 	resolvingExplicitTypeOfSymbol               collections.Set[*ast.Symbol]
 	constructorOrFunctionChecked                collections.Set[*ast.Symbol]
@@ -692,6 +692,7 @@ type Checker struct {
 	outerTypeParameterListArena                 core.Arena[[]*Type]
 	valueSymbolExtraArena                       core.Arena[valueSymbolExtra]
 	structuredTypeExtraArena                    core.Arena[structuredTypeExtra]
+	lazyStateArena                              core.Arena[LazyState]
 	memberLayoutArena                           core.Arena[MemberLayout]
 	layoutMemberInfos                           map[string]MemberInfo
 	freeTypeSets                                *temporaryTypeSet
@@ -19298,6 +19299,10 @@ func (c *Checker) getPropertiesOfObjectType(t *Type) []*ast.Symbol {
 	return nil
 }
 
+// For classes and interfaces, the layout properties of the type are uninstantiated symbols from
+// the shared member layout. When operations only process the declaration, flags, and/or name
+// of members (and not their type), using the layout properties helps defer instantiation of
+// the members. For example, `keyof T` can be computed entirely from layout properties.
 func (c *Checker) getLayoutPropertiesOfType(t *Type) []*ast.Symbol {
 	t = c.getReducedApparentType(t)
 	lazy := c.getLazyStateOfType(t)
@@ -19604,11 +19609,11 @@ func (c *Checker) resolveObjectTypeMembers(t *Type) {
 		}))
 	}
 	c.setStructuredTypeMembers(t, members, callSignatures, constructSignatures, indexInfos)
-	t.AsTypeReference().lazy = &LazyState{
-		layout:    layout,
-		mapper:    mapper,
-		baseTypes: instantiatedBaseTypes,
-	}
+	lazyState := c.lazyStateArena.New()
+	lazyState.layout = layout
+	lazyState.mapper = mapper
+	lazyState.baseTypes = instantiatedBaseTypes
+	t.AsTypeReference().lazy = lazyState
 }
 
 func (c *Checker) getMemberLayout(t *Type, baseTypes []*Type) *MemberLayout {
@@ -19617,13 +19622,13 @@ func (c *Checker) getMemberLayout(t *Type, baseTypes []*Type) *MemberLayout {
 	}
 	source := c.getTargetType(t)
 	key := c.getMemberLayoutKey(source, baseTypes)
-	layout := c.memberLayouts[key]
+	layout := c.memberLayoutCache[key]
 	if layout == nil {
 		layout = c.createMemberLayout(source, baseTypes)
-		if c.memberLayouts == nil {
-			c.memberLayouts = make(map[CacheHashKey]*MemberLayout)
+		if c.memberLayoutCache == nil {
+			c.memberLayoutCache = make(map[CacheHashKey]*MemberLayout)
 		}
-		c.memberLayouts[key] = layout
+		c.memberLayoutCache[key] = layout
 	}
 	return layout
 }
@@ -19649,6 +19654,7 @@ func (c *Checker) getMemberLayoutKey(t *Type, baseTypes []*Type) CacheHashKey {
 }
 
 func (c *Checker) createMemberLayout(t *Type, baseTypes []*Type) *MemberLayout {
+	// Reuse c.layoutMemberInfos to avoid repeated allocations
 	layoutMemberInfos := c.layoutMemberInfos
 	c.layoutMemberInfos = nil
 	addMember := func(symbol *ast.Symbol, baseIndex int) {
@@ -19695,8 +19701,8 @@ func (c *Checker) createMemberLayout(t *Type, baseTypes []*Type) *MemberLayout {
 		}
 		return c.CompareSymbols(a.symbol, b.symbol)
 	})
-	// Store slot indices in the sorted memberInfos. These indices are used to identify
-	// slots in the instantiated type's properties list.
+	// Store slot indices in the sorted memberInfos and build the memberInfoMap. Slot indices are used to
+	// identify slots in the instantiated type's properties list.
 	memberInfoMap := make(map[string]*MemberInfo, len(memberInfos))
 	for i := range memberInfos {
 		memberInfo := &memberInfos[i]
