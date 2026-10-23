@@ -3576,6 +3576,12 @@ func (r *Relater) recursiveTypeRelatedTo(source *Type, target *Type, reportError
 	low, truncated := r.low, r.truncated
 	r.low, r.truncated = saveLow, saveTruncated
 	switch {
+	case r.overflow:
+		// The comparison was cut short, so its result and those of the
+		// comparisons that completed assuming it are not what computing them
+		// from scratch would give. Only the overflow is cached.
+		r.resetMaybeStack(maybeStart, propagatingVarianceFlags, false, nil)
+		result = TernaryFalse
 	case result == TernaryFalse:
 		// A false result goes straight into global cache (when something is false under
 		// assumptions it will also be false without assumptions)
