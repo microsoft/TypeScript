@@ -857,6 +857,36 @@ describe("API", { concurrency }, () => {
         assert.deepEqual(originalProgram.getSourceFileNames(), ["/src/a.ts"]);
     });
 
+    test("snapshot.update removes and creates synthetic programs together", () => {
+        using api = spawnAPI({
+            "/src/a.ts": `export const a = 1;`,
+            "/src/b.ts": `export const b = 2;`,
+        });
+        const snapshot = api.createSnapshot({
+            createPrograms: [{
+                rootFiles: ["/src/a.ts"],
+                compilerOptions: { noLib: true },
+            }],
+        });
+        const removedProgram = snapshot.operation.createdPrograms[0];
+
+        const updated = snapshot.update({
+            removePrograms: [removedProgram.id],
+            createPrograms: [{
+                rootFiles: ["/src/b.ts"],
+                compilerOptions: { noLib: true },
+            }],
+        });
+        const createdProgram = updated.operation.createdPrograms[0];
+
+        assert.notEqual(createdProgram.id, removedProgram.id);
+        assert.equal(updated.getProgram(removedProgram.id), undefined);
+        assert.deepEqual(updated.getProjects().map(project => project.id), [createdProgram.id]);
+        assert.deepEqual(createdProgram.getSourceFileNames(), ["/src/b.ts"]);
+        assert.deepEqual(createdProgram.getSemanticDiagnostics("/src/b.ts"), []);
+        assert.deepEqual(removedProgram.getSourceFileNames(), ["/src/a.ts"]);
+    });
+
     test("snapshot.update reconfigures module resolution providers", () => {
         const root = toRootedFilePath("/src/index.ts", undefined);
         const providedA = toRootedFilePath("/a.d.ts", undefined);
