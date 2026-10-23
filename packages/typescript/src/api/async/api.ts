@@ -1908,6 +1908,15 @@ export class Program<Id extends ProjectId = ProjectId> implements FormatDiagnost
         return result ?? undefined;
     }
 
+    async getAllDependencies(file: DocumentIdentifier): Promise<readonly RootedFilePath[]> {
+        const data = await this.client.apiRequest("getAllDependencies", {
+            snapshot: this.snapshotId,
+            project: this.project.handle,
+            file,
+        });
+        return data ?? [];
+    }
+
     async getSourceFileNames(): Promise<readonly RootedFilePath[]> {
         const data = await this.client.apiRequest("getSourceFileNames", {
             snapshot: this.snapshotId,
