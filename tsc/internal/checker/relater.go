@@ -1070,9 +1070,27 @@ func (d *TypeDiscriminator) matches(index int, t *Type, isOptional bool) bool {
 	return false
 }
 
+// A union can only be narrowed by discriminants when it has at least two non-primitive constituents to
+// tell apart. This rules out the very common `T | undefined` shaped unions before any property work.
+func isDiscriminableUnion(t *Type) bool {
+	if t.objectFlags&ObjectFlagsPrimitiveUnion != 0 {
+		return false
+	}
+	count := 0
+	for _, s := range t.Types() {
+		if s.flags&TypeFlagsPrimitive == 0 {
+			count++
+			if count == 2 {
+				return true
+			}
+		}
+	}
+	return false
+}
+
 // Keep this up-to-date with the same logic within `getApparentTypeOfContextualType`, since they should behave similarly
 func (c *Checker) findMatchingDiscriminantType(source *Type, target *Type, isRelatedTo func(source *Type, target *Type) Ternary) *Type {
-	if target.flags&TypeFlagsUnion != 0 && source.flags&(TypeFlagsIntersection|TypeFlagsObject) != 0 {
+	if target.flags&TypeFlagsUnion != 0 && source.flags&(TypeFlagsIntersection|TypeFlagsObject) != 0 && isDiscriminableUnion(target) {
 		if match := c.getMatchingUnionConstituentForType(target, source); match != nil {
 			return match
 		}
