@@ -2,9 +2,9 @@
  * Shared utilities for the TypeScript API client.
  */
 
-import getExePath from "#getExePath";
 import { existsSync } from "node:fs";
 import { fileURLToPath } from "node:url";
+import getExePath from "../../lib/getExePath.js";
 import type { FileSystemCallbacks } from "./fs.ts";
 
 export interface ClientSocketOptions {
