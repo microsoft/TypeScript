@@ -167,7 +167,9 @@ func TestArrowFunctionHeadSyntaxFailure(t *testing.T) {
 	t.Parallel()
 	p := newTestParser("(a = b; c)")
 	pos := p.nodePos()
-	p.parsingFlags = ParsingFlagsTentative
+	tentative := p.beginTentativeParse()
+	defer tentative.revert()
+	tentative.silence()
 	status, _ := p.tryParseArrowFunctionHead(ExpressionParseFlagsNone)
 	assert.Equal(t, status, core.TSFalse)
 	assert.Assert(t, p.notParenthesizedArrow.Has(pos))
@@ -180,24 +182,26 @@ func TestArrowFunctionHeadSyntaxFailure(t *testing.T) {
 
 func TestTentativeParseNode(t *testing.T) {
 	t.Parallel()
-	p := newTestParser("(a) + b")
+	p := newTestParser("b(await(a)), c")
 	tentative := p.beginTentativeParse()
 	tentative.silence()
 	state := p.mark()
-	first := p.parseParenthesizedExpression()
-	assert.Equal(t, p.token, ast.KindPlusToken)
+	first := p.parseAssignmentExpressionOrHigher()
+	assert.Equal(t, first.AsCallExpression().Arguments.Nodes[0].Kind, ast.KindCallExpression)
+	assert.Equal(t, p.token, ast.KindCommaToken)
 	p.rewind(state)
-	second := p.parseParenthesizedExpression()
+	second := p.parseAssignmentExpressionOrHigher()
 	assert.Equal(t, first, second)
-	assert.Equal(t, p.token, ast.KindPlusToken)
+	assert.Equal(t, p.token, ast.KindCommaToken)
 	p.rewind(state)
 	p.contextFlags |= ast.NodeFlagsAwaitContext
-	third := p.parseParenthesizedExpression()
+	third := p.parseAssignmentExpressionOrHigher()
 	assert.Assert(t, third != first)
 	assert.Equal(t, third.Flags&ast.NodeFlagsAwaitContext, ast.NodeFlagsAwaitContext)
+	assert.Equal(t, third.AsCallExpression().Arguments.Nodes[0].Kind, ast.KindAwaitExpression)
 	tentative.revert()
 	assert.Assert(t, p.tentativeNodes == nil)
-	assert.Equal(t, p.scanner.TokenText(), "(")
+	assert.Equal(t, p.scanner.TokenText(), "b")
 }
 
 func TestTentativeParseNodeFailure(t *testing.T) {
@@ -209,7 +213,7 @@ func TestTentativeParseNodeFailure(t *testing.T) {
 	func() {
 		attempt := p.beginTentativeParse()
 		defer attempt.close()
-		p.parseParenthesizedExpression()
+		p.parseAssignmentExpressionOrHigher()
 		t.Fatal("invalid expression accepted")
 	}()
 	assert.Equal(t, len(p.tentativeNodes[pos]), 1)
@@ -217,7 +221,7 @@ func TestTentativeParseNodeFailure(t *testing.T) {
 	func() {
 		attempt := p.beginTentativeParse()
 		defer attempt.close()
-		p.parseParenthesizedExpression()
+		p.parseAssignmentExpressionOrHigher()
 		t.Fatal("failed recognition reused as a valid expression")
 	}()
 	assert.Equal(t, len(p.tentativeNodes[pos]), 1)

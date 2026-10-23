@@ -4183,10 +4183,19 @@ func (p *Parser) parseExpressionAllowIn() *ast.Expression {
 	return p.doInContext(ast.NodeFlagsDisallowInContext, false, (*Parser).parseExpression)
 }
 
-func (p *Parser) parseAssignmentExpressionOrHigher() *ast.Expression {
+func (p *Parser) parseAssignmentExpressionOrHigher() (expression *ast.Expression) {
+	if p.parsingFlags&ParsingFlagsTentative != 0 {
+		pos := p.nodePos()
+		node := p.getTentativeNode(pos)
+		if node == nil {
+			defer p.recordTentativeNode(pos, p.contextFlags, &expression)
+		} else {
+			return node
+		}
+	}
 	scope := p.beginTentativeScope()
 	scope.suspendExpression()
-	expression := p.parseAssignmentExpressionOrHigherWorker(ExpressionParseFlagsNone)
+	expression = p.parseAssignmentExpressionOrHigherWorker(ExpressionParseFlagsNone)
 	scope.restore()
 	return expression
 }
@@ -5869,20 +5878,13 @@ func (p *Parser) parsePrimaryExpression() *ast.Expression {
 	return p.parseIdentifierWithDiagnostic(diagnostics.Expression_expected, nil)
 }
 
-func (p *Parser) parseParenthesizedExpression() (result *ast.Expression) {
+func (p *Parser) parseParenthesizedExpression() *ast.Expression {
 	pos := p.nodePos()
-	if p.parsingFlags&ParsingFlagsTentative != 0 {
-		node := p.getTentativeNode(pos, ast.KindParenthesizedExpression)
-		if node != nil {
-			return node
-		}
-		defer p.recordTentativeNode(pos, ast.KindParenthesizedExpression, p.contextFlags, &result)
-	}
 	jsdoc := p.jsdocScannerInfo()
 	p.parseExpected(ast.KindOpenParenToken)
 	expression := p.parseExpressionAllowIn()
 	p.parseExpected(ast.KindCloseParenToken)
-	result = p.finishNode(p.factory.NewParenthesizedExpression(expression), pos)
+	result := p.finishNode(p.factory.NewParenthesizedExpression(expression), pos)
 	p.withJSDoc(result, jsdoc)
 	return result
 }

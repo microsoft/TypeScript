@@ -55,6 +55,10 @@ func BenchmarkConditionalAsyncExpressions(b *testing.B) {
 		{"invalidArrow", "a ? async(): T => async() : x => ", "0 +;", ""},
 		{"parenthesizedCall", "a ? async() : x => (", "0", ")"},
 		{"invalidParenthesizedCall", "a ? async() : x => (", "0 +", ")"},
+		{"array", "a ? async() : x => [", "0", "]"},
+		{"invalidArray", "a ? async() : x => [", "0 +", "]"},
+		{"callArgument", "a ? async() : x => b(", "0", ")"},
+		{"invalidCallArgument", "a ? async() : x => b(", "0 +", ")"},
 	} {
 		b.Run(test.name, func(b *testing.B) {
 			for _, count := range []int{10, 20, 40, 80} {
@@ -239,6 +243,26 @@ func parseConditionalInGenerator(t *testing.T, expression string, kind core.Scri
 	statement := file.Statements.Nodes[0].Body().AsBlock().Statements.Nodes[0]
 	declaration := statement.AsVariableStatement().DeclarationList.AsVariableDeclarationList().Declarations.Nodes[0]
 	return declaration.Initializer().AsConditionalExpression()
+}
+
+func checkConditionalAsyncNesting(t *testing.T, prefix string, closing string) {
+	t.Helper()
+	const depth = 8
+	source := "const r = " + strings.Repeat(prefix, depth) + "0" + strings.Repeat(closing, depth) + ";"
+	file := parsetestutil.ParseTypeScript(source, false)
+	parsetestutil.CheckDiagnostics(t, file)
+	maxNodeCount := len(source) * len(source)
+	assert.Assert(t, file.NodeCount <= maxNodeCount, "created %d nodes for %d bytes", file.NodeCount, len(source))
+}
+
+func TestConditionalAsyncNestedArray(t *testing.T) {
+	t.Parallel()
+	checkConditionalAsyncNesting(t, "a ? async() : x => [", "]")
+}
+
+func TestConditionalAsyncNestedCallArgument(t *testing.T) {
+	t.Parallel()
+	checkConditionalAsyncNesting(t, "a ? async() : x => b(", ")")
 }
 
 func TestConditionalAsyncCall(t *testing.T) {

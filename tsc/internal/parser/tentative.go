@@ -5,7 +5,6 @@ import "github.com/microsoft/TypeScript/tsc/internal/ast"
 type tentativeParseFailure struct{}
 
 type tentativeNode struct {
-	kind         ast.Kind
 	contextFlags ast.NodeFlags
 	node         *ast.Node
 }
@@ -93,28 +92,28 @@ func (tp *tentativeParse) close() {
 	panic(failure)
 }
 
-func (p *Parser) getTentativeNode(pos int, kind ast.Kind) *ast.Node {
-	for _, annotation := range p.tentativeNodes[pos] {
-		if annotation.kind == kind && annotation.contextFlags == p.contextFlags {
-			if annotation.node == nil {
+func (p *Parser) getTentativeNode(pos int) *ast.Node {
+	for _, entry := range p.tentativeNodes[pos] {
+		if entry.contextFlags == p.contextFlags {
+			if entry.node == nil {
 				panic(tentativeParseFailure{})
 			}
-			p.scanner.ResetTokenState(annotation.node.End())
+			p.scanner.ResetTokenState(entry.node.End())
 			p.nextToken()
-			return annotation.node
+			return entry.node
 		}
 	}
 	return nil
 }
 
-func (p *Parser) recordTentativeNode(pos int, kind ast.Kind, contextFlags ast.NodeFlags, node **ast.Node) {
+func (p *Parser) recordTentativeNode(pos int, contextFlags ast.NodeFlags, node **ast.Node) {
 	failure := recover()
 	if failure != nil {
 		if _, ok := failure.(tentativeParseFailure); !ok {
 			panic(failure)
 		}
 	}
-	p.tentativeNodes[pos] = append(p.tentativeNodes[pos], tentativeNode{kind: kind, contextFlags: contextFlags, node: *node})
+	p.tentativeNodes[pos] = append(p.tentativeNodes[pos], tentativeNode{contextFlags: contextFlags, node: *node})
 	if failure != nil {
 		panic(failure)
 	}
