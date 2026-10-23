@@ -1,0 +1,31 @@
+refFirst.ts(10,14): error TS2322: Type 'DS<{ total: M; }, string>' is not assignable to type 'DS<Record<string, M>, string>'.
+  Property 'total' is missing in type 'Record<string, M>' but required in type '{ total: M; }'.
+
+
+==== refFirst.ts (1 errors) ====
+    type M = { kind: "m" };
+    type Filtered<T> = { [K in keyof T as T[K] extends M ? K : never]: T[K] };
+    interface Config<T> { measure: keyof T }
+    interface Ref<N> { dataset: DS<Record<string, M>, N> }
+    interface DS<T, N> {
+        a(config: Config<Filtered<T>>): void;
+        b: Ref<N>;
+    }
+    declare const x: DS<{ total: M }, string>;
+    export const y: DS<Record<string, M>, string> = x;
+                 ~
+!!! error TS2322: Type 'DS<{ total: M; }, string>' is not assignable to type 'DS<Record<string, M>, string>'.
+!!! error TS2322:   Property 'total' is missing in type 'Record<string, M>' but required in type '{ total: M; }'.
+    
+==== dsFirst.ts (0 errors) ====
+    type M = { kind: "m" };
+    type Filtered<T> = { [K in keyof T as T[K] extends M ? K : never]: T[K] };
+    interface Config<T> { measure: keyof T }
+    interface DS<T, N> {
+        a(config: Config<Filtered<T>>): void;
+        b: Ref<N>;
+    }
+    interface Ref<N> { dataset: DS<Record<string, M>, N> }
+    declare const x: DS<{ total: M }, string>;
+    export const y: DS<Record<string, M>, string> = x;
+    

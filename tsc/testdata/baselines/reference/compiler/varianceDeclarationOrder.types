@@ -1,0 +1,62 @@
+//// [tests/cases/compiler/varianceDeclarationOrder.ts] ////
+
+=== refFirst.ts ===
+type M = { kind: "m" };
+>M : M
+>kind : "m"
+
+type Filtered<T> = { [K in keyof T as T[K] extends M ? K : never]: T[K] };
+>Filtered : Filtered<T>
+
+interface Config<T> { measure: keyof T }
+>measure : keyof T
+
+interface Ref<N> { dataset: DS<Record<string, M>, N> }
+>dataset : DS<Record<string, M>, N>
+
+interface DS<T, N> {
+    a(config: Config<Filtered<T>>): void;
+>a : (config: Config<Filtered<T>>) => void
+>config : Config<Filtered<T>>
+
+    b: Ref<N>;
+>b : Ref<N>
+}
+declare const x: DS<{ total: M }, string>;
+>x : DS<{ total: M; }, string>
+>total : M
+
+export const y: DS<Record<string, M>, string> = x;
+>y : DS<Record<string, M>, string>
+>x : DS<{ total: M; }, string>
+
+=== dsFirst.ts ===
+type M = { kind: "m" };
+>M : M
+>kind : "m"
+
+type Filtered<T> = { [K in keyof T as T[K] extends M ? K : never]: T[K] };
+>Filtered : Filtered<T>
+
+interface Config<T> { measure: keyof T }
+>measure : keyof T
+
+interface DS<T, N> {
+    a(config: Config<Filtered<T>>): void;
+>a : (config: Config<Filtered<T>>) => void
+>config : Config<Filtered<T>>
+
+    b: Ref<N>;
+>b : Ref<N>
+}
+interface Ref<N> { dataset: DS<Record<string, M>, N> }
+>dataset : DS<Record<string, M>, N>
+
+declare const x: DS<{ total: M }, string>;
+>x : DS<{ total: M; }, string>
+>total : M
+
+export const y: DS<Record<string, M>, string> = x;
+>y : DS<Record<string, M>, string>
+>x : DS<{ total: M; }, string>
+
