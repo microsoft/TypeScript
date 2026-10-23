@@ -74,6 +74,8 @@ const (
 	TypeSystemPropertyNameSimplifiedForWriting
 	TypeSystemPropertyNameDefaultType
 	TypeSystemPropertyNameAwaitedType
+	TypeSystemPropertyNameExplicitType
+	TypeSystemPropertyNameAssertionOperand
 	TypeSystemPropertyNamePatternInitializer
 )
 
@@ -684,8 +686,6 @@ type Checker struct {
 	varianceGuessed                             []*ast.Symbol                   // Keys of varianceGuesses in order of addition
 	flushStates                                 *[]*memoState                   // Collects memo states given effects to replay, if non-nil; see withoutChecking
 	callResolutionStack                         []*ast.Node
-	resolvingExplicitTypeOfSymbol               collections.Set[*ast.Symbol]
-	resolvingAssertionOperands                  collections.Set[*ast.Node]
 	resolvingBindingElementParents              collections.Set[*ast.Node] // Binding element parents whose types are being resolved to narrow a reference
 	apparentArgumentCount                       *int
 	lastGetCombinedNodeFlagsNode                *ast.Node
@@ -12880,7 +12880,7 @@ func (c *Checker) checkAssertion(node *ast.Node, checkMode CheckMode) *Type {
 	var exprType *Type
 	if isConst {
 		exprType = c.checkExpressionEx(node.Expression(), checkMode)
-	} else if c.resolvingAssertionOperands.AddIfAbsent(node) {
+	} else if !c.isResolvingAnywhere(node, TypeSystemPropertyNameAssertionOperand) {
 		// Only the deferred check uses the operand type, and it uses the
 		// cached one, so compute that here rather than checking twice. The
 		// operand is contextually typed by the asserted type alone; hiding
@@ -12890,10 +12890,11 @@ func (c *Checker) checkAssertion(node *ast.Node, checkMode CheckMode) *Type {
 		// assertion is re-entered when the operand's flow type depends on
 		// a call containing it within a loop; the enclosing computation
 		// then provides the cached type.
+		c.beginTypeResolution(node, TypeSystemPropertyNameAssertionOperand)
 		c.pushInferenceContext(node.Expression(), nil)
 		c.checkExpressionCached(node.Expression())
 		c.popInferenceContext()
-		c.resolvingAssertionOperands.Delete(node)
+		c.popTypeResolution()
 	}
 	// Always check the type node so its identifiers are resolved. resolveName knows not
 	// to resolve (or report an error for) the `const` in a `const` assertion, so this is
@@ -20087,6 +20088,22 @@ func (c *Checker) isResolutionInProgress(target TypeSystemEntity, propertyName T
 	return true
 }
 
+// isResolvingAnywhere reports whether the property of target is being
+// resolved. A computation finding it so fails, as computing it from scratch
+// would, so the results cached since it started are discarded when it
+// finishes, like those of any other failure, and every caller computes them
+// again and reports the failure. Unlike isResolutionInProgress, it searches
+// the whole stack, for computations that would not otherwise stop.
+func (c *Checker) isResolvingAnywhere(target TypeSystemEntity, propertyName TypeSystemPropertyName) bool {
+	for i := c.typeResolutionTop - 1; i >= 0; i = int(c.resolutions[i].prevTypeResolution) - 1 {
+		if r := &c.resolutions[i].typeResolution; r.target == target && r.propertyName == propertyName {
+			c.markTypeResolutionCircular(i)
+			return true
+		}
+	}
+	return false
+}
+
 // observeCircularHead is for computations where re-entering one in progress
 // fails only that computation, while the others complete from its failed
 // result. Which member fails then depends on which was entered first, so the
@@ -20322,7 +20339,7 @@ func (c *Checker) typeResolutionHasProperty(r *TypeResolution) bool {
 		return c.aliasSymbolLinks.Get(r.target.(*ast.Symbol)).aliasTarget.peek() != nil
 	case TypeSystemPropertyNameContextChecked, TypeSystemPropertyNameStructuredMembers, TypeSystemPropertyNameCurrentNode,
 		TypeSystemPropertyNameSimplifiedForReading, TypeSystemPropertyNameSimplifiedForWriting, TypeSystemPropertyNameDefaultType,
-		TypeSystemPropertyNameAwaitedType, TypeSystemPropertyNamePatternInitializer:
+		TypeSystemPropertyNameAwaitedType, TypeSystemPropertyNameExplicitType, TypeSystemPropertyNameAssertionOperand, TypeSystemPropertyNamePatternInitializer:
 		// Marked as checked or resolved on entry, so it is only on the stack
 		// while in progress.
 		return false
@@ -33721,20 +33738,10 @@ func (c *Checker) pushAwaitingType(t *Type) {
 	c.beginTypeResolution(t, TypeSystemPropertyNameAwaitedType)
 }
 
-// isAwaitingType reports whether the awaited type of t is being computed. A
-// computation finding it so fails, as computing it from scratch would, so
-// the results cached since it started are discarded when it finishes, like
-// those of any other failure, and every caller computes them again and
-// reports the failure. Unlike isResolutionInProgress, it searches the whole
-// stack, since the computation would not otherwise stop.
+// isAwaitingType reports whether the awaited type of t is being computed;
+// see isResolvingAnywhere.
 func (c *Checker) isAwaitingType(t *Type) bool {
-	for i := c.typeResolutionTop - 1; i >= 0; i = int(c.resolutions[i].prevTypeResolution) - 1 {
-		if r := &c.resolutions[i].typeResolution; r.target == t && r.propertyName == TypeSystemPropertyNameAwaitedType {
-			c.markTypeResolutionCircular(i)
-			return true
-		}
-	}
-	return false
+	return c.isResolvingAnywhere(t, TypeSystemPropertyNameAwaitedType)
 }
 
 func (c *Checker) isAwaitedTypeInstantiation(t *Type) bool {
