@@ -1093,6 +1093,16 @@ func (c *Checker) memoEffectsAt(i int) *memoEffects {
 // detected (its participants) are kept: each of them reaches the cycle when
 // computed from scratch too, so each result is the fallback for a circularity
 // whichever participant is computed first.
+//
+// Type comparisons are the exception: a comparison that reaches itself
+// assumes it holds rather than being a circularity, since relations are
+// coinductive. The Relater tracks those assumptions itself (see
+// recursiveTypeRelatedTo), and caches only results that hold whatever they
+// assumed. Each comparison is still a resolution, so circularities through
+// other computations it needs are handled as above, discarding the relation
+// results cached during them. A comparison that needs another relater, as in
+// variance measurement, does not see the assumptions of the outer one, so it
+// compares from scratch, as it would if run first.
 
 // Discard log
 //
