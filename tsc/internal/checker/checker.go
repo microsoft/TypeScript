@@ -708,6 +708,7 @@ type Checker struct {
 	reverseMappedSourceStack                    []*Type
 	reverseMappedTargetStack                    []*Type
 	reverseExpandingFlags                       ExpandingFlags
+	reverseMappedStart                          int32
 	freeRelater                                 *Relater
 	getGlobalESSymbolType                       func() *Type
 	getGlobalBigIntType                         func() *Type

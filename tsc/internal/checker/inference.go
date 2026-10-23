@@ -1082,6 +1082,9 @@ func (c *Checker) inferReverseMappedType(source *Type, target *Type, constraint 
 		return core.OrElse(cached, c.unknownType)
 	}
 	c.reverseMappedCache.begin(c, key)
+	if len(c.reverseMappedSourceStack) == 0 {
+		c.reverseMappedStart = int32(len(c.resolutions) - 1)
+	}
 	c.reverseMappedSourceStack = append(c.reverseMappedSourceStack, source)
 	c.reverseMappedTargetStack = append(c.reverseMappedTargetStack, target)
 	saveExpandingFlags := c.reverseExpandingFlags
@@ -1094,6 +1097,10 @@ func (c *Checker) inferReverseMappedType(source *Type, target *Type, constraint 
 	var t *Type
 	if c.reverseExpandingFlags != ExpandingFlagsBoth {
 		t = c.inferReverseMappedTypeWorker(source, target, constraint)
+	} else {
+		// Stopping depends on the enclosing reverse mappings, not just on key, so
+		// only the outermost one, which has none, may keep a result.
+		c.markCircular(int(c.reverseMappedStart))
 	}
 	c.reverseMappedSourceStack = c.reverseMappedSourceStack[:len(c.reverseMappedSourceStack)-1]
 	c.reverseMappedTargetStack = c.reverseMappedTargetStack[:len(c.reverseMappedTargetStack)-1]
