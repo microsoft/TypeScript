@@ -4,6 +4,7 @@ import (
 	"testing"
 
 	"github.com/microsoft/TypeScript/tsc/internal/collections"
+	"github.com/microsoft/TypeScript/tsc/internal/core"
 	"github.com/microsoft/TypeScript/tsc/internal/lsp/lsproto"
 	"github.com/microsoft/TypeScript/tsc/internal/tspath"
 	"gotest.tools/v3/assert"
@@ -28,6 +29,29 @@ func TestNilWatchedFilesClone(t *testing.T) {
 	var w *WatchedFiles[int]
 	result := w.Clone(42)
 	assert.Assert(t, result == nil, "clone on a nil `WatchedFiles` should return nil")
+}
+
+func TestWatchedFilesOmitsNetworkPaths(t *testing.T) {
+	t.Parallel()
+
+	files := []tspath.RootedFilePath{
+		"/workspace/a.ts",
+		"/external/b.ts",
+		"//server/share/c.ts",
+		"/??/UNC/server/share/d.ts",
+	}
+	for _, test := range []struct {
+		workspace tspath.RootedDirectoryPath
+		expected  []string
+	}{
+		{"/workspace", []string{"/workspace/a.ts", "file:///external/**/*"}},
+		{"//server/share", []string{"file:///external/**/*", "file:///workspace/**/*"}},
+	} {
+		w := NewWatchedFilesForPaths("test", lsproto.WatchKindCreate, true, test.workspace, tspath.CaseSensitive).Clone(files)
+		watchers := w.Watchers()
+		globs := core.Map(append(watchers.WorkspaceWatchers, watchers.OutsideWorkspaceWatchers...), fileSystemWatcherGlobString)
+		assert.DeepEqual(t, globs, test.expected)
+	}
 }
 
 func TestResolutionLookupWatcherPreservesDirectorySpelling(t *testing.T) {

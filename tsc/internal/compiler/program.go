@@ -21,6 +21,7 @@ import (
 	"github.com/microsoft/TypeScript/tsc/internal/locale"
 	"github.com/microsoft/TypeScript/tsc/internal/module"
 	"github.com/microsoft/TypeScript/tsc/internal/modulespecifiers"
+	"github.com/microsoft/TypeScript/tsc/internal/nativepath"
 	"github.com/microsoft/TypeScript/tsc/internal/outputpaths"
 	"github.com/microsoft/TypeScript/tsc/internal/packagejson"
 	"github.com/microsoft/TypeScript/tsc/internal/parser"
@@ -110,6 +111,9 @@ type Program struct {
 	caseSensitivity tspath.CaseSensitivity
 
 	processedFiles
+
+	sourceFilesByNodeIDOnce sync.Once
+	sourceFilesByNodeID     map[ast.NodeId]*ast.SourceFile
 
 	usesUriStyleNodeCoreModules core.Tristate
 
@@ -546,7 +550,11 @@ func (p *Program) GetContentMapper(file *ast.SourceFile) *contentmapper.Mapper {
 	return nil
 }
 
-func (p *Program) ContentMapperExtensions() []string         { return p.opts.Config.ContentMapperExtensions() }
+func (p *Program) ContentMapperExtensions() []string { return p.opts.Config.ContentMapperExtensions() }
+
+func (p *Program) ContentMapperExtensionRewrites() []tspath.ExtensionRewrite {
+	return p.opts.Config.ContentMapperExtensionRewrites()
+}
 func (p *Program) CommandLine() *tsoptions.ParsedCommandLine { return p.opts.Config }
 func (p *Program) Host() CompilerHost                        { return p.hosts.Host }
 func (p *Program) Tracing() *tracing.Tracing                 { return p.hosts.Tracing }
@@ -1177,6 +1185,8 @@ func (p *Program) verifyCompilerOptions() {
 			}
 			if !tspath.PathIsRelative(subst) && !tspath.PathIsAbsolute(subst) {
 				createDiagnosticForOptionPathKeyValue(key, i, diagnostics.Non_relative_paths_are_not_allowed_Did_you_forget_a_leading_Slash)
+			} else if nativepath.IsNetworkPath(tspath.GetNormalizedAbsolutePath(subst, options.GetPathsBasePath(p.GetCurrentDirectory()))) {
+				createDiagnosticForOptionPathKeyValue(key, i, diagnostics.Network_path_0_is_not_supported, subst)
 			}
 		}
 	}
@@ -1395,13 +1405,19 @@ func (p *Program) verifyCompilerOptions() {
 			}
 		}
 
+		externalOutputSourceFiles := core.Filter(p.SourceFiles(), func(sourceFile *ast.SourceFile) bool {
+			return sourceFile.ContentMapper() != "" &&
+				!p.IsSourceFileFromExternalLibrary(sourceFile) &&
+				p.GetProjectReferenceFromSource(sourceFile.PathKey()) == nil
+		})
 		outputpaths.ForEachEmittedFile(p, options, func(emitFileNames *outputpaths.OutputPaths, sourceFile *ast.SourceFile) bool {
 			verifyEmitFilePath(emitFileNames.JsFilePath())
 			verifyEmitFilePath(emitFileNames.SourceMapFilePath())
 			verifyEmitFilePath(emitFileNames.DeclarationFilePath())
 			verifyEmitFilePath(emitFileNames.DeclarationMapPath())
+			verifyEmitFilePath(emitFileNames.ExternalOutputFilePath())
 			return false
-		}, p.getSourceFilesToEmit(nil, false, false), false)
+		}, p.getSourceFilesToEmit(nil, false, false), externalOutputSourceFiles, false)
 		verifyEmitFilePath(p.opts.Config.GetBuildInfoFileName())
 	}
 }
@@ -2116,6 +2132,16 @@ func (p *Program) FilesByPath() map[tspath.PathKey]*ast.SourceFile {
 
 func (p *Program) GetSourceFileByPath(path tspath.PathKey) *ast.SourceFile {
 	return p.filesByPath[path]
+}
+
+func (p *Program) GetSourceFileByNodeID(id ast.NodeId) *ast.SourceFile {
+	p.sourceFilesByNodeIDOnce.Do(func() {
+		p.sourceFilesByNodeID = make(map[ast.NodeId]*ast.SourceFile, len(p.GetSourceFiles()))
+		for _, file := range p.GetSourceFiles() {
+			p.sourceFilesByNodeID[ast.GetNodeId(file.AsNode())] = file
+		}
+	})
+	return p.sourceFilesByNodeID[id]
 }
 
 func (p *Program) HasSameFileNames(other *Program) bool {

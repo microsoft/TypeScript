@@ -1,0 +1,36 @@
+//// [tests/cases/compiler/identityOfInstantiatedMappedIntersection.ts] ////
+
+=== identityOfInstantiatedMappedIntersection.ts ===
+declare const brand: unique symbol;
+>brand : unique symbol
+
+type Equal<T, U> = (<V>() => V extends T ? 1 : 2) extends (<V>() => V extends U ? 1 : 2) ? true : false;
+>Equal : Equal<T, U>
+>true : true
+>false : false
+
+declare function assertEqual<T, U>(value: Equal<T, U>): void;
+>assertEqual : <T, U>(value: Equal<T, U>) => void
+>value : Equal<T, U>
+
+type Flatten<T> = { [K in keyof T]: T[K] };
+>Flatten : Flatten<T>
+
+type Branded = Flatten<{ name: string }> & { [brand]: { label: true } };
+>Branded : Branded
+>name : string
+>[brand] : { label: true; }
+>brand : unique symbol
+>label : true
+>true : true
+
+assertEqual<Branded, { name: string } & { [brand]: { label: true } }>(true);
+>assertEqual<Branded, { name: string } & { [brand]: { label: true } }>(true) : void
+>assertEqual : <T, U>(value: Equal<T, U>) => void
+>name : string
+>[brand] : { label: true; }
+>brand : unique symbol
+>label : true
+>true : true
+>true : true
+

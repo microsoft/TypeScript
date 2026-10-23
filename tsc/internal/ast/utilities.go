@@ -99,12 +99,12 @@ func GetSymbolTable(data *SymbolTable) SymbolTable {
 	return *data
 }
 
-func GetMembers(symbol *Symbol) SymbolTable {
-	return GetSymbolTable(&symbol.data.members)
+func GetMembers(symbol *Symbol, arena *SymbolExtraArena) SymbolTable {
+	return GetSymbolTable(&symbol.ensureExtra(arena).members)
 }
 
-func GetExports(symbol *Symbol) SymbolTable {
-	return GetSymbolTable(&symbol.data.exports)
+func GetExports(symbol *Symbol, arena *SymbolExtraArena) SymbolTable {
+	return GetSymbolTable(&symbol.ensureExtra(arena).exports)
 }
 
 func GetLocals(container *Node) SymbolTable {

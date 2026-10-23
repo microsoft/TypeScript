@@ -1,6 +1,10 @@
 package tsoptions
 
 import (
+	"maps"
+	"slices"
+	"strings"
+
 	"github.com/microsoft/TypeScript/tsc/internal/ast"
 	"github.com/microsoft/TypeScript/tsc/internal/contentmapper"
 	"github.com/microsoft/TypeScript/tsc/internal/core"
@@ -28,7 +32,8 @@ func (h *contentMapperResolutionHost) GetCurrentDirectory() tspath.RootedDirecto
 	return h.currentDirectory
 }
 
-func resolveContentMapperManifest(fs vfs.FS, containingFile tspath.RootedFilePath, packageName string) (contentmapper.Manifest, tspath.RootedDirectoryPath, *ast.Diagnostic) {
+func resolveContentMapperManifest(host ParseConfigHost, containingFile tspath.RootedFilePath, packageName string) (contentmapper.Manifest, tspath.RootedDirectoryPath, *ast.Diagnostic) {
+	fs := host.FS()
 	resolver := module.NewResolver(module.ResolverOptions{
 		Host:            &contentMapperResolutionHost{fs: fs, currentDirectory: containingFile.Directory()},
 		CompilerOptions: &core.CompilerOptions{ModuleResolution: core.ModuleResolutionKindBundler},
@@ -36,6 +41,14 @@ func resolveContentMapperManifest(fs vfs.FS, containingFile tspath.RootedFilePat
 	resolved := resolver.ResolvePackageDirectory(packageName, containingFile, core.ResolutionModeNone, nil)
 	if resolved == nil || resolved.ResolvedFileName == "" {
 		return contentmapper.Manifest{}, "", ast.NewCompilerDiagnostic(diagnostics.The_content_mapper_package_0_could_not_be_resolved, packageName)
+	}
+	logicalPackageDirectory := resolved.OriginalPath
+	if logicalPackageDirectory == "" {
+		logicalPackageDirectory = resolved.ResolvedFileName
+	}
+	logicalPackageDirectoryPath := tspath.RootedDirectoryPathFromPath(tspath.RootedPath(logicalPackageDirectory))
+	if !host.IsContentMapperPackageAllowed(logicalPackageDirectoryPath) {
+		return contentmapper.Manifest{}, "", ast.NewCompilerDiagnostic(diagnostics.The_content_mapper_package_0_is_outside_the_open_workspace_and_will_not_be_loaded, packageName)
 	}
 	packageDirectory := tspath.RootedDirectoryPathFromPath(tspath.RootedPath(resolved.ResolvedFileName))
 
@@ -66,5 +79,31 @@ func resolveContentMapperManifest(fs vfs.FS, containingFile tspath.RootedFilePat
 	}
 	compilerOptions, _ := cm.CompilerOptions.GetValue()
 	dynamicConfig, _ := cm.DynamicConfig.GetValue()
-	return contentmapper.Manifest{Name: name, Version: version, Exec: exec, CompilerOptions: compilerOptions, DynamicConfig: dynamicConfig}, packageDirectory, nil
+	outputExtensions, valid := cm.OutputExtensions.GetValue()
+	if cm.OutputExtensions.IsPresent() && !valid {
+		return contentmapper.Manifest{}, packageDirectory, ast.NewCompilerDiagnostic(
+			diagnostics.The_typescript_contentMapper_outputExtensions_of_the_content_mapper_package_0_must_be_an_object_with_string_values,
+			packageName,
+		)
+	}
+	for _, source := range slices.Sorted(maps.Keys(outputExtensions)) {
+		output := outputExtensions[source]
+		for _, extension := range []string{source, output} {
+			if strings.ContainsAny(extension, "/\\") {
+				return contentmapper.Manifest{}, packageDirectory, ast.NewCompilerDiagnostic(
+					diagnostics.Content_mapper_extension_0_must_not_contain_path_separators,
+					extension,
+				)
+			}
+		}
+		if !contentmapper.IsValidExtension(source) || !contentmapper.IsValidExtension(output) {
+			return contentmapper.Manifest{}, packageDirectory, ast.NewCompilerDiagnostic(
+				diagnostics.The_typescript_contentMapper_outputExtensions_of_the_content_mapper_package_0_contains_an_invalid_mapping_from_1_to_2_Extensions_must_be_non_empty_and_begin_with_a,
+				packageName,
+				source,
+				output,
+			)
+		}
+	}
+	return contentmapper.Manifest{Name: name, Version: version, Exec: exec, CompilerOptions: compilerOptions, DynamicConfig: dynamicConfig, DefaultOutputExtensions: outputExtensions}, packageDirectory, nil
 }
