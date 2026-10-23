@@ -417,13 +417,14 @@ func (fs *overlayFS) processChanges(changes []FileChange) (FileChangeSummary, ma
 
 	// Reduced collection of changes that occurred on a single file
 	type fileEvents struct {
-		openChange   *FileChange
-		closeChange  *FileChange
-		watchChanged bool
-		changes      []*FileChange
-		saved        bool
-		created      bool
-		deleted      bool
+		openChange    *FileChange
+		closeChange   *FileChange
+		watchChanged  bool
+		changes       []*FileChange
+		saved         bool
+		created       bool
+		deleted       bool
+		watchObserved bool
 	}
 
 	fileEventMap := make(map[lsproto.DocumentUri]*fileEvents)
@@ -439,6 +440,7 @@ func (fs *overlayFS) processChanges(changes []FileChange) (FileChangeSummary, ma
 			events = &fileEvents{}
 			fileEventMap[uri] = events
 		}
+		events.watchObserved = events.watchObserved || change.Kind.IsWatchKind()
 
 		if !result.IncludesWatchChangeOutsideNodeModules && change.Kind.IsWatchKind() && !strings.Contains(string(uri), "/node_modules/") {
 			result.IncludesWatchChangeOutsideNodeModules = true
@@ -529,16 +531,8 @@ func (fs *overlayFS) processChanges(changes []FileChange) (FileChangeSummary, ma
 			o = nil
 		}
 
-		if events.watchChanged {
-			if o == nil {
-				result.Changed.Add(uri)
-			} else if o != nil && !events.saved {
-				if matchesDiskText, _ := o.computeMatchesDiskText(fs.host); matchesDiskText != o.MatchesDiskText() {
-					o = newOverlay(o.FileName(), o.Content(), o.Version(), o.kind)
-					o.matchesDiskText = matchesDiskText
-					newOverlays[path] = o
-				}
-			}
+		if events.watchChanged && o == nil {
+			result.Changed.Add(uri)
 		}
 
 		if len(events.changes) > 0 && o != nil {
@@ -567,15 +561,15 @@ func (fs *overlayFS) processChanges(changes []FileChange) (FileChangeSummary, ma
 			}
 		}
 
-		if events.saved {
-			if o != nil {
+		if o != nil && (events.watchObserved || events.saved) {
+			if matchesDiskText, _ := o.computeMatchesDiskText(fs.host); matchesDiskText != o.MatchesDiskText() {
 				o = newOverlay(o.FileName(), o.Content(), o.Version(), o.kind)
-				o.matchesDiskText = true
+				o.matchesDiskText = matchesDiskText
 				newOverlays[path] = o
-			} else if !events.watchChanged {
-				// File was saved but never opened via didOpen; treat as a disk change.
-				result.Changed.Add(uri)
 			}
+		} else if events.saved && o == nil && !events.watchChanged {
+			// File was saved but never opened via didOpen; treat as a disk change.
+			result.Changed.Add(uri)
 		}
 
 		if events.created && o == nil {
