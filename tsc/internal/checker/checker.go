@@ -75,6 +75,7 @@ const (
 	TypeSystemPropertyNameDefaultType
 	TypeSystemPropertyNameAwaitedType
 	TypeSystemPropertyNameExplicitType
+	TypeSystemPropertyNameBindingElementParent
 	TypeSystemPropertyNameAssertionOperand
 	TypeSystemPropertyNamePatternInitializer
 )
@@ -685,7 +686,6 @@ type Checker struct {
 	varianceGuessed                             []*ast.Symbol                   // Keys of varianceGuesses in order of addition
 	flushStates                                 *[]*memoState                   // Collects memo states given effects to replay, if non-nil; see withoutChecking
 	callResolutionStack                         []*ast.Node
-	resolvingBindingElementParents              collections.Set[*ast.Node] // Binding element parents whose types are being resolved to narrow a reference
 	apparentArgumentCount                       *int
 	lastGetCombinedNodeFlagsNode                *ast.Node
 	lastGetCombinedNodeFlagsResult              ast.NodeFlags
@@ -14487,15 +14487,15 @@ func (c *Checker) getNarrowedTypeOfSymbol(symbol *ast.Symbol, location *ast.Node
 			}
 			parent := declaration.Parent.Parent
 			if ast.IsVariableDeclaration(rootDeclaration) && c.getCombinedNodeFlagsCached(rootDeclaration)&ast.NodeFlagsConstant != 0 || ast.IsParameterDeclaration(rootDeclaration) {
-				if !c.resolvingBindingElementParents.Has(parent) {
-					c.resolvingBindingElementParents.Add(parent)
+				if !c.isResolvingAnywhere(parent, TypeSystemPropertyNameBindingElementParent) {
+					c.beginTypeResolution(parent, TypeSystemPropertyNameBindingElementParent)
 					parentType := c.getTypeForBindingElementParent(parent, CheckModeNormal)
 					var parentTypeConstraint *Type
 					if parentType != nil {
 						parentTypeConstraint = c.mapType(parentType, c.getBaseConstraintOrType)
 					}
 					// Guard parent-type resolution only; flow analysis should allow re-entrant narrowing
-					c.resolvingBindingElementParents.Delete(parent)
+					c.popTypeResolution()
 					if parentTypeConstraint != nil && parentTypeConstraint.flags&TypeFlagsUnion != 0 && !(ast.IsParameterDeclaration(rootDeclaration) && c.isSomeSymbolAssigned(rootDeclaration)) {
 						pattern := declaration.Parent
 						narrowedType := c.getFlowTypeOfReferenceEx(pattern, parentTypeConstraint, parentTypeConstraint, nil /*flowContainer*/, getFlowNodeOfNode(location))
@@ -20338,7 +20338,9 @@ func (c *Checker) typeResolutionHasProperty(r *TypeResolution) bool {
 		return c.aliasSymbolLinks.Get(r.target.(*ast.Symbol)).aliasTarget.peek() != nil
 	case TypeSystemPropertyNameContextChecked, TypeSystemPropertyNameStructuredMembers, TypeSystemPropertyNameCurrentNode,
 		TypeSystemPropertyNameSimplifiedForReading, TypeSystemPropertyNameSimplifiedForWriting, TypeSystemPropertyNameDefaultType,
-		TypeSystemPropertyNameAwaitedType, TypeSystemPropertyNameExplicitType, TypeSystemPropertyNameAssertionOperand, TypeSystemPropertyNamePatternInitializer:
+		TypeSystemPropertyNameAwaitedType, TypeSystemPropertyNameExplicitType,
+		TypeSystemPropertyNameBindingElementParent,
+		TypeSystemPropertyNameAssertionOperand, TypeSystemPropertyNamePatternInitializer:
 		// Marked as checked or resolved on entry, so it is only on the stack
 		// while in progress.
 		return false
