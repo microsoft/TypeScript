@@ -27440,7 +27440,7 @@ func (c *Checker) getLiteralTypeFromProperties(t *Type, include TypeFlags, inclu
 	if includeOrigin && t.objectFlags&(ObjectFlagsClassOrInterface|ObjectFlagsReference) != 0 || t.alias != nil {
 		origin = c.newIndexType(t, IndexFlagsNone)
 	}
-	props := c.getPropertiesOfType(t)
+	props := c.getLayoutPropertiesOfType(t)
 	indexInfos := c.getIndexInfosOfType(t)
 	types := make([]*Type, 0, len(props)+len(indexInfos))
 	for _, prop := range props {
@@ -31528,7 +31528,7 @@ func (c *Checker) discriminateContextualTypeByObjectMembers(node *ast.Node, cont
 			}
 			return false
 		})
-		discriminantMembers := core.Filter(c.getPropertiesOfType(contextualType), func(s *ast.Symbol) bool {
+		discriminantMembers := core.Filter(c.getLayoutPropertiesOfType(contextualType), func(s *ast.Symbol) bool {
 			return s.Flags()&ast.SymbolFlagsOptional != 0 && node.Symbol().Members()[s.Name()] == nil && c.isDiscriminantProperty(contextualType, s.Name())
 		})
 		discriminator := &ObjectLiteralDiscriminator{c: c, props: discriminantProperties, members: discriminantMembers}
