@@ -4,7 +4,7 @@
  * delegates to these functions.
  */
 
-import { SyntaxKind } from "#enums/syntaxKind";
+import { SyntaxKind } from "../../enums/syntaxKind.js";
 import type {
     JSDocComment,
     JSDocParameterOrPropertyTag,

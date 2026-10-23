@@ -1,0 +1,6 @@
+//// [tests/cases/compiler/defaultTypesExcludeAmbientPackages.ts] ////
+
+=== /main.ts ===
+
+__dirname;
+

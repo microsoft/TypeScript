@@ -1,0 +1,20 @@
+//// [tests/cases/compiler/compoundAssignmentAfterExcludedLiteral.ts] ////
+
+=== compoundAssignmentAfterExcludedLiteral.ts ===
+function append(buffer: { value: string }) {
+>append : Symbol(append, Decl(compoundAssignmentAfterExcludedLiteral.ts, 0, 0))
+>buffer : Symbol(buffer, Decl(compoundAssignmentAfterExcludedLiteral.ts, 0, 16))
+>value : Symbol(value, Decl(compoundAssignmentAfterExcludedLiteral.ts, 0, 25))
+
+    if (buffer.value !== "") {
+>buffer.value : Symbol(value, Decl(compoundAssignmentAfterExcludedLiteral.ts, 0, 25))
+>buffer : Symbol(buffer, Decl(compoundAssignmentAfterExcludedLiteral.ts, 0, 16))
+>value : Symbol(value, Decl(compoundAssignmentAfterExcludedLiteral.ts, 0, 25))
+
+        buffer.value += "\n";
+>buffer.value : Symbol(value, Decl(compoundAssignmentAfterExcludedLiteral.ts, 0, 25))
+>buffer : Symbol(buffer, Decl(compoundAssignmentAfterExcludedLiteral.ts, 0, 16))
+>value : Symbol(value, Decl(compoundAssignmentAfterExcludedLiteral.ts, 0, 25))
+    }
+}
+
