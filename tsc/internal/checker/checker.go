@@ -73,6 +73,7 @@ const (
 	TypeSystemPropertyNameSimplifiedForReading
 	TypeSystemPropertyNameSimplifiedForWriting
 	TypeSystemPropertyNameDefaultType
+	TypeSystemPropertyNameAwaitedType
 	TypeSystemPropertyNamePatternInitializer
 )
 
@@ -705,7 +706,6 @@ type Checker struct {
 	renamedBindingElementsInTypes               []*ast.Node
 	contextualInfos                             []ContextualInfo
 	inferenceContextInfos                       []InferenceContextInfo
-	awaitedTypeStack                            []*Type
 	reverseMappedSourceStack                    []*Type
 	reverseMappedTargetStack                    []*Type
 	reverseExpandingFlags                       ExpandingFlags
@@ -20311,7 +20311,8 @@ func (c *Checker) typeResolutionHasProperty(r *TypeResolution) bool {
 	case TypeSystemPropertyNameAliasTarget:
 		return c.aliasSymbolLinks.Get(r.target.(*ast.Symbol)).aliasTarget.peek() != nil
 	case TypeSystemPropertyNameContextChecked, TypeSystemPropertyNameStructuredMembers, TypeSystemPropertyNameCurrentNode,
-		TypeSystemPropertyNameSimplifiedForReading, TypeSystemPropertyNameSimplifiedForWriting, TypeSystemPropertyNameDefaultType, TypeSystemPropertyNamePatternInitializer:
+		TypeSystemPropertyNameSimplifiedForReading, TypeSystemPropertyNameSimplifiedForWriting, TypeSystemPropertyNameDefaultType,
+		TypeSystemPropertyNameAwaitedType, TypeSystemPropertyNamePatternInitializer:
 		// Marked as checked or resolved on entry, so it is only on the stack
 		// while in progress.
 		return false
@@ -33606,16 +33607,16 @@ func (c *Checker) getAwaitedTypeNoAliasEx(t *Type, errorNode *ast.Node, diagnost
 	defer c.endMemo()
 	// For a union, get a union of the awaited types of each constituent.
 	if t.flags&TypeFlagsUnion != 0 {
-		if slices.Contains(c.awaitedTypeStack, t) {
+		if c.isAwaitingType(t) {
 			if errorNode != nil {
 				c.error(errorNode, diagnostics.Type_is_referenced_directly_or_indirectly_in_the_fulfillment_callback_of_its_own_then_method)
 			}
 			return nil
 		}
-		c.awaitedTypeStack = append(c.awaitedTypeStack, t)
+		c.pushAwaitingType(t)
 		mapped := c.mapType(t, func(t *Type) *Type { return c.getAwaitedTypeNoAliasEx(t, errorNode, diagnosticMessage, args...) })
-		c.awaitedTypeStack = c.awaitedTypeStack[:len(c.awaitedTypeStack)-1]
 		c.cachedTypes.set(c, key, mapped)
+		c.popTypeResolution()
 		return mapped
 	}
 	// If `type` is generic and should be wrapped in `Awaited<T>`, return it.
@@ -33626,7 +33627,7 @@ func (c *Checker) getAwaitedTypeNoAliasEx(t *Type, errorNode *ast.Node, diagnost
 	var thisTypeForError *Type
 	promisedType := c.getPromisedTypeOfPromiseEx(t, nil /*errorNode*/, &thisTypeForError)
 	if promisedType != nil {
-		if t == promisedType || slices.Contains(c.awaitedTypeStack, promisedType) {
+		if t == promisedType || c.isAwaitingType(promisedType) {
 			// Verify that we don't have a bad actor in the form of a promise whose
 			// promised type is the same as the promise type, or a mutually recursive
 			// promise. If so, we return undefined as we cannot guess the shape. If this
@@ -33667,13 +33668,12 @@ func (c *Checker) getAwaitedTypeNoAliasEx(t *Type, errorNode *ast.Node, diagnost
 		}
 		// Keep track of the type we're about to unwrap to avoid bad recursive promise types.
 		// See the comments above for more information.
-		c.awaitedTypeStack = append(c.awaitedTypeStack, t)
+		c.pushAwaitingType(t)
 		awaitedType := c.getAwaitedTypeNoAliasEx(promisedType, errorNode, diagnosticMessage, args...)
-		c.awaitedTypeStack = c.awaitedTypeStack[:len(c.awaitedTypeStack)-1]
-		if awaitedType == nil {
-			return nil
+		if awaitedType != nil {
+			c.cachedTypes.set(c, key, awaitedType)
 		}
-		c.cachedTypes.set(c, key, awaitedType)
+		c.popTypeResolution()
 		return awaitedType
 	}
 	// The type was not a promise, so it could not be unwrapped any further.
@@ -33703,6 +33703,28 @@ func (c *Checker) getAwaitedTypeNoAliasEx(t *Type, errorNode *ast.Node, diagnost
 	}
 	c.cachedTypes.set(c, key, t)
 	return t
+}
+
+// pushAwaitingType records that the awaited type of t is being computed, until
+// the matching popTypeResolution.
+func (c *Checker) pushAwaitingType(t *Type) {
+	c.beginTypeResolution(t, TypeSystemPropertyNameAwaitedType)
+}
+
+// isAwaitingType reports whether the awaited type of t is being computed. A
+// computation finding it so fails, as computing it from scratch would, so
+// the results cached since it started are discarded when it finishes, like
+// those of any other failure, and every caller computes them again and
+// reports the failure. Unlike isResolutionInProgress, it searches the whole
+// stack, since the computation would not otherwise stop.
+func (c *Checker) isAwaitingType(t *Type) bool {
+	for i := c.typeResolutionTop - 1; i >= 0; i = int(c.resolutions[i].prevTypeResolution) - 1 {
+		if r := &c.resolutions[i].typeResolution; r.target == t && r.propertyName == TypeSystemPropertyNameAwaitedType {
+			c.markTypeResolutionCircular(i)
+			return true
+		}
+	}
+	return false
 }
 
 func (c *Checker) isAwaitedTypeInstantiation(t *Type) bool {
