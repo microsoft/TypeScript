@@ -1,0 +1,35 @@
+//// [tests/cases/compiler/conditionalFunctionUnionInference.ts] ////
+
+=== conditionalFunctionUnionInference.ts ===
+type DeepValue<T> = T extends () => unknown ? T :
+>DeepValue : Symbol(DeepValue, Decl(conditionalFunctionUnionInference.ts, 0, 0))
+>T : Symbol(T, Decl(conditionalFunctionUnionInference.ts, 0, 15))
+>T : Symbol(T, Decl(conditionalFunctionUnionInference.ts, 0, 15))
+>T : Symbol(T, Decl(conditionalFunctionUnionInference.ts, 0, 15))
+
+    { [K in keyof T]: DeepValue<T[K]> };
+>K : Symbol(K, Decl(conditionalFunctionUnionInference.ts, 1, 7))
+>T : Symbol(T, Decl(conditionalFunctionUnionInference.ts, 0, 15))
+>DeepValue : Symbol(DeepValue, Decl(conditionalFunctionUnionInference.ts, 0, 0))
+>T : Symbol(T, Decl(conditionalFunctionUnionInference.ts, 0, 15))
+>K : Symbol(K, Decl(conditionalFunctionUnionInference.ts, 1, 7))
+
+declare function createValue<T>(initialValue: DeepValue<T | (() => T)>): T;
+>createValue : Symbol(createValue, Decl(conditionalFunctionUnionInference.ts, 1, 40))
+>T : Symbol(T, Decl(conditionalFunctionUnionInference.ts, 3, 29))
+>initialValue : Symbol(initialValue, Decl(conditionalFunctionUnionInference.ts, 3, 32))
+>DeepValue : Symbol(DeepValue, Decl(conditionalFunctionUnionInference.ts, 0, 0))
+>T : Symbol(T, Decl(conditionalFunctionUnionInference.ts, 3, 29))
+>T : Symbol(T, Decl(conditionalFunctionUnionInference.ts, 3, 29))
+>T : Symbol(T, Decl(conditionalFunctionUnionInference.ts, 3, 29))
+
+const value = createValue(() => ({ ready: true }));
+>value : Symbol(value, Decl(conditionalFunctionUnionInference.ts, 5, 5))
+>createValue : Symbol(createValue, Decl(conditionalFunctionUnionInference.ts, 1, 40))
+>ready : Symbol(ready, Decl(conditionalFunctionUnionInference.ts, 5, 34))
+
+value.ready;
+>value.ready : Symbol(ready, Decl(conditionalFunctionUnionInference.ts, 5, 34))
+>value : Symbol(value, Decl(conditionalFunctionUnionInference.ts, 5, 5))
+>ready : Symbol(ready, Decl(conditionalFunctionUnionInference.ts, 5, 34))
+

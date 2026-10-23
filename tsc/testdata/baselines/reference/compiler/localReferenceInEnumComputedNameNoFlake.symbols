@@ -1,0 +1,18 @@
+//// [tests/cases/compiler/localReferenceInEnumComputedNameNoFlake.ts] ////
+
+=== localReferenceInEnumComputedNameNoFlake.ts ===
+// TS6133 must not report 'unused' as unread: the computed name references it.
+const unused = { value: 1 };
+>unused : Symbol(unused, Decl(localReferenceInEnumComputedNameNoFlake.ts, 1, 5))
+>value : Symbol(value, Decl(localReferenceInEnumComputedNameNoFlake.ts, 1, 16))
+
+export enum Example {
+>Example : Symbol(Example, Decl(localReferenceInEnumComputedNameNoFlake.ts, 1, 28))
+
+    [unused.value] = 0
+>[unused.value] : Symbol(Example[unused.value], Decl(localReferenceInEnumComputedNameNoFlake.ts, 2, 21))
+>unused.value : Symbol(value, Decl(localReferenceInEnumComputedNameNoFlake.ts, 1, 16))
+>unused : Symbol(unused, Decl(localReferenceInEnumComputedNameNoFlake.ts, 1, 5))
+>value : Symbol(value, Decl(localReferenceInEnumComputedNameNoFlake.ts, 1, 16))
+}
+

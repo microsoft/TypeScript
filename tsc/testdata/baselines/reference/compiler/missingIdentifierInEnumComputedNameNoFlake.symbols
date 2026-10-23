@@ -1,0 +1,10 @@
+//// [tests/cases/compiler/missingIdentifierInEnumComputedNameNoFlake.ts] ////
+
+=== missingIdentifierInEnumComputedNameNoFlake.ts ===
+// TS2304: Cannot find name 'missing'.
+export enum Values {
+>Values : Symbol(Values, Decl(missingIdentifierInEnumComputedNameNoFlake.ts, 0, 0))
+
+    [missing.value] = 1,
+>[missing.value] : Symbol(Values[missing.value], Decl(missingIdentifierInEnumComputedNameNoFlake.ts, 1, 20))
+}

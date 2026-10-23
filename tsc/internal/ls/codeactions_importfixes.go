@@ -80,6 +80,7 @@ func getImportCodeActions(ctx context.Context, fixContext *CodeFixContext) ([]*C
 			fixContext.LS.FormatOptions(),
 			fixContext.LS.converters,
 			fixContext.LS.UserPreferences(),
+			fixInfo.symbolName != fixInfo.errorIdentifierText,
 		)
 
 		if ok {
@@ -257,7 +258,7 @@ func getFixesInfoForUMDImport(token *ast.Node, view *autoimport.View, ch *checke
 		}
 		result = append(result, &fixInfo{
 			fix:                 fix,
-			symbolName:          umdSymbol.Name,
+			symbolName:          umdSymbol.Name(),
 			errorIdentifierText: errorIdentifierText,
 		})
 	}
@@ -294,9 +295,9 @@ func getUmdSymbol(token *ast.Node, ch *checker.Checker) *ast.Symbol {
 }
 
 func isUMDExportSymbol(symbol *ast.Symbol) bool {
-	return symbol != nil && len(symbol.Declarations) > 0 &&
-		symbol.Declarations[0] != nil &&
-		ast.IsNamespaceExportDeclaration(symbol.Declarations[0])
+	return symbol != nil && len(symbol.Declarations()) > 0 &&
+		symbol.Declarations()[0] != nil &&
+		ast.IsNamespaceExportDeclaration(symbol.Declarations()[0])
 }
 
 func getFixesInfoForNonUMDImport(fixContext *CodeFixContext, symbolToken *ast.Node, view *autoimport.View, ch *checker.Checker) []*fixInfo {
@@ -339,9 +340,10 @@ func getFixesInfoForNonUMDImport(fixContext *CodeFixContext, symbolToken *ast.No
 			fixes := view.GetFixes(export, isJSXTagName, isValidTypeOnlyUseSite, &usagePosition)
 			for _, fix := range fixes {
 				allInfo = append(allInfo, &fixInfo{
-					fix:               fix,
-					symbolName:        symbolName,
-					isJsxNamespaceFix: symbolName != symbolToken.Text(),
+					fix:                 fix,
+					symbolName:          symbolName,
+					errorIdentifierText: symbolToken.Text(),
+					isJsxNamespaceFix:   symbolName != symbolToken.Text(),
 				})
 			}
 		}
@@ -415,8 +417,8 @@ func needsJsxNamespaceFix(jsxNamespace string, symbolToken *ast.Node, ch *checke
 	if namespaceSymbol == nil {
 		return true
 	}
-	if slices.ContainsFunc(namespaceSymbol.Declarations, ast.IsTypeOnlyImportOrExportDeclaration) {
-		return (namespaceSymbol.Flags & ast.SymbolFlagsValue) == 0
+	if slices.ContainsFunc(namespaceSymbol.Declarations(), ast.IsTypeOnlyImportOrExportDeclaration) {
+		return (namespaceSymbol.Flags() & ast.SymbolFlagsValue) == 0
 	}
 	return false
 }

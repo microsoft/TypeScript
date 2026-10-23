@@ -1,0 +1,17 @@
+//// [tests/cases/compiler/stringIncrementInEnumComputedNameNoFlake.ts] ////
+
+=== stringIncrementInEnumComputedNameNoFlake.ts ===
+// TS2356: An arithmetic operand must be of type 'any', 'number', 'bigint' or an enum type.
+declare let text: string;
+>text : Symbol(text, Decl(stringIncrementInEnumComputedNameNoFlake.ts, 1, 11))
+
+export enum Values {
+>Values : Symbol(Values, Decl(stringIncrementInEnumComputedNameNoFlake.ts, 1, 25))
+
+    [(text++).valueOf] = 1,
+>[(text++).valueOf] : Symbol(Values[(text++).valueOf], Decl(stringIncrementInEnumComputedNameNoFlake.ts, 2, 20))
+>(text++).valueOf : Symbol(Number.valueOf, Decl(lib.es5.d.ts, --, --))
+>text : Symbol(text, Decl(stringIncrementInEnumComputedNameNoFlake.ts, 1, 11))
+>valueOf : Symbol(Number.valueOf, Decl(lib.es5.d.ts, --, --))
+}
+

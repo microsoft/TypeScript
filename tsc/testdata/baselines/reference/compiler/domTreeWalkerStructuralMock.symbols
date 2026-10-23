@@ -1,0 +1,60 @@
+//// [tests/cases/compiler/domTreeWalkerStructuralMock.ts] ////
+
+=== domTreeWalkerStructuralMock.ts ===
+declare class Walker implements TreeWalker {
+>Walker : Symbol(Walker, Decl(domTreeWalkerStructuralMock.ts, 0, 0))
+>TreeWalker : Symbol(TreeWalker, Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --))
+
+    currentNode: Node;
+>currentNode : Symbol(Walker.currentNode, Decl(domTreeWalkerStructuralMock.ts, 0, 44))
+>Node : Symbol(Node, Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --))
+
+    readonly filter: NodeFilter | null;
+>filter : Symbol(Walker.filter, Decl(domTreeWalkerStructuralMock.ts, 1, 22))
+>NodeFilter : Symbol(NodeFilter, Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --))
+
+    readonly root: Node;
+>root : Symbol(Walker.root, Decl(domTreeWalkerStructuralMock.ts, 2, 39))
+>Node : Symbol(Node, Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --))
+
+    readonly whatToShow: number;
+>whatToShow : Symbol(Walker.whatToShow, Decl(domTreeWalkerStructuralMock.ts, 3, 24))
+
+    firstChild(): Node | null;
+>firstChild : Symbol(Walker.firstChild, Decl(domTreeWalkerStructuralMock.ts, 4, 32))
+>Node : Symbol(Node, Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --))
+
+    lastChild(): Node | null;
+>lastChild : Symbol(Walker.lastChild, Decl(domTreeWalkerStructuralMock.ts, 5, 30))
+>Node : Symbol(Node, Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --))
+
+    nextNode(): Node | null;
+>nextNode : Symbol(Walker.nextNode, Decl(domTreeWalkerStructuralMock.ts, 6, 29))
+>Node : Symbol(Node, Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --))
+
+    nextSibling(): Node | null;
+>nextSibling : Symbol(Walker.nextSibling, Decl(domTreeWalkerStructuralMock.ts, 7, 28))
+>Node : Symbol(Node, Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --))
+
+    parentNode(): Node | null;
+>parentNode : Symbol(Walker.parentNode, Decl(domTreeWalkerStructuralMock.ts, 8, 31))
+>Node : Symbol(Node, Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --))
+
+    previousNode(): Node | null;
+>previousNode : Symbol(Walker.previousNode, Decl(domTreeWalkerStructuralMock.ts, 9, 30))
+>Node : Symbol(Node, Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --))
+
+    previousSibling(): Node | null;
+>previousSibling : Symbol(Walker.previousSibling, Decl(domTreeWalkerStructuralMock.ts, 10, 32))
+>Node : Symbol(Node, Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --))
+}
+
+declare const walker: Walker;
+>walker : Symbol(walker, Decl(domTreeWalkerStructuralMock.ts, 14, 13))
+>Walker : Symbol(Walker, Decl(domTreeWalkerStructuralMock.ts, 0, 0))
+
+const result: TreeWalker = walker;
+>result : Symbol(result, Decl(domTreeWalkerStructuralMock.ts, 15, 5))
+>TreeWalker : Symbol(TreeWalker, Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --))
+>walker : Symbol(walker, Decl(domTreeWalkerStructuralMock.ts, 14, 13))
+

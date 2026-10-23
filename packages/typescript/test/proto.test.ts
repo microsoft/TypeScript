@@ -1,5 +1,6 @@
 import assert from "node:assert";
 import test from "node:test";
+import { SymbolOwnerKind } from "../enums/symbolOwnerKind.js";
 import type {
     SymbolOwner as ProtocolSymbolOwner,
     SymbolResponse as ProtocolSymbolResponse,
@@ -14,10 +15,9 @@ import type {
     PathKey,
     RootedFilePath,
 } from "../src/ast/index.ts";
-import { SymbolOwnerKind } from "../src/enums/symbolOwnerKind.ts";
 
 test("symbol ownership protocol validation rejects mixed variants", () => {
-    const project = "/tsconfig.json" as ProjectId;
+    const project = 1;
     const file = {
         fileName: "/file.ts" as RootedFilePath,
         path: "/file.ts" as PathKey,
@@ -41,9 +41,9 @@ test("symbol ownership protocol validation rejects mixed variants", () => {
         const owner of [
             { kind: SymbolOwnerKind.File },
             { kind: SymbolOwnerKind.File, file, snapshot: 1 },
-            { kind: SymbolOwnerKind.Snapshot, project: "/tsconfig.json" },
+            { kind: SymbolOwnerKind.Snapshot, project },
             { kind: SymbolOwnerKind.Snapshot, snapshot: 1 },
-            { kind: SymbolOwnerKind.Snapshot, snapshot: 1, project: "/tsconfig.json", file },
+            { kind: SymbolOwnerKind.Snapshot, snapshot: 1, project, file },
             { kind: 99 },
         ] as ProtocolSymbolOwner[]
     ) {
