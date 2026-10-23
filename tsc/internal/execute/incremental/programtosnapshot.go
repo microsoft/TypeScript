@@ -315,13 +315,17 @@ func addReferencedFileFromFileName(program *compiler.Program, fileName tspath.Ro
 
 // Gets the referenced files for a file from the program with values for the keys as referenced file's path to be true
 func getReferencedFiles(program *compiler.Program, file *ast.SourceFile) *collections.Set[tspath.PathKey] {
+	checker, done := program.GetTypeCheckerForFileExclusive(context.TODO(), file)
+	defer done()
+	return getReferencedFilesWithChecker(program, checker, file)
+}
+
+func getReferencedFilesWithChecker(program *compiler.Program, checker *checker.Checker, file *ast.SourceFile) *collections.Set[tspath.PathKey] {
 	referencedFiles := collections.Set[tspath.PathKey]{}
 
 	// We need to use a set here since the code can contain the same import twice,
 	// but that will only be one dependency.
 	// To avoid invernal conversion, the key of the referencedFiles map must be of type Path
-	checker, done := program.GetTypeCheckerForFileExclusive(context.TODO(), file)
-	defer done()
 	for _, importName := range file.Imports() {
 		addReferencedFilesFromImportLiteral(file, &referencedFiles, checker, importName)
 	}

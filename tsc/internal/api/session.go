@@ -26,6 +26,7 @@ import (
 	compilerdebug "github.com/microsoft/TypeScript/tsc/internal/debug"
 	"github.com/microsoft/TypeScript/tsc/internal/diagnostics"
 	"github.com/microsoft/TypeScript/tsc/internal/execute/build"
+	"github.com/microsoft/TypeScript/tsc/internal/execute/incremental"
 	"github.com/microsoft/TypeScript/tsc/internal/execute/tsc"
 	"github.com/microsoft/TypeScript/tsc/internal/format"
 	"github.com/microsoft/TypeScript/tsc/internal/ipc"
@@ -965,6 +966,8 @@ func (s *Session) HandleRequest(ctx context.Context, method string, params json.
 		return s.handleGetResolvedTypeReferenceDirective(ctx, parsed.(*GetResolvedTypeReferenceDirectiveParams))
 	case string(MethodGetResolvedTypeReferenceDirectiveFromReference):
 		return s.handleGetResolvedTypeReferenceDirectiveFromReference(ctx, parsed.(*GetResolvedTypeReferenceDirectiveFromReferenceParams))
+	case string(MethodGetAllDependencies):
+		return s.handleGetAllDependencies(ctx, parsed.(*GetSourceFileParams))
 	case string(MethodGetConfigFileNames):
 		return s.handleGetConfigFileNames(ctx, parsed.(*GetProjectDiagnosticsParams))
 	case string(MethodGetConfigSourceFile):
@@ -2664,6 +2667,24 @@ func (s *Session) handleGetResolvedTypeReferenceDirectiveFromReference(ctx conte
 		mode = program.GetDefaultResolutionModeForFile(sourceFile)
 	}
 	return newResolvedTypeReferenceDirectiveResponse(program.GetResolvedTypeReferenceDirective(sourceFile, params.TypeDirectiveName, mode)), nil
+}
+
+func (s *Session) handleGetAllDependencies(ctx context.Context, params *GetSourceFileParams) ([]tspath.RootedFilePath, error) {
+	sd, err := s.getSnapshotData(params.Snapshot)
+	if err != nil {
+		return nil, err
+	}
+	program, err := sd.getProgram(params.Project)
+	if err != nil {
+		return nil, err
+	}
+	sourceFile, err := s.resolveOptionalSourceFile(program, &params.File)
+	if err != nil {
+		return nil, err
+	}
+	ch, done := program.GetTypeCheckerForFile(ctx, sourceFile)
+	defer done()
+	return core.Map(incremental.GetAllDependencies(program, ch, sourceFile), (*ast.SourceFile).FileName), nil
 }
 
 // handleGetSymbolAtPosition returns the symbol at a position in a file.

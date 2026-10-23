@@ -3264,6 +3264,33 @@ export class Program<Id extends ProjectId = ProjectId> implements FormatDiagnost
         );
     }
 
+    get getAllDependencies(): {
+        (file: DocumentIdentifier): readonly RootedFilePath[];
+        gen(file: DocumentIdentifier): Generator<ProtocolRequest, readonly RootedFilePath[], ProtocolResponse["result"]>;
+    } {
+        const owner = this;
+        return cacheGeneratorMethod(
+            owner,
+            "getAllDependencies",
+            function (file: DocumentIdentifier): readonly RootedFilePath[] {
+                const data = owner.client.apiRequest("getAllDependencies", {
+                    snapshot: owner.snapshotId,
+                    project: owner.project.handle,
+                    file,
+                });
+                return data ?? [];
+            },
+            function* (file: DocumentIdentifier): Generator<ProtocolRequest, readonly RootedFilePath[], ProtocolResponse["result"]> {
+                const data = yield* apiRequest("getAllDependencies", {
+                    snapshot: owner.snapshotId,
+                    project: owner.project.handle,
+                    file,
+                });
+                return data ?? [];
+            },
+        );
+    }
+
     get getSourceFileNames(): {
         (): readonly RootedFilePath[];
         gen(): Generator<ProtocolRequest, readonly RootedFilePath[], ProtocolResponse["result"]>;
