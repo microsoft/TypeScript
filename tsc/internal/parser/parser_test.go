@@ -5,6 +5,7 @@ import (
 	"iter"
 	"os"
 	"path/filepath"
+	"strconv"
 	"strings"
 	"testing"
 
@@ -40,6 +41,44 @@ func BenchmarkParse(b *testing.B) {
 
 			for b.Loop() {
 				parser.ParseSourceFile(opts, sourceText, scriptKind)
+			}
+		})
+	}
+}
+
+func BenchmarkConditionalAsyncExpressions(b *testing.B) {
+	for _, test := range []struct{ name, prefix, suffix, closing string }{
+		{"call", "a ? async() : x => ", "0;", ""},
+		{"arrow", "a ? async(): T => async() : x => ", "0;", ""},
+		{"priority", "a ? d = (d): T => a ? 0 : async(...c) : T => ", "0;", ""},
+		{"invalidCall", "a ? async() : x => ", "0 +;", ""},
+		{"invalidArrow", "a ? async(): T => async() : x => ", "0 +;", ""},
+		{"parenthesizedCall", "a ? async() : x => (", "0", ")"},
+		{"invalidParenthesizedCall", "a ? async() : x => (", "0 +", ")"},
+	} {
+		b.Run(test.name, func(b *testing.B) {
+			for _, count := range []int{10, 20, 40, 80} {
+				b.Run(strconv.Itoa(count), func(b *testing.B) {
+					source := "const r = " + strings.Repeat(test.prefix, count) + test.suffix + strings.Repeat(test.closing, count)
+					opts := ast.SourceFileParseOptions{FileName: "/a.ts", PathKey: "/a.ts"}
+					b.ReportAllocs()
+					for b.Loop() {
+						parser.ParseSourceFile(opts, source, core.ScriptKindTS)
+					}
+				})
+			}
+		})
+	}
+}
+
+func BenchmarkConditionalExpressions(b *testing.B) {
+	for _, count := range []int{1, 100} {
+		b.Run(strconv.Itoa(count), func(b *testing.B) {
+			source := strings.Repeat("{ const r = a ? b : c; }\n", count)
+			opts := ast.SourceFileParseOptions{FileName: "/a.ts", PathKey: "/a.ts"}
+			b.ReportAllocs()
+			for b.Loop() {
+				parser.ParseSourceFile(opts, source, core.ScriptKindTS)
 			}
 		})
 	}
@@ -188,17 +227,23 @@ class MissingImplements implements B. {}
 	assert.Equal(t, missingImplementsDecl.HeritageClauses.Nodes[0].AsHeritageClause().Types.Nodes[0].Kind, ast.KindExpressionWithTypeArguments)
 }
 
-func TestConditionalAsyncCall(t *testing.T) {
-	t.Parallel()
+func parseConditionalInGenerator(t *testing.T, expression string, kind core.ScriptKind) *ast.ConditionalExpression {
+	t.Helper()
+	fileName := tspath.RootedFilePathFromNormalized(core.IfElse(kind == core.ScriptKindJS, "/a.js", "/a.ts"))
 	file := parser.ParseSourceFile(ast.SourceFileParseOptions{
-		FileName: "/a.ts",
-		PathKey:  "/a.ts",
-	}, "function* g() { const a = b ? async(...c) : 0; }", core.ScriptKindTS)
+		FileName: fileName,
+		PathKey:  tspath.CaseSensitive.PathKey(tspath.RootedPath(fileName)),
+	}, "function* g() { const a = "+expression+"; }", kind)
 	assert.Equal(t, len(file.Diagnostics()), 0)
 	assert.Equal(t, len(file.JSDiagnostics()), 0)
 	statement := file.Statements.Nodes[0].Body().AsBlock().Statements.Nodes[0]
 	declaration := statement.AsVariableStatement().DeclarationList.AsVariableDeclarationList().Declarations.Nodes[0]
-	conditional := declaration.Initializer().AsConditionalExpression()
+	return declaration.Initializer().AsConditionalExpression()
+}
+
+func TestConditionalAsyncCall(t *testing.T) {
+	t.Parallel()
+	conditional := parseConditionalInGenerator(t, "b ? async(...c) : 0", core.ScriptKindTS)
 	assert.Equal(t, conditional.WhenTrue.Kind, ast.KindCallExpression)
 	assert.Equal(t, conditional.WhenTrue.Flags&ast.NodeFlagsYieldContext, ast.NodeFlagsYieldContext)
 	assert.Equal(t, conditional.WhenFalse.Kind, ast.KindNumericLiteral)
@@ -206,15 +251,7 @@ func TestConditionalAsyncCall(t *testing.T) {
 
 func TestConditionalAsyncCallWithArrow(t *testing.T) {
 	t.Parallel()
-	file := parser.ParseSourceFile(ast.SourceFileParseOptions{
-		FileName: "/a.ts",
-		PathKey:  "/a.ts",
-	}, "function* g() { const a = b ? async(...c) : d => d; }", core.ScriptKindTS)
-	assert.Equal(t, len(file.Diagnostics()), 0)
-	assert.Equal(t, len(file.JSDiagnostics()), 0)
-	statement := file.Statements.Nodes[0].Body().AsBlock().Statements.Nodes[0]
-	declaration := statement.AsVariableStatement().DeclarationList.AsVariableDeclarationList().Declarations.Nodes[0]
-	conditional := declaration.Initializer().AsConditionalExpression()
+	conditional := parseConditionalInGenerator(t, "b ? async(...c) : d => d", core.ScriptKindTS)
 	assert.Equal(t, conditional.WhenTrue.Kind, ast.KindCallExpression)
 	assert.Equal(t, conditional.WhenTrue.Flags&ast.NodeFlagsYieldContext, ast.NodeFlagsYieldContext)
 	assert.Equal(t, conditional.WhenFalse.Kind, ast.KindArrowFunction)
@@ -222,15 +259,7 @@ func TestConditionalAsyncCallWithArrow(t *testing.T) {
 
 func TestConditionalAsyncCallYield(t *testing.T) {
 	t.Parallel()
-	file := parser.ParseSourceFile(ast.SourceFileParseOptions{
-		FileName: "/a.ts",
-		PathKey:  "/a.ts",
-	}, "function* g() { const a = b ? yield async(...c) : 0; }", core.ScriptKindTS)
-	assert.Equal(t, len(file.Diagnostics()), 0)
-	assert.Equal(t, len(file.JSDiagnostics()), 0)
-	statement := file.Statements.Nodes[0].Body().AsBlock().Statements.Nodes[0]
-	declaration := statement.AsVariableStatement().DeclarationList.AsVariableDeclarationList().Declarations.Nodes[0]
-	conditional := declaration.Initializer().AsConditionalExpression()
+	conditional := parseConditionalInGenerator(t, "b ? yield async(...c) : 0", core.ScriptKindTS)
 	assert.Equal(t, conditional.WhenTrue.Kind, ast.KindYieldExpression)
 	assert.Equal(t, conditional.WhenTrue.Flags&ast.NodeFlagsYieldContext, ast.NodeFlagsYieldContext)
 	assert.Equal(t, conditional.WhenFalse.Kind, ast.KindNumericLiteral)
@@ -239,15 +268,7 @@ func TestConditionalAsyncCallYield(t *testing.T) {
 
 func TestConditionalAsyncCallYieldWithArrow(t *testing.T) {
 	t.Parallel()
-	file := parser.ParseSourceFile(ast.SourceFileParseOptions{
-		FileName: "/a.ts",
-		PathKey:  "/a.ts",
-	}, "function* g() { const a = b ? yield async(...c) : d => d; }", core.ScriptKindTS)
-	assert.Equal(t, len(file.Diagnostics()), 0)
-	assert.Equal(t, len(file.JSDiagnostics()), 0)
-	statement := file.Statements.Nodes[0].Body().AsBlock().Statements.Nodes[0]
-	declaration := statement.AsVariableStatement().DeclarationList.AsVariableDeclarationList().Declarations.Nodes[0]
-	conditional := declaration.Initializer().AsConditionalExpression()
+	conditional := parseConditionalInGenerator(t, "b ? yield async(...c) : d => d", core.ScriptKindTS)
 	assert.Equal(t, conditional.WhenTrue.Kind, ast.KindYieldExpression)
 	assert.Equal(t, conditional.WhenTrue.Flags&ast.NodeFlagsYieldContext, ast.NodeFlagsYieldContext)
 	assert.Equal(t, conditional.WhenFalse.Kind, ast.KindArrowFunction)
@@ -256,15 +277,7 @@ func TestConditionalAsyncCallYieldWithArrow(t *testing.T) {
 
 func TestConditionalAsyncCallJS(t *testing.T) {
 	t.Parallel()
-	file := parser.ParseSourceFile(ast.SourceFileParseOptions{
-		FileName: "/a.js",
-		PathKey:  "/a.js",
-	}, "function* g() { const a = b ? async(...c) : 0; }", core.ScriptKindJS)
-	assert.Equal(t, len(file.Diagnostics()), 0)
-	assert.Equal(t, len(file.JSDiagnostics()), 0)
-	statement := file.Statements.Nodes[0].Body().AsBlock().Statements.Nodes[0]
-	declaration := statement.AsVariableStatement().DeclarationList.AsVariableDeclarationList().Declarations.Nodes[0]
-	conditional := declaration.Initializer().AsConditionalExpression()
+	conditional := parseConditionalInGenerator(t, "b ? async(...c) : 0", core.ScriptKindJS)
 	assert.Equal(t, conditional.WhenTrue.Kind, ast.KindCallExpression)
 	assert.Equal(t, conditional.WhenTrue.Flags&ast.NodeFlagsYieldContext, ast.NodeFlagsYieldContext)
 	assert.Equal(t, conditional.WhenFalse.Kind, ast.KindNumericLiteral)
@@ -272,15 +285,7 @@ func TestConditionalAsyncCallJS(t *testing.T) {
 
 func TestConditionalAsyncCallWithArrowJS(t *testing.T) {
 	t.Parallel()
-	file := parser.ParseSourceFile(ast.SourceFileParseOptions{
-		FileName: "/a.js",
-		PathKey:  "/a.js",
-	}, "function* g() { const a = b ? async(...c) : d => d; }", core.ScriptKindJS)
-	assert.Equal(t, len(file.Diagnostics()), 0)
-	assert.Equal(t, len(file.JSDiagnostics()), 0)
-	statement := file.Statements.Nodes[0].Body().AsBlock().Statements.Nodes[0]
-	declaration := statement.AsVariableStatement().DeclarationList.AsVariableDeclarationList().Declarations.Nodes[0]
-	conditional := declaration.Initializer().AsConditionalExpression()
+	conditional := parseConditionalInGenerator(t, "b ? async(...c) : d => d", core.ScriptKindJS)
 	assert.Equal(t, conditional.WhenTrue.Kind, ast.KindCallExpression)
 	assert.Equal(t, conditional.WhenTrue.Flags&ast.NodeFlagsYieldContext, ast.NodeFlagsYieldContext)
 	assert.Equal(t, conditional.WhenFalse.Kind, ast.KindArrowFunction)
@@ -288,15 +293,7 @@ func TestConditionalAsyncCallWithArrowJS(t *testing.T) {
 
 func TestConditionalAsyncCallYieldJS(t *testing.T) {
 	t.Parallel()
-	file := parser.ParseSourceFile(ast.SourceFileParseOptions{
-		FileName: "/a.js",
-		PathKey:  "/a.js",
-	}, "function* g() { const a = b ? yield async(...c) : 0; }", core.ScriptKindJS)
-	assert.Equal(t, len(file.Diagnostics()), 0)
-	assert.Equal(t, len(file.JSDiagnostics()), 0)
-	statement := file.Statements.Nodes[0].Body().AsBlock().Statements.Nodes[0]
-	declaration := statement.AsVariableStatement().DeclarationList.AsVariableDeclarationList().Declarations.Nodes[0]
-	conditional := declaration.Initializer().AsConditionalExpression()
+	conditional := parseConditionalInGenerator(t, "b ? yield async(...c) : 0", core.ScriptKindJS)
 	assert.Equal(t, conditional.WhenTrue.Kind, ast.KindYieldExpression)
 	assert.Equal(t, conditional.WhenTrue.Flags&ast.NodeFlagsYieldContext, ast.NodeFlagsYieldContext)
 	assert.Equal(t, conditional.WhenFalse.Kind, ast.KindNumericLiteral)
@@ -305,371 +302,11 @@ func TestConditionalAsyncCallYieldJS(t *testing.T) {
 
 func TestConditionalAsyncCallYieldWithArrowJS(t *testing.T) {
 	t.Parallel()
-	file := parser.ParseSourceFile(ast.SourceFileParseOptions{
-		FileName: "/a.js",
-		PathKey:  "/a.js",
-	}, "function* g() { const a = b ? yield async(...c) : d => d; }", core.ScriptKindJS)
-	assert.Equal(t, len(file.Diagnostics()), 0)
-	assert.Equal(t, len(file.JSDiagnostics()), 0)
-	statement := file.Statements.Nodes[0].Body().AsBlock().Statements.Nodes[0]
-	declaration := statement.AsVariableStatement().DeclarationList.AsVariableDeclarationList().Declarations.Nodes[0]
-	conditional := declaration.Initializer().AsConditionalExpression()
+	conditional := parseConditionalInGenerator(t, "b ? yield async(...c) : d => d", core.ScriptKindJS)
 	assert.Equal(t, conditional.WhenTrue.Kind, ast.KindYieldExpression)
 	assert.Equal(t, conditional.WhenTrue.Flags&ast.NodeFlagsYieldContext, ast.NodeFlagsYieldContext)
 	assert.Equal(t, conditional.WhenFalse.Kind, ast.KindArrowFunction)
 	assert.Equal(t, conditional.WhenTrue.Expression().Kind, ast.KindCallExpression)
-}
-
-func TestConditionalAsyncCallReturnType(t *testing.T) {
-	t.Parallel()
-	file := parser.ParseSourceFile(ast.SourceFileParseOptions{
-		FileName: "/a.ts",
-		PathKey:  "/a.ts",
-	}, "const a = b ? async() : d => async (...c): Promise<number> => c.length;", core.ScriptKindTS)
-	assert.Equal(t, len(file.Diagnostics()), 0)
-	declaration := file.Statements.Nodes[0].AsVariableStatement().DeclarationList.AsVariableDeclarationList().Declarations.Nodes[0]
-	conditional := declaration.Initializer().AsConditionalExpression()
-	assert.Equal(t, conditional.WhenTrue.Kind, ast.KindCallExpression)
-	assert.Equal(t, conditional.WhenFalse.Kind, ast.KindArrowFunction)
-	arrow := conditional.WhenFalse.Body()
-	assert.Equal(t, arrow.Kind, ast.KindArrowFunction)
-	assert.Equal(t, arrow.Type().Kind, ast.KindTypeReference)
-}
-
-func TestConditionalAsyncCallReturnTypeAlias(t *testing.T) {
-	t.Parallel()
-	file := parser.ParseSourceFile(ast.SourceFileParseOptions{
-		FileName: "/a.ts",
-		PathKey:  "/a.ts",
-	}, "const a = b ? async() : d => async (...c): T => c.length;", core.ScriptKindTS)
-	assert.Equal(t, len(file.Diagnostics()), 0)
-	declaration := file.Statements.Nodes[0].AsVariableStatement().DeclarationList.AsVariableDeclarationList().Declarations.Nodes[0]
-	conditional := declaration.Initializer().AsConditionalExpression()
-	assert.Equal(t, conditional.WhenTrue.Kind, ast.KindCallExpression)
-	assert.Equal(t, conditional.WhenFalse.Kind, ast.KindArrowFunction)
-	arrow := conditional.WhenFalse.Body()
-	assert.Equal(t, arrow.Kind, ast.KindArrowFunction)
-	assert.Equal(t, arrow.Type().Kind, ast.KindTypeReference)
-}
-
-func TestConditionalAsyncCallWithTypedArrow(t *testing.T) {
-	t.Parallel()
-	file := parser.ParseSourceFile(ast.SourceFileParseOptions{
-		FileName: "/a.ts",
-		PathKey:  "/a.ts",
-	}, "const a = b ? async() : d => async (): T => 0;", core.ScriptKindTS)
-	assert.Equal(t, len(file.Diagnostics()), 0)
-	declaration := file.Statements.Nodes[0].AsVariableStatement().DeclarationList.AsVariableDeclarationList().Declarations.Nodes[0]
-	conditional := declaration.Initializer().AsConditionalExpression()
-	assert.Equal(t, conditional.WhenTrue.Kind, ast.KindCallExpression)
-	assert.Equal(t, conditional.WhenFalse.Kind, ast.KindArrowFunction)
-	arrow := conditional.WhenFalse.Body()
-	assert.Equal(t, arrow.Kind, ast.KindArrowFunction)
-	assert.Equal(t, len(arrow.Parameters()), 0)
-	assert.Equal(t, arrow.Modifiers().Nodes[0].Kind, ast.KindAsyncKeyword)
-	assert.Equal(t, arrow.Type().Kind, ast.KindTypeReference)
-	assert.Equal(t, arrow.Type().AsTypeReferenceNode().TypeName.Text(), "T")
-	assert.Equal(t, arrow.Body().Kind, ast.KindNumericLiteral)
-}
-
-func TestConditionalParenthesizedExpressionWithTypedArrow(t *testing.T) {
-	t.Parallel()
-	file := parser.ParseSourceFile(ast.SourceFileParseOptions{
-		FileName: "/a.ts",
-		PathKey:  "/a.ts",
-	}, "const a = b ? (value) : d => async (): T => 0;", core.ScriptKindTS)
-	assert.Equal(t, len(file.Diagnostics()), 0)
-	declaration := file.Statements.Nodes[0].AsVariableStatement().DeclarationList.AsVariableDeclarationList().Declarations.Nodes[0]
-	conditional := declaration.Initializer().AsConditionalExpression()
-	assert.Equal(t, conditional.WhenTrue.Kind, ast.KindParenthesizedExpression)
-	assert.Equal(t, conditional.WhenTrue.Expression().Text(), "value")
-	assert.Equal(t, conditional.WhenFalse.Kind, ast.KindArrowFunction)
-	arrow := conditional.WhenFalse.Body()
-	assert.Equal(t, arrow.Kind, ast.KindArrowFunction)
-	assert.Equal(t, len(arrow.Parameters()), 0)
-	assert.Equal(t, arrow.Modifiers().Nodes[0].Kind, ast.KindAsyncKeyword)
-	assert.Equal(t, arrow.Type().Kind, ast.KindTypeReference)
-	assert.Equal(t, arrow.Type().AsTypeReferenceNode().TypeName.Text(), "T")
-	assert.Equal(t, arrow.Body().Kind, ast.KindNumericLiteral)
-}
-
-func TestConditionalAsyncCallWithParenthesizedTypedArrow(t *testing.T) {
-	t.Parallel()
-	file := parser.ParseSourceFile(ast.SourceFileParseOptions{
-		FileName: "/a.ts",
-		PathKey:  "/a.ts",
-	}, "const a = b ? async() : d => (e): T => 0;", core.ScriptKindTS)
-	assert.Equal(t, len(file.Diagnostics()), 0)
-	declaration := file.Statements.Nodes[0].AsVariableStatement().DeclarationList.AsVariableDeclarationList().Declarations.Nodes[0]
-	conditional := declaration.Initializer().AsConditionalExpression()
-	assert.Equal(t, conditional.WhenTrue.Kind, ast.KindCallExpression)
-	assert.Equal(t, conditional.WhenFalse.Kind, ast.KindArrowFunction)
-	arrow := conditional.WhenFalse.Body()
-	assert.Equal(t, arrow.Kind, ast.KindArrowFunction)
-	assert.Equal(t, len(arrow.Parameters()), 1)
-	assert.Equal(t, arrow.Parameters()[0].Name().Text(), "e")
-	assert.Equal(t, arrow.Type().AsTypeReferenceNode().TypeName.Text(), "T")
-	assert.Equal(t, arrow.Body().Kind, ast.KindNumericLiteral)
-}
-
-func TestConditionalAsyncCallWithGenericTypedArrow(t *testing.T) {
-	t.Parallel()
-	file := parser.ParseSourceFile(ast.SourceFileParseOptions{
-		FileName: "/a.ts",
-		PathKey:  "/a.ts",
-	}, "const a = b ? async() : d => async <U>(): T => 0;", core.ScriptKindTS)
-	assert.Equal(t, len(file.Diagnostics()), 0)
-	declaration := file.Statements.Nodes[0].AsVariableStatement().DeclarationList.AsVariableDeclarationList().Declarations.Nodes[0]
-	conditional := declaration.Initializer().AsConditionalExpression()
-	assert.Equal(t, conditional.WhenTrue.Kind, ast.KindCallExpression)
-	assert.Equal(t, conditional.WhenFalse.Kind, ast.KindArrowFunction)
-	arrow := conditional.WhenFalse.Body()
-	assert.Equal(t, arrow.Kind, ast.KindArrowFunction)
-	assert.Equal(t, len(arrow.TypeParameterList().Nodes), 1)
-	assert.Equal(t, arrow.TypeParameterList().Nodes[0].Name().Text(), "U")
-	assert.Equal(t, len(arrow.Parameters()), 0)
-	assert.Equal(t, arrow.Modifiers().Nodes[0].Kind, ast.KindAsyncKeyword)
-	assert.Equal(t, arrow.Type().AsTypeReferenceNode().TypeName.Text(), "T")
-	assert.Equal(t, arrow.Body().Kind, ast.KindNumericLiteral)
-}
-
-func TestConditionalParenthesizedTypedArrowPriority(t *testing.T) {
-	t.Parallel()
-	file := parser.ParseSourceFile(ast.SourceFileParseOptions{
-		FileName: "/a.ts",
-		PathKey:  "/a.ts",
-	}, "const a = b ? (c) : d => (e): T => 0;", core.ScriptKindTS)
-	assert.Equal(t, len(file.Diagnostics()), 0)
-	declaration := file.Statements.Nodes[0].AsVariableStatement().DeclarationList.AsVariableDeclarationList().Declarations.Nodes[0]
-	conditional := declaration.Initializer().AsConditionalExpression()
-	assert.Equal(t, conditional.WhenTrue.Kind, ast.KindArrowFunction)
-	assert.Equal(t, conditional.WhenTrue.Type().AsTypeReferenceNode().TypeName.Text(), "d")
-	assert.Equal(t, conditional.WhenTrue.Body().Kind, ast.KindParenthesizedExpression)
-	assert.Equal(t, conditional.WhenTrue.Body().Expression().Text(), "e")
-	assert.Equal(t, conditional.WhenFalse.Kind, ast.KindArrowFunction)
-	assert.Equal(t, conditional.WhenFalse.Parameters()[0].Name().Text(), "T")
-	assert.Equal(t, conditional.WhenFalse.Body().Kind, ast.KindNumericLiteral)
-}
-
-func TestConditionalGenericTypedArrowPriority(t *testing.T) {
-	t.Parallel()
-	file := parser.ParseSourceFile(ast.SourceFileParseOptions{
-		FileName: "/a.ts",
-		PathKey:  "/a.ts",
-	}, "const a = b ? async<U>() : d => (e): T => 0;", core.ScriptKindTS)
-	assert.Equal(t, len(file.Diagnostics()), 0)
-	declaration := file.Statements.Nodes[0].AsVariableStatement().DeclarationList.AsVariableDeclarationList().Declarations.Nodes[0]
-	conditional := declaration.Initializer().AsConditionalExpression()
-	assert.Equal(t, conditional.WhenTrue.Kind, ast.KindArrowFunction)
-	assert.Equal(t, len(conditional.WhenTrue.TypeParameterList().Nodes), 1)
-	assert.Equal(t, conditional.WhenTrue.Type().AsTypeReferenceNode().TypeName.Text(), "d")
-	assert.Equal(t, conditional.WhenTrue.Body().Kind, ast.KindParenthesizedExpression)
-	assert.Equal(t, conditional.WhenTrue.Body().Expression().Text(), "e")
-	assert.Equal(t, conditional.WhenFalse.Kind, ast.KindArrowFunction)
-	assert.Equal(t, conditional.WhenFalse.Parameters()[0].Name().Text(), "T")
-	assert.Equal(t, conditional.WhenFalse.Body().Kind, ast.KindNumericLiteral)
-}
-
-func TestConditionalAsyncArrowWithConditionalBody(t *testing.T) {
-	t.Parallel()
-	file := parser.ParseSourceFile(ast.SourceFileParseOptions{
-		FileName: "/a.ts",
-		PathKey:  "/a.ts",
-	}, "const a = b ? async (): Promise<number> => b ? async() : 0 : () => 0;", core.ScriptKindTS)
-	assert.Equal(t, len(file.Diagnostics()), 0)
-	declaration := file.Statements.Nodes[0].AsVariableStatement().DeclarationList.AsVariableDeclarationList().Declarations.Nodes[0]
-	conditional := declaration.Initializer().AsConditionalExpression()
-	assert.Equal(t, conditional.WhenTrue.Kind, ast.KindArrowFunction)
-	assert.Equal(t, conditional.WhenFalse.Kind, ast.KindArrowFunction)
-	assert.Equal(t, conditional.WhenTrue.Body().Kind, ast.KindConditionalExpression)
-	body := conditional.WhenTrue.Body().AsConditionalExpression()
-	assert.Equal(t, body.WhenTrue.Kind, ast.KindCallExpression)
-	assert.Equal(t, body.WhenFalse.Kind, ast.KindNumericLiteral)
-}
-
-func TestConditionalAsyncArrowBody(t *testing.T) {
-	t.Parallel()
-	file := parser.ParseSourceFile(ast.SourceFileParseOptions{
-		FileName: "/a.ts",
-		PathKey:  "/a.ts",
-	}, "const a = b ? async () => async() : c => c;", core.ScriptKindTS)
-	assert.Equal(t, len(file.Diagnostics()), 0)
-	assert.Equal(t, len(file.JSDiagnostics()), 0)
-	declaration := file.Statements.Nodes[0].AsVariableStatement().DeclarationList.AsVariableDeclarationList().Declarations.Nodes[0]
-	conditional := declaration.Initializer().AsConditionalExpression()
-	assert.Equal(t, conditional.WhenTrue.Kind, ast.KindArrowFunction)
-	assert.Equal(t, conditional.WhenTrue.Body().Kind, ast.KindCallExpression)
-	assert.Equal(t, conditional.WhenTrue.Body().Expression().Text(), "async")
-	assert.Equal(t, conditional.WhenFalse.Kind, ast.KindArrowFunction)
-}
-
-func TestConditionalAsyncArrowBodyJS(t *testing.T) {
-	t.Parallel()
-	file := parser.ParseSourceFile(ast.SourceFileParseOptions{
-		FileName: "/a.js",
-		PathKey:  "/a.js",
-	}, "const a = b ? async () => async() : c => c;", core.ScriptKindJS)
-	assert.Equal(t, len(file.Diagnostics()), 0)
-	assert.Equal(t, len(file.JSDiagnostics()), 0)
-	declaration := file.Statements.Nodes[0].AsVariableStatement().DeclarationList.AsVariableDeclarationList().Declarations.Nodes[0]
-	conditional := declaration.Initializer().AsConditionalExpression()
-	assert.Equal(t, conditional.WhenTrue.Kind, ast.KindArrowFunction)
-	assert.Equal(t, conditional.WhenTrue.Body().Kind, ast.KindCallExpression)
-	assert.Equal(t, conditional.WhenTrue.Body().Expression().Text(), "async")
-	assert.Equal(t, conditional.WhenFalse.Kind, ast.KindArrowFunction)
-}
-
-func TestConditionalAsyncRestArrowBody(t *testing.T) {
-	t.Parallel()
-	file := parser.ParseSourceFile(ast.SourceFileParseOptions{
-		FileName: "/a.ts",
-		PathKey:  "/a.ts",
-	}, "const a = b ? async (...c) => async() : d => d;", core.ScriptKindTS)
-	assert.Equal(t, len(file.Diagnostics()), 0)
-	assert.Equal(t, len(file.JSDiagnostics()), 0)
-	declaration := file.Statements.Nodes[0].AsVariableStatement().DeclarationList.AsVariableDeclarationList().Declarations.Nodes[0]
-	conditional := declaration.Initializer().AsConditionalExpression()
-	assert.Equal(t, conditional.WhenTrue.Kind, ast.KindArrowFunction)
-	assert.Equal(t, conditional.WhenTrue.Body().Kind, ast.KindCallExpression)
-	assert.Equal(t, conditional.WhenTrue.Body().Expression().Text(), "async")
-	assert.Equal(t, conditional.WhenFalse.Kind, ast.KindArrowFunction)
-}
-
-func TestConditionalAsyncRestArrowBodyJS(t *testing.T) {
-	t.Parallel()
-	file := parser.ParseSourceFile(ast.SourceFileParseOptions{
-		FileName: "/a.js",
-		PathKey:  "/a.js",
-	}, "const a = b ? async (...c) => async() : d => d;", core.ScriptKindJS)
-	assert.Equal(t, len(file.Diagnostics()), 0)
-	assert.Equal(t, len(file.JSDiagnostics()), 0)
-	declaration := file.Statements.Nodes[0].AsVariableStatement().DeclarationList.AsVariableDeclarationList().Declarations.Nodes[0]
-	conditional := declaration.Initializer().AsConditionalExpression()
-	assert.Equal(t, conditional.WhenTrue.Kind, ast.KindArrowFunction)
-	assert.Equal(t, conditional.WhenTrue.Body().Kind, ast.KindCallExpression)
-	assert.Equal(t, conditional.WhenTrue.Body().Expression().Text(), "async")
-	assert.Equal(t, conditional.WhenFalse.Kind, ast.KindArrowFunction)
-}
-
-func TestConditionalArrowBody(t *testing.T) {
-	t.Parallel()
-	file := parser.ParseSourceFile(ast.SourceFileParseOptions{
-		FileName: "/a.ts",
-		PathKey:  "/a.ts",
-	}, "const a = b ? () => async() : c => c;", core.ScriptKindTS)
-	assert.Equal(t, len(file.Diagnostics()), 0)
-	assert.Equal(t, len(file.JSDiagnostics()), 0)
-	declaration := file.Statements.Nodes[0].AsVariableStatement().DeclarationList.AsVariableDeclarationList().Declarations.Nodes[0]
-	conditional := declaration.Initializer().AsConditionalExpression()
-	assert.Equal(t, conditional.WhenTrue.Kind, ast.KindArrowFunction)
-	assert.Equal(t, conditional.WhenTrue.Body().Kind, ast.KindCallExpression)
-	assert.Equal(t, conditional.WhenTrue.Body().Expression().Text(), "async")
-	assert.Equal(t, conditional.WhenFalse.Kind, ast.KindArrowFunction)
-}
-
-func TestConditionalArrowBodyJS(t *testing.T) {
-	t.Parallel()
-	file := parser.ParseSourceFile(ast.SourceFileParseOptions{
-		FileName: "/a.js",
-		PathKey:  "/a.js",
-	}, "const a = b ? () => async() : c => c;", core.ScriptKindJS)
-	assert.Equal(t, len(file.Diagnostics()), 0)
-	assert.Equal(t, len(file.JSDiagnostics()), 0)
-	declaration := file.Statements.Nodes[0].AsVariableStatement().DeclarationList.AsVariableDeclarationList().Declarations.Nodes[0]
-	conditional := declaration.Initializer().AsConditionalExpression()
-	assert.Equal(t, conditional.WhenTrue.Kind, ast.KindArrowFunction)
-	assert.Equal(t, conditional.WhenTrue.Body().Kind, ast.KindCallExpression)
-	assert.Equal(t, conditional.WhenTrue.Body().Expression().Text(), "async")
-	assert.Equal(t, conditional.WhenFalse.Kind, ast.KindArrowFunction)
-}
-
-func TestConditionalTypedAsyncArrowBody(t *testing.T) {
-	t.Parallel()
-	arrow := checkConditionalTypedAsyncArrowBody(t, "const a = b ? async (c: number): Promise<number> => async() : d => d;")
-	assert.Equal(t, arrow.Parameters()[0].Type().Kind, ast.KindNumberKeyword)
-}
-
-func TestConditionalTypedAsyncArrowBodyWithEmptyParameters(t *testing.T) {
-	t.Parallel()
-	checkConditionalTypedAsyncArrowBody(t, "const a = b ? async (): Promise<number> => async() : d => d;")
-}
-
-func TestConditionalTypedAsyncArrowBodyWithSpreadCall(t *testing.T) {
-	t.Parallel()
-	checkConditionalTypedAsyncArrowBody(t, "const a = b ? async (): Promise<number> => async(...c) : d => d;")
-}
-
-func TestConditionalTypedAsyncArrowBodyWithRestParameter(t *testing.T) {
-	t.Parallel()
-	checkConditionalTypedAsyncArrowBody(t, "const a = b ? async (...c): Promise<number> => async() : d => d;")
-}
-
-func TestConditionalTypedAsyncArrowBodyWithTypedRestParameter(t *testing.T) {
-	t.Parallel()
-	arrow := checkConditionalTypedAsyncArrowBody(t, "const a = b ? async (...c: number[]): Promise<number> => async() : d => d;")
-	assert.Equal(t, arrow.Parameters()[0].Type().Kind, ast.KindArrayType)
-}
-
-func TestConditionalTypedAsyncArrowBodyWithTypeParameter(t *testing.T) {
-	t.Parallel()
-	checkConditionalTypedAsyncArrowBody(t, "const a = b ? async <T>(): Promise<number> => async() : d => d;")
-}
-
-func TestConditionalTypedAsyncArrowBodyWithParenthesizedReturnType(t *testing.T) {
-	t.Parallel()
-	checkConditionalTypedAsyncArrowBody(t, "const a = b ? async (): (Promise<number>) => async() : d => d;")
-}
-
-func TestConditionalAsyncCallWithFunction(t *testing.T) {
-	t.Parallel()
-	checkConditionalAsyncCallWithFunction(t, "/a.ts")
-}
-
-func TestConditionalAsyncCallWithFunctionJS(t *testing.T) {
-	t.Parallel()
-	checkConditionalAsyncCallWithFunction(t, "/a.js")
-}
-
-func TestConditionalExpressionFollowedByBlock(t *testing.T) {
-	t.Parallel()
-	const source = "const a = b ? async() : 0\n{}"
-	checkConditionalExpressionFollowedByBlock(t, "/a.ts", source, ast.KindCallExpression, ast.KindNumericLiteral)
-	checkConditionalExpressionFollowedByBlock(t, "/a.js", source, ast.KindCallExpression, ast.KindNumericLiteral)
-}
-
-func TestConditionalExpressionWithObjectFollowedByBlock(t *testing.T) {
-	t.Parallel()
-	const source = "const a = b ? async() : {}\n{}"
-	checkConditionalExpressionFollowedByBlock(t, "/a.ts", source, ast.KindCallExpression, ast.KindObjectLiteralExpression)
-	checkConditionalExpressionFollowedByBlock(t, "/a.js", source, ast.KindCallExpression, ast.KindObjectLiteralExpression)
-}
-
-func TestConditionalExpressionWithStringFollowedByBlock(t *testing.T) {
-	t.Parallel()
-	const source = "const a = b ? async() : \"c\"\n{}"
-	checkConditionalExpressionFollowedByBlock(t, "/a.ts", source, ast.KindCallExpression, ast.KindStringLiteral)
-	checkConditionalExpressionFollowedByBlock(t, "/a.js", source, ast.KindCallExpression, ast.KindStringLiteral)
-}
-
-func TestConditionalSpreadCallFollowedByBlock(t *testing.T) {
-	t.Parallel()
-	const source = "const a = b ? async(...c) : 0\n{}"
-	checkConditionalExpressionFollowedByBlock(t, "/a.ts", source, ast.KindCallExpression, ast.KindNumericLiteral)
-	checkConditionalExpressionFollowedByBlock(t, "/a.js", source, ast.KindCallExpression, ast.KindNumericLiteral)
-}
-
-func TestConditionalParenthesizedExpressionFollowedByBlock(t *testing.T) {
-	t.Parallel()
-	const source = "const a = b ? (c) : 0\n{}"
-	checkConditionalExpressionFollowedByBlock(t, "/a.ts", source, ast.KindParenthesizedExpression, ast.KindNumericLiteral)
-	checkConditionalExpressionFollowedByBlock(t, "/a.js", source, ast.KindParenthesizedExpression, ast.KindNumericLiteral)
-}
-
-func TestConditionalExpressionWithSemicolonFollowedByBlock(t *testing.T) {
-	t.Parallel()
-	const source = "const a = b ? async() : 0;\n{}"
-	checkConditionalExpressionFollowedByBlock(t, "/a.ts", source, ast.KindCallExpression, ast.KindNumericLiteral)
-	checkConditionalExpressionFollowedByBlock(t, "/a.js", source, ast.KindCallExpression, ast.KindNumericLiteral)
 }
 
 func TestConditionalAsyncCallJSDoc(t *testing.T) {
@@ -704,80 +341,57 @@ func TestConditionalAsyncCallJSDocTypedef(t *testing.T) {
 	assert.Equal(t, len(arrow.JSDoc(file)), 1)
 }
 
-func TestConditionalAsyncCallRecovery(t *testing.T) {
+func TestConditionalAsyncCallCommentDirectives(t *testing.T) {
 	t.Parallel()
-	checkConditionalArrowRecovery(t, "const a = b ? async(...c: number[]): Promise<number> => 0;")
-}
-
-func TestConditionalTypedAsyncArrowRecovery(t *testing.T) {
-	t.Parallel()
-	checkConditionalArrowRecovery(t, "const a = b ? async (): Promise<number> {} : d => d;")
-}
-
-func TestConditionalTypedArrowRecovery(t *testing.T) {
-	t.Parallel()
-	checkConditionalArrowRecovery(t, "const a = b ? (c): number {} : d => d;")
-}
-
-func checkConditionalTypedAsyncArrowBody(t *testing.T, source string) *ast.Node {
-	t.Helper()
-	file := parser.ParseSourceFile(ast.SourceFileParseOptions{
-		FileName: "/a.ts",
-		PathKey:  "/a.ts",
-	}, source, core.ScriptKindTS)
-	assert.Equal(t, len(file.Diagnostics()), 0)
-	declaration := file.Statements.Nodes[0].AsVariableStatement().DeclarationList.AsVariableDeclarationList().Declarations.Nodes[0]
-	conditional := declaration.Initializer().AsConditionalExpression()
-	assert.Equal(t, conditional.WhenTrue.Kind, ast.KindArrowFunction)
-	assert.Assert(t, conditional.WhenTrue.Type() != nil)
-	assert.Equal(t, conditional.WhenTrue.Body().Kind, ast.KindCallExpression)
-	assert.Equal(t, conditional.WhenTrue.Body().Expression().Text(), "async")
-	assert.Equal(t, conditional.WhenTrue.Body().Flags&ast.NodeFlagsAwaitContext, ast.NodeFlagsAwaitContext)
-	assert.Equal(t, conditional.WhenFalse.Kind, ast.KindArrowFunction)
-	assert.Equal(t, conditional.WhenFalse.Parameters()[0].Name().Text(), "d")
-	return conditional.WhenTrue
-}
-
-func checkConditionalAsyncCallWithFunction(t *testing.T, fileName tspath.RootedFilePath) {
-	t.Helper()
-	file := parser.ParseSourceFile(ast.SourceFileParseOptions{
-		FileName: fileName,
-		PathKey:  tspath.PathKeyFromCanonical(fileName.AsString()),
-	}, "const a = b ? async() : function() {};", core.GetScriptKindFromFileName(fileName))
-	assert.Equal(t, len(file.Diagnostics()), 0)
-	assert.Equal(t, len(file.JSDiagnostics()), 0)
-	declaration := file.Statements.Nodes[0].AsVariableStatement().DeclarationList.AsVariableDeclarationList().Declarations.Nodes[0]
-	conditional := declaration.Initializer().AsConditionalExpression()
-	assert.Equal(t, conditional.WhenTrue.Kind, ast.KindCallExpression)
-	assert.Equal(t, conditional.WhenFalse.Kind, ast.KindFunctionExpression)
-}
-
-func checkConditionalExpressionFollowedByBlock(t *testing.T, fileName tspath.RootedFilePath, source string, whenTrueKind ast.Kind, whenFalseKind ast.Kind) {
-	t.Helper()
-	file := parser.ParseSourceFile(ast.SourceFileParseOptions{
-		FileName: fileName,
-		PathKey:  tspath.PathKeyFromCanonical(fileName.AsString()),
-	}, source, core.GetScriptKindFromFileName(fileName))
-	assert.Equal(t, len(file.Diagnostics()), 0, fileName)
-	assert.Equal(t, len(file.JSDiagnostics()), 0, fileName)
+	file := parsetestutil.ParseTypeScript(`const r = a ? async() : x =>
+        // @ts-expect-error
+        a ? async() : x =>
+        // @ts-ignore
+        0;
+    const s = a ? async(x = (
+        // @ts-expect-error
+        b
+    ),
+        // @ts-ignore
+        c
+    ): T => b : c;`, false)
+	parsetestutil.CheckDiagnostics(t, file)
+	assert.Equal(t, len(file.CommentDirectives), 4)
+	assert.Equal(t, file.CommentDirectives[0].Kind, ast.CommentDirectiveKindExpectError)
+	assert.Equal(t, file.CommentDirectives[1].Kind, ast.CommentDirectiveKindIgnore)
+	assert.Equal(t, file.CommentDirectives[2].Kind, ast.CommentDirectiveKindExpectError)
+	assert.Equal(t, file.CommentDirectives[3].Kind, ast.CommentDirectiveKindIgnore)
 	assert.Equal(t, len(file.Statements.Nodes), 2)
-	assert.Equal(t, file.Statements.Nodes[1].Kind, ast.KindBlock)
-	declaration := file.Statements.Nodes[0].AsVariableStatement().DeclarationList.AsVariableDeclarationList().Declarations.Nodes[0]
-	conditional := declaration.Initializer().AsConditionalExpression()
-	assert.Equal(t, conditional.WhenTrue.Kind, whenTrueKind)
-	assert.Equal(t, conditional.WhenFalse.Kind, whenFalseKind)
 }
 
-func checkConditionalArrowRecovery(t *testing.T, source string) {
-	t.Helper()
+func TestConditionalAsyncArrowBodyContext(t *testing.T) {
+	t.Parallel()
 	file := parser.ParseSourceFile(ast.SourceFileParseOptions{
 		FileName: "/a.ts",
 		PathKey:  "/a.ts",
-	}, source, core.ScriptKindTS)
-	assert.Equal(t, len(file.Diagnostics()), 1)
-	assert.Equal(t, file.Diagnostics()[0].Code(), diagnostics.X_0_expected.Code())
+	}, "const a = b ? async (): Promise<number> => async() : d => d;", core.ScriptKindTS)
+	assert.Equal(t, len(file.Diagnostics()), 0)
 	declaration := file.Statements.Nodes[0].AsVariableStatement().DeclarationList.AsVariableDeclarationList().Declarations.Nodes[0]
-	assert.Equal(t, declaration.Initializer().AsConditionalExpression().WhenTrue.Kind, ast.KindArrowFunction)
+	arrow := declaration.Initializer().AsConditionalExpression().WhenTrue
+	assert.Equal(t, arrow.Kind, ast.KindArrowFunction)
+	body := arrow.Body()
+	assert.Equal(t, body.Kind, ast.KindCallExpression)
+	assert.Equal(t, body.Flags&ast.NodeFlagsAwaitContext, ast.NodeFlagsAwaitContext)
+	assert.Equal(t, body.Flags&ast.NodeFlagsYieldContext, ast.NodeFlagsNone)
+}
+
+func TestConditionalAsyncArrowYieldContext(t *testing.T) {
+	t.Parallel()
+	expression := parseConditionalInGenerator(t, "a ? async (): T => a ? async (): T => async() : async() : yield b", core.ScriptKindTS)
+	assert.Equal(t, expression.WhenTrue.Kind, ast.KindArrowFunction)
+	assert.Equal(t, expression.WhenFalse.Kind, ast.KindYieldExpression)
+	assert.Assert(t, expression.WhenFalse.Flags&ast.NodeFlagsYieldContext != 0)
+	assert.Equal(t, expression.WhenFalse.Flags&ast.NodeFlagsAwaitContext, ast.NodeFlagsNone)
+	body := expression.WhenTrue.Body().AsConditionalExpression()
+	assert.Equal(t, body.WhenTrue.Kind, ast.KindArrowFunction)
+	assert.Equal(t, body.WhenFalse.Kind, ast.KindCallExpression)
+	assert.Assert(t, body.WhenFalse.Flags&ast.NodeFlagsAwaitContext != 0)
+	assert.Equal(t, body.WhenFalse.Flags&ast.NodeFlagsYieldContext, ast.NodeFlagsNone)
 }
 
 func TestParseStaticSourcePhaseImport(t *testing.T) {

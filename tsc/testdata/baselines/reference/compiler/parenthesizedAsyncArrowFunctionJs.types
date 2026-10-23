@@ -125,3 +125,235 @@ function* g() {
 >x : any
 }
 
+const d = { a: c };
+>d : { a: number[]; }
+>{ a: c } : { a: number[]; }
+>a : number[]
+>c : number[]
+
+const e = () => c;
+>e : () => number[]
+>() => c : () => number[]
+>c : number[]
+
+const f8 = async(...d.a);
+>f8 : number
+>async(...d.a) : number
+>async : (...c: any[]) => number
+>...d.a : number
+>d.a : number[]
+>d : { a: number[]; }
+>a : number[]
+
+const f9 = async(...e());
+>f9 : number
+>async(...e()) : number
+>async : (...c: any[]) => number
+>...e() : number
+>e() : number[]
+>e : () => number[]
+
+const f10 = async(...[b]);
+>f10 : number
+>async(...[b]) : number
+>async : (...c: any[]) => number
+>...[b] : number
+>[b] : [number]
+>b : 1
+
+const f11 = a ? async() : function() {};
+>f11 : number | (() => void)
+>a ? async() : function() {} : number | (() => void)
+>a : true
+>async() : number
+>async : (...c: any[]) => number
+>function() {} : () => void
+
+const f12 = a ? async() : "b"
+>f12 : number | "b"
+>a ? async() : "b" : number | "b"
+>a : true
+>async() : number
+>async : (...c: any[]) => number
+>"b" : "b"
+
+{}
+const f13 = a ? async(...c) : 0
+>f13 : number
+>a ? async(...c) : 0 : number
+>a : true
+>async(...c) : number
+>async : (...c: any[]) => number
+>...c : number
+>c : number[]
+>0 : 0
+
+{}
+const f14 = a ? (c) : 0
+>f14 : 0 | number[]
+>a ? (c) : 0 : 0 | number[]
+>a : true
+>(c) : number[]
+>c : number[]
+>0 : 0
+
+{}
+const f15 = a ? async() : 0;
+>f15 : number
+>a ? async() : 0 : number
+>a : true
+>async() : number
+>async : (...c: any[]) => number
+>0 : 0
+
+{}
+
+const f16 = a ? a ? async() : d => d : b;
+>f16 : number | ((d: any) => any)
+>a ? a ? async() : d => d : b : number | ((d: any) => any)
+>a : true
+>a ? async() : d => d : number | ((d: any) => any)
+>a : true
+>async() : number
+>async : (...c: any[]) => number
+>d => d : (d: any) => any
+>d : any
+>d : any
+>b : 1
+
+const f17 = a ? a ? async(b) : d => d : b;
+>f17 : number | ((d: any) => any)
+>a ? a ? async(b) : d => d : b : number | ((d: any) => any)
+>a : true
+>a ? async(b) : d => d : number | ((d: any) => any)
+>a : true
+>async(b) : number
+>async : (...c: any[]) => number
+>b : 1
+>d => d : (d: any) => any
+>d : any
+>d : any
+>b : 1
+
+const f18 = a ? a ? async(...c) : d => d : b;
+>f18 : number | ((d: any) => any)
+>a ? a ? async(...c) : d => d : b : number | ((d: any) => any)
+>a : true
+>a ? async(...c) : d => d : number | ((d: any) => any)
+>a : true
+>async(...c) : number
+>async : (...c: any[]) => number
+>...c : number
+>c : number[]
+>d => d : (d: any) => any
+>d : any
+>d : any
+>b : 1
+
+const f19 = a ? a ? a ? async() : d => d : b : b;
+>f19 : number | ((d: any) => any)
+>a ? a ? a ? async() : d => d : b : b : number | ((d: any) => any)
+>a : true
+>a ? a ? async() : d => d : b : number | ((d: any) => any)
+>a : true
+>a ? async() : d => d : number | ((d: any) => any)
+>a : true
+>async() : number
+>async : (...c: any[]) => number
+>d => d : (d: any) => any
+>d : any
+>d : any
+>b : 1
+>b : 1
+
+const f20 = a ? d => a ? (0) : a ? async(b) : async() : (d => d = a);
+>f20 : ((d: any) => number) | ((d: any) => boolean)
+>a ? d => a ? (0) : a ? async(b) : async() : (d => d = a) : ((d: any) => number) | ((d: any) => boolean)
+>a : true
+>d => a ? (0) : a ? async(b) : async() : (d: any) => number
+>d : any
+>a ? (0) : a ? async(b) : async() : number
+>a : true
+>(0) : 0
+>0 : 0
+>a ? async(b) : async() : number
+>a : true
+>async(b) : number
+>async : (...c: any[]) => number
+>b : 1
+>async() : number
+>async : (...c: any[]) => number
+>(d => d = a) : (d: any) => boolean
+>d => d = a : (d: any) => boolean
+>d : any
+>d = a : true
+>d : any
+>a : true
+
+const f21 = a ? d => d = async () => async() : (d => d = 0);
+>f21 : ((d: any) => () => Promise<number>) | ((d: any) => number)
+>a ? d => d = async () => async() : (d => d = 0) : ((d: any) => () => Promise<number>) | ((d: any) => number)
+>a : true
+>d => d = async () => async() : (d: any) => () => Promise<number>
+>d : any
+>d = async () => async() : () => Promise<number>
+>d : any
+>async () => async() : () => Promise<number>
+>async() : number
+>async : (...c: any[]) => number
+>(d => d = 0) : (d: any) => number
+>d => d = 0 : (d: any) => number
+>d : any
+>d = 0 : 0
+>d : any
+>0 : 0
+
+const f22 = h => a ? async(h = a ? async() : d => d) : d => d;
+>f22 : (h: any) => number | ((d: any) => any)
+>h => a ? async(h = a ? async() : d => d) : d => d : (h: any) => number | ((d: any) => any)
+>h : any
+>a ? async(h = a ? async() : d => d) : d => d : number | ((d: any) => any)
+>a : true
+>async(h = a ? async() : d => d) : number
+>async : (...c: any[]) => number
+>h = a ? async() : d => d : number | ((d: any) => any)
+>h : any
+>a ? async() : d => d : number | ((d: any) => any)
+>a : true
+>async() : number
+>async : (...c: any[]) => number
+>d => d : (d: any) => any
+>d : any
+>d : any
+>d => d : (d: any) => any
+>d : any
+>d : any
+
+const f23 = a ? async() : (d => d);
+>f23 : number | ((d: any) => any)
+>a ? async() : (d => d) : number | ((d: any) => any)
+>a : true
+>async() : number
+>async : (...c: any[]) => number
+>(d => d) : (d: any) => any
+>d => d : (d: any) => any
+>d : any
+>d : any
+
+const f24 = a ? async() : d => (a ? async() : d => d);
+>f24 : number | ((d: any) => number | ((d: any) => any))
+>a ? async() : d => (a ? async() : d => d) : number | ((d: any) => number | ((d: any) => any))
+>a : true
+>async() : number
+>async : (...c: any[]) => number
+>d => (a ? async() : d => d) : (d: any) => number | ((d: any) => any)
+>d : any
+>(a ? async() : d => d) : number | ((d: any) => any)
+>a ? async() : d => d : number | ((d: any) => any)
+>a : true
+>async() : number
+>async : (...c: any[]) => number
+>d => d : (d: any) => any
+>d : any
+>d : any
+
