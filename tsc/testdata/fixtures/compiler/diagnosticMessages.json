@@ -919,6 +919,10 @@
         "category": "Error",
         "code": 1280
     },
+    "JSX cannot be used in a script file when using automatic JSX runtime (jsx: 'react-jsx' or 'react-jsxdev'). Add 'export {}' to make this a module, or use a module file.": {
+        "category": "Error",
+        "code": 1281
+    },
     "Cannot access '{0}' from another file without qualification when '{1}' is enabled. Use '{2}' instead.": {
         "category": "Error",
         "code": 1281
