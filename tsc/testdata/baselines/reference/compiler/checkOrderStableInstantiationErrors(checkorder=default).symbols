@@ -46,3 +46,45 @@ export let b: Recur<5, "a">;
 >b : Symbol(b, Decl(b.ts, 1, 10))
 >Recur : Symbol(Recur, Decl(b.ts, 0, 8))
 
+=== c.ts ===
+class T<A> {
+>T : Symbol(T, Decl(c.ts, 0, 0))
+>A : Symbol(A, Decl(c.ts, 0, 8))
+
+    declare a: A;
+>a : Symbol(T.a, Decl(c.ts, 0, 12))
+>A : Symbol(A, Decl(c.ts, 0, 8))
+
+    declare b: any;
+>b : Symbol(T.b, Decl(c.ts, 1, 17))
+}
+class L<RT extends { a: 'a' | 'b', b: any }> extends T<RT[RT['a']]> {}
+>L : Symbol(L, Decl(c.ts, 3, 1))
+>RT : Symbol(RT, Decl(c.ts, 4, 8))
+>a : Symbol(a, Decl(c.ts, 4, 20))
+>b : Symbol(b, Decl(c.ts, 4, 34))
+>T : Symbol(T, Decl(c.ts, 0, 0))
+>RT : Symbol(RT, Decl(c.ts, 4, 8))
+>RT : Symbol(RT, Decl(c.ts, 4, 8))
+
+export class X extends L<X> {
+>X : Symbol(X, Decl(c.ts, 4, 70))
+>L : Symbol(L, Decl(c.ts, 3, 1))
+>X : Symbol(X, Decl(c.ts, 4, 70))
+
+    declare a: 'a' | 'b';
+>a : Symbol(X.a, Decl(c.ts, 5, 29))
+
+    declare b: number;
+>b : Symbol(X.b, Decl(c.ts, 6, 25))
+
+    m() {
+>m : Symbol(X.m, Decl(c.ts, 7, 22))
+
+        this.a;
+>this.a : Symbol(X.a, Decl(c.ts, 5, 29))
+>this : Symbol(X, Decl(c.ts, 4, 70))
+>a : Symbol(X.a, Decl(c.ts, 5, 29))
+    }
+}
+

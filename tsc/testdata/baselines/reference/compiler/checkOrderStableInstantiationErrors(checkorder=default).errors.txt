@@ -1,4 +1,5 @@
 a.ts(2,15): error TS2589: Type instantiation is excessively deep and possibly infinite.
+c.ts(10,9): error TS5114: Instantiations of type 'T' appear infinitely circular.
 
 
 ==== lib.ts (0 errors) ====
@@ -18,4 +19,20 @@ a.ts(2,15): error TS2589: Type instantiation is excessively deep and possibly in
 ==== b.ts (0 errors) ====
     import { Recur } from "./lib";
     export let b: Recur<5, "a">;
+    
+==== c.ts (1 errors) ====
+    class T<A> {
+        declare a: A;
+        declare b: any;
+    }
+    class L<RT extends { a: 'a' | 'b', b: any }> extends T<RT[RT['a']]> {}
+    export class X extends L<X> {
+        declare a: 'a' | 'b';
+        declare b: number;
+        m() {
+            this.a;
+            ~~~~~~
+!!! error TS5114: Instantiations of type 'T' appear infinitely circular.
+        }
+    }
     

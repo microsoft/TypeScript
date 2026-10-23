@@ -26,3 +26,39 @@ import { Recur } from "./lib";
 export let b: Recur<5, "a">;
 >b : any
 
+=== c.ts ===
+class T<A> {
+>T : T<A>
+
+    declare a: A;
+>a : A
+
+    declare b: any;
+>b : any
+}
+class L<RT extends { a: 'a' | 'b', b: any }> extends T<RT[RT['a']]> {}
+>L : L<RT>
+>a : "a" | "b"
+>b : any
+>T : T<RT[RT["a"]]>
+
+export class X extends L<X> {
+>X : X
+>L : L<X>
+
+    declare a: 'a' | 'b';
+>a : "a" | "b"
+
+    declare b: number;
+>b : number
+
+    m() {
+>m : () => void
+
+        this.a;
+>this.a : "a" | "b"
+>this : this
+>a : "a" | "b"
+    }
+}
+

@@ -16,6 +16,20 @@ export let a: Recur<5, "a">;
 import { Recur } from "./lib";
 export let b: Recur<5, "a">;
 
+//// [c.ts]
+class T<A> {
+    declare a: A;
+    declare b: any;
+}
+class L<RT extends { a: 'a' | 'b', b: any }> extends T<RT[RT['a']]> {}
+export class X extends L<X> {
+    declare a: 'a' | 'b';
+    declare b: number;
+    m() {
+        this.a;
+    }
+}
+
 
 //// [lib.js]
 export {};
@@ -23,3 +37,13 @@ export {};
 export let a;
 //// [b.js]
 export let b;
+//// [c.js]
+class T {
+}
+class L extends T {
+}
+export class X extends L {
+    m() {
+        this.a;
+    }
+}
