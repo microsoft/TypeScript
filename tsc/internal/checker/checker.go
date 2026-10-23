@@ -17885,7 +17885,7 @@ func (b *keyBuilder) writeAlias(alias *TypeAlias) {
 	}
 }
 
-func (b *keyBuilder) writeGenericTypeReferences(source *Type, target *Type, ignoreConstraints bool) bool {
+func (b *keyBuilder) writeGenericTypeReferences(c *Checker, source *Type, target *Type, ignoreConstraints bool) bool {
 	var constrained bool
 	typeParameters := make([]*Type, 0, 8)
 	var writeTypeReference func(*Type, int)
@@ -17893,7 +17893,7 @@ func (b *keyBuilder) writeGenericTypeReferences(source *Type, target *Type, igno
 		b.writeType(ref.Target())
 		for _, t := range ref.AsTypeReference().resolvedTypeArguments {
 			if t.flags&TypeFlagsTypeParameter != 0 {
-				if ignoreConstraints || t.checker.getConstraintOfTypeParameter(t) == nil {
+				if ignoreConstraints || c.getConstraintOfTypeParameter(t) == nil {
 					index := slices.Index(typeParameters, t)
 					if index < 0 {
 						index = len(typeParameters)
@@ -17904,7 +17904,7 @@ func (b *keyBuilder) writeGenericTypeReferences(source *Type, target *Type, igno
 					continue
 				}
 				constrained = true
-			} else if depth < 4 && isTypeReferenceWithGenericArguments(t) {
+			} else if depth < 4 && c.isTypeReferenceWithGenericArguments(t) {
 				b.writeByte('<')
 				writeTypeReference(t, depth+1)
 				b.writeByte('>')
@@ -18047,15 +18047,15 @@ func getConditionalTypeKey(typeArguments []*Type, alias *TypeAlias, forConstrain
 	return b.hash()
 }
 
-func getRelationKey(source *Type, target *Type, intersectionState IntersectionState, isIdentity bool, ignoreConstraints bool) (CacheHashKey, bool) {
+func (c *Checker) getRelationKey(source *Type, target *Type, intersectionState IntersectionState, isIdentity bool, ignoreConstraints bool) (CacheHashKey, bool) {
 	if isIdentity && source.id > target.id {
 		source, target = target, source
 	}
 	var b keyBuilder
 	var constrained bool
-	if isTypeReferenceWithGenericArguments(source) && isTypeReferenceWithGenericArguments(target) {
+	if c.isTypeReferenceWithGenericArguments(source) && c.isTypeReferenceWithGenericArguments(target) {
 		b.writeByte('g')
-		constrained = b.writeGenericTypeReferences(source, target, ignoreConstraints)
+		constrained = b.writeGenericTypeReferences(c, source, target, ignoreConstraints)
 	} else {
 		b.writeByte('s')
 		b.writeType(source)
@@ -18074,9 +18074,9 @@ func getNodeListKey(nodes []*ast.Node) CacheHashKey {
 	return b.hash()
 }
 
-func isTypeReferenceWithGenericArguments(t *Type) bool {
-	return isNonDeferredTypeReference(t) && core.Some(t.checker.getTypeArguments(t), func(t *Type) bool {
-		return t.flags&TypeFlagsTypeParameter != 0 || isTypeReferenceWithGenericArguments(t)
+func (c *Checker) isTypeReferenceWithGenericArguments(t *Type) bool {
+	return isNonDeferredTypeReference(t) && core.Some(c.getTypeArguments(t), func(t *Type) bool {
+		return t.flags&TypeFlagsTypeParameter != 0 || c.isTypeReferenceWithGenericArguments(t)
 	})
 }
 
@@ -19610,6 +19610,7 @@ func (c *Checker) resolveObjectTypeMembers(t *Type) {
 	}
 	c.setStructuredTypeMembers(t, members, callSignatures, constructSignatures, indexInfos)
 	lazyState := c.lazyStateArena.New()
+	lazyState.checker = c
 	lazyState.layout = layout
 	lazyState.mapper = mapper
 	lazyState.baseTypes = instantiatedBaseTypes
@@ -21269,7 +21270,7 @@ func (c *Checker) resolveAnonymousTypeMembers(t *Type) {
 		}
 	}
 	if indexInfos != nil || d.extra != nil {
-		d.ensureExtra().indexInfos = indexInfos
+		d.ensureExtra(c).indexInfos = indexInfos
 	}
 	// We resolve the members before computing the signatures because a signature may use
 	// typeof with a qualified name expression that circularly references the type we are
@@ -21278,7 +21279,7 @@ func (c *Checker) resolveAnonymousTypeMembers(t *Type) {
 	if symbol.Flags()&(ast.SymbolFlagsFunction|ast.SymbolFlagsMethod) != 0 {
 		signatures := c.getSignaturesOfSymbol(symbol)
 		if signatures != nil || d.extra != nil {
-			extra := d.ensureExtra()
+			extra := d.ensureExtra(c)
 			extra.signatures = signatures
 			extra.callSignatureCount = len(signatures)
 		}
@@ -21291,7 +21292,7 @@ func (c *Checker) resolveAnonymousTypeMembers(t *Type) {
 			constructSignatures = c.getDefaultConstructSignatures(classType)
 		}
 		if len(constructSignatures) != 0 {
-			extra := d.ensureExtra()
+			extra := d.ensureExtra(c)
 			extra.signatures = append(extra.signatures, constructSignatures...)
 		}
 	}
@@ -24495,7 +24496,7 @@ func (c *Checker) getInferTypeParameters(node *ast.Node) []*Type {
 			result = append(result, c.getDeclaredTypeOfSymbol(symbol))
 		}
 	}
-	slices.SortFunc(result, CompareTypes)
+	slices.SortFunc(result, c.CompareTypes)
 	return result
 }
 
@@ -25704,9 +25705,8 @@ func (c *Checker) newType(flags TypeFlags, objectFlags ObjectFlags, t *Type, kin
 	t.objectFlags = objectFlags &^ (ObjectFlagsCouldContainTypeVariablesComputed | ObjectFlagsCouldContainTypeVariables | ObjectFlagsMembersResolved)
 	t.id = TypeId(c.TypeCount)
 	t.kind = kind
-	t.checker = c
 	if c.tracer != nil {
-		c.tracer.RecordType(t)
+		c.tracer.RecordType(c, t)
 	}
 	return t
 }
@@ -25860,7 +25860,7 @@ func (c *Checker) setStructuredTypeSignatures(data *StructuredType, callSignatur
 	if data.extra == nil && callSignatures == nil && constructSignatures == nil && indexInfos == nil {
 		return
 	}
-	extra := data.ensureExtra()
+	extra := data.ensureExtra(c)
 	if len(callSignatures) != 0 {
 		if len(constructSignatures) != 0 {
 			extra.signatures = core.Concatenate(callSignatures, constructSignatures)
@@ -26434,7 +26434,7 @@ func (c *Checker) getUnionTypeWorker(types []*Type, unionReduction UnionReductio
 		namedUnions := c.addNamedUnions(nil, types)
 		var reducedTypes []*Type
 		for _, t := range typeSet {
-			if !core.Some(namedUnions, func(u *Type) bool { return containsType(u.Types(), t) }) {
+			if !core.Some(namedUnions, func(u *Type) bool { return c.containsType(u.Types(), t) }) {
 				reducedTypes = append(reducedTypes, t)
 			}
 		}
@@ -26449,7 +26449,7 @@ func (c *Checker) getUnionTypeWorker(types []*Type, unionReduction UnionReductio
 		}
 		if namedTypesCount+len(reducedTypes) == len(typeSet) {
 			for _, t := range namedUnions {
-				reducedTypes, _ = insertType(reducedTypes, t)
+				reducedTypes, _ = c.insertType(reducedTypes, t)
 			}
 			origin = c.newUnionType(ObjectFlagsNone, reducedTypes)
 		}
@@ -26533,7 +26533,7 @@ func (c *Checker) addTypesToUnion(sourceTypes []*Type, types []*Type) ([]*Type, 
 	}
 	if len(types) >= 2 {
 		// Sort and deduplicate types
-		slices.SortStableFunc(types, CompareTypes)
+		slices.SortStableFunc(types, c.CompareTypes)
 		unique := 1
 		for _, t := range types[1:] {
 			if t != types[unique-1] {
@@ -26572,7 +26572,7 @@ func (c *Checker) removeRedundantLiteralTypes(types []*Type, includes TypeFlags,
 			flags&TypeFlagsBigIntLiteral != 0 && includes&TypeFlagsBigInt != 0 ||
 			flags&TypeFlagsUniqueESSymbol != 0 && includes&TypeFlagsESSymbol != 0 ||
 			reduceVoidUndefined && flags&TypeFlagsUndefined != 0 && includes&TypeFlagsVoid != 0 ||
-			isFreshLiteralType(t) && containsType(types, t.AsLiteralType().regularType)
+			isFreshLiteralType(t) && c.containsType(types, t.AsLiteralType().regularType)
 		if remove {
 			types = slices.Delete(types, i, i+1)
 		}
@@ -26629,14 +26629,14 @@ func (c *Checker) removeConstrainedTypeVariables(types []*Type) []*Type {
 					index = 1
 				}
 				if t.AsIntersectionType().types[index] == typeVariable {
-					primitives, _ = insertType(primitives, t.AsIntersectionType().types[1-index])
+					primitives, _ = c.insertType(primitives, t.AsIntersectionType().types[1-index])
 				}
 			}
 		}
 		// If every constituent in the type variable's constraint is covered by an intersection of the type
 		// variable and that constituent, remove those intersections and substitute the type variable.
 		constraint := c.getBaseConstraintOfType(typeVariable)
-		if everyType(constraint, func(t *Type) bool { return containsType(primitives, t) }) {
+		if everyType(constraint, func(t *Type) bool { return c.containsType(primitives, t) }) {
 			i := len(types)
 			for i > 0 {
 				i--
@@ -26646,12 +26646,12 @@ func (c *Checker) removeConstrainedTypeVariables(types []*Type) []*Type {
 					if t.AsIntersectionType().types[0].flags&TypeFlagsTypeVariable == 0 {
 						index = 1
 					}
-					if t.AsIntersectionType().types[index] == typeVariable && containsType(primitives, t.AsIntersectionType().types[1-index]) {
+					if t.AsIntersectionType().types[index] == typeVariable && c.containsType(primitives, t.AsIntersectionType().types[1-index]) {
 						types = slices.Delete(types, i, i+1)
 					}
 				}
 			}
-			types, _ = insertType(types, typeVariable)
+			types, _ = c.insertType(types, typeVariable)
 		}
 	}
 	return types
@@ -27097,7 +27097,7 @@ func (c *Checker) intersectUnionsOfPrimitiveTypes(types []*Type) ([]*Type, bool)
 	for _, u := range unionTypes {
 		for _, t := range u.Types() {
 			var inserted bool
-			if checked, inserted = insertType(checked, t); inserted {
+			if checked, inserted = c.insertType(checked, t); inserted {
 				if c.eachUnionContains(unionTypes, t) {
 					// undefinedType/missingType are always sorted first so we leverage that here
 					if t == c.undefinedType && len(result) != 0 && result[0] == c.missingType {
@@ -27107,7 +27107,7 @@ func (c *Checker) intersectUnionsOfPrimitiveTypes(types []*Type) ([]*Type, bool)
 						result[0] = c.missingType
 						continue
 					}
-					result, _ = insertType(result, t)
+					result, _ = c.insertType(result, t)
 				}
 			}
 		}
@@ -27131,14 +27131,14 @@ func (c *Checker) eachUnionContains(unionTypes []*Type, t *Type) bool {
 
 func (c *Checker) unionContainsType(union *Type, t *Type, matchSymbol bool) bool {
 	types := union.Types()
-	if containsType(types, t) {
+	if c.containsType(types, t) {
 		return true
 	}
 	if t == c.missingType {
-		return containsType(types, c.undefinedType)
+		return c.containsType(types, c.undefinedType)
 	}
 	if t == c.undefinedType {
-		return containsType(types, c.missingType)
+		return c.containsType(types, c.missingType)
 	}
 	var primitive *Type
 	switch {
@@ -27151,7 +27151,7 @@ func (c *Checker) unionContainsType(union *Type, t *Type, matchSymbol bool) bool
 	case t.flags&TypeFlagsUniqueESSymbol != 0 && matchSymbol:
 		primitive = c.esSymbolType
 	}
-	return primitive != nil && containsType(types, primitive)
+	return primitive != nil && c.containsType(types, primitive)
 }
 
 func (c *Checker) getCrossProductIntersections(types []*Type, flags IntersectionFlags) []*Type {
@@ -27325,11 +27325,11 @@ func (c *Checker) removeType(t *Type, targetType *Type) *Type {
 		}
 		return t
 	}
-	if origin := t.AsUnionType().origin; origin != nil && origin.flags&TypeFlagsUnion != 0 && containsType(origin.Types(), targetType) {
+	if origin := t.AsUnionType().origin; origin != nil && origin.flags&TypeFlagsUnion != 0 && c.containsType(origin.Types(), targetType) {
 		return c.filterType(t, func(t *Type) bool { return t != targetType })
 	}
 	types := t.Types()
-	if i, ok := slices.BinarySearchFunc(types, targetType, CompareTypes); ok {
+	if i, ok := slices.BinarySearchFunc(types, targetType, c.CompareTypes); ok {
 		if len(types) == 2 {
 			return types[1-i]
 		}
@@ -27344,13 +27344,13 @@ func (c *Checker) removeType(t *Type, targetType *Type) *Type {
 	return t
 }
 
-func containsType(types []*Type, t *Type) bool {
-	_, ok := slices.BinarySearchFunc(types, t, CompareTypes)
+func (c *Checker) containsType(types []*Type, t *Type) bool {
+	_, ok := slices.BinarySearchFunc(types, t, c.CompareTypes)
 	return ok
 }
 
-func insertType(types []*Type, t *Type) ([]*Type, bool) {
-	if i, ok := slices.BinarySearchFunc(types, t, CompareTypes); !ok {
+func (c *Checker) insertType(types []*Type, t *Type) ([]*Type, bool) {
+	if i, ok := slices.BinarySearchFunc(types, t, c.CompareTypes); !ok {
 		return slices.Insert(types, i, t), true
 	}
 	return types, false
@@ -27982,7 +27982,7 @@ func (c *Checker) getSuggestionForNonexistentIndexSignature(objectType *Type, ex
 
 func (c *Checker) getSuggestedTypeForNonexistentStringLiteralType(source *Type, target *Type) *Type {
 	candidates := core.FilterSeq(target.Types(), func(t *Type) bool { return t.flags&TypeFlagsStringLiteral != 0 })
-	return core.GetSpellingSuggestionWithMaxCandidateCount(getStringLiteralValue(source), candidates, getStringLiteralValue, CompareTypes, 1000)
+	return core.GetSpellingSuggestionWithMaxCandidateCount(getStringLiteralValue(source), candidates, getStringLiteralValue, c.CompareTypes, 1000)
 }
 
 func getIndexNodeForAccessExpression(accessNode *ast.Node) *ast.Node {
@@ -28193,7 +28193,7 @@ func (c *Checker) getResolvedBaseConstraint(t *Type, stack []RecursionId) *Type 
 	// levels of nesting, we are presumably exploring a repeating pattern with a long cycle that hasn't
 	// yet triggered the deeply nested limiter. We have no test cases that actually get to 50 levels of
 	// nesting, so it is effectively just a safety stop.
-	identity := getRecursionIdentity(t)
+	identity := c.getRecursionIdentity(t)
 	if len(stack) < 10 || len(stack) < 50 && !slices.Contains(stack, identity) {
 		constraint = c.computeBaseConstraint(c.getSimplifiedType(t /*writing*/, false), append(stack, identity))
 	}
@@ -31606,7 +31606,7 @@ func (c *Checker) instantiateContextualType(contextualType *Type, node *ast.Node
 				// literals actually end up widening to 'boolean' (see #48363).
 				t := c.instantiateInstantiableTypes(contextualType, inferenceContext.returnMapper)
 				if t.flags&TypeFlagsAnyOrUnknown == 0 {
-					if t.flags&TypeFlagsUnion != 0 && containsType(t.Types(), c.regularFalseType) && containsType(t.Types(), c.regularTrueType) {
+					if t.flags&TypeFlagsUnion != 0 && c.containsType(t.Types(), c.regularFalseType) && c.containsType(t.Types(), c.regularTrueType) {
 						return c.filterType(t, func(t *Type) bool {
 							return t != c.regularFalseType && t != c.regularTrueType
 						})

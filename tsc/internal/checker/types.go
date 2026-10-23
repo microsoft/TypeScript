@@ -504,7 +504,7 @@ type SignatureLinks struct {
 type TypeFlags uint32
 
 // Note that for types of different kinds, the numeric values of TypeFlags determine the order
-// computed by the CompareTypes function and therefore the order of constituent types in union types.
+// computed by the Checker.CompareTypes method and therefore the order of constituent types in union types.
 // Since union type processing often bails out early when a result is known, it is important to order
 // TypeFlags in increasing order of potential type complexity. In particular, indexed access and
 // conditional types should sort last as those types are potentially recursive and possibly infinite.
@@ -790,7 +790,6 @@ type Type struct {
 	kind        typeKind
 	symbol      *ast.Symbol
 	alias       *TypeAlias
-	checker     *Checker
 }
 
 // Enforce the layout required by the pointer conversions, on every architecture.
@@ -1182,9 +1181,9 @@ func (t *StructuredType) getPropertyAt(index int) *ast.Symbol {
 	if member == nil {
 		memberInfo := lazy.layout.memberInfos[index]
 		if memberInfo.baseIndex < 0 {
-			member = t.checker.instantiateSymbol(memberInfo.symbol, lazy.mapper)
+			member = lazy.checker.instantiateSymbol(memberInfo.symbol, lazy.mapper)
 		} else {
-			member = t.checker.getPropertyOfType(lazy.baseTypes[memberInfo.baseIndex], memberInfo.symbol.Name())
+			member = lazy.checker.getPropertyOfType(lazy.baseTypes[memberInfo.baseIndex], memberInfo.symbol.Name())
 		}
 		t.properties[index] = member
 	}
@@ -1233,9 +1232,9 @@ func (t *StructuredType) getIndexInfos() []*IndexInfo {
 	return t.extra.indexInfos
 }
 
-func (t *StructuredType) ensureExtra() *structuredTypeExtra {
+func (t *StructuredType) ensureExtra(c *Checker) *structuredTypeExtra {
 	if t.extra == nil {
-		t.extra = t.checker.structuredTypeExtraArena.New()
+		t.extra = c.structuredTypeExtraArena.New()
 	}
 	return t.extra
 }
@@ -1297,6 +1296,7 @@ type TypeReference struct {
 
 type LazyState struct {
 	layout             *MemberLayout
+	checker            *Checker
 	mapper             *TypeMapper
 	baseTypes          []*Type
 	propertiesResolved bool
