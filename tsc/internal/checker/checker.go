@@ -76,6 +76,7 @@ const (
 	TypeSystemPropertyNameAwaitedType
 	TypeSystemPropertyNameExplicitType
 	TypeSystemPropertyNameBindingElementParent
+	TypeSystemPropertyNameCallResolution
 	TypeSystemPropertyNameAssertionOperand
 	TypeSystemPropertyNamePatternInitializer
 )
@@ -685,7 +686,6 @@ type Checker struct {
 	varianceGuesses                             map[*ast.Symbol][]VarianceFlags // Variances assumed for measurements in progress; see getVariancesWorker
 	varianceGuessed                             []*ast.Symbol                   // Keys of varianceGuesses in order of addition
 	flushStates                                 *[]*memoState                   // Collects memo states given effects to replay, if non-nil; see withoutChecking
-	callResolutionStack                         []*ast.Node
 	apparentArgumentCount                       *int
 	lastGetCombinedNodeFlagsNode                *ast.Node
 	lastGetCombinedNodeFlagsResult              ast.NodeFlags
@@ -9406,15 +9406,15 @@ func (c *Checker) resolveCall(node *ast.Node, signatures []*Signature, candidate
 	// is just important for choosing the best signature. So in the case where there is only one
 	// signature, the subtype pass is useless. So skipping it is an optimization.
 	var result *Signature
-	s.recursiveResolution = slices.Contains(c.callResolutionStack, s.node)
-	c.callResolutionStack = append(c.callResolutionStack, s.node)
+	s.recursiveResolution = c.isResolvingAnywhere(s.node, TypeSystemPropertyNameCallResolution)
+	c.beginTypeResolution(s.node, TypeSystemPropertyNameCallResolution)
 	if len(s.candidates) > 1 {
 		result = c.chooseOverload(&s, c.subtypeRelation)
 	}
 	if result == nil {
 		result = c.chooseOverload(&s, c.assignableRelation)
 	}
-	c.callResolutionStack = c.callResolutionStack[:len(c.callResolutionStack)-1]
+	c.popTypeResolution()
 	if result != nil {
 		return result
 	}
@@ -20339,7 +20339,7 @@ func (c *Checker) typeResolutionHasProperty(r *TypeResolution) bool {
 	case TypeSystemPropertyNameContextChecked, TypeSystemPropertyNameStructuredMembers, TypeSystemPropertyNameCurrentNode,
 		TypeSystemPropertyNameSimplifiedForReading, TypeSystemPropertyNameSimplifiedForWriting, TypeSystemPropertyNameDefaultType,
 		TypeSystemPropertyNameAwaitedType, TypeSystemPropertyNameExplicitType,
-		TypeSystemPropertyNameBindingElementParent,
+		TypeSystemPropertyNameBindingElementParent, TypeSystemPropertyNameCallResolution,
 		TypeSystemPropertyNameAssertionOperand, TypeSystemPropertyNamePatternInitializer:
 		// Marked as checked or resolved on entry, so it is only on the stack
 		// while in progress.
