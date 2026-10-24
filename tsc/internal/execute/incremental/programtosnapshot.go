@@ -2,6 +2,9 @@ package incremental
 
 import (
 	"context"
+	"fmt"
+	"slices"
+	"strings"
 
 	"github.com/microsoft/TypeScript/tsc/internal/ast"
 	"github.com/microsoft/TypeScript/tsc/internal/binder"
@@ -9,6 +12,11 @@ import (
 	"github.com/microsoft/TypeScript/tsc/internal/collections"
 	"github.com/microsoft/TypeScript/tsc/internal/compiler"
 	"github.com/microsoft/TypeScript/tsc/internal/core"
+	"github.com/microsoft/TypeScript/tsc/internal/json"
+	"github.com/microsoft/TypeScript/tsc/internal/modulespecifiers"
+	"github.com/microsoft/TypeScript/tsc/internal/outputpaths"
+	"github.com/microsoft/TypeScript/tsc/internal/packagejson"
+	"github.com/microsoft/TypeScript/tsc/internal/symlinks"
 	"github.com/microsoft/TypeScript/tsc/internal/tsoptions"
 	"github.com/microsoft/TypeScript/tsc/internal/tspath"
 )
@@ -33,6 +41,7 @@ func programToSnapshot(program *compiler.Program, oldProgram *Program, hashWithT
 		to.computeProgramFileChanges()
 		to.handleFileDelete()
 		to.handleGlobalScopeChange()
+		to.computeLinkedPackagesSignature()
 		to.handlePendingEmit()
 		to.handlePendingCheck()
 	}
@@ -237,6 +246,9 @@ func (t *toProgramSnapshot) handlePendingEmit() {
 		} else {
 			pendingEmitKind = getPendingEmitKindWithOptions(t.snapshot.options, t.oldProgram.snapshot.options)
 		}
+		if t.snapshot.linkedPackagesSignature != t.oldProgram.snapshot.linkedPackagesSignature {
+			pendingEmitKind |= GetFileEmitKind(t.snapshot.options) & FileEmitKindAllDts
+		}
 		if pendingEmitKind != FileEmitKindNone {
 			// Add all files to affectedFilesPendingEmit since emit changed
 			for _, file := range t.program.GetSourceFiles() {
@@ -248,6 +260,111 @@ func (t *toProgramSnapshot) handlePendingEmit() {
 			t.snapshot.buildInfoEmitPending.Store(true)
 		}
 	}
+}
+
+func (t *toProgramSnapshot) computeLinkedPackagesSignature() {
+	if !t.snapshot.options.GetEmitDeclarations() {
+		return
+	}
+	caseSensitivity := t.program.CaseSensitivity()
+	var baseDirectory string
+	if buildInfoFileName := outputpaths.GetBuildInfoFileName(t.snapshot.options, caseSensitivity); buildInfoFileName != "" {
+		baseDirectory = buildInfoFileName.Directory().AsString()
+	}
+	toSignaturePath := func(path tspath.PathKey) string {
+		if baseDirectory == "" {
+			return path.AsString()
+		}
+		return tspath.GetRelativePathFromDirectory(baseDirectory, path.AsString(), caseSensitivity)
+	}
+	symlinkCache := t.program.GetSymlinkCache()
+	var entries []string
+	symlinkCache.Directories().Range(func(symlinkPath tspath.PathKey, link *symlinks.KnownDirectoryLink) bool {
+		if link != nil {
+			entries = append(entries, toSignaturePath(symlinkPath)+" -> "+toSignaturePath(link.RealPath))
+		}
+		return true
+	})
+	if len(entries) == 0 {
+		return
+	}
+	var seenDirectories, seenPackageDirectories collections.Set[tspath.PathKey]
+	addPackageDirectory := func(directory tspath.RootedDirectoryPath) {
+		path := caseSensitivity.PathKey(directory.AsPath())
+		if !seenPackageDirectories.AddIfAbsent(path) {
+			return
+		}
+		if info := t.program.GetPackageJsonInfo(directory.ResolveFile("package.json")); info != nil {
+			entries = append(entries, toSignaturePath(path)+" "+getPackageEntryFields(info.GetContents()))
+		}
+	}
+	for _, file := range t.program.GetSourceFiles() {
+		for _, fileName := range []tspath.RootedFilePath{file.FileName(), t.program.GetSourceOfProjectReferenceIfOutputIncluded(file)} {
+			if !seenDirectories.AddIfAbsent(caseSensitivity.PathKey(fileName.Directory().AsPath())) {
+				continue
+			}
+			tspath.ForEachAncestorDirectoryPathStoppingAtGlobalCache(
+				t.program.GetGlobalTypingsCacheLocation(),
+				fileName.Directory(),
+				func(realPathDirectory tspath.RootedDirectoryPath) (bool, bool) {
+					symlinkDirectories, ok := symlinkCache.DirectoriesByRealpath().Load(caseSensitivity.PathKey(realPathDirectory.AsPath()))
+					if !ok {
+						return false, false
+					}
+					relative, _ := caseSensitivity.RelativeFilePathFromDirectory(realPathDirectory, fileName)
+					symlinkDirectories.Range(func(symlinkDirectory tspath.RootedDirectoryPath) bool {
+						forEachPackageDirectoryOfModule(symlinkDirectory.ResolveRelativeFile(relative), addPackageDirectory)
+						return true
+					})
+					return false, false
+				},
+			)
+		}
+	}
+	slices.Sort(entries)
+	t.snapshot.linkedPackagesSignature = t.snapshot.computeHash(strings.Join(entries, "\n"))
+}
+
+func forEachPackageDirectoryOfModule(fileName tspath.RootedFilePath, callback func(directory tspath.RootedDirectoryPath)) {
+	parts := modulespecifiers.GetNodeModulePathParts(fileName)
+	if parts == nil || parts.IsDirectNodeModulesFile {
+		return
+	}
+	directory := parts.PackageRootDirectory
+	components := strings.Split(parts.PackageRelativePath.AsString(), "/")
+	for _, component := range components[:len(components)-1] {
+		callback(directory)
+		directory = directory.ResolveDirectory(component)
+	}
+	callback(directory)
+}
+
+func getPackageEntryFields(contents *packagejson.PackageJson) string {
+	validValue := func(field packagejson.Expected[string]) *string {
+		if value, ok := field.GetValue(); ok {
+			return &value
+		}
+		return nil
+	}
+	fields, err := json.Marshal(struct {
+		Type          string                       `json:"type,omitzero"`
+		Main          *string                      `json:"main,omitzero"`
+		Types         *string                      `json:"types,omitzero"`
+		Typings       *string                      `json:"typings,omitzero"`
+		TypesVersions packagejson.JSONValue        `json:"typesVersions,omitzero"`
+		Exports       packagejson.ExportsOrImports `json:"exports,omitzero"`
+	}{
+		Type:          contents.Type.Value,
+		Main:          validValue(contents.Main),
+		Types:         validValue(contents.Types),
+		Typings:       validValue(contents.Typings),
+		TypesVersions: contents.TypesVersions,
+		Exports:       contents.Exports,
+	})
+	if err != nil {
+		panic(fmt.Sprintf("Failed to marshal package.json fields: %v", err))
+	}
+	return string(fields)
 }
 
 func (t *toProgramSnapshot) handlePendingCheck() {

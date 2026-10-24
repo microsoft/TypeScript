@@ -107,7 +107,7 @@ interface Symbol {
 }
 declare const console: { log(msg: any): void; };
 //// [/home/src/workspaces/solution/packages/consumer/tsconfig.tsbuildinfo] *new* 
-{"version":"FakeTSVersion","root":[5],"packageJsons":["./package.json","../dep/package.json"],"fileNames":["lib.es2026.full.d.ts","../dep/types/themes/componentTypes/formFieldLayout.d.ts","../dep/types/themes/componentTypes/index.d.ts","../dep/types/index.d.ts","./src/index.ts"],"fileInfos":[{"version":"8859c12c614ce56ba9a18e58384a198f-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ninterface SymbolConstructor {\n    (desc?: string | number): symbol;\n    for(name: string): symbol;\n    readonly toStringTag: symbol;\n}\ndeclare var Symbol: SymbolConstructor;\ninterface Symbol {\n    readonly [Symbol.toStringTag]: string;\n}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true,"impliedNodeFormat":1},"2265bb6aae4ea44359eda1a1333669d7-export type FormFieldLayout = {\n    textColor: string;\n    fontSize: string;\n};\nexport default FormFieldLayout;\n","262c77b15a9433c1a517a42af08dabc4-import type FormFieldLayout from \"./formFieldLayout.js\";\nexport type ComponentTypes = {\n    formFieldLayout: () => FormFieldLayout;\n};\n","8c960f82affa27b6eaa999ea3cdac3e7-import type { ComponentTypes as NewComponentTypes } from \"./themes/componentTypes/index.js\";\nexport type { NewComponentTypes };\n",{"version":"0eb11471bc41fb5a80fd0098368e8295-import type { NewComponentTypes } from \"@scope/dep\"\ndeclare const c: NewComponentTypes\nexport const style = c.formFieldLayout()","signature":"9cca47ad36e3ee3df7f98a27c15d37b0-export declare const style: import(\"@scope/dep/types/themes/componentTypes/formFieldLayout.js\").FormFieldLayout;\n","impliedNodeFormat":1}],"fileIdsList":[[4],[3],[2]],"options":{"composite":true,"emitDeclarationOnly":true,"declaration":true,"declarationDir":"./types","module":99,"outDir":"./types","rootDir":"./src","strict":true},"referencedMap":[[5,1],[4,2],[3,3]],"latestChangedDtsFile":"./types/index.d.ts"}
+{"version":"FakeTSVersion","root":[5],"packageJsons":["./package.json","../dep/package.json"],"missingPackageJsons":["../../node_modules/@scope/dep/src/package.json","../../node_modules/@scope/dep/src/themes/componentTypes/package.json","../../node_modules/@scope/dep/src/themes/package.json","../../node_modules/@scope/dep/types/package.json","../../node_modules/@scope/dep/types/themes/componentTypes/package.json","../../node_modules/@scope/dep/types/themes/package.json"],"fileNames":["lib.es2026.full.d.ts","../dep/types/themes/componentTypes/formFieldLayout.d.ts","../dep/types/themes/componentTypes/index.d.ts","../dep/types/index.d.ts","./src/index.ts"],"fileInfos":[{"version":"8859c12c614ce56ba9a18e58384a198f-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ninterface SymbolConstructor {\n    (desc?: string | number): symbol;\n    for(name: string): symbol;\n    readonly toStringTag: symbol;\n}\ndeclare var Symbol: SymbolConstructor;\ninterface Symbol {\n    readonly [Symbol.toStringTag]: string;\n}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true,"impliedNodeFormat":1},"2265bb6aae4ea44359eda1a1333669d7-export type FormFieldLayout = {\n    textColor: string;\n    fontSize: string;\n};\nexport default FormFieldLayout;\n","262c77b15a9433c1a517a42af08dabc4-import type FormFieldLayout from \"./formFieldLayout.js\";\nexport type ComponentTypes = {\n    formFieldLayout: () => FormFieldLayout;\n};\n","8c960f82affa27b6eaa999ea3cdac3e7-import type { ComponentTypes as NewComponentTypes } from \"./themes/componentTypes/index.js\";\nexport type { NewComponentTypes };\n",{"version":"0eb11471bc41fb5a80fd0098368e8295-import type { NewComponentTypes } from \"@scope/dep\"\ndeclare const c: NewComponentTypes\nexport const style = c.formFieldLayout()","signature":"9cca47ad36e3ee3df7f98a27c15d37b0-export declare const style: import(\"@scope/dep/types/themes/componentTypes/formFieldLayout.js\").FormFieldLayout;\n","impliedNodeFormat":1}],"fileIdsList":[[4],[3],[2]],"options":{"composite":true,"emitDeclarationOnly":true,"declaration":true,"declarationDir":"./types","module":99,"outDir":"./types","rootDir":"./src","strict":true},"referencedMap":[[5,1],[4,2],[3,3]],"latestChangedDtsFile":"./types/index.d.ts","linkedPackagesSignature":"521d96dff1c94699bc30a1a07a702e35-../../node_modules/@scope/dep -> ../dep\n../../node_modules/@scope/dep {\"exports\":{\"./src/*\":\"./src/*\",\"./types/*\":\"./types/*\",\".\":{\"types\":\"./types/index.d.ts\",\"default\":\"./src/index.ts\"}}}"}
 //// [/home/src/workspaces/solution/packages/consumer/tsconfig.tsbuildinfo.readable.baseline.txt] *new* 
 {
   "version": "FakeTSVersion",
@@ -122,6 +122,14 @@ declare const console: { log(msg: any): void; };
   "packageJsons": [
     "./package.json",
     "../dep/package.json"
+  ],
+  "missingPackageJsons": [
+    "../../node_modules/@scope/dep/src/package.json",
+    "../../node_modules/@scope/dep/src/themes/componentTypes/package.json",
+    "../../node_modules/@scope/dep/src/themes/package.json",
+    "../../node_modules/@scope/dep/types/package.json",
+    "../../node_modules/@scope/dep/types/themes/componentTypes/package.json",
+    "../../node_modules/@scope/dep/types/themes/package.json"
   ],
   "fileNames": [
     "lib.es2026.full.d.ts",
@@ -206,7 +214,8 @@ declare const console: { log(msg: any): void; };
     ]
   },
   "latestChangedDtsFile": "./types/index.d.ts",
-  "size": 2200
+  "linkedPackagesSignature": "521d96dff1c94699bc30a1a07a702e35-../../node_modules/@scope/dep -> ../dep\n../../node_modules/@scope/dep {\"exports\":{\"./src/*\":\"./src/*\",\"./types/*\":\"./types/*\",\".\":{\"types\":\"./types/index.d.ts\",\"default\":\"./src/index.ts\"}}}",
+  "size": 2854
 }
 //// [/home/src/workspaces/solution/packages/consumer/types/index.d.ts] *new* 
 export declare const style: import("@scope/dep/types/themes/componentTypes/formFieldLayout.js").FormFieldLayout;

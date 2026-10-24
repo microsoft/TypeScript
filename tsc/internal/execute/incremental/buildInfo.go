@@ -493,6 +493,7 @@ type BuildInfo struct {
 	AffectedFilesPendingEmit   []*BuildInfoFilePendingEmit          `json:"affectedFilesPendingEmit,omitzero"`
 	LatestChangedDtsFile       BuildInfoPath                        `json:"latestChangedDtsFile,omitzero"` // Because this is only output file in the program, we dont need fileId to deduplicate name
 	EmitSignatures             []*BuildInfoEmitSignature            `json:"emitSignatures,omitzero"`
+	LinkedPackagesSignature    string                               `json:"linkedPackagesSignature,omitzero"`
 	ResolvedRoot               []*BuildInfoResolvedRoot             `json:"resolvedRoot,omitzero"`
 
 	// NonIncrementalProgram info
