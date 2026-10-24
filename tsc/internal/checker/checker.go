@@ -32286,12 +32286,15 @@ func (c *Checker) isConstraintPosition(t *Type, node *ast.Node) bool {
 		ast.IsElementAccessExpression(parent) && parent.Expression() == node && !(someType(t, c.isGenericTypeWithoutNullableConstraint) && c.isGenericIndexType(c.getTypeOfExpression(parent.AsElementAccessExpression().ArgumentExpression)))
 }
 
-// A union whose couldContainTypeVariables result is already computed as false has no constituent that is
-// a generic type with a union constraint, so the per-constituent walk can be skipped. The only instantiable
-// constituents such a union can hold are pattern literal types of a non-generic top-level alias, and each of
-// those is its own base constraint. The cached result is only read here, never computed.
+// Skips the walk for unions that cannot contain type variables. Such a union can still hold
+// instantiable types when it comes from a non-generic top-level alias:
+//
+//	type Size = `${number}px` | Uppercase<string> | "auto"
+//
+// Both `${number}px` and Uppercase<string> are their own base constraints, never a union, so the
+// walk would return false anyway.
 func (c *Checker) someGenericTypeWithUnionConstraint(t *Type) bool {
-	if t.flags&TypeFlagsUnion != 0 && t.objectFlags&(ObjectFlagsCouldContainTypeVariablesComputed|ObjectFlagsCouldContainTypeVariables) == ObjectFlagsCouldContainTypeVariablesComputed {
+	if t.flags&TypeFlagsUnion != 0 && !c.couldContainTypeVariables(t) {
 		return false
 	}
 	return someType(t, c.isGenericTypeWithUnionConstraint)
