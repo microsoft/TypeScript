@@ -399,9 +399,10 @@ interface RegExpConstructor {
 
 interface String {
     /**
-     * Returns a nonnegative integer Number less than 1114112 (0x110000) that is the code point
-     * value of the UTF-16 encoded code point starting at the string element at position pos in
-     * the String resulting from converting this object to a String.
+     * Returns a nonnegative integer Number less than 1114112 (0x110000) that is the Unicode
+     * code point value starting at the string element at position pos in the String resulting
+     * from converting this object to a String. Note that this is the code point starting at pos,
+     * not the pos-th code point of the string.
      * If there is no element at that position, the result is undefined.
      * If a valid UTF-16 surrogate pair does not begin at pos, the result is the code unit at pos.
      */
