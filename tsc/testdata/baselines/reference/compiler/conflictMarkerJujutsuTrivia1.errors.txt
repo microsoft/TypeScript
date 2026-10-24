@@ -1,0 +1,33 @@
+conflictMarkerJujutsuTrivia1.ts(3,1): error TS1185: Merge conflict marker encountered.
+conflictMarkerJujutsuTrivia1.ts(4,1): error TS1185: Merge conflict marker encountered.
+conflictMarkerJujutsuTrivia1.ts(5,1): error TS1185: Merge conflict marker encountered.
+conflictMarkerJujutsuTrivia1.ts(8,1): error TS1185: Merge conflict marker encountered.
+conflictMarkerJujutsuTrivia1.ts(10,1): error TS1185: Merge conflict marker encountered.
+
+
+==== conflictMarkerJujutsuTrivia1.ts (5 errors) ====
+    class C {
+      foo() {
+    <<<<<<< conflict 1 of 1
+    ~~~~~~~
+!!! error TS1185: Merge conflict marker encountered.
+    %%%%%%% diff from: puqzxvrm 9be6077e "call c()"
+    ~~~~~~~
+!!! error TS1185: Merge conflict marker encountered.
+    \\\\\\\        to: lnqukurm 3504bbcc "call a()"
+    ~~~~~~~
+!!! error TS1185: Merge conflict marker encountered.
+    -     c();
+    +     a();
+    +++++++ uxvuvmmx 392ce8b5 "call b()"
+    ~~~~~~~
+!!! error TS1185: Merge conflict marker encountered.
+         b();
+    >>>>>>> conflict 1 of 1 ends
+    ~~~~~~~
+!!! error TS1185: Merge conflict marker encountered.
+      }
+    
+      public bar() { }
+    }
+    
