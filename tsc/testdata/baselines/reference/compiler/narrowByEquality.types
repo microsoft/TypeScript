@@ -160,4 +160,21 @@ if (xUnknown != null) {
 >xUnknown : null | undefined
 }
 
+declare let option: { type: string } | undefined;
+>option : { type: string; } | undefined
+>type : string
+
+if ((option satisfies { type: string } | undefined) !== undefined) {
+>(option satisfies { type: string } | undefined) !== undefined : boolean
+>(option satisfies { type: string } | undefined) : { type: string; } | undefined
+>option satisfies { type: string } | undefined : { type: string; } | undefined
+>option : { type: string; } | undefined
+>type : string
+>undefined : undefined
+
+    option.type;
+>option.type : string
+>option : { type: string; }
+>type : string
+}
 
