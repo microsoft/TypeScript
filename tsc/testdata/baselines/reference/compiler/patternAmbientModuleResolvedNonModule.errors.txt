@@ -1,0 +1,54 @@
+/src/main.ts(1,20): error TS2306: File '/stub.d.ts' is not a module.
+/src/main.ts(4,22): error TS2306: File '/generated/relative.svelte.d.ts' is not a module.
+
+
+==== /tsconfig.json (0 errors) ====
+    {
+        "compilerOptions": {
+            "strict": true,
+            "noEmit": true,
+            "module": "esnext",
+            "moduleResolution": "bundler",
+            "types": [],
+            "paths": {
+                "script.svelte": ["./stub.d.ts"],
+                "module.svelte": ["./module.d.ts"]
+            },
+            "rootDirs": ["./src", "./generated"]
+        },
+        "files": ["ambient.d.ts", "src/main.ts"]
+    }
+    
+==== /ambient.d.ts (0 errors) ====
+    declare module "*.svelte" {
+        const c: number;
+        export default c;
+    }
+    
+==== /src/main.ts (2 errors) ====
+    import script from "script.svelte";
+                       ~~~~~~~~~~~~~~~
+!!! error TS2306: File '/stub.d.ts' is not a module.
+    const scriptValue: string = script;
+    
+    import relative from "./relative.svelte";
+                         ~~~~~~~~~~~~~~~~~~~
+!!! error TS2306: File '/generated/relative.svelte.d.ts' is not a module.
+    const relativeValue: string = relative;
+    
+    import resolved from "module.svelte";
+    const resolvedValue: string = resolved;
+    
+    import missing from "missing.svelte";
+    const missingValue: number = missing;
+    
+==== /stub.d.ts (0 errors) ====
+    // A script, not a module.
+    
+==== /generated/relative.svelte.d.ts (0 errors) ====
+    // A script, not a module.
+    
+==== /module.d.ts (0 errors) ====
+    declare const c: string;
+    export default c;
+    
