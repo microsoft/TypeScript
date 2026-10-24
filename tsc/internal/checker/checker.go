@@ -31287,7 +31287,9 @@ func (c *Checker) newSetterFunctionType(t *Type) *Type {
 
 // Creates a synthetic `Signature` corresponding to a call signature.
 func (c *Checker) newCallSignature(typeParameters []*Type, thisParameter *ast.Symbol, parameters []*ast.Symbol, returnType *Type) *Signature {
-	decl := c.factory.NewFunctionTypeNode(nil, nil, c.factory.NewKeywordTypeNode(ast.KindAnyKeyword))
+	// The shared declaration supplies syntax and source-file identity only;
+	// parameter and return types are stored on the signature.
+	decl := GetSyntheticSignatureSourceFile().Statements.Nodes[0].Type()
 	return c.newSignature(SignatureFlagsNone, decl, typeParameters, thisParameter, parameters, returnType, nil, len(parameters))
 }
 

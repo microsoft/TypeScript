@@ -2362,7 +2362,11 @@ func (s *Session) handleGetSourceFile(ctx context.Context, params *GetSourceFile
 		return nil, err
 	}
 
-	return s.encodeSourceFileResponse(program.GetSourceFile(params.File.ToFileName(program.BaseDirectory())))
+	fileName := params.File.ToFileName(program.BaseDirectory())
+	if fileName == checker.SyntheticSignatureFileName {
+		return s.encodeSourceFileResponse(checker.GetSyntheticSignatureSourceFile())
+	}
+	return s.encodeSourceFileResponse(program.GetSourceFile(fileName))
 }
 
 // handleGetConfigFileNames returns tsconfig file names associated with the project's command line.
@@ -5029,6 +5033,12 @@ func (sd *snapshotData) resolveNodeHandle(program *compiler.Program, handle Node
 		return nil, fmt.Errorf("%w: invalid node handle %q", ErrClientError, handle)
 	}
 	sourceFile := program.GetSourceFileByNodeID(ast.NodeId(nodeID))
+	if sourceFile == nil {
+		syntheticFile := checker.GetSyntheticSignatureSourceFile()
+		if sourceFileNodeID(syntheticFile) == nodeID {
+			sourceFile = syntheticFile
+		}
+	}
 	if sourceFile == nil {
 		return nil, fmt.Errorf("%w: node handle %q could not be resolved (file may not be loaded or handle may be stale)", ErrClientError, handle)
 	}
