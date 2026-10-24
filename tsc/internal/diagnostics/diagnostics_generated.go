@@ -3396,6 +3396,8 @@ var Deduplicate_packages_with_the_same_name_and_version = &Message{code: 6939, c
 
 var Allow_loading_external_content_mapper_plugins_that_execute_code_during_compilation = &Message{code: 6940, category: CategoryMessage, key: "Allow_loading_external_content_mapper_plugins_that_execute_code_during_compilation_6940", text: "Allow loading external content mapper plugins that execute code during compilation."}
 
+var Set_the_memory_limit_in_MiB_for_recycling_checkers_during_no_emit_type_checking = &Message{code: 6941, category: CategoryMessage, key: "Set_the_memory_limit_in_MiB_for_recycling_checkers_during_no_emit_type_checking_6941", text: "Set the memory limit in MiB for recycling checkers during no-emit type checking."}
+
 var Variable_0_implicitly_has_an_1_type = &Message{code: 7005, category: CategoryError, key: "Variable_0_implicitly_has_an_1_type_7005", text: "Variable '{0}' implicitly has an '{1}' type."}
 
 var Parameter_0_implicitly_has_an_1_type = &Message{code: 7006, category: CategoryError, key: "Parameter_0_implicitly_has_an_1_type_7006", text: "Parameter '{0}' implicitly has an '{1}' type."}
@@ -6160,6 +6162,7 @@ var allMessages = [...]**Message{
 	&Set_the_number_of_projects_to_build_concurrently,
 	&Deduplicate_packages_with_the_same_name_and_version,
 	&Allow_loading_external_content_mapper_plugins_that_execute_code_during_compilation,
+	&Set_the_memory_limit_in_MiB_for_recycling_checkers_during_no_emit_type_checking,
 	&Variable_0_implicitly_has_an_1_type,
 	&Parameter_0_implicitly_has_an_1_type,
 	&Member_0_implicitly_has_an_1_type,

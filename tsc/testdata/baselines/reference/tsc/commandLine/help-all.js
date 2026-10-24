@@ -38,6 +38,9 @@ Print names of files that are part of the compilation and then stop processing.
 [94m--locale[39m
 Set the language of the messaging from TypeScript. This does not affect emit.
 
+[94m--maxMemory[39m
+Set the memory limit in MiB for recycling checkers during no-emit type checking.
+
 [94m--pprofDir[39m
 Generate pprof CPU/memory profiles to the given directory.
 

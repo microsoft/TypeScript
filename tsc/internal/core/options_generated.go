@@ -160,6 +160,7 @@ type CompilerOptions struct {
 	SingleThreaded      Tristate                   `json:"singleThreaded,omitzero"`
 	Quiet               Tristate                   `json:"quiet,omitzero"`
 	Checkers            *int                       `json:"checkers,omitzero"`
+	MaxMemory           *int                       `json:"maxMemory,omitzero"`
 }
 
 // Clone creates a shallow copy of the CompilerOptions.
@@ -297,6 +298,7 @@ func (options *CompilerOptions) Clone() *CompilerOptions {
 		SingleThreaded:                          options.SingleThreaded,
 		Quiet:                                   options.Quiet,
 		Checkers:                                options.Checkers,
+		MaxMemory:                               options.MaxMemory,
 	}
 }
 
@@ -705,6 +707,9 @@ func (options *CompilerOptions) Equals(other *CompilerOptions) bool {
 		return false
 	}
 	if options.Checkers != other.Checkers && (options.Checkers == nil || other.Checkers == nil || *options.Checkers != *other.Checkers) {
+		return false
+	}
+	if options.MaxMemory != other.MaxMemory && (options.MaxMemory == nil || other.MaxMemory == nil || *options.MaxMemory != *other.MaxMemory) {
 		return false
 	}
 	return true
