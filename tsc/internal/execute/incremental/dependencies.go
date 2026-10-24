@@ -17,14 +17,13 @@ func GetAllDependencies(program *compiler.Program, checker *checker.Checker, fil
 		for len(queue) > 0 {
 			path := queue[len(queue)-1]
 			queue = queue[:len(queue)-1]
-			if !seen.AddIfAbsent(path) {
+			current := program.GetSourceFileByPath(path)
+			if current == nil || !seen.AddIfAbsent(current.PathKey()) {
 				continue
 			}
-			if current := program.GetSourceFileByPath(path); current != nil {
-				if references := getReferencedFilesWithChecker(program, checker, current); references != nil {
-					for reference := range references.Keys() {
-						queue = append(queue, reference)
-					}
+			if references := getReferencedFilesWithChecker(program, checker, current); references != nil {
+				for reference := range references.Keys() {
+					queue = append(queue, reference)
 				}
 			}
 		}
