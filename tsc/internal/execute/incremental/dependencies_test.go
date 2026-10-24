@@ -78,6 +78,25 @@ export const value = 1;`,
 			},
 		},
 		{
+			name: "includes deduplicated package installations reached through type reference directives",
+			files: map[string]string{
+				"/project/a.ts":                        `import { a } from "a"; export const value = a;`,
+				"/project/b.ts":                        `import { b } from "b"; export const value = b;`,
+				"/project/node_modules/a/package.json": `{ "name": "a", "version": "1.0.0" }`,
+				"/project/node_modules/a/index.d.ts":   `/// <reference types="pkg" />` + "\n" + `export declare const a: number;`,
+				"/project/node_modules/a/node_modules/@types/pkg/package.json": `{ "name": "@types/pkg", "version": "1.0.0" }`,
+				"/project/node_modules/a/node_modules/@types/pkg/index.d.ts":   `declare const pkgValue: string;`,
+				"/project/node_modules/b/package.json":                         `{ "name": "b", "version": "1.0.0" }`,
+				"/project/node_modules/b/index.d.ts":                           `/// <reference types="pkg" />` + "\n" + `export declare const b: number;`,
+				"/project/node_modules/b/node_modules/@types/pkg/package.json": `{ "name": "@types/pkg", "version": "1.0.0" }`,
+				"/project/node_modules/b/node_modules/@types/pkg/index.d.ts":   `declare const pkgValue: string;`,
+			},
+			expected: map[string][]string{
+				"a.ts": {"a.ts", "node_modules/a/node_modules/@types/pkg/index.d.ts", "node_modules/a/index.d.ts"},
+				"b.ts": {"b.ts", "node_modules/a/node_modules/@types/pkg/index.d.ts", "node_modules/b/index.d.ts"},
+			},
+		},
+		{
 			name: "returns every file for files that affect the global scope",
 			files: map[string]string{
 				"/project/script.ts":        `const scriptValue = 1;`,
