@@ -3,6 +3,7 @@ package checker
 import (
 	"github.com/microsoft/TypeScript/tsc/internal/ast"
 	"github.com/microsoft/TypeScript/tsc/internal/core"
+	"github.com/microsoft/TypeScript/tsc/internal/debug"
 	"github.com/microsoft/TypeScript/tsc/internal/nodebuilder"
 	"github.com/microsoft/TypeScript/tsc/internal/printer"
 )
@@ -39,23 +40,34 @@ func (b *NodeBuilder) enterContext(enclosingDeclaration *ast.Node, flags nodebui
 	}
 	b.ctxStack = append(b.ctxStack, b.impl.ctx)
 	b.impl.ctx = &NodeBuilderContext{
-		host:                     b.host,
-		tracker:                  tracker,
-		flags:                    flags,
-		internalFlags:            internalFlags,
-		maxExpansionDepth:        verbosityLevel,
-		maxTruncationLength:      maxTruncationLength,
-		enclosingDeclaration:     enclosingDeclaration,
-		enclosingFile:            ast.GetSourceFileOfNode(enclosingDeclaration),
-		inferTypeParameters:      make([]*Type, 0),
-		symbolDepth:              make(map[CompositeSymbolIdentity]int),
-		trackedSymbols:           make([]*TrackedSymbolArgs, 0),
-		reverseMappedStack:       make([]*ast.Symbol, 0),
-		enclosingSymbolTypes:     make(map[ast.SymbolId]*Type),
-		remappedSymbolReferences: make(map[ast.SymbolId]*ast.Symbol),
+		host:                       b.host,
+		tracker:                    tracker,
+		flags:                      flags,
+		internalFlags:              internalFlags,
+		maxExpansionDepth:          verbosityLevel,
+		maxTruncationLength:        maxTruncationLength,
+		enclosingDeclaration:       enclosingDeclaration,
+		typeAliasNamingDeclaration: enclosingDeclaration,
+		enclosingFile:              ast.GetSourceFileOfNode(enclosingDeclaration),
+		inferTypeParameters:        make([]*Type, 0),
+		symbolDepth:                make(map[CompositeSymbolIdentity]int),
+		trackedSymbols:             make([]*TrackedSymbolArgs, 0),
+		reverseMappedStack:         make([]*ast.Symbol, 0),
+		enclosingSymbolTypes:       make(map[ast.SymbolId]*Type),
+		remappedSymbolReferences:   make(map[ast.SymbolId]*ast.Symbol),
 	}
-	tracker = NewSymbolTrackerImpl(b.impl.ctx, tracker)
-	b.impl.ctx.tracker = tracker
+	for node := enclosingDeclaration; node != nil; node = node.Parent {
+		if ast.IsClassLike(node) || ast.IsInterfaceDeclaration(node) {
+			if symbol := b.impl.ch.getSymbolOfDeclaration(node); symbol != nil {
+				parameters := b.impl.ch.getLocalTypeParametersOfClassOrInterfaceOrTypeAlias(symbol)
+				b.impl.ctx.typeParameters = append(parameters, b.impl.ctx.typeParameters...)
+			}
+		}
+	}
+	b.impl.ctx.tracker = NewSymbolTrackerImpl(b.impl.ctx, tracker)
+	if internalFlags&nodebuilder.InternalFlagsSynthesizeTypeAliases != 0 {
+		debug.Assert(b.impl.ctx.tracker.TypeAliasScope() != nil, "Type alias synthesis requires a destination scope")
+	}
 }
 
 // propagateVerbosityOut copies expansion signals from the context to the VerbosityContext output.
@@ -102,6 +114,9 @@ func (b *NodeBuilder) exitContextSlice(result []*ast.Node) []*ast.Node {
 }
 
 func (b *NodeBuilder) exitContextCheck() {
+	if !b.impl.ctx.encounteredError {
+		b.impl.emitSerializationTypeAliases()
+	}
 	if b.impl.ctx.truncating && b.impl.ctx.flags&nodebuilder.FlagsNoTruncation != 0 {
 		b.impl.ctx.tracker.ReportTruncationError()
 	}
@@ -116,6 +131,7 @@ func (b *NodeBuilder) IndexInfoToIndexSignatureDeclaration(info *IndexInfo, encl
 // SerializeReturnTypeForSignature implements NodeBuilderInterface.
 func (b *NodeBuilder) SerializeReturnTypeForSignature(signatureDeclaration *ast.Node, enclosingDeclaration *ast.Node, flags nodebuilder.Flags, internalFlags nodebuilder.InternalFlags, tracker nodebuilder.SymbolTracker) *ast.Node {
 	b.enterContext(enclosingDeclaration, flags, internalFlags, tracker)
+	b.impl.ctx.typeAliasNamingDeclaration = signatureDeclaration
 	signature := b.impl.ch.getSignatureFromDeclaration(signatureDeclaration)
 	_, cleanup := b.impl.enterSignatureScope(signature)
 	result := b.impl.serializeReturnTypeForSignature(signature, true)
@@ -133,6 +149,7 @@ func (b *NodeBuilder) SerializeTypeParametersForSignature(signatureDeclaration *
 // SerializeTypeForDeclaration implements NodeBuilderInterface.
 func (b *NodeBuilder) SerializeTypeForDeclaration(declaration *ast.Node, symbol *ast.Symbol, enclosingDeclaration *ast.Node, flags nodebuilder.Flags, internalFlags nodebuilder.InternalFlags, tracker nodebuilder.SymbolTracker) *ast.Node {
 	b.enterContext(enclosingDeclaration, flags, internalFlags, tracker)
+	b.impl.ctx.typeAliasNamingDeclaration = declaration
 	return b.exitContext(b.impl.serializeTypeForDeclaration(declaration, nil, symbol, true))
 }
 
@@ -236,24 +253,28 @@ func (b *NodeBuilder) SymbolToExpression(symbol *ast.Symbol, meaning ast.SymbolF
 // SymbolToNode implements NodeBuilderInterface.
 func (b *NodeBuilder) SymbolToNode(symbol *ast.Symbol, meaning ast.SymbolFlags, enclosingDeclaration *ast.Node, flags nodebuilder.Flags, internalFlags nodebuilder.InternalFlags, tracker nodebuilder.SymbolTracker) *ast.Node {
 	b.enterContext(enclosingDeclaration, flags, internalFlags, tracker)
+	b.impl.ctx.typeAliasNamingDeclaration = core.Coalesce(core.FirstOrNil(symbol.Declarations()), enclosingDeclaration)
 	return b.exitContext(b.impl.symbolToNode(symbol, meaning))
 }
 
 // SymbolToParameterDeclaration implements NodeBuilderInterface.
 func (b NodeBuilder) SymbolToParameterDeclaration(symbol *ast.Symbol, enclosingDeclaration *ast.Node, flags nodebuilder.Flags, internalFlags nodebuilder.InternalFlags, tracker nodebuilder.SymbolTracker) *ast.Node {
 	b.enterContext(enclosingDeclaration, flags, internalFlags, tracker)
+	b.impl.ctx.typeAliasNamingDeclaration = core.Coalesce(getEffectiveParameterDeclaration(symbol), enclosingDeclaration)
 	return b.exitContext(b.impl.symbolToParameterDeclaration(symbol, false))
 }
 
 // SymbolToTypeParameterDeclarations implements NodeBuilderInterface.
 func (b *NodeBuilder) SymbolToTypeParameterDeclarations(symbol *ast.Symbol, enclosingDeclaration *ast.Node, flags nodebuilder.Flags, internalFlags nodebuilder.InternalFlags, tracker nodebuilder.SymbolTracker) []*ast.Node {
 	b.enterContext(enclosingDeclaration, flags, internalFlags, tracker)
+	b.impl.ctx.typeAliasNamingDeclaration = core.Coalesce(core.FirstOrNil(symbol.Declarations()), enclosingDeclaration)
 	return b.exitContextSlice(b.impl.symbolToTypeParameterDeclarations(symbol))
 }
 
 // TypeParameterToDeclaration implements NodeBuilderInterface.
 func (b *NodeBuilder) TypeParameterToDeclaration(parameter *Type, enclosingDeclaration *ast.Node, flags nodebuilder.Flags, internalFlags nodebuilder.InternalFlags, tracker nodebuilder.SymbolTracker) *ast.Node {
 	b.enterContext(enclosingDeclaration, flags, internalFlags, tracker)
+	b.impl.ctx.typeAliasNamingDeclaration = core.Coalesce(core.FirstOrNil(parameter.symbol.Declarations()), enclosingDeclaration)
 	return b.exitContext(b.impl.typeParameterToDeclaration(parameter))
 }
 
@@ -271,6 +292,7 @@ func (b *NodeBuilder) TypeToTypeNode(typ *Type, enclosingDeclaration *ast.Node, 
 
 func (b *NodeBuilder) TryJSTypeNodeToTypeNode(node *ast.Node, enclosingDeclaration *ast.Node, flags nodebuilder.Flags, internalFlags nodebuilder.InternalFlags, tracker nodebuilder.SymbolTracker) *ast.Node {
 	b.enterContext(enclosingDeclaration, flags, internalFlags, tracker)
+	b.impl.ctx.typeAliasNamingDeclaration = node
 	return b.exitContext(b.impl.tryJSTypeNodeToTypeNode(node))
 }
 

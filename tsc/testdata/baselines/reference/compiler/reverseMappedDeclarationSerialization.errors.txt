@@ -1,4 +1,3 @@
-recursive.ts(10,14): error TS5088: The inferred type of 'recursive' references a type with a cyclic structure which cannot be trivially serialized. A type annotation is necessary.
 recursive.ts(17,14): error TS7056: The inferred type of this node exceeds the maximum length the compiler will serialize. An explicit type annotation is needed.
 recursive.ts(23,14): error TS7056: The inferred type of this node exceeds the maximum length the compiler will serialize. An explicit type annotation is needed.
 
@@ -35,7 +34,7 @@ recursive.ts(23,14): error TS7056: The inferred type of this node exceeds the ma
     export const deepExplicit: { a: { b: { c: { d: string } } } } =
         decode({ a: { b: { c: { d: stringValidator } } } });
     
-==== recursive.ts (3 errors) ====
+==== recursive.ts (2 errors) ====
     type Validator<T> = ((input: unknown) => T | undefined) | {
         [K in keyof T]: Validator<T[K]>;
     };
@@ -46,8 +45,6 @@ recursive.ts(23,14): error TS7056: The inferred type of this node exceeds the ma
     };
     declare const recursiveInput: RecursiveInput;
     export const recursive = decode(recursiveInput);
-                 ~~~~~~~~~
-!!! error TS5088: The inferred type of 'recursive' references a type with a cyclic structure which cannot be trivially serialized. A type annotation is necessary.
     
     interface GrowingInput<T> {
         value: (input: unknown) => T;
