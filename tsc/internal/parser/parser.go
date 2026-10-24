@@ -5051,9 +5051,29 @@ func (p *Parser) parseJsxElementName() *ast.Expression {
 	}
 	expression := initialExpression
 	for p.parseOptional(ast.KindDotToken) {
-		expression = p.finishNode(p.factory.NewPropertyAccessExpression(expression, nil, p.parseRightSideOfDot(true /*allowIdentifierNames*/, false /*allowPrivateIdentifiers*/, false /*allowUnicodeEscapeSequenceInIdentifierName*/), ast.NodeFlagsNone), pos)
+		var name *ast.Node
+		if p.scanner.TokenStart() > p.nodePos() && tokenIsIdentifierOrKeyword(p.token) && p.lookAhead((*Parser).nextTokenIsJsxAttributeValue) {
+			// Recover <A. prop="value"> as an incomplete tag name followed by an attribute.
+			// Consuming prop as the property name would also lose the matching closing tag.
+			p.parseErrorAt(p.nodePos(), p.nodePos(), diagnostics.Identifier_expected)
+			name = p.createMissingIdentifier()
+		} else {
+			name = p.parseRightSideOfDot(true /*allowIdentifierNames*/, false /*allowPrivateIdentifiers*/, false /*allowUnicodeEscapeSequenceInIdentifierName*/)
+		}
+		expression = p.finishNode(p.factory.NewPropertyAccessExpression(expression, nil, name, ast.NodeFlagsNone), pos)
 	}
 	return expression
+}
+
+func (p *Parser) nextTokenIsJsxAttributeValue() bool {
+	p.scanJsxIdentifier()
+	p.nextToken()
+	if p.token == ast.KindColonToken {
+		p.nextToken()
+		p.scanJsxIdentifier()
+		p.nextToken()
+	}
+	return p.token == ast.KindEqualsToken
 }
 
 func (p *Parser) parseJsxTagName() *ast.Expression {
