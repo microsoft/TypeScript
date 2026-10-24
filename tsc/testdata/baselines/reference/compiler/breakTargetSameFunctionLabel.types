@@ -1,0 +1,71 @@
+//// [tests/cases/compiler/breakTargetSameFunctionLabel.ts] ////
+
+=== breakTargetSameFunctionLabel.ts ===
+// Repro for https://github.com/microsoft/TypeScript/issues/30408
+// The labels are declared in the same scope but do not enclose the
+// break statements, so the errors should say so instead of claiming the
+// jump targets cross a function boundary.
+function foo() {
+>foo : () => void
+
+    for (let i = 0; i < 10; i++) {
+>i : number
+>0 : 0
+>i < 10 : boolean
+>i : number
+>10 : 10
+>i++ : number
+>i : number
+
+        console.log(`${i}`);
+>console.log(`${i}`) : void
+>console.log : (...data: any[]) => void
+>console : Console
+>log : (...data: any[]) => void
+>`${i}` : string
+>i : number
+
+        break loopend;
+>loopend : any
+    }
+
+    loopend:
+>loopend : any
+
+    console.log('end of loop');
+>console.log('end of loop') : void
+>console.log : (...data: any[]) => void
+>console : Console
+>log : (...data: any[]) => void
+>'end of loop' : "end of loop"
+}
+
+class C {
+>C : C
+
+    static {
+        for (let i = 0; i < 10; i++) {
+>i : number
+>0 : 0
+>i < 10 : boolean
+>i : number
+>10 : 10
+>i++ : number
+>i : number
+
+            break done;
+>done : any
+        }
+
+        done:
+>done : any
+
+        console.log('end');
+>console.log('end') : void
+>console.log : (...data: any[]) => void
+>console : Console
+>log : (...data: any[]) => void
+>'end' : "end"
+    }
+}
+
