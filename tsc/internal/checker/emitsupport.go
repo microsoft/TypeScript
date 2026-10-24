@@ -293,7 +293,7 @@ func (c *Checker) requiresAddingImplicitUndefined(declaration *ast.Node, symbol 
 		}
 		t := c.getTypeOfSymbol(symbol)
 		c.mappedSymbolLinks.Has(symbol)
-		return (symbol.Flags()&ast.SymbolFlagsProperty != 0) && (symbol.Flags()&ast.SymbolFlagsOptional != 0) && isOptionalDeclaration(declaration) && c.ReverseMappedSymbolLinks.Has(symbol) && c.ReverseMappedSymbolLinks.Get(symbol).mappedType != nil && containsNonMissingUndefinedType(c, t)
+		return (symbol.Flags()&ast.SymbolFlagsProperty != 0) && (symbol.Flags()&ast.SymbolFlagsOptional != 0) && isOptionalDeclaration(declaration) && c.reverseMappedSymbolLinks.Has(symbol) && c.reverseMappedSymbolLinks.Get(symbol).mappedType != nil && containsNonMissingUndefinedType(c, t)
 	case ast.KindParameter, ast.KindJSDocParameterTag:
 		return c.requiresAddingImplicitUndefinedWorker(declaration, enclosingDeclaration)
 	default:

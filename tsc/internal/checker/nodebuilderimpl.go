@@ -2408,8 +2408,8 @@ func (b *NodeBuilderImpl) shouldUsePlaceholderForProperty(propertySymbol *ast.Sy
 	// (2)
 	if len(b.ctx.reverseMappedStack) > 0 {
 		last := b.ctx.reverseMappedStack[len(b.ctx.reverseMappedStack)-1]
-		if b.ch.ReverseMappedSymbolLinks.Has(last) {
-			links := b.ch.ReverseMappedSymbolLinks.TryGet(last)
+		if b.ch.reverseMappedSymbolLinks.Has(last) {
+			links := b.ch.reverseMappedSymbolLinks.TryGet(last)
 			propertyType := links.propertyType
 			if propertyType != nil && propertyType.objectFlags&ObjectFlagsAnonymous == 0 {
 				return true
@@ -2422,10 +2422,10 @@ func (b *NodeBuilderImpl) shouldUsePlaceholderForProperty(propertySymbol *ast.Sy
 	if len(b.ctx.reverseMappedStack) < MAX_REVERSE_MAPPED_NESTING_INSPECTION_DEPTH {
 		return false
 	}
-	if !b.ch.ReverseMappedSymbolLinks.Has(propertySymbol) {
+	if !b.ch.reverseMappedSymbolLinks.Has(propertySymbol) {
 		return false
 	}
-	propertyLinks := b.ch.ReverseMappedSymbolLinks.TryGet(propertySymbol)
+	propertyLinks := b.ch.reverseMappedSymbolLinks.TryGet(propertySymbol)
 	propMappedType := propertyLinks.mappedType
 	if propMappedType == nil || propMappedType.symbol == nil {
 		return false
@@ -2435,8 +2435,8 @@ func (b *NodeBuilderImpl) shouldUsePlaceholderForProperty(propertySymbol *ast.Sy
 			break
 		}
 		prop := b.ctx.reverseMappedStack[len(b.ctx.reverseMappedStack)-1-i]
-		if b.ch.ReverseMappedSymbolLinks.Has(prop) {
-			links := b.ch.ReverseMappedSymbolLinks.TryGet(prop)
+		if b.ch.reverseMappedSymbolLinks.Has(prop) {
+			links := b.ch.reverseMappedSymbolLinks.TryGet(prop)
 			mappedType := links.mappedType
 			if mappedType != nil && mappedType.symbol == propMappedType.symbol {
 				return true
