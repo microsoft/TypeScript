@@ -342,7 +342,19 @@ func (r *EmitResolver) IsLiteralConstDeclaration(node *ast.Node) bool {
 		if s == nil {
 			return false
 		}
-		return isFreshLiteralType(r.checker.getTypeOfSymbol(s))
+		t := r.checker.getTypeOfSymbol(s)
+		if !isFreshLiteralType(t) {
+			return false
+		}
+		// Infinity and NaN have number literal types but no literal syntax. An ambient const can only be
+		// initialized with a string or numeric literal (TS1254), so declare these with a type instead.
+		// Enum members are fine: they are written as references like E.A.
+		if t.flags&TypeFlagsNumberLiteral != 0 && t.flags&TypeFlagsEnumLike == 0 {
+			if n := t.AsLiteralType().value.(jsnum.Number); n.IsInf() || n.IsNaN() {
+				return false
+			}
+		}
+		return true
 	}
 	return false
 }
@@ -703,14 +715,10 @@ func (r *EmitResolver) CreateLiteralConstValue(node *ast.Node, tracker nodebuild
 	case string:
 		return r.emitContext.Factory.NewStringLiteral(value, ast.TokenFlagsNone)
 	case jsnum.Number:
-		if value.IsInf() {
-			if value > 0 {
-				return r.emitContext.Factory.NewIdentifier("Infinity")
-			}
-			return r.emitContext.Factory.NewPrefixUnaryExpression(ast.KindMinusToken, r.emitContext.Factory.NewIdentifier("Infinity"))
-		}
-		if value.IsNaN() {
-			return r.emitContext.Factory.NewIdentifier("NaN")
+		if value.IsInf() || value.IsNaN() {
+			// Infinity and NaN have no literal syntax, and an ambient const can only be initialized with a
+			// string or numeric literal (TS1254). Return nil so the caller writes a type annotation instead.
+			return nil
 		}
 		if value.Abs() != value {
 			// negative

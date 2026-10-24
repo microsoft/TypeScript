@@ -1,0 +1,54 @@
+//// [tests/cases/compiler/declarationEmitNonFiniteNumberLiteral.ts] ////
+
+=== declarationEmitNonFiniteNumberLiteral.ts ===
+// Numeric literals that overflow to Infinity have number literal types, but Infinity has no literal
+// syntax: `declare const a = Infinity;` is an error in a .d.ts (TS1254), so these get type annotations.
+
+export const a = 1e400;
+>a : Symbol(a, Decl(declarationEmitNonFiniteNumberLiteral.ts, 3, 12))
+
+export const b = -1e400;
+>b : Symbol(b, Decl(declarationEmitNonFiniteNumberLiteral.ts, 4, 12))
+
+export const c = 1.7976931348623159e308;
+>c : Symbol(c, Decl(declarationEmitNonFiniteNumberLiteral.ts, 5, 12))
+
+export const d = 1e308;
+>d : Symbol(d, Decl(declarationEmitNonFiniteNumberLiteral.ts, 6, 12))
+
+export class C {
+>C : Symbol(C, Decl(declarationEmitNonFiniteNumberLiteral.ts, 6, 23))
+
+    static readonly e = 1e400;
+>e : Symbol(C.e, Decl(declarationEmitNonFiniteNumberLiteral.ts, 8, 16))
+
+    readonly f = -2e308;
+>f : Symbol(C.f, Decl(declarationEmitNonFiniteNumberLiteral.ts, 9, 30))
+}
+
+// References to enum members are valid initializers whatever their value.
+export enum E {
+>E : Symbol(E, Decl(declarationEmitNonFiniteNumberLiteral.ts, 11, 1))
+
+    A = NaN,
+>A : Symbol(E.A, Decl(declarationEmitNonFiniteNumberLiteral.ts, 14, 15))
+>NaN : Symbol(NaN, Decl(lib.es5.d.ts, --, --))
+
+    B = Infinity,
+>B : Symbol(E.B, Decl(declarationEmitNonFiniteNumberLiteral.ts, 15, 12))
+>Infinity : Symbol(Infinity, Decl(lib.es5.d.ts, --, --))
+}
+export const g = E.A;
+>g : Symbol(g, Decl(declarationEmitNonFiniteNumberLiteral.ts, 18, 12))
+>E.A : Symbol(E.A, Decl(declarationEmitNonFiniteNumberLiteral.ts, 14, 15))
+>E : Symbol(E, Decl(declarationEmitNonFiniteNumberLiteral.ts, 11, 1))
+>A : Symbol(E.A, Decl(declarationEmitNonFiniteNumberLiteral.ts, 14, 15))
+
+export const h = E.B;
+>h : Symbol(h, Decl(declarationEmitNonFiniteNumberLiteral.ts, 19, 12))
+>E.B : Symbol(E.B, Decl(declarationEmitNonFiniteNumberLiteral.ts, 15, 12))
+>E : Symbol(E, Decl(declarationEmitNonFiniteNumberLiteral.ts, 11, 1))
+>B : Symbol(E.B, Decl(declarationEmitNonFiniteNumberLiteral.ts, 15, 12))
+
+export default 1e400;
+
