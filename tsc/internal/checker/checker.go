@@ -19429,7 +19429,7 @@ func (c *Checker) getSignaturesOfType(t *Type, kind SignatureKind) []*Signature 
 }
 
 func (c *Checker) getSignaturesOfStructuredType(t *Type, kind SignatureKind) []*Signature {
-	if t.flags&TypeFlagsStructuredType == 0 {
+	if t.flags&TypeFlagsStructuredType == 0 || t.objectFlags&(ObjectFlagsMapped|ObjectFlagsReverseMapped) != 0 {
 		return nil
 	}
 	resolved := c.resolveStructuredTypeMembers(t)
