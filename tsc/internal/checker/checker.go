@@ -3083,10 +3083,26 @@ func (c *Checker) checkTypeReferenceOrImport(node *ast.Node) {
 				c.checkTypeArgumentConstraints(node, typeParameters)
 			}
 		}
-		symbol := c.getResolvedSymbolOrNil(node)
-		if symbol != nil {
-			if core.Some(symbol.Declarations(), func(d *ast.Node) bool { return ast.IsTypeDeclaration(d) && c.IsDeprecatedDeclaration(d) }) {
-				c.addDeprecatedSuggestion(c.getDeprecatedSuggestionNode(node), symbol.Declarations(), symbol.Name())
+		name := getTypeReferenceName(node)
+		var aliasSymbol *ast.Symbol
+		if name != nil {
+			aliasSymbol = c.resolveEntityName(name, ast.SymbolFlagsType, true /*ignoreErrors*/, true /*dontResolveAlias*/, nil /*location*/)
+		} else if ast.IsImportTypeNode(node) && !ast.NodeIsMissing(node.AsImportTypeNode().Qualifier) {
+			aliasSymbol = c.getResolvedSymbolOrNil(node.AsImportTypeNode().Qualifier)
+		}
+		if aliasSymbol != nil && aliasSymbol.Flags()&ast.SymbolFlagsAlias != 0 && aliasSymbol.Flags()&ast.SymbolFlagsType == 0 {
+			targetSymbol := c.resolveAliasWithDeprecationCheck(aliasSymbol, c.getDeprecatedSuggestionNode(node))
+			if targetSymbol != nil && core.Some(targetSymbol.Declarations(), func(d *ast.Node) bool {
+				return (ast.IsTypeDeclaration(d) || d.Kind == ast.KindImportEqualsDeclaration || d.Kind == ast.KindImportSpecifier || d.Kind == ast.KindExportSpecifier) && c.IsDeprecatedDeclaration(d)
+			}) {
+				c.addDeprecatedSuggestion(c.getDeprecatedSuggestionNode(node), targetSymbol.Declarations(), targetSymbol.Name())
+			}
+		} else {
+			symbol := c.getResolvedSymbolOrNil(node)
+			if symbol != nil {
+				if core.Some(symbol.Declarations(), func(d *ast.Node) bool { return ast.IsTypeDeclaration(d) && c.IsDeprecatedDeclaration(d) }) {
+					c.addDeprecatedSuggestion(c.getDeprecatedSuggestionNode(node), symbol.Declarations(), symbol.Name())
+				}
 			}
 		}
 	}
@@ -3126,6 +3142,14 @@ func (c *Checker) getDeprecatedSuggestionNode(node *ast.Node) *ast.Node {
 		typeName := node.AsTypeReferenceNode().TypeName
 		if ast.IsQualifiedName(typeName) {
 			return typeName.AsQualifiedName().Right
+		}
+	case ast.KindImportType:
+		qualifier := node.AsImportTypeNode().Qualifier
+		if qualifier != nil {
+			if ast.IsQualifiedName(qualifier) {
+				return qualifier.AsQualifiedName().Right
+			}
+			return qualifier
 		}
 	}
 	return node
