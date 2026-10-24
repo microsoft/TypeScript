@@ -727,3 +727,100 @@ const f75 = a ? async (x): T => async() : x => x;
 >x : Symbol(x, Decl(c.ts, 13, 54), Decl(c.ts, 16, 13))
 >x : Symbol(x, Decl(c.ts, 13, 54), Decl(c.ts, 16, 13))
 
+declare function h<A>(a: A): A;
+>h : Symbol(h, Decl(c.ts, 20, 49))
+>A : Symbol(A, Decl(c.ts, 22, 19))
+>a : Symbol(a, Decl(c.ts, 22, 22))
+>A : Symbol(A, Decl(c.ts, 22, 19))
+>A : Symbol(A, Decl(c.ts, 22, 19))
+
+declare namespace number { type T = number; }
+>number : Symbol(number, Decl(c.ts, 22, 31))
+>T : Symbol(T, Decl(c.ts, 23, 26))
+
+const f76 = a ? async(x = b < (d + 1)): T => x : 0;
+>f76 : Symbol(f76, Decl(c.ts, 24, 5))
+>a : Symbol(a, Decl(c.ts, 1, 13))
+>x : Symbol(x, Decl(c.ts, 24, 22))
+>b : Symbol(b, Decl(c.ts, 1, 21))
+>d : Symbol(d, Decl(c.ts, 4, 3))
+>T : Symbol(T, Decl(c.ts, 2, 41))
+>x : Symbol(x, Decl(c.ts, 24, 22))
+
+const f77 = a ? async(x = b << (d + 1)): T => x : 0;
+>f77 : Symbol(f77, Decl(c.ts, 25, 5))
+>a : Symbol(a, Decl(c.ts, 1, 13))
+>x : Symbol(x, Decl(c.ts, 25, 22))
+>b : Symbol(b, Decl(c.ts, 1, 21))
+>d : Symbol(d, Decl(c.ts, 4, 3))
+>T : Symbol(T, Decl(c.ts, 2, 41))
+>x : Symbol(x, Decl(c.ts, 25, 22))
+
+const f78 = a ? async(x = new b < (d + 1)): T => x : 0;
+>f78 : Symbol(f78, Decl(c.ts, 26, 5))
+>a : Symbol(a, Decl(c.ts, 1, 13))
+>x : Symbol(x, Decl(c.ts, 26, 22))
+>b : Symbol(b, Decl(c.ts, 1, 21))
+>d : Symbol(d, Decl(c.ts, 4, 3))
+>T : Symbol(T, Decl(c.ts, 2, 41))
+>x : Symbol(x, Decl(c.ts, 26, 22))
+
+const f79 = a ? async(x = h<T>(b)): T => x : 0;
+>f79 : Symbol(f79, Decl(c.ts, 27, 5))
+>a : Symbol(a, Decl(c.ts, 1, 13))
+>x : Symbol(x, Decl(c.ts, 27, 22))
+>h : Symbol(h, Decl(c.ts, 20, 49))
+>T : Symbol(T, Decl(c.ts, 2, 41))
+>b : Symbol(b, Decl(c.ts, 1, 21))
+>T : Symbol(T, Decl(c.ts, 2, 41))
+>x : Symbol(x, Decl(c.ts, 27, 22))
+
+const f80 = a ? async(): Promise<({ a: number[] })> => ({ a: [] }) : 0;
+>f80 : Symbol(f80, Decl(c.ts, 28, 5))
+>a : Symbol(a, Decl(c.ts, 1, 13))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>a : Symbol(a, Decl(c.ts, 28, 35))
+>a : Symbol(a, Decl(c.ts, 28, 57))
+
+const f81 = a ? async(): Promise<([a: number])> => [b] : 0;
+>f81 : Symbol(f81, Decl(c.ts, 29, 5))
+>a : Symbol(a, Decl(c.ts, 1, 13))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>b : Symbol(b, Decl(c.ts, 1, 21))
+
+const f82 = a ? async(): Promise<{ r\u0065adonly: number }> => ({ readonly: 0 }) : 0;
+>f82 : Symbol(f82, Decl(c.ts, 30, 5))
+>a : Symbol(a, Decl(c.ts, 1, 13))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>r\u0065adonly : Symbol(r\u0065adonly, Decl(c.ts, 30, 34))
+>readonly : Symbol(readonly, Decl(c.ts, 30, 65))
+
+const f83 = a ? async(): Promise<{ g\u0065t: number }> => ({ get: 0 }) : 0;
+>f83 : Symbol(f83, Decl(c.ts, 31, 5))
+>a : Symbol(a, Decl(c.ts, 1, 13))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>g\u0065t : Symbol(g\u0065t, Decl(c.ts, 31, 34))
+>get : Symbol(get, Decl(c.ts, 31, 60))
+
+const f84 = a ? async(): Promise<n\u0075mber.T> => b : 0;
+>f84 : Symbol(f84, Decl(c.ts, 32, 5))
+>a : Symbol(a, Decl(c.ts, 1, 13))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>n\u0075mber : Symbol(number, Decl(c.ts, 22, 31))
+>T : Symbol(number.T, Decl(c.ts, 23, 26))
+>b : Symbol(b, Decl(c.ts, 1, 21))
+
+const f85 = a ? a ? as\u0079nc() : d => d : b;
+>f85 : Symbol(f85, Decl(c.ts, 33, 5))
+>a : Symbol(a, Decl(c.ts, 1, 13))
+>a : Symbol(a, Decl(c.ts, 1, 13))
+>as\u0079nc : Symbol(async, Decl(c.ts, 1, 39))
+>d : Symbol(d, Decl(c.ts, 33, 34))
+>d : Symbol(d, Decl(c.ts, 33, 34))
+>b : Symbol(b, Decl(c.ts, 1, 21))
+
+const f86 = a ? async(): Promise<n\u0075mber> => 0 : 0;
+>f86 : Symbol(f86, Decl(c.ts, 34, 5))
+>a : Symbol(a, Decl(c.ts, 1, 13))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+

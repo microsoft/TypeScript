@@ -125,6 +125,20 @@ const f73 = a ? a ? async (): Promise<any> => (x): T => async() : x => x;
 const f74 = a ? async (x): T => async (): T => b;
 const f75 = a ? async (x): T => async() : x => x;
 
+declare function h<A>(a: A): A;
+declare namespace number { type T = number; }
+const f76 = a ? async(x = b < (d + 1)): T => x : 0;
+const f77 = a ? async(x = b << (d + 1)): T => x : 0;
+const f78 = a ? async(x = new b < (d + 1)): T => x : 0;
+const f79 = a ? async(x = h<T>(b)): T => x : 0;
+const f80 = a ? async(): Promise<({ a: number[] })> => ({ a: [] }) : 0;
+const f81 = a ? async(): Promise<([a: number])> => [b] : 0;
+const f82 = a ? async(): Promise<{ r\u0065adonly: number }> => ({ readonly: 0 }) : 0;
+const f83 = a ? async(): Promise<{ g\u0065t: number }> => ({ get: 0 }) : 0;
+const f84 = a ? async(): Promise<n\u0075mber.T> => b : 0;
+const f85 = a ? a ? as\u0079nc() : d => d : b;
+const f86 = a ? async(): Promise<n\u0075mber> => 0 : 0;
+
 
 //// [a.js]
 "use strict";
@@ -254,4 +268,15 @@ const f72 = a ? a ? () => __awaiter(void 0, void 0, void 0, function* () { retur
 const f73 = a ? a ? () => __awaiter(void 0, void 0, void 0, function* () { return (x); }) : T => async() : x => x;
 const f74 = a ? async(x) : T => () => __awaiter(void 0, void 0, void 0, function* () { return b; });
 const f75 = a ? async(x) : T => () => __awaiter(void 0, void 0, void 0, function* () { return x; });
+const f76 = a ? (...args_1) => __awaiter(void 0, [...args_1], void 0, function* (x = b < (d + 1)) { return x; }) : 0;
+const f77 = a ? (...args_1) => __awaiter(void 0, [...args_1], void 0, function* (x = b << (d + 1)) { return x; }) : 0;
+const f78 = a ? (...args_1) => __awaiter(void 0, [...args_1], void 0, function* (x = new b < (d + 1)) { return x; }) : 0;
+const f79 = a ? (...args_1) => __awaiter(void 0, [...args_1], void 0, function* (x = h(b)) { return x; }) : 0;
+const f80 = a ? () => __awaiter(void 0, void 0, void 0, function* () { return ({ a: [] }); }) : 0;
+const f81 = a ? () => __awaiter(void 0, void 0, void 0, function* () { return [b]; }) : 0;
+const f82 = a ? () => __awaiter(void 0, void 0, void 0, function* () { return ({ readonly: 0 }); }) : 0;
+const f83 = a ? () => __awaiter(void 0, void 0, void 0, function* () { return ({ get: 0 }); }) : 0;
+const f84 = a ? () => __awaiter(void 0, void 0, void 0, function* () { return b; }) : 0;
+const f85 = a ? a ? as\u0079nc() : d => d : b;
+const f86 = a ? () => __awaiter(void 0, void 0, void 0, function* () { return 0; }) : 0;
 export {};

@@ -235,3 +235,12 @@ const f24 = a ? async() : d => (a ? async() : d => d);
 >d : Symbol(d, Decl(a.js, 48, 45))
 >d : Symbol(d, Decl(a.js, 48, 45))
 
+const f25 = a ? a ? as\u0079nc() : d => d : b;
+>f25 : Symbol(f25, Decl(a.js, 49, 5))
+>a : Symbol(a, Decl(a.js, 0, 5))
+>a : Symbol(a, Decl(a.js, 0, 5))
+>as\u0079nc : Symbol(async, Decl(a.js, 2, 14))
+>d : Symbol(d, Decl(a.js, 49, 34))
+>d : Symbol(d, Decl(a.js, 49, 34))
+>b : Symbol(b, Decl(a.js, 1, 5))
+

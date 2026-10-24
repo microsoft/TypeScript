@@ -124,3 +124,17 @@ const f72 = a ? a ? async (): T => (x): T => async() : x => x;
 const f73 = a ? a ? async (): Promise<any> => (x): T => async() : x => x;
 const f74 = a ? async (x): T => async (): T => b;
 const f75 = a ? async (x): T => async() : x => x;
+
+declare function h<A>(a: A): A;
+declare namespace number { type T = number; }
+const f76 = a ? async(x = b < (d + 1)): T => x : 0;
+const f77 = a ? async(x = b << (d + 1)): T => x : 0;
+const f78 = a ? async(x = new b < (d + 1)): T => x : 0;
+const f79 = a ? async(x = h<T>(b)): T => x : 0;
+const f80 = a ? async(): Promise<({ a: number[] })> => ({ a: [] }) : 0;
+const f81 = a ? async(): Promise<([a: number])> => [b] : 0;
+const f82 = a ? async(): Promise<{ r\u0065adonly: number }> => ({ readonly: 0 }) : 0;
+const f83 = a ? async(): Promise<{ g\u0065t: number }> => ({ get: 0 }) : 0;
+const f84 = a ? async(): Promise<n\u0075mber.T> => b : 0;
+const f85 = a ? a ? as\u0079nc() : d => d : b;
+const f86 = a ? async(): Promise<n\u0075mber> => 0 : 0;

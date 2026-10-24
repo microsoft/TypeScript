@@ -357,3 +357,16 @@ const f24 = a ? async() : d => (a ? async() : d => d);
 >d : any
 >d : any
 
+const f25 = a ? a ? as\u0079nc() : d => d : b;
+>f25 : number | ((d: any) => any)
+>a ? a ? as\u0079nc() : d => d : b : number | ((d: any) => any)
+>a : true
+>a ? as\u0079nc() : d => d : number | ((d: any) => any)
+>a : true
+>as\u0079nc() : number
+>as\u0079nc : (...c: any[]) => number
+>d => d : (d: any) => any
+>d : any
+>d : any
+>b : 1
+

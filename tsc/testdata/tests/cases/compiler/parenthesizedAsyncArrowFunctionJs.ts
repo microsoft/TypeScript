@@ -53,3 +53,4 @@ const f21 = a ? d => d = async () => async() : (d => d = 0);
 const f22 = h => a ? async(h = a ? async() : d => d) : d => d;
 const f23 = a ? async() : (d => d);
 const f24 = a ? async() : d => (a ? async() : d => d);
+const f25 = a ? a ? as\u0079nc() : d => d : b;

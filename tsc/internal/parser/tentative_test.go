@@ -142,6 +142,48 @@ func TestTentativeConditionalFailure(t *testing.T) {
 	assert.Equal(t, p.parsingFlags, ParsingFlagsTentative)
 }
 
+func TestTentativeTypeArgumentsRollback(t *testing.T) {
+	t.Parallel()
+	p := newTestParser("<(a + 1)")
+	tentative := p.beginTentativeParse()
+	defer tentative.revert()
+	tentative.silence()
+	state := p.mark()
+	parsingContexts := p.parsingContexts
+	typeArguments := p.tryParseTypeArgumentsInExpression()
+	assert.Assert(t, typeArguments == nil)
+	assert.Assert(t, reflect.DeepEqual(p.mark(), state))
+	assert.Equal(t, p.parsingContexts, parsingContexts)
+	assert.Equal(t, p.parsingFlags, ParsingFlagsTentative)
+}
+
+func TestTentativeTypeArgumentsCommit(t *testing.T) {
+	t.Parallel()
+	p := newTestParser("<A>(a)")
+	tentative := p.beginTentativeParse()
+	defer tentative.revert()
+	tentative.silence()
+	typeArguments := p.tryParseTypeArgumentsInExpression()
+	assert.Assert(t, typeArguments != nil)
+	assert.Equal(t, len(typeArguments.Nodes), 1)
+	assert.Equal(t, typeArguments.Nodes[0].Kind, ast.KindTypeReference)
+	assert.Equal(t, p.token, ast.KindOpenParenToken)
+	assert.Equal(t, p.parsingContexts, ParsingContexts(0))
+	assert.Equal(t, p.parsingFlags, ParsingFlagsTentative)
+}
+
+func TestTentativeLookAheadRecovery(t *testing.T) {
+	t.Parallel()
+	p := newTestParser(`r\u0065adonly: number`)
+	tentative := p.beginTentativeParse()
+	defer tentative.revert()
+	tentative.silence()
+	state := p.mark()
+	assert.Assert(t, p.lookAhead((*Parser).scanTypeMemberStart))
+	assert.Assert(t, reflect.DeepEqual(p.mark(), state))
+	assert.Equal(t, p.parsingFlags, ParsingFlagsTentative)
+}
+
 func TestTentativeParseCommittedFailure(t *testing.T) {
 	t.Parallel()
 	p := newTestParser("a + b")

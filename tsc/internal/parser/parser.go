@@ -409,10 +409,16 @@ func (p *Parser) rewind(state ParserState) {
 }
 
 func (p *Parser) lookAhead(callback func(p *Parser) bool) bool {
-	state := p.mark()
-	result := callback(p)
-	p.rewind(state)
-	return result
+	if p.parsingFlags == ParsingFlagsNone {
+		state := p.mark()
+		result := callback(p)
+		p.rewind(state)
+		return result
+	}
+	tentative := p.beginTentativeParse()
+	defer tentative.close()
+	p.parsingFlags = ParsingFlagsNone
+	return callback(p)
 }
 
 func (p *Parser) nextToken() ast.Kind {
@@ -2861,13 +2867,10 @@ func (p *Parser) parseNonArrayType() *ast.Node {
 	switch p.token {
 	case ast.KindAnyKeyword, ast.KindUnknownKeyword, ast.KindStringKeyword, ast.KindNumberKeyword, ast.KindBigIntKeyword,
 		ast.KindSymbolKeyword, ast.KindBooleanKeyword, ast.KindUndefinedKeyword, ast.KindNeverKeyword, ast.KindObjectKeyword:
-		state := p.mark()
-		keywordTypeNode := p.parseKeywordTypeNode()
-		// If these are followed by a dot then parse these out as a dotted type reference instead
-		if p.token != ast.KindDotToken {
+		keywordTypeNode := p.tryParseKeywordTypeNode()
+		if keywordTypeNode != nil {
 			return keywordTypeNode
 		}
-		p.rewind(state)
 		return p.parseTypeReference()
 	case ast.KindAsteriskEqualsToken:
 		// If there is '*=', treat it as * followed by postfix =
@@ -2925,6 +2928,17 @@ func (p *Parser) parseNonArrayType() *ast.Node {
 	default:
 		return p.parseTypeReference()
 	}
+}
+
+func (p *Parser) tryParseKeywordTypeNode() *ast.Node {
+	tentative := p.beginTentativeParse()
+	defer tentative.close()
+	node := p.parseKeywordTypeNode()
+	if p.token == ast.KindDotToken {
+		return nil
+	}
+	tentative.commit()
+	return node
 }
 
 func (p *Parser) parseKeywordTypeNode() *ast.Node {
@@ -4049,20 +4063,28 @@ func (p *Parser) tryParseModifier(hasSeenStaticModifier bool, permitConstAsModif
 }
 
 func (p *Parser) parseContextualModifier(t ast.Kind) bool {
-	state := p.mark()
-	if p.token == t && p.nextTokenCanFollowModifier() {
+	if p.token != t {
+		return false
+	}
+	tentative := p.beginTentativeParse()
+	defer tentative.close()
+	if p.nextTokenCanFollowModifier() {
+		tentative.commit()
 		return true
 	}
-	p.rewind(state)
 	return false
 }
 
 func (p *Parser) parseAnyContextualModifier() bool {
-	state := p.mark()
-	if ast.IsModifierKind(p.token) && p.nextTokenCanFollowModifier() {
+	if !ast.IsModifierKind(p.token) {
+		return false
+	}
+	tentative := p.beginTentativeParse()
+	defer tentative.close()
+	if p.nextTokenCanFollowModifier() {
+		tentative.commit()
 		return true
 	}
-	p.rewind(state)
 	return false
 }
 
@@ -4316,10 +4338,9 @@ func (p *Parser) parseYieldExpression(flags ExpressionParseFlags) *ast.Node {
 
 func (p *Parser) isParenthesizedArrowFunctionExpression() core.Tristate {
 	if p.token == ast.KindOpenParenToken || p.token == ast.KindLessThanToken || p.token == ast.KindAsyncKeyword {
-		state := p.mark()
-		result := p.nextIsParenthesizedArrowFunctionExpression()
-		p.rewind(state)
-		return result
+		tentative := p.beginTentativeParse()
+		defer tentative.close()
+		return p.nextIsParenthesizedArrowFunctionExpression()
 	}
 	if p.token == ast.KindEqualsGreaterThanToken {
 		// ERROR RECOVERY TWEAK:
@@ -5534,7 +5555,8 @@ func (p *Parser) tryParseTypeArgumentsInExpression() *ast.NodeList {
 	if p.contextFlags&ast.NodeFlagsJavaScriptFile != 0 || (p.token != ast.KindLessThanToken && p.token != ast.KindLessThanLessThanToken) {
 		return nil
 	}
-	state := p.mark()
+	tentative := p.beginTentativeParse()
+	defer tentative.close()
 	if p.reScanLessThanToken() == ast.KindLessThanToken {
 		p.nextToken()
 		typeArguments := p.parseDelimitedList(PCTypeArguments, (*Parser).parseType)
@@ -5546,11 +5568,11 @@ func (p *Parser) tryParseTypeArgumentsInExpression() *ast.NodeList {
 			// `f<number>(42)`, we favor the type argument interpretation even though JavaScript would view
 			// it as a relational expression.
 			if p.canFollowTypeArgumentsInExpression() {
+				tentative.commit()
 				return typeArguments
 			}
 		}
 	}
-	p.rewind(state)
 	return nil
 }
 
