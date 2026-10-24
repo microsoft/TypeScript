@@ -1452,6 +1452,11 @@ func (c *Checker) getJsxNamespaceContainerForImplicitImport(location *ast.Node) 
 	if links.jsxImplicitImportContainer != nil {
 		return core.IfElse(links.jsxImplicitImportContainer == c.unknownSymbol, nil, links.jsxImplicitImportContainer)
 	}
+	// If the file is not an external module (no imports/exports), it cannot import the JSX runtime.
+	// Return nil to avoid the confusing "module path ... could not be found" error (Issue #64438).
+	if file.ExternalModuleIndicator == nil {
+		return nil
+	}
 	canonicalErrorTag := links.firstJSXTagInFile
 	if canonicalErrorTag == nil {
 		var visit ast.Visitor
