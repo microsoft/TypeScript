@@ -1,0 +1,36 @@
+sharedMemberLayoutThisIntersectionBase.ts(5,11): error TS2589: Type instantiation is excessively deep and possibly infinite.
+sharedMemberLayoutThisIntersectionBase.ts(7,1): error TS2589: Type instantiation is excessively deep and possibly infinite.
+sharedMemberLayoutThisIntersectionBase.ts(7,3): error TS2339: Property 'm' does not exist on type 'D<"b">'.
+sharedMemberLayoutThisIntersectionBase.ts(10,7): error TS2589: Type instantiation is excessively deep and possibly infinite.
+sharedMemberLayoutThisIntersectionBase.ts(12,1): error TS2589: Type instantiation is excessively deep and possibly infinite.
+sharedMemberLayoutThisIntersectionBase.ts(12,3): error TS2339: Property 'm' does not exist on type 'C<"b">'.
+
+
+==== sharedMemberLayoutThisIntersectionBase.ts (6 errors) ====
+    interface A { kind: string; m: this["kind"] }
+    interface B { m: "a" }
+    type AB = A & B;
+    
+    interface D<T extends string> extends AB { kind: T }
+              ~
+!!! error TS2589: Type instantiation is excessively deep and possibly infinite.
+    declare let d: D<"b">;
+    d.m;
+    ~~~
+!!! error TS2589: Type instantiation is excessively deep and possibly infinite.
+      ~
+!!! error TS2339: Property 'm' does not exist on type 'D<"b">'.
+    
+    declare const ABCtor: new () => AB;
+    class C<T extends string> extends ABCtor { declare kind: T }
+          ~
+!!! error TS2589: Type instantiation is excessively deep and possibly infinite.
+    declare let c: C<"b">;
+    c.m;
+    ~~~
+!!! error TS2589: Type instantiation is excessively deep and possibly infinite.
+      ~
+!!! error TS2339: Property 'm' does not exist on type 'C<"b">'.
+    
+    export {};
+    
