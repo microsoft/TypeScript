@@ -75,11 +75,11 @@ declare class Foo {
     static p1: number;
     p1: number;
 }
-export declare const t1: () => number;
+export declare const t1: (typeof Foo)[typeof k1];
 export declare const t2: () => string;
-export declare const t3: () => number;
+export declare const t3: (typeof Foo)["foo"];
 export declare const t4: () => string;
-export declare const t5: typeof Foo.m1;
+export declare const t5: (typeof Foo)["m1"];
 export declare const t6: () => void;
 export declare const t7: number;
 export declare const t8: number;
