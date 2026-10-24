@@ -125,44 +125,45 @@ func getIsolatedDeclarationsCodeActions(ctx context.Context, fixContext *CodeFix
 	return fixes, nil
 }
 
-func getAllIsolatedDeclarationsCodeActions(ctx context.Context, fixContext *CodeFixContext) (*CombinedCodeActions, error) {
-	allDiags := getAllDiagnostics(ctx, fixContext.Program, fixContext.SourceFile)
-
-	ch, done := fixContext.Program.GetTypeCheckerForFile(ctx, fixContext.SourceFile)
-	defer done()
-
+func getAllIsolatedDeclarationsCodeActions(ctx context.Context, fixContext *CodeFixContext, fixAll *CodeFixAll) (*CombinedCodeActions, error) {
 	changeTracker := change.NewTracker(ctx, fixContext.Program.Options(), fixContext.LS.FormatOptions(), fixContext.LS.converters)
-
 	fixer := &isolatedDeclarationsFixer{
 		sourceFile:    fixContext.SourceFile,
 		program:       fixContext.Program,
-		checker:       ch,
+		checker:       fixAll.typeChecker,
 		changeTracker: changeTracker,
 		locale:        locale.FromContext(ctx),
 		fixedNodes:    make(map[*ast.Node]bool),
 		typePrintMode: typePrintModeFull,
 	}
 
-	for _, diag := range allDiags {
-		if isFixableDiagnostic(diag, isolatedDeclarationsFixErrorCodes) {
+	for _, diag := range fixAll.diagnostics {
+		if diag.File() == fixContext.SourceFile && isFixableDiagnostic(diag, isolatedDeclarationsFixErrorCodes) {
 			span := core.NewTextRange(diag.Loc().Pos(), diag.Loc().End())
 			fixer.addTypeAnnotation(span)
 		}
 	}
 
-	for _, sym := range fixer.symbolsToImport {
-		fixer.addSymbolToExistingImport(sym)
+	changes := getCodeFixChanges(fixContext.SourceFile, changeTracker)
+	if len(changes) == 0 {
+		return nil, nil
 	}
 
-	changes, _ := changeTracker.GetChanges()
-	fileChanges := changes[fixContext.SourceFile.OriginalFileName()]
-	if len(fileChanges) == 0 {
-		return nil, nil
+	if len(fixer.symbolsToImport) > 0 {
+		importAdder, err := fixAll.getImportAdder(ctx, fixContext)
+		if err != nil {
+			return nil, err
+		}
+		if importAdder != nil {
+			for _, symbol := range fixer.symbolsToImport {
+				importAdder.AddImportFromExportedSymbol(symbol, true /*isValidTypeOnlyUseSite*/)
+			}
+		}
 	}
 
 	return &CombinedCodeActions{
 		Description: diagnostics.Add_all_missing_type_annotations.Localize(locale.FromContext(ctx)),
-		Changes:     fileChanges,
+		Changes:     changes,
 	}, nil
 }
 
@@ -193,14 +194,11 @@ func tryCodeAction(ctx context.Context, fixContext *CodeFixContext, ch *checker.
 		fixer.addSymbolToExistingImport(sym)
 	}
 
-	changes, _ := changeTracker.GetChanges()
-	fileChanges := changes[fixContext.SourceFile.OriginalFileName()]
-
 	// Add import edits if import adder has fixes
 	if importAdder != nil && importAdder.HasFixes() {
-		fileChanges = append(fileChanges, importAdder.Edits()...)
+		importAdder.WriteFixes(changeTracker)
 	}
-
+	fileChanges := getCodeFixChanges(fixContext.SourceFile, changeTracker)
 	if len(fileChanges) == 0 {
 		return nil
 	}
