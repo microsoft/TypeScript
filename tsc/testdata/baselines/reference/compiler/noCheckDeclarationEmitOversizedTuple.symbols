@@ -1,0 +1,29 @@
+//// [tests/cases/compiler/noCheckDeclarationEmitOversizedTuple.ts] ////
+
+=== noCheckDeclarationEmitOversizedTuple.ts ===
+type BuildTuple<L extends number, T extends any[] = [any]> =
+>BuildTuple : Symbol(BuildTuple, Decl(noCheckDeclarationEmitOversizedTuple.ts, 0, 0))
+>L : Symbol(L, Decl(noCheckDeclarationEmitOversizedTuple.ts, 0, 16))
+>T : Symbol(T, Decl(noCheckDeclarationEmitOversizedTuple.ts, 0, 33))
+
+    T['length'] extends L ? T : BuildTuple<L, [...T, ...T]>;
+>T : Symbol(T, Decl(noCheckDeclarationEmitOversizedTuple.ts, 0, 33))
+>L : Symbol(L, Decl(noCheckDeclarationEmitOversizedTuple.ts, 0, 16))
+>T : Symbol(T, Decl(noCheckDeclarationEmitOversizedTuple.ts, 0, 33))
+>BuildTuple : Symbol(BuildTuple, Decl(noCheckDeclarationEmitOversizedTuple.ts, 0, 0))
+>L : Symbol(L, Decl(noCheckDeclarationEmitOversizedTuple.ts, 0, 16))
+>T : Symbol(T, Decl(noCheckDeclarationEmitOversizedTuple.ts, 0, 33))
+>T : Symbol(T, Decl(noCheckDeclarationEmitOversizedTuple.ts, 0, 33))
+
+type A = BuildTuple<3>;
+>A : Symbol(A, Decl(noCheckDeclarationEmitOversizedTuple.ts, 1, 60))
+>BuildTuple : Symbol(BuildTuple, Decl(noCheckDeclarationEmitOversizedTuple.ts, 0, 0))
+
+export class C {
+>C : Symbol(C, Decl(noCheckDeclarationEmitOversizedTuple.ts, 2, 23))
+
+    p? = null! as A | string;
+>p : Symbol(C.p, Decl(noCheckDeclarationEmitOversizedTuple.ts, 4, 16))
+>A : Symbol(A, Decl(noCheckDeclarationEmitOversizedTuple.ts, 1, 60))
+}
+
