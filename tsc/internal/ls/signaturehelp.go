@@ -459,13 +459,28 @@ func (l *LanguageService) getSignatureHelpItem(candidate *checker.Signature, isT
 
 	suffixDpw := returnTypeToDisplayParts(candidate, c, enclosingDeclaration, sourceFile, vsCapability, emitContext)
 
-	// Generate documentation from the signature's declaration
+	// Generate documentation from the signature's declaration.
 	var documentation *string
+	var doc string
 	if declaration := candidate.Declaration(); declaration != nil {
-		doc := getDocumentationFromDeclaration(l.documentationLocationMapper(spanmap.FeatureSignatureHelp), c, nil, declaration, nil, docFormat, true /*commentOnly*/)
-		if doc != "" {
-			documentation = &doc
+		doc = getDocumentationFromDeclaration(
+			l.documentationLocationMapper(spanmap.FeatureSignatureHelp),
+			c, nil, declaration, nil, docFormat, true, /*commentOnly*/
+		)
+	}
+	if doc == "" && callTargetSym != nil {
+		for _, declaration := range callTargetSym.Declarations() {
+			doc = getDocumentationFromDeclaration(
+				l.documentationLocationMapper(spanmap.FeatureSignatureHelp),
+				c, callTargetSym, declaration, nil, docFormat, true, /*commentOnly*/
+			)
+			if doc != "" {
+				break
+			}
 		}
+	}
+	if doc != "" {
+		documentation = &doc
 	}
 
 	result := make([]signatureInformation, len(infos))

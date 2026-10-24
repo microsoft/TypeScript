@@ -1,0 +1,45 @@
+// === SignatureHelp ===
+=== /signatureHelpCommentsConstFunctionType.ts ===
+// /**
+//  * Adds one to a number.
+//  * @param value The number to add one to.
+//  */
+// declare const addOne: (value: number) => number;
+// 
+// addOne(1);
+//        ^
+// | ----------------------------------------------------------------------
+// | addOne(**value: number**): number
+// | Adds one to a number.
+// | ----------------------------------------------------------------------
+[
+  {
+    "marker": {
+      "Position": 132,
+      "LSPosition": {
+        "line": 6,
+        "character": 7
+      },
+      "Name": "0",
+      "Data": {}
+    },
+    "item": {
+      "signatures": [
+        {
+          "label": "addOne(value: number): number",
+          "documentation": {
+            "kind": "markdown",
+            "value": "Adds one to a number."
+          },
+          "parameters": [
+            {
+              "label": "value: number"
+            }
+          ],
+          "activeParameter": 0
+        }
+      ],
+      "activeSignature": 0
+    }
+  }
+]
