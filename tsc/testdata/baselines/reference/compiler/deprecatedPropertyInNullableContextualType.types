@@ -1,0 +1,53 @@
+//// [tests/cases/compiler/deprecatedPropertyInNullableContextualType.ts] ////
+
+=== objectLiteral.ts ===
+interface Options {
+    /** @deprecated use other */
+    value: number;
+>value : number
+}
+const nullable: Options | undefined = { value: 1 };
+>nullable : Options | undefined
+>{ value: 1 } : { value: number; }
+>value : number
+>1 : 1
+
+const plain: Options = { value: 1 };
+>plain : Options
+>{ value: 1 } : { value: number; }
+>value : number
+>1 : 1
+
+=== jsxAttributes.tsx ===
+declare namespace JSX {
+    interface Element {}
+}
+interface Props {
+    /** @deprecated use other */
+    value: number;
+>value : number
+}
+declare function Nullable(props: Props | undefined): JSX.Element;
+>Nullable : (props: Props | undefined) => JSX.Element
+>props : Props | undefined
+>JSX : any
+
+declare function Plain(props: Props): JSX.Element;
+>Plain : (props: Props) => JSX.Element
+>props : Props
+>JSX : any
+
+const nullableElement = <Nullable value={1} />;
+>nullableElement : JSX.Element
+><Nullable value={1} /> : JSX.Element
+>Nullable : (props: Props | undefined) => JSX.Element
+>value : number
+>1 : 1
+
+const plainElement = <Plain value={1} />;
+>plainElement : JSX.Element
+><Plain value={1} /> : JSX.Element
+>Plain : (props: Props) => JSX.Element
+>value : number
+>1 : 1
+
