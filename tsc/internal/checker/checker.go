@@ -2205,6 +2205,8 @@ func isPropertyImmediatelyReferencedWithinDeclaration(declaration *ast.Node, usa
 func (c *Checker) getTypeOnlyAliasDeclaration(symbol *ast.Symbol) *ast.Node {
 	if symbol.Flags()&ast.SymbolFlagsAlias != 0 {
 		c.resolveAlias(symbol)
+		// Alias resolution may fail before recording the declaration's type-only marker.
+		c.markSymbolOfAliasDeclarationIfTypeOnly(core.FirstOrNil(symbol.Declarations()), nil)
 		return c.aliasSymbolLinks.Get(symbol).typeOnlyDeclaration
 	}
 	return nil
@@ -2214,12 +2216,10 @@ func (c *Checker) getTypeOnlyAliasDeclaration(symbol *ast.Symbol) *ast.Node {
 // the symbol for the given meaning
 func (c *Checker) getTypeOnlyAliasDeclarationEx(symbol *ast.Symbol, meaning ast.SymbolFlags) *ast.Node {
 	for symbol.Flags()&ast.SymbolFlagsAlias != 0 && symbol.Flags()&meaning == 0 {
-		resolved := c.resolveAlias(symbol)
-		links := c.aliasSymbolLinks.Get(symbol)
-		if links.typeOnlyDeclaration != nil {
-			return links.typeOnlyDeclaration
+		if declaration := c.getTypeOnlyAliasDeclaration(symbol); declaration != nil {
+			return declaration
 		}
-		symbol = resolved
+		symbol = c.resolveAlias(symbol)
 	}
 	return nil
 }
@@ -16705,9 +16705,10 @@ func (c *Checker) resolveAlias(symbol *ast.Symbol) *ast.Symbol {
 
 func (c *Checker) resolveIndirectionAlias(source *ast.Symbol, target *ast.Symbol) *ast.Symbol {
 	result := c.getMergedSymbol(c.resolveAlias(target))
-	if targetLinks := c.aliasSymbolLinks.Get(target); targetLinks.typeOnlyDeclaration != nil {
+	// Compute the target's type-only marker before propagating it, even if alias resolution failed.
+	if typeOnlyDeclaration := c.getTypeOnlyAliasDeclaration(target); typeOnlyDeclaration != nil {
 		if sourceLinks := c.aliasSymbolLinks.Get(source); sourceLinks.typeOnlyDeclaration == nil {
-			sourceLinks.typeOnlyDeclaration = targetLinks.typeOnlyDeclaration
+			sourceLinks.typeOnlyDeclaration = typeOnlyDeclaration
 		}
 	}
 	return result
