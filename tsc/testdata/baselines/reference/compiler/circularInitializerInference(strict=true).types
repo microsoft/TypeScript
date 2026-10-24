@@ -1,0 +1,106 @@
+//// [tests/cases/compiler/circularInitializerInference.ts] ////
+
+=== circularInitializerInference.ts ===
+export {};
+
+type IsAny<Type> = 0 extends (1 & Type) ? true : false;
+>IsAny : IsAny<Type>
+>true : true
+>false : false
+
+type Assert<Condition extends true> = Condition;
+>Assert : Condition
+>true : true
+
+var comma = (comma, 3);
+>comma : any
+>(comma, 3) : 3
+>comma, 3 : 3
+>comma : any
+>3 : 3
+
+type CommaInference = Assert<IsAny<typeof comma>>;
+>CommaInference : any
+>comma : any
+
+var nestedComma = (comma, nestedComma, comma);
+>nestedComma : any
+>(comma, nestedComma, comma) : any
+>comma, nestedComma, comma : any
+>comma, nestedComma : any
+>comma : any
+>nestedComma : any
+>comma : any
+
+type NestedCommaInference = Assert<IsAny<typeof nestedComma>>;
+>NestedCommaInference : any
+>nestedComma : any
+
+var assignment = (assignment = 2);
+>assignment : any
+>(assignment = 2) : 2
+>assignment = 2 : 2
+>assignment : any
+>2 : 2
+
+type AssignmentInference = Assert<IsAny<typeof assignment>>;
+>AssignmentInference : any
+>assignment : any
+
+var nestedAssignment = (nestedAssignment = nestedAssignment = 2);
+>nestedAssignment : any
+>(nestedAssignment = nestedAssignment = 2) : 2
+>nestedAssignment = nestedAssignment = 2 : 2
+>nestedAssignment : any
+>nestedAssignment = 2 : 2
+>nestedAssignment : any
+>2 : 2
+
+type NestedAssignmentInference = Assert<IsAny<typeof nestedAssignment>>;
+>NestedAssignmentInference : any
+>nestedAssignment : any
+
+var conditional = conditional ? 0 : 1;
+>conditional : any
+>conditional ? 0 : 1 : 0 | 1
+>conditional : any
+>0 : 0
+>1 : 1
+
+type ConditionalInference = Assert<IsAny<typeof conditional>>;
+>ConditionalInference : any
+>conditional : any
+
+var logicalAnd = logicalAnd && "";
+>logicalAnd : any
+>logicalAnd && "" : any
+>logicalAnd : any
+>"" : ""
+
+type LogicalAndInference = Assert<IsAny<typeof logicalAnd>>;
+>LogicalAndInference : any
+>logicalAnd : any
+
+var propertyAccess = { member: propertyAccess.member };
+>propertyAccess : any
+>{ member: propertyAccess.member } : { member: any; }
+>member : any
+>propertyAccess.member : any
+>propertyAccess : any
+>member : any
+
+type PropertyAccessInference = Assert<IsAny<typeof propertyAccess>>;
+>PropertyAccessInference : any
+>propertyAccess : any
+
+const nonCircular: number = 3;
+>nonCircular : number
+>3 : 3
+
+type NonCircularInference = Assert<IsAny<typeof nonCircular> extends false ? true : false>;
+>NonCircularInference : true
+>nonCircular : number
+>false : false
+>true : true
+>false : false
+

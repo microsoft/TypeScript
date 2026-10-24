@@ -1,6 +1,9 @@
 //// [tests/cases/conformance/types/witness/witness.ts] ////
 
 //// [witness.ts]
+type IsAny<Type> = 0 extends (1 & Type) ? true : false;
+type Assert<Condition extends true> = Condition;
+
 // Initializers
 var varInit = varInit; // any
 var pInit: any;
@@ -29,21 +32,21 @@ var fnr2: () => any = fnReturn2();
 
 // Comma
 var co1 = (co1, 3);
-var co1: number;
+type CommaInference = Assert<IsAny<typeof co1>>;
 var co2 = (3, 4, co2);
 var co2: any;
 var co3 = (co1, co2, co3, co1);
-var co3: number;
+type NestedCommaInference = Assert<IsAny<typeof co3>>;
 
 // Assignment
 var as1 = (as1 = 2);
-var as1: number;
+type AssignmentInference = Assert<IsAny<typeof as1>>;
 var as2 = (as2 = as2 = 2);
-var as2: number;
+type NestedAssignmentInference = Assert<IsAny<typeof as2>>;
 
 // Conditional
 var cnd1 = cnd1 ? 0 : 1;
-var cnd1: number;
+type ConditionalInference = Assert<IsAny<typeof cnd1>>;
 var cnd2 = cnd1 ? cnd1 ? '' : "" : '';
 var cnd2: string;
 
@@ -57,7 +60,7 @@ var or3: any;
 
 // &&
 var and1 = and1 && '';
-var and1: string;
+type LogicalAndInference = Assert<IsAny<typeof and1>>;
 var and2 = '' && and2;
 var and2: any;
 var and3 = and3 && and3;
@@ -110,7 +113,7 @@ var fn5r = fn5(); // fn5r: should be 'any', but is 'number'
 var propAcc1 = {
     m: propAcc1.m
 };
-var propAcc1: { m: any; }
+type PropertyAccessInference = Assert<IsAny<typeof propAcc1>>;
 
 // Property access of namespace member
 namespace M2 {
@@ -167,19 +170,14 @@ function fnReturn2() {
 var fnr2 = fnReturn2();
 // Comma
 var co1 = (co1, 3);
-var co1;
 var co2 = (3, 4, co2);
 var co2;
 var co3 = (co1, co2, co3, co1);
-var co3;
 // Assignment
 var as1 = (as1 = 2);
-var as1;
 var as2 = (as2 = as2 = 2);
-var as2;
 // Conditional
 var cnd1 = cnd1 ? 0 : 1;
-var cnd1;
 var cnd2 = cnd1 ? cnd1 ? '' : "" : '';
 var cnd2;
 // ||
@@ -191,7 +189,6 @@ var or3 = or3 || or3;
 var or3;
 // &&
 var and1 = and1 && '';
-var and1;
 var and2 = '' && and2;
 var and2;
 var and3 = and3 && and3;
@@ -235,7 +232,6 @@ var fn5r = fn5(); // fn5r: should be 'any', but is 'number'
 var propAcc1 = {
     m: propAcc1.m
 };
-var propAcc1;
 // Property access of namespace member
 var M2;
 (function (M2) {
