@@ -1,0 +1,119 @@
+//// [tests/cases/conformance/es6/mapConstruction/new-Map1.ts] ////
+
+=== new-Map1.ts ===
+// https://github.com/microsoft/TypeScript/issues/37527#issuecomment-628802102
+const sample: Map<number | string, number> = new Map([[1, 1], ["yes", 1]]);
+>sample : Map<string | number, number>
+>new Map([[1, 1], ["yes", 1]]) : Map<string | number, number>
+>Map : MapConstructor
+>[[1, 1], ["yes", 1]] : ([string, number] | [number, number])[]
+>[1, 1] : [number, number]
+>1 : 1
+>1 : 1
+>["yes", 1] : [string, number]
+>"yes" : "yes"
+>1 : 1
+
+// https://github.com/microsoft/TypeScript/issues/37527#issuecomment-750412755
+function test(_a: Map<string | number, boolean>) {}
+>test : (_a: Map<string | number, boolean>) => void
+>_a : Map<string | number, boolean>
+
+test(new Map([["test" ,true] ,[1 ,false]]))
+>test(new Map([["test" ,true] ,[1 ,false]])) : void
+>test : (_a: Map<string | number, boolean>) => void
+>new Map([["test" ,true] ,[1 ,false]]) : Map<string | number, boolean>
+>Map : MapConstructor
+>[["test" ,true] ,[1 ,false]] : ([string, true] | [number, false])[]
+>["test" ,true] : [string, true]
+>"test" : "test"
+>true : true
+>[1 ,false] : [number, false]
+>1 : 1
+>false : false
+
+// https://github.com/microsoft/TypeScript/issues/33611#issue-498858215
+const M1 = new Map([
+>M1 : Map<string, { a: number; b: string; }>
+>new Map([	['k', {a: 1, b: 'asd'}],	['k', {a: 2, b: 'asd'}],]) : Map<string, { a: number; b: string; }>
+>Map : MapConstructor
+>[	['k', {a: 1, b: 'asd'}],	['k', {a: 2, b: 'asd'}],] : [string, { a: number; b: string; }][]
+
+	['k', {a: 1, b: 'asd'}],
+>['k', {a: 1, b: 'asd'}] : [string, { a: number; b: string; }]
+>'k' : "k"
+>{a: 1, b: 'asd'} : { a: number; b: string; }
+>a : number
+>1 : 1
+>b : string
+>'asd' : "asd"
+
+	['k', {a: 2, b: 'asd'}],
+>['k', {a: 2, b: 'asd'}] : [string, { a: number; b: string; }]
+>'k' : "k"
+>{a: 2, b: 'asd'} : { a: number; b: string; }
+>a : number
+>2 : 2
+>b : string
+>'asd' : "asd"
+
+]);
+const M2 = new Map([
+>M2 : Map<string, { a: number; b: string; } | { a: number; }>
+>new Map([	...M1,	['k', {a: 1}],]) : Map<string, { a: number; b: string; } | { a: number; }>
+>Map : MapConstructor
+>[	...M1,	['k', {a: 1}],] : ([string, { a: number; b: string; }] | [string, { a: number; }])[]
+
+	...M1,
+>...M1 : [string, { a: number; b: string; }]
+>M1 : Map<string, { a: number; b: string; }>
+
+	['k', {a: 1}],
+>['k', {a: 1}] : [string, { a: number; }]
+>'k' : "k"
+>{a: 1} : { a: number; }
+>a : number
+>1 : 1
+
+]);
+
+// Additional cases
+const m1 = new Map([['num', 123], ['str', 'val1']]);
+>m1 : Map<string, string | number>
+>new Map([['num', 123], ['str', 'val1']]) : Map<string, string | number>
+>Map : MapConstructor
+>[['num', 123], ['str', 'val1']] : ([string, string] | [string, number])[]
+>['num', 123] : [string, number]
+>'num' : "num"
+>123 : 123
+>['str', 'val1'] : [string, string]
+>'str' : "str"
+>'val1' : "val1"
+
+const m2 = new Map([['num', 456], ['str', 'val2']] as const);
+>m2 : Map<"num" | "str", "val2" | 456>
+>new Map([['num', 456], ['str', 'val2']] as const) : Map<"num" | "str", "val2" | 456>
+>Map : MapConstructor
+>[['num', 456], ['str', 'val2']] as const : readonly [readonly ["num", 456], readonly ["str", "val2"]]
+>[['num', 456], ['str', 'val2']] : readonly [readonly ["num", 456], readonly ["str", "val2"]]
+>['num', 456] : readonly ["num", 456]
+>'num' : "num"
+>456 : 456
+>['str', 'val2'] : readonly ["str", "val2"]
+>'str' : "str"
+>'val2' : "val2"
+
+const m3 = new Map([['num' as const, 456], ['str' as const, 'val2']]);
+>m3 : Map<"num" | "str", string | number>
+>new Map([['num' as const, 456], ['str' as const, 'val2']]) : Map<"num" | "str", string | number>
+>Map : MapConstructor
+>[['num' as const, 456], ['str' as const, 'val2']] : (["num", number] | ["str", string])[]
+>['num' as const, 456] : ["num", number]
+>'num' as const : "num"
+>'num' : "num"
+>456 : 456
+>['str' as const, 'val2'] : ["str", string]
+>'str' as const : "str"
+>'str' : "str"
+>'val2' : "val2"
+
