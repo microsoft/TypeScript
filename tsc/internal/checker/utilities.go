@@ -8,7 +8,6 @@ import (
 
 	"github.com/microsoft/TypeScript/tsc/internal/ast"
 	"github.com/microsoft/TypeScript/tsc/internal/binder"
-	"github.com/microsoft/TypeScript/tsc/internal/collections"
 	"github.com/microsoft/TypeScript/tsc/internal/core"
 	"github.com/microsoft/TypeScript/tsc/internal/debug"
 	"github.com/microsoft/TypeScript/tsc/internal/diagnostics"
@@ -933,9 +932,50 @@ func (c *Checker) releaseTemporaryTypeSet(set *temporaryTypeSet) {
 	c.freeTypeSets = set
 }
 
+// temporaryPropertyCounts counts property names in first-occurrence order.
 type temporaryPropertyCounts struct {
-	collections.OrderedMap[string, int]
-	next *temporaryPropertyCounts
+	entries []propertyCount
+	indices map[string]int32
+	next    *temporaryPropertyCounts
+}
+
+type propertyCount struct {
+	name  string
+	count int32
+}
+
+func (p *temporaryPropertyCounts) Add(name string) {
+	if i, ok := p.indices[name]; ok {
+		p.entries[i].count++
+		return
+	}
+	p.AddNew(name)
+}
+
+// AddNew adds a name known not to have been added yet, skipping the lookup.
+func (p *temporaryPropertyCounts) AddNew(name string) {
+	if p.indices == nil {
+		p.indices = make(map[string]int32)
+	}
+	p.indices[name] = int32(len(p.entries))
+	p.entries = append(p.entries, propertyCount{name: name, count: 1})
+}
+
+func (p *temporaryPropertyCounts) Count(name string) int {
+	if i, ok := p.indices[name]; ok {
+		return int(p.entries[i].count)
+	}
+	return 0
+}
+
+func (p *temporaryPropertyCounts) Size() int {
+	return len(p.entries)
+}
+
+func (p *temporaryPropertyCounts) Clear() {
+	clear(p.entries)
+	p.entries = p.entries[:0]
+	clear(p.indices)
 }
 
 func (c *Checker) getTemporaryPropertyCounts() *temporaryPropertyCounts {
