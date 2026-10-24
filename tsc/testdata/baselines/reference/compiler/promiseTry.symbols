@@ -42,34 +42,32 @@ Promise.try((foo) => "Async result", "foo");
 >try : Symbol(PromiseConstructor.try, Decl(lib.es2025.promise.d.ts, --, --))
 >foo : Symbol(foo, Decl(promiseTry.ts, 13, 13))
 
-// @ts-expect-error too few parameters
 Promise.try((foo) => "Async result");
 >Promise.try : Symbol(PromiseConstructor.try, Decl(lib.es2025.promise.d.ts, --, --))
 >Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2018.promise.d.ts, --, --))
 >try : Symbol(PromiseConstructor.try, Decl(lib.es2025.promise.d.ts, --, --))
->foo : Symbol(foo, Decl(promiseTry.ts, 15, 13))
+>foo : Symbol(foo, Decl(promiseTry.ts, 14, 13))
 
 Promise.try((foo: string | undefined) => "Async result", undefined);
 >Promise.try : Symbol(PromiseConstructor.try, Decl(lib.es2025.promise.d.ts, --, --))
 >Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2018.promise.d.ts, --, --))
 >try : Symbol(PromiseConstructor.try, Decl(lib.es2025.promise.d.ts, --, --))
->foo : Symbol(foo, Decl(promiseTry.ts, 16, 13))
+>foo : Symbol(foo, Decl(promiseTry.ts, 15, 13))
 >undefined : Symbol(undefined)
 
 Promise.try((foo: string | undefined) => "Async result", "foo");
 >Promise.try : Symbol(PromiseConstructor.try, Decl(lib.es2025.promise.d.ts, --, --))
 >Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2018.promise.d.ts, --, --))
 >try : Symbol(PromiseConstructor.try, Decl(lib.es2025.promise.d.ts, --, --))
->foo : Symbol(foo, Decl(promiseTry.ts, 17, 13))
+>foo : Symbol(foo, Decl(promiseTry.ts, 16, 13))
 
 Promise.try((foo) => "Async result", undefined);
 >Promise.try : Symbol(PromiseConstructor.try, Decl(lib.es2025.promise.d.ts, --, --))
 >Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2018.promise.d.ts, --, --))
 >try : Symbol(PromiseConstructor.try, Decl(lib.es2025.promise.d.ts, --, --))
->foo : Symbol(foo, Decl(promiseTry.ts, 18, 13))
+>foo : Symbol(foo, Decl(promiseTry.ts, 17, 13))
 >undefined : Symbol(undefined)
 
-// @ts-expect-error too many parameters
 Promise.try(() => "Async result", "foo");
 >Promise.try : Symbol(PromiseConstructor.try, Decl(lib.es2025.promise.d.ts, --, --))
 >Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2018.promise.d.ts, --, --))
@@ -80,44 +78,42 @@ Promise.try((foo: string, bar: number) => "Async result", "foo", 42);
 >Promise.try : Symbol(PromiseConstructor.try, Decl(lib.es2025.promise.d.ts, --, --))
 >Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2018.promise.d.ts, --, --))
 >try : Symbol(PromiseConstructor.try, Decl(lib.es2025.promise.d.ts, --, --))
->foo : Symbol(foo, Decl(promiseTry.ts, 23, 13))
->bar : Symbol(bar, Decl(promiseTry.ts, 23, 25))
+>foo : Symbol(foo, Decl(promiseTry.ts, 21, 13))
+>bar : Symbol(bar, Decl(promiseTry.ts, 21, 25))
 
-// @ts-expect-error too many parameters
 Promise.try((foo: string, bar: number) => "Async result", "foo", 42, "baz");
 >Promise.try : Symbol(PromiseConstructor.try, Decl(lib.es2025.promise.d.ts, --, --))
 >Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2018.promise.d.ts, --, --))
 >try : Symbol(PromiseConstructor.try, Decl(lib.es2025.promise.d.ts, --, --))
->foo : Symbol(foo, Decl(promiseTry.ts, 25, 13))
->bar : Symbol(bar, Decl(promiseTry.ts, 25, 25))
+>foo : Symbol(foo, Decl(promiseTry.ts, 22, 13))
+>bar : Symbol(bar, Decl(promiseTry.ts, 22, 25))
 
-// @ts-expect-error too few parameters
 Promise.try((foo: string, bar: number) => "Async result", "foo");
 >Promise.try : Symbol(PromiseConstructor.try, Decl(lib.es2025.promise.d.ts, --, --))
 >Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2018.promise.d.ts, --, --))
 >try : Symbol(PromiseConstructor.try, Decl(lib.es2025.promise.d.ts, --, --))
->foo : Symbol(foo, Decl(promiseTry.ts, 27, 13))
->bar : Symbol(bar, Decl(promiseTry.ts, 27, 25))
+>foo : Symbol(foo, Decl(promiseTry.ts, 23, 13))
+>bar : Symbol(bar, Decl(promiseTry.ts, 23, 25))
 
 Promise.try((foo: string, bar?: number) => "Async result", "foo");
 >Promise.try : Symbol(PromiseConstructor.try, Decl(lib.es2025.promise.d.ts, --, --))
 >Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2018.promise.d.ts, --, --))
 >try : Symbol(PromiseConstructor.try, Decl(lib.es2025.promise.d.ts, --, --))
->foo : Symbol(foo, Decl(promiseTry.ts, 28, 13))
->bar : Symbol(bar, Decl(promiseTry.ts, 28, 25))
+>foo : Symbol(foo, Decl(promiseTry.ts, 24, 13))
+>bar : Symbol(bar, Decl(promiseTry.ts, 24, 25))
 
 Promise.try((foo: string, bar?: number) => "Async result", "foo", undefined);
 >Promise.try : Symbol(PromiseConstructor.try, Decl(lib.es2025.promise.d.ts, --, --))
 >Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2018.promise.d.ts, --, --))
 >try : Symbol(PromiseConstructor.try, Decl(lib.es2025.promise.d.ts, --, --))
->foo : Symbol(foo, Decl(promiseTry.ts, 29, 13))
->bar : Symbol(bar, Decl(promiseTry.ts, 29, 25))
+>foo : Symbol(foo, Decl(promiseTry.ts, 25, 13))
+>bar : Symbol(bar, Decl(promiseTry.ts, 25, 25))
 >undefined : Symbol(undefined)
 
 Promise.try((foo: string, bar?: number) => "Async result", "foo", 42);
 >Promise.try : Symbol(PromiseConstructor.try, Decl(lib.es2025.promise.d.ts, --, --))
 >Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2018.promise.d.ts, --, --))
 >try : Symbol(PromiseConstructor.try, Decl(lib.es2025.promise.d.ts, --, --))
->foo : Symbol(foo, Decl(promiseTry.ts, 30, 13))
->bar : Symbol(bar, Decl(promiseTry.ts, 30, 25))
+>foo : Symbol(foo, Decl(promiseTry.ts, 26, 13))
+>bar : Symbol(bar, Decl(promiseTry.ts, 26, 25))
 
