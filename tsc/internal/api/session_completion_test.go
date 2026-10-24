@@ -4,6 +4,7 @@ import (
 	"testing"
 	"time"
 
+	"github.com/microsoft/TypeScript/tsc/internal/api/requestfilesystem"
 	"github.com/microsoft/TypeScript/tsc/internal/bundled"
 	"github.com/microsoft/TypeScript/tsc/internal/core"
 	"github.com/microsoft/TypeScript/tsc/internal/ls/lsutil"
@@ -326,8 +327,8 @@ func TestCompletionUsesSnapshotPreferences(t *testing.T) {
 
 func TestSnapshotCreatesProgramsAndPreparesAutoImportsInOneClone(t *testing.T) {
 	t.Parallel()
-	for _, update := range []bool{false, true} {
-		t.Run(map[bool]string{false: "create", true: "update"}[update], func(t *testing.T) {
+	for _, operation := range []string{"create", "update", "snapshot filesystem"} {
+		t.Run(operation, func(t *testing.T) {
 			t.Parallel()
 			defer testutil.RecoverAndFail(t, "snapshot creation panicked")
 			const fileName = "/home/projects/p/index.ts"
@@ -351,10 +352,13 @@ func TestSnapshotCreatesProgramsAndPreparesAutoImportsInOneClone(t *testing.T) {
 			var response *CreateSnapshotResponse
 			var err error
 			expectedID := SnapshotID(1)
-			if update {
+			if operation != "create" {
 				base, e := session.handleCreateSnapshot(t.Context(), &CreateSnapshotParams{})
 				assert.NilError(t, e)
 				expectedID = base.Snapshot + 1
+				if operation == "snapshot filesystem" {
+					params.FileSystem = &requestfilesystem.RequestFileSystem{Kind: requestfilesystem.KindSnapshot, Snapshot: uint64(base.Snapshot)}
+				}
 				response, err = session.handleUpdateSnapshot(t.Context(), &UpdateSnapshotParams{
 					Snapshot: base.Snapshot,
 					Changes:  params,
@@ -370,6 +374,27 @@ func TestSnapshotCreatesProgramsAndPreparesAutoImportsInOneClone(t *testing.T) {
 			assert.Assert(t, snapshot.AutoImportRegistry().IsPreparedForImportingFile(fileName, proj.ID(), snapshot.UserPreferences()))
 		})
 	}
+}
+
+func TestSnapshotFileSystemRejectsUnpreparedAutoImports(t *testing.T) {
+	t.Parallel()
+	projectSession, _ := projecttestutil.Setup(map[string]any{})
+	defer projectSession.Close()
+	session := NewLSPSession(projectSession, nil)
+	defer session.Close()
+	base, err := session.handleCreateSnapshot(t.Context(), &CreateSnapshotParams{})
+	assert.NilError(t, err)
+	_, err = session.handleUpdateSnapshot(t.Context(), &UpdateSnapshotParams{
+		Snapshot: base.Snapshot,
+		Changes: &CreateSnapshotParams{
+			PrepareAutoImports: &DocumentIdentifier{FileName: "/missing.ts"},
+			FileSystem:         &requestfilesystem.RequestFileSystem{Kind: requestfilesystem.KindSnapshot, Snapshot: uint64(base.Snapshot)},
+		},
+	})
+	assert.ErrorIs(t, err, ErrClientError)
+	assert.ErrorContains(t, err, "could not prepare auto-imports")
+	assert.Equal(t, len(session.snapshots), 1)
+	assert.Equal(t, session.snapshots[base.Snapshot].refCount, 1)
 }
 
 func TestPreparedIndependentSnapshotPreservesLSPOverlays(t *testing.T) {
