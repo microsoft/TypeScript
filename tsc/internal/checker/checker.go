@@ -2232,7 +2232,7 @@ func (c *Checker) getImmediateAliasedSymbol(symbol *ast.Symbol) *ast.Symbol {
 		if node == nil {
 			panic("Unexpected nil in getImmediateAliasedSymbol")
 		}
-		links.immediateTarget = c.getTargetOfAliasDeclaration(node)
+		links.immediateTarget = c.getTargetOfAliasDeclaration(node, true /*dontRecursivelyResolve*/)
 	}
 	return links.immediateTarget
 }
@@ -14924,19 +14924,19 @@ func (c *Checker) resolveExportByName(moduleSymbol *ast.Symbol, name string, sou
 	return resolved
 }
 
-func (c *Checker) getTargetOfNamespaceImport(node *ast.Node) *ast.Symbol {
+func (c *Checker) getTargetOfNamespaceImport(node *ast.Node, dontRecursivelyResolve bool) *ast.Symbol {
 	moduleSpecifier := c.getModuleSpecifierForImportOrExport(node)
 	immediate := c.resolveExternalModuleName(node, moduleSpecifier, false /*ignoreErrors*/, c.getTypeFromImportAttributes(ast.GetImportAttributes(node.Parent.Parent)))
-	resolved := c.resolveESModuleSymbol(immediate, node, moduleSpecifier)
+	resolved := c.resolveESModuleSymbol(immediate, node, moduleSpecifier, dontRecursivelyResolve)
 	c.markSymbolOfAliasDeclarationIfTypeOnly(node, nil)
 	return resolved
 }
 
-func (c *Checker) getTargetOfNamespaceExport(node *ast.Node) *ast.Symbol {
+func (c *Checker) getTargetOfNamespaceExport(node *ast.Node, dontRecursivelyResolve bool) *ast.Symbol {
 	moduleSpecifier := c.getModuleSpecifierForImportOrExport(node)
 	if moduleSpecifier != nil {
 		immediate := c.resolveExternalModuleName(node, moduleSpecifier, false /*ignoreErrors*/, c.getTypeFromImportAttributes(ast.GetImportAttributes(node.Parent)))
-		resolved := c.resolveESModuleSymbol(immediate, node, moduleSpecifier)
+		resolved := c.resolveESModuleSymbol(immediate, node, moduleSpecifier, dontRecursivelyResolve)
 		c.markSymbolOfAliasDeclarationIfTypeOnly(node, nil)
 		return resolved
 	}
@@ -14986,7 +14986,7 @@ func (c *Checker) getExternalModuleMember(node *ast.Node, specifier *ast.Node, d
 		return nil
 	}
 	nameText := name.Text()
-	targetSymbol := c.resolveESModuleSymbol(moduleSymbol, specifier, moduleSpecifier)
+	targetSymbol := c.resolveESModuleSymbol(moduleSymbol, specifier, moduleSpecifier, false /*dontRecursivelyResolve*/)
 	if targetSymbol != nil {
 		// Note: The empty string is a valid module export name:
 		//
@@ -15978,8 +15978,11 @@ func (c *Checker) resolveExternalModuleSymbol(moduleSymbol *ast.Symbol, dontReso
 
 // Resolves the given external module symbol, possibly removing call and construct signatures or creating a
 // wrapper module with a synthetic default.
-func (c *Checker) resolveESModuleSymbol(moduleSymbol *ast.Symbol, node *ast.Node, moduleSpecifier *ast.Node) *ast.Symbol {
+func (c *Checker) resolveESModuleSymbol(moduleSymbol *ast.Symbol, node *ast.Node, moduleSpecifier *ast.Node, dontRecursivelyResolve bool) *ast.Symbol {
 	symbol := c.resolveExternalModuleSymbol(moduleSymbol, true /*dontResolveAlias*/)
+	if dontRecursivelyResolve {
+		return symbol
+	}
 	if ast.IsNonLocalAlias(symbol, ast.SymbolFlagsValue|ast.SymbolFlagsType|ast.SymbolFlagsNamespace) {
 		// When the module has an export= with a pure alias, we transitively resolve and propagate any typeOnlyDeclaration
 		symbol = c.getMergedSymbol(c.resolveIndirectionAlias(c.getSymbolOfDeclaration(node), symbol))
@@ -16146,7 +16149,7 @@ func (c *Checker) cloneTypeAsModuleType(symbol *ast.Symbol, moduleType *Type, re
 	return result
 }
 
-func (c *Checker) getTargetOfAliasDeclaration(node *ast.Node) *ast.Symbol {
+func (c *Checker) getTargetOfAliasDeclaration(node *ast.Node, dontRecursivelyResolve bool) *ast.Symbol {
 	if node == nil {
 		return nil
 	}
@@ -16156,9 +16159,9 @@ func (c *Checker) getTargetOfAliasDeclaration(node *ast.Node) *ast.Symbol {
 	case ast.KindImportClause:
 		return c.getTargetOfImportClause(node)
 	case ast.KindNamespaceImport:
-		return c.getTargetOfNamespaceImport(node)
+		return c.getTargetOfNamespaceImport(node, dontRecursivelyResolve)
 	case ast.KindNamespaceExport:
-		return c.getTargetOfNamespaceExport(node)
+		return c.getTargetOfNamespaceExport(node, dontRecursivelyResolve)
 	case ast.KindImportSpecifier, ast.KindBindingElement:
 		return c.getTargetOfImportSpecifier(node)
 	case ast.KindExportSpecifier:
@@ -16689,7 +16692,7 @@ func (c *Checker) resolveAlias(symbol *ast.Symbol) *ast.Symbol {
 		if node == nil {
 			panic("Unexpected nil in resolveAlias for symbol: " + c.symbolToString(symbol))
 		}
-		target := c.getTargetOfAliasDeclaration(node)
+		target := c.getTargetOfAliasDeclaration(node, false /*dontRecursivelyResolve*/)
 		if ast.IsNonLocalAlias(target, ast.SymbolFlagsValue|ast.SymbolFlagsType|ast.SymbolFlagsNamespace) {
 			// When the target is a pure alias, we transitively resolve and propagate any typeOnlyDeclaration
 			target = c.resolveIndirectionAlias(symbol, target)
@@ -19043,7 +19046,7 @@ func (c *Checker) getTypeOfAlias(symbol *ast.Symbol) *Type {
 			return c.errorType
 		}
 		targetSymbol := c.resolveAlias(symbol)
-		exportSymbol := c.getTargetOfAliasDeclaration(c.getDeclarationOfAliasSymbol(symbol))
+		exportSymbol := c.getTargetOfAliasDeclaration(c.getDeclarationOfAliasSymbol(symbol), false /*dontRecursivelyResolve*/)
 		// It only makes sense to get the type of a value symbol. If the result of resolving
 		// the alias is not a value, then it has no type. To get the type associated with a
 		// type symbol, call getDeclaredTypeOfSymbol.

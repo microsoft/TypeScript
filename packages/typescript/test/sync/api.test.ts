@@ -1900,6 +1900,51 @@ describe("BuildOrchestrator", () => {
 });
 
 describe("Checker - getImmediateAliasedSymbol", { concurrency }, () => {
+    for (const declaration of [`import * as X from "./mod";`, `export * as X from "./mod";`]) {
+        for (const moduleContent of [`export default class User {}`, `export class User {}`]) {
+            test(`preserves module symbol identity for ${declaration} with ${moduleContent}`, () => {
+                using api = spawnAPI({
+                    "/tsconfig.json": JSON.stringify({ compilerOptions: { strict: true } }),
+                    "/src/mod.ts": moduleContent,
+                    "/src/main.ts": declaration,
+                });
+
+                const snapshot = api.createSnapshot({ openProjects: ["/tsconfig.json"] });
+                const checker = snapshot.getConfiguredProject("/tsconfig.json")!.checker;
+                const moduleSymbol = checker.getSymbolOfSourceFile("/src/mod.ts");
+                assert.ok(moduleSymbol);
+                const aliasSymbol = checker.getSymbolAtPosition("/src/main.ts", declaration.indexOf("X"));
+                assert.ok(aliasSymbol);
+                assert.equal(checker.getImmediateAliasedSymbol(aliasSymbol) === moduleSymbol, true);
+                assert.equal(checker.getImmediateAliasedSymbol(aliasSymbol) === moduleSymbol, true);
+            });
+        }
+    }
+
+    test("preserves the export assignment alias of a namespace import", () => {
+        const declaration = `import * as X from "./mod";`;
+        using api = spawnAPI({
+            "/tsconfig.json": JSON.stringify({ compilerOptions: { strict: true } }),
+            "/src/user.ts": `export class User {}`,
+            "/src/mod.ts": `import { User } from "./user"; export = User;`,
+            "/src/main.ts": declaration,
+        });
+
+        const snapshot = api.createSnapshot({ openProjects: ["/tsconfig.json"] });
+        const checker = snapshot.getConfiguredProject("/tsconfig.json")!.checker;
+        const moduleSymbol = checker.getSymbolOfSourceFile("/src/mod.ts");
+        assert.ok(moduleSymbol);
+        const exportAssignment = (moduleSymbol.getExports()).get(InternalSymbolName.ExportEquals);
+        assert.ok(exportAssignment);
+        const aliasSymbol = checker.getSymbolAtPosition("/src/main.ts", declaration.indexOf("X"));
+        assert.ok(aliasSymbol);
+        assert.equal(checker.getImmediateAliasedSymbol(aliasSymbol) === exportAssignment, true);
+        const resolved = checker.getAliasedSymbol(aliasSymbol);
+        assert.ok(resolved);
+        assert.equal(resolved.name, "User");
+        assert.ok(resolved.flags & SymbolFlags.Class);
+    });
+
     test("resolves one level of alias indirection", () => {
         using api = spawnAPI({
             "/tsconfig.json": JSON.stringify({ compilerOptions: { strict: true } }),
