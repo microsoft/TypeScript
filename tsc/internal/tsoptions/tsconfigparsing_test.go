@@ -259,6 +259,48 @@ var parseJsonConfigFileTests = []parseJsonConfigTestCase{
 		}},
 	},
 	{
+		title:                  "reports errors for network paths",
+		includeCompilerOptions: true,
+		input: []testConfig{{
+			jsonText: `{
+                "extends": ["//server/share/base.json", "\\\\?\\UNC\\server\\share\\base.json"],
+                "compilerOptions": {
+                    "outDir": "\\\\server\\share\\out",
+                    "rootDir": "./src",
+                    "typeRoots": ["./types", "\\??\\UNC\\server\\share\\types"],
+                    "mapRoot": "//server/share/maps",
+                    "declarationDir": "/x/../??/UNC/server/share/decl",
+                    "baseUrl": "/??/../apath"
+                },
+                "files": ["main.ts", "//server/share/a.ts", "../??/UNC/server/share/b.ts"],
+                "include": ["src", "\\\\.\\GLOBALROOT\\Device\\Mup\\server\\share"],
+                "exclude": ["//server/share/excluded", "../??/*.ts"],
+                "references": [{ "path": "//server/share/project" }]
+            }`,
+			configFileName: "/apath/tsconfig.json",
+			basePath:       "/apath",
+			allFileList:    map[string]string{"/apath/main.ts": "", "/apath/src/index.ts": ""},
+		}},
+	},
+	{
+		title: "reports errors for network path in string extends",
+		input: []testConfig{{
+			jsonText:       `{ "extends": "\\\\server\\share\\base.json" }`,
+			configFileName: "/apath/tsconfig.json",
+			basePath:       "/apath",
+			allFileList:    map[string]string{"/apath/main.ts": ""},
+		}},
+	},
+	{
+		title: "reports errors for normalized network path in string extends",
+		input: []testConfig{{
+			jsonText:       `{ "extends": "/x/../??/UNC/server/share/base.json" }`,
+			configFileName: "/apath/tsconfig.json",
+			basePath:       "/apath",
+			allFileList:    map[string]string{"/apath/main.ts": ""},
+		}},
+	},
+	{
 		title:                  "parses tsconfig with compilerOptions, files, include, and exclude",
 		includeCompilerOptions: true,
 		input: []testConfig{{
@@ -871,7 +913,7 @@ func TestParseJsonConfigFileContentAcceptsJsonRepresentations(t *testing.T) {
 			t.Parallel()
 			parsed := tsoptions.ParseJsonConfigFileContent(
 				json,
-				fs,
+				tsoptions.NewDefaultParseConfigHost(fs),
 				"/project",
 				nil,
 				"/project/tsconfig.json",
@@ -898,7 +940,7 @@ func TestParseJsonConfigFileContentPreservesRaw(t *testing.T) {
 			"customSetting": map[string]any{"enabled": true},
 			"compileOnSave": true,
 		},
-		fs,
+		tsoptions.NewDefaultParseConfigHost(fs),
 		"/project",
 		nil,
 		"/project/tsconfig.json",
@@ -925,7 +967,7 @@ func TestParseJsonConfigFileContentHandlesNullArrayElements(t *testing.T) {
 			t.Parallel()
 			parsed := tsoptions.ParseJsonConfigFileContent(
 				map[string]any{property: []any{nil}},
-				fs,
+				tsoptions.NewDefaultParseConfigHost(fs),
 				"/project",
 				nil,
 				"/project/tsconfig.json",
@@ -946,7 +988,7 @@ func TestParseJsonConfigFileContentDefaultsCompileOnSaveToFalse(t *testing.T) {
 	}, tspath.CaseSensitive /*caseSensitivity*/)
 	parsed := tsoptions.ParseJsonConfigFileContent(
 		map[string]any{"files": []any{"index.ts"}},
-		fs,
+		tsoptions.NewDefaultParseConfigHost(fs),
 		"/project",
 		nil,
 		"/project/tsconfig.json",
@@ -963,7 +1005,7 @@ func getParsedWithJsonApi(config testConfig, fs vfs.FS, basePath tspath.RootedDi
 	parsed, _ := tsoptions.ParseConfigFileTextToJson(configFileName, path, config.jsonText)
 	return tsoptions.ParseJsonConfigFileContent(
 		parsed,
-		fs,
+		tsoptions.NewDefaultParseConfigHost(fs),
 		basePath,
 		config.existingOptions,
 		configFileName,
@@ -1002,7 +1044,7 @@ func TestParseJsonSourceFileConfigFileContentReportsInvalidExtendedConfig(t *tes
 
 	parsed := tsoptions.ParseJsonSourceFileConfigFileContent(
 		configFile,
-		fs,
+		tsoptions.NewDefaultParseConfigHost(fs),
 		"/project",
 		nil,
 		nil,
@@ -1045,7 +1087,7 @@ func TestParseJsonSourceFileConfigFileContentWithEmptyExtendedConfig(t *testing.
 
 	parsed := tsoptions.ParseJsonSourceFileConfigFileContent(
 		configFile,
-		fs,
+		tsoptions.NewDefaultParseConfigHost(fs),
 		"/project",
 		nil,
 		nil,
@@ -1139,6 +1181,64 @@ func TestParseNullEnumCompilerOptions(t *testing.T) {
 			parsedConfigFileContent := getParsed(config, fs, config.basePath)
 			assert.Equal(t, len(parsedConfigFileContent.Errors), 0)
 		})
+	}
+}
+
+func TestContentMapperOutputExtensionsReset(t *testing.T) {
+	t.Parallel()
+	for _, test := range []struct {
+		name             string
+		override         string
+		rewrite          bool
+		declaration      tspath.RootedFilePath
+		outputExtensions map[string]string
+	}{
+		{"omitted", "", true, "/dist/Card.d.ts", map[string]string{".astro": ".js"}},
+		{"null", `, "outputExtensions": null`, false, "/dist/Card.d.astro.ts", nil},
+		{"empty object", `, "outputExtensions": {}`, false, "/dist/Card.d.astro.ts", map[string]string{}},
+		{"replacement", `, "outputExtensions": {".astro": ".mjs"}`, true, "/dist/Card.d.mts", map[string]string{".astro": ".mjs"}},
+	} {
+		for name, getParsed := range map[string]func(testConfig, vfs.FS, tspath.RootedDirectoryPath) *tsoptions.ParsedCommandLine{
+			"json api":           getParsedWithJsonApi,
+			"jsonSourceFile api": getParsedWithJsonSourceFileApi,
+		} {
+			t.Run(test.name+"/"+name, func(t *testing.T) {
+				t.Parallel()
+				config := testConfig{
+					jsonText: fmt.Sprintf(`{
+						"compilerOptions": {
+							"declaration": true, "rootDir": "/src", "outDir": "/dist",
+							"rewriteRelativeImportExtensions": %t
+						},
+						"contentMappers": [{ "package": "mapper", "extensions": [".astro"]%s }],
+						"files": ["/src/Card.astro"]
+					}`, test.rewrite, test.override),
+					configFileName:  "tsconfig.json",
+					basePath:        "/",
+					existingOptions: &core.CompilerOptions{RunExternalCode: core.TSTrue},
+				}
+				files := map[string]string{
+					"/tsconfig.json":  config.jsonText,
+					"/src/Card.astro": "export {};",
+					"/node_modules/mapper/package.json": `{
+						"name": "mapper",
+						"typescript": { "contentMapper": {
+							"exec": ["mapper"], "outputExtensions": {".astro": ".js"}
+						} }
+					}`,
+				}
+				config.allFileList = files
+				parsed := getParsed(config, tsoptionstest.NewVFS(files, tspath.CaseSensitive), config.basePath)
+				assert.Equal(t, len(parsed.Errors), 0)
+				assert.Equal(t, len(parsed.ContentMappers()), 1)
+				mapper := parsed.ContentMappers()[0]
+				assert.DeepEqual(t, mapper.Definition.OutputExtensions, test.outputExtensions)
+				assert.Equal(t, len(parsed.ContentMapperExtensionRewrites()) > 0, test.rewrite)
+				assert.DeepEqual(t, slices.Collect(parsed.GetOutputFileNames()), []tspath.RootedFilePath{test.declaration})
+				mapper.Manifest.DefaultOutputExtensions[".astro"] = ".cjs"
+				assert.DeepEqual(t, mapper.Definition.OutputExtensions, test.outputExtensions)
+			})
+		}
 	}
 }
 
@@ -1326,6 +1426,36 @@ func TestContentMappersValidation(t *testing.T) {
 			expectedCode:   diagnostics.Content_mapper_file_extension_0_must_begin_with_a.Code(),
 		},
 		{
+			name:           "source extension contains slash",
+			contentMappers: `[{ "package": "x", "extensions": [".vue/foo"] }]`,
+			expectedCode:   diagnostics.Content_mapper_extension_0_must_not_contain_path_separators.Code(),
+		},
+		{
+			name:           "source extension contains backslash",
+			contentMappers: `[{ "package": "x", "extensions": [".vue\\foo"] }]`,
+			expectedCode:   diagnostics.Content_mapper_extension_0_must_not_contain_path_separators.Code(),
+		},
+		{
+			name:           "output extension key contains slash",
+			contentMappers: `[{ "package": "x", "extensions": [".vue"], "outputExtensions": {".vue/foo": ".js"} }]`,
+			expectedCode:   diagnostics.Content_mapper_extension_0_must_not_contain_path_separators.Code(),
+		},
+		{
+			name:           "output extension key contains backslash",
+			contentMappers: `[{ "package": "x", "extensions": [".vue"], "outputExtensions": {".vue\\foo": ".js"} }]`,
+			expectedCode:   diagnostics.Content_mapper_extension_0_must_not_contain_path_separators.Code(),
+		},
+		{
+			name:           "output extension value contains slash",
+			contentMappers: `[{ "package": "x", "extensions": [".vue"], "outputExtensions": {".vue": ".js/foo"} }]`,
+			expectedCode:   diagnostics.Content_mapper_extension_0_must_not_contain_path_separators.Code(),
+		},
+		{
+			name:           "output extension value contains backslash",
+			contentMappers: `[{ "package": "x", "extensions": [".vue"], "outputExtensions": {".vue": ".js\\foo"} }]`,
+			expectedCode:   diagnostics.Content_mapper_extension_0_must_not_contain_path_separators.Code(),
+		},
+		{
 			name:           "built-in extension",
 			contentMappers: `[{ "package": "x", "extensions": [".ts"] }]`,
 			expectedCode:   diagnostics.Content_mapper_file_extension_0_is_a_built_in_extension_and_cannot_be_registered_by_a_content_mapper.Code(),
@@ -1484,6 +1614,43 @@ func TestContentMapperExtensionValidationUsesHostCaseSensitivity(t *testing.T) {
 	}
 }
 
+func TestContentMapperCompoundExtensionValidation(t *testing.T) {
+	t.Parallel()
+	for _, caseSensitivity := range []tspath.CaseSensitivity{tspath.CaseInsensitive, tspath.CaseSensitive} {
+		extensions := []string{".y.z", ".component.tsx.vue"}
+		for _, extension := range core.Flatten(tspath.AllSupportedExtensionsWithJson) {
+			extensions = append(extensions, ".component"+extension, ".component"+strings.ToUpper(extension))
+		}
+		for _, extension := range extensions {
+			t.Run(fmt.Sprintf("%s/caseSensitive=%t", extension, caseSensitivity.IsCaseSensitive()), func(t *testing.T) {
+				t.Parallel()
+				files := map[string]string{
+					"/tsconfig.json": fmt.Sprintf(`{ "contentMappers": [{ "package": "mapper", "extensions": [%q] }] }`, extension),
+					"/app.ts":        "export {};",
+					"/node_modules/mapper/package.json": `{
+						"name": "mapper",
+						"typescript": { "contentMapper": { "exec": ["mapper"] } }
+					}`,
+				}
+				fs := tsoptionstest.NewVFS(files, caseSensitivity)
+				config := testConfig{
+					jsonText: files["/tsconfig.json"], configFileName: "tsconfig.json", basePath: "/",
+					allFileList: files, existingOptions: &core.CompilerOptions{RunExternalCode: core.TSTrue},
+				}
+				parsed := getParsedWithJsonSourceFileApi(config, fs, config.basePath)
+				if extension == ".y.z" || extension == ".component.tsx.vue" {
+					assert.Equal(t, len(parsed.Errors), 0)
+					assert.DeepEqual(t, parsed.ContentMapperExtensions(), []string{extension})
+				} else {
+					assert.Equal(t, len(parsed.Errors), 1)
+					assert.Equal(t, parsed.Errors[0].Code(), diagnostics.Content_mapper_file_extension_0_is_a_built_in_extension_and_cannot_be_registered_by_a_content_mapper.Code())
+					assert.Equal(t, len(parsed.ContentMapperExtensions()), 0)
+				}
+			})
+		}
+	}
+}
+
 func getParsedWithJsonSourceFileApi(config testConfig, fs vfs.FS, basePath tspath.RootedDirectoryPath) *tsoptions.ParsedCommandLine {
 	configFileName := tspath.ToRootedFilePath(config.configFileName, basePath)
 	path := fs.CaseSensitivity().PathKey(tspath.RootedPath(configFileName))
@@ -1496,7 +1663,7 @@ func getParsedWithJsonSourceFileApi(config testConfig, fs vfs.FS, basePath tspat
 	}
 	return tsoptions.ParseJsonSourceFileConfigFileContent(
 		tsConfigSourceFile,
-		fs,
+		tsoptions.NewDefaultParseConfigHost(fs),
 		basePath,
 		config.existingOptions,
 		nil,
@@ -1690,7 +1857,7 @@ func parseSrcCompiler(tb testing.TB) *tsoptions.ParsedCommandLine {
 	)
 	parsed := tsoptions.ParseJsonSourceFileConfigFileContent(
 		configFile,
-		fs,
+		tsoptions.NewDefaultParseConfigHost(fs),
 		compilerDir,
 		nil,
 		nil,
@@ -1733,7 +1900,7 @@ func BenchmarkParseSrcCompiler(b *testing.B) {
 	for b.Loop() {
 		tsoptions.ParseJsonSourceFileConfigFileContent(
 			configFile,
-			fs,
+			tsoptions.NewDefaultParseConfigHost(fs),
 			compilerDir,
 			nil,
 			nil,
@@ -1792,7 +1959,7 @@ func TestExtendedConfigErrorsAppearOnCacheHit(t *testing.T) {
 			}
 			return tsoptions.ParseJsonSourceFileConfigFileContent(
 				tsConfigSourceFile,
-				fs,
+				tsoptions.NewDefaultParseConfigHost(fs),
 				"/",
 				nil,
 				nil,
@@ -1835,7 +2002,7 @@ func TestExtendedConfigErrorsAppearOnCacheHit(t *testing.T) {
 			}
 			return tsoptions.ParseJsonSourceFileConfigFileContent(
 				tsConfigSourceFile,
-				fs,
+				tsoptions.NewDefaultParseConfigHost(fs),
 				"/",
 				nil,
 				nil,
@@ -1877,7 +2044,7 @@ func TestExtendedConfigConfigDirPathsAreNotCached(t *testing.T) {
 	cache := &memoCache{}
 
 	parseConfig := func(configFileName tspath.RootedFilePath) *tsoptions.ParsedCommandLine {
-		parsed, errors := tsoptions.GetParsedCommandLineOfConfigFile(configFileName, nil, nil, fs, cache)
+		parsed, errors := tsoptions.GetParsedCommandLineOfConfigFile(configFileName, nil, nil, tsoptions.NewDefaultParseConfigHost(fs), cache)
 		assert.Assert(t, len(errors) == 0, "unexpected errors parsing %s: %v", configFileName, errors)
 		return parsed
 	}

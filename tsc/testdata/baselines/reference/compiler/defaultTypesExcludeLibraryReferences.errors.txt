@@ -1,0 +1,11 @@
+/main.ts(1,18): error TS2550: Property 'includes' does not exist on type 'string[]'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2016' or later.
+
+
+==== /main.ts (1 errors) ====
+    ["workflow.yml"].includes("workflow.yml");
+                     ~~~~~~~~
+!!! error TS2550: Property 'includes' does not exist on type 'string[]'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2016' or later.
+    
+==== /node_modules/@types/runtime/index.d.ts (0 errors) ====
+    /// <reference lib="es2018" />
+    

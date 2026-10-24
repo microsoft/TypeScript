@@ -14,6 +14,7 @@ import {
     type ChildProcess,
     spawn,
 } from "node:child_process";
+import { randomBytes } from "node:crypto";
 import {
     closeSync,
     openSync,
@@ -86,6 +87,10 @@ process.on("exit", () => {
     liveChildren.clear();
 });
 
+export function createPipePath(): string {
+    return `\\\\.\\pipe\\tsgo-sync-${process.pid}-${randomBytes(16).toString("hex")}`;
+}
+
 /**
  * SyncRpcChannel – drop-in replacement for the native libsyncrpc class.
  *
@@ -108,6 +113,7 @@ export class SyncRpcChannel {
     private writeFd: number;
     private pipeFd: number | undefined;
     private callbacks = new Map<string, (name: string, payload: string) => string>();
+    private callbackFailure: { error: unknown; } | undefined;
 
     private methodBufCache = new Map<string, Buffer>();
 
@@ -147,7 +153,7 @@ export class SyncRpcChannel {
             // we create a Windows named pipe path, pass it to the child
             // via --pipe, and open it with fs.openSync which returns a
             // real C-runtime fd backed by a proper HANDLE.
-            const pipePath = `\\\\.\\pipe\\tsgo-sync-${process.pid}-${Date.now()}`;
+            const pipePath = createPipePath();
             this.child = spawn(exe, [...args, "--pipe", pipePath], {
                 stdio: ["ignore", "ignore", "inherit"],
             });
@@ -275,6 +281,9 @@ export class SyncRpcChannel {
         if (this.readFd < 0) {
             throw new Error("SyncRpcChannel is closed");
         }
+        if (this.callbackFailure) {
+            throw this.callbackFailure.error;
+        }
     }
 
     private getMethodBuf(method: string): Buffer {
@@ -321,7 +330,14 @@ export class SyncRpcChannel {
                     );
                 }
                 case MSG_CALL: {
-                    this.handleCall(this._msgName.toString("utf-8"), this._msgPayload);
+                    try {
+                        this.handleCall(this._msgName.toString("utf-8"), this._msgPayload);
+                    }
+                    catch (error) {
+                        // The pending response is unread, so further I/O cannot be synchronized.
+                        this.callbackFailure = { error };
+                        throw error;
+                    }
                     break;
                 }
                 default:

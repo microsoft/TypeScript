@@ -31,6 +31,7 @@
         "lib",
         "schemas",
         "dist",
+        "enums",
         "vendor"
     ],
     "bin": {
@@ -93,18 +94,6 @@
             "@typescript/source": "./src/ast/clone.ts",
             "default": "./dist/ast/clone.js"
         }
-    },
-    "imports": {
-        "#getExePath": "./lib/getExePath.js",
-        "#enums/*": {
-            "@typescript/source": {
-                "types": "./src/enums/*.enum.ts",
-                "default": "./src/enums/*.ts"
-            },
-            "types": "./dist/enums/*.enum.d.ts",
-            "default": "./dist/enums/*.js"
-        },
-        "#vscode-jsonrpc/node": "./vendor/vscode-jsonrpc/lib/node/main.js"
     },
     "scripts": {
         "node": "node --conditions @typescript/source",

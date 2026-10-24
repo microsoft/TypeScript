@@ -1,0 +1,14 @@
+domIterableGenericDatasetKeys.ts(2,19): error TS2536: Type 'Key' cannot be used to index type 'DOMStringMap'.
+domIterableGenericDatasetKeys.ts(3,12): error TS2536: Type 'Key' cannot be used to index type 'DOMStringMap'.
+
+
+==== domIterableGenericDatasetKeys.ts (2 errors) ====
+    function restore<Key extends keyof CSSStyleDeclaration>(key: Key, element: HTMLElement) {
+        const value = element.dataset[key];
+                      ~~~~~~~~~~~~~~~~~~~~
+!!! error TS2536: Type 'Key' cannot be used to index type 'DOMStringMap'.
+        delete element.dataset[key];
+               ~~~~~~~~~~~~~~~~~~~~
+!!! error TS2536: Type 'Key' cannot be used to index type 'DOMStringMap'.
+    }
+    

@@ -1,0 +1,23 @@
+//// [tests/cases/compiler/genericCallInNegativeTypeofBranch.ts] ////
+
+=== genericCallInNegativeTypeofBranch.ts ===
+declare function identity<T>(value: T): T;
+>identity : <T>(value: T) => T
+>value : T
+
+function normalize(value: unknown) {
+>normalize : (value: unknown) => unknown
+>value : unknown
+
+    return typeof value === "string" ? value : identity(value);
+>typeof value === "string" ? value : identity(value) : unknown
+>typeof value === "string" : boolean
+>typeof value : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
+>value : unknown
+>"string" : "string"
+>value : string
+>identity(value) : unknown
+>identity : <T>(value: T) => T
+>value : unknown
+}
+

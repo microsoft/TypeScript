@@ -1,0 +1,22 @@
+//// [tests/cases/compiler/objectFromEntriesAdditionalProperty.ts] ////
+
+=== objectFromEntriesAdditionalProperty.ts ===
+declare const keys: ("language" | "theme")[];
+>keys : Symbol(keys, Decl(objectFromEntriesAdditionalProperty.ts, 0, 13))
+
+const settings = Object.fromEntries(keys.map(key => [key, ""]));
+>settings : Symbol(settings, Decl(objectFromEntriesAdditionalProperty.ts, 1, 5))
+>Object.fromEntries : Symbol(ObjectConstructor.fromEntries, Decl(lib.es2019.object.d.ts, --, --), Decl(lib.es2019.object.d.ts, --, --))
+>Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>fromEntries : Symbol(ObjectConstructor.fromEntries, Decl(lib.es2019.object.d.ts, --, --), Decl(lib.es2019.object.d.ts, --, --))
+>keys.map : Symbol(Array.map, Decl(lib.es5.d.ts, --, --))
+>keys : Symbol(keys, Decl(objectFromEntriesAdditionalProperty.ts, 0, 13))
+>map : Symbol(Array.map, Decl(lib.es5.d.ts, --, --))
+>key : Symbol(key, Decl(objectFromEntriesAdditionalProperty.ts, 1, 45))
+>key : Symbol(key, Decl(objectFromEntriesAdditionalProperty.ts, 1, 45))
+
+settings.timestamp = "";
+>settings.timestamp : Symbol(__index, Decl(lib.es2019.object.d.ts, --, --))
+>settings : Symbol(settings, Decl(objectFromEntriesAdditionalProperty.ts, 1, 5))
+>timestamp : Symbol(__index, Decl(lib.es2019.object.d.ts, --, --))
+
