@@ -1,0 +1,11 @@
+scripthostDateGetVarDateRemoved.ts(3,12): error TS2551: Property 'getVarDate' does not exist on type 'Date'. Did you mean 'getDate'?
+
+
+==== scripthostDateGetVarDateRemoved.ts (1 errors) ====
+    /// <reference lib="scripthost" />
+    
+    new Date().getVarDate();
+               ~~~~~~~~~~
+!!! error TS2551: Property 'getVarDate' does not exist on type 'Date'. Did you mean 'getDate'?
+!!! related TS2728 lib.es5.d.ts:--:--: 'getDate' is declared here.
+    
