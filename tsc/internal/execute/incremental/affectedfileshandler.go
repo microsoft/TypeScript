@@ -22,14 +22,16 @@ func (c dtsMayChange) addFileToAffectedFilesPendingEmit(filePath tspath.PathKey,
 }
 
 type updatedSignature struct {
-	mu        sync.Mutex
-	signature string
-	kind      SignatureUpdateKind
+	mu                  sync.Mutex
+	signature           string
+	kind                SignatureUpdateKind
+	semanticDiagnostics *DiagnosticsOrBuildInfoDiagnosticsWithFileName
 }
 
 type affectedFilesHandler struct {
 	ctx                                    context.Context
 	program                                *Program
+	collectSemanticDiagnostics             bool
 	hasAllFilesExcludingDefaultLibraryFile atomic.Bool
 	updatedSignatures                      collections.SyncMap[tspath.PathKey, *updatedSignature]
 	dtsMayChange                           []dtsMayChange
@@ -101,6 +103,13 @@ func (h *affectedFilesHandler) updateShapeSignature(file *ast.SourceFile, useFil
 	// JSON files have no declaration output from which to compute a shape
 	// signature, so use the file version to conservatively invalidate dependents.
 	if !file.IsDeclarationFile && !ast.IsJsonSourceFile(file) && !useFileVersionAsSignature {
+		if h.collectSemanticDiagnostics && !h.program.snapshot.options.NoCheck.IsTrue() {
+			// Signature generation can discover globals before checking does. Keep the
+			// checking diagnostics first, without retaining incidental emit-only errors.
+			update.semanticDiagnostics = &DiagnosticsOrBuildInfoDiagnosticsWithFileName{
+				diagnostics: h.program.program.GetSemanticDiagnosticsForIncremental(h.ctx, core.SingleElementSlice(file))[file],
+			}
+		}
 		update.signature = h.computeDtsSignature(file)
 	}
 	// Default is to use file version as signature
@@ -347,6 +356,12 @@ func (h *affectedFilesHandler) updateSnapshot() {
 		h.program.snapshot.semanticDiagnosticsPerFile.Delete(file)
 		return true
 	})
+	h.updatedSignatures.Range(func(filePath tspath.PathKey, update *updatedSignature) bool {
+		if update.semanticDiagnostics != nil && h.filesToRemoveDiagnostics.Has(filePath) {
+			h.program.snapshot.semanticDiagnosticsPerFile.Store(filePath, update.semanticDiagnostics)
+		}
+		return true
+	})
 	for _, change := range h.dtsMayChange {
 		for filePath, emitKind := range change {
 			h.program.snapshot.addFileToAffectedFilesPendingEmit(filePath, emitKind)
@@ -356,12 +371,12 @@ func (h *affectedFilesHandler) updateSnapshot() {
 	h.program.snapshot.buildInfoEmitPending.Store(true)
 }
 
-func collectAllAffectedFiles(ctx context.Context, program *Program) {
+func collectAllAffectedFiles(ctx context.Context, program *Program, collectSemanticDiagnostics bool) {
 	if program.snapshot.changedFilesSet.Size() == 0 {
 		return
 	}
 
-	handler := affectedFilesHandler{ctx: ctx, program: program}
+	handler := affectedFilesHandler{ctx: ctx, program: program, collectSemanticDiagnostics: collectSemanticDiagnostics}
 	wg := core.NewWorkGroup(handler.program.program.SingleThreaded())
 	var result collections.SyncSet[*ast.SourceFile]
 	program.snapshot.changedFilesSet.Range(func(file tspath.PathKey) bool {
