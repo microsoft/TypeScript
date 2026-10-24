@@ -149,8 +149,8 @@ func (d *astDecoder) decode() (*ast.Node, error) {
 	// Process bottom-up so children exist before parents.
 	for i := d.nodeCount - 1; i >= 1; i-- {
 		kind := d.nodeField(i, NodeOffsetKind)
-		pos := d.nodeField(i, NodeOffsetPos)
-		end := d.nodeField(i, NodeOffsetEnd)
+		pos := int32(d.nodeField(i, NodeOffsetPos))
+		end := int32(d.nodeField(i, NodeOffsetEnd))
 		data := d.nodeField(i, NodeOffsetData)
 		childIndices := d.collectChildren(i)
 
