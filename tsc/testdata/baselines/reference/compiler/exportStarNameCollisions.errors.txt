@@ -1,0 +1,107 @@
+consumer.ts(9,58): error TS1362: 'a5' cannot be used as a value because it was exported using 'export type'.
+consumer.ts(9,70): error TS1362: 'b6' cannot be used as a value because it was exported using 'export type'.
+localShadows.ts(3,1): error TS2308: Module "./a" has already exported a member named 'SharedType'. Consider explicitly re-exporting to resolve the ambiguity.
+threeStarsCollide.ts(3,1): error TS2308: Module "./a" has already exported a member named 'SharedType'. Consider explicitly re-exporting to resolve the ambiguity.
+threeStarsCollide.ts(3,1): error TS2308: Module "./a" has already exported a member named 'shared'. Consider explicitly re-exporting to resolve the ambiguity.
+threeStarsCollide.ts(4,1): error TS2308: Module "./a" has already exported a member named 'shared'. Consider explicitly re-exporting to resolve the ambiguity.
+twoStarsCollide.ts(3,1): error TS2308: Module "./a" has already exported a member named 'SharedType'. Consider explicitly re-exporting to resolve the ambiguity.
+twoStarsCollide.ts(3,1): error TS2308: Module "./a" has already exported a member named 'shared'. Consider explicitly re-exporting to resolve the ambiguity.
+typeOnlyThenValue.ts(2,1): error TS2308: Module "./a" has already exported a member named 'SharedType'. Consider explicitly re-exporting to resolve the ambiguity.
+typeOnlyThenValue.ts(2,1): error TS2308: Module "./a" has already exported a member named 'shared'. Consider explicitly re-exporting to resolve the ambiguity.
+valueThenTypeOnly.ts(2,1): error TS2308: Module "./a" has already exported a member named 'SharedType'. Consider explicitly re-exporting to resolve the ambiguity.
+valueThenTypeOnly.ts(2,1): error TS2308: Module "./a" has already exported a member named 'shared'. Consider explicitly re-exporting to resolve the ambiguity.
+
+
+==== a.ts (0 errors) ====
+    export const onlyA = 1;
+    export const shared = "a";
+    export interface SharedType { fromA: true }
+    export default "a";
+    
+==== b.ts (0 errors) ====
+    export const onlyB = 2;
+    export const shared = "b";
+    export interface SharedType { fromB: true }
+    export default "b";
+    
+==== b2.ts (0 errors) ====
+    export const shared = "b2";
+    
+==== sameSymbol.ts (0 errors) ====
+    export { shared } from "./a";
+    
+==== twoStarsCollide.ts (2 errors) ====
+    // 'shared' and 'SharedType' come from both modules with different meanings.
+    export * from "./a";
+    export * from "./b";
+    ~~~~~~~~~~~~~~~~~~~~
+!!! error TS2308: Module "./a" has already exported a member named 'SharedType'. Consider explicitly re-exporting to resolve the ambiguity.
+    ~~~~~~~~~~~~~~~~~~~~
+!!! error TS2308: Module "./a" has already exported a member named 'shared'. Consider explicitly re-exporting to resolve the ambiguity.
+    
+==== threeStarsCollide.ts (3 errors) ====
+    // Both later declarations are reported against the first one.
+    export * from "./a";
+    export * from "./b";
+    ~~~~~~~~~~~~~~~~~~~~
+!!! error TS2308: Module "./a" has already exported a member named 'SharedType'. Consider explicitly re-exporting to resolve the ambiguity.
+    ~~~~~~~~~~~~~~~~~~~~
+!!! error TS2308: Module "./a" has already exported a member named 'shared'. Consider explicitly re-exporting to resolve the ambiguity.
+    export * from "./b2";
+    ~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2308: Module "./a" has already exported a member named 'shared'. Consider explicitly re-exporting to resolve the ambiguity.
+    
+==== sameSymbolTwice.ts (0 errors) ====
+    // Reaching the same symbol through two declarations is not a collision.
+    export * from "./a";
+    export * from "./sameSymbol";
+    
+==== localShadows.ts (1 errors) ====
+    // A module's own export takes precedence and silences the collision for shared, but not for SharedType.
+    export * from "./a";
+    export * from "./b";
+    ~~~~~~~~~~~~~~~~~~~~
+!!! error TS2308: Module "./a" has already exported a member named 'SharedType'. Consider explicitly re-exporting to resolve the ambiguity.
+    export const shared = "local";
+    
+==== singleStar.ts (0 errors) ====
+    export * from "./a";
+    
+==== typeOnlyThenValue.ts (2 errors) ====
+    export type * from "./a";
+    export * from "./b";
+    ~~~~~~~~~~~~~~~~~~~~
+!!! error TS2308: Module "./a" has already exported a member named 'SharedType'. Consider explicitly re-exporting to resolve the ambiguity.
+    ~~~~~~~~~~~~~~~~~~~~
+!!! error TS2308: Module "./a" has already exported a member named 'shared'. Consider explicitly re-exporting to resolve the ambiguity.
+    
+==== valueThenTypeOnly.ts (2 errors) ====
+    export * from "./a";
+    export type * from "./b";
+    ~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2308: Module "./a" has already exported a member named 'SharedType'. Consider explicitly re-exporting to resolve the ambiguity.
+    ~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2308: Module "./a" has already exported a member named 'shared'. Consider explicitly re-exporting to resolve the ambiguity.
+    
+==== chained.ts (0 errors) ====
+    export * from "./twoStarsCollide";
+    export * from "./singleStar";
+    
+==== consumer.ts (2 errors) ====
+    import { onlyA, onlyB, shared as s1 } from "./twoStarsCollide";
+    import { shared as s2 } from "./sameSymbolTwice";
+    import { shared as s3 } from "./localShadows";
+    import { shared as s4, onlyA as a4 } from "./singleStar";
+    import { onlyA as a5, onlyB as b5 } from "./typeOnlyThenValue";
+    import { onlyA as a6, onlyB as b6 } from "./valueThenTypeOnly";
+    import { onlyA as a7, onlyB as b7, shared as s7 } from "./chained";
+    import type { SharedType } from "./twoStarsCollide";
+    export const values = [onlyA, onlyB, s1, s2, s3, s4, a4, a5, b5, a6, b6, a7, b7, s7];
+                                                             ~~
+!!! error TS1362: 'a5' cannot be used as a value because it was exported using 'export type'.
+!!! related TS1377 typeOnlyThenValue.ts:1:1: 'a5' was exported here.
+                                                                         ~~
+!!! error TS1362: 'b6' cannot be used as a value because it was exported using 'export type'.
+!!! related TS1377 valueThenTypeOnly.ts:2:1: 'b6' was exported here.
+    export let t: SharedType | undefined;
+    
