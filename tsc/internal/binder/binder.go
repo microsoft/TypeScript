@@ -500,6 +500,9 @@ func (b *Binder) createFlowMutation(flags ast.FlowFlags, antecedent *ast.FlowNod
 	setFlowNodeReferenced(antecedent)
 	b.hasFlowEffects = true
 	result := b.newFlowNodeEx(flags, node, antecedent)
+	if flags&ast.FlowFlagsAssignment != 0 {
+		result.AssignmentTarget = ast.FlowAssignmentTargetHash(node)
+	}
 	if b.currentExceptionTarget != nil {
 		b.addAntecedent(b.currentExceptionTarget, result)
 	}
