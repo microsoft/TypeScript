@@ -1,6 +1,7 @@
 package checker
 
 import (
+	"math/bits"
 	"slices"
 	"strconv"
 	"strings"
@@ -64,12 +65,18 @@ const (
 type RelationComparisonResult uint32
 
 const (
+	relationComparisonResultSucceededBitShift           = 0
+	relationComparisonResultFailedBitShift              = 1
+	relationComparisonResultReportsUnmeasurableBitShift = 3
+	relationComparisonResultReportsUnreliableBitShift   = 4
+	relationComparisonResultOverflowBitShift            = 5
+
 	RelationComparisonResultNone                RelationComparisonResult = 0
-	RelationComparisonResultSucceeded           RelationComparisonResult = 1 << 0
-	RelationComparisonResultFailed              RelationComparisonResult = 1 << 1
-	RelationComparisonResultReportsUnmeasurable RelationComparisonResult = 1 << 3
-	RelationComparisonResultReportsUnreliable   RelationComparisonResult = 1 << 4
-	RelationComparisonResultComplexityOverflow  RelationComparisonResult = 1 << 5
+	RelationComparisonResultSucceeded           RelationComparisonResult = 1 << relationComparisonResultSucceededBitShift
+	RelationComparisonResultFailed              RelationComparisonResult = 1 << relationComparisonResultFailedBitShift
+	RelationComparisonResultReportsUnmeasurable RelationComparisonResult = 1 << relationComparisonResultReportsUnmeasurableBitShift
+	RelationComparisonResultReportsUnreliable   RelationComparisonResult = 1 << relationComparisonResultReportsUnreliableBitShift
+	RelationComparisonResultComplexityOverflow  RelationComparisonResult = 1 << relationComparisonResultOverflowBitShift
 	RelationComparisonResultReportsMask                                  = RelationComparisonResultReportsUnmeasurable | RelationComparisonResultReportsUnreliable
 	RelationComparisonResultOverflow                                     = RelationComparisonResultComplexityOverflow
 )
@@ -96,22 +103,99 @@ func asRecursionId[T *ast.Node | *ast.Symbol | *Type](value T) RecursionId {
 }
 
 type Relation struct {
-	results map[CacheHashKey]RelationComparisonResult
+	packedResults *packedRelationCache
+	packedShift   uint8
+}
+
+type packedRelationCache struct {
+	results map[CacheHashKey]uint32
+	counts  [packedRelationCount]int
+}
+
+func newRelations() (subtype *Relation, strictSubtype *Relation, assignable *Relation, comparableRelation *Relation, identity *Relation) {
+	packedResults := &packedRelationCache{}
+	identity = newRelation(packedResults, 0)
+	strictSubtype = newRelation(packedResults, 6)
+	subtype = newRelation(packedResults, 12)
+	assignable = newRelation(packedResults, 18)
+	comparableRelation = newRelation(packedResults, 24)
+	return subtype, strictSubtype, assignable, comparableRelation, identity
+}
+
+func newRelation(packedResults *packedRelationCache, packedShift uint8) *Relation {
+	return &Relation{packedResults: packedResults, packedShift: packedShift}
 }
 
 func (r *Relation) get(key CacheHashKey) RelationComparisonResult {
-	return r.results[key]
+	packed := r.packedResults.results[key]
+	if packed == 0 {
+		return RelationComparisonResultNone
+	}
+	result := RelationComparisonResult(packed>>r.packedShift) & relationComparisonResultMask
+	if result != RelationComparisonResultNone {
+		return result
+	}
+
+	// A failure in a laxer relation implies failure in this relation. Align each
+	// slot's failure and overflow bits with its respective slot marker, then keep
+	// failures that did not result from an overflow. The mask excludes this and
+	// all stricter relations.
+	laxerSlots := packedRelationSlotMask &^ (uint32(1)<<(r.packedShift+packedRelationResultBits) - 1)
+	if failedSlots := ((packed >> relationComparisonResultFailedBitShift) &^ (packed >> relationComparisonResultOverflowBitShift)) & laxerSlots; failedSlots != 0 {
+		// The lowest set marker is the nearest laxer relation with a usable failure.
+		shift := bits.TrailingZeros32(failedSlots)
+		result = RelationComparisonResult(packed>>shift) & relationComparisonResultMask
+		return r.setPacked(key, packed, result)
+	}
+
+	// A success in a stricter relation implies success in this relation. Align
+	// each slot's success bit with its respective slot marker, then exclude this
+	// and all laxer relations.
+	stricterSlots := packedRelationSlotMask & (uint32(1)<<r.packedShift - 1)
+	if succeededSlots := (packed >> relationComparisonResultSucceededBitShift) & stricterSlots; succeededSlots != 0 {
+		// Prefer the strictest available success, matching the previous scan order.
+		shift := bits.TrailingZeros32(succeededSlots)
+		result = RelationComparisonResult(packed>>shift) & relationComparisonResultMask
+		return r.setPacked(key, packed, result)
+	}
+	return RelationComparisonResultNone
 }
 
 func (r *Relation) set(key CacheHashKey, result RelationComparisonResult) {
-	if r.results == nil {
-		r.results = make(map[CacheHashKey]RelationComparisonResult)
+	if r.packedResults.results == nil {
+		r.packedResults.results = make(map[CacheHashKey]uint32)
 	}
-	r.results[key] = result
+	r.setPacked(key, r.packedResults.results[key], result)
+}
+
+const relationComparisonResultMask = RelationComparisonResultSucceeded |
+	RelationComparisonResultFailed |
+	RelationComparisonResultReportsUnmeasurable |
+	RelationComparisonResultReportsUnreliable |
+	RelationComparisonResultComplexityOverflow
+
+// Each map value contains one six-bit result slot per relation, ordered from
+// strictest to laxest: identity, strict subtype, subtype, assignable, comparable.
+const (
+	packedRelationResultBits = 6
+	packedRelationCount      = 5
+	// Marks the low bit of every slot, which is also its success bit.
+	packedRelationSlotMask = 1 | 1<<6 | 1<<12 | 1<<18 | 1<<24
+)
+
+func (r *Relation) setPacked(key CacheHashKey, packed uint32, result RelationComparisonResult) RelationComparisonResult {
+	result &= relationComparisonResultMask
+	shiftedResult := uint32(result&relationComparisonResultMask) << r.packedShift
+	mask := uint32(relationComparisonResultMask) << r.packedShift
+	if packed&mask == 0 {
+		r.packedResults.counts[r.packedShift/packedRelationResultBits]++
+	}
+	r.packedResults.results[key] = packed&^mask | shiftedResult
+	return result
 }
 
 func (r *Relation) size() int {
-	return len(r.results)
+	return r.packedResults.counts[r.packedShift/packedRelationResultBits]
 }
 
 func (c *Checker) isTypeIdenticalTo(source *Type, target *Type) bool {
