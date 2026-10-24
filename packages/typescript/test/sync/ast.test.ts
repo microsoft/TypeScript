@@ -11,6 +11,9 @@ import type {
     Identifier,
     InterfaceDeclaration,
     JSDoc,
+    JSDocPropertyTag,
+    JSDocTypeLiteral,
+    JSDocTypedefTag,
     MethodDeclaration,
     Node,
     NodeArray,
@@ -1357,6 +1360,43 @@ describe("RemoteNode + child/token getters", { concurrency }, () => {
             assert.strictEqual(first.kind, SyntaxKind.JSDoc);
             assert.strictEqual(first.getText().trim(), "/** doc */");
         });
+    });
+
+    test("jsdocPropertyTags exposes every raw list element", () => {
+        const api = spawnAPI({
+            "/tsconfig.json": JSON.stringify({ compilerOptions: { allowJs: true, noLib: true } }),
+            "/src/children.js": [
+                "/**",
+                " * @typedef {Object} Events",
+                " * @property {string} a",
+                " * @property {string} b",
+                " * @property {string} c",
+                " */",
+                "export const x = 1;",
+            ].join("\n"),
+        });
+        try {
+            const sf = getRemoteSourceFile(api, "/tsconfig.json", "/src/children.js");
+            const typedefTag = sf.statements[0].jsDoc?.[0]?.tags?.[0] as JSDocTypedefTag | undefined;
+            assert.ok(typedefTag, "expected a JSDoc typedef tag");
+            const typeLiteral = typedefTag.typeExpression as JSDocTypeLiteral | undefined;
+            assert.ok(typeLiteral?.kind === SyntaxKind.JSDocTypeLiteral, "expected a JSDoc type literal");
+            const propertyTags = typeLiteral.jsdocPropertyTags;
+            assert.ok(Array.isArray(propertyTags), "jsdocPropertyTags should be a node list");
+            assert.deepStrictEqual(propertyTags.map(tag => (tag as JSDocPropertyTag).name.getText(sf)), ["a", "b", "c"]);
+
+            const visitedPropertyTagNames: string[] = [];
+            typeLiteral.forEachChild(child => {
+                if (child.kind === SyntaxKind.JSDocPropertyTag) {
+                    visitedPropertyTagNames.push((child as JSDocPropertyTag).name.getText(sf));
+                }
+                return undefined;
+            });
+            assert.deepStrictEqual(visitedPropertyTagNames, ["a", "b", "c"]);
+        }
+        finally {
+            api.close();
+        }
     });
 
     test("getChildren throws on a synthesized node without a real position", () => {

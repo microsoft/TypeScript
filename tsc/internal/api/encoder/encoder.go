@@ -335,6 +335,36 @@ type NodeIndexTable struct {
 
 var nodeIndexTableKey = ast.NewSourceFileDataKey[*NodeIndexTable]()
 
+// rawNodeList returns the child list stored directly on raw-list AST members.
+// The encoded tree represents lists with a synthetic NodeList node, so callers
+// must visit this list through the same hook as ordinary NodeList members.
+func rawNodeList(node *ast.Node) *ast.NodeList {
+	switch node.Kind {
+	case ast.KindSyntaxList:
+		children := node.AsSyntaxList().Children
+		if len(children) == 0 {
+			return nil
+		}
+		return &ast.NodeList{Loc: core.NewTextRange(node.Pos(), node.End()), Nodes: children}
+	case ast.KindJSDocTypeLiteral:
+		tags := node.AsJSDocTypeLiteral().JSDocPropertyTags
+		if len(tags) == 0 {
+			return nil
+		}
+		return &ast.NodeList{Loc: core.NewTextRange(tags[0].Pos(), tags[len(tags)-1].End()), Nodes: tags}
+	default:
+		return nil
+	}
+}
+
+func visitEncodedChildren(node *ast.Node, visitor *ast.NodeVisitor) {
+	if list := rawNodeList(node); list != nil {
+		visitor.Hooks.VisitNodes(list, visitor)
+		return
+	}
+	visitor.VisitEachChild(node)
+}
+
 // GetIndex returns the encoder index for the given node.
 // On the first call the sortedIdx array is built (O(n log n) sort on a flat []uint32),
 // then subsequent calls use binary search (O(log n)). This turns out to be much faster than
@@ -393,7 +423,7 @@ func BuildNodeIndexTable(sourceFile *ast.SourceFile) *NodeIndexTable {
 	visitor.Visit = func(node *ast.Node) *ast.Node {
 		nodeCount++
 		nodeTable = append(nodeTable, node)
-		visitor.VisitEachChild(node)
+		visitEncodedChildren(node, visitor)
 		for _, jsdoc := range node.JSDoc(sourceFile) {
 			visitor.Visit(jsdoc)
 		}
@@ -405,7 +435,7 @@ func BuildNodeIndexTable(sourceFile *ast.SourceFile) *NodeIndexTable {
 	nodeCount++
 	nodeTable = append(nodeTable, rootNode)
 
-	visitor.VisitEachChild(rootNode)
+	visitEncodedChildren(rootNode, visitor)
 	for _, jsdoc := range rootNode.JSDoc(sourceFile) {
 		visitor.Visit(jsdoc)
 	}
@@ -567,7 +597,7 @@ func encodeTree(rootNode *ast.Node, sourceFile *ast.SourceFile) ([]byte, *NodeIn
 		currentIndex := nodeCount
 		prevIndex = 0
 		parentIndex = currentIndex
-		visitor.VisitEachChild(node)
+		visitEncodedChildren(node, visitor)
 		if sourceFile != nil {
 			for _, jsdoc := range node.JSDoc(sourceFile) {
 				visitor.Visit(jsdoc)
@@ -587,7 +617,7 @@ func encodeTree(rootNode *ast.Node, sourceFile *ast.SourceFile) ([]byte, *NodeIn
 	sfExtendedDataOffset = len(extendedData)
 	nodes = appendUint32s(nodes, uint32(rootNode.Kind), utf16(rootNode.Pos()), utf16(rootNode.End()), 0, 0, getNodeData(rootNode, strs, positionMap, &extendedData, &structuredData), uint32(rootNode.Flags))
 
-	visitor.VisitEachChild(rootNode)
+	visitEncodedChildren(rootNode, visitor)
 	if sourceFile != nil {
 		for _, jsdoc := range rootNode.JSDoc(sourceFile) {
 			visitor.Visit(jsdoc)
