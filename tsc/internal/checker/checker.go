@@ -32269,7 +32269,7 @@ func (c *Checker) getNarrowableTypeForReference(t *Type, reference *ast.Node, ch
 	// control flow analysis an opportunity to narrow it further. For example, for a reference of a type
 	// parameter type 'T extends string | undefined' with a contextual type 'string', we substitute
 	// 'string | undefined' to give control flow analysis the opportunity to narrow to type 'string'.
-	substituteConstraints := checkMode&CheckModeInferential == 0 && someType(t, c.isGenericTypeWithUnionConstraint) && (c.isConstraintPosition(t, reference) || c.hasContextualTypeWithNoGenericTypes(reference, checkMode))
+	substituteConstraints := checkMode&CheckModeInferential == 0 && c.someGenericTypeWithUnionConstraint(t) && (c.isConstraintPosition(t, reference) || c.hasContextualTypeWithNoGenericTypes(reference, checkMode))
 	if substituteConstraints {
 		return c.mapType(t, c.getBaseConstraintOrType)
 	}
@@ -32284,6 +32284,17 @@ func (c *Checker) isConstraintPosition(t *Type, node *ast.Node) bool {
 	return ast.IsPropertyAccessExpression(parent) || ast.IsQualifiedName(parent) ||
 		(ast.IsCallExpression(parent) || ast.IsNewExpression(parent)) && parent.Expression() == node ||
 		ast.IsElementAccessExpression(parent) && parent.Expression() == node && !(someType(t, c.isGenericTypeWithoutNullableConstraint) && c.isGenericIndexType(c.getTypeOfExpression(parent.AsElementAccessExpression().ArgumentExpression)))
+}
+
+// A union whose couldContainTypeVariables result is already computed as false has no constituent that is
+// a generic type with a union constraint, so the per-constituent walk can be skipped. The only instantiable
+// constituents such a union can hold are pattern literal types of a non-generic top-level alias, and each of
+// those is its own base constraint. The cached result is only read here, never computed.
+func (c *Checker) someGenericTypeWithUnionConstraint(t *Type) bool {
+	if t.flags&TypeFlagsUnion != 0 && t.objectFlags&(ObjectFlagsCouldContainTypeVariablesComputed|ObjectFlagsCouldContainTypeVariables) == ObjectFlagsCouldContainTypeVariablesComputed {
+		return false
+	}
+	return someType(t, c.isGenericTypeWithUnionConstraint)
 }
 
 func (c *Checker) isGenericTypeWithUnionConstraint(t *Type) bool {
