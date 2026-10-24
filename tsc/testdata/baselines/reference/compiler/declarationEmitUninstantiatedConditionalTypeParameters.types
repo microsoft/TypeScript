@@ -1,0 +1,40 @@
+//// [tests/cases/compiler/declarationEmitUninstantiatedConditionalTypeParameters.ts] ////
+
+=== router.ts ===
+import { State } from "./contracts";
+>State : any
+
+interface Builder<TOutputOut> {
+    query<T>(resolver: () => T): { output: TOutputOut extends "unset" ? T : TOutputOut };
+>query : <T>(resolver: () => T) => { output: TOutputOut extends "unset" ? T : TOutputOut; }
+>resolver : () => T
+>output : TOutputOut extends "unset" ? T : TOutputOut
+}
+
+declare const builder: Builder<"unset">;
+>builder : Builder<"unset">
+
+export const query = builder.query((): State | null => null);
+>query : { output: any; }
+>builder.query((): State | null => null) : { output: any; }
+>builder.query : <T>(resolver: () => T) => { output: T; }
+>builder : Builder<"unset">
+>query : <T>(resolver: () => T) => { output: T; }
+>(): State | null => null : () => State | null
+
+export const anyQuery = builder.query((): any => null);
+>anyQuery : { output: any; }
+>builder.query((): any => null) : { output: any; }
+>builder.query : <T>(resolver: () => T) => { output: T; }
+>builder : Builder<"unset">
+>query : <T>(resolver: () => T) => { output: T; }
+>(): any => null : () => any
+
+export const typedQuery = builder.query((): string | null => null);
+>typedQuery : { output: string | null; }
+>builder.query((): string | null => null) : { output: string | null; }
+>builder.query : <T>(resolver: () => T) => { output: T; }
+>builder : Builder<"unset">
+>query : <T>(resolver: () => T) => { output: T; }
+>(): string | null => null : () => string | null
+
