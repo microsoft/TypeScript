@@ -1,0 +1,95 @@
+//// [tests/cases/compiler/lateBoundMemberLayoutReentrancy.ts] ////
+
+=== lateBoundMemberLayoutReentrancy.ts ===
+declare const rI: RI<"a">;
+>rI : Symbol(rI, Decl(lateBoundMemberLayoutReentrancy.ts, 0, 13))
+>RI : Symbol(RI, Decl(lateBoundMemberLayoutReentrancy.ts, 1, 4))
+
+rI.x
+>rI.x : Symbol(RI.x, Decl(lateBoundMemberLayoutReentrancy.ts, 2, 35))
+>rI : Symbol(rI, Decl(lateBoundMemberLayoutReentrancy.ts, 0, 13))
+>x : Symbol(RI.x, Decl(lateBoundMemberLayoutReentrancy.ts, 2, 35))
+
+interface RI<T extends "a" | "b"> {
+>RI : Symbol(RI, Decl(lateBoundMemberLayoutReentrancy.ts, 1, 4))
+>T : Symbol(T, Decl(lateBoundMemberLayoutReentrancy.ts, 2, 13))
+
+    x: T;
+>x : Symbol(RI.x, Decl(lateBoundMemberLayoutReentrancy.ts, 2, 35))
+>T : Symbol(T, Decl(lateBoundMemberLayoutReentrancy.ts, 2, 13))
+
+    [rI.x]: "b";
+>[rI.x] : Symbol(RI[rI.x], Decl(lateBoundMemberLayoutReentrancy.ts, 3, 9))
+>rI.x : Symbol(RI.x, Decl(lateBoundMemberLayoutReentrancy.ts, 2, 35))
+>rI : Symbol(rI, Decl(lateBoundMemberLayoutReentrancy.ts, 0, 13))
+>x : Symbol(RI.x, Decl(lateBoundMemberLayoutReentrancy.ts, 2, 35))
+}
+declare const rI2: RI<"b">;
+>rI2 : Symbol(rI2, Decl(lateBoundMemberLayoutReentrancy.ts, 6, 13))
+>RI : Symbol(RI, Decl(lateBoundMemberLayoutReentrancy.ts, 1, 4))
+
+export const v1 = rI2.a;
+>v1 : Symbol(v1, Decl(lateBoundMemberLayoutReentrancy.ts, 7, 12))
+>rI2.a : Symbol(RI[rI.x], Decl(lateBoundMemberLayoutReentrancy.ts, 3, 9))
+>rI2 : Symbol(rI2, Decl(lateBoundMemberLayoutReentrancy.ts, 6, 13))
+>a : Symbol(RI[rI.x], Decl(lateBoundMemberLayoutReentrancy.ts, 3, 9))
+
+export const v2 = rI.a;
+>v2 : Symbol(v2, Decl(lateBoundMemberLayoutReentrancy.ts, 8, 12))
+>rI.a : Symbol(RI[rI.x], Decl(lateBoundMemberLayoutReentrancy.ts, 3, 9))
+>rI : Symbol(rI, Decl(lateBoundMemberLayoutReentrancy.ts, 0, 13))
+>a : Symbol(RI[rI.x], Decl(lateBoundMemberLayoutReentrancy.ts, 3, 9))
+
+export type K2 = keyof RI<"b">;
+>K2 : Symbol(K2, Decl(lateBoundMemberLayoutReentrancy.ts, 8, 23))
+>RI : Symbol(RI, Decl(lateBoundMemberLayoutReentrancy.ts, 1, 4))
+
+export const k: K2 = "a";
+>k : Symbol(k, Decl(lateBoundMemberLayoutReentrancy.ts, 10, 12))
+>K2 : Symbol(K2, Decl(lateBoundMemberLayoutReentrancy.ts, 8, 23))
+
+export const o: RI<"b"> = { x: "b", a: "b" };
+>o : Symbol(o, Decl(lateBoundMemberLayoutReentrancy.ts, 11, 12))
+>RI : Symbol(RI, Decl(lateBoundMemberLayoutReentrancy.ts, 1, 4))
+>x : Symbol(x, Decl(lateBoundMemberLayoutReentrancy.ts, 11, 27))
+>a : Symbol(a, Decl(lateBoundMemberLayoutReentrancy.ts, 11, 35))
+
+declare const rC: RC<"a">;
+>rC : Symbol(rC, Decl(lateBoundMemberLayoutReentrancy.ts, 13, 13))
+>RC : Symbol(RC, Decl(lateBoundMemberLayoutReentrancy.ts, 14, 4))
+
+rC.x
+>rC.x : Symbol(RC.x, Decl(lateBoundMemberLayoutReentrancy.ts, 15, 39))
+>rC : Symbol(rC, Decl(lateBoundMemberLayoutReentrancy.ts, 13, 13))
+>x : Symbol(RC.x, Decl(lateBoundMemberLayoutReentrancy.ts, 15, 39))
+
+declare class RC<T extends "a" | "b"> {
+>RC : Symbol(RC, Decl(lateBoundMemberLayoutReentrancy.ts, 14, 4))
+>T : Symbol(T, Decl(lateBoundMemberLayoutReentrancy.ts, 15, 17))
+
+    x: T;
+>x : Symbol(RC.x, Decl(lateBoundMemberLayoutReentrancy.ts, 15, 39))
+>T : Symbol(T, Decl(lateBoundMemberLayoutReentrancy.ts, 15, 17))
+
+    [rC.x]: "b";
+>[rC.x] : Symbol(RC[rC.x], Decl(lateBoundMemberLayoutReentrancy.ts, 16, 9))
+>rC.x : Symbol(RC.x, Decl(lateBoundMemberLayoutReentrancy.ts, 15, 39))
+>rC : Symbol(rC, Decl(lateBoundMemberLayoutReentrancy.ts, 13, 13))
+>x : Symbol(RC.x, Decl(lateBoundMemberLayoutReentrancy.ts, 15, 39))
+}
+declare const rC2: RC<"b">;
+>rC2 : Symbol(rC2, Decl(lateBoundMemberLayoutReentrancy.ts, 19, 13))
+>RC : Symbol(RC, Decl(lateBoundMemberLayoutReentrancy.ts, 14, 4))
+
+export const w1 = rC2.a;
+>w1 : Symbol(w1, Decl(lateBoundMemberLayoutReentrancy.ts, 20, 12))
+>rC2.a : Symbol(RC[rC.x], Decl(lateBoundMemberLayoutReentrancy.ts, 16, 9))
+>rC2 : Symbol(rC2, Decl(lateBoundMemberLayoutReentrancy.ts, 19, 13))
+>a : Symbol(RC[rC.x], Decl(lateBoundMemberLayoutReentrancy.ts, 16, 9))
+
+export const w2 = rC.a;
+>w2 : Symbol(w2, Decl(lateBoundMemberLayoutReentrancy.ts, 21, 12))
+>rC.a : Symbol(RC[rC.x], Decl(lateBoundMemberLayoutReentrancy.ts, 16, 9))
+>rC : Symbol(rC, Decl(lateBoundMemberLayoutReentrancy.ts, 13, 13))
+>a : Symbol(RC[rC.x], Decl(lateBoundMemberLayoutReentrancy.ts, 16, 9))
+
