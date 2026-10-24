@@ -607,6 +607,14 @@ func TestWatch(t *testing.T) {
 			input.edits = slices.DeleteFunc(input.edits, func(edit *tscEdit) bool { return edit == noChange })
 			return input
 		}(),
+		func() *tscInput {
+			input := linkedPackageNestedManifestTestInput(
+				"watch updates declaration emit when nested manifest of linked package changes",
+				[]string{"--watch", "--incremental", "false"},
+			)
+			input.edits = slices.DeleteFunc(input.edits, func(edit *tscEdit) bool { return edit == noChange })
+			return input
+		}(),
 	}
 
 	for _, test := range testCases {

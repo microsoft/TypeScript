@@ -1557,6 +1557,45 @@ func TestBuildDependencyUpdate(t *testing.T) {
 				noChange,
 			},
 		},
+		{
+			subScenario: "updates declaration emit when nested manifest of linked package changes",
+			files: func() FileMap {
+				files := getLinkedPackageFiles(`"b":"1.0.0","c":"1.0.0"`)
+				files["/home/src/workspaces/solution/a/node_modules/c"] = vfstest.Symlink("/home/src/workspaces/solution/c")
+				files["/home/src/workspaces/solution/b/src/index.ts"] = stringtestutil.Dedent(`
+					import { current } from "c/src/index.js";
+					export const currentStage = () => current;
+				`)
+				files["/home/src/workspaces/solution/c/package.json"] = `{"name":"c","version":"1.0.0","type":"module","types":"./src/main.ts"}`
+				files["/home/src/workspaces/solution/c/src/package.json"] = `{"type":"module","types":"./index.ts"}`
+				files["/home/src/workspaces/solution/c/src/main.ts"] = `export const version = "1.0.0";`
+				return files
+			}(),
+			cwd:             "/home/src/workspaces/solution",
+			commandLineArgs: []string{"--b", "--verbose"},
+			edits: []*tscEdit{
+				{
+					caption: "point types of nested manifest of c to another entry",
+					edit: func(sys *TestSys) {
+						sys.replaceFileText("/home/src/workspaces/solution/c/src/package.json", "./index.ts", "./main.ts")
+					},
+				},
+				noChange,
+				{
+					caption: "remove nested manifest of c",
+					edit: func(sys *TestSys) {
+						sys.removeNoError("/home/src/workspaces/solution/c/src/package.json")
+					},
+				},
+				{
+					caption: "add nested manifest of c pointing types to index",
+					edit: func(sys *TestSys) {
+						sys.writeFileNoError("/home/src/workspaces/solution/c/src/package.json", `{"type":"module","types":"./index.ts"}`)
+					},
+				},
+				noChange,
+			},
+		},
 	}
 
 	for _, test := range testCases {

@@ -2605,9 +2605,47 @@ func TestTscIncremental(t *testing.T) {
 		"updates declaration emit when linked dependency is removed and added",
 		nil,
 	))
+	testCases = append(testCases, linkedPackageNestedManifestTestInput(
+		"updates declaration emit when nested manifest of linked package changes",
+		nil,
+	))
 
 	for _, test := range testCases {
 		test.run(t, "incremental")
+	}
+}
+
+func linkedPackageDeclarationEmitFiles() FileMap {
+	return FileMap{
+		"/home/src/workspaces/project/a/package.json": `{"name":"a","version":"1.0.0","type":"module","dependencies":{"b":"1.0.0","c":"1.0.0"}}`,
+		"/home/src/workspaces/project/a/tsconfig.json": stringtestutil.Dedent(`
+			{
+				"compilerOptions": {
+					"incremental": true,
+					"declaration": true,
+					"emitDeclarationOnly": true,
+					"strict": true,
+					"module": "nodenext",
+					"types": [],
+					"rootDir": "src",
+					"outDir": "dist"
+				},
+				"include": ["src"]
+			}`),
+		"/home/src/workspaces/project/a/src/index.ts": stringtestutil.Dedent(`
+			import { currentStage } from "b";
+			export const stage = currentStage();
+		`),
+		"/home/src/workspaces/project/a/node_modules/b": vfstest.Symlink("/home/src/workspaces/project/b"),
+		"/home/src/workspaces/project/a/node_modules/c": vfstest.Symlink("/home/src/workspaces/project/c"),
+		"/home/src/workspaces/project/b/package.json":   `{"name":"b","version":"1.0.0","type":"module","types":"./index.d.ts","dependencies":{"c":"1.0.0"}}`,
+		"/home/src/workspaces/project/b/index.d.ts":     `export declare const currentStage: () => import("c").Current;`,
+		"/home/src/workspaces/project/b/node_modules/c": vfstest.Symlink("/home/src/workspaces/project/c"),
+		"/home/src/workspaces/project/c/package.json":   `{"name":"c","version":"1.0.0","type":"module","types":"./index.d.ts"}`,
+		"/home/src/workspaces/project/c/index.d.ts": stringtestutil.Dedent(`
+			export interface Current { readonly stage: string }
+			export declare const current: Current;
+		`),
 	}
 }
 
@@ -2616,38 +2654,8 @@ func linkedPackageDeclarationEmitTestInput(subScenario string, commandLineArgs [
 		sys.writeFileNoError("/home/src/workspaces/project/a/package.json", fmt.Sprintf(`{"name":"a","version":"1.0.0","type":"module","dependencies":{%s}}`, dependencies))
 	}
 	return &tscInput{
-		subScenario: subScenario,
-		files: FileMap{
-			"/home/src/workspaces/project/a/package.json": `{"name":"a","version":"1.0.0","type":"module","dependencies":{"b":"1.0.0","c":"1.0.0"}}`,
-			"/home/src/workspaces/project/a/tsconfig.json": stringtestutil.Dedent(`
-				{
-					"compilerOptions": {
-						"incremental": true,
-						"declaration": true,
-						"emitDeclarationOnly": true,
-						"strict": true,
-						"module": "nodenext",
-						"types": [],
-						"rootDir": "src",
-						"outDir": "dist"
-					},
-					"include": ["src"]
-				}`),
-			"/home/src/workspaces/project/a/src/index.ts": stringtestutil.Dedent(`
-				import { currentStage } from "b";
-				export const stage = currentStage();
-			`),
-			"/home/src/workspaces/project/a/node_modules/b": vfstest.Symlink("/home/src/workspaces/project/b"),
-			"/home/src/workspaces/project/a/node_modules/c": vfstest.Symlink("/home/src/workspaces/project/c"),
-			"/home/src/workspaces/project/b/package.json":   `{"name":"b","version":"1.0.0","type":"module","types":"./index.d.ts","dependencies":{"c":"1.0.0"}}`,
-			"/home/src/workspaces/project/b/index.d.ts":     `export declare const currentStage: () => import("c").Current;`,
-			"/home/src/workspaces/project/b/node_modules/c": vfstest.Symlink("/home/src/workspaces/project/c"),
-			"/home/src/workspaces/project/c/package.json":   `{"name":"c","version":"1.0.0","type":"module","types":"./index.d.ts"}`,
-			"/home/src/workspaces/project/c/index.d.ts": stringtestutil.Dedent(`
-				export interface Current { readonly stage: string }
-				export declare const current: Current;
-			`),
-		},
+		subScenario:     subScenario,
+		files:           linkedPackageDeclarationEmitFiles(),
 		cwd:             "/home/src/workspaces/project/a",
 		commandLineArgs: commandLineArgs,
 		edits: []*tscEdit{
@@ -2664,6 +2672,47 @@ func linkedPackageDeclarationEmitTestInput(subScenario string, commandLineArgs [
 				edit: func(sys *TestSys) {
 					writeManifestOfA(sys, `"b":"1.0.0","c":"1.0.0"`)
 					sys.addSymlink("/home/src/workspaces/project/a/node_modules/c", "/home/src/workspaces/project/c")
+				},
+			},
+			noChange,
+		},
+	}
+}
+
+func linkedPackageNestedManifestTestInput(subScenario string, commandLineArgs []string) *tscInput {
+	files := linkedPackageDeclarationEmitFiles()
+	delete(files, "/home/src/workspaces/project/c/index.d.ts")
+	files["/home/src/workspaces/project/b/index.d.ts"] = `export declare const currentStage: () => import("c/src/index.js").Current;`
+	files["/home/src/workspaces/project/c/package.json"] = `{"name":"c","version":"1.0.0","type":"module","types":"./src/main.d.ts"}`
+	files["/home/src/workspaces/project/c/src/package.json"] = `{"type":"module","types":"./index.d.ts"}`
+	files["/home/src/workspaces/project/c/src/index.d.ts"] = stringtestutil.Dedent(`
+		export interface Current { readonly stage: string }
+		export declare const current: Current;
+	`)
+	files["/home/src/workspaces/project/c/src/main.d.ts"] = `export declare const version: string;`
+	return &tscInput{
+		subScenario:     subScenario,
+		files:           files,
+		cwd:             "/home/src/workspaces/project/a",
+		commandLineArgs: commandLineArgs,
+		edits: []*tscEdit{
+			{
+				caption: "point types of nested manifest of c to another entry",
+				edit: func(sys *TestSys) {
+					sys.replaceFileText("/home/src/workspaces/project/c/src/package.json", "./index.d.ts", "./main.d.ts")
+				},
+			},
+			noChange,
+			{
+				caption: "remove nested manifest of c",
+				edit: func(sys *TestSys) {
+					sys.removeNoError("/home/src/workspaces/project/c/src/package.json")
+				},
+			},
+			{
+				caption: "add nested manifest of c pointing types to index",
+				edit: func(sys *TestSys) {
+					sys.writeFileNoError("/home/src/workspaces/project/c/src/package.json", `{"type":"module","types":"./index.d.ts"}`)
 				},
 			},
 			noChange,
