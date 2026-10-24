@@ -1,0 +1,61 @@
+//// [tests/cases/compiler/weakTypeWithTypeParameterBase.ts] ////
+
+=== weakTypeWithTypeParameterBase.ts ===
+declare function base<T>(): new () => T;
+>base : <T>() => new () => T
+
+function make<T extends object>() {
+>make : <T extends object>() => typeof Weak
+
+    class Weak extends base<T>() {
+>Weak : Weak
+>base<T>() : T
+>base : <T_1>() => new () => T_1
+
+        optional?: string;
+>optional : string | undefined
+    }
+    return Weak;
+>Weak : typeof Weak
+}
+
+const C = make<() => void>();
+>C : typeof Weak
+>make<() => void>() : typeof Weak
+>make : <T extends object>() => typeof Weak
+
+const c: InstanceType<typeof C> = () => {};
+>c : make.Weak
+>C : typeof Weak
+>() => {} : () => void
+
+function makeGeneric<T extends object>() {
+>makeGeneric : <T extends object>() => typeof Inner
+
+    class Inner<U> extends base<T>() {
+>Inner : Inner<U>
+>base<T>() : T
+>base : <T_1>() => new () => T_1
+
+        u?: U;
+>u : U | undefined
+    }
+    return Inner;
+>Inner : typeof Inner
+}
+
+const I = makeGeneric<{ req: string }>();
+>I : typeof Inner
+>makeGeneric<{ req: string }>() : typeof Inner
+>makeGeneric : <T extends object>() => typeof Inner
+>req : string
+
+const i: InstanceType<typeof I> = { other: 1 } as { other: number };
+>i : makeGeneric.Inner<unknown>
+>I : typeof Inner
+>{ other: 1 } as { other: number } : { other: number; }
+>{ other: 1 } : { other: number; }
+>other : number
+>1 : 1
+>other : number
+
