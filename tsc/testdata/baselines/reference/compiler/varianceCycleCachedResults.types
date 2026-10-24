@@ -1,0 +1,49 @@
+//// [tests/cases/compiler/varianceCycleCachedResults.ts] ////
+
+=== first.ts ===
+declare let b1: Box<string>;
+>b1 : Box<string>
+
+declare let b2: Box<number>;
+>b2 : Box<number>
+
+b1 = b2;
+>b1 = b2 : Box<number>
+>b1 : Box<string>
+>b2 : Box<number>
+
+=== box.ts ===
+declare let a1: Box<string>;
+>a1 : Box<string>
+
+declare let a2: Box<number>;
+>a2 : Box<number>
+
+declare const cond: boolean;
+>cond : boolean
+
+class Box<T> {
+>Box : Box<T>
+
+    value!: T;
+>value : T
+
+    m() {
+>m : () => Box<string>
+
+        if (cond) return a1;
+>cond : boolean
+>a1 : Box<string>
+
+        return a2;
+>a2 : Box<number>
+    }
+}
+const r = new Box<boolean>().m();
+>r : Box<string>
+>new Box<boolean>().m() : Box<string>
+>new Box<boolean>().m : () => Box<string>
+>new Box<boolean>() : Box<boolean>
+>Box : typeof Box
+>m : () => Box<string>
+
