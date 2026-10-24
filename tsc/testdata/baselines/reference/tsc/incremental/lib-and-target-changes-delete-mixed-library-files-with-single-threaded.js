@@ -52,7 +52,7 @@ tsgo --singleThreaded
 ExitStatus:: Success
 Output::
 //// [/home/src/workspaces/project/tsconfig.tsbuildinfo] *new* 
-{"version":"FakeTSVersion","root":[5],"fileNames":["lib.es5.d.ts","lib.es2026.array.d.ts","lib.decorators.d.ts","lib.esnext.full.d.ts","./a.ts"],"fileInfos":[{"version":"8859c12c614ce56ba9a18e58384a198f-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ninterface SymbolConstructor {\n    (desc?: string | number): symbol;\n    for(name: string): symbol;\n    readonly toStringTag: symbol;\n}\ndeclare var Symbol: SymbolConstructor;\ninterface Symbol {\n    readonly [Symbol.toStringTag]: string;\n}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true,"impliedNodeFormat":1},{"version":"e91cd068d41015559cda423626d75b7a-/// <reference no-default-lib=\"true\"/>\ninterface Array<T> {\n    toSorted(): T[];\n}","affectsGlobalScope":true,"impliedNodeFormat":1},"7391cbbbaadf784b1dca43ffe8f0eaee-/// <reference no-default-lib=\"true\"/>\nexport {};","5ecdc3e6174a78a8b8d9150f692c3942-/// <reference no-default-lib=\"true\"/>\n/// <reference lib=\"es5\"/>\n/// <reference lib=\"esnext.array\"/>\n/// <reference lib=\"decorators\"/>","b31fbc1eb463bbe84b7bbcf331cb31f2-export const values = [3, 1, 2].toSorted();"],"options":{"target":99},"affectedFilesPendingEmit":[5]}
+{"version":"FakeTSVersion","root":[5],"fileNames":["lib.es5.d.ts","lib.es2026.array.d.ts","lib.decorators.d.ts","lib.esnext.full.d.ts","./a.ts"],"fileInfos":[{"version":"8859c12c614ce56ba9a18e58384a198f-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ninterface SymbolConstructor {\n    (desc?: string | number): symbol;\n    for(name: string): symbol;\n    readonly toStringTag: symbol;\n}\ndeclare var Symbol: SymbolConstructor;\ninterface Symbol {\n    readonly [Symbol.toStringTag]: string;\n}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true,"impliedNodeFormat":1},{"version":"e91cd068d41015559cda423626d75b7a-/// <reference no-default-lib=\"true\"/>\ninterface Array<T> {\n    toSorted(): T[];\n}","affectsGlobalScope":true,"impliedNodeFormat":1},"7391cbbbaadf784b1dca43ffe8f0eaee-/// <reference no-default-lib=\"true\"/>\nexport {};","5ecdc3e6174a78a8b8d9150f692c3942-/// <reference no-default-lib=\"true\"/>\n/// <reference lib=\"es5\"/>\n/// <reference lib=\"esnext.array\"/>\n/// <reference lib=\"decorators\"/>","b31fbc1eb463bbe84b7bbcf331cb31f2-export const values = [3, 1, 2].toSorted();"],"options":{"target":99,"types":[]},"affectedFilesPendingEmit":[5]}
 //// [/home/src/workspaces/project/tsconfig.tsbuildinfo.readable.baseline.txt] *new* 
 {
   "version": "FakeTSVersion",
@@ -116,7 +116,8 @@ Output::
     }
   ],
   "options": {
-    "target": 99
+    "target": 99,
+    "types": []
   },
   "affectedFilesPendingEmit": [
     [
@@ -125,7 +126,7 @@ Output::
       5
     ]
   ],
-  "size": 1516
+  "size": 1527
 }
 
 tsconfig.json::
@@ -154,7 +155,7 @@ Output::
 Found 1 error in a.ts[90m:1[0m
 
 //// [/home/src/workspaces/project/tsconfig.tsbuildinfo] *modified* 
-{"version":"FakeTSVersion","root":[3],"fileNames":["lib.es5.d.ts","lib.es2020.d.ts","./a.ts"],"fileInfos":[{"version":"8859c12c614ce56ba9a18e58384a198f-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ninterface SymbolConstructor {\n    (desc?: string | number): symbol;\n    for(name: string): symbol;\n    readonly toStringTag: symbol;\n}\ndeclare var Symbol: SymbolConstructor;\ninterface Symbol {\n    readonly [Symbol.toStringTag]: string;\n}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true,"impliedNodeFormat":1},"39b6b52e4bfc36fd6d892df73c38abe0-/// <reference no-default-lib=\"true\"/>\n/// <reference lib=\"es5\"/>",{"version":"b31fbc1eb463bbe84b7bbcf331cb31f2-export const values = [3, 1, 2].toSorted();","signature":"c31aa5c2cd609f2993edf6ca8656963f-export declare const values: any;\n","impliedNodeFormat":1}],"options":{"target":99},"semanticDiagnosticsPerFile":[[3,[{"pos":32,"end":40,"code":2550,"category":1,"messageKey":"Property_0_does_not_exist_on_type_1_Do_you_need_to_change_your_target_library_Try_changing_the_lib_c_2550","messageArgs":["toSorted","number[]","es2023"]}]]],"affectedFilesPendingEmit":[3]}
+{"version":"FakeTSVersion","root":[3],"fileNames":["lib.es5.d.ts","lib.es2020.d.ts","./a.ts"],"fileInfos":[{"version":"8859c12c614ce56ba9a18e58384a198f-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ninterface SymbolConstructor {\n    (desc?: string | number): symbol;\n    for(name: string): symbol;\n    readonly toStringTag: symbol;\n}\ndeclare var Symbol: SymbolConstructor;\ninterface Symbol {\n    readonly [Symbol.toStringTag]: string;\n}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true,"impliedNodeFormat":1},"39b6b52e4bfc36fd6d892df73c38abe0-/// <reference no-default-lib=\"true\"/>\n/// <reference lib=\"es5\"/>",{"version":"b31fbc1eb463bbe84b7bbcf331cb31f2-export const values = [3, 1, 2].toSorted();","signature":"c31aa5c2cd609f2993edf6ca8656963f-export declare const values: any;\n","impliedNodeFormat":1}],"options":{"target":99,"types":[]},"semanticDiagnosticsPerFile":[[3,[{"pos":32,"end":40,"code":2550,"category":1,"messageKey":"Property_0_does_not_exist_on_type_1_Do_you_need_to_change_your_target_library_Try_changing_the_lib_c_2550","messageArgs":["toSorted","number[]","es2023"]}]]],"affectedFilesPendingEmit":[3]}
 //// [/home/src/workspaces/project/tsconfig.tsbuildinfo.readable.baseline.txt] *modified* 
 {
   "version": "FakeTSVersion",
@@ -203,7 +204,8 @@ Found 1 error in a.ts[90m:1[0m
     }
   ],
   "options": {
-    "target": 99
+    "target": 99,
+    "types": []
   },
   "semanticDiagnosticsPerFile": [
     [
@@ -231,7 +233,7 @@ Found 1 error in a.ts[90m:1[0m
       3
     ]
   ],
-  "size": 1485
+  "size": 1496
 }
 
 tsconfig.json::
@@ -271,7 +273,7 @@ tsgo --singleThreaded
 ExitStatus:: Success
 Output::
 //// [/home/src/workspaces/project/tsconfig.tsbuildinfo] *modified* 
-{"version":"FakeTSVersion","root":[5],"fileNames":["lib.es5.d.ts","lib.es2026.array.d.ts","lib.decorators.d.ts","lib.esnext.full.d.ts","./a.ts"],"fileInfos":[{"version":"8859c12c614ce56ba9a18e58384a198f-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ninterface SymbolConstructor {\n    (desc?: string | number): symbol;\n    for(name: string): symbol;\n    readonly toStringTag: symbol;\n}\ndeclare var Symbol: SymbolConstructor;\ninterface Symbol {\n    readonly [Symbol.toStringTag]: string;\n}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true,"impliedNodeFormat":1},{"version":"e91cd068d41015559cda423626d75b7a-/// <reference no-default-lib=\"true\"/>\ninterface Array<T> {\n    toSorted(): T[];\n}","affectsGlobalScope":true,"impliedNodeFormat":1},"7391cbbbaadf784b1dca43ffe8f0eaee-/// <reference no-default-lib=\"true\"/>\nexport {};","5ecdc3e6174a78a8b8d9150f692c3942-/// <reference no-default-lib=\"true\"/>\n/// <reference lib=\"es5\"/>\n/// <reference lib=\"esnext.array\"/>\n/// <reference lib=\"decorators\"/>",{"version":"b31fbc1eb463bbe84b7bbcf331cb31f2-export const values = [3, 1, 2].toSorted();","signature":"38b21ab127214358ce1b4ec5bf7acbed-export declare const values: number[];\n","impliedNodeFormat":1}],"options":{"target":99},"affectedFilesPendingEmit":[5]}
+{"version":"FakeTSVersion","root":[5],"fileNames":["lib.es5.d.ts","lib.es2026.array.d.ts","lib.decorators.d.ts","lib.esnext.full.d.ts","./a.ts"],"fileInfos":[{"version":"8859c12c614ce56ba9a18e58384a198f-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ninterface SymbolConstructor {\n    (desc?: string | number): symbol;\n    for(name: string): symbol;\n    readonly toStringTag: symbol;\n}\ndeclare var Symbol: SymbolConstructor;\ninterface Symbol {\n    readonly [Symbol.toStringTag]: string;\n}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true,"impliedNodeFormat":1},{"version":"e91cd068d41015559cda423626d75b7a-/// <reference no-default-lib=\"true\"/>\ninterface Array<T> {\n    toSorted(): T[];\n}","affectsGlobalScope":true,"impliedNodeFormat":1},"7391cbbbaadf784b1dca43ffe8f0eaee-/// <reference no-default-lib=\"true\"/>\nexport {};","5ecdc3e6174a78a8b8d9150f692c3942-/// <reference no-default-lib=\"true\"/>\n/// <reference lib=\"es5\"/>\n/// <reference lib=\"esnext.array\"/>\n/// <reference lib=\"decorators\"/>",{"version":"b31fbc1eb463bbe84b7bbcf331cb31f2-export const values = [3, 1, 2].toSorted();","signature":"38b21ab127214358ce1b4ec5bf7acbed-export declare const values: number[];\n","impliedNodeFormat":1}],"options":{"target":99,"types":[]},"affectedFilesPendingEmit":[5]}
 //// [/home/src/workspaces/project/tsconfig.tsbuildinfo.readable.baseline.txt] *modified* 
 {
   "version": "FakeTSVersion",
@@ -340,7 +342,8 @@ Output::
     }
   ],
   "options": {
-    "target": 99
+    "target": 99,
+    "types": []
   },
   "affectedFilesPendingEmit": [
     [
@@ -349,7 +352,7 @@ Output::
       5
     ]
   ],
-  "size": 1638
+  "size": 1649
 }
 
 tsconfig.json::
@@ -382,7 +385,7 @@ Output::
 Found 1 error in a.ts[90m:1[0m
 
 //// [/home/src/workspaces/project/tsconfig.tsbuildinfo] *modified* 
-{"version":"FakeTSVersion","root":[3],"fileNames":["lib.es5.d.ts","lib.es2020.full.d.ts","./a.ts"],"fileInfos":[{"version":"8859c12c614ce56ba9a18e58384a198f-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ninterface SymbolConstructor {\n    (desc?: string | number): symbol;\n    for(name: string): symbol;\n    readonly toStringTag: symbol;\n}\ndeclare var Symbol: SymbolConstructor;\ninterface Symbol {\n    readonly [Symbol.toStringTag]: string;\n}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true,"impliedNodeFormat":1},"39b6b52e4bfc36fd6d892df73c38abe0-/// <reference no-default-lib=\"true\"/>\n/// <reference lib=\"es5\"/>",{"version":"b31fbc1eb463bbe84b7bbcf331cb31f2-export const values = [3, 1, 2].toSorted();","signature":"c31aa5c2cd609f2993edf6ca8656963f-export declare const values: any;\n","impliedNodeFormat":1}],"options":{"target":7},"semanticDiagnosticsPerFile":[[3,[{"pos":32,"end":40,"code":2550,"category":1,"messageKey":"Property_0_does_not_exist_on_type_1_Do_you_need_to_change_your_target_library_Try_changing_the_lib_c_2550","messageArgs":["toSorted","number[]","es2023"]}]]],"affectedFilesPendingEmit":[3]}
+{"version":"FakeTSVersion","root":[3],"fileNames":["lib.es5.d.ts","lib.es2020.full.d.ts","./a.ts"],"fileInfos":[{"version":"8859c12c614ce56ba9a18e58384a198f-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ninterface SymbolConstructor {\n    (desc?: string | number): symbol;\n    for(name: string): symbol;\n    readonly toStringTag: symbol;\n}\ndeclare var Symbol: SymbolConstructor;\ninterface Symbol {\n    readonly [Symbol.toStringTag]: string;\n}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true,"impliedNodeFormat":1},"39b6b52e4bfc36fd6d892df73c38abe0-/// <reference no-default-lib=\"true\"/>\n/// <reference lib=\"es5\"/>",{"version":"b31fbc1eb463bbe84b7bbcf331cb31f2-export const values = [3, 1, 2].toSorted();","signature":"c31aa5c2cd609f2993edf6ca8656963f-export declare const values: any;\n","impliedNodeFormat":1}],"options":{"target":7,"types":[]},"semanticDiagnosticsPerFile":[[3,[{"pos":32,"end":40,"code":2550,"category":1,"messageKey":"Property_0_does_not_exist_on_type_1_Do_you_need_to_change_your_target_library_Try_changing_the_lib_c_2550","messageArgs":["toSorted","number[]","es2023"]}]]],"affectedFilesPendingEmit":[3]}
 //// [/home/src/workspaces/project/tsconfig.tsbuildinfo.readable.baseline.txt] *modified* 
 {
   "version": "FakeTSVersion",
@@ -431,7 +434,8 @@ Found 1 error in a.ts[90m:1[0m
     }
   ],
   "options": {
-    "target": 7
+    "target": 7,
+    "types": []
   },
   "semanticDiagnosticsPerFile": [
     [
@@ -459,7 +463,7 @@ Found 1 error in a.ts[90m:1[0m
       3
     ]
   ],
-  "size": 1489
+  "size": 1500
 }
 
 tsconfig.json::
@@ -499,7 +503,7 @@ tsgo --singleThreaded
 ExitStatus:: Success
 Output::
 //// [/home/src/workspaces/project/tsconfig.tsbuildinfo] *modified* 
-{"version":"FakeTSVersion","root":[5],"fileNames":["lib.es5.d.ts","lib.es2026.array.d.ts","lib.decorators.d.ts","lib.esnext.full.d.ts","./a.ts"],"fileInfos":[{"version":"8859c12c614ce56ba9a18e58384a198f-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ninterface SymbolConstructor {\n    (desc?: string | number): symbol;\n    for(name: string): symbol;\n    readonly toStringTag: symbol;\n}\ndeclare var Symbol: SymbolConstructor;\ninterface Symbol {\n    readonly [Symbol.toStringTag]: string;\n}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true,"impliedNodeFormat":1},{"version":"e91cd068d41015559cda423626d75b7a-/// <reference no-default-lib=\"true\"/>\ninterface Array<T> {\n    toSorted(): T[];\n}","affectsGlobalScope":true,"impliedNodeFormat":1},"7391cbbbaadf784b1dca43ffe8f0eaee-/// <reference no-default-lib=\"true\"/>\nexport {};","5ecdc3e6174a78a8b8d9150f692c3942-/// <reference no-default-lib=\"true\"/>\n/// <reference lib=\"es5\"/>\n/// <reference lib=\"esnext.array\"/>\n/// <reference lib=\"decorators\"/>",{"version":"b31fbc1eb463bbe84b7bbcf331cb31f2-export const values = [3, 1, 2].toSorted();","signature":"38b21ab127214358ce1b4ec5bf7acbed-export declare const values: number[];\n","impliedNodeFormat":1}],"options":{"target":99},"affectedFilesPendingEmit":[5]}
+{"version":"FakeTSVersion","root":[5],"fileNames":["lib.es5.d.ts","lib.es2026.array.d.ts","lib.decorators.d.ts","lib.esnext.full.d.ts","./a.ts"],"fileInfos":[{"version":"8859c12c614ce56ba9a18e58384a198f-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ninterface SymbolConstructor {\n    (desc?: string | number): symbol;\n    for(name: string): symbol;\n    readonly toStringTag: symbol;\n}\ndeclare var Symbol: SymbolConstructor;\ninterface Symbol {\n    readonly [Symbol.toStringTag]: string;\n}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true,"impliedNodeFormat":1},{"version":"e91cd068d41015559cda423626d75b7a-/// <reference no-default-lib=\"true\"/>\ninterface Array<T> {\n    toSorted(): T[];\n}","affectsGlobalScope":true,"impliedNodeFormat":1},"7391cbbbaadf784b1dca43ffe8f0eaee-/// <reference no-default-lib=\"true\"/>\nexport {};","5ecdc3e6174a78a8b8d9150f692c3942-/// <reference no-default-lib=\"true\"/>\n/// <reference lib=\"es5\"/>\n/// <reference lib=\"esnext.array\"/>\n/// <reference lib=\"decorators\"/>",{"version":"b31fbc1eb463bbe84b7bbcf331cb31f2-export const values = [3, 1, 2].toSorted();","signature":"38b21ab127214358ce1b4ec5bf7acbed-export declare const values: number[];\n","impliedNodeFormat":1}],"options":{"target":99,"types":[]},"affectedFilesPendingEmit":[5]}
 //// [/home/src/workspaces/project/tsconfig.tsbuildinfo.readable.baseline.txt] *modified* 
 {
   "version": "FakeTSVersion",
@@ -568,7 +572,8 @@ Output::
     }
   ],
   "options": {
-    "target": 99
+    "target": 99,
+    "types": []
   },
   "affectedFilesPendingEmit": [
     [
@@ -577,7 +582,7 @@ Output::
       5
     ]
   ],
-  "size": 1638
+  "size": 1649
 }
 
 tsconfig.json::

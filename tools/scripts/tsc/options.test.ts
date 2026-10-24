@@ -33,6 +33,18 @@ test("semantic diagnostic options must be stored in build info", () => {
     assert.throws(() => validateOptions(model), /Semantic diagnostics must affect build info: noImplicitAny/);
 });
 
+test("emit options must be stored in build info", () => {
+    for (const flag of ["affectsEmit", "affectsDeclarationPath"] as const) {
+        const model = structuredClone(options);
+        const declaration = model.compilerOptions.find(option => option.name === "jsxFragmentFactory")!.declaration!;
+        declaration.affectsSemanticDiagnostics = false;
+        declaration.affectsEmit = false;
+        declaration.affectsBuildInfo = false;
+        declaration[flag] = true;
+        assert.throws(() => validateOptions(model), /Emit options must affect build info: jsxFragmentFactory/);
+    }
+});
+
 test("compiler test variations accept finite options without requiring affects metadata", () => {
     const source = generateOptions().get("tsc/internal/testrunner/options_generated.go")!;
     for (const name of ["strict", "module", "noCheck", "preserveSymlinks", "noEmit", "isolatedModules"]) {
@@ -186,12 +198,22 @@ test("metadata enum artifacts are current and use the shared alias ordering", ()
     assert.deepEqual(members, [{ name: "Value", value: "7" }, { name: "Alias", value: "Value" }]);
 });
 
-test("option comparisons reject types that require deep equality", () => {
-    for (const name of ["maxNodeModuleJsDepth", "types", "paths", "plugins"]) {
-        const model = structuredClone(options);
+test("option comparisons use value equality for every stored option type", () => {
+    const model = structuredClone(options);
+    for (const name of ["maxNodeModuleJsDepth", "types", "paths", "plugins", "rootDirs"]) {
         model.compilerOptions.find(option => option.name === name)!.declaration!.affectsEmit = true;
-        assert.throws(() => generateOptionComparisons(model), new RegExp(`Unsupported comparison type for ${name}:`));
     }
+    const source = generateOptionComparisons(model);
+    assert.match(source, /oldOptions.MaxNodeModuleJsDepth != newOptions.MaxNodeModuleJsDepth && \(oldOptions.MaxNodeModuleJsDepth == nil/);
+    for (const name of ["Types", "Plugins", "RootDirs"]) {
+        assert(source.includes(`(oldOptions.${name} == nil) != (newOptions.${name} == nil) || !slices.Equal(oldOptions.${name}, newOptions.${name})`));
+    }
+    assert.match(source, /!oldOptions.Paths.EqualFunc\(newOptions.Paths, func\(a, b \[\]string\) bool/);
+    assert.equal(source.split('oldOptions.GetPathsBasePath("") != newOptions.GetPathsBasePath("")').length - 1, 2);
+    assert.match(source, /return \(a == nil\) == \(b == nil\) && slices.Equal\(a, b\)/);
+    assert.match(source, /oldOptions.GetStrictOptionValue\(oldOptions.StrictNullChecks\) != newOptions.GetStrictOptionValue\(newOptions.StrictNullChecks\)/);
+    assert.match(source, /if \(oldOptions.ModuleSuffixes/);
+    assert.doesNotMatch(source, / \|\|\noldOptions/);
 });
 
 test("option section headings are detached line comments", () => {
