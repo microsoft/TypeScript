@@ -22,6 +22,12 @@ type SymbolTracker interface {
 	PopErrorFallbackNode()
 }
 
+// SymbolRemapper optionally provides the name to use when a referenced symbol
+// is represented by a generated binding during declaration emit.
+type SymbolRemapper interface {
+	GetRemappedSymbol(symbol *ast.Symbol) *ast.Symbol
+}
+
 // NOTE: If modifying this enum, must modify `TypeFormatFlags` too!
 type Flags uint32
 

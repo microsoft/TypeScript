@@ -1,0 +1,44 @@
+//// [tests/cases/compiler/uniqueSymbolDeclarationEmitImportsTag.ts] ////
+
+=== /brand.ts ===
+export declare const tag: unique symbol;
+>tag : Symbol(tag, Decl(brand.ts, 0, 20))
+
+export type Branded<Type, Name extends string> = Type & { readonly [tag]: Name };
+>Branded : Symbol(Branded, Decl(brand.ts, 0, 40))
+>Type : Symbol(Type, Decl(brand.ts, 1, 20))
+>Name : Symbol(Name, Decl(brand.ts, 1, 25))
+>Type : Symbol(Type, Decl(brand.ts, 1, 20))
+>[tag] : Symbol([tag], Decl(brand.ts, 1, 57))
+>tag : Symbol(tag, Decl(brand.ts, 0, 20))
+>Name : Symbol(Name, Decl(brand.ts, 1, 25))
+
+=== /otherBrand.ts ===
+export declare const tag: unique symbol;
+>tag : Symbol(tag, Decl(otherBrand.ts, 0, 20))
+
+export type OtherBranded = { readonly [tag]: "Other" };
+>OtherBranded : Symbol(OtherBranded, Decl(otherBrand.ts, 0, 40))
+>[tag] : Symbol([tag], Decl(otherBrand.ts, 1, 28))
+>tag : Symbol(tag, Decl(otherBrand.ts, 0, 20))
+
+=== /index.ts ===
+import type { Branded } from "./brand.js";
+>Branded : Symbol(Branded, Decl(index.ts, 0, 13))
+
+import type { OtherBranded } from "./otherBrand.js";
+>OtherBranded : Symbol(OtherBranded, Decl(index.ts, 1, 13))
+
+declare const user: Branded<{ name: string }, "User"> & OtherBranded;
+>user : Symbol(user, Decl(index.ts, 3, 13))
+>Branded : Symbol(Branded, Decl(index.ts, 0, 13))
+>name : Symbol(name, Decl(index.ts, 3, 29))
+>OtherBranded : Symbol(OtherBranded, Decl(index.ts, 1, 13))
+
+const tag = "local";
+>tag : Symbol(tag, Decl(index.ts, 4, 5))
+
+export const copy = { ...user };
+>copy : Symbol(copy, Decl(index.ts, 6, 12))
+>user : Symbol(user, Decl(index.ts, 3, 13))
+

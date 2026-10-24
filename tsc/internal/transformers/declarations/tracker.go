@@ -197,8 +197,20 @@ func (s *SymbolTrackerImpl) TrackSymbol(symbol *ast.Symbol, enclosingDeclaration
 		s.classSymbolTracked = true
 		return false
 	}
-	issuedDiagnostic := s.handleSymbolAccessibilityError(s.resolver.IsSymbolAccessible(symbol, enclosingDeclaration, meaning /*shouldComputeAliasToMarkVisible*/, true))
+	accessibility := s.resolver.IsSymbolAccessible(symbol, enclosingDeclaration, meaning /*shouldComputeAliasToMarkVisible*/, true)
+	if meaning&ast.SymbolFlagsValue != 0 && s.resolver.IsUniqueESSymbol(symbol) &&
+		!s.resolver.IsNameResolvableToSymbol(enclosingDeclaration, symbol.Name(), symbol) && s.state.addUniqueSymbolImport != nil && s.state.addUniqueSymbolImport(symbol) {
+		return false
+	}
+	issuedDiagnostic := s.handleSymbolAccessibilityError(accessibility)
 	return issuedDiagnostic
+}
+
+func (s *SymbolTrackerImpl) GetRemappedSymbol(symbol *ast.Symbol) *ast.Symbol {
+	if s.state.remappedSymbols == nil {
+		return nil
+	}
+	return s.state.remappedSymbols[ast.GetSymbolId(symbol)]
 }
 
 func (s *SymbolTrackerImpl) handleSymbolAccessibilityError(symbolAccessibilityResult printer.SymbolAccessibilityResult) bool {
@@ -246,6 +258,8 @@ type SymbolTrackerSharedState struct {
 	currentSourceFile                *ast.SourceFile
 	resolver                         printer.EmitResolver
 	reportExpandoFunctionErrors      func(node *ast.Node)
+	addUniqueSymbolImport            func(symbol *ast.Symbol) bool
+	remappedSymbols                  map[ast.SymbolId]*ast.Symbol
 }
 
 func (s *SymbolTrackerSharedState) addDiagnostic(diag *ast.Diagnostic) {

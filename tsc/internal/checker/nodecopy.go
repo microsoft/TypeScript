@@ -186,6 +186,13 @@ func (w *wrappingTracker) TrackSymbol(symbol *ast.Symbol, enclosingDeclaration *
 	return false
 }
 
+func (w *wrappingTracker) GetRemappedSymbol(symbol *ast.Symbol) *ast.Symbol {
+	if remapper, ok := w.wrapped.(nodebuilder.SymbolRemapper); ok {
+		return remapper.GetRemappedSymbol(symbol)
+	}
+	return nil
+}
+
 func newWrappingTracker(inner nodebuilder.SymbolTracker, bound *recoveryBoundary) *wrappingTracker {
 	return &wrappingTracker{
 		wrapped: inner,
