@@ -1159,6 +1159,44 @@ func (b *ProjectCollectionBuilder) findOrCreateDefaultConfiguredProjectWorker(
 					}
 					return true
 				})
+				// Skip later candidates once a clean loaded project contains the file.
+				// Keep earlier candidates in parallel to preserve reference order.
+				foundMatch := false
+				var trailingKeys []searchNodeKey
+				level.Range(func(node searchNode) bool {
+					key := searchNodeKey{configFileName: node.configFileName, loadKind: node.loadKind}
+					if foundMatch {
+						trailingKeys = append(trailingKeys, key)
+						return true
+					}
+					if visited.Has(key) {
+						return true
+					}
+					configPath := b.toPathKey(node.configFileName)
+					projectEntry, ok := b.configuredProjects.Load(ConfiguredProjectIDFromPathKey(configPath))
+					if !ok || projectEntry.Value().IsDirty() {
+						return true
+					}
+					configEntry, ok := b.configFileRegistryBuilder.configs.Load(configPath)
+					if !ok || configEntry.Value().pendingReload != PendingReloadNone {
+						return true
+					}
+					config := configEntry.Value().commandLine
+					project := projectEntry.Value()
+					if config == nil || project.CommandLine != config || len(config.FileNames()) == 0 {
+						return true
+					}
+					if config.CompilerOptions().Composite.IsTrue() && !config.FilePaths().Has(path) {
+						return true
+					}
+					foundMatch = project.containsFile(path) && !project.IsSourceFromProjectReference(path)
+					return true
+				})
+				// Delete after traversal so entries are not skipped.
+				// Removing from the end keeps pruning linear.
+				for _, key := range slices.Backward(trailingKeys) {
+					level.Delete(key)
+				}
 			},
 		},
 		func(node searchNode) searchNodeKey {
