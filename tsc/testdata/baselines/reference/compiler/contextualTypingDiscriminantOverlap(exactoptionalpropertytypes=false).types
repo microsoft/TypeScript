@@ -1,0 +1,124 @@
+//// [tests/cases/compiler/contextualTypingDiscriminantOverlap.ts] ////
+
+=== contextualTypingDiscriminantOverlap.ts ===
+type Handler<T> = (value: T) => T;
+>Handler : Handler<T>
+>value : T
+
+type IndexedHandler = {
+>IndexedHandler : IndexedHandler
+
+    [key: string]: "b" | Handler<"b">;
+>key : string
+
+    value: Handler<"b">;
+>value : Handler<"b">
+
+};
+type DeclaredOptionalHandler = {
+>DeclaredOptionalHandler : DeclaredOptionalHandler
+
+    [key: string]: "a" | "b" | undefined | Handler<"b">;
+>key : string
+
+    tag?: "a";
+>tag : "a" | undefined
+
+    value: Handler<"b">;
+>value : Handler<"b">
+
+};
+type DeclaredRequiredHandler = {
+>DeclaredRequiredHandler : DeclaredRequiredHandler
+
+    [key: string]: "b" | Handler<"b">;
+>key : string
+
+    tag: "b";
+>tag : "b"
+
+    value: Handler<"b">;
+>value : Handler<"b">
+
+};
+
+const indexedOptional:
+>indexedOptional : IndexedHandler | { tag: "a"; value: Handler<"a">; } | { tag?: "a"; value: Handler<"a">; }
+
+    | { tag: "a"; value: Handler<"a"> }
+>tag : "a"
+>value : Handler<"a">
+
+    | { tag?: "a"; value: Handler<"a"> }
+>tag : "a" | undefined
+>value : Handler<"a">
+
+    | IndexedHandler = {
+>{        value: value => value, // error    } : { value: (value: any) => any; }
+
+        value: value => value, // error
+>value : (value: any) => any
+>value => value : (value: any) => any
+>value : any
+>value : any
+
+    };
+
+const declaredOptional:
+>declaredOptional : DeclaredOptionalHandler | { tag: "a"; value: Handler<"a">; }
+
+    | { tag: "a"; value: Handler<"a"> }
+>tag : "a"
+>value : Handler<"a">
+
+    | DeclaredOptionalHandler = {
+>{        value: value => value,    } : { value: (value: "b") => "b"; }
+
+        value: value => value,
+>value : (value: "b") => "b"
+>value => value : (value: "b") => "b"
+>value : "b"
+>value : "b"
+
+    };
+
+const declaredRequired:
+>declaredRequired : DeclaredRequiredHandler | { tag: "a"; value: Handler<"a">; }
+
+    | { tag: "a"; value: Handler<"a"> }
+>tag : "a"
+>value : Handler<"a">
+
+    | DeclaredRequiredHandler = {
+>{        tag: "a",        value: value => value,    } : { tag: "a"; value: (value: "a") => "a"; }
+
+        tag: "a",
+>tag : "a"
+>"a" : "a"
+
+        value: value => value,
+>value : (value: "a") => "a"
+>value => value : (value: "a") => "a"
+>value : "a"
+>value : "a"
+
+    };
+
+const indexedRequired:
+>indexedRequired : IndexedHandler | { tag: "a"; value: Handler<"a">; }
+
+    | { tag: "a"; value: Handler<"a"> }
+>tag : "a"
+>value : Handler<"a">
+
+    | IndexedHandler = {
+>{        value: value => value, // error    } : { value: (value: any) => any; }
+
+        value: value => value, // error
+>value : (value: any) => any
+>value => value : (value: any) => any
+>value : any
+>value : any
+
+    };
+
