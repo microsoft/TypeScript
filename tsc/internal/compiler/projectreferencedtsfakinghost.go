@@ -55,14 +55,11 @@ func (fs *projectReferenceDtsFakingVfs) CaseSensitivity() tspath.CaseSensitivity
 
 // FileExists implements vfs.FS.
 func (fs *projectReferenceDtsFakingVfs) FileExists(path tspath.RootedFilePath) bool {
-	if fs.host.FS().FileExists(path) {
+	// Prefer referenced sources so resolution does not probe their declaration outputs.
+	if path.IsDeclarationFile() && fs.fileExistsUsingSource(path) {
 		return true
 	}
-	if !path.IsDeclarationFile() {
-		return false
-	}
-	// Project references go to source file instead of .d.ts file
-	return fs.fileExistsUsingSource(path)
+	return fs.host.FS().FileExists(path)
 }
 
 // ReadFile implements vfs.FS.
@@ -93,11 +90,14 @@ func (fs *projectReferenceDtsFakingVfs) Chtimes(path tspath.RootedPath, aTime ti
 
 // DirectoryExists implements vfs.FS.
 func (fs *projectReferenceDtsFakingVfs) DirectoryExists(path tspath.RootedDirectoryPath) bool {
+	if fs.directoryExistsUsingSource(path) {
+		return true
+	}
 	if fs.host.FS().DirectoryExists(path) {
 		fs.handleDirectoryCouldBeSymlink(path)
 		return true
 	}
-	return fs.directoryExistsUsingSource(path)
+	return false
 }
 
 // GetAccessibleEntries implements vfs.FS.
@@ -201,7 +201,12 @@ func (fs *projectReferenceDtsFakingVfs) fileOrDirectoryExistsUsingSource(
 		fs.handleDirectoryCouldBeSymlink(packageRoot)
 	}
 	knownDirectoryLinks := fs.knownSymlinks.Directories()
-	if knownDirectoryLinks.Size() == 0 {
+	hasDirectoryLinks := false
+	knownDirectoryLinks.Range(func(tspath.PathKey, *symlinks.KnownDirectoryLink) bool {
+		hasDirectoryLinks = true
+		return false
+	})
+	if !hasDirectoryLinks {
 		return false
 	}
 	if onFileExists != nil {
@@ -211,25 +216,27 @@ func (fs *projectReferenceDtsFakingVfs) fileOrDirectoryExistsUsingSource(
 		}
 	}
 
-	// If it contains node_modules check if its one of the symlinked path we know of
-	var exists bool
-	knownDirectoryLinks.Range(func(directoryPath tspath.PathKey, knownDirectoryLink *symlinks.KnownDirectoryLink) bool {
-		if directoryPath == fileOrDirectoryPath || !directoryPath.ContainsPath(fileOrDirectoryPath) {
-			return true
-		}
-		realFileOrDirectory, ok := knownDirectoryLink.ResolveFilePath(tspath.RootedFilePathFromPath(fileOrDirectory), fs.CaseSensitivity())
-		if !ok {
-			panic("canonical symlink path did not match its presentation path")
-		}
-		if exists = existsUsingSource(tspath.RootedPath(realFileOrDirectory)).IsTrue(); exists {
-			if onFileExists != nil {
-				onFileExists(realFileOrDirectory)
+	// Map through the nearest linked ancestor. Only the path's own ancestors
+	// are checked, so the cost does not grow with the number of known links.
+	for directory := fileOrDirectory.Directory(); ; {
+		if link, ok := knownDirectoryLinks.Load(fs.pathKey(directory.AsPath())); ok && link != nil {
+			realFileOrDirectory, ok := link.ResolveFilePath(tspath.RootedFilePathFromPath(fileOrDirectory), fs.CaseSensitivity())
+			if !ok {
+				panic("canonical symlink path did not match its presentation path")
 			}
+			if existsUsingSource(tspath.RootedPath(realFileOrDirectory)).IsTrue() {
+				if onFileExists != nil {
+					onFileExists(realFileOrDirectory)
+				}
+				return true
+			}
+		}
+		parent := directory.AsPath().Directory()
+		if parent == directory {
 			return false
 		}
-		return true
-	})
-	return exists
+		directory = parent
+	}
 }
 
 func (fs *projectReferenceDtsFakingVfs) fileExistsIfProjectReferenceDts(file tspath.RootedFilePath) core.Tristate {
