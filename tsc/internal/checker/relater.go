@@ -1371,7 +1371,9 @@ func (c *Checker) getVariancesWorker(symbol *ast.Symbol, typeParameters []*Type)
 					variance = VarianceFlagsContravariant
 				default:
 					saveReliabilityFlags := c.reliabilityFlags
+					saveSawCircularVariance := c.sawCircularVariance
 					c.reliabilityFlags = 0
+					c.sawCircularVariance = false
 					// We first compare instantiations where the type parameter is replaced with
 					// marker types that have a known subtype relationship. From this we can infer
 					// invariance, covariance, contravariance or bivariance.
@@ -1382,9 +1384,15 @@ func (c *Checker) getVariancesWorker(symbol *ast.Symbol, typeParameters []*Type)
 					// If the instantiations appear to be related bivariantly it may be because the
 					// type parameter is independent (i.e. it isn't witnessed anywhere in the generic
 					// type). To determine this we compare instantiations where the type parameter is
-					// replaced with marker types that are known to be unrelated.
+					// replaced with marker types that are known to be unrelated. However, if the comparisons
+					// relied on variances of circular types still being computed, the type parameter may be
+					// witnessed through those types, so we can only conclude that the variance is unmeasurable.
 					if variance == VarianceFlagsBivariant && c.isTypeAssignableTo(c.createMarkerType(symbol, tp, c.markerOtherType), typeWithSuper) {
-						variance = VarianceFlagsIndependent
+						if c.sawCircularVariance {
+							variance |= VarianceFlagsUnmeasurable
+						} else {
+							variance = VarianceFlagsIndependent
+						}
 					}
 					if c.reliabilityFlags&RelationComparisonResultReportsUnmeasurable != 0 {
 						variance |= VarianceFlagsUnmeasurable
@@ -1393,6 +1401,7 @@ func (c *Checker) getVariancesWorker(symbol *ast.Symbol, typeParameters []*Type)
 						variance |= VarianceFlagsUnreliable
 					}
 					c.reliabilityFlags = saveReliabilityFlags
+					c.sawCircularVariance = saveSawCircularVariance
 				}
 				// If variance computation was restarted due to a circularity we may have already
 				// computed variances for this generic type. If so, we exit early.
@@ -3428,6 +3437,7 @@ func (r *Relater) structuredTypeRelatedToWorker(source *Type, target *Type, repo
 		target.alias != nil && source.alias.symbol == target.alias.symbol && !(r.c.isMarkerType(source) || r.c.isMarkerType(target)) {
 		variances := r.c.getAliasVariances(source.alias.symbol)
 		if len(variances) == 0 {
+			r.c.sawCircularVariance = true
 			return TernaryUnknown
 		}
 		params := r.c.typeAliasLinks.Get(source.alias.symbol).typeParameters
@@ -3867,6 +3877,7 @@ func (r *Relater) structuredTypeRelatedToWorker(source *Type, target *Type, repo
 			// effectively means we measure variance only from type parameter occurrences that aren't nested in
 			// recursive instantiations of the generic type.
 			if len(variances) == 0 {
+				r.c.sawCircularVariance = true
 				return TernaryUnknown
 			}
 			varianceResult, ok := relateVariances(r.c.getTypeArguments(source), r.c.getTypeArguments(target), variances, intersectionState)
