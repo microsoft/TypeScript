@@ -9,8 +9,8 @@ import (
 )
 
 type InferenceKey struct {
-	source        TypeId
-	target        TypeId
+	source        *Type
+	target        *Type
 	priority      InferencePriority
 	contravariant bool
 	bivariant     bool
@@ -344,7 +344,7 @@ func (c *Checker) inferFromContravariantTypesIfStrictFunctionTypes(n *InferenceS
 // such that we would go on inferring forever, even though we would never infer
 // between the same pair of types.
 func (c *Checker) invokeOnce(n *InferenceState, source *Type, target *Type, action func(c *Checker, n *InferenceState, source *Type, target *Type)) {
-	key := InferenceKey{source: source.id, target: target.id, priority: n.priority, contravariant: n.contravariant, bivariant: n.bivariant}
+	key := InferenceKey{source: source, target: target, priority: n.priority, contravariant: n.contravariant, bivariant: n.bivariant}
 	if status, ok := n.visited[key]; ok {
 		n.inferencePriority = min(n.inferencePriority, status)
 		return
@@ -1013,7 +1013,7 @@ func (c *Checker) inferToMappedType(n *InferenceState, source *Type, target *Typ
 // property is computed by inferring from the source property type to X for the type
 // variable T[P] (i.e. we treat the type T[P] as the type variable we're inferring for).
 func (c *Checker) inferTypeForHomomorphicMappedType(source *Type, target *Type, constraint *Type) *Type {
-	key := ReverseMappedTypeKey{sourceId: source.id, targetId: target.id, constraintId: constraint.id}
+	key := ReverseMappedTypeKey{source: source, target: target, constraint: constraint}
 	if cached := c.reverseHomomorphicMappedCache[key]; cached != nil {
 		return cached
 	}
@@ -1075,7 +1075,7 @@ func (c *Checker) isPartiallyInferableType(t *Type) bool {
 }
 
 func (c *Checker) inferReverseMappedType(source *Type, target *Type, constraint *Type) *Type {
-	key := ReverseMappedTypeKey{sourceId: source.id, targetId: target.id, constraintId: constraint.id}
+	key := ReverseMappedTypeKey{source: source, target: target, constraint: constraint}
 	if cached, ok := c.reverseMappedCache[key]; ok {
 		return core.OrElse(cached, c.unknownType)
 	}
