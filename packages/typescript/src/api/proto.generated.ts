@@ -87,6 +87,7 @@ export interface APIMethodInfo {
     getResolvedModuleFromModuleSpecifier: APIMethod<GetResolvedModuleFromModuleSpecifierParams, ResolvedModule | null>;
     getResolvedTypeReferenceDirective: APIMethod<GetResolvedTypeReferenceDirectiveParams, ResolvedTypeReferenceDirective | null>;
     getResolvedTypeReferenceDirectiveFromTypeReferenceDirective: APIMethod<GetResolvedTypeReferenceDirectiveFromReferenceParams, ResolvedTypeReferenceDirective | null>;
+    getAllDependencies: APIMethod<GetSourceFileParams, RootedFilePath[]>;
     getConfigFileNames: APIMethod<GetProjectDiagnosticsParams, RootedFilePath[] | null>;
     getConfigSourceFile: APIMethod<GetSourceFileParams, SourceFileResponse | null>;
     resolveName: APIMethod<ResolveNameParams, SymbolResponse | null>;
@@ -1167,6 +1168,7 @@ export interface BatchRequest {
         | "getAliasSymbolOfType"
         | "getAliasTypeArgumentsOfType"
         | "getAliasedSymbol"
+        | "getAllDependencies"
         | "getAnyType"
         | "getApparentPropertiesOfType"
         | "getApparentType"
@@ -1349,6 +1351,7 @@ export interface BatchResponse {
         | "getAliasSymbolOfType"
         | "getAliasTypeArgumentsOfType"
         | "getAliasedSymbol"
+        | "getAllDependencies"
         | "getAnyType"
         | "getApparentPropertiesOfType"
         | "getApparentType"
