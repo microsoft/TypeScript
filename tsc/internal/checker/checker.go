@@ -14692,7 +14692,10 @@ func (c *Checker) getLateBoundSymbol(symbol *ast.Symbol) *ast.Symbol {
 	if links.lateSymbol == nil && core.Some(symbol.Declarations(), c.hasLateBindableName) {
 		// force late binding of members/exports. This will set the late-bound symbol
 		parent := c.getMergedSymbol(symbol.Parent())
-		if core.Some(symbol.Declarations(), ast.HasStaticModifier) {
+		// Function/namespace expandos are stored on exports (see AssignmentDeclaration),
+		// not members. BinaryExpression declarations never have a static modifier, so
+		// Assignment is the signal to resolve exports.
+		if core.Some(symbol.Declarations(), ast.HasStaticModifier) || symbol.Flags()&ast.SymbolFlagsAssignment != 0 {
 			c.getExportsOfSymbol(parent)
 		} else {
 			c.getMembersOfSymbol(parent)

@@ -1,0 +1,13 @@
+//// [tests/cases/compiler/noCheckExpandoElementAccessAssignmentInitializer.ts] ////
+
+=== noCheckExpandoElementAccessAssignmentInitializer.ts ===
+const k = "bar";
+>k : Symbol(k, Decl(noCheckExpandoElementAccessAssignmentInitializer.ts, 0, 5))
+
+const foo = () => {};
+>foo : Symbol(foo, Decl(noCheckExpandoElementAccessAssignmentInitializer.ts, 1, 5))
+
+foo[k] = 1;
+>foo : Symbol(foo, Decl(noCheckExpandoElementAccessAssignmentInitializer.ts, 1, 5))
+>k : Symbol(k, Decl(noCheckExpandoElementAccessAssignmentInitializer.ts, 0, 5))
+
