@@ -1,0 +1,55 @@
+//// [tests/cases/compiler/jsxImportSourceScriptFile.tsx] ////
+
+=== /node_modules/@solidjs/web/jsx-runtime.d.ts ===
+export namespace JSX {
+    type Element = { readonly __solid: true };
+>Element : Element
+>__solid : true
+>true : true
+
+    interface IntrinsicElements {
+        div: { children?: unknown };
+>div : { children?: unknown; }
+>children : unknown
+    }
+}
+export declare function jsx(type: any, props: any): JSX.Element;
+>jsx : (type: any, props: any) => JSX.Element
+>type : any
+>props : any
+>JSX : any
+
+export declare function Fragment(props: { children?: unknown }): JSX.Element;
+>Fragment : (props: { children?: unknown; }) => JSX.Element
+>props : { children?: unknown; }
+>children : unknown
+>JSX : any
+
+=== /script.tsx ===
+const ok = <><div>hi</div></>;
+>ok : import("@solidjs/web/jsx-runtime").JSX.Element
+><><div>hi</div></> : import("@solidjs/web/jsx-runtime").JSX.Element
+><div>hi</div> : import("@solidjs/web/jsx-runtime").JSX.Element
+>div : any
+>div : any
+
+const bad = <span />; // error, not in the runtime's JSX.IntrinsicElements
+>bad : import("@solidjs/web/jsx-runtime").JSX.Element
+><span /> : import("@solidjs/web/jsx-runtime").JSX.Element
+>span : any
+
+=== /module.tsx ===
+const ok = <><div>hi</div></>;
+>ok : import("@solidjs/web/jsx-runtime").JSX.Element
+><><div>hi</div></> : import("@solidjs/web/jsx-runtime").JSX.Element
+><div>hi</div> : import("@solidjs/web/jsx-runtime").JSX.Element
+>div : any
+>div : any
+
+const bad = <span />; // error, not in the runtime's JSX.IntrinsicElements
+>bad : import("@solidjs/web/jsx-runtime").JSX.Element
+><span /> : import("@solidjs/web/jsx-runtime").JSX.Element
+>span : any
+
+export {};
+
