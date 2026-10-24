@@ -1682,7 +1682,7 @@ func (c *Checker) checkAndReportErrorForUsingTypeAsNamespace(errorLocation *ast.
 		symbol := c.resolveSymbol(c.resolveName(errorLocation, name, ast.SymbolFlagsType&^ast.SymbolFlagsNamespace, nil /*nameNotFoundMessage*/, false /*isUse*/, false /*excludeGlobals*/))
 		if symbol != nil {
 			parent := errorLocation.Parent
-			if ast.IsQualifiedName(parent) {
+			if c.globalObjectType != nil && ast.IsQualifiedName(parent) {
 				debug.Assert(parent.AsQualifiedName().Left == errorLocation, "Should only be resolving left side of qualified name as a namespace")
 				propName := parent.AsQualifiedName().Right.Text()
 				propType := c.getPropertyOfType(c.getDeclaredTypeOfSymbol(symbol), propName)
