@@ -1,0 +1,220 @@
+//// [tests/cases/conformance/types/literal/stringMappingNarrowing.ts] ////
+
+=== stringMappingNarrowing.ts ===
+// === Basic narrowing: Uppercase<string> === literal ===
+
+function testUppercaseNarrowing(x: Uppercase<string>) {
+>testUppercaseNarrowing : Symbol(testUppercaseNarrowing, Decl(stringMappingNarrowing.ts, 0, 0))
+>x : Symbol(x, Decl(stringMappingNarrowing.ts, 2, 32))
+>Uppercase : Symbol(Uppercase, Decl(lib.es5.d.ts, --, --))
+
+    if (x === "BE") {
+>x : Symbol(x, Decl(stringMappingNarrowing.ts, 2, 32))
+
+        const r: "BE" = x; // ok — narrowed to "BE"
+>r : Symbol(r, Decl(stringMappingNarrowing.ts, 4, 13))
+>x : Symbol(x, Decl(stringMappingNarrowing.ts, 2, 32))
+    }
+    if (x === "be") {
+>x : Symbol(x, Decl(stringMappingNarrowing.ts, 2, 32))
+
+        const r: "be" = x; // error — "be" is never Uppercase<string>
+>r : Symbol(r, Decl(stringMappingNarrowing.ts, 7, 13))
+>x : Symbol(x, Decl(stringMappingNarrowing.ts, 2, 32))
+    }
+}
+
+// === Basic narrowing: Lowercase<string> === literal ===
+
+function testLowercaseNarrowing(x: Lowercase<string>) {
+>testLowercaseNarrowing : Symbol(testLowercaseNarrowing, Decl(stringMappingNarrowing.ts, 9, 1))
+>x : Symbol(x, Decl(stringMappingNarrowing.ts, 13, 32))
+>Lowercase : Symbol(Lowercase, Decl(lib.es5.d.ts, --, --))
+
+    if (x === "be") {
+>x : Symbol(x, Decl(stringMappingNarrowing.ts, 13, 32))
+
+        const r: "be" = x; // ok — narrowed to "be"
+>r : Symbol(r, Decl(stringMappingNarrowing.ts, 15, 13))
+>x : Symbol(x, Decl(stringMappingNarrowing.ts, 13, 32))
+    }
+    if (x === "BE") {
+>x : Symbol(x, Decl(stringMappingNarrowing.ts, 13, 32))
+
+        const r: "BE" = x; // error — "BE" is never Lowercase<string>
+>r : Symbol(r, Decl(stringMappingNarrowing.ts, 18, 13))
+>x : Symbol(x, Decl(stringMappingNarrowing.ts, 13, 32))
+    }
+}
+
+// === Union narrowing and assignment (original issue) ===
+
+function testUnionAssignment() {
+>testUnionAssignment : Symbol(testUnionAssignment, Decl(stringMappingNarrowing.ts, 20, 1))
+
+    let countryCode: "BE" | "LU" | "NL";
+>countryCode : Symbol(countryCode, Decl(stringMappingNarrowing.ts, 25, 7))
+
+    const prefix = "be".toUpperCase() as Uppercase<string>;
+>prefix : Symbol(prefix, Decl(stringMappingNarrowing.ts, 26, 9))
+>"be".toUpperCase : Symbol(String.toUpperCase, Decl(lib.es5.d.ts, --, --))
+>toUpperCase : Symbol(String.toUpperCase, Decl(lib.es5.d.ts, --, --))
+>Uppercase : Symbol(Uppercase, Decl(lib.es5.d.ts, --, --))
+
+    if (prefix === "BE" || prefix === "LU" || prefix === "NL") {
+>prefix : Symbol(prefix, Decl(stringMappingNarrowing.ts, 26, 9))
+>prefix : Symbol(prefix, Decl(stringMappingNarrowing.ts, 26, 9))
+>prefix : Symbol(prefix, Decl(stringMappingNarrowing.ts, 26, 9))
+
+        countryCode = prefix; // ok — narrowed to "BE" | "LU" | "NL"
+>countryCode : Symbol(countryCode, Decl(stringMappingNarrowing.ts, 25, 7))
+>prefix : Symbol(prefix, Decl(stringMappingNarrowing.ts, 26, 9))
+    }
+}
+
+// === Narrowing in else branch ===
+
+function testUppercaseElseBranch(x: Uppercase<string>) {
+>testUppercaseElseBranch : Symbol(testUppercaseElseBranch, Decl(stringMappingNarrowing.ts, 30, 1))
+>x : Symbol(x, Decl(stringMappingNarrowing.ts, 34, 33))
+>Uppercase : Symbol(Uppercase, Decl(lib.es5.d.ts, --, --))
+
+    if (x === "BE") {
+>x : Symbol(x, Decl(stringMappingNarrowing.ts, 34, 33))
+
+        x; // type is "BE"
+>x : Symbol(x, Decl(stringMappingNarrowing.ts, 34, 33))
+
+    } else {
+        x; // type is Uppercase<string>
+>x : Symbol(x, Decl(stringMappingNarrowing.ts, 34, 33))
+    }
+}
+
+// === Switch statement narrowing ===
+
+function testUppercaseSwitch(x: Uppercase<string>): string {
+>testUppercaseSwitch : Symbol(testUppercaseSwitch, Decl(stringMappingNarrowing.ts, 40, 1))
+>x : Symbol(x, Decl(stringMappingNarrowing.ts, 44, 29))
+>Uppercase : Symbol(Uppercase, Decl(lib.es5.d.ts, --, --))
+
+    switch (x) {
+>x : Symbol(x, Decl(stringMappingNarrowing.ts, 44, 29))
+
+        case "BE": return "Belgium";
+        case "LU": return "Luxembourg";
+        case "NL": return "Netherlands";
+        default: return "Unknown";
+    }
+}
+
+// === Capitalize<string> narrowing ===
+
+function testCapitalizeNarrowing(x: Capitalize<string>) {
+>testCapitalizeNarrowing : Symbol(testCapitalizeNarrowing, Decl(stringMappingNarrowing.ts, 51, 1))
+>x : Symbol(x, Decl(stringMappingNarrowing.ts, 55, 33))
+>Capitalize : Symbol(Capitalize, Decl(lib.es5.d.ts, --, --))
+
+    if (x === "Hello") {
+>x : Symbol(x, Decl(stringMappingNarrowing.ts, 55, 33))
+
+        const r: "Hello" = x; // ok
+>r : Symbol(r, Decl(stringMappingNarrowing.ts, 57, 13))
+>x : Symbol(x, Decl(stringMappingNarrowing.ts, 55, 33))
+    }
+    if (x === "hello") {
+>x : Symbol(x, Decl(stringMappingNarrowing.ts, 55, 33))
+
+        const r: "hello" = x; // error
+>r : Symbol(r, Decl(stringMappingNarrowing.ts, 60, 13))
+>x : Symbol(x, Decl(stringMappingNarrowing.ts, 55, 33))
+    }
+}
+
+// === Uncapitalize<string> narrowing ===
+
+function testUncapitalizeNarrowing(x: Uncapitalize<string>) {
+>testUncapitalizeNarrowing : Symbol(testUncapitalizeNarrowing, Decl(stringMappingNarrowing.ts, 62, 1))
+>x : Symbol(x, Decl(stringMappingNarrowing.ts, 66, 35))
+>Uncapitalize : Symbol(Uncapitalize, Decl(lib.es5.d.ts, --, --))
+
+    if (x === "hello") {
+>x : Symbol(x, Decl(stringMappingNarrowing.ts, 66, 35))
+
+        const r: "hello" = x; // ok
+>r : Symbol(r, Decl(stringMappingNarrowing.ts, 68, 13))
+>x : Symbol(x, Decl(stringMappingNarrowing.ts, 66, 35))
+    }
+    if (x === "Hello") {
+>x : Symbol(x, Decl(stringMappingNarrowing.ts, 66, 35))
+
+        const r: "Hello" = x; // error
+>r : Symbol(r, Decl(stringMappingNarrowing.ts, 71, 13))
+>x : Symbol(x, Decl(stringMappingNarrowing.ts, 66, 35))
+    }
+}
+
+// === Always-false comparisons (comparability) ===
+
+function testAlwaysFalseUppercase(foo: Uppercase<string>) {
+>testAlwaysFalseUppercase : Symbol(testAlwaysFalseUppercase, Decl(stringMappingNarrowing.ts, 73, 1))
+>foo : Symbol(foo, Decl(stringMappingNarrowing.ts, 77, 34))
+>Uppercase : Symbol(Uppercase, Decl(lib.es5.d.ts, --, --))
+
+    if (foo === "ba") {} // error — "ba" is not Uppercase<string>
+>foo : Symbol(foo, Decl(stringMappingNarrowing.ts, 77, 34))
+
+    if (foo === "BA") {} // ok
+>foo : Symbol(foo, Decl(stringMappingNarrowing.ts, 77, 34))
+}
+
+function testAlwaysFalseLowercase(foo: Lowercase<string>) {
+>testAlwaysFalseLowercase : Symbol(testAlwaysFalseLowercase, Decl(stringMappingNarrowing.ts, 80, 1))
+>foo : Symbol(foo, Decl(stringMappingNarrowing.ts, 82, 34))
+>Lowercase : Symbol(Lowercase, Decl(lib.es5.d.ts, --, --))
+
+    if (foo === "BA") {} // error — "BA" is not Lowercase<string>
+>foo : Symbol(foo, Decl(stringMappingNarrowing.ts, 82, 34))
+
+    if (foo === "ba") {} // ok
+>foo : Symbol(foo, Decl(stringMappingNarrowing.ts, 82, 34))
+}
+
+// === Narrowing does not broaden the type ===
+
+function testNoFalseNarrowing(x: Uppercase<string>) {
+>testNoFalseNarrowing : Symbol(testNoFalseNarrowing, Decl(stringMappingNarrowing.ts, 85, 1))
+>x : Symbol(x, Decl(stringMappingNarrowing.ts, 89, 30))
+>Uppercase : Symbol(Uppercase, Decl(lib.es5.d.ts, --, --))
+
+    if (x === "BE") {
+>x : Symbol(x, Decl(stringMappingNarrowing.ts, 89, 30))
+
+        const r1: Uppercase<string> = x; // ok
+>r1 : Symbol(r1, Decl(stringMappingNarrowing.ts, 91, 13))
+>Uppercase : Symbol(Uppercase, Decl(lib.es5.d.ts, --, --))
+>x : Symbol(x, Decl(stringMappingNarrowing.ts, 89, 30))
+
+        const r2: string = x;            // ok
+>r2 : Symbol(r2, Decl(stringMappingNarrowing.ts, 92, 13))
+>x : Symbol(x, Decl(stringMappingNarrowing.ts, 89, 30))
+    }
+}
+
+// === Multiple literal union narrowing ===
+
+function testUppercaseUnionAssign2(x: Uppercase<string>) {
+>testUppercaseUnionAssign2 : Symbol(testUppercaseUnionAssign2, Decl(stringMappingNarrowing.ts, 94, 1))
+>x : Symbol(x, Decl(stringMappingNarrowing.ts, 98, 35))
+>Uppercase : Symbol(Uppercase, Decl(lib.es5.d.ts, --, --))
+
+    if (x === "FOO" || x === "BAR") {
+>x : Symbol(x, Decl(stringMappingNarrowing.ts, 98, 35))
+>x : Symbol(x, Decl(stringMappingNarrowing.ts, 98, 35))
+
+        const r: "FOO" | "BAR" = x; // ok
+>r : Symbol(r, Decl(stringMappingNarrowing.ts, 100, 13))
+>x : Symbol(x, Decl(stringMappingNarrowing.ts, 98, 35))
+    }
+}
+
