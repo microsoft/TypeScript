@@ -122,6 +122,72 @@ func TestSnapshot(t *testing.T) {
 		assert.Equal(t, len(removedSnapshot.ProjectCollection.SyntheticProjects()), 1)
 	})
 
+	t.Run("removes and creates synthetic programs in one update", func(t *testing.T) {
+		t.Parallel()
+		session := setup(map[string]any{
+			"/a.ts": "export const a = 1;",
+			"/b.ts": "export const b = 1;",
+		})
+		defer session.Close()
+
+		ctx := context.Background()
+		options := &core.CompilerOptions{NoLib: core.TSTrue}
+		createdSnapshot, err := session.CloneSnapshot(
+			ctx,
+			session.Snapshot(),
+			FileChangeSummary{},
+			&APISnapshotRequest{CreatePrograms: []*APICreateProgramRequest{{
+				RootFileNames:   []tspath.RootedFilePath{"/a.ts"},
+				CompilerOptions: options,
+			}}},
+		)
+		assert.NilError(t, err)
+		defer createdSnapshot.Deref()
+		firstProject := createdSnapshot.CreatedPrograms()[0]
+		firstProgramID, ok := firstProject.ID().Synthetic()
+		assert.Assert(t, ok)
+
+		replacedSnapshot, err := session.CloneSnapshot(
+			ctx,
+			createdSnapshot,
+			FileChangeSummary{},
+			&APISnapshotRequest{
+				RemovePrograms: collections.NewSetFromItems(firstProgramID),
+				CreatePrograms: []*APICreateProgramRequest{{
+					RootFileNames:   []tspath.RootedFilePath{"/b.ts"},
+					CompilerOptions: options,
+				}},
+			},
+		)
+		assert.NilError(t, err)
+		defer replacedSnapshot.Deref()
+
+		createdPrograms := replacedSnapshot.CreatedPrograms()
+		assert.Equal(t, len(createdPrograms), 1)
+		secondProject := createdPrograms[0]
+		assert.Assert(t, secondProject.ID() != firstProject.ID())
+		assert.DeepEqual(t, secondProject.CommandLine.FileNames(), []tspath.RootedFilePath{"/b.ts"})
+		assert.Assert(t, secondProject.GetProgram().GetSourceFile("/b.ts") != nil)
+		assert.Assert(t, replacedSnapshot.ProjectCollection.GetProject(firstProject.ID()) == nil)
+		assert.Equal(t, replacedSnapshot.ProjectCollection.GetProject(secondProject.ID()), secondProject)
+		assert.Equal(t, len(replacedSnapshot.ProjectCollection.SyntheticProjects()), 1)
+		assert.Equal(t, createdSnapshot.ProjectCollection.GetProject(firstProject.ID()), firstProject)
+
+		reusedSnapshot, err := session.CloneSnapshot(
+			ctx,
+			replacedSnapshot,
+			FileChangeSummary{},
+			&APISnapshotRequest{CreatePrograms: []*APICreateProgramRequest{{
+				RootFileNames:   []tspath.RootedFilePath{"/a.ts"},
+				CompilerOptions: options,
+			}}},
+		)
+		assert.NilError(t, err)
+		defer reusedSnapshot.Deref()
+		assert.Equal(t, reusedSnapshot.CreatedPrograms()[0].ID(), firstProject.ID())
+		assert.Equal(t, len(reusedSnapshot.ProjectCollection.SyntheticProjects()), 2)
+	})
+
 	t.Run("failed API update is not adopted", func(t *testing.T) {
 		t.Parallel()
 		session := setup(map[string]any{
