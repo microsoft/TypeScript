@@ -1,0 +1,174 @@
+//// [tests/cases/compiler/parseGenericArrowRatherThanLeftShift2.tsx] ////
+
+=== heritage.ts ===
+declare const f: <T>(x: T) => T;
+>f : Symbol(f, Decl(heritage.ts, 0, 13))
+>T : Symbol(T, Decl(heritage.ts, 0, 18))
+>x : Symbol(x, Decl(heritage.ts, 0, 21))
+>T : Symbol(T, Decl(heritage.ts, 0, 18))
+>T : Symbol(T, Decl(heritage.ts, 0, 18))
+
+declare function g(): typeof B;
+>g : Symbol(g, Decl(heritage.ts, 0, 32))
+>B : Symbol(B, Decl(heritage.ts, 1, 31))
+
+declare class B<F> {}
+>B : Symbol(B, Decl(heritage.ts, 1, 31))
+>F : Symbol(F, Decl(heritage.ts, 2, 16))
+
+interface I<F> {}
+>I : Symbol(I, Decl(heritage.ts, 2, 21))
+>F : Symbol(F, Decl(heritage.ts, 3, 12))
+
+interface J<F> {}
+>J : Symbol(J, Decl(heritage.ts, 3, 17))
+>F : Symbol(F, Decl(heritage.ts, 4, 12))
+
+class C1 implements I<<T>(x: T) => T> {}
+>C1 : Symbol(C1, Decl(heritage.ts, 4, 17))
+>I : Symbol(I, Decl(heritage.ts, 2, 21))
+>T : Symbol(T, Decl(heritage.ts, 6, 23))
+>x : Symbol(x, Decl(heritage.ts, 6, 26))
+>T : Symbol(T, Decl(heritage.ts, 6, 23))
+>T : Symbol(T, Decl(heritage.ts, 6, 23))
+
+class C2 extends B<<T>(x: T) => T> {}
+>C2 : Symbol(C2, Decl(heritage.ts, 6, 40))
+>B : Symbol(B, Decl(heritage.ts, 1, 31))
+>T : Symbol(T, Decl(heritage.ts, 7, 20))
+>x : Symbol(x, Decl(heritage.ts, 7, 23))
+>T : Symbol(T, Decl(heritage.ts, 7, 20))
+>T : Symbol(T, Decl(heritage.ts, 7, 20))
+
+const C3 = class extends g()<<T>(x: T) => T> {};
+>C3 : Symbol(C3, Decl(heritage.ts, 8, 5))
+>g : Symbol(g, Decl(heritage.ts, 0, 32))
+>T : Symbol(T, Decl(heritage.ts, 8, 30))
+>x : Symbol(x, Decl(heritage.ts, 8, 33))
+>T : Symbol(T, Decl(heritage.ts, 8, 30))
+>T : Symbol(T, Decl(heritage.ts, 8, 30))
+
+interface I2 extends J<<T>(x: T) => T> {}
+>I2 : Symbol(I2, Decl(heritage.ts, 8, 48))
+>J : Symbol(J, Decl(heritage.ts, 3, 17))
+>T : Symbol(T, Decl(heritage.ts, 9, 24))
+>x : Symbol(x, Decl(heritage.ts, 9, 27))
+>T : Symbol(T, Decl(heritage.ts, 9, 24))
+>T : Symbol(T, Decl(heritage.ts, 9, 24))
+
+type A1 = typeof f<<T>(x: T) => T>;
+>A1 : Symbol(A1, Decl(heritage.ts, 9, 41))
+>f : Symbol(f, Decl(heritage.ts, 0, 13))
+>T : Symbol(T, Decl(heritage.ts, 10, 20))
+>x : Symbol(x, Decl(heritage.ts, 10, 23))
+>T : Symbol(T, Decl(heritage.ts, 10, 20))
+>T : Symbol(T, Decl(heritage.ts, 10, 20))
+
+const e1 = f<<T>(x: T) => T>;
+>e1 : Symbol(e1, Decl(heritage.ts, 12, 5))
+>f : Symbol(f, Decl(heritage.ts, 0, 13))
+>T : Symbol(T, Decl(heritage.ts, 12, 14))
+>x : Symbol(x, Decl(heritage.ts, 12, 17))
+>T : Symbol(T, Decl(heritage.ts, 12, 14))
+>T : Symbol(T, Decl(heritage.ts, 12, 14))
+
+const e2 = f<<T>(x: T) => T>(f);
+>e2 : Symbol(e2, Decl(heritage.ts, 13, 5))
+>f : Symbol(f, Decl(heritage.ts, 0, 13))
+>T : Symbol(T, Decl(heritage.ts, 13, 14))
+>x : Symbol(x, Decl(heritage.ts, 13, 17))
+>T : Symbol(T, Decl(heritage.ts, 13, 14))
+>T : Symbol(T, Decl(heritage.ts, 13, 14))
+>f : Symbol(f, Decl(heritage.ts, 0, 13))
+
+// `<<` is still a left shift in expressions.
+declare let n: number;
+>n : Symbol(n, Decl(heritage.ts, 16, 11))
+
+const s1 = n << 2;
+>s1 : Symbol(s1, Decl(heritage.ts, 17, 5))
+>n : Symbol(n, Decl(heritage.ts, 16, 11))
+
+const s2 = n<<n;
+>s2 : Symbol(s2, Decl(heritage.ts, 18, 5))
+>n : Symbol(n, Decl(heritage.ts, 16, 11))
+>n : Symbol(n, Decl(heritage.ts, 16, 11))
+
+const s3 = (n<<n) > n;
+>s3 : Symbol(s3, Decl(heritage.ts, 19, 5))
+>n : Symbol(n, Decl(heritage.ts, 16, 11))
+>n : Symbol(n, Decl(heritage.ts, 16, 11))
+>n : Symbol(n, Decl(heritage.ts, 16, 11))
+
+// `<<` after a type query in an expression is still a left shift.
+declare const a: any;
+>a : Symbol(a, Decl(heritage.ts, 22, 13))
+
+const s4 = a as typeof n << 1;
+>s4 : Symbol(s4, Decl(heritage.ts, 23, 5))
+>a : Symbol(a, Decl(heritage.ts, 22, 13))
+>n : Symbol(n, Decl(heritage.ts, 16, 11))
+
+const s5 = a satisfies typeof n << 1;
+>s5 : Symbol(s5, Decl(heritage.ts, 24, 5))
+>a : Symbol(a, Decl(heritage.ts, 22, 13))
+>n : Symbol(n, Decl(heritage.ts, 16, 11))
+
+=== jsx.tsx ===
+declare namespace JSX {
+>JSX : Symbol(JSX, Decl(jsx.tsx, 0, 0))
+
+    interface Element {}
+>Element : Symbol(Element, Decl(jsx.tsx, 0, 23))
+
+    interface IntrinsicElements {
+>IntrinsicElements : Symbol(IntrinsicElements, Decl(jsx.tsx, 1, 24))
+
+        div: { x?: number };
+>div : Symbol(IntrinsicElements.div, Decl(jsx.tsx, 2, 33))
+>x : Symbol(x, Decl(jsx.tsx, 3, 14))
+    }
+}
+declare function Comp<P>(props: { value: P }): JSX.Element;
+>Comp : Symbol(Comp, Decl(jsx.tsx, 5, 1))
+>P : Symbol(P, Decl(jsx.tsx, 6, 22))
+>props : Symbol(props, Decl(jsx.tsx, 6, 25))
+>value : Symbol(value, Decl(jsx.tsx, 6, 33))
+>P : Symbol(P, Decl(jsx.tsx, 6, 22))
+>JSX : Symbol(JSX, Decl(jsx.tsx, 0, 0))
+>Element : Symbol(JSX.Element, Decl(jsx.tsx, 0, 23))
+
+const j1 = <Comp<<T>(x: T) => T> value={f} />;
+>j1 : Symbol(j1, Decl(jsx.tsx, 8, 5))
+>Comp : Symbol(Comp, Decl(jsx.tsx, 5, 1))
+>T : Symbol(T, Decl(jsx.tsx, 8, 18))
+>x : Symbol(x, Decl(jsx.tsx, 8, 21))
+>T : Symbol(T, Decl(jsx.tsx, 8, 18))
+>T : Symbol(T, Decl(jsx.tsx, 8, 18))
+>value : Symbol(value, Decl(jsx.tsx, 8, 32))
+>f : Symbol(f, Decl(heritage.ts, 0, 13))
+
+const j2 = <Comp<<T>(x: T) => T> value={f}></Comp>;
+>j2 : Symbol(j2, Decl(jsx.tsx, 9, 5))
+>Comp : Symbol(Comp, Decl(jsx.tsx, 5, 1))
+>T : Symbol(T, Decl(jsx.tsx, 9, 18))
+>x : Symbol(x, Decl(jsx.tsx, 9, 21))
+>T : Symbol(T, Decl(jsx.tsx, 9, 18))
+>T : Symbol(T, Decl(jsx.tsx, 9, 18))
+>value : Symbol(value, Decl(jsx.tsx, 9, 32))
+>f : Symbol(f, Decl(heritage.ts, 0, 13))
+>Comp : Symbol(Comp, Decl(jsx.tsx, 5, 1))
+
+const j3 = <div x={n << 1} />;
+>j3 : Symbol(j3, Decl(jsx.tsx, 10, 5))
+>div : Symbol(JSX.IntrinsicElements.div, Decl(jsx.tsx, 2, 33))
+>x : Symbol(x, Decl(jsx.tsx, 10, 15))
+>n : Symbol(n, Decl(heritage.ts, 16, 11))
+
+const j4 = <div x={n<<n} />;
+>j4 : Symbol(j4, Decl(jsx.tsx, 11, 5))
+>div : Symbol(JSX.IntrinsicElements.div, Decl(jsx.tsx, 2, 33))
+>x : Symbol(x, Decl(jsx.tsx, 11, 15))
+>n : Symbol(n, Decl(heritage.ts, 16, 11))
+>n : Symbol(n, Decl(heritage.ts, 16, 11))
+
