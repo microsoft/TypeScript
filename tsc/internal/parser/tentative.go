@@ -44,36 +44,41 @@ func (p *Parser) beginTentativeParse() tentativeParse {
 }
 
 func (tp *tentativeParse) silence() {
+	parser := tp.parser
 	if tp.nodes == nil {
-		tp.nodes = tp.parser.tentativeNodes
+		tp.nodes = parser.tentativeNodes
 		if tp.nodes == nil {
 			tp.nodes = make(map[int][]tentativeNode)
 		}
 	}
-	tp.parser.tentativeNodes = tp.nodes
-	tp.parser.parsingFlags |= ParsingFlagsTentative
-	tp.parser.hasParseError = false
+	parser.tentativeNodes = tp.nodes
+	parser.parsingFlags |= ParsingFlagsTentative
+	parser.hasParseError = false
 }
 
 func (tp *tentativeParse) rewind() {
-	tp.parser.rewind(tp.state)
-	tp.parser.parsingFlags = tp.parsingFlags
-	tp.parser.parsingContexts = tp.parsingContexts
+	parser := tp.parser
+	parser.rewind(tp.state)
+	parser.parsingFlags = tp.parsingFlags
+	parser.parsingContexts = tp.parsingContexts
 }
 
 func (tp *tentativeParse) commit() {
-	if tp.parser != nil {
-		tp.restore()
-		tp.parser.tentativeNodes = tp.state.tentativeNodes
+	parser := tp.parser
+	if parser == nil {
+		return
 	}
+	tp.restore()
+	parser.tentativeNodes = tp.state.tentativeNodes
 	tp.parser = nil
 }
 
 func (tp *tentativeParse) revert() {
-	if tp.parser != nil {
-		tp.rewind()
-		tp.parser = nil
+	if tp.parser == nil {
+		return
 	}
+	tp.rewind()
+	tp.parser = nil
 }
 
 func (tp *tentativeParse) close() {

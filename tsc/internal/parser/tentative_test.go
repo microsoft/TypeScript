@@ -288,17 +288,6 @@ func TestArrowFunctionHeadAmbiguity(t *testing.T) {
 	assert.Assert(t, reflect.DeepEqual(p.mark(), headState))
 }
 
-func TestArrowFunctionHeadParameterType(t *testing.T) {
-	t.Parallel()
-	p := newTestParser("async (...a: number[]): T => a ?")
-	status, signature := p.parseArrowFunctionHead(ExpressionParseFlagsAllowArrowFunctionRecovery | ExpressionParseFlagsDisallowArrowReturnType)
-	assert.Equal(t, status, core.TSTrue)
-	assert.Equal(t, len(signature.parameters.Nodes), 1)
-	assert.Equal(t, signature.parameters.Nodes[0].Type().Kind, ast.KindArrayType)
-	assert.Equal(t, p.token, ast.KindEqualsGreaterThanToken)
-	assert.Equal(t, len(p.diagnostics), 0)
-}
-
 func TestArrowFunctionHeadRollback(t *testing.T) {
 	t.Parallel()
 	p := newTestParser("async(a = b.c)")

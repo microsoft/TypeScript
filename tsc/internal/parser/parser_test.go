@@ -242,7 +242,9 @@ func parseConditionalInGenerator(t *testing.T, expression string, kind core.Scri
 	assert.Equal(t, len(file.JSDiagnostics()), 0)
 	statement := file.Statements.Nodes[0].Body().AsBlock().Statements.Nodes[0]
 	declaration := statement.AsVariableStatement().DeclarationList.AsVariableDeclarationList().Declarations.Nodes[0]
-	return declaration.Initializer().AsConditionalExpression()
+	conditional := declaration.Initializer().AsConditionalExpression()
+	assert.Equal(t, conditional.WhenTrue.Flags&ast.NodeFlagsYieldContext, ast.NodeFlagsYieldContext)
+	return conditional
 }
 
 func checkConditionalAsyncNesting(t *testing.T, prefix string, closing string) {
@@ -269,7 +271,6 @@ func TestConditionalAsyncCall(t *testing.T) {
 	t.Parallel()
 	conditional := parseConditionalInGenerator(t, "b ? async(...c) : 0", core.ScriptKindTS)
 	assert.Equal(t, conditional.WhenTrue.Kind, ast.KindCallExpression)
-	assert.Equal(t, conditional.WhenTrue.Flags&ast.NodeFlagsYieldContext, ast.NodeFlagsYieldContext)
 	assert.Equal(t, conditional.WhenFalse.Kind, ast.KindNumericLiteral)
 }
 
@@ -277,7 +278,6 @@ func TestConditionalAsyncCallWithArrow(t *testing.T) {
 	t.Parallel()
 	conditional := parseConditionalInGenerator(t, "b ? async(...c) : d => d", core.ScriptKindTS)
 	assert.Equal(t, conditional.WhenTrue.Kind, ast.KindCallExpression)
-	assert.Equal(t, conditional.WhenTrue.Flags&ast.NodeFlagsYieldContext, ast.NodeFlagsYieldContext)
 	assert.Equal(t, conditional.WhenFalse.Kind, ast.KindArrowFunction)
 }
 
@@ -285,7 +285,6 @@ func TestConditionalAsyncCallYield(t *testing.T) {
 	t.Parallel()
 	conditional := parseConditionalInGenerator(t, "b ? yield async(...c) : 0", core.ScriptKindTS)
 	assert.Equal(t, conditional.WhenTrue.Kind, ast.KindYieldExpression)
-	assert.Equal(t, conditional.WhenTrue.Flags&ast.NodeFlagsYieldContext, ast.NodeFlagsYieldContext)
 	assert.Equal(t, conditional.WhenFalse.Kind, ast.KindNumericLiteral)
 	assert.Equal(t, conditional.WhenTrue.Expression().Kind, ast.KindCallExpression)
 }
@@ -294,7 +293,6 @@ func TestConditionalAsyncCallYieldWithArrow(t *testing.T) {
 	t.Parallel()
 	conditional := parseConditionalInGenerator(t, "b ? yield async(...c) : d => d", core.ScriptKindTS)
 	assert.Equal(t, conditional.WhenTrue.Kind, ast.KindYieldExpression)
-	assert.Equal(t, conditional.WhenTrue.Flags&ast.NodeFlagsYieldContext, ast.NodeFlagsYieldContext)
 	assert.Equal(t, conditional.WhenFalse.Kind, ast.KindArrowFunction)
 	assert.Equal(t, conditional.WhenTrue.Expression().Kind, ast.KindCallExpression)
 }
@@ -303,7 +301,6 @@ func TestConditionalAsyncCallJS(t *testing.T) {
 	t.Parallel()
 	conditional := parseConditionalInGenerator(t, "b ? async(...c) : 0", core.ScriptKindJS)
 	assert.Equal(t, conditional.WhenTrue.Kind, ast.KindCallExpression)
-	assert.Equal(t, conditional.WhenTrue.Flags&ast.NodeFlagsYieldContext, ast.NodeFlagsYieldContext)
 	assert.Equal(t, conditional.WhenFalse.Kind, ast.KindNumericLiteral)
 }
 
@@ -311,7 +308,6 @@ func TestConditionalAsyncCallWithArrowJS(t *testing.T) {
 	t.Parallel()
 	conditional := parseConditionalInGenerator(t, "b ? async(...c) : d => d", core.ScriptKindJS)
 	assert.Equal(t, conditional.WhenTrue.Kind, ast.KindCallExpression)
-	assert.Equal(t, conditional.WhenTrue.Flags&ast.NodeFlagsYieldContext, ast.NodeFlagsYieldContext)
 	assert.Equal(t, conditional.WhenFalse.Kind, ast.KindArrowFunction)
 }
 
@@ -319,7 +315,6 @@ func TestConditionalAsyncCallYieldJS(t *testing.T) {
 	t.Parallel()
 	conditional := parseConditionalInGenerator(t, "b ? yield async(...c) : 0", core.ScriptKindJS)
 	assert.Equal(t, conditional.WhenTrue.Kind, ast.KindYieldExpression)
-	assert.Equal(t, conditional.WhenTrue.Flags&ast.NodeFlagsYieldContext, ast.NodeFlagsYieldContext)
 	assert.Equal(t, conditional.WhenFalse.Kind, ast.KindNumericLiteral)
 	assert.Equal(t, conditional.WhenTrue.Expression().Kind, ast.KindCallExpression)
 }
@@ -328,7 +323,6 @@ func TestConditionalAsyncCallYieldWithArrowJS(t *testing.T) {
 	t.Parallel()
 	conditional := parseConditionalInGenerator(t, "b ? yield async(...c) : d => d", core.ScriptKindJS)
 	assert.Equal(t, conditional.WhenTrue.Kind, ast.KindYieldExpression)
-	assert.Equal(t, conditional.WhenTrue.Flags&ast.NodeFlagsYieldContext, ast.NodeFlagsYieldContext)
 	assert.Equal(t, conditional.WhenFalse.Kind, ast.KindArrowFunction)
 	assert.Equal(t, conditional.WhenTrue.Expression().Kind, ast.KindCallExpression)
 }

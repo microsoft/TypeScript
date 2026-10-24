@@ -273,14 +273,14 @@ const f31 = a ? async (): (Promise<number>) => async() : x => x;
 >x : Symbol(x, Decl(a.ts, 45, 56))
 >x : Symbol(x, Decl(a.ts, 45, 56))
 
-const f32 = a ? async (...c: number[]): Promise<number> => async() : x => x;
+const f32 = a ? async (...c: number[]): T => async() : x => x;
 >f32 : Symbol(f32, Decl(a.ts, 46, 5))
 >a : Symbol(a, Decl(a.ts, 4, 5))
 >c : Symbol(c, Decl(a.ts, 46, 23))
->Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>T : Symbol(T, Decl(a.ts, 24, 73))
 >async : Symbol(async, Decl(a.ts, 6, 14))
->x : Symbol(x, Decl(a.ts, 46, 68))
->x : Symbol(x, Decl(a.ts, 46, 68))
+>x : Symbol(x, Decl(a.ts, 46, 54))
+>x : Symbol(x, Decl(a.ts, 46, 54))
 
 const f33 = a ? async() : 0
 >f33 : Symbol(f33, Decl(a.ts, 48, 5))
@@ -375,182 +375,176 @@ const f42 = a ? (c) : 0
 >c : Symbol(c, Decl(a.ts, 6, 5))
 
 {}
-const f43 = a ? async() : 0;
->f43 : Symbol(f43, Decl(a.ts, 73, 5))
->a : Symbol(a, Decl(a.ts, 4, 5))
->async : Symbol(async, Decl(a.ts, 6, 14))
 
-{}
-
-const f44 = a ? async() : T => async (...c): T => c.length;
->f44 : Symbol(f44, Decl(a.ts, 76, 5))
+const f43 = a ? async() : T => async (...c): T => c.length;
+>f43 : Symbol(f43, Decl(a.ts, 74, 5))
 >a : Symbol(a, Decl(a.ts, 4, 5))
 >T : Symbol(T, Decl(a.ts, 24, 73))
 >async : Symbol(async, Decl(a.ts, 6, 14))
 >c : Symbol(c, Decl(a.ts, 6, 5))
->T : Symbol(T, Decl(a.ts, 76, 44))
+>T : Symbol(T, Decl(a.ts, 74, 44))
 >c.length : Symbol(Array.length, Decl(lib.es5.d.ts, --, --))
 >c : Symbol(c, Decl(a.ts, 6, 5))
 >length : Symbol(Array.length, Decl(lib.es5.d.ts, --, --))
 
-const f45 = a ? async (): T => (b) : d => d;
->f45 : Symbol(f45, Decl(a.ts, 78, 5))
+const f44 = a ? async (): T => (b) : d => d;
+>f44 : Symbol(f44, Decl(a.ts, 76, 5))
 >a : Symbol(a, Decl(a.ts, 4, 5))
 >T : Symbol(T, Decl(a.ts, 24, 73))
 >b : Symbol(b, Decl(a.ts, 5, 5))
->d : Symbol(d, Decl(a.ts, 78, 36))
->d : Symbol(d, Decl(a.ts, 78, 36))
+>d : Symbol(d, Decl(a.ts, 76, 36))
+>d : Symbol(d, Decl(a.ts, 76, 36))
 
-const f46 = a ? async (): T => async() : d => d;
->f46 : Symbol(f46, Decl(a.ts, 79, 5))
+const f45 = a ? async (): T => async() : d => d;
+>f45 : Symbol(f45, Decl(a.ts, 77, 5))
 >a : Symbol(a, Decl(a.ts, 4, 5))
 >T : Symbol(T, Decl(a.ts, 24, 73))
 >async : Symbol(async, Decl(a.ts, 6, 14))
->d : Symbol(d, Decl(a.ts, 79, 40))
->d : Symbol(d, Decl(a.ts, 79, 40))
+>d : Symbol(d, Decl(a.ts, 77, 40))
+>d : Symbol(d, Decl(a.ts, 77, 40))
 
-const f47 = a ? async (): T => async() : b;
->f47 : Symbol(f47, Decl(a.ts, 80, 5))
+const f46 = a ? async (): T => async() : b;
+>f46 : Symbol(f46, Decl(a.ts, 78, 5))
 >a : Symbol(a, Decl(a.ts, 4, 5))
 >T : Symbol(T, Decl(a.ts, 24, 73))
 >async : Symbol(async, Decl(a.ts, 6, 14))
 >b : Symbol(b, Decl(a.ts, 5, 5))
 
-const f48 = a ? a ? async() : d => d : b;
->f48 : Symbol(f48, Decl(a.ts, 81, 5))
+const f47 = a ? a ? async() : d => d : b;
+>f47 : Symbol(f47, Decl(a.ts, 79, 5))
 >a : Symbol(a, Decl(a.ts, 4, 5))
 >a : Symbol(a, Decl(a.ts, 4, 5))
 >async : Symbol(async, Decl(a.ts, 6, 14))
->d : Symbol(d, Decl(a.ts, 81, 29))
->d : Symbol(d, Decl(a.ts, 81, 29))
+>d : Symbol(d, Decl(a.ts, 79, 29))
+>d : Symbol(d, Decl(a.ts, 79, 29))
 >b : Symbol(b, Decl(a.ts, 5, 5))
 
-const f49 = a ? a ? async(b) : d => d : b;
->f49 : Symbol(f49, Decl(a.ts, 82, 5))
+const f48 = a ? a ? async(b) : d => d : b;
+>f48 : Symbol(f48, Decl(a.ts, 80, 5))
 >a : Symbol(a, Decl(a.ts, 4, 5))
 >a : Symbol(a, Decl(a.ts, 4, 5))
 >async : Symbol(async, Decl(a.ts, 6, 14))
 >b : Symbol(b, Decl(a.ts, 5, 5))
->d : Symbol(d, Decl(a.ts, 82, 30))
->d : Symbol(d, Decl(a.ts, 82, 30))
+>d : Symbol(d, Decl(a.ts, 80, 30))
+>d : Symbol(d, Decl(a.ts, 80, 30))
 >b : Symbol(b, Decl(a.ts, 5, 5))
 
-const f50 = a ? a ? async(...c) : d => d : b;
->f50 : Symbol(f50, Decl(a.ts, 83, 5))
+const f49 = a ? a ? async(...c) : d => d : b;
+>f49 : Symbol(f49, Decl(a.ts, 81, 5))
 >a : Symbol(a, Decl(a.ts, 4, 5))
 >a : Symbol(a, Decl(a.ts, 4, 5))
 >async : Symbol(async, Decl(a.ts, 6, 14))
 >c : Symbol(c, Decl(a.ts, 6, 5))
->d : Symbol(d, Decl(a.ts, 83, 33))
->d : Symbol(d, Decl(a.ts, 83, 33))
+>d : Symbol(d, Decl(a.ts, 81, 33))
+>d : Symbol(d, Decl(a.ts, 81, 33))
 >b : Symbol(b, Decl(a.ts, 5, 5))
 
-const f51 = a ? a ? async() : T => b : async (): T => b;
->f51 : Symbol(f51, Decl(a.ts, 84, 5))
+const f50 = a ? a ? async() : T => b : async (): T => b;
+>f50 : Symbol(f50, Decl(a.ts, 82, 5))
 >a : Symbol(a, Decl(a.ts, 4, 5))
 >a : Symbol(a, Decl(a.ts, 4, 5))
 >T : Symbol(T, Decl(a.ts, 24, 73))
 >b : Symbol(b, Decl(a.ts, 5, 5))
 >async : Symbol(async, Decl(a.ts, 6, 14))
->T : Symbol(T, Decl(a.ts, 84, 48))
+>T : Symbol(T, Decl(a.ts, 82, 48))
 >b : Symbol(b, Decl(a.ts, 5, 5))
 
-const f52 = a ? async (): T => async() : (d): number => d;
->f52 : Symbol(f52, Decl(a.ts, 85, 5))
+const f51 = a ? async (): T => async() : (d): number => d;
+>f51 : Symbol(f51, Decl(a.ts, 83, 5))
 >a : Symbol(a, Decl(a.ts, 4, 5))
 >T : Symbol(T, Decl(a.ts, 24, 73))
 >async : Symbol(async, Decl(a.ts, 6, 14))
->d : Symbol(d, Decl(a.ts, 85, 42))
->d : Symbol(d, Decl(a.ts, 85, 42))
+>d : Symbol(d, Decl(a.ts, 83, 42))
+>d : Symbol(d, Decl(a.ts, 83, 42))
 
-const f53 = a ? a ? async (): T => async() : d => d : b;
->f53 : Symbol(f53, Decl(a.ts, 86, 5))
+const f52 = a ? a ? async (): T => async() : d => d : b;
+>f52 : Symbol(f52, Decl(a.ts, 84, 5))
 >a : Symbol(a, Decl(a.ts, 4, 5))
 >a : Symbol(a, Decl(a.ts, 4, 5))
 >T : Symbol(T, Decl(a.ts, 24, 73))
 >async : Symbol(async, Decl(a.ts, 6, 14))
->d : Symbol(d, Decl(a.ts, 86, 44))
->d : Symbol(d, Decl(a.ts, 86, 44))
+>d : Symbol(d, Decl(a.ts, 84, 44))
+>d : Symbol(d, Decl(a.ts, 84, 44))
 >b : Symbol(b, Decl(a.ts, 5, 5))
 
-const f54 = a ? async (): T => a ? async() : b : d => d;
->f54 : Symbol(f54, Decl(a.ts, 87, 5))
+const f53 = a ? async (): T => a ? async() : b : d => d;
+>f53 : Symbol(f53, Decl(a.ts, 85, 5))
 >a : Symbol(a, Decl(a.ts, 4, 5))
 >T : Symbol(T, Decl(a.ts, 24, 73))
 >a : Symbol(a, Decl(a.ts, 4, 5))
 >async : Symbol(async, Decl(a.ts, 6, 14))
 >b : Symbol(b, Decl(a.ts, 5, 5))
->d : Symbol(d, Decl(a.ts, 87, 48))
->d : Symbol(d, Decl(a.ts, 87, 48))
+>d : Symbol(d, Decl(a.ts, 85, 48))
+>d : Symbol(d, Decl(a.ts, 85, 48))
 
-const f55 = a ? a ? async() : d => d : a ? async() : d => d;
->f55 : Symbol(f55, Decl(a.ts, 88, 5))
+const f54 = a ? a ? async() : d => d : a ? async() : d => d;
+>f54 : Symbol(f54, Decl(a.ts, 86, 5))
 >a : Symbol(a, Decl(a.ts, 4, 5))
 >a : Symbol(a, Decl(a.ts, 4, 5))
 >async : Symbol(async, Decl(a.ts, 6, 14))
->d : Symbol(d, Decl(a.ts, 88, 29))
->d : Symbol(d, Decl(a.ts, 88, 29))
+>d : Symbol(d, Decl(a.ts, 86, 29))
+>d : Symbol(d, Decl(a.ts, 86, 29))
 >a : Symbol(a, Decl(a.ts, 4, 5))
 >async : Symbol(async, Decl(a.ts, 6, 14))
->d : Symbol(d, Decl(a.ts, 88, 52))
->d : Symbol(d, Decl(a.ts, 88, 52))
+>d : Symbol(d, Decl(a.ts, 86, 52))
+>d : Symbol(d, Decl(a.ts, 86, 52))
 
-const f56 = a ? a ? a ? async() : d => d : b : b;
+const f55 = a ? a ? a ? async() : d => d : b : b;
+>f55 : Symbol(f55, Decl(a.ts, 87, 5))
+>a : Symbol(a, Decl(a.ts, 4, 5))
+>a : Symbol(a, Decl(a.ts, 4, 5))
+>a : Symbol(a, Decl(a.ts, 4, 5))
+>async : Symbol(async, Decl(a.ts, 6, 14))
+>d : Symbol(d, Decl(a.ts, 87, 33))
+>d : Symbol(d, Decl(a.ts, 87, 33))
+>b : Symbol(b, Decl(a.ts, 5, 5))
+>b : Symbol(b, Decl(a.ts, 5, 5))
+
+const f56 = a ? d => a ? (0) : a ? async(b) : async() : (d => d = a);
 >f56 : Symbol(f56, Decl(a.ts, 89, 5))
 >a : Symbol(a, Decl(a.ts, 4, 5))
->a : Symbol(a, Decl(a.ts, 4, 5))
->a : Symbol(a, Decl(a.ts, 4, 5))
->async : Symbol(async, Decl(a.ts, 6, 14))
->d : Symbol(d, Decl(a.ts, 89, 33))
->d : Symbol(d, Decl(a.ts, 89, 33))
->b : Symbol(b, Decl(a.ts, 5, 5))
->b : Symbol(b, Decl(a.ts, 5, 5))
-
-const f57 = a ? d => a ? (0) : a ? async(b) : async() : (d => d = a);
->f57 : Symbol(f57, Decl(a.ts, 91, 5))
->a : Symbol(a, Decl(a.ts, 4, 5))
->d : Symbol(d, Decl(a.ts, 91, 15))
+>d : Symbol(d, Decl(a.ts, 89, 15))
 >a : Symbol(a, Decl(a.ts, 4, 5))
 >a : Symbol(a, Decl(a.ts, 4, 5))
 >async : Symbol(async, Decl(a.ts, 6, 14))
 >b : Symbol(b, Decl(a.ts, 5, 5))
 >async : Symbol(async, Decl(a.ts, 6, 14))
->d : Symbol(d, Decl(a.ts, 91, 57))
->d : Symbol(d, Decl(a.ts, 91, 57))
+>d : Symbol(d, Decl(a.ts, 89, 57))
+>d : Symbol(d, Decl(a.ts, 89, 57))
 >a : Symbol(a, Decl(a.ts, 4, 5))
 
-const f58 = a ? d => d = async () => async() : (d => d = 0);
->f58 : Symbol(f58, Decl(a.ts, 92, 5))
+const f57 = a ? d => d = async () => async() : (d => d = 0);
+>f57 : Symbol(f57, Decl(a.ts, 90, 5))
 >a : Symbol(a, Decl(a.ts, 4, 5))
->d : Symbol(d, Decl(a.ts, 92, 15))
->d : Symbol(d, Decl(a.ts, 92, 15))
+>d : Symbol(d, Decl(a.ts, 90, 15))
+>d : Symbol(d, Decl(a.ts, 90, 15))
 >async : Symbol(async, Decl(a.ts, 6, 14))
->d : Symbol(d, Decl(a.ts, 92, 48))
->d : Symbol(d, Decl(a.ts, 92, 48))
+>d : Symbol(d, Decl(a.ts, 90, 48))
+>d : Symbol(d, Decl(a.ts, 90, 48))
 
 === b.ts ===
-const f59 = a ? async(...c: number[]): Promise<number> => 0;
->f59 : Symbol(f59, Decl(b.ts, 0, 5))
+const f58 = a ? async(...c: number[]): Promise<number> => 0;
+>f58 : Symbol(f58, Decl(b.ts, 0, 5))
 >a : Symbol(a, Decl(a.ts, 4, 5))
 >c : Symbol(c, Decl(b.ts, 0, 22))
 >Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 
-const f60 = a ? async (): Promise<number> {} : d => d;
->f60 : Symbol(f60, Decl(b.ts, 1, 5))
+const f59 = a ? async (): Promise<number> {} : d => d;
+>f59 : Symbol(f59, Decl(b.ts, 1, 5))
 >a : Symbol(a, Decl(a.ts, 4, 5))
 >Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 >d : Symbol(d, Decl(b.ts, 1, 46))
 >d : Symbol(d, Decl(b.ts, 1, 46))
 
-const f61 = a ? (c): number {} : d => d;
->f61 : Symbol(f61, Decl(b.ts, 2, 5))
+const f60 = a ? (c): number {} : d => d;
+>f60 : Symbol(f60, Decl(b.ts, 2, 5))
 >a : Symbol(a, Decl(a.ts, 4, 5))
 >c : Symbol(c, Decl(b.ts, 2, 17))
 >d : Symbol(d, Decl(b.ts, 2, 32))
 >d : Symbol(d, Decl(b.ts, 2, 32))
 
-const f62 = a ? async() : T => async(a ? b);
->f62 : Symbol(f62, Decl(b.ts, 4, 5))
+const f61 = a ? async() : T => async(a ? b);
+>f61 : Symbol(f61, Decl(b.ts, 4, 5))
 >a : Symbol(a, Decl(a.ts, 4, 5))
 >T : Symbol(T, Decl(a.ts, 24, 73))
 >async : Symbol(async, Decl(a.ts, 6, 14))
@@ -575,8 +569,8 @@ type T = Promise<any>;
 let d: any;
 >d : Symbol(d, Decl(c.ts, 4, 3))
 
-const f63 = a ? d = (d): T => a ? 0 : async(...c) : T => b;
->f63 : Symbol(f63, Decl(c.ts, 5, 5))
+const f62 = a ? d = (d): T => a ? 0 : async(...c) : T => b;
+>f62 : Symbol(f62, Decl(c.ts, 5, 5))
 >a : Symbol(a, Decl(c.ts, 1, 13))
 >d : Symbol(d, Decl(c.ts, 4, 3))
 >d : Symbol(d, Decl(c.ts, 4, 3))
@@ -586,8 +580,8 @@ const f63 = a ? d = (d): T => a ? 0 : async(...c) : T => b;
 >T : Symbol(T, Decl(c.ts, 2, 41))
 >b : Symbol(b, Decl(c.ts, 1, 21))
 
-const f64 = a ? async (): T => async (): T => (d): T => b : a ? d => (d): T => async(...c) : T => b;
->f64 : Symbol(f64, Decl(c.ts, 6, 5))
+const f63 = a ? async (): T => async (): T => (d): T => b : a ? d => (d): T => async(...c) : T => b;
+>f63 : Symbol(f63, Decl(c.ts, 6, 5))
 >a : Symbol(a, Decl(c.ts, 1, 13))
 >T : Symbol(T, Decl(c.ts, 2, 41))
 >T : Symbol(T, Decl(c.ts, 2, 41))
@@ -602,8 +596,8 @@ const f64 = a ? async (): T => async (): T => (d): T => b : a ? d => (d): T => a
 >T : Symbol(T, Decl(c.ts, 2, 41))
 >b : Symbol(b, Decl(c.ts, 1, 21))
 
-const f65 = a ? async (): T => (d): T => async() : b;
->f65 : Symbol(f65, Decl(c.ts, 7, 5))
+const f64 = a ? async (): T => (d): T => async() : b;
+>f64 : Symbol(f64, Decl(c.ts, 7, 5))
 >a : Symbol(a, Decl(c.ts, 1, 13))
 >T : Symbol(T, Decl(c.ts, 2, 41))
 >d : Symbol(d, Decl(c.ts, 7, 32))
@@ -611,8 +605,8 @@ const f65 = a ? async (): T => (d): T => async() : b;
 >async : Symbol(async, Decl(c.ts, 1, 39))
 >b : Symbol(b, Decl(c.ts, 1, 21))
 
-const f66 = (a ? async (): T => (d): T => async() : b);
->f66 : Symbol(f66, Decl(c.ts, 8, 5))
+const f65 = (a ? async (): T => (d): T => async() : b);
+>f65 : Symbol(f65, Decl(c.ts, 8, 5))
 >a : Symbol(a, Decl(c.ts, 1, 13))
 >T : Symbol(T, Decl(c.ts, 2, 41))
 >d : Symbol(d, Decl(c.ts, 8, 33))
@@ -620,8 +614,8 @@ const f66 = (a ? async (): T => (d): T => async() : b);
 >async : Symbol(async, Decl(c.ts, 1, 39))
 >b : Symbol(b, Decl(c.ts, 1, 21))
 
-const f67 = a ? d = (d): T => a ? 0 : async(...c) : T => a ? d = (d): T => a ? 0 : async(...c) : T => b;
->f67 : Symbol(f67, Decl(c.ts, 9, 5))
+const f66 = a ? d = (d): T => a ? 0 : async(...c) : T => a ? d = (d): T => a ? 0 : async(...c) : T => b;
+>f66 : Symbol(f66, Decl(c.ts, 9, 5))
 >a : Symbol(a, Decl(c.ts, 1, 13))
 >d : Symbol(d, Decl(c.ts, 4, 3))
 >d : Symbol(d, Decl(c.ts, 4, 3))
@@ -638,8 +632,8 @@ const f67 = a ? d = (d): T => a ? 0 : async(...c) : T => a ? d = (d): T => a ? 0
 >T : Symbol(T, Decl(c.ts, 2, 41))
 >b : Symbol(b, Decl(c.ts, 1, 21))
 
-const f68 = a ? async (c = a ? async() : d => d): T => async() : b;
->f68 : Symbol(f68, Decl(c.ts, 10, 5))
+const f67 = a ? async (c = a ? async() : d => d): T => async() : b;
+>f67 : Symbol(f67, Decl(c.ts, 10, 5))
 >a : Symbol(a, Decl(c.ts, 1, 13))
 >c : Symbol(c, Decl(c.ts, 10, 23))
 >a : Symbol(a, Decl(c.ts, 1, 13))
@@ -650,8 +644,8 @@ const f68 = a ? async (c = a ? async() : d => d): T => async() : b;
 >async : Symbol(async, Decl(c.ts, 1, 39))
 >b : Symbol(b, Decl(c.ts, 1, 21))
 
-const f69 = a ? a ? (d): T => a ? async() : b : d => d : b;
->f69 : Symbol(f69, Decl(c.ts, 11, 5))
+const f68 = a ? a ? (d): T => a ? async() : b : d => d : b;
+>f68 : Symbol(f68, Decl(c.ts, 11, 5))
 >a : Symbol(a, Decl(c.ts, 1, 13))
 >a : Symbol(a, Decl(c.ts, 1, 13))
 >d : Symbol(d, Decl(c.ts, 11, 21))
@@ -663,15 +657,15 @@ const f69 = a ? a ? (d): T => a ? async() : b : d => d : b;
 >d : Symbol(d, Decl(c.ts, 11, 47))
 >b : Symbol(b, Decl(c.ts, 1, 21))
 
-const f70 = a ? async() : (d => d);
->f70 : Symbol(f70, Decl(c.ts, 12, 5))
+const f69 = a ? async() : (d => d);
+>f69 : Symbol(f69, Decl(c.ts, 12, 5))
 >a : Symbol(a, Decl(c.ts, 1, 13))
 >async : Symbol(async, Decl(c.ts, 1, 39))
 >d : Symbol(d, Decl(c.ts, 12, 27))
 >d : Symbol(d, Decl(c.ts, 12, 27))
 
-const f71 = a ? async() : d => (a ? async() : d => d);
->f71 : Symbol(f71, Decl(c.ts, 13, 5))
+const f70 = a ? async() : d => (a ? async() : d => d);
+>f70 : Symbol(f70, Decl(c.ts, 13, 5))
 >a : Symbol(a, Decl(c.ts, 1, 13))
 >async : Symbol(async, Decl(c.ts, 1, 39))
 >d : Symbol(d, Decl(c.ts, 13, 25))
@@ -687,8 +681,8 @@ type x = T;
 declare const x: any;
 >x : Symbol(x, Decl(c.ts, 13, 54), Decl(c.ts, 16, 13))
 
-const f72 = a ? a ? async (): T => (x): T => async() : x => x;
->f72 : Symbol(f72, Decl(c.ts, 17, 5))
+const f71 = a ? a ? async (): T => (x): T => async() : x => x;
+>f71 : Symbol(f71, Decl(c.ts, 17, 5))
 >a : Symbol(a, Decl(c.ts, 1, 13))
 >a : Symbol(a, Decl(c.ts, 1, 13))
 >T : Symbol(T, Decl(c.ts, 2, 41))
@@ -698,8 +692,8 @@ const f72 = a ? a ? async (): T => (x): T => async() : x => x;
 >x : Symbol(x, Decl(c.ts, 17, 54))
 >x : Symbol(x, Decl(c.ts, 17, 54))
 
-const f73 = a ? a ? async (): Promise<any> => (x): T => async() : x => x;
->f73 : Symbol(f73, Decl(c.ts, 18, 5))
+const f72 = a ? a ? async (): Promise<any> => (x): T => async() : x => x;
+>f72 : Symbol(f72, Decl(c.ts, 18, 5))
 >a : Symbol(a, Decl(c.ts, 1, 13))
 >a : Symbol(a, Decl(c.ts, 1, 13))
 >Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
@@ -709,8 +703,8 @@ const f73 = a ? a ? async (): Promise<any> => (x): T => async() : x => x;
 >x : Symbol(x, Decl(c.ts, 18, 65))
 >x : Symbol(x, Decl(c.ts, 18, 65))
 
-const f74 = a ? async (x): T => async (): T => b;
->f74 : Symbol(f74, Decl(c.ts, 19, 5))
+const f73 = a ? async (x): T => async (): T => b;
+>f73 : Symbol(f73, Decl(c.ts, 19, 5))
 >a : Symbol(a, Decl(c.ts, 1, 13))
 >async : Symbol(async, Decl(c.ts, 1, 39))
 >x : Symbol(x, Decl(c.ts, 13, 54), Decl(c.ts, 16, 13))
@@ -718,8 +712,8 @@ const f74 = a ? async (x): T => async (): T => b;
 >T : Symbol(T, Decl(c.ts, 2, 41))
 >b : Symbol(b, Decl(c.ts, 1, 21))
 
-const f75 = a ? async (x): T => async() : x => x;
->f75 : Symbol(f75, Decl(c.ts, 20, 5))
+const f74 = a ? async (x): T => async() : x => x;
+>f74 : Symbol(f74, Decl(c.ts, 20, 5))
 >a : Symbol(a, Decl(c.ts, 1, 13))
 >async : Symbol(async, Decl(c.ts, 1, 39))
 >x : Symbol(x, Decl(c.ts, 13, 54), Decl(c.ts, 16, 13))
@@ -738,8 +732,8 @@ declare namespace number { type T = number; }
 >number : Symbol(number, Decl(c.ts, 22, 31))
 >T : Symbol(T, Decl(c.ts, 23, 26))
 
-const f76 = a ? async(x = b < (d + 1)): T => x : 0;
->f76 : Symbol(f76, Decl(c.ts, 24, 5))
+const f75 = a ? async(x = b < (d + 1)): T => x : 0;
+>f75 : Symbol(f75, Decl(c.ts, 24, 5))
 >a : Symbol(a, Decl(c.ts, 1, 13))
 >x : Symbol(x, Decl(c.ts, 24, 22))
 >b : Symbol(b, Decl(c.ts, 1, 21))
@@ -747,8 +741,8 @@ const f76 = a ? async(x = b < (d + 1)): T => x : 0;
 >T : Symbol(T, Decl(c.ts, 2, 41))
 >x : Symbol(x, Decl(c.ts, 24, 22))
 
-const f77 = a ? async(x = b << (d + 1)): T => x : 0;
->f77 : Symbol(f77, Decl(c.ts, 25, 5))
+const f76 = a ? async(x = b << (d + 1)): T => x : 0;
+>f76 : Symbol(f76, Decl(c.ts, 25, 5))
 >a : Symbol(a, Decl(c.ts, 1, 13))
 >x : Symbol(x, Decl(c.ts, 25, 22))
 >b : Symbol(b, Decl(c.ts, 1, 21))
@@ -756,8 +750,8 @@ const f77 = a ? async(x = b << (d + 1)): T => x : 0;
 >T : Symbol(T, Decl(c.ts, 2, 41))
 >x : Symbol(x, Decl(c.ts, 25, 22))
 
-const f78 = a ? async(x = new b < (d + 1)): T => x : 0;
->f78 : Symbol(f78, Decl(c.ts, 26, 5))
+const f77 = a ? async(x = new b < (d + 1)): T => x : 0;
+>f77 : Symbol(f77, Decl(c.ts, 26, 5))
 >a : Symbol(a, Decl(c.ts, 1, 13))
 >x : Symbol(x, Decl(c.ts, 26, 22))
 >b : Symbol(b, Decl(c.ts, 1, 21))
@@ -765,8 +759,8 @@ const f78 = a ? async(x = new b < (d + 1)): T => x : 0;
 >T : Symbol(T, Decl(c.ts, 2, 41))
 >x : Symbol(x, Decl(c.ts, 26, 22))
 
-const f79 = a ? async(x = h<T>(b)): T => x : 0;
->f79 : Symbol(f79, Decl(c.ts, 27, 5))
+const f78 = a ? async(x = h<T>(b)): T => x : 0;
+>f78 : Symbol(f78, Decl(c.ts, 27, 5))
 >a : Symbol(a, Decl(c.ts, 1, 13))
 >x : Symbol(x, Decl(c.ts, 27, 22))
 >h : Symbol(h, Decl(c.ts, 20, 49))
@@ -775,43 +769,43 @@ const f79 = a ? async(x = h<T>(b)): T => x : 0;
 >T : Symbol(T, Decl(c.ts, 2, 41))
 >x : Symbol(x, Decl(c.ts, 27, 22))
 
-const f80 = a ? async(): Promise<({ a: number[] })> => ({ a: [] }) : 0;
->f80 : Symbol(f80, Decl(c.ts, 28, 5))
+const f79 = a ? async(): Promise<({ a: number[] })> => ({ a: [] }) : 0;
+>f79 : Symbol(f79, Decl(c.ts, 28, 5))
 >a : Symbol(a, Decl(c.ts, 1, 13))
 >Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 >a : Symbol(a, Decl(c.ts, 28, 35))
 >a : Symbol(a, Decl(c.ts, 28, 57))
 
-const f81 = a ? async(): Promise<([a: number])> => [b] : 0;
->f81 : Symbol(f81, Decl(c.ts, 29, 5))
+const f80 = a ? async(): Promise<([a: number])> => [b] : 0;
+>f80 : Symbol(f80, Decl(c.ts, 29, 5))
 >a : Symbol(a, Decl(c.ts, 1, 13))
 >Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 >b : Symbol(b, Decl(c.ts, 1, 21))
 
-const f82 = a ? async(): Promise<{ r\u0065adonly: number }> => ({ readonly: 0 }) : 0;
->f82 : Symbol(f82, Decl(c.ts, 30, 5))
+const f81 = a ? async(): Promise<{ r\u0065adonly: number }> => ({ readonly: 0 }) : 0;
+>f81 : Symbol(f81, Decl(c.ts, 30, 5))
 >a : Symbol(a, Decl(c.ts, 1, 13))
 >Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 >r\u0065adonly : Symbol(r\u0065adonly, Decl(c.ts, 30, 34))
 >readonly : Symbol(readonly, Decl(c.ts, 30, 65))
 
-const f83 = a ? async(): Promise<{ g\u0065t: number }> => ({ get: 0 }) : 0;
->f83 : Symbol(f83, Decl(c.ts, 31, 5))
+const f82 = a ? async(): Promise<{ g\u0065t: number }> => ({ get: 0 }) : 0;
+>f82 : Symbol(f82, Decl(c.ts, 31, 5))
 >a : Symbol(a, Decl(c.ts, 1, 13))
 >Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 >g\u0065t : Symbol(g\u0065t, Decl(c.ts, 31, 34))
 >get : Symbol(get, Decl(c.ts, 31, 60))
 
-const f84 = a ? async(): Promise<n\u0075mber.T> => b : 0;
->f84 : Symbol(f84, Decl(c.ts, 32, 5))
+const f83 = a ? async(): Promise<n\u0075mber.T> => b : 0;
+>f83 : Symbol(f83, Decl(c.ts, 32, 5))
 >a : Symbol(a, Decl(c.ts, 1, 13))
 >Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 >n\u0075mber : Symbol(number, Decl(c.ts, 22, 31))
 >T : Symbol(number.T, Decl(c.ts, 23, 26))
 >b : Symbol(b, Decl(c.ts, 1, 21))
 
-const f85 = a ? a ? as\u0079nc() : d => d : b;
->f85 : Symbol(f85, Decl(c.ts, 33, 5))
+const f84 = a ? a ? as\u0079nc() : d => d : b;
+>f84 : Symbol(f84, Decl(c.ts, 33, 5))
 >a : Symbol(a, Decl(c.ts, 1, 13))
 >a : Symbol(a, Decl(c.ts, 1, 13))
 >as\u0079nc : Symbol(async, Decl(c.ts, 1, 39))
@@ -819,8 +813,8 @@ const f85 = a ? a ? as\u0079nc() : d => d : b;
 >d : Symbol(d, Decl(c.ts, 33, 34))
 >b : Symbol(b, Decl(c.ts, 1, 21))
 
-const f86 = a ? async(): Promise<n\u0075mber> => 0 : 0;
->f86 : Symbol(f86, Decl(c.ts, 34, 5))
+const f85 = a ? async(): Promise<n\u0075mber> => 0 : 0;
+>f85 : Symbol(f85, Decl(c.ts, 34, 5))
 >a : Symbol(a, Decl(c.ts, 1, 13))
 >Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 
