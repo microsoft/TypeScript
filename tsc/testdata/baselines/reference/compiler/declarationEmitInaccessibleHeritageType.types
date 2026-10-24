@@ -1,0 +1,22 @@
+//// [tests/cases/compiler/declarationEmitInaccessibleHeritageType.ts] ////
+
+=== interface.ts ===
+label: interface I {}
+>label : any
+
+export interface J extends I {}
+
+=== implements.ts ===
+label: interface I {}
+>label : any
+
+export class C implements I {}
+>C : C
+
+=== typeArgument.ts ===
+label: interface I {}
+>label : any
+
+interface Base<T> {}
+export interface J extends Base<I> {}
+
