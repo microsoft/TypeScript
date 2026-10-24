@@ -11,6 +11,7 @@ import (
 	"github.com/microsoft/TypeScript/tsc/internal/ls/lsutil"
 	"github.com/microsoft/TypeScript/tsc/internal/lsp"
 	"github.com/microsoft/TypeScript/tsc/internal/lsp/lsproto"
+	"github.com/microsoft/TypeScript/tsc/internal/modulespecifiers"
 	"github.com/microsoft/TypeScript/tsc/internal/testutil/lsptestutil"
 	"github.com/microsoft/TypeScript/tsc/internal/tspath"
 	"github.com/microsoft/TypeScript/tsc/internal/vfs/vfstest"
@@ -227,6 +228,69 @@ func TestAutoImportCompletionForUnopenedFile(t *testing.T) {
 	assert.Assert(t, item != nil)
 	assert.Assert(t, item.Data != nil && item.Data.AutoImport != nil)
 	assert.Equal(t, item.Data.AutoImport.ModuleSpecifier, "./a")
+}
+
+func TestAutoImportModuleSpecifierAfterUserPreferenceChange(t *testing.T) {
+	t.Parallel()
+
+	if !bundled.Embedded {
+		t.Skip("bundled files are not embedded")
+	}
+
+	prefs := &lsutil.UserPreferences{
+		IncludeCompletionsForModuleExports:    core.TSTrue,
+		IncludeCompletionsForImportStatements: core.TSTrue,
+	}
+	client := initCompletionClient(t, map[string]string{
+		"/home/projects/tsconfig.json":     `{"compilerOptions": {"module": "esnext", "target": "esnext", "paths": {"~/*": ["./src/*"]}}}`,
+		"/home/projects/src/util/path.ts":  "export const somePath = 10;",
+		"/home/projects/src/util/index.ts": "s",
+	}, prefs)
+
+	uri := lsconv.FileNameToDocumentURI("/home/projects/src/util/index.ts")
+	client.SendNotification(t, lsproto.TextDocumentDidOpenInfo, &lsproto.DidOpenTextDocumentParams{
+		TextDocument: &lsproto.TextDocumentItem{Uri: uri, LanguageId: "typescript", Text: "s"},
+	})
+
+	moduleSpecifier := func() string {
+		msg, resp, ok := client.SendRequest(t, lsproto.TextDocumentCompletionInfo, &lsproto.CompletionParams{
+			TextDocument: lsproto.TextDocumentIdentifier{Uri: uri},
+			Position:     lsproto.Position{Line: 0, Character: 1},
+			Context:      &lsproto.CompletionContext{},
+		})
+		assert.Assert(t, ok, "expected a response")
+		assert.Assert(t, msg.AsResponse().Error == nil)
+		item := findCompletionItem(completionItems(resp), "somePath")
+		assert.Assert(t, item != nil)
+		assert.Assert(t, item.Data != nil && item.Data.AutoImport != nil)
+		return item.Data.AutoImport.ModuleSpecifier
+	}
+
+	assert.Equal(t, moduleSpecifier(), "./path")
+
+	excluded := *prefs
+	excluded.AutoImportSpecifierExcludeRegexes = []string{"^\\./path$"}
+	client.SendNotification(t, lsproto.WorkspaceDidChangeConfigurationInfo, &lsproto.DidChangeConfigurationParams{
+		Settings: map[string]any{"typescript": &excluded},
+	})
+
+	assert.Equal(t, moduleSpecifier(), "~/util/path")
+
+	jsEnding := excluded
+	jsEnding.ImportModuleSpecifierEnding = modulespecifiers.ImportModuleSpecifierEndingPreferenceJs
+	client.SendNotification(t, lsproto.WorkspaceDidChangeConfigurationInfo, &lsproto.DidChangeConfigurationParams{
+		Settings: map[string]any{"typescript": &jsEnding},
+	})
+
+	assert.Equal(t, moduleSpecifier(), "./path.js")
+
+	nonRelative := jsEnding
+	nonRelative.ImportModuleSpecifierPreference = modulespecifiers.ImportModuleSpecifierPreferenceNonRelative
+	client.SendNotification(t, lsproto.WorkspaceDidChangeConfigurationInfo, &lsproto.DidChangeConfigurationParams{
+		Settings: map[string]any{"typescript": &nonRelative},
+	})
+
+	assert.Equal(t, moduleSpecifier(), "~/util/path.js")
 }
 
 // TestCompletionSnapshotFreezing verifies that the auto-import retry uses the
