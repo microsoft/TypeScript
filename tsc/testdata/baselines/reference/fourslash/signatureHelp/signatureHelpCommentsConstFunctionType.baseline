@@ -10,6 +10,7 @@
 //        ^
 // | ----------------------------------------------------------------------
 // | addOne(**value: number**): number
+// | - `value: number`: The number to add one to.
 // | Adds one to a number.
 // | ----------------------------------------------------------------------
 [
@@ -33,7 +34,11 @@
           },
           "parameters": [
             {
-              "label": "value: number"
+              "label": "value: number",
+              "documentation": {
+                "kind": "markdown",
+                "value": "The number to add one to."
+              }
             }
           ],
           "activeParameter": 0
