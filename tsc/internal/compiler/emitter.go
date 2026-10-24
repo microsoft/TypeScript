@@ -41,9 +41,12 @@ type emitter struct {
 	forceEmit          bool
 	writeFile          WriteFile
 	tr                 *tracing.Tracing
+	prints             []func()
 }
 
-func (e *emitter) emit() {
+// transform runs the JS and declaration transformers for the file, the part of emit that uses the checker. print
+// prints and writes what transform produced.
+func (e *emitter) transform() {
 	if e.tr != nil {
 		defer e.tr.Push(tracing.PhaseEmit, "emit", map[string]any{"path": string(e.sourceFile.PathKey())}, true)()
 	}
@@ -51,6 +54,18 @@ func (e *emitter) emit() {
 	emitResolver := e.host.NewEmitResolver(emitContext)
 	e.emitJSFile(emitResolver, e.sourceFile, e.paths.JsFilePath(), e.paths.SourceMapFilePath())
 	e.emitDeclarationFile(emitResolver, e.sourceFile, e.paths.DeclarationFilePath(), e.paths.DeclarationMapPath())
+}
+
+// print prints and writes the outputs transformed by transform. It must not use the checker, which may be in use by
+// another file by then.
+func (e *emitter) print() {
+	if e.tr != nil {
+		defer e.tr.Push(tracing.PhaseEmit, "emitPrint", map[string]any{"path": string(e.sourceFile.PathKey())}, true)()
+	}
+	for _, print := range e.prints {
+		print()
+	}
+	e.prints = nil
 	e.emitResult.Diagnostics = e.emitterDiagnostics.GetDiagnostics()
 }
 
@@ -219,7 +234,9 @@ func (e *emitter) emitJSFile(emitResolver printer.EmitResolver, sourceFile *ast.
 		// !!!
 	}, emitContext)
 
-	e.printSourceFile(emitContext, jsFilePath, sourceMapFilePath, sourceFile, printer, options, shouldEmitSourceMaps(options, sourceFile))
+	e.prints = append(e.prints, func() {
+		e.printSourceFile(emitContext, jsFilePath, sourceMapFilePath, sourceFile, printer, options, shouldEmitSourceMaps(options, sourceFile))
+	})
 }
 
 func (e *emitter) emitDeclarationFile(emitResolver printer.EmitResolver, sourceFile *ast.SourceFile, declarationFilePath tspath.RootedFilePath, declarationMapPath tspath.RootedFilePath) {
@@ -292,7 +309,9 @@ func (e *emitter) emitDeclarationFile(emitResolver printer.EmitResolver, sourceF
 		MapRoot:    options.MapRoot,
 		// Explicitly do not pass through either inline option.
 	}
-	e.printSourceFile(emitContext, declarationFilePath, declarationMapPath, sourceFile, printer, declarationMapOptions, shouldEmitSourceMaps(declarationMapOptions, sourceFile))
+	e.prints = append(e.prints, func() {
+		e.printSourceFile(emitContext, declarationFilePath, declarationMapPath, sourceFile, printer, declarationMapOptions, shouldEmitSourceMaps(declarationMapOptions, sourceFile))
+	})
 }
 
 type declarationMapSource struct {
