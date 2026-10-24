@@ -13,16 +13,13 @@ awaitInNamespaceExportedClassComputedProperty.ts(43,24): error TS1308: 'await' e
         class A { [await x]() {} }
                    ~~~~~
 !!! error TS1308: 'await' expressions are only allowed within async functions and at the top levels of modules.
-!!! related TS1356 awaitInNamespaceExportedClassComputedProperty.ts:3:15: Did you mean to mark this function as 'async'?
         export class B {
             [await x]() {}
              ~~~~~
 !!! error TS1308: 'await' expressions are only allowed within async functions and at the top levels of modules.
-!!! related TS1356 awaitInNamespaceExportedClassComputedProperty.ts:5:9: Did you mean to mark this function as 'async'?
             static [await x]() {}
                     ~~~~~
 !!! error TS1308: 'await' expressions are only allowed within async functions and at the top levels of modules.
-!!! related TS1356 awaitInNamespaceExportedClassComputedProperty.ts:6:16: Did you mean to mark this function as 'async'?
         }
     }
     export class C {
@@ -39,11 +36,11 @@ awaitInNamespaceExportedClassComputedProperty.ts(43,24): error TS1308: 'await' e
             [await x]() {}
              ~~~~~
 !!! error TS1308: 'await' expressions are only allowed within async functions and at the top levels of modules.
-!!! related TS1356 awaitInNamespaceExportedClassComputedProperty.ts:20:9: Did you mean to mark this function as 'async'?
+!!! related TS1356 awaitInNamespaceExportedClassComputedProperty.ts:18:10: Did you mean to mark this function as 'async'?
             static [await x]() {}
                     ~~~~~
 !!! error TS1308: 'await' expressions are only allowed within async functions and at the top levels of modules.
-!!! related TS1356 awaitInNamespaceExportedClassComputedProperty.ts:21:16: Did you mean to mark this function as 'async'?
+!!! related TS1356 awaitInNamespaceExportedClassComputedProperty.ts:18:10: Did you mean to mark this function as 'async'?
         }
     }
     
@@ -58,7 +55,7 @@ awaitInNamespaceExportedClassComputedProperty.ts(43,24): error TS1308: 'await' e
         class G { [await x]() {} }
                    ~~~~~
 !!! error TS1308: 'await' expressions are only allowed within async functions and at the top levels of modules.
-!!! related TS1356 awaitInNamespaceExportedClassComputedProperty.ts:33:15: Did you mean to mark this function as 'async'?
+!!! related TS1356 awaitInNamespaceExportedClassComputedProperty.ts:32:11: Did you mean to mark this function as 'async'?
     }
     
     async function* agf() {
@@ -71,7 +68,7 @@ awaitInNamespaceExportedClassComputedProperty.ts(43,24): error TS1308: 'await' e
                 class I { [await x]() {} }
                            ~~~~~
 !!! error TS1308: 'await' expressions are only allowed within async functions and at the top levels of modules.
-!!! related TS1356 awaitInNamespaceExportedClassComputedProperty.ts:43:23: Did you mean to mark this function as 'async'?
+!!! related TS1356 awaitInNamespaceExportedClassComputedProperty.ts:40:10: Did you mean to mark this function as 'async'?
         }
     }
     
