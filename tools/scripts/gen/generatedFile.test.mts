@@ -58,7 +58,9 @@ test("validate generates before building and selects the generation scope", asyn
             runTests: action("test:tsc"),
             runTestExtension: action("test:extension"),
             runCheckAPIDeclarations: action("check:api-declarations"),
+            runCheckHerebyfile: action("check:herebyfile"),
             runTestAPI: action("test:api"),
+            runTestAPIWasm: action("test:api:wasm"),
             runTestBenchmarks: action("test:benchmarks"),
             runTestTools: action("test:tools"),
             run: async (command: string, args: string[]) => {
@@ -77,6 +79,8 @@ test("validate generates before building and selects the generation scope", asyn
         assert.ok(calls.indexOf("build") < calls.indexOf("test:tsc"));
         assert.ok(calls.indexOf("check:api-declarations") > calls.indexOf("test:extension"));
         assert.equal(calls.includes("test:api"), "api" in options || "all" in options);
+        assert.equal(calls.includes("test:api:wasm"), "api" in options || "all" in options);
+        assert.equal(calls.includes("check:herebyfile"), "all" in options);
         assert.equal(calls.includes("test:tools"), "all" in options);
         assert.equal(calls.includes("test:options"), "all" in options);
         if ("all" in options) {

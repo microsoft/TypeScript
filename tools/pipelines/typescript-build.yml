@@ -199,12 +199,17 @@ extends:
                 inputs:
                   buildType: current
                   targetPath: $(Pipeline.Workspace)/platform-packages
-                  patterns: '$(packageBaseName)-*/**'
+                  patterns: |
+                    $(packageBaseName)-*/**
+                    typescript-wasip1-wasm/**
 
               - bash: |
                   set -euo pipefail
                   shopt -s nullglob
                   platformArtifacts=("$(Pipeline.Workspace)"/platform-packages/"$PACKAGE_BASE_NAME"-*)
+                  if [[ "$PACKAGE_BASE_NAME" != "typescript" ]]; then
+                    platformArtifacts+=("$(Pipeline.Workspace)"/platform-packages/typescript-wasip1-wasm)
+                  fi
                   if (( ${#platformArtifacts[@]} == 0 )); then
                     echo "No platform package artifacts were downloaded." >&2
                     exit 1
@@ -212,12 +217,14 @@ extends:
                   for artifact in "${platformArtifacts[@]}"; do
                     packageDir="built/npm/$(basename "$artifact")"
                     cp -a "$artifact" "$packageDir"
-                    executable="$(find "$packageDir/lib" -maxdepth 1 -type f \( -name tsc -o -name tsc.exe -o -name tsgo -o -name tsgo.exe \) -print -quit)"
+                    executable="$(find "$packageDir/lib" -maxdepth 1 -type f \( -name tsc -o -name tsc.exe -o -name tsgo -o -name tsgo.exe -o -name tsc.wasm \) -print -quit)"
                     if [[ -z "$executable" ]]; then
                       echo "Missing platform executable in $packageDir." >&2
                       exit 1
                     fi
-                    chmod +x "$executable"
+                    if [[ "$executable" != *.wasm ]]; then
+                      chmod +x "$executable"
+                    fi
                   done
                 displayName: 'Assemble platform packages'
                 env:
