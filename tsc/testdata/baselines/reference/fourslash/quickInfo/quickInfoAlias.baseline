@@ -29,7 +29,10 @@
 // | ```typescript
 // | (alias) const x: 0
 // | ```
+// | Doc 3
 // | Doc
+// | 
+// | *@tag* — Tag text 3
 // | 
 // | *@tag* — Tag text
 // | ----------------------------------------------------------------------
@@ -76,7 +79,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```typescript\n(alias) const x: 0\n```\nDoc\n\n*@tag* — Tag text"
+        "value": "```typescript\n(alias) const x: 0\n```\nDoc 3\nDoc\n\n*@tag* — Tag text 3\n\n*@tag* — Tag text"
       },
       "range": {
         "start": {

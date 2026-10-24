@@ -460,6 +460,41 @@ const value = 0;`
 	}
 }
 
+func TestImportSpecifierJSDoc(t *testing.T) {
+	t.Parallel()
+	sourceText := `import { /** a */ a,
+    /** b */ b } from "m"`
+	tests := []struct {
+		fileName   tspath.RootedFilePath
+		pathKey    tspath.PathKey
+		scriptKind core.ScriptKind
+	}{
+		{fileName: "/index.ts", pathKey: "/index.ts", scriptKind: core.ScriptKindTS},
+		{fileName: "/index.js", pathKey: "/index.js", scriptKind: core.ScriptKindJS},
+	}
+	for _, test := range tests {
+		t.Run(string(test.fileName), func(t *testing.T) {
+			t.Parallel()
+			opts := ast.SourceFileParseOptions{
+				FileName: test.fileName,
+				PathKey:  test.pathKey,
+			}
+			file := parser.ParseSourceFile(opts, sourceText, test.scriptKind)
+			importDeclaration := file.Statements.Nodes[0]
+			assert.Assert(t, ast.IsImportDeclaration(importDeclaration))
+			assert.Equal(t, len(importDeclaration.JSDoc(file)), 0)
+
+			specifiers := importDeclaration.AsImportDeclaration().ImportClause.AsImportClause().NamedBindings.AsNamedImports().Elements.Nodes
+			assert.Equal(t, len(specifiers), 2)
+			for i, expected := range []string{"a", "b"} {
+				jsDocs := specifiers[i].JSDoc(file)
+				assert.Equal(t, len(jsDocs), 1)
+				assert.Equal(t, scanner.GetTextOfJSDocComment(jsDocs[0].AsJSDoc().Comment), expected)
+			}
+		})
+	}
+}
+
 func TestJSDocTypeSourcePropagatesToConstructedReparse(t *testing.T) {
 	t.Parallel()
 	sourceText := `/**
