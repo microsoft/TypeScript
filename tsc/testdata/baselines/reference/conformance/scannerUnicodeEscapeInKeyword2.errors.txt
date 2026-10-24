@@ -1,3 +1,9 @@
+c.ts(3,15): error TS1260: Keywords cannot contain escape characters.
+c.ts(4,14): error TS1260: Keywords cannot contain escape characters.
+d.js(3,15): error TS1260: Keywords cannot contain escape characters.
+d.js(4,14): error TS1260: Keywords cannot contain escape characters.
+e.ts(5,9): error TS1451: Private identifiers are only allowed in class bodies and may only be used as part of a class member declaration, property access, or on the left-hand-side of an 'in' expression
+f.js(5,9): error TS1451: Private identifiers are only allowed in class bodies and may only be used as part of a class member declaration, property access, or on the left-hand-side of an 'in' expression
 file1.ts(3,5): error TS1260: Keywords cannot contain escape characters.
 file1.ts(8,5): error TS1260: Keywords cannot contain escape characters.
 file1.ts(13,1): error TS1260: Keywords cannot contain escape characters.
@@ -5,6 +11,16 @@ file2.ts(1,1): error TS1260: Keywords cannot contain escape characters.
 file2.ts(5,5): error TS1260: Keywords cannot contain escape characters.
 file2.ts(10,5): error TS1260: Keywords cannot contain escape characters.
 file2.ts(15,1): error TS1260: Keywords cannot contain escape characters.
+g.ts(3,1): error TS1109: Expression expected.
+g.ts(3,8): error TS1109: Expression expected.
+h.ts(3,1): error TS1109: Expression expected.
+i.ts(3,5): error TS1005: ')' expected.
+i.ts(3,14): error TS1005: ';' expected.
+j.js(3,1): error TS1109: Expression expected.
+j.js(3,8): error TS1109: Expression expected.
+k.js(3,1): error TS1109: Expression expected.
+l.js(3,5): error TS1005: ')' expected.
+l.js(3,14): error TS1005: ';' expected.
 
 
 ==== file1.ts (3 errors) ====
@@ -58,4 +74,194 @@ file2.ts(15,1): error TS1260: Keywords cannot contain escape characters.
     
     const a = {def\u0061ult: 12}; // OK, `default` not in keyword position
     // chrome and jsc may still error on this, ref https://bugs.chromium.org/p/chromium/issues/detail?id=993000 and https://bugs.webkit.org/show_bug.cgi?id=200638
+    
+==== a.ts (0 errors) ====
+    export {};
+    
+    class A {
+        a = 1
+        \u{69}n
+        b = 2
+        \u{69}nstanceof
+    }
+    
+    class B {
+        a = 1
+        \u0069n
+        b = 2
+        \u0069nstanceof
+    }
+    
+    class C {
+        a = () => 1
+        \u{69}nstanceof
+        b = 2
+        \u0069n() {}
+    }
+    
+    class D {
+        a = "a"
+        in
+        { a: 1 }
+        b = {}
+        instanceof
+        Object
+    }
+    
+    class E {
+        a = 1;
+        \u0069n = 2;
+        b = 3;
+        \u{69}nstanceof = 4;
+    }
+    
+    const a = Object.keys(new A());
+    const b = Object.keys(new B());
+    const c = new C();
+    const d = new D();
+    const e = 1;
+    const f = \u0065
+        + 1;
+    
+==== b.js (0 errors) ====
+    export {};
+    
+    class A {
+        a = 1
+        \u{69}n
+        b = 2
+        \u{69}nstanceof
+    }
+    
+    class B {
+        a = 1
+        \u0069n
+        b = 2
+        \u0069nstanceof
+    }
+    
+    class C {
+        a = () => 1
+        \u{69}nstanceof
+        b = 2
+        \u0069n() {}
+    }
+    
+    class D {
+        a = "a"
+        in
+        { a: 1 }
+        b = {}
+        instanceof
+        Object
+    }
+    
+    class E {
+        a = 1;
+        \u0069n = 2;
+        b = 3;
+        \u{69}nstanceof = 4;
+    }
+    
+    const a = Object.keys(new A());
+    const b = Object.keys(new B());
+    const c = new C();
+    const d = new D();
+    const e = 1;
+    const f = \u0065
+        + 1;
+    
+==== c.ts (2 errors) ====
+    export {};
+    
+    const a = "a" \u0069n { a: 1 };
+                  ~~~~~~~
+!!! error TS1260: Keywords cannot contain escape characters.
+    const b = {} \u{69}nstanceof Object;
+                 ~~~~~~~~~~~~~~~
+!!! error TS1260: Keywords cannot contain escape characters.
+    
+==== d.js (2 errors) ====
+    export {};
+    
+    const a = "a" \u0069n { a: 1 };
+                  ~~~~~~~
+!!! error TS1260: Keywords cannot contain escape characters.
+    const b = {} \u{69}nstanceof Object;
+                 ~~~~~~~~~~~~~~~
+!!! error TS1260: Keywords cannot contain escape characters.
+    
+==== e.ts (1 errors) ====
+    export {};
+    
+    class A {
+        #a;
+        b = #a
+            ~~
+!!! error TS1451: Private identifiers are only allowed in class bodies and may only be used as part of a class member declaration, property access, or on the left-hand-side of an 'in' expression
+        \u0069n
+    }
+    
+==== f.js (1 errors) ====
+    export {};
+    
+    class A {
+        #a;
+        b = #a
+            ~~
+!!! error TS1451: Private identifiers are only allowed in class bodies and may only be used as part of a class member declaration, property access, or on the left-hand-side of an 'in' expression
+        \u0069n
+    }
+    
+==== g.ts (2 errors) ====
+    declare var x: any, y: any;
+    x
+    \u0069n
+    ~~~~~~~
+!!! error TS1109: Expression expected.
+           
+!!! error TS1109: Expression expected.
+    
+==== h.ts (1 errors) ====
+    declare var x: any, y: any;
+    x
+    \u{69}nstanceof y
+    ~~~~~~~~~~~~~~~
+!!! error TS1109: Expression expected.
+    
+==== i.ts (2 errors) ====
+    declare var x: any, y: any;
+    if (x
+        \u0069n y) {}
+        ~~~~~~~
+!!! error TS1005: ')' expected.
+!!! related TS1007 i.ts:2:4: The parser expected to find a ')' to match the '(' token here.
+                 ~
+!!! error TS1005: ';' expected.
+    
+==== j.js (2 errors) ====
+    var x, y;
+    x
+    \u0069n
+    ~~~~~~~
+!!! error TS1109: Expression expected.
+           
+!!! error TS1109: Expression expected.
+    
+==== k.js (1 errors) ====
+    var x, y;
+    x
+    \u{69}nstanceof y
+    ~~~~~~~~~~~~~~~
+!!! error TS1109: Expression expected.
+    
+==== l.js (2 errors) ====
+    var x, y;
+    if (x
+        \u0069n y) {}
+        ~~~~~~~
+!!! error TS1005: ')' expected.
+!!! related TS1007 l.js:2:4: The parser expected to find a ')' to match the '(' token here.
+                 ~
+!!! error TS1005: ';' expected.
     
