@@ -1444,7 +1444,7 @@ func (c *Checker) mergePatternAmbientModules() {
 		attributesType := c.getTypeOfModuleImportAttributes(module.Symbol)
 		groupIndex := -1
 		for _, index := range groupsByPattern[module.Pattern.Text] {
-			if c.isTypeIdenticalTo(attributesType, c.getTypeOfModuleImportAttributes(grouped[index].Symbol)) {
+			if c.isImportAttributesTypeIdenticalTo(attributesType, c.getTypeOfModuleImportAttributes(grouped[index].Symbol)) {
 				groupIndex = index
 				break
 			}
@@ -5370,6 +5370,26 @@ func (c *Checker) getTypeOfModuleImportAttributes(symbol *ast.Symbol) *Type {
 	}
 	c.moduleImportAttributesTypes[symbol] = result
 	return result
+}
+
+// Import attributes are only ever the own properties of the attributes, so the apparent members of Object
+// don't participate. This also keeps the comparison independent of global types, which don't exist yet
+// while global augmentations are merged
+func (c *Checker) isImportAttributesTypeAssignableTo(source *Type, target *Type) bool {
+	if source.flags&TypeFlagsAny != 0 {
+		return true
+	}
+	for _, targetProp := range c.getPropertiesOfType(target) {
+		sourceProp := c.getPropertyOfTypeEx(source, targetProp.Name(), true /*skipObjectFunctionPropertyAugment*/, false /*includeTypeOnlyMembers*/)
+		if sourceProp == nil || sourceProp.Flags()&ast.SymbolFlagsOptional != 0 || sourceProp.CheckFlags()&ast.CheckFlagsPartial != 0 || !c.isTypeAssignableTo(c.getTypeOfSymbol(sourceProp), c.getTypeOfSymbol(targetProp)) {
+			return false
+		}
+	}
+	return true
+}
+
+func (c *Checker) isImportAttributesTypeIdenticalTo(source *Type, target *Type) bool {
+	return c.isImportAttributesTypeAssignableTo(source, target) && c.isImportAttributesTypeAssignableTo(target, source)
 }
 
 func isInstantiatedModule(node *ast.Node, preserveConstEnums bool) bool {
@@ -15781,16 +15801,16 @@ func (c *Checker) resolveExternalModule(
 }
 
 // Resolves the module reference to a pattern ambient module, if one exists.
-// If a resolved symbol from regular module resolution exists and we have an empty import attributes type,
-// we prefer the resolved symbol.
+// If regular module resolution found a symbol and the attributes are absent or empty,
+// prefer the resolved symbol.
 func (c *Checker) tryResolvePatternAmbientModule(resolvedSymbol *ast.Symbol, moduleReference string, importAttributesType *Type) *ast.Symbol {
-	if c.isEmptyObjectType(importAttributesType) && resolvedSymbol != nil {
+	if resolvedSymbol != nil && (c.isEmptyObjectType(importAttributesType) || c.maybeTypeOfKindConsideringBaseConstraint(importAttributesType, TypeFlagsUndefined)) {
 		return resolvedSymbol
 	}
 	if len(c.patternAmbientModules) != 0 {
 		candidates := core.Filter(c.patternAmbientModules, func(v *ast.PatternAmbientModule) bool {
 			moduleAttributesType := c.getTypeOfModuleImportAttributes(v.Symbol)
-			return v.Pattern.Matches(moduleReference) && c.isTypeAssignableTo(importAttributesType, moduleAttributesType)
+			return v.Pattern.Matches(moduleReference) && c.isImportAttributesTypeAssignableTo(importAttributesType, moduleAttributesType)
 		})
 
 		if len(candidates) > 0 {
@@ -15811,7 +15831,7 @@ func (c *Checker) tryResolvePatternAmbientModule(resolvedSymbol *ast.Symbol, mod
 				candidateType := c.getTypeOfModuleImportAttributes(candidate.Symbol)
 				for j, other := range candidates {
 					otherType := c.getTypeOfModuleImportAttributes(other.Symbol)
-					if i != j && c.isTypeStrictSubtypeOf(otherType, candidateType) && !c.isTypeIdenticalTo(otherType, candidateType) {
+					if i != j && c.isImportAttributesTypeAssignableTo(otherType, candidateType) && !c.isImportAttributesTypeIdenticalTo(otherType, candidateType) {
 						continue outer
 					}
 				}

@@ -1,0 +1,111 @@
+//// [tests/cases/compiler/importAttributeDynamicImportsUndefined.ts] ////
+
+=== /types.d.ts ===
+declare module "*.resource" {
+>"*.resource" : Symbol("*.resource", Decl(types.d.ts, 0, 0))
+
+    export const kind: "plain";
+>kind : Symbol(kind, Decl(types.d.ts, 1, 16))
+}
+
+declare module "*.resource" with { type: "text" } {
+>"*.resource" : Symbol("*.resource", Decl(types.d.ts, 2, 1))
+>type : Symbol(type, Decl(types.d.ts, 4, 34))
+
+    export const kind: "text";
+>kind : Symbol(kind, Decl(types.d.ts, 5, 16))
+}
+
+declare module "*.textonly" with { type: "text" } {
+>"*.textonly" : Symbol("*.textonly", Decl(types.d.ts, 6, 1))
+>type : Symbol(type, Decl(types.d.ts, 8, 34))
+
+    export const kind: "text";
+>kind : Symbol(kind, Decl(types.d.ts, 9, 16))
+}
+
+=== /index.ts ===
+declare const options: ImportCallOptions;
+>options : Symbol(options, Decl(index.ts, 0, 13))
+>ImportCallOptions : Symbol(ImportCallOptions, Decl(lib.es5.d.ts, --, --))
+
+declare const anyAttributes: any;
+>anyAttributes : Symbol(anyAttributes, Decl(index.ts, 1, 13))
+
+async function test() {
+>test : Symbol(test, Decl(index.ts, 1, 33))
+
+    const withUndefined = await import("a.resource", { with: undefined });
+>withUndefined : Symbol(withUndefined, Decl(index.ts, 4, 9))
+>"a.resource" : Symbol("*.resource", Decl(types.d.ts, 0, 0))
+>with : Symbol(with, Decl(index.ts, 4, 54))
+>undefined : Symbol(undefined)
+
+    const withUndefinedKind: "plain" = withUndefined.kind;
+>withUndefinedKind : Symbol(withUndefinedKind, Decl(index.ts, 5, 9))
+>withUndefined.kind : Symbol(kind, Decl(types.d.ts, 1, 16))
+>withUndefined : Symbol(withUndefined, Decl(index.ts, 4, 9))
+>kind : Symbol(kind, Decl(types.d.ts, 1, 16))
+
+    const fromOptions = await import("b.resource", options);
+>fromOptions : Symbol(fromOptions, Decl(index.ts, 7, 9))
+>"b.resource" : Symbol("*.resource", Decl(types.d.ts, 0, 0))
+>options : Symbol(options, Decl(index.ts, 0, 13))
+
+    const fromOptionsKind: "plain" = fromOptions.kind;
+>fromOptionsKind : Symbol(fromOptionsKind, Decl(index.ts, 8, 9))
+>fromOptions.kind : Symbol(kind, Decl(types.d.ts, 1, 16))
+>fromOptions : Symbol(fromOptions, Decl(index.ts, 7, 9))
+>kind : Symbol(kind, Decl(types.d.ts, 1, 16))
+
+    const emptyOptions = await import("c.resource", {});
+>emptyOptions : Symbol(emptyOptions, Decl(index.ts, 10, 9))
+>"c.resource" : Symbol("*.resource", Decl(types.d.ts, 0, 0))
+
+    const emptyOptionsKind: "plain" = emptyOptions.kind;
+>emptyOptionsKind : Symbol(emptyOptionsKind, Decl(index.ts, 11, 9))
+>emptyOptions.kind : Symbol(kind, Decl(types.d.ts, 1, 16))
+>emptyOptions : Symbol(emptyOptions, Decl(index.ts, 10, 9))
+>kind : Symbol(kind, Decl(types.d.ts, 1, 16))
+
+    const emptyWith = await import("d.resource", { with: {} });
+>emptyWith : Symbol(emptyWith, Decl(index.ts, 13, 9))
+>"d.resource" : Symbol("*.resource", Decl(types.d.ts, 0, 0))
+>with : Symbol(with, Decl(index.ts, 13, 50))
+
+    const emptyWithKind: "plain" = emptyWith.kind;
+>emptyWithKind : Symbol(emptyWithKind, Decl(index.ts, 14, 9))
+>emptyWith.kind : Symbol(kind, Decl(types.d.ts, 1, 16))
+>emptyWith : Symbol(emptyWith, Decl(index.ts, 13, 9))
+>kind : Symbol(kind, Decl(types.d.ts, 1, 16))
+
+    const anyWith = await import("e.resource", { with: anyAttributes });
+>anyWith : Symbol(anyWith, Decl(index.ts, 16, 9))
+>"e.resource" : Symbol("*.resource", Decl(types.d.ts, 2, 1))
+>with : Symbol(with, Decl(index.ts, 16, 48))
+>anyAttributes : Symbol(anyAttributes, Decl(index.ts, 1, 13))
+
+    const anyWithKind: "text" = anyWith.kind;
+>anyWithKind : Symbol(anyWithKind, Decl(index.ts, 17, 9))
+>anyWith.kind : Symbol(kind, Decl(types.d.ts, 5, 16))
+>anyWith : Symbol(anyWith, Decl(index.ts, 16, 9))
+>kind : Symbol(kind, Decl(types.d.ts, 5, 16))
+
+    const textOnlyUndefined = await import("f.textonly", { with: undefined });
+>textOnlyUndefined : Symbol(textOnlyUndefined, Decl(index.ts, 19, 9))
+>with : Symbol(with, Decl(index.ts, 19, 58))
+>undefined : Symbol(undefined)
+
+    const textOnlyText = await import("g.textonly", { with: { type: "text" } });
+>textOnlyText : Symbol(textOnlyText, Decl(index.ts, 21, 9))
+>"g.textonly" : Symbol("*.textonly", Decl(types.d.ts, 6, 1))
+>with : Symbol(with, Decl(index.ts, 21, 53))
+>type : Symbol(type, Decl(index.ts, 21, 61))
+
+    const textOnlyTextKind: "text" = textOnlyText.kind;
+>textOnlyTextKind : Symbol(textOnlyTextKind, Decl(index.ts, 22, 9))
+>textOnlyText.kind : Symbol(kind, Decl(types.d.ts, 9, 16))
+>textOnlyText : Symbol(textOnlyText, Decl(index.ts, 21, 9))
+>kind : Symbol(kind, Decl(types.d.ts, 9, 16))
+}
+

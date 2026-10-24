@@ -1,0 +1,29 @@
+/a.ts(1,21): error TS2307: Cannot find module './a.style' or its corresponding type declarations.
+
+
+==== /types.d.ts (0 errors) ====
+    declare module "*.style" with { type: "css" } {
+        export interface Bar {}
+    }
+    
+==== /a.ts (1 errors) ====
+    import * as NS from "./a.style";
+                        ~~~~~~~~~~~
+!!! error TS2307: Cannot find module './a.style' or its corresponding type declarations.
+    declare global {
+        namespace G {
+            import Foo = NS.Bar;
+            export { Foo };
+        }
+    }
+    
+==== /b.ts (0 errors) ====
+    export {};
+    declare global {
+        namespace G {
+            interface Foo {
+                x: number;
+            }
+        }
+    }
+    
