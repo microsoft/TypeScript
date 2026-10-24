@@ -21678,6 +21678,10 @@ func (c *Checker) isReadonlyArraySymbol(symbol *ast.Symbol) bool {
 // type is the union of the constituent return types.
 func (c *Checker) getUnionSignatures(signatureLists [][]*Signature) []*Signature {
 	var result []*Signature
+	var priorities [][]int
+	orderedSignatureLists := core.Map(signatureLists, func(signatures []*Signature) []*Signature {
+		return c.reorderCandidates(signatures, SignatureFlagsNone)
+	})
 	var indexWithLengthOverOne int
 	var countLengthOverOne int
 	for i := range signatureLists {
@@ -21712,7 +21716,28 @@ func (c *Checker) getUnionSignatures(signatureLists [][]*Signature) []*Signature
 						s = c.createUnionSignature(signature, unionSignatures)
 						s.setThisParameter(c, thisParameter)
 					}
-					result = append(result, s)
+					priority := core.Map(orderedSignatureLists, func(signatures []*Signature) int {
+						return core.FindIndex(signatures, func(signature *Signature) bool {
+							return slices.Contains(unionSignatures, signature)
+						})
+					})
+					// A union candidate has precedence when its matching overloads occur no
+					// later in any constituent and earlier in at least one.
+					index := core.FindIndex(priorities, func(previous []int) bool {
+						earlier := false
+						for i, position := range priority {
+							if position < 0 || previous[i] < 0 || position > previous[i] {
+								return false
+							}
+							earlier = earlier || position < previous[i]
+						}
+						return earlier
+					})
+					if index < 0 {
+						index = len(result)
+					}
+					result = slices.Insert(result, index, s)
+					priorities = slices.Insert(priorities, index, priority)
 				}
 			}
 		}
