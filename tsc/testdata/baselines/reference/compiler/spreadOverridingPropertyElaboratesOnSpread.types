@@ -1,0 +1,49 @@
+//// [tests/cases/compiler/spreadOverridingPropertyElaboratesOnSpread.ts] ////
+
+=== spreadOverridingPropertyElaboratesOnSpread.ts ===
+type Item = {
+>Item : Item
+
+    attribute: string;
+>attribute : string
+
+};
+
+declare const result: Partial<Record<"attribute", string | null>>;
+>result : Partial<Record<"attribute", string | null>>
+
+const item: Item = {
+>item : Item
+>{    attribute: "",    ...result,} : { attribute: string | null; }
+
+    attribute: "",
+>attribute : string
+>"" : ""
+
+    ...result,
+>result : Partial<Record<"attribute", string | null>>
+
+};
+
+const item2: Item = {
+>item2 : Item
+>{    ...result,    attribute: "",} : { attribute: string; }
+
+    ...result,
+>result : Partial<Record<"attribute", string | null>>
+
+    attribute: "",
+>attribute : string
+>"" : ""
+
+};
+
+const item3: Item = {
+>item3 : Item
+>{    attribute: null,} : { attribute: null; }
+
+    attribute: null,
+>attribute : null
+
+};
+
