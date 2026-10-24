@@ -126,8 +126,8 @@ const p09 = null ?? (opt ? null : undefined) ?? null;
 >undefined : undefined
 
 const p10 = opt ?? null ?? 1;
->p10 : number
->opt ?? null ?? 1 : number
+>p10 : number (origin: number | 1)
+>opt ?? null ?? 1 : number (origin: number | 1)
 >opt ?? null : number
 >opt : number
 >1 : 1
@@ -139,8 +139,8 @@ const p11 = opt ?? null ?? null;
 >opt : number
 
 const p12 = opt ?? (null ?? 1);
->p12 : number
->opt ?? (null ?? 1) : number
+>p12 : number (origin: number | 1)
+>opt ?? (null ?? 1) : number (origin: number | 1)
 >opt : number
 >(null ?? 1) : 1
 >null ?? 1 : 1
@@ -172,17 +172,17 @@ const p15 = opt ?? (opt ? null : undefined) ?? null;
 >undefined : undefined
 
 const p16 = opt ?? 1 ?? 2;
->p16 : number
->opt ?? 1 ?? 2 : number
->opt ?? 1 : number
+>p16 : number (origin: number | 1 | 2)
+>opt ?? 1 ?? 2 : number (origin: number | 1 | 2)
+>opt ?? 1 : number (origin: number | 1)
 >opt : number
 >1 : 1
 >2 : 2
 
 const p17 = opt ?? (opt ? 1 : 2) ?? 3;
->p17 : number
->opt ?? (opt ? 1 : 2) ?? 3 : number
->opt ?? (opt ? 1 : 2) : number
+>p17 : number (origin: number | 1 | 2 | 3)
+>opt ?? (opt ? 1 : 2) ?? 3 : number (origin: number | 1 | 2 | 3)
+>opt ?? (opt ? 1 : 2) : number (origin: number | 1 | 2)
 >opt : number
 >(opt ? 1 : 2) : 1 | 2
 >opt ? 1 : 2 : 1 | 2
@@ -244,7 +244,7 @@ console.log((cond || undefined) && 1 / cond);
 >console.log : (...data: any[]) => void
 >console : Console
 >log : (...data: any[]) => void
->(cond || undefined) && 1 / cond : number
+>(cond || undefined) && 1 / cond : number (origin: number | 0)
 >(cond || undefined) : any
 >cond || undefined : any
 >cond : any

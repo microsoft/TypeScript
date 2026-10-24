@@ -1,0 +1,238 @@
+//// [tests/cases/compiler/mappedStringLiteralOrigin.ts] ////
+
+=== mappedStringLiteralOrigin.ts ===
+// Literal origins are editor metadata, not additional mapped keys.
+type Keys = "a" | string;
+>Keys : Symbol(Keys, Decl(mappedStringLiteralOrigin.ts, 0, 0))
+
+type LegacyKeys = "a" | (string & {});
+>LegacyKeys : Symbol(LegacyKeys, Decl(mappedStringLiteralOrigin.ts, 1, 25))
+
+type Values = Record<Keys, number>;
+>Values : Symbol(Values, Decl(mappedStringLiteralOrigin.ts, 2, 38))
+>Record : Symbol(Record, Decl(lib.es5.d.ts, --, --))
+>Keys : Symbol(Keys, Decl(mappedStringLiteralOrigin.ts, 0, 0))
+
+type LegacyValues = Record<LegacyKeys, number>;
+>LegacyValues : Symbol(LegacyValues, Decl(mappedStringLiteralOrigin.ts, 3, 35))
+>Record : Symbol(Record, Decl(lib.es5.d.ts, --, --))
+>LegacyKeys : Symbol(LegacyKeys, Decl(mappedStringLiteralOrigin.ts, 1, 25))
+
+declare const values: Values;
+>values : Symbol(values, Decl(mappedStringLiteralOrigin.ts, 6, 13))
+>Values : Symbol(Values, Decl(mappedStringLiteralOrigin.ts, 2, 38))
+
+declare const legacy: LegacyValues;
+>legacy : Symbol(legacy, Decl(mappedStringLiteralOrigin.ts, 7, 13))
+>LegacyValues : Symbol(LegacyValues, Decl(mappedStringLiteralOrigin.ts, 3, 35))
+
+export const known = values.a;
+>known : Symbol(known, Decl(mappedStringLiteralOrigin.ts, 8, 12))
+>values : Symbol(values, Decl(mappedStringLiteralOrigin.ts, 6, 13))
+
+export const other = values.other;
+>other : Symbol(other, Decl(mappedStringLiteralOrigin.ts, 9, 12))
+>values : Symbol(values, Decl(mappedStringLiteralOrigin.ts, 6, 13))
+
+export const legacyKnown = legacy.a;
+>legacyKnown : Symbol(legacyKnown, Decl(mappedStringLiteralOrigin.ts, 10, 12))
+>legacy : Symbol(legacy, Decl(mappedStringLiteralOrigin.ts, 7, 13))
+
+export const legacyOther = legacy.other;
+>legacyOther : Symbol(legacyOther, Decl(mappedStringLiteralOrigin.ts, 11, 12))
+>legacy : Symbol(legacy, Decl(mappedStringLiteralOrigin.ts, 7, 13))
+
+const missing: Values = {};
+>missing : Symbol(missing, Decl(mappedStringLiteralOrigin.ts, 12, 5))
+>Values : Symbol(Values, Decl(mappedStringLiteralOrigin.ts, 2, 38))
+
+const legacyMissing: LegacyValues = {};
+>legacyMissing : Symbol(legacyMissing, Decl(mappedStringLiteralOrigin.ts, 13, 5))
+>LegacyValues : Symbol(LegacyValues, Decl(mappedStringLiteralOrigin.ts, 3, 35))
+
+const present: Values = { a: 1, other: 2 };
+>present : Symbol(present, Decl(mappedStringLiteralOrigin.ts, 14, 5))
+>Values : Symbol(Values, Decl(mappedStringLiteralOrigin.ts, 2, 38))
+>a : Symbol(a, Decl(mappedStringLiteralOrigin.ts, 14, 25))
+>other : Symbol(other, Decl(mappedStringLiteralOrigin.ts, 14, 31))
+
+const plain: Record<string, number> = {};
+>plain : Symbol(plain, Decl(mappedStringLiteralOrigin.ts, 15, 5))
+>Record : Symbol(Record, Decl(lib.es5.d.ts, --, --))
+
+type KeyValues = { [Key in Keys]: Key };
+>KeyValues : Symbol(KeyValues, Decl(mappedStringLiteralOrigin.ts, 15, 41))
+>Key : Symbol(Key, Decl(mappedStringLiteralOrigin.ts, 17, 20))
+>Keys : Symbol(Keys, Decl(mappedStringLiteralOrigin.ts, 0, 0))
+>Key : Symbol(Key, Decl(mappedStringLiteralOrigin.ts, 17, 20))
+
+declare const keyValues: KeyValues;
+>keyValues : Symbol(keyValues, Decl(mappedStringLiteralOrigin.ts, 18, 13))
+>KeyValues : Symbol(KeyValues, Decl(mappedStringLiteralOrigin.ts, 15, 41))
+
+export const literalValue = keyValues.a;
+>literalValue : Symbol(literalValue, Decl(mappedStringLiteralOrigin.ts, 19, 12))
+>keyValues : Symbol(keyValues, Decl(mappedStringLiteralOrigin.ts, 18, 13))
+
+export const indexValue = keyValues.other;
+>indexValue : Symbol(indexValue, Decl(mappedStringLiteralOrigin.ts, 20, 12))
+>keyValues : Symbol(keyValues, Decl(mappedStringLiteralOrigin.ts, 18, 13))
+
+type Remapped = { [Key in Keys as `get_${Key}`]: Key };
+>Remapped : Symbol(Remapped, Decl(mappedStringLiteralOrigin.ts, 20, 42))
+>Key : Symbol(Key, Decl(mappedStringLiteralOrigin.ts, 22, 19))
+>Keys : Symbol(Keys, Decl(mappedStringLiteralOrigin.ts, 0, 0))
+>Key : Symbol(Key, Decl(mappedStringLiteralOrigin.ts, 22, 19))
+>Key : Symbol(Key, Decl(mappedStringLiteralOrigin.ts, 22, 19))
+
+declare const remapped: Remapped;
+>remapped : Symbol(remapped, Decl(mappedStringLiteralOrigin.ts, 23, 13))
+>Remapped : Symbol(Remapped, Decl(mappedStringLiteralOrigin.ts, 20, 42))
+
+export const remappedKnown = remapped.get_a;
+>remappedKnown : Symbol(remappedKnown, Decl(mappedStringLiteralOrigin.ts, 24, 12))
+>remapped : Symbol(remapped, Decl(mappedStringLiteralOrigin.ts, 23, 13))
+
+export const remappedOther = remapped.get_other;
+>remappedOther : Symbol(remappedOther, Decl(mappedStringLiteralOrigin.ts, 25, 12))
+>remapped : Symbol(remapped, Decl(mappedStringLiteralOrigin.ts, 23, 13))
+
+type OptionalValues = { readonly [Key in Keys]?: number };
+>OptionalValues : Symbol(OptionalValues, Decl(mappedStringLiteralOrigin.ts, 25, 48))
+>Key : Symbol(Key, Decl(mappedStringLiteralOrigin.ts, 27, 34))
+>Keys : Symbol(Keys, Decl(mappedStringLiteralOrigin.ts, 0, 0))
+
+declare let optional: OptionalValues;
+>optional : Symbol(optional, Decl(mappedStringLiteralOrigin.ts, 28, 11))
+>OptionalValues : Symbol(OptionalValues, Decl(mappedStringLiteralOrigin.ts, 25, 48))
+
+export const optionalKnown = optional.a;
+>optionalKnown : Symbol(optionalKnown, Decl(mappedStringLiteralOrigin.ts, 29, 12))
+>optional : Symbol(optional, Decl(mappedStringLiteralOrigin.ts, 28, 11))
+
+optional.a = 1;
+>optional : Symbol(optional, Decl(mappedStringLiteralOrigin.ts, 28, 11))
+
+type RequiredValues = { -readonly [Key in keyof OptionalValues]-?: OptionalValues[Key] };
+>RequiredValues : Symbol(RequiredValues, Decl(mappedStringLiteralOrigin.ts, 30, 15))
+>Key : Symbol(Key, Decl(mappedStringLiteralOrigin.ts, 31, 35))
+>OptionalValues : Symbol(OptionalValues, Decl(mappedStringLiteralOrigin.ts, 25, 48))
+>OptionalValues : Symbol(OptionalValues, Decl(mappedStringLiteralOrigin.ts, 25, 48))
+>Key : Symbol(Key, Decl(mappedStringLiteralOrigin.ts, 31, 35))
+
+declare let required: RequiredValues;
+>required : Symbol(required, Decl(mappedStringLiteralOrigin.ts, 32, 11))
+>RequiredValues : Symbol(RequiredValues, Decl(mappedStringLiteralOrigin.ts, 30, 15))
+
+required.a = 1;
+>required : Symbol(required, Decl(mappedStringLiteralOrigin.ts, 32, 11))
+
+export const requiredKnown = required.a;
+>requiredKnown : Symbol(requiredKnown, Decl(mappedStringLiteralOrigin.ts, 34, 12))
+>required : Symbol(required, Decl(mappedStringLiteralOrigin.ts, 32, 11))
+
+export const requiredOther = required.other;
+>requiredOther : Symbol(requiredOther, Decl(mappedStringLiteralOrigin.ts, 35, 12))
+>required : Symbol(required, Decl(mappedStringLiteralOrigin.ts, 32, 11))
+
+type ExtendedKeys = Keys | "b" | number;
+>ExtendedKeys : Symbol(ExtendedKeys, Decl(mappedStringLiteralOrigin.ts, 35, 44))
+>Keys : Symbol(Keys, Decl(mappedStringLiteralOrigin.ts, 0, 0))
+
+declare const extended: Record<ExtendedKeys, number>;
+>extended : Symbol(extended, Decl(mappedStringLiteralOrigin.ts, 38, 13))
+>Record : Symbol(Record, Decl(lib.es5.d.ts, --, --))
+>ExtendedKeys : Symbol(ExtendedKeys, Decl(mappedStringLiteralOrigin.ts, 35, 44))
+
+export const extendedKnown = extended.a;
+>extendedKnown : Symbol(extendedKnown, Decl(mappedStringLiteralOrigin.ts, 39, 12))
+>extended : Symbol(extended, Decl(mappedStringLiteralOrigin.ts, 38, 13))
+
+export const extendedAdded = extended.b;
+>extendedAdded : Symbol(extendedAdded, Decl(mappedStringLiteralOrigin.ts, 40, 12))
+>extended : Symbol(extended, Decl(mappedStringLiteralOrigin.ts, 38, 13))
+
+export const extendedIndex = extended[0];
+>extendedIndex : Symbol(extendedIndex, Decl(mappedStringLiteralOrigin.ts, 41, 12))
+>extended : Symbol(extended, Decl(mappedStringLiteralOrigin.ts, 38, 13))
+
+type GenericValues<Key extends string> = Record<Key | string, number>;
+>GenericValues : Symbol(GenericValues, Decl(mappedStringLiteralOrigin.ts, 41, 41))
+>Key : Symbol(Key, Decl(mappedStringLiteralOrigin.ts, 43, 19))
+>Record : Symbol(Record, Decl(lib.es5.d.ts, --, --))
+>Key : Symbol(Key, Decl(mappedStringLiteralOrigin.ts, 43, 19))
+
+declare const generic: GenericValues<"a" | "b">;
+>generic : Symbol(generic, Decl(mappedStringLiteralOrigin.ts, 44, 13))
+>GenericValues : Symbol(GenericValues, Decl(mappedStringLiteralOrigin.ts, 41, 41))
+
+export const genericKnown = generic.a;
+>genericKnown : Symbol(genericKnown, Decl(mappedStringLiteralOrigin.ts, 45, 12))
+>generic : Symbol(generic, Decl(mappedStringLiteralOrigin.ts, 44, 13))
+
+export const genericAdded = generic.b;
+>genericAdded : Symbol(genericAdded, Decl(mappedStringLiteralOrigin.ts, 46, 12))
+>generic : Symbol(generic, Decl(mappedStringLiteralOrigin.ts, 44, 13))
+
+export const genericOther = generic.other;
+>genericOther : Symbol(genericOther, Decl(mappedStringLiteralOrigin.ts, 47, 12))
+>generic : Symbol(generic, Decl(mappedStringLiteralOrigin.ts, 44, 13))
+
+type OnlyKnown<Value> = { [Key in Keys as Key extends "a" ? Key : never]: Value };
+>OnlyKnown : Symbol(OnlyKnown, Decl(mappedStringLiteralOrigin.ts, 47, 42))
+>Value : Symbol(Value, Decl(mappedStringLiteralOrigin.ts, 49, 15))
+>Key : Symbol(Key, Decl(mappedStringLiteralOrigin.ts, 49, 27))
+>Keys : Symbol(Keys, Decl(mappedStringLiteralOrigin.ts, 0, 0))
+>Key : Symbol(Key, Decl(mappedStringLiteralOrigin.ts, 49, 27))
+>Key : Symbol(Key, Decl(mappedStringLiteralOrigin.ts, 49, 27))
+>Value : Symbol(Value, Decl(mappedStringLiteralOrigin.ts, 49, 15))
+
+export function knownKey<Value>(): keyof OnlyKnown<Value> {
+>knownKey : Symbol(knownKey, Decl(mappedStringLiteralOrigin.ts, 49, 82))
+>Value : Symbol(Value, Decl(mappedStringLiteralOrigin.ts, 50, 25))
+>OnlyKnown : Symbol(OnlyKnown, Decl(mappedStringLiteralOrigin.ts, 47, 42))
+>Value : Symbol(Value, Decl(mappedStringLiteralOrigin.ts, 50, 25))
+
+	return "a";
+}
+export function knownValue<Value>(value: OnlyKnown<Value>): Value {
+>knownValue : Symbol(knownValue, Decl(mappedStringLiteralOrigin.ts, 52, 1))
+>Value : Symbol(Value, Decl(mappedStringLiteralOrigin.ts, 53, 27))
+>value : Symbol(value, Decl(mappedStringLiteralOrigin.ts, 53, 34))
+>OnlyKnown : Symbol(OnlyKnown, Decl(mappedStringLiteralOrigin.ts, 47, 42))
+>Value : Symbol(Value, Decl(mappedStringLiteralOrigin.ts, 53, 27))
+>Value : Symbol(Value, Decl(mappedStringLiteralOrigin.ts, 53, 27))
+
+	return value.a;
+>value : Symbol(value, Decl(mappedStringLiteralOrigin.ts, 53, 34))
+}
+const filteredMissing: OnlyKnown<number> = {};
+>filteredMissing : Symbol(filteredMissing, Decl(mappedStringLiteralOrigin.ts, 56, 5))
+>OnlyKnown : Symbol(OnlyKnown, Decl(mappedStringLiteralOrigin.ts, 47, 42))
+
+const filteredPresent: OnlyKnown<number> = { a: 1 };
+>filteredPresent : Symbol(filteredPresent, Decl(mappedStringLiteralOrigin.ts, 57, 5))
+>OnlyKnown : Symbol(OnlyKnown, Decl(mappedStringLiteralOrigin.ts, 47, 42))
+>a : Symbol(a, Decl(mappedStringLiteralOrigin.ts, 57, 44))
+
+type WithoutKnown<Value> = { [Key in Keys as Key extends "a" ? never : Key]: Value };
+>WithoutKnown : Symbol(WithoutKnown, Decl(mappedStringLiteralOrigin.ts, 57, 52))
+>Value : Symbol(Value, Decl(mappedStringLiteralOrigin.ts, 59, 18))
+>Key : Symbol(Key, Decl(mappedStringLiteralOrigin.ts, 59, 30))
+>Keys : Symbol(Keys, Decl(mappedStringLiteralOrigin.ts, 0, 0))
+>Key : Symbol(Key, Decl(mappedStringLiteralOrigin.ts, 59, 30))
+>Key : Symbol(Key, Decl(mappedStringLiteralOrigin.ts, 59, 30))
+>Value : Symbol(Value, Decl(mappedStringLiteralOrigin.ts, 59, 18))
+
+const filteredPlain: WithoutKnown<number> = {};
+>filteredPlain : Symbol(filteredPlain, Decl(mappedStringLiteralOrigin.ts, 60, 5))
+>WithoutKnown : Symbol(WithoutKnown, Decl(mappedStringLiteralOrigin.ts, 57, 52))
+
+declare const filtered: WithoutKnown<number>;
+>filtered : Symbol(filtered, Decl(mappedStringLiteralOrigin.ts, 61, 13))
+>WithoutKnown : Symbol(WithoutKnown, Decl(mappedStringLiteralOrigin.ts, 57, 52))
+
+export const filteredAccess = filtered.a;
+>filteredAccess : Symbol(filteredAccess, Decl(mappedStringLiteralOrigin.ts, 62, 12))
+>filtered : Symbol(filtered, Decl(mappedStringLiteralOrigin.ts, 61, 13))
+

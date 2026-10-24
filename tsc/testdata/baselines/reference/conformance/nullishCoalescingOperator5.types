@@ -30,14 +30,14 @@ a || b ?? c;
 a ?? b && c;
 >a ?? b && c : string | undefined
 >a : string | undefined
->b && c : string | undefined
+>b && c : string | undefined (origin: string | "" | undefined)
 >b : string | undefined
 >c : string | undefined
 
 // should be a syntax error
 a && b ?? c;
 >a && b ?? c : string | undefined
->a && b : string | undefined
+>a && b : string | undefined (origin: string | "" | undefined)
 >a : string | undefined
 >b : string | undefined
 >c : string | undefined
@@ -82,14 +82,14 @@ a || (b ?? c);
 a ?? (b && c);
 >a ?? (b && c) : string | undefined
 >a : string | undefined
->(b && c) : string | undefined
->b && c : string | undefined
+>(b && c) : string | undefined (origin: string | "" | undefined)
+>b && c : string | undefined (origin: string | "" | undefined)
 >b : string | undefined
 >c : string | undefined
 
 // Valid according to spec
 (a ?? b) && c;
->(a ?? b) && c : string | undefined
+>(a ?? b) && c : string | undefined (origin: string | "" | undefined)
 >(a ?? b) : string | undefined
 >a ?? b : string | undefined
 >a : string | undefined
@@ -99,15 +99,15 @@ a ?? (b && c);
 // Valid according to spec
 (a && b) ?? c;
 >(a && b) ?? c : string | undefined
->(a && b) : string | undefined
->a && b : string | undefined
+>(a && b) : string | undefined (origin: string | "" | undefined)
+>a && b : string | undefined (origin: string | "" | undefined)
 >a : string | undefined
 >b : string | undefined
 >c : string | undefined
 
 // Valid according to spec
 a && (b ?? c);
->a && (b ?? c) : string | undefined
+>a && (b ?? c) : string | undefined (origin: string | "" | undefined)
 >a : string | undefined
 >(b ?? c) : string | undefined
 >b ?? c : string | undefined

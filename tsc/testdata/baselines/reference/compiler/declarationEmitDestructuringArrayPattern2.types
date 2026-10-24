@@ -13,9 +13,9 @@ var [x10, [y10, [z10]]] = [1, ["hello", [true]]];
 >true : true
 
 var [x11 = 0, y11 = ""] = [1, "hello"];
->x11 : number
+>x11 : number (origin: number | 0)
 >0 : 0
->y11 : string
+>y11 : string (origin: string | "")
 >"" : ""
 >[1, "hello"] : [number, string]
 >1 : 1

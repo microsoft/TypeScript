@@ -131,7 +131,7 @@ function f14(x: number | null | undefined): number | null {
 >undefined : undefined
 
     return notUndefined ? x : 0;
->notUndefined ? x : 0 : number | null
+>notUndefined ? x : 0 : number | null (origin: number | 0 | null)
 >notUndefined : boolean
 >x : number | null
 >0 : 0

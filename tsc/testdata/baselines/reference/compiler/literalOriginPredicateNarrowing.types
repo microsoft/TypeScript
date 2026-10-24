@@ -1,0 +1,101 @@
+//// [tests/cases/compiler/literalOriginPredicateNarrowing.ts] ////
+
+=== literalOriginPredicateNarrowing.ts ===
+declare function isString(value: unknown): value is string;
+>isString : (value: unknown) => value is string
+>value : unknown
+
+declare function isStringOrNumber(value: unknown): value is string | number;
+>isStringOrNumber : (value: unknown) => value is string | number
+>value : unknown
+
+declare function isNumberOrBigint(value: unknown): value is number | bigint;
+>isNumberOrBigint : (value: unknown) => value is number | bigint
+>value : unknown
+
+declare let plain: string;
+>plain : string
+
+declare let tracked: "a" | string;
+>tracked : string (origin: string | "a")
+
+declare let numeric: 1 | number;
+>numeric : number (origin: number | 1)
+
+declare let big: 1n | bigint;
+>big : bigint (origin: bigint | 1n)
+
+declare let mixed: "a" | string | boolean;
+>mixed : string | boolean (origin: string | "a" | boolean)
+
+if (!isString(plain)) {
+>!isString(plain) : boolean
+>isString(plain) : boolean
+>isString : (value: unknown) => value is string
+>plain : string
+
+    const impossible: never = plain;
+>impossible : never
+>plain : never
+}
+if (!isString(tracked)) {
+>!isString(tracked) : boolean
+>isString(tracked) : boolean
+>isString : (value: unknown) => value is string
+>tracked : string (origin: string | "a")
+
+    const impossible: never = tracked;
+>impossible : never
+>tracked : never
+}
+if (!isStringOrNumber(plain)) {
+>!isStringOrNumber(plain) : boolean
+>isStringOrNumber(plain) : boolean
+>isStringOrNumber : (value: unknown) => value is string | number
+>plain : string
+
+    const impossible: never = plain;
+>impossible : never
+>plain : never
+}
+if (!isStringOrNumber(tracked)) {
+>!isStringOrNumber(tracked) : boolean
+>isStringOrNumber(tracked) : boolean
+>isStringOrNumber : (value: unknown) => value is string | number
+>tracked : string (origin: string | "a")
+
+    const impossible: never = tracked;
+>impossible : never
+>tracked : never
+}
+if (!isNumberOrBigint(numeric)) {
+>!isNumberOrBigint(numeric) : boolean
+>isNumberOrBigint(numeric) : boolean
+>isNumberOrBigint : (value: unknown) => value is number | bigint
+>numeric : number (origin: number | 1)
+
+    const impossible: never = numeric;
+>impossible : never
+>numeric : never
+}
+if (!isNumberOrBigint(big)) {
+>!isNumberOrBigint(big) : boolean
+>isNumberOrBigint(big) : boolean
+>isNumberOrBigint : (value: unknown) => value is number | bigint
+>big : bigint (origin: bigint | 1n)
+
+    const impossible: never = big;
+>impossible : never
+>big : never
+}
+if (!isStringOrNumber(mixed)) {
+>!isStringOrNumber(mixed) : boolean
+>isStringOrNumber(mixed) : boolean
+>isStringOrNumber : (value: unknown) => value is string | number
+>mixed : string | boolean (origin: string | "a" | boolean)
+
+    const remaining: boolean = mixed;
+>remaining : boolean
+>mixed : boolean
+}
+

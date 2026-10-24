@@ -38,7 +38,7 @@ function return3(x: string): string {
 >x : string
 
     return x.startsWith("a") ? "a" : x;
->x.startsWith("a") ? "a" : x : string
+>x.startsWith("a") ? "a" : x : string (origin: string | "a")
 >x.startsWith("a") : boolean
 >x.startsWith : (searchString: string, position?: number) => boolean
 >x : string
