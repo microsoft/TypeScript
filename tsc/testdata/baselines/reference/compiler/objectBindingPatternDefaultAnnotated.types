@@ -1,0 +1,40 @@
+//// [tests/cases/compiler/objectBindingPatternDefaultAnnotated.ts] ////
+
+=== objectBindingPatternDefaultAnnotated.ts ===
+interface Inner {
+    a?: number;
+>a : number | undefined
+
+    b?: number;
+>b : number | undefined
+}
+
+interface Outer {
+    inner?: Inner;
+>inner : Inner | undefined
+}
+
+export function withSibling({ inner: { a = 1, b } = {} }: Outer) {
+>withSibling : ({ inner: { a, b } }: Outer) => (number | undefined)[]
+>inner : any
+>a : number
+>1 : 1
+>b : number | undefined
+>{} : {}
+
+    return [a, b];
+>[a, b] : (number | undefined)[]
+>a : number
+>b : number | undefined
+}
+
+export function alone({ inner: { b } = {} }: Outer) {
+>alone : ({ inner: { b } }: Outer) => number | undefined
+>inner : any
+>b : number | undefined
+>{} : {}
+
+    return b;
+>b : number | undefined
+}
+
