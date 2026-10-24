@@ -968,9 +968,9 @@ type ProfileResult struct {
 type CreateBuildOrchestratorParams struct {
 	RootNames []string                   `json:"rootNames"`
 	Cwd       tspath.RootedDirectoryPath `json:"cwd,omitempty"`
-	// Only a subset of these options are exposed  the API
-	*core.BuildOptions    `json:"buildOptions,omitempty"`
-	*core.CompilerOptions `json:"compilerOptions,omitempty"`
+	// Only a subset of these options are exposed in the API
+	BuildOptions    *core.BuildOptions    `json:"buildOptions,omitempty"`
+	CompilerOptions *core.CompilerOptions `json:"compilerOptions,omitempty"`
 }
 
 type CreateBuildOrchestratorResponse struct {
