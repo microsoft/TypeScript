@@ -150,7 +150,7 @@ func createGetSymbolAccessibilityDiagnosticForNode(node *ast.Node) GetSymbolAcce
 		return wrapSimpleDiagnosticSelector(node, getParameterDeclarationTypeVisibilityDiagnosticMessage)
 	} else if ast.IsTypeParameterDeclaration(node) {
 		return wrapSimpleDiagnosticSelector(node, getTypeParameterConstraintVisibilityDiagnosticMessage)
-	} else if ast.IsExpressionWithTypeArguments(node) {
+	} else if ast.IsExpressionWithTypeArguments(node) || (ast.IsTypeReferenceNode(node) && ast.IsHeritageClause(node.Parent)) {
 		// unique node selection behavior, inline closure
 		return func(symbolAccessibilityResult printer.SymbolAccessibilityResult) *SymbolAccessibilityDiagnostic {
 			var diagnosticMessage *diagnostics.Message

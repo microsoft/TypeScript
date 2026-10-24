@@ -37,6 +37,7 @@ func canProduceDiagnostics(node *ast.Node) bool {
 		ast.IsParameterDeclaration(node) ||
 		ast.IsTypeParameterDeclaration(node) ||
 		ast.IsExpressionWithTypeArguments(node) ||
+		(ast.IsTypeReferenceNode(node) && ast.IsHeritageClause(node.Parent)) ||
 		ast.IsImportEqualsDeclaration(node) ||
 		ast.IsTypeAliasDeclaration(node) ||
 		ast.IsJSTypeAliasDeclaration(node) ||
