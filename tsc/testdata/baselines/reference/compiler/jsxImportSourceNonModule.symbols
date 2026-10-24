@@ -1,0 +1,6 @@
+//// [tests/cases/compiler/jsxImportSourceNonModule.tsx] ////
+
+=== jsxImportSourceNonModule.tsx ===
+const x = <><div>hi</div></>;
+>x : Symbol(x, Decl(jsxImportSourceNonModule.tsx, 0, 5))
+
