@@ -1,0 +1,15 @@
+neverIndexSignatureNotDuplicate.ts(3,6): error TS1268: An index signature parameter type must be 'string', 'number', 'symbol', or a template literal type.
+neverIndexSignatureNotDuplicate.ts(4,6): error TS1268: An index signature parameter type must be 'string', 'number', 'symbol', or a template literal type.
+
+
+==== neverIndexSignatureNotDuplicate.ts (2 errors) ====
+    // `never` distributes to no types, so these aren't duplicate index signatures.
+    interface I {
+        [k: never]: string;
+         ~
+!!! error TS1268: An index signature parameter type must be 'string', 'number', 'symbol', or a template literal type.
+        [k: never]: number;
+         ~
+!!! error TS1268: An index signature parameter type must be 'string', 'number', 'symbol', or a template literal type.
+    }
+    

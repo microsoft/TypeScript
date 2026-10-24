@@ -1,0 +1,24 @@
+//// [tests/cases/compiler/uniqueSymbolPropertyNameFromReexportedModule.ts] ////
+
+=== b.ts ===
+export const key: unique symbol = Symbol();
+>key : unique symbol
+>Symbol() : unique symbol
+>Symbol : SymbolConstructor
+
+=== c.ts ===
+export { key } from "./b";
+>key : unique symbol
+
+=== a.ts ===
+import { key } from "./c";
+>key : unique symbol
+
+declare const o: {};
+>o : {}
+
+o[key];
+>o[key] : any
+>o : {}
+>key : unique symbol
+

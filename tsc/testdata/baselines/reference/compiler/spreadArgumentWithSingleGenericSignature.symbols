@@ -1,0 +1,27 @@
+//// [tests/cases/compiler/spreadArgumentWithSingleGenericSignature.ts] ////
+
+=== spreadArgumentWithSingleGenericSignature.ts ===
+declare function apply<A, R>(f: (a: A) => R, a: A): R;
+>apply : Symbol(apply, Decl(spreadArgumentWithSingleGenericSignature.ts, 0, 0))
+>A : Symbol(A, Decl(spreadArgumentWithSingleGenericSignature.ts, 0, 23))
+>R : Symbol(R, Decl(spreadArgumentWithSingleGenericSignature.ts, 0, 25))
+>f : Symbol(f, Decl(spreadArgumentWithSingleGenericSignature.ts, 0, 29))
+>a : Symbol(a, Decl(spreadArgumentWithSingleGenericSignature.ts, 0, 33))
+>A : Symbol(A, Decl(spreadArgumentWithSingleGenericSignature.ts, 0, 23))
+>R : Symbol(R, Decl(spreadArgumentWithSingleGenericSignature.ts, 0, 25))
+>a : Symbol(a, Decl(spreadArgumentWithSingleGenericSignature.ts, 0, 44))
+>A : Symbol(A, Decl(spreadArgumentWithSingleGenericSignature.ts, 0, 23))
+>R : Symbol(R, Decl(spreadArgumentWithSingleGenericSignature.ts, 0, 25))
+
+declare const args: [<T>(x: T) => T[], number];
+>args : Symbol(args, Decl(spreadArgumentWithSingleGenericSignature.ts, 1, 13))
+>T : Symbol(T, Decl(spreadArgumentWithSingleGenericSignature.ts, 1, 22))
+>x : Symbol(x, Decl(spreadArgumentWithSingleGenericSignature.ts, 1, 25))
+>T : Symbol(T, Decl(spreadArgumentWithSingleGenericSignature.ts, 1, 22))
+>T : Symbol(T, Decl(spreadArgumentWithSingleGenericSignature.ts, 1, 22))
+
+const r = apply(...args);
+>r : Symbol(r, Decl(spreadArgumentWithSingleGenericSignature.ts, 2, 5))
+>apply : Symbol(apply, Decl(spreadArgumentWithSingleGenericSignature.ts, 0, 0))
+>args : Symbol(args, Decl(spreadArgumentWithSingleGenericSignature.ts, 1, 13))
+
