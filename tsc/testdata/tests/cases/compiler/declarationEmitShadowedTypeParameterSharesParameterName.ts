@@ -15,6 +15,12 @@ export function assertion<value>(value: value) {
     };
 }
 
+export function truthyAssertion<value>(value: value) {
+    return function <value>(value: value): asserts value {
+        if (!value) throw value;
+    };
+}
+
 export function query<value>(value: value) {
     return function <value>(value: value, other: typeof value): typeof value {
         return value;
@@ -27,9 +33,29 @@ export function qualifiedQuery<value>(value: value) {
     };
 }
 
+declare const key: unique symbol;
+
+export function computed<value>(value: value) {
+    return function <value>(value: typeof key): { [value]: number } {
+        return { [value]: 1 };
+    };
+}
+
 export function capturedPredicate<value>(value: value) {
     return function <value>(value: value, value_1: unknown): value is value & string {
         return typeof value === "string";
+    };
+}
+
+export function capturedAssertion<value>(value: value) {
+    return function <value>(value: value, value_1: unknown): asserts value is value & string {
+        if (typeof value !== "string") throw value;
+    };
+}
+
+export function capturedTruthyAssertion<value>(value: value) {
+    return function <value>(value: value, value_1: unknown): asserts value {
+        if (!value) throw value;
     };
 }
 
