@@ -13,6 +13,14 @@ label: interface I {}
 interface Base<T> {}
 export interface J extends Base<I> {}
 
+//// [namedClassExpression.ts]
+label: interface I {}
+export default (class C implements I {});
+
+//// [anonymousClassExpression.ts]
+label: interface I {}
+export default (class implements I {});
+
 
 //// [interface.js]
 label: ;
@@ -24,3 +32,11 @@ export class C {
 //// [typeArgument.js]
 label: ;
 export {};
+//// [namedClassExpression.js]
+label: ;
+export default (class C {
+});
+//// [anonymousClassExpression.js]
+label: ;
+export default (class {
+});

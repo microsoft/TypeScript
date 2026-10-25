@@ -29,3 +29,18 @@ export interface J extends Base<I> {}
 >Base : Symbol(Base, Decl(typeArgument.ts, 0, 21))
 >I : Symbol(I, Decl(typeArgument.ts, 0, 6))
 
+=== namedClassExpression.ts ===
+label: interface I {}
+>I : Symbol(I, Decl(namedClassExpression.ts, 0, 6))
+
+export default (class C implements I {});
+>C : Symbol(C, Decl(namedClassExpression.ts, 1, 16))
+>I : Symbol(I, Decl(namedClassExpression.ts, 0, 6))
+
+=== anonymousClassExpression.ts ===
+label: interface I {}
+>I : Symbol(I, Decl(anonymousClassExpression.ts, 0, 6))
+
+export default (class implements I {});
+>I : Symbol(I, Decl(anonymousClassExpression.ts, 0, 6))
+
