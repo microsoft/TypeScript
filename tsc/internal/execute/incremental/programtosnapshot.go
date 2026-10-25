@@ -51,16 +51,24 @@ func (t *toProgramSnapshot) reuseFromOldProgram() {
 		if t.snapshot.options.Composite.IsTrue() {
 			t.snapshot.latestChangedDtsFile = t.oldProgram.snapshot.latestChangedDtsFile
 		}
+		t.snapshot.buildInfoEmitPending.Store(t.oldProgram.snapshot.buildInfoEmitPending.Load())
 		// Copy old snapshot's changed files set
 		t.oldProgram.snapshot.changedFilesSet.Range(func(key tspath.PathKey) bool {
-			t.snapshot.changedFilesSet.Add(key)
+			if t.program.GetSourceFileByPath(key) != nil {
+				t.snapshot.changedFilesSet.Add(key)
+			} else {
+				t.snapshot.buildInfoEmitPending.Store(true)
+			}
 			return true
 		})
 		t.oldProgram.snapshot.affectedFilesPendingEmit.Range(func(key tspath.PathKey, emitKind FileEmitKind) bool {
-			t.snapshot.affectedFilesPendingEmit.Store(key, emitKind)
+			if t.program.GetSourceFileByPath(key) != nil {
+				t.snapshot.affectedFilesPendingEmit.Store(key, emitKind)
+			} else {
+				t.snapshot.buildInfoEmitPending.Store(true)
+			}
 			return true
 		})
-		t.snapshot.buildInfoEmitPending.Store(t.oldProgram.snapshot.buildInfoEmitPending.Load())
 		t.snapshot.hasErrorsFromOldState = t.oldProgram.snapshot.hasErrors
 		t.snapshot.hasSemanticErrorsFromOldState = t.oldProgram.snapshot.hasSemanticErrors
 		t.snapshot.packageJsonsFromOldState = t.oldProgram.snapshot.packageJsons
@@ -161,21 +169,41 @@ func (t *toProgramSnapshot) computeProgramFileChanges() {
 
 func (t *toProgramSnapshot) handleFileDelete() {
 	if t.oldProgram != nil {
-		// If the global file is removed, add all files as changed
-		t.oldProgram.snapshot.fileInfos.Range(func(filePath tspath.PathKey, oldInfo *FileInfo) bool {
-			if _, ok := t.snapshot.fileInfos.Load(filePath); !ok {
-				if oldInfo.affectsGlobalScope {
-					for _, file := range t.snapshot.getAllFilesExcludingDefaultLibraryFile(t.program, nil) {
-						t.snapshot.addFileToChangeSet(file.PathKey())
-					}
-					t.globalFileRemoved = true
-				} else {
-					t.snapshot.buildInfoEmitPending.Store(true)
-				}
-				return false
-			}
-			return true
-		})
+		forEachDeletedFile(t.oldProgram.snapshot.fileInfos.Range, &t.snapshot.fileInfos, t.handleDeletedFile)
+		if t.globalFileRemoved {
+			t.invalidateGlobalScope()
+		}
+	}
+}
+
+func forEachDeletedFile(
+	rangeOldFileInfos func(func(tspath.PathKey, *FileInfo) bool),
+	newFileInfos *collections.SyncMap[tspath.PathKey, *FileInfo],
+	onDeletedFile func(tspath.PathKey, *FileInfo),
+) {
+	rangeOldFileInfos(func(filePath tspath.PathKey, oldInfo *FileInfo) bool {
+		if _, retained := newFileInfos.Load(filePath); !retained {
+			onDeletedFile(filePath, oldInfo)
+		}
+		return true
+	})
+}
+
+func (t *toProgramSnapshot) handleDeletedFile(filePath tspath.PathKey, oldInfo *FileInfo) {
+	t.snapshot.buildInfoEmitPending.Store(true)
+	t.snapshot.changedFilesSet.Delete(filePath)
+	t.snapshot.affectedFilesPendingEmit.Delete(filePath)
+	t.globalFileRemoved = t.globalFileRemoved || oldInfo.affectsGlobalScope
+}
+
+func (t *toProgramSnapshot) invalidateGlobalScope() {
+	t.snapshot.buildInfoEmitPending.Store(true)
+	for _, file := range t.program.GetSourceFiles() {
+		if !t.program.IsSourceFileDefaultLibrary(file.PathKey()) {
+			t.snapshot.addFileToChangeSet(file.PathKey())
+		} else if !t.program.SkipTypeChecking(file, true) {
+			t.snapshot.semanticDiagnosticsPerFile.Delete(file.PathKey())
+		}
 	}
 }
 
@@ -195,9 +223,7 @@ func (t *toProgramSnapshot) handleGlobalScopeChange() {
 		return true
 	})
 	if globalScopeLost {
-		for _, file := range t.snapshot.getAllFilesExcludingDefaultLibraryFile(t.program, nil) {
-			t.snapshot.addFileToChangeSet(file.PathKey())
-		}
+		t.invalidateGlobalScope()
 	}
 }
 

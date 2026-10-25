@@ -1,0 +1,30 @@
+//// [tests/cases/compiler/promiseAllArrayAssertionOverlap.ts] ////
+
+=== promiseAllArrayAssertionOverlap.ts ===
+interface Row {
+    [name: string]: any;
+>name : string
+}
+interface Entity {
+    id: number;
+>id : number
+}
+declare const result: Promise<Row | null>;
+>result : Promise<Row | null>
+
+export async function load() {
+>load : () => Promise<Entity[]>
+
+    return (await Promise.all([result, result])) as Entity[];
+>(await Promise.all([result, result])) as Entity[] : Entity[]
+>(await Promise.all([result, result])) : (Row | null)[]
+>await Promise.all([result, result]) : (Row | null)[]
+>Promise.all([result, result]) : Promise<(Row | null)[]>
+>Promise.all : { <T>(values: Iterable<T | PromiseLike<T>>): Promise<Awaited<T>[]>; <T extends readonly unknown[] | []>(values: T): Promise<{ -readonly [P in keyof T]: Awaited<T[P]>; }>; }
+>Promise : PromiseConstructor
+>all : { <T>(values: Iterable<T | PromiseLike<T>>): Promise<Awaited<T>[]>; <T extends readonly unknown[] | []>(values: T): Promise<{ -readonly [P in keyof T]: Awaited<T[P]>; }>; }
+>[result, result] : Promise<Row | null>[]
+>result : Promise<Row | null>
+>result : Promise<Row | null>
+}
+

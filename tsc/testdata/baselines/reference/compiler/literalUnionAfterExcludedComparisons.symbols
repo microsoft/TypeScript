@@ -1,0 +1,23 @@
+//// [tests/cases/compiler/literalUnionAfterExcludedComparisons.ts] ////
+
+=== literalUnionAfterExcludedComparisons.ts ===
+type Runtime = "node" | "deno" | "bun";
+>Runtime : Symbol(Runtime, Decl(literalUnionAfterExcludedComparisons.ts, 0, 0))
+
+function readRuntime(value: string): Runtime {
+>readRuntime : Symbol(readRuntime, Decl(literalUnionAfterExcludedComparisons.ts, 0, 39))
+>value : Symbol(value, Decl(literalUnionAfterExcludedComparisons.ts, 1, 21))
+>Runtime : Symbol(Runtime, Decl(literalUnionAfterExcludedComparisons.ts, 0, 0))
+
+    if (value !== "node" && value !== "deno" && value !== "bun") {
+>value : Symbol(value, Decl(literalUnionAfterExcludedComparisons.ts, 1, 21))
+>value : Symbol(value, Decl(literalUnionAfterExcludedComparisons.ts, 1, 21))
+>value : Symbol(value, Decl(literalUnionAfterExcludedComparisons.ts, 1, 21))
+
+        throw new Error();
+>Error : Symbol(Error, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+    }
+    return value;
+>value : Symbol(value, Decl(literalUnionAfterExcludedComparisons.ts, 1, 21))
+}
+
