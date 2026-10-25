@@ -423,6 +423,8 @@ const (
 	NodeCheckFlagsInCheckIdentifier                        NodeCheckFlags = 1 << 22
 	NodeCheckFlagsInitializerIsUndefined                   NodeCheckFlags = 1 << 24
 	NodeCheckFlagsInitializerIsUndefinedComputed           NodeCheckFlags = 1 << 25
+	NodeCheckFlagsIsConstContext                           NodeCheckFlags = 1 << 26 // The node is in a const context; see isConstContext.
+	NodeCheckFlagsIsConstContextComputed                   NodeCheckFlags = 1 << 27 // The const-context of the node has been computed; see isConstContext.
 )
 
 // Common links

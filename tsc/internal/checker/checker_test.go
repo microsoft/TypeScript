@@ -208,3 +208,65 @@ export type Initial = Box<"first">;
 	assert.Equal(t, c.TypeToString(initial), "Initial")
 	assert.Equal(t, len(c.GetDiagnostics(t.Context(), file)), 0)
 }
+
+func TestDeeplyNestedArrayLiterals(t *testing.T) {
+	t.Parallel()
+	// Guards against quadratic checking of the const-context of deeply nested
+	// array or object literals: each element's context used to be recomputed by
+	// walking up through the entire nesting.
+	const depth = 20000
+	var content strings.Builder
+	content.WriteString("export const x = ")
+	for range depth {
+		content.WriteByte('[')
+	}
+	content.WriteByte('1')
+	for range depth {
+		content.WriteByte(']')
+	}
+	content.WriteString(";\n")
+	fs := bundled.WrapFS(vfstest.FromMap(map[string]string{
+		"/foo.ts": content.String(),
+	}, tspath.CaseSensitive))
+	opts := &core.CompilerOptions{NoLib: core.TSTrue}
+	program := compiler.NewProgram(compiler.ProgramOptions{
+		Config: tsoptions.NewParsedCommandLine(opts, []tspath.RootedFilePath{"/foo.ts"}, nil, "/", fs.CaseSensitivity()),
+		Host:   compiler.NewCompilerHost(fs, bundled.LibPath(), nil, nil, nil),
+	})
+	program.BindSourceFiles()
+	c, done := program.GetTypeChecker(t.Context())
+	defer done()
+	file := program.GetSourceFile("/foo.ts")
+	assert.Equal(t, len(c.GetDiagnostics(t.Context(), file)), 0)
+}
+
+func TestConstContextAcrossOverloadCandidates(t *testing.T) {
+	t.Parallel()
+	// The const-context of an argument node is not invariant across overload
+	// candidates: the rejected non-const candidate here is checked first and
+	// must not decide the const-context seen by the const type parameter
+	// candidate that is actually selected, including for nested literals.
+	content := `declare function f<T>(x: T, y: boolean): T;
+declare function f<const T>(x: T, y: string): T;
+const r = f({ a: 1 }, "s");
+const check1: { readonly a: 1 } = r;
+const nested = f({ a: { b: 1 } }, "s");
+const check2: { readonly a: { readonly b: 1 } } = nested;
+`
+	fs := bundled.WrapFS(vfstest.FromMap(map[string]string{
+		"/foo.ts": content,
+	}, tspath.CaseSensitive))
+	opts := &core.CompilerOptions{NoLib: core.TSTrue}
+	program := compiler.NewProgram(compiler.ProgramOptions{
+		Config: tsoptions.NewParsedCommandLine(opts, []tspath.RootedFilePath{"/foo.ts"}, nil, "/", fs.CaseSensitivity()),
+		Host:   compiler.NewCompilerHost(fs, bundled.LibPath(), nil, nil, nil),
+	})
+	program.BindSourceFiles()
+	c, done := program.GetTypeChecker(t.Context())
+	defer done()
+	file := program.GetSourceFile("/foo.ts")
+	diagnostics := c.GetDiagnostics(t.Context(), file)
+	if len(diagnostics) != 0 {
+		t.Fatalf("expected no diagnostics, got: %v", diagnostics)
+	}
+}

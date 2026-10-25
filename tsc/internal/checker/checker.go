@@ -604,6 +604,7 @@ type Checker struct {
 	inlineLevel                                 int
 	serializationLevel                          int
 	currentNode                                 *ast.Node
+	nonCacheContextualDepth                     int
 	varianceTypeParameter                       *Type
 	languageVersion                             core.ScriptTarget
 	moduleKind                                  core.ModuleKind
@@ -13869,6 +13870,27 @@ func (c *Checker) hasDefaultValue(node *ast.Node) bool {
 }
 
 func (c *Checker) isConstContext(node *ast.Node) bool {
+	// The result for a node is cached only while no non-cache contextual type is
+	// on the stack: those entries come from contextual-typing and inference
+	// attempts (such as individual overload candidates), where the same node is
+	// re-checked under different contextual types and the answer is not
+	// invariant. The cached path matters for deeply nested array or object
+	// literals, where the uncached recursion is quadratic in the nesting depth
+	// -- observable now that the parser handles much deeper nesting than the
+	// JavaScript implementation's stack allowed.
+	links := c.nodeLinks.Get(node)
+	if c.nonCacheContextualDepth == 0 {
+		if links.flags&NodeCheckFlagsIsConstContextComputed == 0 {
+			parent := node.Parent
+			result := ast.IsConstAssertion(parent) ||
+				c.isInlineImportAttributes(node) ||
+				c.isValidConstAssertionArgument(node) && c.isConstTypeVariable(c.getContextualType(node, ContextFlagsNone), 0) ||
+				(ast.IsParenthesizedExpression(parent) || ast.IsArrayLiteralExpression(parent) || ast.IsSpreadElement(parent)) && c.isConstContext(parent) ||
+				(ast.IsPropertyAssignment(parent) || ast.IsShorthandPropertyAssignment(parent) || ast.IsTemplateSpan(parent)) && c.isConstContext(parent.Parent)
+			links.flags |= NodeCheckFlagsIsConstContextComputed | core.IfElse(result, NodeCheckFlagsIsConstContext, 0)
+		}
+		return links.flags&NodeCheckFlagsIsConstContext != 0
+	}
 	parent := node.Parent
 	return ast.IsConstAssertion(parent) ||
 		c.isInlineImportAttributes(node) ||
@@ -31644,11 +31666,17 @@ func (c *Checker) pushCachedContextualType(node *ast.Node) {
 }
 
 func (c *Checker) pushContextualType(node *ast.Node, t *Type, isCache bool) {
+	if !isCache {
+		c.nonCacheContextualDepth++
+	}
 	c.contextualInfos = append(c.contextualInfos, ContextualInfo{node, t, isCache})
 }
 
 func (c *Checker) popContextualType() {
 	lastIndex := len(c.contextualInfos) - 1
+	if !c.contextualInfos[lastIndex].isCache {
+		c.nonCacheContextualDepth--
+	}
 	c.contextualInfos[lastIndex] = ContextualInfo{}
 	c.contextualInfos = c.contextualInfos[:lastIndex]
 }
