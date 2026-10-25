@@ -2869,10 +2869,17 @@ func (c *Checker) isTypeSubsetOf(source *Type, target *Type) bool {
 
 func (c *Checker) isTypeSubsetOfUnion(source *Type, target *Type) bool {
 	if source.flags&TypeFlagsUnion != 0 {
-		for _, t := range source.Types() {
-			if !containsType(target.Types(), t) {
+		// Union types are sorted by CompareTypes, so the types of a subset appear in target in the same order.
+		sourceTypes, targetTypes := source.Types(), target.Types()
+		if len(sourceTypes) > len(targetTypes) {
+			return false
+		}
+		for _, t := range sourceTypes {
+			i := slices.Index(targetTypes, t)
+			if i < 0 {
 				return false
 			}
+			targetTypes = targetTypes[i+1:]
 		}
 		return true
 	}
