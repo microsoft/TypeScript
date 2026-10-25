@@ -10,6 +10,7 @@ import (
 	"github.com/microsoft/TypeScript/tsc/internal/collections"
 	"github.com/microsoft/TypeScript/tsc/internal/core"
 	"github.com/microsoft/TypeScript/tsc/internal/evaluator"
+	"github.com/zeebo/xxh3"
 )
 
 //go:generate npx hereby generate:checker
@@ -1114,7 +1115,7 @@ func (t *ConstrainedType) AsConstrainedType() *ConstrainedType { return t }
 
 type StructuredType struct {
 	ConstrainedType
-	members    ast.SymbolTable
+	members    *memberIndex
 	properties []*ast.Symbol
 	extra      *structuredTypeExtra
 }
@@ -1145,10 +1146,15 @@ func (t *StructuredType) ConstructSignatures() []*Signature {
 
 func (t *StructuredType) getMember(name string) *ast.Symbol {
 	if t.members != nil {
-		return t.members[name]
+		return t.members.get(name, t.properties)
 	}
 	lazy := t.getLazyState()
 	if lazy == nil {
+		for _, symbol := range t.properties {
+			if symbol.Name() == name {
+				return symbol
+			}
+		}
 		return nil
 	}
 	memberInfo := lazy.layout.memberInfoMap[name]
@@ -1159,15 +1165,49 @@ func (t *StructuredType) getMember(name string) *ast.Symbol {
 }
 
 func (t *StructuredType) getMembers() ast.SymbolTable {
-	if t.members == nil {
-		if properties := t.getProperties(); len(properties) != 0 {
-			t.members = make(ast.SymbolTable, len(properties))
-			for _, member := range properties {
-				t.members[member.Name()] = member
-			}
-		}
+	if t.members != nil && t.members.table != nil {
+		return t.members.table
 	}
-	return t.members
+	properties := t.getProperties()
+	if len(properties) == 0 {
+		return nil
+	}
+	members := make(ast.SymbolTable, len(properties))
+	for _, member := range properties {
+		members[member.Name()] = member
+	}
+	if t.getLazyState() != nil {
+		t.members = t.checker.memberIndexArena.New()
+		t.members.table = members
+	}
+	return members
+}
+
+// A memberIndex finds a structured type's members by name. When every member
+// is a named property stored under its own name, the property list already
+// holds all of them, so larger types index it with pointer-free slots and
+// smaller ones need no index at all. Other types keep their symbol table.
+type memberIndex struct {
+	table ast.SymbolTable
+	slots []uint32
+}
+
+func (m *memberIndex) get(name string, properties []*ast.Symbol) *ast.Symbol {
+	if m.table != nil {
+		return m.table[name]
+	}
+	mask := uint64(len(m.slots) - 1)
+	slot := xxh3.HashString(name) & mask
+	for {
+		index := m.slots[slot]
+		if index == 0 {
+			return nil
+		}
+		if symbol := properties[index-1]; symbol.Name() == name {
+			return symbol
+		}
+		slot = (slot + 1) & mask
+	}
 }
 
 func (t *StructuredType) getPropertyAt(index int) *ast.Symbol {
