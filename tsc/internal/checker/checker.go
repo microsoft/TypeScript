@@ -12287,6 +12287,19 @@ func (c *Checker) getContextualThisParameterType(fn *ast.Node) *Type {
 			// There was no contextual ThisType<T> for the containing object literal, so the contextual type
 			// for 'this' is the non-null form of the contextual type for the containing object literal or
 			// the type of the object literal itself.
+			// A `return` in an async function is contextually `Awaited<T> | PromiseLike<Awaited<T>>`
+			// (see getContextualTypeForReturnExpression), but `this` is always the literal itself.
+			// See https://github.com/microsoft/TypeScript/issues/64954
+			if contextualType != nil {
+				filtered := c.filterType(contextualType, func(t *Type) bool {
+					return c.getAwaitedTypeOfPromise(t) == nil
+				})
+				if filtered.flags&TypeFlagsNever == 0 {
+					contextualType = filtered
+				} else {
+					contextualType = nil
+				}
+			}
 			if contextualType != nil {
 				thisType = c.GetNonNullableType(contextualType)
 			} else {

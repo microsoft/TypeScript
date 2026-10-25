@@ -1,0 +1,61 @@
+//// [tests/cases/compiler/thisInObjectLiteralMethodAsyncReturn.ts] ////
+
+=== thisInObjectLiteralMethodAsyncReturn.ts ===
+// https://github.com/microsoft/TypeScript/issues/64954
+
+const test1 = async () => {
+>test1 : () => Promise<{ value: number; method(): void; }>
+>async () => {    return {        value: 5,        method() {            this satisfies { value: number, method(): void };        },    };} : () => Promise<{ value: number; method(): void; }>
+
+    return {
+>{        value: 5,        method() {            this satisfies { value: number, method(): void };        },    } : { value: number; method(): void; }
+
+        value: 5,
+>value : number
+>5 : 5
+
+        method() {
+>method : () => void
+
+            this satisfies { value: number, method(): void };
+>this satisfies { value: number, method(): void } : { value: number; method(): void; }
+>this : { value: number; method(): void; }
+>value : number
+>method : () => void
+
+        },
+    };
+};
+
+const test2: () => Promise<{
+>test2 : () => Promise<{ value: number; method(): void; }>
+
+    value: number;
+>value : number
+
+    method(): void;
+>method : () => void
+
+}> = async () => {
+>async () => {    return {        value: 5,        method() {            this satisfies { value: number, method(): void };        },    };} : () => Promise<{ value: number; method(): void; }>
+
+    return {
+>{        value: 5,        method() {            this satisfies { value: number, method(): void };        },    } : { value: number; method(): void; }
+
+        value: 5,
+>value : number
+>5 : 5
+
+        method() {
+>method : () => void
+
+            this satisfies { value: number, method(): void };
+>this satisfies { value: number, method(): void } : { value: number; method(): void; }
+>this : { value: number; method(): void; }
+>value : number
+>method : () => void
+
+        },
+    };
+};
+
