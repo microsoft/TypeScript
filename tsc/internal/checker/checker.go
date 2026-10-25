@@ -12288,6 +12288,19 @@ func (c *Checker) getContextualThisParameterType(fn *ast.Node) *Type {
 			// for 'this' is the non-null form of the contextual type for the containing object literal or
 			// the type of the object literal itself.
 			if contextualType != nil {
+				if contextualType.flags&TypeFlagsUnion != 0 && c.isAsyncReturnExpression(containingLiteral) {
+					// The contextual type of an async return expression is `T | PromiseLike<T>`; `this` is just `T`.
+					globalPromiseLike := c.getGlobalPromiseLikeType()
+					// Only remove a `PromiseLike<U>` that was synthesized for a sibling union member `U`.
+					members := contextualType.Types()
+					contextualType = c.filterType(contextualType, func(t *Type) bool {
+						if t.objectFlags&ObjectFlagsReference == 0 || t.Target() != globalPromiseLike {
+							return true
+						}
+						args := c.getTypeArguments(t)
+						return len(args) != 1 || !slices.Contains(members, args[0])
+					})
+				}
 				thisType = c.GetNonNullableType(contextualType)
 			} else {
 				thisType = c.checkExpressionCached(containingLiteral)
@@ -12313,6 +12326,28 @@ func (c *Checker) getContextualThisParameterType(fn *ast.Node) *Type {
 		}
 	}
 	return nil
+}
+
+func (c *Checker) isAsyncReturnExpression(node *ast.Node) bool {
+	parent := node.Parent
+	for parent != nil && ast.IsParenthesizedExpression(parent) {
+		parent = parent.Parent
+	}
+	if parent == nil {
+		return false
+	}
+	var fn *ast.Node
+	switch {
+	case ast.IsReturnStatement(parent):
+		fn = ast.GetContainingFunction(parent)
+	case ast.IsArrowFunction(parent) && ast.SkipParentheses(parent.Body()) == node:
+		fn = parent
+	}
+	if fn == nil {
+		return false
+	}
+	flags := ast.GetFunctionFlags(fn)
+	return flags&ast.FunctionFlagsAsync != 0 && flags&ast.FunctionFlagsGenerator == 0
 }
 
 func (c *Checker) checkThisExpression(node *ast.Node) *Type {
