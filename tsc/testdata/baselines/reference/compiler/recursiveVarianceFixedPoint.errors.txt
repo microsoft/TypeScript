@@ -12,9 +12,79 @@ annotations.ts(20,1): error TS2322: Type 'AnnotatedStore<unknown>' is not assign
   Types of property 'value' are incompatible.
     Type 'unknown' is not assignable to type 'string'.
 columnDefFirst.ts(14,1): error TS2322: Type 'ColumnDef<{ name: string; }, string>' is not assignable to type 'ColumnDef<{ name: string; }, unknown>'.
-  Type 'unknown' is not assignable to type 'string'.
+  Types of property 'cell' are incompatible.
+    Type '((column: Column<{ name: string; }, string>) => void) | undefined' is not assignable to type '((column: Column<{ name: string; }, unknown>) => void) | undefined'.
+      Type '(column: Column<{ name: string; }, string>) => void' is not assignable to type '(column: Column<{ name: string; }, unknown>) => void'.
+        Types of parameters 'column' and 'column' are incompatible.
+          Type 'Column<{ name: string; }, unknown>' is not assignable to type 'Column<{ name: string; }, string>'.
+            Types of property 'accessorFn' are incompatible.
+              Type '((row: { name: string; }) => unknown) | undefined' is not assignable to type '((row: { name: string; }) => string) | undefined'.
+                Type '(row: { name: string; }) => unknown' is not assignable to type '(row: { name: string; }) => string'.
+                  Type 'unknown' is not assignable to type 'string'.
+columnDefFirst.ts(15,1): error TS2322: Type 'ColumnDef<{ name: string; }, unknown>' is not assignable to type 'ColumnDef<{ name: string; }, string>'.
+  Types of property 'cell' are incompatible.
+    Type '((column: Column<{ name: string; }, unknown>) => void) | undefined' is not assignable to type '((column: Column<{ name: string; }, string>) => void) | undefined'.
+      Type '(column: Column<{ name: string; }, unknown>) => void' is not assignable to type '(column: Column<{ name: string; }, string>) => void'.
+        Types of parameters 'column' and 'column' are incompatible.
+          Type 'Column<{ name: string; }, string>' is not assignable to type 'Column<{ name: string; }, unknown>'.
+            The types of 'columnDef.cell' are incompatible between these types.
+              Type '((column: Column<{ name: string; }, string>) => void) | undefined' is not assignable to type '((column: Column<{ name: string; }, unknown>) => void) | undefined'.
+                Type '(column: Column<{ name: string; }, string>) => void' is not assignable to type '(column: Column<{ name: string; }, unknown>) => void'.
+                  Types of parameters 'column' and 'column' are incompatible.
+                    Type 'Column<{ name: string; }, unknown>' is not assignable to type 'Column<{ name: string; }, string>'.
+                      Types of property 'accessorFn' are incompatible.
+                        Type '((row: { name: string; }) => unknown) | undefined' is not assignable to type '((row: { name: string; }) => string) | undefined'.
+                          Type '(row: { name: string; }) => unknown' is not assignable to type '(row: { name: string; }) => string'.
+                            Type 'unknown' is not assignable to type 'string'.
+columnFirst.ts(14,1): error TS2322: Type 'ColumnDef<{ name: string; }, string>' is not assignable to type 'ColumnDef<{ name: string; }, unknown>'.
+  Types of property 'cell' are incompatible.
+    Type '((column: Column<{ name: string; }, string>) => void) | undefined' is not assignable to type '((column: Column<{ name: string; }, unknown>) => void) | undefined'.
+      Type '(column: Column<{ name: string; }, string>) => void' is not assignable to type '(column: Column<{ name: string; }, unknown>) => void'.
+        Types of parameters 'column' and 'column' are incompatible.
+          Type 'Column<{ name: string; }, unknown>' is not assignable to type 'Column<{ name: string; }, string>'.
+            The types of 'columnDef.cell' are incompatible between these types.
+              Type '((column: Column<{ name: string; }, unknown>) => void) | undefined' is not assignable to type '((column: Column<{ name: string; }, string>) => void) | undefined'.
+                Type '(column: Column<{ name: string; }, unknown>) => void' is not assignable to type '(column: Column<{ name: string; }, string>) => void'.
+                  Types of parameters 'column' and 'column' are incompatible.
+                    Type 'Column<{ name: string; }, string>' is not assignable to type 'Column<{ name: string; }, unknown>'.
+                      Type 'unknown' is not assignable to type 'string'.
+columnFirst.ts(15,1): error TS2322: Type 'ColumnDef<{ name: string; }, unknown>' is not assignable to type 'ColumnDef<{ name: string; }, string>'.
+  Types of property 'cell' are incompatible.
+    Type '((column: Column<{ name: string; }, unknown>) => void) | undefined' is not assignable to type '((column: Column<{ name: string; }, string>) => void) | undefined'.
+      Type '(column: Column<{ name: string; }, unknown>) => void' is not assignable to type '(column: Column<{ name: string; }, string>) => void'.
+        Types of parameters 'column' and 'column' are incompatible.
+          Type 'Column<{ name: string; }, string>' is not assignable to type 'Column<{ name: string; }, unknown>'.
+            The types of 'columnDef.cell' are incompatible between these types.
+              Type '((column: Column<{ name: string; }, string>) => void) | undefined' is not assignable to type '((column: Column<{ name: string; }, unknown>) => void) | undefined'.
+                Type '(column: Column<{ name: string; }, string>) => void' is not assignable to type '(column: Column<{ name: string; }, unknown>) => void'.
+                  Types of parameters 'column' and 'column' are incompatible.
+                    Type 'Column<{ name: string; }, unknown>' is not assignable to type 'Column<{ name: string; }, string>'.
+                      Types of property 'accessorFn' are incompatible.
+                        Type '((row: { name: string; }) => unknown) | undefined' is not assignable to type '((row: { name: string; }) => string) | undefined'.
+                          Type '(row: { name: string; }) => unknown' is not assignable to type '(row: { name: string; }) => string'.
+                            Type 'unknown' is not assignable to type 'string'.
 listenerFirst.ts(14,1): error TS2322: Type 'Listener<string>' is not assignable to type 'Listener<unknown>'.
-  Type 'unknown' is not assignable to type 'string'.
+  Types of parameters 'batch' and 'batch' are incompatible.
+    Type 'Store<unknown[]>' is not assignable to type 'Store<string[]>'.
+      Types of property 'listener' are incompatible.
+        Type 'Listener<unknown[]>' is not assignable to type 'Listener<string[]>'.
+          Types of parameters 'batch' and 'batch' are incompatible.
+            Type 'Store<string[][]>' is not assignable to type 'Store<unknown[][]>'.
+              Type 'unknown[][]' is not assignable to type 'string[][]'.
+                Type 'unknown[]' is not assignable to type 'string[]'.
+                  Type 'unknown' is not assignable to type 'string'.
+listenerFirst.ts(15,1): error TS2322: Type 'Store<string>' is not assignable to type 'Store<unknown>'.
+  Types of property 'listener' are incompatible.
+    Type 'Listener<string>' is not assignable to type 'Listener<unknown>'.
+      Types of parameters 'batch' and 'batch' are incompatible.
+        Type 'Store<unknown[]>' is not assignable to type 'Store<string[]>'.
+          Types of property 'listener' are incompatible.
+            Type 'Listener<unknown[]>' is not assignable to type 'Listener<string[]>'.
+              Types of parameters 'batch' and 'batch' are incompatible.
+                Type 'Store<string[][]>' is not assignable to type 'Store<unknown[][]>'.
+                  Type 'unknown[][]' is not assignable to type 'string[][]'.
+                    Type 'unknown[]' is not assignable to type 'string[]'.
+                      Type 'unknown' is not assignable to type 'string'.
 nestedComposition.ts(14,1): error TS2322: Type 'Outer<string>' is not assignable to type 'Outer<unknown>'.
   Types of property 'next' are incompatible.
     Type 'Inner<Outer<string>>' is not assignable to type 'Inner<Outer<unknown>>'.
@@ -26,11 +96,25 @@ nestedComposition.ts(15,1): error TS2322: Type 'Outer<unknown>' is not assignabl
     Type 'unknown' is not assignable to type 'string'.
 positiveRecursion.ts(18,1): error TS2322: Type 'Tree<unknown>' is not assignable to type 'Tree<string>'.
   Type 'unknown' is not assignable to type 'string'.
+storeFirst.ts(14,1): error TS2322: Type 'Store<string>' is not assignable to type 'Store<unknown>'.
+  Types of property 'listener' are incompatible.
+    Type 'Listener<string>' is not assignable to type 'Listener<unknown>'.
+      Types of parameters 'batch' and 'batch' are incompatible.
+        Type 'Store<unknown[]>' is not assignable to type 'Store<string[]>'.
+          Types of property 'value' are incompatible.
+            Type 'unknown[]' is not assignable to type 'string[]'.
+              Type 'unknown' is not assignable to type 'string'.
+storeFirst.ts(15,1): error TS2322: Type 'Listener<string>' is not assignable to type 'Listener<unknown>'.
+  Types of parameters 'batch' and 'batch' are incompatible.
+    Type 'Store<unknown[]>' is not assignable to type 'Store<string[]>'.
+      Types of property 'value' are incompatible.
+        Type 'unknown[]' is not assignable to type 'string[]'.
+          Type 'unknown' is not assignable to type 'string'.
 structuralMeasurement.ts(23,1): error TS2322: Type 'GenericMethod<unknown>' is not assignable to type 'GenericMethod<string>'.
   Type 'unknown' is not assignable to type 'string'.
 
 
-==== storeFirst.ts (0 errors) ====
+==== storeFirst.ts (2 errors) ====
     export {};
     
     interface Store<T> {
@@ -45,9 +129,25 @@ structuralMeasurement.ts(23,1): error TS2322: Type 'GenericMethod<unknown>' is n
     declare let unknownListener: Listener<unknown>;
     
     unknowns = strings; // Error
+    ~~~~~~~~
+!!! error TS2322: Type 'Store<string>' is not assignable to type 'Store<unknown>'.
+!!! error TS2322:   Types of property 'listener' are incompatible.
+!!! error TS2322:     Type 'Listener<string>' is not assignable to type 'Listener<unknown>'.
+!!! error TS2322:       Types of parameters 'batch' and 'batch' are incompatible.
+!!! error TS2322:         Type 'Store<unknown[]>' is not assignable to type 'Store<string[]>'.
+!!! error TS2322:           Types of property 'value' are incompatible.
+!!! error TS2322:             Type 'unknown[]' is not assignable to type 'string[]'.
+!!! error TS2322:               Type 'unknown' is not assignable to type 'string'.
     unknownListener = stringListener; // Error
+    ~~~~~~~~~~~~~~~
+!!! error TS2322: Type 'Listener<string>' is not assignable to type 'Listener<unknown>'.
+!!! error TS2322:   Types of parameters 'batch' and 'batch' are incompatible.
+!!! error TS2322:     Type 'Store<unknown[]>' is not assignable to type 'Store<string[]>'.
+!!! error TS2322:       Types of property 'value' are incompatible.
+!!! error TS2322:         Type 'unknown[]' is not assignable to type 'string[]'.
+!!! error TS2322:           Type 'unknown' is not assignable to type 'string'.
     
-==== listenerFirst.ts (1 errors) ====
+==== listenerFirst.ts (2 errors) ====
     export {};
     
     type Listener<T> = (batch: Store<T[]>) => void;
@@ -64,10 +164,31 @@ structuralMeasurement.ts(23,1): error TS2322: Type 'GenericMethod<unknown>' is n
     unknownListener = stringListener; // Error
     ~~~~~~~~~~~~~~~
 !!! error TS2322: Type 'Listener<string>' is not assignable to type 'Listener<unknown>'.
-!!! error TS2322:   Type 'unknown' is not assignable to type 'string'.
+!!! error TS2322:   Types of parameters 'batch' and 'batch' are incompatible.
+!!! error TS2322:     Type 'Store<unknown[]>' is not assignable to type 'Store<string[]>'.
+!!! error TS2322:       Types of property 'listener' are incompatible.
+!!! error TS2322:         Type 'Listener<unknown[]>' is not assignable to type 'Listener<string[]>'.
+!!! error TS2322:           Types of parameters 'batch' and 'batch' are incompatible.
+!!! error TS2322:             Type 'Store<string[][]>' is not assignable to type 'Store<unknown[][]>'.
+!!! error TS2322:               Type 'unknown[][]' is not assignable to type 'string[][]'.
+!!! error TS2322:                 Type 'unknown[]' is not assignable to type 'string[]'.
+!!! error TS2322:                   Type 'unknown' is not assignable to type 'string'.
     unknowns = strings; // Error
+    ~~~~~~~~
+!!! error TS2322: Type 'Store<string>' is not assignable to type 'Store<unknown>'.
+!!! error TS2322:   Types of property 'listener' are incompatible.
+!!! error TS2322:     Type 'Listener<string>' is not assignable to type 'Listener<unknown>'.
+!!! error TS2322:       Types of parameters 'batch' and 'batch' are incompatible.
+!!! error TS2322:         Type 'Store<unknown[]>' is not assignable to type 'Store<string[]>'.
+!!! error TS2322:           Types of property 'listener' are incompatible.
+!!! error TS2322:             Type 'Listener<unknown[]>' is not assignable to type 'Listener<string[]>'.
+!!! error TS2322:               Types of parameters 'batch' and 'batch' are incompatible.
+!!! error TS2322:                 Type 'Store<string[][]>' is not assignable to type 'Store<unknown[][]>'.
+!!! error TS2322:                   Type 'unknown[][]' is not assignable to type 'string[][]'.
+!!! error TS2322:                     Type 'unknown[]' is not assignable to type 'string[]'.
+!!! error TS2322:                       Type 'unknown' is not assignable to type 'string'.
     
-==== columnDefFirst.ts (1 errors) ====
+==== columnDefFirst.ts (2 errors) ====
     export {};
     
     interface ColumnDef<Row, Value = unknown> {
@@ -84,10 +205,34 @@ structuralMeasurement.ts(23,1): error TS2322: Type 'GenericMethod<unknown>' is n
     unknownColumn = stringColumn; // Error
     ~~~~~~~~~~~~~
 !!! error TS2322: Type 'ColumnDef<{ name: string; }, string>' is not assignable to type 'ColumnDef<{ name: string; }, unknown>'.
-!!! error TS2322:   Type 'unknown' is not assignable to type 'string'.
+!!! error TS2322:   Types of property 'cell' are incompatible.
+!!! error TS2322:     Type '((column: Column<{ name: string; }, string>) => void) | undefined' is not assignable to type '((column: Column<{ name: string; }, unknown>) => void) | undefined'.
+!!! error TS2322:       Type '(column: Column<{ name: string; }, string>) => void' is not assignable to type '(column: Column<{ name: string; }, unknown>) => void'.
+!!! error TS2322:         Types of parameters 'column' and 'column' are incompatible.
+!!! error TS2322:           Type 'Column<{ name: string; }, unknown>' is not assignable to type 'Column<{ name: string; }, string>'.
+!!! error TS2322:             Types of property 'accessorFn' are incompatible.
+!!! error TS2322:               Type '((row: { name: string; }) => unknown) | undefined' is not assignable to type '((row: { name: string; }) => string) | undefined'.
+!!! error TS2322:                 Type '(row: { name: string; }) => unknown' is not assignable to type '(row: { name: string; }) => string'.
+!!! error TS2322:                   Type 'unknown' is not assignable to type 'string'.
     stringColumn = unknownColumn; // Error
+    ~~~~~~~~~~~~
+!!! error TS2322: Type 'ColumnDef<{ name: string; }, unknown>' is not assignable to type 'ColumnDef<{ name: string; }, string>'.
+!!! error TS2322:   Types of property 'cell' are incompatible.
+!!! error TS2322:     Type '((column: Column<{ name: string; }, unknown>) => void) | undefined' is not assignable to type '((column: Column<{ name: string; }, string>) => void) | undefined'.
+!!! error TS2322:       Type '(column: Column<{ name: string; }, unknown>) => void' is not assignable to type '(column: Column<{ name: string; }, string>) => void'.
+!!! error TS2322:         Types of parameters 'column' and 'column' are incompatible.
+!!! error TS2322:           Type 'Column<{ name: string; }, string>' is not assignable to type 'Column<{ name: string; }, unknown>'.
+!!! error TS2322:             The types of 'columnDef.cell' are incompatible between these types.
+!!! error TS2322:               Type '((column: Column<{ name: string; }, string>) => void) | undefined' is not assignable to type '((column: Column<{ name: string; }, unknown>) => void) | undefined'.
+!!! error TS2322:                 Type '(column: Column<{ name: string; }, string>) => void' is not assignable to type '(column: Column<{ name: string; }, unknown>) => void'.
+!!! error TS2322:                   Types of parameters 'column' and 'column' are incompatible.
+!!! error TS2322:                     Type 'Column<{ name: string; }, unknown>' is not assignable to type 'Column<{ name: string; }, string>'.
+!!! error TS2322:                       Types of property 'accessorFn' are incompatible.
+!!! error TS2322:                         Type '((row: { name: string; }) => unknown) | undefined' is not assignable to type '((row: { name: string; }) => string) | undefined'.
+!!! error TS2322:                           Type '(row: { name: string; }) => unknown' is not assignable to type '(row: { name: string; }) => string'.
+!!! error TS2322:                             Type 'unknown' is not assignable to type 'string'.
     
-==== columnFirst.ts (0 errors) ====
+==== columnFirst.ts (2 errors) ====
     export {};
     
     interface Column<Row, Value = unknown> {
@@ -102,7 +247,36 @@ structuralMeasurement.ts(23,1): error TS2322: Type 'GenericMethod<unknown>' is n
     declare let unknownColumn: ColumnDef<{ name: string }, unknown>;
     
     unknownColumn = stringColumn; // Error
+    ~~~~~~~~~~~~~
+!!! error TS2322: Type 'ColumnDef<{ name: string; }, string>' is not assignable to type 'ColumnDef<{ name: string; }, unknown>'.
+!!! error TS2322:   Types of property 'cell' are incompatible.
+!!! error TS2322:     Type '((column: Column<{ name: string; }, string>) => void) | undefined' is not assignable to type '((column: Column<{ name: string; }, unknown>) => void) | undefined'.
+!!! error TS2322:       Type '(column: Column<{ name: string; }, string>) => void' is not assignable to type '(column: Column<{ name: string; }, unknown>) => void'.
+!!! error TS2322:         Types of parameters 'column' and 'column' are incompatible.
+!!! error TS2322:           Type 'Column<{ name: string; }, unknown>' is not assignable to type 'Column<{ name: string; }, string>'.
+!!! error TS2322:             The types of 'columnDef.cell' are incompatible between these types.
+!!! error TS2322:               Type '((column: Column<{ name: string; }, unknown>) => void) | undefined' is not assignable to type '((column: Column<{ name: string; }, string>) => void) | undefined'.
+!!! error TS2322:                 Type '(column: Column<{ name: string; }, unknown>) => void' is not assignable to type '(column: Column<{ name: string; }, string>) => void'.
+!!! error TS2322:                   Types of parameters 'column' and 'column' are incompatible.
+!!! error TS2322:                     Type 'Column<{ name: string; }, string>' is not assignable to type 'Column<{ name: string; }, unknown>'.
+!!! error TS2322:                       Type 'unknown' is not assignable to type 'string'.
     stringColumn = unknownColumn; // Error
+    ~~~~~~~~~~~~
+!!! error TS2322: Type 'ColumnDef<{ name: string; }, unknown>' is not assignable to type 'ColumnDef<{ name: string; }, string>'.
+!!! error TS2322:   Types of property 'cell' are incompatible.
+!!! error TS2322:     Type '((column: Column<{ name: string; }, unknown>) => void) | undefined' is not assignable to type '((column: Column<{ name: string; }, string>) => void) | undefined'.
+!!! error TS2322:       Type '(column: Column<{ name: string; }, unknown>) => void' is not assignable to type '(column: Column<{ name: string; }, string>) => void'.
+!!! error TS2322:         Types of parameters 'column' and 'column' are incompatible.
+!!! error TS2322:           Type 'Column<{ name: string; }, string>' is not assignable to type 'Column<{ name: string; }, unknown>'.
+!!! error TS2322:             The types of 'columnDef.cell' are incompatible between these types.
+!!! error TS2322:               Type '((column: Column<{ name: string; }, string>) => void) | undefined' is not assignable to type '((column: Column<{ name: string; }, unknown>) => void) | undefined'.
+!!! error TS2322:                 Type '(column: Column<{ name: string; }, string>) => void' is not assignable to type '(column: Column<{ name: string; }, unknown>) => void'.
+!!! error TS2322:                   Types of parameters 'column' and 'column' are incompatible.
+!!! error TS2322:                     Type 'Column<{ name: string; }, unknown>' is not assignable to type 'Column<{ name: string; }, string>'.
+!!! error TS2322:                       Types of property 'accessorFn' are incompatible.
+!!! error TS2322:                         Type '((row: { name: string; }) => unknown) | undefined' is not assignable to type '((row: { name: string; }) => string) | undefined'.
+!!! error TS2322:                           Type '(row: { name: string; }) => unknown' is not assignable to type '(row: { name: string; }) => string'.
+!!! error TS2322:                             Type 'unknown' is not assignable to type 'string'.
     
 ==== positiveRecursion.ts (1 errors) ====
     export {};

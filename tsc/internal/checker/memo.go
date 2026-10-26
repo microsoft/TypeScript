@@ -630,6 +630,9 @@ func (c *Checker) attachState(state *memoState) {
 	if state.pending == nil {
 		state.pending = &memoEffects{}
 		c.memoPendingCount++
+		if c.flushStates != nil {
+			*c.flushStates = append(*c.flushStates, state)
+		}
 	}
 	state.pending.addDep(f)
 }
@@ -780,7 +783,7 @@ func (c *Checker) endMemoUncached() {
 	if res == nil || res.effects == nil {
 		return
 	}
-	f := res.effects
+	state, f := res.result, res.effects
 	if parent := c.currentMemoEffects(); parent != nil {
 		if len(f.effects) == 0 && f.entry == parent.entry {
 			// Without effects of its own, and located like the enclosing
@@ -791,6 +794,9 @@ func (c *Checker) endMemoUncached() {
 		} else {
 			parent.addDep(f)
 		}
+	} else if c.flushStates != nil {
+		// withoutChecking replays effects through the results computed.
+		c.retainEffects(state, f)
 	}
 }
 
@@ -808,13 +814,16 @@ func (c *Checker) retainEffects(state *memoState, f *memoEffects) {
 		}
 		return
 	}
-	if c.logResults() {
+	if c.logEffects() {
 		c.logPendingDiscard(state)
 	}
 	if state.pending != nil {
 		f.addDep(state.pending)
 	} else {
 		c.memoPendingCount++
+		if c.flushStates != nil {
+			*c.flushStates = append(*c.flushStates, state)
+		}
 	}
 	state.pending = f
 	if parent := c.currentMemoEffects(); parent != nil {
@@ -923,6 +932,34 @@ func (c *Checker) withReferenceMarks(fn func()) {
 	}
 }
 
+// withoutChecking runs fn in a query from a check, then replays the effects
+// of everything fn computed, as if fn had run in the check. Unlike effects
+// applied directly, recorded effects can be discarded with the results they
+// belong to.
+func (c *Checker) withoutChecking(fn func()) {
+	debug.Assert(c.checking && c.flushStates == nil, "withoutChecking outside a check")
+	saveMemoTop := c.memoTop
+	var states []*memoState
+	c.checking = false
+	c.memoTop = 0
+	c.flushStates = &states
+	fn()
+	c.flushStates = nil
+	c.checking = true
+	c.memoTop = saveMemoTop
+	// Replaying is in order of computation, so effects apply in the order
+	// they would have in the check. They also happened at the current node,
+	// so only the effects of computations started there are located at it.
+	for _, state := range states {
+		if state.pending != nil {
+			f := state.pending
+			state.pending = nil
+			c.memoPendingCount--
+			c.replayEffects(f, c.currentNode, true)
+		}
+	}
+}
+
 // withChecking runs fn in a check.
 func (c *Checker) withChecking(fn func()) {
 	// Checking starts only from top-level requests, so any resolution left at
@@ -949,8 +986,28 @@ func (c *Checker) memoCycle(depth int) {
 		if !c.resolutions[i].memo {
 			continue
 		}
-		c.memoEffectsAt(i).addDep(outer)
+		f := c.memoEffectsAt(i)
+		if i < c.effectsMarkDepth-1 && f != outer && outer.parent != f {
+			// The resolution is in progress below the mark, so discarding to
+			// the mark must also discard this dependency.
+			c.logDepsDiscard(f)
+		}
+		f.addDep(outer)
 	}
+}
+
+// logDepsDiscard logs the dependencies of a computation in progress below the
+// innermost effects mark, which are about to grow, so discardSince can
+// restore them.
+//
+//go:noinline
+func (c *Checker) logDepsDiscard(f *memoEffects) {
+	n := len(f.deps)
+	c.discardLog = append(c.discardLog, discardEntry{effects: true, restore: func() {
+		if len(f.deps) > n {
+			f.truncateDeps(n)
+		}
+	}})
 }
 
 func (c *Checker) memoEffectsAt(i int) *memoEffects {
@@ -979,9 +1036,10 @@ func (c *Checker) memoEffectsAt(i int) *memoEffects {
 // Discard log
 //
 // Some computations run provisionally, and may have to be discarded as if
-// they had never run: those in a cycle (see above). While any of them is in
-// progress, what they cache is logged in the discard log, from which each
-// discards to the position where it started. The discard log is
+// they had never run: those in a cycle (see above), and those a computation
+// that retries from a mark runs before retrying (see markDiscard). While any
+// of them is in progress, what they cache is logged in the discard log, from
+// which each discards to the position where it started. The discard log is
 // cleared once nothing in progress can discard.
 
 type discardEntry struct {
@@ -994,6 +1052,12 @@ type discardEntry struct {
 // log.
 func (c *Checker) logResults() bool {
 	return c.circularityStart != 0
+}
+
+// logEffects reports whether changing the effects of a result must be logged
+// in the discard log.
+func (c *Checker) logEffects() bool {
+	return c.circularityStart != 0 || c.effectsMarkDepth != 0
 }
 
 // discardLogSince restores everything logged in the discard log since
@@ -1009,7 +1073,7 @@ func (c *Checker) discardLogSince(start int) {
 
 // trimDiscardLog clears the discard log if nothing in progress can discard.
 func (c *Checker) trimDiscardLog() {
-	if !c.logResults() && len(c.discardLog) != 0 {
+	if !c.logEffects() && len(c.discardLog) != 0 {
 		clear(c.discardLog)
 		c.discardLog = c.discardLog[:0]
 	}
@@ -1123,6 +1187,62 @@ func (c *Checker) extendCircularity(head int) {
 	}
 }
 
+// A discardMark is a position in the computation in progress to which it can
+// discard, so that it can run again from the same state, as if what it
+// computed since had never run. From markDiscard to releaseDiscardMark, the
+// discard log logs all that may have to be discarded.
+type discardMark struct {
+	discardLog       int
+	participants     int
+	circularityStart int
+	effectsMarkDepth int // Checker.effectsMarkDepth to restore on release
+
+	// The effects recorded so far by the innermost computation in progress,
+	// which must have a memo resolution.
+	recording       *memoEffects
+	effects         int
+	deps            int
+	resolutionIndex int
+}
+
+func (c *Checker) markDiscard() discardMark {
+	n := c.memoTop - 1
+	f := c.memoEffectsAt(n)
+	m := discardMark{
+		discardLog:       len(c.discardLog),
+		participants:     len(c.cycleParticipants),
+		circularityStart: c.circularityStart,
+		effectsMarkDepth: c.effectsMarkDepth,
+		recording:        f,
+		effects:          len(f.effects),
+		deps:             len(f.deps),
+		resolutionIndex:  n,
+	}
+	c.effectsMarkDepth = n + 1
+	return m
+}
+
+// discardSince discards the results cached since m, with the effects of
+// computing them, restoring the cycle in progress then, and discards the
+// effects recorded by the computation in progress.
+func (c *Checker) discardSince(m discardMark) {
+	c.discardLogSince(m.discardLog)
+	c.cycleParticipants = c.cycleParticipants[:min(m.participants, len(c.cycleParticipants))]
+	c.circularityStart = m.circularityStart
+	debug.Assert(c.memoTop-1 == m.resolutionIndex && c.resolutions[m.resolutionIndex].effects == m.recording, "effects discarded outside their computation")
+	f := m.recording
+	clear(f.effects[m.effects:])
+	f.effects = f.effects[:m.effects]
+	f.truncateDeps(m.deps)
+}
+
+// releaseDiscardMark ends the period during which the computation in progress
+// can discard to m.
+func (c *Checker) releaseDiscardMark(m discardMark) {
+	c.effectsMarkDepth = m.effectsMarkDepth
+	c.trimDiscardLog()
+}
+
 func (f *memoEffects) truncateDeps(n int) {
 	for _, d := range f.deps[n:] {
 		if d.parent == f {
@@ -1134,7 +1254,7 @@ func (f *memoEffects) truncateDeps(n int) {
 }
 
 // logPendingDiscard logs the effects of the result in the memo state, which
-// are about to change, so discarding the cycle can restore them.
+// are about to change, so discardSince can restore them.
 //
 //go:noinline
 func (c *Checker) logPendingDiscard(state *memoState) {

@@ -26,7 +26,7 @@ class Bar<T> {
 >x : T
 
     Value = pick(new Foo(this)).foo;
->Value : any
+>Value : string
 >pick(new Foo(this)).foo : string
 >pick(new Foo(this)) : B
 >pick : { (x: Foo<number>): A; (x: object): B; }
@@ -56,8 +56,8 @@ class Foo<T> {
 
 const v: number = new Bar<string>().Value;
 >v : number
->new Bar<string>().Value : any
+>new Bar<string>().Value : string
 >new Bar<string>() : Bar<string>
 >Bar : typeof Bar
->Value : any
+>Value : string
 

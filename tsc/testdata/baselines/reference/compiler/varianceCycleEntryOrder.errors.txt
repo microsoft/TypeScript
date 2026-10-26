@@ -1,28 +1,54 @@
+barFirst.ts(8,1): error TS2322: Type 'Bar<string>' is not assignable to type 'Bar<"lit">'.
+  The types of 'foo.b.f' are incompatible between these types.
+    Type '(u: Foo<Bar<string>>) => void' is not assignable to type '(u: Foo<Bar<"lit">>) => void'.
+      Types of parameters 'u' and 'u' are incompatible.
+        Type 'Foo<Bar<"lit">>' is not assignable to type 'Foo<Bar<string>>'.
+          The types of 'x.f' are incompatible between these types.
+            Type '(u: "lit") => void' is not assignable to type '(u: string) => void'.
+              Types of parameters 'u' and 'u' are incompatible.
+                Type 'string' is not assignable to type '"lit"'.
 barFirst.ts(9,1): error TS2322: Type 'Bar<"lit">' is not assignable to type 'Bar<string>'.
-  Type 'string' is not assignable to type '"lit"'.
+  Types of property 'f' are incompatible.
+    Type '(u: "lit") => void' is not assignable to type '(u: string) => void'.
+      Types of parameters 'u' and 'u' are incompatible.
+        Type 'string' is not assignable to type '"lit"'.
 barFirst.ts(10,1): error TS2322: Type 'Foo<string>' is not assignable to type 'Foo<"lit">'.
   Types of property 'x' are incompatible.
     Type 'string' is not assignable to type '"lit"'.
 barFirst.ts(11,1): error TS2322: Type 'Foo<"lit">' is not assignable to type 'Foo<string>'.
-  Types of property 'b' are incompatible.
-    Type 'Bar<Foo<"lit">>' is not assignable to type 'Bar<Foo<string>>'.
-      Type 'Foo<string>' is not assignable to type 'Foo<"lit">'.
-        Types of property 'x' are incompatible.
-          Type 'string' is not assignable to type '"lit"'.
+  The types of 'b.f' are incompatible between these types.
+    Type '(u: Foo<"lit">) => void' is not assignable to type '(u: Foo<string>) => void'.
+      Types of parameters 'u' and 'u' are incompatible.
+        Type 'Foo<string>' is not assignable to type 'Foo<"lit">'.
+          Types of property 'x' are incompatible.
+            Type 'string' is not assignable to type '"lit"'.
 fooFirst.ts(8,1): error TS2322: Type 'Foo<string>' is not assignable to type 'Foo<"lit">'.
   Types of property 'x' are incompatible.
     Type 'string' is not assignable to type '"lit"'.
 fooFirst.ts(9,1): error TS2322: Type 'Foo<"lit">' is not assignable to type 'Foo<string>'.
-  Types of property 'b' are incompatible.
-    Type 'Bar<Foo<"lit">>' is not assignable to type 'Bar<Foo<string>>'.
-      Type 'Foo<string>' is not assignable to type 'Foo<"lit">'.
-        Types of property 'x' are incompatible.
-          Type 'string' is not assignable to type '"lit"'.
+  The types of 'b.f' are incompatible between these types.
+    Type '(u: Foo<"lit">) => void' is not assignable to type '(u: Foo<string>) => void'.
+      Types of parameters 'u' and 'u' are incompatible.
+        Type 'Foo<string>' is not assignable to type 'Foo<"lit">'.
+          Types of property 'x' are incompatible.
+            Type 'string' is not assignable to type '"lit"'.
+fooFirst.ts(10,1): error TS2322: Type 'Bar<string>' is not assignable to type 'Bar<"lit">'.
+  The types of 'foo.b.f' are incompatible between these types.
+    Type '(u: Foo<Bar<string>>) => void' is not assignable to type '(u: Foo<Bar<"lit">>) => void'.
+      Types of parameters 'u' and 'u' are incompatible.
+        Type 'Foo<Bar<"lit">>' is not assignable to type 'Foo<Bar<string>>'.
+          The types of 'x.f' are incompatible between these types.
+            Type '(u: "lit") => void' is not assignable to type '(u: string) => void'.
+              Types of parameters 'u' and 'u' are incompatible.
+                Type 'string' is not assignable to type '"lit"'.
 fooFirst.ts(11,1): error TS2322: Type 'Bar<"lit">' is not assignable to type 'Bar<string>'.
-  Type 'string' is not assignable to type '"lit"'.
+  Types of property 'f' are incompatible.
+    Type '(u: "lit") => void' is not assignable to type '(u: string) => void'.
+      Types of parameters 'u' and 'u' are incompatible.
+        Type 'string' is not assignable to type '"lit"'.
 
 
-==== fooFirst.ts (3 errors) ====
+==== fooFirst.ts (4 errors) ====
     export {};
     
     interface Foo<T> { x: T; b: Bar<Foo<T>> }
@@ -38,18 +64,32 @@ fooFirst.ts(11,1): error TS2322: Type 'Bar<"lit">' is not assignable to type 'Ba
     fs = fl; // Error
     ~~
 !!! error TS2322: Type 'Foo<"lit">' is not assignable to type 'Foo<string>'.
-!!! error TS2322:   Types of property 'b' are incompatible.
-!!! error TS2322:     Type 'Bar<Foo<"lit">>' is not assignable to type 'Bar<Foo<string>>'.
-!!! error TS2322:       Type 'Foo<string>' is not assignable to type 'Foo<"lit">'.
-!!! error TS2322:         Types of property 'x' are incompatible.
-!!! error TS2322:           Type 'string' is not assignable to type '"lit"'.
+!!! error TS2322:   The types of 'b.f' are incompatible between these types.
+!!! error TS2322:     Type '(u: Foo<"lit">) => void' is not assignable to type '(u: Foo<string>) => void'.
+!!! error TS2322:       Types of parameters 'u' and 'u' are incompatible.
+!!! error TS2322:         Type 'Foo<string>' is not assignable to type 'Foo<"lit">'.
+!!! error TS2322:           Types of property 'x' are incompatible.
+!!! error TS2322:             Type 'string' is not assignable to type '"lit"'.
     bl = bs; // Error
+    ~~
+!!! error TS2322: Type 'Bar<string>' is not assignable to type 'Bar<"lit">'.
+!!! error TS2322:   The types of 'foo.b.f' are incompatible between these types.
+!!! error TS2322:     Type '(u: Foo<Bar<string>>) => void' is not assignable to type '(u: Foo<Bar<"lit">>) => void'.
+!!! error TS2322:       Types of parameters 'u' and 'u' are incompatible.
+!!! error TS2322:         Type 'Foo<Bar<"lit">>' is not assignable to type 'Foo<Bar<string>>'.
+!!! error TS2322:           The types of 'x.f' are incompatible between these types.
+!!! error TS2322:             Type '(u: "lit") => void' is not assignable to type '(u: string) => void'.
+!!! error TS2322:               Types of parameters 'u' and 'u' are incompatible.
+!!! error TS2322:                 Type 'string' is not assignable to type '"lit"'.
     bs = bl; // Error
     ~~
 !!! error TS2322: Type 'Bar<"lit">' is not assignable to type 'Bar<string>'.
-!!! error TS2322:   Type 'string' is not assignable to type '"lit"'.
+!!! error TS2322:   Types of property 'f' are incompatible.
+!!! error TS2322:     Type '(u: "lit") => void' is not assignable to type '(u: string) => void'.
+!!! error TS2322:       Types of parameters 'u' and 'u' are incompatible.
+!!! error TS2322:         Type 'string' is not assignable to type '"lit"'.
     
-==== barFirst.ts (3 errors) ====
+==== barFirst.ts (4 errors) ====
     export {};
     
     interface Foo<T> { x: T; b: Bar<Foo<T>> }
@@ -58,10 +98,23 @@ fooFirst.ts(11,1): error TS2322: Type 'Bar<"lit">' is not assignable to type 'Ba
     declare let fs: Foo<string>, fl: Foo<"lit">;
     declare let bs: Bar<string>, bl: Bar<"lit">;
     bl = bs; // Error
+    ~~
+!!! error TS2322: Type 'Bar<string>' is not assignable to type 'Bar<"lit">'.
+!!! error TS2322:   The types of 'foo.b.f' are incompatible between these types.
+!!! error TS2322:     Type '(u: Foo<Bar<string>>) => void' is not assignable to type '(u: Foo<Bar<"lit">>) => void'.
+!!! error TS2322:       Types of parameters 'u' and 'u' are incompatible.
+!!! error TS2322:         Type 'Foo<Bar<"lit">>' is not assignable to type 'Foo<Bar<string>>'.
+!!! error TS2322:           The types of 'x.f' are incompatible between these types.
+!!! error TS2322:             Type '(u: "lit") => void' is not assignable to type '(u: string) => void'.
+!!! error TS2322:               Types of parameters 'u' and 'u' are incompatible.
+!!! error TS2322:                 Type 'string' is not assignable to type '"lit"'.
     bs = bl; // Error
     ~~
 !!! error TS2322: Type 'Bar<"lit">' is not assignable to type 'Bar<string>'.
-!!! error TS2322:   Type 'string' is not assignable to type '"lit"'.
+!!! error TS2322:   Types of property 'f' are incompatible.
+!!! error TS2322:     Type '(u: "lit") => void' is not assignable to type '(u: string) => void'.
+!!! error TS2322:       Types of parameters 'u' and 'u' are incompatible.
+!!! error TS2322:         Type 'string' is not assignable to type '"lit"'.
     fl = fs; // Error
     ~~
 !!! error TS2322: Type 'Foo<string>' is not assignable to type 'Foo<"lit">'.
@@ -70,9 +123,10 @@ fooFirst.ts(11,1): error TS2322: Type 'Bar<"lit">' is not assignable to type 'Ba
     fs = fl; // Error
     ~~
 !!! error TS2322: Type 'Foo<"lit">' is not assignable to type 'Foo<string>'.
-!!! error TS2322:   Types of property 'b' are incompatible.
-!!! error TS2322:     Type 'Bar<Foo<"lit">>' is not assignable to type 'Bar<Foo<string>>'.
-!!! error TS2322:       Type 'Foo<string>' is not assignable to type 'Foo<"lit">'.
-!!! error TS2322:         Types of property 'x' are incompatible.
-!!! error TS2322:           Type 'string' is not assignable to type '"lit"'.
+!!! error TS2322:   The types of 'b.f' are incompatible between these types.
+!!! error TS2322:     Type '(u: Foo<"lit">) => void' is not assignable to type '(u: Foo<string>) => void'.
+!!! error TS2322:       Types of parameters 'u' and 'u' are incompatible.
+!!! error TS2322:         Type 'Foo<string>' is not assignable to type 'Foo<"lit">'.
+!!! error TS2322:           Types of property 'x' are incompatible.
+!!! error TS2322:             Type 'string' is not assignable to type '"lit"'.
     

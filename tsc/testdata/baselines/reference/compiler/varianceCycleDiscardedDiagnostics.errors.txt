@@ -1,4 +1,4 @@
-varianceCycleDiscardedDiagnostics.ts(12,5): error TS7022: 'Value' implicitly has type 'any' because it does not have a type annotation and is referenced directly or indirectly in its own initializer.
+varianceCycleDiscardedDiagnostics.ts(22,7): error TS2322: Type 'string' is not assignable to type 'number'.
 
 
 ==== varianceCycleDiscardedDiagnostics.ts (1 errors) ====
@@ -14,8 +14,6 @@ varianceCycleDiscardedDiagnostics.ts(12,5): error TS7022: 'Value' implicitly has
     class Bar<T> {
         x!: T;
         Value = pick(new Foo(this)).foo;
-        ~~~~~
-!!! error TS7022: 'Value' implicitly has type 'any' because it does not have a type annotation and is referenced directly or indirectly in its own initializer.
     }
     
     class Foo<T> {
@@ -26,4 +24,6 @@ varianceCycleDiscardedDiagnostics.ts(12,5): error TS7022: 'Value' implicitly has
     }
     
     const v: number = new Bar<string>().Value;
+          ~
+!!! error TS2322: Type 'string' is not assignable to type 'number'.
     

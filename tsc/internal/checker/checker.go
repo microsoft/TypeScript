@@ -563,7 +563,9 @@ type WideningContext struct {
 type VarianceStackEntry struct {
 	symbol         *ast.Symbol
 	typeParameters []*Type
-	resolution     int // Index in Checker.resolutions of the resolution of the measurement
+	resolution     int  // Index in Checker.resolutions of the resolution of the measurement
+	cycleStart     int  // Lowest index of an entry whose guessed variances this measurement used, or MaxInt
+	guessChanged   bool // Whether a measurement in the circularity found stricter variances than guessed
 }
 
 const maxSerializationLevel = 2
@@ -667,8 +669,11 @@ type Checker struct {
 	discardLog                                  []discardEntry      // Restores what was cached while anything may be discarded; see "Discard log" in memo.go
 	circularityMark                             int                 // Length of discard log when the cycle in progress was detected
 	cycleParticipants                           []TypeResolution    // Computations that observed a cycle in progress
+	effectsMarkDepth                            int                 // 1 + resolution index of the innermost effects mark that may be discarded, or 0
 	varianceStack                               []VarianceStackEntry
-	varianceMeasuring                           map[*ast.Symbol]int // Symbols whose variances are being measured, including by suspended computations
+	varianceGuesses                             map[*ast.Symbol][]VarianceFlags // Variances assumed for measurements in progress; see getVariancesWorker
+	varianceGuessed                             []*ast.Symbol                   // Keys of varianceGuesses in order of addition
+	flushStates                                 *[]*memoState                   // Collects memo states given effects to replay, if non-nil; see withoutChecking
 	callResolutionStack                         []*ast.Node
 	resolvingExplicitTypeOfSymbol               collections.Set[*ast.Symbol]
 	resolvingAssertionOperands                  collections.Set[*ast.Node]
@@ -18821,7 +18826,14 @@ func (c *Checker) getRelationKey(source *Type, target *Type, intersectionState I
 	var b keyBuilder
 	var constrained bool
 	if c.isTypeReferenceWithGenericArguments(source) && c.isTypeReferenceWithGenericArguments(target) {
-		b.writeByte('g')
+		// Marker types are compared structurally while their variances are being
+		// measured, and other instantiations with the same key by those variances,
+		// which may be guesses until the measurement finishes.
+		if c.isMarkerType(source) || c.isMarkerType(target) {
+			b.writeByte('m')
+		} else {
+			b.writeByte('g')
+		}
 		constrained = b.writeGenericTypeReferences(c, source, target, ignoreConstraints)
 	} else {
 		b.writeByte('s')

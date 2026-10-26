@@ -1,6 +1,7 @@
 package checker
 
 import (
+	"math"
 	"math/bits"
 	"slices"
 	"strconv"
@@ -1506,129 +1507,194 @@ func (c *Checker) getAliasVariances(symbol *ast.Symbol) []VarianceFlags {
 // Return an array containing the variance of each type parameter. The variance is effectively
 // a digest of the type comparisons that occur for each type argument when instantiations of the
 // generic type are structurally compared. We infer the variance information by comparing
-// instantiations of the generic type for type arguments with known relations. The function
-// returns an empty slice when invoked recursively for the given generic type.
+// instantiations of the generic type for type arguments with known relations.
+//
+// Generic types whose variance measurements depend on each other are measured together as a
+// fixpoint. A measurement that needs the variances of a type still being measured uses a guess
+// for them, starting from the most permissive variances. When the outermost measurement of the
+// circularity finishes, any measured type whose variances are stricter than its guess gets the
+// stricter guess, and everything computed since the guesses were first used is discarded and
+// measured again. Measurements only get stricter, so this ends, with the same variances for
+// each type whichever type is measured first.
 func (c *Checker) getVariancesWorker(symbol *ast.Symbol, typeParameters []*Type) []VarianceFlags {
 	links := c.varianceLinks.Get(symbol)
-	if links.variances.get(c) == nil {
-		var traceArgs map[string]any
-		if tr := c.tracer; tr != nil {
-			traceArgs = map[string]any{"arity": len(typeParameters), "id": c.getDeclaredTypeOfSymbol(symbol).id}
-			popFn := tr.Push(tracing.PhaseCheckTypes, "getVariancesWorker", traceArgs, true)
-			defer func() {
-				variances := links.variances.get(c)
-				formatted := make([]string, len(variances))
-				for i, v := range variances {
-					formatted[i] = v.String()
-				}
-				traceArgs["variances"] = formatted
-				popFn()
-			}()
-		}
-		stackIndex := c.getVarianceStackIndex(symbol)
-		if stackIndex < 0 {
-			links.variances.begin(c)
-			saveResolutionStart := c.resolutionStart
-			if len(c.varianceStack) == 0 {
-				c.resolutionStart = len(c.resolutions)
-			}
-			c.varianceStack = append(c.varianceStack, VarianceStackEntry{symbol: symbol, typeParameters: typeParameters, resolution: len(c.resolutions)})
-			c.beginTypeResolution(symbol, TypeSystemPropertyNameVariances)
-			if c.varianceMeasuring == nil {
-				c.varianceMeasuring = make(map[*ast.Symbol]int)
-			}
-			c.varianceMeasuring[symbol]++
-			variances := make([]VarianceFlags, len(typeParameters))
-			for i, tp := range typeParameters {
-				modifiers := c.getTypeParameterModifiers(tp)
-				var variance VarianceFlags
-				switch {
-				case modifiers&ast.ModifierFlagsOut != 0:
-					if modifiers&ast.ModifierFlagsIn != 0 {
-						variance = VarianceFlagsInvariant
-					} else {
-						variance = VarianceFlagsCovariant
-					}
-				case modifiers&ast.ModifierFlagsIn != 0:
-					variance = VarianceFlagsContravariant
-				default:
-					saveReliabilityFlags := c.reliabilityFlags
-					c.reliabilityFlags = 0
-					// We first compare instantiations where the type parameter is replaced with
-					// marker types that have a known subtype relationship. From this we can infer
-					// invariance, covariance, contravariance or bivariance.
-					typeWithSuper := c.createMarkerType(symbol, tp, c.markerSuperType)
-					typeWithSub := c.createMarkerType(symbol, tp, c.markerSubType)
-					variance = core.IfElse(c.isTypeAssignableTo(typeWithSub, typeWithSuper), VarianceFlagsCovariant, 0) |
-						core.IfElse(c.isTypeAssignableTo(typeWithSuper, typeWithSub), VarianceFlagsContravariant, 0)
-					// If the instantiations appear to be related bivariantly it may be because the
-					// type parameter is independent (i.e. it isn't witnessed anywhere in the generic
-					// type). To determine this we compare instantiations where the type parameter is
-					// replaced with marker types that are known to be unrelated.
-					if variance == VarianceFlagsBivariant && c.isTypeAssignableTo(c.createMarkerType(symbol, tp, c.markerOtherType), typeWithSuper) {
-						variance = VarianceFlagsIndependent
-					}
-					if c.reliabilityFlags&RelationComparisonResultReportsUnmeasurable != 0 {
-						variance |= VarianceFlagsUnmeasurable
-					}
-					if c.reliabilityFlags&RelationComparisonResultReportsUnreliable != 0 {
-						variance |= VarianceFlagsUnreliable
-					}
-					c.reliabilityFlags = saveReliabilityFlags
-				}
-				// If variance computation was restarted due to a circularity we may have already
-				// computed variances for this generic type. If so, we exit early.
-				if len(links.variances.get(c)) != 0 {
-					break
-				}
-				variances[i] = variance
-			}
-			// Store the results unless a restarted computation has already stored them.
-			if len(links.variances.get(c)) == 0 {
-				links.variances.set(c, variances)
-			}
-			c.varianceStack = c.varianceStack[:len(c.varianceStack)-1]
-			c.popTypeResolution()
-			if c.varianceMeasuring[symbol]--; c.varianceMeasuring[symbol] == 0 {
-				delete(c.varianceMeasuring, symbol)
-			}
-			if len(c.varianceStack) == 0 {
-				c.resolutionStart = saveResolutionStart
-			}
-			c.endMemo()
-		} else {
-			// We've detected a circularity. Since we may compute different variances depending on where
-			// we enter a circularity, we find the generic type with the "smallest" symbol in the circular
-			// region of the variance stack and restart the computation from there if necessary. This
-			// ensures stable results for circular generic types.
-			// Results computed since the circularity was entered observed incomplete
-			// variances, so they are discarded once the outermost variance computation
-			// of the circularity finishes. The variances themselves are kept, since the
-			// restart below computes them the same way from any entry point.
-			for i := stackIndex; i < len(c.varianceStack); i++ {
-				c.cycleParticipants = append(c.cycleParticipants, c.resolutions[c.varianceStack[i].resolution].typeResolution)
-			}
-			c.markTypeResolutionCircular(c.varianceStack[stackIndex].resolution)
-			minIndex := stackIndex
-			for i := stackIndex + 1; i < len(c.varianceStack); i++ {
-				if c.compareSymbols(c.varianceStack[i].symbol, c.varianceStack[minIndex].symbol) < 0 {
-					minIndex = i
-				}
-			}
-			if minIndex > stackIndex {
-				saveVarianceStack := c.varianceStack
-				c.varianceStack = nil
-				c.getVariancesWorker(saveVarianceStack[minIndex].symbol, saveVarianceStack[minIndex].typeParameters)
-				c.varianceStack = saveVarianceStack
-			}
-			// Store an empty slice to mark that we can't compute variances for this type. We treat type
-			// parameters as co-variant in this case.
-			if len(links.variances.get(c)) == 0 {
-				links.variances.set(c, []VarianceFlags{})
-			}
-		}
+	if variances := links.variances.get(c); variances != nil {
+		return variances
 	}
-	return links.variances.get(c)
+	if stackIndex := c.getVarianceStackIndex(symbol); stackIndex >= 0 {
+		return c.getVarianceGuess(stackIndex)
+	}
+	if c.checking {
+		// A circularity is measured again with stricter guesses after
+		// discarding what was computed from the earlier ones, including its
+		// effects, so measure while recording effects.
+		var variances []VarianceFlags
+		c.withoutChecking(func() {
+			variances = c.getVariancesWorker(symbol, typeParameters)
+		})
+		return variances
+	}
+	var traceArgs map[string]any
+	if tr := c.tracer; tr != nil {
+		traceArgs = map[string]any{"arity": len(typeParameters), "id": c.getDeclaredTypeOfSymbol(symbol).id}
+		popFn := tr.Push(tracing.PhaseCheckTypes, "getVariancesWorker", traceArgs, true)
+		defer func() {
+			variances := links.variances.get(c)
+			formatted := make([]string, len(variances))
+			for i, v := range variances {
+				formatted[i] = v.String()
+			}
+			traceArgs["variances"] = formatted
+			popFn()
+		}()
+	}
+	links.variances.begin(c)
+	saveResolutionStart := c.resolutionStart
+	if len(c.varianceStack) == 0 {
+		c.resolutionStart = len(c.resolutions)
+	}
+	index := len(c.varianceStack)
+	c.varianceStack = append(c.varianceStack, VarianceStackEntry{symbol: symbol, typeParameters: typeParameters, resolution: len(c.resolutions), cycleStart: math.MaxInt})
+	c.beginTypeResolution(symbol, TypeSystemPropertyNameVariances)
+	guessesStart := len(c.varianceGuessed)
+	mark := c.markDiscard()
+	instantiationCount := c.instantiationCount
+	var variances []VarianceFlags
+	for {
+		variances = c.measureVariances(symbol, typeParameters)
+		entry := &c.varianceStack[index]
+		guess := c.varianceGuesses[symbol]
+		if guess != nil {
+			variances = meetVariances(guess, variances)
+		}
+		if entry.cycleStart < index {
+			// Part of a circularity whose outermost measurement is still in progress.
+			if guess != nil && !slices.Equal(guess, variances) {
+				c.varianceGuesses[symbol] = variances
+				entry.guessChanged = true
+			}
+			parent := &c.varianceStack[index-1]
+			parent.cycleStart = min(parent.cycleStart, entry.cycleStart)
+			parent.guessChanged = parent.guessChanged || entry.guessChanged
+			break
+		}
+		if guess == nil || !entry.guessChanged && slices.Equal(guess, variances) {
+			break
+		}
+		c.varianceGuesses[symbol] = variances
+		entry.cycleStart = math.MaxInt
+		entry.guessChanged = false
+		c.discardSince(mark)
+		// The work of a discarded round does not count toward the limit on
+		// instantiations, so whether the limit is reached does not depend on
+		// how many rounds the circularity took to settle.
+		c.instantiationCount = instantiationCount
+	}
+	if c.varianceStack[index].cycleStart >= index {
+		for _, s := range c.varianceGuessed[guessesStart:] {
+			delete(c.varianceGuesses, s)
+		}
+		c.varianceGuessed = c.varianceGuessed[:guessesStart]
+	}
+	c.releaseDiscardMark(mark)
+	links.variances.set(c, variances)
+	c.varianceStack = c.varianceStack[:index]
+	c.popTypeResolution()
+	if index == 0 {
+		c.resolutionStart = saveResolutionStart
+	}
+	c.endMemo()
+	return variances
+}
+
+// getVarianceGuess returns the variances to assume for the generic type at the given index of
+// the variance stack, whose measurement is in progress. Everything measured since then is part
+// of a circularity with it, and results computed from now on depend on the guess.
+func (c *Checker) getVarianceGuess(stackIndex int) []VarianceFlags {
+	entry := &c.varianceStack[stackIndex]
+	top := &c.varianceStack[len(c.varianceStack)-1]
+	top.cycleStart = min(top.cycleStart, stackIndex)
+	for i := stackIndex; i < len(c.varianceStack); i++ {
+		c.cycleParticipants = append(c.cycleParticipants, c.resolutions[c.varianceStack[i].resolution].typeResolution)
+	}
+	c.markTypeResolutionCircular(entry.resolution)
+	guess := c.varianceGuesses[entry.symbol]
+	if guess == nil {
+		guess = make([]VarianceFlags, len(entry.typeParameters))
+		for i := range guess {
+			guess[i] = VarianceFlagsIndependent
+		}
+		if c.varianceGuesses == nil {
+			c.varianceGuesses = make(map[*ast.Symbol][]VarianceFlags)
+		}
+		c.varianceGuesses[entry.symbol] = guess
+		c.varianceGuessed = append(c.varianceGuessed, entry.symbol)
+	}
+	return guess
+}
+
+// meetVariances returns, for each type parameter, the most permissive variance that is no more
+// permissive than either of the given variances.
+func meetVariances(a []VarianceFlags, b []VarianceFlags) []VarianceFlags {
+	result := make([]VarianceFlags, len(a))
+	for i := range a {
+		x, y := a[i]&VarianceFlagsVarianceMask, b[i]&VarianceFlagsVarianceMask
+		var v VarianceFlags
+		switch {
+		case x == VarianceFlagsIndependent:
+			v = y
+		case y == VarianceFlagsIndependent:
+			v = x
+		default:
+			v = x & y
+		}
+		result[i] = v | (a[i]|b[i])&VarianceFlagsAllowsStructuralFallback
+	}
+	return result
+}
+
+func (c *Checker) measureVariances(symbol *ast.Symbol, typeParameters []*Type) []VarianceFlags {
+	variances := make([]VarianceFlags, len(typeParameters))
+	for i, tp := range typeParameters {
+		modifiers := c.getTypeParameterModifiers(tp)
+		var variance VarianceFlags
+		switch {
+		case modifiers&ast.ModifierFlagsOut != 0:
+			if modifiers&ast.ModifierFlagsIn != 0 {
+				variance = VarianceFlagsInvariant
+			} else {
+				variance = VarianceFlagsCovariant
+			}
+		case modifiers&ast.ModifierFlagsIn != 0:
+			variance = VarianceFlagsContravariant
+		default:
+			saveReliabilityFlags := c.reliabilityFlags
+			c.reliabilityFlags = 0
+			// We first compare instantiations where the type parameter is replaced with
+			// marker types that have a known subtype relationship. From this we can infer
+			// invariance, covariance, contravariance or bivariance.
+			typeWithSuper := c.createMarkerType(symbol, tp, c.markerSuperType)
+			typeWithSub := c.createMarkerType(symbol, tp, c.markerSubType)
+			variance = core.IfElse(c.isTypeAssignableTo(typeWithSub, typeWithSuper), VarianceFlagsCovariant, 0) |
+				core.IfElse(c.isTypeAssignableTo(typeWithSuper, typeWithSub), VarianceFlagsContravariant, 0)
+			// If the instantiations appear to be related bivariantly it may be because the
+			// type parameter is independent (i.e. it isn't witnessed anywhere in the generic
+			// type). To determine this we compare instantiations where the type parameter is
+			// replaced with marker types that are known to be unrelated.
+			if variance == VarianceFlagsBivariant && c.isTypeAssignableTo(c.createMarkerType(symbol, tp, c.markerOtherType), typeWithSuper) {
+				variance = VarianceFlagsIndependent
+			}
+			if c.reliabilityFlags&RelationComparisonResultReportsUnmeasurable != 0 {
+				variance |= VarianceFlagsUnmeasurable
+			}
+			if c.reliabilityFlags&RelationComparisonResultReportsUnreliable != 0 {
+				variance |= VarianceFlagsUnreliable
+			}
+			c.reliabilityFlags = saveReliabilityFlags
+		}
+		variances[i] = variance
+	}
+	return variances
 }
 
 func (c *Checker) getVarianceStackIndex(symbol *ast.Symbol) int {
@@ -1656,14 +1722,13 @@ func (c *Checker) createMarkerType(symbol *ast.Symbol, source *Type, target *Typ
 }
 
 // isMarkerType reports whether t is a marker type of a variance computation
-// or variance annotation check in progress (including computations suspended
-// by a restart from a circularity): an instantiation of the generic
+// or variance annotation check in progress: an instantiation of the generic
 // type or type alias being measured with one of its type parameters replaced
 // by a variance marker. Instantiations of other types with markers, such as
 // those nested in the type being measured, are not marker types, whether or
 // not their own variances have been measured before.
 func (c *Checker) isMarkerType(t *Type) bool {
-	if len(c.varianceMeasuring) == 0 && c.varianceTypeParameter == nil {
+	if len(c.varianceStack) == 0 && c.varianceTypeParameter == nil {
 		return false
 	}
 	if t.alias != nil && t.alias.symbol.Flags()&ast.SymbolFlagsTypeAlias != 0 &&
@@ -1700,7 +1765,7 @@ func (c *Checker) isMarkerInstantiation(symbol *ast.Symbol, typeParameters []*Ty
 	case c.markerSuperTypeForCheck, c.markerSubTypeForCheck:
 		return typeParameters[replaced] == c.varianceTypeParameter
 	default:
-		return c.varianceMeasuring[symbol] != 0
+		return c.getVarianceStackIndex(symbol) >= 0
 	}
 }
 
@@ -3696,9 +3761,22 @@ func (r *Relater) structuredTypeRelatedToWorker(source *Type, target *Type, repo
 	var varianceCheckFailed bool
 	var originalErrorChain *ErrorChain
 	saveErrorState := r.getErrorState()
-	relateVariances := func(sourceTypeArguments []*Type, targetTypeArguments []*Type, variances []VarianceFlags, intersectionState IntersectionState) (Ternary, bool) {
+	relateVariances := func(sourceTypeArguments []*Type, targetTypeArguments []*Type, variances []VarianceFlags, guessed bool, intersectionState IntersectionState) (Ternary, bool) {
 		if result = r.typeArgumentsRelatedTo(sourceTypeArguments, targetTypeArguments, variances, reportErrors, intersectionState); result != TernaryFalse {
 			return result, true
+		}
+		if guessed {
+			// The variances are a guess for a generic type whose variances are being
+			// measured (see getVariancesWorker). There is no structural fallback for
+			// them, so that a stricter guess never makes a comparison succeed, and the
+			// measurement depends on the guess monotonically. The measurement still
+			// learns that it observed unreliable or unmeasurable variances.
+			for i, v := range variances {
+				if v&VarianceFlagsUnmeasurable != 0 && i < len(sourceTypeArguments) {
+					r.c.instantiateType(sourceTypeArguments[i], r.c.reportUnmeasurableMapper)
+				}
+			}
+			return TernaryFalse, true
 		}
 		if core.Some(variances, func(v VarianceFlags) bool { return v&VarianceFlagsAllowsStructuralFallback != 0 }) {
 			// If some type parameter was `Unmeasurable` or `Unreliable`, and we couldn't pass by assuming it was identical, then we
@@ -3833,7 +3911,7 @@ func (r *Relater) structuredTypeRelatedToWorker(source *Type, target *Type, repo
 		nodeIsInJsFile := ast.IsInJSFile(source.alias.symbol.ValueDeclaration())
 		sourceTypes := r.c.fillMissingTypeArguments(source.alias.typeArguments, params, minParams, nodeIsInJsFile)
 		targetTypes := r.c.fillMissingTypeArguments(target.alias.typeArguments, params, minParams, nodeIsInJsFile)
-		varianceResult, ok := relateVariances(sourceTypes, targetTypes, variances, intersectionState)
+		varianceResult, ok := relateVariances(sourceTypes, targetTypes, variances, r.c.getVarianceStackIndex(source.alias.symbol) >= 0, intersectionState)
 		if ok {
 			return varianceResult
 		}
@@ -4263,13 +4341,10 @@ func (r *Relater) structuredTypeRelatedToWorker(source *Type, target *Type, repo
 			// type references (which are intended by be compared structurally). Obtain the variance
 			// information for the type parameters and relate the type arguments accordingly.
 			variances := r.c.getVariances(source.Target())
-			// We return Ternary.Maybe for a recursive invocation of getVariances (signaled by emptyArray). This
-			// effectively means we measure variance only from type parameter occurrences that aren't nested in
-			// recursive instantiations of the generic type.
 			if len(variances) == 0 {
 				return TernaryUnknown
 			}
-			varianceResult, ok := relateVariances(r.c.getTypeArguments(source), r.c.getTypeArguments(target), variances, intersectionState)
+			varianceResult, ok := relateVariances(r.c.getTypeArguments(source), r.c.getTypeArguments(target), variances, r.c.getVarianceStackIndex(source.Target().symbol) >= 0, intersectionState)
 			if ok {
 				return varianceResult
 			}

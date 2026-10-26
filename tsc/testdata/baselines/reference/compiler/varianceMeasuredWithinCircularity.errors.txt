@@ -13,9 +13,24 @@ varianceMeasuredWithinCircularity.ts(24,5): error TS2322: Type 'Selection<unknow
                         Types of parameters 'key' and 'key' are incompatible.
                           Types of parameters 'parent' and 'parent' are incompatible.
                             Property 'derived' is missing in type 'Base' but required in type 'Derived'.
+varianceMeasuredWithinCircularity.ts(27,5): error TS2322: Type 'TransitionLike<Derived>' is not assignable to type 'TransitionLike<Base>'.
+  The types returned by 'selection().join' are incompatible between these types.
+    Type '(enter: string | ((elem: Selection<Derived, unknown>) => Selection<Derived, unknown> | TransitionLike<Derived>)) => Selection<Derived, unknown>' is not assignable to type '(enter: string | ((elem: Selection<Base, unknown>) => Selection<Base, unknown> | TransitionLike<Base>)) => Selection<Base, unknown>'.
+      Types of parameters 'enter' and 'enter' are incompatible.
+        Type 'string | ((elem: Selection<Base, unknown>) => Selection<Base, unknown> | TransitionLike<Base>)' is not assignable to type 'string | ((elem: Selection<Derived, unknown>) => Selection<Derived, unknown> | TransitionLike<Derived>)'.
+          Type '(elem: Selection<Base, unknown>) => Selection<Base, unknown> | TransitionLike<Base>' is not assignable to type 'string | ((elem: Selection<Derived, unknown>) => Selection<Derived, unknown> | TransitionLike<Derived>)'.
+            Type '(elem: Selection<Base, unknown>) => Selection<Base, unknown> | TransitionLike<Base>' is not assignable to type '(elem: Selection<Derived, unknown>) => Selection<Derived, unknown> | TransitionLike<Derived>'.
+              Type 'Selection<Base, unknown> | TransitionLike<Base>' is not assignable to type 'Selection<Derived, unknown> | TransitionLike<Derived>'.
+                Type 'Selection<Base, unknown>' is not assignable to type 'Selection<Derived, unknown> | TransitionLike<Derived>'.
+                  Type 'Selection<Base, unknown>' is not assignable to type 'Selection<Derived, unknown>'.
+                    The types returned by 'children().data' are incompatible between these types.
+                      Type '(key: (parent: Base) => string) => Selection<unknown, Base>' is not assignable to type '(key: (parent: Derived) => string) => Selection<unknown, Derived>'.
+                        Types of parameters 'key' and 'key' are incompatible.
+                          Types of parameters 'parent' and 'parent' are incompatible.
+                            Property 'derived' is missing in type 'Base' but required in type 'Derived'.
 
 
-==== varianceMeasuredWithinCircularity.ts (1 errors) ====
+==== varianceMeasuredWithinCircularity.ts (2 errors) ====
     // The variances of Selection and TransitionLike depend on each other.
     // The callback of `data` requires Selection to be covariant in P, while
     // `join` passes Selection<G, P> to a callback, which then requires it to
@@ -60,4 +75,21 @@ varianceMeasuredWithinCircularity.ts(24,5): error TS2322: Type 'Selection<unknow
     
     declare let t1: TransitionLike<Derived>;
     let t2: TransitionLike<Base> = t1;
+        ~~
+!!! error TS2322: Type 'TransitionLike<Derived>' is not assignable to type 'TransitionLike<Base>'.
+!!! error TS2322:   The types returned by 'selection().join' are incompatible between these types.
+!!! error TS2322:     Type '(enter: string | ((elem: Selection<Derived, unknown>) => Selection<Derived, unknown> | TransitionLike<Derived>)) => Selection<Derived, unknown>' is not assignable to type '(enter: string | ((elem: Selection<Base, unknown>) => Selection<Base, unknown> | TransitionLike<Base>)) => Selection<Base, unknown>'.
+!!! error TS2322:       Types of parameters 'enter' and 'enter' are incompatible.
+!!! error TS2322:         Type 'string | ((elem: Selection<Base, unknown>) => Selection<Base, unknown> | TransitionLike<Base>)' is not assignable to type 'string | ((elem: Selection<Derived, unknown>) => Selection<Derived, unknown> | TransitionLike<Derived>)'.
+!!! error TS2322:           Type '(elem: Selection<Base, unknown>) => Selection<Base, unknown> | TransitionLike<Base>' is not assignable to type 'string | ((elem: Selection<Derived, unknown>) => Selection<Derived, unknown> | TransitionLike<Derived>)'.
+!!! error TS2322:             Type '(elem: Selection<Base, unknown>) => Selection<Base, unknown> | TransitionLike<Base>' is not assignable to type '(elem: Selection<Derived, unknown>) => Selection<Derived, unknown> | TransitionLike<Derived>'.
+!!! error TS2322:               Type 'Selection<Base, unknown> | TransitionLike<Base>' is not assignable to type 'Selection<Derived, unknown> | TransitionLike<Derived>'.
+!!! error TS2322:                 Type 'Selection<Base, unknown>' is not assignable to type 'Selection<Derived, unknown> | TransitionLike<Derived>'.
+!!! error TS2322:                   Type 'Selection<Base, unknown>' is not assignable to type 'Selection<Derived, unknown>'.
+!!! error TS2322:                     The types returned by 'children().data' are incompatible between these types.
+!!! error TS2322:                       Type '(key: (parent: Base) => string) => Selection<unknown, Base>' is not assignable to type '(key: (parent: Derived) => string) => Selection<unknown, Derived>'.
+!!! error TS2322:                         Types of parameters 'key' and 'key' are incompatible.
+!!! error TS2322:                           Types of parameters 'parent' and 'parent' are incompatible.
+!!! error TS2322:                             Property 'derived' is missing in type 'Base' but required in type 'Derived'.
+!!! related TS2728 varianceMeasuredWithinCircularity.ts:11:34: 'derived' is declared here.
     
