@@ -480,6 +480,7 @@ type SourceFileLinks struct {
 	typeChecked                  bool
 	unusedChecked                bool
 	externalHelpersModule        *ast.Symbol
+	externalHelperRequests       []externalHelperRequest
 	requestedExternalEmitHelpers ExternalEmitHelpers
 	deferredNodes                collections.OrderedSet[*ast.Node]
 	identifierCheckNodes         []*ast.Node

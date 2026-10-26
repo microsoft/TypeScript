@@ -645,6 +645,7 @@ var unmemoizedCacheFields = map[string]string{
 	"NodeBuilderSymbolLinks.specifierCache":             unmemoizedNodeBuilder,
 	"SourceFileLinks.externalHelpersModule":             unmemoizedChecking,
 	"SourceFileLinks.requestedExternalEmitHelpers":      unmemoizedChecking,
+	"SourceFileLinks.externalHelperRequests":            unmemoizedChecking,
 	"AliasSymbolLinks.typeOnlyDeclaration":              unmemoizedGuarded,
 	"NodeLinks.flags":                                   unmemoizedNodeFlags,
 }
