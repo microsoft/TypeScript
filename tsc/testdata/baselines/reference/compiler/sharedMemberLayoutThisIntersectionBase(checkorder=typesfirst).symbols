@@ -27,9 +27,7 @@ declare let d: D<"b">;
 >D : Symbol(D, Decl(sharedMemberLayoutThisIntersectionBase.ts, 2, 16))
 
 d.m;
->d.m : Symbol(m, Decl(sharedMemberLayoutThisIntersectionBase.ts, 0, 27), Decl(sharedMemberLayoutThisIntersectionBase.ts, 1, 13))
 >d : Symbol(d, Decl(sharedMemberLayoutThisIntersectionBase.ts, 5, 11))
->m : Symbol(m, Decl(sharedMemberLayoutThisIntersectionBase.ts, 0, 27), Decl(sharedMemberLayoutThisIntersectionBase.ts, 1, 13))
 
 declare const ABCtor: new () => AB;
 >ABCtor : Symbol(ABCtor, Decl(sharedMemberLayoutThisIntersectionBase.ts, 8, 13))
@@ -47,9 +45,7 @@ declare let c: C<"b">;
 >C : Symbol(C, Decl(sharedMemberLayoutThisIntersectionBase.ts, 8, 35))
 
 c.m;
->c.m : Symbol(m, Decl(sharedMemberLayoutThisIntersectionBase.ts, 0, 27), Decl(sharedMemberLayoutThisIntersectionBase.ts, 1, 13))
 >c : Symbol(c, Decl(sharedMemberLayoutThisIntersectionBase.ts, 10, 11))
->m : Symbol(m, Decl(sharedMemberLayoutThisIntersectionBase.ts, 0, 27), Decl(sharedMemberLayoutThisIntersectionBase.ts, 1, 13))
 
 export {};
 

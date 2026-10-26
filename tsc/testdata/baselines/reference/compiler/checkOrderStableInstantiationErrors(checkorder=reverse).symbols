@@ -82,7 +82,9 @@ export class X extends L<X> {
 >m : Symbol(X.m, Decl(c.ts, 7, 22))
 
         this.a;
+>this.a : Symbol(X.a, Decl(c.ts, 5, 29))
 >this : Symbol(X, Decl(c.ts, 4, 70))
+>a : Symbol(X.a, Decl(c.ts, 5, 29))
     }
 }
 

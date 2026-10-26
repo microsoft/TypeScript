@@ -20474,7 +20474,11 @@ func (c *Checker) resolveStructuredTypeMembers(t *Type) *StructuredType {
 	if t.objectFlags&ObjectFlagsMembersResolving != 0 {
 		// Resolving members may observe the type itself, whose members are
 		// then incomplete.
-		c.isResolutionInProgress(t, TypeSystemPropertyNameStructuredMembers)
+		if c.isResolutionInProgress(t, TypeSystemPropertyNameStructuredMembers) && t.AsStructuredType().getLazyState() != nil {
+			// Its declared members are available while inherited members
+			// are resolved; see resolveObjectTypeMembers.
+			return t.AsStructuredType()
+		}
 	}
 	c.beginMemo(memoKeyOf(t, memoStructuredMembers))
 	result := c.resolveStructuredTypeMembersUncached(t)
@@ -20600,6 +20604,17 @@ func (c *Checker) resolveObjectTypeMembers(t *Type) {
 		for i, baseType := range baseTypes {
 			instantiatedBaseTypes[i] = c.getTypeWithThisArgument(c.instantiateType(baseType, mapper), thisArgument, false /*needsApparentType*/)
 		}
+	}
+	if len(instantiatedBaseTypes) != 0 {
+		// Inherited members may depend on the type itself, for example
+		// through this types. Rather than resolving it again without end,
+		// such a dependency sees the declared members, which come first in
+		// the full layout too.
+		c.setStructuredTypeSignatures(t.AsStructuredType(), callSignatures, constructSignatures, indexInfos)
+		declared := c.lazyStateArena.New()
+		declared.layout = c.getMemberLayout(t, nil)
+		declared.mapper = mapper
+		t.AsTypeReference().lazy = declared
 	}
 	// Member layout must be computed before inherited signatures, which may circularly depend on it
 	layout := c.getMemberLayout(t, instantiatedBaseTypes)

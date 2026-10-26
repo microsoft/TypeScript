@@ -42,7 +42,9 @@ class X extends L<X> {
 >m2 : Symbol(X.m2, Decl(mutuallyRecursiveInference.ts, 9, 13))
 
         this.a
+>this.a : Symbol(X.a, Decl(mutuallyRecursiveInference.ts, 7, 22))
 >this : Symbol(X, Decl(mutuallyRecursiveInference.ts, 6, 1))
+>a : Symbol(X.a, Decl(mutuallyRecursiveInference.ts, 7, 22))
     }
 }
 

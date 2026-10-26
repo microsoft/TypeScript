@@ -18,9 +18,9 @@ declare let d: D<"b">;
 >d : D<"b">
 
 d.m;
->d.m : never
+>d.m : any
 >d : D<"b">
->m : never
+>m : any
 
 declare const ABCtor: new () => AB;
 >ABCtor : new () => AB
@@ -34,9 +34,9 @@ declare let c: C<"b">;
 >c : C<"b">
 
 c.m;
->c.m : never
+>c.m : any
 >c : C<"b">
->m : never
+>m : any
 
 export {};
 
