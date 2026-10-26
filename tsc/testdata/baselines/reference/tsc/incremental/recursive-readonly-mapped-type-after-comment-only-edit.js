@@ -105,74 +105,6 @@ tsgo
 ExitStatus:: Success
 Output::
 //// [/home/src/workspaces/project/tsconfig.tsbuildinfo] *modified* 
-{"version":"FakeTSVersion","errors":true,"root":[2],"fileNames":["lib.es2026.full.d.ts","./repro.ts"],"fileInfos":[{"version":"0e330bc1e98a7e2601e4b38548df5e2b-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> { readonly length: number; readonly [n: number]: T; }\ninterface SymbolConstructor {\n    (desc?: string | number): symbol;\n    for(name: string): symbol;\n    readonly toStringTag: symbol;\n}\ndeclare var Symbol: SymbolConstructor;\ninterface Symbol {\n    readonly [Symbol.toStringTag]: string;\n}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true,"impliedNodeFormat":1},{"version":"44adeee334483dab0e3927db949cf78a-type Json = string | readonly Json[];\ntype Parsed<T> = T extends object ? { [K in keyof T]: Parsed<T[K]> } : T;\ndeclare function wrap<T>(value: T): Parsed<T>;\nexport const value = wrap({ items: [] as readonly Json[] });\n// comment-only edit\n","signature":"ac9ba36fbad04eb70b8f2b14cdf772ef-type Json = string | readonly Json[];\nexport declare const value: {\n    items: readonly Json[];\n};\nexport {};\n","impliedNodeFormat":1}],"options":{"strict":true},"affectedFilesPendingEmit":[2]}
-//// [/home/src/workspaces/project/tsconfig.tsbuildinfo.readable.baseline.txt] *modified* 
-{
-  "version": "FakeTSVersion",
-  "errors": true,
-  "root": [
-    {
-      "files": [
-        "./repro.ts"
-      ],
-      "original": 2
-    }
-  ],
-  "fileNames": [
-    "lib.es2026.full.d.ts",
-    "./repro.ts"
-  ],
-  "fileInfos": [
-    {
-      "fileName": "lib.es2026.full.d.ts",
-      "version": "0e330bc1e98a7e2601e4b38548df5e2b-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> { readonly length: number; readonly [n: number]: T; }\ninterface SymbolConstructor {\n    (desc?: string | number): symbol;\n    for(name: string): symbol;\n    readonly toStringTag: symbol;\n}\ndeclare var Symbol: SymbolConstructor;\ninterface Symbol {\n    readonly [Symbol.toStringTag]: string;\n}\ndeclare const console: { log(msg: any): void; };",
-      "signature": "0e330bc1e98a7e2601e4b38548df5e2b-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> { readonly length: number; readonly [n: number]: T; }\ninterface SymbolConstructor {\n    (desc?: string | number): symbol;\n    for(name: string): symbol;\n    readonly toStringTag: symbol;\n}\ndeclare var Symbol: SymbolConstructor;\ninterface Symbol {\n    readonly [Symbol.toStringTag]: string;\n}\ndeclare const console: { log(msg: any): void; };",
-      "affectsGlobalScope": true,
-      "impliedNodeFormat": "CommonJS",
-      "original": {
-        "version": "0e330bc1e98a7e2601e4b38548df5e2b-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> { readonly length: number; readonly [n: number]: T; }\ninterface SymbolConstructor {\n    (desc?: string | number): symbol;\n    for(name: string): symbol;\n    readonly toStringTag: symbol;\n}\ndeclare var Symbol: SymbolConstructor;\ninterface Symbol {\n    readonly [Symbol.toStringTag]: string;\n}\ndeclare const console: { log(msg: any): void; };",
-        "affectsGlobalScope": true,
-        "impliedNodeFormat": 1
-      }
-    },
-    {
-      "fileName": "./repro.ts",
-      "version": "44adeee334483dab0e3927db949cf78a-type Json = string | readonly Json[];\ntype Parsed<T> = T extends object ? { [K in keyof T]: Parsed<T[K]> } : T;\ndeclare function wrap<T>(value: T): Parsed<T>;\nexport const value = wrap({ items: [] as readonly Json[] });\n// comment-only edit\n",
-      "signature": "ac9ba36fbad04eb70b8f2b14cdf772ef-type Json = string | readonly Json[];\nexport declare const value: {\n    items: readonly Json[];\n};\nexport {};\n",
-      "impliedNodeFormat": "CommonJS",
-      "original": {
-        "version": "44adeee334483dab0e3927db949cf78a-type Json = string | readonly Json[];\ntype Parsed<T> = T extends object ? { [K in keyof T]: Parsed<T[K]> } : T;\ndeclare function wrap<T>(value: T): Parsed<T>;\nexport const value = wrap({ items: [] as readonly Json[] });\n// comment-only edit\n",
-        "signature": "ac9ba36fbad04eb70b8f2b14cdf772ef-type Json = string | readonly Json[];\nexport declare const value: {\n    items: readonly Json[];\n};\nexport {};\n",
-        "impliedNodeFormat": 1
-      }
-    }
-  ],
-  "options": {
-    "strict": true
-  },
-  "affectedFilesPendingEmit": [
-    [
-      "./repro.ts",
-      "Js",
-      2
-    ]
-  ],
-  "size": 1473
-}
-
-tsconfig.json::
-SemanticDiagnostics::
-*refresh*    /home/src/workspaces/project/repro.ts
-Signatures::
-(computed .d.ts) /home/src/workspaces/project/repro.ts
-
-
-Edit [1]:: no change
-
-tsgo 
-ExitStatus:: Success
-Output::
-//// [/home/src/workspaces/project/tsconfig.tsbuildinfo] *modified* 
 {"version":"FakeTSVersion","root":[2],"fileNames":["lib.es2026.full.d.ts","./repro.ts"],"fileInfos":[{"version":"0e330bc1e98a7e2601e4b38548df5e2b-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> { readonly length: number; readonly [n: number]: T; }\ninterface SymbolConstructor {\n    (desc?: string | number): symbol;\n    for(name: string): symbol;\n    readonly toStringTag: symbol;\n}\ndeclare var Symbol: SymbolConstructor;\ninterface Symbol {\n    readonly [Symbol.toStringTag]: string;\n}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true,"impliedNodeFormat":1},{"version":"44adeee334483dab0e3927db949cf78a-type Json = string | readonly Json[];\ntype Parsed<T> = T extends object ? { [K in keyof T]: Parsed<T[K]> } : T;\ndeclare function wrap<T>(value: T): Parsed<T>;\nexport const value = wrap({ items: [] as readonly Json[] });\n// comment-only edit\n","signature":"ac9ba36fbad04eb70b8f2b14cdf772ef-type Json = string | readonly Json[];\nexport declare const value: {\n    items: readonly Json[];\n};\nexport {};\n","impliedNodeFormat":1}],"options":{"strict":true},"affectedFilesPendingEmit":[2]}
 //// [/home/src/workspaces/project/tsconfig.tsbuildinfo.readable.baseline.txt] *modified* 
 {
@@ -229,6 +161,19 @@ Output::
 
 tsconfig.json::
 SemanticDiagnostics::
+*refresh*    /home/src/workspaces/project/repro.ts
+Signatures::
+(computed .d.ts) /home/src/workspaces/project/repro.ts
+
+
+Edit [1]:: no change
+
+tsgo 
+ExitStatus:: Success
+Output::
+
+tsconfig.json::
+SemanticDiagnostics::
 Signatures::
 
 
@@ -242,74 +187,6 @@ export const value = wrap({ items: [] as readonly Json[] });
 
 // another comment
 
-
-tsgo 
-ExitStatus:: Success
-Output::
-//// [/home/src/workspaces/project/tsconfig.tsbuildinfo] *modified* 
-{"version":"FakeTSVersion","errors":true,"root":[2],"fileNames":["lib.es2026.full.d.ts","./repro.ts"],"fileInfos":[{"version":"0e330bc1e98a7e2601e4b38548df5e2b-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> { readonly length: number; readonly [n: number]: T; }\ninterface SymbolConstructor {\n    (desc?: string | number): symbol;\n    for(name: string): symbol;\n    readonly toStringTag: symbol;\n}\ndeclare var Symbol: SymbolConstructor;\ninterface Symbol {\n    readonly [Symbol.toStringTag]: string;\n}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true,"impliedNodeFormat":1},{"version":"123beaefc70ba63a9447b94fb12d09b5-type Json = string | readonly Json[];\ntype Parsed<T> = T extends object ? { [K in keyof T]: Parsed<T[K]> } : T;\ndeclare function wrap<T>(value: T): Parsed<T>;\nexport const value = wrap({ items: [] as readonly Json[] });\n// comment-only edit\n\n// another comment\n","signature":"ac9ba36fbad04eb70b8f2b14cdf772ef-type Json = string | readonly Json[];\nexport declare const value: {\n    items: readonly Json[];\n};\nexport {};\n","impliedNodeFormat":1}],"options":{"strict":true},"affectedFilesPendingEmit":[2]}
-//// [/home/src/workspaces/project/tsconfig.tsbuildinfo.readable.baseline.txt] *modified* 
-{
-  "version": "FakeTSVersion",
-  "errors": true,
-  "root": [
-    {
-      "files": [
-        "./repro.ts"
-      ],
-      "original": 2
-    }
-  ],
-  "fileNames": [
-    "lib.es2026.full.d.ts",
-    "./repro.ts"
-  ],
-  "fileInfos": [
-    {
-      "fileName": "lib.es2026.full.d.ts",
-      "version": "0e330bc1e98a7e2601e4b38548df5e2b-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> { readonly length: number; readonly [n: number]: T; }\ninterface SymbolConstructor {\n    (desc?: string | number): symbol;\n    for(name: string): symbol;\n    readonly toStringTag: symbol;\n}\ndeclare var Symbol: SymbolConstructor;\ninterface Symbol {\n    readonly [Symbol.toStringTag]: string;\n}\ndeclare const console: { log(msg: any): void; };",
-      "signature": "0e330bc1e98a7e2601e4b38548df5e2b-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> { readonly length: number; readonly [n: number]: T; }\ninterface SymbolConstructor {\n    (desc?: string | number): symbol;\n    for(name: string): symbol;\n    readonly toStringTag: symbol;\n}\ndeclare var Symbol: SymbolConstructor;\ninterface Symbol {\n    readonly [Symbol.toStringTag]: string;\n}\ndeclare const console: { log(msg: any): void; };",
-      "affectsGlobalScope": true,
-      "impliedNodeFormat": "CommonJS",
-      "original": {
-        "version": "0e330bc1e98a7e2601e4b38548df5e2b-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> { readonly length: number; readonly [n: number]: T; }\ninterface SymbolConstructor {\n    (desc?: string | number): symbol;\n    for(name: string): symbol;\n    readonly toStringTag: symbol;\n}\ndeclare var Symbol: SymbolConstructor;\ninterface Symbol {\n    readonly [Symbol.toStringTag]: string;\n}\ndeclare const console: { log(msg: any): void; };",
-        "affectsGlobalScope": true,
-        "impliedNodeFormat": 1
-      }
-    },
-    {
-      "fileName": "./repro.ts",
-      "version": "123beaefc70ba63a9447b94fb12d09b5-type Json = string | readonly Json[];\ntype Parsed<T> = T extends object ? { [K in keyof T]: Parsed<T[K]> } : T;\ndeclare function wrap<T>(value: T): Parsed<T>;\nexport const value = wrap({ items: [] as readonly Json[] });\n// comment-only edit\n\n// another comment\n",
-      "signature": "ac9ba36fbad04eb70b8f2b14cdf772ef-type Json = string | readonly Json[];\nexport declare const value: {\n    items: readonly Json[];\n};\nexport {};\n",
-      "impliedNodeFormat": "CommonJS",
-      "original": {
-        "version": "123beaefc70ba63a9447b94fb12d09b5-type Json = string | readonly Json[];\ntype Parsed<T> = T extends object ? { [K in keyof T]: Parsed<T[K]> } : T;\ndeclare function wrap<T>(value: T): Parsed<T>;\nexport const value = wrap({ items: [] as readonly Json[] });\n// comment-only edit\n\n// another comment\n",
-        "signature": "ac9ba36fbad04eb70b8f2b14cdf772ef-type Json = string | readonly Json[];\nexport declare const value: {\n    items: readonly Json[];\n};\nexport {};\n",
-        "impliedNodeFormat": 1
-      }
-    }
-  ],
-  "options": {
-    "strict": true
-  },
-  "affectedFilesPendingEmit": [
-    [
-      "./repro.ts",
-      "Js",
-      2
-    ]
-  ],
-  "size": 1495
-}
-
-tsconfig.json::
-SemanticDiagnostics::
-*refresh*    /home/src/workspaces/project/repro.ts
-Signatures::
-(computed .d.ts) /home/src/workspaces/project/repro.ts
-
-
-Edit [3]:: no change
 
 tsgo 
 ExitStatus:: Success
@@ -368,6 +245,19 @@ Output::
   ],
   "size": 1481
 }
+
+tsconfig.json::
+SemanticDiagnostics::
+*refresh*    /home/src/workspaces/project/repro.ts
+Signatures::
+(computed .d.ts) /home/src/workspaces/project/repro.ts
+
+
+Edit [3]:: no change
+
+tsgo 
+ExitStatus:: Success
+Output::
 
 tsconfig.json::
 SemanticDiagnostics::

@@ -1,8 +1,9 @@
-error TS2589: Type instantiation is excessively deep and possibly infinite.
+templateLiteralTypeExcessiveLength.ts(15,11): error TS2589: Type instantiation is excessively deep and possibly infinite.
+templateLiteralTypeExcessiveLength.ts(20,11): error TS2589: Type instantiation is excessively deep and possibly infinite.
+templateLiteralTypeExcessiveLength.ts(34,11): error TS2589: Type instantiation is excessively deep and possibly infinite.
 
 
-!!! error TS2589: Type instantiation is excessively deep and possibly infinite.
-==== templateLiteralTypeExcessiveLength.ts (0 errors) ====
+==== templateLiteralTypeExcessiveLength.ts (3 errors) ====
     // Regression test for #63271: `Dec<2>` is `any`, so `Recur` produces both conditional branches and
     // keeps tail-recursing forever. The checker must report an error instead of building an unbounded
     // template literal type.
@@ -18,11 +19,15 @@ error TS2589: Type instantiation is excessively deep and possibly infinite.
     // The string literal doubles on every iteration.
     type Explode = {
         [P in Recur<5, "a"> as `${P}_key`]: any;
+              ~~~~~~~~~~~~~
+!!! error TS2589: Type instantiation is excessively deep and possibly infinite.
     };
     
     // The number of placeholders doubles on every iteration.
     type ExplodeSpans = {
         [P in Recur<5, string> as `${P}_key`]: any;
+              ~~~~~~~~~~~~~~~~
+!!! error TS2589: Type instantiation is excessively deep and possibly infinite.
     };
     
     // Every text segment stays small, but the number of segments doubles on every iteration,
@@ -37,5 +42,7 @@ error TS2589: Type instantiation is excessively deep and possibly infinite.
     
     type ExplodeSegments = {
         [P in RecurSegments<5, A1024> as `${P}_key`]: any;
+              ~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2589: Type instantiation is excessively deep and possibly infinite.
     };
     

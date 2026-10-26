@@ -519,7 +519,7 @@ func (b *NodeBuilderImpl) tryGetResolvedSymbolFromTypeNode(node *ast.Node) *ast.
 	if links == nil {
 		return nil
 	}
-	return links.resolvedSymbol
+	return links.resolvedSymbol.get(b.ch)
 }
 
 func (b *NodeBuilderImpl) existingTypeNodeIsNotReferenceOrIsReferenceWithCompatibleTypeArgumentCount(existing *ast.TypeNode, t *Type) bool {
@@ -2063,9 +2063,9 @@ func (c *Checker) getExpandedParameters(sig *Signature, skipUnionExpanding bool)
 				symbol := c.newSymbolEx(ast.SymbolFlagsFunctionScopedVariable, name, checkFlags)
 				links := c.valueSymbolLinks.Get(symbol)
 				if flags&ElementFlagsRest != 0 {
-					links.resolvedType = c.createArrayType(t)
+					links.resolvedType.set(c, c.createArrayType(t))
 				} else {
-					links.resolvedType = t
+					links.resolvedType.set(c, t)
 				}
 				return symbol
 			})
@@ -2669,7 +2669,7 @@ func (b *NodeBuilderImpl) addPropertyToElementList(propertySymbol *ast.Symbol, t
 				typeElements = append(typeElements, fakeGetterDeclaration)
 
 				setterParam := b.ch.newSymbol(ast.SymbolFlagsFunctionScopedVariable, "arg")
-				b.ch.valueSymbolLinks.Get(setterParam).resolvedType = writeType
+				b.ch.valueSymbolLinks.Get(setterParam).resolvedType.set(b.ch, writeType)
 				fakeSetterSignature := b.ch.newSignature(SignatureFlagsNone, nil, nil, nil, []*ast.Symbol{setterParam}, b.ch.voidType, nil, 0)
 				fakeSetterDeclaration := b.signatureToSignatureDeclarationHelper(fakeSetterSignature, ast.KindSetAccessor, &SignatureToSignatureDeclarationOptions{
 					name: propertyName,

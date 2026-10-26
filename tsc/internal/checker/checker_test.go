@@ -2,6 +2,9 @@ package checker_test
 
 import (
 	"fmt"
+	goast "go/ast"
+	"go/parser"
+	"go/token"
 	"path/filepath"
 	"strings"
 	"testing"
@@ -207,4 +210,26 @@ export type Initial = Box<"first">;
 	assert.Equal(t, c.GetTypeAtLocation(file.Statements.Nodes[1].AsTypeAliasDeclaration().Type), initial)
 	assert.Equal(t, c.TypeToString(initial), "Initial")
 	assert.Equal(t, len(c.GetDiagnostics(t.Context(), file)), 0)
+}
+
+// Memoized results must only be accessed through memo methods, which account
+// for the effects of computing them.
+func TestMemoValueOnlyAccessedThroughMethods(t *testing.T) {
+	t.Parallel()
+	fset := token.NewFileSet()
+	files, err := filepath.Glob("*.go")
+	assert.NilError(t, err)
+	for _, name := range files {
+		if name == "memo.go" || strings.HasSuffix(name, "_test.go") {
+			continue
+		}
+		file, err := parser.ParseFile(fset, name, nil, parser.SkipObjectResolution)
+		assert.NilError(t, err)
+		goast.Inspect(file, func(n goast.Node) bool {
+			if sel, ok := n.(*goast.SelectorExpr); ok && sel.Sel.Name == "memoValue" {
+				t.Errorf("%s: memo value accessed directly; use get or set", fset.Position(sel.Pos()))
+			}
+			return true
+		})
+	}
 }

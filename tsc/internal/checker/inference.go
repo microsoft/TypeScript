@@ -399,7 +399,7 @@ func (c *Checker) inferFromMatchingTypes(n *InferenceState, sources []*Type, tar
 		// when inferring from string[] | string[][] to T[] | T[][], the inference of string we make from
 		// relating string[][] to T[][] is of higher quality than the inference of string[] we make relating
 		// string[][] to T[].
-		slices.SortFunc(matchedTargets, compareTypesAndDepth)
+		slices.SortFunc(matchedTargets, c.compareTypesAndDepth)
 		for _, t := range matchedTargets {
 			for _, s := range matchedSources {
 				if matches(c, s, t) {
@@ -418,9 +418,9 @@ func (c *Checker) inferFromMatchingTypes(n *InferenceState, sources []*Type, tar
 }
 
 // Compare two types first by depth and then by the regular type ordering.
-func compareTypesAndDepth(t1, t2 *Type) int {
-	d1 := getTypeDepth(t1, 3)
-	d2 := getTypeDepth(t2, 3)
+func (c *Checker) compareTypesAndDepth(t1, t2 *Type) int {
+	d1 := c.getTypeDepth(t1, 3)
+	d2 := c.getTypeDepth(t2, 3)
 	if d1 != d2 {
 		return d2 - d1 // Largest depth sorts first
 	}
@@ -431,27 +431,27 @@ func compareTypesAndDepth(t1, t2 *Type) int {
 // and type references, the depth is one plus the largest type argument depth. For union and
 // intersection types, the depth is the largest constituent type depth. For all other types,
 // the depth is zero. The maximum depth limits infinite recursion of circular types.
-func getTypeDepth(t *Type, maxDepth int) int {
+func (c *Checker) getTypeDepth(t *Type, maxDepth int) int {
 	if maxDepth != 0 {
 		if t.alias != nil && len(t.alias.typeArguments) != 0 {
-			return getTypeListDepth(t.alias.typeArguments, maxDepth-1) + 1
+			return c.getTypeListDepth(t.alias.typeArguments, maxDepth-1) + 1
 		}
 		if t.objectFlags&ObjectFlagsReference != 0 {
-			if typeArguments := t.checker.getTypeArguments(t); len(typeArguments) != 0 {
-				return getTypeListDepth(typeArguments, maxDepth-1) + 1
+			if typeArguments := c.getTypeArguments(t); len(typeArguments) != 0 {
+				return c.getTypeListDepth(typeArguments, maxDepth-1) + 1
 			}
 		}
 		if t.flags&TypeFlagsUnionOrIntersection != 0 {
-			return getTypeListDepth(t.Types(), maxDepth)
+			return c.getTypeListDepth(t.Types(), maxDepth)
 		}
 	}
 	return 0
 }
 
-func getTypeListDepth(types []*Type, maxDepth int) int {
+func (c *Checker) getTypeListDepth(types []*Type, maxDepth int) int {
 	depth := 0
 	for _, t := range types {
-		depth = max(depth, getTypeDepth(t, maxDepth))
+		depth = max(depth, c.getTypeDepth(t, maxDepth))
 	}
 	return depth
 }
@@ -984,7 +984,7 @@ func (c *Checker) inferToMappedType(n *InferenceState, source *Type, target *Typ
 	if constraintType.flags&TypeFlagsTypeParameter != 0 {
 		// We're inferring from some source type S to a mapped type { [P in K]: X }, where K is a type
 		// parameter. First infer from 'keyof S' to K.
-		c.inferWithPriority(n, c.getIndexTypeEx(source, core.IfElse(c.patternForType[source] != nil, IndexFlagsNoIndexSignatures, IndexFlagsNone)), constraintType, InferencePriorityMappedTypeConstraint)
+		c.inferWithPriority(n, c.getIndexTypeEx(source, core.IfElse(c.patternForType.has(c, source), IndexFlagsNoIndexSignatures, IndexFlagsNone)), constraintType, InferencePriorityMappedTypeConstraint)
 		// If K is constrained to a type C, also infer to C. Thus, for a mapped type { [P in K]: X },
 		// where K extends keyof T, we make the same inferences as for a homomorphic mapped type
 		// { [P in keyof T]: X }. This enables us to make meaningful inferences when the target is a
@@ -1014,11 +1014,13 @@ func (c *Checker) inferToMappedType(n *InferenceState, source *Type, target *Typ
 // variable T[P] (i.e. we treat the type T[P] as the type variable we're inferring for).
 func (c *Checker) inferTypeForHomomorphicMappedType(source *Type, target *Type, constraint *Type) *Type {
 	key := ReverseMappedTypeKey{sourceId: source.id, targetId: target.id, constraintId: constraint.id}
-	if cached := c.reverseHomomorphicMappedCache[key]; cached != nil {
+	if cached, _ := c.reverseHomomorphicMappedCache.get(c, key); cached != nil {
 		return cached
 	}
+	c.reverseHomomorphicMappedCache.begin(c, key)
 	t := c.createReverseMappedType(source, target, constraint)
-	c.reverseHomomorphicMappedCache[key] = t
+	c.reverseHomomorphicMappedCache.set(c, key, t)
+	c.endMemo()
 	return t
 }
 
@@ -1076,9 +1078,10 @@ func (c *Checker) isPartiallyInferableType(t *Type) bool {
 
 func (c *Checker) inferReverseMappedType(source *Type, target *Type, constraint *Type) *Type {
 	key := ReverseMappedTypeKey{sourceId: source.id, targetId: target.id, constraintId: constraint.id}
-	if cached, ok := c.reverseMappedCache[key]; ok {
+	if cached, ok := c.reverseMappedCache.get(c, key); ok {
 		return core.OrElse(cached, c.unknownType)
 	}
+	c.reverseMappedCache.begin(c, key)
 	c.reverseMappedSourceStack = append(c.reverseMappedSourceStack, source)
 	c.reverseMappedTargetStack = append(c.reverseMappedTargetStack, target)
 	saveExpandingFlags := c.reverseExpandingFlags
@@ -1095,7 +1098,8 @@ func (c *Checker) inferReverseMappedType(source *Type, target *Type, constraint 
 	c.reverseMappedSourceStack = c.reverseMappedSourceStack[:len(c.reverseMappedSourceStack)-1]
 	c.reverseMappedTargetStack = c.reverseMappedTargetStack[:len(c.reverseMappedTargetStack)-1]
 	c.reverseExpandingFlags = saveExpandingFlags
-	c.reverseMappedCache[key] = t
+	c.reverseMappedCache.set(c, key, t)
+	c.endMemo()
 	return t
 }
 
@@ -1160,11 +1164,11 @@ func (c *Checker) resolveReverseMappedTypeMembers(t *Type) {
 
 func (c *Checker) getTypeOfReverseMappedSymbol(symbol *ast.Symbol) *Type {
 	links := c.valueSymbolLinks.Get(symbol)
-	if links.resolvedType == nil {
+	if links.resolvedType.get(c) == nil {
 		reverseLinks := c.ReverseMappedSymbolLinks.Get(symbol)
-		links.resolvedType = core.OrElse(c.inferReverseMappedType(reverseLinks.propertyType, reverseLinks.mappedType, reverseLinks.constraintType), c.unknownType)
+		links.resolvedType.set(c, core.OrElse(c.inferReverseMappedType(reverseLinks.propertyType, reverseLinks.mappedType, reverseLinks.constraintType), c.unknownType))
 	}
-	return links.resolvedType
+	return links.resolvedType.get(c)
 }
 
 // If the original mapped type had an intersection constraint we extract its components,
@@ -1250,7 +1254,7 @@ func (c *Checker) createEmptyObjectTypeFromStringLiteral(t *Type) *Type {
 		}
 		name := getStringLiteralValue(t)
 		literalProp := c.newSymbol(ast.SymbolFlagsProperty, name)
-		c.valueSymbolLinks.Get(literalProp).resolvedType = c.anyType
+		c.valueSymbolLinks.Get(literalProp).resolvedType.set(c, c.anyType)
 		if t.symbol != nil {
 			literalProp.SetDeclarations(t.symbol.Declarations())
 			literalProp.SetValueDeclaration(t.symbol.ValueDeclaration())

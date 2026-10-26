@@ -29,18 +29,18 @@ func TestCheckerNodeLinkStores(t *testing.T) {
 		nodes[i] = node
 		assert.Assert(t, !first.typeNodeLinks.Has(node))
 		assert.Assert(t, !first.signatureLinks.Has(node))
-		first.typeNodeLinks.Get(node).resolvedType = &Type{id: TypeId(i + 1)}
-		first.signatureLinks.Get(node).resolvedSignature = &Signature{id: SignatureId(i + 1)}
-		second.typeNodeLinks.Get(node).resolvedType = &Type{id: TypeId(i + 2)}
-		second.signatureLinks.Get(node).resolvedSignature = &Signature{id: SignatureId(i + 2)}
+		first.typeNodeLinks.Get(node).resolvedType.intern(&Type{id: TypeId(i + 1)})
+		first.signatureLinks.Get(node).resolvedSignature.intern(&Signature{id: SignatureId(i + 1)})
+		second.typeNodeLinks.Get(node).resolvedType.intern(&Type{id: TypeId(i + 2)})
+		second.signatureLinks.Get(node).resolvedSignature.intern(&Signature{id: SignatureId(i + 2)})
 	}
 	f.ReleaseArenas()
 	runtime.GC()
 	for i, node := range nodes {
-		assert.Equal(t, first.typeNodeLinks.Get(node).resolvedType.id, TypeId(i+1))
-		assert.Equal(t, first.signatureLinks.Get(node).resolvedSignature.id, SignatureId(i+1))
-		assert.Equal(t, second.typeNodeLinks.Get(node).resolvedType.id, TypeId(i+2))
-		assert.Equal(t, second.signatureLinks.Get(node).resolvedSignature.id, SignatureId(i+2))
+		assert.Equal(t, first.typeNodeLinks.Get(node).resolvedType.get(first).id, TypeId(i+1))
+		assert.Equal(t, first.signatureLinks.Get(node).resolvedSignature.get(first).id, SignatureId(i+1))
+		assert.Equal(t, second.typeNodeLinks.Get(node).resolvedType.get(second).id, TypeId(i+2))
+		assert.Equal(t, second.signatureLinks.Get(node).resolvedSignature.get(second).id, SignatureId(i+2))
 	}
 	clone := nodes[0].Clone(f)
 	assert.Assert(t, !first.typeNodeLinks.Has(clone))
@@ -178,6 +178,7 @@ func BenchmarkTypeListKey(b *testing.B) {
 // newBareTestChecker returns an uninitialized checker with an empty store.
 func newBareTestChecker() *Checker {
 	c := &Checker{memoStore: &memoStore{}}
+	c.initResolutions()
 	c.root = c
 	return c
 }
@@ -185,10 +186,6 @@ func newBareTestChecker() *Checker {
 func newCompositeTestChecker() (*Checker, []*Type) {
 	c := newBareTestChecker()
 	c.strictNullChecks = true
-	c.unionTypes = make(map[CacheHashKey]*Type)
-	c.unionOfUnionTypes = make(map[UnionOfUnionKey]*Type)
-	c.intersectionTypes = make(map[CacheHashKey]*Type)
-	c.subtypeReductionCache = make(map[CacheHashKey][]*Type)
 	c.compareSymbols = c.compareSymbolsWorker
 	c.neverType = c.newIntrinsicType(TypeFlagsNever, "never")
 	c.unknownType = c.newIntrinsicType(TypeFlagsUnknown, "unknown")
@@ -494,7 +491,7 @@ func TestCompactValueSymbolLinksLayout(t *testing.T) {
 	assert.Equal(t, unsafe.Sizeof(valueSymbolExtra{}), 3*unsafe.Sizeof(uintptr(0)))
 	c, types := newCompositeTestChecker()
 	var links ValueSymbolLinks
-	assert.Assert(t, links.getWriteType() == nil)
+	assert.Assert(t, links.getWriteType(c) == nil)
 	assert.Assert(t, links.getNameType() == nil)
 	assert.Assert(t, links.getContainingType() == nil)
 	links.setWriteType(c, nil)
@@ -511,12 +508,12 @@ func TestCompactValueSymbolLinksLayout(t *testing.T) {
 		other.setNameType(c, types[2])
 	}
 	runtime.GC()
-	assert.Equal(t, links.getWriteType(), types[0])
+	assert.Equal(t, links.getWriteType(c), types[0])
 	assert.Equal(t, links.getNameType(), types[1])
 	assert.Equal(t, links.getContainingType(), types[2])
 	links.setNameType(c, nil)
 	assert.Assert(t, links.getNameType() == nil)
-	assert.Equal(t, links.getWriteType(), types[0])
+	assert.Equal(t, links.getWriteType(c), types[0])
 	assert.Equal(t, links.getContainingType(), types[2])
 }
 
@@ -655,7 +652,7 @@ func TestCompactTypeNodeLinksLayout(t *testing.T) {
 	assert.Equal(t, unsafe.Sizeof(TypeNodeLinks{}), 2*unsafe.Sizeof(uintptr(0)))
 	c, types := newCompositeTestChecker()
 	var links TypeNodeLinks
-	links.resolvedType = types[0]
+	links.resolvedType.intern(types[0])
 	assert.Assert(t, links.getOuterTypeParameters() == nil)
 	links.setOuterTypeParameters(c, nil)
 	assert.Assert(t, links.outerTypeParameters == nil)
@@ -675,10 +672,10 @@ func TestCompactTypeNodeLinksLayout(t *testing.T) {
 	}
 	runtime.GC()
 	assert.Equal(t, links.getOuterTypeParameters()[0], types[1])
-	assert.Equal(t, links.resolvedType, types[0])
+	assert.Equal(t, links.resolvedType.get(c), types[0])
 	links.setOuterTypeParameters(c, nil)
 	assert.Assert(t, links.getOuterTypeParameters() == nil)
-	assert.Equal(t, links.resolvedType, types[0])
+	assert.Equal(t, links.resolvedType.get(c), types[0])
 	runtime.KeepAlive(c)
 }
 
@@ -754,7 +751,7 @@ func TestSignatureExtra(t *testing.T) {
 	sig.setComposite(c, nil)
 	assert.Equal(t, sig.extra, entry)
 	assert.Assert(t, sig.TypeParameters() == nil)
-	assert.Equal(t, sig.resolvedReturnType, types[0])
+	assert.Equal(t, sig.resolvedReturnType.get(c), types[0])
 	assert.Equal(t, sig.minArgumentCount, int32(1))
 	assert.Equal(t, sig.getResolvedTypePredicate(c), predicate)
 	runtime.KeepAlive(c)

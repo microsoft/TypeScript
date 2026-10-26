@@ -242,7 +242,6 @@ func main() {
 			"ContainsSpread":                    toInt32(checker.ObjectFlagsContainsSpread),
 			"ObjectRestType":                    toInt32(checker.ObjectFlagsObjectRestType),
 			"IsClassInstanceClone":              toInt32(checker.ObjectFlagsIsClassInstanceClone),
-			"IdenticalBaseTypeCalculated":       toInt32(checker.ObjectFlagsIdenticalBaseTypeCalculated),
 			"IdenticalBaseTypeExists":           toInt32(checker.ObjectFlagsIdenticalBaseTypeExists),
 			"FromTypeNode":                      toInt32(checker.ObjectFlagsFromTypeNode),
 			"IsGenericTypeComputed":             toInt32(checker.ObjectFlagsIsGenericTypeComputed),

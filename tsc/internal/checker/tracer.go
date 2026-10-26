@@ -319,11 +319,12 @@ func (a *tracedTypeAdapter) Pattern() *ast.Node {
 	if a.checker == nil {
 		return nil
 	}
-	return a.checker.patternForType[a.t]
+	p, _ := a.checker.patternForType.get(a.checker, a.t)
+	return p
 }
 
 func (a *tracedTypeAdapter) RecursionIdentity() any {
-	return getRecursionIdentity(a.t).value
+	return a.checker.getRecursionIdentity(a.t).value
 }
 
 func (a *tracedTypeAdapter) Display() string {

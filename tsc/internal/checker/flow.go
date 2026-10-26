@@ -852,11 +852,13 @@ func (c *Checker) getNarrowedType(t *Type, candidate *Type, assumeTrue bool, che
 		return c.getNarrowedTypeWorker(t, candidate, assumeTrue, checkDerived)
 	}
 	key := NarrowedTypeKey{t, candidate, assumeTrue, checkDerived}
-	if narrowedType, ok := c.narrowedTypes[key]; ok {
+	if narrowedType, ok := c.narrowedTypes.get(c, key); ok {
 		return narrowedType
 	}
+	c.narrowedTypes.begin(c, key)
 	narrowedType := c.getNarrowedTypeWorker(t, candidate, assumeTrue, checkDerived)
-	c.narrowedTypes[key] = narrowedType
+	c.narrowedTypes.set(c, key, narrowedType)
+	c.endMemo()
 	return narrowedType
 }
 
@@ -1346,10 +1348,22 @@ func (c *Checker) getTypeAtFlowLoopLabel(f *FlowState, flow *ast.FlowNode) FlowT
 		return FlowType{t: f.declaredType}
 	}
 	key := FlowLoopKey{flowNode: flow, refKey: f.refKey}
+	entry, _ := c.flowLoopCache.get(c, key)
+	if entry == nil {
+		entry = &flowLoopCacheEntry{}
+		c.flowLoopCache.intern(key, entry)
+	}
+	c.beginMemo(memoKeyOf(entry, memoFlowLoopType))
+	result := c.getTypeAtFlowLoopLabelCached(f, flow, key, entry)
+	c.endMemo()
+	return result
+}
+
+func (c *Checker) getTypeAtFlowLoopLabelCached(f *FlowState, flow *ast.FlowNode, key FlowLoopKey, entry *flowLoopCacheEntry) FlowType {
 	// If we have previously computed the control flow type for the reference at
 	// this flow loop junction, return the cached type.
-	if cached := c.flowLoopCache[key]; cached != nil {
-		return FlowType{t: cached}
+	if entry.t != nil {
+		return FlowType{t: entry.t}
 	}
 	// If this flow loop junction and reference are already being processed, return
 	// the union of the types computed for each branch so far, marked as incomplete.
@@ -1389,8 +1403,8 @@ func (c *Checker) getTypeAtFlowLoopLabel(f *FlowState, flow *ast.FlowNode) FlowT
 			// If we see a value appear in the cache it is a sign that control flow analysis
 			// was restarted and completed by checkExpressionCached. We can simply pick up
 			// the resulting type and bail out.
-			if cached := c.flowLoopCache[key]; cached != nil {
-				return FlowType{t: cached}
+			if entry.t != nil {
+				return FlowType{t: entry.t}
 			}
 		}
 		antecedentTypes = core.AppendIfUnique(antecedentTypes, flowType.t)
@@ -1413,7 +1427,7 @@ func (c *Checker) getTypeAtFlowLoopLabel(f *FlowState, flow *ast.FlowNode) FlowT
 	if firstAntecedentType.incomplete {
 		return c.newFlowType(result, true /*incomplete*/)
 	}
-	c.flowLoopCache[key] = result
+	entry.t = result
 	return FlowType{t: result}
 }
 
@@ -1524,11 +1538,11 @@ func getCandidateVariableDeclarationInitializer(node *ast.Node) *ast.Node {
 // and never escape the getFlowTypeOfReference function.
 func (c *Checker) getEvolvingArrayType(elementType *Type) *Type {
 	key := CachedTypeKey{kind: CachedTypeKindEvolvingArrayType, typeId: elementType.id}
-	result := c.cachedTypes[key]
+	result, _ := c.cachedTypes.get(c, key)
 	if result == nil {
 		result = c.newObjectType(ObjectFlagsEvolvingArray, nil)
 		result.AsEvolvingArrayType().elementType = elementType
-		c.cachedTypes[key] = result
+		c.cachedTypes.intern(key, result)
 	}
 	return result
 }
@@ -2290,7 +2304,7 @@ func (c *Checker) getTypeOfInitializer(node *ast.Node) *Type {
 	// from its initializer, we'll already have cached the type. Otherwise we compute it now
 	// without caching such that transient types are reflected.
 	if c.typeNodeLinks.Has(node) {
-		t := c.typeNodeLinks.Get(node).resolvedType
+		t := c.typeNodeLinks.Get(node).resolvedType.get(c)
 		if t != nil {
 			return t
 		}
@@ -2432,10 +2446,12 @@ func (c *Checker) getAssignmentReducedType(declaredType *Type, assignedType *Typ
 		return assignedType
 	}
 	key := AssignmentReducedKey{id1: declaredType.id, id2: assignedType.id}
-	result := c.assignmentReducedTypes[key]
+	result, _ := c.assignmentReducedTypes.get(c, key)
 	if result == nil {
+		c.assignmentReducedTypes.begin(c, key)
 		result = c.getAssignmentReducedTypeWorker(declaredType, assignedType)
-		c.assignmentReducedTypes[key] = result
+		c.assignmentReducedTypes.set(c, key, result)
+		c.endMemo()
 	}
 	return result
 }
@@ -2555,11 +2571,13 @@ func (c *Checker) isReachableFlowNodeWorker(f *FlowState, flow *ast.FlowNode, no
 		flags := flow.Flags
 		if flags&ast.FlowFlagsShared != 0 {
 			if !noCacheCheck && len(f.reduceLabels) == 0 {
-				if reachable, ok := c.flowNodeReachable[flow]; ok {
+				if reachable, ok := c.flowNodeReachable.get(c, flow); ok {
 					return reachable
 				}
+				c.flowNodeReachable.begin(c, flow)
 				reachable := c.isReachableFlowNodeWorker(f, flow, true /*noCacheCheck*/)
-				c.flowNodeReachable[flow] = reachable
+				c.flowNodeReachable.set(c, flow, reachable)
+				c.endMemo()
 				return reachable
 			}
 			noCacheCheck = false
@@ -2641,11 +2659,13 @@ func (c *Checker) isPostSuperFlowNodeWorker(f *FlowState, flow *ast.FlowNode, no
 		flags := flow.Flags
 		if flags&ast.FlowFlagsShared != 0 {
 			if !noCacheCheck {
-				if postSuper, ok := c.flowNodePostSuper[flow]; ok {
+				if postSuper, ok := c.flowNodePostSuper.get(c, flow); ok {
 					return postSuper
 				}
+				c.flowNodePostSuper.begin(c, flow)
 				postSuper := c.isPostSuperFlowNodeWorker(f, flow, true /*noCacheCheck*/)
-				c.flowNodePostSuper[flow] = postSuper
+				c.flowNodePostSuper.set(c, flow, postSuper)
+				c.endMemo()
 			}
 			noCacheCheck = false
 		}

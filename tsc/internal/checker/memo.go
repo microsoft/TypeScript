@@ -1,0 +1,718 @@
+package checker
+
+import (
+	"iter"
+	"maps"
+	"slices"
+	"unsafe"
+
+	"github.com/microsoft/TypeScript/tsc/internal/ast"
+
+	"github.com/microsoft/TypeScript/tsc/internal/core"
+	"github.com/microsoft/TypeScript/tsc/internal/debug"
+)
+
+// Checker side effects and memoization
+//
+// Checking a file produces outputs other than types: diagnostics, reference
+// marks used by unused-identifier checks, deferred nodes, and so on. Those
+// outputs are produced while computing memoized results (the type of a symbol,
+// the resolved symbol of an identifier, ...). If such a result is first computed
+// for an API query rather than while checking, a later check reuses the cached
+// result without recomputing it, so the outputs would historically either leak
+// (reported for code that checking never visits) or be lost (never reported for
+// code that checking does visit). Both make diagnostics depend on query history.
+//
+// To make checking independent of query history, a checker is either checking
+// or answering queries. A query does not apply side effects. Instead it
+// records them against the innermost memoized computation in progress, along
+// with the memoized results that computation reused. When a check later
+// reuses a memoized result, it replays the recorded effects of that result
+// and everything it transitively reused, exactly as if it had computed the
+// result itself. Effects produced outside any memoized computation belong
+// solely to the query and are discarded.
+
+type memoField uint8
+
+const (
+	memoCell memoField = iota // A memo[T], keyed by its own address
+	memoWriteType
+	memoDeclaredType
+	memoTypeNodeType
+	memoBaseTypes
+	memoStructuredMembers
+	memoGlobal
+	memoTypeParameterConstraint
+	memoTypeParameterDefault
+	memoTypeAlias
+	memoEnumMemberValue
+	memoBaseConstraint
+	memoAccessorType
+	memoRegularExpression
+	memoContextualParameters
+	memoContextChecked
+	memoInitializerIsUndefined
+	memoFlowExpressionType
+	memoFlowLoopType
+	memoJsxImplicitImportContainer
+	memoModuleExports
+	memoInstantiationExpressionType
+	memoRelationOverflow
+	memoResolvedMembers // followed by one field per MembersOrExportsResolutionKind
+	memoSymbolExports   = memoResolvedMembers + memoField(MembersOrExportsResolutionKindResolvedExports)
+	memoSymbolMembers   = memoResolvedMembers + memoField(MembersOrExportsResolutionKindResolvedMembers)
+	memoFieldCount      = memoResolvedMembers + 2
+)
+
+// memoKey identifies a memoized result: the address of the entity owning the
+// cache slot (an *ast.Node, *ast.Symbol, *Type, or *Signature) shifted left by
+// eight bits, plus the memoField of the slot. Packing into an integer keeps map
+// operations on the fast path. Entities live as long as the program or the
+// checker store, so an address cannot be reused while its keys exist.
+type memoKey uint64
+
+func memoKeyOf[T any](entity *T, field memoField) memoKey {
+	// SAFETY: Only the address is kept, as an identity; it is never turned back
+	// into a pointer except by symbol, whose entity outlives the key.
+	return memoKey(uint64(uintptr(unsafe.Pointer(entity)))<<8 | uint64(field))
+}
+
+type memoEffects struct {
+	effects  []func(c *Checker)
+	marks    []*ast.Symbol // Aliases marked referenced, also among effects; see withReferenceMarks
+	deps     []*memoEffects
+	parent   *memoEffects // Resolution d was most recently added to; avoids duplicate deps
+	entry    *ast.Node    // Current node when the computation started, if entered
+	entered  bool         // Whether this is the resolution of a computation, not just a set of deps
+	replayed bool
+}
+
+func (f *memoEffects) addDep(d *memoEffects) {
+	if f == d || d.parent == f {
+		return
+	}
+	d.parent = f
+	f.deps = append(f.deps, d)
+}
+
+// covers reports whether replaying f replays deps, checking only the direct
+// dependencies of f, and only of a few, to stay cheap.
+func (f *memoEffects) covers(deps []*memoEffects) bool {
+	if len(deps) > 16 || len(f.deps) > 64 {
+		return false
+	}
+	for _, d := range deps {
+		if d != f && !slices.Contains(f.deps, d) {
+			return false
+		}
+	}
+	return true
+}
+
+// memoState is the memo state of one memoized result.
+type memoState struct {
+	pending *memoEffects // Effects not yet replayed by a check
+}
+
+// memo is a cached result. Cached checker state must live in a memo so that
+// every read accounts for the effects of the computation that produced it;
+// see the package comment above. The value is only accessible through
+// methods. The memo state of a result is kept in the store's memo state map,
+// keyed by the address of the memo, so a memo costs nothing beyond its value.
+type memo[T any] struct {
+	memoHeader
+	memoValue T
+}
+
+// memoHeader is the part of a memo independent of its type, which identifies
+// it.
+type memoHeader struct {
+	_ memoNoCopy
+}
+
+// memoNoCopy makes go vet reject copies of a memo, which would bypass it.
+type memoNoCopy struct{}
+
+func (*memoNoCopy) Lock()   {}
+func (*memoNoCopy) Unlock() {}
+
+func (h *memoHeader) key() memoKey {
+	return memoKeyOf(h, memoCell)
+}
+
+// get returns the cached result, accounting for the effects of computing it.
+func (m *memo[T]) get(c *Checker) T {
+	if c.memoActive() {
+		c.observeCell(&m.memoHeader)
+	}
+	return m.memoValue
+}
+
+// set caches a result. When set outside the result's own computation (for
+// example, the types of binding elements assigned while resolving the type of
+// their declaration), the result depends on the computation setting it.
+func (m *memo[T]) set(c *Checker, v T) {
+	m.memoValue = v
+	if !c.checking {
+		c.attachCell(&m.memoHeader)
+	}
+}
+
+// setIfChanged is set for a result that every computation needing it sets
+// again, such as the symbol a property access resolves to. Setting the value
+// it already has comes from the same computation, whose effects are already
+// retained, so it is only set when it changes.
+func setIfChanged[T comparable](c *Checker, m *memo[T], v T) {
+	if m.memoValue != v {
+		m.set(c, v)
+	}
+}
+
+// peek returns the cached result without accounting for effects. It is only
+// for a result whose computation is in progress, where reading it does not
+// observe it.
+func (m *memo[T]) peek() T {
+	return m.memoValue
+}
+
+// exchange replaces the cached result without accounting for effects. It is
+// only for speculative computations that restore the previous result after.
+func (m *memo[T]) swap(v T) T {
+	old := m.memoValue
+	m.memoValue = v
+	return old
+}
+
+// init sets the result of a cell whose owner is being created. Nothing can
+// observe the owner before its creator returns it, so the result needs no
+// dependency of its own.
+func (m *memo[T]) intern(v T) {
+	m.memoValue = v
+}
+
+// enter starts the computation of the result; see beginMemo.
+func (m *memo[T]) begin(c *Checker) {
+	c.beginMemo(m.key())
+}
+
+// memoMap is a map of cached results, each accounted for like a memo. The
+// entries are only accessible through methods. Memo state is kept per entry
+// in a side map allocated on first use by a query.
+//
+// An entry should be computed between enter and endMemo, so that reusing it
+// replays the effects of computing that entry alone. An entry set outside its
+// own computation depends on the whole enclosing computation instead.
+type memoMap[K comparable, V any] struct {
+	_             memoNoCopy
+	memoEntries   map[K]V
+	memoStates    map[K]*memoState
+	resolvingKeys []K // Keys of computations in progress without a memo state yet
+}
+
+// get returns the cached result for k, accounting for the effects of
+// computing it.
+func (m *memoMap[K, V]) get(c *Checker, k K) (V, bool) {
+	if m.memoStates != nil && c.memoActive() {
+		m.observe(c, k)
+	}
+	v, ok := m.memoEntries[k]
+	return v, ok
+}
+
+// peek returns the cached result for k without observing it, for results
+// that are interned and never change.
+func (m *memoMap[K, V]) peek(k K) (V, bool) {
+	v, ok := m.memoEntries[k]
+	return v, ok
+}
+
+// observe is the out of line part of get, keeping get cheap enough to inline.
+//
+//go:noinline
+func (m *memoMap[K, V]) observe(c *Checker, k K) {
+	if c.observeState(m.memoStates[k]) {
+		c.memoCycle(m.resolvingIndex(c, k))
+	}
+}
+
+// has reports whether a result is cached for k; see get.
+func (m *memoMap[K, V]) has(c *Checker, k K) bool {
+	_, ok := m.get(c, k)
+	return ok
+}
+
+// values iterates the cached results without observing them, for
+// inspection outside of checking.
+func (m *memoMap[K, V]) values() iter.Seq[V] {
+	return maps.Values(m.memoEntries)
+}
+
+// set caches the result for k; see memo.set.
+// set caches the result for k; see memo.set.
+func (m *memoMap[K, V]) set(c *Checker, k K, v V) {
+	if m.memoEntries == nil {
+		m.memoEntries = make(map[K]V)
+	}
+	m.memoEntries[k] = v
+	if c.memoTop != 0 {
+		c.attachState(m.state(k))
+	}
+}
+
+// intern caches a result constructed from the inputs in k alone, without
+// consulting any cached result, so computing it has no effects to account for.
+func (m *memoMap[K, V]) intern(k K, v V) {
+	if m.memoEntries == nil {
+		m.memoEntries = make(map[K]V)
+	}
+	m.memoEntries[k] = v
+}
+
+// compute computes and caches the result for k in a computation of its own.
+func (m *memoMap[K, V]) compute(c *Checker, k K, fn func() V) V {
+	m.begin(c, k)
+	v := fn()
+	m.set(c, k, v)
+	c.endMemo()
+	return v
+}
+
+// enter starts the computation of the result for k; see beginMemo.
+func (m *memoMap[K, V]) begin(c *Checker, k K) {
+	outer := m.resolvingIndex(c, k)
+	m.resolvingKeys = append(m.resolvingKeys, k)
+	c.beginResolution(0, m, len(m.resolvingKeys)-1)
+	if c.checking {
+		if c.memoPendingCount != 0 && m.memoStates != nil {
+			c.replayPending(m.memoStates[k])
+		}
+		return
+	}
+	c.beginState(m.state(k), outer)
+}
+
+// resolvingIndex returns 1 + the index in resolutions of the computation of
+// the entry for k in progress, or 0.
+func (m *memoMap[K, V]) resolvingIndex(c *Checker, k K) int {
+	i := slices.Index(m.resolvingKeys, k)
+	if i < 0 {
+		return 0
+	}
+	for j := len(c.resolutions) - 1; j >= 0; j-- {
+		if f := &c.resolutions[j]; f.source == memoStateSource(m) && int(f.index) == i {
+			return j + 1
+		}
+	}
+	panic("entry in progress without a resolution")
+}
+
+func (m *memoMap[K, V]) popState(i int) {
+	clear(m.resolvingKeys[i:])
+	m.resolvingKeys = m.resolvingKeys[:i]
+}
+
+func (m *memoMap[K, V]) state(k K) *memoState {
+	state := m.memoStates[k]
+	if state == nil {
+		if m.memoStates == nil {
+			m.memoStates = make(map[K]*memoState)
+		}
+		state = &memoState{}
+		m.memoStates[k] = state
+	}
+	return state
+}
+
+// memoActive reports whether reading a cached result must account for its
+// effects: false in a check with nothing pending.
+func (c *Checker) memoActive() bool {
+	return !c.checking || c.memoPendingCount != 0
+}
+
+// beginMemo is called on entry to a memoized function whose result for this
+// input is cached in the memo state identified by key. It accounts for
+// effects recorded by a previous computation of that result, and starts a
+// resolution for this computation, which in a query records its effects. It
+// must be matched by endMemo.
+func (c *Checker) beginMemo(key memoKey) {
+	c.beginResolution(key, nil, 0)
+	if c.checking {
+		if c.memoPendingCount != 0 {
+			c.replayPending(c.memoStates[key])
+		}
+		return
+	}
+	outer := c.resolvingIndex(key)
+	if outer == len(c.resolutions) {
+		outer = 0
+	}
+	c.beginState(c.memoState(key), outer)
+}
+
+// beginState is beginMemo for the memo state of a result, in a query. outer
+// is 1 + the index in resolutions of the computation of the same result in
+// progress, if this one re-enters it, or 0.
+func (c *Checker) beginState(state *memoState, outer int) {
+	if state.pending != nil {
+		if parent := c.currentMemoEffects(); parent != nil {
+			parent.addDep(state.pending)
+		}
+	}
+	c.startEffects(state)
+	// Re-entering a computation in progress: the inner result is derived
+	// from whatever in-progress marker the outer computation left behind.
+	c.memoCycle(outer)
+}
+
+// startEffects starts recording the effects of the current resolution, which
+// computes the result in state.
+func (c *Checker) startEffects(state *memoState) {
+	n := len(c.resolutions) - 1
+	f := &c.resolutions[n]
+	f.memo = true
+	f.prevMemo = int32(c.memoTop)
+	f.result = state
+	f.entry = c.currentNode
+	c.memoTop = n + 1
+}
+
+// stopEffects stops recording the effects of the current resolution,
+// returning it if it recorded them.
+func (c *Checker) stopEffects() *resolution {
+	n := len(c.resolutions) - 1
+	f := &c.resolutions[n]
+	if !f.memo {
+		return nil
+	}
+	c.memoTop = int(f.prevMemo)
+	return f
+}
+
+func (c *Checker) memoState(key memoKey) *memoState {
+	state := c.memoStates[key]
+	if state == nil {
+		if c.memoStates == nil {
+			c.memoStates = make(map[memoKey]*memoState)
+		}
+		state = &memoState{}
+		c.memoStates[key] = state
+	}
+	return state
+}
+
+// memoAttach makes the result identified by key depend on the innermost
+// computation in progress, unless that computation is the result's own.
+func (c *Checker) memoAttach(key memoKey) {
+	if c.memoTop == 0 {
+		return
+	}
+	c.attachState(c.memoState(key))
+}
+
+// attachState is memoAttach for the memo state of a result.
+func (c *Checker) attachState(state *memoState) {
+	n := c.memoTop - 1
+	if n < 0 {
+		return
+	}
+	if c.resolutions[n].result == state {
+		return
+	}
+	f := c.memoEffectsAt(n)
+	if state.pending == nil {
+		state.pending = &memoEffects{}
+		c.memoPendingCount++
+	}
+	state.pending.addDep(f)
+}
+
+// observeCell and attachCell are observeMemo and memoAttach for a memo at
+// address p. They are kept out of line so that memo reads and writes are
+// cheap enough to inline.
+//
+//go:noinline
+func (c *Checker) observeCell(h *memoHeader) {
+	c.observeMemo(h.key())
+}
+
+//go:noinline
+func (c *Checker) attachCell(h *memoHeader) {
+	c.memoAttach(h.key())
+}
+
+// observeMemo accounts for reading a memoized result without computing it.
+func (c *Checker) observeMemo(key memoKey) {
+	if !c.memoActive() {
+		return
+	}
+	if c.observeState(c.memoStates[key]) {
+		c.memoCycle(c.resolvingIndex(key))
+	}
+}
+
+// observeState is observeMemo for the memo state of a result, if it has one.
+// It reports whether the result is read in a query, in which case reading a
+// computation in progress is left to the caller; see memoCycle.
+func (c *Checker) observeState(state *memoState) bool {
+	if state == nil {
+		return false
+	}
+	if c.checking {
+		c.replayPending(state)
+		return false
+	}
+	if state.pending != nil {
+		if parent := c.currentMemoEffects(); parent != nil {
+			parent.addDep(state.pending)
+		}
+	}
+	return true
+}
+
+func (c *Checker) replayPending(state *memoState) {
+	if state != nil && state.pending != nil {
+		f := state.pending
+		state.pending = nil
+		c.memoPendingCount--
+		c.replayMemo(f)
+	}
+}
+
+// endMemo finishes a computation started by beginMemo, retaining its effects
+// for replay by later reuse of the result. The effects also become part of
+// the enclosing computation, since it observed the result.
+func (c *Checker) endMemo() {
+	if f := c.stopEffects(); f != nil && f.effects != nil {
+		c.retainEffects(f.result, f.effects)
+	}
+	c.endResolution()
+}
+
+// endMemoUncached is endMemo for a computation that did not cache its result.
+// Nothing can reuse the result, so its effects belong only to the enclosing
+// computation, and retaining them for the result would grow them each time it
+// is computed again.
+func (c *Checker) endMemoUncached() {
+	defer c.endResolution()
+	res := c.stopEffects()
+	if res == nil || res.effects == nil {
+		return
+	}
+	f := res.effects
+	if parent := c.currentMemoEffects(); parent != nil {
+		if len(f.effects) == 0 && f.entry == parent.entry {
+			// Without effects of its own, and located like the enclosing
+			// computation, the computation adds nothing but what it observed.
+			for _, d := range f.deps {
+				parent.addDep(d)
+			}
+		} else {
+			parent.addDep(f)
+		}
+	}
+}
+
+// retainEffects retains the effects of a computation that just finished for
+// replay by later reuse of its result, and adds them to the enclosing
+// computation.
+func (c *Checker) retainEffects(state *memoState, f *memoEffects) {
+	if state.pending != nil && len(f.effects) == 0 && state.pending.covers(f.deps) {
+		// Computing the result again, typically to return it from a cache
+		// that the computation reads, observed only what computing it
+		// before did. Retaining that again would grow the effects of the
+		// result each time.
+		if parent := c.currentMemoEffects(); parent != nil {
+			parent.addDep(state.pending)
+		}
+		return
+	}
+	if state.pending != nil {
+		f.addDep(state.pending)
+	} else {
+		c.memoPendingCount++
+	}
+	state.pending = f
+	if parent := c.currentMemoEffects(); parent != nil {
+		parent.addDep(f)
+	}
+}
+
+func (c *Checker) replayMemo(f *memoEffects) {
+	c.replayEffects(f, nil, false)
+}
+
+// replayEffects replays the effects of f and its dependencies. Effects
+// located at the current node that a computation started with (see
+// reportAtCurrentNode) are located at the node the reuse happens at instead,
+// as they would be had the computation happened there, unless the computation
+// started at a different node than the computation replaying it, which then
+// fixes its location.
+func (c *Checker) replayEffects(f *memoEffects, outerEntry *ast.Node, outerEntered bool) {
+	if f.replayed {
+		return
+	}
+	f.replayed = true
+	saveCurrentNode := c.currentNode
+	if f.entered {
+		// A computation that started at no node can be located anywhere,
+		// like one started at the node it is reused at.
+		if outerEntered && f.entry != outerEntry && f.entry != nil {
+			c.currentNode = f.entry
+		}
+		outerEntry, outerEntered = f.entry, true
+	}
+	for _, e := range f.effects {
+		e(c)
+	}
+	for _, d := range f.deps {
+		c.replayEffects(d, outerEntry, outerEntered)
+	}
+	c.currentNode = saveCurrentNode
+	f.effects = nil
+	f.deps = nil
+}
+
+// atMemoStartNode reports whether the current node is the one the innermost
+// computation in progress started with.
+func (c *Checker) atMemoStartNode() bool {
+	n := c.memoTop - 1
+	return n >= 0 && c.resolutions[n].entry == c.currentNode
+}
+
+func (c *Checker) currentMemoEffects() *memoEffects {
+	if c.memoTop == 0 {
+		return nil
+	}
+	return c.memoEffectsAt(c.memoTop - 1)
+}
+
+// recordEffect records a side effect produced by a query against the
+// innermost memoized computation, if any. Callers must only call this when
+// !c.checking, and must not apply the effect themselves.
+func (c *Checker) recordEffect(effect func(c *Checker)) {
+	if f := c.currentMemoEffects(); f != nil {
+		f.effects = append(f.effects, effect)
+	}
+}
+
+// recordReferenceMark records marking an alias referenced, an effect that
+// emit applies itself (see withReferenceMarks).
+func (c *Checker) recordReferenceMark(symbol *ast.Symbol) {
+	if f := c.currentMemoEffects(); f != nil {
+		f.effects = append(f.effects, func(c *Checker) { c.markAliasSymbolAsReferenced(symbol) })
+		f.marks = append(f.marks, symbol)
+	}
+}
+
+// withReferenceMarks runs fn as a query, then marks referenced the aliases
+// that everything fn computed would mark, which emit relies on to elide
+// imports. Unlike checking, it reports nothing, so diagnostics do not depend
+// on whether a file was emitted before it was checked. Other effects stay
+// pending for checking to replay.
+func (c *Checker) withReferenceMarks(fn func()) {
+	debug.Assert(!c.checking && c.memoTop == 0, "withReferenceMarks inside a computation")
+	c.beginResolution(0, nil, 0)
+	c.startEffects(&memoState{})
+	fn()
+	f := c.stopEffects().effects
+	c.endResolution()
+	if f == nil {
+		return
+	}
+	var marks []*ast.Symbol
+	visited := make(map[*memoEffects]struct{})
+	var collect func(f *memoEffects)
+	collect = func(f *memoEffects) {
+		if _, ok := visited[f]; ok {
+			return
+		}
+		visited[f] = struct{}{}
+		marks = append(marks, f.marks...)
+		for _, d := range f.deps {
+			collect(d)
+		}
+	}
+	collect(f)
+	for _, symbol := range marks {
+		c.withReferenceMarks(func() { c.referenceAliasSymbol(symbol) })
+	}
+}
+
+// withChecking runs fn in a check.
+func (c *Checker) withChecking(fn func()) {
+	// Checking starts only from top-level requests, so any resolution left at
+	// this point was never exited and would absorb unrelated effects.
+	debug.Assert(c.memoTop == 0, "memo resolution leaked")
+	saveChecking := c.checking
+	c.checking = true
+	fn()
+	c.checking = saveChecking
+}
+
+// memoCycle is called when a computation observes another computation that is
+// still in progress, whose resolution is at index depth-1. Every computation
+// started since then produced its result from the incomplete state of that
+// computation, so reusing any of them must also replay the effects of the
+// whole cycle (for example, its circularity error).
+func (c *Checker) memoCycle(depth int) {
+	if depth == 0 || !c.resolutions[depth-1].memo {
+		// The outer computation does not record effects.
+		return
+	}
+	outer := c.memoEffectsAt(depth - 1)
+	for i := depth; i < len(c.resolutions); i++ {
+		if !c.resolutions[i].memo {
+			continue
+		}
+		c.memoEffectsAt(i).addDep(outer)
+	}
+}
+
+func (c *Checker) memoEffectsAt(i int) *memoEffects {
+	f := c.resolutions[i].effects
+	if f == nil {
+		f = &memoEffects{entry: c.resolutions[i].entry, entered: true}
+		c.resolutions[i].effects = f
+	}
+	return f
+}
+
+// typeResolutionMemo returns the address of the memo caching the result of
+// a type resolution, or nil if it is not cached in a memo.
+func (c *Checker) typeResolutionMemo(r *TypeResolution) *memoHeader {
+	switch r.propertyName {
+	case TypeSystemPropertyNameType:
+		return &c.valueSymbolLinks.Get(r.target.(*ast.Symbol)).resolvedType.memoHeader
+	case TypeSystemPropertyNameDeclaredType:
+		return &c.typeAliasLinks.Get(r.target.(*ast.Symbol)).declaredType.memoHeader
+	case TypeSystemPropertyNameResolvedBaseTypes:
+		return &r.target.(*Type).AsInterfaceType().resolvedBaseTypes.memoHeader
+	case TypeSystemPropertyNameResolvedBaseConstructorType:
+		return &r.target.(*Type).AsInterfaceType().resolvedBaseConstructorType.memoHeader
+	case TypeSystemPropertyNameResolvedReturnType:
+		return &r.target.(*Signature).resolvedReturnType.memoHeader
+	case TypeSystemPropertyNameResolvedBaseConstraint:
+		return &r.target.(*Type).AsConstrainedType().resolvedBaseConstraint.memoHeader
+	case TypeSystemPropertyNameWriteType:
+		if extra := c.valueSymbolLinks.Get(r.target.(*ast.Symbol)).extra; extra != nil {
+			return &extra.writeType.memoHeader
+		}
+	case TypeSystemPropertyNameAliasTarget:
+		return &c.aliasSymbolLinks.Get(r.target.(*ast.Symbol)).aliasTarget.memoHeader
+	case TypeSystemPropertyNameComputedPropertyName:
+		return &c.typeNodeLinks.Get(r.target.(*ast.Node)).resolvedType.memoHeader
+	}
+	return nil
+}
+
+// memoizeGlobal memoizes the resolution of a global, replaying effects of
+// the resolution wherever the cached result is observed.
+func memoizeGlobal[T any](c *Checker, fn func() T) func() T {
+	cell := &struct{ resolve func() T }{resolve: core.Memoize(fn)}
+	return func() T {
+		c.beginMemo(memoKeyOf(cell, memoGlobal))
+		result := cell.resolve()
+		c.endMemo()
+		return result
+	}
+}

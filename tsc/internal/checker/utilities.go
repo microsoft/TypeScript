@@ -666,8 +666,8 @@ func CompareTypes(t1, t2 *Type) int {
 	}
 	// Types implied by binding patterns are ordered by their patterns.
 	if t1.flags&TypeFlagsObject != 0 {
-		p1 := t1.checker.patternForType[t1]
-		p2 := t2.checker.patternForType[t2]
+		p1, _ := t1.checker.patternForType.peek(t1)
+		p2, _ := t2.checker.patternForType.peek(t2)
 		if c := t1.checker.compareNodes(p1, p2); c != 0 {
 			return c
 		}
@@ -840,7 +840,7 @@ func compareObjectLiteralMembers(t1, t2 *Type) int {
 // created.
 func (c *Checker) peekTypeOfObjectLiteralMember(s *ast.Symbol) *Type {
 	if links := c.valueSymbolLinks.TryGet(s); links != nil {
-		return links.resolvedType
+		return links.resolvedType.peek()
 	}
 	return nil
 }
@@ -887,7 +887,7 @@ func compareTypeParameterOrigins(t1, t2 *Type) int {
 		// Tuple this types have no symbol; their constraint is the tuple target,
 		// initialized at creation.
 		if t1.symbol == nil {
-			return CompareTypes(p1.constraint, p2.constraint)
+			return CompareTypes(p1.constraint.peek(), p2.constraint.peek())
 		}
 	case typeParameterOriginDistributed:
 		return CompareTypes(p1.distributedType, p2.distributedType)
