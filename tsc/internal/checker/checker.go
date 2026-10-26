@@ -14904,8 +14904,18 @@ func (c *Checker) combineSymbolTables(first ast.SymbolTable, second ast.SymbolTa
 	if second.Len() == 0 {
 		return first
 	}
-	combined := ast.NewSymbolTable()
-	c.mergeSymbolTable(combined, first, false, nil)
+	// Late binding has merged into early symbols already; the merges are
+	// looked up without resolving the table, whose resolution is this one.
+	combined := ast.NewSymbolTableWithCapacity(first.Len() + second.Len())
+	for id, symbol := range first.All() {
+		if merged := c.mergedSymbols.TryGet(symbol); merged != nil && *merged != nil {
+			symbol = *merged
+		}
+		if merged, _ := c.lateMergedSymbols.get(c, symbol); merged != nil {
+			symbol = merged
+		}
+		combined.Set(id, symbol)
+	}
 	c.mergeSymbolTable(combined, second, false, nil)
 	return combined
 }
