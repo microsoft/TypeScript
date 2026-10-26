@@ -228,6 +228,7 @@ func CompileFilesEx(
 	result := compileFilesWithHost(host, config, harnessOptions)
 	result.Symlinks = symlinks
 	result.Trace = host.tracer.String()
+	fuzzCheckOrder(t, host, config, harnessOptions)
 	result.Repeat = func(testConfig TestConfiguration) *CompilationResult {
 		newHarnessOptions := *harnessOptions
 		newCompilerOptions := compilerOptions.Clone()
