@@ -1,3 +1,5 @@
+dynamicNamesErrors.ts(5,5): error TS2300: Duplicate identifier '1'.
+dynamicNamesErrors.ts(6,5): error TS2300: Duplicate identifier '1'.
 dynamicNamesErrors.ts(18,5): error TS2300: Duplicate identifier '[c0]'.
 dynamicNamesErrors.ts(19,5): error TS2300: Duplicate identifier '[c0]'.
 dynamicNamesErrors.ts(19,5): error TS2717: Subsequent property declarations must have the same type.  Property '[c1]' must be of type 'number', but here has type 'string'.
@@ -10,13 +12,17 @@ dynamicNamesErrors.ts(25,1): error TS2322: Type 'T1' is not assignable to type '
 dynamicNamesErrors.ts(43,5): error TS2564: Property '[x]' has no initializer and is not definitely assigned in the constructor.
 
 
-==== dynamicNamesErrors.ts (6 errors) ====
+==== dynamicNamesErrors.ts (8 errors) ====
     const c0 = "1";
     const c1 = 1;
     
     interface T0 {
         [c0]: number;
+        ~~~~
+!!! error TS2300: Duplicate identifier '1'.
         1: number;
+        ~
+!!! error TS2300: Duplicate identifier '1'.
     }
     
     interface T1 {
