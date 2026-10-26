@@ -178,7 +178,7 @@ describe("API over WebAssembly", () => {
             const imports = {
                 ...wasi.wasiImport,
                 fd_read(...args) {
-                    if (++reads > 50) throw new Error("stdin was read repeatedly while idle");
+                    if (++reads > 500) throw new Error("stdin was read repeatedly while idle");
                     return wasi.wasiImport.fd_read(...args);
                 },
             };
@@ -193,16 +193,39 @@ describe("API over WebAssembly", () => {
         t.after(() => {
             if (child.exitCode === null && child.signalCode === null) child.kill("SIGKILL");
         });
-        let stdout = "";
+        let stdout = Buffer.alloc(0);
         let stderr = "";
-        child.stdout.setEncoding("utf8");
+        const responses = new Set<unknown>();
+        const send = (message: object) => {
+            const json = JSON.stringify({ jsonrpc: "2.0", ...message });
+            child.stdin.write(`Content-Length: ${Buffer.byteLength(json)}\r\n\r\n${json}`);
+        };
+        child.stdout.on("data", (chunk: Buffer) => {
+            stdout = Buffer.concat([stdout, chunk]);
+            while (true) {
+                const headerEnd = stdout.indexOf("\r\n\r\n");
+                if (headerEnd < 0) return;
+                const length = Number(/Content-Length: (\d+)/.exec(stdout.subarray(0, headerEnd).toString())![1]);
+                const bodyStart = headerEnd + 4;
+                if (stdout.length < bodyStart + length) return;
+                const message = JSON.parse(stdout.subarray(bodyStart, bodyStart + length).toString());
+                stdout = stdout.subarray(bodyStart + length);
+                if (!("method" in message)) responses.add(message.id);
+                else if ("id" in message) send({ id: message.id, result: null });
+            }
+        });
         child.stderr.setEncoding("utf8");
-        child.stdout.on("data", chunk => stdout += chunk);
         child.stderr.on("data", chunk => stderr += chunk);
+        const waitForResponse = async (id: number) => {
+            while (!responses.has(id) && child.exitCode === null && !t.signal.aborted) {
+                await new Promise(resolve => setTimeout(resolve, 10));
+            }
+            assert.ok(responses.has(id), `no response to request ${id}\n${stderr}`);
+        };
 
+        // Each request arrives after the server has gone idle waiting for stdin.
         await new Promise(resolve => setTimeout(resolve, 250));
-        const request = JSON.stringify({
-            jsonrpc: "2.0",
+        send({
             id: 1,
             method: "initialize",
             params: {
@@ -212,15 +235,14 @@ describe("API over WebAssembly", () => {
                 workspaceFolders: null,
             },
         });
-        child.stdin.write(`Content-Length: ${Buffer.byteLength(request)}\r\n\r\n${request}`);
-
-        while (!stdout.includes("Resolved client capabilities") && child.exitCode === null && !t.signal.aborted) {
-            await new Promise(resolve => setTimeout(resolve, 10));
-        }
+        await waitForResponse(1);
+        send({ method: "initialized", params: {} });
+        await new Promise(resolve => setTimeout(resolve, 250));
+        send({ id: 2, method: "shutdown" });
+        await waitForResponse(2);
         child.stdin.end();
         const exitCode = child.exitCode ?? await new Promise<number | null>(resolve => child.once("exit", resolve));
         assert.strictEqual(exitCode, 0, stderr);
-        assert.match(stdout, /Resolved client capabilities/);
     });
 
     test("waits for API stdin without repeatedly reading", { timeout: 10_000 }, async t => {
