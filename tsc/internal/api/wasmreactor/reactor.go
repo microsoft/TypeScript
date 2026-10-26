@@ -115,15 +115,15 @@ func (r *Reactor) Send(message Message) error {
 	defer r.mu.Unlock()
 	select {
 	case r.inbox <- message:
+		if r.isIdle {
+			// The server is about to receive this message, so it is no longer idle.
+			r.idle = make(chan struct{})
+			r.isIdle = false
+		}
+		return nil
 	default:
 		return errors.New("a message is already waiting for the server")
 	}
-	if r.isIdle {
-		// The server is about to receive this message, so it is no longer idle.
-		r.idle = make(chan struct{})
-		r.isIdle = false
-	}
-	return nil
 }
 
 // Receive runs the server until it produces its next message. It returns
