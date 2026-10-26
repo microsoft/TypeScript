@@ -1,6 +1,7 @@
 package checker
 
 import (
+	"cmp"
 	"context"
 	"encoding/binary"
 	"fmt"
@@ -2420,6 +2421,7 @@ func (c *Checker) checkSourceFileWorker(ctx context.Context, sourceFile *ast.Sou
 		if !sourceFile.IsDeclarationFile && !c.isCanceled() {
 			c.checkUnusedRenamedBindingElements()
 		}
+		c.checkExternalHelperRequests(sourceFile)
 		c.produceDeferredDiagnostics()
 		links.typeChecked = true
 	}
@@ -30875,11 +30877,44 @@ func (c *Checker) checkExternalEmitHelpers(location *ast.Node, helpers ExternalE
 		return
 	}
 	if !c.checking {
-		// Helper errors are reported once per file at the first requesting
-		// location, so the check must happen in checking order.
 		c.recordEffect(func(c *Checker) { c.checkExternalEmitHelpers(location, helpers) })
 		return
 	}
+	links := c.sourceFileLinks.Get(sourceFile)
+	if links.typeChecked {
+		c.checkExternalEmitHelpersAt(sourceFile, location, helpers)
+		return
+	}
+	links.externalHelperRequests = append(links.externalHelperRequests, externalHelperRequest{location, helpers})
+}
+
+type externalHelperRequest struct {
+	location *ast.Node
+	helpers  ExternalEmitHelpers
+}
+
+// checkExternalHelperRequests checks the helpers requested by checking
+// sourceFile. Errors are reported once per file, at the first location
+// requesting a helper in the file, rather than the first location checked,
+// since the order in which checking requests helpers depends on what was
+// computed before.
+func (c *Checker) checkExternalHelperRequests(sourceFile *ast.SourceFile) {
+	links := c.sourceFileLinks.Get(sourceFile)
+	requests := links.externalHelperRequests
+	links.externalHelperRequests = nil
+	slices.SortStableFunc(requests, func(a, b externalHelperRequest) int {
+		return cmp.Or(
+			cmp.Compare(a.location.Pos(), b.location.Pos()),
+			cmp.Compare(b.location.End(), a.location.End()),
+			cmp.Compare(a.location.Kind, b.location.Kind),
+		)
+	})
+	for _, r := range requests {
+		c.checkExternalEmitHelpersAt(sourceFile, r.location, r.helpers)
+	}
+}
+
+func (c *Checker) checkExternalEmitHelpersAt(sourceFile *ast.SourceFile, location *ast.Node, helpers ExternalEmitHelpers) {
 	helpersModule := c.resolveHelpersModule(sourceFile, location)
 	if helpersModule == c.unknownSymbol {
 		return
