@@ -1421,6 +1421,14 @@ var getFeatureMap = sync.OnceValue(func() map[string][]FeatureMapEntry {
 			{lib: "es2022", props: []string{"at"}},
 			{lib: "es2023", props: []string{"findLastIndex", "findLast", "toReversed", "toSorted", "toSpliced", "with"}},
 		},
+		"ReadonlyArray": {
+			{lib: "es5", props: []string{}},
+			{lib: "es2015", props: []string{"find", "findIndex", "entries", "keys", "values"}},
+			{lib: "es2016", props: []string{"includes"}},
+			{lib: "es2019", props: []string{"flat", "flatMap"}},
+			{lib: "es2022", props: []string{"at"}},
+			{lib: "es2023", props: []string{"findLastIndex", "findLast", "toReversed", "toSorted", "toSpliced", "with"}},
+		},
 		"Iterator": {
 			{lib: "es2015", props: []string{}},
 		},
@@ -1525,10 +1533,25 @@ var getFeatureMap = sync.OnceValue(func() map[string][]FeatureMapEntry {
 				"getOrInsertComputed",
 			}},
 		},
+		"ReadonlyMap": {
+			{lib: "es2015", props: []string{"entries", "keys", "values"}},
+		},
 		"MapConstructor": {
 			{lib: "es2024", props: []string{"groupBy"}},
 		},
 		"Set": {
+			{lib: "es2015", props: []string{"entries", "keys", "values"}},
+			{lib: "es2025", props: []string{
+				"union",
+				"intersection",
+				"difference",
+				"symmetricDifference",
+				"isSubsetOf",
+				"isSupersetOf",
+				"isDisjointFrom",
+			}},
+		},
+		"ReadonlySet": {
 			{lib: "es2015", props: []string{"entries", "keys", "values"}},
 			{lib: "es2025", props: []string{
 				"union",

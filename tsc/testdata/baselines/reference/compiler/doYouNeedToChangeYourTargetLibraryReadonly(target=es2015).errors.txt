@@ -1,0 +1,132 @@
+doYouNeedToChangeYourTargetLibraryReadonly.ts(7,7): error TS2550: Property 'includes' does not exist on type 'readonly number[]'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2016' or later.
+doYouNeedToChangeYourTargetLibraryReadonly.ts(8,7): error TS2550: Property 'flat' does not exist on type 'readonly number[]'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2019' or later.
+doYouNeedToChangeYourTargetLibraryReadonly.ts(9,7): error TS2550: Property 'flatMap' does not exist on type 'readonly number[]'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2019' or later.
+doYouNeedToChangeYourTargetLibraryReadonly.ts(10,7): error TS2550: Property 'at' does not exist on type 'readonly number[]'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2022' or later.
+doYouNeedToChangeYourTargetLibraryReadonly.ts(11,7): error TS2550: Property 'findLastIndex' does not exist on type 'readonly number[]'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2023' or later.
+doYouNeedToChangeYourTargetLibraryReadonly.ts(12,7): error TS2550: Property 'findLast' does not exist on type 'readonly number[]'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2023' or later.
+doYouNeedToChangeYourTargetLibraryReadonly.ts(13,7): error TS2550: Property 'toReversed' does not exist on type 'readonly number[]'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2023' or later.
+doYouNeedToChangeYourTargetLibraryReadonly.ts(14,7): error TS2550: Property 'toSorted' does not exist on type 'readonly number[]'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2023' or later.
+doYouNeedToChangeYourTargetLibraryReadonly.ts(15,7): error TS2550: Property 'toSpliced' does not exist on type 'readonly number[]'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2023' or later.
+doYouNeedToChangeYourTargetLibraryReadonly.ts(16,7): error TS2550: Property 'with' does not exist on type 'readonly number[]'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2023' or later.
+doYouNeedToChangeYourTargetLibraryReadonly.ts(19,15): error TS2550: Property 'toReversed' does not exist on type 'readonly number[]'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2023' or later.
+doYouNeedToChangeYourTargetLibraryReadonly.ts(20,22): error TS2550: Property 'toReversed' does not exist on type 'readonly [1, 2, 3]'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2023' or later.
+doYouNeedToChangeYourTargetLibraryReadonly.ts(23,7): error TS2550: Property 'toReversed' does not exist on type '[number, string]'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2023' or later.
+doYouNeedToChangeYourTargetLibraryReadonly.ts(26,11): error TS2550: Property 'toReversed' does not exist on type 'T'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2023' or later.
+doYouNeedToChangeYourTargetLibraryReadonly.ts(38,5): error TS2550: Property 'union' does not exist on type 'ReadonlySet<number>'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2025' or later.
+doYouNeedToChangeYourTargetLibraryReadonly.ts(39,5): error TS2550: Property 'intersection' does not exist on type 'ReadonlySet<number>'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2025' or later.
+doYouNeedToChangeYourTargetLibraryReadonly.ts(40,5): error TS2550: Property 'difference' does not exist on type 'ReadonlySet<number>'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2025' or later.
+doYouNeedToChangeYourTargetLibraryReadonly.ts(41,5): error TS2550: Property 'symmetricDifference' does not exist on type 'ReadonlySet<number>'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2025' or later.
+doYouNeedToChangeYourTargetLibraryReadonly.ts(42,5): error TS2550: Property 'isSubsetOf' does not exist on type 'ReadonlySet<number>'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2025' or later.
+doYouNeedToChangeYourTargetLibraryReadonly.ts(43,5): error TS2550: Property 'isSupersetOf' does not exist on type 'ReadonlySet<number>'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2025' or later.
+doYouNeedToChangeYourTargetLibraryReadonly.ts(44,5): error TS2550: Property 'isDisjointFrom' does not exist on type 'ReadonlySet<number>'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2025' or later.
+doYouNeedToChangeYourTargetLibraryReadonly.ts(46,7): error TS2339: Property 'fill' does not exist on type 'readonly number[]'.
+doYouNeedToChangeYourTargetLibraryReadonly.ts(47,7): error TS2339: Property 'copyWithin' does not exist on type 'readonly number[]'.
+doYouNeedToChangeYourTargetLibraryReadonly.ts(48,7): error TS2339: Property 'notAnArrayMethod' does not exist on type 'readonly number[]'.
+doYouNeedToChangeYourTargetLibraryReadonly.ts(49,5): error TS2339: Property 'getOrInsert' does not exist on type 'ReadonlyMap<string, number>'.
+doYouNeedToChangeYourTargetLibraryReadonly.ts(50,5): error TS2339: Property 'getOrInsertComputed' does not exist on type 'ReadonlyMap<string, number>'.
+
+
+==== doYouNeedToChangeYourTargetLibraryReadonly.ts (26 errors) ====
+    declare const array: ReadonlyArray<number>;
+    array.find;
+    array.findIndex;
+    array.entries;
+    array.keys;
+    array.values;
+    array.includes;
+          ~~~~~~~~
+!!! error TS2550: Property 'includes' does not exist on type 'readonly number[]'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2016' or later.
+    array.flat;
+          ~~~~
+!!! error TS2550: Property 'flat' does not exist on type 'readonly number[]'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2019' or later.
+    array.flatMap;
+          ~~~~~~~
+!!! error TS2550: Property 'flatMap' does not exist on type 'readonly number[]'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2019' or later.
+    array.at;
+          ~~
+!!! error TS2550: Property 'at' does not exist on type 'readonly number[]'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2022' or later.
+    array.findLastIndex;
+          ~~~~~~~~~~~~~
+!!! error TS2550: Property 'findLastIndex' does not exist on type 'readonly number[]'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2023' or later.
+    array.findLast;
+          ~~~~~~~~
+!!! error TS2550: Property 'findLast' does not exist on type 'readonly number[]'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2023' or later.
+    array.toReversed;
+          ~~~~~~~~~~
+!!! error TS2550: Property 'toReversed' does not exist on type 'readonly number[]'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2023' or later.
+    array.toSorted;
+          ~~~~~~~~
+!!! error TS2550: Property 'toSorted' does not exist on type 'readonly number[]'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2023' or later.
+    array.toSpliced;
+          ~~~~~~~~~
+!!! error TS2550: Property 'toSpliced' does not exist on type 'readonly number[]'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2023' or later.
+    array.with;
+          ~~~~
+!!! error TS2550: Property 'with' does not exist on type 'readonly number[]'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2023' or later.
+    
+    declare const readonlyArray: readonly number[];
+    readonlyArray.toReversed;
+                  ~~~~~~~~~~
+!!! error TS2550: Property 'toReversed' does not exist on type 'readonly number[]'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2023' or later.
+    ([1, 2, 3] as const).toReversed();
+                         ~~~~~~~~~~
+!!! error TS2550: Property 'toReversed' does not exist on type 'readonly [1, 2, 3]'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2023' or later.
+    
+    declare const tuple: [number, string];
+    tuple.toReversed;
+          ~~~~~~~~~~
+!!! error TS2550: Property 'toReversed' does not exist on type '[number, string]'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2023' or later.
+    
+    function f<T extends readonly number[]>(value: T) {
+        value.toReversed;
+              ~~~~~~~~~~
+!!! error TS2550: Property 'toReversed' does not exist on type 'T'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2023' or later.
+    }
+    
+    declare const map: ReadonlyMap<string, number>;
+    map.entries;
+    map.keys;
+    map.values;
+    
+    declare const set: ReadonlySet<number>;
+    set.entries;
+    set.keys;
+    set.values;
+    set.union;
+        ~~~~~
+!!! error TS2550: Property 'union' does not exist on type 'ReadonlySet<number>'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2025' or later.
+    set.intersection;
+        ~~~~~~~~~~~~
+!!! error TS2550: Property 'intersection' does not exist on type 'ReadonlySet<number>'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2025' or later.
+    set.difference;
+        ~~~~~~~~~~
+!!! error TS2550: Property 'difference' does not exist on type 'ReadonlySet<number>'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2025' or later.
+    set.symmetricDifference;
+        ~~~~~~~~~~~~~~~~~~~
+!!! error TS2550: Property 'symmetricDifference' does not exist on type 'ReadonlySet<number>'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2025' or later.
+    set.isSubsetOf;
+        ~~~~~~~~~~
+!!! error TS2550: Property 'isSubsetOf' does not exist on type 'ReadonlySet<number>'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2025' or later.
+    set.isSupersetOf;
+        ~~~~~~~~~~~~
+!!! error TS2550: Property 'isSupersetOf' does not exist on type 'ReadonlySet<number>'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2025' or later.
+    set.isDisjointFrom;
+        ~~~~~~~~~~~~~~
+!!! error TS2550: Property 'isDisjointFrom' does not exist on type 'ReadonlySet<number>'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2025' or later.
+    
+    array.fill;
+          ~~~~
+!!! error TS2339: Property 'fill' does not exist on type 'readonly number[]'.
+    array.copyWithin;
+          ~~~~~~~~~~
+!!! error TS2339: Property 'copyWithin' does not exist on type 'readonly number[]'.
+    array.notAnArrayMethod;
+          ~~~~~~~~~~~~~~~~
+!!! error TS2339: Property 'notAnArrayMethod' does not exist on type 'readonly number[]'.
+    map.getOrInsert;
+        ~~~~~~~~~~~
+!!! error TS2339: Property 'getOrInsert' does not exist on type 'ReadonlyMap<string, number>'.
+    map.getOrInsertComputed;
+        ~~~~~~~~~~~~~~~~~~~
+!!! error TS2339: Property 'getOrInsertComputed' does not exist on type 'ReadonlyMap<string, number>'.
+    

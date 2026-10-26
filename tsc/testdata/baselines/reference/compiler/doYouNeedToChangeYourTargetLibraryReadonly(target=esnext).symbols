@@ -1,0 +1,203 @@
+//// [tests/cases/compiler/doYouNeedToChangeYourTargetLibraryReadonly.ts] ////
+
+=== doYouNeedToChangeYourTargetLibraryReadonly.ts ===
+declare const array: ReadonlyArray<number>;
+>array : Symbol(array, Decl(doYouNeedToChangeYourTargetLibraryReadonly.ts, 0, 13))
+>ReadonlyArray : Symbol(ReadonlyArray, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2016.array.include.d.ts, --, --) ... and 3 more)
+
+array.find;
+>array.find : Symbol(ReadonlyArray.find, Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
+>array : Symbol(array, Decl(doYouNeedToChangeYourTargetLibraryReadonly.ts, 0, 13))
+>find : Symbol(ReadonlyArray.find, Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
+
+array.findIndex;
+>array.findIndex : Symbol(ReadonlyArray.findIndex, Decl(lib.es2015.core.d.ts, --, --))
+>array : Symbol(array, Decl(doYouNeedToChangeYourTargetLibraryReadonly.ts, 0, 13))
+>findIndex : Symbol(ReadonlyArray.findIndex, Decl(lib.es2015.core.d.ts, --, --))
+
+array.entries;
+>array.entries : Symbol(ReadonlyArray.entries, Decl(lib.es2015.iterable.d.ts, --, --))
+>array : Symbol(array, Decl(doYouNeedToChangeYourTargetLibraryReadonly.ts, 0, 13))
+>entries : Symbol(ReadonlyArray.entries, Decl(lib.es2015.iterable.d.ts, --, --))
+
+array.keys;
+>array.keys : Symbol(ReadonlyArray.keys, Decl(lib.es2015.iterable.d.ts, --, --))
+>array : Symbol(array, Decl(doYouNeedToChangeYourTargetLibraryReadonly.ts, 0, 13))
+>keys : Symbol(ReadonlyArray.keys, Decl(lib.es2015.iterable.d.ts, --, --))
+
+array.values;
+>array.values : Symbol(ReadonlyArray.values, Decl(lib.es2015.iterable.d.ts, --, --))
+>array : Symbol(array, Decl(doYouNeedToChangeYourTargetLibraryReadonly.ts, 0, 13))
+>values : Symbol(ReadonlyArray.values, Decl(lib.es2015.iterable.d.ts, --, --))
+
+array.includes;
+>array.includes : Symbol(ReadonlyArray.includes, Decl(lib.es2016.array.include.d.ts, --, --))
+>array : Symbol(array, Decl(doYouNeedToChangeYourTargetLibraryReadonly.ts, 0, 13))
+>includes : Symbol(ReadonlyArray.includes, Decl(lib.es2016.array.include.d.ts, --, --))
+
+array.flat;
+>array.flat : Symbol(ReadonlyArray.flat, Decl(lib.es2019.array.d.ts, --, --))
+>array : Symbol(array, Decl(doYouNeedToChangeYourTargetLibraryReadonly.ts, 0, 13))
+>flat : Symbol(ReadonlyArray.flat, Decl(lib.es2019.array.d.ts, --, --))
+
+array.flatMap;
+>array.flatMap : Symbol(ReadonlyArray.flatMap, Decl(lib.es2019.array.d.ts, --, --))
+>array : Symbol(array, Decl(doYouNeedToChangeYourTargetLibraryReadonly.ts, 0, 13))
+>flatMap : Symbol(ReadonlyArray.flatMap, Decl(lib.es2019.array.d.ts, --, --))
+
+array.at;
+>array.at : Symbol(ReadonlyArray.at, Decl(lib.es2022.array.d.ts, --, --))
+>array : Symbol(array, Decl(doYouNeedToChangeYourTargetLibraryReadonly.ts, 0, 13))
+>at : Symbol(ReadonlyArray.at, Decl(lib.es2022.array.d.ts, --, --))
+
+array.findLastIndex;
+>array.findLastIndex : Symbol(ReadonlyArray.findLastIndex, Decl(lib.es2023.array.d.ts, --, --))
+>array : Symbol(array, Decl(doYouNeedToChangeYourTargetLibraryReadonly.ts, 0, 13))
+>findLastIndex : Symbol(ReadonlyArray.findLastIndex, Decl(lib.es2023.array.d.ts, --, --))
+
+array.findLast;
+>array.findLast : Symbol(ReadonlyArray.findLast, Decl(lib.es2023.array.d.ts, --, --), Decl(lib.es2023.array.d.ts, --, --))
+>array : Symbol(array, Decl(doYouNeedToChangeYourTargetLibraryReadonly.ts, 0, 13))
+>findLast : Symbol(ReadonlyArray.findLast, Decl(lib.es2023.array.d.ts, --, --), Decl(lib.es2023.array.d.ts, --, --))
+
+array.toReversed;
+>array.toReversed : Symbol(ReadonlyArray.toReversed, Decl(lib.es2023.array.d.ts, --, --))
+>array : Symbol(array, Decl(doYouNeedToChangeYourTargetLibraryReadonly.ts, 0, 13))
+>toReversed : Symbol(ReadonlyArray.toReversed, Decl(lib.es2023.array.d.ts, --, --))
+
+array.toSorted;
+>array.toSorted : Symbol(ReadonlyArray.toSorted, Decl(lib.es2023.array.d.ts, --, --))
+>array : Symbol(array, Decl(doYouNeedToChangeYourTargetLibraryReadonly.ts, 0, 13))
+>toSorted : Symbol(ReadonlyArray.toSorted, Decl(lib.es2023.array.d.ts, --, --))
+
+array.toSpliced;
+>array.toSpliced : Symbol(ReadonlyArray.toSpliced, Decl(lib.es2023.array.d.ts, --, --), Decl(lib.es2023.array.d.ts, --, --))
+>array : Symbol(array, Decl(doYouNeedToChangeYourTargetLibraryReadonly.ts, 0, 13))
+>toSpliced : Symbol(ReadonlyArray.toSpliced, Decl(lib.es2023.array.d.ts, --, --), Decl(lib.es2023.array.d.ts, --, --))
+
+array.with;
+>array.with : Symbol(ReadonlyArray.with, Decl(lib.es2023.array.d.ts, --, --))
+>array : Symbol(array, Decl(doYouNeedToChangeYourTargetLibraryReadonly.ts, 0, 13))
+>with : Symbol(ReadonlyArray.with, Decl(lib.es2023.array.d.ts, --, --))
+
+declare const readonlyArray: readonly number[];
+>readonlyArray : Symbol(readonlyArray, Decl(doYouNeedToChangeYourTargetLibraryReadonly.ts, 17, 13))
+
+readonlyArray.toReversed;
+>readonlyArray.toReversed : Symbol(ReadonlyArray.toReversed, Decl(lib.es2023.array.d.ts, --, --))
+>readonlyArray : Symbol(readonlyArray, Decl(doYouNeedToChangeYourTargetLibraryReadonly.ts, 17, 13))
+>toReversed : Symbol(ReadonlyArray.toReversed, Decl(lib.es2023.array.d.ts, --, --))
+
+([1, 2, 3] as const).toReversed();
+>([1, 2, 3] as const).toReversed : Symbol(ReadonlyArray.toReversed, Decl(lib.es2023.array.d.ts, --, --))
+>const : Symbol(const)
+>toReversed : Symbol(ReadonlyArray.toReversed, Decl(lib.es2023.array.d.ts, --, --))
+
+declare const tuple: [number, string];
+>tuple : Symbol(tuple, Decl(doYouNeedToChangeYourTargetLibraryReadonly.ts, 21, 13))
+
+tuple.toReversed;
+>tuple.toReversed : Symbol(Array.toReversed, Decl(lib.es2023.array.d.ts, --, --))
+>tuple : Symbol(tuple, Decl(doYouNeedToChangeYourTargetLibraryReadonly.ts, 21, 13))
+>toReversed : Symbol(Array.toReversed, Decl(lib.es2023.array.d.ts, --, --))
+
+function f<T extends readonly number[]>(value: T) {
+>f : Symbol(f, Decl(doYouNeedToChangeYourTargetLibraryReadonly.ts, 22, 17))
+>T : Symbol(T, Decl(doYouNeedToChangeYourTargetLibraryReadonly.ts, 24, 11))
+>value : Symbol(value, Decl(doYouNeedToChangeYourTargetLibraryReadonly.ts, 24, 40))
+>T : Symbol(T, Decl(doYouNeedToChangeYourTargetLibraryReadonly.ts, 24, 11))
+
+    value.toReversed;
+>value.toReversed : Symbol(ReadonlyArray.toReversed, Decl(lib.es2023.array.d.ts, --, --))
+>value : Symbol(value, Decl(doYouNeedToChangeYourTargetLibraryReadonly.ts, 24, 40))
+>toReversed : Symbol(ReadonlyArray.toReversed, Decl(lib.es2023.array.d.ts, --, --))
+}
+
+declare const map: ReadonlyMap<string, number>;
+>map : Symbol(map, Decl(doYouNeedToChangeYourTargetLibraryReadonly.ts, 28, 13))
+>ReadonlyMap : Symbol(ReadonlyMap, Decl(lib.es2015.collection.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --))
+
+map.entries;
+>map.entries : Symbol(ReadonlyMap.entries, Decl(lib.es2015.iterable.d.ts, --, --))
+>map : Symbol(map, Decl(doYouNeedToChangeYourTargetLibraryReadonly.ts, 28, 13))
+>entries : Symbol(ReadonlyMap.entries, Decl(lib.es2015.iterable.d.ts, --, --))
+
+map.keys;
+>map.keys : Symbol(ReadonlyMap.keys, Decl(lib.es2015.iterable.d.ts, --, --))
+>map : Symbol(map, Decl(doYouNeedToChangeYourTargetLibraryReadonly.ts, 28, 13))
+>keys : Symbol(ReadonlyMap.keys, Decl(lib.es2015.iterable.d.ts, --, --))
+
+map.values;
+>map.values : Symbol(ReadonlyMap.values, Decl(lib.es2015.iterable.d.ts, --, --))
+>map : Symbol(map, Decl(doYouNeedToChangeYourTargetLibraryReadonly.ts, 28, 13))
+>values : Symbol(ReadonlyMap.values, Decl(lib.es2015.iterable.d.ts, --, --))
+
+declare const set: ReadonlySet<number>;
+>set : Symbol(set, Decl(doYouNeedToChangeYourTargetLibraryReadonly.ts, 33, 13))
+>ReadonlySet : Symbol(ReadonlySet, Decl(lib.es2015.collection.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2025.collection.d.ts, --, --))
+
+set.entries;
+>set.entries : Symbol(ReadonlySet.entries, Decl(lib.es2015.iterable.d.ts, --, --))
+>set : Symbol(set, Decl(doYouNeedToChangeYourTargetLibraryReadonly.ts, 33, 13))
+>entries : Symbol(ReadonlySet.entries, Decl(lib.es2015.iterable.d.ts, --, --))
+
+set.keys;
+>set.keys : Symbol(ReadonlySet.keys, Decl(lib.es2015.iterable.d.ts, --, --))
+>set : Symbol(set, Decl(doYouNeedToChangeYourTargetLibraryReadonly.ts, 33, 13))
+>keys : Symbol(ReadonlySet.keys, Decl(lib.es2015.iterable.d.ts, --, --))
+
+set.values;
+>set.values : Symbol(ReadonlySet.values, Decl(lib.es2015.iterable.d.ts, --, --))
+>set : Symbol(set, Decl(doYouNeedToChangeYourTargetLibraryReadonly.ts, 33, 13))
+>values : Symbol(ReadonlySet.values, Decl(lib.es2015.iterable.d.ts, --, --))
+
+set.union;
+>set.union : Symbol(ReadonlySet.union, Decl(lib.es2025.collection.d.ts, --, --))
+>set : Symbol(set, Decl(doYouNeedToChangeYourTargetLibraryReadonly.ts, 33, 13))
+>union : Symbol(ReadonlySet.union, Decl(lib.es2025.collection.d.ts, --, --))
+
+set.intersection;
+>set.intersection : Symbol(ReadonlySet.intersection, Decl(lib.es2025.collection.d.ts, --, --))
+>set : Symbol(set, Decl(doYouNeedToChangeYourTargetLibraryReadonly.ts, 33, 13))
+>intersection : Symbol(ReadonlySet.intersection, Decl(lib.es2025.collection.d.ts, --, --))
+
+set.difference;
+>set.difference : Symbol(ReadonlySet.difference, Decl(lib.es2025.collection.d.ts, --, --))
+>set : Symbol(set, Decl(doYouNeedToChangeYourTargetLibraryReadonly.ts, 33, 13))
+>difference : Symbol(ReadonlySet.difference, Decl(lib.es2025.collection.d.ts, --, --))
+
+set.symmetricDifference;
+>set.symmetricDifference : Symbol(ReadonlySet.symmetricDifference, Decl(lib.es2025.collection.d.ts, --, --))
+>set : Symbol(set, Decl(doYouNeedToChangeYourTargetLibraryReadonly.ts, 33, 13))
+>symmetricDifference : Symbol(ReadonlySet.symmetricDifference, Decl(lib.es2025.collection.d.ts, --, --))
+
+set.isSubsetOf;
+>set.isSubsetOf : Symbol(ReadonlySet.isSubsetOf, Decl(lib.es2025.collection.d.ts, --, --))
+>set : Symbol(set, Decl(doYouNeedToChangeYourTargetLibraryReadonly.ts, 33, 13))
+>isSubsetOf : Symbol(ReadonlySet.isSubsetOf, Decl(lib.es2025.collection.d.ts, --, --))
+
+set.isSupersetOf;
+>set.isSupersetOf : Symbol(ReadonlySet.isSupersetOf, Decl(lib.es2025.collection.d.ts, --, --))
+>set : Symbol(set, Decl(doYouNeedToChangeYourTargetLibraryReadonly.ts, 33, 13))
+>isSupersetOf : Symbol(ReadonlySet.isSupersetOf, Decl(lib.es2025.collection.d.ts, --, --))
+
+set.isDisjointFrom;
+>set.isDisjointFrom : Symbol(ReadonlySet.isDisjointFrom, Decl(lib.es2025.collection.d.ts, --, --))
+>set : Symbol(set, Decl(doYouNeedToChangeYourTargetLibraryReadonly.ts, 33, 13))
+>isDisjointFrom : Symbol(ReadonlySet.isDisjointFrom, Decl(lib.es2025.collection.d.ts, --, --))
+
+array.fill;
+>array : Symbol(array, Decl(doYouNeedToChangeYourTargetLibraryReadonly.ts, 0, 13))
+
+array.copyWithin;
+>array : Symbol(array, Decl(doYouNeedToChangeYourTargetLibraryReadonly.ts, 0, 13))
+
+array.notAnArrayMethod;
+>array : Symbol(array, Decl(doYouNeedToChangeYourTargetLibraryReadonly.ts, 0, 13))
+
+map.getOrInsert;
+>map : Symbol(map, Decl(doYouNeedToChangeYourTargetLibraryReadonly.ts, 28, 13))
+
+map.getOrInsertComputed;
+>map : Symbol(map, Decl(doYouNeedToChangeYourTargetLibraryReadonly.ts, 28, 13))
+
