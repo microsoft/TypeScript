@@ -26778,7 +26778,7 @@ func (c *Checker) getObjectLiteralShapeKey(t *Type) (CacheHashKey, bool) {
 		return CacheHashKey{}, false
 	}
 	resolved := t.AsStructuredType()
-	if len(resolved.signatures) != 0 || len(resolved.indexInfos) != 0 {
+	if len(resolved.getSignatures()) != 0 || len(resolved.getIndexInfos()) != 0 {
 		return CacheHashKey{}, false
 	}
 	var b keyBuilder
