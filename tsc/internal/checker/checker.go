@@ -66,6 +66,12 @@ const (
 	TypeSystemPropertyNameInitializerIsUndefined
 	TypeSystemPropertyNameAliasTarget
 	TypeSystemPropertyNameComputedPropertyName
+	TypeSystemPropertyNameContextChecked
+	TypeSystemPropertyNameVariances
+	TypeSystemPropertyNameStructuredMembers
+	TypeSystemPropertyNameCurrentNode
+	TypeSystemPropertyNameSimplifiedForReading
+	TypeSystemPropertyNameSimplifiedForWriting
 )
 
 type TypeResolution struct {
@@ -556,6 +562,7 @@ type WideningContext struct {
 type VarianceStackEntry struct {
 	symbol         *ast.Symbol
 	typeParameters []*Type
+	resolution     int // Index in Checker.resolutions of the resolution of the measurement
 }
 
 const maxSerializationLevel = 2
@@ -606,6 +613,8 @@ type Checker struct {
 	inlineLevel                                 int
 	serializationLevel                          int
 	currentNode                                 *ast.Node
+	simplifyingIndexedAccess                    collections.Set[CachedTypeKey]
+	currentNodeResolution                       int // 1-based index in resolutions of the resolution of currentNode, or 0; see enterCurrentNode
 	varianceTypeParameter                       *Type
 	isInferencePartiallyBlocked                 bool
 	wasCanceled                                 bool
@@ -647,9 +656,16 @@ type Checker struct {
 	restrictiveMapper                           *TypeMapper
 	permissiveMapper                            *TypeMapper
 	contextualBindingPatterns                   []*ast.Node
-	resolving                                   map[memoKey]int32 // Index in resolutions of the outermost computation of each key in progress
-	typeResolutionTop                           int               // 1-based index in resolutions of the innermost resolution, or 0
-	resolutionStart                             int               // Index in resolutions below which resolutions are not searched for cycles
+	resolving                                   map[memoKey]int32   // Index in resolutions of the outermost computation of each key in progress
+	typeResolutionTop                           int                 // 1-based index in resolutions of the innermost resolution, or 0
+	resolutionStart                             int                 // Index in resolutions below which resolutions are not searched for cycles
+	circularityStart                            int                 // 1-based index in resolutions of the outermost cycle in progress, or 0; see memo.go
+	currentNodeErrors                           []*currentNodeError // Errors reported at the current node while collecting; see startCurrentNodeErrors
+	currentNodeErrorCollectors                  int                 // Number of computations collecting currentNodeErrors
+	currentNodeErrorsCyclic                     bool                // Whether a cycle was observed while collecting currentNodeErrors; see endCurrentNodeErrors
+	discardLog                                  []discardEntry      // Restores what was cached while anything may be discarded; see "Discard log" in memo.go
+	circularityMark                             int                 // Length of discard log when the cycle in progress was detected
+	cycleParticipants                           []TypeResolution    // Computations that observed a cycle in progress
 	varianceStack                               []VarianceStackEntry
 	varianceMeasuring                           map[*ast.Symbol]int // Symbols whose variances are being measured, including by suspended computations
 	callResolutionStack                         []*ast.Node
@@ -664,6 +680,7 @@ type Checker struct {
 	freeinferenceState                          *InferenceState
 	freeFlowState                               *FlowState
 	flowLoopStack                               []FlowLoopInfo
+	signaturesResolving                         []*SignatureLinks // Calls whose resolution is in progress
 	sharedFlows                                 []SharedFlow
 	flowLoopFrameCount                          uint64
 	antecedentTypes                             []*Type
@@ -982,6 +999,7 @@ type memoStore struct {
 	deferredDiagnosticCallbacks             []func(c *Checker)
 	memoStates                              map[memoKey]*memoState // Memo state of results computed by queries; see memo.go
 	memoPendingCount                        int                    // Number of memoStates with unreplayed effects
+	memoErrorStates                         int                    // Number of memoStates with reports; see setReported
 
 	mu sync.Mutex
 }
@@ -2414,14 +2432,13 @@ func (c *Checker) checkSourceElements(nodes []*ast.Node) {
 
 func (c *Checker) checkSourceElement(node *ast.Node) bool {
 	if node != nil {
-		saveCurrentNode := c.currentNode
+		saveCurrentNode := c.enterCurrentNode(node)
 		saveWithinUnreachableCode := c.withinUnreachableCode
-		c.currentNode = node
 		c.instantiationCount = 0
 		c.beginResolution(0, nil, 0)
 		c.checkSourceElementWorker(node)
 		c.endResolution()
-		c.currentNode = saveCurrentNode
+		c.exitCurrentNode(saveCurrentNode)
 		c.withinUnreachableCode = saveWithinUnreachableCode
 	}
 	return false
@@ -2659,8 +2676,7 @@ func (c *Checker) checkDeferredNode(node *ast.Node) {
 	if tr := c.tracer; tr != nil {
 		defer tr.Push(tracing.PhaseCheck, "checkDeferredNode", map[string]any{"kind": node.Kind, "pos": node.Pos(), "end": node.End(), "path": ast.GetSourceFileOfNode(node).FileName()}, false)()
 	}
-	saveCurrentNode := c.currentNode
-	c.currentNode = node
+	saveCurrentNode := c.enterCurrentNode(node)
 	c.instantiationCount = 0
 	c.beginResolution(0, nil, 0)
 	switch node.Kind {
@@ -2692,7 +2708,7 @@ func (c *Checker) checkDeferredNode(node *ast.Node) {
 		c.checkContextualDeprecations(node)
 	}
 	c.endResolution()
-	c.currentNode = saveCurrentNode
+	c.exitCurrentNode(saveCurrentNode)
 }
 
 func (c *Checker) checkJSDocComments(node *ast.Node) {
@@ -5683,7 +5699,7 @@ func (c *Checker) checkImportAttributesExpression(node *ast.Node) *Type {
 		members := ast.NewSymbolTable()
 		for _, attribute := range node.AsImportAttributes().Attributes.Nodes {
 			member := c.newSymbol(ast.SymbolFlagsProperty, attribute.Name().Text())
-			c.valueSymbolLinks.Get(member).resolvedType.set(c, c.getRegularTypeOfLiteralType(c.checkExpressionCached(attribute.AsImportAttribute().Value)))
+			c.valueSymbolLinks.Get(member).resolvedType.setIdentity(c, c.getRegularTypeOfLiteralType(c.checkExpressionCached(attribute.AsImportAttribute().Value)))
 			members.Set(member.Name(), member)
 		}
 		t := c.newAnonymousType(symbol, members, nil, nil, nil)
@@ -7906,8 +7922,7 @@ func (c *Checker) checkExpressionEx(node *ast.Node, checkMode CheckMode) *Type {
 	if tr := c.tracer; tr != nil {
 		defer tr.Push(tracing.PhaseCheck, "checkExpression", map[string]any{"kind": node.Kind, "pos": node.Pos(), "end": node.End(), "path": ast.GetSourceFileOfNode(node).FileName()}, false)()
 	}
-	saveCurrentNode := c.currentNode
-	c.currentNode = node
+	saveCurrentNode := c.enterCurrentNode(node)
 	c.instantiationCount = 0
 	c.beginResolution(0, nil, 0)
 	uninstantiatedType := c.checkExpressionWorker(node, checkMode)
@@ -7916,7 +7931,7 @@ func (c *Checker) checkExpressionEx(node *ast.Node, checkMode CheckMode) *Type {
 		c.checkConstEnumAccess(node, t)
 	}
 	c.endResolution()
-	c.currentNode = saveCurrentNode
+	c.exitCurrentNode(saveCurrentNode)
 	return t
 }
 
@@ -8815,8 +8830,7 @@ func (c *Checker) getResolvedSignature(node *ast.Node, candidatesOutArray *[]*Si
 	// Resolution is located at the call however it was requested, such as
 	// from contextually typing an argument, so that errors it reports at the
 	// current node do not depend on which was checked first.
-	saveCurrentNode := c.currentNode
-	c.currentNode = node
+	saveCurrentNode := c.enterCurrentNode(node)
 	var result *Signature
 	if c.memoActive() {
 		c.signatureLinks.Get(node).resolvedSignature.begin(c)
@@ -8825,7 +8839,7 @@ func (c *Checker) getResolvedSignature(node *ast.Node, candidatesOutArray *[]*Si
 	} else {
 		result = c.getResolvedSignatureUncached(node, candidatesOutArray, checkMode)
 	}
-	c.currentNode = saveCurrentNode
+	c.exitCurrentNode(saveCurrentNode)
 	return result
 }
 
@@ -8864,7 +8878,9 @@ func (c *Checker) getResolvedSignatureUncached(node *ast.Node, candidatesOutArra
 		c.resolutionStart = len(c.resolutions)
 	}
 	links.resolvedSignature.swap(c.resolvingSignature)
+	c.signaturesResolving = append(c.signaturesResolving, links)
 	result := c.resolveSignature(node, candidatesOutArray, checkMode)
+	c.signaturesResolving = c.signaturesResolving[:len(c.signaturesResolving)-1]
 	c.resolutionStart = saveResolutionStart
 	// When CheckMode.SkipGenericFunctions is set we use resolvingSignature to indicate that call
 	// resolution should be deferred.
@@ -8881,12 +8897,21 @@ func (c *Checker) getResolvedSignatureUncached(node *ast.Node, candidatesOutArra
 		// assigned type in a flow assignment) we don't cache the result as it may be based on temporary
 		// types from the control flow analysis.
 		if len(c.flowLoopStack) == 0 {
-			links.resolvedSignature.set(c, result)
+			c.setResolvedSignature(links, result)
 		} else {
 			links.resolvedSignature.swap(cached)
 		}
 	}
 	return result
+}
+
+// setResolvedSignature caches the signature a call resolves to, in place of
+// the marker of its resolution, which is only restored while the resolution
+// is still in progress.
+func (c *Checker) setResolvedSignature(links *SignatureLinks, signature *Signature) {
+	links.resolvedSignature.setAfterMarker(c, signature, func(s *Signature) bool {
+		return s == c.resolvingSignature && !slices.Contains(c.signaturesResolving, links)
+	})
 }
 
 func (c *Checker) resolveSignature(node *ast.Node, candidatesOutArray *[]*Signature, checkMode CheckMode) *Signature {
@@ -10629,10 +10654,18 @@ func (c *Checker) contextuallyCheckFunctionExpressionOrObjectLiteralMethodUncach
 	setFlagMemoBits(c, memoKeyOf(node, memoContextChecked), &links.flags, NodeCheckFlagsSignatureContextChecked, NodeCheckFlagsSignatureContextChecked)
 	signature := c.getSignatureFromDeclarationUncontextual(node)
 	contextualSignature := c.getContextualSignature(node)
-	if contextualSignature != nil && c.getReturnTypeFromAnnotation(node) == nil && signature.resolvedReturnType.get(c) == nil {
+	// The return type is inferred now, while the contextual types of the
+	// function's enclosing expressions are in place; a later request may
+	// come from where they are not.
+	if contextualSignature != nil && checkMode&^CheckModeTypeOnly == CheckModeNormal && c.getReturnTypeFromAnnotation(node) == nil && !c.isResolvingReturnTypeOfSignature(signature) {
+		c.getReturnTypeOfSignature(signature)
+	} else if contextualSignature != nil && c.getReturnTypeFromAnnotation(node) == nil && signature.resolvedReturnType.get(c) == nil && !c.isResolvingReturnTypeOfSignature(signature) && c.pushTypeResolution(signature, TypeSystemPropertyNameResolvedReturnType) {
 		// resolvedReturnType is cached indefinitely, so the return type here has to be computed without CheckModeSkipContextSensitive;
 		// otherwise anyFunctionType could leak as part of the computed (and cached) return type.
 		returnType := c.getReturnTypeFromBody(node, checkMode&^CheckModeSkipContextSensitive)
+		if !c.popTypeResolution() {
+			returnType = c.circularReturnType(signature)
+		}
 		if signature.resolvedReturnType.get(c) == nil {
 			signature.resolvedReturnType.set(c, returnType)
 		}
@@ -10661,6 +10694,7 @@ func (c *Checker) assignContextualParameterTypesOfFunctionUncached(node *ast.Nod
 		if links.flags&NodeCheckFlagsContextChecked == 0 {
 			setFlagMemoBits(c, memoKeyOf(node, memoContextualParameters), &links.flags, NodeCheckFlagsContextChecked, NodeCheckFlagsContextChecked)
 			signature := c.getSignatureFromDeclarationUncontextual(node)
+			c.pushTypeResolution(node, TypeSystemPropertyNameContextChecked)
 			if c.isContextSensitive(node) {
 				if contextualSignature != nil {
 					inferenceContext := c.getInferenceContext(node)
@@ -10690,8 +10724,11 @@ func (c *Checker) assignContextualParameterTypesOfFunctionUncached(node *ast.Nod
 					c.inferFromAnnotatedParametersAndReturn(signature, contextualSignature, inferenceContext)
 				}
 			}
+			c.popTypeResolution()
+			return
 		}
 	}
+	c.observeResolutionInProgress(node, TypeSystemPropertyNameContextChecked)
 }
 
 func (c *Checker) checkFunctionExpressionOrObjectLiteralMethodDeferred(node *ast.Node) {
@@ -10845,6 +10882,9 @@ func (c *Checker) assignContextualParameterTypes(sig *Signature, context *Signat
 		if len(sig.TypeParameters()) != 0 {
 			// This signature has already has a contextual inference performed and cached on it
 			return
+		}
+		if c.logResults() {
+			c.logFlagMemoDiscard(func() { sig.setTypeParameters(c, nil) })
 		}
 		sig.setTypeParameters(c, context.TypeParameters())
 	}
@@ -13822,7 +13862,7 @@ func (c *Checker) checkObjectLiteral(node *ast.Node, checkMode CheckMode) *Type 
 			prop.SetDeclarations(member.Declarations())
 			prop.SetParent(member.Parent())
 			prop.SetValueDeclaration(member.ValueDeclaration())
-			links.resolvedType.set(c, t)
+			links.resolvedType.setIdentity(c, t)
 			links.target = member
 			member = prop
 			if allPropertiesTable != nil {
@@ -14065,15 +14105,15 @@ func (c *Checker) getSpreadType(left *Type, right *Type, symbol *ast.Symbol, obj
 				leftTypeWithoutUndefined := c.removeMissingOrUndefinedType(leftType)
 				rightTypeWithoutUndefined := c.removeMissingOrUndefinedType(rightType)
 				if leftTypeWithoutUndefined == rightTypeWithoutUndefined {
-					links.resolvedType.set(c, leftType)
+					links.resolvedType.setIdentity(c, leftType)
 				} else {
-					links.resolvedType.set(c, c.getUnionTypeEx([]*Type{leftType, rightTypeWithoutUndefined}, UnionReductionSubtype, nil, nil))
+					links.resolvedType.setIdentity(c, c.getUnionTypeEx([]*Type{leftType, rightTypeWithoutUndefined}, UnionReductionSubtype, nil, nil))
 				}
 				c.spreadLinks.Get(result).leftSpread = leftProp
 				c.spreadLinks.Get(result).rightSpread = rightProp
 				result.SetDeclarations(declarations)
 				links.setNameType(c, c.valueSymbolLinks.Get(leftProp).getNameType())
-				c.spreadSymbols.intern(key, result)
+				c.spreadSymbols.set(c, key, result)
 				members.Set(leftProp.Name(), result)
 			}
 		} else {
@@ -14088,13 +14128,13 @@ func (c *Checker) getSpreadType(left *Type, right *Type, symbol *ast.Symbol, obj
 	// overrides every property of the left side.
 	contentKey := c.getObjectTypeContentKey(symbol, flags, members, spreadIndexInfos)
 	if existing, _ := c.objectContentTypes.get(c, contentKey); existing != nil {
-		c.spreadTypes.intern(key, existing)
+		c.spreadTypes.set(c, key, existing)
 		return existing
 	}
 	spread := c.newAnonymousType(symbol, members, nil, nil, spreadIndexInfos)
 	spread.objectFlags |= flags
 	c.objectContentTypes.intern(contentKey, spread)
-	c.spreadTypes.intern(key, spread)
+	c.spreadTypes.set(c, key, spread)
 	return spread
 }
 
@@ -14165,9 +14205,9 @@ func (c *Checker) tryMergeUnionOfObjectTypeAndEmptyObject(t *Type, readonly bool
 			result := c.newSymbolEx(flags, prop.Name(), prop.CheckFlags()&ast.CheckFlagsLate|core.IfElse(readonly, ast.CheckFlagsReadonly, 0))
 			links := c.valueSymbolLinks.Get(result)
 			if isSetonlyAccessor {
-				links.resolvedType.set(c, c.undefinedType)
+				links.resolvedType.setIdentity(c, c.undefinedType)
 			} else {
-				links.resolvedType.set(c, c.addOptionalityEx(c.getTypeOfSymbol(prop), true /*isProperty*/, true /*isOptional*/))
+				links.resolvedType.setIdentity(c, c.addOptionalityEx(c.getTypeOfSymbol(prop), true /*isProperty*/, true /*isOptional*/))
 			}
 			result.SetDeclarations(prop.Declarations())
 			links.setNameType(c, c.valueSymbolLinks.Get(prop).getNameType())
@@ -14199,14 +14239,14 @@ func (c *Checker) getSpreadSymbol(prop *ast.Symbol, readonly bool) *ast.Symbol {
 	result := c.newSymbolEx(flags, prop.Name(), prop.CheckFlags()&ast.CheckFlagsLate|core.IfElse(readonly, ast.CheckFlagsReadonly, 0))
 	links := c.valueSymbolLinks.Get(result)
 	if isSetonlyAccessor {
-		links.resolvedType.set(c, c.undefinedType)
+		links.resolvedType.setIdentity(c, c.undefinedType)
 	} else {
-		links.resolvedType.set(c, c.getTypeOfSymbol(prop))
+		links.resolvedType.setIdentity(c, c.getTypeOfSymbol(prop))
 	}
 	result.SetDeclarations(prop.Declarations())
 	links.setNameType(c, c.valueSymbolLinks.Get(prop).getNameType())
 	c.mappedSymbolLinks.Get(result).syntheticOrigin = prop
-	c.spreadSymbols.intern(key, result)
+	c.spreadSymbols.set(c, key, result)
 	return result
 }
 
@@ -14714,7 +14754,26 @@ func (c *Checker) errorAtCurrentNode(message *diagnostics.Message, args ...any) 
 	c.reportAtCurrentNode(func(c *Checker, node *ast.Node) { c.error(node, message, args...) })
 }
 
+// reportAtCurrentNode reports an error located at whichever node's check
+// reached it, so that every node reaching it reports it, as it would if it
+// were checked first. Results cached from now until the current node is left
+// were computed for that node, and are discarded so that other nodes
+// compute them again.
 func (c *Checker) reportAtCurrentNode(report func(c *Checker, node *ast.Node)) {
+	c.reportNode(&currentNodeError{report})
+}
+
+func (c *Checker) reportNode(r *currentNodeError) {
+	c.markCurrentNodeCircular()
+	if c.currentNodeErrorCollectors != 0 {
+		c.currentNodeErrors = append(c.currentNodeErrors, r)
+	}
+	c.reportAtCurrentNodeOnce(r.report)
+}
+
+// reportAtCurrentNodeOnce is reportAtCurrentNode for an error whose result
+// is kept, so that only the node reaching it first reports it.
+func (c *Checker) reportAtCurrentNodeOnce(report func(c *Checker, node *ast.Node)) {
 	if !c.checking {
 		// A node the computation started at is where the computation was
 		// requested from, so it is located wherever the result is reused.
@@ -14816,13 +14875,13 @@ func (c *Checker) newSymbolEx(flags ast.SymbolFlags, name string, checkFlags ast
 
 func (c *Checker) newParameter(name string, t *Type) *ast.Symbol {
 	symbol := c.newSymbol(ast.SymbolFlagsFunctionScopedVariable, name)
-	c.valueSymbolLinks.Get(symbol).resolvedType.set(c, t)
+	c.valueSymbolLinks.Get(symbol).resolvedType.setIdentity(c, t)
 	return symbol
 }
 
 func (c *Checker) newProperty(name string, t *Type) *ast.Symbol {
 	symbol := c.newSymbol(ast.SymbolFlagsProperty, name)
-	c.valueSymbolLinks.Get(symbol).resolvedType.set(c, t)
+	c.valueSymbolLinks.Get(symbol).resolvedType.setIdentity(c, t)
 	return symbol
 }
 
@@ -16615,7 +16674,7 @@ func (c *Checker) getTypeWithSyntheticDefaultImportType(t *Type, symbol *ast.Sym
 			anonymousSymbol := c.newSymbol(ast.SymbolFlagsTypeLiteral, ast.InternalSymbolNameType)
 			anonymousSymbol.SetDeclarations(originalSymbol.Declarations())
 			defaultContainingObject := c.createDefaultPropertyWrapperForModule(symbol, originalSymbol, anonymousSymbol)
-			c.valueSymbolLinks.Get(anonymousSymbol).resolvedType.set(c, defaultContainingObject)
+			c.valueSymbolLinks.Get(anonymousSymbol).resolvedType.setIdentity(c, defaultContainingObject)
 			if c.isValidSpreadType(t) {
 				syntheticType = c.getSpreadType(t, defaultContainingObject, anonymousSymbol, 0 /*objectFlags*/, false /*readonly*/)
 			} else {
@@ -16688,7 +16747,7 @@ func (c *Checker) cloneTypeAsModuleType(symbol *ast.Symbol, moduleType *Type, re
 	links.target = symbol
 	links.originatingImport = referenceParent
 	resolvedModuleType := c.resolveStructuredTypeMembers(moduleType)
-	c.valueSymbolLinks.Get(result).resolvedType.set(c, c.newAnonymousType(result, resolvedModuleType.getMembers(c), nil, nil, resolvedModuleType.getIndexInfos()))
+	c.valueSymbolLinks.Get(result).resolvedType.setIdentity(c, c.newAnonymousType(result, resolvedModuleType.getMembers(c), nil, nil, resolvedModuleType.getIndexInfos()))
 	return result
 }
 
@@ -17874,7 +17933,7 @@ func (c *Checker) padObjectLiteralType(t *Type, pattern *ast.Node) *Type {
 		symbol, _ := c.paddedProperties.get(c, key)
 		if symbol == nil {
 			symbol = c.newSymbol(ast.SymbolFlagsProperty|ast.SymbolFlagsOptional, name)
-			c.valueSymbolLinks.Get(symbol).resolvedType.set(c, propType)
+			c.valueSymbolLinks.Get(symbol).resolvedType.setIdentity(c, propType)
 			c.paddedProperties.intern(key, symbol)
 		}
 		members.Set(symbol.Name(), symbol)
@@ -18382,7 +18441,7 @@ func (c *Checker) getDeclaredTypeOfClassOrInterface(symbol *ast.Symbol) *Type {
 	if links.declaredType.get(c) == nil {
 		kind := core.IfElse(symbol.Flags()&ast.SymbolFlagsClass != 0, ObjectFlagsClass, ObjectFlagsInterface)
 		t := c.newObjectType(kind, symbol)
-		links.declaredType.set(c, t)
+		links.declaredType.setIdentity(c, t)
 		outerTypeParameters := c.getOuterTypeParametersOfClassOrInterface(symbol)
 		typeParameters := c.appendLocalTypeParametersOfClassOrInterfaceOrTypeAlias(outerTypeParameters, symbol)
 		// A class or interface is generic if it has type parameters or a "this" type. We always give classes a "this" type
@@ -19071,7 +19130,7 @@ func (c *Checker) getTypeFromObjectBindingPattern(pattern *ast.Node, includePatt
 		text := getPropertyNameFromType(exprType)
 		flags := ast.SymbolFlagsProperty | core.IfElse(e.Initializer() != nil, ast.SymbolFlagsOptional, 0)
 		symbol := c.newSymbol(flags, text)
-		c.valueSymbolLinks.Get(symbol).resolvedType.set(c, c.getTypeFromBindingElement(e, includePatternInType, reportErrors))
+		c.valueSymbolLinks.Get(symbol).resolvedType.setIdentity(c, c.getTypeFromBindingElement(e, includePatternInType, reportErrors))
 		members.Set(symbol.Name(), symbol)
 	}
 	var indexInfos []*IndexInfo
@@ -19945,19 +20004,100 @@ func (c *Checker) getCombinedModifierFlagsCached(node *ast.Node) ast.ModifierFla
 func (c *Checker) pushTypeResolution(target TypeSystemEntity, propertyName TypeSystemPropertyName) bool {
 	resolutionCycleStartIndex := c.findResolutionCycleStartIndex(target, propertyName)
 	if resolutionCycleStartIndex >= 0 {
-		// A cycle was found
-		for i := resolutionCycleStartIndex; i < len(c.resolutions); i++ {
-			if c.resolutions[i].isTypeResolution {
-				c.resolutions[i].typeResolution.result = false
-			}
-		}
-		if !c.checking {
-			c.memoCycle(int(c.resolutions[resolutionCycleStartIndex].prevMemo))
-		}
+		c.markResolutionCycle(resolutionCycleStartIndex)
 		return false
 	}
 	c.beginTypeResolution(target, propertyName)
 	return true
+}
+
+// markResolutionCycle records that the type resolution entries from start to
+// the top of the stack form a cycle, so each of them fails.
+func (c *Checker) markResolutionCycle(start int) {
+	for i := start; i < len(c.resolutions); i++ {
+		if r := &c.resolutions[i].typeResolution; c.resolutions[i].isTypeResolution && r.result {
+			c.cycleParticipants = append(c.cycleParticipants, *r)
+			r.result = false
+		}
+	}
+	c.markTypeResolutionCircular(start)
+}
+
+// observeResolutionInProgress is for computations that are skipped rather
+// than failed when re-entered. Skipping still observes the incomplete
+// computation, so everything on the stack since it started is in a cycle.
+func (c *Checker) observeResolutionInProgress(target TypeSystemEntity, propertyName TypeSystemPropertyName) {
+	if start := c.findResolutionCycleStartIndex(target, propertyName); start >= 0 {
+		c.markResolutionCycle(start)
+	}
+}
+
+// isResolutionInProgress reports whether a resolution is on the stack, for
+// computations that deliberately take another path to avoid a circularity.
+// The answer depends on the incomplete resolution, so results cached while it
+// is in progress must not outlive it, but nothing fails.
+func (c *Checker) isResolutionInProgress(target TypeSystemEntity, propertyName TypeSystemPropertyName) bool {
+	start := c.findResolutionCycleStartIndex(target, propertyName)
+	if start < 0 {
+		return false
+	}
+	c.markTypeResolutionCircular(start)
+	return true
+}
+
+// enterCurrentNode makes node the node being checked, until the matching
+// exitCurrentNode. Its type resolution delimits the results that errors
+// located at node (see reportAtCurrentNode) depend on.
+func (c *Checker) enterCurrentNode(node *ast.Node) savedCurrentNode {
+	save := savedCurrentNode{node: c.currentNode, resolution: c.currentNodeResolution}
+	if c.circularityStart != 0 && c.circularityStart == c.currentNodeResolution && c.typeResolutionTop == c.currentNodeResolution {
+		// The results discarded when the current node is left depend on errors
+		// located at it, so a node within it must not reuse them either.
+		c.endCircularity()
+	}
+	c.currentNode = node
+	c.beginTypeResolution(node, TypeSystemPropertyNameCurrentNode)
+	c.currentNodeResolution = c.typeResolutionTop
+	return save
+}
+
+func (c *Checker) exitCurrentNode(save savedCurrentNode) {
+	debug.Assert(len(c.resolutions) == c.currentNodeResolution, "resolutions left on the stack")
+	c.popTypeResolution()
+	c.currentNode = save.node
+	c.currentNodeResolution = save.resolution
+}
+
+type savedCurrentNode struct {
+	node       *ast.Node
+	resolution int
+}
+
+// markCurrentNodeCircular records that results cached until the current node
+// is left depend on that node.
+func (c *Checker) markCurrentNodeCircular() {
+	if c.currentNodeResolution != 0 {
+		c.extendCircularity(c.currentNodeResolution)
+	}
+}
+
+// markTypeResolutionCircular records that the computations from start to the
+// top of the stack observed the incomplete resolution at start without
+// failing, so results cached while it is in progress are discarded when it
+// finishes.
+func (c *Checker) markTypeResolutionCircular(start int) {
+	if !c.checking {
+		c.memoCycle(int(c.resolutions[start].prevMemo))
+	}
+	c.markCircular(start)
+}
+
+// markCircular records that the computations from the resolution at start to
+// the top of the stack observed the incomplete computation at start, so
+// results cached while it is in progress are discarded when it finishes.
+func (c *Checker) markCircular(start int) {
+	c.currentNodeErrorsCyclic = true
+	c.extendCircularity(start + 1)
 }
 
 /**
@@ -19972,6 +20112,9 @@ func (c *Checker) popTypeResolution() bool {
 	c.typeResolutionTop = int(f.prevTypeResolution)
 	c.resolutions[n] = resolution{}
 	c.resolutions = c.resolutions[:n]
+	if c.circularityStart > n {
+		c.endCircularity()
+	}
 	return result
 }
 
@@ -20041,8 +20184,15 @@ func (c *Checker) typeResolutionHasProperty(r *TypeResolution) bool {
 		return extra != nil && extra.writeType.peek() != nil
 	case TypeSystemPropertyNameAliasTarget:
 		return c.aliasSymbolLinks.Get(r.target.(*ast.Symbol)).aliasTarget.peek() != nil
+	case TypeSystemPropertyNameContextChecked, TypeSystemPropertyNameStructuredMembers, TypeSystemPropertyNameCurrentNode,
+		TypeSystemPropertyNameSimplifiedForReading, TypeSystemPropertyNameSimplifiedForWriting:
+		// Marked as checked or resolved on entry, so it is only on the stack
+		// while in progress.
+		return false
 	case TypeSystemPropertyNameComputedPropertyName:
 		return c.typeNodeLinks.Get(r.target.(*ast.Node)).resolvedType.peek() != nil
+	case TypeSystemPropertyNameVariances:
+		return c.varianceLinks.Get(r.target.(*ast.Symbol)).variances.peek() != nil
 	}
 	panic("Unhandled case in typeResolutionHasProperty")
 }
@@ -20321,6 +20471,11 @@ func (c *Checker) isApplicableIndexType(source *Type, target *Type) bool {
 }
 
 func (c *Checker) resolveStructuredTypeMembers(t *Type) *StructuredType {
+	if t.objectFlags&ObjectFlagsMembersResolving != 0 {
+		// Resolving members may observe the type itself, whose members are
+		// then incomplete.
+		c.isResolutionInProgress(t, TypeSystemPropertyNameStructuredMembers)
+	}
 	c.beginMemo(memoKeyOf(t, memoStructuredMembers))
 	result := c.resolveStructuredTypeMembersUncached(t)
 	c.endMemo()
@@ -20329,6 +20484,20 @@ func (c *Checker) resolveStructuredTypeMembers(t *Type) *StructuredType {
 
 func (c *Checker) resolveStructuredTypeMembersUncached(t *Type) *StructuredType {
 	if t.objectFlags&ObjectFlagsMembersResolved == 0 {
+		// Many kinds of types make members available before they are
+		// complete, so the resolution is on the stack, but never fails.
+		outermost := t.objectFlags&ObjectFlagsMembersResolving == 0
+		t.objectFlags |= ObjectFlagsMembersResolving
+		c.beginTypeResolution(t, TypeSystemPropertyNameStructuredMembers)
+		defer func() {
+			c.popTypeResolution()
+			if outermost {
+				t.objectFlags &^= ObjectFlagsMembersResolving
+			}
+			if c.logResults() {
+				c.logMembersDiscard(t)
+			}
+		}()
 		switch {
 		case t.flags&TypeFlagsObject != 0:
 			switch {
@@ -20352,6 +20521,48 @@ func (c *Checker) resolveStructuredTypeMembersUncached(t *Type) *StructuredType 
 		}
 	}
 	return t.AsStructuredType()
+}
+
+// logMembersDiscard discards the members of t when the cycle in progress
+// ends, like any other result cached during the cycle, so that they are
+// resolved again from scratch when next requested.
+//
+//go:noinline
+func (c *Checker) logMembersDiscard(t *Type) {
+	c.discardLog = append(c.discardLog, discardEntry{nil, func() {
+		if t.objectFlags&ObjectFlagsMembersResolving != 0 {
+			// An enclosing resolution of the same members sets them again.
+			return
+		}
+		t.objectFlags &^= ObjectFlagsMembersResolved
+		data := t.AsStructuredType()
+		data.members = nil
+		data.properties = nil
+		if data.extra != nil {
+			data.extra.signatures = nil
+			data.extra.callSignatureCount = 0
+			data.extra.indexInfos = nil
+		}
+		if t.objectFlags&(ObjectFlagsClassOrInterface|ObjectFlagsReference) != 0 {
+			t.AsTypeReference().lazy = nil
+		}
+	}, false})
+}
+
+// logPropertySlotDiscard discards the property in slot index of t, filled on
+// first use during a cycle, when the cycle ends. The property may be one of a
+// base type whose members the cycle discards.
+//
+//go:noinline
+func (c *Checker) logPropertySlotDiscard(t *StructuredType, lazy *LazyState, index int) {
+	properties := t.properties
+	c.discardLog = append(c.discardLog, discardEntry{nil, func() {
+		properties[index] = nil
+		lazy.propertiesResolved = false
+		if t.AsType().AsTypeReference().lazy == lazy {
+			t.members = nil
+		}
+	}, false})
 }
 
 func (c *Checker) resolveObjectTypeMembers(t *Type) {
@@ -20574,6 +20785,9 @@ func (c *Checker) getBaseTypesUncached(t *Type) []*Type {
 		// See https://github.com/microsoft/TypeScript/issues/16861 for an example.
 		t.objectFlags &^= ObjectFlagsMembersResolved
 		data.baseTypesResolved = true
+		if c.logResults() {
+			c.discardLog = append(c.discardLog, discardEntry{&data.resolvedBaseTypes.memoHeader, func() { data.baseTypesResolved = false }, false})
+		}
 	}
 	return data.resolvedBaseTypes.get(c)
 }
@@ -21010,6 +21224,9 @@ func (c *Checker) resolveDeclaredMembersUncached(t *Type) {
 	if !d.declaredMembersResolved {
 		members := c.getMembersOfSymbol(t.symbol)
 		d.declaredMembersResolved = true
+		if c.logResults() {
+			c.logFlagMemoDiscard(func() { d.declaredMembersResolved = false })
+		}
 		c.setFlagMemo(memoKeyOf(t, memoDeclaredMembers))
 		d.declaredMembers = members
 		d.declaredCallSignatures = c.getSignaturesOfSymbol(d.declaredMembers.Get(ast.InternalSymbolNameCall))
@@ -21453,25 +21670,31 @@ func (c *Checker) getReturnTypeOfSignatureUncached(sig *Signature) *Type {
 		t = c.getOptionalType(t, false /*isProperty*/)
 	}
 	if !c.popTypeResolution() {
-		if sig.declaration != nil {
-			typeNode := sig.declaration.Type()
-			if typeNode != nil {
-				c.error(typeNode, diagnostics.Return_type_annotation_circularly_references_itself)
-			} else if c.noImplicitAny {
-				name := ast.GetNameOfDeclaration(sig.declaration)
-				if name != nil {
-					c.error(name, diagnostics.X_0_implicitly_has_return_type_any_because_it_does_not_have_a_return_type_annotation_and_is_referenced_directly_or_indirectly_in_one_of_its_return_expressions, scanner.DeclarationNameToString(name))
-				} else {
-					c.error(sig.declaration, diagnostics.Function_implicitly_has_return_type_any_because_it_does_not_have_a_return_type_annotation_and_is_referenced_directly_or_indirectly_in_one_of_its_return_expressions)
-				}
-			}
-		}
-		t = c.anyType
+		t = c.circularReturnType(sig)
 	}
 	if sig.resolvedReturnType.get(c) == nil {
 		sig.resolvedReturnType.set(c, t)
 	}
 	return sig.resolvedReturnType.get(c)
+}
+
+// circularReturnType reports a return type that depends on itself and returns
+// the type it resolves to instead.
+func (c *Checker) circularReturnType(sig *Signature) *Type {
+	if sig.declaration != nil {
+		typeNode := sig.declaration.Type()
+		if typeNode != nil {
+			c.error(typeNode, diagnostics.Return_type_annotation_circularly_references_itself)
+		} else if c.noImplicitAny {
+			name := ast.GetNameOfDeclaration(sig.declaration)
+			if name != nil {
+				c.error(name, diagnostics.X_0_implicitly_has_return_type_any_because_it_does_not_have_a_return_type_annotation_and_is_referenced_directly_or_indirectly_in_one_of_its_return_expressions, scanner.DeclarationNameToString(name))
+			} else {
+				c.error(sig.declaration, diagnostics.Function_implicitly_has_return_type_any_because_it_does_not_have_a_return_type_annotation_and_is_referenced_directly_or_indirectly_in_one_of_its_return_expressions)
+			}
+		}
+	}
+	return c.anyType
 }
 
 func (c *Checker) getNonCircularReturnTypeOfSignature(sig *Signature) *Type {
@@ -22417,7 +22640,7 @@ func (c *Checker) getTypeOfMappedSymbol(symbol *ast.Symbol) *Type {
 	if links.resolvedType.get(c) == nil {
 		mappedType := links.getContainingType()
 		if !c.pushTypeResolution(symbol, TypeSystemPropertyNameType) {
-			mappedType.AsMappedType().containsError.set(c, true)
+			mappedType.AsMappedType().containsError.setIdentity(c, true)
 			return c.errorType
 		}
 		templateType := c.getTemplateTypeFromMappedType(core.OrElse(mappedType.AsMappedType().target, mappedType))
@@ -22698,18 +22921,18 @@ func (c *Checker) combineUnionOrIntersectionParameters(left *Signature, right *S
 			core.IfElse(isRestParam, ast.CheckFlagsRestParameter, core.IfElse(isOptional, ast.CheckFlagsOptionalParameter, 0)))
 		links := c.valueSymbolLinks.Get(paramSymbol)
 		if isRestParam {
-			links.resolvedType.set(c, c.createArrayType(combinedParamType))
+			links.resolvedType.setIdentity(c, c.createArrayType(combinedParamType))
 		} else {
-			links.resolvedType.set(c, combinedParamType)
+			links.resolvedType.setIdentity(c, combinedParamType)
 		}
 		params[i] = paramSymbol
 	}
 	if needsExtraRestElement {
 		restParamSymbol := c.newSymbolEx(ast.SymbolFlagsFunctionScopedVariable, "args", ast.CheckFlagsRestParameter)
 		links := c.valueSymbolLinks.Get(restParamSymbol)
-		links.resolvedType.set(c, c.createArrayType(c.getTypeAtPosition(shorter, longestCount)))
+		links.resolvedType.setIdentity(c, c.createArrayType(c.getTypeAtPosition(shorter, longestCount)))
 		if shorter == right {
-			links.resolvedType.set(c, c.instantiateType(links.resolvedType.get(c), mapper))
+			links.resolvedType.setIdentity(c, c.instantiateType(links.resolvedType.get(c), mapper))
 		}
 		params[longestCount] = restParamSymbol
 	}
@@ -22876,7 +23099,7 @@ func (c *Checker) getUnionOrIntersectionProperty(t *Type, name string, skipObjec
 	cache.begin(c, name)
 	prop := c.createUnionOrIntersectionProperty(t, name, skipObjectFunctionPropertyAugment)
 	if prop != nil {
-		cache.set(c, name, prop)
+		cache.setIdentity(c, name, prop)
 	}
 	c.endMemo()
 	return prop
@@ -23033,7 +23256,7 @@ func (c *Checker) createUnionOrIntersectionProperty(containingType *Type, name s
 		links := c.valueSymbolLinks.Get(clone)
 		links.setContainingType(c, containingType)
 		links.mapper = singlePropMapper
-		links.setWriteType(c, c.getWriteTypeOfSymbol(singleProp))
+		links.setNewWriteType(c, c.getWriteTypeOfSymbol(singleProp))
 		return clone
 	}
 	if propSet.Size() == 0 {
@@ -23099,15 +23322,15 @@ func (c *Checker) createUnionOrIntersectionProperty(containingType *Type, name s
 		return result
 	}
 	if isUnion {
-		links.resolvedType.set(c, c.getUnionType(propTypes))
+		links.resolvedType.setIdentity(c, c.getUnionType(propTypes))
 	} else {
-		links.resolvedType.set(c, c.getIntersectionType(propTypes))
+		links.resolvedType.setIdentity(c, c.getIntersectionType(propTypes))
 	}
 	if writeTypes != nil {
 		if isUnion {
-			links.setWriteType(c, c.getUnionType(writeTypes))
+			links.setNewWriteType(c, c.getUnionType(writeTypes))
 		} else {
-			links.setWriteType(c, c.getIntersectionType(writeTypes))
+			links.setNewWriteType(c, c.getIntersectionType(writeTypes))
 		}
 	}
 	return result
@@ -23190,7 +23413,7 @@ func (c *Checker) createSymbolWithType(source *ast.Symbol, t *Type) *ast.Symbol 
 	symbol.SetParent(source.Parent())
 	symbol.SetValueDeclaration(source.ValueDeclaration())
 	links := c.valueSymbolLinks.Get(symbol)
-	links.resolvedType.set(c, t)
+	links.resolvedType.setIdentity(c, t)
 	links.target = source
 	links.setNameType(c, c.valueSymbolLinks.Get(source).getNameType())
 	return symbol
@@ -23663,13 +23886,23 @@ func (c *Checker) instantiateTypeWithAlias(t *Type, m *TypeMapper, alias *TypeAl
 			tr.Instant(tracing.PhaseCheckTypes, "instantiateType_DepthLimit", map[string]any{"typeId": t.id, "instantiationDepth": len(c.instantiationStack), "instantiationCount": c.instantiationCount})
 		}
 		circularTypeNames := c.getCircularTypeNames()
+		var message *diagnostics.Message
+		var args []any
 		switch {
 		case len(circularTypeNames) == 1:
-			c.errorAtCurrentNode(diagnostics.Instantiations_of_type_0_appear_infinitely_circular, circularTypeNames[0])
+			message, args = diagnostics.Instantiations_of_type_0_appear_infinitely_circular, []any{circularTypeNames[0]}
 		case len(circularTypeNames) > 1:
-			c.errorAtCurrentNode(diagnostics.Instantiations_of_the_following_types_appear_infinitely_circular_Colon_0, quotedAndCommaSeparated(circularTypeNames))
+			message, args = diagnostics.Instantiations_of_the_following_types_appear_infinitely_circular_Colon_0, []any{quotedAndCommaSeparated(circularTypeNames)}
 		default:
-			c.errorAtCurrentNode(diagnostics.Type_instantiation_is_excessively_deep_and_possibly_infinite)
+			message = diagnostics.Type_instantiation_is_excessively_deep_and_possibly_infinite
+		}
+		report := func(c *Checker, node *ast.Node) { c.error(node, message, args...) }
+		if len(c.instantiationStack) == 100 {
+			c.reportAtCurrentNode(report)
+		} else {
+			// The count depends on how much was already cached, so computing
+			// the result again elsewhere would not reliably reach it either.
+			c.reportAtCurrentNodeOnce(report)
 		}
 		return c.errorType
 	}
@@ -23972,9 +24205,10 @@ func (c *Checker) getObjectTypeInstantiation(t *Type, m *TypeMapper, alias *Type
 	}
 	result, _ := data.instantiations.get(c, key)
 	if result == nil {
+		reports := c.startCurrentNodeErrors()
 		data.instantiations.begin(c, key)
 		result = instantiate(newTypeMapper(typeParameters, typeArguments))
-		data.instantiations.set(c, key, result)
+		data.instantiations.setReported(c, key, result, c.endCurrentNodeErrors(reports))
 		c.endMemo()
 		if result.flags&TypeFlagsObjectFlagsType != 0 && result.objectFlags&ObjectFlagsCouldContainTypeVariablesComputed == 0 {
 			// if `result` is one of the object types we tried to make (it may not be, due to how `instantiateMappedType` works), we can carry forward the type variable containment check from the input type arguments
@@ -24088,6 +24322,7 @@ func (c *Checker) getConditionalTypeInstantiation(t *Type, mapper *TypeMapper, f
 		key := getConditionalTypeKey(typeArguments, alias, forConstraint)
 		result, _ := root.instantiations.get(c, key)
 		if result == nil {
+			reports := c.startCurrentNodeErrors()
 			root.instantiations.begin(c, key)
 			newMapper := newTypeMapper(root.outerTypeParameters, typeArguments)
 			checkType := root.checkType
@@ -24105,7 +24340,7 @@ func (c *Checker) getConditionalTypeInstantiation(t *Type, mapper *TypeMapper, f
 			} else {
 				result = c.getConditionalType(root, newMapper, forConstraint, alias)
 			}
-			root.instantiations.set(c, key, result)
+			root.instantiations.setReported(c, key, result, c.endCurrentNodeErrors(reports))
 			c.endMemo()
 		}
 		return result
@@ -24150,7 +24385,7 @@ func (c *Checker) instantiateMappedType(t *Type, m *TypeMapper, alias *TypeAlias
 			return s
 		}
 		if d.declaration.NameType == nil {
-			if c.isArrayType(s) || s.flags&TypeFlagsAny != 0 && c.findResolutionCycleStartIndex(typeVariable, TypeSystemPropertyNameResolvedBaseConstraint) < 0 && c.hasArrayOrTypeTypeConstraint(typeVariable) {
+			if c.isArrayType(s) || s.flags&TypeFlagsAny != 0 && !c.isResolutionInProgress(typeVariable, TypeSystemPropertyNameResolvedBaseConstraint) && c.hasArrayOrTypeTypeConstraint(typeVariable) {
 				return c.instantiateMappedArrayType(s, t, prependTypeMapping(typeVariable, s, m))
 			}
 			if isTupleType(s) {
@@ -24623,7 +24858,13 @@ func (c *Checker) getTypeFromTypeReference(node *ast.Node) *Type {
 		} else if t := c.getIntendedTypeFromJSDocTypeReference(node); t != nil {
 			links.resolvedType.set(c, t)
 		} else {
-			links.resolvedType.set(c, c.getDistributedTypeParameter(node, c.getTypeReferenceType(node, c.getSymbolFromTypeReference(node))))
+			t := c.getDistributedTypeParameter(node, c.getTypeReferenceType(node, c.getSymbolFromTypeReference(node)))
+			if t.objectFlags&ObjectFlagsReference != 0 && t.AsTypeReference().node == node {
+				// A deferred reference is identified by the node, so it outlives a cycle.
+				links.resolvedType.setIdentity(c, t)
+			} else {
+				links.resolvedType.set(c, t)
+			}
 		}
 	}
 	return links.resolvedType.get(c)
@@ -25506,7 +25747,7 @@ func (c *Checker) appendTypeParameters(typeParameters []*Type, declarations []*a
 func (c *Checker) getDeclaredTypeOfTypeParameter(symbol *ast.Symbol) *Type {
 	links := c.declaredTypeLinks.Get(symbol)
 	if links.declaredType.get(c) == nil {
-		links.declaredType.set(c, c.newTypeParameter(symbol))
+		links.declaredType.setIdentity(c, c.newTypeParameter(symbol))
 	}
 	return links.declaredType.get(c)
 }
@@ -25519,6 +25760,7 @@ func (c *Checker) getDeclaredTypeOfTypeAlias(symbol *ast.Symbol) *Type {
 		if !c.pushTypeResolution(symbol, TypeSystemPropertyNameDeclaredType) {
 			return c.errorType
 		}
+		reports := c.startCurrentNodeErrors()
 		declaration := core.Find(symbol.Declarations(), ast.IsTypeOrJSTypeAliasDeclaration)
 		typeNode := declaration.Type()
 		t := c.getTypeFromTypeNode(typeNode)
@@ -25541,9 +25783,11 @@ func (c *Checker) getDeclaredTypeOfTypeAlias(symbol *ast.Symbol) *Type {
 			c.error(errorNode, diagnostics.Type_alias_0_circularly_references_itself, c.symbolToString(symbol))
 			t = c.errorType
 		}
-		if links.declaredType.get(c) == nil {
-			links.declaredType.set(c, t)
+		nodeReports := c.endCurrentNodeErrors(reports)
+		if links.declaredType.peek() == nil {
+			links.declaredType.setReported(c, t, nodeReports)
 		}
+		return links.declaredType.peek()
 	}
 	return links.declaredType.get(c)
 }
@@ -25564,7 +25808,7 @@ func (c *Checker) getDeclaredTypeOfEnum(symbol *ast.Symbol) *Type {
 						} else {
 							memberType = c.createComputedEnumType(memberSymbol)
 						}
-						c.declaredTypeLinks.Get(memberSymbol).declaredType.set(c, c.getFreshTypeOfLiteralType(memberType))
+						c.declaredTypeLinks.Get(memberSymbol).declaredType.setIdentity(c, c.getFreshTypeOfLiteralType(memberType))
 						memberTypeList = append(memberTypeList, memberType)
 					}
 				}
@@ -25580,7 +25824,7 @@ func (c *Checker) getDeclaredTypeOfEnum(symbol *ast.Symbol) *Type {
 			enumType.flags |= TypeFlagsEnumLiteral
 			enumType.symbol = symbol
 		}
-		links.declaredType.set(c, enumType)
+		links.declaredType.setIdentity(c, enumType)
 	}
 	return links.declaredType.get(c)
 }
@@ -25605,7 +25849,7 @@ func (c *Checker) getDeclaredTypeOfEnumMember(symbol *ast.Symbol) *Type {
 	if !(links.declaredType.get(c) != nil) {
 		enumType := c.getDeclaredTypeOfEnum(c.getParentOfSymbol(symbol))
 		if links.declaredType.get(c) == nil {
-			links.declaredType.set(c, enumType)
+			links.declaredType.setIdentity(c, enumType)
 		}
 	}
 	return links.declaredType.get(c)
@@ -25802,7 +26046,8 @@ func (c *Checker) getTypeFromArrayOrTupleTypeNode(node *ast.Node) *Type {
 			if node.Kind == ast.KindTupleType && len(node.Elements()) == 0 {
 				links.resolvedType.set(c, target)
 			} else {
-				links.resolvedType.set(c, c.createDeferredTypeReference(target, node, nil /*mapper*/, nil /*alias*/))
+				// The deferred reference is identified by the node, so it outlives a cycle.
+				links.resolvedType.setIdentity(c, c.createDeferredTypeReference(target, node, nil /*mapper*/, nil /*alias*/))
 			}
 		} else {
 			var elementTypes []*Type
@@ -27944,7 +28189,7 @@ func (c *Checker) getIntersectionTypeEx(types []*Type, flags IntersectionFlags, 
 		} else {
 			result = c.getIntersectionTypeWithContent(objectFlags|c.getPropagatingFlagsOfTypes(types /*excludeKinds*/, TypeFlagsNullable), typeSet, alias)
 		}
-		c.intersectionTypes.set(c, key, result)
+		c.intersectionTypes.setIdentity(c, key, result)
 		c.endMemo()
 	}
 	return result
@@ -29247,7 +29492,11 @@ func (c *Checker) getResolvedBaseConstraintUncached(t *Type, stack []RecursionId
 			errorNode := c.getConstraintDeclaration(t)
 			if errorNode != nil {
 				typeString := c.TypeToString(t)
-				c.reportAtCurrentNode(func(c *Checker, node *ast.Node) {
+				// The error is located at the constraint, not the current node, and the
+				// circularity is intrinsic to the declarations, so it is reported once
+				// and the circular result is kept. Discarding it would let a later
+				// computation reuse cycle participants that hide the cycle.
+				c.reportAtCurrentNodeOnce(func(c *Checker, node *ast.Node) {
 					diagnostic := c.error(errorNode, diagnostics.Type_parameter_0_has_a_circular_constraint, typeString)
 					if node != nil && !isNodeDescendantOf(errorNode, node) && !isNodeDescendantOf(node, errorNode) {
 						diagnostic.AddRelatedInfo(NewDiagnosticForNode(node, diagnostics.Circularity_originates_in_type_at_this_location))
@@ -29525,9 +29774,9 @@ func (c *Checker) expandSignatureParametersWithTupleMembers(signature *Signature
 		symbol := c.newSymbolEx(ast.SymbolFlagsFunctionScopedVariable, associatedNames[i], checkFlags)
 		links := c.valueSymbolLinks.Get(symbol)
 		if flags&ElementFlagsRest != 0 {
-			links.resolvedType.set(c, c.createArrayType(t))
+			links.resolvedType.setIdentity(c, c.createArrayType(t))
 		} else {
-			links.resolvedType.set(c, t)
+			links.resolvedType.setIdentity(c, t)
 		}
 		expanded = append(expanded, symbol)
 	}
@@ -29703,17 +29952,26 @@ func (c *Checker) getSimplifiedIndexType(t *Type) *Type {
 func (c *Checker) getSimplifiedIndexedAccessType(t *Type, writing bool) *Type {
 	key := CachedTypeKey{kind: core.IfElse(writing, CachedTypeKindIndexedAccessForWriting, CachedTypeKindIndexedAccessForReading), typeId: t.id}
 	if cached, _ := c.cachedTypes.get(c, key); cached != nil {
-		return core.IfElse(cached == c.circularConstraintType, t, cached)
+		return cached
+	}
+	propertyName := core.IfElse(writing, TypeSystemPropertyNameSimplifiedForWriting, TypeSystemPropertyNameSimplifiedForReading)
+	if c.simplifyingIndexedAccess.Has(key) {
+		// Resolve circular references to t itself while simplifying, which
+		// depends on the simplification in progress.
+		c.isResolutionInProgress(t, propertyName)
+		return t
 	}
 	c.cachedTypes.begin(c, key)
-	// Resolve circular references to t itself while simplifying.
-	c.cachedTypes.intern(key, t)
+	c.simplifyingIndexedAccess.Add(key)
+	c.beginTypeResolution(t, propertyName)
 	result := c.getSimplifiedIndexedAccessTypeWorker(t, writing)
 	if result != t {
 		// If the simplification is a union type that includes t, remove t from the type.
 		result = c.removeType(result, t)
-		c.cachedTypes.set(c, key, result)
 	}
+	c.cachedTypes.set(c, key, result)
+	c.simplifyingIndexedAccess.Delete(key)
+	c.popTypeResolution()
 	c.endMemo()
 	return result
 }
@@ -32525,7 +32783,7 @@ func (c *Checker) getTypeFromIndexInfosOfContextualType(t *Type, name string, na
 func (c *Checker) isCircularMappedProperty(symbol *ast.Symbol) bool {
 	if symbol.CheckFlags()&ast.CheckFlagsMapped != 0 {
 		links := c.valueSymbolLinks.Get(symbol)
-		return links.resolvedType.get(c) == nil && c.findResolutionCycleStartIndex(symbol, TypeSystemPropertyNameType) >= 0
+		return links.resolvedType.get(c) == nil && c.isResolutionInProgress(symbol, TypeSystemPropertyNameType)
 	}
 	return false
 }
@@ -33975,7 +34233,7 @@ func (c *Checker) getApplicableIndexSymbol(t *Type, keyType *Type) *ast.Symbol {
 				symbol.SetValueDeclaration(declarations[0])
 				symbol.SetParent(t.symbol)
 				links := c.valueSymbolLinks.Get(symbol)
-				links.resolvedType.set(c, info.valueType)
+				links.resolvedType.setIdentity(c, info.valueType)
 				info.indexSymbol = symbol
 			}
 		}

@@ -1260,6 +1260,10 @@ func (c *Checker) isDiscriminantProperty(t *Type, name string) bool {
 // discriminant, a flag memo.
 func (c *Checker) setDiscriminantFlags(prop *ast.Symbol, flags ast.CheckFlags) {
 	const mask = ast.CheckFlagsIsDiscriminantComputed | ast.CheckFlagsIsDiscriminant
+	if c.logResults() {
+		old := prop.CheckFlags() & mask
+		c.logFlagMemoDiscard(func() { prop.SetCheckFlags(prop.CheckFlags()&^mask | old) })
+	}
 	prop.SetCheckFlags(prop.CheckFlags()&^mask | flags)
 	c.setFlagMemo(memoKeyOf(prop, memoDiscriminant))
 }
@@ -1528,7 +1532,8 @@ func (c *Checker) getVariancesWorker(symbol *ast.Symbol, typeParameters []*Type)
 			if len(c.varianceStack) == 0 {
 				c.resolutionStart = len(c.resolutions)
 			}
-			c.varianceStack = append(c.varianceStack, VarianceStackEntry{symbol, typeParameters})
+			c.varianceStack = append(c.varianceStack, VarianceStackEntry{symbol: symbol, typeParameters: typeParameters, resolution: len(c.resolutions)})
+			c.beginTypeResolution(symbol, TypeSystemPropertyNameVariances)
 			if c.varianceMeasuring == nil {
 				c.varianceMeasuring = make(map[*ast.Symbol]int)
 			}
@@ -1583,6 +1588,7 @@ func (c *Checker) getVariancesWorker(symbol *ast.Symbol, typeParameters []*Type)
 				links.variances.set(c, variances)
 			}
 			c.varianceStack = c.varianceStack[:len(c.varianceStack)-1]
+			c.popTypeResolution()
 			if c.varianceMeasuring[symbol]--; c.varianceMeasuring[symbol] == 0 {
 				delete(c.varianceMeasuring, symbol)
 			}
@@ -1595,6 +1601,14 @@ func (c *Checker) getVariancesWorker(symbol *ast.Symbol, typeParameters []*Type)
 			// we enter a circularity, we find the generic type with the "smallest" symbol in the circular
 			// region of the variance stack and restart the computation from there if necessary. This
 			// ensures stable results for circular generic types.
+			// Results computed since the circularity was entered observed incomplete
+			// variances, so they are discarded once the outermost variance computation
+			// of the circularity finishes. The variances themselves are kept, since the
+			// restart below computes them the same way from any entry point.
+			for i := stackIndex; i < len(c.varianceStack); i++ {
+				c.cycleParticipants = append(c.cycleParticipants, c.resolutions[c.varianceStack[i].resolution].typeResolution)
+			}
+			c.markTypeResolutionCircular(c.varianceStack[stackIndex].resolution)
 			minIndex := stackIndex
 			for i := stackIndex + 1; i < len(c.varianceStack); i++ {
 				if c.compareSymbols(c.varianceStack[i].symbol, c.varianceStack[minIndex].symbol) < 0 {
@@ -2404,7 +2418,7 @@ func (c *Checker) isResolvingReturnTypeOfSignature(signature *Signature) bool {
 	if signature.getComposite() != nil && core.Some(signature.getComposite().signatures, c.isResolvingReturnTypeOfSignature) {
 		return true
 	}
-	return signature.resolvedReturnType.get(c) == nil && c.findResolutionCycleStartIndex(signature, TypeSystemPropertyNameResolvedReturnType) >= 0
+	return signature.resolvedReturnType.get(c) == nil && c.isResolutionInProgress(signature, TypeSystemPropertyNameResolvedReturnType)
 }
 
 func (c *Checker) findMatchingSignatures(signatureLists [][]*Signature, signature *Signature, listIndex int) []*Signature {

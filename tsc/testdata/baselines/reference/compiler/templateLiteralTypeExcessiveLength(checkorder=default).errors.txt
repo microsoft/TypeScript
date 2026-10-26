@@ -1,9 +1,18 @@
+templateLiteralTypeExcessiveLength.ts(14,16): error TS2589: Type instantiation is excessively deep and possibly infinite.
+templateLiteralTypeExcessiveLength.ts(15,6): error TS2589: Type instantiation is excessively deep and possibly infinite.
 templateLiteralTypeExcessiveLength.ts(15,11): error TS2589: Type instantiation is excessively deep and possibly infinite.
+templateLiteralTypeExcessiveLength.ts(15,28): error TS2589: Type instantiation is excessively deep and possibly infinite.
+templateLiteralTypeExcessiveLength.ts(19,21): error TS2589: Type instantiation is excessively deep and possibly infinite.
+templateLiteralTypeExcessiveLength.ts(20,6): error TS2589: Type instantiation is excessively deep and possibly infinite.
 templateLiteralTypeExcessiveLength.ts(20,11): error TS2589: Type instantiation is excessively deep and possibly infinite.
+templateLiteralTypeExcessiveLength.ts(20,31): error TS2589: Type instantiation is excessively deep and possibly infinite.
+templateLiteralTypeExcessiveLength.ts(33,24): error TS2589: Type instantiation is excessively deep and possibly infinite.
+templateLiteralTypeExcessiveLength.ts(34,6): error TS2589: Type instantiation is excessively deep and possibly infinite.
 templateLiteralTypeExcessiveLength.ts(34,11): error TS2589: Type instantiation is excessively deep and possibly infinite.
+templateLiteralTypeExcessiveLength.ts(34,38): error TS2589: Type instantiation is excessively deep and possibly infinite.
 
 
-==== templateLiteralTypeExcessiveLength.ts (3 errors) ====
+==== templateLiteralTypeExcessiveLength.ts (12 errors) ====
     // Regression test for #63271: `Dec<2>` is `any`, so `Recur` produces both conditional branches and
     // keeps tail-recursing forever. The checker must report an error instead of building an unbounded
     // template literal type.
@@ -18,17 +27,33 @@ templateLiteralTypeExcessiveLength.ts(34,11): error TS2589: Type instantiation i
     
     // The string literal doubles on every iteration.
     type Explode = {
+                   ~
         [P in Recur<5, "a"> as `${P}_key`]: any;
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+         ~~~~~~~~~~~~~~~~~~
+!!! error TS2589: Type instantiation is excessively deep and possibly infinite.
               ~~~~~~~~~~~~~
 !!! error TS2589: Type instantiation is excessively deep and possibly infinite.
+                               ~~~~~~~~~~
+!!! error TS2589: Type instantiation is excessively deep and possibly infinite.
     };
+    ~
+!!! error TS2589: Type instantiation is excessively deep and possibly infinite.
     
     // The number of placeholders doubles on every iteration.
     type ExplodeSpans = {
+                        ~
         [P in Recur<5, string> as `${P}_key`]: any;
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+         ~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2589: Type instantiation is excessively deep and possibly infinite.
               ~~~~~~~~~~~~~~~~
 !!! error TS2589: Type instantiation is excessively deep and possibly infinite.
+                                  ~~~~~~~~~~
+!!! error TS2589: Type instantiation is excessively deep and possibly infinite.
     };
+    ~
+!!! error TS2589: Type instantiation is excessively deep and possibly infinite.
     
     // Every text segment stays small, but the number of segments doubles on every iteration,
     // so the combined text length grows without bound.
@@ -41,8 +66,16 @@ templateLiteralTypeExcessiveLength.ts(34,11): error TS2589: Type instantiation i
         N extends 0 ? S : RecurSegments<Dec<N>, `${S}${string}${S}`>;
     
     type ExplodeSegments = {
+                           ~
         [P in RecurSegments<5, A1024> as `${P}_key`]: any;
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2589: Type instantiation is excessively deep and possibly infinite.
               ~~~~~~~~~~~~~~~~~~~~~~~
 !!! error TS2589: Type instantiation is excessively deep and possibly infinite.
+                                         ~~~~~~~~~~
+!!! error TS2589: Type instantiation is excessively deep and possibly infinite.
     };
+    ~
+!!! error TS2589: Type instantiation is excessively deep and possibly infinite.
     

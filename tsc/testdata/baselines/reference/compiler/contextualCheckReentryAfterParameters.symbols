@@ -1,0 +1,181 @@
+//// [tests/cases/compiler/contextualCheckReentryAfterParameters.ts] ////
+
+=== contextualCheckReentryAfterParameters.ts ===
+// Instantiating the type predicate inside the nested callback re-enters the
+// contextual check of the enclosing functions through their outer type
+// parameters. That must not discard the parameter types assigned to them.
+
+type Surface = { id: string; kind: "file"; path: string } | { id: string; kind: "terminal" };
+>Surface : Symbol(Surface, Decl(contextualCheckReentryAfterParameters.ts, 0, 0))
+>id : Symbol(id, Decl(contextualCheckReentryAfterParameters.ts, 4, 16))
+>kind : Symbol(kind, Decl(contextualCheckReentryAfterParameters.ts, 4, 28))
+>path : Symbol(path, Decl(contextualCheckReentryAfterParameters.ts, 4, 42))
+>id : Symbol(id, Decl(contextualCheckReentryAfterParameters.ts, 4, 61))
+>kind : Symbol(kind, Decl(contextualCheckReentryAfterParameters.ts, 4, 73))
+
+interface Panel {
+>Panel : Symbol(Panel, Decl(contextualCheckReentryAfterParameters.ts, 4, 93))
+
+    surfaces: Surface[];
+>surfaces : Symbol(Panel.surfaces, Decl(contextualCheckReentryAfterParameters.ts, 5, 17))
+>Surface : Symbol(Surface, Decl(contextualCheckReentryAfterParameters.ts, 0, 0))
+}
+interface Store {
+>Store : Symbol(Store, Decl(contextualCheckReentryAfterParameters.ts, 7, 1))
+
+    panel: Panel;
+>panel : Symbol(Store.panel, Decl(contextualCheckReentryAfterParameters.ts, 8, 17))
+>Panel : Symbol(Panel, Decl(contextualCheckReentryAfterParameters.ts, 4, 93))
+
+    openFile: (path: string) => void;
+>openFile : Symbol(Store.openFile, Decl(contextualCheckReentryAfterParameters.ts, 9, 17))
+>path : Symbol(path, Decl(contextualCheckReentryAfterParameters.ts, 10, 15))
+
+    close: (id: string) => void;
+>close : Symbol(Store.close, Decl(contextualCheckReentryAfterParameters.ts, 10, 37))
+>id : Symbol(id, Decl(contextualCheckReentryAfterParameters.ts, 11, 12))
+}
+type Creator<T> = (set: (update: (state: T) => Partial<T>) => void) => T;
+>Creator : Symbol(Creator, Decl(contextualCheckReentryAfterParameters.ts, 12, 1))
+>T : Symbol(T, Decl(contextualCheckReentryAfterParameters.ts, 13, 13))
+>set : Symbol(set, Decl(contextualCheckReentryAfterParameters.ts, 13, 19))
+>update : Symbol(update, Decl(contextualCheckReentryAfterParameters.ts, 13, 25))
+>state : Symbol(state, Decl(contextualCheckReentryAfterParameters.ts, 13, 34))
+>T : Symbol(T, Decl(contextualCheckReentryAfterParameters.ts, 13, 13))
+>Partial : Symbol(Partial, Decl(lib.es5.d.ts, --, --))
+>T : Symbol(T, Decl(contextualCheckReentryAfterParameters.ts, 13, 13))
+>T : Symbol(T, Decl(contextualCheckReentryAfterParameters.ts, 13, 13))
+
+declare function create<T>(init: Creator<T>): T;
+>create : Symbol(create, Decl(contextualCheckReentryAfterParameters.ts, 13, 73))
+>T : Symbol(T, Decl(contextualCheckReentryAfterParameters.ts, 14, 24))
+>init : Symbol(init, Decl(contextualCheckReentryAfterParameters.ts, 14, 27))
+>Creator : Symbol(Creator, Decl(contextualCheckReentryAfterParameters.ts, 12, 1))
+>T : Symbol(T, Decl(contextualCheckReentryAfterParameters.ts, 14, 24))
+>T : Symbol(T, Decl(contextualCheckReentryAfterParameters.ts, 14, 24))
+
+declare function wrap<T>(init: Creator<T>): Creator<T>;
+>wrap : Symbol(wrap, Decl(contextualCheckReentryAfterParameters.ts, 14, 48))
+>T : Symbol(T, Decl(contextualCheckReentryAfterParameters.ts, 15, 22))
+>init : Symbol(init, Decl(contextualCheckReentryAfterParameters.ts, 15, 25))
+>Creator : Symbol(Creator, Decl(contextualCheckReentryAfterParameters.ts, 12, 1))
+>T : Symbol(T, Decl(contextualCheckReentryAfterParameters.ts, 15, 22))
+>Creator : Symbol(Creator, Decl(contextualCheckReentryAfterParameters.ts, 12, 1))
+>T : Symbol(T, Decl(contextualCheckReentryAfterParameters.ts, 15, 22))
+
+const update = (state: Store, updater: (current: Panel) => Panel): Partial<Store> => ({ panel: updater(state.panel) });
+>update : Symbol(update, Decl(contextualCheckReentryAfterParameters.ts, 17, 5))
+>state : Symbol(state, Decl(contextualCheckReentryAfterParameters.ts, 17, 16))
+>Store : Symbol(Store, Decl(contextualCheckReentryAfterParameters.ts, 7, 1))
+>updater : Symbol(updater, Decl(contextualCheckReentryAfterParameters.ts, 17, 29))
+>current : Symbol(current, Decl(contextualCheckReentryAfterParameters.ts, 17, 40))
+>Panel : Symbol(Panel, Decl(contextualCheckReentryAfterParameters.ts, 4, 93))
+>Panel : Symbol(Panel, Decl(contextualCheckReentryAfterParameters.ts, 4, 93))
+>Partial : Symbol(Partial, Decl(lib.es5.d.ts, --, --))
+>Store : Symbol(Store, Decl(contextualCheckReentryAfterParameters.ts, 7, 1))
+>panel : Symbol(panel, Decl(contextualCheckReentryAfterParameters.ts, 17, 87))
+>updater : Symbol(updater, Decl(contextualCheckReentryAfterParameters.ts, 17, 29))
+>state.panel : Symbol(Store.panel, Decl(contextualCheckReentryAfterParameters.ts, 8, 17))
+>state : Symbol(state, Decl(contextualCheckReentryAfterParameters.ts, 17, 16))
+>panel : Symbol(Store.panel, Decl(contextualCheckReentryAfterParameters.ts, 8, 17))
+
+export const store = create<Store>(wrap((set) => ({
+>store : Symbol(store, Decl(contextualCheckReentryAfterParameters.ts, 19, 12))
+>create : Symbol(create, Decl(contextualCheckReentryAfterParameters.ts, 13, 73))
+>Store : Symbol(Store, Decl(contextualCheckReentryAfterParameters.ts, 7, 1))
+>wrap : Symbol(wrap, Decl(contextualCheckReentryAfterParameters.ts, 14, 48))
+>set : Symbol(set, Decl(contextualCheckReentryAfterParameters.ts, 19, 41))
+
+    panel: { surfaces: [] },
+>panel : Symbol(panel, Decl(contextualCheckReentryAfterParameters.ts, 19, 51))
+>surfaces : Symbol(surfaces, Decl(contextualCheckReentryAfterParameters.ts, 20, 12))
+
+    openFile: (path) =>
+>openFile : Symbol(openFile, Decl(contextualCheckReentryAfterParameters.ts, 20, 28))
+>path : Symbol(path, Decl(contextualCheckReentryAfterParameters.ts, 21, 15))
+
+        set((state) =>
+>set : Symbol(set, Decl(contextualCheckReentryAfterParameters.ts, 19, 41))
+>state : Symbol(state, Decl(contextualCheckReentryAfterParameters.ts, 22, 13))
+
+            update(state, (current) => {
+>update : Symbol(update, Decl(contextualCheckReentryAfterParameters.ts, 17, 5))
+>state : Symbol(state, Decl(contextualCheckReentryAfterParameters.ts, 22, 13))
+>current : Symbol(current, Decl(contextualCheckReentryAfterParameters.ts, 23, 27))
+
+                const existing = current.surfaces.find(
+>existing : Symbol(existing, Decl(contextualCheckReentryAfterParameters.ts, 24, 21))
+>current.surfaces.find : Symbol(Array.find, Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
+>current.surfaces : Symbol(Panel.surfaces, Decl(contextualCheckReentryAfterParameters.ts, 5, 17))
+>current : Symbol(current, Decl(contextualCheckReentryAfterParameters.ts, 23, 27))
+>surfaces : Symbol(Panel.surfaces, Decl(contextualCheckReentryAfterParameters.ts, 5, 17))
+>find : Symbol(Array.find, Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
+
+                    (surface): surface is Extract<Surface, { kind: "file" }> => surface.kind === "file" && surface.path === path,
+>surface : Symbol(surface, Decl(contextualCheckReentryAfterParameters.ts, 25, 21))
+>surface : Symbol(surface, Decl(contextualCheckReentryAfterParameters.ts, 25, 21))
+>Extract : Symbol(Extract, Decl(lib.es5.d.ts, --, --))
+>Surface : Symbol(Surface, Decl(contextualCheckReentryAfterParameters.ts, 0, 0))
+>kind : Symbol(kind, Decl(contextualCheckReentryAfterParameters.ts, 25, 60))
+>surface.kind : Symbol(kind, Decl(contextualCheckReentryAfterParameters.ts, 4, 28), Decl(contextualCheckReentryAfterParameters.ts, 4, 73))
+>surface : Symbol(surface, Decl(contextualCheckReentryAfterParameters.ts, 25, 21))
+>kind : Symbol(kind, Decl(contextualCheckReentryAfterParameters.ts, 4, 28), Decl(contextualCheckReentryAfterParameters.ts, 4, 73))
+>surface.path : Symbol(path, Decl(contextualCheckReentryAfterParameters.ts, 4, 42))
+>surface : Symbol(surface, Decl(contextualCheckReentryAfterParameters.ts, 25, 21))
+>path : Symbol(path, Decl(contextualCheckReentryAfterParameters.ts, 4, 42))
+>path : Symbol(path, Decl(contextualCheckReentryAfterParameters.ts, 21, 15))
+
+                );
+                return existing ? current : { surfaces: [...current.surfaces, { id: path, kind: "file", path }] };
+>existing : Symbol(existing, Decl(contextualCheckReentryAfterParameters.ts, 24, 21))
+>current : Symbol(current, Decl(contextualCheckReentryAfterParameters.ts, 23, 27))
+>surfaces : Symbol(surfaces, Decl(contextualCheckReentryAfterParameters.ts, 27, 45))
+>current.surfaces : Symbol(Panel.surfaces, Decl(contextualCheckReentryAfterParameters.ts, 5, 17))
+>current : Symbol(current, Decl(contextualCheckReentryAfterParameters.ts, 23, 27))
+>surfaces : Symbol(Panel.surfaces, Decl(contextualCheckReentryAfterParameters.ts, 5, 17))
+>id : Symbol(id, Decl(contextualCheckReentryAfterParameters.ts, 27, 79))
+>path : Symbol(path, Decl(contextualCheckReentryAfterParameters.ts, 21, 15))
+>kind : Symbol(kind, Decl(contextualCheckReentryAfterParameters.ts, 27, 89))
+>path : Symbol(path, Decl(contextualCheckReentryAfterParameters.ts, 27, 103))
+
+            })
+        ),
+    close: (id) =>
+>close : Symbol(close, Decl(contextualCheckReentryAfterParameters.ts, 29, 10))
+>id : Symbol(id, Decl(contextualCheckReentryAfterParameters.ts, 30, 12))
+
+        set((state) =>
+>set : Symbol(set, Decl(contextualCheckReentryAfterParameters.ts, 19, 41))
+>state : Symbol(state, Decl(contextualCheckReentryAfterParameters.ts, 31, 13))
+
+            update(state, (current) => {
+>update : Symbol(update, Decl(contextualCheckReentryAfterParameters.ts, 17, 5))
+>state : Symbol(state, Decl(contextualCheckReentryAfterParameters.ts, 31, 13))
+>current : Symbol(current, Decl(contextualCheckReentryAfterParameters.ts, 32, 27))
+
+                const index = current.surfaces.findIndex((entry) => entry.id === id);
+>index : Symbol(index, Decl(contextualCheckReentryAfterParameters.ts, 33, 21))
+>current.surfaces.findIndex : Symbol(Array.findIndex, Decl(lib.es2015.core.d.ts, --, --))
+>current.surfaces : Symbol(Panel.surfaces, Decl(contextualCheckReentryAfterParameters.ts, 5, 17))
+>current : Symbol(current, Decl(contextualCheckReentryAfterParameters.ts, 32, 27))
+>surfaces : Symbol(Panel.surfaces, Decl(contextualCheckReentryAfterParameters.ts, 5, 17))
+>findIndex : Symbol(Array.findIndex, Decl(lib.es2015.core.d.ts, --, --))
+>entry : Symbol(entry, Decl(contextualCheckReentryAfterParameters.ts, 33, 58))
+>entry.id : Symbol(id, Decl(contextualCheckReentryAfterParameters.ts, 4, 16), Decl(contextualCheckReentryAfterParameters.ts, 4, 61))
+>entry : Symbol(entry, Decl(contextualCheckReentryAfterParameters.ts, 33, 58))
+>id : Symbol(id, Decl(contextualCheckReentryAfterParameters.ts, 4, 16), Decl(contextualCheckReentryAfterParameters.ts, 4, 61))
+>id : Symbol(id, Decl(contextualCheckReentryAfterParameters.ts, 30, 12))
+
+                return { surfaces: current.surfaces.slice(index) };
+>surfaces : Symbol(surfaces, Decl(contextualCheckReentryAfterParameters.ts, 34, 24))
+>current.surfaces.slice : Symbol(Array.slice, Decl(lib.es5.d.ts, --, --))
+>current.surfaces : Symbol(Panel.surfaces, Decl(contextualCheckReentryAfterParameters.ts, 5, 17))
+>current : Symbol(current, Decl(contextualCheckReentryAfterParameters.ts, 32, 27))
+>surfaces : Symbol(Panel.surfaces, Decl(contextualCheckReentryAfterParameters.ts, 5, 17))
+>slice : Symbol(Array.slice, Decl(lib.es5.d.ts, --, --))
+>index : Symbol(index, Decl(contextualCheckReentryAfterParameters.ts, 33, 21))
+
+            })
+        ),
+})));
+

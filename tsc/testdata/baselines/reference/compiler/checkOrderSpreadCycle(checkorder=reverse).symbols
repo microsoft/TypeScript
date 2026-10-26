@@ -14,7 +14,6 @@ module.exports = { v: { ...M } };
 
 === /ma.js ===
 export { v as pa } from "./xa";
->v : Symbol(v, Decl(xa.js, 2, 18))
 >pa : Symbol(pa, Decl(ma.js, 0, 8))
 
 export const ma = 1;
@@ -22,7 +21,6 @@ export const ma = 1;
 
 === /mb.js ===
 export { v as pb } from "./xb";
->v : Symbol(v, Decl(xb.js, 2, 18))
 >pb : Symbol(pb, Decl(mb.js, 0, 8))
 
 export const mb = 1;

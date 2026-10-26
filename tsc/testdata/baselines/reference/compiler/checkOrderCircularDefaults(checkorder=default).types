@@ -18,5 +18,5 @@ export interface B<U = A> { b: U }
 >b : U
 
 export declare const b: B;
->b : B<A<unknown>>
+>b : B<unknown>
 

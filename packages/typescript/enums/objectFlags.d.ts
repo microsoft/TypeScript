@@ -24,6 +24,7 @@ export declare enum ObjectFlags {
     CouldContainTypeVariablesComputed = 1 << 19,
     CouldContainTypeVariables = 1 << 20,
     MembersResolved = 1 << 21,
+    MembersResolving = 1 << 30,
     ClassOrInterface = Class | Interface,
     RequiresWidening = ContainsWideningType | ContainsObjectOrArrayLiteral,
     PropagatingFlags = ContainsWideningType | ContainsObjectOrArrayLiteral | NonInferrableType,

@@ -69,12 +69,48 @@ const (
 	memoFieldCount      = memoResolvedMembers + 2
 )
 
+// A reentry says what it means to re-enter a computation in progress, which
+// can only observe whatever the computation has published so far.
+type reentry uint8
+
+const (
+	// What re-entry observes is incomplete, so the results computed while
+	// the outer computation is in progress are discarded when it finishes,
+	// and computed again from its result. This is the default.
+	reentryCircular reentry = iota
+	// The computation detects re-entry with a type resolution of its own,
+	// which decides the head of the cycle and what to discard.
+	reentryResolution
+	// The computation publishes a partial result before it finishes, and
+	// re-entry observes that partial result. Results derived from it may
+	// differ depending on which computation starts first.
+	reentryPartial
+)
+
+// memoReentry is the re-entry policy of each kind of computation.
+var memoReentry = [memoFieldCount]reentry{
+	// memoCompute keeps the result that a re-entrant computation cached,
+	// and many cells publish an in-progress marker for re-entry to read.
+	memoCell: reentryPartial,
+	// Many kinds of types make members available before they are complete.
+	memoStructuredMembers: reentryPartial,
+	// Circular defaults are reported at the default first in program order.
+	memoTypeParameterDefault: reentryResolution,
+	// Contextual parameter typing resolves a cycle through the enclosing call.
+	// Its type resolution ends once the parameters are assigned.
+	memoContextualParameters: reentryResolution,
+}
+
 // memoKey identifies a memoized result: the address of the entity owning the
 // cache slot (an *ast.Node, *ast.Symbol, *Type, or *Signature) shifted left by
 // eight bits, plus the memoField of the slot. Packing into an integer keeps map
 // operations on the fast path. Entities live as long as the program or the
 // checker store, so an address cannot be reused while its keys exist.
 type memoKey uint64
+
+func (k memoKey) field() memoField {
+	return memoField(k)
+}
 
 func memoKeyOf[T any](entity *T, field memoField) memoKey {
 	// SAFETY: Only the address is kept, as an identity; it is never turned back
@@ -116,7 +152,8 @@ func (f *memoEffects) covers(deps []*memoEffects) bool {
 
 // memoState is the memo state of one memoized result.
 type memoState struct {
-	pending *memoEffects // Effects not yet replayed by a check
+	pending *memoEffects        // Effects not yet replayed by a check
+	errors  []*currentNodeError // Errors the computation reported at the current node; see setReported
 }
 
 // memo is a cached result. Cached checker state must live in a memo so that
@@ -157,9 +194,31 @@ func (m *memo[T]) get(c *Checker) T {
 // example, the types of binding elements assigned while resolving the type of
 // their declaration), the result depends on the computation setting it.
 func (m *memo[T]) set(c *Checker, v T) {
+	if c.logResults() {
+		m.logDiscard(c)
+	}
 	m.memoValue = v
 	if !c.checking {
 		c.attachCell(&m.memoHeader)
+	}
+}
+
+// setAfterMarker is set for a result replacing the marker its computation put
+// in place when it began. A marker put in place before a cycle began was not
+// logged, so discarding the result would restore it; a restored marker that
+// stale reports as no longer in progress is cleared instead.
+func (m *memo[T]) setAfterMarker(c *Checker, v T, stale func(T) bool) {
+	n := len(c.discardLog)
+	m.set(c, v)
+	if len(c.discardLog) > n {
+		restore := c.discardLog[n].restore
+		c.discardLog[n].restore = func() {
+			restore()
+			if stale(m.memoValue) {
+				var zero T
+				m.memoValue = zero
+			}
+		}
 	}
 }
 
@@ -171,6 +230,46 @@ func setIfChanged[T comparable](c *Checker, m *memo[T], v T) {
 	if m.memoValue != v {
 		m.set(c, v)
 	}
+}
+
+// setIdentity is set for a result that defines the identity of what it
+// caches, such as a declared type, or that is part of an entity being
+// created, such as the type of a synthetic property. It is never discarded at
+// the end of a cycle: discarding an identity would let a second, distinct
+// result exist, and an entity can outlive the cycle in caches that are kept
+// while having no way to compute its parts again.
+func (m *memo[T]) setIdentity(c *Checker, v T) {
+	m.memoValue = v
+	if !c.checking {
+		c.attachCell(&m.memoHeader)
+	}
+}
+
+// setReported is setIdentity for a result whose computation collected errors
+// reported at the current node, as returned by endCurrentNodeErrors. Every
+// node reusing the result reports them again, as it would had it computed the
+// result itself. If computing the result elsewhere may not report them (see
+// endCurrentNodeErrors), it is instead discarded with other results cached
+// for the current node.
+func (m *memo[T]) setReported(c *Checker, v T, r currentNodeErrors) {
+	if r.cyclic {
+		if c.logResults() {
+			m.logDiscard(c)
+		}
+		r.list = nil
+	}
+	m.setIdentity(c, v)
+	if r.list != nil || c.memoErrorStates != 0 && c.memoStates[m.key()] != nil {
+		c.memoState(m.key()).setErrors(c, r.list)
+	}
+}
+
+//go:noinline
+func (m *memo[T]) logDiscard(c *Checker) {
+	old := m.memoValue
+	c.discardLog = append(c.discardLog, discardEntry{&m.memoHeader, func() {
+		m.memoValue = old
+	}, false})
 }
 
 // peek returns the cached result without accounting for effects. It is only
@@ -277,8 +376,42 @@ func (m *memoMap[K, V]) values() iter.Seq[V] {
 }
 
 // set caches the result for k; see memo.set.
-// set caches the result for k; see memo.set.
 func (m *memoMap[K, V]) set(c *Checker, k K, v V) {
+	if c.logResults() {
+		m.logDiscard(c, k)
+	}
+	m.setIdentity(c, k, v)
+}
+
+//go:noinline
+func (m *memoMap[K, V]) logDiscard(c *Checker, k K) {
+	old, ok := m.memoEntries[k]
+	c.discardLog = append(c.discardLog, discardEntry{nil, func() {
+		if ok {
+			m.memoEntries[k] = old
+		} else {
+			delete(m.memoEntries, k)
+		}
+	}, false})
+}
+
+// setReported is setIdentity for an entry; see memo.setReported.
+func (m *memoMap[K, V]) setReported(c *Checker, k K, v V, r currentNodeErrors) {
+	if r.cyclic {
+		if c.logResults() {
+			m.logDiscard(c, k)
+		}
+		r.list = nil
+	}
+	m.setIdentity(c, k, v)
+	if r.list != nil || c.memoErrorStates != 0 && m.memoStates[k] != nil {
+		m.state(k).setErrors(c, r.list)
+	}
+}
+
+// setIdentity is set for a result that defines the identity of what it
+// caches; see memo.setIdentity.
+func (m *memoMap[K, V]) setIdentity(c *Checker, k K, v V) {
 	if m.memoEntries == nil {
 		m.memoEntries = make(map[K]V)
 	}
@@ -309,6 +442,10 @@ func (m *memoMap[K, V]) compute(c *Checker, k K, fn func() V) V {
 // enter starts the computation of the result for k; see beginMemo.
 func (m *memoMap[K, V]) begin(c *Checker, k K) {
 	outer := m.resolvingIndex(c, k)
+	if outer != 0 {
+		// Re-entering an entry marks the cycle circular; see reentryCircular.
+		c.markCircular(outer - 1)
+	}
 	m.resolvingKeys = append(m.resolvingKeys, k)
 	c.beginResolution(0, m, len(m.resolvingKeys)-1)
 	if c.checking {
@@ -379,7 +516,7 @@ func (s *memoSet[K]) once(c *Checker, k K, fn func()) {
 // memoActive reports whether reading a cached result must account for its
 // effects: false in a check with nothing pending.
 func (c *Checker) memoActive() bool {
-	return !c.checking || c.memoPendingCount != 0
+	return !c.checking || c.memoPendingCount|c.memoErrorStates != 0
 }
 
 // beginMemo is called on entry to a memoized function whose result for this
@@ -426,6 +563,16 @@ func (c *Checker) startEffects(state *memoState) {
 	f.prevMemo = int32(c.memoTop)
 	f.result = state
 	f.entry = c.currentNode
+	if c.memoTop == 0 && c.currentNodeResolution == 0 {
+		// A query made outside of checking: errors located at the current
+		// node are located wherever checking reuses the result, so results
+		// they depend on are discarded once the query finishes (see
+		// reportAtCurrentNode), and every reuse computes them again. The
+		// node's resolution is entered above the computation's resolution.
+		f.isQuery = true
+		query := c.enterCurrentNode(c.currentNode)
+		c.resolutions[n].query = query
+	}
 	c.memoTop = n + 1
 }
 
@@ -433,6 +580,11 @@ func (c *Checker) startEffects(state *memoState) {
 // returning it if it recorded them.
 func (c *Checker) stopEffects() *resolution {
 	n := len(c.resolutions) - 1
+	if c.resolutions[n].isTypeResolution {
+		n--
+		debug.Assert(c.resolutions[n].isQuery, "resolution left on the stack")
+		c.exitCurrentNode(c.resolutions[n].query)
+	}
 	f := &c.resolutions[n]
 	if !f.memo {
 		return nil
@@ -472,6 +624,9 @@ func (c *Checker) attachState(state *memoState) {
 		return
 	}
 	f := c.memoEffectsAt(n)
+	if c.logResults() {
+		c.logPendingDiscard(state)
+	}
 	if state.pending == nil {
 		state.pending = &memoEffects{}
 		c.memoPendingCount++
@@ -510,6 +665,9 @@ func (c *Checker) observeState(state *memoState) bool {
 	if state == nil {
 		return false
 	}
+	if state.errors != nil {
+		c.replayCurrentNodeErrors(state.errors)
+	}
 	if c.checking {
 		c.replayPending(state)
 		return false
@@ -520,6 +678,77 @@ func (c *Checker) observeState(state *memoState) bool {
 		}
 	}
 	return true
+}
+
+// A currentNodeError is an error reported at the current node; see
+// reportAtCurrentNode. Replaying it reports the same *currentNodeError, so
+// that reports collected more than once can be told apart from distinct ones.
+type currentNodeError struct {
+	report func(c *Checker, node *ast.Node)
+}
+
+type currentNodeErrorsMark struct {
+	errors int
+	cyclic bool
+}
+
+// currentNodeErrors are the errors a computation reported at the current
+// node.
+type currentNodeErrors struct {
+	list   []*currentNodeError
+	cyclic bool // Whether the computation observed a cycle, so computing it elsewhere may not report them
+}
+
+// startCurrentNodeErrors starts collecting the errors a computation reports
+// at the current node, to be passed to endCurrentNodeErrors when it finishes.
+func (c *Checker) startCurrentNodeErrors() currentNodeErrorsMark {
+	c.currentNodeErrorCollectors++
+	mark := currentNodeErrorsMark{len(c.currentNodeErrors), c.currentNodeErrorsCyclic}
+	c.currentNodeErrorsCyclic = false
+	return mark
+}
+
+// endCurrentNodeErrors returns the errors reported at the current node since
+// mark.
+func (c *Checker) endCurrentNodeErrors(mark currentNodeErrorsMark) currentNodeErrors {
+	var r currentNodeErrors
+	for _, report := range c.currentNodeErrors[mark.errors:] {
+		// Reusing a result more than once reports its errors each time.
+		if !slices.Contains(r.list, report) {
+			r.list = append(r.list, report)
+		}
+	}
+	// Which errors a cycle reports depends on where it is entered, so they
+	// are only reported where the result is computed.
+	r.cyclic = r.list != nil && c.currentNodeErrorsCyclic
+	c.currentNodeErrorsCyclic = c.currentNodeErrorsCyclic || mark.cyclic
+	c.currentNodeErrorCollectors--
+	if c.currentNodeErrorCollectors == 0 {
+		clear(c.currentNodeErrors)
+		c.currentNodeErrors = c.currentNodeErrors[:0]
+		c.currentNodeErrorsCyclic = false
+	}
+	return r
+}
+
+func (s *memoState) setErrors(c *Checker, reports []*currentNodeError) {
+	switch {
+	case s.errors == nil && reports != nil:
+		c.memoErrorStates++
+	case s.errors != nil && reports == nil:
+		c.memoErrorStates--
+	}
+	s.errors = reports
+}
+
+// replayCurrentNodeErrors reports at the current node the errors that
+// computing a reused result reported at the node it was computed for.
+//
+//go:noinline
+func (c *Checker) replayCurrentNodeErrors(reports []*currentNodeError) {
+	for _, r := range reports {
+		c.reportNode(r)
+	}
 }
 
 func (c *Checker) replayPending(state *memoState) {
@@ -578,6 +807,9 @@ func (c *Checker) retainEffects(state *memoState, f *memoEffects) {
 			parent.addDep(state.pending)
 		}
 		return
+	}
+	if c.logResults() {
+		c.logPendingDiscard(state)
 	}
 	if state.pending != nil {
 		f.addDep(state.pending)
@@ -730,12 +962,66 @@ func (c *Checker) memoEffectsAt(i int) *memoEffects {
 	return f
 }
 
+// Cycles
+//
+// A cached result must be the result of computing it from scratch, so that
+// it does not depend on which computation happened to request it first. A
+// computation that observes another computation still in progress (a
+// circularity) sees a provisional state, so results cached from the moment
+// the cycle is detected until the outermost computation of the cycle (its
+// head) finishes may differ from computing them from scratch. Those results
+// are discarded when the head finishes, and are recomputed when next
+// requested. The computations that were in progress when the cycle was
+// detected (its participants) are kept: each of them reaches the cycle when
+// computed from scratch too, so each result is the fallback for a circularity
+// whichever participant is computed first.
+
+// Discard log
+//
+// Some computations run provisionally, and may have to be discarded as if
+// they had never run: those in a cycle (see above). While any of them is in
+// progress, what they cache is logged in the discard log, from which each
+// discards to the position where it started. The discard log is
+// cleared once nothing in progress can discard.
+
+type discardEntry struct {
+	memo    *memoHeader // The memo restored, or nil
+	restore func()
+	effects bool // Restores the effects of a result rather than the result
+}
+
+// logResults reports whether caching a result must be logged in the discard
+// log.
+func (c *Checker) logResults() bool {
+	return c.circularityStart != 0
+}
+
+// discardLogSince restores everything logged in the discard log since
+// position start.
+func (c *Checker) discardLogSince(start int) {
+	start = min(start, len(c.discardLog))
+	for i := len(c.discardLog) - 1; i >= start; i-- {
+		c.discardLog[i].restore()
+	}
+	clear(c.discardLog[start:])
+	c.discardLog = c.discardLog[:start]
+}
+
+// trimDiscardLog clears the discard log if nothing in progress can discard.
+func (c *Checker) trimDiscardLog() {
+	if !c.logResults() && len(c.discardLog) != 0 {
+		clear(c.discardLog)
+		c.discardLog = c.discardLog[:0]
+	}
+}
+
 // A flag memo is a cached result held outside a memo, so that it costs no
 // space of its own: bits of a flags word shared with other results, or a
 // field of storage allocated only when needed. It is accounted for like a
 // memo under a key naming its entity and field. Readers finding it cached
 // call observeFlagMemo; it is computed between beginMemo and endMemo for the
-// key, and cached with setFlagMemoBits or setFlagMemo.
+// key, and cached with setFlagMemoBits, or with setFlagMemo after logging how
+// to discard it with logFlagMemoDiscard.
 
 // observeFlagMemo accounts for reading the flag memo identified by key.
 func (c *Checker) observeFlagMemo(key memoKey) {
@@ -750,6 +1036,15 @@ func (c *Checker) setFlagMemo(key memoKey) {
 	if !c.checking {
 		c.memoAttach(key)
 	}
+}
+
+// logFlagMemoDiscard logs how to discard the result of a flag memo in the
+// discard log; the caller checks logResults so that the closure is only
+// allocated when needed.
+//
+//go:noinline
+func (c *Checker) logFlagMemoDiscard(restore func()) {
+	c.discardLog = append(c.discardLog, discardEntry{nil, restore, false})
 }
 
 // objectFlagsCell returns the flags under value of t, a flag memo whose
@@ -779,8 +1074,87 @@ func (c *Checker) objectFlagsCell(t *Type, field memoField, computed ObjectFlags
 // setFlagMemoBits caches the bits of *p under mask as the result of the flag
 // memo identified by key.
 func setFlagMemoBits[T ~uint32](c *Checker, key memoKey, p *T, mask T, bits T) {
+	if c.logResults() {
+		old := *p & mask
+		c.logFlagMemoDiscard(func() { *p = *p&^mask | old })
+	}
 	*p = *p&^mask | bits&mask
 	c.setFlagMemo(key)
+}
+
+// endCircularity discards the results cached since the outermost cycle in
+// progress was detected, except those of its participants.
+func (c *Checker) endCircularity() {
+	mark := min(c.circularityMark, len(c.discardLog))
+	undo := c.discardLog[mark:]
+	participants := c.cycleParticipants
+	c.circularityStart = 0
+	c.cycleParticipants = nil
+	keep := make(map[*memoHeader]struct{}, len(participants))
+	for i := range participants {
+		if p := c.typeResolutionMemo(&participants[i]); p != nil {
+			keep[p] = struct{}{}
+		}
+	}
+	for _, u := range slices.Backward(undo) {
+		if u.effects {
+			// A result recomputed after the cycle also replays the effects
+			// of the computation discarded here.
+			continue
+		}
+		if _, ok := keep[u.memo]; ok && u.memo != nil {
+			continue
+		}
+		u.restore()
+	}
+	clear(undo)
+	c.discardLog = c.discardLog[:mark]
+	c.trimDiscardLog()
+}
+
+// extendCircularity makes the resolution at index head-1 part of the cycle in
+// progress, starting one if there is none.
+func (c *Checker) extendCircularity(head int) {
+	if c.circularityStart == 0 {
+		c.circularityMark = len(c.discardLog)
+		c.circularityStart = head
+	} else if head < c.circularityStart {
+		c.circularityStart = head
+	}
+}
+
+func (f *memoEffects) truncateDeps(n int) {
+	for _, d := range f.deps[n:] {
+		if d.parent == f {
+			d.parent = nil
+		}
+	}
+	clear(f.deps[n:])
+	f.deps = f.deps[:n]
+}
+
+// logPendingDiscard logs the effects of the result in the memo state, which
+// are about to change, so discarding the cycle can restore them.
+//
+//go:noinline
+func (c *Checker) logPendingDiscard(state *memoState) {
+	old := state.pending
+	n := 0
+	if old != nil {
+		n = len(old.deps)
+	}
+	c.discardLog = append(c.discardLog, discardEntry{effects: true, restore: func() {
+		switch {
+		case old == nil && state.pending != nil:
+			c.memoPendingCount--
+		case old != nil && state.pending == nil:
+			c.memoPendingCount++
+		}
+		state.pending = old
+		if old != nil && len(old.deps) > n {
+			old.truncateDeps(n)
+		}
+	}})
 }
 
 // typeResolutionMemo returns the address of the memo caching the result of
@@ -809,6 +1183,8 @@ func (c *Checker) typeResolutionMemo(r *TypeResolution) *memoHeader {
 		return &c.aliasSymbolLinks.Get(r.target.(*ast.Symbol)).aliasTarget.memoHeader
 	case TypeSystemPropertyNameComputedPropertyName:
 		return &c.typeNodeLinks.Get(r.target.(*ast.Node)).resolvedType.memoHeader
+	case TypeSystemPropertyNameVariances:
+		return &c.varianceLinks.Get(r.target.(*ast.Symbol)).variances.memoHeader
 	}
 	return nil
 }

@@ -11,14 +11,14 @@ interface I {
 >I : Symbol(I, Decl(checkOrderLateBoundMembers.ts, 3, 17))
 
     get [foo](): number;
->[foo] : Symbol(I.foo, Decl(checkOrderLateBoundMembers.ts, 5, 24), Decl(checkOrderLateBoundMembers.ts, 4, 13), Decl(checkOrderLateBoundMembers.ts, 6, 16))
+>[foo] : Symbol(I[foo], Decl(checkOrderLateBoundMembers.ts, 4, 13), Decl(checkOrderLateBoundMembers.ts, 6, 16))
 >foo : Symbol(foo, Decl(checkOrderLateBoundMembers.ts, 3, 5))
 
     foo: number;
->foo : Symbol(I.foo, Decl(checkOrderLateBoundMembers.ts, 5, 24), Decl(checkOrderLateBoundMembers.ts, 4, 13), Decl(checkOrderLateBoundMembers.ts, 6, 16))
+>foo : Symbol(I.foo, Decl(checkOrderLateBoundMembers.ts, 5, 24))
 
     set [foo](value: number);
->[foo] : Symbol(I.foo, Decl(checkOrderLateBoundMembers.ts, 5, 24), Decl(checkOrderLateBoundMembers.ts, 4, 13), Decl(checkOrderLateBoundMembers.ts, 6, 16))
+>[foo] : Symbol(I[foo], Decl(checkOrderLateBoundMembers.ts, 4, 13), Decl(checkOrderLateBoundMembers.ts, 6, 16))
 >foo : Symbol(foo, Decl(checkOrderLateBoundMembers.ts, 3, 5))
 >value : Symbol(value, Decl(checkOrderLateBoundMembers.ts, 7, 14))
 }

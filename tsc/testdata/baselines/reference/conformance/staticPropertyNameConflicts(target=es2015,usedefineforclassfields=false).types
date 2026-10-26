@@ -149,7 +149,7 @@ class StaticPrototype2 {
 >StaticPrototype2 : StaticPrototype2
 
     static [FunctionPropertyNames.prototype]: number; // always an error
->[FunctionPropertyNames.prototype] : StaticPrototype2
+>[FunctionPropertyNames.prototype] : number
 >FunctionPropertyNames.prototype : "prototype"
 >FunctionPropertyNames : { readonly name: 'name'; readonly length: 'length'; readonly prototype: 'prototype'; readonly caller: 'caller'; readonly arguments: 'arguments'; }
 >prototype : "prototype"
@@ -427,7 +427,7 @@ var StaticPrototype_Anonymous2 = class {
 >class {    static [FunctionPropertyNames.prototype]: number; // always an error    [FunctionPropertyNames.prototype]: string; // ok} : typeof StaticPrototype_Anonymous2
 
     static [FunctionPropertyNames.prototype]: number; // always an error
->[FunctionPropertyNames.prototype] : StaticPrototype_Anonymous2
+>[FunctionPropertyNames.prototype] : number
 >FunctionPropertyNames.prototype : "prototype"
 >FunctionPropertyNames : { readonly name: 'name'; readonly length: 'length'; readonly prototype: 'prototype'; readonly caller: 'caller'; readonly arguments: 'arguments'; }
 >prototype : "prototype"
@@ -725,7 +725,7 @@ export class ExportedStaticPrototype {
 >ExportedStaticPrototype : ExportedStaticPrototype
 
     static [FunctionPropertyNames.prototype]: number; // always an error
->[FunctionPropertyNames.prototype] : ExportedStaticPrototype
+>[FunctionPropertyNames.prototype] : number
 >FunctionPropertyNames.prototype : "prototype"
 >FunctionPropertyNames : { readonly name: 'name'; readonly length: 'length'; readonly prototype: 'prototype'; readonly caller: 'caller'; readonly arguments: 'arguments'; }
 >prototype : "prototype"

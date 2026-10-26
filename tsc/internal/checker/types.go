@@ -224,6 +224,18 @@ func (links *ValueSymbolLinks) setWriteType(c *Checker, typ *Type) {
 	links.extra.writeType.set(c, typ)
 }
 
+// setNewWriteType sets the write type of a symbol being created; see
+// memo.setIdentity.
+func (links *ValueSymbolLinks) setNewWriteType(c *Checker, typ *Type) {
+	if links.extra == nil {
+		if typ == nil {
+			return
+		}
+		links.extra = c.valueSymbolExtraArena.New()
+	}
+	links.extra.writeType.setIdentity(c, typ)
+}
+
 func (links *ValueSymbolLinks) setNameType(c *Checker, typ *Type) {
 	if links.extra == nil {
 		if typ == nil {
@@ -683,6 +695,7 @@ const (
 	ObjectFlagsCouldContainTypeVariablesComputed          ObjectFlags = 1 << 19 // CouldContainTypeVariables flag has been computed
 	ObjectFlagsCouldContainTypeVariables                  ObjectFlags = 1 << 20 // Type could contain a type variable
 	ObjectFlagsMembersResolved                            ObjectFlags = 1 << 21 // Members have been resolved
+	ObjectFlagsMembersResolving                           ObjectFlags = 1 << 30 // Members are being resolved
 
 	ObjectFlagsClassOrInterface   = ObjectFlagsClass | ObjectFlagsInterface
 	ObjectFlagsRequiresWidening   = ObjectFlagsContainsWideningType | ObjectFlagsContainsObjectOrArrayLiteral
@@ -1180,6 +1193,9 @@ func (t *StructuredType) getPropertyAt(c *Checker, index int) *ast.Symbol {
 			member = c.getPropertyOfType(lazy.baseTypes[memberInfo.baseIndex], memberInfo.symbol.Name())
 		}
 		t.properties[index] = member
+		if c.logResults() {
+			c.logPropertySlotDiscard(t, lazy, index)
+		}
 	}
 	return member
 }
@@ -1664,6 +1680,10 @@ func (s *Signature) getResolvedTypePredicate(c *Checker) *TypePredicate {
 // setResolvedTypePredicate caches the type predicate of the signature, a flag
 // memo; see initResolvedTypePredicate.
 func (s *Signature) setResolvedTypePredicate(c *Checker, predicate *TypePredicate) {
+	if c.logResults() {
+		old := s.getResolvedTypePredicate(c)
+		c.logFlagMemoDiscard(func() { s.initResolvedTypePredicate(c, old) })
+	}
 	s.initResolvedTypePredicate(c, predicate)
 	c.setFlagMemo(memoKeyOf(s, memoTypePredicate))
 }

@@ -1,0 +1,59 @@
+//// [tests/cases/compiler/contextualReturnTypeInSpreadArgument.ts] ////
+
+=== contextualReturnTypeInSpreadArgument.ts ===
+enum Kind { A, B }
+>Kind : Symbol(Kind, Decl(contextualReturnTypeInSpreadArgument.ts, 0, 0))
+>A : Symbol(Kind.A, Decl(contextualReturnTypeInSpreadArgument.ts, 0, 11))
+>B : Symbol(Kind.B, Decl(contextualReturnTypeInSpreadArgument.ts, 0, 14))
+
+interface ItemA { kind: Kind.A; name: string }
+>ItemA : Symbol(ItemA, Decl(contextualReturnTypeInSpreadArgument.ts, 0, 18))
+>kind : Symbol(ItemA.kind, Decl(contextualReturnTypeInSpreadArgument.ts, 2, 17))
+>Kind : Symbol(Kind, Decl(contextualReturnTypeInSpreadArgument.ts, 0, 0))
+>A : Symbol(Kind.A, Decl(contextualReturnTypeInSpreadArgument.ts, 0, 11))
+>name : Symbol(ItemA.name, Decl(contextualReturnTypeInSpreadArgument.ts, 2, 31))
+
+interface ItemB { kind: Kind.B; size: number }
+>ItemB : Symbol(ItemB, Decl(contextualReturnTypeInSpreadArgument.ts, 2, 46))
+>kind : Symbol(ItemB.kind, Decl(contextualReturnTypeInSpreadArgument.ts, 3, 17))
+>Kind : Symbol(Kind, Decl(contextualReturnTypeInSpreadArgument.ts, 0, 0))
+>B : Symbol(Kind.B, Decl(contextualReturnTypeInSpreadArgument.ts, 0, 14))
+>size : Symbol(ItemB.size, Decl(contextualReturnTypeInSpreadArgument.ts, 3, 31))
+
+type Item = ItemA | ItemB;
+>Item : Symbol(Item, Decl(contextualReturnTypeInSpreadArgument.ts, 3, 46))
+>ItemA : Symbol(ItemA, Decl(contextualReturnTypeInSpreadArgument.ts, 0, 18))
+>ItemB : Symbol(ItemB, Decl(contextualReturnTypeInSpreadArgument.ts, 2, 46))
+
+declare function create(options: { items?: () => readonly Item[]; label: string }): void;
+>create : Symbol(create, Decl(contextualReturnTypeInSpreadArgument.ts, 4, 26))
+>options : Symbol(options, Decl(contextualReturnTypeInSpreadArgument.ts, 6, 24))
+>items : Symbol(items, Decl(contextualReturnTypeInSpreadArgument.ts, 6, 34))
+>Item : Symbol(Item, Decl(contextualReturnTypeInSpreadArgument.ts, 3, 46))
+>label : Symbol(label, Decl(contextualReturnTypeInSpreadArgument.ts, 6, 65))
+
+function test(flag: boolean) {
+>test : Symbol(test, Decl(contextualReturnTypeInSpreadArgument.ts, 6, 89))
+>flag : Symbol(flag, Decl(contextualReturnTypeInSpreadArgument.ts, 8, 14))
+
+    create({
+>create : Symbol(create, Decl(contextualReturnTypeInSpreadArgument.ts, 4, 26))
+
+        label: "x",
+>label : Symbol(label, Decl(contextualReturnTypeInSpreadArgument.ts, 9, 12))
+
+        ...(flag ? {} : {
+>flag : Symbol(flag, Decl(contextualReturnTypeInSpreadArgument.ts, 8, 14))
+
+            items: () => [{ kind: Kind.A, name: "a" }],
+>items : Symbol(items, Decl(contextualReturnTypeInSpreadArgument.ts, 11, 25))
+>kind : Symbol(kind, Decl(contextualReturnTypeInSpreadArgument.ts, 12, 27))
+>Kind.A : Symbol(Kind.A, Decl(contextualReturnTypeInSpreadArgument.ts, 0, 11))
+>Kind : Symbol(Kind, Decl(contextualReturnTypeInSpreadArgument.ts, 0, 0))
+>A : Symbol(Kind.A, Decl(contextualReturnTypeInSpreadArgument.ts, 0, 11))
+>name : Symbol(name, Decl(contextualReturnTypeInSpreadArgument.ts, 12, 41))
+
+        }),
+    });
+}
+

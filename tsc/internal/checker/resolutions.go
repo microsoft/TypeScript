@@ -18,10 +18,12 @@ type resolution struct {
 	// A query records the effects of a memoized computation, for replay by
 	// reuse of its result; see memo.go.
 	memo     bool
+	isQuery  bool
 	prevMemo int32        // Checker.memoTop on entry
 	result   *memoState   // Memo state of the result computed
 	effects  *memoEffects // Allocated on first use
 	entry    *ast.Node    // Current node when the computation started
+	query    savedCurrentNode
 
 	// A type resolution is a computation that re-entering detects as a cycle;
 	// see beginTypeResolution. Its other fields are those of the resolution
@@ -69,6 +71,9 @@ func (c *Checker) endResolution() {
 	}
 	c.resolutions[n] = resolution{}
 	c.resolutions = c.resolutions[:n]
+	if c.circularityStart > n {
+		c.endCircularity()
+	}
 }
 
 // resolvingIndex returns 1 + the index in resolutions of the outermost
@@ -81,9 +86,13 @@ func (c *Checker) resolvingIndex(key memoKey) int {
 }
 
 // beginResolving records that the resolution about to be pushed computes key,
-// unless a computation of key is already in progress.
+// unless a computation of key is already in progress, in which case the new
+// one re-enters it as the policy of its kind says; see memoReentry.
 func (c *Checker) beginResolving(key memoKey) {
-	if _, ok := c.resolving[key]; ok {
+	if i, ok := c.resolving[key]; ok {
+		if memoReentry[key.field()] == reentryCircular {
+			c.markCircular(int(i))
+		}
 		return
 	}
 	if c.resolving == nil {

@@ -232,6 +232,7 @@ func main() {
 			"CouldContainTypeVariablesComputed": toInt32(checker.ObjectFlagsCouldContainTypeVariablesComputed),
 			"CouldContainTypeVariables":         toInt32(checker.ObjectFlagsCouldContainTypeVariables),
 			"MembersResolved":                   toInt32(checker.ObjectFlagsMembersResolved),
+			"MembersResolving":                  toInt32(checker.ObjectFlagsMembersResolving),
 			"ClassOrInterface":                  toInt32(checker.ObjectFlagsClassOrInterface),
 			"RequiresWidening":                  toInt32(checker.ObjectFlagsRequiresWidening),
 			"PropagatingFlags":                  toInt32(checker.ObjectFlagsPropagatingFlags),

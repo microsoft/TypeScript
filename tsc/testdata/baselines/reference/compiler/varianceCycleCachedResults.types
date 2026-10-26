@@ -29,7 +29,7 @@ class Box<T> {
 >value : T
 
     m() {
->m : () => Box<string>
+>m : () => Box<string> | Box<number>
 
         if (cond) return a1;
 >cond : boolean
@@ -40,10 +40,10 @@ class Box<T> {
     }
 }
 const r = new Box<boolean>().m();
->r : Box<string>
->new Box<boolean>().m() : Box<string>
->new Box<boolean>().m : () => Box<string>
+>r : Box<string> | Box<number>
+>new Box<boolean>().m() : Box<string> | Box<number>
+>new Box<boolean>().m : () => Box<string> | Box<number>
 >new Box<boolean>() : Box<boolean>
 >Box : typeof Box
->m : () => Box<string>
+>m : () => Box<string> | Box<number>
 
