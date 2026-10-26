@@ -1143,6 +1143,82 @@ func (t *StructuredType) ConstructSignatures() []*Signature {
 	return slices.Clip(t.extra.signatures[t.extra.callSignatureCount:])
 }
 
+func (t *StructuredType) getMember(name string) *ast.Symbol {
+	if t.members != nil {
+		return t.members.Get(name)
+	}
+	lazy := t.getLazyState()
+	if lazy == nil {
+		return nil
+	}
+	memberInfo := lazy.layout.memberInfoMap[name]
+	if memberInfo == nil {
+		return nil
+	}
+	return t.getPropertyAt(int(memberInfo.slotIndex))
+}
+
+func (t *StructuredType) getMembers() ast.SymbolTable {
+	if t.members == nil {
+		if properties := t.getProperties(); len(properties) != 0 {
+			t.members = ast.NewSymbolTable(len(properties))
+			for _, member := range properties {
+				t.members.Set(member.Name(), member)
+			}
+		}
+	}
+	return t.members
+}
+
+func (t *StructuredType) getPropertyAt(index int) *ast.Symbol {
+	lazy := t.getLazyState()
+	if lazy == nil {
+		return t.properties[index]
+	}
+	if t.properties == nil {
+		t.properties = make([]*ast.Symbol, len(lazy.layout.memberInfos))
+	}
+	member := t.properties[index]
+	if member == nil {
+		memberInfo := lazy.layout.memberInfos[index]
+		if memberInfo.baseIndex < 0 {
+			member = t.checker.instantiateSymbol(memberInfo.symbol, lazy.mapper)
+		} else {
+			member = t.checker.getPropertyOfType(lazy.baseTypes[memberInfo.baseIndex], memberInfo.symbol.Name())
+		}
+		t.properties[index] = member
+	}
+	return member
+}
+
+func (t *StructuredType) getProperties() []*ast.Symbol {
+	if lazy := t.getLazyState(); lazy != nil && !lazy.propertiesResolved {
+		for i := range lazy.layout.memberInfos {
+			t.getPropertyAt(i)
+		}
+		lazy.propertiesResolved = true
+	}
+	return t.AsStructuredType().properties
+}
+
+func (t *StructuredType) hasProperties() bool {
+	if len(t.properties) != 0 {
+		return true
+	}
+	lazy := t.getLazyState()
+	if lazy == nil {
+		return false
+	}
+	return len(lazy.layout.memberInfos) != 0
+}
+
+func (t *StructuredType) getLazyState() *LazyState {
+	if t.objectFlags&(ObjectFlagsClassOrInterface|ObjectFlagsReference) != 0 {
+		return t.AsType().AsTypeReference().lazy
+	}
+	return nil
+}
+
 func (t *StructuredType) getSignatures() []*Signature {
 	if t.extra == nil {
 		return nil
@@ -1165,7 +1241,7 @@ func (t *StructuredType) ensureExtra() *structuredTypeExtra {
 }
 
 func (t *StructuredType) Properties() []*ast.Symbol {
-	return t.properties
+	return t.getProperties()
 }
 
 // Except for tuple type references and reverse mapped types, all object types have an associated symbol.
@@ -1216,6 +1292,27 @@ type TypeReference struct {
 	ObjectType
 	node                  *ast.Node // TypeReferenceNode | ArrayTypeNode | TupleTypeNode when deferred, else nil
 	resolvedTypeArguments []*Type
+	lazy                  *LazyState // Resolved member layout and instantiation state
+}
+
+type LazyState struct {
+	layout             *MemberLayout
+	mapper             *TypeMapper
+	baseTypes          []*Type
+	propertiesResolved bool
+}
+
+type MemberLayout struct {
+	id               uint32                 // Unique identifier for the member layout
+	memberInfoMap    map[string]*MemberInfo // MemberInfos keyed by property name
+	memberInfos      []MemberInfo           // MemberInfos in sorted order
+	layoutProperties []*ast.Symbol          // Lazily created list of layout properties (symbols corresponding to memberInfos)
+}
+
+type MemberInfo struct {
+	symbol    *ast.Symbol // Uninstantiated symbol
+	baseIndex int32       // Index of base type with symbol, or -1 if locally declared
+	slotIndex int32       // Index of resolved symbol in members array
 }
 
 func (t *TypeReference) AsTypeReference() *TypeReference { return t }
