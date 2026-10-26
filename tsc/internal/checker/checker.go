@@ -32289,10 +32289,17 @@ func (c *Checker) isConstraintPosition(t *Type, node *ast.Node) bool {
 // Skips the walk for unions that cannot contain type variables. Such a union can still hold
 // instantiable types when it comes from a non-generic top-level alias:
 //
-//	type Size = `${number}px` | Uppercase<string> | "auto"
+// type Size = `${number}px` | Uppercase<string> | "auto"
 //
 // Both `${number}px` and Uppercase<string> are their own base constraints, never a union, so the
 // walk would return false anyway.
+//
+// In theory couldContainTypeVariables can do more work than the walk, as it also looks into the type
+// arguments of object types. But its result is cached on the type and it usually gets computed elsewhere
+// anyway, so this one-time eager cost pays off on later references to the same union.
+//
+// Only unions are checked, because for any other type the walk is a single call that is already as
+// cheap as the check that would skip it.
 func (c *Checker) someGenericTypeWithUnionConstraint(t *Type) bool {
 	if t.flags&TypeFlagsUnion != 0 && !c.couldContainTypeVariables(t) {
 		return false
