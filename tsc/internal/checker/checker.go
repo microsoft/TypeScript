@@ -6580,38 +6580,35 @@ func (c *Checker) getIterationTypesOfIterable(t *Type, use IterationUse, errorNo
 	if IsTypeAny(t) {
 		return IterationTypes{c.anyType, c.anyType, c.anyType}
 	}
+	if errorNode != nil {
+		// Errors belong to errorNode, so compute them here rather than
+		// cache them with the types every other use of t shares.
+		return c.getIterationTypesOfIterableWorker(t, use, errorNode)
+	}
+	key := IterationTypesKey{typeId: t.id, use: use & IterationUseCacheFlags}
 	if c.memoActive() {
-		c.iterationTypesCache.begin(c, IterationTypesKey{typeId: t.id, use: use & IterationUseCacheFlags})
-		result := c.getIterationTypesOfIterableCached(t, use, errorNode)
+		c.iterationTypesCache.begin(c, key)
+		result := c.getIterationTypesOfIterableCached(t, use, key)
 		c.endMemo()
 		return result
 	}
-	return c.getIterationTypesOfIterableCached(t, use, errorNode)
+	return c.getIterationTypesOfIterableCached(t, use, key)
 }
 
-func (c *Checker) getIterationTypesOfIterableCached(t *Type, use IterationUse, errorNode *ast.Node) IterationTypes {
-	key := IterationTypesKey{typeId: t.id, use: use & IterationUseCacheFlags}
-	// If we are reporting errors and encounter a cached `noIterationTypes`, we should ignore the cached value and continue as if nothing was cached.
-	// In addition, we should not cache any new results for this call.
-	noCache := false
+func (c *Checker) getIterationTypesOfIterableCached(t *Type, use IterationUse, key IterationTypesKey) IterationTypes {
 	if cached, ok := c.iterationTypesCache.get(c, key); ok {
-		if errorNode == nil || cached.hasTypes() {
-			return cached
-		}
-		noCache = true
+		return cached
 	}
-	result := c.getIterationTypesOfIterableWorker(t, use, errorNode, noCache)
-	if !noCache {
-		c.iterationTypesCache.set(c, key, result)
-	}
+	result := c.getIterationTypesOfIterableWorker(t, use, nil /*errorNode*/)
+	c.iterationTypesCache.set(c, key, result)
 	return result
 }
 
-func (c *Checker) getIterationTypesOfIterableWorker(t *Type, use IterationUse, errorNode *ast.Node, noCache bool) IterationTypes {
+func (c *Checker) getIterationTypesOfIterableWorker(t *Type, use IterationUse, errorNode *ast.Node) IterationTypes {
 	if t.flags&TypeFlagsUnion != 0 {
 		allIterationTypes := make([]IterationTypes, 0, len(t.Types()))
 		for _, constituent := range t.Types() {
-			iterationTypes := c.getIterationTypesOfIterableWorker(constituent, use, nil, noCache)
+			iterationTypes := c.getIterationTypesOfIterableWorker(constituent, use, nil)
 			if !iterationTypes.hasTypes() {
 				if errorNode != nil {
 					c.addDeferredDiagnostic(func(c *Checker) {
@@ -31255,16 +31252,26 @@ func (c *Checker) getPromisedTypeOfPromiseEx(t *Type, errorNode *ast.Node, thisT
 	if IsTypeAny(t) {
 		return nil
 	}
+	if errorNode != nil {
+		// Errors belong to errorNode; see getIterationTypesOfIterable.
+		return c.getPromisedTypeOfPromiseWorker(t, errorNode, thisTypeForErrorOut)
+	}
 	key := CachedTypeKey{kind: CachedTypeKindPromisedTypeOfPromise, typeId: t.id}
 	if cached, _ := c.cachedTypes.get(c, key); cached != nil {
 		return cached
 	}
 	c.cachedTypes.begin(c, key)
 	defer c.endMemo()
-	if c.isReferenceToType(t, c.getGlobalPromiseType()) {
-		result := c.getTypeArguments(t)[0]
+	result := c.getPromisedTypeOfPromiseWorker(t, nil /*errorNode*/, thisTypeForErrorOut)
+	if result != nil {
 		c.cachedTypes.set(c, key, result)
-		return result
+	}
+	return result
+}
+
+func (c *Checker) getPromisedTypeOfPromiseWorker(t *Type, errorNode *ast.Node, thisTypeForErrorOut **Type) *Type {
+	if c.isReferenceToType(t, c.getGlobalPromiseType()) {
+		return c.getTypeArguments(t)[0]
 	}
 	// primitives with a `{ then() }` won't be unwrapped/adopted.
 	if c.allTypesAssignableToKind(c.getBaseConstraintOrType(t), TypeFlagsPrimitive|TypeFlagsNever) {
@@ -31316,9 +31323,7 @@ func (c *Checker) getPromisedTypeOfPromiseEx(t *Type, errorNode *ast.Node, thisT
 		}
 		return nil
 	}
-	result := c.getUnionTypeEx(core.Map(onfulfilledParameterSignatures, c.getTypeOfFirstParameterOfSignature), UnionReductionSubtype, nil, nil)
-	c.cachedTypes.set(c, key, result)
-	return result
+	return c.getUnionTypeEx(core.Map(onfulfilledParameterSignatures, c.getTypeOfFirstParameterOfSignature), UnionReductionSubtype, nil, nil)
 }
 
 func (c *Checker) getTypeOfFirstParameterOfSignature(signature *Signature) *Type {
@@ -33623,6 +33628,10 @@ func (c *Checker) getAwaitedTypeNoAliasEx(t *Type, errorNode *ast.Node, diagnost
 	if c.isAwaitedTypeInstantiation(t) {
 		return t
 	}
+	if errorNode != nil {
+		// Errors belong to errorNode; see getIterationTypesOfIterable.
+		return c.getAwaitedTypeNoAliasWorker(t, errorNode, diagnosticMessage, args...)
+	}
 	// If we've already cached an awaited type, return a possible `Awaited<T>` for it.
 	key := CachedTypeKey{kind: CachedTypeKindAwaitedType, typeId: t.id}
 	if awaitedType, _ := c.cachedTypes.get(c, key); awaitedType != nil {
@@ -33630,6 +33639,14 @@ func (c *Checker) getAwaitedTypeNoAliasEx(t *Type, errorNode *ast.Node, diagnost
 	}
 	c.cachedTypes.begin(c, key)
 	defer c.endMemo()
+	awaitedType := c.getAwaitedTypeNoAliasWorker(t, nil /*errorNode*/, nil /*diagnosticMessage*/)
+	if awaitedType != nil {
+		c.cachedTypes.set(c, key, awaitedType)
+	}
+	return awaitedType
+}
+
+func (c *Checker) getAwaitedTypeNoAliasWorker(t *Type, errorNode *ast.Node, diagnosticMessage *diagnostics.Message, args ...any) *Type {
 	// For a union, get a union of the awaited types of each constituent.
 	if t.flags&TypeFlagsUnion != 0 {
 		if c.isAwaitingType(t) {
@@ -33640,13 +33657,11 @@ func (c *Checker) getAwaitedTypeNoAliasEx(t *Type, errorNode *ast.Node, diagnost
 		}
 		c.pushAwaitingType(t)
 		mapped := c.mapType(t, func(t *Type) *Type { return c.getAwaitedTypeNoAliasEx(t, errorNode, diagnosticMessage, args...) })
-		c.cachedTypes.set(c, key, mapped)
 		c.popTypeResolution()
 		return mapped
 	}
 	// If `type` is generic and should be wrapped in `Awaited<T>`, return it.
 	if c.isAwaitedTypeNeeded(t) {
-		c.cachedTypes.set(c, key, t)
 		return t
 	}
 	var thisTypeForError *Type
@@ -33695,9 +33710,6 @@ func (c *Checker) getAwaitedTypeNoAliasEx(t *Type, errorNode *ast.Node, diagnost
 		// See the comments above for more information.
 		c.pushAwaitingType(t)
 		awaitedType := c.getAwaitedTypeNoAliasEx(promisedType, errorNode, diagnosticMessage, args...)
-		if awaitedType != nil {
-			c.cachedTypes.set(c, key, awaitedType)
-		}
 		c.popTypeResolution()
 		return awaitedType
 	}
@@ -33726,7 +33738,6 @@ func (c *Checker) getAwaitedTypeNoAliasEx(t *Type, errorNode *ast.Node, diagnost
 		}
 		return nil
 	}
-	c.cachedTypes.set(c, key, t)
 	return t
 }
 
