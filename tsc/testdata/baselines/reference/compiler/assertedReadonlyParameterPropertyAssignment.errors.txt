@@ -1,0 +1,13 @@
+assertedReadonlyParameterPropertyAssignment.ts(4,15): error TS2540: Cannot assign to 'value' because it is a read-only property.
+
+
+==== assertedReadonlyParameterPropertyAssignment.ts (1 errors) ====
+    class ReadonlyState {
+        constructor(readonly value: object) {}
+        clear() {
+            (this.value as unknown) = null;
+                  ~~~~~
+!!! error TS2540: Cannot assign to 'value' because it is a read-only property.
+        }
+    }
+    

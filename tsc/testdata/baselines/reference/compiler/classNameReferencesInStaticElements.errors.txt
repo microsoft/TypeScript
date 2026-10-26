@@ -1,0 +1,21 @@
+classNameReferencesInStaticElements.ts(12,2): error TS2629: Cannot assign to 'Foo' because it is a class.
+
+
+==== classNameReferencesInStaticElements.ts (1 errors) ====
+    // https://github.com/microsoft/TypeScript/issues/54607
+    class Foo {
+        static { console.log(this, Foo) }
+        static x = () => { console.log(this, Foo) }
+        static y = function(this: unknown) { console.log(this, Foo) }
+    
+        #x() { console.log(Foo); }
+        x() { this.#x(); }
+    }
+    
+    const oldFoo = Foo;
+    (Foo as any) = null;
+     ~~~
+!!! error TS2629: Cannot assign to 'Foo' because it is a class.
+    oldFoo.x();
+    oldFoo.y();
+    new oldFoo().x();
