@@ -1,6 +1,7 @@
 // @target: es2015
 // @lib: es5, es2015.collection
 // @noEmit: true
+// @noTypesAndSymbols: true
 
 declare const array: ReadonlyArray<number>;
 array.find;
