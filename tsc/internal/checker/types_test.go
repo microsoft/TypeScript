@@ -369,7 +369,7 @@ func TestIntersectionReductionReentrancy(t *testing.T) {
 	assert.Assert(t, c.freePropertyCounts.next != nil)
 	workspace := c.freePropertyCounts
 	conflicting := c.newSymbolEx(ast.SymbolFlagsProperty, "value", ast.CheckFlagsContainsPrivate)
-	outer.AsUnionOrIntersectionType().propertyCacheWithoutFunctionPropertyAugment.Set("value", conflicting)
+	outer.AsUnionOrIntersectionType().propertyCacheWithoutFunctionPropertyAugment.intern("value", conflicting)
 	assert.Assert(t, c.somePropertyReducesToNever(outer))
 	assert.Equal(t, c.freePropertyCounts, workspace)
 	for counts := c.freePropertyCounts; counts != nil; counts = counts.next {
@@ -542,9 +542,9 @@ func TestUnionIntersectionPropertyCacheSharing(t *testing.T) {
 					assert.Equal(t, c.getUnionOrIntersectionProperty(typ, name, !augmentedFirst), symbol)
 					assert.Equal(t, c.getUnionOrIntersectionProperty(typ, name, augmentedFirst), symbol)
 				}
-				assert.Equal(t, data.propertyCacheWithoutFunctionPropertyAugment.Len(), members.Len())
+				assert.Equal(t, len(data.propertyCacheWithoutFunctionPropertyAugment.memoEntries), members.Len())
 				if !augmentedFirst {
-					assert.Assert(t, data.propertyCache == nil)
+					assert.Assert(t, data.propertyCache.isEmpty())
 				}
 				runtime.GC()
 				for name, symbol := range members.All() {
@@ -572,25 +572,23 @@ func TestUnionIntersectionPropertyCacheModes(t *testing.T) {
 			data := typ.AsUnionOrIntersectionType()
 			assert.Assert(t, c.getUnionOrIntersectionProperty(typ, "missing", true) == nil)
 			assert.Assert(t, c.getUnionOrIntersectionProperty(typ, "missing", false) == nil)
-			assert.Assert(t, data.propertyCache == nil)
-			assert.Assert(t, data.propertyCacheWithoutFunctionPropertyAugment == nil)
-			data.propertyCacheWithoutFunctionPropertyAugment = ast.NewSymbolTable()
-			data.propertyCache = ast.NewSymbolTable()
+			assert.Assert(t, data.propertyCache.isEmpty())
+			assert.Assert(t, data.propertyCacheWithoutFunctionPropertyAugment.isEmpty())
 			for _, flags := range []ast.CheckFlags{ast.CheckFlagsReadPartial, ast.CheckFlagsWritePartial} {
 				name := strconv.Itoa(int(flags))
 				partial := c.newSymbolEx(ast.SymbolFlagsProperty, name, flags)
 				complete := c.newSymbol(ast.SymbolFlagsProperty, name)
-				data.propertyCacheWithoutFunctionPropertyAugment.Set(name, partial)
+				data.propertyCacheWithoutFunctionPropertyAugment.intern(name, partial)
 				assert.Equal(t, c.getUnionOrIntersectionProperty(typ, name, true), partial)
 				assert.Assert(t, c.getUnionOrIntersectionProperty(typ, name, false) == nil)
 				assert.Equal(t, c.getPropertyOfUnionOrIntersectionType(typ, name, true) == nil, flags&ast.CheckFlagsReadPartial != 0)
-				data.propertyCache.Set(name, complete)
+				data.propertyCache.intern(name, complete)
 				assert.Equal(t, c.getUnionOrIntersectionProperty(typ, name, false), complete)
 			}
 			nonAugmented := c.newSymbol(ast.SymbolFlagsProperty, "different")
 			augmented := c.newSymbol(ast.SymbolFlagsProperty, "different")
-			data.propertyCacheWithoutFunctionPropertyAugment.Set("different", nonAugmented)
-			data.propertyCache.Set("different", augmented)
+			data.propertyCacheWithoutFunctionPropertyAugment.intern("different", nonAugmented)
+			data.propertyCache.intern("different", augmented)
 			assert.Equal(t, c.getUnionOrIntersectionProperty(typ, "different", true), nonAugmented)
 			assert.Equal(t, c.getUnionOrIntersectionProperty(typ, "different", false), augmented)
 		})
@@ -653,28 +651,26 @@ func TestCompactTypeNodeLinksLayout(t *testing.T) {
 	c, types := newCompositeTestChecker()
 	var links TypeNodeLinks
 	links.resolvedType.intern(types[0])
-	assert.Assert(t, links.getOuterTypeParameters() == nil)
+	assert.Assert(t, links.getOuterTypeParameters(c) == nil)
 	links.setOuterTypeParameters(c, nil)
-	assert.Assert(t, links.outerTypeParameters == nil)
+	assert.Assert(t, links.outerTypeParameters.memoValue == nil)
 	links.setOuterTypeParameters(c, []*Type{})
-	assert.Assert(t, links.getOuterTypeParameters() != nil)
-	assert.Equal(t, len(links.getOuterTypeParameters()), 0)
-	entry := links.outerTypeParameters
+	assert.Assert(t, links.getOuterTypeParameters(c) != nil)
+	assert.Equal(t, len(links.getOuterTypeParameters(c)), 0)
 	list := slices.Clone(types)
 	links.setOuterTypeParameters(c, list)
-	assert.Equal(t, links.outerTypeParameters, entry)
-	assert.Equal(t, links.getOuterTypeParameters()[0], types[0])
+	assert.Equal(t, links.getOuterTypeParameters(c)[0], types[0])
 	list[0] = types[1]
-	assert.Equal(t, links.getOuterTypeParameters()[0], types[1])
+	assert.Equal(t, links.getOuterTypeParameters(c)[0], types[1])
 	for range 1024 {
 		var other TypeNodeLinks
 		other.setOuterTypeParameters(c, types)
 	}
 	runtime.GC()
-	assert.Equal(t, links.getOuterTypeParameters()[0], types[1])
+	assert.Equal(t, links.getOuterTypeParameters(c)[0], types[1])
 	assert.Equal(t, links.resolvedType.get(c), types[0])
 	links.setOuterTypeParameters(c, nil)
-	assert.Assert(t, links.getOuterTypeParameters() == nil)
+	assert.Assert(t, links.getOuterTypeParameters(c) == nil)
 	assert.Equal(t, links.resolvedType.get(c), types[0])
 	runtime.KeepAlive(c)
 }
@@ -696,7 +692,7 @@ func TestSignatureExtra(t *testing.T) {
 	assert.Assert(t, sig.getComposite() == nil)
 	assert.Assert(t, sig.getIsolatedSignatureType() == nil)
 	assert.Assert(t, sig.getResolvedTypePredicate(c) == nil)
-	assert.Equal(t, sig.resolvedMinArgumentCount, int32(-1))
+	assert.Equal(t, sig.resolvedMinArgumentCount.peek(), int32(-1))
 	sig.setTypeParameters(c, nil)
 	sig.setThisParameter(c, nil)
 	sig.setComposite(c, nil)

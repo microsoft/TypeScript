@@ -153,7 +153,7 @@ func (c *Checker) ForEachExportAndPropertyOfModule(moduleSymbol *ast.Symbol, cb 
 	if reducedType.flags&TypeFlagsStructuredType == 0 {
 		return
 	}
-	for name, symbol := range c.resolveStructuredTypeMembers(reducedType).getMembers().All() {
+	for name, symbol := range c.resolveStructuredTypeMembers(reducedType).getMembers(c).All() {
 		if c.isNamedMember(symbol, name) {
 			cb(symbol, name)
 		}

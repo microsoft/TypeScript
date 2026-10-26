@@ -171,18 +171,37 @@ func (c *Checker) getAlternativeContainingModules(symbol *ast.Symbol, enclosingD
 		return nil
 	}
 	containingFile := ast.GetSourceFileOfNode(enclosingDeclaration)
-	id := ast.GetNodeId(containingFile.AsNode())
-	links := c.symbolContainerLinks.Get(symbol)
-	if links.extendedContainersByFile == nil {
-		links.extendedContainersByFile = make(map[ast.NodeId][]*ast.Symbol)
+	// Try to make an import using an import already in the enclosing file, if possible
+	if results := c.getImportedContainingModules(symbol, containingFile, enclosingDeclaration); len(results) > 0 {
+		return results
 	}
-	existing, ok := links.extendedContainersByFile[id]
-	if ok && existing != nil {
-		return existing
+	// No results from files already being imported by this file - expand search (not location-specific, so cached)
+	if results, ok := c.extendedContainers.get(c, symbol); ok {
+		return results
 	}
-	var results []*ast.Symbol
-	if len(containingFile.Imports()) > 0 {
-		// Try to make an import using an import already in the enclosing file, if possible
+	return c.extendedContainers.compute(c, symbol, func() []*ast.Symbol {
+		return c.getExternalModuleContainers(symbol)
+	})
+}
+
+type symbolFileKey struct {
+	symbol *ast.Symbol
+	file   *ast.SourceFile
+}
+
+// getImportedContainingModules returns the modules imported by a file that
+// export a symbol. The result only depends on the file, as the module names
+// are resolved relative to it.
+func (c *Checker) getImportedContainingModules(symbol *ast.Symbol, containingFile *ast.SourceFile, enclosingDeclaration *ast.Node) []*ast.Symbol {
+	if len(containingFile.Imports()) == 0 {
+		return nil
+	}
+	key := symbolFileKey{symbol, containingFile}
+	if results, ok := c.importedContainingModules.get(c, key); ok {
+		return results
+	}
+	return c.importedContainingModules.compute(c, key, func() []*ast.Symbol {
+		var results []*ast.Symbol
 		for _, importRef := range containingFile.Imports() {
 			if ast.NodeIsSynthesized(importRef) {
 				// Synthetic names can't be resolved by `resolveExternalModuleName` - they'll cause a debug assert if they error
@@ -198,23 +217,11 @@ func (c *Checker) getAlternativeContainingModules(symbol *ast.Symbol, enclosingD
 			}
 			results = append(results, resolvedModule)
 		}
-		if len(results) > 0 {
-			links.extendedContainersByFile[id] = results
-			return results
-		}
-	}
-
-	if links.extendedContainers != nil {
-		return *links.extendedContainers
-	}
-	// No results from files already being imported by this file - expand search (not location-specific, so cached)
-	results = c.getExternalModuleContainers(symbol)
-	links.extendedContainers = &results
-	return results
+		return results
+	})
 }
 
 type externalModuleContainerIndex struct {
-	complete           bool
 	containersByTarget map[*ast.Symbol][]*ast.Symbol
 	moduleOrder        map[*ast.Symbol]int
 }
@@ -227,13 +234,13 @@ func (index *externalModuleContainerIndex) add(target *ast.Symbol, container *as
 }
 
 func (c *Checker) getExternalModuleContainers(symbol *ast.Symbol) []*ast.Symbol {
-	if c.externalModuleContainers == nil {
-		c.buildExternalModuleContainerIndex()
-	}
-	index := c.externalModuleContainers
-	if !index.complete {
+	if c.buildingExternalModuleContainers {
 		// Re-entered from an alias resolved while building the index; answer this query without it.
 		return c.scanExternalModuleContainers(symbol)
+	}
+	index := c.externalModuleContainers.get(c)
+	if index == nil {
+		index = c.buildExternalModuleContainerIndex()
 	}
 	containers := index.containersByTarget[c.getResolvedTarget(symbol)]
 	parent := c.getParentOfSymbol(symbol)
@@ -250,12 +257,13 @@ func (c *Checker) getExternalModuleContainers(symbol *ast.Symbol) []*ast.Symbol 
 	return containers
 }
 
-func (c *Checker) buildExternalModuleContainerIndex() {
+func (c *Checker) buildExternalModuleContainerIndex() *externalModuleContainerIndex {
+	c.externalModuleContainers.begin(c)
+	c.buildingExternalModuleContainers = true
 	index := &externalModuleContainerIndex{
 		containersByTarget: make(map[*ast.Symbol][]*ast.Symbol),
 		moduleOrder:        make(map[*ast.Symbol]int, len(c.program.SourceFiles())),
 	}
-	c.externalModuleContainers = index
 	for _, file := range c.program.SourceFiles() {
 		if !ast.IsExternalModule(file) {
 			continue
@@ -269,7 +277,10 @@ func (c *Checker) buildExternalModuleContainerIndex() {
 			index.add(c.getResolvedTarget(exportEquals), container)
 		}
 	}
-	index.complete = true
+	c.buildingExternalModuleContainers = false
+	c.externalModuleContainers.set(c, index)
+	c.endMemo()
+	return index
 }
 
 func (c *Checker) scanExternalModuleContainers(symbol *ast.Symbol) []*ast.Symbol {
@@ -513,15 +524,11 @@ func (c *Checker) getAccessibleSymbolChainEx(ctx accessibleSymbolChainContext) [
 		firstRelevantLocation = node
 		return true
 	})
-	links := c.symbolContainerLinks.Get(ctx.symbol)
-	linkKey := accessibleChainCacheKey{ctx.useOnlyExternalAliasing, firstRelevantLocation, ctx.meaning}
-	if links.accessibleChainCache == nil {
-		links.accessibleChainCache = make(map[accessibleChainCacheKey][]*ast.Symbol)
-	}
-	existing, ok := links.accessibleChainCache[linkKey]
-	if ok {
+	key := accessibleChainCacheKey{ctx.symbol, ctx.useOnlyExternalAliasing, firstRelevantLocation, ctx.meaning}
+	if existing, ok := c.accessibleChains.get(c, key); ok {
 		return existing
 	}
+	c.accessibleChains.begin(c, key)
 
 	var result []*ast.Symbol
 
@@ -533,7 +540,8 @@ func (c *Checker) getAccessibleSymbolChainEx(ctx accessibleSymbolChainContext) [
 		}
 		return false
 	})
-	links.accessibleChainCache[linkKey] = result
+	c.accessibleChains.set(c, key, result)
+	c.endMemo()
 	return result
 }
 

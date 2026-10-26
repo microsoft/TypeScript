@@ -32,11 +32,11 @@ const (
 )
 
 type JsxElementLinks struct {
-	jsxFlags                         JsxFlags    // Flags for the JSX element
-	resolvedJsxElementAttributesType *Type       // Resolved element attributes type of a JSX opening-like element
-	jsxNamespace                     *ast.Symbol // Resolved JSX namespace symbol for this node
-	jsxImplicitImportContainer       *ast.Symbol // Resolved module symbol the implicit JSX import of this file should refer to
-	firstJSXTagInFile                *ast.Node   // The first JSX tag in the file
+	jsxFlags                         JsxFlags          // Flags for the JSX element
+	resolvedJsxElementAttributesType memo[*Type]       // Resolved element attributes type of a JSX opening-like element
+	jsxNamespace                     memo[*ast.Symbol] // Resolved JSX namespace symbol for this node
+	jsxImplicitImportContainer       *ast.Symbol       // Resolved module symbol the implicit JSX import of this file should refer to
+	firstJSXTagInFile                *ast.Node         // The first JSX tag in the file
 }
 
 var JsxNames = struct {
@@ -502,15 +502,22 @@ func (c *Checker) getSuggestedSymbolForNonexistentJSXAttribute(name string, cont
 func (c *Checker) getJSXFragmentType(node *ast.Node) *Type {
 	// An opening fragment is required in order for `getJsxNamespace` to give the fragment factory
 	links := c.sourceFileLinks.Get(ast.GetSourceFileOfNode(node))
-	if links.jsxFragmentType != nil {
-		return links.jsxFragmentType
+	if t := links.jsxFragmentType.get(c); t != nil {
+		return t
 	}
+	links.jsxFragmentType.begin(c)
+	t := c.getJSXFragmentTypeUncached(node)
+	links.jsxFragmentType.set(c, t)
+	c.endMemo()
+	return t
+}
+
+func (c *Checker) getJSXFragmentTypeUncached(node *ast.Node) *Type {
 	jsxFragmentFactoryName := c.getJsxNamespace(node)
 	// #38720/60122, allow null as jsxFragmentFactory
 	shouldResolveFactoryReference := (c.compilerOptions.Jsx == core.JsxEmitReact || c.compilerOptions.JsxFragmentFactory != "") && jsxFragmentFactoryName != "null"
 	if !shouldResolveFactoryReference {
-		links.jsxFragmentType = c.anyType
-		return links.jsxFragmentType
+		return c.anyType
 	}
 	jsxFactorySymbol := c.getJsxNamespaceContainerForImplicitImport(node)
 	if jsxFactorySymbol == nil {
@@ -522,12 +529,10 @@ func (c *Checker) getJSXFragmentType(node *ast.Node) *Type {
 		jsxFactorySymbol = c.resolveName(node, jsxFragmentFactoryName, flags, diagnostics.Using_JSX_fragments_requires_fragment_factory_0_to_be_in_scope_but_it_could_not_be_found, true /*isUse*/, false /*excludeGlobals*/)
 	}
 	if jsxFactorySymbol == nil {
-		links.jsxFragmentType = c.errorType
-		return links.jsxFragmentType
+		return c.errorType
 	}
 	if jsxFactorySymbol.Name() == ReactNames.Fragment {
-		links.jsxFragmentType = c.getTypeOfSymbol(jsxFactorySymbol)
-		return links.jsxFragmentType
+		return c.getTypeOfSymbol(jsxFactorySymbol)
 	}
 	resolvedAlias := jsxFactorySymbol
 	if jsxFactorySymbol.Flags()&ast.SymbolFlagsAlias != 0 {
@@ -537,11 +542,9 @@ func (c *Checker) getJSXFragmentType(node *ast.Node) *Type {
 	reactExports := c.getExportsOfSymbol(resolvedAlias)
 	typeSymbol := c.getSymbol(reactExports, ReactNames.Fragment, ast.SymbolFlagsBlockScopedVariable)
 	if typeSymbol != nil {
-		links.jsxFragmentType = c.getTypeOfSymbol(typeSymbol)
-	} else {
-		links.jsxFragmentType = c.errorType
+		return c.getTypeOfSymbol(typeSymbol)
 	}
-	return links.jsxFragmentType
+	return c.errorType
 }
 
 func (c *Checker) resolveJsxOpeningLikeElement(node *ast.Node, candidatesOutArray *[]*Signature, checkMode CheckMode) *Signature {
@@ -1190,23 +1193,34 @@ func (c *Checker) createSignatureForJSXIntrinsic(node *ast.Node, result *Type) *
 func (c *Checker) getIntrinsicAttributesTypeFromJsxOpeningLikeElement(node *ast.Node) *Type {
 	debug.Assert(isJsxIntrinsicTagName(node.TagName()))
 	links := c.jsxElementLinks.Get(node)
-	if links.resolvedJsxElementAttributesType != nil {
-		return links.resolvedJsxElementAttributesType
+	if t := links.resolvedJsxElementAttributesType.get(c); t != nil {
+		return t
 	}
+	if c.memoActive() {
+		links.resolvedJsxElementAttributesType.begin(c)
+		result := c.getIntrinsicAttributesTypeFromJsxOpeningLikeElementUncached(node, links)
+		c.endMemo()
+		return result
+	}
+	return c.getIntrinsicAttributesTypeFromJsxOpeningLikeElementUncached(node, links)
+}
+
+func (c *Checker) getIntrinsicAttributesTypeFromJsxOpeningLikeElementUncached(node *ast.Node, links *JsxElementLinks) *Type {
+	if t := links.resolvedJsxElementAttributesType.get(c); t != nil {
+		return t
+	}
+	result := c.errorType
 	symbol := c.getIntrinsicTagSymbol(node)
 	if links.jsxFlags&JsxFlagsIntrinsicNamedElement != 0 {
-		links.resolvedJsxElementAttributesType = core.OrElse(c.getTypeOfSymbol(symbol), c.errorType)
-		return links.resolvedJsxElementAttributesType
-	}
-	if links.jsxFlags&JsxFlagsIntrinsicIndexedElement != 0 {
+		result = core.OrElse(c.getTypeOfSymbol(symbol), c.errorType)
+	} else if links.jsxFlags&JsxFlagsIntrinsicIndexedElement != 0 {
 		indexInfo := c.getApplicableIndexInfoForName(c.getJsxType(JsxNames.IntrinsicElements, node), node.TagName().Text())
 		if indexInfo != nil {
-			links.resolvedJsxElementAttributesType = indexInfo.valueType
-			return links.resolvedJsxElementAttributesType
+			result = indexInfo.valueType
 		}
 	}
-	links.resolvedJsxElementAttributesType = c.errorType
-	return links.resolvedJsxElementAttributesType
+	links.resolvedJsxElementAttributesType.set(c, result)
+	return result
 }
 
 // Looks up an intrinsic tag name and returns a symbol that either points to an intrinsic
@@ -1314,14 +1328,31 @@ func (c *Checker) getJsxType(name string, location *ast.Node) *Type {
 }
 
 func (c *Checker) getJsxNamespaceAt(location *ast.Node) *ast.Symbol {
-	var links *JsxElementLinks
-	if location != nil {
-		links = c.jsxElementLinks.Get(location)
+	if location == nil {
+		return c.getJsxNamespaceAtUncached(location, nil)
 	}
-	if links != nil && links.jsxNamespace != nil && links.jsxNamespace != c.unknownSymbol {
-		return links.jsxNamespace
+	links := c.jsxElementLinks.Get(location)
+	if s := links.jsxNamespace.get(c); s != nil && s != c.unknownSymbol {
+		return s
 	}
-	if links == nil || links.jsxNamespace != c.unknownSymbol {
+	if c.memoActive() {
+		links.jsxNamespace.begin(c)
+		result := c.getJsxNamespaceAtUncached(location, links)
+		c.endMemo()
+		return result
+	}
+	return c.getJsxNamespaceAtUncached(location, links)
+}
+
+func (c *Checker) getJsxNamespaceAtUncached(location *ast.Node, links *JsxElementLinks) *ast.Symbol {
+	var cached *ast.Symbol
+	if links != nil {
+		cached = links.jsxNamespace.get(c)
+		if cached != nil && cached != c.unknownSymbol {
+			return cached
+		}
+	}
+	if cached != c.unknownSymbol {
 		resolvedNamespace := c.getJsxNamespaceContainerForImplicitImport(location)
 		if resolvedNamespace == nil || resolvedNamespace == c.unknownSymbol {
 			namespaceName := c.getJsxNamespace(location)
@@ -1331,13 +1362,13 @@ func (c *Checker) getJsxNamespaceAt(location *ast.Node) *ast.Symbol {
 			candidate := c.resolveSymbol(c.getSymbol(c.getExportsOfSymbol(c.resolveSymbol(resolvedNamespace)), JsxNames.JSX, ast.SymbolFlagsNamespace))
 			if candidate != nil && candidate != c.unknownSymbol {
 				if links != nil {
-					links.jsxNamespace = candidate
+					links.jsxNamespace.set(c, candidate)
 				}
 				return candidate
 			}
 		}
 		if links != nil {
-			links.jsxNamespace = c.unknownSymbol
+			links.jsxNamespace.set(c, c.unknownSymbol)
 		}
 	}
 	// JSX global fallback

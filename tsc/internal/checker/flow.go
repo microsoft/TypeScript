@@ -1601,10 +1601,7 @@ func (c *Checker) finalizeEvolvingArrayType(t *Type) *Type {
 }
 
 func (c *Checker) getFinalArrayType(t *EvolvingArrayType) *Type {
-	if t.finalArrayType == nil {
-		t.finalArrayType = c.createFinalArrayType(t.elementType)
-	}
-	return t.finalArrayType
+	return c.memoCompute(&t.finalArrayType, func() *Type { return c.createFinalArrayType(t.elementType) })
 }
 
 func (c *Checker) createFinalArrayType(elementType *Type) *Type {
@@ -1974,18 +1971,21 @@ func isCoercibleUnderDoubleEquals(source *Type, target *Type) bool {
 
 func (c *Checker) isExhaustiveSwitchStatement(node *ast.Node) bool {
 	links := c.switchStatementLinks.Get(node)
-	if links.exhaustiveState == ExhaustiveStateUnknown {
+	switch links.exhaustiveState.get(c) {
+	case ExhaustiveStateUnknown:
+		links.exhaustiveState.begin(c)
 		// Indicate resolution is in process
-		links.exhaustiveState = ExhaustiveStateComputing
+		links.exhaustiveState.set(c, ExhaustiveStateComputing)
 		isExhaustive := c.computeExhaustiveSwitchStatement(node)
-		if links.exhaustiveState == ExhaustiveStateComputing {
-			links.exhaustiveState = core.IfElse(isExhaustive, ExhaustiveStateTrue, ExhaustiveStateFalse)
+		if links.exhaustiveState.get(c) == ExhaustiveStateComputing {
+			links.exhaustiveState.set(c, core.IfElse(isExhaustive, ExhaustiveStateTrue, ExhaustiveStateFalse))
 		}
-	} else if links.exhaustiveState == ExhaustiveStateComputing {
+		c.endMemo()
+	case ExhaustiveStateComputing:
 		// Resolve circularity to false
-		links.exhaustiveState = ExhaustiveStateFalse
+		links.exhaustiveState.set(c, ExhaustiveStateFalse)
 	}
-	return links.exhaustiveState == ExhaustiveStateTrue
+	return links.exhaustiveState.get(c) == ExhaustiveStateTrue
 }
 
 func (c *Checker) computeExhaustiveSwitchStatement(node *ast.Node) bool {
@@ -2067,16 +2067,17 @@ func (c *Checker) getNotEqualFactsFromTypeofSwitch(start int, end int, witnesses
 
 func (c *Checker) getSwitchClauseTypes(node *ast.Node) []*Type {
 	links := c.switchStatementLinks.Get(node)
-	if !links.switchTypesComputed {
+	if links.switchTypes.get(c) == nil {
+		links.switchTypes.begin(c)
 		clauses := node.AsSwitchStatement().CaseBlock.AsCaseBlock().Clauses.Nodes
 		types := make([]*Type, len(clauses))
 		for i, clause := range clauses {
 			types[i] = c.getTypeOfSwitchClause(clause)
 		}
-		links.switchTypes = types
-		links.switchTypesComputed = true
+		links.switchTypes.set(c, types)
+		c.endMemo()
 	}
-	return links.switchTypes
+	return links.switchTypes.get(c)
 }
 
 func (c *Checker) getTypeOfSwitchClause(clause *ast.Node) *Type {
@@ -2088,8 +2089,9 @@ func (c *Checker) getTypeOfSwitchClause(clause *ast.Node) *Type {
 
 func (c *Checker) getEffectsSignature(node *ast.Node) *Signature {
 	links := c.signatureLinks.Get(node)
-	signature := links.effectsSignature
+	signature := links.effectsSignature.get(c)
 	if signature == nil {
+		links.effectsSignature.begin(c)
 		// A call expression parented by an expression statement is a potential assertion. Other call
 		// expressions are potential type predicate function calls. In order to avoid triggering
 		// circularities in control flow analysis, we use getTypeOfDottedName when resolving the call
@@ -2121,7 +2123,8 @@ func (c *Checker) getEffectsSignature(node *ast.Node) *Signature {
 		if !(signature != nil && c.hasTypePredicateOrNeverReturnType(signature)) {
 			signature = c.unknownSignature
 		}
-		links.effectsSignature = signature
+		links.effectsSignature.set(c, signature)
+		c.endMemo()
 	}
 	if signature == c.unknownSignature {
 		return nil
@@ -2724,18 +2727,16 @@ func (c *Checker) ensureAssignmentsMarked(symbol *ast.Symbol) {
 	if parent == nil {
 		return
 	}
-	links := c.nodeLinks.Get(parent)
-	if links.flags&NodeCheckFlagsAssignmentsMarked == 0 {
-		links.flags |= NodeCheckFlagsAssignmentsMarked
+	c.assignmentsMarked.once(c, parent, func() {
 		if !c.hasParentWithAssignmentsMarked(parent) {
 			c.markNodeAssignments(parent)
 		}
-	}
+	})
 }
 
 func (c *Checker) hasParentWithAssignmentsMarked(node *ast.Node) bool {
 	return ast.FindAncestor(node.Parent, func(node *ast.Node) bool {
-		return ast.IsFunctionOrSourceFile(node) && c.nodeLinks.Get(node).flags&NodeCheckFlagsAssignmentsMarked != 0
+		return ast.IsFunctionOrSourceFile(node) && c.assignmentsMarked.has(c, node)
 	}) != nil
 }
 

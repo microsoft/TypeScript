@@ -8,7 +8,6 @@ import (
 
 	"github.com/microsoft/TypeScript/tsc/internal/ast"
 
-	"github.com/microsoft/TypeScript/tsc/internal/core"
 	"github.com/microsoft/TypeScript/tsc/internal/debug"
 )
 
@@ -41,7 +40,6 @@ const (
 	memoTypeNodeType
 	memoBaseTypes
 	memoStructuredMembers
-	memoGlobal
 	memoTypeParameterConstraint
 	memoTypeParameterDefault
 	memoTypeAlias
@@ -58,6 +56,13 @@ const (
 	memoModuleExports
 	memoInstantiationExpressionType
 	memoRelationOverflow
+	memoTypePredicate
+	memoDeclaredMembers
+	memoCouldContainTypeVariables
+	memoGenericObjectFlags
+	memoUnknownLikeUnion
+	memoNeverIntersection
+	memoDiscriminant
 	memoResolvedMembers // followed by one field per MembersOrExportsResolutionKind
 	memoSymbolExports   = memoResolvedMembers + memoField(MembersOrExportsResolutionKindResolvedExports)
 	memoSymbolMembers   = memoResolvedMembers + memoField(MembersOrExportsResolutionKindResolvedMembers)
@@ -195,6 +200,25 @@ func (m *memo[T]) begin(c *Checker) {
 	c.beginMemo(m.key())
 }
 
+// memoCompute returns the result cached in m, computing it in a computation
+// of its own if there is none. A result cached while computing it, by a
+// computation that re-entered it, is kept.
+func (c *Checker) memoCompute[T comparable](m *memo[T], compute func() T) T {
+	var zero T
+	if v := m.get(c); v != zero {
+		return v
+	}
+	m.begin(c)
+	v := compute()
+	if cur := m.peek(); cur != zero {
+		v = cur
+	} else {
+		m.set(c, v)
+	}
+	c.endMemo()
+	return v
+}
+
 // memoMap is a map of cached results, each accounted for like a memo. The
 // entries are only accessible through methods. Memo state is kept per entry
 // in a side map allocated on first use by a query.
@@ -239,6 +263,11 @@ func (m *memoMap[K, V]) observe(c *Checker, k K) {
 func (m *memoMap[K, V]) has(c *Checker, k K) bool {
 	_, ok := m.get(c, k)
 	return ok
+}
+
+// isEmpty reports whether no result is cached, without observing any.
+func (m *memoMap[K, V]) isEmpty() bool {
+	return len(m.memoEntries) == 0
 }
 
 // values iterates the cached results without observing them, for
@@ -321,6 +350,30 @@ func (m *memoMap[K, V]) state(k K) *memoState {
 		m.memoStates[k] = state
 	}
 	return state
+}
+
+// memoSet tracks computations that run at most once per key, such as checks
+// whose only results are diagnostics. Each run is a computation of its own, so
+// skipping a key that already ran accounts for the effects of that run.
+type memoSet[K comparable] struct {
+	m memoMap[K, struct{}]
+}
+
+// has reports whether k has run; see memoMap.get.
+func (s *memoSet[K]) has(c *Checker, k K) bool {
+	return s.m.has(c, k)
+}
+
+// once runs fn unless k has run already. k is marked before fn runs, so fn
+// does not run again if it re-enters.
+func (s *memoSet[K]) once(c *Checker, k K, fn func()) {
+	if s.m.has(c, k) {
+		return
+	}
+	s.m.begin(c, k)
+	s.m.set(c, k, struct{}{})
+	fn()
+	c.endMemo()
 }
 
 // memoActive reports whether reading a cached result must account for its
@@ -677,6 +730,59 @@ func (c *Checker) memoEffectsAt(i int) *memoEffects {
 	return f
 }
 
+// A flag memo is a cached result held outside a memo, so that it costs no
+// space of its own: bits of a flags word shared with other results, or a
+// field of storage allocated only when needed. It is accounted for like a
+// memo under a key naming its entity and field. Readers finding it cached
+// call observeFlagMemo; it is computed between beginMemo and endMemo for the
+// key, and cached with setFlagMemoBits or setFlagMemo.
+
+// observeFlagMemo accounts for reading the flag memo identified by key.
+func (c *Checker) observeFlagMemo(key memoKey) {
+	if c.memoActive() {
+		c.observeMemo(key)
+	}
+}
+
+// setFlagMemo accounts for caching the result of the flag memo identified by
+// key, as memo.set does.
+func (c *Checker) setFlagMemo(key memoKey) {
+	if !c.checking {
+		c.memoAttach(key)
+	}
+}
+
+// objectFlagsCell returns the flags under value of t, a flag memo whose
+// result is cached once the computed flag is set, computing them in a
+// computation of their own if needed. With inProgress, the computed flag is
+// set while computing, so that a computation re-entering it finds no flags.
+func (c *Checker) objectFlagsCell(t *Type, field memoField, computed ObjectFlags, value ObjectFlags, inProgress bool, compute func() ObjectFlags) ObjectFlags {
+	key := memoKeyOf(t, field)
+	if t.objectFlags&computed != 0 {
+		c.observeFlagMemo(key)
+		return t.objectFlags & value
+	}
+	c.beginMemo(key)
+	if inProgress {
+		setFlagMemoBits(c, key, &t.objectFlags, computed|value, computed)
+	}
+	result := compute() & value
+	if inProgress || t.objectFlags&computed == 0 {
+		setFlagMemoBits(c, key, &t.objectFlags, computed|value, computed|result)
+	} else {
+		result = t.objectFlags & value
+	}
+	c.endMemo()
+	return result
+}
+
+// setFlagMemoBits caches the bits of *p under mask as the result of the flag
+// memo identified by key.
+func setFlagMemoBits[T ~uint32](c *Checker, key memoKey, p *T, mask T, bits T) {
+	*p = *p&^mask | bits&mask
+	c.setFlagMemo(key)
+}
+
 // typeResolutionMemo returns the address of the memo caching the result of
 // a type resolution, or nil if it is not cached in a memo.
 func (c *Checker) typeResolutionMemo(r *TypeResolution) *memoHeader {
@@ -685,6 +791,8 @@ func (c *Checker) typeResolutionMemo(r *TypeResolution) *memoHeader {
 		return &c.valueSymbolLinks.Get(r.target.(*ast.Symbol)).resolvedType.memoHeader
 	case TypeSystemPropertyNameDeclaredType:
 		return &c.typeAliasLinks.Get(r.target.(*ast.Symbol)).declaredType.memoHeader
+	case TypeSystemPropertyNameResolvedTypeArguments:
+		return &r.target.(*Type).AsTypeReference().resolvedTypeArguments.memoHeader
 	case TypeSystemPropertyNameResolvedBaseTypes:
 		return &r.target.(*Type).AsInterfaceType().resolvedBaseTypes.memoHeader
 	case TypeSystemPropertyNameResolvedBaseConstructorType:
@@ -703,16 +811,4 @@ func (c *Checker) typeResolutionMemo(r *TypeResolution) *memoHeader {
 		return &c.typeNodeLinks.Get(r.target.(*ast.Node)).resolvedType.memoHeader
 	}
 	return nil
-}
-
-// memoizeGlobal memoizes the resolution of a global, replaying effects of
-// the resolution wherever the cached result is observed.
-func memoizeGlobal[T any](c *Checker, fn func() T) func() T {
-	cell := &struct{ resolve func() T }{resolve: core.Memoize(fn)}
-	return func() T {
-		c.beginMemo(memoKeyOf(cell, memoGlobal))
-		result := cell.resolve()
-		c.endMemo()
-		return result
-	}
 }

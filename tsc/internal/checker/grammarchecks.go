@@ -2026,13 +2026,20 @@ func (c *Checker) checkGrammarSourceFile(node *ast.SourceFile) bool {
 	return node.Flags&ast.NodeFlagsAmbient != 0 && c.checkGrammarTopLevelElementsForRequiredDeclareModifier(node)
 }
 
+func (c *Checker) reportStatementInAmbientContext(links *NodeLinks, node *ast.Node, message *diagnostics.Message) bool {
+	links.hasReportedStatementInAmbientContext.begin(c)
+	reported := c.grammarErrorOnFirstToken(node, message)
+	links.hasReportedStatementInAmbientContext.set(c, reported)
+	c.endMemo()
+	return reported
+}
+
 func (c *Checker) checkGrammarStatementInAmbientContext(node *ast.Node) bool {
 	if node.Flags&ast.NodeFlagsAmbient != 0 {
 		// Find containing block which is either Block, ModuleBlock, SourceFile
 		links := c.nodeLinks.Get(node)
-		if !links.hasReportedStatementInAmbientContext && (ast.IsFunctionLike(node.Parent) || ast.IsAccessor(node.Parent)) {
-			links.hasReportedStatementInAmbientContext = c.grammarErrorOnFirstToken(node, diagnostics.An_implementation_cannot_be_declared_in_ambient_contexts)
-			return links.hasReportedStatementInAmbientContext
+		if !links.hasReportedStatementInAmbientContext.get(c) && (ast.IsFunctionLike(node.Parent) || ast.IsAccessor(node.Parent)) {
+			return c.reportStatementInAmbientContext(links, node, diagnostics.An_implementation_cannot_be_declared_in_ambient_contexts)
 		}
 
 		// We are either parented by another statement, or some sort of block.
@@ -2043,9 +2050,8 @@ func (c *Checker) checkGrammarStatementInAmbientContext(node *ast.Node) bool {
 		if node.Parent.Kind == ast.KindBlock || node.Parent.Kind == ast.KindModuleBlock || node.Parent.Kind == ast.KindSourceFile {
 			links := c.nodeLinks.Get(node.Parent)
 			// Check if the containing block ever report this error
-			if !links.hasReportedStatementInAmbientContext {
-				links.hasReportedStatementInAmbientContext = c.grammarErrorOnFirstToken(node, diagnostics.Statements_are_not_allowed_in_ambient_contexts)
-				return links.hasReportedStatementInAmbientContext
+			if !links.hasReportedStatementInAmbientContext.get(c) {
+				return c.reportStatementInAmbientContext(links, node, diagnostics.Statements_are_not_allowed_in_ambient_contexts)
 			}
 		} else {
 			// We must be parented by a statement.  If so, there's no need

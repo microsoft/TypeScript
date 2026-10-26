@@ -487,7 +487,7 @@ func CompareTypes(t1, t2 *Type) int {
 			// Here we know we have references to instantiations of the same type because we have matching targets.
 			if r1.node == nil && r2.node == nil {
 				// Non-deferred type references with the same target are sorted by their type argument lists.
-				if c := compareTypeLists(t1.AsTypeReference().resolvedTypeArguments, t2.AsTypeReference().resolvedTypeArguments); c != 0 {
+				if c := compareTypeLists(t1.AsTypeReference().resolvedTypeArguments.peek(), t2.AsTypeReference().resolvedTypeArguments.peek()); c != 0 {
 					return c
 				}
 			} else {
