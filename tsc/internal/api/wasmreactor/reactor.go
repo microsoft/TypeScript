@@ -42,10 +42,13 @@ type Reactor struct {
 	files   *memFS
 	cwd     tspath.RootedDirectoryPath
 
-	mu      sync.Mutex
-	inbox   chan Message
-	outbox  chan Message
+	mu     sync.Mutex
+	inbox  chan Message
+	outbox chan Message
+	// idle is closed while the server waits for a message, and replaced
+	// by Send, so every Receive in between reports ErrIdle.
 	idle    chan struct{}
+	isIdle  bool
 	closed  chan struct{}
 	started bool
 	done    chan struct{}
@@ -69,7 +72,7 @@ func New(ctx context.Context, options Options) *Reactor {
 		cwd:     tspath.RootedDirectoryPathFromAbsolute(options.Cwd),
 		inbox:   make(chan Message, 1),
 		outbox:  make(chan Message),
-		idle:    make(chan struct{}, 1),
+		idle:    make(chan struct{}),
 		closed:  make(chan struct{}),
 		done:    make(chan struct{}),
 	}
@@ -111,17 +114,16 @@ func (r *Reactor) Send(message Message) error {
 	r.mu.Lock()
 	defer r.mu.Unlock()
 	select {
-	case <-r.idle:
-		// The server is about to receive this message, so it is no longer idle.
-	default:
-		// The server has not reported being idle.
-	}
-	select {
 	case r.inbox <- message:
-		return nil
 	default:
 		return errors.New("a message is already waiting for the server")
 	}
+	if r.isIdle {
+		// The server is about to receive this message, so it is no longer idle.
+		r.idle = make(chan struct{})
+		r.isIdle = false
+	}
+	return nil
 }
 
 // Receive runs the server until it produces its next message. It returns
@@ -137,17 +139,30 @@ func (r *Reactor) Receive() (Message, error) {
 	default:
 		// Run the server until it writes, waits, or stops.
 	}
+	r.mu.Lock()
+	idle := r.idle
+	r.mu.Unlock()
 	select {
 	case message := <-r.outbox:
 		return message, nil
-	case <-r.idle:
-		return Message{}, ErrIdle
-	case <-r.done:
-		if r.err != nil {
-			return Message{}, r.err
+	case <-idle:
+		select {
+		case <-r.done:
+			// A stopped server stays idle; report that it stopped instead.
+			return r.stopped()
+		default:
+			return Message{}, ErrIdle
 		}
-		return Message{}, io.EOF
+	case <-r.done:
+		return r.stopped()
 	}
+}
+
+func (r *Reactor) stopped() (Message, error) {
+	if r.err != nil {
+		return Message{}, r.err
+	}
+	return Message{}, io.EOF
 }
 
 func (r *Reactor) SetFile(path string, content string) error {
@@ -189,11 +204,9 @@ func (t *tupleTransport) ReadTuple() (api.MessageType, string, []byte, error) {
 	default:
 		// No message is waiting, so the server is idle.
 	}
-	select {
-	case t.idle <- struct{}{}:
-		// Receive may now report that the server is waiting.
-	default:
-		// An idle signal is already pending.
+	if !t.isIdle {
+		t.isIdle = true
+		close(t.idle)
 	}
 	t.mu.Unlock()
 	select {

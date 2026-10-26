@@ -47,6 +47,9 @@ func TestReactor(t *testing.T) {
 
 	_, err := reactor.Receive()
 	assert.Equal(t, err, ErrIdle)
+	_, err = reactor.Receive()
+	assert.Equal(t, err, ErrIdle)
+	assert.DeepEqual(t, request("echo", []byte("again")).Payload, []byte("again"))
 
 	assert.NilError(t, reactor.RemoveFile("/src/index.ts"))
 	_, ok = reactor.ReadFile("/src/index.ts")
