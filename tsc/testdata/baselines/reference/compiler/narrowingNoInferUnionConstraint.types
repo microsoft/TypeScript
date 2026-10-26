@@ -1,0 +1,76 @@
+//// [tests/cases/compiler/narrowingNoInferUnionConstraint.ts] ////
+
+=== narrowingNoInferUnionConstraint.ts ===
+// A non-generic top-level type alias can hold a NoInfer type whose constraint is a union. A reference to it is
+// narrowed through that constraint.
+
+type U1 = NoInfer<{ kind: "a"; a: number } | { kind: "b"; b: number }> | { kind: "c" };
+>U1 : U1
+>kind : "a"
+>a : number
+>kind : "b"
+>b : number
+>kind : "c"
+
+function f1(u: U1) {
+>f1 : (u: U1) => void
+>u : U1
+
+    if (u.kind === "a") {
+>u.kind === "a" : boolean
+>u.kind : "a" | "b" | "c"
+>u : { kind: "a"; a: number; } | { kind: "b"; b: number; } | { kind: "c"; }
+>kind : "a" | "b" | "c"
+>"a" : "a"
+
+        u.a;
+>u.a : number
+>u : { kind: "a"; a: number; }
+>a : number
+    }
+}
+
+// The same after an instantiation of Box<string> has computed whether U2 could contain type variables.
+
+type U2 = NoInfer<{ kind: "a"; a: number } | { kind: "b"; b: number }> | { kind: "c" };
+>U2 : U2
+>kind : "a"
+>a : number
+>kind : "b"
+>b : number
+>kind : "c"
+
+interface Box<T> {
+    u: U2;
+>u : U2
+
+    t: T;
+>t : T
+}
+
+declare const box: Box<string>;
+>box : Box<string>
+
+box.u;
+>box.u : U2
+>box : Box<string>
+>u : U2
+
+function f2(u: U2) {
+>f2 : (u: U2) => void
+>u : U2
+
+    if (u.kind === "a") {
+>u.kind === "a" : boolean
+>u.kind : "a" | "b" | "c"
+>u : { kind: "a"; a: number; } | { kind: "b"; b: number; } | { kind: "c"; }
+>kind : "a" | "b" | "c"
+>"a" : "a"
+
+        u.a;
+>u.a : number
+>u : { kind: "a"; a: number; }
+>a : number
+    }
+}
+

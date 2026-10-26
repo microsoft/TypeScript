@@ -26470,7 +26470,11 @@ func (c *Checker) getUnionTypeFromSortedList(types []*Type, precomputedObjectFla
 	key := getUnionKey(types, origin, alias)
 	t := c.unionTypes[key]
 	if t == nil {
-		t = c.newUnionType(precomputedObjectFlags|c.getPropagatingFlagsOfTypes(types, TypeFlagsNullable), types)
+		objectFlags := precomputedObjectFlags | c.getPropagatingFlagsOfTypes(types, TypeFlagsNullable)
+		if core.Some(types, func(t *Type) bool { return t.flags&TypeFlagsInstantiable != 0 }) {
+			objectFlags |= ObjectFlagsContainsInstantiables
+		}
+		t = c.newUnionType(objectFlags, types)
 		t.AsUnionType().origin = origin
 		t.alias = alias
 		if len(types) == 2 && types[0].flags&TypeFlagsBooleanLiteral != 0 && types[1].flags&TypeFlagsBooleanLiteral != 0 {
@@ -32286,22 +32290,10 @@ func (c *Checker) isConstraintPosition(t *Type, node *ast.Node) bool {
 		ast.IsElementAccessExpression(parent) && parent.Expression() == node && !(someType(t, c.isGenericTypeWithoutNullableConstraint) && c.isGenericIndexType(c.getTypeOfExpression(parent.AsElementAccessExpression().ArgumentExpression)))
 }
 
-// Skips the walk for unions that cannot contain type variables. Such a union can still hold
-// instantiable types when it comes from a non-generic top-level alias:
-//
-// type Size = `${number}px` | Uppercase<string> | "auto"
-//
-// Both `${number}px` and Uppercase<string> are their own base constraints, never a union, so the
-// walk would return false anyway.
-//
-// In theory couldContainTypeVariables can do more work than the walk, as it also looks into the type
-// arguments of object types. But its result is cached on the type and it usually gets computed elsewhere
-// anyway, so this one-time eager cost pays off on later references to the same union.
-//
-// Only unions are checked, because for any other type the walk is a single call that is already as
-// cheap as the check that would skip it.
+// A union type is a generic type with a union constraint only when one of its constituents is instantiable, or is
+// an intersection that might contain one, so the walk is skipped for unions with neither.
 func (c *Checker) someGenericTypeWithUnionConstraint(t *Type) bool {
-	if t.flags&TypeFlagsUnion != 0 && !c.couldContainTypeVariables(t) {
+	if t.flags&TypeFlagsUnion != 0 && t.objectFlags&(ObjectFlagsContainsInstantiables|ObjectFlagsContainsIntersections) == 0 {
 		return false
 	}
 	return someType(t, c.isGenericTypeWithUnionConstraint)

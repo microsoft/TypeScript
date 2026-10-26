@@ -1,0 +1,82 @@
+//// [tests/cases/compiler/narrowingNoInferUnionConstraint.ts] ////
+
+=== narrowingNoInferUnionConstraint.ts ===
+// A non-generic top-level type alias can hold a NoInfer type whose constraint is a union. A reference to it is
+// narrowed through that constraint.
+
+type U1 = NoInfer<{ kind: "a"; a: number } | { kind: "b"; b: number }> | { kind: "c" };
+>U1 : Symbol(U1, Decl(narrowingNoInferUnionConstraint.ts, 0, 0))
+>NoInfer : Symbol(NoInfer, Decl(lib.es5.d.ts, --, --))
+>kind : Symbol(kind, Decl(narrowingNoInferUnionConstraint.ts, 3, 19))
+>a : Symbol(a, Decl(narrowingNoInferUnionConstraint.ts, 3, 30))
+>kind : Symbol(kind, Decl(narrowingNoInferUnionConstraint.ts, 3, 46))
+>b : Symbol(b, Decl(narrowingNoInferUnionConstraint.ts, 3, 57))
+>kind : Symbol(kind, Decl(narrowingNoInferUnionConstraint.ts, 3, 74))
+
+function f1(u: U1) {
+>f1 : Symbol(f1, Decl(narrowingNoInferUnionConstraint.ts, 3, 87))
+>u : Symbol(u, Decl(narrowingNoInferUnionConstraint.ts, 5, 12))
+>U1 : Symbol(U1, Decl(narrowingNoInferUnionConstraint.ts, 0, 0))
+
+    if (u.kind === "a") {
+>u.kind : Symbol(kind, Decl(narrowingNoInferUnionConstraint.ts, 3, 19), Decl(narrowingNoInferUnionConstraint.ts, 3, 46), Decl(narrowingNoInferUnionConstraint.ts, 3, 74))
+>u : Symbol(u, Decl(narrowingNoInferUnionConstraint.ts, 5, 12))
+>kind : Symbol(kind, Decl(narrowingNoInferUnionConstraint.ts, 3, 19), Decl(narrowingNoInferUnionConstraint.ts, 3, 46), Decl(narrowingNoInferUnionConstraint.ts, 3, 74))
+
+        u.a;
+>u.a : Symbol(a, Decl(narrowingNoInferUnionConstraint.ts, 3, 30))
+>u : Symbol(u, Decl(narrowingNoInferUnionConstraint.ts, 5, 12))
+>a : Symbol(a, Decl(narrowingNoInferUnionConstraint.ts, 3, 30))
+    }
+}
+
+// The same after an instantiation of Box<string> has computed whether U2 could contain type variables.
+
+type U2 = NoInfer<{ kind: "a"; a: number } | { kind: "b"; b: number }> | { kind: "c" };
+>U2 : Symbol(U2, Decl(narrowingNoInferUnionConstraint.ts, 9, 1))
+>NoInfer : Symbol(NoInfer, Decl(lib.es5.d.ts, --, --))
+>kind : Symbol(kind, Decl(narrowingNoInferUnionConstraint.ts, 13, 19))
+>a : Symbol(a, Decl(narrowingNoInferUnionConstraint.ts, 13, 30))
+>kind : Symbol(kind, Decl(narrowingNoInferUnionConstraint.ts, 13, 46))
+>b : Symbol(b, Decl(narrowingNoInferUnionConstraint.ts, 13, 57))
+>kind : Symbol(kind, Decl(narrowingNoInferUnionConstraint.ts, 13, 74))
+
+interface Box<T> {
+>Box : Symbol(Box, Decl(narrowingNoInferUnionConstraint.ts, 13, 87))
+>T : Symbol(T, Decl(narrowingNoInferUnionConstraint.ts, 15, 14))
+
+    u: U2;
+>u : Symbol(Box.u, Decl(narrowingNoInferUnionConstraint.ts, 15, 18))
+>U2 : Symbol(U2, Decl(narrowingNoInferUnionConstraint.ts, 9, 1))
+
+    t: T;
+>t : Symbol(Box.t, Decl(narrowingNoInferUnionConstraint.ts, 16, 10))
+>T : Symbol(T, Decl(narrowingNoInferUnionConstraint.ts, 15, 14))
+}
+
+declare const box: Box<string>;
+>box : Symbol(box, Decl(narrowingNoInferUnionConstraint.ts, 20, 13))
+>Box : Symbol(Box, Decl(narrowingNoInferUnionConstraint.ts, 13, 87))
+
+box.u;
+>box.u : Symbol(Box.u, Decl(narrowingNoInferUnionConstraint.ts, 15, 18))
+>box : Symbol(box, Decl(narrowingNoInferUnionConstraint.ts, 20, 13))
+>u : Symbol(Box.u, Decl(narrowingNoInferUnionConstraint.ts, 15, 18))
+
+function f2(u: U2) {
+>f2 : Symbol(f2, Decl(narrowingNoInferUnionConstraint.ts, 21, 6))
+>u : Symbol(u, Decl(narrowingNoInferUnionConstraint.ts, 23, 12))
+>U2 : Symbol(U2, Decl(narrowingNoInferUnionConstraint.ts, 9, 1))
+
+    if (u.kind === "a") {
+>u.kind : Symbol(kind, Decl(narrowingNoInferUnionConstraint.ts, 13, 19), Decl(narrowingNoInferUnionConstraint.ts, 13, 46), Decl(narrowingNoInferUnionConstraint.ts, 13, 74))
+>u : Symbol(u, Decl(narrowingNoInferUnionConstraint.ts, 23, 12))
+>kind : Symbol(kind, Decl(narrowingNoInferUnionConstraint.ts, 13, 19), Decl(narrowingNoInferUnionConstraint.ts, 13, 46), Decl(narrowingNoInferUnionConstraint.ts, 13, 74))
+
+        u.a;
+>u.a : Symbol(a, Decl(narrowingNoInferUnionConstraint.ts, 13, 30))
+>u : Symbol(u, Decl(narrowingNoInferUnionConstraint.ts, 23, 12))
+>a : Symbol(a, Decl(narrowingNoInferUnionConstraint.ts, 13, 30))
+    }
+}
+
