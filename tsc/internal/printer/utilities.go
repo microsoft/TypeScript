@@ -77,7 +77,18 @@ func encodeUtf16EscapeSequence(b *strings.Builder, charCode rune) {
 func escapeStringWorker(s string, quoteChar QuoteChar, flags getLiteralTextFlags, b *strings.Builder) {
 	pos := 0
 	i := 0
+	// Other quote values cannot match ASCII bytes; avoid truncating them.
+	quote := byte(0)
+	if quoteChar >= 0 && quoteChar < utf8.RuneSelf {
+		quote = byte(quoteChar)
+	}
 	for i < len(s) {
+		if ch := s[i]; ch >= 0x20 && ch < utf8.RuneSelf && ch != '\\' && ch != quote && (quote != '`' || ch != '$') {
+			i += stringutil.UnescapedASCIIPrefixLen(s[i:], quote)
+			if i == len(s) {
+				break
+			}
+		}
 		ch, size := stringutil.DecodeJSStringRune(s[i:])
 
 		escape := false

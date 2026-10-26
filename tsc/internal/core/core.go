@@ -436,6 +436,10 @@ func ComputeECMALineStartsSeq(text string) iter.Seq[TextPos] {
 		var pos TextPos
 		var lineStart TextPos
 		for pos < textLen {
+			pos += TextPos(stringutil.LineBreakPrefixLen(text[pos:]))
+			if pos == textLen {
+				break
+			}
 			b := text[pos]
 			if b < utf8.RuneSelf {
 				pos++
@@ -484,17 +488,34 @@ type UTF16Offset int
 func UTF16Len(s string) UTF16Offset {
 	// Fast path: scan for non-ASCII bytes. For ASCII-only strings,
 	// each byte is one UTF-16 code unit, so we can return len(s) directly.
-	for i := range len(s) {
-		if s[i] >= utf8.RuneSelf {
-			// Found non-ASCII; count the ASCII prefix, then decode the rest.
-			n := UTF16Offset(i)
-			for _, r := range s[i:] {
-				n += UTF16Offset(utf16.RuneLen(r))
-			}
-			return n
+	i := 0
+	if len(s) < 16 {
+		for i < len(s) && s[i] < utf8.RuneSelf {
+			i++
+		}
+	} else {
+		i = stringutil.ASCIIPrefixLen(s)
+	}
+	n := UTF16Offset(i)
+	// A non-ASCII start often means dense Unicode. Keep the compact rune loop
+	// rather than repeatedly dispatching SIMD for very short ASCII runs.
+	if i == 0 {
+		for _, r := range s {
+			n += UTF16Offset(utf16.RuneLen(r))
+		}
+		return n
+	}
+	for i < len(s) {
+		r, size := utf8.DecodeRuneInString(s[i:])
+		n += UTF16Offset(utf16.RuneLen(r))
+		i += size
+		if i < len(s) && s[i] < utf8.RuneSelf {
+			size = stringutil.ASCIIPrefixLen(s[i:])
+			n += UTF16Offset(size)
+			i += size
 		}
 	}
-	return UTF16Offset(len(s))
+	return n
 }
 
 func Flatten[T any](array [][]T) []T {
