@@ -387,14 +387,14 @@ func (c *Checker) narrowType(f *FlowState, t *Type, expr *ast.Node, assumeTrue b
 	case ast.KindIdentifier:
 		// When narrowing a reference to a const variable, non-assigned parameter, or readonly property, we inline
 		// up to five levels of aliased conditional expressions that are themselves declared as const variables.
-		if !c.isMatchingReference(f.reference, expr) && c.inlineLevel < 5 {
+		if !c.isMatchingReference(f.reference, expr) {
 			symbol := c.getResolvedSymbol(expr)
 			if c.isConstantVariable(symbol) {
 				declaration := symbol.ValueDeclaration()
-				if declaration != nil && ast.IsVariableDeclaration(declaration) && declaration.Type() == nil && declaration.Initializer() != nil && c.isConstantReference(f.reference) {
-					c.inlineLevel++
+				if declaration != nil && ast.IsVariableDeclaration(declaration) && declaration.Type() == nil && declaration.Initializer() != nil && c.isConstantReference(f.reference) && !c.depthLimitReached(&c.inlineLevel, 5) {
+					c.enterDepthLimit(&c.inlineLevel)
 					result := c.narrowType(f, t, declaration.Initializer(), assumeTrue)
-					c.inlineLevel--
+					c.inlineLevel.exit()
 					return result
 				}
 			}

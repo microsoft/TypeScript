@@ -609,12 +609,16 @@ type Checker struct {
 	*memoStore
 	compareSymbols                              func(*ast.Symbol, *ast.Symbol) int
 	compareSymbolChains                         func([]*ast.Symbol, []*ast.Symbol) int
+	resolutionSerials                           uint32
 	resolutions                                 []resolution
-	instantiationCount                          uint32
+	symbolHashes                                map[*ast.Symbol]uint64
+	typeHashes                                  map[*Type]*[typeHashDepth]uint64
+	mapperHashes                                map[*TypeMapper]uint64
+	fileHashes                                  map[*ast.SourceFile]uint64
 	instantiationStack                          []*Type
-	conditionalConstraintDepth                  uint32
-	inlineLevel                                 int
-	serializationLevel                          int
+	conditionalConstraintDepth                  depthLimit
+	inlineLevel                                 depthLimit
+	serializationLevel                          depthLimit
 	currentNode                                 *ast.Node
 	simplifyingIndexedAccess                    collections.Set[CachedTypeKey]
 	currentNodeResolution                       int // 1-based index in resolutions of the resolution of currentNode, or 0; see enterCurrentNode
@@ -765,7 +769,7 @@ type Checker struct {
 	skipDirectInferenceNodes                    collections.Set[*ast.Node]
 	ctx                                         context.Context
 	activeMappers                               []*TypeMapper
-	activeTypeMappersCaches                     []clearableMap[*Type]
+	activeTypeMappersCaches                     []clearableMap[activeMapperCacheEntry]
 	withinUnreachableCode                       bool
 	typeToStringNodebuilder                     *NodeBuilder
 	tracer                                      *Tracer // Optional tracer for trace events and type recording (for --generateTrace)
@@ -1004,6 +1008,7 @@ type memoStore struct {
 	nonExistentProperties                   collections.Set[NonExistentPropertyKey]
 	deferredDiagnosticCallbacks             []func(c *Checker)
 	memoStates                              map[memoKey]*memoState // Memo state of results computed by queries; see memo.go
+	costFilter                              []uint64               // Memo keys whose memo states may store work; see resolutions.go
 	memoPendingCount                        int                    // Number of memoStates with unreplayed effects
 	memoErrorStates                         int                    // Number of memoStates with reports; see setReported
 
@@ -2440,8 +2445,7 @@ func (c *Checker) checkSourceElement(node *ast.Node) bool {
 	if node != nil {
 		saveCurrentNode := c.enterCurrentNode(node)
 		saveWithinUnreachableCode := c.withinUnreachableCode
-		c.instantiationCount = 0
-		c.beginResolution(0, nil, 0)
+		c.beginNodeResolution()
 		c.checkSourceElementWorker(node)
 		c.endResolution()
 		c.exitCurrentNode(saveCurrentNode)
@@ -2683,8 +2687,7 @@ func (c *Checker) checkDeferredNode(node *ast.Node) {
 		defer tr.Push(tracing.PhaseCheck, "checkDeferredNode", map[string]any{"kind": node.Kind, "pos": node.Pos(), "end": node.End(), "path": ast.GetSourceFileOfNode(node).FileName()}, false)()
 	}
 	saveCurrentNode := c.enterCurrentNode(node)
-	c.instantiationCount = 0
-	c.beginResolution(0, nil, 0)
+	c.beginNodeResolution()
 	switch node.Kind {
 	case ast.KindCallExpression, ast.KindNewExpression, ast.KindTaggedTemplateExpression, ast.KindDecorator, ast.KindJsxOpeningElement:
 		// These node kinds are deferred checked when overload resolution fails. To save on work,
@@ -7929,8 +7932,7 @@ func (c *Checker) checkExpressionEx(node *ast.Node, checkMode CheckMode) *Type {
 		defer tr.Push(tracing.PhaseCheck, "checkExpression", map[string]any{"kind": node.Kind, "pos": node.Pos(), "end": node.End(), "path": ast.GetSourceFileOfNode(node).FileName()}, false)()
 	}
 	saveCurrentNode := c.enterCurrentNode(node)
-	c.instantiationCount = 0
-	c.beginResolution(0, nil, 0)
+	c.beginNodeResolution()
 	uninstantiatedType := c.checkExpressionWorker(node, checkMode)
 	t := c.instantiateTypeWithSingleGenericCallSignature(node, uninstantiatedType, checkMode)
 	if isConstEnumObjectType(t) {
@@ -14726,7 +14728,7 @@ func (c *Checker) produceDeferredDiagnostics() {
 
 func (c *Checker) addDiagnostic(diagnostic *ast.Diagnostic) *ast.Diagnostic {
 	// Discard diagnostics created while at the maximum number of recursive TypeToString invocations.
-	if c.serializationLevel < maxSerializationLevel {
+	if !c.depthLimitReached(&c.serializationLevel, maxSerializationLevel) {
 		if !c.checking {
 			c.recordEffect(func(c *Checker) { c.diagnostics.Add(diagnostic) })
 			return diagnostic
@@ -14738,7 +14740,7 @@ func (c *Checker) addDiagnostic(diagnostic *ast.Diagnostic) *ast.Diagnostic {
 
 func (c *Checker) addSuggestionDiagnostic(diagnostic *ast.Diagnostic) *ast.Diagnostic {
 	// Discard diagnostics created while at the maximum number of recursive TypeToString invocations.
-	if c.serializationLevel < maxSerializationLevel {
+	if !c.depthLimitReached(&c.serializationLevel, maxSerializationLevel) {
 		if !c.checking {
 			c.recordEffect(func(c *Checker) { c.suggestionDiagnostics.Add(diagnostic) })
 			return diagnostic
@@ -20126,6 +20128,36 @@ func (c *Checker) markCircular(start int) {
 	c.extendCircularity(start + 1)
 }
 
+// depthLimit counts the nesting of a recursion that is cut short at a fixed
+// depth. How deep a computation may go then depends on how deep it was
+// entered, so a computation cut short keeps its result only if it started
+// counting.
+type depthLimit struct {
+	depth int32
+	start int32 // Index in resolutions of the computation that started counting
+}
+
+// depthLimitReached reports whether l is at limit, in which case the
+// computations since the one that started counting are marked circular.
+func (c *Checker) depthLimitReached(l *depthLimit, limit int32) bool {
+	if l.depth < limit {
+		return false
+	}
+	c.markCircular(int(l.start))
+	return true
+}
+
+func (c *Checker) enterDepthLimit(l *depthLimit) {
+	if l.depth == 0 {
+		l.start = int32(len(c.resolutions) - 1)
+	}
+	l.depth++
+}
+
+func (l *depthLimit) exit() {
+	l.depth--
+}
+
 /**
  * Pop an entry from the type resolution stack and return its associated result value. The result value will
  * be true if no circularities were detected, or false if a circularity was found.
@@ -20135,6 +20167,8 @@ func (c *Checker) popTypeResolution() bool {
 	debug.Assert(c.typeResolutionTop == n+1, "resolutions left above a type resolution")
 	f := &c.resolutions[n]
 	result := f.typeResolution.result
+	parent := &c.resolutions[n-1]
+	parent.count = f.count
 	c.typeResolutionTop = int(f.prevTypeResolution)
 	c.resolutions[n] = resolution{}
 	c.resolutions = c.resolutions[:n]
@@ -20145,9 +20179,15 @@ func (c *Checker) popTypeResolution() bool {
 }
 
 // beginTypeResolution starts the resolution of propertyName for target, which
-// re-entering detects as a cycle.
+// re-entering detects as a cycle. Its resolution shares the work of the
+// resolution below it.
 func (c *Checker) beginTypeResolution(target TypeSystemEntity, propertyName TypeSystemPropertyName) {
+	parent := c.currentResolution()
 	f := resolution{
+		count:              parent.count,
+		start:              parent.start,
+		depthStart:         parent.depthStart,
+		serial:             parent.serial,
 		prevMemo:           int32(c.memoTop),
 		isTypeResolution:   true,
 		prevTypeResolution: int32(c.typeResolutionTop),
@@ -23920,12 +23960,13 @@ func (c *Checker) instantiateTypeWithAlias(t *Type, m *TypeMapper, alias *TypeAl
 	if t == nil || m == nil || !(c.couldContainTypeVariables(t) || (t.alias != nil && len(t.alias.typeArguments) > 0 && core.Some(t.alias.typeArguments, c.couldContainTypeVariables))) {
 		return t
 	}
-	if len(c.instantiationStack) == 100 || c.instantiationCount >= 5_000_000 {
-		// We have reached 100 recursive type instantiations, or 5M type instantiations caused by the same statement
-		// or expression. There is a very high likelihood we're dealing with a combination of infinite generic types
+	// See "Instantiation limits" in memo.go.
+	if c.instantiationLimitReached() {
+		// We have reached 100 recursive type instantiations in one computation, or 5M type instantiations caused by
+		// the same statement or expression. There is a very high likelihood we're dealing with a combination of infinite generic types
 		// that perpetually generate new type identities, so we stop the recursion here by yielding the error type.
 		if tr := c.tracer; tr != nil {
-			tr.Instant(tracing.PhaseCheckTypes, "instantiateType_DepthLimit", map[string]any{"typeId": t.id, "instantiationDepth": len(c.instantiationStack), "instantiationCount": c.instantiationCount})
+			tr.Instant(tracing.PhaseCheckTypes, "instantiateType_DepthLimit", map[string]any{"typeId": t.id, "instantiationDepth": len(c.instantiationStack)})
 		}
 		circularTypeNames := c.getCircularTypeNames()
 		var message *diagnostics.Message
@@ -23938,14 +23979,7 @@ func (c *Checker) instantiateTypeWithAlias(t *Type, m *TypeMapper, alias *TypeAl
 		default:
 			message = diagnostics.Type_instantiation_is_excessively_deep_and_possibly_infinite
 		}
-		report := func(c *Checker, node *ast.Node) { c.error(node, message, args...) }
-		if len(c.instantiationStack) == 100 {
-			c.reportAtCurrentNode(report)
-		} else {
-			// The count depends on how much was already cached, so computing
-			// the result again elsewhere would not reliably reach it either.
-			c.reportAtCurrentNodeOnce(report)
-		}
+		c.reportAtCurrentNode(func(c *Checker, node *ast.Node) { c.error(node, message, args...) })
 		return c.errorType
 	}
 	index := c.findActiveMapper(m)
@@ -23955,22 +23989,34 @@ func (c *Checker) instantiateTypeWithAlias(t *Type, m *TypeMapper, alias *TypeAl
 		c.pushActiveMapper(m)
 	} else {
 		key = getActiveMapperCacheKey(t, alias)
-		if cachedType, ok := c.activeTypeMappersCaches[index].get(key); ok {
-			return cachedType
+		// An instantiation cached in another resolution is not part of the work
+		// of this one, so it is only reused within the same resolution.
+		if cached, ok := c.activeTypeMappersCaches[index].get(key); ok && cached.serial == c.currentResolution().serial {
+			return cached.result
 		}
 	}
 	c.TotalInstantiationCount++
-	c.instantiationCount++
+	h := hashCombine(c.typeHash(t), c.mapperHash(m))
+	if alias != nil {
+		h = hashCombine(h, c.symbolHash(alias.symbol))
+		h = c.hashTypes(h, alias.typeArguments, typeHashDepth)
+	}
+	c.addInstantiation(hashFinal(h))
 	c.instantiationStack = append(c.instantiationStack, t)
 	result := c.instantiateTypeWorker(t, m, alias)
 	if index == -1 {
 		c.popActiveMapper()
 	} else {
-		c.activeTypeMappersCaches[index].set(key, result)
+		c.activeTypeMappersCaches[index].set(key, activeMapperCacheEntry{result, c.currentResolution().serial})
 	}
 	c.instantiationStack[len(c.instantiationStack)-1] = nil
 	c.instantiationStack = c.instantiationStack[:len(c.instantiationStack)-1]
 	return result
+}
+
+type activeMapperCacheEntry struct {
+	result *Type
+	serial uint32
 }
 
 // Without an alias the key is just the type ID, which avoids hashing. Hashed keys have
@@ -23988,7 +24034,14 @@ func getActiveMapperCacheKey(t *Type, alias *TypeAlias) CacheHashKey {
 func (c *Checker) getCircularTypeNames() []string {
 	typeCounts := make(map[*Type]int)
 	var circularTypeNames []string
-	for _, t := range c.instantiationStack {
+	// A computation reaching the depth limit names only its own
+	// instantiations, which do not depend on where it was first computed;
+	// see "Instantiation limits".
+	stack := c.instantiationStack
+	if len(stack) != instantiationTotalDepthLimit {
+		stack = stack[c.currentResolution().depthStart:]
+	}
+	for _, t := range stack {
 		typeCounts[t] = typeCounts[t] + 1
 		if typeCounts[t] == 3 {
 			symbol := t.symbol
@@ -24013,7 +24066,7 @@ func (c *Checker) pushActiveMapper(mapper *TypeMapper) {
 		// The cap may contain an empty cache from popActiveMapper; reuse it.
 		c.activeTypeMappersCaches = c.activeTypeMappersCaches[:lastIndex+1]
 	} else {
-		c.activeTypeMappersCaches = append(c.activeTypeMappersCaches, clearableMap[*Type]{})
+		c.activeTypeMappersCaches = append(c.activeTypeMappersCaches, clearableMap[activeMapperCacheEntry]{})
 	}
 }
 
@@ -29630,12 +29683,12 @@ func (c *Checker) computeBaseConstraint(t *Type, stack []RecursionId) *Type {
 		}
 		return c.getNextBaseConstraint(c.getIndexedAccessTypeOrUndefined(baseObjectType, baseIndexType, t.AsIndexedAccessType().accessFlags, nil, nil), stack)
 	case t.flags&TypeFlagsConditional != 0:
-		if c.conditionalConstraintDepth >= 100 {
+		if c.depthLimitReached(&c.conditionalConstraintDepth, 100) {
 			return nil
 		}
-		c.conditionalConstraintDepth++
+		c.enterDepthLimit(&c.conditionalConstraintDepth)
 		constraint := c.getConstraintFromConditionalType(t)
-		c.conditionalConstraintDepth--
+		c.conditionalConstraintDepth.exit()
 		return c.getNextBaseConstraint(constraint, stack)
 	case t.flags&TypeFlagsSubstitution != 0:
 		return c.getNextBaseConstraint(c.getSubstitutionIntersection(t), stack)

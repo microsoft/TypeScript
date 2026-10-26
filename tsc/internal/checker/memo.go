@@ -154,6 +154,7 @@ func (f *memoEffects) covers(deps []*memoEffects) bool {
 type memoState struct {
 	pending *memoEffects        // Effects not yet replayed by a check
 	errors  []*currentNodeError // Errors the computation reported at the current node; see setReported
+	count   *instantiationCount // Instantiations the computation needed; see "Instantiation counts"
 }
 
 // memo is a cached result. Cached checker state must live in a memo so that
@@ -184,7 +185,7 @@ func (h *memoHeader) key() memoKey {
 
 // get returns the cached result, accounting for the effects of computing it.
 func (m *memo[T]) get(c *Checker) T {
-	if c.memoActive() {
+	if c.observing() {
 		c.observeCell(&m.memoHeader)
 	}
 	return m.memoValue
@@ -198,6 +199,7 @@ func (m *memo[T]) set(c *Checker, v T) {
 		m.logDiscard(c)
 	}
 	m.memoValue = v
+	c.linkCost(m.key())
 	if !c.checking {
 		c.attachCell(&m.memoHeader)
 	}
@@ -238,6 +240,11 @@ func setIfChanged[T comparable](c *Checker, m *memo[T], v T) {
 // the end of a cycle: discarding an identity would let a second, distinct
 // result exist, and an entity can outlive the cycle in caches that are kept
 // while having no way to compute its parts again.
+//
+// Unlike set, it does not take on the work of the computation setting it (see
+// linkCost): an identity is reached only through the result that created it,
+// whose work is already accounted for, and the setting computation's later
+// work, which would otherwise count, is unrelated.
 func (m *memo[T]) setIdentity(c *Checker, v T) {
 	m.memoValue = v
 	if !c.checking {
@@ -266,9 +273,12 @@ func (m *memo[T]) setReported(c *Checker, v T, r currentNodeErrors) {
 
 //go:noinline
 func (m *memo[T]) logDiscard(c *Checker) {
+	// The work of the result is discarded with it.
 	old := m.memoValue
+	oldCount := savedCountOf(c.memoStates, m.key())
 	c.discardLog = append(c.discardLog, discardEntry{&m.memoHeader, func() {
 		m.memoValue = old
+		restoreCount(c.memoStates, m.key(), oldCount)
 	}, false})
 }
 
@@ -335,7 +345,7 @@ type memoMap[K comparable, V any] struct {
 // get returns the cached result for k, accounting for the effects of
 // computing it.
 func (m *memoMap[K, V]) get(c *Checker, k K) (V, bool) {
-	if m.memoStates != nil && c.memoActive() {
+	if m.memoStates != nil && c.observing() {
 		m.observe(c, k)
 	}
 	v, ok := m.memoEntries[k]
@@ -381,17 +391,25 @@ func (m *memoMap[K, V]) set(c *Checker, k K, v V) {
 		m.logDiscard(c, k)
 	}
 	m.setIdentity(c, k, v)
+	if len(c.resolutions) > 1 && !m.isOwnResolution(c, k) {
+		// Like memo.set; see linkCost.
+		if count := c.costSoFar(); count != nil {
+			m.state(k).count = count
+		}
+	}
 }
 
 //go:noinline
 func (m *memoMap[K, V]) logDiscard(c *Checker, k K) {
 	old, ok := m.memoEntries[k]
+	oldCount := savedCountOf(m.memoStates, k)
 	c.discardLog = append(c.discardLog, discardEntry{nil, func() {
 		if ok {
 			m.memoEntries[k] = old
 		} else {
 			delete(m.memoEntries, k)
 		}
+		restoreCount(m.memoStates, k, oldCount)
 	}, false})
 }
 
@@ -421,6 +439,24 @@ func (m *memoMap[K, V]) setIdentity(c *Checker, k K, v V) {
 	}
 }
 
+// setWithCost is set for a result whose instantiation count is count, rather
+// than that of the current resolution.
+func (m *memoMap[K, V]) setWithCost(c *Checker, k K, v V, count *instantiationCount) {
+	if c.logResults() {
+		m.logDiscard(c, k)
+	}
+	if m.memoEntries == nil {
+		m.memoEntries = make(map[K]V)
+	}
+	m.memoEntries[k] = v
+	if count != nil {
+		m.state(k).count = count
+	}
+	if c.memoTop != 0 {
+		c.attachState(m.state(k))
+	}
+}
+
 // intern caches a result constructed from the inputs in k alone, without
 // consulting any cached result, so computing it has no effects to account for.
 func (m *memoMap[K, V]) intern(k K, v V) {
@@ -441,6 +477,12 @@ func (m *memoMap[K, V]) compute(c *Checker, k K, fn func() V) V {
 
 // enter starts the computation of the result for k; see beginMemo.
 func (m *memoMap[K, V]) begin(c *Checker, k K) {
+	if c.inResolution() {
+		// Entering a computed result reads it.
+		if state := m.memoStates[k]; state != nil {
+			c.observeCost(state.count)
+		}
+	}
 	outer := m.resolvingIndex(c, k)
 	if outer != 0 {
 		// Re-entering an entry marks the cycle circular; see reentryCircular.
@@ -470,6 +512,17 @@ func (m *memoMap[K, V]) resolvingIndex(c *Checker, k K) int {
 		}
 	}
 	panic("entry in progress without a resolution")
+}
+
+// isOwnResolution reports whether the current resolution computes the entry
+// for k.
+func (m *memoMap[K, V]) isOwnResolution(c *Checker, k K) bool {
+	f := c.currentResolution()
+	return f.source == memoStateSource(m) && m.resolvingKeys[f.index] == k
+}
+
+func (m *memoMap[K, V]) stateAt(i int) *memoState {
+	return m.state(m.resolvingKeys[i])
 }
 
 func (m *memoMap[K, V]) popState(i int) {
@@ -517,6 +570,12 @@ func (s *memoSet[K]) once(c *Checker, k K, fn func()) {
 // effects: false in a check with nothing pending.
 func (c *Checker) memoActive() bool {
 	return !c.checking || c.memoPendingCount|c.memoErrorStates != 0
+}
+
+// observing reports whether reading a cached result must account for its
+// effects or its instantiation count.
+func (c *Checker) observing() bool {
+	return c.memoActive() || c.inResolution()
 }
 
 // beginMemo is called on entry to a memoized function whose result for this
@@ -653,7 +712,8 @@ func (c *Checker) attachCell(h *memoHeader) {
 
 // observeMemo accounts for reading a memoized result without computing it.
 func (c *Checker) observeMemo(key memoKey) {
-	if !c.memoActive() {
+	if !c.memoActive() && !c.mayHaveCost(key) {
+		// Only the work of the result is accounted for, and it has none.
 		return
 	}
 	if c.observeState(c.memoStates[key]) {
@@ -668,6 +728,7 @@ func (c *Checker) observeState(state *memoState) bool {
 	if state == nil {
 		return false
 	}
+	c.observeCost(state.count)
 	if state.errors != nil {
 		c.replayCurrentNodeErrors(state.errors)
 	}
@@ -780,6 +841,7 @@ func (c *Checker) endMemo() {
 func (c *Checker) endMemoUncached() {
 	defer c.endResolution()
 	res := c.stopEffects()
+	c.forgetCost()
 	if res == nil || res.effects == nil {
 		return
 	}
@@ -905,7 +967,7 @@ func (c *Checker) recordReferenceMark(symbol *ast.Symbol) {
 // pending for checking to replay.
 func (c *Checker) withReferenceMarks(fn func()) {
 	debug.Assert(!c.checking && c.memoTop == 0, "withReferenceMarks inside a computation")
-	c.beginResolution(0, nil, 0)
+	c.beginNodeResolution()
 	c.startEffects(&memoState{})
 	fn()
 	f := c.stopEffects().effects
@@ -1089,7 +1151,7 @@ func (c *Checker) trimDiscardLog() {
 
 // observeFlagMemo accounts for reading the flag memo identified by key.
 func (c *Checker) observeFlagMemo(key memoKey) {
-	if c.memoActive() {
+	if c.observing() {
 		c.observeMemo(key)
 	}
 }
@@ -1307,4 +1369,38 @@ func (c *Checker) typeResolutionMemo(r *TypeResolution) *memoHeader {
 		return &c.varianceLinks.Get(r.target.(*ast.Symbol)).variances.memoHeader
 	}
 	return nil
+}
+
+// Instantiation limits
+//
+// Instantiation stops with an error when nested too deeply or after too
+// many instantiations, as the instantiation is then very likely infinite.
+// For the result not to depend on what was cached before, each memoized
+// computation (including each cached comparison of two types) measures
+// depth from where it started, whether or not it reports errors, and a
+// reused result adds no depth. Chains that start a new memoized computation
+// at every level are only stopped by a much larger limit on the whole
+// outermost instantiation, which is only reached by runaway instantiations,
+// and which does depend on what was cached before.
+//
+// The limit on the number of instantiations likewise applies to the work
+// needed to compute the current result from scratch, estimated by an
+// instantiation count of the distinct instantiations it needs, including
+// those of the results it reuses (see resolutions.go).
+
+const (
+	instantiationDepthLimit      = 100
+	instantiationTotalDepthLimit = 1000
+	instantiationCountLimit      = 5_000_000
+)
+
+// instantiationLimitReached reports whether a further instantiation would
+// exceed a limit.
+func (c *Checker) instantiationLimitReached() bool {
+	return c.instantiationDepthLimitReached() || c.currentResolution().count.exceedsLimit()
+}
+
+func (c *Checker) instantiationDepthLimitReached() bool {
+	depth := len(c.instantiationStack)
+	return depth-int(c.currentResolution().depthStart) == instantiationDepthLimit || depth == instantiationTotalDepthLimit
 }
