@@ -72,6 +72,7 @@ const (
 	TypeSystemPropertyNameCurrentNode
 	TypeSystemPropertyNameSimplifiedForReading
 	TypeSystemPropertyNameSimplifiedForWriting
+	TypeSystemPropertyNamePatternInitializer
 )
 
 type TypeResolution struct {
@@ -17676,6 +17677,19 @@ func (c *Checker) getTypeOfVariableOrParameterOrPropertyWorker(symbol *ast.Symbo
 		}
 		return c.getWidenedType(c.getWidenedLiteralType(c.checkExpression(statements[0].Expression())))
 	}
+	if ast.IsBindingElement(declaration) && c.strictNullChecks {
+		// The type of a binding element depends on the type of the
+		// initializer its pattern destructures (see
+		// getBindingElementTypeFromParentType), which may in turn depend on
+		// the element. Resolving the initializer first, as for any element of
+		// the pattern, makes the cycle resolve the same way whichever element
+		// is requested first.
+		if initializer := declaration.Parent.Parent.Initializer(); initializer != nil && !c.isResolutionInProgress(initializer, TypeSystemPropertyNamePatternInitializer) {
+			c.beginTypeResolution(initializer, TypeSystemPropertyNamePatternInitializer)
+			c.getTypeOfInitializer(initializer)
+			c.popTypeResolution()
+		}
+	}
 	// Handle variable, parameter or property
 	if !c.pushTypeResolution(symbol, TypeSystemPropertyNameType) {
 		return c.reportCircularityError(symbol)
@@ -20185,7 +20199,8 @@ func (c *Checker) typeResolutionHasProperty(r *TypeResolution) bool {
 	case TypeSystemPropertyNameAliasTarget:
 		return c.aliasSymbolLinks.Get(r.target.(*ast.Symbol)).aliasTarget.peek() != nil
 	case TypeSystemPropertyNameContextChecked, TypeSystemPropertyNameStructuredMembers, TypeSystemPropertyNameCurrentNode,
-		TypeSystemPropertyNameSimplifiedForReading, TypeSystemPropertyNameSimplifiedForWriting:
+		TypeSystemPropertyNameSimplifiedForReading, TypeSystemPropertyNameSimplifiedForWriting,
+		TypeSystemPropertyNamePatternInitializer:
 		// Marked as checked or resolved on entry, so it is only on the stack
 		// while in progress.
 		return false
