@@ -26470,11 +26470,8 @@ func (c *Checker) getUnionTypeFromSortedList(types []*Type, precomputedObjectFla
 	key := getUnionKey(types, origin, alias)
 	t := c.unionTypes[key]
 	if t == nil {
-		objectFlags := precomputedObjectFlags | c.getPropagatingFlagsOfTypes(types, TypeFlagsNullable)
-		if core.Some(types, func(t *Type) bool { return t.flags&TypeFlagsInstantiable != 0 }) {
-			objectFlags |= ObjectFlagsContainsInstantiables
-		}
-		t = c.newUnionType(objectFlags, types)
+		t = c.newUnionType(precomputedObjectFlags|c.getPropagatingFlagsOfTypes(types, TypeFlagsNullable), types)
+		t.AsUnionType().containsInstantiables = core.Some(types, func(t *Type) bool { return t.flags&TypeFlagsInstantiable != 0 })
 		t.AsUnionType().origin = origin
 		t.alias = alias
 		if len(types) == 2 && types[0].flags&TypeFlagsBooleanLiteral != 0 && types[1].flags&TypeFlagsBooleanLiteral != 0 {
@@ -32293,7 +32290,7 @@ func (c *Checker) isConstraintPosition(t *Type, node *ast.Node) bool {
 // A union type is a generic type with a union constraint only when one of its constituents is instantiable, or is
 // an intersection that might contain one, so the walk is skipped for unions with neither.
 func (c *Checker) someGenericTypeWithUnionConstraint(t *Type) bool {
-	if t.flags&TypeFlagsUnion != 0 && t.objectFlags&(ObjectFlagsContainsInstantiables|ObjectFlagsContainsIntersections) == 0 {
+	if t.flags&TypeFlagsUnion != 0 && t.objectFlags&ObjectFlagsContainsIntersections == 0 && !t.AsUnionType().containsInstantiables {
 		return false
 	}
 	return someType(t, c.isGenericTypeWithUnionConstraint)

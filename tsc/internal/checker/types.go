@@ -726,7 +726,6 @@ const (
 	ObjectFlagsIsUnknownLikeUnion         = 1 << 27 // Union of null, undefined, and empty object type
 	ObjectFlagsIsUniformEnumComputed      = 1 << 28 // IsUniformEnum flag has been computed
 	ObjectFlagsIsUniformEnum              = 1 << 29 // Union contains uniform literal types
-	ObjectFlagsContainsInstantiables      = 1 << 30 // Union contains instantiable types
 	// Flags that require TypeFlags.Intersection
 	ObjectFlagsIsNeverIntersectionComputed = 1 << 25 // IsNeverLike flag has been computed
 	ObjectFlagsIsNeverIntersection         = 1 << 26 // Intersection reduces to never
@@ -1475,11 +1474,12 @@ func (t *UnionOrIntersectionType) Types() []*Type {
 
 type UnionType struct {
 	UnionOrIntersectionType
-	resolvedReducedType *Type
-	regularType         *Type
-	origin              *Type           // Denormalized union, intersection, or index type in which union originates
-	keyPropertyName     string          // Property with unique unit type that exists in every object/intersection in union type
-	constituentMap      map[*Type]*Type // Constituents keyed by unit type discriminants
+	resolvedReducedType   *Type
+	regularType           *Type
+	origin                *Type           // Denormalized union, intersection, or index type in which union originates
+	keyPropertyName       string          // Property with unique unit type that exists in every object/intersection in union type
+	constituentMap        map[*Type]*Type // Constituents keyed by unit type discriminants
+	containsInstantiables bool            // Union contains instantiable types
 }
 
 // IntersectionType
