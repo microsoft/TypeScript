@@ -7,6 +7,7 @@ import (
 	"iter"
 	"maps"
 	"math"
+	"math/bits"
 	"slices"
 	"strconv"
 	"strings"
@@ -692,6 +693,8 @@ type Checker struct {
 	outerTypeParameterListArena                 core.Arena[[]*Type]
 	valueSymbolExtraArena                       core.Arena[valueSymbolExtra]
 	structuredTypeExtraArena                    core.Arena[structuredTypeExtra]
+	memberIndexArena                            core.Arena[memberIndex]
+	memberIndexSlotsArena                       core.Arena[uint32]
 	lazyStateArena                              core.Arena[LazyState]
 	memberLayoutArena                           core.Arena[MemberLayout]
 	layoutMemberInfos                           map[string]MemberInfo
@@ -4592,8 +4595,8 @@ func (c *Checker) getTypeWithoutSignatures(t *Type) *Type {
 		if len(resolved.getSignatures()) != 0 {
 			result := c.newObjectType(ObjectFlagsAnonymous, t.symbol)
 			result.objectFlags |= ObjectFlagsMembersResolved
-			result.AsObjectType().members = resolved.getMembers()
 			result.AsObjectType().properties = resolved.getProperties()
+			result.AsObjectType().members = resolved.members
 			return result
 		}
 	case t.flags&TypeFlagsIntersection != 0:
@@ -25853,9 +25856,56 @@ func (c *Checker) cloneTypeReference(source *Type) *Type {
 func (c *Checker) setStructuredTypeMembers(t *Type, members ast.SymbolTable, callSignatures []*Signature, constructSignatures []*Signature, indexInfos []*IndexInfo) {
 	t.objectFlags |= ObjectFlagsMembersResolved
 	data := t.AsStructuredType()
-	data.members = members
+	// Filtering named members may query this type's members before they're set.
+	data.members = nil
+	if members != nil {
+		data.members = c.memberIndexArena.New()
+		data.members.table = members
+	}
 	data.properties = c.getNamedMembers(members, t.symbol)
+	// Module exports can change after they're resolved, so keep their table.
+	if data.members != nil && (t.symbol == nil || t.symbol.Flags()&ast.SymbolFlagsValueModule == 0) && symbolTableMatchesProperties(members, data.properties) {
+		data.members = c.newPropertyIndex(data.properties, data.members)
+	}
 	c.setStructuredTypeSignatures(data, callSignatures, constructSignatures, indexInfos)
+}
+
+// Reports whether every member is one of the properties, stored under its own
+// name. Checking the table's pairs, rather than looking up each property by
+// name, also rejects a symbol stored under a second key.
+func symbolTableMatchesProperties(members ast.SymbolTable, properties []*ast.Symbol) bool {
+	if len(members) != len(properties) {
+		return false
+	}
+	for name, symbol := range members {
+		if symbol.Name() != name {
+			return false
+		}
+	}
+	return true
+}
+
+// Indexes properties by name in place of their symbol table. Small property
+// lists are searched directly and need no index.
+func (c *Checker) newPropertyIndex(properties []*ast.Symbol, index *memberIndex) *memberIndex {
+	if len(properties) <= 8 {
+		return nil
+	}
+	if uint64(len(properties)) >= uint64(^uint32(0)) {
+		panic("Member index exhausted")
+	}
+	size := 1 << bits.Len(uint(len(properties))*2-1)
+	index.table = nil
+	index.slots = c.memberIndexSlotsArena.NewSlice(size)
+	mask := uint64(size - 1)
+	for i, symbol := range properties {
+		slot := xxh3.HashString(symbol.Name()) & mask
+		for index.slots[slot] != 0 {
+			slot = (slot + 1) & mask
+		}
+		index.slots[slot] = uint32(i + 1)
+	}
+	return index
 }
 
 func (c *Checker) setStructuredTypeSignatures(data *StructuredType, callSignatures []*Signature, constructSignatures []*Signature, indexInfos []*IndexInfo) {
