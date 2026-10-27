@@ -1,6 +1,6 @@
-import { SpanMapFeature } from "#enums/spanMapFeature";
-import { SpanMapFidelity } from "#enums/spanMapFidelity";
-import { SpanMapKind } from "#enums/spanMapKind";
+import { SpanMapFeature } from "../../enums/spanMapFeature.js";
+import { SpanMapFidelity } from "../../enums/spanMapFidelity.js";
+import { SpanMapKind } from "../../enums/spanMapKind.js";
 import type { ReadonlyTextRange } from "./ast.ts";
 
 export { SpanMapFeature, SpanMapFidelity, SpanMapKind };

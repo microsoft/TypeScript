@@ -1,0 +1,39 @@
+//// [tests/cases/compiler/objectEntriesPartialIndexedWrite.ts] ////
+
+=== objectEntriesPartialIndexedWrite.ts ===
+type Row = { amount: number } & Record<string, string>;
+>Row : Symbol(Row, Decl(objectEntriesPartialIndexedWrite.ts, 0, 0))
+>amount : Symbol(amount, Decl(objectEntriesPartialIndexedWrite.ts, 0, 12))
+>Record : Symbol(Record, Decl(lib.es5.d.ts, --, --))
+
+export function copy(row: Row, mapping: { amount: string; notes: string }) {
+>copy : Symbol(copy, Decl(objectEntriesPartialIndexedWrite.ts, 0, 55))
+>row : Symbol(row, Decl(objectEntriesPartialIndexedWrite.ts, 1, 21))
+>Row : Symbol(Row, Decl(objectEntriesPartialIndexedWrite.ts, 0, 0))
+>mapping : Symbol(mapping, Decl(objectEntriesPartialIndexedWrite.ts, 1, 30))
+>amount : Symbol(amount, Decl(objectEntriesPartialIndexedWrite.ts, 1, 41))
+>notes : Symbol(notes, Decl(objectEntriesPartialIndexedWrite.ts, 1, 57))
+
+    const result: Partial<Row> = {};
+>result : Symbol(result, Decl(objectEntriesPartialIndexedWrite.ts, 2, 9))
+>Partial : Symbol(Partial, Decl(lib.es5.d.ts, --, --))
+>Row : Symbol(Row, Decl(objectEntriesPartialIndexedWrite.ts, 0, 0))
+
+    for (const [field, target] of Object.entries(mapping)) {
+>field : Symbol(field, Decl(objectEntriesPartialIndexedWrite.ts, 3, 16))
+>target : Symbol(target, Decl(objectEntriesPartialIndexedWrite.ts, 3, 22))
+>Object.entries : Symbol(ObjectConstructor.entries, Decl(lib.es2017.object.d.ts, --, --), Decl(lib.es2017.object.d.ts, --, --))
+>Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>entries : Symbol(ObjectConstructor.entries, Decl(lib.es2017.object.d.ts, --, --), Decl(lib.es2017.object.d.ts, --, --))
+>mapping : Symbol(mapping, Decl(objectEntriesPartialIndexedWrite.ts, 1, 30))
+
+        result[field] = row[target];
+>result : Symbol(result, Decl(objectEntriesPartialIndexedWrite.ts, 2, 9))
+>field : Symbol(field, Decl(objectEntriesPartialIndexedWrite.ts, 3, 16))
+>row : Symbol(row, Decl(objectEntriesPartialIndexedWrite.ts, 1, 21))
+>target : Symbol(target, Decl(objectEntriesPartialIndexedWrite.ts, 3, 22))
+    }
+    return result;
+>result : Symbol(result, Decl(objectEntriesPartialIndexedWrite.ts, 2, 9))
+}
+

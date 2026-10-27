@@ -76,9 +76,10 @@ type SessionOptions struct {
 	PushDiagnosticsEnabled bool
 	// RunExternalCode allows configured content mappers to run their (external) processes,
 	// gated on workspace trust by the client. It corresponds to the --runExternalCode CLI flag.
-	RunExternalCode    bool
-	DebounceDelay      time.Duration
-	CheckerPoolOptions CheckerPoolOptions
+	RunExternalCode       bool
+	InitialWorkspaceRoots []tspath.RootedDirectoryPath
+	DebounceDelay         time.Duration
+	CheckerPoolOptions    CheckerPoolOptions
 }
 
 type SessionInit struct {
@@ -697,6 +698,10 @@ func (s *Session) scheduleIdleCacheClean() {
 
 		go func() { runtime.GC() }()
 	})
+	// Must be stored so cancelIdleCacheClean/closeIdleCacheClean can find and
+	// stop this timer; otherwise it always runs to completion, making Close
+	// block for the full delay instead of returning promptly.
+	s.idleCacheCleanTimer = timer
 }
 
 func (s *Session) cancelIdleCacheClean() {

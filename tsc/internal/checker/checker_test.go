@@ -1,7 +1,9 @@
 package checker_test
 
 import (
+	"fmt"
 	"path/filepath"
+	"strings"
 	"testing"
 
 	"github.com/microsoft/TypeScript/tsc/internal/ast"
@@ -37,7 +39,7 @@ foo.bar;`
 	fs = bundled.WrapFS(fs)
 
 	host := compiler.NewCompilerHost(fs, bundled.LibPath(), nil, nil, nil)
-	parsed, errors := tsoptions.GetParsedCommandLineOfConfigFile("/tsconfig.json", &core.CompilerOptions{}, nil, fs, nil)
+	parsed, errors := tsoptions.GetParsedCommandLineOfConfigFile("/tsconfig.json", &core.CompilerOptions{}, nil, tsoptions.NewDefaultParseConfigHost(fs), nil)
 	assert.Equal(t, len(errors), 0, "Expected no errors in parsed command line")
 
 	p, err := compiler.NewProgram(t.Context(), compiler.ProgramOptions{
@@ -86,7 +88,7 @@ export type E = D;`,
 
 	host := compiler.NewCompilerHost(fs, bundled.LibPath(), nil, nil, nil)
 
-	parsed, errors := tsoptions.GetParsedCommandLineOfConfigFile("/tsconfig.json", &core.CompilerOptions{}, nil, fs, nil)
+	parsed, errors := tsoptions.GetParsedCommandLineOfConfigFile("/tsconfig.json", &core.CompilerOptions{}, nil, tsoptions.NewDefaultParseConfigHost(fs), nil)
 	assert.Equal(t, len(errors), 0, "Expected no errors in parsed command line")
 
 	p, err := compiler.NewProgram(t.Context(), compiler.ProgramOptions{
@@ -121,7 +123,7 @@ func BenchmarkNewChecker(b *testing.B) {
 	fs := bundled.WrapFS(osvfs.FS())
 	rootPath := tspath.RootedDirectoryPathFromAbsolute(filepath.Join(repo.TestDataPath(), "fixtures/compiler"))
 	host := compiler.NewCompilerHost(fs, bundled.LibPath(), nil, nil, nil)
-	parsed, errors := tsoptions.GetParsedCommandLineOfConfigFile(rootPath.ResolveFile("tsconfig.json"), &core.CompilerOptions{}, nil, fs, nil)
+	parsed, errors := tsoptions.GetParsedCommandLineOfConfigFile(rootPath.ResolveFile("tsconfig.json"), &core.CompilerOptions{}, nil, tsoptions.NewDefaultParseConfigHost(fs), nil)
 	assert.Equal(b, len(errors), 0, "Expected no errors in parsed command line")
 	program, err := compiler.NewProgram(b.Context(), compiler.ProgramOptions{
 		Config: parsed,
@@ -133,4 +135,82 @@ func BenchmarkNewChecker(b *testing.B) {
 	for b.Loop() {
 		checker.NewChecker(program, nil)
 	}
+}
+
+func BenchmarkCheck(b *testing.B) {
+	fs := bundled.WrapFS(osvfs.FS())
+	rootPath := tspath.RootedDirectoryPathFromAbsolute(filepath.Join(repo.TestDataPath(), "fixtures/compiler"))
+	host := compiler.NewCompilerHost(fs, bundled.LibPath(), nil, nil, nil)
+	parsed, errors := tsoptions.GetParsedCommandLineOfConfigFile(rootPath.ResolveFile("tsconfig.json"), &core.CompilerOptions{}, nil, tsoptions.NewDefaultParseConfigHost(fs), nil)
+	assert.Equal(b, len(errors), 0, "Expected no errors in parsed command line")
+	program, err := compiler.NewProgram(b.Context(), compiler.ProgramOptions{
+		Config: parsed,
+		Host:   host,
+	})
+	assert.NilError(b, err)
+	program.BindSourceFiles()
+	ctx := b.Context()
+
+	b.ReportAllocs()
+	for b.Loop() {
+		c, _ := checker.NewChecker(program, nil)
+		for _, file := range program.GetSourceFiles() {
+			c.GetDiagnostics(ctx, file)
+		}
+		c.GetGlobalDiagnostics()
+	}
+}
+
+func BenchmarkCheckFreshProgram(b *testing.B) {
+	fs := bundled.WrapFS(osvfs.FS())
+	rootPath := tspath.RootedDirectoryPathFromAbsolute(filepath.Join(repo.TestDataPath(), "fixtures/compiler"))
+	host := compiler.NewCompilerHost(fs, bundled.LibPath(), nil, nil, nil)
+	parsed, errors := tsoptions.GetParsedCommandLineOfConfigFile(rootPath.ResolveFile("tsconfig.json"), &core.CompilerOptions{}, nil, tsoptions.NewDefaultParseConfigHost(fs), nil)
+	assert.Equal(b, len(errors), 0, "Expected no errors in parsed command line")
+	ctx := b.Context()
+
+	b.ReportAllocs()
+	for b.Loop() {
+		program, err := compiler.NewProgram(ctx, compiler.ProgramOptions{Config: parsed, Host: host})
+		assert.NilError(b, err)
+		program.BindSourceFiles()
+		c, _ := checker.NewChecker(program, nil)
+		for _, file := range program.GetSourceFiles() {
+			assert.Equal(b, len(c.GetDiagnostics(ctx, file)), 0)
+		}
+		assert.Equal(b, len(c.GetGlobalDiagnostics()), 0)
+	}
+}
+
+func TestTypeAllocationAcrossCheckerGrowth(t *testing.T) {
+	t.Parallel()
+	var content strings.Builder
+	content.WriteString(`interface Box<T> { value: T }
+export type Initial = Box<"first">;
+`)
+	for i := range 1024 {
+		fmt.Fprintf(&content, "export type T%d = Box<\"value%d\">;\n", i, i)
+	}
+	fs := bundled.WrapFS(vfstest.FromMap(map[string]string{
+		"/foo.ts": content.String(),
+	}, tspath.CaseSensitive))
+	opts := &core.CompilerOptions{NoLib: core.TSTrue}
+	program, err := compiler.NewProgram(t.Context(), compiler.ProgramOptions{
+		Config: tsoptions.NewParsedCommandLine(opts, []tspath.RootedFilePath{"/foo.ts"}, nil, "/", fs.CaseSensitivity()),
+		Host:   compiler.NewCompilerHost(fs, bundled.LibPath(), nil, nil, nil),
+	})
+	assert.NilError(t, err)
+	program.BindSourceFiles()
+	c, done := program.GetTypeChecker(t.Context())
+	defer done()
+	file := program.GetSourceFile("/foo.ts")
+	initial := c.GetTypeAtLocation(file.Statements.Nodes[1].AsTypeAliasDeclaration().Type)
+	for i := range 1024 {
+		node := file.Statements.Nodes[i+2].AsTypeAliasDeclaration().Type
+		typ := c.GetTypeAtLocation(node)
+		assert.Equal(t, c.TypeToString(typ), fmt.Sprintf("T%d", i))
+	}
+	assert.Equal(t, c.GetTypeAtLocation(file.Statements.Nodes[1].AsTypeAliasDeclaration().Type), initial)
+	assert.Equal(t, c.TypeToString(initial), "Initial")
+	assert.Equal(t, len(c.GetDiagnostics(t.Context(), file)), 0)
 }

@@ -1,4 +1,4 @@
-import { SymbolOwnerKind } from "#enums/symbolOwnerKind";
+import { SymbolOwnerKind } from "../../enums/symbolOwnerKind.js";
 import {
     documentURIToFileName,
     fileNameToDocumentURI,
@@ -7,7 +7,6 @@ import type {
     APIMethodInfo,
     CreateSnapshotParams as CoreCreateSnapshotParams,
     DocumentIdentifier,
-    ProjectId,
     SignatureResponse,
     SourceFileDescriptor,
     SourceFileResponse,
@@ -32,7 +31,7 @@ export interface SnapshotSymbolOwner {
     readonly kind: typeof SymbolOwnerKind.Snapshot;
     readonly file?: never;
     readonly snapshot: number;
-    readonly project: ProjectId;
+    readonly project: number;
 }
 
 export type SymbolOwner = FileSymbolOwner | SnapshotSymbolOwner;
@@ -128,33 +127,8 @@ export function resolveDocumentURI(identifier: DocumentIdentifier): string {
     return identifier.uri;
 }
 
-/**
- * Parameters for createSnapshot, including deprecated members handled by `toCreateSnapshotRequest`
- */
-export interface CreateSnapshotParams extends CoreCreateSnapshotParams {
-    /**
-     * @deprecated Use {@link openProjects} instead.
-     * Path to a tsconfig.json file to open in the new snapshot.
-     */
-    openProject?: string | undefined;
-}
+export type CreateSnapshotParams = CoreCreateSnapshotParams;
 
 export interface CreateBuildOrchestratorParams {
     rootNames: readonly string[] | null;
-}
-
-/**
- * Builds the wire request for createSnapshot, applying the deprecated `openProject`
- * compatibility shim: a single `openProject` is folded into `openProjects` and is
- * never sent on the wire.
- */
-export function toCreateSnapshotRequest(params?: CreateSnapshotParams): CreateSnapshotParams {
-    const { openProject, openProjects, ...rest } = params ?? {};
-    const mergedOpenProjects = openProject !== undefined
-        ? [resolveFileName(openProject), ...(openProjects ?? [])]
-        : openProjects;
-    return {
-        ...rest,
-        openProjects: mergedOpenProjects,
-    };
 }

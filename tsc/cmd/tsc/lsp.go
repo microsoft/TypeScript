@@ -55,7 +55,7 @@ func runLSP(ctx context.Context, args []string) int {
 		Cwd:                cwd,
 		FS:                 fs,
 		DefaultLibraryPath: defaultLibraryPath,
-		TypingsLocation:    tspath.ToRootedDirectoryPath(typingsLocation, cwd),
+		TypingsLocation:    typingsLocation,
 		NpmInstall: func(ctx context.Context, cwd string, args []string) ([]byte, error) {
 			cmd := exec.CommandContext(ctx, "npm", args...)
 			cmd.Dir = cwd

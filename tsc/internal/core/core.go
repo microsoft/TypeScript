@@ -720,10 +720,6 @@ func IndexAfter(s string, pattern string, startIndex int) int {
 	}
 }
 
-func ShouldRewriteModuleSpecifier(specifier string, compilerOptions *CompilerOptions) bool {
-	return compilerOptions.RewriteRelativeImportExtensions.IsTrue() && tspath.PathIsRelative(specifier) && !tspath.IsDeclarationFileName(specifier) && tspath.HasTSFileExtension(specifier)
-}
-
 func SingleElementSlice[T any](element *T) []*T {
 	if element == nil {
 		return nil

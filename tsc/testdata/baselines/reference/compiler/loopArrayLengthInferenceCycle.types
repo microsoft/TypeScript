@@ -1,0 +1,66 @@
+//// [tests/cases/compiler/loopArrayLengthInferenceCycle.ts] ////
+
+=== loopArrayLengthInferenceCycle.ts ===
+function tokenize() {
+>tokenize : () => void
+
+    let state: { matches: string[]; groups: string[][] } | null = null;
+>state : { matches: string[]; groups: string[][]; } | null
+>matches : string[]
+>groups : string[][]
+
+    while (true) {
+>true : true
+
+        let matches: string[] | null = null;
+>matches : string[] | null
+
+        let action: string[] | null = null;
+>action : string[] | null
+
+        if (state) {
+>state : { matches: string[]; groups: string[][]; } | null
+
+            const groupEntry = state.groups[0];
+>groupEntry : string[]
+>state.groups[0] : string[]
+>state.groups : string[][]
+>state : { matches: string[]; groups: string[][]; }
+>groups : string[][]
+>0 : 0
+
+            action = groupEntry;
+>action = groupEntry : string[]
+>action : string[] | null
+>groupEntry : string[]
+        }
+        matches = [];
+>matches = [] : never[]
+>matches : string[] | null
+>[] : never[]
+
+        if (action) {
+>action : string[] | null
+
+            if (matches.length !== action.length) throw new Error();
+>matches.length !== action.length : boolean
+>matches.length : number
+>matches : string[]
+>length : number
+>action.length : number
+>action : string[]
+>length : number
+>new Error() : Error
+>Error : ErrorConstructor
+
+            state = { matches, groups: [] };
+>state = { matches, groups: [] } : { matches: string[]; groups: never[]; }
+>state : { matches: string[]; groups: string[][]; } | null
+>{ matches, groups: [] } : { matches: string[]; groups: never[]; }
+>matches : string[]
+>groups : never[]
+>[] : never[]
+        }
+    }
+}
+

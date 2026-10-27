@@ -318,7 +318,8 @@ func (w *filesParser) start(ctx context.Context, loader *fileLoader, tasks []*pa
 			}
 
 			currentDepth := core.IfElse(task.increaseDepth, depth+1, depth)
-			if currentDepth < data.lowestDepth {
+			lowered := currentDepth < data.lowestDepth
+			if lowered {
 				// If we're seeing this task at a lower depth than before,
 				// reprocess its subtasks to ensure they are loaded.
 				data.lowestDepth = currentDepth
@@ -343,7 +344,7 @@ func (w *filesParser) start(ctx context.Context, loader *fileLoader, tasks []*pa
 						data.startedSubTasks = true
 					}
 				}
-				if !taskByFileName.startedSubTasks && loadSubTasks {
+				if loadSubTasks && (lowered || !taskByFileName.startedSubTasks) {
 					taskByFileName.startedSubTasks = true
 					w.start(ctx, loader, taskByFileName.subTasks, data.lowestDepth)
 				}

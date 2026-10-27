@@ -145,7 +145,7 @@ import { value } from "./dep.js"; export const result = value;`,
 	}
 	fs := vfstest.FromMap(files, tspath.CaseSensitive)
 	host := NewCompilerHost(fs, "/", nil, nil, nil)
-	config, diagnostics := tsoptions.GetParsedCommandLineOfConfigFile("/src/tsconfig.json", nil, nil, fs, nil)
+	config, diagnostics := tsoptions.GetParsedCommandLineOfConfigFile("/src/tsconfig.json", nil, nil, tsoptions.NewDefaultParseConfigHost(fs), nil)
 	assert.Equal(t, len(diagnostics), 0)
 	var pools, resolvers int
 	tr := new(tracing.Tracing)
@@ -261,7 +261,7 @@ func TestClonedProgramProjectReferenceResolution(t *testing.T) {
 			host := NewCompilerHost(fs, "/", nil, nil, nil)
 			config, diagnostics := tsoptions.GetParsedCommandLineOfConfigFile("/src/tsconfig.json", &core.CompilerOptions{
 				PreserveSymlinks: core.BoolToTristate(preserveSymlinks),
-			}, nil, fs, nil)
+			}, nil, tsoptions.NewDefaultParseConfigHost(fs), nil)
 			assert.Equal(t, len(diagnostics), 0)
 			p, err := NewProgram(t.Context(), ProgramOptions{Config: config, Host: host, UseSourceOfProjectReference: true})
 			assert.NilError(t, err)
@@ -386,6 +386,7 @@ var esnextLibs = []string{
 	"lib.es2026.json.d.ts",
 	"lib.es2026.math.d.ts",
 	"lib.es2026.typedarrays.d.ts",
+	"lib.esnext.iterator.d.ts",
 	"lib.esnext.promise.d.ts",
 	"lib.esnext.date.d.ts",
 	"lib.esnext.decorators.d.ts",
@@ -553,7 +554,7 @@ func TestImportSourceProgram(t *testing.T) {
 			}
 			fs := vfstest.FromMap(files, tspath.CaseSensitive)
 			host := NewCompilerHost(fs, "/", nil, nil, nil)
-			config, diagnostics := tsoptions.GetParsedCommandLineOfConfigFile("/src/tsconfig.json", nil, nil, fs, nil)
+			config, diagnostics := tsoptions.GetParsedCommandLineOfConfigFile("/src/tsconfig.json", nil, nil, tsoptions.NewDefaultParseConfigHost(fs), nil)
 			assert.Equal(t, len(diagnostics), 0)
 			program, err := NewProgram(t.Context(), ProgramOptions{Config: config, Host: host})
 			assert.NilError(t, err)
@@ -670,7 +671,7 @@ func BenchmarkNewProgram(b *testing.B) {
 		rootPath := tspath.RootedDirectoryPathFromAbsolute(filepath.Join(repo.TestDataPath(), "fixtures/compiler"))
 		fs := bundled.WrapFS(osvfs.FS())
 		host := NewCompilerHost(fs, bundled.LibPath(), nil, nil, nil)
-		parsed, errors := tsoptions.GetParsedCommandLineOfConfigFile(rootPath.ResolveFile("tsconfig.json"), nil, nil, fs, nil)
+		parsed, errors := tsoptions.GetParsedCommandLineOfConfigFile(rootPath.ResolveFile("tsconfig.json"), nil, nil, tsoptions.NewDefaultParseConfigHost(fs), nil)
 		assert.Equal(b, len(errors), 0, "Expected no errors in parsed command line")
 		opts := ProgramOptions{
 			Config: parsed,

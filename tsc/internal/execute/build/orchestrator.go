@@ -124,14 +124,14 @@ func (o *Orchestrator) ScheduleOrder() []string {
 // picked up may not be done yet, so a builder can take a dependent of a slow project and
 // wait on that project while a later project's upstream has already finished. The stable
 // sort preserves the original order within a depth, and reporting still follows Order().
-func (o *Orchestrator) computeScheduleOrder(ctx context.Context) []*BuildTask {
+func (o *Orchestrator) computeScheduleOrder(ctx context.Context, order []*BuildTask) []*BuildTask {
 	type scheduleEntry struct {
 		task  *BuildTask
 		depth int
 	}
-	entries := make([]scheduleEntry, len(o.order))
-	depths := make(map[*BuildTask]int, len(o.order))
-	for i, task := range o.order {
+	entries := make([]scheduleEntry, len(order))
+	depths := make(map[*BuildTask]int, len(order))
+	for i, task := range order {
 		if ctx.Err() != nil {
 			return nil
 		}
@@ -148,14 +148,14 @@ func (o *Orchestrator) computeScheduleOrder(ctx context.Context) []*BuildTask {
 	slices.SortStableFunc(entries, func(a, b scheduleEntry) int {
 		return a.depth - b.depth
 	})
-	order := make([]*BuildTask, len(entries))
+	scheduleOrder := make([]*BuildTask, len(entries))
 	for i, entry := range entries {
 		if ctx.Err() != nil {
 			return nil
 		}
-		order[i] = entry.task
+		scheduleOrder[i] = entry.task
 	}
-	return order
+	return scheduleOrder
 }
 
 func (o *Orchestrator) Upstream(configName string) []string {
@@ -332,7 +332,7 @@ func (o *Orchestrator) GenerateGraph(ctx context.Context, oldTasks *collections.
 		}
 		o.setupBuildTask(ctx, project, nil, false, &completed, &analyzing, circularityStack)
 	}
-	o.scheduleOrder = o.computeScheduleOrder(ctx)
+	o.scheduleOrder = o.computeScheduleOrder(ctx, o.order)
 	o.graphGenerated = ctx.Err() == nil
 }
 
@@ -978,7 +978,15 @@ func (o *Orchestrator) buildOrCleanOrder(ctx context.Context, order []*BuildTask
 		// 	prevReporter = task
 		// }
 		buildResult.Statistics.Projects = len(order)
-		// Builders pick up projects in scheduleOrder; results are reported in Order(), waiting for each project to finish
+		scheduleOrder := o.scheduleOrder
+		if len(order) != len(o.order) {
+			scheduleOrder = o.computeScheduleOrder(ctx, order)
+		}
+		if ctx.Err() != nil {
+			buildResult.Result.Status = tsc.ExitStatusCancelled
+			return buildResult
+		}
+		// Builders pick up selected projects in dependency-depth order; reporting preserves the selected build order.
 		reported := make(chan struct{})
 		go func() {
 			defer close(reported)
@@ -991,7 +999,7 @@ func (o *Orchestrator) buildOrCleanOrder(ctx context.Context, order []*BuildTask
 				}
 			}
 		}()
-		o.rangeTasks(order, func(path tspath.PathKey, task *BuildTask) {
+		o.rangeTasks(scheduleOrder, func(path tspath.PathKey, task *BuildTask) {
 			o.buildOrCleanProject(ctx, task, path)
 		})
 		<-reported

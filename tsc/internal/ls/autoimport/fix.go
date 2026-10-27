@@ -22,6 +22,7 @@ import (
 	"github.com/microsoft/TypeScript/tsc/internal/ls/lsutil"
 	"github.com/microsoft/TypeScript/tsc/internal/lsp/lsproto"
 	"github.com/microsoft/TypeScript/tsc/internal/modulespecifiers"
+	"github.com/microsoft/TypeScript/tsc/internal/printer"
 	"github.com/microsoft/TypeScript/tsc/internal/scanner"
 	"github.com/microsoft/TypeScript/tsc/internal/stringutil"
 	"github.com/microsoft/TypeScript/tsc/internal/tspath"
@@ -60,6 +61,7 @@ func (f *Fix) Edits(
 	formatOptions lsutil.FormatCodeSettings,
 	converters *lsconv.Converters,
 	preferences lsutil.UserPreferences,
+	includeSymbolNameInDescription bool,
 ) ([]*lsproto.TextEdit, string, bool) {
 	locale := locale.FromContext(ctx)
 	tracker := change.NewTracker(ctx, compilerOptions, formatOptions, converters)
@@ -75,6 +77,9 @@ func (f *Fix) Edits(
 		existingFix := getAddToExistingImportFix(file, f)
 		addToExistingImport(tracker, file, existingFix.importClauseOrBindingPattern, existingFix.defaultImport, core.SingleElementSlice(existingFix.namedImport), preferences)
 		edits, safe := fileEdits(tracker, file)
+		if includeSymbolNameInDescription {
+			return edits, diagnostics.Import_0_from_1.Localize(locale, f.Name, f.ModuleSpecifier), safe
+		}
 		return edits, diagnostics.Update_import_from_0.Localize(locale, f.ModuleSpecifier), safe
 	case lsproto.AutoImportFixKindAddNew:
 		var declarations []*ast.Statement
@@ -107,6 +112,9 @@ func (f *Fix) Edits(
 		// 	addNamespaceQualifier(tracker, file, qualification)
 		// }
 		edits, safe := fileEdits(tracker, file)
+		if includeSymbolNameInDescription {
+			return edits, diagnostics.Import_0_from_1.Localize(locale, f.Name, f.ModuleSpecifier), safe
+		}
 		return edits, diagnostics.Add_import_from_0.Localize(locale, f.ModuleSpecifier), safe
 	case lsproto.AutoImportFixKindPromoteTypeOnly:
 		promotedDeclaration := promoteFromTypeOnly(tracker, f.TypeOnlyAliasDeclaration, compilerOptions, file, preferences)
@@ -140,11 +148,11 @@ func addImportType(f *Fix, file *ast.SourceFile, preferences lsutil.UserPreferen
 		panic("UsagePosition must be set for JSDoc type import fix")
 	}
 	quotePreference := lsutil.GetQuotePreference(file, preferences)
-	quoteChar := "\""
+	quoteChar := printer.QuoteCharDoubleQuote
 	if quotePreference == lsutil.QuotePreferenceSingle {
-		quoteChar = "'"
+		quoteChar = printer.QuoteCharSingleQuote
 	}
-	importTypePrefix := fmt.Sprintf("import(%s%s%s).", quoteChar, f.ModuleSpecifier, quoteChar)
+	importTypePrefix := fmt.Sprintf("import(%c%s%c).", quoteChar, printer.EscapeString(f.ModuleSpecifier, quoteChar), quoteChar)
 	tracker.InsertText(file, *f.UsagePosition, importTypePrefix)
 	return diagnostics.Change_0_to_1.Localize(locale, f.Name, importTypePrefix+f.Name)
 }
