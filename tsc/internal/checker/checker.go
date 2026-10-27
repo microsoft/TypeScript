@@ -966,7 +966,7 @@ func NewChecker(program Program, tracer *Tracer) (*Checker, *sync.Mutex) {
 	c.exactOptionalPropertyTypes = c.compilerOptions.ExactOptionalPropertyTypes == core.TSTrue
 	c.canCollectSymbolAliasAccessibilityData = c.compilerOptions.VerbatimModuleSyntax.IsFalseOrUnknown()
 	c.arrayVariances = []VarianceFlags{VarianceFlagsCovariant}
-	c.globals = ast.NewSymbolTable(countGlobalSymbols(c.files))
+	c.globals = ast.NewSymbolTableWithCapacity(countGlobalSymbols(c.files))
 	c.evaluate = evaluator.NewEvaluator(c.evaluateEntity, ast.OEKParentheses)
 	c.stringLiteralTypes = make(map[string]*Type)
 	c.numberLiteralTypes = make(map[jsnum.Number]*Type)
@@ -5603,7 +5603,7 @@ func (c *Checker) checkImportAttributesExpression(node *ast.Node) *Type {
 	links := c.typeNodeLinks.Get(node)
 	if links.resolvedType == nil {
 		symbol := c.newSymbol(ast.SymbolFlagsObjectLiteral, ast.InternalSymbolNameImportAttributes)
-		members := ast.NewSymbolTable(0)
+		members := ast.NewSymbolTable()
 		for _, attribute := range node.AsImportAttributes().Attributes.Nodes {
 			member := c.newSymbol(ast.SymbolFlagsProperty, attribute.Name().Text())
 			c.valueSymbolLinks.Get(member).resolvedType = c.getRegularTypeOfLiteralType(c.checkExpressionCached(attribute.AsImportAttribute().Value))
@@ -13404,9 +13404,9 @@ func (c *Checker) checkObjectLiteral(node *ast.Node, checkMode CheckMode) *Type 
 	c.checkGrammarObjectLiteralExpression(node.AsObjectLiteralExpression(), inDestructuringPattern)
 	var allPropertiesTable ast.SymbolTable
 	if c.strictNullChecks {
-		allPropertiesTable = ast.NewSymbolTable(0)
+		allPropertiesTable = ast.NewSymbolTable()
 	}
-	propertiesTable := ast.NewSymbolTable(0)
+	propertiesTable := ast.NewSymbolTable()
 	var propertiesArray []*ast.Symbol
 	spread := c.emptyObjectType
 	c.pushCachedContextualType(node)
@@ -13528,7 +13528,7 @@ func (c *Checker) checkObjectLiteral(node *ast.Node, checkMode CheckMode) *Type 
 			if len(propertiesArray) > 0 {
 				spread = c.getSpreadType(spread, createObjectLiteralType(), node.Symbol(), objectFlags, inConstContext)
 				propertiesArray = nil
-				propertiesTable = ast.NewSymbolTable(0)
+				propertiesTable = ast.NewSymbolTable()
 				hasComputedStringProperty = false
 				hasComputedNumberProperty = false
 				hasComputedSymbolProperty = false
@@ -13584,7 +13584,7 @@ func (c *Checker) checkObjectLiteral(node *ast.Node, checkMode CheckMode) *Type 
 		if len(propertiesArray) > 0 {
 			spread = c.getSpreadType(spread, createObjectLiteralType(), node.Symbol(), objectFlags, inConstContext)
 			propertiesArray = nil
-			propertiesTable = ast.NewSymbolTable(0)
+			propertiesTable = ast.NewSymbolTable()
 			hasComputedStringProperty = false
 			hasComputedNumberProperty = false
 		}
@@ -13692,7 +13692,7 @@ func (c *Checker) getSpreadType(left *Type, right *Type, symbol *ast.Symbol, obj
 		}
 		return c.getIntersectionType([]*Type{left, right})
 	}
-	members := ast.NewSymbolTable(0)
+	members := ast.NewSymbolTable()
 	var skippedPrivateMembers collections.Set[string]
 	var indexInfos []*IndexInfo
 	if left == c.emptyObjectType {
@@ -13807,7 +13807,7 @@ func (c *Checker) tryMergeUnionOfObjectTypeAndEmptyObject(t *Type, readonly bool
 		return t
 	}
 	// gets the type as if it had been spread, but where everything in the spread is made optional
-	members := ast.NewSymbolTable(0)
+	members := ast.NewSymbolTable()
 	for _, prop := range c.getPropertiesOfType(firstType) {
 		if getDeclarationModifierFlagsFromSymbol(prop)&(ast.ModifierFlagsPrivate|ast.ModifierFlagsProtected) != 0 {
 			// do nothing, skip privates
@@ -14381,7 +14381,7 @@ func (c *Checker) combineSymbolTables(first ast.SymbolTable, second ast.SymbolTa
 	if second.Len() == 0 {
 		return first
 	}
-	combined := ast.NewSymbolTable(0)
+	combined := ast.NewSymbolTable()
 	c.mergeSymbolTable(combined, first, false, nil)
 	c.mergeSymbolTable(combined, second, false, nil)
 	return combined
@@ -16124,7 +16124,7 @@ func (c *Checker) isCommonJSRequire(node *ast.Node) bool {
 }
 
 func (c *Checker) createDefaultPropertyWrapperForModule(symbol *ast.Symbol, originalSymbol *ast.Symbol, anonymousSymbol *ast.Symbol) *Type {
-	memberTable := ast.NewSymbolTable(0)
+	memberTable := ast.NewSymbolTable()
 	newSymbol := c.newSymbol(ast.SymbolFlagsAlias, ast.InternalSymbolNameDefault)
 	newSymbol.SetParent(originalSymbol)
 	c.valueSymbolLinks.Get(newSymbol).setNameType(c, c.getStringLiteralType("default"))
@@ -16366,12 +16366,12 @@ func (c *Checker) getResolvedMembersOrExportsOfSymbol(symbol *ast.Symbol, resolu
 					switch {
 					case c.hasLateBindableName(member):
 						if lateSymbols == nil {
-							lateSymbols = ast.NewSymbolTable(0)
+							lateSymbols = ast.NewSymbolTable()
 						}
 						c.lateBindMember(symbol, earlySymbols, lateSymbols, member)
 					case c.hasLateBindableIndexSignature(member):
 						if lateSymbols == nil {
-							lateSymbols = ast.NewSymbolTable(0)
+							lateSymbols = ast.NewSymbolTable()
 						}
 						c.lateBindIndexSignature(symbol, earlySymbols, lateSymbols, member.AsNode() /* as LateBoundDeclaration | LateBoundBinaryExpressionDeclaration */)
 					}
@@ -16383,7 +16383,7 @@ func (c *Checker) getResolvedMembersOrExportsOfSymbol(symbol *ast.Symbol, resolu
 				for _, member := range assignmentSymbol.Declarations() {
 					if c.hasLateBindableName(member) {
 						if lateSymbols == nil {
-							lateSymbols = ast.NewSymbolTable(0)
+							lateSymbols = ast.NewSymbolTable()
 						}
 						c.lateBindMember(symbol, earlySymbols, lateSymbols, member)
 					}
@@ -16588,7 +16588,7 @@ func (c *Checker) getExportsOfModuleWorker(moduleSymbol *ast.Symbol) (exports as
 		// All export * declarations are collected in an __export symbol by the binder
 		exportStars := symbol.Exports().Get(ast.InternalSymbolNameExportStar)
 		if exportStars != nil {
-			nestedSymbols := ast.NewSymbolTable(0)
+			nestedSymbols := ast.NewSymbolTable()
 			lookupTable := make(ExportCollisionTable)
 			for _, node := range exportStars.Declarations() {
 				resolvedModule := c.resolveExternalModuleName(node, node.ModuleSpecifier(), false /*ignoreErrors*/, c.getTypeFromImportAttributes(ast.GetImportAttributes(node)))
@@ -16626,7 +16626,7 @@ func (c *Checker) getExportsOfModuleWorker(moduleSymbol *ast.Symbol) (exports as
 	moduleSymbol = c.resolveExternalModuleSymbol(moduleSymbol, false /*dontResolveAlias*/)
 	exports = visit(moduleSymbol, nil, false)
 	if exports == nil {
-		exports = ast.NewSymbolTable(0)
+		exports = ast.NewSymbolTable()
 	}
 	// A CommonJS module defined by an 'export=' might also export typedefs, stored on the original module
 	if originalModule != nil && originalModule.Exports().Len() > 1 {
@@ -17254,7 +17254,7 @@ func (c *Checker) padObjectLiteralType(t *Type, pattern *ast.Node) *Type {
 	if len(missingElements) == 0 {
 		return t
 	}
-	members := ast.NewSymbolTable(0)
+	members := ast.NewSymbolTable()
 	for _, prop := range c.getPropertiesOfObjectType(t) {
 		members.Set(prop.Name(), prop)
 	}
@@ -18270,7 +18270,7 @@ func (c *Checker) getRestType(source *Type, properties []*ast.Node, symbol *ast.
 		}
 		return c.getTypeAliasInstantiation(omitTypeAlias, []*Type{source, omitKeyType}, nil)
 	}
-	members := ast.NewSymbolTable(0)
+	members := ast.NewSymbolTable()
 	for _, prop := range spreadableProperties {
 		members.Set(prop.Name(), c.getSpreadSymbol(prop, false /*readonly*/))
 	}
@@ -18363,7 +18363,7 @@ func (c *Checker) getTypeFromBindingPattern(pattern *ast.Node, includePatternInT
 
 // Return the type implied by an object binding pattern
 func (c *Checker) getTypeFromObjectBindingPattern(pattern *ast.Node, includePatternInType bool, reportErrors bool) *Type {
-	members := ast.NewSymbolTable(0)
+	members := ast.NewSymbolTable()
 	var stringIndexInfo *IndexInfo
 	objectFlags := ObjectFlagsObjectLiteral | ObjectFlagsContainsObjectOrArrayLiteral
 	for _, e := range pattern.Elements() {
@@ -18851,7 +18851,7 @@ func (c *Checker) getWidenedTypeOfObjectLiteral(t *Type, context *WideningContex
 			return cached
 		}
 	}
-	members := ast.NewSymbolTable(0)
+	members := ast.NewSymbolTable()
 	for _, prop := range c.getPropertiesOfObjectType(t) {
 		members.Set(prop.Name(), c.getWidenedProperty(prop, context))
 	}
@@ -20169,7 +20169,7 @@ func (c *Checker) addInheritedMembers(symbols ast.SymbolTable, baseSymbols []*as
 		if !isStaticPrivateIdentifierProperty(base) {
 			if s, ok := symbols.Lookup(base.Name()); !ok || s.Flags()&ast.SymbolFlagsValue == 0 {
 				if symbols == nil {
-					symbols = ast.NewSymbolTable(0)
+					symbols = ast.NewSymbolTable()
 				}
 				symbols.Set(base.Name(), base)
 			}
@@ -21241,7 +21241,7 @@ func (c *Checker) resolveAnonymousTypeMembers(t *Type) {
 	members := c.getExportsOfSymbol(symbol)
 	var indexInfos []*IndexInfo
 	if symbol == c.globalThisSymbol {
-		varsOnly := ast.NewSymbolTable(0)
+		varsOnly := ast.NewSymbolTable()
 		for _, p := range members.All() {
 			if p.Flags()&ast.SymbolFlagsBlockScoped == 0 && !(p.Flags()&ast.SymbolFlagsValueModule != 0 && len(p.Declarations()) != 0 && core.Every(p.Declarations(), ast.IsAmbientModule)) {
 				varsOnly.Set(p.Name(), p)
@@ -21308,7 +21308,7 @@ func (c *Checker) createInstantiatedSymbolTable(symbols []*ast.Symbol, m *TypeMa
 	if len(symbols) == 0 {
 		return nil
 	}
-	result := ast.NewSymbolTable(len(symbols))
+	result := ast.NewSymbolTableWithCapacity(len(symbols))
 	for _, symbol := range symbols {
 		result.Set(symbol.Name(), c.instantiateSymbol(symbol, m))
 	}
@@ -21319,7 +21319,7 @@ func (c *Checker) instantiateSymbolTable(symbols ast.SymbolTable, m *TypeMapper)
 	if symbols.Len() == 0 {
 		return nil
 	}
-	result := ast.NewSymbolTable(symbols.Len())
+	result := ast.NewSymbolTableWithCapacity(symbols.Len())
 	for id, symbol := range symbols.All() {
 		if c.isNamedMember(symbol, id) {
 			result.Set(id, c.instantiateSymbol(symbol, m))
@@ -21466,7 +21466,7 @@ func (c *Checker) getDefaultConstructSignatures(classType *Type) []*Signature {
 }
 
 func (c *Checker) resolveMappedTypeMembers(t *Type) {
-	members := ast.NewSymbolTable(0)
+	members := ast.NewSymbolTable()
 	var indexInfos []*IndexInfo
 	// Resolve upfront such that recursive references see an empty object type.
 	c.setStructuredTypeMembers(t, nil, nil, nil, nil)
@@ -25487,7 +25487,7 @@ func (c *Checker) createTupleTargetType(elementInfos []TupleElementInfo, readonl
 		return e.flags&(ElementFlagsRequired|ElementFlagsVariadic) != 0
 	})
 	var typeParameters []*Type
-	members := ast.NewSymbolTable(0)
+	members := ast.NewSymbolTable()
 	combinedFlags := ElementFlagsNone
 	if arity != 0 {
 		typeParameters = make([]*Type, 0, arity)
@@ -28936,7 +28936,7 @@ func (c *Checker) getRegularTypeOfObjectLiteral(t *Type) *Type {
 }
 
 func (c *Checker) transformTypeOfMembers(t *Type, f func(propertyType *Type) *Type) ast.SymbolTable {
-	members := ast.NewSymbolTable(0)
+	members := ast.NewSymbolTable()
 	for _, property := range c.getPropertiesOfObjectType(t) {
 		original := c.getTypeOfSymbol(property)
 		updated := f(original)
@@ -31221,7 +31221,7 @@ func (c *Checker) getClassMemberDecoratorContextOverrideType(nameType *Type, isP
 	if overrideType := c.cachedTypes[key]; overrideType != nil {
 		return overrideType
 	}
-	members := ast.NewSymbolTable(0)
+	members := ast.NewSymbolTable()
 	members.Set("name", c.newProperty("name", nameType))
 	members.Set("private", c.newProperty("private", core.IfElse(isPrivate, c.trueType, c.falseType)))
 	members.Set("static", c.newProperty("static", core.IfElse(isStatic, c.trueType, c.falseType)))

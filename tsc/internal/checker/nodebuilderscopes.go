@@ -119,7 +119,7 @@ func (b *NodeBuilderImpl) enterNewScope(declaration *ast.Node, expandedParams []
 				locals = existingFakeScope.Locals()
 			}
 			if locals == nil {
-				locals = ast.NewSymbolTable(0)
+				locals = ast.NewSymbolTable()
 			}
 			newLocals := []string{}
 			oldLocals := []localsRecord{}

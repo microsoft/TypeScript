@@ -209,15 +209,15 @@ func getMissingMembers(typeChecker *checker.Checker, classDeclaration *ast.Node,
 func getInheritedMembers(typeChecker *checker.Checker, classDeclaration *ast.Node) ast.SymbolTable {
 	typeNode := ast.GetClassExtendsHeritageElement(classDeclaration)
 	if typeNode == nil {
-		return ast.NewSymbolTable(0)
+		return ast.NewSymbolTable()
 	}
 
 	baseType := typeChecker.GetTypeAtLocation(typeNode.AsNode())
 	if baseType == nil {
-		return ast.NewSymbolTable(0)
+		return ast.NewSymbolTable()
 	}
 
-	inheritedMembers := ast.NewSymbolTable(0)
+	inheritedMembers := ast.NewSymbolTable()
 	for _, symbol := range typeChecker.GetPropertiesOfType(baseType) {
 		if symbol == nil {
 			continue

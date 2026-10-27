@@ -850,7 +850,7 @@ func (c *Checker) someSymbolTableInScope(
 			for key, memberSymbol := range sym.Members().All() {
 				if memberSymbol.Flags()&(ast.SymbolFlagsType & ^ast.SymbolFlagsAssignment) != 0 {
 					if table == nil {
-						table = ast.NewSymbolTable(0)
+						table = ast.NewSymbolTable()
 					}
 					table.Set(key, memberSymbol)
 				}

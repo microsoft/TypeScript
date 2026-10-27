@@ -94,7 +94,7 @@ func (a *SymbolIdGenerator) GetSymbolId(symbol *Symbol) SymbolId {
 
 func GetSymbolTable(data *SymbolTable) SymbolTable {
 	if *data == nil {
-		*data = NewSymbolTable(0)
+		*data = NewSymbolTable()
 	}
 	return *data
 }

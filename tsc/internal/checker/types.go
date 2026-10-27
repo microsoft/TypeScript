@@ -1161,7 +1161,7 @@ func (t *StructuredType) getMember(name string) *ast.Symbol {
 func (t *StructuredType) getMembers() ast.SymbolTable {
 	if t.members == nil {
 		if properties := t.getProperties(); len(properties) != 0 {
-			t.members = ast.NewSymbolTable(len(properties))
+			t.members = ast.NewSymbolTableWithCapacity(len(properties))
 			for _, member := range properties {
 				t.members.Set(member.Name(), member)
 			}

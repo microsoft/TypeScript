@@ -291,7 +291,7 @@ func TestIntersectionReductionAllocations(t *testing.T) { //nolint:paralleltest
 		t.Skip("race instrumentation changes hashing allocations")
 	}
 	c, _ := newCompositeTestChecker()
-	members := ast.NewSymbolTable(0)
+	members := ast.NewSymbolTable()
 	for i := range 128 {
 		name := strconv.Itoa(i)
 		members.Set(name, c.newSymbol(ast.SymbolFlagsProperty, name))

@@ -189,7 +189,11 @@ type SymbolMap struct {
 
 var symbolTableSeed = maphash.MakeSeed()
 
-func NewSymbolTable(capacity int) SymbolTable {
+func NewSymbolTable() SymbolTable {
+	return NewSymbolTableWithCapacity(0)
+}
+
+func NewSymbolTableWithCapacity(capacity int) SymbolTable {
 	m := &SymbolMap{}
 	if capacity > 0 {
 		m.entries = make([]*Symbol, 0, capacity)
@@ -202,7 +206,7 @@ func NewSymbolTable(capacity int) SymbolTable {
 
 // SymbolTableOf returns a new table holding symbol under name.
 func SymbolTableOf(name string, symbol *Symbol) SymbolTable {
-	m := NewSymbolTable(1)
+	m := NewSymbolTableWithCapacity(1)
 	m.Set(name, symbol)
 	return m
 }

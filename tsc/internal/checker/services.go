@@ -22,7 +22,7 @@ func (c *Checker) getSymbolsInScope(location *ast.Node, meaning ast.SymbolFlags)
 		return nil
 	}
 
-	symbols := ast.NewSymbolTable(0)
+	symbols := ast.NewSymbolTable()
 	isStaticSymbol := false
 
 	// Copy the given symbol into symbol tables if the symbol has the given meaning
@@ -211,7 +211,7 @@ func (c *Checker) GetAllPossiblePropertiesOfTypes(types []*Type) []*ast.Symbol {
 		return c.getAugmentedPropertiesOfType(unionType)
 	}
 
-	props := ast.NewSymbolTable(0)
+	props := ast.NewSymbolTable()
 	for _, memberType := range types {
 		augmentedProps := c.getAugmentedPropertiesOfType(memberType)
 		for _, p := range augmentedProps {
@@ -279,7 +279,7 @@ func (c *Checker) getAugmentedPropertiesOfType(t *Type) []*ast.Symbol {
 	}
 
 	if propsByName == nil {
-		propsByName = ast.NewSymbolTable(0)
+		propsByName = ast.NewSymbolTable()
 	}
 	if functionType != nil {
 		for _, p := range c.getPropertiesOfType(functionType) {

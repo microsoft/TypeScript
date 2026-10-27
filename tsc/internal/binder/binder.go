@@ -1001,7 +1001,7 @@ func (b *Binder) bindFunctionOrConstructorType(node *ast.Node) {
 	b.addDeclarationToSymbol(symbol, node, ast.SymbolFlagsSignature)
 	typeLiteralSymbol := b.newSymbol(ast.SymbolFlagsTypeLiteral, ast.InternalSymbolNameType)
 	b.addDeclarationToSymbol(typeLiteralSymbol, node, ast.SymbolFlagsTypeLiteral)
-	typeLiteralSymbol.SetMembers(ast.NewSymbolTable(0), &b.symbolExtraArena)
+	typeLiteralSymbol.SetMembers(ast.NewSymbolTable(), &b.symbolExtraArena)
 	typeLiteralSymbol.Members().Set(symbol.Name(), symbol)
 }
 
@@ -1636,7 +1636,7 @@ func (b *Binder) declareCommonJSVariable(name string) {
 			exportsProperty.SetDeclarations(symbol.Declarations())
 			exportsProperty.SetValueDeclaration(symbol.ValueDeclaration())
 			exportsProperty.SetParent(symbol)
-			symbol.SetMembers(ast.NewSymbolTable(1), &b.symbolExtraArena)
+			symbol.SetMembers(ast.NewSymbolTableWithCapacity(1), &b.symbolExtraArena)
 			symbol.Members().Set("exports", exportsProperty)
 		}
 		locals.Set(name, symbol)

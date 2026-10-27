@@ -352,7 +352,7 @@ func createSymbolTable(symbols []*ast.Symbol) ast.SymbolTable {
 	if len(symbols) == 0 {
 		return nil
 	}
-	result := ast.NewSymbolTable(0)
+	result := ast.NewSymbolTable()
 	for _, symbol := range symbols {
 		result.Set(symbol.Name(), symbol)
 	}
