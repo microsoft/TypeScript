@@ -1,0 +1,123 @@
+//// [tests/cases/compiler/asyncReturnObjectLiteralThisType.ts] ////
+
+=== asyncReturnObjectLiteralThisType.ts ===
+type X = { value: number; method(): void };
+>X : X
+>value : number
+>method : () => void
+
+declare function foo(cb: () => Promise<X>): void;
+>foo : (cb: () => Promise<X>) => void
+>cb : () => Promise<X>
+
+foo(async () => ({ value: 5, method() { this satisfies X; } }));
+>foo(async () => ({ value: 5, method() { this satisfies X; } })) : void
+>foo : (cb: () => Promise<X>) => void
+>async () => ({ value: 5, method() { this satisfies X; } }) : () => Promise<{ value: number; method(): void; }>
+>({ value: 5, method() { this satisfies X; } }) : { value: number; method(): void; }
+>{ value: 5, method() { this satisfies X; } } : { value: number; method(): void; }
+>value : number
+>5 : 5
+>method : () => void
+>this satisfies X : X
+>this : X
+
+foo(async () => { return { value: 5, method() { this satisfies X; } }; });
+>foo(async () => { return { value: 5, method() { this satisfies X; } }; }) : void
+>foo : (cb: () => Promise<X>) => void
+>async () => { return { value: 5, method() { this satisfies X; } }; } : () => Promise<{ value: number; method(): void; }>
+>{ value: 5, method() { this satisfies X; } } : { value: number; method(): void; }
+>value : number
+>5 : 5
+>method : () => void
+>this satisfies X : X
+>this : X
+
+foo(async function () { return { value: 5, method() { this satisfies X; } }; });
+>foo(async function () { return { value: 5, method() { this satisfies X; } }; }) : void
+>foo : (cb: () => Promise<X>) => void
+>async function () { return { value: 5, method() { this satisfies X; } }; } : () => Promise<{ value: number; method(): void; }>
+>{ value: 5, method() { this satisfies X; } } : { value: number; method(): void; }
+>value : number
+>5 : 5
+>method : () => void
+>this satisfies X : X
+>this : X
+
+async function f(): Promise<X> { return { value: 1, method() { this satisfies X; } }; }
+>f : () => Promise<X>
+>{ value: 1, method() { this satisfies X; } } : { value: number; method(): void; }
+>value : number
+>1 : 1
+>method : () => void
+>this satisfies X : X
+>this : X
+
+const test2: () => Promise<X> = async () => { return { value: 5, method() { this satisfies X; } }; };
+>test2 : () => Promise<X>
+>async () => { return { value: 5, method() { this satisfies X; } }; } : () => Promise<{ value: number; method(): void; }>
+>{ value: 5, method() { this satisfies X; } } : { value: number; method(): void; }
+>value : number
+>5 : 5
+>method : () => void
+>this satisfies X : X
+>this : X
+
+// nullable awaited
+const n1: () => Promise<X | null> = async () => ({ value: 1, method() { this satisfies X; } });
+>n1 : () => Promise<X | null>
+>async () => ({ value: 1, method() { this satisfies X; } }) : () => Promise<{ value: number; method(): void; }>
+>({ value: 1, method() { this satisfies X; } }) : { value: number; method(): void; }
+>{ value: 1, method() { this satisfies X; } } : { value: number; method(): void; }
+>value : number
+>1 : 1
+>method : () => void
+>this satisfies X : X
+>this : X
+
+const n2: () => Promise<X | undefined> = async () => { return { value: 1, method() { this satisfies X; } }; };
+>n2 : () => Promise<X | undefined>
+>async () => { return { value: 1, method() { this satisfies X; } }; } : () => Promise<{ value: number; method(): void; }>
+>{ value: 1, method() { this satisfies X; } } : { value: number; method(): void; }
+>value : number
+>1 : 1
+>method : () => void
+>this satisfies X : X
+>this : X
+
+// thenable must not get this: X
+const t: () => Promise<{ value: number }> = async () => ({
+>t : () => Promise<{ value: number; }>
+>value : number
+>async () => ({  then(resolve: any) { this.value.toFixed(); },}) : () => Promise<any>
+>({  then(resolve: any) { this.value.toFixed(); },}) : { then<TResult1 = { value: number; }, TResult2 = never>(resolve: any): void; }
+>{  then(resolve: any) { this.value.toFixed(); },} : { then<TResult1 = { value: number; }, TResult2 = never>(resolve: any): void; }
+
+  then(resolve: any) { this.value.toFixed(); },
+>then : <TResult1 = { value: number; }, TResult2 = never>(resolve: any) => void
+>resolve : any
+>this.value.toFixed() : any
+>this.value.toFixed : any
+>this.value : any
+>this : PromiseLike<{ value: number; }> | { value: number; }
+>value : any
+>toFixed : any
+
+});
+// declared PromiseLike remains
+declare function g(cb: () => X | PromiseLike<X>): void;
+>g : (cb: () => X | PromiseLike<X>) => void
+>cb : () => X | PromiseLike<X>
+
+g(async () => ({ value: 1, method() { this satisfies X; } }));
+>g(async () => ({ value: 1, method() { this satisfies X; } })) : void
+>g : (cb: () => X | PromiseLike<X>) => void
+>async () => ({ value: 1, method() { this satisfies X; } }) : () => Promise<{ value: number; method(): void; }>
+>({ value: 1, method() { this satisfies X; } }) : { value: number; method(): void; }
+>{ value: 1, method() { this satisfies X; } } : { value: number; method(): void; }
+>value : number
+>1 : 1
+>method : () => void
+>this satisfies X : X
+>this : X
+
