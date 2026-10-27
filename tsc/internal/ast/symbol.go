@@ -3,7 +3,6 @@ package ast
 import (
 	"hash/maphash"
 	"iter"
-	"maps"
 	"slices"
 	"strings"
 	"sync/atomic"
@@ -175,12 +174,8 @@ func (s *Symbol) CombinedLocalAndExportSymbolFlags() SymbolFlags {
 //
 // The entries are kept in insertion order in one slice. Most tables are small, so a table is searched linearly until
 // it has more than symbolTableLinearMax entries, and only then gets a hash index of entry positions. An entry does not
-// store its key: the key is almost always the symbol's own name, so an entry holds the symbol and the key's length,
-// which rejects most non-matching entries without reading the symbol. A key with other text than its symbol's name
-// is kept in oddKeys. Because of that, a symbol's name must not change after the symbol is added to a table.
-//
-// This is not a collections.OrderedMap[string, *Symbol]: that stores every key in its key slice and again in its
-// map, and gives every table a hash map, while symbol tables are numerous, long-lived and mostly tiny.
+// store its key as the key is almost always the symbol's own name. In the rare cases when a symbol has a different name,
+// the table stores a proxy symbol with the new name and a reference to the original symbol in the parent field.
 //
 // A table must not be changed with Set or Delete while it is being iterated.
 type SymbolTable = *SymbolMap
@@ -188,23 +183,16 @@ type SymbolTable = *SymbolMap
 const symbolTableLinearMax = 16
 
 type SymbolMap struct {
-	entries []symbolMapEntry
+	entries []*Symbol
 	index   []int32 // open addressing table of entry positions plus one (0 is empty), only past symbolTableLinearMax
-	oddKeys map[int32]string
 }
 
 var symbolTableSeed = maphash.MakeSeed()
 
-type symbolMapEntry struct {
-	symbol *Symbol
-	keyLen int32
-	oddKey bool
-}
-
 func NewSymbolTable(capacity int) SymbolTable {
 	m := &SymbolMap{}
 	if capacity > 0 {
-		m.entries = make([]symbolMapEntry, 0, capacity)
+		m.entries = make([]*Symbol, 0, capacity)
 		if capacity > symbolTableLinearMax {
 			m.index = make([]int32, indexSizeFor(capacity))
 		}
@@ -220,10 +208,15 @@ func SymbolTableOf(name string, symbol *Symbol) SymbolTable {
 }
 
 func (m *SymbolMap) keyAt(i int) string {
-	if m.entries[i].oddKey {
-		return m.oddKeys[int32(i)]
+	return m.entries[i].Name()
+}
+
+func (m *SymbolMap) symbolAt(i int) *Symbol {
+	symbol := m.entries[i]
+	if symbol.flags == SymbolFlagsNameProxy {
+		symbol = symbol.data.parent
 	}
-	return m.entries[i].symbol.Name()
+	return symbol
 }
 
 func (m *SymbolMap) find(key string) int {
@@ -237,14 +230,13 @@ func (m *SymbolMap) find(key string) int {
 			if p == 0 {
 				return -1
 			}
-			if i := int(p - 1); m.entries[i].keyLen == int32(len(key)) && m.keyAt(i) == key {
+			if i := int(p - 1); m.keyAt(i) == key {
 				return i
 			}
 		}
 	}
-	keyLen := int32(len(key))
 	for i := range m.entries {
-		if m.entries[i].keyLen == keyLen && m.keyAt(i) == key {
+		if m.keyAt(i) == key {
 			return i
 		}
 	}
@@ -260,49 +252,42 @@ func (m *SymbolMap) Len() int {
 
 func (m *SymbolMap) Get(key string) *Symbol {
 	if i := m.find(key); i >= 0 {
-		return m.entries[i].symbol
+		return m.symbolAt(i)
 	}
 	return nil
 }
 
 func (m *SymbolMap) Lookup(key string) (*Symbol, bool) {
 	if i := m.find(key); i >= 0 {
-		return m.entries[i].symbol, true
+		return m.symbolAt(i), true
 	}
 	return nil, false
 }
 
 // Set replaces the symbol of an existing key in place, keeping its position, or adds the key at the end.
 func (m *SymbolMap) Set(key string, symbol *Symbol) {
+	if key != symbol.Name() {
+		proxy := NewSymbol()
+		proxy.flags = SymbolFlagsNameProxy
+		proxy.data.name = key
+		proxy.data.parent = symbol
+		symbol = proxy
+	}
 	if i := m.find(key); i >= 0 {
-		m.entries[i].symbol = symbol
-		if !m.entries[i].oddKey && symbol.Name() != key {
-			m.setOddKey(int32(i), key)
-		}
+		m.entries[i] = symbol
 		return
 	}
 	i := int32(len(m.entries))
 	if cap(m.entries) == 0 {
 		// Most tables hold one or two entries, so start with room for two rather than growing from one.
-		m.entries = make([]symbolMapEntry, 0, 2)
+		m.entries = make([]*Symbol, 0, 2)
 	}
-	m.entries = append(m.entries, symbolMapEntry{symbol: symbol, keyLen: int32(len(key))})
-	if symbol.Name() != key {
-		m.setOddKey(i, key)
-	}
+	m.entries = append(m.entries, symbol)
 	if m.index != nil && len(m.entries)*4 <= len(m.index)*3 {
 		m.insertIndex(key, i)
 	} else if len(m.entries) > symbolTableLinearMax {
 		m.buildIndex()
 	}
-}
-
-func (m *SymbolMap) setOddKey(i int32, key string) {
-	if m.oddKeys == nil {
-		m.oddKeys = make(map[int32]string)
-	}
-	m.entries[i].oddKey = true
-	m.oddKeys[i] = key
 }
 
 func indexSizeFor(n int) int {
@@ -335,22 +320,6 @@ func (m *SymbolMap) Delete(key string) {
 		return
 	}
 	m.entries = slices.Delete(m.entries, d, d+1)
-	if m.oddKeys != nil {
-		var oddKeys map[int32]string
-		for i, oddKey := range m.oddKeys {
-			if i == int32(d) {
-				continue
-			}
-			if i > int32(d) {
-				i--
-			}
-			if oddKeys == nil {
-				oddKeys = make(map[int32]string, len(m.oddKeys))
-			}
-			oddKeys[i] = oddKey
-		}
-		m.oddKeys = oddKeys
-	}
 	m.index = nil
 	if len(m.entries) > symbolTableLinearMax {
 		m.buildIndex()
@@ -363,13 +332,9 @@ func (m *SymbolMap) All() iter.Seq2[string, *Symbol] {
 		if m == nil {
 			return
 		}
-		entries, oddKeys := m.entries, m.oddKeys
+		entries := m.entries
 		for i := range entries {
-			key := entries[i].symbol.Name()
-			if entries[i].oddKey {
-				key = oddKeys[int32(i)]
-			}
-			if !yield(key, entries[i].symbol) {
+			if !yield(m.keyAt(i), m.symbolAt(i)) {
 				return
 			}
 		}
@@ -400,7 +365,7 @@ func (m *SymbolMap) Clone() SymbolTable {
 	if m == nil {
 		return nil
 	}
-	clone := &SymbolMap{entries: slices.Clone(m.entries), index: slices.Clone(m.index), oddKeys: maps.Clone(m.oddKeys)}
+	clone := &SymbolMap{entries: slices.Clone(m.entries), index: slices.Clone(m.index)}
 	return clone
 }
 
