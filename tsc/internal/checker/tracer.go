@@ -22,8 +22,8 @@ func NewTracer(tr *tracing.Tracing, checkerIndex int) *Tracer {
 	return &Tracer{tracing: tr, recorder: tr.NewTypeTracer(checkerIndex), checkerIndex: checkerIndex}
 }
 
-func (t *Tracer) RecordType(typ *Type) {
-	t.recorder.RecordType(wrapType(typ))
+func (t *Tracer) RecordType(c *Checker, typ *Type) {
+	t.recorder.RecordType(wrapType(c, typ))
 }
 
 func (t *Tracer) Push(phase tracing.Phase, name string, args map[string]any, separateBeginAndEnd bool) func() {
@@ -105,7 +105,7 @@ func (a *tracedTypeAdapter) AliasTypeArguments() []tracing.TracedType {
 	if a.t.alias == nil {
 		return nil
 	}
-	return wrapTypes(a.t.alias.TypeArguments())
+	return wrapTypes(a.checker, a.t.alias.TypeArguments())
 }
 
 func (a *tracedTypeAdapter) IntrinsicName() string {
@@ -122,14 +122,14 @@ func (a *tracedTypeAdapter) UnionTypes() []tracing.TracedType {
 	if a.t.flags&TypeFlagsUnion == 0 {
 		return nil
 	}
-	return wrapTypes(a.t.AsUnionType().types)
+	return wrapTypes(a.checker, a.t.AsUnionType().types)
 }
 
 func (a *tracedTypeAdapter) IntersectionTypes() []tracing.TracedType {
 	if a.t.flags&TypeFlagsIntersection == 0 {
 		return nil
 	}
-	return wrapTypes(a.t.AsIntersectionType().types)
+	return wrapTypes(a.checker, a.t.AsIntersectionType().types)
 }
 
 func (a *tracedTypeAdapter) IndexType() tracing.TracedType {
@@ -140,7 +140,7 @@ func (a *tracedTypeAdapter) IndexType() tracing.TracedType {
 	if t == nil {
 		return nil
 	}
-	return wrapType(t)
+	return wrapType(a.checker, t)
 }
 
 func (a *tracedTypeAdapter) IndexedAccessObjectType() tracing.TracedType {
@@ -151,7 +151,7 @@ func (a *tracedTypeAdapter) IndexedAccessObjectType() tracing.TracedType {
 	if t == nil {
 		return nil
 	}
-	return wrapType(t)
+	return wrapType(a.checker, t)
 }
 
 func (a *tracedTypeAdapter) IndexedAccessIndexType() tracing.TracedType {
@@ -162,7 +162,7 @@ func (a *tracedTypeAdapter) IndexedAccessIndexType() tracing.TracedType {
 	if t == nil {
 		return nil
 	}
-	return wrapType(t)
+	return wrapType(a.checker, t)
 }
 
 func (a *tracedTypeAdapter) ConditionalCheckType() tracing.TracedType {
@@ -173,7 +173,7 @@ func (a *tracedTypeAdapter) ConditionalCheckType() tracing.TracedType {
 	if t == nil {
 		return nil
 	}
-	return wrapType(t)
+	return wrapType(a.checker, t)
 }
 
 func (a *tracedTypeAdapter) ConditionalExtendsType() tracing.TracedType {
@@ -184,7 +184,7 @@ func (a *tracedTypeAdapter) ConditionalExtendsType() tracing.TracedType {
 	if t == nil {
 		return nil
 	}
-	return wrapType(t)
+	return wrapType(a.checker, t)
 }
 
 func (a *tracedTypeAdapter) ConditionalTrueType() tracing.TracedType {
@@ -195,7 +195,7 @@ func (a *tracedTypeAdapter) ConditionalTrueType() tracing.TracedType {
 	if t == nil {
 		return nil
 	}
-	return wrapType(t)
+	return wrapType(a.checker, t)
 }
 
 func (a *tracedTypeAdapter) ConditionalFalseType() tracing.TracedType {
@@ -206,7 +206,7 @@ func (a *tracedTypeAdapter) ConditionalFalseType() tracing.TracedType {
 	if t == nil {
 		return nil
 	}
-	return wrapType(t)
+	return wrapType(a.checker, t)
 }
 
 func (a *tracedTypeAdapter) SubstitutionBaseType() tracing.TracedType {
@@ -217,7 +217,7 @@ func (a *tracedTypeAdapter) SubstitutionBaseType() tracing.TracedType {
 	if t == nil {
 		return nil
 	}
-	return wrapType(t)
+	return wrapType(a.checker, t)
 }
 
 func (a *tracedTypeAdapter) SubstitutionConstraintType() tracing.TracedType {
@@ -228,7 +228,7 @@ func (a *tracedTypeAdapter) SubstitutionConstraintType() tracing.TracedType {
 	if t == nil {
 		return nil
 	}
-	return wrapType(t)
+	return wrapType(a.checker, t)
 }
 
 func (a *tracedTypeAdapter) ReferenceTarget() tracing.TracedType {
@@ -239,14 +239,14 @@ func (a *tracedTypeAdapter) ReferenceTarget() tracing.TracedType {
 	if t == nil {
 		return nil
 	}
-	return wrapType(t)
+	return wrapType(a.checker, t)
 }
 
 func (a *tracedTypeAdapter) ReferenceTypeArguments() []tracing.TracedType {
 	if a.t.flags&TypeFlagsObject == 0 || a.t.objectFlags&ObjectFlagsReference == 0 {
 		return nil
 	}
-	return wrapTypes(a.t.AsTypeReference().resolvedTypeArguments)
+	return wrapTypes(a.checker, a.t.AsTypeReference().resolvedTypeArguments)
 }
 
 func (a *tracedTypeAdapter) ReferenceNode() *ast.Node {
@@ -264,7 +264,7 @@ func (a *tracedTypeAdapter) ReverseMappedSourceType() tracing.TracedType {
 	if t == nil {
 		return nil
 	}
-	return wrapType(t)
+	return wrapType(a.checker, t)
 }
 
 func (a *tracedTypeAdapter) ReverseMappedMappedType() tracing.TracedType {
@@ -275,7 +275,7 @@ func (a *tracedTypeAdapter) ReverseMappedMappedType() tracing.TracedType {
 	if t == nil {
 		return nil
 	}
-	return wrapType(t)
+	return wrapType(a.checker, t)
 }
 
 func (a *tracedTypeAdapter) ReverseMappedConstraintType() tracing.TracedType {
@@ -286,7 +286,7 @@ func (a *tracedTypeAdapter) ReverseMappedConstraintType() tracing.TracedType {
 	if t == nil {
 		return nil
 	}
-	return wrapType(t)
+	return wrapType(a.checker, t)
 }
 
 func (a *tracedTypeAdapter) EvolvingArrayElementType() tracing.TracedType {
@@ -297,7 +297,7 @@ func (a *tracedTypeAdapter) EvolvingArrayElementType() tracing.TracedType {
 	if t == nil {
 		return nil
 	}
-	return wrapType(t)
+	return wrapType(a.checker, t)
 }
 
 func (a *tracedTypeAdapter) EvolvingArrayFinalType() tracing.TracedType {
@@ -308,7 +308,7 @@ func (a *tracedTypeAdapter) EvolvingArrayFinalType() tracing.TracedType {
 	if t == nil {
 		return nil
 	}
-	return wrapType(t)
+	return wrapType(a.checker, t)
 }
 
 func (a *tracedTypeAdapter) IsTuple() bool {
@@ -323,7 +323,7 @@ func (a *tracedTypeAdapter) Pattern() *ast.Node {
 }
 
 func (a *tracedTypeAdapter) RecursionIdentity() any {
-	return getRecursionIdentity(a.t).value
+	return a.checker.getRecursionIdentity(a.t).value
 }
 
 func (a *tracedTypeAdapter) Display() string {
@@ -346,20 +346,20 @@ func (a *tracedTypeAdapter) Display() string {
 	return ""
 }
 
-func wrapType(t *Type) tracing.TracedType {
+func wrapType(c *Checker, t *Type) tracing.TracedType {
 	if t == nil {
 		return nil
 	}
-	return &tracedTypeAdapter{t: t, checker: t.checker}
+	return &tracedTypeAdapter{t: t, checker: c}
 }
 
-func wrapTypes(types []*Type) []tracing.TracedType {
+func wrapTypes(c *Checker, types []*Type) []tracing.TracedType {
 	if len(types) == 0 {
 		return nil
 	}
 	result := make([]tracing.TracedType, len(types))
 	for i, t := range types {
-		result[i] = wrapType(t)
+		result[i] = wrapType(c, t)
 	}
 	return result
 }

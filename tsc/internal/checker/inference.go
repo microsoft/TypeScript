@@ -399,7 +399,7 @@ func (c *Checker) inferFromMatchingTypes(n *InferenceState, sources []*Type, tar
 		// when inferring from string[] | string[][] to T[] | T[][], the inference of string we make from
 		// relating string[][] to T[][] is of higher quality than the inference of string[] we make relating
 		// string[][] to T[].
-		slices.SortFunc(matchedTargets, compareTypesAndDepth)
+		slices.SortFunc(matchedTargets, c.compareTypesAndDepth)
 		for _, t := range matchedTargets {
 			for _, s := range matchedSources {
 				if matches(c, s, t) {
@@ -418,40 +418,40 @@ func (c *Checker) inferFromMatchingTypes(n *InferenceState, sources []*Type, tar
 }
 
 // Compare two types first by depth and then by the regular type ordering.
-func compareTypesAndDepth(t1, t2 *Type) int {
-	d1 := getTypeDepth(t1, 3)
-	d2 := getTypeDepth(t2, 3)
+func (c *Checker) compareTypesAndDepth(t1, t2 *Type) int {
+	d1 := c.getTypeDepth(t1, 3)
+	d2 := c.getTypeDepth(t2, 3)
 	if d1 != d2 {
 		return d2 - d1 // Largest depth sorts first
 	}
-	return CompareTypes(t1, t2)
+	return c.CompareTypes(t1, t2)
 }
 
 // Return the depth of the given type up to the given maximum depth. For generic aliased types
 // and type references, the depth is one plus the largest type argument depth. For union and
 // intersection types, the depth is the largest constituent type depth. For all other types,
 // the depth is zero. The maximum depth limits infinite recursion of circular types.
-func getTypeDepth(t *Type, maxDepth int) int {
+func (c *Checker) getTypeDepth(t *Type, maxDepth int) int {
 	if maxDepth != 0 {
 		if t.alias != nil && len(t.alias.typeArguments) != 0 {
-			return getTypeListDepth(t.alias.typeArguments, maxDepth-1) + 1
+			return c.getTypeListDepth(t.alias.typeArguments, maxDepth-1) + 1
 		}
 		if t.objectFlags&ObjectFlagsReference != 0 {
-			if typeArguments := t.checker.getTypeArguments(t); len(typeArguments) != 0 {
-				return getTypeListDepth(typeArguments, maxDepth-1) + 1
+			if typeArguments := c.getTypeArguments(t); len(typeArguments) != 0 {
+				return c.getTypeListDepth(typeArguments, maxDepth-1) + 1
 			}
 		}
 		if t.flags&TypeFlagsUnionOrIntersection != 0 {
-			return getTypeListDepth(t.Types(), maxDepth)
+			return c.getTypeListDepth(t.Types(), maxDepth)
 		}
 	}
 	return 0
 }
 
-func getTypeListDepth(types []*Type, maxDepth int) int {
+func (c *Checker) getTypeListDepth(types []*Type, maxDepth int) int {
 	depth := 0
 	for _, t := range types {
-		depth = max(depth, getTypeDepth(t, maxDepth))
+		depth = max(depth, c.getTypeDepth(t, maxDepth))
 	}
 	return depth
 }

@@ -535,7 +535,7 @@ func (c *compilerTest) verifyUnionOrdering(t *testing.T) {
 
 				reversed := slices.Clone(types)
 				slices.Reverse(reversed)
-				slices.SortFunc(reversed, checker.CompareTypes)
+				slices.SortFunc(reversed, c.CompareTypes)
 				assert.Assert(t, slices.Equal(reversed, types), "compareTypes does not sort union types consistently")
 
 				shuffled := slices.Clone(types)
@@ -543,7 +543,7 @@ func (c *compilerTest) verifyUnionOrdering(t *testing.T) {
 
 				for range 10 {
 					rng.Shuffle(len(shuffled), func(i, j int) { shuffled[i], shuffled[j] = shuffled[j], shuffled[i] })
-					slices.SortFunc(shuffled, checker.CompareTypes)
+					slices.SortFunc(shuffled, c.CompareTypes)
 					assert.Assert(t, slices.Equal(shuffled, types), "compareTypes does not sort union types consistently")
 				}
 			}

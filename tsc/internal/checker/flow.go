@@ -2436,7 +2436,7 @@ func (c *Checker) typeMaybeAssignableTo(source *Type, target *Type) bool {
 		return c.isTypeAssignableTo(source, target)
 	}
 	// Quick exit when source union contains the target type
-	if containsType(source.Types(), target) {
+	if c.containsType(source.Types(), target) {
 		return true
 	}
 	// Otherwise, check if any constituent type of the source union is assignable to the target type
