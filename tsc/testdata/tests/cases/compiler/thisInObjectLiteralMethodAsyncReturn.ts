@@ -22,3 +22,17 @@ const test2: () => Promise<{
         },
     };
 };
+
+// Ordinary, non-async object literal with thenable contextual type
+type T = {
+    then(cb: (n: number) => void): void;
+    value?: number;
+    method(): void;
+};
+const x: T = {
+    then() {},
+    method() {
+        this.value = 1;
+    },
+};
+

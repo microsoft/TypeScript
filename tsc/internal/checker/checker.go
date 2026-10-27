@@ -12259,6 +12259,50 @@ func getThisParameterFromNodeContext(node *ast.Node) *ast.Node {
 	return nil
 }
 
+func isAsyncReturnExpression(node *ast.Node) bool {
+	expr := node
+	for expr != nil && expr.Parent != nil {
+		parent := expr.Parent
+		if ast.IsParenthesizedExpression(parent) || ast.IsNonNullExpression(parent) {
+			expr = parent
+			continue
+		}
+		if ast.IsConditionalExpression(parent) {
+			cond := parent.AsConditionalExpression()
+			if expr == cond.WhenTrue || expr == cond.WhenFalse {
+				expr = parent
+				continue
+			}
+			return false
+		}
+		if ast.IsBinaryExpression(parent) {
+			bin := parent.AsBinaryExpression()
+			switch bin.OperatorToken.Kind {
+			case ast.KindBarBarToken, ast.KindQuestionQuestionToken:
+				expr = parent
+				continue
+			case ast.KindCommaToken:
+				if expr == bin.Right {
+					expr = parent
+					continue
+				}
+				return false
+			default:
+				return false
+			}
+		}
+		if ast.IsReturnStatement(parent) {
+			fn := ast.GetContainingFunction(parent)
+			return fn != nil && (ast.GetFunctionFlags(fn)&ast.FunctionFlagsAsync) != 0
+		}
+		if ast.IsArrowFunction(parent) {
+			return expr == parent.AsArrowFunction().Body && (ast.GetFunctionFlags(parent)&ast.FunctionFlagsAsync) != 0
+		}
+		return false
+	}
+	return false
+}
+
 func (c *Checker) getContextualThisParameterType(fn *ast.Node) *Type {
 	if ast.IsArrowFunction(fn) {
 		return nil
@@ -12289,10 +12333,12 @@ func (c *Checker) getContextualThisParameterType(fn *ast.Node) *Type {
 			// the type of the object literal itself.
 			// A `return` in an async function is contextually `Awaited<T> | PromiseLike<Awaited<T>>`
 			// (see getContextualTypeForReturnExpression), but `this` is always the literal itself.
+			// Restrict filtering of `PromiseLike<T>` to the synthetic async-return context to avoid
+			// removing user-provided thenable types.
 			// See https://github.com/microsoft/TypeScript/issues/64954
-			if contextualType != nil {
+			if contextualType != nil && isAsyncReturnExpression(containingLiteral) {
 				filtered := c.filterType(contextualType, func(t *Type) bool {
-					return c.getAwaitedTypeOfPromise(t) == nil
+					return !c.isReferenceToType(t, c.getGlobalPromiseLikeType())
 				})
 				if filtered.flags&TypeFlagsNever == 0 {
 					contextualType = filtered

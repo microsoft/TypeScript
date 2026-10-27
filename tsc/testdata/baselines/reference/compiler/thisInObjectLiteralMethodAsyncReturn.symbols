@@ -49,3 +49,38 @@ const test2: () => Promise<{
     };
 };
 
+// Ordinary, non-async object literal with thenable contextual type
+type T = {
+>T : Symbol(T, Decl(thisInObjectLiteralMethodAsyncReturn.ts, 21, 2))
+
+    then(cb: (n: number) => void): void;
+>then : Symbol(then, Decl(thisInObjectLiteralMethodAsyncReturn.ts, 24, 10))
+>cb : Symbol(cb, Decl(thisInObjectLiteralMethodAsyncReturn.ts, 25, 9))
+>n : Symbol(n, Decl(thisInObjectLiteralMethodAsyncReturn.ts, 25, 14))
+
+    value?: number;
+>value : Symbol(value, Decl(thisInObjectLiteralMethodAsyncReturn.ts, 25, 40))
+
+    method(): void;
+>method : Symbol(method, Decl(thisInObjectLiteralMethodAsyncReturn.ts, 26, 19))
+
+};
+const x: T = {
+>x : Symbol(x, Decl(thisInObjectLiteralMethodAsyncReturn.ts, 29, 5))
+>T : Symbol(T, Decl(thisInObjectLiteralMethodAsyncReturn.ts, 21, 2))
+
+    then() {},
+>then : Symbol(then, Decl(thisInObjectLiteralMethodAsyncReturn.ts, 29, 14))
+
+    method() {
+>method : Symbol(method, Decl(thisInObjectLiteralMethodAsyncReturn.ts, 30, 14))
+
+        this.value = 1;
+>this.value : Symbol(value, Decl(thisInObjectLiteralMethodAsyncReturn.ts, 25, 40))
+>this : Symbol(__type, Decl(thisInObjectLiteralMethodAsyncReturn.ts, 24, 8))
+>value : Symbol(value, Decl(thisInObjectLiteralMethodAsyncReturn.ts, 25, 40))
+
+    },
+};
+
+
