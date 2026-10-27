@@ -1,0 +1,961 @@
+//// [tests/cases/compiler/distributiveConditionalTypeRelations.ts] ////
+
+=== distributiveConditionalTypeRelations.ts ===
+// The original #27932 cases are in conditionalTypeAssignabilityWhenDeferred.ts.
+
+type Either<T, U> = T extends U ? T | { matched: true } : T | { matched: false };
+>Either : Either<T, U>
+>matched : true
+>true : true
+>matched : false
+>false : false
+
+type Both<T, U> = T extends U ? T & U : T;
+>Both : Both<T, U>
+
+type Constant<T> = T extends string ? { a: number } : { b: number };
+>Constant : Constant<T>
+>a : number
+>b : number
+
+type Pair<T> = T extends unknown ? { x: T; y: T } : never;
+>Pair : Pair<T>
+>x : T
+>y : T
+
+type Tuple<T> = T extends unknown ? [T, T] : never;
+>Tuple : Tuple<T>
+
+type Callback<T> = T extends unknown ? (value: T) => T : never;
+>Callback : Callback<T>
+>value : T
+
+type Repeated<T extends string> = T extends unknown ? `${T}-${T}` : never;
+>Repeated : Repeated<T>
+
+type Remapped<T extends string> = T extends unknown ? `key-${T}` : never;
+>Remapped : Remapped<T>
+
+type Upper<T extends string> = T extends unknown ? Uppercase<T> : never;
+>Upper : Upper<T>
+
+function identity<T, U>(value: T, intersection: T & U) {
+>identity : <T, U>(value: T, intersection: T & U) => void
+>value : T
+>intersection : T & U
+
+    const either: Either<T, U> = value;
+>either : Either<T, U>
+>value : T
+
+    const both: Both<T, U> = value;
+>both : Both<T, U>
+>value : T
+
+    const intersected: Either<T, U> = intersection;
+>intersected : Either<T, U>
+>intersection : T & U
+
+    const extracted: Extract<T, unknown> = value;
+>extracted : Extract<T, unknown>
+>value : T
+
+    const excluded: Exclude<T, never> = value;
+>excluded : Exclude<T, never>
+>value : T
+}
+
+function wrappers<T extends string>(value: `key-${T}`, upper: Uppercase<T>, repeated: `${T}-${T}`) {
+>wrappers : <T extends string>(value: `key-${T}`, upper: Uppercase<T>, repeated: `${T}-${T}`) => void
+>value : `key-${T}`
+>upper : Uppercase<T>
+>repeated : `${T}-${T}`
+
+    const remapped: Remapped<T> = value;
+>remapped : Remapped<T>
+>value : `key-${T}`
+
+    const capitalized: Upper<T> = upper;
+>capitalized : Upper<T>
+>upper : Uppercase<T>
+
+    const correlated: Repeated<T> = repeated; // Error: cross products do not distribute.
+>correlated : Repeated<T>
+>repeated : `${T}-${T}`
+}
+
+type WithOuter<T extends string, U extends string> = T extends unknown ? `${T}-${U}` : never;
+>WithOuter : WithOuter<T, U>
+
+function retainOuterArgument<T extends string>(value: `${T}-${T}`) {
+>retainOuterArgument : <T extends string>(value: `${T}-${T}`) => void
+>value : `${T}-${T}`
+
+    const result: WithOuter<T, T> = value; // Error: the uniform-instantiation proof conservatively rejects repeated occurrences.
+>result : WithOuter<T, T>
+>value : `${T}-${T}`
+}
+
+type OuterSource<T extends string, U extends string> = T extends unknown ? `${T}-${U}` : never;
+>OuterSource : OuterSource<T, U>
+
+type OuterRepeated<T extends string> = T extends unknown ? `outer-${T}-${T}` : never;
+>OuterRepeated : OuterRepeated<T>
+
+type UpperRepeated<T extends string> = T extends unknown ? `${Uppercase<T>}-${Uppercase<T>}` : never;
+>UpperRepeated : UpperRepeated<T>
+
+type InferredRepeated<T extends string> = [T] extends [infer U extends string] ? `${U}-${U}` : never;
+>InferredRepeated : InferredRepeated<T>
+
+function retainConditionalArgument<T extends string>(value: `outer-${OuterSource<T, T>}`) {
+>retainConditionalArgument : <T extends string>(value: `outer-${OuterSource<T, T>}`) => void
+>value : `outer-${OuterSource<T, T>}`
+
+    const correlated: OuterRepeated<T> = value; // Error: the second argument is not distributed.
+>correlated : OuterRepeated<T>
+>value : `outer-${OuterSource<T, T>}`
+}
+
+function cachedOccurrences<T extends string>(value: `${Uppercase<T>}-${Uppercase<T>}`) {
+>cachedOccurrences : <T extends string>(value: `${Uppercase<T>}-${Uppercase<T>}`) => void
+>value : `${Uppercase<T>}-${Uppercase<T>}`
+
+    const correlated: UpperRepeated<T> = value; // Error: a cached inner type still occurs twice.
+>correlated : UpperRepeated<T>
+>value : `${Uppercase<T>}-${Uppercase<T>}`
+}
+
+function deferredOccurrences<T extends string>(value: `outer-${InferredRepeated<T>}`) {
+>deferredOccurrences : <T extends string>(value: `outer-${InferredRepeated<T>}`) => void
+>value : `outer-${InferredRepeated<T>}`
+
+    const correlated: OuterRepeated<T> = value; // Error: deferred inference hides a non-distributive use.
+>correlated : OuterRepeated<T>
+>value : `outer-${InferredRepeated<T>}`
+}
+
+type Linked<T> = T extends unknown ? T & { value: T } : never;
+>Linked : Linked<T>
+>value : T
+
+function retainIntersectionComponent<T>(value: T & { value: T }) {
+>retainIntersectionComponent : <T>(value: T & { value: T; }) => void
+>value : T & { value: T; }
+>value : T
+
+    const correlated: Linked<T> = value; // Error: the property can come from a different constituent.
+>correlated : Linked<T>
+>value : T & { value: T; }
+}
+
+type ObjectValues<T extends { value: unknown }> = T extends unknown ? T["value"] : never;
+>ObjectValues : ObjectValues<T>
+>value : unknown
+
+type IndexedValues<T, K extends keyof T> = K extends unknown ? T[K] : never;
+>IndexedValues : IndexedValues<T, K>
+
+function indexedAccess<T extends { value: unknown }, K extends keyof T>(value: T["value"], indexed: T[K]) {
+>indexedAccess : <T extends { value: unknown; }, K extends keyof T>(value: T["value"], indexed: T[K]) => void
+>value : unknown
+>value : T["value"]
+>indexed : T[K]
+
+    const fromObject: ObjectValues<T> = value;
+>fromObject : ObjectValues<T>
+>value : T["value"]
+
+    const fromIndex: IndexedValues<T, K> = indexed;
+>fromIndex : IndexedValues<T, K>
+>indexed : T[K]
+}
+
+function correlated<T>(pair: { x: T; y: T }, tuple: [T, T], callback: (value: T) => T) {
+>correlated : <T>(pair: { x: T; y: T; }, tuple: [T, T], callback: (value: T) => T) => void
+>pair : { x: T; y: T; }
+>x : T
+>y : T
+>tuple : [T, T]
+>callback : (value: T) => T
+>value : T
+
+    const p: Pair<T> = pair; // Error
+>p : Pair<T>
+>pair : { x: T; y: T; }
+
+    const t: Tuple<T> = tuple; // Error
+>t : Tuple<T>
+>tuple : [T, T]
+
+    const c: Callback<T> = callback; // Error
+>c : Callback<T>
+>callback : (value: T) => T
+}
+
+function possiblyNever<T>(value: { a: number; b: number }) {
+>possiblyNever : <T>(value: { a: number; b: number; }) => void
+>value : { a: number; b: number; }
+>a : number
+>b : number
+
+    const unconstrained: Constant<T> = value; // Error
+>unconstrained : Constant<T>
+>value : { a: number; b: number; }
+
+    const constrained: Constant<T & string> = value; // Error
+>constrained : Constant<T & string>
+>value : { a: number; b: number; }
+
+    const conditional: Constant<[T] extends [never] ? object : never> = value; // Error
+>conditional : Constant<[T] extends [never] ? object : never>
+>value : { a: number; b: number; }
+}
+
+function requiredWitness<T>(value: { a: number; b: number; value: T }) {
+>requiredWitness : <T>(value: { a: number; b: number; value: T; }) => void
+>value : { a: number; b: number; value: T; }
+>a : number
+>b : number
+>value : T
+
+    const result: Constant<T> = value; // Error: a getter returning never can throw.
+>result : Constant<T>
+>value : { a: number; b: number; value: T; }
+}
+
+requiredWitness<never>({ a: 1, b: 2, get value(): never { throw new Error(); } });
+>requiredWitness<never>({ a: 1, b: 2, get value(): never { throw new Error(); } }) : void
+>requiredWitness : <T>(value: { a: number; b: number; value: T; }) => void
+>{ a: 1, b: 2, get value(): never { throw new Error(); } } : { a: number; b: number; readonly value: never; }
+>a : number
+>1 : 1
+>b : number
+>2 : 2
+>value : never
+>new Error() : Error
+>Error : ErrorConstructor
+
+function optionalWitness<T>(value: { a: number; b: number; value?: T }) {
+>optionalWitness : <T>(value: { a: number; b: number; value?: T; }) => void
+>value : { a: number; b: number; value?: T; }
+>a : number
+>b : number
+>value : T | undefined
+
+    const result: Constant<T> = value; // Error: the property can be absent when T is never.
+>result : Constant<T>
+>value : { a: number; b: number; value?: T; }
+}
+
+function arrayWitness<T>(value: { a: number; b: number; values: T[] }) {
+>arrayWitness : <T>(value: { a: number; b: number; values: T[]; }) => void
+>value : { a: number; b: number; values: T[]; }
+>a : number
+>b : number
+>values : T[]
+
+    const result: Constant<T> = value; // Error: an array of never can be empty.
+>result : Constant<T>
+>value : { a: number; b: number; values: T[]; }
+}
+
+function functionWitness<T>(value: { a: number; b: number; get: () => T }) {
+>functionWitness : <T>(value: { a: number; b: number; get: () => T; }) => void
+>value : { a: number; b: number; get: () => T; }
+>a : number
+>b : number
+>get : () => T
+
+    const result: Constant<T> = value; // Error: a function returning never can throw.
+>result : Constant<T>
+>value : { a: number; b: number; get: () => T; }
+}
+
+function definitelyNotNever<T>(value: { a: number; b: number }) {
+>definitelyNotNever : <T>(value: { a: number; b: number; }) => void
+>value : { a: number; b: number; }
+>a : number
+>b : number
+
+    const object: Constant<{ value: T }> = value;
+>object : { b: number; }
+>value : T
+>value : { a: number; b: number; }
+
+    const array: Constant<T[]> = value;
+>array : { b: number; }
+>value : { a: number; b: number; }
+
+    const tuple: Constant<[T]> = value;
+>tuple : { b: number; }
+>value : { a: number; b: number; }
+
+    const union: Constant<T | number> = value;
+>union : { b: number; } | Constant<T>
+>value : { a: number; b: number; }
+
+    const conditional: Constant<[T] extends [string] ? { value: T } : { other: T }> = value;
+>conditional : Constant<[T] extends [string] ? { value: T; } : { other: T; }>
+>value : T
+>other : T
+>value : { a: number; b: number; }
+}
+
+type Homomorphic<T> = { [K in keyof T]: T[K] };
+>Homomorphic : Homomorphic<T>
+
+type Spread<T extends unknown[]> = [...T];
+>Spread : [...T]
+
+function emptyInstantiations<T, U extends unknown[]>(value: { a: number; b: number }) {
+>emptyInstantiations : <T, U extends unknown[]>(value: { a: number; b: number; }) => void
+>value : { a: number; b: number; }
+>a : number
+>b : number
+
+    const mapped: Constant<Homomorphic<T>> = value; // Error: Homomorphic<never> is never.
+>mapped : Constant<Homomorphic<T>>
+>value : { a: number; b: number; }
+
+    const variadic: Constant<Spread<U>> = value; // Error: Spread<never> is never.
+>variadic : Constant<[...U]>
+>value : { a: number; b: number; }
+}
+
+type Inferred<T> = T extends (value: infer P) => unknown ? T | P : never;
+>Inferred : Inferred<T>
+>value : P
+
+type InferredNonDistributive<T> = [T] extends [(value: infer P) => unknown] ? T | P : never;
+>InferredNonDistributive : InferredNonDistributive<T>
+>value : P
+
+type InferredValue<T> = T extends { value: infer P } ? P : never;
+>InferredValue : InferredValue<T>
+>value : P
+
+type InferredCallback<T> = T extends { value: infer P } ? (value: P) => P : never;
+>InferredCallback : InferredCallback<T>
+>value : P
+>value : P
+
+type ConstrainedInfer<T> = T extends { value: infer P extends string } ? T : never;
+>ConstrainedInfer : ConstrainedInfer<T>
+>value : P
+
+function inference<T extends (value: any) => unknown>(value: T) {
+>inference : <T extends (value: any) => unknown>(value: T) => void
+>value : any
+>value : T
+
+    const distributive: Inferred<T> = value; // Error: additional overloads can change the inferred parameter.
+>distributive : Inferred<T>
+>value : T
+
+    const nonDistributive: InferredNonDistributive<T> = value; // Error
+>nonDistributive : InferredNonDistributive<T>
+>value : T
+}
+
+function independentInference<T>(value: T) {
+>independentInference : <T>(value: T) => void
+>value : T
+
+    const result: T extends infer P ? T | P : never = value;
+>result : T extends infer P ? P | T : never
+>value : T
+}
+
+function propertyInference<T extends { value: unknown }>(value: T) {
+>propertyInference : <T extends { value: unknown; }>(value: T) => void
+>value : unknown
+>value : T
+
+    const result: T extends { value: infer P } ? T | P : never = value;
+>result : T extends { value: infer P; } ? P | T : never
+>value : P
+>value : T
+}
+
+function tupleInference<T>(value: T) {
+>tupleInference : <T>(value: T) => void
+>value : T
+
+    const result: [T] extends [infer P] ? T | P : never = value;
+>result : [T] extends [infer P] ? P | T : never
+>value : T
+}
+
+function independentParameters<T extends (value: any) => unknown>(value: T) {
+>independentParameters : <T extends (value: any) => unknown>(value: T) => void
+>value : any
+>value : T
+
+    const result: T extends (value: infer P) => infer R ? T | P | R : never = value; // Error
+>result : T extends (value: infer P) => infer R ? P | R | T : never
+>value : P
+>value : T
+}
+
+type InferredReturn<T> = T extends () => infer R ? T | R : never;
+>InferredReturn : InferredReturn<T>
+
+function returnInference<T extends () => unknown>(value: T) {
+>returnInference : <T extends () => unknown>(value: T) => void
+>value : T
+
+    const result: InferredReturn<T> = value; // Error: inference can use an overload with incompatible arity.
+>result : InferredReturn<T>
+>value : T
+}
+
+function universalSignature<T extends (value: unknown) => never>(value: T) {
+>universalSignature : <T extends (value: unknown) => never>(value: T) => void
+>value : unknown
+>value : T
+
+    const parameter: Inferred<T> = value;
+>parameter : Inferred<T>
+>value : T
+
+    const both: T extends (value: infer P) => infer R ? T | P | R : never = value;
+>both : T extends (value: infer P) => infer R ? P | R | T : never
+>value : P
+>value : T
+}
+
+function ignoredParameter<T extends () => never>(value: T) {
+>ignoredParameter : <T extends () => never>(value: T) => void
+>value : T
+
+    const result: Inferred<T> = value;
+>result : Inferred<T>
+>value : T
+
+    const returned: InferredReturn<T> = value;
+>returned : InferredReturn<T>
+>value : T
+}
+
+type InferredMethod<T> = T extends { method: (value: infer P) => unknown } ? T | P : never;
+>InferredMethod : InferredMethod<T>
+>method : (value: infer P) => unknown
+>value : P
+
+type InferredMethodReturn<T> = T extends { method: (value: any) => infer R } ? T | R : never;
+>InferredMethodReturn : InferredMethodReturn<T>
+>method : (value: any) => infer R
+>value : any
+
+function bivariantInference<T extends { method(value: unknown): never }>(value: T) {
+>bivariantInference : <T extends { method(value: unknown): never; }>(value: T) => void
+>method : (value: unknown) => never
+>value : unknown
+>value : T
+
+    const result: InferredMethod<T> = value; // Error: the constraint permits narrower method parameters.
+>result : InferredMethod<T>
+>value : T
+
+    const returned: InferredMethodReturn<T> = value; // Error: a never parameter fails the strict function pattern.
+>returned : InferredMethodReturn<T>
+>value : T
+}
+
+function dependentInference<T extends { value: string }>(value: string, callback: (value: string) => string) {
+>dependentInference : <T extends { value: string; }>(value: string, callback: (value: string) => string) => void
+>value : string
+>value : string
+>callback : (value: string) => string
+>value : string
+
+    const inferred: InferredValue<T> = value; // Error: T can contain a narrower value.
+>inferred : InferredValue<T>
+>value : string
+
+    const inferredCallback: InferredCallback<T> = callback; // Error
+>inferredCallback : InferredCallback<T>
+>callback : (value: string) => string
+}
+
+function constrainedInference<T extends { value: any }>(value: T) {
+>constrainedInference : <T extends { value: any; }>(value: T) => void
+>value : any
+>value : T
+
+    const result: ConstrainedInfer<T> = value; // Error: any in the constraint does not imply string.
+>result : ConstrainedInfer<T>
+>value : T
+}
+
+type SpecificParameter<T> = T extends (value: string) => infer R ? T | R : never;
+>SpecificParameter : SpecificParameter<T>
+>value : string
+
+type SpecificMethod<T> = T extends { method(value: string): infer R } ? T | R : never;
+>SpecificMethod : SpecificMethod<T>
+>method : (value: string) => infer R
+>value : string
+
+type OptionalProperty<T> = T extends { optional?: string; value: infer R } ? T | R : never;
+>OptionalProperty : OptionalProperty<T>
+>optional : string | undefined
+>value : R
+
+type MixedInference<T> = T extends { input: (value: infer R) => void; output: infer R } ? T | R : never;
+>MixedInference : MixedInference<T>
+>input : (value: infer R) => void
+>value : R
+>output : R
+
+type SingleParameter<T> = T extends (value: infer R) => unknown ? T | R : never;
+>SingleParameter : SingleParameter<T>
+>value : R
+
+type OptionalParameter<T> = T extends (value?: infer R) => unknown ? T | R : never;
+>OptionalParameter : OptionalParameter<T>
+>value : R | undefined
+
+type IntersectionPattern<T> = T extends { value: infer R } & { method(value: string): unknown } ? T | R : never;
+>IntersectionPattern : IntersectionPattern<T>
+>value : R
+>method : (value: string) => unknown
+>value : string
+
+type PrimitiveBoundary<T> = T extends object | (infer R extends number) ? T | R : never;
+>PrimitiveBoundary : PrimitiveBoundary<T>
+
+function fixedParameter<T extends (value: any) => unknown>(value: T) {
+>fixedParameter : <T extends (value: any) => unknown>(value: T) => void
+>value : any
+>value : T
+
+    const result: SpecificParameter<T> = value; // Error: a number parameter also satisfies the constraint.
+>result : SpecificParameter<T>
+>value : T
+
+    const withoutInference: T extends (value: string) => unknown ? T : never = value; // Error
+>withoutInference : T extends (value: string) => unknown ? T : never
+>value : string
+>value : T
+}
+
+function bivariantParameter<T extends { method(value: unknown): unknown }>(value: T) {
+>bivariantParameter : <T extends { method(value: unknown): unknown; }>(value: T) => void
+>method : (value: unknown) => unknown
+>value : unknown
+>value : T
+
+    const result: SpecificMethod<T> = value; // Error
+>result : SpecificMethod<T>
+>value : T
+}
+
+function optionalProperty<T extends { value: unknown }>(value: T) {
+>optionalProperty : <T extends { value: unknown; }>(value: T) => void
+>value : unknown
+>value : T
+
+    const result: OptionalProperty<T> = value; // Error: subtypes can add an incompatible optional property.
+>result : OptionalProperty<T>
+>value : T
+}
+
+function mixedInference<T extends { input: (value: any) => void; output: any }>(value: T) {
+>mixedInference : <T extends { input: (value: any) => void; output: any; }>(value: T) => void
+>input : (value: any) => void
+>value : any
+>output : any
+>value : T
+
+    const result: MixedInference<T> = value; // Error: input and output can require incompatible inferences.
+>result : MixedInference<T>
+>value : T
+}
+
+interface InvariantInferencePattern<T> {
+    input: (value: T) => void;
+>input : (value: T) => void
+>value : T
+
+    output: T;
+>output : T
+}
+
+type InvariantInference<T> = T extends InvariantInferencePattern<infer R> ? T | R : never;
+>InvariantInference : InvariantInference<T>
+
+function invariantInference<T extends InvariantInferencePattern<any>>(value: T) {
+>invariantInference : <T extends InvariantInferencePattern<any>>(value: T) => void
+>value : T
+
+    const result: InvariantInference<T> = value; // Error: invariant type-argument inference must not hide mixed positions.
+>result : InvariantInference<T>
+>value : T
+}
+
+enum NumericInferencePattern {
+>NumericInferencePattern : NumericInferencePattern
+
+    value
+>value : NumericInferencePattern.value
+}
+
+type NumericInference<T> = T extends (value: infer P) => NumericInferencePattern ? T | P : never;
+>NumericInference : NumericInference<T>
+>value : P
+
+function numericInference<T extends (value: unknown) => number>(value: T) {
+>numericInference : <T extends (value: unknown) => number>(value: T) => void
+>value : unknown
+>value : T
+
+    const result: NumericInference<T> = value; // Error: number-to-enum compatibility does not cover every numeric literal.
+>result : NumericInference<T>
+>value : T
+}
+
+function unboundedArity<T extends (...args: any[]) => unknown>(value: T) {
+>unboundedArity : <T extends (...args: any[]) => unknown>(value: T) => void
+>args : any[]
+>value : T
+
+    const result: SingleParameter<T> = value; // Error: subtypes can require multiple arguments.
+>result : SingleParameter<T>
+>value : T
+}
+
+function optionalParameter<T extends (value?: any) => unknown>(value: T) {
+>optionalParameter : <T extends (value?: any) => unknown>(value: T) => void
+>value : any
+>value : T
+
+    const result: OptionalParameter<T> = value; // Error: subtypes can require an argument.
+>result : OptionalParameter<T>
+>value : T
+}
+
+function intersectionPattern<T extends { value: any; method(value: any): unknown }>(value: T) {
+>intersectionPattern : <T extends { value: any; method(value: any): unknown; }>(value: T) => void
+>value : any
+>method : (value: any) => unknown
+>value : any
+>value : T
+
+    const result: IntersectionPattern<T> = value; // Error
+>result : IntersectionPattern<T>
+>value : T
+}
+
+function primitiveBoundary<T extends { toString(): string }>(value: T) {
+>primitiveBoundary : <T extends { toString(): string; }>(value: T) => void
+>toString : () => string
+>value : T
+
+    const result: PrimitiveBoundary<T> = value; // Error: structural object constraints admit primitives.
+>result : PrimitiveBoundary<T>
+>value : T
+}
+
+class Nominal<T> {
+>Nominal : Nominal<T>
+
+    private brand!: void;
+>brand : void
+
+    value!: T;
+>value : T
+}
+
+function nominalInference<T extends { value: unknown }>(value: T) {
+>nominalInference : <T extends { value: unknown; }>(value: T) => void
+>value : unknown
+>value : T
+
+    const result: T extends Nominal<infer P> ? T | P : never = value; // Error
+>result : T extends Nominal<infer P> ? P | T : never
+>value : T
+}
+
+type FilteredKeys<T, U> = T extends U ? never : T;
+>FilteredKeys : FilteredKeys<T, U>
+
+type DecoratedKeys<T extends string, U> = T extends U ? never : `key-${T}`;
+>DecoratedKeys : DecoratedKeys<T, U>
+
+function filtering<T extends string, U>(value: FilteredKeys<T, U>) {
+>filtering : <T extends string, U>(value: FilteredKeys<T, U>) => void
+>value : FilteredKeys<T, U>
+
+    const excluded: Exclude<T, U> = value;
+>excluded : Exclude<T, U>
+>value : FilteredKeys<T, U>
+
+    const remapped: DecoratedKeys<FilteredKeys<T, U>, never> = `key-${value}`;
+>remapped : DecoratedKeys<FilteredKeys<T, U>, never>
+>`key-${value}` : `key-${FilteredKeys<T, U>}`
+>value : FilteredKeys<T, U>
+}
+
+function filteredRemapping<T extends string, U>(value: `key-${Exclude<T, U>}`) {
+>filteredRemapping : <T extends string, U>(value: `key-${Exclude<T, U>}`) => void
+>value : `key-${Exclude<T, U>}`
+
+    const result: DecoratedKeys<T, U> = value;
+>result : DecoratedKeys<T, U>
+>value : `key-${Exclude<T, U>}`
+}
+
+type FilteredMap<T extends string, U> = { [K in T as K extends U ? never : K]: unknown };
+>FilteredMap : FilteredMap<T, U>
+
+type DecoratedMap<T extends string, U> = { [K in T as K extends U ? never : `key-${K}`]: unknown };
+>DecoratedMap : DecoratedMap<T, U>
+
+function mappedKeys<T extends string, U>(key: Exclude<T, U>, decorated: `key-${Exclude<T, U>}`) {
+>mappedKeys : <T extends string, U>(key: Exclude<T, U>, decorated: `key-${Exclude<T, U>}`) => void
+>key : Exclude<T, U>
+>decorated : `key-${Exclude<T, U>}`
+
+    const filtered: keyof FilteredMap<T, U> = key;
+>filtered : keyof FilteredMap<T, U>
+>key : Exclude<T, U>
+
+    const remapped: keyof DecoratedMap<T, U> = decorated;
+>remapped : keyof DecoratedMap<T, U>
+>decorated : `key-${Exclude<T, U>}`
+}
+
+type Recursive<T> = T extends object ? T | { next: Recursive<T> } : T;
+>Recursive : Recursive<T>
+>next : Recursive<T>
+
+function recursion<T>(value: T) {
+>recursion : <T>(value: T) => void
+>value : T
+
+    const result: Recursive<T> = value;
+>result : Recursive<T>
+>value : T
+}
+
+function subtypeIsNotConstituent<T>(value: T & string) {
+>subtypeIsNotConstituent : <T>(value: T & string) => void
+>value : T & string
+
+    const result: Extract<T, string> = value; // Error: Extract<unknown, string> is never.
+>result : Extract<T, string>
+>value : T & string
+}
+
+// Concrete instantiations witnessing the rejected assignments.
+const mixedPair: Pair<"a" | "b"> = { x: "a", y: "b" }; // Error
+>mixedPair : { x: "a"; y: "a"; } | { x: "b"; y: "b"; }
+>{ x: "a", y: "b" } : { x: "a"; y: "b"; }
+>x : "a"
+>"a" : "a"
+>y : "b"
+>"b" : "b"
+
+const mixedTuple: Tuple<"a" | "b"> = ["a", "b"]; // Error
+>mixedTuple : ["a", "a"] | ["b", "b"]
+>["a", "b"] : ["a", "b"]
+>"a" : "a"
+>"b" : "b"
+
+const mixedString: Repeated<"a" | "b"> = "a-b"; // Error
+>mixedString : "a-a" | "b-b"
+>"a-b" : "a-b"
+
+const emptyConstant: Constant<never> = { a: 1, b: 2 }; // Error
+>emptyConstant : never
+>{ a: 1, b: 2 } : { a: number; b: number; }
+>a : number
+>1 : 1
+>b : number
+>2 : 2
+
+const narrowInference: InferredValue<{ value: "a" }> = "b"; // Error
+>narrowInference : "a"
+>value : "a"
+>"b" : "b"
+
+const rejectedConstrainedInfer: ConstrainedInfer<{ value: number }> = { value: 1 }; // Error
+>rejectedConstrainedInfer : never
+>value : number
+>{ value: 1 } : { value: number; }
+>value : number
+>1 : 1
+
+const rejectedFixedParameter: SpecificParameter<(value: number) => boolean> = (value: number) => true; // Error
+>rejectedFixedParameter : never
+>value : number
+>(value: number) => true : (value: number) => boolean
+>value : number
+>true : true
+
+const rejectedMethod: SpecificMethod<{ method(value: number): boolean }> = { method: (value: number) => true }; // Error
+>rejectedMethod : never
+>method : (value: number) => boolean
+>value : number
+>{ method: (value: number) => true } : { method: (value: number) => boolean; }
+>method : (value: number) => boolean
+>(value: number) => true : (value: number) => boolean
+>value : number
+>true : true
+
+const rejectedOptionalProperty: OptionalProperty<{ optional: number; value: boolean }> = { optional: 1, value: true }; // Error
+>rejectedOptionalProperty : never
+>optional : number
+>value : boolean
+>{ optional: 1, value: true } : { optional: number; value: boolean; }
+>optional : number
+>1 : 1
+>value : boolean
+>true : true
+
+const rejectedMixedInference: MixedInference<{ input(value: number): void; output: string }> = { input: (value: number) => {}, output: "" }; // Error
+>rejectedMixedInference : never
+>input : (value: number) => void
+>value : number
+>output : string
+>{ input: (value: number) => {}, output: "" } : { input: (value: number) => void; output: string; }
+>input : (value: number) => void
+>(value: number) => {} : (value: number) => void
+>value : number
+>output : string
+>"" : ""
+
+const rejectedInvariantInference: InvariantInference<{ input: (value: number) => void; output: string }> = { input: (value: number) => {}, output: "" }; // Error
+>rejectedInvariantInference : never
+>input : (value: number) => void
+>value : number
+>output : string
+>{ input: (value: number) => {}, output: "" } : { input: (value: number) => void; output: string; }
+>input : (value: number) => void
+>(value: number) => {} : (value: number) => void
+>value : number
+>output : string
+>"" : ""
+
+const rejectedNumericInference: NumericInference<(value: unknown) => 123> = (value: unknown) => 123; // Error
+>rejectedNumericInference : never
+>value : unknown
+>(value: unknown) => 123 : (value: unknown) => number
+>value : unknown
+>123 : 123
+
+const rejectedArity: SingleParameter<(left: number, right: number) => void> = (left: number, right: number) => {}; // Error
+>rejectedArity : never
+>left : number
+>right : number
+>(left: number, right: number) => {} : (left: number, right: number) => void
+>left : number
+>right : number
+
+const rejectedOptionalParameter: OptionalParameter<(value: string) => void> = (value: string) => {}; // Error
+>rejectedOptionalParameter : never
+>value : string
+>(value: string) => {} : (value: string) => void
+>value : string
+
+const rejectedIntersection: IntersectionPattern<{ value: boolean; method(value: number): unknown }> = { value: true, method: (value: number) => {} }; // Error
+>rejectedIntersection : never
+>value : boolean
+>method : (value: number) => unknown
+>value : number
+>{ value: true, method: (value: number) => {} } : { value: boolean; method: (value: number) => void; }
+>value : boolean
+>true : true
+>method : (value: number) => void
+>(value: number) => {} : (value: number) => void
+>value : number
+
+const rejectedPrimitive: PrimitiveBoundary<string> = ""; // Error
+>rejectedPrimitive : never
+>"" : ""
+
+declare const overloadedParameter: {
+>overloadedParameter : { (value: string): void; (left: number, right: number): void; }
+
+    (value: string): void;
+>value : string
+
+    (left: number, right: number): void;
+>left : number
+>right : number
+
+};
+const parameterConstraint: (value: any) => unknown = overloadedParameter;
+>parameterConstraint : (value: any) => unknown
+>value : any
+>overloadedParameter : { (value: string): void; (left: number, right: number): void; }
+
+const rejectedOverloadedParameter: Inferred<typeof overloadedParameter> = overloadedParameter; // Error
+>rejectedOverloadedParameter : never
+>overloadedParameter : { (value: string): void; (left: number, right: number): void; }
+>overloadedParameter : { (value: string): void; (left: number, right: number): void; }
+
+const rejectedOverloadedNonDistributive: InferredNonDistributive<typeof overloadedParameter> = overloadedParameter; // Error
+>rejectedOverloadedNonDistributive : never
+>overloadedParameter : { (value: string): void; (left: number, right: number): void; }
+>overloadedParameter : { (value: string): void; (left: number, right: number): void; }
+
+declare const overloadedReturn: {
+>overloadedReturn : { (): string; (value: number): number; }
+
+    (): string;
+    (value: number): number;
+>value : number
+
+};
+const returnConstraint: () => unknown = overloadedReturn;
+>returnConstraint : () => unknown
+>overloadedReturn : { (): string; (value: number): number; }
+
+const rejectedOverloadedReturn: InferredReturn<typeof overloadedReturn> = overloadedReturn; // Error
+>rejectedOverloadedReturn : never
+>overloadedReturn : { (): string; (value: number): number; }
+>overloadedReturn : { (): string; (value: number): number; }
+
+declare const overloadedMethod: {
+>overloadedMethod : { method(value: string): never; method(left: number, right: number): void; }
+
+    method(value: string): never;
+>method : { (value: string): never; (left: number, right: number): void; }
+>value : string
+
+    method(left: number, right: number): void;
+>method : { (value: string): never; (left: number, right: number): void; }
+>left : number
+>right : number
+
+};
+const methodConstraint: { method(value: unknown): never } = overloadedMethod;
+>methodConstraint : { method(value: unknown): never; }
+>method : (value: unknown) => never
+>value : unknown
+>overloadedMethod : { method(value: string): never; method(left: number, right: number): void; }
+
+const rejectedOverloadedMethod: InferredMethod<typeof overloadedMethod> = overloadedMethod; // Error
+>rejectedOverloadedMethod : never
+>overloadedMethod : { method(value: string): never; method(left: number, right: number): void; }
+>overloadedMethod : { method(value: string): never; method(left: number, right: number): void; }
+
+declare const neverParameterMethod: { method(value: never): never };
+>neverParameterMethod : { method(value: never): never; }
+>method : (value: never) => never
+>value : never
+
+const neverMethodConstraint: { method(value: unknown): never } = neverParameterMethod;
+>neverMethodConstraint : { method(value: unknown): never; }
+>method : (value: unknown) => never
+>value : unknown
+>neverParameterMethod : { method(value: never): never; }
+
+const rejectedMethodReturn: InferredMethodReturn<typeof neverParameterMethod> = neverParameterMethod; // Error
+>rejectedMethodReturn : never
+>neverParameterMethod : { method(value: never): never; }
+>neverParameterMethod : { method(value: never): never; }
+

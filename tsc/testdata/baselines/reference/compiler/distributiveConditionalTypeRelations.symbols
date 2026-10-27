@@ -1,0 +1,1436 @@
+//// [tests/cases/compiler/distributiveConditionalTypeRelations.ts] ////
+
+=== distributiveConditionalTypeRelations.ts ===
+// The original #27932 cases are in conditionalTypeAssignabilityWhenDeferred.ts.
+
+type Either<T, U> = T extends U ? T | { matched: true } : T | { matched: false };
+>Either : Symbol(Either, Decl(distributiveConditionalTypeRelations.ts, 0, 0))
+>T : Symbol(T, Decl(distributiveConditionalTypeRelations.ts, 2, 12))
+>U : Symbol(U, Decl(distributiveConditionalTypeRelations.ts, 2, 14))
+>T : Symbol(T, Decl(distributiveConditionalTypeRelations.ts, 2, 12))
+>U : Symbol(U, Decl(distributiveConditionalTypeRelations.ts, 2, 14))
+>T : Symbol(T, Decl(distributiveConditionalTypeRelations.ts, 2, 12))
+>matched : Symbol(matched, Decl(distributiveConditionalTypeRelations.ts, 2, 39))
+>T : Symbol(T, Decl(distributiveConditionalTypeRelations.ts, 2, 12))
+>matched : Symbol(matched, Decl(distributiveConditionalTypeRelations.ts, 2, 63))
+
+type Both<T, U> = T extends U ? T & U : T;
+>Both : Symbol(Both, Decl(distributiveConditionalTypeRelations.ts, 2, 81))
+>T : Symbol(T, Decl(distributiveConditionalTypeRelations.ts, 3, 10))
+>U : Symbol(U, Decl(distributiveConditionalTypeRelations.ts, 3, 12))
+>T : Symbol(T, Decl(distributiveConditionalTypeRelations.ts, 3, 10))
+>U : Symbol(U, Decl(distributiveConditionalTypeRelations.ts, 3, 12))
+>T : Symbol(T, Decl(distributiveConditionalTypeRelations.ts, 3, 10))
+>U : Symbol(U, Decl(distributiveConditionalTypeRelations.ts, 3, 12))
+>T : Symbol(T, Decl(distributiveConditionalTypeRelations.ts, 3, 10))
+
+type Constant<T> = T extends string ? { a: number } : { b: number };
+>Constant : Symbol(Constant, Decl(distributiveConditionalTypeRelations.ts, 3, 42))
+>T : Symbol(T, Decl(distributiveConditionalTypeRelations.ts, 4, 14))
+>T : Symbol(T, Decl(distributiveConditionalTypeRelations.ts, 4, 14))
+>a : Symbol(a, Decl(distributiveConditionalTypeRelations.ts, 4, 39))
+>b : Symbol(b, Decl(distributiveConditionalTypeRelations.ts, 4, 55))
+
+type Pair<T> = T extends unknown ? { x: T; y: T } : never;
+>Pair : Symbol(Pair, Decl(distributiveConditionalTypeRelations.ts, 4, 68))
+>T : Symbol(T, Decl(distributiveConditionalTypeRelations.ts, 5, 10))
+>T : Symbol(T, Decl(distributiveConditionalTypeRelations.ts, 5, 10))
+>x : Symbol(x, Decl(distributiveConditionalTypeRelations.ts, 5, 36))
+>T : Symbol(T, Decl(distributiveConditionalTypeRelations.ts, 5, 10))
+>y : Symbol(y, Decl(distributiveConditionalTypeRelations.ts, 5, 42))
+>T : Symbol(T, Decl(distributiveConditionalTypeRelations.ts, 5, 10))
+
+type Tuple<T> = T extends unknown ? [T, T] : never;
+>Tuple : Symbol(Tuple, Decl(distributiveConditionalTypeRelations.ts, 5, 58))
+>T : Symbol(T, Decl(distributiveConditionalTypeRelations.ts, 6, 11))
+>T : Symbol(T, Decl(distributiveConditionalTypeRelations.ts, 6, 11))
+>T : Symbol(T, Decl(distributiveConditionalTypeRelations.ts, 6, 11))
+>T : Symbol(T, Decl(distributiveConditionalTypeRelations.ts, 6, 11))
+
+type Callback<T> = T extends unknown ? (value: T) => T : never;
+>Callback : Symbol(Callback, Decl(distributiveConditionalTypeRelations.ts, 6, 51))
+>T : Symbol(T, Decl(distributiveConditionalTypeRelations.ts, 7, 14))
+>T : Symbol(T, Decl(distributiveConditionalTypeRelations.ts, 7, 14))
+>value : Symbol(value, Decl(distributiveConditionalTypeRelations.ts, 7, 40))
+>T : Symbol(T, Decl(distributiveConditionalTypeRelations.ts, 7, 14))
+>T : Symbol(T, Decl(distributiveConditionalTypeRelations.ts, 7, 14))
+
+type Repeated<T extends string> = T extends unknown ? `${T}-${T}` : never;
+>Repeated : Symbol(Repeated, Decl(distributiveConditionalTypeRelations.ts, 7, 63))
+>T : Symbol(T, Decl(distributiveConditionalTypeRelations.ts, 8, 14))
+>T : Symbol(T, Decl(distributiveConditionalTypeRelations.ts, 8, 14))
+>T : Symbol(T, Decl(distributiveConditionalTypeRelations.ts, 8, 14))
+>T : Symbol(T, Decl(distributiveConditionalTypeRelations.ts, 8, 14))
+
+type Remapped<T extends string> = T extends unknown ? `key-${T}` : never;
+>Remapped : Symbol(Remapped, Decl(distributiveConditionalTypeRelations.ts, 8, 74))
+>T : Symbol(T, Decl(distributiveConditionalTypeRelations.ts, 9, 14))
+>T : Symbol(T, Decl(distributiveConditionalTypeRelations.ts, 9, 14))
+>T : Symbol(T, Decl(distributiveConditionalTypeRelations.ts, 9, 14))
+
+type Upper<T extends string> = T extends unknown ? Uppercase<T> : never;
+>Upper : Symbol(Upper, Decl(distributiveConditionalTypeRelations.ts, 9, 73))
+>T : Symbol(T, Decl(distributiveConditionalTypeRelations.ts, 10, 11))
+>T : Symbol(T, Decl(distributiveConditionalTypeRelations.ts, 10, 11))
+>Uppercase : Symbol(Uppercase, Decl(lib.es5.d.ts, --, --))
+>T : Symbol(T, Decl(distributiveConditionalTypeRelations.ts, 10, 11))
+
+function identity<T, U>(value: T, intersection: T & U) {
+>identity : Symbol(identity, Decl(distributiveConditionalTypeRelations.ts, 10, 72))
+>T : Symbol(T, Decl(distributiveConditionalTypeRelations.ts, 12, 18))
+>U : Symbol(U, Decl(distributiveConditionalTypeRelations.ts, 12, 20))
+>value : Symbol(value, Decl(distributiveConditionalTypeRelations.ts, 12, 24))
+>T : Symbol(T, Decl(distributiveConditionalTypeRelations.ts, 12, 18))
+>intersection : Symbol(intersection, Decl(distributiveConditionalTypeRelations.ts, 12, 33))
+>T : Symbol(T, Decl(distributiveConditionalTypeRelations.ts, 12, 18))
+>U : Symbol(U, Decl(distributiveConditionalTypeRelations.ts, 12, 20))
+
+    const either: Either<T, U> = value;
+>either : Symbol(either, Decl(distributiveConditionalTypeRelations.ts, 13, 9))
+>Either : Symbol(Either, Decl(distributiveConditionalTypeRelations.ts, 0, 0))
+>T : Symbol(T, Decl(distributiveConditionalTypeRelations.ts, 12, 18))
+>U : Symbol(U, Decl(distributiveConditionalTypeRelations.ts, 12, 20))
+>value : Symbol(value, Decl(distributiveConditionalTypeRelations.ts, 12, 24))
+
+    const both: Both<T, U> = value;
+>both : Symbol(both, Decl(distributiveConditionalTypeRelations.ts, 14, 9))
+>Both : Symbol(Both, Decl(distributiveConditionalTypeRelations.ts, 2, 81))
+>T : Symbol(T, Decl(distributiveConditionalTypeRelations.ts, 12, 18))
+>U : Symbol(U, Decl(distributiveConditionalTypeRelations.ts, 12, 20))
+>value : Symbol(value, Decl(distributiveConditionalTypeRelations.ts, 12, 24))
+
+    const intersected: Either<T, U> = intersection;
+>intersected : Symbol(intersected, Decl(distributiveConditionalTypeRelations.ts, 15, 9))
+>Either : Symbol(Either, Decl(distributiveConditionalTypeRelations.ts, 0, 0))
+>T : Symbol(T, Decl(distributiveConditionalTypeRelations.ts, 12, 18))
+>U : Symbol(U, Decl(distributiveConditionalTypeRelations.ts, 12, 20))
+>intersection : Symbol(intersection, Decl(distributiveConditionalTypeRelations.ts, 12, 33))
+
+    const extracted: Extract<T, unknown> = value;
+>extracted : Symbol(extracted, Decl(distributiveConditionalTypeRelations.ts, 16, 9))
+>Extract : Symbol(Extract, Decl(lib.es5.d.ts, --, --))
+>T : Symbol(T, Decl(distributiveConditionalTypeRelations.ts, 12, 18))
+>value : Symbol(value, Decl(distributiveConditionalTypeRelations.ts, 12, 24))
+
+    const excluded: Exclude<T, never> = value;
+>excluded : Symbol(excluded, Decl(distributiveConditionalTypeRelations.ts, 17, 9))
+>Exclude : Symbol(Exclude, Decl(lib.es5.d.ts, --, --))
+>T : Symbol(T, Decl(distributiveConditionalTypeRelations.ts, 12, 18))
+>value : Symbol(value, Decl(distributiveConditionalTypeRelations.ts, 12, 24))
+}
+
+function wrappers<T extends string>(value: `key-${T}`, upper: Uppercase<T>, repeated: `${T}-${T}`) {
+>wrappers : Symbol(wrappers, Decl(distributiveConditionalTypeRelations.ts, 18, 1))
+>T : Symbol(T, Decl(distributiveConditionalTypeRelations.ts, 20, 18))
+>value : Symbol(value, Decl(distributiveConditionalTypeRelations.ts, 20, 36))
+>T : Symbol(T, Decl(distributiveConditionalTypeRelations.ts, 20, 18))
+>upper : Symbol(upper, Decl(distributiveConditionalTypeRelations.ts, 20, 54))
+>Uppercase : Symbol(Uppercase, Decl(lib.es5.d.ts, --, --))
+>T : Symbol(T, Decl(distributiveConditionalTypeRelations.ts, 20, 18))
+>repeated : Symbol(repeated, Decl(distributiveConditionalTypeRelations.ts, 20, 75))
+>T : Symbol(T, Decl(distributiveConditionalTypeRelations.ts, 20, 18))
+>T : Symbol(T, Decl(distributiveConditionalTypeRelations.ts, 20, 18))
+
+    const remapped: Remapped<T> = value;
+>remapped : Symbol(remapped, Decl(distributiveConditionalTypeRelations.ts, 21, 9))
+>Remapped : Symbol(Remapped, Decl(distributiveConditionalTypeRelations.ts, 8, 74))
+>T : Symbol(T, Decl(distributiveConditionalTypeRelations.ts, 20, 18))
+>value : Symbol(value, Decl(distributiveConditionalTypeRelations.ts, 20, 36))
+
+    const capitalized: Upper<T> = upper;
+>capitalized : Symbol(capitalized, Decl(distributiveConditionalTypeRelations.ts, 22, 9))
+>Upper : Symbol(Upper, Decl(distributiveConditionalTypeRelations.ts, 9, 73))
+>T : Symbol(T, Decl(distributiveConditionalTypeRelations.ts, 20, 18))
+>upper : Symbol(upper, Decl(distributiveConditionalTypeRelations.ts, 20, 54))
+
+    const correlated: Repeated<T> = repeated; // Error: cross products do not distribute.
+>correlated : Symbol(correlated, Decl(distributiveConditionalTypeRelations.ts, 23, 9))
+>Repeated : Symbol(Repeated, Decl(distributiveConditionalTypeRelations.ts, 7, 63))
+>T : Symbol(T, Decl(distributiveConditionalTypeRelations.ts, 20, 18))
+>repeated : Symbol(repeated, Decl(distributiveConditionalTypeRelations.ts, 20, 75))
+}
+
+type WithOuter<T extends string, U extends string> = T extends unknown ? `${T}-${U}` : never;
+>WithOuter : Symbol(WithOuter, Decl(distributiveConditionalTypeRelations.ts, 24, 1))
+>T : Symbol(T, Decl(distributiveConditionalTypeRelations.ts, 26, 15))
+>U : Symbol(U, Decl(distributiveConditionalTypeRelations.ts, 26, 32))
+>T : Symbol(T, Decl(distributiveConditionalTypeRelations.ts, 26, 15))
+>T : Symbol(T, Decl(distributiveConditionalTypeRelations.ts, 26, 15))
+>U : Symbol(U, Decl(distributiveConditionalTypeRelations.ts, 26, 32))
+
+function retainOuterArgument<T extends string>(value: `${T}-${T}`) {
+>retainOuterArgument : Symbol(retainOuterArgument, Decl(distributiveConditionalTypeRelations.ts, 26, 93))
+>T : Symbol(T, Decl(distributiveConditionalTypeRelations.ts, 28, 29))
+>value : Symbol(value, Decl(distributiveConditionalTypeRelations.ts, 28, 47))
+>T : Symbol(T, Decl(distributiveConditionalTypeRelations.ts, 28, 29))
+>T : Symbol(T, Decl(distributiveConditionalTypeRelations.ts, 28, 29))
+
+    const result: WithOuter<T, T> = value; // Error: the uniform-instantiation proof conservatively rejects repeated occurrences.
+>result : Symbol(result, Decl(distributiveConditionalTypeRelations.ts, 29, 9))
+>WithOuter : Symbol(WithOuter, Decl(distributiveConditionalTypeRelations.ts, 24, 1))
+>T : Symbol(T, Decl(distributiveConditionalTypeRelations.ts, 28, 29))
+>T : Symbol(T, Decl(distributiveConditionalTypeRelations.ts, 28, 29))
+>value : Symbol(value, Decl(distributiveConditionalTypeRelations.ts, 28, 47))
+}
+
+type OuterSource<T extends string, U extends string> = T extends unknown ? `${T}-${U}` : never;
+>OuterSource : Symbol(OuterSource, Decl(distributiveConditionalTypeRelations.ts, 30, 1))
+>T : Symbol(T, Decl(distributiveConditionalTypeRelations.ts, 32, 17))
+>U : Symbol(U, Decl(distributiveConditionalTypeRelations.ts, 32, 34))
+>T : Symbol(T, Decl(distributiveConditionalTypeRelations.ts, 32, 17))
+>T : Symbol(T, Decl(distributiveConditionalTypeRelations.ts, 32, 17))
+>U : Symbol(U, Decl(distributiveConditionalTypeRelations.ts, 32, 34))
+
+type OuterRepeated<T extends string> = T extends unknown ? `outer-${T}-${T}` : never;
+>OuterRepeated : Symbol(OuterRepeated, Decl(distributiveConditionalTypeRelations.ts, 32, 95))
+>T : Symbol(T, Decl(distributiveConditionalTypeRelations.ts, 33, 19))
+>T : Symbol(T, Decl(distributiveConditionalTypeRelations.ts, 33, 19))
+>T : Symbol(T, Decl(distributiveConditionalTypeRelations.ts, 33, 19))
+>T : Symbol(T, Decl(distributiveConditionalTypeRelations.ts, 33, 19))
+
+type UpperRepeated<T extends string> = T extends unknown ? `${Uppercase<T>}-${Uppercase<T>}` : never;
+>UpperRepeated : Symbol(UpperRepeated, Decl(distributiveConditionalTypeRelations.ts, 33, 85))
+>T : Symbol(T, Decl(distributiveConditionalTypeRelations.ts, 34, 19))
+>T : Symbol(T, Decl(distributiveConditionalTypeRelations.ts, 34, 19))
+>Uppercase : Symbol(Uppercase, Decl(lib.es5.d.ts, --, --))
+>T : Symbol(T, Decl(distributiveConditionalTypeRelations.ts, 34, 19))
+>Uppercase : Symbol(Uppercase, Decl(lib.es5.d.ts, --, --))
+>T : Symbol(T, Decl(distributiveConditionalTypeRelations.ts, 34, 19))
+
+type InferredRepeated<T extends string> = [T] extends [infer U extends string] ? `${U}-${U}` : never;
+>InferredRepeated : Symbol(InferredRepeated, Decl(distributiveConditionalTypeRelations.ts, 34, 101))
+>T : Symbol(T, Decl(distributiveConditionalTypeRelations.ts, 35, 22))
+>T : Symbol(T, Decl(distributiveConditionalTypeRelations.ts, 35, 22))
+>U : Symbol(U, Decl(distributiveConditionalTypeRelations.ts, 35, 60))
+>U : Symbol(U, Decl(distributiveConditionalTypeRelations.ts, 35, 60))
+>U : Symbol(U, Decl(distributiveConditionalTypeRelations.ts, 35, 60))
+
+function retainConditionalArgument<T extends string>(value: `outer-${OuterSource<T, T>}`) {
+>retainConditionalArgument : Symbol(retainConditionalArgument, Decl(distributiveConditionalTypeRelations.ts, 35, 101))
+>T : Symbol(T, Decl(distributiveConditionalTypeRelations.ts, 37, 35))
+>value : Symbol(value, Decl(distributiveConditionalTypeRelations.ts, 37, 53))
+>OuterSource : Symbol(OuterSource, Decl(distributiveConditionalTypeRelations.ts, 30, 1))
+>T : Symbol(T, Decl(distributiveConditionalTypeRelations.ts, 37, 35))
+>T : Symbol(T, Decl(distributiveConditionalTypeRelations.ts, 37, 35))
+
+    const correlated: OuterRepeated<T> = value; // Error: the second argument is not distributed.
+>correlated : Symbol(correlated, Decl(distributiveConditionalTypeRelations.ts, 38, 9))
+>OuterRepeated : Symbol(OuterRepeated, Decl(distributiveConditionalTypeRelations.ts, 32, 95))
+>T : Symbol(T, Decl(distributiveConditionalTypeRelations.ts, 37, 35))
+>value : Symbol(value, Decl(distributiveConditionalTypeRelations.ts, 37, 53))
+}
+
+function cachedOccurrences<T extends string>(value: `${Uppercase<T>}-${Uppercase<T>}`) {
+>cachedOccurrences : Symbol(cachedOccurrences, Decl(distributiveConditionalTypeRelations.ts, 39, 1))
+>T : Symbol(T, Decl(distributiveConditionalTypeRelations.ts, 41, 27))
+>value : Symbol(value, Decl(distributiveConditionalTypeRelations.ts, 41, 45))
+>Uppercase : Symbol(Uppercase, Decl(lib.es5.d.ts, --, --))
+>T : Symbol(T, Decl(distributiveConditionalTypeRelations.ts, 41, 27))
+>Uppercase : Symbol(Uppercase, Decl(lib.es5.d.ts, --, --))
+>T : Symbol(T, Decl(distributiveConditionalTypeRelations.ts, 41, 27))
+
+    const correlated: UpperRepeated<T> = value; // Error: a cached inner type still occurs twice.
+>correlated : Symbol(correlated, Decl(distributiveConditionalTypeRelations.ts, 42, 9))
+>UpperRepeated : Symbol(UpperRepeated, Decl(distributiveConditionalTypeRelations.ts, 33, 85))
+>T : Symbol(T, Decl(distributiveConditionalTypeRelations.ts, 41, 27))
+>value : Symbol(value, Decl(distributiveConditionalTypeRelations.ts, 41, 45))
+}
+
+function deferredOccurrences<T extends string>(value: `outer-${InferredRepeated<T>}`) {
+>deferredOccurrences : Symbol(deferredOccurrences, Decl(distributiveConditionalTypeRelations.ts, 43, 1))
+>T : Symbol(T, Decl(distributiveConditionalTypeRelations.ts, 45, 29))
+>value : Symbol(value, Decl(distributiveConditionalTypeRelations.ts, 45, 47))
+>InferredRepeated : Symbol(InferredRepeated, Decl(distributiveConditionalTypeRelations.ts, 34, 101))
+>T : Symbol(T, Decl(distributiveConditionalTypeRelations.ts, 45, 29))
+
+    const correlated: OuterRepeated<T> = value; // Error: deferred inference hides a non-distributive use.
+>correlated : Symbol(correlated, Decl(distributiveConditionalTypeRelations.ts, 46, 9))
+>OuterRepeated : Symbol(OuterRepeated, Decl(distributiveConditionalTypeRelations.ts, 32, 95))
+>T : Symbol(T, Decl(distributiveConditionalTypeRelations.ts, 45, 29))
+>value : Symbol(value, Decl(distributiveConditionalTypeRelations.ts, 45, 47))
+}
+
+type Linked<T> = T extends unknown ? T & { value: T } : never;
+>Linked : Symbol(Linked, Decl(distributiveConditionalTypeRelations.ts, 47, 1))
+>T : Symbol(T, Decl(distributiveConditionalTypeRelations.ts, 49, 12))
+>T : Symbol(T, Decl(distributiveConditionalTypeRelations.ts, 49, 12))
+>T : Symbol(T, Decl(distributiveConditionalTypeRelations.ts, 49, 12))
+>value : Symbol(value, Decl(distributiveConditionalTypeRelations.ts, 49, 42))
+>T : Symbol(T, Decl(distributiveConditionalTypeRelations.ts, 49, 12))
+
+function retainIntersectionComponent<T>(value: T & { value: T }) {
+>retainIntersectionComponent : Symbol(retainIntersectionComponent, Decl(distributiveConditionalTypeRelations.ts, 49, 62))
+>T : Symbol(T, Decl(distributiveConditionalTypeRelations.ts, 51, 37))
+>value : Symbol(value, Decl(distributiveConditionalTypeRelations.ts, 51, 40))
+>T : Symbol(T, Decl(distributiveConditionalTypeRelations.ts, 51, 37))
+>value : Symbol(value, Decl(distributiveConditionalTypeRelations.ts, 51, 52))
+>T : Symbol(T, Decl(distributiveConditionalTypeRelations.ts, 51, 37))
+
+    const correlated: Linked<T> = value; // Error: the property can come from a different constituent.
+>correlated : Symbol(correlated, Decl(distributiveConditionalTypeRelations.ts, 52, 9))
+>Linked : Symbol(Linked, Decl(distributiveConditionalTypeRelations.ts, 47, 1))
+>T : Symbol(T, Decl(distributiveConditionalTypeRelations.ts, 51, 37))
+>value : Symbol(value, Decl(distributiveConditionalTypeRelations.ts, 51, 40))
+}
+
+type ObjectValues<T extends { value: unknown }> = T extends unknown ? T["value"] : never;
+>ObjectValues : Symbol(ObjectValues, Decl(distributiveConditionalTypeRelations.ts, 53, 1))
+>T : Symbol(T, Decl(distributiveConditionalTypeRelations.ts, 55, 18))
+>value : Symbol(value, Decl(distributiveConditionalTypeRelations.ts, 55, 29))
+>T : Symbol(T, Decl(distributiveConditionalTypeRelations.ts, 55, 18))
+>T : Symbol(T, Decl(distributiveConditionalTypeRelations.ts, 55, 18))
+
+type IndexedValues<T, K extends keyof T> = K extends unknown ? T[K] : never;
+>IndexedValues : Symbol(IndexedValues, Decl(distributiveConditionalTypeRelations.ts, 55, 89))
+>T : Symbol(T, Decl(distributiveConditionalTypeRelations.ts, 56, 19))
+>K : Symbol(K, Decl(distributiveConditionalTypeRelations.ts, 56, 21))
+>T : Symbol(T, Decl(distributiveConditionalTypeRelations.ts, 56, 19))
+>K : Symbol(K, Decl(distributiveConditionalTypeRelations.ts, 56, 21))
+>T : Symbol(T, Decl(distributiveConditionalTypeRelations.ts, 56, 19))
+>K : Symbol(K, Decl(distributiveConditionalTypeRelations.ts, 56, 21))
+
+function indexedAccess<T extends { value: unknown }, K extends keyof T>(value: T["value"], indexed: T[K]) {
+>indexedAccess : Symbol(indexedAccess, Decl(distributiveConditionalTypeRelations.ts, 56, 76))
+>T : Symbol(T, Decl(distributiveConditionalTypeRelations.ts, 58, 23))
+>value : Symbol(value, Decl(distributiveConditionalTypeRelations.ts, 58, 34))
+>K : Symbol(K, Decl(distributiveConditionalTypeRelations.ts, 58, 52))
+>T : Symbol(T, Decl(distributiveConditionalTypeRelations.ts, 58, 23))
+>value : Symbol(value, Decl(distributiveConditionalTypeRelations.ts, 58, 72))
+>T : Symbol(T, Decl(distributiveConditionalTypeRelations.ts, 58, 23))
+>indexed : Symbol(indexed, Decl(distributiveConditionalTypeRelations.ts, 58, 90))
+>T : Symbol(T, Decl(distributiveConditionalTypeRelations.ts, 58, 23))
+>K : Symbol(K, Decl(distributiveConditionalTypeRelations.ts, 58, 52))
+
+    const fromObject: ObjectValues<T> = value;
+>fromObject : Symbol(fromObject, Decl(distributiveConditionalTypeRelations.ts, 59, 9))
+>ObjectValues : Symbol(ObjectValues, Decl(distributiveConditionalTypeRelations.ts, 53, 1))
+>T : Symbol(T, Decl(distributiveConditionalTypeRelations.ts, 58, 23))
+>value : Symbol(value, Decl(distributiveConditionalTypeRelations.ts, 58, 72))
+
+    const fromIndex: IndexedValues<T, K> = indexed;
+>fromIndex : Symbol(fromIndex, Decl(distributiveConditionalTypeRelations.ts, 60, 9))
+>IndexedValues : Symbol(IndexedValues, Decl(distributiveConditionalTypeRelations.ts, 55, 89))
+>T : Symbol(T, Decl(distributiveConditionalTypeRelations.ts, 58, 23))
+>K : Symbol(K, Decl(distributiveConditionalTypeRelations.ts, 58, 52))
+>indexed : Symbol(indexed, Decl(distributiveConditionalTypeRelations.ts, 58, 90))
+}
+
+function correlated<T>(pair: { x: T; y: T }, tuple: [T, T], callback: (value: T) => T) {
+>correlated : Symbol(correlated, Decl(distributiveConditionalTypeRelations.ts, 61, 1))
+>T : Symbol(T, Decl(distributiveConditionalTypeRelations.ts, 63, 20))
+>pair : Symbol(pair, Decl(distributiveConditionalTypeRelations.ts, 63, 23))
+>x : Symbol(x, Decl(distributiveConditionalTypeRelations.ts, 63, 30))
+>T : Symbol(T, Decl(distributiveConditionalTypeRelations.ts, 63, 20))
+>y : Symbol(y, Decl(distributiveConditionalTypeRelations.ts, 63, 36))
+>T : Symbol(T, Decl(distributiveConditionalTypeRelations.ts, 63, 20))
+>tuple : Symbol(tuple, Decl(distributiveConditionalTypeRelations.ts, 63, 44))
+>T : Symbol(T, Decl(distributiveConditionalTypeRelations.ts, 63, 20))
+>T : Symbol(T, Decl(distributiveConditionalTypeRelations.ts, 63, 20))
+>callback : Symbol(callback, Decl(distributiveConditionalTypeRelations.ts, 63, 59))
+>value : Symbol(value, Decl(distributiveConditionalTypeRelations.ts, 63, 71))
+>T : Symbol(T, Decl(distributiveConditionalTypeRelations.ts, 63, 20))
+>T : Symbol(T, Decl(distributiveConditionalTypeRelations.ts, 63, 20))
+
+    const p: Pair<T> = pair; // Error
+>p : Symbol(p, Decl(distributiveConditionalTypeRelations.ts, 64, 9))
+>Pair : Symbol(Pair, Decl(distributiveConditionalTypeRelations.ts, 4, 68))
+>T : Symbol(T, Decl(distributiveConditionalTypeRelations.ts, 63, 20))
+>pair : Symbol(pair, Decl(distributiveConditionalTypeRelations.ts, 63, 23))
+
+    const t: Tuple<T> = tuple; // Error
+>t : Symbol(t, Decl(distributiveConditionalTypeRelations.ts, 65, 9))
+>Tuple : Symbol(Tuple, Decl(distributiveConditionalTypeRelations.ts, 5, 58))
+>T : Symbol(T, Decl(distributiveConditionalTypeRelations.ts, 63, 20))
+>tuple : Symbol(tuple, Decl(distributiveConditionalTypeRelations.ts, 63, 44))
+
+    const c: Callback<T> = callback; // Error
+>c : Symbol(c, Decl(distributiveConditionalTypeRelations.ts, 66, 9))
+>Callback : Symbol(Callback, Decl(distributiveConditionalTypeRelations.ts, 6, 51))
+>T : Symbol(T, Decl(distributiveConditionalTypeRelations.ts, 63, 20))
+>callback : Symbol(callback, Decl(distributiveConditionalTypeRelations.ts, 63, 59))
+}
+
+function possiblyNever<T>(value: { a: number; b: number }) {
+>possiblyNever : Symbol(possiblyNever, Decl(distributiveConditionalTypeRelations.ts, 67, 1))
+>T : Symbol(T, Decl(distributiveConditionalTypeRelations.ts, 69, 23))
+>value : Symbol(value, Decl(distributiveConditionalTypeRelations.ts, 69, 26))
+>a : Symbol(a, Decl(distributiveConditionalTypeRelations.ts, 69, 34))
+>b : Symbol(b, Decl(distributiveConditionalTypeRelations.ts, 69, 45))
+
+    const unconstrained: Constant<T> = value; // Error
+>unconstrained : Symbol(unconstrained, Decl(distributiveConditionalTypeRelations.ts, 70, 9))
+>Constant : Symbol(Constant, Decl(distributiveConditionalTypeRelations.ts, 3, 42))
+>T : Symbol(T, Decl(distributiveConditionalTypeRelations.ts, 69, 23))
+>value : Symbol(value, Decl(distributiveConditionalTypeRelations.ts, 69, 26))
+
+    const constrained: Constant<T & string> = value; // Error
+>constrained : Symbol(constrained, Decl(distributiveConditionalTypeRelations.ts, 71, 9))
+>Constant : Symbol(Constant, Decl(distributiveConditionalTypeRelations.ts, 3, 42))
+>T : Symbol(T, Decl(distributiveConditionalTypeRelations.ts, 69, 23))
+>value : Symbol(value, Decl(distributiveConditionalTypeRelations.ts, 69, 26))
+
+    const conditional: Constant<[T] extends [never] ? object : never> = value; // Error
+>conditional : Symbol(conditional, Decl(distributiveConditionalTypeRelations.ts, 72, 9))
+>Constant : Symbol(Constant, Decl(distributiveConditionalTypeRelations.ts, 3, 42))
+>T : Symbol(T, Decl(distributiveConditionalTypeRelations.ts, 69, 23))
+>value : Symbol(value, Decl(distributiveConditionalTypeRelations.ts, 69, 26))
+}
+
+function requiredWitness<T>(value: { a: number; b: number; value: T }) {
+>requiredWitness : Symbol(requiredWitness, Decl(distributiveConditionalTypeRelations.ts, 73, 1))
+>T : Symbol(T, Decl(distributiveConditionalTypeRelations.ts, 75, 25))
+>value : Symbol(value, Decl(distributiveConditionalTypeRelations.ts, 75, 28))
+>a : Symbol(a, Decl(distributiveConditionalTypeRelations.ts, 75, 36))
+>b : Symbol(b, Decl(distributiveConditionalTypeRelations.ts, 75, 47))
+>value : Symbol(value, Decl(distributiveConditionalTypeRelations.ts, 75, 58))
+>T : Symbol(T, Decl(distributiveConditionalTypeRelations.ts, 75, 25))
+
+    const result: Constant<T> = value; // Error: a getter returning never can throw.
+>result : Symbol(result, Decl(distributiveConditionalTypeRelations.ts, 76, 9))
+>Constant : Symbol(Constant, Decl(distributiveConditionalTypeRelations.ts, 3, 42))
+>T : Symbol(T, Decl(distributiveConditionalTypeRelations.ts, 75, 25))
+>value : Symbol(value, Decl(distributiveConditionalTypeRelations.ts, 75, 28))
+}
+
+requiredWitness<never>({ a: 1, b: 2, get value(): never { throw new Error(); } });
+>requiredWitness : Symbol(requiredWitness, Decl(distributiveConditionalTypeRelations.ts, 73, 1))
+>a : Symbol(a, Decl(distributiveConditionalTypeRelations.ts, 79, 24))
+>b : Symbol(b, Decl(distributiveConditionalTypeRelations.ts, 79, 30))
+>value : Symbol(value, Decl(distributiveConditionalTypeRelations.ts, 79, 36))
+>Error : Symbol(Error, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2022.error.d.ts, --, --))
+
+function optionalWitness<T>(value: { a: number; b: number; value?: T }) {
+>optionalWitness : Symbol(optionalWitness, Decl(distributiveConditionalTypeRelations.ts, 79, 82))
+>T : Symbol(T, Decl(distributiveConditionalTypeRelations.ts, 81, 25))
+>value : Symbol(value, Decl(distributiveConditionalTypeRelations.ts, 81, 28))
+>a : Symbol(a, Decl(distributiveConditionalTypeRelations.ts, 81, 36))
+>b : Symbol(b, Decl(distributiveConditionalTypeRelations.ts, 81, 47))
+>value : Symbol(value, Decl(distributiveConditionalTypeRelations.ts, 81, 58))
+>T : Symbol(T, Decl(distributiveConditionalTypeRelations.ts, 81, 25))
+
+    const result: Constant<T> = value; // Error: the property can be absent when T is never.
+>result : Symbol(result, Decl(distributiveConditionalTypeRelations.ts, 82, 9))
+>Constant : Symbol(Constant, Decl(distributiveConditionalTypeRelations.ts, 3, 42))
+>T : Symbol(T, Decl(distributiveConditionalTypeRelations.ts, 81, 25))
+>value : Symbol(value, Decl(distributiveConditionalTypeRelations.ts, 81, 28))
+}
+
+function arrayWitness<T>(value: { a: number; b: number; values: T[] }) {
+>arrayWitness : Symbol(arrayWitness, Decl(distributiveConditionalTypeRelations.ts, 83, 1))
+>T : Symbol(T, Decl(distributiveConditionalTypeRelations.ts, 85, 22))
+>value : Symbol(value, Decl(distributiveConditionalTypeRelations.ts, 85, 25))
+>a : Symbol(a, Decl(distributiveConditionalTypeRelations.ts, 85, 33))
+>b : Symbol(b, Decl(distributiveConditionalTypeRelations.ts, 85, 44))
+>values : Symbol(values, Decl(distributiveConditionalTypeRelations.ts, 85, 55))
+>T : Symbol(T, Decl(distributiveConditionalTypeRelations.ts, 85, 22))
+
+    const result: Constant<T> = value; // Error: an array of never can be empty.
+>result : Symbol(result, Decl(distributiveConditionalTypeRelations.ts, 86, 9))
+>Constant : Symbol(Constant, Decl(distributiveConditionalTypeRelations.ts, 3, 42))
+>T : Symbol(T, Decl(distributiveConditionalTypeRelations.ts, 85, 22))
+>value : Symbol(value, Decl(distributiveConditionalTypeRelations.ts, 85, 25))
+}
+
+function functionWitness<T>(value: { a: number; b: number; get: () => T }) {
+>functionWitness : Symbol(functionWitness, Decl(distributiveConditionalTypeRelations.ts, 87, 1))
+>T : Symbol(T, Decl(distributiveConditionalTypeRelations.ts, 89, 25))
+>value : Symbol(value, Decl(distributiveConditionalTypeRelations.ts, 89, 28))
+>a : Symbol(a, Decl(distributiveConditionalTypeRelations.ts, 89, 36))
+>b : Symbol(b, Decl(distributiveConditionalTypeRelations.ts, 89, 47))
+>get : Symbol(get, Decl(distributiveConditionalTypeRelations.ts, 89, 58))
+>T : Symbol(T, Decl(distributiveConditionalTypeRelations.ts, 89, 25))
+
+    const result: Constant<T> = value; // Error: a function returning never can throw.
+>result : Symbol(result, Decl(distributiveConditionalTypeRelations.ts, 90, 9))
+>Constant : Symbol(Constant, Decl(distributiveConditionalTypeRelations.ts, 3, 42))
+>T : Symbol(T, Decl(distributiveConditionalTypeRelations.ts, 89, 25))
+>value : Symbol(value, Decl(distributiveConditionalTypeRelations.ts, 89, 28))
+}
+
+function definitelyNotNever<T>(value: { a: number; b: number }) {
+>definitelyNotNever : Symbol(definitelyNotNever, Decl(distributiveConditionalTypeRelations.ts, 91, 1))
+>T : Symbol(T, Decl(distributiveConditionalTypeRelations.ts, 93, 28))
+>value : Symbol(value, Decl(distributiveConditionalTypeRelations.ts, 93, 31))
+>a : Symbol(a, Decl(distributiveConditionalTypeRelations.ts, 93, 39))
+>b : Symbol(b, Decl(distributiveConditionalTypeRelations.ts, 93, 50))
+
+    const object: Constant<{ value: T }> = value;
+>object : Symbol(object, Decl(distributiveConditionalTypeRelations.ts, 94, 9))
+>Constant : Symbol(Constant, Decl(distributiveConditionalTypeRelations.ts, 3, 42))
+>value : Symbol(value, Decl(distributiveConditionalTypeRelations.ts, 94, 28))
+>T : Symbol(T, Decl(distributiveConditionalTypeRelations.ts, 93, 28))
+>value : Symbol(value, Decl(distributiveConditionalTypeRelations.ts, 93, 31))
+
+    const array: Constant<T[]> = value;
+>array : Symbol(array, Decl(distributiveConditionalTypeRelations.ts, 95, 9))
+>Constant : Symbol(Constant, Decl(distributiveConditionalTypeRelations.ts, 3, 42))
+>T : Symbol(T, Decl(distributiveConditionalTypeRelations.ts, 93, 28))
+>value : Symbol(value, Decl(distributiveConditionalTypeRelations.ts, 93, 31))
+
+    const tuple: Constant<[T]> = value;
+>tuple : Symbol(tuple, Decl(distributiveConditionalTypeRelations.ts, 96, 9))
+>Constant : Symbol(Constant, Decl(distributiveConditionalTypeRelations.ts, 3, 42))
+>T : Symbol(T, Decl(distributiveConditionalTypeRelations.ts, 93, 28))
+>value : Symbol(value, Decl(distributiveConditionalTypeRelations.ts, 93, 31))
+
+    const union: Constant<T | number> = value;
+>union : Symbol(union, Decl(distributiveConditionalTypeRelations.ts, 97, 9))
+>Constant : Symbol(Constant, Decl(distributiveConditionalTypeRelations.ts, 3, 42))
+>T : Symbol(T, Decl(distributiveConditionalTypeRelations.ts, 93, 28))
+>value : Symbol(value, Decl(distributiveConditionalTypeRelations.ts, 93, 31))
+
+    const conditional: Constant<[T] extends [string] ? { value: T } : { other: T }> = value;
+>conditional : Symbol(conditional, Decl(distributiveConditionalTypeRelations.ts, 98, 9))
+>Constant : Symbol(Constant, Decl(distributiveConditionalTypeRelations.ts, 3, 42))
+>T : Symbol(T, Decl(distributiveConditionalTypeRelations.ts, 93, 28))
+>value : Symbol(value, Decl(distributiveConditionalTypeRelations.ts, 98, 56))
+>T : Symbol(T, Decl(distributiveConditionalTypeRelations.ts, 93, 28))
+>other : Symbol(other, Decl(distributiveConditionalTypeRelations.ts, 98, 71))
+>T : Symbol(T, Decl(distributiveConditionalTypeRelations.ts, 93, 28))
+>value : Symbol(value, Decl(distributiveConditionalTypeRelations.ts, 93, 31))
+}
+
+type Homomorphic<T> = { [K in keyof T]: T[K] };
+>Homomorphic : Symbol(Homomorphic, Decl(distributiveConditionalTypeRelations.ts, 99, 1))
+>T : Symbol(T, Decl(distributiveConditionalTypeRelations.ts, 101, 17))
+>K : Symbol(K, Decl(distributiveConditionalTypeRelations.ts, 101, 25))
+>T : Symbol(T, Decl(distributiveConditionalTypeRelations.ts, 101, 17))
+>T : Symbol(T, Decl(distributiveConditionalTypeRelations.ts, 101, 17))
+>K : Symbol(K, Decl(distributiveConditionalTypeRelations.ts, 101, 25))
+
+type Spread<T extends unknown[]> = [...T];
+>Spread : Symbol(Spread, Decl(distributiveConditionalTypeRelations.ts, 101, 47))
+>T : Symbol(T, Decl(distributiveConditionalTypeRelations.ts, 102, 12))
+>T : Symbol(T, Decl(distributiveConditionalTypeRelations.ts, 102, 12))
+
+function emptyInstantiations<T, U extends unknown[]>(value: { a: number; b: number }) {
+>emptyInstantiations : Symbol(emptyInstantiations, Decl(distributiveConditionalTypeRelations.ts, 102, 42))
+>T : Symbol(T, Decl(distributiveConditionalTypeRelations.ts, 104, 29))
+>U : Symbol(U, Decl(distributiveConditionalTypeRelations.ts, 104, 31))
+>value : Symbol(value, Decl(distributiveConditionalTypeRelations.ts, 104, 53))
+>a : Symbol(a, Decl(distributiveConditionalTypeRelations.ts, 104, 61))
+>b : Symbol(b, Decl(distributiveConditionalTypeRelations.ts, 104, 72))
+
+    const mapped: Constant<Homomorphic<T>> = value; // Error: Homomorphic<never> is never.
+>mapped : Symbol(mapped, Decl(distributiveConditionalTypeRelations.ts, 105, 9))
+>Constant : Symbol(Constant, Decl(distributiveConditionalTypeRelations.ts, 3, 42))
+>Homomorphic : Symbol(Homomorphic, Decl(distributiveConditionalTypeRelations.ts, 99, 1))
+>T : Symbol(T, Decl(distributiveConditionalTypeRelations.ts, 104, 29))
+>value : Symbol(value, Decl(distributiveConditionalTypeRelations.ts, 104, 53))
+
+    const variadic: Constant<Spread<U>> = value; // Error: Spread<never> is never.
+>variadic : Symbol(variadic, Decl(distributiveConditionalTypeRelations.ts, 106, 9))
+>Constant : Symbol(Constant, Decl(distributiveConditionalTypeRelations.ts, 3, 42))
+>Spread : Symbol(Spread, Decl(distributiveConditionalTypeRelations.ts, 101, 47))
+>U : Symbol(U, Decl(distributiveConditionalTypeRelations.ts, 104, 31))
+>value : Symbol(value, Decl(distributiveConditionalTypeRelations.ts, 104, 53))
+}
+
+type Inferred<T> = T extends (value: infer P) => unknown ? T | P : never;
+>Inferred : Symbol(Inferred, Decl(distributiveConditionalTypeRelations.ts, 107, 1))
+>T : Symbol(T, Decl(distributiveConditionalTypeRelations.ts, 109, 14))
+>T : Symbol(T, Decl(distributiveConditionalTypeRelations.ts, 109, 14))
+>value : Symbol(value, Decl(distributiveConditionalTypeRelations.ts, 109, 30))
+>P : Symbol(P, Decl(distributiveConditionalTypeRelations.ts, 109, 42))
+>T : Symbol(T, Decl(distributiveConditionalTypeRelations.ts, 109, 14))
+>P : Symbol(P, Decl(distributiveConditionalTypeRelations.ts, 109, 42))
+
+type InferredNonDistributive<T> = [T] extends [(value: infer P) => unknown] ? T | P : never;
+>InferredNonDistributive : Symbol(InferredNonDistributive, Decl(distributiveConditionalTypeRelations.ts, 109, 73))
+>T : Symbol(T, Decl(distributiveConditionalTypeRelations.ts, 110, 29))
+>T : Symbol(T, Decl(distributiveConditionalTypeRelations.ts, 110, 29))
+>value : Symbol(value, Decl(distributiveConditionalTypeRelations.ts, 110, 48))
+>P : Symbol(P, Decl(distributiveConditionalTypeRelations.ts, 110, 60))
+>T : Symbol(T, Decl(distributiveConditionalTypeRelations.ts, 110, 29))
+>P : Symbol(P, Decl(distributiveConditionalTypeRelations.ts, 110, 60))
+
+type InferredValue<T> = T extends { value: infer P } ? P : never;
+>InferredValue : Symbol(InferredValue, Decl(distributiveConditionalTypeRelations.ts, 110, 92))
+>T : Symbol(T, Decl(distributiveConditionalTypeRelations.ts, 111, 19))
+>T : Symbol(T, Decl(distributiveConditionalTypeRelations.ts, 111, 19))
+>value : Symbol(value, Decl(distributiveConditionalTypeRelations.ts, 111, 35))
+>P : Symbol(P, Decl(distributiveConditionalTypeRelations.ts, 111, 48))
+>P : Symbol(P, Decl(distributiveConditionalTypeRelations.ts, 111, 48))
+
+type InferredCallback<T> = T extends { value: infer P } ? (value: P) => P : never;
+>InferredCallback : Symbol(InferredCallback, Decl(distributiveConditionalTypeRelations.ts, 111, 65))
+>T : Symbol(T, Decl(distributiveConditionalTypeRelations.ts, 112, 22))
+>T : Symbol(T, Decl(distributiveConditionalTypeRelations.ts, 112, 22))
+>value : Symbol(value, Decl(distributiveConditionalTypeRelations.ts, 112, 38))
+>P : Symbol(P, Decl(distributiveConditionalTypeRelations.ts, 112, 51))
+>value : Symbol(value, Decl(distributiveConditionalTypeRelations.ts, 112, 59))
+>P : Symbol(P, Decl(distributiveConditionalTypeRelations.ts, 112, 51))
+>P : Symbol(P, Decl(distributiveConditionalTypeRelations.ts, 112, 51))
+
+type ConstrainedInfer<T> = T extends { value: infer P extends string } ? T : never;
+>ConstrainedInfer : Symbol(ConstrainedInfer, Decl(distributiveConditionalTypeRelations.ts, 112, 82))
+>T : Symbol(T, Decl(distributiveConditionalTypeRelations.ts, 113, 22))
+>T : Symbol(T, Decl(distributiveConditionalTypeRelations.ts, 113, 22))
+>value : Symbol(value, Decl(distributiveConditionalTypeRelations.ts, 113, 38))
+>P : Symbol(P, Decl(distributiveConditionalTypeRelations.ts, 113, 51))
+>T : Symbol(T, Decl(distributiveConditionalTypeRelations.ts, 113, 22))
+
+function inference<T extends (value: any) => unknown>(value: T) {
+>inference : Symbol(inference, Decl(distributiveConditionalTypeRelations.ts, 113, 83))
+>T : Symbol(T, Decl(distributiveConditionalTypeRelations.ts, 115, 19))
+>value : Symbol(value, Decl(distributiveConditionalTypeRelations.ts, 115, 30))
+>value : Symbol(value, Decl(distributiveConditionalTypeRelations.ts, 115, 54))
+>T : Symbol(T, Decl(distributiveConditionalTypeRelations.ts, 115, 19))
+
+    const distributive: Inferred<T> = value; // Error: additional overloads can change the inferred parameter.
+>distributive : Symbol(distributive, Decl(distributiveConditionalTypeRelations.ts, 116, 9))
+>Inferred : Symbol(Inferred, Decl(distributiveConditionalTypeRelations.ts, 107, 1))
+>T : Symbol(T, Decl(distributiveConditionalTypeRelations.ts, 115, 19))
+>value : Symbol(value, Decl(distributiveConditionalTypeRelations.ts, 115, 54))
+
+    const nonDistributive: InferredNonDistributive<T> = value; // Error
+>nonDistributive : Symbol(nonDistributive, Decl(distributiveConditionalTypeRelations.ts, 117, 9))
+>InferredNonDistributive : Symbol(InferredNonDistributive, Decl(distributiveConditionalTypeRelations.ts, 109, 73))
+>T : Symbol(T, Decl(distributiveConditionalTypeRelations.ts, 115, 19))
+>value : Symbol(value, Decl(distributiveConditionalTypeRelations.ts, 115, 54))
+}
+
+function independentInference<T>(value: T) {
+>independentInference : Symbol(independentInference, Decl(distributiveConditionalTypeRelations.ts, 118, 1))
+>T : Symbol(T, Decl(distributiveConditionalTypeRelations.ts, 120, 30))
+>value : Symbol(value, Decl(distributiveConditionalTypeRelations.ts, 120, 33))
+>T : Symbol(T, Decl(distributiveConditionalTypeRelations.ts, 120, 30))
+
+    const result: T extends infer P ? T | P : never = value;
+>result : Symbol(result, Decl(distributiveConditionalTypeRelations.ts, 121, 9))
+>T : Symbol(T, Decl(distributiveConditionalTypeRelations.ts, 120, 30))
+>P : Symbol(P, Decl(distributiveConditionalTypeRelations.ts, 121, 33))
+>T : Symbol(T, Decl(distributiveConditionalTypeRelations.ts, 120, 30))
+>P : Symbol(P, Decl(distributiveConditionalTypeRelations.ts, 121, 33))
+>value : Symbol(value, Decl(distributiveConditionalTypeRelations.ts, 120, 33))
+}
+
+function propertyInference<T extends { value: unknown }>(value: T) {
+>propertyInference : Symbol(propertyInference, Decl(distributiveConditionalTypeRelations.ts, 122, 1))
+>T : Symbol(T, Decl(distributiveConditionalTypeRelations.ts, 124, 27))
+>value : Symbol(value, Decl(distributiveConditionalTypeRelations.ts, 124, 38))
+>value : Symbol(value, Decl(distributiveConditionalTypeRelations.ts, 124, 57))
+>T : Symbol(T, Decl(distributiveConditionalTypeRelations.ts, 124, 27))
+
+    const result: T extends { value: infer P } ? T | P : never = value;
+>result : Symbol(result, Decl(distributiveConditionalTypeRelations.ts, 125, 9))
+>T : Symbol(T, Decl(distributiveConditionalTypeRelations.ts, 124, 27))
+>value : Symbol(value, Decl(distributiveConditionalTypeRelations.ts, 125, 29))
+>P : Symbol(P, Decl(distributiveConditionalTypeRelations.ts, 125, 42))
+>T : Symbol(T, Decl(distributiveConditionalTypeRelations.ts, 124, 27))
+>P : Symbol(P, Decl(distributiveConditionalTypeRelations.ts, 125, 42))
+>value : Symbol(value, Decl(distributiveConditionalTypeRelations.ts, 124, 57))
+}
+
+function tupleInference<T>(value: T) {
+>tupleInference : Symbol(tupleInference, Decl(distributiveConditionalTypeRelations.ts, 126, 1))
+>T : Symbol(T, Decl(distributiveConditionalTypeRelations.ts, 128, 24))
+>value : Symbol(value, Decl(distributiveConditionalTypeRelations.ts, 128, 27))
+>T : Symbol(T, Decl(distributiveConditionalTypeRelations.ts, 128, 24))
+
+    const result: [T] extends [infer P] ? T | P : never = value;
+>result : Symbol(result, Decl(distributiveConditionalTypeRelations.ts, 129, 9))
+>T : Symbol(T, Decl(distributiveConditionalTypeRelations.ts, 128, 24))
+>P : Symbol(P, Decl(distributiveConditionalTypeRelations.ts, 129, 36))
+>T : Symbol(T, Decl(distributiveConditionalTypeRelations.ts, 128, 24))
+>P : Symbol(P, Decl(distributiveConditionalTypeRelations.ts, 129, 36))
+>value : Symbol(value, Decl(distributiveConditionalTypeRelations.ts, 128, 27))
+}
+
+function independentParameters<T extends (value: any) => unknown>(value: T) {
+>independentParameters : Symbol(independentParameters, Decl(distributiveConditionalTypeRelations.ts, 130, 1))
+>T : Symbol(T, Decl(distributiveConditionalTypeRelations.ts, 132, 31))
+>value : Symbol(value, Decl(distributiveConditionalTypeRelations.ts, 132, 42))
+>value : Symbol(value, Decl(distributiveConditionalTypeRelations.ts, 132, 66))
+>T : Symbol(T, Decl(distributiveConditionalTypeRelations.ts, 132, 31))
+
+    const result: T extends (value: infer P) => infer R ? T | P | R : never = value; // Error
+>result : Symbol(result, Decl(distributiveConditionalTypeRelations.ts, 133, 9))
+>T : Symbol(T, Decl(distributiveConditionalTypeRelations.ts, 132, 31))
+>value : Symbol(value, Decl(distributiveConditionalTypeRelations.ts, 133, 29))
+>P : Symbol(P, Decl(distributiveConditionalTypeRelations.ts, 133, 41))
+>R : Symbol(R, Decl(distributiveConditionalTypeRelations.ts, 133, 53))
+>T : Symbol(T, Decl(distributiveConditionalTypeRelations.ts, 132, 31))
+>P : Symbol(P, Decl(distributiveConditionalTypeRelations.ts, 133, 41))
+>R : Symbol(R, Decl(distributiveConditionalTypeRelations.ts, 133, 53))
+>value : Symbol(value, Decl(distributiveConditionalTypeRelations.ts, 132, 66))
+}
+
+type InferredReturn<T> = T extends () => infer R ? T | R : never;
+>InferredReturn : Symbol(InferredReturn, Decl(distributiveConditionalTypeRelations.ts, 134, 1))
+>T : Symbol(T, Decl(distributiveConditionalTypeRelations.ts, 136, 20))
+>T : Symbol(T, Decl(distributiveConditionalTypeRelations.ts, 136, 20))
+>R : Symbol(R, Decl(distributiveConditionalTypeRelations.ts, 136, 46))
+>T : Symbol(T, Decl(distributiveConditionalTypeRelations.ts, 136, 20))
+>R : Symbol(R, Decl(distributiveConditionalTypeRelations.ts, 136, 46))
+
+function returnInference<T extends () => unknown>(value: T) {
+>returnInference : Symbol(returnInference, Decl(distributiveConditionalTypeRelations.ts, 136, 65))
+>T : Symbol(T, Decl(distributiveConditionalTypeRelations.ts, 138, 25))
+>value : Symbol(value, Decl(distributiveConditionalTypeRelations.ts, 138, 50))
+>T : Symbol(T, Decl(distributiveConditionalTypeRelations.ts, 138, 25))
+
+    const result: InferredReturn<T> = value; // Error: inference can use an overload with incompatible arity.
+>result : Symbol(result, Decl(distributiveConditionalTypeRelations.ts, 139, 9))
+>InferredReturn : Symbol(InferredReturn, Decl(distributiveConditionalTypeRelations.ts, 134, 1))
+>T : Symbol(T, Decl(distributiveConditionalTypeRelations.ts, 138, 25))
+>value : Symbol(value, Decl(distributiveConditionalTypeRelations.ts, 138, 50))
+}
+
+function universalSignature<T extends (value: unknown) => never>(value: T) {
+>universalSignature : Symbol(universalSignature, Decl(distributiveConditionalTypeRelations.ts, 140, 1))
+>T : Symbol(T, Decl(distributiveConditionalTypeRelations.ts, 142, 28))
+>value : Symbol(value, Decl(distributiveConditionalTypeRelations.ts, 142, 39))
+>value : Symbol(value, Decl(distributiveConditionalTypeRelations.ts, 142, 65))
+>T : Symbol(T, Decl(distributiveConditionalTypeRelations.ts, 142, 28))
+
+    const parameter: Inferred<T> = value;
+>parameter : Symbol(parameter, Decl(distributiveConditionalTypeRelations.ts, 143, 9))
+>Inferred : Symbol(Inferred, Decl(distributiveConditionalTypeRelations.ts, 107, 1))
+>T : Symbol(T, Decl(distributiveConditionalTypeRelations.ts, 142, 28))
+>value : Symbol(value, Decl(distributiveConditionalTypeRelations.ts, 142, 65))
+
+    const both: T extends (value: infer P) => infer R ? T | P | R : never = value;
+>both : Symbol(both, Decl(distributiveConditionalTypeRelations.ts, 144, 9))
+>T : Symbol(T, Decl(distributiveConditionalTypeRelations.ts, 142, 28))
+>value : Symbol(value, Decl(distributiveConditionalTypeRelations.ts, 144, 27))
+>P : Symbol(P, Decl(distributiveConditionalTypeRelations.ts, 144, 39))
+>R : Symbol(R, Decl(distributiveConditionalTypeRelations.ts, 144, 51))
+>T : Symbol(T, Decl(distributiveConditionalTypeRelations.ts, 142, 28))
+>P : Symbol(P, Decl(distributiveConditionalTypeRelations.ts, 144, 39))
+>R : Symbol(R, Decl(distributiveConditionalTypeRelations.ts, 144, 51))
+>value : Symbol(value, Decl(distributiveConditionalTypeRelations.ts, 142, 65))
+}
+
+function ignoredParameter<T extends () => never>(value: T) {
+>ignoredParameter : Symbol(ignoredParameter, Decl(distributiveConditionalTypeRelations.ts, 145, 1))
+>T : Symbol(T, Decl(distributiveConditionalTypeRelations.ts, 147, 26))
+>value : Symbol(value, Decl(distributiveConditionalTypeRelations.ts, 147, 49))
+>T : Symbol(T, Decl(distributiveConditionalTypeRelations.ts, 147, 26))
+
+    const result: Inferred<T> = value;
+>result : Symbol(result, Decl(distributiveConditionalTypeRelations.ts, 148, 9))
+>Inferred : Symbol(Inferred, Decl(distributiveConditionalTypeRelations.ts, 107, 1))
+>T : Symbol(T, Decl(distributiveConditionalTypeRelations.ts, 147, 26))
+>value : Symbol(value, Decl(distributiveConditionalTypeRelations.ts, 147, 49))
+
+    const returned: InferredReturn<T> = value;
+>returned : Symbol(returned, Decl(distributiveConditionalTypeRelations.ts, 149, 9))
+>InferredReturn : Symbol(InferredReturn, Decl(distributiveConditionalTypeRelations.ts, 134, 1))
+>T : Symbol(T, Decl(distributiveConditionalTypeRelations.ts, 147, 26))
+>value : Symbol(value, Decl(distributiveConditionalTypeRelations.ts, 147, 49))
+}
+
+type InferredMethod<T> = T extends { method: (value: infer P) => unknown } ? T | P : never;
+>InferredMethod : Symbol(InferredMethod, Decl(distributiveConditionalTypeRelations.ts, 150, 1))
+>T : Symbol(T, Decl(distributiveConditionalTypeRelations.ts, 152, 20))
+>T : Symbol(T, Decl(distributiveConditionalTypeRelations.ts, 152, 20))
+>method : Symbol(method, Decl(distributiveConditionalTypeRelations.ts, 152, 36))
+>value : Symbol(value, Decl(distributiveConditionalTypeRelations.ts, 152, 46))
+>P : Symbol(P, Decl(distributiveConditionalTypeRelations.ts, 152, 58))
+>T : Symbol(T, Decl(distributiveConditionalTypeRelations.ts, 152, 20))
+>P : Symbol(P, Decl(distributiveConditionalTypeRelations.ts, 152, 58))
+
+type InferredMethodReturn<T> = T extends { method: (value: any) => infer R } ? T | R : never;
+>InferredMethodReturn : Symbol(InferredMethodReturn, Decl(distributiveConditionalTypeRelations.ts, 152, 91))
+>T : Symbol(T, Decl(distributiveConditionalTypeRelations.ts, 153, 26))
+>T : Symbol(T, Decl(distributiveConditionalTypeRelations.ts, 153, 26))
+>method : Symbol(method, Decl(distributiveConditionalTypeRelations.ts, 153, 42))
+>value : Symbol(value, Decl(distributiveConditionalTypeRelations.ts, 153, 52))
+>R : Symbol(R, Decl(distributiveConditionalTypeRelations.ts, 153, 72))
+>T : Symbol(T, Decl(distributiveConditionalTypeRelations.ts, 153, 26))
+>R : Symbol(R, Decl(distributiveConditionalTypeRelations.ts, 153, 72))
+
+function bivariantInference<T extends { method(value: unknown): never }>(value: T) {
+>bivariantInference : Symbol(bivariantInference, Decl(distributiveConditionalTypeRelations.ts, 153, 93))
+>T : Symbol(T, Decl(distributiveConditionalTypeRelations.ts, 155, 28))
+>method : Symbol(method, Decl(distributiveConditionalTypeRelations.ts, 155, 39))
+>value : Symbol(value, Decl(distributiveConditionalTypeRelations.ts, 155, 47))
+>value : Symbol(value, Decl(distributiveConditionalTypeRelations.ts, 155, 73))
+>T : Symbol(T, Decl(distributiveConditionalTypeRelations.ts, 155, 28))
+
+    const result: InferredMethod<T> = value; // Error: the constraint permits narrower method parameters.
+>result : Symbol(result, Decl(distributiveConditionalTypeRelations.ts, 156, 9))
+>InferredMethod : Symbol(InferredMethod, Decl(distributiveConditionalTypeRelations.ts, 150, 1))
+>T : Symbol(T, Decl(distributiveConditionalTypeRelations.ts, 155, 28))
+>value : Symbol(value, Decl(distributiveConditionalTypeRelations.ts, 155, 73))
+
+    const returned: InferredMethodReturn<T> = value; // Error: a never parameter fails the strict function pattern.
+>returned : Symbol(returned, Decl(distributiveConditionalTypeRelations.ts, 157, 9))
+>InferredMethodReturn : Symbol(InferredMethodReturn, Decl(distributiveConditionalTypeRelations.ts, 152, 91))
+>T : Symbol(T, Decl(distributiveConditionalTypeRelations.ts, 155, 28))
+>value : Symbol(value, Decl(distributiveConditionalTypeRelations.ts, 155, 73))
+}
+
+function dependentInference<T extends { value: string }>(value: string, callback: (value: string) => string) {
+>dependentInference : Symbol(dependentInference, Decl(distributiveConditionalTypeRelations.ts, 158, 1))
+>T : Symbol(T, Decl(distributiveConditionalTypeRelations.ts, 160, 28))
+>value : Symbol(value, Decl(distributiveConditionalTypeRelations.ts, 160, 39))
+>value : Symbol(value, Decl(distributiveConditionalTypeRelations.ts, 160, 57))
+>callback : Symbol(callback, Decl(distributiveConditionalTypeRelations.ts, 160, 71))
+>value : Symbol(value, Decl(distributiveConditionalTypeRelations.ts, 160, 83))
+
+    const inferred: InferredValue<T> = value; // Error: T can contain a narrower value.
+>inferred : Symbol(inferred, Decl(distributiveConditionalTypeRelations.ts, 161, 9))
+>InferredValue : Symbol(InferredValue, Decl(distributiveConditionalTypeRelations.ts, 110, 92))
+>T : Symbol(T, Decl(distributiveConditionalTypeRelations.ts, 160, 28))
+>value : Symbol(value, Decl(distributiveConditionalTypeRelations.ts, 160, 57))
+
+    const inferredCallback: InferredCallback<T> = callback; // Error
+>inferredCallback : Symbol(inferredCallback, Decl(distributiveConditionalTypeRelations.ts, 162, 9))
+>InferredCallback : Symbol(InferredCallback, Decl(distributiveConditionalTypeRelations.ts, 111, 65))
+>T : Symbol(T, Decl(distributiveConditionalTypeRelations.ts, 160, 28))
+>callback : Symbol(callback, Decl(distributiveConditionalTypeRelations.ts, 160, 71))
+}
+
+function constrainedInference<T extends { value: any }>(value: T) {
+>constrainedInference : Symbol(constrainedInference, Decl(distributiveConditionalTypeRelations.ts, 163, 1))
+>T : Symbol(T, Decl(distributiveConditionalTypeRelations.ts, 165, 30))
+>value : Symbol(value, Decl(distributiveConditionalTypeRelations.ts, 165, 41))
+>value : Symbol(value, Decl(distributiveConditionalTypeRelations.ts, 165, 56))
+>T : Symbol(T, Decl(distributiveConditionalTypeRelations.ts, 165, 30))
+
+    const result: ConstrainedInfer<T> = value; // Error: any in the constraint does not imply string.
+>result : Symbol(result, Decl(distributiveConditionalTypeRelations.ts, 166, 9))
+>ConstrainedInfer : Symbol(ConstrainedInfer, Decl(distributiveConditionalTypeRelations.ts, 112, 82))
+>T : Symbol(T, Decl(distributiveConditionalTypeRelations.ts, 165, 30))
+>value : Symbol(value, Decl(distributiveConditionalTypeRelations.ts, 165, 56))
+}
+
+type SpecificParameter<T> = T extends (value: string) => infer R ? T | R : never;
+>SpecificParameter : Symbol(SpecificParameter, Decl(distributiveConditionalTypeRelations.ts, 167, 1))
+>T : Symbol(T, Decl(distributiveConditionalTypeRelations.ts, 169, 23))
+>T : Symbol(T, Decl(distributiveConditionalTypeRelations.ts, 169, 23))
+>value : Symbol(value, Decl(distributiveConditionalTypeRelations.ts, 169, 39))
+>R : Symbol(R, Decl(distributiveConditionalTypeRelations.ts, 169, 62))
+>T : Symbol(T, Decl(distributiveConditionalTypeRelations.ts, 169, 23))
+>R : Symbol(R, Decl(distributiveConditionalTypeRelations.ts, 169, 62))
+
+type SpecificMethod<T> = T extends { method(value: string): infer R } ? T | R : never;
+>SpecificMethod : Symbol(SpecificMethod, Decl(distributiveConditionalTypeRelations.ts, 169, 81))
+>T : Symbol(T, Decl(distributiveConditionalTypeRelations.ts, 170, 20))
+>T : Symbol(T, Decl(distributiveConditionalTypeRelations.ts, 170, 20))
+>method : Symbol(method, Decl(distributiveConditionalTypeRelations.ts, 170, 36))
+>value : Symbol(value, Decl(distributiveConditionalTypeRelations.ts, 170, 44))
+>R : Symbol(R, Decl(distributiveConditionalTypeRelations.ts, 170, 65))
+>T : Symbol(T, Decl(distributiveConditionalTypeRelations.ts, 170, 20))
+>R : Symbol(R, Decl(distributiveConditionalTypeRelations.ts, 170, 65))
+
+type OptionalProperty<T> = T extends { optional?: string; value: infer R } ? T | R : never;
+>OptionalProperty : Symbol(OptionalProperty, Decl(distributiveConditionalTypeRelations.ts, 170, 86))
+>T : Symbol(T, Decl(distributiveConditionalTypeRelations.ts, 171, 22))
+>T : Symbol(T, Decl(distributiveConditionalTypeRelations.ts, 171, 22))
+>optional : Symbol(optional, Decl(distributiveConditionalTypeRelations.ts, 171, 38))
+>value : Symbol(value, Decl(distributiveConditionalTypeRelations.ts, 171, 57))
+>R : Symbol(R, Decl(distributiveConditionalTypeRelations.ts, 171, 70))
+>T : Symbol(T, Decl(distributiveConditionalTypeRelations.ts, 171, 22))
+>R : Symbol(R, Decl(distributiveConditionalTypeRelations.ts, 171, 70))
+
+type MixedInference<T> = T extends { input: (value: infer R) => void; output: infer R } ? T | R : never;
+>MixedInference : Symbol(MixedInference, Decl(distributiveConditionalTypeRelations.ts, 171, 91))
+>T : Symbol(T, Decl(distributiveConditionalTypeRelations.ts, 172, 20))
+>T : Symbol(T, Decl(distributiveConditionalTypeRelations.ts, 172, 20))
+>input : Symbol(input, Decl(distributiveConditionalTypeRelations.ts, 172, 36))
+>value : Symbol(value, Decl(distributiveConditionalTypeRelations.ts, 172, 45))
+>R : Symbol(R, Decl(distributiveConditionalTypeRelations.ts, 172, 57), Decl(distributiveConditionalTypeRelations.ts, 172, 83))
+>output : Symbol(output, Decl(distributiveConditionalTypeRelations.ts, 172, 69))
+>R : Symbol(R, Decl(distributiveConditionalTypeRelations.ts, 172, 57), Decl(distributiveConditionalTypeRelations.ts, 172, 83))
+>T : Symbol(T, Decl(distributiveConditionalTypeRelations.ts, 172, 20))
+>R : Symbol(R, Decl(distributiveConditionalTypeRelations.ts, 172, 57), Decl(distributiveConditionalTypeRelations.ts, 172, 83))
+
+type SingleParameter<T> = T extends (value: infer R) => unknown ? T | R : never;
+>SingleParameter : Symbol(SingleParameter, Decl(distributiveConditionalTypeRelations.ts, 172, 104))
+>T : Symbol(T, Decl(distributiveConditionalTypeRelations.ts, 173, 21))
+>T : Symbol(T, Decl(distributiveConditionalTypeRelations.ts, 173, 21))
+>value : Symbol(value, Decl(distributiveConditionalTypeRelations.ts, 173, 37))
+>R : Symbol(R, Decl(distributiveConditionalTypeRelations.ts, 173, 49))
+>T : Symbol(T, Decl(distributiveConditionalTypeRelations.ts, 173, 21))
+>R : Symbol(R, Decl(distributiveConditionalTypeRelations.ts, 173, 49))
+
+type OptionalParameter<T> = T extends (value?: infer R) => unknown ? T | R : never;
+>OptionalParameter : Symbol(OptionalParameter, Decl(distributiveConditionalTypeRelations.ts, 173, 80))
+>T : Symbol(T, Decl(distributiveConditionalTypeRelations.ts, 174, 23))
+>T : Symbol(T, Decl(distributiveConditionalTypeRelations.ts, 174, 23))
+>value : Symbol(value, Decl(distributiveConditionalTypeRelations.ts, 174, 39))
+>R : Symbol(R, Decl(distributiveConditionalTypeRelations.ts, 174, 52))
+>T : Symbol(T, Decl(distributiveConditionalTypeRelations.ts, 174, 23))
+>R : Symbol(R, Decl(distributiveConditionalTypeRelations.ts, 174, 52))
+
+type IntersectionPattern<T> = T extends { value: infer R } & { method(value: string): unknown } ? T | R : never;
+>IntersectionPattern : Symbol(IntersectionPattern, Decl(distributiveConditionalTypeRelations.ts, 174, 83))
+>T : Symbol(T, Decl(distributiveConditionalTypeRelations.ts, 175, 25))
+>T : Symbol(T, Decl(distributiveConditionalTypeRelations.ts, 175, 25))
+>value : Symbol(value, Decl(distributiveConditionalTypeRelations.ts, 175, 41))
+>R : Symbol(R, Decl(distributiveConditionalTypeRelations.ts, 175, 54))
+>method : Symbol(method, Decl(distributiveConditionalTypeRelations.ts, 175, 62))
+>value : Symbol(value, Decl(distributiveConditionalTypeRelations.ts, 175, 70))
+>T : Symbol(T, Decl(distributiveConditionalTypeRelations.ts, 175, 25))
+>R : Symbol(R, Decl(distributiveConditionalTypeRelations.ts, 175, 54))
+
+type PrimitiveBoundary<T> = T extends object | (infer R extends number) ? T | R : never;
+>PrimitiveBoundary : Symbol(PrimitiveBoundary, Decl(distributiveConditionalTypeRelations.ts, 175, 112))
+>T : Symbol(T, Decl(distributiveConditionalTypeRelations.ts, 176, 23))
+>T : Symbol(T, Decl(distributiveConditionalTypeRelations.ts, 176, 23))
+>R : Symbol(R, Decl(distributiveConditionalTypeRelations.ts, 176, 53))
+>T : Symbol(T, Decl(distributiveConditionalTypeRelations.ts, 176, 23))
+>R : Symbol(R, Decl(distributiveConditionalTypeRelations.ts, 176, 53))
+
+function fixedParameter<T extends (value: any) => unknown>(value: T) {
+>fixedParameter : Symbol(fixedParameter, Decl(distributiveConditionalTypeRelations.ts, 176, 88))
+>T : Symbol(T, Decl(distributiveConditionalTypeRelations.ts, 178, 24))
+>value : Symbol(value, Decl(distributiveConditionalTypeRelations.ts, 178, 35))
+>value : Symbol(value, Decl(distributiveConditionalTypeRelations.ts, 178, 59))
+>T : Symbol(T, Decl(distributiveConditionalTypeRelations.ts, 178, 24))
+
+    const result: SpecificParameter<T> = value; // Error: a number parameter also satisfies the constraint.
+>result : Symbol(result, Decl(distributiveConditionalTypeRelations.ts, 179, 9))
+>SpecificParameter : Symbol(SpecificParameter, Decl(distributiveConditionalTypeRelations.ts, 167, 1))
+>T : Symbol(T, Decl(distributiveConditionalTypeRelations.ts, 178, 24))
+>value : Symbol(value, Decl(distributiveConditionalTypeRelations.ts, 178, 59))
+
+    const withoutInference: T extends (value: string) => unknown ? T : never = value; // Error
+>withoutInference : Symbol(withoutInference, Decl(distributiveConditionalTypeRelations.ts, 180, 9))
+>T : Symbol(T, Decl(distributiveConditionalTypeRelations.ts, 178, 24))
+>value : Symbol(value, Decl(distributiveConditionalTypeRelations.ts, 180, 39))
+>T : Symbol(T, Decl(distributiveConditionalTypeRelations.ts, 178, 24))
+>value : Symbol(value, Decl(distributiveConditionalTypeRelations.ts, 178, 59))
+}
+
+function bivariantParameter<T extends { method(value: unknown): unknown }>(value: T) {
+>bivariantParameter : Symbol(bivariantParameter, Decl(distributiveConditionalTypeRelations.ts, 181, 1))
+>T : Symbol(T, Decl(distributiveConditionalTypeRelations.ts, 183, 28))
+>method : Symbol(method, Decl(distributiveConditionalTypeRelations.ts, 183, 39))
+>value : Symbol(value, Decl(distributiveConditionalTypeRelations.ts, 183, 47))
+>value : Symbol(value, Decl(distributiveConditionalTypeRelations.ts, 183, 75))
+>T : Symbol(T, Decl(distributiveConditionalTypeRelations.ts, 183, 28))
+
+    const result: SpecificMethod<T> = value; // Error
+>result : Symbol(result, Decl(distributiveConditionalTypeRelations.ts, 184, 9))
+>SpecificMethod : Symbol(SpecificMethod, Decl(distributiveConditionalTypeRelations.ts, 169, 81))
+>T : Symbol(T, Decl(distributiveConditionalTypeRelations.ts, 183, 28))
+>value : Symbol(value, Decl(distributiveConditionalTypeRelations.ts, 183, 75))
+}
+
+function optionalProperty<T extends { value: unknown }>(value: T) {
+>optionalProperty : Symbol(optionalProperty, Decl(distributiveConditionalTypeRelations.ts, 185, 1))
+>T : Symbol(T, Decl(distributiveConditionalTypeRelations.ts, 187, 26))
+>value : Symbol(value, Decl(distributiveConditionalTypeRelations.ts, 187, 37))
+>value : Symbol(value, Decl(distributiveConditionalTypeRelations.ts, 187, 56))
+>T : Symbol(T, Decl(distributiveConditionalTypeRelations.ts, 187, 26))
+
+    const result: OptionalProperty<T> = value; // Error: subtypes can add an incompatible optional property.
+>result : Symbol(result, Decl(distributiveConditionalTypeRelations.ts, 188, 9))
+>OptionalProperty : Symbol(OptionalProperty, Decl(distributiveConditionalTypeRelations.ts, 170, 86))
+>T : Symbol(T, Decl(distributiveConditionalTypeRelations.ts, 187, 26))
+>value : Symbol(value, Decl(distributiveConditionalTypeRelations.ts, 187, 56))
+}
+
+function mixedInference<T extends { input: (value: any) => void; output: any }>(value: T) {
+>mixedInference : Symbol(mixedInference, Decl(distributiveConditionalTypeRelations.ts, 189, 1))
+>T : Symbol(T, Decl(distributiveConditionalTypeRelations.ts, 191, 24))
+>input : Symbol(input, Decl(distributiveConditionalTypeRelations.ts, 191, 35))
+>value : Symbol(value, Decl(distributiveConditionalTypeRelations.ts, 191, 44))
+>output : Symbol(output, Decl(distributiveConditionalTypeRelations.ts, 191, 64))
+>value : Symbol(value, Decl(distributiveConditionalTypeRelations.ts, 191, 80))
+>T : Symbol(T, Decl(distributiveConditionalTypeRelations.ts, 191, 24))
+
+    const result: MixedInference<T> = value; // Error: input and output can require incompatible inferences.
+>result : Symbol(result, Decl(distributiveConditionalTypeRelations.ts, 192, 9))
+>MixedInference : Symbol(MixedInference, Decl(distributiveConditionalTypeRelations.ts, 171, 91))
+>T : Symbol(T, Decl(distributiveConditionalTypeRelations.ts, 191, 24))
+>value : Symbol(value, Decl(distributiveConditionalTypeRelations.ts, 191, 80))
+}
+
+interface InvariantInferencePattern<T> {
+>InvariantInferencePattern : Symbol(InvariantInferencePattern, Decl(distributiveConditionalTypeRelations.ts, 193, 1))
+>T : Symbol(T, Decl(distributiveConditionalTypeRelations.ts, 195, 36))
+
+    input: (value: T) => void;
+>input : Symbol(InvariantInferencePattern.input, Decl(distributiveConditionalTypeRelations.ts, 195, 40))
+>value : Symbol(value, Decl(distributiveConditionalTypeRelations.ts, 196, 12))
+>T : Symbol(T, Decl(distributiveConditionalTypeRelations.ts, 195, 36))
+
+    output: T;
+>output : Symbol(InvariantInferencePattern.output, Decl(distributiveConditionalTypeRelations.ts, 196, 30))
+>T : Symbol(T, Decl(distributiveConditionalTypeRelations.ts, 195, 36))
+}
+
+type InvariantInference<T> = T extends InvariantInferencePattern<infer R> ? T | R : never;
+>InvariantInference : Symbol(InvariantInference, Decl(distributiveConditionalTypeRelations.ts, 198, 1))
+>T : Symbol(T, Decl(distributiveConditionalTypeRelations.ts, 200, 24))
+>T : Symbol(T, Decl(distributiveConditionalTypeRelations.ts, 200, 24))
+>InvariantInferencePattern : Symbol(InvariantInferencePattern, Decl(distributiveConditionalTypeRelations.ts, 193, 1))
+>R : Symbol(R, Decl(distributiveConditionalTypeRelations.ts, 200, 70))
+>T : Symbol(T, Decl(distributiveConditionalTypeRelations.ts, 200, 24))
+>R : Symbol(R, Decl(distributiveConditionalTypeRelations.ts, 200, 70))
+
+function invariantInference<T extends InvariantInferencePattern<any>>(value: T) {
+>invariantInference : Symbol(invariantInference, Decl(distributiveConditionalTypeRelations.ts, 200, 90))
+>T : Symbol(T, Decl(distributiveConditionalTypeRelations.ts, 202, 28))
+>InvariantInferencePattern : Symbol(InvariantInferencePattern, Decl(distributiveConditionalTypeRelations.ts, 193, 1))
+>value : Symbol(value, Decl(distributiveConditionalTypeRelations.ts, 202, 70))
+>T : Symbol(T, Decl(distributiveConditionalTypeRelations.ts, 202, 28))
+
+    const result: InvariantInference<T> = value; // Error: invariant type-argument inference must not hide mixed positions.
+>result : Symbol(result, Decl(distributiveConditionalTypeRelations.ts, 203, 9))
+>InvariantInference : Symbol(InvariantInference, Decl(distributiveConditionalTypeRelations.ts, 198, 1))
+>T : Symbol(T, Decl(distributiveConditionalTypeRelations.ts, 202, 28))
+>value : Symbol(value, Decl(distributiveConditionalTypeRelations.ts, 202, 70))
+}
+
+enum NumericInferencePattern {
+>NumericInferencePattern : Symbol(NumericInferencePattern, Decl(distributiveConditionalTypeRelations.ts, 204, 1))
+
+    value
+>value : Symbol(NumericInferencePattern.value, Decl(distributiveConditionalTypeRelations.ts, 206, 30))
+}
+
+type NumericInference<T> = T extends (value: infer P) => NumericInferencePattern ? T | P : never;
+>NumericInference : Symbol(NumericInference, Decl(distributiveConditionalTypeRelations.ts, 208, 1))
+>T : Symbol(T, Decl(distributiveConditionalTypeRelations.ts, 210, 22))
+>T : Symbol(T, Decl(distributiveConditionalTypeRelations.ts, 210, 22))
+>value : Symbol(value, Decl(distributiveConditionalTypeRelations.ts, 210, 38))
+>P : Symbol(P, Decl(distributiveConditionalTypeRelations.ts, 210, 50))
+>NumericInferencePattern : Symbol(NumericInferencePattern, Decl(distributiveConditionalTypeRelations.ts, 204, 1))
+>T : Symbol(T, Decl(distributiveConditionalTypeRelations.ts, 210, 22))
+>P : Symbol(P, Decl(distributiveConditionalTypeRelations.ts, 210, 50))
+
+function numericInference<T extends (value: unknown) => number>(value: T) {
+>numericInference : Symbol(numericInference, Decl(distributiveConditionalTypeRelations.ts, 210, 97))
+>T : Symbol(T, Decl(distributiveConditionalTypeRelations.ts, 212, 26))
+>value : Symbol(value, Decl(distributiveConditionalTypeRelations.ts, 212, 37))
+>value : Symbol(value, Decl(distributiveConditionalTypeRelations.ts, 212, 64))
+>T : Symbol(T, Decl(distributiveConditionalTypeRelations.ts, 212, 26))
+
+    const result: NumericInference<T> = value; // Error: number-to-enum compatibility does not cover every numeric literal.
+>result : Symbol(result, Decl(distributiveConditionalTypeRelations.ts, 213, 9))
+>NumericInference : Symbol(NumericInference, Decl(distributiveConditionalTypeRelations.ts, 208, 1))
+>T : Symbol(T, Decl(distributiveConditionalTypeRelations.ts, 212, 26))
+>value : Symbol(value, Decl(distributiveConditionalTypeRelations.ts, 212, 64))
+}
+
+function unboundedArity<T extends (...args: any[]) => unknown>(value: T) {
+>unboundedArity : Symbol(unboundedArity, Decl(distributiveConditionalTypeRelations.ts, 214, 1))
+>T : Symbol(T, Decl(distributiveConditionalTypeRelations.ts, 216, 24))
+>args : Symbol(args, Decl(distributiveConditionalTypeRelations.ts, 216, 35))
+>value : Symbol(value, Decl(distributiveConditionalTypeRelations.ts, 216, 63))
+>T : Symbol(T, Decl(distributiveConditionalTypeRelations.ts, 216, 24))
+
+    const result: SingleParameter<T> = value; // Error: subtypes can require multiple arguments.
+>result : Symbol(result, Decl(distributiveConditionalTypeRelations.ts, 217, 9))
+>SingleParameter : Symbol(SingleParameter, Decl(distributiveConditionalTypeRelations.ts, 172, 104))
+>T : Symbol(T, Decl(distributiveConditionalTypeRelations.ts, 216, 24))
+>value : Symbol(value, Decl(distributiveConditionalTypeRelations.ts, 216, 63))
+}
+
+function optionalParameter<T extends (value?: any) => unknown>(value: T) {
+>optionalParameter : Symbol(optionalParameter, Decl(distributiveConditionalTypeRelations.ts, 218, 1))
+>T : Symbol(T, Decl(distributiveConditionalTypeRelations.ts, 220, 27))
+>value : Symbol(value, Decl(distributiveConditionalTypeRelations.ts, 220, 38))
+>value : Symbol(value, Decl(distributiveConditionalTypeRelations.ts, 220, 63))
+>T : Symbol(T, Decl(distributiveConditionalTypeRelations.ts, 220, 27))
+
+    const result: OptionalParameter<T> = value; // Error: subtypes can require an argument.
+>result : Symbol(result, Decl(distributiveConditionalTypeRelations.ts, 221, 9))
+>OptionalParameter : Symbol(OptionalParameter, Decl(distributiveConditionalTypeRelations.ts, 173, 80))
+>T : Symbol(T, Decl(distributiveConditionalTypeRelations.ts, 220, 27))
+>value : Symbol(value, Decl(distributiveConditionalTypeRelations.ts, 220, 63))
+}
+
+function intersectionPattern<T extends { value: any; method(value: any): unknown }>(value: T) {
+>intersectionPattern : Symbol(intersectionPattern, Decl(distributiveConditionalTypeRelations.ts, 222, 1))
+>T : Symbol(T, Decl(distributiveConditionalTypeRelations.ts, 224, 29))
+>value : Symbol(value, Decl(distributiveConditionalTypeRelations.ts, 224, 40))
+>method : Symbol(method, Decl(distributiveConditionalTypeRelations.ts, 224, 52))
+>value : Symbol(value, Decl(distributiveConditionalTypeRelations.ts, 224, 60))
+>value : Symbol(value, Decl(distributiveConditionalTypeRelations.ts, 224, 84))
+>T : Symbol(T, Decl(distributiveConditionalTypeRelations.ts, 224, 29))
+
+    const result: IntersectionPattern<T> = value; // Error
+>result : Symbol(result, Decl(distributiveConditionalTypeRelations.ts, 225, 9))
+>IntersectionPattern : Symbol(IntersectionPattern, Decl(distributiveConditionalTypeRelations.ts, 174, 83))
+>T : Symbol(T, Decl(distributiveConditionalTypeRelations.ts, 224, 29))
+>value : Symbol(value, Decl(distributiveConditionalTypeRelations.ts, 224, 84))
+}
+
+function primitiveBoundary<T extends { toString(): string }>(value: T) {
+>primitiveBoundary : Symbol(primitiveBoundary, Decl(distributiveConditionalTypeRelations.ts, 226, 1))
+>T : Symbol(T, Decl(distributiveConditionalTypeRelations.ts, 228, 27))
+>toString : Symbol(toString, Decl(distributiveConditionalTypeRelations.ts, 228, 38))
+>value : Symbol(value, Decl(distributiveConditionalTypeRelations.ts, 228, 61))
+>T : Symbol(T, Decl(distributiveConditionalTypeRelations.ts, 228, 27))
+
+    const result: PrimitiveBoundary<T> = value; // Error: structural object constraints admit primitives.
+>result : Symbol(result, Decl(distributiveConditionalTypeRelations.ts, 229, 9))
+>PrimitiveBoundary : Symbol(PrimitiveBoundary, Decl(distributiveConditionalTypeRelations.ts, 175, 112))
+>T : Symbol(T, Decl(distributiveConditionalTypeRelations.ts, 228, 27))
+>value : Symbol(value, Decl(distributiveConditionalTypeRelations.ts, 228, 61))
+}
+
+class Nominal<T> {
+>Nominal : Symbol(Nominal, Decl(distributiveConditionalTypeRelations.ts, 230, 1))
+>T : Symbol(T, Decl(distributiveConditionalTypeRelations.ts, 232, 14))
+
+    private brand!: void;
+>brand : Symbol(Nominal.brand, Decl(distributiveConditionalTypeRelations.ts, 232, 18))
+
+    value!: T;
+>value : Symbol(Nominal.value, Decl(distributiveConditionalTypeRelations.ts, 233, 25))
+>T : Symbol(T, Decl(distributiveConditionalTypeRelations.ts, 232, 14))
+}
+
+function nominalInference<T extends { value: unknown }>(value: T) {
+>nominalInference : Symbol(nominalInference, Decl(distributiveConditionalTypeRelations.ts, 235, 1))
+>T : Symbol(T, Decl(distributiveConditionalTypeRelations.ts, 237, 26))
+>value : Symbol(value, Decl(distributiveConditionalTypeRelations.ts, 237, 37))
+>value : Symbol(value, Decl(distributiveConditionalTypeRelations.ts, 237, 56))
+>T : Symbol(T, Decl(distributiveConditionalTypeRelations.ts, 237, 26))
+
+    const result: T extends Nominal<infer P> ? T | P : never = value; // Error
+>result : Symbol(result, Decl(distributiveConditionalTypeRelations.ts, 238, 9))
+>T : Symbol(T, Decl(distributiveConditionalTypeRelations.ts, 237, 26))
+>Nominal : Symbol(Nominal, Decl(distributiveConditionalTypeRelations.ts, 230, 1))
+>P : Symbol(P, Decl(distributiveConditionalTypeRelations.ts, 238, 41))
+>T : Symbol(T, Decl(distributiveConditionalTypeRelations.ts, 237, 26))
+>P : Symbol(P, Decl(distributiveConditionalTypeRelations.ts, 238, 41))
+>value : Symbol(value, Decl(distributiveConditionalTypeRelations.ts, 237, 56))
+}
+
+type FilteredKeys<T, U> = T extends U ? never : T;
+>FilteredKeys : Symbol(FilteredKeys, Decl(distributiveConditionalTypeRelations.ts, 239, 1))
+>T : Symbol(T, Decl(distributiveConditionalTypeRelations.ts, 241, 18))
+>U : Symbol(U, Decl(distributiveConditionalTypeRelations.ts, 241, 20))
+>T : Symbol(T, Decl(distributiveConditionalTypeRelations.ts, 241, 18))
+>U : Symbol(U, Decl(distributiveConditionalTypeRelations.ts, 241, 20))
+>T : Symbol(T, Decl(distributiveConditionalTypeRelations.ts, 241, 18))
+
+type DecoratedKeys<T extends string, U> = T extends U ? never : `key-${T}`;
+>DecoratedKeys : Symbol(DecoratedKeys, Decl(distributiveConditionalTypeRelations.ts, 241, 50))
+>T : Symbol(T, Decl(distributiveConditionalTypeRelations.ts, 242, 19))
+>U : Symbol(U, Decl(distributiveConditionalTypeRelations.ts, 242, 36))
+>T : Symbol(T, Decl(distributiveConditionalTypeRelations.ts, 242, 19))
+>U : Symbol(U, Decl(distributiveConditionalTypeRelations.ts, 242, 36))
+>T : Symbol(T, Decl(distributiveConditionalTypeRelations.ts, 242, 19))
+
+function filtering<T extends string, U>(value: FilteredKeys<T, U>) {
+>filtering : Symbol(filtering, Decl(distributiveConditionalTypeRelations.ts, 242, 75))
+>T : Symbol(T, Decl(distributiveConditionalTypeRelations.ts, 244, 19))
+>U : Symbol(U, Decl(distributiveConditionalTypeRelations.ts, 244, 36))
+>value : Symbol(value, Decl(distributiveConditionalTypeRelations.ts, 244, 40))
+>FilteredKeys : Symbol(FilteredKeys, Decl(distributiveConditionalTypeRelations.ts, 239, 1))
+>T : Symbol(T, Decl(distributiveConditionalTypeRelations.ts, 244, 19))
+>U : Symbol(U, Decl(distributiveConditionalTypeRelations.ts, 244, 36))
+
+    const excluded: Exclude<T, U> = value;
+>excluded : Symbol(excluded, Decl(distributiveConditionalTypeRelations.ts, 245, 9))
+>Exclude : Symbol(Exclude, Decl(lib.es5.d.ts, --, --))
+>T : Symbol(T, Decl(distributiveConditionalTypeRelations.ts, 244, 19))
+>U : Symbol(U, Decl(distributiveConditionalTypeRelations.ts, 244, 36))
+>value : Symbol(value, Decl(distributiveConditionalTypeRelations.ts, 244, 40))
+
+    const remapped: DecoratedKeys<FilteredKeys<T, U>, never> = `key-${value}`;
+>remapped : Symbol(remapped, Decl(distributiveConditionalTypeRelations.ts, 246, 9))
+>DecoratedKeys : Symbol(DecoratedKeys, Decl(distributiveConditionalTypeRelations.ts, 241, 50))
+>FilteredKeys : Symbol(FilteredKeys, Decl(distributiveConditionalTypeRelations.ts, 239, 1))
+>T : Symbol(T, Decl(distributiveConditionalTypeRelations.ts, 244, 19))
+>U : Symbol(U, Decl(distributiveConditionalTypeRelations.ts, 244, 36))
+>value : Symbol(value, Decl(distributiveConditionalTypeRelations.ts, 244, 40))
+}
+
+function filteredRemapping<T extends string, U>(value: `key-${Exclude<T, U>}`) {
+>filteredRemapping : Symbol(filteredRemapping, Decl(distributiveConditionalTypeRelations.ts, 247, 1))
+>T : Symbol(T, Decl(distributiveConditionalTypeRelations.ts, 249, 27))
+>U : Symbol(U, Decl(distributiveConditionalTypeRelations.ts, 249, 44))
+>value : Symbol(value, Decl(distributiveConditionalTypeRelations.ts, 249, 48))
+>Exclude : Symbol(Exclude, Decl(lib.es5.d.ts, --, --))
+>T : Symbol(T, Decl(distributiveConditionalTypeRelations.ts, 249, 27))
+>U : Symbol(U, Decl(distributiveConditionalTypeRelations.ts, 249, 44))
+
+    const result: DecoratedKeys<T, U> = value;
+>result : Symbol(result, Decl(distributiveConditionalTypeRelations.ts, 250, 9))
+>DecoratedKeys : Symbol(DecoratedKeys, Decl(distributiveConditionalTypeRelations.ts, 241, 50))
+>T : Symbol(T, Decl(distributiveConditionalTypeRelations.ts, 249, 27))
+>U : Symbol(U, Decl(distributiveConditionalTypeRelations.ts, 249, 44))
+>value : Symbol(value, Decl(distributiveConditionalTypeRelations.ts, 249, 48))
+}
+
+type FilteredMap<T extends string, U> = { [K in T as K extends U ? never : K]: unknown };
+>FilteredMap : Symbol(FilteredMap, Decl(distributiveConditionalTypeRelations.ts, 251, 1))
+>T : Symbol(T, Decl(distributiveConditionalTypeRelations.ts, 253, 17))
+>U : Symbol(U, Decl(distributiveConditionalTypeRelations.ts, 253, 34))
+>K : Symbol(K, Decl(distributiveConditionalTypeRelations.ts, 253, 43))
+>T : Symbol(T, Decl(distributiveConditionalTypeRelations.ts, 253, 17))
+>K : Symbol(K, Decl(distributiveConditionalTypeRelations.ts, 253, 43))
+>U : Symbol(U, Decl(distributiveConditionalTypeRelations.ts, 253, 34))
+>K : Symbol(K, Decl(distributiveConditionalTypeRelations.ts, 253, 43))
+
+type DecoratedMap<T extends string, U> = { [K in T as K extends U ? never : `key-${K}`]: unknown };
+>DecoratedMap : Symbol(DecoratedMap, Decl(distributiveConditionalTypeRelations.ts, 253, 89))
+>T : Symbol(T, Decl(distributiveConditionalTypeRelations.ts, 254, 18))
+>U : Symbol(U, Decl(distributiveConditionalTypeRelations.ts, 254, 35))
+>K : Symbol(K, Decl(distributiveConditionalTypeRelations.ts, 254, 44))
+>T : Symbol(T, Decl(distributiveConditionalTypeRelations.ts, 254, 18))
+>K : Symbol(K, Decl(distributiveConditionalTypeRelations.ts, 254, 44))
+>U : Symbol(U, Decl(distributiveConditionalTypeRelations.ts, 254, 35))
+>K : Symbol(K, Decl(distributiveConditionalTypeRelations.ts, 254, 44))
+
+function mappedKeys<T extends string, U>(key: Exclude<T, U>, decorated: `key-${Exclude<T, U>}`) {
+>mappedKeys : Symbol(mappedKeys, Decl(distributiveConditionalTypeRelations.ts, 254, 99))
+>T : Symbol(T, Decl(distributiveConditionalTypeRelations.ts, 256, 20))
+>U : Symbol(U, Decl(distributiveConditionalTypeRelations.ts, 256, 37))
+>key : Symbol(key, Decl(distributiveConditionalTypeRelations.ts, 256, 41))
+>Exclude : Symbol(Exclude, Decl(lib.es5.d.ts, --, --))
+>T : Symbol(T, Decl(distributiveConditionalTypeRelations.ts, 256, 20))
+>U : Symbol(U, Decl(distributiveConditionalTypeRelations.ts, 256, 37))
+>decorated : Symbol(decorated, Decl(distributiveConditionalTypeRelations.ts, 256, 60))
+>Exclude : Symbol(Exclude, Decl(lib.es5.d.ts, --, --))
+>T : Symbol(T, Decl(distributiveConditionalTypeRelations.ts, 256, 20))
+>U : Symbol(U, Decl(distributiveConditionalTypeRelations.ts, 256, 37))
+
+    const filtered: keyof FilteredMap<T, U> = key;
+>filtered : Symbol(filtered, Decl(distributiveConditionalTypeRelations.ts, 257, 9))
+>FilteredMap : Symbol(FilteredMap, Decl(distributiveConditionalTypeRelations.ts, 251, 1))
+>T : Symbol(T, Decl(distributiveConditionalTypeRelations.ts, 256, 20))
+>U : Symbol(U, Decl(distributiveConditionalTypeRelations.ts, 256, 37))
+>key : Symbol(key, Decl(distributiveConditionalTypeRelations.ts, 256, 41))
+
+    const remapped: keyof DecoratedMap<T, U> = decorated;
+>remapped : Symbol(remapped, Decl(distributiveConditionalTypeRelations.ts, 258, 9))
+>DecoratedMap : Symbol(DecoratedMap, Decl(distributiveConditionalTypeRelations.ts, 253, 89))
+>T : Symbol(T, Decl(distributiveConditionalTypeRelations.ts, 256, 20))
+>U : Symbol(U, Decl(distributiveConditionalTypeRelations.ts, 256, 37))
+>decorated : Symbol(decorated, Decl(distributiveConditionalTypeRelations.ts, 256, 60))
+}
+
+type Recursive<T> = T extends object ? T | { next: Recursive<T> } : T;
+>Recursive : Symbol(Recursive, Decl(distributiveConditionalTypeRelations.ts, 259, 1))
+>T : Symbol(T, Decl(distributiveConditionalTypeRelations.ts, 261, 15))
+>T : Symbol(T, Decl(distributiveConditionalTypeRelations.ts, 261, 15))
+>T : Symbol(T, Decl(distributiveConditionalTypeRelations.ts, 261, 15))
+>next : Symbol(next, Decl(distributiveConditionalTypeRelations.ts, 261, 44))
+>Recursive : Symbol(Recursive, Decl(distributiveConditionalTypeRelations.ts, 259, 1))
+>T : Symbol(T, Decl(distributiveConditionalTypeRelations.ts, 261, 15))
+>T : Symbol(T, Decl(distributiveConditionalTypeRelations.ts, 261, 15))
+
+function recursion<T>(value: T) {
+>recursion : Symbol(recursion, Decl(distributiveConditionalTypeRelations.ts, 261, 70))
+>T : Symbol(T, Decl(distributiveConditionalTypeRelations.ts, 263, 19))
+>value : Symbol(value, Decl(distributiveConditionalTypeRelations.ts, 263, 22))
+>T : Symbol(T, Decl(distributiveConditionalTypeRelations.ts, 263, 19))
+
+    const result: Recursive<T> = value;
+>result : Symbol(result, Decl(distributiveConditionalTypeRelations.ts, 264, 9))
+>Recursive : Symbol(Recursive, Decl(distributiveConditionalTypeRelations.ts, 259, 1))
+>T : Symbol(T, Decl(distributiveConditionalTypeRelations.ts, 263, 19))
+>value : Symbol(value, Decl(distributiveConditionalTypeRelations.ts, 263, 22))
+}
+
+function subtypeIsNotConstituent<T>(value: T & string) {
+>subtypeIsNotConstituent : Symbol(subtypeIsNotConstituent, Decl(distributiveConditionalTypeRelations.ts, 265, 1))
+>T : Symbol(T, Decl(distributiveConditionalTypeRelations.ts, 267, 33))
+>value : Symbol(value, Decl(distributiveConditionalTypeRelations.ts, 267, 36))
+>T : Symbol(T, Decl(distributiveConditionalTypeRelations.ts, 267, 33))
+
+    const result: Extract<T, string> = value; // Error: Extract<unknown, string> is never.
+>result : Symbol(result, Decl(distributiveConditionalTypeRelations.ts, 268, 9))
+>Extract : Symbol(Extract, Decl(lib.es5.d.ts, --, --))
+>T : Symbol(T, Decl(distributiveConditionalTypeRelations.ts, 267, 33))
+>value : Symbol(value, Decl(distributiveConditionalTypeRelations.ts, 267, 36))
+}
+
+// Concrete instantiations witnessing the rejected assignments.
+const mixedPair: Pair<"a" | "b"> = { x: "a", y: "b" }; // Error
+>mixedPair : Symbol(mixedPair, Decl(distributiveConditionalTypeRelations.ts, 272, 5))
+>Pair : Symbol(Pair, Decl(distributiveConditionalTypeRelations.ts, 4, 68))
+>x : Symbol(x, Decl(distributiveConditionalTypeRelations.ts, 272, 36))
+>y : Symbol(y, Decl(distributiveConditionalTypeRelations.ts, 272, 44))
+
+const mixedTuple: Tuple<"a" | "b"> = ["a", "b"]; // Error
+>mixedTuple : Symbol(mixedTuple, Decl(distributiveConditionalTypeRelations.ts, 273, 5))
+>Tuple : Symbol(Tuple, Decl(distributiveConditionalTypeRelations.ts, 5, 58))
+
+const mixedString: Repeated<"a" | "b"> = "a-b"; // Error
+>mixedString : Symbol(mixedString, Decl(distributiveConditionalTypeRelations.ts, 274, 5))
+>Repeated : Symbol(Repeated, Decl(distributiveConditionalTypeRelations.ts, 7, 63))
+
+const emptyConstant: Constant<never> = { a: 1, b: 2 }; // Error
+>emptyConstant : Symbol(emptyConstant, Decl(distributiveConditionalTypeRelations.ts, 275, 5))
+>Constant : Symbol(Constant, Decl(distributiveConditionalTypeRelations.ts, 3, 42))
+>a : Symbol(a, Decl(distributiveConditionalTypeRelations.ts, 275, 40))
+>b : Symbol(b, Decl(distributiveConditionalTypeRelations.ts, 275, 46))
+
+const narrowInference: InferredValue<{ value: "a" }> = "b"; // Error
+>narrowInference : Symbol(narrowInference, Decl(distributiveConditionalTypeRelations.ts, 276, 5))
+>InferredValue : Symbol(InferredValue, Decl(distributiveConditionalTypeRelations.ts, 110, 92))
+>value : Symbol(value, Decl(distributiveConditionalTypeRelations.ts, 276, 38))
+
+const rejectedConstrainedInfer: ConstrainedInfer<{ value: number }> = { value: 1 }; // Error
+>rejectedConstrainedInfer : Symbol(rejectedConstrainedInfer, Decl(distributiveConditionalTypeRelations.ts, 277, 5))
+>ConstrainedInfer : Symbol(ConstrainedInfer, Decl(distributiveConditionalTypeRelations.ts, 112, 82))
+>value : Symbol(value, Decl(distributiveConditionalTypeRelations.ts, 277, 50))
+>value : Symbol(value, Decl(distributiveConditionalTypeRelations.ts, 277, 71))
+
+const rejectedFixedParameter: SpecificParameter<(value: number) => boolean> = (value: number) => true; // Error
+>rejectedFixedParameter : Symbol(rejectedFixedParameter, Decl(distributiveConditionalTypeRelations.ts, 278, 5))
+>SpecificParameter : Symbol(SpecificParameter, Decl(distributiveConditionalTypeRelations.ts, 167, 1))
+>value : Symbol(value, Decl(distributiveConditionalTypeRelations.ts, 278, 49))
+>value : Symbol(value, Decl(distributiveConditionalTypeRelations.ts, 278, 79))
+
+const rejectedMethod: SpecificMethod<{ method(value: number): boolean }> = { method: (value: number) => true }; // Error
+>rejectedMethod : Symbol(rejectedMethod, Decl(distributiveConditionalTypeRelations.ts, 279, 5))
+>SpecificMethod : Symbol(SpecificMethod, Decl(distributiveConditionalTypeRelations.ts, 169, 81))
+>method : Symbol(method, Decl(distributiveConditionalTypeRelations.ts, 279, 38))
+>value : Symbol(value, Decl(distributiveConditionalTypeRelations.ts, 279, 46))
+>method : Symbol(method, Decl(distributiveConditionalTypeRelations.ts, 279, 76))
+>value : Symbol(value, Decl(distributiveConditionalTypeRelations.ts, 279, 86))
+
+const rejectedOptionalProperty: OptionalProperty<{ optional: number; value: boolean }> = { optional: 1, value: true }; // Error
+>rejectedOptionalProperty : Symbol(rejectedOptionalProperty, Decl(distributiveConditionalTypeRelations.ts, 280, 5))
+>OptionalProperty : Symbol(OptionalProperty, Decl(distributiveConditionalTypeRelations.ts, 170, 86))
+>optional : Symbol(optional, Decl(distributiveConditionalTypeRelations.ts, 280, 50))
+>value : Symbol(value, Decl(distributiveConditionalTypeRelations.ts, 280, 68))
+>optional : Symbol(optional, Decl(distributiveConditionalTypeRelations.ts, 280, 90))
+>value : Symbol(value, Decl(distributiveConditionalTypeRelations.ts, 280, 103))
+
+const rejectedMixedInference: MixedInference<{ input(value: number): void; output: string }> = { input: (value: number) => {}, output: "" }; // Error
+>rejectedMixedInference : Symbol(rejectedMixedInference, Decl(distributiveConditionalTypeRelations.ts, 281, 5))
+>MixedInference : Symbol(MixedInference, Decl(distributiveConditionalTypeRelations.ts, 171, 91))
+>input : Symbol(input, Decl(distributiveConditionalTypeRelations.ts, 281, 46))
+>value : Symbol(value, Decl(distributiveConditionalTypeRelations.ts, 281, 53))
+>output : Symbol(output, Decl(distributiveConditionalTypeRelations.ts, 281, 74))
+>input : Symbol(input, Decl(distributiveConditionalTypeRelations.ts, 281, 96))
+>value : Symbol(value, Decl(distributiveConditionalTypeRelations.ts, 281, 105))
+>output : Symbol(output, Decl(distributiveConditionalTypeRelations.ts, 281, 126))
+
+const rejectedInvariantInference: InvariantInference<{ input: (value: number) => void; output: string }> = { input: (value: number) => {}, output: "" }; // Error
+>rejectedInvariantInference : Symbol(rejectedInvariantInference, Decl(distributiveConditionalTypeRelations.ts, 282, 5))
+>InvariantInference : Symbol(InvariantInference, Decl(distributiveConditionalTypeRelations.ts, 198, 1))
+>input : Symbol(input, Decl(distributiveConditionalTypeRelations.ts, 282, 54))
+>value : Symbol(value, Decl(distributiveConditionalTypeRelations.ts, 282, 63))
+>output : Symbol(output, Decl(distributiveConditionalTypeRelations.ts, 282, 86))
+>input : Symbol(input, Decl(distributiveConditionalTypeRelations.ts, 282, 108))
+>value : Symbol(value, Decl(distributiveConditionalTypeRelations.ts, 282, 117))
+>output : Symbol(output, Decl(distributiveConditionalTypeRelations.ts, 282, 138))
+
+const rejectedNumericInference: NumericInference<(value: unknown) => 123> = (value: unknown) => 123; // Error
+>rejectedNumericInference : Symbol(rejectedNumericInference, Decl(distributiveConditionalTypeRelations.ts, 283, 5))
+>NumericInference : Symbol(NumericInference, Decl(distributiveConditionalTypeRelations.ts, 208, 1))
+>value : Symbol(value, Decl(distributiveConditionalTypeRelations.ts, 283, 50))
+>value : Symbol(value, Decl(distributiveConditionalTypeRelations.ts, 283, 77))
+
+const rejectedArity: SingleParameter<(left: number, right: number) => void> = (left: number, right: number) => {}; // Error
+>rejectedArity : Symbol(rejectedArity, Decl(distributiveConditionalTypeRelations.ts, 284, 5))
+>SingleParameter : Symbol(SingleParameter, Decl(distributiveConditionalTypeRelations.ts, 172, 104))
+>left : Symbol(left, Decl(distributiveConditionalTypeRelations.ts, 284, 38))
+>right : Symbol(right, Decl(distributiveConditionalTypeRelations.ts, 284, 51))
+>left : Symbol(left, Decl(distributiveConditionalTypeRelations.ts, 284, 79))
+>right : Symbol(right, Decl(distributiveConditionalTypeRelations.ts, 284, 92))
+
+const rejectedOptionalParameter: OptionalParameter<(value: string) => void> = (value: string) => {}; // Error
+>rejectedOptionalParameter : Symbol(rejectedOptionalParameter, Decl(distributiveConditionalTypeRelations.ts, 285, 5))
+>OptionalParameter : Symbol(OptionalParameter, Decl(distributiveConditionalTypeRelations.ts, 173, 80))
+>value : Symbol(value, Decl(distributiveConditionalTypeRelations.ts, 285, 52))
+>value : Symbol(value, Decl(distributiveConditionalTypeRelations.ts, 285, 79))
+
+const rejectedIntersection: IntersectionPattern<{ value: boolean; method(value: number): unknown }> = { value: true, method: (value: number) => {} }; // Error
+>rejectedIntersection : Symbol(rejectedIntersection, Decl(distributiveConditionalTypeRelations.ts, 286, 5))
+>IntersectionPattern : Symbol(IntersectionPattern, Decl(distributiveConditionalTypeRelations.ts, 174, 83))
+>value : Symbol(value, Decl(distributiveConditionalTypeRelations.ts, 286, 49))
+>method : Symbol(method, Decl(distributiveConditionalTypeRelations.ts, 286, 65))
+>value : Symbol(value, Decl(distributiveConditionalTypeRelations.ts, 286, 73))
+>value : Symbol(value, Decl(distributiveConditionalTypeRelations.ts, 286, 103))
+>method : Symbol(method, Decl(distributiveConditionalTypeRelations.ts, 286, 116))
+>value : Symbol(value, Decl(distributiveConditionalTypeRelations.ts, 286, 126))
+
+const rejectedPrimitive: PrimitiveBoundary<string> = ""; // Error
+>rejectedPrimitive : Symbol(rejectedPrimitive, Decl(distributiveConditionalTypeRelations.ts, 287, 5))
+>PrimitiveBoundary : Symbol(PrimitiveBoundary, Decl(distributiveConditionalTypeRelations.ts, 175, 112))
+
+declare const overloadedParameter: {
+>overloadedParameter : Symbol(overloadedParameter, Decl(distributiveConditionalTypeRelations.ts, 289, 13))
+
+    (value: string): void;
+>value : Symbol(value, Decl(distributiveConditionalTypeRelations.ts, 290, 5))
+
+    (left: number, right: number): void;
+>left : Symbol(left, Decl(distributiveConditionalTypeRelations.ts, 291, 5))
+>right : Symbol(right, Decl(distributiveConditionalTypeRelations.ts, 291, 18))
+
+};
+const parameterConstraint: (value: any) => unknown = overloadedParameter;
+>parameterConstraint : Symbol(parameterConstraint, Decl(distributiveConditionalTypeRelations.ts, 293, 5))
+>value : Symbol(value, Decl(distributiveConditionalTypeRelations.ts, 293, 28))
+>overloadedParameter : Symbol(overloadedParameter, Decl(distributiveConditionalTypeRelations.ts, 289, 13))
+
+const rejectedOverloadedParameter: Inferred<typeof overloadedParameter> = overloadedParameter; // Error
+>rejectedOverloadedParameter : Symbol(rejectedOverloadedParameter, Decl(distributiveConditionalTypeRelations.ts, 294, 5))
+>Inferred : Symbol(Inferred, Decl(distributiveConditionalTypeRelations.ts, 107, 1))
+>overloadedParameter : Symbol(overloadedParameter, Decl(distributiveConditionalTypeRelations.ts, 289, 13))
+>overloadedParameter : Symbol(overloadedParameter, Decl(distributiveConditionalTypeRelations.ts, 289, 13))
+
+const rejectedOverloadedNonDistributive: InferredNonDistributive<typeof overloadedParameter> = overloadedParameter; // Error
+>rejectedOverloadedNonDistributive : Symbol(rejectedOverloadedNonDistributive, Decl(distributiveConditionalTypeRelations.ts, 295, 5))
+>InferredNonDistributive : Symbol(InferredNonDistributive, Decl(distributiveConditionalTypeRelations.ts, 109, 73))
+>overloadedParameter : Symbol(overloadedParameter, Decl(distributiveConditionalTypeRelations.ts, 289, 13))
+>overloadedParameter : Symbol(overloadedParameter, Decl(distributiveConditionalTypeRelations.ts, 289, 13))
+
+declare const overloadedReturn: {
+>overloadedReturn : Symbol(overloadedReturn, Decl(distributiveConditionalTypeRelations.ts, 297, 13))
+
+    (): string;
+    (value: number): number;
+>value : Symbol(value, Decl(distributiveConditionalTypeRelations.ts, 299, 5))
+
+};
+const returnConstraint: () => unknown = overloadedReturn;
+>returnConstraint : Symbol(returnConstraint, Decl(distributiveConditionalTypeRelations.ts, 301, 5))
+>overloadedReturn : Symbol(overloadedReturn, Decl(distributiveConditionalTypeRelations.ts, 297, 13))
+
+const rejectedOverloadedReturn: InferredReturn<typeof overloadedReturn> = overloadedReturn; // Error
+>rejectedOverloadedReturn : Symbol(rejectedOverloadedReturn, Decl(distributiveConditionalTypeRelations.ts, 302, 5))
+>InferredReturn : Symbol(InferredReturn, Decl(distributiveConditionalTypeRelations.ts, 134, 1))
+>overloadedReturn : Symbol(overloadedReturn, Decl(distributiveConditionalTypeRelations.ts, 297, 13))
+>overloadedReturn : Symbol(overloadedReturn, Decl(distributiveConditionalTypeRelations.ts, 297, 13))
+
+declare const overloadedMethod: {
+>overloadedMethod : Symbol(overloadedMethod, Decl(distributiveConditionalTypeRelations.ts, 304, 13))
+
+    method(value: string): never;
+>method : Symbol(method, Decl(distributiveConditionalTypeRelations.ts, 304, 33), Decl(distributiveConditionalTypeRelations.ts, 305, 33))
+>value : Symbol(value, Decl(distributiveConditionalTypeRelations.ts, 305, 11))
+
+    method(left: number, right: number): void;
+>method : Symbol(method, Decl(distributiveConditionalTypeRelations.ts, 304, 33), Decl(distributiveConditionalTypeRelations.ts, 305, 33))
+>left : Symbol(left, Decl(distributiveConditionalTypeRelations.ts, 306, 11))
+>right : Symbol(right, Decl(distributiveConditionalTypeRelations.ts, 306, 24))
+
+};
+const methodConstraint: { method(value: unknown): never } = overloadedMethod;
+>methodConstraint : Symbol(methodConstraint, Decl(distributiveConditionalTypeRelations.ts, 308, 5))
+>method : Symbol(method, Decl(distributiveConditionalTypeRelations.ts, 308, 25))
+>value : Symbol(value, Decl(distributiveConditionalTypeRelations.ts, 308, 33))
+>overloadedMethod : Symbol(overloadedMethod, Decl(distributiveConditionalTypeRelations.ts, 304, 13))
+
+const rejectedOverloadedMethod: InferredMethod<typeof overloadedMethod> = overloadedMethod; // Error
+>rejectedOverloadedMethod : Symbol(rejectedOverloadedMethod, Decl(distributiveConditionalTypeRelations.ts, 309, 5))
+>InferredMethod : Symbol(InferredMethod, Decl(distributiveConditionalTypeRelations.ts, 150, 1))
+>overloadedMethod : Symbol(overloadedMethod, Decl(distributiveConditionalTypeRelations.ts, 304, 13))
+>overloadedMethod : Symbol(overloadedMethod, Decl(distributiveConditionalTypeRelations.ts, 304, 13))
+
+declare const neverParameterMethod: { method(value: never): never };
+>neverParameterMethod : Symbol(neverParameterMethod, Decl(distributiveConditionalTypeRelations.ts, 311, 13))
+>method : Symbol(method, Decl(distributiveConditionalTypeRelations.ts, 311, 37))
+>value : Symbol(value, Decl(distributiveConditionalTypeRelations.ts, 311, 45))
+
+const neverMethodConstraint: { method(value: unknown): never } = neverParameterMethod;
+>neverMethodConstraint : Symbol(neverMethodConstraint, Decl(distributiveConditionalTypeRelations.ts, 312, 5))
+>method : Symbol(method, Decl(distributiveConditionalTypeRelations.ts, 312, 30))
+>value : Symbol(value, Decl(distributiveConditionalTypeRelations.ts, 312, 38))
+>neverParameterMethod : Symbol(neverParameterMethod, Decl(distributiveConditionalTypeRelations.ts, 311, 13))
+
+const rejectedMethodReturn: InferredMethodReturn<typeof neverParameterMethod> = neverParameterMethod; // Error
+>rejectedMethodReturn : Symbol(rejectedMethodReturn, Decl(distributiveConditionalTypeRelations.ts, 313, 5))
+>InferredMethodReturn : Symbol(InferredMethodReturn, Decl(distributiveConditionalTypeRelations.ts, 152, 91))
+>neverParameterMethod : Symbol(neverParameterMethod, Decl(distributiveConditionalTypeRelations.ts, 311, 13))
+>neverParameterMethod : Symbol(neverParameterMethod, Decl(distributiveConditionalTypeRelations.ts, 311, 13))
+

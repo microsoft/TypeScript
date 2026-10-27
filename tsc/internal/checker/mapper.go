@@ -72,6 +72,67 @@ func (m *TypeMapper) Map(t *Type) *Type {
 
 func (m *TypeMapper) Kind() TypeMapperKind { return m.kind }
 
+// Store(nil) reports whether this mapper has state; otherwise Store captures it.
+func (m *TypeMapper) Store(state *TypeMapperState) bool {
+	if m == nil {
+		return false
+	}
+	switch m.kind {
+	case TypeMapperKindSimple:
+		return castTypeMapper[SimpleTypeMapper](m, TypeMapperKindSimple).Store(state)
+	case TypeMapperKindArray:
+		return castTypeMapper[ArrayTypeMapper](m, TypeMapperKindArray).Store(state)
+	case TypeMapperKindArrayToSingle:
+		return castTypeMapper[ArrayToSingleTypeMapper](m, TypeMapperKindArrayToSingle).Store(state)
+	case TypeMapperKindDeferred:
+		return castTypeMapper[DeferredTypeMapper](m, TypeMapperKindDeferred).Store(state)
+	case TypeMapperKindFunction:
+		return castTypeMapper[FunctionTypeMapper](m, TypeMapperKindFunction).Store(state)
+	case TypeMapperKindMerged:
+		return castTypeMapper[MergedTypeMapper](m, TypeMapperKindMerged).Store(state)
+	case TypeMapperKindComposite:
+		return castTypeMapper[CompositeTypeMapper](m, TypeMapperKindComposite).Store(state)
+	case TypeMapperKindInference:
+		return castTypeMapper[InferenceTypeMapper](m, TypeMapperKindInference).Store(state)
+	default:
+		panic("Invalid type mapper kind")
+	}
+}
+
+func (m *TypeMapper) Load(before, after TypeMapperState) {
+	if m == nil {
+		return
+	}
+	switch m.kind {
+	case TypeMapperKindSimple:
+		castTypeMapper[SimpleTypeMapper](m, TypeMapperKindSimple).Load(before, after)
+	case TypeMapperKindArray:
+		castTypeMapper[ArrayTypeMapper](m, TypeMapperKindArray).Load(before, after)
+	case TypeMapperKindArrayToSingle:
+		castTypeMapper[ArrayToSingleTypeMapper](m, TypeMapperKindArrayToSingle).Load(before, after)
+	case TypeMapperKindDeferred:
+		castTypeMapper[DeferredTypeMapper](m, TypeMapperKindDeferred).Load(before, after)
+	case TypeMapperKindFunction:
+		castTypeMapper[FunctionTypeMapper](m, TypeMapperKindFunction).Load(before, after)
+	case TypeMapperKindMerged:
+		castTypeMapper[MergedTypeMapper](m, TypeMapperKindMerged).Load(before, after)
+	case TypeMapperKindComposite:
+		castTypeMapper[CompositeTypeMapper](m, TypeMapperKindComposite).Load(before, after)
+	case TypeMapperKindInference:
+		castTypeMapper[InferenceTypeMapper](m, TypeMapperKindInference).Load(before, after)
+	default:
+		panic("Invalid type mapper kind")
+	}
+}
+
+// TypeMapperState stores a snapshot for each mapper participating in cache bookkeeping.
+type TypeMapperState map[*TypeMapper]any
+
+type typeMapperCacheState struct {
+	before TypeMapperState
+	after  TypeMapperState
+}
+
 func (m *TypeMapper) MapsThisOnly() bool {
 	switch m.kind {
 	case TypeMapperKindSimple:
@@ -108,6 +169,9 @@ func (c *Checker) combineTypeMappers(m1 *TypeMapper, m2 *TypeMapper) *TypeMapper
 }
 
 func (c *Checker) mapTypeWithCompositeMapper(t *Type, m1 *TypeMapper, m2 *TypeMapper) *Type {
+	if m2 == nil {
+		return getMappedType(t, m1)
+	}
 	if m1 == nil {
 		return getMappedType(t, m2)
 	}
@@ -157,6 +221,10 @@ type TypeMapperBase struct {
 
 func (m *TypeMapperBase) Map(t *Type) *Type  { return t }
 func (m *TypeMapperBase) MapsThisOnly() bool { return false }
+func (m *TypeMapperBase) Store(*TypeMapperState) bool {
+	return false
+}
+func (m *TypeMapperBase) Load(TypeMapperState, TypeMapperState) {}
 
 // SimpleTypeMapper
 
@@ -274,18 +342,49 @@ func (m *DeferredTypeMapper) MapsThisOnly() bool {
 
 type FunctionTypeMapper struct {
 	TypeMapperBase
-	fn func(*Type) *Type
+	fn    func(*Type) *Type
+	store func() any
+	load  func(before, after any)
 }
 
-func newFunctionTypeMapper(fn func(*Type) *Type) *TypeMapper {
+// Cache handlers are optional as a pair. Store captures an immutable snapshot;
+// load replays the effect between two snapshots. Hooked mappers also observe whole types.
+// Tracked state must not change the mapped result.
+func newFunctionTypeMapper(fn func(*Type) *Type, store func() any, load func(before, after any)) *TypeMapper {
+	if (store == nil) != (load == nil) {
+		panic("Function mapper cache handlers must be provided together")
+	}
 	m := &FunctionTypeMapper{}
 	m.kind = TypeMapperKindFunction
 	m.fn = fn
+	m.store = store
+	m.load = load
 	return &m.TypeMapper
 }
 
 func (m *FunctionTypeMapper) Map(t *Type) *Type {
 	return m.fn(t)
+}
+
+func (m *FunctionTypeMapper) Store(state *TypeMapperState) bool {
+	if m.store == nil {
+		return false
+	}
+	if state != nil {
+		if *state == nil {
+			*state = make(TypeMapperState)
+		}
+		if _, stored := (*state)[&m.TypeMapper]; !stored {
+			(*state)[&m.TypeMapper] = m.store()
+		}
+	}
+	return true
+}
+
+func (m *FunctionTypeMapper) Load(before, after TypeMapperState) {
+	if value, stored := after[&m.TypeMapper]; stored {
+		m.load(before[&m.TypeMapper], value)
+	}
 }
 
 // MergedTypeMapper
@@ -308,6 +407,19 @@ func (m *MergedTypeMapper) Map(t *Type) *Type {
 	return m.m2.Map(m.m1.Map(t))
 }
 
+func (m *MergedTypeMapper) Store(state *TypeMapperState) bool {
+	left := m.m1.Store(state)
+	right := m.m2.Store(state)
+	return left || right
+}
+
+func (m *MergedTypeMapper) Load(before, after TypeMapperState) {
+	// Shared children occur only once in the stored state.
+	for mapper := range after {
+		mapper.Load(before, after)
+	}
+}
+
 // CompositeTypeMapper
 
 type CompositeTypeMapper struct {
@@ -327,11 +439,26 @@ func newCompositeTypeMapper(c *Checker, m1 *TypeMapper, m2 *TypeMapper) *TypeMap
 }
 
 func (m *CompositeTypeMapper) Map(t *Type) *Type {
+	if m.m2 == nil {
+		return m.m1.Map(t)
+	}
 	t1 := m.m1.Map(t)
 	if t1 != t {
 		return m.c.instantiateType(t1, m.m2)
 	}
 	return m.m2.Map(t)
+}
+
+func (m *CompositeTypeMapper) Store(state *TypeMapperState) bool {
+	left := m.m1.Store(state)
+	right := m.m2.Store(state)
+	return left || right
+}
+
+func (m *CompositeTypeMapper) Load(before, after TypeMapperState) {
+	for mapper := range after {
+		mapper.Load(before, after)
+	}
 }
 
 // InferenceTypeMapper

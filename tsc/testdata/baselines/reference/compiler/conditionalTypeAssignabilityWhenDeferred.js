@@ -45,7 +45,7 @@ function f2<T>(t1: { x: T; y: T }, t2: T extends T ? { x: T; y: T } : never) {
 type Foo<T> = T extends true ? string : "a";
 
 function test<T>(x: Foo<T>, s: string) {
-  x = "a"; // Currently an error, should be ok
+  x = "a"; // Error: Foo<never> is never.
   x = s; // Error
 }
 
@@ -65,12 +65,8 @@ function testAssignabilityToConditionalType<T>() {
   // Infer type parameters: no good
   const o2: [T] extends [[infer U]] ? U : { b: number } = o;
 
-  // The next 4 are arguable - if you choose to ignore the `never` distribution case,
-  // then they're all good. The `never` case _is_ a bit of an outlier - we say distributive types
-  // look approximately like the sum of their branches, but the `never` case bucks that.
-  // There's an argument for the result of dumping `never` into a distributive conditional
-  // being not `never`, but instead the intersection of the branches - a much more precise bound
-  // on that "impossible" input.
+  // Branch-wise checking must account for the empty union: C<never> is never,
+  // even when both branches are independent of the check type.
 
   // Distributive where T might instantiate to never: no good
   const o3: Distributive<T> = o;
@@ -106,7 +102,7 @@ type InferBecauseWhyNot<T> = [T] extends [(p: infer P1) => any]
   : never;
 
 function f3<Q extends (arg: any) => any>(x: Q): InferBecauseWhyNot<Q> {
-  return x;
+  return x; // Error: Q can add overloads that change the inferred parameter.
 }
 
 type InferBecauseWhyNotDistributive<T> = T extends (p: infer P1) => any
@@ -116,7 +112,7 @@ type InferBecauseWhyNotDistributive<T> = T extends (p: infer P1) => any
 function f4<Q extends (arg: any) => any>(
   x: Q
 ): InferBecauseWhyNotDistributive<Q> {
-  return x; // should fail
+  return x; // Error: additional overloads can make the extends check fail.
 }
 
 
@@ -139,7 +135,7 @@ function f2(t1, t2) {
     t2 = t1; // should fail
 }
 function test(x, s) {
-    x = "a"; // Currently an error, should be ok
+    x = "a"; // Error: Foo<never> is never.
     x = s; // Error
 }
 function testAssignabilityToConditionalType() {
@@ -151,12 +147,8 @@ function testAssignabilityToConditionalType() {
     const x1 = x;
     // Infer type parameters: no good
     const o2 = o;
-    // The next 4 are arguable - if you choose to ignore the `never` distribution case,
-    // then they're all good. The `never` case _is_ a bit of an outlier - we say distributive types
-    // look approximately like the sum of their branches, but the `never` case bucks that.
-    // There's an argument for the result of dumping `never` into a distributive conditional
-    // being not `never`, but instead the intersection of the branches - a much more precise bound
-    // on that "impossible" input.
+    // Branch-wise checking must account for the empty union: C<never> is never,
+    // even when both branches are independent of the check type.
     // Distributive where T might instantiate to never: no good
     const o3 = o;
     // Distributive where T & string might instantiate to never: also no good
@@ -173,8 +165,8 @@ class Foo2 {
 }
 set(new Foo2(), "prop", "hi"); // <-- typechecks
 function f3(x) {
-    return x;
+    return x; // Error: Q can add overloads that change the inferred parameter.
 }
 function f4(x) {
-    return x; // should fail
+    return x; // Error: additional overloads can make the extends check fail.
 }

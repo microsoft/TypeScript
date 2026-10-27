@@ -1401,8 +1401,10 @@ type TypeParameter struct {
 	mapper              *TypeMapper
 	isThisType          bool
 	isDistributed       bool
+	isInferencePattern  bool
 	resolvedDefaultType *Type
 	distributedType     *Type
+	rigidInferenceType  *Type
 }
 
 func (t *TypeParameter) IsThisType() bool { return t.isThisType }
@@ -1486,6 +1488,9 @@ type ConditionalType struct {
 	resolvedInferredTrueType         *Type // The `trueType` instantiated with the `combinedMapper`, if present
 	resolvedDefaultConstraint        *Type
 	resolvedConstraintOfDistributive *Type
+	resolvedDistributiveCheckType    *Type
+	resolvedInferencePattern         *Type
+	inferencePatternResolved         bool
 	mapper                           *TypeMapper
 	combinedMapper                   *TypeMapper
 }

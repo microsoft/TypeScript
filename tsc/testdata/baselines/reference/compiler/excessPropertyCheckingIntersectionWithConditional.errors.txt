@@ -1,0 +1,12 @@
+excessPropertyCheckingIntersectionWithConditional.ts(3,3): error TS2322: Type '{ a: number; x: K; }' is not assignable to type 'Foo<K> & { x: K; }'.
+  Type '{ a: number; x: K; }' is not assignable to type 'Foo<K>'.
+
+
+==== excessPropertyCheckingIntersectionWithConditional.ts (1 errors) ====
+    type Foo<K> = K extends unknown ? { a: number } : unknown
+    const createDefaultExample = <K,>(x: K): Foo<K> & { x: K; } => {
+      return { a: 1, x: x }; // Error: Foo<never> is never.
+      ~~~~~~
+!!! error TS2322: Type '{ a: number; x: K; }' is not assignable to type 'Foo<K> & { x: K; }'.
+!!! error TS2322:   Type '{ a: number; x: K; }' is not assignable to type 'Foo<K>'.
+    }

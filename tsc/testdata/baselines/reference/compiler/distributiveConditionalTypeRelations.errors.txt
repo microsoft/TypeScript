@@ -1,0 +1,561 @@
+distributiveConditionalTypeRelations.ts(24,11): error TS2322: Type '`${T}-${T}`' is not assignable to type 'Repeated<T>'.
+  Type '`${string}-${string}`' is not assignable to type 'Repeated<T>'.
+distributiveConditionalTypeRelations.ts(30,11): error TS2322: Type '`${T}-${T}`' is not assignable to type 'WithOuter<T, T>'.
+  Type '`${string}-${string}`' is not assignable to type 'WithOuter<T, T>'.
+distributiveConditionalTypeRelations.ts(39,11): error TS2322: Type '`outer-${OuterSource<T, T>}`' is not assignable to type 'OuterRepeated<T>'.
+  Type '`outer-${string}-${string}`' is not assignable to type 'OuterRepeated<T>'.
+distributiveConditionalTypeRelations.ts(43,11): error TS2322: Type '`${Uppercase<T>}-${Uppercase<T>}`' is not assignable to type 'UpperRepeated<T>'.
+  Type '`${Uppercase<string>}-${Uppercase<string>}`' is not assignable to type 'UpperRepeated<T>'.
+    Type '`${string}-${string}`' is not assignable to type 'UpperRepeated<T>'.
+distributiveConditionalTypeRelations.ts(47,11): error TS2322: Type '`outer-${InferredRepeated<T>}`' is not assignable to type 'OuterRepeated<T>'.
+  Type '`outer-${string}-${string}`' is not assignable to type 'OuterRepeated<T>'.
+distributiveConditionalTypeRelations.ts(53,11): error TS2322: Type 'T & { value: T; }' is not assignable to type 'Linked<T>'.
+distributiveConditionalTypeRelations.ts(65,11): error TS2322: Type '{ x: T; y: T; }' is not assignable to type 'Pair<T>'.
+distributiveConditionalTypeRelations.ts(66,11): error TS2322: Type '[T, T]' is not assignable to type 'Tuple<T>'.
+distributiveConditionalTypeRelations.ts(67,11): error TS2322: Type '(value: T) => T' is not assignable to type 'Callback<T>'.
+distributiveConditionalTypeRelations.ts(71,11): error TS2322: Type '{ a: number; b: number; }' is not assignable to type 'Constant<T>'.
+distributiveConditionalTypeRelations.ts(72,11): error TS2322: Type '{ a: number; b: number; }' is not assignable to type 'Constant<T & string>'.
+distributiveConditionalTypeRelations.ts(73,11): error TS2322: Type '{ a: number; b: number; }' is not assignable to type 'Constant<[T] extends [never] ? object : never>'.
+distributiveConditionalTypeRelations.ts(77,11): error TS2322: Type '{ a: number; b: number; value: T; }' is not assignable to type 'Constant<T>'.
+distributiveConditionalTypeRelations.ts(83,11): error TS2322: Type '{ a: number; b: number; value?: T | undefined; }' is not assignable to type 'Constant<T>'.
+distributiveConditionalTypeRelations.ts(87,11): error TS2322: Type '{ a: number; b: number; values: T[]; }' is not assignable to type 'Constant<T>'.
+distributiveConditionalTypeRelations.ts(91,11): error TS2322: Type '{ a: number; b: number; get: () => T; }' is not assignable to type 'Constant<T>'.
+distributiveConditionalTypeRelations.ts(106,11): error TS2322: Type '{ a: number; b: number; }' is not assignable to type 'Constant<Homomorphic<T>>'.
+distributiveConditionalTypeRelations.ts(107,11): error TS2322: Type '{ a: number; b: number; }' is not assignable to type 'Constant<[...U]>'.
+distributiveConditionalTypeRelations.ts(117,11): error TS2322: Type 'T' is not assignable to type 'Inferred<T>'.
+  Type '(value: any) => unknown' is not assignable to type 'Inferred<T>'.
+distributiveConditionalTypeRelations.ts(118,11): error TS2322: Type 'T' is not assignable to type 'InferredNonDistributive<T>'.
+  Type '(value: any) => unknown' is not assignable to type 'InferredNonDistributive<T>'.
+distributiveConditionalTypeRelations.ts(134,11): error TS2322: Type 'T' is not assignable to type 'T extends (value: infer P) => infer R ? P | R | T : never'.
+  Type '(value: any) => unknown' is not assignable to type 'T extends (value: infer P) => infer R ? P | R | T : never'.
+distributiveConditionalTypeRelations.ts(140,11): error TS2322: Type 'T' is not assignable to type 'InferredReturn<T>'.
+  Type '() => unknown' is not assignable to type 'InferredReturn<T>'.
+distributiveConditionalTypeRelations.ts(157,11): error TS2322: Type 'T' is not assignable to type 'InferredMethod<T>'.
+  Type '{ method(value: unknown): never; }' is not assignable to type 'InferredMethod<T>'.
+distributiveConditionalTypeRelations.ts(158,11): error TS2322: Type 'T' is not assignable to type 'InferredMethodReturn<T>'.
+  Type '{ method(value: unknown): never; }' is not assignable to type 'InferredMethodReturn<T>'.
+distributiveConditionalTypeRelations.ts(162,11): error TS2322: Type 'string' is not assignable to type 'InferredValue<T>'.
+distributiveConditionalTypeRelations.ts(163,11): error TS2322: Type '(value: string) => string' is not assignable to type 'InferredCallback<T>'.
+distributiveConditionalTypeRelations.ts(167,11): error TS2322: Type 'T' is not assignable to type 'ConstrainedInfer<T>'.
+  Type '{ value: any; }' is not assignable to type 'ConstrainedInfer<T>'.
+distributiveConditionalTypeRelations.ts(180,11): error TS2322: Type 'T' is not assignable to type 'SpecificParameter<T>'.
+  Type '(value: any) => unknown' is not assignable to type 'SpecificParameter<T>'.
+distributiveConditionalTypeRelations.ts(181,11): error TS2322: Type 'T' is not assignable to type 'T extends (value: string) => unknown ? T : never'.
+  Type '(value: any) => unknown' is not assignable to type 'T extends (value: string) => unknown ? T : never'.
+distributiveConditionalTypeRelations.ts(185,11): error TS2322: Type 'T' is not assignable to type 'SpecificMethod<T>'.
+  Type '{ method(value: unknown): unknown; }' is not assignable to type 'SpecificMethod<T>'.
+distributiveConditionalTypeRelations.ts(189,11): error TS2322: Type 'T' is not assignable to type 'OptionalProperty<T>'.
+  Type '{ value: unknown; }' is not assignable to type 'OptionalProperty<T>'.
+distributiveConditionalTypeRelations.ts(193,11): error TS2322: Type 'T' is not assignable to type 'MixedInference<T>'.
+  Type '{ input: (value: any) => void; output: any; }' is not assignable to type 'MixedInference<T>'.
+distributiveConditionalTypeRelations.ts(204,11): error TS2322: Type 'T' is not assignable to type 'InvariantInference<T>'.
+  Type 'InvariantInferencePattern<any>' is not assignable to type 'InvariantInference<T>'.
+distributiveConditionalTypeRelations.ts(214,11): error TS2322: Type 'T' is not assignable to type 'NumericInference<T>'.
+  Type '(value: unknown) => number' is not assignable to type 'NumericInference<T>'.
+distributiveConditionalTypeRelations.ts(218,11): error TS2322: Type 'T' is not assignable to type 'SingleParameter<T>'.
+  Type '(...args: any[]) => unknown' is not assignable to type 'SingleParameter<T>'.
+distributiveConditionalTypeRelations.ts(222,11): error TS2322: Type 'T' is not assignable to type 'OptionalParameter<T>'.
+  Type '(value?: any) => unknown' is not assignable to type 'OptionalParameter<T>'.
+distributiveConditionalTypeRelations.ts(226,11): error TS2322: Type 'T' is not assignable to type 'IntersectionPattern<T>'.
+  Type '{ value: any; method(value: any): unknown; }' is not assignable to type 'IntersectionPattern<T>'.
+distributiveConditionalTypeRelations.ts(230,11): error TS2322: Type 'T' is not assignable to type 'PrimitiveBoundary<T>'.
+  Type '{ toString(): string; }' is not assignable to type 'PrimitiveBoundary<T>'.
+distributiveConditionalTypeRelations.ts(239,11): error TS2322: Type 'T' is not assignable to type 'T extends Nominal<infer P> ? P | T : never'.
+  Type '{ value: unknown; }' is not assignable to type 'T extends Nominal<infer P> ? P | T : never'.
+distributiveConditionalTypeRelations.ts(269,11): error TS2322: Type 'T & string' is not assignable to type 'Extract<T, string>'.
+distributiveConditionalTypeRelations.ts(273,7): error TS2322: Type '{ x: "a"; y: "b"; }' is not assignable to type '{ x: "a"; y: "a"; } | { x: "b"; y: "b"; }'.
+  Types of property 'y' are incompatible.
+    Type '"b"' is not assignable to type '"a"'.
+distributiveConditionalTypeRelations.ts(274,7): error TS2322: Type '["a", "b"]' is not assignable to type '["a", "a"] | ["b", "b"]'.
+  Type '["a", "b"]' is not assignable to type '["a", "a"]'.
+    Type at position 1 in source is not compatible with type at position 1 in target.
+      Type '"b"' is not assignable to type '"a"'.
+distributiveConditionalTypeRelations.ts(275,7): error TS2322: Type '"a-b"' is not assignable to type '"a-a" | "b-b"'.
+distributiveConditionalTypeRelations.ts(276,7): error TS2322: Type '{ a: number; b: number; }' is not assignable to type 'never'.
+distributiveConditionalTypeRelations.ts(277,7): error TS2322: Type '"b"' is not assignable to type '"a"'.
+distributiveConditionalTypeRelations.ts(278,7): error TS2322: Type '{ value: number; }' is not assignable to type 'never'.
+distributiveConditionalTypeRelations.ts(279,7): error TS2322: Type '(value: number) => boolean' is not assignable to type 'never'.
+distributiveConditionalTypeRelations.ts(280,7): error TS2322: Type '{ method: (value: number) => boolean; }' is not assignable to type 'never'.
+distributiveConditionalTypeRelations.ts(281,7): error TS2322: Type '{ optional: number; value: boolean; }' is not assignable to type 'never'.
+distributiveConditionalTypeRelations.ts(282,7): error TS2322: Type '{ input: (value: number) => void; output: string; }' is not assignable to type 'never'.
+distributiveConditionalTypeRelations.ts(283,7): error TS2322: Type '{ input: (value: number) => void; output: string; }' is not assignable to type 'never'.
+distributiveConditionalTypeRelations.ts(284,7): error TS2322: Type '(value: unknown) => number' is not assignable to type 'never'.
+distributiveConditionalTypeRelations.ts(285,7): error TS2322: Type '(left: number, right: number) => void' is not assignable to type 'never'.
+distributiveConditionalTypeRelations.ts(286,7): error TS2322: Type '(value: string) => void' is not assignable to type 'never'.
+distributiveConditionalTypeRelations.ts(287,7): error TS2322: Type '{ value: boolean; method: (value: number) => void; }' is not assignable to type 'never'.
+distributiveConditionalTypeRelations.ts(288,7): error TS2322: Type '""' is not assignable to type 'never'.
+distributiveConditionalTypeRelations.ts(295,7): error TS2322: Type '{ (value: string): void; (left: number, right: number): void; }' is not assignable to type 'never'.
+distributiveConditionalTypeRelations.ts(296,7): error TS2322: Type '{ (value: string): void; (left: number, right: number): void; }' is not assignable to type 'never'.
+distributiveConditionalTypeRelations.ts(303,7): error TS2322: Type '{ (): string; (value: number): number; }' is not assignable to type 'never'.
+distributiveConditionalTypeRelations.ts(310,7): error TS2322: Type '{ method(value: string): never; method(left: number, right: number): void; }' is not assignable to type 'never'.
+distributiveConditionalTypeRelations.ts(314,7): error TS2322: Type '{ method(value: never): never; }' is not assignable to type 'never'.
+
+
+==== distributiveConditionalTypeRelations.ts (61 errors) ====
+    // The original #27932 cases are in conditionalTypeAssignabilityWhenDeferred.ts.
+    
+    type Either<T, U> = T extends U ? T | { matched: true } : T | { matched: false };
+    type Both<T, U> = T extends U ? T & U : T;
+    type Constant<T> = T extends string ? { a: number } : { b: number };
+    type Pair<T> = T extends unknown ? { x: T; y: T } : never;
+    type Tuple<T> = T extends unknown ? [T, T] : never;
+    type Callback<T> = T extends unknown ? (value: T) => T : never;
+    type Repeated<T extends string> = T extends unknown ? `${T}-${T}` : never;
+    type Remapped<T extends string> = T extends unknown ? `key-${T}` : never;
+    type Upper<T extends string> = T extends unknown ? Uppercase<T> : never;
+    
+    function identity<T, U>(value: T, intersection: T & U) {
+        const either: Either<T, U> = value;
+        const both: Both<T, U> = value;
+        const intersected: Either<T, U> = intersection;
+        const extracted: Extract<T, unknown> = value;
+        const excluded: Exclude<T, never> = value;
+    }
+    
+    function wrappers<T extends string>(value: `key-${T}`, upper: Uppercase<T>, repeated: `${T}-${T}`) {
+        const remapped: Remapped<T> = value;
+        const capitalized: Upper<T> = upper;
+        const correlated: Repeated<T> = repeated; // Error: cross products do not distribute.
+              ~~~~~~~~~~
+!!! error TS2322: Type '`${T}-${T}`' is not assignable to type 'Repeated<T>'.
+!!! error TS2322:   Type '`${string}-${string}`' is not assignable to type 'Repeated<T>'.
+    }
+    
+    type WithOuter<T extends string, U extends string> = T extends unknown ? `${T}-${U}` : never;
+    
+    function retainOuterArgument<T extends string>(value: `${T}-${T}`) {
+        const result: WithOuter<T, T> = value; // Error: the uniform-instantiation proof conservatively rejects repeated occurrences.
+              ~~~~~~
+!!! error TS2322: Type '`${T}-${T}`' is not assignable to type 'WithOuter<T, T>'.
+!!! error TS2322:   Type '`${string}-${string}`' is not assignable to type 'WithOuter<T, T>'.
+    }
+    
+    type OuterSource<T extends string, U extends string> = T extends unknown ? `${T}-${U}` : never;
+    type OuterRepeated<T extends string> = T extends unknown ? `outer-${T}-${T}` : never;
+    type UpperRepeated<T extends string> = T extends unknown ? `${Uppercase<T>}-${Uppercase<T>}` : never;
+    type InferredRepeated<T extends string> = [T] extends [infer U extends string] ? `${U}-${U}` : never;
+    
+    function retainConditionalArgument<T extends string>(value: `outer-${OuterSource<T, T>}`) {
+        const correlated: OuterRepeated<T> = value; // Error: the second argument is not distributed.
+              ~~~~~~~~~~
+!!! error TS2322: Type '`outer-${OuterSource<T, T>}`' is not assignable to type 'OuterRepeated<T>'.
+!!! error TS2322:   Type '`outer-${string}-${string}`' is not assignable to type 'OuterRepeated<T>'.
+    }
+    
+    function cachedOccurrences<T extends string>(value: `${Uppercase<T>}-${Uppercase<T>}`) {
+        const correlated: UpperRepeated<T> = value; // Error: a cached inner type still occurs twice.
+              ~~~~~~~~~~
+!!! error TS2322: Type '`${Uppercase<T>}-${Uppercase<T>}`' is not assignable to type 'UpperRepeated<T>'.
+!!! error TS2322:   Type '`${Uppercase<string>}-${Uppercase<string>}`' is not assignable to type 'UpperRepeated<T>'.
+!!! error TS2322:     Type '`${string}-${string}`' is not assignable to type 'UpperRepeated<T>'.
+    }
+    
+    function deferredOccurrences<T extends string>(value: `outer-${InferredRepeated<T>}`) {
+        const correlated: OuterRepeated<T> = value; // Error: deferred inference hides a non-distributive use.
+              ~~~~~~~~~~
+!!! error TS2322: Type '`outer-${InferredRepeated<T>}`' is not assignable to type 'OuterRepeated<T>'.
+!!! error TS2322:   Type '`outer-${string}-${string}`' is not assignable to type 'OuterRepeated<T>'.
+    }
+    
+    type Linked<T> = T extends unknown ? T & { value: T } : never;
+    
+    function retainIntersectionComponent<T>(value: T & { value: T }) {
+        const correlated: Linked<T> = value; // Error: the property can come from a different constituent.
+              ~~~~~~~~~~
+!!! error TS2322: Type 'T & { value: T; }' is not assignable to type 'Linked<T>'.
+    }
+    
+    type ObjectValues<T extends { value: unknown }> = T extends unknown ? T["value"] : never;
+    type IndexedValues<T, K extends keyof T> = K extends unknown ? T[K] : never;
+    
+    function indexedAccess<T extends { value: unknown }, K extends keyof T>(value: T["value"], indexed: T[K]) {
+        const fromObject: ObjectValues<T> = value;
+        const fromIndex: IndexedValues<T, K> = indexed;
+    }
+    
+    function correlated<T>(pair: { x: T; y: T }, tuple: [T, T], callback: (value: T) => T) {
+        const p: Pair<T> = pair; // Error
+              ~
+!!! error TS2322: Type '{ x: T; y: T; }' is not assignable to type 'Pair<T>'.
+        const t: Tuple<T> = tuple; // Error
+              ~
+!!! error TS2322: Type '[T, T]' is not assignable to type 'Tuple<T>'.
+        const c: Callback<T> = callback; // Error
+              ~
+!!! error TS2322: Type '(value: T) => T' is not assignable to type 'Callback<T>'.
+    }
+    
+    function possiblyNever<T>(value: { a: number; b: number }) {
+        const unconstrained: Constant<T> = value; // Error
+              ~~~~~~~~~~~~~
+!!! error TS2322: Type '{ a: number; b: number; }' is not assignable to type 'Constant<T>'.
+        const constrained: Constant<T & string> = value; // Error
+              ~~~~~~~~~~~
+!!! error TS2322: Type '{ a: number; b: number; }' is not assignable to type 'Constant<T & string>'.
+        const conditional: Constant<[T] extends [never] ? object : never> = value; // Error
+              ~~~~~~~~~~~
+!!! error TS2322: Type '{ a: number; b: number; }' is not assignable to type 'Constant<[T] extends [never] ? object : never>'.
+    }
+    
+    function requiredWitness<T>(value: { a: number; b: number; value: T }) {
+        const result: Constant<T> = value; // Error: a getter returning never can throw.
+              ~~~~~~
+!!! error TS2322: Type '{ a: number; b: number; value: T; }' is not assignable to type 'Constant<T>'.
+    }
+    
+    requiredWitness<never>({ a: 1, b: 2, get value(): never { throw new Error(); } });
+    
+    function optionalWitness<T>(value: { a: number; b: number; value?: T }) {
+        const result: Constant<T> = value; // Error: the property can be absent when T is never.
+              ~~~~~~
+!!! error TS2322: Type '{ a: number; b: number; value?: T | undefined; }' is not assignable to type 'Constant<T>'.
+    }
+    
+    function arrayWitness<T>(value: { a: number; b: number; values: T[] }) {
+        const result: Constant<T> = value; // Error: an array of never can be empty.
+              ~~~~~~
+!!! error TS2322: Type '{ a: number; b: number; values: T[]; }' is not assignable to type 'Constant<T>'.
+    }
+    
+    function functionWitness<T>(value: { a: number; b: number; get: () => T }) {
+        const result: Constant<T> = value; // Error: a function returning never can throw.
+              ~~~~~~
+!!! error TS2322: Type '{ a: number; b: number; get: () => T; }' is not assignable to type 'Constant<T>'.
+    }
+    
+    function definitelyNotNever<T>(value: { a: number; b: number }) {
+        const object: Constant<{ value: T }> = value;
+        const array: Constant<T[]> = value;
+        const tuple: Constant<[T]> = value;
+        const union: Constant<T | number> = value;
+        const conditional: Constant<[T] extends [string] ? { value: T } : { other: T }> = value;
+    }
+    
+    type Homomorphic<T> = { [K in keyof T]: T[K] };
+    type Spread<T extends unknown[]> = [...T];
+    
+    function emptyInstantiations<T, U extends unknown[]>(value: { a: number; b: number }) {
+        const mapped: Constant<Homomorphic<T>> = value; // Error: Homomorphic<never> is never.
+              ~~~~~~
+!!! error TS2322: Type '{ a: number; b: number; }' is not assignable to type 'Constant<Homomorphic<T>>'.
+        const variadic: Constant<Spread<U>> = value; // Error: Spread<never> is never.
+              ~~~~~~~~
+!!! error TS2322: Type '{ a: number; b: number; }' is not assignable to type 'Constant<[...U]>'.
+    }
+    
+    type Inferred<T> = T extends (value: infer P) => unknown ? T | P : never;
+    type InferredNonDistributive<T> = [T] extends [(value: infer P) => unknown] ? T | P : never;
+    type InferredValue<T> = T extends { value: infer P } ? P : never;
+    type InferredCallback<T> = T extends { value: infer P } ? (value: P) => P : never;
+    type ConstrainedInfer<T> = T extends { value: infer P extends string } ? T : never;
+    
+    function inference<T extends (value: any) => unknown>(value: T) {
+        const distributive: Inferred<T> = value; // Error: additional overloads can change the inferred parameter.
+              ~~~~~~~~~~~~
+!!! error TS2322: Type 'T' is not assignable to type 'Inferred<T>'.
+!!! error TS2322:   Type '(value: any) => unknown' is not assignable to type 'Inferred<T>'.
+        const nonDistributive: InferredNonDistributive<T> = value; // Error
+              ~~~~~~~~~~~~~~~
+!!! error TS2322: Type 'T' is not assignable to type 'InferredNonDistributive<T>'.
+!!! error TS2322:   Type '(value: any) => unknown' is not assignable to type 'InferredNonDistributive<T>'.
+    }
+    
+    function independentInference<T>(value: T) {
+        const result: T extends infer P ? T | P : never = value;
+    }
+    
+    function propertyInference<T extends { value: unknown }>(value: T) {
+        const result: T extends { value: infer P } ? T | P : never = value;
+    }
+    
+    function tupleInference<T>(value: T) {
+        const result: [T] extends [infer P] ? T | P : never = value;
+    }
+    
+    function independentParameters<T extends (value: any) => unknown>(value: T) {
+        const result: T extends (value: infer P) => infer R ? T | P | R : never = value; // Error
+              ~~~~~~
+!!! error TS2322: Type 'T' is not assignable to type 'T extends (value: infer P) => infer R ? P | R | T : never'.
+!!! error TS2322:   Type '(value: any) => unknown' is not assignable to type 'T extends (value: infer P) => infer R ? P | R | T : never'.
+    }
+    
+    type InferredReturn<T> = T extends () => infer R ? T | R : never;
+    
+    function returnInference<T extends () => unknown>(value: T) {
+        const result: InferredReturn<T> = value; // Error: inference can use an overload with incompatible arity.
+              ~~~~~~
+!!! error TS2322: Type 'T' is not assignable to type 'InferredReturn<T>'.
+!!! error TS2322:   Type '() => unknown' is not assignable to type 'InferredReturn<T>'.
+    }
+    
+    function universalSignature<T extends (value: unknown) => never>(value: T) {
+        const parameter: Inferred<T> = value;
+        const both: T extends (value: infer P) => infer R ? T | P | R : never = value;
+    }
+    
+    function ignoredParameter<T extends () => never>(value: T) {
+        const result: Inferred<T> = value;
+        const returned: InferredReturn<T> = value;
+    }
+    
+    type InferredMethod<T> = T extends { method: (value: infer P) => unknown } ? T | P : never;
+    type InferredMethodReturn<T> = T extends { method: (value: any) => infer R } ? T | R : never;
+    
+    function bivariantInference<T extends { method(value: unknown): never }>(value: T) {
+        const result: InferredMethod<T> = value; // Error: the constraint permits narrower method parameters.
+              ~~~~~~
+!!! error TS2322: Type 'T' is not assignable to type 'InferredMethod<T>'.
+!!! error TS2322:   Type '{ method(value: unknown): never; }' is not assignable to type 'InferredMethod<T>'.
+        const returned: InferredMethodReturn<T> = value; // Error: a never parameter fails the strict function pattern.
+              ~~~~~~~~
+!!! error TS2322: Type 'T' is not assignable to type 'InferredMethodReturn<T>'.
+!!! error TS2322:   Type '{ method(value: unknown): never; }' is not assignable to type 'InferredMethodReturn<T>'.
+    }
+    
+    function dependentInference<T extends { value: string }>(value: string, callback: (value: string) => string) {
+        const inferred: InferredValue<T> = value; // Error: T can contain a narrower value.
+              ~~~~~~~~
+!!! error TS2322: Type 'string' is not assignable to type 'InferredValue<T>'.
+        const inferredCallback: InferredCallback<T> = callback; // Error
+              ~~~~~~~~~~~~~~~~
+!!! error TS2322: Type '(value: string) => string' is not assignable to type 'InferredCallback<T>'.
+    }
+    
+    function constrainedInference<T extends { value: any }>(value: T) {
+        const result: ConstrainedInfer<T> = value; // Error: any in the constraint does not imply string.
+              ~~~~~~
+!!! error TS2322: Type 'T' is not assignable to type 'ConstrainedInfer<T>'.
+!!! error TS2322:   Type '{ value: any; }' is not assignable to type 'ConstrainedInfer<T>'.
+    }
+    
+    type SpecificParameter<T> = T extends (value: string) => infer R ? T | R : never;
+    type SpecificMethod<T> = T extends { method(value: string): infer R } ? T | R : never;
+    type OptionalProperty<T> = T extends { optional?: string; value: infer R } ? T | R : never;
+    type MixedInference<T> = T extends { input: (value: infer R) => void; output: infer R } ? T | R : never;
+    type SingleParameter<T> = T extends (value: infer R) => unknown ? T | R : never;
+    type OptionalParameter<T> = T extends (value?: infer R) => unknown ? T | R : never;
+    type IntersectionPattern<T> = T extends { value: infer R } & { method(value: string): unknown } ? T | R : never;
+    type PrimitiveBoundary<T> = T extends object | (infer R extends number) ? T | R : never;
+    
+    function fixedParameter<T extends (value: any) => unknown>(value: T) {
+        const result: SpecificParameter<T> = value; // Error: a number parameter also satisfies the constraint.
+              ~~~~~~
+!!! error TS2322: Type 'T' is not assignable to type 'SpecificParameter<T>'.
+!!! error TS2322:   Type '(value: any) => unknown' is not assignable to type 'SpecificParameter<T>'.
+        const withoutInference: T extends (value: string) => unknown ? T : never = value; // Error
+              ~~~~~~~~~~~~~~~~
+!!! error TS2322: Type 'T' is not assignable to type 'T extends (value: string) => unknown ? T : never'.
+!!! error TS2322:   Type '(value: any) => unknown' is not assignable to type 'T extends (value: string) => unknown ? T : never'.
+    }
+    
+    function bivariantParameter<T extends { method(value: unknown): unknown }>(value: T) {
+        const result: SpecificMethod<T> = value; // Error
+              ~~~~~~
+!!! error TS2322: Type 'T' is not assignable to type 'SpecificMethod<T>'.
+!!! error TS2322:   Type '{ method(value: unknown): unknown; }' is not assignable to type 'SpecificMethod<T>'.
+    }
+    
+    function optionalProperty<T extends { value: unknown }>(value: T) {
+        const result: OptionalProperty<T> = value; // Error: subtypes can add an incompatible optional property.
+              ~~~~~~
+!!! error TS2322: Type 'T' is not assignable to type 'OptionalProperty<T>'.
+!!! error TS2322:   Type '{ value: unknown; }' is not assignable to type 'OptionalProperty<T>'.
+    }
+    
+    function mixedInference<T extends { input: (value: any) => void; output: any }>(value: T) {
+        const result: MixedInference<T> = value; // Error: input and output can require incompatible inferences.
+              ~~~~~~
+!!! error TS2322: Type 'T' is not assignable to type 'MixedInference<T>'.
+!!! error TS2322:   Type '{ input: (value: any) => void; output: any; }' is not assignable to type 'MixedInference<T>'.
+    }
+    
+    interface InvariantInferencePattern<T> {
+        input: (value: T) => void;
+        output: T;
+    }
+    
+    type InvariantInference<T> = T extends InvariantInferencePattern<infer R> ? T | R : never;
+    
+    function invariantInference<T extends InvariantInferencePattern<any>>(value: T) {
+        const result: InvariantInference<T> = value; // Error: invariant type-argument inference must not hide mixed positions.
+              ~~~~~~
+!!! error TS2322: Type 'T' is not assignable to type 'InvariantInference<T>'.
+!!! error TS2322:   Type 'InvariantInferencePattern<any>' is not assignable to type 'InvariantInference<T>'.
+    }
+    
+    enum NumericInferencePattern {
+        value
+    }
+    
+    type NumericInference<T> = T extends (value: infer P) => NumericInferencePattern ? T | P : never;
+    
+    function numericInference<T extends (value: unknown) => number>(value: T) {
+        const result: NumericInference<T> = value; // Error: number-to-enum compatibility does not cover every numeric literal.
+              ~~~~~~
+!!! error TS2322: Type 'T' is not assignable to type 'NumericInference<T>'.
+!!! error TS2322:   Type '(value: unknown) => number' is not assignable to type 'NumericInference<T>'.
+    }
+    
+    function unboundedArity<T extends (...args: any[]) => unknown>(value: T) {
+        const result: SingleParameter<T> = value; // Error: subtypes can require multiple arguments.
+              ~~~~~~
+!!! error TS2322: Type 'T' is not assignable to type 'SingleParameter<T>'.
+!!! error TS2322:   Type '(...args: any[]) => unknown' is not assignable to type 'SingleParameter<T>'.
+    }
+    
+    function optionalParameter<T extends (value?: any) => unknown>(value: T) {
+        const result: OptionalParameter<T> = value; // Error: subtypes can require an argument.
+              ~~~~~~
+!!! error TS2322: Type 'T' is not assignable to type 'OptionalParameter<T>'.
+!!! error TS2322:   Type '(value?: any) => unknown' is not assignable to type 'OptionalParameter<T>'.
+    }
+    
+    function intersectionPattern<T extends { value: any; method(value: any): unknown }>(value: T) {
+        const result: IntersectionPattern<T> = value; // Error
+              ~~~~~~
+!!! error TS2322: Type 'T' is not assignable to type 'IntersectionPattern<T>'.
+!!! error TS2322:   Type '{ value: any; method(value: any): unknown; }' is not assignable to type 'IntersectionPattern<T>'.
+    }
+    
+    function primitiveBoundary<T extends { toString(): string }>(value: T) {
+        const result: PrimitiveBoundary<T> = value; // Error: structural object constraints admit primitives.
+              ~~~~~~
+!!! error TS2322: Type 'T' is not assignable to type 'PrimitiveBoundary<T>'.
+!!! error TS2322:   Type '{ toString(): string; }' is not assignable to type 'PrimitiveBoundary<T>'.
+    }
+    
+    class Nominal<T> {
+        private brand!: void;
+        value!: T;
+    }
+    
+    function nominalInference<T extends { value: unknown }>(value: T) {
+        const result: T extends Nominal<infer P> ? T | P : never = value; // Error
+              ~~~~~~
+!!! error TS2322: Type 'T' is not assignable to type 'T extends Nominal<infer P> ? P | T : never'.
+!!! error TS2322:   Type '{ value: unknown; }' is not assignable to type 'T extends Nominal<infer P> ? P | T : never'.
+    }
+    
+    type FilteredKeys<T, U> = T extends U ? never : T;
+    type DecoratedKeys<T extends string, U> = T extends U ? never : `key-${T}`;
+    
+    function filtering<T extends string, U>(value: FilteredKeys<T, U>) {
+        const excluded: Exclude<T, U> = value;
+        const remapped: DecoratedKeys<FilteredKeys<T, U>, never> = `key-${value}`;
+    }
+    
+    function filteredRemapping<T extends string, U>(value: `key-${Exclude<T, U>}`) {
+        const result: DecoratedKeys<T, U> = value;
+    }
+    
+    type FilteredMap<T extends string, U> = { [K in T as K extends U ? never : K]: unknown };
+    type DecoratedMap<T extends string, U> = { [K in T as K extends U ? never : `key-${K}`]: unknown };
+    
+    function mappedKeys<T extends string, U>(key: Exclude<T, U>, decorated: `key-${Exclude<T, U>}`) {
+        const filtered: keyof FilteredMap<T, U> = key;
+        const remapped: keyof DecoratedMap<T, U> = decorated;
+    }
+    
+    type Recursive<T> = T extends object ? T | { next: Recursive<T> } : T;
+    
+    function recursion<T>(value: T) {
+        const result: Recursive<T> = value;
+    }
+    
+    function subtypeIsNotConstituent<T>(value: T & string) {
+        const result: Extract<T, string> = value; // Error: Extract<unknown, string> is never.
+              ~~~~~~
+!!! error TS2322: Type 'T & string' is not assignable to type 'Extract<T, string>'.
+    }
+    
+    // Concrete instantiations witnessing the rejected assignments.
+    const mixedPair: Pair<"a" | "b"> = { x: "a", y: "b" }; // Error
+          ~~~~~~~~~
+!!! error TS2322: Type '{ x: "a"; y: "b"; }' is not assignable to type '{ x: "a"; y: "a"; } | { x: "b"; y: "b"; }'.
+!!! error TS2322:   Types of property 'y' are incompatible.
+!!! error TS2322:     Type '"b"' is not assignable to type '"a"'.
+    const mixedTuple: Tuple<"a" | "b"> = ["a", "b"]; // Error
+          ~~~~~~~~~~
+!!! error TS2322: Type '["a", "b"]' is not assignable to type '["a", "a"] | ["b", "b"]'.
+!!! error TS2322:   Type '["a", "b"]' is not assignable to type '["a", "a"]'.
+!!! error TS2322:     Type at position 1 in source is not compatible with type at position 1 in target.
+!!! error TS2322:       Type '"b"' is not assignable to type '"a"'.
+    const mixedString: Repeated<"a" | "b"> = "a-b"; // Error
+          ~~~~~~~~~~~
+!!! error TS2322: Type '"a-b"' is not assignable to type '"a-a" | "b-b"'.
+    const emptyConstant: Constant<never> = { a: 1, b: 2 }; // Error
+          ~~~~~~~~~~~~~
+!!! error TS2322: Type '{ a: number; b: number; }' is not assignable to type 'never'.
+    const narrowInference: InferredValue<{ value: "a" }> = "b"; // Error
+          ~~~~~~~~~~~~~~~
+!!! error TS2322: Type '"b"' is not assignable to type '"a"'.
+    const rejectedConstrainedInfer: ConstrainedInfer<{ value: number }> = { value: 1 }; // Error
+          ~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2322: Type '{ value: number; }' is not assignable to type 'never'.
+    const rejectedFixedParameter: SpecificParameter<(value: number) => boolean> = (value: number) => true; // Error
+          ~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2322: Type '(value: number) => boolean' is not assignable to type 'never'.
+    const rejectedMethod: SpecificMethod<{ method(value: number): boolean }> = { method: (value: number) => true }; // Error
+          ~~~~~~~~~~~~~~
+!!! error TS2322: Type '{ method: (value: number) => boolean; }' is not assignable to type 'never'.
+    const rejectedOptionalProperty: OptionalProperty<{ optional: number; value: boolean }> = { optional: 1, value: true }; // Error
+          ~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2322: Type '{ optional: number; value: boolean; }' is not assignable to type 'never'.
+    const rejectedMixedInference: MixedInference<{ input(value: number): void; output: string }> = { input: (value: number) => {}, output: "" }; // Error
+          ~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2322: Type '{ input: (value: number) => void; output: string; }' is not assignable to type 'never'.
+    const rejectedInvariantInference: InvariantInference<{ input: (value: number) => void; output: string }> = { input: (value: number) => {}, output: "" }; // Error
+          ~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2322: Type '{ input: (value: number) => void; output: string; }' is not assignable to type 'never'.
+    const rejectedNumericInference: NumericInference<(value: unknown) => 123> = (value: unknown) => 123; // Error
+          ~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2322: Type '(value: unknown) => number' is not assignable to type 'never'.
+    const rejectedArity: SingleParameter<(left: number, right: number) => void> = (left: number, right: number) => {}; // Error
+          ~~~~~~~~~~~~~
+!!! error TS2322: Type '(left: number, right: number) => void' is not assignable to type 'never'.
+    const rejectedOptionalParameter: OptionalParameter<(value: string) => void> = (value: string) => {}; // Error
+          ~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2322: Type '(value: string) => void' is not assignable to type 'never'.
+    const rejectedIntersection: IntersectionPattern<{ value: boolean; method(value: number): unknown }> = { value: true, method: (value: number) => {} }; // Error
+          ~~~~~~~~~~~~~~~~~~~~
+!!! error TS2322: Type '{ value: boolean; method: (value: number) => void; }' is not assignable to type 'never'.
+    const rejectedPrimitive: PrimitiveBoundary<string> = ""; // Error
+          ~~~~~~~~~~~~~~~~~
+!!! error TS2322: Type '""' is not assignable to type 'never'.
+    
+    declare const overloadedParameter: {
+        (value: string): void;
+        (left: number, right: number): void;
+    };
+    const parameterConstraint: (value: any) => unknown = overloadedParameter;
+    const rejectedOverloadedParameter: Inferred<typeof overloadedParameter> = overloadedParameter; // Error
+          ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2322: Type '{ (value: string): void; (left: number, right: number): void; }' is not assignable to type 'never'.
+    const rejectedOverloadedNonDistributive: InferredNonDistributive<typeof overloadedParameter> = overloadedParameter; // Error
+          ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2322: Type '{ (value: string): void; (left: number, right: number): void; }' is not assignable to type 'never'.
+    
+    declare const overloadedReturn: {
+        (): string;
+        (value: number): number;
+    };
+    const returnConstraint: () => unknown = overloadedReturn;
+    const rejectedOverloadedReturn: InferredReturn<typeof overloadedReturn> = overloadedReturn; // Error
+          ~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2322: Type '{ (): string; (value: number): number; }' is not assignable to type 'never'.
+    
+    declare const overloadedMethod: {
+        method(value: string): never;
+        method(left: number, right: number): void;
+    };
+    const methodConstraint: { method(value: unknown): never } = overloadedMethod;
+    const rejectedOverloadedMethod: InferredMethod<typeof overloadedMethod> = overloadedMethod; // Error
+          ~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2322: Type '{ method(value: string): never; method(left: number, right: number): void; }' is not assignable to type 'never'.
+    
+    declare const neverParameterMethod: { method(value: never): never };
+    const neverMethodConstraint: { method(value: unknown): never } = neverParameterMethod;
+    const rejectedMethodReturn: InferredMethodReturn<typeof neverParameterMethod> = neverParameterMethod; // Error
+          ~~~~~~~~~~~~~~~~~~~~
+!!! error TS2322: Type '{ method(value: never): never; }' is not assignable to type 'never'.
+    
