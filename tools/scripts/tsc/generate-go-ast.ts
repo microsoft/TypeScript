@@ -1486,8 +1486,6 @@ export default function main(force = false) {
     verifyNoDuplicateBases();
     verifyNodeBaseAtOffsetZero();
 
-    console.log("Generating Go AST code...");
-
     const outPath = path.join(ROOT, outputs[0]);
     writeAndFormat(outPath, () => generate() + "\n", force);
 

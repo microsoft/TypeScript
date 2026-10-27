@@ -243,7 +243,6 @@ export default async function generateUnicode(force = false, outDir = path.resol
     const identifierOutput = new GeneratedFile(path.join(outDir, outputs[1]), inputs);
     const generatedFiles = [caseOutput, identifierOutput];
     if (generatedFiles.every(file => file.isCurrent(force))) {
-        console.log("Unicode tables are up to date.");
         return;
     }
 

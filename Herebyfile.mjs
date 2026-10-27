@@ -15,7 +15,10 @@ import {
     styleText,
 } from "node:util";
 import * as tar from "tar";
-import { xSync } from "tinyexec";
+import {
+    x,
+    xSync,
+} from "tinyexec";
 import {
     enableFileFingerprintCache,
     invalidateFileFingerprints,
@@ -316,7 +319,10 @@ export const generateGo = task({
 });
 
 const getGoGenerateEnvironment = memoize(async () => {
-    const { stdout } = await runOutput("go", ["env", "-json", "GOOS", "GOARCH", "GOROOT"], { cwd: "./tsc" });
+    const { stdout } = await x("go", ["env", "-json", "GOOS", "GOARCH", "GOROOT"], {
+        throwOnError: true,
+        nodeOptions: { cwd: "./tsc" },
+    });
     return /** @type {{ GOOS: string; GOARCH: string; GOROOT: string }} */ (JSON.parse(stdout));
 });
 
@@ -608,9 +614,6 @@ async function runGenerateLSP() {
         await generate();
         output.markCurrent();
     }
-    else {
-        console.log("LSP bindings are up to date.");
-    }
     const typeScriptOutput = new GeneratedFile(path.join(__dirname, lspOutputs[1]), [
         __filename,
         path.join(directory, "generate.mts"),
@@ -741,7 +744,6 @@ async function runGenerateVendor() {
     }
     const manifest = new GeneratedFile(path.join(dest, "package.json"), [__filename, path.join(src, "package.json")]);
     if (manifest.isCurrent(!!options.force)) {
-        console.log("Vendored vscode-jsonrpc files are up to date.");
         return;
     }
     manifest.invalidate();

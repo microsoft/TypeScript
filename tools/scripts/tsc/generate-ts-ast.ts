@@ -1831,7 +1831,6 @@ export const outputs = [
 ] as const;
 
 export default function main(force = false) {
-    console.log("Generating TS AST code...");
     nodeBaseFieldNames = new Set(api.bases().find(base => base.name === "NodeBase")?.fields.filter(field => !field.noTS).map(field => field.name) ?? []);
     goOnlyBases = new Set(api.bases().filter(base => base.isGoOnly()).map(base => base.key));
     tsVariants = computeTsVariants();

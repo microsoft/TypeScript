@@ -16,6 +16,25 @@ import {
     withFileFingerprintWrites,
 } from "./utils.mts";
 
+test("unchanged generators produce no output", async context => {
+    const generators = [
+        ["Go AST", (await import("../tsc/generate-go-ast.ts")).default],
+        ["TypeScript AST", (await import("../tsc/generate-ts-ast.ts")).default],
+        ["encoder", (await import("../tsc/generate-encoder.ts")).default],
+        ["enums", (await import("../tsc/generate-enums.ts")).default],
+        ["Unicode", (await import("../../../tsc/internal/stringutil/_scripts/generate-unicode-data.mts")).default],
+        ["sync API", (await import("../../../packages/typescript/scripts/generateSync.ts")).generateSync],
+    ] as const;
+    for (const [name, generate] of generators) {
+        await context.test(name, async context => {
+            context.mock.method(GeneratedFile.prototype, "isCurrent", () => true);
+            const log = context.mock.method(console, "log", () => {});
+            await generate();
+            assert.equal(log.mock.callCount(), 0);
+        });
+    }
+});
+
 test("Go AST generator validates bases after schema reloads", async context => {
     const { default: generateGoAST } = await import("../tsc/generate-go-ast.ts");
     const schema = await import("../tsc/schema.ts");

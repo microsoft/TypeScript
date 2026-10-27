@@ -508,7 +508,6 @@ export default async function generateEnums(force = false) {
     const generatedGoFile = new GeneratedFile(enumValuesGeneratedGoPath, [...inputs, ...enumDefs.map(def => path.join(ROOT, def.goFile))]);
     const generatedFiles = [generatedGoFile, ...enumFiles.flatMap(({ typeFile, runtimeFile }) => [typeFile, runtimeFile])];
     if (generatedFiles.every(file => file.isCurrent(force))) {
-        console.log("Enums are up to date.");
         return;
     }
     const ts = await import("typescript");

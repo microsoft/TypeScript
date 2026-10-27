@@ -8,6 +8,26 @@ import cache, { type CacheHost } from "./cache.mts";
 import { GeneratedFile } from "./generatedFile.mts";
 import { enableFileFingerprintCache } from "./utils.mts";
 
+test("cached commands produce no output", async context => {
+    const directory = fs.mkdtempSync(path.join(os.tmpdir(), "tsgo-cache-quiet-"));
+    context.after(() => fs.rmSync(directory, { recursive: true, force: true }));
+    const options = {
+        cwd: directory,
+        inputs: [],
+        outputs: ["output.txt"],
+        commands: [["generate"]],
+    };
+    const host: CacheHost = {
+        async run() {
+            fs.writeFileSync(path.join(directory, "output.txt"), "generated");
+        },
+    };
+    assert.equal(await cache(options, host), false);
+    const log = context.mock.method(console, "log", () => {});
+    assert.equal(await cache(options, host), true);
+    assert.equal(log.mock.callCount(), 0);
+});
+
 test("command cache snapshots and generated files share invocation fingerprints", async context => {
     const directory = fs.mkdtempSync(path.join(os.tmpdir(), "tsgo-fingerprint-"));
     context.after(() => fs.rmSync(directory, { recursive: true, force: true }));

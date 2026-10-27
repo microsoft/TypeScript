@@ -117,6 +117,7 @@ Generation is owned by `Herebyfile.mjs`; Go directives forward to the same
 to bypass incremental caches. `generate` includes every generator and fetches
 the pinned LSP model when its local cache is missing or stale. Use
 `generate:go` for the narrower scope of `go generate ./...` in the `tsc` module.
+Up-to-date generators emit no status messages.
 
 `npx hereby build` runs `generate` before compiling; a separate generation step
 is not needed. The API and package build tasks share this prerequisite, and

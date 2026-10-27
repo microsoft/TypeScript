@@ -2068,8 +2068,6 @@ export const outputs = [
 ] as const;
 
 export default function main(force = false) {
-    console.log("Generating encoder/decoder code...");
-
     writeAndFormat(
         path.join(ROOT, outputs[0]),
         generateGoEncoder,
@@ -2099,8 +2097,6 @@ export default function main(force = false) {
         generateTSNodeGenerated,
         force,
     );
-
-    console.log("Done!");
 }
 
 if (process.argv[1] === fileURLToPath(import.meta.url)) {
