@@ -14,6 +14,13 @@ import (
 
 //go:generate npx hereby generate:checker
 
+type RelationCacheSizes struct {
+	Assignable    int `json:"assignable"`
+	Identity      int `json:"identity"`
+	Subtype       int `json:"subtype"`
+	StrictSubtype int `json:"strictSubtype"`
+}
+
 // ParseFlags
 
 type ParseFlags uint32

@@ -857,6 +857,27 @@ func (p *Program) GetProgramDiagnostics() []*ast.Diagnostic {
 	))
 }
 
+func (p *Program) GetOptionsDiagnostics() []*ast.Diagnostic {
+	configFiles := map[tspath.PathKey]*ast.SourceFile{}
+	addConfig := func(config *tsoptions.ParsedCommandLine) {
+		if config != nil && config.ConfigFile != nil {
+			configFiles[config.ConfigFile.SourceFile.PathKey()] = config.ConfigFile.SourceFile
+		}
+	}
+	addConfig(p.CommandLine())
+	p.RangeResolvedProjectReference(func(_ tspath.PathKey, config *tsoptions.ParsedCommandLine, _ *tsoptions.ParsedCommandLine, _ int) bool {
+		addConfig(config)
+		return true
+	})
+	result := core.Filter(p.GetProgramDiagnostics(), func(d *ast.Diagnostic) bool {
+		return d.File() == nil || configFiles[d.File().PathKey()] != nil
+	})
+	for _, file := range configFiles {
+		result = append(result, p.includeProcessor.getDiagnostics(p).GetDiagnosticsForFile(file)...)
+	}
+	return SortAndDeduplicateDiagnostics(result)
+}
+
 func (p *Program) collectContentMapperOptionDiagnostics() {
 	project := p.ContentMapperProject()
 	if project == nil {

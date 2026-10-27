@@ -42,6 +42,7 @@ import {
 import { assertNever } from "../../internal/utils.ts";
 import {
     encodeNode,
+    sourceFileResponseToUint8Array,
     uint8ArrayToBase64,
 } from "../node/encoder.ts";
 import {
@@ -95,6 +96,7 @@ import type {
     ModuleResolutionSpec,
     PackageId,
     ParsedCommandLine,
+    ProgramStatisticsResponse,
     ProjectId,
     ProjectReference,
     ProjectResponse,
@@ -102,6 +104,7 @@ import type {
     RawCompilerOptions,
     ReadConfigFileResponse,
     ReconfigureSnapshotProgramParams as ProtocolReconfigureSnapshotProgramParams,
+    RelationCacheSizes,
     ResolutionMode,
     ResolvedModule,
     ResolvedTypeReferenceDirective,
@@ -241,6 +244,7 @@ export type {
     ProjectReference,
     RawCompilerOptions,
     ReadConfigFileResponse,
+    RelationCacheSizes,
     RequestTiming,
     ResolutionMode,
     ResolvedModule,
@@ -343,7 +347,6 @@ export interface TranspileOutput {
 // @sync-only-start
 // export { all, defer, type APIRequestGenerator, type AnyAPIRequestGenerator, type AllAPIRequestGenerator, type DeferredAPIRequestGenerator, type ExecutedGeneratorsResults } from "./generatorSupport.ts";
 // import {executeRequestGenerators, type ExecutedGeneratorsResults, type AnyAPIRequestGenerator} from "./generatorSupport.ts";
-// import { sourceFileResponseToUint8Array } from "../node/encoder.ts";
 // @sync-only-end
 
 export class API<FromLSP extends boolean = false> implements FormatDiagnosticsHost {
@@ -1712,6 +1715,12 @@ export class LanguageService {
     }
 }
 
+export interface ResolvedProjectReference {
+    commandLine: ParsedCommandLine;
+    sourceFile: SourceFile;
+    references?: readonly (ResolvedProjectReference | undefined)[] | undefined;
+}
+
 export class Program<Id extends ProjectId = ProjectId> implements FormatDiagnosticsHost {
     /** @internal */
     readonly snapshotId: number;
@@ -1722,6 +1731,7 @@ export class Program<Id extends ProjectId = ProjectId> implements FormatDiagnost
     private readonly sourceFileMetadataCache = new Map<PathKey, Promise<SourceFileMetadata | undefined>>();
     private ownedSnapshot: Snapshot | undefined;
     private disposePromise: Promise<void> | undefined;
+    private resolvedProjectReferences: Promise<readonly (ResolvedProjectReference | undefined)[] | undefined> | undefined;
 
     private get client(): Client {
         return this.project.api.client;
@@ -1771,6 +1781,82 @@ export class Program<Id extends ProjectId = ProjectId> implements FormatDiagnost
 
     getCompilerOptions(): CompilerOptions {
         return this.project.parsedCommandLine.options;
+    }
+
+    async getRootFileNames(): Promise<readonly RootedFilePath[]> {
+        return this.project.parsedCommandLine.fileNames;
+    }
+
+    async getProjectReferences(): Promise<readonly ProjectReference[] | undefined> {
+        return this.project.parsedCommandLine.projectReferences;
+    }
+
+    async getTypeChecker(): Promise<Checker> {
+        await this.getStatistics();
+        return this.project.checker;
+    }
+
+    async getSourceFiles(): Promise<readonly SourceFile[]> {
+        const files: SourceFile[] = [];
+        for (const fileName of await this.getSourceFileNames()) {
+            const file = await this.getSourceFile(fileName);
+            if (!file) {
+                throw new Error(`Program source file '${fileName}' could not be loaded`);
+            }
+            files.push(file);
+        }
+        return files;
+    }
+
+    private async getStatistics(): Promise<ProgramStatisticsResponse> {
+        return this.client.apiRequest("getProgramStatistics", {
+            snapshot: this.snapshotId,
+            project: this.project.handle,
+        });
+    }
+
+    async getIdentifierCount(): Promise<number> {
+        return (await this.getStatistics()).identifierCount;
+    }
+
+    async getInstantiationCount(): Promise<number> {
+        return (await this.getStatistics()).instantiationCount;
+    }
+
+    async getNodeCount(): Promise<number> {
+        return (await this.getStatistics()).nodeCount;
+    }
+
+    async getSymbolCount(): Promise<number> {
+        return (await this.getStatistics()).symbolCount;
+    }
+
+    async getTypeCount(): Promise<number> {
+        return (await this.getStatistics()).typeCount;
+    }
+
+    async getRelationCacheSizes(): Promise<RelationCacheSizes> {
+        return (await this.getStatistics()).relationCacheSizes;
+    }
+
+    getResolvedProjectReferences(): Promise<readonly (ResolvedProjectReference | undefined)[] | undefined> {
+        return this.resolvedProjectReferences ??= this.fetchResolvedProjectReferences();
+    }
+
+    private async fetchResolvedProjectReferences(): Promise<readonly (ResolvedProjectReference | undefined)[] | undefined> {
+        const data = await this.client.apiRequest("getResolvedProjectReferences", {
+            snapshot: this.snapshotId,
+            project: this.project.handle,
+        });
+        const projects: ResolvedProjectReference[] = data.projects.map(project => ({
+            commandLine: project.commandLine,
+            sourceFile: new RemoteSourceFile(sourceFileResponseToUint8Array(project.sourceFile)!, this.decoder, undefined, this.project.api) as unknown as SourceFile,
+        }));
+        const resolve = (indices: readonly number[] | null | undefined): (ResolvedProjectReference | undefined)[] | undefined => indices?.map(index => index === 0 ? undefined : projects[index - 1]);
+        for (let i = 0; i < projects.length; i++) {
+            projects[i].references = resolve(data.projects[i].references);
+        }
+        return resolve(data.references);
     }
 
     async getSourceFile(file: DocumentIdentifier): Promise<SourceFile | undefined> {
@@ -2066,6 +2152,14 @@ export class Program<Id extends ProjectId = ProjectId> implements FormatDiagnost
      */
     async getProgramDiagnostics(): Promise<readonly Diagnostic[]> {
         const data = await this.client.apiRequest("getProgramDiagnostics", {
+            snapshot: this.snapshotId,
+            project: this.project.handle,
+        });
+        return data ?? [];
+    }
+
+    async getOptionsDiagnostics(): Promise<readonly Diagnostic[]> {
+        const data = await this.client.apiRequest("getOptionsDiagnostics", {
             snapshot: this.snapshotId,
             project: this.project.handle,
         });

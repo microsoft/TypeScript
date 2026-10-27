@@ -2650,6 +2650,133 @@ describe("SourceFile", { concurrency }, () => {
         );
     });
 
+    test("Program accessors distinguish root files from source files and reuse the checker", async () => {
+        await using api = spawnAPI({
+            "/src/main.ts": `import { value } from "./dependency"; export const result = value;`,
+            "/src/dependency.ts": `export const value = 1;`,
+        });
+        await using program = await api.createProgram(["/src/main.ts"], { noLib: true });
+        assert.deepEqual(await program.getRootFileNames(), ["/src/main.ts"]);
+        const files = await program.getSourceFiles();
+        assert.deepEqual(files.map(file => file.fileName), ["/src/dependency.ts", "/src/main.ts"]);
+        assert.strictEqual(files[1], await program.getSourceFile("/src/main.ts"));
+        const checker = await program.getTypeChecker();
+        assert.strictEqual(await program.getTypeChecker(), checker);
+        assert.ok(await checker.getSymbolAtLocation(cast(files[1].statements[1], isVariableStatement).declarationList.declarations[0].name));
+        assert.equal(await program.getProjectReferences(), undefined);
+        assert.equal(await program.getResolvedProjectReferences(), undefined);
+    });
+
+    test("Program counters reflect work on its type checker without forcing diagnostics", async () => {
+        await using api = spawnAPI({
+            "/src/main.ts": `type Box<T> = { value: T };
+export const box: Box<string> = { value: "hello" };
+export const other: { value: string } = box;`,
+        });
+        await using program = await api.createProgram(["/src/main.ts"], { noLib: true });
+        const identifiers = await program.getIdentifierCount();
+        const nodes = await program.getNodeCount();
+        const symbols = await program.getSymbolCount();
+        const types = await program.getTypeCount();
+        const instantiations = await program.getInstantiationCount();
+        const relations = await program.getRelationCacheSizes();
+        assert.ok(identifiers > 0);
+        assert.ok(nodes > identifiers);
+        assert.ok(symbols > 0);
+        assert.ok(types > 0);
+        assert.equal(instantiations, 0);
+        assert.deepEqual(relations, { assignable: 0, identity: 0, subtype: 0, strictSubtype: 0 });
+
+        const file = (await program.getSourceFile("/src/main.ts"))!;
+        const checker = await program.getTypeChecker();
+        const declaration = cast(file.statements[1], isVariableStatement).declarationList.declarations[0];
+        const type = await checker.getTypeAtLocation(declaration.name);
+        await type.getProperties();
+        assert.ok(await program.getInstantiationCount() > instantiations);
+        assert.ok(await program.getTypeCount() > types);
+        assert.ok(await program.getSymbolCount() >= symbols);
+        const other = cast(file.statements[2], isVariableStatement).declarationList.declarations[0];
+        await checker.isTypeAssignableTo(type, await checker.getTypeAtLocation(other.name));
+        assert.ok((await program.getRelationCacheSizes()).assignable > relations.assignable);
+        assert.equal(await program.getIdentifierCount(), identifiers);
+        assert.equal(await program.getNodeCount(), nodes);
+    });
+
+    test("Program accessors handle empty programs and missing root files", async () => {
+        await using api = spawnAPI({});
+        await using empty = await api.createProgram([], { noLib: true });
+        assert.deepEqual(await empty.getRootFileNames(), []);
+        assert.deepEqual(await empty.getSourceFiles(), []);
+        assert.equal(await empty.getNodeCount(), 0);
+        assert.equal(await empty.getIdentifierCount(), 0);
+        assert.equal(await empty.getProjectReferences(), undefined);
+        assert.equal(await empty.getResolvedProjectReferences(), undefined);
+        assert.deepEqual(await empty.getOptionsDiagnostics(), []);
+
+        await using noReferences = await api.createProgram([], { noLib: true }, { projectReferences: [] });
+        assert.deepEqual(await noReferences.getProjectReferences(), []);
+        assert.deepEqual(await noReferences.getResolvedProjectReferences(), []);
+
+        await using missing = await api.createProgram(["/missing.ts"], { noLib: true });
+        assert.deepEqual(await missing.getRootFileNames(), ["/missing.ts"]);
+        assert.deepEqual(await missing.getSourceFiles(), []);
+        assert.ok((await missing.getOptionsDiagnostics()).some(diagnostic => diagnostic.code === 6053));
+    });
+
+    test("Program options diagnostics exclude source-file and config parsing diagnostics", async () => {
+        await using api = spawnAPI({
+            "/tsconfig.json": JSON.stringify({
+                compilerOptions: { noLib: true, strictNullChecks: false, exactOptionalPropertyTypes: true, unknownOption: true },
+                files: ["src/main.ts"],
+            }),
+            "/src/main.ts": `/// <reference path="./missing.ts" />
+const value: string = 1;`,
+        });
+        const snapshot = await api.createSnapshot({ openProjects: ["/tsconfig.json"] });
+        const program = snapshot.getConfiguredProject("/tsconfig.json")!.program;
+        const diagnostics = await program.getOptionsDiagnostics();
+        assert.ok(diagnostics.some(diagnostic => diagnostic.code === 5052));
+        assert.ok(diagnostics.every(diagnostic => !diagnostic.fileName || diagnostic.fileName === "/tsconfig.json"));
+        assert.ok(!(diagnostics.some(diagnostic => diagnostic.code === 5023 || diagnostic.code === 6053 || diagnostic.code === 2322)));
+        assert.ok((await program.getConfigFileParsingDiagnostics()).some(diagnostic => diagnostic.code === 5023));
+    });
+
+    test("Program resolved project references preserve missing, nested, shared, and circular references", async () => {
+        await using api = spawnAPI({
+            "/tsconfig.json": JSON.stringify({ files: [], references: [{ path: "./a" }, { path: "./missing" }, { path: "./b" }, { path: "./a" }] }),
+            "/a/tsconfig.json": JSON.stringify({ compilerOptions: { composite: true }, files: ["index.ts"], references: [{ path: "../b" }] }),
+            "/a/index.ts": "export const a = 1;",
+            "/b/tsconfig.json": JSON.stringify({ compilerOptions: { composite: true }, files: ["index.ts"], references: [{ path: "../a", circular: true }, { path: "../missing" }] }),
+            "/b/index.ts": "export const b = 1;",
+        });
+        const snapshot = await api.createSnapshot({ openProjects: ["/tsconfig.json"] });
+        const program = snapshot.getConfiguredProject("/tsconfig.json")!.program;
+        const references = await program.getProjectReferences();
+        assert.equal(references?.length, 4);
+        const resolved = await program.getResolvedProjectReferences();
+        assert.equal(resolved?.length, 4);
+        assert.equal(resolved![1], undefined);
+        const a = resolved![0]!;
+        const b = resolved![2]!;
+        assert.strictEqual(resolved![3], a);
+        assert.strictEqual(a.references![0], b);
+        assert.strictEqual(b.references![0], a);
+        assert.equal(b.references![1], undefined);
+        assert.equal(a.sourceFile.fileName, "/a/tsconfig.json");
+        assert.equal(a.commandLine.options.composite, true);
+        assert.deepEqual(a.commandLine.fileNames, ["/a/index.ts"]);
+        assert.strictEqual((await program.getResolvedProjectReferences())![0], a);
+
+        await using synthetic = await api.createProgram([], { noLib: true }, {
+            projectReferences: [{ path: "/a/tsconfig.json" }, { path: "/missing/tsconfig.json" }],
+        });
+        assert.equal((await synthetic.getProjectReferences())!.length, 2);
+        const syntheticResolved = await synthetic.getResolvedProjectReferences();
+        assert.equal(syntheticResolved!.length, 2);
+        assert.equal(syntheticResolved![0]!.sourceFile.fileName, "/a/tsconfig.json");
+        assert.equal(syntheticResolved![1], undefined);
+    });
+
     test("getSourceFileNames returns all program files, not just root files", async () => {
         await using api = spawnAPI({
             "/tsconfig.json": JSON.stringify({
