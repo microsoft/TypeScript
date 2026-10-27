@@ -94,12 +94,12 @@ const A = object<Something>()({
   fields: () => ({
 >fields : () => any
 >() => ({    a: field({      type: A,      resolve() {        return {          foo: 100,        };      },    }),  }) : () => any
->({    a: field({      type: A,      resolve() {        return {          foo: 100,        };      },    }),  }) : { a: Field<unknown, string>; }
->{    a: field({      type: A,      resolve() {        return {          foo: 100,        };      },    }),  } : { a: Field<unknown, string>; }
+>({    a: field({      type: A,      resolve() {        return {          foo: 100,        };      },    }),  }) : { a: Field<Something, "a">; }
+>{    a: field({      type: A,      resolve() {        return {          foo: 100,        };      },    }),  } : { a: Field<Something, "a">; }
 
     a: field({
->a : Field<unknown, string>
->field({      type: A,      resolve() {        return {          foo: 100,        };      },    }) : Field<unknown, string>
+>a : Field<Something, "a">
+>field({      type: A,      resolve() {        return {          foo: 100,        };      },    }) : Field<Something, "a">
 >field : <Source, Type extends ObjectType<any>, Key extends string>(field: FieldFuncArgs<Source, Type>) => Field<Source, Key>
 >{      type: A,      resolve() {        return {          foo: 100,        };      },    } : { type: any; resolve(): { foo: number; }; }
 
