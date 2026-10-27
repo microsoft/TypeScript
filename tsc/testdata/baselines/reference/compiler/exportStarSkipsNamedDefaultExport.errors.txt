@@ -1,0 +1,24 @@
+/d.ts(1,10): error TS2305: Module '"./c"' has no exported member 'I'.
+
+
+==== /a.ts (0 errors) ====
+    interface I {}
+    export default I;
+    export interface J {}
+    
+==== /b.ts (0 errors) ====
+    export {};
+    declare module './a' {
+        export default interface I { x: number; }
+    }
+    
+==== /c.ts (0 errors) ====
+    export * from "./a";
+    
+==== /d.ts (1 errors) ====
+    import { I, J } from "./c";
+             ~
+!!! error TS2305: Module '"./c"' has no exported member 'I'.
+    export const i: I = { x: 0 };
+    export const j: J = {};
+    
