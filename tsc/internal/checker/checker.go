@@ -20294,9 +20294,10 @@ func (c *Checker) findResolutionCycleStartIndex(target TypeSystemEntity, propert
 	for i := c.typeResolutionTop - 1; i >= c.resolutionStart; i = int(c.resolutions[i].prevTypeResolution) - 1 {
 		resolution := &c.resolutions[i].typeResolution
 		if c.typeResolutionHasProperty(resolution) {
-			// Only now does the search depend on the result, which was set
-			// before its computation finished.
-			if c.memoActive() {
+			// The result was set before its computation finished, which
+			// hides a cycle below it. Only then does the search depend on
+			// the result.
+			if c.memoActive() && c.findResolutionBelow(i, target, propertyName) {
 				if p := c.typeResolutionMemo(resolution); p != nil {
 					c.observeCell(p)
 				}
@@ -20308,6 +20309,18 @@ func (c *Checker) findResolutionCycleStartIndex(target TypeSystemEntity, propert
 		}
 	}
 	return -1
+}
+
+// findResolutionBelow reports whether a type resolution of target below the
+// one at index i is in progress.
+func (c *Checker) findResolutionBelow(i int, target TypeSystemEntity, propertyName TypeSystemPropertyName) bool {
+	for i = int(c.resolutions[i].prevTypeResolution) - 1; i >= c.resolutionStart; i = int(c.resolutions[i].prevTypeResolution) - 1 {
+		r := &c.resolutions[i].typeResolution
+		if r.target == target && r.propertyName == propertyName {
+			return true
+		}
+	}
+	return false
 }
 
 // typeResolutionHasProperty reports whether a resolution on the stack already
