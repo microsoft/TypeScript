@@ -6009,6 +6009,9 @@ func (c *Checker) checkVariableLikeDeclaration(node *ast.Node) {
 			// variable renaming in function type notation is confusing,
 			// so we forbid it even if noUnusedLocals is not enabled
 			c.renamedBindingElementsInTypes = append(c.renamedBindingElementsInTypes, node)
+			// Still resolve the type like the end of this function does for every other declaration,
+			// so implicit any errors are reported by checking instead of by whatever asks for the type later
+			c.getTypeOfSymbol(c.getSymbolOfDeclaration(node))
 			return
 		}
 		if ast.IsObjectBindingPattern(node.Parent) && hasDotDotDotToken(node) && c.languageVersion < LanguageFeatureMinimumTarget.ObjectSpreadRest {
@@ -15735,9 +15738,11 @@ func (c *Checker) resolveExternalModule(
 			}
 			return c.tryResolvePatternAmbientModule(c.getMergedSymbol(sourceFile.Symbol), moduleReference, importAttributesType)
 		}
-		patternAmbientModule := c.tryResolvePatternAmbientModule(nil /*resolvedSymbol*/, moduleReference, importAttributesType)
-		if patternAmbientModule != nil {
-			return patternAmbientModule
+		if !c.isEmptyObjectType(importAttributesType) {
+			patternAmbientModule := c.tryResolvePatternAmbientModule(nil /*resolvedSymbol*/, moduleReference, importAttributesType)
+			if patternAmbientModule != nil {
+				return patternAmbientModule
+			}
 		}
 		if errorNode != nil && moduleNotFoundError != nil && !isSideEffectImport(errorNode) {
 			c.error(errorNode, diagnostics.File_0_is_not_a_module, resolvedModule.ResolvedFileName)
