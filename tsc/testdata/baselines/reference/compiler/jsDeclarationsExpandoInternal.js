@@ -38,6 +38,11 @@ PublicExportedBinding.args = { text: 'bind text' };
 declare function Internal(args: {
     text: string;
 }): JSX.Element;
+declare namespace Internal {
+    var args: {
+        text: string;
+    };
+}
 export declare const PublicInternalBinding: typeof Internal;
 /**
  * @param {Object} args
@@ -59,7 +64,7 @@ export {};
 
 
 src/main.d.ts(7,5): error TS2503: Cannot find namespace 'JSX'.
-src/main.d.ts(15,5): error TS2503: Cannot find namespace 'JSX'.
+src/main.d.ts(20,5): error TS2503: Cannot find namespace 'JSX'.
 
 
 ==== src/main.d.ts (2 errors) ====
@@ -72,6 +77,11 @@ src/main.d.ts(15,5): error TS2503: Cannot find namespace 'JSX'.
     }): JSX.Element;
         ~~~
 !!! error TS2503: Cannot find namespace 'JSX'.
+    declare namespace Internal {
+        var args: {
+            text: string;
+        };
+    }
     export declare const PublicInternalBinding: typeof Internal;
     /**
      * @param {Object} args
