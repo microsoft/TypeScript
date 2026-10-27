@@ -23,11 +23,13 @@ func (l *LanguageService) ProvideDocumentHighlights(ctx context.Context, documen
 	if err != nil {
 		return lsproto.DocumentHighlightsOrNull{}, err
 	}
-	// Extract highlights for the current file only.
+	// Extract highlights for the current file only. Compare file names rather than
+	// URI strings, since the client may encode the URI differently than we do.
+	fileName := documentUri.FileName()
 	var documentHighlights []*lsproto.DocumentHighlight
 	if result.MultiDocumentHighlights != nil {
 		for _, mh := range *result.MultiDocumentHighlights {
-			if mh.Uri == documentUri {
+			if mh.Uri.FileName() == fileName {
 				documentHighlights = append(documentHighlights, mh.Highlights...)
 			}
 		}
