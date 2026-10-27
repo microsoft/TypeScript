@@ -159,3 +159,7 @@
 !!! error TS2322:   Type 'undefined' is not assignable to type 'string'.
     };
     
+    export const f12: (input: { a: boolean; b?: string }) => string = ({ a, b } = { a: false }) => `${a}${b}`;
+    
+    export const f13 = (input: { a?: number; b?: string }[]) => input.map(({ a, b } = {}) => `${a}${b}`);
+    

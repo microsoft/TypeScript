@@ -354,3 +354,36 @@ export const f11: (input?: { a?: number }[]) => void = ([...[{ a } = {}]] = []) 
 
 };
 
+export const f12: (input: { a: boolean; b?: string }) => string = ({ a, b } = { a: false }) => `${a}${b}`;
+>f12 : (input: { a: boolean; b?: string; }) => string
+>input : { a: boolean; b?: string; }
+>a : boolean
+>b : string | undefined
+>({ a, b } = { a: false }) => `${a}${b}` : ({ a, b }?: { a: boolean; b?: string; }) => string
+>a : boolean
+>b : string | undefined
+>{ a: false } : { a: false; }
+>a : false
+>false : false
+>`${a}${b}` : string
+>a : boolean
+>b : string | undefined
+
+export const f13 = (input: { a?: number; b?: string }[]) => input.map(({ a, b } = {}) => `${a}${b}`);
+>f13 : (input: { a?: number; b?: string; }[]) => string[]
+>(input: { a?: number; b?: string }[]) => input.map(({ a, b } = {}) => `${a}${b}`) : (input: { a?: number; b?: string; }[]) => string[]
+>input : { a?: number; b?: string; }[]
+>a : number | undefined
+>b : string | undefined
+>input.map(({ a, b } = {}) => `${a}${b}`) : string[]
+>input.map : <U>(callbackfn: (value: { a?: number; b?: string; }, index: number, array: { a?: number; b?: string; }[]) => U, thisArg?: any) => U[]
+>input : { a?: number; b?: string; }[]
+>map : <U>(callbackfn: (value: { a?: number; b?: string; }, index: number, array: { a?: number; b?: string; }[]) => U, thisArg?: any) => U[]
+>({ a, b } = {}) => `${a}${b}` : ({ a, b }?: { a?: number; b?: string; }) => string
+>a : number | undefined
+>b : string | undefined
+>{} : {}
+>`${a}${b}` : string
+>a : number | undefined
+>b : string | undefined
+

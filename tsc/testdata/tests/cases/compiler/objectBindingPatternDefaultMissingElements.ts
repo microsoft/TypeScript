@@ -100,3 +100,7 @@ f10({ a: 1 }, ({ a } = {}) => {
 export const f11: (input?: { a?: number }[]) => void = ([...[{ a } = {}]] = []) => {
     const b: string = a;
 };
+
+export const f12: (input: { a: boolean; b?: string }) => string = ({ a, b } = { a: false }) => `${a}${b}`;
+
+export const f13 = (input: { a?: number; b?: string }[]) => input.map(({ a, b } = {}) => `${a}${b}`);

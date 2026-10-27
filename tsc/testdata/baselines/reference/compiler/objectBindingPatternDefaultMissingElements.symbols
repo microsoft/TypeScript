@@ -270,3 +270,27 @@ export const f11: (input?: { a?: number }[]) => void = ([...[{ a } = {}]] = []) 
 
 };
 
+export const f12: (input: { a: boolean; b?: string }) => string = ({ a, b } = { a: false }) => `${a}${b}`;
+>f12 : Symbol(f12, Decl(main.ts, 74, 12))
+>input : Symbol(input, Decl(main.ts, 74, 19))
+>a : Symbol(a, Decl(main.ts, 74, 27))
+>b : Symbol(b, Decl(main.ts, 74, 39))
+>a : Symbol(a, Decl(main.ts, 74, 68))
+>b : Symbol(b, Decl(main.ts, 74, 71))
+>a : Symbol(a, Decl(main.ts, 74, 79))
+>a : Symbol(a, Decl(main.ts, 74, 68))
+>b : Symbol(b, Decl(main.ts, 74, 71))
+
+export const f13 = (input: { a?: number; b?: string }[]) => input.map(({ a, b } = {}) => `${a}${b}`);
+>f13 : Symbol(f13, Decl(main.ts, 76, 12))
+>input : Symbol(input, Decl(main.ts, 76, 20))
+>a : Symbol(a, Decl(main.ts, 76, 28))
+>b : Symbol(b, Decl(main.ts, 76, 40))
+>input.map : Symbol(Array.map, Decl(lib.es5.d.ts, --, --))
+>input : Symbol(input, Decl(main.ts, 76, 20))
+>map : Symbol(Array.map, Decl(lib.es5.d.ts, --, --))
+>a : Symbol(a, Decl(main.ts, 76, 72))
+>b : Symbol(b, Decl(main.ts, 76, 75))
+>a : Symbol(a, Decl(main.ts, 76, 72))
+>b : Symbol(b, Decl(main.ts, 76, 75))
+
