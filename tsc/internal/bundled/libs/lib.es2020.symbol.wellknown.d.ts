@@ -34,7 +34,6 @@ interface RegExp {
      * Matches a string with this regular expression.
      * @param string A string to search within.
      * @returns An iterator of regular expression matches.
-     * @throws A {@linkcode TypeError} if the global (`g`) flag is not set on the RegExp.
      */
     [Symbol.matchAll](string: string): RegExpStringIterator<RegExpExecArray>;
 }
