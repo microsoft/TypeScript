@@ -21,6 +21,9 @@ func TestTextScanBoundaries(t *testing.T) {
 			"", "\n", "\r", "\r\n", "\n\r", "\u2028", "\u2029", "\u0085",
 			"\uFEFF", "\u00E9", "\U0001F980", "\xff", "\xe2", "\xe2\x80",
 			"\xe2\x80\n", "\xf0\x9f", "\xed\xa0\x80",
+			"\n\n\r\r\n\r\n\u2028\u2029",
+			strings.Repeat("x\r\n", 33),
+			strings.Repeat("\u2028\u2029", 33),
 		} {
 			for _, suffix := range []string{"", strings.Repeat("z", 129), "\r\nlast\n"} {
 				text := strings.Repeat("a", prefix) + middle + suffix
@@ -56,6 +59,20 @@ func TestTextScanBoundaries(t *testing.T) {
 	}
 }
 
+func FuzzECMALineStarts(f *testing.F) {
+	for _, text := range []string{
+		"", "\r\n", "\n\r\r\n", "\u2028\u2029",
+		strings.Repeat("a", 127) + "\r\n\u2028\u2029",
+		"\xff\xe2\x80\n\xe2\x80\xa8\xe2\x80\xa9",
+	} {
+		f.Add(text)
+	}
+	f.Fuzz(func(t *testing.T, text string) {
+		want := core.ECMALineStarts(slices.Collect(core.ComputeECMALineStartsSeq(text)))
+		assert.DeepEqual(t, core.ComputeECMALineStarts(text), want)
+	})
+}
+
 func BenchmarkTextScan(b *testing.B) {
 	texts := []filefixture.Fixture{
 		filefixture.FromString("short", "", "const x = 1;"),
@@ -64,6 +81,7 @@ func BenchmarkTextScan(b *testing.B) {
 		filefixture.FromString("Unicode", "", strings.Repeat("\u65E5\u672C\u8A9E\U0001F980\u2028", 400)),
 		filefixture.FromString("CRLF", "", strings.Repeat("const variable = someFunction(argument1, argument2);\r\n", 200)),
 		filefixture.FromString("longLine", "", strings.Repeat("a", 16384)),
+		filefixture.FromString("shortLines", "", strings.Repeat("x\r\n", 4096)),
 	}
 	for _, fixture := range append(texts, fixtures.BenchFixtures...) {
 		b.Run(fixture.Name(), func(b *testing.B) {

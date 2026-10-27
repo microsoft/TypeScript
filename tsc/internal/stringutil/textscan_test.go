@@ -1,9 +1,45 @@
 package stringutil
 
 import (
+	"strconv"
 	"strings"
 	"testing"
 )
+
+func TestTextScanMultipleCandidates(t *testing.T) {
+	t.Parallel()
+	for prefix := range 130 {
+		for gap := range 66 {
+			for _, middle := range []string{"\n", "\r\n", "\xe2", "\"", "\\", "$", "\x00", "\xff"} {
+				text := strings.Repeat("a", prefix) + middle + strings.Repeat("b", gap) + middle + strings.Repeat("c", 129)
+				checkTextScan(t, text)
+			}
+		}
+	}
+}
+
+func BenchmarkTextScanPrefixes(b *testing.B) {
+	for _, length := range []int{8, 16, 31, 32, 63, 64, 127, 128, 1024} {
+		b.Run(strconv.Itoa(length), func(b *testing.B) {
+			b.Run("LineBreak", func(b *testing.B) {
+				text := strings.Repeat("a", length) + "\n" + strings.Repeat("z", 128)
+				b.SetBytes(int64(length + 1))
+				b.ReportAllocs()
+				for b.Loop() {
+					LineBreakPrefixLen(text)
+				}
+			})
+			b.Run("Escape", func(b *testing.B) {
+				text := strings.Repeat("a", length) + "\"" + strings.Repeat("z", 128)
+				b.SetBytes(int64(length + 1))
+				b.ReportAllocs()
+				for b.Loop() {
+					UnescapedASCIIPrefixLen(text, '"')
+				}
+			})
+		})
+	}
+}
 
 func checkTextScan(t *testing.T, text string) {
 	t.Helper()

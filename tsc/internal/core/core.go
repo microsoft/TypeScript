@@ -426,8 +426,11 @@ func Coalesce[T *U, U any](a T, b T) T {
 type ECMALineStarts []TextPos
 
 func ComputeECMALineStarts(text string) ECMALineStarts {
-	result := make([]TextPos, 0, strings.Count(text, "\n")+1)
-	return slices.AppendSeq(result, ComputeECMALineStartsSeq(text))
+	if len(text) < 16 {
+		result := make([]TextPos, 0, strings.Count(text, "\n")+1)
+		return slices.AppendSeq(result, ComputeECMALineStartsSeq(text))
+	}
+	return computeECMALineStarts(text)
 }
 
 func ComputeECMALineStartsSeq(text string) iter.Seq[TextPos] {

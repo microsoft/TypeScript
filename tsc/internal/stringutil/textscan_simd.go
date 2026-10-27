@@ -3,9 +3,29 @@
 package stringutil
 
 import (
+	"math/bits"
 	"simd"
 	"unsafe"
 )
+
+// Keep this small enough to inline: it is called once per vector.
+// ReshapeToUint64s places each group's first byte in the low bits.
+// A full SIMD mask has at least two uint64 lanes.
+func firstNonzeroByte(mask []uint64) int {
+	lo, hi := mask[0], mask[1]
+	if lo != 0 {
+		return bits.TrailingZeros64(lo) / 8
+	}
+	if hi != 0 {
+		return 8 + bits.TrailingZeros64(hi)/8
+	}
+	for i := 2; i < len(mask); i++ {
+		if word := mask[i]; word != 0 {
+			return i*8 + bits.TrailingZeros64(word)/8
+		}
+	}
+	return len(mask) * 8
+}
 
 func asciiPrefixLenLong(text string) int {
 	width := (simd.Uint8s{}).Len()
@@ -44,17 +64,13 @@ func LineBreakPrefixLen(text string) int {
 	cr := simd.BroadcastUint8s('\r')
 	lf := simd.BroadcastUint8s('\n')
 	separator := simd.BroadcastUint8s(0xe2)
-	words := make([]uint64, (simd.Uint64s{}).Len())
+	mask := make([]uint64, (simd.Uint64s{}).Len())
 	i := 0
 	for len(text)-i >= width {
 		v := simd.LoadUint8s(bytes[i:])
-		v.Equal(cr).Or(v.Equal(lf)).Or(v.Equal(separator)).ToInt8s().ToBits().ReshapeToUint64s().Store(words)
-		var combined uint64
-		for _, word := range words {
-			combined |= word
-		}
-		if combined != 0 {
-			break
+		v.Equal(cr).Or(v.Equal(lf)).Or(v.Equal(separator)).ToInt8s().ToBits().ReshapeToUint64s().Store(mask)
+		if offset := firstNonzeroByte(mask); offset < width {
+			return i + offset
 		}
 		i += width
 	}
@@ -73,7 +89,7 @@ func UnescapedASCIIPrefixLen(text string, quote byte) int {
 	backslash := simd.BroadcastUint8s('\\')
 	quoteVector := simd.BroadcastUint8s(quote)
 	dollar := simd.BroadcastUint8s('$')
-	words := make([]uint64, (simd.Uint64s{}).Len())
+	matches := make([]uint64, (simd.Uint64s{}).Len())
 	i := 0
 	for len(text)-i >= width {
 		v := simd.LoadUint8s(bytes[i:])
@@ -82,13 +98,9 @@ func UnescapedASCIIPrefixLen(text string, quote byte) int {
 		if quote == '`' {
 			mask = mask.Or(v.Equal(dollar))
 		}
-		mask.ToInt8s().ToBits().ReshapeToUint64s().Store(words)
-		var combined uint64
-		for _, word := range words {
-			combined |= word
-		}
-		if combined != 0 {
-			break
+		mask.ToInt8s().ToBits().ReshapeToUint64s().Store(matches)
+		if offset := firstNonzeroByte(matches); offset < width {
+			return i + offset
 		}
 		i += width
 	}
