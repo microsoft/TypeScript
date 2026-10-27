@@ -675,6 +675,8 @@ type Checker struct {
 	resolving                                   map[memoKey]int32   // Index in resolutions of the outermost computation of each key in progress
 	typeResolutionTop                           int                 // 1-based index in resolutions of the innermost resolution, or 0
 	resolutionStart                             int                 // Index in resolutions below which resolutions are not searched for cycles
+	visibleStart                                int                 // Index in resolutions below which nothing in progress is visible; see yieldCycle
+	cycleYields                                 []cycleYield        // Canonical recomputations in progress; see yieldCycle
 	circularityStart                            int                 // 1-based index in resolutions of the outermost cycle in progress, or 0; see memo.go
 	currentNodeErrors                           []*currentNodeError // Errors reported at the current node while collecting; see startCurrentNodeErrors
 	currentNodeErrorCollectors                  int                 // Number of computations collecting currentNodeErrors
@@ -695,7 +697,7 @@ type Checker struct {
 	freeinferenceState                          *InferenceState
 	freeFlowState                               *FlowState
 	flowLoopStack                               []FlowLoopInfo
-	signaturesResolving                         []*SignatureLinks // Calls whose resolution is in progress
+	signaturesResolving                         []signatureResolving // Calls whose resolution is in progress
 	sharedFlows                                 []SharedFlow
 	flowLoopFrameCount                          uint64
 	antecedentTypes                             []*Type
@@ -8861,6 +8863,9 @@ func (c *Checker) getResolvedSignatureUncached(node *ast.Node, candidatesOutArra
 	// or that a different candidatesOutArray was passed in. Therefore, we need to redo the work
 	// to correctly fill the candidatesOutArray.
 	cached := links.resolvedSignature.get(c)
+	if cached == c.resolvingSignature && c.isSignatureResolutionHidden(links) {
+		cached = nil
+	}
 	if cached != nil && cached != c.resolvingSignature && candidatesOutArray == nil {
 		return cached
 	}
@@ -8874,6 +8879,9 @@ func (c *Checker) getResolvedSignatureUncached(node *ast.Node, candidatesOutArra
 			c.getContextualType(node, ContextFlagsNone)
 		}
 		cached = links.resolvedSignature.get(c)
+		if cached == c.resolvingSignature && c.isSignatureResolutionHidden(links) {
+			cached = nil
+		}
 		if cached != nil && cached != c.resolvingSignature && candidatesOutArray == nil {
 			return cached
 		}
@@ -8889,7 +8897,7 @@ func (c *Checker) getResolvedSignatureUncached(node *ast.Node, candidatesOutArra
 		c.resolutionStart = len(c.resolutions)
 	}
 	links.resolvedSignature.swap(c.resolvingSignature)
-	c.signaturesResolving = append(c.signaturesResolving, links)
+	c.signaturesResolving = append(c.signaturesResolving, signatureResolving{links, len(c.resolutions)})
 	result := c.resolveSignature(node, candidatesOutArray, checkMode)
 	c.signaturesResolving = c.signaturesResolving[:len(c.signaturesResolving)-1]
 	c.resolutionStart = saveResolutionStart
@@ -8921,8 +8929,27 @@ func (c *Checker) getResolvedSignatureUncached(node *ast.Node, candidatesOutArra
 // is still in progress.
 func (c *Checker) setResolvedSignature(links *SignatureLinks, signature *Signature) {
 	links.resolvedSignature.setAfterMarker(c, signature, func(s *Signature) bool {
-		return s == c.resolvingSignature && !slices.Contains(c.signaturesResolving, links)
+		return s == c.resolvingSignature && !slices.ContainsFunc(c.signaturesResolving, func(r signatureResolving) bool { return r.links == links })
 	})
+}
+
+type signatureResolving struct {
+	links *SignatureLinks
+	start int // Index in resolutions on entry
+}
+
+// isSignatureResolutionHidden reports whether the resolution of the call
+// with the given links is in progress below what is visible; see yieldCycle.
+func (c *Checker) isSignatureResolutionHidden(links *SignatureLinks) bool {
+	if c.visibleStart == 0 {
+		return false
+	}
+	for _, r := range slices.Backward(c.signaturesResolving) {
+		if r.links == links {
+			return r.start < c.visibleStart
+		}
+	}
+	return false
 }
 
 func (c *Checker) resolveSignature(node *ast.Node, candidatesOutArray *[]*Signature, checkMode CheckMode) *Signature {
@@ -9406,7 +9433,10 @@ func (c *Checker) resolveCall(node *ast.Node, signatures []*Signature, candidate
 	// is just important for choosing the best signature. So in the case where there is only one
 	// signature, the subtype pass is useless. So skipping it is an optimization.
 	var result *Signature
-	s.recursiveResolution = c.isResolvingAnywhere(s.node, TypeSystemPropertyNameCallResolution)
+	if i := c.resolvingAnywhereIndex(s.node, TypeSystemPropertyNameCallResolution); i >= 0 && !c.yieldCycle(i) {
+		c.markTypeResolutionCircular(i)
+		s.recursiveResolution = true
+	}
 	c.beginTypeResolution(s.node, TypeSystemPropertyNameCallResolution)
 	if len(s.candidates) > 1 {
 		result = c.chooseOverload(&s, c.subtypeRelation)
@@ -20046,11 +20076,106 @@ func (c *Checker) getCombinedModifierFlagsCached(node *ast.Node) ast.ModifierFla
 func (c *Checker) pushTypeResolution(target TypeSystemEntity, propertyName TypeSystemPropertyName) bool {
 	resolutionCycleStartIndex := c.findResolutionCycleStartIndex(target, propertyName)
 	if resolutionCycleStartIndex >= 0 {
-		c.markResolutionCycle(resolutionCycleStartIndex)
-		return false
+		if !c.yieldCycle(resolutionCycleStartIndex) {
+			c.markResolutionCycle(resolutionCycleStartIndex)
+			return false
+		}
 	}
 	c.beginTypeResolution(target, propertyName)
 	return true
+}
+
+// cycleYield is a canonical recomputation in progress; see yieldCycle.
+type cycleYield struct {
+	end                  int // Index in resolutions of the resolution whose pop ends it, or -1
+	target               TypeSystemEntity
+	propertyName         TypeSystemPropertyName
+	savedResolutionStart int
+	savedVisibleStart    int
+	savedDepths          [3]depthLimit
+	shadowed             []shadowedResolving
+}
+
+type shadowedResolving struct {
+	key   memoKey
+	index int32
+}
+
+// yieldCycle handles re-entering the resolution in progress at start, a
+// cycle that would fail the resolution re-entered. Which resolution is
+// re-entered depends on which was entered first, so a cycle through the
+// types of symbols declared before the one re-entered (if it is one)
+// fails at the first of those instead, as if that symbol had been resolved
+// first: its type is computed again from scratch, with nothing in progress
+// visible, and the resolution re-entered is then computed again likewise,
+// by the caller, which pushes it. The computations in progress then continue
+// from those results. Termination: a resolution is never computed again
+// while it is already being computed again.
+func (c *Checker) yieldCycle(start int) bool {
+	r := &c.resolutions[start].typeResolution
+	var first *ast.Symbol
+	if r.propertyName == TypeSystemPropertyNameType {
+		first = r.target.(*ast.Symbol)
+	}
+	entered := first
+	for i := start + 1; i < len(c.resolutions); i++ {
+		if f := &c.resolutions[i]; f.isTypeResolution && f.typeResolution.propertyName == TypeSystemPropertyNameType {
+			if s := f.typeResolution.target.(*ast.Symbol); first == nil || c.compareSymbols(s, first) < 0 {
+				first = s
+			}
+		}
+	}
+	if first == nil || first == entered || c.isYieldingTo(first, TypeSystemPropertyNameType) || c.isYieldingTo(r.target, r.propertyName) {
+		return false
+	}
+	c.beginCycleYield(first, TypeSystemPropertyNameType, -1)
+	c.getTypeOfSymbol(first)
+	c.endCycleYield()
+	c.beginCycleYield(r.target, r.propertyName, len(c.resolutions))
+	return true
+}
+
+// observeHiddenMembers fails the cycle yield in progress if the members of t
+// are being resolved below it. Members are made available while they are
+// resolved, so the yield would see whatever part of them the hidden
+// resolution has published, rather than compute them from scratch.
+func (c *Checker) observeHiddenMembers(t *Type) {
+	if i, ok := c.resolving[memoKeyOf(t, memoStructuredMembers)]; ok && int(i) < c.visibleStart {
+		c.markResolutionCycle(c.visibleStart)
+	}
+}
+
+func (c *Checker) isYieldingTo(target TypeSystemEntity, propertyName TypeSystemPropertyName) bool {
+	return slices.ContainsFunc(c.cycleYields, func(y cycleYield) bool { return y.target == target && y.propertyName == propertyName })
+}
+
+// beginCycleYield hides everything in progress until endCycleYield, which
+// popping the resolution at end calls if it is not -1.
+func (c *Checker) beginCycleYield(target TypeSystemEntity, propertyName TypeSystemPropertyName, end int) {
+	n := len(c.resolutions)
+	c.cycleYields = append(c.cycleYields, cycleYield{
+		end:                  end,
+		target:               target,
+		propertyName:         propertyName,
+		savedResolutionStart: c.resolutionStart,
+		savedVisibleStart:    c.visibleStart,
+		savedDepths:          [3]depthLimit{c.serializationLevel, c.inlineLevel, c.conditionalConstraintDepth},
+	})
+	c.resolutionStart = n
+	c.visibleStart = n
+	c.serializationLevel, c.inlineLevel, c.conditionalConstraintDepth = depthLimit{}, depthLimit{}, depthLimit{}
+}
+
+func (c *Checker) endCycleYield() {
+	y := &c.cycleYields[len(c.cycleYields)-1]
+	c.resolutionStart = y.savedResolutionStart
+	c.visibleStart = y.savedVisibleStart
+	c.serializationLevel, c.inlineLevel, c.conditionalConstraintDepth = y.savedDepths[0], y.savedDepths[1], y.savedDepths[2]
+	for _, sh := range y.shadowed {
+		c.resolving[sh.key] = sh.index
+	}
+	c.cycleYields[len(c.cycleYields)-1] = cycleYield{}
+	c.cycleYields = c.cycleYields[:len(c.cycleYields)-1]
 }
 
 // markResolutionCycle records that the type resolution entries from start to
@@ -20094,13 +20219,22 @@ func (c *Checker) isResolutionInProgress(target TypeSystemEntity, propertyName T
 // again and reports the failure. Unlike isResolutionInProgress, it searches
 // the whole stack, for computations that would not otherwise stop.
 func (c *Checker) isResolvingAnywhere(target TypeSystemEntity, propertyName TypeSystemPropertyName) bool {
-	for i := c.typeResolutionTop - 1; i >= 0; i = int(c.resolutions[i].prevTypeResolution) - 1 {
-		if r := &c.resolutions[i].typeResolution; r.target == target && r.propertyName == propertyName {
-			c.markTypeResolutionCircular(i)
-			return true
-		}
+	if i := c.resolvingAnywhereIndex(target, propertyName); i >= 0 {
+		c.markTypeResolutionCircular(i)
+		return true
 	}
 	return false
+}
+
+// resolvingAnywhereIndex returns the index in resolutions of the visible
+// resolution of the property of target in progress, or -1.
+func (c *Checker) resolvingAnywhereIndex(target TypeSystemEntity, propertyName TypeSystemPropertyName) int {
+	for i := c.typeResolutionTop - 1; i >= c.visibleStart; i = int(c.resolutions[i].prevTypeResolution) - 1 {
+		if r := &c.resolutions[i].typeResolution; r.target == target && r.propertyName == propertyName {
+			return i
+		}
+	}
+	return -1
 }
 
 // observeCircularHead is for computations where re-entering one in progress
@@ -20260,6 +20394,9 @@ func (c *Checker) popTypeResolution() bool {
 	c.resolutions = c.resolutions[:n]
 	if c.circularityStart > n {
 		c.endCircularity()
+	}
+	if len(c.cycleYields) != 0 && c.cycleYields[len(c.cycleYields)-1].end == n {
+		c.endCycleYield()
 	}
 	return result
 }
@@ -20646,6 +20783,9 @@ func (c *Checker) resolveStructuredTypeMembers(t *Type) *StructuredType {
 			// Its declared members are available while inherited members
 			// are resolved; see resolveObjectTypeMembers.
 			return t.AsStructuredType()
+		}
+		if len(c.cycleYields) != 0 {
+			c.observeHiddenMembers(t)
 		}
 	}
 	c.beginMemo(memoKeyOf(t, memoStructuredMembers))
@@ -32178,7 +32318,7 @@ func (c *Checker) getContextualTypeForArgumentAtIndex(callTarget *ast.Node, argI
 	// If we're already in the process of resolving the given signature, don't resolve again as
 	// that could cause infinite recursion. Instead, return anySignature.
 	var signature *Signature
-	if c.signatureLinks.Get(callTarget).resolvedSignature.get(c) == c.resolvingSignature {
+	if links := c.signatureLinks.Get(callTarget); links.resolvedSignature.get(c) == c.resolvingSignature && !c.isSignatureResolutionHidden(links) {
 		signature = c.resolvingSignature
 	} else {
 		signature = c.getResolvedSignature(callTarget, nil, CheckModeNormal)

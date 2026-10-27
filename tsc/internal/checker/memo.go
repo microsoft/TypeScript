@@ -501,13 +501,23 @@ func (m *memoMap[K, V]) begin(c *Checker, k K) {
 // resolvingIndex returns 1 + the index in resolutions of the computation of
 // the entry for k in progress, or 0.
 func (m *memoMap[K, V]) resolvingIndex(c *Checker, k K) int {
-	i := slices.Index(m.resolvingKeys, k)
-	if i < 0 {
-		return 0
+	for i, key := range m.resolvingKeys {
+		if key != k {
+			continue
+		}
+		j := m.resolutionIndex(c, i)
+		if j >= c.visibleStart {
+			return j + 1
+		}
+		// Hidden; see yieldCycle.
 	}
+	return 0
+}
+
+func (m *memoMap[K, V]) resolutionIndex(c *Checker, i int) int {
 	for j := len(c.resolutions) - 1; j >= 0; j-- {
 		if f := &c.resolutions[j]; f.source == memoStateSource(m) && int(f.index) == i {
-			return j + 1
+			return j
 		}
 	}
 	panic("entry in progress without a resolution")

@@ -166,7 +166,7 @@ func (c *Checker) forgetCost() {
 // resolvingIndex returns 1 + the index in resolutions of the outermost
 // computation of key in progress, or 0.
 func (c *Checker) resolvingIndex(key memoKey) int {
-	if i, ok := c.resolving[key]; ok {
+	if i, ok := c.resolving[key]; ok && int(i) >= c.visibleStart {
 		return int(i) + 1
 	}
 	return 0
@@ -177,10 +177,14 @@ func (c *Checker) resolvingIndex(key memoKey) int {
 // one re-enters it as the policy of its kind says; see memoReentry.
 func (c *Checker) beginResolving(key memoKey) {
 	if i, ok := c.resolving[key]; ok {
-		if memoReentry[key.field()] == reentryCircular {
-			c.markCircular(int(i))
+		if int(i) >= c.visibleStart {
+			if memoReentry[key.field()] == reentryCircular {
+				c.markCircular(int(i))
+			}
+			return
 		}
-		return
+		y := &c.cycleYields[len(c.cycleYields)-1]
+		y.shadowed = append(y.shadowed, shadowedResolving{key, i})
 	}
 	if c.resolving == nil {
 		c.resolving = make(map[memoKey]int32)
