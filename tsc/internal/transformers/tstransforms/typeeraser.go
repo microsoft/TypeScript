@@ -136,7 +136,17 @@ func (tx *TypeEraserTransformer) visit(node *ast.Node) *ast.Node {
 		if tx.compilerOptions.ExperimentalDecorators.IsTrue() && ast.HasSyntacticModifier(node, ast.ModifierFlagsAmbient|ast.ModifierFlagsAbstract) && ast.HasDecorators(node) {
 			// declare/abstract props with decorators must be preserved until the decorator transform can process them and remove them
 			n := node.AsPropertyDeclaration()
-			return tx.Factory().UpdatePropertyDeclaration(n, tx.Visitor().VisitModifiers(n.Modifiers()), tx.Visitor().VisitNode(n.Name()), nil, nil, tx.Visitor().VisitNode(n.Initializer))
+			modifiers := tx.Visitor().VisitModifiers(n.Modifiers())
+			if !ast.HasSyntacticModifier(node, ast.ModifierFlagsAmbient) {
+				// `abstract` is elided by VisitModifiers; add `declare` so the decorator transform still erases the field.
+				var nodes []*ast.Node
+				if modifiers != nil {
+					nodes = slices.Clone(modifiers.Nodes)
+				}
+				nodes = append(nodes, tx.Factory().NewModifier(ast.KindDeclareKeyword))
+				modifiers = tx.Factory().NewModifierList(nodes)
+			}
+			return tx.Factory().UpdatePropertyDeclaration(n, modifiers, tx.Visitor().VisitNode(n.Name()), nil, nil, tx.Visitor().VisitNode(n.Initializer))
 		}
 		if ast.HasSyntacticModifier(node, ast.ModifierFlagsAmbient|ast.ModifierFlagsAbstract) {
 			// TypeScript `declare` fields are elided
