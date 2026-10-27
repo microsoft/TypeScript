@@ -17049,6 +17049,9 @@ func (c *Checker) getResolvedMembersOrExportsOfSymbolUncached(symbol *ast.Symbol
 			}
 		}
 		links[resolutionKind] = c.combineSymbolTables(earlySymbols, lateSymbols)
+		if c.logResults() {
+			c.discardLog = append(c.discardLog, discardEntry{nil, func() { links[resolutionKind] = nil }, false})
+		}
 	}
 	return links[resolutionKind]
 }
@@ -20076,7 +20079,7 @@ func (c *Checker) getCombinedModifierFlagsCached(node *ast.Node) ast.ModifierFla
 func (c *Checker) pushTypeResolution(target TypeSystemEntity, propertyName TypeSystemPropertyName) bool {
 	resolutionCycleStartIndex := c.findResolutionCycleStartIndex(target, propertyName)
 	if resolutionCycleStartIndex >= 0 {
-		if !c.yieldCycle(resolutionCycleStartIndex) {
+		if !c.yieldCycleToMembers(resolutionCycleStartIndex) {
 			c.markResolutionCycle(resolutionCycleStartIndex)
 			return false
 		}
@@ -20128,10 +20131,10 @@ func (c *Checker) yieldCycle(start int) bool {
 	if first == nil || first == entered || c.isYieldingTo(first, TypeSystemPropertyNameType) || c.isYieldingTo(r.target, r.propertyName) {
 		return false
 	}
-	c.beginCycleYield(first, TypeSystemPropertyNameType, -1)
+	c.beginCycleYield(first, TypeSystemPropertyNameType, -1, len(c.resolutions))
 	c.getTypeOfSymbol(first)
 	c.endCycleYield()
-	c.beginCycleYield(r.target, r.propertyName, len(c.resolutions))
+	c.beginCycleYield(r.target, r.propertyName, len(c.resolutions), len(c.resolutions))
 	return true
 }
 
@@ -20145,14 +20148,50 @@ func (c *Checker) observeHiddenMembers(t *Type) {
 	}
 }
 
+// yieldCycleToMembers handles re-entering the type resolution in progress
+// at start, a cycle that would fail it, when the cycle passes through a
+// member table. Entering the cycle at the member table instead would not
+// fail, as the table is available while it is resolved, so the resolution
+// re-entered is computed again as if the table had been entered first: by
+// the caller, with everything entered before the table hidden. Otherwise it
+// yields as yieldCycle does.
+func (c *Checker) yieldCycleToMembers(start int) bool {
+	if m := c.findMembersInCycle(start); m >= 0 {
+		r := &c.resolutions[start].typeResolution
+		if c.isYieldingTo(r.target, r.propertyName) {
+			return false
+		}
+		c.beginCycleYield(r.target, r.propertyName, len(c.resolutions), m)
+		return true
+	}
+	return c.yieldCycle(start)
+}
+
+// findMembersInCycle returns the index in resolutions of the outermost
+// resolution of a member table in progress above start, or -1. Member
+// tables are available while they are resolved, so a cycle entered at its
+// member table never fails.
+func (c *Checker) findMembersInCycle(start int) int {
+	for i := start + 1; i < len(c.resolutions); i++ {
+		f := &c.resolutions[i]
+		if f.isTypeResolution && f.typeResolution.propertyName == TypeSystemPropertyNameStructuredMembers {
+			return i
+		}
+		if field := f.key.field(); f.key != 0 && (field == memoSymbolMembers || field == memoSymbolExports) {
+			return i
+		}
+	}
+	return -1
+}
+
 func (c *Checker) isYieldingTo(target TypeSystemEntity, propertyName TypeSystemPropertyName) bool {
 	return slices.ContainsFunc(c.cycleYields, func(y cycleYield) bool { return y.target == target && y.propertyName == propertyName })
 }
 
-// beginCycleYield hides everything in progress until endCycleYield, which
-// popping the resolution at end calls if it is not -1.
-func (c *Checker) beginCycleYield(target TypeSystemEntity, propertyName TypeSystemPropertyName, end int) {
-	n := len(c.resolutions)
+// beginCycleYield hides the resolutions in progress below floor until
+// endCycleYield, which popping the resolution at end calls if it is not -1.
+func (c *Checker) beginCycleYield(target TypeSystemEntity, propertyName TypeSystemPropertyName, end int, floor int) {
+	n := floor
 	c.cycleYields = append(c.cycleYields, cycleYield{
 		end:                  end,
 		target:               target,
