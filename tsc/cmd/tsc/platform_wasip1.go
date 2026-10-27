@@ -7,6 +7,8 @@ import (
 	"errors"
 	"io"
 	"os"
+	"runtime"
+	"runtime/metrics"
 	"syscall"
 	"time"
 
@@ -17,9 +19,26 @@ const maxStdinPollDelay = 50 * time.Millisecond
 
 type wasiStdin struct{}
 
+// runRunnable yields until no other goroutine is ready to run. Some hosts,
+// such as Node on Windows, cannot read a stdin pipe without blocking, and a
+// blocked read stalls every goroutine, so pending work such as writing
+// responses must finish first. Work that waits on timers still stalls until
+// input arrives on those hosts.
+func runRunnable() {
+	sample := []metrics.Sample{{Name: "/sched/goroutines/runnable:goroutines"}}
+	for range 1000 {
+		metrics.Read(sample)
+		if sample[0].Value.Uint64() == 0 {
+			return
+		}
+		runtime.Gosched()
+	}
+}
+
 func (wasiStdin) Read(buffer []byte) (int, error) {
 	delay := time.Millisecond
 	for {
+		runRunnable()
 		n, err := syscall.Read(syscall.Stdin, buffer)
 		if n > 0 {
 			return n, nil
