@@ -21,6 +21,9 @@ import {
     run,
 } from "./tools/scripts/gen/utils.mts";
 
+// Set GOEXPERIMENT=nosimd to opt out of SIMD for any task.
+process.env.GOEXPERIMENT ||= "simd";
+
 enableFileFingerprintCache();
 
 if (process.platform === "win32") {

@@ -21,6 +21,33 @@ import {
     run,
 } from "./utils.mts";
 
+test("Hereby defaults to SIMD without overriding explicit experiments", () => {
+    const fileName = path.resolve(import.meta.dirname, "../../../Herebyfile.mjs");
+    const source = ts.createSourceFile(fileName, fs.readFileSync(fileName, "utf8"), ts.ScriptTarget.Latest, true, ts.ScriptKind.JS);
+    const assignment = source.statements.find(statement =>
+        ts.isExpressionStatement(statement)
+        && ts.isBinaryExpression(statement.expression)
+        && statement.expression.left.getText(source) === "process.env.GOEXPERIMENT"
+    );
+    assert.ok(assignment, "Hereby must set the default experiment before running tasks");
+    for (
+        const { initial, expected } of [
+            { initial: undefined, expected: "simd" },
+            { initial: "", expected: "simd" },
+            { initial: "nosimd", expected: "nosimd" },
+            { initial: "simd", expected: "simd" },
+            { initial: "jsonv2", expected: "jsonv2" },
+            { initial: "simd,nosimd", expected: "simd,nosimd" },
+        ]
+    ) {
+        const environment: NodeJS.ProcessEnv = { GODEBUG: "tracebackancestors=10" };
+        if (initial !== undefined) environment.GOEXPERIMENT = initial;
+        runInNewContext(assignment.getText(source), { process: { env: environment } });
+        assert.equal(environment.GOEXPERIMENT, expected);
+        assert.equal(environment.GODEBUG, "tracebackancestors=10");
+    }
+});
+
 test("validate generates before building and selects the generation scope", async () => {
     const fileName = path.resolve(import.meta.dirname, "../../../Herebyfile.mjs");
     const source = ts.createSourceFile(fileName, fs.readFileSync(fileName, "utf8"), ts.ScriptTarget.Latest, true, ts.ScriptKind.JS);
