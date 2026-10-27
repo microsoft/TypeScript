@@ -114,3 +114,159 @@ typedObject({ required: "value" });
 typedArray(["value"]);
 >typedArray : Symbol(typedArray, Decl(main.ts, 8, 12))
 
+type F = (input?: { a?: string; b?: number }) => number;
+>F : Symbol(F, Decl(main.ts, 25, 22))
+>input : Symbol(input, Decl(main.ts, 27, 10))
+>a : Symbol(a, Decl(main.ts, 27, 19))
+>b : Symbol(b, Decl(main.ts, 27, 31))
+
+export const f1: F = ({ a, b } = {}) => (a ? 1 : 0) + (b ?? 0);
+>f1 : Symbol(f1, Decl(main.ts, 28, 12))
+>F : Symbol(F, Decl(main.ts, 25, 22))
+>a : Symbol(a, Decl(main.ts, 28, 23))
+>b : Symbol(b, Decl(main.ts, 28, 26))
+>a : Symbol(a, Decl(main.ts, 28, 23))
+>b : Symbol(b, Decl(main.ts, 28, 26))
+
+export const f2: (input: { a?: string; b?: number }) => number = ({ a, b } = {}) => (a ? 1 : 0) + (b ?? 0);
+>f2 : Symbol(f2, Decl(main.ts, 30, 12))
+>input : Symbol(input, Decl(main.ts, 30, 18))
+>a : Symbol(a, Decl(main.ts, 30, 26))
+>b : Symbol(b, Decl(main.ts, 30, 38))
+>a : Symbol(a, Decl(main.ts, 30, 67))
+>b : Symbol(b, Decl(main.ts, 30, 70))
+>a : Symbol(a, Decl(main.ts, 30, 67))
+>b : Symbol(b, Decl(main.ts, 30, 70))
+
+declare function f3(callback: F): void;
+>f3 : Symbol(f3, Decl(main.ts, 30, 107))
+>callback : Symbol(callback, Decl(main.ts, 32, 20))
+>F : Symbol(F, Decl(main.ts, 25, 22))
+
+f3(({ a, b } = {}) => {
+>f3 : Symbol(f3, Decl(main.ts, 30, 107))
+>a : Symbol(a, Decl(main.ts, 33, 5))
+>b : Symbol(b, Decl(main.ts, 33, 8))
+
+    const c: number = a;
+>c : Symbol(c, Decl(main.ts, 34, 9))
+>a : Symbol(a, Decl(main.ts, 33, 5))
+
+    const d: string = b;
+>d : Symbol(d, Decl(main.ts, 35, 9))
+>b : Symbol(b, Decl(main.ts, 33, 8))
+
+    return 0;
+});
+
+export const f4: (input?: { a?: { b?: number } }) => number = ({ a: { b } = {} } = {}) => {
+>f4 : Symbol(f4, Decl(main.ts, 39, 12))
+>input : Symbol(input, Decl(main.ts, 39, 18))
+>a : Symbol(a, Decl(main.ts, 39, 27))
+>b : Symbol(b, Decl(main.ts, 39, 33))
+>b : Symbol(b, Decl(main.ts, 39, 69))
+
+    const c: string = b;
+>c : Symbol(c, Decl(main.ts, 40, 9))
+>b : Symbol(b, Decl(main.ts, 39, 69))
+
+    return b ?? 0;
+>b : Symbol(b, Decl(main.ts, 39, 69))
+
+};
+
+export function f5({ a: { b } = {} }: { a?: { b?: number } }) {
+>f5 : Symbol(f5, Decl(main.ts, 42, 2))
+>a : Symbol(a, Decl(main.ts, 44, 39))
+>b : Symbol(b, Decl(main.ts, 44, 25))
+>a : Symbol(a, Decl(main.ts, 44, 39))
+>b : Symbol(b, Decl(main.ts, 44, 45))
+
+    const c: string = b;
+>c : Symbol(c, Decl(main.ts, 45, 9))
+>b : Symbol(b, Decl(main.ts, 44, 25))
+
+    return b;
+>b : Symbol(b, Decl(main.ts, 44, 25))
+}
+
+export const f6: (input?: { a?: number }) => void = ({ a, b } = {}) => {
+>f6 : Symbol(f6, Decl(main.ts, 49, 12))
+>input : Symbol(input, Decl(main.ts, 49, 18))
+>a : Symbol(a, Decl(main.ts, 49, 27))
+>a : Symbol(a, Decl(main.ts, 49, 54))
+>b : Symbol(b, Decl(main.ts, 49, 57))
+
+    const c: string = a;
+>c : Symbol(c, Decl(main.ts, 50, 9))
+>a : Symbol(a, Decl(main.ts, 49, 54))
+
+};
+
+export const f7: (input?: [{ a?: number }?]) => void = ([{ a } = {}] = []) => {
+>f7 : Symbol(f7, Decl(main.ts, 53, 12))
+>input : Symbol(input, Decl(main.ts, 53, 18))
+>a : Symbol(a, Decl(main.ts, 53, 28))
+>a : Symbol(a, Decl(main.ts, 53, 58))
+
+    const b: string = a;
+>b : Symbol(b, Decl(main.ts, 54, 9))
+>a : Symbol(a, Decl(main.ts, 53, 58))
+
+};
+
+export const f8: (input?: { [key: string]: number }) => void = ({ a } = {}) => {
+>f8 : Symbol(f8, Decl(main.ts, 57, 12))
+>input : Symbol(input, Decl(main.ts, 57, 18))
+>key : Symbol(key, Decl(main.ts, 57, 29))
+>a : Symbol(a, Decl(main.ts, 57, 65))
+
+    const b: string = a;
+>b : Symbol(b, Decl(main.ts, 58, 9))
+>a : Symbol(a, Decl(main.ts, 57, 65))
+
+};
+
+export const f9: (input?: any) => void = ({ a: { b } = {} } = {}) => {
+>f9 : Symbol(f9, Decl(main.ts, 61, 12))
+>input : Symbol(input, Decl(main.ts, 61, 18))
+>b : Symbol(b, Decl(main.ts, 61, 48))
+
+    b;
+>b : Symbol(b, Decl(main.ts, 61, 48))
+
+};
+
+declare function f10<T>(value: T, callback: (input?: Partial<T>) => void): void;
+>f10 : Symbol(f10, Decl(main.ts, 63, 2))
+>T : Symbol(T, Decl(main.ts, 65, 21))
+>value : Symbol(value, Decl(main.ts, 65, 24))
+>T : Symbol(T, Decl(main.ts, 65, 21))
+>callback : Symbol(callback, Decl(main.ts, 65, 33))
+>input : Symbol(input, Decl(main.ts, 65, 45))
+>Partial : Symbol(Partial, Decl(lib.es5.d.ts, --, --))
+>T : Symbol(T, Decl(main.ts, 65, 21))
+
+f10({ a: 1 }, ({ a } = {}) => {
+>f10 : Symbol(f10, Decl(main.ts, 63, 2))
+>a : Symbol(a, Decl(main.ts, 66, 5))
+>a : Symbol(a, Decl(main.ts, 66, 16))
+
+    const b: string = a;
+>b : Symbol(b, Decl(main.ts, 67, 9))
+>a : Symbol(a, Decl(main.ts, 66, 16))
+
+});
+
+export const f11: (input?: { a?: number }[]) => void = ([...[{ a } = {}]] = []) => {
+>f11 : Symbol(f11, Decl(main.ts, 70, 12))
+>input : Symbol(input, Decl(main.ts, 70, 19))
+>a : Symbol(a, Decl(main.ts, 70, 28))
+>a : Symbol(a, Decl(main.ts, 70, 62))
+
+    const b: string = a;
+>b : Symbol(b, Decl(main.ts, 71, 9))
+>a : Symbol(a, Decl(main.ts, 70, 62))
+
+};
+

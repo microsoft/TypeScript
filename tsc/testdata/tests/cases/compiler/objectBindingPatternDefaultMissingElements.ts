@@ -53,3 +53,50 @@ checkedObject({ required: "value" });
 checkedArray(["value"]);
 typedObject({ required: "value" });
 typedArray(["value"]);
+
+type F = (input?: { a?: string; b?: number }) => number;
+export const f1: F = ({ a, b } = {}) => (a ? 1 : 0) + (b ?? 0);
+
+export const f2: (input: { a?: string; b?: number }) => number = ({ a, b } = {}) => (a ? 1 : 0) + (b ?? 0);
+
+declare function f3(callback: F): void;
+f3(({ a, b } = {}) => {
+    const c: number = a;
+    const d: string = b;
+    return 0;
+});
+
+export const f4: (input?: { a?: { b?: number } }) => number = ({ a: { b } = {} } = {}) => {
+    const c: string = b;
+    return b ?? 0;
+};
+
+export function f5({ a: { b } = {} }: { a?: { b?: number } }) {
+    const c: string = b;
+    return b;
+}
+
+export const f6: (input?: { a?: number }) => void = ({ a, b } = {}) => {
+    const c: string = a;
+};
+
+export const f7: (input?: [{ a?: number }?]) => void = ([{ a } = {}] = []) => {
+    const b: string = a;
+};
+
+export const f8: (input?: { [key: string]: number }) => void = ({ a } = {}) => {
+    const b: string = a;
+};
+
+export const f9: (input?: any) => void = ({ a: { b } = {} } = {}) => {
+    b;
+};
+
+declare function f10<T>(value: T, callback: (input?: Partial<T>) => void): void;
+f10({ a: 1 }, ({ a } = {}) => {
+    const b: string = a;
+});
+
+export const f11: (input?: { a?: number }[]) => void = ([...[{ a } = {}]] = []) => {
+    const b: string = a;
+};
