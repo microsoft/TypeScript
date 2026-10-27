@@ -1,0 +1,95 @@
+//// [tests/cases/compiler/exportStarDefault.ts] ////
+
+=== /default.ts ===
+export default class Default {}
+>Default : Default
+
+export const named = 1;
+>named : 1
+>1 : 1
+
+=== /other.ts ===
+export default class Other {}
+>Other : Other
+
+=== /reexport.ts ===
+
+export * from "./default";
+
+=== /ambiguous.ts ===
+
+export * from "./default";
+export * from "./other";
+
+=== /resolved.ts ===
+export * from "./default";
+export * from "./other";
+export { default } from "./default";
+>default : typeof import("./default").default
+
+=== /localDefault.ts ===
+export * from "./default";
+export * from "./other";
+export default class Local {}
+>Local : Local
+
+=== /localDefaultExpression.ts ===
+
+export * from "./default";
+export * from "./other";
+export default 1;
+
+=== /defaultType.ts ===
+export default interface DefaultType {
+    value: string;
+>value : string
+}
+
+=== /reexportType.ts ===
+
+export type * from "./defaultType";
+
+=== /main.ts ===
+import Default, { named } from "./reexport";
+>Default : typeof Default
+>named : 1
+
+import Resolved from "./resolved";
+>Resolved : typeof Default
+
+import Local from "./localDefault";
+>Local : typeof Local
+
+import valueDefault from "./localDefaultExpression";
+>valueDefault : 1
+
+import type DefaultType from "./reexportType";
+>DefaultType : DefaultType
+
+new Default();
+>new Default() : Default
+>Default : typeof Default
+
+new Resolved();
+>new Resolved() : Default
+>Resolved : typeof Default
+
+new Local();
+>new Local() : Local
+>Local : typeof Local
+
+valueDefault.toFixed();
+>valueDefault.toFixed() : string
+>valueDefault.toFixed : (fractionDigits?: number) => string
+>valueDefault : 1
+>toFixed : (fractionDigits?: number) => string
+
+const value: DefaultType = { value: "" };
+>value : DefaultType
+>{ value: "" } : { value: string; }
+>value : string
+>"" : ""
+
+named;
+>named : 1
+

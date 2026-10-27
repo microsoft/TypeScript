@@ -118,6 +118,8 @@ func (c *externalModuleInfoCollector) collect() *externalModuleInfo {
 			if n.IsExportEquals && c.output.exportEquals == nil {
 				// export = x
 				c.output.exportEquals = n
+			} else if !n.IsExportEquals {
+				c.hasExportDefault = true
 			}
 
 		case ast.KindVariableStatement:
@@ -159,6 +161,10 @@ func (c *externalModuleInfoCollector) collect() *externalModuleInfo {
 				}
 			}
 		}
+	}
+
+	if c.hasExportDefault && c.output.hasExportStarsToExportValues {
+		c.addExportedName(c.emitContext.Factory.NewIdentifier("default"))
 	}
 
 	return c.output
