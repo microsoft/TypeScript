@@ -56,6 +56,13 @@ func asciiPrefixLenLong(text string) int {
 // LineBreakPrefixLen returns the byte offset of the first possible ECMAScript
 // line break (CR, LF, or the leading byte of U+2028/U+2029), or len(text).
 func LineBreakPrefixLen(text string) int {
+	if len(text) < 16 {
+		return lineBreakPrefixLen(text)
+	}
+	return lineBreakPrefixLenLong(text)
+}
+
+func lineBreakPrefixLenLong(text string) int {
 	width := (simd.Uint8s{}).Len()
 	if len(text) < width || text[0] == '\r' || text[0] == '\n' || text[0] == 0xe2 {
 		return lineBreakPrefixLen(text)
@@ -80,6 +87,13 @@ func LineBreakPrefixLen(text string) int {
 // UnescapedASCIIPrefixLen returns the length of the ASCII prefix that needs no
 // escaping. It conservatively stops at all controls, backslashes, and template dollars.
 func UnescapedASCIIPrefixLen(text string, quote byte) int {
+	if len(text) < 16 {
+		return unescapedASCIIPrefixLen(text, quote)
+	}
+	return unescapedASCIIPrefixLenLong(text, quote)
+}
+
+func unescapedASCIIPrefixLenLong(text string, quote byte) int {
 	width := (simd.Uint8s{}).Len()
 	if len(text) < width || unescapedASCIIPrefixLen(text[:1], quote) == 0 {
 		return unescapedASCIIPrefixLen(text, quote)

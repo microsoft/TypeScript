@@ -9,26 +9,6 @@ import (
 	"unsafe"
 )
 
-func ecmaLineBreakEnd(text string, pos int) int {
-	switch text[pos] {
-	case '\r':
-		if pos+1 < len(text) && text[pos+1] == '\n' {
-			return pos + 2
-		}
-		return pos + 1
-	case '\n':
-		if pos == 0 || text[pos-1] != '\r' {
-			return pos + 1
-		}
-	case 0xe2:
-		// U+2028 and U+2029 differ only in the low bit of their final byte.
-		if pos+2 < len(text) && text[pos+1] == 0x80 && text[pos+2]&0xfe == 0xa8 {
-			return pos + 3
-		}
-	}
-	return 0
-}
-
 func lineBreakBits(word uint64) uint64 {
 	// Pack the low bit of each byte into the low eight bits. The multiply
 	// places source byte i at bit 56+i without overlapping partial products.
@@ -53,10 +33,12 @@ func computeECMALineStarts(text string) ECMALineStarts {
 	for len(text)-pos >= width {
 		v := simd.LoadUint8s(bytes[pos:])
 		v.Equal(cr).Or(v.Equal(lf)).Or(v.Equal(separator)).ToInt8s().ToBits().ReshapeToUint64s().Store(mask)
-		word := 0
-		for ; len(mask)-word >= 2; word += 2 {
+		for word := 0; word < len(mask); word += 2 {
 			lo := mask[word]
-			hi := mask[word+1]
+			var hi uint64
+			if word+1 < len(mask) {
+				hi = mask[word+1]
+			}
 			if lo|hi == 0 {
 				continue
 			}
@@ -66,16 +48,10 @@ func computeECMALineStarts(text string) ECMALineStarts {
 				matches &= matches - 1
 				if end := ecmaLineBreakEnd(text, index); end != 0 {
 					result = append(result, TextPos(end))
-				}
-			}
-		}
-		if word < len(mask) {
-			matches := lineBreakBits(mask[word])
-			for matches != 0 {
-				index := pos + word*8 + bits.TrailingZeros64(matches)
-				matches &= matches - 1
-				if end := ecmaLineBreakEnd(text, index); end != 0 {
-					result = append(result, TextPos(end))
+					if end == index+2 {
+						// The next candidate is the LF of this CRLF pair.
+						matches &= matches - 1
+					}
 				}
 			}
 		}
@@ -84,6 +60,7 @@ func computeECMALineStarts(text string) ECMALineStarts {
 	for ; pos < len(text); pos++ {
 		if end := ecmaLineBreakEnd(text, pos); end != 0 {
 			result = append(result, TextPos(end))
+			pos = end - 1
 		}
 	}
 	return result

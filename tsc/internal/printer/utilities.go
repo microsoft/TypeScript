@@ -38,23 +38,6 @@ var jsxEscapedCharsMap = map[rune]string{
 	'\'': "&apos;",
 }
 
-var escapedCharsMap = map[rune]string{
-	'\t':     `\t`,
-	'\v':     `\v`,
-	'\f':     `\f`,
-	'\b':     `\b`,
-	'\r':     `\r`,
-	'\n':     `\n`,
-	'\\':     `\\`,
-	'"':      `\"`,
-	'\'':     `\'`,
-	'`':      "\\`",
-	'$':      `\$`,     // when quoteChar == '`'
-	'\u2028': `\u2028`, // lineSeparator
-	'\u2029': `\u2029`, // paragraphSeparator
-	'\u0085': `\u0085`, // nextLine
-}
-
 func encodeJsxCharacterEntity(b *strings.Builder, charCode rune) {
 	hexCharCode := strings.ToUpper(strconv.FormatUint(uint64(charCode), 16))
 	b.WriteString("&#x")
@@ -63,133 +46,28 @@ func encodeJsxCharacterEntity(b *strings.Builder, charCode rune) {
 }
 
 func encodeUtf16EscapeSequence(b *strings.Builder, charCode rune) {
-	hexCharCode := strings.ToUpper(strconv.FormatUint(uint64(charCode), 16))
-	b.WriteString(`\u`)
-	for i := len(hexCharCode); i < 4; i++ {
-		b.WriteByte('0')
-	}
-	b.WriteString(hexCharCode)
+	const hex = "0123456789ABCDEF"
+	bytes := [6]byte{'\\', 'u', hex[charCode>>12&15], hex[charCode>>8&15], hex[charCode>>4&15], hex[charCode&15]}
+	b.Write(bytes[:])
 }
 
 // Based heavily on the abstract 'Quote'/'QuoteJSONString' operation from ECMA-262 (24.3.2.2),
 // but augmented for a few select characters (e.g. lineSeparator, paragraphSeparator, nextLine)
 // Note that this doesn't actually wrap the input in double quotes.
 func escapeStringWorker(s string, quoteChar QuoteChar, flags getLiteralTextFlags, b *strings.Builder) {
-	pos := 0
-	i := 0
-	// Other quote values cannot match ASCII bytes; avoid truncating them.
-	quote := byte(0)
-	if quoteChar >= 0 && quoteChar < utf8.RuneSelf {
-		quote = byte(quoteChar)
+	if len(s) == 0 {
+		return
 	}
-	for i < len(s) {
-		if ch := s[i]; ch >= 0x20 && ch < utf8.RuneSelf && ch != '\\' && ch != quote && (quote != '`' || ch != '$') {
-			i += stringutil.UnescapedASCIIPrefixLen(s[i:], quote)
-			if i == len(s) {
-				break
-			}
-		}
-		ch, size := stringutil.DecodeJSStringRune(s[i:])
-
-		escape := false
-		if ch >= 0xD800 && ch <= 0xDFFF {
-			escape = true
-		} else if ch == utf8.RuneError && size == 1 {
-			// A stray byte that is not valid UTF-8 (for example, a fragment of a
-			// surrogate sentinel left behind by code that sliced the string by
-			// byte). Escape it as the Unicode replacement character so the output
-			// is always well-formed rather than containing raw invalid bytes.
-			escape = true
-		}
-
-		// This consists of the first 19 unprintable ASCII characters, canonical escapes, lineSeparator,
-		// paragraphSeparator, and nextLine. The latter three are just desirable to suppress new lines in
-		// the language service. These characters should be escaped when printing, and if any characters are added,
-		// `escapedCharsMap` and/or `jsxEscapedCharsMap` must be updated. Note that this *does not* include the 'delete'
-		// character. There is no reason for this other than that JSON.stringify does not handle it either.
-		switch ch {
-		case '\\':
-			if flags&getLiteralTextFlagsJsxAttributeEscape == 0 {
-				escape = true
-			}
-		case '$':
-			if quoteChar == QuoteCharBacktick && i+1 < len(s) && s[i+1] == '{' {
-				escape = true
-			}
-		case rune(quoteChar), '\u2028', '\u2029', '\u0085', '\r':
-			escape = true
-		case '\n':
-			if quoteChar != QuoteCharBacktick {
-				// Template strings preserve simple LF newlines, still encode CRLF (or CR).
-				escape = true
-			}
-		default:
-			if ch <= '\u001f' || flags&getLiteralTextFlagsNeverAsciiEscape == 0 && ch > '\u007f' {
-				escape = true
-			}
-		}
-
-		if escape {
-			if pos < i {
-				// Write string up to this point
-				b.WriteString(s[pos:i])
-			}
-
-			switch {
-			case flags&getLiteralTextFlagsJsxAttributeEscape != 0:
-				if ch == 0 {
-					b.WriteString("&#0;")
-				} else if match, ok := jsxEscapedCharsMap[ch]; ok {
-					b.WriteString(match)
-				} else {
-					encodeJsxCharacterEntity(b, ch)
-				}
-
-			default:
-				if ch == '\r' && quoteChar == QuoteCharBacktick && i+1 < len(s) && s[i+1] == '\n' {
-					// Template strings preserve simple LF newlines, but still must escape CRLF. Left alone, the
-					// above cases for `\r` and `\n` would inadvertently escape CRLF as two independent characters.
-					size++
-					b.WriteString(`\r\n`)
-				} else if ch > 0xffff {
-					// encode as surrogate pair
-					ch -= 0x10000
-					encodeUtf16EscapeSequence(b, (ch&0b11111111110000000000>>10)+0xD800)
-					encodeUtf16EscapeSequence(b, (ch&0b00000000001111111111)+0xDC00)
-				} else if ch >= 0xD800 && ch <= 0xDFFF {
-					encodeUtf16EscapeSequence(b, ch)
-				} else if ch == 0 {
-					if i+1 < len(s) && stringutil.IsDigit(rune(s[i+1])) {
-						// If the null character is followed by digits, print as a hex escape to prevent the result from
-						// parsing as an octal (which is forbidden in strict mode)
-						b.WriteString(`\x00`)
-					} else {
-						// Otherwise, keep printing a literal \0 for the null character
-						b.WriteString(`\0`)
-					}
-				} else {
-					if match, ok := escapedCharsMap[ch]; ok {
-						b.WriteString(match)
-					} else {
-						encodeUtf16EscapeSequence(b, ch)
-					}
-				}
-			}
-			pos = i + size
-		}
-
-		i += size
-	}
-
-	if pos < i {
-		b.WriteString(s[pos:])
+	if !appendEscapedString(s, quoteChar, flags, b) {
+		b.WriteString(s)
 	}
 }
 
 func EscapeString(s string, quoteChar QuoteChar) string {
 	var b strings.Builder
-	b.Grow(len(s) + 2)
-	escapeStringWorker(s, quoteChar, getLiteralTextFlagsNeverAsciiEscape, &b)
+	if !appendEscapedString(s, quoteChar, getLiteralTextFlagsNeverAsciiEscape, &b) {
+		return s
+	}
 	return b.String()
 }
 

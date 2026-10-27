@@ -427,8 +427,18 @@ type ECMALineStarts []TextPos
 
 func ComputeECMALineStarts(text string) ECMALineStarts {
 	if len(text) < 16 {
-		result := make([]TextPos, 0, strings.Count(text, "\n")+1)
-		return slices.AppendSeq(result, ComputeECMALineStartsSeq(text))
+		// Avoid iterator and vector dispatch overhead for short eager scans.
+		result := make(ECMALineStarts, 1, strings.Count(text, "\n")+1)
+		for pos := 0; pos < len(text); pos++ {
+			if b := text[pos]; b != '\r' && b != '\n' && b != 0xe2 {
+				continue
+			}
+			if end := ecmaLineBreakEnd(text, pos); end != 0 {
+				result = append(result, TextPos(end))
+				pos = end - 1
+			}
+		}
+		return result
 	}
 	return computeECMALineStarts(text)
 }
@@ -443,34 +453,38 @@ func ComputeECMALineStartsSeq(text string) iter.Seq[TextPos] {
 			if pos == textLen {
 				break
 			}
-			b := text[pos]
-			if b < utf8.RuneSelf {
-				pos++
-				switch b {
-				case '\r':
-					if pos < textLen && text[pos] == '\n' {
-						pos++
-					}
-					fallthrough
-				case '\n':
-					if !yield(lineStart) {
-						return
-					}
-					lineStart = pos
+			if end := ecmaLineBreakEnd(text, int(pos)); end != 0 {
+				if !yield(lineStart) {
+					return
 				}
+				pos = TextPos(end)
+				lineStart = pos
 			} else {
-				ch, size := utf8.DecodeRuneInString(text[pos:])
-				pos += TextPos(size)
-				if stringutil.IsLineBreak(ch) {
-					if !yield(lineStart) {
-						return
-					}
-					lineStart = pos
-				}
+				pos++
 			}
 		}
 		yield(lineStart)
 	}
+}
+
+func ecmaLineBreakEnd(text string, pos int) int {
+	switch text[pos] {
+	case '\r':
+		if pos+1 < len(text) && text[pos+1] == '\n' {
+			return pos + 2
+		}
+		return pos + 1
+	case '\n':
+		if pos == 0 || text[pos-1] != '\r' {
+			return pos + 1
+		}
+	case 0xe2:
+		// U+2028 and U+2029 differ only in the low bit of their final byte.
+		if pos+2 < len(text) && text[pos+1] == 0x80 && text[pos+2]&0xfe == 0xa8 {
+			return pos + 3
+		}
+	}
+	return 0
 }
 
 // PositionToLineAndByteOffset returns the 0-based line and byte offset from the
@@ -489,25 +503,30 @@ type UTF16Offset int
 // UTF16Len returns the number of UTF-16 code units needed to
 // represent the given UTF-8 encoded string.
 func UTF16Len(s string) UTF16Offset {
-	// Fast path: scan for non-ASCII bytes. For ASCII-only strings,
-	// each byte is one UTF-16 code unit, so we can return len(s) directly.
-	i := 0
-	if len(s) < 16 {
-		for i < len(s) && s[i] < utf8.RuneSelf {
-			i++
-		}
-	} else {
-		i = stringutil.ASCIIPrefixLen(s)
+	// Amortize vector dispatch and keep the long scan's stack frame out of
+	// short strings, where the compact byte loop is faster.
+	if len(s) >= 64 {
+		return utf16LenLong(s)
 	}
-	n := UTF16Offset(i)
+	for i := range len(s) {
+		if s[i] >= utf8.RuneSelf {
+			return UTF16Offset(i) + utf16LenRunes(s[i:])
+		}
+	}
+	return UTF16Offset(len(s))
+}
+
+func utf16LenLong(s string) UTF16Offset {
+	i := stringutil.ASCIIPrefixLen(s)
+	if i == len(s) {
+		return UTF16Offset(i)
+	}
 	// A non-ASCII start often means dense Unicode. Keep the compact rune loop
 	// rather than repeatedly dispatching SIMD for very short ASCII runs.
 	if i == 0 {
-		for _, r := range s {
-			n += UTF16Offset(utf16.RuneLen(r))
-		}
-		return n
+		return utf16LenRunes(s)
 	}
+	n := UTF16Offset(i)
 	for i < len(s) {
 		r, size := utf8.DecodeRuneInString(s[i:])
 		n += UTF16Offset(utf16.RuneLen(r))
@@ -517,6 +536,14 @@ func UTF16Len(s string) UTF16Offset {
 			n += UTF16Offset(size)
 			i += size
 		}
+	}
+	return n
+}
+
+func utf16LenRunes(s string) UTF16Offset {
+	var n UTF16Offset
+	for _, r := range s {
+		n += UTF16Offset(utf16.RuneLen(r))
 	}
 	return n
 }
