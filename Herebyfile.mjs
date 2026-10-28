@@ -102,6 +102,7 @@ const { values: rawOptions } = parseArgs({
         tests: { type: "string", short: "t" },
         fix: { type: "boolean" },
         force: { type: "boolean", default: parseEnvBoolean("FORCE") },
+        skipGenerate: { type: "boolean" },
         api: { type: "boolean" },
         all: { type: "boolean" },
         debug: { type: "boolean" },
@@ -783,10 +784,12 @@ export const generate = task({
     run: runGenerate,
 });
 
+const generateDependencies = options.skipGenerate ? [] : [generate];
+
 export const tscBuild = task({
     name: "tsc:build",
-    description: "Generates sources and builds the tsc binary.",
-    dependencies: [generate],
+    description: "Generates sources and builds the tsc binary. Pass --skipGenerate to use existing generated sources.",
+    dependencies: generateDependencies,
     run: async () => {
         await buildTsc({ extraFlags: options.release ? getReleaseBuildFlags() : [] });
     },
@@ -823,7 +826,9 @@ export const buildWatch = task({
         await watchDebounced("build:watch", async (_paths, abortSignal) => {
             abortSignal.throwIfAborted();
             invalidateFileFingerprints();
-            await runGenerate();
+            if (!options.skipGenerate) {
+                await runGenerate();
+            }
             abortSignal.throwIfAborted();
             await generateLibs(builtLocal);
             abortSignal.throwIfAborted();
@@ -1105,7 +1110,7 @@ export const testCodegen = task({
 export const buildAPI = task({
     name: "build:api",
     description: "Builds @typescript/typescript JS API.",
-    dependencies: [generate],
+    dependencies: generateDependencies,
     run: async () => {
         await run("npm", ["run", "-w", "@typescript/typescript", "build"]);
     },
@@ -1129,7 +1134,7 @@ async function runBuildAPITests() {
 export const buildAPITests = task({
     name: "build:api:test",
     description: "Builds the @typescript/typescript JS API tests.",
-    dependencies: [generate],
+    dependencies: generateDependencies,
     run: runBuildAPITests,
 });
 
@@ -2335,7 +2340,7 @@ function stripConditionsFromValue(value) {
 export const buildNativePreviewPackages = task({
     name: "typescript:build",
     description: "Builds TypeScript npm packages for the current platform. Pass --respectGoEnv to preserve caller-provided Go build settings.",
-    dependencies: usePublishedPlatformPackagesForVsix ? undefined : [generate],
+    dependencies: usePublishedPlatformPackagesForVsix ? undefined : generateDependencies,
     run: runBuildNativePreviewPackages,
 });
 
@@ -3198,7 +3203,7 @@ export const vscodeTypescriptRelease = task({
 export const nativePreviewRelease = task({
     name: "typescript:release",
     hiddenFromTaskList: true,
-    dependencies: [generate],
+    dependencies: generateDependencies,
     run: async () => {
         if (releaseVscodeTypescript) {
             throw new Error("typescript:release cannot be used with --vscodeTypescriptRelease; use vscode-typescript:release");
