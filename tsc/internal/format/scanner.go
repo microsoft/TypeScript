@@ -1,8 +1,6 @@
 package format
 
 import (
-	"slices"
-
 	"github.com/microsoft/TypeScript/tsc/internal/ast"
 	"github.com/microsoft/TypeScript/tsc/internal/core"
 	"github.com/microsoft/TypeScript/tsc/internal/debug"
@@ -266,10 +264,11 @@ func (s *formattingScanner) readTokenInfo(n *ast.Node) tokenInfo {
 	}
 
 	s.hasLastTokenInfo = true
+	// Trivia buffers are replaced rather than reused, so saved token infos can share them.
 	s.lastTokenInfo = tokenInfo{
-		leadingTrivia:  slices.Clone(s.leadingTrivia),
+		leadingTrivia:  s.leadingTrivia,
 		token:          token,
-		trailingTrivia: slices.Clone(s.trailingTrivia),
+		trailingTrivia: s.trailingTrivia,
 	}
 	s.lastTokenInfo = fixTokenKind(s.lastTokenInfo, n)
 

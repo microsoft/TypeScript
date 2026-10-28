@@ -21,6 +21,14 @@ func TestTextScanMultipleCandidates(t *testing.T) {
 func BenchmarkTextScanPrefixes(b *testing.B) {
 	for _, length := range []int{8, 16, 31, 32, 63, 64, 127, 128, 1024} {
 		b.Run(strconv.Itoa(length), func(b *testing.B) {
+			b.Run("Whitespace", func(b *testing.B) {
+				text := strings.Repeat(" ", length) + "x" + strings.Repeat("z", 128)
+				b.SetBytes(int64(length))
+				b.ReportAllocs()
+				for b.Loop() {
+					ASCIISingleLineWhitespacePrefixLen(text)
+				}
+			})
 			b.Run("LineBreak", func(b *testing.B) {
 				text := strings.Repeat("a", length) + "\n" + strings.Repeat("z", 128)
 				b.SetBytes(int64(length + 1))
@@ -49,9 +57,35 @@ func checkTextScan(t *testing.T, text string) {
 	if got, want := LineBreakPrefixLen(text), lineBreakPrefixLen(text); got != want {
 		t.Fatalf("LineBreakPrefixLen(%q) = %d, want %d", text, got, want)
 	}
+	if got, want := ASCIISingleLineWhitespacePrefixLen(text), asciiSingleLineWhitespacePrefixLen(text); got != want {
+		t.Fatalf("ASCIISingleLineWhitespacePrefixLen(%q) = %d, want %d", text, got, want)
+	}
 	for _, quote := range []byte{0, '\'', '"', '`', 0xff} {
 		if got, want := UnescapedASCIIPrefixLen(text, quote), unescapedASCIIPrefixLen(text, quote); got != want {
 			t.Fatalf("UnescapedASCIIPrefixLen(%q, %q) = %d, want %d", text, quote, got, want)
+		}
+	}
+}
+
+func TestWhitespacePrefixBytes(t *testing.T) {
+	t.Parallel()
+	for prefix := range 130 {
+		whitespace := strings.Repeat(" \t\v\f", prefix)
+		for offset := range 4 {
+			padding := whitespace[min(offset, len(whitespace)):]
+			for value := range 256 {
+				text := padding + string(byte(value)) + "x"
+				want := len(padding)
+				if value == ' ' || value == '\t' || value == '\v' || value == '\f' {
+					want++
+				}
+				if got := ASCIISingleLineWhitespacePrefixLen(text); got != want {
+					t.Fatalf("prefix %d, offset %d, byte %x: got %d, want %d", prefix, offset, value, got, want)
+				}
+			}
+			if got := ASCIISingleLineWhitespacePrefixLen(padding); got != len(padding) {
+				t.Fatalf("prefix %d, offset %d: got %d, want %d", prefix, offset, got, len(padding))
+			}
 		}
 	}
 }

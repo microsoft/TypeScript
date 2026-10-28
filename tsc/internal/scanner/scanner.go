@@ -488,6 +488,7 @@ func (s *Scanner) Scan() ast.Kind {
 			if s.skipTrivia {
 				continue
 			}
+			s.pos += stringutil.ASCIISingleLineWhitespacePrefixLen(s.text[s.pos:s.end])
 			for {
 				ch, size := s.charAndSize()
 				if !stringutil.IsWhiteSpaceSingleLine(ch) {
@@ -627,9 +628,7 @@ func (s *Scanner) Scan() ast.Kind {
 				s.pos += 2
 
 				for {
-					s.scanASCIIWhile(func(b byte) bool {
-						return b != '\n' && b != '\r'
-					})
+					s.pos += stringutil.LineBreakPrefixLen(s.text[s.pos:s.end])
 					ch1, size := s.charAndSize()
 					if size == 0 || stringutil.IsLineBreak(ch1) {
 						break
@@ -2323,7 +2322,10 @@ func SkipTriviaEx(text string, pos int, options *SkipTriviaOptions) int {
 		if pos >= textLen {
 			return pos
 		}
-		ch, size := utf8.DecodeRuneInString(text[pos:])
+		ch, size := rune(text[pos]), 1
+		if ch >= utf8.RuneSelf {
+			ch, size = utf8.DecodeRuneInString(text[pos:])
+		}
 		switch ch {
 		case '\r':
 			if pos+1 < textLen && text[pos+1] == '\n' {
@@ -2339,6 +2341,7 @@ func SkipTriviaEx(text string, pos int, options *SkipTriviaOptions) int {
 			continue
 		case '\t', '\v', '\f', ' ':
 			pos++
+			pos += stringutil.ASCIISingleLineWhitespacePrefixLen(text[pos:])
 			continue
 		case '/':
 			if options.StopAtComments {
@@ -2348,6 +2351,10 @@ func SkipTriviaEx(text string, pos int, options *SkipTriviaOptions) int {
 				if text[pos+1] == '/' {
 					pos += 2
 					for pos < textLen {
+						pos += stringutil.LineBreakPrefixLen(text[pos:])
+						if pos == textLen {
+							break
+						}
 						ch, size := utf8.DecodeRuneInString(text[pos:])
 						if stringutil.IsLineBreak(ch) {
 							break
@@ -2359,13 +2366,10 @@ func SkipTriviaEx(text string, pos int, options *SkipTriviaOptions) int {
 				}
 				if text[pos+1] == '*' {
 					pos += 2
-					for pos < textLen {
-						if text[pos] == '*' && (pos+1 < textLen) && text[pos+1] == '/' {
-							pos += 2
-							break
-						}
-						_, size := utf8.DecodeRuneInString(text[pos:])
-						pos += size
+					if end := strings.Index(text[pos:], "*/"); end >= 0 {
+						pos += end + 2
+					} else {
+						pos = textLen
 					}
 					canConsumeStar = false
 					continue
@@ -2701,14 +2705,25 @@ func GetECMALineAndByteOffsetOfPosition(sourceFile ast.SourceFileLike, pos int) 
 }
 
 func GetECMAEndLinePosition(sourceFile *ast.SourceFile, line int) int {
-	pos := int(GetECMALineStarts(sourceFile)[line])
-	for {
-		ch, size := utf8.DecodeRuneInString(sourceFile.Text()[pos:])
-		if size == 0 || stringutil.IsLineBreak(ch) {
-			return pos - 1
-		}
-		pos += size
+	lineStarts := GetECMALineStarts(sourceFile)[line:]
+	text := sourceFile.Text()
+	if len(lineStarts) == 1 {
+		return len(text) - 1
 	}
+	end := int(lineStarts[1])
+	switch text[end-1] {
+	case '\n':
+		end--
+		if end > 0 && text[end-1] == '\r' {
+			end--
+		}
+	case '\r':
+		end--
+	default:
+		// The remaining ECMAScript line separators, U+2028 and U+2029, are three bytes.
+		end -= 3
+	}
+	return end - 1
 }
 
 // GetECMAPositionOfLineAndUTF16Character converts a 0-based line number and UTF-16

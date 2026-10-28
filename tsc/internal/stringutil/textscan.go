@@ -21,6 +21,24 @@ func asciiPrefixLen(text string) int {
 	return len(text)
 }
 
+// ASCIISingleLineWhitespacePrefixLen returns the length of the leading run of
+// ASCII whitespace other than line breaks. Non-ASCII whitespace is left to the caller.
+func ASCIISingleLineWhitespacePrefixLen(text string) int {
+	if len(text) < 16 || text[0] != ' ' && text[0] != '\t' && text[0] != '\v' && text[0] != '\f' {
+		return asciiSingleLineWhitespacePrefixLen(text)
+	}
+	return asciiSingleLineWhitespacePrefixLenLong(text)
+}
+
+func asciiSingleLineWhitespacePrefixLen(text string) int {
+	for i := range len(text) {
+		if b := text[i]; b != ' ' && b != '\t' && b != '\v' && b != '\f' {
+			return i
+		}
+	}
+	return len(text)
+}
+
 func lineBreakPrefixLen(text string) int {
 	for i := range len(text) {
 		if b := text[i]; b == '\r' || b == '\n' || b == 0xe2 {

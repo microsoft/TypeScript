@@ -54,3 +54,37 @@ func TestFormatNoTrailingSpace(t *testing.T) {
 		})
 	}
 }
+
+func TestFormatBulkTrivia(t *testing.T) {
+	t.Parallel()
+	for _, test := range []struct {
+		name    string
+		body    string
+		newLine string
+	}{
+		{"long indentation", strings.Repeat(" ", 129) + "return 1;" + strings.Repeat(" ", 129), "\n"},
+		{"mixed indentation", strings.Repeat(" \t", 33) + "return 1;", "\r\n"},
+		{"Unicode indentation", strings.Repeat(" ", 32) + "\u00a0\u2003return 1;", "\n"},
+		{"long comment", "/* " + strings.Repeat("comment ", 64) + "*/" + "\nreturn 1;", "\n"},
+	} {
+		t.Run(test.name, func(t *testing.T) {
+			t.Parallel()
+			options := lsutil.GetDefaultFormatCodeSettings()
+			options.NewLineCharacter = test.newLine
+			options.TrimTrailingWhitespace = core.TSTrue
+			ctx := format.WithFormatCodeSettings(t.Context(), options, test.newLine)
+			text := "function f(){" + test.newLine + test.body + test.newLine + "}" + test.newLine
+			expectedBody := "    return 1;"
+			if test.name == "long comment" {
+				expectedBody = "    /* " + strings.Repeat("comment ", 64) + "*/\n    return 1;"
+			}
+			expected := "function f() {" + test.newLine + expectedBody + test.newLine + "}" + test.newLine
+			parse := func(text string) *ast.SourceFile {
+				return parser.ParseSourceFile(ast.SourceFileParseOptions{FileName: "/test.ts", PathKey: "/test.ts"}, text, core.ScriptKindTS)
+			}
+			formatted := applyBulkEdits(text, format.FormatDocument(ctx, parse(text)))
+			assert.Equal(t, formatted, expected)
+			assert.Equal(t, len(format.FormatDocument(ctx, parse(formatted))), 0)
+		})
+	}
+}

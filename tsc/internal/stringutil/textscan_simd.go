@@ -53,6 +53,28 @@ func asciiPrefixLenLong(text string) int {
 	return i + asciiPrefixLen(text[i:])
 }
 
+func asciiSingleLineWhitespacePrefixLenLong(text string) int {
+	width := (simd.Uint8s{}).Len()
+	bytes := unsafe.Slice(unsafe.StringData(text), len(text))
+	space := simd.BroadcastUint8s(' ')
+	tab := simd.BroadcastUint8s('\t')
+	verticalTab := simd.BroadcastUint8s('\v')
+	formFeed := simd.BroadcastUint8s('\f')
+	allBits := simd.BroadcastUint8s(0xff)
+	words := make([]uint64, (simd.Uint64s{}).Len())
+	i := 0
+	for len(text)-i >= width {
+		v := simd.LoadUint8s(bytes[i:])
+		v.Equal(space).Or(v.Equal(tab)).Or(v.Equal(verticalTab)).Or(v.Equal(formFeed)).
+			ToInt8s().ToBits().Xor(allBits).ReshapeToUint64s().Store(words)
+		if offset := firstNonzeroByte(words); offset < width {
+			return i + offset
+		}
+		i += width
+	}
+	return i + asciiSingleLineWhitespacePrefixLen(text[i:])
+}
+
 // LineBreakPrefixLen returns the byte offset of the first possible ECMAScript
 // line break (CR, LF, or the leading byte of U+2028/U+2029), or len(text).
 func LineBreakPrefixLen(text string) int {
