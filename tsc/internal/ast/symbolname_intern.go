@@ -159,11 +159,11 @@ func (c *SymbolNameCache) Make(text string) SymbolName {
 func (c *SymbolNameCache) MakeHashed(text string, hash uint64) SymbolName {
 	slot := &c.slots[hash&(symbolNameCacheSize-1)]
 	if slot.id != 0 && slot.hash == uint32(hash>>32) && symbolNames.text(slot.id) == text {
-		return SymbolName{slot.id}
+		return SymbolName{uint64(slot.id)}
 	}
 	id := symbolNames.internHashed(text, hash)
 	*slot = symbolNameCacheSlot{hash: uint32(hash >> 32), id: id}
-	return SymbolName{id}
+	return SymbolName{uint64(id)}
 }
 
 // Symbol name hashes are FNV-1a with a final mix. Names are short, so this

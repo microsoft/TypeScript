@@ -170,16 +170,20 @@ func (s *Symbol) CombinedLocalAndExportSymbolFlags() SymbolFlags {
 
 // SymbolName is an interned name used for symbol identity and lookup.
 // Its zero value denotes an unset name and must not be passed to Value.
+//
+// Interned IDs are 32 bits, but SymbolName stores them in 64. Every struct
+// and map slot that holds a name aligns its neighbors to 8 bytes, so a 32-bit
+// name is padded to 8 bytes anyway; the upper bits cost no memory.
 type SymbolName struct {
-	id uint32
+	id uint64
 }
 
 func MakeSymbolName(text string) SymbolName {
-	return SymbolName{symbolNames.intern(text)}
+	return SymbolName{uint64(symbolNames.intern(text))}
 }
 
 func (name SymbolName) Value() string {
-	return symbolNames.text(name.id)
+	return symbolNames.text(uint32(name.id))
 }
 
 func (name SymbolName) IsZero() bool {
