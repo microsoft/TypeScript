@@ -274,7 +274,7 @@ func (c *Checker) storedCost(key memoKey) *instantiationCount {
 	if !c.mayHaveCost(key) {
 		return nil
 	}
-	state := c.memoStates[key]
+	state := c.peekMemoState(key)
 	if state == nil {
 		return nil
 	}
