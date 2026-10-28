@@ -117,6 +117,15 @@ func memoKeyOf[T any](entity *T, field memoField) memoKey {
 	return memoKey(uint64(uintptr(unsafe.Pointer(entity)))<<8 | uint64(field))
 }
 
+// symbol returns the symbol identified by a key of a symbol's memo field.
+func (k memoKey) symbol() *ast.Symbol {
+	p := uintptr(k >> 8)
+	// SAFETY: k was made by memoKeyOf from a symbol that lives as long as the
+	// program or checker store, which outlives every key made from it, so the
+	// address still points to that symbol.
+	return *(**ast.Symbol)(unsafe.Pointer(&p))
+}
+
 // cell returns the memo identified by a key of field memoCell, which is the
 // address of the memo. The memo is alive, since its key is in use, and the
 // heap does not move.

@@ -17002,61 +17002,117 @@ func (c *Checker) getExportsOfSymbol(symbol *ast.Symbol) ast.SymbolTable {
 }
 
 func (c *Checker) getResolvedMembersOrExportsOfSymbol(symbol *ast.Symbol, resolutionKind MembersOrExportsResolutionKind) ast.SymbolTable {
-	c.beginMemo(memoKeyOf(symbol, memoResolvedMembers+memoField(resolutionKind)))
+	key := memoKeyOf(symbol, memoResolvedMembers+memoField(resolutionKind))
+	if floor := c.findEarlierMembersInCycle(key, symbol); floor >= 0 {
+		return c.yieldMembers(key, symbol, resolutionKind, floor)
+	}
+	c.beginMemo(key)
 	result := c.getResolvedMembersOrExportsOfSymbolUncached(symbol, resolutionKind)
 	c.endMemo()
+	return result
+}
+
+// findEarlierMembersInCycle handles re-entering the member table of symbol,
+// identified by key, while it is resolved. Re-entry observes the part of the
+// table published so far, so when the tables of several symbols are resolved
+// in a cycle, the result depends on which table was entered first. If the
+// table of a symbol declared before this one is resolved since this table
+// was entered, it returns the index in resolutions of the first declared,
+// the table the cycle canonically enters at; otherwise -1.
+func (c *Checker) findEarlierMembersInCycle(key memoKey, symbol *ast.Symbol) int {
+	i, ok := c.resolving[key]
+	if !ok || int(i) < c.visibleStart || c.isYieldingTo(key, TypeSystemPropertyNameStructuredMembers) {
+		return -1
+	}
+	for j := int(i) + 1; j < len(c.resolutions); j++ {
+		f := &c.resolutions[j]
+		if field := f.key.field(); f.key != 0 && (field == memoSymbolMembers || field == memoSymbolExports) {
+			if c.compareSymbols(f.key.symbol(), symbol) < 0 {
+				return int(i) + 1
+			}
+		}
+	}
+	return -1
+}
+
+// yieldMembers computes the member table of symbol again, as if the cycle
+// in progress had been entered at the table of a symbol declared before it:
+// with the computation of the table in progress, which starts at floor,
+// hidden. Re-entry observes the incomplete table, so what is computed since
+// it started is in a cycle. The table in progress is the one cached once it
+// is complete, so whatever computing it again caches is discarded, keeping
+// only its result and effects for the caller.
+func (c *Checker) yieldMembers(key memoKey, symbol *ast.Symbol, resolutionKind MembersOrExportsResolutionKind, floor int) ast.SymbolTable {
+	c.markCircular(floor - 1)
+	mark := c.markDiscard()
+	links := c.membersAndExportsLinks.Get(symbol)
+	saved := links[resolutionKind]
+	links[resolutionKind] = nil
+	c.beginCycleYield(key, TypeSystemPropertyNameStructuredMembers, -1, floor)
+	c.beginMemo(key)
+	result := c.resolveMembersOrExportsOfSymbol(symbol, resolutionKind, links)
+	c.endMemoUncached()
+	c.endCycleYield()
+	links[resolutionKind] = saved
+	c.discardLogSince(mark.discardLog)
+	c.releaseDiscardMark(mark)
 	return result
 }
 
 func (c *Checker) getResolvedMembersOrExportsOfSymbolUncached(symbol *ast.Symbol, resolutionKind MembersOrExportsResolutionKind) ast.SymbolTable {
 	links := c.membersAndExportsLinks.Get(symbol)
 	if links[resolutionKind] == nil {
-		isStatic := resolutionKind == MembersOrExportsResolutionKindResolvedExports
-		earlySymbols := symbol.Exports()
-		switch {
-		case !isStatic:
-			earlySymbols = symbol.Members()
-		case symbol.Flags()&ast.SymbolFlagsModule != 0:
-			earlySymbols, _ = c.getExportsOfModuleWorker(symbol)
-		}
-		links[resolutionKind] = earlySymbols
-		// fill in any as-yet-unresolved late-bound members.
-		var lateSymbols ast.SymbolTable
-		for _, decl := range symbol.Declarations() {
-			for _, member := range getMembersOfDeclaration(decl) {
-				if isStatic == ast.HasStaticModifier(member) {
-					switch {
-					case c.hasLateBindableName(member):
-						if lateSymbols == nil {
-							lateSymbols = ast.NewSymbolTable()
-						}
-						c.lateBindMember(symbol, earlySymbols, lateSymbols, member)
-					case c.hasLateBindableIndexSignature(member):
-						if lateSymbols == nil {
-							lateSymbols = ast.NewSymbolTable()
-						}
-						c.lateBindIndexSignature(symbol, earlySymbols, lateSymbols, member.AsNode() /* as LateBoundDeclaration | LateBoundBinaryExpressionDeclaration */)
-					}
-				}
-			}
-		}
-		if isStatic {
-			if assignmentSymbol := symbol.Exports().Get(ast.InternalSymbolNameAssignmentDeclaration); assignmentSymbol != nil {
-				for _, member := range assignmentSymbol.Declarations() {
-					if c.hasLateBindableName(member) {
-						if lateSymbols == nil {
-							lateSymbols = ast.NewSymbolTable()
-						}
-						c.lateBindMember(symbol, earlySymbols, lateSymbols, member)
-					}
-				}
-			}
-		}
-		links[resolutionKind] = c.combineSymbolTables(earlySymbols, lateSymbols)
+		c.resolveMembersOrExportsOfSymbol(symbol, resolutionKind, links)
 		if c.logResults() {
 			c.discardLog = append(c.discardLog, discardEntry{nil, func() { links[resolutionKind] = nil }, false})
 		}
 	}
+	return links[resolutionKind]
+}
+
+func (c *Checker) resolveMembersOrExportsOfSymbol(symbol *ast.Symbol, resolutionKind MembersOrExportsResolutionKind, links *MembersAndExportsLinks) ast.SymbolTable {
+	isStatic := resolutionKind == MembersOrExportsResolutionKindResolvedExports
+	earlySymbols := symbol.Exports()
+	switch {
+	case !isStatic:
+		earlySymbols = symbol.Members()
+	case symbol.Flags()&ast.SymbolFlagsModule != 0:
+		earlySymbols, _ = c.getExportsOfModuleWorker(symbol)
+	}
+	links[resolutionKind] = earlySymbols
+	// fill in any as-yet-unresolved late-bound members.
+	var lateSymbols ast.SymbolTable
+	for _, decl := range symbol.Declarations() {
+		for _, member := range getMembersOfDeclaration(decl) {
+			if isStatic == ast.HasStaticModifier(member) {
+				switch {
+				case c.hasLateBindableName(member):
+					if lateSymbols == nil {
+						lateSymbols = ast.NewSymbolTable()
+					}
+					c.lateBindMember(symbol, earlySymbols, lateSymbols, member)
+				case c.hasLateBindableIndexSignature(member):
+					if lateSymbols == nil {
+						lateSymbols = ast.NewSymbolTable()
+					}
+					c.lateBindIndexSignature(symbol, earlySymbols, lateSymbols, member.AsNode() /* as LateBoundDeclaration | LateBoundBinaryExpressionDeclaration */)
+				}
+			}
+		}
+	}
+	if isStatic {
+		if assignmentSymbol := symbol.Exports().Get(ast.InternalSymbolNameAssignmentDeclaration); assignmentSymbol != nil {
+			for _, member := range assignmentSymbol.Declarations() {
+				if c.hasLateBindableName(member) {
+					if lateSymbols == nil {
+						lateSymbols = ast.NewSymbolTable()
+					}
+					c.lateBindMember(symbol, earlySymbols, lateSymbols, member)
+				}
+			}
+		}
+	}
+	links[resolutionKind] = c.combineSymbolTables(earlySymbols, lateSymbols)
 	return links[resolutionKind]
 }
 
