@@ -58,19 +58,10 @@ a.ts(128,14): error TS2769: No overload matches this call.
             Type 'IteratorYieldResult<undefined>' is not assignable to type 'IteratorResult<IteratorInput<unknown>, any>' with 'exactOptionalPropertyTypes: true'. Consider adding 'undefined' to the types of the target's properties.
               Type 'IteratorYieldResult<undefined>' is not assignable to type 'IteratorYieldResult<IteratorInput<unknown>>' with 'exactOptionalPropertyTypes: true'. Consider adding 'undefined' to the types of the target's properties.
                 Type 'undefined' is not assignable to type 'IteratorInput<unknown>'.
-a.ts(144,7): error TS2322: Type '[number, ...IteratorZipValue<Iterable<number>, number, undefined, [number]>[]][]' is not assignable to type 'number[][]'.
-  Type '[number, ...IteratorZipValue<Iterable<number>, number, undefined, [number]>[]]' is not assignable to type 'number[]'.
-    Type 'IteratorZipValue<Iterable<number>, number, undefined, [number]>' is not assignable to type 'number'.
-      Type 'undefined' is not assignable to type 'number'.
 a.ts(149,7): error TS2322: Type '({ [x: string]: IteratorZipValue<Iterable<number>, string, undefined, {}>; } & {})[]' is not assignable to type 'Record<string, number>[]'.
   Type '{ [x: string]: IteratorZipValue<Iterable<number>, string, undefined, {}>; } & {}' is not assignable to type 'Record<string, number>'.
     'string' index signatures are incompatible.
       Type 'IteratorZipValue<Iterable<number>, string, undefined, {}>' is not assignable to type 'number'.
-        Type 'undefined' is not assignable to type 'number'.
-a.ts(154,7): error TS2322: Type '({ a: IteratorZipValue<number[], "a", undefined, Record<string, number>>; b: IteratorZipValue<number[], "b", undefined, Record<string, number>>; } & {})[]' is not assignable to type '{ a: number; b: number; }[]'.
-  Type '{ a: IteratorZipValue<number[], "a", undefined, Record<string, number>>; b: IteratorZipValue<number[], "b", undefined, Record<string, number>>; } & {}' is not assignable to type '{ a: number; b: number; }'.
-    Types of property 'a' are incompatible.
-      Type 'IteratorZipValue<number[], "a", undefined, Record<string, number>>' is not assignable to type 'number'.
         Type 'undefined' is not assignable to type 'number'.
 a.ts(163,7): error TS2322: Type '[number, IteratorZipValue<string[], "1", undefined, [number]>][]' is not assignable to type '[number, string][]'.
   Type '[number, IteratorZipValue<string[], "1", undefined, [number]>]' is not assignable to type '[number, string]'.
@@ -114,11 +105,6 @@ a.ts(190,7): error TS2322: Type '({ [x: `a${string}`]: IteratorZipValue<Iterable
     '`a${string}`' index signatures are incompatible.
       Type 'IteratorZipValue<Iterable<number>, `a${string}`, undefined, {}>' is not assignable to type 'number'.
         Type 'undefined' is not assignable to type 'number'.
-a.ts(198,7): error TS2322: Type '({ a: number; b: IteratorZipValue<number[], "b", undefined, Record<string, number> & { a: number; }>; } & {})[]' is not assignable to type '{ a: number; b: number; }[]'.
-  Type '{ a: number; b: IteratorZipValue<number[], "b", undefined, Record<string, number> & { a: number; }>; } & {}' is not assignable to type '{ a: number; b: number; }'.
-    Types of property 'b' are incompatible.
-      Type 'IteratorZipValue<number[], "b", undefined, Record<string, number> & { a: number; }>' is not assignable to type 'number'.
-        Type 'undefined' is not assignable to type 'number'.
 a.ts(203,7): error TS2322: Type '[number, IteratorZipValue<string[], "1", undefined, [number] | [number, string]>][]' is not assignable to type '[number, string][]'.
   Type '[number, IteratorZipValue<string[], "1", undefined, [number] | [number, string]>]' is not assignable to type '[number, string]'.
     Type at position 1 in source is not compatible with type at position 1 in target.
@@ -128,6 +114,9 @@ a.ts(236,7): error TS2322: Type 'unknown' is not assignable to type 'string'.
 a.ts(237,7): error TS2322: Type 'unknown' is not assignable to type 'string'.
 a.ts(253,7): error TS2322: Type 'Record<PropertyKey, unknown>[]' is not assignable to type 'never[]'.
   Type 'Record<PropertyKey, unknown>' is not assignable to type 'never'.
+a.ts(256,32): error TS2769: No overload matches this call.
+  The last overload gave the following error.
+    Argument of type '{}' is not assignable to parameter of type 'never'.
 a.ts(258,7): error TS2322: Type 'Record<PropertyKey, unknown>[]' is not assignable to type 'never[]'.
   Type 'Record<PropertyKey, unknown>' is not assignable to type 'never'.
 a.ts(260,19): error TS2769: No overload matches this call.
@@ -177,15 +166,13 @@ a.ts(307,7): error TS2322: Type '({ [x: string]: IteratorZipValue<Iterable<numbe
 a.ts(314,45): error TS2769: No overload matches this call.
   The last overload gave the following error.
     Argument of type '{ a: number[]; }' is not assignable to parameter of type 'never'.
-a.ts(315,23): error TS2769: No overload matches this call.
-  The last overload gave the following error.
-    Argument of type '{}' is not assignable to parameter of type 'never'.
+a.ts(315,19): error TS2344: Type '{}' does not satisfy the constraint 'object'.
 a.ts(316,80): error TS2769: No overload matches this call.
   The last overload gave the following error.
     Type 'number' is not assignable to type 'object'.
 
 
-==== a.ts (45 errors) ====
+==== a.ts (43 errors) ====
     declare const a1: unique symbol;
     
     const a2: [number, string][] = Iterator.zip([
@@ -415,11 +402,6 @@ a.ts(316,80): error TS2769: No overload matches this call.
     const a55 = Iterator.zip(a54, { mode: "longest", padding: [0] }).toArray();
     const a56: (number | undefined)[][] = a55;
     const a57: number[][] = a55;
-          ~~~
-!!! error TS2322: Type '[number, ...IteratorZipValue<Iterable<number>, number, undefined, [number]>[]][]' is not assignable to type 'number[][]'.
-!!! error TS2322:   Type '[number, ...IteratorZipValue<Iterable<number>, number, undefined, [number]>[]]' is not assignable to type 'number[]'.
-!!! error TS2322:     Type 'IteratorZipValue<Iterable<number>, number, undefined, [number]>' is not assignable to type 'number'.
-!!! error TS2322:       Type 'undefined' is not assignable to type 'number'.
     
     const a58: Record<string, Iterable<number>> = { a: [1], b: [2, 3] };
     const a59 = Iterator.zipKeyed(a58, { mode: "longest", padding: {} }).toArray();
@@ -436,12 +418,6 @@ a.ts(316,80): error TS2769: No overload matches this call.
     const a63 = Iterator.zipKeyed({ a: [1], b: [2, 3] }, { mode: "longest", padding: a62 }).toArray();
     const a64: { a: number | undefined; b: number | undefined; }[] = a63;
     const a65: { a: number; b: number; }[] = a63;
-          ~~~
-!!! error TS2322: Type '({ a: IteratorZipValue<number[], "a", undefined, Record<string, number>>; b: IteratorZipValue<number[], "b", undefined, Record<string, number>>; } & {})[]' is not assignable to type '{ a: number; b: number; }[]'.
-!!! error TS2322:   Type '{ a: IteratorZipValue<number[], "a", undefined, Record<string, number>>; b: IteratorZipValue<number[], "b", undefined, Record<string, number>>; } & {}' is not assignable to type '{ a: number; b: number; }'.
-!!! error TS2322:     Types of property 'a' are incompatible.
-!!! error TS2322:       Type 'IteratorZipValue<number[], "a", undefined, Record<string, number>>' is not assignable to type 'number'.
-!!! error TS2322:         Type 'undefined' is not assignable to type 'number'.
     
     const a66 = Iterator.zip([[1], ["a"]], { mode: "longest", padding: [0, ""] }).toArray();
     const a67: [number, string][] = a66;
@@ -536,12 +512,6 @@ a.ts(316,80): error TS2769: No overload matches this call.
     const a98 = Iterator.zipKeyed({ a: [1], b: [2] }, { mode: "longest", padding: a97 }).toArray();
     const a99: { a: number; b: number | undefined; }[] = a98;
     const a100: { a: number; b: number; }[] = a98;
-          ~~~~
-!!! error TS2322: Type '({ a: number; b: IteratorZipValue<number[], "b", undefined, Record<string, number> & { a: number; }>; } & {})[]' is not assignable to type '{ a: number; b: number; }[]'.
-!!! error TS2322:   Type '{ a: number; b: IteratorZipValue<number[], "b", undefined, Record<string, number> & { a: number; }>; } & {}' is not assignable to type '{ a: number; b: number; }'.
-!!! error TS2322:     Types of property 'b' are incompatible.
-!!! error TS2322:       Type 'IteratorZipValue<number[], "b", undefined, Record<string, number> & { a: number; }>' is not assignable to type 'number'.
-!!! error TS2322:         Type 'undefined' is not assignable to type 'number'.
     
     declare const a101: [number] | [number, string];
     const a102 = Iterator.zip([[1], ["a"]], { mode: "longest", padding: a101 }).toArray();
@@ -613,6 +583,11 @@ a.ts(316,80): error TS2769: No overload matches this call.
     
     declare const a134: {};
     const a135 = Iterator.zipKeyed(a134).toArray();
+                                   ~~~~
+!!! error TS2769: No overload matches this call.
+!!! error TS2769:   The last overload gave the following error.
+!!! error TS2769:     Argument of type '{}' is not assignable to parameter of type 'never'.
+!!! related TS2771 lib.esnext.iterator.d.ts:--:--: The last overload is declared here.
     const a136: unknown = a135[0].a;
     const a137: never[] = a135;
           ~~~~
@@ -740,11 +715,8 @@ a.ts(316,80): error TS2769: No overload matches this call.
 !!! error TS2769:     Argument of type '{ a: number[]; }' is not assignable to parameter of type 'never'.
 !!! related TS2771 lib.esnext.iterator.d.ts:--:--: The last overload is declared here.
     Iterator.zipKeyed<{}>({}, { mode: "longest", padding: 0 });
-                          ~~
-!!! error TS2769: No overload matches this call.
-!!! error TS2769:   The last overload gave the following error.
-!!! error TS2769:     Argument of type '{}' is not assignable to parameter of type 'never'.
-!!! related TS2771 lib.esnext.iterator.d.ts:--:--: The last overload is declared here.
+                      ~~
+!!! error TS2344: Type '{}' does not satisfy the constraint 'object'.
     Iterator.zipKeyed<{ a: Iterable<number>; }, {}>({ a: [1] }, { mode: "longest", padding: 0 });
                                                                                    ~~~~~~~
 !!! error TS2769: No overload matches this call.

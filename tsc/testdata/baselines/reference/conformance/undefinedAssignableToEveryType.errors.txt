@@ -5,6 +5,7 @@ undefinedAssignableToEveryType.ts(15,5): error TS2322: Type 'undefined' is not a
 undefinedAssignableToEveryType.ts(16,5): error TS2322: Type 'undefined' is not assignable to type 'Date'.
 undefinedAssignableToEveryType.ts(19,5): error TS2322: Type 'undefined' is not assignable to type 'Object'.
 undefinedAssignableToEveryType.ts(20,5): error TS2322: Type 'undefined' is not assignable to type '{}'.
+  Type 'undefined' is not assignable to type 'not undefined'.
 undefinedAssignableToEveryType.ts(21,5): error TS2322: Type 'undefined' is not assignable to type '() => {}'.
 undefinedAssignableToEveryType.ts(22,5): error TS2322: Type 'undefined' is not assignable to type 'Function'.
 undefinedAssignableToEveryType.ts(23,5): error TS2322: Type 'undefined' is not assignable to type '(x: number) => string'.
@@ -59,6 +60,7 @@ undefinedAssignableToEveryType.ts(36,5): error TS2322: Type 'undefined' is not a
     var i: {} = undefined;
         ~
 !!! error TS2322: Type 'undefined' is not assignable to type '{}'.
+!!! error TS2322:   Type 'undefined' is not assignable to type 'not undefined'.
     var j: () => {} = undefined;
         ~
 !!! error TS2322: Type 'undefined' is not assignable to type '() => {}'.

@@ -1,0 +1,65 @@
+nonNullishUnknownApparentType.ts(6,15): error TS2345: Argument of type 'NonNullable<unknown>' is not assignable to parameter of type 'Record<string, string>'.
+  Index signature for type 'string' is missing in type '{}'.
+nonNullishUnknownApparentType.ts(7,15): error TS2345: Argument of type '{}' is not assignable to parameter of type 'Record<string, string>'.
+  Index signature for type 'string' is missing in type '{}'.
+nonNullishUnknownApparentType.ts(8,15): error TS2345: Argument of type '{}' is not assignable to parameter of type 'Record<string, string>'.
+  Index signature for type 'string' is missing in type '{}'.
+nonNullishUnknownApparentType.ts(14,23): error TS2345: Argument of type 'NonNullable<unknown>' is not assignable to parameter of type 'Record<string, string>'.
+  Index signature for type 'string' is missing in type '{}'.
+nonNullishUnknownApparentType.ts(23,19): error TS2345: Argument of type 'Value' is not assignable to parameter of type 'Record<string, string>'.
+  Type '{}' is not assignable to type 'Record<string, string>'.
+    Index signature for type 'string' is missing in type '{}'.
+nonNullishUnknownApparentType.ts(32,7): error TS2322: Type '"toString"' is not assignable to type 'never'.
+
+
+==== nonNullishUnknownApparentType.ts (6 errors) ====
+    declare function acceptsRecord(value: Record<string, string>): void;
+    declare const value: unknown;
+    declare const nonNullish: {};
+    declare const explicit: unknown & not null & not undefined;
+    
+    acceptsRecord(value || {});
+                  ~~~~~~~~~~~
+!!! error TS2345: Argument of type 'NonNullable<unknown>' is not assignable to parameter of type 'Record<string, string>'.
+!!! error TS2345:   Index signature for type 'string' is missing in type '{}'.
+    acceptsRecord(nonNullish);
+                  ~~~~~~~~~~
+!!! error TS2345: Argument of type '{}' is not assignable to parameter of type 'Record<string, string>'.
+!!! error TS2345:   Index signature for type 'string' is missing in type '{}'.
+    acceptsRecord(explicit);
+                  ~~~~~~~~
+!!! error TS2345: Argument of type '{}' is not assignable to parameter of type 'Record<string, string>'.
+!!! error TS2345:   Index signature for type 'string' is missing in type '{}'.
+    acceptsRecord({});
+    acceptsRecord({ name: "value" });
+    
+    export function narrowed(value: unknown) {
+        if (value != null) {
+            acceptsRecord(value);
+                          ~~~~~
+!!! error TS2345: Argument of type 'NonNullable<unknown>' is not assignable to parameter of type 'Record<string, string>'.
+!!! error TS2345:   Index signature for type 'string' is missing in type '{}'.
+            const text: string = value.toString();
+            const own: boolean = value.hasOwnProperty("name");
+            const object: Object = value;
+            return { text, own, object };
+        }
+    }
+    
+    export function constrained<Value extends {}>(value: Value) {
+        acceptsRecord(value);
+                      ~~~~~
+!!! error TS2345: Argument of type 'Value' is not assignable to parameter of type 'Record<string, string>'.
+!!! error TS2345:   Type '{}' is not assignable to type 'Record<string, string>'.
+!!! error TS2345:     Index signature for type 'string' is missing in type '{}'.
+        return value.toString();
+    }
+    
+    export const toStringMethod = nonNullish.toString;
+    export const valueOfMethod = explicit.valueOf;
+    export const literal = {};
+    export const spread = { ...nonNullish, own: true };
+    export type EmptyKeys = keyof {};
+    const emptyKey: EmptyKeys = "toString";
+          ~~~~~~~~
+!!! error TS2322: Type '"toString"' is not assignable to type 'never'.

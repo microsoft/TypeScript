@@ -324,7 +324,7 @@ function f22(x: unknown) {
 >x : unknown
 
     let v7: {} | null | undefined = x;  // Error
->v7 : {} | null | undefined
+>v7 : unknown
 >x : unknown
 }
 

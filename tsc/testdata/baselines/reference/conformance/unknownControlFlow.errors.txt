@@ -1,13 +1,12 @@
 unknownControlFlow.ts(18,9): error TS2322: Type 'unknown' is not assignable to type '{}'.
-unknownControlFlow.ts(283,5): error TS2536: Type 'keyof (T & {})' cannot be used to index type 'T'.
+  Type 'unknown' is not assignable to type 'not null'.
+unknownControlFlow.ts(283,5): error TS2536: Type 'keyof (T & not null & not undefined)' cannot be used to index type 'T'.
 unknownControlFlow.ts(290,11): error TS2345: Argument of type '"foo"' is not assignable to parameter of type 'never'.
 unknownControlFlow.ts(291,5): error TS2345: Argument of type 'null' is not assignable to parameter of type 'never'.
 unknownControlFlow.ts(293,5): error TS2345: Argument of type 'null' is not assignable to parameter of type 'never'.
-unknownControlFlow.ts(323,9): error TS2367: This comparison appears to be unintentional because the types 'T' and 'number' have no overlap.
-unknownControlFlow.ts(341,9): error TS2367: This comparison appears to be unintentional because the types 'T' and 'number' have no overlap.
 
 
-==== unknownControlFlow.ts (7 errors) ====
+==== unknownControlFlow.ts (5 errors) ====
     type T01 = {} & string;  // {} & string
     type T02 = {} & 'a';  // 'a'
     type T03 = {} & object;  // object
@@ -28,6 +27,7 @@ unknownControlFlow.ts(341,9): error TS2367: This comparison appears to be uninte
         let x1: {} = u;  // Error
             ~~
 !!! error TS2322: Type 'unknown' is not assignable to type '{}'.
+!!! error TS2322:   Type 'unknown' is not assignable to type 'not null'.
         let x2: {} | null | undefined = u;
         let x3: {} | { x: string } | null | undefined = u;
         let x4: ThisOrThatNode | null | undefined = u;
@@ -294,7 +294,7 @@ unknownControlFlow.ts(341,9): error TS2367: This comparison appears to be uninte
     function ff3<T>(t: T, k: keyof (T & {})) {
         t[k];  // Error
         ~~~~
-!!! error TS2536: Type 'keyof (T & {})' cannot be used to index type 'T'.
+!!! error TS2536: Type 'keyof (T & not null & not undefined)' cannot be used to index type 'T'.
     }
     
     function ff4<T>(t: T & {}, k: keyof (T & {})) {
@@ -341,8 +341,6 @@ unknownControlFlow.ts(341,9): error TS2367: This comparison appears to be uninte
     
     function fx2<T extends {}>(value: T & ({} | null)) {
         if (value === 42) {
-            ~~~~~~~~~~~~
-!!! error TS2367: This comparison appears to be unintentional because the types 'T' and 'number' have no overlap.
             value;  // T & {}
         }
         else {
@@ -361,8 +359,6 @@ unknownControlFlow.ts(341,9): error TS2367: This comparison appears to be uninte
     
     function fx4<T extends {} | null>(value: T & ({} | null)) {
         if (value === 42) {
-            ~~~~~~~~~~~~
-!!! error TS2367: This comparison appears to be unintentional because the types 'T' and 'number' have no overlap.
             value;  // T & {}
         }
         else {

@@ -1,0 +1,114 @@
+//// [tests/cases/compiler/nonNullishUnknownApparentType.ts] ////
+
+=== nonNullishUnknownApparentType.ts ===
+declare function acceptsRecord(value: Record<string, string>): void;
+>acceptsRecord : Symbol(acceptsRecord, Decl(nonNullishUnknownApparentType.ts, 0, 0))
+>value : Symbol(value, Decl(nonNullishUnknownApparentType.ts, 0, 31))
+>Record : Symbol(Record, Decl(lib.es5.d.ts, --, --))
+
+declare const value: unknown;
+>value : Symbol(value, Decl(nonNullishUnknownApparentType.ts, 1, 13))
+
+declare const nonNullish: {};
+>nonNullish : Symbol(nonNullish, Decl(nonNullishUnknownApparentType.ts, 2, 13))
+
+declare const explicit: unknown & not null & not undefined;
+>explicit : Symbol(explicit, Decl(nonNullishUnknownApparentType.ts, 3, 13))
+
+acceptsRecord(value || {});
+>acceptsRecord : Symbol(acceptsRecord, Decl(nonNullishUnknownApparentType.ts, 0, 0))
+>value : Symbol(value, Decl(nonNullishUnknownApparentType.ts, 1, 13))
+
+acceptsRecord(nonNullish);
+>acceptsRecord : Symbol(acceptsRecord, Decl(nonNullishUnknownApparentType.ts, 0, 0))
+>nonNullish : Symbol(nonNullish, Decl(nonNullishUnknownApparentType.ts, 2, 13))
+
+acceptsRecord(explicit);
+>acceptsRecord : Symbol(acceptsRecord, Decl(nonNullishUnknownApparentType.ts, 0, 0))
+>explicit : Symbol(explicit, Decl(nonNullishUnknownApparentType.ts, 3, 13))
+
+acceptsRecord({});
+>acceptsRecord : Symbol(acceptsRecord, Decl(nonNullishUnknownApparentType.ts, 0, 0))
+
+acceptsRecord({ name: "value" });
+>acceptsRecord : Symbol(acceptsRecord, Decl(nonNullishUnknownApparentType.ts, 0, 0))
+>name : Symbol(name, Decl(nonNullishUnknownApparentType.ts, 9, 15))
+
+export function narrowed(value: unknown) {
+>narrowed : Symbol(narrowed, Decl(nonNullishUnknownApparentType.ts, 9, 33))
+>value : Symbol(value, Decl(nonNullishUnknownApparentType.ts, 11, 25))
+
+    if (value != null) {
+>value : Symbol(value, Decl(nonNullishUnknownApparentType.ts, 11, 25))
+
+        acceptsRecord(value);
+>acceptsRecord : Symbol(acceptsRecord, Decl(nonNullishUnknownApparentType.ts, 0, 0))
+>value : Symbol(value, Decl(nonNullishUnknownApparentType.ts, 11, 25))
+
+        const text: string = value.toString();
+>text : Symbol(text, Decl(nonNullishUnknownApparentType.ts, 14, 13))
+>value.toString : Symbol(Object.toString, Decl(lib.es5.d.ts, --, --))
+>value : Symbol(value, Decl(nonNullishUnknownApparentType.ts, 11, 25))
+>toString : Symbol(Object.toString, Decl(lib.es5.d.ts, --, --))
+
+        const own: boolean = value.hasOwnProperty("name");
+>own : Symbol(own, Decl(nonNullishUnknownApparentType.ts, 15, 13))
+>value.hasOwnProperty : Symbol(Object.hasOwnProperty, Decl(lib.es5.d.ts, --, --))
+>value : Symbol(value, Decl(nonNullishUnknownApparentType.ts, 11, 25))
+>hasOwnProperty : Symbol(Object.hasOwnProperty, Decl(lib.es5.d.ts, --, --))
+
+        const object: Object = value;
+>object : Symbol(object, Decl(nonNullishUnknownApparentType.ts, 16, 13))
+>Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>value : Symbol(value, Decl(nonNullishUnknownApparentType.ts, 11, 25))
+
+        return { text, own, object };
+>text : Symbol(text, Decl(nonNullishUnknownApparentType.ts, 17, 16))
+>own : Symbol(own, Decl(nonNullishUnknownApparentType.ts, 17, 22))
+>object : Symbol(object, Decl(nonNullishUnknownApparentType.ts, 17, 27))
+    }
+}
+
+export function constrained<Value extends {}>(value: Value) {
+>constrained : Symbol(constrained, Decl(nonNullishUnknownApparentType.ts, 19, 1))
+>Value : Symbol(Value, Decl(nonNullishUnknownApparentType.ts, 21, 28))
+>value : Symbol(value, Decl(nonNullishUnknownApparentType.ts, 21, 46))
+>Value : Symbol(Value, Decl(nonNullishUnknownApparentType.ts, 21, 28))
+
+    acceptsRecord(value);
+>acceptsRecord : Symbol(acceptsRecord, Decl(nonNullishUnknownApparentType.ts, 0, 0))
+>value : Symbol(value, Decl(nonNullishUnknownApparentType.ts, 21, 46))
+
+    return value.toString();
+>value.toString : Symbol(Object.toString, Decl(lib.es5.d.ts, --, --))
+>value : Symbol(value, Decl(nonNullishUnknownApparentType.ts, 21, 46))
+>toString : Symbol(Object.toString, Decl(lib.es5.d.ts, --, --))
+}
+
+export const toStringMethod = nonNullish.toString;
+>toStringMethod : Symbol(toStringMethod, Decl(nonNullishUnknownApparentType.ts, 26, 12))
+>nonNullish.toString : Symbol(Object.toString, Decl(lib.es5.d.ts, --, --))
+>nonNullish : Symbol(nonNullish, Decl(nonNullishUnknownApparentType.ts, 2, 13))
+>toString : Symbol(Object.toString, Decl(lib.es5.d.ts, --, --))
+
+export const valueOfMethod = explicit.valueOf;
+>valueOfMethod : Symbol(valueOfMethod, Decl(nonNullishUnknownApparentType.ts, 27, 12))
+>explicit.valueOf : Symbol(Object.valueOf, Decl(lib.es5.d.ts, --, --))
+>explicit : Symbol(explicit, Decl(nonNullishUnknownApparentType.ts, 3, 13))
+>valueOf : Symbol(Object.valueOf, Decl(lib.es5.d.ts, --, --))
+
+export const literal = {};
+>literal : Symbol(literal, Decl(nonNullishUnknownApparentType.ts, 28, 12))
+
+export const spread = { ...nonNullish, own: true };
+>spread : Symbol(spread, Decl(nonNullishUnknownApparentType.ts, 29, 12))
+>nonNullish : Symbol(nonNullish, Decl(nonNullishUnknownApparentType.ts, 2, 13))
+>own : Symbol(own, Decl(nonNullishUnknownApparentType.ts, 29, 38))
+
+export type EmptyKeys = keyof {};
+>EmptyKeys : Symbol(EmptyKeys, Decl(nonNullishUnknownApparentType.ts, 29, 51))
+
+const emptyKey: EmptyKeys = "toString";
+>emptyKey : Symbol(emptyKey, Decl(nonNullishUnknownApparentType.ts, 31, 5))
+>EmptyKeys : Symbol(EmptyKeys, Decl(nonNullishUnknownApparentType.ts, 29, 51))
+

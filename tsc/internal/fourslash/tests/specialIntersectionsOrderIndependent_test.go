@@ -20,13 +20,11 @@ b('/*2*/')`
 	f.VerifyCompletions(t, []string{"1", "2"}, &fourslash.CompletionsExpectedList{
 		IsIncomplete: false,
 		ItemDefaults: &fourslash.CompletionsExpectedItemDefaults{
-			CommitCharacters: &DefaultCommitCharacters,
+			CommitCharacters: &[]string{},
 			EditRange:        Ignored,
 		},
 		Items: &fourslash.CompletionsExpectedItems{
-			Exact: []fourslash.CompletionsExpectedItem{
-				"test",
-			},
+			Exact: []fourslash.CompletionsExpectedItem{"test"},
 		},
 	})
 }
