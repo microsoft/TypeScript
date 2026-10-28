@@ -64,16 +64,8 @@ func (c *Checker) currentResolution() *resolution {
 // beginResolution starts a resolution with an empty instantiation count for a
 // computation, which also starts the depth limit of instantiations (see
 // "Instantiation limits" in memo.go).
-func (c *Checker) beginResolution(key memoKey, source memoStateSource, index int) {
-	if key != 0 && c.inResolution() {
-		// Entering a computed result reads it.
-		c.observeCost(c.storedCost(key))
-	}
-	if key != 0 {
-		c.beginResolving(key)
-	}
-	base := int32(len(c.instantiationStack))
-	c.appendResolution(key, source, index, base)
+func (c *Checker) beginResolution(source memoStateSource, index int) {
+	c.appendResolution(0, source, index, int32(len(c.instantiationStack)))
 }
 
 // beginNodeResolution starts a resolution for checking a node, which
@@ -270,17 +262,6 @@ func (c *Checker) costSoFar() *instantiationCount {
 		return &count
 	}
 	return nil
-}
-
-func (c *Checker) storedCost(key memoKey) *instantiationCount {
-	if !c.mayHaveCost(key) {
-		return nil
-	}
-	state := c.peekMemoState(key)
-	if state == nil {
-		return nil
-	}
-	return state.count
 }
 
 // The work filter is a set of the memo keys whose memo states may store work,

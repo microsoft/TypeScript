@@ -520,7 +520,7 @@ func (m *memoMap[K, V]) begin(c *Checker, k K) {
 		c.markCircular(outer - 1)
 	}
 	m.resolvingKeys = append(m.resolvingKeys, k)
-	c.beginResolution(0, m, len(m.resolvingKeys)-1)
+	c.beginResolution(m, len(m.resolvingKeys)-1)
 	if c.checking {
 		if c.memoPendingCount != 0 && m.memoStates != nil {
 			c.replayPending(m.memoStates[k])
@@ -625,21 +625,27 @@ func (c *Checker) observing() bool {
 // resolution for this computation, which in a query records its effects. It
 // must be matched by endMemo.
 func (c *Checker) beginMemo(key memoKey) {
-	c.beginResolution(key, nil, 0)
+	state := c.peekMemoState(key)
+	if state != nil {
+		// Entering a computed result reads it.
+		c.observeCost(state.count)
+	}
+	c.beginResolving(key)
+	c.appendResolution(key, nil, 0, int32(len(c.instantiationStack)))
 	if c.checking {
 		if c.memoPendingCount != 0 {
-			c.replayPending(c.peekMemoState(key))
+			c.replayPending(state)
 		}
 		c.beginQueryFromCheck()
 		// The outermost computation re-enters nothing.
-		c.beginState(c.peekMemoState(key), 0)
+		c.beginState(state, 0)
 		return
 	}
 	outer := c.resolvingIndex(key)
 	if outer == len(c.resolutions) {
 		outer = 0
 	}
-	c.beginState(c.peekMemoState(key), outer)
+	c.beginState(state, outer)
 }
 
 // beginState is beginMemo for the memo state of a result, in a query. outer
