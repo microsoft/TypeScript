@@ -2,6 +2,7 @@ package checker
 
 import (
 	"maps"
+	"math/bits"
 	"slices"
 	"strconv"
 	"strings"
@@ -699,7 +700,7 @@ func (c *Checker) elaborateArrowFunction(node *ast.Node, source *Type, target *T
 func (c *Checker) isWeakType(t *Type) bool {
 	if t.flags&TypeFlagsObject != 0 {
 		resolved := c.resolveStructuredTypeMembers(t)
-		return len(resolved.getSignatures()) == 0 && len(resolved.getIndexInfos()) == 0 && len(resolved.properties) > 0 && core.Every(resolved.properties, func(p *ast.Symbol) bool {
+		return len(resolved.getSignatures()) == 0 && len(resolved.getIndexInfos()) == 0 && len(c.getLayoutPropertiesOfType(t)) > 0 && core.Every(c.getLayoutPropertiesOfType(t), func(p *ast.Symbol) bool {
 			return p.Flags()&ast.SymbolFlagsOptional != 0
 		})
 	}
@@ -995,14 +996,16 @@ func (c *Checker) getUnmatchedProperties(source *Type, target *Type, requireOpti
 }
 
 func (c *Checker) getUnmatchedPropertiesWorker(source *Type, target *Type, requireOptionalProperties bool, matchDiscriminantProperties bool, propsOut *[]*ast.Symbol) *ast.Symbol {
-	properties := c.getPropertiesOfType(target)
-	for _, targetProp := range properties {
+	for _, targetProp := range c.getLayoutPropertiesOfType(target) {
 		// TODO: remove this when we support static private identifier fields and find other solutions to get privateNamesAndStaticFields test to pass
 		if isStaticPrivateIdentifierProperty(targetProp) {
 			continue
 		}
 		if requireOptionalProperties || targetProp.Flags()&ast.SymbolFlagsOptional == 0 && targetProp.CheckFlags()&ast.CheckFlagsPartial == 0 {
 			sourceProp := c.getPropertyOfType(source, targetProp.Name())
+			if sourceProp == nil || matchDiscriminantProperties {
+				targetProp = c.getPropertyOfType(target, targetProp.Name())
+			}
 			if sourceProp == nil {
 				if propsOut == nil {
 					return targetProp
@@ -2965,10 +2968,29 @@ func (c *Checker) isTypeSubsetOf(source *Type, target *Type) bool {
 
 func (c *Checker) isTypeSubsetOfUnion(source *Type, target *Type) bool {
 	if source.flags&TypeFlagsUnion != 0 {
-		for _, t := range source.Types() {
-			if !containsType(target.Types(), t) {
+		sourceTypes, targetTypes := source.Types(), target.Types()
+		if len(sourceTypes) > len(targetTypes) {
+			return false
+		}
+		// Scan by identity unless a few source types are looked for in a large target. A CompareTypes call costs
+		// roughly 8 pointer comparisons, so there a binary search is cheaper than walking the target.
+		if len(sourceTypes)*bits.Len(uint(len(targetTypes)))*8 >= len(targetTypes) {
+			for _, t := range sourceTypes {
+				i := slices.Index(targetTypes, t)
+				if i < 0 {
+					return false
+				}
+				// Union types are sorted by CompareTypes, so the next source type can only appear after this one.
+				targetTypes = targetTypes[i+1:]
+			}
+			return true
+		}
+		for _, t := range sourceTypes {
+			i, found := slices.BinarySearchFunc(targetTypes, t, CompareTypes)
+			if !found {
 				return false
 			}
+			targetTypes = targetTypes[i+1:]
 		}
 		return true
 	}
