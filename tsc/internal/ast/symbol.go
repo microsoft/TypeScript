@@ -176,9 +176,7 @@ func (s *Symbol) CombinedLocalAndExportSymbolFlags() SymbolFlags {
 // and tag internal names. See symbolname_derived.go.
 //
 // Fixed names, such as SymbolNamePrototype, are constants generated from the
-// list in symbolnames_generate.go.
-//
-//go:generate npx hereby generate:symbolnames
+// list in tools/scripts/tsc/symbolNames.ts by `npx hereby generate:ast`.
 type SymbolName uint64
 
 func MakeSymbolName(text string) SymbolName {

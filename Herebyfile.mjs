@@ -473,13 +473,6 @@ export const generateBundled = goGenerateTask("generate:bundled", [{
     commands: [["go", "run", "generate.go"]],
 }]);
 
-export const generateSymbolNames = goGenerateTask("generate:symbolnames", [{
-    file: "tsc/internal/ast/symbol.go",
-    inputs: ["symbolnames_generate.go"],
-    outputs: ["symbolnames_generated.go"],
-    commands: [["go", "run", "symbolnames_generate.go"]],
-}]);
-
 export const generateChecker = goGenerateTask("generate:checker", [
     stringerGenerator("tsc/internal/checker/types.go", "SignatureKind", "stringer_generated.go"),
 ]);
@@ -684,7 +677,7 @@ async function runGenerateAST() {
 
 export const generateAST = task({
     name: "generate:ast",
-    description: "Generates AST, kind stringer, and encoder files from ast.json. Pass --force to regenerate unchanged files.",
+    description: "Generates AST, kind stringer, symbol name, and encoder files from ast.json and symbolNames.ts. Pass --force to regenerate unchanged files.",
     run: runGenerateAST,
 });
 
