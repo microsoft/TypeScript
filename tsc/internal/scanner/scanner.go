@@ -130,6 +130,35 @@ var textToKeyword = map[string]ast.Kind{
 	"of":          ast.KindOfKeyword,
 }
 
+type keywordEntry struct {
+	text string
+	kind ast.Kind
+}
+
+// keywordTable is a perfect hash of textToKeyword, indexed by keywordHash. The keyword set is fixed,
+// so a multiplier with no collisions is found once at startup and a lookup is one hash plus one comparison.
+var keywordTable, keywordHashMultiplier = func() ([256]keywordEntry, uint32) {
+	var table [256]keywordEntry
+search:
+	for multiplier := uint32(0x9E3779B1); ; multiplier += 2 {
+		table = [256]keywordEntry{}
+		for text, kind := range textToKeyword {
+			entry := &table[keywordHash(text, multiplier)]
+			if entry.text != "" {
+				continue search
+			}
+			*entry = keywordEntry{text, kind}
+		}
+		return table, multiplier
+	}
+}()
+
+// keywordHash requires len(s) >= 2.
+func keywordHash(s string, multiplier uint32) uint8 {
+	x := uint32(len(s)) | uint32(s[0])<<8 | uint32(s[1])<<16 | uint32(s[len(s)-1])<<24
+	return uint8((x * multiplier) >> 24)
+}
+
 var textToToken = func() map[string]ast.Kind {
 	m := map[string]ast.Kind{
 		"{":    ast.KindOpenBraceToken,
@@ -2213,9 +2242,9 @@ func (s *Scanner) scanInvalidCharacter() {
 
 func GetIdentifierToken(str string) ast.Kind {
 	if len(str) >= 2 && len(str) <= 12 && str[0] >= 'a' && str[0] <= 'z' {
-		keyword := textToKeyword[str]
-		if keyword != ast.KindUnknown {
-			return keyword
+		entry := &keywordTable[keywordHash(str, keywordHashMultiplier)]
+		if entry.text == str {
+			return entry.kind
 		}
 	}
 	return ast.KindIdentifier
