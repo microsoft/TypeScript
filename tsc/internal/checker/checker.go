@@ -675,7 +675,7 @@ type Checker struct {
 	restrictiveMapper                           *TypeMapper
 	permissiveMapper                            *TypeMapper
 	contextualBindingPatterns                   []*ast.Node
-	resolving                                   map[memoKey]int32   // Index in resolutions of the outermost computation of each key in progress
+	resolving                                   resolvingTable      // Index in resolutions of the outermost computation of each key in progress
 	typeResolutionTop                           int                 // 1-based index in resolutions of the innermost resolution, or 0
 	resolutionStart                             int                 // Index in resolutions below which resolutions are not searched for cycles
 	visibleStart                                int                 // Index in resolutions below which nothing in progress is visible; see yieldCycle
@@ -17023,7 +17023,7 @@ func (c *Checker) getResolvedMembersOrExportsOfSymbol(symbol *ast.Symbol, resolu
 // was entered, it returns the index in resolutions of the first declared,
 // the table the cycle canonically enters at; otherwise -1.
 func (c *Checker) findEarlierMembersInCycle(key memoKey, symbol *ast.Symbol) int {
-	i, ok := c.resolving[key]
+	i, ok := c.resolving.get(key)
 	if !ok || int(i) < c.visibleStart || c.isYieldingTo(key, TypeSystemPropertyNameStructuredMembers) {
 		return -1
 	}
@@ -20205,7 +20205,7 @@ func (c *Checker) yieldCycle(start int) bool {
 // resolved, so the yield would see whatever part of them the hidden
 // resolution has published, rather than compute them from scratch.
 func (c *Checker) observeHiddenMembers(t *Type) {
-	if i, ok := c.resolving[memoKeyOf(t, memoStructuredMembers)]; ok && int(i) < c.visibleStart {
+	if i, ok := c.resolving.get(memoKeyOf(t, memoStructuredMembers)); ok && int(i) < c.visibleStart {
 		c.markResolutionCycle(c.visibleStart)
 	}
 }
@@ -20286,7 +20286,7 @@ func (c *Checker) endCycleYield() {
 	c.visibleStart = y.savedVisibleStart
 	c.serializationLevel, c.inlineLevel, c.conditionalConstraintDepth = y.savedDepths[0], y.savedDepths[1], y.savedDepths[2]
 	for _, sh := range y.shadowed {
-		c.resolving[sh.key] = sh.index
+		c.resolving.set(sh.key, sh.index)
 	}
 	c.cycleYields[len(c.cycleYields)-1] = cycleYield{}
 	c.cycleYields = c.cycleYields[:len(c.cycleYields)-1]
@@ -21038,7 +21038,8 @@ func (c *Checker) resolveModuleTableMembers(t *Type) {
 		// is resolved again as if it had been entered first: with the
 		// computations in progress below it hidden.
 		hidden = true
-		c.beginCycleYield(t, TypeSystemPropertyNameStructuredMembers, -1, int(c.resolving[memoKeyOf(t, memoStructuredMembers)]))
+		floor, _ := c.resolving.get(memoKeyOf(t, memoStructuredMembers))
+		c.beginCycleYield(t, TypeSystemPropertyNameStructuredMembers, -1, int(floor))
 	}
 	if hidden {
 		c.endCycleYield()

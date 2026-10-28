@@ -173,10 +173,97 @@ func (c *Checker) forgetCost() {
 // resolvingIndex returns 1 + the index in resolutions of the outermost
 // computation of key in progress, or 0.
 func (c *Checker) resolvingIndex(key memoKey) int {
-	if i, ok := c.resolving[key]; ok && int(i) >= c.visibleStart {
+	if i, ok := c.resolving.get(key); ok && int(i) >= c.visibleStart {
 		return int(i) + 1
 	}
 	return 0
+}
+
+// resolvingTable maps the keys of computations in progress to the index in
+// resolutions of the outermost one. It only holds keys on the resolution
+// stack, so it stays small, and it is looked up far more often than it
+// changes. It uses open addressing with linear probing, with zero marking an
+// empty slot, as no memo key is zero.
+type resolvingTable struct {
+	slots []resolvingSlot
+	count int
+}
+
+type resolvingSlot struct {
+	key   memoKey
+	index int32
+}
+
+func (t *resolvingTable) home(key memoKey) int {
+	return int(uint64(key) * 0x9E3779B97F4A7C15 >> 32 & uint64(len(t.slots)-1))
+}
+
+func (t *resolvingTable) get(key memoKey) (int32, bool) {
+	if t.count == 0 {
+		return 0, false
+	}
+	mask := len(t.slots) - 1
+	for i := t.home(key); ; i = (i + 1) & mask {
+		switch t.slots[i].key {
+		case key:
+			return t.slots[i].index, true
+		case 0:
+			return 0, false
+		}
+	}
+}
+
+func (t *resolvingTable) set(key memoKey, index int32) {
+	if 2*(t.count+1) > len(t.slots) {
+		t.grow()
+	}
+	mask := len(t.slots) - 1
+	for i := t.home(key); ; i = (i + 1) & mask {
+		switch t.slots[i].key {
+		case key:
+			t.slots[i].index = index
+			return
+		case 0:
+			t.slots[i] = resolvingSlot{key, index}
+			t.count++
+			return
+		}
+	}
+}
+
+func (t *resolvingTable) delete(key memoKey) {
+	if t.count == 0 {
+		return
+	}
+	mask := len(t.slots) - 1
+	i := t.home(key)
+	for t.slots[i].key != key {
+		if t.slots[i].key == 0 {
+			return
+		}
+		i = (i + 1) & mask
+	}
+	// Shift later entries of the probe sequence back into the hole, so that
+	// lookups need no tombstones.
+	for j := (i + 1) & mask; t.slots[j].key != 0; j = (j + 1) & mask {
+		if h := t.home(t.slots[j].key); (j-h)&mask >= (j-i)&mask {
+			t.slots[i] = t.slots[j]
+			i = j
+		}
+	}
+	t.slots[i] = resolvingSlot{}
+	t.count--
+}
+
+func (t *resolvingTable) grow() {
+	old := t.slots
+	t.slots = make([]resolvingSlot, max(2*len(old), 64))
+	t.count = 0
+	for _, slot := range old {
+		if slot.key != 0 {
+			t.set(slot.key, slot.index)
+		}
+	}
 }
 
 // beginResolving records that the resolution about to be pushed computes key,
@@ -184,7 +271,7 @@ func (c *Checker) resolvingIndex(key memoKey) int {
 // one re-enters it as the policy of its kind says; see memoReentry. It reports
 // whether the resolution is recorded.
 func (c *Checker) beginResolving(key memoKey) bool {
-	i, ok := c.resolving[key]
+	i, ok := c.resolving.get(key)
 	if ok {
 		if int(i) >= c.visibleStart {
 			if memoReentry[key.field()] == reentryCircular {
@@ -195,10 +282,7 @@ func (c *Checker) beginResolving(key memoKey) bool {
 		y := &c.cycleYields[len(c.cycleYields)-1]
 		y.shadowed = append(y.shadowed, shadowedResolving{key, i})
 	}
-	if c.resolving == nil {
-		c.resolving = make(map[memoKey]int32)
-	}
-	c.resolving[key] = int32(len(c.resolutions))
+	c.resolving.set(key, int32(len(c.resolutions)))
 	return true
 }
 
@@ -207,7 +291,7 @@ func (c *Checker) beginResolving(key memoKey) bool {
 // restores the one it shadows, so it is still the one recorded.
 func (c *Checker) endResolving(f *resolution) {
 	if f.resolving {
-		delete(c.resolving, f.key)
+		c.resolving.delete(f.key)
 		f.resolving = false
 	}
 }

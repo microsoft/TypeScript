@@ -2,6 +2,7 @@ package checker
 
 import (
 	"encoding/binary"
+	"math/rand/v2"
 	"runtime"
 	"slices"
 	"strconv"
@@ -751,4 +752,32 @@ func TestSignatureExtra(t *testing.T) {
 	assert.Equal(t, sig.minArgumentCount, int32(1))
 	assert.Equal(t, sig.getResolvedTypePredicate(c), predicate)
 	runtime.KeepAlive(c)
+}
+
+func TestResolvingTable(t *testing.T) {
+	t.Parallel()
+	var table resolvingTable
+	want := map[memoKey]int32{}
+	rng := rand.New(rand.NewPCG(1, 2))
+	for i := range 200000 {
+		key := memoKey(rng.IntN(300)+1) << 8
+		switch rng.IntN(3) {
+		case 0:
+			table.set(key, int32(i))
+			want[key] = int32(i)
+		case 1:
+			table.delete(key)
+			delete(want, key)
+		}
+		got, ok := table.get(key)
+		wantIndex, wantOk := want[key]
+		assert.Equal(t, ok, wantOk)
+		assert.Equal(t, got, wantIndex)
+		assert.Equal(t, table.count, len(want))
+	}
+	for key, index := range want {
+		got, ok := table.get(key)
+		assert.Assert(t, ok)
+		assert.Equal(t, got, index)
+	}
 }
