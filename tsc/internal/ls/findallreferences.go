@@ -1408,7 +1408,7 @@ func (l *LanguageService) getReferencedSymbolsForModuleIfDeclaredBySourceFile(ct
 	} else {
 		return nil
 	}
-	exportEquals := symbol.Exports()[ast.InternalSymbolNameExportEquals]
+	exportEquals := symbol.Exports().Get(ast.InternalSymbolNameExportEquals)
 	// If exportEquals != nil, we're about to add references to `import("mod")` anyway, so don't double-count them.
 	moduleReferences := l.getReferencedSymbolsForModule(checker, program, symbol, exportEquals != nil, sourceFiles, sourceFilesSet)
 	if exportEquals == nil || exportEquals.Flags()&ast.SymbolFlagsAlias == 0 || !sourceFilesSet.Has(moduleSourceFileName) {
@@ -1798,7 +1798,7 @@ func (l *LanguageService) getReferencedSymbolsForModule(checker *checker.Checker
 	}
 
 	// Handle export equals declarations
-	exported := symbol.Exports()[ast.InternalSymbolNameExportEquals]
+	exported := symbol.Exports().Get(ast.InternalSymbolNameExportEquals)
 	if exported != nil && len(exported.Declarations()) > 0 {
 		for _, decl := range exported.Declarations() {
 			sourceFile := ast.GetSourceFileOfNode(decl)
@@ -2041,7 +2041,7 @@ func getClassConstructorSymbol(classSymbol *ast.Symbol) *ast.Symbol {
 	if classSymbol.Members() == nil {
 		return nil
 	}
-	return classSymbol.Members()[ast.InternalSymbolNameConstructor]
+	return classSymbol.Members().Get(ast.InternalSymbolNameConstructor)
 }
 
 func hasOwnConstructor(classDeclaration *ast.ClassLikeDeclaration) bool {
@@ -2061,7 +2061,7 @@ func findOwnConstructorReferences(classSymbol *ast.Symbol, sourceFile *ast.Sourc
 	}
 
 	if classSymbol.Exports() != nil {
-		for _, member := range classSymbol.Exports() {
+		for _, member := range classSymbol.Exports().All() {
 			decl := member.ValueDeclaration()
 			if decl != nil && decl.Kind == ast.KindMethodDeclaration {
 				body := decl.Body()
