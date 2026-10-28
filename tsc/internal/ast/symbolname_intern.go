@@ -28,26 +28,31 @@ const (
 
 type symbolNameChunk [symbolNameChunkSize]string
 
-type symbolNameShard struct {
-	table atomic.Pointer[[]atomic.Uint64]
-	mu    sync.Mutex
-	count int
-	_     [64]byte
+// Lookups only read tables and chunks; inserts write the shard locks, counts,
+// and nextID. Keeping the two groups on separate cache lines stops inserts on
+// one core from evicting lines that lookups on every other core need. The
+// table is one large allocation, so it starts on a page boundary.
+type symbolNameTable struct {
+	tables [symbolNameShardCount]atomic.Pointer[[]atomic.Uint64]
+	chunks [symbolNameMaxChunks]atomic.Pointer[symbolNameChunk]
+	nextID atomic.Uint32
+	_      [60]byte
+	shards [symbolNameShardCount]symbolNameShard
 }
 
-type symbolNameTable struct {
-	shards [symbolNameShardCount]symbolNameShard
-	nextID atomic.Uint32
-	chunks [symbolNameMaxChunks]atomic.Pointer[symbolNameChunk]
+type symbolNameShard struct {
+	mu    sync.Mutex
+	count int
+	_     [48]byte
 }
 
 var symbolNames = newSymbolNameTable()
 
 func newSymbolNameTable() *symbolNameTable {
 	t := &symbolNameTable{}
-	for i := range t.shards {
+	for i := range t.tables {
 		slots := make([]atomic.Uint64, symbolNameInitialSlots)
-		t.shards[i].table.Store(&slots)
+		t.tables[i].Store(&slots)
 	}
 	for want := SymbolName(1); want < SymbolName(len(fixedSymbolNameTexts)); want++ {
 		text := fixedSymbolNameTexts[want]
@@ -58,7 +63,7 @@ func newSymbolNameTable() *symbolNameTable {
 			panic("fixed symbol name has a derived form: " + text)
 		}
 		hash := hashSymbolNameText(text)
-		if id := t.insert(&t.shards[hash&(symbolNameShardCount-1)], hash, text); SymbolName(id) != want {
+		if id := t.insert(hash, text); SymbolName(id) != want {
 			panic("duplicate fixed symbol name: " + text)
 		}
 	}
@@ -92,20 +97,21 @@ func (t *symbolNameTable) make(text string, hash uint64) SymbolName {
 	if text == "" {
 		return EmptySymbolName
 	}
-	shard := &t.shards[hash&(symbolNameShardCount-1)]
-	if id := t.lookup(*shard.table.Load(), hash, text); id != 0 {
+	if id := t.lookup(*t.tables[hash&(symbolNameShardCount-1)].Load(), hash, text); id != 0 {
 		return internedSymbolName(id, text)
 	}
 	if name, ok := parseDerivedName(text); ok {
 		return name
 	}
-	return internedSymbolName(t.insert(shard, hash, text), text)
+	return internedSymbolName(t.insert(hash, text), text)
 }
 
-func (t *symbolNameTable) insert(shard *symbolNameShard, hash uint64, text string) uint32 {
+func (t *symbolNameTable) insert(hash uint64, text string) uint32 {
+	table := &t.tables[hash&(symbolNameShardCount-1)]
+	shard := &t.shards[hash&(symbolNameShardCount-1)]
 	shard.mu.Lock()
 	defer shard.mu.Unlock()
-	slots := *shard.table.Load()
+	slots := *table.Load()
 	if id := t.lookup(slots, hash, text); id != 0 {
 		return id
 	}
@@ -116,7 +122,7 @@ func (t *symbolNameTable) insert(shard *symbolNameShard, hash uint64, text strin
 				storeSymbolNameSlot(grown, t.hashOf(uint32(v)), v)
 			}
 		}
-		shard.table.Store(&grown)
+		table.Store(&grown)
 		slots = grown
 	}
 	id := t.allocate(string([]byte(text)))
