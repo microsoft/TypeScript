@@ -38,7 +38,7 @@ extends:
 
   parameters:
     sdl:
-      sourceAnalysisPool: VSEngSS-MicroBuild2022-1ES
+      sourceAnalysisPool: VSEng-MicroBuildVSStable
     pool:
       name: AzurePipelines-EO
       image: 1ESPT-Ubuntu22.04

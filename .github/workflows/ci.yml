@@ -2,11 +2,11 @@ name: CI
 
 on:
   push:
-    branches: [main, main-ts7, ts7-release, 'release-*']
+    branches: [main, main-ts7, ts7-release, 'release-*', 'weswigham/*']
   pull_request:
-    branches: [main, main-ts7, ts7-release, 'release-*']
+    branches: [main, main-ts7, ts7-release, 'release-*', 'weswigham/*']
   merge_group:
-    branches: [main, main-ts7, ts7-release, 'release-*']
+    branches: [main, main-ts7, ts7-release, 'release-*', 'weswigham/*']
 
 permissions:
   contents: read
