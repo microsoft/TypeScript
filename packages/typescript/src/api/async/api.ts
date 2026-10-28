@@ -1565,11 +1565,13 @@ export class Project<Id extends ProjectId = ProjectId> {
     readonly program: Program<Id>;
     readonly checker: Checker;
     readonly languageService: LanguageService;
+    private readonly toPath: (fileName: string, basePath?: string) => PathKey;
 
     constructor(data: ProjectResponse, snapshotId: number, toPath: (fileName: string, basePath?: string) => PathKey, api: API<boolean>, snapshotRegistry: SnapshotObjectRegistry) {
         this.id = data.id as Id;
         this.handle = data.handle;
         this.api = api;
+        this.toPath = toPath;
         this.configFileName = data.configFileName;
         this.currentDirectory = data.currentDirectory;
         this.dirty = data.dirty;
@@ -1581,6 +1583,60 @@ export class Project<Id extends ProjectId = ProjectId> {
         const objectRegistry = new ProjectObjectRegistry(snapshotId, this, snapshotRegistry);
         this.checker = new Checker(snapshotId, this, objectRegistry);
         this.languageService = new LanguageService(snapshotId, this, objectRegistry);
+    }
+
+    async containsFile(file: DocumentIdentifier, requireOpen?: boolean): Promise<boolean> {
+        return this.api.client.apiRequest("containsProjectFile", {
+            snapshot: this.program.snapshotId,
+            project: this.handle,
+            file,
+            requireOpen,
+        });
+    }
+
+    async getFileNames(excludeFilesFromExternalLibraries?: boolean, excludeConfigFiles?: boolean): Promise<readonly RootedFilePath[]> {
+        const files = await this.program.getSourceFileNames();
+        const result: RootedFilePath[] = [];
+        for (const file of files) {
+            if (excludeFilesFromExternalLibraries) {
+                const metadata = await this.program.getSourceFileMetadata(file);
+                if (!metadata) {
+                    throw new Error(`Program source file '${file}' has no metadata`);
+                }
+                if (metadata.isFromExternalLibrary) continue;
+            }
+            result.push(file);
+        }
+        if (!excludeConfigFiles) {
+            result.push(...await this.program.getConfigFileNames());
+        }
+        return result;
+    }
+
+    /** Returns existing root files, excluding missing root declarations. */
+    async getRootFiles(): Promise<readonly RootedFilePath[]> {
+        return this.api.client.apiRequest("getProjectRootFiles", {
+            snapshot: this.program.snapshotId,
+            project: this.handle,
+        });
+    }
+
+    async hasRoots(): Promise<boolean> {
+        return this.parsedCommandLine.fileNames.length > 0;
+    }
+
+    async isRoot(file: DocumentIdentifier): Promise<boolean> {
+        const path = this.toPath(resolveFileName(file), this.currentDirectory);
+        return (await this.getRootFiles()).some(root => this.toPath(root, this.currentDirectory) === path);
+    }
+
+    async hasConfigFile(file: DocumentIdentifier): Promise<boolean> {
+        const path = this.toPath(resolveFileName(file), this.currentDirectory);
+        return (await this.program.getConfigFileNames()).some(config => this.toPath(config, this.currentDirectory) === path);
+    }
+
+    async getSourceFile(file: DocumentIdentifier): Promise<SourceFile | undefined> {
+        return this.program.getSourceFile(file);
     }
 
     dispose(): void {
@@ -1792,7 +1848,10 @@ export class Program<Id extends ProjectId = ProjectId> implements FormatDiagnost
     }
 
     async getTypeChecker(): Promise<Checker> {
-        await this.getStatistics();
+        await this.client.apiRequest("ensureTypeChecker", {
+            snapshot: this.snapshotId,
+            project: this.project.handle,
+        });
         return this.project.checker;
     }
 

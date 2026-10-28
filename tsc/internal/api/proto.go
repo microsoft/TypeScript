@@ -111,6 +111,9 @@ const (
 	MethodGetNonMissingTypeOfSymbol                      Method = "getNonMissingTypeOfSymbol"
 	MethodGetSourceFile                                  Method = "getSourceFile"
 	MethodGetSourceFileNames                             Method = "getSourceFileNames"
+	MethodContainsProjectFile                            Method = "containsProjectFile"
+	MethodGetProjectRootFiles                            Method = "getProjectRootFiles"
+	MethodEnsureTypeChecker                              Method = "ensureTypeChecker"
 	MethodGetProgramStatistics                           Method = "getProgramStatistics"
 	MethodGetResolvedProjectReferences                   Method = "getResolvedProjectReferences"
 	MethodGetOptionsDiagnostics                          Method = "getOptionsDiagnostics"
@@ -629,6 +632,8 @@ var unmarshalers = map[Method]func([]byte) (any, error){
 	MethodGetDefaultProjectForFile:                       unmarshallerFor[GetDefaultProjectForFileParams],
 	MethodGetSourceFile:                                  unmarshallerFor[GetSourceFileParams],
 	MethodGetSourceFileNames:                             unmarshallerFor[GetSourceFileNamesParams],
+	MethodContainsProjectFile:                            unmarshallerFor[ContainsProjectFileParams],
+	MethodGetProjectRootFiles:                            unmarshallerFor[GetSourceFileNamesParams],
 	MethodGetSourceFileMetadata:                          unmarshallerFor[GetSourceFileParams],
 	MethodGetModeForUsageLocation:                        unmarshallerFor[GetModeForUsageLocationParams],
 	MethodGetModeForResolutionAtIndex:                    unmarshallerFor[GetModeForResolutionAtIndexParams],
@@ -773,6 +778,7 @@ var unmarshalers = map[Method]func([]byte) (any, error){
 	MethodGetSuggestionDiagnostics:          unmarshallerFor[GetDiagnosticsParams],
 	MethodGetDeclarationDiagnostics:         unmarshallerFor[GetDiagnosticsParams],
 	MethodGetProgramDiagnostics:             unmarshallerFor[GetProjectDiagnosticsParams],
+	MethodEnsureTypeChecker:                 unmarshallerFor[GetProjectDiagnosticsParams],
 	MethodGetProgramStatistics:              unmarshallerFor[GetProjectDiagnosticsParams],
 	MethodGetResolvedProjectReferences:      unmarshallerFor[GetProjectDiagnosticsParams],
 	MethodGetOptionsDiagnostics:             unmarshallerFor[GetProjectDiagnosticsParams],
@@ -1412,6 +1418,13 @@ type GetSourceFileParams struct {
 type GetSourceFileNamesParams struct {
 	Snapshot SnapshotID     `json:"snapshot"`
 	Project  project.Handle `json:"project"`
+}
+
+type ContainsProjectFileParams struct {
+	Snapshot    SnapshotID         `json:"snapshot"`
+	Project     project.Handle     `json:"project"`
+	File        DocumentIdentifier `json:"file"`
+	RequireOpen bool               `json:"requireOpen,omitempty"`
 }
 
 type GetModeForUsageLocationParams struct {

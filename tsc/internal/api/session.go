@@ -951,6 +951,12 @@ func (s *Session) HandleRequest(ctx context.Context, method string, params json.
 		return s.handleGetSourceFile(ctx, parsed.(*GetSourceFileParams))
 	case string(MethodGetSourceFileNames):
 		return s.handleGetSourceFileNames(ctx, parsed.(*GetSourceFileNamesParams))
+	case string(MethodContainsProjectFile):
+		return s.handleContainsProjectFile(ctx, parsed.(*ContainsProjectFileParams))
+	case string(MethodGetProjectRootFiles):
+		return s.handleGetProjectRootFiles(ctx, parsed.(*GetSourceFileNamesParams))
+	case string(MethodEnsureTypeChecker):
+		return s.handleEnsureTypeChecker(ctx, parsed.(*GetProjectDiagnosticsParams))
 	case string(MethodGetProgramStatistics):
 		return s.handleGetProgramStatistics(ctx, parsed.(*GetProjectDiagnosticsParams))
 	case string(MethodGetResolvedProjectReferences):
@@ -2354,6 +2360,15 @@ func transpileOutput(ctx context.Context, input string, options TranspileOptions
 	}, nil
 }
 
+func (s *Session) handleEnsureTypeChecker(ctx context.Context, params *GetProjectDiagnosticsParams) (bool, error) {
+	setup, err := s.setupChecker(ctx, params.Snapshot, params.Project)
+	if err != nil {
+		return false, err
+	}
+	defer setup.done()
+	return true, nil
+}
+
 func (s *Session) handleGetProgramStatistics(ctx context.Context, params *GetProjectDiagnosticsParams) (*ProgramStatisticsResponse, error) {
 	setup, err := s.setupChecker(ctx, params.Snapshot, params.Project)
 	if err != nil {
@@ -2552,6 +2567,51 @@ func (s *Session) encodeSourceFileResponse(sourceFile *ast.SourceFile) (any, err
 	return &SourceFileResponse{
 		Data: base64.StdEncoding.EncodeToString(data),
 	}, nil
+}
+
+func (s *Session) handleContainsProjectFile(ctx context.Context, params *ContainsProjectFileParams) (bool, error) {
+	sd, err := s.getSnapshotData(params.Snapshot)
+	if err != nil {
+		return false, err
+	}
+	proj, err := sd.getProject(params.Project)
+	if err != nil {
+		return false, err
+	}
+	fileName := params.File.ToFileName(proj.CurrentDirectory())
+	file := sd.snapshot.GetFile(fileName)
+	if file == nil {
+		return false, nil
+	}
+	path := sd.snapshot.CaseSensitivity().PathKey(fileName.AsPath())
+	if params.RequireOpen && !sd.snapshot.ProjectCollection.IsFileOpen(path) {
+		return false, nil
+	}
+	for _, root := range proj.CommandLine.FileNames() {
+		if sd.snapshot.CaseSensitivity().PathKey(root.AsPath()) == path {
+			return true, nil
+		}
+	}
+	program := proj.GetProgram()
+	return program != nil && program.GetSourceFileByPath(path) != nil, nil
+}
+
+func (s *Session) handleGetProjectRootFiles(ctx context.Context, params *GetSourceFileNamesParams) ([]tspath.RootedFilePath, error) {
+	sd, err := s.getSnapshotData(params.Snapshot)
+	if err != nil {
+		return nil, err
+	}
+	proj, err := sd.getProject(params.Project)
+	if err != nil {
+		return nil, err
+	}
+	result := make([]tspath.RootedFilePath, 0, len(proj.CommandLine.FileNames()))
+	for _, root := range proj.CommandLine.FileNames() {
+		if sd.snapshot.GetFile(root) != nil {
+			result = append(result, root)
+		}
+	}
+	return result, nil
 }
 
 // handleGetSourceFileNames returns file names of all source files in a project.
