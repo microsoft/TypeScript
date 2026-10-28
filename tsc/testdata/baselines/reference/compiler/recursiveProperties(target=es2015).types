@@ -5,8 +5,8 @@ class A {
 >A : A
 
     get testProp() { return this.testProp; }
->testProp : any
->this.testProp : any
+>testProp : error
+>this.testProp : error
 >this : this
 >testProp : any
 }

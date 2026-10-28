@@ -1,0 +1,28 @@
+//// [tests/cases/compiler/getterCircularityDiagnostics.ts] ////
+
+=== getterCircularityDiagnostics.ts ===
+declare const props: Options;
+>props : Symbol(props, Decl(getterCircularityDiagnostics.ts, 0, 13))
+>Options : Symbol(Options, Decl(getterCircularityDiagnostics.ts, 6, 1))
+
+class Container {
+>Container : Symbol(Container, Decl(getterCircularityDiagnostics.ts, 0, 29))
+
+    get options() {
+>options : Symbol(Container.options, Decl(getterCircularityDiagnostics.ts, 2, 17))
+
+        return { container: this, ...props } as Options;
+>container : Symbol(container, Decl(getterCircularityDiagnostics.ts, 4, 16))
+>this : Symbol(Container, Decl(getterCircularityDiagnostics.ts, 0, 29))
+>props : Symbol(props, Decl(getterCircularityDiagnostics.ts, 0, 13))
+>Options : Symbol(Options, Decl(getterCircularityDiagnostics.ts, 6, 1))
+    }
+}
+
+interface Options {
+>Options : Symbol(Options, Decl(getterCircularityDiagnostics.ts, 6, 1))
+
+    container?: Container;
+>container : Symbol(Options.container, Decl(getterCircularityDiagnostics.ts, 8, 19))
+>Container : Symbol(Container, Decl(getterCircularityDiagnostics.ts, 0, 29))
+}

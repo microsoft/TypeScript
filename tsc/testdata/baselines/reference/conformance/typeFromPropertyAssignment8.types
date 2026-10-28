@@ -2,25 +2,25 @@
 
 === a.js ===
 var my = my || {};
->my : any
->my || {} : any
->my : any
+>my : error
+>my || {} : error
+>my : error
 >{} : {}
 
 my.app = my.app || {};
->my.app = my.app || {} : any
->my.app : any
+>my.app = my.app || {} : error
+>my.app : error
 >my : any
 >app : any
->my.app || {} : any
->my.app : any
+>my.app || {} : error
+>my.app : error
 >my : any
 >app : any
 >{} : {}
 
 my.app.Application = (function () {
 >my.app.Application = (function () {var Application = function () {    //...};return Application;})() : () => void
->my.app.Application : any
+>my.app.Application : error
 >my.app : any
 >my : any
 >app : any
@@ -40,8 +40,8 @@ return Application;
 
 })();
 my.app.Application()
->my.app.Application() : any
->my.app.Application : any
+>my.app.Application() : error
+>my.app.Application : error
 >my.app : any
 >my : any
 >app : any
@@ -49,27 +49,27 @@ my.app.Application()
 
 === b.js ===
 var min = window.min || {};
->min : any
->window.min || {} : any
->window.min : any
+>min : error
+>window.min || {} : error
+>window.min : error
 >window : Window & typeof globalThis
 >min : any
 >{} : {}
 
 min.app = min.app || {};
->min.app = min.app || {} : any
->min.app : any
+>min.app = min.app || {} : error
+>min.app : error
 >min : any
 >app : any
->min.app || {} : any
->min.app : any
+>min.app || {} : error
+>min.app : error
 >min : any
 >app : any
 >{} : {}
 
 min.app.Application = (function () {
 >min.app.Application = (function () {var Application = function () {    //...};return Application;})() : () => void
->min.app.Application : any
+>min.app.Application : error
 >min.app : any
 >min : any
 >app : any
@@ -89,8 +89,8 @@ return Application;
 
 })();
 min.app.Application()
->min.app.Application() : any
->min.app.Application : any
+>min.app.Application() : error
+>min.app.Application : error
 >min.app : any
 >min : any
 >app : any

@@ -1,27 +1,23 @@
-witness.ts(4,21): error TS2372: Parameter 'pInit' cannot reference itself.
-witness.ts(8,14): error TS2729: Property 'x' is used before its initialization.
-witness.ts(20,5): error TS2403: Subsequent variable declarations must have the same type.  Variable 'a' must be of type 'any', but here has type 'never'.
-witness.ts(28,12): error TS2695: Left side of comma operator is unused and has no side effects.
-witness.ts(29,5): error TS2403: Subsequent variable declarations must have the same type.  Variable 'co1' must be of type 'any', but here has type 'number'.
-witness.ts(30,12): error TS2695: Left side of comma operator is unused and has no side effects.
-witness.ts(30,12): error TS2695: Left side of comma operator is unused and has no side effects.
-witness.ts(32,12): error TS2695: Left side of comma operator is unused and has no side effects.
-witness.ts(32,12): error TS2695: Left side of comma operator is unused and has no side effects.
-witness.ts(32,12): error TS2695: Left side of comma operator is unused and has no side effects.
-witness.ts(33,5): error TS2403: Subsequent variable declarations must have the same type.  Variable 'co3' must be of type 'any', but here has type 'number'.
-witness.ts(37,5): error TS2403: Subsequent variable declarations must have the same type.  Variable 'as1' must be of type 'any', but here has type 'number'.
-witness.ts(39,5): error TS2403: Subsequent variable declarations must have the same type.  Variable 'as2' must be of type 'any', but here has type 'number'.
-witness.ts(43,5): error TS2403: Subsequent variable declarations must have the same type.  Variable 'cnd1' must be of type 'any', but here has type 'number'.
-witness.ts(50,11): error TS2873: This kind of expression is always falsy.
-witness.ts(57,5): error TS2403: Subsequent variable declarations must have the same type.  Variable 'and1' must be of type 'any', but here has type 'string'.
-witness.ts(58,12): error TS2873: This kind of expression is always falsy.
-witness.ts(68,5): error TS2403: Subsequent variable declarations must have the same type.  Variable 'fnCallResult' must be of type 'never', but here has type 'any'.
-witness.ts(110,5): error TS2403: Subsequent variable declarations must have the same type.  Variable 'propAcc1' must be of type 'any', but here has type '{ m: any; }'.
-witness.ts(121,14): error TS2729: Property 'n' is used before its initialization.
-witness.ts(128,19): error TS2729: Property 'q' is used before its initialization.
+witness.ts(7,21): error TS2372: Parameter 'pInit' cannot reference itself.
+witness.ts(11,14): error TS2729: Property 'x' is used before its initialization.
+witness.ts(23,5): error TS2403: Subsequent variable declarations must have the same type.  Variable 'a' must be of type 'any', but here has type 'never'.
+witness.ts(31,12): error TS2695: Left side of comma operator is unused and has no side effects.
+witness.ts(33,12): error TS2695: Left side of comma operator is unused and has no side effects.
+witness.ts(33,12): error TS2695: Left side of comma operator is unused and has no side effects.
+witness.ts(35,12): error TS2695: Left side of comma operator is unused and has no side effects.
+witness.ts(35,12): error TS2695: Left side of comma operator is unused and has no side effects.
+witness.ts(35,12): error TS2695: Left side of comma operator is unused and has no side effects.
+witness.ts(53,11): error TS2873: This kind of expression is always falsy.
+witness.ts(61,12): error TS2873: This kind of expression is always falsy.
+witness.ts(71,5): error TS2403: Subsequent variable declarations must have the same type.  Variable 'fnCallResult' must be of type 'never', but here has type 'any'.
+witness.ts(124,14): error TS2729: Property 'n' is used before its initialization.
+witness.ts(131,19): error TS2729: Property 'q' is used before its initialization.
 
 
-==== witness.ts (21 errors) ====
+==== witness.ts (14 errors) ====
+    type IsAny<Type> = 0 extends (1 & Type) ? true : false;
+    type Assert<Condition extends true> = Condition;
+    
     // Initializers
     var varInit = varInit; // any
     var pInit: any;
@@ -34,7 +30,7 @@ witness.ts(128,19): error TS2729: Property 'q' is used before its initialization
         x = this.x;
                  ~
 !!! error TS2729: Property 'x' is used before its initialization.
-!!! related TS2728 witness.ts:8:5: 'x' is declared here.
+!!! related TS2728 witness.ts:11:5: 'x' is declared here.
         fn() {
             var y = this.x;
             var y: any;
@@ -49,7 +45,7 @@ witness.ts(128,19): error TS2729: Property 'q' is used before its initialization
     var a = fnReturn1();
         ~
 !!! error TS2403: Subsequent variable declarations must have the same type.  Variable 'a' must be of type 'any', but here has type 'never'.
-!!! related TS6203 witness.ts:19:5: 'a' was also declared here.
+!!! related TS6203 witness.ts:22:5: 'a' was also declared here.
     
     function fnReturn2() {
         return fnReturn2;
@@ -60,10 +56,7 @@ witness.ts(128,19): error TS2729: Property 'q' is used before its initialization
     var co1 = (co1, 3);
                ~~~
 !!! error TS2695: Left side of comma operator is unused and has no side effects.
-    var co1: number;
-        ~~~
-!!! error TS2403: Subsequent variable declarations must have the same type.  Variable 'co1' must be of type 'any', but here has type 'number'.
-!!! related TS6203 witness.ts:28:5: 'co1' was also declared here.
+    type CommaInference = Assert<IsAny<typeof co1>>;
     var co2 = (3, 4, co2);
                ~
 !!! error TS2695: Left side of comma operator is unused and has no side effects.
@@ -77,29 +70,17 @@ witness.ts(128,19): error TS2729: Property 'q' is used before its initialization
 !!! error TS2695: Left side of comma operator is unused and has no side effects.
                ~~~~~~~~~~~~~
 !!! error TS2695: Left side of comma operator is unused and has no side effects.
-    var co3: number;
-        ~~~
-!!! error TS2403: Subsequent variable declarations must have the same type.  Variable 'co3' must be of type 'any', but here has type 'number'.
-!!! related TS6203 witness.ts:32:5: 'co3' was also declared here.
+    type NestedCommaInference = Assert<IsAny<typeof co3>>;
     
     // Assignment
     var as1 = (as1 = 2);
-    var as1: number;
-        ~~~
-!!! error TS2403: Subsequent variable declarations must have the same type.  Variable 'as1' must be of type 'any', but here has type 'number'.
-!!! related TS6203 witness.ts:36:5: 'as1' was also declared here.
+    type AssignmentInference = Assert<IsAny<typeof as1>>;
     var as2 = (as2 = as2 = 2);
-    var as2: number;
-        ~~~
-!!! error TS2403: Subsequent variable declarations must have the same type.  Variable 'as2' must be of type 'any', but here has type 'number'.
-!!! related TS6203 witness.ts:38:5: 'as2' was also declared here.
+    type NestedAssignmentInference = Assert<IsAny<typeof as2>>;
     
     // Conditional
     var cnd1 = cnd1 ? 0 : 1;
-    var cnd1: number;
-        ~~~~
-!!! error TS2403: Subsequent variable declarations must have the same type.  Variable 'cnd1' must be of type 'any', but here has type 'number'.
-!!! related TS6203 witness.ts:42:5: 'cnd1' was also declared here.
+    type ConditionalInference = Assert<IsAny<typeof cnd1>>;
     var cnd2 = cnd1 ? cnd1 ? '' : "" : '';
     var cnd2: string;
     
@@ -115,10 +96,7 @@ witness.ts(128,19): error TS2729: Property 'q' is used before its initialization
     
     // &&
     var and1 = and1 && '';
-    var and1: string;
-        ~~~~
-!!! error TS2403: Subsequent variable declarations must have the same type.  Variable 'and1' must be of type 'any', but here has type 'string'.
-!!! related TS6203 witness.ts:56:5: 'and1' was also declared here.
+    type LogicalAndInference = Assert<IsAny<typeof and1>>;
     var and2 = '' && and2;
                ~~
 !!! error TS2873: This kind of expression is always falsy.
@@ -134,7 +112,7 @@ witness.ts(128,19): error TS2729: Property 'q' is used before its initialization
     var fnCallResult: any;
         ~~~~~~~~~~~~
 !!! error TS2403: Subsequent variable declarations must have the same type.  Variable 'fnCallResult' must be of type 'never', but here has type 'any'.
-!!! related TS6203 witness.ts:67:5: 'fnCallResult' was also declared here.
+!!! related TS6203 witness.ts:70:5: 'fnCallResult' was also declared here.
     
     // Call argument
     function fnArg1(x: typeof fnArg1, y: number) {
@@ -176,10 +154,7 @@ witness.ts(128,19): error TS2729: Property 'q' is used before its initialization
     var propAcc1 = {
         m: propAcc1.m
     };
-    var propAcc1: { m: any; }
-        ~~~~~~~~
-!!! error TS2403: Subsequent variable declarations must have the same type.  Variable 'propAcc1' must be of type 'any', but here has type '{ m: any; }'.
-!!! related TS6203 witness.ts:107:5: 'propAcc1' was also declared here.
+    type PropertyAccessInference = Assert<IsAny<typeof propAcc1>>;
     
     // Property access of namespace member
     namespace M2 {
@@ -193,7 +168,7 @@ witness.ts(128,19): error TS2729: Property 'q' is used before its initialization
         n = this.n; // n: any
                  ~
 !!! error TS2729: Property 'n' is used before its initialization.
-!!! related TS2728 witness.ts:121:5: 'n' is declared here.
+!!! related TS2728 witness.ts:124:5: 'n' is declared here.
     }
     var c2inst = new C2().n;
     var c2inst: any;
@@ -203,7 +178,7 @@ witness.ts(128,19): error TS2729: Property 'q' is used before its initialization
         static q = C3.q;
                       ~
 !!! error TS2729: Property 'q' is used before its initialization.
-!!! related TS2728 witness.ts:128:12: 'q' is declared here.
+!!! related TS2728 witness.ts:131:12: 'q' is declared here.
     }
     var qq = C3.q;
     var qq: any;
