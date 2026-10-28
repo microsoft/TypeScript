@@ -27,8 +27,8 @@ func TestSymbolNameInterning(t *testing.T) {
 			assert.Assert(t, storedName == otherName)
 			assert.Equal(t, storedName.Value(), text)
 
-			table := ast.SymbolTable{name: symbol}
-			assert.Equal(t, table[otherName], symbol)
+			table := ast.SymbolTableOf(name, symbol)
+			assert.Equal(t, table.Get(otherName), symbol)
 			assert.Equal(t, ast.SymbolNameText(symbol), text)
 
 			shared := ast.NewSymbol()
@@ -194,8 +194,8 @@ func TestSymbolAccessors(t *testing.T) {
 	parent := ast.NewSymbol()
 	exportSymbol := ast.NewSymbol()
 	declarations := []*ast.Node{declaration}
-	members := ast.SymbolTable{ast.MakeSymbolName("member"): member}
-	exports := ast.SymbolTable{ast.MakeSymbolName("export"): export}
+	members := ast.SymbolTableOf(ast.MakeSymbolName("member"), member)
+	exports := ast.SymbolTableOf(ast.MakeSymbolName("export"), export)
 
 	symbol.SetFlags(ast.SymbolFlagsClass | ast.SymbolFlagsTransient)
 	symbol.SetCheckFlags(ast.CheckFlagsReadonly)
@@ -212,8 +212,8 @@ func TestSymbolAccessors(t *testing.T) {
 	assert.Equal(t, symbol.Name().Value(), "C")
 	assert.Equal(t, symbol.Declarations()[0], declaration)
 	assert.Equal(t, symbol.ValueDeclaration(), declaration)
-	assert.Equal(t, symbol.Members()[ast.MakeSymbolName("member")], member)
-	assert.Equal(t, symbol.Exports()[ast.MakeSymbolName("export")], export)
+	assert.Equal(t, symbol.Members().Get(ast.MakeSymbolName("member")), member)
+	assert.Equal(t, symbol.Exports().Get(ast.MakeSymbolName("export")), export)
 	assert.Equal(t, symbol.Parent(), parent)
 	assert.Equal(t, symbol.ExportSymbol(), exportSymbol)
 
@@ -221,10 +221,10 @@ func TestSymbolAccessors(t *testing.T) {
 	assert.Equal(t, symbol.Declarations()[0], otherDeclaration)
 	symbol.Declarations()[0] = declaration
 	assert.Equal(t, declarations[0], declaration)
-	symbol.Members()[ast.MakeSymbolName("added")] = export
-	assert.Equal(t, members[ast.MakeSymbolName("added")], export)
-	symbol.Exports()[ast.MakeSymbolName("added")] = member
-	assert.Equal(t, exports[ast.MakeSymbolName("added")], member)
+	symbol.Members().Set(ast.MakeSymbolName("added"), export)
+	assert.Equal(t, members.Get(ast.MakeSymbolName("added")), export)
+	symbol.Exports().Set(ast.MakeSymbolName("added"), member)
+	assert.Equal(t, exports.Get(ast.MakeSymbolName("added")), member)
 
 	symbol.SetFlags(ast.SymbolFlagsNone)
 	symbol.SetCheckFlags(0)
@@ -255,21 +255,21 @@ func TestSymbolTableInitialization(t *testing.T) {
 	export := ast.NewSymbol()
 
 	members := ast.GetMembers(symbol, &arena)
-	members[ast.MakeSymbolName("member")] = member
-	assert.Equal(t, symbol.Members()[ast.MakeSymbolName("member")], member)
-	assert.Equal(t, ast.GetMembers(symbol, &arena)[ast.MakeSymbolName("member")], member)
+	members.Set(ast.MakeSymbolName("member"), member)
+	assert.Equal(t, symbol.Members().Get(ast.MakeSymbolName("member")), member)
+	assert.Equal(t, ast.GetMembers(symbol, &arena).Get(ast.MakeSymbolName("member")), member)
 
 	exports := ast.GetExports(symbol, &arena)
-	exports[ast.MakeSymbolName("export")] = export
-	assert.Equal(t, symbol.Exports()[ast.MakeSymbolName("export")], export)
-	assert.Equal(t, ast.GetExports(symbol, &arena)[ast.MakeSymbolName("export")], export)
+	exports.Set(ast.MakeSymbolName("export"), export)
+	assert.Equal(t, symbol.Exports().Get(ast.MakeSymbolName("export")), export)
+	assert.Equal(t, ast.GetExports(symbol, &arena).Get(ast.MakeSymbolName("export")), export)
 
 	symbol.SetMembers(nil, &arena)
 	symbol.SetExports(nil, &arena)
 	assert.Assert(t, ast.GetMembers(symbol, &arena) != nil)
 	assert.Assert(t, ast.GetExports(symbol, &arena) != nil)
-	assert.Equal(t, len(symbol.Members()), 0)
-	assert.Equal(t, len(symbol.Exports()), 0)
+	assert.Equal(t, symbol.Members().Len(), 0)
+	assert.Equal(t, symbol.Exports().Len(), 0)
 }
 
 func TestSymbolHotRecordLayout(t *testing.T) {
@@ -298,12 +298,12 @@ func TestSymbolSharedExtraData(t *testing.T) {
 	alias.SetSymbolData(symbol)
 	member := ast.NewSymbol()
 	export := ast.NewSymbol()
-	alias.SetMembers(ast.SymbolTable{ast.MakeSymbolName("member"): member}, &arena)
-	symbol.SetExports(ast.SymbolTable{ast.MakeSymbolName("export"): export}, &otherArena)
+	alias.SetMembers(ast.SymbolTableOf(ast.MakeSymbolName("member"), member), &arena)
+	symbol.SetExports(ast.SymbolTableOf(ast.MakeSymbolName("export"), export), &otherArena)
 	alias.SetExportSymbol(export, &otherArena)
 	runtime.GC()
-	assert.Equal(t, symbol.Members()[ast.MakeSymbolName("member")], member)
-	assert.Equal(t, alias.Exports()[ast.MakeSymbolName("export")], export)
+	assert.Equal(t, symbol.Members().Get(ast.MakeSymbolName("member")), member)
+	assert.Equal(t, alias.Exports().Get(ast.MakeSymbolName("export")), export)
 	assert.Equal(t, symbol.ExportSymbol(), export)
 	symbol.SetMembers(nil, &otherArena)
 	alias.SetExports(nil, &arena)
@@ -311,14 +311,14 @@ func TestSymbolSharedExtraData(t *testing.T) {
 	assert.Assert(t, alias.Members() == nil)
 	assert.Assert(t, symbol.Exports() == nil)
 	assert.Assert(t, alias.ExportSymbol() == nil)
-	ast.GetMembers(alias, &otherArena)[ast.MakeSymbolName("new")] = export
-	ast.GetExports(symbol, &arena)[ast.MakeSymbolName("new")] = member
+	ast.GetMembers(alias, &otherArena).Set(ast.MakeSymbolName("new"), export)
+	ast.GetExports(symbol, &arena).Set(ast.MakeSymbolName("new"), member)
 	for range 1024 {
-		ast.NewSymbol().SetExports(ast.SymbolTable{ast.MakeSymbolName("export"): export}, &arena)
+		ast.NewSymbol().SetExports(ast.SymbolTableOf(ast.MakeSymbolName("export"), export), &arena)
 	}
 	arena = ast.SymbolExtraArena{}
 	otherArena = ast.SymbolExtraArena{}
 	runtime.GC()
-	assert.Equal(t, symbol.Members()[ast.MakeSymbolName("new")], export)
-	assert.Equal(t, alias.Exports()[ast.MakeSymbolName("new")], member)
+	assert.Equal(t, symbol.Members().Get(ast.MakeSymbolName("new")), export)
+	assert.Equal(t, alias.Exports().Get(ast.MakeSymbolName("new")), member)
 }

@@ -8,7 +8,6 @@ import (
 
 	"github.com/microsoft/TypeScript/tsc/internal/ast"
 	"github.com/microsoft/TypeScript/tsc/internal/binder"
-	"github.com/microsoft/TypeScript/tsc/internal/collections"
 	"github.com/microsoft/TypeScript/tsc/internal/core"
 	"github.com/microsoft/TypeScript/tsc/internal/debug"
 	"github.com/microsoft/TypeScript/tsc/internal/diagnostics"
@@ -255,7 +254,7 @@ func isSyntacticDefault(node *ast.Node) bool {
 }
 
 func hasExportAssignmentSymbol(moduleSymbol *ast.Symbol) bool {
-	return moduleSymbol.Exports()[ast.InternalSymbolNameExportEquals] != nil
+	return moduleSymbol.Exports().Get(ast.InternalSymbolNameExportEquals) != nil
 }
 
 func isTypeAlias(node *ast.Node) bool {
@@ -352,9 +351,9 @@ func createSymbolTable(symbols []*ast.Symbol) ast.SymbolTable {
 	if len(symbols) == 0 {
 		return nil
 	}
-	result := make(ast.SymbolTable)
+	result := ast.NewSymbolTable()
 	for _, symbol := range symbols {
-		result[symbol.Name()] = symbol
+		result.Set(symbol.Name(), symbol)
 	}
 	return result
 }
@@ -933,9 +932,50 @@ func (c *Checker) releaseTemporaryTypeSet(set *temporaryTypeSet) {
 	c.freeTypeSets = set
 }
 
+// temporaryPropertyCounts counts property names in first-occurrence order.
 type temporaryPropertyCounts struct {
-	collections.OrderedMap[ast.SymbolName, int]
-	next *temporaryPropertyCounts
+	entries []propertyCount
+	indices map[ast.SymbolName]int32
+	next    *temporaryPropertyCounts
+}
+
+type propertyCount struct {
+	name  ast.SymbolName
+	count int32
+}
+
+func (p *temporaryPropertyCounts) Add(name ast.SymbolName) {
+	if i, ok := p.indices[name]; ok {
+		p.entries[i].count++
+		return
+	}
+	p.AddNew(name)
+}
+
+// AddNew adds a name known not to have been added yet, skipping the lookup.
+func (p *temporaryPropertyCounts) AddNew(name ast.SymbolName) {
+	if p.indices == nil {
+		p.indices = make(map[ast.SymbolName]int32)
+	}
+	p.indices[name] = int32(len(p.entries))
+	p.entries = append(p.entries, propertyCount{name: name, count: 1})
+}
+
+func (p *temporaryPropertyCounts) Count(name ast.SymbolName) int {
+	if i, ok := p.indices[name]; ok {
+		return int(p.entries[i].count)
+	}
+	return 0
+}
+
+func (p *temporaryPropertyCounts) Size() int {
+	return len(p.entries)
+}
+
+func (p *temporaryPropertyCounts) Clear() {
+	clear(p.entries)
+	p.entries = p.entries[:0]
+	clear(p.indices)
 }
 
 func (c *Checker) getTemporaryPropertyCounts() *temporaryPropertyCounts {
@@ -1275,7 +1315,7 @@ func isInNameOfExpressionWithTypeArgumentsOrHeritageTypeReference(node *ast.Node
 }
 
 func getIndexSymbolFromSymbolTable(symbolTable ast.SymbolTable) *ast.Symbol {
-	return symbolTable[ast.InternalSymbolNameIndex]
+	return symbolTable.Get(ast.InternalSymbolNameIndex)
 }
 
 // Indicates whether the result of an `Expression` will be unused.
@@ -1770,7 +1810,7 @@ func introducesArgumentsExoticObject(node *ast.Node) bool {
 
 func symbolsToArray(symbols ast.SymbolTable) []*ast.Symbol {
 	var result []*ast.Symbol
-	for id, symbol := range symbols {
+	for id, symbol := range symbols.All() {
 		if !isReservedMemberName(id) {
 			result = append(result, symbol)
 		}

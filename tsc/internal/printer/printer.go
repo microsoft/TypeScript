@@ -5095,7 +5095,7 @@ func (p *Printer) Write(node *ast.Node, sourceFile *ast.SourceFile, writer EmitT
 	}
 	p.writer = writer
 	p.writer.Clear()
-	if sourceFile != nil {
+	if sourceFile != nil && node == sourceFile.AsNode() {
 		if grower, ok := p.writer.(interface{ Grow(n int) }); ok {
 			grower.Grow(len(sourceFile.Text()))
 		}
