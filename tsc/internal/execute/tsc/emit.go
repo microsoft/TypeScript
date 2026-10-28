@@ -60,7 +60,7 @@ func EmitAndReportStatistics(input EmitInput) (CompileAndEmitResult, *Statistics
 		runtime.ReadMemStats(&memStats)
 
 		statistics = statisticsFromProgram(input, &memStats)
-		statistics.Report(input.Writer, input.Testing)
+		statistics.Report(input.Writer, input.Testing, input.Config.CompilerOptions().ExtendedDiagnostics.IsTrue())
 	}
 
 	if result.EmitResult.EmitSkipped && len(result.Diagnostics) > 0 {

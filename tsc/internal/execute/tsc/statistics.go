@@ -10,6 +10,7 @@ import (
 	"time"
 
 	"github.com/microsoft/TypeScript/tsc/internal/compiler"
+	"github.com/microsoft/TypeScript/tsc/internal/osutil"
 )
 
 type tableRow struct {
@@ -83,7 +84,7 @@ func statisticsFromProgram(input EmitInput, memStats *runtime.MemStats) *Statist
 	}
 }
 
-func (s *Statistics) Report(w io.Writer, testing CommandLineTesting) {
+func (s *Statistics) Report(w io.Writer, testing CommandLineTesting, extendedDiagnostics bool) {
 	if testing != nil {
 		testing.OnStatisticsStart(w)
 		defer testing.OnStatisticsEnd(w)
@@ -126,6 +127,11 @@ func (s *Statistics) Report(w io.Writer, testing CommandLineTesting) {
 	}
 	s.addContentMapperStatistics(&table, prefix)
 	table.add(prefix+"Total time", s.compileTimes.totalTime)
+	if extendedDiagnostics {
+		if cpuTime, err := osutil.ProcessCPUTime(); err == nil {
+			table.add("CPU time", cpuTime)
+		}
+	}
 	table.print(w)
 }
 
