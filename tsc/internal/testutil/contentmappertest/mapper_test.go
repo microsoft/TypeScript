@@ -5,6 +5,7 @@ import (
 	"io"
 	"os"
 	"os/exec"
+	"runtime"
 	"strings"
 	"testing"
 
@@ -58,6 +59,9 @@ func transformRequest() contentmapper.Request {
 // subprocess and drives it over stdio through the production content mapper host.
 func TestOutOfProcess(t *testing.T) {
 	t.Parallel()
+	if runtime.GOOS == "wasip1" {
+		t.Skip("wasip1 cannot run subprocesses")
+	}
 	host := contentmapper.NewHost(t.Context(), execSpawner{}, locale.Default)
 	defer host.Close()
 	mapper := testMapper()
