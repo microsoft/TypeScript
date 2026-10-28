@@ -1,0 +1,69 @@
+//// [tests/cases/compiler/lateBoundMutualMemberTables.ts] ////
+
+=== lateBoundMutualMemberTables.ts ===
+declare const a: A<"a">;
+>a : A<"a">
+
+declare const b: B<"b">;
+>b : B<"b">
+
+declare class A<T> {
+>A : A<T>
+
+    x: T;
+>x : T
+
+    [b.y]: "fromB";
+>[b.y] : "fromB"
+>b.y : "b"
+>b : B<"b">
+>y : "b"
+
+    [b.by]: "fromB2";
+>[b.by] : "fromB2"
+>b.by : any
+>b : B<"b">
+>by : any
+}
+declare class B<T> {
+>B : B<T>
+
+    y: T;
+>y : T
+
+    [a.x]: "fromA";
+>[a.x] : "fromA"
+>a.x : "a"
+>a : A<"a">
+>x : "a"
+
+    [a.b]: "fromA2";
+>[a.b] : "fromA2"
+>a.b : "fromB"
+>a : A<"a">
+>b : "fromB"
+}
+export const v1 = a.b;
+>v1 : "fromB"
+>a.b : "fromB"
+>a : A<"a">
+>b : "fromB"
+
+export const v2 = b.a;
+>v2 : "fromA"
+>b.a : "fromA"
+>b : B<"b">
+>a : "fromA"
+
+export const v3 = a.fromA2;
+>v3 : any
+>a.fromA2 : any
+>a : A<"a">
+>fromA2 : any
+
+export const v4 = b.fromB;
+>v4 : "fromA2"
+>b.fromB : "fromA2"
+>b : B<"b">
+>fromB : "fromA2"
+
