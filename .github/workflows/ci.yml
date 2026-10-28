@@ -155,8 +155,12 @@ jobs:
       - name: Tests
         id: test
         run: npx hereby test:tsc
+        env:
+          TMPDIR: ${{ runner.temp }}
       - name: Benchmarks
         run: npx hereby test:benchmarks
+        env:
+          TMPDIR: ${{ runner.temp }}
       - run: git add .
       - uses: codecov/codecov-action@303a32d7a59b442fa8d48b6a1cc6825c09c847a5 # v7.1.1
         if: ${{ always() && matrix.config.coverage && github.event_name != 'merge_group' }}
