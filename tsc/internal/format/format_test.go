@@ -54,3 +54,32 @@ func TestFormatNoTrailingSpace(t *testing.T) {
 		})
 	}
 }
+
+func TestFormatIdempotentWhenLineAddedBeforeNestedNodes(t *testing.T) {
+	t.Parallel()
+
+	// The callee `0!` and the call both start at `0`. When formatting moves `0` to
+	// a new line, the call's arguments must be indented as if `0` were already there.
+	text := "{{0!\n(\"\")}}"
+	expected := "{\n    {\n        0!\n            (\"\")\n    }\n}"
+
+	format1 := func(text string) string {
+		ctx := format.WithFormatCodeSettings(t.Context(), lsutil.FormatCodeSettings{
+			TabSize:                4,
+			IndentSize:             4,
+			NewLineCharacter:       "\n",
+			ConvertTabsToSpaces:    core.TSTrue,
+			IndentStyle:            lsutil.IndentStyleSmart,
+			TrimTrailingWhitespace: core.TSTrue,
+		}, "\n")
+		sourceFile := parser.ParseSourceFile(ast.SourceFileParseOptions{
+			FileName: "/test.ts",
+			PathKey:  "/test.ts",
+		}, text, core.ScriptKindTS)
+		return applyBulkEdits(text, format.FormatDocument(ctx, sourceFile))
+	}
+
+	first := format1(text)
+	assert.Equal(t, first, expected)
+	assert.Equal(t, format1(first), first)
+}
