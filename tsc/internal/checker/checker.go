@@ -20892,6 +20892,14 @@ func (c *Checker) isApplicableIndexType(source *Type, target *Type) bool {
 }
 
 func (c *Checker) resolveStructuredTypeMembers(t *Type) *StructuredType {
+	key := memoKeyOf(t, memoStructuredMembers)
+	if t.objectFlags&(ObjectFlagsMembersResolved|ObjectFlagsMembersResolving) == ObjectFlagsMembersResolved {
+		// Resolved members are only read.
+		if c.observing() {
+			c.observeMemo(key)
+		}
+		return t.AsStructuredType()
+	}
 	if t.objectFlags&ObjectFlagsMembersResolving != 0 {
 		// Resolving members may observe the type itself, whose members are
 		// then incomplete.
@@ -20906,7 +20914,7 @@ func (c *Checker) resolveStructuredTypeMembers(t *Type) *StructuredType {
 			c.observeHiddenMembers(t)
 		}
 	}
-	c.beginMemo(memoKeyOf(t, memoStructuredMembers))
+	c.beginMemo(key)
 	result := c.resolveStructuredTypeMembersUncached(t)
 	c.endMemo()
 	return result
