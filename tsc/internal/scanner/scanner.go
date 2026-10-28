@@ -459,6 +459,15 @@ func (s *Scanner) charAndSize() (rune, int) {
 	return utf8.DecodeRuneInString(s.text[s.pos:])
 }
 
+// isASCIIIdentifierPart reports whether a byte is [A-Za-z0-9_$], with one load instead of a chain of range checks.
+var isASCIIIdentifierPart = func() [256]bool {
+	var table [256]bool
+	for b := range table {
+		table[b] = b >= 'a' && b <= 'z' || b >= 'A' && b <= 'Z' || b >= '0' && b <= '9' || b == '_' || b == '$'
+	}
+	return table
+}()
+
 // scanASCIIWhile advances s.pos over the longest run of ASCII bytes for which
 // pred returns true. It stops at end-of-text, the first non-ASCII byte, or the
 // first byte where pred is false.
@@ -1491,7 +1500,7 @@ func (s *Scanner) scanIdentifier(prefixLength int, variant identifierVariant) bo
 	if variant != identifierVariantJSX && (stringutil.IsASCIILetter(ch) || ch == '_' || ch == '$') {
 		s.pos++
 		s.scanASCIIWhile(func(b byte) bool {
-			return (b >= 'a' && b <= 'z') || (b >= 'A' && b <= 'Z') || (b >= '0' && b <= '9') || b == '_' || b == '$'
+			return isASCIIIdentifierPart[b]
 		})
 		ch = s.char()
 		if ch < utf8.RuneSelf && ch != '\\' {
