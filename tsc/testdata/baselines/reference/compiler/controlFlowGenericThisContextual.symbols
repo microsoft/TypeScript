@@ -1,0 +1,254 @@
+//// [tests/cases/compiler/controlFlowGenericThisContextual.ts] ////
+
+=== controlFlowGenericThisContextual.ts ===
+type Type = I32 | Str;
+>Type : Symbol(Type, Decl(controlFlowGenericThisContextual.ts, 0, 0))
+>I32 : Symbol(I32, Decl(controlFlowGenericThisContextual.ts, 1, 45))
+>Str : Symbol(Str, Decl(controlFlowGenericThisContextual.ts, 0, 22))
+
+interface Str { group: "none"; kind: "str"; }
+>Str : Symbol(Str, Decl(controlFlowGenericThisContextual.ts, 0, 22))
+>group : Symbol(Str.group, Decl(controlFlowGenericThisContextual.ts, 1, 15))
+>kind : Symbol(Str.kind, Decl(controlFlowGenericThisContextual.ts, 1, 30))
+
+interface I32 { group: "scalar"; kind: "i32"; }
+>I32 : Symbol(I32, Decl(controlFlowGenericThisContextual.ts, 1, 45))
+>group : Symbol(I32.group, Decl(controlFlowGenericThisContextual.ts, 2, 15))
+>kind : Symbol(I32.kind, Decl(controlFlowGenericThisContextual.ts, 2, 32))
+
+declare function takeI32(value: I32): void;
+>takeI32 : Symbol(takeI32, Decl(controlFlowGenericThisContextual.ts, 2, 47))
+>value : Symbol(value, Decl(controlFlowGenericThisContextual.ts, 4, 25))
+>I32 : Symbol(I32, Decl(controlFlowGenericThisContextual.ts, 1, 45))
+
+declare function inferKind<T>(value: { kind: T }): T;
+>inferKind : Symbol(inferKind, Decl(controlFlowGenericThisContextual.ts, 4, 43))
+>T : Symbol(T, Decl(controlFlowGenericThisContextual.ts, 5, 27))
+>value : Symbol(value, Decl(controlFlowGenericThisContextual.ts, 5, 30))
+>kind : Symbol(kind, Decl(controlFlowGenericThisContextual.ts, 5, 38))
+>T : Symbol(T, Decl(controlFlowGenericThisContextual.ts, 5, 27))
+>T : Symbol(T, Decl(controlFlowGenericThisContextual.ts, 5, 27))
+
+function testThis<T extends Type>(this: T): I32 | undefined {
+>testThis : Symbol(testThis, Decl(controlFlowGenericThisContextual.ts, 5, 53))
+>T : Symbol(T, Decl(controlFlowGenericThisContextual.ts, 7, 18))
+>Type : Symbol(Type, Decl(controlFlowGenericThisContextual.ts, 0, 0))
+>this : Symbol(this, Decl(controlFlowGenericThisContextual.ts, 7, 34))
+>T : Symbol(T, Decl(controlFlowGenericThisContextual.ts, 7, 18))
+>I32 : Symbol(I32, Decl(controlFlowGenericThisContextual.ts, 1, 45))
+
+    if (this.group === "scalar") {
+>this.group : Symbol(group, Decl(controlFlowGenericThisContextual.ts, 2, 15), Decl(controlFlowGenericThisContextual.ts, 1, 15))
+>this : Symbol(this, Decl(controlFlowGenericThisContextual.ts, 7, 34))
+>group : Symbol(group, Decl(controlFlowGenericThisContextual.ts, 2, 15), Decl(controlFlowGenericThisContextual.ts, 1, 15))
+
+        const value: I32 = this;
+>value : Symbol(value, Decl(controlFlowGenericThisContextual.ts, 9, 13))
+>I32 : Symbol(I32, Decl(controlFlowGenericThisContextual.ts, 1, 45))
+>this : Symbol(this, Decl(controlFlowGenericThisContextual.ts, 7, 34))
+
+        takeI32(this);
+>takeI32 : Symbol(takeI32, Decl(controlFlowGenericThisContextual.ts, 2, 47))
+>this : Symbol(this, Decl(controlFlowGenericThisContextual.ts, 7, 34))
+
+        this satisfies I32;
+>this : Symbol(this, Decl(controlFlowGenericThisContextual.ts, 7, 34))
+>I32 : Symbol(I32, Decl(controlFlowGenericThisContextual.ts, 1, 45))
+
+        const arrow = (): I32 => this;
+>arrow : Symbol(arrow, Decl(controlFlowGenericThisContextual.ts, 12, 13))
+>I32 : Symbol(I32, Decl(controlFlowGenericThisContextual.ts, 1, 45))
+>this : Symbol(this, Decl(controlFlowGenericThisContextual.ts, 7, 34))
+
+        return this;
+>this : Symbol(this, Decl(controlFlowGenericThisContextual.ts, 7, 34))
+    }
+}
+
+function testParameter<T extends Type>(o: T): I32 | undefined {
+>testParameter : Symbol(testParameter, Decl(controlFlowGenericThisContextual.ts, 15, 1))
+>T : Symbol(T, Decl(controlFlowGenericThisContextual.ts, 17, 23))
+>Type : Symbol(Type, Decl(controlFlowGenericThisContextual.ts, 0, 0))
+>o : Symbol(o, Decl(controlFlowGenericThisContextual.ts, 17, 39))
+>T : Symbol(T, Decl(controlFlowGenericThisContextual.ts, 17, 23))
+>I32 : Symbol(I32, Decl(controlFlowGenericThisContextual.ts, 1, 45))
+
+    if (o.group === "scalar") {
+>o.group : Symbol(group, Decl(controlFlowGenericThisContextual.ts, 2, 15), Decl(controlFlowGenericThisContextual.ts, 1, 15))
+>o : Symbol(o, Decl(controlFlowGenericThisContextual.ts, 17, 39))
+>group : Symbol(group, Decl(controlFlowGenericThisContextual.ts, 2, 15), Decl(controlFlowGenericThisContextual.ts, 1, 15))
+
+        const value: I32 = o;
+>value : Symbol(value, Decl(controlFlowGenericThisContextual.ts, 19, 13))
+>I32 : Symbol(I32, Decl(controlFlowGenericThisContextual.ts, 1, 45))
+>o : Symbol(o, Decl(controlFlowGenericThisContextual.ts, 17, 39))
+
+        takeI32(o);
+>takeI32 : Symbol(takeI32, Decl(controlFlowGenericThisContextual.ts, 2, 47))
+>o : Symbol(o, Decl(controlFlowGenericThisContextual.ts, 17, 39))
+
+        o satisfies I32;
+>o : Symbol(o, Decl(controlFlowGenericThisContextual.ts, 17, 39))
+>I32 : Symbol(I32, Decl(controlFlowGenericThisContextual.ts, 1, 45))
+
+        const arrow = (): I32 => o;
+>arrow : Symbol(arrow, Decl(controlFlowGenericThisContextual.ts, 22, 13))
+>I32 : Symbol(I32, Decl(controlFlowGenericThisContextual.ts, 1, 45))
+>o : Symbol(o, Decl(controlFlowGenericThisContextual.ts, 17, 39))
+
+        return o;
+>o : Symbol(o, Decl(controlFlowGenericThisContextual.ts, 17, 39))
+    }
+}
+
+function testAliasedThis<T extends Type>(this: T): I32 | undefined {
+>testAliasedThis : Symbol(testAliasedThis, Decl(controlFlowGenericThisContextual.ts, 25, 1))
+>T : Symbol(T, Decl(controlFlowGenericThisContextual.ts, 27, 25))
+>Type : Symbol(Type, Decl(controlFlowGenericThisContextual.ts, 0, 0))
+>this : Symbol(this, Decl(controlFlowGenericThisContextual.ts, 27, 41))
+>T : Symbol(T, Decl(controlFlowGenericThisContextual.ts, 27, 25))
+>I32 : Symbol(I32, Decl(controlFlowGenericThisContextual.ts, 1, 45))
+
+    const o = this;
+>o : Symbol(o, Decl(controlFlowGenericThisContextual.ts, 28, 9))
+>this : Symbol(this, Decl(controlFlowGenericThisContextual.ts, 27, 41))
+
+    if (o.group === "scalar") {
+>o.group : Symbol(group, Decl(controlFlowGenericThisContextual.ts, 2, 15), Decl(controlFlowGenericThisContextual.ts, 1, 15))
+>o : Symbol(o, Decl(controlFlowGenericThisContextual.ts, 28, 9))
+>group : Symbol(group, Decl(controlFlowGenericThisContextual.ts, 2, 15), Decl(controlFlowGenericThisContextual.ts, 1, 15))
+
+        const value: I32 = o;
+>value : Symbol(value, Decl(controlFlowGenericThisContextual.ts, 30, 13))
+>I32 : Symbol(I32, Decl(controlFlowGenericThisContextual.ts, 1, 45))
+>o : Symbol(o, Decl(controlFlowGenericThisContextual.ts, 28, 9))
+
+        takeI32(o);
+>takeI32 : Symbol(takeI32, Decl(controlFlowGenericThisContextual.ts, 2, 47))
+>o : Symbol(o, Decl(controlFlowGenericThisContextual.ts, 28, 9))
+
+        o satisfies I32;
+>o : Symbol(o, Decl(controlFlowGenericThisContextual.ts, 28, 9))
+>I32 : Symbol(I32, Decl(controlFlowGenericThisContextual.ts, 1, 45))
+
+        const arrow = (): I32 => o;
+>arrow : Symbol(arrow, Decl(controlFlowGenericThisContextual.ts, 33, 13))
+>I32 : Symbol(I32, Decl(controlFlowGenericThisContextual.ts, 1, 45))
+>o : Symbol(o, Decl(controlFlowGenericThisContextual.ts, 28, 9))
+
+        return o;
+>o : Symbol(o, Decl(controlFlowGenericThisContextual.ts, 28, 9))
+    }
+}
+
+function testInferenceThis<T extends Type>(this: T) {
+>testInferenceThis : Symbol(testInferenceThis, Decl(controlFlowGenericThisContextual.ts, 36, 1))
+>T : Symbol(T, Decl(controlFlowGenericThisContextual.ts, 38, 27))
+>Type : Symbol(Type, Decl(controlFlowGenericThisContextual.ts, 0, 0))
+>this : Symbol(this, Decl(controlFlowGenericThisContextual.ts, 38, 43))
+>T : Symbol(T, Decl(controlFlowGenericThisContextual.ts, 38, 27))
+
+    if (this.group === "scalar") {
+>this.group : Symbol(group, Decl(controlFlowGenericThisContextual.ts, 2, 15), Decl(controlFlowGenericThisContextual.ts, 1, 15))
+>this : Symbol(this, Decl(controlFlowGenericThisContextual.ts, 38, 43))
+>group : Symbol(group, Decl(controlFlowGenericThisContextual.ts, 2, 15), Decl(controlFlowGenericThisContextual.ts, 1, 15))
+
+        const kind = inferKind(this);
+>kind : Symbol(kind, Decl(controlFlowGenericThisContextual.ts, 40, 13))
+>inferKind : Symbol(inferKind, Decl(controlFlowGenericThisContextual.ts, 4, 43))
+>this : Symbol(this, Decl(controlFlowGenericThisContextual.ts, 38, 43))
+    }
+}
+
+function testInferenceParameter<T extends Type>(o: T) {
+>testInferenceParameter : Symbol(testInferenceParameter, Decl(controlFlowGenericThisContextual.ts, 42, 1))
+>T : Symbol(T, Decl(controlFlowGenericThisContextual.ts, 44, 32))
+>Type : Symbol(Type, Decl(controlFlowGenericThisContextual.ts, 0, 0))
+>o : Symbol(o, Decl(controlFlowGenericThisContextual.ts, 44, 48))
+>T : Symbol(T, Decl(controlFlowGenericThisContextual.ts, 44, 32))
+
+    if (o.group === "scalar") {
+>o.group : Symbol(group, Decl(controlFlowGenericThisContextual.ts, 2, 15), Decl(controlFlowGenericThisContextual.ts, 1, 15))
+>o : Symbol(o, Decl(controlFlowGenericThisContextual.ts, 44, 48))
+>group : Symbol(group, Decl(controlFlowGenericThisContextual.ts, 2, 15), Decl(controlFlowGenericThisContextual.ts, 1, 15))
+
+        const kind = inferKind(o);
+>kind : Symbol(kind, Decl(controlFlowGenericThisContextual.ts, 46, 13))
+>inferKind : Symbol(inferKind, Decl(controlFlowGenericThisContextual.ts, 4, 43))
+>o : Symbol(o, Decl(controlFlowGenericThisContextual.ts, 44, 48))
+    }
+}
+
+function testInferenceAliasedThis<T extends Type>(this: T) {
+>testInferenceAliasedThis : Symbol(testInferenceAliasedThis, Decl(controlFlowGenericThisContextual.ts, 48, 1))
+>T : Symbol(T, Decl(controlFlowGenericThisContextual.ts, 50, 34))
+>Type : Symbol(Type, Decl(controlFlowGenericThisContextual.ts, 0, 0))
+>this : Symbol(this, Decl(controlFlowGenericThisContextual.ts, 50, 50))
+>T : Symbol(T, Decl(controlFlowGenericThisContextual.ts, 50, 34))
+
+    const o = this;
+>o : Symbol(o, Decl(controlFlowGenericThisContextual.ts, 51, 9))
+>this : Symbol(this, Decl(controlFlowGenericThisContextual.ts, 50, 50))
+
+    if (o.group === "scalar") {
+>o.group : Symbol(group, Decl(controlFlowGenericThisContextual.ts, 2, 15), Decl(controlFlowGenericThisContextual.ts, 1, 15))
+>o : Symbol(o, Decl(controlFlowGenericThisContextual.ts, 51, 9))
+>group : Symbol(group, Decl(controlFlowGenericThisContextual.ts, 2, 15), Decl(controlFlowGenericThisContextual.ts, 1, 15))
+
+        const kind = inferKind(o);
+>kind : Symbol(kind, Decl(controlFlowGenericThisContextual.ts, 53, 13))
+>inferKind : Symbol(inferKind, Decl(controlFlowGenericThisContextual.ts, 4, 43))
+>o : Symbol(o, Decl(controlFlowGenericThisContextual.ts, 51, 9))
+    }
+}
+
+const contextual: { method<T extends Type>(this: T): I32 | undefined } = {
+>contextual : Symbol(contextual, Decl(controlFlowGenericThisContextual.ts, 57, 5))
+>method : Symbol(method, Decl(controlFlowGenericThisContextual.ts, 57, 19))
+>T : Symbol(T, Decl(controlFlowGenericThisContextual.ts, 57, 27))
+>Type : Symbol(Type, Decl(controlFlowGenericThisContextual.ts, 0, 0))
+>this : Symbol(this, Decl(controlFlowGenericThisContextual.ts, 57, 43))
+>T : Symbol(T, Decl(controlFlowGenericThisContextual.ts, 57, 27))
+>I32 : Symbol(I32, Decl(controlFlowGenericThisContextual.ts, 1, 45))
+
+    method() {
+>method : Symbol(method, Decl(controlFlowGenericThisContextual.ts, 57, 74))
+
+        if (this.group === "scalar") {
+>this.group : Symbol(group, Decl(controlFlowGenericThisContextual.ts, 2, 15), Decl(controlFlowGenericThisContextual.ts, 1, 15))
+>this : Symbol(this, Decl(controlFlowGenericThisContextual.ts, 57, 43))
+>group : Symbol(group, Decl(controlFlowGenericThisContextual.ts, 2, 15), Decl(controlFlowGenericThisContextual.ts, 1, 15))
+
+            return this;
+>this : Symbol(this, Decl(controlFlowGenericThisContextual.ts, 57, 43))
+        }
+    },
+};
+
+const contextualAliased: { method<T extends Type>(this: T): I32 | undefined } = {
+>contextualAliased : Symbol(contextualAliased, Decl(controlFlowGenericThisContextual.ts, 65, 5))
+>method : Symbol(method, Decl(controlFlowGenericThisContextual.ts, 65, 26))
+>T : Symbol(T, Decl(controlFlowGenericThisContextual.ts, 65, 34))
+>Type : Symbol(Type, Decl(controlFlowGenericThisContextual.ts, 0, 0))
+>this : Symbol(this, Decl(controlFlowGenericThisContextual.ts, 65, 50))
+>T : Symbol(T, Decl(controlFlowGenericThisContextual.ts, 65, 34))
+>I32 : Symbol(I32, Decl(controlFlowGenericThisContextual.ts, 1, 45))
+
+    method() {
+>method : Symbol(method, Decl(controlFlowGenericThisContextual.ts, 65, 81))
+
+        const o = this;
+>o : Symbol(o, Decl(controlFlowGenericThisContextual.ts, 67, 13))
+>this : Symbol(this, Decl(controlFlowGenericThisContextual.ts, 65, 50))
+
+        if (o.group === "scalar") {
+>o.group : Symbol(group, Decl(controlFlowGenericThisContextual.ts, 2, 15), Decl(controlFlowGenericThisContextual.ts, 1, 15))
+>o : Symbol(o, Decl(controlFlowGenericThisContextual.ts, 67, 13))
+>group : Symbol(group, Decl(controlFlowGenericThisContextual.ts, 2, 15), Decl(controlFlowGenericThisContextual.ts, 1, 15))
+
+            return o;
+>o : Symbol(o, Decl(controlFlowGenericThisContextual.ts, 67, 13))
+        }
+    },
+};
+

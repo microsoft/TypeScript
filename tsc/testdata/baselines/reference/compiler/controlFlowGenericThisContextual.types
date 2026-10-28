@@ -1,0 +1,238 @@
+//// [tests/cases/compiler/controlFlowGenericThisContextual.ts] ////
+
+=== controlFlowGenericThisContextual.ts ===
+type Type = I32 | Str;
+>Type : Type
+
+interface Str { group: "none"; kind: "str"; }
+>group : "none"
+>kind : "str"
+
+interface I32 { group: "scalar"; kind: "i32"; }
+>group : "scalar"
+>kind : "i32"
+
+declare function takeI32(value: I32): void;
+>takeI32 : (value: I32) => void
+>value : I32
+
+declare function inferKind<T>(value: { kind: T }): T;
+>inferKind : <T>(value: { kind: T; }) => T
+>value : { kind: T; }
+>kind : T
+
+function testThis<T extends Type>(this: T): I32 | undefined {
+>testThis : <T extends Type>(this: T) => I32 | undefined
+>this : T
+
+    if (this.group === "scalar") {
+>this.group === "scalar" : boolean
+>this.group : "none" | "scalar"
+>this : Type
+>group : "none" | "scalar"
+>"scalar" : "scalar"
+
+        const value: I32 = this;
+>value : I32
+>this : I32
+
+        takeI32(this);
+>takeI32(this) : void
+>takeI32 : (value: I32) => void
+>this : I32
+
+        this satisfies I32;
+>this satisfies I32 : I32
+>this : I32
+
+        const arrow = (): I32 => this;
+>arrow : () => I32
+>(): I32 => this : () => I32
+>this : I32
+
+        return this;
+>this : I32
+    }
+}
+
+function testParameter<T extends Type>(o: T): I32 | undefined {
+>testParameter : <T extends Type>(o: T) => I32 | undefined
+>o : T
+
+    if (o.group === "scalar") {
+>o.group === "scalar" : boolean
+>o.group : "none" | "scalar"
+>o : Type
+>group : "none" | "scalar"
+>"scalar" : "scalar"
+
+        const value: I32 = o;
+>value : I32
+>o : I32
+
+        takeI32(o);
+>takeI32(o) : void
+>takeI32 : (value: I32) => void
+>o : I32
+
+        o satisfies I32;
+>o satisfies I32 : I32
+>o : I32
+
+        const arrow = (): I32 => o;
+>arrow : () => I32
+>(): I32 => o : () => I32
+>o : I32
+
+        return o;
+>o : I32
+    }
+}
+
+function testAliasedThis<T extends Type>(this: T): I32 | undefined {
+>testAliasedThis : <T extends Type>(this: T) => I32 | undefined
+>this : T
+
+    const o = this;
+>o : T
+>this : T
+
+    if (o.group === "scalar") {
+>o.group === "scalar" : boolean
+>o.group : "none" | "scalar"
+>o : Type
+>group : "none" | "scalar"
+>"scalar" : "scalar"
+
+        const value: I32 = o;
+>value : I32
+>o : I32
+
+        takeI32(o);
+>takeI32(o) : void
+>takeI32 : (value: I32) => void
+>o : I32
+
+        o satisfies I32;
+>o satisfies I32 : I32
+>o : I32
+
+        const arrow = (): I32 => o;
+>arrow : () => I32
+>(): I32 => o : () => I32
+>o : I32
+
+        return o;
+>o : I32
+    }
+}
+
+function testInferenceThis<T extends Type>(this: T) {
+>testInferenceThis : <T extends Type>(this: T) => void
+>this : T
+
+    if (this.group === "scalar") {
+>this.group === "scalar" : boolean
+>this.group : "none" | "scalar"
+>this : Type
+>group : "none" | "scalar"
+>"scalar" : "scalar"
+
+        const kind = inferKind(this);
+>kind : "i32" | "str"
+>inferKind(this) : "i32" | "str"
+>inferKind : <T_1>(value: { kind: T_1; }) => T_1
+>this : I32
+    }
+}
+
+function testInferenceParameter<T extends Type>(o: T) {
+>testInferenceParameter : <T extends Type>(o: T) => void
+>o : T
+
+    if (o.group === "scalar") {
+>o.group === "scalar" : boolean
+>o.group : "none" | "scalar"
+>o : Type
+>group : "none" | "scalar"
+>"scalar" : "scalar"
+
+        const kind = inferKind(o);
+>kind : "i32" | "str"
+>inferKind(o) : "i32" | "str"
+>inferKind : <T_1>(value: { kind: T_1; }) => T_1
+>o : I32
+    }
+}
+
+function testInferenceAliasedThis<T extends Type>(this: T) {
+>testInferenceAliasedThis : <T extends Type>(this: T) => void
+>this : T
+
+    const o = this;
+>o : T
+>this : T
+
+    if (o.group === "scalar") {
+>o.group === "scalar" : boolean
+>o.group : "none" | "scalar"
+>o : Type
+>group : "none" | "scalar"
+>"scalar" : "scalar"
+
+        const kind = inferKind(o);
+>kind : "i32" | "str"
+>inferKind(o) : "i32" | "str"
+>inferKind : <T_1>(value: { kind: T_1; }) => T_1
+>o : I32
+    }
+}
+
+const contextual: { method<T extends Type>(this: T): I32 | undefined } = {
+>contextual : { method<T extends Type>(this: T): I32 | undefined; }
+>method : <T extends Type>(this: T) => I32 | undefined
+>this : T
+>{    method() {        if (this.group === "scalar") {            return this;        }    },} : { method<T extends Type>(this: T): I32 | undefined; }
+
+    method() {
+>method : <T extends Type>(this: T) => I32 | undefined
+
+        if (this.group === "scalar") {
+>this.group === "scalar" : boolean
+>this.group : "none" | "scalar"
+>this : Type
+>group : "none" | "scalar"
+>"scalar" : "scalar"
+
+            return this;
+>this : I32
+        }
+    },
+};
+
+const contextualAliased: { method<T extends Type>(this: T): I32 | undefined } = {
+>contextualAliased : { method<T extends Type>(this: T): I32 | undefined; }
+>method : <T extends Type>(this: T) => I32 | undefined
+>this : T
+>{    method() {        const o = this;        if (o.group === "scalar") {            return o;        }    },} : { method<T extends Type>(this: T): I32 | undefined; }
+
+    method() {
+>method : <T extends Type>(this: T) => I32 | undefined
+
+        const o = this;
+>o : T
+>this : T
+
+        if (o.group === "scalar") {
+>o.group === "scalar" : boolean
+>o.group : "none" | "scalar"
+>o : Type
+>group : "none" | "scalar"
+>"scalar" : "scalar"
+
+            return o;
+>o : I32
+        }
+    },
+};
+
