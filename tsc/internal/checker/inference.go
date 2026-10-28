@@ -1132,9 +1132,14 @@ func (c *Checker) resolveReverseMappedTypeMembers(t *Type) {
 	if indexInfo != nil {
 		indexInfos = []*IndexInfo{c.newIndexInfo(c.stringType, core.OrElse(c.inferReverseMappedType(indexInfo.valueType, r.mappedType, r.constraintType), c.unknownType), readonlyMask && indexInfo.isReadonly, nil, nil)}
 	}
-	members := make(ast.SymbolTable)
+	members := ast.NewSymbolTable()
 	limitedConstraint := c.getLimitedConstraint(t)
 	for _, prop := range c.getPropertiesOfType(r.source) {
+		// Private and protected properties are never produced by keyof, so they have no counterpart in a
+		// reverse mapped type. Copying them would surface them as public properties of the inferred type.
+		if getDeclarationModifierFlagsFromSymbol(prop)&ast.ModifierFlagsNonPublicAccessibilityModifier != 0 {
+			continue
+		}
 		// In case of a reverse mapped type with an intersection constraint, if we were able to
 		// extract the filtering type literals we skip those properties that are not assignable to them,
 		// because the extra properties wouldn't get through the application of the mapped type anyway
@@ -1163,7 +1168,7 @@ func (c *Checker) resolveReverseMappedTypeMembers(t *Type) {
 			links.mappedType = r.mappedType
 			links.constraintType = r.constraintType
 		}
-		members[prop.Name()] = inferredProp
+		members.Set(prop.Name(), inferredProp)
 	}
 	c.setStructuredTypeMembers(t, members, nil, nil, indexInfos)
 }
@@ -1253,7 +1258,7 @@ func (c *Checker) isTypeCloselyMatchedBy(s *Type, t *Type) bool {
 
 // Create an object with properties named in the string literal type. Every property has type `any`.
 func (c *Checker) createEmptyObjectTypeFromStringLiteral(t *Type) *Type {
-	members := make(ast.SymbolTable)
+	members := ast.NewSymbolTable()
 	for _, t := range t.Distributed() {
 		if t.flags&TypeFlagsStringLiteral == 0 {
 			continue
@@ -1265,7 +1270,7 @@ func (c *Checker) createEmptyObjectTypeFromStringLiteral(t *Type) *Type {
 			literalProp.SetDeclarations(t.symbol.Declarations())
 			literalProp.SetValueDeclaration(t.symbol.ValueDeclaration())
 		}
-		members[name] = literalProp
+		members.Set(name, literalProp)
 	}
 	var indexInfos []*IndexInfo
 	if t.flags&TypeFlagsString != 0 {

@@ -59,6 +59,7 @@ func main() {
 			"ConstEnumOnlyModule":                 toInt32(ast.SymbolFlagsConstEnumOnlyModule),
 			"ReplaceableByMethod":                 toInt32(ast.SymbolFlagsReplaceableByMethod),
 			"GlobalLookup":                        toInt32(ast.SymbolFlagsGlobalLookup),
+			"NameProxy":                           toInt32(ast.SymbolFlagsNameProxy),
 			"All":                                 toInt32(ast.SymbolFlagsAll),
 			"Enum":                                toInt32(ast.SymbolFlagsEnum),
 			"Variable":                            toInt32(ast.SymbolFlagsVariable),

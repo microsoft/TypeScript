@@ -1,4 +1,4 @@
-import { SymbolOwnerKind } from "#enums/symbolOwnerKind";
+import { SymbolOwnerKind } from "../../enums/symbolOwnerKind.js";
 import {
     documentURIToFileName,
     fileNameToDocumentURI,

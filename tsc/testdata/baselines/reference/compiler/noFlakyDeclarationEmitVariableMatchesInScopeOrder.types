@@ -1,0 +1,105 @@
+//// [tests/cases/compiler/noFlakyDeclarationEmitVariableMatchesInScopeOrder.ts] ////
+
+=== /main.ts ===
+/// <reference path="./ambient.d.ts" />
+/// <reference path="./globals.d.ts" />
+/// <reference path="./keys.d.ts" />
+declare function expand<X>(): { [K in keyof X]: X[K] };
+>expand : <X>() => { [K in keyof X]: X[K]; }
+
+export const obj = mk();
+>obj : { [Keys.key]: 1; }
+>mk() : { [Keys.key]: 1; }
+>mk : () => { [keys.key]: 1; }
+
+export const obsA = expand<typeof oxa>();
+>obsA : { pb: 0; readonly mb: 1; v: 0; }
+>expand<typeof oxa>() : { pb: 0; readonly mb: 1; v: 0; }
+>expand : <X>() => { [K in keyof X]: X[K]; }
+>oxa : O
+
+export const obsB = expand<typeof oxb>();
+>obsB : { v: 0; }
+>expand<typeof oxb>() : { v: 0; }
+>expand : <X>() => { [K in keyof X]: X[K]; }
+>oxb : O
+
+=== /ambient.d.ts ===
+declare module "ma" {
+>"ma" : typeof import("ma")
+
+    export { v as pa } from "xa";
+>v : 0
+>pa : 0
+
+    export const ma: 1;
+>ma : 1
+}
+declare module "mb" {
+>"mb" : typeof import("mb")
+
+    export { v as pb } from "xb";
+>v : 0
+>pb : 0
+
+    export const mb: 1;
+>mb : 1
+}
+declare module "xa" {
+>"xa" : typeof import("xa")
+
+    type T = typeof import("mb");
+>T : typeof import("mb")
+
+    interface O extends T { v: 0 }
+>v : 0
+
+    const o: O;
+>o : O
+
+    export = o;
+>o : O
+}
+declare module "xb" {
+>"xb" : typeof import("xb")
+
+    type T = typeof import("ma");
+>T : typeof import("ma")
+
+    interface O extends T { v: 0 }
+>v : 0
+
+    const o: O;
+>o : O
+
+    export = o;
+>o : O
+}
+
+=== /globals.d.ts ===
+declare const gb: { [K in keyof typeof import("ma")]: 0 };
+>gb : { pa: 0; readonly ma: 0; }
+
+declare const ga: { [K in keyof typeof import("mb")]: 0 };
+>ga : { pb: 0; readonly mb: 0; }
+
+declare const oxa: typeof import("xa");
+>oxa : O
+
+declare const oxb: typeof import("xb");
+>oxb : O
+
+=== /keys.d.ts ===
+interface Keys { readonly key: unique symbol }
+>key : unique symbol
+
+declare const keys: Keys;
+>keys : Keys
+
+declare function mk(): { [keys.key]: 1 };
+>mk : () => { [keys.key]: 1; }
+>[keys.key] : 1
+>keys.key : unique symbol
+>keys : Keys
+>key : unique symbol
+
