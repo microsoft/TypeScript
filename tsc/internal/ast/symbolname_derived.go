@@ -14,8 +14,8 @@ import (
 // the SymbolName itself and renders its text on demand:
 //
 //	bits 61-63: kind (0 for plain interned names)
-//	bits 26-60: number
-//	bits  0-25: interned ID of the base text (always an interned name)
+//	bits 32-60: number
+//	bits  0-31: interned ID of the base text (always an interned name)
 //
 // Names must be equal exactly when their texts are equal, so MakeSymbolName
 // parses text that has a derived form into that form and never interns it.
@@ -40,7 +40,7 @@ const (
 
 const (
 	derivedNameKindShift = 61
-	derivedNameNumShift  = 26
+	derivedNameNumShift  = 32
 	derivedNameNumMax    = 1<<(derivedNameKindShift-derivedNameNumShift) - 1
 	derivedNameBaseMask  = 1<<derivedNameNumShift - 1
 )

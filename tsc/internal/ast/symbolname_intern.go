@@ -17,7 +17,8 @@ import (
 // followed by the text, aligned to 8-byte units, and an ID is its record's
 // offset in units. Looking up an ID's text is then a single dependent load,
 // which matters because every intern hit compares texts. The arena is split
-// into fixed-size chunks so records never move. Each shard appends records to
+// into fixed-size chunks so records never move, found through a two-level
+// directory whose small top level stays in cache. Each shard appends records to
 // its own chunk, so inserts into different shards don't contend; a record
 // longer than a quarter chunk gets its own run of contiguous chunks.
 //
@@ -35,11 +36,16 @@ const (
 	symbolNameChunkUnitBits = 11
 	symbolNameChunkUnits    = 1 << symbolNameChunkUnitBits
 	symbolNameChunkBytes    = symbolNameChunkUnits * symbolNameUnitBytes
+	symbolNameDirBits       = 11
+	symbolNameDirSize       = 1 << symbolNameDirBits
 	symbolNameMaxUnits      = 1 << derivedNameNumShift
-	symbolNameMaxChunks     = symbolNameMaxUnits / symbolNameChunkUnits
+	// The last chunk is left unused so unit offsets never overflow a uint32.
+	symbolNameMaxChunks = symbolNameMaxUnits/symbolNameChunkUnits - 1
 )
 
 type symbolNameChunk [symbolNameChunkBytes]byte
+
+type symbolNameDir [symbolNameDirSize]atomic.Pointer[symbolNameChunk]
 
 // Lookups only read tables and chunks; inserts write the shard locks, counts,
 // and the arena cursor. Keeping the two groups on separate cache lines stops
@@ -47,7 +53,7 @@ type symbolNameChunk [symbolNameChunkBytes]byte
 // need. The table is one large allocation, so it starts on a page boundary.
 type symbolNameTable struct {
 	tables    [symbolNameShardCount]atomic.Pointer[[]atomic.Uint64]
-	chunks    [symbolNameMaxChunks]atomic.Pointer[symbolNameChunk]
+	dirs      [(symbolNameMaxChunks + symbolNameDirSize) / symbolNameDirSize]atomic.Pointer[symbolNameDir]
 	nextChunk atomic.Uint32
 	_         [60]byte
 	shards    [symbolNameShardCount]symbolNameShard
@@ -92,8 +98,12 @@ func newSymbolNameTable() *symbolNameTable {
 	return t
 }
 
+func (t *symbolNameTable) chunk(index uint32) *symbolNameChunk {
+	return t.dirs[index>>symbolNameDirBits].Load()[index&(symbolNameDirSize-1)].Load()
+}
+
 func (t *symbolNameTable) text(id uint32) string {
-	chunk := t.chunks[id>>symbolNameChunkUnitBits].Load()
+	chunk := t.chunk(id >> symbolNameChunkUnitBits)
 	record := unsafe.Pointer(&chunk[(id&(symbolNameChunkUnits-1))*symbolNameUnitBytes])
 	return unsafe.String((*byte)(unsafe.Add(record, symbolNameRecordHeader)), *(*uint32)(record))
 }
@@ -164,7 +174,7 @@ func (t *symbolNameTable) hashOf(id uint32) uint64 {
 }
 
 func (t *symbolNameTable) allocate(arena *symbolNameArena, text string) uint32 {
-	if len(text) > symbolNameMaxUnits*symbolNameUnitBytes {
+	if len(text) > 1<<30 {
 		panic("symbol name too long")
 	}
 	units := uint32((symbolNameRecordHeader + len(text) + symbolNameUnitBytes - 1) / symbolNameUnitBytes)
@@ -180,7 +190,7 @@ func (t *symbolNameTable) allocate(arena *symbolNameArena, text string) uint32 {
 		id = arena.next
 		arena.next += units
 	}
-	chunk := t.chunks[id>>symbolNameChunkUnitBits].Load()
+	chunk := t.chunk(id >> symbolNameChunkUnitBits)
 	record := unsafe.Pointer(&chunk[(id&(symbolNameChunkUnits-1))*symbolNameUnitBytes])
 	*(*uint32)(record) = uint32(len(text))
 	copy(unsafe.Slice((*byte)(unsafe.Add(record, symbolNameRecordHeader)), len(text)), text)
@@ -196,7 +206,15 @@ func (t *symbolNameTable) newChunks(arena *symbolNameArena, count uint32) uint32
 	}
 	run := make([]symbolNameChunk, count)
 	for i := range run {
-		t.chunks[first+uint32(i)].Store(&run[i])
+		index := first + uint32(i)
+		dir := t.dirs[index>>symbolNameDirBits].Load()
+		if dir == nil {
+			dir = new(symbolNameDir)
+			if !t.dirs[index>>symbolNameDirBits].CompareAndSwap(nil, dir) {
+				dir = t.dirs[index>>symbolNameDirBits].Load()
+			}
+		}
+		dir[index&(symbolNameDirSize-1)].Store(&run[i])
 	}
 	arena.next = first << symbolNameChunkUnitBits
 	arena.end = arena.next + count<<symbolNameChunkUnitBits

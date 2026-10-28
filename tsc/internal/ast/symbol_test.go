@@ -119,21 +119,21 @@ func TestPreinternedSymbolNames(t *testing.T) {
 
 func TestDerivedSymbolNames(t *testing.T) {
 	t.Parallel()
-	const maxNum = 1<<35 - 1
+	const maxNum = 1<<29 - 1
 	for text, name := range map[string]ast.SymbolName{
-		"\xFE#12@#value":           ast.MakePrivateSymbolName(12, "#value"),
-		"\xFE#0@":                  ast.MakePrivateSymbolName(0, ""),
-		"\xFE@iterator@7":          ast.MakeUniqueESSymbolName(ast.SymbolNameIteratorProperty, 7),
-		"\xFE@a@b@7":               ast.MakeUniqueESSymbolName(ast.MakeSymbolName("a@b"), 7),
-		"\xFE\"*.css\"pattern@9":   ast.MakeModulePatternSymbolName("*.css", 9),
-		"(auto@3)":                 ast.MakeGeneratedSymbolName("", false, 3, ""),
-		"_(generated@4)_1":         ast.MakeGeneratedSymbolName("_", true, 4, "_1"),
-		"(auto@(auto@5)":           ast.MakeGeneratedSymbolName("(auto@", false, 5, ""),
-		"(auto@1)(auto@2)":         ast.MakeGeneratedSymbolName("(auto@1)", false, 2, ""),
-		"\xFE#" + "34359738367@#x": ast.MakePrivateSymbolName(maxNum, "#x"),
-		"\xFE#" + "34359738368@#x": ast.MakePrivateSymbolName(maxNum+1, "#x"),
-		"\xFE@\xFE#1@#x@2":         ast.MakeUniqueESSymbolName(ast.MakePrivateSymbolName(1, "#x"), 2),
-		"\xFEx(auto@1)":            ast.MakeGeneratedSymbolName("\xFEx", false, 1, ""),
+		"\xFE#12@#value":         ast.MakePrivateSymbolName(12, "#value"),
+		"\xFE#0@":                ast.MakePrivateSymbolName(0, ""),
+		"\xFE@iterator@7":        ast.MakeUniqueESSymbolName(ast.SymbolNameIteratorProperty, 7),
+		"\xFE@a@b@7":             ast.MakeUniqueESSymbolName(ast.MakeSymbolName("a@b"), 7),
+		"\xFE\"*.css\"pattern@9": ast.MakeModulePatternSymbolName("*.css", 9),
+		"(auto@3)":               ast.MakeGeneratedSymbolName("", false, 3, ""),
+		"_(generated@4)_1":       ast.MakeGeneratedSymbolName("_", true, 4, "_1"),
+		"(auto@(auto@5)":         ast.MakeGeneratedSymbolName("(auto@", false, 5, ""),
+		"(auto@1)(auto@2)":       ast.MakeGeneratedSymbolName("(auto@1)", false, 2, ""),
+		"\xFE#" + "536870911@#x": ast.MakePrivateSymbolName(maxNum, "#x"),
+		"\xFE#" + "536870912@#x": ast.MakePrivateSymbolName(maxNum+1, "#x"),
+		"\xFE@\xFE#1@#x@2":       ast.MakeUniqueESSymbolName(ast.MakePrivateSymbolName(1, "#x"), 2),
+		"\xFEx(auto@1)":          ast.MakeGeneratedSymbolName("\xFEx", false, 1, ""),
 	} {
 		t.Run(text, func(t *testing.T) {
 			t.Parallel()
