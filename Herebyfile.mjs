@@ -977,6 +977,33 @@ export const testTsc = task({
     run: runTests,
 });
 
+async function runTestWasm() {
+    if (process.platform === "win32") {
+        throw new Error("test:wasm requires a Unix-like host, because the whole host file system is mounted at the WebAssembly root.");
+    }
+    const runner = path.join(__dirname, "tools", "scripts", "wasm", "go-wasip1-exec.mts");
+    await gotestsumTool.run([
+        ...goTestSumFlags,
+        "--",
+        ...goBuildTags(),
+        ...(options.tests ? [`-run=${options.tests}`] : []),
+        // WebAssembly runs each test binary on a single thread, so the slowest packages take far longer than natively.
+        "-timeout=60m",
+        // Go expects a WebAssembly call stack of about 8MB.
+        `-exec=node --no-warnings --stack-size=8192 "${runner}"`,
+        "./...",
+    ], {
+        env: { ...goTestEnv, GOOS: "wasip1", GOARCH: "wasm" },
+        cwd: "./tsc",
+    });
+}
+
+export const testWasm = task({
+    name: "test:wasm",
+    description: "Runs all tests in the tsc module as wasip1 WebAssembly under Node.js.",
+    run: runTestWasm,
+});
+
 export const testExtension = task({
     name: "test:extension",
     description: "Runs the VS Code extension tests.",
@@ -1473,6 +1500,7 @@ const scriptTsconfigs = [
     "./tools/scripts/gen/tsconfig.json",
     "./tools/scripts/tsc/tsconfig.json",
     "./tools/scripts/lsp/tsconfig.json",
+    "./tools/scripts/wasm/tsconfig.json",
 ];
 
 export const checkScripts = task({
