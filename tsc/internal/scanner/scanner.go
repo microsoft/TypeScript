@@ -135,22 +135,21 @@ type keywordEntry struct {
 	kind ast.Kind
 }
 
-// keywordTable is a perfect hash of textToKeyword, indexed by keywordHash. The keyword set is fixed,
-// so a multiplier with no collisions is found once at startup and a lookup is one hash plus one comparison.
-var keywordTable, keywordHashMultiplier = func() ([256]keywordEntry, uint32) {
+// keywordHashMultiplier gives keywordHash no collisions over textToKeyword. If the keyword set changes,
+// search odd multipliers upwards from 0x9E3779B1 for a new one.
+const keywordHashMultiplier = 0x9E6867BF
+
+// keywordTable is a perfect hash of textToKeyword, indexed by keywordHash, so a lookup is one hash plus one comparison.
+var keywordTable = func() [256]keywordEntry {
 	var table [256]keywordEntry
-search:
-	for multiplier := uint32(0x9E3779B1); ; multiplier += 2 {
-		table = [256]keywordEntry{}
-		for text, kind := range textToKeyword {
-			entry := &table[keywordHash(text, multiplier)]
-			if entry.text != "" {
-				continue search
-			}
-			*entry = keywordEntry{text, kind}
+	for text, kind := range textToKeyword {
+		entry := &table[keywordHash(text, keywordHashMultiplier)]
+		if entry.text != "" {
+			panic("keywordHashMultiplier collides on " + entry.text + " and " + text)
 		}
-		return table, multiplier
+		*entry = keywordEntry{text, kind}
 	}
+	return table
 }()
 
 // keywordHash requires len(s) >= 2.
