@@ -28,6 +28,7 @@ type resolution struct {
 	// reuse of its result; see memo.go.
 	memo      bool
 	isQuery   bool
+	resolving bool         // The resolution is the one in Checker.resolving for key
 	fromCheck bool         // The query began in a check; see beginQueryFromCheck
 	prevMemo  int32        // Checker.memoTop on entry
 	result    *memoState   // Memo state of the result computed
@@ -92,7 +93,7 @@ func (c *Checker) endResolution() *instantiationCount {
 	n := len(c.resolutions) - 1
 	f := &c.resolutions[n]
 	debug.Assert(!f.isTypeResolution, "resolution left on the stack")
-	c.endResolving(f, n)
+	c.endResolving(f)
 	count := f.count
 	fromCheck := f.fromCheck
 	if f.memo {
@@ -165,7 +166,7 @@ func (c *Checker) forgetCost() {
 	if f.source != nil {
 		f.source.popState(int(f.index))
 	}
-	c.endResolving(f, len(c.resolutions)-1)
+	c.endResolving(f)
 	f.key, f.source = 0, nil
 }
 
@@ -180,14 +181,16 @@ func (c *Checker) resolvingIndex(key memoKey) int {
 
 // beginResolving records that the resolution about to be pushed computes key,
 // unless a computation of key is already in progress, in which case the new
-// one re-enters it as the policy of its kind says; see memoReentry.
-func (c *Checker) beginResolving(key memoKey) {
-	if i, ok := c.resolving[key]; ok {
+// one re-enters it as the policy of its kind says; see memoReentry. It reports
+// whether the resolution is recorded.
+func (c *Checker) beginResolving(key memoKey) bool {
+	i, ok := c.resolving[key]
+	if ok {
 		if int(i) >= c.visibleStart {
 			if memoReentry[key.field()] == reentryCircular {
 				c.markCircular(int(i))
 			}
-			return
+			return false
 		}
 		y := &c.cycleYields[len(c.cycleYields)-1]
 		y.shadowed = append(y.shadowed, shadowedResolving{key, i})
@@ -196,13 +199,16 @@ func (c *Checker) beginResolving(key memoKey) {
 		c.resolving = make(map[memoKey]int32)
 	}
 	c.resolving[key] = int32(len(c.resolutions))
+	return true
 }
 
-// endResolving records that the resolution at index n no longer computes its
-// key.
-func (c *Checker) endResolving(f *resolution, n int) {
-	if f.key != 0 && c.resolving[f.key] == int32(n) {
+// endResolving records that the resolution no longer computes its key. A
+// resolution that shadows another during a cycle yield ends before the yield
+// restores the one it shadows, so it is still the one recorded.
+func (c *Checker) endResolving(f *resolution) {
+	if f.resolving {
 		delete(c.resolving, f.key)
+		f.resolving = false
 	}
 }
 

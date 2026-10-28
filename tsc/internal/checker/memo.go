@@ -630,8 +630,9 @@ func (c *Checker) beginMemo(key memoKey) {
 		// Entering a computed result reads it.
 		c.observeCost(state.count)
 	}
-	c.beginResolving(key)
+	resolving := c.beginResolving(key)
 	c.appendResolution(key, nil, 0, int32(len(c.instantiationStack)))
+	c.resolutions[len(c.resolutions)-1].resolving = resolving
 	if c.checking {
 		if c.memoPendingCount != 0 {
 			c.replayPending(state)
