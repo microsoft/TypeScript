@@ -4,7 +4,6 @@ import (
 	"math"
 	"slices"
 	"strconv"
-	"strings"
 
 	"github.com/microsoft/TypeScript/tsc/internal/ast"
 	"github.com/microsoft/TypeScript/tsc/internal/binder"
@@ -1700,7 +1699,7 @@ func (c *Checker) writeFlowCacheKey(b *keyBuilder, node *ast.Node, declaredType 
 				return false
 			}
 			b.writeByte('.')
-			b.writeString(propName.Value())
+			b.writeString(propName.String())
 			return true
 		}
 		if ast.IsElementAccessExpression(node) && ast.IsIdentifier(node.AsElementAccessExpression().ArgumentExpression) {
@@ -2113,7 +2112,7 @@ func (c *Checker) getPropertyNameForKnownSymbolName(symbolName ast.SymbolName) a
 			return getPropertyNameFromType(uniqueType)
 		}
 	}
-	return ast.MakeSymbolName(ast.InternalSymbolNamePrefix + "@" + symbolName.Value())
+	return ast.MakeSymbolName(ast.InternalSymbolNamePrefix + "@" + symbolName.String())
 }
 
 // We require the dotted function name in an assertion expression to be comprised of identifiers
@@ -2466,11 +2465,10 @@ func (c *Checker) getTypePredicateArgument(predicate *TypePredicate, callExpress
 
 func (c *Checker) getFlowTypeInConstructor(symbol *ast.Symbol, constructor *ast.Node) *Type {
 	var accessName *ast.Node
-	if strings.HasPrefix(symbol.Name().Value(), ast.InternalSymbolNamePrefix+"#") {
-		name := symbol.Name().Value()
-		accessName = c.factory.NewPrivateIdentifier(name[strings.Index(name, "@")+1:])
+	if description, ok := symbol.Name().PrivateNameDescription(); ok {
+		accessName = c.factory.NewPrivateIdentifier(description)
 	} else {
-		accessName = c.factory.NewIdentifier(symbol.Name().Value())
+		accessName = c.factory.NewIdentifier(symbol.Name().String())
 	}
 	reference := c.factory.NewPropertyAccessExpression(c.factory.NewKeywordExpression(ast.KindThisKeyword), nil, accessName, ast.NodeFlagsNone)
 	reference.Expression().Parent = reference
@@ -2489,11 +2487,10 @@ func (c *Checker) getFlowTypeInConstructor(symbol *ast.Symbol, constructor *ast.
 
 func (c *Checker) getFlowTypeInStaticBlocks(symbol *ast.Symbol, staticBlocks []*ast.Node) *Type {
 	var accessName *ast.Node
-	if strings.HasPrefix(symbol.Name().Value(), ast.InternalSymbolNamePrefix+"#") {
-		name := symbol.Name().Value()
-		accessName = c.factory.NewPrivateIdentifier(name[strings.Index(name, "@")+1:])
+	if description, ok := symbol.Name().PrivateNameDescription(); ok {
+		accessName = c.factory.NewPrivateIdentifier(description)
 	} else {
-		accessName = c.factory.NewIdentifier(symbol.Name().Value())
+		accessName = c.factory.NewIdentifier(symbol.Name().String())
 	}
 	for _, staticBlock := range staticBlocks {
 		reference := c.factory.NewPropertyAccessExpression(c.factory.NewKeywordExpression(ast.KindThisKeyword), nil, accessName, ast.NodeFlagsNone)

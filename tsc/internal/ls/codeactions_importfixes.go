@@ -258,7 +258,7 @@ func getFixesInfoForUMDImport(token *ast.Node, view *autoimport.View, ch *checke
 		}
 		result = append(result, &fixInfo{
 			fix:                 fix,
-			symbolName:          umdSymbol.Name().Value(),
+			symbolName:          umdSymbol.Name().String(),
 			errorIdentifierText: errorIdentifierText,
 		})
 	}

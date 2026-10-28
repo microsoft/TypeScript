@@ -309,7 +309,7 @@ func (c *Checker) elaborateJsxComponents(node *ast.Node, source *Type, target *T
 		if childrenPropName == ast.InternalSymbolNameMissing {
 			childrenPropName = ast.SymbolNameChildren
 		}
-		childrenNameType := c.getStringLiteralType(childrenPropName.Value())
+		childrenNameType := c.getStringLiteralType(childrenPropName.String())
 		childrenTargetType := c.getIndexedAccessType(target, childrenNameType)
 		validChildren := ast.GetSemanticJsxChildren(containingElement.Children().Nodes)
 		if len(validChildren) == 0 {
@@ -333,7 +333,7 @@ func (c *Checker) elaborateJsxComponents(node *ast.Node, source *Type, target *T
 			if invalidTextDiagnostic == nil {
 				tagNameText := scanner.GetTextOfNode(node.Parent.TagName())
 				invalidTextDiagnostic = diagnostics.X_0_components_don_t_accept_text_as_child_elements_Text_in_JSX_has_the_type_string_but_the_expected_type_of_1_is_2
-				invalidTextDiagnosticArgs = []any{tagNameText, childrenPropName.Value(), c.TypeToString(childrenTargetType)}
+				invalidTextDiagnosticArgs = []any{tagNameText, childrenPropName.String(), c.TypeToString(childrenTargetType)}
 			}
 			return invalidTextDiagnostic, invalidTextDiagnosticArgs
 		}
@@ -344,7 +344,7 @@ func (c *Checker) elaborateJsxComponents(node *ast.Node, source *Type, target *T
 				reportedError = c.elaborateIterableOrArrayLikeTargetElementwise(children, realSource, arrayLikeTargetParts, relation, diagnosticOutput) || reportedError
 			} else if !c.isTypeRelatedTo(c.getIndexedAccessType(source, childrenNameType), childrenTargetType, relation) {
 				// arity mismatch
-				diag := c.error(containingElement.AsJsxElement().OpeningElement.TagName(), diagnostics.This_JSX_tag_s_0_prop_expects_a_single_child_of_type_1_but_multiple_children_were_provided, childrenPropName.Value(), c.TypeToString(childrenTargetType))
+				diag := c.error(containingElement.AsJsxElement().OpeningElement.TagName(), diagnostics.This_JSX_tag_s_0_prop_expects_a_single_child_of_type_1_but_multiple_children_were_provided, childrenPropName.String(), c.TypeToString(childrenTargetType))
 				c.reportDiagnostic(diag, diagnosticOutput)
 				reportedError = true
 			}
@@ -357,7 +357,7 @@ func (c *Checker) elaborateJsxComponents(node *ast.Node, source *Type, target *T
 				}
 			} else if !c.isTypeRelatedTo(c.getIndexedAccessType(source, childrenNameType), childrenTargetType, relation) {
 				// arity mismatch
-				diag := c.error(containingElement.AsJsxElement().OpeningElement.TagName(), diagnostics.This_JSX_tag_s_0_prop_expects_type_1_which_requires_multiple_children_but_only_a_single_child_was_provided, childrenPropName.Value(), c.TypeToString(childrenTargetType))
+				diag := c.error(containingElement.AsJsxElement().OpeningElement.TagName(), diagnostics.This_JSX_tag_s_0_prop_expects_type_1_which_requires_multiple_children_but_only_a_single_child_was_provided, childrenPropName.String(), c.TypeToString(childrenTargetType))
 				c.reportDiagnostic(diag, diagnosticOutput)
 				reportedError = true
 			}
@@ -823,7 +823,7 @@ func (c *Checker) createJsxAttributesTypeFromAttributesProperty(openingLikeEleme
 			// This is because children element will overwrite the value from attributes.
 			// Note: we will not warn "children" attribute overwritten if "children" attribute is specified in object spread.
 			if explicitlySpecifyChildrenAttribute {
-				c.error(attributeParent, diagnostics.X_0_are_specified_twice_The_attribute_named_0_will_be_overwritten, jsxChildrenPropertyName.Value())
+				c.error(attributeParent, diagnostics.X_0_are_specified_twice_The_attribute_named_0_will_be_overwritten, jsxChildrenPropertyName.String())
 			}
 			var childrenContextualType *Type
 			if ast.IsJsxOpeningElement(openingLikeElement) {
@@ -843,7 +843,7 @@ func (c *Checker) createJsxAttributesTypeFromAttributesProperty(openingLikeEleme
 				links.resolvedType = c.createArrayType(c.getUnionType(childTypes))
 			}
 			// Fake up a property declaration for the children
-			childrenPropSymbol.SetValueDeclaration(c.factory.NewPropertySignatureDeclaration(nil, c.factory.NewIdentifier(jsxChildrenPropertyName.Value()), nil /*postfixToken*/, nil /*type*/, nil /*initializer*/))
+			childrenPropSymbol.SetValueDeclaration(c.factory.NewPropertySignatureDeclaration(nil, c.factory.NewIdentifier(jsxChildrenPropertyName.String()), nil /*postfixToken*/, nil /*type*/, nil /*initializer*/))
 			childrenPropSymbol.ValueDeclaration().Parent = attributeParent
 			childrenPropSymbol.ValueDeclaration().AsPropertySignatureDeclaration().Symbol = childrenPropSymbol
 			childPropMap := ast.NewSymbolTable()
@@ -900,7 +900,7 @@ func (c *Checker) getUninstantiatedJsxSignaturesOfType(elementType *Type, caller
 	if elementType.flags&TypeFlagsStringLiteral != 0 {
 		intrinsicType := c.getIntrinsicAttributesTypeFromStringLiteralType(elementType, caller)
 		if intrinsicType == nil {
-			c.error(caller, diagnostics.Property_0_does_not_exist_on_type_1, getStringLiteralValue(elementType), "JSX."+JsxNames.IntrinsicElements.Value())
+			c.error(caller, diagnostics.Property_0_does_not_exist_on_type_1, getStringLiteralValue(elementType), "JSX."+JsxNames.IntrinsicElements.String())
 			return nil
 		}
 		fakeSignature := c.createSignatureForJSXIntrinsic(caller, intrinsicType)
@@ -952,7 +952,7 @@ func (c *Checker) getJsxPropsTypeFromClassType(sig *Signature, context *ast.Node
 		attributesType = c.getJsxPropsTypeForSignatureFromMember(sig, forcedLookupLocation)
 		if attributesType == nil && len(context.Attributes().Properties()) != 0 {
 			// There is no property named 'props' on this instance type
-			c.error(context, diagnostics.JSX_element_class_does_not_support_attributes_because_it_does_not_have_a_0_property, forcedLookupLocation.Value())
+			c.error(context, diagnostics.JSX_element_class_does_not_support_attributes_because_it_does_not_have_a_0_property, forcedLookupLocation.String())
 		}
 	}
 	if attributesType == nil {
@@ -1104,7 +1104,7 @@ func (c *Checker) getNameFromJsxElementAttributesContainer(nameOfAttribPropConta
 			}
 			if len(propertiesOfJsxElementAttribPropInterface) > 1 && len(jsxElementAttribPropInterfaceSym.Declarations()) != 0 {
 				// More than one property on ElementAttributesProperty is an error
-				c.error(jsxElementAttribPropInterfaceSym.Declarations()[0], diagnostics.The_global_type_JSX_0_may_not_have_more_than_one_property, nameOfAttribPropContainer.Value())
+				c.error(jsxElementAttribPropInterfaceSym.Declarations()[0], diagnostics.The_global_type_JSX_0_may_not_have_more_than_one_property, nameOfAttribPropContainer.String())
 			}
 		}
 	}
@@ -1243,12 +1243,12 @@ func (c *Checker) getIntrinsicTagSymbol(node *ast.Node) *ast.Symbol {
 			return links.resolvedSymbol
 		}
 		// Wasn't found
-		c.error(node, diagnostics.Property_0_does_not_exist_on_type_1, tagName.Text(), "JSX."+JsxNames.IntrinsicElements.Value())
+		c.error(node, diagnostics.Property_0_does_not_exist_on_type_1, tagName.Text(), "JSX."+JsxNames.IntrinsicElements.String())
 		links.resolvedSymbol = c.unknownSymbol
 		return links.resolvedSymbol
 	}
 	if c.noImplicitAny {
-		c.error(node, diagnostics.JSX_element_implicitly_has_type_any_because_no_interface_JSX_0_exists, JsxNames.IntrinsicElements.Value())
+		c.error(node, diagnostics.JSX_element_implicitly_has_type_any_because_no_interface_JSX_0_exists, JsxNames.IntrinsicElements.String())
 	}
 	links.resolvedSymbol = c.unknownSymbol
 	return links.resolvedSymbol

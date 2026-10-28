@@ -311,7 +311,7 @@ func (b *Binder) getDeclarationName(node *ast.Node) ast.SymbolName {
 			}
 			if pattern := core.TryParsePattern(moduleName); pattern.IsValid() && pattern.StarIndex >= 0 {
 				if attributes := node.AsModuleDeclaration().Attributes; attributes != nil {
-					return ast.MakeSymbolName(ast.InternalSymbolNamePrefix + "\"" + moduleName + "\"pattern@" + strconv.FormatUint(uint64(ast.GetNodeId(attributes)), 10))
+					return ast.MakeModulePatternSymbolName(moduleName, ast.GetNodeId(attributes))
 				}
 			}
 			return ast.MakeSymbolName("\"" + moduleName + "\"")
@@ -366,13 +366,13 @@ func (b *Binder) getDisplayName(node *ast.Node) string {
 	}
 	name := b.getDeclarationName(node)
 	if name != ast.InternalSymbolNameMissing {
-		return name.Value()
+		return name.String()
 	}
 	return "(Missing)"
 }
 
 func GetSymbolNameForPrivateIdentifier(containingClassSymbol *ast.Symbol, description string) ast.SymbolName {
-	return ast.MakeSymbolName(ast.InternalSymbolNamePrefix + "#" + strconv.Itoa(int(ast.GetSymbolId(containingClassSymbol))) + "@" + description)
+	return ast.MakePrivateSymbolName(ast.GetSymbolId(containingClassSymbol), description)
 }
 
 func (b *Binder) declareModuleMember(node *ast.Node, symbolFlags ast.SymbolFlags, symbolExcludes ast.SymbolFlags) *ast.Symbol {

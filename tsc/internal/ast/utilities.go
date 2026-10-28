@@ -1716,7 +1716,13 @@ func IsAmbientModuleSymbolName(s SymbolName) bool {
 // Ambient module symbols are either of the form `"modulename"` or `InternalSymbolNamePrefix + "\"modulename\"pattern@nodeId"`;
 // see `getDeclarationName`.
 func TryGetAmbientModuleNameFromSymbolName(name SymbolName) (string, bool) {
-	s := name.Value()
+	if kind := name.derivedKind(); kind == derivedNameModulePattern {
+		base := name.derivedBase()
+		return base, base != ""
+	} else if !name.isInterned() {
+		return "", false
+	}
+	s := name.String()
 	if strings.HasPrefix(s, "\"") && strings.HasSuffix(s, "\"") {
 		return s[1 : len(s)-1], true
 	}

@@ -548,7 +548,7 @@ function generateGoRecordNodeStrings(w: CodeWriter) {
         const textAccess = info.textMember.private
             ? `node.${castName}().${api.capitalize(info.textMember.name)}()`
             : `node.${castName}().${info.textMember.name}`;
-        const textValue = isSymbolNamePrimitive(info.textMember.declaredType) ? `${textAccess}.Value()` : textAccess;
+        const textValue = isSymbolNamePrimitive(info.textMember.declaredType) ? `${textAccess}.String()` : textAccess;
 
         w.write(`case ${kinds.join(", ")}:`);
         w.push();

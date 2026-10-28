@@ -3020,7 +3020,7 @@ func extractExpandoHostParams(node *ast.Node) (typeParameters *ast.TypeParameter
 
 func (tx *DeclarationTransformer) tryGetPropertyName(node *ast.Node) string {
 	if ast.IsElementAccessExpression(node) {
-		return tx.resolver.GetElementAccessExpressionName(node.AsElementAccessExpression()).Value()
+		return tx.resolver.GetElementAccessExpressionName(node.AsElementAccessExpression()).String()
 	}
 	if ast.IsPropertyAccessExpression(node) {
 		return node.Name().Text()

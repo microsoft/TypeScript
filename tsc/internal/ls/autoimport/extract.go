@@ -451,7 +451,7 @@ func getSyntax(symbol *ast.Symbol) ExportSyntax {
 }
 
 func isUnusableName(name ast.SymbolName) bool {
-	return name.IsZero() || name == ast.EmptySymbolName ||
+	return name == ast.EmptySymbolName ||
 		name == ast.SymbolNameUnderscoreDefault ||
 		name == ast.InternalSymbolNameExportStar ||
 		name == ast.InternalSymbolNameDefault ||

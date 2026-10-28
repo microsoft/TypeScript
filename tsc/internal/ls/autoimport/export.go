@@ -116,7 +116,7 @@ type Export struct {
 }
 
 func (e *Export) Name() ast.SymbolName {
-	if !e.localName.IsZero() && e.localName != ast.EmptySymbolName {
+	if e.localName != ast.EmptySymbolName {
 		return e.localName
 	}
 	if e.ExportName == ast.InternalSymbolNameExportEquals {

@@ -177,7 +177,7 @@ func (adder *importAdder) Edits() []*lsproto.TextEdit {
 }
 
 func sortedNamedImports(m map[ast.SymbolName]*newImportBinding) []*newImportBinding {
-	keys := slices.SortedFunc(maps.Keys(m), func(a, b ast.SymbolName) int { return strings.Compare(a.Value(), b.Value()) })
+	keys := slices.SortedFunc(maps.Keys(m), func(a, b ast.SymbolName) int { return strings.Compare(a.String(), b.String()) })
 	result := make([]*newImportBinding, 0, len(keys))
 	for _, k := range keys {
 		result = append(result, m[k])
@@ -471,12 +471,12 @@ func getNameForExportedSymbol(symbol *ast.Symbol, preferCapitalized bool) string
 		// - export default 0 => filename converted to camelCase
 		name := getDefaultLikeExportNameFromDeclaration(symbol)
 		if name != ast.EmptySymbolName {
-			return name.Value()
+			return name.String()
 		}
 		debug.Assert(symbol.Parent() != nil, "Expected exported symbol to have module symbol as parent")
 		return lsutil.ModuleSymbolToValidIdentifier(symbol.Parent(), preferCapitalized)
 	}
-	return symbol.Name().Value()
+	return symbol.Name().String()
 }
 
 func replaceFirstIdentifierOfEntityName(factory *ast.NodeFactory, name *ast.EntityName, newIdentifier *ast.IdentifierNode) *ast.EntityName {

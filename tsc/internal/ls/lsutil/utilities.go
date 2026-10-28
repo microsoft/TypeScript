@@ -117,7 +117,7 @@ func ModuleSymbolToValidIdentifier(moduleSymbol *ast.Symbol, forceCapitalize boo
 	if ambientModuleName, ok := ast.TryGetAmbientModuleNameFromSymbolName(moduleName); ok {
 		moduleName = ast.MakeSymbolName(ambientModuleName)
 	}
-	return ModuleSpecifierToValidIdentifier(moduleName.Value(), forceCapitalize)
+	return ModuleSpecifierToValidIdentifier(moduleName.String(), forceCapitalize)
 }
 
 func ModuleSpecifierToValidIdentifier(moduleSpecifier string, forceCapitalize bool) string {

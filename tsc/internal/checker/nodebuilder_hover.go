@@ -61,7 +61,7 @@ func (b *NodeBuilderImpl) expandEnumDecl(symbol *ast.Symbol) *ast.Node {
 			b.ctx.expansionTruncated = true
 			members = append(members, b.f.NewEnumMember(b.f.NewStringLiteral(fmt.Sprintf(" ... %d more ... ", len(memberProps)-i-1), 0), nil))
 			last := memberProps[len(memberProps)-1]
-			members = append(members, b.f.NewEnumMember(b.f.NewIdentifier(last.Name().Value()), b.enumMemberInitializer(last)))
+			members = append(members, b.f.NewEnumMember(b.f.NewIdentifier(last.Name().String()), b.enumMemberInitializer(last)))
 			break
 		}
 		memberDecl := core.Find(p.Declarations(), ast.IsEnumMember)
@@ -71,11 +71,11 @@ func (b *NodeBuilderImpl) expandEnumDecl(symbol *ast.Symbol) *ast.Node {
 		} else {
 			initializer = b.enumMemberInitializer(p)
 		}
-		b.ctx.approximateLength += 4 + len(p.Name().Value())
+		b.ctx.approximateLength += 4 + len(p.Name().String())
 		if initializer != nil {
 			b.ctx.approximateLength += 5 // " = " + value estimate
 		}
-		members = append(members, b.f.NewEnumMember(b.f.NewIdentifier(p.Name().Value()), initializer))
+		members = append(members, b.f.NewEnumMember(b.f.NewIdentifier(p.Name().String()), initializer))
 	}
 
 	constModifier := ast.ModifierFlagsNone
@@ -418,7 +418,7 @@ func (b *NodeBuilderImpl) expandModuleDecl(symbol *ast.Symbol) *ast.Node {
 		if !b.isNamespaceMember(sym) {
 			continue
 		}
-		if !scanner.IsIdentifierText(sym.Name().Value(), core.LanguageVariantStandard) {
+		if !scanner.IsIdentifierText(sym.Name().String(), core.LanguageVariantStandard) {
 			continue
 		}
 		members = append(members, sym)
@@ -457,24 +457,24 @@ func (b *NodeBuilderImpl) expandModuleDecl(symbol *ast.Symbol) *ast.Node {
 				if target.Flags()&(ast.SymbolFlagsBlockScopedVariable|ast.SymbolFlagsFunctionScopedVariable|ast.SymbolFlagsProperty) != 0 {
 					if emittedLocals.AddIfAbsent(target) {
 						localType := b.ch.getWidenedType(b.ch.getTypeOfSymbol(target))
-						b.ctx.approximateLength += len(target.Name().Value()) + 5
+						b.ctx.approximateLength += len(target.Name().String()) + 5
 						localStmt := b.f.NewVariableStatement(nil,
 							b.f.NewVariableDeclarationList(b.f.NewNodeList([]*ast.Node{
-								b.f.NewVariableDeclaration(b.f.NewIdentifier(target.Name().Value()), nil, b.serializeTypeForDeclaration(nil, localType, target, true), nil),
+								b.f.NewVariableDeclaration(b.f.NewIdentifier(target.Name().String()), nil, b.serializeTypeForDeclaration(nil, localType, target, true), nil),
 							}), ast.NodeFlagsLet))
 						bodyStmts = append(bodyStmts, hoverStatement{node: localStmt, isLocal: true})
 					}
 				}
 				targetName := target.Name()
-				b.ctx.approximateLength += 16 + len(m.Name().Value())
+				b.ctx.approximateLength += 16 + len(m.Name().String())
 				var propertyName *ast.Node
 				if m.Name() != targetName {
-					propertyName = b.f.NewIdentifier(targetName.Value())
+					propertyName = b.f.NewIdentifier(targetName.String())
 				}
 				stmt := b.f.NewExportDeclaration(
 					nil, false,
 					b.f.NewNamedExports(b.f.NewNodeList([]*ast.Node{
-						b.f.NewExportSpecifier(false, propertyName, b.f.NewIdentifier(m.Name().Value())),
+						b.f.NewExportSpecifier(false, propertyName, b.f.NewIdentifier(m.Name().String())),
 					})),
 					nil, nil,
 				)
@@ -492,7 +492,7 @@ func (b *NodeBuilderImpl) expandModuleDecl(symbol *ast.Symbol) *ast.Node {
 			for _, sig := range sigs {
 				b.ctx.approximateLength++
 				decl := b.signatureToSignatureDeclarationHelper(sig, ast.KindFunctionDeclaration, &SignatureToSignatureDeclarationOptions{
-					name: b.f.NewIdentifier(m.Name().Value()),
+					name: b.f.NewIdentifier(m.Name().String()),
 				})
 				bodyStmts = append(bodyStmts, hoverStatement{node: decl})
 			}
@@ -500,13 +500,13 @@ func (b *NodeBuilderImpl) expandModuleDecl(symbol *ast.Symbol) *ast.Node {
 			merged := b.ch.getMergedSymbol(resolved)
 			hasModuleExports := merged.Flags()&(ast.SymbolFlagsValueModule|ast.SymbolFlagsNamespaceModule) != 0 && merged.Exports() != nil && merged.Exports().Len() != 0
 			if !hasModuleExports {
-				bodyStmts = append(bodyStmts, hoverStatement{node: b.f.NewModuleDeclaration(nil, ast.KindNamespaceKeyword, b.f.NewIdentifier(m.Name().Value()), nil /*attributes*/, b.f.NewModuleBlock(b.f.NewNodeList(nil)))})
+				bodyStmts = append(bodyStmts, hoverStatement{node: b.f.NewModuleDeclaration(nil, ast.KindNamespaceKeyword, b.f.NewIdentifier(m.Name().String()), nil /*attributes*/, b.f.NewModuleBlock(b.f.NewNodeList(nil)))})
 			}
 			continue
 		}
 
 		// Handle remaining member kinds (type alias, enum, class, interface, namespace, variable)
-		if node := b.serializeNamespaceMember(resolved, m.Name().Value()); node != nil {
+		if node := b.serializeNamespaceMember(resolved, m.Name().String()); node != nil {
 			bodyStmts = append(bodyStmts, hoverStatement{node: node})
 		}
 	}

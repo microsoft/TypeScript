@@ -133,7 +133,7 @@ func (c *Checker) GetExportsOfModule(symbol *ast.Symbol) []*ast.Symbol {
 
 func (c *Checker) ForEachExportAndPropertyOfModule(moduleSymbol *ast.Symbol, cb func(*ast.Symbol, ast.SymbolName)) {
 	for key, exportedSymbol := range c.getExportsOfModule(moduleSymbol).All() {
-		if !isReservedMemberName(key) {
+		if !key.IsReservedMemberName() {
 			cb(exportedSymbol, key)
 		}
 	}
@@ -528,7 +528,7 @@ func (c *Checker) IsDeclarationUsed(
 	if jsxElementsPresent && jsxModeNeedsExplicitImport {
 		jsxNamespace := c.getJsxNamespace(sourceFile.AsNode())
 		jsxFragmentFactory := c.GetJsxFragmentFactory(sourceFile.AsNode())
-		identifierText := identifier.Text.Value()
+		identifierText := identifier.Text.String()
 		if identifierText == jsxNamespace {
 			return true
 		}
@@ -553,7 +553,7 @@ func (c *Checker) IsSymbolReferencedInFile(
 	symbol *ast.Symbol,
 ) bool {
 	identifierText := definition.Text
-	for _, token := range getPossibleSymbolReferenceNodes(sourceFile, identifierText.Value(), sourceFile.AsNode()) {
+	for _, token := range getPossibleSymbolReferenceNodes(sourceFile, identifierText.String(), sourceFile.AsNode()) {
 		if !ast.IsIdentifier(token) {
 			continue
 		}
@@ -588,7 +588,7 @@ func (c *Checker) GetReferencesToSymbolInFile(
 ) []*ast.Node {
 	identifierText := symbol.Name()
 	var result []*ast.Node
-	for _, token := range getPossibleSymbolReferenceNodes(sourceFile, identifierText.Value(), sourceFile.AsNode()) {
+	for _, token := range getPossibleSymbolReferenceNodes(sourceFile, identifierText.String(), sourceFile.AsNode()) {
 		if !ast.IsIdentifier(token) {
 			continue
 		}

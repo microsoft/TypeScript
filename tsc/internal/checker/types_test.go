@@ -310,7 +310,7 @@ func TestTemporaryPropertyCounts(t *testing.T) {
 	names := func(p *temporaryPropertyCounts) []string {
 		var result []string
 		for _, e := range p.entries {
-			result = append(result, e.name.Value())
+			result = append(result, e.name.String())
 		}
 		return result
 	}

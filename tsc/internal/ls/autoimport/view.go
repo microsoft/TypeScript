@@ -192,10 +192,10 @@ func (v *View) GetCompletions(prefix string, position lsproto.Position, forJSX b
 outer:
 	for _, e := range results {
 		name := e.Name()
-		if !scanner.IsIdentifierText(name.Value(), core.LanguageVariantStandard) {
+		if !scanner.IsIdentifierText(name.String(), core.LanguageVariantStandard) {
 			continue
 		}
-		if forJSX && !(unicode.IsUpper(rune(name.Value()[0])) || e.IsRenameable()) {
+		if forJSX && !(unicode.IsUpper(rune(name.String()[0])) || e.IsRenameable()) {
 			continue
 		}
 		target := e.ExportID

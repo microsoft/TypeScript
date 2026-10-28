@@ -118,7 +118,7 @@ func TestDecodeSourceFile_VariableDeclaration(t *testing.T) {
 
 	decl := declList.Declarations.Nodes[0].AsVariableDeclaration()
 	assert.Equal(t, decl.Name().Kind, ast.KindIdentifier)
-	assert.Equal(t, decl.Name().AsIdentifier().Text.Value(), "x")
+	assert.Equal(t, decl.Name().AsIdentifier().Text.String(), "x")
 	assert.Assert(t, decl.Initializer != nil)
 	assert.Equal(t, decl.Initializer.Kind, ast.KindNumericLiteral)
 	assert.Equal(t, decl.Initializer.AsNumericLiteral().Text, "1")
@@ -165,14 +165,14 @@ func TestDecodeSourceFile_FunctionDeclaration(t *testing.T) {
 
 	funcDecl := decoded.Statements.Nodes[0].AsFunctionDeclaration()
 	assert.Assert(t, funcDecl.Name() != nil)
-	assert.Equal(t, funcDecl.Name().AsIdentifier().Text.Value(), "add")
+	assert.Equal(t, funcDecl.Name().AsIdentifier().Text.String(), "add")
 	assert.Assert(t, funcDecl.Parameters != nil)
 	assert.Equal(t, len(funcDecl.Parameters.Nodes), 2)
 	assert.Assert(t, funcDecl.Type != nil)
 	assert.Assert(t, funcDecl.Body != nil)
 
 	param0 := funcDecl.Parameters.Nodes[0].AsParameterDeclaration()
-	assert.Equal(t, param0.Name().AsIdentifier().Text.Value(), "a")
+	assert.Equal(t, param0.Name().AsIdentifier().Text.String(), "a")
 	assert.Assert(t, param0.Type != nil)
 }
 
@@ -196,7 +196,7 @@ func TestDecodeSourceFile_ImportDeclaration(t *testing.T) {
 	assert.Assert(t, namedImports.Elements != nil)
 	assert.Equal(t, len(namedImports.Elements.Nodes), 1)
 	spec := namedImports.Elements.Nodes[0].AsImportSpecifier()
-	assert.Equal(t, spec.Name().AsIdentifier().Text.Value(), "bar")
+	assert.Equal(t, spec.Name().AsIdentifier().Text.String(), "bar")
 }
 
 func TestDecodeSourceFile_SourcePhaseImport(t *testing.T) {
@@ -293,7 +293,7 @@ func TestDecodeSourceFile_ClassDeclaration(t *testing.T) {
 
 	classDecl := decoded.Statements.Nodes[0].AsClassDeclaration()
 	assert.Assert(t, classDecl.Name() != nil)
-	assert.Equal(t, classDecl.Name().AsIdentifier().Text.Value(), "Foo")
+	assert.Equal(t, classDecl.Name().AsIdentifier().Text.String(), "Foo")
 	assert.Assert(t, classDecl.Members != nil)
 	assert.Equal(t, len(classDecl.Members.Nodes), 1)
 	assert.Equal(t, classDecl.Members.Nodes[0].Kind, ast.KindMethodDeclaration)
@@ -323,7 +323,7 @@ func TestDecodeNodes_SubtreeRoundTrip(t *testing.T) {
 	assert.Equal(t, decoded.Kind, ast.KindFunctionDeclaration)
 	funcDecl := decoded.AsFunctionDeclaration()
 	assert.Assert(t, funcDecl.Name() != nil)
-	assert.Equal(t, funcDecl.Name().AsIdentifier().Text.Value(), "greet")
+	assert.Equal(t, funcDecl.Name().AsIdentifier().Text.String(), "greet")
 	assert.Assert(t, funcDecl.Parameters != nil)
 	assert.Equal(t, len(funcDecl.Parameters.Nodes), 1)
 	assert.Assert(t, funcDecl.Body != nil)

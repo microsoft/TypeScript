@@ -1170,7 +1170,7 @@ func (p *Printer) emitIdentifierReference(node *ast.Identifier) {
 		}
 		if p.uniqueHelperNames != nil {
 			// Substitute `__helper` with `__helper_1` if there is a conflict in an ES module.
-			helperName := p.getUniqueHelperName(node.Text.Value())
+			helperName := p.getUniqueHelperName(node.Text.String())
 			p.emitContext.AssignCommentAndSourceMapRanges(helperName, node.AsNode())
 			node = helperName.AsIdentifier()
 		}
@@ -1185,7 +1185,7 @@ func (p *Printer) emitBindingIdentifier(node *ast.Identifier) {
 	if p.uniqueHelperNames != nil &&
 		p.emitContext.EmitFlags(node.AsNode())&EFHelperName != 0 {
 		// Substitute `__helper` with `__helper_1` if there is a conflict in an ES module.
-		helperName := p.getUniqueHelperName(node.Text.Value())
+		helperName := p.getUniqueHelperName(node.Text.String())
 		p.emitContext.AssignCommentAndSourceMapRanges(helperName, node.AsNode())
 		node = helperName.AsIdentifier()
 	}

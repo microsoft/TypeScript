@@ -25,7 +25,7 @@ func TestSymbolNameInterning(t *testing.T) {
 			symbol.SetName(name)
 			storedName := symbol.Name()
 			assert.Assert(t, storedName == otherName)
-			assert.Equal(t, storedName.Value(), text)
+			assert.Equal(t, storedName.String(), text)
 
 			table := ast.SymbolTableOf(name, symbol)
 			assert.Equal(t, table.Get(otherName), symbol)
@@ -73,7 +73,7 @@ func TestConcurrentSymbolNameInterning(t *testing.T) {
 		for w := range workers {
 			assert.Assert(t, results[w][i] == results[0][i])
 		}
-		assert.Equal(t, results[0][i].Value(), text)
+		assert.Equal(t, results[0][i].String(), text)
 	}
 }
 
@@ -91,9 +91,73 @@ func TestPreinternedSymbolNames(t *testing.T) {
 		t.Run(text, func(t *testing.T) {
 			t.Parallel()
 			assert.Assert(t, name == ast.MakeSymbolName(strings.Clone(text)))
-			assert.Equal(t, name.Value(), text)
+			assert.Equal(t, name.String(), text)
 		})
 	}
+}
+
+func TestDerivedSymbolNames(t *testing.T) {
+	t.Parallel()
+	const maxNum = 1<<35 - 1
+	for text, name := range map[string]ast.SymbolName{
+		"\xFE#12@#value":           ast.MakePrivateSymbolName(12, "#value"),
+		"\xFE#0@":                  ast.MakePrivateSymbolName(0, ""),
+		"\xFE@iterator@7":          ast.MakeUniqueESSymbolName(ast.SymbolNameIteratorProperty, 7),
+		"\xFE@a@b@7":               ast.MakeUniqueESSymbolName(ast.MakeSymbolName("a@b"), 7),
+		"\xFE\"*.css\"pattern@9":   ast.MakeModulePatternSymbolName("*.css", 9),
+		"(auto@3)":                 ast.MakeGeneratedSymbolName("", false, 3, ""),
+		"_(generated@4)_1":         ast.MakeGeneratedSymbolName("_", true, 4, "_1"),
+		"(auto@(auto@5)":           ast.MakeGeneratedSymbolName("(auto@", false, 5, ""),
+		"(auto@1)(auto@2)":         ast.MakeGeneratedSymbolName("(auto@1)", false, 2, ""),
+		"\xFE#" + "34359738367@#x": ast.MakePrivateSymbolName(maxNum, "#x"),
+		"\xFE#" + "34359738368@#x": ast.MakePrivateSymbolName(maxNum+1, "#x"),
+		"\xFE@\xFE#1@#x@2":         ast.MakeUniqueESSymbolName(ast.MakePrivateSymbolName(1, "#x"), 2),
+		"\xFEx(auto@1)":            ast.MakeGeneratedSymbolName("\xFEx", false, 1, ""),
+	} {
+		t.Run(text, func(t *testing.T) {
+			t.Parallel()
+			assert.Equal(t, name.String(), text)
+			assert.Assert(t, name == ast.MakeSymbolName(strings.Clone(text)))
+			checkSymbolNamePredicates(t, name)
+		})
+	}
+	// Text that is not canonical keeps its spelling as a distinct plain name.
+	for _, text := range []string{"\xFE#012@#x", "\xFE@iterator", "\xFE@x@", "(auto@)", "(auto@1", "\xFE\"x\"pattern@", "\xFE#x(auto@1)", "\xFE", "\xFEcall"} {
+		name := ast.MakeSymbolName(text)
+		assert.Equal(t, name.String(), text)
+		assert.Assert(t, name == ast.MakeSymbolName(strings.Clone(text)))
+		checkSymbolNamePredicates(t, name)
+	}
+	for name, text := range map[ast.SymbolName]string{
+		ast.InternalSymbolNameCall:         "\xFEcall",
+		ast.InternalSymbolNameExportStar:   "\xFEexport",
+		ast.InternalSymbolNameExportEquals: "export=",
+		ast.SymbolNamePrototype:            "prototype",
+	} {
+		assert.Equal(t, name.String(), text)
+		assert.Assert(t, name == ast.MakeSymbolName(strings.Clone(text)))
+		checkSymbolNamePredicates(t, name)
+	}
+	description, ok := ast.MakePrivateSymbolName(1, "#x").PrivateNameDescription()
+	assert.Assert(t, ok)
+	assert.Equal(t, description, "#x")
+	description, ok = ast.MakePrivateSymbolName(maxNum+1, "#y").PrivateNameDescription()
+	assert.Assert(t, ok)
+	assert.Equal(t, description, "#y")
+	moduleName, ok := ast.TryGetAmbientModuleNameFromSymbolName(ast.MakeModulePatternSymbolName("*.css", 9))
+	assert.Assert(t, ok)
+	assert.Equal(t, moduleName, "*.css")
+}
+
+// checkSymbolNamePredicates checks the predicates against the name's text.
+func checkSymbolNamePredicates(t *testing.T, name ast.SymbolName) {
+	t.Helper()
+	text := name.String()
+	rest, internal := strings.CutPrefix(text, ast.InternalSymbolNamePrefix)
+	assert.Equal(t, name.IsInternal(), internal, text)
+	assert.Equal(t, name.IsPrivateName(), internal && strings.HasPrefix(rest, "#"), text)
+	assert.Equal(t, name.IsLateBoundName(), internal && strings.HasPrefix(rest, "@"), text)
+	assert.Equal(t, name.IsReservedMemberName(), internal && rest != "" && rest[0] != '#' && rest[0] != '@', text)
 }
 
 func TestSymbolNameMarshaling(t *testing.T) {
@@ -110,7 +174,6 @@ func TestSymbolNameMarshaling(t *testing.T) {
 		t.Run(text, func(t *testing.T) {
 			t.Parallel()
 			name := ast.MakeSymbolName(text)
-			assert.Assert(t, !name.IsZero())
 			assert.Equal(t, name.String(), text)
 			encodedText, err := name.MarshalText()
 			assert.NilError(t, err)
@@ -138,18 +201,17 @@ func TestSymbolNameMarshaling(t *testing.T) {
 	}
 }
 
-func TestUnsetSymbolNameMarshaling(t *testing.T) {
+func TestEmptySymbolName(t *testing.T) {
 	t.Parallel()
 	var name ast.SymbolName
-	assert.Assert(t, name.IsZero())
-	_, err := name.MarshalText()
-	assert.ErrorContains(t, err, "unset")
-	data, err := json.Marshal(name)
-	assert.NilError(t, err)
-	assert.Equal(t, string(data), "null")
-	name = ast.EmptySymbolName
-	assert.NilError(t, json.Unmarshal(data, &name))
-	assert.Assert(t, name.IsZero())
+	assert.Assert(t, name == ast.EmptySymbolName)
+	assert.Assert(t, ast.MakeSymbolName("") == ast.EmptySymbolName)
+	var cache ast.SymbolNameCache
+	assert.Assert(t, cache.Make("") == ast.EmptySymbolName)
+	assert.Equal(t, name.String(), "")
+	name = ast.SymbolNamePrototype
+	assert.NilError(t, json.Unmarshal([]byte("null"), &name))
+	assert.Assert(t, name == ast.EmptySymbolName)
 }
 
 func TestInvalidSymbolNameMarshaling(t *testing.T) {
@@ -179,7 +241,7 @@ func TestSymbolAccessors(t *testing.T) {
 	symbol := ast.NewSymbol()
 	assert.Equal(t, symbol.Flags(), ast.SymbolFlagsNone)
 	assert.Equal(t, symbol.CheckFlags(), ast.CheckFlags(0))
-	assert.Equal(t, symbol.Name().Value(), "")
+	assert.Equal(t, symbol.Name().String(), "")
 	assert.Assert(t, symbol.Declarations() == nil)
 	assert.Assert(t, symbol.ValueDeclaration() == nil)
 	assert.Assert(t, symbol.Members() == nil)
@@ -209,7 +271,7 @@ func TestSymbolAccessors(t *testing.T) {
 
 	assert.Equal(t, symbol.Flags(), ast.SymbolFlagsClass|ast.SymbolFlagsTransient)
 	assert.Equal(t, symbol.CheckFlags(), ast.CheckFlagsReadonly)
-	assert.Equal(t, symbol.Name().Value(), "C")
+	assert.Equal(t, symbol.Name().String(), "C")
 	assert.Equal(t, symbol.Declarations()[0], declaration)
 	assert.Equal(t, symbol.ValueDeclaration(), declaration)
 	assert.Equal(t, symbol.Members().Get(ast.MakeSymbolName("member")), member)
@@ -238,7 +300,7 @@ func TestSymbolAccessors(t *testing.T) {
 
 	assert.Equal(t, symbol.Flags(), ast.SymbolFlagsNone)
 	assert.Equal(t, symbol.CheckFlags(), ast.CheckFlags(0))
-	assert.Equal(t, symbol.Name().Value(), "")
+	assert.Equal(t, symbol.Name().String(), "")
 	assert.Assert(t, symbol.Declarations() == nil)
 	assert.Assert(t, symbol.ValueDeclaration() == nil)
 	assert.Assert(t, symbol.Members() == nil)

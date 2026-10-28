@@ -3487,7 +3487,7 @@ func (s *Session) resolveSymbolTablePropertyOfSymbol(ctx context.Context, params
 					return order
 				}
 			}
-			if order := cmp.Compare(left.Name().Value(), right.Name().Value()); order != 0 {
+			if order := cmp.Compare(left.Name().String(), right.Name().String()); order != 0 {
 				return order
 			}
 			return cmp.Compare(ast.GetSymbolId(left), ast.GetSymbolId(right))
@@ -4319,7 +4319,7 @@ func (s *Session) handleGetTypePredicateOfSignature(ctx context.Context, params 
 	resp := &TypePredicateResponse{
 		Kind:           int32(pred.Kind()),
 		ParameterIndex: pred.ParameterIndex(),
-		ParameterName:  pred.ParameterName().Value(),
+		ParameterName:  pred.ParameterName().String(),
 	}
 	if pred.Type() != nil {
 		resp.Type = setup.sd.newTypeResponse(setup.projectID, pred.Type(), setup.checker)

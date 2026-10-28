@@ -930,7 +930,7 @@ func getAmbientModuleName(symbol *ast.Symbol) string {
 	if declaration != nil && ast.IsModuleWithStringLiteralName(declaration) {
 		return declaration.Name().Text()
 	}
-	return stringutil.StripQuotes(symbol.Name().Value())
+	return stringutil.StripQuotes(symbol.Name().String())
 }
 
 func (l *LanguageService) getCompletionEntriesFromTypings(

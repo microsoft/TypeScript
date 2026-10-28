@@ -26,7 +26,7 @@ func (idx *Index[T]) Find(name ast.SymbolName, caseSensitive bool) []T {
 	if len(idx.entries) == 0 || name == ast.EmptySymbolName {
 		return nil
 	}
-	nameText := name.Value()
+	nameText := name.String()
 	firstRune := core.FirstResult(utf8.DecodeRuneInString(nameText))
 	if firstRune == utf8.RuneError {
 		return nil
@@ -41,7 +41,7 @@ func (idx *Index[T]) Find(name ast.SymbolName, caseSensitive bool) []T {
 	for _, entryIndex := range candidates {
 		entry := idx.entries[entryIndex]
 		entryName := entry.Name()
-		if (caseSensitive && entryName == name) || (!caseSensitive && strings.EqualFold(entryName.Value(), nameText)) {
+		if (caseSensitive && entryName == name) || (!caseSensitive && strings.EqualFold(entryName.String(), nameText)) {
 			results = append(results, entry)
 		}
 	}
@@ -87,7 +87,7 @@ func (idx *Index[T]) SearchWordPrefix(prefix string) []T {
 	for _, starts := range [][]int{nameStarts, wordStarts} {
 		for _, i := range starts {
 			entry := idx.entries[i]
-			if containsCharsInOrder(entry.Name().Value(), prefix) {
+			if containsCharsInOrder(entry.Name().String(), prefix) {
 				results = append(results, entry)
 			}
 		}
@@ -118,7 +118,7 @@ func (idx *Index[T]) insertAsWords(value T) {
 		idx.index = make(map[rune][]int)
 	}
 
-	name := value.Name().Value()
+	name := value.Name().String()
 	if len(name) == 0 {
 		panic("Cannot index entry with empty name")
 	}

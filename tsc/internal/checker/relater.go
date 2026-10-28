@@ -605,7 +605,7 @@ func (c *Checker) elaborateElement(source *Type, target *Type, relation *Relatio
 		} else {
 			targetNode = target.symbol.Declarations()[0]
 		}
-		propertyNameText := propertyName.Value()
+		propertyNameText := propertyName.String()
 		if propertyName == ast.EmptySymbolName || nameType.flags&TypeFlagsUniqueESSymbol != 0 {
 			propertyNameText = c.TypeToString(nameType)
 		}
@@ -723,8 +723,8 @@ func (c *Checker) isKnownProperty(targetType *Type, name ast.SymbolName, isCompa
 		// we should remove this exception.
 		if c.getPropertyOfObjectType(targetType, name) != nil ||
 			c.getApplicableIndexInfoForName(targetType, name) != nil ||
-			isLateBoundName(name) && c.getIndexInfoOfType(targetType, c.stringType) != nil ||
-			isComparingJsxAttributes && isHyphenatedJsxName(name.Value()) {
+			name.IsLateBoundName() && c.getIndexInfoOfType(targetType, c.stringType) != nil ||
+			isComparingJsxAttributes && isHyphenatedJsxName(name.String()) {
 			// For JSXAttributes, if the attribute has a hyphenated name, consider that the attribute to be known.
 			return true
 		}
@@ -1114,7 +1114,7 @@ func (c *Checker) getMatchingUnionConstituentForType(unionType *Type, t *Type) *
 // an empty name if no such discriminant property exists.
 func (c *Checker) getKeyPropertyName(t *Type) ast.SymbolName {
 	u := t.AsUnionType()
-	if u.keyPropertyName.IsZero() {
+	if u.keyPropertyName == ast.EmptySymbolName {
 		u.keyPropertyName, u.constituentMap = c.computeKeyPropertyNameAndMap(t)
 	}
 	if u.keyPropertyName == ast.InternalSymbolNameMissing {
@@ -1617,7 +1617,7 @@ func (c *Checker) compareSignaturesRelated(source *Signature, target *Signature,
 			}
 			if related == TernaryFalse {
 				if reportErrors {
-					errorReporter(diagnostics.Types_of_parameters_0_and_1_are_incompatible, c.getParameterNameAtPosition(source, i).Value(), c.getParameterNameAtPosition(target, i).Value())
+					errorReporter(diagnostics.Types_of_parameters_0_and_1_are_incompatible, c.getParameterNameAtPosition(source, i).String(), c.getParameterNameAtPosition(target, i).String())
 				}
 				return TernaryFalse
 			}
@@ -1687,7 +1687,7 @@ func (c *Checker) compareTypePredicateRelatedTo(source *TypePredicate, target *T
 	if source.kind == TypePredicateKindIdentifier || source.kind == TypePredicateKindAssertsIdentifier {
 		if source.parameterIndex != target.parameterIndex {
 			if reportErrors {
-				errorReporter(diagnostics.Parameter_0_is_not_in_the_same_position_as_parameter_1, source.parameterName.Value(), target.parameterName.Value())
+				errorReporter(diagnostics.Parameter_0_is_not_in_the_same_position_as_parameter_1, source.parameterName.String(), target.parameterName.String())
 				errorReporter(diagnostics.Type_predicate_0_is_not_assignable_to_1, c.typePredicateToString(source), c.typePredicateToString(target))
 			}
 			return TernaryFalse
@@ -1988,7 +1988,7 @@ func (c *Checker) getTupleElementLabel(elementInfo TupleElementInfo, restSymbol 
 	if restSymbol != nil {
 		rootName = restSymbol.Name()
 	}
-	return ast.MakeSymbolName(rootName.Value() + "_" + strconv.Itoa(index))
+	return ast.MakeSymbolName(rootName.String() + "_" + strconv.Itoa(index))
 }
 
 func (c *Checker) getTupleElementLabelFromBindingElement(node *ast.Node, index int, elementFlags ElementFlags) ast.SymbolName {
@@ -2860,7 +2860,7 @@ func shouldCheckAsExcessProperty(prop *ast.Symbol, container *ast.Symbol) bool {
 }
 
 func isIgnoredJsxProperty(source *Type, sourceProp *ast.Symbol) bool {
-	return source.objectFlags&ObjectFlagsJsxAttributes != 0 && isHyphenatedJsxName(sourceProp.Name().Value())
+	return source.objectFlags&ObjectFlagsJsxAttributes != 0 && isHyphenatedJsxName(sourceProp.Name().String())
 }
 
 func (c *Checker) isTypeSubsetOf(source *Type, target *Type) bool {
@@ -4307,7 +4307,7 @@ func (r *Relater) propertiesRelatedTo(source *Type, target *Type, reportErrors b
 	numericNamesOnly := isTupleType(source) && isTupleType(target)
 	for _, targetProp := range excludeProperties(properties, excludedProperties) {
 		name := targetProp.Name()
-		if targetProp.Flags()&ast.SymbolFlagsPrototype == 0 && (!numericNamesOnly || isNumericLiteralName(name.Value()) || name == ast.SymbolNameLength) && (!optionalsOnly || targetProp.Flags()&ast.SymbolFlagsOptional != 0) {
+		if targetProp.Flags()&ast.SymbolFlagsPrototype == 0 && (!numericNamesOnly || isNumericLiteralName(name.String()) || name == ast.SymbolNameLength) && (!optionalsOnly || targetProp.Flags()&ast.SymbolFlagsOptional != 0) {
 			sourceProp := r.c.getPropertyOfType(source, name)
 			if sourceProp != nil && sourceProp != targetProp {
 				related := r.propertyRelatedTo(source, target, sourceProp, targetProp, r.c.getNonMissingTypeOfSymbol, reportErrors, intersectionState, r.relation == r.c.comparableRelation)

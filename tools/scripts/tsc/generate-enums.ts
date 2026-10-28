@@ -76,7 +76,7 @@ export const enumDefs = [
     { name: "EmitOnly", goPrefix: "Emit", goFile: "tsc/internal/compiler/emitter.go", outDir: "packages/typescript/enums", excludeMembers: ["OnlyBuilderSignature"] },
     // String enum: Go stores internal names with a "\xFE" sentinel prefix, but the escaped
     // form sent over the wire uses "__" (see EscapeSymbolName), so map the sentinel accordingly.
-    { name: "InternalSymbolName", goPrefix: "InternalSymbolName", goFile: "tsc/internal/ast/symbol.go", outDir: "packages/typescript/enums", stringEnum: true, valueReplacements: { InternalSymbolNamePrefix: "__" } },
+    { name: "InternalSymbolName", goPrefix: "InternalSymbolName", goFile: "tsc/internal/ast/symbolnames_generated.go", outDir: "packages/typescript/enums", stringEnum: true, valueReplacements: { InternalSymbolNamePrefix: "__" } },
 ] satisfies EnumDef[];
 
 function syntaxKindMembers(): EnumMember[] {
@@ -103,7 +103,9 @@ function parseGoDeclarationBlock(block: string, def: EnumDef): EnumMember[] {
         }
 
         // Match: PrefixName Type = value  or  PrefixName = value
-        const fullMatch = line.match(new RegExp(`^(${prefix}\\w+)\\s+(?:\\S+\\s*)?=\\s*(.+)$`));
+        // or, in a keyed composite literal: PrefixName: value, or PrefixName & mask: value,
+        const fullMatch = line.match(new RegExp(`^(${prefix}\\w+)\\s+(?:\\S+\\s*)?=\\s*(.+)$`))
+            ?? (def.stringEnum ? line.match(new RegExp(`^(${prefix}\\w+)(?:\\s*&\\s*\\w+)?:\\s*(.+?),$`)) : null);
         // Match bare iota continuation: just PrefixName
         const bareMatch = !fullMatch && iotaExpression !== undefined
             ? line.match(new RegExp(`^(${prefix}\\w+)$`))
@@ -307,11 +309,14 @@ interface EnumMember {
 
 function parseGoEnum(def: EnumDef): EnumMember[] {
     const source = fs.readFileSync(path.join(ROOT, def.goFile), "utf-8");
-    const declarationBlockRegex = /(const|var)\s*\(([\s\S]*?)\n\)/g;
+    // Numeric enums come from const blocks. String enums come from var blocks or
+    // keyed composite literals, such as the texts of constant symbol names.
+    const declarationBlockRegex = /(const|var)\s*\(([\s\S]*?)\n\)|var\s+\w+\s*=\s*[^{\n]*\{([\s\S]*?)\n\}/g;
 
     for (const match of source.matchAll(declarationBlockRegex)) {
-        if (match[1] === "var" && !def.stringEnum) continue;
-        const members = parseGoDeclarationBlock(match[2], def).filter(member => !def.excludeMembers?.includes(member.name));
+        const isConst = match[1] === "const";
+        if (isConst === !!def.stringEnum) continue;
+        const members = parseGoDeclarationBlock(match[2] ?? match[3], def).filter(member => !def.excludeMembers?.includes(member.name));
         if (members.length > 0) return topoSortMembers(members);
     }
 

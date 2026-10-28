@@ -381,7 +381,7 @@ func (c *Checker) compareSymbolsWorker(s1, s2 *ast.Symbol) int {
 	} else if len(s2.Declarations()) != 0 {
 		return 1
 	}
-	if r := strings.Compare(s1.Name().Value(), s2.Name().Value()); r != 0 {
+	if r := strings.Compare(s1.Name().String(), s2.Name().String()); r != 0 {
 		return r
 	}
 	// Fall back to symbol IDs. This is a last resort that should happen only when symbols have
@@ -644,7 +644,7 @@ func compareTypeNames(t1, t2 *Type) int {
 	if s2 == nil {
 		return -1
 	}
-	if c := strings.Compare(s1.Name().Value(), s2.Name().Value()); c != 0 {
+	if c := strings.Compare(s1.Name().String(), s2.Name().String()); c != 0 {
 		return c
 	}
 	// Keep distinct same-named declarations together before comparing alias arguments or structure.
@@ -1135,19 +1135,14 @@ func isVariableDeclarationInVariableStatement(node *ast.Node) bool {
 }
 
 func IsKnownSymbol(symbol *ast.Symbol) bool {
-	return isLateBoundName(symbol.Name())
+	return symbol.Name().IsLateBoundName()
 }
 
 func IsPrivateIdentifierSymbol(symbol *ast.Symbol) bool {
 	if symbol == nil {
 		return false
 	}
-	return strings.HasPrefix(symbol.Name().Value(), ast.InternalSymbolNamePrefix+"#")
-}
-
-func isLateBoundName(symbolName ast.SymbolName) bool {
-	name := symbolName.Value()
-	return len(name) >= 2 && name[0] == '\xfe' && name[1] == '@'
+	return symbol.Name().IsPrivateName()
 }
 
 func isObjectOrArrayLiteralType(t *Type) bool {
@@ -1740,7 +1735,7 @@ func tryGetPropertyAccessOrIdentifierToString(expr *ast.Node) string {
 	case ast.IsElementAccessExpression(expr):
 		baseStr := tryGetPropertyAccessOrIdentifierToString(expr.Expression())
 		if baseStr != "" && ast.IsPropertyName(expr.AsElementAccessExpression().ArgumentExpression) {
-			return baseStr + "." + ast.GetPropertyNameForPropertyNameNode(expr.AsElementAccessExpression().ArgumentExpression).Value()
+			return baseStr + "." + ast.GetPropertyNameForPropertyNameNode(expr.AsElementAccessExpression().ArgumentExpression).String()
 		}
 	case ast.IsIdentifier(expr):
 		return expr.Text()
@@ -1791,14 +1786,6 @@ func getAnyImportSyntax(node *ast.Node) *ast.Node {
 	return importNode
 }
 
-// A reserved member name consists of the byte 0xFE (which is an invalid UTF-8 encoding) followed by one or more
-// characters where the first character is not '@' or '#'. The '@' character indicates that the name is denoted by
-// a well known ES Symbol instance and the '#' character indicates that the name is a PrivateIdentifier.
-func isReservedMemberName(symbolName ast.SymbolName) bool {
-	name := symbolName.Value()
-	return len(name) >= 2 && name[0] == '\xFE' && name[1] != '@' && name[1] != '#'
-}
-
 func introducesArgumentsExoticObject(node *ast.Node) bool {
 	switch node.Kind {
 	case ast.KindMethodDeclaration, ast.KindMethodSignature, ast.KindConstructor, ast.KindGetAccessor,
@@ -1811,7 +1798,7 @@ func introducesArgumentsExoticObject(node *ast.Node) bool {
 func symbolsToArray(symbols ast.SymbolTable) []*ast.Symbol {
 	var result []*ast.Symbol
 	for id, symbol := range symbols.All() {
-		if !isReservedMemberName(id) {
+		if !id.IsReservedMemberName() {
 			result = append(result, symbol)
 		}
 	}

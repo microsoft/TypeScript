@@ -5,10 +5,12 @@ import (
 	"sync/atomic"
 )
 
-// Symbol names are interned into a process-wide table and identified by a
-// 32-bit ID; ID 0 is reserved for the unset name. Interned names are never
-// freed. IDs contain no pointers, so nodes, symbol tables, and caches that
-// hold them cost the garbage collector nothing to scan or write-barrier.
+// Symbol names are interned into a process-wide table and identified by an
+// ID; ID 0 is the empty name, and the fixed names generated in
+// symbolnames_generated.go take the IDs after it. Interned names are never
+// freed. Names synthesized from symbol and node IDs are not interned; see
+// symbolname_derived.go. IDs contain no pointers, so nodes, symbol tables, and
+// caches that hold them cost the garbage collector nothing to scan.
 //
 // Texts are stored in fixed-size chunks so an ID's text never moves. Lookups
 // are lock-free: each shard publishes an open-addressing table whose slots
@@ -47,6 +49,19 @@ func newSymbolNameTable() *symbolNameTable {
 		slots := make([]atomic.Uint64, symbolNameInitialSlots)
 		t.shards[i].table.Store(&slots)
 	}
+	for want := SymbolName(1); want < SymbolName(len(fixedSymbolNameTexts)); want++ {
+		text := fixedSymbolNameTexts[want]
+		if text == "" {
+			panic("fixed symbol name has no text")
+		}
+		if _, _, _, ok := splitDerivedName(text); ok {
+			panic("fixed symbol name has a derived form: " + text)
+		}
+		hash := hashSymbolNameText(text)
+		if id := t.insert(&t.shards[hash&(symbolNameShardCount-1)], hash, text); SymbolName(id) != want {
+			panic("duplicate fixed symbol name: " + text)
+		}
+	}
 	return t
 }
 
@@ -70,16 +85,21 @@ func (t *symbolNameTable) lookup(slots []atomic.Uint64, hash uint64, text string
 	}
 }
 
-func (t *symbolNameTable) intern(text string) uint32 {
-	return t.internHashed(text, hashSymbolNameText(text))
-}
-
-func (t *symbolNameTable) internHashed(text string, hash uint64) uint32 {
+// make returns the name for text. Text with a derived form is never interned,
+// so a lookup hit is always the canonical name. The empty name is ID 0, which
+// the hash table uses for empty slots, so it is never inserted either.
+func (t *symbolNameTable) make(text string, hash uint64) SymbolName {
+	if text == "" {
+		return EmptySymbolName
+	}
 	shard := &t.shards[hash&(symbolNameShardCount-1)]
 	if id := t.lookup(*shard.table.Load(), hash, text); id != 0 {
-		return id
+		return internedSymbolName(id, text)
 	}
-	return t.insert(shard, hash, text)
+	if name, ok := parseDerivedName(text); ok {
+		return name
+	}
+	return internedSymbolName(t.insert(shard, hash, text), text)
 }
 
 func (t *symbolNameTable) insert(shard *symbolNameShard, hash uint64, text string) uint32 {
@@ -159,15 +179,17 @@ func (c *SymbolNameCache) Make(text string) SymbolName {
 func (c *SymbolNameCache) MakeHashed(text string, hash uint64) SymbolName {
 	slot := &c.slots[hash&(symbolNameCacheSize-1)]
 	if slot.id != 0 && slot.hash == uint32(hash>>32) && symbolNames.text(slot.id) == text {
-		return SymbolName{uint64(slot.id)}
+		return SymbolName(slot.id)
 	}
-	id := symbolNames.internHashed(text, hash)
-	*slot = symbolNameCacheSlot{hash: uint32(hash >> 32), id: id}
-	return SymbolName{uint64(id)}
+	name := symbolNames.make(text, hash)
+	// Only untagged names, whose value is their ID, are cached.
+	if name.derivedKind() == derivedNamePlain {
+		*slot = symbolNameCacheSlot{hash: uint32(hash >> 32), id: uint32(name)}
+	}
+	return name
 }
 
-// Symbol name hashes are FNV-1a with a final mix. Names are short, so this
-// inlines well and beats a general-purpose hash call. The incremental form lets
+// Symbol name hashes are FNV-1a with a final mix. The incremental form lets
 // the scanner hash identifiers while it scans them.
 const SymbolNameHashSeed uint64 = 14695981039346656037
 

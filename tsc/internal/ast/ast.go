@@ -256,7 +256,7 @@ func (n *Node) TextSymbolName() SymbolName {
 func (n *Node) Text() string {
 	switch n.Kind {
 	case KindIdentifier:
-		return n.AsIdentifier().Text.Value()
+		return n.AsIdentifier().Text.String()
 	case KindPrivateIdentifier:
 		return n.AsPrivateIdentifier().Text
 	case KindStringLiteral:

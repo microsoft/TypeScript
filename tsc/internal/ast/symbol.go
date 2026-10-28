@@ -1,7 +1,6 @@
 package ast
 
 import (
-	"bytes"
 	"errors"
 	"iter"
 	"slices"
@@ -171,39 +170,30 @@ func (s *Symbol) CombinedLocalAndExportSymbolFlags() SymbolFlags {
 }
 
 // SymbolName is an interned name used for symbol identity and lookup.
-// Its zero value denotes an unset name and must not be passed to Value.
+// Its zero value is EmptySymbolName.
 //
-// Interned IDs are 32 bits, but SymbolName stores them in 64. Every struct
-// and map slot that holds a name aligns its neighbors to 8 bytes, so a 32-bit
-// name is padded to 8 bytes anyway; the upper bits cost no memory.
-type SymbolName struct {
-	id uint64
-}
+// The low bits hold an intern table ID; the upper bits encode derived names
+// and tag internal names. See symbolname_derived.go.
+//
+// Fixed names, such as SymbolNamePrototype, are constants generated from the
+// list in symbolnames_generate.go.
+//
+//go:generate npx hereby generate:symbolnames
+type SymbolName uint64
 
 func MakeSymbolName(text string) SymbolName {
-	return SymbolName{uint64(symbolNames.intern(text))}
-}
-
-func (name SymbolName) Value() string {
-	return symbolNames.text(uint32(name.id))
-}
-
-func (name SymbolName) IsZero() bool {
-	return name == SymbolName{}
+	return symbolNames.make(text, hashSymbolNameText(text))
 }
 
 func (name SymbolName) String() string {
-	if name.IsZero() {
-		return "<unset>"
+	if name.derivedKind() != derivedNamePlain {
+		return name.derivedValue()
 	}
-	return name.Value()
+	return symbolNames.text(uint32(name))
 }
 
 // MarshalText uses the escaped spelling so internal names remain valid UTF-8.
 func (name SymbolName) MarshalText() ([]byte, error) {
-	if name.IsZero() {
-		return nil, errors.New("cannot marshal an unset symbol name as text")
-	}
 	text := EscapeSymbolName(name)
 	if !utf8.ValidString(text) {
 		return nil, errors.New("symbol name contains invalid UTF-8")
@@ -219,23 +209,7 @@ func (name *SymbolName) UnmarshalText(text []byte) error {
 	return nil
 }
 
-// MarshalJSON preserves the distinction between unset and empty names.
-func (name SymbolName) MarshalJSON() ([]byte, error) {
-	if name.IsZero() {
-		return []byte("null"), nil
-	}
-	text, err := name.MarshalText()
-	if err != nil {
-		return nil, err
-	}
-	return json.Marshal(string(text))
-}
-
 func (name *SymbolName) UnmarshalJSON(data []byte) error {
-	if bytes.Equal(bytes.TrimSpace(data), []byte("null")) {
-		*name = SymbolName{}
-		return nil
-	}
 	if !utf8.Valid(data) {
 		return errors.New("symbol name contains invalid UTF-8")
 	}
@@ -245,191 +219,6 @@ func (name *SymbolName) UnmarshalJSON(data []byte) error {
 	}
 	return name.UnmarshalText([]byte(text))
 }
-
-// EmptySymbolName is a valid empty name, distinct from an unset zero handle.
-var EmptySymbolName = MakeSymbolName("")
-
-// Fixed symbol names are interned once and shared by compiler consumers.
-var (
-	SymbolNameZero                          = MakeSymbolName("0")
-	SymbolNameUnresolved                    = MakeSymbolName("<<unresolved>>")
-	SymbolNameAbstractModuleSource          = MakeSymbolName("AbstractModuleSource")
-	SymbolNameArray                         = MakeSymbolName("Array")
-	SymbolNameArrayBuffer                   = MakeSymbolName("ArrayBuffer")
-	SymbolNameArrayConstructor              = MakeSymbolName("ArrayConstructor")
-	SymbolNameArrayLike                     = MakeSymbolName("ArrayLike")
-	SymbolNameAsyncDisposable               = MakeSymbolName("AsyncDisposable")
-	SymbolNameAsyncDisposableStack          = MakeSymbolName("AsyncDisposableStack")
-	SymbolNameAsyncGenerator                = MakeSymbolName("AsyncGenerator")
-	SymbolNameAsyncGeneratorFunction        = MakeSymbolName("AsyncGeneratorFunction")
-	SymbolNameAsyncIterable                 = MakeSymbolName("AsyncIterable")
-	SymbolNameAsyncIterableIterator         = MakeSymbolName("AsyncIterableIterator")
-	SymbolNameAsyncIterator                 = MakeSymbolName("AsyncIterator")
-	SymbolNameAsyncIteratorObject           = MakeSymbolName("AsyncIteratorObject")
-	SymbolNameAtomics                       = MakeSymbolName("Atomics")
-	SymbolNameAwaited                       = MakeSymbolName("Awaited")
-	SymbolNameBigInt                        = MakeSymbolName("BigInt")
-	SymbolNameBigInt64Array                 = MakeSymbolName("BigInt64Array")
-	SymbolNameBigUint64Array                = MakeSymbolName("BigUint64Array")
-	SymbolNameBoolean                       = MakeSymbolName("Boolean")
-	SymbolNameBuiltinIteratorReturn         = MakeSymbolName("BuiltinIteratorReturn")
-	SymbolNameCallableFunction              = MakeSymbolName("CallableFunction")
-	SymbolNameCapitalize                    = MakeSymbolName("Capitalize")
-	SymbolNameClassAccessorDecoratorContext = MakeSymbolName("ClassAccessorDecoratorContext")
-	SymbolNameClassAccessorDecoratorResult  = MakeSymbolName("ClassAccessorDecoratorResult")
-	SymbolNameClassAccessorDecoratorTarget  = MakeSymbolName("ClassAccessorDecoratorTarget")
-	SymbolNameClassDecoratorContext         = MakeSymbolName("ClassDecoratorContext")
-	SymbolNameClassFieldDecoratorContext    = MakeSymbolName("ClassFieldDecoratorContext")
-	SymbolNameClassGetterDecoratorContext   = MakeSymbolName("ClassGetterDecoratorContext")
-	SymbolNameClassMethodDecoratorContext   = MakeSymbolName("ClassMethodDecoratorContext")
-	SymbolNameClassSetterDecoratorContext   = MakeSymbolName("ClassSetterDecoratorContext")
-	SymbolNameDataView                      = MakeSymbolName("DataView")
-	SymbolNameDate                          = MakeSymbolName("Date")
-	SymbolNameDateTimeFormat                = MakeSymbolName("DateTimeFormat")
-	SymbolNameDisposable                    = MakeSymbolName("Disposable")
-	SymbolNameDisposableStack               = MakeSymbolName("DisposableStack")
-	SymbolNameElement                       = MakeSymbolName("Element")
-	SymbolNameElementAttributesProperty     = MakeSymbolName("ElementAttributesProperty")
-	SymbolNameElementChildrenAttribute      = MakeSymbolName("ElementChildrenAttribute")
-	SymbolNameElementClass                  = MakeSymbolName("ElementClass")
-	SymbolNameElementType                   = MakeSymbolName("ElementType")
-	SymbolNameError                         = MakeSymbolName("Error")
-	SymbolNameErrorConstructor              = MakeSymbolName("ErrorConstructor")
-	SymbolNameEventTarget                   = MakeSymbolName("EventTarget")
-	SymbolNameExtract                       = MakeSymbolName("Extract")
-	SymbolNameFloat16Array                  = MakeSymbolName("Float16Array")
-	SymbolNameFloat32Array                  = MakeSymbolName("Float32Array")
-	SymbolNameFloat64Array                  = MakeSymbolName("Float64Array")
-	SymbolNameFunction                      = MakeSymbolName("Function")
-	SymbolNameGenerator                     = MakeSymbolName("Generator")
-	SymbolNameIArguments                    = MakeSymbolName("IArguments")
-	SymbolNameImportAttributes              = MakeSymbolName("ImportAttributes")
-	SymbolNameImportCallOptions             = MakeSymbolName("ImportCallOptions")
-	SymbolNameImportMeta                    = MakeSymbolName("ImportMeta")
-	SymbolNameImportMetaExpression          = MakeSymbolName("ImportMetaExpression")
-	SymbolNameInt16Array                    = MakeSymbolName("Int16Array")
-	SymbolNameInt32Array                    = MakeSymbolName("Int32Array")
-	SymbolNameInt8Array                     = MakeSymbolName("Int8Array")
-	SymbolNameIntl                          = MakeSymbolName("Intl")
-	SymbolNameIntrinsicAttributes           = MakeSymbolName("IntrinsicAttributes")
-	SymbolNameIntrinsicClassAttributes      = MakeSymbolName("IntrinsicClassAttributes")
-	SymbolNameIntrinsicElements             = MakeSymbolName("IntrinsicElements")
-	SymbolNameIterable                      = MakeSymbolName("Iterable")
-	SymbolNameIterableIterator              = MakeSymbolName("IterableIterator")
-	SymbolNameIterator                      = MakeSymbolName("Iterator")
-	SymbolNameIteratorConstructor           = MakeSymbolName("IteratorConstructor")
-	SymbolNameIteratorObject                = MakeSymbolName("IteratorObject")
-	SymbolNameIteratorReturnResult          = MakeSymbolName("IteratorReturnResult")
-	SymbolNameIteratorYieldResult           = MakeSymbolName("IteratorYieldResult")
-	SymbolNameJSON                          = MakeSymbolName("JSON")
-	SymbolNameJSX                           = MakeSymbolName("JSX")
-	SymbolNameK                             = MakeSymbolName("K")
-	SymbolNameLibraryManagedAttributes      = MakeSymbolName("LibraryManagedAttributes")
-	SymbolNameLowercase                     = MakeSymbolName("Lowercase")
-	SymbolNameMap                           = MakeSymbolName("Map")
-	SymbolNameMapConstructor                = MakeSymbolName("MapConstructor")
-	SymbolNameMath                          = MakeSymbolName("Math")
-	SymbolNameNaN                           = MakeSymbolName("NaN")
-	SymbolNameNewableFunction               = MakeSymbolName("NewableFunction")
-	SymbolNameNoInfer                       = MakeSymbolName("NoInfer")
-	SymbolNameNode                          = MakeSymbolName("Node")
-	SymbolNameNodeList                      = MakeSymbolName("NodeList")
-	SymbolNameNonNullable                   = MakeSymbolName("NonNullable")
-	SymbolNameNumber                        = MakeSymbolName("Number")
-	SymbolNameNumberConstructor             = MakeSymbolName("NumberConstructor")
-	SymbolNameNumberFormat                  = MakeSymbolName("NumberFormat")
-	SymbolNameObject                        = MakeSymbolName("Object")
-	SymbolNameObjectConstructor             = MakeSymbolName("ObjectConstructor")
-	SymbolNameOmit                          = MakeSymbolName("Omit")
-	SymbolNamePartial                       = MakeSymbolName("Partial")
-	SymbolNamePick                          = MakeSymbolName("Pick")
-	SymbolNamePromise                       = MakeSymbolName("Promise")
-	SymbolNamePromiseConstructor            = MakeSymbolName("PromiseConstructor")
-	SymbolNamePromiseLike                   = MakeSymbolName("PromiseLike")
-	SymbolNameRawJSON                       = MakeSymbolName("RawJSON")
-	SymbolNameReadonly                      = MakeSymbolName("Readonly")
-	SymbolNameReadonlyArray                 = MakeSymbolName("ReadonlyArray")
-	SymbolNameReadonlyMap                   = MakeSymbolName("ReadonlyMap")
-	SymbolNameReadonlySet                   = MakeSymbolName("ReadonlySet")
-	SymbolNameRecord                        = MakeSymbolName("Record")
-	SymbolNameReflect                       = MakeSymbolName("Reflect")
-	SymbolNameRegExp                        = MakeSymbolName("RegExp")
-	SymbolNameRegExpConstructor             = MakeSymbolName("RegExpConstructor")
-	SymbolNameRegExpExecArray               = MakeSymbolName("RegExpExecArray")
-	SymbolNameRegExpMatchArray              = MakeSymbolName("RegExpMatchArray")
-	SymbolNameRelativeTimeFormat            = MakeSymbolName("RelativeTimeFormat")
-	SymbolNameRequired                      = MakeSymbolName("Required")
-	SymbolNameSet                           = MakeSymbolName("Set")
-	SymbolNameSharedArrayBuffer             = MakeSymbolName("SharedArrayBuffer")
-	SymbolNameString                        = MakeSymbolName("String")
-	SymbolNameStringConstructor             = MakeSymbolName("StringConstructor")
-	SymbolNameSymbol                        = MakeSymbolName("Symbol")
-	SymbolNameSymbolConstructor             = MakeSymbolName("SymbolConstructor")
-	SymbolNameT                             = MakeSymbolName("T")
-	SymbolNameTemplateStringsArray          = MakeSymbolName("TemplateStringsArray")
-	SymbolNameThisType                      = MakeSymbolName("ThisType")
-	SymbolNameTypedPropertyDescriptor       = MakeSymbolName("TypedPropertyDescriptor")
-	SymbolNameUint16Array                   = MakeSymbolName("Uint16Array")
-	SymbolNameUint32Array                   = MakeSymbolName("Uint32Array")
-	SymbolNameUint8Array                    = MakeSymbolName("Uint8Array")
-	SymbolNameUint8ArrayConstructor         = MakeSymbolName("Uint8ArrayConstructor")
-	SymbolNameUint8ClampedArray             = MakeSymbolName("Uint8ClampedArray")
-	SymbolNameUncapitalize                  = MakeSymbolName("Uncapitalize")
-	SymbolNameUppercase                     = MakeSymbolName("Uppercase")
-	SymbolNameWeakMap                       = MakeSymbolName("WeakMap")
-	SymbolNameWeakSet                       = MakeSymbolName("WeakSet")
-	SymbolNameESModule                      = MakeSymbolName("__esModule")
-	SymbolNameUnderscoreDefault             = MakeSymbolName("_default")
-	SymbolNameAny                           = MakeSymbolName("any")
-	SymbolNameArg                           = MakeSymbolName("arg")
-	SymbolNameArgs                          = MakeSymbolName("args")
-	SymbolNameArguments                     = MakeSymbolName("arguments")
-	SymbolNameAsyncIteratorProperty         = MakeSymbolName("asyncIterator")
-	SymbolNameBind                          = MakeSymbolName("bind")
-	SymbolNameBooleanKeyword                = MakeSymbolName("boolean")
-	SymbolNameCaller                        = MakeSymbolName("caller")
-	SymbolNameChildren                      = MakeSymbolName("children")
-	SymbolNameClass                         = MakeSymbolName("class")
-	SymbolNameClassName                     = MakeSymbolName("className")
-	SymbolNameConst                         = MakeSymbolName("const")
-	SymbolNameContext                       = MakeSymbolName("context")
-	SymbolNameDescriptor                    = MakeSymbolName("descriptor")
-	SymbolNameDone                          = MakeSymbolName("done")
-	SymbolNameExports                       = MakeSymbolName("exports")
-	SymbolNameFor                           = MakeSymbolName("for")
-	SymbolNameGetProperty                   = MakeSymbolName("get")
-	SymbolNameGlobal                        = MakeSymbolName("global")
-	SymbolNameGlobalThis                    = MakeSymbolName("globalThis")
-	SymbolNameHasInstance                   = MakeSymbolName("hasInstance")
-	SymbolNameHtmlFor                       = MakeSymbolName("htmlFor")
-	SymbolNameIteratorProperty              = MakeSymbolName("iterator")
-	SymbolNameLength                        = MakeSymbolName("length")
-	SymbolNameMeta                          = MakeSymbolName("meta")
-	SymbolNameModule                        = MakeSymbolName("module")
-	SymbolNameName                          = MakeSymbolName("name")
-	SymbolNameNever                         = MakeSymbolName("never")
-	SymbolNameNext                          = MakeSymbolName("next")
-	SymbolNameNumberKeyword                 = MakeSymbolName("number")
-	SymbolNameParameterIndex                = MakeSymbolName("parameterIndex")
-	SymbolNamePrivate                       = MakeSymbolName("private")
-	SymbolNamePropertyKey                   = MakeSymbolName("propertyKey")
-	SymbolNameProps                         = MakeSymbolName("props")
-	SymbolNamePrototype                     = MakeSymbolName("prototype")
-	SymbolNameRequire                       = MakeSymbolName("require")
-	SymbolNameReturn                        = MakeSymbolName("return")
-	SymbolNameSelf                          = MakeSymbolName("self")
-	SymbolNameSetProperty                   = MakeSymbolName("set")
-	SymbolNameStatic                        = MakeSymbolName("static")
-	SymbolNameStringKeyword                 = MakeSymbolName("string")
-	SymbolNameTarget                        = MakeSymbolName("target")
-	SymbolNameThen                          = MakeSymbolName("then")
-	SymbolNameThrow                         = MakeSymbolName("throw")
-	SymbolNameUndefined                     = MakeSymbolName("undefined")
-	SymbolNameUnknown                       = MakeSymbolName("unknown")
-	SymbolNameValue                         = MakeSymbolName("value")
-	SymbolNameWith                          = MakeSymbolName("with")
-	SymbolNameWritable                      = MakeSymbolName("writable")
-)
 
 // SymbolTable
 //
@@ -454,7 +243,7 @@ type SymbolMap struct {
 
 // hashSymbolTableKey spreads interned name IDs, which are small and dense, across the index.
 func hashSymbolTableKey(name SymbolName) uint64 {
-	h := name.id * 0x9e3779b97f4a7c15
+	h := uint64(name) * 0x9e3779b97f4a7c15
 	return h ^ h>>32
 }
 
@@ -644,35 +433,12 @@ func (m *SymbolMap) Clone() SymbolTable {
 
 const InternalSymbolNamePrefix = "\xFE" // Invalid UTF8 sequence, will never occur as IdentifierName
 
-var (
-	InternalSymbolNameCall                    = MakeSymbolName(InternalSymbolNamePrefix + "call")                    // Call signatures
-	InternalSymbolNameConstructor             = MakeSymbolName(InternalSymbolNamePrefix + "constructor")             // Constructor implementations
-	InternalSymbolNameNew                     = MakeSymbolName(InternalSymbolNamePrefix + "new")                     // Constructor signatures
-	InternalSymbolNameIndex                   = MakeSymbolName(InternalSymbolNamePrefix + "index")                   // Index signatures
-	InternalSymbolNameExportStar              = MakeSymbolName(InternalSymbolNamePrefix + "export")                  // Module export * declarations
-	InternalSymbolNameGlobal                  = MakeSymbolName(InternalSymbolNamePrefix + "global")                  // Global self-reference
-	InternalSymbolNameMissing                 = MakeSymbolName(InternalSymbolNamePrefix + "missing")                 // Indicates missing symbol
-	InternalSymbolNameType                    = MakeSymbolName(InternalSymbolNamePrefix + "type")                    // Anonymous type literal symbol
-	InternalSymbolNameObject                  = MakeSymbolName(InternalSymbolNamePrefix + "object")                  // Anonymous object literal declaration
-	InternalSymbolNameJSXAttributes           = MakeSymbolName(InternalSymbolNamePrefix + "jsxAttributes")           // Anonymous JSX attributes object literal declaration
-	InternalSymbolNameClass                   = MakeSymbolName(InternalSymbolNamePrefix + "class")                   // Unnamed class expression
-	InternalSymbolNameFunction                = MakeSymbolName(InternalSymbolNamePrefix + "function")                // Unnamed function expression
-	InternalSymbolNameComputed                = MakeSymbolName(InternalSymbolNamePrefix + "computed")                // Computed property name declaration with dynamic name
-	InternalSymbolNameAssignmentDeclaration   = MakeSymbolName(InternalSymbolNamePrefix + "assignment")              // Assignment declarations
-	InternalSymbolNameInstantiationExpression = MakeSymbolName(InternalSymbolNamePrefix + "instantiationExpression") // Instantiation expressions
-	InternalSymbolNameImportAttributes        = MakeSymbolName(InternalSymbolNamePrefix + "importAttributes")
-	InternalSymbolNameExportEquals            = MakeSymbolName("export=") // Export assignment symbol
-	InternalSymbolNameDefault                 = MakeSymbolName("default") // Default export symbol (technically not wholly internal, but included here for usability)
-	InternalSymbolNameThis                    = MakeSymbolName("this")
-	InternalSymbolNameModuleExports           = MakeSymbolName("module.exports")
-)
-
 // SymbolNameText returns a display name, preserving private identifier spelling.
 func SymbolNameText(symbol *Symbol) string {
 	if symbol.ValueDeclaration() != nil && IsPrivateIdentifierClassElementDeclaration(symbol.ValueDeclaration()) {
 		return symbol.ValueDeclaration().Name().Text()
 	}
-	return symbol.Name().Value()
+	return symbol.Name().String()
 }
 
 // EscapeAllInternalSymbolNames replaces internal symbol name markers ("\xFE") with "__".
@@ -681,7 +447,7 @@ func EscapeAllInternalSymbolNames(name string) string {
 }
 
 func EscapeInternalSymbolName(symbolName SymbolName) string {
-	name := symbolName.Value()
+	name := symbolName.String()
 	if rest, ok := strings.CutPrefix(name, InternalSymbolNamePrefix); ok {
 		return "__" + rest
 	}
@@ -693,7 +459,7 @@ func EscapeInternalSymbolName(symbolName SymbolName) string {
 // and user names that already begin with "__" gain an extra leading underscore
 // so they can be distinguished from internal names.
 func EscapeSymbolName(symbolName SymbolName) string {
-	name := symbolName.Value()
+	name := symbolName.String()
 	if rest, ok := strings.CutPrefix(name, InternalSymbolNamePrefix); ok {
 		return "__" + rest
 	}
