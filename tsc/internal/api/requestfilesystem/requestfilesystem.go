@@ -19,6 +19,8 @@ const (
 	KindFull Kind = "full"
 	// KindLayer checks the supplied filesystem before falling back to the host.
 	KindLayer Kind = "layer"
+	// KindSnapshot overlays a retained snapshot's request entries before applying an optional filesystem.
+	KindSnapshot Kind = "snapshot"
 )
 
 // RequestDirectoryEntries is a cached directory listing. Entry names are
@@ -42,6 +44,10 @@ type RequestSymlink struct {
 // for a request that creates a snapshot.
 type RequestFileSystem struct {
 	Kind Kind `json:"kind"`
+	// Snapshot identifies the retained snapshot supplying request entries for KindSnapshot.
+	Snapshot uint64 `json:"snapshot,omitempty"`
+	// FileSystem is an optional layer or full filesystem applied on top of KindSnapshot.
+	FileSystem *RequestFileSystem `json:"fileSystem,omitempty"`
 	// Files maps file names to their complete contents.
 	Files map[string]string `json:"files" nonnil:"true"`
 	// Directories maps directory names to complete listing results. Directory
@@ -52,6 +58,11 @@ type RequestFileSystem struct {
 	// RemovedPaths lists files or directory trees that must be treated as missing
 	// even when present in an underlying snapshot or host filesystem.
 	RemovedPaths []string `json:"removedPaths,omitempty"`
+}
+
+// ReplacesFileSystem reports whether the request includes an explicit full replacement.
+func (r *RequestFileSystem) ReplacesFileSystem() bool {
+	return r != nil && (r.Kind == KindFull || r.Kind == KindSnapshot && r.FileSystem != nil && r.FileSystem.Kind == KindFull)
 }
 
 // requestFileSystem is either a full filesystem or a layer over the session
@@ -117,6 +128,42 @@ func NewForUpdate(params *RequestFileSystem, base vfs.FS, currentDirectory tspat
 func HasFullFileSystem(fileSystem vfs.FS) bool {
 	requestFileSystem := getRequestFileSystem(fileSystem)
 	return requestFileSystem != nil && requestFileSystem.kind == KindFull
+}
+
+// Rebase reapplies fileSystem's request entries over base. baseContents is the
+// target snapshot's cached/editor view, used only to report changes relative to
+// that snapshot; it must not become part of the composed filesystem.
+func Rebase(fileSystem vfs.FS, base vfs.FS, baseContents vfs.FS, fileChanges *project.FileChangeSummary) vfs.FS {
+	source := getRequestFileSystem(fileSystem)
+	if source == nil {
+		return base
+	}
+	paths := source.paths
+	kind := source.kind
+	baseFileSystem := base
+	if target := getRequestFileSystem(base); target != nil {
+		base = target.base
+		if source.kind == KindLayer {
+			paths = composeRequestPaths(target.paths, source.paths, requestFallbackAllowed, source.caseSensitivity)
+			kind = target.kind
+		}
+	}
+	result := &requestFileSystem{
+		kind:             kind,
+		base:             base,
+		currentDirectory: source.currentDirectory,
+		caseSensitivity:  source.caseSensitivity,
+		paths:            paths,
+	}
+	if source != getRequestFileSystem(baseFileSystem) {
+		addRebaseFileChanges(fileChanges, source, baseFileSystem, baseContents, result)
+		// Listings need not expose every readable entry, so only a self-rebase can
+		// establish that a full replacement preserves all of the target's paths.
+		if source.kind == KindFull {
+			fileChanges.InvalidateAll = true
+		}
+	}
+	return result
 }
 
 func newRequestFileSystemWorker(params *RequestFileSystem, base vfs.FS, currentDirectory tspath.RootedDirectoryPath) (*requestFileSystem, error) {
@@ -198,7 +245,10 @@ func newRequestFileSystemWorker(params *RequestFileSystem, base vfs.FS, currentD
 		result.registerDirectory(directoryName)
 	}
 	for _, path := range params.RemovedPaths {
-		result.paths.ensure(result.caseSensitivity.PathKey(result.toAbsolutePath(path))).fallback = requestFallbackMissing
+		absolutePath := result.toAbsolutePath(path)
+		node := result.paths.ensure(result.caseSensitivity.PathKey(absolutePath))
+		node.fallback = requestFallbackMissing
+		node.fallbackPath = absolutePath
 	}
 	result.paths = composeRequestPaths(nil, result.paths, requestFallbackAllowed, result.caseSensitivity)
 	return &result, nil

@@ -2,7 +2,7 @@
 
 import AdmZip from "adm-zip";
 import chokidar from "chokidar";
-import { task } from "hereby";
+import { task as herebyTask } from "hereby";
 import assert from "node:assert";
 import crypto from "node:crypto";
 import fs from "node:fs";
@@ -15,11 +15,24 @@ import {
     styleText,
 } from "node:util";
 import * as tar from "tar";
-import { xSync } from "tinyexec";
+import {
+    x,
+    xSync,
+} from "tinyexec";
 import {
     enableFileFingerprintCache,
+    invalidateFileFingerprints,
     run,
 } from "./tools/scripts/gen/utils.mts";
+import {
+    ensureModel as ensureLSPModel,
+    outputs as lspModelOutputs,
+} from "./tools/scripts/lsp/fetchModel.mts";
+import { outputs as encoderOutputs } from "./tools/scripts/tsc/generate-encoder.ts";
+import { outputs as enumOutputs } from "./tools/scripts/tsc/generate-enums.ts";
+import { outputs as goASTOutputs } from "./tools/scripts/tsc/generate-go-ast.ts";
+import { outputs as tsASTOutputs } from "./tools/scripts/tsc/generate-ts-ast.ts";
+import generateUnicodeData, { outputs as unicodeOutputs } from "./tsc/internal/stringutil/_scripts/generate-unicode-data.mts";
 
 // Set GOEXPERIMENT=nosimd to opt out of SIMD for any task.
 process.env.GOEXPERIMENT ||= "simd";
@@ -32,6 +45,17 @@ if (process.platform === "win32") {
 
 const __filename = url.fileURLToPath(new URL(import.meta.url));
 const __dirname = path.dirname(__filename);
+
+/** @typedef {import("hereby").TaskOptions & { outputs?: readonly string[] }} TaskOptions */
+/** @type {TaskOptions[]} */
+const taskDescriptors = [];
+
+/** @param {TaskOptions} options */
+function task(options) {
+    const result = herebyTask(options);
+    taskDescriptors.push(options);
+    return result;
+}
 
 const isCI = !!process.env.CI || !!process.env.TF_BUILD;
 const stableThreeComponentVersionPatternSource = String.raw`^(0|[1-9][0-9]*)\.(0|[1-9][0-9]*)\.(0|[1-9][0-9]*)$`;
@@ -222,7 +246,6 @@ async function runWithConcurrencyLimit(tasks, concurrency) {
 const builtLocal = "./built/local";
 
 const libsDir = "./tsc/internal/bundled/libs";
-const libsRegexp = /(?:^|[\\/])internal[\\/]bundled[\\/]libs[\\/]/;
 
 /**
  * @param {string} out
@@ -233,7 +256,7 @@ async function generateLibs(out) {
     const libs = await fs.promises.readdir(libsDir);
 
     await Promise.all(libs.map(async lib => {
-        fs.promises.copyFile(path.join(libsDir, lib), path.join(out, lib));
+        await fs.promises.copyFile(path.join(libsDir, lib), path.join(out, lib));
     }));
 }
 
@@ -274,71 +297,6 @@ function buildTsc(opts) {
     });
 }
 
-export const tscBuild = task({
-    name: "tsc:build",
-    description: "Builds the tsc binary.",
-    run: async () => {
-        await buildTsc({ extraFlags: options.release ? getReleaseBuildFlags() : [] });
-    },
-});
-
-export const tsgo = task({
-    name: "tsgo",
-    dependencies: [lib, tscBuild],
-});
-
-export const local = task({
-    name: "local",
-    dependencies: [tsgo],
-});
-
-export const build = task({
-    name: "build",
-    dependencies: [local],
-});
-
-export const buildWatch = task({
-    name: "build:watch",
-    description: "Builds the tsc binary and watches for changes.",
-    run: async () => {
-        await watchDebounced("build:watch", async (paths, abortSignal) => {
-            let libsChanged = false;
-            let goChanged = false;
-
-            if (paths) {
-                for (const p of paths) {
-                    if (libsRegexp.test(p)) {
-                        libsChanged = true;
-                    }
-                    else if (p.endsWith(".go")) {
-                        goChanged = true;
-                    }
-                    if (libsChanged && goChanged) {
-                        break;
-                    }
-                }
-            }
-            else {
-                libsChanged = true;
-                goChanged = true;
-            }
-
-            if (libsChanged) {
-                console.log("Generating libs...");
-                await generateLibs(builtLocal);
-            }
-
-            if (goChanged) {
-                console.log("Building tsgo...");
-                await buildTsc({ abortSignal });
-            }
-        }, {
-            paths: ["tsc/cmd", "tsc/internal"],
-            ignored: path => /[\\/]testdata[\\/]/.test(path),
-        });
-    },
-});
-
 export const cleanBuilt = task({
     name: "clean:built",
     hiddenFromTaskList: true,
@@ -364,7 +322,10 @@ export const generateGo = task({
 });
 
 const getGoGenerateEnvironment = memoize(async () => {
-    const { stdout } = await runOutput("go", ["env", "-json", "GOOS", "GOARCH", "GOROOT"], { cwd: "./tsc" });
+    const { stdout } = await x("go", ["env", "-json", "GOOS", "GOARCH", "GOROOT"], {
+        throwOnError: true,
+        nodeOptions: { cwd: "./tsc" },
+    });
     return /** @type {{ GOOS: string; GOARCH: string; GOROOT: string }} */ (JSON.parse(stdout));
 });
 
@@ -412,8 +373,9 @@ async function runGoGenerator(name, { file, ...spec }) {
 /**
  * @param {string} name
  * @param {GoGenerator[] | (() => Promise<void>)} generators
+ * @param {readonly string[]} [extraOutputs]
  */
-function goGenerateTask(name, generators) {
+function goGenerateTask(name, generators, extraOutputs = []) {
     const run = typeof generators === "function" ? generators : async () => {
         for (const generator of generators) await runGoGenerator(name, generator);
     };
@@ -421,6 +383,10 @@ function goGenerateTask(name, generators) {
     return task({
         name,
         description: `Generates ${name.slice("generate:".length)} files. Pass --force to regenerate unchanged files.`,
+        outputs: [
+            ...(typeof generators === "function" ? [] : generators.flatMap(generator => generator.outputs.map(output => path.resolve(__dirname, generator.cwd ?? path.dirname(generator.file), output)))),
+            ...extraOutputs,
+        ],
         run,
     });
 }
@@ -463,11 +429,13 @@ function moqGenerator(file, type, output, { source = ".", packageName, inputs = 
     };
 }
 
+const astStringerGenerator = stringerGenerator("tsc/internal/ast/kind_generated.go", "Kind", "kind_stringer_generated.go");
+
 async function runGenerateASTStringer() {
-    await runGoGenerator("generate:ast-stringer", stringerGenerator("tsc/internal/ast/kind_generated.go", "Kind", "kind_stringer_generated.go"));
+    await runGoGenerator("generate:ast-stringer", astStringerGenerator);
 }
 
-export const generateASTStringer = goGenerateTask("generate:ast-stringer", runGenerateASTStringer);
+export const generateASTStringer = goGenerateTask("generate:ast-stringer", [astStringerGenerator]);
 
 export const generateBundled = goGenerateTask("generate:bundled", [{
     file: "tsc/internal/bundled/bundled.go",
@@ -495,6 +463,19 @@ goGenerateActions.push(runGenerateCompilerOptions);
 export const generateCompilerOptions = task({
     name: "generate:compileroptions",
     description: "Generates compiler options and their dependent API files. Pass --force to regenerate unchanged files.",
+    outputs: [
+        "packages/typescript/src/api/compilerOptions.generated.ts",
+        "packages/typescript/src/api/prepareCompilerOptions.generated.ts",
+        "packages/typescript/schemas/tsconfig.schema.json",
+        "packages/typescript/schemas/jsconfig.schema.json",
+        "tsc/internal/core/options_generated.go",
+        "tsc/internal/core/modulekind_stringer_generated.go",
+        "tsc/internal/core/scripttarget_stringer_generated.go",
+        "tsc/internal/transpile/options_generated.go",
+        "tsc/internal/tsoptions/declarations_generated.go",
+        "tsc/internal/tsoptions/options_generated.go",
+        "tsc/internal/testrunner/options_generated.go",
+    ],
     run: async () => {
         await runGenerateCompilerOptions();
         await runGenerateEnums();
@@ -519,7 +500,7 @@ export const generateDiagnostics = goGenerateTask("generate:diagnostics", [
         file: "tsc/internal/diagnostics/diagnostics.go",
         inputs: ["generate.go", "diagnosticMessages.json", "../../../tools/LocProject.json", "../{collections,json}/*.go", "loc/*.generated.json"],
         exclude: ["**/*_test.go"],
-        outputs: ["diagnostics_generated.go", "diagnosticMessages.generated.json", "loc_generated.go", "loc/*.json.gz"],
+        outputs: ["diagnostics_generated.go", "loc_generated.go", "diagnosticMessages.generated.json", "loc/*.json.gz"],
         commands: [
             [
                 "go",
@@ -540,7 +521,7 @@ export const generateDiagnostics = goGenerateTask("generate:diagnostics", [
         ],
     },
     stringerGenerator("tsc/internal/diagnostics/diagnostics.go", "Category", "stringer_generated.go"),
-]);
+], ["tsc/internal/diagnostics/loc"]);
 
 export const generateAutoImport = goGenerateTask("generate:autoimport", [
     stringerGenerator("tsc/internal/ls/autoimport/export.go", "ExportSyntax", "export_stringer_generated.go"),
@@ -574,16 +555,18 @@ export const generateVFSMatch = goGenerateTask("generate:vfsmatch", [
 ]);
 
 export const generateUnicode = goGenerateTask("generate:unicode", async () => {
-    const { default: generate } = await import("./tsc/internal/stringutil/_scripts/generate-unicode-data.mts");
-    await generate(!!options.force);
-});
+    await generateUnicodeData(!!options.force);
+}, unicodeOutputs.map(output => path.join("tsc/internal/stringutil", output)));
+
+const extensionOutputs = ["packages/vscode-typescript/l10n/bundle.l10n.json"];
+const extensionTestOutputs = ["packages/vscode-typescript/l10n/bundle.l10n.qps-ploc.json", "packages/vscode-typescript/package.nls.qps-ploc.json"];
 
 async function runGenerateExtension() {
     const { default: cache } = await import("./tools/scripts/gen/cache.mts");
     await cache({
         cwd: __dirname,
         inputs: [__filename, "tools/scripts/gen/extensionLocalization.mts", "packages/vscode-typescript/package.json", "packages/vscode-typescript/src/**/*"],
-        outputs: ["packages/vscode-typescript/l10n/bundle.l10n.json"],
+        outputs: extensionOutputs,
         commands: [["npm", "run", "-w", "native-preview", "generateLocBundle"]],
         envInputs: [],
         force: !!options.force,
@@ -593,6 +576,7 @@ async function runGenerateExtension() {
 export const generateExtension = task({
     name: "generate:extension",
     description: "Generates files in the extension. Pass --force to regenerate unchanged files.",
+    outputs: extensionOutputs,
     run: runGenerateExtension,
 });
 
@@ -601,7 +585,7 @@ async function runGenerateExtensionTest() {
     await cache({
         cwd: __dirname,
         inputs: [__filename, "tools/scripts/gen/extensionLocalization.mts", "packages/vscode-typescript/package.json", "packages/vscode-typescript/l10n/bundle.l10n.json", "packages/vscode-typescript/package.nls.json"],
-        outputs: ["packages/vscode-typescript/l10n/bundle.l10n.qps-ploc.json", "packages/vscode-typescript/package.nls.qps-ploc.json"],
+        outputs: extensionTestOutputs,
         commands: [["npm", "run", "-w", "native-preview", "generateLocTest"]],
         envInputs: [],
         force: !!options.force,
@@ -612,20 +596,17 @@ export const generateExtensionTest = task({
     name: "generate:extension-test",
     description: "Generates pseudo-localized extension resources. Pass --force to regenerate unchanged files.",
     dependencies: [generateExtension],
+    outputs: extensionTestOutputs,
     run: runGenerateExtensionTest,
 });
+
+const lspOutputs = ["tsc/internal/lsp/lsproto/lsp_generated.go", "packages/typescript/src/vscode/protocol.generated.ts"];
 
 async function runGenerateLSP() {
     const { GeneratedFile } = await import("./tools/scripts/gen/generatedFile.mts");
     const directory = path.join(__dirname, "tools/scripts/lsp");
-    const modelFiles = ["metaModel.json", "metaModelSchema.mts"].map(file => new GeneratedFile(path.join(directory, file), [path.join(directory, "fetchModel.mts"), path.join(__dirname, "package-lock.json")]));
-    if (!modelFiles.every(file => file.isCurrent(!!options.force))) {
-        for (const file of modelFiles) file.invalidate();
-        const { default: fetchModel } = await import("./tools/scripts/lsp/fetchModel.mts");
-        await fetchModel();
-        for (const file of modelFiles) file.markCurrent();
-    }
-    const output = new GeneratedFile(path.join(__dirname, "tsc/internal/lsp/lsproto/lsp_generated.go"), [
+    const modelFiles = await ensureLSPModel(!!options.force);
+    const output = new GeneratedFile(path.join(__dirname, lspOutputs[0]), [
         __filename,
         path.join(directory, "generate.mts"),
         ...modelFiles.map(file => file.fileName),
@@ -636,10 +617,7 @@ async function runGenerateLSP() {
         await generate();
         output.markCurrent();
     }
-    else {
-        console.log("LSP bindings are up to date.");
-    }
-    const typeScriptOutput = new GeneratedFile(path.join(__dirname, "packages/typescript/src/vscode/protocol.generated.ts"), [
+    const typeScriptOutput = new GeneratedFile(path.join(__dirname, lspOutputs[1]), [
         __filename,
         path.join(directory, "generate.mts"),
         path.join(directory, "generateTypeScript.mts"),
@@ -658,6 +636,7 @@ async function runGenerateLSP() {
 export const generateLSP = task({
     name: "generate:lsp",
     description: "Generates Go LSP bindings and extension API types from the pinned protocol model. Pass --force to regenerate unchanged files.",
+    outputs: [...lspOutputs, ...lspModelOutputs.map(output => path.join("tools/scripts/lsp", output))],
     run: runGenerateLSP,
 });
 
@@ -669,6 +648,7 @@ async function runGenerateEnums() {
 export const generateEnums = task({
     name: "generate:enums",
     description: "Generates TypeScript enums from metadata and Go source. Pass --force to regenerate unchanged files.",
+    outputs: enumOutputs,
     run: runGenerateEnums,
 });
 
@@ -681,6 +661,7 @@ async function runGenerateAST() {
 export const generateAST = task({
     name: "generate:ast",
     description: "Generates AST, kind stringer, and encoder files from ast.json. Pass --force to regenerate unchanged files.",
+    outputs: [...goASTOutputs, ...tsASTOutputs, ...encoderOutputs],
     run: runGenerateAST,
 });
 
@@ -692,8 +673,15 @@ async function runGenerateSync() {
 export const generateSync = task({
     name: "generate:sync",
     description: "Generates synchronous and generator APIs and tests. Pass --force to regenerate unchanged files.",
+    outputs: ["packages/typescript/src/api/sync", "packages/typescript/test/sync", "packages/typescript/test/generators/api.bench.ts"],
     run: runGenerateSync,
 });
+
+const apiOutputs = ["packages/typescript/src/api/proto.generated.ts"];
+const preferenceOutputs = [
+    "tsc/internal/ls/lsutil/userpreferences_generated.go",
+    "packages/typescript/src/api/userPreferences.generated.ts",
+];
 
 async function runGeneratePreferences() {
     await runGoGenerator("generate:preferences", {
@@ -702,10 +690,7 @@ async function runGeneratePreferences() {
         inputs: ["tools/userPreferences.schema.json", "tools/gen-preferences/*.go"],
         exclude: ["**/*_test.go"],
         envInputs: [],
-        outputs: [
-            "tsc/internal/ls/lsutil/userpreferences_generated.go",
-            "packages/typescript/src/api/userPreferences.generated.ts",
-        ],
+        outputs: preferenceOutputs,
         commands: [
             ["go", "-C", "./tools", "run", "./gen-preferences", "./userPreferences.schema.json", "../tsc/internal/ls/lsutil/userpreferences_generated.go", "../packages/typescript/src/api/userPreferences.generated.ts"],
             ["dprint", "fmt", "tsc/internal/ls/lsutil/userpreferences_generated.go", "packages/typescript/src/api/userPreferences.generated.ts"],
@@ -713,7 +698,7 @@ async function runGeneratePreferences() {
     });
 }
 
-export const generatePreferences = goGenerateTask("generate:preferences", runGeneratePreferences);
+export const generatePreferences = goGenerateTask("generate:preferences", runGeneratePreferences, preferenceOutputs);
 
 async function runGenerateAPI() {
     await runGeneratePreferences();
@@ -731,7 +716,7 @@ async function runGenerateAPI() {
         ],
         exclude: ["**/*_test.go"],
         envInputs: [],
-        outputs: ["packages/typescript/src/api/proto.generated.ts"],
+        outputs: apiOutputs,
         commands: [
             ["go", "-C", "./tools", "run", "./gen-proto", "../tsc/internal/api/proto.go", "../packages/typescript/src/api/proto.generated.ts"],
             ["dprint", "fmt", "packages/typescript/src/api/proto.generated.ts"],
@@ -742,6 +727,7 @@ async function runGenerateAPI() {
 export const generateAPI = task({
     name: "generate:api",
     description: "Generates API files. Pass --force to regenerate unchanged files.",
+    outputs: apiOutputs,
     run: runGenerateAPI,
 });
 
@@ -761,7 +747,6 @@ async function runGenerateVendor() {
     }
     const manifest = new GeneratedFile(path.join(dest, "package.json"), [__filename, path.join(src, "package.json")]);
     if (manifest.isCurrent(!!options.force)) {
-        console.log("Vendored vscode-jsonrpc files are up to date.");
         return;
     }
     manifest.invalidate();
@@ -776,20 +761,108 @@ async function runGenerateVendor() {
 export const generateVendor = task({
     name: "generate:vendor",
     description: "Updates the vendored copy of vscode-jsonrpc from node_modules. Pass --force to regenerate unchanged files.",
+    outputs: [vendorJsonrpcDir],
     run: runGenerateVendor,
 });
 
-const generateCompiler = task({
-    name: "generate:compiler",
-    hiddenFromTaskList: true,
-    dependencies: [generateAST, generateLSP],
-    run: runGenerateGo,
-});
+async function runGenerate() {
+    await runWithConcurrencyLimit([
+        async () => {
+            await runWithConcurrencyLimit([runGenerateAST, runGenerateLSP], 2);
+            await runGenerateGo();
+        },
+        runGenerateSync,
+        async () => {
+            await runGenerateExtension();
+            await runGenerateExtensionTest();
+        },
+        runGenerateVendor,
+    ], 4);
+}
 
 export const generate = task({
     name: "generate",
     description: "Runs all code generation, including AST, LSP, APIs, extension localization, and vendored dependencies.",
-    dependencies: [generateCompiler, generateSync, generateExtensionTest, generateVendor],
+    run: runGenerate,
+});
+
+export const tscBuild = task({
+    name: "tsc:build",
+    description: "Generates sources and builds the tsc binary.",
+    dependencies: [generate],
+    run: async () => {
+        await buildTsc({ extraFlags: options.release ? getReleaseBuildFlags() : [] });
+    },
+});
+
+export const tsgo = task({
+    name: "tsgo",
+    dependencies: [lib, tscBuild],
+});
+
+export const local = task({
+    name: "local",
+    dependencies: [tsgo],
+});
+
+export const build = task({
+    name: "build",
+    dependencies: [local],
+});
+
+function getGeneratedOutputPaths() {
+    const outputs = taskDescriptors.flatMap(descriptor => descriptor.outputs ?? []);
+    return new Set([...outputs, ...fs.globSync(outputs, { cwd: __dirname })].map(output => path.resolve(__dirname, output)));
+}
+
+export const buildWatch = task({
+    name: "build:watch",
+    description: "Watches sources and generator inputs, regenerating and rebuilding the tsc binary on changes.",
+    run: async () => {
+        const generatedOutputs = getGeneratedOutputPaths();
+        const generatorDirectories = [
+            "tsc/internal/stringutil/_scripts",
+        ].map(directory => path.resolve(directory));
+        await watchDebounced("build:watch", async (_paths, abortSignal) => {
+            abortSignal.throwIfAborted();
+            invalidateFileFingerprints();
+            await runGenerate();
+            abortSignal.throwIfAborted();
+            await generateLibs(builtLocal);
+            abortSignal.throwIfAborted();
+            console.log("Building tsgo...");
+            await buildTsc({ abortSignal });
+        }, {
+            paths: [
+                "tsc/cmd",
+                "tsc/internal",
+                "tools/scripts/tsc/ast.json",
+                "tools/gen-proto",
+                "tools/gen-preferences",
+                "tools/userPreferences.schema.json",
+                "packages/typescript/src/api/async",
+                "packages/typescript/test/async",
+                "packages/vscode-typescript/src",
+                "packages/vscode-typescript/package.json",
+                "packages/vscode-typescript/package.nls.json",
+                "node_modules/vscode-jsonrpc/package.json",
+                "package-lock.json",
+                ".dprint.jsonc",
+                "go.work",
+                "go.work.sum",
+                "tsc/go.mod",
+                "tsc/go.sum",
+                "tools/go.mod",
+                "tools/go.sum",
+            ],
+            ignored: file => {
+                const absolutePath = path.resolve(file);
+                return generatedOutputs.has(absolutePath)
+                    || generatorDirectories.some(directory => absolutePath === directory || absolutePath.startsWith(directory + path.sep))
+                    || path.normalize(file).split(path.sep).includes("testdata");
+            },
+        });
+    },
 });
 
 const coverageDir = path.join(__dirname, "coverage");
@@ -1026,9 +1099,8 @@ export const testTools = task({
 
 export const testCodegen = task({
     name: "test:codegen",
-    description: "Runs incremental codegen tests.",
+    description: "Runs codegen tests without regenerating sources.",
     run: async () => {
-        await run("go", ["-C", "tsc", "mod", "download"]);
         await run("node", ["--test", "--test-concurrency=1", "./tools/scripts/gen/*.test.mts", "./tools/scripts/tsc/*.test.ts"]);
     },
 });
@@ -1036,6 +1108,7 @@ export const testCodegen = task({
 export const buildAPI = task({
     name: "build:api",
     description: "Builds @typescript/typescript JS API.",
+    dependencies: [generate],
     run: async () => {
         await run("npm", ["run", "-w", "@typescript/typescript", "build"]);
     },
@@ -1052,15 +1125,14 @@ export const checkAPIDeclarations = task({
     run: runCheckAPIDeclarations,
 });
 
-async function runBuildAPITests(generateSources = true) {
-    if (generateSources) await runGenerateSync();
+async function runBuildAPITests() {
     await run("npm", ["run", "-w", "@typescript/typescript", "build:test"]);
 }
 
 export const buildAPITests = task({
     name: "build:api:test",
     description: "Builds the @typescript/typescript JS API tests.",
-    dependencies: [generateEnums, generateAPI],
+    dependencies: [generate],
     run: runBuildAPITests,
 });
 
@@ -1218,12 +1290,9 @@ async function runFormat() {
 
 export const validate = task({
     name: "validate",
-    description: "Generates, builds, tests, lints, and formats the repo. Pass --api to include API tests, or --all to include all code generation and ancillary repository tests Benchmarks are separate: test:benchmarks and test:benchmarks:api.",
-    dependencies: [options.all ? generate : generateGo],
+    description: "Generates, builds, tests, lints, and formats the repo. Pass --api to include API tests, or --all to include API and ancillary repository tests. Benchmarks are separate: test:benchmarks and test:benchmarks:api.",
+    dependencies: [build],
     run: async () => {
-        await generateLibs(builtLocal);
-        await buildTsc({ extraFlags: options.release ? getReleaseBuildFlags() : [] });
-
         /** @type {{ name: string; error: unknown }[]} */
         const failures = [];
         /** @param {string} name @param {() => Promise<void>} action */
@@ -1241,8 +1310,7 @@ export const validate = task({
         await runValidation("test:extension", runTestExtension);
         await runValidation("check:api-declarations", runCheckAPIDeclarations);
         if (options.api || options.all) {
-            if (!options.all) await runGenerateEnums();
-            await runBuildAPITests(!options.all);
+            await runBuildAPITests();
             await runValidation("test:api", runTestAPI);
         }
         if (options.all) {
@@ -2270,6 +2338,7 @@ function stripConditionsFromValue(value) {
 export const buildNativePreviewPackages = task({
     name: "typescript:build",
     description: "Builds TypeScript npm packages for the current platform. Pass --respectGoEnv to preserve caller-provided Go build settings.",
+    dependencies: usePublishedPlatformPackagesForVsix ? undefined : [generate],
     run: runBuildNativePreviewPackages,
 });
 
@@ -3132,6 +3201,7 @@ export const vscodeTypescriptRelease = task({
 export const nativePreviewRelease = task({
     name: "typescript:release",
     hiddenFromTaskList: true,
+    dependencies: [generate],
     run: async () => {
         if (releaseVscodeTypescript) {
             throw new Error("typescript:release cannot be used with --vscodeTypescriptRelease; use vscode-typescript:release");

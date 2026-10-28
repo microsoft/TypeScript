@@ -1,6 +1,7 @@
 package checker
 
 import (
+	"math/bits"
 	"slices"
 	"strconv"
 	"strings"
@@ -2869,10 +2870,29 @@ func (c *Checker) isTypeSubsetOf(source *Type, target *Type) bool {
 
 func (c *Checker) isTypeSubsetOfUnion(source *Type, target *Type) bool {
 	if source.flags&TypeFlagsUnion != 0 {
-		for _, t := range source.Types() {
-			if !containsType(target.Types(), t) {
+		sourceTypes, targetTypes := source.Types(), target.Types()
+		if len(sourceTypes) > len(targetTypes) {
+			return false
+		}
+		// Scan by identity unless a few source types are looked for in a large target. A CompareTypes call costs
+		// roughly 8 pointer comparisons, so there a binary search is cheaper than walking the target.
+		if len(sourceTypes)*bits.Len(uint(len(targetTypes)))*8 >= len(targetTypes) {
+			for _, t := range sourceTypes {
+				i := slices.Index(targetTypes, t)
+				if i < 0 {
+					return false
+				}
+				// Union types are sorted by CompareTypes, so the next source type can only appear after this one.
+				targetTypes = targetTypes[i+1:]
+			}
+			return true
+		}
+		for _, t := range sourceTypes {
+			i, found := slices.BinarySearchFunc(targetTypes, t, CompareTypes)
+			if !found {
 				return false
 			}
+			targetTypes = targetTypes[i+1:]
 		}
 		return true
 	}
