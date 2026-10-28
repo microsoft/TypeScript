@@ -683,6 +683,7 @@ type Checker struct {
 	currentNodeErrorsCyclic                     bool                // Whether a cycle was observed while collecting currentNodeErrors; see endCurrentNodeErrors
 	discardLog                                  []discardEntry      // Restores what was cached while anything may be discarded; see "Discard log" in memo.go
 	circularityMark                             int                 // Length of discard log when the cycle in progress was detected
+	innerCycles                                 []innerCycle        // Cycles detected inside the one in progress; see extendCircularity
 	cycleParticipants                           []TypeResolution    // Computations that observed a cycle in progress
 	effectsMarkDepth                            int                 // 1 + resolution index of the innermost effects mark that may be discarded, or 0
 	varianceStack                               []VarianceStackEntry
@@ -20436,6 +20437,8 @@ func (c *Checker) popTypeResolution() bool {
 	c.resolutions = c.resolutions[:n]
 	if c.circularityStart > n {
 		c.endCircularity()
+	} else if len(c.innerCycles) != 0 {
+		c.endInnerCycles(n)
 	}
 	if len(c.cycleYields) != 0 && c.cycleYields[len(c.cycleYields)-1].end == n {
 		c.endCycleYield()

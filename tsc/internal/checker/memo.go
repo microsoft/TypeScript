@@ -1301,6 +1301,9 @@ func (c *Checker) logEffects() bool {
 // position start.
 func (c *Checker) discardLogSince(start int) {
 	start = min(start, len(c.discardLog))
+	for i := range c.innerCycles {
+		c.innerCycles[i].mark = min(c.innerCycles[i].mark, start)
+	}
 	for i := len(c.discardLog) - 1; i >= start; i-- {
 		c.discardLog[i].restore()
 	}
@@ -1387,17 +1390,28 @@ func setFlagMemoBits[T ~uint32](c *Checker, key memoKey, p *T, mask T, bits T) {
 // progress was detected, except those of its participants.
 func (c *Checker) endCircularity() {
 	mark := min(c.circularityMark, len(c.discardLog))
+	c.circularityStart = 0
+	c.innerCycles = c.innerCycles[:0]
+	c.discardCycle(mark, false)
+	c.cycleParticipants = nil
+	c.trimDiscardLog()
+}
+
+// discardCycle discards the results logged since mark, except those of the
+// participants of the cycle in progress. If retain, the entries not undone
+// stay in the log, as the outer cycle may still discard them.
+func (c *Checker) discardCycle(mark int, retain bool) {
 	undo := c.discardLog[mark:]
 	participants := c.cycleParticipants
-	c.circularityStart = 0
-	c.cycleParticipants = nil
 	keep := make(map[*memoHeader]struct{}, len(participants))
 	for i := range participants {
 		if p := c.typeResolutionMemo(&participants[i]); p != nil {
 			keep[p] = struct{}{}
 		}
 	}
-	for _, u := range slices.Backward(undo) {
+	n := mark
+	for i := len(undo) - 1; i >= 0; i-- {
+		u := undo[i]
 		if u.effects {
 			// A result recomputed after the cycle also replays the effects
 			// of the computation discarded here.
@@ -1407,20 +1421,60 @@ func (c *Checker) endCircularity() {
 			continue
 		}
 		u.restore()
+		undo[i] = discardEntry{}
 	}
-	clear(undo)
-	c.discardLog = c.discardLog[:mark]
-	c.trimDiscardLog()
+	if retain {
+		for _, u := range undo {
+			if u.restore != nil {
+				c.discardLog[n] = u
+				n++
+			}
+		}
+	}
+	clear(c.discardLog[n:])
+	c.discardLog = c.discardLog[:n]
 }
 
 // extendCircularity makes the resolution at index head-1 part of the cycle in
-// progress, starting one if there is none.
+// progress, starting one if there is none. A cycle whose head is inside the
+// one in progress is an inner cycle: what is computed from its head while it
+// is incomplete is discarded when it finishes, as for the outermost, rather
+// than read by the rest of the outer cycle.
 func (c *Checker) extendCircularity(head int) {
-	if c.circularityStart == 0 {
+	switch {
+	case c.circularityStart == 0:
 		c.circularityMark = len(c.discardLog)
 		c.circularityStart = head
-	} else if head < c.circularityStart {
+	case head < c.circularityStart:
+		c.addInnerCycle(c.circularityStart, c.circularityMark)
 		c.circularityStart = head
+	case head > c.circularityStart:
+		c.addInnerCycle(head, len(c.discardLog))
+	}
+}
+
+type innerCycle struct {
+	head int // As Checker.circularityStart
+	mark int // Length of the discard log when detected
+}
+
+func (c *Checker) addInnerCycle(head int, mark int) {
+	for _, ic := range c.innerCycles {
+		if ic.head == head {
+			return
+		}
+	}
+	c.innerCycles = append(c.innerCycles, innerCycle{head, mark})
+}
+
+// endInnerCycles ends the inner cycles whose head is the resolution at index
+// n, which just finished.
+func (c *Checker) endInnerCycles(n int) {
+	for i, ic := range slices.Backward(c.innerCycles) {
+		if ic.head > n {
+			c.innerCycles = slices.Delete(c.innerCycles, i, i+1)
+			c.discardCycle(min(ic.mark, len(c.discardLog)), true)
+		}
 	}
 }
 
