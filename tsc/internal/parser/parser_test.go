@@ -571,3 +571,17 @@ namespace N {
 	assert.Equal(t, positionMap.UTF8ToUTF16(afterBoxDrawingCharacter), afterBoxDrawingCharacter-2)
 	assert.Equal(t, positionMap.UTF8ToUTF16(len(sourceText)), len(sourceText)-2)
 }
+
+func TestReparseTopLevelAwaitThroughEndOfFile(t *testing.T) {
+	t.Parallel()
+	// In a module, `await + f(` is reparsed in an await context, where the
+	// call reads to the end of the file. The statements the first parse made
+	// of the text after it must not stay beside the reparsed one.
+	file := parsetestutil.ParseTypeScript(`export {}; await + f(const 0 await !x`, false)
+	statements := file.Statements.Nodes
+	for i := 1; i < len(statements); i++ {
+		assert.Assert(t, statements[i-1].End() <= statements[i].Pos(), "statement %d [%d, %d) overlaps statement %d [%d, %d)", i, statements[i].Pos(), statements[i].End(), i-1, statements[i-1].Pos(), statements[i-1].End())
+	}
+	assert.Equal(t, len(statements), 2)
+	assert.Equal(t, statements[1].End(), file.End())
+}
