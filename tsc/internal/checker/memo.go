@@ -117,6 +117,14 @@ func memoKeyOf[T any](entity *T, field memoField) memoKey {
 	return memoKey(uint64(uintptr(unsafe.Pointer(entity)))<<8 | uint64(field))
 }
 
+// cell returns the memo identified by a key of field memoCell, which is the
+// address of the memo. The memo is alive, since its key is in use, and the
+// heap does not move.
+func (k memoKey) cell() *memoHeader {
+	p := uintptr(k >> 8)
+	return *(**memoHeader)(unsafe.Pointer(&p))
+}
+
 type memoEffects struct {
 	effects  []func(c *Checker)
 	marks    []*ast.Symbol // Aliases marked referenced, also among effects; see withReferenceMarks
@@ -169,7 +177,8 @@ type memo[T any] struct {
 // memoHeader is the part of a memo independent of its type, which identifies
 // it.
 type memoHeader struct {
-	_ memoNoCopy
+	_     memoNoCopy
+	state *memoState // Created on demand; see Checker.memoState
 }
 
 // memoNoCopy makes go vet reject copies of a memo, which would bypass it.
@@ -265,7 +274,7 @@ func (m *memo[T]) setReported(c *Checker, v T, r currentNodeErrors) {
 		r.list = nil
 	}
 	m.setIdentity(c, v)
-	if r.list != nil || c.memoErrorStates != 0 && c.memoStates[m.key()] != nil {
+	if r.list != nil || c.memoErrorStates != 0 && m.state != nil {
 		c.memoState(m.key()).setErrors(c, r.list)
 	}
 }
@@ -274,10 +283,15 @@ func (m *memo[T]) setReported(c *Checker, v T, r currentNodeErrors) {
 func (m *memo[T]) logDiscard(c *Checker) {
 	// The work of the result is discarded with it.
 	old := m.memoValue
-	oldCount := savedCountOf(c.memoStates, m.key())
+	var oldCount *instantiationCount
+	if m.state != nil {
+		oldCount = m.state.count
+	}
 	c.discardLog = append(c.discardLog, discardEntry{&m.memoHeader, func() {
 		m.memoValue = old
-		restoreCount(c.memoStates, m.key(), oldCount)
+		if m.state != nil {
+			m.state.count = oldCount
+		}
 	}, false})
 }
 
@@ -605,7 +619,7 @@ func (c *Checker) beginMemo(key memoKey) {
 	c.beginResolution(key, nil, 0)
 	if c.checking {
 		if c.memoPendingCount != 0 {
-			c.replayPending(c.memoStates[key])
+			c.replayPending(c.peekMemoState(key))
 		}
 		c.beginQueryFromCheck()
 	}
@@ -672,6 +686,13 @@ func (c *Checker) stopEffects() *resolution {
 }
 
 func (c *Checker) memoState(key memoKey) *memoState {
+	if key.field() == memoCell {
+		h := key.cell()
+		if h.state == nil {
+			h.state = &memoState{}
+		}
+		return h.state
+	}
 	state := c.memoStates[key]
 	if state == nil {
 		if c.memoStates == nil {
@@ -691,6 +712,9 @@ func (c *Checker) memoState(key memoKey) *memoState {
 // peekMemoState returns the memo state of the result identified by key, or
 // nil if it has none, consulting a filter first since most results have none.
 func (c *Checker) peekMemoState(key memoKey) *memoState {
+	if key.field() == memoCell {
+		return key.cell().state
+	}
 	if c.stateFilter == nil {
 		return nil
 	}

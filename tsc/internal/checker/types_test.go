@@ -487,8 +487,8 @@ func TestInferenceContextMappers(t *testing.T) { //nolint:paralleltest
 
 func TestCompactValueSymbolLinksLayout(t *testing.T) {
 	t.Parallel()
-	assert.Equal(t, unsafe.Sizeof(ValueSymbolLinks{}), 4*unsafe.Sizeof(uintptr(0)))
-	assert.Equal(t, unsafe.Sizeof(valueSymbolExtra{}), 3*unsafe.Sizeof(uintptr(0)))
+	assert.Equal(t, unsafe.Sizeof(ValueSymbolLinks{}), 5*unsafe.Sizeof(uintptr(0)))
+	assert.Equal(t, unsafe.Sizeof(valueSymbolExtra{}), 4*unsafe.Sizeof(uintptr(0)))
 	c, types := newCompositeTestChecker()
 	var links ValueSymbolLinks
 	assert.Assert(t, links.getWriteType(c) == nil)
@@ -647,7 +647,7 @@ func TestStructuredTypeExtra(t *testing.T) {
 
 func TestCompactTypeNodeLinksLayout(t *testing.T) {
 	t.Parallel()
-	assert.Equal(t, unsafe.Sizeof(TypeNodeLinks{}), 2*unsafe.Sizeof(uintptr(0)))
+	assert.Equal(t, unsafe.Sizeof(TypeNodeLinks{}), 4*unsafe.Sizeof(uintptr(0)))
 	c, types := newCompositeTestChecker()
 	var links TypeNodeLinks
 	links.resolvedType.intern(types[0])
@@ -677,7 +677,7 @@ func TestCompactTypeNodeLinksLayout(t *testing.T) {
 
 func TestCompactSignatureLayout(t *testing.T) {
 	t.Parallel()
-	assert.Equal(t, unsafe.Sizeof(Signature{}), 16+8*unsafe.Sizeof(uintptr(0)))
+	assert.Equal(t, unsafe.Sizeof(Signature{}), 16+11*unsafe.Sizeof(uintptr(0)))
 	assert.Equal(t, unsafe.Sizeof(signatureExtra{}), 7*unsafe.Sizeof(uintptr(0)))
 }
 
