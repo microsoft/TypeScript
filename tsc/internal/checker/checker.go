@@ -30063,6 +30063,10 @@ func (c *Checker) getBaseConstraintOfType(t *Type) *Type {
 }
 
 func (c *Checker) getResolvedBaseConstraint(t *Type, stack []RecursionId) *Type {
+	if constrained := t.AsConstrainedType(); constrained != nil && constrained.resolvedBaseConstraint.peek() != nil {
+		// A resolved base constraint is only read.
+		return constrained.resolvedBaseConstraint.get(c)
+	}
 	c.beginMemo(memoKeyOf(t, memoBaseConstraint))
 	result := c.getResolvedBaseConstraintUncached(t, stack)
 	c.endMemo()
