@@ -469,3 +469,55 @@ const spreadDynamicImport = import(...[])
 
 return
 
+// optional property access in assignment positions
+let optObj = { a: 1, s: "x" };
+>optObj : Symbol(optObj, Decl(plainJSGrammarErrors.js, 209, 3))
+>a : Symbol(a, Decl(plainJSGrammarErrors.js, 209, 14))
+>s : Symbol(s, Decl(plainJSGrammarErrors.js, 209, 20))
+
+optObj?.a = 1;
+>optObj?.a : Symbol(a, Decl(plainJSGrammarErrors.js, 209, 14))
+>optObj : Symbol(optObj, Decl(plainJSGrammarErrors.js, 209, 3))
+>a : Symbol(a, Decl(plainJSGrammarErrors.js, 209, 14))
+
+optObj.a?.b = 1;
+>optObj.a : Symbol(a, Decl(plainJSGrammarErrors.js, 209, 14))
+>optObj : Symbol(optObj, Decl(plainJSGrammarErrors.js, 209, 3))
+>a : Symbol(a, Decl(plainJSGrammarErrors.js, 209, 14))
+
+optObj?.a++;
+>optObj?.a : Symbol(a, Decl(plainJSGrammarErrors.js, 209, 14))
+>optObj : Symbol(optObj, Decl(plainJSGrammarErrors.js, 209, 3))
+>a : Symbol(a, Decl(plainJSGrammarErrors.js, 209, 14))
+
+({ ...optObj?.a } = {});
+>optObj?.a : Symbol(a, Decl(plainJSGrammarErrors.js, 209, 14))
+>optObj : Symbol(optObj, Decl(plainJSGrammarErrors.js, 209, 3))
+>a : Symbol(a, Decl(plainJSGrammarErrors.js, 209, 14))
+
+for (optObj?.s in {});
+>optObj?.s : Symbol(s, Decl(plainJSGrammarErrors.js, 209, 20))
+>optObj : Symbol(optObj, Decl(plainJSGrammarErrors.js, 209, 3))
+>s : Symbol(s, Decl(plainJSGrammarErrors.js, 209, 20))
+
+for (optObj?.a of []);
+>optObj?.a : Symbol(a, Decl(plainJSGrammarErrors.js, 209, 14))
+>optObj : Symbol(optObj, Decl(plainJSGrammarErrors.js, 209, 3))
+>a : Symbol(a, Decl(plainJSGrammarErrors.js, 209, 14))
+
+/** @type {any} */ let anyObj;
+>anyObj : Symbol(anyObj, Decl(plainJSGrammarErrors.js, 216, 22))
+
+for (anyObj?.a in {});
+>anyObj : Symbol(anyObj, Decl(plainJSGrammarErrors.js, 216, 22))
+
+optObj.a = 2;
+>optObj.a : Symbol(a, Decl(plainJSGrammarErrors.js, 209, 14))
+>optObj : Symbol(optObj, Decl(plainJSGrammarErrors.js, 209, 3))
+>a : Symbol(a, Decl(plainJSGrammarErrors.js, 209, 14))
+
+optObj?.a;
+>optObj?.a : Symbol(a, Decl(plainJSGrammarErrors.js, 209, 14))
+>optObj : Symbol(optObj, Decl(plainJSGrammarErrors.js, 209, 3))
+>a : Symbol(a, Decl(plainJSGrammarErrors.js, 209, 14))
+
