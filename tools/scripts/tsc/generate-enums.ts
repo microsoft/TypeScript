@@ -506,6 +506,7 @@ export default async function generateEnums(force = false) {
         path.join(import.meta.dirname, "options.ts"),
         path.join(import.meta.dirname, "options-model.ts"),
         path.join(import.meta.dirname, "schema.ts"),
+        path.join(import.meta.dirname, "symbolNames.ts"),
         ...goInputs(),
     ];
     const enumFiles = enumDefs.map(def => {
