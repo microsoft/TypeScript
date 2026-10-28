@@ -6,6 +6,7 @@ import (
 
 	"github.com/microsoft/TypeScript/tsc/internal/ast"
 	"github.com/microsoft/TypeScript/tsc/internal/core"
+	"github.com/microsoft/TypeScript/tsc/internal/diagnostics"
 	"github.com/microsoft/TypeScript/tsc/internal/stringutil"
 	"gotest.tools/v3/assert"
 )
@@ -102,4 +103,49 @@ func TestScanSourceKeyword(t *testing.T) {
 	assert.Equal(t, StringToToken("source"), ast.KindSourceKeyword)
 	assert.Equal(t, s.Scan(), ast.KindIdentifier)
 	assert.Equal(t, s.TokenValue(), "sourceValue")
+}
+
+func TestScanMultiLineCommentTail(t *testing.T) {
+	t.Parallel()
+	tests := []struct {
+		name           string
+		comment        string
+		directiveStart int // -1 when no directive is expected
+		unterminated   bool
+	}{
+		{"LF", "/*a\n * b\n @ts-ignore */", len("/*a\n * b\n"), false},
+		{"CRLF", "/*a\r\n @ts-expect-error */", len("/*a\r\n"), false},
+		{"CR", "/*a\r @ts-ignore */", len("/*a\r"), false},
+		{"LineSeparator", "/*a\u2028 @ts-ignore */", len("/*a\u2028"), false},
+		{"LineSeparatorAfterFirstLine", "/*a\n\u2028 @ts-ignore */", len("/*a\n\u2028"), false},
+		{"ParagraphSeparator", "/*a\n\u2029 @ts-ignore */", len("/*a\n\u2029"), false},
+		{"OtherNonASCII", "/*a\n @ts-ignore \u00e9\u2027 */", len("/*a\n"), false},
+		{"StarsBeforeClose", "/*a\n * b **/", -1, false},
+		{"DirectiveNotOnLastLine", "/*\n@ts-ignore\n*/", -1, false},
+		{"Unterminated", "/*a\n @ts-ignore", len("/*a\n"), true},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			t.Parallel()
+			s := NewScanner()
+			text := tt.comment
+			if !tt.unterminated {
+				text += "x"
+			}
+			s.SetText(text)
+			s.SetSkipTrivia(false)
+			s.SetOnError(func(*diagnostics.Message, int, int, ...any) {})
+			assert.Equal(t, s.Scan(), ast.KindMultiLineCommentTrivia)
+			assert.Equal(t, s.TokenEnd(), len(tt.comment))
+			assert.Assert(t, s.TokenFlags()&ast.TokenFlagsPrecedingLineBreak != 0)
+			assert.Equal(t, s.TokenFlags()&ast.TokenFlagsUnterminated != 0, tt.unterminated)
+			directives := s.CommentDirectives()
+			if tt.directiveStart < 0 {
+				assert.Equal(t, len(directives), 0)
+			} else {
+				assert.Equal(t, len(directives), 1)
+				assert.Equal(t, directives[0].Loc, core.NewTextRange(tt.directiveStart, len(tt.comment)))
+			}
+		})
+	}
 }
