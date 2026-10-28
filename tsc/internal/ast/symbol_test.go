@@ -3,6 +3,8 @@ package ast_test
 import (
 	"reflect"
 	"runtime"
+	"slices"
+	"strconv"
 	"testing"
 	"unsafe"
 
@@ -114,6 +116,95 @@ func TestSymbolTableInitialization(t *testing.T) {
 	assert.Assert(t, ast.GetExports(symbol, &arena) != nil)
 	assert.Equal(t, symbol.Members().Len(), 0)
 	assert.Equal(t, symbol.Exports().Len(), 0)
+}
+
+func TestSymbolTableGrowthAndClone(t *testing.T) {
+	t.Parallel()
+	for _, capacity := range []int{0, 1, 4, 5, 17} {
+		t.Run(strconv.Itoa(capacity), func(t *testing.T) {
+			t.Parallel()
+			table := ast.NewSymbolTableWithCapacity(capacity)
+			for i := range 40 {
+				symbol := ast.NewSymbol()
+				symbol.SetName(strconv.Itoa(i))
+				table.Set(symbol.Name(), symbol)
+				if i != 0 && i != 3 && i != 4 && i != 16 && i != 39 {
+					continue
+				}
+				clone := table.Clone()
+				assert.DeepEqual(t, slices.Collect(clone.Keys()), slices.Collect(table.Keys()))
+				for key, value := range table.All() {
+					assert.Equal(t, clone.Get(key), value)
+				}
+				replacement := ast.NewSymbol()
+				replacement.SetName("replacement")
+				clone.Set("0", replacement)
+				assert.Assert(t, table.Get("0") != replacement)
+				assert.Equal(t, clone.Get("0"), replacement)
+				clone.Delete("0")
+				assert.Equal(t, clone.Len(), table.Len()-1)
+				assert.Assert(t, clone.Get("0") == nil)
+				assert.Assert(t, table.Get("0") != nil)
+				clone.Set("0", table.Get("0"))
+				assert.Equal(t, slices.Collect(clone.Keys())[clone.Len()-1], "0")
+			}
+		})
+	}
+	t.Run("zero value", func(t *testing.T) {
+		t.Parallel()
+		var table ast.SymbolMap
+		symbol := ast.NewSymbol()
+		symbol.SetName("symbol")
+		table.Set(symbol.Name(), symbol)
+		assert.Equal(t, table.Get(symbol.Name()), symbol)
+		assert.Equal(t, table.Clone().Get(symbol.Name()), symbol)
+	})
+}
+
+func TestSymbolTableSmallAllocations(t *testing.T) { //nolint:paralleltest
+	symbols := make([]*ast.Symbol, 4)
+	for i := range symbols {
+		symbols[i] = ast.NewSymbol()
+		symbols[i].SetName(strconv.Itoa(i))
+	}
+	var table ast.SymbolTable
+	for _, capacity := range []int{0, 1, 4} {
+		allocs := testing.AllocsPerRun(10, func() {
+			table = ast.NewSymbolTableWithCapacity(capacity)
+			for _, symbol := range symbols {
+				table.Set(symbol.Name(), symbol)
+			}
+		})
+		assert.Equal(t, allocs, float64(1), "capacity %d", capacity)
+	}
+	original := table
+	allocs := testing.AllocsPerRun(10, func() {
+		table = original.Clone()
+	})
+	assert.Equal(t, allocs, float64(1))
+	assert.Equal(t, table.Len(), len(symbols))
+}
+
+var symbolTableBenchmarkSink ast.SymbolTable
+
+func BenchmarkSymbolTable(b *testing.B) {
+	for _, size := range []int{0, 1, 2, 4, 6, 8, 16, 32, 64} {
+		b.Run(strconv.Itoa(size), func(b *testing.B) {
+			symbols := make([]*ast.Symbol, size)
+			for i := range symbols {
+				symbols[i] = ast.NewSymbol()
+				symbols[i].SetName(strconv.Itoa(i))
+			}
+			b.ReportAllocs()
+			for b.Loop() {
+				table := ast.NewSymbolTable()
+				for _, symbol := range symbols {
+					table.Set(symbol.Name(), symbol)
+				}
+				symbolTableBenchmarkSink = table
+			}
+		})
+	}
 }
 
 func TestSymbolHotRecordLayout(t *testing.T) {
