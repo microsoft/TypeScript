@@ -48,15 +48,20 @@ type symbolNameChunk [symbolNameChunkBytes]byte
 type symbolNameDir [symbolNameDirSize]atomic.Pointer[symbolNameChunk]
 
 // Lookups only read tables and chunks; inserts write the shard locks, counts,
-// and the arena cursor. Keeping the two groups on separate cache lines stops
+// and arena cursors. Keeping the two groups on separate cache lines stops
 // inserts on one core from evicting lines that lookups on every other core
-// need. The table is one large allocation, so it starts on a page boundary.
+// need. The written state is a separate pointer-free allocation: the runtime
+// puts no header before those, and its size class is a multiple of 64 bytes,
+// so each shard gets a cache line of its own.
 type symbolNameTable struct {
-	tables    [symbolNameShardCount]atomic.Pointer[[]atomic.Uint64]
-	dirs      [(symbolNameMaxChunks + symbolNameDirSize) / symbolNameDirSize]atomic.Pointer[symbolNameDir]
-	nextChunk atomic.Uint32
-	_         [60]byte
+	tables [symbolNameShardCount]atomic.Pointer[[]atomic.Uint64]
+	dirs   [(symbolNameMaxChunks + symbolNameDirSize) / symbolNameDirSize]atomic.Pointer[symbolNameDir]
+	writes *symbolNameWrites
+}
+
+type symbolNameWrites struct {
 	shards    [symbolNameShardCount]symbolNameShard
+	nextChunk atomic.Uint32
 }
 
 type symbolNameShard struct {
@@ -74,7 +79,7 @@ type symbolNameArena struct {
 var symbolNames = newSymbolNameTable()
 
 func newSymbolNameTable() *symbolNameTable {
-	t := &symbolNameTable{}
+	t := &symbolNameTable{writes: new(symbolNameWrites)}
 	for i := range t.tables {
 		slots := make([]atomic.Uint64, symbolNameInitialSlots)
 		t.tables[i].Store(&slots)
@@ -143,7 +148,7 @@ func (t *symbolNameTable) make(text string, hash uint64) SymbolName {
 // insert appends new texts to arena, or to the shard's arena if nil.
 func (t *symbolNameTable) insert(hash uint64, text string, arena *symbolNameArena) uint32 {
 	table := &t.tables[hash&(symbolNameShardCount-1)]
-	shard := &t.shards[hash&(symbolNameShardCount-1)]
+	shard := &t.writes.shards[hash&(symbolNameShardCount-1)]
 	shard.mu.Lock()
 	defer shard.mu.Unlock()
 	slots := *table.Load()
@@ -200,7 +205,7 @@ func (t *symbolNameTable) allocate(arena *symbolNameArena, text string) uint32 {
 // newChunks points arena at a new run of count contiguous chunks and returns
 // the run's first unit.
 func (t *symbolNameTable) newChunks(arena *symbolNameArena, count uint32) uint32 {
-	first := t.nextChunk.Add(count) - count
+	first := t.writes.nextChunk.Add(count) - count
 	if uint64(first)+uint64(count) > symbolNameMaxChunks {
 		panic("too many symbol names")
 	}
