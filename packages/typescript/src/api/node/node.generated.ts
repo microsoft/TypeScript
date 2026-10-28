@@ -58,11 +58,11 @@ export class RemoteNodeList extends Array<RemoteNode> implements NodeArray<Remot
     private _cursorNodeIndex: number = 0;
 
     get pos(): number {
-        return this.view.getUint32(this._byteIndex + NODE_OFFSET_POS, true);
+        return this.view.getInt32(this._byteIndex + NODE_OFFSET_POS, true);
     }
 
     get end(): number {
-        return this.view.getUint32(this._byteIndex + NODE_OFFSET_END, true);
+        return this.view.getInt32(this._byteIndex + NODE_OFFSET_END, true);
     }
 
     get next(): number {

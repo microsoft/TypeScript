@@ -74,6 +74,17 @@ function decode(data: Uint8Array): RemoteSourceFile {
 }
 
 describe("Encoder", { concurrency }, () => {
+    test("preserves synthesized node and list ranges", () => {
+        const statement = createExpressionStatement(createIdentifier("x"));
+        const sf = makeSF("", "/test.ts", [statement]);
+        const decoded = decode(encodeSourceFile(sf));
+
+        for (const range of [decoded, decoded.statements!, decoded.statements!.at(0)!, decoded.endOfFileToken!]) {
+            assert.strictEqual(range.pos, -1);
+            assert.strictEqual(range.end, -1);
+        }
+    });
+
     test("encodes empty source file", () => {
         const sf = makeSF("", "/test.ts", []);
 

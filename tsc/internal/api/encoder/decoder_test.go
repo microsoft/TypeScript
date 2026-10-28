@@ -2,6 +2,7 @@ package encoder_test
 
 import (
 	"bytes"
+	"encoding/binary"
 	"os"
 	"path/filepath"
 	"testing"
@@ -35,6 +36,26 @@ func TestDecodeSourceFile_Basic(t *testing.T) {
 	assert.Equal(t, decoded.Text(), "let x = 1;")
 	assert.Assert(t, decoded.Statements != nil)
 	assert.Assert(t, decoded.EndOfFileToken != nil)
+}
+
+func TestDecodeSourceFile_SynthesizedRanges(t *testing.T) {
+	t.Parallel()
+	sf := parseSourceFile("foo();")
+	synthesized := core.NewTextRange(-1, -1)
+	buf, _, err := encoder.EncodeSourceFile(sf)
+	assert.NilError(t, err)
+	nodesOffset := int(binary.LittleEndian.Uint32(buf[encoder.HeaderOffsetNodes:]))
+	for offset := nodesOffset + encoder.NodeSize; offset < len(buf); offset += encoder.NodeSize {
+		binary.LittleEndian.PutUint32(buf[offset+encoder.NodeOffsetPos:], ^uint32(0))
+		binary.LittleEndian.PutUint32(buf[offset+encoder.NodeOffsetEnd:], ^uint32(0))
+	}
+	decoded, err := encoder.DecodeSourceFile(buf)
+	assert.NilError(t, err)
+
+	assert.Equal(t, decoded.AsNode().Loc, synthesized)
+	assert.Equal(t, decoded.Statements.Loc, synthesized)
+	assert.Equal(t, decoded.Statements.Nodes[0].Loc, synthesized)
+	assert.Equal(t, decoded.EndOfFileToken.Loc, synthesized)
 }
 
 func TestDecodeSourceFile_Metadata(t *testing.T) {
