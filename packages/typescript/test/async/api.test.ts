@@ -66,6 +66,7 @@ import {
     type CompilerOptions,
     type ConditionalType,
     type ConfiguredProjectId,
+    type CreateSnapshotParams,
     DiagnosticCategory,
     type DocumentIdentifier,
     EmitOnly,
@@ -113,6 +114,7 @@ import {
 } from "@typescript/typescript/async"; // @sync: } from "@typescript/typescript/sync";
 import {
     createFileSystem,
+    createFileSystemFromSnapshot,
     createFileSystemLayer,
     createFileSystemWithLib,
     type FileSystemCallbacks,
@@ -2034,6 +2036,51 @@ describe("BuildOrchestrator", () => {
 });
 
 describe("Checker - getImmediateAliasedSymbol", { concurrency }, () => {
+    for (const declaration of [`import * as X from "./mod";`, `export * as X from "./mod";`]) {
+        for (const moduleContent of [`export default class User {}`, `export class User {}`]) {
+            test(`preserves module symbol identity for ${declaration} with ${moduleContent}`, async () => {
+                await using api = spawnAPI({
+                    "/tsconfig.json": JSON.stringify({ compilerOptions: { strict: true } }),
+                    "/src/mod.ts": moduleContent,
+                    "/src/main.ts": declaration,
+                });
+
+                const snapshot = await api.createSnapshot({ openProjects: ["/tsconfig.json"] });
+                const checker = snapshot.getConfiguredProject("/tsconfig.json")!.checker;
+                const moduleSymbol = await checker.getSymbolOfSourceFile("/src/mod.ts");
+                assert.ok(moduleSymbol);
+                const aliasSymbol = await checker.getSymbolAtPosition("/src/main.ts", declaration.indexOf("X"));
+                assert.ok(aliasSymbol);
+                assert.equal(await checker.getImmediateAliasedSymbol(aliasSymbol) === moduleSymbol, true);
+                assert.equal(await checker.getImmediateAliasedSymbol(aliasSymbol) === moduleSymbol, true);
+            });
+        }
+    }
+
+    test("preserves the export assignment alias of a namespace import", async () => {
+        const declaration = `import * as X from "./mod";`;
+        await using api = spawnAPI({
+            "/tsconfig.json": JSON.stringify({ compilerOptions: { strict: true } }),
+            "/src/user.ts": `export class User {}`,
+            "/src/mod.ts": `import { User } from "./user"; export = User;`,
+            "/src/main.ts": declaration,
+        });
+
+        const snapshot = await api.createSnapshot({ openProjects: ["/tsconfig.json"] });
+        const checker = snapshot.getConfiguredProject("/tsconfig.json")!.checker;
+        const moduleSymbol = await checker.getSymbolOfSourceFile("/src/mod.ts");
+        assert.ok(moduleSymbol);
+        const exportAssignment = (await moduleSymbol.getExports()).get(InternalSymbolName.ExportEquals);
+        assert.ok(exportAssignment);
+        const aliasSymbol = await checker.getSymbolAtPosition("/src/main.ts", declaration.indexOf("X"));
+        assert.ok(aliasSymbol);
+        assert.equal(await checker.getImmediateAliasedSymbol(aliasSymbol) === exportAssignment, true);
+        const resolved = await checker.getAliasedSymbol(aliasSymbol);
+        assert.ok(resolved);
+        assert.equal(resolved.name, "User");
+        assert.ok(resolved.flags & SymbolFlags.Class);
+    });
+
     test("resolves one level of alias indirection", async () => {
         await using api = spawnAPI({
             "/tsconfig.json": JSON.stringify({ compilerOptions: { strict: true } }),
@@ -5550,60 +5597,266 @@ describe("updateSnapshot file systems", { concurrency }, () => {
         assert.deepEqual(callbackCalls, []);
     });
 
-    test("Snapshot.update layers filesystem edits and removals", async () => {
-        await using api = new API({
-            cwd: fileURLToPath(new URL("../../../../", import.meta.url).toString()),
+    test("createFileSystemFromSnapshot supports creating snapshots with additional layer and full filesystems", async () => {
+        await using api = spawnAPI({});
+        await using source = await api.createSnapshot({
+            fileSystem: createFileSystemLayer([
+                ["/source.ts", "source"],
+                ["/removed/nested.ts", "removed"],
+            ]),
         });
-        await using snapshot = await api.createSnapshot({
-            openProjects: ["/tsconfig.json"],
-            fileSystem: createFileSystem(Object.entries({
-                "/tsconfig.json": JSON.stringify({
-                    compilerOptions: { noLib: true },
-                    include: ["src/**/*.ts"],
-                }),
-                "/src/keep.ts": `export const keep = true;`,
-                "/src/change.ts": `export const version = "old";`,
-                "/src/remove.ts": `export const remove = true;`,
-                "/src/removed/gone.ts": `export const gone = true;`,
-            })),
+        const descriptor = createFileSystemFromSnapshot(source);
+        assert.equal(descriptor.kind, "snapshot");
+        assert.equal(descriptor.snapshot, source.id);
+        assert.deepEqual(descriptor.files, {});
+        await using cloned = await api.createSnapshot({
+            fileSystem: descriptor,
+            createPrograms: [{ rootFiles: ["/source.ts"], compilerOptions: { noLib: true } }],
         });
+        assert.notEqual(cloned.id, source.id);
+        assert.equal((await cloned.operation.createdPrograms[0].getSourceFile("/source.ts"))?.text, "source");
+        assert.throws(() => createFileSystemFromSnapshot(source, descriptor), /layer or full/);
+        for (const full of [false, true]) {
+            const extra = (full ? createFileSystem : createFileSystemLayer)([
+                ["/extra.ts", "extra"],
+            ], {
+                directories: { "/listed": { files: ["entry.ts"], directories: [] } },
+                symlinks: { "/alias.ts": { target: "/extra.ts" } },
+                removedPaths: ["/removed"],
+            });
+            const fileSystem = createFileSystemFromSnapshot(source, extra);
+            assert.strictEqual(fileSystem.fileSystem, extra);
+            await using snapshot = await api.createSnapshot({
+                fileSystem,
+                createPrograms: [{ rootFiles: ["/extra.ts", "/alias.ts", "/source.ts", "/removed/nested.ts"], compilerOptions: { noLib: true } }],
+            });
+            const program = snapshot.operation.createdPrograms[0];
+            assert.equal((await program.getSourceFile("/extra.ts"))?.text, "extra");
+            assert.equal((await program.getSourceFile("/alias.ts"))?.text, "extra");
+            assert.equal((await program.getSourceFile("/source.ts"))?.text, full ? undefined : "source");
+            assert.equal(await program.getSourceFile("/removed/nested.ts"), undefined);
+        }
+    });
 
-        await using updated = await snapshot.update({
-            ensurePrograms: true,
-            fileSystem: createFileSystemLayer(
-                Object.entries({
-                    "/src/change.ts": `export const version = "new";`,
-                    "/src/added.ts": `export const added = true;`,
-                }),
-                {
-                    removedPaths: ["/src/remove.ts", "/src/removed"],
-                },
-            ),
-        });
-        const project = updated.getConfiguredProject("/tsconfig.json")!;
-        assert.equal((await project.program.getSourceFile("/src/keep.ts"))?.text, `export const keep = true;`);
-        assert.equal((await project.program.getSourceFile("/src/change.ts"))?.text, `export const version = "new";`);
-        assert.equal((await project.program.getSourceFile("/src/added.ts"))?.text, `export const added = true;`);
-        assert.equal(await project.program.getSourceFile("/src/remove.ts"), undefined);
-        assert.equal(await project.program.getSourceFile("/src/removed/gone.ts"), undefined);
-        await using fork = await snapshot.update({ ensurePrograms: true });
-        assert.equal((await fork.getConfiguredProject("/tsconfig.json")!.program.getSourceFile("/src/change.ts"))?.text, `export const version = "old";`);
+    for (const snapshotFileSystem of [false, true]) {
+        test(`Snapshot.update layers filesystem edits and removals with ${snapshotFileSystem ? "a snapshot" : "a layer"} filesystem`, async () => {
+            const update = (base: Snapshot, changes: CreateSnapshotParams) =>
+                base.update(
+                    snapshotFileSystem
+                        ? { ...changes, fileSystem: createFileSystemFromSnapshot(base, changes.fileSystem) }
+                        : changes,
+                );
+            await using api = new API({
+                cwd: fileURLToPath(new URL("../../../../", import.meta.url).toString()),
+            });
+            await using snapshot = await api.createSnapshot({
+                openProjects: ["/tsconfig.json"],
+                fileSystem: createFileSystem(Object.entries({
+                    "/tsconfig.json": JSON.stringify({
+                        compilerOptions: { noLib: true },
+                        include: ["src/**/*.ts"],
+                    }),
+                    "/src/keep.ts": `export const keep = true;`,
+                    "/src/change.ts": `export const version = "old";`,
+                    "/src/remove.ts": `export const remove = true;`,
+                    "/src/removed/gone.ts": `export const gone = true;`,
+                })),
+            });
 
-        await using updatedAgain = await updated.update({
-            ensurePrograms: true,
-            fileSystem: createFileSystemLayer(
-                Object.entries({
-                    "/src/added.ts": `export const added = "updated again";`,
-                }),
-                {
-                    removedPaths: ["/src/change.ts"],
-                },
-            ),
+            await using updated = await update(snapshot, {
+                ensurePrograms: true,
+                fileSystem: createFileSystemLayer(
+                    Object.entries({
+                        "/src/change.ts": `export const version = "new";`,
+                        "/src/added.ts": `export const added = true;`,
+                    }),
+                    {
+                        removedPaths: ["/src/remove.ts", "/src/removed"],
+                    },
+                ),
+            });
+            const project = updated.getConfiguredProject("/tsconfig.json")!;
+            assert.equal((await project.program.getSourceFile("/src/keep.ts"))?.text, `export const keep = true;`);
+            assert.equal((await project.program.getSourceFile("/src/change.ts"))?.text, `export const version = "new";`);
+            assert.equal((await project.program.getSourceFile("/src/added.ts"))?.text, `export const added = true;`);
+            assert.equal(await project.program.getSourceFile("/src/remove.ts"), undefined);
+            assert.equal(await project.program.getSourceFile("/src/removed/gone.ts"), undefined);
+            await using fork = await update(snapshot, { ensurePrograms: true });
+            assert.equal((await fork.getConfiguredProject("/tsconfig.json")!.program.getSourceFile("/src/change.ts"))?.text, `export const version = "old";`);
+
+            await using updatedAgain = await update(updated, {
+                ensurePrograms: true,
+                fileSystem: createFileSystemLayer(
+                    Object.entries({
+                        "/src/added.ts": `export const added = "updated again";`,
+                    }),
+                    {
+                        removedPaths: ["/src/change.ts"],
+                    },
+                ),
+            });
+            const updatedAgainProject = updatedAgain.getConfiguredProject("/tsconfig.json")!;
+            assert.equal((await updatedAgainProject.program.getSourceFile("/src/keep.ts"))?.text, `export const keep = true;`);
+            assert.equal((await updatedAgainProject.program.getSourceFile("/src/added.ts"))?.text, `export const added = "updated again";`);
+            assert.equal(await updatedAgainProject.program.getSourceFile("/src/change.ts"), undefined);
         });
-        const updatedAgainProject = updatedAgain.getConfiguredProject("/tsconfig.json")!;
-        assert.equal((await updatedAgainProject.program.getSourceFile("/src/keep.ts"))?.text, `export const keep = true;`);
-        assert.equal((await updatedAgainProject.program.getSourceFile("/src/added.ts"))?.text, `export const added = "updated again";`);
-        assert.equal(await updatedAgainProject.program.getSourceFile("/src/change.ts"), undefined);
+    }
+
+    test("Snapshot.update with a snapshot filesystem compares against the target's cached contents", async () => {
+        const { api: disposableAPI, fs } = spawnAPIWithFS({ "/index.ts": "export const value = 1;" });
+        await using api = disposableAPI;
+        await using target = await api.createSnapshot({
+            createPrograms: [{ rootFiles: ["/index.ts"], compilerOptions: { noLib: true } }],
+        });
+        const programId = target.operation.createdPrograms[0].id;
+        const originalFile = await target.getProgram(programId)!.getSourceFile("/index.ts");
+        assert.equal(originalFile!.text, "export const value = 1;");
+        fs.writeFile!(toRootedFilePath("/index.ts", undefined), "export const value = 2;");
+        await using source = await api.createSnapshot({
+            fileSystem: createFileSystemLayer([["/index.ts", "export const value = 2;"]]),
+        });
+        await using rebased = await target.update({ fileSystem: createFileSystemFromSnapshot(source), ensurePrograms: true });
+        assert.equal((await rebased.getProgram(programId)!.getSourceFile("/index.ts"))!.text, "export const value = 2;");
+        assert.strictEqual(await target.getProgram(programId)!.getSourceFile("/index.ts"), originalFile);
+    });
+
+    for (const fullReplacement of [false, true]) {
+        test(`Snapshot.update with a snapshot filesystem removes cached files with ${fullReplacement ? "a full replacement" : "matching tombstones"}`, async () => {
+            await using api = spawnAPI({});
+            const files = {
+                "/tsconfig.json": JSON.stringify({ compilerOptions: { noLib: true }, files: ["index.ts", "removed/keep.ts"] }),
+                "/index.ts": "export {};",
+            };
+            await using target = await api.createSnapshot({
+                openProjects: ["/tsconfig.json"],
+                fileSystem: {
+                    kind: "full",
+                    files: { ...files, "/removed/keep.ts": "export const keep = true;" },
+                    directories: { "/": { files: ["index.ts", "tsconfig.json"], directories: [] } },
+                    removedPaths: ["/removed"],
+                },
+            });
+            const originalFile = await target.getConfiguredProject("/tsconfig.json")!.program.getSourceFile("/removed/keep.ts");
+            assert.ok(originalFile);
+            await using self = await target.update({ fileSystem: createFileSystemFromSnapshot(target), ensurePrograms: true });
+            assert.strictEqual(await self.getConfiguredProject("/tsconfig.json")!.program.getSourceFile("/removed/keep.ts"), originalFile);
+            await using source = await api.createSnapshot({
+                fileSystem: fullReplacement
+                    ? createFileSystem(Object.entries(files))
+                    : createFileSystemLayer([], { removedPaths: ["/removed"] }),
+            });
+            await using rebased = await target.update({ fileSystem: createFileSystemFromSnapshot(source), ensurePrograms: true });
+            assert.equal(await rebased.getConfiguredProject("/tsconfig.json")!.program.getSourceFile("/removed/keep.ts"), undefined);
+            assert.strictEqual(await target.getConfiguredProject("/tsconfig.json")!.program.getSourceFile("/removed/keep.ts"), originalFile);
+        });
+    }
+
+    test("Snapshot.update with a snapshot filesystem preserves explicit full invalidation", async () => {
+        const { api: disposableAPI, fs } = spawnAPIWithFS({ "/index.ts": "export const value = 1;" });
+        await using api = disposableAPI;
+        await using original = await api.createSnapshot({
+            createPrograms: [{ rootFiles: ["/index.ts"], compilerOptions: { noLib: true } }],
+        });
+        const programId = original.operation.createdPrograms[0].id;
+        await using target = await original.update({});
+        fs.writeFile!(toRootedFilePath("/index.ts", undefined), "export const value = 2;");
+        const changes = { fileNotifications: { invalidateAll: true }, ensurePrograms: true } as const;
+        await using updated = await original.update(changes);
+        assert.equal((await updated.getProgram(programId)!.getSourceFile("/index.ts"))!.text, "export const value = 2;");
+        for (const base of [original, target]) {
+            await using rebased = await base.update({ ...changes, fileSystem: createFileSystemFromSnapshot(original) });
+            assert.equal((await rebased.getProgram(programId)!.getSourceFile("/index.ts"))!.text, "export const value = 2;");
+        }
+        assert.equal((await original.getProgram(programId)!.getSourceFile("/index.ts"))!.text, "export const value = 1;");
+    });
+
+    test("Snapshot.update with a snapshot filesystem refreshes dependency auto-imports", async () => {
+        const fileName = "/home/project/index.ts";
+        const dependency = "/home/project/node_modules/my-pkg/index.d.ts";
+        await using api = spawnAPI({
+            "/home/project/tsconfig.json": JSON.stringify({ compilerOptions: { noLib: true } }),
+            [fileName]: "package",
+            "/home/project/package.json": JSON.stringify({ dependencies: { "my-pkg": "1.0.0" } }),
+            "/home/project/node_modules/my-pkg/package.json": JSON.stringify({ name: "my-pkg", version: "1.0.0", types: "index.d.ts" }),
+            [dependency]: "export declare const packageOld: number;",
+        });
+        await using target = await api.createSnapshot({
+            openProjects: ["/home/project/tsconfig.json"],
+            prepareAutoImports: fileName,
+        });
+        const completionNames = async (snapshot: Snapshot) => (await snapshot.getConfiguredProject("/home/project/tsconfig.json")!.languageService.getCompletionsAtPosition(fileName, 7, { includeSymbol: true }))!.entries.map(entry => entry.name);
+        assert.ok((await completionNames(target)).includes("packageOld"));
+        await using source = await target.update({
+            prepareAutoImports: fileName,
+            fileSystem: createFileSystemLayer([[dependency, "export declare const packageNew: number;"]]),
+        });
+        assert.ok((await completionNames(source)).includes("packageNew"));
+        for (const base of [target, source]) {
+            await using rebased = await base.update({ fileSystem: createFileSystemFromSnapshot(source), prepareAutoImports: fileName });
+            const names = await completionNames(rebased);
+            assert.ok(names.includes("packageNew"));
+            assert.ok(!names.includes("packageOld"));
+        }
+    });
+
+    test("Snapshot.update applies snapshot filesystems over the target snapshot", async () => {
+        const { api: disposableAPI, fs } = spawnAPIWithFS({
+            "/tsconfig.json": JSON.stringify({ compilerOptions: { noLib: true }, include: ["src/**/*.ts"] }),
+            "/src/index.ts": "export const value = 1;",
+            "/other/tsconfig.json": JSON.stringify({ compilerOptions: { noLib: true }, files: ["index.ts"] }),
+            "/other/index.ts": "export const other = true;",
+        });
+        await using api = disposableAPI;
+        await using original = await api.createSnapshot({ openProjects: ["/tsconfig.json"] });
+        await using extras = await original.update({
+            ensurePrograms: true,
+            fileSystem: createFileSystemLayer([
+                ["/src/extra.ts", "export const extra = true;"],
+            ], { removedPaths: ["/src/removed"] }),
+        });
+        await using moreExtras = await extras.update({
+            fileSystem: createFileSystemLayer([["/src/second.ts", "export const second = true;"]]),
+        });
+        fs.writeFile!(toRootedFilePath("/src/index.ts", undefined), "export const value = 2;");
+        await using newOriginal = await original.update({
+            openProjects: ["/other/tsconfig.json"],
+            ensurePrograms: true,
+            fileNotifications: { changed: ["/src/index.ts"] },
+            fileSystem: createFileSystemLayer([
+                ["/src/extra.ts", "export const extra = false;"],
+                ["/src/target.ts", "export const target = true;"],
+                ["/src/removed/nested.ts", "export const removed = true;"],
+            ]),
+        });
+        await using rebased = await newOriginal.update({
+            prepareAutoImports: "/src/index.ts",
+            openFiles: ["/src/index.ts"],
+            createPrograms: [{ rootFiles: ["/src/extra.ts"], compilerOptions: { noLib: true } }],
+            fileSystem: createFileSystemFromSnapshot(moreExtras, createFileSystemLayer([["/src/second.ts", "export const second = false;"]])),
+        });
+        assert.notEqual(rebased.id, moreExtras.id);
+        assert.notEqual(rebased.id, newOriginal.id);
+        assert.ok(rebased.getConfiguredProject("/other/tsconfig.json"));
+        assert.strictEqual(rebased.operation.openedFiles[0].project, rebased.getConfiguredProject("/tsconfig.json"));
+        assert.equal((await rebased.operation.createdPrograms[0].getSourceFile("/src/extra.ts"))!.text, "export const extra = true;");
+        const program = rebased.getConfiguredProject("/tsconfig.json")!.program;
+        assert.equal((await program.getSourceFile("/src/index.ts"))!.text, "export const value = 2;");
+        assert.equal((await program.getSourceFile("/src/extra.ts"))!.text, "export const extra = true;");
+        assert.equal((await program.getSourceFile("/src/second.ts"))!.text, "export const second = false;");
+        assert.equal((await program.getSourceFile("/src/target.ts"))!.text, "export const target = true;");
+        assert.equal(await program.getSourceFile("/src/removed/nested.ts"), undefined);
+        assert.equal((await extras.getConfiguredProject("/tsconfig.json")!.program.getSourceFile("/src/index.ts"))!.text, "export const value = 1;");
+        assert.equal((await newOriginal.getConfiguredProject("/tsconfig.json")!.program.getSourceFile("/src/extra.ts"))!.text, "export const extra = false;");
+        await extras.dispose();
+        await moreExtras.dispose();
+        await newOriginal.dispose();
+        assert.equal((await program.getSourceFile("/src/extra.ts"))!.text, "export const extra = true;");
+        await using rebasedAgain = await original.update({ fileSystem: createFileSystemFromSnapshot(rebased), ensurePrograms: true });
+        assert.equal((await rebasedAgain.getConfiguredProject("/tsconfig.json")!.program.getSourceFile("/src/target.ts"))!.text, "export const target = true;");
+        assert.throws(() => createFileSystemFromSnapshot(moreExtras), /disposed/);
+        assert.throws(() => newOriginal.update({ fileSystem: createFileSystemFromSnapshot(rebased) }), /disposed/);
+        // @sync: assert.throws(() => original.update({ fileSystem: { kind: "snapshot", snapshot: moreExtras.id, files: {} } }), /inactive snapshot/);
+        await assert.rejects(original.update({ fileSystem: { kind: "snapshot", snapshot: moreExtras.id, files: {} } }), /inactive snapshot/); // @sync-skip
     });
 
     test("eager snapshot disposal does not retain filesystem history", async () => {
