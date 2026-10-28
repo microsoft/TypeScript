@@ -263,7 +263,7 @@ func (b *NodeBuilderImpl) expandInterfaceDecl(symbol *ast.Symbol) *ast.Node {
 		members = append(members, b.signatureToSignatureDeclarationHelper(sig, ast.KindCallSignature, nil))
 	}
 	// Properties, filtering inherited
-	filteredProps := b.filterInheritedProperties(interfaceType, baseTypes, resolved.properties)
+	filteredProps := b.filterInheritedProperties(interfaceType, baseTypes, resolved.getProperties())
 	members = b.serializePropertiesWithTruncation(filteredProps, members)
 
 	// Heritage clauses
@@ -413,7 +413,7 @@ func (b *NodeBuilderImpl) serializeNamespaceMember(resolved *ast.Symbol, name st
 func (b *NodeBuilderImpl) expandModuleDecl(symbol *ast.Symbol) *ast.Node {
 	exports := b.ch.getExportsOfSymbol(symbol)
 	var members []*ast.Symbol
-	for _, sym := range exports {
+	for _, sym := range exports.All() {
 		// Filter to namespace-relevant members
 		if !b.isNamespaceMember(sym) {
 			continue
@@ -498,7 +498,7 @@ func (b *NodeBuilderImpl) expandModuleDecl(symbol *ast.Symbol) *ast.Node {
 			}
 			// If the function also has namespace characteristics, emit an empty namespace.
 			merged := b.ch.getMergedSymbol(resolved)
-			hasModuleExports := merged.Flags()&(ast.SymbolFlagsValueModule|ast.SymbolFlagsNamespaceModule) != 0 && merged.Exports() != nil && len(merged.Exports()) != 0
+			hasModuleExports := merged.Flags()&(ast.SymbolFlagsValueModule|ast.SymbolFlagsNamespaceModule) != 0 && merged.Exports() != nil && merged.Exports().Len() != 0
 			if !hasModuleExports {
 				bodyStmts = append(bodyStmts, hoverStatement{node: b.f.NewModuleDeclaration(nil, ast.KindNamespaceKeyword, b.f.NewIdentifier(m.Name()), nil /*attributes*/, b.f.NewModuleBlock(b.f.NewNodeList(nil)))})
 			}

@@ -464,31 +464,38 @@ func (s *snapshotFSBuilder) reloadEntryIfNeeded(entry *dirty.SyncMapEntry[tspath
 }
 
 func (s *snapshotFSBuilder) watchChangesOverlapCache(change FileChangeSummary, previousOpenFiles map[tspath.PathKey]FileHandle, openFiles map[tspath.PathKey]FileHandle) bool {
-	for uri := range change.Changed.Keys() {
-		path := s.caseSensitivity.PathKey(uri.FileName().AsPath())
-		if previousOpenFiles[path] != nil || openFiles[path] != nil {
-			return true
-		}
-		if _, ok := s.cacheFiles.Load(path); ok {
-			return true
-		}
-		if _, ok := s.nodeModulesRealpathAliases.Load(path); ok {
-			return true
-		}
-	}
-	for uri := range change.Deleted.Keys() {
-		path := s.caseSensitivity.PathKey(uri.FileName().AsPath())
-		if previousOpenFiles[path] != nil || openFiles[path] != nil {
-			return true
-		}
-		if _, ok := s.cacheFiles.Load(path); ok {
-			return true
-		}
-		if _, ok := s.nodeModulesRealpathAliases.Load(path); ok {
-			return true
+	for _, changes := range []collections.Set[lsproto.DocumentUri]{change.Changed, change.Created, change.Deleted} {
+		for uri := range changes.Keys() {
+			path := s.caseSensitivity.PathKey(uri.FileName().AsPath())
+			if previousOpenFiles[path] != nil || openFiles[path] != nil {
+				return true
+			}
+			if _, ok := s.cacheFiles.Load(path); ok {
+				return true
+			}
+			if _, ok := s.nodeModulesRealpathAliases.Load(path); ok {
+				return true
+			}
 		}
 	}
 	return false
+}
+
+func (s *snapshotFSBuilder) expandCreatedCacheEntries(change FileChangeSummary) FileChangeSummary {
+	if change.Created.Len() == 0 {
+		return change
+	}
+	createdDirectories := collections.NewSetWithSizeHint[tspath.PathKey](change.Created.Len())
+	for uri := range change.Created.Keys() {
+		path := s.caseSensitivity.PathKey(uri.FileName().AsPath())
+		if _, ok := s.cacheDirectories.Get(path); ok {
+			createdDirectories.Add(path)
+		}
+	}
+	for path := range createdDirectories.Keys() {
+		s.collectFilesRecursive(path, &change.Created, nil, nil)
+	}
+	return change
 }
 
 func (s *snapshotFSBuilder) invalidateCache() {
@@ -512,12 +519,23 @@ func (s *snapshotFSBuilder) invalidateNodeModulesCache() {
 }
 
 func (s *snapshotFSBuilder) markDirtyFiles(change FileChangeSummary) FileChangeSummary {
-	if change.Changed.Len() > 0 {
+	filterChanges := func(changes collections.Set[lsproto.DocumentUri], created bool) collections.Set[lsproto.DocumentUri] {
+		if changes.Len() == 0 {
+			return changes
+		}
 		var filteredChanged collections.SyncSet[lsproto.DocumentUri]
 		wg := core.NewWorkGroup(false)
-		for uri := range change.Changed.Keys() {
+		for uri := range changes.Keys() {
 			path := s.caseSensitivity.PathKey(uri.FileName().AsPath())
-			if file := s.fs.GetFileByPath(uri.FileName(), path); file != nil && file.IsOverlay() {
+			if created {
+				// Cached Created paths represent replacements of files we already knew about.
+				// If the disk content is unchanged, registries already contain the path and
+				// there is no filesystem change to propagate. Open overlays remain authoritative,
+				// so a Created event cannot change their active contents either.
+				if s.fs.Overlays()[path] != nil {
+					continue
+				}
+			} else if file := s.fs.GetFileByPath(uri.FileName(), path); file != nil && file.IsOverlay() {
 				filteredChanged.Add(uri)
 				continue
 			}
@@ -533,12 +551,16 @@ func (s *snapshotFSBuilder) markDirtyFiles(change FileChangeSummary) FileChangeS
 			})
 		}
 		wg.RunAndWait()
-		newChanged := collections.NewSetWithSizeHint[lsproto.DocumentUri](filteredChanged.Size())
+		newSet := collections.NewSetWithSizeHint[lsproto.DocumentUri](filteredChanged.Size())
 		for uri := range filteredChanged.Keys() {
-			newChanged.Add(uri)
+			newSet.Add(uri)
 		}
-		change.Changed = *newChanged
+		return *newSet
 	}
+
+	change.Changed = filterChanges(change.Changed, false)
+	change.Created = filterChanges(change.Created, true)
+
 	for uri := range change.Deleted.Keys() {
 		path := s.caseSensitivity.PathKey(uri.FileName().AsPath())
 		if entry, ok := s.cacheFiles.Load(path); ok {
@@ -582,7 +604,7 @@ func (s *snapshotFSBuilder) reloadEntryIfContentChanged(entry *dirty.SyncMapEntr
 	return changed
 }
 
-// expandRealpathAliases adds synthetic URIs to the Changed and Deleted sets for
+// expandRealpathAliases adds synthetic URIs to the Changed, Created, and Deleted sets for
 // files that were accessed through node_modules symlinks. When a watch event arrives
 // using a realpath, this expands it to include the symlink-based path so that
 // downstream consumers (markDirtyFiles, markFilesChanged) can find cached entries.
@@ -591,30 +613,49 @@ func (s *SnapshotFS) expandRealpathAliases(change FileChangeSummary) FileChangeS
 		return change
 	}
 
-	var additionalChanged collections.Set[lsproto.DocumentUri]
-	for uri := range change.Changed.Keys() {
-		path := s.caseSensitivity.PathKey(uri.FileName().AsPath())
-		if aliases, ok := s.nodeModulesRealpathAliases[path]; ok {
-			for _, aliasFileName := range aliases.paths {
-				additionalChanged.Add(lsconv.FileNameToDocumentURI(aliasFileName))
+	expandSet := func(set *collections.Set[lsproto.DocumentUri]) {
+		if set.Len() == 0 {
+			return
+		}
+		var additional collections.Set[lsproto.DocumentUri]
+		for uri := range set.Keys() {
+			path := s.caseSensitivity.PathKey(uri.FileName().AsPath())
+			if aliases, ok := s.nodeModulesRealpathAliases[path]; ok {
+				for _, aliasFileName := range aliases.paths {
+					additional.Add(lsconv.FileNameToDocumentURI(aliasFileName))
+				}
 			}
 		}
-	}
-	for uri := range additionalChanged.Keys() {
-		change.Changed.Add(uri)
+		for uri := range additional.Keys() {
+			set.Add(uri)
+		}
 	}
 
-	var additionalDeleted collections.Set[lsproto.DocumentUri]
-	for uri := range change.Deleted.Keys() {
-		path := s.caseSensitivity.PathKey(uri.FileName().AsPath())
-		if aliases, ok := s.nodeModulesRealpathAliases[path]; ok {
-			for _, aliasFileName := range aliases.paths {
-				additionalDeleted.Add(lsconv.FileNameToDocumentURI(aliasFileName))
+	expandSet(&change.Changed)
+	expandSet(&change.Created)
+	expandSet(&change.Deleted)
+
+	if change.Created.Len() > 0 {
+		createdDirectories := collections.NewSetWithSizeHint[tspath.PathKey](change.Created.Len())
+		for uri := range change.Created.Keys() {
+			createdDirectories.Add(s.caseSensitivity.PathKey(uri.FileName().AsPath()))
+		}
+		for realpath, aliases := range s.nodeModulesRealpathAliases {
+			path := realpath
+			for {
+				if createdDirectories.Has(path) {
+					for _, aliasFileName := range aliases.paths {
+						change.Created.Add(lsconv.FileNameToDocumentURI(aliasFileName))
+					}
+					break
+				}
+				parent := path.Parent()
+				if parent == path {
+					break
+				}
+				path = parent
 			}
 		}
-	}
-	for uri := range additionalDeleted.Keys() {
-		change.Deleted.Add(uri)
 	}
 
 	return change

@@ -1,7 +1,6 @@
 package checker
 
 import (
-	"maps"
 	"slices"
 
 	"github.com/microsoft/TypeScript/tsc/internal/ast"
@@ -365,8 +364,7 @@ func (c *Checker) GetIndexInfosOfType(t *Type) []*IndexInfo {
 func (c *Checker) GetIndexInfosOfIndexSymbol(symbol *ast.Symbol) []*IndexInfo {
 	var siblingSymbols []*ast.Symbol
 	if symbol.Parent() != nil {
-		siblingSymbols = slices.Collect(maps.Values(c.getMembersOfSymbol(symbol.Parent())))
-		c.sortSymbols(siblingSymbols)
+		siblingSymbols = slices.Collect(c.getMembersOfSymbol(symbol.Parent()).Values())
 	}
 	return c.getIndexInfosOfIndexSymbol(symbol, siblingSymbols)
 }
