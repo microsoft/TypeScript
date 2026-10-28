@@ -1,0 +1,149 @@
+//// [tests/cases/compiler/parseGenericArrowRatherThanLeftShift2.tsx] ////
+
+=== heritage.ts ===
+declare const f: <T>(x: T) => T;
+>f : <T>(x: T) => T
+>x : T
+
+declare function g(): typeof B;
+>g : () => typeof B
+>B : typeof B
+
+declare class B<F> {}
+>B : B<F>
+
+interface I<F> {}
+interface J<F> {}
+
+class C1 implements I<<T>(x: T) => T> {}
+>C1 : C1
+>x : T
+
+class C2 extends B<<T>(x: T) => T> {}
+>C2 : C2
+>B : B<<T>(x: T) => T>
+>x : T
+
+const C3 = class extends g()<<T>(x: T) => T> {};
+>C3 : typeof C3
+>class extends g()<<T>(x: T) => T> {} : typeof C3
+>g() : B<<T>(x: T) => T>
+>g : () => typeof B
+>x : T
+
+interface I2 extends J<<T>(x: T) => T> {}
+>x : T
+
+type A1 = typeof f<<T>(x: T) => T>;
+>A1 : typeof f<<T>(x: T) => T>
+>f : <T>(x: T) => T
+>x : T
+
+const e1 = f<<T>(x: T) => T>;
+>e1 : (x: <T>(x: T) => T) => <T>(x: T) => T
+>f<<T>(x: T) => T> : (x: <T>(x: T) => T) => <T>(x: T) => T
+>f : <T>(x: T) => T
+>x : T
+
+const e2 = f<<T>(x: T) => T>(f);
+>e2 : <T>(x: T) => T
+>f<<T>(x: T) => T>(f) : <T>(x: T) => T
+>f : <T>(x: T) => T
+>x : T
+>f : <T>(x: T) => T
+
+// `<<` is still a left shift in expressions.
+declare let n: number;
+>n : number
+
+const s1 = n << 2;
+>s1 : number
+>n << 2 : number
+>n : number
+>2 : 2
+
+const s2 = n<<n;
+>s2 : number
+>n<<n : number
+>n : number
+>n : number
+
+const s3 = (n<<n) > n;
+>s3 : boolean
+>(n<<n) > n : boolean
+>(n<<n) : number
+>n<<n : number
+>n : number
+>n : number
+>n : number
+
+// `<<` after a type query in an expression is still a left shift.
+declare const a: any;
+>a : any
+
+const s4 = a as typeof n << 1;
+>s4 : number
+>a as typeof n << 1 : number
+>a as typeof n : number
+>a : any
+>n : number
+>1 : 1
+
+const s5 = a satisfies typeof n << 1;
+>s5 : number
+>a satisfies typeof n << 1 : number
+>a satisfies typeof n : any
+>a : any
+>n : number
+>1 : 1
+
+=== jsx.tsx ===
+declare namespace JSX {
+    interface Element {}
+    interface IntrinsicElements {
+        div: { x?: number };
+>div : { x?: number; }
+>x : number | undefined
+    }
+}
+declare function Comp<P>(props: { value: P }): JSX.Element;
+>Comp : <P>(props: { value: P; }) => JSX.Element
+>props : { value: P; }
+>value : P
+>JSX : any
+
+const j1 = <Comp<<T>(x: T) => T> value={f} />;
+>j1 : JSX.Element
+><Comp<<T>(x: T) => T> value={f} /> : JSX.Element
+>Comp : <P>(props: { value: P; }) => JSX.Element
+>x : T
+>value : <T>(x: T) => T
+>f : <T>(x: T) => T
+
+const j2 = <Comp<<T>(x: T) => T> value={f}></Comp>;
+>j2 : JSX.Element
+><Comp<<T>(x: T) => T> value={f}></Comp> : JSX.Element
+>Comp : <P>(props: { value: P; }) => JSX.Element
+>x : T
+>value : <T>(x: T) => T
+>f : <T>(x: T) => T
+>Comp : <P>(props: { value: P; }) => JSX.Element
+
+const j3 = <div x={n << 1} />;
+>j3 : JSX.Element
+><div x={n << 1} /> : JSX.Element
+>div : any
+>x : number
+>n << 1 : number
+>n : number
+>1 : 1
+
+const j4 = <div x={n<<n} />;
+>j4 : JSX.Element
+><div x={n<<n} /> : JSX.Element
+>div : any
+>x : number
+>n<<n : number
+>n : number
+>n : number
+
