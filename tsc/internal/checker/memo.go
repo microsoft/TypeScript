@@ -798,7 +798,18 @@ func (c *Checker) linkState(state *memoState, f *memoEffects) {
 //
 //go:noinline
 func (c *Checker) observeCell(h *memoHeader) {
-	c.observeMemo(h.key())
+	state := h.state
+	if !c.memoActive() {
+		// Only the work of the result is accounted for. The memo state is at
+		// hand, so the work filter is no help.
+		if state != nil {
+			c.observeCost(state.count)
+		}
+		return
+	}
+	if c.observeState(state) || state == nil && !c.checking && c.resolving.count != 0 {
+		c.memoCycle(c.resolvingIndex(h.key()))
+	}
 }
 
 //go:noinline
