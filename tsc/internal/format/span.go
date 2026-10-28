@@ -1184,15 +1184,19 @@ func (i *dynamicIndenter) recomputeIndentation(lineAdded bool, parent *ast.Node)
 			shift = -shift
 		}
 		i.indentation += shift
-		if ShouldIndentChildNode(i.options, i.node, nil, nil) {
-			i.delta = i.options.IndentSize
-		} else {
-			i.delta = 0
+		start := scanner.GetTokenPosOfNode(i.node, i.sourceFile, false)
+		// A node that starts at the same token as its parent, like `x + y` in the
+		// statement `x + y`, stays on its parent's line and keeps its inherited delta.
+		if i.parent == nil || scanner.GetTokenPosOfNode(i.parent.node, i.sourceFile, false) != start {
+			if ShouldIndentChildNode(i.options, i.node, nil, nil) {
+				i.delta = i.options.IndentSize
+			} else {
+				i.delta = 0
+			}
 		}
 		// Enclosing nodes that start at the same token, like the call in `0!("")`,
 		// moved with this node, so shift them too. Keep their deltas: resetting one
 		// would drop the delta a binary expression inherits from its statement.
-		start := scanner.GetTokenPosOfNode(i.node, i.sourceFile, false)
 		for p := i.parent; p != nil && scanner.GetTokenPosOfNode(p.node, i.sourceFile, false) == start; p = p.parent {
 			p.indentation += shift
 		}

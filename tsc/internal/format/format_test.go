@@ -58,12 +58,20 @@ func TestFormatNoTrailingSpace(t *testing.T) {
 func TestFormatIdempotentWhenLineAddedBeforeNestedNodes(t *testing.T) {
 	t.Parallel()
 
-	// The callee `0!` and the call both start at `0`. When formatting moves `0` to
-	// a new line, the call's arguments must be indented as if `0` were already there.
-	text := "{{0!\n(\"\")}}"
-	expected := "{\n    {\n        0!\n            (\"\")\n    }\n}"
+	testCases := []struct {
+		name     string
+		text     string
+		expected string
+	}{
+		// The callee `0!` and the call both start at `0`. When formatting moves `0` to
+		// a new line, the call's arguments must be indented as if `0` were already there.
+		{"call with non-null callee", "{{0!\n(\"\")}}", "{\n    {\n        0!\n            (\"\")\n    }\n}"},
+		// The binary expression and its statement both start at `x`. When formatting
+		// moves `x` to a new line, the operator keeps the statement's continuation indent.
+		{"binary expression statement", "{{x\n+ y}}", "{\n    {\n        x\n            +y\n    }\n}"},
+	}
 
-	format1 := func(text string) string {
+	format1 := func(t *testing.T, text string) string {
 		ctx := format.WithFormatCodeSettings(t.Context(), lsutil.FormatCodeSettings{
 			TabSize:                4,
 			IndentSize:             4,
@@ -79,7 +87,12 @@ func TestFormatIdempotentWhenLineAddedBeforeNestedNodes(t *testing.T) {
 		return applyBulkEdits(text, format.FormatDocument(ctx, sourceFile))
 	}
 
-	first := format1(text)
-	assert.Equal(t, first, expected)
-	assert.Equal(t, format1(first), first)
+	for _, tc := range testCases {
+		t.Run(tc.name, func(t *testing.T) {
+			t.Parallel()
+			first := format1(t, tc.text)
+			assert.Equal(t, first, tc.expected)
+			assert.Equal(t, format1(t, first), first)
+		})
+	}
 }
