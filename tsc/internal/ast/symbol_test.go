@@ -77,6 +77,27 @@ func TestConcurrentSymbolNameInterning(t *testing.T) {
 	}
 }
 
+func TestLongSymbolNames(t *testing.T) {
+	t.Parallel()
+	// Fill shards past their chunks, then intern names that need a chunk of
+	// their own or a run of several.
+	var texts []string
+	for i := range 5000 {
+		texts = append(texts, strconv.Itoa(i)+strings.Repeat("m", 300))
+	}
+	for _, n := range []int{4000, 5000, 16 << 10, 40 << 10} {
+		texts = append(texts, strings.Repeat("x", n-1)+"y")
+	}
+	names := make([]ast.SymbolName, len(texts))
+	for i, text := range texts {
+		names[i] = ast.MakeSymbolName(text)
+	}
+	for i, text := range texts {
+		assert.Assert(t, names[i] == ast.MakeSymbolName(strings.Clone(text)))
+		assert.Equal(t, names[i].String(), text)
+	}
+}
+
 func TestPreinternedSymbolNames(t *testing.T) {
 	t.Parallel()
 	for text, name := range map[string]ast.SymbolName{

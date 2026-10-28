@@ -3,47 +3,66 @@ package ast
 import (
 	"sync"
 	"sync/atomic"
+	"unsafe"
 )
 
 // Symbol names are interned into a process-wide table and identified by an
 // ID; ID 0 is the empty name, and the fixed names generated in
-// symbolnames_generated.go take the IDs after it. Interned names are never
-// freed. Names synthesized from symbol and node IDs are not interned; see
+// symbolnames_generated.go are inserted next. Interned names are never freed.
+// Names synthesized from symbol and node IDs are not interned; see
 // symbolname_derived.go. IDs contain no pointers, so nodes, symbol tables, and
 // caches that hold them cost the garbage collector nothing to scan.
 //
-// Texts are stored in fixed-size chunks so an ID's text never moves. Lookups
-// are lock-free: each shard publishes an open-addressing table whose slots
-// pack a 32-bit hash with an ID. Inserts take the shard lock and may publish
-// a larger table; a reader racing with growth may miss and then retry under
-// the lock.
+// Texts are stored in a pointer-free arena as records of a 4-byte length
+// followed by the text, aligned to 8-byte units, and an ID is its record's
+// offset in units. Looking up an ID's text is then a single dependent load,
+// which matters because every intern hit compares texts. The arena is split
+// into fixed-size chunks so records never move. Each shard appends records to
+// its own chunk, so inserts into different shards don't contend; a record
+// longer than a quarter chunk gets its own run of contiguous chunks.
+//
+// Lookups are lock-free: each shard publishes an open-addressing table whose
+// slots pack a 32-bit hash with an ID. Inserts take the shard lock and may
+// publish a larger table; a reader racing with growth may miss and then retry
+// under the lock.
 const (
 	symbolNameShardBits    = 6
 	symbolNameShardCount   = 1 << symbolNameShardBits
 	symbolNameInitialSlots = 256
-	symbolNameChunkBits    = 12
-	symbolNameChunkSize    = 1 << symbolNameChunkBits
-	symbolNameMaxChunks    = 1 << 14
+
+	symbolNameUnitBytes     = 8
+	symbolNameRecordHeader  = 4
+	symbolNameChunkUnitBits = 11
+	symbolNameChunkUnits    = 1 << symbolNameChunkUnitBits
+	symbolNameChunkBytes    = symbolNameChunkUnits * symbolNameUnitBytes
+	symbolNameMaxUnits      = 1 << derivedNameNumShift
+	symbolNameMaxChunks     = symbolNameMaxUnits / symbolNameChunkUnits
 )
 
-type symbolNameChunk [symbolNameChunkSize]string
+type symbolNameChunk [symbolNameChunkBytes]byte
 
 // Lookups only read tables and chunks; inserts write the shard locks, counts,
-// and nextID. Keeping the two groups on separate cache lines stops inserts on
-// one core from evicting lines that lookups on every other core need. The
-// table is one large allocation, so it starts on a page boundary.
+// and the arena cursor. Keeping the two groups on separate cache lines stops
+// inserts on one core from evicting lines that lookups on every other core
+// need. The table is one large allocation, so it starts on a page boundary.
 type symbolNameTable struct {
-	tables [symbolNameShardCount]atomic.Pointer[[]atomic.Uint64]
-	chunks [symbolNameMaxChunks]atomic.Pointer[symbolNameChunk]
-	nextID atomic.Uint32
-	_      [60]byte
-	shards [symbolNameShardCount]symbolNameShard
+	tables    [symbolNameShardCount]atomic.Pointer[[]atomic.Uint64]
+	chunks    [symbolNameMaxChunks]atomic.Pointer[symbolNameChunk]
+	nextChunk atomic.Uint32
+	_         [60]byte
+	shards    [symbolNameShardCount]symbolNameShard
 }
 
 type symbolNameShard struct {
 	mu    sync.Mutex
 	count int
-	_     [48]byte
+	arena symbolNameArena
+	_     [40]byte
+}
+
+// symbolNameArena is a bump allocator over the units of the current chunk.
+type symbolNameArena struct {
+	next, end uint32
 }
 
 var symbolNames = newSymbolNameTable()
@@ -54,24 +73,29 @@ func newSymbolNameTable() *symbolNameTable {
 		slots := make([]atomic.Uint64, symbolNameInitialSlots)
 		t.tables[i].Store(&slots)
 	}
-	for want := SymbolName(1); want < SymbolName(len(fixedSymbolNameTexts)); want++ {
-		text := fixedSymbolNameTexts[want]
-		if text == "" {
+	// The empty name's record is the zeroed first unit, and the fixed names
+	// follow it in order.
+	fixedArena := &symbolNameArena{}
+	t.newChunks(fixedArena, 1)
+	fixedArena.next = 1
+	for _, fixed := range fixedSymbolNames {
+		if fixed.text == "" {
 			panic("fixed symbol name has no text")
 		}
-		if _, _, _, ok := splitDerivedName(text); ok {
-			panic("fixed symbol name has a derived form: " + text)
+		if _, _, _, ok := splitDerivedName(fixed.text); ok {
+			panic("fixed symbol name has a derived form: " + fixed.text)
 		}
-		hash := hashSymbolNameText(text)
-		if id := t.insert(hash, text); SymbolName(id) != want {
-			panic("duplicate fixed symbol name: " + text)
+		if id := t.insert(hashSymbolNameText(fixed.text), fixed.text, fixedArena); id != fixed.id {
+			panic("fixed symbol name has the wrong ID: " + fixed.text)
 		}
 	}
 	return t
 }
 
 func (t *symbolNameTable) text(id uint32) string {
-	return t.chunks[id>>symbolNameChunkBits].Load()[id&(symbolNameChunkSize-1)]
+	chunk := t.chunks[id>>symbolNameChunkUnitBits].Load()
+	record := unsafe.Pointer(&chunk[(id&(symbolNameChunkUnits-1))*symbolNameUnitBytes])
+	return unsafe.String((*byte)(unsafe.Add(record, symbolNameRecordHeader)), *(*uint32)(record))
 }
 
 func (t *symbolNameTable) lookup(slots []atomic.Uint64, hash uint64, text string) uint32 {
@@ -103,10 +127,11 @@ func (t *symbolNameTable) make(text string, hash uint64) SymbolName {
 	if name, ok := parseDerivedName(text); ok {
 		return name
 	}
-	return internedSymbolName(t.insert(hash, text), text)
+	return internedSymbolName(t.insert(hash, text, nil), text)
 }
 
-func (t *symbolNameTable) insert(hash uint64, text string) uint32 {
+// insert appends new texts to arena, or to the shard's arena if nil.
+func (t *symbolNameTable) insert(hash uint64, text string, arena *symbolNameArena) uint32 {
 	table := &t.tables[hash&(symbolNameShardCount-1)]
 	shard := &t.shards[hash&(symbolNameShardCount-1)]
 	shard.mu.Lock()
@@ -125,7 +150,10 @@ func (t *symbolNameTable) insert(hash uint64, text string) uint32 {
 		table.Store(&grown)
 		slots = grown
 	}
-	id := t.allocate(string([]byte(text)))
+	if arena == nil {
+		arena = &shard.arena
+	}
+	id := t.allocate(arena, text)
 	storeSymbolNameSlot(slots, hash, hash>>32<<32|uint64(id))
 	shard.count++
 	return id
@@ -135,21 +163,44 @@ func (t *symbolNameTable) hashOf(id uint32) uint64 {
 	return hashSymbolNameText(t.text(id))
 }
 
-func (t *symbolNameTable) allocate(text string) uint32 {
-	id := t.nextID.Add(1)
-	if id >= symbolNameMaxChunks*symbolNameChunkSize-1 {
+func (t *symbolNameTable) allocate(arena *symbolNameArena, text string) uint32 {
+	if len(text) > symbolNameMaxUnits*symbolNameUnitBytes {
+		panic("symbol name too long")
+	}
+	units := uint32((symbolNameRecordHeader + len(text) + symbolNameUnitBytes - 1) / symbolNameUnitBytes)
+	var id uint32
+	switch {
+	case units > symbolNameChunkUnits/4:
+		var own symbolNameArena
+		id = t.newChunks(&own, (units+symbolNameChunkUnits-1)/symbolNameChunkUnits)
+	case arena.next+units > arena.end:
+		id = t.newChunks(arena, 1)
+		arena.next = id + units
+	default:
+		id = arena.next
+		arena.next += units
+	}
+	chunk := t.chunks[id>>symbolNameChunkUnitBits].Load()
+	record := unsafe.Pointer(&chunk[(id&(symbolNameChunkUnits-1))*symbolNameUnitBytes])
+	*(*uint32)(record) = uint32(len(text))
+	copy(unsafe.Slice((*byte)(unsafe.Add(record, symbolNameRecordHeader)), len(text)), text)
+	return id
+}
+
+// newChunks points arena at a new run of count contiguous chunks and returns
+// the run's first unit.
+func (t *symbolNameTable) newChunks(arena *symbolNameArena, count uint32) uint32 {
+	first := t.nextChunk.Add(count) - count
+	if uint64(first)+uint64(count) > symbolNameMaxChunks {
 		panic("too many symbol names")
 	}
-	chunkSlot := &t.chunks[id>>symbolNameChunkBits]
-	chunk := chunkSlot.Load()
-	if chunk == nil {
-		chunk = new(symbolNameChunk)
-		if !chunkSlot.CompareAndSwap(nil, chunk) {
-			chunk = chunkSlot.Load()
-		}
+	run := make([]symbolNameChunk, count)
+	for i := range run {
+		t.chunks[first+uint32(i)].Store(&run[i])
 	}
-	chunk[id&(symbolNameChunkSize-1)] = text
-	return id
+	arena.next = first << symbolNameChunkUnitBits
+	arena.end = arena.next + count<<symbolNameChunkUnitBits
+	return arena.next
 }
 
 func storeSymbolNameSlot(slots []atomic.Uint64, hash uint64, v uint64) {

@@ -13,6 +13,7 @@ import {
 import generateOptions from "./generate-options.ts";
 import { options } from "./options.ts";
 import { api } from "./schema.ts";
+import { symbolNames } from "./symbolNames.ts";
 
 function runOutput(command: string, args: readonly string[]) {
     return run(command, args, { captureOutput: true, cwd: ROOT });
@@ -75,8 +76,21 @@ export const enumDefs = [
     { name: "CompletionItemKind", goPrefix: "CompletionItemKind", goFile: "tsc/internal/lsp/lsproto/lsp_generated.go", outDir: "packages/typescript/enums" },
     { name: "EmitOnly", goPrefix: "Emit", goFile: "tsc/internal/compiler/emitter.go", outDir: "packages/typescript/enums", excludeMembers: ["OnlyBuilderSignature"] },
     // String enum: Go stores internal names with a "\xFE" sentinel prefix, but the escaped
-    // form sent over the wire uses "__" (see EscapeSymbolName), so map the sentinel accordingly.
-    { name: "InternalSymbolName", goPrefix: "InternalSymbolName", goFile: "tsc/internal/ast/symbolnames_generated.go", outDir: "packages/typescript/enums", stringEnum: true, valueReplacements: { InternalSymbolNamePrefix: "__" } },
+    // form sent over the wire uses "__" (see EscapeSymbolName).
+    {
+        name: "InternalSymbolName",
+        goPrefix: "InternalSymbolName",
+        goFile: "tsc/internal/ast/symbolnames_generated.go",
+        outDir: "packages/typescript/enums",
+        stringEnum: true,
+        metadata: {
+            file: "tools/scripts/tsc/symbolNames.ts",
+            members: symbolNames.filter(n => n.name.startsWith("InternalSymbolName")).map(n => ({
+                name: n.name.slice("InternalSymbolName".length),
+                value: JSON.stringify(n.internal ? "__" + n.text : n.text),
+            })),
+        },
+    },
 ] satisfies EnumDef[];
 
 function syntaxKindMembers(): EnumMember[] {
@@ -84,7 +98,7 @@ function syntaxKindMembers(): EnumMember[] {
     return [...members, { name: "Count", value: String(members.length) }, ...api.kindMarkers()];
 }
 
-function parseGoDeclarationBlock(block: string, def: EnumDef): EnumMember[] {
+function parseGoConstBlock(block: string, def: EnumDef): EnumMember[] {
     const prefix = def.goPrefix;
     const members: EnumMember[] = [];
     let iotaCounter = 0;
@@ -103,9 +117,7 @@ function parseGoDeclarationBlock(block: string, def: EnumDef): EnumMember[] {
         }
 
         // Match: PrefixName Type = value  or  PrefixName = value
-        // or, in a keyed composite literal: PrefixName: value, or PrefixName & mask: value,
-        const fullMatch = line.match(new RegExp(`^(${prefix}\\w+)\\s+(?:\\S+\\s*)?=\\s*(.+)$`))
-            ?? (def.stringEnum ? line.match(new RegExp(`^(${prefix}\\w+)(?:\\s*&\\s*\\w+)?:\\s*(.+?),$`)) : null);
+        const fullMatch = line.match(new RegExp(`^(${prefix}\\w+)\\s+(?:\\S+\\s*)?=\\s*(.+)$`));
         // Match bare iota continuation: just PrefixName
         const bareMatch = !fullMatch && iotaExpression !== undefined
             ? line.match(new RegExp(`^(${prefix}\\w+)$`))
@@ -280,12 +292,11 @@ function translateGoNumericExpression(expression: string, prefix: string): strin
 }
 
 /**
- * Resolve a Go string expression, optionally interned with `MakeSymbolName`,
+ * Resolve a Go string-constant expression (e.g. `Prefix + "call"` or `"export="`)
  * into a quoted, JS-escaped TypeScript string literal. `replacements` maps bare
  * Go identifiers (such as a sentinel-prefix constant) to their literal value.
  */
 function parseGoStringValue(goValue: string, replacements: Record<string, string>): string {
-    goValue = goValue.replace(/^(?:unique\.Make|MakeSymbolName)\((.*)\)$/, "$1");
     let result = "";
     for (const part of goValue.split("+").map(p => p.trim())) {
         if (Object.prototype.hasOwnProperty.call(replacements, part)) {
@@ -309,14 +320,10 @@ interface EnumMember {
 
 function parseGoEnum(def: EnumDef): EnumMember[] {
     const source = fs.readFileSync(path.join(ROOT, def.goFile), "utf-8");
-    // Numeric enums come from const blocks. String enums come from var blocks or
-    // keyed composite literals, such as the texts of constant symbol names.
-    const declarationBlockRegex = /(const|var)\s*\(([\s\S]*?)\n\)|var\s+\w+\s*=\s*[^{\n]*\{([\s\S]*?)\n\}/g;
+    const constBlockRegex = /const\s*\(([\s\S]*?)\n\)/g;
 
-    for (const match of source.matchAll(declarationBlockRegex)) {
-        const isConst = match[1] === "const";
-        if (isConst === !!def.stringEnum) continue;
-        const members = parseGoDeclarationBlock(match[2] ?? match[3], def).filter(member => !def.excludeMembers?.includes(member.name));
+    for (const match of source.matchAll(constBlockRegex)) {
+        const members = parseGoConstBlock(match[1], def).filter(member => !def.excludeMembers?.includes(member.name));
         if (members.length > 0) return topoSortMembers(members);
     }
 
@@ -379,6 +386,14 @@ export function generateEnum(def: EnumDef): { members: EnumMember[]; code: strin
 }
 
 const enumValuesGeneratedGoPath = path.join(ROOT, "tsc/internal/api/enum_values_generated.go");
+
+export const outputs = [
+    enumValuesGeneratedGoPath,
+    ...enumDefs.flatMap(def => {
+        const camelName = def.name.charAt(0).toLowerCase() + def.name.slice(1);
+        return [path.join(ROOT, def.outDir, `${camelName}.enum.ts`), path.join(ROOT, def.outDir, `${camelName}.ts`)];
+    }),
+];
 
 interface GeneratedEnum {
     def: EnumDef;
@@ -507,7 +522,6 @@ export default async function generateEnums(force = false) {
     const generatedGoFile = new GeneratedFile(enumValuesGeneratedGoPath, [...inputs, ...enumDefs.map(def => path.join(ROOT, def.goFile))]);
     const generatedFiles = [generatedGoFile, ...enumFiles.flatMap(({ typeFile, runtimeFile }) => [typeFile, runtimeFile])];
     if (generatedFiles.every(file => file.isCurrent(force))) {
-        console.log("Enums are up to date.");
         return;
     }
     const ts = await import("typescript");
