@@ -857,7 +857,8 @@ func (c *Checker) checkGrammarTypeArguments(node *ast.Node, typeArguments *ast.N
 }
 
 func (c *Checker) checkGrammarTaggedTemplateChain(node *ast.TaggedTemplateExpression) bool {
-	if node.QuestionDotToken != nil || node.Flags&ast.NodeFlagsOptionalChain != 0 {
+	tag := ast.SkipOuterExpressions(node.Tag, ast.OEKNonNullAssertions)
+	if node.QuestionDotToken != nil || node.Flags&ast.NodeFlagsOptionalChain != 0 || tag.Flags&ast.NodeFlagsOptionalChain != 0 {
 		return c.grammarErrorOnNode(node.Template, diagnostics.Tagged_template_expressions_are_not_permitted_in_an_optional_chain)
 	}
 	return false
