@@ -26,13 +26,17 @@ type resolution struct {
 
 	// A query records the effects of a memoized computation, for replay by
 	// reuse of its result; see memo.go.
-	memo     bool
-	isQuery  bool
-	prevMemo int32        // Checker.memoTop on entry
-	result   *memoState   // Memo state of the result computed
-	effects  *memoEffects // Allocated on first use
-	entry    *ast.Node    // Current node when the computation started
-	query    savedCurrentNode
+	memo      bool
+	isQuery   bool
+	fromCheck bool         // The query began in a check; see beginQueryFromCheck
+	prevMemo  int32        // Checker.memoTop on entry
+	result    *memoState   // Memo state of the result computed
+	effects   *memoEffects // Allocated on first use
+	// Index in Checker.deferredAttach of the first result cached by the
+	// computation before it had effects; see attachState.
+	attachStart int32
+	entry       *ast.Node // Current node when the computation started
+	query       savedCurrentNode
 
 	// A type resolution is a computation that re-entering detects as a cycle;
 	// see beginTypeResolution. Its other fields are those of the resolution
@@ -98,6 +102,11 @@ func (c *Checker) endResolution() *instantiationCount {
 	debug.Assert(!f.isTypeResolution, "resolution left on the stack")
 	c.endResolving(f, n)
 	count := f.count
+	fromCheck := f.fromCheck
+	if f.memo {
+		clear(c.deferredAttach[f.attachStart:])
+		c.deferredAttach = c.deferredAttach[:f.attachStart]
+	}
 	if count != nil || f.source != nil {
 		c.finishResolution(f)
 	}
@@ -108,6 +117,9 @@ func (c *Checker) endResolution() *instantiationCount {
 	}
 	if count != nil {
 		c.observeCost(count)
+	}
+	if fromCheck {
+		c.endQueryFromCheck()
 	}
 	return count
 }

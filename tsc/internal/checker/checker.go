@@ -688,7 +688,9 @@ type Checker struct {
 	varianceStack                               []VarianceStackEntry
 	varianceGuesses                             map[*ast.Symbol][]VarianceFlags // Variances assumed for measurements in progress; see getVariancesWorker
 	varianceGuessed                             []*ast.Symbol                   // Keys of varianceGuesses in order of addition
-	flushStates                                 *[]*memoState                   // Collects memo states given effects to replay, if non-nil; see withoutChecking
+	flushBuf                                    []*memoState
+	deferredAttach                              []*memoState  // See attachState
+	flushStates                                 *[]*memoState // Collects memo states given effects to replay, if non-nil; see withoutChecking
 	apparentArgumentCount                       *int
 	lastGetCombinedNodeFlagsNode                *ast.Node
 	lastGetCombinedNodeFlagsResult              ast.NodeFlags
@@ -1016,6 +1018,7 @@ type memoStore struct {
 	deferredDiagnosticCallbacks             []func(c *Checker)
 	memoStates                              map[memoKey]*memoState // Memo state of results computed by queries; see memo.go
 	costFilter                              []uint64               // Memo keys whose memo states may store work; see resolutions.go
+	stateFilter                             []uint64               // Memo keys that may have a memo state; see memoState
 	memoPendingCount                        int                    // Number of memoStates with unreplayed effects
 	memoErrorStates                         int                    // Number of memoStates with reports; see setReported
 
