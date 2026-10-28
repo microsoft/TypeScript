@@ -199,15 +199,15 @@ function possiblyNever<T>(value: { a: number; b: number }) {
 >a : number
 >b : number
 
-    const unconstrained: Constant<T> = value; // Error
+    const unconstrained: Constant<T> = value;
 >unconstrained : Constant<T>
 >value : { a: number; b: number; }
 
-    const constrained: Constant<T & string> = value; // Error
+    const constrained: Constant<T & string> = value;
 >constrained : Constant<T & string>
 >value : { a: number; b: number; }
 
-    const conditional: Constant<[T] extends [never] ? object : never> = value; // Error
+    const conditional: Constant<[T] extends [never] ? object : never> = value;
 >conditional : Constant<[T] extends [never] ? object : never>
 >value : { a: number; b: number; }
 }
@@ -219,7 +219,7 @@ function requiredWitness<T>(value: { a: number; b: number; value: T }) {
 >b : number
 >value : T
 
-    const result: Constant<T> = value; // Error: a getter returning never can throw.
+    const result: Constant<T> = value;
 >result : Constant<T>
 >value : { a: number; b: number; value: T; }
 }
@@ -243,7 +243,7 @@ function optionalWitness<T>(value: { a: number; b: number; value?: T }) {
 >b : number
 >value : T | undefined
 
-    const result: Constant<T> = value; // Error: the property can be absent when T is never.
+    const result: Constant<T> = value;
 >result : Constant<T>
 >value : { a: number; b: number; value?: T; }
 }
@@ -255,7 +255,7 @@ function arrayWitness<T>(value: { a: number; b: number; values: T[] }) {
 >b : number
 >values : T[]
 
-    const result: Constant<T> = value; // Error: an array of never can be empty.
+    const result: Constant<T> = value;
 >result : Constant<T>
 >value : { a: number; b: number; values: T[]; }
 }
@@ -267,7 +267,7 @@ function functionWitness<T>(value: { a: number; b: number; get: () => T }) {
 >b : number
 >get : () => T
 
-    const result: Constant<T> = value; // Error: a function returning never can throw.
+    const result: Constant<T> = value;
 >result : Constant<T>
 >value : { a: number; b: number; get: () => T; }
 }
@@ -314,11 +314,11 @@ function emptyInstantiations<T, U extends unknown[]>(value: { a: number; b: numb
 >a : number
 >b : number
 
-    const mapped: Constant<Homomorphic<T>> = value; // Error: Homomorphic<never> is never.
+    const mapped: Constant<Homomorphic<T>> = value;
 >mapped : Constant<Homomorphic<T>>
 >value : { a: number; b: number; }
 
-    const variadic: Constant<Spread<U>> = value; // Error: Spread<never> is never.
+    const variadic: Constant<Spread<U>> = value;
 >variadic : Constant<[...U]>
 >value : { a: number; b: number; }
 }

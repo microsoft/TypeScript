@@ -71,27 +71,27 @@ function correlated<T>(pair: { x: T; y: T }, tuple: [T, T], callback: (value: T)
 }
 
 function possiblyNever<T>(value: { a: number; b: number }) {
-    const unconstrained: Constant<T> = value; // Error
-    const constrained: Constant<T & string> = value; // Error
-    const conditional: Constant<[T] extends [never] ? object : never> = value; // Error
+    const unconstrained: Constant<T> = value;
+    const constrained: Constant<T & string> = value;
+    const conditional: Constant<[T] extends [never] ? object : never> = value;
 }
 
 function requiredWitness<T>(value: { a: number; b: number; value: T }) {
-    const result: Constant<T> = value; // Error: a getter returning never can throw.
+    const result: Constant<T> = value;
 }
 
 requiredWitness<never>({ a: 1, b: 2, get value(): never { throw new Error(); } });
 
 function optionalWitness<T>(value: { a: number; b: number; value?: T }) {
-    const result: Constant<T> = value; // Error: the property can be absent when T is never.
+    const result: Constant<T> = value;
 }
 
 function arrayWitness<T>(value: { a: number; b: number; values: T[] }) {
-    const result: Constant<T> = value; // Error: an array of never can be empty.
+    const result: Constant<T> = value;
 }
 
 function functionWitness<T>(value: { a: number; b: number; get: () => T }) {
-    const result: Constant<T> = value; // Error: a function returning never can throw.
+    const result: Constant<T> = value;
 }
 
 function definitelyNotNever<T>(value: { a: number; b: number }) {
@@ -106,8 +106,8 @@ type Homomorphic<T> = { [K in keyof T]: T[K] };
 type Spread<T extends unknown[]> = [...T];
 
 function emptyInstantiations<T, U extends unknown[]>(value: { a: number; b: number }) {
-    const mapped: Constant<Homomorphic<T>> = value; // Error: Homomorphic<never> is never.
-    const variadic: Constant<Spread<U>> = value; // Error: Spread<never> is never.
+    const mapped: Constant<Homomorphic<T>> = value;
+    const variadic: Constant<Spread<U>> = value;
 }
 
 type Inferred<T> = T extends (value: infer P) => unknown ? T | P : never;

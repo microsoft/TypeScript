@@ -7,11 +7,11 @@ type Foo<K> = K extends unknown ? { a: number } : unknown
 
 const createDefaultExample = <K,>(x: K): Foo<K> & { x: K; } => {
 >createDefaultExample : <K>(x: K) => Foo<K> & { x: K; }
-><K,>(x: K): Foo<K> & { x: K; } => {  return { a: 1, x: x }; // Error: Foo<never> is never.} : <K>(x: K) => Foo<K> & { x: K; }
+><K,>(x: K): Foo<K> & { x: K; } => {  return { a: 1, x: x };} : <K>(x: K) => Foo<K> & { x: K; }
 >x : K
 >x : K
 
-  return { a: 1, x: x }; // Error: Foo<never> is never.
+  return { a: 1, x: x };
 >{ a: 1, x: x } : { a: number; x: K; }
 >a : number
 >1 : 1

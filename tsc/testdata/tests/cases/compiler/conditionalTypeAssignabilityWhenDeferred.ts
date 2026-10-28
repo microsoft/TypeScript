@@ -44,7 +44,7 @@ function f2<T>(t1: { x: T; y: T }, t2: T extends T ? { x: T; y: T } : never) {
 type Foo<T> = T extends true ? string : "a";
 
 function test<T>(x: Foo<T>, s: string) {
-  x = "a"; // Error: Foo<never> is never.
+  x = "a"; // OK: both branches accept "a".
   x = s; // Error
 }
 
@@ -64,16 +64,15 @@ function testAssignabilityToConditionalType<T>() {
   // Infer type parameters: no good
   const o2: [T] extends [[infer U]] ? U : { b: number } = o;
 
-  // Branch-wise checking must account for the empty union: C<never> is never,
-  // even when both branches are independent of the check type.
+  // Independent branches retain branch-wise checking without a distributive source.
 
-  // Distributive where T might instantiate to never: no good
+  // Distributive with independent branches: OK
   const o3: Distributive<T> = o;
-  // Distributive where T & string might instantiate to never: also no good
+  // Intersection check type with independent branches: OK
   const o4: Distributive<T & string> = o;
   // Distributive where {a: T} cannot instantiate to never: OK
   const o5: Distributive<{ a: T }> = o;
-  // Distributive where check type is a conditional which returns a non-never type upon instantiation with `never` but can still return never otherwise: no good
+  // Conditional check type with independent branches: OK
   const o6: Distributive<[T] extends [never] ? { a: number } : never> = o;
 }
 

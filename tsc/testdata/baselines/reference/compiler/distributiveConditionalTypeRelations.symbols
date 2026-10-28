@@ -357,19 +357,19 @@ function possiblyNever<T>(value: { a: number; b: number }) {
 >a : Symbol(a, Decl(distributiveConditionalTypeRelations.ts, 69, 34))
 >b : Symbol(b, Decl(distributiveConditionalTypeRelations.ts, 69, 45))
 
-    const unconstrained: Constant<T> = value; // Error
+    const unconstrained: Constant<T> = value;
 >unconstrained : Symbol(unconstrained, Decl(distributiveConditionalTypeRelations.ts, 70, 9))
 >Constant : Symbol(Constant, Decl(distributiveConditionalTypeRelations.ts, 3, 42))
 >T : Symbol(T, Decl(distributiveConditionalTypeRelations.ts, 69, 23))
 >value : Symbol(value, Decl(distributiveConditionalTypeRelations.ts, 69, 26))
 
-    const constrained: Constant<T & string> = value; // Error
+    const constrained: Constant<T & string> = value;
 >constrained : Symbol(constrained, Decl(distributiveConditionalTypeRelations.ts, 71, 9))
 >Constant : Symbol(Constant, Decl(distributiveConditionalTypeRelations.ts, 3, 42))
 >T : Symbol(T, Decl(distributiveConditionalTypeRelations.ts, 69, 23))
 >value : Symbol(value, Decl(distributiveConditionalTypeRelations.ts, 69, 26))
 
-    const conditional: Constant<[T] extends [never] ? object : never> = value; // Error
+    const conditional: Constant<[T] extends [never] ? object : never> = value;
 >conditional : Symbol(conditional, Decl(distributiveConditionalTypeRelations.ts, 72, 9))
 >Constant : Symbol(Constant, Decl(distributiveConditionalTypeRelations.ts, 3, 42))
 >T : Symbol(T, Decl(distributiveConditionalTypeRelations.ts, 69, 23))
@@ -385,7 +385,7 @@ function requiredWitness<T>(value: { a: number; b: number; value: T }) {
 >value : Symbol(value, Decl(distributiveConditionalTypeRelations.ts, 75, 58))
 >T : Symbol(T, Decl(distributiveConditionalTypeRelations.ts, 75, 25))
 
-    const result: Constant<T> = value; // Error: a getter returning never can throw.
+    const result: Constant<T> = value;
 >result : Symbol(result, Decl(distributiveConditionalTypeRelations.ts, 76, 9))
 >Constant : Symbol(Constant, Decl(distributiveConditionalTypeRelations.ts, 3, 42))
 >T : Symbol(T, Decl(distributiveConditionalTypeRelations.ts, 75, 25))
@@ -408,7 +408,7 @@ function optionalWitness<T>(value: { a: number; b: number; value?: T }) {
 >value : Symbol(value, Decl(distributiveConditionalTypeRelations.ts, 81, 58))
 >T : Symbol(T, Decl(distributiveConditionalTypeRelations.ts, 81, 25))
 
-    const result: Constant<T> = value; // Error: the property can be absent when T is never.
+    const result: Constant<T> = value;
 >result : Symbol(result, Decl(distributiveConditionalTypeRelations.ts, 82, 9))
 >Constant : Symbol(Constant, Decl(distributiveConditionalTypeRelations.ts, 3, 42))
 >T : Symbol(T, Decl(distributiveConditionalTypeRelations.ts, 81, 25))
@@ -424,7 +424,7 @@ function arrayWitness<T>(value: { a: number; b: number; values: T[] }) {
 >values : Symbol(values, Decl(distributiveConditionalTypeRelations.ts, 85, 55))
 >T : Symbol(T, Decl(distributiveConditionalTypeRelations.ts, 85, 22))
 
-    const result: Constant<T> = value; // Error: an array of never can be empty.
+    const result: Constant<T> = value;
 >result : Symbol(result, Decl(distributiveConditionalTypeRelations.ts, 86, 9))
 >Constant : Symbol(Constant, Decl(distributiveConditionalTypeRelations.ts, 3, 42))
 >T : Symbol(T, Decl(distributiveConditionalTypeRelations.ts, 85, 22))
@@ -440,7 +440,7 @@ function functionWitness<T>(value: { a: number; b: number; get: () => T }) {
 >get : Symbol(get, Decl(distributiveConditionalTypeRelations.ts, 89, 58))
 >T : Symbol(T, Decl(distributiveConditionalTypeRelations.ts, 89, 25))
 
-    const result: Constant<T> = value; // Error: a function returning never can throw.
+    const result: Constant<T> = value;
 >result : Symbol(result, Decl(distributiveConditionalTypeRelations.ts, 90, 9))
 >Constant : Symbol(Constant, Decl(distributiveConditionalTypeRelations.ts, 3, 42))
 >T : Symbol(T, Decl(distributiveConditionalTypeRelations.ts, 89, 25))
@@ -511,14 +511,14 @@ function emptyInstantiations<T, U extends unknown[]>(value: { a: number; b: numb
 >a : Symbol(a, Decl(distributiveConditionalTypeRelations.ts, 104, 61))
 >b : Symbol(b, Decl(distributiveConditionalTypeRelations.ts, 104, 72))
 
-    const mapped: Constant<Homomorphic<T>> = value; // Error: Homomorphic<never> is never.
+    const mapped: Constant<Homomorphic<T>> = value;
 >mapped : Symbol(mapped, Decl(distributiveConditionalTypeRelations.ts, 105, 9))
 >Constant : Symbol(Constant, Decl(distributiveConditionalTypeRelations.ts, 3, 42))
 >Homomorphic : Symbol(Homomorphic, Decl(distributiveConditionalTypeRelations.ts, 99, 1))
 >T : Symbol(T, Decl(distributiveConditionalTypeRelations.ts, 104, 29))
 >value : Symbol(value, Decl(distributiveConditionalTypeRelations.ts, 104, 53))
 
-    const variadic: Constant<Spread<U>> = value; // Error: Spread<never> is never.
+    const variadic: Constant<Spread<U>> = value;
 >variadic : Symbol(variadic, Decl(distributiveConditionalTypeRelations.ts, 106, 9))
 >Constant : Symbol(Constant, Decl(distributiveConditionalTypeRelations.ts, 3, 42))
 >Spread : Symbol(Spread, Decl(distributiveConditionalTypeRelations.ts, 101, 47))

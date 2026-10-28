@@ -541,7 +541,7 @@ func TestInferencePatternRelationContext(t *testing.T) {
 
 func TestInferencePatternRelationRigidConstraints(t *testing.T) {
 	t.Parallel()
-	c, _ := newInferenceRelationTestChecker()
+	c, primitives := newInferenceRelationTestChecker()
 	outer := newInferencePatternTestParameter(c)
 	inner := newInferencePatternTestParameter(c)
 	inner.AsTypeParameter().constraint = outer
@@ -550,6 +550,10 @@ func TestInferencePatternRelationRigidConstraints(t *testing.T) {
 	assert.Equal(t, c.getConstraintOfTypeParameter(rigidInner), rigidOuter)
 	assert.Assert(t, !isInferencePatternParameter(rigidOuter))
 	assert.Assert(t, c.isTypeRelatedTo(inner, rigidOuter, c.inferencePatternRelation))
+	assert.Assert(t, c.isTypeRelatedTo(outer, inner, c.inferencePatternRelation))
+	assert.Assert(t, !c.isTypeRelatedTo(primitives[0], inner, c.inferencePatternRelation))
+	assert.Assert(t, !c.isTypeRelatedTo(primitives[1], inner, c.inferencePatternRelation))
+	assert.Assert(t, c.isTypeRelatedTo(c.neverType, inner, c.inferencePatternRelation))
 }
 
 func TestInferencePatternRelationCacheEffects(t *testing.T) {

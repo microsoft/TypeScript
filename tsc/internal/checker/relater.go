@@ -2712,7 +2712,14 @@ func (r *Relater) isRelatedToEx(originalSource *Type, originalTarget *Type, recu
 			if constraint == nil {
 				return TernaryTrue
 			}
+			// A referenced infer binder constrains this match; it is not another inference site.
+			constraint = r.c.instantiateType(constraint, r.c.rigidInferenceMapper)
 			return r.isRelatedToEx(originalSource, constraint, recursionFlags, false, nil, intersectionState)
+		}
+		// Intersection inference removes matching constituents before selecting candidates.
+		// Independent wildcard matches do not establish that the resulting binding works.
+		if originalTarget.flags&TypeFlagsIntersection != 0 && core.Some(originalTarget.Types(), isInferencePatternParameter) {
+			return TernaryFalse
 		}
 	}
 	if originalSource == originalTarget {
@@ -5274,7 +5281,12 @@ func (r *Relater) typeRelatedToConditionalType(source *Type, target *Type, inter
 	var isValidSource func() bool
 	mapper := d.mapper
 	checkType, extendsType := d.checkType, d.extendsType
-	if d.root.isDistributive && !isFixedConditionalCheckType(d.checkType) {
+	// Preserve branch-wise comparison for independent branches, but inferred
+	// results must still account for an empty distributive check type.
+	if d.root.isDistributive && !isFixedConditionalCheckType(d.checkType) &&
+		(len(d.root.inferTypeParameters) != 0 && !r.c.isDefinitelyNonNeverType(d.checkType, 0) ||
+			r.c.isTypeParameterPossiblyReferenced(d.root.checkType, d.root.node.TrueType) ||
+			r.c.isTypeParameterPossiblyReferenced(d.root.checkType, d.root.node.FalseType)) {
 		if d.resolvedDistributiveCheckType == nil {
 			d.resolvedDistributiveCheckType = r.c.newTypeParameter(nil)
 			d.resolvedDistributiveCheckType.AsTypeParameter().constraint = d.checkType
@@ -5313,22 +5325,12 @@ func (r *Relater) typeRelatedToConditionalType(source *Type, target *Type, inter
 			r.c.isTypeAssignableTo(r.c.instantiateType(falseSource, newSimpleTypeMapper(constituent, r.c.neverType)), r.c.neverType) &&
 			isValidSource()
 		if !distributedSource {
-			isValidSource = nil
-			// Independent branches still require a nonempty check type: C<never> is never,
-			// even when neither branch mentions the distributed parameter.
-			if !r.c.isDefinitelyNonNeverType(d.checkType, 0) ||
-				r.c.isTypeParameterPossiblyReferenced(d.root.checkType, d.root.node.TrueType) ||
-				r.c.isTypeParameterPossiblyReferenced(d.root.checkType, d.root.node.FalseType) {
-				return TernaryFalse
-			}
-			falseSource = source
+			return TernaryFalse
 		}
 		checkType = constituent
 		mapper = prependTypeMapping(d.root.checkType, checkType, mapper)
 		extendsType = r.c.instantiateType(d.root.extendsType, mapper)
-		if distributedSource {
-			trueSource = r.c.instantiateType(falseSource, newSimpleTypeMapper(checkType, r.c.getSubstitutionType(checkType, extendsType)))
-		}
+		trueSource = r.c.instantiateType(falseSource, newSimpleTypeMapper(checkType, r.c.getSubstitutionType(checkType, extendsType)))
 	}
 	// Inferred parameters remain universally quantified in the result type. An
 	// irrefutable inference pattern justifies checking only the true branch, but

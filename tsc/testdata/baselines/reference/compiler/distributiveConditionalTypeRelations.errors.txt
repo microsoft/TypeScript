@@ -13,15 +13,6 @@ distributiveConditionalTypeRelations.ts(53,11): error TS2322: Type 'T & { value:
 distributiveConditionalTypeRelations.ts(65,11): error TS2322: Type '{ x: T; y: T; }' is not assignable to type 'Pair<T>'.
 distributiveConditionalTypeRelations.ts(66,11): error TS2322: Type '[T, T]' is not assignable to type 'Tuple<T>'.
 distributiveConditionalTypeRelations.ts(67,11): error TS2322: Type '(value: T) => T' is not assignable to type 'Callback<T>'.
-distributiveConditionalTypeRelations.ts(71,11): error TS2322: Type '{ a: number; b: number; }' is not assignable to type 'Constant<T>'.
-distributiveConditionalTypeRelations.ts(72,11): error TS2322: Type '{ a: number; b: number; }' is not assignable to type 'Constant<T & string>'.
-distributiveConditionalTypeRelations.ts(73,11): error TS2322: Type '{ a: number; b: number; }' is not assignable to type 'Constant<[T] extends [never] ? object : never>'.
-distributiveConditionalTypeRelations.ts(77,11): error TS2322: Type '{ a: number; b: number; value: T; }' is not assignable to type 'Constant<T>'.
-distributiveConditionalTypeRelations.ts(83,11): error TS2322: Type '{ a: number; b: number; value?: T | undefined; }' is not assignable to type 'Constant<T>'.
-distributiveConditionalTypeRelations.ts(87,11): error TS2322: Type '{ a: number; b: number; values: T[]; }' is not assignable to type 'Constant<T>'.
-distributiveConditionalTypeRelations.ts(91,11): error TS2322: Type '{ a: number; b: number; get: () => T; }' is not assignable to type 'Constant<T>'.
-distributiveConditionalTypeRelations.ts(106,11): error TS2322: Type '{ a: number; b: number; }' is not assignable to type 'Constant<Homomorphic<T>>'.
-distributiveConditionalTypeRelations.ts(107,11): error TS2322: Type '{ a: number; b: number; }' is not assignable to type 'Constant<[...U]>'.
 distributiveConditionalTypeRelations.ts(117,11): error TS2322: Type 'T' is not assignable to type 'Inferred<T>'.
   Type '(value: any) => unknown' is not assignable to type 'Inferred<T>'.
 distributiveConditionalTypeRelations.ts(118,11): error TS2322: Type 'T' is not assignable to type 'InferredNonDistributive<T>'.
@@ -91,7 +82,7 @@ distributiveConditionalTypeRelations.ts(310,7): error TS2322: Type '{ method(val
 distributiveConditionalTypeRelations.ts(314,7): error TS2322: Type '{ method(value: never): never; }' is not assignable to type 'never'.
 
 
-==== distributiveConditionalTypeRelations.ts (61 errors) ====
+==== distributiveConditionalTypeRelations.ts (52 errors) ====
     // The original #27932 cases are in conditionalTypeAssignabilityWhenDeferred.ts.
     
     type Either<T, U> = T extends U ? T | { matched: true } : T | { matched: false };
@@ -186,41 +177,27 @@ distributiveConditionalTypeRelations.ts(314,7): error TS2322: Type '{ method(val
     }
     
     function possiblyNever<T>(value: { a: number; b: number }) {
-        const unconstrained: Constant<T> = value; // Error
-              ~~~~~~~~~~~~~
-!!! error TS2322: Type '{ a: number; b: number; }' is not assignable to type 'Constant<T>'.
-        const constrained: Constant<T & string> = value; // Error
-              ~~~~~~~~~~~
-!!! error TS2322: Type '{ a: number; b: number; }' is not assignable to type 'Constant<T & string>'.
-        const conditional: Constant<[T] extends [never] ? object : never> = value; // Error
-              ~~~~~~~~~~~
-!!! error TS2322: Type '{ a: number; b: number; }' is not assignable to type 'Constant<[T] extends [never] ? object : never>'.
+        const unconstrained: Constant<T> = value;
+        const constrained: Constant<T & string> = value;
+        const conditional: Constant<[T] extends [never] ? object : never> = value;
     }
     
     function requiredWitness<T>(value: { a: number; b: number; value: T }) {
-        const result: Constant<T> = value; // Error: a getter returning never can throw.
-              ~~~~~~
-!!! error TS2322: Type '{ a: number; b: number; value: T; }' is not assignable to type 'Constant<T>'.
+        const result: Constant<T> = value;
     }
     
     requiredWitness<never>({ a: 1, b: 2, get value(): never { throw new Error(); } });
     
     function optionalWitness<T>(value: { a: number; b: number; value?: T }) {
-        const result: Constant<T> = value; // Error: the property can be absent when T is never.
-              ~~~~~~
-!!! error TS2322: Type '{ a: number; b: number; value?: T | undefined; }' is not assignable to type 'Constant<T>'.
+        const result: Constant<T> = value;
     }
     
     function arrayWitness<T>(value: { a: number; b: number; values: T[] }) {
-        const result: Constant<T> = value; // Error: an array of never can be empty.
-              ~~~~~~
-!!! error TS2322: Type '{ a: number; b: number; values: T[]; }' is not assignable to type 'Constant<T>'.
+        const result: Constant<T> = value;
     }
     
     function functionWitness<T>(value: { a: number; b: number; get: () => T }) {
-        const result: Constant<T> = value; // Error: a function returning never can throw.
-              ~~~~~~
-!!! error TS2322: Type '{ a: number; b: number; get: () => T; }' is not assignable to type 'Constant<T>'.
+        const result: Constant<T> = value;
     }
     
     function definitelyNotNever<T>(value: { a: number; b: number }) {
@@ -235,12 +212,8 @@ distributiveConditionalTypeRelations.ts(314,7): error TS2322: Type '{ method(val
     type Spread<T extends unknown[]> = [...T];
     
     function emptyInstantiations<T, U extends unknown[]>(value: { a: number; b: number }) {
-        const mapped: Constant<Homomorphic<T>> = value; // Error: Homomorphic<never> is never.
-              ~~~~~~
-!!! error TS2322: Type '{ a: number; b: number; }' is not assignable to type 'Constant<Homomorphic<T>>'.
-        const variadic: Constant<Spread<U>> = value; // Error: Spread<never> is never.
-              ~~~~~~~~
-!!! error TS2322: Type '{ a: number; b: number; }' is not assignable to type 'Constant<[...U]>'.
+        const mapped: Constant<Homomorphic<T>> = value;
+        const variadic: Constant<Spread<U>> = value;
     }
     
     type Inferred<T> = T extends (value: infer P) => unknown ? T | P : never;

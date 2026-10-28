@@ -1,0 +1,158 @@
+distributiveConditionalTypeInferencePatterns.ts(6,9): error TS2322: Type 'T' is not assignable to type 'Result<T>'.
+  Type '{ a: string; b: number; }' is not assignable to type 'Result<T>'.
+distributiveConditionalTypeInferencePatterns.ts(10,9): error TS2322: Type 'T' is not assignable to type 'NonDistributive<T>'.
+  Type '{ a: string; b: number; }' is not assignable to type 'NonDistributive<T>'.
+distributiveConditionalTypeInferencePatterns.ts(13,18): error TS2322: Type '{ a: string; b: number; }' is not assignable to type 'never'.
+distributiveConditionalTypeInferencePatterns.ts(38,9): error TS2322: Type 'T' is not assignable to type 'Result<T>'.
+  Type '{ a: string; b: number; }' is not assignable to type 'Result<T>'.
+distributiveConditionalTypeInferencePatterns.ts(42,9): error TS2322: Type 'T' is not assignable to type 'NonDistributive<T>'.
+  Type '{ a: string; b: number; }' is not assignable to type 'NonDistributive<T>'.
+distributiveConditionalTypeInferencePatterns.ts(45,18): error TS2322: Type '{ a: string; b: number; }' is not assignable to type 'never'.
+distributiveConditionalTypeInferencePatterns.ts(66,9): error TS2322: Type '{}' is not assignable to type 'Box<T>'.
+distributiveConditionalTypeInferencePatterns.ts(70,9): error TS2322: Type '{}' is not assignable to type 'PropertyBox<T>'.
+distributiveConditionalTypeInferencePatterns.ts(74,9): error TS2322: Type '{ done: true; }' is not assignable to type 'Constant<T>'.
+distributiveConditionalTypeInferencePatterns.ts(77,18): error TS2322: Type '{}' is not assignable to type 'never'.
+distributiveConditionalTypeInferencePatterns.ts(78,18): error TS2322: Type '{}' is not assignable to type 'never'.
+distributiveConditionalTypeInferencePatterns.ts(79,18): error TS2322: Type '{ done: boolean; }' is not assignable to type 'never'.
+
+
+==== distributiveConditionalTypeInferencePatterns.ts (12 errors) ====
+    namespace IntersectionInference {
+        type Result<T> = T extends { a: infer U & string; b: infer U } ? T : never;
+        type NonDistributive<T> = [T] extends [{ a: infer U & string; b: infer U }] ? T : never;
+    
+        export function generic<T extends { a: string; b: number }>(value: T): Result<T> {
+            return value; // Error: string is removed before inferring U from b.
+            ~~~~~~
+!!! error TS2322: Type 'T' is not assignable to type 'Result<T>'.
+!!! error TS2322:   Type '{ a: string; b: number; }' is not assignable to type 'Result<T>'.
+        }
+    
+        export function nonDistributive<T extends { a: string; b: number }>(value: T): NonDistributive<T> {
+            return value; // Error
+            ~~~~~~
+!!! error TS2322: Type 'T' is not assignable to type 'NonDistributive<T>'.
+!!! error TS2322:   Type '{ a: string; b: number; }' is not assignable to type 'NonDistributive<T>'.
+        }
+    
+        export const rejected: Result<{ a: string; b: number }> = { a: "", b: 1 }; // Error
+                     ~~~~~~~~
+!!! error TS2322: Type '{ a: string; b: number; }' is not assignable to type 'never'.
+        export const accepted: Result<{ a: string; b: string }> = { a: "", b: "" };
+    
+        type Covariant<T> = T extends { a: infer U; b: infer U } ? T : never;
+        type ObjectIntersection<T> = T extends { a: infer U } & { b: number } ? T : never;
+    
+        export function covariant<T extends { a: string; b: number }>(value: T): Covariant<T> {
+            return value;
+        }
+    
+        export function objectIntersection<T extends { a: string; b: number }>(value: T): ObjectIntersection<T> {
+            return value;
+        }
+    }
+    
+    namespace DependentConstraints {
+        interface Dep<A, B extends A> {
+            a: A;
+            b: B;
+        }
+    
+        type Result<T> = T extends Dep<infer A, infer B> ? T : never;
+        type NonDistributive<T> = [T] extends [Dep<infer A, infer B>] ? T : never;
+    
+        export function generic<T extends { a: string; b: number }>(value: T): Result<T> {
+            return value; // Error: the inferred B must satisfy the same A.
+            ~~~~~~
+!!! error TS2322: Type 'T' is not assignable to type 'Result<T>'.
+!!! error TS2322:   Type '{ a: string; b: number; }' is not assignable to type 'Result<T>'.
+        }
+    
+        export function nonDistributive<T extends { a: string; b: number }>(value: T): NonDistributive<T> {
+            return value; // Error
+            ~~~~~~
+!!! error TS2322: Type 'T' is not assignable to type 'NonDistributive<T>'.
+!!! error TS2322:   Type '{ a: string; b: number; }' is not assignable to type 'NonDistributive<T>'.
+        }
+    
+        export const rejected: Result<{ a: string; b: number }> = { a: "", b: 1 }; // Error
+                     ~~~~~~~~
+!!! error TS2322: Type '{ a: string; b: number; }' is not assignable to type 'never'.
+        export const accepted: Result<{ a: string; b: string }> = { a: "", b: "" };
+    
+        interface Independent<A, B extends string> {
+            a: A;
+            b: B;
+        }
+    
+        type IndependentResult<T> = T extends Independent<infer A, infer B> ? T : never;
+    
+        export function independent<T extends { a: number; b: string }>(value: T): IndependentResult<T> {
+            return value;
+        }
+    }
+    
+    namespace InferredBranchDependence {
+        type Box<T> = T extends infer U ? { value?: U } : never;
+        type PropertyBox<T> = T extends { value: infer U } ? { copy?: U } : never;
+        type Constant<T> = T extends infer U ? { done: true } : never;
+    
+        export function box<T>(): Box<T> {
+            return {}; // Error: Box<never> is never even though the branch only references U.
+            ~~~~~~
+!!! error TS2322: Type '{}' is not assignable to type 'Box<T>'.
+        }
+    
+        export function propertyBox<T extends { value: unknown }>(): PropertyBox<T> {
+            return {}; // Error
+            ~~~~~~
+!!! error TS2322: Type '{}' is not assignable to type 'PropertyBox<T>'.
+        }
+    
+        export function constant<T>(): Constant<T> {
+            return { done: true }; // Error: an unused infer binder still requires a nonempty check type.
+            ~~~~~~
+!!! error TS2322: Type '{ done: true; }' is not assignable to type 'Constant<T>'.
+        }
+    
+        export const rejectedBox: Box<never> = {}; // Error
+                     ~~~~~~~~~~~
+!!! error TS2322: Type '{}' is not assignable to type 'never'.
+        export const rejectedProperty: PropertyBox<never> = {}; // Error
+                     ~~~~~~~~~~~~~~~~
+!!! error TS2322: Type '{}' is not assignable to type 'never'.
+        export const rejectedConstant: Constant<never> = { done: true }; // Error
+                     ~~~~~~~~~~~~~~~~
+!!! error TS2322: Type '{ done: boolean; }' is not assignable to type 'never'.
+    
+        type NonDistributive<T> = [T] extends [infer U] ? { value?: U } : never;
+    
+        export function nonDistributive<T>(): NonDistributive<T> {
+            return {};
+        }
+    
+        export const emptyNonDistributive: NonDistributive<never> = {};
+    
+        export function nonNeverUnion<T>(): Box<T | number> {
+            return {};
+        }
+    
+        export function nonNeverProperty<T extends { value: unknown }>(): PropertyBox<T | { value: number }> {
+            return {};
+        }
+    
+        export function nonNeverObject<T>(): Box<{ value: T }> {
+            return {};
+        }
+    
+        export function nonNeverConditional<T>(): Box<[T] extends [never] ? { value: T } : number> {
+            return {};
+        }
+    
+        type Identity<T> = T extends infer U ? U : never;
+    
+        export function identity<T>(value: T): Identity<T> {
+            return value;
+        }
+    }
+    

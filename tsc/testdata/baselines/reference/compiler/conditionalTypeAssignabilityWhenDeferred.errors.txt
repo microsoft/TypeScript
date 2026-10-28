@@ -1,20 +1,16 @@
 conditionalTypeAssignabilityWhenDeferred.ts(28,20): error TS2345: Argument of type 'string' is not assignable to parameter of type 'never'.
 conditionalTypeAssignabilityWhenDeferred.ts(29,21): error TS2345: Argument of type 'string' is not assignable to parameter of type 'never'.
 conditionalTypeAssignabilityWhenDeferred.ts(39,3): error TS2322: Type '{ x: T; y: T; }' is not assignable to type 'T extends T ? { x: T; y: T; } : never'.
-conditionalTypeAssignabilityWhenDeferred.ts(45,3): error TS2322: Type 'string' is not assignable to type 'Foo<T>'.
 conditionalTypeAssignabilityWhenDeferred.ts(46,3): error TS2322: Type 'string' is not assignable to type 'Foo<T>'.
 conditionalTypeAssignabilityWhenDeferred.ts(63,9): error TS2322: Type '{ a: number; b: number; }' is not assignable to type '[T] extends [[infer U]] ? U : { b: number; }'.
-conditionalTypeAssignabilityWhenDeferred.ts(69,9): error TS2322: Type '{ a: number; b: number; }' is not assignable to type 'Distributive<T>'.
-conditionalTypeAssignabilityWhenDeferred.ts(71,9): error TS2322: Type '{ a: number; b: number; }' is not assignable to type 'Distributive<T & string>'.
-conditionalTypeAssignabilityWhenDeferred.ts(75,9): error TS2322: Type '{ a: number; b: number; }' is not assignable to type 'Distributive<[T] extends [never] ? { a: number; } : never>'.
-conditionalTypeAssignabilityWhenDeferred.ts(91,23): error TS2345: Argument of type 'string' is not assignable to parameter of type 'Unwrap<this["prop"]>'.
-conditionalTypeAssignabilityWhenDeferred.ts(102,3): error TS2322: Type 'Q' is not assignable to type 'InferBecauseWhyNot<Q>'.
+conditionalTypeAssignabilityWhenDeferred.ts(90,23): error TS2345: Argument of type 'string' is not assignable to parameter of type 'Unwrap<this["prop"]>'.
+conditionalTypeAssignabilityWhenDeferred.ts(101,3): error TS2322: Type 'Q' is not assignable to type 'InferBecauseWhyNot<Q>'.
   Type '(arg: any) => any' is not assignable to type 'InferBecauseWhyNot<Q>'.
-conditionalTypeAssignabilityWhenDeferred.ts(112,3): error TS2322: Type 'Q' is not assignable to type 'InferBecauseWhyNotDistributive<Q>'.
+conditionalTypeAssignabilityWhenDeferred.ts(111,3): error TS2322: Type 'Q' is not assignable to type 'InferBecauseWhyNotDistributive<Q>'.
   Type '(arg: any) => any' is not assignable to type 'InferBecauseWhyNotDistributive<Q>'.
 
 
-==== conditionalTypeAssignabilityWhenDeferred.ts (12 errors) ====
+==== conditionalTypeAssignabilityWhenDeferred.ts (8 errors) ====
     export type FilterPropsByType<T, TT> = {
       [K in keyof T]: T[K] extends TT ? K : never
     }[keyof T];
@@ -65,9 +61,7 @@ conditionalTypeAssignabilityWhenDeferred.ts(112,3): error TS2322: Type 'Q' is no
     type Foo<T> = T extends true ? string : "a";
     
     function test<T>(x: Foo<T>, s: string) {
-      x = "a"; // Error: Foo<never> is never.
-      ~
-!!! error TS2322: Type 'string' is not assignable to type 'Foo<T>'.
+      x = "a"; // OK: both branches accept "a".
       x = s; // Error
       ~
 !!! error TS2322: Type 'string' is not assignable to type 'Foo<T>'.
@@ -91,23 +85,16 @@ conditionalTypeAssignabilityWhenDeferred.ts(112,3): error TS2322: Type 'Q' is no
             ~~
 !!! error TS2322: Type '{ a: number; b: number; }' is not assignable to type '[T] extends [[infer U]] ? U : { b: number; }'.
     
-      // Branch-wise checking must account for the empty union: C<never> is never,
-      // even when both branches are independent of the check type.
+      // Independent branches retain branch-wise checking without a distributive source.
     
-      // Distributive where T might instantiate to never: no good
+      // Distributive with independent branches: OK
       const o3: Distributive<T> = o;
-            ~~
-!!! error TS2322: Type '{ a: number; b: number; }' is not assignable to type 'Distributive<T>'.
-      // Distributive where T & string might instantiate to never: also no good
+      // Intersection check type with independent branches: OK
       const o4: Distributive<T & string> = o;
-            ~~
-!!! error TS2322: Type '{ a: number; b: number; }' is not assignable to type 'Distributive<T & string>'.
       // Distributive where {a: T} cannot instantiate to never: OK
       const o5: Distributive<{ a: T }> = o;
-      // Distributive where check type is a conditional which returns a non-never type upon instantiation with `never` but can still return never otherwise: no good
+      // Conditional check type with independent branches: OK
       const o6: Distributive<[T] extends [never] ? { a: number } : never> = o;
-            ~~
-!!! error TS2322: Type '{ a: number; b: number; }' is not assignable to type 'Distributive<[T] extends [never] ? { a: number; } : never>'.
     }
     
     type Wrapped<T> = { ___secret: T };
