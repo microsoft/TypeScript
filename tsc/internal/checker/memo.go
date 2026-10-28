@@ -814,7 +814,7 @@ func (c *Checker) observeMemo(key memoKey) {
 	}
 	// A computation in progress may not have a memo state yet; see
 	// resolutionState.
-	if state := c.peekMemoState(key); c.observeState(state) || state == nil && !c.checking && len(c.resolving) != 0 {
+	if state := c.peekMemoState(key); c.observeState(state) || state == nil && !c.checking && c.resolving.count != 0 {
 		c.memoCycle(c.resolvingIndex(key))
 	}
 }
