@@ -344,7 +344,7 @@ type memoMap[K comparable, V any] struct {
 // get returns the cached result for k, accounting for the effects of
 // computing it.
 func (m *memoMap[K, V]) get(c *Checker, k K) (V, bool) {
-	if m.memoStates != nil && c.observing() {
+	if (m.memoStates != nil || len(m.resolvingKeys) != 0) && c.observing() {
 		m.observe(c, k)
 	}
 	v, ok := m.memoEntries[k]
@@ -362,7 +362,9 @@ func (m *memoMap[K, V]) peek(k K) (V, bool) {
 //
 //go:noinline
 func (m *memoMap[K, V]) observe(c *Checker, k K) {
-	if c.observeState(m.memoStates[k]) {
+	// A computation in progress may not have a memo state yet; see
+	// resolutionState.
+	if state := m.memoStates[k]; c.observeState(state) || state == nil && !c.checking {
 		c.memoCycle(m.resolvingIndex(c, k))
 	}
 }
@@ -433,9 +435,7 @@ func (m *memoMap[K, V]) setIdentity(c *Checker, k K, v V) {
 		m.memoEntries = make(map[K]V)
 	}
 	m.memoEntries[k] = v
-	if c.memoTop != 0 {
-		c.attachState(m.state(k))
-	}
+	m.attach(c, k)
 }
 
 // setWithCost is set for a result whose instantiation count is count, rather
@@ -451,9 +451,18 @@ func (m *memoMap[K, V]) setWithCost(c *Checker, k K, v V, count *instantiationCo
 	if count != nil {
 		m.state(k).count = count
 	}
-	if c.memoTop != 0 {
-		c.attachState(m.state(k))
+	m.attach(c, k)
+}
+
+// attach is memoAttach for the entry for k.
+func (m *memoMap[K, V]) attach(c *Checker, k K) {
+	if c.memoTop == 0 {
+		return
 	}
+	if f := &c.resolutions[c.memoTop-1]; f.source == memoStateSource(m) && m.resolvingKeys[f.index] == k {
+		return
+	}
+	c.attachState(m.state(k))
 }
 
 // intern caches a result constructed from the inputs in k alone, without
@@ -493,9 +502,9 @@ func (m *memoMap[K, V]) begin(c *Checker, k K) {
 		if c.memoPendingCount != 0 && m.memoStates != nil {
 			c.replayPending(m.memoStates[k])
 		}
-		return
+		c.beginQueryFromCheck()
 	}
-	c.beginState(m.state(k), outer)
+	c.beginState(m.memoStates[k], outer)
 }
 
 // resolvingIndex returns 1 + the index in resolutions of the computation of
@@ -598,20 +607,20 @@ func (c *Checker) beginMemo(key memoKey) {
 		if c.memoPendingCount != 0 {
 			c.replayPending(c.memoStates[key])
 		}
-		return
+		c.beginQueryFromCheck()
 	}
 	outer := c.resolvingIndex(key)
 	if outer == len(c.resolutions) {
 		outer = 0
 	}
-	c.beginState(c.memoState(key), outer)
+	c.beginState(c.peekMemoState(key), outer)
 }
 
 // beginState is beginMemo for the memo state of a result, in a query. outer
 // is 1 + the index in resolutions of the computation of the same result in
 // progress, if this one re-enters it, or 0.
 func (c *Checker) beginState(state *memoState, outer int) {
-	if state.pending != nil {
+	if state != nil && state.pending != nil {
 		if parent := c.currentMemoEffects(); parent != nil {
 			parent.addDep(state.pending)
 		}
@@ -631,6 +640,7 @@ func (c *Checker) startEffects(state *memoState) {
 	f.prevMemo = int32(c.memoTop)
 	f.result = state
 	f.entry = c.currentNode
+	f.attachStart = int32(len(c.deferredAttach))
 	if c.memoTop == 0 && c.currentNodeResolution == 0 {
 		// A query made outside of checking: errors located at the current
 		// node are located wherever checking reuses the result, so results
@@ -669,14 +679,34 @@ func (c *Checker) memoState(key memoKey) *memoState {
 		}
 		state = &memoState{}
 		c.memoStates[key] = state
+		if c.stateFilter == nil {
+			c.stateFilter = make([]uint64, 1<<costFilterBits/64)
+		}
+		i := costFilterIndex(key)
+		c.stateFilter[i/64] |= 1 << (i % 64)
 	}
 	return state
+}
+
+// peekMemoState returns the memo state of the result identified by key, or
+// nil if it has none, consulting a filter first since most results have none.
+func (c *Checker) peekMemoState(key memoKey) *memoState {
+	if c.stateFilter == nil {
+		return nil
+	}
+	if i := costFilterIndex(key); c.stateFilter[i/64]&(1<<(i%64)) == 0 {
+		return nil
+	}
+	return c.memoStates[key]
 }
 
 // memoAttach makes the result identified by key depend on the innermost
 // computation in progress, unless that computation is the result's own.
 func (c *Checker) memoAttach(key memoKey) {
 	if c.memoTop == 0 {
+		return
+	}
+	if f := &c.resolutions[c.memoTop-1]; f.source == nil && f.key == key {
 		return
 	}
 	c.attachState(c.memoState(key))
@@ -689,9 +719,23 @@ func (c *Checker) attachState(state *memoState) {
 		return
 	}
 	if c.resolutions[n].result == state {
+		// Writers skip their own computation before creating its state, so
+		// a state created later is never the computation's own.
 		return
 	}
-	f := c.memoEffectsAt(n)
+	if c.resolutions[n].effects == nil && !c.logEffects() {
+		// Until the computation has effects, the result depends on nothing,
+		// and most computations never have any; memoEffectsAt attaches the
+		// result if it gets some.
+		c.deferredAttach = append(c.deferredAttach, state)
+		return
+	}
+	c.linkState(state, c.memoEffectsAt(n))
+}
+
+// linkState makes the result in state depend on the effects f of the
+// computation that cached it.
+func (c *Checker) linkState(state *memoState, f *memoEffects) {
 	if c.logResults() {
 		c.logPendingDiscard(state)
 	}
@@ -725,7 +769,9 @@ func (c *Checker) observeMemo(key memoKey) {
 		// Only the work of the result is accounted for, and it has none.
 		return
 	}
-	if c.observeState(c.memoStates[key]) {
+	// A computation in progress may not have a memo state yet; see
+	// resolutionState.
+	if state := c.peekMemoState(key); c.observeState(state) || state == nil && !c.checking && len(c.resolving) != 0 {
 		c.memoCycle(c.resolvingIndex(key))
 	}
 }
@@ -838,7 +884,7 @@ func (c *Checker) replayPending(state *memoState) {
 // the enclosing computation, since it observed the result.
 func (c *Checker) endMemo() {
 	if f := c.stopEffects(); f != nil && f.effects != nil {
-		c.retainEffects(f.result, f.effects)
+		c.retainEffects(c.resolutionState(f), f.effects)
 	}
 	c.endResolution()
 }
@@ -854,7 +900,7 @@ func (c *Checker) endMemoUncached() {
 	if res == nil || res.effects == nil {
 		return
 	}
-	state, f := res.result, res.effects
+	f := res.effects
 	if parent := c.currentMemoEffects(); parent != nil {
 		if len(f.effects) == 0 && f.entry == parent.entry {
 			// Without effects of its own, and located like the enclosing
@@ -867,8 +913,26 @@ func (c *Checker) endMemoUncached() {
 		}
 	} else if c.flushStates != nil {
 		// withoutChecking replays effects through the results computed.
-		c.retainEffects(state, f)
+		c.retainEffects(c.resolutionState(res), f)
 	}
+}
+
+// resolutionState returns the memo state of the result a memo resolution
+// computes, creating it on first use, since most computations have no
+// effects to retain.
+func (c *Checker) resolutionState(f *resolution) *memoState {
+	if f.result == nil {
+		switch {
+		case f.source != nil:
+			f.result = f.source.stateAt(int(f.index))
+		case f.key != 0:
+			f.result = c.memoState(f.key)
+		default:
+			// The computation caches no result; see forgetCost.
+			f.result = &memoState{}
+		}
+	}
+	return f.result
 }
 
 // retainEffects retains the effects of a computation that just finished for
@@ -1031,6 +1095,36 @@ func (c *Checker) withoutChecking(fn func()) {
 	}
 }
 
+// beginQueryFromCheck makes the memoized computation starting in a check a
+// query, like withoutChecking, so that its effects are recorded with its
+// result and with every result observing it. They are replayed when it
+// finishes (see endQueryFromCheck), and those of results discarded with a
+// cycle are applied only if a result that is kept observed them.
+func (c *Checker) beginQueryFromCheck() {
+	debug.Assert(c.memoTop == 0 && c.flushStates == nil, "query from a check inside a query")
+	c.resolutions[len(c.resolutions)-1].fromCheck = true
+	c.checking = false
+	c.flushBuf = c.flushBuf[:0]
+	c.flushStates = &c.flushBuf
+}
+
+// endQueryFromCheck ends the query begun by beginQueryFromCheck, replaying
+// the effects of everything it computed in the check.
+func (c *Checker) endQueryFromCheck() {
+	states := *c.flushStates
+	c.flushStates = nil
+	c.checking = true
+	defer clear(states)
+	for _, state := range states {
+		if state.pending != nil {
+			f := state.pending
+			state.pending = nil
+			c.memoPendingCount--
+			c.replayEffects(f, c.currentNode, true)
+		}
+	}
+}
+
 // withChecking runs fn in a check.
 func (c *Checker) withChecking(fn func()) {
 	// Checking starts only from top-level requests, so any resolution left at
@@ -1052,10 +1146,15 @@ func (c *Checker) memoCycle(depth int) {
 		// The outer computation does not record effects.
 		return
 	}
-	outer := c.memoEffectsAt(depth - 1)
+	var outer *memoEffects
 	for i := depth; i < len(c.resolutions); i++ {
 		if !c.resolutions[i].memo {
 			continue
+		}
+		if outer == nil {
+			// Typically, the computation reads its own result, and no
+			// computation in between depends on it.
+			outer = c.memoEffectsAt(depth - 1)
 		}
 		f := c.memoEffectsAt(i)
 		if i < c.effectsMarkDepth-1 && f != outer && outer.parent != f {
@@ -1086,8 +1185,38 @@ func (c *Checker) memoEffectsAt(i int) *memoEffects {
 	if f == nil {
 		f = &memoEffects{entry: c.resolutions[i].entry, entered: true}
 		c.resolutions[i].effects = f
+		c.attachDeferred(i, f)
 	}
 	return f
+}
+
+// attachDeferred attaches the results the memo resolution at index i cached
+// before it had effects f; see attachState. A result cached before an effects
+// mark or a cycle is attached as if it had been attached then, so the discard
+// log does not log it.
+//
+//go:noinline
+func (c *Checker) attachDeferred(i int, f *memoEffects) {
+	start := int(c.resolutions[i].attachStart)
+	end := len(c.deferredAttach)
+	for j := i + 1; j < len(c.resolutions); j++ {
+		if c.resolutions[j].memo {
+			end = int(c.resolutions[j].attachStart)
+			break
+		}
+	}
+	if start == end {
+		return
+	}
+	saveStart := c.circularityStart
+	c.circularityStart = 0
+	for k := start; k < end; k++ {
+		if state := c.deferredAttach[k]; state != nil {
+			c.deferredAttach[k] = nil
+			c.linkState(state, f)
+		}
+	}
+	c.circularityStart = saveStart
 }
 
 // Cycles
