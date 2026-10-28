@@ -1,0 +1,92 @@
+/ia.js(3,7): error TS5088: The inferred type of 'o' references a type with a cyclic structure which cannot be trivially serialized. A type annotation is necessary.
+/ib.js(3,7): error TS5088: The inferred type of 'o' references a type with a cyclic structure which cannot be trivially serialized. A type annotation is necessary.
+/main.ts(5,14): error TS5088: The inferred type of 'fromA' references a type with a cyclic structure which cannot be trivially serialized. A type annotation is necessary.
+/main.ts(6,14): error TS5088: The inferred type of 'fromB' references a type with a cyclic structure which cannot be trivially serialized. A type annotation is necessary.
+/xa.js(3,7): error TS5088: The inferred type of 'o' references a type with a cyclic structure which cannot be trivially serialized. A type annotation is necessary.
+/xb.js(3,7): error TS5088: The inferred type of 'o' references a type with a cyclic structure which cannot be trivially serialized. A type annotation is necessary.
+
+
+==== /main.ts (2 errors) ====
+    import * as idx from "./d";
+    const all = { ...idx };
+    import * as MA from "./ma";
+    import * as MB from "./mb";
+    export const fromA = MA.pa;
+                 ~~~~~
+!!! error TS5088: The inferred type of 'fromA' references a type with a cyclic structure which cannot be trivially serialized. A type annotation is necessary.
+    export const fromB = MB.pb;
+                 ~~~~~
+!!! error TS5088: The inferred type of 'fromB' references a type with a cyclic structure which cannot be trivially serialized. A type annotation is necessary.
+    export const checkA: 1 = MA.pa.mb;
+    export const checkB: 1 = MB.pb.ma;
+    
+==== /ma.js (0 errors) ====
+    export { v as pa } from "./xa";
+    export const ma = 1;
+    
+==== /mb.js (0 errors) ====
+    export { v as pb } from "./xb";
+    export const mb = 1;
+    
+==== /xa.js (1 errors) ====
+    /** @type {typeof import("./mb")} */
+    const M = /** @type {any} */ (null);
+    const o = { v: { ...M } };
+          ~
+!!! error TS5088: The inferred type of 'o' references a type with a cyclic structure which cannot be trivially serialized. A type annotation is necessary.
+    module.exports = o;
+    
+==== /xb.js (1 errors) ====
+    /** @type {typeof import("./ma")} */
+    const M = /** @type {any} */ (null);
+    const o = { v: { ...M } };
+          ~
+!!! error TS5088: The inferred type of 'o' references a type with a cyclic structure which cannot be trivially serialized. A type annotation is necessary.
+    module.exports = o;
+    
+==== /ia.js (1 errors) ====
+    /** @type {typeof import("./ma")} */
+    const M = /** @type {any} */ (null);
+    const o = { v: { ...M } };
+          ~
+!!! error TS5088: The inferred type of 'o' references a type with a cyclic structure which cannot be trivially serialized. A type annotation is necessary.
+    module.exports = o;
+    
+==== /ib.js (1 errors) ====
+    /** @type {typeof import("./mb")} */
+    const M = /** @type {any} */ (null);
+    const o = { v: { ...M } };
+          ~
+!!! error TS5088: The inferred type of 'o' references a type with a cyclic structure which cannot be trivially serialized. A type annotation is necessary.
+    module.exports = o;
+    
+==== /ia2.d.ts (0 errors) ====
+    export { v } from "./ia";
+    export type v = number;
+    
+==== /ib2.d.ts (0 errors) ====
+    export { v } from "./ib";
+    export type v = number;
+    
+==== /index.d.ts (0 errors) ====
+    export { v as a } from "./ia2";
+    export { v as b } from "./ib2";
+    export const f1: 1;
+    export const f2: 2;
+    export const f3: 3;
+    export const f4: 4;
+    export const f5: 5;
+    export const f6: 6;
+    export const f7: 7;
+    export const f8: 8;
+    export const f9: 9;
+    export const f10: 10;
+    
+==== /index2.d.ts (0 errors) ====
+    export { v as a } from "./ia2";
+    export { v as b } from "./ib2";
+    
+==== /d.d.ts (0 errors) ====
+    export * from "./index";
+    export * from "./index2";
+    
