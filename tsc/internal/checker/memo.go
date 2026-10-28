@@ -622,6 +622,9 @@ func (c *Checker) beginMemo(key memoKey) {
 			c.replayPending(c.peekMemoState(key))
 		}
 		c.beginQueryFromCheck()
+		// The outermost computation re-enters nothing.
+		c.beginState(c.peekMemoState(key), 0)
+		return
 	}
 	outer := c.resolvingIndex(key)
 	if outer == len(c.resolutions) {
