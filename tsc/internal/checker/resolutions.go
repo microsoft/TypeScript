@@ -114,6 +114,8 @@ func (c *Checker) endResolution() *instantiationCount {
 	c.resolutions = c.resolutions[:n]
 	if c.circularityStart > n {
 		c.endCircularity()
+	} else if len(c.innerCycles) != 0 {
+		c.endInnerCycles(n)
 	}
 	if count != nil {
 		c.observeCost(count)
