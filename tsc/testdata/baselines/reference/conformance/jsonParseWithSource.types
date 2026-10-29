@@ -3,9 +3,9 @@
 === jsonParseWithSource.ts ===
 JSON.parse('{"value": 1}', function (key, parsedValue, context) {
 >JSON.parse('{"value": 1}', function (key, parsedValue, context) {    const source: string | undefined = context.source;    return parsedValue;}) : any
->JSON.parse : { (text: string, reviver?: (this: any, key: string, value: any) => any): any; (text: string, reviver: (this: any, key: string, value: any, context: { source?: string; }) => any): any; }
+>JSON.parse : { (text: string, reviver?: (this: any, key: string, value: any) => any): any; (text: string, reviver?: (this: any, key: string, value: any, context: { source?: string; }) => any): any; }
 >JSON : JSON
->parse : { (text: string, reviver?: (this: any, key: string, value: any) => any): any; (text: string, reviver: (this: any, key: string, value: any, context: { source?: string; }) => any): any; }
+>parse : { (text: string, reviver?: (this: any, key: string, value: any) => any): any; (text: string, reviver?: (this: any, key: string, value: any, context: { source?: string; }) => any): any; }
 >'{"value": 1}' : "{\"value\": 1}"
 >function (key, parsedValue, context) {    const source: string | undefined = context.source;    return parsedValue;} : (this: any, key: string, parsedValue: any, context: { source?: string; }) => any
 >key : string
@@ -22,4 +22,123 @@ JSON.parse('{"value": 1}', function (key, parsedValue, context) {
 >parsedValue : any
 
 });
+
+declare const text: string;
+>text : string
+
+declare const condition: boolean;
+>condition : boolean
+
+JSON.parse(text);
+>JSON.parse(text) : any
+>JSON.parse : { (text: string, reviver?: (this: any, key: string, value: any) => any): any; (text: string, reviver?: (this: any, key: string, value: any, context: { source?: string; }) => any): any; }
+>JSON : JSON
+>parse : { (text: string, reviver?: (this: any, key: string, value: any) => any): any; (text: string, reviver?: (this: any, key: string, value: any, context: { source?: string; }) => any): any; }
+>text : string
+
+JSON.parse(text, undefined);
+>JSON.parse(text, undefined) : any
+>JSON.parse : { (text: string, reviver?: (this: any, key: string, value: any) => any): any; (text: string, reviver?: (this: any, key: string, value: any, context: { source?: string; }) => any): any; }
+>JSON : JSON
+>parse : { (text: string, reviver?: (this: any, key: string, value: any) => any): any; (text: string, reviver?: (this: any, key: string, value: any, context: { source?: string; }) => any): any; }
+>text : string
+>undefined : undefined
+
+JSON.parse.call(JSON, text);
+>JSON.parse.call(JSON, text) : any
+>JSON.parse.call : <T, A extends any[], R>(this: (this: T, ...args: A) => R, thisArg: T, ...args: A) => R
+>JSON.parse : { (text: string, reviver?: (this: any, key: string, value: any) => any): any; (text: string, reviver?: (this: any, key: string, value: any, context: { source?: string; }) => any): any; }
+>JSON : JSON
+>parse : { (text: string, reviver?: (this: any, key: string, value: any) => any): any; (text: string, reviver?: (this: any, key: string, value: any, context: { source?: string; }) => any): any; }
+>call : <T, A extends any[], R>(this: (this: T, ...args: A) => R, thisArg: T, ...args: A) => R
+>JSON : JSON
+>text : string
+
+JSON.parse.apply(JSON, [text]);
+>JSON.parse.apply(JSON, [text]) : any
+>JSON.parse.apply : { <T, R>(this: (this: T) => R, thisArg: T): R; <T, A extends any[], R>(this: (this: T, ...args: A) => R, thisArg: T, args: A): R; }
+>JSON.parse : { (text: string, reviver?: (this: any, key: string, value: any) => any): any; (text: string, reviver?: (this: any, key: string, value: any, context: { source?: string; }) => any): any; }
+>JSON : JSON
+>parse : { (text: string, reviver?: (this: any, key: string, value: any) => any): any; (text: string, reviver?: (this: any, key: string, value: any, context: { source?: string; }) => any): any; }
+>apply : { <T, R>(this: (this: T) => R, thisArg: T): R; <T, A extends any[], R>(this: (this: T, ...args: A) => R, thisArg: T, args: A): R; }
+>JSON : JSON
+>[text] : [string]
+>text : string
+
+type P = Parameters<typeof JSON.parse>;
+>P : [text: string, reviver?: ((this: any, key: string, value: any, context: { source?: string; }) => any) | undefined]
+>JSON.parse : { (text: string, reviver?: (this: any, key: string, value: any) => any): any; (text: string, reviver?: (this: any, key: string, value: any, context: { source?: string; }) => any): any; }
+>JSON : JSON
+>parse : { (text: string, reviver?: (this: any, key: string, value: any) => any): any; (text: string, reviver?: (this: any, key: string, value: any, context: { source?: string; }) => any): any; }
+
+function parse(...args: P) {
+>parse : (text: string, reviver?: ((this: any, key: string, value: any, context: { source?: string; }) => any) | undefined) => any
+>args : [text: string, reviver?: ((this: any, key: string, value: any, context: { source?: string; }) => any) | undefined]
+
+    return JSON.parse(...args);
+>JSON.parse(...args) : any
+>JSON.parse : { (text: string, reviver?: (this: any, key: string, value: any) => any): any; (text: string, reviver?: (this: any, key: string, value: any, context: { source?: string; }) => any): any; }
+>JSON : JSON
+>parse : { (text: string, reviver?: (this: any, key: string, value: any) => any): any; (text: string, reviver?: (this: any, key: string, value: any, context: { source?: string; }) => any): any; }
+>...args : string | ((this: any, key: string, value: any, context: { source?: string; }) => any) | undefined
+>args : [text: string, reviver?: ((this: any, key: string, value: any, context: { source?: string; }) => any) | undefined]
+}
+parse(text);
+>parse(text) : any
+>parse : (text: string, reviver?: ((this: any, key: string, value: any, context: { source?: string; }) => any) | undefined) => any
+>text : string
+
+function parseWith(input: string, reviver?: P[1]) {
+>parseWith : (input: string, reviver?: P[1]) => any
+>input : string
+>reviver : ((this: any, key: string, value: any, context: { source?: string; }) => any) | undefined
+
+    return JSON.parse(input, reviver);
+>JSON.parse(input, reviver) : any
+>JSON.parse : { (text: string, reviver?: (this: any, key: string, value: any) => any): any; (text: string, reviver?: (this: any, key: string, value: any, context: { source?: string; }) => any): any; }
+>JSON : JSON
+>parse : { (text: string, reviver?: (this: any, key: string, value: any) => any): any; (text: string, reviver?: (this: any, key: string, value: any, context: { source?: string; }) => any): any; }
+>input : string
+>reviver : ((this: any, key: string, value: any, context: { source?: string; }) => any) | undefined
+}
+
+const a = JSON.parse.bind(JSON);
+>a : { (text: string, reviver?: (this: any, key: string, value: any) => any): any; (text: string, reviver?: (this: any, key: string, value: any, context: { source?: string; }) => any): any; }
+>JSON.parse.bind(JSON) : { (text: string, reviver?: (this: any, key: string, value: any) => any): any; (text: string, reviver?: (this: any, key: string, value: any, context: { source?: string; }) => any): any; }
+>JSON.parse.bind : { <T>(this: T, thisArg: ThisParameterType<T>): OmitThisParameter<T>; <T, A extends any[], B extends any[], R>(this: (this: T, ...args: [...A, ...B]) => R, thisArg: T, ...args: A): (...args: B) => R; }
+>JSON.parse : { (text: string, reviver?: (this: any, key: string, value: any) => any): any; (text: string, reviver?: (this: any, key: string, value: any, context: { source?: string; }) => any): any; }
+>JSON : JSON
+>parse : { (text: string, reviver?: (this: any, key: string, value: any) => any): any; (text: string, reviver?: (this: any, key: string, value: any, context: { source?: string; }) => any): any; }
+>bind : { <T>(this: T, thisArg: ThisParameterType<T>): OmitThisParameter<T>; <T, A extends any[], B extends any[], R>(this: (this: T, ...args: [...A, ...B]) => R, thisArg: T, ...args: A): (...args: B) => R; }
+>JSON : JSON
+
+a(text);
+>a(text) : any
+>a : { (text: string, reviver?: (this: any, key: string, value: any) => any): any; (text: string, reviver?: (this: any, key: string, value: any, context: { source?: string; }) => any): any; }
+>text : string
+
+JSON.parse(text, condition ? (key, value, context) => {
+>JSON.parse(text, condition ? (key, value, context) => {    const source: string | undefined = context.source;    return value;} : undefined) : any
+>JSON.parse : { (text: string, reviver?: (this: any, key: string, value: any) => any): any; (text: string, reviver?: (this: any, key: string, value: any, context: { source?: string; }) => any): any; }
+>JSON : JSON
+>parse : { (text: string, reviver?: (this: any, key: string, value: any) => any): any; (text: string, reviver?: (this: any, key: string, value: any, context: { source?: string; }) => any): any; }
+>text : string
+>condition ? (key, value, context) => {    const source: string | undefined = context.source;    return value;} : undefined : ((this: any, key: string, value: any, context: { source?: string; }) => any) | undefined
+>condition : boolean
+>(key, value, context) => {    const source: string | undefined = context.source;    return value;} : (this: any, key: string, value: any, context: { source?: string; }) => any
+>key : string
+>value : any
+>context : { source?: string; }
+
+    const source: string | undefined = context.source;
+>source : string | undefined
+>context.source : string | undefined
+>context : { source?: string; }
+>source : string | undefined
+
+    return value;
+>value : any
+
+} : undefined);
+>undefined : undefined
 
