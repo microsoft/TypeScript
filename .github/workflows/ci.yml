@@ -2,11 +2,11 @@ name: CI
 
 on:
   push:
-    branches: [main, main-ts7, ts7-release, 'release-*']
+    branches: [main, main-ts7, ts7-release, 'release-*', 'weswigham/*']
   pull_request:
-    branches: [main, main-ts7, ts7-release, 'release-*']
+    branches: [main, main-ts7, ts7-release, 'release-*', 'weswigham/*']
   merge_group:
-    branches: [main, main-ts7, ts7-release, 'release-*']
+    branches: [main, main-ts7, ts7-release, 'release-*', 'weswigham/*']
 
 permissions:
   contents: read
@@ -155,8 +155,12 @@ jobs:
       - name: Tests
         id: test
         run: npx hereby test:tsc
+        env:
+          TMPDIR: ${{ runner.temp }}
       - name: Benchmarks
         run: npx hereby test:benchmarks
+        env:
+          TMPDIR: ${{ runner.temp }}
       - run: git add .
       - uses: codecov/codecov-action@303a32d7a59b442fa8d48b6a1cc6825c09c847a5 # v7.1.1
         if: ${{ always() && matrix.config.coverage && github.event_name != 'merge_group' }}

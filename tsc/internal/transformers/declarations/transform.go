@@ -355,7 +355,7 @@ func (tx *DeclarationTransformer) transformSourceFile(node *ast.SourceFile) *ast
 	combinedStatements.Loc = statements.Loc // setTextRange
 	if ast.IsExternalOrCommonJSModule(node) {
 		if ast.IsInJSFile(node.AsNode()) {
-			if exportEquals := node.Symbol.Exports()[ast.InternalSymbolNameExportEquals]; exportEquals != nil && len(exportEquals.Declarations()) > 1 {
+			if exportEquals := node.Symbol.Exports().Get(ast.InternalSymbolNameExportEquals); exportEquals != nil && len(exportEquals.Declarations()) > 1 {
 				for _, node := range exportEquals.Declarations() {
 					tx.state.addDiagnostic(createDiagnosticForNode(node, diagnostics.Multiple_module_exports_assignments_cannot_be_serialized_for_declaration_emit))
 				}
@@ -2027,7 +2027,7 @@ func (tx *DeclarationTransformer) transformClassDeclaration(input *ast.ClassDecl
 
 	members := tx.buildClassMembers(input.AsNode(), extraMembers...)
 
-	extendsClause := getEffectiveBaseTypeNode(input.AsNode())
+	extendsClause := ast.GetClassExtendsHeritageElement(input.AsNode())
 
 	if extendsClause != nil && !ast.IsEntityNameExpression(extendsClause.AsExpressionWithTypeArguments().Expression) && extendsClause.AsExpressionWithTypeArguments().Expression.Kind != ast.KindNullKeyword {
 		tx.tracker.ReportInferenceFallback(extendsClause.AsExpressionWithTypeArguments().Expression) // Add an isolated declarations error on this extends clause
@@ -2846,8 +2846,8 @@ func (tx *DeclarationTransformer) transformExpandoAssignment(node *ast.BinaryExp
 	declarationData := synthesizedNamespace.DeclarationData()
 	declarationData.Symbol = host
 	containerData := synthesizedNamespace.LocalsContainerData()
-	containerData.Locals = make(ast.SymbolTable, 0)
-	containerData.Locals[localName.Text()] = symbol
+	containerData.Locals = ast.NewSymbolTable()
+	containerData.Locals.Set(localName.Text(), symbol)
 
 	oldEnclosing := tx.enclosingDeclaration
 	tx.enclosingDeclaration = synthesizedNamespace

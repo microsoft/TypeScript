@@ -1,0 +1,46 @@
+//// [tests/cases/compiler/syntheticDefaultCallbackContext.ts] ////
+
+=== stream.d.ts ===
+export interface Stream {
+>Stream : Symbol(Stream, Decl(stream.d.ts, 0, 0))
+
+    emit(event: string, data?: any): void;
+>emit : Symbol(Stream.emit, Decl(stream.d.ts, 0, 25))
+>event : Symbol(event, Decl(stream.d.ts, 1, 9))
+>data : Symbol(data, Decl(stream.d.ts, 1, 23))
+}
+export function through(write?: (this: Stream, data: any) => void, end?: (this: Stream) => void): Stream;
+>through : Symbol(through, Decl(stream.d.ts, 2, 1))
+>write : Symbol(write, Decl(stream.d.ts, 3, 24))
+>this : Symbol(this, Decl(stream.d.ts, 3, 33))
+>Stream : Symbol(Stream, Decl(stream.d.ts, 0, 0))
+>data : Symbol(data, Decl(stream.d.ts, 3, 46))
+>end : Symbol(end, Decl(stream.d.ts, 3, 66))
+>this : Symbol(this, Decl(stream.d.ts, 3, 74))
+>Stream : Symbol(Stream, Decl(stream.d.ts, 0, 0))
+>Stream : Symbol(Stream, Decl(stream.d.ts, 0, 0))
+
+=== main.ts ===
+import stream from "./stream";
+>stream : Symbol(stream, Decl(main.ts, 0, 6))
+
+stream.through(function (data) {
+>stream.through : Symbol(stream.through, Decl(stream.d.ts, 2, 1))
+>stream : Symbol(stream, Decl(main.ts, 0, 6))
+>through : Symbol(stream.through, Decl(stream.d.ts, 2, 1))
+>data : Symbol(data, Decl(main.ts, 1, 25))
+
+    this.emit("data", data);
+>this.emit : Symbol(stream.Stream.emit, Decl(stream.d.ts, 0, 25))
+>this : Symbol(this, Decl(stream.d.ts, 3, 33))
+>emit : Symbol(stream.Stream.emit, Decl(stream.d.ts, 0, 25))
+>data : Symbol(data, Decl(main.ts, 1, 25))
+
+}, function () {
+    this.emit("end");
+>this.emit : Symbol(stream.Stream.emit, Decl(stream.d.ts, 0, 25))
+>this : Symbol(this, Decl(stream.d.ts, 3, 74))
+>emit : Symbol(stream.Stream.emit, Decl(stream.d.ts, 0, 25))
+
+});
+

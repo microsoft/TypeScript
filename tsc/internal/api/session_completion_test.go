@@ -4,6 +4,7 @@ import (
 	"testing"
 	"time"
 
+	"github.com/microsoft/TypeScript/tsc/internal/api/requestfilesystem"
 	"github.com/microsoft/TypeScript/tsc/internal/bundled"
 	"github.com/microsoft/TypeScript/tsc/internal/core"
 	"github.com/microsoft/TypeScript/tsc/internal/ls/lsutil"
@@ -59,7 +60,7 @@ func TestCompletionSymbolTypeIsResolvable(t *testing.T) {
 	// content is pure ASCII, so the UTF-16 caret offset equals the byte length.
 	completions, err := session.handleGetCompletionsAtPosition(t.Context(), &GetCompletionsAtPositionParams{
 		Snapshot:      snapshotResp.Snapshot,
-		Project:       proj.Id,
+		Project:       proj.Handle,
 		File:          DocumentIdentifier{FileName: fileName},
 		Position:      uint32(len(content)),
 		IncludeSymbol: true,
@@ -77,7 +78,7 @@ func TestCompletionSymbolTypeIsResolvable(t *testing.T) {
 		sawSymbol = true
 		typeResp, err := session.handleGetTypeOfSymbol(t.Context(), &GetTypeOfSymbolParams{
 			Snapshot: snapshotResp.Snapshot,
-			Project:  proj.Id,
+			Project:  proj.Handle,
 			Symbol:   entry.Symbol.Reference,
 		})
 		assert.NilError(t, err)
@@ -132,7 +133,7 @@ func TestCompletionOnInferredProject(t *testing.T) {
 	// content is pure ASCII, so the UTF-16 caret offset equals the byte length.
 	completions, err := session.handleGetCompletionsAtPosition(t.Context(), &GetCompletionsAtPositionParams{
 		Snapshot: snapshotResp.Snapshot,
-		Project:  proj.Id,
+		Project:  proj.Handle,
 		File:     DocumentIdentifier{FileName: fileName},
 		Position: uint32(len(content)),
 	})
@@ -175,7 +176,7 @@ func TestCompletionRetriesWithAutoImports(t *testing.T) {
 
 	completions, err := session.handleGetCompletionsAtPosition(t.Context(), &GetCompletionsAtPositionParams{
 		Snapshot: snapshotResp.Snapshot,
-		Project:  proj.Id,
+		Project:  proj.Handle,
 		File:     DocumentIdentifier{FileName: fileName},
 		Position: uint32(len(content)),
 	})
@@ -222,7 +223,7 @@ func TestCompletionWithSymbolsRequiresPreparedAutoImports(t *testing.T) {
 
 	_, err = session.handleGetCompletionsAtPosition(t.Context(), &GetCompletionsAtPositionParams{
 		Snapshot:      snapshotResp.Snapshot,
-		Project:       proj.Id,
+		Project:       proj.Handle,
 		File:          DocumentIdentifier{FileName: fileName},
 		Position:      uint32(len(content)),
 		IncludeSymbol: true,
@@ -264,7 +265,7 @@ func TestCompletionWithSymbolsUsesPreparedSnapshot(t *testing.T) {
 
 	completions, err := session.handleGetCompletionsAtPosition(t.Context(), &GetCompletionsAtPositionParams{
 		Snapshot:      snapshotResp.Snapshot,
-		Project:       proj.Id,
+		Project:       proj.Handle,
 		File:          DocumentIdentifier{FileName: fileName},
 		Position:      uint32(len(content)),
 		IncludeSymbol: true,
@@ -312,7 +313,7 @@ func TestCompletionUsesSnapshotPreferences(t *testing.T) {
 
 	completions, err := session.handleGetCompletionsAtPosition(t.Context(), &GetCompletionsAtPositionParams{
 		Snapshot:      snapshotResp.Snapshot,
-		Project:       proj.Id,
+		Project:       proj.Handle,
 		File:          DocumentIdentifier{FileName: fileName},
 		Position:      uint32(len(content)),
 		IncludeSymbol: true,
@@ -326,8 +327,8 @@ func TestCompletionUsesSnapshotPreferences(t *testing.T) {
 
 func TestSnapshotCreatesProgramsAndPreparesAutoImportsInOneClone(t *testing.T) {
 	t.Parallel()
-	for _, update := range []bool{false, true} {
-		t.Run(map[bool]string{false: "create", true: "update"}[update], func(t *testing.T) {
+	for _, operation := range []string{"create", "update", "snapshot filesystem"} {
+		t.Run(operation, func(t *testing.T) {
 			t.Parallel()
 			defer testutil.RecoverAndFail(t, "snapshot creation panicked")
 			const fileName = "/home/projects/p/index.ts"
@@ -351,10 +352,13 @@ func TestSnapshotCreatesProgramsAndPreparesAutoImportsInOneClone(t *testing.T) {
 			var response *CreateSnapshotResponse
 			var err error
 			expectedID := SnapshotID(1)
-			if update {
+			if operation != "create" {
 				base, e := session.handleCreateSnapshot(t.Context(), &CreateSnapshotParams{})
 				assert.NilError(t, e)
 				expectedID = base.Snapshot + 1
+				if operation == "snapshot filesystem" {
+					params.FileSystem = &requestfilesystem.RequestFileSystem{Kind: requestfilesystem.KindSnapshot, Snapshot: uint64(base.Snapshot)}
+				}
 				response, err = session.handleUpdateSnapshot(t.Context(), &UpdateSnapshotParams{
 					Snapshot: base.Snapshot,
 					Changes:  params,
@@ -370,6 +374,27 @@ func TestSnapshotCreatesProgramsAndPreparesAutoImportsInOneClone(t *testing.T) {
 			assert.Assert(t, snapshot.AutoImportRegistry().IsPreparedForImportingFile(fileName, proj.ID(), snapshot.UserPreferences()))
 		})
 	}
+}
+
+func TestSnapshotFileSystemRejectsUnpreparedAutoImports(t *testing.T) {
+	t.Parallel()
+	projectSession, _ := projecttestutil.Setup(map[string]any{})
+	defer projectSession.Close()
+	session := NewLSPSession(projectSession, nil)
+	defer session.Close()
+	base, err := session.handleCreateSnapshot(t.Context(), &CreateSnapshotParams{})
+	assert.NilError(t, err)
+	_, err = session.handleUpdateSnapshot(t.Context(), &UpdateSnapshotParams{
+		Snapshot: base.Snapshot,
+		Changes: &CreateSnapshotParams{
+			PrepareAutoImports: &DocumentIdentifier{FileName: "/missing.ts"},
+			FileSystem:         &requestfilesystem.RequestFileSystem{Kind: requestfilesystem.KindSnapshot, Snapshot: uint64(base.Snapshot)},
+		},
+	})
+	assert.ErrorIs(t, err, ErrClientError)
+	assert.ErrorContains(t, err, "could not prepare auto-imports")
+	assert.Equal(t, len(session.snapshots), 1)
+	assert.Equal(t, session.snapshots[base.Snapshot].refCount, 1)
 }
 
 func TestPreparedIndependentSnapshotPreservesLSPOverlays(t *testing.T) {
@@ -403,7 +428,7 @@ func TestPreparedIndependentSnapshotPreservesLSPOverlays(t *testing.T) {
 	assert.Equal(t, proj.GetProgram().GetSourceFile(fileName).Text(), "packageV")
 	completions, err := session.handleGetCompletionsAtPosition(t.Context(), &GetCompletionsAtPositionParams{
 		Snapshot:      prepared.Snapshot,
-		Project:       proj.ID(),
+		Project:       proj.Handle(),
 		File:          DocumentIdentifier{FileName: fileName},
 		Position:      8,
 		IncludeSymbol: true,
@@ -449,7 +474,7 @@ func TestFreshSnapshotIncludesDependencyAutoImports(t *testing.T) {
 			proj := snapshot.GetDefaultProject("file:///home/projects/MixedCase/index.ts")
 			completions, err := session.handleGetCompletionsAtPosition(t.Context(), &GetCompletionsAtPositionParams{
 				Snapshot:      response.Snapshot,
-				Project:       proj.ID(),
+				Project:       proj.Handle(),
 				File:          DocumentIdentifier{FileName: fileName},
 				Position:      8,
 				IncludeSymbol: prepare,
@@ -512,7 +537,7 @@ func TestCompletionWithSymbolsAndExistingImportDoesNotDeadlock(t *testing.T) {
 	go func() {
 		completions, e := session.handleGetCompletionsAtPosition(t.Context(), &GetCompletionsAtPositionParams{
 			Snapshot:      snapshotResp.Snapshot,
-			Project:       proj.Id,
+			Project:       proj.Handle,
 			File:          DocumentIdentifier{FileName: fileName},
 			Position:      uint32(len(content)),
 			IncludeSymbol: true,

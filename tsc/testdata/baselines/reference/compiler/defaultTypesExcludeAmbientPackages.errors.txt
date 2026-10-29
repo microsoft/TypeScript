@@ -1,0 +1,11 @@
+/main.ts(1,1): error TS2304: Cannot find name '__dirname'.
+
+
+==== /main.ts (1 errors) ====
+    __dirname;
+    ~~~~~~~~~
+!!! error TS2304: Cannot find name '__dirname'.
+    
+==== /node_modules/@types/runtime/index.d.ts (0 errors) ====
+    declare const __dirname: string;
+    

@@ -8,7 +8,6 @@ import (
 
 	"github.com/microsoft/TypeScript/tsc/internal/ast"
 	"github.com/microsoft/TypeScript/tsc/internal/binder"
-	"github.com/microsoft/TypeScript/tsc/internal/collections"
 	"github.com/microsoft/TypeScript/tsc/internal/core"
 	"github.com/microsoft/TypeScript/tsc/internal/debug"
 	"github.com/microsoft/TypeScript/tsc/internal/diagnostics"
@@ -255,7 +254,7 @@ func isSyntacticDefault(node *ast.Node) bool {
 }
 
 func hasExportAssignmentSymbol(moduleSymbol *ast.Symbol) bool {
-	return moduleSymbol.Exports()[ast.InternalSymbolNameExportEquals] != nil
+	return moduleSymbol.Exports().Get(ast.InternalSymbolNameExportEquals) != nil
 }
 
 func isTypeAlias(node *ast.Node) bool {
@@ -352,9 +351,9 @@ func createSymbolTable(symbols []*ast.Symbol) ast.SymbolTable {
 	if len(symbols) == 0 {
 		return nil
 	}
-	result := make(ast.SymbolTable)
+	result := ast.NewSymbolTable()
 	for _, symbol := range symbols {
-		result[symbol.Name()] = symbol
+		result.Set(symbol.Name(), symbol)
 	}
 	return result
 }
@@ -387,7 +386,7 @@ func (c *Checker) compareSymbolsWorker(s1, s2 *ast.Symbol) int {
 	}
 	// Fall back to symbol IDs. This is a last resort that should happen only when symbols have
 	// no declaration and duplicate names.
-	return int(ast.GetSymbolId(s1)) - int(ast.GetSymbolId(s2))
+	return cmp.Compare(ast.GetSymbolId(s1), ast.GetSymbolId(s2))
 }
 
 func (c *Checker) compareNodes(n1, n2 *ast.Node) int {
@@ -399,6 +398,9 @@ func (c *Checker) compareNodes(n1, n2 *ast.Node) int {
 	}
 	if n2 == nil {
 		return -1
+	}
+	if n1.Parent != nil && n1.Parent == n2.Parent {
+		return n1.Pos() - n2.Pos()
 	}
 	s1 := ast.GetSourceFileOfNode(n1)
 	s2 := ast.GetSourceFileOfNode(n2)
@@ -930,9 +932,50 @@ func (c *Checker) releaseTemporaryTypeSet(set *temporaryTypeSet) {
 	c.freeTypeSets = set
 }
 
+// temporaryPropertyCounts counts property names in first-occurrence order.
 type temporaryPropertyCounts struct {
-	collections.OrderedMap[string, int]
-	next *temporaryPropertyCounts
+	entries []propertyCount
+	indices map[string]int32
+	next    *temporaryPropertyCounts
+}
+
+type propertyCount struct {
+	name  string
+	count int32
+}
+
+func (p *temporaryPropertyCounts) Add(name string) {
+	if i, ok := p.indices[name]; ok {
+		p.entries[i].count++
+		return
+	}
+	p.AddNew(name)
+}
+
+// AddNew adds a name known not to have been added yet, skipping the lookup.
+func (p *temporaryPropertyCounts) AddNew(name string) {
+	if p.indices == nil {
+		p.indices = make(map[string]int32)
+	}
+	p.indices[name] = int32(len(p.entries))
+	p.entries = append(p.entries, propertyCount{name: name, count: 1})
+}
+
+func (p *temporaryPropertyCounts) Count(name string) int {
+	if i, ok := p.indices[name]; ok {
+		return int(p.entries[i].count)
+	}
+	return 0
+}
+
+func (p *temporaryPropertyCounts) Size() int {
+	return len(p.entries)
+}
+
+func (p *temporaryPropertyCounts) Clear() {
+	clear(p.entries)
+	p.entries = p.entries[:0]
+	clear(p.indices)
 }
 
 func (c *Checker) getTemporaryPropertyCounts() *temporaryPropertyCounts {
@@ -1271,7 +1314,7 @@ func isInNameOfExpressionWithTypeArgumentsOrHeritageTypeReference(node *ast.Node
 }
 
 func getIndexSymbolFromSymbolTable(symbolTable ast.SymbolTable) *ast.Symbol {
-	return symbolTable[ast.InternalSymbolNameIndex]
+	return symbolTable.Get(ast.InternalSymbolNameIndex)
 }
 
 // Indicates whether the result of an `Expression` will be unused.
@@ -1765,7 +1808,7 @@ func introducesArgumentsExoticObject(node *ast.Node) bool {
 
 func symbolsToArray(symbols ast.SymbolTable) []*ast.Symbol {
 	var result []*ast.Symbol
-	for id, symbol := range symbols {
+	for id, symbol := range symbols.All() {
 		if !isReservedMemberName(id) {
 			result = append(result, symbol)
 		}

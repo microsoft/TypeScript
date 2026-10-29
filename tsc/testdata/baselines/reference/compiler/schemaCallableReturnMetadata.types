@@ -1,0 +1,27 @@
+//// [tests/cases/compiler/schemaCallableReturnMetadata.ts] ////
+
+=== schemaCallableReturnMetadata.ts ===
+type Test = (() => void) & { options?: {} };
+>Test : Test
+>options : {} | undefined
+
+interface ISchema {
+    resolve(): ISchema;
+>resolve : () => ISchema
+
+    asNestedTest(): Test;
+>asNestedTest : () => Test
+}
+
+class Schema implements ISchema {
+>Schema : Schema
+
+    resolve() { return this; }
+>resolve : () => this
+>this : this
+
+    asNestedTest(): () => void { return () => {}; }
+>asNestedTest : () => () => void
+>() => {} : () => void
+}
+

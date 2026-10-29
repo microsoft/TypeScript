@@ -7,10 +7,53 @@ import (
 	"testing"
 
 	"github.com/microsoft/TypeScript/tsc/internal/core"
+	"github.com/microsoft/TypeScript/tsc/internal/diagnostics"
+	"github.com/microsoft/TypeScript/tsc/internal/locale"
 	"github.com/microsoft/TypeScript/tsc/internal/testutil/contentmappertest"
+	"github.com/microsoft/TypeScript/tsc/internal/testutil/harnessutil"
 	"github.com/microsoft/TypeScript/tsc/internal/testutil/stringtestutil"
 	"github.com/microsoft/TypeScript/tsc/internal/vfs/vfstest"
+	"gotest.tools/v3/assert"
 )
+
+func TestOutputSanitizerVersionPadding(t *testing.T) {
+	t.Parallel()
+	for name, language := range map[string]locale.Locale{"en": locale.Default, "cs": czech} {
+		t.Run(name, func(t *testing.T) {
+			t.Parallel()
+			version := diagnostics.Version_0.Localize(language, core.Version())
+			fakeVersion := diagnostics.Version_0.Localize(language, harnessutil.FakeTSVersion)
+			header := diagnostics.X_tsc_Colon_The_TypeScript_Compiler.Localize(language) + " - "
+			for _, test := range []struct {
+				name  string
+				input string
+				want  string
+			}{
+				{name: "version", input: version, want: fakeVersion},
+				{name: "version in prose", input: version + " is installed", want: fakeVersion + " is installed"},
+				{name: "repeated versions", input: version + ", " + version, want: fakeVersion + ", " + fakeVersion},
+				{name: "header without logo", input: header + version, want: header + fakeVersion},
+				{
+					name:  "header with logo",
+					input: fmt.Sprintf("%-115s\x1b[44m     \x1b[39;49m", header+version),
+					want:  fmt.Sprintf("%-115s\x1b[44m     \x1b[39;49m", header+fakeVersion),
+				},
+				{
+					name:  "narrow header with logo",
+					input: fmt.Sprintf("%-75s\x1b[44m     \x1b[39;49m", header+version),
+					want:  fmt.Sprintf("%-75s\x1b[44m     \x1b[39;49m", header+fakeVersion),
+				},
+			} {
+				t.Run(test.name, func(t *testing.T) {
+					t.Parallel()
+					sanitizer := &outputSanitizer{}
+					sanitizer.addOutputLine(test.input)
+					assert.Equal(t, strings.Join(sanitizer.outputLines, "\n"), test.want)
+				})
+			}
+		})
+	}
+}
 
 func TestTscCommandline(t *testing.T) {
 	t.Parallel()
@@ -282,6 +325,43 @@ func TestTscCommandline(t *testing.T) {
 		},
 	}
 
+	for _, value := range []string{"false", "true", "omitted"} {
+		option := ""
+		if value != "omitted" {
+			option = `, "alwaysStrict": ` + value
+		}
+		testCases = append(testCases, &tscInput{
+			subScenario: "alwaysStrict " + value + " in configuration",
+			files: FileMap{
+				"/home/src/workspaces/project/tsconfig.json": fmt.Sprintf(`{"compilerOptions": {"target": "es2015"%s}}`, option),
+				"/home/src/workspaces/project/index.ts":      "export {};",
+			},
+			commandLineArgs: []string{"--noEmit"},
+		})
+	}
+	for _, setting := range []struct {
+		name   string
+		config string
+		base   string
+	}{
+		{"relative", `{"compilerOptions": {"target": "es2015", "baseUrl": "."}}`, ""},
+		{"empty", `{"compilerOptions": {"target": "es2015", "baseUrl": ""}}`, ""},
+		{"inherited", `{"extends": "./base.json"}`, `{"compilerOptions": {"target": "es2015", "baseUrl": "."}}`},
+		{"omitted", `{"compilerOptions": {"target": "es2015"}}`, ""},
+	} {
+		files := FileMap{
+			"/home/src/workspaces/project/tsconfig.json": setting.config,
+			"/home/src/workspaces/project/index.ts":      "export {};",
+		}
+		if setting.base != "" {
+			files["/home/src/workspaces/project/base.json"] = setting.base
+		}
+		testCases = append(testCases, &tscInput{
+			subScenario:     "baseUrl " + setting.name + " in configuration",
+			files:           files,
+			commandLineArgs: []string{"--noEmit"},
+		})
+	}
 	for _, testCase := range testCases {
 		testCase.run(t, "commandLine")
 	}
@@ -2523,6 +2603,153 @@ func TestTscIncremental(t *testing.T) {
 
 	for _, test := range testCases {
 		test.run(t, "incremental")
+	}
+}
+
+func TestTscIncrementalDeletion(t *testing.T) {
+	t.Parallel()
+	for _, mode := range []struct {
+		name string
+		args []string
+	}{
+		{},
+		{" with single threaded", []string{"--singleThreaded"}},
+		{" with one checker", []string{"--checkers", "1"}},
+	} {
+		config := func(options string) string {
+			return `{"compilerOptions":{"incremental":true,"noEmit":true,"types":[]` + options + `},"files":["a.ts"]}`
+		}
+		(&tscInput{
+			subScenario:     "lib and target changes delete mixed library files" + mode.name,
+			commandLineArgs: mode.args,
+			files: FileMap{
+				"/home/src/workspaces/project/tsconfig.json": config(`,"target":"esnext"`),
+				"/home/src/workspaces/project/a.ts":          `export const values = [3, 1, 2].toSorted();`,
+				getTestLibPathFor("es5"):                     tscDefaultLibContent,
+				getTestLibPathFor("esnext.array"): stringtestutil.Dedent(`
+					/// <reference no-default-lib="true"/>
+					interface Array<T> {
+						toSorted(): T[];
+					}
+				`),
+				getTestLibPathFor("decorators"): stringtestutil.Dedent(`
+					/// <reference no-default-lib="true"/>
+					export {};
+				`),
+				getTestLibPathFor("esnext.full"): stringtestutil.Dedent(`
+					/// <reference no-default-lib="true"/>
+					/// <reference lib="es5"/>
+					/// <reference lib="esnext.array"/>
+					/// <reference lib="decorators"/>
+				`),
+				getTestLibPathFor("es2020"): stringtestutil.Dedent(`
+					/// <reference no-default-lib="true"/>
+					/// <reference lib="es5"/>
+				`),
+				getTestLibPathFor("es2020.full"): stringtestutil.Dedent(`
+					/// <reference no-default-lib="true"/>
+					/// <reference lib="es5"/>
+				`),
+			},
+			edits: []*tscEdit{
+				{caption: "narrow lib", edit: func(sys *TestSys) {
+					sys.writeFileNoError("/home/src/workspaces/project/tsconfig.json", config(`,"target":"esnext","lib":["es2020"]`))
+				}},
+				noChange,
+				{caption: "restore lib", edit: func(sys *TestSys) {
+					sys.writeFileNoError("/home/src/workspaces/project/tsconfig.json", config(`,"target":"esnext"`))
+				}},
+				{caption: "narrow target", edit: func(sys *TestSys) {
+					sys.writeFileNoError("/home/src/workspaces/project/tsconfig.json", config(`,"target":"es2020"`))
+				}},
+				noChange,
+				{caption: "restore target", edit: func(sys *TestSys) {
+					sys.writeFileNoError("/home/src/workspaces/project/tsconfig.json", config(`,"target":"esnext"`))
+				}},
+				noChange,
+			},
+		}).run(t, "incremental")
+		(&tscInput{
+			subScenario:     "mixed file deletion with add and change" + mode.name,
+			commandLineArgs: mode.args,
+			files: FileMap{
+				"/home/src/workspaces/project/tsconfig.json": `{"compilerOptions":{"incremental":true,"noEmit":true,"types":[]}}`,
+				"/home/src/workspaces/project/consumer.ts":   `declare const value: RemovedGlobal; value.property;`,
+				"/home/src/workspaces/project/global.d.ts":   `interface RemovedGlobal { property: string; }`,
+				"/home/src/workspaces/project/module.d.ts":   `export interface ModuleOnly { property: string; }`,
+				"/home/src/workspaces/project/changed.ts":    `export const changed = 1;`,
+			},
+			edits: []*tscEdit{
+				{caption: "delete global and non-global files while adding and changing sources", edit: func(sys *TestSys) {
+					sys.removeNoError("/home/src/workspaces/project/global.d.ts")
+					sys.removeNoError("/home/src/workspaces/project/module.d.ts")
+					sys.replaceFileText("/home/src/workspaces/project/changed.ts", "1", "2")
+					sys.writeFileNoError("/home/src/workspaces/project/added.ts", `export const added = 1;`)
+				}},
+				noChange,
+				{caption: "restore global file", edit: func(sys *TestSys) {
+					sys.writeFileNoError("/home/src/workspaces/project/global.d.ts", `interface RemovedGlobal { property: number; }`)
+				}},
+				{caption: "delete ordinary source file", edit: func(sys *TestSys) {
+					sys.removeNoError("/home/src/workspaces/project/added.ts")
+				}},
+				noChange,
+			},
+		}).run(t, "incremental")
+		for _, cleared := range []bool{false, true} {
+			library := tscDefaultLibContent + "\ninterface LibraryConsumer { property: RemovedGlobal; }"
+			global := "interface RemovedGlobal {}"
+			if cleared {
+				library = tscDefaultLibContent + "\ninterface Shared<T> {}"
+				global = "interface Shared<T, U> {}"
+			}
+			(&tscInput{
+				subScenario:     fmt.Sprintf("retained library diagnostics after global deletion cleared %t%s", cleared, mode.name),
+				commandLineArgs: mode.args,
+				files: FileMap{
+					"/home/src/workspaces/project/tsconfig.json": `{"compilerOptions":{"incremental":true,"noEmit":true,"types":[],"lib":["es5"]}}`,
+					"/home/src/workspaces/project/consumer.ts":   "export const unchanged = 1;",
+					"/home/src/workspaces/project/global.d.ts":   global,
+					"/home/src/workspaces/project/module.d.ts":   "export interface Unrelated {}",
+					getTestLibPathFor("es5"):                     library,
+				},
+				edits: []*tscEdit{
+					{caption: "delete global and module declarations", edit: func(sys *TestSys) {
+						sys.removeNoError("/home/src/workspaces/project/global.d.ts")
+						sys.removeNoError("/home/src/workspaces/project/module.d.ts")
+					}},
+					noChange,
+					{caption: "restore global declaration", edit: func(sys *TestSys) {
+						sys.writeFileNoError("/home/src/workspaces/project/global.d.ts", global)
+					}},
+					noChange,
+				},
+			}).run(t, "incremental")
+		}
+	}
+	for _, composite := range []bool{false, true} {
+		(&tscInput{
+			subScenario: fmt.Sprintf("unchecked deleted paths with no emit composite %t", composite),
+			files: FileMap{
+				"/home/src/workspaces/project/tsconfig.json": fmt.Sprintf(`{"compilerOptions":{"incremental":true,"noCheck":true,"noEmit":true,"composite":%t,"types":[]}}`, composite),
+				"/home/src/workspaces/project/stable.ts":     "export const stable = 1;",
+			},
+			edits: []*tscEdit{
+				{caption: "add unchecked sources", edit: func(sys *TestSys) {
+					sys.writeFileNoError("/home/src/workspaces/project/first.ts", "export const first = 1;")
+					sys.writeFileNoError("/home/src/workspaces/project/second.ts", "export const second = 1;")
+				}},
+				{caption: "delete unchecked sources", edit: func(sys *TestSys) {
+					sys.removeNoError("/home/src/workspaces/project/first.ts")
+					sys.removeNoError("/home/src/workspaces/project/second.ts")
+				}},
+				noChange,
+				{caption: "enable checking and emit", edit: func(sys *TestSys) {
+					sys.replaceFileText("/home/src/workspaces/project/tsconfig.json", `"noCheck":true,"noEmit":true`, `"noCheck":false,"noEmit":false`)
+				}},
+				noChange,
+			},
+		}).run(t, "incremental")
 	}
 }
 
@@ -5078,11 +5305,146 @@ func TestGenerateTrace(t *testing.T) {
 			},
 			commandLineArgs: []string{"--generateTrace", "/home/src/workspaces/project/trace", "--singleThreaded"},
 		},
+		{
+			// Type ids are creation order. Each part of this project makes the checker create types while it
+			// iterates a symbol table with more than eight entries (whose iteration order varies from run to run):
+			// the infer type parameters of a conditional type in a declaration file, a namespace import whose
+			// members are aliases of namespace imports, and declaration emit of a type no import of main.ts
+			// exports, which resolves the `export =` re-exports of every module.
+			subScenario:     "generateTrace creates types in a stable order",
+			files:           generateTraceStableOrderFiles(),
+			commandLineArgs: []string{"--generateTrace", "/home/src/workspaces/project/trace", "--singleThreaded"},
+		},
+		{
+			subScenario: "generateTrace creates index signature sibling types in a stable order",
+			files: FileMap{
+				"/home/src/workspaces/project/tsconfig.json": stringtestutil.Dedent(`
+				{
+					"compilerOptions": {
+						"strict": true,
+						"skipLibCheck": true,
+						"declaration": true,
+						"emitDeclarationOnly": true,
+						"outDir": "out"
+					},
+					"files": ["main.ts", "ambient.d.ts"]
+				}`),
+				"/home/src/workspaces/project/ambient.d.ts": stringtestutil.Dedent(`
+				declare const k1: string;
+				declare class C {
+					[k1]: { a: 1 };
+					m1: { p1: 1 };
+					m2: { p2: 2 };
+					m3: { p3: 3 };
+					m4: { p4: 4 };
+					m5: { p5: 5 };
+					m6: { p6: 6 };
+					m7: { p7: 7 };
+					m8: { p8: 8 };
+					m9: { p9: 9 };
+					m10: { p10: 10 };
+				}
+				`),
+				"/home/src/workspaces/project/main.ts": stringtestutil.Dedent(`
+				declare function expand<X>(): { [K in keyof X]: X[K] };
+				export const w = expand<C>();
+				`),
+			},
+			commandLineArgs: []string{"--generateTrace", "/home/src/workspaces/project/trace", "--singleThreaded"},
+		},
+		{
+			subScenario: "generateTrace creates static index signature sibling types in a stable order",
+			files: FileMap{
+				"/home/src/workspaces/project/tsconfig.json": stringtestutil.Dedent(`
+				{
+					"compilerOptions": {
+						"strict": true,
+						"skipLibCheck": true,
+						"declaration": true,
+						"emitDeclarationOnly": true,
+						"outDir": "out"
+					},
+					"files": ["main.ts", "ambient.d.ts"]
+				}`),
+				"/home/src/workspaces/project/ambient.d.ts": stringtestutil.Dedent(`
+				declare const k1: string;
+				declare class C {
+					static [k1]: { a: 1 };
+					static m1: { p1: 1 };
+					static m2: { p2: 2 };
+					static m3: { p3: 3 };
+					static m4: { p4: 4 };
+					static m5: { p5: 5 };
+					static m6: { p6: 6 };
+					static m7: { p7: 7 };
+					static m8: { p8: 8 };
+					static m9: { p9: 9 };
+					static m10: { p10: 10 };
+				}
+				`),
+				"/home/src/workspaces/project/main.ts": stringtestutil.Dedent(`
+				declare function expand<X>(): { [K in keyof X]: X[K] };
+				export const w = expand<typeof C>();
+				`),
+			},
+			commandLineArgs: []string{"--generateTrace", "/home/src/workspaces/project/trace", "--singleThreaded"},
+		},
 	}
 
 	for _, c := range cases {
 		c.run(t, "generateTrace")
 	}
+}
+
+func generateTraceStableOrderFiles() FileMap {
+	files := FileMap{
+		"/home/src/workspaces/project/tsconfig.json": stringtestutil.Dedent(`
+		{
+			"compilerOptions": {
+				"strict": true,
+				"skipLibCheck": true,
+				"declaration": true,
+				"emitDeclarationOnly": true,
+				"outDir": "out"
+			},
+			"files": ["main.ts", "locales/index.d.ts"]
+		}`),
+		"/home/src/workspaces/project/fields.d.ts": stringtestutil.Dedent(`
+		export type Fields<T> = T extends { a: infer A; b: infer B; c: infer C; d: infer D; e: infer E; f: infer F; g: infer G; h: infer H; i: infer I; j: infer J; k: infer K; l: infer L } ? [A, B, C, D, E, F, G, H, I, J, K, L] : never;
+		`),
+		"/home/src/workspaces/project/gadget.d.ts": stringtestutil.Dedent(`
+		export interface Gadget {
+			id: number;
+		}
+		`),
+		"/home/src/workspaces/project/widget.d.ts": stringtestutil.Dedent(`
+		import { Gadget } from "./gadget";
+		export declare function makeWidget(): Gadget;
+		`),
+		"/home/src/workspaces/project/main.ts": stringtestutil.Dedent(`
+		import * as parts from "./parts/index";
+		import { Fields } from "./fields";
+		import { makeWidget } from "./widget";
+
+		export const fields: Fields<{ a: 1; b: 2; c: 3; d: 4; e: 5; f: 6; g: 7; h: 8; i: 9; j: 10; k: 11; l: 12 }> = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12];
+		export const allParts = parts;
+		export const widget = makeWidget();
+		`),
+	}
+	var localesIndex, partsIndex strings.Builder
+	parts := []string{"alpha", "beta", "gamma", "delta", "epsilon", "zeta", "eta", "theta", "iota", "kappa", "lambda", "mu"}
+	for _, locale := range []string{"ar", "de", "en", "es", "fr", "he", "it", "ja", "ko", "nl", "pl", "pt"} {
+		files["/home/src/workspaces/project/locales/"+locale+".d.ts"] = fmt.Sprintf("declare const _default: () => { locale: %q };\nexport = _default;\n", locale)
+		fmt.Fprintf(&localesIndex, "export { default as %s } from \"./%s\";\n", locale, locale)
+	}
+	for _, part := range parts {
+		files["/home/src/workspaces/project/parts/"+part+".d.ts"] = fmt.Sprintf("export declare const %s: { name: %q };\n", part, part)
+		fmt.Fprintf(&partsIndex, "import * as %s from \"./%s\";\n", part, part)
+	}
+	fmt.Fprintf(&partsIndex, "export { %s };\n", strings.Join(parts, ", "))
+	files["/home/src/workspaces/project/locales/index.d.ts"] = localesIndex.String()
+	files["/home/src/workspaces/project/parts/index.d.ts"] = partsIndex.String()
+	return files
 }
 
 func TestTscContentMapperEmit(t *testing.T) {

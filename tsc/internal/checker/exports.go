@@ -1,6 +1,8 @@
 package checker
 
 import (
+	"slices"
+
 	"github.com/microsoft/TypeScript/tsc/internal/ast"
 	"github.com/microsoft/TypeScript/tsc/internal/diagnostics"
 )
@@ -357,6 +359,14 @@ func (c *Checker) GetIndexTypeOfType(t *Type, keyType *Type) *Type {
 
 func (c *Checker) GetIndexInfosOfType(t *Type) []*IndexInfo {
 	return c.getIndexInfosOfType(t)
+}
+
+func (c *Checker) GetIndexInfosOfIndexSymbol(symbol *ast.Symbol) []*IndexInfo {
+	var siblingSymbols []*ast.Symbol
+	if symbol.Parent() != nil {
+		siblingSymbols = slices.Collect(c.getMembersOfSymbol(symbol.Parent()).Values())
+	}
+	return c.getIndexInfosOfIndexSymbol(symbol, siblingSymbols)
 }
 
 func (c *Checker) IsContextSensitive(node *ast.Node) bool {
