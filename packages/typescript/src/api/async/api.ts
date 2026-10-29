@@ -57,7 +57,7 @@ import {
 } from "../node/node.ts";
 import { Wtf8Decoder } from "../node/wtf8.ts";
 import type {
-    APIOptions,
+    APIOptions, // @sync:     SyncAPIOptions as APIOptions,
     LSPConnectionOptions,
 } from "../options.ts";
 import {
@@ -138,9 +138,10 @@ import type {
     TimingInfo,
 } from "../timing.ts";
 import {
-    Client,
+    type Client, // @sync:     Client,
     type ClientSocketOptions,
     type ClientSpawnOptions,
+    createClient, // @sync-skip
 } from "./client.ts";
 import type {
     AssertsIdentifierTypePredicate,
@@ -364,7 +365,7 @@ export class API<FromLSP extends boolean = false> implements FormatDiagnosticsHo
     readonly debug: DebugHandlers;
 
     constructor(options: APIOptions | LSPConnectionOptions = {}) {
-        this.client = new Client(options);
+        this.client = createClient(options); // @sync: this.client = new Client(options);
         this.sourceFileCache = new SourceFileCache<Symbol>();
         this.printer = new Printer(this.client);
         this.debug = new DebugHandlers(this.client, () => this.ensureInitialized()); // @sync: this.debug = new DebugHandlers(this.client, this.ensureInitialized);
@@ -771,6 +772,15 @@ export class API<FromLSP extends boolean = false> implements FormatDiagnosticsHo
     }
 
     async close(): Promise<void> {
+        // @sync-skip-block-start
+        if (this.initializing && !this.initialized) {
+            const initializing = this.initializing;
+            await this.client.close();
+            await initializing.catch(() => {});
+            this.sourceFileCache.clear();
+            return;
+        }
+        // @sync-skip-block-end
         await this.initializing?.catch(() => {}); // @sync-skip
         try {
             for (const retained of [...this.activeSourceFileLeases.values()]) {
