@@ -913,7 +913,6 @@ type Checker struct {
 	syncIterationTypesResolver                  *IterationTypesResolver
 	asyncIterationTypesResolver                 *IterationTypesResolver
 	isPrimitiveOrObjectOrEmptyType              func(*Type) bool
-	containsMissingType                         func(*Type) bool
 	couldContainTypeVariables                   func(*Type) bool
 	isStringIndexSignatureOnlyType              func(*Type) bool
 	markNodeAssignments                         func(*ast.Node) bool
@@ -1288,13 +1287,14 @@ func (c *Checker) initializeClosures() {
 	c.isPrimitiveOrObjectOrEmptyType = func(t *Type) bool {
 		return t.flags&(TypeFlagsPrimitive|TypeFlagsNonPrimitive) != 0 || c.IsEmptyAnonymousObjectType(t)
 	}
-	c.containsMissingType = func(t *Type) bool {
-		return t == c.missingType || t.flags&TypeFlagsUnion != 0 && t.Types()[0] == c.missingType
-	}
 	c.couldContainTypeVariables = c.couldContainTypeVariablesWorker
 	c.isStringIndexSignatureOnlyType = c.isStringIndexSignatureOnlyTypeWorker
 	c.markNodeAssignments = c.markNodeAssignmentsWorker
 	c.compareTypesAssignable = c.compareTypesAssignableWorker
+}
+
+func (c *Checker) containsMissingType(t *Type) bool {
+	return t == c.missingType || t.flags&TypeFlagsUnion != 0 && t.Types()[0] == c.missingType
 }
 
 func (c *Checker) initializeIterationResolvers() {
