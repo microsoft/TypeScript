@@ -66,6 +66,7 @@ const (
 	TypeSystemPropertyNameInitializerIsUndefined
 	TypeSystemPropertyNameAliasTarget
 	TypeSystemPropertyNameResolvedReducedType
+	TypeSystemPropertyNameImpliedConstraint
 )
 
 type TypeResolution struct {
@@ -150,6 +151,11 @@ const (
 type CachedTypeKey struct {
 	kind   CachedTypeKind
 	typeId TypeId
+}
+
+type ConditionalConstraintKey struct {
+	node       *ast.Node
+	assumeTrue bool
 }
 
 type DistributiveInstantiationKey struct {
@@ -724,6 +730,7 @@ type Checker struct {
 	signatureLinks                              nodeLinkStore[SignatureLinks]
 	symbolNodeLinks                             nodeLinkStore[SymbolNodeLinks]
 	typeNodeLinks                               nodeLinkStore[TypeNodeLinks]
+	conditionalConstraintLinks                  core.LinkStore[ConditionalConstraintKey, ConditionalConstraintLinks]
 	enumMemberLinks                             core.LinkStore[*ast.Node, EnumMemberLinks]
 	assertionLinks                              core.LinkStore[*ast.Node, AssertionLinks]
 	arrayLiteralLinks                           core.LinkStore[*ast.Node, ArrayLiteralLinks]
@@ -19307,6 +19314,8 @@ func (c *Checker) typeResolutionHasProperty(r *TypeResolution) bool {
 		return c.aliasSymbolLinks.Get(r.target.(*ast.Symbol)).aliasTarget != nil
 	case TypeSystemPropertyNameResolvedReducedType:
 		return r.target.(*Type).AsUnionType().resolvedReducedType != nil
+	case TypeSystemPropertyNameImpliedConstraint:
+		return r.target.(*ConditionalConstraintLinks).constraint != nil
 	}
 	panic("Unhandled case in typeResolutionHasProperty")
 }
@@ -23018,9 +23027,8 @@ func (c *Checker) instantiateTypeWorker(t *Type, m *TypeMapper, alias *TypeAlias
 			return c.getNoInferType(newBaseType)
 		}
 		newConstraint := c.instantiateType(t.AsSubstitutionType().constraint, m)
-		// A substitution type originates in the true branch of a conditional type and can be resolved
-		// to just the base type in the same cases as the conditional type resolves to its true branch
-		// (because the base type is then known to satisfy the constraint).
+		// A conditional branch substitution can be resolved to just the base type when the
+		// base type is known to satisfy the branch's constraint.
 		if newBaseType.flags&TypeFlagsTypeVariable != 0 && c.isGenericType(newConstraint) {
 			return c.getSubstitutionType(newBaseType, newConstraint)
 		}
@@ -25053,10 +25061,19 @@ func (c *Checker) getTypeFromMappedTypeNode(node *ast.Node) *Type {
 	return links.resolvedType
 }
 
+func (c *Checker) getConditionalCheckType(node *ast.Node) *Type {
+	t := c.getTypeFromTypeNode(node)
+	// Branch constraints must not suppress distribution, but NoInfer intentionally does.
+	for t.flags&TypeFlagsSubstitution != 0 && !c.isNoInferType(t) {
+		t = t.AsSubstitutionType().baseType
+	}
+	return t
+}
+
 func (c *Checker) getTypeFromConditionalTypeNode(node *ast.Node) *Type {
 	links := c.typeNodeLinks.Get(node)
 	if links.resolvedType == nil {
-		checkType := c.getTypeFromTypeNode(node.AsConditionalTypeNode().CheckType)
+		checkType := c.getConditionalCheckType(node.AsConditionalTypeNode().CheckType)
 		alias := c.getAliasForTypeNode(node)
 		allOuterTypeParameters := c.getOuterTypeParameters(node, true /*includeThisTypes*/)
 		var outerTypeParameters []*Type
@@ -25754,10 +25771,13 @@ func (c *Checker) getConditionalFlowTypeOfType(t *Type, node *ast.Node) *Type {
 		}
 		// Always substitute on type parameters, regardless of variance, since even
 		// in contravariant positions, they may rely on substituted constraints to be valid
-		if (covariant || t.flags&TypeFlagsTypeVariable != 0) && ast.IsConditionalTypeNode(parent) && node == parent.AsConditionalTypeNode().TrueType {
-			constraint := c.getImpliedConstraint(t, parent.AsConditionalTypeNode().CheckType, parent.AsConditionalTypeNode().ExtendsType)
-			if constraint != nil {
-				constraints = append(constraints, constraint)
+		if (covariant || t.flags&TypeFlagsTypeVariable != 0) && ast.IsConditionalTypeNode(parent) {
+			conditional := parent.AsConditionalTypeNode()
+			if node == conditional.TrueType || node == conditional.FalseType {
+				constraint := c.getImpliedConstraint(t, conditional, node == conditional.TrueType)
+				if constraint != nil {
+					constraints = append(constraints, constraint)
+				}
 			}
 		} else if t.flags&TypeFlagsTypeParameter != 0 && ast.IsMappedTypeNode(parent) && parent.AsMappedTypeNode().NameType == nil && node == parent.Type() {
 			mappedType := c.getTypeFromTypeNode(parent)
@@ -25779,14 +25799,72 @@ func (c *Checker) getConditionalFlowTypeOfType(t *Type, node *ast.Node) *Type {
 	return t
 }
 
-func (c *Checker) getImpliedConstraint(t *Type, checkNode *ast.Node, extendsNode *ast.Node) *Type {
-	switch {
-	case isUnaryTupleTypeNode(checkNode) && isUnaryTupleTypeNode(extendsNode):
-		return c.getImpliedConstraint(t, checkNode.Elements()[0], extendsNode.Elements()[0])
-	case c.getActualTypeVariable(c.getTypeFromTypeNode(checkNode)) == c.getActualTypeVariable(t):
-		return c.getTypeFromTypeNode(extendsNode)
+func (c *Checker) getImpliedConstraint(t *Type, node *ast.ConditionalTypeNode, assumeTrue bool) *Type {
+	links := c.conditionalConstraintLinks.Get(ConditionalConstraintKey{node: node.AsNode(), assumeTrue: assumeTrue})
+	if links.constraint == nil {
+		if !c.pushTypeResolution(links, TypeSystemPropertyNameImpliedConstraint) {
+			return c.errorType
+		}
+		var checkType, constraint *Type
+		if assumeTrue {
+			checkType, constraint = c.resolveImpliedTrueConstraint(node)
+		} else {
+			checkType, constraint = c.resolveImpliedFalseConstraint(node)
+		}
+		if !c.popTypeResolution() {
+			c.error(node.CheckType, diagnostics.Conditional_type_constraint_circularly_references_itself)
+			checkType, constraint = nil, c.errorType
+		}
+		if constraint == nil {
+			constraint = c.noConstraintType
+		}
+		if links.constraint == nil {
+			links.checkType, links.constraint = checkType, constraint
+		}
+	}
+	if links.constraint == c.errorType {
+		return c.errorType
+	}
+	if links.checkType == c.getActualTypeVariable(t) {
+		return links.constraint
 	}
 	return nil
+}
+
+func (c *Checker) resolveImpliedTrueConstraint(node *ast.ConditionalTypeNode) (*Type, *Type) {
+	checkNode := node.CheckType
+	extendsNode := node.ExtendsType
+	for isUnaryTupleTypeNode(checkNode) && isUnaryTupleTypeNode(extendsNode) {
+		checkNode = checkNode.Elements()[0]
+		extendsNode = extendsNode.Elements()[0]
+	}
+	checkType := c.getActualTypeVariable(c.getTypeFromTypeNode(checkNode))
+	return checkType, c.getTypeFromTypeNode(extendsNode)
+}
+
+func (c *Checker) resolveImpliedFalseConstraint(node *ast.ConditionalTypeNode) (*Type, *Type) {
+	checkType := c.getConditionalCheckType(node.CheckType)
+	// Distribution is necessary: [string | number] not extending [string] does not exclude strings.
+	// Inferred types are unavailable in the false branch and their constraints need not be exact.
+	if checkType.flags&TypeFlagsTypeParameter == 0 || len(c.getInferTypeParameters(node.AsNode())) != 0 {
+		return nil, nil
+	}
+	constraint := c.getBaseConstraintOfType(c.getTypeFromTypeNode(node.CheckType))
+	if constraint == nil {
+		return nil, nil
+	}
+	extendsType := c.getTypeFromTypeNode(node.ExtendsType)
+	// A primitive constituent must be entirely included or disjoint. In particular, string
+	// failing to extend "a" cannot imply not "a". Structural unions are not sufficient either:
+	// { kind: "a" | "b" } can satisfy { kind: "a" } | { kind: "b" } without distributing.
+	// Enum constraints are also excluded because numeric enums admit broad number instantiations.
+	if !everyType(constraint, func(t *Type) bool {
+		return t.flags&TypeFlagsPrimitive != 0 && t.flags&TypeFlagsEnumLike == 0 &&
+			(c.isTypeSubtypeOf(t, extendsType) || c.getIntersectionType([]*Type{t, extendsType}).flags&TypeFlagsNever != 0)
+	}) {
+		return nil, nil
+	}
+	return c.getActualTypeVariable(checkType), c.getNegatedType(extendsType)
 }
 
 func isUnaryTupleTypeNode(node *ast.Node) bool {
@@ -27795,6 +27873,11 @@ func (c *Checker) getIndexedAccessTypeEx(objectType *Type, indexType *Type, acce
 func (c *Checker) getIndexedAccessTypeOrUndefined(objectType *Type, indexType *Type, accessFlags AccessFlags, accessNode *ast.Node, alias *TypeAlias) *Type {
 	if objectType == c.wildcardType || indexType == c.wildcardType {
 		return c.wildcardType
+	}
+	// Canonicalize negative constraints with explicit intersections. Positive substitutions
+	// must retain their identity for reverse mapped type inference.
+	if indexType.flags&TypeFlagsSubstitution != 0 && containsNegatedType(indexType.AsSubstitutionType().constraint) {
+		indexType = c.getSubstitutionIntersection(indexType)
 	}
 	objectType = c.getReducedType(objectType)
 	// If the object type has a string index signature and no other members we know that the result will

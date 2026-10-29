@@ -1,0 +1,197 @@
+//// [tests/cases/compiler/negatedConditionalFalseBranchSoundness.ts] ////
+
+=== negatedConditionalFalseBranchSoundness.ts ===
+type NonString<T extends not string> = T;
+>NonString : T
+
+type NonA<T extends not "a"> = T;
+>NonA : T
+
+type NonKindA<T extends not { kind: "a" }> = T;
+>NonKindA : T
+>kind : "a"
+
+type NonLengthOne<T extends not { length: 1 }> = T;
+>NonLengthOne : T
+>length : 1
+
+type NonUndefined<T extends not undefined> = T;
+>NonUndefined : T
+
+type NonZero<T extends not 0> = T;
+>NonZero : T
+
+// A false subtype check does not imply disjointness, even when distributive.
+type Unconstrained<T> = T extends string ? never : NonString<T>;
+>Unconstrained : Unconstrained<T>
+
+type BroadString<T extends string> = T extends "a" ? never : NonA<T>;
+>BroadString : BroadString<T>
+
+type Structural<T extends { kind: "a" | "b" }> =
+>Structural : Structural<T>
+>kind : "a" | "b"
+
+    T extends { kind: "a" } ? never : NonKindA<T>;
+>kind : "a"
+
+type PrimitiveStructure<T extends string | number> =
+>PrimitiveStructure : PrimitiveStructure<T>
+
+    T extends { length: 1 } ? never : NonLengthOne<T>;
+>length : 1
+
+const unknownString: Unconstrained<unknown> = "a";
+>unknownString : unknown
+>"a" : "a"
+
+const broadString: BroadString<string> = "a";
+>broadString : string
+>"a" : "a"
+
+const structural: Structural<{ kind: "a" | "b" }> = { kind: "a" };
+>structural : { kind: "a" | "b"; }
+>kind : "a" | "b"
+>{ kind: "a" } : { kind: "a"; }
+>kind : "a"
+>"a" : "a"
+
+const primitiveStructure: PrimitiveStructure<string> = "a";
+>primitiveStructure : string
+>"a" : "a"
+
+// Even a discriminated-union constraint admits a single object with a union property.
+type Tagged = { kind: "a" } | { kind: "b" };
+>Tagged : Tagged
+>kind : "a"
+>kind : "b"
+
+type Discriminated<T extends Tagged> = T extends { kind: "a" } ? never : NonKindA<T>;
+>Discriminated : Discriminated<T>
+>kind : "a"
+
+const discriminated: Discriminated<{ kind: "a" | "b" }> = { kind: "a" };
+>discriminated : { kind: "a" | "b"; }
+>kind : "a" | "b"
+>{ kind: "a" } : { kind: "a"; }
+>kind : "a"
+>"a" : "a"
+
+// Non-distributive checks retain the entire union, including matching members.
+type NonDistributive<T extends string | number> =
+>NonDistributive : NonDistributive<T>
+
+    [T] extends [string] ? never : NonString<T>;
+type NestedTuple<T extends string | number> =
+>NestedTuple : NestedTuple<T>
+
+    [[T]] extends [[string]] ? never : NonString<T>;
+type ParenthesizedTuple<T extends string | number> =
+>ParenthesizedTuple : ParenthesizedTuple<T>
+
+    ([T]) extends ([string]) ? never : NonString<T>;
+const nonDistributiveString: NonDistributive<string | number> = "a";
+>nonDistributiveString : string | number
+>"a" : "a"
+
+const nonDistributiveNumber: NonDistributive<string | number> = 1;
+>nonDistributiveNumber : string | number
+>1 : 1
+
+const nestedTuple: NestedTuple<string | number> = "a";
+>nestedTuple : string | number
+>"a" : "a"
+
+const parenthesizedTuple: ParenthesizedTuple<string | number> = "a";
+>parenthesizedTuple : string | number
+>"a" : "a"
+
+type NoInferCheck<T extends string | number> =
+>NoInferCheck : NoInferCheck<T>
+
+    NoInfer<T> extends string ? never : NonString<T>;
+const noInferCheck: NoInferCheck<string | number> = "a";
+>noInferCheck : string | number
+>"a" : "a"
+
+// False-branch infer parameters are out of scope; their upper bounds need not be exact matches.
+type WithInfer<T extends string | number> =
+>WithInfer : WithInfer<T>
+
+    T extends infer U extends string ? U : NonString<T>;
+type StructuralInfer<T extends Tagged> =
+>StructuralInfer : StructuralInfer<T>
+
+    T extends { kind: infer K extends "a" } ? K : NonKindA<T>;
+>kind : K
+
+type NonDistributiveInfer<T extends string | number> =
+>NonDistributiveInfer : NonDistributiveInfer<T>
+
+    [T] extends [infer U extends string] ? U : NonString<T>;
+const withInfer: WithInfer<string | number> = 1;
+>withInfer : string | number
+>1 : 1
+
+const structuralInfer: StructuralInfer<{ kind: "a" | "b" }> = { kind: "a" };
+>structuralInfer : { kind: "a" | "b"; }
+>kind : "a" | "b"
+>{ kind: "a" } : { kind: "a"; }
+>kind : "a"
+>"a" : "a"
+
+const nonDistributiveInfer: NonDistributiveInfer<string | number> = "a";
+>nonDistributiveInfer : string | number
+>"a" : "a"
+
+// A generic extends type may select only part of a primitive domain.
+type GenericTarget<T extends string | number, U extends string> =
+>GenericTarget : GenericTarget<T, U>
+
+    T extends U ? never : NonString<T>;
+const genericTarget: GenericTarget<string, "a"> = "a";
+>genericTarget : string
+>"a" : "a"
+
+// Unknown and structural supertypes can overlap strings without being string subtypes.
+type TopConstraint<T extends {}> = T extends string ? never : NonString<T>;
+>TopConstraint : TopConstraint<T>
+
+type ObjectConstraint<T extends { length: number }> = T extends string ? never : NonString<T>;
+>ObjectConstraint : ObjectConstraint<T>
+>length : number
+
+const topConstraint: TopConstraint<{}> = "a";
+>topConstraint : {}
+>"a" : "a"
+
+const objectConstraint: ObjectConstraint<{ length: number }> = "a";
+>objectConstraint : { length: number; }
+>length : number
+>"a" : "a"
+
+// Void also overlaps undefined without extending it.
+type VoidConstraint<T extends void> = T extends undefined ? never : NonUndefined<T>;
+>VoidConstraint : VoidConstraint<T>
+
+const voidConstraint: VoidConstraint<void> = undefined;
+>voidConstraint : void
+>undefined : undefined
+
+// Numeric enum constraints admit broad number types, not just their literal members.
+enum Numeric {
+>Numeric : Numeric
+
+    A,
+>A : Numeric.A
+
+    B,
+>B : Numeric.B
+}
+type EnumConstraint<T extends Numeric> = T extends 0 ? never : NonZero<T>;
+>EnumConstraint : EnumConstraint<T>
+
+const enumConstraint: EnumConstraint<number> = 0;
+>enumConstraint : number
+>0 : 0
+

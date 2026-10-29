@@ -1,0 +1,323 @@
+//// [tests/cases/compiler/negatedConditionalFalseBranchConstraints.ts] ////
+
+=== negatedConditionalFalseBranchConstraints.ts ===
+type OnlyNumber<T extends number> = T;
+>OnlyNumber : Symbol(OnlyNumber, Decl(negatedConditionalFalseBranchConstraints.ts, 0, 0))
+>T : Symbol(T, Decl(negatedConditionalFalseBranchConstraints.ts, 0, 16))
+>T : Symbol(T, Decl(negatedConditionalFalseBranchConstraints.ts, 0, 16))
+
+type OnlySymbol<T extends symbol> = T;
+>OnlySymbol : Symbol(OnlySymbol, Decl(negatedConditionalFalseBranchConstraints.ts, 0, 38))
+>T : Symbol(T, Decl(negatedConditionalFalseBranchConstraints.ts, 1, 16))
+>T : Symbol(T, Decl(negatedConditionalFalseBranchConstraints.ts, 1, 16))
+
+type OnlyBoolean<T extends boolean> = T;
+>OnlyBoolean : Symbol(OnlyBoolean, Decl(negatedConditionalFalseBranchConstraints.ts, 1, 38))
+>T : Symbol(T, Decl(negatedConditionalFalseBranchConstraints.ts, 2, 17))
+>T : Symbol(T, Decl(negatedConditionalFalseBranchConstraints.ts, 2, 17))
+
+type OnlyB<T extends "b"> = T;
+>OnlyB : Symbol(OnlyB, Decl(negatedConditionalFalseBranchConstraints.ts, 2, 40))
+>T : Symbol(T, Decl(negatedConditionalFalseBranchConstraints.ts, 3, 11))
+>T : Symbol(T, Decl(negatedConditionalFalseBranchConstraints.ts, 3, 11))
+
+type NonString<T extends not string> = T;
+>NonString : Symbol(NonString, Decl(negatedConditionalFalseBranchConstraints.ts, 3, 30))
+>T : Symbol(T, Decl(negatedConditionalFalseBranchConstraints.ts, 4, 15))
+>T : Symbol(T, Decl(negatedConditionalFalseBranchConstraints.ts, 4, 15))
+
+type NonA<T extends not "a"> = T;
+>NonA : Symbol(NonA, Decl(negatedConditionalFalseBranchConstraints.ts, 4, 41))
+>T : Symbol(T, Decl(negatedConditionalFalseBranchConstraints.ts, 5, 10))
+>T : Symbol(T, Decl(negatedConditionalFalseBranchConstraints.ts, 5, 10))
+
+type OnlyString<T extends string> = T;
+>OnlyString : Symbol(OnlyString, Decl(negatedConditionalFalseBranchConstraints.ts, 5, 33))
+>T : Symbol(T, Decl(negatedConditionalFalseBranchConstraints.ts, 6, 16))
+>T : Symbol(T, Decl(negatedConditionalFalseBranchConstraints.ts, 6, 16))
+
+type Primitive<T extends string | number> = T extends string ? never : OnlyNumber<T>;
+>Primitive : Symbol(Primitive, Decl(negatedConditionalFalseBranchConstraints.ts, 6, 38))
+>T : Symbol(T, Decl(negatedConditionalFalseBranchConstraints.ts, 8, 15))
+>T : Symbol(T, Decl(negatedConditionalFalseBranchConstraints.ts, 8, 15))
+>OnlyNumber : Symbol(OnlyNumber, Decl(negatedConditionalFalseBranchConstraints.ts, 0, 0))
+>T : Symbol(T, Decl(negatedConditionalFalseBranchConstraints.ts, 8, 15))
+
+type NegativeConstraint<T extends string | number> = T extends string ? never : NonString<T>;
+>NegativeConstraint : Symbol(NegativeConstraint, Decl(negatedConditionalFalseBranchConstraints.ts, 8, 85))
+>T : Symbol(T, Decl(negatedConditionalFalseBranchConstraints.ts, 9, 24))
+>T : Symbol(T, Decl(negatedConditionalFalseBranchConstraints.ts, 9, 24))
+>NonString : Symbol(NonString, Decl(negatedConditionalFalseBranchConstraints.ts, 3, 30))
+>T : Symbol(T, Decl(negatedConditionalFalseBranchConstraints.ts, 9, 24))
+
+type Keys<T extends PropertyKey> = T extends string | number ? never : OnlySymbol<T>;
+>Keys : Symbol(Keys, Decl(negatedConditionalFalseBranchConstraints.ts, 9, 93))
+>T : Symbol(T, Decl(negatedConditionalFalseBranchConstraints.ts, 10, 10))
+>PropertyKey : Symbol(PropertyKey, Decl(lib.es5.d.ts, --, --))
+>T : Symbol(T, Decl(negatedConditionalFalseBranchConstraints.ts, 10, 10))
+>OnlySymbol : Symbol(OnlySymbol, Decl(negatedConditionalFalseBranchConstraints.ts, 0, 38))
+>T : Symbol(T, Decl(negatedConditionalFalseBranchConstraints.ts, 10, 10))
+
+type Literals<T extends "a" | "b"> = T extends "a" ? never : OnlyB<T>;
+>Literals : Symbol(Literals, Decl(negatedConditionalFalseBranchConstraints.ts, 10, 85))
+>T : Symbol(T, Decl(negatedConditionalFalseBranchConstraints.ts, 11, 14))
+>T : Symbol(T, Decl(negatedConditionalFalseBranchConstraints.ts, 11, 14))
+>OnlyB : Symbol(OnlyB, Decl(negatedConditionalFalseBranchConstraints.ts, 2, 40))
+>T : Symbol(T, Decl(negatedConditionalFalseBranchConstraints.ts, 11, 14))
+
+type NegativeLiteral<T extends "a" | "b"> = T extends "a" ? never : NonA<T>;
+>NegativeLiteral : Symbol(NegativeLiteral, Decl(negatedConditionalFalseBranchConstraints.ts, 11, 70))
+>T : Symbol(T, Decl(negatedConditionalFalseBranchConstraints.ts, 12, 21))
+>T : Symbol(T, Decl(negatedConditionalFalseBranchConstraints.ts, 12, 21))
+>NonA : Symbol(NonA, Decl(negatedConditionalFalseBranchConstraints.ts, 4, 41))
+>T : Symbol(T, Decl(negatedConditionalFalseBranchConstraints.ts, 12, 21))
+
+type Booleans<T extends boolean> = T extends true ? never : OnlyBoolean<T>;
+>Booleans : Symbol(Booleans, Decl(negatedConditionalFalseBranchConstraints.ts, 12, 76))
+>T : Symbol(T, Decl(negatedConditionalFalseBranchConstraints.ts, 13, 14))
+>T : Symbol(T, Decl(negatedConditionalFalseBranchConstraints.ts, 13, 14))
+>OnlyBoolean : Symbol(OnlyBoolean, Decl(negatedConditionalFalseBranchConstraints.ts, 1, 38))
+>T : Symbol(T, Decl(negatedConditionalFalseBranchConstraints.ts, 13, 14))
+
+type DoubleNegation<T extends string | number> = T extends not string ? never : OnlyString<T>;
+>DoubleNegation : Symbol(DoubleNegation, Decl(negatedConditionalFalseBranchConstraints.ts, 13, 75))
+>T : Symbol(T, Decl(negatedConditionalFalseBranchConstraints.ts, 14, 20))
+>T : Symbol(T, Decl(negatedConditionalFalseBranchConstraints.ts, 14, 20))
+>OnlyString : Symbol(OnlyString, Decl(negatedConditionalFalseBranchConstraints.ts, 5, 33))
+>T : Symbol(T, Decl(negatedConditionalFalseBranchConstraints.ts, 14, 20))
+
+type Nested<T extends string | number | boolean> =
+>Nested : Symbol(Nested, Decl(negatedConditionalFalseBranchConstraints.ts, 14, 94))
+>T : Symbol(T, Decl(negatedConditionalFalseBranchConstraints.ts, 15, 12))
+
+    T extends string ? T : T extends number ? OnlyNumber<T> : OnlyBoolean<T>;
+>T : Symbol(T, Decl(negatedConditionalFalseBranchConstraints.ts, 15, 12))
+>T : Symbol(T, Decl(negatedConditionalFalseBranchConstraints.ts, 15, 12))
+>T : Symbol(T, Decl(negatedConditionalFalseBranchConstraints.ts, 15, 12))
+>OnlyNumber : Symbol(OnlyNumber, Decl(negatedConditionalFalseBranchConstraints.ts, 0, 0))
+>T : Symbol(T, Decl(negatedConditionalFalseBranchConstraints.ts, 15, 12))
+>OnlyBoolean : Symbol(OnlyBoolean, Decl(negatedConditionalFalseBranchConstraints.ts, 1, 38))
+>T : Symbol(T, Decl(negatedConditionalFalseBranchConstraints.ts, 15, 12))
+
+type Callback<T extends string | number> = T extends string ? never : (value: NonString<T>) => OnlyNumber<T>;
+>Callback : Symbol(Callback, Decl(negatedConditionalFalseBranchConstraints.ts, 16, 77))
+>T : Symbol(T, Decl(negatedConditionalFalseBranchConstraints.ts, 17, 14))
+>T : Symbol(T, Decl(negatedConditionalFalseBranchConstraints.ts, 17, 14))
+>value : Symbol(value, Decl(negatedConditionalFalseBranchConstraints.ts, 17, 71))
+>NonString : Symbol(NonString, Decl(negatedConditionalFalseBranchConstraints.ts, 3, 30))
+>T : Symbol(T, Decl(negatedConditionalFalseBranchConstraints.ts, 17, 14))
+>OnlyNumber : Symbol(OnlyNumber, Decl(negatedConditionalFalseBranchConstraints.ts, 0, 0))
+>T : Symbol(T, Decl(negatedConditionalFalseBranchConstraints.ts, 17, 14))
+
+type Parenthesized<T extends string | number> = (T) extends (string) ? never : NonString<T>;
+>Parenthesized : Symbol(Parenthesized, Decl(negatedConditionalFalseBranchConstraints.ts, 17, 109))
+>T : Symbol(T, Decl(negatedConditionalFalseBranchConstraints.ts, 18, 19))
+>T : Symbol(T, Decl(negatedConditionalFalseBranchConstraints.ts, 18, 19))
+>NonString : Symbol(NonString, Decl(negatedConditionalFalseBranchConstraints.ts, 3, 30))
+>T : Symbol(T, Decl(negatedConditionalFalseBranchConstraints.ts, 18, 19))
+
+type WrappedOuter<T extends string | number> =
+>WrappedOuter : Symbol(WrappedOuter, Decl(negatedConditionalFalseBranchConstraints.ts, 18, 92))
+>T : Symbol(T, Decl(negatedConditionalFalseBranchConstraints.ts, 19, 18))
+
+    [T] extends [string | number] ? T extends string ? never : OnlyNumber<T> : never;
+>T : Symbol(T, Decl(negatedConditionalFalseBranchConstraints.ts, 19, 18))
+>T : Symbol(T, Decl(negatedConditionalFalseBranchConstraints.ts, 19, 18))
+>OnlyNumber : Symbol(OnlyNumber, Decl(negatedConditionalFalseBranchConstraints.ts, 0, 0))
+>T : Symbol(T, Decl(negatedConditionalFalseBranchConstraints.ts, 19, 18))
+
+const primitive: Primitive<"a" | 1 | 2> = 1;
+>primitive : Symbol(primitive, Decl(negatedConditionalFalseBranchConstraints.ts, 22, 5))
+>Primitive : Symbol(Primitive, Decl(negatedConditionalFalseBranchConstraints.ts, 6, 38))
+
+const anyPrimitive: Primitive<any> = "a";
+>anyPrimitive : Symbol(anyPrimitive, Decl(negatedConditionalFalseBranchConstraints.ts, 23, 5))
+>Primitive : Symbol(Primitive, Decl(negatedConditionalFalseBranchConstraints.ts, 6, 38))
+
+const negativeConstraint: NegativeConstraint<string | number> = 1;
+>negativeConstraint : Symbol(negativeConstraint, Decl(negatedConditionalFalseBranchConstraints.ts, 24, 5))
+>NegativeConstraint : Symbol(NegativeConstraint, Decl(negatedConditionalFalseBranchConstraints.ts, 8, 85))
+
+declare const key: Keys<symbol | "a" | 1>;
+>key : Symbol(key, Decl(negatedConditionalFalseBranchConstraints.ts, 25, 13))
+>Keys : Symbol(Keys, Decl(negatedConditionalFalseBranchConstraints.ts, 9, 93))
+
+const symbolKey: symbol = key;
+>symbolKey : Symbol(symbolKey, Decl(negatedConditionalFalseBranchConstraints.ts, 26, 5))
+>key : Symbol(key, Decl(negatedConditionalFalseBranchConstraints.ts, 25, 13))
+
+const literal: Literals<"a" | "b"> = "b";
+>literal : Symbol(literal, Decl(negatedConditionalFalseBranchConstraints.ts, 27, 5))
+>Literals : Symbol(Literals, Decl(negatedConditionalFalseBranchConstraints.ts, 10, 85))
+
+const negativeLiteral: NegativeLiteral<"a" | "b"> = "b";
+>negativeLiteral : Symbol(negativeLiteral, Decl(negatedConditionalFalseBranchConstraints.ts, 28, 5))
+>NegativeLiteral : Symbol(NegativeLiteral, Decl(negatedConditionalFalseBranchConstraints.ts, 11, 70))
+
+const boolean: Booleans<boolean> = false;
+>boolean : Symbol(boolean, Decl(negatedConditionalFalseBranchConstraints.ts, 29, 5))
+>Booleans : Symbol(Booleans, Decl(negatedConditionalFalseBranchConstraints.ts, 12, 76))
+
+const doubleNegation: DoubleNegation<string | number> = "a";
+>doubleNegation : Symbol(doubleNegation, Decl(negatedConditionalFalseBranchConstraints.ts, 30, 5))
+>DoubleNegation : Symbol(DoubleNegation, Decl(negatedConditionalFalseBranchConstraints.ts, 13, 75))
+
+const nested: Nested<string | number | boolean> = true;
+>nested : Symbol(nested, Decl(negatedConditionalFalseBranchConstraints.ts, 31, 5))
+>Nested : Symbol(Nested, Decl(negatedConditionalFalseBranchConstraints.ts, 14, 94))
+
+const callback: Callback<string | number> = value => value;
+>callback : Symbol(callback, Decl(negatedConditionalFalseBranchConstraints.ts, 32, 5))
+>Callback : Symbol(Callback, Decl(negatedConditionalFalseBranchConstraints.ts, 16, 77))
+>value : Symbol(value, Decl(negatedConditionalFalseBranchConstraints.ts, 32, 43))
+>value : Symbol(value, Decl(negatedConditionalFalseBranchConstraints.ts, 32, 43))
+
+const parenthesized: Parenthesized<string | number> = 1;
+>parenthesized : Symbol(parenthesized, Decl(negatedConditionalFalseBranchConstraints.ts, 33, 5))
+>Parenthesized : Symbol(Parenthesized, Decl(negatedConditionalFalseBranchConstraints.ts, 17, 109))
+
+const wrappedOuter: WrappedOuter<string | number> = 1;
+>wrappedOuter : Symbol(wrappedOuter, Decl(negatedConditionalFalseBranchConstraints.ts, 34, 5))
+>WrappedOuter : Symbol(WrappedOuter, Decl(negatedConditionalFalseBranchConstraints.ts, 18, 92))
+
+// Filtering must still happen separately for each union member.
+const rejectedPrimitive: Primitive<string | number> = "a";
+>rejectedPrimitive : Symbol(rejectedPrimitive, Decl(negatedConditionalFalseBranchConstraints.ts, 37, 5))
+>Primitive : Symbol(Primitive, Decl(negatedConditionalFalseBranchConstraints.ts, 6, 38))
+
+const rejectedKey: Keys<PropertyKey> = 1;
+>rejectedKey : Symbol(rejectedKey, Decl(negatedConditionalFalseBranchConstraints.ts, 38, 5))
+>Keys : Symbol(Keys, Decl(negatedConditionalFalseBranchConstraints.ts, 9, 93))
+>PropertyKey : Symbol(PropertyKey, Decl(lib.es5.d.ts, --, --))
+
+const rejectedLiteral: Literals<"a" | "b"> = "a";
+>rejectedLiteral : Symbol(rejectedLiteral, Decl(negatedConditionalFalseBranchConstraints.ts, 39, 5))
+>Literals : Symbol(Literals, Decl(negatedConditionalFalseBranchConstraints.ts, 10, 85))
+
+const rejectedBoolean: Booleans<boolean> = true;
+>rejectedBoolean : Symbol(rejectedBoolean, Decl(negatedConditionalFalseBranchConstraints.ts, 40, 5))
+>Booleans : Symbol(Booleans, Decl(negatedConditionalFalseBranchConstraints.ts, 12, 76))
+
+const rejectedDoubleNegation: DoubleNegation<string | number> = 1;
+>rejectedDoubleNegation : Symbol(rejectedDoubleNegation, Decl(negatedConditionalFalseBranchConstraints.ts, 41, 5))
+>DoubleNegation : Symbol(DoubleNegation, Decl(negatedConditionalFalseBranchConstraints.ts, 13, 75))
+
+const rejectedNever: Primitive<never> = 1;
+>rejectedNever : Symbol(rejectedNever, Decl(negatedConditionalFalseBranchConstraints.ts, 42, 5))
+>Primitive : Symbol(Primitive, Decl(negatedConditionalFalseBranchConstraints.ts, 6, 38))
+
+const rejectedWrappedOuter: WrappedOuter<string | number> = "a";
+>rejectedWrappedOuter : Symbol(rejectedWrappedOuter, Decl(negatedConditionalFalseBranchConstraints.ts, 43, 5))
+>WrappedOuter : Symbol(WrappedOuter, Decl(negatedConditionalFalseBranchConstraints.ts, 18, 92))
+
+// Existing true-branch constraints and explicit negative intersections remain valid.
+type TrueBranch<T> = T extends number ? OnlyNumber<T> : never;
+>TrueBranch : Symbol(TrueBranch, Decl(negatedConditionalFalseBranchConstraints.ts, 43, 64))
+>T : Symbol(T, Decl(negatedConditionalFalseBranchConstraints.ts, 46, 16))
+>T : Symbol(T, Decl(negatedConditionalFalseBranchConstraints.ts, 46, 16))
+>OnlyNumber : Symbol(OnlyNumber, Decl(negatedConditionalFalseBranchConstraints.ts, 0, 0))
+>T : Symbol(T, Decl(negatedConditionalFalseBranchConstraints.ts, 46, 16))
+
+type Explicit<T> = T extends string ? never : NonString<T & not string>;
+>Explicit : Symbol(Explicit, Decl(negatedConditionalFalseBranchConstraints.ts, 46, 62))
+>T : Symbol(T, Decl(negatedConditionalFalseBranchConstraints.ts, 47, 14))
+>T : Symbol(T, Decl(negatedConditionalFalseBranchConstraints.ts, 47, 14))
+>NonString : Symbol(NonString, Decl(negatedConditionalFalseBranchConstraints.ts, 3, 30))
+>T : Symbol(T, Decl(negatedConditionalFalseBranchConstraints.ts, 47, 14))
+
+type Inherited<T extends string | number, U extends T> = U extends string ? never : NonString<U>;
+>Inherited : Symbol(Inherited, Decl(negatedConditionalFalseBranchConstraints.ts, 47, 72))
+>T : Symbol(T, Decl(negatedConditionalFalseBranchConstraints.ts, 48, 15))
+>U : Symbol(U, Decl(negatedConditionalFalseBranchConstraints.ts, 48, 41))
+>T : Symbol(T, Decl(negatedConditionalFalseBranchConstraints.ts, 48, 15))
+>U : Symbol(U, Decl(negatedConditionalFalseBranchConstraints.ts, 48, 41))
+>NonString : Symbol(NonString, Decl(negatedConditionalFalseBranchConstraints.ts, 3, 30))
+>U : Symbol(U, Decl(negatedConditionalFalseBranchConstraints.ts, 48, 41))
+
+const inherited: Inherited<string | number, number> = 1;
+>inherited : Symbol(inherited, Decl(negatedConditionalFalseBranchConstraints.ts, 49, 5))
+>Inherited : Symbol(Inherited, Decl(negatedConditionalFalseBranchConstraints.ts, 47, 72))
+
+interface Values {
+>Values : Symbol(Values, Decl(negatedConditionalFalseBranchConstraints.ts, 49, 56))
+
+    a: 1;
+>a : Symbol(Values.a, Decl(negatedConditionalFalseBranchConstraints.ts, 51, 18))
+
+    b: 2;
+>b : Symbol(Values.b, Decl(negatedConditionalFalseBranchConstraints.ts, 52, 9))
+
+    skip: 3;
+>skip : Symbol(Values.skip, Decl(negatedConditionalFalseBranchConstraints.ts, 53, 9))
+}
+type Lookup<T extends keyof Values> = T extends "skip" ? never : Values[T];
+>Lookup : Symbol(Lookup, Decl(negatedConditionalFalseBranchConstraints.ts, 55, 1))
+>T : Symbol(T, Decl(negatedConditionalFalseBranchConstraints.ts, 56, 12))
+>Values : Symbol(Values, Decl(negatedConditionalFalseBranchConstraints.ts, 49, 56))
+>T : Symbol(T, Decl(negatedConditionalFalseBranchConstraints.ts, 56, 12))
+>Values : Symbol(Values, Decl(negatedConditionalFalseBranchConstraints.ts, 49, 56))
+>T : Symbol(T, Decl(negatedConditionalFalseBranchConstraints.ts, 56, 12))
+
+function lookup<T extends keyof Values>(value: Values[T & not "skip"]): Lookup<T> {
+>lookup : Symbol(lookup, Decl(negatedConditionalFalseBranchConstraints.ts, 56, 75))
+>T : Symbol(T, Decl(negatedConditionalFalseBranchConstraints.ts, 57, 16))
+>Values : Symbol(Values, Decl(negatedConditionalFalseBranchConstraints.ts, 49, 56))
+>value : Symbol(value, Decl(negatedConditionalFalseBranchConstraints.ts, 57, 40))
+>Values : Symbol(Values, Decl(negatedConditionalFalseBranchConstraints.ts, 49, 56))
+>T : Symbol(T, Decl(negatedConditionalFalseBranchConstraints.ts, 57, 16))
+>Lookup : Symbol(Lookup, Decl(negatedConditionalFalseBranchConstraints.ts, 55, 1))
+>T : Symbol(T, Decl(negatedConditionalFalseBranchConstraints.ts, 57, 16))
+
+    return value;
+>value : Symbol(value, Decl(negatedConditionalFalseBranchConstraints.ts, 57, 40))
+}
+
+type SelfChecks<T extends string | number> =
+>SelfChecks : Symbol(SelfChecks, Decl(negatedConditionalFalseBranchConstraints.ts, 59, 1))
+>T : Symbol(T, Decl(negatedConditionalFalseBranchConstraints.ts, 61, 16))
+
+    T extends T ? 0 : T extends T ? 1 : T extends T ? 2 : T extends T ? 3 :
+>T : Symbol(T, Decl(negatedConditionalFalseBranchConstraints.ts, 61, 16))
+>T : Symbol(T, Decl(negatedConditionalFalseBranchConstraints.ts, 61, 16))
+>T : Symbol(T, Decl(negatedConditionalFalseBranchConstraints.ts, 61, 16))
+>T : Symbol(T, Decl(negatedConditionalFalseBranchConstraints.ts, 61, 16))
+>T : Symbol(T, Decl(negatedConditionalFalseBranchConstraints.ts, 61, 16))
+>T : Symbol(T, Decl(negatedConditionalFalseBranchConstraints.ts, 61, 16))
+>T : Symbol(T, Decl(negatedConditionalFalseBranchConstraints.ts, 61, 16))
+>T : Symbol(T, Decl(negatedConditionalFalseBranchConstraints.ts, 61, 16))
+
+    T extends T ? 4 : T extends T ? 5 : T extends T ? 6 : T extends T ? 7 :
+>T : Symbol(T, Decl(negatedConditionalFalseBranchConstraints.ts, 61, 16))
+>T : Symbol(T, Decl(negatedConditionalFalseBranchConstraints.ts, 61, 16))
+>T : Symbol(T, Decl(negatedConditionalFalseBranchConstraints.ts, 61, 16))
+>T : Symbol(T, Decl(negatedConditionalFalseBranchConstraints.ts, 61, 16))
+>T : Symbol(T, Decl(negatedConditionalFalseBranchConstraints.ts, 61, 16))
+>T : Symbol(T, Decl(negatedConditionalFalseBranchConstraints.ts, 61, 16))
+>T : Symbol(T, Decl(negatedConditionalFalseBranchConstraints.ts, 61, 16))
+>T : Symbol(T, Decl(negatedConditionalFalseBranchConstraints.ts, 61, 16))
+
+    T extends T ? 8 : T extends T ? 9 : T extends T ? 10 : T extends T ? 11 :
+>T : Symbol(T, Decl(negatedConditionalFalseBranchConstraints.ts, 61, 16))
+>T : Symbol(T, Decl(negatedConditionalFalseBranchConstraints.ts, 61, 16))
+>T : Symbol(T, Decl(negatedConditionalFalseBranchConstraints.ts, 61, 16))
+>T : Symbol(T, Decl(negatedConditionalFalseBranchConstraints.ts, 61, 16))
+>T : Symbol(T, Decl(negatedConditionalFalseBranchConstraints.ts, 61, 16))
+>T : Symbol(T, Decl(negatedConditionalFalseBranchConstraints.ts, 61, 16))
+>T : Symbol(T, Decl(negatedConditionalFalseBranchConstraints.ts, 61, 16))
+>T : Symbol(T, Decl(negatedConditionalFalseBranchConstraints.ts, 61, 16))
+
+    T extends T ? 12 : T extends T ? 13 : T extends T ? 14 : T extends T ? 15 : T;
+>T : Symbol(T, Decl(negatedConditionalFalseBranchConstraints.ts, 61, 16))
+>T : Symbol(T, Decl(negatedConditionalFalseBranchConstraints.ts, 61, 16))
+>T : Symbol(T, Decl(negatedConditionalFalseBranchConstraints.ts, 61, 16))
+>T : Symbol(T, Decl(negatedConditionalFalseBranchConstraints.ts, 61, 16))
+>T : Symbol(T, Decl(negatedConditionalFalseBranchConstraints.ts, 61, 16))
+>T : Symbol(T, Decl(negatedConditionalFalseBranchConstraints.ts, 61, 16))
+>T : Symbol(T, Decl(negatedConditionalFalseBranchConstraints.ts, 61, 16))
+>T : Symbol(T, Decl(negatedConditionalFalseBranchConstraints.ts, 61, 16))
+>T : Symbol(T, Decl(negatedConditionalFalseBranchConstraints.ts, 61, 16))
+
+const selfChecks: SelfChecks<string | number> = 0;
+>selfChecks : Symbol(selfChecks, Decl(negatedConditionalFalseBranchConstraints.ts, 66, 5))
+>SelfChecks : Symbol(SelfChecks, Decl(negatedConditionalFalseBranchConstraints.ts, 59, 1))
+

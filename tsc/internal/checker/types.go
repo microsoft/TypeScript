@@ -442,6 +442,11 @@ type TypeNodeLinks struct {
 	outerTypeParameters *[]*Type // Outer type parameters of anonymous object type
 }
 
+type ConditionalConstraintLinks struct {
+	checkType  *Type
+	constraint *Type
+}
+
 func (links *TypeNodeLinks) getOuterTypeParameters() []*Type {
 	if links.outerTypeParameters == nil {
 		return nil

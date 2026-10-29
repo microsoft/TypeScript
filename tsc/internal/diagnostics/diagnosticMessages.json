@@ -4796,6 +4796,10 @@
         "category": "Error",
         "code": 5116
     },
+    "Conditional type constraint circularly references itself.": {
+        "category": "Error",
+        "code": 5117
+    },
 
     "Generates a sourcemap for each corresponding '.d.ts' file.": {
         "category": "Message",
