@@ -1683,7 +1683,6 @@ type GetNonNullableTypeParams struct {
 	Type     TypeID         `json:"type"`
 }
 
-// GetNullableTypeParams are the parameters for the getNullableType method.
 type GetNullableTypeParams struct {
 	Snapshot SnapshotID     `json:"snapshot"`
 	Project  project.Handle `json:"project"`
@@ -1691,21 +1690,18 @@ type GetNullableTypeParams struct {
 	Flags    int32          `json:"flags"`
 }
 
-// GetStringLiteralTypeParams are the parameters for the getStringLiteralType method.
 type GetStringLiteralTypeParams struct {
 	Snapshot SnapshotID     `json:"snapshot"`
 	Project  project.Handle `json:"project"`
 	Value    string         `json:"value"`
 }
 
-// GetNumberLiteralTypeParams are the parameters for the getNumberLiteralType method.
 type GetNumberLiteralTypeParams struct {
 	Snapshot SnapshotID     `json:"snapshot"`
 	Project  project.Handle `json:"project"`
 	Value    float64        `json:"value"`
 }
 
-// GetBigIntLiteralTypeParams are the parameters for the getBigIntLiteralType method.
 // Base10Value is the absolute value in base 10 with no leading zeros (empty for zero).
 type GetBigIntLiteralTypeParams struct {
 	Snapshot    SnapshotID     `json:"snapshot"`
@@ -1714,7 +1710,6 @@ type GetBigIntLiteralTypeParams struct {
 	Base10Value string         `json:"base10Value,omitempty"`
 }
 
-// GetPrivateIdentifierPropertyOfTypeParams are the parameters for the getPrivateIdentifierPropertyOfType method.
 type GetPrivateIdentifierPropertyOfTypeParams struct {
 	Snapshot SnapshotID     `json:"snapshot"`
 	Project  project.Handle `json:"project"`
@@ -1723,21 +1718,18 @@ type GetPrivateIdentifierPropertyOfTypeParams struct {
 	Location NodeHandle     `json:"location"`
 }
 
-// GetTypeFromTypeNodeParams are the parameters for the getTypeFromTypeNode method.
 type GetTypeFromTypeNodeParams struct {
 	Snapshot SnapshotID     `json:"snapshot"`
 	Project  project.Handle `json:"project"`
 	Location NodeHandle     `json:"location"`
 }
 
-// GetWidenedTypeParams are the parameters for the getWidenedType method.
 type GetWidenedTypeParams struct {
 	Snapshot SnapshotID     `json:"snapshot"`
 	Project  project.Handle `json:"project"`
 	Type     TypeID         `json:"type"`
 }
 
-// GetParameterTypeParams are the parameters for the getParameterType method.
 type GetParameterTypeParams struct {
 	Snapshot  SnapshotID     `json:"snapshot"`
 	Project   project.Handle `json:"project"`
@@ -1745,14 +1737,12 @@ type GetParameterTypeParams struct {
 	Index     int32          `json:"index"`
 }
 
-// IsArrayLikeTypeParams checks whether a type is array-like.
 type IsArrayLikeTypeParams struct {
 	Snapshot SnapshotID     `json:"snapshot"`
 	Project  project.Handle `json:"project"`
 	Type     TypeID         `json:"type"`
 }
 
-// IsTypeAssignableToParams checks assignability between two types.
 type IsTypeAssignableToParams struct {
 	Snapshot SnapshotID     `json:"snapshot"`
 	Project  project.Handle `json:"project"`
