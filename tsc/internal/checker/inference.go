@@ -841,19 +841,25 @@ func (c *Checker) inferFromProperties(n *InferenceState, source *Type, target *T
 	for _, targetProp := range properties {
 		sourceProp := c.getPropertyOfType(source, targetProp.Name())
 		if sourceProp != nil && !core.Some(sourceProp.Declarations(), c.isSkipDirectInferenceNode) {
-			c.inferFromTypes(n, c.removeMissingType(c.getTypeOfSymbol(sourceProp), sourceProp.Flags()&ast.SymbolFlagsOptional != 0), c.removeMissingType(c.getTypeOfSymbol(targetProp), targetProp.Flags()&ast.SymbolFlagsOptional != 0))
+			targetType := c.removeMissingType(c.getTypeOfSymbol(targetProp), targetProp.Flags()&ast.SymbolFlagsOptional != 0)
+			if c.couldContainTypeVariables(targetType) {
+				c.inferFromTypes(n, c.removeMissingType(c.getTypeOfSymbol(sourceProp), sourceProp.Flags()&ast.SymbolFlagsOptional != 0), targetType)
+			}
 		}
 	}
 }
 
 func (c *Checker) inferFromSignatures(n *InferenceState, source *Type, target *Type, kind SignatureKind) {
+	targetSignatures := c.getSignaturesOfType(target, kind)
+	targetLen := len(targetSignatures)
+	if targetLen == 0 {
+		return
+	}
 	sourceSignatures := c.getSignaturesOfType(source, kind)
 	sourceLen := len(sourceSignatures)
 	if sourceLen > 0 {
 		// We match source and target signatures from the bottom up, and if the source has fewer signatures
 		// than the target, we infer from the first source signature to the excess target signatures.
-		targetSignatures := c.getSignaturesOfType(target, kind)
-		targetLen := len(targetSignatures)
 		for i := range targetLen {
 			sourceIndex := max(sourceLen-targetLen+i, 0)
 			c.inferFromSignature(n, c.getBaseSignature(sourceSignatures[sourceIndex]), c.getErasedSignature(targetSignatures[i]))
@@ -889,17 +895,21 @@ func (c *Checker) applyToParameterTypes(source *Signature, target *Signature, ca
 	if sourceRestType == nil {
 		paramCount = min(sourceCount, targetNonRestCount)
 	}
+	// Callers only use the callback to infer to the target type, which is a no-op when the target cannot
+	// contain type variables, so we avoid computing the corresponding source types in that case.
 	sourceThisType := c.getThisTypeOfSignature(source)
 	if sourceThisType != nil {
 		targetThisType := c.getThisTypeOfSignature(target)
-		if targetThisType != nil {
+		if targetThisType != nil && c.couldContainTypeVariables(targetThisType) {
 			callback(sourceThisType, targetThisType)
 		}
 	}
 	for i := range paramCount {
-		callback(c.getTypeAtPosition(source, i), c.getTypeAtPosition(target, i))
+		if targetType := c.getTypeAtPosition(target, i); c.couldContainTypeVariables(targetType) {
+			callback(c.getTypeAtPosition(source, i), targetType)
+		}
 	}
-	if targetRestType != nil {
+	if targetRestType != nil && c.couldContainTypeVariables(targetRestType) {
 		callback(c.getRestTypeAtPosition(source, paramCount, c.isConstTypeVariable(targetRestType, 0) && !someType(targetRestType, c.isMutableArrayLikeType) /*readonly*/), targetRestType)
 	}
 }
@@ -909,7 +919,9 @@ func (c *Checker) applyToReturnTypes(source *Signature, target *Signature, callb
 	if targetTypePredicate != nil {
 		sourceTypePredicate := c.getTypePredicateOfSignature(source)
 		if sourceTypePredicate != nil && c.typePredicateKindsMatch(sourceTypePredicate, targetTypePredicate) && sourceTypePredicate.t != nil && targetTypePredicate.t != nil {
-			callback(sourceTypePredicate.t, targetTypePredicate.t)
+			if c.couldContainTypeVariables(targetTypePredicate.t) {
+				callback(sourceTypePredicate.t, targetTypePredicate.t)
+			}
 			return
 		}
 	}
@@ -926,6 +938,9 @@ func (c *Checker) inferFromIndexTypes(n *InferenceState, source *Type, target *T
 		priority = InferencePriorityHomomorphicMappedType
 	}
 	indexInfos := c.getIndexInfosOfType(target)
+	if len(indexInfos) == 0 {
+		return
+	}
 	if c.isObjectTypeWithInferableIndex(source) {
 		for _, targetInfo := range indexInfos {
 			var propTypes []*Type
