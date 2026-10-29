@@ -22331,6 +22331,15 @@ func (c *Checker) isMappedTypeGenericIndexedAccess(t *Type) bool {
  * type itself.
  */
 func (c *Checker) getApparentType(t *Type) *Type {
+	// Object types other than mapped types are their own apparent types. Checking this here
+	// keeps the common case cheap enough to inline.
+	if t.flags&TypeFlagsObject != 0 && t.objectFlags&ObjectFlagsMapped == 0 {
+		return t
+	}
+	return c.getApparentTypeWorker(t)
+}
+
+func (c *Checker) getApparentTypeWorker(t *Type) *Type {
 	originalType := t
 	if t.flags&TypeFlagsInstantiable != 0 {
 		t = c.getBaseConstraintOfType(t)
@@ -22421,6 +22430,15 @@ func (c *Checker) getApparentTypeOfIntersectionType(t *Type, thisArgument *Type)
  * no constituent property has type 'never', but the intersection of the constituent property types is 'never'.
  */
 func (c *Checker) getReducedType(t *Type) *Type {
+	// Only unions and intersections can reduce. Checking this here keeps the common case
+	// cheap enough to inline.
+	if t.flags&(TypeFlagsUnion|TypeFlagsIntersection) == 0 {
+		return t
+	}
+	return c.getReducedTypeWorker(t)
+}
+
+func (c *Checker) getReducedTypeWorker(t *Type) *Type {
 	switch {
 	case t.flags&TypeFlagsUnion != 0:
 		if t.objectFlags&ObjectFlagsContainsIntersections != 0 {
@@ -22507,6 +22525,10 @@ func (c *Checker) getReducedApparentType(t *Type) *Type {
 	// type reduction both before and after obtaining the apparent type. For example, given a type parameter
 	// 'T extends A | B', the type 'T & X' becomes 'A & X | B & X' after obtaining the apparent type, and
 	// that type may need further reduction to remove empty intersections.
+	if t.flags&TypeFlagsObject != 0 && t.objectFlags&ObjectFlagsMapped == 0 {
+		// Neither reduces nor has a different apparent type.
+		return t
+	}
 	return c.getReducedType(c.getApparentType(c.getReducedType(t)))
 }
 
