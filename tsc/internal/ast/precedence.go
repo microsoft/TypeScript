@@ -392,7 +392,6 @@ func GetLeftmostExpression(node *Expression, stopAtCallExpressions bool) *Expres
 			KindPropertyAccessExpression,
 			KindNonNullExpression,
 			KindPartiallyEmittedExpression,
-			KindParenthesizedExpression,
 			KindSatisfiesExpression:
 			node = node.Expression()
 			continue

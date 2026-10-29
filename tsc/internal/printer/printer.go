@@ -2597,9 +2597,9 @@ func (p *Printer) emitNewExpression(node *ast.NewExpression) {
 	// bind to `new`. `new C()` is fine, but `new C().D()` parses as `(new C()).D()`, so
 	// `new (C().D)()` needs parentheses around the whole expression — including after
 	// type assertions / satisfies / non-null are erased (e.g. `new (f() as T).C()`).
-	// See https://github.com/microsoft/TypeScript/issues/64981.
-	expr := ast.SkipPartiallyEmittedExpressions(node.Expression)
-	if ast.GetLeftmostExpression(expr, true /*stopAtCallExpressions*/).Kind == ast.KindCallExpression {
+	// See https://github.com/microsoft/TypeScript/issues/64981 and
+	// https://github.com/microsoft/TypeScript/pull/65015.
+	if newExpressionOperandNeedsParens(node.Expression) {
 		p.emitExpression(node.Expression, ast.OperatorPrecedenceParentheses)
 	} else {
 		p.emitExpression(node.Expression, ast.OperatorPrecedenceMember)
@@ -2607,6 +2607,34 @@ func (p *Printer) emitNewExpression(node *ast.NewExpression) {
 	p.emitTypeArguments(node.AsNode(), node.TypeArguments)
 	p.emitList((*Printer).emitArgument, node.AsNode(), node.Arguments, LFNewExpressionArguments)
 	p.exitNode(node.AsNode(), state)
+}
+
+// newExpressionOperandNeedsParens reports whether the operand of `new` must be
+// parenthesized so a CallExpression is not parsed as the NewExpression callee.
+//
+// Parentheses are walked here only — not in ast.GetLeftmostExpression — so that
+// emitConciseBody can still treat an already-parenthesized object literal
+// `({ ... })` as parenthesized and avoid emitting a second pair.
+func newExpressionOperandNeedsParens(expression *ast.Expression) bool {
+	node := ast.SkipPartiallyEmittedExpressions(expression)
+	for {
+		node = ast.SkipPartiallyEmittedExpressions(node)
+		switch node.Kind {
+		case ast.KindCallExpression:
+			return true
+		case ast.KindParenthesizedExpression,
+			ast.KindPropertyAccessExpression,
+			ast.KindElementAccessExpression,
+			ast.KindNonNullExpression,
+			ast.KindAsExpression,
+			ast.KindSatisfiesExpression,
+			ast.KindPartiallyEmittedExpression:
+			node = node.Expression()
+			continue
+		default:
+			return false
+		}
+	}
 }
 
 func (p *Printer) emitTemplateLiteral(node *ast.TemplateLiteral) {
