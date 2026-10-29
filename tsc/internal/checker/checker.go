@@ -26669,12 +26669,18 @@ func (c *Checker) removeRedundantLiteralTypes(types []*Type, includes TypeFlags,
 			flags&TypeFlagsBigIntLiteral != 0 && includes&TypeFlagsBigInt != 0 ||
 			flags&TypeFlagsUniqueESSymbol != 0 && includes&TypeFlagsESSymbol != 0 ||
 			reduceVoidUndefined && flags&TypeFlagsUndefined != 0 && includes&TypeFlagsVoid != 0 ||
-			isFreshLiteralType(t) && containsType(types, t.AsLiteralType().regularType)
+			isFreshLiteralType(t) && containsAdjacentType(types, i, t.AsLiteralType().regularType)
 		if remove {
 			types = slices.Delete(types, i, i+1)
 		}
 	}
 	return types
+}
+
+// containsAdjacentType reports whether t is a neighbor of types[i] in the sorted list types. A fresh literal
+// type and its regular counterpart differ only in type ID, so CompareTypes orders them next to each other.
+func containsAdjacentType(types []*Type, i int, t *Type) bool {
+	return i > 0 && types[i-1] == t || i+1 < len(types) && types[i+1] == t
 }
 
 func (c *Checker) removeStringLiteralsMatchedByTemplateLiterals(types []*Type) []*Type {
