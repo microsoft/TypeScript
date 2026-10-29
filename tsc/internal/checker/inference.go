@@ -250,7 +250,7 @@ func (c *Checker) inferFromTypes(n *InferenceState, source *Type, target *Type) 
 		c.inferToUnionOrIntersectionType(n, source, target)
 	case source.flags&TypeFlagsUnion != 0:
 		sources := source.Types()
-		if filtered := c.discriminateUnionForInference(source, target, true /*reverse*/); filtered != nil {
+		if filtered := c.getInferenceDiscriminatedTypes(source, target, true /*reverse*/); filtered != nil {
 			sources = filtered
 		}
 		for _, sourceType := range sources {
@@ -466,7 +466,7 @@ func (c *Checker) inferToUnionOrIntersectionType(n *InferenceState, source *Type
 	if target.flags&TypeFlagsUnion != 0 && isDiscriminableUnion(target) {
 		sources := source.Distributed()
 		for i, s := range sources {
-			if filtered := c.discriminateUnionForInference(target, s, false /*reverse*/); filtered != nil {
+			if filtered := c.getInferenceDiscriminatedTypes(target, s, false /*reverse*/); filtered != nil {
 				if filteredTargetsBySource == nil {
 					filteredTargetsBySource = make([][]*Type, len(sources))
 				}
@@ -477,18 +477,17 @@ func (c *Checker) inferToUnionOrIntersectionType(n *InferenceState, source *Type
 	c.inferToMultipleTypes(n, source, target.Types(), target.flags, filteredTargetsBySource)
 }
 
-// Returns the constituents of a union that the discriminants of an object type do not rule out, in union order, or
-// nil when the union cannot be narrowed by them. As in findMatchingDiscriminantType, a union with a key property is
-// narrowed through its constituent map first, and discriminant properties are only compared one by one otherwise.
-// With reverse set, the union's discriminant types are related to the object's instead of the other way around.
-func (c *Checker) discriminateUnionForInference(union *Type, object *Type, reverse bool) []*Type {
-	if !isDiscriminableUnion(union) || object.flags&TypeFlagsObject == 0 {
+func (c *Checker) getInferenceDiscriminatedTypes(union *Type, object *Type, reverse bool) []*Type {
+	if object.flags&TypeFlagsObject == 0 || !isDiscriminableUnion(union) {
 		return nil
 	}
 	if match := c.getMatchingUnionConstituentForType(union, object); match != nil {
 		return match.Distributed()
 	}
-	discriminants := c.getInferenceDiscriminants(union, object)
+	literalProps := core.Filter(c.getPropertiesOfType(object), func(prop *ast.Symbol) bool {
+		return isLiteralType(c.getNonMissingTypeOfSymbol(prop))
+	})
+	discriminants := c.findDiscriminantProperties(literalProps, union)
 	if len(discriminants) == 0 {
 		return nil
 	}
@@ -1250,16 +1249,6 @@ func (c *Checker) replaceIndexedAccess(instantiable *Type, t *Type, replacement 
 	// map type.objectType to `[TReplacement]`
 	// thus making the indexed access `[TReplacement][0]` or `TReplacement`
 	return c.instantiateType(instantiable, newTypeMapper([]*Type{t.AsIndexedAccessType().indexType, t.AsIndexedAccessType().objectType}, []*Type{c.getNumberLiteralType(0), c.createTupleType([]*Type{replacement})}))
-}
-
-func (c *Checker) getInferenceDiscriminants(source *Type, target *Type) []*ast.Symbol {
-	if target.flags&TypeFlagsObject == 0 {
-		return nil
-	}
-	literalProps := core.Filter(c.getPropertiesOfType(target), func(prop *ast.Symbol) bool {
-		return isLiteralType(c.getNonMissingTypeOfSymbol(prop))
-	})
-	return c.findDiscriminantProperties(literalProps, source)
 }
 
 func (c *Checker) typesDefinitelyUnrelated(source *Type, target *Type) bool {

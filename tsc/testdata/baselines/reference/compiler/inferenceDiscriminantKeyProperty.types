@@ -1,9 +1,6 @@
 //// [tests/cases/compiler/inferenceDiscriminantKeyProperty.ts] ////
 
 === inferenceDiscriminantKeyProperty.ts ===
-// Unions with at least ten constituents that all share a literal-typed property get a key property map,
-// which inference uses to discriminate them, the same way relation checks do.
-
 type Tagged<T> =
 >Tagged : Tagged<T>
 

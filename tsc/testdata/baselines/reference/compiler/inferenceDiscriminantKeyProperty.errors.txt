@@ -1,21 +1,18 @@
-inferenceDiscriminantKeyProperty.ts(28,36): error TS2345: Argument of type '{ kind: "missing"; value: { nested: boolean; }; }' is not assignable to parameter of type 'Tagged<{ nested: boolean; }>'.
+inferenceDiscriminantKeyProperty.ts(25,36): error TS2345: Argument of type '{ kind: "missing"; value: { nested: boolean; }; }' is not assignable to parameter of type 'Tagged<{ nested: boolean; }>'.
   Type '{ kind: "missing"; value: { nested: boolean; }; }' is not assignable to type '{ kind: "k10"; value: number; }'.
     Types of property 'kind' are incompatible.
       Type '"missing"' is not assignable to type '"k10"'.
-inferenceDiscriminantKeyProperty.ts(31,34): error TS2345: Argument of type '{ kind: string; value: { nested: boolean; }; }' is not assignable to parameter of type 'Tagged<{ nested: boolean; }>'.
+inferenceDiscriminantKeyProperty.ts(28,34): error TS2345: Argument of type '{ kind: string; value: { nested: boolean; }; }' is not assignable to parameter of type 'Tagged<{ nested: boolean; }>'.
   Type '{ kind: string; value: { nested: boolean; }; }' is not assignable to type '{ kind: "k10"; value: number; }'.
     Types of property 'kind' are incompatible.
       Type 'string' is not assignable to type '"k10"'.
-inferenceDiscriminantKeyProperty.ts(37,32): error TS2345: Argument of type 'Concrete' is not assignable to parameter of type '{ kind: "k2"; value: string[]; }'.
+inferenceDiscriminantKeyProperty.ts(34,32): error TS2345: Argument of type 'Concrete' is not assignable to parameter of type '{ kind: "k2"; value: string[]; }'.
   Type '{ kind: "k0"; value: string; }' is not assignable to type '{ kind: "k2"; value: string[]; }'.
     Types of property 'kind' are incompatible.
       Type '"k0"' is not assignable to type '"k2"'.
 
 
 ==== inferenceDiscriminantKeyProperty.ts (3 errors) ====
-    // Unions with at least ten constituents that all share a literal-typed property get a key property map,
-    // which inference uses to discriminate them, the same way relation checks do.
-    
     type Tagged<T> =
         | { kind: "k0"; value: T }
         | { kind: "k1"; value: { nested: T } }
