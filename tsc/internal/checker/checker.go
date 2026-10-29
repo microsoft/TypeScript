@@ -19431,6 +19431,22 @@ func (c *Checker) getPropertyOfTypeEx(t *Type, name string, skipObjectFunctionPr
 	return nil
 }
 
+// Looks up a property of an object type whose members are already resolved, giving the same result as
+// getPropertyOfTypeEx on its apparent type without the work of getting there. Reports false when the
+// full lookup is needed: for other kinds of types, module types, members that aren't plain values, and
+// missing members that may come from the global Object or Function types.
+func getValueMemberOfResolvedObjectType(t *Type, name string, skipObjectFunctionPropertyAugment bool) (*ast.Symbol, bool) {
+	if t.flags != TypeFlagsObject || t.objectFlags&(ObjectFlagsMapped|ObjectFlagsMembersResolved) != ObjectFlagsMembersResolved ||
+		t.symbol != nil && t.symbol.Flags()&ast.SymbolFlagsValueModule != 0 {
+		return nil, false
+	}
+	prop := t.AsStructuredType().getMember(name)
+	if prop == nil {
+		return nil, skipObjectFunctionPropertyAugment
+	}
+	return prop, prop.Flags()&ast.SymbolFlagsValue != 0
+}
+
 // Return the type of the given property in the given type, or nil if no such property exists
 func (c *Checker) getTypeOfPropertyOfType(t *Type, name string) *Type {
 	prop := c.getPropertyOfType(t, name)
@@ -22057,95 +22073,102 @@ func (c *Checker) createUnionOrIntersectionProperty(containingType *Type, name s
 	syntheticFlag := ast.CheckFlagsSyntheticMethod
 	mergedInstantiations := false
 	for _, current := range containingType.Types() {
-		t := c.getApparentType(current)
-		if !c.isErrorType(t) && t.flags&TypeFlagsNever == 0 {
-			prop := c.getPropertyOfTypeEx(t, name, skipObjectFunctionPropertyAugment, false)
-			var modifiers ast.ModifierFlags
-			if prop != nil {
-				modifiers = getDeclarationModifierFlagsFromSymbol(prop)
-				writeModifiers := getDeclarationModifierFlagsFromSymbolEx(prop, true /*isWrite*/)
-				if prop.Flags()&ast.SymbolFlagsClassMember != 0 {
-					if isUnion {
-						optionalFlag |= prop.Flags() & ast.SymbolFlagsOptional
-					} else {
-						optionalFlag &= prop.Flags()
-					}
-				}
-				if singleProp == nil {
-					singleProp = prop
-					propFlags = core.OrElse(prop.Flags()&ast.SymbolFlagsAccessor, ast.SymbolFlagsProperty)
-				} else if prop != singleProp {
-					isInstantiation := c.getTargetSymbol(prop) == c.getTargetSymbol(singleProp)
-					// If the symbols are instances of one another with identical types - consider the symbols
-					// equivalent and just use the first one, which thus allows us to avoid eliding private
-					// members when intersecting a (this-)instantiations of a class with its raw base or another instance
-					if isInstantiation && c.compareProperties(singleProp, prop, compareTypesEqual) == TernaryTrue {
-						// If we merged instantiations of a generic type, we replicate the symbol parent resetting behavior we used
-						// to do when we recorded multiple distinct symbols so that we still get, eg, `Array<T>.length` printed
-						// back and not `Array<string>.length` when we're looking at a `.length` access on a `string[] | number[]`
-						mergedInstantiations = singleProp.Parent() != nil && len(c.getLocalTypeParametersOfClassOrInterfaceOrTypeAlias(singleProp.Parent())) != 0
-					} else {
-						if propSet.Size() == 0 {
-							propSet.Add(singleProp)
-						}
-						propSet.Add(prop)
-					}
-					// classes created by mixins are represented as intersections
-					// and overriding a property in a derived class redefines it completely at runtime
-					// so a get accessor can't be merged with a set accessor in a base class,
-					// for that reason the accessor flags are only used when they are the same in all constituents
-					if propFlags&ast.SymbolFlagsAccessor != 0 && (prop.Flags()&ast.SymbolFlagsAccessor != (propFlags & ast.SymbolFlagsAccessor)) {
-						propFlags = (propFlags &^ ast.SymbolFlagsAccessor) | ast.SymbolFlagsProperty
-					}
-				}
-				if isUnion && c.isReadonlySymbol(prop) {
-					checkFlags |= ast.CheckFlagsReadonly
-				} else if !isUnion && !c.isReadonlySymbol(prop) {
-					checkFlags &^= ast.CheckFlagsReadonly
-				}
-				if modifiers&ast.ModifierFlagsProtected != 0 && modifiers&ast.ModifierFlagsPublic == 0 {
-					checkFlags |= ast.CheckFlagsContainsProtected
-				} else if modifiers&ast.ModifierFlagsPrivate != 0 && modifiers&ast.ModifierFlagsPublic == 0 {
-					checkFlags |= ast.CheckFlagsContainsPrivate
+		t := current
+		var prop *ast.Symbol
+		if member, ok := getValueMemberOfResolvedObjectType(current, name, skipObjectFunctionPropertyAugment); ok {
+			prop = member
+		} else {
+			t = c.getApparentType(current)
+			if c.isErrorType(t) || t.flags&TypeFlagsNever != 0 {
+				continue
+			}
+			prop = c.getPropertyOfTypeEx(t, name, skipObjectFunctionPropertyAugment, false)
+		}
+		var modifiers ast.ModifierFlags
+		if prop != nil {
+			modifiers = getDeclarationModifierFlagsFromSymbol(prop)
+			writeModifiers := getDeclarationModifierFlagsFromSymbolEx(prop, true /*isWrite*/)
+			if prop.Flags()&ast.SymbolFlagsClassMember != 0 {
+				if isUnion {
+					optionalFlag |= prop.Flags() & ast.SymbolFlagsOptional
 				} else {
-					checkFlags |= ast.CheckFlagsContainsPublic
+					optionalFlag &= prop.Flags()
 				}
-				if writeModifiers&ast.ModifierFlagsProtected != 0 && writeModifiers&ast.ModifierFlagsPublic == 0 {
-					checkFlags |= ast.CheckFlagsContainsWriteProtected
-				} else if writeModifiers&ast.ModifierFlagsPrivate != 0 && writeModifiers&ast.ModifierFlagsPublic == 0 {
-					checkFlags |= ast.CheckFlagsContainsWritePrivate
+			}
+			if singleProp == nil {
+				singleProp = prop
+				propFlags = core.OrElse(prop.Flags()&ast.SymbolFlagsAccessor, ast.SymbolFlagsProperty)
+			} else if prop != singleProp {
+				isInstantiation := c.getTargetSymbol(prop) == c.getTargetSymbol(singleProp)
+				// If the symbols are instances of one another with identical types - consider the symbols
+				// equivalent and just use the first one, which thus allows us to avoid eliding private
+				// members when intersecting a (this-)instantiations of a class with its raw base or another instance
+				if isInstantiation && c.compareProperties(singleProp, prop, compareTypesEqual) == TernaryTrue {
+					// If we merged instantiations of a generic type, we replicate the symbol parent resetting behavior we used
+					// to do when we recorded multiple distinct symbols so that we still get, eg, `Array<T>.length` printed
+					// back and not `Array<string>.length` when we're looking at a `.length` access on a `string[] | number[]`
+					mergedInstantiations = singleProp.Parent() != nil && len(c.getLocalTypeParametersOfClassOrInterfaceOrTypeAlias(singleProp.Parent())) != 0
 				} else {
-					checkFlags |= ast.CheckFlagsContainsWritePublic
-				}
-				if modifiers&ast.ModifierFlagsStatic != 0 {
-					checkFlags |= ast.CheckFlagsContainsStatic
-				}
-				if !isPrototypeProperty(prop) {
-					syntheticFlag = ast.CheckFlagsSyntheticProperty
-				}
-			} else if isUnion {
-				var indexInfo *IndexInfo
-				if !isLateBoundName(name) {
-					indexInfo = c.getApplicableIndexInfoForName(t, name)
-				}
-				if indexInfo != nil {
-					propFlags = propFlags&^ast.SymbolFlagsAccessor | ast.SymbolFlagsProperty
-					checkFlags |= ast.CheckFlagsWritePartial | core.IfElse(indexInfo.isReadonly, ast.CheckFlagsReadonly, 0)
-					if isTupleType(t) {
-						indexType := c.getRestTypeOfTupleType(t)
-						if indexType == nil {
-							indexType = c.undefinedType
-						}
-						indexTypes = append(indexTypes, indexType)
-					} else {
-						indexTypes = append(indexTypes, indexInfo.valueType)
+					if propSet.Size() == 0 {
+						propSet.Add(singleProp)
 					}
-				} else if isObjectLiteralType(t) && t.objectFlags&ObjectFlagsContainsSpread == 0 {
-					checkFlags |= ast.CheckFlagsWritePartial
-					indexTypes = append(indexTypes, c.undefinedType)
-				} else {
-					checkFlags |= ast.CheckFlagsReadPartial
+					propSet.Add(prop)
 				}
+				// classes created by mixins are represented as intersections
+				// and overriding a property in a derived class redefines it completely at runtime
+				// so a get accessor can't be merged with a set accessor in a base class,
+				// for that reason the accessor flags are only used when they are the same in all constituents
+				if propFlags&ast.SymbolFlagsAccessor != 0 && (prop.Flags()&ast.SymbolFlagsAccessor != (propFlags & ast.SymbolFlagsAccessor)) {
+					propFlags = (propFlags &^ ast.SymbolFlagsAccessor) | ast.SymbolFlagsProperty
+				}
+			}
+			if isUnion && c.isReadonlySymbol(prop) {
+				checkFlags |= ast.CheckFlagsReadonly
+			} else if !isUnion && !c.isReadonlySymbol(prop) {
+				checkFlags &^= ast.CheckFlagsReadonly
+			}
+			if modifiers&ast.ModifierFlagsProtected != 0 && modifiers&ast.ModifierFlagsPublic == 0 {
+				checkFlags |= ast.CheckFlagsContainsProtected
+			} else if modifiers&ast.ModifierFlagsPrivate != 0 && modifiers&ast.ModifierFlagsPublic == 0 {
+				checkFlags |= ast.CheckFlagsContainsPrivate
+			} else {
+				checkFlags |= ast.CheckFlagsContainsPublic
+			}
+			if writeModifiers&ast.ModifierFlagsProtected != 0 && writeModifiers&ast.ModifierFlagsPublic == 0 {
+				checkFlags |= ast.CheckFlagsContainsWriteProtected
+			} else if writeModifiers&ast.ModifierFlagsPrivate != 0 && writeModifiers&ast.ModifierFlagsPublic == 0 {
+				checkFlags |= ast.CheckFlagsContainsWritePrivate
+			} else {
+				checkFlags |= ast.CheckFlagsContainsWritePublic
+			}
+			if modifiers&ast.ModifierFlagsStatic != 0 {
+				checkFlags |= ast.CheckFlagsContainsStatic
+			}
+			if !isPrototypeProperty(prop) {
+				syntheticFlag = ast.CheckFlagsSyntheticProperty
+			}
+		} else if isUnion {
+			var indexInfo *IndexInfo
+			if !isLateBoundName(name) {
+				indexInfo = c.getApplicableIndexInfoForName(t, name)
+			}
+			if indexInfo != nil {
+				propFlags = propFlags&^ast.SymbolFlagsAccessor | ast.SymbolFlagsProperty
+				checkFlags |= ast.CheckFlagsWritePartial | core.IfElse(indexInfo.isReadonly, ast.CheckFlagsReadonly, 0)
+				if isTupleType(t) {
+					indexType := c.getRestTypeOfTupleType(t)
+					if indexType == nil {
+						indexType = c.undefinedType
+					}
+					indexTypes = append(indexTypes, indexType)
+				} else {
+					indexTypes = append(indexTypes, indexInfo.valueType)
+				}
+			} else if isObjectLiteralType(t) && t.objectFlags&ObjectFlagsContainsSpread == 0 {
+				checkFlags |= ast.CheckFlagsWritePartial
+				indexTypes = append(indexTypes, c.undefinedType)
+			} else {
+				checkFlags |= ast.CheckFlagsReadPartial
 			}
 		}
 	}
