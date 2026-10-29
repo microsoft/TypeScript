@@ -19497,45 +19497,54 @@ func (c *Checker) getApplicableIndexInfo(t *Type, keyType *Type) *IndexInfo {
 }
 
 func (c *Checker) getApplicableIndexInfoForName(t *Type, name string) *IndexInfo {
-	if isLateBoundName(name) {
-		return c.getApplicableIndexInfo(t, c.esSymbolType)
+	indexInfos := c.getIndexInfosOfType(t)
+	// Most types have no index signatures, so avoid creating a literal type for the name.
+	if len(indexInfos) == 0 {
+		return nil
 	}
-	return c.getApplicableIndexInfo(t, c.getStringLiteralType(name))
+	if isLateBoundName(name) {
+		return c.findApplicableIndexInfo(indexInfos, c.esSymbolType)
+	}
+	return c.findApplicableIndexInfo(indexInfos, c.getStringLiteralType(name))
 }
 
 func (c *Checker) findApplicableIndexInfo(indexInfos []*IndexInfo, keyType *Type) *IndexInfo {
 	// Index signatures for type 'string' are considered only when no other index signatures apply.
 	var stringIndexInfo *IndexInfo
-	applicableInfos := make([]*IndexInfo, 0, 8)
+	var applicableInfo *IndexInfo
+	// Value types of all applicable index signatures, collected only when there is more than one.
+	var applicableTypes []*Type
+	isReadonly := true
 	for _, info := range indexInfos {
 		if info.keyType == c.stringType {
 			stringIndexInfo = info
 		} else if c.isApplicableIndexType(keyType, info.keyType) {
-			applicableInfos = append(applicableInfos, info)
-		}
-	}
-	// When more than one index signature is applicable we create a synthetic IndexInfo. Instead of computing
-	// the intersected key type, we just use unknownType for the key type as nothing actually depends on the
-	// keyType property of the returned IndexInfo.
-	switch len(applicableInfos) {
-	case 0:
-		if stringIndexInfo != nil && c.isApplicableIndexType(keyType, c.stringType) {
-			return stringIndexInfo
-		}
-		return nil
-	case 1:
-		return applicableInfos[0]
-	default:
-		isReadonly := true
-		types := make([]*Type, len(applicableInfos))
-		for i, info := range applicableInfos {
-			types[i] = info.valueType
+			if applicableInfo == nil {
+				applicableInfo = info
+			} else {
+				if applicableTypes == nil {
+					applicableTypes = append(make([]*Type, 0, len(indexInfos)), applicableInfo.valueType)
+				}
+				applicableTypes = append(applicableTypes, info.valueType)
+			}
 			if !info.isReadonly {
 				isReadonly = false
 			}
 		}
-		return c.newIndexInfo(c.unknownType, c.getIntersectionType(types), isReadonly, nil, nil)
 	}
+	if applicableInfo == nil {
+		if stringIndexInfo != nil && c.isApplicableIndexType(keyType, c.stringType) {
+			return stringIndexInfo
+		}
+		return nil
+	}
+	if applicableTypes == nil {
+		return applicableInfo
+	}
+	// When more than one index signature is applicable we create a synthetic IndexInfo. Instead of computing
+	// the intersected key type, we just use unknownType for the key type as nothing actually depends on the
+	// keyType property of the returned IndexInfo.
+	return c.newIndexInfo(c.unknownType, c.getIntersectionType(applicableTypes), isReadonly, nil, nil)
 }
 
 func (c *Checker) isApplicableIndexType(source *Type, target *Type) bool {
