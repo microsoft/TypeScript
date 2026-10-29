@@ -26691,13 +26691,25 @@ func (c *Checker) removeStringLiteralsMatchedByTemplateLiterals(types []*Type) [
 			i--
 			t := types[i]
 			if t.flags&TypeFlagsStringLiteral != 0 && core.Some(templates, func(template *Type) bool {
-				return c.isTypeMatchedByTemplateLiteralOrStringMapping(t, template)
+				return couldStringLiteralMatchTemplate(t, template) && c.isTypeMatchedByTemplateLiteralOrStringMapping(t, template)
 			}) {
 				types = slices.Delete(types, i, i+1)
 			}
 		}
 	}
 	return types
+}
+
+// couldStringLiteralMatchTemplate cheaply rejects a string literal whose value lacks the leading and trailing
+// text of a template literal type, which inferFromLiteralPartsToTemplateLiteral requires for a match.
+func couldStringLiteralMatchTemplate(t *Type, template *Type) bool {
+	if template.flags&TypeFlagsTemplateLiteral == 0 {
+		return true
+	}
+	value := getStringLiteralValue(t)
+	texts := template.AsTemplateLiteralType().texts
+	start, end := texts[0], texts[len(texts)-1]
+	return len(value) >= len(start)+len(end) && strings.HasPrefix(value, start) && strings.HasSuffix(value, end)
 }
 
 func (c *Checker) isTypeMatchedByTemplateLiteralOrStringMapping(t *Type, template *Type) bool {
