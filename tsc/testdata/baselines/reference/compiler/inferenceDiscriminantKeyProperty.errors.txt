@@ -1,0 +1,68 @@
+inferenceDiscriminantKeyProperty.ts(28,36): error TS2345: Argument of type '{ kind: "missing"; value: { nested: boolean; }; }' is not assignable to parameter of type 'Tagged<{ nested: boolean; }>'.
+  Type '{ kind: "missing"; value: { nested: boolean; }; }' is not assignable to type '{ kind: "k10"; value: number; }'.
+    Types of property 'kind' are incompatible.
+      Type '"missing"' is not assignable to type '"k10"'.
+inferenceDiscriminantKeyProperty.ts(31,34): error TS2345: Argument of type '{ kind: string; value: { nested: boolean; }; }' is not assignable to parameter of type 'Tagged<{ nested: boolean; }>'.
+  Type '{ kind: string; value: { nested: boolean; }; }' is not assignable to type '{ kind: "k10"; value: number; }'.
+    Types of property 'kind' are incompatible.
+      Type 'string' is not assignable to type '"k10"'.
+inferenceDiscriminantKeyProperty.ts(37,32): error TS2345: Argument of type 'Concrete' is not assignable to parameter of type '{ kind: "k2"; value: string[]; }'.
+  Type '{ kind: "k0"; value: string; }' is not assignable to type '{ kind: "k2"; value: string[]; }'.
+    Types of property 'kind' are incompatible.
+      Type '"k0"' is not assignable to type '"k2"'.
+
+
+==== inferenceDiscriminantKeyProperty.ts (3 errors) ====
+    // Unions with at least ten constituents that all share a literal-typed property get a key property map,
+    // which inference uses to discriminate them, the same way relation checks do.
+    
+    type Tagged<T> =
+        | { kind: "k0"; value: T }
+        | { kind: "k1"; value: { nested: T } }
+        | { kind: "k2"; value: T[] }
+        | { kind: "k3"; value: number }
+        | { kind: "k4"; value: number }
+        | { kind: "k5"; value: number }
+        | { kind: "k6"; value: number }
+        | { kind: "k7"; value: number }
+        | { kind: "k8"; value: number }
+        | { kind: "k9"; value: number }
+        | { kind: "k10"; value: number };
+    
+    declare function fromTagged<T>(tagged: Tagged<T>): T;
+    
+    const direct = fromTagged({ kind: "k0", value: "a" });
+    const nested = fromTagged({ kind: "k1", value: { nested: "a" } });
+    const array = fromTagged({ kind: "k2", value: ["a"] });
+    const unrelated = fromTagged({ kind: "k3", value: 1 });
+    
+    declare const k1Source: { kind: "k1"; value: { nested: boolean } };
+    const fromDeclared = fromTagged(k1Source);
+    
+    declare const unknownKind: { kind: "missing"; value: { nested: boolean } };
+    const fromUnknownKind = fromTagged(unknownKind); // error
+                                       ~~~~~~~~~~~
+!!! error TS2345: Argument of type '{ kind: "missing"; value: { nested: boolean; }; }' is not assignable to parameter of type 'Tagged<{ nested: boolean; }>'.
+!!! error TS2345:   Type '{ kind: "missing"; value: { nested: boolean; }; }' is not assignable to type '{ kind: "k10"; value: number; }'.
+!!! error TS2345:     Types of property 'kind' are incompatible.
+!!! error TS2345:       Type '"missing"' is not assignable to type '"k10"'.
+    
+    declare const broadKind: { kind: string; value: { nested: boolean } };
+    const fromBroadKind = fromTagged(broadKind); // error
+                                     ~~~~~~~~~
+!!! error TS2345: Argument of type '{ kind: string; value: { nested: boolean; }; }' is not assignable to parameter of type 'Tagged<{ nested: boolean; }>'.
+!!! error TS2345:   Type '{ kind: string; value: { nested: boolean; }; }' is not assignable to type '{ kind: "k10"; value: number; }'.
+!!! error TS2345:     Types of property 'kind' are incompatible.
+!!! error TS2345:       Type 'string' is not assignable to type '"k10"'.
+    
+    type Concrete = Tagged<string>;
+    declare const concrete: Concrete;
+    
+    declare function fromK2<T>(tagged: { kind: "k2"; value: T }): T;
+    const fromUnionSource = fromK2(concrete); // error
+                                   ~~~~~~~~
+!!! error TS2345: Argument of type 'Concrete' is not assignable to parameter of type '{ kind: "k2"; value: string[]; }'.
+!!! error TS2345:   Type '{ kind: "k0"; value: string; }' is not assignable to type '{ kind: "k2"; value: string[]; }'.
+!!! error TS2345:     Types of property 'kind' are incompatible.
+!!! error TS2345:       Type '"k0"' is not assignable to type '"k2"'.
+    

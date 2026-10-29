@@ -250,13 +250,8 @@ func (c *Checker) inferFromTypes(n *InferenceState, source *Type, target *Type) 
 		c.inferToUnionOrIntersectionType(n, source, target)
 	case source.flags&TypeFlagsUnion != 0:
 		sources := source.Types()
-		if isDiscriminableUnion(source) {
-			if discriminants := c.getInferenceDiscriminants(source, target); len(discriminants) != 0 {
-				discriminator := &TypeDiscriminator{c: c, props: discriminants, reverse: true, isRelatedTo: c.compareTypesComparableSimple}
-				if filtered := c.discriminateTypesByDiscriminableItems(source, discriminator); filtered != nil {
-					sources = filtered
-				}
-			}
+		if filtered := c.discriminateUnionForInference(source, target, true /*reverse*/); filtered != nil {
+			sources = filtered
 		}
 		for _, sourceType := range sources {
 			c.inferFromTypes(n, sourceType, target)
@@ -471,18 +466,34 @@ func (c *Checker) inferToUnionOrIntersectionType(n *InferenceState, source *Type
 	if target.flags&TypeFlagsUnion != 0 && isDiscriminableUnion(target) {
 		sources := source.Distributed()
 		for i, s := range sources {
-			if discriminants := c.getInferenceDiscriminants(target, s); len(discriminants) != 0 {
-				discriminator := &TypeDiscriminator{c: c, props: discriminants, isRelatedTo: c.compareTypesComparableSimple}
-				if filtered := c.discriminateTypesByDiscriminableItems(target, discriminator); filtered != nil {
-					if filteredTargetsBySource == nil {
-						filteredTargetsBySource = make([][]*Type, len(sources))
-					}
-					filteredTargetsBySource[i] = filtered
+			if filtered := c.discriminateUnionForInference(target, s, false /*reverse*/); filtered != nil {
+				if filteredTargetsBySource == nil {
+					filteredTargetsBySource = make([][]*Type, len(sources))
 				}
+				filteredTargetsBySource[i] = filtered
 			}
 		}
 	}
 	c.inferToMultipleTypes(n, source, target.Types(), target.flags, filteredTargetsBySource)
+}
+
+// Returns the constituents of a union that the discriminants of an object type do not rule out, in union order, or
+// nil when the union cannot be narrowed by them. As in findMatchingDiscriminantType, a union with a key property is
+// narrowed through its constituent map first, and discriminant properties are only compared one by one otherwise.
+// With reverse set, the union's discriminant types are related to the object's instead of the other way around.
+func (c *Checker) discriminateUnionForInference(union *Type, object *Type, reverse bool) []*Type {
+	if !isDiscriminableUnion(union) || object.flags&TypeFlagsObject == 0 {
+		return nil
+	}
+	if match := c.getMatchingUnionConstituentForType(union, object); match != nil {
+		return match.Distributed()
+	}
+	discriminants := c.getInferenceDiscriminants(union, object)
+	if len(discriminants) == 0 {
+		return nil
+	}
+	discriminator := &TypeDiscriminator{c: c, props: discriminants, reverse: reverse, isRelatedTo: c.compareTypesComparableSimple}
+	return c.discriminateTypesByDiscriminableItems(union, discriminator)
 }
 
 func (c *Checker) inferToMultipleTypes(n *InferenceState, source *Type, targets []*Type, targetFlags TypeFlags, filteredTargetsBySource [][]*Type) {

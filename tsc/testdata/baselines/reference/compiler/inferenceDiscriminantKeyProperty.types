@@ -1,0 +1,155 @@
+//// [tests/cases/compiler/inferenceDiscriminantKeyProperty.ts] ////
+
+=== inferenceDiscriminantKeyProperty.ts ===
+// Unions with at least ten constituents that all share a literal-typed property get a key property map,
+// which inference uses to discriminate them, the same way relation checks do.
+
+type Tagged<T> =
+>Tagged : Tagged<T>
+
+    | { kind: "k0"; value: T }
+>kind : "k0"
+>value : T
+
+    | { kind: "k1"; value: { nested: T } }
+>kind : "k1"
+>value : { nested: T; }
+>nested : T
+
+    | { kind: "k2"; value: T[] }
+>kind : "k2"
+>value : T[]
+
+    | { kind: "k3"; value: number }
+>kind : "k3"
+>value : number
+
+    | { kind: "k4"; value: number }
+>kind : "k4"
+>value : number
+
+    | { kind: "k5"; value: number }
+>kind : "k5"
+>value : number
+
+    | { kind: "k6"; value: number }
+>kind : "k6"
+>value : number
+
+    | { kind: "k7"; value: number }
+>kind : "k7"
+>value : number
+
+    | { kind: "k8"; value: number }
+>kind : "k8"
+>value : number
+
+    | { kind: "k9"; value: number }
+>kind : "k9"
+>value : number
+
+    | { kind: "k10"; value: number };
+>kind : "k10"
+>value : number
+
+declare function fromTagged<T>(tagged: Tagged<T>): T;
+>fromTagged : <T>(tagged: Tagged<T>) => T
+>tagged : Tagged<T>
+
+const direct = fromTagged({ kind: "k0", value: "a" });
+>direct : string
+>fromTagged({ kind: "k0", value: "a" }) : string
+>fromTagged : <T>(tagged: Tagged<T>) => T
+>{ kind: "k0", value: "a" } : { kind: "k0"; value: string; }
+>kind : "k0"
+>"k0" : "k0"
+>value : string
+>"a" : "a"
+
+const nested = fromTagged({ kind: "k1", value: { nested: "a" } });
+>nested : string
+>fromTagged({ kind: "k1", value: { nested: "a" } }) : string
+>fromTagged : <T>(tagged: Tagged<T>) => T
+>{ kind: "k1", value: { nested: "a" } } : { kind: "k1"; value: { nested: string; }; }
+>kind : "k1"
+>"k1" : "k1"
+>value : { nested: string; }
+>{ nested: "a" } : { nested: string; }
+>nested : string
+>"a" : "a"
+
+const array = fromTagged({ kind: "k2", value: ["a"] });
+>array : string
+>fromTagged({ kind: "k2", value: ["a"] }) : string
+>fromTagged : <T>(tagged: Tagged<T>) => T
+>{ kind: "k2", value: ["a"] } : { kind: "k2"; value: string[]; }
+>kind : "k2"
+>"k2" : "k2"
+>value : string[]
+>["a"] : string[]
+>"a" : "a"
+
+const unrelated = fromTagged({ kind: "k3", value: 1 });
+>unrelated : number
+>fromTagged({ kind: "k3", value: 1 }) : number
+>fromTagged : <T>(tagged: Tagged<T>) => T
+>{ kind: "k3", value: 1 } : { kind: "k3"; value: number; }
+>kind : "k3"
+>"k3" : "k3"
+>value : number
+>1 : 1
+
+declare const k1Source: { kind: "k1"; value: { nested: boolean } };
+>k1Source : { kind: "k1"; value: { nested: boolean; }; }
+>kind : "k1"
+>value : { nested: boolean; }
+>nested : boolean
+
+const fromDeclared = fromTagged(k1Source);
+>fromDeclared : boolean
+>fromTagged(k1Source) : boolean
+>fromTagged : <T>(tagged: Tagged<T>) => T
+>k1Source : { kind: "k1"; value: { nested: boolean; }; }
+
+declare const unknownKind: { kind: "missing"; value: { nested: boolean } };
+>unknownKind : { kind: "missing"; value: { nested: boolean; }; }
+>kind : "missing"
+>value : { nested: boolean; }
+>nested : boolean
+
+const fromUnknownKind = fromTagged(unknownKind); // error
+>fromUnknownKind : { nested: boolean; }
+>fromTagged(unknownKind) : { nested: boolean; }
+>fromTagged : <T>(tagged: Tagged<T>) => T
+>unknownKind : { kind: "missing"; value: { nested: boolean; }; }
+
+declare const broadKind: { kind: string; value: { nested: boolean } };
+>broadKind : { kind: string; value: { nested: boolean; }; }
+>kind : string
+>value : { nested: boolean; }
+>nested : boolean
+
+const fromBroadKind = fromTagged(broadKind); // error
+>fromBroadKind : { nested: boolean; }
+>fromTagged(broadKind) : { nested: boolean; }
+>fromTagged : <T>(tagged: Tagged<T>) => T
+>broadKind : { kind: string; value: { nested: boolean; }; }
+
+type Concrete = Tagged<string>;
+>Concrete : Concrete
+
+declare const concrete: Concrete;
+>concrete : Concrete
+
+declare function fromK2<T>(tagged: { kind: "k2"; value: T }): T;
+>fromK2 : <T>(tagged: { kind: "k2"; value: T; }) => T
+>tagged : { kind: "k2"; value: T; }
+>kind : "k2"
+>value : T
+
+const fromUnionSource = fromK2(concrete); // error
+>fromUnionSource : string[]
+>fromK2(concrete) : string[]
+>fromK2 : <T>(tagged: { kind: "k2"; value: T; }) => T
+>concrete : Concrete
+
