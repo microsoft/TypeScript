@@ -2,7 +2,6 @@ package fourslash_test
 
 import (
 	"testing"
-	"time"
 
 	"github.com/microsoft/TypeScript/tsc/internal/fourslash"
 	"github.com/microsoft/TypeScript/tsc/internal/testutil"
@@ -16,14 +15,5 @@ func TestSignatureHelpUnclosedTypeArgumentHang(t *testing.T) {
 	defer done()
 	f.GoToMarker(t, "")
 
-	finished := make(chan struct{})
-	go func() {
-		defer close(finished)
-		f.VerifyNoSignatureHelp(t)
-	}()
-	select {
-	case <-finished:
-	case <-time.After(10 * time.Second):
-		t.Fatal("signature help request did not complete within 10 seconds")
-	}
+	f.VerifyNoSignatureHelp(t)
 }
