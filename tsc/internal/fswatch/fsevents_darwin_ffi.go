@@ -123,6 +123,8 @@ func cfRelease(ref uintptr) {
 var fse_CFStringCreateWithCString_trampoline_addr uintptr
 
 func cfStringCreate(allocator uintptr, cstr unsafe.Pointer, encoding uint32) uintptr {
+	// SAFETY: Converted in the argument list of a bodyless (assembly) call,
+	// which keeps the pointee alive and unmoved until the call returns.
 	ret, _, _ := syscall_syscall6(fse_CFStringCreateWithCString_trampoline_addr, allocator, uintptr(cstr), uintptr(encoding), 0, 0, 0)
 	runtime.KeepAlive(cstr)
 	return ret
@@ -133,6 +135,8 @@ func cfStringCreate(allocator uintptr, cstr unsafe.Pointer, encoding uint32) uin
 var fse_CFArrayCreate_trampoline_addr uintptr
 
 func cfArrayCreate(allocator uintptr, values unsafe.Pointer, count int, callbacks uintptr) uintptr {
+	// SAFETY: Converted in the argument list of a bodyless (assembly) call,
+	// which keeps the pointee alive and unmoved until the call returns.
 	ret, _, _ := syscall_syscall6(fse_CFArrayCreate_trampoline_addr, allocator, uintptr(values), uintptr(count), callbacks, 0, 0)
 	runtime.KeepAlive(values)
 	return ret
@@ -252,6 +256,8 @@ func cfStringGetMaximumSizeForEncoding(length int, encoding uint32) int {
 var fse_CFStringGetCString_trampoline_addr uintptr
 
 func cfStringGetCString(str uintptr, buf unsafe.Pointer, bufSize int, encoding uint32) bool {
+	// SAFETY: Converted in the argument list of a bodyless (assembly) call,
+	// which keeps the pointee alive and unmoved until the call returns.
 	ret, _, _ := syscall_syscall6(fse_CFStringGetCString_trampoline_addr, str, uintptr(buf), uintptr(bufSize), uintptr(encoding), 0, 0)
 	runtime.KeepAlive(buf)
 	return ret != 0
@@ -348,6 +354,8 @@ func normalizeNFC(s string) string {
 var fse_dispatch_queue_create_trampoline_addr uintptr
 
 func dispatchQueueCreate(label unsafe.Pointer) uintptr {
+	// SAFETY: Converted in the argument list of a bodyless (assembly) call,
+	// which keeps the pointee alive and unmoved until the call returns.
 	ret, _, _ := syscall_syscall6(fse_dispatch_queue_create_trampoline_addr, uintptr(label), 0, 0, 0, 0, 0)
 	runtime.KeepAlive(label)
 	return ret
@@ -389,6 +397,8 @@ func fsEventStreamCreate(allocator, callback uintptr, ctx unsafe.Pointer, paths 
 		fse_FSEventStreamCreate_trampoline_addr,
 		allocator,
 		callback,
+		// SAFETY: Converted in the argument list of a bodyless (assembly)
+		// call, which keeps ctx alive and unmoved until the call returns.
 		uintptr(ctx),
 		paths,
 		uintptr(since),
