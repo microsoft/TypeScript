@@ -145,7 +145,13 @@ func (t *Tracker) computeNewText(change *trackerEdit, targetSourceFile *ast.Sour
 			if joiner == "" {
 				joiner = t.newLine
 			}
-			text = strings.Join(core.Map(change.nodes, func(n *ast.Node) string { return strings.TrimSuffix(formatNode(n), t.newLine) }), joiner)
+			text = strings.Join(core.Map(change.nodes, func(n *ast.Node) string {
+				nodeText := strings.TrimSuffix(formatNode(n), t.newLine)
+				if !strings.ContainsAny(joiner, "\r\n") {
+					nodeText = strings.TrimLeftFunc(nodeText, unicode.IsSpace)
+				}
+				return nodeText
+			}), joiner)
 		case trackerEditKindReplaceWithSingleNode:
 			text = formatNode(change.Node)
 		default:
@@ -153,7 +159,7 @@ func (t *Tracker) computeNewText(change *trackerEdit, targetSourceFile *ast.Sour
 		}
 		// Strip initial indentation if text will be inserted in the middle of the line.
 		noIndent := text
-		if !(change.options.indentation != nil || format.GetLineStartPositionForPosition(pos, projection) == pos) {
+		if !(change.options.Indentation != nil || format.GetLineStartPositionForPosition(pos, projection) == pos) {
 			noIndent = strings.TrimLeftFunc(text, unicode.IsSpace)
 		}
 		candidate := change.options.Prefix + noIndent + core.IfElse(strings.HasSuffix(noIndent, change.options.Suffix), "", change.options.Suffix)
@@ -184,7 +190,7 @@ func (t *Tracker) computeNewText(change *trackerEdit, targetSourceFile *ast.Sour
 // content-mapped file whose projection is indented differently from the document the edit is applied to.
 // Edits carrying an explicit indentation option are left alone.
 func (t *Tracker) reindentInsertedLines(sourceFile *ast.SourceFile, change *trackerEdit, text string) string {
-	if text == "" || change.TextRange.Pos() != change.TextRange.End() || change.options.indentation != nil {
+	if text == "" || change.TextRange.Pos() != change.TextRange.End() || change.options.Indentation != nil {
 		return text
 	}
 	if !strings.HasSuffix(text, t.newLine) {
@@ -234,10 +240,10 @@ func (t *Tracker) getFormattedTextOfNode(nodeIn *ast.Node, targetSourceFile *ast
 	formatOptions := GetFormatCodeSettingsForWriting(t.formatSettings, targetSourceFile)
 
 	var initialIndentation, delta int
-	if options.indentation == nil {
+	if options.Indentation == nil {
 		initialIndentation = format.GetIndentation(pos, sourceFile, formatOptions, options.Prefix == t.newLine || format.GetLineStartPositionForPosition(pos, sourceFile) == pos)
 	} else {
-		initialIndentation = *options.indentation
+		initialIndentation = *options.Indentation
 	}
 
 	if options.delta != nil {

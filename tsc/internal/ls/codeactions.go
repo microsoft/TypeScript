@@ -7,11 +7,14 @@ import (
 	"strings"
 
 	"github.com/microsoft/TypeScript/tsc/internal/ast"
+	"github.com/microsoft/TypeScript/tsc/internal/checker"
 	"github.com/microsoft/TypeScript/tsc/internal/collections"
 	"github.com/microsoft/TypeScript/tsc/internal/compiler"
 	"github.com/microsoft/TypeScript/tsc/internal/core"
 	"github.com/microsoft/TypeScript/tsc/internal/diagnostics"
 	"github.com/microsoft/TypeScript/tsc/internal/locale"
+	"github.com/microsoft/TypeScript/tsc/internal/ls/autoimport"
+	"github.com/microsoft/TypeScript/tsc/internal/ls/change"
 	"github.com/microsoft/TypeScript/tsc/internal/ls/lsconv"
 	"github.com/microsoft/TypeScript/tsc/internal/lsp/lsproto"
 	"github.com/microsoft/TypeScript/tsc/internal/spanmap"
@@ -22,7 +25,7 @@ type CodeFixProvider struct {
 	ErrorCodes        []int32
 	GetCodeActions    func(ctx context.Context, fixContext *CodeFixContext) ([]*CodeAction, error)
 	FixIds            []string
-	GetAllCodeActions func(ctx context.Context, fixContext *CodeFixContext) (*CombinedCodeActions, error)
+	GetAllCodeActions func(ctx context.Context, fixContext *CodeFixContext, fixAll *CodeFixAll) (*CombinedCodeActions, error)
 }
 
 // CodeFixContext contains the context needed to generate code fixes
@@ -34,6 +37,33 @@ type CodeFixContext struct {
 	LS         *LanguageService
 	Diagnostic *lsproto.Diagnostic
 	Params     *lsproto.CodeActionParams
+}
+
+type CodeFixAll struct {
+	diagnostics []*ast.Diagnostic
+	typeChecker *checker.Checker
+	importAdder autoimport.ImportAdder
+}
+
+func (fixAll *CodeFixAll) getImportAdder(ctx context.Context, fixContext *CodeFixContext) (autoimport.ImportAdder, error) {
+	if fixAll.importAdder == nil {
+		importAdder, err := fixContext.LS.createImportAdder(ctx, fixAll.typeChecker, fixContext.SourceFile)
+		if err == nil {
+			fixAll.importAdder = importAdder
+		} else {
+			return nil, err
+		}
+	}
+	return fixAll.importAdder, nil
+}
+
+func getCodeFixChanges(sourceFile *ast.SourceFile, tracker *change.Tracker) []*lsproto.TextEdit {
+	changes, unmappable := tracker.GetChanges()
+	if len(unmappable) != 0 {
+		return nil
+	}
+
+	return changes[sourceFile.OriginalFileName()]
 }
 
 // CodeAction represents a single code action fix
@@ -72,6 +102,8 @@ var codeFixProviders = []*CodeFixProvider{
 	ImportFixProvider,
 	IsolatedDeclarationsFixProvider,
 	FixClassIncorrectlyImplementsInterfaceProvider,
+	AddMissingPropertiesFixProvider,
+	AddMissingJsxAttributesFixProvider,
 	// Add more code fix providers here as they are implemented
 }
 
@@ -168,6 +200,10 @@ func (l *LanguageService) getFixAllQuickFixes(
 	fixIdSeen map[string]*CodeFixProvider,
 ) ([]lsproto.CommandOrCodeAction, error) {
 	var actions []lsproto.CommandOrCodeAction
+	if len(fixIdSeen) == 0 {
+		return nil, nil
+	}
+	allDiagnostics := getAllDiagnostics(ctx, program, file)
 
 	// Deduplicate providers; multiple fixIds may map to the same provider.
 	var seen collections.Set[*CodeFixProvider]
@@ -181,16 +217,11 @@ func (l *LanguageService) getFixAllQuickFixes(
 			continue
 		}
 
-		if !hasMultipleFixableDiagnostics(ctx, program, file, provider.ErrorCodes) {
+		if !hasMultipleFixableDiagnostics(allDiagnostics, provider.ErrorCodes) {
 			continue
 		}
 
-		fixContext := &CodeFixContext{
-			SourceFile: file,
-			Program:    program,
-			LS:         l,
-		}
-		combined, err := provider.GetAllCodeActions(ctx, fixContext)
+		combined, err := l.getCombinedCodeActions(ctx, program, file, []*CodeFixProvider{provider}, allDiagnostics)
 		if err != nil {
 			return nil, err
 		}
@@ -215,8 +246,7 @@ func (l *LanguageService) getFixAllQuickFixes(
 // hasMultipleFixableDiagnostics returns true if the file has at least 2 diagnostics
 // matching the given error codes. Checks all diagnostic sources (semantic,
 // syntactic, suggestion, declaration) to match ProvideDiagnostics.
-func hasMultipleFixableDiagnostics(ctx context.Context, program *compiler.Program, file *ast.SourceFile, errorCodes []int32) bool {
-	allDiags := getAllDiagnostics(ctx, program, file)
+func hasMultipleFixableDiagnostics(allDiags []*ast.Diagnostic, errorCodes []int32) bool {
 	count := 0
 	for _, d := range allDiags {
 		if isFixableDiagnostic(d, errorCodes) {
@@ -268,31 +298,14 @@ func (l *LanguageService) createFixAllAction(
 	uri lsproto.DocumentUri,
 ) (*lsproto.CommandOrCodeAction, error) {
 	kind := lsproto.CodeActionKindSourceFixAllTs
-	lspChanges := make(map[lsproto.DocumentUri][]*lsproto.TextEdit)
-
-	for _, provider := range codeFixProviders {
-		if provider.GetAllCodeActions == nil {
-			continue
-		}
-
-		fixContext := &CodeFixContext{
-			SourceFile: file,
-			Program:    program,
-			LS:         l,
-		}
-
-		combined, err := provider.GetAllCodeActions(ctx, fixContext)
-		if err != nil {
-			return nil, err
-		}
-		if combined != nil && len(combined.Changes) > 0 {
-			lspChanges[uri] = append(lspChanges[uri], combined.Changes...)
-		}
+	combined, err := l.getCombinedCodeActions(ctx, program, file, codeFixProviders, getAllDiagnostics(ctx, program, file))
+	if err != nil {
+		return nil, err
 	}
-
-	if len(lspChanges) == 0 {
+	if combined == nil {
 		return nil, nil
 	}
+	lspChanges := map[lsproto.DocumentUri][]*lsproto.TextEdit{uri: combined.Changes}
 
 	return &lsproto.CommandOrCodeAction{
 		CodeAction: &lsproto.CodeAction{
@@ -300,6 +313,82 @@ func (l *LanguageService) createFixAllAction(
 			Kind:  &kind,
 			Edit:  &lsproto.WorkspaceEdit{Changes: &lspChanges},
 		},
+	}, nil
+}
+
+func (l *LanguageService) getCombinedCodeActions(ctx context.Context, program *compiler.Program, file *ast.SourceFile, providers []*CodeFixProvider, allDiagnostics []*ast.Diagnostic) (*CombinedCodeActions, error) {
+	if len(file.SupplementalSourceFiles()) == 0 {
+		return l.getCombinedCodeActionsForFile(ctx, program, file, providers, allDiagnostics)
+	}
+
+	tracker := change.NewTracker(ctx, program.Options(), l.FormatOptions(), l.converters)
+	var description string
+	files := append([]*ast.SourceFile{file}, file.SupplementalSourceFiles()...)
+	for _, sourceFile := range files {
+		combined, err := l.getCombinedCodeActionsForFile(ctx, program, sourceFile, providers, allDiagnostics)
+		if err != nil {
+			return nil, err
+		}
+		if combined != nil {
+			description = combined.Description
+			for _, edit := range combined.Changes {
+				tracker.ReplaceRangeWithText(sourceFile, edit.Range, edit.NewText)
+			}
+		}
+	}
+
+	changes := getCodeFixChanges(file, tracker)
+	if len(changes) == 0 {
+		return nil, nil
+	}
+	return &CombinedCodeActions{Description: description, Changes: changes}, nil
+}
+
+func (l *LanguageService) getCombinedCodeActionsForFile(ctx context.Context, program *compiler.Program, file *ast.SourceFile, providers []*CodeFixProvider, allDiagnostics []*ast.Diagnostic) (*CombinedCodeActions, error) {
+	typeChecker, done := program.GetTypeCheckerForFile(ctx, file)
+	defer done()
+	fixContext := &CodeFixContext{
+		SourceFile: file,
+		Program:    program,
+		LS:         l,
+	}
+	fixAll := &CodeFixAll{
+		diagnostics: allDiagnostics,
+		typeChecker: typeChecker,
+	}
+
+	var description string
+	var edits []*lsproto.TextEdit
+	for _, provider := range providers {
+		if provider.GetAllCodeActions == nil {
+			continue
+		}
+
+		combined, err := provider.GetAllCodeActions(ctx, fixContext, fixAll)
+		if err != nil {
+			return nil, err
+		}
+		if combined != nil {
+			description = combined.Description
+			edits = append(edits, combined.Changes...)
+		}
+	}
+
+	if fixAll.importAdder != nil && fixAll.importAdder.HasFixes() {
+		tracker := change.NewTracker(ctx, program.Options(), l.FormatOptions(), l.converters)
+		fixAll.importAdder.WriteFixes(tracker)
+		changes, unmappable := tracker.GetChanges()
+		if len(unmappable) != 0 {
+			return nil, nil
+		}
+		edits = append(edits, changes[file.OriginalFileName()]...)
+	}
+	if len(edits) == 0 {
+		return nil, nil
+	}
+	return &CombinedCodeActions{
+		Description: description,
+		Changes:     edits,
 	}, nil
 }
 
