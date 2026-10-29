@@ -2372,7 +2372,7 @@ func (c *Checker) getTypeOfDestructuredProperty(t *Type, name *ast.Node) *Type {
 		return propType
 	}
 	if indexInfo := c.getApplicableIndexInfoForName(t, text); indexInfo != nil {
-		return c.includeUndefinedInIndexSignature(indexInfo.valueType)
+		return c.includeUndefinedInIndexSignature(c.getValueTypeOfIndexInfo(indexInfo))
 	}
 	return c.errorType
 }

@@ -2851,7 +2851,7 @@ func (c *Checker) getTypeOfPropertyInType(t *Type, name string) *Type {
 	}
 	indexInfo := c.getApplicableIndexInfoForName(t, name)
 	if indexInfo != nil {
-		return indexInfo.valueType
+		return c.getValueTypeOfIndexInfo(indexInfo)
 	}
 	return c.undefinedType
 }
@@ -4640,10 +4640,10 @@ func (r *Relater) indexSignaturesRelatedTo(source *Type, target *Type, sourceIsP
 	for _, targetInfo := range indexInfos {
 		var related Ternary
 		switch {
-		case r.relation != r.c.strictSubtypeRelation && !sourceIsPrimitive && targetHasStringIndex && targetInfo.valueType.flags&TypeFlagsAny != 0:
+		case r.relation != r.c.strictSubtypeRelation && !sourceIsPrimitive && targetHasStringIndex && r.c.getValueTypeOfIndexInfo(targetInfo).flags&TypeFlagsAny != 0:
 			related = TernaryTrue
 		case r.c.isGenericMappedType(source) && targetHasStringIndex:
-			related = r.isRelatedTo(r.c.getTemplateTypeFromMappedType(source), targetInfo.valueType, RecursionFlagsBoth, reportErrors)
+			related = r.isRelatedTo(r.c.getTemplateTypeFromMappedType(source), r.c.getValueTypeOfIndexInfo(targetInfo), RecursionFlagsBoth, reportErrors)
 		default:
 			related = r.typeRelatedToIndexInfo(source, targetInfo, reportErrors, intersectionState)
 		}
@@ -4708,7 +4708,7 @@ func (r *Relater) membersRelatedToIndexInfo(source *Type, targetInfo *IndexInfo,
 			} else {
 				t = r.c.getTypeWithFacts(propType, TypeFactsNEUndefined)
 			}
-			related := r.isRelatedToEx(t, targetInfo.valueType, RecursionFlagsBoth, reportErrors, nil /*headMessage*/, intersectionState)
+			related := r.isRelatedToEx(t, r.c.getValueTypeOfIndexInfo(targetInfo), RecursionFlagsBoth, reportErrors, nil /*headMessage*/, intersectionState)
 			if related == TernaryFalse {
 				if reportErrors {
 					r.reportError(diagnostics.Property_0_is_incompatible_with_index_signature, r.c.symbolToString(prop))
@@ -4731,7 +4731,7 @@ func (r *Relater) membersRelatedToIndexInfo(source *Type, targetInfo *IndexInfo,
 }
 
 func (r *Relater) indexInfoRelatedTo(sourceInfo *IndexInfo, targetInfo *IndexInfo, reportErrors bool, intersectionState IntersectionState) Ternary {
-	related := r.isRelatedToEx(sourceInfo.valueType, targetInfo.valueType, RecursionFlagsBoth, reportErrors, nil /*headMessage*/, intersectionState)
+	related := r.isRelatedToEx(r.c.getValueTypeOfIndexInfo(sourceInfo), r.c.getValueTypeOfIndexInfo(targetInfo), RecursionFlagsBoth, reportErrors, nil /*headMessage*/, intersectionState)
 	if related == TernaryFalse && reportErrors {
 		if sourceInfo.keyType == targetInfo.keyType {
 			r.reportError(diagnostics.X_0_index_signatures_are_incompatible, r.c.TypeToString(sourceInfo.keyType))
@@ -4750,7 +4750,7 @@ func (r *Relater) indexSignaturesIdenticalTo(source *Type, target *Type) Ternary
 	}
 	for _, targetInfo := range targetInfos {
 		sourceInfo := r.c.getIndexInfoOfType(source, targetInfo.keyType)
-		if !(sourceInfo != nil && r.isRelatedTo(sourceInfo.valueType, targetInfo.valueType, RecursionFlagsBoth, false) != TernaryFalse && sourceInfo.isReadonly == targetInfo.isReadonly) {
+		if !(sourceInfo != nil && r.isRelatedTo(r.c.getValueTypeOfIndexInfo(sourceInfo), r.c.getValueTypeOfIndexInfo(targetInfo), RecursionFlagsBoth, false) != TernaryFalse && sourceInfo.isReadonly == targetInfo.isReadonly) {
 			return TernaryFalse
 		}
 	}

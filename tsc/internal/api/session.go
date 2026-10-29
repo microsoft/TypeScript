@@ -764,7 +764,7 @@ func (setup checkerSetup) newIndexInfoResponse(info *checker.IndexInfo) *IndexIn
 	}
 	result := &IndexInfoResponse{
 		KeyType:    *setup.sd.newTypeResponse(setup.projectID, info.KeyType(), setup.checker),
-		ValueType:  *setup.sd.newTypeResponse(setup.projectID, info.ValueType(), setup.checker),
+		ValueType:  *setup.sd.newTypeResponse(setup.projectID, setup.checker.GetValueTypeOfIndexInfo(info), setup.checker),
 		IsReadonly: info.IsReadonly(),
 	}
 	if info.Declaration() != nil {

@@ -353,6 +353,10 @@ func (c *Checker) GetIndexInfoOfType(t *Type, keyType *Type) *IndexInfo {
 	return c.getIndexInfoOfType(t, keyType)
 }
 
+func (c *Checker) GetValueTypeOfIndexInfo(info *IndexInfo) *Type {
+	return c.getValueTypeOfIndexInfo(info)
+}
+
 func (c *Checker) GetIndexTypeOfType(t *Type, keyType *Type) *Type {
 	return c.getIndexTypeOfType(t, keyType)
 }

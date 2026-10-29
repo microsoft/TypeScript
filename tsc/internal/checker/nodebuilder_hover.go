@@ -371,7 +371,7 @@ func (b *NodeBuilderImpl) serializeIndexSignaturesOfType(input *Type, baseType *
 	for _, info := range b.ch.getIndexInfosOfType(input) {
 		if baseType != nil {
 			baseInfo := b.ch.getIndexInfoOfType(baseType, info.keyType)
-			if baseInfo != nil && b.ch.isTypeIdenticalTo(info.valueType, baseInfo.valueType) {
+			if baseInfo != nil && b.ch.isTypeIdenticalTo(b.ch.getValueTypeOfIndexInfo(info), b.ch.getValueTypeOfIndexInfo(baseInfo)) {
 				continue
 			}
 		}

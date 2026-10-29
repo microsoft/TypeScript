@@ -1199,7 +1199,7 @@ func (c *Checker) getIntrinsicAttributesTypeFromJsxOpeningLikeElement(node *ast.
 	if links.jsxFlags&JsxFlagsIntrinsicIndexedElement != 0 {
 		indexInfo := c.getApplicableIndexInfoForName(c.getJsxType(JsxNames.IntrinsicElements, node), node.TagName().Text())
 		if indexInfo != nil {
-			links.resolvedJsxElementAttributesType = indexInfo.valueType
+			links.resolvedJsxElementAttributesType = c.getValueTypeOfIndexInfo(indexInfo)
 			return links.resolvedJsxElementAttributesType
 		}
 	}

@@ -1786,12 +1786,15 @@ type IndexInfo struct {
 	declaration *ast.Node   // IndexSignatureDeclaration
 	indexSymbol *ast.Symbol // Synthetic property symbol for this index signature
 	components  []*ast.Node // ElementWithComputedPropertyName
+	mapper      *TypeMapper // Applied when lazily resolving a deferred valueType
 }
 
 func (info *IndexInfo) KeyType() *Type {
 	return info.keyType
 }
 
+// ValueType returns the cached value type, which may be nil when resolution was
+// deferred (see Checker.getValueTypeOfIndexInfo). Prefer Checker.GetValueTypeOfIndexInfo.
 func (info *IndexInfo) ValueType() *Type {
 	return info.valueType
 }
