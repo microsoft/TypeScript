@@ -88,6 +88,27 @@
                                 },
                                 "description": "File extensions handled by this mapper. Defaults to the value of 'typescript.contentMapper.extensions' in the package manifest."
                             },
+                            "include": {
+                                "type": "array",
+                                "items": {
+                                    "type": "string"
+                                },
+                                "description": "Patterns relative to this config file that narrow which files the mapper handles."
+                            },
+                            "outputExtensions": {
+                                "anyOf": [
+                                    {
+                                        "type": "object",
+                                        "additionalProperties": {
+                                            "type": "string"
+                                        }
+                                    },
+                                    {
+                                        "type": "null"
+                                    }
+                                ],
+                                "description": "Maps source file extensions to output extensions for declaration filenames and rewritten imports."
+                            },
                             "options": {
                                 "type": "object"
                             }

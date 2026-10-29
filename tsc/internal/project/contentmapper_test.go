@@ -93,6 +93,45 @@ func TestContentMapperProjectWithoutMappedFiles(t *testing.T) {
 	}
 }
 
+func TestContentMapperRegistryOnlyWatchRefresh(t *testing.T) {
+	t.Parallel()
+	files := map[string]any{
+		"/home/project/tsconfig.json": `{
+			"files": ["main.ts"], "references": [{"path": "./lib"}]
+		}`,
+		"/home/project/main.ts": "export {};",
+		"/home/project/lib/tsconfig.json": `{
+			"compilerOptions": {"composite": true},
+			"contentMappers": [{"package": "mapper", "extensions": [".box"], "include": ["src"]}]
+		}`,
+		"/home/project/lib/src/index.ts":                 "export {};",
+		"/home/project/node_modules/mapper/package.json": contentmappertest.PackageJSON(contentmappertest.TransformingMapper),
+	}
+	init, utils := projecttestutil.GetSessionInitOptions(files, &project.SessionOptions{
+		CurrentDirectory: "/home/project", DefaultLibraryPath: bundled.LibPath(),
+		PositionEncoding: lsproto.PositionEncodingKindUTF8, RunExternalCode: true, LoggingEnabled: true,
+	}, nil)
+	init.Spawner = contentmappertest.NewSpawner()
+	session := project.NewSession(init)
+	defer session.Close()
+	ctx := context.Background()
+	session.DidOpenFile(ctx, "file:///home/project/main.ts", 1, "export {};", lsproto.LanguageKindTypeScript)
+	_, err := session.GetLanguageService(ctx, "file:///home/project/main.ts")
+	assert.NilError(t, err)
+	session.WaitForBackgroundTasks()
+	snapshot := session.Snapshot()
+	assert.Assert(t, snapshot.ConfigFileRegistry.GetConfig("/home/project/lib/tsconfig.json") != nil)
+	assert.DeepEqual(t, snapshot.ConfigFileRegistry.GetConfig("/home/project/lib/tsconfig.json").ContentMapperExtensions(), []string{".box"})
+	assert.DeepEqual(t, snapshot.ContentMapperExtensions(), []string{".box"})
+	assert.Assert(t, snapshot.ProjectCollection.GetProject(project.ID("/home/project/lib/tsconfig.json")) == nil)
+	before := len(utils.Client().RefreshDiagnosticsCalls())
+	session.DidChangeWatchedFiles(ctx, []*lsproto.FileEvent{{
+		Uri: "file:///home/project/lib/src/new.box", Type: lsproto.FileChangeTypeCreated,
+	}})
+	session.WaitForBackgroundTasks()
+	assert.Assert(t, len(utils.Client().RefreshDiagnosticsCalls()) > before)
+}
+
 func TestContentMapperParallelFileLoading(t *testing.T) {
 	t.Parallel()
 	files := map[string]any{
@@ -174,9 +213,9 @@ func TestContentMapperInProject(t *testing.T) {
 
 		// The config's .box mapper should have been registered for text document synchronization.
 		session.WaitForBackgroundTasks()
-		calls := utils.Client().RegisterContentMapperExtensionsCalls()
-		assert.Assert(t, len(calls) > 0, "expected RegisterContentMapperExtensions to be called")
-		assert.DeepEqual(t, calls[len(calls)-1].Extensions, []string{".box"})
+		calls := utils.Client().RegisterContentMapperSelectorsCalls()
+		assert.Assert(t, len(calls) > 0, "expected RegisterContentMapperSelectors to be called")
+		assert.DeepEqual(t, calls[len(calls)-1].Selectors, []project.ContentMapperSelector{{Pattern: "**/*.box", Extension: ".box"}})
 	})
 
 	t.Run("untrusted workspace does not run the content mapper", func(t *testing.T) {
@@ -195,8 +234,8 @@ func TestContentMapperInProject(t *testing.T) {
 
 		// No content mapper extensions should be registered without trust.
 		session.WaitForBackgroundTasks()
-		for _, call := range utils.Client().RegisterContentMapperExtensionsCalls() {
-			assert.Equal(t, len(call.Extensions), 0, "expected no content mapper extensions to be registered without trust")
+		for _, call := range utils.Client().RegisterContentMapperSelectorsCalls() {
+			assert.Equal(t, len(call.Selectors), 0, "expected no content mapper selectors to be registered without trust")
 		}
 	})
 
@@ -835,11 +874,11 @@ func TestContentMappersInParallelProjectReferences(t *testing.T) {
 	uri := lsproto.DocumentUri("file:///home/project/src/index.d.ts")
 	session.DidOpenFile(context.Background(), uri, 1, files["/home/project/src/index.d.ts"].(string), lsproto.LanguageKindTypeScript)
 	session.WaitForBackgroundTasks()
-	calls := utils.Client().RegisterContentMapperExtensionsCalls()
+	calls := utils.Client().RegisterContentMapperSelectorsCalls()
 	assert.Assert(t, len(calls) > 0)
-	extensions := slices.Clone(calls[len(calls)-1].Extensions)
-	slices.Sort(extensions)
-	assert.DeepEqual(t, extensions, []string{".svelte", ".vue"})
+	assert.DeepEqual(t, calls[len(calls)-1].Selectors, []project.ContentMapperSelector{
+		{Pattern: "**/*.svelte", Extension: ".svelte"}, {Pattern: "**/*.vue", Extension: ".vue"},
+	})
 }
 
 func TestContentMapperOpenFileExcludedByConfigChange(t *testing.T) {
@@ -970,9 +1009,9 @@ func TestContentMapperRemovalWithOpenFile(t *testing.T) {
 	assert.Equal(t, spawner.closes.Load(), int32(0), "live old snapshot should retain the mapper process")
 	assert.NilError(t, releaseOldSnapshot())
 	assert.Equal(t, spawner.closes.Load(), int32(1), "process should close after the final live snapshot is released")
-	calls := utils.Client().RegisterContentMapperExtensionsCalls()
+	calls := utils.Client().RegisterContentMapperSelectorsCalls()
 	assert.Assert(t, len(calls) > 0, "expected content mapper registration updates")
-	assert.Equal(t, len(calls[len(calls)-1].Extensions), 0, "expected content mapper extensions to be unregistered")
+	assert.Equal(t, len(calls[len(calls)-1].Selectors), 0, "expected content mapper selectors to be unregistered")
 
 	session.DidCloseFile(ctx, boxURI)
 	_, err = session.GetLanguageService(ctx, boxURI)

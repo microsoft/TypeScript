@@ -131,13 +131,14 @@ func getScriptTransformers(emitResolver printer.EmitResolver, host printer.EmitH
 	}
 
 	opts := transformers.TransformOptions{
-		Context:                        emitContext,
-		CompilerOptions:                options,
-		Resolver:                       referenceResolver,
-		EmitResolver:                   emitResolver,
-		GetEmitModuleFormatOfFile:      host.GetEmitModuleFormatOfFile,
-		ContentMapperExtensionRewrites: host.ContentMapperExtensionRewrites(),
-		CaseSensitivity:                host.CaseSensitivity(),
+		Context:                           emitContext,
+		CompilerOptions:                   options,
+		Resolver:                          referenceResolver,
+		EmitResolver:                      emitResolver,
+		GetEmitModuleFormatOfFile:         host.GetEmitModuleFormatOfFile,
+		ContentMapperExtensionRewrites:    host.ContentMapperExtensionRewrites(),
+		ContentMapperExtensionForFileName: host.ContentMapperExtensionForFileName,
+		CaseSensitivity:                   host.CaseSensitivity(),
 	}
 
 	// transform TypeScript syntax

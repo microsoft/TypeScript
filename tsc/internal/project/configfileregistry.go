@@ -4,12 +4,14 @@ import (
 	"iter"
 	"maps"
 	"slices"
+	"strings"
 
 	"github.com/microsoft/TypeScript/tsc/internal/collections"
 	"github.com/microsoft/TypeScript/tsc/internal/core"
 	"github.com/microsoft/TypeScript/tsc/internal/lsp/lsproto"
 	"github.com/microsoft/TypeScript/tsc/internal/tsoptions"
 	"github.com/microsoft/TypeScript/tsc/internal/tspath"
+	"github.com/microsoft/TypeScript/tsc/internal/vfs/vfsmatch"
 )
 
 type ConfigFileRegistry struct {
@@ -27,11 +29,50 @@ type ConfigFileRegistry struct {
 
 type configuredContentMappers struct {
 	extensions []string
+	selectors  []ContentMapperSelector
+}
+
+func contentMapperSelectorPattern(include, extension string) (string, bool) {
+	pattern := tspath.NormalizeSlashes(include)
+	if vfsmatch.IsImplicitGlob(tspath.GetBaseFileName(pattern)) {
+		pattern += "/**/*"
+	}
+	lowerPattern := strings.ToLower(pattern)
+	lowerExtension := strings.ToLower(extension)
+	if strings.HasSuffix(lowerPattern, lowerExtension) {
+		return pattern, true
+	}
+	if !strings.ContainsAny(pattern, "*?") {
+		return "", false
+	}
+	if strings.HasSuffix(pattern, "*") {
+		// Appending can miss matches for extension-like patterns such as "*.v*".
+		// Broader selectors are safe because the server rechecks claims.
+		last := tspath.GetBaseFileName(pattern)
+		if !strings.Contains(last[:len(last)-1], ".") {
+			return pattern + extension, true
+		}
+	}
+	return pattern, true
+}
+
+func contentMapperSelector(base tspath.RootedDirectoryPath, pattern, extension string) ContentMapperSelector {
+	prefix := pattern
+	if wildcard := strings.IndexAny(pattern, "*?"); wildcard >= 0 {
+		prefix = pattern[:wildcard]
+	}
+	baseLength := max(tspath.GetRootLength(pattern), strings.LastIndex(prefix, "/"))
+	if baseLength > 0 {
+		base = base.ResolveDirectory(pattern[:baseLength])
+		pattern = strings.TrimPrefix(pattern[baseLength:], "/")
+	}
+	return ContentMapperSelector{Base: base, Pattern: pattern, Extension: extension}
 }
 
 func collectConfiguredContentMappers(commandLines []*tsoptions.ParsedCommandLine) *configuredContentMappers {
 	var seenExtensions collections.Set[string]
 	var extensions []string
+	var selectors []ContentMapperSelector
 	for _, commandLine := range commandLines {
 		for _, mapper := range commandLine.ContentMappers() {
 			for _, extension := range mapper.Definition.Extensions {
@@ -39,10 +80,24 @@ func collectConfiguredContentMappers(commandLines []*tsoptions.ParsedCommandLine
 					extensions = append(extensions, extension)
 				}
 			}
+			for _, include := range mapper.Definition.Include {
+				for _, extension := range mapper.Definition.Extensions {
+					if pattern, ok := contentMapperSelectorPattern(include, extension); ok {
+						selectors = append(selectors, contentMapperSelector(commandLine.BaseDirectory(), pattern, extension))
+					}
+				}
+			}
+
+			if mapper.Definition.Include == nil {
+				for _, extension := range mapper.Definition.Extensions {
+					selectors = append(selectors, ContentMapperSelector{Pattern: ContentMapperExtensionPattern(extension), Extension: extension})
+				}
+			}
 		}
 	}
 	slices.Sort(extensions)
-	return &configuredContentMappers{extensions: extensions}
+	slices.SortFunc(selectors, compareContentMapperSelectors)
+	return &configuredContentMappers{extensions: extensions, selectors: selectors}
 }
 
 func (c *ConfigFileRegistry) contentMappers() *configuredContentMappers {

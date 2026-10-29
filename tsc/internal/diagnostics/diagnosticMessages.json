@@ -8959,5 +8959,21 @@
     "Content mapper '{0}' must specify 'extensions' in tsconfig or its package manifest.": {
         "category": "Error",
         "code": 18125
+    },
+    "Content mapper '{0}' is also registered for the extension '{1}', but has a conflicting 'outputExtensions' mapping. Each registration for this extension must produce the same output file name.": {
+        "category": "Error",
+        "code": 18127
+    },
+    "Content mapper '{0}' is also registered for the extension '{1}', but has no 'outputExtensions' mapping. Each registration for this extension must produce the same output file name.": {
+        "category": "Error",
+        "code": 18128
+    },
+    "The conflicting mapper registration is declared here.": {
+        "category": "Message",
+        "code": 18130
+    },
+    "The conflicting mapper registration is declared here. Its 'outputExtensions' setting is inherited from the mapper's package.json.": {
+        "category": "Message",
+        "code": 18131
     }
 }

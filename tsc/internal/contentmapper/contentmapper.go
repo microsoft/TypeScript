@@ -29,10 +29,11 @@ import (
 var ErrProjectUnavailable = errors.New("content mapper project is unavailable")
 
 // Definition is a content mapper as declared in a tsconfig's "contentMappers": the npm package that
-// implements the mapper and the otherwise unsupported file extensions it registers.
+// implements the mapper, its effective file extensions, and an optional project-relative include filter.
 type Definition struct {
 	Package    string   `json:"package"`
 	Extensions []string `json:"extensions"`
+	Include    []string `json:"include,omitzero"`
 	// OutputExtensions contains the resolved mapping after applying manifest defaults and project overrides.
 	OutputExtensions map[string]string `json:"outputExtensions,omitzero"`
 	Options          json.Value        `json:"options,omitempty"`
@@ -129,6 +130,8 @@ func (m *Mapper) Equals(other *Mapper) bool {
 	return m.Package == other.Package &&
 		(m.Extensions == nil) == (other.Extensions == nil) &&
 		slices.Equal(m.Extensions, other.Extensions) &&
+		(m.Include == nil) == (other.Include == nil) &&
+		slices.Equal(m.Include, other.Include) &&
 		(m.Definition.OutputExtensions == nil) == (other.Definition.OutputExtensions == nil) &&
 		maps.Equal(m.Definition.OutputExtensions, other.Definition.OutputExtensions) &&
 		(m.Options == nil) == (other.Options == nil) &&
