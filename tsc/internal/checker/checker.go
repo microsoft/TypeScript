@@ -20200,16 +20200,23 @@ func (c *Checker) getTypeWithThisArgument(t *Type, thisArgument *Type, needAppar
 
 func (c *Checker) addInheritedMembers(symbols ast.SymbolTable, baseSymbols []*ast.Symbol) ast.SymbolTable {
 	for _, base := range baseSymbols {
-		if !isStaticPrivateIdentifierProperty(base) {
-			if s, ok := symbols.Lookup(base.Name()); !ok || s.Flags()&ast.SymbolFlagsValue == 0 {
-				if symbols == nil {
-					symbols = ast.NewSymbolTable()
-				}
-				symbols.Set(base.Name(), base)
+		if isInheritedMember(symbols, base) {
+			if symbols == nil {
+				symbols = ast.NewSymbolTable()
 			}
+			symbols.Set(base.Name(), base)
 		}
 	}
 	return symbols
+}
+
+// Reports whether addInheritedMembers would add the base symbol to the given symbols.
+func isInheritedMember(symbols ast.SymbolTable, base *ast.Symbol) bool {
+	if isStaticPrivateIdentifierProperty(base) {
+		return false
+	}
+	s, ok := symbols.Lookup(base.Name())
+	return !ok || s.Flags()&ast.SymbolFlagsValue == 0
 }
 
 func (c *Checker) resolveDeclaredMembers(t *Type) *InterfaceType {
@@ -21289,9 +21296,14 @@ func (c *Checker) resolveAnonymousTypeMembers(t *Type) {
 		classType := c.getDeclaredTypeOfClassOrInterface(symbol)
 		baseConstructorType := c.getBaseConstructorTypeOfClass(classType)
 		if baseConstructorType.flags&(TypeFlagsObject|TypeFlagsIntersection|TypeFlagsTypeVariable) != 0 {
-			members = members.Clone()
-			c.addInheritedMembers(members, c.getPropertiesOfType(baseConstructorType))
-			c.setStructuredTypeMembers(t, members, nil, nil, nil)
+			// Base static members are usually all shadowed (e.g. 'prototype'), in which case
+			// the exports table can be used as is.
+			baseProps := c.getPropertiesOfType(baseConstructorType)
+			if i := slices.IndexFunc(baseProps, func(base *ast.Symbol) bool { return isInheritedMember(members, base) }); i >= 0 {
+				members = members.Clone()
+				c.addInheritedMembers(members, baseProps[i:])
+				c.setStructuredTypeMembers(t, members, nil, nil, nil)
+			}
 		} else if baseConstructorType == c.anyType {
 			baseConstructorIndexInfo = c.anyBaseTypeIndexInfo
 		}
