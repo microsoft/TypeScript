@@ -10,7 +10,7 @@ import (
 // TypeMapper
 
 type TypeMapper struct {
-	kind TypeMapperKind
+	kind TypeMapperKind `customlint:"protected"`
 }
 
 type TypeMapperKind uint8
@@ -170,7 +170,7 @@ type SimpleTypeMapper struct {
 
 func newSimpleTypeMapper(source *Type, target *Type) *TypeMapper {
 	m := &SimpleTypeMapper{}
-	m.kind = TypeMapperKindSimple
+	m.kind = TypeMapperKindSimple //nolint:customlint
 	m.source = source
 	m.target = target
 	return &m.TypeMapper
@@ -197,7 +197,7 @@ type ArrayTypeMapper struct {
 
 func newArrayTypeMapper(sources []*Type, targets []*Type) *TypeMapper {
 	m := &ArrayTypeMapper{}
-	m.kind = TypeMapperKindArray
+	m.kind = TypeMapperKindArray //nolint:customlint
 	m.sources = sources
 	m.targets = targets
 	return &m.TypeMapper
@@ -226,7 +226,7 @@ type ArrayToSingleTypeMapper struct {
 
 func newArrayToSingleTypeMapper(sources []*Type, target *Type) *TypeMapper {
 	m := &ArrayToSingleTypeMapper{}
-	m.kind = TypeMapperKindArrayToSingle
+	m.kind = TypeMapperKindArrayToSingle //nolint:customlint
 	m.sources = sources
 	m.target = target
 	return &m.TypeMapper
@@ -253,7 +253,7 @@ type DeferredTypeMapper struct {
 
 func newDeferredTypeMapper(sources []*Type, targets []func() *Type) *TypeMapper {
 	m := &DeferredTypeMapper{}
-	m.kind = TypeMapperKindDeferred
+	m.kind = TypeMapperKindDeferred //nolint:customlint
 	m.sources = sources
 	m.targets = targets
 	return &m.TypeMapper
@@ -281,7 +281,7 @@ type FunctionTypeMapper struct {
 
 func newFunctionTypeMapper(fn func(*Type) *Type) *TypeMapper {
 	m := &FunctionTypeMapper{}
-	m.kind = TypeMapperKindFunction
+	m.kind = TypeMapperKindFunction //nolint:customlint
 	m.fn = fn
 	return &m.TypeMapper
 }
@@ -300,7 +300,7 @@ type MergedTypeMapper struct {
 
 func newMergedTypeMapper(m1 *TypeMapper, m2 *TypeMapper) *TypeMapper {
 	m := &MergedTypeMapper{}
-	m.kind = TypeMapperKindMerged
+	m.kind = TypeMapperKindMerged //nolint:customlint
 	m.m1 = m1
 	m.m2 = m2
 	return &m.TypeMapper
@@ -321,7 +321,7 @@ type CompositeTypeMapper struct {
 
 func newCompositeTypeMapper(c *Checker, m1 *TypeMapper, m2 *TypeMapper) *TypeMapper {
 	m := &CompositeTypeMapper{}
-	m.kind = TypeMapperKindComposite
+	m.kind = TypeMapperKindComposite //nolint:customlint
 	m.c = c
 	m.m1 = m1
 	m.m2 = m2
@@ -346,7 +346,7 @@ type InferenceTypeMapper struct {
 }
 
 func (c *Checker) initInferenceTypeMapper(m *InferenceTypeMapper, n *InferenceContext, fixing bool) *TypeMapper {
-	m.kind = TypeMapperKindInference
+	m.kind = TypeMapperKindInference //nolint:customlint
 	m.c = c
 	m.n = n
 	m.fixing = fixing
