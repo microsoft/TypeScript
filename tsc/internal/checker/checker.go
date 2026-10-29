@@ -22993,15 +22993,23 @@ func (c *Checker) instantiateTypeReference(t *Type, m *TypeMapper) *Type {
 		return t
 	}
 	target := t.Target()
-	if target.objectFlags&ObjectFlagsTuple == 0 || target.AsTupleType().combinedFlags&ElementFlagsNonRequired == 0 {
+	normalize := target.objectFlags&ObjectFlagsTuple != 0 && target.AsTupleType().combinedFlags&ElementFlagsNonRequired != 0
+	var id CacheHashKey
+	if !normalize {
 		// No normalization is needed, so check for an existing instantiation first.
-		id := getTypeListKey(newTypeArguments)
+		id = getTypeListKey(newTypeArguments)
 		if existing, ok := target.AsInterfaceType().instantiations[id]; ok {
 			return existing
 		}
-		return c.newTypeReferenceInstantiation(target, id, slices.Clone(newTypeArguments), ObjectFlagsNone)
 	}
-	return c.createNormalizedTypeReference(target, slices.Clone(newTypeArguments))
+	if len(newTypeArguments) <= len(buf) {
+		// Arguments written into buf must be copied before they are retained.
+		newTypeArguments = slices.Clone(newTypeArguments)
+	}
+	if normalize {
+		return c.createNormalizedTypeReference(target, newTypeArguments)
+	}
+	return c.newTypeReferenceInstantiation(target, id, newTypeArguments, ObjectFlagsNone)
 }
 
 // Handles instantiation of the following object types:
@@ -23084,7 +23092,11 @@ func (c *Checker) getObjectTypeInstantiation(t *Type, m *TypeMapper, alias *Type
 	}
 	result := data.instantiations[key]
 	if result == nil {
-		newMapper := newTypeMapper(typeParameters, slices.Clone(typeArguments))
+		if len(typeParameters) <= len(buf) {
+			// Arguments written into buf must be copied before the mapper retains them.
+			typeArguments = slices.Clone(typeArguments)
+		}
+		newMapper := newTypeMapper(typeParameters, typeArguments)
 		if target.objectFlags&ObjectFlagsSingleSignatureType != 0 && m != nil {
 			newMapper = c.combineTypeMappers(newMapper, m)
 		}
