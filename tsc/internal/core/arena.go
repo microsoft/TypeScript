@@ -15,7 +15,7 @@ type Arena[T any] struct {
 // capacity and unrelated values retained by a surviving pointer into a chunk.
 func (a *Arena[T]) New() *T {
 	if len(a.data) == cap(a.data) {
-		nextSize := nextArenaSize[T](len(a.data))
+		nextSize := nextArenaSize[T](cap(a.data))
 		// Use the same trick as slices.Concat; Grow rounds up to the next size class.
 		a.data = slices.Grow[[]T](nil, nextSize)
 	}
@@ -33,7 +33,7 @@ func (a *Arena[T]) NewSlice(size int) []T {
 		return nil
 	}
 	if len(a.data)+size > cap(a.data) {
-		nextSize := nextArenaSize[T](len(a.data))
+		nextSize := nextArenaSize[T](cap(a.data))
 		if size > nextSize {
 			return make([]T, size)
 		}
