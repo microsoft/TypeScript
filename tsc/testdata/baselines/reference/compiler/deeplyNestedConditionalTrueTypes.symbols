@@ -1,0 +1,371 @@
+//// [tests/cases/compiler/deeplyNestedConditionalTrueTypes.ts] ////
+
+=== deeplyNestedConditionalTrueTypes.ts ===
+type OnlyString<T extends string> = T;
+>OnlyString : Symbol(OnlyString, Decl(deeplyNestedConditionalTrueTypes.ts, 0, 0))
+>T : Symbol(T, Decl(deeplyNestedConditionalTrueTypes.ts, 0, 16))
+>T : Symbol(T, Decl(deeplyNestedConditionalTrueTypes.ts, 0, 16))
+
+type DeepTrue<T> =
+>DeepTrue : Symbol(DeepTrue, Decl(deeplyNestedConditionalTrueTypes.ts, 0, 38))
+>T : Symbol(T, Decl(deeplyNestedConditionalTrueTypes.ts, 2, 14))
+
+    T extends string ?
+>T : Symbol(T, Decl(deeplyNestedConditionalTrueTypes.ts, 2, 14))
+
+    T extends string ?
+>T : Symbol(T, Decl(deeplyNestedConditionalTrueTypes.ts, 2, 14))
+
+    T extends string ?
+>T : Symbol(T, Decl(deeplyNestedConditionalTrueTypes.ts, 2, 14))
+
+    T extends string ?
+>T : Symbol(T, Decl(deeplyNestedConditionalTrueTypes.ts, 2, 14))
+
+    T extends string ?
+>T : Symbol(T, Decl(deeplyNestedConditionalTrueTypes.ts, 2, 14))
+
+    T extends string ?
+>T : Symbol(T, Decl(deeplyNestedConditionalTrueTypes.ts, 2, 14))
+
+    T extends string ?
+>T : Symbol(T, Decl(deeplyNestedConditionalTrueTypes.ts, 2, 14))
+
+    T extends string ?
+>T : Symbol(T, Decl(deeplyNestedConditionalTrueTypes.ts, 2, 14))
+
+    T extends string ?
+>T : Symbol(T, Decl(deeplyNestedConditionalTrueTypes.ts, 2, 14))
+
+    T extends string ?
+>T : Symbol(T, Decl(deeplyNestedConditionalTrueTypes.ts, 2, 14))
+
+    T extends string ?
+>T : Symbol(T, Decl(deeplyNestedConditionalTrueTypes.ts, 2, 14))
+
+    T extends string ?
+>T : Symbol(T, Decl(deeplyNestedConditionalTrueTypes.ts, 2, 14))
+
+    T extends string ?
+>T : Symbol(T, Decl(deeplyNestedConditionalTrueTypes.ts, 2, 14))
+
+    T extends string ?
+>T : Symbol(T, Decl(deeplyNestedConditionalTrueTypes.ts, 2, 14))
+
+    T extends string ?
+>T : Symbol(T, Decl(deeplyNestedConditionalTrueTypes.ts, 2, 14))
+
+    T extends string ?
+>T : Symbol(T, Decl(deeplyNestedConditionalTrueTypes.ts, 2, 14))
+
+    T extends string ?
+>T : Symbol(T, Decl(deeplyNestedConditionalTrueTypes.ts, 2, 14))
+
+    T extends string ?
+>T : Symbol(T, Decl(deeplyNestedConditionalTrueTypes.ts, 2, 14))
+
+    T extends string ?
+>T : Symbol(T, Decl(deeplyNestedConditionalTrueTypes.ts, 2, 14))
+
+    T extends string ?
+>T : Symbol(T, Decl(deeplyNestedConditionalTrueTypes.ts, 2, 14))
+
+    OnlyString<T> :
+>OnlyString : Symbol(OnlyString, Decl(deeplyNestedConditionalTrueTypes.ts, 0, 0))
+>T : Symbol(T, Decl(deeplyNestedConditionalTrueTypes.ts, 2, 14))
+
+    never : never : never : never : never :
+    never : never : never : never : never :
+    never : never : never : never : never :
+    never : never : never : never : never;
+
+const value: DeepTrue<"value"> = "value";
+>value : Symbol(value, Decl(deeplyNestedConditionalTrueTypes.ts, 29, 5))
+>DeepTrue : Symbol(DeepTrue, Decl(deeplyNestedConditionalTrueTypes.ts, 0, 38))
+
+declare const excluded: DeepTrue<number>;
+>excluded : Symbol(excluded, Decl(deeplyNestedConditionalTrueTypes.ts, 30, 13))
+>DeepTrue : Symbol(DeepTrue, Decl(deeplyNestedConditionalTrueTypes.ts, 0, 38))
+
+type DeepParenthesized<T> =
+>DeepParenthesized : Symbol(DeepParenthesized, Decl(deeplyNestedConditionalTrueTypes.ts, 30, 41))
+>T : Symbol(T, Decl(deeplyNestedConditionalTrueTypes.ts, 32, 23))
+
+    (T) extends (string) ?
+>T : Symbol(T, Decl(deeplyNestedConditionalTrueTypes.ts, 32, 23))
+
+    (T) extends (string) ?
+>T : Symbol(T, Decl(deeplyNestedConditionalTrueTypes.ts, 32, 23))
+
+    (T) extends (string) ?
+>T : Symbol(T, Decl(deeplyNestedConditionalTrueTypes.ts, 32, 23))
+
+    (T) extends (string) ?
+>T : Symbol(T, Decl(deeplyNestedConditionalTrueTypes.ts, 32, 23))
+
+    (T) extends (string) ?
+>T : Symbol(T, Decl(deeplyNestedConditionalTrueTypes.ts, 32, 23))
+
+    (T) extends (string) ?
+>T : Symbol(T, Decl(deeplyNestedConditionalTrueTypes.ts, 32, 23))
+
+    (T) extends (string) ?
+>T : Symbol(T, Decl(deeplyNestedConditionalTrueTypes.ts, 32, 23))
+
+    (T) extends (string) ?
+>T : Symbol(T, Decl(deeplyNestedConditionalTrueTypes.ts, 32, 23))
+
+    (T) extends (string) ?
+>T : Symbol(T, Decl(deeplyNestedConditionalTrueTypes.ts, 32, 23))
+
+    (T) extends (string) ?
+>T : Symbol(T, Decl(deeplyNestedConditionalTrueTypes.ts, 32, 23))
+
+    (T) extends (string) ?
+>T : Symbol(T, Decl(deeplyNestedConditionalTrueTypes.ts, 32, 23))
+
+    (T) extends (string) ?
+>T : Symbol(T, Decl(deeplyNestedConditionalTrueTypes.ts, 32, 23))
+
+    (T) extends (string) ?
+>T : Symbol(T, Decl(deeplyNestedConditionalTrueTypes.ts, 32, 23))
+
+    (T) extends (string) ?
+>T : Symbol(T, Decl(deeplyNestedConditionalTrueTypes.ts, 32, 23))
+
+    (T) extends (string) ?
+>T : Symbol(T, Decl(deeplyNestedConditionalTrueTypes.ts, 32, 23))
+
+    (T) extends (string) ?
+>T : Symbol(T, Decl(deeplyNestedConditionalTrueTypes.ts, 32, 23))
+
+    OnlyString<T> :
+>OnlyString : Symbol(OnlyString, Decl(deeplyNestedConditionalTrueTypes.ts, 0, 0))
+>T : Symbol(T, Decl(deeplyNestedConditionalTrueTypes.ts, 32, 23))
+
+    never : never : never : never :
+    never : never : never : never :
+    never : never : never : never :
+    never : never : never : never;
+
+const parenthesized: DeepParenthesized<"value"> = "value";
+>parenthesized : Symbol(parenthesized, Decl(deeplyNestedConditionalTrueTypes.ts, 55, 5))
+>DeepParenthesized : Symbol(DeepParenthesized, Decl(deeplyNestedConditionalTrueTypes.ts, 30, 41))
+
+type DeepTuple<T> =
+>DeepTuple : Symbol(DeepTuple, Decl(deeplyNestedConditionalTrueTypes.ts, 55, 58))
+>T : Symbol(T, Decl(deeplyNestedConditionalTrueTypes.ts, 57, 15))
+
+    [T] extends [string] ?
+>T : Symbol(T, Decl(deeplyNestedConditionalTrueTypes.ts, 57, 15))
+
+    [T] extends [string] ?
+>T : Symbol(T, Decl(deeplyNestedConditionalTrueTypes.ts, 57, 15))
+
+    [T] extends [string] ?
+>T : Symbol(T, Decl(deeplyNestedConditionalTrueTypes.ts, 57, 15))
+
+    [T] extends [string] ?
+>T : Symbol(T, Decl(deeplyNestedConditionalTrueTypes.ts, 57, 15))
+
+    [T] extends [string] ?
+>T : Symbol(T, Decl(deeplyNestedConditionalTrueTypes.ts, 57, 15))
+
+    [T] extends [string] ?
+>T : Symbol(T, Decl(deeplyNestedConditionalTrueTypes.ts, 57, 15))
+
+    [T] extends [string] ?
+>T : Symbol(T, Decl(deeplyNestedConditionalTrueTypes.ts, 57, 15))
+
+    [T] extends [string] ?
+>T : Symbol(T, Decl(deeplyNestedConditionalTrueTypes.ts, 57, 15))
+
+    [T] extends [string] ?
+>T : Symbol(T, Decl(deeplyNestedConditionalTrueTypes.ts, 57, 15))
+
+    [T] extends [string] ?
+>T : Symbol(T, Decl(deeplyNestedConditionalTrueTypes.ts, 57, 15))
+
+    [T] extends [string] ?
+>T : Symbol(T, Decl(deeplyNestedConditionalTrueTypes.ts, 57, 15))
+
+    [T] extends [string] ?
+>T : Symbol(T, Decl(deeplyNestedConditionalTrueTypes.ts, 57, 15))
+
+    [T] extends [string] ?
+>T : Symbol(T, Decl(deeplyNestedConditionalTrueTypes.ts, 57, 15))
+
+    [T] extends [string] ?
+>T : Symbol(T, Decl(deeplyNestedConditionalTrueTypes.ts, 57, 15))
+
+    [T] extends [string] ?
+>T : Symbol(T, Decl(deeplyNestedConditionalTrueTypes.ts, 57, 15))
+
+    [T] extends [string] ?
+>T : Symbol(T, Decl(deeplyNestedConditionalTrueTypes.ts, 57, 15))
+
+    OnlyString<T> :
+>OnlyString : Symbol(OnlyString, Decl(deeplyNestedConditionalTrueTypes.ts, 0, 0))
+>T : Symbol(T, Decl(deeplyNestedConditionalTrueTypes.ts, 57, 15))
+
+    never : never : never : never :
+    never : never : never : never :
+    never : never : never : never :
+    never : never : never : never;
+
+const tuple: DeepTuple<"value"> = "value";
+>tuple : Symbol(tuple, Decl(deeplyNestedConditionalTrueTypes.ts, 80, 5))
+>DeepTuple : Symbol(DeepTuple, Decl(deeplyNestedConditionalTrueTypes.ts, 55, 58))
+
+type DeepMixed<T extends string | number> =
+>DeepMixed : Symbol(DeepMixed, Decl(deeplyNestedConditionalTrueTypes.ts, 80, 42))
+>T : Symbol(T, Decl(deeplyNestedConditionalTrueTypes.ts, 82, 15))
+
+    T extends string ?
+>T : Symbol(T, Decl(deeplyNestedConditionalTrueTypes.ts, 82, 15))
+
+    T extends number ? never :
+>T : Symbol(T, Decl(deeplyNestedConditionalTrueTypes.ts, 82, 15))
+
+    T extends string ?
+>T : Symbol(T, Decl(deeplyNestedConditionalTrueTypes.ts, 82, 15))
+
+    T extends number ? never :
+>T : Symbol(T, Decl(deeplyNestedConditionalTrueTypes.ts, 82, 15))
+
+    T extends string ?
+>T : Symbol(T, Decl(deeplyNestedConditionalTrueTypes.ts, 82, 15))
+
+    T extends number ? never :
+>T : Symbol(T, Decl(deeplyNestedConditionalTrueTypes.ts, 82, 15))
+
+    T extends string ?
+>T : Symbol(T, Decl(deeplyNestedConditionalTrueTypes.ts, 82, 15))
+
+    T extends number ? never :
+>T : Symbol(T, Decl(deeplyNestedConditionalTrueTypes.ts, 82, 15))
+
+    T extends string ?
+>T : Symbol(T, Decl(deeplyNestedConditionalTrueTypes.ts, 82, 15))
+
+    T extends number ? never :
+>T : Symbol(T, Decl(deeplyNestedConditionalTrueTypes.ts, 82, 15))
+
+    T extends string ?
+>T : Symbol(T, Decl(deeplyNestedConditionalTrueTypes.ts, 82, 15))
+
+    T extends number ? never :
+>T : Symbol(T, Decl(deeplyNestedConditionalTrueTypes.ts, 82, 15))
+
+    T extends string ?
+>T : Symbol(T, Decl(deeplyNestedConditionalTrueTypes.ts, 82, 15))
+
+    T extends number ? never :
+>T : Symbol(T, Decl(deeplyNestedConditionalTrueTypes.ts, 82, 15))
+
+    T extends string ?
+>T : Symbol(T, Decl(deeplyNestedConditionalTrueTypes.ts, 82, 15))
+
+    T extends number ? never :
+>T : Symbol(T, Decl(deeplyNestedConditionalTrueTypes.ts, 82, 15))
+
+    OnlyString<T> :
+>OnlyString : Symbol(OnlyString, Decl(deeplyNestedConditionalTrueTypes.ts, 0, 0))
+>T : Symbol(T, Decl(deeplyNestedConditionalTrueTypes.ts, 82, 15))
+
+    never : never : never : never :
+    never : never : never : never;
+
+const mixed: DeepMixed<"value" | 1> = "value";
+>mixed : Symbol(mixed, Decl(deeplyNestedConditionalTrueTypes.ts, 103, 5))
+>DeepMixed : Symbol(DeepMixed, Decl(deeplyNestedConditionalTrueTypes.ts, 80, 42))
+
+type OnlyNumber<T extends number> = T;
+>OnlyNumber : Symbol(OnlyNumber, Decl(deeplyNestedConditionalTrueTypes.ts, 103, 46))
+>T : Symbol(T, Decl(deeplyNestedConditionalTrueTypes.ts, 105, 16))
+>T : Symbol(T, Decl(deeplyNestedConditionalTrueTypes.ts, 105, 16))
+
+type BothBranches<T extends string | number> =
+>BothBranches : Symbol(BothBranches, Decl(deeplyNestedConditionalTrueTypes.ts, 105, 38))
+>T : Symbol(T, Decl(deeplyNestedConditionalTrueTypes.ts, 106, 18))
+
+    T extends string ? { branch: "true"; value: OnlyString<T> } : { branch: "false"; value: OnlyNumber<T> };
+>T : Symbol(T, Decl(deeplyNestedConditionalTrueTypes.ts, 106, 18))
+>branch : Symbol(branch, Decl(deeplyNestedConditionalTrueTypes.ts, 107, 24))
+>value : Symbol(value, Decl(deeplyNestedConditionalTrueTypes.ts, 107, 40))
+>OnlyString : Symbol(OnlyString, Decl(deeplyNestedConditionalTrueTypes.ts, 0, 0))
+>T : Symbol(T, Decl(deeplyNestedConditionalTrueTypes.ts, 106, 18))
+>branch : Symbol(branch, Decl(deeplyNestedConditionalTrueTypes.ts, 107, 67))
+>value : Symbol(value, Decl(deeplyNestedConditionalTrueTypes.ts, 107, 84))
+>OnlyNumber : Symbol(OnlyNumber, Decl(deeplyNestedConditionalTrueTypes.ts, 103, 46))
+>T : Symbol(T, Decl(deeplyNestedConditionalTrueTypes.ts, 106, 18))
+
+const trueBranch: BothBranches<string | number> = { branch: "true", value: "value" };
+>trueBranch : Symbol(trueBranch, Decl(deeplyNestedConditionalTrueTypes.ts, 108, 5))
+>BothBranches : Symbol(BothBranches, Decl(deeplyNestedConditionalTrueTypes.ts, 105, 38))
+>branch : Symbol(branch, Decl(deeplyNestedConditionalTrueTypes.ts, 108, 51))
+>value : Symbol(value, Decl(deeplyNestedConditionalTrueTypes.ts, 108, 67))
+
+const falseBranch: BothBranches<string | number> = { branch: "false", value: 1 };
+>falseBranch : Symbol(falseBranch, Decl(deeplyNestedConditionalTrueTypes.ts, 109, 5))
+>BothBranches : Symbol(BothBranches, Decl(deeplyNestedConditionalTrueTypes.ts, 105, 38))
+>branch : Symbol(branch, Decl(deeplyNestedConditionalTrueTypes.ts, 109, 52))
+>value : Symbol(value, Decl(deeplyNestedConditionalTrueTypes.ts, 109, 69))
+
+type DifferentParameters<T, U> = T extends string ? U extends number ? [OnlyNumber<U>, OnlyString<T>] : never : never;
+>DifferentParameters : Symbol(DifferentParameters, Decl(deeplyNestedConditionalTrueTypes.ts, 109, 81))
+>T : Symbol(T, Decl(deeplyNestedConditionalTrueTypes.ts, 111, 25))
+>U : Symbol(U, Decl(deeplyNestedConditionalTrueTypes.ts, 111, 27))
+>T : Symbol(T, Decl(deeplyNestedConditionalTrueTypes.ts, 111, 25))
+>U : Symbol(U, Decl(deeplyNestedConditionalTrueTypes.ts, 111, 27))
+>OnlyNumber : Symbol(OnlyNumber, Decl(deeplyNestedConditionalTrueTypes.ts, 103, 46))
+>U : Symbol(U, Decl(deeplyNestedConditionalTrueTypes.ts, 111, 27))
+>OnlyString : Symbol(OnlyString, Decl(deeplyNestedConditionalTrueTypes.ts, 0, 0))
+>T : Symbol(T, Decl(deeplyNestedConditionalTrueTypes.ts, 111, 25))
+
+const differentParameters: DifferentParameters<"value", 1> = [1, "value"];
+>differentParameters : Symbol(differentParameters, Decl(deeplyNestedConditionalTrueTypes.ts, 112, 5))
+>DifferentParameters : Symbol(DifferentParameters, Decl(deeplyNestedConditionalTrueTypes.ts, 109, 81))
+
+type NestedTuples<T> = [[T]] extends [[string]] ? OnlyString<T> : never;
+>NestedTuples : Symbol(NestedTuples, Decl(deeplyNestedConditionalTrueTypes.ts, 112, 74))
+>T : Symbol(T, Decl(deeplyNestedConditionalTrueTypes.ts, 114, 18))
+>T : Symbol(T, Decl(deeplyNestedConditionalTrueTypes.ts, 114, 18))
+>OnlyString : Symbol(OnlyString, Decl(deeplyNestedConditionalTrueTypes.ts, 0, 0))
+>T : Symbol(T, Decl(deeplyNestedConditionalTrueTypes.ts, 114, 18))
+
+const nestedTuples: NestedTuples<"value"> = "value";
+>nestedTuples : Symbol(nestedTuples, Decl(deeplyNestedConditionalTrueTypes.ts, 115, 5))
+>NestedTuples : Symbol(NestedTuples, Decl(deeplyNestedConditionalTrueTypes.ts, 112, 74))
+
+type TrueInfer<T> = T extends { value: infer U } ? U extends string ? OnlyString<U> : never : never;
+>TrueInfer : Symbol(TrueInfer, Decl(deeplyNestedConditionalTrueTypes.ts, 115, 52))
+>T : Symbol(T, Decl(deeplyNestedConditionalTrueTypes.ts, 117, 15))
+>T : Symbol(T, Decl(deeplyNestedConditionalTrueTypes.ts, 117, 15))
+>value : Symbol(value, Decl(deeplyNestedConditionalTrueTypes.ts, 117, 31))
+>U : Symbol(U, Decl(deeplyNestedConditionalTrueTypes.ts, 117, 44))
+>U : Symbol(U, Decl(deeplyNestedConditionalTrueTypes.ts, 117, 44))
+>OnlyString : Symbol(OnlyString, Decl(deeplyNestedConditionalTrueTypes.ts, 0, 0))
+>U : Symbol(U, Decl(deeplyNestedConditionalTrueTypes.ts, 117, 44))
+
+const inferred: TrueInfer<{ value: "value" }> = "value";
+>inferred : Symbol(inferred, Decl(deeplyNestedConditionalTrueTypes.ts, 118, 5))
+>TrueInfer : Symbol(TrueInfer, Decl(deeplyNestedConditionalTrueTypes.ts, 115, 52))
+>value : Symbol(value, Decl(deeplyNestedConditionalTrueTypes.ts, 118, 27))
+
+type TrueNoInfer<T> = NoInfer<T> extends string ? OnlyString<T> : never;
+>TrueNoInfer : Symbol(TrueNoInfer, Decl(deeplyNestedConditionalTrueTypes.ts, 118, 56))
+>T : Symbol(T, Decl(deeplyNestedConditionalTrueTypes.ts, 120, 17))
+>NoInfer : Symbol(NoInfer, Decl(lib.es5.d.ts, --, --))
+>T : Symbol(T, Decl(deeplyNestedConditionalTrueTypes.ts, 120, 17))
+>OnlyString : Symbol(OnlyString, Decl(deeplyNestedConditionalTrueTypes.ts, 0, 0))
+>T : Symbol(T, Decl(deeplyNestedConditionalTrueTypes.ts, 120, 17))
+
+const noInfer: TrueNoInfer<string> = "value";
+>noInfer : Symbol(noInfer, Decl(deeplyNestedConditionalTrueTypes.ts, 121, 5))
+>TrueNoInfer : Symbol(TrueNoInfer, Decl(deeplyNestedConditionalTrueTypes.ts, 118, 56))
+
+declare const noInferUnion: TrueNoInfer<string | number>;
+>noInferUnion : Symbol(noInferUnion, Decl(deeplyNestedConditionalTrueTypes.ts, 122, 13))
+>TrueNoInfer : Symbol(TrueNoInfer, Decl(deeplyNestedConditionalTrueTypes.ts, 118, 56))
+

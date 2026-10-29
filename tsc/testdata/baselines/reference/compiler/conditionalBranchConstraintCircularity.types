@@ -1,0 +1,27 @@
+//// [tests/cases/compiler/conditionalBranchConstraintCircularity.ts] ////
+
+=== conditionalBranchConstraintCircularity.ts ===
+type BeforeTrue = ReferencedFirstTrue<any>;
+>BeforeTrue : any
+
+type ReferencedFirstTrue<T extends ReferencedFirstTrue<T>> = T extends keyof T ? T : never;
+>ReferencedFirstTrue : ReferencedFirstTrue<T>
+
+type DeclaredFirstTrue<T extends DeclaredFirstTrue<T>> = T extends keyof T ? T : never;
+>DeclaredFirstTrue : DeclaredFirstTrue<T>
+
+type AfterTrue = DeclaredFirstTrue<any>;
+>AfterTrue : any
+
+type BeforeFalse = ReferencedFirstFalse<any>;
+>BeforeFalse : any
+
+type ReferencedFirstFalse<T extends ReferencedFirstFalse<T>> = T extends string ? never : T;
+>ReferencedFirstFalse : ReferencedFirstFalse<T>
+
+type DeclaredFirstFalse<T extends DeclaredFirstFalse<T>> = T extends string ? never : T;
+>DeclaredFirstFalse : DeclaredFirstFalse<T>
+
+type AfterFalse = DeclaredFirstFalse<any>;
+>AfterFalse : any
+

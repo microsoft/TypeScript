@@ -1,0 +1,53 @@
+//// [tests/cases/compiler/conditionalBranchConstraintCircularity.ts] ////
+
+=== conditionalBranchConstraintCircularity.ts ===
+type BeforeTrue = ReferencedFirstTrue<any>;
+>BeforeTrue : Symbol(BeforeTrue, Decl(conditionalBranchConstraintCircularity.ts, 0, 0))
+>ReferencedFirstTrue : Symbol(ReferencedFirstTrue, Decl(conditionalBranchConstraintCircularity.ts, 0, 43))
+
+type ReferencedFirstTrue<T extends ReferencedFirstTrue<T>> = T extends keyof T ? T : never;
+>ReferencedFirstTrue : Symbol(ReferencedFirstTrue, Decl(conditionalBranchConstraintCircularity.ts, 0, 43))
+>T : Symbol(T, Decl(conditionalBranchConstraintCircularity.ts, 1, 25))
+>ReferencedFirstTrue : Symbol(ReferencedFirstTrue, Decl(conditionalBranchConstraintCircularity.ts, 0, 43))
+>T : Symbol(T, Decl(conditionalBranchConstraintCircularity.ts, 1, 25))
+>T : Symbol(T, Decl(conditionalBranchConstraintCircularity.ts, 1, 25))
+>T : Symbol(T, Decl(conditionalBranchConstraintCircularity.ts, 1, 25))
+>T : Symbol(T, Decl(conditionalBranchConstraintCircularity.ts, 1, 25))
+
+type DeclaredFirstTrue<T extends DeclaredFirstTrue<T>> = T extends keyof T ? T : never;
+>DeclaredFirstTrue : Symbol(DeclaredFirstTrue, Decl(conditionalBranchConstraintCircularity.ts, 1, 91))
+>T : Symbol(T, Decl(conditionalBranchConstraintCircularity.ts, 3, 23))
+>DeclaredFirstTrue : Symbol(DeclaredFirstTrue, Decl(conditionalBranchConstraintCircularity.ts, 1, 91))
+>T : Symbol(T, Decl(conditionalBranchConstraintCircularity.ts, 3, 23))
+>T : Symbol(T, Decl(conditionalBranchConstraintCircularity.ts, 3, 23))
+>T : Symbol(T, Decl(conditionalBranchConstraintCircularity.ts, 3, 23))
+>T : Symbol(T, Decl(conditionalBranchConstraintCircularity.ts, 3, 23))
+
+type AfterTrue = DeclaredFirstTrue<any>;
+>AfterTrue : Symbol(AfterTrue, Decl(conditionalBranchConstraintCircularity.ts, 3, 87))
+>DeclaredFirstTrue : Symbol(DeclaredFirstTrue, Decl(conditionalBranchConstraintCircularity.ts, 1, 91))
+
+type BeforeFalse = ReferencedFirstFalse<any>;
+>BeforeFalse : Symbol(BeforeFalse, Decl(conditionalBranchConstraintCircularity.ts, 4, 40))
+>ReferencedFirstFalse : Symbol(ReferencedFirstFalse, Decl(conditionalBranchConstraintCircularity.ts, 6, 45))
+
+type ReferencedFirstFalse<T extends ReferencedFirstFalse<T>> = T extends string ? never : T;
+>ReferencedFirstFalse : Symbol(ReferencedFirstFalse, Decl(conditionalBranchConstraintCircularity.ts, 6, 45))
+>T : Symbol(T, Decl(conditionalBranchConstraintCircularity.ts, 7, 26))
+>ReferencedFirstFalse : Symbol(ReferencedFirstFalse, Decl(conditionalBranchConstraintCircularity.ts, 6, 45))
+>T : Symbol(T, Decl(conditionalBranchConstraintCircularity.ts, 7, 26))
+>T : Symbol(T, Decl(conditionalBranchConstraintCircularity.ts, 7, 26))
+>T : Symbol(T, Decl(conditionalBranchConstraintCircularity.ts, 7, 26))
+
+type DeclaredFirstFalse<T extends DeclaredFirstFalse<T>> = T extends string ? never : T;
+>DeclaredFirstFalse : Symbol(DeclaredFirstFalse, Decl(conditionalBranchConstraintCircularity.ts, 7, 92))
+>T : Symbol(T, Decl(conditionalBranchConstraintCircularity.ts, 9, 24))
+>DeclaredFirstFalse : Symbol(DeclaredFirstFalse, Decl(conditionalBranchConstraintCircularity.ts, 7, 92))
+>T : Symbol(T, Decl(conditionalBranchConstraintCircularity.ts, 9, 24))
+>T : Symbol(T, Decl(conditionalBranchConstraintCircularity.ts, 9, 24))
+>T : Symbol(T, Decl(conditionalBranchConstraintCircularity.ts, 9, 24))
+
+type AfterFalse = DeclaredFirstFalse<any>;
+>AfterFalse : Symbol(AfterFalse, Decl(conditionalBranchConstraintCircularity.ts, 9, 88))
+>DeclaredFirstFalse : Symbol(DeclaredFirstFalse, Decl(conditionalBranchConstraintCircularity.ts, 7, 92))
+

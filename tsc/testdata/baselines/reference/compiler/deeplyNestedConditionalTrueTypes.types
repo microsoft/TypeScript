@@ -1,0 +1,190 @@
+//// [tests/cases/compiler/deeplyNestedConditionalTrueTypes.ts] ////
+
+=== deeplyNestedConditionalTrueTypes.ts ===
+type OnlyString<T extends string> = T;
+>OnlyString : T
+
+type DeepTrue<T> =
+>DeepTrue : DeepTrue<T>
+
+    T extends string ?
+    T extends string ?
+    T extends string ?
+    T extends string ?
+    T extends string ?
+    T extends string ?
+    T extends string ?
+    T extends string ?
+    T extends string ?
+    T extends string ?
+    T extends string ?
+    T extends string ?
+    T extends string ?
+    T extends string ?
+    T extends string ?
+    T extends string ?
+    T extends string ?
+    T extends string ?
+    T extends string ?
+    T extends string ?
+    OnlyString<T> :
+    never : never : never : never : never :
+    never : never : never : never : never :
+    never : never : never : never : never :
+    never : never : never : never : never;
+
+const value: DeepTrue<"value"> = "value";
+>value : "value"
+>"value" : "value"
+
+declare const excluded: DeepTrue<number>;
+>excluded : never
+
+type DeepParenthesized<T> =
+>DeepParenthesized : DeepParenthesized<T>
+
+    (T) extends (string) ?
+    (T) extends (string) ?
+    (T) extends (string) ?
+    (T) extends (string) ?
+    (T) extends (string) ?
+    (T) extends (string) ?
+    (T) extends (string) ?
+    (T) extends (string) ?
+    (T) extends (string) ?
+    (T) extends (string) ?
+    (T) extends (string) ?
+    (T) extends (string) ?
+    (T) extends (string) ?
+    (T) extends (string) ?
+    (T) extends (string) ?
+    (T) extends (string) ?
+    OnlyString<T> :
+    never : never : never : never :
+    never : never : never : never :
+    never : never : never : never :
+    never : never : never : never;
+
+const parenthesized: DeepParenthesized<"value"> = "value";
+>parenthesized : "value"
+>"value" : "value"
+
+type DeepTuple<T> =
+>DeepTuple : DeepTuple<T>
+
+    [T] extends [string] ?
+    [T] extends [string] ?
+    [T] extends [string] ?
+    [T] extends [string] ?
+    [T] extends [string] ?
+    [T] extends [string] ?
+    [T] extends [string] ?
+    [T] extends [string] ?
+    [T] extends [string] ?
+    [T] extends [string] ?
+    [T] extends [string] ?
+    [T] extends [string] ?
+    [T] extends [string] ?
+    [T] extends [string] ?
+    [T] extends [string] ?
+    [T] extends [string] ?
+    OnlyString<T> :
+    never : never : never : never :
+    never : never : never : never :
+    never : never : never : never :
+    never : never : never : never;
+
+const tuple: DeepTuple<"value"> = "value";
+>tuple : "value"
+>"value" : "value"
+
+type DeepMixed<T extends string | number> =
+>DeepMixed : DeepMixed<T>
+
+    T extends string ?
+    T extends number ? never :
+    T extends string ?
+    T extends number ? never :
+    T extends string ?
+    T extends number ? never :
+    T extends string ?
+    T extends number ? never :
+    T extends string ?
+    T extends number ? never :
+    T extends string ?
+    T extends number ? never :
+    T extends string ?
+    T extends number ? never :
+    T extends string ?
+    T extends number ? never :
+    OnlyString<T> :
+    never : never : never : never :
+    never : never : never : never;
+
+const mixed: DeepMixed<"value" | 1> = "value";
+>mixed : "value"
+>"value" : "value"
+
+type OnlyNumber<T extends number> = T;
+>OnlyNumber : T
+
+type BothBranches<T extends string | number> =
+>BothBranches : BothBranches<T>
+
+    T extends string ? { branch: "true"; value: OnlyString<T> } : { branch: "false"; value: OnlyNumber<T> };
+>branch : "true"
+>value : T
+>branch : "false"
+>value : T
+
+const trueBranch: BothBranches<string | number> = { branch: "true", value: "value" };
+>trueBranch : { branch: "true"; value: string; } | { branch: "false"; value: number; }
+>{ branch: "true", value: "value" } : { branch: "true"; value: string; }
+>branch : "true"
+>"true" : "true"
+>value : string
+>"value" : "value"
+
+const falseBranch: BothBranches<string | number> = { branch: "false", value: 1 };
+>falseBranch : { branch: "true"; value: string; } | { branch: "false"; value: number; }
+>{ branch: "false", value: 1 } : { branch: "false"; value: number; }
+>branch : "false"
+>"false" : "false"
+>value : number
+>1 : 1
+
+type DifferentParameters<T, U> = T extends string ? U extends number ? [OnlyNumber<U>, OnlyString<T>] : never : never;
+>DifferentParameters : DifferentParameters<T, U>
+
+const differentParameters: DifferentParameters<"value", 1> = [1, "value"];
+>differentParameters : [1, "value"]
+>[1, "value"] : [1, "value"]
+>1 : 1
+>"value" : "value"
+
+type NestedTuples<T> = [[T]] extends [[string]] ? OnlyString<T> : never;
+>NestedTuples : NestedTuples<T>
+
+const nestedTuples: NestedTuples<"value"> = "value";
+>nestedTuples : "value"
+>"value" : "value"
+
+type TrueInfer<T> = T extends { value: infer U } ? U extends string ? OnlyString<U> : never : never;
+>TrueInfer : TrueInfer<T>
+>value : U
+
+const inferred: TrueInfer<{ value: "value" }> = "value";
+>inferred : "value"
+>value : "value"
+>"value" : "value"
+
+type TrueNoInfer<T> = NoInfer<T> extends string ? OnlyString<T> : never;
+>TrueNoInfer : TrueNoInfer<T>
+
+const noInfer: TrueNoInfer<string> = "value";
+>noInfer : string
+>"value" : "value"
+
+declare const noInferUnion: TrueNoInfer<string | number>;
+>noInferUnion : never
+

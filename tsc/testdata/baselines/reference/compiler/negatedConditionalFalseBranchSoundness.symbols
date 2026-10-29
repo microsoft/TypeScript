@@ -1,0 +1,294 @@
+//// [tests/cases/compiler/negatedConditionalFalseBranchSoundness.ts] ////
+
+=== negatedConditionalFalseBranchSoundness.ts ===
+type NonString<T extends not string> = T;
+>NonString : Symbol(NonString, Decl(negatedConditionalFalseBranchSoundness.ts, 0, 0))
+>T : Symbol(T, Decl(negatedConditionalFalseBranchSoundness.ts, 0, 15))
+>T : Symbol(T, Decl(negatedConditionalFalseBranchSoundness.ts, 0, 15))
+
+type NonA<T extends not "a"> = T;
+>NonA : Symbol(NonA, Decl(negatedConditionalFalseBranchSoundness.ts, 0, 41))
+>T : Symbol(T, Decl(negatedConditionalFalseBranchSoundness.ts, 1, 10))
+>T : Symbol(T, Decl(negatedConditionalFalseBranchSoundness.ts, 1, 10))
+
+type NonKindA<T extends not { kind: "a" }> = T;
+>NonKindA : Symbol(NonKindA, Decl(negatedConditionalFalseBranchSoundness.ts, 1, 33))
+>T : Symbol(T, Decl(negatedConditionalFalseBranchSoundness.ts, 2, 14))
+>kind : Symbol(kind, Decl(negatedConditionalFalseBranchSoundness.ts, 2, 29))
+>T : Symbol(T, Decl(negatedConditionalFalseBranchSoundness.ts, 2, 14))
+
+type NonLengthOne<T extends not { length: 1 }> = T;
+>NonLengthOne : Symbol(NonLengthOne, Decl(negatedConditionalFalseBranchSoundness.ts, 2, 47))
+>T : Symbol(T, Decl(negatedConditionalFalseBranchSoundness.ts, 3, 18))
+>length : Symbol(length, Decl(negatedConditionalFalseBranchSoundness.ts, 3, 33))
+>T : Symbol(T, Decl(negatedConditionalFalseBranchSoundness.ts, 3, 18))
+
+type NonUndefined<T extends not undefined> = T;
+>NonUndefined : Symbol(NonUndefined, Decl(negatedConditionalFalseBranchSoundness.ts, 3, 51))
+>T : Symbol(T, Decl(negatedConditionalFalseBranchSoundness.ts, 4, 18))
+>T : Symbol(T, Decl(negatedConditionalFalseBranchSoundness.ts, 4, 18))
+
+type NonZero<T extends not 0> = T;
+>NonZero : Symbol(NonZero, Decl(negatedConditionalFalseBranchSoundness.ts, 4, 47))
+>T : Symbol(T, Decl(negatedConditionalFalseBranchSoundness.ts, 5, 13))
+>T : Symbol(T, Decl(negatedConditionalFalseBranchSoundness.ts, 5, 13))
+
+// A false subtype check does not imply disjointness, even when distributive.
+type Unconstrained<T> = T extends string ? never : NonString<T>;
+>Unconstrained : Symbol(Unconstrained, Decl(negatedConditionalFalseBranchSoundness.ts, 5, 34))
+>T : Symbol(T, Decl(negatedConditionalFalseBranchSoundness.ts, 8, 19))
+>T : Symbol(T, Decl(negatedConditionalFalseBranchSoundness.ts, 8, 19))
+>NonString : Symbol(NonString, Decl(negatedConditionalFalseBranchSoundness.ts, 0, 0))
+>T : Symbol(T, Decl(negatedConditionalFalseBranchSoundness.ts, 8, 19))
+
+type BroadString<T extends string> = T extends "a" ? never : NonA<T>;
+>BroadString : Symbol(BroadString, Decl(negatedConditionalFalseBranchSoundness.ts, 8, 64))
+>T : Symbol(T, Decl(negatedConditionalFalseBranchSoundness.ts, 9, 17))
+>T : Symbol(T, Decl(negatedConditionalFalseBranchSoundness.ts, 9, 17))
+>NonA : Symbol(NonA, Decl(negatedConditionalFalseBranchSoundness.ts, 0, 41))
+>T : Symbol(T, Decl(negatedConditionalFalseBranchSoundness.ts, 9, 17))
+
+type Structural<T extends { kind: "a" | "b" }> =
+>Structural : Symbol(Structural, Decl(negatedConditionalFalseBranchSoundness.ts, 9, 69))
+>T : Symbol(T, Decl(negatedConditionalFalseBranchSoundness.ts, 10, 16))
+>kind : Symbol(kind, Decl(negatedConditionalFalseBranchSoundness.ts, 10, 27))
+
+    T extends { kind: "a" } ? never : NonKindA<T>;
+>T : Symbol(T, Decl(negatedConditionalFalseBranchSoundness.ts, 10, 16))
+>kind : Symbol(kind, Decl(negatedConditionalFalseBranchSoundness.ts, 11, 15))
+>NonKindA : Symbol(NonKindA, Decl(negatedConditionalFalseBranchSoundness.ts, 1, 33))
+>T : Symbol(T, Decl(negatedConditionalFalseBranchSoundness.ts, 10, 16))
+
+type PrimitiveStructure<T extends string | number> =
+>PrimitiveStructure : Symbol(PrimitiveStructure, Decl(negatedConditionalFalseBranchSoundness.ts, 11, 50))
+>T : Symbol(T, Decl(negatedConditionalFalseBranchSoundness.ts, 12, 24))
+
+    T extends { length: 1 } ? never : NonLengthOne<T>;
+>T : Symbol(T, Decl(negatedConditionalFalseBranchSoundness.ts, 12, 24))
+>length : Symbol(length, Decl(negatedConditionalFalseBranchSoundness.ts, 13, 15))
+>NonLengthOne : Symbol(NonLengthOne, Decl(negatedConditionalFalseBranchSoundness.ts, 2, 47))
+>T : Symbol(T, Decl(negatedConditionalFalseBranchSoundness.ts, 12, 24))
+
+const unknownString: Unconstrained<unknown> = "a";
+>unknownString : Symbol(unknownString, Decl(negatedConditionalFalseBranchSoundness.ts, 15, 5))
+>Unconstrained : Symbol(Unconstrained, Decl(negatedConditionalFalseBranchSoundness.ts, 5, 34))
+
+const broadString: BroadString<string> = "a";
+>broadString : Symbol(broadString, Decl(negatedConditionalFalseBranchSoundness.ts, 16, 5))
+>BroadString : Symbol(BroadString, Decl(negatedConditionalFalseBranchSoundness.ts, 8, 64))
+
+const structural: Structural<{ kind: "a" | "b" }> = { kind: "a" };
+>structural : Symbol(structural, Decl(negatedConditionalFalseBranchSoundness.ts, 17, 5))
+>Structural : Symbol(Structural, Decl(negatedConditionalFalseBranchSoundness.ts, 9, 69))
+>kind : Symbol(kind, Decl(negatedConditionalFalseBranchSoundness.ts, 17, 30))
+>kind : Symbol(kind, Decl(negatedConditionalFalseBranchSoundness.ts, 17, 53))
+
+const primitiveStructure: PrimitiveStructure<string> = "a";
+>primitiveStructure : Symbol(primitiveStructure, Decl(negatedConditionalFalseBranchSoundness.ts, 18, 5))
+>PrimitiveStructure : Symbol(PrimitiveStructure, Decl(negatedConditionalFalseBranchSoundness.ts, 11, 50))
+
+// Even a discriminated-union constraint admits a single object with a union property.
+type Tagged = { kind: "a" } | { kind: "b" };
+>Tagged : Symbol(Tagged, Decl(negatedConditionalFalseBranchSoundness.ts, 18, 59))
+>kind : Symbol(kind, Decl(negatedConditionalFalseBranchSoundness.ts, 21, 15))
+>kind : Symbol(kind, Decl(negatedConditionalFalseBranchSoundness.ts, 21, 31))
+
+type Discriminated<T extends Tagged> = T extends { kind: "a" } ? never : NonKindA<T>;
+>Discriminated : Symbol(Discriminated, Decl(negatedConditionalFalseBranchSoundness.ts, 21, 44))
+>T : Symbol(T, Decl(negatedConditionalFalseBranchSoundness.ts, 22, 19))
+>Tagged : Symbol(Tagged, Decl(negatedConditionalFalseBranchSoundness.ts, 18, 59))
+>T : Symbol(T, Decl(negatedConditionalFalseBranchSoundness.ts, 22, 19))
+>kind : Symbol(kind, Decl(negatedConditionalFalseBranchSoundness.ts, 22, 50))
+>NonKindA : Symbol(NonKindA, Decl(negatedConditionalFalseBranchSoundness.ts, 1, 33))
+>T : Symbol(T, Decl(negatedConditionalFalseBranchSoundness.ts, 22, 19))
+
+const discriminated: Discriminated<{ kind: "a" | "b" }> = { kind: "a" };
+>discriminated : Symbol(discriminated, Decl(negatedConditionalFalseBranchSoundness.ts, 23, 5))
+>Discriminated : Symbol(Discriminated, Decl(negatedConditionalFalseBranchSoundness.ts, 21, 44))
+>kind : Symbol(kind, Decl(negatedConditionalFalseBranchSoundness.ts, 23, 36))
+>kind : Symbol(kind, Decl(negatedConditionalFalseBranchSoundness.ts, 23, 59))
+
+// Non-distributive checks retain the entire union, including matching members.
+type NonDistributive<T extends string | number> =
+>NonDistributive : Symbol(NonDistributive, Decl(negatedConditionalFalseBranchSoundness.ts, 23, 72))
+>T : Symbol(T, Decl(negatedConditionalFalseBranchSoundness.ts, 26, 21))
+
+    [T] extends [string] ? never : NonString<T>;
+>T : Symbol(T, Decl(negatedConditionalFalseBranchSoundness.ts, 26, 21))
+>NonString : Symbol(NonString, Decl(negatedConditionalFalseBranchSoundness.ts, 0, 0))
+>T : Symbol(T, Decl(negatedConditionalFalseBranchSoundness.ts, 26, 21))
+
+type NestedTuple<T extends string | number> =
+>NestedTuple : Symbol(NestedTuple, Decl(negatedConditionalFalseBranchSoundness.ts, 27, 48))
+>T : Symbol(T, Decl(negatedConditionalFalseBranchSoundness.ts, 28, 17))
+
+    [[T]] extends [[string]] ? never : NonString<T>;
+>T : Symbol(T, Decl(negatedConditionalFalseBranchSoundness.ts, 28, 17))
+>NonString : Symbol(NonString, Decl(negatedConditionalFalseBranchSoundness.ts, 0, 0))
+>T : Symbol(T, Decl(negatedConditionalFalseBranchSoundness.ts, 28, 17))
+
+type ParenthesizedTuple<T extends string | number> =
+>ParenthesizedTuple : Symbol(ParenthesizedTuple, Decl(negatedConditionalFalseBranchSoundness.ts, 29, 52))
+>T : Symbol(T, Decl(negatedConditionalFalseBranchSoundness.ts, 30, 24))
+
+    ([T]) extends ([string]) ? never : NonString<T>;
+>T : Symbol(T, Decl(negatedConditionalFalseBranchSoundness.ts, 30, 24))
+>NonString : Symbol(NonString, Decl(negatedConditionalFalseBranchSoundness.ts, 0, 0))
+>T : Symbol(T, Decl(negatedConditionalFalseBranchSoundness.ts, 30, 24))
+
+const nonDistributiveString: NonDistributive<string | number> = "a";
+>nonDistributiveString : Symbol(nonDistributiveString, Decl(negatedConditionalFalseBranchSoundness.ts, 32, 5))
+>NonDistributive : Symbol(NonDistributive, Decl(negatedConditionalFalseBranchSoundness.ts, 23, 72))
+
+const nonDistributiveNumber: NonDistributive<string | number> = 1;
+>nonDistributiveNumber : Symbol(nonDistributiveNumber, Decl(negatedConditionalFalseBranchSoundness.ts, 33, 5))
+>NonDistributive : Symbol(NonDistributive, Decl(negatedConditionalFalseBranchSoundness.ts, 23, 72))
+
+const nestedTuple: NestedTuple<string | number> = "a";
+>nestedTuple : Symbol(nestedTuple, Decl(negatedConditionalFalseBranchSoundness.ts, 34, 5))
+>NestedTuple : Symbol(NestedTuple, Decl(negatedConditionalFalseBranchSoundness.ts, 27, 48))
+
+const parenthesizedTuple: ParenthesizedTuple<string | number> = "a";
+>parenthesizedTuple : Symbol(parenthesizedTuple, Decl(negatedConditionalFalseBranchSoundness.ts, 35, 5))
+>ParenthesizedTuple : Symbol(ParenthesizedTuple, Decl(negatedConditionalFalseBranchSoundness.ts, 29, 52))
+
+type NoInferCheck<T extends string | number> =
+>NoInferCheck : Symbol(NoInferCheck, Decl(negatedConditionalFalseBranchSoundness.ts, 35, 68))
+>T : Symbol(T, Decl(negatedConditionalFalseBranchSoundness.ts, 36, 18))
+
+    NoInfer<T> extends string ? never : NonString<T>;
+>NoInfer : Symbol(NoInfer, Decl(lib.es5.d.ts, --, --))
+>T : Symbol(T, Decl(negatedConditionalFalseBranchSoundness.ts, 36, 18))
+>NonString : Symbol(NonString, Decl(negatedConditionalFalseBranchSoundness.ts, 0, 0))
+>T : Symbol(T, Decl(negatedConditionalFalseBranchSoundness.ts, 36, 18))
+
+const noInferCheck: NoInferCheck<string | number> = "a";
+>noInferCheck : Symbol(noInferCheck, Decl(negatedConditionalFalseBranchSoundness.ts, 38, 5))
+>NoInferCheck : Symbol(NoInferCheck, Decl(negatedConditionalFalseBranchSoundness.ts, 35, 68))
+
+// False-branch infer parameters are out of scope; their upper bounds need not be exact matches.
+type WithInfer<T extends string | number> =
+>WithInfer : Symbol(WithInfer, Decl(negatedConditionalFalseBranchSoundness.ts, 38, 56))
+>T : Symbol(T, Decl(negatedConditionalFalseBranchSoundness.ts, 41, 15))
+
+    T extends infer U extends string ? U : NonString<T>;
+>T : Symbol(T, Decl(negatedConditionalFalseBranchSoundness.ts, 41, 15))
+>U : Symbol(U, Decl(negatedConditionalFalseBranchSoundness.ts, 42, 19))
+>U : Symbol(U, Decl(negatedConditionalFalseBranchSoundness.ts, 42, 19))
+>NonString : Symbol(NonString, Decl(negatedConditionalFalseBranchSoundness.ts, 0, 0))
+>T : Symbol(T, Decl(negatedConditionalFalseBranchSoundness.ts, 41, 15))
+
+type StructuralInfer<T extends Tagged> =
+>StructuralInfer : Symbol(StructuralInfer, Decl(negatedConditionalFalseBranchSoundness.ts, 42, 56))
+>T : Symbol(T, Decl(negatedConditionalFalseBranchSoundness.ts, 43, 21))
+>Tagged : Symbol(Tagged, Decl(negatedConditionalFalseBranchSoundness.ts, 18, 59))
+
+    T extends { kind: infer K extends "a" } ? K : NonKindA<T>;
+>T : Symbol(T, Decl(negatedConditionalFalseBranchSoundness.ts, 43, 21))
+>kind : Symbol(kind, Decl(negatedConditionalFalseBranchSoundness.ts, 44, 15))
+>K : Symbol(K, Decl(negatedConditionalFalseBranchSoundness.ts, 44, 27))
+>K : Symbol(K, Decl(negatedConditionalFalseBranchSoundness.ts, 44, 27))
+>NonKindA : Symbol(NonKindA, Decl(negatedConditionalFalseBranchSoundness.ts, 1, 33))
+>T : Symbol(T, Decl(negatedConditionalFalseBranchSoundness.ts, 43, 21))
+
+type NonDistributiveInfer<T extends string | number> =
+>NonDistributiveInfer : Symbol(NonDistributiveInfer, Decl(negatedConditionalFalseBranchSoundness.ts, 44, 62))
+>T : Symbol(T, Decl(negatedConditionalFalseBranchSoundness.ts, 45, 26))
+
+    [T] extends [infer U extends string] ? U : NonString<T>;
+>T : Symbol(T, Decl(negatedConditionalFalseBranchSoundness.ts, 45, 26))
+>U : Symbol(U, Decl(negatedConditionalFalseBranchSoundness.ts, 46, 22))
+>U : Symbol(U, Decl(negatedConditionalFalseBranchSoundness.ts, 46, 22))
+>NonString : Symbol(NonString, Decl(negatedConditionalFalseBranchSoundness.ts, 0, 0))
+>T : Symbol(T, Decl(negatedConditionalFalseBranchSoundness.ts, 45, 26))
+
+const withInfer: WithInfer<string | number> = 1;
+>withInfer : Symbol(withInfer, Decl(negatedConditionalFalseBranchSoundness.ts, 47, 5))
+>WithInfer : Symbol(WithInfer, Decl(negatedConditionalFalseBranchSoundness.ts, 38, 56))
+
+const structuralInfer: StructuralInfer<{ kind: "a" | "b" }> = { kind: "a" };
+>structuralInfer : Symbol(structuralInfer, Decl(negatedConditionalFalseBranchSoundness.ts, 48, 5))
+>StructuralInfer : Symbol(StructuralInfer, Decl(negatedConditionalFalseBranchSoundness.ts, 42, 56))
+>kind : Symbol(kind, Decl(negatedConditionalFalseBranchSoundness.ts, 48, 40))
+>kind : Symbol(kind, Decl(negatedConditionalFalseBranchSoundness.ts, 48, 63))
+
+const nonDistributiveInfer: NonDistributiveInfer<string | number> = "a";
+>nonDistributiveInfer : Symbol(nonDistributiveInfer, Decl(negatedConditionalFalseBranchSoundness.ts, 49, 5))
+>NonDistributiveInfer : Symbol(NonDistributiveInfer, Decl(negatedConditionalFalseBranchSoundness.ts, 44, 62))
+
+// A generic extends type may select only part of a primitive domain.
+type GenericTarget<T extends string | number, U extends string> =
+>GenericTarget : Symbol(GenericTarget, Decl(negatedConditionalFalseBranchSoundness.ts, 49, 72))
+>T : Symbol(T, Decl(negatedConditionalFalseBranchSoundness.ts, 52, 19))
+>U : Symbol(U, Decl(negatedConditionalFalseBranchSoundness.ts, 52, 45))
+
+    T extends U ? never : NonString<T>;
+>T : Symbol(T, Decl(negatedConditionalFalseBranchSoundness.ts, 52, 19))
+>U : Symbol(U, Decl(negatedConditionalFalseBranchSoundness.ts, 52, 45))
+>NonString : Symbol(NonString, Decl(negatedConditionalFalseBranchSoundness.ts, 0, 0))
+>T : Symbol(T, Decl(negatedConditionalFalseBranchSoundness.ts, 52, 19))
+
+const genericTarget: GenericTarget<string, "a"> = "a";
+>genericTarget : Symbol(genericTarget, Decl(negatedConditionalFalseBranchSoundness.ts, 54, 5))
+>GenericTarget : Symbol(GenericTarget, Decl(negatedConditionalFalseBranchSoundness.ts, 49, 72))
+
+// Unknown and structural supertypes can overlap strings without being string subtypes.
+type TopConstraint<T extends {}> = T extends string ? never : NonString<T>;
+>TopConstraint : Symbol(TopConstraint, Decl(negatedConditionalFalseBranchSoundness.ts, 54, 54))
+>T : Symbol(T, Decl(negatedConditionalFalseBranchSoundness.ts, 57, 19))
+>T : Symbol(T, Decl(negatedConditionalFalseBranchSoundness.ts, 57, 19))
+>NonString : Symbol(NonString, Decl(negatedConditionalFalseBranchSoundness.ts, 0, 0))
+>T : Symbol(T, Decl(negatedConditionalFalseBranchSoundness.ts, 57, 19))
+
+type ObjectConstraint<T extends { length: number }> = T extends string ? never : NonString<T>;
+>ObjectConstraint : Symbol(ObjectConstraint, Decl(negatedConditionalFalseBranchSoundness.ts, 57, 75))
+>T : Symbol(T, Decl(negatedConditionalFalseBranchSoundness.ts, 58, 22))
+>length : Symbol(length, Decl(negatedConditionalFalseBranchSoundness.ts, 58, 33))
+>T : Symbol(T, Decl(negatedConditionalFalseBranchSoundness.ts, 58, 22))
+>NonString : Symbol(NonString, Decl(negatedConditionalFalseBranchSoundness.ts, 0, 0))
+>T : Symbol(T, Decl(negatedConditionalFalseBranchSoundness.ts, 58, 22))
+
+const topConstraint: TopConstraint<{}> = "a";
+>topConstraint : Symbol(topConstraint, Decl(negatedConditionalFalseBranchSoundness.ts, 59, 5))
+>TopConstraint : Symbol(TopConstraint, Decl(negatedConditionalFalseBranchSoundness.ts, 54, 54))
+
+const objectConstraint: ObjectConstraint<{ length: number }> = "a";
+>objectConstraint : Symbol(objectConstraint, Decl(negatedConditionalFalseBranchSoundness.ts, 60, 5))
+>ObjectConstraint : Symbol(ObjectConstraint, Decl(negatedConditionalFalseBranchSoundness.ts, 57, 75))
+>length : Symbol(length, Decl(negatedConditionalFalseBranchSoundness.ts, 60, 42))
+
+// Void also overlaps undefined without extending it.
+type VoidConstraint<T extends void> = T extends undefined ? never : NonUndefined<T>;
+>VoidConstraint : Symbol(VoidConstraint, Decl(negatedConditionalFalseBranchSoundness.ts, 60, 67))
+>T : Symbol(T, Decl(negatedConditionalFalseBranchSoundness.ts, 63, 20))
+>T : Symbol(T, Decl(negatedConditionalFalseBranchSoundness.ts, 63, 20))
+>NonUndefined : Symbol(NonUndefined, Decl(negatedConditionalFalseBranchSoundness.ts, 3, 51))
+>T : Symbol(T, Decl(negatedConditionalFalseBranchSoundness.ts, 63, 20))
+
+const voidConstraint: VoidConstraint<void> = undefined;
+>voidConstraint : Symbol(voidConstraint, Decl(negatedConditionalFalseBranchSoundness.ts, 64, 5))
+>VoidConstraint : Symbol(VoidConstraint, Decl(negatedConditionalFalseBranchSoundness.ts, 60, 67))
+>undefined : Symbol(undefined)
+
+// Numeric enum constraints admit broad number types, not just their literal members.
+enum Numeric {
+>Numeric : Symbol(Numeric, Decl(negatedConditionalFalseBranchSoundness.ts, 64, 55))
+
+    A,
+>A : Symbol(Numeric.A, Decl(negatedConditionalFalseBranchSoundness.ts, 67, 14))
+
+    B,
+>B : Symbol(Numeric.B, Decl(negatedConditionalFalseBranchSoundness.ts, 68, 6))
+}
+type EnumConstraint<T extends Numeric> = T extends 0 ? never : NonZero<T>;
+>EnumConstraint : Symbol(EnumConstraint, Decl(negatedConditionalFalseBranchSoundness.ts, 70, 1))
+>T : Symbol(T, Decl(negatedConditionalFalseBranchSoundness.ts, 71, 20))
+>Numeric : Symbol(Numeric, Decl(negatedConditionalFalseBranchSoundness.ts, 64, 55))
+>T : Symbol(T, Decl(negatedConditionalFalseBranchSoundness.ts, 71, 20))
+>NonZero : Symbol(NonZero, Decl(negatedConditionalFalseBranchSoundness.ts, 4, 47))
+>T : Symbol(T, Decl(negatedConditionalFalseBranchSoundness.ts, 71, 20))
+
+const enumConstraint: EnumConstraint<number> = 0;
+>enumConstraint : Symbol(enumConstraint, Decl(negatedConditionalFalseBranchSoundness.ts, 72, 5))
+>EnumConstraint : Symbol(EnumConstraint, Decl(negatedConditionalFalseBranchSoundness.ts, 70, 1))
+

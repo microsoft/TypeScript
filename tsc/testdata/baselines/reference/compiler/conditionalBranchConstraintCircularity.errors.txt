@@ -1,0 +1,41 @@
+conditionalBranchConstraintCircularity.ts(2,36): error TS2313: Type parameter 'T' has a circular constraint.
+conditionalBranchConstraintCircularity.ts(2,62): error TS5117: Conditional type constraint circularly references itself.
+conditionalBranchConstraintCircularity.ts(4,34): error TS2313: Type parameter 'T' has a circular constraint.
+conditionalBranchConstraintCircularity.ts(4,58): error TS5117: Conditional type constraint circularly references itself.
+conditionalBranchConstraintCircularity.ts(8,37): error TS2313: Type parameter 'T' has a circular constraint.
+conditionalBranchConstraintCircularity.ts(8,64): error TS5117: Conditional type constraint circularly references itself.
+conditionalBranchConstraintCircularity.ts(10,35): error TS2313: Type parameter 'T' has a circular constraint.
+conditionalBranchConstraintCircularity.ts(10,60): error TS5117: Conditional type constraint circularly references itself.
+
+
+==== conditionalBranchConstraintCircularity.ts (8 errors) ====
+    type BeforeTrue = ReferencedFirstTrue<any>;
+    type ReferencedFirstTrue<T extends ReferencedFirstTrue<T>> = T extends keyof T ? T : never;
+                                       ~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2313: Type parameter 'T' has a circular constraint.
+!!! related TS2751 conditionalBranchConstraintCircularity.ts:1:19: Circularity originates in type at this location.
+                                                                 ~
+!!! error TS5117: Conditional type constraint circularly references itself.
+    
+    type DeclaredFirstTrue<T extends DeclaredFirstTrue<T>> = T extends keyof T ? T : never;
+                                     ~~~~~~~~~~~~~~~~~~~~
+!!! error TS2313: Type parameter 'T' has a circular constraint.
+                                                             ~
+!!! error TS5117: Conditional type constraint circularly references itself.
+    type AfterTrue = DeclaredFirstTrue<any>;
+    
+    type BeforeFalse = ReferencedFirstFalse<any>;
+    type ReferencedFirstFalse<T extends ReferencedFirstFalse<T>> = T extends string ? never : T;
+                                        ~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2313: Type parameter 'T' has a circular constraint.
+!!! related TS2751 conditionalBranchConstraintCircularity.ts:7:20: Circularity originates in type at this location.
+                                                                   ~
+!!! error TS5117: Conditional type constraint circularly references itself.
+    
+    type DeclaredFirstFalse<T extends DeclaredFirstFalse<T>> = T extends string ? never : T;
+                                      ~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2313: Type parameter 'T' has a circular constraint.
+                                                               ~
+!!! error TS5117: Conditional type constraint circularly references itself.
+    type AfterFalse = DeclaredFirstFalse<any>;
+    

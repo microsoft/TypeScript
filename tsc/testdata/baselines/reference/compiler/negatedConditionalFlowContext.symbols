@@ -1,0 +1,242 @@
+//// [tests/cases/compiler/negatedConditionalFlowContext.ts] ////
+
+=== negatedConditionalFlowContext.ts ===
+type OnlyNumber<T extends number> = T;
+>OnlyNumber : Symbol(OnlyNumber, Decl(negatedConditionalFlowContext.ts, 0, 0))
+>T : Symbol(T, Decl(negatedConditionalFlowContext.ts, 0, 16))
+>T : Symbol(T, Decl(negatedConditionalFlowContext.ts, 0, 16))
+
+type OnlyBoolean<T extends boolean> = T;
+>OnlyBoolean : Symbol(OnlyBoolean, Decl(negatedConditionalFlowContext.ts, 0, 38))
+>T : Symbol(T, Decl(negatedConditionalFlowContext.ts, 1, 17))
+>T : Symbol(T, Decl(negatedConditionalFlowContext.ts, 1, 17))
+
+type NonString<T extends not string> = T;
+>NonString : Symbol(NonString, Decl(negatedConditionalFlowContext.ts, 1, 40))
+>T : Symbol(T, Decl(negatedConditionalFlowContext.ts, 2, 15))
+>T : Symbol(T, Decl(negatedConditionalFlowContext.ts, 2, 15))
+
+// The inner check gets its primitive bound from the enclosing true branch.
+type Contextual<T> =
+>Contextual : Symbol(Contextual, Decl(negatedConditionalFlowContext.ts, 2, 41))
+>T : Symbol(T, Decl(negatedConditionalFlowContext.ts, 5, 16))
+
+    [T] extends [string | number] ? T extends string ? never : OnlyNumber<T> : never;
+>T : Symbol(T, Decl(negatedConditionalFlowContext.ts, 5, 16))
+>T : Symbol(T, Decl(negatedConditionalFlowContext.ts, 5, 16))
+>OnlyNumber : Symbol(OnlyNumber, Decl(negatedConditionalFlowContext.ts, 0, 0))
+>T : Symbol(T, Decl(negatedConditionalFlowContext.ts, 5, 16))
+
+type Parenthesized<T> =
+>Parenthesized : Symbol(Parenthesized, Decl(negatedConditionalFlowContext.ts, 6, 85))
+>T : Symbol(T, Decl(negatedConditionalFlowContext.ts, 7, 19))
+
+    [T] extends [string | number] ? (T) extends (string) ? never : OnlyNumber<T> : never;
+>T : Symbol(T, Decl(negatedConditionalFlowContext.ts, 7, 19))
+>T : Symbol(T, Decl(negatedConditionalFlowContext.ts, 7, 19))
+>OnlyNumber : Symbol(OnlyNumber, Decl(negatedConditionalFlowContext.ts, 0, 0))
+>T : Symbol(T, Decl(negatedConditionalFlowContext.ts, 7, 19))
+
+type DistributiveOuter<T> =
+>DistributiveOuter : Symbol(DistributiveOuter, Decl(negatedConditionalFlowContext.ts, 8, 89))
+>T : Symbol(T, Decl(negatedConditionalFlowContext.ts, 9, 23))
+
+    T extends string | number ? T extends string ? never : OnlyNumber<T> : never;
+>T : Symbol(T, Decl(negatedConditionalFlowContext.ts, 9, 23))
+>T : Symbol(T, Decl(negatedConditionalFlowContext.ts, 9, 23))
+>OnlyNumber : Symbol(OnlyNumber, Decl(negatedConditionalFlowContext.ts, 0, 0))
+>T : Symbol(T, Decl(negatedConditionalFlowContext.ts, 9, 23))
+
+type Callback<T> =
+>Callback : Symbol(Callback, Decl(negatedConditionalFlowContext.ts, 10, 81))
+>T : Symbol(T, Decl(negatedConditionalFlowContext.ts, 11, 14))
+
+    [T] extends [string | number] ? T extends string ? never : (value: NonString<T>) => OnlyNumber<T> : never;
+>T : Symbol(T, Decl(negatedConditionalFlowContext.ts, 11, 14))
+>T : Symbol(T, Decl(negatedConditionalFlowContext.ts, 11, 14))
+>value : Symbol(value, Decl(negatedConditionalFlowContext.ts, 12, 64))
+>NonString : Symbol(NonString, Decl(negatedConditionalFlowContext.ts, 1, 40))
+>T : Symbol(T, Decl(negatedConditionalFlowContext.ts, 11, 14))
+>OnlyNumber : Symbol(OnlyNumber, Decl(negatedConditionalFlowContext.ts, 0, 0))
+>T : Symbol(T, Decl(negatedConditionalFlowContext.ts, 11, 14))
+
+// Both enclosing branches contribute constraints to the inner references.
+type Nested<T> =
+>Nested : Symbol(Nested, Decl(negatedConditionalFlowContext.ts, 12, 110))
+>T : Symbol(T, Decl(negatedConditionalFlowContext.ts, 15, 12))
+
+    T extends string ? never :
+>T : Symbol(T, Decl(negatedConditionalFlowContext.ts, 15, 12))
+
+    [T] extends [number | boolean] ? T extends number ? never : OnlyBoolean<T> : never;
+>T : Symbol(T, Decl(negatedConditionalFlowContext.ts, 15, 12))
+>T : Symbol(T, Decl(negatedConditionalFlowContext.ts, 15, 12))
+>OnlyBoolean : Symbol(OnlyBoolean, Decl(negatedConditionalFlowContext.ts, 0, 38))
+>T : Symbol(T, Decl(negatedConditionalFlowContext.ts, 15, 12))
+
+const contextual: Contextual<string | number> = 1;
+>contextual : Symbol(contextual, Decl(negatedConditionalFlowContext.ts, 19, 5))
+>Contextual : Symbol(Contextual, Decl(negatedConditionalFlowContext.ts, 2, 41))
+
+const parenthesized: Parenthesized<string | number> = 1;
+>parenthesized : Symbol(parenthesized, Decl(negatedConditionalFlowContext.ts, 20, 5))
+>Parenthesized : Symbol(Parenthesized, Decl(negatedConditionalFlowContext.ts, 6, 85))
+
+const distributiveOuter: DistributiveOuter<string | number | boolean> = 1;
+>distributiveOuter : Symbol(distributiveOuter, Decl(negatedConditionalFlowContext.ts, 21, 5))
+>DistributiveOuter : Symbol(DistributiveOuter, Decl(negatedConditionalFlowContext.ts, 8, 89))
+
+const callback: Callback<string | number> = value => value;
+>callback : Symbol(callback, Decl(negatedConditionalFlowContext.ts, 22, 5))
+>Callback : Symbol(Callback, Decl(negatedConditionalFlowContext.ts, 10, 81))
+>value : Symbol(value, Decl(negatedConditionalFlowContext.ts, 22, 43))
+>value : Symbol(value, Decl(negatedConditionalFlowContext.ts, 22, 43))
+
+const nested: Nested<string | number | boolean> = true;
+>nested : Symbol(nested, Decl(negatedConditionalFlowContext.ts, 23, 5))
+>Nested : Symbol(Nested, Decl(negatedConditionalFlowContext.ts, 12, 110))
+
+const rejectedContextual: Contextual<string | number> = "a";
+>rejectedContextual : Symbol(rejectedContextual, Decl(negatedConditionalFlowContext.ts, 25, 5))
+>Contextual : Symbol(Contextual, Decl(negatedConditionalFlowContext.ts, 2, 41))
+
+const rejectedParenthesized: Parenthesized<string | number> = "a";
+>rejectedParenthesized : Symbol(rejectedParenthesized, Decl(negatedConditionalFlowContext.ts, 26, 5))
+>Parenthesized : Symbol(Parenthesized, Decl(negatedConditionalFlowContext.ts, 6, 85))
+
+const rejectedDistributiveOuter: DistributiveOuter<string | number | boolean> = true;
+>rejectedDistributiveOuter : Symbol(rejectedDistributiveOuter, Decl(negatedConditionalFlowContext.ts, 27, 5))
+>DistributiveOuter : Symbol(DistributiveOuter, Decl(negatedConditionalFlowContext.ts, 8, 89))
+
+const rejectedNested: Nested<string | number | boolean> = 1;
+>rejectedNested : Symbol(rejectedNested, Decl(negatedConditionalFlowContext.ts, 28, 5))
+>Nested : Symbol(Nested, Decl(negatedConditionalFlowContext.ts, 12, 110))
+
+// Contextual substitutions must not accidentally make a NoInfer check distributive.
+type ContextualNoInfer<T> =
+>ContextualNoInfer : Symbol(ContextualNoInfer, Decl(negatedConditionalFlowContext.ts, 28, 60))
+>T : Symbol(T, Decl(negatedConditionalFlowContext.ts, 31, 23))
+
+    [T] extends [string | number] ? NoInfer<T> extends string ? never : T : never;
+>T : Symbol(T, Decl(negatedConditionalFlowContext.ts, 31, 23))
+>NoInfer : Symbol(NoInfer, Decl(lib.es5.d.ts, --, --))
+>T : Symbol(T, Decl(negatedConditionalFlowContext.ts, 31, 23))
+>T : Symbol(T, Decl(negatedConditionalFlowContext.ts, 31, 23))
+
+const noInferString: ContextualNoInfer<string | number> = "a";
+>noInferString : Symbol(noInferString, Decl(negatedConditionalFlowContext.ts, 33, 5))
+>ContextualNoInfer : Symbol(ContextualNoInfer, Decl(negatedConditionalFlowContext.ts, 28, 60))
+
+const noInferNumber: ContextualNoInfer<string | number> = 1;
+>noInferNumber : Symbol(noInferNumber, Decl(negatedConditionalFlowContext.ts, 34, 5))
+>ContextualNoInfer : Symbol(ContextualNoInfer, Decl(negatedConditionalFlowContext.ts, 28, 60))
+
+type ContextualInfer<T> =
+>ContextualInfer : Symbol(ContextualInfer, Decl(negatedConditionalFlowContext.ts, 34, 60))
+>T : Symbol(T, Decl(negatedConditionalFlowContext.ts, 36, 21))
+
+    [T] extends [string | number] ? T extends infer U extends string ? U : T : never;
+>T : Symbol(T, Decl(negatedConditionalFlowContext.ts, 36, 21))
+>T : Symbol(T, Decl(negatedConditionalFlowContext.ts, 36, 21))
+>U : Symbol(U, Decl(negatedConditionalFlowContext.ts, 37, 51))
+>U : Symbol(U, Decl(negatedConditionalFlowContext.ts, 37, 51))
+>T : Symbol(T, Decl(negatedConditionalFlowContext.ts, 36, 21))
+
+const inferredString: ContextualInfer<string | number> = "a";
+>inferredString : Symbol(inferredString, Decl(negatedConditionalFlowContext.ts, 38, 5))
+>ContextualInfer : Symbol(ContextualInfer, Decl(negatedConditionalFlowContext.ts, 34, 60))
+
+const inferredNumber: ContextualInfer<string | number> = 1;
+>inferredNumber : Symbol(inferredNumber, Decl(negatedConditionalFlowContext.ts, 39, 5))
+>ContextualInfer : Symbol(ContextualInfer, Decl(negatedConditionalFlowContext.ts, 34, 60))
+
+// Re-resolving parenthesized check and extends nodes must not repeat ancestor analysis exponentially.
+type Deep<T extends string | number> =
+>Deep : Symbol(Deep, Decl(negatedConditionalFlowContext.ts, 39, 59))
+>T : Symbol(T, Decl(negatedConditionalFlowContext.ts, 42, 10))
+
+    (T) extends (T) ? 0 : (T) extends (T) ? 1 : (T) extends (T) ? 2 : (T) extends (T) ? 3 :
+>T : Symbol(T, Decl(negatedConditionalFlowContext.ts, 42, 10))
+>T : Symbol(T, Decl(negatedConditionalFlowContext.ts, 42, 10))
+>T : Symbol(T, Decl(negatedConditionalFlowContext.ts, 42, 10))
+>T : Symbol(T, Decl(negatedConditionalFlowContext.ts, 42, 10))
+>T : Symbol(T, Decl(negatedConditionalFlowContext.ts, 42, 10))
+>T : Symbol(T, Decl(negatedConditionalFlowContext.ts, 42, 10))
+>T : Symbol(T, Decl(negatedConditionalFlowContext.ts, 42, 10))
+>T : Symbol(T, Decl(negatedConditionalFlowContext.ts, 42, 10))
+
+    (T) extends (T) ? 4 : (T) extends (T) ? 5 : (T) extends (T) ? 6 : (T) extends (T) ? 7 :
+>T : Symbol(T, Decl(negatedConditionalFlowContext.ts, 42, 10))
+>T : Symbol(T, Decl(negatedConditionalFlowContext.ts, 42, 10))
+>T : Symbol(T, Decl(negatedConditionalFlowContext.ts, 42, 10))
+>T : Symbol(T, Decl(negatedConditionalFlowContext.ts, 42, 10))
+>T : Symbol(T, Decl(negatedConditionalFlowContext.ts, 42, 10))
+>T : Symbol(T, Decl(negatedConditionalFlowContext.ts, 42, 10))
+>T : Symbol(T, Decl(negatedConditionalFlowContext.ts, 42, 10))
+>T : Symbol(T, Decl(negatedConditionalFlowContext.ts, 42, 10))
+
+    (T) extends (T) ? 8 : (T) extends (T) ? 9 : (T) extends (T) ? 10 : (T) extends (T) ? 11 :
+>T : Symbol(T, Decl(negatedConditionalFlowContext.ts, 42, 10))
+>T : Symbol(T, Decl(negatedConditionalFlowContext.ts, 42, 10))
+>T : Symbol(T, Decl(negatedConditionalFlowContext.ts, 42, 10))
+>T : Symbol(T, Decl(negatedConditionalFlowContext.ts, 42, 10))
+>T : Symbol(T, Decl(negatedConditionalFlowContext.ts, 42, 10))
+>T : Symbol(T, Decl(negatedConditionalFlowContext.ts, 42, 10))
+>T : Symbol(T, Decl(negatedConditionalFlowContext.ts, 42, 10))
+>T : Symbol(T, Decl(negatedConditionalFlowContext.ts, 42, 10))
+
+    (T) extends (T) ? 12 : (T) extends (T) ? 13 : (T) extends (T) ? 14 : (T) extends (T) ? 15 :
+>T : Symbol(T, Decl(negatedConditionalFlowContext.ts, 42, 10))
+>T : Symbol(T, Decl(negatedConditionalFlowContext.ts, 42, 10))
+>T : Symbol(T, Decl(negatedConditionalFlowContext.ts, 42, 10))
+>T : Symbol(T, Decl(negatedConditionalFlowContext.ts, 42, 10))
+>T : Symbol(T, Decl(negatedConditionalFlowContext.ts, 42, 10))
+>T : Symbol(T, Decl(negatedConditionalFlowContext.ts, 42, 10))
+>T : Symbol(T, Decl(negatedConditionalFlowContext.ts, 42, 10))
+>T : Symbol(T, Decl(negatedConditionalFlowContext.ts, 42, 10))
+
+    (T) extends (T) ? 16 : (T) extends (T) ? 17 : (T) extends (T) ? 18 : (T) extends (T) ? 19 :
+>T : Symbol(T, Decl(negatedConditionalFlowContext.ts, 42, 10))
+>T : Symbol(T, Decl(negatedConditionalFlowContext.ts, 42, 10))
+>T : Symbol(T, Decl(negatedConditionalFlowContext.ts, 42, 10))
+>T : Symbol(T, Decl(negatedConditionalFlowContext.ts, 42, 10))
+>T : Symbol(T, Decl(negatedConditionalFlowContext.ts, 42, 10))
+>T : Symbol(T, Decl(negatedConditionalFlowContext.ts, 42, 10))
+>T : Symbol(T, Decl(negatedConditionalFlowContext.ts, 42, 10))
+>T : Symbol(T, Decl(negatedConditionalFlowContext.ts, 42, 10))
+
+    (T) extends (T) ? 20 : (T) extends (T) ? 21 : (T) extends (T) ? 22 : (T) extends (T) ? 23 :
+>T : Symbol(T, Decl(negatedConditionalFlowContext.ts, 42, 10))
+>T : Symbol(T, Decl(negatedConditionalFlowContext.ts, 42, 10))
+>T : Symbol(T, Decl(negatedConditionalFlowContext.ts, 42, 10))
+>T : Symbol(T, Decl(negatedConditionalFlowContext.ts, 42, 10))
+>T : Symbol(T, Decl(negatedConditionalFlowContext.ts, 42, 10))
+>T : Symbol(T, Decl(negatedConditionalFlowContext.ts, 42, 10))
+>T : Symbol(T, Decl(negatedConditionalFlowContext.ts, 42, 10))
+>T : Symbol(T, Decl(negatedConditionalFlowContext.ts, 42, 10))
+
+    (T) extends (T) ? 24 : (T) extends (T) ? 25 : (T) extends (T) ? 26 : (T) extends (T) ? 27 :
+>T : Symbol(T, Decl(negatedConditionalFlowContext.ts, 42, 10))
+>T : Symbol(T, Decl(negatedConditionalFlowContext.ts, 42, 10))
+>T : Symbol(T, Decl(negatedConditionalFlowContext.ts, 42, 10))
+>T : Symbol(T, Decl(negatedConditionalFlowContext.ts, 42, 10))
+>T : Symbol(T, Decl(negatedConditionalFlowContext.ts, 42, 10))
+>T : Symbol(T, Decl(negatedConditionalFlowContext.ts, 42, 10))
+>T : Symbol(T, Decl(negatedConditionalFlowContext.ts, 42, 10))
+>T : Symbol(T, Decl(negatedConditionalFlowContext.ts, 42, 10))
+
+    (T) extends (T) ? 28 : (T) extends (T) ? 29 : (T) extends (T) ? 30 : (T) extends (T) ? 31 : T;
+>T : Symbol(T, Decl(negatedConditionalFlowContext.ts, 42, 10))
+>T : Symbol(T, Decl(negatedConditionalFlowContext.ts, 42, 10))
+>T : Symbol(T, Decl(negatedConditionalFlowContext.ts, 42, 10))
+>T : Symbol(T, Decl(negatedConditionalFlowContext.ts, 42, 10))
+>T : Symbol(T, Decl(negatedConditionalFlowContext.ts, 42, 10))
+>T : Symbol(T, Decl(negatedConditionalFlowContext.ts, 42, 10))
+>T : Symbol(T, Decl(negatedConditionalFlowContext.ts, 42, 10))
+>T : Symbol(T, Decl(negatedConditionalFlowContext.ts, 42, 10))
+>T : Symbol(T, Decl(negatedConditionalFlowContext.ts, 42, 10))
+
+const deep: Deep<string | number> = 0;
+>deep : Symbol(deep, Decl(negatedConditionalFlowContext.ts, 51, 5))
+>Deep : Symbol(Deep, Decl(negatedConditionalFlowContext.ts, 39, 59))
+
