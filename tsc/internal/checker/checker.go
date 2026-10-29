@@ -21338,30 +21338,32 @@ func (c *Checker) instantiateSymbolTable(symbols ast.SymbolTable, m *TypeMapper)
 }
 
 func (c *Checker) instantiateSymbol(symbol *ast.Symbol, m *TypeMapper) *ast.Symbol {
-	if symbol == nil || m == nil {
+	if symbol == nil || m == nil || m.MapsThisOnly() && isThisless(symbol) {
 		return symbol
 	}
-	links := c.valueSymbolLinks.Get(symbol)
-	if m.MapsThisOnly() && isThisless(symbol) {
-		return symbol
-	}
-	// If the type of the symbol is already resolved, and if that type could not possibly
-	// be affected by instantiation, simply return the symbol itself.
-	if links.resolvedType != nil && !c.couldContainTypeVariables(links.resolvedType) {
-		if symbol.Flags()&ast.SymbolFlagsSetAccessor == 0 {
-			return symbol
+	// Use TryGet to avoid allocating links for a symbol whose type has never been resolved.
+	// Instantiated symbols always have links.
+	var nameType *Type
+	if links := c.valueSymbolLinks.TryGet(symbol); links != nil {
+		// If the type of the symbol is already resolved, and if that type could not possibly
+		// be affected by instantiation, simply return the symbol itself.
+		if links.resolvedType != nil && !c.couldContainTypeVariables(links.resolvedType) {
+			if symbol.Flags()&ast.SymbolFlagsSetAccessor == 0 {
+				return symbol
+			}
+			// If we're a setter, check writeType.
+			if links.getWriteType() != nil && !c.couldContainTypeVariables(links.getWriteType()) {
+				return symbol
+			}
 		}
-		// If we're a setter, check writeType.
-		if links.getWriteType() != nil && !c.couldContainTypeVariables(links.getWriteType()) {
-			return symbol
+		if symbol.CheckFlags()&ast.CheckFlagsInstantiated != 0 {
+			// If symbol being instantiated is itself a instantiation, fetch the original target and combine the
+			// type mappers. This ensures that original type identities are properly preserved and that aliases
+			// always reference a non-aliases.
+			symbol = links.target
+			m = c.combineTypeMappers(links.mapper, m)
 		}
-	}
-	if symbol.CheckFlags()&ast.CheckFlagsInstantiated != 0 {
-		// If symbol being instantiated is itself a instantiation, fetch the original target and combine the
-		// type mappers. This ensures that original type identities are properly preserved and that aliases
-		// always reference a non-aliases.
-		symbol = links.target
-		m = c.combineTypeMappers(links.mapper, m)
+		nameType = links.getNameType()
 	}
 	// Create a new transient symbol that shares the underlying data with the original symbol.
 	result := c.newSharedDataSymbol(symbol)
@@ -21369,7 +21371,7 @@ func (c *Checker) instantiateSymbol(symbol *ast.Symbol, m *TypeMapper) *ast.Symb
 	resultLinks := c.valueSymbolLinks.Get(result)
 	resultLinks.target = symbol
 	resultLinks.mapper = m
-	resultLinks.setNameType(c, links.getNameType())
+	resultLinks.setNameType(c, nameType)
 	return result
 }
 
@@ -22754,7 +22756,7 @@ func (c *Checker) instantiateTypeWithAlias(t *Type, m *TypeMapper, alias *TypeAl
 	// Check for type variables in the alias, so things like `type Brand<T> = number & {}` can potentially be copied with new alias type args, despite them being unreferenced.
 	// This is the behavior most people using aliases expect, and prevents the cache from leaking type parameters outside their scope of validity.
 	// tests/cases/compiler/declarationEmitArrowFunctionNoRenaming.ts contains an example of this, which previously only worked in strada via some input node reuse logic instead.
-	if t == nil || m == nil || !(c.couldContainTypeVariables(t) || (t.alias != nil && len(t.alias.typeArguments) > 0 && core.Some(t.alias.typeArguments, c.couldContainTypeVariables))) {
+	if t == nil || m == nil || c.isTypeVariableFree(t) {
 		return t
 	}
 	if len(c.instantiationStack) == 100 || c.instantiationCount >= 5_000_000 {
@@ -22799,6 +22801,18 @@ func (c *Checker) instantiateTypeWithAlias(t *Type, m *TypeMapper, alias *TypeAl
 	c.instantiationStack[len(c.instantiationStack)-1] = nil
 	c.instantiationStack = c.instantiationStack[:len(c.instantiationStack)-1]
 	return result
+}
+
+// Returns true if no instantiation of t can differ from t itself, because neither t nor its alias
+// type arguments could contain type variables. The result is cached on the types involved.
+func (c *Checker) isTypeVariableFree(t *Type) bool {
+	// Check the cached result inline before falling back to couldContainTypeVariables, as this is on a hot path.
+	knownFree := t.flags&TypeFlagsStructuredOrInstantiable == 0 ||
+		t.objectFlags&(ObjectFlagsCouldContainTypeVariablesComputed|ObjectFlagsCouldContainTypeVariables) == ObjectFlagsCouldContainTypeVariablesComputed
+	if !knownFree && c.couldContainTypeVariables(t) {
+		return false
+	}
+	return t.alias == nil || !core.Some(t.alias.typeArguments, c.couldContainTypeVariables)
 }
 
 func (c *Checker) getCircularTypeNames() []string {
@@ -25201,7 +25215,7 @@ func (c *Checker) isDeferredType(t *Type, checkTuples bool) bool {
 }
 
 func (c *Checker) getPermissiveInstantiation(t *Type) *Type {
-	if t.flags&(TypeFlagsPrimitive|TypeFlagsAnyOrUnknown|TypeFlagsNever) != 0 {
+	if t.flags&(TypeFlagsPrimitive|TypeFlagsAnyOrUnknown|TypeFlagsNever) != 0 || c.isTypeVariableFree(t) {
 		return t
 	}
 	key := CachedTypeKey{kind: CachedTypeKindPermissiveInstantiation, typeId: t.id}
@@ -25214,7 +25228,7 @@ func (c *Checker) getPermissiveInstantiation(t *Type) *Type {
 }
 
 func (c *Checker) getRestrictiveInstantiation(t *Type) *Type {
-	if t.flags&(TypeFlagsPrimitive|TypeFlagsAnyOrUnknown|TypeFlagsNever) != 0 {
+	if t.flags&(TypeFlagsPrimitive|TypeFlagsAnyOrUnknown|TypeFlagsNever) != 0 || c.isTypeVariableFree(t) {
 		return t
 	}
 	key := CachedTypeKey{kind: CachedTypeKindRestrictiveInstantiation, typeId: t.id}
