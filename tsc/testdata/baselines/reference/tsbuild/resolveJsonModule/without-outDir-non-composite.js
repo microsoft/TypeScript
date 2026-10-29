@@ -75,7 +75,7 @@ const hello_json_1 = __importDefault(require("./hello.json"));
 exports.default = hello_json_1.default.hello;
 
 //// [/home/src/workspaces/solution/project/tsconfig.tsbuildinfo] *new* 
-{"version":"FakeTSVersion","root":["./src/index.ts","./src/hello.json"],"nonIncrementalFileNames":[]}
+{"version":"FakeTSVersion","root":["./src/index.ts","./src/hello.json"],"watchDirectories":[".."],"nonIncrementalFileNames":[]}
 //// [/home/src/workspaces/solution/project/tsconfig.tsbuildinfo.readable.baseline.txt] *new* 
 {
   "version": "FakeTSVersion",
@@ -93,7 +93,7 @@ exports.default = hello_json_1.default.hello;
       "original": "./src/hello.json"
     }
   ],
-  "size": 101
+  "size": 127
 }
 
 project/tsconfig.json::

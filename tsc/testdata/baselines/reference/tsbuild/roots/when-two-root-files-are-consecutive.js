@@ -57,7 +57,7 @@ export declare const y = "world";
 export const y = "world";
 
 //// [/home/src/workspaces/project/tsconfig.tsbuildinfo] *new* 
-{"version":"FakeTSVersion","root":[[2,3]],"fileNames":["lib.es2026.full.d.ts","./file1.ts","./file2.ts"],"fileInfos":[{"version":"8859c12c614ce56ba9a18e58384a198f-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ninterface SymbolConstructor {\n    (desc?: string | number): symbol;\n    for(name: string): symbol;\n    readonly toStringTag: symbol;\n}\ndeclare var Symbol: SymbolConstructor;\ninterface Symbol {\n    readonly [Symbol.toStringTag]: string;\n}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true,"impliedNodeFormat":1},{"version":"cc7052ed344567798ec87f1c0f8f276c-export const x = \"hello\";","signature":"0c71c4d05f424f4dc52c978a9207cdf6-export declare const x = \"hello\";\n","impliedNodeFormat":1},{"version":"42f7437ec4aafe7a26fc38ec3ba035fe-export const y = \"world\";","signature":"64ca81919be0c5adb4964999189ddb2c-export declare const y = \"world\";\n","impliedNodeFormat":1}],"options":{"composite":true},"latestChangedDtsFile":"./file2.d.ts"}
+{"version":"FakeTSVersion","root":[[2,3]],"watchDirectories":[],"fileNames":["lib.es2026.full.d.ts","./file1.ts","./file2.ts"],"fileInfos":[{"version":"8859c12c614ce56ba9a18e58384a198f-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ninterface SymbolConstructor {\n    (desc?: string | number): symbol;\n    for(name: string): symbol;\n    readonly toStringTag: symbol;\n}\ndeclare var Symbol: SymbolConstructor;\ninterface Symbol {\n    readonly [Symbol.toStringTag]: string;\n}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true,"impliedNodeFormat":1},{"version":"cc7052ed344567798ec87f1c0f8f276c-export const x = \"hello\";","signature":"0c71c4d05f424f4dc52c978a9207cdf6-export declare const x = \"hello\";\n","impliedNodeFormat":1},{"version":"42f7437ec4aafe7a26fc38ec3ba035fe-export const y = \"world\";","signature":"64ca81919be0c5adb4964999189ddb2c-export declare const y = \"world\";\n","impliedNodeFormat":1}],"options":{"composite":true},"latestChangedDtsFile":"./file2.d.ts"}
 //// [/home/src/workspaces/project/tsconfig.tsbuildinfo.readable.baseline.txt] *new* 
 {
   "version": "FakeTSVersion",
@@ -118,7 +118,7 @@ export const y = "world";
     "composite": true
   },
   "latestChangedDtsFile": "./file2.d.ts",
-  "size": 1320
+  "size": 1342
 }
 
 tsconfig.json::
@@ -147,7 +147,7 @@ Output::
 [[90mHH:MM:SS AM[0m] Building project 'tsconfig.json'...
 
 //// [/home/src/workspaces/project/tsconfig.tsbuildinfo] *modified* 
-{"version":"FakeTSVersion","root":[2],"fileNames":["lib.es2026.full.d.ts","./file2.ts"],"fileInfos":[{"version":"8859c12c614ce56ba9a18e58384a198f-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ninterface SymbolConstructor {\n    (desc?: string | number): symbol;\n    for(name: string): symbol;\n    readonly toStringTag: symbol;\n}\ndeclare var Symbol: SymbolConstructor;\ninterface Symbol {\n    readonly [Symbol.toStringTag]: string;\n}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true,"impliedNodeFormat":1},{"version":"42f7437ec4aafe7a26fc38ec3ba035fe-export const y = \"world\";","signature":"64ca81919be0c5adb4964999189ddb2c-export declare const y = \"world\";\n","impliedNodeFormat":1}],"options":{"composite":true},"latestChangedDtsFile":"./file2.d.ts"}
+{"version":"FakeTSVersion","root":[2],"watchDirectories":[],"fileNames":["lib.es2026.full.d.ts","./file2.ts"],"fileInfos":[{"version":"8859c12c614ce56ba9a18e58384a198f-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ninterface SymbolConstructor {\n    (desc?: string | number): symbol;\n    for(name: string): symbol;\n    readonly toStringTag: symbol;\n}\ndeclare var Symbol: SymbolConstructor;\ninterface Symbol {\n    readonly [Symbol.toStringTag]: string;\n}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true,"impliedNodeFormat":1},{"version":"42f7437ec4aafe7a26fc38ec3ba035fe-export const y = \"world\";","signature":"64ca81919be0c5adb4964999189ddb2c-export declare const y = \"world\";\n","impliedNodeFormat":1}],"options":{"composite":true},"latestChangedDtsFile":"./file2.d.ts"}
 //// [/home/src/workspaces/project/tsconfig.tsbuildinfo.readable.baseline.txt] *modified* 
 {
   "version": "FakeTSVersion",
@@ -192,7 +192,7 @@ Output::
     "composite": true
   },
   "latestChangedDtsFile": "./file2.d.ts",
-  "size": 1121
+  "size": 1143
 }
 
 tsconfig.json::

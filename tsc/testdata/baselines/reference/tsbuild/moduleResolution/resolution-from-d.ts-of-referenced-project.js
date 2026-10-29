@@ -159,7 +159,7 @@ v2.onValue = (n) => {
 };
 
 //// [/home/src/workspaces/project/consumer/tsconfig.tsbuildinfo] *new* 
-{"version":"FakeTSVersion","root":["./index.ts"],"nonIncrementalFileNames":["../common.d.ts","../producer/in-js.d.ts","../producer/index.d.ts"]}
+{"version":"FakeTSVersion","root":["./index.ts"],"watchDirectories":[],"nonIncrementalFileNames":["../common.d.ts","../producer/in-js.d.ts","../producer/index.d.ts"]}
 //// [/home/src/workspaces/project/consumer/tsconfig.tsbuildinfo.readable.baseline.txt] *new* 
 {
   "version": "FakeTSVersion",
@@ -171,7 +171,7 @@ v2.onValue = (n) => {
       "original": "./index.ts"
     }
   ],
-  "size": 144
+  "size": 166
 }
 //// [/home/src/workspaces/project/producer/index.d.ts] *new* 
 export { ValueProducerDeclaration } from "./in-js";
@@ -185,7 +185,7 @@ export interface ValueProducerFromTs {
 Object.defineProperty(exports, "__esModule", { value: true });
 
 //// [/home/src/workspaces/project/producer/tsconfig.tsbuildinfo] *new* 
-{"version":"FakeTSVersion","root":[[3,4]],"fileNames":["lib.es2026.full.d.ts","../common.d.ts","./in-js.d.ts","./index.ts"],"fileInfos":[{"version":"8859c12c614ce56ba9a18e58384a198f-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ninterface SymbolConstructor {\n    (desc?: string | number): symbol;\n    for(name: string): symbol;\n    readonly toStringTag: symbol;\n}\ndeclare var Symbol: SymbolConstructor;\ninterface Symbol {\n    readonly [Symbol.toStringTag]: string;\n}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true,"impliedNodeFormat":1},"3a9dc77bc99684cad72839382a1f46cb-export type OnValue = (value: number) => void","7677191ddc32f3fe5aa447395ff0553a-import { OnValue } from \"@common\"\nexport interface ValueProducerDeclaration {\n    onValue: OnValue;\n}",{"version":"3bb4cb1dd0764fa7c558b11ba246518a-export { ValueProducerDeclaration } from \"./in-js\"\nimport { OnValue } from \"@common\"\nexport interface ValueProducerFromTs {\n    onValue: OnValue;\n}","signature":"846f65cd8d68b44b74d0de4a41b17245-export { ValueProducerDeclaration } from \"./in-js\";\nimport { OnValue } from \"@common\";\nexport interface ValueProducerFromTs {\n    onValue: OnValue;\n}\n","impliedNodeFormat":1}],"fileIdsList":[[2],[2,3]],"options":{"composite":true,"module":199,"strict":true},"referencedMap":[[3,1],[4,2]],"latestChangedDtsFile":"./index.d.ts"}
+{"version":"FakeTSVersion","root":[[3,4]],"watchDirectories":[],"fileNames":["lib.es2026.full.d.ts","../common.d.ts","./in-js.d.ts","./index.ts"],"fileInfos":[{"version":"8859c12c614ce56ba9a18e58384a198f-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ninterface SymbolConstructor {\n    (desc?: string | number): symbol;\n    for(name: string): symbol;\n    readonly toStringTag: symbol;\n}\ndeclare var Symbol: SymbolConstructor;\ninterface Symbol {\n    readonly [Symbol.toStringTag]: string;\n}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true,"impliedNodeFormat":1},"3a9dc77bc99684cad72839382a1f46cb-export type OnValue = (value: number) => void","7677191ddc32f3fe5aa447395ff0553a-import { OnValue } from \"@common\"\nexport interface ValueProducerDeclaration {\n    onValue: OnValue;\n}",{"version":"3bb4cb1dd0764fa7c558b11ba246518a-export { ValueProducerDeclaration } from \"./in-js\"\nimport { OnValue } from \"@common\"\nexport interface ValueProducerFromTs {\n    onValue: OnValue;\n}","signature":"846f65cd8d68b44b74d0de4a41b17245-export { ValueProducerDeclaration } from \"./in-js\";\nimport { OnValue } from \"@common\";\nexport interface ValueProducerFromTs {\n    onValue: OnValue;\n}\n","impliedNodeFormat":1}],"fileIdsList":[[2],[2,3]],"options":{"composite":true,"module":199,"strict":true},"referencedMap":[[3,1],[4,2]],"latestChangedDtsFile":"./index.d.ts"}
 //// [/home/src/workspaces/project/producer/tsconfig.tsbuildinfo.readable.baseline.txt] *new* 
 {
   "version": "FakeTSVersion",
@@ -268,7 +268,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
     ]
   },
   "latestChangedDtsFile": "./index.d.ts",
-  "size": 1713
+  "size": 1735
 }
 
 producer/tsconfig.json::

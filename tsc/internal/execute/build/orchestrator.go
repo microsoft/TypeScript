@@ -522,7 +522,8 @@ func (o *Orchestrator) resetCaches() {
 	o.host.configTimes = collections.SyncMap[tspath.PathKey, time.Duration]{}
 }
 
-func (o *Orchestrator) checkTasksForEventChanges(changedPaths map[tspath.RootedPath]fswatch.EventKind, needsConfigUpdate, needsUpdate *atomic.Bool) {
+func (o *Orchestrator) checkTasksForEventChanges(changedPaths map[tspath.RootedPath]fswatch.EventKind, needsConfigUpdate, needsUpdate *atomic.Bool) bool {
+	needsWatchUpdate := false
 	normalizedPaths := make(map[tspath.PathKey]fswatch.EventKind, len(changedPaths))
 	for eventPath, kind := range changedPaths {
 		normalizedPaths[o.caseSensitivity.PathKey(eventPath)] = kind
@@ -636,6 +637,41 @@ func (o *Orchestrator) checkTasksForEventChanges(changedPaths map[tspath.RootedP
 			}
 		}
 		input, changed, aliasChanged := task.watchDependencies.changed(o, normalizedPaths, roots, handled)
+		if input == "" && task.watchDependencies != nil && !task.watchDependencies.complete && bi != nil {
+			dependencyPaths := task.buildInfoUnclassifiedEvents(o, bi.buildInfo, bi.fileName.Directory(), normalizedPaths)
+			for path := range dependencyPaths {
+				if roots.Has(path) || handled.Has(path) {
+					delete(dependencyPaths, path)
+				}
+			}
+			if len(dependencyPaths) != 0 {
+				contentMapperProject, err := task.getContentMapperProject(o)
+				if err != nil {
+					task.resetStatus()
+					needsUpdate.Store(true)
+				} else {
+					previous := task.watchDependencies
+					program := task.captureCurrentWatchDependencies(o, contentMapperProject)
+					needsWatchUpdate = true
+					if affected, affectedChanged := task.watchDependencies.affectedInput(dependencyPaths, &previous.inputPaths); affectedChanged {
+						input = affected
+						// Broad directory notifications can also cover unchanged consumed inputs.
+						changed = changed || input != "" || needsUpdate.Load() ||
+							task.getUpToDateStatus(o, path).kind != upToDateStatusTypeUpToDate
+					}
+					if task.inputAliasChanged {
+						input = task.changedInput
+						changed = true
+						aliasChanged = true
+					}
+					// Enumeration changes can introduce diagnostics without adding a consumed input.
+					if len(program.GetProgramDiagnostics()) != 0 {
+						input = task.config.AsPath()
+						changed = true
+					}
+				}
+			}
+		}
 		if !changed && task.watchDependencies != nil && bi != nil {
 			// Directory notifications can replace consumed children without naming them.
 			for inputPath, inputFile := range task.watchDependencies.lookups {
@@ -699,6 +735,7 @@ func (o *Orchestrator) checkTasksForEventChanges(changedPaths map[tspath.RootedP
 			}
 		}
 	}
+	return needsWatchUpdate
 }
 
 func (o *Orchestrator) packageJsonLookupChanged(packageJson tspath.RootedFilePath, changedPaths map[tspath.PathKey]fswatch.EventKind, handled *collections.Set[tspath.PathKey]) bool {
@@ -792,6 +829,15 @@ func (o *Orchestrator) computeDesiredWatches() map[tspath.RootedDirectoryPath]bo
 			for fileName := range bi.buildInfo.GetNonIncrementalFileNames(buildInfoDir) {
 				o.addProgramFileWatchDir(desiredDirs, o.host.FS().Realpath(fileName.AsPath()).Directory())
 			}
+			for fileName, realPath := range bi.buildInfo.GetInputAliases(buildInfoDir) {
+				o.addProgramFileWatchDir(desiredDirs, fileName.Directory())
+				o.addProgramFileWatchDir(desiredDirs, realPath.Directory())
+			}
+			for dir := range bi.buildInfo.GetWatchDirectories(buildInfoDir) {
+				if !desiredDirs.Covered(dir) {
+					desiredDirs.Set(dir, false)
+				}
+			}
 			for packageJson := range bi.buildInfo.GetPackageJsons(buildInfoDir) {
 				o.addPackageJsonWatchDirs(desiredDirs, packageJson)
 			}
@@ -810,6 +856,15 @@ func (o *Orchestrator) computeDesiredWatches() map[tspath.RootedDirectoryPath]bo
 
 func (o *Orchestrator) addDependencyWatchDirs(desiredDirs *watchmanager.DirWatchSet, configDir tspath.RootedDirectoryPath, dependencies *watchDependencies) {
 	if dependencies == nil {
+		return
+	}
+	if !dependencies.complete {
+		o.addKnownDependencyWatchDirs(desiredDirs, dependencies)
+		for _, dir := range dependencies.watchDirectories {
+			if !desiredDirs.Covered(dir) {
+				desiredDirs.Set(dir, false)
+			}
+		}
 		return
 	}
 	o.addKnownDependencyWatchDirs(desiredDirs, dependencies)
@@ -862,6 +917,22 @@ func (o *Orchestrator) addResidualDependencyWatchDirs(desiredDirs *watchmanager.
 		}
 		o.addWatchDir(desiredDirs, o.host.FS().Realpath(lookup).Directory())
 	}
+}
+
+func (o *Orchestrator) persistedDependencyWatchDirs(configDir tspath.RootedDirectoryPath, dependencies *watchDependencies) []tspath.RootedDirectoryPath {
+	dirs := watchmanager.NewDirWatchSet(o.caseSensitivity)
+	dirs.Set(configDir, false)
+	o.addKnownDependencyWatchDirs(dirs, dependencies)
+	known := maps.Clone(dirs.Dirs())
+	o.addResidualDependencyWatchDirs(dirs, configDir, dependencies)
+	result := make([]tspath.RootedDirectoryPath, 0, len(dirs.Dirs()))
+	for dir := range dirs.Dirs() {
+		if _, ok := known[dir]; !ok {
+			result = append(result, dir)
+		}
+	}
+	slices.Sort(result)
+	return result
 }
 
 func (o *Orchestrator) addWatchDir(desiredDirs *watchmanager.DirWatchSet, dir tspath.RootedDirectoryPath) {
@@ -949,6 +1020,7 @@ func (o *Orchestrator) doCycle(changedPaths map[tspath.RootedPath]fswatch.EventK
 
 	var needsConfigUpdate atomic.Bool
 	var needsUpdate atomic.Bool
+	needsWatchUpdate := false
 
 	if overflow {
 		// Overflow: reset all tasks to force a full rebuild.
@@ -964,10 +1036,14 @@ func (o *Orchestrator) doCycle(changedPaths map[tspath.RootedPath]fswatch.EventK
 		needsUpdate.Store(true)
 	} else {
 		// Event-driven: check only tasks affected by changed paths
-		o.checkTasksForEventChanges(changedPaths, &needsConfigUpdate, &needsUpdate)
+		needsWatchUpdate = o.checkTasksForEventChanges(changedPaths, &needsConfigUpdate, &needsUpdate)
 	}
 
 	if !needsUpdate.Load() {
+		if needsWatchUpdate {
+			o.updateWatch()
+			o.reconcileWatches()
+		}
 		o.resetCaches()
 		return false
 	}

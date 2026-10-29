@@ -88,7 +88,7 @@ export const session = {
 };
 
 //// [/user/username/projects/reexport/out/main/tsconfig.tsbuildinfo] *new* 
-{"version":"FakeTSVersion","root":["../../src/main/index.ts"],"nonIncrementalFileNames":["../pure/index.d.ts","../pure/session.d.ts"]}
+{"version":"FakeTSVersion","root":["../../src/main/index.ts"],"watchDirectories":["..","../..","../../src","../../src/pure"],"nonIncrementalFileNames":["../pure/index.d.ts","../pure/session.d.ts"]}
 //// [/user/username/projects/reexport/out/main/tsconfig.tsbuildinfo.readable.baseline.txt] *new* 
 {
   "version": "FakeTSVersion",
@@ -100,7 +100,7 @@ export const session = {
       "original": "../../src/main/index.ts"
     }
   ],
-  "size": 134
+  "size": 197
 }
 //// [/user/username/projects/reexport/out/pure/index.d.ts] *new* 
 export * from "./session";
@@ -117,7 +117,7 @@ export interface Session {
 export {};
 
 //// [/user/username/projects/reexport/out/pure/tsconfig.tsbuildinfo] *new* 
-{"version":"FakeTSVersion","root":[[2,3]],"fileNames":["lib.es2026.full.d.ts","../../src/pure/session.ts","../../src/pure/index.ts"],"fileInfos":[{"version":"8859c12c614ce56ba9a18e58384a198f-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ninterface SymbolConstructor {\n    (desc?: string | number): symbol;\n    for(name: string): symbol;\n    readonly toStringTag: symbol;\n}\ndeclare var Symbol: SymbolConstructor;\ninterface Symbol {\n    readonly [Symbol.toStringTag]: string;\n}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true,"impliedNodeFormat":1},{"version":"1beb34deefa28062ed4b4b605c69e42f-export interface Session {\n    foo: number;\n    // bar: number;\n}","signature":"90b43415bdb2993dfd8c888e444ab471-export interface Session {\n    foo: number;\n}\n","impliedNodeFormat":1},{"version":"c3b7227625b1dcb56b6fb13c17c504fe-export * from \"./session\";","signature":"14ab788547e1e852fa86d4bf1731e8c8-export * from \"./session\";\n","impliedNodeFormat":1}],"fileIdsList":[[2]],"options":{"composite":true,"outDir":"..","rootDir":"../../src"},"referencedMap":[[3,1]],"latestChangedDtsFile":"./index.d.ts"}
+{"version":"FakeTSVersion","root":[[2,3]],"watchDirectories":["../..","../../src"],"fileNames":["lib.es2026.full.d.ts","../../src/pure/session.ts","../../src/pure/index.ts"],"fileInfos":[{"version":"8859c12c614ce56ba9a18e58384a198f-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ninterface SymbolConstructor {\n    (desc?: string | number): symbol;\n    for(name: string): symbol;\n    readonly toStringTag: symbol;\n}\ndeclare var Symbol: SymbolConstructor;\ninterface Symbol {\n    readonly [Symbol.toStringTag]: string;\n}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true,"impliedNodeFormat":1},{"version":"1beb34deefa28062ed4b4b605c69e42f-export interface Session {\n    foo: number;\n    // bar: number;\n}","signature":"90b43415bdb2993dfd8c888e444ab471-export interface Session {\n    foo: number;\n}\n","impliedNodeFormat":1},{"version":"c3b7227625b1dcb56b6fb13c17c504fe-export * from \"./session\";","signature":"14ab788547e1e852fa86d4bf1731e8c8-export * from \"./session\";\n","impliedNodeFormat":1}],"fileIdsList":[[2]],"options":{"composite":true,"outDir":"..","rootDir":"../../src"},"referencedMap":[[3,1]],"latestChangedDtsFile":"./index.d.ts"}
 //// [/user/username/projects/reexport/out/pure/tsconfig.tsbuildinfo.readable.baseline.txt] *new* 
 {
   "version": "FakeTSVersion",
@@ -190,7 +190,7 @@ export {};
     ]
   },
   "latestChangedDtsFile": "./index.d.ts",
-  "size": 1475
+  "size": 1516
 }
 
 Watch Registrations::
@@ -257,7 +257,7 @@ Output::
 
 //// [/user/username/projects/reexport/out/main/index.js] *rewrite with same content*
 //// [/user/username/projects/reexport/out/main/tsconfig.tsbuildinfo] *modified* 
-{"version":"FakeTSVersion","root":["../../src/main/index.ts"],"semanticErrors":true,"nonIncrementalFileNames":["../pure/index.d.ts","../pure/session.d.ts"]}
+{"version":"FakeTSVersion","root":["../../src/main/index.ts"],"watchDirectories":["..","../..","../../src","../../src/pure"],"semanticErrors":true,"nonIncrementalFileNames":["../pure/index.d.ts","../pure/session.d.ts"]}
 //// [/user/username/projects/reexport/out/main/tsconfig.tsbuildinfo.readable.baseline.txt] *modified* 
 {
   "version": "FakeTSVersion",
@@ -269,7 +269,7 @@ Output::
       "original": "../../src/main/index.ts"
     }
   ],
-  "size": 156,
+  "size": 219,
   "semanticErrors": true
 }
 //// [/user/username/projects/reexport/out/pure/index.js] *rewrite with same content*
@@ -281,7 +281,7 @@ export interface Session {
 
 //// [/user/username/projects/reexport/out/pure/session.js] *rewrite with same content*
 //// [/user/username/projects/reexport/out/pure/tsconfig.tsbuildinfo] *modified* 
-{"version":"FakeTSVersion","root":[[2,3]],"fileNames":["lib.es2026.full.d.ts","../../src/pure/session.ts","../../src/pure/index.ts"],"fileInfos":[{"version":"8859c12c614ce56ba9a18e58384a198f-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ninterface SymbolConstructor {\n    (desc?: string | number): symbol;\n    for(name: string): symbol;\n    readonly toStringTag: symbol;\n}\ndeclare var Symbol: SymbolConstructor;\ninterface Symbol {\n    readonly [Symbol.toStringTag]: string;\n}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true,"impliedNodeFormat":1},{"version":"f993dc94313f77cb079d7ee366b10997-export interface Session {\n    foo: number;\n    bar: number;\n}","signature":"5daeec8bad73c67127f3b3aae951c919-export interface Session {\n    foo: number;\n    bar: number;\n}\n","impliedNodeFormat":1},{"version":"c3b7227625b1dcb56b6fb13c17c504fe-export * from \"./session\";","signature":"14ab788547e1e852fa86d4bf1731e8c8-export * from \"./session\";\n","impliedNodeFormat":1}],"fileIdsList":[[2]],"options":{"composite":true,"outDir":"..","rootDir":"../../src"},"referencedMap":[[3,1]],"latestChangedDtsFile":"./session.d.ts"}
+{"version":"FakeTSVersion","root":[[2,3]],"watchDirectories":["../..","../../src"],"fileNames":["lib.es2026.full.d.ts","../../src/pure/session.ts","../../src/pure/index.ts"],"fileInfos":[{"version":"8859c12c614ce56ba9a18e58384a198f-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ninterface SymbolConstructor {\n    (desc?: string | number): symbol;\n    for(name: string): symbol;\n    readonly toStringTag: symbol;\n}\ndeclare var Symbol: SymbolConstructor;\ninterface Symbol {\n    readonly [Symbol.toStringTag]: string;\n}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true,"impliedNodeFormat":1},{"version":"f993dc94313f77cb079d7ee366b10997-export interface Session {\n    foo: number;\n    bar: number;\n}","signature":"5daeec8bad73c67127f3b3aae951c919-export interface Session {\n    foo: number;\n    bar: number;\n}\n","impliedNodeFormat":1},{"version":"c3b7227625b1dcb56b6fb13c17c504fe-export * from \"./session\";","signature":"14ab788547e1e852fa86d4bf1731e8c8-export * from \"./session\";\n","impliedNodeFormat":1}],"fileIdsList":[[2]],"options":{"composite":true,"outDir":"..","rootDir":"../../src"},"referencedMap":[[3,1]],"latestChangedDtsFile":"./session.d.ts"}
 //// [/user/username/projects/reexport/out/pure/tsconfig.tsbuildinfo.readable.baseline.txt] *modified* 
 {
   "version": "FakeTSVersion",
@@ -354,7 +354,7 @@ export interface Session {
     ]
   },
   "latestChangedDtsFile": "./session.d.ts",
-  "size": 1492
+  "size": 1533
 }
 
 Watch Registrations::
@@ -411,7 +411,7 @@ Output::
 
 //// [/user/username/projects/reexport/out/main/index.js] *rewrite with same content*
 //// [/user/username/projects/reexport/out/main/tsconfig.tsbuildinfo] *modified* 
-{"version":"FakeTSVersion","root":["../../src/main/index.ts"],"nonIncrementalFileNames":["../pure/index.d.ts","../pure/session.d.ts"]}
+{"version":"FakeTSVersion","root":["../../src/main/index.ts"],"watchDirectories":["..","../..","../../src","../../src/pure"],"nonIncrementalFileNames":["../pure/index.d.ts","../pure/session.d.ts"]}
 //// [/user/username/projects/reexport/out/main/tsconfig.tsbuildinfo.readable.baseline.txt] *modified* 
 {
   "version": "FakeTSVersion",
@@ -423,7 +423,7 @@ Output::
       "original": "../../src/main/index.ts"
     }
   ],
-  "size": 134
+  "size": 197
 }
 //// [/user/username/projects/reexport/out/pure/index.js] *rewrite with same content*
 //// [/user/username/projects/reexport/out/pure/session.d.ts] *modified* 
@@ -433,7 +433,7 @@ export interface Session {
 
 //// [/user/username/projects/reexport/out/pure/session.js] *rewrite with same content*
 //// [/user/username/projects/reexport/out/pure/tsconfig.tsbuildinfo] *modified* 
-{"version":"FakeTSVersion","root":[[2,3]],"fileNames":["lib.es2026.full.d.ts","../../src/pure/session.ts","../../src/pure/index.ts"],"fileInfos":[{"version":"8859c12c614ce56ba9a18e58384a198f-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ninterface SymbolConstructor {\n    (desc?: string | number): symbol;\n    for(name: string): symbol;\n    readonly toStringTag: symbol;\n}\ndeclare var Symbol: SymbolConstructor;\ninterface Symbol {\n    readonly [Symbol.toStringTag]: string;\n}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true,"impliedNodeFormat":1},{"version":"1beb34deefa28062ed4b4b605c69e42f-export interface Session {\n    foo: number;\n    // bar: number;\n}","signature":"90b43415bdb2993dfd8c888e444ab471-export interface Session {\n    foo: number;\n}\n","impliedNodeFormat":1},{"version":"c3b7227625b1dcb56b6fb13c17c504fe-export * from \"./session\";","signature":"14ab788547e1e852fa86d4bf1731e8c8-export * from \"./session\";\n","impliedNodeFormat":1}],"fileIdsList":[[2]],"options":{"composite":true,"outDir":"..","rootDir":"../../src"},"referencedMap":[[3,1]],"latestChangedDtsFile":"./session.d.ts"}
+{"version":"FakeTSVersion","root":[[2,3]],"watchDirectories":["../..","../../src"],"fileNames":["lib.es2026.full.d.ts","../../src/pure/session.ts","../../src/pure/index.ts"],"fileInfos":[{"version":"8859c12c614ce56ba9a18e58384a198f-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ninterface SymbolConstructor {\n    (desc?: string | number): symbol;\n    for(name: string): symbol;\n    readonly toStringTag: symbol;\n}\ndeclare var Symbol: SymbolConstructor;\ninterface Symbol {\n    readonly [Symbol.toStringTag]: string;\n}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true,"impliedNodeFormat":1},{"version":"1beb34deefa28062ed4b4b605c69e42f-export interface Session {\n    foo: number;\n    // bar: number;\n}","signature":"90b43415bdb2993dfd8c888e444ab471-export interface Session {\n    foo: number;\n}\n","impliedNodeFormat":1},{"version":"c3b7227625b1dcb56b6fb13c17c504fe-export * from \"./session\";","signature":"14ab788547e1e852fa86d4bf1731e8c8-export * from \"./session\";\n","impliedNodeFormat":1}],"fileIdsList":[[2]],"options":{"composite":true,"outDir":"..","rootDir":"../../src"},"referencedMap":[[3,1]],"latestChangedDtsFile":"./session.d.ts"}
 //// [/user/username/projects/reexport/out/pure/tsconfig.tsbuildinfo.readable.baseline.txt] *modified* 
 {
   "version": "FakeTSVersion",
@@ -506,7 +506,7 @@ export interface Session {
     ]
   },
   "latestChangedDtsFile": "./session.d.ts",
-  "size": 1477
+  "size": 1518
 }
 
 Watch Registrations::

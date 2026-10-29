@@ -114,7 +114,7 @@ export function leftPad(s, n) { return s + n; }
 export function multiply(a, b) { return a * b; }
 
 //// [/user/username/projects/sample1/core/tsconfig.tsbuildinfo] *new* 
-{"version":"FakeTSVersion","root":["./anotherModule.ts","./index.ts","./some_decl.d.ts"],"nonIncrementalFileNames":[]}
+{"version":"FakeTSVersion","root":["./anotherModule.ts","./index.ts","./some_decl.d.ts"],"watchDirectories":[".."],"nonIncrementalFileNames":[]}
 //// [/user/username/projects/sample1/core/tsconfig.tsbuildinfo.readable.baseline.txt] *new* 
 {
   "version": "FakeTSVersion",
@@ -138,7 +138,7 @@ export function multiply(a, b) { return a * b; }
       "original": "./some_decl.d.ts"
     }
   ],
-  "size": 118
+  "size": 144
 }
 
 core/tsconfig.json::

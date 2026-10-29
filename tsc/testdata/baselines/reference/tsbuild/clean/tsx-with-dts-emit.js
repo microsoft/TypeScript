@@ -53,7 +53,7 @@ export declare const x = 10;
 export const x = 10;
 
 //// [/home/src/workspaces/solution/project/tsconfig.tsbuildinfo] *new* 
-{"version":"FakeTSVersion","root":["./src/main.tsx"],"nonIncrementalFileNames":[]}
+{"version":"FakeTSVersion","root":["./src/main.tsx"],"watchDirectories":[".."],"nonIncrementalFileNames":[]}
 //// [/home/src/workspaces/solution/project/tsconfig.tsbuildinfo.readable.baseline.txt] *new* 
 {
   "version": "FakeTSVersion",
@@ -65,7 +65,7 @@ export const x = 10;
       "original": "./src/main.tsx"
     }
   ],
-  "size": 82
+  "size": 108
 }
 
 project/tsconfig.json::

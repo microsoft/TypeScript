@@ -90,7 +90,7 @@ exports.default = index_json_1.default.hello;
 }
 
 //// [/home/src/workspaces/solution/project/dist/tsconfig.tsbuildinfo] *new* 
-{"version":"FakeTSVersion","errors":true,"root":["../src/index.ts","../src/index.json"],"nonIncrementalFileNames":[]}
+{"version":"FakeTSVersion","errors":true,"root":["../src/index.ts","../src/index.json"],"watchDirectories":["../.."],"nonIncrementalFileNames":[]}
 //// [/home/src/workspaces/solution/project/dist/tsconfig.tsbuildinfo.readable.baseline.txt] *new* 
 {
   "version": "FakeTSVersion",
@@ -109,7 +109,7 @@ exports.default = index_json_1.default.hello;
       "original": "../src/index.json"
     }
   ],
-  "size": 117
+  "size": 146
 }
 
 project/tsconfig.json::

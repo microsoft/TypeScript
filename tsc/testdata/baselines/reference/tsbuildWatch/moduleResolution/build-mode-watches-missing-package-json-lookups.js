@@ -85,7 +85,7 @@ declare const console: { log(msg: any): void; };
 export const theNum = 42;
 
 //// [/user/username/projects/myproject/packages/pkg1/build/tsconfig.tsbuildinfo] *new* 
-{"version":"FakeTSVersion","root":["../index.ts"],"semanticErrors":true,"nonIncrementalFileNames":[]}
+{"version":"FakeTSVersion","root":["../index.ts"],"watchDirectories":["../..","../../.."],"semanticErrors":true,"nonIncrementalFileNames":[]}
 //// [/user/username/projects/myproject/packages/pkg1/build/tsconfig.tsbuildinfo.readable.baseline.txt] *new* 
 {
   "version": "FakeTSVersion",
@@ -97,7 +97,7 @@ export const theNum = 42;
       "original": "../index.ts"
     }
   ],
-  "size": 101,
+  "size": 141,
   "semanticErrors": true
 }
 
@@ -163,7 +163,7 @@ Resolving real path for '/user/username/projects/myproject/node_modules/pkg2/ind
 
 //// [/user/username/projects/myproject/packages/pkg1/build/index.js] *rewrite with same content*
 //// [/user/username/projects/myproject/packages/pkg1/build/tsconfig.tsbuildinfo] *modified* 
-{"version":"FakeTSVersion","root":["../index.ts"],"packageJsons":["../../../node_modules/pkg2/package.json"],"nonIncrementalFileNames":["../../../node_modules/pkg2/index.d.ts"]}
+{"version":"FakeTSVersion","root":["../index.ts"],"packageJsons":["../../../node_modules/pkg2/package.json"],"watchDirectories":["../..","../../..","../../../node_modules"],"nonIncrementalFileNames":["../../../node_modules/pkg2/index.d.ts"]}
 //// [/user/username/projects/myproject/packages/pkg1/build/tsconfig.tsbuildinfo.readable.baseline.txt] *modified* 
 {
   "version": "FakeTSVersion",
@@ -178,7 +178,7 @@ Resolving real path for '/user/username/projects/myproject/node_modules/pkg2/ind
   "packageJsons": [
     "../../../node_modules/pkg2/package.json"
   ],
-  "size": 177
+  "size": 241
 }
 
 Watch Registrations::
@@ -259,7 +259,7 @@ Directory '/node_modules' does not exist, skipping all lookups in it.
 
 //// [/user/username/projects/myproject/packages/pkg1/build/index.js] *rewrite with same content*
 //// [/user/username/projects/myproject/packages/pkg1/build/tsconfig.tsbuildinfo] *modified* 
-{"version":"FakeTSVersion","root":["../index.ts"],"missingPackageJsons":["../../../node_modules/pkg2/package.json"],"semanticErrors":true,"nonIncrementalFileNames":[]}
+{"version":"FakeTSVersion","root":["../index.ts"],"missingPackageJsons":["../../../node_modules/pkg2/package.json"],"watchDirectories":["../..","../../..","../../../node_modules","../../../node_modules/pkg2"],"semanticErrors":true,"nonIncrementalFileNames":[]}
 //// [/user/username/projects/myproject/packages/pkg1/build/tsconfig.tsbuildinfo.readable.baseline.txt] *modified* 
 {
   "version": "FakeTSVersion",
@@ -274,7 +274,7 @@ Directory '/node_modules' does not exist, skipping all lookups in it.
   "missingPackageJsons": [
     "../../../node_modules/pkg2/package.json"
   ],
-  "size": 167,
+  "size": 260,
   "semanticErrors": true
 }
 

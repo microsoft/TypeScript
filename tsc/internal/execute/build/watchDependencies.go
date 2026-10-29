@@ -7,6 +7,7 @@ import (
 	"github.com/microsoft/TypeScript/tsc/internal/collections"
 	"github.com/microsoft/TypeScript/tsc/internal/compiler"
 	"github.com/microsoft/TypeScript/tsc/internal/core"
+	"github.com/microsoft/TypeScript/tsc/internal/execute/incremental"
 	"github.com/microsoft/TypeScript/tsc/internal/fswatch"
 	"github.com/microsoft/TypeScript/tsc/internal/module"
 	"github.com/microsoft/TypeScript/tsc/internal/tsoptions"
@@ -17,9 +18,10 @@ import (
 
 type dependencyTrackingFS struct {
 	trackingvfs.FS
-	directories  collections.SyncSet[tspath.RootedDirectoryPath]
-	enumerations collections.SyncMap[tspath.RootedDirectoryPath, []string]
-	realpaths    collections.SyncMap[tspath.RootedPath, tspath.RootedPath]
+	directories      collections.SyncSet[tspath.RootedDirectoryPath]
+	enumerations     collections.SyncMap[tspath.RootedDirectoryPath, []string]
+	realpaths        collections.SyncMap[tspath.RootedPath, tspath.RootedPath]
+	watchDirectories []tspath.RootedDirectoryPath
 }
 
 func (f *dependencyTrackingFS) Realpath(path tspath.RootedPath) tspath.RootedPath {
@@ -62,6 +64,49 @@ type watchDependencies struct {
 	relativeDirectories collections.Set[tspath.RootedDirectoryPath]
 	enumerations        map[tspath.PathKey]directoryDependency
 	referenceSources    collections.Set[tspath.PathKey]
+	watchDirectories    []tspath.RootedDirectoryPath
+	complete            bool
+}
+
+func watchDependenciesFromBuildInfo(o *Orchestrator, buildInfo *incremental.BuildInfo, buildInfoDirectory tspath.RootedDirectoryPath) *watchDependencies {
+	dependencies := &watchDependencies{
+		inputs:       make(map[tspath.PathKey]tspath.RootedFilePath),
+		inputAliases: make(map[tspath.PathKey]inputAlias),
+		lookups:      make(map[tspath.PathKey]tspath.RootedPath),
+		enumerations: make(map[tspath.PathKey]directoryDependency),
+	}
+	addInput := func(file tspath.RootedFilePath) {
+		path := o.caseSensitivity.PathKey(file.AsPath())
+		dependencies.inputs[path] = file
+		dependencies.inputPaths.Add(path)
+		dependencies.inputPaths.Add(o.caseSensitivity.PathKey(o.host.FS().Realpath(file.AsPath())))
+	}
+	for _, file := range buildInfo.FileNames {
+		if !incremental.IsBuildInfoFileNameDefaultLibrary(file) {
+			addInput(incremental.ResolveBuildInfoFileName(file, buildInfoDirectory, o.host.DefaultLibraryPath()))
+		}
+	}
+	for _, root := range buildInfo.Root {
+		if root.NonIncremental != "" {
+			addInput(incremental.ResolveBuildInfoFileName(root.NonIncremental, buildInfoDirectory, ""))
+		}
+	}
+	for file := range buildInfo.GetNonIncrementalFileNames(buildInfoDirectory) {
+		addInput(file)
+	}
+	for file, realPath := range buildInfo.GetInputAliases(buildInfoDirectory) {
+		path := o.caseSensitivity.PathKey(file.AsPath())
+		realPathKey := o.caseSensitivity.PathKey(realPath.AsPath())
+		dependencies.inputAliases[path] = inputAlias{file: file, realPath: realPathKey}
+		dependencies.inputPaths.Add(path)
+		dependencies.inputPaths.Add(realPathKey)
+		dependencies.lookups[path] = file.AsPath()
+		dependencies.lookups[realPathKey] = realPath.AsPath()
+	}
+	dependencies.watchDirectories = core.Map(buildInfo.WatchDirectories, func(path incremental.BuildInfoPath) tspath.RootedDirectoryPath {
+		return buildInfoDirectory.ResolveDirectory(path.AsString())
+	})
+	return dependencies
 }
 
 func (d *watchDependencies) addInputAlias(o *Orchestrator, path, realPath tspath.RootedPath) {
@@ -176,7 +221,22 @@ func (t *BuildTask) captureWatchDependencies(o *Orchestrator, program *compiler.
 	}
 	t.watchDependencies = dependencies
 	t.watchDependenciesDirty = false
+	dependencies.complete = true
+	fs.watchDirectories = o.persistedDependencyWatchDirs(t.config.Directory(), dependencies)
 	return true
+}
+
+func (f *dependencyTrackingFS) BuildInfoInputAliases() map[tspath.RootedPath]tspath.RootedPath {
+	aliases := make(map[tspath.RootedPath]tspath.RootedPath)
+	f.realpaths.Range(func(path, realPath tspath.RootedPath) bool {
+		aliases[path] = realPath
+		return true
+	})
+	return aliases
+}
+
+func (f *dependencyTrackingFS) BuildInfoWatchDirectories() []tspath.RootedDirectoryPath {
+	return slices.Clone(f.watchDirectories)
 }
 
 func (d *watchDependencies) changedInputAlias(o *Orchestrator, paths map[tspath.PathKey]fswatch.EventKind) tspath.RootedPath {
@@ -252,4 +312,30 @@ func (d *watchDependencies) changed(o *Orchestrator, paths map[tspath.PathKey]fs
 		}
 	}
 	return "", inputChanged, false
+}
+
+func (d *watchDependencies) affectedInput(paths map[tspath.PathKey]fswatch.EventKind, knownInputs *collections.Set[tspath.PathKey]) (input tspath.RootedPath, changed bool) {
+	for _, inputPath := range slices.Sorted(maps.Keys(d.inputPaths.Keys())) {
+		for eventPath := range paths {
+			if eventPath.ContainsPath(inputPath) || inputPath.ContainsPath(eventPath) {
+				if input := d.lookups[inputPath]; input != "" {
+					if !knownInputs.Has(inputPath) {
+						return input, true
+					}
+					changed = true
+				}
+			}
+		}
+	}
+	for _, aliasPath := range slices.Sorted(maps.Keys(d.inputAliases)) {
+		for eventPath := range paths {
+			if eventPath.ContainsPath(aliasPath) || aliasPath.ContainsPath(eventPath) {
+				if !knownInputs.Has(aliasPath) {
+					return d.inputAliases[aliasPath].file.AsPath(), true
+				}
+				changed = true
+			}
+		}
+	}
+	return "", changed
 }

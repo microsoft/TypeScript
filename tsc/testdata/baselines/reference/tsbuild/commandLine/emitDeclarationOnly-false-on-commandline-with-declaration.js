@@ -84,7 +84,7 @@ export declare const c = 10;
 export declare const d = 10;
 
 //// [/home/src/workspaces/solution/project1/src/tsconfig.tsbuildinfo] *new* 
-{"version":"FakeTSVersion","root":["./a.ts","./b.ts","./c.ts","./d.ts"],"nonIncrementalFileNames":[]}
+{"version":"FakeTSVersion","root":["./a.ts","./b.ts","./c.ts","./d.ts"],"watchDirectories":["..","../.."],"nonIncrementalFileNames":[]}
 //// [/home/src/workspaces/solution/project1/src/tsconfig.tsbuildinfo.readable.baseline.txt] *new* 
 {
   "version": "FakeTSVersion",
@@ -114,7 +114,7 @@ export declare const d = 10;
       "original": "./d.ts"
     }
   ],
-  "size": 101
+  "size": 135
 }
 //// [/home/src/workspaces/solution/project2/src/e.d.ts] *new* 
 export declare const e = 10;
@@ -126,7 +126,7 @@ export declare const f = 10;
 export declare const g = 10;
 
 //// [/home/src/workspaces/solution/project2/src/tsconfig.tsbuildinfo] *new* 
-{"version":"FakeTSVersion","errors":true,"root":["./e.ts","./f.ts","./g.ts"],"nonIncrementalFileNames":["../../project1/src/a.d.ts","../../project1/src/b.d.ts"]}
+{"version":"FakeTSVersion","errors":true,"root":["./e.ts","./f.ts","./g.ts"],"watchDirectories":["..","../..","../../project1"],"nonIncrementalFileNames":["../../project1/src/a.d.ts","../../project1/src/b.d.ts"]}
 //// [/home/src/workspaces/solution/project2/src/tsconfig.tsbuildinfo.readable.baseline.txt] *new* 
 {
   "version": "FakeTSVersion",
@@ -151,7 +151,7 @@ export declare const g = 10;
       "original": "./g.ts"
     }
   ],
-  "size": 161
+  "size": 212
 }
 
 project1/src/tsconfig.json::

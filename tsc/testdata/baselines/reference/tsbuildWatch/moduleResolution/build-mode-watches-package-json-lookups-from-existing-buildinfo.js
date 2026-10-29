@@ -22,7 +22,7 @@ export const theNum: TheNum = 42;
 export const theNum = 42;
 
 //// [/user/username/projects/myproject/packages/pkg1/zzbuild/tsconfig.tsbuildinfo] *new* 
-{"version":"FakeTSVersion","root":["../index.ts"],"packageJsons":["../../../node_modules/pkg2/package.json"],"nonIncrementalFileNames":["../../../node_modules/pkg2/index.d.ts"]}
+{"version":"FakeTSVersion","root":["../index.ts"],"packageJsons":["../../../node_modules/pkg2/package.json"],"watchDirectories":["../..","../../..","../../../node_modules"],"nonIncrementalFileNames":["../../../node_modules/pkg2/index.d.ts"]}
 //// [/user/username/projects/myproject/packages/pkg1/zzbuild/tsconfig.tsbuildinfo.readable.baseline.txt] *new* 
 {
   "version": "FakeTSVersion",
@@ -37,7 +37,7 @@ export const theNum = 42;
   "packageJsons": [
     "../../../node_modules/pkg2/package.json"
   ],
-  "size": 177
+  "size": 241
 }
 
 tsgo -b packages/pkg1 -w --verbose --traceResolution
@@ -52,29 +52,6 @@ Output::
 
 [[90mHH:MM:SS AM[0m] Found 0 errors. Watching for file changes.
 
-//// [/home/src/tslibs/TS/Lib/lib.es2026.full.d.ts] *Lib*
-/// <reference no-default-lib="true"/>
-interface Boolean {}
-interface Function {}
-interface CallableFunction {}
-interface NewableFunction {}
-interface IArguments {}
-interface Number { toExponential: any; }
-interface Object {}
-interface RegExp {}
-interface String { charAt: any; }
-interface Array<T> { length: number; [n: number]: T; }
-interface ReadonlyArray<T> {}
-interface SymbolConstructor {
-    (desc?: string | number): symbol;
-    for(name: string): symbol;
-    readonly toStringTag: symbol;
-}
-declare var Symbol: SymbolConstructor;
-interface Symbol {
-    readonly [Symbol.toStringTag]: string;
-}
-declare const console: { log(msg: any): void; };
 
 Watch Registrations::
 Directory watches::
@@ -146,9 +123,32 @@ Directory '/node_modules' does not exist, skipping all lookups in it.
 
 [[90mHH:MM:SS AM[0m] Found 1 error. Watching for file changes.
 
+//// [/home/src/tslibs/TS/Lib/lib.es2026.full.d.ts] *Lib*
+/// <reference no-default-lib="true"/>
+interface Boolean {}
+interface Function {}
+interface CallableFunction {}
+interface NewableFunction {}
+interface IArguments {}
+interface Number { toExponential: any; }
+interface Object {}
+interface RegExp {}
+interface String { charAt: any; }
+interface Array<T> { length: number; [n: number]: T; }
+interface ReadonlyArray<T> {}
+interface SymbolConstructor {
+    (desc?: string | number): symbol;
+    for(name: string): symbol;
+    readonly toStringTag: symbol;
+}
+declare var Symbol: SymbolConstructor;
+interface Symbol {
+    readonly [Symbol.toStringTag]: string;
+}
+declare const console: { log(msg: any): void; };
 //// [/user/username/projects/myproject/packages/pkg1/zzbuild/index.js] *rewrite with same content*
 //// [/user/username/projects/myproject/packages/pkg1/zzbuild/tsconfig.tsbuildinfo] *modified* 
-{"version":"FakeTSVersion","root":["../index.ts"],"missingPackageJsons":["../../../node_modules/pkg2/package.json"],"semanticErrors":true,"nonIncrementalFileNames":[]}
+{"version":"FakeTSVersion","root":["../index.ts"],"missingPackageJsons":["../../../node_modules/pkg2/package.json"],"watchDirectories":["../..","../../..","../../../node_modules","../../../node_modules/pkg2"],"semanticErrors":true,"nonIncrementalFileNames":[]}
 //// [/user/username/projects/myproject/packages/pkg1/zzbuild/tsconfig.tsbuildinfo.readable.baseline.txt] *modified* 
 {
   "version": "FakeTSVersion",
@@ -163,7 +163,7 @@ Directory '/node_modules' does not exist, skipping all lookups in it.
   "missingPackageJsons": [
     "../../../node_modules/pkg2/package.json"
   ],
-  "size": 167,
+  "size": 260,
   "semanticErrors": true
 }
 

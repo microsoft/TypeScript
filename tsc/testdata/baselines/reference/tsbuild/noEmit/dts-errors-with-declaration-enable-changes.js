@@ -21,7 +21,7 @@ Output::
 [[90mHH:MM:SS AM[0m] Building project 'tsconfig.json'...
 
 //// [/home/src/projects/project/tsconfig.tsbuildinfo] *new* 
-{"version":"FakeTSVersion","root":["./a.ts"],"nonIncrementalFileNames":[]}
+{"version":"FakeTSVersion","root":["./a.ts"],"watchDirectories":[],"nonIncrementalFileNames":[]}
 //// [/home/src/projects/project/tsconfig.tsbuildinfo.readable.baseline.txt] *new* 
 {
   "version": "FakeTSVersion",
@@ -33,7 +33,7 @@ Output::
       "original": "./a.ts"
     }
   ],
-  "size": 74
+  "size": 96
 }
 //// [/home/src/tslibs/TS/Lib/lib.es2026.full.d.ts] *Lib*
 /// <reference no-default-lib="true"/>
@@ -113,7 +113,7 @@ Output::
 Found 1 error in a.ts[90m:1[0m
 
 //// [/home/src/projects/project/tsconfig.tsbuildinfo] *modified* 
-{"version":"FakeTSVersion","errors":true,"root":["./a.ts"],"nonIncrementalFileNames":[]}
+{"version":"FakeTSVersion","errors":true,"root":["./a.ts"],"watchDirectories":[],"nonIncrementalFileNames":[]}
 //// [/home/src/projects/project/tsconfig.tsbuildinfo.readable.baseline.txt] *modified* 
 {
   "version": "FakeTSVersion",
@@ -126,7 +126,7 @@ Found 1 error in a.ts[90m:1[0m
       "original": "./a.ts"
     }
   ],
-  "size": 88
+  "size": 110
 }
 
 tsconfig.json::
@@ -183,7 +183,7 @@ Output::
 [[90mHH:MM:SS AM[0m] Building project 'tsconfig.json'...
 
 //// [/home/src/projects/project/tsconfig.tsbuildinfo] *modified* 
-{"version":"FakeTSVersion","root":["./a.ts"],"nonIncrementalFileNames":[]}
+{"version":"FakeTSVersion","root":["./a.ts"],"watchDirectories":[],"nonIncrementalFileNames":[]}
 //// [/home/src/projects/project/tsconfig.tsbuildinfo.readable.baseline.txt] *modified* 
 {
   "version": "FakeTSVersion",
@@ -195,7 +195,7 @@ Output::
       "original": "./a.ts"
     }
   ],
-  "size": 74
+  "size": 96
 }
 
 tsconfig.json::
@@ -238,7 +238,7 @@ const a = class {
 };
 
 //// [/home/src/projects/project/tsconfig.tsbuildinfo] *modified* 
-{"version":"FakeTSVersion","errors":true,"root":["./a.ts"],"nonIncrementalFileNames":[]}
+{"version":"FakeTSVersion","errors":true,"root":["./a.ts"],"watchDirectories":[],"nonIncrementalFileNames":[]}
 //// [/home/src/projects/project/tsconfig.tsbuildinfo.readable.baseline.txt] *modified* 
 {
   "version": "FakeTSVersion",
@@ -251,7 +251,7 @@ const a = class {
       "original": "./a.ts"
     }
   ],
-  "size": 88
+  "size": 110
 }
 
 tsconfig.json::
@@ -276,7 +276,7 @@ Output::
 [[90mHH:MM:SS AM[0m] Building project 'tsconfig.json'...
 
 //// [/home/src/projects/project/tsconfig.tsbuildinfo] *modified* 
-{"version":"FakeTSVersion","root":["./a.ts"],"nonIncrementalFileNames":[]}
+{"version":"FakeTSVersion","root":["./a.ts"],"watchDirectories":[],"nonIncrementalFileNames":[]}
 //// [/home/src/projects/project/tsconfig.tsbuildinfo.readable.baseline.txt] *modified* 
 {
   "version": "FakeTSVersion",
@@ -288,7 +288,7 @@ Output::
       "original": "./a.ts"
     }
   ],
-  "size": 74
+  "size": 96
 }
 
 tsconfig.json::

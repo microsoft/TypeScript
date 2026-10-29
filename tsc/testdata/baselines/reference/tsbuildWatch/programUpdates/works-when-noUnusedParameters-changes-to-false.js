@@ -50,7 +50,7 @@ declare const console: { log(msg: any): void; };
 const fn = (a, b) => b;
 
 //// [/user/username/projects/myproject/tsconfig.tsbuildinfo] *new* 
-{"version":"FakeTSVersion","root":["./index.ts"],"semanticErrors":true,"nonIncrementalFileNames":[]}
+{"version":"FakeTSVersion","root":["./index.ts"],"watchDirectories":[],"semanticErrors":true,"nonIncrementalFileNames":[]}
 //// [/user/username/projects/myproject/tsconfig.tsbuildinfo.readable.baseline.txt] *new* 
 {
   "version": "FakeTSVersion",
@@ -62,7 +62,7 @@ const fn = (a, b) => b;
       "original": "./index.ts"
     }
   ],
-  "size": 100,
+  "size": 122,
   "semanticErrors": true
 }
 
@@ -92,7 +92,7 @@ Output::
 
 //// [/user/username/projects/myproject/index.js] *rewrite with same content*
 //// [/user/username/projects/myproject/tsconfig.tsbuildinfo] *modified* 
-{"version":"FakeTSVersion","root":["./index.ts"],"nonIncrementalFileNames":[]}
+{"version":"FakeTSVersion","root":["./index.ts"],"watchDirectories":[],"nonIncrementalFileNames":[]}
 //// [/user/username/projects/myproject/tsconfig.tsbuildinfo.readable.baseline.txt] *modified* 
 {
   "version": "FakeTSVersion",
@@ -104,7 +104,7 @@ Output::
       "original": "./index.ts"
     }
   ],
-  "size": 78
+  "size": 100
 }
 
 Watch Registrations::

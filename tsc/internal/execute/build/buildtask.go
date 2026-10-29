@@ -16,6 +16,7 @@ import (
 	"github.com/microsoft/TypeScript/tsc/internal/diagnostics"
 	"github.com/microsoft/TypeScript/tsc/internal/execute/incremental"
 	"github.com/microsoft/TypeScript/tsc/internal/execute/tsc"
+	"github.com/microsoft/TypeScript/tsc/internal/fswatch"
 	"github.com/microsoft/TypeScript/tsc/internal/tsoptions"
 	"github.com/microsoft/TypeScript/tsc/internal/tspath"
 )
@@ -150,7 +151,9 @@ func (t *BuildTask) buildProject(orchestrator *Orchestrator, path tspath.PathKey
 	// Wait on upstream tasks to complete
 	t.waitOnUpstream()
 	if t.pending.Load() {
-		t.status = t.getUpToDateStatus(orchestrator, path)
+		if t.status == nil {
+			t.status = t.getUpToDateStatus(orchestrator, path)
+		}
 		t.reportUpToDateStatus(orchestrator)
 		if !t.handleStatusThatDoesntRequireBuild(orchestrator) {
 			t.compileAndEmit(orchestrator, path)
@@ -222,7 +225,7 @@ func (t *BuildTask) updateDownstream(orchestrator *Orchestrator, path tspath.Pat
 	}
 }
 
-func (t *BuildTask) captureCurrentWatchDependencies(orchestrator *Orchestrator, contentMapperProject contentmapper.Project) {
+func (t *BuildTask) captureCurrentWatchDependencies(orchestrator *Orchestrator, contentMapperProject contentmapper.Project) *compiler.Program {
 	host := &compilerHost{
 		host:                 orchestrator.host,
 		trace:                func(*diagnostics.Message, ...any) {},
@@ -231,6 +234,7 @@ func (t *BuildTask) captureCurrentWatchDependencies(orchestrator *Orchestrator, 
 	host.trackDependencies()
 	program := compiler.NewProgram(compiler.ProgramOptions{Config: t.resolved, Host: host})
 	t.captureWatchDependencies(orchestrator, program, host.watchFS)
+	return program
 }
 
 func (t *BuildTask) compileAndEmit(orchestrator *Orchestrator, path tspath.PathKey) {
@@ -368,9 +372,6 @@ func (t *BuildTask) handleStatusThatDoesntRequireBuild(orchestrator *Orchestrato
 }
 
 func (t *BuildTask) getUpToDateStatus(orchestrator *Orchestrator, configPath tspath.PathKey) *upToDateStatus {
-	if t.status != nil {
-		return t.status
-	}
 	// Config file not found
 	if t.resolved == nil {
 		return &upToDateStatus{kind: upToDateStatusTypeConfigFileNotFound}
@@ -406,7 +407,6 @@ func (t *BuildTask) getUpToDateStatus(orchestrator *Orchestrator, configPath tsp
 	if !buildInfo.IsValidVersion() {
 		return &upToDateStatus{kind: upToDateStatusTypeTsVersionOutputOfDate, data: buildInfo.Version}
 	}
-
 	// If a configured content mapper's identity has changed, files it produced may be stale.
 	contentMapperProject, err := t.getContentMapperProject(orchestrator)
 	contentMapperIdentities, identityErr := incremental.ContentMapperIdentities(contentMapperProject)
@@ -654,7 +654,10 @@ func (t *BuildTask) getUpToDateStatus(orchestrator *Orchestrator, configPath tsp
 	}
 
 	if orchestrator.opts.Command.CompilerOptions.Watch.IsTrue() {
-		if t.watchDependencies == nil || t.watchDependenciesDirty {
+		if t.watchDependencies == nil {
+			t.watchDependencies = watchDependenciesFromBuildInfo(orchestrator, buildInfo, getBuildInfoDirectory())
+		}
+		if (!t.watchDependencies.complete && t.watchDependencies.watchDirectories == nil) || t.watchDependenciesDirty {
 			t.captureCurrentWatchDependencies(orchestrator, contentMapperProject)
 		}
 		if input := t.watchDependencies.changedInputAlias(orchestrator, nil); input != "" {
@@ -709,6 +712,67 @@ func isContentMapperVirtualFilePath(inputPath tspath.PathKey, roots *incremental
 
 	_, err := strconv.Atoi(index)
 	return err == nil
+}
+
+func (t *BuildTask) buildInfoUnclassifiedEvents(
+	orchestrator *Orchestrator,
+	buildInfo *incremental.BuildInfo,
+	buildInfoDirectory tspath.RootedDirectoryPath,
+	paths map[tspath.PathKey]fswatch.EventKind,
+) map[tspath.PathKey]fswatch.EventKind {
+	if buildInfo == nil {
+		return nil
+	}
+	knownFiles := make(map[tspath.PathKey]struct{})
+	directories := &collections.Set[tspath.PathKey]{}
+	addFile := func(file tspath.RootedFilePath) {
+		knownFiles[orchestrator.caseSensitivity.PathKey(file.AsPath())] = struct{}{}
+		directories.Add(orchestrator.caseSensitivity.PathKey(file.Directory().AsPath()))
+		realPath := orchestrator.host.FS().Realpath(file.AsPath())
+		knownFiles[orchestrator.caseSensitivity.PathKey(realPath)] = struct{}{}
+		directories.Add(orchestrator.caseSensitivity.PathKey(realPath.Directory().AsPath()))
+	}
+	addFile(t.config)
+	for _, file := range t.resolved.FileNames() {
+		addFile(file)
+	}
+	for _, fileName := range buildInfo.FileNames {
+		if !incremental.IsBuildInfoFileNameDefaultLibrary(fileName) {
+			addFile(incremental.ResolveBuildInfoFileName(fileName, buildInfoDirectory, orchestrator.host.DefaultLibraryPath()))
+		}
+	}
+	for file := range buildInfo.GetNonIncrementalFileNames(buildInfoDirectory) {
+		addFile(file)
+	}
+	for file, realPath := range buildInfo.GetInputAliases(buildInfoDirectory) {
+		addFile(file)
+		addFile(realPath)
+	}
+	for file := range buildInfo.GetPackageJsons(buildInfoDirectory) {
+		addFile(file)
+	}
+	for file := range buildInfo.GetMissingPackageJsons(buildInfoDirectory) {
+		addFile(file)
+	}
+	for dir := range buildInfo.GetWatchDirectories(buildInfoDirectory) {
+		directories.Add(orchestrator.caseSensitivity.PathKey(dir.AsPath()))
+	}
+	var result map[tspath.PathKey]fswatch.EventKind
+	for path, kind := range paths {
+		if _, known := knownFiles[path]; known {
+			continue
+		}
+		for dirPath := range directories.Keys() {
+			if path.ContainsPath(dirPath) || dirPath.ContainsPath(path) {
+				if result == nil {
+					result = make(map[tspath.PathKey]fswatch.EventKind)
+				}
+				result[path] = kind
+				break
+			}
+		}
+	}
+	return result
 }
 
 func (t *BuildTask) reportUpToDateStatus(orchestrator *Orchestrator) {

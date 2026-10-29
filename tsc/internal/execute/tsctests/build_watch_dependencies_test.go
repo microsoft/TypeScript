@@ -918,6 +918,55 @@ func TestBuildWatchConfigurationAliasRecovery(t *testing.T) {
 	}
 }
 
+func TestBuildWatchAutomaticDependencyTypes(t *testing.T) {
+	t.Parallel()
+	for _, prebuild := range []bool{false, true} {
+		for _, metadata := range []bool{false, true} {
+			t.Run(fmt.Sprintf("prebuild=%v/metadata=%v", prebuild, metadata), func(t *testing.T) {
+				t.Parallel()
+				files := dependencyFiles()
+				files[dependencyProject+"tsconfig.json"] = `{"compilerOptions":{"outDir":"out","incremental":true,"moduleDetection":"legacy","types":["*"]},"files":["index.ts"]}`
+				files[dependencyProject+"index.ts"] = `const required: number = 42;`
+				files[dependencyProject+"node_modules/@types/note.txt"] = "unrelated"
+				sys, watcher := startDependencyWatch(t, files, []string{"--build", "--watch", "--verbose", "--pretty", "false"}, prebuild, "")
+				const directory = dependencyProject + "node_modules/@types/visible"
+				sys.writeFileNoError(directory+"/note.txt", "")
+				if metadata {
+					sys.writeFileNoError(directory+"/package.json", `{"typings":null}`)
+					sys.writeFileNoError(directory+"/index.d.ts", `declare const required: string;`)
+				}
+				sys.mockWatchBackend.SendEvents([]fswatch.Event{{Kind: fswatch.EventUpdate, Path: directory}})
+				watcher.DoCycle()
+				if metadata {
+					assert.DeepEqual(t, dependencyDiagnosticCodes(sys), []string{})
+					assert.Assert(t, isWatched(sys, directory), "discovery must install metadata watches even when no compilation is needed")
+					if prebuild {
+						assert.Equal(t, sys.getOutput(false), "", "discovery alone must not start a build")
+					}
+					sys.clearOutput()
+					sys.writeFileNoError(directory+"/package.json", `{"typings":"index.d.ts"}`)
+					dependencyEvent(sys, watcher, fswatch.EventUpdate, directory+"/package.json")
+				} else {
+					assert.DeepEqual(t, dependencyDiagnosticCodes(sys), []string{"2688"})
+					sys.clearOutput()
+					sys.writeFileNoError(directory+"/index.d.ts", `declare const required: string;`)
+					dependencyEvent(sys, watcher, fswatch.EventUpdate, directory+"/index.d.ts")
+				}
+				assert.Assert(t, strings.Contains(sys.getOutput(false), "Cannot redeclare"), "%s", sys.getOutput(false))
+				sys.clearOutput()
+				sys.removeNoError(directory + "/index.d.ts")
+				sys.removeNoError(directory + "/note.txt")
+				if metadata {
+					sys.removeNoError(directory + "/package.json")
+				}
+				sys.removeNoError(directory)
+				dependencyEvent(sys, watcher, fswatch.EventDelete, directory)
+				checkDependencySuccess(t, sys)
+			})
+		}
+	}
+}
+
 func TestBuildWatchLegacyDependencyInventory(t *testing.T) {
 	t.Parallel()
 	for _, kind := range []string{"delete", "change", "unchanged", "empty"} {

@@ -48,7 +48,7 @@ declare const console: { log(msg: any): void; };
 export const x = 10;
 
 //// [/home/src/workspaces/project/tsconfig.tsbuildinfo] *new* 
-{"version":"FakeTSVersion","root":["./src/index.ts"],"nonIncrementalFileNames":[]}
+{"version":"FakeTSVersion","root":["./src/index.ts"],"watchDirectories":[],"nonIncrementalFileNames":[]}
 //// [/home/src/workspaces/project/tsconfig.tsbuildinfo.readable.baseline.txt] *new* 
 {
   "version": "FakeTSVersion",
@@ -60,7 +60,7 @@ export const x = 10;
       "original": "./src/index.ts"
     }
   ],
-  "size": 82
+  "size": 104
 }
 
 tsconfig.json::

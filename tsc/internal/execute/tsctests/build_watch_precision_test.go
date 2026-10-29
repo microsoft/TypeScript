@@ -12,6 +12,7 @@ import (
 	"github.com/microsoft/TypeScript/tsc/internal/execute/build"
 	"github.com/microsoft/TypeScript/tsc/internal/execute/incremental"
 	"github.com/microsoft/TypeScript/tsc/internal/fswatch"
+	"github.com/microsoft/TypeScript/tsc/internal/json"
 	"github.com/microsoft/TypeScript/tsc/internal/tsoptions"
 	"github.com/microsoft/TypeScript/tsc/internal/tspath"
 	"github.com/microsoft/TypeScript/tsc/internal/vfs"
@@ -27,6 +28,19 @@ type dependencyWrites struct {
 	restore      func()
 	restoreAfter int
 	afterWrite   func(tspath.RootedFilePath)
+}
+
+type dependencyReads struct {
+	vfs.FS
+	mu    sync.Mutex
+	reads map[tspath.RootedFilePath]int
+}
+
+func (f *dependencyReads) ReadFile(path tspath.RootedFilePath) (string, bool) {
+	f.mu.Lock()
+	f.reads[path]++
+	f.mu.Unlock()
+	return f.FS.ReadFile(path)
 }
 
 func (f *dependencyWrites) FileExists(path tspath.RootedFilePath) bool {
@@ -55,6 +69,199 @@ func (f *dependencyWrites) WriteFile(path tspath.RootedFilePath, text string) er
 		f.afterWrite(path)
 	}
 	return err
+}
+
+func TestBuildWatchDetectsOfflineAliasRetarget(t *testing.T) {
+	t.Parallel()
+	for _, incremental := range []bool{false, true} {
+		for _, preserve := range []bool{false, true} {
+			t.Run(fmt.Sprintf("incremental=%v/preserve=%v", incremental, preserve), func(t *testing.T) {
+				t.Parallel()
+				files, _, _ := configurationAliasFiles(incremental, preserve, false)
+				const logical = dependencyProject + "node_modules/widget/index.d.ts"
+				const second = "/home/src/dependencies/second/types.d.ts"
+				const output = dependencyProject + "out/index.d.ts"
+				sys := newTestSys(&tscInput{files: files}, false)
+				result := execute.CommandLine(t.Context(), sys, []string{"--build", "--pretty", "false"}, sys)
+				assert.Equal(t, int(result.Status), 0)
+				checkDependencyOutput(t, sys, output, "result: 1;")
+
+				sys.mapFs().AddSymlink(strings.TrimPrefix(logical, "/"), strings.TrimPrefix(second, "/"))
+				files[logical] = vfstest.Symlink(second)
+				sys.clearOutput()
+				observer := &dependencyObserver{TestSys: sys}
+				result = execute.CommandLine(t.Context(), sys, []string{"--build", "--watch", "--verbose", "--pretty", "false"}, observer)
+				assert.Equal(t, int(result.Status), 0)
+				assert.Equal(t, observer.programs, 1)
+				checkDependencyOutput(t, sys, output, "result: 2;")
+			})
+		}
+	}
+}
+
+func TestBuildWatchIncrementalStartupUsesBuildInfo(t *testing.T) {
+	t.Parallel()
+	files, _, _ := configurationAliasFiles(true, false, false)
+	const logical = dependencyProject + "node_modules/widget/index.d.ts"
+	const first = "/home/src/dependencies/first/types.d.ts"
+	const second = "/home/src/dependencies/second/types.d.ts"
+	root := tspath.RootedFilePath(dependencyProject + "index.ts")
+	sys := newTestSys(&tscInput{files: files}, false)
+	result := execute.CommandLine(t.Context(), sys, []string{"--build", "--pretty", "false"}, sys)
+	assert.Equal(t, int(result.Status), 0)
+	var buildInfo incremental.BuildInfo
+	assert.NilError(t, json.Unmarshal([]byte(sys.readFileNoError(dependencyProject+"out/tsconfig.tsbuildinfo")), &buildInfo))
+	watchDirectories := slices.Collect(buildInfo.GetWatchDirectories(tspath.RootedDirectoryPath(dependencyProject + "out")))
+	assert.Assert(t, !slices.Contains(watchDirectories, tspath.RootedDirectoryPath("/home/src/dependencies/first")))
+	assert.Assert(t, !slices.Contains(watchDirectories, tspath.RootedDirectoryPath("/home/src/dependencies/second")))
+
+	reads := &dependencyReads{FS: sys.fs.FS, reads: make(map[tspath.RootedFilePath]int)}
+	sys.fs.FS = reads
+	sys.clearOutput()
+	observer := &dependencyObserver{TestSys: sys}
+	result = execute.CommandLine(t.Context(), sys, []string{"--build", "--watch", "--verbose", "--pretty", "false"}, observer)
+	assert.Equal(t, int(result.Status), 0)
+	assert.Equal(t, observer.programs, 0)
+	for _, path := range []tspath.RootedFilePath{root, logical, first, second} {
+		assert.Equal(t, reads.reads[path], 0, "unexpected source read for %s", path)
+	}
+}
+
+func TestBuildWatchEmptyInventoryStartup(t *testing.T) {
+	t.Parallel()
+	for _, mode := range []string{"plain", "incremental", "composite"} {
+		t.Run(mode, func(t *testing.T) {
+			t.Parallel()
+			files := FileMap{
+				dependencyProject + "tsconfig.json": fmt.Sprintf(`{"compilerOptions":{"outDir":"out","module":"commonjs","types":[],"libReplacement":false,"incremental":%v,"composite":%v},"files":["index.ts"]}`, mode != "plain", mode == "composite"),
+				dependencyProject + "index.ts":      `export const result = 1;`,
+			}
+			sys := newTestSys(&tscInput{files: files}, false)
+			result := execute.CommandLine(t.Context(), sys, []string{"--build"}, sys)
+			assert.Equal(t, int(result.Status), 0)
+			var info incremental.BuildInfo
+			assert.NilError(t, json.Unmarshal([]byte(sys.readFileNoError(dependencyProject+"out/tsconfig.tsbuildinfo")), &info))
+			assert.Assert(t, info.WatchDirectories != nil && len(info.WatchDirectories) == 0)
+			reads := &dependencyReads{FS: sys.fs.FS, reads: make(map[tspath.RootedFilePath]int)}
+			sys.fs.FS = reads
+			sys.clearOutput()
+			observer := &dependencyObserver{TestSys: sys}
+			result = execute.CommandLine(t.Context(), sys, []string{"--build", "--watch", "--verbose"}, observer)
+			assert.Equal(t, int(result.Status), 0)
+			assert.Assert(t, strings.Contains(sys.getOutput(false), "is up to date"))
+			assert.Equal(t, observer.programs, 0)
+			assert.Equal(t, reads.reads[dependencyProject+"index.ts"], 0, "current empty inventories must not parse sources on restart")
+		})
+	}
+}
+
+func TestBuildWatchDependencyResolutionHints(t *testing.T) {
+	t.Parallel()
+	for _, incrementalOption := range []bool{false, true} {
+		for _, prebuild := range []bool{false, true} {
+			for _, hint := range []string{"none", "input", "alias", "config", "local", "descendant"} {
+				t.Run(fmt.Sprintf("incremental=%v/prebuild=%v/%s", incrementalOption, prebuild, hint), func(t *testing.T) {
+					t.Parallel()
+					files := FileMap{
+						dependencyProject + "tsconfig.json": fmt.Sprintf(`{
+							"compilerOptions":{"outDir":"out","rootDir":"..","declaration":true,"incremental":%v,"types":[],"libReplacement":false,"module":"commonjs",
+								"paths":{"pkg":["./watch/generated/deep/index.d.ts","../fallback/index.d.ts"]}},
+							"files":["index.ts"],"include":["watch/**/entry.ts"]}`, incrementalOption),
+						dependencyProject + "index.ts": `import { value } from "./other"; import { fallback } from "pkg"; import { fixed } from "widget";
+							export const result = value; export const alternative = fallback; export const unchanged = fixed;`,
+						dependencyProject + "other.d.ts":                     `export const value: 1;`,
+						dependencyProject + "node_modules/widget/index.d.ts": vfstest.Symlink("/home/src/dependencies/fixed/index.d.ts"),
+						"/home/src/dependencies/fixed/index.d.ts":            `export const fixed: 10;`,
+						"/home/src/workspaces/fallback/index.d.ts":           `export const fallback: 11;`,
+						dependencyProject + "watch/generated/placeholder":    "",
+					}
+					sys := newTestSys(&tscInput{files: files}, false)
+					if prebuild {
+						result := execute.CommandLine(t.Context(), sys, []string{"--build"}, sys)
+						assert.Equal(t, int(result.Status), 0, sys.getOutput(false))
+						var info incremental.BuildInfo
+						const infoDirectory = dependencyProject + "out/project"
+						assert.NilError(t, json.Unmarshal([]byte(sys.readFileNoError(infoDirectory+"/tsconfig.tsbuildinfo")), &info))
+						assert.DeepEqual(t, slices.Collect(info.GetWatchDirectories(tspath.RootedDirectoryPath(infoDirectory))), []tspath.RootedDirectoryPath{
+							dependencyProject + "node_modules",
+							dependencyProject + "watch/generated",
+							dependencyProject + "watch/generated/deep",
+						})
+					}
+					reads := &dependencyReads{FS: sys.fs.FS, reads: make(map[tspath.RootedFilePath]int)}
+					sys.fs.FS = reads
+					observer := &dependencyObserver{TestSys: sys}
+					result := execute.CommandLine(t.Context(), sys, []string{"--build", "--watch", "--verbose", "--pretty", "false"}, observer)
+					assert.Equal(t, int(result.Status), 0)
+					if prebuild {
+						assert.Equal(t, observer.programs, 0)
+						assert.Equal(t, reads.reads[dependencyProject+"index.ts"], 0)
+					}
+					assert.Assert(t, isWatched(sys, dependencyProject+"watch"))
+
+					sys.clearOutput()
+					const generated = dependencyProject + "watch/generated/deep"
+					events := []fswatch.Event{{Kind: fswatch.EventUpdate, Path: generated}}
+					expected := "alternative: 12;"
+					if hint == "local" {
+						sys.writeFileNoError(dependencyProject+"other.ts", `export const value = 2 as const;`)
+						events[0].Path = dependencyProject + "other.ts"
+						expected = "result: 2;"
+					} else {
+						sys.writeFileNoError(generated+"/index.d.ts", `export const fallback: 12;`)
+						hints := map[string]string{
+							"input":  "/home/src/workspaces/fallback/index.d.ts",
+							"alias":  dependencyProject + "node_modules/widget/index.d.ts",
+							"config": dependencyProject + "tsconfig.json",
+						}
+						if path := hints[hint]; path != "" {
+							events = append(events, fswatch.Event{Kind: fswatch.EventUpdate, Path: path})
+						}
+						if hint == "descendant" {
+							sys.writeFileNoError(generated+"/note.txt", "unrelated")
+							events = append(events, fswatch.Event{Kind: fswatch.EventUpdate, Path: generated + "/note.txt"})
+						}
+					}
+					sys.mockWatchBackend.SendEvents(events)
+					result.Watcher.DoCycle()
+					checkDependencySuccess(t, sys)
+					checkDependencyOutput(t, sys, dependencyProject+"out/project/index.d.ts", expected)
+				})
+			}
+		}
+	}
+}
+
+func TestBuildWatchIncrementalStartupDetectsLogicalAliasSibling(t *testing.T) {
+	t.Parallel()
+	for _, preserve := range []bool{false, true} {
+		t.Run(fmt.Sprintf("preserve=%v", preserve), func(t *testing.T) {
+			t.Parallel()
+			files, _, _ := configurationAliasFiles(true, preserve, false)
+			const logicalDirectory = dependencyProject + "node_modules/widget"
+			const sibling = logicalDirectory + "/index.ts"
+			const output = dependencyProject + "out/index.d.ts"
+			sys := newTestSys(&tscInput{files: files}, false)
+			result := execute.CommandLine(t.Context(), sys, []string{"--build", "--pretty", "false"}, sys)
+			assert.Equal(t, int(result.Status), 0)
+			checkDependencyOutput(t, sys, output, "result: 1;")
+
+			sys.clearOutput()
+			observer := &dependencyObserver{TestSys: sys}
+			result = execute.CommandLine(t.Context(), sys, []string{"--build", "--watch", "--verbose", "--pretty", "false"}, observer)
+			assert.Equal(t, int(result.Status), 0)
+			assert.Equal(t, observer.programs, 0)
+			assert.Assert(t, isWatched(sys, logicalDirectory))
+
+			files[sibling] = `export const value = 3;`
+			sys.writeFileNoError(sibling, files[sibling].(string))
+			sys.clearOutput()
+			sys.mockWatchBackend.SendEvents([]fswatch.Event{{Kind: fswatch.EventUpdate, Path: sibling}})
+			result.Watcher.DoCycle()
+			checkDependencySuccess(t, sys)
+			checkDependencyOutput(t, sys, output, "result = 3;")
+		})
+	}
 }
 
 func TestBuildWatchCoalescesAliasChangesDuringEmit(t *testing.T) {
