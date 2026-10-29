@@ -254,6 +254,27 @@ jobs:
             name: 'noembed'
             noembed: true
             skip: ${{ github.event_name == 'merge_group' }}
+          # Cross-lint OSes with build-tagged files we have no runner for.
+          - runner: ubuntu-latest
+            name: 'darwin'
+            goos: darwin
+            goarch: arm64
+            skip: ${{ github.event_name == 'merge_group' }}
+          - runner: ubuntu-latest
+            name: 'freebsd'
+            goos: freebsd
+            goarch: amd64
+            skip: ${{ github.event_name == 'merge_group' }}
+          - runner: ubuntu-latest
+            name: 'dragonfly'
+            goos: dragonfly
+            goarch: amd64
+            skip: ${{ github.event_name == 'merge_group' }}
+          - runner: ubuntu-latest
+            name: 'solaris'
+            goos: solaris
+            goarch: amd64
+            skip: ${{ github.event_name == 'merge_group' }}
         exclude:
           - config:
               skip: true
@@ -276,6 +297,9 @@ jobs:
           echo "::remove-matcher owner=go::"
       - run: npm ci
       - run: npx hereby lint
+        env:
+          GOOS: ${{ matrix.config.goos }}
+          GOARCH: ${{ matrix.config.goarch }}
 
   format:
     runs-on: ubuntu-slim
