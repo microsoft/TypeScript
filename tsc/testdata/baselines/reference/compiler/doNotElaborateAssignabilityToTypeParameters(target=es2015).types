@@ -6,14 +6,14 @@ async function foo<T>(x: T): Promise<T> {
 >x : T
 
   let yaddable = await getXOrYadda(x);
->yaddable : Yadda | Awaited<T>
->await getXOrYadda(x) : Yadda | Awaited<T>
+>yaddable : Awaited<T> | (Yadda & not { then(): any; })
+>await getXOrYadda(x) : Awaited<T> | (Yadda & not { then(): any; })
 >getXOrYadda(x) : T | Yadda
 >getXOrYadda : <T_1>(x: T_1) => T_1 | Yadda
 >x : T
 
   return yaddable;
->yaddable : Yadda | Awaited<T>
+>yaddable : Awaited<T> | (Yadda & not { then(): any; })
 }
 
 interface Yadda {

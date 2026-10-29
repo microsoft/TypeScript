@@ -3,28 +3,28 @@
 === subfolder/index.js ===
 // cjs format file
 const x = await 1;
->x : 1
->await 1 : 1
+>x : 1 & not { then(): any; }
+>await 1 : 1 & not { then(): any; }
 >1 : 1
 
 export {x};
->x : 1
+>x : 1 & not { then(): any; }
 
 for await (const y of []) {}
->y : any
+>y : undefined
 >[] : undefined[]
 
 === index.js ===
 // esm format file
 const x = await 1;
->x : 1
->await 1 : 1
+>x : 1 & not { then(): any; }
+>await 1 : 1 & not { then(): any; }
 >1 : 1
 
 export {x};
->x : 1
+>x : 1 & not { then(): any; }
 
 for await (const y of []) {}
->y : any
+>y : undefined
 >[] : undefined[]
 

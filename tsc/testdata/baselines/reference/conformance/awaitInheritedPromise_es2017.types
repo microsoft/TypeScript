@@ -6,9 +6,9 @@ declare var a: A;
 >a : A
 
 async function f() {
->f : () => Promise<void>
+>f : () => Promise<void & not { then(): any; }>
 
     await a;
->await a : string
+>await a : string & not { then(): any; }
 >a : A
 }

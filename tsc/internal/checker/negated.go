@@ -296,7 +296,6 @@ func (c *Checker) objectTypesAreDisjointByProperties(source *Type, target *Type,
 		return false
 	}
 	for _, prop := range c.getPropertiesOfType(source) {
-		sourcePropType := c.getTypeOfPropertyOfType(source, prop.Name())
 		targetProp := c.getPropertyOfType(target, prop.Name())
 		var targetPropType *Type
 		if targetProp != nil {
@@ -307,7 +306,11 @@ func (c *Checker) objectTypesAreDisjointByProperties(source *Type, target *Type,
 				targetPropType = indexInfo.valueType
 			}
 		}
-		if sourcePropType == nil || targetPropType == nil {
+		if targetPropType == nil {
+			continue
+		}
+		sourcePropType := c.getTypeOfPropertyOfType(source, prop.Name())
+		if sourcePropType == nil {
 			continue
 		}
 		if (isRequiredProperty(prop) || isRequiredProperty(targetProp)) &&

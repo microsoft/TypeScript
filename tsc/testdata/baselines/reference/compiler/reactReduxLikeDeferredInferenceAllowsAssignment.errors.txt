@@ -8,9 +8,10 @@ reactReduxLikeDeferredInferenceAllowsAssignment.ts(76,50): error TS2344: Type 'G
               Type 'string extends keyof TInjectedProps ? TInjectedProps[keyof TInjectedProps & string] extends GetProps<C>[keyof TInjectedProps & string] ? GetProps<C>[keyof TInjectedProps & string] : TInjectedProps[keyof TInjectedProps & string] : GetProps<C>[string]' is not assignable to type '(TInjectedProps[P] extends GetProps<C>[P] ? GetProps<C>[P] : never) | undefined'.
                 Type 'GetProps<C>[string] | (TInjectedProps[keyof TInjectedProps & string] extends GetProps<C>[keyof TInjectedProps & string] ? GetProps<C>[keyof TInjectedProps & string] : TInjectedProps[keyof TInjectedProps & string])' is not assignable to type '(TInjectedProps[P] extends GetProps<C>[P] ? GetProps<C>[P] : never) | undefined'.
                   Type 'GetProps<C>[string]' is not assignable to type '(TInjectedProps[P] extends GetProps<C>[P] ? GetProps<C>[P] : never) | undefined'.
+reactReduxLikeDeferredInferenceAllowsAssignment.ts(134,56): error TS2344: Type 'string' does not satisfy the constraint 'not { then(): any; }'.
 
 
-==== reactReduxLikeDeferredInferenceAllowsAssignment.ts (1 errors) ====
+==== reactReduxLikeDeferredInferenceAllowsAssignment.ts (2 errors) ====
     declare class Component<P> {
       constructor(props: Readonly<P>);
       constructor(props: P, context?: any);
@@ -156,6 +157,8 @@ reactReduxLikeDeferredInferenceAllowsAssignment.ts(76,50): error TS2344: Type 'G
     interface TestComponentProps extends OwnProps {
       simpleAction: typeof simpleAction;
       thunkAction(param1: number, param2: string): Promise<string>;
+                                                           ~~~~~~
+!!! error TS2344: Type 'string' does not satisfy the constraint 'not { then(): any; }'.
     }
     class TestComponent extends Component<TestComponentProps> {}
     const mapDispatchToProps = { simpleAction, thunkAction };

@@ -78,7 +78,7 @@ var Promise = null;
 >Promise : any
 
 async function f4() {
->f4 : () => Promise<number>
+>f4 : () => Promise<0 & not { then(): any; }>
 
     return 0;
 >0 : 0

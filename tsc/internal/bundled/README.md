@@ -19,6 +19,22 @@ You can find the source of truth for modern language features and Intl APIs in t
 
 For the DOM APIs, which are a bit more free-form, we have asked that APIs are available un-prefixed/flagged in at least 2 browser _engines_ (i.e. not just 2 chromium browsers.) 
 
+## Promise fulfillment types
+
+`Promise<T>` requires `T extends not { then(): any }`, because native promises
+assimilate thenables instead of fulfilling with them. Use `Promise<Awaited<T>>`
+when an API accepts an arbitrary value and resolves it, or constrain `T` when it
+already represents a fulfilled value. APIs that construct result containers must
+also record that those containers are not thenable.
+
+`PromiseLike<T>` remains unconstrained: custom thenables can pass another thenable
+to their fulfillment callbacks, and `Awaited<T>` recursively unwraps them. The
+terminal branch of `Awaited<T>` records the non-thenable fulfillment constraint.
+The compiler carries the same evidence through `await` expressions and inferred
+async return types.
+Unconstrained `interface Promise<T>` augmentations can still merge with the
+constrained global declaration.
+
 ## Generated files
 
 The DOM and web worker files aren't meant to be edited by hand.

@@ -20965,9 +20965,20 @@ func (c *Checker) createPromiseType(promisedType *Type) *Type {
 		// if the promised type is itself a promise, get the underlying type; otherwise, fallback to the promised type
 		// Unwrap an `Awaited<T>` to `T` to improve inference.
 		promisedType = core.OrElse(c.getAwaitedTypeNoAlias(c.unwrapAwaitedType(promisedType)), c.unknownType)
+		promisedType = c.getPromiseFulfillmentType(promisedType)
 		return c.createTypeReference(globalPromiseType, []*Type{promisedType})
 	}
 	return c.unknownType
+}
+
+func (c *Checker) getPromiseFulfillmentType(t *Type) *Type {
+	promiseType := c.getGlobalPromiseType()
+	if promiseType != c.emptyGenericType {
+		if constraint := c.getConstraintOfTypeParameter(promiseType.AsInterfaceType().TypeParameters()[0]); containsNegatedType(constraint) {
+			return c.getIntersectionType([]*Type{c.createAwaitedTypeIfNeeded(t), constraint})
+		}
+	}
+	return t
 }
 
 func (c *Checker) createPromiseLikeType(promisedType *Type) *Type {
@@ -32223,7 +32234,7 @@ func (c *Checker) checkAwaitedType(t *Type, withAlias bool, errorNode *ast.Node,
 		awaitedType = c.getAwaitedTypeNoAliasEx(t, errorNode, diagnosticMessage)
 	}
 	if awaitedType != nil {
-		return awaitedType
+		return c.getPromiseFulfillmentType(awaitedType)
 	}
 	return c.errorType
 }
@@ -32243,7 +32254,7 @@ func (c *Checker) getAwaitedType(t *Type) *Type {
 func (c *Checker) getAwaitedTypeEx(t *Type, errorNode *ast.Node, diagnosticMessage *diagnostics.Message, args ...any) *Type {
 	awaitedType := c.getAwaitedTypeNoAliasEx(t, errorNode, diagnosticMessage, args...)
 	if awaitedType != nil {
-		return c.createAwaitedTypeIfNeeded(awaitedType)
+		return c.getPromiseFulfillmentType(c.createAwaitedTypeIfNeeded(awaitedType))
 	}
 	return nil
 }

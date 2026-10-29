@@ -1,0 +1,43 @@
+/src/subpath.ts(1,31): error TS2344: Type 'string' does not satisfy the constraint 'not { then(): any; }'.
+
+
+==== /tsconfig.json (0 errors) ====
+    {
+      "compilerOptions": {
+        "module": "nodenext",
+        "outDir": "dist",
+        "rootDir": "src",
+        "declaration": true,
+      },
+      "files": ["src/main.ts"]
+    }
+    
+==== /src/main.ts (0 errors) ====
+    import { bar } from "./indirect.js";
+    console.log(await bar());
+    
+==== /package.json (0 errors) ====
+    {
+      "name": "pkg",
+      "type": "module",
+      "imports": {
+        "#subpath": "./src/subpath.ts"
+      },
+      "exports": {
+        "./*": "./dist/*"
+      }
+    }
+    
+==== /src/subpath.ts (1 errors) ====
+    async function bar(): Promise<string> {
+                                  ~~~~~~
+!!! error TS2344: Type 'string' does not satisfy the constraint 'not { then(): any; }'.
+      return "bar";
+    }
+    export const barrel = { bar };
+    
+==== /src/indirect.ts (0 errors) ====
+    import { barrel } from "#subpath";
+    const { bar } = barrel;
+    export { bar };
+    

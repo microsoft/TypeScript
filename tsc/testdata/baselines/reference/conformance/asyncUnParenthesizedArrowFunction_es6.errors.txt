@@ -1,0 +1,9 @@
+asyncUnParenthesizedArrowFunction_es6.ts(1,53): error TS2344: Type 'void' does not satisfy the constraint 'not { then(): any; }'.
+
+
+==== asyncUnParenthesizedArrowFunction_es6.ts (1 errors) ====
+    declare function someOtherFunction(i: any): Promise<void>;
+                                                        ~~~~
+!!! error TS2344: Type 'void' does not satisfy the constraint 'not { then(): any; }'.
+    const x = async i => await someOtherFunction(i)
+    const x1 = async (i) => await someOtherFunction(i);

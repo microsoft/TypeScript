@@ -202,7 +202,7 @@ registerCommand("_references-view.showHistoryItem", async (item) => { // Error, 
 >registerCommand("_references-view.showHistoryItem", async (item) => { // Error, contextual return type of Promise<unknown>  if (item instanceof HistoryItem) {    return executeCommand("vscode.open", item.input.location.uri);  }}) : void
 >registerCommand : (command: string, callback: (...args: any[]) => any, thisArg?: any) => void
 >"_references-view.showHistoryItem" : "_references-view.showHistoryItem"
->async (item) => { // Error, contextual return type of Promise<unknown>  if (item instanceof HistoryItem) {    return executeCommand("vscode.open", item.input.location.uri);  }} : (item: any) => Promise<unknown>
+>async (item) => { // Error, contextual return type of Promise<unknown>  if (item instanceof HistoryItem) {    return executeCommand("vscode.open", item.input.location.uri);  }} : (item: any) => Promise<not { then(): any; } | undefined>
 >item : any
 
   if (item instanceof HistoryItem) {

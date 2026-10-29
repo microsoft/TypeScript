@@ -10,7 +10,7 @@ declare var x, y, z, a, b, c;
 >c : any
 
 async function conditional0() {
->conditional0 : () => Promise<void>
+>conditional0 : () => Promise<void & not { then(): any; }>
 
     a = (await x) ? y : z;
 >a = (await x) ? y : z : any
@@ -24,7 +24,7 @@ async function conditional0() {
 }
 
 async function conditional1() {
->conditional1 : () => Promise<void>
+>conditional1 : () => Promise<void & not { then(): any; }>
 
     a = x ? await y : z;
 >a = x ? await y : z : any
@@ -37,7 +37,7 @@ async function conditional1() {
 }
 
 async function conditional2() {
->conditional2 : () => Promise<void>
+>conditional2 : () => Promise<void & not { then(): any; }>
 
     a = x ? y : await z;
 >a = x ? y : await z : any

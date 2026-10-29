@@ -38,20 +38,20 @@ const sources: AbstractModuleSource[] = [a, b, c, d, e, f];
 >f : AbstractModuleSource
 
 export const g = import.source("./missing.wasm");
->g : Promise<AbstractModuleSource>
->import.source("./missing.wasm") : Promise<AbstractModuleSource>
+>g : Promise<AbstractModuleSource & not { then(): any; }>
+>import.source("./missing.wasm") : Promise<AbstractModuleSource & not { then(): any; }>
 >source : any
 >"./missing.wasm" : "./missing.wasm"
 
 export const h = import.source("missing");
->h : Promise<AbstractModuleSource>
->import.source("missing") : Promise<AbstractModuleSource>
+>h : Promise<AbstractModuleSource & not { then(): any; }>
+>import.source("missing") : Promise<AbstractModuleSource & not { then(): any; }>
 >source : any
 >"missing" : "missing"
 
 export const i = import.source("./a.txt");
->i : Promise<AbstractModuleSource>
->import.source("./a.txt") : Promise<AbstractModuleSource>
+>i : Promise<AbstractModuleSource & not { then(): any; }>
+>import.source("./a.txt") : Promise<AbstractModuleSource & not { then(): any; }>
 >source : any
 >"./a.txt" : "./a.txt"
 
@@ -60,7 +60,7 @@ export function load(path: string): Promise<AbstractModuleSource> {
 >path : string
 
     return import.source(path);
->import.source(path) : Promise<AbstractModuleSource>
+>import.source(path) : Promise<AbstractModuleSource & not { then(): any; }>
 >source : any
 >path : string
 }

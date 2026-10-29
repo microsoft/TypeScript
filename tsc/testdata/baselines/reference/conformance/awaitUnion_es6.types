@@ -17,30 +17,30 @@ declare let e: number | PromiseLike<number | string>;
 >e : number | PromiseLike<string | number>
 
 async function f() {
->f : () => Promise<void>
+>f : () => Promise<void & not { then(): any; }>
 
 	let await_a = await a;
->await_a : string | number
->await a : string | number
+>await_a : (string & not { then(): any; }) | (number & not { then(): any; })
+>await a : (string & not { then(): any; }) | (number & not { then(): any; })
 >a : string | number
 
 	let await_b = await b;
->await_b : string | number
->await b : string | number
+>await_b : (string & not { then(): any; }) | (number & not { then(): any; })
+>await b : (string & not { then(): any; }) | (number & not { then(): any; })
 >b : PromiseLike<string> | PromiseLike<number>
 
 	let await_c = await c;
->await_c : string | number
->await c : string | number
+>await_c : (string & not { then(): any; }) | (number & not { then(): any; })
+>await c : (string & not { then(): any; }) | (number & not { then(): any; })
 >c : PromiseLike<string | number>
 
 	let await_d = await d;
->await_d : string | number
->await d : string | number
+>await_d : (string & not { then(): any; }) | (number & not { then(): any; })
+>await d : (string & not { then(): any; }) | (number & not { then(): any; })
 >d : number | PromiseLike<string>
 
 	let await_e = await e;
->await_e : string | number
->await e : string | number
+>await_e : (string & not { then(): any; }) | (number & not { then(): any; })
+>await e : (string & not { then(): any; }) | (number & not { then(): any; })
 >e : number | PromiseLike<string | number>
 }

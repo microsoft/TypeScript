@@ -1,16 +1,41 @@
+awaitUnionPromise.ts(6,22): error TS2344: Type 'T | AsyncEnumeratorDone' does not satisfy the constraint 'not { then(): any; }'.
+  Type 'T' is not assignable to type 'not { then(): any; }'.
+awaitUnionPromise.ts(7,22): error TS2344: Type 'T' does not satisfy the constraint 'not { then(): any; }'.
+awaitUnionPromise.ts(7,35): error TS2344: Type 'AsyncEnumeratorDone' does not satisfy the constraint 'not { then(): any; }'.
+awaitUnionPromise.ts(8,22): error TS2344: Type 'T | {}' does not satisfy the constraint 'not { then(): any; }'.
+  Type 'T' is not assignable to type 'not { then(): any; }'.
+awaitUnionPromise.ts(9,22): error TS2344: Type 'T | { x: string; }' does not satisfy the constraint 'not { then(): any; }'.
+  Type 'T' is not assignable to type 'not { then(): any; }'.
 awaitUnionPromise.ts(13,11): error TS2322: Type 'null' is not assignable to type 'IAsyncEnumerator<number>'.
 
 
-==== awaitUnionPromise.ts (1 errors) ====
+==== awaitUnionPromise.ts (6 errors) ====
     // https://github.com/Microsoft/TypeScript/issues/18186
     
     class AsyncEnumeratorDone { };
     
     interface IAsyncEnumerator<T> {
         next1(): Promise<T | AsyncEnumeratorDone>;
+                         ~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2344: Type 'T | AsyncEnumeratorDone' does not satisfy the constraint 'not { then(): any; }'.
+!!! error TS2344:   Type 'T' is not assignable to type 'not { then(): any; }'.
+!!! related TS2208 awaitUnionPromise.ts:5:28: This type parameter might need an `extends not { then(): any; }` constraint.
         next2(): Promise<T> | Promise<AsyncEnumeratorDone>;
+                         ~
+!!! error TS2344: Type 'T' does not satisfy the constraint 'not { then(): any; }'.
+!!! related TS2208 awaitUnionPromise.ts:5:28: This type parameter might need an `extends not { then(): any; }` constraint.
+                                      ~~~~~~~~~~~~~~~~~~~
+!!! error TS2344: Type 'AsyncEnumeratorDone' does not satisfy the constraint 'not { then(): any; }'.
         next3(): Promise<T | {}>;
+                         ~~~~~~
+!!! error TS2344: Type 'T | {}' does not satisfy the constraint 'not { then(): any; }'.
+!!! error TS2344:   Type 'T' is not assignable to type 'not { then(): any; }'.
+!!! related TS2208 awaitUnionPromise.ts:5:28: This type parameter might need an `extends not { then(): any; }` constraint.
         next4(): Promise<T | { x: string }>;
+                         ~~~~~~~~~~~~~~~~~
+!!! error TS2344: Type 'T | { x: string; }' does not satisfy the constraint 'not { then(): any; }'.
+!!! error TS2344:   Type 'T' is not assignable to type 'not { then(): any; }'.
+!!! related TS2208 awaitUnionPromise.ts:5:28: This type parameter might need an `extends not { then(): any; }` constraint.
     }
     
     async function main() {

@@ -1,0 +1,20 @@
+contextuallyTypeAsyncFunctionAwaitOperand.ts(3,31): error TS2344: Type 'Obj' does not satisfy the constraint 'not { then(): any; }'.
+contextuallyTypeAsyncFunctionAwaitOperand.ts(5,11): error TS2322: Type 'not { then(): any; } & not { then(): any; }' is not assignable to type 'Obj'.
+contextuallyTypeAsyncFunctionAwaitOperand.ts(5,62): error TS2353: Object literal may only specify known properties, and 'key' does not exist in type 'PromiseLike<not { then(): any; }>'.
+
+
+==== contextuallyTypeAsyncFunctionAwaitOperand.ts (3 errors) ====
+    interface Obj { key: "value"; }
+    
+    async function fn1(): Promise<Obj> {
+                                  ~~~
+!!! error TS2344: Type 'Obj' does not satisfy the constraint 'not { then(): any; }'.
+        const obj1: Obj = await { key: "value" };
+        const obj2: Obj = await new Promise(resolve => resolve({ key: "value" }));
+              ~~~~
+!!! error TS2322: Type 'not { then(): any; } & not { then(): any; }' is not assignable to type 'Obj'.
+                                                                 ~~~
+!!! error TS2353: Object literal may only specify known properties, and 'key' does not exist in type 'PromiseLike<not { then(): any; }>'.
+        return await { key: "value" };
+    }
+    

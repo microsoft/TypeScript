@@ -1,11 +1,14 @@
 asyncFunctionDeclaration6_es6.ts(1,24): error TS2524: 'await' expressions cannot be used in a parameter initializer.
 asyncFunctionDeclaration6_es6.ts(1,29): error TS1109: Expression expected.
+asyncFunctionDeclaration6_es6.ts(1,40): error TS2344: Type 'void' does not satisfy the constraint 'not { then(): any; }'.
 
 
-==== asyncFunctionDeclaration6_es6.ts (2 errors) ====
+==== asyncFunctionDeclaration6_es6.ts (3 errors) ====
     async function foo(a = await): Promise<void> {
                            ~~~~~
 !!! error TS2524: 'await' expressions cannot be used in a parameter initializer.
                                 ~
 !!! error TS1109: Expression expected.
+                                           ~~~~
+!!! error TS2344: Type 'void' does not satisfy the constraint 'not { then(): any; }'.
     }

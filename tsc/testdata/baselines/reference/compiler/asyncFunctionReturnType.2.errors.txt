@@ -1,0 +1,12 @@
+asyncFunctionReturnType.2.ts(3,27): error TS2344: Type 'this' does not satisfy the constraint 'not { then(): any; }'.
+  Type 'X' is not assignable to type 'not { then(): any; }'.
+
+
+==== asyncFunctionReturnType.2.ts (1 errors) ====
+    // https://github.com/microsoft/TypeScript/issues/47291
+    class X {
+        f = async (): Promise<this> => this;
+                              ~~~~
+!!! error TS2344: Type 'this' does not satisfy the constraint 'not { then(): any; }'.
+!!! error TS2344:   Type 'X' is not assignable to type 'not { then(): any; }'.
+    }

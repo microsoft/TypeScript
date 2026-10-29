@@ -10,7 +10,7 @@ namespace N {
     class A { [await x]() {} }
 >A : A
 >[await x] : () => void
->await x : string
+>await x : string & not { then(): any; }
 >x : string
 
     export class B {
@@ -18,12 +18,12 @@ namespace N {
 
         [await x]() {}
 >[await x] : () => void
->await x : string
+>await x : string & not { then(): any; }
 >x : string
 
         static [await x]() {}
 >[await x] : () => void
->await x : string
+>await x : string & not { then(): any; }
 >x : string
     }
 }
@@ -32,12 +32,12 @@ export class C {
 
     [await x]() {}
 >[await x] : () => void
->await x : string
+>await x : string & not { then(): any; }
 >x : string
 
     static [await x]() {}
 >[await x] : () => void
->await x : string
+>await x : string & not { then(): any; }
 >x : string
 }
 
@@ -45,7 +45,7 @@ export class C {
     class D { [await x]() {} }
 >D : D
 >[await x] : () => void
->await x : string
+>await x : string & not { then(): any; }
 >x : string
 }
 
@@ -57,30 +57,30 @@ function f() {
 
         [await x]() {}
 >[await x] : () => void
->await x : string
+>await x : string & not { then(): any; }
 >x : string
 
         static [await x]() {}
 >[await x] : () => void
->await x : string
+>await x : string & not { then(): any; }
 >x : string
     }
 }
 
 async function af() {
->af : () => Promise<void>
+>af : () => Promise<void & not { then(): any; }>
 
     class F {
 >F : F
 
         [await x]() {}
 >[await x] : () => void
->await x : string
+>await x : string & not { then(): any; }
 >x : string
 
         static [await x]() {}
 >[await x] : () => void
->await x : string
+>await x : string & not { then(): any; }
 >x : string
     }
 }
@@ -91,17 +91,17 @@ function* gf() {
     class G { [await x]() {} }
 >G : G
 >[await x] : () => void
->await x : string
+>await x : string & not { then(): any; }
 >x : string
 }
 
 async function* agf() {
->agf : () => AsyncGenerator<never, void, unknown>
+>agf : () => AsyncGenerator<never, void & not { then(): any; }, unknown>
 
     class H { [await x]() {} }
 >H : H
 >[await x] : () => void
->await x : string
+>await x : string & not { then(): any; }
 >x : string
 }
 
@@ -117,13 +117,13 @@ function switchSync() {
             class I { [await x]() {} }
 >I : I
 >[await x] : () => void
->await x : string
+>await x : string & not { then(): any; }
 >x : string
     }
 }
 
 async function switchAsync() {
->switchAsync : () => Promise<void>
+>switchAsync : () => Promise<void & not { then(): any; }>
 
     switch (0) {
 >0 : 0
@@ -134,7 +134,7 @@ async function switchAsync() {
             class J { [await x]() {} }
 >J : J
 >[await x] : () => void
->await x : string
+>await x : string & not { then(): any; }
 >x : string
     }
 }

@@ -10,7 +10,7 @@ declare var x, y, z, a, b, c;
 >c : any
 
 async function forOfStatement0() {
->forOfStatement0 : () => Promise<void>
+>forOfStatement0 : () => Promise<void & not { then(): any; }>
 
     for (x of y) { z; }
 >x : any
@@ -19,7 +19,7 @@ async function forOfStatement0() {
 }
 
 async function forOfStatement1() {
->forOfStatement1 : () => Promise<void>
+>forOfStatement1 : () => Promise<void & not { then(): any; }>
 
     for (x of await y) { z; }
 >x : any
@@ -29,7 +29,7 @@ async function forOfStatement1() {
 }
 
 async function forOfStatement2() {
->forOfStatement2 : () => Promise<void>
+>forOfStatement2 : () => Promise<void & not { then(): any; }>
 
     for (x of y) { await z; }
 >x : any
@@ -39,7 +39,7 @@ async function forOfStatement2() {
 }
 
 async function forOfStatement3() {
->forOfStatement3 : () => Promise<void>
+>forOfStatement3 : () => Promise<void & not { then(): any; }>
 
     for ((await x).a of y) { z; }
 >(await x).a : any
@@ -52,7 +52,7 @@ async function forOfStatement3() {
 }
 
 async function forOfStatement4() {
->forOfStatement4 : () => Promise<void>
+>forOfStatement4 : () => Promise<void & not { then(): any; }>
 
     for (x.a of await y) { z; }
 >x.a : any
@@ -64,7 +64,7 @@ async function forOfStatement4() {
 }
 
 async function forOfStatement5() {
->forOfStatement5 : () => Promise<void>
+>forOfStatement5 : () => Promise<void & not { then(): any; }>
 
     for (x.a of y) { await z; }
 >x.a : any
@@ -76,7 +76,7 @@ async function forOfStatement5() {
 }
 
 async function forOfStatement6() {
->forOfStatement6 : () => Promise<void>
+>forOfStatement6 : () => Promise<void & not { then(): any; }>
 
     for (var b of y) { z; }
 >b : any
@@ -85,7 +85,7 @@ async function forOfStatement6() {
 }
 
 async function forOfStatement7() {
->forOfStatement7 : () => Promise<void>
+>forOfStatement7 : () => Promise<void & not { then(): any; }>
 
     for (var c of await y) { z; }
 >c : any
@@ -95,7 +95,7 @@ async function forOfStatement7() {
 }
 
 async function forOfStatement8() {
->forOfStatement8 : () => Promise<void>
+>forOfStatement8 : () => Promise<void & not { then(): any; }>
 
     for (var d of y) { await z; }
 >d : any
@@ -105,7 +105,7 @@ async function forOfStatement8() {
 }
 
 async function forOfStatement9() {
->forOfStatement9 : () => Promise<void>
+>forOfStatement9 : () => Promise<void & not { then(): any; }>
 
     for ([x] of await y) { z; }
 >[x] : [any]
@@ -116,7 +116,7 @@ async function forOfStatement9() {
 }
 
 async function forOfStatement10() {
->forOfStatement10 : () => Promise<void>
+>forOfStatement10 : () => Promise<void & not { then(): any; }>
 
     for ([x] of y) { await z; }
 >[x] : [any]
@@ -127,7 +127,7 @@ async function forOfStatement10() {
 }
 
 async function forOfStatement11() {
->forOfStatement11 : () => Promise<void>
+>forOfStatement11 : () => Promise<void & not { then(): any; }>
 
     for ([x = await a] of y) { z; }
 >[x = await a] : [any]
@@ -140,7 +140,7 @@ async function forOfStatement11() {
 }
 
 async function forOfStatement12() {
->forOfStatement12 : () => Promise<void>
+>forOfStatement12 : () => Promise<void & not { then(): any; }>
 
     for ([x = a] of await y) { z; }
 >[x = a] : [any]
@@ -153,7 +153,7 @@ async function forOfStatement12() {
 }
 
 async function forOfStatement13() {
->forOfStatement13 : () => Promise<void>
+>forOfStatement13 : () => Promise<void & not { then(): any; }>
 
     for ([x = a] of y) { await z; }
 >[x = a] : [any]
@@ -166,7 +166,7 @@ async function forOfStatement13() {
 }
 
 async function forOfStatement14() {
->forOfStatement14 : () => Promise<void>
+>forOfStatement14 : () => Promise<void & not { then(): any; }>
 
     for ({ x } of await y) { z; }
 >{ x } : { x: any; }
@@ -177,7 +177,7 @@ async function forOfStatement14() {
 }
 
 async function forOfStatement15() {
->forOfStatement15 : () => Promise<void>
+>forOfStatement15 : () => Promise<void & not { then(): any; }>
 
     for ({ x } of y) { await z; }
 >{ x } : { x: any; }
@@ -188,7 +188,7 @@ async function forOfStatement15() {
 }
 
 async function forOfStatement16() {
->forOfStatement16 : () => Promise<void>
+>forOfStatement16 : () => Promise<void & not { then(): any; }>
 
     for ({ x = await a } of y) { z; }
 >{ x = await a } : { x?: any; }
@@ -200,7 +200,7 @@ async function forOfStatement16() {
 }
 
 async function forOfStatement17() {
->forOfStatement17 : () => Promise<void>
+>forOfStatement17 : () => Promise<void & not { then(): any; }>
 
     for ({ x = a } of await y) { z; }
 >{ x = a } : { x?: any; }
@@ -212,7 +212,7 @@ async function forOfStatement17() {
 }
 
 async function forOfStatement18() {
->forOfStatement18 : () => Promise<void>
+>forOfStatement18 : () => Promise<void & not { then(): any; }>
 
     for ({ x = a } of y) { await z; }
 >{ x = a } : { x?: any; }

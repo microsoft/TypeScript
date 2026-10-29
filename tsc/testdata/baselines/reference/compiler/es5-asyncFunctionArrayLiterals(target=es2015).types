@@ -8,7 +8,7 @@ declare var x, y, z, a;
 >a : any
 
 async function arrayLiteral0() {
->arrayLiteral0 : () => Promise<void>
+>arrayLiteral0 : () => Promise<void & not { then(): any; }>
 
     x = [await y, z];
 >x = [await y, z] : any[]
@@ -20,7 +20,7 @@ async function arrayLiteral0() {
 }
 
 async function arrayLiteral1() {
->arrayLiteral1 : () => Promise<void>
+>arrayLiteral1 : () => Promise<void & not { then(): any; }>
 
     x = [y, await z];
 >x = [y, await z] : any[]
@@ -32,7 +32,7 @@ async function arrayLiteral1() {
 }
 
 async function arrayLiteral2() {
->arrayLiteral2 : () => Promise<void>
+>arrayLiteral2 : () => Promise<void & not { then(): any; }>
 
     x = [...(await y), z];
 >x = [...(await y), z] : any[]
@@ -46,7 +46,7 @@ async function arrayLiteral2() {
 }
 
 async function arrayLiteral3() {
->arrayLiteral3 : () => Promise<void>
+>arrayLiteral3 : () => Promise<void & not { then(): any; }>
 
     x = [...y, await z];
 >x = [...y, await z] : any[]
@@ -59,7 +59,7 @@ async function arrayLiteral3() {
 }
 
 async function arrayLiteral4() {
->arrayLiteral4 : () => Promise<void>
+>arrayLiteral4 : () => Promise<void & not { then(): any; }>
 
     x = [await y, ...z];
 >x = [await y, ...z] : any[]
@@ -72,7 +72,7 @@ async function arrayLiteral4() {
 }
 
 async function arrayLiteral5() {
->arrayLiteral5 : () => Promise<void>
+>arrayLiteral5 : () => Promise<void & not { then(): any; }>
 
     x = [y, ...(await z)];
 >x = [y, ...(await z)] : any[]
@@ -86,7 +86,7 @@ async function arrayLiteral5() {
 }
 
 async function arrayLiteral6() {
->arrayLiteral6 : () => Promise<void>
+>arrayLiteral6 : () => Promise<void & not { then(): any; }>
 
     x = [y, await z, a];
 >x = [y, await z, a] : any[]
@@ -99,7 +99,7 @@ async function arrayLiteral6() {
 }
 
 async function arrayLiteral7() {
->arrayLiteral7 : () => Promise<void>
+>arrayLiteral7 : () => Promise<void & not { then(): any; }>
 
     x = [await y, z, await a];
 >x = [await y, z, await a] : any[]

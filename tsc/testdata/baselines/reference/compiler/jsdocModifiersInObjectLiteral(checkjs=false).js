@@ -40,5 +40,7 @@ declare const obj: {
     /** @readonly */
     value: number;
     /** @public */
-    load(): Promise<void>;
+    load(): Promise<void & not {
+        then(): any;
+    }>;
 };

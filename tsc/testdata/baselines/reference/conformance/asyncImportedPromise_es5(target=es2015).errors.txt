@@ -1,10 +1,14 @@
+task.ts(1,38): error TS2344: Type 'T' does not satisfy the constraint 'not { then(): any; }'.
 test.ts(3,25): error TS1064: The return type of an async function or method must be the global Promise<T> type. Did you mean to write 'Promise<T>'?
 test.ts(3,35): error TS2322: Type 'undefined' is not assignable to type 'T'.
   'T' could be instantiated with an arbitrary type which could be unrelated to 'undefined'.
 
 
-==== task.ts (0 errors) ====
+==== task.ts (1 errors) ====
     export class Task<T> extends Promise<T> { }
+                                         ~
+!!! error TS2344: Type 'T' does not satisfy the constraint 'not { then(): any; }'.
+!!! related TS2208 task.ts:1:19: This type parameter might need an `extends not { then(): any; }` constraint.
     
 ==== test.ts (2 errors) ====
     import { Task } from "./task";

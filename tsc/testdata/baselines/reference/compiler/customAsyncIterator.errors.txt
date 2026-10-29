@@ -1,0 +1,34 @@
+customAsyncIterator.ts(5,11): error TS2416: Property 'next' in type 'ConstantIterator<T>' is not assignable to the same property in base type 'AsyncIterator<T, void, T | undefined>'.
+  Type '(value?: T | undefined) => Promise<IteratorResult<T, any>>' is not assignable to type '(...[value]: [] | [T | undefined]) => Promise<IteratorResult<T, void> & not { then(): any; }>'.
+    Type 'Promise<IteratorResult<T, any>>' is not assignable to type 'Promise<IteratorResult<T, void> & not { then(): any; }>'.
+      Type 'IteratorResult<T, any>' is not assignable to type 'IteratorResult<T, void> & not { then(): any; }'.
+        Type 'IteratorReturnResult<any>' is not assignable to type 'IteratorResult<T, void> & not { then(): any; }'.
+          Type 'IteratorReturnResult<any>' is not assignable to type 'IteratorReturnResult<void> & not { then(): any; }'.
+            Type 'IteratorReturnResult<any>' is not assignable to type 'not { then(): any; }'.
+customAsyncIterator.ts(5,36): error TS2344: Type 'IteratorResult<T, any>' does not satisfy the constraint 'not { then(): any; }'.
+  Type 'IteratorReturnResult<any>' is not assignable to type 'not { then(): any; }'.
+
+
+==== customAsyncIterator.ts (2 errors) ====
+    // GH: https://github.com/microsoft/TypeScript/issues/33239
+    class ConstantIterator<T> implements AsyncIterator<T, void, T | undefined> {
+        constructor(private constant: T) {
+        }
+        async next(value?: T): Promise<IteratorResult<T>> {
+              ~~~~
+!!! error TS2416: Property 'next' in type 'ConstantIterator<T>' is not assignable to the same property in base type 'AsyncIterator<T, void, T | undefined>'.
+!!! error TS2416:   Type '(value?: T | undefined) => Promise<IteratorResult<T, any>>' is not assignable to type '(...[value]: [] | [T | undefined]) => Promise<IteratorResult<T, void> & not { then(): any; }>'.
+!!! error TS2416:     Type 'Promise<IteratorResult<T, any>>' is not assignable to type 'Promise<IteratorResult<T, void> & not { then(): any; }>'.
+!!! error TS2416:       Type 'IteratorResult<T, any>' is not assignable to type 'IteratorResult<T, void> & not { then(): any; }'.
+!!! error TS2416:         Type 'IteratorReturnResult<any>' is not assignable to type 'IteratorResult<T, void> & not { then(): any; }'.
+!!! error TS2416:           Type 'IteratorReturnResult<any>' is not assignable to type 'IteratorReturnResult<void> & not { then(): any; }'.
+!!! error TS2416:             Type 'IteratorReturnResult<any>' is not assignable to type 'not { then(): any; }'.
+                                       ~~~~~~~~~~~~~~~~~
+!!! error TS2344: Type 'IteratorResult<T, any>' does not satisfy the constraint 'not { then(): any; }'.
+!!! error TS2344:   Type 'IteratorReturnResult<any>' is not assignable to type 'not { then(): any; }'.
+            if (value != null) {
+                throw new Error("ConstantIterator.prototype.next may not take any values");
+            }
+            return { value: this.constant, done: false };
+        }
+    }

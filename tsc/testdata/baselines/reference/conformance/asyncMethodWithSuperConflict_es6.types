@@ -18,7 +18,7 @@ class B extends A {
 
     // async method with only call/get on 'super' does not require a binding
     async simple() {
->simple : () => Promise<void>
+>simple : () => Promise<void & not { then(): any; }>
 
         const _super = null;
 >_super : any
@@ -64,7 +64,7 @@ class B extends A {
 
     // async method with assignment/destructuring on 'super' requires a binding
     async advanced() {
->advanced : () => Promise<void>
+>advanced : () => Promise<void & not { then(): any; }>
 
         const _super = null;
 >_super : any

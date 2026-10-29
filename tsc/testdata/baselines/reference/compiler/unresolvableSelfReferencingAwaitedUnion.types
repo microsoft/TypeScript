@@ -23,12 +23,12 @@ type T1 = 1 | Promise<T1> | T1[];
 >T1 : T1
 
 export async function myFunction(param: T1) {
->myFunction : (param: T1) => Promise<void>
+>myFunction : (param: T1) => Promise<void & not { then(): any; }>
 >param : T1
 
   const awaited = await param
->awaited : 1 | T1[]
->await param : 1 | T1[]
+>awaited : (1 & not { then(): any; }) | (T1[] & not { then(): any; })
+>await param : (1 & not { then(): any; }) | (T1[] & not { then(): any; })
 >param : T1
 }
 
@@ -41,7 +41,7 @@ type EffectResult =
   | Promise<EffectResult>;
 
 export async function handleEffectResult(result: EffectResult) {
->handleEffectResult : (result: EffectResult) => Promise<void>
+>handleEffectResult : (result: EffectResult) => Promise<void & not { then(): any; }>
 >result : EffectResult
 
   if (result instanceof Function) {
@@ -50,9 +50,9 @@ export async function handleEffectResult(result: EffectResult) {
 >Function : FunctionConstructor
 
     await handleEffectResult(result());
->await handleEffectResult(result()) : void
->handleEffectResult(result()) : Promise<void>
->handleEffectResult : (result: EffectResult) => Promise<void>
+>await handleEffectResult(result()) : void & not { then(): any; }
+>handleEffectResult(result()) : Promise<void & not { then(): any; }>
+>handleEffectResult : (result: EffectResult) => Promise<void & not { then(): any; }>
 >result() : EffectResult
 >result : () => EffectResult
 
@@ -62,10 +62,10 @@ export async function handleEffectResult(result: EffectResult) {
 >Promise : PromiseConstructor
 
     await handleEffectResult(await result);
->await handleEffectResult(await result) : void
->handleEffectResult(await result) : Promise<void>
->handleEffectResult : (result: EffectResult) => Promise<void>
->await result : () => EffectResult
+>await handleEffectResult(await result) : void & not { then(): any; }
+>handleEffectResult(await result) : Promise<void & not { then(): any; }>
+>handleEffectResult : (result: EffectResult) => Promise<void & not { then(): any; }>
+>await result : (() => EffectResult) & not { then(): any; }
 >result : Promise<EffectResult>
   }
 }

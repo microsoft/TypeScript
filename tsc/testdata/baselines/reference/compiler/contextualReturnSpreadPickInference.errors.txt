@@ -1,0 +1,19 @@
+contextualReturnSpreadPickInference.ts(7,44): error TS2344: Type '{ title: string; intro: string; }' does not satisfy the constraint 'not { then(): any; }'.
+
+
+==== contextualReturnSpreadPickInference.ts (1 errors) ====
+    type Many<T> = T | readonly T[];
+    declare function pick<T extends object, Key extends keyof T>(
+        object: T,
+        ...props: Many<Key>[]
+    ): Pick<T, Key>;
+    
+    async function getPage(page: any): Promise<{ title: string; intro: string }> {
+                                               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2344: Type '{ title: string; intro: string; }' does not satisfy the constraint 'not { then(): any; }'.
+        return {
+            title: "",
+            ...pick(page, ["intro"]),
+        };
+    }
+    

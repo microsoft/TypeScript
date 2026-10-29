@@ -1,6 +1,11 @@
 lovefield-ts.d.ts(4,19): error TS2503: Cannot find namespace 'query'.
+lovefield-ts.d.ts(4,43): error TS2344: Type 'Object[]' does not satisfy the constraint 'not { then(): any; }'.
 lovefield-ts.d.ts(5,24): error TS2503: Cannot find namespace 'schema'.
+lovefield-ts.d.ts(5,48): error TS2344: Type 'void' does not satisfy the constraint 'not { then(): any; }'.
+lovefield-ts.d.ts(6,23): error TS2344: Type 'void' does not satisfy the constraint 'not { then(): any; }'.
 lovefield-ts.d.ts(7,25): error TS2503: Cannot find namespace 'query'.
+lovefield-ts.d.ts(7,50): error TS2344: Type 'Object[][]' does not satisfy the constraint 'not { then(): any; }'.
+lovefield-ts.d.ts(8,25): error TS2344: Type 'void' does not satisfy the constraint 'not { then(): any; }'.
 lovefield-ts.d.ts(9,14): error TS2552: Cannot find name 'TransactionStats'. Did you mean 'Transaction'?
 lovefield.js(1,1): error TS2708: Cannot use namespace 'lf' as a value.
 lovefield.js(3,23): error TS2694: Namespace 'lf' has no exported member 'schema'.
@@ -8,21 +13,31 @@ lovefield.js(4,14): error TS2552: Cannot find name 'IThenable'. Did you mean 'It
 lovefield.js(6,1): error TS2708: Cannot use namespace 'lf' as a value.
 
 
-==== lovefield-ts.d.ts (4 errors) ====
+==== lovefield-ts.d.ts (9 errors) ====
     // bug #27352, crashes from github.com/google/lovefield
     declare namespace lf {
       export interface Transaction {
         attach(query: query.Builder): Promise<Array<Object>>
                       ~~~~~
 !!! error TS2503: Cannot find namespace 'query'.
+                                              ~~~~~~~~~~~~~
+!!! error TS2344: Type 'Object[]' does not satisfy the constraint 'not { then(): any; }'.
         begin(scope: Array<schema.Table>): Promise<void>
                            ~~~~~~
 !!! error TS2503: Cannot find namespace 'schema'.
+                                                   ~~~~
+!!! error TS2344: Type 'void' does not satisfy the constraint 'not { then(): any; }'.
         commit(): Promise<void>
+                          ~~~~
+!!! error TS2344: Type 'void' does not satisfy the constraint 'not { then(): any; }'.
         exec(queries: Array<query.Builder>): Promise<Array<Array<Object>>>
                             ~~~~~
 !!! error TS2503: Cannot find namespace 'query'.
+                                                     ~~~~~~~~~~~~~~~~~~~~
+!!! error TS2344: Type 'Object[][]' does not satisfy the constraint 'not { then(): any; }'.
         rollback(): Promise<void>
+                            ~~~~
+!!! error TS2344: Type 'void' does not satisfy the constraint 'not { then(): any; }'.
         stats(): TransactionStats
                  ~~~~~~~~~~~~~~~~
 !!! error TS2552: Cannot find name 'TransactionStats'. Did you mean 'Transaction'?

@@ -83,10 +83,16 @@ export declare const annotated: import("./Card.js").CardProps;
 export { Card } from "./Card.js";
 export type { CardProps } from "./Card.js";
 export { Widget } from "./Widget.mjs";
-export declare function load(): Promise<typeof import("./Card.js")>;
-export declare const inferred: Promise<typeof import("./Widget.mjs")>;
+export declare function load(): Promise<typeof import("./Card.js") & not {
+    then(): any;
+}>;
+export declare const inferred: Promise<typeof import("./Widget.mjs") & not {
+    then(): any;
+}>;
 export declare const nested: {
-    load: () => Promise<typeof import("./Card.js")>;
+    load: () => Promise<typeof import("./Card.js") & not {
+        then(): any;
+    }>;
 };
 export declare const copied: import("./Card.js").CardProps[];
 //# sourceMappingURL=main.d.ts.map

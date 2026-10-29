@@ -1,0 +1,11 @@
+asyncAliasReturnType_es6.ts(1,32): error TS2344: Type 'T' does not satisfy the constraint 'not { then(): any; }'.
+
+
+==== asyncAliasReturnType_es6.ts (1 errors) ====
+    type PromiseAlias<T> = Promise<T>;
+                                   ~
+!!! error TS2344: Type 'T' does not satisfy the constraint 'not { then(): any; }'.
+!!! related TS2208 asyncAliasReturnType_es6.ts:1:19: This type parameter might need an `extends not { then(): any; }` constraint.
+    
+    async function f(): PromiseAlias<void> {
+    }

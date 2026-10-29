@@ -30,7 +30,7 @@ class C {
     // await in static block
     static {
         for await (const x of [1,2,3]) {
->x : number
+>x : number & not { then(): any; }
 >[1,2,3] : number[]
 >1 : 1
 >2 : 2
@@ -41,7 +41,7 @@ class C {
 >console.log : (...data: any[]) => void
 >console : Console
 >log : (...data: any[]) => void
->x : number
+>x : number & not { then(): any; }
         }
         return null
     }
@@ -59,10 +59,10 @@ class C {
 >12 : 12
     }
     async async extremelyAsync() {
->extremelyAsync : () => Promise<void>
+>extremelyAsync : () => Promise<void & not { then(): any; }>
     }
     async static oorder(){ }
->oorder : () => Promise<void>
+>oorder : () => Promise<void & not { then(): any; }>
 
     export cantExportProperty = 1
 >cantExportProperty : number
@@ -141,7 +141,7 @@ function staticParam(static x = 1) { return x }
 >x : number
 
 async export function oorder(x = 1) { return x }
->oorder : (x?: number) => Promise<number>
+>oorder : (x?: number) => Promise<number & not { then(): any; }>
 >x : number
 >1 : 1
 >x : number
@@ -159,7 +159,7 @@ function cantAsyncParam(async x = 1) { return x }
 >x : number
 
 async async function extremelyAsync() {}
->extremelyAsync : () => Promise<void>
+>extremelyAsync : () => Promise<void & not { then(): any; }>
 
 async class CantAsyncClass {
 >CantAsyncClass : CantAsyncClass

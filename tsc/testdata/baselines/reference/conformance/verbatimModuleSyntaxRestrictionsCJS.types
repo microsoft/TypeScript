@@ -36,7 +36,7 @@ import type { funciton as funciton2 } from "./decl"; // ok I guess?
 >funciton2 : any
 
 import("./decl"); // error
->import("./decl") : Promise<typeof import("./decl")>
+>import("./decl") : Promise<typeof import("./decl") & not { then(): any; }>
 >"./decl" : "./decl"
 
 type T = typeof import("./decl"); // ok

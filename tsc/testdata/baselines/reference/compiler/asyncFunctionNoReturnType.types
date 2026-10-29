@@ -2,7 +2,7 @@
 
 === asyncFunctionNoReturnType.ts ===
 async () => {
->async () => {    if (window)        return;} : () => Promise<void>
+>async () => {    if (window)        return;} : () => Promise<void & not { then(): any; }>
 
     if (window)
 >window : Window & typeof globalThis

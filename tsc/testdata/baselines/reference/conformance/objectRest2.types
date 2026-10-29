@@ -8,15 +8,15 @@ declare function connectionFromArray(objects: number, args: any): {};
 >args : any
 
 function rootConnection(name: string) {
->rootConnection : (name: string) => { resolve: (context: any, args: any) => Promise<{}>; }
+>rootConnection : (name: string) => { resolve: (context: any, args: any) => Promise<{} & not { then(): any; }>; }
 >name : string
 
   return {
->{    resolve: async (context, args) => {        const { objects } = await { objects: 12 };      return {        ...connectionFromArray(objects, args)      };    }  } : { resolve: (context: any, args: any) => Promise<{}>; }
+>{    resolve: async (context, args) => {        const { objects } = await { objects: 12 };      return {        ...connectionFromArray(objects, args)      };    }  } : { resolve: (context: any, args: any) => Promise<{} & not { then(): any; }>; }
 
     resolve: async (context, args) => {
->resolve : (context: any, args: any) => Promise<{}>
->async (context, args) => {        const { objects } = await { objects: 12 };      return {        ...connectionFromArray(objects, args)      };    } : (context: any, args: any) => Promise<{}>
+>resolve : (context: any, args: any) => Promise<{} & not { then(): any; }>
+>async (context, args) => {        const { objects } = await { objects: 12 };      return {        ...connectionFromArray(objects, args)      };    } : (context: any, args: any) => Promise<{} & not { then(): any; }>
 >context : any
 >args : any
 
@@ -41,7 +41,7 @@ function rootConnection(name: string) {
   };
 }
 rootConnection('test');
->rootConnection('test') : { resolve: (context: any, args: any) => Promise<{}>; }
->rootConnection : (name: string) => { resolve: (context: any, args: any) => Promise<{}>; }
+>rootConnection('test') : { resolve: (context: any, args: any) => Promise<{} & not { then(): any; }>; }
+>rootConnection : (name: string) => { resolve: (context: any, args: any) => Promise<{} & not { then(): any; }>; }
 >'test' : "test"
 

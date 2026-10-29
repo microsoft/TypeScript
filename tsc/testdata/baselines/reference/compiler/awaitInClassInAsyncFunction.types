@@ -4,24 +4,24 @@
 // https://github.com/microsoft/TypeScript/issues/34887
 
 async function bar() {
->bar : () => Promise<number>
+>bar : () => Promise<2 & not { then(): any; }>
 
     return 2;
 >2 : 2
 }
 
 async function foo() {
->foo : () => Promise<(Anonymous class)>
+>foo : () => Promise<(Anonymous class) & not { then(): any; }>
 
     return new class {
 >new class {        baz = await bar();    } : (Anonymous class)
 >class {        baz = await bar();    } : typeof (Anonymous class)
 
         baz = await bar();
->baz : number
->await bar() : number
->bar() : Promise<number>
->bar : () => Promise<number>
+>baz : 2 & not { then(): any; }
+>await bar() : 2 & not { then(): any; }
+>bar() : Promise<2 & not { then(): any; }>
+>bar : () => Promise<2 & not { then(): any; }>
 
     };
 }

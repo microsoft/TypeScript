@@ -1,0 +1,59 @@
+arrowFunctionParsingGenericInObject.ts(7,52): error TS2344: Type 'T' does not satisfy the constraint 'not { then(): any; }'.
+arrowFunctionParsingGenericInObject.ts(17,40): error TS2344: Type 'T' does not satisfy the constraint 'not { then(): any; }'.
+arrowFunctionParsingGenericInObject.ts(28,52): error TS2344: Type 'T' does not satisfy the constraint 'not { then(): any; }'.
+arrowFunctionParsingGenericInObject.ts(38,52): error TS2344: Type 'T' does not satisfy the constraint 'not { then(): any; }'.
+
+
+==== arrowFunctionParsingGenericInObject.ts (4 errors) ====
+    const fn1 = () => ({
+        test: <T = undefined>(value: T): T => value,
+        extraValue: () => {},
+    })
+    
+    const fn1async = () => ({
+        test: async <T = undefined>(value: T): Promise<T> => value,
+                                                       ~
+!!! error TS2344: Type 'T' does not satisfy the constraint 'not { then(): any; }'.
+!!! related TS2208 arrowFunctionParsingGenericInObject.ts:7:18: This type parameter might need an `extends not { then(): any; }` constraint.
+        extraValue: () => {},
+    })
+    
+    const fn2 = () => ({
+        test: <T>(value: T): T => value,
+        extraValue: () => {},
+    })
+    
+    const fn2async = () => ({
+        test: async <T>(value: T): Promise<T> => value,
+                                           ~
+!!! error TS2344: Type 'T' does not satisfy the constraint 'not { then(): any; }'.
+!!! related TS2208 arrowFunctionParsingGenericInObject.ts:17:18: This type parameter might need an `extends not { then(): any; }` constraint.
+        extraValue: () => {},
+    })
+    
+    const fn3 = () => ({
+        extraValue: () => {},
+        test: <T = undefined>(value: T): T => value,
+    })
+    
+    const fn3async = () => ({
+        extraValue: () => {},
+        test: async <T = undefined>(value: T): Promise<T> => value,
+                                                       ~
+!!! error TS2344: Type 'T' does not satisfy the constraint 'not { then(): any; }'.
+!!! related TS2208 arrowFunctionParsingGenericInObject.ts:28:18: This type parameter might need an `extends not { then(): any; }` constraint.
+    })
+    
+    const fn4 = () => ({
+        extraValue: '',
+        test: <T = undefined>(value: T): T => value,
+    })
+    
+    const fn4async = () => ({
+        extraValue: '',
+        test: async <T = undefined>(value: T): Promise<T> => value,
+                                                       ~
+!!! error TS2344: Type 'T' does not satisfy the constraint 'not { then(): any; }'.
+!!! related TS2208 arrowFunctionParsingGenericInObject.ts:38:18: This type parameter might need an `extends not { then(): any; }` constraint.
+    })
+    

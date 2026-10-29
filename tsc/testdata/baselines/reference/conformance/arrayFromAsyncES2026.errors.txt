@@ -1,0 +1,16 @@
+arrayFromAsyncES2026.ts(1,31): error TS2344: Type 'number[]' does not satisfy the constraint 'not { then(): any; }'.
+arrayFromAsyncES2026.ts(6,23): error TS2344: Type 'string[]' does not satisfy the constraint 'not { then(): any; }'.
+
+
+==== arrayFromAsyncES2026.ts (2 errors) ====
+    const resolvedValues: Promise<number[]> = Array.fromAsync([
+                                  ~~~~~~~~
+!!! error TS2344: Type 'number[]' does not satisfy the constraint 'not { then(): any; }'.
+        Promise.resolve(1),
+        Promise.resolve(2),
+    ]);
+    
+    const mapped: Promise<string[]> = Array.fromAsync([1, 2], async value => value.toString());
+                          ~~~~~~~~
+!!! error TS2344: Type 'string[]' does not satisfy the constraint 'not { then(): any; }'.
+    

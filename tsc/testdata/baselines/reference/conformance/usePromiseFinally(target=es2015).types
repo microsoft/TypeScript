@@ -2,16 +2,16 @@
 
 === usePromiseFinally.ts ===
 let promise1 = new Promise(function(resolve, reject) {})
->promise1 : Promise<unknown>
->new Promise(function(resolve, reject) {})                .finally(function() {}) : Promise<unknown>
->new Promise(function(resolve, reject) {})                .finally : (onfinally?: (() => void) | undefined | null) => Promise<unknown>
->new Promise(function(resolve, reject) {}) : Promise<unknown>
+>promise1 : Promise<not { then(): any; }>
+>new Promise(function(resolve, reject) {})                .finally(function() {}) : Promise<not { then(): any; }>
+>new Promise(function(resolve, reject) {})                .finally : (onfinally?: (() => void) | undefined | null) => Promise<not { then(): any; }>
+>new Promise(function(resolve, reject) {}) : Promise<not { then(): any; }>
 >Promise : PromiseConstructor
->function(resolve, reject) {} : (resolve: (value: unknown) => void, reject: (reason?: any) => void) => void
->resolve : (value: unknown) => void
+>function(resolve, reject) {} : (resolve: (value: PromiseLike<not { then(): any; }> | not { then(): any; }) => void, reject: (reason?: any) => void) => void
+>resolve : (value: PromiseLike<not { then(): any; }> | not { then(): any; }) => void
 >reject : (reason?: any) => void
 
                 .finally(function() {});
->finally : (onfinally?: (() => void) | undefined | null) => Promise<unknown>
+>finally : (onfinally?: (() => void) | undefined | null) => Promise<not { then(): any; }>
 >function() {} : () => void
 

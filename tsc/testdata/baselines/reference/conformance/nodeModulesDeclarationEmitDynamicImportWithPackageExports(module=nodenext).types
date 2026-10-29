@@ -21,15 +21,15 @@ export const a = await import("package/cjs");
 >"package/cjs" : "package/cjs"
 
 export const b = await import("package/mjs");
->b : typeof import("package/mjs")
->await import("package/mjs") : typeof import("package/mjs")
->import("package/mjs") : Promise<typeof import("package/mjs")>
+>b : typeof import("package/mjs") & not { then(): any; }
+>await import("package/mjs") : typeof import("package/mjs") & not { then(): any; }
+>import("package/mjs") : Promise<typeof import("package/mjs") & not { then(): any; }>
 >"package/mjs" : "package/mjs"
 
 export const c = await import("package");
->c : typeof import("package")
->await import("package") : typeof import("package")
->import("package") : Promise<typeof import("package")>
+>c : typeof import("package") & not { then(): any; }
+>await import("package") : typeof import("package") & not { then(): any; }
+>import("package") : Promise<typeof import("package") & not { then(): any; }>
 >"package" : "package"
 
 export const f = await import("inner");
@@ -47,9 +47,9 @@ export const d = await import("inner/cjs");
 >"inner/cjs" : "inner/cjs"
 
 export const e = await import("inner/mjs");
->e : typeof import("inner/mjs")
->await import("inner/mjs") : typeof import("inner/mjs")
->import("inner/mjs") : Promise<typeof import("inner/mjs")>
+>e : typeof import("inner/mjs") & not { then(): any; }
+>await import("inner/mjs") : typeof import("inner/mjs") & not { then(): any; }
+>import("inner/mjs") : Promise<typeof import("inner/mjs") & not { then(): any; }>
 >"inner/mjs" : "inner/mjs"
 
 === other.mts ===
@@ -61,15 +61,15 @@ export const a = await import("package/cjs");
 >"package/cjs" : "package/cjs"
 
 export const b = await import("package/mjs");
->b : typeof import("package/mjs")
->await import("package/mjs") : typeof import("package/mjs")
->import("package/mjs") : Promise<typeof import("package/mjs")>
+>b : typeof import("package/mjs") & not { then(): any; }
+>await import("package/mjs") : typeof import("package/mjs") & not { then(): any; }
+>import("package/mjs") : Promise<typeof import("package/mjs") & not { then(): any; }>
 >"package/mjs" : "package/mjs"
 
 export const c = await import("package");
->c : typeof import("package")
->await import("package") : typeof import("package")
->import("package") : Promise<typeof import("package")>
+>c : typeof import("package") & not { then(): any; }
+>await import("package") : typeof import("package") & not { then(): any; }
+>import("package") : Promise<typeof import("package") & not { then(): any; }>
 >"package" : "package"
 
 export const f = await import("inner");
@@ -87,9 +87,9 @@ export const d = await import("inner/cjs");
 >"inner/cjs" : "inner/cjs"
 
 export const e = await import("inner/mjs");
->e : typeof import("inner/mjs")
->await import("inner/mjs") : typeof import("inner/mjs")
->import("inner/mjs") : Promise<typeof import("inner/mjs")>
+>e : typeof import("inner/mjs") & not { then(): any; }
+>await import("inner/mjs") : typeof import("inner/mjs") & not { then(): any; }
+>import("inner/mjs") : Promise<typeof import("inner/mjs") & not { then(): any; }>
 >"inner/mjs" : "inner/mjs"
 
 === other.cts ===
@@ -100,13 +100,13 @@ export const a = import("package/cjs");
 >"package/cjs" : "package/cjs"
 
 export const b = import("package/mjs");
->b : Promise<typeof import("package/mjs", { with: { "resolution-mode": "import" } })>
->import("package/mjs") : Promise<typeof import("package/mjs", { with: { "resolution-mode": "import" } })>
+>b : Promise<typeof import("package/mjs", { with: { "resolution-mode": "import" } }) & not { then(): any; }>
+>import("package/mjs") : Promise<typeof import("package/mjs", { with: { "resolution-mode": "import" } }) & not { then(): any; }>
 >"package/mjs" : "package/mjs"
 
 export const c = import("package");
->c : Promise<typeof import("package", { with: { "resolution-mode": "import" } })>
->import("package") : Promise<typeof import("package", { with: { "resolution-mode": "import" } })>
+>c : Promise<typeof import("package", { with: { "resolution-mode": "import" } }) & not { then(): any; }>
+>import("package") : Promise<typeof import("package", { with: { "resolution-mode": "import" } }) & not { then(): any; }>
 >"package" : "package"
 
 export const f = import("inner");
@@ -122,8 +122,8 @@ export const d = import("inner/cjs");
 >"inner/cjs" : "inner/cjs"
 
 export const e = import("inner/mjs");
->e : Promise<typeof import("inner/mjs", { with: { "resolution-mode": "import" } })>
->import("inner/mjs") : Promise<typeof import("inner/mjs", { with: { "resolution-mode": "import" } })>
+>e : Promise<typeof import("inner/mjs", { with: { "resolution-mode": "import" } }) & not { then(): any; }>
+>import("inner/mjs") : Promise<typeof import("inner/mjs", { with: { "resolution-mode": "import" } }) & not { then(): any; }>
 >"inner/mjs" : "inner/mjs"
 
 === node_modules/inner/index.d.ts ===

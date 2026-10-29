@@ -3,12 +3,15 @@ functionsMissingReturnStatementsAndExpressionsStrictNullChecks.ts(9,17): error T
 functionsMissingReturnStatementsAndExpressionsStrictNullChecks.ts(21,7): error TS2322: Type '() => void' is not assignable to type '() => number'.
   Type 'void' is not assignable to type 'number'.
 functionsMissingReturnStatementsAndExpressionsStrictNullChecks.ts(29,23): error TS2355: A function whose declared type is neither 'undefined', 'void', nor 'any' must return a value.
+functionsMissingReturnStatementsAndExpressionsStrictNullChecks.ts(29,31): error TS2344: Type 'number | undefined' does not satisfy the constraint 'not { then(): any; }'.
+  Type 'number' is not assignable to type 'not { then(): any; }'.
 functionsMissingReturnStatementsAndExpressionsStrictNullChecks.ts(33,23): error TS2355: A function whose declared type is neither 'undefined', 'void', nor 'any' must return a value.
+functionsMissingReturnStatementsAndExpressionsStrictNullChecks.ts(33,31): error TS2344: Type 'number' does not satisfy the constraint 'not { then(): any; }'.
 functionsMissingReturnStatementsAndExpressionsStrictNullChecks.ts(52,3): error TS2345: Argument of type '() => void' is not assignable to parameter of type '() => undefined'.
   Type 'void' is not assignable to type 'undefined'.
 
 
-==== functionsMissingReturnStatementsAndExpressionsStrictNullChecks.ts (6 errors) ====
+==== functionsMissingReturnStatementsAndExpressionsStrictNullChecks.ts (8 errors) ====
     function f10(): undefined {
         // Ok, return type allows implicit return of undefined
     }
@@ -47,12 +50,17 @@ functionsMissingReturnStatementsAndExpressionsStrictNullChecks.ts(52,3): error T
     async function f31(): Promise<undefined | number> {
                           ~~~~~~~~~~~~~~~~~~~~~~~~~~~
 !!! error TS2355: A function whose declared type is neither 'undefined', 'void', nor 'any' must return a value.
+                                  ~~~~~~~~~~~~~~~~~~
+!!! error TS2344: Type 'number | undefined' does not satisfy the constraint 'not { then(): any; }'.
+!!! error TS2344:   Type 'number' is not assignable to type 'not { then(): any; }'.
         // Error, return type isn't just undefined
     }
     
     async function f32(): Promise<number> {
                           ~~~~~~~~~~~~~~~
 !!! error TS2355: A function whose declared type is neither 'undefined', 'void', nor 'any' must return a value.
+                                  ~~~~~~
+!!! error TS2344: Type 'number' does not satisfy the constraint 'not { then(): any; }'.
         // Error, return type doesn't include undefined
     }
     

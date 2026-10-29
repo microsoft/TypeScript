@@ -442,11 +442,11 @@ const testSet: Set<any> = null as any;
 >null as any : any
 
 const testPromiseAll = Promise.all([]);
->testPromiseAll : Promise<[]>
->Promise.all([]) : Promise<[]>
->Promise.all : { <T>(values: Iterable<T | PromiseLike<T>>): Promise<Awaited<T>[]>; <T extends readonly unknown[] | []>(values: T): Promise<{ -readonly [P in keyof T]: Awaited<T[P]>; }>; }
+>testPromiseAll : Promise<[] & not { then(): any; }>
+>Promise.all([]) : Promise<[] & not { then(): any; }>
+>Promise.all : { <T>(values: Iterable<T | PromiseLike<T>>): Promise<Awaited<T>[] & not { then(): any; }>; <T extends readonly unknown[] | []>(values: T): Promise<{ -readonly [P in keyof T]: Awaited<T[P]>; } & not { then(): any; }>; }
 >Promise : PromiseConstructor
->all : { <T>(values: Iterable<T | PromiseLike<T>>): Promise<Awaited<T>[]>; <T extends readonly unknown[] | []>(values: T): Promise<{ -readonly [P in keyof T]: Awaited<T[P]>; }>; }
+>all : { <T>(values: Iterable<T | PromiseLike<T>>): Promise<Awaited<T>[] & not { then(): any; }>; <T extends readonly unknown[] | []>(values: T): Promise<{ -readonly [P in keyof T]: Awaited<T[P]>; } & not { then(): any; }>; }
 >[] : []
 
 const testPromiseRace = Promise.race([]);
@@ -458,18 +458,18 @@ const testPromiseRace = Promise.race([]);
 >[] : []
 
 const testPromiseResolve = Promise.resolve();
->testPromiseResolve : Promise<void>
->Promise.resolve() : Promise<void>
->Promise.resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T>(value: T | PromiseLike<T>): Promise<Awaited<T>>; }
+>testPromiseResolve : Promise<void & not { then(): any; }>
+>Promise.resolve() : Promise<void & not { then(): any; }>
+>Promise.resolve : { (): Promise<void & not { then(): any; }>; <T>(value: T): Promise<Awaited<T>>; <T>(value: T | PromiseLike<T>): Promise<Awaited<T>>; }
 >Promise : PromiseConstructor
->resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T>(value: T | PromiseLike<T>): Promise<Awaited<T>>; }
+>resolve : { (): Promise<void & not { then(): any; }>; <T>(value: T): Promise<Awaited<T>>; <T>(value: T | PromiseLike<T>): Promise<Awaited<T>>; }
 
 const testPromiseReject = Promise.reject();
 >testPromiseReject : Promise<never>
 >Promise.reject() : Promise<never>
->Promise.reject : <T = never>(reason?: any) => Promise<T>
+>Promise.reject : <T extends not { then(): any; } = never>(reason?: any) => Promise<T>
 >Promise : PromiseConstructor
->reject : <T = never>(reason?: any) => Promise<T>
+>reject : <T extends not { then(): any; } = never>(reason?: any) => Promise<T>
 
 const testSymbolFor = Symbol.for('a');
 >testSymbolFor : unique symbol

@@ -2,41 +2,41 @@
 
 === a.ts ===
 import { b } from './b';
->b : { f: () => Promise<void>; }
+>b : { f: () => Promise<void & not { then(): any; }>; }
 
 export const a = {
->a : { f: () => Promise<void>; }
->{    f: async () => {        await b.f();    }} : { f: () => Promise<void>; }
+>a : { f: () => Promise<void & not { then(): any; }>; }
+>{    f: async () => {        await b.f();    }} : { f: () => Promise<void & not { then(): any; }>; }
 
     f: async () => {
->f : () => Promise<void>
->async () => {        await b.f();    } : () => Promise<void>
+>f : () => Promise<void & not { then(): any; }>
+>async () => {        await b.f();    } : () => Promise<void & not { then(): any; }>
 
         await b.f();
->await b.f() : void
->b.f() : Promise<void>
->b.f : () => Promise<void>
->b : { f: () => Promise<void>; }
->f : () => Promise<void>
+>await b.f() : void & not { then(): any; }
+>b.f() : Promise<void & not { then(): any; }>
+>b.f : () => Promise<void & not { then(): any; }>
+>b : { f: () => Promise<void & not { then(): any; }>; }
+>f : () => Promise<void & not { then(): any; }>
     }
 };
 === b.ts ===
 import { a } from './a';
->a : { f: () => Promise<void>; }
+>a : { f: () => Promise<void & not { then(): any; }>; }
 
 export const b = {
->b : { f: () => Promise<void>; }
->{    f: async () => {        await a.f();    }} : { f: () => Promise<void>; }
+>b : { f: () => Promise<void & not { then(): any; }>; }
+>{    f: async () => {        await a.f();    }} : { f: () => Promise<void & not { then(): any; }>; }
 
     f: async () => {
->f : () => Promise<void>
->async () => {        await a.f();    } : () => Promise<void>
+>f : () => Promise<void & not { then(): any; }>
+>async () => {        await a.f();    } : () => Promise<void & not { then(): any; }>
 
         await a.f();
->await a.f() : void
->a.f() : Promise<void>
->a.f : () => Promise<void>
->a : { f: () => Promise<void>; }
->f : () => Promise<void>
+>await a.f() : void & not { then(): any; }
+>a.f() : Promise<void & not { then(): any; }>
+>a.f : () => Promise<void & not { then(): any; }>
+>a : { f: () => Promise<void & not { then(): any; }>; }
+>f : () => Promise<void & not { then(): any; }>
     }
 };

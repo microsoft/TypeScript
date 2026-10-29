@@ -1,0 +1,106 @@
+//// [tests/cases/compiler/negatedPromiseConstraintAugmentation.ts] ////
+
+=== augmentation.d.ts ===
+interface Promise<T> {
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2018.promise.d.ts, --, --) ... and 2 more)
+>T : Symbol(T, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2018.promise.d.ts, --, --), Decl(augmentation.d.ts, 0, 18) ... and 1 more)
+
+    communityMethod(): T;
+>communityMethod : Symbol(Promise.communityMethod, Decl(augmentation.d.ts, 0, 22))
+>T : Symbol(T, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2018.promise.d.ts, --, --), Decl(augmentation.d.ts, 0, 18) ... and 1 more)
+}
+
+interface Promise<T extends not { then(): any }> {
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2018.promise.d.ts, --, --) ... and 2 more)
+>T : Symbol(T, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2018.promise.d.ts, --, --), Decl(augmentation.d.ts, 0, 18) ... and 1 more)
+>then : Symbol(then, Decl(augmentation.d.ts, 4, 33))
+
+    anotherCommunityMethod(): T;
+>anotherCommunityMethod : Symbol(Promise.anotherCommunityMethod, Decl(augmentation.d.ts, 4, 50))
+>T : Symbol(T, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2018.promise.d.ts, --, --), Decl(augmentation.d.ts, 0, 18) ... and 1 more)
+}
+
+=== main.ts ===
+type Value = number & not { then(): any };
+>Value : Symbol(Value, Decl(main.ts, 0, 0))
+>then : Symbol(then, Decl(main.ts, 0, 27))
+
+declare const value: Value;
+>value : Symbol(value, Decl(main.ts, 1, 13))
+>Value : Symbol(Value, Decl(main.ts, 0, 0))
+
+const promise = Promise.resolve(value);
+>promise : Symbol(promise, Decl(main.ts, 2, 5))
+>Promise.resolve : Symbol(PromiseConstructor.resolve, Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2018.promise.d.ts, --, --) ... and 2 more)
+>resolve : Symbol(PromiseConstructor.resolve, Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
+>value : Symbol(value, Decl(main.ts, 1, 13))
+
+const first: Value = promise.communityMethod();
+>first : Symbol(first, Decl(main.ts, 3, 5))
+>Value : Symbol(Value, Decl(main.ts, 0, 0))
+>promise.communityMethod : Symbol(Promise.communityMethod, Decl(augmentation.d.ts, 0, 22))
+>promise : Symbol(promise, Decl(main.ts, 2, 5))
+>communityMethod : Symbol(Promise.communityMethod, Decl(augmentation.d.ts, 0, 22))
+
+const second: Value = promise.anotherCommunityMethod();
+>second : Symbol(second, Decl(main.ts, 4, 5))
+>Value : Symbol(Value, Decl(main.ts, 0, 0))
+>promise.anotherCommunityMethod : Symbol(Promise.anotherCommunityMethod, Decl(augmentation.d.ts, 4, 50))
+>promise : Symbol(promise, Decl(main.ts, 2, 5))
+>anotherCommunityMethod : Symbol(Promise.anotherCommunityMethod, Decl(augmentation.d.ts, 4, 50))
+
+type NestedPromise = Promise<Promise<Value>>;
+>NestedPromise : Symbol(NestedPromise, Decl(main.ts, 4, 55))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2018.promise.d.ts, --, --) ... and 2 more)
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2018.promise.d.ts, --, --) ... and 2 more)
+>Value : Symbol(Value, Decl(main.ts, 0, 0))
+
+interface UnconstrainedFirst<T> {
+>UnconstrainedFirst : Symbol(UnconstrainedFirst, Decl(main.ts, 5, 45), Decl(main.ts, 9, 1))
+>T : Symbol(T, Decl(main.ts, 7, 29), Decl(main.ts, 10, 29))
+
+    value: T;
+>value : Symbol(UnconstrainedFirst.value, Decl(main.ts, 7, 33))
+>T : Symbol(T, Decl(main.ts, 7, 29), Decl(main.ts, 10, 29))
+}
+interface UnconstrainedFirst<T extends not { then(): any }> {}
+>UnconstrainedFirst : Symbol(UnconstrainedFirst, Decl(main.ts, 5, 45), Decl(main.ts, 9, 1))
+>T : Symbol(T, Decl(main.ts, 7, 29), Decl(main.ts, 10, 29))
+>then : Symbol(then, Decl(main.ts, 10, 44))
+
+type ValidUnconstrainedFirst = UnconstrainedFirst<Value>;
+>ValidUnconstrainedFirst : Symbol(ValidUnconstrainedFirst, Decl(main.ts, 10, 62))
+>UnconstrainedFirst : Symbol(UnconstrainedFirst, Decl(main.ts, 5, 45), Decl(main.ts, 9, 1))
+>Value : Symbol(Value, Decl(main.ts, 0, 0))
+
+type NestedUnconstrainedFirst = UnconstrainedFirst<Promise<Value>>;
+>NestedUnconstrainedFirst : Symbol(NestedUnconstrainedFirst, Decl(main.ts, 11, 57))
+>UnconstrainedFirst : Symbol(UnconstrainedFirst, Decl(main.ts, 5, 45), Decl(main.ts, 9, 1))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2018.promise.d.ts, --, --) ... and 2 more)
+>Value : Symbol(Value, Decl(main.ts, 0, 0))
+
+interface ConstrainedFirst<T extends not { then(): any }> {
+>ConstrainedFirst : Symbol(ConstrainedFirst, Decl(main.ts, 12, 67), Decl(main.ts, 16, 1))
+>T : Symbol(T, Decl(main.ts, 14, 27), Decl(main.ts, 17, 27))
+>then : Symbol(then, Decl(main.ts, 14, 42))
+
+    value: T;
+>value : Symbol(ConstrainedFirst.value, Decl(main.ts, 14, 59))
+>T : Symbol(T, Decl(main.ts, 14, 27), Decl(main.ts, 17, 27))
+}
+interface ConstrainedFirst<T> {}
+>ConstrainedFirst : Symbol(ConstrainedFirst, Decl(main.ts, 12, 67), Decl(main.ts, 16, 1))
+>T : Symbol(T, Decl(main.ts, 14, 27), Decl(main.ts, 17, 27))
+
+type ValidConstrainedFirst = ConstrainedFirst<Value>;
+>ValidConstrainedFirst : Symbol(ValidConstrainedFirst, Decl(main.ts, 17, 32))
+>ConstrainedFirst : Symbol(ConstrainedFirst, Decl(main.ts, 12, 67), Decl(main.ts, 16, 1))
+>Value : Symbol(Value, Decl(main.ts, 0, 0))
+
+type NestedConstrainedFirst = ConstrainedFirst<Promise<Value>>;
+>NestedConstrainedFirst : Symbol(NestedConstrainedFirst, Decl(main.ts, 18, 53))
+>ConstrainedFirst : Symbol(ConstrainedFirst, Decl(main.ts, 12, 67), Decl(main.ts, 16, 1))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2018.promise.d.ts, --, --) ... and 2 more)
+>Value : Symbol(Value, Decl(main.ts, 0, 0))
+

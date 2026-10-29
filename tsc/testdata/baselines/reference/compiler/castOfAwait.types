@@ -2,21 +2,21 @@
 
 === castOfAwait.ts ===
 async function f() {
->f : () => Promise<void>
+>f : () => Promise<void & not { then(): any; }>
 
     <number> await 0;
 ><number> await 0 : number
->await 0 : 0
+>await 0 : 0 & not { then(): any; }
 >0 : 0
 
     typeof await 0;
 >typeof await 0 : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
->await 0 : 0
+>await 0 : 0 & not { then(): any; }
 >0 : 0
 
     void await 0;
 >void await 0 : undefined
->await 0 : 0
+>await 0 : 0 & not { then(): any; }
 >0 : 0
 
     await void <string> typeof <number> void await 0;
@@ -26,12 +26,12 @@ async function f() {
 >typeof <number> void await 0 : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
 ><number> void await 0 : number
 >void await 0 : undefined
->await 0 : 0
+>await 0 : 0 & not { then(): any; }
 >0 : 0
 
     await await 0;
->await await 0 : 0
->await 0 : 0
+>await await 0 : 0 & not { then(): any; }
+>await 0 : 0 & not { then(): any; }
 >0 : 0
 }
 

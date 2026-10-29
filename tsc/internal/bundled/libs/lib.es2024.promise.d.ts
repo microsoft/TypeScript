@@ -14,7 +14,7 @@ and limitations under the License.
 ***************************************************************************** */
 
 
-interface PromiseWithResolvers<T> {
+interface PromiseWithResolvers<T extends not { then(): any }> {
     promise: Promise<T>;
     resolve: (value: T | PromiseLike<T>) => void;
     reject: (reason?: any) => void;
@@ -29,5 +29,5 @@ interface PromiseConstructor {
      * const { promise, resolve, reject } = Promise.withResolvers<T>();
      * ```
      */
-    withResolvers<T>(): PromiseWithResolvers<T>;
+    withResolvers<T extends not { then(): any }>(): PromiseWithResolvers<T>;
 }

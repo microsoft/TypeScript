@@ -1,0 +1,24 @@
+genericTemplateOverloadResolution.ts(2,46): error TS2344: Type '{}' does not satisfy the constraint 'not { then(): any; }'.
+genericTemplateOverloadResolution.ts(3,49): error TS2344: Type 'T' does not satisfy the constraint 'not { then(): any; }'.
+genericTemplateOverloadResolution.ts(8,36): error TS2344: Type 'number' does not satisfy the constraint 'not { then(): any; }'.
+
+
+==== genericTemplateOverloadResolution.ts (3 errors) ====
+    interface IFooFn {
+        (strings: TemplateStringsArray): Promise<{}>;
+                                                 ~~
+!!! error TS2344: Type '{}' does not satisfy the constraint 'not { then(): any; }'.
+        <T>(strings: TemplateStringsArray): Promise<T>;
+                                                    ~
+!!! error TS2344: Type 'T' does not satisfy the constraint 'not { then(): any; }'.
+!!! related TS2208 genericTemplateOverloadResolution.ts:3:6: This type parameter might need an `extends not { then(): any; }` constraint.
+    }
+    
+    declare const fooFn: IFooFn;
+    
+    declare function expect(x: Promise<number>): void;
+                                       ~~~~~~
+!!! error TS2344: Type 'number' does not satisfy the constraint 'not { then(): any; }'.
+    
+    expect(fooFn<number>``);
+    

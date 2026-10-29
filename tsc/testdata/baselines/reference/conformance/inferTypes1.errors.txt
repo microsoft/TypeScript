@@ -1,3 +1,5 @@
+inferTypes1.ts(10,29): error TS2344: Type 'string' does not satisfy the constraint 'not { then(): any; }'.
+inferTypes1.ts(11,38): error TS2344: Type 'string' does not satisfy the constraint 'not { then(): any; }'.
 inferTypes1.ts(36,23): error TS2344: Type 'string' does not satisfy the constraint '(...args: any) => any'.
 inferTypes1.ts(37,23): error TS2344: Type 'Function' does not satisfy the constraint '(...args: any) => any'.
   Type 'Function' provides no match for the signature '(...args: any): any'.
@@ -19,7 +21,7 @@ inferTypes1.ts(91,44): error TS2344: Type 'U' does not satisfy the constraint 's
 inferTypes1.ts(153,40): error TS2322: Type 'T' is not assignable to type 'string | number | symbol'.
 
 
-==== inferTypes1.ts (14 errors) ====
+==== inferTypes1.ts (16 errors) ====
     type Unpacked<T> =
         T extends (infer U)[] ? U :
         T extends (...args: any[]) => infer U ? U :
@@ -30,7 +32,11 @@ inferTypes1.ts(153,40): error TS2322: Type 'T' is not assignable to type 'string
     type T01 = Unpacked<string[]>;  // string
     type T02 = Unpacked<() => string>;  // string
     type T03 = Unpacked<Promise<string>>;  // string
+                                ~~~~~~
+!!! error TS2344: Type 'string' does not satisfy the constraint 'not { then(): any; }'.
     type T04 = Unpacked<Unpacked<Promise<string>[]>>;  // string
+                                         ~~~~~~
+!!! error TS2344: Type 'string' does not satisfy the constraint 'not { then(): any; }'.
     type T05 = Unpacked<any>;  // any
     type T06 = Unpacked<never>;  // never
     

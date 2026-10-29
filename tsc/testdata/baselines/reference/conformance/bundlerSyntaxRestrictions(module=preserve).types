@@ -33,7 +33,7 @@ declare module "path" {
 === /mainJs.js ===
 import {} from "./a";
 import("./a");
->import("./a") : Promise<typeof _>
+>import("./a") : Promise<typeof _ & not { then(): any; }>
 >"./a" : "./a"
 
 const _ = require("./a");

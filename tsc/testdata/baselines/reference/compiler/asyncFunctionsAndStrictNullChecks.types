@@ -54,14 +54,14 @@ declare namespace Windows.Foundation {
 }
 
 async function sample(promise: Windows.Foundation.IPromise<number>) {
->sample : (promise: Windows.Foundation.IPromise<number>) => Promise<void>
+>sample : (promise: Windows.Foundation.IPromise<number>) => Promise<void & not { then(): any; }>
 >promise : Windows.Foundation.IPromise<number>
 >Windows : any
 >Foundation : any
 
     var number = await promise;
->number : number
->await promise : number
+>number : number & not { then(): any; }
+>await promise : number & not { then(): any; }
 >promise : Windows.Foundation.IPromise<number>
 }
 
@@ -77,19 +77,19 @@ declare function resolve2<T>(value: T): Windows.Foundation.IPromise<T>;
 >Foundation : any
 
 async function sample2(x?: number) {
->sample2 : (x?: number) => Promise<void>
+>sample2 : (x?: number) => Promise<void & not { then(): any; }>
 >x : number | undefined
 
     let x1 = await resolve1(x);
->x1 : number | undefined
->await resolve1(x) : number | undefined
+>x1 : (number & not { then(): any; }) | undefined
+>await resolve1(x) : (number & not { then(): any; }) | undefined
 >resolve1(x) : Promise<number | undefined>
 >resolve1 : <T>(value: T) => Promise<T>
 >x : number | undefined
 
     let x2 = await resolve2(x);
->x2 : number | undefined
->await resolve2(x) : number | undefined
+>x2 : (number & not { then(): any; }) | undefined
+>await resolve2(x) : (number & not { then(): any; }) | undefined
 >resolve2(x) : Windows.Foundation.IPromise<number | undefined>
 >resolve2 : <T>(value: T) => Windows.Foundation.IPromise<T>
 >x : number | undefined

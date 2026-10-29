@@ -254,7 +254,7 @@ sourceFile:../main.ts
 6 >                 ^^^^^^
 7 >                       ^^^^^^^^^^^^^^
 8 >                                     ^
-9 >                                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+9 >                                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
 1 >
   >
 2 >export 
@@ -273,12 +273,10 @@ sourceFile:../main.ts
 7 >Emitted(3, 38) Source(4, 38) + SourceIndex(0)
 8 >Emitted(3, 39) Source(4, 39) + SourceIndex(0)
 ---
->>>export declare function load(): Promise<typeof import("./Card.js")>;
+>>>export declare function load(): Promise<typeof import("./Card.js") & not {
 1->
 2 >^^^^^^^^^^^^^^^^^^^^^^^^
 3 >                        ^^^^
-4 >                            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-5 >                                                                    ^^^->
 1->
   >
   >const path = "./Card.astro";
@@ -287,65 +285,77 @@ sourceFile:../main.ts
   >
 2 >export async function 
 3 >                        load
-4 >                            () { return import("./Card.astro"); }
 1->Emitted(4, 1) Source(9, 1) + SourceIndex(0)
 2 >Emitted(4, 25) Source(9, 23) + SourceIndex(0)
 3 >Emitted(4, 29) Source(9, 27) + SourceIndex(0)
-4 >Emitted(4, 69) Source(9, 64) + SourceIndex(0)
 ---
->>>export declare const inferred: Promise<typeof import("./Widget.mjs")>;
+>>>    then(): any;
+>>>}>;
+1 >^^^
+2 >   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+1 >() { return import("./Card.astro"); }
+1 >Emitted(6, 4) Source(9, 64) + SourceIndex(0)
+---
+>>>export declare const inferred: Promise<typeof import("./Widget.mjs") & not {
 1->
 2 >^^^^^^^^^^^^^^^
 3 >               ^^^^^^
 4 >                     ^^^^^^^^
-5 >                             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-6 >                                                                     ^
 1->
   >
 2 >export 
 3 >               const 
 4 >                     inferred
-5 >                              = import("./Widget.y.z")
-6 >                                                                     ;
-1->Emitted(5, 1) Source(10, 1) + SourceIndex(0)
-2 >Emitted(5, 16) Source(10, 8) + SourceIndex(0)
-3 >Emitted(5, 22) Source(10, 14) + SourceIndex(0)
-4 >Emitted(5, 30) Source(10, 22) + SourceIndex(0)
-5 >Emitted(5, 70) Source(10, 47) + SourceIndex(0)
-6 >Emitted(5, 71) Source(10, 48) + SourceIndex(0)
+1->Emitted(7, 1) Source(10, 1) + SourceIndex(0)
+2 >Emitted(7, 16) Source(10, 8) + SourceIndex(0)
+3 >Emitted(7, 22) Source(10, 14) + SourceIndex(0)
+4 >Emitted(7, 30) Source(10, 22) + SourceIndex(0)
+---
+>>>    then(): any;
+>>>}>;
+1 >^^
+2 >  ^
+3 >   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+1 > = import("./Widget.y.z")
+2 >  ;
+1 >Emitted(9, 3) Source(10, 47) + SourceIndex(0)
+2 >Emitted(9, 4) Source(10, 48) + SourceIndex(0)
 ---
 >>>export declare const nested: {
-1 >
+1->
 2 >^^^^^^^^^^^^^^^
 3 >               ^^^^^^
 4 >                     ^^^^^^
-5 >                           ^^^^^^^^^^^^^^^^^^^^^^^^^^->
-1 >
+5 >                           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+1->
   >
 2 >export 
 3 >               const 
 4 >                     nested
-1 >Emitted(6, 1) Source(11, 1) + SourceIndex(0)
-2 >Emitted(6, 16) Source(11, 8) + SourceIndex(0)
-3 >Emitted(6, 22) Source(11, 14) + SourceIndex(0)
-4 >Emitted(6, 28) Source(11, 20) + SourceIndex(0)
+1->Emitted(10, 1) Source(11, 1) + SourceIndex(0)
+2 >Emitted(10, 16) Source(11, 8) + SourceIndex(0)
+3 >Emitted(10, 22) Source(11, 14) + SourceIndex(0)
+4 >Emitted(10, 28) Source(11, 20) + SourceIndex(0)
 ---
->>>    load: () => Promise<typeof import("./Card.js")>;
+>>>    load: () => Promise<typeof import("./Card.js") & not {
 1->^^^^
 2 >    ^^^^
+3 >        ^^^^^^^^^^^^^->
 1-> = { 
 2 >    load
-1->Emitted(7, 5) Source(11, 25) + SourceIndex(0)
-2 >Emitted(7, 9) Source(11, 29) + SourceIndex(0)
+1->Emitted(11, 5) Source(11, 25) + SourceIndex(0)
+2 >Emitted(11, 9) Source(11, 29) + SourceIndex(0)
 ---
+>>>        then(): any;
+>>>    }>;
 >>>};
-1 >^
+1->^
 2 > ^
 3 >  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
-1 >: () => import("./Card.astro") }
+1->: () => import("./Card.astro") }
 2 > ;
-1 >Emitted(8, 2) Source(11, 61) + SourceIndex(0)
-2 >Emitted(8, 3) Source(11, 62) + SourceIndex(0)
+1->Emitted(14, 2) Source(11, 61) + SourceIndex(0)
+2 >Emitted(14, 3) Source(11, 62) + SourceIndex(0)
 ---
 >>>export declare const copied: import("./Card.js").CardProps[];
 1->
@@ -361,11 +371,11 @@ sourceFile:../main.ts
 4 >                     copied
 5 >                            = [annotated]
 6 >                                                            ;
-1->Emitted(9, 1) Source(12, 1) + SourceIndex(0)
-2 >Emitted(9, 16) Source(12, 8) + SourceIndex(0)
-3 >Emitted(9, 22) Source(12, 14) + SourceIndex(0)
-4 >Emitted(9, 28) Source(12, 20) + SourceIndex(0)
-5 >Emitted(9, 61) Source(12, 34) + SourceIndex(0)
-6 >Emitted(9, 62) Source(12, 35) + SourceIndex(0)
+1->Emitted(15, 1) Source(12, 1) + SourceIndex(0)
+2 >Emitted(15, 16) Source(12, 8) + SourceIndex(0)
+3 >Emitted(15, 22) Source(12, 14) + SourceIndex(0)
+4 >Emitted(15, 28) Source(12, 20) + SourceIndex(0)
+5 >Emitted(15, 61) Source(12, 34) + SourceIndex(0)
+6 >Emitted(15, 62) Source(12, 35) + SourceIndex(0)
 ---
 >>>//# sourceMappingURL=main.d.ts.map

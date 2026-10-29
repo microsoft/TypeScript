@@ -25,7 +25,7 @@ interface Atomics {
      * @param value The expected value to test.
      * @param [timeout] The expected value to test.
      */
-    waitAsync(typedArray: Int32Array, index: number, value: number, timeout?: number): { async: false; value: "not-equal" | "timed-out"; } | { async: true; value: Promise<"ok" | "timed-out">; };
+    waitAsync(typedArray: Int32Array, index: number, value: number, timeout?: number): { async: false; value: "not-equal" | "timed-out"; } | { async: true; value: Promise<("ok" | "timed-out") & not { then(): any }>; };
 
     /**
      * A non-blocking, asynchronous version of wait which is usable on the main thread.
@@ -35,7 +35,7 @@ interface Atomics {
      * @param value The expected value to test.
      * @param [timeout] The expected value to test.
      */
-    waitAsync(typedArray: BigInt64Array, index: number, value: bigint, timeout?: number): { async: false; value: "not-equal" | "timed-out"; } | { async: true; value: Promise<"ok" | "timed-out">; };
+    waitAsync(typedArray: BigInt64Array, index: number, value: bigint, timeout?: number): { async: false; value: "not-equal" | "timed-out"; } | { async: true; value: Promise<("ok" | "timed-out") & not { then(): any }>; };
 }
 
 interface SharedArrayBuffer {

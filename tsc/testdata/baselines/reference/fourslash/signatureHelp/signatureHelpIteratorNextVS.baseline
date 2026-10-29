@@ -31,12 +31,12 @@
 // asyncIterator.next();
 //                    ^
 // | ----------------------------------------------------------------------
-// | next(): Promise<IteratorResult<string, void>>
+// | next(): Promise<IteratorResult<string, void> & not { then(): any; }>
 // | ----------------------------------------------------------------------
 // asyncIterator.next( 0);
 //                    ^
 // | ----------------------------------------------------------------------
-// | next(**value: number**): Promise<IteratorResult<string, void>>
+// | next(**value: number**): Promise<IteratorResult<string, void> & not { then(): any; }>
 // | ----------------------------------------------------------------------
 // 
 // declare const asyncGenerator: AsyncGenerator<string, void, number>;
@@ -44,12 +44,12 @@
 // asyncGenerator.next();
 //                     ^
 // | ----------------------------------------------------------------------
-// | next(): Promise<IteratorResult<string, void>>
+// | next(): Promise<IteratorResult<string, void> & not { then(): any; }>
 // | ----------------------------------------------------------------------
 // asyncGenerator.next( 0);
 //                     ^
 // | ----------------------------------------------------------------------
-// | next(**value: number**): Promise<IteratorResult<string, void>>
+// | next(**value: number**): Promise<IteratorResult<string, void> & not { then(): any; }>
 // | ----------------------------------------------------------------------
 [
   {
@@ -741,7 +741,7 @@
     "item": {
       "signatures": [
         {
-          "label": "next(): Promise<IteratorResult<string, void>>",
+          "label": "next(): Promise<IteratorResult<string, void> & not { then(): any; }>",
           "parameters": [],
           "_vs_colorizedLabel": {
             "Runs": [
@@ -811,6 +811,86 @@
                 "_vs_type": "ClassifiedTextRun"
               },
               {
+                "ClassificationTypeName": "whitespace",
+                "Text": " ",
+                "_vs_type": "ClassifiedTextRun"
+              },
+              {
+                "ClassificationTypeName": "punctuation",
+                "Text": "&",
+                "_vs_type": "ClassifiedTextRun"
+              },
+              {
+                "ClassificationTypeName": "whitespace",
+                "Text": " ",
+                "_vs_type": "ClassifiedTextRun"
+              },
+              {
+                "ClassificationTypeName": "keyword",
+                "Text": "not",
+                "_vs_type": "ClassifiedTextRun"
+              },
+              {
+                "ClassificationTypeName": "whitespace",
+                "Text": " ",
+                "_vs_type": "ClassifiedTextRun"
+              },
+              {
+                "ClassificationTypeName": "punctuation",
+                "Text": "{",
+                "_vs_type": "ClassifiedTextRun"
+              },
+              {
+                "ClassificationTypeName": "whitespace",
+                "Text": " ",
+                "_vs_type": "ClassifiedTextRun"
+              },
+              {
+                "ClassificationTypeName": "property name",
+                "Text": "then",
+                "_vs_type": "ClassifiedTextRun"
+              },
+              {
+                "ClassificationTypeName": "punctuation",
+                "Text": "(",
+                "_vs_type": "ClassifiedTextRun"
+              },
+              {
+                "ClassificationTypeName": "punctuation",
+                "Text": ")",
+                "_vs_type": "ClassifiedTextRun"
+              },
+              {
+                "ClassificationTypeName": "punctuation",
+                "Text": ":",
+                "_vs_type": "ClassifiedTextRun"
+              },
+              {
+                "ClassificationTypeName": "whitespace",
+                "Text": " ",
+                "_vs_type": "ClassifiedTextRun"
+              },
+              {
+                "ClassificationTypeName": "keyword",
+                "Text": "any",
+                "_vs_type": "ClassifiedTextRun"
+              },
+              {
+                "ClassificationTypeName": "punctuation",
+                "Text": ";",
+                "_vs_type": "ClassifiedTextRun"
+              },
+              {
+                "ClassificationTypeName": "whitespace",
+                "Text": " ",
+                "_vs_type": "ClassifiedTextRun"
+              },
+              {
+                "ClassificationTypeName": "punctuation",
+                "Text": "}",
+                "_vs_type": "ClassifiedTextRun"
+              },
+              {
                 "ClassificationTypeName": "punctuation",
                 "Text": ">",
                 "_vs_type": "ClassifiedTextRun"
@@ -820,7 +900,7 @@
           }
         },
         {
-          "label": "next(value: number): Promise<IteratorResult<string, void>>",
+          "label": "next(value: number): Promise<IteratorResult<string, void> & not { then(): any; }>",
           "parameters": [
             {
               "label": "value: number"
@@ -912,6 +992,86 @@
               {
                 "ClassificationTypeName": "punctuation",
                 "Text": ">",
+                "_vs_type": "ClassifiedTextRun"
+              },
+              {
+                "ClassificationTypeName": "whitespace",
+                "Text": " ",
+                "_vs_type": "ClassifiedTextRun"
+              },
+              {
+                "ClassificationTypeName": "punctuation",
+                "Text": "&",
+                "_vs_type": "ClassifiedTextRun"
+              },
+              {
+                "ClassificationTypeName": "whitespace",
+                "Text": " ",
+                "_vs_type": "ClassifiedTextRun"
+              },
+              {
+                "ClassificationTypeName": "keyword",
+                "Text": "not",
+                "_vs_type": "ClassifiedTextRun"
+              },
+              {
+                "ClassificationTypeName": "whitespace",
+                "Text": " ",
+                "_vs_type": "ClassifiedTextRun"
+              },
+              {
+                "ClassificationTypeName": "punctuation",
+                "Text": "{",
+                "_vs_type": "ClassifiedTextRun"
+              },
+              {
+                "ClassificationTypeName": "whitespace",
+                "Text": " ",
+                "_vs_type": "ClassifiedTextRun"
+              },
+              {
+                "ClassificationTypeName": "property name",
+                "Text": "then",
+                "_vs_type": "ClassifiedTextRun"
+              },
+              {
+                "ClassificationTypeName": "punctuation",
+                "Text": "(",
+                "_vs_type": "ClassifiedTextRun"
+              },
+              {
+                "ClassificationTypeName": "punctuation",
+                "Text": ")",
+                "_vs_type": "ClassifiedTextRun"
+              },
+              {
+                "ClassificationTypeName": "punctuation",
+                "Text": ":",
+                "_vs_type": "ClassifiedTextRun"
+              },
+              {
+                "ClassificationTypeName": "whitespace",
+                "Text": " ",
+                "_vs_type": "ClassifiedTextRun"
+              },
+              {
+                "ClassificationTypeName": "keyword",
+                "Text": "any",
+                "_vs_type": "ClassifiedTextRun"
+              },
+              {
+                "ClassificationTypeName": "punctuation",
+                "Text": ";",
+                "_vs_type": "ClassifiedTextRun"
+              },
+              {
+                "ClassificationTypeName": "whitespace",
+                "Text": " ",
+                "_vs_type": "ClassifiedTextRun"
+              },
+              {
+                "ClassificationTypeName": "punctuation",
+                "Text": "}",
                 "_vs_type": "ClassifiedTextRun"
               },
               {
@@ -940,7 +1100,7 @@
     "item": {
       "signatures": [
         {
-          "label": "next(): Promise<IteratorResult<string, void>>",
+          "label": "next(): Promise<IteratorResult<string, void> & not { then(): any; }>",
           "parameters": [],
           "_vs_colorizedLabel": {
             "Runs": [
@@ -1010,6 +1170,86 @@
                 "_vs_type": "ClassifiedTextRun"
               },
               {
+                "ClassificationTypeName": "whitespace",
+                "Text": " ",
+                "_vs_type": "ClassifiedTextRun"
+              },
+              {
+                "ClassificationTypeName": "punctuation",
+                "Text": "&",
+                "_vs_type": "ClassifiedTextRun"
+              },
+              {
+                "ClassificationTypeName": "whitespace",
+                "Text": " ",
+                "_vs_type": "ClassifiedTextRun"
+              },
+              {
+                "ClassificationTypeName": "keyword",
+                "Text": "not",
+                "_vs_type": "ClassifiedTextRun"
+              },
+              {
+                "ClassificationTypeName": "whitespace",
+                "Text": " ",
+                "_vs_type": "ClassifiedTextRun"
+              },
+              {
+                "ClassificationTypeName": "punctuation",
+                "Text": "{",
+                "_vs_type": "ClassifiedTextRun"
+              },
+              {
+                "ClassificationTypeName": "whitespace",
+                "Text": " ",
+                "_vs_type": "ClassifiedTextRun"
+              },
+              {
+                "ClassificationTypeName": "property name",
+                "Text": "then",
+                "_vs_type": "ClassifiedTextRun"
+              },
+              {
+                "ClassificationTypeName": "punctuation",
+                "Text": "(",
+                "_vs_type": "ClassifiedTextRun"
+              },
+              {
+                "ClassificationTypeName": "punctuation",
+                "Text": ")",
+                "_vs_type": "ClassifiedTextRun"
+              },
+              {
+                "ClassificationTypeName": "punctuation",
+                "Text": ":",
+                "_vs_type": "ClassifiedTextRun"
+              },
+              {
+                "ClassificationTypeName": "whitespace",
+                "Text": " ",
+                "_vs_type": "ClassifiedTextRun"
+              },
+              {
+                "ClassificationTypeName": "keyword",
+                "Text": "any",
+                "_vs_type": "ClassifiedTextRun"
+              },
+              {
+                "ClassificationTypeName": "punctuation",
+                "Text": ";",
+                "_vs_type": "ClassifiedTextRun"
+              },
+              {
+                "ClassificationTypeName": "whitespace",
+                "Text": " ",
+                "_vs_type": "ClassifiedTextRun"
+              },
+              {
+                "ClassificationTypeName": "punctuation",
+                "Text": "}",
+                "_vs_type": "ClassifiedTextRun"
+              },
+              {
                 "ClassificationTypeName": "punctuation",
                 "Text": ">",
                 "_vs_type": "ClassifiedTextRun"
@@ -1019,7 +1259,7 @@
           }
         },
         {
-          "label": "next(value: number): Promise<IteratorResult<string, void>>",
+          "label": "next(value: number): Promise<IteratorResult<string, void> & not { then(): any; }>",
           "parameters": [
             {
               "label": "value: number"
@@ -1111,6 +1351,86 @@
               {
                 "ClassificationTypeName": "punctuation",
                 "Text": ">",
+                "_vs_type": "ClassifiedTextRun"
+              },
+              {
+                "ClassificationTypeName": "whitespace",
+                "Text": " ",
+                "_vs_type": "ClassifiedTextRun"
+              },
+              {
+                "ClassificationTypeName": "punctuation",
+                "Text": "&",
+                "_vs_type": "ClassifiedTextRun"
+              },
+              {
+                "ClassificationTypeName": "whitespace",
+                "Text": " ",
+                "_vs_type": "ClassifiedTextRun"
+              },
+              {
+                "ClassificationTypeName": "keyword",
+                "Text": "not",
+                "_vs_type": "ClassifiedTextRun"
+              },
+              {
+                "ClassificationTypeName": "whitespace",
+                "Text": " ",
+                "_vs_type": "ClassifiedTextRun"
+              },
+              {
+                "ClassificationTypeName": "punctuation",
+                "Text": "{",
+                "_vs_type": "ClassifiedTextRun"
+              },
+              {
+                "ClassificationTypeName": "whitespace",
+                "Text": " ",
+                "_vs_type": "ClassifiedTextRun"
+              },
+              {
+                "ClassificationTypeName": "property name",
+                "Text": "then",
+                "_vs_type": "ClassifiedTextRun"
+              },
+              {
+                "ClassificationTypeName": "punctuation",
+                "Text": "(",
+                "_vs_type": "ClassifiedTextRun"
+              },
+              {
+                "ClassificationTypeName": "punctuation",
+                "Text": ")",
+                "_vs_type": "ClassifiedTextRun"
+              },
+              {
+                "ClassificationTypeName": "punctuation",
+                "Text": ":",
+                "_vs_type": "ClassifiedTextRun"
+              },
+              {
+                "ClassificationTypeName": "whitespace",
+                "Text": " ",
+                "_vs_type": "ClassifiedTextRun"
+              },
+              {
+                "ClassificationTypeName": "keyword",
+                "Text": "any",
+                "_vs_type": "ClassifiedTextRun"
+              },
+              {
+                "ClassificationTypeName": "punctuation",
+                "Text": ";",
+                "_vs_type": "ClassifiedTextRun"
+              },
+              {
+                "ClassificationTypeName": "whitespace",
+                "Text": " ",
+                "_vs_type": "ClassifiedTextRun"
+              },
+              {
+                "ClassificationTypeName": "punctuation",
+                "Text": "}",
                 "_vs_type": "ClassifiedTextRun"
               },
               {
@@ -1139,7 +1459,7 @@
     "item": {
       "signatures": [
         {
-          "label": "next(): Promise<IteratorResult<string, void>>",
+          "label": "next(): Promise<IteratorResult<string, void> & not { then(): any; }>",
           "parameters": [],
           "_vs_colorizedLabel": {
             "Runs": [
@@ -1209,6 +1529,86 @@
                 "_vs_type": "ClassifiedTextRun"
               },
               {
+                "ClassificationTypeName": "whitespace",
+                "Text": " ",
+                "_vs_type": "ClassifiedTextRun"
+              },
+              {
+                "ClassificationTypeName": "punctuation",
+                "Text": "&",
+                "_vs_type": "ClassifiedTextRun"
+              },
+              {
+                "ClassificationTypeName": "whitespace",
+                "Text": " ",
+                "_vs_type": "ClassifiedTextRun"
+              },
+              {
+                "ClassificationTypeName": "keyword",
+                "Text": "not",
+                "_vs_type": "ClassifiedTextRun"
+              },
+              {
+                "ClassificationTypeName": "whitespace",
+                "Text": " ",
+                "_vs_type": "ClassifiedTextRun"
+              },
+              {
+                "ClassificationTypeName": "punctuation",
+                "Text": "{",
+                "_vs_type": "ClassifiedTextRun"
+              },
+              {
+                "ClassificationTypeName": "whitespace",
+                "Text": " ",
+                "_vs_type": "ClassifiedTextRun"
+              },
+              {
+                "ClassificationTypeName": "property name",
+                "Text": "then",
+                "_vs_type": "ClassifiedTextRun"
+              },
+              {
+                "ClassificationTypeName": "punctuation",
+                "Text": "(",
+                "_vs_type": "ClassifiedTextRun"
+              },
+              {
+                "ClassificationTypeName": "punctuation",
+                "Text": ")",
+                "_vs_type": "ClassifiedTextRun"
+              },
+              {
+                "ClassificationTypeName": "punctuation",
+                "Text": ":",
+                "_vs_type": "ClassifiedTextRun"
+              },
+              {
+                "ClassificationTypeName": "whitespace",
+                "Text": " ",
+                "_vs_type": "ClassifiedTextRun"
+              },
+              {
+                "ClassificationTypeName": "keyword",
+                "Text": "any",
+                "_vs_type": "ClassifiedTextRun"
+              },
+              {
+                "ClassificationTypeName": "punctuation",
+                "Text": ";",
+                "_vs_type": "ClassifiedTextRun"
+              },
+              {
+                "ClassificationTypeName": "whitespace",
+                "Text": " ",
+                "_vs_type": "ClassifiedTextRun"
+              },
+              {
+                "ClassificationTypeName": "punctuation",
+                "Text": "}",
+                "_vs_type": "ClassifiedTextRun"
+              },
+              {
                 "ClassificationTypeName": "punctuation",
                 "Text": ">",
                 "_vs_type": "ClassifiedTextRun"
@@ -1218,7 +1618,7 @@
           }
         },
         {
-          "label": "next(value: number): Promise<IteratorResult<string, void>>",
+          "label": "next(value: number): Promise<IteratorResult<string, void> & not { then(): any; }>",
           "parameters": [
             {
               "label": "value: number"
@@ -1310,6 +1710,86 @@
               {
                 "ClassificationTypeName": "punctuation",
                 "Text": ">",
+                "_vs_type": "ClassifiedTextRun"
+              },
+              {
+                "ClassificationTypeName": "whitespace",
+                "Text": " ",
+                "_vs_type": "ClassifiedTextRun"
+              },
+              {
+                "ClassificationTypeName": "punctuation",
+                "Text": "&",
+                "_vs_type": "ClassifiedTextRun"
+              },
+              {
+                "ClassificationTypeName": "whitespace",
+                "Text": " ",
+                "_vs_type": "ClassifiedTextRun"
+              },
+              {
+                "ClassificationTypeName": "keyword",
+                "Text": "not",
+                "_vs_type": "ClassifiedTextRun"
+              },
+              {
+                "ClassificationTypeName": "whitespace",
+                "Text": " ",
+                "_vs_type": "ClassifiedTextRun"
+              },
+              {
+                "ClassificationTypeName": "punctuation",
+                "Text": "{",
+                "_vs_type": "ClassifiedTextRun"
+              },
+              {
+                "ClassificationTypeName": "whitespace",
+                "Text": " ",
+                "_vs_type": "ClassifiedTextRun"
+              },
+              {
+                "ClassificationTypeName": "property name",
+                "Text": "then",
+                "_vs_type": "ClassifiedTextRun"
+              },
+              {
+                "ClassificationTypeName": "punctuation",
+                "Text": "(",
+                "_vs_type": "ClassifiedTextRun"
+              },
+              {
+                "ClassificationTypeName": "punctuation",
+                "Text": ")",
+                "_vs_type": "ClassifiedTextRun"
+              },
+              {
+                "ClassificationTypeName": "punctuation",
+                "Text": ":",
+                "_vs_type": "ClassifiedTextRun"
+              },
+              {
+                "ClassificationTypeName": "whitespace",
+                "Text": " ",
+                "_vs_type": "ClassifiedTextRun"
+              },
+              {
+                "ClassificationTypeName": "keyword",
+                "Text": "any",
+                "_vs_type": "ClassifiedTextRun"
+              },
+              {
+                "ClassificationTypeName": "punctuation",
+                "Text": ";",
+                "_vs_type": "ClassifiedTextRun"
+              },
+              {
+                "ClassificationTypeName": "whitespace",
+                "Text": " ",
+                "_vs_type": "ClassifiedTextRun"
+              },
+              {
+                "ClassificationTypeName": "punctuation",
+                "Text": "}",
                 "_vs_type": "ClassifiedTextRun"
               },
               {
@@ -1338,7 +1818,7 @@
     "item": {
       "signatures": [
         {
-          "label": "next(): Promise<IteratorResult<string, void>>",
+          "label": "next(): Promise<IteratorResult<string, void> & not { then(): any; }>",
           "parameters": [],
           "_vs_colorizedLabel": {
             "Runs": [
@@ -1408,6 +1888,86 @@
                 "_vs_type": "ClassifiedTextRun"
               },
               {
+                "ClassificationTypeName": "whitespace",
+                "Text": " ",
+                "_vs_type": "ClassifiedTextRun"
+              },
+              {
+                "ClassificationTypeName": "punctuation",
+                "Text": "&",
+                "_vs_type": "ClassifiedTextRun"
+              },
+              {
+                "ClassificationTypeName": "whitespace",
+                "Text": " ",
+                "_vs_type": "ClassifiedTextRun"
+              },
+              {
+                "ClassificationTypeName": "keyword",
+                "Text": "not",
+                "_vs_type": "ClassifiedTextRun"
+              },
+              {
+                "ClassificationTypeName": "whitespace",
+                "Text": " ",
+                "_vs_type": "ClassifiedTextRun"
+              },
+              {
+                "ClassificationTypeName": "punctuation",
+                "Text": "{",
+                "_vs_type": "ClassifiedTextRun"
+              },
+              {
+                "ClassificationTypeName": "whitespace",
+                "Text": " ",
+                "_vs_type": "ClassifiedTextRun"
+              },
+              {
+                "ClassificationTypeName": "property name",
+                "Text": "then",
+                "_vs_type": "ClassifiedTextRun"
+              },
+              {
+                "ClassificationTypeName": "punctuation",
+                "Text": "(",
+                "_vs_type": "ClassifiedTextRun"
+              },
+              {
+                "ClassificationTypeName": "punctuation",
+                "Text": ")",
+                "_vs_type": "ClassifiedTextRun"
+              },
+              {
+                "ClassificationTypeName": "punctuation",
+                "Text": ":",
+                "_vs_type": "ClassifiedTextRun"
+              },
+              {
+                "ClassificationTypeName": "whitespace",
+                "Text": " ",
+                "_vs_type": "ClassifiedTextRun"
+              },
+              {
+                "ClassificationTypeName": "keyword",
+                "Text": "any",
+                "_vs_type": "ClassifiedTextRun"
+              },
+              {
+                "ClassificationTypeName": "punctuation",
+                "Text": ";",
+                "_vs_type": "ClassifiedTextRun"
+              },
+              {
+                "ClassificationTypeName": "whitespace",
+                "Text": " ",
+                "_vs_type": "ClassifiedTextRun"
+              },
+              {
+                "ClassificationTypeName": "punctuation",
+                "Text": "}",
+                "_vs_type": "ClassifiedTextRun"
+              },
+              {
                 "ClassificationTypeName": "punctuation",
                 "Text": ">",
                 "_vs_type": "ClassifiedTextRun"
@@ -1417,7 +1977,7 @@
           }
         },
         {
-          "label": "next(value: number): Promise<IteratorResult<string, void>>",
+          "label": "next(value: number): Promise<IteratorResult<string, void> & not { then(): any; }>",
           "parameters": [
             {
               "label": "value: number"
@@ -1509,6 +2069,86 @@
               {
                 "ClassificationTypeName": "punctuation",
                 "Text": ">",
+                "_vs_type": "ClassifiedTextRun"
+              },
+              {
+                "ClassificationTypeName": "whitespace",
+                "Text": " ",
+                "_vs_type": "ClassifiedTextRun"
+              },
+              {
+                "ClassificationTypeName": "punctuation",
+                "Text": "&",
+                "_vs_type": "ClassifiedTextRun"
+              },
+              {
+                "ClassificationTypeName": "whitespace",
+                "Text": " ",
+                "_vs_type": "ClassifiedTextRun"
+              },
+              {
+                "ClassificationTypeName": "keyword",
+                "Text": "not",
+                "_vs_type": "ClassifiedTextRun"
+              },
+              {
+                "ClassificationTypeName": "whitespace",
+                "Text": " ",
+                "_vs_type": "ClassifiedTextRun"
+              },
+              {
+                "ClassificationTypeName": "punctuation",
+                "Text": "{",
+                "_vs_type": "ClassifiedTextRun"
+              },
+              {
+                "ClassificationTypeName": "whitespace",
+                "Text": " ",
+                "_vs_type": "ClassifiedTextRun"
+              },
+              {
+                "ClassificationTypeName": "property name",
+                "Text": "then",
+                "_vs_type": "ClassifiedTextRun"
+              },
+              {
+                "ClassificationTypeName": "punctuation",
+                "Text": "(",
+                "_vs_type": "ClassifiedTextRun"
+              },
+              {
+                "ClassificationTypeName": "punctuation",
+                "Text": ")",
+                "_vs_type": "ClassifiedTextRun"
+              },
+              {
+                "ClassificationTypeName": "punctuation",
+                "Text": ":",
+                "_vs_type": "ClassifiedTextRun"
+              },
+              {
+                "ClassificationTypeName": "whitespace",
+                "Text": " ",
+                "_vs_type": "ClassifiedTextRun"
+              },
+              {
+                "ClassificationTypeName": "keyword",
+                "Text": "any",
+                "_vs_type": "ClassifiedTextRun"
+              },
+              {
+                "ClassificationTypeName": "punctuation",
+                "Text": ";",
+                "_vs_type": "ClassifiedTextRun"
+              },
+              {
+                "ClassificationTypeName": "whitespace",
+                "Text": " ",
+                "_vs_type": "ClassifiedTextRun"
+              },
+              {
+                "ClassificationTypeName": "punctuation",
+                "Text": "}",
                 "_vs_type": "ClassifiedTextRun"
               },
               {

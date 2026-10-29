@@ -1,0 +1,17 @@
+//// [tests/cases/compiler/negatedPromiseConstraintLibrary.ts] ////
+
+=== negatedPromiseConstraintLibrary.ts ===
+const promise = Promise.resolve(0);
+>promise : Promise<number & not { then(): any; }>
+>Promise.resolve(0) : Promise<number & not { then(): any; }>
+>Promise.resolve : { (): Promise<void & not { then(): any; }>; <T>(value: T): Promise<Awaited<T>>; <T>(value: T | PromiseLike<T>): Promise<Awaited<T>>; }
+>Promise : PromiseConstructor
+>resolve : { (): Promise<void & not { then(): any; }>; <T>(value: T): Promise<Awaited<T>>; <T>(value: T | PromiseLike<T>): Promise<Awaited<T>>; }
+>0 : 0
+
+const response: Promise<Awaited<Response>> = fetch("");
+>response : Promise<Response & not { then(): any; }>
+>fetch("") : Promise<Response & not { then(): any; }>
+>fetch : (input: RequestInfo | URL, init?: RequestInit) => Promise<Response & not { then(): any; }>
+>"" : ""
+

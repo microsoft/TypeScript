@@ -11,7 +11,7 @@ class A {
 >decorator : MethodDecorator
 
     async foo() {}
->foo : () => Promise<void>
+>foo : () => Promise<void & not { then(): any; }>
 
     @decorator
 >decorator : MethodDecorator

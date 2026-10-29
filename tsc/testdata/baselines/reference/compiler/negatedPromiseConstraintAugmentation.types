@@ -1,0 +1,74 @@
+//// [tests/cases/compiler/negatedPromiseConstraintAugmentation.ts] ////
+
+=== augmentation.d.ts ===
+interface Promise<T> {
+    communityMethod(): T;
+>communityMethod : () => T
+}
+
+interface Promise<T extends not { then(): any }> {
+>then : () => any
+
+    anotherCommunityMethod(): T;
+>anotherCommunityMethod : () => T
+}
+
+=== main.ts ===
+type Value = number & not { then(): any };
+>Value : Value
+>then : () => any
+
+declare const value: Value;
+>value : Value
+
+const promise = Promise.resolve(value);
+>promise : Promise<number & not { then(): any; } & not { then(): any; }>
+>Promise.resolve(value) : Promise<number & not { then(): any; } & not { then(): any; }>
+>Promise.resolve : { (): Promise<void & not { then(): any; }>; <T>(value: T): Promise<Awaited<T>>; <T>(value: T | PromiseLike<T>): Promise<Awaited<T>>; }
+>Promise : PromiseConstructor
+>resolve : { (): Promise<void & not { then(): any; }>; <T>(value: T): Promise<Awaited<T>>; <T>(value: T | PromiseLike<T>): Promise<Awaited<T>>; }
+>value : Value
+
+const first: Value = promise.communityMethod();
+>first : Value
+>promise.communityMethod() : number & not { then(): any; } & not { then(): any; }
+>promise.communityMethod : () => number & not { then(): any; } & not { then(): any; }
+>promise : Promise<number & not { then(): any; } & not { then(): any; }>
+>communityMethod : () => number & not { then(): any; } & not { then(): any; }
+
+const second: Value = promise.anotherCommunityMethod();
+>second : Value
+>promise.anotherCommunityMethod() : number & not { then(): any; } & not { then(): any; }
+>promise.anotherCommunityMethod : () => number & not { then(): any; } & not { then(): any; }
+>promise : Promise<number & not { then(): any; } & not { then(): any; }>
+>anotherCommunityMethod : () => number & not { then(): any; } & not { then(): any; }
+
+type NestedPromise = Promise<Promise<Value>>;
+>NestedPromise : NestedPromise
+
+interface UnconstrainedFirst<T> {
+    value: T;
+>value : T
+}
+interface UnconstrainedFirst<T extends not { then(): any }> {}
+>then : () => any
+
+type ValidUnconstrainedFirst = UnconstrainedFirst<Value>;
+>ValidUnconstrainedFirst : ValidUnconstrainedFirst
+
+type NestedUnconstrainedFirst = UnconstrainedFirst<Promise<Value>>;
+>NestedUnconstrainedFirst : NestedUnconstrainedFirst
+
+interface ConstrainedFirst<T extends not { then(): any }> {
+>then : () => any
+
+    value: T;
+>value : T
+}
+interface ConstrainedFirst<T> {}
+type ValidConstrainedFirst = ConstrainedFirst<Value>;
+>ValidConstrainedFirst : ValidConstrainedFirst
+
+type NestedConstrainedFirst = ConstrainedFirst<Promise<Value>>;
+>NestedConstrainedFirst : NestedConstrainedFirst
+

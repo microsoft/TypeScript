@@ -9,7 +9,7 @@ const { promise, resolve, reject } = Promise.withResolvers<T>();
 >resolve : (value: PromiseLike<T> | T) => void
 >reject : (reason?: any) => void
 >Promise.withResolvers<T>() : PromiseWithResolvers<T>
->Promise.withResolvers : <T>() => PromiseWithResolvers<T>
+>Promise.withResolvers : <T extends not { then(): any; }>() => PromiseWithResolvers<T>
 >Promise : PromiseConstructor
->withResolvers : <T>() => PromiseWithResolvers<T>
+>withResolvers : <T extends not { then(): any; }>() => PromiseWithResolvers<T>
 

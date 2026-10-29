@@ -2,19 +2,19 @@
 
 === awaitedTypeStrictNull.ts ===
 type T1 = Awaited<number>;
->T1 : number
+>T1 : number & not { then(): any; }
 
 type T2 = Awaited<Promise<number>>;
->T2 : number
+>T2 : number & not { then(): any; }
 
 type T3 = Awaited<number | Promise<number>>;
->T3 : number
+>T3 : number & not { then(): any; }
 
 type T4 = Awaited<number | Promise<string>>;
 >T4 : T4
 
 type T5 = Awaited<{ then: number }>;
->T5 : { then: number; }
+>T5 : { then: number; } & not { then(): any; }
 >then : number
 
 type T6 = Awaited<{ then(): void }>; // never (non-promise "thenable")
@@ -27,7 +27,7 @@ type T7 = Awaited<{ then(x: number): void }>; // never (non-promise "thenable")
 >x : number
 
 type T8 = Awaited<{ then(x: () => void): void }>; // unknown
->T8 : unknown
+>T8 : not { then(): any; }
 >then : (x: () => void) => void
 >x : () => void
 
@@ -38,19 +38,19 @@ type T10 = Awaited<never>;
 >T10 : never
 
 type T11 = Awaited<unknown>;
->T11 : unknown
+>T11 : not { then(): any; }
 
 type T12 = Awaited<Promise<Promise<number>>>;
->T12 : number
+>T12 : number & not { then(): any; }
 
 type T13 = _Expect<Awaited<Promise<Promise<number>> | string | null>, /*expected*/ string | number | null>; // otherwise just prints T13 in types tests, which isn't very helpful
->T13 : string | number | null
+>T13 : (string & not { then(): any; }) | (number & not { then(): any; }) | null
 
 type T14 = _Expect<Awaited<Promise<Promise<number>> | string | undefined>, /*expected*/ string | number | undefined>; // otherwise just prints T14 in types tests, which isn't very helpful
->T14 : string | number | undefined
+>T14 : (string & not { then(): any; }) | (number & not { then(): any; }) | undefined
 
 type T15 = _Expect<Awaited<Promise<Promise<number>> | string | null | undefined>, /*expected*/ string | number | null | undefined>; // otherwise just prints T15 in types tests, which isn't very helpful
->T15 : string | number | null | undefined
+>T15 : (string & not { then(): any; }) | (number & not { then(): any; }) | null | undefined
 
 type TUndefined = Awaited<undefined>;
 >TUndefined : undefined
@@ -84,7 +84,7 @@ type T17 = Awaited<BadPromise1>; // error
 
 // https://github.com/microsoft/TypeScript/issues/46934
 type T18 = Awaited<{ then(cb: (value: number, other: { }) => void)}>; // number
->T18 : number
+>T18 : number & not { then(): any; }
 >then : (cb: (value: number, other: {}) => void) => any
 >cb : (value: number, other: {}) => void
 >value : number
@@ -99,7 +99,7 @@ declare function MaybePromise<T>(value: T): MaybePromise<T>;
 >value : T
 
 async function main() {
->main : () => Promise<void>
+>main : () => Promise<void & not { then(): any; }>
 
     let aaa: number;
 >aaa : number
@@ -108,7 +108,7 @@ async function main() {
 >bbb : string
 
     [
->[        aaa,        bbb,    ] = await Promise.all([        MaybePromise(1),        MaybePromise('2'),        MaybePromise(true),    ]) : [number, string, boolean]
+>[        aaa,        bbb,    ] = await Promise.all([        MaybePromise(1),        MaybePromise('2'),        MaybePromise(true),    ]) : [(number & not { then(): any; }) | (1 & not { then(): any; }), (string & not { then(): any; }) | ("2" & not { then(): any; }), (false & not { then(): any; }) | (true & not { then(): any; })] & not { then(): any; } & not { then(): any; }
 >[        aaa,        bbb,    ] : [number, string]
 
         aaa,
@@ -118,11 +118,11 @@ async function main() {
 >bbb : string
 
     ] = await Promise.all([
->await Promise.all([        MaybePromise(1),        MaybePromise('2'),        MaybePromise(true),    ]) : [number, string, boolean]
->Promise.all([        MaybePromise(1),        MaybePromise('2'),        MaybePromise(true),    ]) : Promise<[number, string, boolean]>
->Promise.all : { <T>(values: Iterable<T | PromiseLike<T>>): Promise<Awaited<T>[]>; <T extends readonly unknown[] | []>(values: T): Promise<{ -readonly [P in keyof T]: Awaited<T[P]>; }>; }
+>await Promise.all([        MaybePromise(1),        MaybePromise('2'),        MaybePromise(true),    ]) : [(number & not { then(): any; }) | (1 & not { then(): any; }), (string & not { then(): any; }) | ("2" & not { then(): any; }), (false & not { then(): any; }) | (true & not { then(): any; })] & not { then(): any; } & not { then(): any; }
+>Promise.all([        MaybePromise(1),        MaybePromise('2'),        MaybePromise(true),    ]) : Promise<[(number & not { then(): any; }) | (1 & not { then(): any; }), (string & not { then(): any; }) | ("2" & not { then(): any; }), (false & not { then(): any; }) | (true & not { then(): any; })] & not { then(): any; }>
+>Promise.all : { <T>(values: Iterable<T | PromiseLike<T>>): Promise<Awaited<T>[] & not { then(): any; }>; <T extends readonly unknown[] | []>(values: T): Promise<{ -readonly [P in keyof T]: Awaited<T[P]>; } & not { then(): any; }>; }
 >Promise : PromiseConstructor
->all : { <T>(values: Iterable<T | PromiseLike<T>>): Promise<Awaited<T>[]>; <T extends readonly unknown[] | []>(values: T): Promise<{ -readonly [P in keyof T]: Awaited<T[P]>; }>; }
+>all : { <T>(values: Iterable<T | PromiseLike<T>>): Promise<Awaited<T>[] & not { then(): any; }>; <T extends readonly unknown[] | []>(values: T): Promise<{ -readonly [P in keyof T]: Awaited<T[P]>; } & not { then(): any; }>; }
 >[        MaybePromise(1),        MaybePromise('2'),        MaybePromise(true),    ] : [number | Promise<1> | PromiseLike<1>, string | Promise<"2"> | PromiseLike<"2">, true | Promise<true> | PromiseLike<true>]
 
         MaybePromise(1),
@@ -149,7 +149,7 @@ class Api<D = {}> {
 
 	// Should result in `Promise<T>` instead of `Promise<Awaited<T>>`.
 	async post<T = D>() { return this.request<T>(); }
->post : <T = D>() => Promise<T>
+>post : <T = D>() => Promise<Awaited<T>>
 >this.request<T>() : Promise<T>
 >this.request : <D_1>() => Promise<D_1>
 >this : this
@@ -173,10 +173,10 @@ async function fn<T>(): Promise<T extends object ? { [K in keyof T]: Obj } : Obj
 	// Per #45924, this was failing due to incorrect inference both above and here.
 	// Should not error.
 	return api.post();
->api.post() : Promise<T extends object ? { [K in keyof T]: Obj; } : Obj>
->api.post : <T_1 = {}>() => Promise<T_1>
+>api.post() : Promise<Awaited<T> | Awaited<{ [K in keyof T]: Obj; }>>
+>api.post : <T_1 = {}>() => Promise<Awaited<T_1>>
 >api : Api<{}>
->post : <T_1 = {}>() => Promise<T_1>
+>post : <T_1 = {}>() => Promise<Awaited<T_1>>
 }
 
 // helps with tests where '.types' just prints out the type alias name

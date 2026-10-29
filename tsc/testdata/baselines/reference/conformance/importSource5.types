@@ -33,24 +33,24 @@ import.source();
 >source : any
 
 import.source("./a.js", {}, {});
->import.source("./a.js", {}, {}) : Promise<AbstractModuleSource>
+>import.source("./a.js", {}, {}) : Promise<AbstractModuleSource & not { then(): any; }>
 >source : any
 >"./a.js" : "./a.js"
 >{} : {}
 >{} : {}
 
 import.source?.("./a.js");
->import.source?.("./a.js") : Promise<AbstractModuleSource>
+>import.source?.("./a.js") : Promise<AbstractModuleSource & not { then(): any; }>
 >source : any
 >"./a.js" : "./a.js"
 
 import.source<string>("./a.js");
->import.source<string>("./a.js") : Promise<AbstractModuleSource>
+>import.source<string>("./a.js") : Promise<AbstractModuleSource & not { then(): any; }>
 >source : any
 >"./a.js" : "./a.js"
 
 import.source(...["./a.js"]);
->import.source(...["./a.js"]) : Promise<AbstractModuleSource>
+>import.source(...["./a.js"]) : Promise<AbstractModuleSource & not { then(): any; }>
 >source : any
 >...["./a.js"] : string
 >["./a.js"] : [string]
@@ -60,7 +60,7 @@ import.source(...["./a.js"]);
 new import.source("./a.js");
 >new : any
 > : any
->import.source("./a.js") : Promise<AbstractModuleSource>
+>import.source("./a.js") : Promise<AbstractModuleSource & not { then(): any; }>
 >source : any
 >"./a.js" : "./a.js"
 
@@ -69,7 +69,7 @@ new import.source("./a.js").a;
 >new : any
 > : any
 >import.source("./a.js").a : any
->import.source("./a.js") : Promise<AbstractModuleSource>
+>import.source("./a.js") : Promise<AbstractModuleSource & not { then(): any; }>
 >source : any
 >"./a.js" : "./a.js"
 >a : any

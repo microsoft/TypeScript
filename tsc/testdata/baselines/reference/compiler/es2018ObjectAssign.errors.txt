@@ -1,0 +1,10 @@
+es2018ObjectAssign.ts(3,26): error TS2344: Type 'number' does not satisfy the constraint 'not { then(): any; }'.
+
+
+==== es2018ObjectAssign.ts (1 errors) ====
+    const test = Object.assign({}, { test: true });
+    
+    declare const p: Promise<number>;
+                             ~~~~~~
+!!! error TS2344: Type 'number' does not satisfy the constraint 'not { then(): any; }'.
+    p.finally();

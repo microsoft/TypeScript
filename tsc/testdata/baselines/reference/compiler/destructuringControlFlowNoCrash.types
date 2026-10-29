@@ -37,5 +37,5 @@ date2.toISOString();
 // It could also be an async function
 const { constructor } = async () => {};
 >constructor : Function
->async () => {} : () => Promise<void>
+>async () => {} : () => Promise<void & not { then(): any; }>
 

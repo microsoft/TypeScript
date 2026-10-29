@@ -1,14 +1,18 @@
-doNotElaborateAssignabilityToTypeParameters.ts(3,3): error TS2322: Type 'Yadda | Awaited<T>' is not assignable to type 'T'.
-  'T' could be instantiated with an arbitrary type which could be unrelated to 'Yadda | Awaited<T>'.
+doNotElaborateAssignabilityToTypeParameters.ts(1,38): error TS2344: Type 'T' does not satisfy the constraint 'not { then(): any; }'.
+doNotElaborateAssignabilityToTypeParameters.ts(3,3): error TS2322: Type 'Awaited<T> | (Yadda & not { then(): any; })' is not assignable to type 'T'.
+  'T' could be instantiated with an arbitrary type which could be unrelated to 'Awaited<T> | (Yadda & not { then(): any; })'.
 
 
-==== doNotElaborateAssignabilityToTypeParameters.ts (1 errors) ====
+==== doNotElaborateAssignabilityToTypeParameters.ts (2 errors) ====
     async function foo<T>(x: T): Promise<T> {
+                                         ~
+!!! error TS2344: Type 'T' does not satisfy the constraint 'not { then(): any; }'.
+!!! related TS2208 doNotElaborateAssignabilityToTypeParameters.ts:1:20: This type parameter might need an `extends not { then(): any; }` constraint.
       let yaddable = await getXOrYadda(x);
       return yaddable;
       ~~~~~~
-!!! error TS2322: Type 'Yadda | Awaited<T>' is not assignable to type 'T'.
-!!! error TS2322:   'T' could be instantiated with an arbitrary type which could be unrelated to 'Yadda | Awaited<T>'.
+!!! error TS2322: Type 'Awaited<T> | (Yadda & not { then(): any; })' is not assignable to type 'T'.
+!!! error TS2322:   'T' could be instantiated with an arbitrary type which could be unrelated to 'Awaited<T> | (Yadda & not { then(): any; })'.
     }
     
     interface Yadda {

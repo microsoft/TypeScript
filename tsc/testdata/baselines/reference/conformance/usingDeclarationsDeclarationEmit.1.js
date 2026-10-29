@@ -21,6 +21,8 @@ declare const r1: {
 };
 export { r1 };
 declare const r2: {
-    [Symbol.asyncDispose](): Promise<void>;
+    [Symbol.asyncDispose](): Promise<void & not {
+        then(): any;
+    }>;
 };
 export { r2 };

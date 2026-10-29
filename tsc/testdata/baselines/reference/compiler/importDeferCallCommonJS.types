@@ -7,7 +7,7 @@ export {};
 === main.ts ===
 export {};
 import.defer("./a");
->import.defer("./a") : Promise<typeof import("./a")>
+>import.defer("./a") : Promise<typeof import("./a") & not { then(): any; }>
 >defer : any
 >"./a" : "./a"
 

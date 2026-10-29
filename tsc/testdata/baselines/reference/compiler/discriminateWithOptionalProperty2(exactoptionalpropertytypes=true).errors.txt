@@ -1,0 +1,101 @@
+discriminateWithOptionalProperty2.ts(3,34): error TS2344: Type 'T' does not satisfy the constraint 'not { then(): any; }'.
+discriminateWithOptionalProperty2.ts(13,14): error TS2344: Type 'IteratorResult<U, R>' does not satisfy the constraint 'not { then(): any; }'.
+  Type 'IteratorReturnResult<R>' is not assignable to type 'not { then(): any; }'.
+discriminateWithOptionalProperty2.ts(34,11): error TS2322: Type '(value: R) => Promise<IteratorResult<U, R>>' is not assignable to type '(value: R | PromiseLike<R>) => Promise<IteratorResult<U, R> & not { then(): any; }>'.
+  Type 'Promise<IteratorResult<U, R>>' is not assignable to type 'Promise<IteratorResult<U, R> & not { then(): any; }>'.
+    Type 'IteratorResult<U, R>' is not assignable to type 'IteratorResult<U, R> & not { then(): any; }' with 'exactOptionalPropertyTypes: true'. Consider adding 'undefined' to the types of the target's properties.
+      Type 'IteratorReturnResult<R>' is not assignable to type 'IteratorResult<U, R> & not { then(): any; }'.
+        Type 'IteratorReturnResult<R>' is not assignable to type 'IteratorReturnResult<R> & not { then(): any; }'.
+          Type 'IteratorReturnResult<R>' is not assignable to type 'not { then(): any; }'.
+discriminateWithOptionalProperty2.ts(34,37): error TS2344: Type 'IteratorResult<U, R>' does not satisfy the constraint 'not { then(): any; }'.
+  Type 'IteratorReturnResult<R>' is not assignable to type 'not { then(): any; }'.
+
+
+==== discriminateWithOptionalProperty2.ts (4 errors) ====
+    // https://github.com/microsoft/TypeScript/issues/55532#issuecomment-1694744665
+    
+    type PromiseOrValue<T> = Promise<T> | T;
+                                     ~
+!!! error TS2344: Type 'T' does not satisfy the constraint 'not { then(): any; }'.
+!!! related TS2208 discriminateWithOptionalProperty2.ts:3:21: This type parameter might need an `extends not { then(): any; }` constraint.
+    
+    function mapAsyncIterable<T, U, R = undefined>(
+      iterable: AsyncGenerator<T, R, undefined> | AsyncIterable<T, R, undefined>,
+      callback: (value: T) => PromiseOrValue<U>,
+    ): AsyncGenerator<U, R, void> {
+      const iterator = iterable[Symbol.asyncIterator]();
+    
+      async function mapResult(
+        result: IteratorResult<T, R>,
+      ): Promise<IteratorResult<U, R>> {
+                 ~~~~~~~~~~~~~~~~~~~~
+!!! error TS2344: Type 'IteratorResult<U, R>' does not satisfy the constraint 'not { then(): any; }'.
+!!! error TS2344:   Type 'IteratorReturnResult<R>' is not assignable to type 'not { then(): any; }'.
+        if (result.done) {
+          return result;
+        }
+    
+        try {
+          return { value: await callback(result.value), done: false };
+        } catch (error) {
+          if (typeof iterator.return === "function") {
+            try {
+              await iterator.return();
+            } catch (_e) {}
+          }
+          throw error;
+        }
+      }
+    
+      return {
+        async next() {
+          return mapResult(await iterator.next());
+        },
+        async return(value: R): Promise<IteratorResult<U, R>> {
+              ~~~~~~
+!!! error TS2322: Type '(value: R) => Promise<IteratorResult<U, R>>' is not assignable to type '(value: R | PromiseLike<R>) => Promise<IteratorResult<U, R> & not { then(): any; }>'.
+!!! error TS2322:   Type 'Promise<IteratorResult<U, R>>' is not assignable to type 'Promise<IteratorResult<U, R> & not { then(): any; }>'.
+!!! error TS2322:     Type 'IteratorResult<U, R>' is not assignable to type 'IteratorResult<U, R> & not { then(): any; }' with 'exactOptionalPropertyTypes: true'. Consider adding 'undefined' to the types of the target's properties.
+!!! error TS2322:       Type 'IteratorReturnResult<R>' is not assignable to type 'IteratorResult<U, R> & not { then(): any; }'.
+!!! error TS2322:         Type 'IteratorReturnResult<R>' is not assignable to type 'IteratorReturnResult<R> & not { then(): any; }'.
+!!! error TS2322:           Type 'IteratorReturnResult<R>' is not assignable to type 'not { then(): any; }'.
+                                        ~~~~~~~~~~~~~~~~~~~~
+!!! error TS2344: Type 'IteratorResult<U, R>' does not satisfy the constraint 'not { then(): any; }'.
+!!! error TS2344:   Type 'IteratorReturnResult<R>' is not assignable to type 'not { then(): any; }'.
+          return typeof iterator.return === "function"
+            ? mapResult(await iterator.return(value))
+            : { value: undefined as any, done: true };
+        },
+        async throw(error?: unknown) {
+          if (typeof iterator.throw === "function") {
+            return mapResult(await iterator.throw(error));
+          }
+          throw error;
+        },
+        [Symbol.asyncIterator]() {
+          return this;
+        },
+        async [Symbol.asyncDispose]() {
+          await this.return(undefined!);
+        }
+      };
+    }
+    
+    const items = [1, 2, 3];
+    
+    const iterable = {
+      [Symbol.asyncIterator]() {
+        return this;
+      },
+      next() {
+        const value = items[0];
+        items.shift();
+        return Promise.resolve({
+          done: items.length === 0,
+          value,
+        });
+      },
+    };
+    
+    const doubles = mapAsyncIterable(iterable, (x) => x + x);
+    

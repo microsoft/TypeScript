@@ -1,0 +1,390 @@
+//// [tests/cases/compiler/negatedPromiseConstraint.ts] ////
+
+=== negatedPromiseConstraint.ts ===
+type Value = number & not { then(): any };
+>Value : Value
+>then : () => any
+
+type Text = string & not { then(): any };
+>Text : Text
+>then : () => any
+
+type NestedPromise = Promise<Promise<Value>>;
+>NestedPromise : NestedPromise
+
+type ThenablePromise = Promise<PromiseLike<Value>>;
+>ThenablePromise : ThenablePromise
+
+type CallableThenPromise = Promise<{ then(): any }>;
+>CallableThenPromise : CallableThenPromise
+>then : () => any
+
+type UnionPromise = Promise<Value | Promise<Text>>;
+>UnionPromise : UnionPromise
+
+type UnknownPromise = Promise<unknown>;
+>UnknownPromise : UnknownPromise
+
+type OpenObjectPromise = Promise<{ value: number }>;
+>OpenObjectPromise : OpenObjectPromise
+>value : number
+
+type PrimitivePromise = Promise<number>;
+>PrimitivePromise : PrimitivePromise
+
+type VoidPromise = Promise<void>;
+>VoidPromise : VoidPromise
+
+type ValuePromise = Promise<Value>;
+>ValuePromise : ValuePromise
+
+type NullishPromise = Promise<null | undefined>;
+>NullishPromise : NullishPromise
+
+type NeverPromise = Promise<never>;
+>NeverPromise : NeverPromise
+
+type AnyPromise = Promise<any>;
+>AnyPromise : AnyPromise
+
+type NonCallableThenPromise = Promise<{ then: number }>;
+>NonCallableThenPromise : NonCallableThenPromise
+>then : number
+
+declare const value: Value;
+>value : Value
+
+declare const text: Text;
+>text : Text
+
+declare const nestedThenable: PromiseLike<PromiseLike<Value>>;
+>nestedThenable : PromiseLike<PromiseLike<Value>>
+
+declare const valuePromise: Promise<Value>;
+>valuePromise : Promise<Value>
+
+const resolved: Promise<Value> = Promise.resolve(nestedThenable);
+>resolved : Promise<Value>
+>Promise.resolve(nestedThenable) : Promise<number & not { then(): any; } & not { then(): any; }>
+>Promise.resolve : { (): Promise<void & not { then(): any; }>; <T>(value: T): Promise<Awaited<T>>; <T>(value: T | PromiseLike<T>): Promise<Awaited<T>>; }
+>Promise : PromiseConstructor
+>resolve : { (): Promise<void & not { then(): any; }>; <T>(value: T): Promise<Awaited<T>>; <T>(value: T | PromiseLike<T>): Promise<Awaited<T>>; }
+>nestedThenable : PromiseLike<PromiseLike<Value>>
+
+const constructed: Promise<Value> = new Promise<Value>(resolve => resolve(valuePromise));
+>constructed : Promise<Value>
+>new Promise<Value>(resolve => resolve(valuePromise)) : Promise<Value>
+>Promise : PromiseConstructor
+>resolve => resolve(valuePromise) : (resolve: (value: PromiseLike<Value> | Value) => void) => void
+>resolve : (value: PromiseLike<Value> | Value) => void
+>resolve(valuePromise) : void
+>resolve : (value: PromiseLike<Value> | Value) => void
+>valuePromise : Promise<Value>
+
+const rejected: Promise<Value> = Promise.reject<Value>("reason");
+>rejected : Promise<Value>
+>Promise.reject<Value>("reason") : Promise<Value>
+>Promise.reject : <T extends not { then(): any; } = never>(reason?: any) => Promise<T>
+>Promise : PromiseConstructor
+>reject : <T extends not { then(): any; } = never>(reason?: any) => Promise<T>
+>"reason" : "reason"
+
+const chained: Promise<Text> = valuePromise.then(() => Promise.resolve(text));
+>chained : Promise<Text>
+>valuePromise.then(() => Promise.resolve(text)) : Promise<string & not { then(): any; } & not { then(): any; }>
+>valuePromise.then : <TResult1 = Value, TResult2 = never>(onfulfilled?: ((value: Value) => TResult1 | PromiseLike<TResult1>) | null | undefined, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | null | undefined) => Promise<Awaited<TResult1> | Awaited<TResult2>>
+>valuePromise : Promise<Value>
+>then : <TResult1 = Value, TResult2 = never>(onfulfilled?: ((value: Value) => TResult1 | PromiseLike<TResult1>) | null | undefined, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | null | undefined) => Promise<Awaited<TResult1> | Awaited<TResult2>>
+>() => Promise.resolve(text) : () => Promise<string & not { then(): any; } & not { then(): any; }>
+>Promise.resolve(text) : Promise<string & not { then(): any; } & not { then(): any; }>
+>Promise.resolve : { (): Promise<void & not { then(): any; }>; <T>(value: T): Promise<Awaited<T>>; <T>(value: T | PromiseLike<T>): Promise<Awaited<T>>; }
+>Promise : PromiseConstructor
+>resolve : { (): Promise<void & not { then(): any; }>; <T>(value: T): Promise<Awaited<T>>; <T>(value: T | PromiseLike<T>): Promise<Awaited<T>>; }
+>text : Text
+
+const nestedChained: Promise<Value> = valuePromise.then(() => nestedThenable);
+>nestedChained : Promise<Value>
+>valuePromise.then(() => nestedThenable) : Promise<number & not { then(): any; } & not { then(): any; }>
+>valuePromise.then : <TResult1 = Value, TResult2 = never>(onfulfilled?: ((value: Value) => TResult1 | PromiseLike<TResult1>) | null | undefined, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | null | undefined) => Promise<Awaited<TResult1> | Awaited<TResult2>>
+>valuePromise : Promise<Value>
+>then : <TResult1 = Value, TResult2 = never>(onfulfilled?: ((value: Value) => TResult1 | PromiseLike<TResult1>) | null | undefined, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | null | undefined) => Promise<Awaited<TResult1> | Awaited<TResult2>>
+>() => nestedThenable : () => PromiseLike<PromiseLike<Value>>
+>nestedThenable : PromiseLike<PromiseLike<Value>>
+
+const caught: Promise<Value | Text> = valuePromise.catch(() => Promise.resolve(text));
+>caught : Promise<Text | Value>
+>valuePromise.catch(() => Promise.resolve(text)) : Promise<Value | (string & not { then(): any; })>
+>valuePromise.catch : <TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | null | undefined) => Promise<Awaited<TResult> | Value>
+>valuePromise : Promise<Value>
+>catch : <TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | null | undefined) => Promise<Awaited<TResult> | Value>
+>() => Promise.resolve(text) : () => Promise<string & not { then(): any; } & not { then(): any; }>
+>Promise.resolve(text) : Promise<string & not { then(): any; } & not { then(): any; }>
+>Promise.resolve : { (): Promise<void & not { then(): any; }>; <T>(value: T): Promise<Awaited<T>>; <T>(value: T | PromiseLike<T>): Promise<Awaited<T>>; }
+>Promise : PromiseConstructor
+>resolve : { (): Promise<void & not { then(): any; }>; <T>(value: T): Promise<Awaited<T>>; <T>(value: T | PromiseLike<T>): Promise<Awaited<T>>; }
+>text : Text
+
+const nestedCaught: Promise<Value> = valuePromise.catch(() => nestedThenable);
+>nestedCaught : Promise<Value>
+>valuePromise.catch(() => nestedThenable) : Promise<number & not { then(): any; }>
+>valuePromise.catch : <TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | null | undefined) => Promise<Awaited<TResult> | Value>
+>valuePromise : Promise<Value>
+>catch : <TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | null | undefined) => Promise<Awaited<TResult> | Value>
+>() => nestedThenable : () => PromiseLike<PromiseLike<Value>>
+>nestedThenable : PromiseLike<PromiseLike<Value>>
+
+const finalized: Promise<Value> = valuePromise.finally(() => Promise.resolve(text));
+>finalized : Promise<Value>
+>valuePromise.finally(() => Promise.resolve(text)) : Promise<Value>
+>valuePromise.finally : (onfinally?: (() => void) | undefined | null) => Promise<Value>
+>valuePromise : Promise<Value>
+>finally : (onfinally?: (() => void) | undefined | null) => Promise<Value>
+>() => Promise.resolve(text) : () => Promise<string & not { then(): any; } & not { then(): any; }>
+>Promise.resolve(text) : Promise<string & not { then(): any; } & not { then(): any; }>
+>Promise.resolve : { (): Promise<void & not { then(): any; }>; <T>(value: T): Promise<Awaited<T>>; <T>(value: T | PromiseLike<T>): Promise<Awaited<T>>; }
+>Promise : PromiseConstructor
+>resolve : { (): Promise<void & not { then(): any; }>; <T>(value: T): Promise<Awaited<T>>; <T>(value: T | PromiseLike<T>): Promise<Awaited<T>>; }
+>text : Text
+
+const all = Promise.all([nestedThenable, Promise.resolve(text)]);
+>all : Promise<[number & not { then(): any; } & not { then(): any; }, string & not { then(): any; } & not { then(): any; } & not { then(): any; }] & not { then(): any; }>
+>Promise.all([nestedThenable, Promise.resolve(text)]) : Promise<[number & not { then(): any; } & not { then(): any; }, string & not { then(): any; } & not { then(): any; } & not { then(): any; }] & not { then(): any; }>
+>Promise.all : { <T>(values: Iterable<T | PromiseLike<T>>): Promise<Awaited<T>[] & not { then(): any; }>; <T extends readonly unknown[] | []>(values: T): Promise<{ -readonly [P in keyof T]: Awaited<T[P]>; } & not { then(): any; }>; }
+>Promise : PromiseConstructor
+>all : { <T>(values: Iterable<T | PromiseLike<T>>): Promise<Awaited<T>[] & not { then(): any; }>; <T extends readonly unknown[] | []>(values: T): Promise<{ -readonly [P in keyof T]: Awaited<T[P]>; } & not { then(): any; }>; }
+>[nestedThenable, Promise.resolve(text)] : [PromiseLike<PromiseLike<Value>>, Promise<string & not { then(): any; } & not { then(): any; }>]
+>nestedThenable : PromiseLike<PromiseLike<Value>>
+>Promise.resolve(text) : Promise<string & not { then(): any; } & not { then(): any; }>
+>Promise.resolve : { (): Promise<void & not { then(): any; }>; <T>(value: T): Promise<Awaited<T>>; <T>(value: T | PromiseLike<T>): Promise<Awaited<T>>; }
+>Promise : PromiseConstructor
+>resolve : { (): Promise<void & not { then(): any; }>; <T>(value: T): Promise<Awaited<T>>; <T>(value: T | PromiseLike<T>): Promise<Awaited<T>>; }
+>text : Text
+
+const race: Promise<Value | Text> = Promise.race([nestedThenable, Promise.resolve(text)]);
+>race : Promise<Text | Value>
+>Promise.race([nestedThenable, Promise.resolve(text)]) : Promise<(string & not { then(): any; }) | (number & not { then(): any; })>
+>Promise.race : { <T>(values: Iterable<T | PromiseLike<T>>): Promise<Awaited<T>>; <T extends readonly unknown[] | []>(values: T): Promise<Awaited<T[number]>>; }
+>Promise : PromiseConstructor
+>race : { <T>(values: Iterable<T | PromiseLike<T>>): Promise<Awaited<T>>; <T extends readonly unknown[] | []>(values: T): Promise<Awaited<T[number]>>; }
+>[nestedThenable, Promise.resolve(text)] : [PromiseLike<PromiseLike<Value>>, Promise<string & not { then(): any; } & not { then(): any; }>]
+>nestedThenable : PromiseLike<PromiseLike<Value>>
+>Promise.resolve(text) : Promise<string & not { then(): any; } & not { then(): any; }>
+>Promise.resolve : { (): Promise<void & not { then(): any; }>; <T>(value: T): Promise<Awaited<T>>; <T>(value: T | PromiseLike<T>): Promise<Awaited<T>>; }
+>Promise : PromiseConstructor
+>resolve : { (): Promise<void & not { then(): any; }>; <T>(value: T): Promise<Awaited<T>>; <T>(value: T | PromiseLike<T>): Promise<Awaited<T>>; }
+>text : Text
+
+const any: Promise<Value | Text> = Promise.any([nestedThenable, Promise.resolve(text)]);
+>any : Promise<Text | Value>
+>Promise.any([nestedThenable, Promise.resolve(text)]) : Promise<(string & not { then(): any; }) | (number & not { then(): any; })>
+>Promise.any : { <T extends readonly unknown[] | []>(values: T): Promise<Awaited<T[number]>>; <T>(values: Iterable<T | PromiseLike<T>>): Promise<Awaited<T>>; }
+>Promise : PromiseConstructor
+>any : { <T extends readonly unknown[] | []>(values: T): Promise<Awaited<T[number]>>; <T>(values: Iterable<T | PromiseLike<T>>): Promise<Awaited<T>>; }
+>[nestedThenable, Promise.resolve(text)] : [PromiseLike<PromiseLike<Value>>, Promise<string & not { then(): any; } & not { then(): any; }>]
+>nestedThenable : PromiseLike<PromiseLike<Value>>
+>Promise.resolve(text) : Promise<string & not { then(): any; } & not { then(): any; }>
+>Promise.resolve : { (): Promise<void & not { then(): any; }>; <T>(value: T): Promise<Awaited<T>>; <T>(value: T | PromiseLike<T>): Promise<Awaited<T>>; }
+>Promise : PromiseConstructor
+>resolve : { (): Promise<void & not { then(): any; }>; <T>(value: T): Promise<Awaited<T>>; <T>(value: T | PromiseLike<T>): Promise<Awaited<T>>; }
+>text : Text
+
+const settled = Promise.allSettled([nestedThenable]);
+>settled : Promise<[PromiseSettledResult<number & not { then(): any; } & not { then(): any; }>] & not { then(): any; }>
+>Promise.allSettled([nestedThenable]) : Promise<[PromiseSettledResult<number & not { then(): any; } & not { then(): any; }>] & not { then(): any; }>
+>Promise.allSettled : { <T extends readonly unknown[] | []>(values: T): Promise<{ -readonly [P in keyof T]: PromiseSettledResult<Awaited<T[P]>>; } & not { then(): any; }>; <T>(values: Iterable<T | PromiseLike<T>>): Promise<PromiseSettledResult<Awaited<T>>[] & not { then(): any; }>; }
+>Promise : PromiseConstructor
+>allSettled : { <T extends readonly unknown[] | []>(values: T): Promise<{ -readonly [P in keyof T]: PromiseSettledResult<Awaited<T[P]>>; } & not { then(): any; }>; <T>(values: Iterable<T | PromiseLike<T>>): Promise<PromiseSettledResult<Awaited<T>>[] & not { then(): any; }>; }
+>[nestedThenable] : [PromiseLike<PromiseLike<Value>>]
+>nestedThenable : PromiseLike<PromiseLike<Value>>
+
+const tried: Promise<Value> = Promise.try(() => nestedThenable);
+>tried : Promise<Value>
+>Promise.try(() => nestedThenable) : Promise<number & not { then(): any; } & not { then(): any; }>
+>Promise.try : <T, U extends unknown[]>(callbackFn: (...args: U) => T | PromiseLike<T>, ...args: U) => Promise<Awaited<T>>
+>Promise : PromiseConstructor
+>try : <T, U extends unknown[]>(callbackFn: (...args: U) => T | PromiseLike<T>, ...args: U) => Promise<Awaited<T>>
+>() => nestedThenable : () => PromiseLike<PromiseLike<Value>>
+>nestedThenable : PromiseLike<PromiseLike<Value>>
+
+const resolvers: PromiseWithResolvers<Value> = Promise.withResolvers<Value>();
+>resolvers : PromiseWithResolvers<Value>
+>Promise.withResolvers<Value>() : PromiseWithResolvers<Value>
+>Promise.withResolvers : <T extends not { then(): any; }>() => PromiseWithResolvers<T>
+>Promise : PromiseConstructor
+>withResolvers : <T extends not { then(): any; }>() => PromiseWithResolvers<T>
+
+resolvers.resolve(valuePromise);
+>resolvers.resolve(valuePromise) : void
+>resolvers.resolve : (value: PromiseLike<Value> | Value) => void
+>resolvers : PromiseWithResolvers<Value>
+>resolve : (value: PromiseLike<Value> | Value) => void
+>valuePromise : Promise<Value>
+
+const empty: Promise<Awaited<void>> = Promise.resolve();
+>empty : Promise<void & not { then(): any; }>
+>Promise.resolve() : Promise<void & not { then(): any; }>
+>Promise.resolve : { (): Promise<void & not { then(): any; }>; <T>(value: T): Promise<Awaited<T>>; <T>(value: T | PromiseLike<T>): Promise<Awaited<T>>; }
+>Promise : PromiseConstructor
+>resolve : { (): Promise<void & not { then(): any; }>; <T>(value: T): Promise<Awaited<T>>; <T>(value: T | PromiseLike<T>): Promise<Awaited<T>>; }
+
+const inferredAsync = async () => 1;
+>inferredAsync : () => Promise<1 & not { then(): any; }>
+>async () => 1 : () => Promise<1 & not { then(): any; }>
+>1 : 1
+
+const asyncResult: Promise<Awaited<number>> = inferredAsync();
+>asyncResult : Promise<number & not { then(): any; }>
+>inferredAsync() : Promise<1 & not { then(): any; }>
+>inferredAsync : () => Promise<1 & not { then(): any; }>
+
+const inferredGenericAsync = async <T>(value: T) => value;
+>inferredGenericAsync : <T>(value: T) => Promise<Awaited<T>>
+>async <T>(value: T) => value : <T>(value: T) => Promise<Awaited<T>>
+>value : T
+>value : T
+
+const genericAsyncResult: Promise<Value> = inferredGenericAsync(nestedThenable);
+>genericAsyncResult : Promise<Value>
+>inferredGenericAsync(nestedThenable) : Promise<number & not { then(): any; } & not { then(): any; }>
+>inferredGenericAsync : <T>(value: T) => Promise<Awaited<T>>
+>nestedThenable : PromiseLike<PromiseLike<Value>>
+
+const keyed = Promise.allKeyed({
+>keyed : Promise<number & not { then(): any; } & not { then(): any; }>
+>Promise.allKeyed({    then: (resolve: (value: Value) => void) => resolve(value),}) : Promise<number & not { then(): any; } & not { then(): any; }>
+>Promise.allKeyed : <T extends object>(promises: T) => Promise<Awaited<{ -readonly [P in keyof T]: Awaited<T[P]>; }>>
+>Promise : PromiseConstructor
+>allKeyed : <T extends object>(promises: T) => Promise<Awaited<{ -readonly [P in keyof T]: Awaited<T[P]>; }>>
+>{    then: (resolve: (value: Value) => void) => resolve(value),} : { then: (resolve: (value: Value) => void) => void; }
+
+    then: (resolve: (value: Value) => void) => resolve(value),
+>then : (resolve: (value: Value) => void) => void
+>(resolve: (value: Value) => void) => resolve(value) : (resolve: (value: Value) => void) => void
+>resolve : (value: Value) => void
+>value : Value
+>resolve(value) : void
+>resolve : (value: Value) => void
+>value : Value
+
+});
+const keyedValue: Awaited<typeof keyed> = value;
+>keyedValue : number & not { then(): any; } & not { then(): any; } & not { then(): any; }
+>keyed : Promise<number & not { then(): any; } & not { then(): any; }>
+>value : Value
+
+new Promise<Promise<Value>>(() => {});
+>new Promise<Promise<Value>>(() => {}) : Promise<Promise<Value>>
+>Promise : PromiseConstructor
+>() => {} : () => void
+
+Promise.reject<Promise<Value>>("reason");
+>Promise.reject<Promise<Value>>("reason") : Promise<Promise<Value>>
+>Promise.reject : <T extends not { then(): any; } = never>(reason?: any) => Promise<T>
+>Promise : PromiseConstructor
+>reject : <T extends not { then(): any; } = never>(reason?: any) => Promise<T>
+>"reason" : "reason"
+
+Promise.withResolvers<Promise<Value>>();
+>Promise.withResolvers<Promise<Value>>() : PromiseWithResolvers<Promise<Value>>
+>Promise.withResolvers : <T extends not { then(): any; }>() => PromiseWithResolvers<T>
+>Promise : PromiseConstructor
+>withResolvers : <T extends not { then(): any; }>() => PromiseWithResolvers<T>
+
+type NestedResolvers = PromiseWithResolvers<Promise<Value>>;
+>NestedResolvers : NestedResolvers
+
+function resolveGeneric<T>(value: T): Promise<Awaited<T>> {
+>resolveGeneric : <T>(value: T) => Promise<Awaited<T>>
+>value : T
+
+    return Promise.resolve(value);
+>Promise.resolve(value) : Promise<Awaited<T>>
+>Promise.resolve : { (): Promise<void & not { then(): any; }>; <T_1>(value: T_1): Promise<Awaited<T_1>>; <T_1>(value: T_1 | PromiseLike<T_1>): Promise<Awaited<T_1>>; }
+>Promise : PromiseConstructor
+>resolve : { (): Promise<void & not { then(): any; }>; <T_1>(value: T_1): Promise<Awaited<T_1>>; <T_1>(value: T_1 | PromiseLike<T_1>): Promise<Awaited<T_1>>; }
+>value : T
+}
+
+function chainGeneric<T>(value: T): Promise<Awaited<T>> {
+>chainGeneric : <T>(value: T) => Promise<Awaited<T>>
+>value : T
+
+    return valuePromise.then(() => value);
+>valuePromise.then(() => value) : Promise<Awaited<T>>
+>valuePromise.then : <TResult1 = Value, TResult2 = never>(onfulfilled?: ((value: Value) => TResult1 | PromiseLike<TResult1>) | null | undefined, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | null | undefined) => Promise<Awaited<TResult1> | Awaited<TResult2>>
+>valuePromise : Promise<Value>
+>then : <TResult1 = Value, TResult2 = never>(onfulfilled?: ((value: Value) => TResult1 | PromiseLike<TResult1>) | null | undefined, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | null | undefined) => Promise<Awaited<TResult1> | Awaited<TResult2>>
+>() => value : () => T
+>value : T
+}
+
+async function awaitGeneric<T>(value: T): Promise<Awaited<T>> {
+>awaitGeneric : <T>(value: T) => Promise<Awaited<T>>
+>value : T
+
+    return value;
+>value : T
+}
+
+async function awaitPrimitive(): Promise<Awaited<number>> {
+>awaitPrimitive : () => Promise<Awaited<number>>
+
+    const result: Awaited<number> = await 1;
+>result : number & not { then(): any; }
+>await 1 : 1 & not { then(): any; }
+>1 : 1
+
+    return result;
+>result : number & not { then(): any; }
+}
+
+async function returnPrimitive(): Promise<Awaited<number>> {
+>returnPrimitive : () => Promise<Awaited<number>>
+
+    return 1;
+>1 : 1
+}
+
+async function returnVoid(): Promise<Awaited<void>> {}
+>returnVoid : () => Promise<Awaited<void>>
+
+async function returnConstrained<T extends not { then(): any }>(value: T): Promise<T> {
+>returnConstrained : <T extends not { then(): any; }>(value: T) => Promise<T>
+>then : () => any
+>value : T
+
+    return value;
+>value : T
+}
+
+async function invalidReturn(): Promise<Promise<Value>> {
+>invalidReturn : () => Promise<Promise<Value>>
+
+    return valuePromise;
+>valuePromise : Promise<Value>
+}
+
+type AwaitedValue = Awaited<Promise<Value>>;
+>AwaitedValue : number & not { then(): any; } & not { then(): any; }
+
+type AwaitedNestedThenable = Awaited<typeof nestedThenable>;
+>AwaitedNestedThenable : number & not { then(): any; } & not { then(): any; }
+>nestedThenable : PromiseLike<PromiseLike<Value>>
+
+type AwaitedUnknown = Awaited<unknown>;
+>AwaitedUnknown : not { then(): any; }
+
+type AwaitedNonCallableThen = Awaited<{ then: number }>;
+>AwaitedNonCallableThen : { then: number; } & not { then(): any; }
+>then : number
+
+type AwaitedInvalidThenable = Awaited<{ then(): any }>;
+>AwaitedInvalidThenable : never
+>then : () => any
+
+interface RecursiveValue {
+    settled: Promise<RecursiveValue & not { then(): any }>;
+>settled : Promise<RecursiveValue & not { then(): any; }>
+>then : () => any
+}
+

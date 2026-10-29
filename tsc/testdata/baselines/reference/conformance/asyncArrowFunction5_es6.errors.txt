@@ -1,8 +1,11 @@
 asyncArrowFunction5_es6.ts(1,18): error TS1359: Identifier expected. 'await' is a reserved word that cannot be used here.
+asyncArrowFunction5_es6.ts(1,34): error TS2344: Type 'void' does not satisfy the constraint 'not { then(): any; }'.
 
 
-==== asyncArrowFunction5_es6.ts (1 errors) ====
+==== asyncArrowFunction5_es6.ts (2 errors) ====
     var foo = async (await): Promise<void> => {
                      ~~~~~
 !!! error TS1359: Identifier expected. 'await' is a reserved word that cannot be used here.
+                                     ~~~~
+!!! error TS2344: Type 'void' does not satisfy the constraint 'not { then(): any; }'.
     }

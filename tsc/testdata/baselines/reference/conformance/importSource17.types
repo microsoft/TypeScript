@@ -23,28 +23,28 @@ import(a);
 >a : AbstractModuleSource
 
 import.source(a);
->import.source(a) : Promise<AbstractModuleSource>
+>import.source(a) : Promise<AbstractModuleSource & not { then(): any; }>
 >source : any
 >a : AbstractModuleSource
 
 import.source(1);
->import.source(1) : Promise<AbstractModuleSource>
+>import.source(1) : Promise<AbstractModuleSource & not { then(): any; }>
 >source : any
 >1 : 1
 
 import.source(undefined);
->import.source(undefined) : Promise<AbstractModuleSource>
+>import.source(undefined) : Promise<AbstractModuleSource & not { then(): any; }>
 >source : any
 >undefined : undefined
 
 import.source("./a.wasm", 1);
->import.source("./a.wasm", 1) : Promise<AbstractModuleSource>
+>import.source("./a.wasm", 1) : Promise<AbstractModuleSource & not { then(): any; }>
 >source : any
 >"./a.wasm" : "./a.wasm"
 >1 : 1
 
 import.source("./a.wasm", { with: { type: 1 } });
->import.source("./a.wasm", { with: { type: 1 } }) : Promise<AbstractModuleSource>
+>import.source("./a.wasm", { with: { type: 1 } }) : Promise<AbstractModuleSource & not { then(): any; }>
 >source : any
 >"./a.wasm" : "./a.wasm"
 >{ with: { type: 1 } } : { with: { readonly type: 1; }; }
@@ -54,7 +54,7 @@ import.source("./a.wasm", { with: { type: 1 } });
 >1 : 1
 
 import.source("./a.wasm", { assert: { type: "webassembly" } });
->import.source("./a.wasm", { assert: { type: "webassembly" } }) : Promise<AbstractModuleSource>
+>import.source("./a.wasm", { assert: { type: "webassembly" } }) : Promise<AbstractModuleSource & not { then(): any; }>
 >source : any
 >"./a.wasm" : "./a.wasm"
 >{ assert: { type: "webassembly" } } : { assert: { type: string; }; }

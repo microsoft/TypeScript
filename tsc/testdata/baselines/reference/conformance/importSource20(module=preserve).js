@@ -28,6 +28,10 @@ export { a };
 
 //// [index.d.mts]
 import source a from "pkg";
-export declare const d: Promise<AbstractModuleSource>;
-export declare const e: Promise<typeof import("pkg")>;
+export declare const d: Promise<AbstractModuleSource & not {
+    then(): any;
+}>;
+export declare const e: Promise<typeof import("pkg") & not {
+    then(): any;
+}>;
 export { a };

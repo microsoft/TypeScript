@@ -2,7 +2,7 @@
 
 === a.ts ===
 async function f() {}
->f : () => Promise<void>
+>f : () => Promise<void & not { then(): any; }>
 
 === b.ts ===
 function g() { }

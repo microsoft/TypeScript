@@ -1,4 +1,6 @@
+inferFromGenericFunctionReturnTypes3.ts(3,33): error TS2344: Type 'boolean' does not satisfy the constraint 'not { then(): any; }'.
 inferFromGenericFunctionReturnTypes3.ts(28,30): error TS2345: Argument of type 'string' is not assignable to parameter of type '"bar"'.
+inferFromGenericFunctionReturnTypes3.ts(156,24): error TS2344: Type 'Player[]' does not satisfy the constraint 'not { then(): any; }'.
 inferFromGenericFunctionReturnTypes3.ts(180,26): error TS2322: Type '{ state: State.A; }[] | { state: State.B; }[]' is not assignable to type '{ state: State.A; }[]'.
   Type '{ state: State.B; }[]' is not assignable to type '{ state: State.A; }[]'.
     Type '{ state: State.B; }' is not assignable to type '{ state: State.A; }'.
@@ -6,10 +8,12 @@ inferFromGenericFunctionReturnTypes3.ts(180,26): error TS2322: Type '{ state: St
         Type 'State.B' is not assignable to type 'State.A'.
 
 
-==== inferFromGenericFunctionReturnTypes3.ts (2 errors) ====
+==== inferFromGenericFunctionReturnTypes3.ts (4 errors) ====
     // Repros from #5487
     
     function truePromise(): Promise<true> {
+                                    ~~~~
+!!! error TS2344: Type 'boolean' does not satisfy the constraint 'not { then(): any; }'.
         return Promise.resolve(true);
     }
     
@@ -165,6 +169,8 @@ inferFromGenericFunctionReturnTypes3.ts(180,26): error TS2322: Type '{ state: St
     };
      
     type F = () => Promise<Array<Player>>;
+                           ~~~~~~~~~~~~~
+!!! error TS2344: Type 'Player[]' does not satisfy the constraint 'not { then(): any; }'.
      
     const f1: F = () => {
         return Promise.all([

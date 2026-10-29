@@ -2,10 +2,10 @@
 
 === main.js ===
 new Promise((resolve) => resolve());
->new Promise((resolve) => resolve()) : Promise<any>
+>new Promise((resolve) => resolve()) : Promise<not { then(): any; }>
 >Promise : PromiseConstructor
->(resolve) => resolve() : (resolve: (value: any) => void) => void
->resolve : (value: any) => void
+>(resolve) => resolve() : (resolve: (value: PromiseLike<not { then(): any; }> | not { then(): any; }) => void) => void
+>resolve : (value: PromiseLike<not { then(): any; }> | not { then(): any; }) => void
 >resolve() : void
->resolve : (value: any) => void
+>resolve : (value: PromiseLike<not { then(): any; }> | not { then(): any; }) => void
 

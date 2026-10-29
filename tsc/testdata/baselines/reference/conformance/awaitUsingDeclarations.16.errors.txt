@@ -1,14 +1,18 @@
 awaitUsingDeclarations.16.ts(2,5): error TS1546: 'await using' declarations are not allowed in ambient contexts.
+awaitUsingDeclarations.16.ts(2,55): error TS2344: Type 'void' does not satisfy the constraint 'not { then(): any; }'.
 awaitUsingDeclarations.16.ts(3,5): error TS1546: 'await using' declarations are not allowed in ambient contexts.
 awaitUsingDeclarations.16.ts(6,5): error TS1546: 'await using' declarations are not allowed in ambient contexts.
+awaitUsingDeclarations.16.ts(6,55): error TS2344: Type 'void' does not satisfy the constraint 'not { then(): any; }'.
 awaitUsingDeclarations.16.ts(7,5): error TS1546: 'await using' declarations are not allowed in ambient contexts.
 
 
-==== awaitUsingDeclarations.16.ts (4 errors) ====
+==== awaitUsingDeclarations.16.ts (6 errors) ====
     declare namespace N {
         await using x: { [Symbol.asyncDispose](): Promise<void> };
         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 !!! error TS1546: 'await using' declarations are not allowed in ambient contexts.
+                                                          ~~~~
+!!! error TS2344: Type 'void' does not satisfy the constraint 'not { then(): any; }'.
         await using y: null;
         ~~~~~~~~~~~~~~~~~~~
 !!! error TS1546: 'await using' declarations are not allowed in ambient contexts.
@@ -17,6 +21,8 @@ awaitUsingDeclarations.16.ts(7,5): error TS1546: 'await using' declarations are 
         await using x: { [Symbol.asyncDispose](): Promise<void> };
         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 !!! error TS1546: 'await using' declarations are not allowed in ambient contexts.
+                                                          ~~~~
+!!! error TS2344: Type 'void' does not satisfy the constraint 'not { then(): any; }'.
         await using y: null;
         ~~~~~~~~~~~~~~~~~~~
 !!! error TS1546: 'await using' declarations are not allowed in ambient contexts.

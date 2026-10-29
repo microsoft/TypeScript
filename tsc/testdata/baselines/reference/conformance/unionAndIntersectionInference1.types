@@ -190,13 +190,13 @@ interface ITest {
 const createTestAsync = (): Promise<ITest> => Promise.resolve().then(() => ({ name: 'test' }))
 >createTestAsync : () => Promise<ITest>
 >(): Promise<ITest> => Promise.resolve().then(() => ({ name: 'test' })) : () => Promise<ITest>
->Promise.resolve().then(() => ({ name: 'test' })) : Promise<ITest | { name: "test"; }>
->Promise.resolve().then : <TResult1 = void, TResult2 = never>(onfulfilled?: ((value: void) => TResult1 | PromiseLike<TResult1>) | null | undefined, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | null | undefined) => Promise<TResult1 | TResult2>
->Promise.resolve() : Promise<void>
->Promise.resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T>(value: T | PromiseLike<T>): Promise<Awaited<T>>; }
+>Promise.resolve().then(() => ({ name: 'test' })) : Promise<(ITest & not { then(): any; }) | ({ name: "test"; } & not { then(): any; })>
+>Promise.resolve().then : <TResult1 = void & not { then(): any; }, TResult2 = never>(onfulfilled?: ((value: void & not { then(): any; }) => TResult1 | PromiseLike<TResult1>) | null | undefined, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | null | undefined) => Promise<Awaited<TResult1> | Awaited<TResult2>>
+>Promise.resolve() : Promise<void & not { then(): any; }>
+>Promise.resolve : { (): Promise<void & not { then(): any; }>; <T>(value: T): Promise<Awaited<T>>; <T>(value: T | PromiseLike<T>): Promise<Awaited<T>>; }
 >Promise : PromiseConstructor
->resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T>(value: T | PromiseLike<T>): Promise<Awaited<T>>; }
->then : <TResult1 = void, TResult2 = never>(onfulfilled?: ((value: void) => TResult1 | PromiseLike<TResult1>) | null | undefined, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | null | undefined) => Promise<TResult1 | TResult2>
+>resolve : { (): Promise<void & not { then(): any; }>; <T>(value: T): Promise<Awaited<T>>; <T>(value: T | PromiseLike<T>): Promise<Awaited<T>>; }
+>then : <TResult1 = void & not { then(): any; }, TResult2 = never>(onfulfilled?: ((value: void & not { then(): any; }) => TResult1 | PromiseLike<TResult1>) | null | undefined, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | null | undefined) => Promise<Awaited<TResult1> | Awaited<TResult2>>
 >() => ({ name: 'test' }) : () => { name: "test"; }
 >({ name: 'test' }) : { name: "test"; }
 >{ name: 'test' } : { name: "test"; }

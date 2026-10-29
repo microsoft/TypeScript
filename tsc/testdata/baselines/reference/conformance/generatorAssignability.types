@@ -89,7 +89,7 @@ for (_ of g2); // ok
 >g2 : Generator<number, void, undefined>
 
 async function asyncfn() {
->asyncfn : () => Promise<void>
+>asyncfn : () => Promise<void & not { then(): any; }>
 
     // for-await-of over iterable
     for await (_ of g1); // error
@@ -128,25 +128,25 @@ async function* f2(): AsyncGenerator<number, void, boolean> {
 
     // yield* over iterable
     yield* g1; // error
->yield* g1 : void
+>yield* g1 : void & not { then(): any; }
 >g1 : Generator<number, void, string>
 
     yield* g3; // ok
->yield* g3 : void
+>yield* g3 : void & not { then(): any; }
 >g3 : Generator<number, void, boolean>
 
     // yield* over asynciterable
     yield* g4; // error
->yield* g4 : void
+>yield* g4 : void & not { then(): any; }
 >g4 : AsyncGenerator<number, void, string>
 
     yield* g6; // ok
->yield* g6 : void
+>yield* g6 : void & not { then(): any; }
 >g6 : AsyncGenerator<number, void, boolean>
 }
 
 async function f3() {
->f3 : () => Promise<void>
+>f3 : () => Promise<void & not { then(): any; }>
 
     const syncGenerator = function*() {
 >syncGenerator : () => Generator<1 | 2, void, unknown>

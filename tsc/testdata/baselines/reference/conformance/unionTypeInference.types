@@ -205,7 +205,7 @@ type DeepPromised<T> =
     { [TKey in keyof T]: T[TKey] | DeepPromised<T[TKey]> | Promise<DeepPromised<T[TKey]>> };
 
 async function fun<T>(deepPromised: DeepPromised<T>) {
->fun : <T>(deepPromised: DeepPromised<T>) => Promise<void>
+>fun : <T>(deepPromised: DeepPromised<T>) => Promise<void & not { then(): any; }>
 >deepPromised : DeepPromised<T>
 
     const deepPromisedWithIndexer: DeepPromised<{ [name: string]: {} | null | undefined }> = deepPromised;
@@ -222,18 +222,18 @@ async function fun<T>(deepPromised: DeepPromised<T>) {
 >deepPromisedWithIndexer : DeepPromised<{ [name: string]: {} | null | undefined; }>
 
         const awaitedValue = await value;
->awaitedValue : {} | ({ [containsPromises]?: true; } & {}) | null | undefined
->await value : {} | ({ [containsPromises]?: true; } & {}) | null | undefined
+>awaitedValue : ({} & not { then(): any; }) | ({ [containsPromises]?: true; } & {} & not { then(): any; }) | null | undefined
+>await value : ({} & not { then(): any; }) | ({ [containsPromises]?: true; } & {} & not { then(): any; }) | null | undefined
 >value : Promise<{ [containsPromises]?: true; } & {}> | {} | ({ [containsPromises]?: true; } & {}) | null | undefined
 
         if (awaitedValue)
->awaitedValue : {} | ({ [containsPromises]?: true; } & {}) | null | undefined
+>awaitedValue : ({} & not { then(): any; }) | ({ [containsPromises]?: true; } & {} & not { then(): any; }) | null | undefined
 
             await fun(awaitedValue);
->await fun(awaitedValue) : void
->fun(awaitedValue) : Promise<void>
->fun : <T>(deepPromised: DeepPromised<T>) => Promise<void>
->awaitedValue : {} | ({ [containsPromises]?: true; } & {})
+>await fun(awaitedValue) : void & not { then(): any; }
+>fun(awaitedValue) : Promise<void & not { then(): any; }>
+>fun : <T>(deepPromised: DeepPromised<T>) => Promise<void & not { then(): any; }>
+>awaitedValue : ({} & not { then(): any; }) | ({ [containsPromises]?: true; } & {} & not { then(): any; })
     }
 }
 
