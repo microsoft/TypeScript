@@ -19548,29 +19548,33 @@ func (c *Checker) isApplicableIndexType(source *Type, target *Type) bool {
 
 func (c *Checker) resolveStructuredTypeMembers(t *Type) *StructuredType {
 	if t.objectFlags&ObjectFlagsMembersResolved == 0 {
+		c.resolveStructuredTypeMembersWorker(t)
+	}
+	return t.AsStructuredType()
+}
+
+func (c *Checker) resolveStructuredTypeMembersWorker(t *Type) {
+	switch {
+	case t.flags&TypeFlagsObject != 0:
 		switch {
-		case t.flags&TypeFlagsObject != 0:
-			switch {
-			case t.objectFlags&(ObjectFlagsClassOrInterface|ObjectFlagsReference) != 0:
-				c.resolveObjectTypeMembers(t)
-			case t.objectFlags&ObjectFlagsReverseMapped != 0:
-				c.resolveReverseMappedTypeMembers(t)
-			case t.objectFlags&ObjectFlagsAnonymous != 0:
-				c.resolveAnonymousTypeMembers(t)
-			case t.objectFlags&ObjectFlagsMapped != 0:
-				c.resolveMappedTypeMembers(t)
-			default:
-				panic("Unhandled case in resolveStructuredTypeMembers")
-			}
-		case t.flags&TypeFlagsUnion != 0:
-			c.resolveUnionTypeMembers(t)
-		case t.flags&TypeFlagsIntersection != 0:
-			c.resolveIntersectionTypeMembers(t)
+		case t.objectFlags&(ObjectFlagsClassOrInterface|ObjectFlagsReference) != 0:
+			c.resolveObjectTypeMembers(t)
+		case t.objectFlags&ObjectFlagsReverseMapped != 0:
+			c.resolveReverseMappedTypeMembers(t)
+		case t.objectFlags&ObjectFlagsAnonymous != 0:
+			c.resolveAnonymousTypeMembers(t)
+		case t.objectFlags&ObjectFlagsMapped != 0:
+			c.resolveMappedTypeMembers(t)
 		default:
 			panic("Unhandled case in resolveStructuredTypeMembers")
 		}
+	case t.flags&TypeFlagsUnion != 0:
+		c.resolveUnionTypeMembers(t)
+	case t.flags&TypeFlagsIntersection != 0:
+		c.resolveIntersectionTypeMembers(t)
+	default:
+		panic("Unhandled case in resolveStructuredTypeMembers")
 	}
-	return t.AsStructuredType()
 }
 
 func (c *Checker) resolveObjectTypeMembers(t *Type) {

@@ -780,7 +780,7 @@ const (
 	typeKindReverseMapped
 	typeKindEvolvingArray
 	typeKindUnion
-	typeKindIntersection
+	typeKindIntersection // Must be last; AsStructuredType relies on this
 )
 
 type Type struct {
@@ -894,7 +894,7 @@ func (t *Type) AsConstrainedType() *ConstrainedType {
 }
 
 func (t *Type) AsStructuredType() *StructuredType {
-	if t.kind >= typeKindObject && t.kind <= typeKindIntersection {
+	if t.kind >= typeKindObject {
 		return (*StructuredType)(unsafe.Pointer(t))
 	}
 	return nil
