@@ -698,6 +698,7 @@ type Checker struct {
 	freeTypeSets                                *temporaryTypeSet
 	freePropertyCounts                          *temporaryPropertyCounts
 	freeObjectLiteralSeenMaps                   []map[string]DeclarationMeaning
+	freeCandidateLists                          [][]*Signature
 	mergedSymbols                               map[*ast.Symbol]*ast.Symbol
 	mergedExportsChecked                        collections.Set[*ast.Symbol]
 	factory                                     ast.NodeFactory
@@ -9082,9 +9083,13 @@ func (c *Checker) resolveCall(node *ast.Node, signatures []*Signature, candidate
 			c.checkSourceElements(s.typeArguments)
 		}
 	}
-	s.candidates = c.reorderCandidates(signatures, callChainFlags)
 	if candidatesOutArray != nil {
+		s.candidates = c.reorderCandidates(nil, signatures, callChainFlags)
 		*candidatesOutArray = s.candidates
+	} else {
+		// The candidate list does not outlive this call, so its storage can be reused.
+		s.candidates = c.reorderCandidates(c.getCandidateList(), signatures, callChainFlags)
+		defer c.releaseCandidateList(s.candidates)
 	}
 
 	if len(s.candidates) == 0 {
@@ -9184,14 +9189,44 @@ func (c *Checker) resolveCall(node *ast.Node, signatures []*Signature, candidate
 	return result
 }
 
-func (c *Checker) reorderCandidates(signatures []*Signature, callChainFlags SignatureFlags) []*Signature {
+func (c *Checker) getCandidateList() []*Signature {
+	if n := len(c.freeCandidateLists); n > 0 {
+		list := c.freeCandidateLists[n-1]
+		c.freeCandidateLists = c.freeCandidateLists[:n-1]
+		return list
+	}
+	return nil
+}
+
+func (c *Checker) releaseCandidateList(list []*Signature) {
+	if cap(list) == 0 || cap(list) > 64 {
+		return
+	}
+	clear(list)
+	c.freeCandidateLists = append(c.freeCandidateLists, list[:0])
+}
+
+// reorderCandidates appends the reordered candidates to dst[:0], reusing its storage when possible.
+func (c *Checker) reorderCandidates(dst []*Signature, signatures []*Signature, callChainFlags SignatureFlags) []*Signature {
+	result := dst[:0]
+	if len(signatures) <= 1 {
+		for _, signature := range signatures {
+			if callChainFlags != 0 {
+				signature = c.getOptionalCallSignature(signature, callChainFlags)
+			}
+			result = append(result, signature)
+		}
+		return result
+	}
+	if cap(result) < len(signatures) {
+		result = make([]*Signature, 0, len(signatures))
+	}
 	var lastParent *ast.Node
 	var lastSymbol *ast.Symbol
 	var index int
 	var cutoffIndex int
 	var spliceIndex int
 	specializedIndex := -1
-	result := make([]*Signature, 0, len(signatures))
 	for _, signature := range signatures {
 		var symbol *ast.Symbol
 		var parent *ast.Node
