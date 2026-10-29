@@ -1743,7 +1743,8 @@
                         "type": "BindingElement",
                         "list": "NodeList"
                     }
-                ]
+                ],
+                "arena": true
             },
             "ParameterDeclaration": {
                 "kind": "Parameter",
@@ -1816,7 +1817,8 @@
                         "type": "Expression",
                         "optional": true
                     }
-                ]
+                ],
+                "arena": true
             },
             "MissingDeclaration": {
                 "extends": [
@@ -2141,7 +2143,8 @@
                         "type": "ImportAttributes",
                         "optional": true
                     }
-                ]
+                ],
+                "arena": true
             },
             "ExternalModuleReference": {
                 "generateSubtreeFacts": true,
@@ -2182,7 +2185,8 @@
                         "type": "ImportSpecifier",
                         "list": "NodeList"
                     }
-                ]
+                ],
+                "arena": true
             },
             "ExportAssignment": {
                 "extends": [
@@ -2577,7 +2581,8 @@
                         "optional": true,
                         "visit": "functionBody"
                     }
-                ]
+                ],
+                "arena": true
             },
             "PropertySignatureDeclaration": {
                 "kind": "PropertySignature",
@@ -2643,7 +2648,8 @@
                         "type": "Expression",
                         "optional": true
                     }
-                ]
+                ],
+                "arena": true
             },
             "SemicolonClassElement": {
                 "extends": [
@@ -2930,7 +2936,8 @@
                         "type": "ConciseBody",
                         "visit": "functionBody"
                     }
-                ]
+                ],
+                "arena": true
             },
             "FunctionExpression": {
                 "extends": [
@@ -3001,7 +3008,8 @@
                         "name": "Type",
                         "type": "TypeNode"
                     }
-                ]
+                ],
+                "arena": true
             },
             "SatisfiesExpression": {
                 "extends": [
@@ -3229,7 +3237,8 @@
                         "type": "TemplateSpan",
                         "list": "NodeList"
                     }
-                ]
+                ],
+                "arena": true
             },
             "TemplateSpan": {
                 "generateSubtreeFacts": true,
@@ -3245,7 +3254,8 @@
                         "name": "Literal",
                         "type": "TemplateMiddleOrTail"
                     }
-                ]
+                ],
+                "arena": true
             },
             "TaggedTemplateExpression": {
                 "extends": [
@@ -3307,7 +3317,8 @@
                         "name": "MultiLine",
                         "type": "bool"
                     }
-                ]
+                ],
+                "arena": true
             },
             "ObjectLiteralExpression": {
                 "generateSubtreeFacts": true,
@@ -3326,7 +3337,8 @@
                         "name": "MultiLine",
                         "type": "bool"
                     }
-                ]
+                ],
+                "arena": true
             },
             "SpreadAssignment": {
                 "extends": [
@@ -3408,7 +3420,8 @@
                         "type": "Expression",
                         "optional": true
                     }
-                ]
+                ],
+                "arena": true
             },
             "DeleteExpression": {
                 "generateSubtreeFacts": true,
@@ -3432,7 +3445,8 @@
                         "name": "Expression",
                         "type": "Expression"
                     }
-                ]
+                ],
+                "arena": true
             },
             "VoidExpression": {
                 "generateSubtreeFacts": true,
@@ -3455,7 +3469,8 @@
                         "name": "Expression",
                         "type": "Expression"
                     }
-                ]
+                ],
+                "arena": true
             },
             "TypeAssertion": {
                 "kind": "TypeAssertionExpression",
@@ -3542,7 +3557,8 @@
                         "name": "FalseType",
                         "type": "TypeNode"
                     }
-                ]
+                ],
+                "arena": true
             },
             "TypeOperatorNode": {
                 "kind": "TypeOperator",
@@ -3575,7 +3591,8 @@
                         "name": "TypeParameter",
                         "type": "TypeParameterDeclaration"
                     }
-                ]
+                ],
+                "arena": true
             },
             "ArrayTypeNode": {
                 "kind": "ArrayType",
@@ -3660,7 +3677,8 @@
                 "kind": "ThisType",
                 "extends": [
                     "TypeNodeBase"
-                ]
+                ],
+                "arena": true
             },
             "TypePredicateNode": {
                 "kind": "TypePredicate",
@@ -3741,7 +3759,8 @@
                         "name": "TypeArguments",
                         "inherited": true
                     }
-                ]
+                ],
+                "arena": true
             },
             "MappedTypeNode": {
                 "kind": "MappedType",
@@ -3819,7 +3838,8 @@
                         "type": "TypeNode",
                         "list": "NodeList"
                     }
-                ]
+                ],
+                "arena": true
             },
             "NamedTupleMember": {
                 "extends": [
@@ -3870,7 +3890,8 @@
                         "name": "Type",
                         "type": "TypeNode"
                     }
-                ]
+                ],
+                "arena": true
             },
             "ParenthesizedTypeNode": {
                 "kind": "ParenthesizedType",
@@ -3949,7 +3970,8 @@
                         "inherited": true,
                         "bitmask": "TokenFlagsTemplateLiteralLikeFlags"
                     }
-                ]
+                ],
+                "arena": true
             },
             "TemplateMiddle": {
                 "extends": [
@@ -3970,7 +3992,8 @@
                         "inherited": true,
                         "bitmask": "TokenFlagsTemplateLiteralLikeFlags"
                     }
-                ]
+                ],
+                "arena": true
             },
             "TemplateTail": {
                 "extends": [
@@ -3991,7 +4014,8 @@
                         "inherited": true,
                         "bitmask": "TokenFlagsTemplateLiteralLikeFlags"
                     }
-                ]
+                ],
+                "arena": true
             },
             "TemplateLiteralTypeNode": {
                 "kind": "TemplateLiteralType",
@@ -4008,7 +4032,8 @@
                         "type": "TemplateLiteralTypeSpan",
                         "list": "NodeList"
                     }
-                ]
+                ],
+                "arena": true
             },
             "TemplateLiteralTypeSpan": {
                 "extends": [
@@ -4023,7 +4048,8 @@
                         "name": "Literal",
                         "type": "TemplateMiddleOrTail"
                     }
-                ]
+                ],
+                "arena": true
             },
             "SyntheticExpression": {
                 "extends": [
@@ -4916,7 +4942,8 @@
                         "name": "TypeArguments",
                         "inherited": true
                     }
-                ]
+                ],
+                "arena": true
             },
             "ImportClause": {
                 "extends": [
@@ -4942,7 +4969,8 @@
                         "type": "NamedImportBindings",
                         "optional": true
                     }
-                ]
+                ],
+                "arena": true
             },
             "ImportSpecifier": {
                 "extends": [
