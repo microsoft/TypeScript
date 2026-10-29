@@ -6,11 +6,33 @@ import (
 
 	"github.com/microsoft/TypeScript/tsc/internal/core"
 	"github.com/microsoft/TypeScript/tsc/internal/lsp/lsproto"
+	"github.com/microsoft/TypeScript/tsc/internal/project"
 	"github.com/microsoft/TypeScript/tsc/internal/tspath"
 	"gotest.tools/v3/assert"
 )
 
 func stringSlice(values ...string) *[]string { return &values }
+
+func TestContentMapperDocumentPattern(t *testing.T) {
+	t.Parallel()
+	for _, test := range []struct {
+		base             tspath.RootedDirectoryPath
+		baseURI, pattern string
+	}{
+		{"/project/local", "file:///project/local", "**/*.toml"},
+		{"c:/shared/src", "file:///c%3A/shared/src", "**/*.toml"},
+		{"/project", "file:///project", "file.toml"},
+		{"/", "file:///", "**/*.toml"},
+	} {
+		got := contentMapperDocumentPattern(project.ContentMapperSelector{Base: test.base, Pattern: test.pattern})
+		assert.Assert(t, got.Pattern == nil)
+		assert.Equal(t, string(*got.RelativePattern.BaseUri.URI), test.baseURI)
+		assert.Equal(t, got.RelativePattern.Pattern, test.pattern)
+	}
+	got := contentMapperDocumentPattern(project.ContentMapperSelector{Pattern: "**/*.toml"})
+	assert.Equal(t, *got.Pattern, "**/*.toml")
+	assert.Assert(t, got.RelativePattern == nil)
+}
 
 func TestContentMapperLoggerRequiresTrace(t *testing.T) {
 	t.Parallel()

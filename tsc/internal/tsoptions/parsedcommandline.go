@@ -75,6 +75,8 @@ type ParsedCommandLine struct {
 
 	contentMapperExtensionRewrites     []tspath.ExtensionRewrite
 	contentMapperExtensionRewritesOnce sync.Once
+	contentMapperFileMatcherOnce       sync.Once
+	contentMapperFileMatcher           *contentmapper.FileMatcher
 
 	locale     locale.Locale
 	localeOnce sync.Once
@@ -394,9 +396,10 @@ func (p *ParsedCommandLine) ContentMappers() []*contentmapper.Mapper {
 // ContentMapperExtensions returns the flattened list of file extensions registered by the
 // config's content mappers.
 func (p *ParsedCommandLine) ContentMapperExtensions() []string {
-	return core.FlatMap(p.ContentMappers(), func(m *contentmapper.Mapper) []string {
+	extensions := core.FlatMap(p.ContentMappers(), func(m *contentmapper.Mapper) []string {
 		return m.Definition.Extensions
 	})
+	return core.Deduplicate(extensions)
 }
 
 func (p *ParsedCommandLine) ContentMapperExtensionRewrites() []tspath.ExtensionRewrite {
@@ -447,19 +450,21 @@ func getContentMapperOutputExtension(outputExtensions map[string]string, sourceE
 	return "", false
 }
 
-// GetContentMapperForFileName returns the configured content mapper whose extensions include fileName,
-// or nil if no content mapper is registered for the file's extension.
+// GetContentMapperForFileName selects a mapper without executing it. Explicit include filters take
+// precedence over extension-only registrations; otherwise preserve longest-extension matching.
 func (p *ParsedCommandLine) GetContentMapperForFileName(fileName tspath.RootedFilePath) *contentmapper.Mapper {
-	caseSensitivity := p.CaseSensitivity()
-	extension := fileName.LongestExtension(p.ContentMapperExtensions(), caseSensitivity)
-	for _, mapper := range p.ContentMappers() {
-		if slices.ContainsFunc(mapper.Definition.Extensions, func(mapperExtension string) bool {
-			return extension == mapperExtension || caseSensitivity.IsCaseInsensitive() && strings.EqualFold(extension, mapperExtension)
-		}) {
-			return mapper
-		}
-	}
-	return nil
+	return p.ContentMapperFileMatcher().GetMapperForFileName(fileName)
+}
+
+func (p *ParsedCommandLine) ContentMapperFileMatcher() *contentmapper.FileMatcher {
+	p.contentMapperFileMatcherOnce.Do(func() {
+		p.contentMapperFileMatcher = contentmapper.NewFileMatcher(p.ContentMappers(), p.baseDirectory, p.CaseSensitivity())
+	})
+	return p.contentMapperFileMatcher
+}
+
+func (p *ParsedCommandLine) ContentMapperExtensionForFileName(fileName tspath.RootedFilePath) string {
+	return p.ContentMapperFileMatcher().ExtensionForFileName(fileName)
 }
 
 func (p *ParsedCommandLine) ResolvedProjectReferencePaths() []tspath.RootedFilePath {
@@ -559,6 +564,7 @@ func (p *ParsedCommandLine) ReloadFileNamesOfParsedCommandLine(fs vfs.FS) *Parse
 		p.CompilerOptions(),
 		fs,
 		p.ContentMapperExtensions(),
+		p.ContentMapperFileMatcher(),
 	)
 	parsedConfig.FileNames = fileNames
 	parsedCommandLine := ParsedCommandLine{

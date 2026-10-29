@@ -12,6 +12,7 @@ type EmitHost interface {
 	Options() *core.CompilerOptions
 	SourceFiles() []*ast.SourceFile
 	ContentMapperExtensionRewrites() []tspath.ExtensionRewrite
+	ContentMapperExtensionForFileName(fileName tspath.RootedFilePath) string
 	CaseSensitivity() tspath.CaseSensitivity
 	CommonSourceDirectory() tspath.RootedDirectoryPath
 	IsEmitBlocked(file tspath.RootedFilePath) bool

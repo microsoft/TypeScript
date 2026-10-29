@@ -169,10 +169,11 @@ func (l *LanguageService) newSourceDefResolver(
 		getSourceFile: program.GetSourceFile,
 		resolveFrom:   resolveFrom,
 		resolver: module.NewResolver(module.ResolverOptions{
-			Host:            &sourceDefResolutionHost{fs: program.Host().FS(), currentDirectory: program.BaseDirectory()},
-			CompilerOptions: noDtsOptions,
-			TypingsLocation: program.GetGlobalTypingsCacheLocation(),
-			ExtraExtensions: program.CommandLine().ContentMapperExtensions(),
+			Host:                     &sourceDefResolutionHost{fs: program.Host().FS(), currentDirectory: program.BaseDirectory()},
+			CompilerOptions:          noDtsOptions,
+			TypingsLocation:          program.GetGlobalTypingsCacheLocation(),
+			ExtraExtensions:          program.CommandLine().ContentMapperExtensions(),
+			ContentMapperFileMatcher: program.CommandLine().ContentMapperFileMatcher(),
 		}),
 	}
 }

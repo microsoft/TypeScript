@@ -8,6 +8,7 @@ import (
 
 	"github.com/microsoft/TypeScript/tsc/internal/ast"
 	"github.com/microsoft/TypeScript/tsc/internal/collections"
+	"github.com/microsoft/TypeScript/tsc/internal/contentmapper"
 	"github.com/microsoft/TypeScript/tsc/internal/core"
 	"github.com/microsoft/TypeScript/tsc/internal/debug"
 	"github.com/microsoft/TypeScript/tsc/internal/jsnum"
@@ -1350,6 +1351,9 @@ func (b *NodeBuilderImpl) rewriteContentMappedModuleSpecifier(specifier tspath.M
 	if b.ctx.internalFlags&nodebuilder.InternalFlagsRewriteModuleSpecifiers != 0 && b.ch.compilerOptions.RewriteRelativeImportExtensions.IsTrue() {
 		rewrites := b.ctx.host.ContentMapperExtensionRewrites()
 		caseSensitivity := b.ctx.host.CaseSensitivity()
+		if b.ctx.enclosingFile != nil {
+			rewrites = contentmapper.RewritesForImport(rewrites, b.ctx.enclosingFile.FileName(), specifier, b.ctx.host.ContentMapperExtensionForFileName, caseSensitivity)
+		}
 		if specifier.ShouldRewriteExtension(rewrites, caseSensitivity) {
 			rewritten, _ := specifier.RewriteExtension(rewrites, caseSensitivity)
 			return rewritten

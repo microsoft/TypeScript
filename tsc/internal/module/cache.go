@@ -2,6 +2,7 @@ package module
 
 import (
 	"github.com/microsoft/TypeScript/tsc/internal/collections"
+	"github.com/microsoft/TypeScript/tsc/internal/contentmapper"
 	"github.com/microsoft/TypeScript/tsc/internal/core"
 	"github.com/microsoft/TypeScript/tsc/internal/packagejson"
 	"github.com/microsoft/TypeScript/tsc/internal/tspath"
@@ -61,21 +62,23 @@ func (c *parsedPatternsCache) Get(pathMappings *collections.OrderedMap[string, [
 }
 
 type ResolutionData struct {
-	compilerOptions *core.CompilerOptions
-	typingsLocation tspath.RootedDirectoryPath
-	projectName     string
-	extraExtensions []string
+	compilerOptions          *core.CompilerOptions
+	typingsLocation          tspath.RootedDirectoryPath
+	projectName              string
+	extraExtensions          []string
+	contentMapperFileMatcher *contentmapper.FileMatcher
 
 	packageJsonInfoCache *packagejson.InfoCache
 }
 
 func newResolutionData(opts ResolverOptions) *ResolutionData {
 	data := &ResolutionData{
-		compilerOptions:      opts.CompilerOptions,
-		typingsLocation:      opts.TypingsLocation,
-		projectName:          opts.ProjectName,
-		extraExtensions:      opts.ExtraExtensions,
-		packageJsonInfoCache: opts.PackageJsonCache,
+		compilerOptions:          opts.CompilerOptions,
+		typingsLocation:          opts.TypingsLocation,
+		projectName:              opts.ProjectName,
+		extraExtensions:          opts.ExtraExtensions,
+		contentMapperFileMatcher: opts.ContentMapperFileMatcher,
+		packageJsonInfoCache:     opts.PackageJsonCache,
 	}
 	if data.packageJsonInfoCache == nil {
 		data.packageJsonInfoCache = packagejson.NewInfoCache(opts.Host.FS().CaseSensitivity())
@@ -86,11 +89,12 @@ func newResolutionData(opts ResolverOptions) *ResolutionData {
 // Clone copies the package-json cache table without copying its entries.
 func (c *ResolutionData) Clone() *ResolutionData {
 	return &ResolutionData{
-		compilerOptions:      c.compilerOptions,
-		typingsLocation:      c.typingsLocation,
-		projectName:          c.projectName,
-		extraExtensions:      c.extraExtensions,
-		packageJsonInfoCache: c.packageJsonInfoCache.Clone(),
+		compilerOptions:          c.compilerOptions,
+		typingsLocation:          c.typingsLocation,
+		projectName:              c.projectName,
+		extraExtensions:          c.extraExtensions,
+		contentMapperFileMatcher: c.contentMapperFileMatcher,
+		packageJsonInfoCache:     c.packageJsonInfoCache.Clone(),
 	}
 }
 

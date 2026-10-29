@@ -17,10 +17,11 @@ calling routine unless stated otherwise.
 
 **Base path** — The absolute directory against which relative specs are resolved.
 
-**Usage mode** — One of three modes that alter matching semantics:
+**Usage mode** — One of four modes that alter matching semantics:
 - **Files** — Matches complete file paths.
 - **Directories** — Matches directory prefixes for traversal pruning.
 - **Exclude** — Matches paths to be excluded.
+- **ContentMapperInclude** — Matches complete file paths without discovery's hidden-folder, package-folder, or `.min.js` exclusions.
 
 **Component kind** — One of:
 - **Literal** — Contains no `*` or `?` characters.
@@ -157,7 +158,7 @@ calling routine unless stated otherwise.
 >    5. If the kind of _comp_ is **DoubleAsterisk**, then:
 >       1. Let _skipResult_ be the result of MATCH_PATH_INNER(_pattern_, _path_, _pathOffset_, _compIdx_ + 1, _prefixOnly_).
 >       2. If _skipResult_ is **true**, return **true**.
->       3. If _usage_ is not **Exclude**, then:
+>       3. If _usage_ is neither **Exclude** nor **ContentMapperInclude**, then:
 >          1. If IS_HIDDEN_PATH(_part_) is **true**, return **false**.
 >          2. If IS_PACKAGE_FOLDER(_part_) is **true**, return **false**.
 >       4. Set _pathOffset_ to _nextOffset_.
@@ -165,7 +166,7 @@ calling routine unless stated otherwise.
 >    6. If the kind of _comp_ is **Literal**, then:
 >       1. If STRINGS_EQUAL(_comp_.value, _part_, _caseSensitive_) is **false**, return **false**.
 >    7. If the kind of _comp_ is **Wildcard**, then:
->       1. If _usage_ is not **Exclude** and IS_PACKAGE_FOLDER(_part_) is **true**, return **false**.
+>       1. If _usage_ is neither **Exclude** nor **ContentMapperInclude** and IS_PACKAGE_FOLDER(_part_) is **true**, return **false**.
 >       2. If the result of MATCH_WILDCARD(_pattern_, _comp_.segments, _part_) is **false**, return **false**.
 >    8. Set _pathOffset_ to _nextOffset_.
 >    9. Increment _compIdx_.
@@ -184,7 +185,7 @@ calling routine unless stated otherwise.
 
 > 1. Let _usage_ be the usage mode of _pattern_.
 > 2. Let _caseSensitive_ be the case-sensitivity flag of _pattern_.
-> 3. If _usage_ is not **Exclude**, then:
+> 3. If _usage_ is neither **Exclude** nor **ContentMapperInclude**, then:
 >    1. If the length of _segments_ > 0, then:
 >       1. Let _firstKind_ be the kind of _segments_\[0\].
 >       2. If (_firstKind_ is **SegStar** or _firstKind_ is **SegQuestion**) and IS_HIDDEN_PATH(_string_) is **true**, return **false**.
