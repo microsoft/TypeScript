@@ -100,15 +100,86 @@ func GetSymbolTable(data *SymbolTable) SymbolTable {
 }
 
 func GetMembers(symbol *Symbol, arena *SymbolExtraArena) SymbolTable {
-	return GetSymbolTable(&symbol.ensureExtra(arena).members)
+	extra := symbol.ensureExtra(arena)
+	if extra.members == nil {
+		extra.members = NewSymbolTableWithCapacity(membersCapacityHint(symbol))
+	}
+	return extra.members
 }
 
 func GetExports(symbol *Symbol, arena *SymbolExtraArena) SymbolTable {
-	return GetSymbolTable(&symbol.ensureExtra(arena).exports)
+	extra := symbol.ensureExtra(arena)
+	if extra.exports == nil {
+		extra.exports = NewSymbolTableWithCapacity(exportsCapacityHint(symbol))
+	}
+	return extra.exports
 }
 
 func GetLocals(container *Node) SymbolTable {
-	return GetSymbolTable(&container.LocalsContainerData().Locals)
+	data := container.LocalsContainerData()
+	if data.Locals == nil {
+		data.Locals = NewSymbolTableWithCapacity(localsCapacityHint(container))
+	}
+	return data.Locals
+}
+
+// The capacity hints below estimate from the declaration syntax how many entries a symbol table will
+// hold, so that the binder can fill a table without repeatedly growing it.
+
+func membersCapacityHint(symbol *Symbol) int {
+	decls := symbol.Declarations()
+	if len(decls) == 0 || decls[0] == nil {
+		return 0
+	}
+	decl := decls[0]
+	switch decl.Kind {
+	case KindClassDeclaration, KindClassExpression, KindInterfaceDeclaration, KindTypeLiteral:
+		return len(decl.Members())
+	case KindObjectLiteralExpression, KindJsxAttributes:
+		return len(decl.Properties())
+	}
+	return 0
+}
+
+func exportsCapacityHint(symbol *Symbol) int {
+	decls := symbol.Declarations()
+	if len(decls) == 0 || decls[0] == nil {
+		return 0
+	}
+	decl := decls[0]
+	switch decl.Kind {
+	case KindEnumDeclaration:
+		return len(decl.Members())
+	case KindSourceFile:
+		return len(decl.Statements())
+	case KindModuleDeclaration:
+		if body := decl.Body(); body != nil && body.Kind == KindModuleBlock {
+			return len(body.Statements())
+		}
+	}
+	return 0
+}
+
+func localsCapacityHint(container *Node) int {
+	switch container.Kind {
+	case KindSourceFile:
+		return len(container.Statements())
+	case KindModuleDeclaration:
+		if body := container.Body(); body != nil && body.Kind == KindModuleBlock {
+			return len(body.Statements())
+		}
+	case KindFunctionDeclaration, KindMethodDeclaration, KindMethodSignature, KindConstructor,
+		KindGetAccessor, KindSetAccessor, KindFunctionExpression, KindArrowFunction,
+		KindCallSignature, KindConstructSignature, KindFunctionType, KindConstructorType:
+		n := len(container.TypeParameters())
+		if params := container.ParameterList(); params != nil {
+			n += len(params.Nodes)
+		}
+		return n
+	case KindTypeAliasDeclaration, KindJSTypeAliasDeclaration:
+		return len(container.TypeParameters())
+	}
+	return 0
 }
 
 // Determines if a node is missing (either `nil` or empty)
