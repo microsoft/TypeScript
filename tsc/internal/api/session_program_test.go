@@ -7,9 +7,59 @@ import (
 	"github.com/microsoft/TypeScript/tsc/internal/core"
 	"github.com/microsoft/TypeScript/tsc/internal/lsp/lsproto"
 	"github.com/microsoft/TypeScript/tsc/internal/project"
+	"github.com/microsoft/TypeScript/tsc/internal/testutil/contentmappertest"
 	"github.com/microsoft/TypeScript/tsc/internal/testutil/projecttestutil"
 	"gotest.tools/v3/assert"
 )
+
+func TestProjectContainsSupplementalFile(t *testing.T) {
+	t.Parallel()
+
+	const supplementalFileName = "/home/project/app.box.0.ts"
+	files := map[string]any{
+		"/home/project/tsconfig.json":                    `{"compilerOptions":{"noLib":true},"files":["app.box","main.ts","missing.ts"],"contentMappers":[{"package":"mapper","extensions":[".box"]}]}`,
+		"/home/project/node_modules/mapper/package.json": contentmappertest.PackageJSON(contentmappertest.SupplementalMapper),
+		"/home/project/app.box":                          "declare const supplementalValue: number;",
+		"/home/project/main.ts":                          "const value: number = supplementalValue;",
+	}
+	init, _ := projecttestutil.GetSessionInitOptions(files, &project.SessionOptions{
+		CurrentDirectory: "/home/project",
+		RunExternalCode:  true,
+	}, nil)
+	init.Spawner = contentmappertest.NewSpawner()
+	projectSession := project.NewSession(init)
+	defer projectSession.Close()
+	projectSession.DidOpenFile(context.Background(), "file:///home/project/main.ts", 1, files["/home/project/main.ts"].(string), lsproto.LanguageKindTypeScript)
+	session := NewLSPSession(projectSession, nil)
+	defer session.Close()
+	response, err := session.handleGetCurrentLanguageServerSnapshot(context.Background(), &GetCurrentLanguageServerSnapshotParams{})
+	assert.NilError(t, err)
+	params := &ContainsProjectFileParams{
+		Snapshot: response.Snapshot,
+		Project:  response.Projects[0].Handle,
+		File:     DocumentIdentifier{FileName: supplementalFileName},
+	}
+	sd, err := session.getSnapshotData(response.Snapshot)
+	assert.NilError(t, err)
+	assert.Assert(t, sd.snapshot.GetFile(supplementalFileName) == nil)
+	sourceFile, err := session.handleGetSourceFile(context.Background(), &GetSourceFileParams{
+		Snapshot: params.Snapshot, Project: params.Project, File: params.File,
+	})
+	assert.NilError(t, err)
+	assert.Assert(t, sourceFile != nil)
+	contains, err := session.handleContainsProjectFile(context.Background(), params)
+	assert.NilError(t, err)
+	assert.Assert(t, contains)
+	params.RequireOpen = true
+	contains, err = session.handleContainsProjectFile(context.Background(), params)
+	assert.NilError(t, err)
+	assert.Assert(t, !contains)
+	params.RequireOpen = false
+	params.File = DocumentIdentifier{FileName: "/home/project/missing.ts"}
+	contains, err = session.handleContainsProjectFile(context.Background(), params)
+	assert.NilError(t, err)
+	assert.Assert(t, !contains)
+}
 
 func TestProjectContainsEditorOpenFile(t *testing.T) {
 	t.Parallel()

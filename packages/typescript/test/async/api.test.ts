@@ -126,8 +126,19 @@ import {
     toRootedFilePath,
 } from "@typescript/typescript/path";
 import assert from "node:assert";
-import { globSync } from "node:fs";
-import { resolve } from "node:path";
+import {
+    existsSync,
+    globSync,
+    mkdirSync,
+    mkdtempSync,
+    rmSync,
+    writeFileSync,
+} from "node:fs";
+import { tmpdir } from "node:os";
+import {
+    join,
+    resolve,
+} from "node:path";
 import {
     describe,
     test,
@@ -2807,6 +2818,54 @@ const value: string = 1;`,
         const updated = await snapshot.update({ closeFiles: ["/src/main.ts"] });
         assert.equal(await updated.getConfiguredProject("/tsconfig.json")!.containsFile("/src/main.ts", true), false);
         assert.equal(await project.containsFile("/src/main.ts", true), true);
+    });
+
+    test("Project membership includes supplemental files without physical files", async t => {
+        const directory = mkdtempSync(join(tmpdir(), "ts-project-membership-"));
+        t.after(() => rmSync(directory, { recursive: true, force: true }));
+        const mapperDirectory = join(directory, "node_modules", "mapper");
+        mkdirSync(mapperDirectory, { recursive: true });
+        const mapperScript = `
+            import { createMessageConnection } from ${JSON.stringify(new URL("../../vendor/vscode-jsonrpc/lib/node/main.js", import.meta.url).href)};
+            const connection = createMessageConnection(process.stdin, process.stdout);
+            connection.onRequest("initialize", () => ({ positionEncoding: "utf-8", diagnosticSource: "mapper" }));
+            connection.onRequest("openProject", () => ({}));
+            connection.onRequest("closeProject", () => null);
+            connection.onRequest("transform", ({ content }) => ({
+                text: "export {};",
+                extension: ".ts",
+                supplemental: [{ text: content, extension: ".ts" }],
+            }));
+            connection.listen();
+        `;
+        writeFileSync(
+            join(mapperDirectory, "package.json"),
+            JSON.stringify({
+                name: "mapper",
+                version: "1.0.0",
+                typescript: { contentMapper: { exec: [process.execPath, "--input-type=module", "--eval", mapperScript] } },
+            }),
+        );
+        const configFileName = toRootedFilePath(join(directory, "tsconfig.json"), undefined);
+        writeFileSync(
+            configFileName,
+            JSON.stringify({
+                compilerOptions: { noLib: true },
+                files: ["app.box", "main.ts", "missing.ts"],
+                contentMappers: [{ package: "mapper", extensions: [".box"] }],
+            }),
+        );
+        writeFileSync(join(directory, "app.box"), "declare const supplementalValue: number;");
+        writeFileSync(join(directory, "main.ts"), "const value: number = supplementalValue;");
+        await using api = new API({ cwd: directory, runExternalCode: true });
+        const snapshot = await api.createSnapshot({ openProjects: [configFileName] });
+        const project = snapshot.getConfiguredProject(configFileName)!;
+        const supplementalFileName = toRootedFilePath(join(directory, "app.box.0.ts"), undefined);
+        assert.equal(existsSync(supplementalFileName), false);
+        assert.ok(await project.getSourceFile(supplementalFileName));
+        assert.equal(await project.containsFile(supplementalFileName), true);
+        assert.equal(await project.containsFile(supplementalFileName, true), false);
+        assert.equal(await project.containsFile(join(directory, "missing.ts")), false);
     });
 
     test("Project file lists include extended configs and optionally exclude external libraries", async () => {

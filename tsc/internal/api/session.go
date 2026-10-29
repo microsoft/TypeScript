@@ -2579,21 +2579,19 @@ func (s *Session) handleContainsProjectFile(ctx context.Context, params *Contain
 		return false, err
 	}
 	fileName := params.File.ToFileName(proj.CurrentDirectory())
-	file := sd.snapshot.GetFile(fileName)
-	if file == nil {
-		return false, nil
-	}
 	path := sd.snapshot.CaseSensitivity().PathKey(fileName.AsPath())
 	if params.RequireOpen && !sd.snapshot.ProjectCollection.IsFileOpen(path) {
 		return false, nil
 	}
+	if program := proj.GetProgram(); program != nil && program.GetSourceFileByPath(path) != nil {
+		return true, nil
+	}
 	for _, root := range proj.CommandLine.FileNames() {
 		if sd.snapshot.CaseSensitivity().PathKey(root.AsPath()) == path {
-			return true, nil
+			return sd.snapshot.GetFile(fileName) != nil, nil
 		}
 	}
-	program := proj.GetProgram()
-	return program != nil && program.GetSourceFileByPath(path) != nil, nil
+	return false, nil
 }
 
 func (s *Session) handleGetProjectRootFiles(ctx context.Context, params *GetSourceFileNamesParams) ([]tspath.RootedFilePath, error) {
