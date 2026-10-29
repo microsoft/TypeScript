@@ -3313,53 +3313,56 @@ func (r *Relater) isSourceIntersectionNeedingExtraCheck(source *Type, target *Ty
 		})
 }
 
+// relateVariances relates type arguments according to the given variances. The boolean result
+// reports whether the returned Ternary is final; otherwise a structural comparison should follow.
+func (r *Relater) relateVariances(sourceTypeArguments []*Type, targetTypeArguments []*Type, variances []VarianceFlags, reportErrors bool, intersectionState IntersectionState, saveErrorState errorState, varianceCheckFailed *bool, originalErrorChain **ErrorChain) (Ternary, bool) {
+	if result := r.typeArgumentsRelatedTo(sourceTypeArguments, targetTypeArguments, variances, reportErrors, intersectionState); result != TernaryFalse {
+		return result, true
+	}
+	if core.Some(variances, func(v VarianceFlags) bool { return v&VarianceFlagsAllowsStructuralFallback != 0 }) {
+		// If some type parameter was `Unmeasurable` or `Unreliable`, and we couldn't pass by assuming it was identical, then we
+		// have to allow a structural fallback check
+		// We elide the variance-based error elaborations, since those might not be too helpful, since we'll potentially
+		// be assuming identity of the type parameter.
+		*originalErrorChain = nil
+		r.restoreErrorState(saveErrorState)
+		return TernaryFalse, false
+	}
+	allowStructuralFallback := r.c.hasCovariantVoidArgument(targetTypeArguments, variances)
+	*varianceCheckFailed = !allowStructuralFallback
+	// The type arguments did not relate appropriately, but it may be because we have no variance
+	// information (in which case typeArgumentsRelatedTo defaulted to covariance for all type
+	// arguments). It might also be the case that the target type has a 'void' type argument for
+	// a covariant type parameter that is only used in return positions within the generic type
+	// (in which case any type argument is permitted on the source side). In those cases we proceed
+	// with a structural comparison. Otherwise, we know for certain the instantiations aren't
+	// related and we can return here.
+	if len(variances) != 0 && !allowStructuralFallback {
+		// In some cases generic types that are covariant in regular type checking mode become
+		// invariant in --strictFunctionTypes mode because one or more type parameters are used in
+		// both co- and contravariant positions. In order to make it easier to diagnose *why* such
+		// types are invariant, if any of the type parameters are invariant we reset the reported
+		// errors and instead force a structural comparison (which will include elaborations that
+		// reveal the reason).
+		// We can switch on `reportErrors` here, since varianceCheckFailed guarantees we return `False`,
+		// we can return `False` early here to skip calculating the structural error message we don't need.
+		if *varianceCheckFailed && !(reportErrors && core.Some(variances, func(v VarianceFlags) bool { return (v & VarianceFlagsVarianceMask) == VarianceFlagsInvariant })) {
+			return TernaryFalse, true
+		}
+		// We remember the original error information so we can restore it in case the structural
+		// comparison unexpectedly succeeds. This can happen when the structural comparison result
+		// is a Ternary.Maybe for example caused by the recursion depth limiter.
+		*originalErrorChain = r.errorChain
+		r.restoreErrorState(saveErrorState)
+	}
+	return TernaryFalse, false
+}
+
 func (r *Relater) structuredTypeRelatedToWorker(source *Type, target *Type, reportErrors bool, intersectionState IntersectionState) Ternary {
 	var result Ternary
 	var varianceCheckFailed bool
 	var originalErrorChain *ErrorChain
 	saveErrorState := r.getErrorState()
-	relateVariances := func(sourceTypeArguments []*Type, targetTypeArguments []*Type, variances []VarianceFlags, intersectionState IntersectionState) (Ternary, bool) {
-		if result = r.typeArgumentsRelatedTo(sourceTypeArguments, targetTypeArguments, variances, reportErrors, intersectionState); result != TernaryFalse {
-			return result, true
-		}
-		if core.Some(variances, func(v VarianceFlags) bool { return v&VarianceFlagsAllowsStructuralFallback != 0 }) {
-			// If some type parameter was `Unmeasurable` or `Unreliable`, and we couldn't pass by assuming it was identical, then we
-			// have to allow a structural fallback check
-			// We elide the variance-based error elaborations, since those might not be too helpful, since we'll potentially
-			// be assuming identity of the type parameter.
-			originalErrorChain = nil
-			r.restoreErrorState(saveErrorState)
-			return TernaryFalse, false
-		}
-		allowStructuralFallback := r.c.hasCovariantVoidArgument(targetTypeArguments, variances)
-		varianceCheckFailed = !allowStructuralFallback
-		// The type arguments did not relate appropriately, but it may be because we have no variance
-		// information (in which case typeArgumentsRelatedTo defaulted to covariance for all type
-		// arguments). It might also be the case that the target type has a 'void' type argument for
-		// a covariant type parameter that is only used in return positions within the generic type
-		// (in which case any type argument is permitted on the source side). In those cases we proceed
-		// with a structural comparison. Otherwise, we know for certain the instantiations aren't
-		// related and we can return here.
-		if len(variances) != 0 && !allowStructuralFallback {
-			// In some cases generic types that are covariant in regular type checking mode become
-			// invariant in --strictFunctionTypes mode because one or more type parameters are used in
-			// both co- and contravariant positions. In order to make it easier to diagnose *why* such
-			// types are invariant, if any of the type parameters are invariant we reset the reported
-			// errors and instead force a structural comparison (which will include elaborations that
-			// reveal the reason).
-			// We can switch on `reportErrors` here, since varianceCheckFailed guarantees we return `False`,
-			// we can return `False` early here to skip calculating the structural error message we don't need.
-			if varianceCheckFailed && !(reportErrors && core.Some(variances, func(v VarianceFlags) bool { return (v & VarianceFlagsVarianceMask) == VarianceFlagsInvariant })) {
-				return TernaryFalse, true
-			}
-			// We remember the original error information so we can restore it in case the structural
-			// comparison unexpectedly succeeds. This can happen when the structural comparison result
-			// is a Ternary.Maybe for example caused by the recursion depth limiter.
-			originalErrorChain = r.errorChain
-			r.restoreErrorState(saveErrorState)
-		}
-		return TernaryFalse, false
-	}
 	switch {
 	case r.relation == r.c.identityRelation:
 		// We've already checked that source.flags and target.flags are identical
@@ -3455,7 +3458,7 @@ func (r *Relater) structuredTypeRelatedToWorker(source *Type, target *Type, repo
 		nodeIsInJsFile := ast.IsInJSFile(source.alias.symbol.ValueDeclaration())
 		sourceTypes := r.c.fillMissingTypeArguments(source.alias.typeArguments, params, minParams, nodeIsInJsFile)
 		targetTypes := r.c.fillMissingTypeArguments(target.alias.typeArguments, params, minParams, nodeIsInJsFile)
-		varianceResult, ok := relateVariances(sourceTypes, targetTypes, variances, intersectionState)
+		varianceResult, ok := r.relateVariances(sourceTypes, targetTypes, variances, reportErrors, intersectionState, saveErrorState, &varianceCheckFailed, &originalErrorChain)
 		if ok {
 			return varianceResult
 		}
@@ -3889,7 +3892,7 @@ func (r *Relater) structuredTypeRelatedToWorker(source *Type, target *Type, repo
 			if len(variances) == 0 {
 				return TernaryUnknown
 			}
-			varianceResult, ok := relateVariances(r.c.getTypeArguments(source), r.c.getTypeArguments(target), variances, intersectionState)
+			varianceResult, ok := r.relateVariances(r.c.getTypeArguments(source), r.c.getTypeArguments(target), variances, reportErrors, intersectionState, saveErrorState, &varianceCheckFailed, &originalErrorChain)
 			if ok {
 				return varianceResult
 			}
