@@ -27442,6 +27442,20 @@ func (c *Checker) removeType(t *Type, targetType *Type) *Type {
 }
 
 func containsType(types []*Type, t *Type) bool {
+	n := len(types)
+	if n == 0 {
+		return false
+	}
+	// Types are sorted primarily by sort order flags, so t can't be present when its flags fall outside
+	// the range spanned by the list.
+	flags := getSortOrderFlags(t)
+	if flags < getSortOrderFlags(types[0]) || flags > getSortOrderFlags(types[n-1]) {
+		return false
+	}
+	// For short lists, scanning by identity is cheaper than the CompareTypes calls of a binary search.
+	if n <= 16 {
+		return slices.Contains(types, t)
+	}
 	_, ok := slices.BinarySearchFunc(types, t, CompareTypes)
 	return ok
 }
