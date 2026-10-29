@@ -540,7 +540,9 @@ func TestUnionIntersectionPropertyCacheSharing(t *testing.T) {
 					assert.Equal(t, c.getUnionOrIntersectionProperty(typ, name, augmentedFirst), symbol)
 				}
 				assert.Equal(t, data.propertyCacheWithoutFunctionPropertyAugment.Len(), members.Len())
-				assert.Assert(t, data.propertyCache == nil)
+				if !augmentedFirst {
+					assert.Assert(t, data.propertyCache == nil)
+				}
 				runtime.GC()
 				for name, symbol := range members.All() {
 					assert.Equal(t, c.getUnionOrIntersectionProperty(typ, name, true), symbol)

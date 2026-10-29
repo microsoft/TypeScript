@@ -22028,12 +22028,6 @@ func (c *Checker) getUnionOrIntersectionProperty(t *Type, name string, skipObjec
 	if prop != nil {
 		if skipObjectFunctionPropertyAugment {
 			ast.GetSymbolTable(&data.propertyCacheWithoutFunctionPropertyAugment).Set(name, prop)
-			if prop.CheckFlags()&ast.CheckFlagsPartial == 0 && data.propertyCache.Get(name) == prop {
-				data.propertyCache.Delete(name)
-				if data.propertyCache.Len() == 0 {
-					data.propertyCache = nil
-				}
-			}
 		} else {
 			ast.GetSymbolTable(&data.propertyCache).Set(name, prop)
 		}
