@@ -142,6 +142,9 @@ const maxFreeNodeListCap = 1024
 func (p *Parser) allocNodeList() []*ast.Node {
 	if n := len(p.freeNodeLists); n > 0 {
 		list := p.freeNodeLists[n-1]
+		// Clear the slot so that a list which is later dropped (rather than returned)
+		// is not kept alive by the stack's backing array.
+		p.freeNodeLists[n-1] = nil
 		p.freeNodeLists = p.freeNodeLists[:n-1]
 		return list
 	}
