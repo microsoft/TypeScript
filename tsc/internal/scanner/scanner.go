@@ -1525,6 +1525,13 @@ func (s *Scanner) ScanJSDocToken() ast.Kind {
 	return s.token
 }
 
+var isASCIIIdentifierPart = func() (table [256]bool) {
+	for b := range table {
+		table[b] = stringutil.IsASCIILetter(rune(b)) || stringutil.IsDigit(rune(b)) || b == '_' || b == '$'
+	}
+	return table
+}()
+
 func (s *Scanner) scanIdentifier(prefixLength int, variant identifierVariant) bool {
 	start := s.pos
 	s.pos += prefixLength
@@ -1532,10 +1539,12 @@ func (s *Scanner) scanIdentifier(prefixLength int, variant identifierVariant) bo
 	ch := s.char()
 	// Fast path for simple ASCII identifiers
 	if variant != identifierVariantJSX && (stringutil.IsASCIILetter(ch) || ch == '_' || ch == '$') {
-		s.pos++
-		s.scanASCIIWhile(func(b byte) bool {
-			return (b >= 'a' && b <= 'z') || (b >= 'A' && b <= 'Z') || (b >= '0' && b <= '9') || b == '_' || b == '$'
-		})
+		text, end := s.text, s.end
+		pos := s.pos + 1
+		for pos < end && isASCIIIdentifierPart[text[pos]] {
+			pos++
+		}
+		s.pos = pos
 		ch = s.char()
 		if ch < utf8.RuneSelf && ch != '\\' {
 			s.tokenValue = s.text[start:s.pos]
