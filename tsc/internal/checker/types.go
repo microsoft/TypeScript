@@ -792,6 +792,8 @@ const (
 	typeCacheShouldNormalizeComputed                            // shouldNormalizeIntersection result has been computed
 	typeCacheShouldNormalize                                    // shouldNormalizeIntersection result
 	typeCacheNonNullableUnion                                   // Union of only definitely non-nullable, non-instantiable types
+	typeCacheIsWeakComputed                                     // isWeakType result has been computed
+	typeCacheIsWeak                                             // isWeakType result
 )
 
 type Type struct {

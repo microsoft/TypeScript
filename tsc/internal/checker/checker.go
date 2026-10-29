@@ -19789,6 +19789,7 @@ func (c *Checker) getBaseTypes(t *Type) []*Type {
 		// members partially resolved. Here we ensure any such partial resolution is reset.
 		// See https://github.com/microsoft/TypeScript/issues/16861 for an example.
 		t.objectFlags &^= ObjectFlagsMembersResolved
+		t.cacheFlags &^= typeCacheIsWeakComputed | typeCacheIsWeak
 		data.baseTypesResolved = true
 	}
 	return data.resolvedBaseTypes
