@@ -998,6 +998,7 @@ func (c *Checker) checkGrammarForInvalidExclamationToken(postfixToken *ast.Token
 func (c *Checker) getObjectLiteralSeenMap() map[string]DeclarationMeaning {
 	if n := len(c.freeObjectLiteralSeenMaps); n > 0 {
 		seen := c.freeObjectLiteralSeenMaps[n-1]
+		c.freeObjectLiteralSeenMaps[n-1] = nil
 		c.freeObjectLiteralSeenMaps = c.freeObjectLiteralSeenMaps[:n-1]
 		return seen
 	}

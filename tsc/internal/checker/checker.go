@@ -9192,6 +9192,7 @@ func (c *Checker) resolveCall(node *ast.Node, signatures []*Signature, candidate
 func (c *Checker) getCandidateList() []*Signature {
 	if n := len(c.freeCandidateLists); n > 0 {
 		list := c.freeCandidateLists[n-1]
+		c.freeCandidateLists[n-1] = nil
 		c.freeCandidateLists = c.freeCandidateLists[:n-1]
 		return list
 	}
