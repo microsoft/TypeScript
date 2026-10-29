@@ -31,6 +31,22 @@ func bad(h *header, b []byte, s string) {
 	if h.kind == 1 {
 		_ = (*derived)(unsafe.Pointer(h))
 	}
+
+	_ = unsafe.Pointer(h) // SAFETY: Trailing comments only cover their own line.
+	_ = unsafe.Pointer(h)
+}
+
+type ptrAlias = unsafe.Pointer
+
+type ptrNamed unsafe.Pointer
+
+func badConversions(p unsafe.Pointer, a ptrAlias, n ptrNamed, h *header) {
+	_ = (*int)(p)
+	_ = uintptr(p)
+	_ = (*int)(a)
+	_ = (*int)(n)
+	_ = ptrAlias(h)
+	_ = ptrNamed(h)
 }
 
 // SAFETY: Comments on a function do not cover its body.
@@ -38,7 +54,7 @@ func badFuncComment(h *header) *derived {
 	return (*derived)(unsafe.Pointer(h))
 }
 
-func good(h *header, b []byte) {
+func good(h *header, b []byte, p unsafe.Pointer) {
 	// SAFETY: h is always embedded in a derived.
 	_ = (*derived)(unsafe.Pointer(h))
 
@@ -71,6 +87,9 @@ func good(h *header, b []byte) {
 		// SAFETY: Inside a case clause.
 		_ = (*derived)(unsafe.Pointer(h))
 	}
+
+	// SAFETY: Conversions from unsafe.Pointer need justification too.
+	_ = (*derived)(p)
 
 	// Compile-time operations are always safe.
 	_ = unsafe.Sizeof(*h)

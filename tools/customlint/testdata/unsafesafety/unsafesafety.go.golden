@@ -14,7 +14,7 @@
 	func bad(h *header, b []byte, s string) {
 		_ = (*derived)(unsafe.Pointer(h))
 		               ~~~~~~~~~~~~~~~~~
-!!! unsafesafety: use of unsafe.Pointer must be preceded by a `// SAFETY:` comment explaining why it is sound
+!!! unsafesafety: conversion to unsafe.Pointer must be preceded by a `// SAFETY:` comment explaining why it is sound
 		_ = unsafe.String(&b[0], len(b))
 		    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 !!! unsafesafety: use of unsafe.String must be preceded by a `// SAFETY:` comment explaining why it is sound
@@ -30,39 +30,69 @@
 		    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 !!! unsafesafety: use of unsafe.Add must be preceded by a `// SAFETY:` comment explaining why it is sound
 		               ~~~~~~~~~~~~~~~~~
-!!! unsafesafety: use of unsafe.Pointer must be preceded by a `// SAFETY:` comment explaining why it is sound
+!!! unsafesafety: conversion to unsafe.Pointer must be preceded by a `// SAFETY:` comment explaining why it is sound
 	
 		// Not a safety comment.
 		_ = (*derived)(unsafe.Pointer(h))
 		               ~~~~~~~~~~~~~~~~~
-!!! unsafesafety: use of unsafe.Pointer must be preceded by a `// SAFETY:` comment explaining why it is sound
+!!! unsafesafety: conversion to unsafe.Pointer must be preceded by a `// SAFETY:` comment explaining why it is sound
 	
 		// SAFETY: Separated from the use by a blank line.
 	
 		_ = (*derived)(unsafe.Pointer(h))
 		               ~~~~~~~~~~~~~~~~~
-!!! unsafesafety: use of unsafe.Pointer must be preceded by a `// SAFETY:` comment explaining why it is sound
+!!! unsafesafety: conversion to unsafe.Pointer must be preceded by a `// SAFETY:` comment explaining why it is sound
 	
 		// safety: Wrong case.
 		_ = (*derived)(unsafe.Pointer(h))
 		               ~~~~~~~~~~~~~~~~~
-!!! unsafesafety: use of unsafe.Pointer must be preceded by a `// SAFETY:` comment explaining why it is sound
+!!! unsafesafety: conversion to unsafe.Pointer must be preceded by a `// SAFETY:` comment explaining why it is sound
 	
 		if h.kind == 1 {
 			_ = (*derived)(unsafe.Pointer(h))
 			               ~~~~~~~~~~~~~~~~~
-!!! unsafesafety: use of unsafe.Pointer must be preceded by a `// SAFETY:` comment explaining why it is sound
+!!! unsafesafety: conversion to unsafe.Pointer must be preceded by a `// SAFETY:` comment explaining why it is sound
 		}
+	
+		_ = unsafe.Pointer(h) // SAFETY: Trailing comments only cover their own line.
+		_ = unsafe.Pointer(h)
+		    ~~~~~~~~~~~~~~~~~
+!!! unsafesafety: conversion to unsafe.Pointer must be preceded by a `// SAFETY:` comment explaining why it is sound
+	}
+	
+	type ptrAlias = unsafe.Pointer
+	
+	type ptrNamed unsafe.Pointer
+	
+	func badConversions(p unsafe.Pointer, a ptrAlias, n ptrNamed, h *header) {
+		_ = (*int)(p)
+		    ~~~~~~~~~
+!!! unsafesafety: conversion from unsafe.Pointer must be preceded by a `// SAFETY:` comment explaining why it is sound
+		_ = uintptr(p)
+		    ~~~~~~~~~~
+!!! unsafesafety: conversion from unsafe.Pointer must be preceded by a `// SAFETY:` comment explaining why it is sound
+		_ = (*int)(a)
+		    ~~~~~~~~~
+!!! unsafesafety: conversion from unsafe.Pointer must be preceded by a `// SAFETY:` comment explaining why it is sound
+		_ = (*int)(n)
+		    ~~~~~~~~~
+!!! unsafesafety: conversion from unsafe.Pointer must be preceded by a `// SAFETY:` comment explaining why it is sound
+		_ = ptrAlias(h)
+		    ~~~~~~~~~~~
+!!! unsafesafety: conversion to unsafe.Pointer must be preceded by a `// SAFETY:` comment explaining why it is sound
+		_ = ptrNamed(h)
+		    ~~~~~~~~~~~
+!!! unsafesafety: conversion to unsafe.Pointer must be preceded by a `// SAFETY:` comment explaining why it is sound
 	}
 	
 	// SAFETY: Comments on a function do not cover its body.
 	func badFuncComment(h *header) *derived {
 		return (*derived)(unsafe.Pointer(h))
 		                  ~~~~~~~~~~~~~~~~~
-!!! unsafesafety: use of unsafe.Pointer must be preceded by a `// SAFETY:` comment explaining why it is sound
+!!! unsafesafety: conversion to unsafe.Pointer must be preceded by a `// SAFETY:` comment explaining why it is sound
 	}
 	
-	func good(h *header, b []byte) {
+	func good(h *header, b []byte, p unsafe.Pointer) {
 		// SAFETY: h is always embedded in a derived.
 		_ = (*derived)(unsafe.Pointer(h))
 	
@@ -96,6 +126,9 @@
 			_ = (*derived)(unsafe.Pointer(h))
 		}
 	
+		// SAFETY: Conversions from unsafe.Pointer need justification too.
+		_ = (*derived)(p)
+	
 		// Compile-time operations are always safe.
 		_ = unsafe.Sizeof(*h)
 		_ = unsafe.Alignof(*h)
@@ -112,5 +145,5 @@
 	
 	var badGlobal = unsafe.Pointer(&derived{})
 	                ~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! unsafesafety: use of unsafe.Pointer must be preceded by a `// SAFETY:` comment explaining why it is sound
+!!! unsafesafety: conversion to unsafe.Pointer must be preceded by a `// SAFETY:` comment explaining why it is sound
 	
