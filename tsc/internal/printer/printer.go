@@ -2593,8 +2593,13 @@ func (p *Printer) emitNewExpression(node *ast.NewExpression) {
 	state := p.enterNode(node.AsNode())
 	p.emitToken(ast.KindNewKeyword, node.Pos(), WriteKindKeyword, node.AsNode())
 	p.writeSpace()
-	if ast.SkipPartiallyEmittedExpressions(node.Expression).Kind == ast.KindCallExpression {
-		// Parenthesize `C()` inside of a NewExpression so it is treated as `new (C())` and not `new C()`
+	// Parenthesize when the expression contains a CallExpression that would otherwise
+	// bind to `new`. `new C()` is fine, but `new C().D()` parses as `(new C()).D()`, so
+	// `new (C().D)()` needs parentheses around the whole expression — including after
+	// type assertions / satisfies / non-null are erased (e.g. `new (f() as T).C()`).
+	// See https://github.com/microsoft/TypeScript/issues/64981.
+	expr := ast.SkipPartiallyEmittedExpressions(node.Expression)
+	if ast.GetLeftmostExpression(expr, true /*stopAtCallExpressions*/).Kind == ast.KindCallExpression {
 		p.emitExpression(node.Expression, ast.OperatorPrecedenceParentheses)
 	} else {
 		p.emitExpression(node.Expression, ast.OperatorPrecedenceMember)

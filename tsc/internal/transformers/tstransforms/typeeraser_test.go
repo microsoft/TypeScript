@@ -58,6 +58,15 @@ func TestTypeEraser(t *testing.T) {
 		{title: "CallExpression", input: "f<T>()", output: "f();"},
 		{title: "NewExpression1", input: "new f<T>()", output: "new f();"},
 		{title: "NewExpression2", input: "new f<T>", output: "new f;"},
+		// After erasing `as T`, parentheses around the call must be restored so
+		// `new (f().C)()` is not emitted as `new f().C()` (== `(new f()).C()`).
+		// See https://github.com/microsoft/TypeScript/issues/64981.
+		{title: "NewExpression3", input: "new (f() as T).C()", output: "new (f().C)();"},
+		{title: "NewExpression4", input: "new (f() as T).C", output: "new (f().C);"},
+		{title: "NewExpression5", input: "new (f() satisfies T).C()", output: "new (f().C)();"},
+		// Non-null doesn't elide the original parentheses the way `as`/`satisfies` do,
+		// so the call keeps its own grouping: `new ((f()).C)()`.
+		{title: "NewExpression6", input: "new (f()!).C()", output: "new ((f()).C)();"},
 		{title: "TaggedTemplateExpression", input: "f<T>``", output: "f ``;"},
 		{title: "NonNullExpression", input: "x!", output: "x;"},
 		{title: "TypeAssertionExpression#1", input: "<T>x", output: "x;"},
