@@ -150,24 +150,18 @@ func exportsCapacityHint(symbol *Symbol) int {
 	switch decl.Kind {
 	case KindEnumDeclaration:
 		return len(decl.Members())
-	case KindSourceFile:
-		return len(decl.Statements())
-	case KindModuleDeclaration:
-		if body := decl.Body(); body != nil && body.Kind == KindModuleBlock {
-			return len(body.Statements())
-		}
+	case KindSourceFile, KindModuleDeclaration:
+		_, exports := moduleCapacityHints(decl)
+		return exports
 	}
 	return 0
 }
 
 func localsCapacityHint(container *Node) int {
 	switch container.Kind {
-	case KindSourceFile:
-		return len(container.Statements())
-	case KindModuleDeclaration:
-		if body := container.Body(); body != nil && body.Kind == KindModuleBlock {
-			return len(body.Statements())
-		}
+	case KindSourceFile, KindModuleDeclaration:
+		locals, _ := moduleCapacityHints(container)
+		return locals
 	case KindFunctionDeclaration, KindMethodDeclaration, KindMethodSignature, KindConstructor,
 		KindGetAccessor, KindSetAccessor, KindFunctionExpression, KindArrowFunction,
 		KindCallSignature, KindConstructSignature, KindFunctionType, KindConstructorType:
@@ -180,6 +174,98 @@ func localsCapacityHint(container *Node) int {
 		return len(container.TypeParameters())
 	}
 	return 0
+}
+
+// moduleCapacityHints estimates the number of locals and exports a source file or namespace declares by counting
+// the declarations among its top-level statements, mirroring where the binder puts them (see declareModuleMember).
+// Statements that declare nothing, such as expression statements, are not counted.
+func moduleCapacityHints(container *Node) (locals int, exports int) {
+	var statements []*Node
+	switch container.Kind {
+	case KindSourceFile:
+		statements = container.Statements()
+	case KindModuleDeclaration:
+		if body := container.Body(); body != nil && body.Kind == KindModuleBlock {
+			statements = body.Statements()
+		}
+	}
+	// Declarations in an ambient export context are implicitly exported.
+	exportContext := container.Flags&NodeFlagsExportContext != 0
+	hasExportStar := false
+	for _, statement := range statements {
+		count := 0
+		switch statement.Kind {
+		case KindVariableStatement:
+			count = len(statement.AsVariableStatement().DeclarationList.AsVariableDeclarationList().Declarations.Nodes)
+		case KindFunctionDeclaration, KindClassDeclaration, KindInterfaceDeclaration, KindTypeAliasDeclaration,
+			KindEnumDeclaration:
+			count = 1
+		case KindJSTypeAliasDeclaration:
+			// JSDoc typedefs are implicitly exported from modules.
+			locals++
+			exports++
+			continue
+		case KindModuleDeclaration:
+			if IsAmbientModule(statement) {
+				// Ambient modules and global augmentations are never exported.
+				locals++
+				continue
+			}
+			count = 1
+		case KindImportEqualsDeclaration:
+			// An exported import alias is only declared as an export.
+			if statement.ModifierFlags()&ModifierFlagsExport != 0 {
+				exports++
+			} else {
+				locals++
+			}
+			continue
+		case KindImportDeclaration, KindJSImportDeclaration:
+			if clause := statement.ImportClause(); clause != nil {
+				if clause.Name() != nil {
+					locals++
+				}
+				if bindings := clause.AsImportClause().NamedBindings; bindings != nil {
+					if bindings.Kind == KindNamedImports {
+						locals += len(bindings.Elements())
+					} else {
+						locals++
+					}
+				}
+			}
+			continue
+		case KindExportDeclaration:
+			switch clause := statement.AsExportDeclaration().ExportClause; {
+			case clause == nil:
+				// All `export *` declarations share a single entry.
+				hasExportStar = true
+			case clause.Kind == KindNamedExports:
+				exports += len(clause.Elements())
+			default:
+				exports++
+			}
+			continue
+		case KindExportAssignment:
+			exports++
+			continue
+		default:
+			continue
+		}
+		flags := statement.ModifierFlags()
+		if flags&ModifierFlagsExport == 0 && !exportContext {
+			locals += count
+			continue
+		}
+		exports += count
+		// An unnamed default export has no local symbol.
+		if flags&ModifierFlagsDefault == 0 || statement.Name() != nil {
+			locals += count
+		}
+	}
+	if hasExportStar {
+		exports++
+	}
+	return locals, exports
 }
 
 // Determines if a node is missing (either `nil` or empty)
