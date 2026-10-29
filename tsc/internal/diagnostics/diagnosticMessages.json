@@ -8955,5 +8955,9 @@
     "Content mapper extension '{0}' must not contain path separators.": {
         "category": "Error",
         "code": 18123
+    },
+    "Content mapper '{0}' must specify 'extensions' in tsconfig or its package manifest.": {
+        "category": "Error",
+        "code": 18125
     }
 }

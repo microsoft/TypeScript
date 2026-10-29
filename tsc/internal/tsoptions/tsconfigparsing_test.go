@@ -1463,7 +1463,7 @@ func TestContentMappersValidation(t *testing.T) {
 		{
 			name:           "missing extensions",
 			contentMappers: `[{ "package": "x" }]`,
-			expectedCode:   diagnostics.Compiler_option_0_requires_a_value_of_type_1.Code(),
+			expectedCode:   diagnostics.Content_mapper_0_must_specify_extensions_in_tsconfig_or_its_package_manifest.Code(),
 		},
 		{
 			name:           "duplicate extension across mappers",
@@ -1510,6 +1510,9 @@ func TestContentMappersValidation(t *testing.T) {
 			if test.name == "duplicate extension across mappers" {
 				config.allFileList["/node_modules/a/package.json"] = `{ "name": "a", "version": "1.0.0", "typescript": { "contentMapper": { "exec": ["a"] } } }`
 				config.allFileList["/node_modules/b/package.json"] = `{ "name": "b", "version": "1.0.0", "typescript": { "contentMapper": { "exec": ["b"] } } }`
+			}
+			if test.name == "missing extensions" {
+				config.allFileList["/node_modules/x/package.json"] = `{ "name": "x", "typescript": { "contentMapper": { "exec": ["x"] } } }`
 			}
 			for apiName, getParsed := range map[string]func(testConfig, vfs.FS, tspath.RootedDirectoryPath) *tsoptions.ParsedCommandLine{
 				"json api":           getParsedWithJsonApi,

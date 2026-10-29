@@ -1326,6 +1326,10 @@ func parseJsonConfigFileContentWorker(
 	}
 	var contentMappers []*contentmapper.Mapper
 	var contentMapperIndices []int
+	containingFile := configFileName
+	if containingFile == "" {
+		containingFile = basePathForFileNames.ResolveFile("tsconfig.json")
+	}
 	contentMappersOfRaw := getPropFromRaw("contentMappers", func(element any) bool { return reflect.TypeOf(element) == orderedMapType }, "object")
 	for i, element := range contentMappersOfRaw.sliceValue {
 		mapper, mapperErrors := parseContentMapper(element)
@@ -1333,6 +1337,28 @@ func parseJsonConfigFileContentWorker(
 			errors = append(errors, setContentMapperDiagnosticLocation(mapperError, contentMapperSourceFile, getContentMapperSyntax(contentMapperSourceFile, i, "")))
 		}
 		if mapper != nil {
+			rawMapper := element.(*collections.OrderedMap[string, any])
+			if parsedConfig.options != nil && parsedConfig.options.RunExternalCode.IsTrue() {
+				manifest, packageDirectory, diagnostic := resolveContentMapperManifest(host, containingFile, mapper.Package)
+				mapper.PackageDirectory = packageDirectory
+				if diagnostic != nil {
+					errors = append(errors, setContentMapperDiagnosticLocation(diagnostic, contentMapperSourceFile, getContentMapperSyntax(contentMapperSourceFile, i, "package")))
+				} else {
+					mapper.Manifest = manifest
+					if mapper.Extensions == nil {
+						mapper.Extensions = slices.Clone(manifest.DefaultExtensions)
+						if mapper.Extensions == nil {
+							errors = append(errors, setContentMapperDiagnosticLocation(ast.NewCompilerDiagnostic(
+								diagnostics.Content_mapper_0_must_specify_extensions_in_tsconfig_or_its_package_manifest, mapper.Package,
+							), contentMapperSourceFile, getContentMapperSyntax(contentMapperSourceFile, i, "package")))
+							continue
+						}
+					}
+					if !rawMapper.Has("outputExtensions") {
+						mapper.Definition.OutputExtensions = maps.Clone(manifest.DefaultOutputExtensions)
+					}
+				}
+			}
 			contentMappers = append(contentMappers, mapper)
 			contentMapperIndices = append(contentMapperIndices, i)
 		}
@@ -1347,9 +1373,13 @@ func parseJsonConfigFileContentWorker(
 		return fs.CaseSensitivity().Canonicalize(extension)
 	}
 	for j, mapper := range contentMappers {
+		rawMapper := contentMappersOfRaw.sliceValue[contentMapperIndices[j]].(*collections.OrderedMap[string, any])
 		validExtensions := make([]string, 0, len(mapper.Definition.Extensions))
 		for _, ext := range mapper.Definition.Extensions {
 			extNode := getContentMapperExtensionSyntax(contentMapperSourceFile, contentMapperIndices[j], ext)
+			if !rawMapper.Has("extensions") {
+				extNode = getContentMapperSyntax(contentMapperSourceFile, contentMapperIndices[j], "package")
+			}
 			canonicalExt := canonicalExtension(ext)
 			switch {
 			case !strings.HasPrefix(ext, "."):
@@ -1382,7 +1412,7 @@ func parseJsonConfigFileContentWorker(
 			} else if !contentmapper.IsValidExtension(outputExtension) {
 				errors = append(errors, setContentMapperDiagnosticLocation(ast.NewCompilerDiagnostic(diagnostics.Content_mapper_output_extension_0_must_be_non_empty_and_begin_with_a, outputExtension), contentMapperSourceFile, outputExtensionsNode))
 			}
-			if !slices.ContainsFunc(validExtensions, func(extension string) bool {
+			if rawMapper.Has("outputExtensions") && !slices.ContainsFunc(validExtensions, func(extension string) bool {
 				return canonicalExtension(extension) == canonicalExtension(sourceExtension)
 			}) {
 				errors = append(errors, setContentMapperDiagnosticLocation(ast.NewCompilerDiagnostic(diagnostics.Content_mapper_output_extension_mapping_source_0_is_not_registered_by_this_content_mapper, sourceExtension), contentMapperSourceFile, outputExtensionsNode))
@@ -1396,24 +1426,11 @@ func parseJsonConfigFileContentWorker(
 		contentMappers = nil
 		contentMapperExtensions = nil
 	} else if len(contentMappers) > 0 {
-		// Resolve each mapper's package.json now so its name, version, and run command are available to
-		// everything downstream (diagnostics, build-info staleness) without executing anything.
-		containingFile := configFileName
-		if containingFile == "" {
-			containingFile = basePathForFileNames.ResolveFile("tsconfig.json")
-		}
 		resolvedContentMappers := make([]*contentmapper.Mapper, 0, len(contentMappers))
 		for j, mapper := range contentMappers {
-			manifest, packageDirectory, diagnostic := resolveContentMapperManifest(host, containingFile, mapper.Package)
-			mapper.PackageDirectory = packageDirectory
-			if diagnostic != nil {
-				errors = append(errors, setContentMapperDiagnosticLocation(diagnostic, contentMapperSourceFile, getContentMapperSyntax(contentMapperSourceFile, contentMapperIndices[j], "package")))
+			if mapper.Name == "" {
+				// Manifest resolution failed.
 				continue
-			}
-			mapper.Manifest = manifest
-			rawMapper := contentMappersOfRaw.sliceValue[contentMapperIndices[j]].(*collections.OrderedMap[string, any])
-			if _, present := rawMapper.Get("outputExtensions"); !present {
-				mapper.Definition.OutputExtensions = maps.Clone(manifest.DefaultOutputExtensions)
 			}
 			for _, sourceExtension := range mapper.Definition.Extensions {
 				outputExtension, ok := getContentMapperOutputExtension(mapper.Definition.OutputExtensions, sourceExtension, fs.CaseSensitivity().IsCaseInsensitive())

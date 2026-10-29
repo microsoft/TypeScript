@@ -352,6 +352,7 @@ test("schemas accept representative valid configs and reject malformed configs",
         { compilerOptions: { paths: { "@/*": ["src/*"] }, plugins: [{ name: "some-plugin", customSetting: true }], moduleSuffixes: ["", ".native"] } },
         { typeAcquisition: { enable: true, include: ["node"], exclude: [] } },
         { contentMappers: [{ package: "mapper", extensions: [".vue"], options: { customSetting: true } }] },
+        { contentMappers: [{ package: "mapper" }] },
         { "$schema": "./tsconfig.schema.json", "tool-specific": { anything: true } },
     ];
     const invalid = [
@@ -378,7 +379,6 @@ test("schemas accept representative valid configs and reject malformed configs",
         { references: [{ path: "" }] },
         { references: [{ path: null }] },
         { contentMappers: [{ package: "", extensions: [] }] },
-        { contentMappers: [{ package: "mapper" }] },
         { contentMappers: [{ package: "mapper", extensions: [1] }] },
         { contentMappers: [{ package: "mapper", extensions: [], options: null }] },
     ];

@@ -48,6 +48,7 @@ type Manifest struct {
 	CompilerOptions         []string
 	DynamicConfig           bool
 	DefaultOutputExtensions map[string]string
+	DefaultExtensions       []string
 }
 
 // Mapper is a resolved content mapper: its tsconfig Definition combined with the Manifest resolved from
@@ -139,6 +140,8 @@ func (m *Mapper) Equals(other *Mapper) bool {
 		(m.CompilerOptions == nil) == (other.CompilerOptions == nil) &&
 		slices.Equal(m.CompilerOptions, other.CompilerOptions) &&
 		m.DynamicConfig == other.DynamicConfig &&
+		(m.DefaultExtensions == nil) == (other.DefaultExtensions == nil) &&
+		slices.Equal(m.DefaultExtensions, other.DefaultExtensions) &&
 		(m.Manifest.DefaultOutputExtensions == nil) == (other.Manifest.DefaultOutputExtensions == nil) &&
 		maps.Equal(m.Manifest.DefaultOutputExtensions, other.Manifest.DefaultOutputExtensions) &&
 		m.PackageDirectory == other.PackageDirectory &&

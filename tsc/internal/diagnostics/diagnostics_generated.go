@@ -3922,6 +3922,8 @@ var Content_mapper_extension_0_must_not_contain_path_separators = &Message{code:
 
 var The_content_mapper_package_0_is_outside_the_open_workspace_and_will_not_be_loaded = &Message{code: 18124, category: CategoryError, key: "The_content_mapper_package_0_is_outside_the_open_workspace_and_will_not_be_loaded_18124", text: "The content mapper package '{0}' is outside the open workspace and will not be loaded."}
 
+var Content_mapper_0_must_specify_extensions_in_tsconfig_or_its_package_manifest = &Message{code: 18125, category: CategoryError, key: "Content_mapper_0_must_specify_extensions_in_tsconfig_or_its_package_manifest_18125", text: "Content mapper '{0}' must specify 'extensions' in tsconfig or its package manifest."}
+
 var X_nodenext_if_module_is_nodenext_node16_if_module_is_node16_or_node18_otherwise_bundler = &Message{code: 69010, category: CategoryMessage, key: "nodenext_if_module_is_nodenext_node16_if_module_is_node16_or_node18_otherwise_bundler_69010", text: "`nodenext` if `module` is `nodenext`; `node16` if `module` is `node16` or `node18`; otherwise, `bundler`."}
 
 var File_is_a_CommonJS_module_it_may_be_converted_to_an_ES_module = &Message{code: 80001, category: CategorySuggestion, key: "File_is_a_CommonJS_module_it_may_be_converted_to_an_ES_module_80001", text: "File is a CommonJS module; it may be converted to an ES module."}
@@ -6423,6 +6425,7 @@ var allMessages = [...]**Message{
 	&The_typescript_contentMapper_outputExtensions_of_the_content_mapper_package_0_must_be_an_object_with_string_values,
 	&Content_mapper_extension_0_must_not_contain_path_separators,
 	&The_content_mapper_package_0_is_outside_the_open_workspace_and_will_not_be_loaded,
+	&Content_mapper_0_must_specify_extensions_in_tsconfig_or_its_package_manifest,
 	&X_nodenext_if_module_is_nodenext_node16_if_module_is_node16_or_node18_otherwise_bundler,
 	&File_is_a_CommonJS_module_it_may_be_converted_to_an_ES_module,
 	&This_constructor_function_may_be_converted_to_a_class_declaration,

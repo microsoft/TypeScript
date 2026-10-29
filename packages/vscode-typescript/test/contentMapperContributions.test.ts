@@ -90,4 +90,30 @@ describe("content mapper contributions", { concurrency: true }, () => {
             },
         }]);
     });
+
+    test("uses manifest extensions when the contribution omits extensions", () => {
+        const contribution = {
+            inferredProjectContribution: {
+                manifest: {
+                    name: "mapper",
+                    exec: ["mapper"],
+                    extensions: [".toml"],
+                },
+            },
+        } satisfies ContentMapperContribution;
+        assert.doesNotThrow(() => validateContentMapperRegistration("mapper", [contribution]));
+        assert.deepEqual(serializeContentMapperContributions(new Map([["mapper", [contribution]]])), [{
+            contributorId: "mapper",
+            inferredProjectContribution: {
+                options: undefined,
+                manifest: {
+                    name: "mapper",
+                    exec: ["mapper"],
+                    extensions: [".toml"],
+                    cwd: undefined,
+                    compilerOptions: undefined,
+                },
+            },
+        }]);
+    });
 });

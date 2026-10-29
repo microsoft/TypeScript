@@ -39,6 +39,7 @@ func TestParsedOptionsEquality(t *testing.T) {
 		}
 		result.ContentMappers[0].Definition.OutputExtensions = map[string]string{".vue": ".mjs"}
 		result.ContentMappers[0].Manifest.DefaultOutputExtensions = map[string]string{".vue": ".js"}
+		result.ContentMappers[0].Manifest.DefaultExtensions = []string{".vue"}
 		return result
 	}
 	check(t, makeOptions(), makeOptions())
@@ -88,6 +89,7 @@ func TestParsedOptionsEquality(t *testing.T) {
 		}},
 		{"mapper package", func(p *ParsedOptions) { p.ContentMappers[0].Package = "other" }},
 		{"mapper extension", func(p *ParsedOptions) { p.ContentMappers[0].Extensions[0] = ".other" }},
+		{"manifest extension", func(p *ParsedOptions) { p.ContentMappers[0].DefaultExtensions[0] = ".other" }},
 		{"mapper output extension", func(p *ParsedOptions) { p.ContentMappers[0].Definition.OutputExtensions[".vue"] = ".js" }},
 		{"mapper options", func(p *ParsedOptions) { p.ContentMappers[0].Options = []byte(`{}`) }},
 		{"mapper name", func(p *ParsedOptions) { p.ContentMappers[0].Name = "other" }},

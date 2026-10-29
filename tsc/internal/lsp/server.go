@@ -2559,8 +2559,12 @@ func parseContentMapperContributions(values []*lsproto.ContentMapperContribution
 			return result, errors.New("content mapper contribution requires a contributorId")
 		}
 		identity := fmt.Sprintf("%s[%d]", value.ContributorId, index)
-		validExtensions := make([]string, 0, len(value.Extensions))
-		for _, extension := range value.Extensions {
+		extensions := valueOrZero(value.Extensions)
+		if len(extensions) == 0 && value.InferredProjectContribution != nil && value.InferredProjectContribution.Manifest != nil {
+			extensions = valueOrZero(value.InferredProjectContribution.Manifest.Extensions)
+		}
+		validExtensions := make([]string, 0, len(extensions))
+		for _, extension := range extensions {
 			if !isValidContributedContentMapperExtension(extension) {
 				return result, fmt.Errorf("content mapper contribution %q has invalid extension %q", identity, extension)
 			}
@@ -2608,6 +2612,7 @@ func parseContentMapperContributions(values []*lsproto.ContentMapperContribution
 			ContributionID:  identity,
 		}
 		mapper.Manifest.DefaultOutputExtensions = maps.Clone(valueOrZero(manifest.OutputExtensions))
+		mapper.Manifest.DefaultExtensions = slices.Clone(valueOrZero(manifest.Extensions))
 		mapper.Definition.OutputExtensions = maps.Clone(mapper.Manifest.DefaultOutputExtensions)
 		if manifest.Cwd != nil {
 			if !tspath.PathIsAbsolute(*manifest.Cwd) {
