@@ -349,11 +349,16 @@ func (s *windowsSubscription) processCompletion(callErr error, buf []byte, bytes
 		}
 	}
 
+	// A successful read of zero bytes means the buffer overflowed and the
+	// kernel discarded its events.
+	if bytes == 0 {
+		s.dirWatch.events.setError(ErrOverflow)
+		s.dirWatch.notify()
+		return false
+	}
+
 	// Walk the FILE_NOTIFY_INFORMATION chain.
 	offset := uint32(0)
-	if bytes == 0 {
-		bytes = uint32(len(buf))
-	}
 	for offset < bytes {
 		fni := (*windows.FileNotifyInformation)(unsafe.Pointer(&buf[offset]))
 		nameLen := int(fni.FileNameLength) / 2
