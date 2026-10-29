@@ -696,6 +696,7 @@ type Checker struct {
 	memberLayoutArena                           core.Arena[MemberLayout]
 	layoutMemberInfos                           map[string]MemberInfo
 	freeTypeSets                                *temporaryTypeSet
+	unionRunStarts                              []int
 	freePropertyCounts                          *temporaryPropertyCounts
 	mergedSymbols                               map[*ast.Symbol]*ast.Symbol
 	mergedExportsChecked                        collections.Set[*ast.Symbol]
@@ -26540,9 +26541,14 @@ func (c *Checker) addTypesToUnion(sourceTypes []*Type, types []*Type) ([]*Type, 
 		}
 		types = append(types, t)
 	}
+	// Each source type contributes an already sorted run of types (a single type or the sorted
+	// constituents of a union). Record where a run is out of order with its predecessor so that
+	// the runs can be merged instead of sorting everything from scratch.
+	runStarts := c.unionRunStarts[:0]
 	var lastType *Type
 	for _, t := range sourceTypes {
 		if t != lastType {
+			start := len(types)
 			if t.flags&TypeFlagsUnion != 0 {
 				u := t.AsUnionType()
 				if t.alias != nil || u.origin != nil {
@@ -26554,12 +26560,17 @@ func (c *Checker) addTypesToUnion(sourceTypes []*Type, types []*Type) ([]*Type, 
 			} else {
 				addType(t)
 			}
+			if start > 0 && len(types) > start && CompareTypes(types[start-1], types[start]) > 0 {
+				runStarts = append(runStarts, start)
+			}
 			lastType = t
 		}
 	}
 	if len(types) >= 2 {
 		// Sort and deduplicate types
-		slices.SortStableFunc(types, CompareTypes)
+		if len(runStarts) != 0 {
+			c.mergeSortedRuns(types, runStarts)
+		}
 		unique := 1
 		for _, t := range types[1:] {
 			if t != types[unique-1] {
@@ -26570,7 +26581,67 @@ func (c *Checker) addTypesToUnion(sourceTypes []*Type, types []*Type) ([]*Type, 
 		clear(types[unique:])
 		types = types[:unique]
 	}
+	c.unionRunStarts = runStarts[:0]
 	return types, includes
+}
+
+// mergeSortedRuns sorts types, which consists of consecutive runs that are each already sorted.
+// runStarts holds the start index of every run except the first, and is reused as scratch space.
+func (c *Checker) mergeSortedRuns(types []*Type, runStarts []int) {
+	n := len(types)
+	scratch := c.getTemporaryTypeSet()
+	defer c.releaseTemporaryTypeSet(scratch)
+	scratch.values = slices.Grow(scratch.values[:0], n)[:n]
+	src, dst := types, scratch.values
+	for len(runStarts) != 0 {
+		runs := len(runStarts) + 1
+		runBound := func(i int) int {
+			switch {
+			case i == 0:
+				return 0
+			case i == runs:
+				return n
+			}
+			return runStarts[i-1]
+		}
+		// Merge adjacent pairs of runs, compacting the start indices of the merged runs in place.
+		merged := 0
+		for i := 0; i < runs; i += 2 {
+			lo := runBound(i)
+			mid := runBound(i + 1)
+			hi := mid
+			if i+1 < runs {
+				hi = runBound(i + 2)
+			}
+			mergeSortedTypes(dst[lo:hi], src[lo:mid], src[mid:hi])
+			if i != 0 {
+				runStarts[merged] = lo
+				merged++
+			}
+		}
+		runStarts = runStarts[:merged]
+		src, dst = dst, src
+	}
+	if &src[0] != &types[0] {
+		copy(types, src)
+	}
+}
+
+// mergeSortedTypes merges the sorted lists left and right into dst, preferring left on ties.
+func mergeSortedTypes(dst []*Type, left []*Type, right []*Type) {
+	i, j, k := 0, 0, 0
+	for i < len(left) && j < len(right) {
+		if CompareTypes(right[j], left[i]) < 0 {
+			dst[k] = right[j]
+			j++
+		} else {
+			dst[k] = left[i]
+			i++
+		}
+		k++
+	}
+	k += copy(dst[k:], left[i:])
+	copy(dst[k:], right[j:])
 }
 
 func (c *Checker) addNamedUnions(namedUnions []*Type, types []*Type) []*Type {
