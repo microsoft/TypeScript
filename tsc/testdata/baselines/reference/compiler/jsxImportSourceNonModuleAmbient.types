@@ -1,0 +1,20 @@
+//// [tests/cases/compiler/jsxImportSourceNonModuleAmbient.tsx] ////
+
+=== ambient.d.ts ===
+declare module "@solidjs/web/jsx-runtime" {
+    namespace JSX {
+        interface IntrinsicElements {
+            div: any;
+>div : any
+        }
+    }
+}
+
+=== index.tsx ===
+const x = <><div>hi</div></>;
+>x : any
+><><div>hi</div></> : any
+><div>hi</div> : any
+>div : any
+>div : any
+

@@ -1,0 +1,24 @@
+//// [tests/cases/compiler/jsxImportSourceNonModuleAmbient.tsx] ////
+
+=== ambient.d.ts ===
+declare module "@solidjs/web/jsx-runtime" {
+>"@solidjs/web/jsx-runtime" : Symbol("@solidjs/web/jsx-runtime", Decl(ambient.d.ts, 0, 0))
+
+    namespace JSX {
+>JSX : Symbol(JSX, Decl(ambient.d.ts, 0, 44))
+
+        interface IntrinsicElements {
+>IntrinsicElements : Symbol(IntrinsicElements, Decl(ambient.d.ts, 1, 19))
+
+            div: any;
+>div : Symbol(IntrinsicElements.div, Decl(ambient.d.ts, 2, 37))
+        }
+    }
+}
+
+=== index.tsx ===
+const x = <><div>hi</div></>;
+>x : Symbol(x, Decl(index.tsx, 0, 5))
+>div : Symbol(JSX.IntrinsicElements.div, Decl(ambient.d.ts, 2, 37))
+>div : Symbol(JSX.IntrinsicElements.div, Decl(ambient.d.ts, 2, 37))
+
