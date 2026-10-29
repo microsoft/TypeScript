@@ -1,0 +1,62 @@
+//// [tests/cases/compiler/transformerCancelMember.ts] ////
+
+=== transformerCancelMember.ts ===
+// Regression test for https://github.com/microsoft/TypeScript/issues/65008
+// WHATWG Streams defines Transformer.cancel; lib.dom must accept it.
+
+const ts = new TransformStream<Uint8Array, Uint8Array>({
+>ts : Symbol(ts, Decl(transformerCancelMember.ts, 3, 5))
+>TransformStream : Symbol(TransformStream, Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --))
+>Uint8Array : Symbol(Uint8Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --) ... and 2 more)
+>Uint8Array : Symbol(Uint8Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --) ... and 2 more)
+
+    transform(chunk, controller) {
+>transform : Symbol(transform, Decl(transformerCancelMember.ts, 3, 56))
+>chunk : Symbol(chunk, Decl(transformerCancelMember.ts, 4, 14))
+>controller : Symbol(controller, Decl(transformerCancelMember.ts, 4, 20))
+
+        controller.enqueue(chunk);
+>controller.enqueue : Symbol(TransformStreamDefaultController.enqueue, Decl(lib.dom.d.ts, --, --))
+>controller : Symbol(controller, Decl(transformerCancelMember.ts, 4, 20))
+>enqueue : Symbol(TransformStreamDefaultController.enqueue, Decl(lib.dom.d.ts, --, --))
+>chunk : Symbol(chunk, Decl(transformerCancelMember.ts, 4, 14))
+
+    },
+    cancel(reason) {
+>cancel : Symbol(cancel, Decl(transformerCancelMember.ts, 6, 6))
+>reason : Symbol(reason, Decl(transformerCancelMember.ts, 7, 11))
+
+        void reason;
+>reason : Symbol(reason, Decl(transformerCancelMember.ts, 7, 11))
+
+    },
+});
+
+declare function useStream(stream: TransformStream<Uint8Array, Uint8Array>): void;
+>useStream : Symbol(useStream, Decl(transformerCancelMember.ts, 10, 3))
+>stream : Symbol(stream, Decl(transformerCancelMember.ts, 12, 27))
+>TransformStream : Symbol(TransformStream, Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --))
+>Uint8Array : Symbol(Uint8Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --) ... and 2 more)
+>Uint8Array : Symbol(Uint8Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --) ... and 2 more)
+
+useStream(ts);
+>useStream : Symbol(useStream, Decl(transformerCancelMember.ts, 10, 3))
+>ts : Symbol(ts, Decl(transformerCancelMember.ts, 3, 5))
+
+// cancel may be async, matching TransformerCancelCallback / UnderlyingSourceCancelCallback.
+new TransformStream({
+>TransformStream : Symbol(TransformStream, Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --))
+
+    async cancel(reason) {
+>cancel : Symbol(cancel, Decl(transformerCancelMember.ts, 16, 21))
+>reason : Symbol(reason, Decl(transformerCancelMember.ts, 17, 17))
+
+        await Promise.resolve(reason);
+>Promise.resolve : Symbol(PromiseConstructor.resolve, Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2018.promise.d.ts, --, --))
+>resolve : Symbol(PromiseConstructor.resolve, Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
+>reason : Symbol(reason, Decl(transformerCancelMember.ts, 17, 17))
+
+    },
+});
+

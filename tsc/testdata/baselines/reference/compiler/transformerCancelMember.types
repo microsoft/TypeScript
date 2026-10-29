@@ -1,0 +1,66 @@
+//// [tests/cases/compiler/transformerCancelMember.ts] ////
+
+=== transformerCancelMember.ts ===
+// Regression test for https://github.com/microsoft/TypeScript/issues/65008
+// WHATWG Streams defines Transformer.cancel; lib.dom must accept it.
+
+const ts = new TransformStream<Uint8Array, Uint8Array>({
+>ts : TransformStream<Uint8Array<ArrayBufferLike>, Uint8Array<ArrayBufferLike>>
+>new TransformStream<Uint8Array, Uint8Array>({    transform(chunk, controller) {        controller.enqueue(chunk);    },    cancel(reason) {        void reason;    },}) : TransformStream<Uint8Array<ArrayBufferLike>, Uint8Array<ArrayBufferLike>>
+>TransformStream : { new <I = any, O = any>(transformer?: Transformer<I, O>, writableStrategy?: QueuingStrategy<I>, readableStrategy?: QueuingStrategy<O>): TransformStream<I, O>; prototype: TransformStream; }
+>{    transform(chunk, controller) {        controller.enqueue(chunk);    },    cancel(reason) {        void reason;    },} : { transform(chunk: Uint8Array<ArrayBufferLike>, controller: TransformStreamDefaultController<Uint8Array<ArrayBufferLike>>): void; cancel(reason: any): void; }
+
+    transform(chunk, controller) {
+>transform : (chunk: Uint8Array<ArrayBufferLike>, controller: TransformStreamDefaultController<Uint8Array<ArrayBufferLike>>) => void
+>chunk : Uint8Array<ArrayBufferLike>
+>controller : TransformStreamDefaultController<Uint8Array<ArrayBufferLike>>
+
+        controller.enqueue(chunk);
+>controller.enqueue(chunk) : void
+>controller.enqueue : (chunk: Uint8Array<ArrayBufferLike>) => void
+>controller : TransformStreamDefaultController<Uint8Array<ArrayBufferLike>>
+>enqueue : (chunk: Uint8Array<ArrayBufferLike>) => void
+>chunk : Uint8Array<ArrayBufferLike>
+
+    },
+    cancel(reason) {
+>cancel : (reason: any) => void
+>reason : any
+
+        void reason;
+>void reason : undefined
+>reason : any
+
+    },
+});
+
+declare function useStream(stream: TransformStream<Uint8Array, Uint8Array>): void;
+>useStream : (stream: TransformStream<Uint8Array, Uint8Array>) => void
+>stream : TransformStream<Uint8Array<ArrayBufferLike>, Uint8Array<ArrayBufferLike>>
+
+useStream(ts);
+>useStream(ts) : void
+>useStream : (stream: TransformStream<Uint8Array, Uint8Array>) => void
+>ts : TransformStream<Uint8Array<ArrayBufferLike>, Uint8Array<ArrayBufferLike>>
+
+// cancel may be async, matching TransformerCancelCallback / UnderlyingSourceCancelCallback.
+new TransformStream({
+>new TransformStream({    async cancel(reason) {        await Promise.resolve(reason);    },}) : TransformStream<any, any>
+>TransformStream : { new <I = any, O = any>(transformer?: Transformer<I, O>, writableStrategy?: QueuingStrategy<I>, readableStrategy?: QueuingStrategy<O>): TransformStream<I, O>; prototype: TransformStream; }
+>{    async cancel(reason) {        await Promise.resolve(reason);    },} : { cancel(reason: any): Promise<void>; }
+
+    async cancel(reason) {
+>cancel : (reason: any) => Promise<void>
+>reason : any
+
+        await Promise.resolve(reason);
+>await Promise.resolve(reason) : any
+>Promise.resolve(reason) : Promise<any>
+>Promise.resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T>(value: T | PromiseLike<T>): Promise<Awaited<T>>; }
+>Promise : PromiseConstructor
+>resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T>(value: T | PromiseLike<T>): Promise<Awaited<T>>; }
+>reason : any
+
+    },
+});
+

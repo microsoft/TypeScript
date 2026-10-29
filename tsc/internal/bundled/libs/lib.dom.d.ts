@@ -2968,6 +2968,7 @@ interface TrackEventInit extends EventInit {
 }
 
 interface Transformer<I = any, O = any> {
+    cancel?: TransformerCancelCallback;
     flush?: TransformerFlushCallback<O>;
     readableType?: undefined;
     start?: TransformerStartCallback<O>;
@@ -43936,6 +43937,10 @@ interface ResizeObserverCallback {
 
 interface SchedulerPostTaskCallback {
     (): any;
+}
+
+interface TransformerCancelCallback {
+    (reason?: any): void | PromiseLike<void>;
 }
 
 interface TransformerFlushCallback<O> {

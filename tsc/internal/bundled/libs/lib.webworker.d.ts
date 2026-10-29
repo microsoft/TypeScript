@@ -1304,6 +1304,7 @@ interface TextEncoderEncodeIntoResult {
 }
 
 interface Transformer<I = any, O = any> {
+    cancel?: TransformerCancelCallback;
     flush?: TransformerFlushCallback<O>;
     readableType?: undefined;
     start?: TransformerStartCallback<O>;
@@ -15193,6 +15194,10 @@ interface ReportingObserverCallback {
 
 interface SchedulerPostTaskCallback {
     (): any;
+}
+
+interface TransformerCancelCallback {
+    (reason?: any): void | PromiseLike<void>;
 }
 
 interface TransformerFlushCallback<O> {
