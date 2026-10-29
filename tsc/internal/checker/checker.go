@@ -26581,7 +26581,12 @@ func (c *Checker) addTypesToUnion(sourceTypes []*Type, types []*Type) ([]*Type, 
 		clear(types[unique:])
 		types = types[:unique]
 	}
-	c.unionRunStarts = runStarts[:0]
+	// Do not retain arbitrarily large run buffers, matching releaseTemporaryTypeSet.
+	if cap(runStarts) <= 4096 {
+		c.unionRunStarts = runStarts[:0]
+	} else {
+		c.unionRunStarts = nil
+	}
 	return types, includes
 }
 
