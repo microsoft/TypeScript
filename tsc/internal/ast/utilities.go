@@ -133,7 +133,10 @@ func membersCapacityHint(symbol *Symbol) int {
 	}
 	decl := decls[0]
 	switch decl.Kind {
-	case KindClassDeclaration, KindClassExpression, KindInterfaceDeclaration, KindTypeLiteral:
+	case KindClassDeclaration, KindClassExpression:
+		members, _ := classCapacityHints(decl)
+		return members
+	case KindInterfaceDeclaration, KindTypeLiteral:
 		return len(decl.Members())
 	case KindObjectLiteralExpression, KindJsxAttributes:
 		return len(decl.Properties())
@@ -150,6 +153,9 @@ func exportsCapacityHint(symbol *Symbol) int {
 	switch decl.Kind {
 	case KindEnumDeclaration:
 		return len(decl.Members())
+	case KindClassDeclaration, KindClassExpression:
+		_, exports := classCapacityHints(decl)
+		return exports
 	case KindSourceFile, KindModuleDeclaration:
 		_, exports := moduleCapacityHints(decl)
 		return exports
@@ -174,6 +180,38 @@ func localsCapacityHint(container *Node) int {
 		return len(container.TypeParameters())
 	}
 	return 0
+}
+
+// classCapacityHints estimates the number of instance members and static exports a class declares, mirroring
+// where the binder puts them (see declareClassMember).
+func classCapacityHints(class *Node) (members int, exports int) {
+	// Every class has a static 'prototype' property.
+	exports = 1
+	hasConstructor := false
+	for _, member := range class.Members() {
+		switch {
+		case member.Kind == KindSemicolonClassElement || member.Kind == KindClassStaticBlockDeclaration:
+			// Declares no symbol in either table.
+		case IsStatic(member):
+			exports++
+		case member.Kind == KindConstructor:
+			// All constructor overloads share a single symbol.
+			if !hasConstructor {
+				hasConstructor = true
+				members++
+			}
+			if params := member.ParameterList(); params != nil {
+				for _, param := range params.Nodes {
+					if param.ModifierFlags()&ModifierFlagsParameterPropertyModifier != 0 {
+						members++
+					}
+				}
+			}
+		default:
+			members++
+		}
+	}
+	return members, exports
 }
 
 // moduleCapacityHints estimates the number of locals and exports a source file or namespace declares by counting
