@@ -23453,7 +23453,11 @@ func (c *Checker) instantiateTypeAlias(alias *TypeAlias, m *TypeMapper) *TypeAli
 	if alias == nil {
 		return nil
 	}
-	return &TypeAlias{symbol: alias.symbol, typeArguments: c.instantiateTypes(alias.typeArguments, m)}
+	typeArguments := c.instantiateTypes(alias.typeArguments, m)
+	if core.Same(typeArguments, alias.typeArguments) {
+		return alias
+	}
+	return &TypeAlias{symbol: alias.symbol, typeArguments: typeArguments}
 }
 
 func (c *Checker) instantiateTypes(types []*Type, m *TypeMapper) []*Type {
