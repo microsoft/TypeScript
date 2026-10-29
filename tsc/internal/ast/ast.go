@@ -1458,6 +1458,10 @@ func IsLocalsContainer(node *Node) bool {
 	return node.LocalsContainerData() != nil
 }
 
+func IsLocalsContainerKind(kind Kind) bool {
+	return nodeLocalsContainerDataDispatch[kind] != 0
+}
+
 // FunctionLikeBase
 
 func (node *FunctionLikeBase) LocalsContainerData() *LocalsContainerBase {
