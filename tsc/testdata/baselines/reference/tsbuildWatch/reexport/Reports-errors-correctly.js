@@ -88,7 +88,7 @@ export const session = {
 };
 
 //// [/user/username/projects/reexport/out/main/tsconfig.tsbuildinfo] *new* 
-{"version":"FakeTSVersion","root":["../../src/main/index.ts"]}
+{"version":"FakeTSVersion","root":["../../src/main/index.ts"],"nonIncrementalFileNames":["../pure/index.d.ts","../pure/session.d.ts"]}
 //// [/user/username/projects/reexport/out/main/tsconfig.tsbuildinfo.readable.baseline.txt] *new* 
 {
   "version": "FakeTSVersion",
@@ -100,7 +100,7 @@ export const session = {
       "original": "../../src/main/index.ts"
     }
   ],
-  "size": 62
+  "size": 134
 }
 //// [/user/username/projects/reexport/out/pure/index.d.ts] *new* 
 export * from "./session";
@@ -257,7 +257,7 @@ Output::
 
 //// [/user/username/projects/reexport/out/main/index.js] *rewrite with same content*
 //// [/user/username/projects/reexport/out/main/tsconfig.tsbuildinfo] *modified* 
-{"version":"FakeTSVersion","root":["../../src/main/index.ts"],"semanticErrors":true}
+{"version":"FakeTSVersion","root":["../../src/main/index.ts"],"semanticErrors":true,"nonIncrementalFileNames":["../pure/index.d.ts","../pure/session.d.ts"]}
 //// [/user/username/projects/reexport/out/main/tsconfig.tsbuildinfo.readable.baseline.txt] *modified* 
 {
   "version": "FakeTSVersion",
@@ -269,7 +269,7 @@ Output::
       "original": "../../src/main/index.ts"
     }
   ],
-  "size": 84,
+  "size": 156,
   "semanticErrors": true
 }
 //// [/user/username/projects/reexport/out/pure/index.js] *rewrite with same content*
@@ -411,7 +411,7 @@ Output::
 
 //// [/user/username/projects/reexport/out/main/index.js] *rewrite with same content*
 //// [/user/username/projects/reexport/out/main/tsconfig.tsbuildinfo] *modified* 
-{"version":"FakeTSVersion","root":["../../src/main/index.ts"]}
+{"version":"FakeTSVersion","root":["../../src/main/index.ts"],"nonIncrementalFileNames":["../pure/index.d.ts","../pure/session.d.ts"]}
 //// [/user/username/projects/reexport/out/main/tsconfig.tsbuildinfo.readable.baseline.txt] *modified* 
 {
   "version": "FakeTSVersion",
@@ -423,7 +423,7 @@ Output::
       "original": "../../src/main/index.ts"
     }
   ],
-  "size": 62
+  "size": 134
 }
 //// [/user/username/projects/reexport/out/pure/index.js] *rewrite with same content*
 //// [/user/username/projects/reexport/out/pure/session.d.ts] *modified* 

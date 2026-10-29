@@ -227,7 +227,7 @@ import 'a';
   "size": 1451
 }
 //// [/home/src/workspaces/project/packages/b/tsconfig.tsbuildinfo] *new* 
-{"version":"FakeTSVersion","root":["./index.js"],"packageJsons":["../a/package.json","./package.json"]}
+{"version":"FakeTSVersion","root":["./index.js"],"packageJsons":["../a/package.json","./package.json"],"nonIncrementalFileNames":["../a/types/index.d.ts"]}
 //// [/home/src/workspaces/project/packages/b/tsconfig.tsbuildinfo.readable.baseline.txt] *new* 
 {
   "version": "FakeTSVersion",
@@ -243,7 +243,7 @@ import 'a';
     "../a/package.json",
     "./package.json"
   ],
-  "size": 103
+  "size": 155
 }
 
 packages/a/tsconfig.json::

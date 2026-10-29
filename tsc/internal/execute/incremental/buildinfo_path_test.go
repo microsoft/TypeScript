@@ -446,3 +446,32 @@ func TestGlobalDeletionPreservesSkippedLibraryDiagnostics(t *testing.T) {
 		})
 	}
 }
+
+func TestNonIncrementalBuildInfoDependenciesJSON(t *testing.T) {
+	t.Parallel()
+	info := &BuildInfo{
+		Root:                    []*BuildInfoRoot{{NonIncremental: "./root.ts"}},
+		NonIncrementalFileNames: []BuildInfoPath{"../shared/other.ts"},
+	}
+	data, err := json.Marshal(info)
+	assert.NilError(t, err)
+	assert.Equal(t, string(data), `{"root":["./root.ts"],"nonIncrementalFileNames":["../shared/other.ts"]}`)
+	var restored BuildInfo
+	assert.NilError(t, json.Unmarshal(data, &restored))
+	assert.DeepEqual(t, restored.NonIncrementalFileNames, info.NonIncrementalFileNames)
+	assert.Assert(t, !restored.IsIncremental())
+}
+
+func TestNonIncrementalBuildInfoEmptyInventory(t *testing.T) {
+	t.Parallel()
+	info := &BuildInfo{NonIncrementalFileNames: []BuildInfoPath{}}
+	data, err := json.Marshal(info)
+	assert.NilError(t, err)
+	assert.Equal(t, string(data), `{"nonIncrementalFileNames":[]}`)
+	var restored BuildInfo
+	assert.NilError(t, json.Unmarshal(data, &restored))
+	assert.Assert(t, restored.NonIncrementalFileNames != nil)
+	var legacy BuildInfo
+	assert.NilError(t, json.Unmarshal([]byte(`{}`), &legacy))
+	assert.Assert(t, legacy.NonIncrementalFileNames == nil)
+}

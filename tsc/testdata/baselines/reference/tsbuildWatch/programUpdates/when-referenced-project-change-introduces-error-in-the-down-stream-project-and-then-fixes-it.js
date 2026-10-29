@@ -62,7 +62,7 @@ import { createSomeObject } from "../Library/library";
 createSomeObject().message;
 
 //// [/user/username/projects/sample1/App/tsconfig.tsbuildinfo] *new* 
-{"version":"FakeTSVersion","root":["./app.ts"]}
+{"version":"FakeTSVersion","root":["./app.ts"],"nonIncrementalFileNames":["../Library/library.d.ts"]}
 //// [/user/username/projects/sample1/App/tsconfig.tsbuildinfo.readable.baseline.txt] *new* 
 {
   "version": "FakeTSVersion",
@@ -74,7 +74,7 @@ createSomeObject().message;
       "original": "./app.ts"
     }
   ],
-  "size": 47
+  "size": 101
 }
 //// [/user/username/projects/sample1/Library/library.d.ts] *new* 
 interface SomeObject {
@@ -191,7 +191,7 @@ Output::
 
 //// [/user/username/projects/sample1/App/app.js] *rewrite with same content*
 //// [/user/username/projects/sample1/App/tsconfig.tsbuildinfo] *modified* 
-{"version":"FakeTSVersion","root":["./app.ts"],"semanticErrors":true}
+{"version":"FakeTSVersion","root":["./app.ts"],"semanticErrors":true,"nonIncrementalFileNames":["../Library/library.d.ts"]}
 //// [/user/username/projects/sample1/App/tsconfig.tsbuildinfo.readable.baseline.txt] *modified* 
 {
   "version": "FakeTSVersion",
@@ -203,7 +203,7 @@ Output::
       "original": "./app.ts"
     }
   ],
-  "size": 69,
+  "size": 123,
   "semanticErrors": true
 }
 //// [/user/username/projects/sample1/Library/library.d.ts] *modified* 
@@ -311,7 +311,7 @@ Output::
 
 //// [/user/username/projects/sample1/App/app.js] *rewrite with same content*
 //// [/user/username/projects/sample1/App/tsconfig.tsbuildinfo] *modified* 
-{"version":"FakeTSVersion","root":["./app.ts"]}
+{"version":"FakeTSVersion","root":["./app.ts"],"nonIncrementalFileNames":["../Library/library.d.ts"]}
 //// [/user/username/projects/sample1/App/tsconfig.tsbuildinfo.readable.baseline.txt] *modified* 
 {
   "version": "FakeTSVersion",
@@ -323,7 +323,7 @@ Output::
       "original": "./app.ts"
     }
   ],
-  "size": 47
+  "size": 101
 }
 //// [/user/username/projects/sample1/Library/library.d.ts] *modified* 
 interface SomeObject {

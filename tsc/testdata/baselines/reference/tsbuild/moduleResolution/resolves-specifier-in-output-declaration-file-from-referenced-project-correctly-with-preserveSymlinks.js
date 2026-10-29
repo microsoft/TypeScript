@@ -124,7 +124,7 @@ declare const console: { log(msg: any): void; };
 export const theNum = 42;
 
 //// [/user/username/projects/myproject/packages/pkg1/build/tsconfig.tsbuildinfo] *new* 
-{"version":"FakeTSVersion","root":["../index.ts"],"packageJsons":["../../pkg2/package.json"],"missingPackageJsons":["../../../node_modules/pkg2/build/package.json"]}
+{"version":"FakeTSVersion","root":["../index.ts"],"packageJsons":["../../pkg2/package.json"],"missingPackageJsons":["../../../node_modules/pkg2/build/package.json"],"nonIncrementalFileNames":["../../../node_modules/pkg2/build/index.d.ts","../../pkg2/build/const.d.ts"]}
 //// [/user/username/projects/myproject/packages/pkg1/build/tsconfig.tsbuildinfo.readable.baseline.txt] *new* 
 {
   "version": "FakeTSVersion",
@@ -142,7 +142,7 @@ export const theNum = 42;
   "missingPackageJsons": [
     "../../../node_modules/pkg2/build/package.json"
   ],
-  "size": 165
+  "size": 269
 }
 //// [/user/username/projects/myproject/packages/pkg2/build/const.d.ts] *new* 
 export type TheNum = 42;

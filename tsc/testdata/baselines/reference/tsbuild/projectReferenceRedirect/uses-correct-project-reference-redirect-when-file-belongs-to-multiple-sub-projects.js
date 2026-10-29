@@ -340,7 +340,7 @@ export declare const platform: "native";
   "size": 1716
 }
 //// [/home/src/workspaces/project/tsconfig.tsbuildinfo] *new* 
-{"version":"FakeTSVersion","root":["./app.ts"],"packageJsons":["./pkg/package.json"]}
+{"version":"FakeTSVersion","root":["./app.ts"],"packageJsons":["./pkg/package.json"],"nonIncrementalFileNames":["./pkg/dist/index.native.d.ts","./pkg/dist/src/util.native.d.ts"]}
 //// [/home/src/workspaces/project/tsconfig.tsbuildinfo.readable.baseline.txt] *new* 
 {
   "version": "FakeTSVersion",
@@ -355,7 +355,7 @@ export declare const platform: "native";
   "packageJsons": [
     "./pkg/package.json"
   ],
-  "size": 85
+  "size": 178
 }
 
 pkg/tsconfig.native.json::

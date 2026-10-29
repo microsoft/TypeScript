@@ -30,7 +30,7 @@ Output::
 Found 1 error in a.ts[90m:1[0m
 
 //// [/home/src/projects/project/tsconfig.tsbuildinfo] *new* 
-{"version":"FakeTSVersion","root":["./a.ts"],"semanticErrors":true}
+{"version":"FakeTSVersion","root":["./a.ts"],"semanticErrors":true,"nonIncrementalFileNames":[]}
 //// [/home/src/projects/project/tsconfig.tsbuildinfo.readable.baseline.txt] *new* 
 {
   "version": "FakeTSVersion",
@@ -42,7 +42,7 @@ Found 1 error in a.ts[90m:1[0m
       "original": "./a.ts"
     }
   ],
-  "size": 67,
+  "size": 96,
   "semanticErrors": true
 }
 //// [/home/src/tslibs/TS/Lib/lib.es2026.full.d.ts] *Lib*
@@ -121,7 +121,7 @@ Output::
 [[90mHH:MM:SS AM[0m] Building project 'tsconfig.json'...
 
 //// [/home/src/projects/project/tsconfig.tsbuildinfo] *modified* 
-{"version":"FakeTSVersion","root":["./a.ts"]}
+{"version":"FakeTSVersion","root":["./a.ts"],"nonIncrementalFileNames":[]}
 //// [/home/src/projects/project/tsconfig.tsbuildinfo.readable.baseline.txt] *modified* 
 {
   "version": "FakeTSVersion",
@@ -133,7 +133,7 @@ Output::
       "original": "./a.ts"
     }
   ],
-  "size": 45
+  "size": 74
 }
 
 tsconfig.json::
@@ -227,7 +227,7 @@ Output::
 Found 1 error in a.ts[90m:1[0m
 
 //// [/home/src/projects/project/tsconfig.tsbuildinfo] *modified* 
-{"version":"FakeTSVersion","root":["./a.ts"],"semanticErrors":true}
+{"version":"FakeTSVersion","root":["./a.ts"],"semanticErrors":true,"nonIncrementalFileNames":[]}
 //// [/home/src/projects/project/tsconfig.tsbuildinfo.readable.baseline.txt] *modified* 
 {
   "version": "FakeTSVersion",
@@ -239,7 +239,7 @@ Found 1 error in a.ts[90m:1[0m
       "original": "./a.ts"
     }
   ],
-  "size": 67,
+  "size": 96,
   "semanticErrors": true
 }
 

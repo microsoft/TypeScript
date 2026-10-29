@@ -121,7 +121,7 @@ declare const console: { log(msg: any): void; };
 export const theNum = 42;
 
 //// [/user/username/projects/myproject/packages/pkg1/build/tsconfig.tsbuildinfo] *new* 
-{"version":"FakeTSVersion","root":["../index.ts"],"packageJsons":["../package.json","../../pkg2/package.json"]}
+{"version":"FakeTSVersion","root":["../index.ts"],"packageJsons":["../package.json","../../pkg2/package.json"],"nonIncrementalFileNames":["../../pkg2/build/const.d.cts","../../pkg2/build/index.d.ts"]}
 //// [/user/username/projects/myproject/packages/pkg1/build/tsconfig.tsbuildinfo.readable.baseline.txt] *new* 
 {
   "version": "FakeTSVersion",
@@ -137,7 +137,7 @@ export const theNum = 42;
     "../package.json",
     "../../pkg2/package.json"
   ],
-  "size": 111
+  "size": 200
 }
 //// [/user/username/projects/myproject/packages/pkg2/build/const.cjs] *new* 
 "use strict";
@@ -322,7 +322,7 @@ exports.theNum = void 0;
 exports.theNum = 42;
 
 //// [/user/username/projects/myproject/packages/pkg1/build/tsconfig.tsbuildinfo] *modified* 
-{"version":"FakeTSVersion","root":["../index.ts"],"packageJsons":["../package.json","../../pkg2/package.json"],"semanticErrors":true}
+{"version":"FakeTSVersion","root":["../index.ts"],"packageJsons":["../package.json","../../pkg2/package.json"],"semanticErrors":true,"nonIncrementalFileNames":["../../pkg2/build/const.d.cts","../../pkg2/build/index.d.ts"]}
 //// [/user/username/projects/myproject/packages/pkg1/build/tsconfig.tsbuildinfo.readable.baseline.txt] *modified* 
 {
   "version": "FakeTSVersion",
@@ -338,7 +338,7 @@ exports.theNum = 42;
     "../package.json",
     "../../pkg2/package.json"
   ],
-  "size": 133,
+  "size": 222,
   "semanticErrors": true
 }
 
@@ -411,7 +411,7 @@ File '/user/username/projects/myproject/packages/pkg2/const.cts' exists - use it
 export const theNum = 42;
 
 //// [/user/username/projects/myproject/packages/pkg1/build/tsconfig.tsbuildinfo] *modified* 
-{"version":"FakeTSVersion","root":["../index.ts"],"packageJsons":["../package.json","../../pkg2/package.json"]}
+{"version":"FakeTSVersion","root":["../index.ts"],"packageJsons":["../package.json","../../pkg2/package.json"],"nonIncrementalFileNames":["../../pkg2/build/const.d.cts","../../pkg2/build/index.d.ts"]}
 //// [/user/username/projects/myproject/packages/pkg1/build/tsconfig.tsbuildinfo.readable.baseline.txt] *modified* 
 {
   "version": "FakeTSVersion",
@@ -427,7 +427,7 @@ export const theNum = 42;
     "../package.json",
     "../../pkg2/package.json"
   ],
-  "size": 111
+  "size": 200
 }
 
 Watch Registrations::
@@ -511,7 +511,7 @@ exports.theNum = void 0;
 exports.theNum = 42;
 
 //// [/user/username/projects/myproject/packages/pkg1/build/tsconfig.tsbuildinfo] *modified* 
-{"version":"FakeTSVersion","root":["../index.ts"],"packageJsons":["../package.json","../../pkg2/package.json"],"semanticErrors":true}
+{"version":"FakeTSVersion","root":["../index.ts"],"packageJsons":["../package.json","../../pkg2/package.json"],"semanticErrors":true,"nonIncrementalFileNames":["../../pkg2/build/const.d.cts","../../pkg2/build/index.d.ts"]}
 //// [/user/username/projects/myproject/packages/pkg1/build/tsconfig.tsbuildinfo.readable.baseline.txt] *modified* 
 {
   "version": "FakeTSVersion",
@@ -527,7 +527,7 @@ exports.theNum = 42;
     "../package.json",
     "../../pkg2/package.json"
   ],
-  "size": 133,
+  "size": 222,
   "semanticErrors": true
 }
 
@@ -614,7 +614,7 @@ File '/user/username/projects/myproject/packages/pkg2/const.cts' exists - use it
 
 //// [/user/username/projects/myproject/packages/pkg1/build/index.js] *rewrite with same content*
 //// [/user/username/projects/myproject/packages/pkg1/build/tsconfig.tsbuildinfo] *modified* 
-{"version":"FakeTSVersion","root":["../index.ts"],"packageJsons":["../package.json","../../pkg2/package.json"]}
+{"version":"FakeTSVersion","root":["../index.ts"],"packageJsons":["../package.json","../../pkg2/package.json"],"nonIncrementalFileNames":["../../pkg2/build/const.d.cts","../../pkg2/build/index.d.cts"]}
 //// [/user/username/projects/myproject/packages/pkg1/build/tsconfig.tsbuildinfo.readable.baseline.txt] *modified* 
 {
   "version": "FakeTSVersion",
@@ -630,7 +630,7 @@ File '/user/username/projects/myproject/packages/pkg2/const.cts' exists - use it
     "../package.json",
     "../../pkg2/package.json"
   ],
-  "size": 111
+  "size": 201
 }
 //// [/user/username/projects/myproject/packages/pkg2/build/index.cjs] *new* 
 "use strict";

@@ -63,7 +63,7 @@ interface Symbol {
 }
 declare const console: { log(msg: any): void; };
 //// [/user/username/projects/noEmitOnError/dev-build/tsconfig.tsbuildinfo] *new* 
-{"version":"FakeTSVersion","root":["../shared/types/db.ts","../src/main.ts","../src/other.ts"],"semanticErrors":true}
+{"version":"FakeTSVersion","root":["../shared/types/db.ts","../src/main.ts","../src/other.ts"],"semanticErrors":true,"nonIncrementalFileNames":[]}
 //// [/user/username/projects/noEmitOnError/dev-build/tsconfig.tsbuildinfo.readable.baseline.txt] *new* 
 {
   "version": "FakeTSVersion",
@@ -87,7 +87,7 @@ declare const console: { log(msg: any): void; };
       "original": "../src/other.ts"
     }
   ],
-  "size": 117,
+  "size": 146,
   "semanticErrors": true
 }
 
@@ -170,7 +170,7 @@ console.log("hi");
 export {};
 
 //// [/user/username/projects/noEmitOnError/dev-build/tsconfig.tsbuildinfo] *modified* 
-{"version":"FakeTSVersion","root":["../shared/types/db.ts","../src/main.ts","../src/other.ts"]}
+{"version":"FakeTSVersion","root":["../shared/types/db.ts","../src/main.ts","../src/other.ts"],"nonIncrementalFileNames":[]}
 //// [/user/username/projects/noEmitOnError/dev-build/tsconfig.tsbuildinfo.readable.baseline.txt] *modified* 
 {
   "version": "FakeTSVersion",
@@ -194,7 +194,7 @@ export {};
       "original": "../src/other.ts"
     }
   ],
-  "size": 95
+  "size": 124
 }
 
 tsconfig.json::

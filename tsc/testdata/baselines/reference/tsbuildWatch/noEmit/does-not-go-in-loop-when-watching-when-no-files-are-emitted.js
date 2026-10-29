@@ -51,7 +51,7 @@ interface Symbol {
 }
 declare const console: { log(msg: any): void; };
 //// [/user/username/projects/myproject/tsconfig.tsbuildinfo] *new* 
-{"version":"FakeTSVersion","root":["./a.js","./b.ts"]}
+{"version":"FakeTSVersion","root":["./a.js","./b.ts"],"nonIncrementalFileNames":[]}
 //// [/user/username/projects/myproject/tsconfig.tsbuildinfo.readable.baseline.txt] *new* 
 {
   "version": "FakeTSVersion",
@@ -69,7 +69,7 @@ declare const console: { log(msg: any): void; };
       "original": "./b.ts"
     }
   ],
-  "size": 54
+  "size": 83
 }
 
 Watch Registrations::

@@ -159,7 +159,7 @@ v2.onValue = (n) => {
 };
 
 //// [/home/src/workspaces/project/consumer/tsconfig.tsbuildinfo] *new* 
-{"version":"FakeTSVersion","root":["./index.ts"]}
+{"version":"FakeTSVersion","root":["./index.ts"],"nonIncrementalFileNames":["../common.d.ts","../producer/in-js.d.ts","../producer/index.d.ts"]}
 //// [/home/src/workspaces/project/consumer/tsconfig.tsbuildinfo.readable.baseline.txt] *new* 
 {
   "version": "FakeTSVersion",
@@ -171,7 +171,7 @@ v2.onValue = (n) => {
       "original": "./index.ts"
     }
   ],
-  "size": 49
+  "size": 144
 }
 //// [/home/src/workspaces/project/producer/index.d.ts] *new* 
 export { ValueProducerDeclaration } from "./in-js";

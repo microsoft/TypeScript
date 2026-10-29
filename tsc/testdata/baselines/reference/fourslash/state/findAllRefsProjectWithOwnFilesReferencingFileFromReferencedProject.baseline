@@ -133,7 +133,7 @@ export { foo };
 	"references": [{ "path": "./tsconfig-src.json" }]
 }
 //// [/myproject/tsconfig.tsbuildinfo] *new* 
-{"version":"FakeTSVersion","root":["./own/main.ts"]}
+{"version":"FakeTSVersion","root":["./own/main.ts"],"nonIncrementalFileNames":["./target/src/helpers/functions.d.ts","./target/src/main.d.ts"]}
 //// [/myproject/tsconfig.tsbuildinfo.readable.baseline.txt] *new* 
 {
   "version": "FakeTSVersion",
@@ -145,7 +145,7 @@ export { foo };
       "original": "./own/main.ts"
     }
   ],
-  "size": 52
+  "size": 143
 }
 
 

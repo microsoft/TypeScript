@@ -80,7 +80,7 @@ interface Symbol {
 }
 declare const console: { log(msg: any): void; };
 //// [/home/src/workspaces/project/consumer/tsconfig.tsbuildinfo] *new* 
-{"version":"FakeTSVersion","root":["./index.ts"],"semanticErrors":true}
+{"version":"FakeTSVersion","root":["./index.ts"],"semanticErrors":true,"nonIncrementalFileNames":["../producer/dist/index.d.ts"]}
 //// [/home/src/workspaces/project/consumer/tsconfig.tsbuildinfo.readable.baseline.txt] *new* 
 {
   "version": "FakeTSVersion",
@@ -92,7 +92,7 @@ declare const console: { log(msg: any): void; };
       "original": "./index.ts"
     }
   ],
-  "size": 71,
+  "size": 129,
   "semanticErrors": true
 }
 //// [/home/src/workspaces/project/producer/dist/index.d.ts] *new* 

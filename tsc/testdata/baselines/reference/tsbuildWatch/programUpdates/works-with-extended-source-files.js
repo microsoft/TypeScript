@@ -253,7 +253,7 @@ let k = 0;
   "size": 1117
 }
 //// [/user/username/projects/project/project3.tsconfig.tsbuildinfo] *new* 
-{"version":"FakeTSVersion","root":["./other2.ts"]}
+{"version":"FakeTSVersion","root":["./other2.ts"],"nonIncrementalFileNames":[]}
 //// [/user/username/projects/project/project3.tsconfig.tsbuildinfo.readable.baseline.txt] *new* 
 {
   "version": "FakeTSVersion",
@@ -265,7 +265,7 @@ let k = 0;
       "original": "./other2.ts"
     }
   ],
-  "size": 50
+  "size": 79
 }
 
 Watch Registrations::
@@ -451,7 +451,7 @@ Output::
 
 //// [/user/username/projects/project/other.js] *rewrite with same content*
 //// [/user/username/projects/project/project2.tsconfig.tsbuildinfo] *modified* 
-{"version":"FakeTSVersion","root":["./other.ts"]}
+{"version":"FakeTSVersion","root":["./other.ts"],"nonIncrementalFileNames":[]}
 //// [/user/username/projects/project/project2.tsconfig.tsbuildinfo.readable.baseline.txt] *modified* 
 {
   "version": "FakeTSVersion",
@@ -463,7 +463,7 @@ Output::
       "original": "./other.ts"
     }
   ],
-  "size": 49
+  "size": 78
 }
 
 Watch Registrations::

@@ -49,6 +49,20 @@ func snapshotToBuildInfo(snapshot *snapshot, program *compiler.Program, buildInf
 		}
 	} else {
 		to.setRootOfNonIncrementalProgram()
+		buildInfo.NonIncrementalFileNames = []BuildInfoPath{}
+		roots := collections.NewSetFromItems(core.Map(program.CommandLine().FileNames(), func(file tspath.RootedFilePath) tspath.PathKey {
+			return program.CaseSensitivity().PathKey(file.AsPath())
+		})...)
+		for _, file := range program.GetSourceFiles() {
+			if roots.Has(file.PathKey()) || !program.Host().FS().FileExists(file.FileName()) {
+				continue
+			}
+			if lib := program.GetDefaultLibFile(file.PathKey()); lib != nil && !lib.Replaced {
+				continue
+			}
+			buildInfo.NonIncrementalFileNames = append(buildInfo.NonIncrementalFileNames, to.serializedPathKeyRelativeToBuildInfo(file.PathKey()))
+		}
+		slices.Sort(buildInfo.NonIncrementalFileNames)
 	}
 	buildInfo.Errors = snapshot.hasErrors.IsTrue()
 	buildInfo.SemanticErrors = snapshot.hasSemanticErrors

@@ -215,7 +215,7 @@ X;
   "size": 1278
 }
 //// [/user/username/projects/transitiveReferences/tsconfig.c.tsbuildinfo] *new* 
-{"version":"FakeTSVersion","root":["./c.ts"]}
+{"version":"FakeTSVersion","root":["./c.ts"],"nonIncrementalFileNames":["./a.d.ts","./b.d.ts","./refs/a.d.ts"]}
 //// [/user/username/projects/transitiveReferences/tsconfig.c.tsbuildinfo.readable.baseline.txt] *new* 
 {
   "version": "FakeTSVersion",
@@ -227,7 +227,7 @@ X;
       "original": "./c.ts"
     }
   ],
-  "size": 45
+  "size": 111
 }
 
 tsconfig.a.json::

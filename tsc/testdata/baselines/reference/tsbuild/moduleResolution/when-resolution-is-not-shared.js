@@ -248,7 +248,7 @@ packages/b/index.js
    Matched by default include pattern '**/*'
    File is ECMAScript module because 'packages/b/package.json' has field "type" with value "module"
 //// [/home/src/workspaces/project/packages/b/tsconfig.tsbuildinfo] *new* 
-{"version":"FakeTSVersion","root":["./index.js"],"packageJsons":["../a/package.json","./package.json"]}
+{"version":"FakeTSVersion","root":["./index.js"],"packageJsons":["../a/package.json","./package.json"],"nonIncrementalFileNames":["../a/types/index.d.ts"]}
 //// [/home/src/workspaces/project/packages/b/tsconfig.tsbuildinfo.readable.baseline.txt] *new* 
 {
   "version": "FakeTSVersion",
@@ -264,7 +264,7 @@ packages/b/index.js
     "../a/package.json",
     "./package.json"
   ],
-  "size": 103
+  "size": 155
 }
 
 packages/b/tsconfig.json::

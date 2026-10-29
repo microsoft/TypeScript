@@ -49,7 +49,7 @@ interface Symbol {
 }
 declare const console: { log(msg: any): void; };
 //// [/home/src/workspaces/project/tsconfig.tsbuildinfo] *new* 
-{"version":"FakeTSVersion","root":["./index.ts","./tsconfig.json"]}
+{"version":"FakeTSVersion","root":["./index.ts","./tsconfig.json"],"nonIncrementalFileNames":[]}
 //// [/home/src/workspaces/project/tsconfig.tsbuildinfo.readable.baseline.txt] *new* 
 {
   "version": "FakeTSVersion",
@@ -67,7 +67,7 @@ declare const console: { log(msg: any): void; };
       "original": "./tsconfig.json"
     }
   ],
-  "size": 67
+  "size": 96
 }
 
 tsconfig.json::

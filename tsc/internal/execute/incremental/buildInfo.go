@@ -497,6 +497,8 @@ type BuildInfo struct {
 
 	// NonIncrementalProgram info
 	SemanticErrors bool `json:"semanticErrors,omitzero"`
+	// A nil inventory predates dependency tracking; an empty inventory is complete.
+	NonIncrementalFileNames []BuildInfoPath `json:"nonIncrementalFileNames,omitzero"`
 }
 
 func (b *BuildInfo) IsValidVersion() bool {
@@ -593,6 +595,10 @@ func (b *BuildInfo) GetPackageJsons(buildInfoDirectory tspath.RootedDirectoryPat
 
 func (b *BuildInfo) GetMissingPackageJsons(buildInfoDirectory tspath.RootedDirectoryPath) iter.Seq[tspath.RootedFilePath] {
 	return getBuildInfoFileNames(b.MissingPackageJsons, buildInfoDirectory)
+}
+
+func (b *BuildInfo) GetNonIncrementalFileNames(buildInfoDirectory tspath.RootedDirectoryPath) iter.Seq[tspath.RootedFilePath] {
+	return getBuildInfoFileNames(b.NonIncrementalFileNames, buildInfoDirectory)
 }
 
 func getBuildInfoFileNames(paths []BuildInfoPath, buildInfoDirectory tspath.RootedDirectoryPath) iter.Seq[tspath.RootedFilePath] {

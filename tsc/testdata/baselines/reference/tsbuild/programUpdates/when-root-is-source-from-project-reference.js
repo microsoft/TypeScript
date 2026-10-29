@@ -102,7 +102,7 @@ export const FOO = 'THEFOOEXPORT';
   "size": 1145
 }
 //// [/home/src/workspaces/project/tsconfig.tsbuildinfo] *new* 
-{"version":"FakeTSVersion","root":["./index.ts","./lib/foo.ts"]}
+{"version":"FakeTSVersion","root":["./index.ts","./lib/foo.ts"],"nonIncrementalFileNames":["./lib/dist/foo.d.ts"]}
 //// [/home/src/workspaces/project/tsconfig.tsbuildinfo.readable.baseline.txt] *new* 
 {
   "version": "FakeTSVersion",
@@ -120,7 +120,7 @@ export const FOO = 'THEFOOEXPORT';
       "original": "./lib/foo.ts"
     }
   ],
-  "size": 64
+  "size": 114
 }
 
 lib/tsconfig.json::
@@ -200,7 +200,7 @@ const Bar = 10;
   "size": 1160
 }
 //// [/home/src/workspaces/project/tsconfig.tsbuildinfo] *modified* 
-{"version":"FakeTSVersion","root":["./index.ts","./lib/foo.ts","./lib/dist/foo.d.ts"]}
+{"version":"FakeTSVersion","root":["./index.ts","./lib/foo.ts","./lib/dist/foo.d.ts"],"nonIncrementalFileNames":[]}
 //// [/home/src/workspaces/project/tsconfig.tsbuildinfo.readable.baseline.txt] *modified* 
 {
   "version": "FakeTSVersion",
@@ -224,7 +224,7 @@ const Bar = 10;
       "original": "./lib/dist/foo.d.ts"
     }
   ],
-  "size": 86
+  "size": 115
 }
 
 lib/tsconfig.json::

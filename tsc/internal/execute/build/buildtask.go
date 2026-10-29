@@ -517,6 +517,18 @@ func (t *BuildTask) getUpToDateStatus(orchestrator *Orchestrator, configPath tsp
 	}
 
 	if !t.resolved.CompilerOptions().IsIncremental() {
+		for file := range buildInfo.GetNonIncrementalFileNames(getBuildInfoDirectory()) {
+			inputTime := orchestrator.host.GetMTime(file)
+			if inputTime.IsZero() {
+				return &upToDateStatus{kind: upToDateStatusTypeInputFileMissing, data: file}
+			}
+			if inputTime.After(newestInputFileAndTime.time) {
+				newestInputFileAndTime = fileAndTime{file, inputTime}
+			}
+			if inputTime.After(oldestOutputFileAndTime.time) {
+				return &upToDateStatus{kind: upToDateStatusTypeInputFileNewer, data: &inputOutputName{file.AsPath(), buildInfoPath}}
+			}
+		}
 		// Check output file stamps
 		for outputFile := range t.resolved.GetOutputFileNames() {
 			outputTime := orchestrator.host.GetMTime(outputFile)
@@ -590,6 +602,9 @@ func (t *BuildTask) getUpToDateStatus(orchestrator *Orchestrator, configPath tsp
 		if extendedConfigStatus != nil {
 			return extendedConfigStatus
 		}
+	}
+	if !t.resolved.CompilerOptions().IsIncremental() && buildInfo.NonIncrementalFileNames == nil {
+		return &upToDateStatus{kind: upToDateStatusTypeOutOfDateOptions, data: buildInfoPath}
 	}
 
 	for packageJson := range buildInfo.GetPackageJsons(getBuildInfoDirectory()) {
