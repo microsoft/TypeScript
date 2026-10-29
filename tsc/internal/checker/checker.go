@@ -31403,55 +31403,66 @@ func (c *Checker) getTypeOfPropertyOfContextualType(t *Type, name string) *Type 
 }
 
 func (c *Checker) getTypeOfPropertyOfContextualTypeEx(t *Type, name string, nameType *Type) *Type {
-	return c.mapTypeEx(t, func(t *Type) *Type {
-		if t.flags&TypeFlagsIntersection != 0 {
-			var types []*Type
-			var indexInfoCandidates []*Type
-			ignoreIndexInfos := false
-			for _, constituentType := range t.Types() {
-				if constituentType.flags&TypeFlagsObject == 0 {
-					continue
-				}
-				if c.isGenericMappedType(constituentType) && c.getMappedTypeNameTypeKind(constituentType) != MappedTypeNameTypeKindRemapping {
-					substitutedType := c.getIndexedMappedTypeSubstitutedTypeOfContextualType(constituentType, name, nameType)
-					types = c.appendContextualPropertyTypeConstituent(types, substitutedType)
-					continue
-				}
-				propertyType := c.getTypeOfConcretePropertyOfContextualType(constituentType, name)
-				if propertyType == nil {
-					if !ignoreIndexInfos {
-						indexInfoCandidates = append(indexInfoCandidates, constituentType)
-					}
-					continue
-				}
-				ignoreIndexInfos = true
-				indexInfoCandidates = nil
-				types = c.appendContextualPropertyTypeConstituent(types, propertyType)
-			}
-			for _, candidate := range indexInfoCandidates {
-				indexInfoType := c.getTypeFromIndexInfosOfContextualType(candidate, name, nameType)
-				types = c.appendContextualPropertyTypeConstituent(types, indexInfoType)
-			}
-			if len(types) == 0 {
-				return nil
-			}
-			if len(types) == 1 {
-				return types[0]
-			}
-			return c.getIntersectionType(types)
+	if t.flags&TypeFlagsUnion == 0 {
+		// Avoid allocating a closure for mapType when there is a single type to look in.
+		if t.flags&TypeFlagsNever != 0 {
+			return t
 		}
-		if t.flags&TypeFlagsObject == 0 {
+		return c.getTypeOfPropertyOfContextualTypeWorker(t, name, nameType)
+	}
+	return c.mapTypeEx(t, func(t *Type) *Type {
+		return c.getTypeOfPropertyOfContextualTypeWorker(t, name, nameType)
+	}, true /*noReductions*/)
+}
+
+func (c *Checker) getTypeOfPropertyOfContextualTypeWorker(t *Type, name string, nameType *Type) *Type {
+	if t.flags&TypeFlagsIntersection != 0 {
+		var types []*Type
+		var indexInfoCandidates []*Type
+		ignoreIndexInfos := false
+		for _, constituentType := range t.Types() {
+			if constituentType.flags&TypeFlagsObject == 0 {
+				continue
+			}
+			if c.isGenericMappedType(constituentType) && c.getMappedTypeNameTypeKind(constituentType) != MappedTypeNameTypeKindRemapping {
+				substitutedType := c.getIndexedMappedTypeSubstitutedTypeOfContextualType(constituentType, name, nameType)
+				types = c.appendContextualPropertyTypeConstituent(types, substitutedType)
+				continue
+			}
+			propertyType := c.getTypeOfConcretePropertyOfContextualType(constituentType, name)
+			if propertyType == nil {
+				if !ignoreIndexInfos {
+					indexInfoCandidates = append(indexInfoCandidates, constituentType)
+				}
+				continue
+			}
+			ignoreIndexInfos = true
+			indexInfoCandidates = nil
+			types = c.appendContextualPropertyTypeConstituent(types, propertyType)
+		}
+		for _, candidate := range indexInfoCandidates {
+			indexInfoType := c.getTypeFromIndexInfosOfContextualType(candidate, name, nameType)
+			types = c.appendContextualPropertyTypeConstituent(types, indexInfoType)
+		}
+		if len(types) == 0 {
 			return nil
 		}
-		if c.isGenericMappedType(t) && c.getMappedTypeNameTypeKind(t) != MappedTypeNameTypeKindRemapping {
-			return c.getIndexedMappedTypeSubstitutedTypeOfContextualType(t, name, nameType)
+		if len(types) == 1 {
+			return types[0]
 		}
-		result := c.getTypeOfConcretePropertyOfContextualType(t, name)
-		if result != nil {
-			return result
-		}
-		return c.getTypeFromIndexInfosOfContextualType(t, name, nameType)
-	}, true /*noReductions*/)
+		return c.getIntersectionType(types)
+	}
+	if t.flags&TypeFlagsObject == 0 {
+		return nil
+	}
+	if c.isGenericMappedType(t) && c.getMappedTypeNameTypeKind(t) != MappedTypeNameTypeKindRemapping {
+		return c.getIndexedMappedTypeSubstitutedTypeOfContextualType(t, name, nameType)
+	}
+	result := c.getTypeOfConcretePropertyOfContextualType(t, name)
+	if result != nil {
+		return result
+	}
+	return c.getTypeFromIndexInfosOfContextualType(t, name, nameType)
 }
 
 func (c *Checker) getIndexedMappedTypeSubstitutedTypeOfContextualType(t *Type, name string, nameType *Type) *Type {
@@ -31500,10 +31511,14 @@ func (c *Checker) getTypeFromIndexInfosOfContextualType(t *Type, name string, na
 			return restType
 		}
 	}
+	indexInfos := c.getIndexInfosOfStructuredType(t)
+	if len(indexInfos) == 0 {
+		return nil
+	}
 	if nameType == nil {
 		nameType = c.getStringLiteralType(name)
 	}
-	indexInfo := c.findApplicableIndexInfo(c.getIndexInfosOfStructuredType(t), nameType)
+	indexInfo := c.findApplicableIndexInfo(indexInfos, nameType)
 	if indexInfo == nil {
 		return nil
 	}
