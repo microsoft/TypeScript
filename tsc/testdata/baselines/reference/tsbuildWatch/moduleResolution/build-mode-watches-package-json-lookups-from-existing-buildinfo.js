@@ -52,12 +52,36 @@ Output::
 
 [[90mHH:MM:SS AM[0m] Found 0 errors. Watching for file changes.
 
+//// [/home/src/tslibs/TS/Lib/lib.es2026.full.d.ts] *Lib*
+/// <reference no-default-lib="true"/>
+interface Boolean {}
+interface Function {}
+interface CallableFunction {}
+interface NewableFunction {}
+interface IArguments {}
+interface Number { toExponential: any; }
+interface Object {}
+interface RegExp {}
+interface String { charAt: any; }
+interface Array<T> { length: number; [n: number]: T; }
+interface ReadonlyArray<T> {}
+interface SymbolConstructor {
+    (desc?: string | number): symbol;
+    for(name: string): symbol;
+    readonly toStringTag: symbol;
+}
+declare var Symbol: SymbolConstructor;
+interface Symbol {
+    readonly [Symbol.toStringTag]: string;
+}
+declare const console: { log(msg: any): void; };
 
 Watch Registrations::
 Directory watches::
   /user/username/projects/myproject
   /user/username/projects/myproject/node_modules
   /user/username/projects/myproject/node_modules/pkg2
+  /user/username/projects/myproject/packages
   /user/username/projects/myproject/packages/pkg1 (recursive)
 
 
@@ -122,29 +146,6 @@ Directory '/node_modules' does not exist, skipping all lookups in it.
 
 [[90mHH:MM:SS AM[0m] Found 1 error. Watching for file changes.
 
-//// [/home/src/tslibs/TS/Lib/lib.es2026.full.d.ts] *Lib*
-/// <reference no-default-lib="true"/>
-interface Boolean {}
-interface Function {}
-interface CallableFunction {}
-interface NewableFunction {}
-interface IArguments {}
-interface Number { toExponential: any; }
-interface Object {}
-interface RegExp {}
-interface String { charAt: any; }
-interface Array<T> { length: number; [n: number]: T; }
-interface ReadonlyArray<T> {}
-interface SymbolConstructor {
-    (desc?: string | number): symbol;
-    for(name: string): symbol;
-    readonly toStringTag: symbol;
-}
-declare var Symbol: SymbolConstructor;
-interface Symbol {
-    readonly [Symbol.toStringTag]: string;
-}
-declare const console: { log(msg: any): void; };
 //// [/user/username/projects/myproject/packages/pkg1/zzbuild/index.js] *rewrite with same content*
 //// [/user/username/projects/myproject/packages/pkg1/zzbuild/tsconfig.tsbuildinfo] *modified* 
 {"version":"FakeTSVersion","root":["../index.ts"],"missingPackageJsons":["../../../node_modules/pkg2/package.json"],"semanticErrors":true,"nonIncrementalFileNames":[]}

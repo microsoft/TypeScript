@@ -4,6 +4,7 @@ import (
 	"context"
 	"fmt"
 	"io"
+	"maps"
 	"slices"
 	"strings"
 	"sync/atomic"
@@ -177,6 +178,7 @@ func (o *Orchestrator) createBuildTasks(oldTasks *collections.SyncMap[tspath.Pat
 			path := o.caseSensitivity.PathKey(tspath.RootedPath(config))
 			var task *BuildTask
 			var buildInfo *buildInfoEntry
+			var previous *BuildTask
 			if oldTasks != nil {
 				if existing, ok := oldTasks.Load(path); ok {
 					if !existing.dirty {
@@ -187,6 +189,7 @@ func (o *Orchestrator) createBuildTasks(oldTasks *collections.SyncMap[tspath.Pat
 							_ = existing.contentMapperProject.Close()
 						}
 						buildInfo = existing.buildInfoEntry
+						previous = existing
 					}
 				}
 			}
@@ -194,6 +197,12 @@ func (o *Orchestrator) createBuildTasks(oldTasks *collections.SyncMap[tspath.Pat
 				task = &BuildTask{config: config, path: path, isInitialCycle: oldTasks == nil}
 				task.pending.Store(true)
 				task.buildInfoEntry = buildInfo
+				if previous != nil {
+					task.watchDependencies = previous.watchDependencies
+					task.watchDependenciesDirty = previous.watchDependenciesDirty
+					task.changedInput = previous.changedInput
+					task.inputAliasChanged = previous.inputAliasChanged
+				}
 			}
 			if _, loaded := o.tasks.LoadOrStore(path, task); loaded {
 				return
@@ -509,6 +518,7 @@ func (o *Orchestrator) resetCaches() {
 	cachesVfs.ClearCache()
 	o.host.extendedConfigCache = tsc.ExtendedConfigCache{}
 	o.host.sourceFiles.reset()
+	o.host.sourceFileIdentities = collections.SyncMap[tspath.PathKey, *sourceFileIdentity]{}
 	o.host.configTimes = collections.SyncMap[tspath.PathKey, time.Duration]{}
 }
 
@@ -522,46 +532,37 @@ func (o *Orchestrator) checkTasksForEventChanges(changedPaths map[tspath.RootedP
 		task := o.order[i]
 		path := task.path
 
-		if _, changed := normalizedPaths[path]; changed {
-			task.resetConfig(o, path)
-			needsConfigUpdate.Store(true)
+		if input := task.watchDependencies.changedInputAlias(o, normalizedPaths); input != "" {
+			task.invalidateWatchDependencies(input, true)
 			needsUpdate.Store(true)
-			continue
 		}
-
+		_, configChanged := normalizedPaths[path]
 		if task.resolved == nil {
-			continue
-		}
-
-		configChanged := false
-		for _, file := range task.resolved.ExtendedSourceFiles() {
-			fp := o.caseSensitivity.PathKey(tspath.RootedPath(file))
-			if _, changed := normalizedPaths[fp]; changed {
+			if configChanged {
 				task.resetConfig(o, path)
 				needsConfigUpdate.Store(true)
 				needsUpdate.Store(true)
-				configChanged = true
-				break
 			}
-		}
-		if configChanged {
 			continue
+		}
+
+		handled := collections.NewSetFromItems(path)
+		for _, file := range task.resolved.ExtendedSourceFiles() {
+			fp := o.caseSensitivity.PathKey(tspath.RootedPath(file))
+			handled.Add(fp)
+			if _, changed := normalizedPaths[fp]; changed {
+				configChanged = true
+			}
 		}
 		for _, mapper := range task.resolved.ContentMappers() {
 			if mapper.PackageDirectory == "" || mapper.ContributionID != "" {
 				continue
 			}
 			manifestPath := o.caseSensitivity.PathKey(tspath.RootedPath(mapper.PackageDirectory.ResolveFile("package.json")))
+			handled.Add(manifestPath)
 			if _, changed := normalizedPaths[manifestPath]; changed {
-				task.resetConfig(o, path)
-				needsConfigUpdate.Store(true)
-				needsUpdate.Store(true)
 				configChanged = true
-				break
 			}
-		}
-		if configChanged {
-			continue
 		}
 
 		rootChanged := false
@@ -597,49 +598,76 @@ func (o *Orchestrator) checkTasksForEventChanges(changedPaths map[tspath.RootedP
 			}
 		}
 
-		if !rootChanged {
-			task.buildInfoEntryMu.Lock()
-			bi := task.buildInfoEntry
-			task.buildInfoEntryMu.Unlock()
-			if bi != nil && bi.buildInfo != nil {
-				buildInfoDir := bi.fileName.Directory()
-				for _, fileName := range bi.buildInfo.FileNames {
-					fp := o.caseSensitivity.PathKey(tspath.RootedPath(incremental.ResolveBuildInfoFileName(fileName, buildInfoDir, o.host.DefaultLibraryPath())))
-					if roots.Has(fp) {
-						continue
-					}
-					if _, changed := normalizedPaths[fp]; changed {
-						task.resetStatus()
-						needsUpdate.Store(true)
-						break
-					}
+		task.buildInfoEntryMu.Lock()
+		bi := task.buildInfoEntry
+		task.buildInfoEntryMu.Unlock()
+		if bi != nil && bi.buildInfo != nil {
+			buildInfoDir := bi.fileName.Directory()
+			for _, fileName := range bi.buildInfo.FileNames {
+				fp := o.caseSensitivity.PathKey(tspath.RootedPath(incremental.ResolveBuildInfoFileName(fileName, buildInfoDir, o.host.DefaultLibraryPath())))
+				if roots.Has(fp) {
+					continue
 				}
-				for packageJson := range bi.buildInfo.GetPackageJsons(buildInfoDir) {
-					if o.packageJsonLookupChanged(packageJson, normalizedPaths) {
-						task.resetStatus()
-						needsUpdate.Store(true)
-						break
-					}
-				}
-				for packageJson := range bi.buildInfo.GetMissingPackageJsons(buildInfoDir) {
-					if o.packageJsonLookupChanged(packageJson, normalizedPaths) {
-						task.resetStatus()
-						needsUpdate.Store(true)
-						break
-					}
-				}
-			}
-			for _, packageJson := range task.packageJsons {
-				if o.packageJsonLookupChanged(packageJson, normalizedPaths) {
+				if _, changed := normalizedPaths[fp]; changed {
 					task.resetStatus()
+					handled.Add(fp)
 					needsUpdate.Store(true)
 					break
 				}
 			}
+			// Classify every ordinary lookup, even when another event already reset the task.
+			for packageJson := range bi.buildInfo.GetPackageJsons(buildInfoDir) {
+				if o.packageJsonLookupChanged(packageJson, normalizedPaths, handled) {
+					task.resetStatus()
+					needsUpdate.Store(true)
+				}
+			}
+			for packageJson := range bi.buildInfo.GetMissingPackageJsons(buildInfoDir) {
+				if o.packageJsonLookupChanged(packageJson, normalizedPaths, handled) {
+					task.resetStatus()
+					needsUpdate.Store(true)
+				}
+			}
+		}
+		for _, packageJson := range task.packageJsons {
+			if o.packageJsonLookupChanged(packageJson, normalizedPaths, handled) {
+				task.resetStatus()
+				needsUpdate.Store(true)
+			}
+		}
+		input, changed, aliasChanged := task.watchDependencies.changed(o, normalizedPaths, roots, handled)
+		if !changed && task.watchDependencies != nil && bi != nil {
+			// Directory notifications can replace consumed children without naming them.
+			for inputPath, inputFile := range task.watchDependencies.lookups {
+				if !task.watchDependencies.inputPaths.Has(inputPath) && task.watchDependencies.inputAliases[inputPath].realPath == "" {
+					continue
+				}
+				for eventPath := range normalizedPaths {
+					if eventPath != inputPath && eventPath.ContainsPath(inputPath) {
+						inputTime := o.host.loadOrStoreMTime(tspath.RootedFilePathFromPath(inputFile), nil, false)
+						changed = inputTime.IsZero() || inputTime.After(bi.mTime)
+						break
+					}
+				}
+				if changed {
+					break
+				}
+			}
+		}
+		if changed {
+			task.invalidateWatchDependencies(input, aliasChanged)
+			needsUpdate.Store(true)
 		}
 
 		task.built = make(chan struct{})
 		task.done = make(chan struct{})
+
+		if configChanged {
+			task.resetConfig(o, path)
+			needsConfigUpdate.Store(true)
+			needsUpdate.Store(true)
+			continue
+		}
 
 		newConfig := task.resolved.ReloadFileNamesOfParsedCommandLine(o.host.FS())
 		if !slices.Equal(task.resolved.FileNames(), newConfig.FileNames()) {
@@ -655,11 +683,17 @@ func (o *Orchestrator) checkTasksForEventChanges(changedPaths map[tspath.RootedP
 			if o.host.FS().DirectoryExists(tspath.RootedDirectoryPathFromPath(eventPath)) {
 				if o.wm.IsPathUnderWatch(eventPath) {
 					o.rangeTask(func(path tspath.PathKey, task *BuildTask) {
+						if task.watchDependencies != nil {
+							return
+						}
+						if task.resolved != nil && len(task.resolved.FileNames()) == 0 && task.resolved.ProjectReferences() != nil {
+							return
+						}
 						task.resetStatus()
 						task.built = make(chan struct{})
 						task.done = make(chan struct{})
+						needsUpdate.Store(true)
 					})
-					needsUpdate.Store(true)
 					break
 				}
 			}
@@ -667,17 +701,20 @@ func (o *Orchestrator) checkTasksForEventChanges(changedPaths map[tspath.RootedP
 	}
 }
 
-func (o *Orchestrator) packageJsonLookupChanged(packageJson tspath.RootedFilePath, changedPaths map[tspath.PathKey]fswatch.EventKind) bool {
+func (o *Orchestrator) packageJsonLookupChanged(packageJson tspath.RootedFilePath, changedPaths map[tspath.PathKey]fswatch.EventKind, handled *collections.Set[tspath.PathKey]) bool {
 	packageJsonPath := o.caseSensitivity.PathKey(tspath.RootedPath(packageJson))
-	if _, changed := changedPaths[packageJsonPath]; changed {
-		return true
+	changed := false
+	if _, present := changedPaths[packageJsonPath]; present {
+		handled.Add(packageJsonPath)
+		changed = true
 	}
 	for changedPath, kind := range changedPaths {
 		if kind == fswatch.EventDelete && changedPath.ContainsPath(packageJsonPath) {
-			return true
+			handled.Add(changedPath)
+			changed = true
 		}
 	}
-	return false
+	return changed
 }
 
 func (o *Orchestrator) computeDesiredWatches() map[tspath.RootedDirectoryPath]bool {
@@ -692,6 +729,7 @@ func (o *Orchestrator) computeDesiredWatches() map[tspath.RootedDirectoryPath]bo
 		desiredDirs.Set(realConfigDir, false)
 
 		if task.resolved == nil {
+			o.addDependencyWatchDirs(desiredDirs, configDir, task.watchDependencies)
 			continue
 		}
 
@@ -751,6 +789,9 @@ func (o *Orchestrator) computeDesiredWatches() map[tspath.RootedDirectoryPath]bo
 				}
 				o.addProgramFileWatchDir(desiredDirs, absPath.Directory())
 			}
+			for fileName := range bi.buildInfo.GetNonIncrementalFileNames(buildInfoDir) {
+				o.addProgramFileWatchDir(desiredDirs, o.host.FS().Realpath(fileName.AsPath()).Directory())
+			}
 			for packageJson := range bi.buildInfo.GetPackageJsons(buildInfoDir) {
 				o.addPackageJsonWatchDirs(desiredDirs, packageJson)
 			}
@@ -761,9 +802,66 @@ func (o *Orchestrator) computeDesiredWatches() map[tspath.RootedDirectoryPath]bo
 		for _, packageJson := range task.packageJsons {
 			o.addPackageJsonWatchDirs(desiredDirs, packageJson)
 		}
+		o.addDependencyWatchDirs(desiredDirs, configDir, task.watchDependencies)
 	}
 
 	return o.wm.ResolveDesiredDirs(desiredDirs.Dirs())
+}
+
+func (o *Orchestrator) addDependencyWatchDirs(desiredDirs *watchmanager.DirWatchSet, configDir tspath.RootedDirectoryPath, dependencies *watchDependencies) {
+	if dependencies == nil {
+		return
+	}
+	o.addKnownDependencyWatchDirs(desiredDirs, dependencies)
+	o.addResidualDependencyWatchDirs(desiredDirs, configDir, dependencies)
+}
+
+func (o *Orchestrator) addKnownDependencyWatchDirs(desiredDirs *watchmanager.DirWatchSet, dependencies *watchDependencies) {
+	for _, file := range dependencies.inputs {
+		o.addProgramFileWatchDir(desiredDirs, o.host.FS().Realpath(file.AsPath()).Directory())
+	}
+	for _, alias := range dependencies.inputAliases {
+		o.addProgramFileWatchDir(desiredDirs, alias.file.Directory())
+		if realPath := dependencies.lookups[alias.realPath]; realPath != "" {
+			o.addProgramFileWatchDir(desiredDirs, realPath.Directory())
+		}
+	}
+}
+
+func (o *Orchestrator) addResidualDependencyWatchDirs(desiredDirs *watchmanager.DirWatchSet, configDir tspath.RootedDirectoryPath, dependencies *watchDependencies) {
+	for _, enumeration := range dependencies.enumerations {
+		o.addWatchDir(desiredDirs, tspath.RootedDirectoryPathFromPath(o.host.FS().Realpath(enumeration.directory.AsPath())))
+	}
+	for dir := range dependencies.relativeDirectories.Keys() {
+		exists := o.host.FS().DirectoryExists(dir)
+		for !o.host.FS().DirectoryExists(dir) {
+			parent := dir.AsPath().Directory()
+			if parent == dir {
+				break
+			}
+			dir = parent
+		}
+		// A missing relative import can share the project's immediate parent, unlike generic package lookup ancestors.
+		if exists || watchmanager.CanWatchDirectory(dir) || (dir == configDir.AsPath().Directory() && len(dir.Components()) > 2) {
+			o.addProgramFileWatchDir(desiredDirs, dir)
+		}
+	}
+	aliasTargets := collections.NewSetWithSizeHint[tspath.PathKey](len(dependencies.inputAliases))
+	for _, alias := range dependencies.inputAliases {
+		aliasTargets.Add(alias.realPath)
+	}
+	for path, lookup := range dependencies.lookups {
+		if dependencies.inputPaths.Has(path) {
+			continue
+		}
+		if alias, ok := dependencies.inputAliases[path]; ok && alias.file != "" {
+			continue
+		}
+		if aliasTargets.Has(path) {
+			continue
+		}
+		o.addWatchDir(desiredDirs, o.host.FS().Realpath(lookup).Directory())
+	}
 }
 
 func (o *Orchestrator) addWatchDir(desiredDirs *watchmanager.DirWatchSet, dir tspath.RootedDirectoryPath) {
@@ -814,13 +912,39 @@ func (o *Orchestrator) DoCycle() {
 	defer o.wm.Unlock()
 
 	changedPaths, overflow := o.wm.DrainEvents()
+	for {
+		if !o.doCycle(changedPaths, overflow) {
+			return
+		}
+		// An alias target can appear after event classification but before its logical watch is installed.
+		// Recheck aliases with fresh caches once those watches are active.
+		changedPaths = make(map[tspath.RootedPath]fswatch.EventKind)
+		o.rangeTask(func(_ tspath.PathKey, task *BuildTask) {
+			if !task.watchDependenciesDirty && !task.inputAliasChanged {
+				if input := task.watchDependencies.changedInputAlias(o, nil); input != "" {
+					changedPaths[input] = fswatch.EventUpdate
+				}
+			}
+		})
+		o.resetCaches()
+		if len(changedPaths) == 0 {
+			return
+		}
+		// Coalesce notifications already queued for the alias change we just observed.
+		queuedPaths, queuedOverflow := o.wm.DrainEvents()
+		maps.Copy(changedPaths, queuedPaths)
+		overflow = queuedOverflow
+	}
+}
+
+func (o *Orchestrator) doCycle(changedPaths map[tspath.RootedPath]fswatch.EventKind, overflow bool) bool {
 	hasEvents := len(changedPaths) > 0 || overflow
 
 	if !hasEvents {
 		if o.wm.DebugLog != nil {
 			fmt.Fprintf(o.wm.DebugLog, "[watch] DoCycle: no events, skipping\n")
 		}
-		return
+		return false
 	}
 
 	var needsConfigUpdate atomic.Bool
@@ -829,6 +953,9 @@ func (o *Orchestrator) DoCycle() {
 	if overflow {
 		// Overflow: reset all tasks to force a full rebuild.
 		o.rangeTask(func(path tspath.PathKey, task *BuildTask) {
+			if input := task.watchDependencies.changedInputAlias(o, nil); input != "" {
+				task.invalidateWatchDependencies(input, true)
+			}
 			task.resetConfig(o, path)
 			task.built = make(chan struct{})
 			task.done = make(chan struct{})
@@ -842,7 +969,7 @@ func (o *Orchestrator) DoCycle() {
 
 	if !needsUpdate.Load() {
 		o.resetCaches()
-		return
+		return false
 	}
 
 	o.watchStatusReporter(ast.NewCompilerDiagnostic(diagnostics.File_change_detected_Starting_incremental_compilation))
@@ -853,13 +980,18 @@ func (o *Orchestrator) DoCycle() {
 
 	o.buildOrClean()
 	o.updateWatch()
+	o.reconcileWatches()
+	o.resetCaches()
+	return true
+}
+
+func (o *Orchestrator) reconcileWatches() {
 	desiredDirs := o.computeDesiredWatches()
 	if err := o.wm.ReconcileWatches(desiredDirs); err != nil {
 		fmt.Fprintf(o.opts.Sys.Writer(), "%v\n", err)
 		// Mark overflow so the next event triggers a full rebuild
 		o.wm.ForceOverflow()
 	}
-	o.resetCaches()
 }
 
 func (o *Orchestrator) buildOrClean() tsc.CommandLineResult {

@@ -14,12 +14,21 @@ type compilerHost struct {
 	host                 *host
 	trace                func(msg *diagnostics.Message, args ...any)
 	contentMapperProject contentmapper.Project
+	watchFS              *dependencyTrackingFS
 }
 
 var _ compiler.CompilerHost = (*compilerHost)(nil)
 
 func (h *compilerHost) FS() vfs.FS {
+	if h.watchFS != nil {
+		return h.watchFS
+	}
 	return h.host.FS()
+}
+
+func (h *compilerHost) trackDependencies() {
+	h.watchFS = &dependencyTrackingFS{}
+	h.watchFS.Inner = h.host.FS()
 }
 
 func (h *compilerHost) DefaultLibraryPath() tspath.RootedDirectoryPath {
@@ -31,6 +40,10 @@ func (h *compilerHost) Trace(msg *diagnostics.Message, args ...any) {
 }
 
 func (h *compilerHost) GetSourceFile(opts ast.SourceFileParseOptions) *ast.SourceFile {
+	if h.watchFS != nil {
+		h.watchFS.SeenFiles.Add(opts.FileName.AsPath())
+		h.watchFS.Realpath(opts.FileName.AsPath())
+	}
 	return h.host.GetSourceFile(opts)
 }
 
