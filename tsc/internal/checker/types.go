@@ -783,11 +783,23 @@ const (
 	typeKindIntersection // Must be last; AsStructuredType relies on this
 )
 
+// typeCacheFlags record internal state and memoized answers for a type. They fit in what would otherwise
+// be padding in Type.
+type typeCacheFlags uint8
+
+const (
+	typeCacheResolvingMembers        typeCacheFlags = 1 << iota // Structured type members are being resolved
+	typeCacheShouldNormalizeComputed                            // shouldNormalizeIntersection result has been computed
+	typeCacheShouldNormalize                                    // shouldNormalizeIntersection result
+	typeCacheNonNullableUnion                                   // Union of only definitely non-nullable, non-instantiable types
+)
+
 type Type struct {
 	flags       TypeFlags
 	objectFlags ObjectFlags
 	id          TypeId
 	kind        typeKind `customlint:"protected"`
+	cacheFlags  typeCacheFlags
 	symbol      *ast.Symbol
 	alias       *TypeAlias
 	checker     *Checker
