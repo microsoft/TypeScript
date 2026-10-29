@@ -85,15 +85,15 @@
                                 "type": "array",
                                 "items": {
                                     "type": "string"
-                                }
+                                },
+                                "description": "File extensions handled by this mapper. Defaults to the value of 'typescript.contentMapper.extensions' in the package manifest."
                             },
                             "options": {
                                 "type": "object"
                             }
                         },
                         "required": [
-                            "package",
-                            "extensions"
+                            "package"
                         ],
                         "additionalProperties": false
                     }

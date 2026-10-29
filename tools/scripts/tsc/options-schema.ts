@@ -110,10 +110,14 @@ function valueSchema(declaration: Declaration): JSONSchema {
                     type: "object",
                     properties: {
                         package: { type: "string", minLength: 1 },
-                        extensions: { type: "array", items: { type: "string" } },
+                        extensions: {
+                            type: "array",
+                            items: { type: "string" },
+                            description: "File extensions handled by this mapper. Defaults to the value of 'typescript.contentMapper.extensions' in the package manifest.",
+                        },
                         options: { type: "object" },
                     },
-                    required: ["package", "extensions"],
+                    required: ["package"],
                     additionalProperties: false,
                 };
             }

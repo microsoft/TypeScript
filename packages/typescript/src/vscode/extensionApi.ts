@@ -25,10 +25,11 @@ export interface ContentMapperManifest {
     readonly compilerOptions?: readonly string[] | undefined;
     readonly dynamicConfig?: boolean | undefined;
     readonly outputExtensions?: Readonly<Record<string, string>> | undefined;
+    readonly extensions?: readonly string[] | undefined;
 }
 
 export interface ContentMapperContribution {
-    readonly extensions: readonly string[];
+    readonly extensions?: readonly string[] | undefined;
     readonly inferredProjectContribution?: {
         readonly options?: Readonly<Record<string, unknown>> | undefined;
         readonly manifest: ContentMapperManifest;

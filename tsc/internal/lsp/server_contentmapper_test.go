@@ -17,6 +17,8 @@ import (
 	"gotest.tools/v3/assert"
 )
 
+func stringSlice(values ...string) *[]string { return &values }
+
 func TestSetContentMapperContributionsBeforeDidOpen(t *testing.T) {
 	t.Parallel()
 	if !bundled.Embedded {
@@ -122,7 +124,7 @@ export const title = "Profile";
 		OpenDocuments: []lsproto.TextDocumentIdentifier{{Uri: uri}},
 		Contributions: []*lsproto.ContentMapperContribution{{
 			ContributorId: "test",
-			Extensions:    []string{".vue", ".svelte"},
+			Extensions:    stringSlice(".vue", ".svelte"),
 		}},
 	})
 	assert.Assert(t, ok && msg.AsResponse().Error == nil)

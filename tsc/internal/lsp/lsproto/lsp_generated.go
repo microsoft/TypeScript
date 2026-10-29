@@ -9132,6 +9132,9 @@ type ContentMapperManifest struct {
 
 	// Default source-to-runtime output extension mappings.
 	OutputExtensions *map[string]string `json:"outputExtensions,omitzero"`
+
+	// Default source extensions handled by the mapper.
+	Extensions *[]string `json:"extensions,omitzero"`
 }
 
 var _ json.UnmarshalerFrom = (*ContentMapperManifest)(nil)
@@ -9161,7 +9164,7 @@ type ContentMapperContribution struct {
 	ContributorId string `json:"contributorId" lsp:"required"`
 
 	// File extensions handled by this content mapper.
-	Extensions []string `json:"extensions" lsp:"required"`
+	Extensions *[]string `json:"extensions,omitzero"`
 
 	// When present, contributes this mapper to inferred projects.
 	InferredProjectContribution *InferredProjectContentMapperContribution `json:"inferredProjectContribution,omitzero"`

@@ -38,6 +38,71 @@ func TestGetContentMapperForFileNameUsesHostCaseSensitivity(t *testing.T) {
 	assert.Assert(t, sensitive.GetContentMapperForFileName("/src/Component.VUE") == nil)
 }
 
+func TestContentMapperManifestExtensionValidation(t *testing.T) {
+	t.Parallel()
+	for _, extensions := range []string{`null`, `"toml"`, `[1]`, `["toml"]`, `[".ts"]`, `[".foo.ts"]`, `[".a/b"]`} {
+		t.Run(extensions, func(t *testing.T) {
+			t.Parallel()
+			fs := vfstest.FromMap(map[string]string{
+				"/project/tsconfig.json": `{"contentMappers": [{"package": "mapper"}]}`,
+				"/project/index.ts":      "",
+				"/project/node_modules/mapper/package.json": `{
+					"name": "mapper", "typescript": {"contentMapper": {"exec": ["run"], "extensions": ` + extensions + `}}
+				}`,
+			}, tspath.CaseSensitive)
+			config, errors := GetParsedCommandLineOfConfigFile(
+				"/project/tsconfig.json", &core.CompilerOptions{RunExternalCode: core.TSTrue}, nil, NewDefaultParseConfigHost(fs), nil,
+			)
+			assert.Equal(t, len(errors), 0)
+			assert.Equal(t, len(config.Errors), 1)
+			assert.Assert(t, config.Errors[0].File() != nil)
+			assert.Equal(t, len(config.ContentMapperExtensions()), 0)
+		})
+	}
+}
+
+func TestContentMapperIncludeAndManifestExtensions(t *testing.T) {
+	t.Parallel()
+	fs := vfstest.FromMap(map[string]string{
+		"/project/tsconfig.json": `{
+				"compilerOptions": { "noLib": true },
+				"include": ["blob.toml", "index.ts", "src"],
+				"contentMappers": [
+					{ "package": "mapper" }
+				]
+			}`,
+		"/project/node_modules/mapper/package.json": `{
+				"name": "mapper",
+				"typescript": { "contentMapper": { "exec": ["run"], "extensions": [".toml"] } }
+			}`,
+		"/project/src/config.toml":             "",
+		"/project/src/.hidden/config.toml":     "",
+		"/project/blob.toml":                   "",
+		"/project/other.toml":                  "",
+		"/project/index.ts":                    "",
+		"/project/node_modules/pkg/blob.toml":  "",
+		"/project/node_modules/pkg/other.toml": "",
+	}, tspath.CaseSensitive)
+	commandLine, errors := GetParsedCommandLineOfConfigFile(
+		"/project/tsconfig.json",
+		&core.CompilerOptions{RunExternalCode: core.TSTrue}, nil,
+		NewDefaultParseConfigHost(fs), nil,
+	)
+	assert.Equal(t, len(errors), 0)
+	assert.Equal(t, len(commandLine.GetConfigFileParsingDiagnostics()), 0)
+	assert.DeepEqual(t, commandLine.ContentMapperExtensions(), []string{".toml"})
+	assert.DeepEqual(t, commandLine.FileNames(), []tspath.RootedFilePath{
+		"/project/blob.toml", "/project/index.ts", "/project/src/config.toml",
+	})
+	for _, file := range []tspath.RootedFilePath{
+		"/project/src/config.toml", "/project/src/.hidden/config.toml",
+		"/project/blob.toml", "/project/node_modules/pkg/blob.toml",
+	} {
+		assert.Assert(t, commandLine.GetContentMapperForFileName(file) != nil, file)
+	}
+	assert.Assert(t, commandLine.GetContentMapperForFileName("/project/src/file.ts") == nil)
+}
+
 func TestGetOutputFileNamesExcludesMapperOwnedOutputs(t *testing.T) {
 	t.Parallel()
 	mapper := &contentmapper.Mapper{Extensions: []string{".vue"}}
