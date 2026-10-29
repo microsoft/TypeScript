@@ -106,3 +106,33 @@ func use(_ int, p unsafe.Pointer) unsafe.Pointer {
 var global = unsafe.Pointer(&derived{})
 
 var badGlobal = unsafe.Pointer(&derived{})
+
+func multiline(h *header) {
+	_ = unsafe.Pointer(
+		h,
+	) // SAFETY: Trailing the end of a multiline use.
+
+	if (*derived)(unsafe.Pointer(h)) != nil {
+	} // SAFETY: Trailing a statement's end does not cover its start.
+}
+
+func fromTypeParam[P ~unsafe.Pointer](p P) *int {
+	return (*int)(p)
+}
+
+func toTypeParam[P ~unsafe.Pointer](p *int) P {
+	return P(p)
+}
+
+type pointerish interface {
+	~unsafe.Pointer | *int
+}
+
+func embeddedConstraint[P pointerish](p *int) P {
+	// SAFETY: Type parameters whose type set includes unsafe.Pointer count.
+	return P(p)
+}
+
+func notPointerTypeParam[P ~*int](p *int) P {
+	return P(p)
+}

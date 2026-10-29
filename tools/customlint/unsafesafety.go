@@ -67,19 +67,22 @@ func (u *unsafeSafetyPass) run() (any, error) {
 			}
 
 			// Accept a SAFETY comment on the line directly above, or trailing on the same line as,
-			// the use itself or any enclosing node up to the innermost statement or declaration.
-			var lines []int
+			// the start of the use itself or any enclosing node up to the innermost statement or
+			// declaration. Trailing comments may also follow the end of the use or an enclosing
+			// expression, but not a statement, whose end may be far from the use.
+			var startLines, endLines []int
 			for e := range c.Enclosing() {
-				lines = append(lines, u.line(e.Node().Pos()))
-				if _, isStmt := e.Node().(ast.Stmt); isStmt {
+				n := e.Node()
+				startLines = append(startLines, u.line(n.Pos()))
+				_, isStmt := n.(ast.Stmt)
+				_, isDecl := n.(ast.Decl)
+				if isStmt || isDecl {
 					break
 				}
-				if _, isDecl := e.Node().(ast.Decl); isDecl {
-					break
-				}
+				endLines = append(endLines, u.line(n.End()))
 			}
 
-			if !hasAdjacentSafetyComment(safetyComments, lines) {
+			if !hasAdjacentSafetyComment(safetyComments, startLines, endLines) {
 				u.pass.Report(analysis.Diagnostic{
 					Pos:     call.Pos(),
 					End:     call.End(),
@@ -125,12 +128,41 @@ func (u *unsafeSafetyPass) unsafeOperation(call *ast.CallExpr) string {
 	return "use of unsafe." + obj.Name()
 }
 
+// isUnsafePointer reports whether t is an unsafe.Pointer type, or a type parameter
+// whose type set includes one.
 func isUnsafePointer(t types.Type) bool {
 	if t == nil {
 		return false
 	}
+	if tp, ok := t.(*types.TypeParam); ok {
+		return typeSetHasUnsafePointer(tp.Constraint(), make(map[types.Type]bool))
+	}
 	basic, ok := t.Underlying().(*types.Basic)
 	return ok && basic.Kind() == types.UnsafePointer
+}
+
+func typeSetHasUnsafePointer(t types.Type, seen map[types.Type]bool) bool {
+	if seen[t] {
+		return false
+	}
+	seen[t] = true
+	switch u := t.Underlying().(type) {
+	case *types.Basic:
+		return u.Kind() == types.UnsafePointer
+	case *types.Union:
+		for term := range u.Terms() {
+			if typeSetHasUnsafePointer(term.Type(), seen) {
+				return true
+			}
+		}
+	case *types.Interface:
+		for embedded := range u.EmbeddedTypes() {
+			if typeSetHasUnsafePointer(embedded, seen) {
+				return true
+			}
+		}
+	}
+	return false
 }
 
 // firstCodeEndByLine maps each line to the earliest end position of a node ending on it.
@@ -160,11 +192,18 @@ type safetyComment struct {
 	trailing bool
 }
 
-func hasAdjacentSafetyComment(comments []safetyComment, lines []int) bool {
+func hasAdjacentSafetyComment(comments []safetyComment, startLines, endLines []int) bool {
 	for _, c := range comments {
-		for _, line := range lines {
+		for _, line := range startLines {
 			if c.start == line || (!c.trailing && c.end == line-1) {
 				return true
+			}
+		}
+		if c.trailing {
+			for _, line := range endLines {
+				if c.start == line {
+					return true
+				}
 			}
 		}
 	}
