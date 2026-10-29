@@ -2878,7 +2878,7 @@ func (f *importOrRequireFinder) next(start int) (index int, size int) {
 }
 
 func indexFrom(text string, substr string, start int) int {
-	if start > len(text) {
+	if start >= len(text) {
 		return -1
 	}
 	if i := strings.Index(text[start:], substr); i >= 0 {
