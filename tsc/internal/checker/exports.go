@@ -5,6 +5,7 @@ import (
 
 	"github.com/microsoft/TypeScript/tsc/internal/ast"
 	"github.com/microsoft/TypeScript/tsc/internal/diagnostics"
+	"github.com/microsoft/TypeScript/tsc/internal/jsnum"
 )
 
 func (c *Checker) GetStringType() *Type {
@@ -59,8 +60,43 @@ func (c *Checker) GetNonPrimitiveType() *Type {
 	return c.nonPrimitiveType
 }
 
+func (c *Checker) GetStringLiteralType(value string) *Type {
+	return c.getStringLiteralType(value)
+}
+
+func (c *Checker) GetNumberLiteralType(value jsnum.Number) *Type {
+	return c.getNumberLiteralType(value)
+}
+
+func (c *Checker) GetBigIntLiteralType(value jsnum.PseudoBigInt) *Type {
+	return c.getBigIntLiteralType(value)
+}
+
+func (c *Checker) GetNullableType(t *Type, flags TypeFlags) *Type {
+	return c.getNullableType(t, flags)
+}
+
+func (c *Checker) GetFalseType() *Type {
+	return c.regularFalseType
+}
+
+func (c *Checker) GetTrueType() *Type {
+	return c.regularTrueType
+}
+
 func (c *Checker) GetBaseTypeOfLiteralType(t *Type) *Type {
 	return c.getBaseTypeOfLiteralType(t)
+}
+
+// GetPrivateIdentifierPropertyOfType looks up a private identifier named name (e.g. "#foo", including
+// the leading '#') lexically in scope at location, and if it resolves to a symbol, returns the
+// corresponding property of leftType (or nil if leftType has no such property).
+func (c *Checker) GetPrivateIdentifierPropertyOfType(leftType *Type, name string, location *ast.Node) *ast.Symbol {
+	lexicallyScopedIdentifier := c.lookupSymbolForPrivateIdentifierDeclaration(name, location)
+	if lexicallyScopedIdentifier == nil {
+		return nil
+	}
+	return c.getPrivateIdentifierPropertyOfType(leftType, lexicallyScopedIdentifier)
 }
 
 func (c *Checker) GetUnknownSymbol() *ast.Symbol {
