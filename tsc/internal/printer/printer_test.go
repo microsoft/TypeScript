@@ -1047,6 +1047,40 @@ func TestParenthesizeNew3(t *testing.T) {
 	emittestutil.CheckEmit(t, nil, file.AsSourceFile(), "new C((a, b));")
 }
 
+func TestParenthesizeNew4(t *testing.T) {
+	t.Parallel()
+
+	// new (C().D)() — CallExpression is not the direct expression of `new`, but
+	// appears on the left of a property access. Without parentheses this would
+	// parse as (new C()).D().
+	var factory ast.NodeFactory
+	file := factory.NewSourceFile(ast.SourceFileParseOptions{FileName: "/file.ts", PathKey: "/file.ts"}, "", factory.NewNodeList(
+		[]*ast.Node{
+			factory.NewExpressionStatement(
+				factory.NewNewExpression(
+					factory.NewPropertyAccessExpression(
+						factory.NewCallExpression(
+							factory.NewIdentifier("C"),
+							nil, /*questionDotToken*/
+							nil, /*typeArguments*/
+							factory.NewNodeList([]*ast.Node{}),
+							ast.NodeFlagsNone,
+						),
+						nil, /*questionDotToken*/
+						factory.NewIdentifier("D"),
+						ast.NodeFlagsNone,
+					),
+					nil, /*typeArguments*/
+					factory.NewNodeList([]*ast.Node{}),
+				),
+			),
+		},
+	), factory.NewToken(ast.KindEndOfFile))
+
+	parsetestutil.MarkSyntheticRecursive(file)
+	emittestutil.CheckEmit(t, nil, file.AsSourceFile(), "new (C().D)();")
+}
+
 func TestParenthesizeTaggedTemplate1(t *testing.T) {
 	t.Parallel()
 
