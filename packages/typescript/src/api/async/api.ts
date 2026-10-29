@@ -485,13 +485,12 @@ export class API<FromLSP extends boolean = false> implements FormatDiagnosticsHo
     /** @internal */
     async createBuildOrchestrator(rootNames: readonly string[], buildOrchestratorOptions: BuildOrchestratorOptions): Promise<BuildOrchestrator> {
         await this.ensureInitialized();
+        const { cwd, dry, force, verbose, stopBuildOnErrors, overrideCompilerOptions } = buildOrchestratorOptions;
         const orchestratorResponse = await this.client.apiRequest("createBuildOrchestrator", {
-            ...buildOrchestratorOptions,
-            ...buildOrchestratorOptions.overrideCompilerOptions,
-            cwd: buildOrchestratorOptions.cwd === undefined
-                ? undefined
-                : toRootedDirectoryPath(buildOrchestratorOptions.cwd, this.getCurrentDirectory()),
             rootNames,
+            cwd: cwd === undefined ? undefined : toRootedDirectoryPath(cwd, this.getCurrentDirectory()),
+            buildOptions: { dry, force, verbose, stopBuildOnErrors },
+            compilerOptions: overrideCompilerOptions,
         });
 
         const orchestrator = new BuildOrchestrator(this.client, orchestratorResponse, () => {
@@ -2191,6 +2190,7 @@ export interface OverrideCompilerOptions {
     sourceMap?: boolean;
     inlineSourceMap?: boolean;
     traceResolution?: boolean;
+    noEmit?: boolean;
 }
 
 export class BuildOrchestrator {

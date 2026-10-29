@@ -1574,7 +1574,7 @@ describe("BuildOrchestrator", () => {
             overrideCompilerOptions: {
                 incremental: true,
                 assumeChangesOnlyAffectDirectDependencies: true,
-                declaration: false,
+                declaration: true,
                 declarationMap: true,
                 emitDeclarationOnly: false,
                 sourceMap: false,
@@ -1591,6 +1591,76 @@ describe("BuildOrchestrator", () => {
         assert.equal((orchestrator.build()).status, 0);
         assert.match(fs.readFile!(toRootedFilePath("/a/dist/index.js", undefined))!, /export const a = 1/);
         assert.match(fs.readFile!(toRootedFilePath("/b/dist/index.js", undefined))!, /export const b = 2/);
+    });
+
+    test("applies overrideCompilerOptions to the build", () => {
+        const { api: disposableApi, fs } = spawnAPIWithFS({ ...files });
+        using api = disposableApi;
+        // @ts-ignore -- Internal API exercised by source tests.
+        const orchestrator = api.createBuildOrchestrator(
+            ["/a/tsconfig.json"],
+            { cwd: "/", overrideCompilerOptions: { declarationMap: true } },
+        );
+
+        assert.equal((orchestrator.build()).status, 0);
+        assert.match(fs.readFile!(toRootedFilePath("/a/dist/index.d.ts.map", undefined))!, /"sources":\["\.\.\/src\/index\.ts"\]/);
+    });
+
+    test("applies build options to the build", () => {
+        const { api: disposableApi, fs } = spawnAPIWithFS({ ...files });
+        using api = disposableApi;
+        // @ts-ignore -- Internal API exercised by source tests.
+        const orchestrator = api.createBuildOrchestrator(
+            ["/a/tsconfig.json"],
+            { cwd: "/", dry: true },
+        );
+
+        assert.equal((orchestrator.build()).status, 0);
+        assert.equal(fs.readFile!(toRootedFilePath("/a/dist/index.js", undefined)), serverFS.useOS);
+    });
+
+    test("does not emit error-free projects when noEmit is overridden", () => {
+        const { api: disposableApi, fs } = spawnAPIWithFS({
+            "/a/tsconfig.json": JSON.stringify({
+                compilerOptions: { outDir: "dist", rootDir: "src" },
+                files: ["src/index.ts"],
+            }),
+            "/a/src/index.ts": `export const a = 1;`,
+        });
+        using api = disposableApi;
+        // @ts-ignore -- Internal API exercised by source tests.
+        const orchestrator = api.createBuildOrchestrator(
+            ["/a/tsconfig.json"],
+            { cwd: "/", overrideCompilerOptions: { noEmit: true } },
+        );
+
+        const response = orchestrator.build();
+        assert.equal(response.status, 0);
+        assert.equal(response.diagnostics, undefined);
+        assert.equal(fs.readFile!(toRootedFilePath("/a/dist/index.js", undefined)), serverFS.useOS);
+    });
+
+    test("does not emit when noEmit is overridden", () => {
+        const source = `export const value: string = 1;`;
+        const { api: disposableApi, fs } = spawnAPIWithFS({
+            "/a/tsconfig.json": JSON.stringify({
+                compilerOptions: { outDir: "dist", rootDir: "src" },
+                files: ["src/index.ts"],
+            }),
+            "/a/src/index.ts": source,
+        });
+        using api = disposableApi;
+        // @ts-ignore -- Internal API exercised by source tests.
+        const orchestrator = api.createBuildOrchestrator(
+            ["/a/tsconfig.json"],
+            { cwd: "/", overrideCompilerOptions: { noEmit: true } },
+        );
+
+        const response = orchestrator.build();
+        assert.equal(response.status, 2);
+        assert.equal(response.diagnostics?.length, 1);
+        assert.equal(response.diagnostics[0].code, 2322);
+        assert.equal(fs.readFile!(toRootedFilePath("/a/dist/index.js", undefined)), serverFS.useOS);
     });
 
     test("returns diagnostics in build response information", () => {
