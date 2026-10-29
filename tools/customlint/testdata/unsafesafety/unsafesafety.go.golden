@@ -183,3 +183,43 @@
 		return P(p)
 	}
 	
+	func aliasedTypeParam[P ~unsafe.Pointer](p *int, q P) {
+		type Alias = P
+		_ = Alias(p)
+		    ~~~~~~~~
+!!! unsafesafety: conversion to unsafe.Pointer must be preceded by a `// SAFETY:` comment explaining why it is sound
+		var a Alias = q
+		_ = (*int)(a)
+		    ~~~~~~~~~
+!!! unsafesafety: conversion from unsafe.Pointer must be preceded by a `// SAFETY:` comment explaining why it is sound
+	}
+	
+	type onlyUintptr interface {
+		~unsafe.Pointer | ~uintptr
+		~uintptr
+	}
+	
+	func intersectedConstraint[P onlyUintptr](p P) uintptr {
+		return uintptr(p)
+	}
+	
+	type ptrOrUintptr interface {
+		~unsafe.Pointer | ~uintptr
+	}
+	
+	type diamond interface {
+		ptrOrUintptr
+		interface{ ptrOrUintptr }
+	}
+	
+	func diamondConstraint[P diamond](p P) uintptr {
+		return uintptr(p)
+		       ~~~~~~~~~~
+!!! unsafesafety: conversion from unsafe.Pointer must be preceded by a `// SAFETY:` comment explaining why it is sound
+	}
+	
+	func boxing[P ~unsafe.Pointer](p P, q unsafe.Pointer) {
+		_ = any(p)
+		_ = any(q)
+	}
+	

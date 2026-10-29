@@ -136,3 +136,37 @@ func embeddedConstraint[P pointerish](p *int) P {
 func notPointerTypeParam[P ~*int](p *int) P {
 	return P(p)
 }
+
+func aliasedTypeParam[P ~unsafe.Pointer](p *int, q P) {
+	type Alias = P
+	_ = Alias(p)
+	var a Alias = q
+	_ = (*int)(a)
+}
+
+type onlyUintptr interface {
+	~unsafe.Pointer | ~uintptr
+	~uintptr
+}
+
+func intersectedConstraint[P onlyUintptr](p P) uintptr {
+	return uintptr(p)
+}
+
+type ptrOrUintptr interface {
+	~unsafe.Pointer | ~uintptr
+}
+
+type diamond interface {
+	ptrOrUintptr
+	interface{ ptrOrUintptr }
+}
+
+func diamondConstraint[P diamond](p P) uintptr {
+	return uintptr(p)
+}
+
+func boxing[P ~unsafe.Pointer](p P, q unsafe.Pointer) {
+	_ = any(p)
+	_ = any(q)
+}

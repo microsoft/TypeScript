@@ -4,6 +4,7 @@ import (
 	"go/ast"
 	"go/token"
 	"go/types"
+	"slices"
 	"strings"
 
 	"golang.org/x/tools/go/analysis"
@@ -102,7 +103,8 @@ func (u *unsafeSafetyPass) unsafeOperation(call *ast.CallExpr) string {
 		if isUnsafePointer(tv.Type) {
 			return "conversion to unsafe.Pointer"
 		}
-		if isUnsafePointer(info.TypeOf(call.Args[0])) {
+		// Boxing into an interface is safe.
+		if isUnsafePointer(info.TypeOf(call.Args[0])) && !isNonTypeParamInterface(tv.Type) {
 			// (*T)(unsafe.Pointer(p)) and the like are a single operation, justified together.
 			if inner, ok := ast.Unparen(call.Args[0]).(*ast.CallExpr); ok && u.unsafeOperation(inner) != "" {
 				return ""
@@ -128,39 +130,52 @@ func (u *unsafeSafetyPass) unsafeOperation(call *ast.CallExpr) string {
 	return "use of unsafe." + obj.Name()
 }
 
+func isNonTypeParamInterface(t types.Type) bool {
+	t = types.Unalias(t)
+	if _, ok := t.(*types.TypeParam); ok {
+		return false
+	}
+	return types.IsInterface(t)
+}
+
 // isUnsafePointer reports whether t is an unsafe.Pointer type, or a type parameter
 // whose type set includes one.
 func isUnsafePointer(t types.Type) bool {
 	if t == nil {
 		return false
 	}
-	if tp, ok := t.(*types.TypeParam); ok {
-		return typeSetHasUnsafePointer(tp.Constraint(), make(map[types.Type]bool))
+	if tp, ok := types.Unalias(t).(*types.TypeParam); ok {
+		return typeSetHasUnsafePointer(tp.Constraint())
 	}
 	basic, ok := t.Underlying().(*types.Basic)
 	return ok && basic.Kind() == types.UnsafePointer
 }
 
-func typeSetHasUnsafePointer(t types.Type, seen map[types.Type]bool) bool {
-	if seen[t] {
-		return false
-	}
-	seen[t] = true
+// typeSetHasUnsafePointer reports whether the type set of constraint t may include an
+// unsafe.Pointer type.
+func typeSetHasUnsafePointer(t types.Type) bool {
 	switch u := t.Underlying().(type) {
 	case *types.Basic:
 		return u.Kind() == types.UnsafePointer
 	case *types.Union:
 		for term := range u.Terms() {
-			if typeSetHasUnsafePointer(term.Type(), seen) {
+			if typeSetHasUnsafePointer(term.Type()) {
 				return true
 			}
 		}
+		return false
 	case *types.Interface:
+		// Types based on unsafe.Pointer cannot have methods.
+		if u.NumExplicitMethods() > 0 {
+			return false
+		}
+		// Embedded constraints intersect, so every one must allow unsafe.Pointer.
 		for embedded := range u.EmbeddedTypes() {
-			if typeSetHasUnsafePointer(embedded, seen) {
-				return true
+			if !typeSetHasUnsafePointer(embedded) {
+				return false
 			}
 		}
+		return true
 	}
 	return false
 }
@@ -199,12 +214,8 @@ func hasAdjacentSafetyComment(comments []safetyComment, startLines, endLines []i
 				return true
 			}
 		}
-		if c.trailing {
-			for _, line := range endLines {
-				if c.start == line {
-					return true
-				}
-			}
+		if c.trailing && slices.Contains(endLines, c.start) {
+			return true
 		}
 	}
 	return false
