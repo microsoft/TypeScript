@@ -32,6 +32,8 @@ func castTypeMapper[T any](m *TypeMapper, kind TypeMapperKind) *T {
 	if m.kind != kind {
 		panic("Incorrect type mapper kind")
 	}
+	// SAFETY: Each kind is only assigned by the constructor of its concrete mapper, which
+	// embeds TypeMapper at offset zero, and every caller pairs T with its kind.
 	return (*T)(unsafe.Pointer(m))
 }
 

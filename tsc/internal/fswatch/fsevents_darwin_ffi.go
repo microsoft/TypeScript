@@ -205,6 +205,7 @@ func foldNativePath(s string) string {
 		return ""
 	}
 	cstr := append([]byte(s), 0)
+	// SAFETY: cstr is NUL-terminated and stays alive for the call, which copies it.
 	src := cfStringCreate(0, unsafe.Pointer(&cstr[0]), cfStringEncodingUTF8)
 	if src == 0 {
 		panic("fswatch: cannot create CFString for path folding")
@@ -301,6 +302,7 @@ func cfStringToGo(src uintptr) string {
 	length := cfStringGetLength(src)
 	bufSize := cfStringGetMaximumSizeForEncoding(length, cfStringEncodingUTF8) + 1
 	buf := make([]byte, bufSize)
+	// SAFETY: buf is bufSize bytes, which is the most the call will write.
 	if !cfStringGetCString(src, unsafe.Pointer(&buf[0]), bufSize, cfStringEncodingUTF8) {
 		return ""
 	}
@@ -322,6 +324,7 @@ func normalizeNFC(s string) string {
 	}
 
 	cstr := append([]byte(s), 0)
+	// SAFETY: cstr is NUL-terminated and stays alive for the call, which copies it.
 	src := cfStringCreate(0, unsafe.Pointer(&cstr[0]), cfStringEncodingUTF8)
 	runtime.KeepAlive(cstr)
 	if src == 0 {
@@ -525,6 +528,7 @@ func (p *fsEventsCallbackPayload) close() {
 	}
 	libcFree(p.flags)
 	libcFree(p.ids)
+	// SAFETY: The callback assembly allocates payloads with malloc, and p is not used after this.
 	libcFree(uintptr(unsafe.Pointer(p)))
 }
 
@@ -542,6 +546,7 @@ func newStreamCallback(watches []fseventsWatchSnapshot) (*streamCallback, error)
 	unix.CloseOnExec(eventPipe[1])
 
 	label := []byte("typescript.fswatch.fsevents.stream\x00")
+	// SAFETY: label is NUL-terminated and stays alive for the call, which copies it.
 	queue := dispatchQueueCreate(unsafe.Pointer(&label[0]))
 	runtime.KeepAlive(label)
 	if queue == 0 {
@@ -586,6 +591,8 @@ func (cb *streamCallback) close() {
 func (cb *streamCallback) eventLoop() {
 	defer close(cb.done)
 	var payload *fsEventsCallbackPayload
+	// SAFETY: buf covers exactly the bytes of payload, which outlives it. The pipe only carries
+	// pointers to C-allocated payloads, so the GC never needs to track the written pointer.
 	buf := unsafe.Slice((*byte)(unsafe.Pointer(&payload)), unsafe.Sizeof(payload))
 	for {
 		payload = nil
