@@ -13409,11 +13409,10 @@ func (c *Checker) checkObjectLiteral(node *ast.Node, checkMode CheckMode) *Type 
 	inDestructuringPattern := ast.IsAssignmentTarget(node)
 	// Grammar checking
 	c.checkGrammarObjectLiteralExpression(node.AsObjectLiteralExpression(), inDestructuringPattern)
+	// allPropertiesTable is only needed to check properties overwritten by spreads.
 	var allPropertiesTable ast.SymbolTable
-	if c.strictNullChecks {
-		allPropertiesTable = ast.NewSymbolTable()
-	}
-	propertiesTable := ast.NewSymbolTable()
+	// propertiesTable is created on first use, as spreads often leave it unused.
+	var propertiesTable ast.SymbolTable
 	var propertiesArray []*ast.Symbol
 	spread := c.emptyObjectType
 	c.pushCachedContextualType(node)
@@ -13438,6 +13437,9 @@ func (c *Checker) checkObjectLiteral(node *ast.Node, checkMode CheckMode) *Type 
 	// As otherwise they may not be checked until exports for the type at this position are retrieved,
 	// which may never occur.
 	for _, elem := range node.Properties() {
+		if elem.Kind == ast.KindSpreadAssignment && c.strictNullChecks && allPropertiesTable == nil {
+			allPropertiesTable = ast.NewSymbolTable()
+		}
 		if elem.Name() != nil && ast.IsComputedPropertyName(elem.Name()) {
 			c.checkComputedPropertyName(elem.Name())
 		}
@@ -13454,6 +13456,9 @@ func (c *Checker) checkObjectLiteral(node *ast.Node, checkMode CheckMode) *Type 
 		}
 		if hasComputedSymbolProperty {
 			indexInfos = append(indexInfos, c.getObjectLiteralIndexInfo(isReadonly, propertiesArray[offset:], c.esSymbolType))
+		}
+		if propertiesTable == nil {
+			propertiesTable = ast.NewSymbolTable()
 		}
 		result := c.newAnonymousType(node.Symbol(), propertiesTable, nil, nil, indexInfos)
 		result.objectFlags |= objectFlags | ObjectFlagsObjectLiteral | ObjectFlagsContainsObjectOrArrayLiteral
@@ -13535,7 +13540,7 @@ func (c *Checker) checkObjectLiteral(node *ast.Node, checkMode CheckMode) *Type 
 			if len(propertiesArray) > 0 {
 				spread = c.getSpreadType(spread, createObjectLiteralType(), node.Symbol(), objectFlags, inConstContext)
 				propertiesArray = nil
-				propertiesTable = ast.NewSymbolTable()
+				propertiesTable = nil
 				hasComputedStringProperty = false
 				hasComputedNumberProperty = false
 				hasComputedSymbolProperty = false
@@ -13579,6 +13584,9 @@ func (c *Checker) checkObjectLiteral(node *ast.Node, checkMode CheckMode) *Type 
 				}
 			}
 		} else {
+			if propertiesTable == nil {
+				propertiesTable = ast.NewSymbolTable()
+			}
 			propertiesTable.Set(member.Name(), member)
 		}
 		propertiesArray = append(propertiesArray, member)
@@ -13591,11 +13599,17 @@ func (c *Checker) checkObjectLiteral(node *ast.Node, checkMode CheckMode) *Type 
 		if len(propertiesArray) > 0 {
 			spread = c.getSpreadType(spread, createObjectLiteralType(), node.Symbol(), objectFlags, inConstContext)
 			propertiesArray = nil
-			propertiesTable = ast.NewSymbolTable()
+			propertiesTable = nil
 			hasComputedStringProperty = false
 			hasComputedNumberProperty = false
 		}
 		// remap the raw emptyObjectType fed in at the top into a fresh empty object literal type, unique to this use site
+		if spread.flags&TypeFlagsUnion == 0 {
+			if spread == c.emptyObjectType {
+				return createObjectLiteralType()
+			}
+			return spread
+		}
 		return c.mapType(spread, func(t *Type) *Type {
 			if t == c.emptyObjectType {
 				return createObjectLiteralType()
