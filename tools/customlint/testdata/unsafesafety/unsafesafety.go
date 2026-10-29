@@ -170,3 +170,9 @@ func boxing[P ~unsafe.Pointer](p P, q unsafe.Pointer) {
 	_ = any(p)
 	_ = any(q)
 }
+
+func identity[T any, C comparable](x T, c C, p unsafe.Pointer) {
+	_ = T(x)
+	_ = C(c)
+	_ = unsafe.Pointer(p)
+}

@@ -100,6 +100,10 @@ func (u *unsafeSafetyPass) run() (any, error) {
 func (u *unsafeSafetyPass) unsafeOperation(call *ast.CallExpr) string {
 	info := u.pass.TypesInfo
 	if tv, ok := info.Types[call.Fun]; ok && tv.IsType() && len(call.Args) == 1 {
+		// Identity conversions, such as T(x) for a type parameter T, change nothing.
+		if types.Identical(tv.Type, info.TypeOf(call.Args[0])) {
+			return ""
+		}
 		if isUnsafePointer(tv.Type) {
 			return "conversion to unsafe.Pointer"
 		}
