@@ -1,0 +1,33 @@
+//// [tests/cases/compiler/jsdocNestedPropertyRecoveryAfterBadType.ts] ////
+
+=== index.js ===
+
+/**
+ * @typedef Sig
+ * @property {object} Args
+ * @property {string} Args.name
+ * @property {function(string)=} Args.onSave
+ * @property {((v: string) => void)=} Args.onCancel
+ */
+
+export {};
+
+=== check.ts ===
+import type { Sig } from './index.js';
+>Sig : Sig
+
+export const a: Array<keyof Sig['Args']> = ['name'];
+>a : ("name" | "onCancel" | "onSave")[]
+>['name'] : "name"[]
+>'name' : "name"
+
+export const b: Array<keyof Sig['Args']> = ['onSave'];
+>b : ("name" | "onCancel" | "onSave")[]
+>['onSave'] : "onSave"[]
+>'onSave' : "onSave"
+
+export const c: Array<keyof Sig['Args']> = ['onCancel'];
+>c : ("name" | "onCancel" | "onSave")[]
+>['onCancel'] : "onCancel"[]
+>'onCancel' : "onCancel"
+

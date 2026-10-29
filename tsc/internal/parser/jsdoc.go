@@ -117,10 +117,47 @@ func (p *Parser) parseJSDocTypeExpression(mayOmitBraces bool) *ast.Node {
 	t := p.parseJSDocType()
 	p.contextFlags = saveContextFlags
 	if hasBrace {
-		p.parseExpectedJSDoc(ast.KindCloseBraceToken)
+		p.parseJSDocTypeExpressionCloseBrace()
 	}
 
 	return p.finishNode(p.factory.NewJSDocTypeExpression(t), pos)
+}
+
+// parseJSDocTypeExpressionCloseBrace consumes the closing `}` of a `{...}` JSDoc type.
+// Unsupported Closure `function(...)` types parse `function` as a name and leave `(...)`
+// before `}`. Skip that leftover so the tag name still parses and later nested `@property`
+// tags are not dropped. Only start this recovery at `(` so unrelated missing-`}` cases
+// (e.g. `@param { { (): void; } name`) still leave the name in place.
+// See https://github.com/microsoft/TypeScript/issues/65020.
+func (p *Parser) parseJSDocTypeExpressionCloseBrace() {
+	if p.parseExpectedJSDoc(ast.KindCloseBraceToken) {
+		return
+	}
+	if p.token != ast.KindOpenParenToken {
+		return
+	}
+	depth := 0
+	for p.token != ast.KindAtToken && p.token != ast.KindEndOfFile {
+		switch p.token {
+		case ast.KindCloseBraceToken:
+			if depth == 0 {
+				p.nextTokenJSDoc()
+				return
+			}
+			depth--
+			p.nextTokenJSDoc()
+		case ast.KindOpenBraceToken, ast.KindOpenParenToken, ast.KindOpenBracketToken:
+			depth++
+			p.nextTokenJSDoc()
+		case ast.KindCloseParenToken, ast.KindCloseBracketToken:
+			if depth > 0 {
+				depth--
+			}
+			p.nextTokenJSDoc()
+		default:
+			p.nextTokenJSDoc()
+		}
+	}
 }
 
 func (p *Parser) parseJSDocNameReference() *ast.Node {
@@ -1196,9 +1233,15 @@ func (p *Parser) parseChildParameterOrPropertyTag(target propertyLikeParse, inde
 			if canParseTag && p.scanner.CanFollowJSDocAt() {
 				child := p.tryParseChildTag(target, indent)
 				if child != nil && name != nil &&
-					(child.Kind == ast.KindJSDocParameterTag || child.Kind == ast.KindJSDocPropertyTag) &&
-					(ast.IsIdentifier(child.Name()) || !textsEqual(name, child.Name().AsQualifiedName().Left)) {
-					return nil
+					(child.Kind == ast.KindJSDocParameterTag || child.Kind == ast.KindJSDocPropertyTag) {
+					childName := child.Name()
+					// A missing name means this tag's type failed to parse and recovery could
+					// not read the name. Keep it as a nested child so subsequent matching
+					// nested tags are still collected rather than aborting the nested literal.
+					if !ast.NodeIsMissing(childName) &&
+						(ast.IsIdentifier(childName) || !textsEqual(name, childName.AsQualifiedName().Left)) {
+						return nil
+					}
 				}
 				return child
 			}

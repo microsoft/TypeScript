@@ -15,12 +15,12 @@
  */
 function callIt(func, arg) {
 >callIt : (func: Type1, arg: string) => boolean
->func : Type1
+>func : Function
 >arg : string
 
   return func(arg);
 >func(arg) : any
->func : Type1
+>func : Function
 >arg : string
 }
 
@@ -73,14 +73,14 @@ function check(obj) {
  */
 function use1(func, bool, str, num) {
 >use1 : (func: StringOrNumber1, bool: boolean, str: string, num: number) => string | number
->func : StringOrNumber1
+>func : Function
 >bool : boolean
 >str : string
 >num : number
 
   return func(bool, str, num)
 >func(bool, str, num) : any
->func : StringOrNumber1
+>func : Function
 >bool : boolean
 >str : string
 >num : number
@@ -105,14 +105,14 @@ function use1(func, bool, str, num) {
  */
 function use2(func, bool, str, num) {
 >use2 : (func: StringOrNumber2, bool: boolean, str: string, num: number) => string | number
->func : StringOrNumber2
+>func : Function
 >bool : boolean
 >str : string
 >num : number
 
   return func(bool, str, num)
 >func(bool, str, num) : any
->func : StringOrNumber2
+>func : Function
 >bool : boolean
 >str : string
 >num : number

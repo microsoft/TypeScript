@@ -571,3 +571,75 @@ namespace N {
 	assert.Equal(t, positionMap.UTF8ToUTF16(afterBoxDrawingCharacter), afterBoxDrawingCharacter-2)
 	assert.Equal(t, positionMap.UTF8ToUTF16(len(sourceText)), len(sourceText)-2)
 }
+
+
+func TestJSDocNestedPropertyRecoveryAfterBadType(t *testing.T) {
+	t.Parallel()
+	// Regression for https://github.com/microsoft/TypeScript/issues/65020:
+	// a nested @property whose type does not parse must not drop later nested properties.
+	sourceText := `/**
+ * @typedef Sig
+ * @property {object} Args
+ * @property {string} Args.name
+ * @property {function(string)=} Args.onSave
+ * @property {((v: string) => void)=} Args.onCancel
+ */
+export {};
+`
+	opts := ast.SourceFileParseOptions{FileName: "/index.js", PathKey: "/index.js"}
+	file := parser.ParseSourceFile(opts, sourceText, core.ScriptKindJS)
+	var typedef *ast.Node
+	for _, statement := range file.Statements.Nodes {
+		for _, j := range statement.JSDoc(file) {
+			if j.AsJSDoc().Tags == nil {
+				continue
+			}
+			for _, tag := range j.AsJSDoc().Tags.Nodes {
+				if tag.Kind == ast.KindJSDocTypedefTag {
+					typedef = tag
+				}
+			}
+		}
+	}
+	assert.Assert(t, typedef != nil)
+	inner := typedef.TypeExpression()
+	if inner.Kind == ast.KindJSDocTypeExpression {
+		inner = inner.Type()
+	}
+	assert.Equal(t, inner.Kind, ast.KindJSDocTypeLiteral)
+	props := inner.AsJSDocTypeLiteral().JSDocPropertyTags
+	assert.Assert(t, len(props) >= 1)
+	args := props[0]
+	assert.Equal(t, entityText(args.Name()), "Args")
+	assert.Assert(t, args.TypeExpression() != nil && args.TypeExpression().Type() != nil)
+	assert.Equal(t, args.TypeExpression().Type().Kind, ast.KindJSDocTypeLiteral)
+	nested := args.TypeExpression().Type().AsJSDocTypeLiteral().JSDocPropertyTags
+	names := make([]string, 0, len(nested))
+	for _, np := range nested {
+		names = append(names, entityText(np.Name()))
+	}
+	assert.Assert(t, containsString(names, "Args.name"), "names=%v", names)
+	assert.Assert(t, containsString(names, "Args.onCancel"), "later nested property must be kept; names=%v", names)
+}
+
+func entityText(n *ast.Node) string {
+	if n == nil {
+		return "<nil>"
+	}
+	if ast.IsIdentifier(n) {
+		return n.Text()
+	}
+	if ast.IsQualifiedName(n) {
+		return entityText(n.AsQualifiedName().Left) + "." + entityText(n.AsQualifiedName().Right)
+	}
+	return n.Kind.String()
+}
+
+func containsString(items []string, want string) bool {
+	for _, item := range items {
+		if item == want {
+			return true
+		}
+	}
+	return false
+}

@@ -1,0 +1,33 @@
+//// [tests/cases/compiler/jsdocNestedPropertyRecoveryAfterBadType.ts] ////
+
+=== index.js ===
+
+/**
+ * @typedef Sig
+ * @property {object} Args
+ * @property {string} Args.name
+ * @property {function(string)=} Args.onSave
+ * @property {((v: string) => void)=} Args.onCancel
+ */
+
+export {};
+
+=== check.ts ===
+import type { Sig } from './index.js';
+>Sig : Symbol(Sig, Decl(check.ts, 0, 13))
+
+export const a: Array<keyof Sig['Args']> = ['name'];
+>a : Symbol(a, Decl(check.ts, 2, 12))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --) ... and 4 more)
+>Sig : Symbol(Sig, Decl(check.ts, 0, 13))
+
+export const b: Array<keyof Sig['Args']> = ['onSave'];
+>b : Symbol(b, Decl(check.ts, 3, 12))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --) ... and 4 more)
+>Sig : Symbol(Sig, Decl(check.ts, 0, 13))
+
+export const c: Array<keyof Sig['Args']> = ['onCancel'];
+>c : Symbol(c, Decl(check.ts, 4, 12))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --) ... and 4 more)
+>Sig : Symbol(Sig, Decl(check.ts, 0, 13))
+

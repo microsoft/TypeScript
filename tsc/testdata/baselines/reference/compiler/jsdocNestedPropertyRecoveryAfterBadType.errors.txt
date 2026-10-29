@@ -1,0 +1,23 @@
+index.js(5,23): error TS1005: '}' expected.
+
+
+==== index.js (1 errors) ====
+    /**
+     * @typedef Sig
+     * @property {object} Args
+     * @property {string} Args.name
+     * @property {function(string)=} Args.onSave
+                          ~
+!!! error TS1005: '}' expected.
+     * @property {((v: string) => void)=} Args.onCancel
+     */
+    
+    export {};
+    
+==== check.ts (0 errors) ====
+    import type { Sig } from './index.js';
+    
+    export const a: Array<keyof Sig['Args']> = ['name'];
+    export const b: Array<keyof Sig['Args']> = ['onSave'];
+    export const c: Array<keyof Sig['Args']> = ['onCancel'];
+    
