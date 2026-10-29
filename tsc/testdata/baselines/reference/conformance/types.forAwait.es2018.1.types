@@ -11,21 +11,21 @@ declare const iterableOfPromise: Iterable<Promise<number>>;
 >iterableOfPromise : Iterable<Promise<number>>
 
 async function f1() {
->f1 : () => Promise<void>
+>f1 : () => Promise<void & not { then(): any; }>
 
     let y: number;
 >y : number
 
     for await (const x of asyncIterable) {
->x : number
+>x : number & not { then(): any; }
 >asyncIterable : AsyncIterable<number>
     }
     for await (const x of iterable) {
->x : number
+>x : number & not { then(): any; }
 >iterable : Iterable<number>
     }
     for await (const x of iterableOfPromise) {
->x : number
+>x : number & not { then(): any; }
 >iterableOfPromise : Iterable<Promise<number>>
     }
     for await (y of asyncIterable) {
@@ -42,21 +42,21 @@ async function f1() {
     }
 }
 async function * f2() {
->f2 : () => AsyncGenerator<never, void, unknown>
+>f2 : () => AsyncGenerator<never, void & not { then(): any; }, unknown>
 
     let y: number;
 >y : number
 
     for await (const x of asyncIterable) {
->x : number
+>x : number & not { then(): any; }
 >asyncIterable : AsyncIterable<number>
     }
     for await (const x of iterable) {
->x : number
+>x : number & not { then(): any; }
 >iterable : Iterable<number>
     }
     for await (const x of iterableOfPromise) {
->x : number
+>x : number & not { then(): any; }
 >iterableOfPromise : Iterable<Promise<number>>
     }
     for await (y of asyncIterable) {

@@ -16,15 +16,15 @@ async function fn1(): Promise<Obj> {
 
     const obj2: Obj = await new Promise(resolve => resolve({ key: "value" }));
 >obj2 : Obj
->await new Promise(resolve => resolve({ key: "value" })) : Obj
->new Promise(resolve => resolve({ key: "value" })) : Promise<Obj>
+>await new Promise(resolve => resolve({ key: "value" })) : not { then(): any; } & not { then(): any; }
+>new Promise(resolve => resolve({ key: "value" })) : Promise<not { then(): any; }>
 >Promise : PromiseConstructor
->resolve => resolve({ key: "value" }) : (resolve: (value: Obj | PromiseLike<Obj>) => void) => void
->resolve : (value: Obj | PromiseLike<Obj>) => void
+>resolve => resolve({ key: "value" }) : (resolve: (value: PromiseLike<not { then(): any; }> | not { then(): any; }) => void) => void
+>resolve : (value: PromiseLike<not { then(): any; }> | not { then(): any; }) => void
 >resolve({ key: "value" }) : void
->resolve : (value: Obj | PromiseLike<Obj>) => void
->{ key: "value" } : { key: "value"; }
->key : "value"
+>resolve : (value: PromiseLike<not { then(): any; }> | not { then(): any; }) => void
+>{ key: "value" } : { key: string; }
+>key : string
 >"value" : "value"
 
     return await { key: "value" };

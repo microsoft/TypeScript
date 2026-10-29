@@ -86,7 +86,7 @@ const testPromiseFinally = new Promise(() => {}).finally();
 >testPromiseFinally : any
 >new Promise(() => {}).finally() : any
 >new Promise(() => {}).finally : any
->new Promise(() => {}) : Promise<unknown>
+>new Promise(() => {}) : Promise<not { then(): any; }>
 >Promise : PromiseConstructor
 >() => {} : () => void
 >finally : any

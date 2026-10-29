@@ -137,17 +137,17 @@ const result16 = test1(() => { return E.Val; });
 >Val : E.Val
 
 const result17 = test1(async () => 'foo');
->result17 : Promise<"foo">
->test1(async () => 'foo') : Promise<"foo">
+>result17 : Promise<"foo" & not { then(): any; }>
+>test1(async () => 'foo') : Promise<"foo" & not { then(): any; }>
 >test1 : <const T>(create: () => T) => T
->async () => 'foo' : () => Promise<"foo">
+>async () => 'foo' : () => Promise<"foo" & not { then(): any; }>
 >'foo' : "foo"
 
 const result18 = test1(async () => { return 'foo'; });
->result18 : Promise<"foo">
->test1(async () => { return 'foo'; }) : Promise<"foo">
+>result18 : Promise<"foo" & not { then(): any; }>
+>test1(async () => { return 'foo'; }) : Promise<"foo" & not { then(): any; }>
 >test1 : <const T>(create: () => T) => T
->async () => { return 'foo'; } : () => Promise<"foo">
+>async () => { return 'foo'; } : () => Promise<"foo" & not { then(): any; }>
 >'foo' : "foo"
 
 declare function test2<const T>(create: () => Promise<T>): T;
@@ -155,17 +155,17 @@ declare function test2<const T>(create: () => Promise<T>): T;
 >create : () => Promise<T>
 
 const result19 = test2(async () => 'foo');
->result19 : "foo"
->test2(async () => 'foo') : "foo"
+>result19 : "foo" & not { then(): any; }
+>test2(async () => 'foo') : "foo" & not { then(): any; }
 >test2 : <const T>(create: () => Promise<T>) => T
->async () => 'foo' : () => Promise<"foo">
+>async () => 'foo' : () => Promise<"foo" & not { then(): any; }>
 >'foo' : "foo"
 
 const result20 = test2(async () => { return 'foo'; });
->result20 : "foo"
->test2(async () => { return 'foo'; }) : "foo"
+>result20 : "foo" & not { then(): any; }
+>test2(async () => { return 'foo'; }) : "foo" & not { then(): any; }
 >test2 : <const T>(create: () => Promise<T>) => T
->async () => { return 'foo'; } : () => Promise<"foo">
+>async () => { return 'foo'; } : () => Promise<"foo" & not { then(): any; }>
 >'foo' : "foo"
 
 declare function test3<const T, const R>(arg: () => Generator<T, R>): [T, R]
@@ -192,10 +192,10 @@ declare function test4<const T, const R>(arg: () => AsyncGenerator<T, R>): [T, R
 >arg : () => AsyncGenerator<T, R>
 
 const result22 = test4(async function*() {
->result22 : [10, "1"]
->test4(async function*() {    yield 10;    return '1';}) : [10, "1"]
+>result22 : [10 & not { then(): any; }, "1" & not { then(): any; }]
+>test4(async function*() {    yield 10;    return '1';}) : [10 & not { then(): any; }, "1" & not { then(): any; }]
 >test4 : <const T, const R>(arg: () => AsyncGenerator<T, R>) => [T, R]
->async function*() {    yield 10;    return '1';} : () => AsyncGenerator<10, "1", any>
+>async function*() {    yield 10;    return '1';} : () => AsyncGenerator<10 & not { then(): any; }, "1" & not { then(): any; }, any>
 
     yield 10;
 >yield 10 : any

@@ -1,0 +1,42 @@
+main.ts(6,30): error TS2344: Type 'Promise<Value>' does not satisfy the constraint 'not { then(): any; }'.
+main.ts(13,52): error TS2344: Type 'Promise<Value>' does not satisfy the constraint 'not { then(): any; }'.
+main.ts(20,48): error TS2344: Type 'Promise<Value>' does not satisfy the constraint 'not { then(): any; }'.
+
+
+==== augmentation.d.ts (0 errors) ====
+    interface Promise<T> {
+        communityMethod(): T;
+    }
+    
+    interface Promise<T extends not { then(): any }> {
+        anotherCommunityMethod(): T;
+    }
+    
+==== main.ts (3 errors) ====
+    type Value = number & not { then(): any };
+    declare const value: Value;
+    const promise = Promise.resolve(value);
+    const first: Value = promise.communityMethod();
+    const second: Value = promise.anotherCommunityMethod();
+    type NestedPromise = Promise<Promise<Value>>;
+                                 ~~~~~~~~~~~~~~
+!!! error TS2344: Type 'Promise<Value>' does not satisfy the constraint 'not { then(): any; }'.
+    
+    interface UnconstrainedFirst<T> {
+        value: T;
+    }
+    interface UnconstrainedFirst<T extends not { then(): any }> {}
+    type ValidUnconstrainedFirst = UnconstrainedFirst<Value>;
+    type NestedUnconstrainedFirst = UnconstrainedFirst<Promise<Value>>;
+                                                       ~~~~~~~~~~~~~~
+!!! error TS2344: Type 'Promise<Value>' does not satisfy the constraint 'not { then(): any; }'.
+    
+    interface ConstrainedFirst<T extends not { then(): any }> {
+        value: T;
+    }
+    interface ConstrainedFirst<T> {}
+    type ValidConstrainedFirst = ConstrainedFirst<Value>;
+    type NestedConstrainedFirst = ConstrainedFirst<Promise<Value>>;
+                                                   ~~~~~~~~~~~~~~
+!!! error TS2344: Type 'Promise<Value>' does not satisfy the constraint 'not { then(): any; }'.
+    

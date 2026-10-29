@@ -4,155 +4,155 @@
 // the generated code from both should be similar
 
 const fooShort = async () => {
->fooShort : () => Promise<{ a: number; b: number; c: number; d: number; e: number; }>
->async () => {    return {        a: await Promise.resolve(0),        b: await Promise.resolve(1),        c: await Promise.resolve(2),        d: await Promise.resolve(3),        e: await Promise.resolve(4),    };} : () => Promise<{ a: number; b: number; c: number; d: number; e: number; }>
+>fooShort : () => Promise<{ a: number & not { then(): any; } & not { then(): any; }; b: number & not { then(): any; } & not { then(): any; }; c: number & not { then(): any; } & not { then(): any; }; d: number & not { then(): any; } & not { then(): any; }; e: number & not { then(): any; } & not { then(): any; }; } & not { then(): any; }>
+>async () => {    return {        a: await Promise.resolve(0),        b: await Promise.resolve(1),        c: await Promise.resolve(2),        d: await Promise.resolve(3),        e: await Promise.resolve(4),    };} : () => Promise<{ a: number & not { then(): any; } & not { then(): any; }; b: number & not { then(): any; } & not { then(): any; }; c: number & not { then(): any; } & not { then(): any; }; d: number & not { then(): any; } & not { then(): any; }; e: number & not { then(): any; } & not { then(): any; }; } & not { then(): any; }>
 
     return {
->{        a: await Promise.resolve(0),        b: await Promise.resolve(1),        c: await Promise.resolve(2),        d: await Promise.resolve(3),        e: await Promise.resolve(4),    } : { a: number; b: number; c: number; d: number; e: number; }
+>{        a: await Promise.resolve(0),        b: await Promise.resolve(1),        c: await Promise.resolve(2),        d: await Promise.resolve(3),        e: await Promise.resolve(4),    } : { a: number & not { then(): any; } & not { then(): any; }; b: number & not { then(): any; } & not { then(): any; }; c: number & not { then(): any; } & not { then(): any; }; d: number & not { then(): any; } & not { then(): any; }; e: number & not { then(): any; } & not { then(): any; }; }
 
         a: await Promise.resolve(0),
->a : number
->await Promise.resolve(0) : number
->Promise.resolve(0) : Promise<number>
->Promise.resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T>(value: T | PromiseLike<T>): Promise<Awaited<T>>; }
+>a : number & not { then(): any; } & not { then(): any; }
+>await Promise.resolve(0) : number & not { then(): any; } & not { then(): any; }
+>Promise.resolve(0) : Promise<number & not { then(): any; }>
+>Promise.resolve : { (): Promise<void & not { then(): any; }>; <T>(value: T): Promise<Awaited<T>>; <T>(value: T | PromiseLike<T>): Promise<Awaited<T>>; }
 >Promise : PromiseConstructor
->resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T>(value: T | PromiseLike<T>): Promise<Awaited<T>>; }
+>resolve : { (): Promise<void & not { then(): any; }>; <T>(value: T): Promise<Awaited<T>>; <T>(value: T | PromiseLike<T>): Promise<Awaited<T>>; }
 >0 : 0
 
         b: await Promise.resolve(1),
->b : number
->await Promise.resolve(1) : number
->Promise.resolve(1) : Promise<number>
->Promise.resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T>(value: T | PromiseLike<T>): Promise<Awaited<T>>; }
+>b : number & not { then(): any; } & not { then(): any; }
+>await Promise.resolve(1) : number & not { then(): any; } & not { then(): any; }
+>Promise.resolve(1) : Promise<number & not { then(): any; }>
+>Promise.resolve : { (): Promise<void & not { then(): any; }>; <T>(value: T): Promise<Awaited<T>>; <T>(value: T | PromiseLike<T>): Promise<Awaited<T>>; }
 >Promise : PromiseConstructor
->resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T>(value: T | PromiseLike<T>): Promise<Awaited<T>>; }
+>resolve : { (): Promise<void & not { then(): any; }>; <T>(value: T): Promise<Awaited<T>>; <T>(value: T | PromiseLike<T>): Promise<Awaited<T>>; }
 >1 : 1
 
         c: await Promise.resolve(2),
->c : number
->await Promise.resolve(2) : number
->Promise.resolve(2) : Promise<number>
->Promise.resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T>(value: T | PromiseLike<T>): Promise<Awaited<T>>; }
+>c : number & not { then(): any; } & not { then(): any; }
+>await Promise.resolve(2) : number & not { then(): any; } & not { then(): any; }
+>Promise.resolve(2) : Promise<number & not { then(): any; }>
+>Promise.resolve : { (): Promise<void & not { then(): any; }>; <T>(value: T): Promise<Awaited<T>>; <T>(value: T | PromiseLike<T>): Promise<Awaited<T>>; }
 >Promise : PromiseConstructor
->resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T>(value: T | PromiseLike<T>): Promise<Awaited<T>>; }
+>resolve : { (): Promise<void & not { then(): any; }>; <T>(value: T): Promise<Awaited<T>>; <T>(value: T | PromiseLike<T>): Promise<Awaited<T>>; }
 >2 : 2
 
         d: await Promise.resolve(3),
->d : number
->await Promise.resolve(3) : number
->Promise.resolve(3) : Promise<number>
->Promise.resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T>(value: T | PromiseLike<T>): Promise<Awaited<T>>; }
+>d : number & not { then(): any; } & not { then(): any; }
+>await Promise.resolve(3) : number & not { then(): any; } & not { then(): any; }
+>Promise.resolve(3) : Promise<number & not { then(): any; }>
+>Promise.resolve : { (): Promise<void & not { then(): any; }>; <T>(value: T): Promise<Awaited<T>>; <T>(value: T | PromiseLike<T>): Promise<Awaited<T>>; }
 >Promise : PromiseConstructor
->resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T>(value: T | PromiseLike<T>): Promise<Awaited<T>>; }
+>resolve : { (): Promise<void & not { then(): any; }>; <T>(value: T): Promise<Awaited<T>>; <T>(value: T | PromiseLike<T>): Promise<Awaited<T>>; }
 >3 : 3
 
         e: await Promise.resolve(4),
->e : number
->await Promise.resolve(4) : number
->Promise.resolve(4) : Promise<number>
->Promise.resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T>(value: T | PromiseLike<T>): Promise<Awaited<T>>; }
+>e : number & not { then(): any; } & not { then(): any; }
+>await Promise.resolve(4) : number & not { then(): any; } & not { then(): any; }
+>Promise.resolve(4) : Promise<number & not { then(): any; }>
+>Promise.resolve : { (): Promise<void & not { then(): any; }>; <T>(value: T): Promise<Awaited<T>>; <T>(value: T | PromiseLike<T>): Promise<Awaited<T>>; }
 >Promise : PromiseConstructor
->resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T>(value: T | PromiseLike<T>): Promise<Awaited<T>>; }
+>resolve : { (): Promise<void & not { then(): any; }>; <T>(value: T): Promise<Awaited<T>>; <T>(value: T | PromiseLike<T>): Promise<Awaited<T>>; }
 >4 : 4
 
     };
 }
 
 const fooLong = async () => {
->fooLong : () => Promise<{ a: number; b: number; c: number; d: number; e: number; f: number; g: number; h: number; i: number; j: number; }>
->async () => {    return {        a: await Promise.resolve(0),        b: await Promise.resolve(1),        c: await Promise.resolve(2),        d: await Promise.resolve(3),        e: await Promise.resolve(4),        f: await Promise.resolve(5),        g: await Promise.resolve(6),        h: await Promise.resolve(7),        i: await Promise.resolve(8),        j: await Promise.resolve(9),    };} : () => Promise<{ a: number; b: number; c: number; d: number; e: number; f: number; g: number; h: number; i: number; j: number; }>
+>fooLong : () => Promise<{ a: number & not { then(): any; } & not { then(): any; }; b: number & not { then(): any; } & not { then(): any; }; c: number & not { then(): any; } & not { then(): any; }; d: number & not { then(): any; } & not { then(): any; }; e: number & not { then(): any; } & not { then(): any; }; f: number & not { then(): any; } & not { then(): any; }; g: number & not { then(): any; } & not { then(): any; }; h: number & not { then(): any; } & not { then(): any; }; i: number & not { then(): any; } & not { then(): any; }; j: number & not { then(): any; } & not { then(): any; }; } & not { then(): any; }>
+>async () => {    return {        a: await Promise.resolve(0),        b: await Promise.resolve(1),        c: await Promise.resolve(2),        d: await Promise.resolve(3),        e: await Promise.resolve(4),        f: await Promise.resolve(5),        g: await Promise.resolve(6),        h: await Promise.resolve(7),        i: await Promise.resolve(8),        j: await Promise.resolve(9),    };} : () => Promise<{ a: number & not { then(): any; } & not { then(): any; }; b: number & not { then(): any; } & not { then(): any; }; c: number & not { then(): any; } & not { then(): any; }; d: number & not { then(): any; } & not { then(): any; }; e: number & not { then(): any; } & not { then(): any; }; f: number & not { then(): any; } & not { then(): any; }; g: number & not { then(): any; } & not { then(): any; }; h: number & not { then(): any; } & not { then(): any; }; i: number & not { then(): any; } & not { then(): any; }; j: number & not { then(): any; } & not { then(): any; }; } & not { then(): any; }>
 
     return {
->{        a: await Promise.resolve(0),        b: await Promise.resolve(1),        c: await Promise.resolve(2),        d: await Promise.resolve(3),        e: await Promise.resolve(4),        f: await Promise.resolve(5),        g: await Promise.resolve(6),        h: await Promise.resolve(7),        i: await Promise.resolve(8),        j: await Promise.resolve(9),    } : { a: number; b: number; c: number; d: number; e: number; f: number; g: number; h: number; i: number; j: number; }
+>{        a: await Promise.resolve(0),        b: await Promise.resolve(1),        c: await Promise.resolve(2),        d: await Promise.resolve(3),        e: await Promise.resolve(4),        f: await Promise.resolve(5),        g: await Promise.resolve(6),        h: await Promise.resolve(7),        i: await Promise.resolve(8),        j: await Promise.resolve(9),    } : { a: number & not { then(): any; } & not { then(): any; }; b: number & not { then(): any; } & not { then(): any; }; c: number & not { then(): any; } & not { then(): any; }; d: number & not { then(): any; } & not { then(): any; }; e: number & not { then(): any; } & not { then(): any; }; f: number & not { then(): any; } & not { then(): any; }; g: number & not { then(): any; } & not { then(): any; }; h: number & not { then(): any; } & not { then(): any; }; i: number & not { then(): any; } & not { then(): any; }; j: number & not { then(): any; } & not { then(): any; }; }
 
         a: await Promise.resolve(0),
->a : number
->await Promise.resolve(0) : number
->Promise.resolve(0) : Promise<number>
->Promise.resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T>(value: T | PromiseLike<T>): Promise<Awaited<T>>; }
+>a : number & not { then(): any; } & not { then(): any; }
+>await Promise.resolve(0) : number & not { then(): any; } & not { then(): any; }
+>Promise.resolve(0) : Promise<number & not { then(): any; }>
+>Promise.resolve : { (): Promise<void & not { then(): any; }>; <T>(value: T): Promise<Awaited<T>>; <T>(value: T | PromiseLike<T>): Promise<Awaited<T>>; }
 >Promise : PromiseConstructor
->resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T>(value: T | PromiseLike<T>): Promise<Awaited<T>>; }
+>resolve : { (): Promise<void & not { then(): any; }>; <T>(value: T): Promise<Awaited<T>>; <T>(value: T | PromiseLike<T>): Promise<Awaited<T>>; }
 >0 : 0
 
         b: await Promise.resolve(1),
->b : number
->await Promise.resolve(1) : number
->Promise.resolve(1) : Promise<number>
->Promise.resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T>(value: T | PromiseLike<T>): Promise<Awaited<T>>; }
+>b : number & not { then(): any; } & not { then(): any; }
+>await Promise.resolve(1) : number & not { then(): any; } & not { then(): any; }
+>Promise.resolve(1) : Promise<number & not { then(): any; }>
+>Promise.resolve : { (): Promise<void & not { then(): any; }>; <T>(value: T): Promise<Awaited<T>>; <T>(value: T | PromiseLike<T>): Promise<Awaited<T>>; }
 >Promise : PromiseConstructor
->resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T>(value: T | PromiseLike<T>): Promise<Awaited<T>>; }
+>resolve : { (): Promise<void & not { then(): any; }>; <T>(value: T): Promise<Awaited<T>>; <T>(value: T | PromiseLike<T>): Promise<Awaited<T>>; }
 >1 : 1
 
         c: await Promise.resolve(2),
->c : number
->await Promise.resolve(2) : number
->Promise.resolve(2) : Promise<number>
->Promise.resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T>(value: T | PromiseLike<T>): Promise<Awaited<T>>; }
+>c : number & not { then(): any; } & not { then(): any; }
+>await Promise.resolve(2) : number & not { then(): any; } & not { then(): any; }
+>Promise.resolve(2) : Promise<number & not { then(): any; }>
+>Promise.resolve : { (): Promise<void & not { then(): any; }>; <T>(value: T): Promise<Awaited<T>>; <T>(value: T | PromiseLike<T>): Promise<Awaited<T>>; }
 >Promise : PromiseConstructor
->resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T>(value: T | PromiseLike<T>): Promise<Awaited<T>>; }
+>resolve : { (): Promise<void & not { then(): any; }>; <T>(value: T): Promise<Awaited<T>>; <T>(value: T | PromiseLike<T>): Promise<Awaited<T>>; }
 >2 : 2
 
         d: await Promise.resolve(3),
->d : number
->await Promise.resolve(3) : number
->Promise.resolve(3) : Promise<number>
->Promise.resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T>(value: T | PromiseLike<T>): Promise<Awaited<T>>; }
+>d : number & not { then(): any; } & not { then(): any; }
+>await Promise.resolve(3) : number & not { then(): any; } & not { then(): any; }
+>Promise.resolve(3) : Promise<number & not { then(): any; }>
+>Promise.resolve : { (): Promise<void & not { then(): any; }>; <T>(value: T): Promise<Awaited<T>>; <T>(value: T | PromiseLike<T>): Promise<Awaited<T>>; }
 >Promise : PromiseConstructor
->resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T>(value: T | PromiseLike<T>): Promise<Awaited<T>>; }
+>resolve : { (): Promise<void & not { then(): any; }>; <T>(value: T): Promise<Awaited<T>>; <T>(value: T | PromiseLike<T>): Promise<Awaited<T>>; }
 >3 : 3
 
         e: await Promise.resolve(4),
->e : number
->await Promise.resolve(4) : number
->Promise.resolve(4) : Promise<number>
->Promise.resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T>(value: T | PromiseLike<T>): Promise<Awaited<T>>; }
+>e : number & not { then(): any; } & not { then(): any; }
+>await Promise.resolve(4) : number & not { then(): any; } & not { then(): any; }
+>Promise.resolve(4) : Promise<number & not { then(): any; }>
+>Promise.resolve : { (): Promise<void & not { then(): any; }>; <T>(value: T): Promise<Awaited<T>>; <T>(value: T | PromiseLike<T>): Promise<Awaited<T>>; }
 >Promise : PromiseConstructor
->resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T>(value: T | PromiseLike<T>): Promise<Awaited<T>>; }
+>resolve : { (): Promise<void & not { then(): any; }>; <T>(value: T): Promise<Awaited<T>>; <T>(value: T | PromiseLike<T>): Promise<Awaited<T>>; }
 >4 : 4
 
         f: await Promise.resolve(5),
->f : number
->await Promise.resolve(5) : number
->Promise.resolve(5) : Promise<number>
->Promise.resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T>(value: T | PromiseLike<T>): Promise<Awaited<T>>; }
+>f : number & not { then(): any; } & not { then(): any; }
+>await Promise.resolve(5) : number & not { then(): any; } & not { then(): any; }
+>Promise.resolve(5) : Promise<number & not { then(): any; }>
+>Promise.resolve : { (): Promise<void & not { then(): any; }>; <T>(value: T): Promise<Awaited<T>>; <T>(value: T | PromiseLike<T>): Promise<Awaited<T>>; }
 >Promise : PromiseConstructor
->resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T>(value: T | PromiseLike<T>): Promise<Awaited<T>>; }
+>resolve : { (): Promise<void & not { then(): any; }>; <T>(value: T): Promise<Awaited<T>>; <T>(value: T | PromiseLike<T>): Promise<Awaited<T>>; }
 >5 : 5
 
         g: await Promise.resolve(6),
->g : number
->await Promise.resolve(6) : number
->Promise.resolve(6) : Promise<number>
->Promise.resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T>(value: T | PromiseLike<T>): Promise<Awaited<T>>; }
+>g : number & not { then(): any; } & not { then(): any; }
+>await Promise.resolve(6) : number & not { then(): any; } & not { then(): any; }
+>Promise.resolve(6) : Promise<number & not { then(): any; }>
+>Promise.resolve : { (): Promise<void & not { then(): any; }>; <T>(value: T): Promise<Awaited<T>>; <T>(value: T | PromiseLike<T>): Promise<Awaited<T>>; }
 >Promise : PromiseConstructor
->resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T>(value: T | PromiseLike<T>): Promise<Awaited<T>>; }
+>resolve : { (): Promise<void & not { then(): any; }>; <T>(value: T): Promise<Awaited<T>>; <T>(value: T | PromiseLike<T>): Promise<Awaited<T>>; }
 >6 : 6
 
         h: await Promise.resolve(7),
->h : number
->await Promise.resolve(7) : number
->Promise.resolve(7) : Promise<number>
->Promise.resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T>(value: T | PromiseLike<T>): Promise<Awaited<T>>; }
+>h : number & not { then(): any; } & not { then(): any; }
+>await Promise.resolve(7) : number & not { then(): any; } & not { then(): any; }
+>Promise.resolve(7) : Promise<number & not { then(): any; }>
+>Promise.resolve : { (): Promise<void & not { then(): any; }>; <T>(value: T): Promise<Awaited<T>>; <T>(value: T | PromiseLike<T>): Promise<Awaited<T>>; }
 >Promise : PromiseConstructor
->resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T>(value: T | PromiseLike<T>): Promise<Awaited<T>>; }
+>resolve : { (): Promise<void & not { then(): any; }>; <T>(value: T): Promise<Awaited<T>>; <T>(value: T | PromiseLike<T>): Promise<Awaited<T>>; }
 >7 : 7
 
         i: await Promise.resolve(8),
->i : number
->await Promise.resolve(8) : number
->Promise.resolve(8) : Promise<number>
->Promise.resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T>(value: T | PromiseLike<T>): Promise<Awaited<T>>; }
+>i : number & not { then(): any; } & not { then(): any; }
+>await Promise.resolve(8) : number & not { then(): any; } & not { then(): any; }
+>Promise.resolve(8) : Promise<number & not { then(): any; }>
+>Promise.resolve : { (): Promise<void & not { then(): any; }>; <T>(value: T): Promise<Awaited<T>>; <T>(value: T | PromiseLike<T>): Promise<Awaited<T>>; }
 >Promise : PromiseConstructor
->resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T>(value: T | PromiseLike<T>): Promise<Awaited<T>>; }
+>resolve : { (): Promise<void & not { then(): any; }>; <T>(value: T): Promise<Awaited<T>>; <T>(value: T | PromiseLike<T>): Promise<Awaited<T>>; }
 >8 : 8
 
         j: await Promise.resolve(9),
->j : number
->await Promise.resolve(9) : number
->Promise.resolve(9) : Promise<number>
->Promise.resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T>(value: T | PromiseLike<T>): Promise<Awaited<T>>; }
+>j : number & not { then(): any; } & not { then(): any; }
+>await Promise.resolve(9) : number & not { then(): any; } & not { then(): any; }
+>Promise.resolve(9) : Promise<number & not { then(): any; }>
+>Promise.resolve : { (): Promise<void & not { then(): any; }>; <T>(value: T): Promise<Awaited<T>>; <T>(value: T | PromiseLike<T>): Promise<Awaited<T>>; }
 >Promise : PromiseConstructor
->resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T>(value: T | PromiseLike<T>): Promise<Awaited<T>>; }
+>resolve : { (): Promise<void & not { then(): any; }>; <T>(value: T): Promise<Awaited<T>>; <T>(value: T | PromiseLike<T>): Promise<Awaited<T>>; }
 >9 : 9
 
     };

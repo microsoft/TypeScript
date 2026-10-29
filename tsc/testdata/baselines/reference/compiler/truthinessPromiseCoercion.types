@@ -15,7 +15,7 @@ declare function pf(): Promise<boolean>
 >pf : () => Promise<boolean>
 
 async function f() {
->f : () => Promise<void>
+>f : () => Promise<void & not { then(): any; }>
 
     if (p) {} // err
 >p : Promise<number>
@@ -32,10 +32,10 @@ async function f() {
 >p ? f.arguments : f.arguments : any
 >p : Promise<number>
 >f.arguments : any
->f : () => Promise<void>
+>f : () => Promise<void & not { then(): any; }>
 >arguments : any
 >f.arguments : any
->f : () => Promise<void>
+>f : () => Promise<void & not { then(): any; }>
 >arguments : any
 
     !!p ? f.arguments : f.arguments;
@@ -44,26 +44,26 @@ async function f() {
 >!p : false
 >p : Promise<number>
 >f.arguments : any
->f : () => Promise<void>
+>f : () => Promise<void & not { then(): any; }>
 >arguments : any
 >f.arguments : any
->f : () => Promise<void>
+>f : () => Promise<void & not { then(): any; }>
 >arguments : any
 
     p2 ? f.arguments : f.arguments;
 >p2 ? f.arguments : f.arguments : any
 >p2 : Promise<number> | null
 >f.arguments : any
->f : () => Promise<void>
+>f : () => Promise<void & not { then(): any; }>
 >arguments : any
 >f.arguments : any
->f : () => Promise<void>
+>f : () => Promise<void & not { then(): any; }>
 >arguments : any
 }
 
 // all ok
 async function g() {
->g : () => Promise<void>
+>g : () => Promise<void & not { then(): any; }>
 
     if (p) {
 >p : Promise<number>
@@ -75,9 +75,9 @@ async function g() {
 >p && p.then.length : number
 >p : Promise<number>
 >p.then.length : number
->p.then : <TResult1 = number, TResult2 = never>(onfulfilled?: ((value: number) => TResult1 | PromiseLike<TResult1>) | null | undefined, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | null | undefined) => Promise<TResult1 | TResult2>
+>p.then : <TResult1 = number, TResult2 = never>(onfulfilled?: ((value: number) => TResult1 | PromiseLike<TResult1>) | null | undefined, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | null | undefined) => Promise<Awaited<TResult1> | Awaited<TResult2>>
 >p : Promise<number>
->then : <TResult1 = number, TResult2 = never>(onfulfilled?: ((value: number) => TResult1 | PromiseLike<TResult1>) | null | undefined, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | null | undefined) => Promise<TResult1 | TResult2>
+>then : <TResult1 = number, TResult2 = never>(onfulfilled?: ((value: number) => TResult1 | PromiseLike<TResult1>) | null | undefined, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | null | undefined) => Promise<Awaited<TResult1> | Awaited<TResult2>>
 >length : number
 
     if (p) {
@@ -92,7 +92,7 @@ async function g() {
                 !!await (((((((p)))))));
 >!!await (((((((p))))))) : boolean
 >!await (((((((p))))))) : boolean
->await (((((((p))))))) : number
+>await (((((((p))))))) : number & not { then(): any; }
 >(((((((p))))))) : Promise<number>
 >((((((p)))))) : Promise<number>
 >(((((p))))) : Promise<number>
@@ -107,7 +107,7 @@ async function g() {
 }
 
 async function h() {
->h : () => Promise<void>
+>h : () => Promise<void & not { then(): any; }>
 
     if (obj.p) {} // error
 >obj.p : Promise<unknown>
@@ -120,17 +120,17 @@ async function h() {
 >p : Promise<unknown>
 
         await obj.p;
->await obj.p : unknown
+>await obj.p : not { then(): any; }
 >obj.p : Promise<unknown>
 >obj : { p: Promise<unknown>; }
 >p : Promise<unknown>
     }
     if (obj.p && await obj.p) {} // ok
->obj.p && await obj.p : unknown
+>obj.p && await obj.p : not { then(): any; }
 >obj.p : Promise<unknown>
 >obj : { p: Promise<unknown>; }
 >p : Promise<unknown>
->await obj.p : unknown
+>await obj.p : not { then(): any; }
 >obj.p : Promise<unknown>
 >obj : { p: Promise<unknown>; }
 >p : Promise<unknown>
@@ -151,11 +151,11 @@ async function i(): Promise<string> {
 >pf : () => Promise<boolean>
 
         pf().then();
->pf().then() : Promise<boolean>
->pf().then : <TResult1 = boolean, TResult2 = never>(onfulfilled?: ((value: boolean) => TResult1 | PromiseLike<TResult1>) | null | undefined, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | null | undefined) => Promise<TResult1 | TResult2>
+>pf().then() : Promise<(false & not { then(): any; }) | (true & not { then(): any; })>
+>pf().then : <TResult1 = boolean, TResult2 = never>(onfulfilled?: ((value: boolean) => TResult1 | PromiseLike<TResult1>) | null | undefined, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | null | undefined) => Promise<Awaited<TResult1> | Awaited<TResult2>>
 >pf() : Promise<boolean>
 >pf : () => Promise<boolean>
->then : <TResult1 = boolean, TResult2 = never>(onfulfilled?: ((value: boolean) => TResult1 | PromiseLike<TResult1>) | null | undefined, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | null | undefined) => Promise<TResult1 | TResult2>
+>then : <TResult1 = boolean, TResult2 = never>(onfulfilled?: ((value: boolean) => TResult1 | PromiseLike<TResult1>) | null | undefined, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | null | undefined) => Promise<Awaited<TResult1> | Awaited<TResult2>>
     }
     return "false";
 >"false" : "false"

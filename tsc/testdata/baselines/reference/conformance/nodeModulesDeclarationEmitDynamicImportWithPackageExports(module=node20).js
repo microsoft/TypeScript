@@ -125,8 +125,12 @@ export {};
 export declare const a: {
     default: typeof import("package/cjs");
 };
-export declare const b: typeof import("package/mjs");
-export declare const c: typeof import("package");
+export declare const b: typeof import("package/mjs") & not {
+    then(): any;
+};
+export declare const c: typeof import("package") & not {
+    then(): any;
+};
 export declare const f: {
     cjsMain: true;
     default: typeof import("inner");
@@ -136,13 +140,19 @@ export declare const d: {
     cjsNonmain: true;
     default: typeof import("inner/cjs");
 };
-export declare const e: typeof import("inner/mjs");
+export declare const e: typeof import("inner/mjs") & not {
+    then(): any;
+};
 //// [other.d.mts]
 export declare const a: {
     default: typeof import("package/cjs");
 };
-export declare const b: typeof import("package/mjs");
-export declare const c: typeof import("package");
+export declare const b: typeof import("package/mjs") & not {
+    then(): any;
+};
+export declare const c: typeof import("package") & not {
+    then(): any;
+};
 export declare const f: {
     cjsMain: true;
     default: typeof import("inner");
@@ -152,13 +162,19 @@ export declare const d: {
     cjsNonmain: true;
     default: typeof import("inner/cjs");
 };
-export declare const e: typeof import("inner/mjs");
+export declare const e: typeof import("inner/mjs") & not {
+    then(): any;
+};
 //// [other.d.cts]
 export declare const a: Promise<{
     default: typeof import("./index.cjs");
 }>;
-export declare const b: Promise<typeof import("package/mjs", { with: { "resolution-mode": "import" } })>;
-export declare const c: Promise<typeof import("package", { with: { "resolution-mode": "import" } })>;
+export declare const b: Promise<typeof import("package/mjs", { with: { "resolution-mode": "import" } }) & not {
+    then(): any;
+}>;
+export declare const c: Promise<typeof import("package", { with: { "resolution-mode": "import" } }) & not {
+    then(): any;
+}>;
 export declare const f: Promise<{
     cjsMain: true;
     default: typeof import("inner");
@@ -168,4 +184,141 @@ export declare const d: Promise<{
     cjsNonmain: true;
     default: typeof import("inner/cjs");
 }>;
-export declare const e: Promise<typeof import("inner/mjs", { with: { "resolution-mode": "import" } })>;
+export declare const e: Promise<typeof import("inner/mjs", { with: { "resolution-mode": "import" } }) & not {
+    then(): any;
+}>;
+
+
+//// [DtsFileErrors]
+
+
+other.d.cts(1,33): error TS2344: Type '{ default: typeof import("index"); }' does not satisfy the constraint 'not { then(): any; }'.
+other.d.cts(10,33): error TS2344: Type '{ cjsMain: true; default: typeof import("node_modules/inner/index"); }' does not satisfy the constraint 'not { then(): any; }'.
+other2.d.cts(1,33): error TS2344: Type '{ cjsNonmain: true; default: typeof import("node_modules/inner/index"); }' does not satisfy the constraint 'not { then(): any; }'.
+
+
+==== index.d.ts (0 errors) ====
+    export {};
+    
+==== index.d.mts (0 errors) ====
+    export {};
+    
+==== index.d.cts (0 errors) ====
+    export {};
+    
+==== other.d.ts (0 errors) ====
+    export declare const a: {
+        default: typeof import("package/cjs");
+    };
+    export declare const b: typeof import("package/mjs") & not {
+        then(): any;
+    };
+    export declare const c: typeof import("package") & not {
+        then(): any;
+    };
+    export declare const f: {
+        cjsMain: true;
+        default: typeof import("inner");
+    };
+    
+==== other2.d.ts (0 errors) ====
+    export declare const d: {
+        cjsNonmain: true;
+        default: typeof import("inner/cjs");
+    };
+    export declare const e: typeof import("inner/mjs") & not {
+        then(): any;
+    };
+    
+==== other.d.mts (0 errors) ====
+    export declare const a: {
+        default: typeof import("package/cjs");
+    };
+    export declare const b: typeof import("package/mjs") & not {
+        then(): any;
+    };
+    export declare const c: typeof import("package") & not {
+        then(): any;
+    };
+    export declare const f: {
+        cjsMain: true;
+        default: typeof import("inner");
+    };
+    
+==== other2.d.mts (0 errors) ====
+    export declare const d: {
+        cjsNonmain: true;
+        default: typeof import("inner/cjs");
+    };
+    export declare const e: typeof import("inner/mjs") & not {
+        then(): any;
+    };
+    
+==== other.d.cts (2 errors) ====
+    export declare const a: Promise<{
+                                    ~
+        default: typeof import("./index.cjs");
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    }>;
+    ~
+!!! error TS2344: Type '{ default: typeof import("index"); }' does not satisfy the constraint 'not { then(): any; }'.
+    export declare const b: Promise<typeof import("package/mjs", { with: { "resolution-mode": "import" } }) & not {
+        then(): any;
+    }>;
+    export declare const c: Promise<typeof import("package", { with: { "resolution-mode": "import" } }) & not {
+        then(): any;
+    }>;
+    export declare const f: Promise<{
+                                    ~
+        cjsMain: true;
+    ~~~~~~~~~~~~~~~~~~
+        default: typeof import("inner");
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    }>;
+    ~
+!!! error TS2344: Type '{ cjsMain: true; default: typeof import("node_modules/inner/index"); }' does not satisfy the constraint 'not { then(): any; }'.
+    
+==== other2.d.cts (1 errors) ====
+    export declare const d: Promise<{
+                                    ~
+        cjsNonmain: true;
+    ~~~~~~~~~~~~~~~~~~~~~
+        default: typeof import("inner/cjs");
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    }>;
+    ~
+!!! error TS2344: Type '{ cjsNonmain: true; default: typeof import("node_modules/inner/index"); }' does not satisfy the constraint 'not { then(): any; }'.
+    export declare const e: Promise<typeof import("inner/mjs", { with: { "resolution-mode": "import" } }) & not {
+        then(): any;
+    }>;
+    
+==== node_modules/inner/index.d.ts (0 errors) ====
+    // cjs format file
+    export const cjsMain = true;
+==== node_modules/inner/index.d.mts (0 errors) ====
+    // esm format file
+    export const esm = true;
+==== node_modules/inner/index.d.cts (0 errors) ====
+    // cjs format file
+    export const cjsNonmain = true;
+==== package.json (0 errors) ====
+    {
+        "name": "package",
+        "private": true,
+        "type": "module",
+        "exports": {
+            "./cjs": "./index.cjs",
+            "./mjs": "./index.mjs",
+            ".": "./index.js"
+        }
+    }
+==== node_modules/inner/package.json (0 errors) ====
+    {
+        "name": "inner",
+        "private": true,
+        "exports": {
+            "./cjs": "./index.cjs",
+            "./mjs": "./index.mjs",
+            ".": "./index.js"
+        }
+    }

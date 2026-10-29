@@ -1,0 +1,101 @@
+//// [tests/cases/conformance/types/negated/negatedTypesGenericInference.ts] ////
+
+=== negatedTypesGenericInference.ts ===
+// Generic inference from `not T` positions.
+
+interface Box<T> { value: T; }
+>Box : Symbol(Box, Decl(negatedTypesGenericInference.ts, 0, 0))
+>T : Symbol(T, Decl(negatedTypesGenericInference.ts, 2, 14))
+>value : Symbol(Box.value, Decl(negatedTypesGenericInference.ts, 2, 18))
+>T : Symbol(T, Decl(negatedTypesGenericInference.ts, 2, 14))
+
+// Inferring a type argument from a bare negated parameter position.
+declare function fromNot<T>(x: not T): T;
+>fromNot : Symbol(fromNot, Decl(negatedTypesGenericInference.ts, 2, 30))
+>T : Symbol(T, Decl(negatedTypesGenericInference.ts, 5, 25))
+>x : Symbol(x, Decl(negatedTypesGenericInference.ts, 5, 28))
+>T : Symbol(T, Decl(negatedTypesGenericInference.ts, 5, 25))
+>T : Symbol(T, Decl(negatedTypesGenericInference.ts, 5, 25))
+
+const r1 = fromNot<string>("literal is irrelevant here"); // explicit T = string
+>r1 : Symbol(r1, Decl(negatedTypesGenericInference.ts, 6, 5))
+>fromNot : Symbol(fromNot, Decl(negatedTypesGenericInference.ts, 2, 30))
+
+declare const numVal: number;
+>numVal : Symbol(numVal, Decl(negatedTypesGenericInference.ts, 7, 13))
+
+const r2 = fromNot(numVal); // T can't be inferred from a bare `not T` when the argument isn't negated -> unknown -> never (error)
+>r2 : Symbol(r2, Decl(negatedTypesGenericInference.ts, 8, 5))
+>fromNot : Symbol(fromNot, Decl(negatedTypesGenericInference.ts, 2, 30))
+>numVal : Symbol(numVal, Decl(negatedTypesGenericInference.ts, 7, 13))
+
+// Inferring from a negated type nested inside a generic wrapper.
+declare function fromBoxNot<T>(x: Box<not T>): T;
+>fromBoxNot : Symbol(fromBoxNot, Decl(negatedTypesGenericInference.ts, 8, 27))
+>T : Symbol(T, Decl(negatedTypesGenericInference.ts, 11, 28))
+>x : Symbol(x, Decl(negatedTypesGenericInference.ts, 11, 31))
+>Box : Symbol(Box, Decl(negatedTypesGenericInference.ts, 0, 0))
+>T : Symbol(T, Decl(negatedTypesGenericInference.ts, 11, 28))
+>T : Symbol(T, Decl(negatedTypesGenericInference.ts, 11, 28))
+
+declare const boxNotString: Box<not string>;
+>boxNotString : Symbol(boxNotString, Decl(negatedTypesGenericInference.ts, 12, 13))
+>Box : Symbol(Box, Decl(negatedTypesGenericInference.ts, 0, 0))
+
+const r3 = fromBoxNot(boxNotString); // T is inferred as string
+>r3 : Symbol(r3, Decl(negatedTypesGenericInference.ts, 13, 5))
+>fromBoxNot : Symbol(fromBoxNot, Decl(negatedTypesGenericInference.ts, 8, 27))
+>boxNotString : Symbol(boxNotString, Decl(negatedTypesGenericInference.ts, 12, 13))
+
+// Inferring from a negated intersection.
+declare function fromStringNot<T extends string>(x: string & not T): T;
+>fromStringNot : Symbol(fromStringNot, Decl(negatedTypesGenericInference.ts, 13, 36))
+>T : Symbol(T, Decl(negatedTypesGenericInference.ts, 16, 31))
+>x : Symbol(x, Decl(negatedTypesGenericInference.ts, 16, 49))
+>T : Symbol(T, Decl(negatedTypesGenericInference.ts, 16, 31))
+>T : Symbol(T, Decl(negatedTypesGenericInference.ts, 16, 31))
+
+declare const sv: string & not "bar";
+>sv : Symbol(sv, Decl(negatedTypesGenericInference.ts, 17, 13))
+
+const r4 = fromStringNot(sv); // T is inferred as "bar"
+>r4 : Symbol(r4, Decl(negatedTypesGenericInference.ts, 18, 5))
+>fromStringNot : Symbol(fromStringNot, Decl(negatedTypesGenericInference.ts, 13, 36))
+>sv : Symbol(sv, Decl(negatedTypesGenericInference.ts, 17, 13))
+
+// Inference site where the same T appears both negated and positive.
+declare function both<T>(a: T, b: not T): T;
+>both : Symbol(both, Decl(negatedTypesGenericInference.ts, 18, 29))
+>T : Symbol(T, Decl(negatedTypesGenericInference.ts, 21, 22))
+>a : Symbol(a, Decl(negatedTypesGenericInference.ts, 21, 25))
+>T : Symbol(T, Decl(negatedTypesGenericInference.ts, 21, 22))
+>b : Symbol(b, Decl(negatedTypesGenericInference.ts, 21, 30))
+>T : Symbol(T, Decl(negatedTypesGenericInference.ts, 21, 22))
+>T : Symbol(T, Decl(negatedTypesGenericInference.ts, 21, 22))
+
+const r5 = both("hello", 123); // T = "hello" from the first arg; 123 checked against not "hello"
+>r5 : Symbol(r5, Decl(negatedTypesGenericInference.ts, 22, 5))
+>both : Symbol(both, Decl(negatedTypesGenericInference.ts, 18, 29))
+
+// Higher-order: mapping a negated type parameter.
+type Negate<T> = not T;
+>Negate : Symbol(Negate, Decl(negatedTypesGenericInference.ts, 22, 30))
+>T : Symbol(T, Decl(negatedTypesGenericInference.ts, 25, 12))
+>T : Symbol(T, Decl(negatedTypesGenericInference.ts, 25, 12))
+
+declare function viaAlias<T>(x: Negate<T>): T;
+>viaAlias : Symbol(viaAlias, Decl(negatedTypesGenericInference.ts, 25, 23))
+>T : Symbol(T, Decl(negatedTypesGenericInference.ts, 26, 26))
+>x : Symbol(x, Decl(negatedTypesGenericInference.ts, 26, 29))
+>Negate : Symbol(Negate, Decl(negatedTypesGenericInference.ts, 22, 30))
+>T : Symbol(T, Decl(negatedTypesGenericInference.ts, 26, 26))
+>T : Symbol(T, Decl(negatedTypesGenericInference.ts, 26, 26))
+
+declare const nv: not number;
+>nv : Symbol(nv, Decl(negatedTypesGenericInference.ts, 27, 13))
+
+const r6 = viaAlias(nv); // T is inferred as number
+>r6 : Symbol(r6, Decl(negatedTypesGenericInference.ts, 28, 5))
+>viaAlias : Symbol(viaAlias, Decl(negatedTypesGenericInference.ts, 25, 23))
+>nv : Symbol(nv, Decl(negatedTypesGenericInference.ts, 27, 13))
+

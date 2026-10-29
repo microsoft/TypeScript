@@ -2,7 +2,7 @@
 
 === operationsAvailableOnPromisedType.ts ===
 async function fn(
->fn : (a: number, b: Promise<number>, c: Promise<string[]>, d: Promise<{ prop: string; }>, e: Promise<() => void>, f: Promise<() => void> | (() => void), g: Promise<{ new (): any; }>) => Promise<void>
+>fn : (a: number, b: Promise<number>, c: Promise<string[]>, d: Promise<{ prop: string; }>, e: Promise<() => void>, f: Promise<() => void> | (() => void), g: Promise<{ new (): any; }>) => Promise<void & not { then(): any; }>
 
     a: number,
 >a : number
@@ -71,8 +71,8 @@ async function fn(
 >c : Promise<string[]>
 
         fn(b, b, c, d, e, f, g);
->fn(b, b, c, d, e, f, g) : Promise<void>
->fn : (a: number, b: Promise<number>, c: Promise<string[]>, d: Promise<{ prop: string; }>, e: Promise<() => void>, f: Promise<() => void> | (() => void), g: Promise<{ new (): any; }>) => Promise<void>
+>fn(b, b, c, d, e, f, g) : Promise<void & not { then(): any; }>
+>fn : (a: number, b: Promise<number>, c: Promise<string[]>, d: Promise<{ prop: string; }>, e: Promise<() => void>, f: Promise<() => void> | (() => void), g: Promise<{ new (): any; }>) => Promise<void & not { then(): any; }>
 >b : Promise<number>
 >b : Promise<number>
 >c : Promise<string[]>

@@ -1,0 +1,114 @@
+arrayFromAsync.ts(29,40): error TS2345: Argument of type 'AsyncGenerator<number & not { then(): any; }, void & not { then(): any; }, unknown>' is not assignable to parameter of type 'ArrayLike<PromiseLike<void & not { then(): any; }> | (void & not { then(): any; })> | AsyncIterable<void & not { then(): any; }> | Iterable<PromiseLike<void & not { then(): any; }> | (void & not { then(): any; })>'.
+  Type 'AsyncGenerator<number & not { then(): any; }, void & not { then(): any; }, unknown>' is not assignable to type 'AsyncIterable<void & not { then(): any; }>'.
+    The types returned by '[Symbol.asyncIterator]().next(...)' are incompatible between these types.
+      Type 'Promise<IteratorResult<number & not { then(): any; }, void & not { then(): any; }> & not { then(): any; }>' is not assignable to type 'Promise<IteratorResult<void & not { then(): any; }, any> & not { then(): any; }>'.
+        Type 'IteratorResult<number & not { then(): any; }, void & not { then(): any; }> & not { then(): any; }' is not assignable to type 'IteratorResult<void & not { then(): any; }, any> & not { then(): any; }'.
+          Type 'IteratorYieldResult<number & not { then(): any; }> & not { then(): any; }' is not assignable to type 'IteratorResult<void & not { then(): any; }, any> & not { then(): any; }'.
+            Type 'IteratorYieldResult<number & not { then(): any; }> & not { then(): any; }' is not assignable to type 'IteratorYieldResult<void & not { then(): any; }> & not { then(): any; }'.
+              Type 'IteratorYieldResult<number & not { then(): any; }> & not { then(): any; }' is not assignable to type 'IteratorYieldResult<void & not { then(): any; }>'.
+                Type 'number & not { then(): any; }' is not assignable to type 'void & not { then(): any; }'.
+                  Type 'number & not { then(): any; }' is not assignable to type 'void'.
+arrayFromAsync.ts(33,39): error TS2345: Argument of type 'AsyncGenerator<number & not { then(): any; }, void & not { then(): any; }, unknown>' is not assignable to parameter of type 'ArrayLike<PromiseLike<void & not { then(): any; }> | (void & not { then(): any; })> | AsyncIterable<void & not { then(): any; }> | Iterable<PromiseLike<void & not { then(): any; }> | (void & not { then(): any; })>'.
+  Type 'AsyncGenerator<number & not { then(): any; }, void & not { then(): any; }, unknown>' is not assignable to type 'AsyncIterable<void & not { then(): any; }>'.
+    The types returned by '[Symbol.asyncIterator]().next(...)' are incompatible between these types.
+      Type 'Promise<IteratorResult<number & not { then(): any; }, void & not { then(): any; }> & not { then(): any; }>' is not assignable to type 'Promise<IteratorResult<void & not { then(): any; }, any> & not { then(): any; }>'.
+        Type 'IteratorResult<number & not { then(): any; }, void & not { then(): any; }> & not { then(): any; }' is not assignable to type 'IteratorResult<void & not { then(): any; }, any> & not { then(): any; }'.
+          Type 'IteratorYieldResult<number & not { then(): any; }> & not { then(): any; }' is not assignable to type 'IteratorResult<void & not { then(): any; }, any> & not { then(): any; }'.
+            Type 'IteratorYieldResult<number & not { then(): any; }> & not { then(): any; }' is not assignable to type 'IteratorYieldResult<void & not { then(): any; }> & not { then(): any; }'.
+              Type 'IteratorYieldResult<number & not { then(): any; }> & not { then(): any; }' is not assignable to type 'IteratorYieldResult<void & not { then(): any; }>'.
+                Type 'number & not { then(): any; }' is not assignable to type 'void & not { then(): any; }'.
+                  Type 'number & not { then(): any; }' is not assignable to type 'void'.
+arrayFromAsync.ts(35,39): error TS2345: Argument of type 'AsyncGenerator<number & not { then(): any; }, void & not { then(): any; }, unknown>' is not assignable to parameter of type 'ArrayLike<void & not { then(): any; }> | AsyncIterable<void & not { then(): any; }> | Iterable<void & not { then(): any; }>'.
+  Type 'AsyncGenerator<number & not { then(): any; }, void & not { then(): any; }, unknown>' is not assignable to type 'AsyncIterable<void & not { then(): any; }>'.
+    The types returned by '[Symbol.asyncIterator]().next(...)' are incompatible between these types.
+      Type 'Promise<IteratorResult<number & not { then(): any; }, void & not { then(): any; }> & not { then(): any; }>' is not assignable to type 'Promise<IteratorResult<void & not { then(): any; }, any> & not { then(): any; }>'.
+        Type 'IteratorResult<number & not { then(): any; }, void & not { then(): any; }> & not { then(): any; }' is not assignable to type 'IteratorResult<void & not { then(): any; }, any> & not { then(): any; }'.
+          Type 'IteratorYieldResult<number & not { then(): any; }> & not { then(): any; }' is not assignable to type 'IteratorResult<void & not { then(): any; }, any> & not { then(): any; }'.
+            Type 'IteratorYieldResult<number & not { then(): any; }> & not { then(): any; }' is not assignable to type 'IteratorYieldResult<void & not { then(): any; }> & not { then(): any; }'.
+              Type 'IteratorYieldResult<number & not { then(): any; }> & not { then(): any; }' is not assignable to type 'IteratorYieldResult<void & not { then(): any; }>'.
+                Type 'number & not { then(): any; }' is not assignable to type 'void & not { then(): any; }'.
+                  Type 'number & not { then(): any; }' is not assignable to type 'void'.
+arrayFromAsync.ts(35,57): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+
+
+==== arrayFromAsync.ts (4 errors) ====
+    export { };
+    async function * asyncGen (n) {
+        for (let i = 0; i < n; i++)
+          yield i * 2;
+      }
+    
+    function * genPromises (n) {
+        for (let i = 0; i < n; i++) {
+            yield Promise.resolve(i * 2);
+        }
+    }
+    
+    const arrLike = {
+        0: Promise.resolve(0),
+        1: Promise.resolve(2),
+        2: Promise.resolve(4),
+        3: Promise.resolve(6),
+        length: 4,
+    }
+    
+    const arr : number[] = [];
+    for await (const v of asyncGen(4)) {
+      arr.push(v);
+    }
+    
+    const sameArr1 = await Array.fromAsync(arrLike);
+    const sameArr2 = await Array.fromAsync([Promise.resolve(0), Promise.resolve(2), Promise.resolve(4), Promise.resolve(6)]);
+    const sameArr3 = await Array.fromAsync(genPromises(4));
+    const sameArr4 = await Array.fromAsync(asyncGen(4));
+                                           ~~~~~~~~~~~
+!!! error TS2345: Argument of type 'AsyncGenerator<number & not { then(): any; }, void & not { then(): any; }, unknown>' is not assignable to parameter of type 'ArrayLike<PromiseLike<void & not { then(): any; }> | (void & not { then(): any; })> | AsyncIterable<void & not { then(): any; }> | Iterable<PromiseLike<void & not { then(): any; }> | (void & not { then(): any; })>'.
+!!! error TS2345:   Type 'AsyncGenerator<number & not { then(): any; }, void & not { then(): any; }, unknown>' is not assignable to type 'AsyncIterable<void & not { then(): any; }>'.
+!!! error TS2345:     The types returned by '[Symbol.asyncIterator]().next(...)' are incompatible between these types.
+!!! error TS2345:       Type 'Promise<IteratorResult<number & not { then(): any; }, void & not { then(): any; }> & not { then(): any; }>' is not assignable to type 'Promise<IteratorResult<void & not { then(): any; }, any> & not { then(): any; }>'.
+!!! error TS2345:         Type 'IteratorResult<number & not { then(): any; }, void & not { then(): any; }> & not { then(): any; }' is not assignable to type 'IteratorResult<void & not { then(): any; }, any> & not { then(): any; }'.
+!!! error TS2345:           Type 'IteratorYieldResult<number & not { then(): any; }> & not { then(): any; }' is not assignable to type 'IteratorResult<void & not { then(): any; }, any> & not { then(): any; }'.
+!!! error TS2345:             Type 'IteratorYieldResult<number & not { then(): any; }> & not { then(): any; }' is not assignable to type 'IteratorYieldResult<void & not { then(): any; }> & not { then(): any; }'.
+!!! error TS2345:               Type 'IteratorYieldResult<number & not { then(): any; }> & not { then(): any; }' is not assignable to type 'IteratorYieldResult<void & not { then(): any; }>'.
+!!! error TS2345:                 Type 'number & not { then(): any; }' is not assignable to type 'void & not { then(): any; }'.
+!!! error TS2345:                   Type 'number & not { then(): any; }' is not assignable to type 'void'.
+    
+    function Data (n) {}
+    Data.fromAsync = Array.fromAsync;
+    const sameArr5 = await Data.fromAsync(asyncGen(4));
+                                          ~~~~~~~~~~~
+!!! error TS2345: Argument of type 'AsyncGenerator<number & not { then(): any; }, void & not { then(): any; }, unknown>' is not assignable to parameter of type 'ArrayLike<PromiseLike<void & not { then(): any; }> | (void & not { then(): any; })> | AsyncIterable<void & not { then(): any; }> | Iterable<PromiseLike<void & not { then(): any; }> | (void & not { then(): any; })>'.
+!!! error TS2345:   Type 'AsyncGenerator<number & not { then(): any; }, void & not { then(): any; }, unknown>' is not assignable to type 'AsyncIterable<void & not { then(): any; }>'.
+!!! error TS2345:     The types returned by '[Symbol.asyncIterator]().next(...)' are incompatible between these types.
+!!! error TS2345:       Type 'Promise<IteratorResult<number & not { then(): any; }, void & not { then(): any; }> & not { then(): any; }>' is not assignable to type 'Promise<IteratorResult<void & not { then(): any; }, any> & not { then(): any; }>'.
+!!! error TS2345:         Type 'IteratorResult<number & not { then(): any; }, void & not { then(): any; }> & not { then(): any; }' is not assignable to type 'IteratorResult<void & not { then(): any; }, any> & not { then(): any; }'.
+!!! error TS2345:           Type 'IteratorYieldResult<number & not { then(): any; }> & not { then(): any; }' is not assignable to type 'IteratorResult<void & not { then(): any; }, any> & not { then(): any; }'.
+!!! error TS2345:             Type 'IteratorYieldResult<number & not { then(): any; }> & not { then(): any; }' is not assignable to type 'IteratorYieldResult<void & not { then(): any; }> & not { then(): any; }'.
+!!! error TS2345:               Type 'IteratorYieldResult<number & not { then(): any; }> & not { then(): any; }' is not assignable to type 'IteratorYieldResult<void & not { then(): any; }>'.
+!!! error TS2345:                 Type 'number & not { then(): any; }' is not assignable to type 'void & not { then(): any; }'.
+!!! error TS2345:                   Type 'number & not { then(): any; }' is not assignable to type 'void'.
+    
+    const mapArr1 = await Array.fromAsync(asyncGen(4), v => v ** 2);
+                                          ~~~~~~~~~~~
+!!! error TS2345: Argument of type 'AsyncGenerator<number & not { then(): any; }, void & not { then(): any; }, unknown>' is not assignable to parameter of type 'ArrayLike<void & not { then(): any; }> | AsyncIterable<void & not { then(): any; }> | Iterable<void & not { then(): any; }>'.
+!!! error TS2345:   Type 'AsyncGenerator<number & not { then(): any; }, void & not { then(): any; }, unknown>' is not assignable to type 'AsyncIterable<void & not { then(): any; }>'.
+!!! error TS2345:     The types returned by '[Symbol.asyncIterator]().next(...)' are incompatible between these types.
+!!! error TS2345:       Type 'Promise<IteratorResult<number & not { then(): any; }, void & not { then(): any; }> & not { then(): any; }>' is not assignable to type 'Promise<IteratorResult<void & not { then(): any; }, any> & not { then(): any; }>'.
+!!! error TS2345:         Type 'IteratorResult<number & not { then(): any; }, void & not { then(): any; }> & not { then(): any; }' is not assignable to type 'IteratorResult<void & not { then(): any; }, any> & not { then(): any; }'.
+!!! error TS2345:           Type 'IteratorYieldResult<number & not { then(): any; }> & not { then(): any; }' is not assignable to type 'IteratorResult<void & not { then(): any; }, any> & not { then(): any; }'.
+!!! error TS2345:             Type 'IteratorYieldResult<number & not { then(): any; }> & not { then(): any; }' is not assignable to type 'IteratorYieldResult<void & not { then(): any; }> & not { then(): any; }'.
+!!! error TS2345:               Type 'IteratorYieldResult<number & not { then(): any; }> & not { then(): any; }' is not assignable to type 'IteratorYieldResult<void & not { then(): any; }>'.
+!!! error TS2345:                 Type 'number & not { then(): any; }' is not assignable to type 'void & not { then(): any; }'.
+!!! error TS2345:                   Type 'number & not { then(): any; }' is not assignable to type 'void'.
+                                                            ~
+!!! error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+    const mapArr2 = await Array.fromAsync([0,2,4,6], v => Promise.resolve(v ** 2));
+    const mapArr3 = await Array.fromAsync([0,2,4,6], v => v ** 2);
+    
+    const err = new Error;
+    const badIterable = { [Symbol.iterator] () { throw err; } };
+    // This returns a promise that will reject with `err`.
+    const badArray = await Array.fromAsync(badIterable);
+    
+    const withIndexResult = await Array.fromAsync(["a", "b"], (str, index) => ({ index, str }));
+    

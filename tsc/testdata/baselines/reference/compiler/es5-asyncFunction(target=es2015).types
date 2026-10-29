@@ -5,11 +5,11 @@ declare var x;
 >x : any
 
 async function empty() {
->empty : () => Promise<void>
+>empty : () => Promise<void & not { then(): any; }>
 }
 
 async function singleAwait() {
->singleAwait : () => Promise<void>
+>singleAwait : () => Promise<void & not { then(): any; }>
 
     await x;
 >await x : any

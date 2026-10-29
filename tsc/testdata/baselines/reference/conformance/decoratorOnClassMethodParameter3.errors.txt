@@ -1,10 +1,13 @@
+decoratorOnClassMethodParameter3.ts(3,28): error TS2344: Type 'number' does not satisfy the constraint 'not { then(): any; }'.
 decoratorOnClassMethodParameter3.ts(5,23): error TS1308: 'await' expressions are only allowed within async functions and at the top levels of modules.
 
 
-==== decoratorOnClassMethodParameter3.ts (1 errors) ====
+==== decoratorOnClassMethodParameter3.ts (2 errors) ====
     // https://github.com/microsoft/TypeScript/issues/48509
     declare function dec(a: any): any;
     function fn(value: Promise<number>): any {
+                               ~~~~~~
+!!! error TS2344: Type 'number' does not satisfy the constraint 'not { then(): any; }'.
       class Class {
         async method(@dec(await value) arg: number) {}
                           ~~~~~

@@ -6,12 +6,12 @@ const localeName = "zh-CN";
 >"zh-CN" : "zh-CN"
 
 import(`./locales/${localeName}.js`).then(bar => {
->import(`./locales/${localeName}.js`).then(bar => {    let x = bar;}) : Promise<void>
->import(`./locales/${localeName}.js`).then : <TResult1 = any, TResult2 = never>(onfulfilled?: ((value: any) => TResult1 | PromiseLike<TResult1>) | null | undefined, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | null | undefined) => Promise<TResult1 | TResult2>
+>import(`./locales/${localeName}.js`).then(bar => {    let x = bar;}) : Promise<void & not { then(): any; }>
+>import(`./locales/${localeName}.js`).then : <TResult1 = any, TResult2 = never>(onfulfilled?: ((value: any) => TResult1 | PromiseLike<TResult1>) | null | undefined, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | null | undefined) => Promise<Awaited<TResult1> | Awaited<TResult2>>
 >import(`./locales/${localeName}.js`) : Promise<any>
 >`./locales/${localeName}.js` : "./locales/zh-CN.js"
 >localeName : "zh-CN"
->then : <TResult1 = any, TResult2 = never>(onfulfilled?: ((value: any) => TResult1 | PromiseLike<TResult1>) | null | undefined, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | null | undefined) => Promise<TResult1 | TResult2>
+>then : <TResult1 = any, TResult2 = never>(onfulfilled?: ((value: any) => TResult1 | PromiseLike<TResult1>) | null | undefined, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | null | undefined) => Promise<Awaited<TResult1> | Awaited<TResult2>>
 >bar => {    let x = bar;} : (bar: any) => void
 >bar : any
 
@@ -22,15 +22,15 @@ import(`./locales/${localeName}.js`).then(bar => {
 });
 
 import("./locales/" + localeName + ".js").then(bar => {
->import("./locales/" + localeName + ".js").then(bar => {    let x = bar;}) : Promise<void>
->import("./locales/" + localeName + ".js").then : <TResult1 = any, TResult2 = never>(onfulfilled?: ((value: any) => TResult1 | PromiseLike<TResult1>) | null | undefined, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | null | undefined) => Promise<TResult1 | TResult2>
+>import("./locales/" + localeName + ".js").then(bar => {    let x = bar;}) : Promise<void & not { then(): any; }>
+>import("./locales/" + localeName + ".js").then : <TResult1 = any, TResult2 = never>(onfulfilled?: ((value: any) => TResult1 | PromiseLike<TResult1>) | null | undefined, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | null | undefined) => Promise<Awaited<TResult1> | Awaited<TResult2>>
 >import("./locales/" + localeName + ".js") : Promise<any>
 >"./locales/" + localeName + ".js" : string
 >"./locales/" + localeName : string
 >"./locales/" : "./locales/"
 >localeName : "zh-CN"
 >".js" : ".js"
->then : <TResult1 = any, TResult2 = never>(onfulfilled?: ((value: any) => TResult1 | PromiseLike<TResult1>) | null | undefined, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | null | undefined) => Promise<TResult1 | TResult2>
+>then : <TResult1 = any, TResult2 = never>(onfulfilled?: ((value: any) => TResult1 | PromiseLike<TResult1>) | null | undefined, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | null | undefined) => Promise<Awaited<TResult1> | Awaited<TResult2>>
 >bar => {    let x = bar;} : (bar: any) => void
 >bar : any
 

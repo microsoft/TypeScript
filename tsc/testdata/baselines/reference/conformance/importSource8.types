@@ -10,8 +10,8 @@ const b = a;
 >a : AbstractModuleSource
 
 const c = import /*comment i*/ . /*comment j*/ source /*comment k*/ ("./a.wasm");
->c : Promise<AbstractModuleSource>
->import /*comment i*/ . /*comment j*/ source /*comment k*/ ("./a.wasm") : Promise<AbstractModuleSource>
+>c : Promise<AbstractModuleSource & not { then(): any; }>
+>import /*comment i*/ . /*comment j*/ source /*comment k*/ ("./a.wasm") : Promise<AbstractModuleSource & not { then(): any; }>
 >source : any
 >"./a.wasm" : "./a.wasm"
 

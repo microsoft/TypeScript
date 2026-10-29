@@ -21,10 +21,10 @@ type T02 = Unpacked<() => string>;  // string
 >T02 : string
 
 type T03 = Unpacked<Promise<string>>;  // string
->T03 : string
+>T03 : Promise<string>
 
 type T04 = Unpacked<Unpacked<Promise<string>[]>>;  // string
->T04 : string
+>T04 : Promise<string>
 
 type T05 = Unpacked<any>;  // any
 >T05 : any

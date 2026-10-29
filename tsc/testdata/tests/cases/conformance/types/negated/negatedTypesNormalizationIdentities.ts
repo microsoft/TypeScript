@@ -1,0 +1,42 @@
+// @strict: true
+// @noEmit: true
+
+// Normalization / identity rules for the `not` type operator.
+
+// not any => any
+type NotAny = not any;
+
+// not unknown => never
+type NotUnknown = not unknown;
+
+// not never => unknown
+type NotNever = not never;
+
+// Negated nullish / void.
+type NotVoid = not void;
+type NotNull = not null;
+type NotUndefined = not undefined;
+
+// Double negation collapses: not not T => T.
+type DoubleNegString = not not string;
+type DoubleNegLiteral = not not "a";
+type TripleNegString = not not not string; // => not string
+
+// Double negation on a generic type parameter.
+type DoubleNeg<T> = not not T;
+type DoubleNegApplied = DoubleNeg<number>;
+
+// Assignability probes confirming the identities.
+declare let notNever: NotNever;   // unknown
+declare let anyVal: any;
+declare let str: string;
+
+notNever = str;      // ok (unknown accepts anything)
+anyVal = notNever;   // ok
+
+declare let notUnknown: NotUnknown; // never
+notUnknown = str;    // error (nothing is assignable to never)
+
+declare let dnStr: DoubleNegString; // string
+dnStr = "hello";     // ok
+dnStr = 0;           // error

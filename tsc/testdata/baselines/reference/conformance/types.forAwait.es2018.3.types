@@ -2,7 +2,7 @@
 
 === types.forAwait.es2018.3.ts ===
 async function f1() {
->f1 : () => Promise<void>
+>f1 : () => Promise<void & not { then(): any; }>
 
     let y: number;
 >y : number

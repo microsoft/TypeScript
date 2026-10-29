@@ -6,8 +6,8 @@ export {};
 
 === b.cts ===
 export const a = import.source("./a.ts");
->a : Promise<AbstractModuleSource>
->import.source("./a.ts") : Promise<AbstractModuleSource>
+>a : Promise<AbstractModuleSource & not { then(): any; }>
+>import.source("./a.ts") : Promise<AbstractModuleSource & not { then(): any; }>
 >source : any
 >"./a.ts" : "./a.ts"
 

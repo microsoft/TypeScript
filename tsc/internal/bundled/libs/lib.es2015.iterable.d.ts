@@ -250,7 +250,7 @@ interface PromiseConstructor {
      * @param values An iterable of Promises.
      * @returns A new Promise.
      */
-    all<T>(values: Iterable<T | PromiseLike<T>>): Promise<Awaited<T>[]>;
+    all<T>(values: Iterable<T | PromiseLike<T>>): Promise<Awaited<T>[] & not { then(): any }>;
 
     /**
      * Creates a Promise that is resolved or rejected when any of the provided Promises are resolved

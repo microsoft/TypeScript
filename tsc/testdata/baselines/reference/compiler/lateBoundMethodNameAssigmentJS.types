@@ -12,13 +12,13 @@ export class MyClass {
 
     constructor() {
         this[_symbol] = this[_symbol].bind(this);
->this[_symbol] = this[_symbol].bind(this) : () => Promise<void>
->this[_symbol] : () => Promise<void>
+>this[_symbol] = this[_symbol].bind(this) : () => Promise<void & not { then(): any; }>
+>this[_symbol] : () => Promise<void & not { then(): any; }>
 >this : this
 >_symbol : unique symbol
->this[_symbol].bind(this) : () => Promise<void>
+>this[_symbol].bind(this) : () => Promise<void & not { then(): any; }>
 >this[_symbol].bind : { <T>(this: T, thisArg: ThisParameterType<T>): OmitThisParameter<T>; <T, A extends any[], B extends any[], R>(this: (this: T, ...args: [...A, ...B]) => R, thisArg: T, ...args: A): (...args: B) => R; }
->this[_symbol] : () => Promise<void>
+>this[_symbol] : () => Promise<void & not { then(): any; }>
 >this : this
 >_symbol : unique symbol
 >bind : { <T>(this: T, thisArg: ThisParameterType<T>): OmitThisParameter<T>; <T, A extends any[], B extends any[], R>(this: (this: T, ...args: [...A, ...B]) => R, thisArg: T, ...args: A): (...args: B) => R; }
@@ -26,6 +26,6 @@ export class MyClass {
     }
 
     async [_symbol]() { }
->[_symbol] : () => Promise<void>
+>[_symbol] : () => Promise<void & not { then(): any; }>
 >_symbol : unique symbol
 }

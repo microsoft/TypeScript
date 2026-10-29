@@ -1,0 +1,99 @@
+//// [tests/cases/conformance/types/negated/negatedTypesContextualLiteralTypes.ts] ////
+
+=== negatedTypesContextualLiteralTypes.ts ===
+declare const excludedSymbol: unique symbol;
+>excludedSymbol : Symbol(excludedSymbol, Decl(negatedTypesContextualLiteralTypes.ts, 0, 13))
+
+declare const allowedSymbol: unique symbol;
+>allowedSymbol : Symbol(allowedSymbol, Decl(negatedTypesContextualLiteralTypes.ts, 1, 13))
+
+const excludedNumberProperty: { value: not 0 } = { value: 0 };
+>excludedNumberProperty : Symbol(excludedNumberProperty, Decl(negatedTypesContextualLiteralTypes.ts, 3, 5))
+>value : Symbol(value, Decl(negatedTypesContextualLiteralTypes.ts, 3, 31))
+>value : Symbol(value, Decl(negatedTypesContextualLiteralTypes.ts, 3, 50))
+
+const allowedNumberProperty: { value: not 0 } = { value: 1 };
+>allowedNumberProperty : Symbol(allowedNumberProperty, Decl(negatedTypesContextualLiteralTypes.ts, 4, 5))
+>value : Symbol(value, Decl(negatedTypesContextualLiteralTypes.ts, 4, 30))
+>value : Symbol(value, Decl(negatedTypesContextualLiteralTypes.ts, 4, 49))
+
+const excludedStringProperty: { value: not "reserved" } = { value: "reserved" };
+>excludedStringProperty : Symbol(excludedStringProperty, Decl(negatedTypesContextualLiteralTypes.ts, 6, 5))
+>value : Symbol(value, Decl(negatedTypesContextualLiteralTypes.ts, 6, 31))
+>value : Symbol(value, Decl(negatedTypesContextualLiteralTypes.ts, 6, 59))
+
+const allowedStringProperty: { value: not "reserved" } = { value: "allowed" };
+>allowedStringProperty : Symbol(allowedStringProperty, Decl(negatedTypesContextualLiteralTypes.ts, 7, 5))
+>value : Symbol(value, Decl(negatedTypesContextualLiteralTypes.ts, 7, 30))
+>value : Symbol(value, Decl(negatedTypesContextualLiteralTypes.ts, 7, 58))
+
+const excludedBigIntProperty: { value: not 0n } = { value: 0n };
+>excludedBigIntProperty : Symbol(excludedBigIntProperty, Decl(negatedTypesContextualLiteralTypes.ts, 9, 5))
+>value : Symbol(value, Decl(negatedTypesContextualLiteralTypes.ts, 9, 31))
+>value : Symbol(value, Decl(negatedTypesContextualLiteralTypes.ts, 9, 51))
+
+const allowedBigIntProperty: { value: not 0n } = { value: 1n };
+>allowedBigIntProperty : Symbol(allowedBigIntProperty, Decl(negatedTypesContextualLiteralTypes.ts, 10, 5))
+>value : Symbol(value, Decl(negatedTypesContextualLiteralTypes.ts, 10, 30))
+>value : Symbol(value, Decl(negatedTypesContextualLiteralTypes.ts, 10, 50))
+
+const excludedBooleanProperty: { value: not false } = { value: false };
+>excludedBooleanProperty : Symbol(excludedBooleanProperty, Decl(negatedTypesContextualLiteralTypes.ts, 12, 5))
+>value : Symbol(value, Decl(negatedTypesContextualLiteralTypes.ts, 12, 32))
+>value : Symbol(value, Decl(negatedTypesContextualLiteralTypes.ts, 12, 55))
+
+const allowedBooleanProperty: { value: not false } = { value: true };
+>allowedBooleanProperty : Symbol(allowedBooleanProperty, Decl(negatedTypesContextualLiteralTypes.ts, 13, 5))
+>value : Symbol(value, Decl(negatedTypesContextualLiteralTypes.ts, 13, 31))
+>value : Symbol(value, Decl(negatedTypesContextualLiteralTypes.ts, 13, 54))
+
+const excludedSymbolProperty: { value: not typeof excludedSymbol } = { value: excludedSymbol };
+>excludedSymbolProperty : Symbol(excludedSymbolProperty, Decl(negatedTypesContextualLiteralTypes.ts, 15, 5))
+>value : Symbol(value, Decl(negatedTypesContextualLiteralTypes.ts, 15, 31))
+>excludedSymbol : Symbol(excludedSymbol, Decl(negatedTypesContextualLiteralTypes.ts, 0, 13))
+>value : Symbol(value, Decl(negatedTypesContextualLiteralTypes.ts, 15, 70))
+>excludedSymbol : Symbol(excludedSymbol, Decl(negatedTypesContextualLiteralTypes.ts, 0, 13))
+
+const allowedSymbolProperty: { value: not typeof excludedSymbol } = { value: allowedSymbol };
+>allowedSymbolProperty : Symbol(allowedSymbolProperty, Decl(negatedTypesContextualLiteralTypes.ts, 16, 5))
+>value : Symbol(value, Decl(negatedTypesContextualLiteralTypes.ts, 16, 30))
+>excludedSymbol : Symbol(excludedSymbol, Decl(negatedTypesContextualLiteralTypes.ts, 0, 13))
+>value : Symbol(value, Decl(negatedTypesContextualLiteralTypes.ts, 16, 69))
+>allowedSymbol : Symbol(allowedSymbol, Decl(negatedTypesContextualLiteralTypes.ts, 1, 13))
+
+const excludedUnionProperty: { value: not (0 | 1) } = { value: 0 };
+>excludedUnionProperty : Symbol(excludedUnionProperty, Decl(negatedTypesContextualLiteralTypes.ts, 18, 5))
+>value : Symbol(value, Decl(negatedTypesContextualLiteralTypes.ts, 18, 30))
+>value : Symbol(value, Decl(negatedTypesContextualLiteralTypes.ts, 18, 55))
+
+const allowedUnionProperty: { value: not (0 | 1) } = { value: 2 };
+>allowedUnionProperty : Symbol(allowedUnionProperty, Decl(negatedTypesContextualLiteralTypes.ts, 19, 5))
+>value : Symbol(value, Decl(negatedTypesContextualLiteralTypes.ts, 19, 29))
+>value : Symbol(value, Decl(negatedTypesContextualLiteralTypes.ts, 19, 54))
+
+const excludedIntersectedProperty: { value: number & not 0 } = { value: 0 };
+>excludedIntersectedProperty : Symbol(excludedIntersectedProperty, Decl(negatedTypesContextualLiteralTypes.ts, 21, 5))
+>value : Symbol(value, Decl(negatedTypesContextualLiteralTypes.ts, 21, 36))
+>value : Symbol(value, Decl(negatedTypesContextualLiteralTypes.ts, 21, 64))
+
+const allowedIntersectedProperty: { value: number & not 0 } = { value: 1 };
+>allowedIntersectedProperty : Symbol(allowedIntersectedProperty, Decl(negatedTypesContextualLiteralTypes.ts, 22, 5))
+>value : Symbol(value, Decl(negatedTypesContextualLiteralTypes.ts, 22, 35))
+>value : Symbol(value, Decl(negatedTypesContextualLiteralTypes.ts, 22, 63))
+
+declare function acceptTuple(value: [not "reserved", not 0]): void;
+>acceptTuple : Symbol(acceptTuple, Decl(negatedTypesContextualLiteralTypes.ts, 22, 75))
+>value : Symbol(value, Decl(negatedTypesContextualLiteralTypes.ts, 24, 29))
+
+acceptTuple(["reserved", 0]);
+>acceptTuple : Symbol(acceptTuple, Decl(negatedTypesContextualLiteralTypes.ts, 22, 75))
+
+acceptTuple(["allowed", 1]);
+>acceptTuple : Symbol(acceptTuple, Decl(negatedTypesContextualLiteralTypes.ts, 22, 75))
+
+const excludedArray: (not 0)[] = [0];
+>excludedArray : Symbol(excludedArray, Decl(negatedTypesContextualLiteralTypes.ts, 28, 5))
+
+const allowedArray: (not 0)[] = [1];
+>allowedArray : Symbol(allowedArray, Decl(negatedTypesContextualLiteralTypes.ts, 29, 5))
+

@@ -16,14 +16,14 @@ const c: number = value;
 >value : number
 
 export const d = import.source("pkg");
->d : Promise<AbstractModuleSource>
->import.source("pkg") : Promise<AbstractModuleSource>
+>d : Promise<AbstractModuleSource & not { then(): any; }>
+>import.source("pkg") : Promise<AbstractModuleSource & not { then(): any; }>
 >source : any
 >"pkg" : "pkg"
 
 export const e = import("pkg");
->e : Promise<typeof import("pkg")>
->import("pkg") : Promise<typeof import("pkg")>
+>e : Promise<typeof import("pkg") & not { then(): any; }>
+>import("pkg") : Promise<typeof import("pkg") & not { then(): any; }>
 >"pkg" : "pkg"
 
 export { a };

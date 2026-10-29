@@ -1,23 +1,47 @@
+promisesWithConstraints.ts(2,35): error TS2344: Type 'U' does not satisfy the constraint 'not { then(): any; }'.
+promisesWithConstraints.ts(2,48): error TS2344: Type 'U' does not satisfy the constraint 'not { then(): any; }'.
+promisesWithConstraints.ts(6,55): error TS2344: Type 'U' does not satisfy the constraint 'not { then(): any; }'.
+  Type '{ x: any; }' is not assignable to type 'not { then(): any; }'.
+promisesWithConstraints.ts(6,68): error TS2344: Type 'U' does not satisfy the constraint 'not { then(): any; }'.
+  Type '{ x: any; }' is not assignable to type 'not { then(): any; }'.
+promisesWithConstraints.ts(12,16): error TS2344: Type 'Foo' does not satisfy the constraint 'not { then(): any; }'.
+promisesWithConstraints.ts(13,24): error TS2344: Type 'Bar' does not satisfy the constraint 'not { then(): any; }'.
 promisesWithConstraints.ts(15,1): error TS2322: Type 'Promise<Foo>' is not assignable to type 'Promise<Bar>'.
   Property 'y' is missing in type 'Foo' but required in type 'Bar'.
 promisesWithConstraints.ts(20,1): error TS2322: Type 'CPromise<Foo>' is not assignable to type 'CPromise<Bar>'.
   Property 'y' is missing in type 'Foo' but required in type 'Bar'.
 
 
-==== promisesWithConstraints.ts (2 errors) ====
+==== promisesWithConstraints.ts (8 errors) ====
     interface Promise<T> {
         then<U>(cb: (x: T) => Promise<U>): Promise<U>;
+                                      ~
+!!! error TS2344: Type 'U' does not satisfy the constraint 'not { then(): any; }'.
+!!! related TS2208 promisesWithConstraints.ts:2:10: This type parameter might need an `extends not { then(): any; }` constraint.
+                                                   ~
+!!! error TS2344: Type 'U' does not satisfy the constraint 'not { then(): any; }'.
+!!! related TS2208 promisesWithConstraints.ts:2:10: This type parameter might need an `extends not { then(): any; }` constraint.
     }
     
     interface CPromise<T extends { x: any; }> {
         then<U extends { x: any; }>(cb: (x: T) => Promise<U>): Promise<U>;
+                                                          ~
+!!! error TS2344: Type 'U' does not satisfy the constraint 'not { then(): any; }'.
+!!! error TS2344:   Type '{ x: any; }' is not assignable to type 'not { then(): any; }'.
+                                                                       ~
+!!! error TS2344: Type 'U' does not satisfy the constraint 'not { then(): any; }'.
+!!! error TS2344:   Type '{ x: any; }' is not assignable to type 'not { then(): any; }'.
     }
     
     interface Foo { x: any; }
     interface Bar { x: any; y: any; }
     
     var a: Promise<Foo>;
+                   ~~~
+!!! error TS2344: Type 'Foo' does not satisfy the constraint 'not { then(): any; }'.
     declare var b: Promise<Bar>;
+                           ~~~
+!!! error TS2344: Type 'Bar' does not satisfy the constraint 'not { then(): any; }'.
     a = b; // ok
     b = a; // ok
     ~

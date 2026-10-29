@@ -125,7 +125,7 @@ interface AsyncDisposableStack {
     /**
      * Disposes each resource in the stack in the reverse order that they were added.
      */
-    disposeAsync(): Promise<void>;
+    disposeAsync(): Promise<void & not { then(): any }>;
     /**
      * Adds a disposable resource to the stack, returning the resource.
      * @param value The resource to add. `null` and `undefined` will not be added, but will be returned.
@@ -174,7 +174,7 @@ interface AsyncDisposableStack {
      * ```
      */
     move(): AsyncDisposableStack;
-    [Symbol.asyncDispose](): Promise<void>;
+    [Symbol.asyncDispose](): Promise<void & not { then(): any }>;
     readonly [Symbol.toStringTag]: string;
 }
 

@@ -3,68 +3,68 @@
 === subfolder/index.js ===
 // cjs format file
 import {h} from "../index.js";
->h : () => Promise<void>
+>h : () => Promise<void & not { then(): any; }>
 
 import mod = require("../index.js");
 >mod : typeof mod
 
 import {f as _f} from "./index.js";
->f : () => Promise<void>
->_f : () => Promise<void>
+>f : () => Promise<void & not { then(): any; }>
+>_f : () => Promise<void & not { then(): any; }>
 
 import mod2 = require("./index.js");
 >mod2 : typeof mod2
 
 export async function f() {
->f : () => Promise<void>
+>f : () => Promise<void & not { then(): any; }>
 
     const mod3 = await import ("../index.js");
->mod3 : typeof mod
->await import ("../index.js") : typeof mod
->import ("../index.js") : Promise<typeof mod>
+>mod3 : typeof mod & not { then(): any; }
+>await import ("../index.js") : typeof mod & not { then(): any; }
+>import ("../index.js") : Promise<typeof mod & not { then(): any; }>
 >"../index.js" : "../index.js"
 
     const mod4 = await import ("./index.js");
->mod4 : { f(): Promise<void>; default: typeof mod2; }
->await import ("./index.js") : { f(): Promise<void>; default: typeof mod2; }
->import ("./index.js") : Promise<{ f(): Promise<void>; default: typeof mod2; }>
+>mod4 : { f(): Promise<void & not { then(): any; }>; default: typeof mod2; }
+>await import ("./index.js") : { f(): Promise<void & not { then(): any; }>; default: typeof mod2; }
+>import ("./index.js") : Promise<{ f(): Promise<void & not { then(): any; }>; default: typeof mod2; }>
 >"./index.js" : "./index.js"
 
     h();
->h() : Promise<void>
->h : () => Promise<void>
+>h() : Promise<void & not { then(): any; }>
+>h : () => Promise<void & not { then(): any; }>
 }
 === index.js ===
 // esm format file
 import {h as _h} from "./index.js";
->h : () => Promise<void>
->_h : () => Promise<void>
+>h : () => Promise<void & not { then(): any; }>
+>_h : () => Promise<void & not { then(): any; }>
 
 import mod = require("./index.js");
 >mod : typeof mod
 
 import {f} from "./subfolder/index.js";
->f : () => Promise<void>
+>f : () => Promise<void & not { then(): any; }>
 
 import mod2 = require("./subfolder/index.js");
 >mod2 : typeof mod2
 
 export async function h() {
->h : () => Promise<void>
+>h : () => Promise<void & not { then(): any; }>
 
     const mod3 = await import ("./index.js");
->mod3 : typeof mod
->await import ("./index.js") : typeof mod
->import ("./index.js") : Promise<typeof mod>
+>mod3 : typeof mod & not { then(): any; }
+>await import ("./index.js") : typeof mod & not { then(): any; }
+>import ("./index.js") : Promise<typeof mod & not { then(): any; }>
 >"./index.js" : "./index.js"
 
     const mod4 = await import ("./subfolder/index.js");
->mod4 : { f(): Promise<void>; default: typeof mod2; }
->await import ("./subfolder/index.js") : { f(): Promise<void>; default: typeof mod2; }
->import ("./subfolder/index.js") : Promise<{ f(): Promise<void>; default: typeof mod2; }>
+>mod4 : { f(): Promise<void & not { then(): any; }>; default: typeof mod2; }
+>await import ("./subfolder/index.js") : { f(): Promise<void & not { then(): any; }>; default: typeof mod2; }
+>import ("./subfolder/index.js") : Promise<{ f(): Promise<void & not { then(): any; }>; default: typeof mod2; }>
 >"./subfolder/index.js" : "./subfolder/index.js"
 
     f();
->f() : Promise<void>
->f : () => Promise<void>
+>f() : Promise<void & not { then(): any; }>
+>f : () => Promise<void & not { then(): any; }>
 }

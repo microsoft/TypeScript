@@ -3,9 +3,9 @@
 === contextualReturnTypeOfIIFE.ts ===
 const test1: Promise<[one: number, two: string]> = (async () => {
 >test1 : Promise<[one: number, two: string]>
->(async () => {    return [1, 'two'];})() : Promise<[number, string]>
->(async () => {    return [1, 'two'];}) : () => Promise<[number, string]>
->async () => {    return [1, 'two'];} : () => Promise<[number, string]>
+>(async () => {    return [1, 'two'];})() : Promise<[number, string] & not { then(): any; }>
+>(async () => {    return [1, 'two'];}) : () => Promise<[number, string] & not { then(): any; }>
+>async () => {    return [1, 'two'];} : () => Promise<[number, string] & not { then(): any; }>
 
     return [1, 'two'];
 >[1, 'two'] : [number, string]
@@ -16,15 +16,15 @@ const test1: Promise<[one: number, two: string]> = (async () => {
 
 const test2: Promise<[one: number, two: string]> = new Promise(
 >test2 : Promise<[one: number, two: string]>
->new Promise(    (resolve) => resolve([1, 'two']),) : Promise<[one: number, two: string]>
+>new Promise(    (resolve) => resolve([1, 'two']),) : Promise<not { then(): any; }>
 >Promise : PromiseConstructor
 
     (resolve) => resolve([1, 'two']),
->(resolve) => resolve([1, 'two']) : (resolve: (value: PromiseLike<[one: number, two: string]> | [one: number, two: string]) => void) => void
->resolve : (value: PromiseLike<[one: number, two: string]> | [one: number, two: string]) => void
+>(resolve) => resolve([1, 'two']) : (resolve: (value: PromiseLike<not { then(): any; }> | not { then(): any; }) => void) => void
+>resolve : (value: PromiseLike<not { then(): any; }> | not { then(): any; }) => void
 >resolve([1, 'two']) : void
->resolve : (value: PromiseLike<[one: number, two: string]> | [one: number, two: string]) => void
->[1, 'two'] : [number, string]
+>resolve : (value: PromiseLike<not { then(): any; }> | not { then(): any; }) => void
+>[1, 'two'] : (string | number)[]
 >1 : 1
 >'two' : "two"
 

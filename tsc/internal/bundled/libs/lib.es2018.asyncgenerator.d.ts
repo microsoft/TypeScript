@@ -18,9 +18,9 @@ and limitations under the License.
 
 interface AsyncGenerator<T = unknown, TReturn = any, TNext = any> extends AsyncIteratorObject<T, TReturn, TNext> {
     // NOTE: 'next' is defined using a tuple to ensure we report the correct assignability errors in all places.
-    next(...[value]: [] | [TNext]): Promise<IteratorResult<T, TReturn>>;
-    return(value: TReturn | PromiseLike<TReturn>): Promise<IteratorResult<T, TReturn>>;
-    throw(e: any): Promise<IteratorResult<T, TReturn>>;
+    next(...[value]: [] | [TNext]): Promise<IteratorResult<T, TReturn> & not { then(): any }>;
+    return(value: TReturn | PromiseLike<TReturn>): Promise<IteratorResult<T, TReturn> & not { then(): any }>;
+    throw(e: any): Promise<IteratorResult<T, TReturn> & not { then(): any }>;
     [Symbol.asyncIterator](): AsyncGenerator<T, TReturn, TNext>;
 }
 

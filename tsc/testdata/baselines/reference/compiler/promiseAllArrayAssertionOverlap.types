@@ -13,16 +13,16 @@ declare const result: Promise<Row | null>;
 >result : Promise<Row | null>
 
 export async function load() {
->load : () => Promise<Entity[]>
+>load : () => Promise<Entity[] & not { then(): any; }>
 
     return (await Promise.all([result, result])) as Entity[];
 >(await Promise.all([result, result])) as Entity[] : Entity[]
->(await Promise.all([result, result])) : (Row | null)[]
->await Promise.all([result, result]) : (Row | null)[]
->Promise.all([result, result]) : Promise<(Row | null)[]>
->Promise.all : { <T>(values: Iterable<T | PromiseLike<T>>): Promise<Awaited<T>[]>; <T extends readonly unknown[] | []>(values: T): Promise<{ -readonly [P in keyof T]: Awaited<T[P]>; }>; }
+>(await Promise.all([result, result])) : ((Row & not { then(): any; }) | null)[] & not { then(): any; } & not { then(): any; }
+>await Promise.all([result, result]) : ((Row & not { then(): any; }) | null)[] & not { then(): any; } & not { then(): any; }
+>Promise.all([result, result]) : Promise<((Row & not { then(): any; }) | null)[] & not { then(): any; }>
+>Promise.all : { <T>(values: Iterable<T | PromiseLike<T>>): Promise<Awaited<T>[] & not { then(): any; }>; <T extends readonly unknown[] | []>(values: T): Promise<{ -readonly [P in keyof T]: Awaited<T[P]>; } & not { then(): any; }>; }
 >Promise : PromiseConstructor
->all : { <T>(values: Iterable<T | PromiseLike<T>>): Promise<Awaited<T>[]>; <T extends readonly unknown[] | []>(values: T): Promise<{ -readonly [P in keyof T]: Awaited<T[P]>; }>; }
+>all : { <T>(values: Iterable<T | PromiseLike<T>>): Promise<Awaited<T>[] & not { then(): any; }>; <T extends readonly unknown[] | []>(values: T): Promise<{ -readonly [P in keyof T]: Awaited<T[P]>; } & not { then(): any; }>; }
 >[result, result] : Promise<Row | null>[]
 >result : Promise<Row | null>
 >result : Promise<Row | null>

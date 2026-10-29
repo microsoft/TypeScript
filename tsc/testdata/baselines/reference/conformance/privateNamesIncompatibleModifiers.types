@@ -43,7 +43,7 @@ class A {
 >#whatMethod : () => any
 
     async #asyncMethod() { return 1; }         //OK
->#asyncMethod : () => Promise<number>
+>#asyncMethod : () => Promise<1 & not { then(): any; }>
 >1 : 1
 
     *#genMethod() { return 1; }                //OK
@@ -51,7 +51,7 @@ class A {
 >1 : 1
 
     async *#asyncGenMethod() { return 1; }     //OK
->#asyncGenMethod : () => AsyncIterableIterator<never, number, unknown>
+>#asyncGenMethod : () => AsyncIterableIterator<never, 1 & not { then(): any; }, unknown>
 >1 : 1
 
     public get #fooProp() { return  3; }         // Error

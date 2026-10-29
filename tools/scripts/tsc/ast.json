@@ -176,6 +176,7 @@
             "ModuleKeyword",
             "NamespaceKeyword",
             "NeverKeyword",
+            "NotKeyword",
             "OutKeyword",
             "ReadonlyKeyword",
             "RequireKeyword",
@@ -3555,7 +3556,8 @@
                         "type": [
                             "SyntaxKind.KeyOfKeyword",
                             "SyntaxKind.ReadonlyKeyword",
-                            "SyntaxKind.UniqueKeyword"
+                            "SyntaxKind.UniqueKeyword",
+                            "SyntaxKind.NotKeyword"
                         ]
                     },
                     {

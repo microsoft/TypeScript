@@ -10,7 +10,7 @@ declare var x, y, z, a, b, c;
 >c : any
 
 async function binaryPlus0() {
->binaryPlus0 : () => Promise<void>
+>binaryPlus0 : () => Promise<void & not { then(): any; }>
 
     (await x) + y;
 >(await x) + y : any
@@ -21,7 +21,7 @@ async function binaryPlus0() {
 }
 
 async function binaryPlus1() {
->binaryPlus1 : () => Promise<void>
+>binaryPlus1 : () => Promise<void & not { then(): any; }>
 
     x + await y;
 >x + await y : any
@@ -31,7 +31,7 @@ async function binaryPlus1() {
 }
 
 async function binaryLogicalAnd0() {
->binaryLogicalAnd0 : () => Promise<void>
+>binaryLogicalAnd0 : () => Promise<void & not { then(): any; }>
 
     (await x) && y;
 >(await x) && y : any
@@ -42,7 +42,7 @@ async function binaryLogicalAnd0() {
 }
 
 async function binaryLogicalAnd1() {
->binaryLogicalAnd1 : () => Promise<void>
+>binaryLogicalAnd1 : () => Promise<void & not { then(): any; }>
 
     x && await y;
 >x && await y : any
@@ -52,7 +52,7 @@ async function binaryLogicalAnd1() {
 }
 
 async function binaryAssignment0() {
->binaryAssignment0 : () => Promise<void>
+>binaryAssignment0 : () => Promise<void & not { then(): any; }>
 
     x = await y;
 >x = await y : any
@@ -62,7 +62,7 @@ async function binaryAssignment0() {
 }
 
 async function binaryAssignment1() {
->binaryAssignment1 : () => Promise<void>
+>binaryAssignment1 : () => Promise<void & not { then(): any; }>
 
     x.a = await y;
 >x.a = await y : any
@@ -74,7 +74,7 @@ async function binaryAssignment1() {
 }
 
 async function binaryAssignment2() {
->binaryAssignment2 : () => Promise<void>
+>binaryAssignment2 : () => Promise<void & not { then(): any; }>
 
     x.a.b = await y;
 >x.a.b = await y : any
@@ -88,7 +88,7 @@ async function binaryAssignment2() {
 }
 
 async function binaryAssignment3() {
->binaryAssignment3 : () => Promise<void>
+>binaryAssignment3 : () => Promise<void & not { then(): any; }>
 
     x[z] = await y;
 >x[z] = await y : any
@@ -100,7 +100,7 @@ async function binaryAssignment3() {
 }
 
 async function binaryAssignment4() {
->binaryAssignment4 : () => Promise<void>
+>binaryAssignment4 : () => Promise<void & not { then(): any; }>
 
     x[z].b = await y;
 >x[z].b = await y : any
@@ -114,7 +114,7 @@ async function binaryAssignment4() {
 }
 
 async function binaryAssignment5() {
->binaryAssignment5 : () => Promise<void>
+>binaryAssignment5 : () => Promise<void & not { then(): any; }>
 
     x.a[z] = await y;
 >x.a[z] = await y : any
@@ -128,7 +128,7 @@ async function binaryAssignment5() {
 }
 
 async function binaryAssignment6() {
->binaryAssignment6 : () => Promise<void>
+>binaryAssignment6 : () => Promise<void & not { then(): any; }>
 
     (await x).a = y;
 >(await x).a = y : any
@@ -141,7 +141,7 @@ async function binaryAssignment6() {
 }
 
 async function binaryAssignment7() {
->binaryAssignment7 : () => Promise<void>
+>binaryAssignment7 : () => Promise<void & not { then(): any; }>
 
     (await x.a).b = y;
 >(await x.a).b = y : any
@@ -156,7 +156,7 @@ async function binaryAssignment7() {
 }
 
 async function binaryAssignment8() {
->binaryAssignment8 : () => Promise<void>
+>binaryAssignment8 : () => Promise<void & not { then(): any; }>
 
     (await x)[z] = y;
 >(await x)[z] = y : any
@@ -169,7 +169,7 @@ async function binaryAssignment8() {
 }
 
 async function binaryAssignment9() {
->binaryAssignment9 : () => Promise<void>
+>binaryAssignment9 : () => Promise<void & not { then(): any; }>
 
     x[await z] = y;
 >x[await z] = y : any
@@ -181,7 +181,7 @@ async function binaryAssignment9() {
 }
 
 async function binaryAssignment10() {
->binaryAssignment10 : () => Promise<void>
+>binaryAssignment10 : () => Promise<void & not { then(): any; }>
 
     x[await z].b = y;
 >x[await z].b = y : any
@@ -195,7 +195,7 @@ async function binaryAssignment10() {
 }
 
 async function binaryAssignment11() {
->binaryAssignment11 : () => Promise<void>
+>binaryAssignment11 : () => Promise<void & not { then(): any; }>
 
     (await x[z]).b = y;
 >(await x[z]).b = y : any
@@ -210,7 +210,7 @@ async function binaryAssignment11() {
 }
 
 async function binaryAssignment12() {
->binaryAssignment12 : () => Promise<void>
+>binaryAssignment12 : () => Promise<void & not { then(): any; }>
 
     x.a[await z] = y;
 >x.a[await z] = y : any
@@ -224,7 +224,7 @@ async function binaryAssignment12() {
 }
 
 async function binaryAssignment13() {
->binaryAssignment13 : () => Promise<void>
+>binaryAssignment13 : () => Promise<void & not { then(): any; }>
 
     (await x.a)[z] = y;
 >(await x.a)[z] = y : any
@@ -239,7 +239,7 @@ async function binaryAssignment13() {
 }
 
 async function binaryCompoundAssignment0() {
->binaryCompoundAssignment0 : () => Promise<void>
+>binaryCompoundAssignment0 : () => Promise<void & not { then(): any; }>
 
     x += await y;
 >x += await y : any
@@ -249,7 +249,7 @@ async function binaryCompoundAssignment0() {
 }
 
 async function binaryCompoundAssignment1() {
->binaryCompoundAssignment1 : () => Promise<void>
+>binaryCompoundAssignment1 : () => Promise<void & not { then(): any; }>
 
     x.a += await y;
 >x.a += await y : any
@@ -261,7 +261,7 @@ async function binaryCompoundAssignment1() {
 }
 
 async function binaryCompoundAssignment2() {
->binaryCompoundAssignment2 : () => Promise<void>
+>binaryCompoundAssignment2 : () => Promise<void & not { then(): any; }>
 
     x[a] += await y;
 >x[a] += await y : any
@@ -273,7 +273,7 @@ async function binaryCompoundAssignment2() {
 }
 
 async function binaryCompoundAssignment3() {
->binaryCompoundAssignment3 : () => Promise<void>
+>binaryCompoundAssignment3 : () => Promise<void & not { then(): any; }>
 
     (await x).a += y;
 >(await x).a += y : any
@@ -286,7 +286,7 @@ async function binaryCompoundAssignment3() {
 }
 
 async function binaryCompoundAssignment4() {
->binaryCompoundAssignment4 : () => Promise<void>
+>binaryCompoundAssignment4 : () => Promise<void & not { then(): any; }>
 
     (await x)[a] += y;
 >(await x)[a] += y : any
@@ -299,7 +299,7 @@ async function binaryCompoundAssignment4() {
 }
 
 async function binaryCompoundAssignment5() {
->binaryCompoundAssignment5 : () => Promise<void>
+>binaryCompoundAssignment5 : () => Promise<void & not { then(): any; }>
 
     x[await a] += y;
 >x[await a] += y : any
@@ -311,7 +311,7 @@ async function binaryCompoundAssignment5() {
 }
 
 async function binaryCompoundAssignment6() {
->binaryCompoundAssignment6 : () => Promise<void>
+>binaryCompoundAssignment6 : () => Promise<void & not { then(): any; }>
 
     (await x).a += await y;
 >(await x).a += await y : any
@@ -325,7 +325,7 @@ async function binaryCompoundAssignment6() {
 }
 
 async function binaryCompoundAssignment7() {
->binaryCompoundAssignment7 : () => Promise<void>
+>binaryCompoundAssignment7 : () => Promise<void & not { then(): any; }>
 
     (await x)[a] += await y;
 >(await x)[a] += await y : any
@@ -339,7 +339,7 @@ async function binaryCompoundAssignment7() {
 }
 
 async function binaryCompoundAssignment8() {
->binaryCompoundAssignment8 : () => Promise<void>
+>binaryCompoundAssignment8 : () => Promise<void & not { then(): any; }>
 
     x[await a] += await y;
 >x[await a] += await y : any
@@ -352,7 +352,7 @@ async function binaryCompoundAssignment8() {
 }
 
 async function binaryExponentiation() {
->binaryExponentiation : () => Promise<void>
+>binaryExponentiation : () => Promise<void & not { then(): any; }>
 
     (await x) ** y;
 >(await x) ** y : number

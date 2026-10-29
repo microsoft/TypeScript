@@ -16,7 +16,7 @@ async function func(): Promise<void> {
     var b = await p || a;
 >b : boolean
 >await p || a : boolean
->await p : boolean
+>await p : (false & not { then(): any; }) | (true & not { then(): any; })
 >p : Promise<boolean>
 >a : boolean
 }

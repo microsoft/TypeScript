@@ -5,9 +5,9 @@ declare const key: unique symbol;
 >key : unique symbol
 
 const values = {
->values : { readonly a: number; readonly b: Promise<string>; readonly c: { readonly then: (resolve: (value: boolean) => void) => void; }; readonly [key]: Promise<number>; }
->{    a: 1 as number,    b: Promise.resolve("value"),    c: { then(resolve: (value: boolean) => void) { resolve(true); } },    [key]: Promise.resolve(42),} as const : { readonly a: number; readonly b: Promise<string>; readonly c: { readonly then: (resolve: (value: boolean) => void) => void; }; readonly [key]: Promise<number>; }
->{    a: 1 as number,    b: Promise.resolve("value"),    c: { then(resolve: (value: boolean) => void) { resolve(true); } },    [key]: Promise.resolve(42),} : { readonly a: number; readonly b: Promise<string>; readonly c: { readonly then: (resolve: (value: boolean) => void) => void; }; readonly [key]: Promise<number>; }
+>values : { readonly a: number; readonly b: Promise<string & not { then(): any; }>; readonly c: { readonly then: (resolve: (value: boolean) => void) => void; }; readonly [key]: Promise<number & not { then(): any; }>; }
+>{    a: 1 as number,    b: Promise.resolve("value"),    c: { then(resolve: (value: boolean) => void) { resolve(true); } },    [key]: Promise.resolve(42),} as const : { readonly a: number; readonly b: Promise<string & not { then(): any; }>; readonly c: { readonly then: (resolve: (value: boolean) => void) => void; }; readonly [key]: Promise<number & not { then(): any; }>; }
+>{    a: 1 as number,    b: Promise.resolve("value"),    c: { then(resolve: (value: boolean) => void) { resolve(true); } },    [key]: Promise.resolve(42),} : { readonly a: number; readonly b: Promise<string & not { then(): any; }>; readonly c: { readonly then: (resolve: (value: boolean) => void) => void; }; readonly [key]: Promise<number & not { then(): any; }>; }
 
     a: 1 as number,
 >a : number
@@ -15,11 +15,11 @@ const values = {
 >1 : 1
 
     b: Promise.resolve("value"),
->b : Promise<string>
->Promise.resolve("value") : Promise<string>
->Promise.resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T>(value: T | PromiseLike<T>): Promise<Awaited<T>>; }
+>b : Promise<string & not { then(): any; }>
+>Promise.resolve("value") : Promise<string & not { then(): any; }>
+>Promise.resolve : { (): Promise<void & not { then(): any; }>; <T>(value: T): Promise<Awaited<T>>; <T>(value: T | PromiseLike<T>): Promise<Awaited<T>>; }
 >Promise : PromiseConstructor
->resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T>(value: T | PromiseLike<T>): Promise<Awaited<T>>; }
+>resolve : { (): Promise<void & not { then(): any; }>; <T>(value: T): Promise<Awaited<T>>; <T>(value: T | PromiseLike<T>): Promise<Awaited<T>>; }
 >"value" : "value"
 
     c: { then(resolve: (value: boolean) => void) { resolve(true); } },
@@ -33,95 +33,95 @@ const values = {
 >true : true
 
     [key]: Promise.resolve(42),
->[key] : Promise<number>
+>[key] : Promise<number & not { then(): any; }>
 >key : unique symbol
->Promise.resolve(42) : Promise<number>
->Promise.resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T>(value: T | PromiseLike<T>): Promise<Awaited<T>>; }
+>Promise.resolve(42) : Promise<number & not { then(): any; }>
+>Promise.resolve : { (): Promise<void & not { then(): any; }>; <T>(value: T): Promise<Awaited<T>>; <T>(value: T | PromiseLike<T>): Promise<Awaited<T>>; }
 >Promise : PromiseConstructor
->resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T>(value: T | PromiseLike<T>): Promise<Awaited<T>>; }
+>resolve : { (): Promise<void & not { then(): any; }>; <T>(value: T): Promise<Awaited<T>>; <T>(value: T | PromiseLike<T>): Promise<Awaited<T>>; }
 >42 : 42
 
 } as const;
 
 async function testAllKeyed() {
->testAllKeyed : () => Promise<void>
+>testAllKeyed : () => Promise<void & not { then(): any; }>
 
     const result = await Promise.allKeyed(values);
->result : { a: number; b: string; c: boolean; [key]: number; }
->await Promise.allKeyed(values) : { a: number; b: string; c: boolean; [key]: number; }
->Promise.allKeyed(values) : Promise<{ a: number; b: string; c: boolean; [key]: number; }>
->Promise.allKeyed : <T extends object>(promises: T) => Promise<{ -readonly [P in keyof T]: Awaited<T[P]>; }>
+>result : { a: number & not { then(): any; }; b: string & not { then(): any; } & not { then(): any; }; c: (false & not { then(): any; }) | (true & not { then(): any; }); [key]: number & not { then(): any; } & not { then(): any; }; } & not { then(): any; } & not { then(): any; }
+>await Promise.allKeyed(values) : { a: number & not { then(): any; }; b: string & not { then(): any; } & not { then(): any; }; c: (false & not { then(): any; }) | (true & not { then(): any; }); [key]: number & not { then(): any; } & not { then(): any; }; } & not { then(): any; } & not { then(): any; }
+>Promise.allKeyed(values) : Promise<{ a: number & not { then(): any; }; b: string & not { then(): any; } & not { then(): any; }; c: (false & not { then(): any; }) | (true & not { then(): any; }); [key]: number & not { then(): any; } & not { then(): any; }; } & not { then(): any; }>
+>Promise.allKeyed : <T extends object>(promises: T) => Promise<Awaited<{ -readonly [P in keyof T]: Awaited<T[P]>; }>>
 >Promise : PromiseConstructor
->allKeyed : <T extends object>(promises: T) => Promise<{ -readonly [P in keyof T]: Awaited<T[P]>; }>
->values : { readonly a: number; readonly b: Promise<string>; readonly c: { readonly then: (resolve: (value: boolean) => void) => void; }; readonly [key]: Promise<number>; }
+>allKeyed : <T extends object>(promises: T) => Promise<Awaited<{ -readonly [P in keyof T]: Awaited<T[P]>; }>>
+>values : { readonly a: number; readonly b: Promise<string & not { then(): any; }>; readonly c: { readonly then: (resolve: (value: boolean) => void) => void; }; readonly [key]: Promise<number & not { then(): any; }>; }
 
     const a: number = result.a;
 >a : number
->result.a : number
->result : { a: number; b: string; c: boolean; [key]: number; }
->a : number
+>result.a : number & not { then(): any; }
+>result : { a: number & not { then(): any; }; b: string & not { then(): any; } & not { then(): any; }; c: (false & not { then(): any; }) | (true & not { then(): any; }); [key]: number & not { then(): any; } & not { then(): any; }; } & not { then(): any; } & not { then(): any; }
+>a : number & not { then(): any; }
 
     const b: string = result.b;
 >b : string
->result.b : string
->result : { a: number; b: string; c: boolean; [key]: number; }
->b : string
+>result.b : string & not { then(): any; } & not { then(): any; }
+>result : { a: number & not { then(): any; }; b: string & not { then(): any; } & not { then(): any; }; c: (false & not { then(): any; }) | (true & not { then(): any; }); [key]: number & not { then(): any; } & not { then(): any; }; } & not { then(): any; } & not { then(): any; }
+>b : string & not { then(): any; } & not { then(): any; }
 
     const c: boolean = result.c;
 >c : boolean
->result.c : boolean
->result : { a: number; b: string; c: boolean; [key]: number; }
->c : boolean
+>result.c : (false & not { then(): any; }) | (true & not { then(): any; })
+>result : { a: number & not { then(): any; }; b: string & not { then(): any; } & not { then(): any; }; c: (false & not { then(): any; }) | (true & not { then(): any; }); [key]: number & not { then(): any; } & not { then(): any; }; } & not { then(): any; } & not { then(): any; }
+>c : (false & not { then(): any; }) | (true & not { then(): any; })
 
     const d: number = result[key];
 >d : number
->result[key] : number
->result : { a: number; b: string; c: boolean; [key]: number; }
+>result[key] : number & not { then(): any; } & not { then(): any; }
+>result : { a: number & not { then(): any; }; b: string & not { then(): any; } & not { then(): any; }; c: (false & not { then(): any; }) | (true & not { then(): any; }); [key]: number & not { then(): any; } & not { then(): any; }; } & not { then(): any; } & not { then(): any; }
 >key : unique symbol
 
     result.a = 2;
 >result.a = 2 : 2
->result.a : number
->result : { a: number; b: string; c: boolean; [key]: number; }
->a : number
+>result.a : number & not { then(): any; }
+>result : { a: number & not { then(): any; }; b: string & not { then(): any; } & not { then(): any; }; c: (false & not { then(): any; }) | (true & not { then(): any; }); [key]: number & not { then(): any; } & not { then(): any; }; } & not { then(): any; } & not { then(): any; }
+>a : number & not { then(): any; }
 >2 : 2
 }
 
 async function testAllSettledKeyed() {
->testAllSettledKeyed : () => Promise<void>
+>testAllSettledKeyed : () => Promise<void & not { then(): any; }>
 
     const result = await Promise.allSettledKeyed(values);
->result : { a: PromiseSettledResult<number>; b: PromiseSettledResult<string>; c: PromiseSettledResult<boolean>; [key]: PromiseSettledResult<number>; }
->await Promise.allSettledKeyed(values) : { a: PromiseSettledResult<number>; b: PromiseSettledResult<string>; c: PromiseSettledResult<boolean>; [key]: PromiseSettledResult<number>; }
->Promise.allSettledKeyed(values) : Promise<{ a: PromiseSettledResult<number>; b: PromiseSettledResult<string>; c: PromiseSettledResult<boolean>; [key]: PromiseSettledResult<number>; }>
->Promise.allSettledKeyed : <T extends object>(promises: T) => Promise<{ -readonly [P in keyof T]: PromiseSettledResult<Awaited<T[P]>>; }>
+>result : { a: PromiseSettledResult<number & not { then(): any; }>; b: PromiseSettledResult<string & not { then(): any; } & not { then(): any; }>; c: PromiseSettledResult<(false & not { then(): any; }) | (true & not { then(): any; })>; [key]: PromiseSettledResult<number & not { then(): any; } & not { then(): any; }>; } & not { then(): any; } & not { then(): any; }
+>await Promise.allSettledKeyed(values) : { a: PromiseSettledResult<number & not { then(): any; }>; b: PromiseSettledResult<string & not { then(): any; } & not { then(): any; }>; c: PromiseSettledResult<(false & not { then(): any; }) | (true & not { then(): any; })>; [key]: PromiseSettledResult<number & not { then(): any; } & not { then(): any; }>; } & not { then(): any; } & not { then(): any; }
+>Promise.allSettledKeyed(values) : Promise<{ a: PromiseSettledResult<number & not { then(): any; }>; b: PromiseSettledResult<string & not { then(): any; } & not { then(): any; }>; c: PromiseSettledResult<(false & not { then(): any; }) | (true & not { then(): any; })>; [key]: PromiseSettledResult<number & not { then(): any; } & not { then(): any; }>; } & not { then(): any; }>
+>Promise.allSettledKeyed : <T extends object>(promises: T) => Promise<{ -readonly [P in keyof T]: PromiseSettledResult<Awaited<T[P]>>; } & not { then(): any; }>
 >Promise : PromiseConstructor
->allSettledKeyed : <T extends object>(promises: T) => Promise<{ -readonly [P in keyof T]: PromiseSettledResult<Awaited<T[P]>>; }>
->values : { readonly a: number; readonly b: Promise<string>; readonly c: { readonly then: (resolve: (value: boolean) => void) => void; }; readonly [key]: Promise<number>; }
+>allSettledKeyed : <T extends object>(promises: T) => Promise<{ -readonly [P in keyof T]: PromiseSettledResult<Awaited<T[P]>>; } & not { then(): any; }>
+>values : { readonly a: number; readonly b: Promise<string & not { then(): any; }>; readonly c: { readonly then: (resolve: (value: boolean) => void) => void; }; readonly [key]: Promise<number & not { then(): any; }>; }
 
     if (result.b.status === "fulfilled") {
 >result.b.status === "fulfilled" : boolean
 >result.b.status : "fulfilled" | "rejected"
->result.b : PromiseSettledResult<string>
->result : { a: PromiseSettledResult<number>; b: PromiseSettledResult<string>; c: PromiseSettledResult<boolean>; [key]: PromiseSettledResult<number>; }
->b : PromiseSettledResult<string>
+>result.b : PromiseSettledResult<string & not { then(): any; } & not { then(): any; }>
+>result : { a: PromiseSettledResult<number & not { then(): any; }>; b: PromiseSettledResult<string & not { then(): any; } & not { then(): any; }>; c: PromiseSettledResult<(false & not { then(): any; }) | (true & not { then(): any; })>; [key]: PromiseSettledResult<number & not { then(): any; } & not { then(): any; }>; } & not { then(): any; } & not { then(): any; }
+>b : PromiseSettledResult<string & not { then(): any; } & not { then(): any; }>
 >status : "fulfilled" | "rejected"
 >"fulfilled" : "fulfilled"
 
         const value: string = result.b.value;
 >value : string
->result.b.value : string
->result.b : PromiseFulfilledResult<string>
->result : { a: PromiseSettledResult<number>; b: PromiseSettledResult<string>; c: PromiseSettledResult<boolean>; [key]: PromiseSettledResult<number>; }
->b : PromiseFulfilledResult<string>
->value : string
+>result.b.value : string & not { then(): any; } & not { then(): any; }
+>result.b : PromiseFulfilledResult<string & not { then(): any; } & not { then(): any; }>
+>result : { a: PromiseSettledResult<number & not { then(): any; }>; b: PromiseSettledResult<string & not { then(): any; } & not { then(): any; }>; c: PromiseSettledResult<(false & not { then(): any; }) | (true & not { then(): any; })>; [key]: PromiseSettledResult<number & not { then(): any; } & not { then(): any; }>; } & not { then(): any; } & not { then(): any; }
+>b : PromiseFulfilledResult<string & not { then(): any; } & not { then(): any; }>
+>value : string & not { then(): any; } & not { then(): any; }
     }
     else {
         const reason: any = result.b.reason;
 >reason : any
 >result.b.reason : any
 >result.b : PromiseRejectedResult
->result : { a: PromiseSettledResult<number>; b: PromiseSettledResult<string>; c: PromiseSettledResult<boolean>; [key]: PromiseSettledResult<number>; }
+>result : { a: PromiseSettledResult<number & not { then(): any; }>; b: PromiseSettledResult<string & not { then(): any; } & not { then(): any; }>; c: PromiseSettledResult<(false & not { then(): any; }) | (true & not { then(): any; })>; [key]: PromiseSettledResult<number & not { then(): any; } & not { then(): any; }>; } & not { then(): any; } & not { then(): any; }
 >b : PromiseRejectedResult
 >reason : any
     }
@@ -129,19 +129,19 @@ async function testAllSettledKeyed() {
     if (result[key].status === "fulfilled") {
 >result[key].status === "fulfilled" : boolean
 >result[key].status : "fulfilled" | "rejected"
->result[key] : PromiseSettledResult<number>
->result : { a: PromiseSettledResult<number>; b: PromiseSettledResult<string>; c: PromiseSettledResult<boolean>; [key]: PromiseSettledResult<number>; }
+>result[key] : PromiseSettledResult<number & not { then(): any; } & not { then(): any; }>
+>result : { a: PromiseSettledResult<number & not { then(): any; }>; b: PromiseSettledResult<string & not { then(): any; } & not { then(): any; }>; c: PromiseSettledResult<(false & not { then(): any; }) | (true & not { then(): any; })>; [key]: PromiseSettledResult<number & not { then(): any; } & not { then(): any; }>; } & not { then(): any; } & not { then(): any; }
 >key : unique symbol
 >status : "fulfilled" | "rejected"
 >"fulfilled" : "fulfilled"
 
         const value: number = result[key].value;
 >value : number
->result[key].value : number
->result[key] : PromiseFulfilledResult<number>
->result : { a: PromiseSettledResult<number>; b: PromiseSettledResult<string>; c: PromiseSettledResult<boolean>; [key]: PromiseSettledResult<number>; }
+>result[key].value : number & not { then(): any; } & not { then(): any; }
+>result[key] : PromiseFulfilledResult<number & not { then(): any; } & not { then(): any; }>
+>result : { a: PromiseSettledResult<number & not { then(): any; }>; b: PromiseSettledResult<string & not { then(): any; } & not { then(): any; }>; c: PromiseSettledResult<(false & not { then(): any; }) | (true & not { then(): any; })>; [key]: PromiseSettledResult<number & not { then(): any; } & not { then(): any; }>; } & not { then(): any; } & not { then(): any; }
 >key : unique symbol
->value : number
+>value : number & not { then(): any; } & not { then(): any; }
     }
 }
 
@@ -160,10 +160,10 @@ const allResult: Promise<{ a: number; b: string; }> = Promise.allKeyed(input);
 >allResult : Promise<{ a: number; b: string; }>
 >a : number
 >b : string
->Promise.allKeyed(input) : Promise<{ a: number; b: string; }>
->Promise.allKeyed : <T extends object>(promises: T) => Promise<{ -readonly [P in keyof T]: Awaited<T[P]>; }>
+>Promise.allKeyed(input) : Promise<{ a: number & not { then(): any; }; b: string & not { then(): any; }; } & not { then(): any; }>
+>Promise.allKeyed : <T extends object>(promises: T) => Promise<Awaited<{ -readonly [P in keyof T]: Awaited<T[P]>; }>>
 >Promise : PromiseConstructor
->allKeyed : <T extends object>(promises: T) => Promise<{ -readonly [P in keyof T]: Awaited<T[P]>; }>
+>allKeyed : <T extends object>(promises: T) => Promise<Awaited<{ -readonly [P in keyof T]: Awaited<T[P]>; }>>
 >input : Input
 
 const allSettledResult: Promise<{
@@ -176,14 +176,14 @@ const allSettledResult: Promise<{
 >b : PromiseSettledResult<string>
 
 }> = Promise.allSettledKeyed(input);
->Promise.allSettledKeyed(input) : Promise<{ a: PromiseSettledResult<number>; b: PromiseSettledResult<string>; }>
->Promise.allSettledKeyed : <T extends object>(promises: T) => Promise<{ -readonly [P in keyof T]: PromiseSettledResult<Awaited<T[P]>>; }>
+>Promise.allSettledKeyed(input) : Promise<{ a: PromiseSettledResult<number & not { then(): any; }>; b: PromiseSettledResult<string & not { then(): any; }>; } & not { then(): any; }>
+>Promise.allSettledKeyed : <T extends object>(promises: T) => Promise<{ -readonly [P in keyof T]: PromiseSettledResult<Awaited<T[P]>>; } & not { then(): any; }>
 >Promise : PromiseConstructor
->allSettledKeyed : <T extends object>(promises: T) => Promise<{ -readonly [P in keyof T]: PromiseSettledResult<Awaited<T[P]>>; }>
+>allSettledKeyed : <T extends object>(promises: T) => Promise<{ -readonly [P in keyof T]: PromiseSettledResult<Awaited<T[P]>>; } & not { then(): any; }>
 >input : Input
 
 Promise.try(() => 1);
->Promise.try(() => 1) : Promise<number>
+>Promise.try(() => 1) : Promise<number & not { then(): any; }>
 >Promise.try : <T, U extends unknown[]>(callbackFn: (...args: U) => T | PromiseLike<T>, ...args: U) => Promise<Awaited<T>>
 >Promise : PromiseConstructor
 >try : <T, U extends unknown[]>(callbackFn: (...args: U) => T | PromiseLike<T>, ...args: U) => Promise<Awaited<T>>
@@ -191,29 +191,29 @@ Promise.try(() => 1);
 >1 : 1
 
 Promise.allKeyed(0);
->Promise.allKeyed(0) : Promise<object>
->Promise.allKeyed : <T extends object>(promises: T) => Promise<{ -readonly [P in keyof T]: Awaited<T[P]>; }>
+>Promise.allKeyed(0) : Promise<object & not { then(): any; }>
+>Promise.allKeyed : <T extends object>(promises: T) => Promise<Awaited<{ -readonly [P in keyof T]: Awaited<T[P]>; }>>
 >Promise : PromiseConstructor
->allKeyed : <T extends object>(promises: T) => Promise<{ -readonly [P in keyof T]: Awaited<T[P]>; }>
+>allKeyed : <T extends object>(promises: T) => Promise<Awaited<{ -readonly [P in keyof T]: Awaited<T[P]>; }>>
 >0 : 0
 
 Promise.allSettledKeyed("value");
->Promise.allSettledKeyed("value") : Promise<object>
->Promise.allSettledKeyed : <T extends object>(promises: T) => Promise<{ -readonly [P in keyof T]: PromiseSettledResult<Awaited<T[P]>>; }>
+>Promise.allSettledKeyed("value") : Promise<object & not { then(): any; }>
+>Promise.allSettledKeyed : <T extends object>(promises: T) => Promise<{ -readonly [P in keyof T]: PromiseSettledResult<Awaited<T[P]>>; } & not { then(): any; }>
 >Promise : PromiseConstructor
->allSettledKeyed : <T extends object>(promises: T) => Promise<{ -readonly [P in keyof T]: PromiseSettledResult<Awaited<T[P]>>; }>
+>allSettledKeyed : <T extends object>(promises: T) => Promise<{ -readonly [P in keyof T]: PromiseSettledResult<Awaited<T[P]>>; } & not { then(): any; }>
 >"value" : "value"
 
 Promise.allKeyed(null);
->Promise.allKeyed(null) : Promise<object>
->Promise.allKeyed : <T extends object>(promises: T) => Promise<{ -readonly [P in keyof T]: Awaited<T[P]>; }>
+>Promise.allKeyed(null) : Promise<object & not { then(): any; }>
+>Promise.allKeyed : <T extends object>(promises: T) => Promise<Awaited<{ -readonly [P in keyof T]: Awaited<T[P]>; }>>
 >Promise : PromiseConstructor
->allKeyed : <T extends object>(promises: T) => Promise<{ -readonly [P in keyof T]: Awaited<T[P]>; }>
+>allKeyed : <T extends object>(promises: T) => Promise<Awaited<{ -readonly [P in keyof T]: Awaited<T[P]>; }>>
 
 Promise.allSettledKeyed(undefined);
->Promise.allSettledKeyed(undefined) : Promise<object>
->Promise.allSettledKeyed : <T extends object>(promises: T) => Promise<{ -readonly [P in keyof T]: PromiseSettledResult<Awaited<T[P]>>; }>
+>Promise.allSettledKeyed(undefined) : Promise<object & not { then(): any; }>
+>Promise.allSettledKeyed : <T extends object>(promises: T) => Promise<{ -readonly [P in keyof T]: PromiseSettledResult<Awaited<T[P]>>; } & not { then(): any; }>
 >Promise : PromiseConstructor
->allSettledKeyed : <T extends object>(promises: T) => Promise<{ -readonly [P in keyof T]: PromiseSettledResult<Awaited<T[P]>>; }>
+>allSettledKeyed : <T extends object>(promises: T) => Promise<{ -readonly [P in keyof T]: PromiseSettledResult<Awaited<T[P]>>; } & not { then(): any; }>
 >undefined : undefined
 

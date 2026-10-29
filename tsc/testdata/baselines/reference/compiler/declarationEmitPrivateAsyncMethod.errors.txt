@@ -1,0 +1,20 @@
+a.ts(11,32): error TS2344: Type 'void' does not satisfy the constraint 'not { then(): any; }'.
+
+
+==== a.ts (1 errors) ====
+    export class C {
+        /**
+         * Non Async function
+         */
+        private a(): void {
+        }
+    
+        /**
+         * Async function
+         */
+        private async b(): Promise<void> {
+                                   ~~~~
+!!! error TS2344: Type 'void' does not satisfy the constraint 'not { then(): any; }'.
+        }
+    }
+    

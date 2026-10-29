@@ -10,7 +10,7 @@ declare var x, y, z, a, b, c;
 >c : any
 
 async function elementAccess0() {
->elementAccess0 : () => Promise<void>
+>elementAccess0 : () => Promise<void & not { then(): any; }>
 
     z = await x[y];
 >z = await x[y] : any
@@ -22,7 +22,7 @@ async function elementAccess0() {
 }
 
 async function elementAccess1() {
->elementAccess1 : () => Promise<void>
+>elementAccess1 : () => Promise<void & not { then(): any; }>
 
     z = (await x)[y];
 >z = (await x)[y] : any
@@ -35,7 +35,7 @@ async function elementAccess1() {
 }
 
 async function elementAccess2() {
->elementAccess2 : () => Promise<void>
+>elementAccess2 : () => Promise<void & not { then(): any; }>
 
     z = x[await y];
 >z = x[await y] : any

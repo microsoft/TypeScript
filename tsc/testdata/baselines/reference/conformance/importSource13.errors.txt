@@ -1,15 +1,21 @@
+b.mts(3,18): error TS2344: Type 'AbstractModuleSource' does not satisfy the constraint 'not { then(): any; }'.
 c.cts(1,8): error TS18115: Source phase imports are not allowed on statements that compile to CommonJS 'require' calls.
+c.cts(3,18): error TS2344: Type 'AbstractModuleSource' does not satisfy the constraint 'not { then(): any; }'.
 
 
-==== b.mts (0 errors) ====
+==== b.mts (1 errors) ====
     import source a from "./a.wasm";
     const b: AbstractModuleSource = a;
     const c: Promise<AbstractModuleSource> = import.source("./a.wasm");
+                     ~~~~~~~~~~~~~~~~~~~~
+!!! error TS2344: Type 'AbstractModuleSource' does not satisfy the constraint 'not { then(): any; }'.
     
-==== c.cts (1 errors) ====
+==== c.cts (2 errors) ====
     import source a from "./a.wasm";
            ~~~~~~~~
 !!! error TS18115: Source phase imports are not allowed on statements that compile to CommonJS 'require' calls.
     const b: AbstractModuleSource = a;
     const c: Promise<AbstractModuleSource> = import.source("./a.wasm");
+                     ~~~~~~~~~~~~~~~~~~~~
+!!! error TS2344: Type 'AbstractModuleSource' does not satisfy the constraint 'not { then(): any; }'.
     

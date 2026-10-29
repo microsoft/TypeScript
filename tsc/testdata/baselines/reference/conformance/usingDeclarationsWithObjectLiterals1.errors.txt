@@ -1,8 +1,9 @@
 usingDeclarationsWithObjectLiterals1.ts(15,62): error TS2353: Object literal may only specify known properties, and 'extra' does not exist in type 'MyDisposable'.
+usingDeclarationsWithObjectLiterals1.ts(20,36): error TS2344: Type 'void' does not satisfy the constraint 'not { then(): any; }'.
 usingDeclarationsWithObjectLiterals1.ts(36,7): error TS2353: Object literal may only specify known properties, and 'extra' does not exist in type 'MyAsyncDisposable'.
 
 
-==== usingDeclarationsWithObjectLiterals1.ts (2 errors) ====
+==== usingDeclarationsWithObjectLiterals1.ts (3 errors) ====
     interface MyDisposable {
       value: number;
       [Symbol.dispose](): void;
@@ -25,6 +26,8 @@ usingDeclarationsWithObjectLiterals1.ts(36,7): error TS2353: Object literal may 
     interface MyAsyncDisposable {
       value: number;
       [Symbol.asyncDispose](): Promise<void>;
+                                       ~~~~
+!!! error TS2344: Type 'void' does not satisfy the constraint 'not { then(): any; }'.
     }
     
     async function f() {

@@ -34,8 +34,8 @@ export type B = typeof a;
 >a : AbstractModuleSource
 
 export const b = import.source("./a.wasm");
->b : Promise<AbstractModuleSource>
->import.source("./a.wasm") : Promise<AbstractModuleSource>
+>b : Promise<AbstractModuleSource & not { then(): any; }>
+>import.source("./a.wasm") : Promise<AbstractModuleSource & not { then(): any; }>
 >source : any
 >"./a.wasm" : "./a.wasm"
 

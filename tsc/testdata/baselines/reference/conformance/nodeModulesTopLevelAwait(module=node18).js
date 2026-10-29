@@ -37,8 +37,12 @@ for await (const y of []) { }
 
 
 //// [index.d.ts]
-declare const x = 1;
+declare const x: 1 & not {
+    then(): any;
+};
 export { x };
 //// [index.d.ts]
-declare const x = 1;
+declare const x: 1 & not {
+    then(): any;
+};
 export { x };

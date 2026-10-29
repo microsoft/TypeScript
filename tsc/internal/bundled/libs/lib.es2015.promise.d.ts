@@ -26,7 +26,7 @@ interface PromiseConstructor {
      * a resolve callback used to resolve the promise with a value or the result of another promise,
      * and a reject callback used to reject the promise with a provided reason or error.
      */
-    new <T>(executor: (resolve: (value: T | PromiseLike<T>) => void, reject: (reason?: any) => void) => void): Promise<T>;
+    new <T extends not { then(): any }>(executor: (resolve: (value: T | PromiseLike<T>) => void, reject: (reason?: any) => void) => void): Promise<T>;
 
     /**
      * Creates a Promise that is resolved with an array of results when all of the provided Promises
@@ -34,10 +34,10 @@ interface PromiseConstructor {
      * @param values An array of Promises.
      * @returns A new Promise.
      */
-    all<T extends readonly unknown[] | []>(values: T): Promise<{ -readonly [P in keyof T]: Awaited<T[P]>; }>;
+    all<T extends readonly unknown[] | []>(values: T): Promise<{ -readonly [P in keyof T]: Awaited<T[P]>; } & not { then(): any }>;
 
     // see: lib.es2015.iterable.d.ts
-    // all<T>(values: Iterable<T | PromiseLike<T>>): Promise<Awaited<T>[]>;
+    // all<T>(values: Iterable<T | PromiseLike<T>>): Promise<Awaited<T>[] & not { then(): any }>;
 
     /**
      * Creates a Promise that is resolved or rejected when any of the provided Promises are resolved
@@ -55,13 +55,13 @@ interface PromiseConstructor {
      * @param reason The reason the promise was rejected.
      * @returns A new rejected Promise.
      */
-    reject<T = never>(reason?: any): Promise<T>;
+    reject<T extends not { then(): any } = never>(reason?: any): Promise<T>;
 
     /**
      * Creates a new resolved promise.
      * @returns A resolved promise.
      */
-    resolve(): Promise<void>;
+    resolve(): Promise<void & not { then(): any }>;
     /**
      * Creates a new resolved promise for the provided value.
      * @param value A promise.

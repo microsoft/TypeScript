@@ -2,7 +2,7 @@
 
 === simpleRecursionWithBaseCase2.ts ===
 async function rec1() {
->rec1 : () => Promise<string>
+>rec1 : () => Promise<"hello" & not { then(): any; }>
 
   if (Math.random() < 0.5) {
 >Math.random() < 0.5 : boolean
@@ -13,8 +13,8 @@ async function rec1() {
 >0.5 : 0.5
 
     return rec1();
->rec1() : Promise<string>
->rec1 : () => Promise<string>
+>rec1() : Promise<"hello" & not { then(): any; }>
+>rec1 : () => Promise<"hello" & not { then(): any; }>
 
   } else {
     return "hello";
@@ -23,7 +23,7 @@ async function rec1() {
 }
 
 async function rec2() {
->rec2 : () => Promise<string>
+>rec2 : () => Promise<"hello" & not { then(): any; }>
 
   if (Math.random() < 0.5) {
 >Math.random() < 0.5 : boolean
@@ -34,9 +34,9 @@ async function rec2() {
 >0.5 : 0.5
 
     return await rec2();
->await rec2() : string
->rec2() : Promise<string>
->rec2 : () => Promise<string>
+>await rec2() : "hello" & not { then(): any; }
+>rec2() : Promise<"hello" & not { then(): any; }>
+>rec2 : () => Promise<"hello" & not { then(): any; }>
 
   } else {
     return "hello";
@@ -62,7 +62,7 @@ async function rec4() {
 }
 
 async function rec5() {
->rec5 : () => Promise<string>
+>rec5 : () => Promise<"hello" & not { then(): any; }>
 
   if (Math.random() < 0.5) {
 >Math.random() < 0.5 : boolean
@@ -73,10 +73,10 @@ async function rec5() {
 >0.5 : 0.5
 
     return ((rec1()));
->((rec1())) : Promise<string>
->(rec1()) : Promise<string>
->rec1() : Promise<string>
->rec1 : () => Promise<string>
+>((rec1())) : Promise<"hello" & not { then(): any; }>
+>(rec1()) : Promise<"hello" & not { then(): any; }>
+>rec1() : Promise<"hello" & not { then(): any; }>
+>rec1 : () => Promise<"hello" & not { then(): any; }>
 
   } else {
     return "hello";
@@ -85,7 +85,7 @@ async function rec5() {
 }
 
 async function rec6() {
->rec6 : () => Promise<string>
+>rec6 : () => Promise<"hello" & not { then(): any; }>
 
   if (Math.random() < 0.5) {
 >Math.random() < 0.5 : boolean
@@ -96,11 +96,11 @@ async function rec6() {
 >0.5 : 0.5
 
     return await ((rec1()));
->await ((rec1())) : string
->((rec1())) : Promise<string>
->(rec1()) : Promise<string>
->rec1() : Promise<string>
->rec1 : () => Promise<string>
+>await ((rec1())) : "hello" & not { then(): any; }
+>((rec1())) : Promise<"hello" & not { then(): any; }>
+>(rec1()) : Promise<"hello" & not { then(): any; }>
+>rec1() : Promise<"hello" & not { then(): any; }>
+>rec1 : () => Promise<"hello" & not { then(): any; }>
 
   } else {
     return "hello";
@@ -112,7 +112,7 @@ declare const ps: Promise<string> | number;
 >ps : number | Promise<string>
 
 async function foo1() {
->foo1 : () => Promise<string | number>
+>foo1 : () => Promise<(string & not { then(): any; }) | (number & not { then(): any; })>
 
   if (Math.random() > 0.5) {
 >Math.random() > 0.5 : boolean
@@ -127,14 +127,14 @@ async function foo1() {
 
   } else {
     return await foo1();
->await foo1() : string | number
->foo1() : Promise<string | number>
->foo1 : () => Promise<string | number>
+>await foo1() : (string & not { then(): any; }) | (number & not { then(): any; })
+>foo1() : Promise<(string & not { then(): any; }) | (number & not { then(): any; })>
+>foo1 : () => Promise<(string & not { then(): any; }) | (number & not { then(): any; })>
   }
 }
 
 async function foo2() {
->foo2 : () => Promise<string | number>
+>foo2 : () => Promise<(string & not { then(): any; }) | (number & not { then(): any; })>
 
   if (Math.random() > 0.5) {
 >Math.random() > 0.5 : boolean
@@ -149,8 +149,8 @@ async function foo2() {
 
   } else {
     return foo2();
->foo2() : Promise<string | number>
->foo2 : () => Promise<string | number>
+>foo2() : Promise<(string & not { then(): any; }) | (number & not { then(): any; })>
+>foo2 : () => Promise<(string & not { then(): any; }) | (number & not { then(): any; })>
   }
 }
 

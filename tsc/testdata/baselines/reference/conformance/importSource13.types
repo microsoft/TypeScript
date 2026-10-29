@@ -10,7 +10,7 @@ const b: AbstractModuleSource = a;
 
 const c: Promise<AbstractModuleSource> = import.source("./a.wasm");
 >c : Promise<AbstractModuleSource>
->import.source("./a.wasm") : Promise<AbstractModuleSource>
+>import.source("./a.wasm") : Promise<AbstractModuleSource & not { then(): any; }>
 >source : any
 >"./a.wasm" : "./a.wasm"
 
@@ -24,7 +24,7 @@ const b: AbstractModuleSource = a;
 
 const c: Promise<AbstractModuleSource> = import.source("./a.wasm");
 >c : Promise<AbstractModuleSource>
->import.source("./a.wasm") : Promise<AbstractModuleSource>
+>import.source("./a.wasm") : Promise<AbstractModuleSource & not { then(): any; }>
 >source : any
 >"./a.wasm" : "./a.wasm"
 

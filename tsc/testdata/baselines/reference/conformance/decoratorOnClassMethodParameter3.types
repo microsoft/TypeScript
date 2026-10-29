@@ -14,10 +14,10 @@ function fn(value: Promise<number>): any {
 >Class : Class
 
     async method(@dec(await value) arg: number) {}
->method : (arg: number) => Promise<void>
+>method : (arg: number) => Promise<void & not { then(): any; }>
 >dec(await value) : any
 >dec : (a: any) => any
->await value : number
+>await value : number & not { then(): any; }
 >value : Promise<number>
 >arg : number
   }

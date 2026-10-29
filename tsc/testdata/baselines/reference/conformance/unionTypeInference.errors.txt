@@ -1,8 +1,11 @@
 unionTypeInference.ts(13,24): error TS2345: Argument of type 'number' is not assignable to parameter of type 'string'.
 unionTypeInference.ts(31,15): error TS2345: Argument of type '42' is not assignable to parameter of type 'never'.
+unionTypeInference.ts(46,40): error TS2344: Type 'T' does not satisfy the constraint 'not { then(): any; }'.
+unionTypeInference.ts(47,32): error TS2344: Type 'boolean' does not satisfy the constraint 'not { then(): any; }'.
+unionTypeInference.ts(59,68): error TS2344: Type 'DeepPromised<T[TKey]>' does not satisfy the constraint 'not { then(): any; }'.
 
 
-==== unionTypeInference.ts (2 errors) ====
+==== unionTypeInference.ts (5 errors) ====
     declare const b: boolean;
     declare const s: string;
     declare const sn: string | number;
@@ -53,7 +56,12 @@ unionTypeInference.ts(31,15): error TS2345: Argument of type '42' is not assigna
     // Repros from #32434
     
     declare function foo<T>(x: T | Promise<T>): void;
+                                           ~
+!!! error TS2344: Type 'T' does not satisfy the constraint 'not { then(): any; }'.
+!!! related TS2208 unionTypeInference.ts:46:22: This type parameter might need an `extends not { then(): any; }` constraint.
     declare let x: false | Promise<true>;
+                                   ~~~~
+!!! error TS2344: Type 'boolean' does not satisfy the constraint 'not { then(): any; }'.
     foo(x);
     
     declare function bar<T>(x: T, y: string | T): T;
@@ -66,6 +74,8 @@ unionTypeInference.ts(31,15): error TS2345: Argument of type '42' is not assigna
     type DeepPromised<T> =
         { [containsPromises]?: true } &
         { [TKey in keyof T]: T[TKey] | DeepPromised<T[TKey]> | Promise<DeepPromised<T[TKey]>> };
+                                                                       ~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2344: Type 'DeepPromised<T[TKey]>' does not satisfy the constraint 'not { then(): any; }'.
     
     async function fun<T>(deepPromised: DeepPromised<T>) {
         const deepPromisedWithIndexer: DeepPromised<{ [name: string]: {} | null | undefined }> = deepPromised;

@@ -6,12 +6,12 @@ export = 42;
 
 === index.ts ===
 export = async function() {
->async function() {    const something = await import("./something");} : () => Promise<void>
+>async function() {    const something = await import("./something");} : () => Promise<void & not { then(): any; }>
 
     const something = await import("./something");
->something : { default: 42; }
->await import("./something") : { default: 42; }
->import("./something") : Promise<{ default: 42; }>
+>something : { default: 42; } & not { then(): any; }
+>await import("./something") : { default: 42; } & not { then(): any; }
+>import("./something") : Promise<{ default: 42; } & not { then(): any; }>
 >"./something" : "./something"
 
 };

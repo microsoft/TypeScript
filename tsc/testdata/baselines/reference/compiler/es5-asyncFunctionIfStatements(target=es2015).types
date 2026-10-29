@@ -10,7 +10,7 @@ declare var x, y, z, a, b, c;
 >c : any
 
 async function ifStatement1() {
->ifStatement1 : () => Promise<void>
+>ifStatement1 : () => Promise<void & not { then(): any; }>
 
     if (await x) { y; } else { z; }
 >await x : any
@@ -20,7 +20,7 @@ async function ifStatement1() {
 }
 
 async function ifStatement2() {
->ifStatement2 : () => Promise<void>
+>ifStatement2 : () => Promise<void & not { then(): any; }>
 
     if (x) { await y; } else { z; }
 >x : any
@@ -30,7 +30,7 @@ async function ifStatement2() {
 }
 
 async function ifStatement3() {
->ifStatement3 : () => Promise<void>
+>ifStatement3 : () => Promise<void & not { then(): any; }>
 
     if (x) { y; } else { await z; }
 >x : any

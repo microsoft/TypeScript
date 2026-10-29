@@ -1,0 +1,130 @@
+//// [tests/cases/compiler/negatedKeyConstraintIndexing.ts] ////
+
+=== negatedKeyConstraintIndexing.ts ===
+type StringNumberKeys<T> = keyof T & not symbol;
+>StringNumberKeys : Symbol(StringNumberKeys, Decl(negatedKeyConstraintIndexing.ts, 0, 0))
+>T : Symbol(T, Decl(negatedKeyConstraintIndexing.ts, 0, 22))
+>T : Symbol(T, Decl(negatedKeyConstraintIndexing.ts, 0, 22))
+
+type MyExclude<T, U> = T & not U;
+>MyExclude : Symbol(MyExclude, Decl(negatedKeyConstraintIndexing.ts, 0, 48))
+>T : Symbol(T, Decl(negatedKeyConstraintIndexing.ts, 1, 15))
+>U : Symbol(U, Decl(negatedKeyConstraintIndexing.ts, 1, 17))
+>T : Symbol(T, Decl(negatedKeyConstraintIndexing.ts, 1, 15))
+>U : Symbol(U, Decl(negatedKeyConstraintIndexing.ts, 1, 17))
+
+function readAlias<T>(key: MyExclude<keyof T, symbol>, values: { [key: string]: boolean }, stringKey: string, numberKey: number) {
+>readAlias : Symbol(readAlias, Decl(negatedKeyConstraintIndexing.ts, 1, 33))
+>T : Symbol(T, Decl(negatedKeyConstraintIndexing.ts, 3, 19))
+>key : Symbol(key, Decl(negatedKeyConstraintIndexing.ts, 3, 22))
+>MyExclude : Symbol(MyExclude, Decl(negatedKeyConstraintIndexing.ts, 0, 48))
+>T : Symbol(T, Decl(negatedKeyConstraintIndexing.ts, 3, 19))
+>values : Symbol(values, Decl(negatedKeyConstraintIndexing.ts, 3, 54))
+>key : Symbol(key, Decl(negatedKeyConstraintIndexing.ts, 3, 66))
+>stringKey : Symbol(stringKey, Decl(negatedKeyConstraintIndexing.ts, 3, 90))
+>numberKey : Symbol(numberKey, Decl(negatedKeyConstraintIndexing.ts, 3, 109))
+
+    const stringResult = values[stringKey];
+>stringResult : Symbol(stringResult, Decl(negatedKeyConstraintIndexing.ts, 4, 9))
+>values : Symbol(values, Decl(negatedKeyConstraintIndexing.ts, 3, 54))
+>stringKey : Symbol(stringKey, Decl(negatedKeyConstraintIndexing.ts, 3, 90))
+
+    const numberResult = values[numberKey];
+>numberResult : Symbol(numberResult, Decl(negatedKeyConstraintIndexing.ts, 5, 9))
+>values : Symbol(values, Decl(negatedKeyConstraintIndexing.ts, 3, 54))
+>numberKey : Symbol(numberKey, Decl(negatedKeyConstraintIndexing.ts, 3, 109))
+
+    const result = values[key];
+>result : Symbol(result, Decl(negatedKeyConstraintIndexing.ts, 6, 9))
+>values : Symbol(values, Decl(negatedKeyConstraintIndexing.ts, 3, 54))
+>key : Symbol(key, Decl(negatedKeyConstraintIndexing.ts, 3, 22))
+
+    return result;
+>result : Symbol(result, Decl(negatedKeyConstraintIndexing.ts, 6, 9))
+}
+
+function readAliasConstrained<T, Key extends MyExclude<keyof T, symbol>>(key: Key, values: { [key: string]: boolean }) {
+>readAliasConstrained : Symbol(readAliasConstrained, Decl(negatedKeyConstraintIndexing.ts, 8, 1))
+>T : Symbol(T, Decl(negatedKeyConstraintIndexing.ts, 10, 30))
+>Key : Symbol(Key, Decl(negatedKeyConstraintIndexing.ts, 10, 32))
+>MyExclude : Symbol(MyExclude, Decl(negatedKeyConstraintIndexing.ts, 0, 48))
+>T : Symbol(T, Decl(negatedKeyConstraintIndexing.ts, 10, 30))
+>key : Symbol(key, Decl(negatedKeyConstraintIndexing.ts, 10, 73))
+>Key : Symbol(Key, Decl(negatedKeyConstraintIndexing.ts, 10, 32))
+>values : Symbol(values, Decl(negatedKeyConstraintIndexing.ts, 10, 82))
+>key : Symbol(key, Decl(negatedKeyConstraintIndexing.ts, 10, 94))
+
+    const result: boolean = values[key];
+>result : Symbol(result, Decl(negatedKeyConstraintIndexing.ts, 11, 9))
+>values : Symbol(values, Decl(negatedKeyConstraintIndexing.ts, 10, 82))
+>key : Symbol(key, Decl(negatedKeyConstraintIndexing.ts, 10, 73))
+
+    return result;
+>result : Symbol(result, Decl(negatedKeyConstraintIndexing.ts, 11, 9))
+}
+
+function read<T>(key: StringNumberKeys<T>, values: { [key: string]: boolean }) {
+>read : Symbol(read, Decl(negatedKeyConstraintIndexing.ts, 13, 1))
+>T : Symbol(T, Decl(negatedKeyConstraintIndexing.ts, 15, 14))
+>key : Symbol(key, Decl(negatedKeyConstraintIndexing.ts, 15, 17))
+>StringNumberKeys : Symbol(StringNumberKeys, Decl(negatedKeyConstraintIndexing.ts, 0, 0))
+>T : Symbol(T, Decl(negatedKeyConstraintIndexing.ts, 15, 14))
+>values : Symbol(values, Decl(negatedKeyConstraintIndexing.ts, 15, 42))
+>key : Symbol(key, Decl(negatedKeyConstraintIndexing.ts, 15, 54))
+
+    const result: boolean = values[key];
+>result : Symbol(result, Decl(negatedKeyConstraintIndexing.ts, 16, 9))
+>values : Symbol(values, Decl(negatedKeyConstraintIndexing.ts, 15, 42))
+>key : Symbol(key, Decl(negatedKeyConstraintIndexing.ts, 15, 17))
+
+    return result;
+>result : Symbol(result, Decl(negatedKeyConstraintIndexing.ts, 16, 9))
+}
+
+function readConstrained<T, Key extends StringNumberKeys<T>>(key: Key, values: { [key: string]: boolean }) {
+>readConstrained : Symbol(readConstrained, Decl(negatedKeyConstraintIndexing.ts, 18, 1))
+>T : Symbol(T, Decl(negatedKeyConstraintIndexing.ts, 20, 25))
+>Key : Symbol(Key, Decl(negatedKeyConstraintIndexing.ts, 20, 27))
+>StringNumberKeys : Symbol(StringNumberKeys, Decl(negatedKeyConstraintIndexing.ts, 0, 0))
+>T : Symbol(T, Decl(negatedKeyConstraintIndexing.ts, 20, 25))
+>key : Symbol(key, Decl(negatedKeyConstraintIndexing.ts, 20, 61))
+>Key : Symbol(Key, Decl(negatedKeyConstraintIndexing.ts, 20, 27))
+>values : Symbol(values, Decl(negatedKeyConstraintIndexing.ts, 20, 70))
+>key : Symbol(key, Decl(negatedKeyConstraintIndexing.ts, 20, 82))
+
+    const result: boolean = values[key];
+>result : Symbol(result, Decl(negatedKeyConstraintIndexing.ts, 21, 9))
+>values : Symbol(values, Decl(negatedKeyConstraintIndexing.ts, 20, 70))
+>key : Symbol(key, Decl(negatedKeyConstraintIndexing.ts, 20, 61))
+
+    return result;
+>result : Symbol(result, Decl(negatedKeyConstraintIndexing.ts, 21, 9))
+}
+
+function readStringOnly<T>(key: keyof T & not number & not symbol, values: { [key: string]: boolean }) {
+>readStringOnly : Symbol(readStringOnly, Decl(negatedKeyConstraintIndexing.ts, 23, 1))
+>T : Symbol(T, Decl(negatedKeyConstraintIndexing.ts, 25, 24))
+>key : Symbol(key, Decl(negatedKeyConstraintIndexing.ts, 25, 27))
+>T : Symbol(T, Decl(negatedKeyConstraintIndexing.ts, 25, 24))
+>values : Symbol(values, Decl(negatedKeyConstraintIndexing.ts, 25, 66))
+>key : Symbol(key, Decl(negatedKeyConstraintIndexing.ts, 25, 78))
+
+    const result: boolean = values[key];
+>result : Symbol(result, Decl(negatedKeyConstraintIndexing.ts, 26, 9))
+>values : Symbol(values, Decl(negatedKeyConstraintIndexing.ts, 25, 66))
+>key : Symbol(key, Decl(negatedKeyConstraintIndexing.ts, 25, 27))
+
+    return result;
+>result : Symbol(result, Decl(negatedKeyConstraintIndexing.ts, 26, 9))
+}
+
+declare const symbolKey: unique symbol;
+>symbolKey : Symbol(symbolKey, Decl(negatedKeyConstraintIndexing.ts, 30, 13))
+
+// Error: Symbol keys are excluded.
+read<{ [symbolKey]: boolean }>(symbolKey, {});
+>read : Symbol(read, Decl(negatedKeyConstraintIndexing.ts, 13, 1))
+>[symbolKey] : Symbol([symbolKey], Decl(negatedKeyConstraintIndexing.ts, 32, 6))
+>symbolKey : Symbol(symbolKey, Decl(negatedKeyConstraintIndexing.ts, 30, 13))
+>symbolKey : Symbol(symbolKey, Decl(negatedKeyConstraintIndexing.ts, 30, 13))
+

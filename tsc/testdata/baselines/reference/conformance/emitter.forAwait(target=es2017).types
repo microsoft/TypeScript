@@ -2,7 +2,7 @@
 
 === file1.ts ===
 async function f1() {
->f1 : () => Promise<void>
+>f1 : () => Promise<void & not { then(): any; }>
 
     let y: any;
 >y : any
@@ -14,7 +14,7 @@ async function f1() {
 }
 === file2.ts ===
 async function f2() {
->f2 : () => Promise<void>
+>f2 : () => Promise<void & not { then(): any; }>
 
     let x: any, y: any;
 >x : any
@@ -27,7 +27,7 @@ async function f2() {
 }
 === file3.ts ===
 async function* f3() {
->f3 : () => AsyncGenerator<never, void, unknown>
+>f3 : () => AsyncGenerator<never, void & not { then(): any; }, unknown>
 
     let y: any;
 >y : any
@@ -39,7 +39,7 @@ async function* f3() {
 }
 === file4.ts ===
 async function* f4() {
->f4 : () => AsyncGenerator<never, void, unknown>
+>f4 : () => AsyncGenerator<never, void & not { then(): any; }, unknown>
 
     let x: any, y: any;
 >x : any
@@ -53,7 +53,7 @@ async function* f4() {
 === file5.ts ===
 // https://github.com/Microsoft/TypeScript/issues/21363
 async function f5() {
->f5 : () => Promise<void>
+>f5 : () => Promise<void & not { then(): any; }>
 
     let y: any;
 >y : any
@@ -70,7 +70,7 @@ async function f5() {
 === file6.ts ===
 // https://github.com/Microsoft/TypeScript/issues/21363
 async function* f6() {
->f6 : () => AsyncGenerator<never, void, unknown>
+>f6 : () => AsyncGenerator<never, void & not { then(): any; }, unknown>
 
     let y: any;
 >y : any
@@ -87,7 +87,7 @@ async function* f6() {
 === file7.ts ===
 // https://github.com/microsoft/TypeScript/issues/36166
 async function* f7() {
->f7 : () => AsyncGenerator<never, void, unknown>
+>f7 : () => AsyncGenerator<never, void & not { then(): any; }, unknown>
 
     let y: any;
 >y : any

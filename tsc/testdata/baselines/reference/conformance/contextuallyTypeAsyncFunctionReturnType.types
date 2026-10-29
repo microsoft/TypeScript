@@ -17,16 +17,16 @@ async function fn2(): Promise<Obj> {
 >fn2 : () => Promise<Obj>
 
     return new Promise(resolve => {
->new Promise(resolve => {        resolve({ key: "value" });    }) : Promise<Obj>
+>new Promise(resolve => {        resolve({ key: "value" });    }) : Promise<not { then(): any; }>
 >Promise : PromiseConstructor
->resolve => {        resolve({ key: "value" });    } : (resolve: (value: Obj | PromiseLike<Obj>) => void) => void
->resolve : (value: Obj | PromiseLike<Obj>) => void
+>resolve => {        resolve({ key: "value" });    } : (resolve: (value: PromiseLike<not { then(): any; }> | not { then(): any; }) => void) => void
+>resolve : (value: PromiseLike<not { then(): any; }> | not { then(): any; }) => void
 
         resolve({ key: "value" });
 >resolve({ key: "value" }) : void
->resolve : (value: Obj | PromiseLike<Obj>) => void
->{ key: "value" } : { key: "value"; }
->key : "value"
+>resolve : (value: PromiseLike<not { then(): any; }> | not { then(): any; }) => void
+>{ key: "value" } : { key: string; }
+>key : string
 >"value" : "value"
 
     });
@@ -46,17 +46,17 @@ async function fn4(): Promise<Obj> {
 >fn4 : () => Promise<Obj>
 
     return await new Promise(resolve => {
->await new Promise(resolve => {        resolve({ key: "value" });    }) : Obj
->new Promise(resolve => {        resolve({ key: "value" });    }) : Promise<Obj>
+>await new Promise(resolve => {        resolve({ key: "value" });    }) : not { then(): any; } & not { then(): any; }
+>new Promise(resolve => {        resolve({ key: "value" });    }) : Promise<not { then(): any; }>
 >Promise : PromiseConstructor
->resolve => {        resolve({ key: "value" });    } : (resolve: (value: Obj | PromiseLike<Obj>) => void) => void
->resolve : (value: Obj | PromiseLike<Obj>) => void
+>resolve => {        resolve({ key: "value" });    } : (resolve: (value: PromiseLike<not { then(): any; }> | not { then(): any; }) => void) => void
+>resolve : (value: PromiseLike<not { then(): any; }> | not { then(): any; }) => void
 
         resolve({ key: "value" });
 >resolve({ key: "value" }) : void
->resolve : (value: Obj | PromiseLike<Obj>) => void
->{ key: "value" } : { key: "value"; }
->key : "value"
+>resolve : (value: PromiseLike<not { then(): any; }> | not { then(): any; }) => void
+>{ key: "value" } : { key: string; }
+>key : string
 >"value" : "value"
 
     });
@@ -133,13 +133,13 @@ test("windows-process-tree", async () => {
 >test("windows-process-tree", async () => {  return new Promise((resolve, reject) => {    getProcessTree(123, (tree) => {      if (tree) {        resolve();      } else {        reject(new Error("windows-process-tree"));      }    });  });}) : void
 >test : TestFunction
 >"windows-process-tree" : "windows-process-tree"
->async () => {  return new Promise((resolve, reject) => {    getProcessTree(123, (tree) => {      if (tree) {        resolve();      } else {        reject(new Error("windows-process-tree"));      }    });  });} : () => Promise<void>
+>async () => {  return new Promise((resolve, reject) => {    getProcessTree(123, (tree) => {      if (tree) {        resolve();      } else {        reject(new Error("windows-process-tree"));      }    });  });} : () => Promise<not { then(): any; } & not { then(): any; }>
 
   return new Promise((resolve, reject) => {
->new Promise((resolve, reject) => {    getProcessTree(123, (tree) => {      if (tree) {        resolve();      } else {        reject(new Error("windows-process-tree"));      }    });  }) : Promise<void>
+>new Promise((resolve, reject) => {    getProcessTree(123, (tree) => {      if (tree) {        resolve();      } else {        reject(new Error("windows-process-tree"));      }    });  }) : Promise<not { then(): any; }>
 >Promise : PromiseConstructor
->(resolve, reject) => {    getProcessTree(123, (tree) => {      if (tree) {        resolve();      } else {        reject(new Error("windows-process-tree"));      }    });  } : (resolve: (value: void | PromiseLike<void>) => void, reject: (reason?: any) => void) => void
->resolve : (value: void | PromiseLike<void>) => void
+>(resolve, reject) => {    getProcessTree(123, (tree) => {      if (tree) {        resolve();      } else {        reject(new Error("windows-process-tree"));      }    });  } : (resolve: (value: PromiseLike<not { then(): any; }> | not { then(): any; }) => void, reject: (reason?: any) => void) => void
+>resolve : (value: PromiseLike<not { then(): any; }> | not { then(): any; }) => void
 >reject : (reason?: any) => void
 
     getProcessTree(123, (tree) => {
@@ -154,7 +154,7 @@ test("windows-process-tree", async () => {
 
         resolve();
 >resolve() : void
->resolve : (value: void | PromiseLike<void>) => void
+>resolve : (value: PromiseLike<not { then(): any; }> | not { then(): any; }) => void
 
       } else {
         reject(new Error("windows-process-tree"));
@@ -201,14 +201,14 @@ async function copyExtensions(
 >extensions : [ILocalExtension, Metadata | undefined][]
 
     await Promise.all(
->await Promise.all(      fromExtensions        .filter((e) => !e.isApplicationScoped)        .map(async (e) => [e, await scanMetadata(e)])    ) : [ILocalExtension, Metadata | undefined][]
->Promise.all(      fromExtensions        .filter((e) => !e.isApplicationScoped)        .map(async (e) => [e, await scanMetadata(e)])    ) : Promise<[ILocalExtension, Metadata | undefined][]>
->Promise.all : { <T>(values: Iterable<T | PromiseLike<T>>): Promise<Awaited<T>[]>; <T extends readonly unknown[] | []>(values: T): Promise<{ -readonly [P in keyof T]: Awaited<T[P]>; }>; }
+>await Promise.all(      fromExtensions        .filter((e) => !e.isApplicationScoped)        .map(async (e) => [e, await scanMetadata(e)])    ) : ([ILocalExtension, (Metadata & not { then(): any; }) | undefined] & not { then(): any; } & not { then(): any; })[] & not { then(): any; } & not { then(): any; }
+>Promise.all(      fromExtensions        .filter((e) => !e.isApplicationScoped)        .map(async (e) => [e, await scanMetadata(e)])    ) : Promise<([ILocalExtension, (Metadata & not { then(): any; }) | undefined] & not { then(): any; } & not { then(): any; })[] & not { then(): any; }>
+>Promise.all : { <T>(values: Iterable<T | PromiseLike<T>>): Promise<Awaited<T>[] & not { then(): any; }>; <T extends readonly unknown[] | []>(values: T): Promise<{ -readonly [P in keyof T]: Awaited<T[P]>; } & not { then(): any; }>; }
 >Promise : PromiseConstructor
->all : { <T>(values: Iterable<T | PromiseLike<T>>): Promise<Awaited<T>[]>; <T extends readonly unknown[] | []>(values: T): Promise<{ -readonly [P in keyof T]: Awaited<T[P]>; }>; }
+>all : { <T>(values: Iterable<T | PromiseLike<T>>): Promise<Awaited<T>[] & not { then(): any; }>; <T extends readonly unknown[] | []>(values: T): Promise<{ -readonly [P in keyof T]: Awaited<T[P]>; } & not { then(): any; }>; }
 
       fromExtensions
->fromExtensions        .filter((e) => !e.isApplicationScoped)        .map(async (e) => [e, await scanMetadata(e)]) : Promise<[ILocalExtension, Metadata | undefined]>[]
+>fromExtensions        .filter((e) => !e.isApplicationScoped)        .map(async (e) => [e, await scanMetadata(e)]) : Promise<[ILocalExtension, (Metadata & not { then(): any; }) | undefined] & not { then(): any; }>[]
 >fromExtensions        .filter((e) => !e.isApplicationScoped)        .map : <U>(callbackfn: (value: ILocalExtension, index: number, array: ILocalExtension[]) => U, thisArg?: any) => U[]
 >fromExtensions        .filter((e) => !e.isApplicationScoped) : ILocalExtension[]
 >fromExtensions        .filter : { <S extends ILocalExtension>(predicate: (value: ILocalExtension, index: number, array: ILocalExtension[]) => value is S, thisArg?: any): S[]; (predicate: (value: ILocalExtension, index: number, array: ILocalExtension[]) => unknown, thisArg?: any): ILocalExtension[]; }
@@ -225,11 +225,11 @@ async function copyExtensions(
 
         .map(async (e) => [e, await scanMetadata(e)])
 >map : <U>(callbackfn: (value: ILocalExtension, index: number, array: ILocalExtension[]) => U, thisArg?: any) => U[]
->async (e) => [e, await scanMetadata(e)] : (e: ILocalExtension) => Promise<[ILocalExtension, Metadata | undefined]>
+>async (e) => [e, await scanMetadata(e)] : (e: ILocalExtension) => Promise<[ILocalExtension, (Metadata & not { then(): any; }) | undefined] & not { then(): any; }>
 >e : ILocalExtension
->[e, await scanMetadata(e)] : [ILocalExtension, Metadata | undefined]
+>[e, await scanMetadata(e)] : [ILocalExtension, (Metadata & not { then(): any; }) | undefined]
 >e : ILocalExtension
->await scanMetadata(e) : Metadata | undefined
+>await scanMetadata(e) : (Metadata & not { then(): any; }) | undefined
 >scanMetadata(e) : Promise<Metadata | undefined>
 >scanMetadata : (local: ILocalExtension) => Promise<Metadata | undefined>
 >e : ILocalExtension

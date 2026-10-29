@@ -1,0 +1,57 @@
+asyncGeneratorPromiseNextType.ts(5,64): error TS2344: Type 'Result' does not satisfy the constraint 'not { then(): any; }'.
+asyncGeneratorPromiseNextType.ts(6,26): error TS2344: Type 'Result' does not satisfy the constraint 'not { then(): any; }'.
+asyncGeneratorPromiseNextType.ts(8,26): error TS2344: Type 'Result' does not satisfy the constraint 'not { then(): any; }'.
+asyncGeneratorPromiseNextType.ts(26,26): error TS2344: Type 'Result' does not satisfy the constraint 'not { then(): any; }'.
+asyncGeneratorPromiseNextType.ts(28,26): error TS2344: Type 'Result' does not satisfy the constraint 'not { then(): any; }'.
+
+
+==== asyncGeneratorPromiseNextType.ts (5 errors) ====
+    // https://github.com/microsoft/TypeScript/issues/44808
+    
+    type Result = {message: string}
+    
+    async function *saverGen(): AsyncGenerator<void, void, Promise<Result> | undefined> {
+                                                                   ~~~~~~
+!!! error TS2344: Type 'Result' does not satisfy the constraint 'not { then(): any; }'.
+        let pending: Promise<Result>[] = [];
+                             ~~~~~~
+!!! error TS2344: Type 'Result' does not satisfy the constraint 'not { then(): any; }'.
+        while (true) {
+            const p: Promise<Result> | undefined = yield;
+                             ~~~~~~
+!!! error TS2344: Type 'Result' does not satisfy the constraint 'not { then(): any; }'.
+            if (p != null)
+                pending.push(p);
+            else {
+                const results = await Promise.all(pending);
+                pending = [];
+                console.log('Storing...');
+                await storeResults(results);
+            }
+        }
+    }
+    
+    function storeResults(results: Result[]) {
+        console.log(results);
+        return Promise.resolve();
+    }
+    
+    async function *saverGen2() {
+        let pending: Promise<Result>[] = [];
+                             ~~~~~~
+!!! error TS2344: Type 'Result' does not satisfy the constraint 'not { then(): any; }'.
+        while (true) {
+            const p: Promise<Result> | undefined = yield;
+                             ~~~~~~
+!!! error TS2344: Type 'Result' does not satisfy the constraint 'not { then(): any; }'.
+            if (p != null)
+                pending.push(p);
+            else {
+                const results = await Promise.all(pending);
+                pending = [];
+                console.log('Storing...');
+                await storeResults(results);
+            }
+        }
+    }
+    

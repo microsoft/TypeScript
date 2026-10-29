@@ -1,0 +1,133 @@
+//// [tests/cases/compiler/negatedDoubleExclusion.ts] ////
+
+=== negatedDoubleExclusion.ts ===
+type Difference<T, U> = T & not U;
+>Difference : Difference<T, U>
+
+type Product = { kind: "a"; value: 0 } | { kind: "b"; value: 1 };
+>Product : Product
+>kind : "a"
+>value : 0
+>kind : "b"
+>value : 1
+
+type DoubleExcluded = {
+>DoubleExcluded : DoubleExcluded
+
+    [Kind in Product["kind"]]: Difference<Product, Difference<Product, { kind: Kind }>>;
+>kind : Kind
+
+};
+const productA: DoubleExcluded["a"] = { kind: "a", value: 0 };
+>productA : { kind: "a"; value: 0; }
+>{ kind: "a", value: 0 } : { kind: "a"; value: 0; }
+>kind : "a"
+>"a" : "a"
+>value : 0
+>0 : 0
+
+const productB: DoubleExcluded["b"] = { kind: "b", value: 1 };
+>productB : { kind: "b"; value: 1; }
+>{ kind: "b", value: 1 } : { kind: "b"; value: 1; }
+>kind : "b"
+>"b" : "b"
+>value : 1
+>1 : 1
+
+const wrongKind: DoubleExcluded["a"] = { kind: "b", value: 1 };
+>wrongKind : { kind: "a"; value: 0; }
+>{ kind: "b", value: 1 } : { kind: "b"; value: 1; }
+>kind : "b"
+>"b" : "b"
+>value : 1
+>1 : 1
+
+const wrongValue: DoubleExcluded["b"] = { kind: "b", value: 0 };
+>wrongValue : { kind: "b"; value: 1; }
+>{ kind: "b", value: 0 } : { kind: "b"; value: 0; }
+>kind : "b"
+>"b" : "b"
+>value : 0
+>0 : 0
+
+type Selected<Kind extends Product["kind"]> = Difference<Product, Difference<Product, { kind: Kind }>>;
+>Selected : Selected<Kind>
+>kind : Kind
+
+const selectedA: Selected<"a"> = productA;
+>selectedA : { kind: "a"; value: 0; }
+>productA : { kind: "a"; value: 0; }
+
+const selectedB: Selected<"b"> = productB;
+>selectedB : { kind: "b"; value: 1; }
+>productB : { kind: "b"; value: 1; }
+
+const selectedBoth: Selected<"a" | "b"> = productA;
+>selectedBoth : Product
+>productA : { kind: "a"; value: 0; }
+
+type Tagged = { kind: "a" } | { kind: "b" };
+>Tagged : Tagged
+>kind : "a"
+>kind : "b"
+
+interface Blocked { blocked: true; }
+>blocked : true
+>true : true
+
+type Allowed = Difference<Tagged, Blocked>;
+>Allowed : Allowed
+
+declare const excluded: { kind: "a" | "b"; blocked: true };
+>excluded : { kind: "a" | "b"; blocked: true; }
+>kind : "a" | "b"
+>blocked : true
+>true : true
+
+const rejected: Allowed = excluded;
+>rejected : Allowed
+>excluded : { kind: "a" | "b"; blocked: true; }
+
+declare const allowed: { kind: "a" | "b" } & not Blocked;
+>allowed : { kind: "a" | "b"; } & not Blocked
+>kind : "a" | "b"
+
+const accepted: Allowed = allowed;
+>accepted : Allowed
+>allowed : { kind: "a" | "b"; } & not Blocked
+
+declare const ordinary: { kind: "a" | "b" };
+>ordinary : { kind: "a" | "b"; }
+>kind : "a" | "b"
+
+const plain: Tagged = ordinary;
+>plain : Tagged
+>ordinary : { kind: "a" | "b"; }
+
+const partiallyExcluded: (Tagged & not Blocked) | { kind: "a" } = excluded;
+>partiallyExcluded : { kind: "a"; } | ({ kind: "b"; } & not Blocked)
+>kind : "a"
+>excluded : { kind: "a" | "b"; blocked: true; }
+
+declare const alternative: { kind: "a"; blocked: true };
+>alternative : { kind: "a"; blocked: true; }
+>kind : "a"
+>blocked : true
+>true : true
+
+const acceptedAlternative: (Tagged & not Blocked) | { kind: "a" } = alternative;
+>acceptedAlternative : { kind: "a"; } | ({ kind: "b"; } & not Blocked)
+>kind : "a"
+>alternative : { kind: "a"; blocked: true; }
+
+function generic<Kind extends "a" | "b">(value: { kind: "a"; value: 0 }) {
+>generic : <Kind extends "a" | "b">(value: { kind: "a"; value: 0; }) => void
+>value : { kind: "a"; value: 0; }
+>kind : "a"
+>value : 0
+
+    const rejected: Difference<Product, { kind: Kind }> = value;
+>rejected : Difference<Product, { kind: Kind; }>
+>kind : Kind
+>value : { kind: "a"; value: 0; }
+}

@@ -1,8 +1,10 @@
+reachabilityChecks7.ts(9,30): error TS2344: Type 'void' does not satisfy the constraint 'not { then(): any; }'.
 reachabilityChecks7.ts(13,16): error TS7030: Not all code paths return a value.
 reachabilityChecks7.ts(17,22): error TS2355: A function whose declared type is neither 'undefined', 'void', nor 'any' must return a value.
+reachabilityChecks7.ts(17,30): error TS2344: Type 'number' does not satisfy the constraint 'not { then(): any; }'.
 
 
-==== reachabilityChecks7.ts (2 errors) ====
+==== reachabilityChecks7.ts (4 errors) ====
     // async function without return type annotation - error
     async function f1() {    
     }
@@ -12,6 +14,8 @@ reachabilityChecks7.ts(17,22): error TS2355: A function whose declared type is n
     
     // async function with which promised type is void - return can be omitted
     async function f2(): Promise<void> {
+                                 ~~~~
+!!! error TS2344: Type 'void' does not satisfy the constraint 'not { then(): any; }'.
         
     }
     
@@ -24,6 +28,8 @@ reachabilityChecks7.ts(17,22): error TS2355: A function whose declared type is n
     async function f4(): Promise<number> {
                          ~~~~~~~~~~~~~~~
 !!! error TS2355: A function whose declared type is neither 'undefined', 'void', nor 'any' must return a value.
+                                 ~~~~~~
+!!! error TS2344: Type 'number' does not satisfy the constraint 'not { then(): any; }'.
         
     }
     

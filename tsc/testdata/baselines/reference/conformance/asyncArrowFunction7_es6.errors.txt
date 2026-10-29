@@ -1,14 +1,20 @@
+asyncArrowFunction7_es6.ts(1,29): error TS2344: Type 'void' does not satisfy the constraint 'not { then(): any; }'.
 asyncArrowFunction7_es6.ts(3,24): error TS2524: 'await' expressions cannot be used in a parameter initializer.
 asyncArrowFunction7_es6.ts(3,29): error TS1109: Expression expected.
+asyncArrowFunction7_es6.ts(3,40): error TS2344: Type 'void' does not satisfy the constraint 'not { then(): any; }'.
 
 
-==== asyncArrowFunction7_es6.ts (2 errors) ====
+==== asyncArrowFunction7_es6.ts (4 errors) ====
     var bar = async (): Promise<void> => {
+                                ~~~~
+!!! error TS2344: Type 'void' does not satisfy the constraint 'not { then(): any; }'.
       // 'await' here is an identifier, and not an await expression.
       var foo = async (a = await): Promise<void> => {
                            ~~~~~
 !!! error TS2524: 'await' expressions cannot be used in a parameter initializer.
                                 ~
 !!! error TS1109: Expression expected.
+                                           ~~~~
+!!! error TS2344: Type 'void' does not satisfy the constraint 'not { then(): any; }'.
       }
     }

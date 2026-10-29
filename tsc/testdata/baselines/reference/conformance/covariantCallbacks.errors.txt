@@ -1,5 +1,7 @@
 covariantCallbacks.ts(12,5): error TS2322: Type 'P<A>' is not assignable to type 'P<B>'.
   Property 'b' is missing in type 'A' but required in type 'B'.
+covariantCallbacks.ts(15,24): error TS2344: Type 'A' does not satisfy the constraint 'not { then(): any; }'.
+covariantCallbacks.ts(15,39): error TS2344: Type 'B' does not satisfy the constraint 'not { then(): any; }'.
 covariantCallbacks.ts(17,5): error TS2322: Type 'Promise<A>' is not assignable to type 'Promise<B>'.
   Property 'b' is missing in type 'A' but required in type 'B'.
 covariantCallbacks.ts(30,5): error TS2322: Type 'AList1' is not assignable to type 'BList1'.
@@ -35,7 +37,7 @@ covariantCallbacks.ts(106,1): error TS2322: Type 'SetLike2<(x: string) => void>'
         Type 'unknown' is not assignable to type 'string'.
 
 
-==== covariantCallbacks.ts (8 errors) ====
+==== covariantCallbacks.ts (10 errors) ====
     // Test that callback parameters are related covariantly
     
     interface P<T> {
@@ -55,6 +57,10 @@ covariantCallbacks.ts(106,1): error TS2322: Type 'SetLike2<(x: string) => void>'
     }
     
     function f2(a: Promise<A>, b: Promise<B>) {
+                           ~
+!!! error TS2344: Type 'A' does not satisfy the constraint 'not { then(): any; }'.
+                                          ~
+!!! error TS2344: Type 'B' does not satisfy the constraint 'not { then(): any; }'.
         a = b;
         b = a;  // Error
         ~

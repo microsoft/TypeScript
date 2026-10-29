@@ -1,0 +1,84 @@
+//// [tests/cases/conformance/types/negated/negatedUnionComplementSimplifies.ts] ////
+
+=== negatedUnionComplementSimplifies.ts ===
+// The union converse of the intersection complement simplification: a type unioned with its
+// complement covers every value, so `T | not T` reduces to `unknown`.
+
+// Basic law of excluded middle.
+type A = string | not string;
+>A : Symbol(A, Decl(negatedUnionComplementSimplifies.ts, 0, 0))
+
+declare const a: A;
+>a : Symbol(a, Decl(negatedUnionComplementSimplifies.ts, 5, 13))
+>A : Symbol(A, Decl(negatedUnionComplementSimplifies.ts, 0, 0))
+
+a; // unknown
+>a : Symbol(a, Decl(negatedUnionComplementSimplifies.ts, 5, 13))
+
+// A literal unioned with the negation of its base is also unknown, because the base covers the literal.
+type B = string | not "w";
+>B : Symbol(B, Decl(negatedUnionComplementSimplifies.ts, 6, 2))
+
+declare const b: B;
+>b : Symbol(b, Decl(negatedUnionComplementSimplifies.ts, 10, 13))
+>B : Symbol(B, Decl(negatedUnionComplementSimplifies.ts, 6, 2))
+
+b; // unknown
+>b : Symbol(b, Decl(negatedUnionComplementSimplifies.ts, 10, 13))
+
+// An object type and its complement.
+interface Point {
+>Point : Symbol(Point, Decl(negatedUnionComplementSimplifies.ts, 11, 2))
+
+    x: number;
+>x : Symbol(Point.x, Decl(negatedUnionComplementSimplifies.ts, 14, 17))
+
+    y: number;
+>y : Symbol(Point.y, Decl(negatedUnionComplementSimplifies.ts, 15, 14))
+}
+type C = Point | not Point;
+>C : Symbol(C, Decl(negatedUnionComplementSimplifies.ts, 17, 1))
+>Point : Symbol(Point, Decl(negatedUnionComplementSimplifies.ts, 11, 2))
+>Point : Symbol(Point, Decl(negatedUnionComplementSimplifies.ts, 11, 2))
+
+declare const c: C;
+>c : Symbol(c, Decl(negatedUnionComplementSimplifies.ts, 19, 13))
+>C : Symbol(C, Decl(negatedUnionComplementSimplifies.ts, 17, 1))
+
+c; // unknown
+>c : Symbol(c, Decl(negatedUnionComplementSimplifies.ts, 19, 13))
+
+// Type parameter form.
+function f<T>(x: T | not T) {
+>f : Symbol(f, Decl(negatedUnionComplementSimplifies.ts, 20, 2))
+>T : Symbol(T, Decl(negatedUnionComplementSimplifies.ts, 23, 11))
+>x : Symbol(x, Decl(negatedUnionComplementSimplifies.ts, 23, 14))
+>T : Symbol(T, Decl(negatedUnionComplementSimplifies.ts, 23, 11))
+>T : Symbol(T, Decl(negatedUnionComplementSimplifies.ts, 23, 11))
+
+    x; // unknown
+>x : Symbol(x, Decl(negatedUnionComplementSimplifies.ts, 23, 14))
+}
+
+// Not saturated: `"w" | not string` is NOT unknown, because `string` is not a subtype of `"w"`.
+type D = "w" | not string;
+>D : Symbol(D, Decl(negatedUnionComplementSimplifies.ts, 25, 1))
+
+declare const d: D;
+>d : Symbol(d, Decl(negatedUnionComplementSimplifies.ts, 29, 13))
+>D : Symbol(D, Decl(negatedUnionComplementSimplifies.ts, 25, 1))
+
+d; // "w" | not string
+>d : Symbol(d, Decl(negatedUnionComplementSimplifies.ts, 29, 13))
+
+// Extra non-negated members still saturate when their union covers the negated base.
+type E = "w" | string | not string;
+>E : Symbol(E, Decl(negatedUnionComplementSimplifies.ts, 30, 2))
+
+declare const e: E;
+>e : Symbol(e, Decl(negatedUnionComplementSimplifies.ts, 34, 13))
+>E : Symbol(E, Decl(negatedUnionComplementSimplifies.ts, 30, 2))
+
+e; // unknown
+>e : Symbol(e, Decl(negatedUnionComplementSimplifies.ts, 34, 13))
+

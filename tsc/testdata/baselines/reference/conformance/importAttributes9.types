@@ -23,11 +23,11 @@ void ns;
 >ns : typeof ns
 
 async function f() {
->f : () => Promise<void>
+>f : () => Promise<void & not { then(): any; }>
 
     await import("./a", {
->await import("./a", {        with: {            type: "not-json",        },    }) : typeof import("./a")
->import("./a", {        with: {            type: "not-json",        },    }) : Promise<typeof import("./a")>
+>await import("./a", {        with: {            type: "not-json",        },    }) : typeof import("./a") & not { then(): any; }
+>import("./a", {        with: {            type: "not-json",        },    }) : Promise<typeof import("./a") & not { then(): any; }>
 >"./a" : "./a"
 >{        with: {            type: "not-json",        },    } : { with: { readonly type: "not-json"; }; }
 

@@ -11,7 +11,7 @@ class C {
     }
     static {
         await (1); // illegal
->await (1) : 1
+>await (1) : 1 & not { then(): any; }
 >(1) : 1
 >1 : 1
     }

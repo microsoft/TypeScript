@@ -14,7 +14,7 @@ label: function* gen() { }
 
 label: async function gen1() { }
 >label : any
->gen1 : () => Promise<void>
+>gen1 : () => Promise<void & not { then(): any; }>
 
 label: enum E {}
 >label : any

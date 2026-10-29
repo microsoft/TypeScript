@@ -331,7 +331,7 @@ interface ExtendableMessageEventInit extends ExtendableEventInit {
 
 interface FetchEventInit extends ExtendableEventInit {
     clientId?: string;
-    handled?: Promise<void>;
+    handled?: Promise<void & not { then(): any }>;
     preloadResponse?: Promise<any>;
     request: Request;
     resultingClientId?: string;
@@ -1822,7 +1822,7 @@ interface AudioDecoder extends EventTarget {
      *
      * [MDN Reference](https://developer.mozilla.org/docs/Web/API/AudioDecoder/flush)
      */
-    flush(): Promise<void>;
+    flush(): Promise<void & not { then(): any }>;
     /**
      * The **`reset()`** method of the AudioDecoder interface resets all states including configuration, control messages in the control message queue, and all pending callbacks.
      *
@@ -1843,7 +1843,7 @@ declare var AudioDecoder: {
      *
      * [MDN Reference](https://developer.mozilla.org/docs/Web/API/AudioDecoder/isConfigSupported_static)
      */
-    isConfigSupported(config: AudioDecoderConfig): Promise<AudioDecoderSupport>;
+    isConfigSupported(config: AudioDecoderConfig): Promise<AudioDecoderSupport & not { then(): any }>;
 };
 
 interface AudioEncoderEventMap {
@@ -1894,7 +1894,7 @@ interface AudioEncoder extends EventTarget {
      *
      * [MDN Reference](https://developer.mozilla.org/docs/Web/API/AudioEncoder/flush)
      */
-    flush(): Promise<void>;
+    flush(): Promise<void & not { then(): any }>;
     /**
      * The **`reset()`** method of the AudioEncoder interface resets all states including configuration, control messages in the control message queue, and all pending callbacks.
      *
@@ -1915,7 +1915,7 @@ declare var AudioEncoder: {
      *
      * [MDN Reference](https://developer.mozilla.org/docs/Web/API/AudioEncoder/isConfigSupported_static)
      */
-    isConfigSupported(config: AudioEncoderConfig): Promise<AudioEncoderSupport>;
+    isConfigSupported(config: AudioEncoderConfig): Promise<AudioEncoderSupport & not { then(): any }>;
 };
 
 /**
@@ -1941,13 +1941,13 @@ interface Blob {
      *
      * [MDN Reference](https://developer.mozilla.org/docs/Web/API/Blob/arrayBuffer)
      */
-    arrayBuffer(): Promise<ArrayBuffer>;
+    arrayBuffer(): Promise<ArrayBuffer & not { then(): any }>;
     /**
      * The **`bytes()`** method of the Blob interface returns a Promise that resolves with a Uint8Array containing the contents of the blob as an array of bytes.
      *
      * [MDN Reference](https://developer.mozilla.org/docs/Web/API/Blob/bytes)
      */
-    bytes(): Promise<Uint8Array<ArrayBuffer>>;
+    bytes(): Promise<Uint8Array<ArrayBuffer> & not { then(): any }>;
     /**
      * The **`slice()`** method of the Blob interface creates and returns a new Blob object which contains data from a subset of the blob on which it's called.
      *
@@ -1965,7 +1965,7 @@ interface Blob {
      *
      * [MDN Reference](https://developer.mozilla.org/docs/Web/API/Blob/text)
      */
-    text(): Promise<string>;
+    text(): Promise<string & not { then(): any }>;
 }
 
 declare var Blob: {
@@ -1991,25 +1991,25 @@ interface Body {
      *
      * [MDN Reference](https://developer.mozilla.org/docs/Web/API/Request/arrayBuffer)
      */
-    arrayBuffer(): Promise<ArrayBuffer>;
+    arrayBuffer(): Promise<ArrayBuffer & not { then(): any }>;
     /**
      * The **`blob()`** method of the Request interface reads the request body and returns it as a promise that resolves with a Blob.
      *
      * [MDN Reference](https://developer.mozilla.org/docs/Web/API/Request/blob)
      */
-    blob(): Promise<Blob>;
+    blob(): Promise<Blob & not { then(): any }>;
     /**
      * The **`bytes()`** method of the Request interface reads the request body and returns it as a promise that resolves with a Uint8Array.
      *
      * [MDN Reference](https://developer.mozilla.org/docs/Web/API/Request/bytes)
      */
-    bytes(): Promise<Uint8Array<ArrayBuffer>>;
+    bytes(): Promise<Uint8Array<ArrayBuffer> & not { then(): any }>;
     /**
      * The **`formData()`** method of the Request interface reads the request body and returns it as a promise that resolves with a FormData object.
      *
      * [MDN Reference](https://developer.mozilla.org/docs/Web/API/Request/formData)
      */
-    formData(): Promise<FormData>;
+    formData(): Promise<FormData & not { then(): any }>;
     /**
      * The **`json()`** method of the Request interface reads the request body and returns it as a promise that resolves with the result of parsing the body text as JSON.
      *
@@ -2021,7 +2021,7 @@ interface Body {
      *
      * [MDN Reference](https://developer.mozilla.org/docs/Web/API/Request/text)
      */
-    text(): Promise<string>;
+    text(): Promise<string & not { then(): any }>;
 }
 
 interface BroadcastChannelEventMap {
@@ -2736,43 +2736,43 @@ interface Cache {
      *
      * [MDN Reference](https://developer.mozilla.org/docs/Web/API/Cache/add)
      */
-    add(request: RequestInfo | URL): Promise<void>;
+    add(request: RequestInfo | URL): Promise<void & not { then(): any }>;
     /**
      * The **`addAll()`** method of the Cache interface takes an array of URLs, retrieves them, and adds the resulting response objects to the given cache. The request objects created during retrieval become keys to the stored response operations.
      *
      * [MDN Reference](https://developer.mozilla.org/docs/Web/API/Cache/addAll)
      */
-    addAll(requests: RequestInfo[]): Promise<void>;
+    addAll(requests: RequestInfo[]): Promise<void & not { then(): any }>;
     /**
      * The **`delete()`** method of the Cache interface finds the Cache entry whose key is the request, and if found, deletes the Cache entry and returns a Promise that resolves to true. If no Cache entry is found, it resolves to false.
      *
      * [MDN Reference](https://developer.mozilla.org/docs/Web/API/Cache/delete)
      */
-    delete(request: RequestInfo | URL, options?: CacheQueryOptions): Promise<boolean>;
+    delete(request: RequestInfo | URL, options?: CacheQueryOptions): Promise<boolean & not { then(): any }>;
     /**
      * The **`keys()`** method of the Cache interface returns a Promise that resolves to an array of Request objects representing the keys of the Cache.
      *
      * [MDN Reference](https://developer.mozilla.org/docs/Web/API/Cache/keys)
      */
-    keys(request?: RequestInfo | URL, options?: CacheQueryOptions): Promise<ReadonlyArray<Request>>;
+    keys(request?: RequestInfo | URL, options?: CacheQueryOptions): Promise<ReadonlyArray<Request> & not { then(): any }>;
     /**
      * The **`match()`** method of the Cache interface returns a Promise that resolves to the Response associated with the first matching request in the Cache object. If no match is found, the Promise resolves to undefined.
      *
      * [MDN Reference](https://developer.mozilla.org/docs/Web/API/Cache/match)
      */
-    match(request: RequestInfo | URL, options?: CacheQueryOptions): Promise<Response | undefined>;
+    match(request: RequestInfo | URL, options?: CacheQueryOptions): Promise<(Response | undefined) & not { then(): any }>;
     /**
      * The **`matchAll()`** method of the Cache interface returns a Promise that resolves to an array of all matching responses in the Cache object.
      *
      * [MDN Reference](https://developer.mozilla.org/docs/Web/API/Cache/matchAll)
      */
-    matchAll(request?: RequestInfo | URL, options?: CacheQueryOptions): Promise<ReadonlyArray<Response>>;
+    matchAll(request?: RequestInfo | URL, options?: CacheQueryOptions): Promise<ReadonlyArray<Response> & not { then(): any }>;
     /**
      * The **`put()`** method of the Cache interface allows key/value pairs to be added to the current Cache object.
      *
      * [MDN Reference](https://developer.mozilla.org/docs/Web/API/Cache/put)
      */
-    put(request: RequestInfo | URL, response: Response): Promise<void>;
+    put(request: RequestInfo | URL, response: Response): Promise<void & not { then(): any }>;
 }
 
 declare var Cache: {
@@ -2792,31 +2792,31 @@ interface CacheStorage {
      *
      * [MDN Reference](https://developer.mozilla.org/docs/Web/API/CacheStorage/delete)
      */
-    delete(cacheName: string): Promise<boolean>;
+    delete(cacheName: string): Promise<boolean & not { then(): any }>;
     /**
      * The **`has()`** method of the CacheStorage interface returns a Promise that resolves to true if a Cache object matches the cacheName.
      *
      * [MDN Reference](https://developer.mozilla.org/docs/Web/API/CacheStorage/has)
      */
-    has(cacheName: string): Promise<boolean>;
+    has(cacheName: string): Promise<boolean & not { then(): any }>;
     /**
      * The **`keys()`** method of the CacheStorage interface returns a Promise that will resolve with an array containing strings corresponding to all of the named Cache objects tracked by the CacheStorage object in the order they were created. Use this method to iterate over a list of all Cache objects.
      *
      * [MDN Reference](https://developer.mozilla.org/docs/Web/API/CacheStorage/keys)
      */
-    keys(): Promise<string[]>;
+    keys(): Promise<string[] & not { then(): any }>;
     /**
      * The **`match()`** method of the CacheStorage interface checks if a given Request or URL string is a key for a stored Response. This method returns a Promise for a Response, or a Promise which resolves to undefined if no match is found.
      *
      * [MDN Reference](https://developer.mozilla.org/docs/Web/API/CacheStorage/match)
      */
-    match(request: RequestInfo | URL, options?: MultiCacheQueryOptions): Promise<Response | undefined>;
+    match(request: RequestInfo | URL, options?: MultiCacheQueryOptions): Promise<(Response | undefined) & not { then(): any }>;
     /**
      * The **`open()`** method of the CacheStorage interface returns a Promise that resolves to the Cache object matching the cacheName.
      *
      * [MDN Reference](https://developer.mozilla.org/docs/Web/API/CacheStorage/open)
      */
-    open(cacheName: string): Promise<Cache>;
+    open(cacheName: string): Promise<Cache & not { then(): any }>;
 }
 
 declare var CacheStorage: {
@@ -3112,25 +3112,25 @@ interface Clients {
      *
      * [MDN Reference](https://developer.mozilla.org/docs/Web/API/Clients/claim)
      */
-    claim(): Promise<void>;
+    claim(): Promise<void & not { then(): any }>;
     /**
      * The **`get()`** method of the Clients interface gets a service worker client matching a given id and returns it in a Promise.
      *
      * [MDN Reference](https://developer.mozilla.org/docs/Web/API/Clients/get)
      */
-    get(id: string): Promise<Client | undefined>;
+    get(id: string): Promise<(Client | undefined) & not { then(): any }>;
     /**
      * The **`matchAll()`** method of the Clients interface returns a Promise for a list of service worker Client objects. Include the options parameter to return all service worker clients whose origin is the same as the associated service worker's origin. If options are not included, the method returns only the service worker clients controlled by the service worker.
      *
      * [MDN Reference](https://developer.mozilla.org/docs/Web/API/Clients/matchAll)
      */
-    matchAll<T extends ClientQueryOptions>(options?: T): Promise<ReadonlyArray<T["type"] extends "window" ? WindowClient : Client>>;
+    matchAll<T extends ClientQueryOptions>(options?: T): Promise<ReadonlyArray<T["type"] extends "window" ? WindowClient : Client> & not { then(): any }>;
     /**
      * The **`openWindow()`** method of the Clients interface creates a new top level browsing context and loads a given URL. If the calling script doesn't have permission to show popups, openWindow() will throw an InvalidAccessError.
      *
      * [MDN Reference](https://developer.mozilla.org/docs/Web/API/Clients/openWindow)
      */
-    openWindow(url: string | URL): Promise<WindowClient | null>;
+    openWindow(url: string | URL): Promise<(WindowClient | null) & not { then(): any }>;
 }
 
 declare var Clients: {
@@ -3198,29 +3198,29 @@ interface CookieStore extends EventTarget {
      *
      * [MDN Reference](https://developer.mozilla.org/docs/Web/API/CookieStore/delete)
      */
-    delete(name: string): Promise<void>;
-    delete(options: CookieStoreDeleteOptions): Promise<void>;
+    delete(name: string): Promise<void & not { then(): any }>;
+    delete(options: CookieStoreDeleteOptions): Promise<void & not { then(): any }>;
     /**
      * The **`get()`** method of the CookieStore interface returns a Promise that resolves to a single cookie matching the given name or options object. The method will return the first cookie that matches.
      *
      * [MDN Reference](https://developer.mozilla.org/docs/Web/API/CookieStore/get)
      */
-    get(name: string): Promise<CookieListItem | null>;
-    get(options?: CookieStoreGetOptions): Promise<CookieListItem | null>;
+    get(name: string): Promise<(CookieListItem | null) & not { then(): any }>;
+    get(options?: CookieStoreGetOptions): Promise<(CookieListItem | null) & not { then(): any }>;
     /**
      * The **`getAll()`** method of the CookieStore interface returns a Promise that resolves as an array of cookies that match the name or options passed to it. Passing no parameters will return all cookies for the current context.
      *
      * [MDN Reference](https://developer.mozilla.org/docs/Web/API/CookieStore/getAll)
      */
-    getAll(name: string): Promise<CookieList>;
-    getAll(options?: CookieStoreGetOptions): Promise<CookieList>;
+    getAll(name: string): Promise<CookieList & not { then(): any }>;
+    getAll(options?: CookieStoreGetOptions): Promise<CookieList & not { then(): any }>;
     /**
      * The **`set()`** method of the CookieStore interface sets a cookie with the given name and value or options object.
      *
      * [MDN Reference](https://developer.mozilla.org/docs/Web/API/CookieStore/set)
      */
-    set(name: string, value: string): Promise<void>;
-    set(options: CookieInit): Promise<void>;
+    set(name: string, value: string): Promise<void & not { then(): any }>;
+    set(options: CookieInit): Promise<void & not { then(): any }>;
 }
 
 declare var CookieStore: {
@@ -3240,19 +3240,19 @@ interface CookieStoreManager {
      *
      * [MDN Reference](https://developer.mozilla.org/docs/Web/API/CookieStoreManager/getSubscriptions)
      */
-    getSubscriptions(): Promise<CookieStoreGetOptions[]>;
+    getSubscriptions(): Promise<CookieStoreGetOptions[] & not { then(): any }>;
     /**
      * The **`subscribe()`** method of the CookieStoreManager interface subscribes a ServiceWorkerRegistration to cookie change events.
      *
      * [MDN Reference](https://developer.mozilla.org/docs/Web/API/CookieStoreManager/subscribe)
      */
-    subscribe(subscriptions: CookieStoreGetOptions[]): Promise<void>;
+    subscribe(subscriptions: CookieStoreGetOptions[]): Promise<void & not { then(): any }>;
     /**
      * The **`unsubscribe()`** method of the CookieStoreManager interface stops the ServiceWorkerRegistration from receiving previously subscribed events.
      *
      * [MDN Reference](https://developer.mozilla.org/docs/Web/API/CookieStoreManager/unsubscribe)
      */
-    unsubscribe(subscriptions: CookieStoreGetOptions[]): Promise<void>;
+    unsubscribe(subscriptions: CookieStoreGetOptions[]): Promise<void & not { then(): any }>;
 }
 
 declare var CookieStoreManager: {
@@ -4736,7 +4736,7 @@ interface FetchEvent extends ExtendableEvent {
      *
      * [MDN Reference](https://developer.mozilla.org/docs/Web/API/FetchEvent/handled)
      */
-    readonly handled: Promise<void>;
+    readonly handled: Promise<void & not { then(): any }>;
     /**
      * The **`preloadResponse`** read-only property of the FetchEvent interface returns a Promise that resolves to the navigation preload Response if navigation preload was triggered, or undefined otherwise.
      *
@@ -4969,25 +4969,25 @@ interface FileSystemDirectoryHandle extends FileSystemHandle {
      *
      * [MDN Reference](https://developer.mozilla.org/docs/Web/API/FileSystemDirectoryHandle/getDirectoryHandle)
      */
-    getDirectoryHandle(name: string, options?: FileSystemGetDirectoryOptions): Promise<FileSystemDirectoryHandle>;
+    getDirectoryHandle(name: string, options?: FileSystemGetDirectoryOptions): Promise<FileSystemDirectoryHandle & not { then(): any }>;
     /**
      * The **`getFileHandle()`** method of the FileSystemDirectoryHandle interface returns a FileSystemFileHandle for a file with the specified name, within the directory the method is called.
      *
      * [MDN Reference](https://developer.mozilla.org/docs/Web/API/FileSystemDirectoryHandle/getFileHandle)
      */
-    getFileHandle(name: string, options?: FileSystemGetFileOptions): Promise<FileSystemFileHandle>;
+    getFileHandle(name: string, options?: FileSystemGetFileOptions): Promise<FileSystemFileHandle & not { then(): any }>;
     /**
      * The **`removeEntry()`** method of the FileSystemDirectoryHandle interface attempts to remove an entry if the directory handle contains a file or directory called the name specified.
      *
      * [MDN Reference](https://developer.mozilla.org/docs/Web/API/FileSystemDirectoryHandle/removeEntry)
      */
-    removeEntry(name: string, options?: FileSystemRemoveOptions): Promise<void>;
+    removeEntry(name: string, options?: FileSystemRemoveOptions): Promise<void & not { then(): any }>;
     /**
      * The **`resolve()`** method of the FileSystemDirectoryHandle interface returns an Array of directory names from the parent handle to the specified child entry, with the name of the child entry as the last array item.
      *
      * [MDN Reference](https://developer.mozilla.org/docs/Web/API/FileSystemDirectoryHandle/resolve)
      */
-    resolve(possibleDescendant: FileSystemHandle): Promise<string[] | null>;
+    resolve(possibleDescendant: FileSystemHandle): Promise<(string[] | null) & not { then(): any }>;
 }
 
 declare var FileSystemDirectoryHandle: {
@@ -5008,19 +5008,19 @@ interface FileSystemFileHandle extends FileSystemHandle {
      *
      * [MDN Reference](https://developer.mozilla.org/docs/Web/API/FileSystemFileHandle/createSyncAccessHandle)
      */
-    createSyncAccessHandle(): Promise<FileSystemSyncAccessHandle>;
+    createSyncAccessHandle(): Promise<FileSystemSyncAccessHandle & not { then(): any }>;
     /**
      * The **`createWritable()`** method of the FileSystemFileHandle interface creates a FileSystemWritableFileStream that can be used to write to a file. The method returns a Promise which resolves to this created stream.
      *
      * [MDN Reference](https://developer.mozilla.org/docs/Web/API/FileSystemFileHandle/createWritable)
      */
-    createWritable(options?: FileSystemCreateWritableOptions): Promise<FileSystemWritableFileStream>;
+    createWritable(options?: FileSystemCreateWritableOptions): Promise<FileSystemWritableFileStream & not { then(): any }>;
     /**
      * The **`getFile()`** method of the FileSystemFileHandle interface returns a Promise which resolves to a File object representing the state on disk of the entry represented by the handle.
      *
      * [MDN Reference](https://developer.mozilla.org/docs/Web/API/FileSystemFileHandle/getFile)
      */
-    getFile(): Promise<File>;
+    getFile(): Promise<File & not { then(): any }>;
 }
 
 declare var FileSystemFileHandle: {
@@ -5052,7 +5052,7 @@ interface FileSystemHandle {
      *
      * [MDN Reference](https://developer.mozilla.org/docs/Web/API/FileSystemHandle/isSameEntry)
      */
-    isSameEntry(other: FileSystemHandle): Promise<boolean>;
+    isSameEntry(other: FileSystemHandle): Promise<boolean & not { then(): any }>;
 }
 
 declare var FileSystemHandle: {
@@ -5122,19 +5122,19 @@ interface FileSystemWritableFileStream extends WritableStream {
      *
      * [MDN Reference](https://developer.mozilla.org/docs/Web/API/FileSystemWritableFileStream/seek)
      */
-    seek(position: number): Promise<void>;
+    seek(position: number): Promise<void & not { then(): any }>;
     /**
      * The **`truncate()`** method of the FileSystemWritableFileStream interface resizes the file associated with the stream to the specified size in bytes.
      *
      * [MDN Reference](https://developer.mozilla.org/docs/Web/API/FileSystemWritableFileStream/truncate)
      */
-    truncate(size: number): Promise<void>;
+    truncate(size: number): Promise<void & not { then(): any }>;
     /**
      * The **`write()`** method of the FileSystemWritableFileStream interface writes content into the file the method is called on, at the current file cursor offset.
      *
      * [MDN Reference](https://developer.mozilla.org/docs/Web/API/FileSystemWritableFileStream/write)
      */
-    write(data: FileSystemWriteChunkType): Promise<void>;
+    write(data: FileSystemWriteChunkType): Promise<void & not { then(): any }>;
 }
 
 declare var FileSystemWritableFileStream: {
@@ -5189,7 +5189,7 @@ interface FontFace {
      *
      * [MDN Reference](https://developer.mozilla.org/docs/Web/API/FontFace/loaded)
      */
-    readonly loaded: Promise<FontFace>;
+    readonly loaded: Promise<FontFace & not { then(): any }>;
     /**
      * The **`status`** read-only property of the FontFace interface returns an enumerated value indicating the status of the font, one of "unloaded", "loading", "loaded", or "error".
      *
@@ -5231,7 +5231,7 @@ interface FontFace {
      *
      * [MDN Reference](https://developer.mozilla.org/docs/Web/API/FontFace/load)
      */
-    load(): Promise<FontFace>;
+    load(): Promise<FontFace & not { then(): any }>;
 }
 
 declare var FontFace: {
@@ -5262,7 +5262,7 @@ interface FontFaceSet extends EventTarget {
      *
      * [MDN Reference](https://developer.mozilla.org/docs/Web/API/FontFaceSet/ready)
      */
-    readonly ready: Promise<FontFaceSet>;
+    readonly ready: Promise<FontFaceSet & not { then(): any }>;
     /**
      * The **`status`** read-only property of the FontFaceSet interface returns the loading state of the fonts in the set.
      *
@@ -5280,7 +5280,7 @@ interface FontFaceSet extends EventTarget {
      *
      * [MDN Reference](https://developer.mozilla.org/docs/Web/API/FontFaceSet/load)
      */
-    load(font: string, text?: string): Promise<FontFace[]>;
+    load(font: string, text?: string): Promise<FontFace[] & not { then(): any }>;
     forEach(callbackfn: (value: FontFace, key: FontFace, parent: FontFaceSet) => void, thisArg?: any): void;
     addEventListener<K extends keyof FontFaceSetEventMap>(type: K, listener: (this: FontFaceSet, ev: FontFaceSetEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
     addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
@@ -5395,7 +5395,7 @@ interface GPU {
      *
      * [MDN Reference](https://developer.mozilla.org/docs/Web/API/GPU/requestAdapter)
      */
-    requestAdapter(options?: GPURequestAdapterOptions): Promise<GPUAdapter | null>;
+    requestAdapter(options?: GPURequestAdapterOptions): Promise<(GPUAdapter | null) & not { then(): any }>;
 }
 
 declare var GPU: {
@@ -5433,7 +5433,7 @@ interface GPUAdapter {
      *
      * [MDN Reference](https://developer.mozilla.org/docs/Web/API/GPUAdapter/requestDevice)
      */
-    requestDevice(descriptor?: GPUDeviceDescriptor): Promise<GPUDevice>;
+    requestDevice(descriptor?: GPUDeviceDescriptor): Promise<GPUDevice & not { then(): any }>;
 }
 
 declare var GPUAdapter: {
@@ -5573,7 +5573,7 @@ interface GPUBuffer extends GPUObjectBase {
      *
      * [MDN Reference](https://developer.mozilla.org/docs/Web/API/GPUBuffer/mapAsync)
      */
-    mapAsync(mode: GPUMapModeFlags, offset?: GPUSize64, size?: GPUSize64): Promise<void>;
+    mapAsync(mode: GPUMapModeFlags, offset?: GPUSize64, size?: GPUSize64): Promise<void & not { then(): any }>;
     /**
      * The **`unmap()`** method of the GPUBuffer interface unmaps the mapped range of the GPUBuffer, making its contents available for use by the GPU again after it has previously been mapped with GPUBuffer.mapAsync() (the GPU cannot access a mapped GPUBuffer).
      *
@@ -5879,7 +5879,7 @@ interface GPUDevice extends EventTarget, GPUObjectBase {
      *
      * [MDN Reference](https://developer.mozilla.org/docs/Web/API/GPUDevice/lost)
      */
-    readonly lost: Promise<GPUDeviceLostInfo>;
+    readonly lost: Promise<GPUDeviceLostInfo & not { then(): any }>;
     /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/GPUDevice/uncapturederror_event) */
     onuncapturederror: ((this: GPUDevice, ev: GPUUncapturedErrorEvent) => any) | null;
     /**
@@ -5923,7 +5923,7 @@ interface GPUDevice extends EventTarget, GPUObjectBase {
      *
      * [MDN Reference](https://developer.mozilla.org/docs/Web/API/GPUDevice/createComputePipelineAsync)
      */
-    createComputePipelineAsync(descriptor: GPUComputePipelineDescriptor): Promise<GPUComputePipeline>;
+    createComputePipelineAsync(descriptor: GPUComputePipelineDescriptor): Promise<GPUComputePipeline & not { then(): any }>;
     /**
      * The **`createPipelineLayout()`** method of the GPUDevice interface creates a GPUPipelineLayout that defines the GPUBindGroupLayouts used by a pipeline. GPUBindGroups used with the pipeline during command encoding must have compatible GPUBindGroupLayouts.
      *
@@ -5953,7 +5953,7 @@ interface GPUDevice extends EventTarget, GPUObjectBase {
      *
      * [MDN Reference](https://developer.mozilla.org/docs/Web/API/GPUDevice/createRenderPipelineAsync)
      */
-    createRenderPipelineAsync(descriptor: GPURenderPipelineDescriptor): Promise<GPURenderPipeline>;
+    createRenderPipelineAsync(descriptor: GPURenderPipelineDescriptor): Promise<GPURenderPipeline & not { then(): any }>;
     /**
      * The **`createSampler()`** method of the GPUDevice interface creates a GPUSampler, which controls how shaders transform and filter texture resource data.
      *
@@ -5989,7 +5989,7 @@ interface GPUDevice extends EventTarget, GPUObjectBase {
      *
      * [MDN Reference](https://developer.mozilla.org/docs/Web/API/GPUDevice/popErrorScope)
      */
-    popErrorScope(): Promise<GPUError | null>;
+    popErrorScope(): Promise<(GPUError | null) & not { then(): any }>;
     /**
      * The **`pushErrorScope()`** method of the GPUDevice interface pushes a new GPU error scope onto the device's error scope stack, allowing you to capture errors of a particular type.
      *
@@ -6189,7 +6189,7 @@ interface GPUQueue extends GPUObjectBase {
      *
      * [MDN Reference](https://developer.mozilla.org/docs/Web/API/GPUQueue/onSubmittedWorkDone)
      */
-    onSubmittedWorkDone(): Promise<void>;
+    onSubmittedWorkDone(): Promise<void & not { then(): any }>;
     /**
      * The **`submit()`** method of the GPUQueue interface schedules the execution of command buffers represented by one or more GPUCommandBuffer objects by the GPU.
      *
@@ -6368,7 +6368,7 @@ interface GPUShaderModule extends GPUObjectBase {
      *
      * [MDN Reference](https://developer.mozilla.org/docs/Web/API/GPUShaderModule/getCompilationInfo)
      */
-    getCompilationInfo(): Promise<GPUCompilationInfo>;
+    getCompilationInfo(): Promise<GPUCompilationInfo & not { then(): any }>;
 }
 
 declare var GPUShaderModule: {
@@ -6832,7 +6832,7 @@ interface IDBFactory {
      *
      * [MDN Reference](https://developer.mozilla.org/docs/Web/API/IDBFactory/databases)
      */
-    databases(): Promise<IDBDatabaseInfo[]>;
+    databases(): Promise<IDBDatabaseInfo[] & not { then(): any }>;
     /**
      * The **`deleteDatabase()`** method of the IDBFactory interface requests the deletion of a database. The method returns an IDBOpenDBRequest object immediately, and performs the deletion operation asynchronously.
      *
@@ -7421,7 +7421,7 @@ interface ImageDecoder {
      *
      * [MDN Reference](https://developer.mozilla.org/docs/Web/API/ImageDecoder/completed)
      */
-    readonly completed: Promise<void>;
+    readonly completed: Promise<void & not { then(): any }>;
     /**
      * The **`tracks`** read-only property of the ImageDecoder interface returns a list of the tracks in the encoded image data.
      *
@@ -7445,7 +7445,7 @@ interface ImageDecoder {
      *
      * [MDN Reference](https://developer.mozilla.org/docs/Web/API/ImageDecoder/decode)
      */
-    decode(options?: ImageDecodeOptions): Promise<ImageDecodeResult>;
+    decode(options?: ImageDecodeOptions): Promise<ImageDecodeResult & not { then(): any }>;
     /**
      * The **`reset()`** method of the ImageDecoder interface aborts all pending decode() operations; rejecting all pending promises. All other state will be unchanged. Class methods can continue to be invoked after reset(). E.g., calling decode() after reset() is permitted.
      *
@@ -7462,7 +7462,7 @@ declare var ImageDecoder: {
      *
      * [MDN Reference](https://developer.mozilla.org/docs/Web/API/ImageDecoder/isTypeSupported_static)
      */
-    isTypeSupported(type: string): Promise<boolean>;
+    isTypeSupported(type: string): Promise<boolean & not { then(): any }>;
 };
 
 /**
@@ -7521,7 +7521,7 @@ interface ImageTrackList {
      *
      * [MDN Reference](https://developer.mozilla.org/docs/Web/API/ImageTrackList/ready)
      */
-    readonly ready: Promise<void>;
+    readonly ready: Promise<void & not { then(): any }>;
     /**
      * The **`selectedIndex`** property of the ImageTrackList interface returns the index of the selected track.
      *
@@ -7594,7 +7594,7 @@ interface LockManager {
      *
      * [MDN Reference](https://developer.mozilla.org/docs/Web/API/LockManager/query)
      */
-    query(): Promise<LockManagerSnapshot>;
+    query(): Promise<LockManagerSnapshot & not { then(): any }>;
     /**
      * The **`request()`** method of the LockManager interface requests a Lock object with parameters specifying its name and characteristics. The requested Lock is passed to a callback, while the function itself returns a Promise that resolves (or rejects) with the result of the callback after the lock is released, or rejects if the request is aborted.
      *
@@ -7620,13 +7620,13 @@ interface MediaCapabilities {
      *
      * [MDN Reference](https://developer.mozilla.org/docs/Web/API/MediaCapabilities/decodingInfo)
      */
-    decodingInfo(configuration: MediaDecodingConfiguration): Promise<MediaCapabilitiesDecodingInfo>;
+    decodingInfo(configuration: MediaDecodingConfiguration): Promise<MediaCapabilitiesDecodingInfo & not { then(): any }>;
     /**
      * The **`encodingInfo()`** method of the MediaCapabilities interface returns a promise that fulfills with the tested media configuration's capabilities for encoding media. This contains the three boolean properties supported, smooth, and powerefficient, which describe how compatible the device is with the type of media.
      *
      * [MDN Reference](https://developer.mozilla.org/docs/Web/API/MediaCapabilities/encodingInfo)
      */
-    encodingInfo(configuration: MediaEncodingConfiguration): Promise<MediaCapabilitiesEncodingInfo>;
+    encodingInfo(configuration: MediaEncodingConfiguration): Promise<MediaCapabilitiesEncodingInfo & not { then(): any }>;
 }
 
 declare var MediaCapabilities: {
@@ -7805,25 +7805,25 @@ interface NavigationPreloadManager {
      *
      * [MDN Reference](https://developer.mozilla.org/docs/Web/API/NavigationPreloadManager/disable)
      */
-    disable(): Promise<void>;
+    disable(): Promise<void & not { then(): any }>;
     /**
      * The **`enable()`** method of the NavigationPreloadManager interface is used to enable preloading of resources managed by the service worker. It returns a promise that resolves with undefined.
      *
      * [MDN Reference](https://developer.mozilla.org/docs/Web/API/NavigationPreloadManager/enable)
      */
-    enable(): Promise<void>;
+    enable(): Promise<void & not { then(): any }>;
     /**
      * The **`getState()`** method of the NavigationPreloadManager interface returns a Promise that resolves to an object with properties that indicate whether preload is enabled and what value will be sent in the Service-Worker-Navigation-Preload HTTP header.
      *
      * [MDN Reference](https://developer.mozilla.org/docs/Web/API/NavigationPreloadManager/getState)
      */
-    getState(): Promise<NavigationPreloadState>;
+    getState(): Promise<NavigationPreloadState & not { then(): any }>;
     /**
      * The **`setHeaderValue()`** method of the NavigationPreloadManager interface sets the value of the Service-Worker-Navigation-Preload header that will be sent with requests resulting from a fetch() operation made during service worker navigation preloading. It returns an empty Promise that resolves with undefined.
      *
      * [MDN Reference](https://developer.mozilla.org/docs/Web/API/NavigationPreloadManager/setHeaderValue)
      */
-    setHeaderValue(value: string): Promise<void>;
+    setHeaderValue(value: string): Promise<void & not { then(): any }>;
 }
 
 declare var NavigationPreloadManager: {
@@ -7834,9 +7834,9 @@ declare var NavigationPreloadManager: {
 /** Available only in secure contexts. */
 interface NavigatorBadge {
     /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/Navigator/clearAppBadge) */
-    clearAppBadge(): Promise<void>;
+    clearAppBadge(): Promise<void & not { then(): any }>;
     /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/Navigator/setAppBadge) */
-    setAppBadge(contents?: number): Promise<void>;
+    setAppBadge(contents?: number): Promise<void & not { then(): any }>;
 }
 
 interface NavigatorConcurrentHardware {
@@ -8218,7 +8218,7 @@ interface OffscreenCanvas extends EventTarget {
      *
      * [MDN Reference](https://developer.mozilla.org/docs/Web/API/OffscreenCanvas/convertToBlob)
      */
-    convertToBlob(options?: ImageEncodeOptions): Promise<Blob>;
+    convertToBlob(options?: ImageEncodeOptions): Promise<Blob & not { then(): any }>;
     /**
      * The **`OffscreenCanvas.getContext()`** method returns a drawing context for an offscreen canvas, or null if the context identifier is not supported, or the offscreen canvas has already been set to a different context mode.
      *
@@ -8777,7 +8777,7 @@ interface Permissions {
      *
      * [MDN Reference](https://developer.mozilla.org/docs/Web/API/Permissions/query)
      */
-    query(permissionDesc: PermissionDescriptor): Promise<PermissionStatus>;
+    query(permissionDesc: PermissionDescriptor): Promise<PermissionStatus & not { then(): any }>;
 }
 
 declare var Permissions: {
@@ -8874,19 +8874,19 @@ interface PushManager {
      *
      * [MDN Reference](https://developer.mozilla.org/docs/Web/API/PushManager/getSubscription)
      */
-    getSubscription(): Promise<PushSubscription | null>;
+    getSubscription(): Promise<(PushSubscription | null) & not { then(): any }>;
     /**
      * The **`permissionState()`** method of the PushManager interface returns a Promise that resolves to a string indicating the permission state of the push manager. Possible values are 'prompt', 'denied', or 'granted'.
      *
      * [MDN Reference](https://developer.mozilla.org/docs/Web/API/PushManager/permissionState)
      */
-    permissionState(options?: PushSubscriptionOptionsInit): Promise<PermissionState>;
+    permissionState(options?: PushSubscriptionOptionsInit): Promise<PermissionState & not { then(): any }>;
     /**
      * The **`subscribe()`** method of the PushManager interface subscribes to a push service.
      *
      * [MDN Reference](https://developer.mozilla.org/docs/Web/API/PushManager/subscribe)
      */
-    subscribe(options?: PushSubscriptionOptionsInit): Promise<PushSubscription>;
+    subscribe(options?: PushSubscriptionOptionsInit): Promise<PushSubscription & not { then(): any }>;
 }
 
 declare var PushManager: {
@@ -8992,7 +8992,7 @@ interface PushSubscription {
      *
      * [MDN Reference](https://developer.mozilla.org/docs/Web/API/PushSubscription/unsubscribe)
      */
-    unsubscribe(): Promise<boolean>;
+    unsubscribe(): Promise<boolean & not { then(): any }>;
 }
 
 declare var PushSubscription: {
@@ -9253,13 +9253,13 @@ interface RTCRtpScriptTransformer extends EventTarget {
      *
      * [MDN Reference](https://developer.mozilla.org/docs/Web/API/RTCRtpScriptTransformer/generateKeyFrame)
      */
-    generateKeyFrame(rid?: string): Promise<void>;
+    generateKeyFrame(rid?: string): Promise<void & not { then(): any }>;
     /**
      * The **`sendKeyFrameRequest()`** method of the RTCRtpScriptTransformer interface may be called by a WebRTC Encoded Transform that is processing incoming encoded video frames, in order to request a key frame from the sender.
      *
      * [MDN Reference](https://developer.mozilla.org/docs/Web/API/RTCRtpScriptTransformer/sendKeyFrameRequest)
      */
-    sendKeyFrameRequest(): Promise<void>;
+    sendKeyFrameRequest(): Promise<void & not { then(): any }>;
 }
 
 declare var RTCRtpScriptTransformer: {
@@ -9346,7 +9346,7 @@ interface ReadableStream<R = any> {
      *
      * [MDN Reference](https://developer.mozilla.org/docs/Web/API/ReadableStream/cancel)
      */
-    cancel(reason?: any): Promise<void>;
+    cancel(reason?: any): Promise<void & not { then(): any }>;
     /**
      * The **`getReader()`** method of the ReadableStream interface creates a reader and locks the stream to it. While the stream is locked, no other reader can be acquired until this one is released.
      *
@@ -9366,7 +9366,7 @@ interface ReadableStream<R = any> {
      *
      * [MDN Reference](https://developer.mozilla.org/docs/Web/API/ReadableStream/pipeTo)
      */
-    pipeTo(destination: WritableStream<R>, options?: StreamPipeOptions): Promise<void>;
+    pipeTo(destination: WritableStream<R>, options?: StreamPipeOptions): Promise<void & not { then(): any }>;
     /**
      * The **`tee()`** method of the ReadableStream interface tees the current readable stream, returning a two-element array containing the two resulting branches as new ReadableStream instances.
      *
@@ -9393,7 +9393,7 @@ interface ReadableStreamBYOBReader extends ReadableStreamGenericReader {
      *
      * [MDN Reference](https://developer.mozilla.org/docs/Web/API/ReadableStreamBYOBReader/read)
      */
-    read<T extends Exclude<BufferSource, ArrayBuffer>>(view: T, options?: ReadableStreamBYOBReaderReadOptions): Promise<ReadableStreamReadResult<T>>;
+    read<T extends Exclude<BufferSource, ArrayBuffer>>(view: T, options?: ReadableStreamBYOBReaderReadOptions): Promise<ReadableStreamReadResult<T> & not { then(): any }>;
     /**
      * The **`releaseLock()`** method of the ReadableStreamBYOBReader interface releases the reader's lock on the stream. After the lock is released, the reader is no longer active.
      *
@@ -9486,7 +9486,7 @@ interface ReadableStreamDefaultReader<R = any> extends ReadableStreamGenericRead
      *
      * [MDN Reference](https://developer.mozilla.org/docs/Web/API/ReadableStreamDefaultReader/read)
      */
-    read(): Promise<ReadableStreamReadResult<R>>;
+    read(): Promise<ReadableStreamReadResult<R> & not { then(): any }>;
     /**
      * The **`releaseLock()`** method of the ReadableStreamDefaultReader interface releases the reader's lock on the stream.
      *
@@ -9502,9 +9502,9 @@ declare var ReadableStreamDefaultReader: {
 
 interface ReadableStreamGenericReader {
     /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/ReadableStreamBYOBReader/closed) */
-    readonly closed: Promise<void>;
+    readonly closed: Promise<void & not { then(): any }>;
     /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/ReadableStreamBYOBReader/cancel) */
-    cancel(reason?: any): Promise<void>;
+    cancel(reason?: any): Promise<void & not { then(): any }>;
 }
 
 /**
@@ -9731,7 +9731,7 @@ interface Scheduler {
      *
      * [MDN Reference](https://developer.mozilla.org/docs/Web/API/Scheduler/yield)
      */
-    yield(): Promise<void>;
+    yield(): Promise<void & not { then(): any }>;
 }
 
 declare var Scheduler: {
@@ -9836,7 +9836,7 @@ interface Serial extends EventTarget {
      *
      * [MDN Reference](https://developer.mozilla.org/docs/Web/API/Serial/getPorts)
      */
-    getPorts(): Promise<SerialPort[]>;
+    getPorts(): Promise<SerialPort[] & not { then(): any }>;
 }
 
 declare var Serial: {
@@ -9883,13 +9883,13 @@ interface SerialPort extends EventTarget {
      *
      * [MDN Reference](https://developer.mozilla.org/docs/Web/API/SerialPort/close)
      */
-    close(): Promise<void>;
+    close(): Promise<void & not { then(): any }>;
     /**
      * The **`SerialPort.forget()`** method of the SerialPort interface returns a Promise that resolves when access to the serial port is revoked.
      *
      * [MDN Reference](https://developer.mozilla.org/docs/Web/API/SerialPort/forget)
      */
-    forget(): Promise<void>;
+    forget(): Promise<void & not { then(): any }>;
     /**
      * The **`getInfo()`** method of the SerialPort interface returns an object containing identifying information for the device available via the port.
      *
@@ -9901,19 +9901,19 @@ interface SerialPort extends EventTarget {
      *
      * [MDN Reference](https://developer.mozilla.org/docs/Web/API/SerialPort/getSignals)
      */
-    getSignals(): Promise<SerialInputSignals>;
+    getSignals(): Promise<SerialInputSignals & not { then(): any }>;
     /**
      * The **`open()`** method of the SerialPort interface returns a Promise that resolves when the port is opened. By default the port is opened with 8 data bits, 1 stop bit and no parity checking. The baudRate parameter is required.
      *
      * [MDN Reference](https://developer.mozilla.org/docs/Web/API/SerialPort/open)
      */
-    open(options: SerialOptions): Promise<void>;
+    open(options: SerialOptions): Promise<void & not { then(): any }>;
     /**
      * The **`setSignals()`** method of the SerialPort interface sets control signals on the port and returns a Promise that resolves when they are set.
      *
      * [MDN Reference](https://developer.mozilla.org/docs/Web/API/SerialPort/setSignals)
      */
-    setSignals(signals?: SerialOutputSignals): Promise<void>;
+    setSignals(signals?: SerialOutputSignals): Promise<void & not { then(): any }>;
     addEventListener<K extends keyof SerialPortEventMap>(type: K, listener: (this: SerialPort, ev: SerialPortEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
     addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
     removeEventListener<K extends keyof SerialPortEventMap>(type: K, listener: (this: SerialPort, ev: SerialPortEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
@@ -9998,25 +9998,25 @@ interface ServiceWorkerContainer extends EventTarget {
      *
      * [MDN Reference](https://developer.mozilla.org/docs/Web/API/ServiceWorkerContainer/ready)
      */
-    readonly ready: Promise<ServiceWorkerRegistration>;
+    readonly ready: Promise<ServiceWorkerRegistration & not { then(): any }>;
     /**
      * The **`getRegistration()`** method of the ServiceWorkerContainer interface gets a ServiceWorkerRegistration object whose scope URL matches the provided client URL. The method returns a Promise that resolves to a ServiceWorkerRegistration or undefined.
      *
      * [MDN Reference](https://developer.mozilla.org/docs/Web/API/ServiceWorkerContainer/getRegistration)
      */
-    getRegistration(clientURL?: string | URL): Promise<ServiceWorkerRegistration | undefined>;
+    getRegistration(clientURL?: string | URL): Promise<(ServiceWorkerRegistration | undefined) & not { then(): any }>;
     /**
      * The **`getRegistrations()`** method of the ServiceWorkerContainer interface gets all ServiceWorkerRegistrations associated with a ServiceWorkerContainer, in an array. The method returns a Promise that resolves to an array of ServiceWorkerRegistration.
      *
      * [MDN Reference](https://developer.mozilla.org/docs/Web/API/ServiceWorkerContainer/getRegistrations)
      */
-    getRegistrations(): Promise<ReadonlyArray<ServiceWorkerRegistration>>;
+    getRegistrations(): Promise<ReadonlyArray<ServiceWorkerRegistration> & not { then(): any }>;
     /**
      * The **`register()`** method of the ServiceWorkerContainer interface creates or updates a ServiceWorkerRegistration for the given scope.
      *
      * [MDN Reference](https://developer.mozilla.org/docs/Web/API/ServiceWorkerContainer/register)
      */
-    register(scriptURL: string | URL, options?: RegistrationOptions): Promise<ServiceWorkerRegistration>;
+    register(scriptURL: string | URL, options?: RegistrationOptions): Promise<ServiceWorkerRegistration & not { then(): any }>;
     /**
      * The **`startMessages()`** method of the ServiceWorkerContainer interface explicitly starts the flow of messages being dispatched from a service worker to pages under its control (e.g., sent via Client.postMessage()). This can be used to react to sent messages earlier, even before that page's content has finished loading.
      *
@@ -10103,7 +10103,7 @@ interface ServiceWorkerGlobalScope extends WorkerGlobalScope {
      *
      * [MDN Reference](https://developer.mozilla.org/docs/Web/API/ServiceWorkerGlobalScope/skipWaiting)
      */
-    skipWaiting(): Promise<void>;
+    skipWaiting(): Promise<void & not { then(): any }>;
     addEventListener<K extends keyof ServiceWorkerGlobalScopeEventMap>(type: K, listener: (this: ServiceWorkerGlobalScope, ev: ServiceWorkerGlobalScopeEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
     addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
     removeEventListener<K extends keyof ServiceWorkerGlobalScopeEventMap>(type: K, listener: (this: ServiceWorkerGlobalScope, ev: ServiceWorkerGlobalScopeEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
@@ -10175,25 +10175,25 @@ interface ServiceWorkerRegistration extends EventTarget, PushManagerAttribute {
      *
      * [MDN Reference](https://developer.mozilla.org/docs/Web/API/ServiceWorkerRegistration/getNotifications)
      */
-    getNotifications(filter?: GetNotificationOptions): Promise<Notification[]>;
+    getNotifications(filter?: GetNotificationOptions): Promise<Notification[] & not { then(): any }>;
     /**
      * The **`showNotification()`** method of the ServiceWorkerRegistration interface creates a notification on an active service worker.
      *
      * [MDN Reference](https://developer.mozilla.org/docs/Web/API/ServiceWorkerRegistration/showNotification)
      */
-    showNotification(title: string, options?: NotificationOptions): Promise<void>;
+    showNotification(title: string, options?: NotificationOptions): Promise<void & not { then(): any }>;
     /**
      * The **`unregister()`** method of the ServiceWorkerRegistration interface unregisters the service worker registration and returns a Promise. The promise will resolve to false if no registration was found, otherwise it resolves to true irrespective of whether unregistration happened or not (it may not unregister if someone else just called ServiceWorkerContainer.register() with the same scope.) The service worker will finish any ongoing operations before it is unregistered.
      *
      * [MDN Reference](https://developer.mozilla.org/docs/Web/API/ServiceWorkerRegistration/unregister)
      */
-    unregister(): Promise<boolean>;
+    unregister(): Promise<boolean & not { then(): any }>;
     /**
      * The **`update()`** method of the ServiceWorkerRegistration interface attempts to update the service worker. It fetches the worker's script URL, and if the new worker is not byte-by-byte identical to the current worker, it installs the new worker. The fetch of the worker bypasses any browser caches if the previous fetch occurred over 24 hours ago.
      *
      * [MDN Reference](https://developer.mozilla.org/docs/Web/API/ServiceWorkerRegistration/update)
      */
-    update(): Promise<ServiceWorkerRegistration>;
+    update(): Promise<ServiceWorkerRegistration & not { then(): any }>;
     addEventListener<K extends keyof ServiceWorkerRegistrationEventMap>(type: K, listener: (this: ServiceWorkerRegistration, ev: ServiceWorkerRegistrationEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
     addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
     removeEventListener<K extends keyof ServiceWorkerRegistrationEventMap>(type: K, listener: (this: ServiceWorkerRegistration, ev: ServiceWorkerRegistrationEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
@@ -10252,19 +10252,19 @@ interface StorageManager {
      *
      * [MDN Reference](https://developer.mozilla.org/docs/Web/API/StorageManager/estimate)
      */
-    estimate(): Promise<StorageEstimate>;
+    estimate(): Promise<StorageEstimate & not { then(): any }>;
     /**
      * The **`getDirectory()`** method of the StorageManager interface is used to obtain a reference to a FileSystemDirectoryHandle object allowing access to a directory and its contents, stored in the origin private file system (OPFS).
      *
      * [MDN Reference](https://developer.mozilla.org/docs/Web/API/StorageManager/getDirectory)
      */
-    getDirectory(): Promise<FileSystemDirectoryHandle>;
+    getDirectory(): Promise<FileSystemDirectoryHandle & not { then(): any }>;
     /**
      * The **`persisted()`** method of the StorageManager interface returns a Promise that resolves to true if your site's storage bucket is persistent.
      *
      * [MDN Reference](https://developer.mozilla.org/docs/Web/API/StorageManager/persisted)
      */
-    persisted(): Promise<boolean>;
+    persisted(): Promise<boolean & not { then(): any }>;
 }
 
 declare var StorageManager: {
@@ -10322,80 +10322,80 @@ interface SubtleCrypto {
      *
      * [MDN Reference](https://developer.mozilla.org/docs/Web/API/SubtleCrypto/decrypt)
      */
-    decrypt(algorithm: AlgorithmIdentifier | RsaOaepParams | AesCtrParams | AesCbcParams | AesGcmParams, key: CryptoKey, data: BufferSource): Promise<ArrayBuffer>;
+    decrypt(algorithm: AlgorithmIdentifier | RsaOaepParams | AesCtrParams | AesCbcParams | AesGcmParams, key: CryptoKey, data: BufferSource): Promise<ArrayBuffer & not { then(): any }>;
     /**
      * The **`deriveBits()`** method of the SubtleCrypto interface can be used to derive an array of bits from a base key.
      *
      * [MDN Reference](https://developer.mozilla.org/docs/Web/API/SubtleCrypto/deriveBits)
      */
-    deriveBits(algorithm: AlgorithmIdentifier | EcdhKeyDeriveParams | HkdfParams | Pbkdf2Params, baseKey: CryptoKey, length?: number | null): Promise<ArrayBuffer>;
+    deriveBits(algorithm: AlgorithmIdentifier | EcdhKeyDeriveParams | HkdfParams | Pbkdf2Params, baseKey: CryptoKey, length?: number | null): Promise<ArrayBuffer & not { then(): any }>;
     /**
      * The **`deriveKey()`** method of the SubtleCrypto interface can be used to derive a secret key from a master key.
      *
      * [MDN Reference](https://developer.mozilla.org/docs/Web/API/SubtleCrypto/deriveKey)
      */
-    deriveKey(algorithm: AlgorithmIdentifier | EcdhKeyDeriveParams | HkdfParams | Pbkdf2Params, baseKey: CryptoKey, derivedKeyType: AlgorithmIdentifier | AesDerivedKeyParams | HmacImportParams | HkdfParams | Pbkdf2Params, extractable: boolean, keyUsages: KeyUsage[]): Promise<CryptoKey>;
+    deriveKey(algorithm: AlgorithmIdentifier | EcdhKeyDeriveParams | HkdfParams | Pbkdf2Params, baseKey: CryptoKey, derivedKeyType: AlgorithmIdentifier | AesDerivedKeyParams | HmacImportParams | HkdfParams | Pbkdf2Params, extractable: boolean, keyUsages: KeyUsage[]): Promise<CryptoKey & not { then(): any }>;
     /**
      * The **`digest()`** method of the SubtleCrypto interface generates a digest of the given data, using the specified hash function. A digest is a short fixed-length value derived from some variable-length input. Cryptographic digests should exhibit collision-resistance, meaning that it's hard to come up with two different inputs that have the same digest value.
      *
      * [MDN Reference](https://developer.mozilla.org/docs/Web/API/SubtleCrypto/digest)
      */
-    digest(algorithm: AlgorithmIdentifier, data: BufferSource): Promise<ArrayBuffer>;
+    digest(algorithm: AlgorithmIdentifier, data: BufferSource): Promise<ArrayBuffer & not { then(): any }>;
     /**
      * The **`encrypt()`** method of the SubtleCrypto interface encrypts data.
      *
      * [MDN Reference](https://developer.mozilla.org/docs/Web/API/SubtleCrypto/encrypt)
      */
-    encrypt(algorithm: AlgorithmIdentifier | RsaOaepParams | AesCtrParams | AesCbcParams | AesGcmParams, key: CryptoKey, data: BufferSource): Promise<ArrayBuffer>;
+    encrypt(algorithm: AlgorithmIdentifier | RsaOaepParams | AesCtrParams | AesCbcParams | AesGcmParams, key: CryptoKey, data: BufferSource): Promise<ArrayBuffer & not { then(): any }>;
     /**
      * The **`exportKey()`** method of the SubtleCrypto interface exports a key: that is, it takes as input a CryptoKey object and gives you the key in an external, portable format.
      *
      * [MDN Reference](https://developer.mozilla.org/docs/Web/API/SubtleCrypto/exportKey)
      */
-    exportKey(format: "jwk", key: CryptoKey): Promise<JsonWebKey>;
-    exportKey(format: Exclude<KeyFormat, "jwk">, key: CryptoKey): Promise<ArrayBuffer>;
-    exportKey(format: KeyFormat, key: CryptoKey): Promise<ArrayBuffer | JsonWebKey>;
+    exportKey(format: "jwk", key: CryptoKey): Promise<JsonWebKey & not { then(): any }>;
+    exportKey(format: Exclude<KeyFormat, "jwk">, key: CryptoKey): Promise<ArrayBuffer & not { then(): any }>;
+    exportKey(format: KeyFormat, key: CryptoKey): Promise<(ArrayBuffer | JsonWebKey) & not { then(): any }>;
     /**
      * The **`generateKey()`** method of the SubtleCrypto interface is used to generate a new key (for symmetric algorithms) or key pair (for public-key algorithms).
      *
      * [MDN Reference](https://developer.mozilla.org/docs/Web/API/SubtleCrypto/generateKey)
      */
-    generateKey(algorithm: "Ed25519" | { name: "Ed25519" }, extractable: boolean, keyUsages: ReadonlyArray<"sign" | "verify">): Promise<CryptoKeyPair>;
-    generateKey(algorithm: "X25519" | { name: "X25519" }, extractable: boolean, keyUsages: ReadonlyArray<"deriveBits" | "deriveKey">): Promise<CryptoKeyPair>;
-    generateKey(algorithm: RsaHashedKeyGenParams | EcKeyGenParams, extractable: boolean, keyUsages: ReadonlyArray<KeyUsage>): Promise<CryptoKeyPair>;
-    generateKey(algorithm: AesKeyGenParams | HmacKeyGenParams | Pbkdf2Params, extractable: boolean, keyUsages: ReadonlyArray<KeyUsage>): Promise<CryptoKey>;
-    generateKey(algorithm: AlgorithmIdentifier, extractable: boolean, keyUsages: KeyUsage[]): Promise<CryptoKeyPair | CryptoKey>;
+    generateKey(algorithm: "Ed25519" | { name: "Ed25519" }, extractable: boolean, keyUsages: ReadonlyArray<"sign" | "verify">): Promise<CryptoKeyPair & not { then(): any }>;
+    generateKey(algorithm: "X25519" | { name: "X25519" }, extractable: boolean, keyUsages: ReadonlyArray<"deriveBits" | "deriveKey">): Promise<CryptoKeyPair & not { then(): any }>;
+    generateKey(algorithm: RsaHashedKeyGenParams | EcKeyGenParams, extractable: boolean, keyUsages: ReadonlyArray<KeyUsage>): Promise<CryptoKeyPair & not { then(): any }>;
+    generateKey(algorithm: AesKeyGenParams | HmacKeyGenParams | Pbkdf2Params, extractable: boolean, keyUsages: ReadonlyArray<KeyUsage>): Promise<CryptoKey & not { then(): any }>;
+    generateKey(algorithm: AlgorithmIdentifier, extractable: boolean, keyUsages: KeyUsage[]): Promise<(CryptoKeyPair | CryptoKey) & not { then(): any }>;
     /**
      * The **`importKey()`** method of the SubtleCrypto interface imports a key: that is, it takes as input a key in an external, portable format and gives you a CryptoKey object that you can use in the Web Crypto API.
      *
      * [MDN Reference](https://developer.mozilla.org/docs/Web/API/SubtleCrypto/importKey)
      */
-    importKey(format: "jwk", keyData: JsonWebKey, algorithm: AlgorithmIdentifier | RsaHashedImportParams | EcKeyImportParams | HmacImportParams | AesKeyAlgorithm, extractable: boolean, keyUsages: ReadonlyArray<KeyUsage>): Promise<CryptoKey>;
-    importKey(format: Exclude<KeyFormat, "jwk">, keyData: BufferSource, algorithm: AlgorithmIdentifier | RsaHashedImportParams | EcKeyImportParams | HmacImportParams | AesKeyAlgorithm, extractable: boolean, keyUsages: KeyUsage[]): Promise<CryptoKey>;
+    importKey(format: "jwk", keyData: JsonWebKey, algorithm: AlgorithmIdentifier | RsaHashedImportParams | EcKeyImportParams | HmacImportParams | AesKeyAlgorithm, extractable: boolean, keyUsages: ReadonlyArray<KeyUsage>): Promise<CryptoKey & not { then(): any }>;
+    importKey(format: Exclude<KeyFormat, "jwk">, keyData: BufferSource, algorithm: AlgorithmIdentifier | RsaHashedImportParams | EcKeyImportParams | HmacImportParams | AesKeyAlgorithm, extractable: boolean, keyUsages: KeyUsage[]): Promise<CryptoKey & not { then(): any }>;
     /**
      * The **`sign()`** method of the SubtleCrypto interface generates a digital signature.
      *
      * [MDN Reference](https://developer.mozilla.org/docs/Web/API/SubtleCrypto/sign)
      */
-    sign(algorithm: AlgorithmIdentifier | RsaPssParams | EcdsaParams, key: CryptoKey, data: BufferSource): Promise<ArrayBuffer>;
+    sign(algorithm: AlgorithmIdentifier | RsaPssParams | EcdsaParams, key: CryptoKey, data: BufferSource): Promise<ArrayBuffer & not { then(): any }>;
     /**
      * The **`unwrapKey()`** method of the SubtleCrypto interface "unwraps" a key. This means that it takes as its input a key that has been exported and then encrypted (also called "wrapped"). It decrypts the key and then imports it, returning a CryptoKey object that can be used in the Web Crypto API.
      *
      * [MDN Reference](https://developer.mozilla.org/docs/Web/API/SubtleCrypto/unwrapKey)
      */
-    unwrapKey(format: KeyFormat, wrappedKey: BufferSource, unwrappingKey: CryptoKey, unwrapAlgorithm: AlgorithmIdentifier | RsaOaepParams | AesCtrParams | AesCbcParams | AesGcmParams, unwrappedKeyAlgorithm: AlgorithmIdentifier | RsaHashedImportParams | EcKeyImportParams | HmacImportParams | AesKeyAlgorithm, extractable: boolean, keyUsages: KeyUsage[]): Promise<CryptoKey>;
+    unwrapKey(format: KeyFormat, wrappedKey: BufferSource, unwrappingKey: CryptoKey, unwrapAlgorithm: AlgorithmIdentifier | RsaOaepParams | AesCtrParams | AesCbcParams | AesGcmParams, unwrappedKeyAlgorithm: AlgorithmIdentifier | RsaHashedImportParams | EcKeyImportParams | HmacImportParams | AesKeyAlgorithm, extractable: boolean, keyUsages: KeyUsage[]): Promise<CryptoKey & not { then(): any }>;
     /**
      * The **`verify()`** method of the SubtleCrypto interface verifies a digital signature.
      *
      * [MDN Reference](https://developer.mozilla.org/docs/Web/API/SubtleCrypto/verify)
      */
-    verify(algorithm: AlgorithmIdentifier | RsaPssParams | EcdsaParams, key: CryptoKey, signature: BufferSource, data: BufferSource): Promise<boolean>;
+    verify(algorithm: AlgorithmIdentifier | RsaPssParams | EcdsaParams, key: CryptoKey, signature: BufferSource, data: BufferSource): Promise<boolean & not { then(): any }>;
     /**
      * The **`wrapKey()`** method of the SubtleCrypto interface "wraps" a key. This means that it exports the key in an external, portable format, then encrypts the exported key. Wrapping a key helps protect it in untrusted environments, such as inside an otherwise unprotected data store or in transmission over an unprotected network.
      *
      * [MDN Reference](https://developer.mozilla.org/docs/Web/API/SubtleCrypto/wrapKey)
      */
-    wrapKey(format: KeyFormat, key: CryptoKey, wrappingKey: CryptoKey, wrapAlgorithm: AlgorithmIdentifier | RsaOaepParams | AesCtrParams | AesCbcParams | AesGcmParams): Promise<ArrayBuffer>;
+    wrapKey(format: KeyFormat, key: CryptoKey, wrappingKey: CryptoKey, wrapAlgorithm: AlgorithmIdentifier | RsaOaepParams | AesCtrParams | AesCbcParams | AesGcmParams): Promise<ArrayBuffer & not { then(): any }>;
 }
 
 declare var SubtleCrypto: {
@@ -11081,7 +11081,7 @@ interface VideoDecoder extends EventTarget {
      *
      * [MDN Reference](https://developer.mozilla.org/docs/Web/API/VideoDecoder/flush)
      */
-    flush(): Promise<void>;
+    flush(): Promise<void & not { then(): any }>;
     /**
      * The **`reset()`** method of the VideoDecoder interface resets all states including configuration, control messages in the control message queue, and all pending callbacks.
      *
@@ -11102,7 +11102,7 @@ declare var VideoDecoder: {
      *
      * [MDN Reference](https://developer.mozilla.org/docs/Web/API/VideoDecoder/isConfigSupported_static)
      */
-    isConfigSupported(config: VideoDecoderConfig): Promise<VideoDecoderSupport>;
+    isConfigSupported(config: VideoDecoderConfig): Promise<VideoDecoderSupport & not { then(): any }>;
 };
 
 interface VideoEncoderEventMap {
@@ -11153,7 +11153,7 @@ interface VideoEncoder extends EventTarget {
      *
      * [MDN Reference](https://developer.mozilla.org/docs/Web/API/VideoEncoder/flush)
      */
-    flush(): Promise<void>;
+    flush(): Promise<void & not { then(): any }>;
     /**
      * The **`reset()`** method of the VideoEncoder interface synchronously cancels all pending encodes and callbacks, frees all underlying resources and sets the state to "unconfigured". After calling reset(), configure() must be called before resuming encode() calls.
      *
@@ -11174,7 +11174,7 @@ declare var VideoEncoder: {
      *
      * [MDN Reference](https://developer.mozilla.org/docs/Web/API/VideoEncoder/isConfigSupported_static)
      */
-    isConfigSupported(config: VideoEncoderConfig): Promise<VideoEncoderSupport>;
+    isConfigSupported(config: VideoEncoderConfig): Promise<VideoEncoderSupport & not { then(): any }>;
 };
 
 /**
@@ -11266,7 +11266,7 @@ interface VideoFrame {
      *
      * [MDN Reference](https://developer.mozilla.org/docs/Web/API/VideoFrame/copyTo)
      */
-    copyTo(destination: AllowSharedBufferSource, options?: VideoFrameCopyToOptions): Promise<PlaneLayout[]>;
+    copyTo(destination: AllowSharedBufferSource, options?: VideoFrameCopyToOptions): Promise<PlaneLayout[] & not { then(): any }>;
 }
 
 declare var VideoFrame: {
@@ -13884,7 +13884,7 @@ interface WebTransport {
      *
      * [MDN Reference](https://developer.mozilla.org/docs/Web/API/WebTransport/closed)
      */
-    readonly closed: Promise<WebTransportCloseInfo>;
+    readonly closed: Promise<WebTransportCloseInfo & not { then(): any }>;
     /**
      * The **`congestionControl`** read-only property of the WebTransport interface indicates the application's preference for either high throughput or low-latency when sending data.
      *
@@ -13915,7 +13915,7 @@ interface WebTransport {
      *
      * [MDN Reference](https://developer.mozilla.org/docs/Web/API/WebTransport/ready)
      */
-    readonly ready: Promise<void>;
+    readonly ready: Promise<void & not { then(): any }>;
     /**
      * The **`reliability`** read-only property of the WebTransport interface indicates whether the connection supports reliable transports only, or whether it also supports unreliable transports (such as UDP).
      *
@@ -13933,19 +13933,19 @@ interface WebTransport {
      *
      * [MDN Reference](https://developer.mozilla.org/docs/Web/API/WebTransport/createBidirectionalStream)
      */
-    createBidirectionalStream(options?: WebTransportSendStreamOptions): Promise<WebTransportBidirectionalStream>;
+    createBidirectionalStream(options?: WebTransportSendStreamOptions): Promise<WebTransportBidirectionalStream & not { then(): any }>;
     /**
      * The **`createUnidirectionalStream()`** method of the WebTransport interface asynchronously opens a unidirectional stream.
      *
      * [MDN Reference](https://developer.mozilla.org/docs/Web/API/WebTransport/createUnidirectionalStream)
      */
-    createUnidirectionalStream(options?: WebTransportSendStreamOptions): Promise<WritableStream>;
+    createUnidirectionalStream(options?: WebTransportSendStreamOptions): Promise<WritableStream & not { then(): any }>;
     /**
      * The **`getStats()`** method of the WebTransport interface asynchronously returns an object containing HTTP/3 connection statistics.
      *
      * [MDN Reference](https://developer.mozilla.org/docs/Web/API/WebTransport/getStats)
      */
-    getStats(): Promise<WebTransportConnectionStats>;
+    getStats(): Promise<WebTransportConnectionStats & not { then(): any }>;
 }
 
 declare var WebTransport: {
@@ -14073,7 +14073,7 @@ interface WebTransportReceiveStream extends ReadableStream {
      *
      * [MDN Reference](https://developer.mozilla.org/docs/Web/API/WebTransportReceiveStream/getStats)
      */
-    getStats(): Promise<WebTransportReceiveStreamStats>;
+    getStats(): Promise<WebTransportReceiveStreamStats & not { then(): any }>;
 }
 
 declare var WebTransportReceiveStream: {
@@ -14099,7 +14099,7 @@ interface WebTransportSendStream extends WritableStream {
      *
      * [MDN Reference](https://developer.mozilla.org/docs/Web/API/WebTransportSendStream/getStats)
      */
-    getStats(): Promise<WebTransportSendStreamStats>;
+    getStats(): Promise<WebTransportSendStreamStats & not { then(): any }>;
 }
 
 declare var WebTransportSendStream: {
@@ -14130,13 +14130,13 @@ interface WindowClient extends Client {
      *
      * [MDN Reference](https://developer.mozilla.org/docs/Web/API/WindowClient/focus)
      */
-    focus(): Promise<WindowClient>;
+    focus(): Promise<WindowClient & not { then(): any }>;
     /**
      * The **`navigate()`** method of the WindowClient interface loads a specified URL into a controlled client page then returns a Promise that resolves to the existing WindowClient.
      *
      * [MDN Reference](https://developer.mozilla.org/docs/Web/API/WindowClient/navigate)
      */
-    navigate(url: string | URL): Promise<WindowClient | null>;
+    navigate(url: string | URL): Promise<(WindowClient | null) & not { then(): any }>;
 }
 
 declare var WindowClient: {
@@ -14174,10 +14174,10 @@ interface WindowOrWorkerGlobalScope {
     /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/Window/clearTimeout) */
     clearTimeout(id: number | undefined): void;
     /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/Window/createImageBitmap) */
-    createImageBitmap(image: ImageBitmapSource, options?: ImageBitmapOptions): Promise<ImageBitmap>;
-    createImageBitmap(image: ImageBitmapSource, sx: number, sy: number, sw: number, sh: number, options?: ImageBitmapOptions): Promise<ImageBitmap>;
+    createImageBitmap(image: ImageBitmapSource, options?: ImageBitmapOptions): Promise<ImageBitmap & not { then(): any }>;
+    createImageBitmap(image: ImageBitmapSource, sx: number, sy: number, sw: number, sh: number, options?: ImageBitmapOptions): Promise<ImageBitmap & not { then(): any }>;
     /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/Window/fetch) */
-    fetch(input: RequestInfo | URL, init?: RequestInit): Promise<Response>;
+    fetch(input: RequestInfo | URL, init?: RequestInit): Promise<Response & not { then(): any }>;
     /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/Window/queueMicrotask) */
     queueMicrotask(callback: VoidFunction): void;
     /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/Window/reportError) */
@@ -14408,13 +14408,13 @@ interface WritableStream<W = any> {
      *
      * [MDN Reference](https://developer.mozilla.org/docs/Web/API/WritableStream/abort)
      */
-    abort(reason?: any): Promise<void>;
+    abort(reason?: any): Promise<void & not { then(): any }>;
     /**
      * The **`close()`** method of the WritableStream interface closes the associated stream. All chunks written before this method is called are sent before the returned promise is fulfilled.
      *
      * [MDN Reference](https://developer.mozilla.org/docs/Web/API/WritableStream/close)
      */
-    close(): Promise<void>;
+    close(): Promise<void & not { then(): any }>;
     /**
      * The **`getWriter()`** method of the WritableStream interface returns a new instance of WritableStreamDefaultWriter and locks the stream to that instance. While the stream is locked, no other writer can be acquired until this one is released.
      *
@@ -14464,7 +14464,7 @@ interface WritableStreamDefaultWriter<W = any> {
      *
      * [MDN Reference](https://developer.mozilla.org/docs/Web/API/WritableStreamDefaultWriter/closed)
      */
-    readonly closed: Promise<void>;
+    readonly closed: Promise<void & not { then(): any }>;
     /**
      * The **`desiredSize`** read-only property of the WritableStreamDefaultWriter interface returns the desired size required to fill the stream's internal queue.
      *
@@ -14476,19 +14476,19 @@ interface WritableStreamDefaultWriter<W = any> {
      *
      * [MDN Reference](https://developer.mozilla.org/docs/Web/API/WritableStreamDefaultWriter/ready)
      */
-    readonly ready: Promise<void>;
+    readonly ready: Promise<void & not { then(): any }>;
     /**
      * The **`abort()`** method of the WritableStreamDefaultWriter interface aborts the stream, signaling that the producer can no longer successfully write to the stream and it is to be immediately moved to an error state, with any queued writes discarded.
      *
      * [MDN Reference](https://developer.mozilla.org/docs/Web/API/WritableStreamDefaultWriter/abort)
      */
-    abort(reason?: any): Promise<void>;
+    abort(reason?: any): Promise<void & not { then(): any }>;
     /**
      * The **`close()`** method of the WritableStreamDefaultWriter interface closes the associated writable stream.
      *
      * [MDN Reference](https://developer.mozilla.org/docs/Web/API/WritableStreamDefaultWriter/close)
      */
-    close(): Promise<void>;
+    close(): Promise<void & not { then(): any }>;
     /**
      * The **`releaseLock()`** method of the WritableStreamDefaultWriter interface releases the writer's lock on the corresponding stream. After the lock is released, the writer is no longer active. If the associated stream is errored when the lock is released, the writer will appear errored in the same way from now on; otherwise, the writer will appear closed.
      *
@@ -14500,7 +14500,7 @@ interface WritableStreamDefaultWriter<W = any> {
      *
      * [MDN Reference](https://developer.mozilla.org/docs/Web/API/WritableStreamDefaultWriter/write)
      */
-    write(chunk: W): Promise<void>;
+    write(chunk: W): Promise<void & not { then(): any }>;
 }
 
 declare var WritableStreamDefaultWriter: {
@@ -15016,14 +15016,14 @@ declare namespace WebAssembly {
     type ValueType = keyof ValueTypeMap;
     var JSTag: Tag;
     /** [MDN Reference](https://developer.mozilla.org/docs/WebAssembly/Reference/JavaScript_interface/compile_static) */
-    function compile(bytes: AllowSharedBufferSource, options?: WebAssemblyCompileOptions): Promise<Module>;
+    function compile(bytes: AllowSharedBufferSource, options?: WebAssemblyCompileOptions): Promise<Module & not { then(): any }>;
     /** [MDN Reference](https://developer.mozilla.org/docs/WebAssembly/Reference/JavaScript_interface/compileStreaming_static) */
-    function compileStreaming(source: Response | PromiseLike<Response>, options?: WebAssemblyCompileOptions): Promise<Module>;
+    function compileStreaming(source: Response | PromiseLike<Response>, options?: WebAssemblyCompileOptions): Promise<Module & not { then(): any }>;
     /** [MDN Reference](https://developer.mozilla.org/docs/WebAssembly/Reference/JavaScript_interface/instantiate_static) */
-    function instantiate(bytes: AllowSharedBufferSource, importObject?: Imports, options?: WebAssemblyCompileOptions): Promise<WebAssemblyInstantiatedSource>;
-    function instantiate(moduleObject: Module, importObject?: Imports): Promise<Instance>;
+    function instantiate(bytes: AllowSharedBufferSource, importObject?: Imports, options?: WebAssemblyCompileOptions): Promise<WebAssemblyInstantiatedSource & not { then(): any }>;
+    function instantiate(moduleObject: Module, importObject?: Imports): Promise<Instance & not { then(): any }>;
     /** [MDN Reference](https://developer.mozilla.org/docs/WebAssembly/Reference/JavaScript_interface/instantiateStreaming_static) */
-    function instantiateStreaming(source: Response | PromiseLike<Response>, importObject?: Imports, options?: WebAssemblyCompileOptions): Promise<WebAssemblyInstantiatedSource>;
+    function instantiateStreaming(source: Response | PromiseLike<Response>, importObject?: Imports, options?: WebAssemblyCompileOptions): Promise<WebAssemblyInstantiatedSource & not { then(): any }>;
     /** [MDN Reference](https://developer.mozilla.org/docs/WebAssembly/Reference/JavaScript_interface/validate_static) */
     function validate(bytes: AllowSharedBufferSource, options?: WebAssemblyCompileOptions): boolean;
 }
@@ -15347,10 +15347,10 @@ declare function clearInterval(id: number | undefined): void;
 /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/Window/clearTimeout) */
 declare function clearTimeout(id: number | undefined): void;
 /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/Window/createImageBitmap) */
-declare function createImageBitmap(image: ImageBitmapSource, options?: ImageBitmapOptions): Promise<ImageBitmap>;
-declare function createImageBitmap(image: ImageBitmapSource, sx: number, sy: number, sw: number, sh: number, options?: ImageBitmapOptions): Promise<ImageBitmap>;
+declare function createImageBitmap(image: ImageBitmapSource, options?: ImageBitmapOptions): Promise<ImageBitmap & not { then(): any }>;
+declare function createImageBitmap(image: ImageBitmapSource, sx: number, sy: number, sw: number, sh: number, options?: ImageBitmapOptions): Promise<ImageBitmap & not { then(): any }>;
 /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/Window/fetch) */
-declare function fetch(input: RequestInfo | URL, init?: RequestInit): Promise<Response>;
+declare function fetch(input: RequestInfo | URL, init?: RequestInit): Promise<Response & not { then(): any }>;
 /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/Window/queueMicrotask) */
 declare function queueMicrotask(callback: VoidFunction): void;
 /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/Window/reportError) */
@@ -15611,7 +15611,7 @@ interface Cache {
      *
      * [MDN Reference](https://developer.mozilla.org/docs/Web/API/Cache/addAll)
      */
-    addAll(requests: Iterable<RequestInfo>): Promise<void>;
+    addAll(requests: Iterable<RequestInfo>): Promise<void & not { then(): any }>;
 }
 
 interface CanvasPath {
@@ -15630,13 +15630,13 @@ interface CookieStoreManager {
      *
      * [MDN Reference](https://developer.mozilla.org/docs/Web/API/CookieStoreManager/subscribe)
      */
-    subscribe(subscriptions: Iterable<CookieStoreGetOptions>): Promise<void>;
+    subscribe(subscriptions: Iterable<CookieStoreGetOptions>): Promise<void & not { then(): any }>;
     /**
      * The **`unsubscribe()`** method of the CookieStoreManager interface stops the ServiceWorkerRegistration from receiving previously subscribed events.
      *
      * [MDN Reference](https://developer.mozilla.org/docs/Web/API/CookieStoreManager/unsubscribe)
      */
-    unsubscribe(subscriptions: Iterable<CookieStoreGetOptions>): Promise<void>;
+    unsubscribe(subscriptions: Iterable<CookieStoreGetOptions>): Promise<void & not { then(): any }>;
 }
 
 interface DOMStringList {
@@ -15787,30 +15787,30 @@ interface SubtleCrypto {
      *
      * [MDN Reference](https://developer.mozilla.org/docs/Web/API/SubtleCrypto/deriveKey)
      */
-    deriveKey(algorithm: AlgorithmIdentifier | EcdhKeyDeriveParams | HkdfParams | Pbkdf2Params, baseKey: CryptoKey, derivedKeyType: AlgorithmIdentifier | AesDerivedKeyParams | HmacImportParams | HkdfParams | Pbkdf2Params, extractable: boolean, keyUsages: Iterable<KeyUsage>): Promise<CryptoKey>;
+    deriveKey(algorithm: AlgorithmIdentifier | EcdhKeyDeriveParams | HkdfParams | Pbkdf2Params, baseKey: CryptoKey, derivedKeyType: AlgorithmIdentifier | AesDerivedKeyParams | HmacImportParams | HkdfParams | Pbkdf2Params, extractable: boolean, keyUsages: Iterable<KeyUsage>): Promise<CryptoKey & not { then(): any }>;
     /**
      * The **`generateKey()`** method of the SubtleCrypto interface is used to generate a new key (for symmetric algorithms) or key pair (for public-key algorithms).
      *
      * [MDN Reference](https://developer.mozilla.org/docs/Web/API/SubtleCrypto/generateKey)
      */
-    generateKey(algorithm: "Ed25519" | { name: "Ed25519" }, extractable: boolean, keyUsages: ReadonlyArray<"sign" | "verify">): Promise<CryptoKeyPair>;
-    generateKey(algorithm: "X25519" | { name: "X25519" }, extractable: boolean, keyUsages: ReadonlyArray<"deriveBits" | "deriveKey">): Promise<CryptoKeyPair>;
-    generateKey(algorithm: RsaHashedKeyGenParams | EcKeyGenParams, extractable: boolean, keyUsages: ReadonlyArray<KeyUsage>): Promise<CryptoKeyPair>;
-    generateKey(algorithm: AesKeyGenParams | HmacKeyGenParams | Pbkdf2Params, extractable: boolean, keyUsages: ReadonlyArray<KeyUsage>): Promise<CryptoKey>;
-    generateKey(algorithm: AlgorithmIdentifier, extractable: boolean, keyUsages: Iterable<KeyUsage>): Promise<CryptoKeyPair | CryptoKey>;
+    generateKey(algorithm: "Ed25519" | { name: "Ed25519" }, extractable: boolean, keyUsages: ReadonlyArray<"sign" | "verify">): Promise<CryptoKeyPair & not { then(): any }>;
+    generateKey(algorithm: "X25519" | { name: "X25519" }, extractable: boolean, keyUsages: ReadonlyArray<"deriveBits" | "deriveKey">): Promise<CryptoKeyPair & not { then(): any }>;
+    generateKey(algorithm: RsaHashedKeyGenParams | EcKeyGenParams, extractable: boolean, keyUsages: ReadonlyArray<KeyUsage>): Promise<CryptoKeyPair & not { then(): any }>;
+    generateKey(algorithm: AesKeyGenParams | HmacKeyGenParams | Pbkdf2Params, extractable: boolean, keyUsages: ReadonlyArray<KeyUsage>): Promise<CryptoKey & not { then(): any }>;
+    generateKey(algorithm: AlgorithmIdentifier, extractable: boolean, keyUsages: Iterable<KeyUsage>): Promise<(CryptoKeyPair | CryptoKey) & not { then(): any }>;
     /**
      * The **`importKey()`** method of the SubtleCrypto interface imports a key: that is, it takes as input a key in an external, portable format and gives you a CryptoKey object that you can use in the Web Crypto API.
      *
      * [MDN Reference](https://developer.mozilla.org/docs/Web/API/SubtleCrypto/importKey)
      */
-    importKey(format: "jwk", keyData: JsonWebKey, algorithm: AlgorithmIdentifier | RsaHashedImportParams | EcKeyImportParams | HmacImportParams | AesKeyAlgorithm, extractable: boolean, keyUsages: ReadonlyArray<KeyUsage>): Promise<CryptoKey>;
-    importKey(format: Exclude<KeyFormat, "jwk">, keyData: BufferSource, algorithm: AlgorithmIdentifier | RsaHashedImportParams | EcKeyImportParams | HmacImportParams | AesKeyAlgorithm, extractable: boolean, keyUsages: Iterable<KeyUsage>): Promise<CryptoKey>;
+    importKey(format: "jwk", keyData: JsonWebKey, algorithm: AlgorithmIdentifier | RsaHashedImportParams | EcKeyImportParams | HmacImportParams | AesKeyAlgorithm, extractable: boolean, keyUsages: ReadonlyArray<KeyUsage>): Promise<CryptoKey & not { then(): any }>;
+    importKey(format: Exclude<KeyFormat, "jwk">, keyData: BufferSource, algorithm: AlgorithmIdentifier | RsaHashedImportParams | EcKeyImportParams | HmacImportParams | AesKeyAlgorithm, extractable: boolean, keyUsages: Iterable<KeyUsage>): Promise<CryptoKey & not { then(): any }>;
     /**
      * The **`unwrapKey()`** method of the SubtleCrypto interface "unwraps" a key. This means that it takes as its input a key that has been exported and then encrypted (also called "wrapped"). It decrypts the key and then imports it, returning a CryptoKey object that can be used in the Web Crypto API.
      *
      * [MDN Reference](https://developer.mozilla.org/docs/Web/API/SubtleCrypto/unwrapKey)
      */
-    unwrapKey(format: KeyFormat, wrappedKey: BufferSource, unwrappingKey: CryptoKey, unwrapAlgorithm: AlgorithmIdentifier | RsaOaepParams | AesCtrParams | AesCbcParams | AesGcmParams, unwrappedKeyAlgorithm: AlgorithmIdentifier | RsaHashedImportParams | EcKeyImportParams | HmacImportParams | AesKeyAlgorithm, extractable: boolean, keyUsages: Iterable<KeyUsage>): Promise<CryptoKey>;
+    unwrapKey(format: KeyFormat, wrappedKey: BufferSource, unwrappingKey: CryptoKey, unwrapAlgorithm: AlgorithmIdentifier | RsaOaepParams | AesCtrParams | AesCbcParams | AesGcmParams, unwrappedKeyAlgorithm: AlgorithmIdentifier | RsaHashedImportParams | EcKeyImportParams | HmacImportParams | AesKeyAlgorithm, extractable: boolean, keyUsages: Iterable<KeyUsage>): Promise<CryptoKey & not { then(): any }>;
 }
 
 interface URLSearchParamsIterator<T> extends IteratorObject<T, BuiltinIteratorReturn, unknown> {

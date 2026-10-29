@@ -1,0 +1,58 @@
+/packages/a/src/re_export.ts(2,33): error TS2344: Type 'B' does not satisfy the constraint 'not { then(): any; }'.
+
+
+==== /packages/a/tsconfig.json (0 errors) ====
+    {
+      "compilerOptions": {
+        "module": "nodenext",
+        "outDir": "dist",
+        "rootDir": "src",
+        "declaration": true,
+      },
+      "include": ["src/**/*.ts"]
+    }
+    
+==== /packages/a/src/re_export.ts (1 errors) ====
+    import type { B } from "package-b";
+    declare function foo(): Promise<B>
+                                    ~
+!!! error TS2344: Type 'B' does not satisfy the constraint 'not { then(): any; }'.
+    export const re = { foo };
+    
+==== /packages/a/src/index.ts (0 errors) ====
+    import { re } from "#re_export";
+    const { foo } = re;
+    export { foo };
+    
+    
+    
+==== /packages/b/package.json (0 errors) ====
+    {
+      "name": "package-b",
+      "type": "module",
+      "exports": {
+        ".": "./index.js"
+      }
+    }
+    
+==== /packages/b/index.js (0 errors) ====
+    export {};
+    
+==== /packages/b/index.d.ts (0 errors) ====
+    export interface B {
+    	b: "b";
+    }
+    
+==== /packages/a/package.json (0 errors) ====
+    {
+      "name": "package-a",
+      "type": "module",
+      "imports": {
+        "#re_export": "./src/re_export.ts"
+      },
+      "exports": {
+        ".": "./dist/index.js"
+      }
+    }
+    
+    

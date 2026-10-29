@@ -1,0 +1,262 @@
+//// [tests/cases/compiler/indexMappedTypeWithFilteredKeysWithNegation.ts] ////
+
+=== indexMappedTypeWithFilteredKeysWithNegation.ts ===
+// homomorphic - mapped type causes `keyof ExcludeKey` to not simplify, relater operates with full mapped type awareness
+type ExcludeKey<T, TKey> = {
+>ExcludeKey : ExcludeKey<T, TKey>
+
+    [K in keyof T as K extends TKey ? never : K]: T[K]
+};
+
+interface Test {
+    a: string;
+>a : string
+
+    b: number;
+>b : number
+
+    c: boolean;
+>c : boolean
+}
+
+declare const test: ExcludeKey<Test, "b">; 
+>test : ExcludeKey<Test, "b">
+
+declare var possibleKey: string & keyof Test & not "b";
+>possibleKey : "a" | "c"
+
+test[possibleKey];
+>test[possibleKey] : string | boolean
+>test : ExcludeKey<Test, "b">
+>possibleKey : "a" | "c"
+
+function f<T extends Test>(test: ExcludeKey<T, "b">, possibleKey: string & keyof T & not "b") {
+>f : <T extends Test>(test: ExcludeKey<T, "b">, possibleKey: string & keyof T & not "b") => void
+>test : ExcludeKey<T, "b">
+>possibleKey : string & keyof T & not "b"
+
+    test[possibleKey];
+>test[possibleKey] : ExcludeKey<T, "b">[string & keyof T & not "b"]
+>test : ExcludeKey<T, "b">
+>possibleKey : string & keyof T & not "b"
+}
+
+// non-homomorphic - mapped type declared with `keyof T & string` causes `keyof PathTuples` to simplify to `(keyof T & string) extends '_key' ? never : (keyof T & string)`
+// relater must operate without mapped type awareness
+// ultimate comparison is `keyof T & string & not '_key'` to `(keyof T & string) extends '_key' ? never : (keyof T & string)`
+type LocalExclude<T, U> = T & not U;
+>LocalExclude : LocalExclude<T, U>
+
+type ChildPaths<T> = [PathTuples<T>] extends [never] ? [] : PathTuples<T>;
+>ChildPaths : ChildPaths<T>
+
+type PathTuples<T> = T extends object
+>PathTuples : PathTuples<T>
+
+  ? {
+      [K in keyof T & string as K extends '_key' ? never : K]: [PathTuples<T[K]>] extends [never]
+        ? never
+        : readonly [K, ...ChildPaths<T[K]>];
+    }[LocalExclude<keyof T & string, '_key'>]
+  : [];
+
+type T1 = PathTuples<{ a: string; _key: string; b: { c: number } }>;
+>T1 : readonly ["a"] | readonly ["b", "c"]
+>a : string
+>_key : string
+>b : { c: number; }
+>c : number
+
+const t1: T1 = ['b', 'c'];
+>t1 : readonly ["a"] | readonly ["b", "c"]
+>['b', 'c'] : ["b", "c"]
+>'b' : "b"
+>'c' : "c"
+
+type S1<T> = { [K in keyof T & string as K extends '_key' ? never : K]: 1 }[LocalExclude<keyof T & string, '_key'>];
+>S1 : S1<T>
+
+type S2<T> = { [K in string & keyof T as K extends '_key' ? never : K]: 1 }[LocalExclude<string & keyof T, '_key'>];
+>S2 : S2<T>
+
+type ConditionalExclude<T, U> = T extends U ? never : T;
+>ConditionalExclude : ConditionalExclude<T, U>
+
+function exclude<T, U>(value: T & not U): ConditionalExclude<T, U> {
+>exclude : <T, U>(value: T & not U) => ConditionalExclude<T, U>
+>value : T & not U
+
+    return value;
+>value : T & not U
+}
+
+type Identity<T> = T;
+>Identity : T
+
+type AliasedExclude<T, U> = T extends U ? never : Identity<T>;
+>AliasedExclude : AliasedExclude<T, U>
+
+function aliasedExclude<T, U>(value: T & not U): AliasedExclude<T, U> {
+>aliasedExclude : <T, U>(value: T & not U) => AliasedExclude<T, U>
+>value : T & not U
+
+    return value;
+>value : T & not U
+}
+
+function mappedExclude<T, U>(value: keyof T & not U): keyof ExcludeKey<T, U> {
+>mappedExclude : <T, U>(value: keyof T & not U) => keyof ExcludeKey<T, U>
+>value : keyof T & not U
+
+    return value;
+>value : keyof T & not U
+}
+
+type AliasedExcludeKey<T, U> = {
+>AliasedExcludeKey : AliasedExcludeKey<T, U>
+
+    [K in keyof T as ConditionalExclude<K, U>]: T[K]
+};
+
+function aliasedMappedExclude<T, U>(value: keyof T & not U): keyof AliasedExcludeKey<T, U> {
+>aliasedMappedExclude : <T, U>(value: keyof T & not U) => keyof AliasedExcludeKey<T, U>
+>value : keyof T & not U
+
+    return value;
+>value : keyof T & not U
+}
+
+type Prefixed<T extends string> = T extends "skip" ? never : `prefix${T}`;
+>Prefixed : Prefixed<T>
+
+function prefixed<T extends string>(value: `prefix${T & not "skip"}`): Prefixed<T> {
+>prefixed : <T extends string>(value: `prefix${T & not "skip"}`) => Prefixed<T>
+>value : `prefix${T & not "skip"}`
+
+    return value;
+>value : `prefix${T & not "skip"}`
+}
+
+type WithSuffix<T extends string, S extends string> = T extends "skip" ? never : `prefix${T}:${S}`;
+>WithSuffix : WithSuffix<T, S>
+
+function withSuffix<T extends string, S extends string>(value: `prefix${T & not "skip"}:${S}`): WithSuffix<T, S> {
+>withSuffix : <T extends string, S extends string>(value: `prefix${T & not "skip"}:${S}`) => WithSuffix<T, S>
+>value : `prefix${T & not "skip"}:${S}`
+
+    return value;
+>value : `prefix${T & not "skip"}:${S}`
+}
+
+type Cased<T extends string> = Uppercase<`prefix${Lowercase<T>}`>;
+>Cased : `PREFIX${Uppercase<Lowercase<T>>}`
+
+type FilteredCased<T extends string> = T extends "skip" ? never : Cased<T>;
+>FilteredCased : FilteredCased<T>
+
+function cased<T extends string>(value: Cased<T & not "skip">): FilteredCased<T> {
+>cased : <T extends string>(value: Cased<T & not "skip">) => FilteredCased<T>
+>value : `PREFIX${Uppercase<Lowercase<T & not "skip">>}`
+
+    return value;
+>value : `PREFIX${Uppercase<Lowercase<T & not "skip">>}`
+}
+
+type Alternatives<T extends string> = T extends "skip" ? never : `left${T}` | `right${Uppercase<T>}`;
+>Alternatives : Alternatives<T>
+
+function alternatives<T extends string>(
+>alternatives : <T extends string>(value: `left${T & not "skip"}` | `right${Uppercase<T & not "skip">}`) => Alternatives<T>
+
+    value: `left${T & not "skip"}` | `right${Uppercase<T & not "skip">}`
+>value : `left${T & not "skip"}` | `right${Uppercase<T & not "skip">}`
+
+): Alternatives<T> {
+    return value;
+>value : `left${T & not "skip"}` | `right${Uppercase<T & not "skip">}`
+}
+
+type Branded<T> = T extends "skip" ? never : T & { brand: true };
+>Branded : Branded<T>
+>brand : true
+>true : true
+
+function branded<T>(value: T & not "skip" & { brand: true }): Branded<T> {
+>branded : <T>(value: T & not "skip" & { brand: true; }) => Branded<T>
+>value : T & not "skip" & { brand: true; }
+>brand : true
+>true : true
+
+    return value;
+>value : T & not "skip" & { brand: true; }
+}
+
+interface Values {
+    a: 1;
+>a : 1
+
+    b: 2;
+>b : 2
+
+    skip: 3;
+>skip : 3
+}
+
+type Lookup<T extends keyof Values> = T extends "skip" ? never : Values[T];
+>Lookup : Lookup<T>
+
+function lookup<T extends keyof Values>(value: Values[T & not "skip"]): Lookup<T> {
+>lookup : <T extends keyof Values>(value: Values[T & not "skip"]) => Lookup<T>
+>value : Values[T & not "skip"]
+
+    return value;
+>value : Values[T & not "skip"]
+}
+
+type PrefixedKeys<T> = {
+>PrefixedKeys : PrefixedKeys<T>
+
+    [K in keyof T & string as K extends "_key" ? never : `prefix${K}`]: T[K]
+};
+
+function prefixedKey<T>(value: `prefix${keyof T & string & not "_key"}`): keyof PrefixedKeys<T> {
+>prefixedKey : <T>(value: `prefix${keyof T & string & not "_key"}`) => keyof PrefixedKeys<T>
+>value : `prefix${keyof T & string & not "_key"}`
+
+    return value;
+>value : `prefix${keyof T & string & not "_key"}`
+}
+
+type FunctionResult<T> = T extends string ? never : () => T;
+>FunctionResult : FunctionResult<T>
+
+function falseFunction<T>(value: () => [T]): FunctionResult<[T]> {
+>falseFunction : <T>(value: () => [T]) => FunctionResult<[T]>
+>value : () => [T]
+
+    return value;
+>value : () => [T]
+}
+
+type TupleResult<T> = T extends string ? never : [T, T];
+>TupleResult : TupleResult<T>
+
+function falseTuple<T>(value: [[T], [T]]): TupleResult<[T]> {
+>falseTuple : <T>(value: [[T], [T]]) => TupleResult<[T]>
+>value : [[T], [T]]
+
+    return value;
+>value : [[T], [T]]
+}
+
+type Nested<T extends string> = T extends "skip" ? never : ConditionalExclude<`prefix${T}`, "prefixomit">;
+>Nested : Nested<T>
+
+function nested<T extends string>(value: ConditionalExclude<`prefix${T & not "skip"}`, "prefixomit">): Nested<T> {
+>nested : <T extends string>(value: ConditionalExclude<`prefix${T & not "skip"}`, "prefixomit">) => Nested<T>
+>value : ConditionalExclude<`prefix${T & not "skip"}`, "prefixomit">
+
+    return value;
+>value : ConditionalExclude<`prefix${T & not "skip"}`, "prefixomit">
+}
+

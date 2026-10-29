@@ -37,7 +37,7 @@ const syncFactory: SyncSequenceFactory = function* (){
 
 const asyncFactory: AsyncSequenceFactory = async function* (){
 >asyncFactory : AsyncSequenceFactory
->async function* (){  let name = "";  while(!name){    name = yield "What is your name?"  }  return `That's the end of the game, ${name}`} : () => AsyncGenerator<string, string, string>
+>async function* (){  let name = "";  while(!name){    name = yield "What is your name?"  }  return `That's the end of the game, ${name}`} : () => AsyncGenerator<"What is your name?" & not { then(): any; }, string & not { then(): any; }, string>
 
   let name = "";
 >name : string
@@ -83,7 +83,7 @@ const looserSyncFactory: SequenceFactory = function* (){
 
 const looserAsyncFactory: SequenceFactory = async function* (){
 >looserAsyncFactory : SequenceFactory
->async function* (){  let name = "";  while(!name){    name = yield "What is your name?"  }  return `That's the end of the game, ${name}`} : () => AsyncGenerator<string, string, string>
+>async function* (){  let name = "";  while(!name){    name = yield "What is your name?"  }  return `That's the end of the game, ${name}`} : () => AsyncGenerator<"What is your name?" & not { then(): any; }, string & not { then(): any; }, string>
 
   let name = "";
 >name : string

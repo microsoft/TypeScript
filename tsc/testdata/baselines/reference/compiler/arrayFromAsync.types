@@ -3,7 +3,7 @@
 === arrayFromAsync.ts ===
 export { };
 async function * asyncGen (n) {
->asyncGen : (n: any) => AsyncGenerator<number, void, unknown>
+>asyncGen : (n: any) => AsyncGenerator<number & not { then(): any; }, void & not { then(): any; }, unknown>
 >n : any
 
     for (let i = 0; i < n; i++)
@@ -23,7 +23,7 @@ async function * asyncGen (n) {
   }
 
 function * genPromises (n) {
->genPromises : (n: any) => Generator<Promise<number>, void, unknown>
+>genPromises : (n: any) => Generator<Promise<number & not { then(): any; }>, void, unknown>
 >n : any
 
     for (let i = 0; i < n; i++) {
@@ -37,10 +37,10 @@ function * genPromises (n) {
 
         yield Promise.resolve(i * 2);
 >yield Promise.resolve(i * 2) : any
->Promise.resolve(i * 2) : Promise<number>
->Promise.resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T>(value: T | PromiseLike<T>): Promise<Awaited<T>>; }
+>Promise.resolve(i * 2) : Promise<number & not { then(): any; }>
+>Promise.resolve : { (): Promise<void & not { then(): any; }>; <T>(value: T): Promise<Awaited<T>>; <T>(value: T | PromiseLike<T>): Promise<Awaited<T>>; }
 >Promise : PromiseConstructor
->resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T>(value: T | PromiseLike<T>): Promise<Awaited<T>>; }
+>resolve : { (): Promise<void & not { then(): any; }>; <T>(value: T): Promise<Awaited<T>>; <T>(value: T | PromiseLike<T>): Promise<Awaited<T>>; }
 >i * 2 : number
 >i : number
 >2 : 2
@@ -48,39 +48,39 @@ function * genPromises (n) {
 }
 
 const arrLike = {
->arrLike : { 0: Promise<number>; 1: Promise<number>; 2: Promise<number>; 3: Promise<number>; length: number; }
->{    0: Promise.resolve(0),    1: Promise.resolve(2),    2: Promise.resolve(4),    3: Promise.resolve(6),    length: 4,} : { 0: Promise<number>; 1: Promise<number>; 2: Promise<number>; 3: Promise<number>; length: number; }
+>arrLike : { 0: Promise<number & not { then(): any; }>; 1: Promise<number & not { then(): any; }>; 2: Promise<number & not { then(): any; }>; 3: Promise<number & not { then(): any; }>; length: number; }
+>{    0: Promise.resolve(0),    1: Promise.resolve(2),    2: Promise.resolve(4),    3: Promise.resolve(6),    length: 4,} : { 0: Promise<number & not { then(): any; }>; 1: Promise<number & not { then(): any; }>; 2: Promise<number & not { then(): any; }>; 3: Promise<number & not { then(): any; }>; length: number; }
 
     0: Promise.resolve(0),
->0 : Promise<number>
->Promise.resolve(0) : Promise<number>
->Promise.resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T>(value: T | PromiseLike<T>): Promise<Awaited<T>>; }
+>0 : Promise<number & not { then(): any; }>
+>Promise.resolve(0) : Promise<number & not { then(): any; }>
+>Promise.resolve : { (): Promise<void & not { then(): any; }>; <T>(value: T): Promise<Awaited<T>>; <T>(value: T | PromiseLike<T>): Promise<Awaited<T>>; }
 >Promise : PromiseConstructor
->resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T>(value: T | PromiseLike<T>): Promise<Awaited<T>>; }
+>resolve : { (): Promise<void & not { then(): any; }>; <T>(value: T): Promise<Awaited<T>>; <T>(value: T | PromiseLike<T>): Promise<Awaited<T>>; }
 >0 : 0
 
     1: Promise.resolve(2),
->1 : Promise<number>
->Promise.resolve(2) : Promise<number>
->Promise.resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T>(value: T | PromiseLike<T>): Promise<Awaited<T>>; }
+>1 : Promise<number & not { then(): any; }>
+>Promise.resolve(2) : Promise<number & not { then(): any; }>
+>Promise.resolve : { (): Promise<void & not { then(): any; }>; <T>(value: T): Promise<Awaited<T>>; <T>(value: T | PromiseLike<T>): Promise<Awaited<T>>; }
 >Promise : PromiseConstructor
->resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T>(value: T | PromiseLike<T>): Promise<Awaited<T>>; }
+>resolve : { (): Promise<void & not { then(): any; }>; <T>(value: T): Promise<Awaited<T>>; <T>(value: T | PromiseLike<T>): Promise<Awaited<T>>; }
 >2 : 2
 
     2: Promise.resolve(4),
->2 : Promise<number>
->Promise.resolve(4) : Promise<number>
->Promise.resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T>(value: T | PromiseLike<T>): Promise<Awaited<T>>; }
+>2 : Promise<number & not { then(): any; }>
+>Promise.resolve(4) : Promise<number & not { then(): any; }>
+>Promise.resolve : { (): Promise<void & not { then(): any; }>; <T>(value: T): Promise<Awaited<T>>; <T>(value: T | PromiseLike<T>): Promise<Awaited<T>>; }
 >Promise : PromiseConstructor
->resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T>(value: T | PromiseLike<T>): Promise<Awaited<T>>; }
+>resolve : { (): Promise<void & not { then(): any; }>; <T>(value: T): Promise<Awaited<T>>; <T>(value: T | PromiseLike<T>): Promise<Awaited<T>>; }
 >4 : 4
 
     3: Promise.resolve(6),
->3 : Promise<number>
->Promise.resolve(6) : Promise<number>
->Promise.resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T>(value: T | PromiseLike<T>): Promise<Awaited<T>>; }
+>3 : Promise<number & not { then(): any; }>
+>Promise.resolve(6) : Promise<number & not { then(): any; }>
+>Promise.resolve : { (): Promise<void & not { then(): any; }>; <T>(value: T): Promise<Awaited<T>>; <T>(value: T | PromiseLike<T>): Promise<Awaited<T>>; }
 >Promise : PromiseConstructor
->resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T>(value: T | PromiseLike<T>): Promise<Awaited<T>>; }
+>resolve : { (): Promise<void & not { then(): any; }>; <T>(value: T): Promise<Awaited<T>>; <T>(value: T | PromiseLike<T>): Promise<Awaited<T>>; }
 >6 : 6
 
     length: 4,
@@ -93,9 +93,9 @@ const arr : number[] = [];
 >[] : undefined[]
 
 for await (const v of asyncGen(4)) {
->v : number
->asyncGen(4) : AsyncGenerator<number, void, unknown>
->asyncGen : (n: any) => AsyncGenerator<number, void, unknown>
+>v : number & not { then(): any; }
+>asyncGen(4) : AsyncGenerator<number & not { then(): any; }, void & not { then(): any; }, unknown>
+>asyncGen : (n: any) => AsyncGenerator<number & not { then(): any; }, void & not { then(): any; }, unknown>
 >4 : 4
 
   arr.push(v);
@@ -103,147 +103,147 @@ for await (const v of asyncGen(4)) {
 >arr.push : (...items: number[]) => number
 >arr : number[]
 >push : (...items: number[]) => number
->v : number
+>v : number & not { then(): any; }
 }
 
 const sameArr1 = await Array.fromAsync(arrLike);
->sameArr1 : number[]
->await Array.fromAsync(arrLike) : number[]
->Array.fromAsync(arrLike) : Promise<number[]>
->Array.fromAsync : { <T>(iterableOrArrayLike: AsyncIterable<T> | Iterable<T | PromiseLike<T>> | ArrayLike<T | PromiseLike<T>>): Promise<T[]>; <T, U>(iterableOrArrayLike: AsyncIterable<T> | Iterable<T> | ArrayLike<T>, mapFn: (value: Awaited<T>, index: number) => U, thisArg?: any): Promise<Awaited<U>[]>; }
+>sameArr1 : (number & not { then(): any; })[] & not { then(): any; } & not { then(): any; }
+>await Array.fromAsync(arrLike) : (number & not { then(): any; })[] & not { then(): any; } & not { then(): any; }
+>Array.fromAsync(arrLike) : Promise<(number & not { then(): any; })[] & not { then(): any; }>
+>Array.fromAsync : { <T>(iterableOrArrayLike: AsyncIterable<T> | Iterable<T | PromiseLike<T>> | ArrayLike<T | PromiseLike<T>>): Promise<T[] & not { then(): any; }>; <T, U>(iterableOrArrayLike: AsyncIterable<T> | Iterable<T> | ArrayLike<T>, mapFn: (value: Awaited<T>, index: number) => U, thisArg?: any): Promise<Awaited<U>[] & not { then(): any; }>; }
 >Array : ArrayConstructor
->fromAsync : { <T>(iterableOrArrayLike: AsyncIterable<T> | Iterable<T | PromiseLike<T>> | ArrayLike<T | PromiseLike<T>>): Promise<T[]>; <T, U>(iterableOrArrayLike: AsyncIterable<T> | Iterable<T> | ArrayLike<T>, mapFn: (value: Awaited<T>, index: number) => U, thisArg?: any): Promise<Awaited<U>[]>; }
->arrLike : { 0: Promise<number>; 1: Promise<number>; 2: Promise<number>; 3: Promise<number>; length: number; }
+>fromAsync : { <T>(iterableOrArrayLike: AsyncIterable<T> | Iterable<T | PromiseLike<T>> | ArrayLike<T | PromiseLike<T>>): Promise<T[] & not { then(): any; }>; <T, U>(iterableOrArrayLike: AsyncIterable<T> | Iterable<T> | ArrayLike<T>, mapFn: (value: Awaited<T>, index: number) => U, thisArg?: any): Promise<Awaited<U>[] & not { then(): any; }>; }
+>arrLike : { 0: Promise<number & not { then(): any; }>; 1: Promise<number & not { then(): any; }>; 2: Promise<number & not { then(): any; }>; 3: Promise<number & not { then(): any; }>; length: number; }
 
 const sameArr2 = await Array.fromAsync([Promise.resolve(0), Promise.resolve(2), Promise.resolve(4), Promise.resolve(6)]);
->sameArr2 : number[]
->await Array.fromAsync([Promise.resolve(0), Promise.resolve(2), Promise.resolve(4), Promise.resolve(6)]) : number[]
->Array.fromAsync([Promise.resolve(0), Promise.resolve(2), Promise.resolve(4), Promise.resolve(6)]) : Promise<number[]>
->Array.fromAsync : { <T>(iterableOrArrayLike: AsyncIterable<T> | Iterable<T | PromiseLike<T>> | ArrayLike<T | PromiseLike<T>>): Promise<T[]>; <T, U>(iterableOrArrayLike: AsyncIterable<T> | Iterable<T> | ArrayLike<T>, mapFn: (value: Awaited<T>, index: number) => U, thisArg?: any): Promise<Awaited<U>[]>; }
+>sameArr2 : (number & not { then(): any; })[] & not { then(): any; } & not { then(): any; }
+>await Array.fromAsync([Promise.resolve(0), Promise.resolve(2), Promise.resolve(4), Promise.resolve(6)]) : (number & not { then(): any; })[] & not { then(): any; } & not { then(): any; }
+>Array.fromAsync([Promise.resolve(0), Promise.resolve(2), Promise.resolve(4), Promise.resolve(6)]) : Promise<(number & not { then(): any; })[] & not { then(): any; }>
+>Array.fromAsync : { <T>(iterableOrArrayLike: AsyncIterable<T> | Iterable<T | PromiseLike<T>> | ArrayLike<T | PromiseLike<T>>): Promise<T[] & not { then(): any; }>; <T, U>(iterableOrArrayLike: AsyncIterable<T> | Iterable<T> | ArrayLike<T>, mapFn: (value: Awaited<T>, index: number) => U, thisArg?: any): Promise<Awaited<U>[] & not { then(): any; }>; }
 >Array : ArrayConstructor
->fromAsync : { <T>(iterableOrArrayLike: AsyncIterable<T> | Iterable<T | PromiseLike<T>> | ArrayLike<T | PromiseLike<T>>): Promise<T[]>; <T, U>(iterableOrArrayLike: AsyncIterable<T> | Iterable<T> | ArrayLike<T>, mapFn: (value: Awaited<T>, index: number) => U, thisArg?: any): Promise<Awaited<U>[]>; }
->[Promise.resolve(0), Promise.resolve(2), Promise.resolve(4), Promise.resolve(6)] : Promise<number>[]
->Promise.resolve(0) : Promise<number>
->Promise.resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T>(value: T | PromiseLike<T>): Promise<Awaited<T>>; }
+>fromAsync : { <T>(iterableOrArrayLike: AsyncIterable<T> | Iterable<T | PromiseLike<T>> | ArrayLike<T | PromiseLike<T>>): Promise<T[] & not { then(): any; }>; <T, U>(iterableOrArrayLike: AsyncIterable<T> | Iterable<T> | ArrayLike<T>, mapFn: (value: Awaited<T>, index: number) => U, thisArg?: any): Promise<Awaited<U>[] & not { then(): any; }>; }
+>[Promise.resolve(0), Promise.resolve(2), Promise.resolve(4), Promise.resolve(6)] : Promise<number & not { then(): any; }>[]
+>Promise.resolve(0) : Promise<number & not { then(): any; }>
+>Promise.resolve : { (): Promise<void & not { then(): any; }>; <T>(value: T): Promise<Awaited<T>>; <T>(value: T | PromiseLike<T>): Promise<Awaited<T>>; }
 >Promise : PromiseConstructor
->resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T>(value: T | PromiseLike<T>): Promise<Awaited<T>>; }
+>resolve : { (): Promise<void & not { then(): any; }>; <T>(value: T): Promise<Awaited<T>>; <T>(value: T | PromiseLike<T>): Promise<Awaited<T>>; }
 >0 : 0
->Promise.resolve(2) : Promise<number>
->Promise.resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T>(value: T | PromiseLike<T>): Promise<Awaited<T>>; }
+>Promise.resolve(2) : Promise<number & not { then(): any; }>
+>Promise.resolve : { (): Promise<void & not { then(): any; }>; <T>(value: T): Promise<Awaited<T>>; <T>(value: T | PromiseLike<T>): Promise<Awaited<T>>; }
 >Promise : PromiseConstructor
->resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T>(value: T | PromiseLike<T>): Promise<Awaited<T>>; }
+>resolve : { (): Promise<void & not { then(): any; }>; <T>(value: T): Promise<Awaited<T>>; <T>(value: T | PromiseLike<T>): Promise<Awaited<T>>; }
 >2 : 2
->Promise.resolve(4) : Promise<number>
->Promise.resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T>(value: T | PromiseLike<T>): Promise<Awaited<T>>; }
+>Promise.resolve(4) : Promise<number & not { then(): any; }>
+>Promise.resolve : { (): Promise<void & not { then(): any; }>; <T>(value: T): Promise<Awaited<T>>; <T>(value: T | PromiseLike<T>): Promise<Awaited<T>>; }
 >Promise : PromiseConstructor
->resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T>(value: T | PromiseLike<T>): Promise<Awaited<T>>; }
+>resolve : { (): Promise<void & not { then(): any; }>; <T>(value: T): Promise<Awaited<T>>; <T>(value: T | PromiseLike<T>): Promise<Awaited<T>>; }
 >4 : 4
->Promise.resolve(6) : Promise<number>
->Promise.resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T>(value: T | PromiseLike<T>): Promise<Awaited<T>>; }
+>Promise.resolve(6) : Promise<number & not { then(): any; }>
+>Promise.resolve : { (): Promise<void & not { then(): any; }>; <T>(value: T): Promise<Awaited<T>>; <T>(value: T | PromiseLike<T>): Promise<Awaited<T>>; }
 >Promise : PromiseConstructor
->resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T>(value: T | PromiseLike<T>): Promise<Awaited<T>>; }
+>resolve : { (): Promise<void & not { then(): any; }>; <T>(value: T): Promise<Awaited<T>>; <T>(value: T | PromiseLike<T>): Promise<Awaited<T>>; }
 >6 : 6
 
 const sameArr3 = await Array.fromAsync(genPromises(4));
->sameArr3 : number[]
->await Array.fromAsync(genPromises(4)) : number[]
->Array.fromAsync(genPromises(4)) : Promise<number[]>
->Array.fromAsync : { <T>(iterableOrArrayLike: AsyncIterable<T> | Iterable<T | PromiseLike<T>> | ArrayLike<T | PromiseLike<T>>): Promise<T[]>; <T, U>(iterableOrArrayLike: AsyncIterable<T> | Iterable<T> | ArrayLike<T>, mapFn: (value: Awaited<T>, index: number) => U, thisArg?: any): Promise<Awaited<U>[]>; }
+>sameArr3 : (number & not { then(): any; })[] & not { then(): any; } & not { then(): any; }
+>await Array.fromAsync(genPromises(4)) : (number & not { then(): any; })[] & not { then(): any; } & not { then(): any; }
+>Array.fromAsync(genPromises(4)) : Promise<(number & not { then(): any; })[] & not { then(): any; }>
+>Array.fromAsync : { <T>(iterableOrArrayLike: AsyncIterable<T> | Iterable<T | PromiseLike<T>> | ArrayLike<T | PromiseLike<T>>): Promise<T[] & not { then(): any; }>; <T, U>(iterableOrArrayLike: AsyncIterable<T> | Iterable<T> | ArrayLike<T>, mapFn: (value: Awaited<T>, index: number) => U, thisArg?: any): Promise<Awaited<U>[] & not { then(): any; }>; }
 >Array : ArrayConstructor
->fromAsync : { <T>(iterableOrArrayLike: AsyncIterable<T> | Iterable<T | PromiseLike<T>> | ArrayLike<T | PromiseLike<T>>): Promise<T[]>; <T, U>(iterableOrArrayLike: AsyncIterable<T> | Iterable<T> | ArrayLike<T>, mapFn: (value: Awaited<T>, index: number) => U, thisArg?: any): Promise<Awaited<U>[]>; }
->genPromises(4) : Generator<Promise<number>, void, unknown>
->genPromises : (n: any) => Generator<Promise<number>, void, unknown>
+>fromAsync : { <T>(iterableOrArrayLike: AsyncIterable<T> | Iterable<T | PromiseLike<T>> | ArrayLike<T | PromiseLike<T>>): Promise<T[] & not { then(): any; }>; <T, U>(iterableOrArrayLike: AsyncIterable<T> | Iterable<T> | ArrayLike<T>, mapFn: (value: Awaited<T>, index: number) => U, thisArg?: any): Promise<Awaited<U>[] & not { then(): any; }>; }
+>genPromises(4) : Generator<Promise<number & not { then(): any; }>, void, unknown>
+>genPromises : (n: any) => Generator<Promise<number & not { then(): any; }>, void, unknown>
 >4 : 4
 
 const sameArr4 = await Array.fromAsync(asyncGen(4));
->sameArr4 : number[]
->await Array.fromAsync(asyncGen(4)) : number[]
->Array.fromAsync(asyncGen(4)) : Promise<number[]>
->Array.fromAsync : { <T>(iterableOrArrayLike: AsyncIterable<T> | Iterable<T | PromiseLike<T>> | ArrayLike<T | PromiseLike<T>>): Promise<T[]>; <T, U>(iterableOrArrayLike: AsyncIterable<T> | Iterable<T> | ArrayLike<T>, mapFn: (value: Awaited<T>, index: number) => U, thisArg?: any): Promise<Awaited<U>[]>; }
+>sameArr4 : (void & not { then(): any; })[] & not { then(): any; } & not { then(): any; }
+>await Array.fromAsync(asyncGen(4)) : (void & not { then(): any; })[] & not { then(): any; } & not { then(): any; }
+>Array.fromAsync(asyncGen(4)) : Promise<(void & not { then(): any; })[] & not { then(): any; }>
+>Array.fromAsync : { <T>(iterableOrArrayLike: AsyncIterable<T> | Iterable<T | PromiseLike<T>> | ArrayLike<T | PromiseLike<T>>): Promise<T[] & not { then(): any; }>; <T, U>(iterableOrArrayLike: AsyncIterable<T> | Iterable<T> | ArrayLike<T>, mapFn: (value: Awaited<T>, index: number) => U, thisArg?: any): Promise<Awaited<U>[] & not { then(): any; }>; }
 >Array : ArrayConstructor
->fromAsync : { <T>(iterableOrArrayLike: AsyncIterable<T> | Iterable<T | PromiseLike<T>> | ArrayLike<T | PromiseLike<T>>): Promise<T[]>; <T, U>(iterableOrArrayLike: AsyncIterable<T> | Iterable<T> | ArrayLike<T>, mapFn: (value: Awaited<T>, index: number) => U, thisArg?: any): Promise<Awaited<U>[]>; }
->asyncGen(4) : AsyncGenerator<number, void, unknown>
->asyncGen : (n: any) => AsyncGenerator<number, void, unknown>
+>fromAsync : { <T>(iterableOrArrayLike: AsyncIterable<T> | Iterable<T | PromiseLike<T>> | ArrayLike<T | PromiseLike<T>>): Promise<T[] & not { then(): any; }>; <T, U>(iterableOrArrayLike: AsyncIterable<T> | Iterable<T> | ArrayLike<T>, mapFn: (value: Awaited<T>, index: number) => U, thisArg?: any): Promise<Awaited<U>[] & not { then(): any; }>; }
+>asyncGen(4) : AsyncGenerator<number & not { then(): any; }, void & not { then(): any; }, unknown>
+>asyncGen : (n: any) => AsyncGenerator<number & not { then(): any; }, void & not { then(): any; }, unknown>
 >4 : 4
 
 function Data (n) {}
->Data : { (n: any): void; fromAsync: { <T>(iterableOrArrayLike: AsyncIterable<T> | Iterable<T | PromiseLike<T>> | ArrayLike<T | PromiseLike<T>>): Promise<T[]>; <T, U>(iterableOrArrayLike: AsyncIterable<T> | Iterable<T> | ArrayLike<T>, mapFn: (value: Awaited<T>, index: number) => U, thisArg?: any): Promise<Awaited<U>[]>; }; }
+>Data : { (n: any): void; fromAsync: { <T>(iterableOrArrayLike: AsyncIterable<T> | Iterable<T | PromiseLike<T>> | ArrayLike<T | PromiseLike<T>>): Promise<T[] & not { then(): any; }>; <T, U>(iterableOrArrayLike: AsyncIterable<T> | Iterable<T> | ArrayLike<T>, mapFn: (value: Awaited<T>, index: number) => U, thisArg?: any): Promise<Awaited<U>[] & not { then(): any; }>; }; }
 >n : any
 
 Data.fromAsync = Array.fromAsync;
->Data.fromAsync = Array.fromAsync : { <T>(iterableOrArrayLike: AsyncIterable<T> | Iterable<T | PromiseLike<T>> | ArrayLike<T | PromiseLike<T>>): Promise<T[]>; <T, U>(iterableOrArrayLike: AsyncIterable<T> | Iterable<T> | ArrayLike<T>, mapFn: (value: Awaited<T>, index: number) => U, thisArg?: any): Promise<Awaited<U>[]>; }
->Data.fromAsync : { <T>(iterableOrArrayLike: AsyncIterable<T> | Iterable<T | PromiseLike<T>> | ArrayLike<T | PromiseLike<T>>): Promise<T[]>; <T, U>(iterableOrArrayLike: AsyncIterable<T> | Iterable<T> | ArrayLike<T>, mapFn: (value: Awaited<T>, index: number) => U, thisArg?: any): Promise<Awaited<U>[]>; }
->Data : { (n: any): void; fromAsync: { <T>(iterableOrArrayLike: AsyncIterable<T> | Iterable<T | PromiseLike<T>> | ArrayLike<T | PromiseLike<T>>): Promise<T[]>; <T, U>(iterableOrArrayLike: AsyncIterable<T> | Iterable<T> | ArrayLike<T>, mapFn: (value: Awaited<T>, index: number) => U, thisArg?: any): Promise<Awaited<U>[]>; }; }
->fromAsync : { <T>(iterableOrArrayLike: AsyncIterable<T> | Iterable<T | PromiseLike<T>> | ArrayLike<T | PromiseLike<T>>): Promise<T[]>; <T, U>(iterableOrArrayLike: AsyncIterable<T> | Iterable<T> | ArrayLike<T>, mapFn: (value: Awaited<T>, index: number) => U, thisArg?: any): Promise<Awaited<U>[]>; }
->Array.fromAsync : { <T>(iterableOrArrayLike: AsyncIterable<T> | Iterable<T | PromiseLike<T>> | ArrayLike<T | PromiseLike<T>>): Promise<T[]>; <T, U>(iterableOrArrayLike: AsyncIterable<T> | Iterable<T> | ArrayLike<T>, mapFn: (value: Awaited<T>, index: number) => U, thisArg?: any): Promise<Awaited<U>[]>; }
+>Data.fromAsync = Array.fromAsync : { <T>(iterableOrArrayLike: AsyncIterable<T> | Iterable<T | PromiseLike<T>> | ArrayLike<T | PromiseLike<T>>): Promise<T[] & not { then(): any; }>; <T, U>(iterableOrArrayLike: AsyncIterable<T> | Iterable<T> | ArrayLike<T>, mapFn: (value: Awaited<T>, index: number) => U, thisArg?: any): Promise<Awaited<U>[] & not { then(): any; }>; }
+>Data.fromAsync : { <T>(iterableOrArrayLike: AsyncIterable<T> | Iterable<T | PromiseLike<T>> | ArrayLike<T | PromiseLike<T>>): Promise<T[] & not { then(): any; }>; <T, U>(iterableOrArrayLike: AsyncIterable<T> | Iterable<T> | ArrayLike<T>, mapFn: (value: Awaited<T>, index: number) => U, thisArg?: any): Promise<Awaited<U>[] & not { then(): any; }>; }
+>Data : { (n: any): void; fromAsync: { <T>(iterableOrArrayLike: AsyncIterable<T> | Iterable<T | PromiseLike<T>> | ArrayLike<T | PromiseLike<T>>): Promise<T[] & not { then(): any; }>; <T, U>(iterableOrArrayLike: AsyncIterable<T> | Iterable<T> | ArrayLike<T>, mapFn: (value: Awaited<T>, index: number) => U, thisArg?: any): Promise<Awaited<U>[] & not { then(): any; }>; }; }
+>fromAsync : { <T>(iterableOrArrayLike: AsyncIterable<T> | Iterable<T | PromiseLike<T>> | ArrayLike<T | PromiseLike<T>>): Promise<T[] & not { then(): any; }>; <T, U>(iterableOrArrayLike: AsyncIterable<T> | Iterable<T> | ArrayLike<T>, mapFn: (value: Awaited<T>, index: number) => U, thisArg?: any): Promise<Awaited<U>[] & not { then(): any; }>; }
+>Array.fromAsync : { <T>(iterableOrArrayLike: AsyncIterable<T> | Iterable<T | PromiseLike<T>> | ArrayLike<T | PromiseLike<T>>): Promise<T[] & not { then(): any; }>; <T, U>(iterableOrArrayLike: AsyncIterable<T> | Iterable<T> | ArrayLike<T>, mapFn: (value: Awaited<T>, index: number) => U, thisArg?: any): Promise<Awaited<U>[] & not { then(): any; }>; }
 >Array : ArrayConstructor
->fromAsync : { <T>(iterableOrArrayLike: AsyncIterable<T> | Iterable<T | PromiseLike<T>> | ArrayLike<T | PromiseLike<T>>): Promise<T[]>; <T, U>(iterableOrArrayLike: AsyncIterable<T> | Iterable<T> | ArrayLike<T>, mapFn: (value: Awaited<T>, index: number) => U, thisArg?: any): Promise<Awaited<U>[]>; }
+>fromAsync : { <T>(iterableOrArrayLike: AsyncIterable<T> | Iterable<T | PromiseLike<T>> | ArrayLike<T | PromiseLike<T>>): Promise<T[] & not { then(): any; }>; <T, U>(iterableOrArrayLike: AsyncIterable<T> | Iterable<T> | ArrayLike<T>, mapFn: (value: Awaited<T>, index: number) => U, thisArg?: any): Promise<Awaited<U>[] & not { then(): any; }>; }
 
 const sameArr5 = await Data.fromAsync(asyncGen(4));
->sameArr5 : number[]
->await Data.fromAsync(asyncGen(4)) : number[]
->Data.fromAsync(asyncGen(4)) : Promise<number[]>
->Data.fromAsync : { <T>(iterableOrArrayLike: AsyncIterable<T> | Iterable<T | PromiseLike<T>> | ArrayLike<T | PromiseLike<T>>): Promise<T[]>; <T, U>(iterableOrArrayLike: AsyncIterable<T> | Iterable<T> | ArrayLike<T>, mapFn: (value: Awaited<T>, index: number) => U, thisArg?: any): Promise<Awaited<U>[]>; }
->Data : { (n: any): void; fromAsync: { <T>(iterableOrArrayLike: AsyncIterable<T> | Iterable<T | PromiseLike<T>> | ArrayLike<T | PromiseLike<T>>): Promise<T[]>; <T, U>(iterableOrArrayLike: AsyncIterable<T> | Iterable<T> | ArrayLike<T>, mapFn: (value: Awaited<T>, index: number) => U, thisArg?: any): Promise<Awaited<U>[]>; }; }
->fromAsync : { <T>(iterableOrArrayLike: AsyncIterable<T> | Iterable<T | PromiseLike<T>> | ArrayLike<T | PromiseLike<T>>): Promise<T[]>; <T, U>(iterableOrArrayLike: AsyncIterable<T> | Iterable<T> | ArrayLike<T>, mapFn: (value: Awaited<T>, index: number) => U, thisArg?: any): Promise<Awaited<U>[]>; }
->asyncGen(4) : AsyncGenerator<number, void, unknown>
->asyncGen : (n: any) => AsyncGenerator<number, void, unknown>
+>sameArr5 : (void & not { then(): any; })[] & not { then(): any; } & not { then(): any; }
+>await Data.fromAsync(asyncGen(4)) : (void & not { then(): any; })[] & not { then(): any; } & not { then(): any; }
+>Data.fromAsync(asyncGen(4)) : Promise<(void & not { then(): any; })[] & not { then(): any; }>
+>Data.fromAsync : { <T>(iterableOrArrayLike: AsyncIterable<T> | Iterable<T | PromiseLike<T>> | ArrayLike<T | PromiseLike<T>>): Promise<T[] & not { then(): any; }>; <T, U>(iterableOrArrayLike: AsyncIterable<T> | Iterable<T> | ArrayLike<T>, mapFn: (value: Awaited<T>, index: number) => U, thisArg?: any): Promise<Awaited<U>[] & not { then(): any; }>; }
+>Data : { (n: any): void; fromAsync: { <T>(iterableOrArrayLike: AsyncIterable<T> | Iterable<T | PromiseLike<T>> | ArrayLike<T | PromiseLike<T>>): Promise<T[] & not { then(): any; }>; <T, U>(iterableOrArrayLike: AsyncIterable<T> | Iterable<T> | ArrayLike<T>, mapFn: (value: Awaited<T>, index: number) => U, thisArg?: any): Promise<Awaited<U>[] & not { then(): any; }>; }; }
+>fromAsync : { <T>(iterableOrArrayLike: AsyncIterable<T> | Iterable<T | PromiseLike<T>> | ArrayLike<T | PromiseLike<T>>): Promise<T[] & not { then(): any; }>; <T, U>(iterableOrArrayLike: AsyncIterable<T> | Iterable<T> | ArrayLike<T>, mapFn: (value: Awaited<T>, index: number) => U, thisArg?: any): Promise<Awaited<U>[] & not { then(): any; }>; }
+>asyncGen(4) : AsyncGenerator<number & not { then(): any; }, void & not { then(): any; }, unknown>
+>asyncGen : (n: any) => AsyncGenerator<number & not { then(): any; }, void & not { then(): any; }, unknown>
 >4 : 4
 
 const mapArr1 = await Array.fromAsync(asyncGen(4), v => v ** 2);
->mapArr1 : number[]
->await Array.fromAsync(asyncGen(4), v => v ** 2) : number[]
->Array.fromAsync(asyncGen(4), v => v ** 2) : Promise<number[]>
->Array.fromAsync : { <T>(iterableOrArrayLike: AsyncIterable<T> | Iterable<T | PromiseLike<T>> | ArrayLike<T | PromiseLike<T>>): Promise<T[]>; <T, U>(iterableOrArrayLike: AsyncIterable<T> | Iterable<T> | ArrayLike<T>, mapFn: (value: Awaited<T>, index: number) => U, thisArg?: any): Promise<Awaited<U>[]>; }
+>mapArr1 : (not { then(): any; })[] & not { then(): any; } & not { then(): any; }
+>await Array.fromAsync(asyncGen(4), v => v ** 2) : (not { then(): any; })[] & not { then(): any; } & not { then(): any; }
+>Array.fromAsync(asyncGen(4), v => v ** 2) : Promise<(not { then(): any; })[] & not { then(): any; }>
+>Array.fromAsync : { <T>(iterableOrArrayLike: AsyncIterable<T> | Iterable<T | PromiseLike<T>> | ArrayLike<T | PromiseLike<T>>): Promise<T[] & not { then(): any; }>; <T, U>(iterableOrArrayLike: AsyncIterable<T> | Iterable<T> | ArrayLike<T>, mapFn: (value: Awaited<T>, index: number) => U, thisArg?: any): Promise<Awaited<U>[] & not { then(): any; }>; }
 >Array : ArrayConstructor
->fromAsync : { <T>(iterableOrArrayLike: AsyncIterable<T> | Iterable<T | PromiseLike<T>> | ArrayLike<T | PromiseLike<T>>): Promise<T[]>; <T, U>(iterableOrArrayLike: AsyncIterable<T> | Iterable<T> | ArrayLike<T>, mapFn: (value: Awaited<T>, index: number) => U, thisArg?: any): Promise<Awaited<U>[]>; }
->asyncGen(4) : AsyncGenerator<number, void, unknown>
->asyncGen : (n: any) => AsyncGenerator<number, void, unknown>
+>fromAsync : { <T>(iterableOrArrayLike: AsyncIterable<T> | Iterable<T | PromiseLike<T>> | ArrayLike<T | PromiseLike<T>>): Promise<T[] & not { then(): any; }>; <T, U>(iterableOrArrayLike: AsyncIterable<T> | Iterable<T> | ArrayLike<T>, mapFn: (value: Awaited<T>, index: number) => U, thisArg?: any): Promise<Awaited<U>[] & not { then(): any; }>; }
+>asyncGen(4) : AsyncGenerator<number & not { then(): any; }, void & not { then(): any; }, unknown>
+>asyncGen : (n: any) => AsyncGenerator<number & not { then(): any; }, void & not { then(): any; }, unknown>
 >4 : 4
->v => v ** 2 : (v: number) => number
->v : number
+>v => v ** 2 : (v: void & not { then(): any; } & not { then(): any; }) => number
+>v : void & not { then(): any; } & not { then(): any; }
 >v ** 2 : number
->v : number
+>v : void & not { then(): any; } & not { then(): any; }
 >2 : 2
 
 const mapArr2 = await Array.fromAsync([0,2,4,6], v => Promise.resolve(v ** 2));
->mapArr2 : number[]
->await Array.fromAsync([0,2,4,6], v => Promise.resolve(v ** 2)) : number[]
->Array.fromAsync([0,2,4,6], v => Promise.resolve(v ** 2)) : Promise<number[]>
->Array.fromAsync : { <T>(iterableOrArrayLike: AsyncIterable<T> | Iterable<T | PromiseLike<T>> | ArrayLike<T | PromiseLike<T>>): Promise<T[]>; <T, U>(iterableOrArrayLike: AsyncIterable<T> | Iterable<T> | ArrayLike<T>, mapFn: (value: Awaited<T>, index: number) => U, thisArg?: any): Promise<Awaited<U>[]>; }
+>mapArr2 : (number & not { then(): any; } & not { then(): any; })[] & not { then(): any; } & not { then(): any; }
+>await Array.fromAsync([0,2,4,6], v => Promise.resolve(v ** 2)) : (number & not { then(): any; } & not { then(): any; })[] & not { then(): any; } & not { then(): any; }
+>Array.fromAsync([0,2,4,6], v => Promise.resolve(v ** 2)) : Promise<(number & not { then(): any; } & not { then(): any; })[] & not { then(): any; }>
+>Array.fromAsync : { <T>(iterableOrArrayLike: AsyncIterable<T> | Iterable<T | PromiseLike<T>> | ArrayLike<T | PromiseLike<T>>): Promise<T[] & not { then(): any; }>; <T, U>(iterableOrArrayLike: AsyncIterable<T> | Iterable<T> | ArrayLike<T>, mapFn: (value: Awaited<T>, index: number) => U, thisArg?: any): Promise<Awaited<U>[] & not { then(): any; }>; }
 >Array : ArrayConstructor
->fromAsync : { <T>(iterableOrArrayLike: AsyncIterable<T> | Iterable<T | PromiseLike<T>> | ArrayLike<T | PromiseLike<T>>): Promise<T[]>; <T, U>(iterableOrArrayLike: AsyncIterable<T> | Iterable<T> | ArrayLike<T>, mapFn: (value: Awaited<T>, index: number) => U, thisArg?: any): Promise<Awaited<U>[]>; }
+>fromAsync : { <T>(iterableOrArrayLike: AsyncIterable<T> | Iterable<T | PromiseLike<T>> | ArrayLike<T | PromiseLike<T>>): Promise<T[] & not { then(): any; }>; <T, U>(iterableOrArrayLike: AsyncIterable<T> | Iterable<T> | ArrayLike<T>, mapFn: (value: Awaited<T>, index: number) => U, thisArg?: any): Promise<Awaited<U>[] & not { then(): any; }>; }
 >[0,2,4,6] : number[]
 >0 : 0
 >2 : 2
 >4 : 4
 >6 : 6
->v => Promise.resolve(v ** 2) : (v: number) => Promise<number>
->v : number
->Promise.resolve(v ** 2) : Promise<number>
->Promise.resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T>(value: T | PromiseLike<T>): Promise<Awaited<T>>; }
+>v => Promise.resolve(v ** 2) : (v: number & not { then(): any; }) => Promise<number & not { then(): any; }>
+>v : number & not { then(): any; }
+>Promise.resolve(v ** 2) : Promise<number & not { then(): any; }>
+>Promise.resolve : { (): Promise<void & not { then(): any; }>; <T>(value: T): Promise<Awaited<T>>; <T>(value: T | PromiseLike<T>): Promise<Awaited<T>>; }
 >Promise : PromiseConstructor
->resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T>(value: T | PromiseLike<T>): Promise<Awaited<T>>; }
+>resolve : { (): Promise<void & not { then(): any; }>; <T>(value: T): Promise<Awaited<T>>; <T>(value: T | PromiseLike<T>): Promise<Awaited<T>>; }
 >v ** 2 : number
->v : number
+>v : number & not { then(): any; }
 >2 : 2
 
 const mapArr3 = await Array.fromAsync([0,2,4,6], v => v ** 2);
->mapArr3 : number[]
->await Array.fromAsync([0,2,4,6], v => v ** 2) : number[]
->Array.fromAsync([0,2,4,6], v => v ** 2) : Promise<number[]>
->Array.fromAsync : { <T>(iterableOrArrayLike: AsyncIterable<T> | Iterable<T | PromiseLike<T>> | ArrayLike<T | PromiseLike<T>>): Promise<T[]>; <T, U>(iterableOrArrayLike: AsyncIterable<T> | Iterable<T> | ArrayLike<T>, mapFn: (value: Awaited<T>, index: number) => U, thisArg?: any): Promise<Awaited<U>[]>; }
+>mapArr3 : (number & not { then(): any; })[] & not { then(): any; } & not { then(): any; }
+>await Array.fromAsync([0,2,4,6], v => v ** 2) : (number & not { then(): any; })[] & not { then(): any; } & not { then(): any; }
+>Array.fromAsync([0,2,4,6], v => v ** 2) : Promise<(number & not { then(): any; })[] & not { then(): any; }>
+>Array.fromAsync : { <T>(iterableOrArrayLike: AsyncIterable<T> | Iterable<T | PromiseLike<T>> | ArrayLike<T | PromiseLike<T>>): Promise<T[] & not { then(): any; }>; <T, U>(iterableOrArrayLike: AsyncIterable<T> | Iterable<T> | ArrayLike<T>, mapFn: (value: Awaited<T>, index: number) => U, thisArg?: any): Promise<Awaited<U>[] & not { then(): any; }>; }
 >Array : ArrayConstructor
->fromAsync : { <T>(iterableOrArrayLike: AsyncIterable<T> | Iterable<T | PromiseLike<T>> | ArrayLike<T | PromiseLike<T>>): Promise<T[]>; <T, U>(iterableOrArrayLike: AsyncIterable<T> | Iterable<T> | ArrayLike<T>, mapFn: (value: Awaited<T>, index: number) => U, thisArg?: any): Promise<Awaited<U>[]>; }
+>fromAsync : { <T>(iterableOrArrayLike: AsyncIterable<T> | Iterable<T | PromiseLike<T>> | ArrayLike<T | PromiseLike<T>>): Promise<T[] & not { then(): any; }>; <T, U>(iterableOrArrayLike: AsyncIterable<T> | Iterable<T> | ArrayLike<T>, mapFn: (value: Awaited<T>, index: number) => U, thisArg?: any): Promise<Awaited<U>[] & not { then(): any; }>; }
 >[0,2,4,6] : number[]
 >0 : 0
 >2 : 2
 >4 : 4
 >6 : 6
->v => v ** 2 : (v: number) => number
->v : number
+>v => v ** 2 : (v: number & not { then(): any; }) => number
+>v : number & not { then(): any; }
 >v ** 2 : number
->v : number
+>v : number & not { then(): any; }
 >2 : 2
 
 const err = new Error;
@@ -262,29 +262,29 @@ const badIterable = { [Symbol.iterator] () { throw err; } };
 
 // This returns a promise that will reject with `err`.
 const badArray = await Array.fromAsync(badIterable);
->badArray : unknown[]
->await Array.fromAsync(badIterable) : unknown[]
->Array.fromAsync(badIterable) : Promise<unknown[]>
->Array.fromAsync : { <T>(iterableOrArrayLike: AsyncIterable<T> | Iterable<T | PromiseLike<T>> | ArrayLike<T | PromiseLike<T>>): Promise<T[]>; <T, U>(iterableOrArrayLike: AsyncIterable<T> | Iterable<T> | ArrayLike<T>, mapFn: (value: Awaited<T>, index: number) => U, thisArg?: any): Promise<Awaited<U>[]>; }
+>badArray : unknown[] & not { then(): any; } & not { then(): any; }
+>await Array.fromAsync(badIterable) : unknown[] & not { then(): any; } & not { then(): any; }
+>Array.fromAsync(badIterable) : Promise<unknown[] & not { then(): any; }>
+>Array.fromAsync : { <T>(iterableOrArrayLike: AsyncIterable<T> | Iterable<T | PromiseLike<T>> | ArrayLike<T | PromiseLike<T>>): Promise<T[] & not { then(): any; }>; <T, U>(iterableOrArrayLike: AsyncIterable<T> | Iterable<T> | ArrayLike<T>, mapFn: (value: Awaited<T>, index: number) => U, thisArg?: any): Promise<Awaited<U>[] & not { then(): any; }>; }
 >Array : ArrayConstructor
->fromAsync : { <T>(iterableOrArrayLike: AsyncIterable<T> | Iterable<T | PromiseLike<T>> | ArrayLike<T | PromiseLike<T>>): Promise<T[]>; <T, U>(iterableOrArrayLike: AsyncIterable<T> | Iterable<T> | ArrayLike<T>, mapFn: (value: Awaited<T>, index: number) => U, thisArg?: any): Promise<Awaited<U>[]>; }
+>fromAsync : { <T>(iterableOrArrayLike: AsyncIterable<T> | Iterable<T | PromiseLike<T>> | ArrayLike<T | PromiseLike<T>>): Promise<T[] & not { then(): any; }>; <T, U>(iterableOrArrayLike: AsyncIterable<T> | Iterable<T> | ArrayLike<T>, mapFn: (value: Awaited<T>, index: number) => U, thisArg?: any): Promise<Awaited<U>[] & not { then(): any; }>; }
 >badIterable : { [Symbol.iterator](): never; }
 
 const withIndexResult = await Array.fromAsync(["a", "b"], (str, index) => ({ index, str }));
->withIndexResult : { index: number; str: string; }[]
->await Array.fromAsync(["a", "b"], (str, index) => ({ index, str })) : { index: number; str: string; }[]
->Array.fromAsync(["a", "b"], (str, index) => ({ index, str })) : Promise<{ index: number; str: string; }[]>
->Array.fromAsync : { <T>(iterableOrArrayLike: AsyncIterable<T> | Iterable<T | PromiseLike<T>> | ArrayLike<T | PromiseLike<T>>): Promise<T[]>; <T, U>(iterableOrArrayLike: AsyncIterable<T> | Iterable<T> | ArrayLike<T>, mapFn: (value: Awaited<T>, index: number) => U, thisArg?: any): Promise<Awaited<U>[]>; }
+>withIndexResult : ({ index: number; str: string & not { then(): any; }; } & not { then(): any; })[] & not { then(): any; } & not { then(): any; }
+>await Array.fromAsync(["a", "b"], (str, index) => ({ index, str })) : ({ index: number; str: string & not { then(): any; }; } & not { then(): any; })[] & not { then(): any; } & not { then(): any; }
+>Array.fromAsync(["a", "b"], (str, index) => ({ index, str })) : Promise<({ index: number; str: string & not { then(): any; }; } & not { then(): any; })[] & not { then(): any; }>
+>Array.fromAsync : { <T>(iterableOrArrayLike: AsyncIterable<T> | Iterable<T | PromiseLike<T>> | ArrayLike<T | PromiseLike<T>>): Promise<T[] & not { then(): any; }>; <T, U>(iterableOrArrayLike: AsyncIterable<T> | Iterable<T> | ArrayLike<T>, mapFn: (value: Awaited<T>, index: number) => U, thisArg?: any): Promise<Awaited<U>[] & not { then(): any; }>; }
 >Array : ArrayConstructor
->fromAsync : { <T>(iterableOrArrayLike: AsyncIterable<T> | Iterable<T | PromiseLike<T>> | ArrayLike<T | PromiseLike<T>>): Promise<T[]>; <T, U>(iterableOrArrayLike: AsyncIterable<T> | Iterable<T> | ArrayLike<T>, mapFn: (value: Awaited<T>, index: number) => U, thisArg?: any): Promise<Awaited<U>[]>; }
+>fromAsync : { <T>(iterableOrArrayLike: AsyncIterable<T> | Iterable<T | PromiseLike<T>> | ArrayLike<T | PromiseLike<T>>): Promise<T[] & not { then(): any; }>; <T, U>(iterableOrArrayLike: AsyncIterable<T> | Iterable<T> | ArrayLike<T>, mapFn: (value: Awaited<T>, index: number) => U, thisArg?: any): Promise<Awaited<U>[] & not { then(): any; }>; }
 >["a", "b"] : string[]
 >"a" : "a"
 >"b" : "b"
->(str, index) => ({ index, str }) : (str: string, index: number) => { index: number; str: string; }
->str : string
+>(str, index) => ({ index, str }) : (str: string & not { then(): any; }, index: number) => { index: number; str: string & not { then(): any; }; }
+>str : string & not { then(): any; }
 >index : number
->({ index, str }) : { index: number; str: string; }
->{ index, str } : { index: number; str: string; }
+>({ index, str }) : { index: number; str: string & not { then(): any; }; }
+>{ index, str } : { index: number; str: string & not { then(): any; }; }
 >index : number
->str : string
+>str : string & not { then(): any; }
 

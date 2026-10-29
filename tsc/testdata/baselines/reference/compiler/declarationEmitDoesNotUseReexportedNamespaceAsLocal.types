@@ -6,10 +6,10 @@ export function a() {}
 
 === index.ts ===
 export const x = add(import("./sub"));
->x : typeof import("./sub")
->add(import("./sub")) : typeof import("./sub")
+>x : typeof import("./sub") & not { then(): any; }
+>add(import("./sub")) : typeof import("./sub") & not { then(): any; }
 >add : <T>(x: Promise<T>) => T
->import("./sub") : Promise<typeof import("./sub")>
+>import("./sub") : Promise<typeof import("./sub") & not { then(): any; }>
 >"./sub" : "./sub"
 
 export * as Q from "./sub";

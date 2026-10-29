@@ -20,7 +20,7 @@ class MssqlClient {
    *
    * @param {Object} - args
    * @param {String} - args.parentTable
-   * @returns {Promise<{upStatement/**/, downStatement}>}
+   * @returns {PromiseLike<{upStatement/**/, downStatement}>}
    */
   async relationCreate(args) {}
 }

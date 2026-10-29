@@ -1,0 +1,31 @@
+contextualReturnTypeOfIIFE.ts(1,22): error TS2344: Type '[one: number, two: string]' does not satisfy the constraint 'not { then(): any; }'.
+contextualReturnTypeOfIIFE.ts(5,7): error TS2322: Type 'Promise<not { then(): any; }>' is not assignable to type 'Promise<[one: number, two: string]>'.
+  Type 'not { then(): any; }' is not assignable to type '[one: number, two: string]'.
+    Type 'unknown' is not assignable to type '[one: number, two: string]'.
+contextualReturnTypeOfIIFE.ts(5,22): error TS2344: Type '[one: number, two: string]' does not satisfy the constraint 'not { then(): any; }'.
+contextualReturnTypeOfIIFE.ts(6,26): error TS2345: Argument of type '(string | number)[]' is not assignable to parameter of type 'PromiseLike<not { then(): any; }> | not { then(): any; }'.
+
+
+==== contextualReturnTypeOfIIFE.ts (4 errors) ====
+    const test1: Promise<[one: number, two: string]> = (async () => {
+                         ~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2344: Type '[one: number, two: string]' does not satisfy the constraint 'not { then(): any; }'.
+        return [1, 'two'];
+    })();
+    
+    const test2: Promise<[one: number, two: string]> = new Promise(
+          ~~~~~
+!!! error TS2322: Type 'Promise<not { then(): any; }>' is not assignable to type 'Promise<[one: number, two: string]>'.
+!!! error TS2322:   Type 'not { then(): any; }' is not assignable to type '[one: number, two: string]'.
+!!! error TS2322:     Type 'unknown' is not assignable to type '[one: number, two: string]'.
+                         ~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2344: Type '[one: number, two: string]' does not satisfy the constraint 'not { then(): any; }'.
+        (resolve) => resolve([1, 'two']),
+                             ~~~~~~~~~~
+!!! error TS2345: Argument of type '(string | number)[]' is not assignable to parameter of type 'PromiseLike<not { then(): any; }> | not { then(): any; }'.
+    );
+    
+    const obj: { foo: [one: number, two: string] } = {
+        foo: (() => [1, 'two'])()
+    };
+    

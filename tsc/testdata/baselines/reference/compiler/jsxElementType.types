@@ -168,29 +168,29 @@ Component = RenderArray;
 
 // React Server Component
 const RenderPromise = async ({ title }: { title: string }) => "react";
->RenderPromise : ({ title }: { title: string; }) => Promise<string>
->async ({ title }: { title: string }) => "react" : ({ title }: { title: string; }) => Promise<string>
+>RenderPromise : ({ title }: { title: string; }) => Promise<"react" & not { then(): any; }>
+>async ({ title }: { title: string }) => "react" : ({ title }: { title: string; }) => Promise<"react" & not { then(): any; }>
 >title : string
 >title : string
 >"react" : "react"
 
 Component = RenderPromise;
->Component = RenderPromise : ({ title }: { title: string; }) => Promise<string>
+>Component = RenderPromise : ({ title }: { title: string; }) => Promise<"react" & not { then(): any; }>
 >Component : NewReactJSXElementConstructor<{ title: string; }>
->RenderPromise : ({ title }: { title: string; }) => Promise<string>
+>RenderPromise : ({ title }: { title: string; }) => Promise<"react" & not { then(): any; }>
 
 <RenderPromise />;
 ><RenderPromise /> : JSX.Element
->RenderPromise : ({ title }: { title: string; }) => Promise<string>
+>RenderPromise : ({ title }: { title: string; }) => Promise<"react" & not { then(): any; }>
 
 <RenderPromise title="react" />;
 ><RenderPromise title="react" /> : JSX.Element
->RenderPromise : ({ title }: { title: string; }) => Promise<string>
+>RenderPromise : ({ title }: { title: string; }) => Promise<"react" & not { then(): any; }>
 >title : string
 
 <RenderPromise excessProp />;
 ><RenderPromise excessProp /> : JSX.Element
->RenderPromise : ({ title }: { title: string; }) => Promise<string>
+>RenderPromise : ({ title }: { title: string; }) => Promise<"react" & not { then(): any; }>
 >excessProp : true
 
 // Class components still work

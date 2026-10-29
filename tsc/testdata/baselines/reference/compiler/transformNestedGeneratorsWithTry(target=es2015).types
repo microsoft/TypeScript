@@ -3,7 +3,7 @@
 === main.ts ===
 // https://github.com/Microsoft/TypeScript/issues/11177
 import * as Bluebird from 'bluebird';
->Bluebird : { all<T>(values: Iterable<T | PromiseLike<T>>): Promise<Awaited<T>[]>; all<T extends readonly unknown[] | []>(values: T): Promise<{ -readonly [P in keyof T]: Awaited<T[P]>; }>; race<T>(values: Iterable<T | PromiseLike<T>>): Promise<Awaited<T>>; race<T extends readonly unknown[] | []>(values: T): Promise<Awaited<T[number]>>; prototype: Promise<any>; reject<T = never>(reason?: any): Promise<T>; resolve(): Promise<void>; resolve<T>(value: T): Promise<Awaited<T>>; resolve<T>(value: T | PromiseLike<T>): Promise<Awaited<T>>; [Symbol.species]: PromiseConstructor; default: PromiseConstructor; }
+>Bluebird : { all<T>(values: Iterable<T | PromiseLike<T>>): Promise<Awaited<T>[] & not { then(): any; }>; all<T extends readonly unknown[] | []>(values: T): Promise<{ -readonly [P in keyof T]: Awaited<T[P]>; } & not { then(): any; }>; race<T>(values: Iterable<T | PromiseLike<T>>): Promise<Awaited<T>>; race<T extends readonly unknown[] | []>(values: T): Promise<Awaited<T[number]>>; prototype: Promise<any>; reject<T extends not { then(): any; } = never>(reason?: any): Promise<T>; resolve(): Promise<void & not { then(): any; }>; resolve<T>(value: T): Promise<Awaited<T>>; resolve<T>(value: T | PromiseLike<T>): Promise<Awaited<T>>; [Symbol.species]: PromiseConstructor; default: PromiseConstructor; }
 
 async function a(): Bluebird<void> {
 >a : () => Bluebird<void>
@@ -16,11 +16,11 @@ async function a(): Bluebird<void> {
 
       try {
         await Bluebird.resolve(); // -- remove this and it compiles
->await Bluebird.resolve() : void
->Bluebird.resolve() : Promise<void>
->Bluebird.resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T>(value: T | PromiseLike<T>): Promise<Awaited<T>>; }
->Bluebird : { all<T>(values: Iterable<T | PromiseLike<T>>): Promise<Awaited<T>[]>; all<T extends readonly unknown[] | []>(values: T): Promise<{ -readonly [P in keyof T]: Awaited<T[P]>; }>; race<T>(values: Iterable<T | PromiseLike<T>>): Promise<Awaited<T>>; race<T extends readonly unknown[] | []>(values: T): Promise<Awaited<T[number]>>; prototype: Promise<any>; reject<T = never>(reason?: any): Promise<T>; resolve(): Promise<void>; resolve<T>(value: T): Promise<Awaited<T>>; resolve<T>(value: T | PromiseLike<T>): Promise<Awaited<T>>; [Symbol.species]: PromiseConstructor; default: PromiseConstructor; }
->resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T>(value: T | PromiseLike<T>): Promise<Awaited<T>>; }
+>await Bluebird.resolve() : void & not { then(): any; } & not { then(): any; }
+>Bluebird.resolve() : Promise<void & not { then(): any; }>
+>Bluebird.resolve : { (): Promise<void & not { then(): any; }>; <T>(value: T): Promise<Awaited<T>>; <T>(value: T | PromiseLike<T>): Promise<Awaited<T>>; }
+>Bluebird : { all<T>(values: Iterable<T | PromiseLike<T>>): Promise<Awaited<T>[] & not { then(): any; }>; all<T extends readonly unknown[] | []>(values: T): Promise<{ -readonly [P in keyof T]: Awaited<T[P]>; } & not { then(): any; }>; race<T>(values: Iterable<T | PromiseLike<T>>): Promise<Awaited<T>>; race<T extends readonly unknown[] | []>(values: T): Promise<Awaited<T[number]>>; prototype: Promise<any>; reject<T extends not { then(): any; } = never>(reason?: any): Promise<T>; resolve(): Promise<void & not { then(): any; }>; resolve<T>(value: T): Promise<Awaited<T>>; resolve<T>(value: T | PromiseLike<T>): Promise<Awaited<T>>; [Symbol.species]: PromiseConstructor; default: PromiseConstructor; }
+>resolve : { (): Promise<void & not { then(): any; }>; <T>(value: T): Promise<Awaited<T>>; <T>(value: T | PromiseLike<T>): Promise<Awaited<T>>; }
 
       } catch (error) { }
 >error : unknown
@@ -28,7 +28,7 @@ async function a(): Bluebird<void> {
     };
 
     await b(); // -- or remove this and it compiles
->await b() : void
+>await b() : void & not { then(): any; }
 >b() : Bluebird<void>
 >b : () => Bluebird<void>
 

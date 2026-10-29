@@ -12,11 +12,12 @@ reverseMappedTypeIntersectionConstraint.ts(87,12): error TS2353: Object literal 
 reverseMappedTypeIntersectionConstraint.ts(98,12): error TS2353: Object literal may only specify known properties, and 'z' does not exist in type '{ x: 1; }'.
 reverseMappedTypeIntersectionConstraint.ts(100,22): error TS2353: Object literal may only specify known properties, and 'z' does not exist in type '{ x: 1; y: "foo"; }'.
 reverseMappedTypeIntersectionConstraint.ts(113,67): error TS2353: Object literal may only specify known properties, and 'extra' does not exist in type '{ nested: { prop: string; }; prop: "foo"; }'.
-reverseMappedTypeIntersectionConstraint.ts(164,3): error TS2353: Object literal may only specify known properties, and 'extra' does not exist in type '{ invoke: { readonly src: "str"; }; types: { actors: { src: "str"; logic: () => Promise<string>; }; }; }'.
+reverseMappedTypeIntersectionConstraint.ts(123,24): error TS2344: Type 'unknown' does not satisfy the constraint 'not { then(): any; }'.
+reverseMappedTypeIntersectionConstraint.ts(164,3): error TS2353: Object literal may only specify known properties, and 'extra' does not exist in type '{ invoke: { readonly src: "str"; }; types: { actors: { src: "str"; logic: () => Promise<string & not { then(): any; }>; }; }; }'.
 reverseMappedTypeIntersectionConstraint.ts(171,3): error TS2353: Object literal may only specify known properties, and 'extra' does not exist in type '{ invoke: { readonly src: "whatever"; }; }'.
 
 
-==== reverseMappedTypeIntersectionConstraint.ts (13 errors) ====
+==== reverseMappedTypeIntersectionConstraint.ts (14 errors) ====
     type StateConfig<TAction extends string> = {
       entry?: TAction
       states?: Record<string, StateConfig<TAction>>;
@@ -166,6 +167,8 @@ reverseMappedTypeIntersectionConstraint.ts(171,3): error TS2353: Object literal 
     interface ProvidedActor {
       src: string;
       logic: () => Promise<unknown>;
+                           ~~~~~~~
+!!! error TS2344: Type 'unknown' does not satisfy the constraint 'not { then(): any; }'.
     }
     
     type DistributeActors<TActor> = TActor extends { src: infer TSrc }
@@ -208,7 +211,7 @@ reverseMappedTypeIntersectionConstraint.ts(171,3): error TS2353: Object literal 
       },
       extra: 10
       ~~~~~
-!!! error TS2353: Object literal may only specify known properties, and 'extra' does not exist in type '{ invoke: { readonly src: "str"; }; types: { actors: { src: "str"; logic: () => Promise<string>; }; }; }'.
+!!! error TS2353: Object literal may only specify known properties, and 'extra' does not exist in type '{ invoke: { readonly src: "str"; }; types: { actors: { src: "str"; logic: () => Promise<string & not { then(): any; }>; }; }; }'.
     });
     
     const config2 = createXMachine({

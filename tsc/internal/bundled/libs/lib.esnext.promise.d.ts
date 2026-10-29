@@ -24,12 +24,12 @@ interface PromiseConstructor {
      * @param promises An object of Promises.
      * @returns A new Promise.
      */
-    allKeyed<T extends object>(promises: T): Promise<{ -readonly [P in keyof T]: Awaited<T[P]>; }>;
+    allKeyed<T extends object>(promises: T): Promise<Awaited<{ -readonly [P in keyof T]: Awaited<T[P]>; }>>;
 
     /**
      * Creates a Promise that is resolved with an object of results when all of the provided Promises resolve or reject.
      * @param promises An object of Promises.
      * @returns A new Promise.
      */
-    allSettledKeyed<T extends object>(promises: T): Promise<{ -readonly [P in keyof T]: PromiseSettledResult<Awaited<T[P]>>; }>;
+    allSettledKeyed<T extends object>(promises: T): Promise<{ -readonly [P in keyof T]: PromiseSettledResult<Awaited<T[P]>>; } & not { then(): any }>;
 }

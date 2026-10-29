@@ -19,19 +19,19 @@ mdast.toString();
 >toString : any
 
 const mdast2 = await import('mdast-util-to-string');
->mdast2 : typeof import("mdast-util-to-string")
->await import('mdast-util-to-string') : typeof import("mdast-util-to-string")
->import('mdast-util-to-string') : Promise<typeof import("mdast-util-to-string")>
+>mdast2 : typeof import("mdast-util-to-string") & not { then(): any; }
+>await import('mdast-util-to-string') : typeof import("mdast-util-to-string") & not { then(): any; }
+>import('mdast-util-to-string') : Promise<typeof import("mdast-util-to-string") & not { then(): any; }>
 >'mdast-util-to-string' : "mdast-util-to-string"
 
 mdast2.toString();
 >mdast2.toString() : string
 >mdast2.toString : () => string
->mdast2 : typeof import("mdast-util-to-string")
+>mdast2 : typeof import("mdast-util-to-string") & not { then(): any; }
 >toString : () => string
 
 mdast2.default;
 >mdast2.default : any
->mdast2 : typeof import("mdast-util-to-string")
+>mdast2 : typeof import("mdast-util-to-string") & not { then(): any; }
 >default : any
 

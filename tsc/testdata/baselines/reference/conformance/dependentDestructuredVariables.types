@@ -804,10 +804,10 @@ type FooAsyncMethod = {
 
 let fooAsyncM: FooAsyncMethod = {
 >fooAsyncM : FooAsyncMethod
->{  async method(type, cb) {    if (type == 'num') {      cb(123)    } else {      cb("abc")    }  }} : { method(type: "num" | "str", cb: ((e: string) => void) | ((e: number) => void)): Promise<void>; }
+>{  async method(type, cb) {    if (type == 'num') {      cb(123)    } else {      cb("abc")    }  }} : { method(type: "num" | "str", cb: ((e: string) => void) | ((e: number) => void)): Promise<void & not { then(): any; }>; }
 
   async method(type, cb) {
->method : (type: "num" | "str", cb: ((e: string) => void) | ((e: number) => void)) => Promise<void>
+>method : (type: "num" | "str", cb: ((e: string) => void) | ((e: number) => void)) => Promise<void & not { then(): any; }>
 >type : "num" | "str"
 >cb : ((e: string) => void) | ((e: number) => void)
 
@@ -892,10 +892,10 @@ type FooAsyncGenMethod = {
 
 let fooAsyncGenM: FooAsyncGenMethod = {
 >fooAsyncGenM : FooAsyncGenMethod
->{  async *method(type, cb) {    if (type == 'num') {      cb(123)    } else {      cb("abc")    }  }} : { method(type: "num" | "str", cb: ((e: string) => void) | ((e: number) => void)): AsyncGenerator<never, void, any>; }
+>{  async *method(type, cb) {    if (type == 'num') {      cb(123)    } else {      cb("abc")    }  }} : { method(type: "num" | "str", cb: ((e: string) => void) | ((e: number) => void)): AsyncGenerator<never, void & not { then(): any; }, any>; }
 
   async *method(type, cb) {
->method : (type: "num" | "str", cb: ((e: string) => void) | ((e: number) => void)) => AsyncGenerator<never, void, any>
+>method : (type: "num" | "str", cb: ((e: string) => void) | ((e: number) => void)) => AsyncGenerator<never, void & not { then(): any; }, any>
 >type : "num" | "str"
 >cb : ((e: string) => void) | ((e: number) => void)
 

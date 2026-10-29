@@ -73,6 +73,10 @@ export { short } from "./Widget.js";
 export { long } from "./Widget.mjs";
 export { identity } from "./Widget.identity.y.z";
 export { unmapped } from "./Widget.unmapped.y.z";
-export declare function literal(): Promise<typeof import("./Widget.mjs")>;
+export declare function literal(): Promise<typeof import("./Widget.mjs") & not {
+    then(): any;
+}>;
 export declare function dynamic(path: string): Promise<any>;
-export declare const inferred: Promise<typeof import("./Widget.mjs")>;
+export declare const inferred: Promise<typeof import("./Widget.mjs") & not {
+    then(): any;
+}>;

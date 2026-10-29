@@ -51,7 +51,7 @@ async function func(): Promise<void> {
 >fn(a, await p, a) : void
 >fn : (arg0: boolean, arg1: boolean, arg2: boolean) => void
 >a : boolean
->await p : boolean
+>await p : (false & not { then(): any; }) | (true & not { then(): any; })
 >p : Promise<boolean>
 >a : boolean
 

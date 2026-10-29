@@ -20,7 +20,7 @@ reader.readEntries(async (entries: FileSystemEntry[]) => {});
 >reader.readEntries : (successCallback: FileSystemEntriesCallback, errorCallback?: ErrorCallback) => void
 >reader : FileSystemDirectoryReader
 >readEntries : (successCallback: FileSystemEntriesCallback, errorCallback?: ErrorCallback) => void
->async (entries: FileSystemEntry[]) => {} : (entries: FileSystemEntry[]) => Promise<void>
+>async (entries: FileSystemEntry[]) => {} : (entries: FileSystemEntry[]) => Promise<void & not { then(): any; }>
 >entries : FileSystemEntry[]
 
 new Promise<readonly FileSystemEntry[]>(resolve => reader.readEntries(resolve));

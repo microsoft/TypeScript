@@ -1,0 +1,18 @@
+uniqueSymbolAssignmentOnGlobalAugmentationSuceeds.ts(9,35): error TS2344: Type 'T' does not satisfy the constraint 'not { then(): any; }'.
+
+
+==== uniqueSymbolAssignmentOnGlobalAugmentationSuceeds.ts (1 errors) ====
+    const FOO_SYMBOL = Symbol('Foo');
+    
+    declare global {
+        interface Promise<T> {
+            [FOO_SYMBOL]?: number;
+        }
+    }
+    
+    export function foo<T>(p: Promise<T>) {
+                                      ~
+!!! error TS2344: Type 'T' does not satisfy the constraint 'not { then(): any; }'.
+!!! related TS2208 uniqueSymbolAssignmentOnGlobalAugmentationSuceeds.ts:9:21: This type parameter might need an `extends not { then(): any; }` constraint.
+        p[FOO_SYMBOL] = 3;
+    }

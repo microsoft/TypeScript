@@ -10,7 +10,7 @@ declare var x, y, z, a, b, c;
 >c : any
 
 async function propertyAccess0() {
->propertyAccess0 : () => Promise<void>
+>propertyAccess0 : () => Promise<void & not { then(): any; }>
 
     y = await x.a;
 >y = await x.a : any
@@ -22,7 +22,7 @@ async function propertyAccess0() {
 }
 
 async function propertyAccess1() {
->propertyAccess1 : () => Promise<void>
+>propertyAccess1 : () => Promise<void & not { then(): any; }>
 
     y = (await x).a;
 >y = (await x).a : any
@@ -35,7 +35,7 @@ async function propertyAccess1() {
 }
 
 async function callExpression0() {
->callExpression0 : () => Promise<void>
+>callExpression0 : () => Promise<void & not { then(): any; }>
 
     await x(y, z);
 >await x(y, z) : any

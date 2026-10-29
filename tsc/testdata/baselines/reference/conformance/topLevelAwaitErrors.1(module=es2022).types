@@ -13,7 +13,7 @@ await (1,);
 
 await <number, string>(1);
 >await <number, string>(1) : boolean
->await <number : number
+>await <number : number & not { then(): any; }
 ><number : number
 > : any
 >string>(1) : boolean
@@ -24,7 +24,7 @@ await <number, string>(1);
 // reparse tagged template as invalid await should error
 await <number, string> ``;
 >await <number, string> `` : boolean
->await <number : number
+>await <number : number & not { then(): any; }
 ><number : number
 > : any
 >string> `` : boolean

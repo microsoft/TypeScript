@@ -3,12 +3,12 @@
 === reachabilityChecks7.ts ===
 // async function without return type annotation - error
 async function f1() {    
->f1 : () => Promise<void>
+>f1 : () => Promise<void & not { then(): any; }>
 }
 
 let x = async function() {
->x : () => Promise<void>
->async function() {} : () => Promise<void>
+>x : () => Promise<void & not { then(): any; }>
+>async function() {} : () => Promise<void & not { then(): any; }>
 }
 
 // async function with which promised type is void - return can be omitted
@@ -18,7 +18,7 @@ async function f2(): Promise<void> {
 }
 
 async function f3(x) {
->f3 : (x: any) => Promise<number>
+>f3 : (x: any) => Promise<10 & not { then(): any; }>
 >x : any
 
     if (x) return 10;

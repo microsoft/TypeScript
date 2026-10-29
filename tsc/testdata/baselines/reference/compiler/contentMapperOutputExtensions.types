@@ -50,21 +50,21 @@ void import(path);
 >path : "./Card.astro"
 
 export async function load() { return import("./Card.astro"); }
->load : () => Promise<typeof import("./Card.astro")>
->import("./Card.astro") : Promise<typeof import("./Card.astro")>
+>load : () => Promise<typeof import("./Card.astro") & not { then(): any; }>
+>import("./Card.astro") : Promise<typeof import("./Card.astro") & not { then(): any; }>
 >"./Card.astro" : "./Card.astro"
 
 export const inferred = import("./Widget.y.z");
->inferred : Promise<typeof import("./Widget.y.z")>
->import("./Widget.y.z") : Promise<typeof import("./Widget.y.z")>
+>inferred : Promise<typeof import("./Widget.y.z") & not { then(): any; }>
+>import("./Widget.y.z") : Promise<typeof import("./Widget.y.z") & not { then(): any; }>
 >"./Widget.y.z" : "./Widget.y.z"
 
 export const nested = { load: () => import("./Card.astro") };
->nested : { load: () => Promise<typeof import("./Card.astro")>; }
->{ load: () => import("./Card.astro") } : { load: () => Promise<typeof import("./Card.astro")>; }
->load : () => Promise<typeof import("./Card.astro")>
->() => import("./Card.astro") : () => Promise<typeof import("./Card.astro")>
->import("./Card.astro") : Promise<typeof import("./Card.astro")>
+>nested : { load: () => Promise<typeof import("./Card.astro") & not { then(): any; }>; }
+>{ load: () => import("./Card.astro") } : { load: () => Promise<typeof import("./Card.astro") & not { then(): any; }>; }
+>load : () => Promise<typeof import("./Card.astro") & not { then(): any; }>
+>() => import("./Card.astro") : () => Promise<typeof import("./Card.astro") & not { then(): any; }>
+>import("./Card.astro") : Promise<typeof import("./Card.astro") & not { then(): any; }>
 >"./Card.astro" : "./Card.astro"
 
 export const copied = [annotated];

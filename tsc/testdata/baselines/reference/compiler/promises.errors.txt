@@ -1,0 +1,21 @@
+promises.ts(2,49): error TS2344: Type 'U' does not satisfy the constraint 'not { then(): any; }'.
+promises.ts(3,45): error TS2344: Type 'U' does not satisfy the constraint 'not { then(): any; }'.
+promises.ts(3,58): error TS2344: Type 'U' does not satisfy the constraint 'not { then(): any; }'.
+
+
+==== promises.ts (3 errors) ====
+    interface Promise<T> {
+        then<U>(success?: (value: T) => U): Promise<U>;
+                                                    ~
+!!! error TS2344: Type 'U' does not satisfy the constraint 'not { then(): any; }'.
+!!! related TS2208 promises.ts:2:10: This type parameter might need an `extends not { then(): any; }` constraint.
+        then<U>(success?: (value: T) => Promise<U>): Promise<U>;
+                                                ~
+!!! error TS2344: Type 'U' does not satisfy the constraint 'not { then(): any; }'.
+!!! related TS2208 promises.ts:3:10: This type parameter might need an `extends not { then(): any; }` constraint.
+                                                             ~
+!!! error TS2344: Type 'U' does not satisfy the constraint 'not { then(): any; }'.
+!!! related TS2208 promises.ts:3:10: This type parameter might need an `extends not { then(): any; }` constraint.
+        value: T;
+    }
+    
