@@ -13876,12 +13876,31 @@ func (c *Checker) hasDefaultValue(node *ast.Node) bool {
 }
 
 func (c *Checker) isConstContext(node *ast.Node) bool {
+	isConst, _, _ := c.isConstContextWorker(node)
+	return isConst
+}
+
+// isConstContextWorker additionally returns the contextual type of node when it was computed in the process and
+// determined the (false) result, so that callers can reuse it.
+func (c *Checker) isConstContextWorker(node *ast.Node) (isConst bool, contextualType *Type, hasContextualType bool) {
 	parent := node.Parent
-	return ast.IsConstAssertion(parent) ||
-		c.isInlineImportAttributes(node) ||
-		c.isValidConstAssertionArgument(node) && c.isConstTypeVariable(c.getContextualType(node, ContextFlagsNone), 0) ||
-		(ast.IsParenthesizedExpression(parent) || ast.IsArrayLiteralExpression(parent) || ast.IsSpreadElement(parent)) && c.isConstContext(parent) ||
-		(ast.IsPropertyAssignment(parent) || ast.IsShorthandPropertyAssignment(parent) || ast.IsTemplateSpan(parent)) && c.isConstContext(parent.Parent)
+	if ast.IsConstAssertion(parent) || c.isInlineImportAttributes(node) {
+		return true, nil, false
+	}
+	if c.isValidConstAssertionArgument(node) {
+		contextualType = c.getContextualType(node, ContextFlagsNone)
+		if c.isConstTypeVariable(contextualType, 0) {
+			return true, nil, false
+		}
+		hasContextualType = true
+	}
+	switch {
+	case ast.IsParenthesizedExpression(parent) || ast.IsArrayLiteralExpression(parent) || ast.IsSpreadElement(parent):
+		return c.isConstContext(parent), nil, false
+	case ast.IsPropertyAssignment(parent) || ast.IsShorthandPropertyAssignment(parent) || ast.IsTemplateSpan(parent):
+		return c.isConstContext(parent.Parent), nil, false
+	}
+	return false, contextualType, hasContextualType
 }
 
 func (c *Checker) isInlineImportAttributes(node *ast.Node) bool {
@@ -14157,13 +14176,17 @@ func (c *Checker) checkObjectLiteralMethod(node *ast.Node, checkMode CheckMode) 
 
 func (c *Checker) checkExpressionForMutableLocation(node *ast.Node, checkMode CheckMode) *Type {
 	t := c.checkExpressionEx(node, checkMode)
+	isConst, contextualType, hasContextualType := c.isConstContextWorker(node)
 	switch {
-	case c.isConstContext(node):
+	case isConst:
 		return c.getRegularTypeOfLiteralType(t)
 	case isTypeAssertion(node):
 		return t
 	default:
-		return c.getWidenedLiteralLikeTypeForContextualType(t, c.instantiateContextualType(c.getContextualType(node, ContextFlagsNone), node, ContextFlagsNone))
+		if !hasContextualType {
+			contextualType = c.getContextualType(node, ContextFlagsNone)
+		}
+		return c.getWidenedLiteralLikeTypeForContextualType(t, c.instantiateContextualType(contextualType, node, ContextFlagsNone))
 	}
 }
 
