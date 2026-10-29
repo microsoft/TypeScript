@@ -5,6 +5,7 @@ import type {
     RootedFilePath,
     RootedPath,
 } from "../ast/index.ts";
+import type { Snapshot } from "./async/api.ts";
 import { normalizePath } from "./path.ts";
 import type {
     RequestDirectoryEntries,
@@ -167,6 +168,26 @@ export function createFileSystemLayer(
     options: CreateFileSystemOptions = {},
 ): RequestFileSystem {
     return createRequestFileSystem("layer", files, options);
+}
+
+/**
+ * Reuses a snapshot's retained request filesystem without resending its contents.
+ * Entries take precedence over the receiving snapshot's filesystem; a full source
+ * filesystem remains total. Host and editor contents are not copied.
+ * An optional layer or full filesystem is applied over the reused filesystem.
+ * The source must remain active until the snapshot operation completes.
+ */
+export function createFileSystemFromSnapshot(
+    snapshot: Pick<Snapshot, "id" | "isDisposed">,
+    fileSystem?: RequestFileSystem | undefined,
+): RequestFileSystem {
+    if (snapshot.isDisposed()) {
+        throw new Error("Cannot create a filesystem from a disposed snapshot");
+    }
+    if (fileSystem?.kind === "snapshot") {
+        throw new Error("Only a layer or full filesystem can be applied on top of a snapshot filesystem");
+    }
+    return { kind: "snapshot", snapshot: snapshot.id, files: {}, fileSystem };
 }
 
 function createRequestFileSystem(

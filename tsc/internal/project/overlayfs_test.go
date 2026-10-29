@@ -146,6 +146,7 @@ func TestProcessChanges(t *testing.T) {
 			},
 		})
 		// Then save
+		assert.NilError(t, fs.host.WriteFile(testURI1.FileName(), "const x = 1;"))
 		result, _ := fs.processChanges([]FileChange{
 			{
 				Kind: FileChangeKindSave,
@@ -228,6 +229,7 @@ func TestProcessChanges(t *testing.T) {
 		assert.Assert(t, !fs.GetFile(testURI1.FileName()).MatchesDiskText())
 
 		// Then save
+		assert.NilError(t, fs.host.WriteFile(testURI1.FileName(), "const x = 1;"))
 		fs.processChanges([]FileChange{
 			{
 				Kind: FileChangeKindSave,
@@ -237,6 +239,7 @@ func TestProcessChanges(t *testing.T) {
 		assert.Assert(t, fs.GetFile(testURI1.FileName()).MatchesDiskText())
 
 		// Now process a watch change
+		assert.NilError(t, fs.host.WriteFile(testURI1.FileName(), "const x = 2;"))
 		fs.processChanges([]FileChange{
 			{
 				Kind: FileChangeKindWatchChange,
@@ -244,6 +247,52 @@ func TestProcessChanges(t *testing.T) {
 			},
 		})
 		assert.Assert(t, !fs.GetFile(testURI1.FileName()).MatchesDiskText())
+	})
+
+	t.Run("save and watch create compare overlay with disk in either order", func(t *testing.T) {
+		t.Parallel()
+		for _, test := range []struct {
+			name    string
+			changes []FileChange
+		}{
+			{
+				name: "save then create",
+				changes: []FileChange{
+					{Kind: FileChangeKindSave, URI: testURI1},
+					{Kind: FileChangeKindWatchCreate, URI: testURI1},
+				},
+			},
+			{
+				name: "create then save",
+				changes: []FileChange{
+					{Kind: FileChangeKindWatchCreate, URI: testURI1},
+					{Kind: FileChangeKindSave, URI: testURI1},
+				},
+			},
+		} {
+			t.Run(test.name, func(t *testing.T) {
+				t.Parallel()
+				fs := createOverlayFS()
+				const overlayContent = "const value = 'overlay';"
+				fs.processChanges([]FileChange{
+					{
+						Kind:         FileChangeKindOpen,
+						URI:          testURI1,
+						Version:      1,
+						Content:      overlayContent,
+						LanguageKind: lsproto.LanguageKindTypeScript,
+					},
+				})
+				assert.NilError(t, fs.host.WriteFile(testURI1.FileName(), "const value = 'disk';"))
+
+				fs.processChanges(test.changes)
+
+				file := fs.GetFile(testURI1.FileName())
+				assert.Assert(t, file != nil)
+				assert.Equal(t, file.Content(), overlayContent)
+				assert.Assert(t, !file.MatchesDiskText())
+			})
+		}
 	})
 
 	t.Run("save without overlay should not panic", func(t *testing.T) {
