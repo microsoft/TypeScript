@@ -28908,6 +28908,9 @@ func (c *Checker) getSingleBaseForNonAugmentingSubtype(t *Type) *Type {
 	}
 	key := CachedTypeKey{kind: CachedTypeKindEquivalentBaseType, typeId: t.id}
 	if t.objectFlags&ObjectFlagsIdenticalBaseTypeCalculated != 0 {
+		if t.objectFlags&ObjectFlagsIdenticalBaseTypeExists == 0 {
+			return nil
+		}
 		return c.cachedTypes[key]
 	}
 	t.objectFlags |= ObjectFlagsIdenticalBaseTypeCalculated
@@ -28938,6 +28941,7 @@ func (c *Checker) getSingleBaseForNonAugmentingSubtype(t *Type) *Type {
 	if len(c.getTypeArguments(t)) > len(typeParameters) {
 		instantiatedBase = c.getTypeWithThisArgument(instantiatedBase, core.LastOrNil(c.getTypeArguments(t)), false)
 	}
+	t.objectFlags |= ObjectFlagsIdenticalBaseTypeExists
 	c.cachedTypes[key] = instantiatedBase
 	return instantiatedBase
 }
