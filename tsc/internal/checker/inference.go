@@ -182,8 +182,10 @@ func (c *Checker) inferFromTypes(n *InferenceState, source *Type, target *Type) 
 					return
 				}
 				if n.priority < inference.priority {
-					inference.candidates = nil
-					inference.contraCandidates = nil
+					clear(inference.candidates)
+					inference.candidates = inference.candidates[:0]
+					clear(inference.contraCandidates)
+					inference.contraCandidates = inference.contraCandidates[:0]
 					inference.topLevel = true
 					inference.priority = n.priority
 				}
