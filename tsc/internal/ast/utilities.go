@@ -2843,31 +2843,48 @@ func nodeContainsPosition(node *Node, position int) bool {
 	return node.Kind >= KindFirstNode && node.Pos() <= position && (position < node.End() || position == node.End() && node.Kind == KindEndOfFile)
 }
 
-func findImportOrRequire(text string, start int) (index int, size int) {
-	index = max(start, 0)
-	n := len(text)
-	for index < n {
-		next := strings.IndexAny(text[index:], "ir")
-		if next < 0 {
-			break
-		}
-		index += next
+// importOrRequireFinder finds successive occurrences of "import" or "require"
+// in text. It remembers the next occurrence of each keyword so that each one is
+// only searched for again once it has been passed.
+type importOrRequireFinder struct {
+	text        string
+	nextImport  int
+	nextRequire int
+}
 
-		var expected string
-		if text[index] == 'i' {
-			size = 6
-			expected = "import"
-		} else {
-			size = 7
-			expected = "require"
-		}
-		if index+size <= n && text[index:index+size] == expected {
-			return index, size
-		}
-		index++
+func newImportOrRequireFinder(text string) importOrRequireFinder {
+	return importOrRequireFinder{
+		text:        text,
+		nextImport:  indexFrom(text, "import", 0),
+		nextRequire: indexFrom(text, "require", 0),
 	}
+}
 
+// next returns the index and length of the first "import" or "require" at or after start, or -1.
+func (f *importOrRequireFinder) next(start int) (index int, size int) {
+	if f.nextImport >= 0 && f.nextImport < start {
+		f.nextImport = indexFrom(f.text, "import", start)
+	}
+	if f.nextRequire >= 0 && f.nextRequire < start {
+		f.nextRequire = indexFrom(f.text, "require", start)
+	}
+	if f.nextImport >= 0 && (f.nextRequire < 0 || f.nextImport < f.nextRequire) {
+		return f.nextImport, len("import")
+	}
+	if f.nextRequire >= 0 {
+		return f.nextRequire, len("require")
+	}
 	return -1, 0
+}
+
+func indexFrom(text string, substr string, start int) int {
+	if start > len(text) {
+		return -1
+	}
+	if i := strings.Index(text[start:], substr); i >= 0 {
+		return start + i
+	}
+	return -1
 }
 
 func ForEachDynamicImportOrRequireCall(
@@ -2877,7 +2894,8 @@ func ForEachDynamicImportOrRequireCall(
 	cb func(node *Node, argument *Expression) bool,
 ) bool {
 	isJavaScriptFile := IsInJSFile(file.AsNode())
-	lastIndex, size := findImportOrRequire(file.Text(), 0)
+	finder := newImportOrRequireFinder(file.Text())
+	lastIndex, size := finder.next(0)
 	for lastIndex >= 0 {
 		node := GetNodeAtPosition(file, lastIndex, isJavaScriptFile && includeTypeSpaceImports)
 		if isJavaScriptFile && IsRequireCall(node, requireStringLiteralLikeArgument) {
@@ -2895,7 +2913,7 @@ func ForEachDynamicImportOrRequireCall(
 		}
 		// skip past import/require
 		lastIndex += size
-		lastIndex, size = findImportOrRequire(file.Text(), lastIndex)
+		lastIndex, size = finder.next(lastIndex)
 	}
 	return false
 }
