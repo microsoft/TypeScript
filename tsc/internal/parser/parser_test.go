@@ -365,6 +365,44 @@ func TestParseEscapedDynamicImportPhase(t *testing.T) {
 	}
 }
 
+func TestParseEscapedInInstanceofAfterClassField(t *testing.T) {
+	t.Parallel()
+	// Escaped `in` / `instanceof` after a class field initializer are IdentifierNames,
+	// not binary operators. ASI should end the previous field; the escaped names are
+	// additional fields. See https://github.com/microsoft/TypeScript/issues/64883.
+	source := "class C {\n  a = 1\n  \\u{69}n\n  b = 2\n  \\u{69}nstanceof\n}"
+	file := parsetestutil.ParseTypeScript(source, false)
+	parsetestutil.CheckDiagnostics(t, file)
+	assert.Equal(t, len(file.Statements.Nodes), 1)
+	classDecl := file.Statements.Nodes[0]
+	assert.Assert(t, ast.IsClassDeclaration(classDecl))
+	members := classDecl.Members()
+	assert.Equal(t, len(members), 4)
+	assert.Equal(t, members[0].Name().Text(), "a")
+	assert.Equal(t, members[1].Name().Text(), "in")
+	assert.Equal(t, members[2].Name().Text(), "b")
+	assert.Equal(t, members[3].Name().Text(), "instanceof")
+}
+
+func TestParseUnescapedInContinuesClassFieldInitializer(t *testing.T) {
+	t.Parallel()
+	// Without escapes, `in` on the next line correctly continues the initializer
+	// (test262 fields-asi-5.js). This must keep working after the escaped-keyword fix.
+	source := "class C {\n  a = x\n  in\n  z\n}"
+	file := parsetestutil.ParseTypeScript(source, false)
+	parsetestutil.CheckDiagnostics(t, file)
+	assert.Equal(t, len(file.Statements.Nodes), 1)
+	classDecl := file.Statements.Nodes[0]
+	assert.Assert(t, ast.IsClassDeclaration(classDecl))
+	members := classDecl.Members()
+	assert.Equal(t, len(members), 1)
+	prop := members[0]
+	assert.Equal(t, prop.Name().Text(), "a")
+	init := prop.Initializer()
+	assert.Assert(t, ast.IsBinaryExpression(init))
+	assert.Equal(t, init.AsBinaryExpression().OperatorToken.Kind, ast.KindInKeyword)
+}
+
 func TestJSDocImportTypeParentChain(t *testing.T) {
 	t.Parallel()
 	sourceText := `test("", async function () {
