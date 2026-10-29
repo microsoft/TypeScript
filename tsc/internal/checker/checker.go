@@ -65,6 +65,7 @@ const (
 	TypeSystemPropertyNameWriteType
 	TypeSystemPropertyNameInitializerIsUndefined
 	TypeSystemPropertyNameAliasTarget
+	TypeSystemPropertyNameIndexInfoValueType
 )
 
 type TypeResolution struct {
@@ -19272,6 +19273,8 @@ func (c *Checker) typeResolutionHasProperty(r *TypeResolution) bool {
 		return c.valueSymbolLinks.Get(r.target.(*ast.Symbol)).getWriteType() != nil
 	case TypeSystemPropertyNameAliasTarget:
 		return c.aliasSymbolLinks.Get(r.target.(*ast.Symbol)).aliasTarget != nil
+	case TypeSystemPropertyNameIndexInfoValueType:
+		return r.target.(*IndexInfo).valueType != nil
 	}
 	panic("Unhandled case in typeResolutionHasProperty")
 }
@@ -26033,21 +26036,35 @@ func (c *Checker) newIndexInfo(keyType *Type, valueType *Type, isReadonly bool, 
 
 // getValueTypeOfIndexInfo returns the value type of an index signature, resolving it
 // lazily from the declaration when it was deferred by getIndexInfosOfIndexSymbol.
+// Resolution is tracked with the type-resolution stack so direct recursion such as
+// `interface I { [k: string]: I[string] }` reports circularity instead of caching the
+// in-progress unresolved sentinel as a usable any-flagged type (#64998 review).
 func (c *Checker) getValueTypeOfIndexInfo(info *IndexInfo) *Type {
 	if info.valueType != nil {
 		return info.valueType
 	}
-	if info.declaration != nil {
-		if returnTypeNode := info.declaration.Type(); returnTypeNode != nil {
-			// Assign a temporary non-nil value before resolving to avoid recursive
-			// re-entry through the same IndexInfo while the value type is circularly
-			// referenced from the type being resolved (e.g. keyof).
-			info.valueType = c.unresolvedType
-			info.valueType = c.instantiateType(c.getTypeFromTypeNode(returnTypeNode), info.mapper)
-			return info.valueType
-		}
+	if info.declaration == nil {
+		info.valueType = c.anyType
+		return info.valueType
 	}
-	info.valueType = c.anyType
+	returnTypeNode := info.declaration.Type()
+	if returnTypeNode == nil {
+		info.valueType = c.anyType
+		return info.valueType
+	}
+	if !c.pushTypeResolution(info, TypeSystemPropertyNameIndexInfoValueType) {
+		return c.errorType
+	}
+	t := c.instantiateType(c.getTypeFromTypeNode(returnTypeNode), info.mapper)
+	if !c.popTypeResolution() {
+		// Index signature value types are the annotation on the index signature
+		// declaration (analogous to a return type annotation).
+		c.error(returnTypeNode, diagnostics.Return_type_annotation_circularly_references_itself)
+		t = c.errorType
+	}
+	if info.valueType == nil {
+		info.valueType = t
+	}
 	return info.valueType
 }
 
