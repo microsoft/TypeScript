@@ -9,8 +9,10 @@ import (
 	"time"
 
 	"github.com/microsoft/TypeScript/tsc/internal/execute"
+	"github.com/microsoft/TypeScript/tsc/internal/execute/build"
 	"github.com/microsoft/TypeScript/tsc/internal/execute/tsc"
 	"github.com/microsoft/TypeScript/tsc/internal/fswatch"
+	"github.com/microsoft/TypeScript/tsc/internal/tsoptions"
 	"github.com/microsoft/TypeScript/tsc/internal/tspath"
 	"gotest.tools/v3/assert"
 )
@@ -40,6 +42,90 @@ func createTestWatcher(t *testing.T) (*execute.Watcher, *TestSys) {
 	return w, sys
 }
 
+func TestWatchCycleStopsWithCancelledContext(t *testing.T) {
+	t.Parallel()
+	for _, build := range []bool{false, true} {
+		t.Run(fmt.Sprintf("build=%t", build), func(t *testing.T) {
+			t.Parallel()
+			args := []string{"--watch"}
+			if build {
+				args = append([]string{"--build"}, args...)
+			}
+			sys := newTestSys(&tscInput{
+				files: FileMap{
+					"/home/src/workspaces/project/tsconfig.json": `{"compilerOptions":{"composite":true,"outDir":"out"}}`,
+					"/home/src/workspaces/project/a.ts":          `export const a = 1;`,
+				},
+				commandLineArgs: args,
+			}, false)
+			result := execute.CommandLine(t.Context(), sys, args, sys)
+			assert.Assert(t, result.Watcher != nil)
+			output, ok := sys.FS().ReadFile("/home/src/workspaces/project/out/a.js")
+			assert.Assert(t, ok)
+			sys.writeFileNoError("/home/src/workspaces/project/a.ts", `export const a = 2;`)
+			sys.mockWatchBackend.SendEvents([]fswatch.Event{{Kind: fswatch.EventUpdate, Path: "/home/src/workspaces/project/a.ts"}})
+			sys.clearOutput()
+			ctx, cancel := context.WithCancel(t.Context())
+			cancel()
+			result.Watcher.DoCycle(ctx)
+			after, ok := sys.FS().ReadFile("/home/src/workspaces/project/out/a.js")
+			assert.Assert(t, ok)
+			assert.Equal(t, after, output)
+			assert.Equal(t, sys.currentWrite.Len(), 0)
+
+			result.Watcher.DoCycle(t.Context())
+			after, ok = sys.FS().ReadFile("/home/src/workspaces/project/out/a.js")
+			assert.Assert(t, ok)
+			assert.Assert(t, strings.Contains(after, "a = 2"))
+		})
+	}
+}
+
+func TestBuildWatchSkipsReconciliationAfterCancellation(t *testing.T) {
+	t.Parallel()
+	for _, cancelConfig := range []bool{false, true} {
+		t.Run(fmt.Sprintf("cancelConfig=%t", cancelConfig), func(t *testing.T) {
+			t.Parallel()
+			const config = "/home/src/workspaces/project/tsconfig.json"
+			const source = "/home/src/workspaces/project/a.ts"
+			sys := newTestSys(&tscInput{
+				files: FileMap{
+					config: `{"compilerOptions":{"composite":true},"files":["a.ts"]}`,
+					source: `export const a = 1;`,
+				},
+			}, false)
+			ctx, cancel := context.WithCancel(t.Context())
+			defer cancel()
+			fs := &cancellingBuildFS{FS: sys.FS(), cancel: cancel}
+			wrapped := &cancellingBuildSystem{TestSys: sys, fs: fs}
+			orchestrator := build.NewOrchestrator(build.Options{
+				Sys:     wrapped,
+				Command: tsoptions.ParseBuildCommandLine([]string{"--watch"}, wrapped.FS(), sys.GetCurrentDirectory()),
+				Testing: sys,
+			})
+			result := orchestrator.Build(t.Context(), "")
+			assert.Equal(t, result.Result.Status, tsc.ExitStatusSuccess)
+			assert.Assert(t, result.Result.Watcher != nil)
+			changed := tspath.RootedFilePath(source)
+			if cancelConfig {
+				changed = config
+				sys.writeFileNoError(config, `{"compilerOptions":{"composite":true,"strict":true},"files":["a.ts"]}`)
+			} else {
+				sys.writeFileNoError(source, `export const a = 2;`)
+			}
+			fs.cancelPath = changed
+			sys.mockWatchBackend.SendEvents([]fswatch.Event{{Kind: fswatch.EventUpdate, Path: changed.AsString()}})
+			sys.clearOutput()
+
+			orchestrator.DoCycle(ctx)
+
+			assert.Equal(t, ctx.Err(), context.Canceled)
+			assert.Equal(t, fs.postCancelDirectoryReads.Load(), int64(0))
+			assert.Assert(t, !strings.Contains(sys.currentWrite.String(), "Watching for file changes."))
+		})
+	}
+}
+
 // TestWatcherConcurrentDoCycle calls DoCycle from multiple goroutines
 // while modifying source files, exposing data races on Watcher fields
 // such as configModified, program, config, and the underlying
@@ -59,7 +145,7 @@ func TestWatcherConcurrentDoCycle(t *testing.T) {
 					"/home/src/workspaces/project/a.ts",
 					fmt.Sprintf("const a: number = %d;", i*10+j),
 				)
-				w.DoCycle()
+				w.DoCycle(t.Context())
 			}
 		}(i)
 	}
@@ -86,7 +172,7 @@ func TestWatcherDoCycleWithConcurrentStateReads(t *testing.T) {
 					"/home/src/workspaces/project/a.ts",
 					fmt.Sprintf("const a: number = %d;", i*15+j),
 				)
-				w.DoCycle()
+				w.DoCycle(t.Context())
 			}
 		}(i)
 	}
@@ -95,10 +181,10 @@ func TestWatcherDoCycleWithConcurrentStateReads(t *testing.T) {
 	for range 8 {
 		wg.Go(func() {
 			for range 50 {
-				w.DoCycle()
-				w.DoCycle()
-				w.DoCycle()
-				w.DoCycle()
+				w.DoCycle(t.Context())
+				w.DoCycle(t.Context())
+				w.DoCycle(t.Context())
+				w.DoCycle(t.Context())
 			}
 		})
 	}
@@ -140,7 +226,7 @@ func TestWatcherConcurrentFileChangesAndDoCycle(t *testing.T) {
 	for range 4 {
 		wg.Go(func() {
 			for range 10 {
-				w.DoCycle()
+				w.DoCycle(t.Context())
 			}
 		})
 	}
@@ -175,7 +261,7 @@ func TestWatcherRapidConfigChanges(t *testing.T) {
 					"/home/src/workspaces/project/tsconfig.json",
 					configs[(i+j)%len(configs)],
 				)
-				w.DoCycle()
+				w.DoCycle(t.Context())
 			}
 		}(i)
 	}
@@ -190,7 +276,7 @@ func TestWatcherRapidConfigChanges(t *testing.T) {
 					"/home/src/workspaces/project/a.ts",
 					fmt.Sprintf("const a: number = %d;", i*15+j),
 				)
-				w.DoCycle()
+				w.DoCycle(t.Context())
 			}
 		}(i)
 	}
@@ -199,8 +285,8 @@ func TestWatcherRapidConfigChanges(t *testing.T) {
 	for range 4 {
 		wg.Go(func() {
 			for range 30 {
-				w.DoCycle()
-				w.DoCycle()
+				w.DoCycle(t.Context())
+				w.DoCycle(t.Context())
 			}
 		})
 	}
@@ -220,7 +306,7 @@ func TestWatcherConcurrentDoCycleNoChanges(t *testing.T) {
 	for range 16 {
 		wg.Go(func() {
 			for range 50 {
-				w.DoCycle()
+				w.DoCycle(t.Context())
 			}
 		})
 	}
@@ -251,7 +337,7 @@ func TestWatcherAlternatingModifyAndDoCycle(t *testing.T) {
 	for range 4 {
 		wg.Go(func() {
 			for range 25 {
-				w.DoCycle()
+				w.DoCycle(t.Context())
 			}
 		})
 	}
@@ -260,7 +346,7 @@ func TestWatcherAlternatingModifyAndDoCycle(t *testing.T) {
 	for range 4 {
 		wg.Go(func() {
 			for range 100 {
-				w.DoCycle()
+				w.DoCycle(t.Context())
 			}
 		})
 	}
@@ -287,8 +373,8 @@ func TestBuildWatchStopsWhenContextIsCancelled(t *testing.T) {
 
 	select {
 	case result := <-resultCh:
-		assert.Equal(t, result.Status, tsc.ExitStatusSuccess)
-		assert.Assert(t, result.Watcher != nil)
+		assert.Equal(t, result.Status, tsc.ExitStatusCancelled)
+		assert.Assert(t, result.Watcher == nil)
 	case <-time.After(2 * time.Second):
 		t.Fatal("build watch did not stop after context cancellation")
 	}
@@ -345,7 +431,7 @@ export const x = <div />;`)
 	sys.mockWatchBackend.SendEvents([]fswatch.Event{
 		{Kind: fswatch.EventUpdate, Path: "/home/src/workspaces/project/index.tsx"},
 	})
-	w.DoCycle()
+	w.DoCycle(t.Context())
 
 	out := sys.currentWrite.String()
 	assert.Assert(t, strings.Contains(out, "bar/jsx-runtime"), "expected updated JSX runtime diagnostic, got: %s", out)
@@ -384,7 +470,7 @@ func TestWatcherUpdateProgramFastPath(t *testing.T) {
 		sys.mockWatchBackend.SendEvents([]fswatch.Event{
 			{Kind: fswatch.EventUpdate, Path: path},
 		})
-		w.DoCycle()
+		w.DoCycle(t.Context())
 		return sys.currentWrite.String()
 	}
 
@@ -462,7 +548,7 @@ func TestWatcherOverflowForcesFullRebuild(t *testing.T) {
 	_ = fs.WriteFile("/home/src/workspaces/project/dep.ts", `export const dep: number = 1;`)
 	full := w.FullBuilds()
 	sys.mockWatchBackend.SendOverflow()
-	w.DoCycle()
+	w.DoCycle(t.Context())
 
 	assert.Equal(t, w.FullBuilds(), full+1, "overflow must force a full rebuild, not the single-file fast path")
 	assert.Assert(t, fs.FileExists("/home/src/workspaces/project/out/dep.js"),
@@ -512,7 +598,7 @@ func TestWatcherNonSourceDependencyForcesFullRebuild(t *testing.T) {
 		{Kind: fswatch.EventUpdate, Path: "/home/src/workspaces/project/index.ts"},
 		{Kind: fswatch.EventUpdate, Path: "/home/src/workspaces/project/dep.ts"},
 	})
-	w.DoCycle()
+	w.DoCycle(t.Context())
 
 	assert.Equal(t, w.FullBuilds(), full+1,
 		"a changed non-source dependency must force a full rebuild, not the fast path")

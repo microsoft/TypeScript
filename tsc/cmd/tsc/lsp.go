@@ -6,8 +6,6 @@ import (
 	"fmt"
 	"os"
 	"os/exec"
-	"os/signal"
-	"syscall"
 	"time"
 
 	"github.com/microsoft/TypeScript/tsc/internal/bundled"
@@ -18,7 +16,7 @@ import (
 	"github.com/microsoft/TypeScript/tsc/internal/vfs/osvfs"
 )
 
-func runLSP(args []string) int {
+func runLSP(ctx context.Context, args []string) int {
 	flag := flag.NewFlagSet("lsp", flag.ContinueOnError)
 	stdio := flag.Bool("stdio", false, "use stdio for communication")
 	pprofDir := flag.String("pprofDir", "", "Generate pprof CPU/memory profiles to the given directory.")
@@ -47,7 +45,7 @@ func runLSP(args []string) int {
 	typingsLocation := osvfs.GetGlobalTypingsCacheLocation()
 	cwd := tspath.RootedDirectoryPathFromAbsolute(core.Must(os.Getwd()))
 
-	ctx, stop := signal.NotifyContext(context.Background(), os.Interrupt, syscall.SIGTERM)
+	ctx, stop := context.WithCancel(ctx)
 	defer stop()
 
 	s := lsp.NewServer(&lsp.ServerOptions{

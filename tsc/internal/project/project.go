@@ -526,10 +526,13 @@ type CreateProgramResult struct {
 	UpdateKind ProgramUpdateKind
 }
 
-func (p *Project) CreateProgram() CreateProgramResult {
+func (p *Project) CreateProgram(ctx context.Context) CreateProgramResult {
+	// Snapshot construction must finish so all acquired parse-cache entries have an owner.
+	programCtx := context.WithoutCancel(ctx)
 	updateKind := ProgramUpdateKindNewFiles
 	var programCloned bool
 	var newProgram *compiler.Program
+	var err error
 
 	createCheckerPool := func(program *compiler.Program) compiler.CheckerPool {
 		return newCheckerPool(p.host.sessionOptions.CheckerPoolOptions, program, p.log)
@@ -539,7 +542,7 @@ func (p *Project) CreateProgram() CreateProgramResult {
 		if p.moduleResolverFactory == nil {
 			return module.NewResolver(options)
 		}
-		resolver, cleanup := p.moduleResolverFactory.NewResolver(p.host.builder.ctx, options)
+		resolver, cleanup := p.moduleResolverFactory.NewResolver(ctx, options)
 		cleanupModuleResolver = cleanup
 		return resolver
 	}
@@ -553,7 +556,7 @@ func (p *Project) CreateProgram() CreateProgramResult {
 	commandLine := p.getCommandLineWithTypingsFiles()
 	if p.dirtyFilePath != "" && p.Program != nil && p.Program.CommandLine() == commandLine {
 		var dirtyFile *ast.SourceFile
-		newProgram, dirtyFile, programCloned = p.Program.UpdateProgram(p.dirtyFilePath, p.host, createCheckerPool, createModuleResolver)
+		newProgram, dirtyFile, programCloned, err = p.Program.UpdateProgram(programCtx, p.dirtyFilePath, p.host, createCheckerPool, createModuleResolver)
 		if programCloned {
 			updateKind = ProgramUpdateKindCloned
 			for _, file := range newProgram.SourceFiles() {
@@ -592,7 +595,8 @@ func (p *Project) CreateProgram() CreateProgramResult {
 		if p.GetTypeAcquisition().Enable.IsTrue() {
 			typingsLocation = p.host.sessionOptions.TypingsLocation
 		}
-		newProgram = compiler.NewProgram(
+		newProgram, err = compiler.NewProgram(
+			programCtx,
 			compiler.ProgramOptions{
 				Host:                        p.host,
 				Config:                      commandLine,
@@ -602,6 +606,9 @@ func (p *Project) CreateProgram() CreateProgramResult {
 				CreateModuleResolver:        createModuleResolver,
 			},
 		)
+	}
+	if err != nil {
+		panic(err)
 	}
 
 	if !programCloned && p.Program != nil && p.Program.HasSameFileNames(newProgram) {
