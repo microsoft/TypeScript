@@ -995,12 +995,34 @@ func (c *Checker) checkGrammarForInvalidExclamationToken(postfixToken *ast.Token
 	return postfixToken != nil && postfixToken.Kind == ast.KindExclamationToken && c.grammarErrorOnNode(postfixToken, message)
 }
 
-func (c *Checker) checkGrammarObjectLiteralExpression(node *ast.ObjectLiteralExpression, inDestructuring bool) bool {
-	seen := make(map[string]DeclarationMeaning)
+func (c *Checker) getObjectLiteralSeenMap() map[string]DeclarationMeaning {
+	if n := len(c.freeObjectLiteralSeenMaps); n > 0 {
+		seen := c.freeObjectLiteralSeenMaps[n-1]
+		c.freeObjectLiteralSeenMaps = c.freeObjectLiteralSeenMaps[:n-1]
+		return seen
+	}
+	return make(map[string]DeclarationMeaning)
+}
 
+func (c *Checker) releaseObjectLiteralSeenMap(seen map[string]DeclarationMeaning) {
+	// Maps never shrink, so do not retain ones grown by unusually large literals.
+	if len(seen) > 1024 {
+		return
+	}
+	clear(seen)
+	c.freeObjectLiteralSeenMaps = append(c.freeObjectLiteralSeenMaps, seen)
+}
+
+func (c *Checker) checkGrammarObjectLiteralExpression(node *ast.ObjectLiteralExpression, inDestructuring bool) bool {
 	var properties []*ast.Node
 	if node.Properties != nil {
 		properties = node.Properties.Nodes
+	}
+	// Duplicate names are only possible with at least two properties.
+	var seen map[string]DeclarationMeaning
+	if !inDestructuring && len(properties) > 1 {
+		seen = c.getObjectLiteralSeenMap()
+		defer c.releaseObjectLiteralSeenMap(seen)
 	}
 	for _, prop := range properties {
 		if prop.Kind == ast.KindSpreadAssignment {
@@ -1107,7 +1129,7 @@ func (c *Checker) checkGrammarObjectLiteralExpression(node *ast.ObjectLiteralExp
 
 		if !inDestructuring {
 			effectiveName, ok := c.getEffectivePropertyNameForPropertyNameNode(name)
-			if !ok {
+			if !ok || seen == nil {
 				continue
 			}
 
