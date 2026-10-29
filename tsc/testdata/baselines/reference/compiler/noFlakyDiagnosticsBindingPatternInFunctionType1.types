@@ -1,0 +1,13 @@
+//// [tests/cases/compiler/noFlakyDiagnosticsBindingPatternInFunctionType1.ts] ////
+
+=== noFlakyDiagnosticsBindingPatternInFunctionType1.ts ===
+class Base<T> {}
+>Base : Base<T>
+
+export class C extends Base<{ e: ({ a: boolean }) => void }> {}
+>C : C
+>Base : Base<{ e: ({ a: boolean }: any) => void; }>
+>e : ({ a: boolean }: { a: any; }) => void
+>a : any
+>boolean : any
+
