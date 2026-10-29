@@ -103,3 +103,15 @@ func TestScanSourceKeyword(t *testing.T) {
 	assert.Equal(t, s.Scan(), ast.KindIdentifier)
 	assert.Equal(t, s.TokenValue(), "sourceValue")
 }
+
+func TestKeywordLookup(t *testing.T) {
+	t.Parallel()
+	for text, kind := range textToKeyword {
+		assert.Equal(t, GetIdentifierToken(text), kind, text)
+		assert.Equal(t, lookupKeyword(text), kind, text)
+	}
+	for _, text := range []string{"", "a", "x", "Class", "classs", "clasp", "xonstructor", "constructors", "constructxr", "instanceOf", "_if", "$in", "ifx", "ox", "yielx", "abstractt", "undefine", "\x00\x00", "élse"} {
+		assert.Equal(t, GetIdentifierToken(text), ast.KindIdentifier, text)
+		assert.Equal(t, lookupKeyword(text), ast.KindUnknown, text)
+	}
+}
