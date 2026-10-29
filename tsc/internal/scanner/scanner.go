@@ -529,6 +529,11 @@ func (s *Scanner) Scan() ast.Kind {
 		case '\t', '\v', '\f', ' ':
 			s.pos++
 			if s.skipTrivia {
+				text, end, pos := s.text, s.end, s.pos
+				for pos < end && (text[pos] == ' ' || text[pos] == '\t') {
+					pos++
+				}
+				s.pos = pos
 				continue
 			}
 			for {
