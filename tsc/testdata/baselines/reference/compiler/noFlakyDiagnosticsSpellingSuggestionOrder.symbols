@@ -1,0 +1,257 @@
+//// [tests/cases/compiler/noFlakyDiagnosticsSpellingSuggestionOrder.ts] ////
+
+=== /main.ts ===
+/// <reference path="./ambient.d.ts" />
+/// <reference path="./ua.d.ts" />
+/// <reference path="./ub.d.ts" />
+/// <reference path="./uf1.d.ts" />
+/// <reference path="./uf2.d.ts" />
+/// <reference path="./uf3.d.ts" />
+/// <reference path="./uf4.d.ts" />
+/// <reference path="./uf5.d.ts" />
+/// <reference path="./uf6.d.ts" />
+/// <reference path="./uf7.d.ts" />
+/// <reference path="./uf8.d.ts" />
+/// <reference path="./uf9.d.ts" />
+/// <reference path="./uf10.d.ts" />
+declare const oxa: typeof import("xa");
+>oxa : Symbol(oxa, Decl(main.ts, 13, 13))
+
+declare const oxb: typeof import("xb");
+>oxb : Symbol(oxb, Decl(main.ts, 14, 13))
+
+declare function expand<X>(): { [K in keyof X]: X[K] };
+>expand : Symbol(expand, Decl(main.ts, 14, 39))
+>X : Symbol(X, Decl(main.ts, 15, 24))
+>K : Symbol(K, Decl(main.ts, 15, 33))
+>X : Symbol(X, Decl(main.ts, 15, 24))
+>X : Symbol(X, Decl(main.ts, 15, 24))
+>K : Symbol(K, Decl(main.ts, 15, 33))
+
+const q = zz;
+>q : Symbol(q, Decl(main.ts, 16, 5))
+
+const obsA: never = expand<typeof oxa>();
+>obsA : Symbol(obsA, Decl(main.ts, 17, 5))
+>expand : Symbol(expand, Decl(main.ts, 14, 39))
+>oxa : Symbol(oxa, Decl(main.ts, 13, 13))
+
+const obsB: never = expand<typeof oxb>();
+>obsB : Symbol(obsB, Decl(main.ts, 18, 5))
+>expand : Symbol(expand, Decl(main.ts, 14, 39))
+>oxb : Symbol(oxb, Decl(main.ts, 14, 13))
+
+=== /ambient.d.ts ===
+declare module "ma" {
+>"ma" : Symbol("ma", Decl(ambient.d.ts, 0, 0))
+
+    export { v as pa } from "xa";
+>v : Symbol(O.v, Decl(ambient.d.ts, 10, 27))
+>pa : Symbol(pa, Decl(ambient.d.ts, 1, 12))
+
+    export const ma: 1;
+>ma : Symbol(ma, Decl(ambient.d.ts, 2, 16))
+}
+declare module "mb" {
+>"mb" : Symbol("mb", Decl(ambient.d.ts, 3, 1))
+
+    export { v as pb } from "xb";
+>v : Symbol(O.v, Decl(ambient.d.ts, 16, 27))
+>pb : Symbol(pb, Decl(ambient.d.ts, 5, 12))
+
+    export const mb: 1;
+>mb : Symbol(mb, Decl(ambient.d.ts, 6, 16))
+}
+declare module "xa" {
+>"xa" : Symbol("xa", Decl(ambient.d.ts, 7, 1))
+
+    type T = typeof import("mb");
+>T : Symbol(T, Decl(ambient.d.ts, 8, 21))
+
+    interface O extends T { v: 0 }
+>O : Symbol(O, Decl(ambient.d.ts, 9, 33))
+>T : Symbol(T, Decl(ambient.d.ts, 8, 21))
+>v : Symbol(O.v, Decl(ambient.d.ts, 10, 27))
+
+    const o: O;
+>o : Symbol(o, Decl(ambient.d.ts, 11, 9))
+>O : Symbol(O, Decl(ambient.d.ts, 9, 33))
+
+    export = o;
+>o : Symbol(o, Decl(ambient.d.ts, 11, 9))
+}
+declare module "xb" {
+>"xb" : Symbol("xb", Decl(ambient.d.ts, 13, 1))
+
+    type T = typeof import("ma");
+>T : Symbol(T, Decl(ambient.d.ts, 14, 21))
+
+    interface O extends T { v: 0 }
+>O : Symbol(O, Decl(ambient.d.ts, 15, 33))
+>T : Symbol(T, Decl(ambient.d.ts, 14, 21))
+>v : Symbol(O.v, Decl(ambient.d.ts, 16, 27))
+
+    const o: O;
+>o : Symbol(o, Decl(ambient.d.ts, 17, 9))
+>O : Symbol(O, Decl(ambient.d.ts, 15, 33))
+
+    export = o;
+>o : Symbol(o, Decl(ambient.d.ts, 17, 9))
+}
+declare module "ia" {
+>"ia" : Symbol("ia", Decl(ambient.d.ts, 19, 1))
+
+    type T = typeof import("ma");
+>T : Symbol(T, Decl(ambient.d.ts, 20, 21))
+
+    interface O extends T { v: 0 }
+>O : Symbol(O, Decl(ambient.d.ts, 21, 33))
+>T : Symbol(T, Decl(ambient.d.ts, 20, 21))
+>v : Symbol(UA, Decl(ambient.d.ts, 22, 27))
+
+    const o: O;
+>o : Symbol(o, Decl(ambient.d.ts, 23, 9))
+>O : Symbol(O, Decl(ambient.d.ts, 21, 33))
+
+    export = o;
+>o : Symbol(o, Decl(ambient.d.ts, 23, 9))
+}
+declare module "ib" {
+>"ib" : Symbol("ib", Decl(ambient.d.ts, 25, 1))
+
+    type T = typeof import("mb");
+>T : Symbol(T, Decl(ambient.d.ts, 26, 21))
+
+    interface O extends T { v: 0 }
+>O : Symbol(O, Decl(ambient.d.ts, 27, 33))
+>T : Symbol(T, Decl(ambient.d.ts, 26, 21))
+>v : Symbol(UB, Decl(ambient.d.ts, 28, 27))
+
+    const o: O;
+>o : Symbol(o, Decl(ambient.d.ts, 29, 9))
+>O : Symbol(O, Decl(ambient.d.ts, 27, 33))
+
+    export = o;
+>o : Symbol(o, Decl(ambient.d.ts, 29, 9))
+}
+
+=== /ua.d.ts ===
+import { v } from "ia";
+>v : Symbol(v, Decl(ua.d.ts, 0, 8))
+
+export = v;
+>v : Symbol(v, Decl(ua.d.ts, 0, 8))
+
+export as namespace UA;
+>UA : Symbol(UA, Decl(ua.d.ts, 1, 11))
+
+=== /ub.d.ts ===
+import { v } from "ib";
+>v : Symbol(v, Decl(ub.d.ts, 0, 8))
+
+export = v;
+>v : Symbol(v, Decl(ub.d.ts, 0, 8))
+
+export as namespace UB;
+>UB : Symbol(UB, Decl(ub.d.ts, 1, 11))
+
+=== /uf1.d.ts ===
+declare const x: 1;
+>x : Symbol(x, Decl(uf1.d.ts, 0, 13))
+
+export = x;
+>x : Symbol(x, Decl(uf1.d.ts, 0, 13))
+
+export as namespace UF1;
+>UF1 : Symbol(UF1, Decl(uf1.d.ts, 1, 11))
+
+=== /uf2.d.ts ===
+declare const x: 2;
+>x : Symbol(x, Decl(uf2.d.ts, 0, 13))
+
+export = x;
+>x : Symbol(x, Decl(uf2.d.ts, 0, 13))
+
+export as namespace UF2;
+>UF2 : Symbol(UF2, Decl(uf2.d.ts, 1, 11))
+
+=== /uf3.d.ts ===
+declare const x: 3;
+>x : Symbol(x, Decl(uf3.d.ts, 0, 13))
+
+export = x;
+>x : Symbol(x, Decl(uf3.d.ts, 0, 13))
+
+export as namespace UF3;
+>UF3 : Symbol(UF3, Decl(uf3.d.ts, 1, 11))
+
+=== /uf4.d.ts ===
+declare const x: 4;
+>x : Symbol(x, Decl(uf4.d.ts, 0, 13))
+
+export = x;
+>x : Symbol(x, Decl(uf4.d.ts, 0, 13))
+
+export as namespace UF4;
+>UF4 : Symbol(UF4, Decl(uf4.d.ts, 1, 11))
+
+=== /uf5.d.ts ===
+declare const x: 5;
+>x : Symbol(x, Decl(uf5.d.ts, 0, 13))
+
+export = x;
+>x : Symbol(x, Decl(uf5.d.ts, 0, 13))
+
+export as namespace UF5;
+>UF5 : Symbol(UF5, Decl(uf5.d.ts, 1, 11))
+
+=== /uf6.d.ts ===
+declare const x: 6;
+>x : Symbol(x, Decl(uf6.d.ts, 0, 13))
+
+export = x;
+>x : Symbol(x, Decl(uf6.d.ts, 0, 13))
+
+export as namespace UF6;
+>UF6 : Symbol(UF6, Decl(uf6.d.ts, 1, 11))
+
+=== /uf7.d.ts ===
+declare const x: 7;
+>x : Symbol(x, Decl(uf7.d.ts, 0, 13))
+
+export = x;
+>x : Symbol(x, Decl(uf7.d.ts, 0, 13))
+
+export as namespace UF7;
+>UF7 : Symbol(UF7, Decl(uf7.d.ts, 1, 11))
+
+=== /uf8.d.ts ===
+declare const x: 8;
+>x : Symbol(x, Decl(uf8.d.ts, 0, 13))
+
+export = x;
+>x : Symbol(x, Decl(uf8.d.ts, 0, 13))
+
+export as namespace UF8;
+>UF8 : Symbol(UF8, Decl(uf8.d.ts, 1, 11))
+
+=== /uf9.d.ts ===
+declare const x: 9;
+>x : Symbol(x, Decl(uf9.d.ts, 0, 13))
+
+export = x;
+>x : Symbol(x, Decl(uf9.d.ts, 0, 13))
+
+export as namespace UF9;
+>UF9 : Symbol(UF9, Decl(uf9.d.ts, 1, 11))
+
+=== /uf10.d.ts ===
+declare const x: 10;
+>x : Symbol(x, Decl(uf10.d.ts, 0, 13))
+
+export = x;
+>x : Symbol(x, Decl(uf10.d.ts, 0, 13))
+
+export as namespace UF10;
+>UF10 : Symbol(UF10, Decl(uf10.d.ts, 1, 11))
+

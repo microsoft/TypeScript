@@ -70,7 +70,7 @@ func getSourceFileSymbolIndex(sourceFile *ast.SourceFile) map[SymbolID]*ast.Symb
 			addSymbol(symbol.Parent())
 			addSymbol(symbol.ExportSymbol())
 			for _, table := range []ast.SymbolTable{symbol.Members(), symbol.Exports()} {
-				for _, child := range table {
+				for _, child := range table.All() {
 					addSymbol(child)
 				}
 			}
@@ -81,11 +81,11 @@ func getSourceFileSymbolIndex(sourceFile *ast.SourceFile) map[SymbolID]*ast.Symb
 			}
 			addSymbol(node.Symbol())
 			addSymbol(node.LocalSymbol())
-			for _, symbol := range node.Locals() {
+			for _, symbol := range node.Locals().All() {
 				addSymbol(symbol)
 			}
 		}
-		for _, symbol := range file.GlobalExports {
+		for _, symbol := range file.GlobalExports.All() {
 			addSymbol(symbol)
 		}
 		for _, module := range file.PatternAmbientModules {
@@ -1440,13 +1440,13 @@ func (s *Session) handleCreateSnapshot(ctx context.Context, params *CreateSnapsh
 	fileChanges := s.toFileChangeSummary(params.FileNotifications)
 	var snapshotFileSystem vfs.FS
 	if params.FileSystem != nil {
-		fileSystem, fileSystemErr := requestfilesystem.NewForUpdate(params.FileSystem, s.FS(), s.GetCurrentDirectory(), &fileChanges)
+		fileSystem, fileSystemErr := s.createRequestFileSystem(params.FileSystem, s.FS(), s.FS(), &fileChanges)
 		if fileSystemErr != nil {
 			return nil, fmt.Errorf("%w: %w", ErrClientError, fileSystemErr)
 		}
 		snapshotFileSystem = fileSystem
 		apiRequest.FileSystem = fileSystem
-		apiRequest.ReplaceFileSystem = params.FileSystem.Kind == requestfilesystem.KindFull
+		apiRequest.ReplaceFileSystem = params.FileSystem.ReplacesFileSystem()
 	}
 	root := s.snapshotHost.NewRootSnapshot()
 	snapshot, err := s.snapshotHost.CloneSnapshot(ctx, root, fileChanges, apiRequest)
@@ -1496,7 +1496,7 @@ func (s *Session) handleUpdateSnapshot(ctx context.Context, params *UpdateSnapsh
 		if baseFileSystem == nil {
 			baseFileSystem = s.FS()
 		}
-		fileSystem, fileSystemErr := requestfilesystem.NewForUpdate(changes.FileSystem, baseFileSystem, s.GetCurrentDirectory(), &fileChanges)
+		fileSystem, fileSystemErr := s.createRequestFileSystem(changes.FileSystem, baseFileSystem, baseSD.snapshot.FS(), &fileChanges)
 		if fileSystemErr != nil {
 			return nil, fmt.Errorf("%w: %w", ErrClientError, fileSystemErr)
 		}
@@ -1504,7 +1504,7 @@ func (s *Session) handleUpdateSnapshot(ctx context.Context, params *UpdateSnapsh
 	}
 	if snapshotFileSystem != nil {
 		apiRequest.FileSystem = snapshotFileSystem
-		apiRequest.ReplaceFileSystem = changes.FileSystem != nil && changes.FileSystem.Kind == requestfilesystem.KindFull
+		apiRequest.ReplaceFileSystem = changes.FileSystem.ReplacesFileSystem()
 	}
 	snapshot, err := s.snapshotHost.CloneSnapshot(ctx, baseSD.snapshot, fileChanges, apiRequest)
 	if err != nil {
@@ -1523,6 +1523,32 @@ func (s *Session) handleUpdateSnapshot(ctx context.Context, params *UpdateSnapsh
 	response := s.createSnapshotResponse(snapshot, baseSD.snapshot, &changes.SnapshotRequestChangesParams)
 	s.registerSnapshot(snapshot, openState, snapshotFileSystem)
 	return response, nil
+}
+
+func (s *Session) createRequestFileSystem(params *requestfilesystem.RequestFileSystem, base vfs.FS, baseContents vfs.FS, fileChanges *project.FileChangeSummary) (vfs.FS, error) {
+	if params.Kind == requestfilesystem.KindSnapshot {
+		if len(params.Files) != 0 || len(params.Directories) != 0 || len(params.Symlinks) != 0 || len(params.RemovedPaths) != 0 {
+			return nil, fmt.Errorf("%w: snapshot filesystem entries must be supplied in fileSystem", ErrClientError)
+		}
+		if params.FileSystem != nil && params.FileSystem.Kind != requestfilesystem.KindLayer && params.FileSystem.Kind != requestfilesystem.KindFull {
+			return nil, fmt.Errorf("%w: only a layer or full filesystem can be applied on top of a snapshot filesystem", ErrClientError)
+		}
+		snapshotID := SnapshotID(params.Snapshot)
+		source, err := s.retainSnapshotData(snapshotID)
+		if err != nil {
+			return nil, err
+		}
+		defer func() { _ = s.releaseSnapshot(snapshotID) }()
+		base = requestfilesystem.Rebase(source.fileSystem, base, baseContents, fileChanges)
+		params = params.FileSystem
+		if params == nil {
+			return base, nil
+		}
+	}
+	if params.Snapshot != 0 || params.FileSystem != nil {
+		return nil, fmt.Errorf("%w: snapshot and fileSystem are only valid for a snapshot filesystem", ErrClientError)
+	}
+	return requestfilesystem.NewForUpdate(params, base, s.GetCurrentDirectory(), fileChanges)
 }
 
 func (s *Session) toAPISnapshotRequest(ctx context.Context, changes *SnapshotRequestChangesParams) (*project.APISnapshotRequest, error) {
@@ -3608,11 +3634,11 @@ func (s *Session) resolveSymbolTablePropertyOfSymbol(ctx context.Context, params
 	defer release()
 
 	symbolTable := getter(symbol)
-	if len(symbolTable) == 0 {
+	if symbolTable.Len() == 0 {
 		return nil, nil
 	}
-	if len(symbolTable) == 1 {
-		for _, sub := range symbolTable {
+	if symbolTable.Len() == 1 {
+		for _, sub := range symbolTable.All() {
 			if sd == nil {
 				return []*SymbolResponse{newFileSymbolResponse(sub)}, nil
 			}
@@ -3620,8 +3646,8 @@ func (s *Session) resolveSymbolTablePropertyOfSymbol(ctx context.Context, params
 		}
 	}
 
-	symbols := make([]*ast.Symbol, 0, len(symbolTable))
-	for _, sub := range symbolTable {
+	symbols := make([]*ast.Symbol, 0, symbolTable.Len())
+	for _, sub := range symbolTable.All() {
 		symbols = append(symbols, sub)
 	}
 	if sd == nil {

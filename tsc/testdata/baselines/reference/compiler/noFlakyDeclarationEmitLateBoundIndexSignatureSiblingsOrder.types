@@ -1,0 +1,171 @@
+//// [tests/cases/compiler/noFlakyDeclarationEmitLateBoundIndexSignatureSiblingsOrder.ts] ////
+
+=== /main.ts ===
+/// <reference path="./ambient.d.ts" />
+declare const k: string;
+>k : string
+
+declare const oxa: typeof import("xa");
+>oxa : O
+
+declare const oxb: typeof import("xb");
+>oxb : O
+
+declare function expand<X>(): { [K in keyof X]: X[K] };
+>expand : <X>() => { [K in keyof X]: X[K]; }
+
+export class C {
+>C : C
+
+    [k]: unknown;
+>[k] : unknown
+>k : string
+
+    sa = { ...(null! as typeof import("ma")) };
+>sa : { pa: 0; ma: 1; }
+>{ ...(null! as typeof import("ma")) } : { pa: 0; ma: 1; }
+>(null! as typeof import("ma")) : typeof import("ma")
+>null! as typeof import("ma") : typeof import("ma")
+>null! : never
+
+    sb = { ...(null! as typeof import("mb")) };
+>sb : { pb: 0; mb: 1; }
+>{ ...(null! as typeof import("mb")) } : { pb: 0; mb: 1; }
+>(null! as typeof import("mb")) : typeof import("mb")
+>null! as typeof import("mb") : typeof import("mb")
+>null! : never
+
+    f1 = 1;
+>f1 : number
+>1 : 1
+
+    f2 = 2;
+>f2 : number
+>2 : 2
+
+    f3 = 3;
+>f3 : number
+>3 : 3
+
+    f4 = 4;
+>f4 : number
+>4 : 4
+
+    f5 = 5;
+>f5 : number
+>5 : 5
+
+    f6 = 6;
+>f6 : number
+>6 : 6
+
+    f7 = 7;
+>f7 : number
+>7 : 7
+
+    f8 = 8;
+>f8 : number
+>8 : 8
+
+    f9 = 9;
+>f9 : number
+>9 : 9
+
+    f10 = 10;
+>f10 : number
+>10 : 10
+}
+export const obsA = expand<typeof oxa>();
+>obsA : { pb: 0; readonly mb: 1; v: 0; }
+>expand<typeof oxa>() : { pb: 0; readonly mb: 1; v: 0; }
+>expand : <X>() => { [K in keyof X]: X[K]; }
+>oxa : O
+
+export const obsB = expand<typeof oxb>();
+>obsB : { v: 0; }
+>expand<typeof oxb>() : { v: 0; }
+>expand : <X>() => { [K in keyof X]: X[K]; }
+>oxb : O
+
+=== /ambient.d.ts ===
+declare module "ma" {
+>"ma" : typeof import("ma")
+
+    export { v as pa } from "xa";
+>v : 0
+>pa : 0
+
+    export const ma: 1;
+>ma : 1
+}
+declare module "mb" {
+>"mb" : typeof import("mb")
+
+    export { v as pb } from "xb";
+>v : 0
+>pb : 0
+
+    export const mb: 1;
+>mb : 1
+}
+declare module "xa" {
+>"xa" : typeof import("xa")
+
+    type T = typeof import("mb");
+>T : typeof import("mb")
+
+    interface O extends T { v: 0 }
+>v : 0
+
+    const o: O;
+>o : O
+
+    export = o;
+>o : O
+}
+declare module "xb" {
+>"xb" : typeof import("xb")
+
+    type T = typeof import("ma");
+>T : typeof import("ma")
+
+    interface O extends T { v: 0 }
+>v : 0
+
+    const o: O;
+>o : O
+
+    export = o;
+>o : O
+}
+declare module "ia" {
+>"ia" : typeof import("ia")
+
+    type T = typeof import("ma");
+>T : typeof import("ma")
+
+    interface O extends T { v: 0 }
+>v : 0
+
+    const o: O;
+>o : O
+
+    export = o;
+>o : O
+}
+declare module "ib" {
+>"ib" : typeof import("ib")
+
+    type T = typeof import("mb");
+>T : typeof import("mb")
+
+    interface O extends T { v: 0 }
+>v : 0
+
+    const o: O;
+>o : O
+
+    export = o;
+>o : O
+}
+
