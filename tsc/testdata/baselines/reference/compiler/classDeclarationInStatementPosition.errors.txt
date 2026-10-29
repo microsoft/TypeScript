@@ -1,0 +1,66 @@
+a.ts(3,17): error TS1156: 'class' declarations can only be declared inside a block.
+a.ts(4,25): error TS1156: 'class' declarations can only be declared inside a block.
+a.ts(5,20): error TS1156: 'class' declarations can only be declared inside a block.
+a.ts(6,10): error TS1156: 'class' declarations can only be declared inside a block.
+a.ts(7,16): error TS1156: 'class' declarations can only be declared inside a block.
+a.ts(8,27): error TS1156: 'class' declarations can only be declared inside a block.
+a.ts(9,27): error TS1156: 'class' declarations can only be declared inside a block.
+a.ts(10,11): error TS1344: A label is not allowed here.
+a.ts(10,24): error TS1156: 'class' declarations can only be declared inside a block.
+b.js(1,26): error TS1156: 'class' declarations can only be declared inside a block.
+
+
+==== a.ts (9 errors) ====
+    declare const cond: boolean;
+    
+    if (cond) class C1 {}
+                    ~~
+!!! error TS1156: 'class' declarations can only be declared inside a block.
+    if (cond) {} else class C2 {}
+                            ~~
+!!! error TS1156: 'class' declarations can only be declared inside a block.
+    while (cond) class C3 {}
+                       ~~
+!!! error TS1156: 'class' declarations can only be declared inside a block.
+    do class C4 {} while (cond);
+             ~~
+!!! error TS1156: 'class' declarations can only be declared inside a block.
+    for (;;) class C5 {}
+                   ~~
+!!! error TS1156: 'class' declarations can only be declared inside a block.
+    for (const k in {}) class C6 {}
+                              ~~
+!!! error TS1156: 'class' declarations can only be declared inside a block.
+    for (const v of []) class C7 {}
+                              ~~
+!!! error TS1156: 'class' declarations can only be declared inside a block.
+    if (cond) label: class C8 {}
+              ~~~~~
+!!! error TS1344: A label is not allowed here.
+                           ~~
+!!! error TS1156: 'class' declarations can only be declared inside a block.
+    
+    // OK
+    if (cond) {
+        class C10 {}
+    }
+    class C11 {}
+    switch (0) {
+        case 0:
+            class C12 {}
+    }
+    namespace N {
+        class C13 {}
+    }
+    function f() {
+        class C14 {}
+        return class C15 {};
+    }
+    let x;
+    if (cond) x = class C16 {};
+    
+==== b.js (1 errors) ====
+    if (Math.random()) class C17 {}
+                             ~~~
+!!! error TS1156: 'class' declarations can only be declared inside a block.
+    

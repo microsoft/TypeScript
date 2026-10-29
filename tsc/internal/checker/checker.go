@@ -4343,6 +4343,9 @@ func (c *Checker) checkClassDeclaration(node *ast.Node) {
 	if node.Name() == nil && !ast.HasSyntacticModifier(node, ast.ModifierFlagsDefault) {
 		c.grammarErrorOnFirstToken(node, diagnostics.A_class_declaration_without_the_default_modifier_must_have_a_name)
 	}
+	if !c.containerAllowsBlockScopedVariable(node.Parent) {
+		c.grammarErrorOnNode(node, diagnostics.X_0_declarations_can_only_be_declared_inside_a_block, "class")
+	}
 	c.checkClassLikeDeclaration(node)
 	c.checkSourceElements(node.Members())
 	c.checkConstructorDeclaredProperties(node)
