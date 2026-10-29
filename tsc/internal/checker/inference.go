@@ -381,8 +381,9 @@ func (c *Checker) invokeOnce(n *InferenceState, source *Type, target *Type, acti
 }
 
 func (c *Checker) inferFromMatchingTypes(n *InferenceState, sources []*Type, targets []*Type, matches func(c *Checker, s *Type, t *Type) bool, sort bool) ([]*Type, []*Type) {
-	var matchedSources []*Type
-	var matchedTargets []*Type
+	var matchedSourcesBuf, matchedTargetsBuf [8]*Type
+	matchedSources := matchedSourcesBuf[:0]
+	matchedTargets := matchedTargetsBuf[:0]
 	for _, t := range targets {
 		for _, s := range sources {
 			if matches(c, s, t) {
@@ -462,13 +463,21 @@ func (c *Checker) inferToMultipleTypes(n *InferenceState, source *Type, targets 
 	typeVariableCount := 0
 	if targetFlags&TypeFlagsUnion != 0 {
 		var nakedTypeVariable *Type
+		var sourceBuf [1]*Type
 		var sources []*Type
 		if source.flags&TypeFlagsUnion != 0 {
 			sources = source.Types()
 		} else {
-			sources = []*Type{source}
+			sourceBuf[0] = source
+			sources = sourceBuf[:]
 		}
-		matched := make([]bool, len(sources))
+		var matchedBuf [64]bool
+		var matched []bool
+		if len(sources) <= len(matchedBuf) {
+			matched = matchedBuf[:len(sources)]
+		} else {
+			matched = make([]bool, len(sources))
+		}
 		inferenceCircularity := false
 		// First infer to types that are not naked type variables. For each source type we
 		// track whether inferences were made from that particular type to some target with
@@ -506,7 +515,8 @@ func (c *Checker) inferToMultipleTypes(n *InferenceState, source *Type, targets 
 		// types from which no inferences have been made so far and infer from that union to the
 		// naked type variable.
 		if typeVariableCount == 1 && !inferenceCircularity {
-			var unmatched []*Type
+			var unmatchedBuf [8]*Type
+			unmatched := unmatchedBuf[:0]
 			for i, s := range sources {
 				if !matched[i] {
 					unmatched = append(unmatched, s)
@@ -571,8 +581,8 @@ func (c *Checker) inferToConditionalType(n *InferenceState, source *Type, target
 		c.inferFromTypes(n, getNonDistributedTypeParameter(c.getTrueTypeFromConditionalType(source)), c.getTrueTypeFromConditionalType(target))
 		c.inferFromTypes(n, getNonDistributedTypeParameter(c.getFalseTypeFromConditionalType(source)), c.getFalseTypeFromConditionalType(target))
 	} else {
-		targetTypes := []*Type{c.getTrueTypeFromConditionalType(target), c.getFalseTypeFromConditionalType(target)}
-		c.inferToMultipleTypesWithPriority(n, source, targetTypes, target.flags, core.IfElse(n.contravariant, InferencePriorityContravariantConditional, 0))
+		targetTypes := [2]*Type{c.getTrueTypeFromConditionalType(target), c.getFalseTypeFromConditionalType(target)}
+		c.inferToMultipleTypesWithPriority(n, source, targetTypes[:], target.flags, core.IfElse(n.contravariant, InferencePriorityContravariantConditional, 0))
 	}
 }
 
