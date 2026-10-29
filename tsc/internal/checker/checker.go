@@ -22918,12 +22918,7 @@ func (c *Checker) instantiateTypeWorker(t *Type, m *TypeMapper, alias *TypeAlias
 		objectFlags := t.objectFlags
 		if objectFlags&(ObjectFlagsReference|ObjectFlagsAnonymous|ObjectFlagsMapped) != 0 {
 			if objectFlags&ObjectFlagsReference != 0 && t.AsTypeReference().node == nil {
-				resolvedTypeArguments := t.AsTypeReference().resolvedTypeArguments
-				newTypeArguments := c.instantiateTypes(resolvedTypeArguments, m)
-				if core.Same(newTypeArguments, resolvedTypeArguments) {
-					return t
-				}
-				return c.createNormalizedTypeReference(t.Target(), newTypeArguments)
+				return c.instantiateTypeReference(t, m)
 			}
 			if objectFlags&ObjectFlagsReverseMapped != 0 {
 				return c.instantiateReverseMappedType(t, m)
@@ -22988,6 +22983,27 @@ func (c *Checker) instantiateTypeWorker(t *Type, m *TypeMapper, alias *TypeAlias
 	return t
 }
 
+func (c *Checker) instantiateTypeReference(t *Type, m *TypeMapper) *Type {
+	resolvedTypeArguments := t.AsTypeReference().resolvedTypeArguments
+	// Instantiate the type arguments into a temporary buffer, and only copy them once we know
+	// they're needed for a new type reference.
+	var buf [8]*Type
+	newTypeArguments := c.instantiateListInto(resolvedTypeArguments, m, (*Checker).instantiateType, buf[:])
+	if core.Same(newTypeArguments, resolvedTypeArguments) {
+		return t
+	}
+	target := t.Target()
+	if target.objectFlags&ObjectFlagsTuple == 0 || target.AsTupleType().combinedFlags&ElementFlagsNonRequired == 0 {
+		// No normalization is needed, so check for an existing instantiation first.
+		id := getTypeListKey(newTypeArguments)
+		if existing, ok := target.AsInterfaceType().instantiations[id]; ok {
+			return existing
+		}
+		return c.newTypeReferenceInstantiation(target, id, slices.Clone(newTypeArguments), ObjectFlagsNone)
+	}
+	return c.createNormalizedTypeReference(target, slices.Clone(newTypeArguments))
+}
+
 // Handles instantiation of the following object types:
 // AnonymousType (ObjectFlagsAnonymous|ObjectFlagsSingleSignatureType)
 // TypeReference with node != nil (ObjectFlagsReference)
@@ -23044,8 +23060,15 @@ func (c *Checker) getObjectTypeInstantiation(t *Type, m *TypeMapper, alias *Type
 	}
 	// We are instantiating an anonymous type that has one or more type parameters in scope. Apply the
 	// mapper to the type parameters to produce the effective list of type arguments, and compute the
-	// instantiation cache key from the type IDs of the type arguments.
-	typeArguments := make([]*Type, len(typeParameters))
+	// instantiation cache key from the type IDs of the type arguments. The type arguments are computed
+	// into a temporary buffer and only copied when creating a new instantiation.
+	var buf [8]*Type
+	var typeArguments []*Type
+	if len(typeParameters) <= len(buf) {
+		typeArguments = buf[:len(typeParameters)]
+	} else {
+		typeArguments = make([]*Type, len(typeParameters))
+	}
 	for i, tp := range typeParameters {
 		typeArguments[i] = c.mapTypeWithCompositeMapper(tp, t.Mapper(), m)
 	}
@@ -23061,7 +23084,7 @@ func (c *Checker) getObjectTypeInstantiation(t *Type, m *TypeMapper, alias *Type
 	}
 	result := data.instantiations[key]
 	if result == nil {
-		newMapper := newTypeMapper(typeParameters, typeArguments)
+		newMapper := newTypeMapper(typeParameters, slices.Clone(typeArguments))
 		if target.objectFlags&ObjectFlagsSingleSignatureType != 0 && m != nil {
 			newMapper = c.combineTypeMappers(newMapper, m)
 		}
@@ -23477,10 +23500,21 @@ func (c *Checker) instantiateIndexInfos(indexInfos []*IndexInfo, m *TypeMapper) 
 }
 
 func (c *Checker) instantiateList[T comparable](values []T, m *TypeMapper, instantiator func(c *Checker, value T, m *TypeMapper) T) []T {
+	return c.instantiateListInto(values, m, instantiator, nil)
+}
+
+// Like instantiateList, but if any value changes, the result is written into buf when it has
+// sufficient capacity. Callers must copy such a result before retaining it.
+func (c *Checker) instantiateListInto[T comparable](values []T, m *TypeMapper, instantiator func(c *Checker, value T, m *TypeMapper) T, buf []T) []T {
 	for i, value := range values {
 		mapped := instantiator(c, value, m)
 		if mapped != value {
-			result := make([]T, len(values))
+			var result []T
+			if cap(buf) >= len(values) {
+				result = buf[:len(values)]
+			} else {
+				result = make([]T, len(values))
+			}
 			copy(result, values[:i])
 			result[i] = mapped
 			for j := i + 1; j < len(values); j++ {
@@ -25856,10 +25890,14 @@ func (c *Checker) createTypeReference(target *Type, typeArguments []*Type) *Type
 
 func (c *Checker) createTypeReferenceEx(target *Type, typeArguments []*Type, objectFlags ObjectFlags) *Type {
 	id := getTypeListKey(typeArguments)
-	intf := target.AsInterfaceType()
-	if t, ok := intf.instantiations[id]; ok {
+	if t, ok := target.AsInterfaceType().instantiations[id]; ok {
 		return t
 	}
+	return c.newTypeReferenceInstantiation(target, id, typeArguments, objectFlags)
+}
+
+func (c *Checker) newTypeReferenceInstantiation(target *Type, id CacheHashKey, typeArguments []*Type, objectFlags ObjectFlags) *Type {
+	intf := target.AsInterfaceType()
 	t := c.newObjectType(ObjectFlagsReference|objectFlags|c.getPropagatingFlagsOfTypes(typeArguments, TypeFlagsNone), target.symbol)
 	d := t.AsTypeReference()
 	d.target = target
