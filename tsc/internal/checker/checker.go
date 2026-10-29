@@ -17233,15 +17233,21 @@ func (c *Checker) checkDeclarationInitializer(declaration *ast.Node, checkMode C
 			t = c.checkExpressionCachedEx(initializer, checkMode)
 		}
 	}
-	if ast.IsParameterDeclaration(ast.GetRootDeclaration(declaration)) {
+	// When a destructured parameter has a default like `= {}`, padding the
+	// initializer's object/tuple type with missing binding elements would
+	// invent `any`-typed properties and erase a contextual parameter type
+	// (TS7031). Only pad when there is no contextual type for the parameter.
+	// See https://github.com/microsoft/TypeScript/issues/65011 and #64974.
+	root := ast.GetRootDeclaration(declaration)
+	if ast.IsParameterDeclaration(root) {
 		name := declaration.Name()
 		switch name.Kind {
 		case ast.KindObjectBindingPattern:
-			if isObjectLiteralType(t) {
+			if isObjectLiteralType(t) && c.getContextualTypeForVariableLikeDeclaration(root, ContextFlagsNone) == nil {
 				return c.padObjectLiteralType(t, name)
 			}
 		case ast.KindArrayBindingPattern:
-			if isTupleType(t) {
+			if isTupleType(t) && c.getContextualTypeForVariableLikeDeclaration(root, ContextFlagsNone) == nil {
 				return c.padTupleType(t, name)
 			}
 		}

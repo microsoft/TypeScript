@@ -114,3 +114,184 @@ typedObject({ required: "value" });
 typedArray(["value"]);
 >typedArray : Symbol(typedArray, Decl(main.ts, 8, 12))
 
+// Contextual typing must win over padding for `= {}` defaults (#64974 / #65011).
+type F = (input?: { a?: string; b?: number }) => number;
+>F : Symbol(F, Decl(main.ts, 25, 22))
+>input : Symbol(input, Decl(main.ts, 28, 10))
+>a : Symbol(a, Decl(main.ts, 28, 19))
+>b : Symbol(b, Decl(main.ts, 28, 31))
+
+export const f1: F = ({ a, b } = {}) => (a ? 1 : 0) + (b ?? 0);
+>f1 : Symbol(f1, Decl(main.ts, 29, 12))
+>F : Symbol(F, Decl(main.ts, 25, 22))
+>a : Symbol(a, Decl(main.ts, 29, 23))
+>b : Symbol(b, Decl(main.ts, 29, 26))
+>a : Symbol(a, Decl(main.ts, 29, 23))
+>b : Symbol(b, Decl(main.ts, 29, 26))
+
+export const f2: (input: { a?: string; b?: number }) => number = ({ a, b } = {}) => (a ? 1 : 0) + (b ?? 0);
+>f2 : Symbol(f2, Decl(main.ts, 31, 12))
+>input : Symbol(input, Decl(main.ts, 31, 18))
+>a : Symbol(a, Decl(main.ts, 31, 26))
+>b : Symbol(b, Decl(main.ts, 31, 38))
+>a : Symbol(a, Decl(main.ts, 31, 67))
+>b : Symbol(b, Decl(main.ts, 31, 70))
+>a : Symbol(a, Decl(main.ts, 31, 67))
+>b : Symbol(b, Decl(main.ts, 31, 70))
+
+declare function f3(callback: F): void;
+>f3 : Symbol(f3, Decl(main.ts, 31, 107))
+>callback : Symbol(callback, Decl(main.ts, 33, 20))
+>F : Symbol(F, Decl(main.ts, 25, 22))
+
+f3(({ a, b } = {}) => {
+>f3 : Symbol(f3, Decl(main.ts, 31, 107))
+>a : Symbol(a, Decl(main.ts, 34, 5))
+>b : Symbol(b, Decl(main.ts, 34, 8))
+
+    const c: number = a;
+>c : Symbol(c, Decl(main.ts, 35, 9))
+>a : Symbol(a, Decl(main.ts, 34, 5))
+
+    const d: string = b;
+>d : Symbol(d, Decl(main.ts, 36, 9))
+>b : Symbol(b, Decl(main.ts, 34, 8))
+
+    return 0;
+});
+
+export const f4: (input?: { a?: { b?: number } }) => number = ({ a: { b } = {} } = {}) => {
+>f4 : Symbol(f4, Decl(main.ts, 40, 12))
+>input : Symbol(input, Decl(main.ts, 40, 18))
+>a : Symbol(a, Decl(main.ts, 40, 27))
+>b : Symbol(b, Decl(main.ts, 40, 33))
+>b : Symbol(b, Decl(main.ts, 40, 69))
+
+    const c: string = b;
+>c : Symbol(c, Decl(main.ts, 41, 9))
+>b : Symbol(b, Decl(main.ts, 40, 69))
+
+    return b ?? 0;
+>b : Symbol(b, Decl(main.ts, 40, 69))
+
+};
+
+export function f5({ a: { b } = {} }: { a?: { b?: number } }) {
+>f5 : Symbol(f5, Decl(main.ts, 43, 2))
+>a : Symbol(a, Decl(main.ts, 45, 39))
+>b : Symbol(b, Decl(main.ts, 45, 25))
+>a : Symbol(a, Decl(main.ts, 45, 39))
+>b : Symbol(b, Decl(main.ts, 45, 45))
+
+    const c: string = b;
+>c : Symbol(c, Decl(main.ts, 46, 9))
+>b : Symbol(b, Decl(main.ts, 45, 25))
+
+    return b;
+>b : Symbol(b, Decl(main.ts, 45, 25))
+}
+
+export const f6: (input?: { a?: number }) => void = ({ a, b } = {}) => {
+>f6 : Symbol(f6, Decl(main.ts, 50, 12))
+>input : Symbol(input, Decl(main.ts, 50, 18))
+>a : Symbol(a, Decl(main.ts, 50, 27))
+>a : Symbol(a, Decl(main.ts, 50, 54))
+>b : Symbol(b, Decl(main.ts, 50, 57))
+
+    const c: string = a;
+>c : Symbol(c, Decl(main.ts, 51, 9))
+>a : Symbol(a, Decl(main.ts, 50, 54))
+
+};
+
+export const f7: (input?: [{ a?: number }?]) => void = ([{ a } = {}] = []) => {
+>f7 : Symbol(f7, Decl(main.ts, 54, 12))
+>input : Symbol(input, Decl(main.ts, 54, 18))
+>a : Symbol(a, Decl(main.ts, 54, 28))
+>a : Symbol(a, Decl(main.ts, 54, 58))
+
+    const b: string = a;
+>b : Symbol(b, Decl(main.ts, 55, 9))
+>a : Symbol(a, Decl(main.ts, 54, 58))
+
+};
+
+export const f8: (input?: { [key: string]: number }) => void = ({ a } = {}) => {
+>f8 : Symbol(f8, Decl(main.ts, 58, 12))
+>input : Symbol(input, Decl(main.ts, 58, 18))
+>key : Symbol(key, Decl(main.ts, 58, 29))
+>a : Symbol(a, Decl(main.ts, 58, 65))
+
+    const b: string = a;
+>b : Symbol(b, Decl(main.ts, 59, 9))
+>a : Symbol(a, Decl(main.ts, 58, 65))
+
+};
+
+export const f9: (input?: any) => void = ({ a: { b } = {} } = {}) => {
+>f9 : Symbol(f9, Decl(main.ts, 62, 12))
+>input : Symbol(input, Decl(main.ts, 62, 18))
+>b : Symbol(b, Decl(main.ts, 62, 48))
+
+    b;
+>b : Symbol(b, Decl(main.ts, 62, 48))
+
+};
+
+declare function f10<T>(value: T, callback: (input?: Partial<T>) => void): void;
+>f10 : Symbol(f10, Decl(main.ts, 64, 2))
+>T : Symbol(T, Decl(main.ts, 66, 21))
+>value : Symbol(value, Decl(main.ts, 66, 24))
+>T : Symbol(T, Decl(main.ts, 66, 21))
+>callback : Symbol(callback, Decl(main.ts, 66, 33))
+>input : Symbol(input, Decl(main.ts, 66, 45))
+>Partial : Symbol(Partial, Decl(lib.es5.d.ts, --, --))
+>T : Symbol(T, Decl(main.ts, 66, 21))
+
+f10({ a: 1 }, ({ a } = {}) => {
+>f10 : Symbol(f10, Decl(main.ts, 64, 2))
+>a : Symbol(a, Decl(main.ts, 67, 5))
+>a : Symbol(a, Decl(main.ts, 67, 16))
+
+    const b: string = a;
+>b : Symbol(b, Decl(main.ts, 68, 9))
+>a : Symbol(a, Decl(main.ts, 67, 16))
+
+});
+
+export const f11: (input?: { a?: number }[]) => void = ([...[{ a } = {}]] = []) => {
+>f11 : Symbol(f11, Decl(main.ts, 71, 12))
+>input : Symbol(input, Decl(main.ts, 71, 19))
+>a : Symbol(a, Decl(main.ts, 71, 28))
+>a : Symbol(a, Decl(main.ts, 71, 62))
+
+    const b: string = a;
+>b : Symbol(b, Decl(main.ts, 72, 9))
+>a : Symbol(a, Decl(main.ts, 71, 62))
+
+};
+
+export const f12: (input: { a: boolean; b?: string }) => string = ({ a, b } = { a: false }) => `${a}${b}`;
+>f12 : Symbol(f12, Decl(main.ts, 75, 12))
+>input : Symbol(input, Decl(main.ts, 75, 19))
+>a : Symbol(a, Decl(main.ts, 75, 27))
+>b : Symbol(b, Decl(main.ts, 75, 39))
+>a : Symbol(a, Decl(main.ts, 75, 68))
+>b : Symbol(b, Decl(main.ts, 75, 71))
+>a : Symbol(a, Decl(main.ts, 75, 79))
+>a : Symbol(a, Decl(main.ts, 75, 68))
+>b : Symbol(b, Decl(main.ts, 75, 71))
+
+export const f13 = (input: { a?: number; b?: string }[]) => input.map(({ a, b } = {}) => `${a}${b}`);
+>f13 : Symbol(f13, Decl(main.ts, 77, 12))
+>input : Symbol(input, Decl(main.ts, 77, 20))
+>a : Symbol(a, Decl(main.ts, 77, 28))
+>b : Symbol(b, Decl(main.ts, 77, 40))
+>input.map : Symbol(Array.map, Decl(lib.es5.d.ts, --, --))
+>input : Symbol(input, Decl(main.ts, 77, 20))
+>map : Symbol(Array.map, Decl(lib.es5.d.ts, --, --))
+>a : Symbol(a, Decl(main.ts, 77, 72))
+>b : Symbol(b, Decl(main.ts, 77, 75))
+>a : Symbol(a, Decl(main.ts, 77, 72))
+>b : Symbol(b, Decl(main.ts, 77, 75))
+
