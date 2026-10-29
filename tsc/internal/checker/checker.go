@@ -22985,10 +22985,18 @@ func (c *Checker) instantiateTypeWorker(t *Type, m *TypeMapper, alias *TypeAlias
 
 func (c *Checker) instantiateTypeReference(t *Type, m *TypeMapper) *Type {
 	resolvedTypeArguments := t.AsTypeReference().resolvedTypeArguments
-	// Instantiate the type arguments into a temporary buffer, and only copy them once we know
-	// they're needed for a new type reference.
+	// Instantiate small argument lists into a temporary buffer, and only copy them once we know
+	// they're needed for a new type reference. Retained arguments are kept in a separate variable
+	// that never aliases buf, so that buf does not escape to the heap.
 	var buf [8]*Type
-	newTypeArguments := c.instantiateListInto(resolvedTypeArguments, m, (*Checker).instantiateType, buf[:])
+	var ownedTypeArguments []*Type
+	var newTypeArguments []*Type
+	if len(resolvedTypeArguments) <= len(buf) {
+		newTypeArguments = c.instantiateListInto(resolvedTypeArguments, m, (*Checker).instantiateType, buf[:])
+	} else {
+		ownedTypeArguments = c.instantiateList(resolvedTypeArguments, m, (*Checker).instantiateType)
+		newTypeArguments = ownedTypeArguments
+	}
 	if core.Same(newTypeArguments, resolvedTypeArguments) {
 		return t
 	}
@@ -23002,14 +23010,13 @@ func (c *Checker) instantiateTypeReference(t *Type, m *TypeMapper) *Type {
 			return existing
 		}
 	}
-	if len(newTypeArguments) <= len(buf) {
-		// Arguments written into buf must be copied before they are retained.
-		newTypeArguments = slices.Clone(newTypeArguments)
+	if ownedTypeArguments == nil {
+		ownedTypeArguments = slices.Clone(newTypeArguments)
 	}
 	if normalize {
-		return c.createNormalizedTypeReference(target, newTypeArguments)
+		return c.createNormalizedTypeReference(target, ownedTypeArguments)
 	}
-	return c.newTypeReferenceInstantiation(target, id, newTypeArguments, ObjectFlagsNone)
+	return c.newTypeReferenceInstantiation(target, id, ownedTypeArguments, ObjectFlagsNone)
 }
 
 // Handles instantiation of the following object types:
@@ -23069,13 +23076,16 @@ func (c *Checker) getObjectTypeInstantiation(t *Type, m *TypeMapper, alias *Type
 	// We are instantiating an anonymous type that has one or more type parameters in scope. Apply the
 	// mapper to the type parameters to produce the effective list of type arguments, and compute the
 	// instantiation cache key from the type IDs of the type arguments. The type arguments are computed
-	// into a temporary buffer and only copied when creating a new instantiation.
+	// into a temporary buffer and only copied when creating a new instantiation. Retained arguments
+	// are kept in a separate variable that never aliases buf, so that buf does not escape to the heap.
 	var buf [8]*Type
+	var ownedTypeArguments []*Type
 	var typeArguments []*Type
 	if len(typeParameters) <= len(buf) {
 		typeArguments = buf[:len(typeParameters)]
 	} else {
-		typeArguments = make([]*Type, len(typeParameters))
+		ownedTypeArguments = make([]*Type, len(typeParameters))
+		typeArguments = ownedTypeArguments
 	}
 	for i, tp := range typeParameters {
 		typeArguments[i] = c.mapTypeWithCompositeMapper(tp, t.Mapper(), m)
@@ -23092,11 +23102,10 @@ func (c *Checker) getObjectTypeInstantiation(t *Type, m *TypeMapper, alias *Type
 	}
 	result := data.instantiations[key]
 	if result == nil {
-		if len(typeParameters) <= len(buf) {
-			// Arguments written into buf must be copied before the mapper retains them.
-			typeArguments = slices.Clone(typeArguments)
+		if ownedTypeArguments == nil {
+			ownedTypeArguments = slices.Clone(typeArguments)
 		}
-		newMapper := newTypeMapper(typeParameters, typeArguments)
+		newMapper := newTypeMapper(typeParameters, ownedTypeArguments)
 		if target.objectFlags&ObjectFlagsSingleSignatureType != 0 && m != nil {
 			newMapper = c.combineTypeMappers(newMapper, m)
 		}
