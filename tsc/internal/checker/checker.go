@@ -27311,10 +27311,21 @@ func everyContainedType(t *Type, f func(*Type) bool) bool {
 func (c *Checker) filterType(t *Type, f func(*Type) bool) *Type {
 	if t.flags&TypeFlagsUnion != 0 {
 		types := t.Types()
-		filtered := core.Filter(types, f)
-		if core.Same(types, filtered) {
+		firstRemoved := slices.IndexFunc(types, func(u *Type) bool { return !f(u) })
+		if firstRemoved < 0 {
 			return t
 		}
+		// The filtered lists are only needed while constructing the result, which copies them
+		// into a new type if needed, so borrow temporary storage for them.
+		set := c.getTemporaryTypeSet()
+		defer c.releaseTemporaryTypeSet(set)
+		filtered := append(set.values[:0], types[:firstRemoved]...)
+		for _, u := range types[firstRemoved+1:] {
+			if f(u) {
+				filtered = append(filtered, u)
+			}
+		}
+		set.values = filtered
 		origin := t.AsUnionType().origin
 		var newOrigin *Type
 		if origin != nil && origin.flags&TypeFlagsUnion != 0 {
@@ -27324,9 +27335,15 @@ func (c *Checker) filterType(t *Type, f func(*Type) bool) *Type {
 			// Otherwise, if we have exactly one type left in the origin set, return that as the filtered type.
 			// Otherwise, construct a new filtered origin type.
 			originTypes := origin.Types()
-			originFiltered := core.Filter(originTypes, func(u *Type) bool {
-				return u.flags&TypeFlagsUnion != 0 || f(u)
-			})
+			originSet := c.getTemporaryTypeSet()
+			defer c.releaseTemporaryTypeSet(originSet)
+			originFiltered := originSet.values[:0]
+			for _, u := range originTypes {
+				if u.flags&TypeFlagsUnion != 0 || f(u) {
+					originFiltered = append(originFiltered, u)
+				}
+			}
+			originSet.values = originFiltered
 			if len(originTypes)-len(originFiltered) == len(types)-len(filtered) {
 				if len(originFiltered) == 1 {
 					return originFiltered[0]
@@ -27355,10 +27372,16 @@ func (c *Checker) removeType(t *Type, targetType *Type) *Type {
 		return c.filterType(t, func(t *Type) bool { return t != targetType })
 	}
 	types := t.Types()
-	if i, ok := slices.BinarySearchFunc(types, targetType, CompareTypes); ok {
-		if len(types) == 2 {
-			return types[1-i]
+	if len(types) == 2 {
+		switch targetType {
+		case types[0]:
+			return types[1]
+		case types[1]:
+			return types[0]
 		}
+		return t
+	}
+	if i, ok := slices.BinarySearchFunc(types, targetType, CompareTypes); ok {
 		// Remove the target type from the slice.
 		set := c.getTemporaryTypeSet()
 		defer c.releaseTemporaryTypeSet(set)
