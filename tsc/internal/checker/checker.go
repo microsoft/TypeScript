@@ -18091,9 +18091,19 @@ func getNodeListKey(nodes []*ast.Node) CacheHashKey {
 }
 
 func isTypeReferenceWithGenericArguments(t *Type) bool {
-	return isNonDeferredTypeReference(t) && core.Some(t.checker.getTypeArguments(t), func(t *Type) bool {
-		return t.flags&TypeFlagsTypeParameter != 0 || isTypeReferenceWithGenericArguments(t)
-	})
+	if !isNonDeferredTypeReference(t) {
+		return false
+	}
+	// The type arguments of a non-deferred type reference are fixed at creation, so the answer never changes.
+	if t.cacheFlags&typeCacheHasGenericArgumentsComputed == 0 {
+		if core.Some(t.checker.getTypeArguments(t), func(t *Type) bool {
+			return t.flags&TypeFlagsTypeParameter != 0 || isTypeReferenceWithGenericArguments(t)
+		}) {
+			t.cacheFlags |= typeCacheHasGenericArguments
+		}
+		t.cacheFlags |= typeCacheHasGenericArgumentsComputed
+	}
+	return t.cacheFlags&typeCacheHasGenericArguments != 0
 }
 
 func isNonDeferredTypeReference(t *Type) bool {

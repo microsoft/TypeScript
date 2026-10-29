@@ -788,12 +788,14 @@ const (
 type typeCacheFlags uint8
 
 const (
-	typeCacheResolvingMembers        typeCacheFlags = 1 << iota // Structured type members are being resolved
-	typeCacheShouldNormalizeComputed                            // shouldNormalizeIntersection result has been computed
-	typeCacheShouldNormalize                                    // shouldNormalizeIntersection result
-	typeCacheNonNullableUnion                                   // Union of only definitely non-nullable, non-instantiable types
-	typeCacheIsWeakComputed                                     // isWeakType result has been computed
-	typeCacheIsWeak                                             // isWeakType result
+	typeCacheResolvingMembers            typeCacheFlags = 1 << iota // Structured type members are being resolved
+	typeCacheShouldNormalizeComputed                                // shouldNormalizeIntersection result has been computed
+	typeCacheShouldNormalize                                        // shouldNormalizeIntersection result
+	typeCacheNonNullableUnion                                       // Union of only definitely non-nullable, non-instantiable types
+	typeCacheIsWeakComputed                                         // isWeakType result has been computed
+	typeCacheIsWeak                                                 // isWeakType result
+	typeCacheHasGenericArgumentsComputed                            // isTypeReferenceWithGenericArguments result has been computed
+	typeCacheHasGenericArguments                                    // isTypeReferenceWithGenericArguments result
 )
 
 type Type struct {
