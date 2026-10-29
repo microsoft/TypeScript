@@ -41,37 +41,37 @@ async function* f(): AsyncGenerator<"NOT_FOUND_AUTHOR" | "NOT_FOUND_BOOK", BookW
     // Without yield*, the type of test1 is
     //   Result<Author, "NOT_FOUND_AUTHOR>
     const test1 = await authorPromise.then(mapper)
->test1 : Result<Author, "NOT_FOUND_AUTHOR">
->await authorPromise.then(mapper) : Result<Author, "NOT_FOUND_AUTHOR">
->authorPromise.then(mapper) : Promise<Result<Author, "NOT_FOUND_AUTHOR">>
->authorPromise.then : <TResult1 = Result<Author, "NOT_FOUND_AUTHOR">, TResult2 = never>(onfulfilled?: ((value: Result<Author, "NOT_FOUND_AUTHOR">) => TResult1 | PromiseLike<TResult1>) | null | undefined, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | null | undefined) => Promise<TResult1 | TResult2>
+>test1 : Result<Author, "NOT_FOUND_AUTHOR"> & not { then(): any; } & not { then(): any; }
+>await authorPromise.then(mapper) : Result<Author, "NOT_FOUND_AUTHOR"> & not { then(): any; } & not { then(): any; }
+>authorPromise.then(mapper) : Promise<Result<Author, "NOT_FOUND_AUTHOR"> & not { then(): any; }>
+>authorPromise.then : <TResult1 = Result<Author, "NOT_FOUND_AUTHOR">, TResult2 = never>(onfulfilled?: ((value: Result<Author, "NOT_FOUND_AUTHOR">) => TResult1 | PromiseLike<TResult1>) | null | undefined, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | null | undefined) => Promise<Awaited<TResult1> | Awaited<TResult2>>
 >authorPromise : Promise<Result<Author, "NOT_FOUND_AUTHOR">>
->then : <TResult1 = Result<Author, "NOT_FOUND_AUTHOR">, TResult2 = never>(onfulfilled?: ((value: Result<Author, "NOT_FOUND_AUTHOR">) => TResult1 | PromiseLike<TResult1>) | null | undefined, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | null | undefined) => Promise<TResult1 | TResult2>
+>then : <TResult1 = Result<Author, "NOT_FOUND_AUTHOR">, TResult2 = never>(onfulfilled?: ((value: Result<Author, "NOT_FOUND_AUTHOR">) => TResult1 | PromiseLike<TResult1>) | null | undefined, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | null | undefined) => Promise<Awaited<TResult1> | Awaited<TResult2>>
 >mapper : <T>(result: Result<T, "NOT_FOUND_AUTHOR">) => Result<T, "NOT_FOUND_AUTHOR">
 
     // With yield*, the type of test2 is
     //    Author | BookWithAuthor
     // But this codepath has no way to produce BookWithAuthor
     const test2 = yield* await authorPromise.then(mapper)
->test2 : Author
->yield* await authorPromise.then(mapper) : Author
->await authorPromise.then(mapper) : Result<Author, "NOT_FOUND_AUTHOR">
->authorPromise.then(mapper) : Promise<Result<Author, "NOT_FOUND_AUTHOR">>
->authorPromise.then : <TResult1 = Result<Author, "NOT_FOUND_AUTHOR">, TResult2 = never>(onfulfilled?: ((value: Result<Author, "NOT_FOUND_AUTHOR">) => TResult1 | PromiseLike<TResult1>) | null | undefined, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | null | undefined) => Promise<TResult1 | TResult2>
+>test2 : Author & not { then(): any; }
+>yield* await authorPromise.then(mapper) : Author & not { then(): any; }
+>await authorPromise.then(mapper) : Result<Author, "NOT_FOUND_AUTHOR"> & not { then(): any; } & not { then(): any; }
+>authorPromise.then(mapper) : Promise<Result<Author, "NOT_FOUND_AUTHOR"> & not { then(): any; }>
+>authorPromise.then : <TResult1 = Result<Author, "NOT_FOUND_AUTHOR">, TResult2 = never>(onfulfilled?: ((value: Result<Author, "NOT_FOUND_AUTHOR">) => TResult1 | PromiseLike<TResult1>) | null | undefined, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | null | undefined) => Promise<Awaited<TResult1> | Awaited<TResult2>>
 >authorPromise : Promise<Result<Author, "NOT_FOUND_AUTHOR">>
->then : <TResult1 = Result<Author, "NOT_FOUND_AUTHOR">, TResult2 = never>(onfulfilled?: ((value: Result<Author, "NOT_FOUND_AUTHOR">) => TResult1 | PromiseLike<TResult1>) | null | undefined, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | null | undefined) => Promise<TResult1 | TResult2>
+>then : <TResult1 = Result<Author, "NOT_FOUND_AUTHOR">, TResult2 = never>(onfulfilled?: ((value: Result<Author, "NOT_FOUND_AUTHOR">) => TResult1 | PromiseLike<TResult1>) | null | undefined, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | null | undefined) => Promise<Awaited<TResult1> | Awaited<TResult2>>
 >mapper : <T>(result: Result<T, "NOT_FOUND_AUTHOR">) => Result<T, "NOT_FOUND_AUTHOR">
 
     const x1 = yield* g();
->x1 : unknown
->yield* g() : unknown
->g() : AsyncGenerator<"NOT_FOUND_AUTHOR" | "NOT_FOUND_BOOK", unknown, unknown>
+>x1 : not { then(): any; }
+>yield* g() : not { then(): any; }
+>g() : AsyncGenerator<("NOT_FOUND_AUTHOR" & not { then(): any; }) | ("NOT_FOUND_BOOK" & not { then(): any; }), unknown, unknown>
 >g : <T, U, V>() => AsyncGenerator<T, U, V>
 
     const x2: number = yield* g();
 >x2 : number
->yield* g() : number
->g() : AsyncGenerator<"NOT_FOUND_AUTHOR" | "NOT_FOUND_BOOK", number, unknown>
+>yield* g() : number & not { then(): any; }
+>g() : AsyncGenerator<("NOT_FOUND_AUTHOR" & not { then(): any; }) | ("NOT_FOUND_BOOK" & not { then(): any; }), number & not { then(): any; }, unknown>
 >g : <T, U, V>() => AsyncGenerator<T, U, V>
 
     return null! as BookWithAuthor;

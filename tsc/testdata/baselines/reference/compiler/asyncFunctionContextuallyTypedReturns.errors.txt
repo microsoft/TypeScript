@@ -1,0 +1,159 @@
+asyncFunctionContextuallyTypedReturns.ts(2,8): error TS2322: Type 'Promise<not { then(): any; }> | [0]' is not assignable to type 'PromiseLike<[0]> | [0]'.
+  Type 'Promise<not { then(): any; }>' is not assignable to type 'PromiseLike<[0]> | [0]'.
+    Type 'Promise<not { then(): any; }>' is not assignable to type 'PromiseLike<[0]>'.
+      Types of property 'then' are incompatible.
+        Type '<TResult1 = not { then(): any; }, TResult2 = never>(onfulfilled?: ((value: not { then(): any; }) => TResult1 | PromiseLike<TResult1>) | null | undefined, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | null | undefined) => Promise<Awaited<TResult1> | Awaited<TResult2>>' is not assignable to type '<TResult1 = [0], TResult2 = never>(onfulfilled?: ((value: [0]) => TResult1 | PromiseLike<TResult1>) | null | undefined, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | null | undefined) => PromiseLike<TResult1 | TResult2>'.
+          Types of parameters 'onfulfilled' and 'onfulfilled' are incompatible.
+            Types of parameters 'value' and 'value' are incompatible.
+              Type 'not { then(): any; }' is not assignable to type '[0]'.
+                Type 'unknown' is not assignable to type '[0]'.
+asyncFunctionContextuallyTypedReturns.ts(3,14): error TS2322: Type 'Promise<not { then(): any; }>' is not assignable to type 'PromiseLike<[0]> | [0]'.
+  Type 'Promise<not { then(): any; }>' is not assignable to type 'PromiseLike<[0]>'.
+    Types of property 'then' are incompatible.
+      Type '<TResult1 = not { then(): any; }, TResult2 = never>(onfulfilled?: ((value: not { then(): any; }) => TResult1 | PromiseLike<TResult1>) | null | undefined, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | null | undefined) => Promise<Awaited<TResult1> | Awaited<TResult2>>' is not assignable to type '<TResult1 = [0], TResult2 = never>(onfulfilled?: ((value: [0]) => TResult1 | PromiseLike<TResult1>) | null | undefined, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | null | undefined) => PromiseLike<TResult1 | TResult2>'.
+        Types of parameters 'onfulfilled' and 'onfulfilled' are incompatible.
+          Types of parameters 'value' and 'value' are incompatible.
+            Type 'not { then(): any; }' is not assignable to type '[0]'.
+              Type 'unknown' is not assignable to type '[0]'.
+asyncFunctionContextuallyTypedReturns.ts(6,8): error TS2322: Type '"contextuallyTypable" | Promise<not { then(): any; }>' is not assignable to type '"contextuallyTypable" | PromiseLike<"contextuallyTypable">'.
+  Type 'Promise<not { then(): any; }>' is not assignable to type '"contextuallyTypable" | PromiseLike<"contextuallyTypable">'.
+    Type 'Promise<not { then(): any; }>' is not assignable to type 'PromiseLike<"contextuallyTypable">'.
+      Types of property 'then' are incompatible.
+        Type '<TResult1 = not { then(): any; }, TResult2 = never>(onfulfilled?: ((value: not { then(): any; }) => TResult1 | PromiseLike<TResult1>) | null | undefined, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | null | undefined) => Promise<Awaited<TResult1> | Awaited<TResult2>>' is not assignable to type '<TResult1 = "contextuallyTypable", TResult2 = never>(onfulfilled?: ((value: "contextuallyTypable") => TResult1 | PromiseLike<TResult1>) | null | undefined, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | null | undefined) => PromiseLike<TResult1 | TResult2>'.
+          Types of parameters 'onfulfilled' and 'onfulfilled' are incompatible.
+            Types of parameters 'value' and 'value' are incompatible.
+              Type 'not { then(): any; }' is not assignable to type '"contextuallyTypable"'.
+                Type 'unknown' is not assignable to type '"contextuallyTypable"'.
+asyncFunctionContextuallyTypedReturns.ts(7,14): error TS2322: Type 'Promise<not { then(): any; }>' is not assignable to type '"contextuallyTypable" | PromiseLike<"contextuallyTypable">'.
+  Type 'Promise<not { then(): any; }>' is not assignable to type 'PromiseLike<"contextuallyTypable">'.
+    Types of property 'then' are incompatible.
+      Type '<TResult1 = not { then(): any; }, TResult2 = never>(onfulfilled?: ((value: not { then(): any; }) => TResult1 | PromiseLike<TResult1>) | null | undefined, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | null | undefined) => Promise<Awaited<TResult1> | Awaited<TResult2>>' is not assignable to type '<TResult1 = "contextuallyTypable", TResult2 = never>(onfulfilled?: ((value: "contextuallyTypable") => TResult1 | PromiseLike<TResult1>) | null | undefined, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | null | undefined) => PromiseLike<TResult1 | TResult2>'.
+        Types of parameters 'onfulfilled' and 'onfulfilled' are incompatible.
+          Types of parameters 'value' and 'value' are incompatible.
+            Type 'not { then(): any; }' is not assignable to type '"contextuallyTypable"'.
+              Type 'unknown' is not assignable to type '"contextuallyTypable"'.
+asyncFunctionContextuallyTypedReturns.ts(11,8): error TS2322: Type 'Promise<not { then(): any; }> | ((abc: string) => void)' is not assignable to type 'MyCallback | PromiseLike<MyCallback>'.
+  Type 'Promise<not { then(): any; }>' is not assignable to type 'MyCallback | PromiseLike<MyCallback>'.
+    Type 'Promise<not { then(): any; }>' is not assignable to type 'PromiseLike<MyCallback>'.
+      Types of property 'then' are incompatible.
+        Type '<TResult1 = not { then(): any; }, TResult2 = never>(onfulfilled?: ((value: not { then(): any; }) => TResult1 | PromiseLike<TResult1>) | null | undefined, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | null | undefined) => Promise<Awaited<TResult1> | Awaited<TResult2>>' is not assignable to type '<TResult1 = MyCallback, TResult2 = never>(onfulfilled?: ((value: MyCallback) => TResult1 | PromiseLike<TResult1>) | null | undefined, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | null | undefined) => PromiseLike<TResult1 | TResult2>'.
+          Types of parameters 'onfulfilled' and 'onfulfilled' are incompatible.
+            Types of parameters 'value' and 'value' are incompatible.
+              Type 'not { then(): any; }' is not assignable to type 'MyCallback'.
+                Type 'unknown' is not assignable to type 'MyCallback'.
+asyncFunctionContextuallyTypedReturns.ts(12,14): error TS2322: Type 'Promise<not { then(): any; }>' is not assignable to type 'MyCallback | PromiseLike<MyCallback>'.
+  Type 'Promise<not { then(): any; }>' is not assignable to type 'PromiseLike<MyCallback>'.
+    Types of property 'then' are incompatible.
+      Type '<TResult1 = not { then(): any; }, TResult2 = never>(onfulfilled?: ((value: not { then(): any; }) => TResult1 | PromiseLike<TResult1>) | null | undefined, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | null | undefined) => Promise<Awaited<TResult1> | Awaited<TResult2>>' is not assignable to type '<TResult1 = MyCallback, TResult2 = never>(onfulfilled?: ((value: MyCallback) => TResult1 | PromiseLike<TResult1>) | null | undefined, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | null | undefined) => PromiseLike<TResult1 | TResult2>'.
+        Types of parameters 'onfulfilled' and 'onfulfilled' are incompatible.
+          Types of parameters 'value' and 'value' are incompatible.
+            Type 'not { then(): any; }' is not assignable to type 'MyCallback'.
+              Type 'unknown' is not assignable to type 'MyCallback'.
+asyncFunctionContextuallyTypedReturns.ts(18,14): error TS2344: Type 'string | ((s: string) => any)' does not satisfy the constraint 'not { then(): any; }'.
+  Type 'string' is not assignable to type 'not { then(): any; }'.
+asyncFunctionContextuallyTypedReturns.ts(27,14): error TS2344: Type 'string | ((s: string) => any)' does not satisfy the constraint 'not { then(): any; }'.
+  Type 'string' is not assignable to type 'not { then(): any; }'.
+
+
+==== asyncFunctionContextuallyTypedReturns.ts (8 errors) ====
+    declare function f(cb: (v: boolean) => [0] | PromiseLike<[0]>): void;
+    f(v => v ? [0] : Promise.reject());
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2322: Type 'Promise<not { then(): any; }> | [0]' is not assignable to type 'PromiseLike<[0]> | [0]'.
+!!! error TS2322:   Type 'Promise<not { then(): any; }>' is not assignable to type 'PromiseLike<[0]> | [0]'.
+!!! error TS2322:     Type 'Promise<not { then(): any; }>' is not assignable to type 'PromiseLike<[0]>'.
+!!! error TS2322:       Types of property 'then' are incompatible.
+!!! error TS2322:         Type '<TResult1 = not { then(): any; }, TResult2 = never>(onfulfilled?: ((value: not { then(): any; }) => TResult1 | PromiseLike<TResult1>) | null | undefined, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | null | undefined) => Promise<Awaited<TResult1> | Awaited<TResult2>>' is not assignable to type '<TResult1 = [0], TResult2 = never>(onfulfilled?: ((value: [0]) => TResult1 | PromiseLike<TResult1>) | null | undefined, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | null | undefined) => PromiseLike<TResult1 | TResult2>'.
+!!! error TS2322:           Types of parameters 'onfulfilled' and 'onfulfilled' are incompatible.
+!!! error TS2322:             Types of parameters 'value' and 'value' are incompatible.
+!!! error TS2322:               Type 'not { then(): any; }' is not assignable to type '[0]'.
+!!! error TS2322:                 Type 'unknown' is not assignable to type '[0]'.
+!!! related TS6502 asyncFunctionContextuallyTypedReturns.ts:1:24: The expected type comes from the return type of this signature.
+    f(async v => v ? [0] : Promise.reject());
+                 ~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2322: Type 'Promise<not { then(): any; }>' is not assignable to type 'PromiseLike<[0]> | [0]'.
+!!! error TS2322:   Type 'Promise<not { then(): any; }>' is not assignable to type 'PromiseLike<[0]>'.
+!!! error TS2322:     Types of property 'then' are incompatible.
+!!! error TS2322:       Type '<TResult1 = not { then(): any; }, TResult2 = never>(onfulfilled?: ((value: not { then(): any; }) => TResult1 | PromiseLike<TResult1>) | null | undefined, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | null | undefined) => Promise<Awaited<TResult1> | Awaited<TResult2>>' is not assignable to type '<TResult1 = [0], TResult2 = never>(onfulfilled?: ((value: [0]) => TResult1 | PromiseLike<TResult1>) | null | undefined, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | null | undefined) => PromiseLike<TResult1 | TResult2>'.
+!!! error TS2322:         Types of parameters 'onfulfilled' and 'onfulfilled' are incompatible.
+!!! error TS2322:           Types of parameters 'value' and 'value' are incompatible.
+!!! error TS2322:             Type 'not { then(): any; }' is not assignable to type '[0]'.
+!!! error TS2322:               Type 'unknown' is not assignable to type '[0]'.
+!!! related TS6502 asyncFunctionContextuallyTypedReturns.ts:1:24: The expected type comes from the return type of this signature.
+    
+    declare function g(cb: (v: boolean) => "contextuallyTypable" | PromiseLike<"contextuallyTypable">): void;
+    g(v => v ? "contextuallyTypable" : Promise.reject());
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2322: Type '"contextuallyTypable" | Promise<not { then(): any; }>' is not assignable to type '"contextuallyTypable" | PromiseLike<"contextuallyTypable">'.
+!!! error TS2322:   Type 'Promise<not { then(): any; }>' is not assignable to type '"contextuallyTypable" | PromiseLike<"contextuallyTypable">'.
+!!! error TS2322:     Type 'Promise<not { then(): any; }>' is not assignable to type 'PromiseLike<"contextuallyTypable">'.
+!!! error TS2322:       Types of property 'then' are incompatible.
+!!! error TS2322:         Type '<TResult1 = not { then(): any; }, TResult2 = never>(onfulfilled?: ((value: not { then(): any; }) => TResult1 | PromiseLike<TResult1>) | null | undefined, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | null | undefined) => Promise<Awaited<TResult1> | Awaited<TResult2>>' is not assignable to type '<TResult1 = "contextuallyTypable", TResult2 = never>(onfulfilled?: ((value: "contextuallyTypable") => TResult1 | PromiseLike<TResult1>) | null | undefined, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | null | undefined) => PromiseLike<TResult1 | TResult2>'.
+!!! error TS2322:           Types of parameters 'onfulfilled' and 'onfulfilled' are incompatible.
+!!! error TS2322:             Types of parameters 'value' and 'value' are incompatible.
+!!! error TS2322:               Type 'not { then(): any; }' is not assignable to type '"contextuallyTypable"'.
+!!! error TS2322:                 Type 'unknown' is not assignable to type '"contextuallyTypable"'.
+!!! related TS6502 asyncFunctionContextuallyTypedReturns.ts:5:24: The expected type comes from the return type of this signature.
+    g(async v => v ? "contextuallyTypable" : Promise.reject());
+                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2322: Type 'Promise<not { then(): any; }>' is not assignable to type '"contextuallyTypable" | PromiseLike<"contextuallyTypable">'.
+!!! error TS2322:   Type 'Promise<not { then(): any; }>' is not assignable to type 'PromiseLike<"contextuallyTypable">'.
+!!! error TS2322:     Types of property 'then' are incompatible.
+!!! error TS2322:       Type '<TResult1 = not { then(): any; }, TResult2 = never>(onfulfilled?: ((value: not { then(): any; }) => TResult1 | PromiseLike<TResult1>) | null | undefined, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | null | undefined) => Promise<Awaited<TResult1> | Awaited<TResult2>>' is not assignable to type '<TResult1 = "contextuallyTypable", TResult2 = never>(onfulfilled?: ((value: "contextuallyTypable") => TResult1 | PromiseLike<TResult1>) | null | undefined, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | null | undefined) => PromiseLike<TResult1 | TResult2>'.
+!!! error TS2322:         Types of parameters 'onfulfilled' and 'onfulfilled' are incompatible.
+!!! error TS2322:           Types of parameters 'value' and 'value' are incompatible.
+!!! error TS2322:             Type 'not { then(): any; }' is not assignable to type '"contextuallyTypable"'.
+!!! error TS2322:               Type 'unknown' is not assignable to type '"contextuallyTypable"'.
+!!! related TS6502 asyncFunctionContextuallyTypedReturns.ts:5:24: The expected type comes from the return type of this signature.
+    
+    type MyCallback = (thing: string) => void;
+    declare function h(cb: (v: boolean) => MyCallback | PromiseLike<MyCallback>): void;
+    h(v => v ? (abc) => { } : Promise.reject());
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2322: Type 'Promise<not { then(): any; }> | ((abc: string) => void)' is not assignable to type 'MyCallback | PromiseLike<MyCallback>'.
+!!! error TS2322:   Type 'Promise<not { then(): any; }>' is not assignable to type 'MyCallback | PromiseLike<MyCallback>'.
+!!! error TS2322:     Type 'Promise<not { then(): any; }>' is not assignable to type 'PromiseLike<MyCallback>'.
+!!! error TS2322:       Types of property 'then' are incompatible.
+!!! error TS2322:         Type '<TResult1 = not { then(): any; }, TResult2 = never>(onfulfilled?: ((value: not { then(): any; }) => TResult1 | PromiseLike<TResult1>) | null | undefined, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | null | undefined) => Promise<Awaited<TResult1> | Awaited<TResult2>>' is not assignable to type '<TResult1 = MyCallback, TResult2 = never>(onfulfilled?: ((value: MyCallback) => TResult1 | PromiseLike<TResult1>) | null | undefined, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | null | undefined) => PromiseLike<TResult1 | TResult2>'.
+!!! error TS2322:           Types of parameters 'onfulfilled' and 'onfulfilled' are incompatible.
+!!! error TS2322:             Types of parameters 'value' and 'value' are incompatible.
+!!! error TS2322:               Type 'not { then(): any; }' is not assignable to type 'MyCallback'.
+!!! error TS2322:                 Type 'unknown' is not assignable to type 'MyCallback'.
+!!! related TS6502 asyncFunctionContextuallyTypedReturns.ts:10:24: The expected type comes from the return type of this signature.
+    h(async v => v ? (def) => { } : Promise.reject());
+                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2322: Type 'Promise<not { then(): any; }>' is not assignable to type 'MyCallback | PromiseLike<MyCallback>'.
+!!! error TS2322:   Type 'Promise<not { then(): any; }>' is not assignable to type 'PromiseLike<MyCallback>'.
+!!! error TS2322:     Types of property 'then' are incompatible.
+!!! error TS2322:       Type '<TResult1 = not { then(): any; }, TResult2 = never>(onfulfilled?: ((value: not { then(): any; }) => TResult1 | PromiseLike<TResult1>) | null | undefined, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | null | undefined) => Promise<Awaited<TResult1> | Awaited<TResult2>>' is not assignable to type '<TResult1 = MyCallback, TResult2 = never>(onfulfilled?: ((value: MyCallback) => TResult1 | PromiseLike<TResult1>) | null | undefined, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | null | undefined) => PromiseLike<TResult1 | TResult2>'.
+!!! error TS2322:         Types of parameters 'onfulfilled' and 'onfulfilled' are incompatible.
+!!! error TS2322:           Types of parameters 'value' and 'value' are incompatible.
+!!! error TS2322:             Type 'not { then(): any; }' is not assignable to type 'MyCallback'.
+!!! error TS2322:               Type 'unknown' is not assignable to type 'MyCallback'.
+!!! related TS6502 asyncFunctionContextuallyTypedReturns.ts:10:24: The expected type comes from the return type of this signature.
+    
+    // repro from #29196
+    const increment: (
+      num: number,
+      str: string
+    ) => Promise<((s: string) => any) | string> | string = async (num, str) => {
+                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2344: Type 'string | ((s: string) => any)' does not satisfy the constraint 'not { then(): any; }'.
+!!! error TS2344:   Type 'string' is not assignable to type 'not { then(): any; }'.
+      return a => {
+        return a.length
+      }
+    }
+    
+    const increment2: (
+      num: number,
+      str: string
+    ) => Promise<((s: string) => any) | string> = async (num, str) => {
+                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2344: Type 'string | ((s: string) => any)' does not satisfy the constraint 'not { then(): any; }'.
+!!! error TS2344:   Type 'string' is not assignable to type 'not { then(): any; }'.
+      return a => {
+        return a.length
+      }
+    }
+    

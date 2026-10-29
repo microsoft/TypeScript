@@ -8,7 +8,7 @@ a;
 >a : {}
 
 import.source("./a.wasm");
->import.source("./a.wasm") : Promise<{}>
+>import.source("./a.wasm") : Promise<{} & not { then(): any; }>
 >source : any
 >"./a.wasm" : "./a.wasm"
 

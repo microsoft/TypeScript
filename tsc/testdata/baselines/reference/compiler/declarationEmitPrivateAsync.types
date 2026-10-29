@@ -5,7 +5,7 @@ export class Foo {
 >Foo : Foo
 
     private async baz() {
->baz : () => Promise<void>
+>baz : () => Promise<void & not { then(): any; }>
 
         return;
     }

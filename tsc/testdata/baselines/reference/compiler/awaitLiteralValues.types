@@ -5,7 +5,7 @@ function awaitString() {
 >awaitString : () => void
 
     await 'literal';
->await 'literal' : "literal"
+>await 'literal' : "literal" & not { then(): any; }
 >'literal' : "literal"
 }
 
@@ -13,7 +13,7 @@ function awaitNumber() {
 >awaitNumber : () => void
 
     await 1;
->await 1 : 1
+>await 1 : 1 & not { then(): any; }
 >1 : 1
 }
 
@@ -21,7 +21,7 @@ function awaitTrue() {
 >awaitTrue : () => void
 
     await true;
->await true : true
+>await true : true & not { then(): any; }
 >true : true
 }
 
@@ -29,7 +29,7 @@ function awaitFalse() {
 >awaitFalse : () => void
 
     await false;
->await false : false
+>await false : false & not { then(): any; }
 >false : false
 }
 

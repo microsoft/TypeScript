@@ -6,28 +6,28 @@ const C = class {
 >class {    async #bar() { return await Promise.resolve(42); }    async foo() {        const b = await this.#bar();        return b + (this.#baz().next().value || 0) + ((await this.#qux().next()).value || 0);    }    *#baz() { yield 42; }    async *#qux() {        yield (await Promise.resolve(42));    }} : typeof C
 
     async #bar() { return await Promise.resolve(42); }
->#bar : () => Promise<number>
->await Promise.resolve(42) : number
->Promise.resolve(42) : Promise<number>
->Promise.resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T>(value: T | PromiseLike<T>): Promise<Awaited<T>>; }
+>#bar : () => Promise<number & not { then(): any; } & not { then(): any; }>
+>await Promise.resolve(42) : number & not { then(): any; } & not { then(): any; }
+>Promise.resolve(42) : Promise<number & not { then(): any; }>
+>Promise.resolve : { (): Promise<void & not { then(): any; }>; <T>(value: T): Promise<Awaited<T>>; <T>(value: T | PromiseLike<T>): Promise<Awaited<T>>; }
 >Promise : PromiseConstructor
->resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T>(value: T | PromiseLike<T>): Promise<Awaited<T>>; }
+>resolve : { (): Promise<void & not { then(): any; }>; <T>(value: T): Promise<Awaited<T>>; <T>(value: T | PromiseLike<T>): Promise<Awaited<T>>; }
 >42 : 42
 
     async foo() {
->foo : () => Promise<number>
+>foo : () => Promise<number & not { then(): any; }>
 
         const b = await this.#bar();
->b : number
->await this.#bar() : number
->this.#bar() : Promise<number>
->this.#bar : () => Promise<number>
+>b : number & not { then(): any; } & not { then(): any; }
+>await this.#bar() : number & not { then(): any; } & not { then(): any; }
+>this.#bar() : Promise<number & not { then(): any; } & not { then(): any; }>
+>this.#bar : () => Promise<number & not { then(): any; } & not { then(): any; }>
 >this : this
 
         return b + (this.#baz().next().value || 0) + ((await this.#qux().next()).value || 0);
 >b + (this.#baz().next().value || 0) + ((await this.#qux().next()).value || 0) : number
 >b + (this.#baz().next().value || 0) : number
->b : number
+>b : number & not { then(): any; } & not { then(): any; }
 >(this.#baz().next().value || 0) : number
 >this.#baz().next().value || 0 : number
 >this.#baz().next().value : void | number
@@ -39,18 +39,18 @@ const C = class {
 >next : (...[value]: [] | [unknown]) => IteratorResult<number, void>
 >value : void | number
 >0 : 0
->((await this.#qux().next()).value || 0) : number
->(await this.#qux().next()).value || 0 : number
->(await this.#qux().next()).value : void | number
->(await this.#qux().next()) : IteratorResult<number, void>
->await this.#qux().next() : IteratorResult<number, void>
->this.#qux().next() : Promise<IteratorResult<number, void>>
->this.#qux().next : (...[value]: [] | [unknown]) => Promise<IteratorResult<number, void>>
->this.#qux() : AsyncGenerator<number, void, unknown>
->this.#qux : () => AsyncGenerator<number, void, unknown>
+>((await this.#qux().next()).value || 0) : 0 | (number & not { then(): any; })
+>(await this.#qux().next()).value || 0 : 0 | (number & not { then(): any; })
+>(await this.#qux().next()).value : (void & not { then(): any; }) | (number & not { then(): any; })
+>(await this.#qux().next()) : (IteratorReturnResult<void & not { then(): any; }> & not { then(): any; }) | (IteratorYieldResult<number & not { then(): any; } & not { then(): any; }> & not { then(): any; })
+>await this.#qux().next() : (IteratorReturnResult<void & not { then(): any; }> & not { then(): any; }) | (IteratorYieldResult<number & not { then(): any; } & not { then(): any; }> & not { then(): any; })
+>this.#qux().next() : Promise<IteratorResult<number & not { then(): any; } & not { then(): any; }, void & not { then(): any; }> & not { then(): any; }>
+>this.#qux().next : (...[value]: [] | [unknown]) => Promise<IteratorResult<number & not { then(): any; } & not { then(): any; }, void & not { then(): any; }> & not { then(): any; }>
+>this.#qux() : AsyncGenerator<number & not { then(): any; } & not { then(): any; }, void & not { then(): any; }, unknown>
+>this.#qux : () => AsyncGenerator<number & not { then(): any; } & not { then(): any; }, void & not { then(): any; }, unknown>
 >this : this
->next : (...[value]: [] | [unknown]) => Promise<IteratorResult<number, void>>
->value : void | number
+>next : (...[value]: [] | [unknown]) => Promise<IteratorResult<number & not { then(): any; } & not { then(): any; }, void & not { then(): any; }> & not { then(): any; }>
+>value : (void & not { then(): any; }) | (number & not { then(): any; })
 >0 : 0
     }
     *#baz() { yield 42; }
@@ -59,29 +59,29 @@ const C = class {
 >42 : 42
 
     async *#qux() {
->#qux : () => AsyncGenerator<number, void, unknown>
+>#qux : () => AsyncGenerator<number & not { then(): any; } & not { then(): any; }, void & not { then(): any; }, unknown>
 
         yield (await Promise.resolve(42));
 >yield (await Promise.resolve(42)) : any
->(await Promise.resolve(42)) : number
->await Promise.resolve(42) : number
->Promise.resolve(42) : Promise<number>
->Promise.resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T>(value: T | PromiseLike<T>): Promise<Awaited<T>>; }
+>(await Promise.resolve(42)) : number & not { then(): any; } & not { then(): any; }
+>await Promise.resolve(42) : number & not { then(): any; } & not { then(): any; }
+>Promise.resolve(42) : Promise<number & not { then(): any; }>
+>Promise.resolve : { (): Promise<void & not { then(): any; }>; <T>(value: T): Promise<Awaited<T>>; <T>(value: T | PromiseLike<T>): Promise<Awaited<T>>; }
 >Promise : PromiseConstructor
->resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T>(value: T | PromiseLike<T>): Promise<Awaited<T>>; }
+>resolve : { (): Promise<void & not { then(): any; }>; <T>(value: T): Promise<Awaited<T>>; <T>(value: T | PromiseLike<T>): Promise<Awaited<T>>; }
 >42 : 42
     }
 }
 
 new C().foo().then(console.log);
->new C().foo().then(console.log) : Promise<void>
->new C().foo().then : <TResult1 = number, TResult2 = never>(onfulfilled?: ((value: number) => TResult1 | PromiseLike<TResult1>) | null | undefined, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | null | undefined) => Promise<TResult1 | TResult2>
->new C().foo() : Promise<number>
->new C().foo : () => Promise<number>
+>new C().foo().then(console.log) : Promise<void & not { then(): any; }>
+>new C().foo().then : <TResult1 = number & not { then(): any; }, TResult2 = never>(onfulfilled?: ((value: number & not { then(): any; }) => TResult1 | PromiseLike<TResult1>) | null | undefined, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | null | undefined) => Promise<Awaited<TResult1> | Awaited<TResult2>>
+>new C().foo() : Promise<number & not { then(): any; }>
+>new C().foo : () => Promise<number & not { then(): any; }>
 >new C() : C
 >C : typeof C
->foo : () => Promise<number>
->then : <TResult1 = number, TResult2 = never>(onfulfilled?: ((value: number) => TResult1 | PromiseLike<TResult1>) | null | undefined, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | null | undefined) => Promise<TResult1 | TResult2>
+>foo : () => Promise<number & not { then(): any; }>
+>then : <TResult1 = number & not { then(): any; }, TResult2 = never>(onfulfilled?: ((value: number & not { then(): any; }) => TResult1 | PromiseLike<TResult1>) | null | undefined, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | null | undefined) => Promise<Awaited<TResult1> | Awaited<TResult2>>
 >console.log : (...data: any[]) => void
 >console : Console
 >log : (...data: any[]) => void

@@ -36,41 +36,41 @@ function test2([[p1, p1Error]]: [[undefined, Error] | [number, undefined]]) {
 }
 
 async function myAllSettled<T extends readonly unknown[]>(fn: () => T) {
->myAllSettled : <T extends readonly unknown[]>(fn: () => T) => Promise<{ [K in keyof T]: [undefined, Error] | [Awaited<T[K]>, undefined]; }>
+>myAllSettled : <T extends readonly unknown[]>(fn: () => T) => Promise<{ [K in keyof T]: [undefined, Error] | [Awaited<T[K]>, undefined]; } & not { then(): any; }>
 >fn : () => T
 
   const promises = await Promise.allSettled(fn());
->promises : { -readonly [P in keyof T]: PromiseSettledResult<Awaited<T[P]>>; }
->await Promise.allSettled(fn()) : { -readonly [P in keyof T]: PromiseSettledResult<Awaited<T[P]>>; }
->Promise.allSettled(fn()) : Promise<{ -readonly [P in keyof T]: PromiseSettledResult<Awaited<T[P]>>; }>
->Promise.allSettled : { <T_1 extends readonly unknown[] | []>(values: T_1): Promise<{ -readonly [P in keyof T_1]: PromiseSettledResult<Awaited<T_1[P]>>; }>; <T_1>(values: Iterable<T_1 | PromiseLike<T_1>>): Promise<PromiseSettledResult<Awaited<T_1>>[]>; }
+>promises : { -readonly [P in keyof T]: PromiseSettledResult<Awaited<T[P]>>; } & not { then(): any; } & not { then(): any; }
+>await Promise.allSettled(fn()) : { -readonly [P in keyof T]: PromiseSettledResult<Awaited<T[P]>>; } & not { then(): any; } & not { then(): any; }
+>Promise.allSettled(fn()) : Promise<{ -readonly [P in keyof T]: PromiseSettledResult<Awaited<T[P]>>; } & not { then(): any; }>
+>Promise.allSettled : { <T_1 extends readonly unknown[] | []>(values: T_1): Promise<{ -readonly [P in keyof T_1]: PromiseSettledResult<Awaited<T_1[P]>>; } & not { then(): any; }>; <T_1>(values: Iterable<T_1 | PromiseLike<T_1>>): Promise<PromiseSettledResult<Awaited<T_1>>[] & not { then(): any; }>; }
 >Promise : PromiseConstructor
->allSettled : { <T_1 extends readonly unknown[] | []>(values: T_1): Promise<{ -readonly [P in keyof T_1]: PromiseSettledResult<Awaited<T_1[P]>>; }>; <T_1>(values: Iterable<T_1 | PromiseLike<T_1>>): Promise<PromiseSettledResult<Awaited<T_1>>[]>; }
+>allSettled : { <T_1 extends readonly unknown[] | []>(values: T_1): Promise<{ -readonly [P in keyof T_1]: PromiseSettledResult<Awaited<T_1[P]>>; } & not { then(): any; }>; <T_1>(values: Iterable<T_1 | PromiseLike<T_1>>): Promise<PromiseSettledResult<Awaited<T_1>>[] & not { then(): any; }>; }
 >fn() : T
 >fn : () => T
 
   return promises.map((result) =>
 >promises.map((result) =>    result.status === "fulfilled"      ? [result.value, undefined]      : [undefined, new Error(String(result.reason))],  ) as { [K in keyof T]: [Awaited<T[K]>, undefined] | [undefined, Error] } : { [K in keyof T]: [undefined, Error] | [Awaited<T[K]>, undefined]; }
->promises.map((result) =>    result.status === "fulfilled"      ? [result.value, undefined]      : [undefined, new Error(String(result.reason))],  ) : ([unknown, undefined] | [undefined, Error])[]
->promises.map : <U>(callbackfn: (value: PromiseSettledResult<unknown>, index: number, array: PromiseSettledResult<unknown>[]) => U, thisArg?: any) => U[]
->promises : { -readonly [P in keyof T]: PromiseSettledResult<Awaited<T[P]>>; }
->map : <U>(callbackfn: (value: PromiseSettledResult<unknown>, index: number, array: PromiseSettledResult<unknown>[]) => U, thisArg?: any) => U[]
->(result) =>    result.status === "fulfilled"      ? [result.value, undefined]      : [undefined, new Error(String(result.reason))] : (result: PromiseSettledResult<unknown>) => [unknown, undefined] | [undefined, Error]
->result : PromiseSettledResult<unknown>
+>promises.map((result) =>    result.status === "fulfilled"      ? [result.value, undefined]      : [undefined, new Error(String(result.reason))],  ) : ([undefined, Error] | [not { then(): any; }, undefined])[]
+>promises.map : <U>(callbackfn: (value: PromiseSettledResult<not { then(): any; }>, index: number, array: PromiseSettledResult<not { then(): any; }>[]) => U, thisArg?: any) => U[]
+>promises : { -readonly [P in keyof T]: PromiseSettledResult<Awaited<T[P]>>; } & not { then(): any; } & not { then(): any; }
+>map : <U>(callbackfn: (value: PromiseSettledResult<not { then(): any; }>, index: number, array: PromiseSettledResult<not { then(): any; }>[]) => U, thisArg?: any) => U[]
+>(result) =>    result.status === "fulfilled"      ? [result.value, undefined]      : [undefined, new Error(String(result.reason))] : (result: PromiseSettledResult<not { then(): any; }>) => [undefined, Error] | [not { then(): any; }, undefined]
+>result : PromiseSettledResult<not { then(): any; }>
 
     result.status === "fulfilled"
->result.status === "fulfilled"      ? [result.value, undefined]      : [undefined, new Error(String(result.reason))] : [unknown, undefined] | [undefined, Error]
+>result.status === "fulfilled"      ? [result.value, undefined]      : [undefined, new Error(String(result.reason))] : [undefined, Error] | [not { then(): any; }, undefined]
 >result.status === "fulfilled" : boolean
 >result.status : "fulfilled" | "rejected"
->result : PromiseSettledResult<unknown>
+>result : PromiseSettledResult<not { then(): any; }>
 >status : "fulfilled" | "rejected"
 >"fulfilled" : "fulfilled"
 
       ? [result.value, undefined]
->[result.value, undefined] : [unknown, undefined]
->result.value : unknown
->result : PromiseFulfilledResult<unknown>
->value : unknown
+>[result.value, undefined] : [not { then(): any; }, undefined]
+>result.value : not { then(): any; }
+>result : PromiseFulfilledResult<not { then(): any; }>
+>value : not { then(): any; }
 >undefined : undefined
 
       : [undefined, new Error(String(result.reason))],
@@ -88,29 +88,29 @@ async function myAllSettled<T extends readonly unknown[]>(fn: () => T) {
 }
 
 async function test3() {
->test3 : () => Promise<void>
+>test3 : () => Promise<void & not { then(): any; }>
 
   const [[p1, p1Error], _] = await myAllSettled(
->p1 : number | undefined
+>p1 : (number & not { then(): any; }) | undefined
 >p1Error : Error | undefined
 >_ : [undefined, Error] | [never, undefined]
->await myAllSettled(    () => [Promise.resolve(0), Promise.reject(1)] as const,  ) : [[undefined, Error] | [number, undefined], [undefined, Error] | [never, undefined]]
->myAllSettled(    () => [Promise.resolve(0), Promise.reject(1)] as const,  ) : Promise<[[undefined, Error] | [number, undefined], [undefined, Error] | [never, undefined]]>
->myAllSettled : <T extends readonly unknown[]>(fn: () => T) => Promise<{ [K in keyof T]: [undefined, Error] | [Awaited<T[K]>, undefined]; }>
+>await myAllSettled(    () => [Promise.resolve(0), Promise.reject(1)] as const,  ) : [[undefined, Error] | [number & not { then(): any; } & not { then(): any; }, undefined], [undefined, Error] | [never, undefined]] & not { then(): any; }
+>myAllSettled(    () => [Promise.resolve(0), Promise.reject(1)] as const,  ) : Promise<[[undefined, Error] | [number & not { then(): any; } & not { then(): any; }, undefined], [undefined, Error] | [never, undefined]] & not { then(): any; }>
+>myAllSettled : <T extends readonly unknown[]>(fn: () => T) => Promise<{ [K in keyof T]: [undefined, Error] | [Awaited<T[K]>, undefined]; } & not { then(): any; }>
 
     () => [Promise.resolve(0), Promise.reject(1)] as const,
->() => [Promise.resolve(0), Promise.reject(1)] as const : () => [Promise<number>, Promise<never>]
->[Promise.resolve(0), Promise.reject(1)] as const : [Promise<number>, Promise<never>]
->[Promise.resolve(0), Promise.reject(1)] : [Promise<number>, Promise<never>]
->Promise.resolve(0) : Promise<number>
->Promise.resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T>(value: T | PromiseLike<T>): Promise<Awaited<T>>; }
+>() => [Promise.resolve(0), Promise.reject(1)] as const : () => [Promise<number & not { then(): any; }>, Promise<never>]
+>[Promise.resolve(0), Promise.reject(1)] as const : [Promise<number & not { then(): any; }>, Promise<never>]
+>[Promise.resolve(0), Promise.reject(1)] : [Promise<number & not { then(): any; }>, Promise<never>]
+>Promise.resolve(0) : Promise<number & not { then(): any; }>
+>Promise.resolve : { (): Promise<void & not { then(): any; }>; <T>(value: T): Promise<Awaited<T>>; <T>(value: T | PromiseLike<T>): Promise<Awaited<T>>; }
 >Promise : PromiseConstructor
->resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T>(value: T | PromiseLike<T>): Promise<Awaited<T>>; }
+>resolve : { (): Promise<void & not { then(): any; }>; <T>(value: T): Promise<Awaited<T>>; <T>(value: T | PromiseLike<T>): Promise<Awaited<T>>; }
 >0 : 0
 >Promise.reject(1) : Promise<never>
->Promise.reject : <T = never>(reason?: any) => Promise<T>
+>Promise.reject : <T extends not { then(): any; } = never>(reason?: any) => Promise<T>
 >Promise : PromiseConstructor
->reject : <T = never>(reason?: any) => Promise<T>
+>reject : <T extends not { then(): any; } = never>(reason?: any) => Promise<T>
 >1 : 1
 
   );
@@ -119,7 +119,7 @@ async function test3() {
 >p1Error : Error | undefined
 
   p1;
->p1 : number
+>p1 : number & not { then(): any; } & not { then(): any; }
 }
 
 function test4([[p1, p1Error]]: [[undefined, Error] | [number, undefined]]) {

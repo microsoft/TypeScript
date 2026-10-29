@@ -1,0 +1,11 @@
+awaitInheritedPromise_es2017.ts(1,29): error TS2344: Type 'string' does not satisfy the constraint 'not { then(): any; }'.
+
+
+==== awaitInheritedPromise_es2017.ts (1 errors) ====
+    interface A extends Promise<string> {}
+                                ~~~~~~
+!!! error TS2344: Type 'string' does not satisfy the constraint 'not { then(): any; }'.
+    declare var a: A;
+    async function f() {
+        await a;
+    }

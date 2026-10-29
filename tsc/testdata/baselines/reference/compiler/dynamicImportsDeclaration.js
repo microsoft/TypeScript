@@ -61,10 +61,14 @@ export default _default;
 declare const _default = "fallback";
 export default _default;
 //// [index.d.ts]
-export declare const mod: {
+export declare const mod: (({
     default: typeof import("./case0.js");
 } | {
     default: typeof import("./case1.js");
 } | {
     default: typeof import("./caseFallback.js");
+}) & not {
+    then(): any;
+}) & not {
+    then(): any;
 };

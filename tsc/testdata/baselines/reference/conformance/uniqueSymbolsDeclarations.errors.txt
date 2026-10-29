@@ -1,8 +1,9 @@
 uniqueSymbolsDeclarations.ts(208,5): error TS2564: Property '[s]' has no initializer and is not definitely assigned in the constructor.
 uniqueSymbolsDeclarations.ts(209,5): error TS2564: Property '[N.s]' has no initializer and is not definitely assigned in the constructor.
+uniqueSymbolsDeclarations.ts(216,24): error TS2344: Type 'typeof s' does not satisfy the constraint 'not { then(): any; }'.
 
 
-==== uniqueSymbolsDeclarations.ts (2 errors) ====
+==== uniqueSymbolsDeclarations.ts (3 errors) ====
     // declarations with call initializer
     const constCall = Symbol();
     let letCall = Symbol();
@@ -223,6 +224,8 @@ uniqueSymbolsDeclarations.ts(209,5): error TS2564: Property '[N.s]' has no initi
     interface Context {
         method1(): typeof s;
         method2(): Promise<typeof s>;
+                           ~~~~~~~~
+!!! error TS2344: Type 'typeof s' does not satisfy the constraint 'not { then(): any; }'.
         method3(): AsyncIterableIterator<typeof s>;
         method4(): IterableIterator<typeof s>;
         method5(p?: typeof s): typeof s;

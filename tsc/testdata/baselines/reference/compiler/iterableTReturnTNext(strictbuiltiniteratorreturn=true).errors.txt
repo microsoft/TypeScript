@@ -4,6 +4,7 @@ iterableTReturnTNext.ts(14,7): error TS2322: Type 'IteratorResult<number, undefi
   Type 'IteratorReturnResult<undefined>' is not assignable to type 'Next<number>'.
     Types of property 'value' are incompatible.
       Type 'undefined' is not assignable to type 'number'.
+iterableTReturnTNext.ts(19,9): error TS2554: Expected 1 arguments, but got 0.
 iterableTReturnTNext.ts(44,7): error TS2416: Property 'values' in type 'MyMap' is not assignable to the same property in base type 'Map<string, number>'.
   Type '() => Generator<number, void, unknown>' is not assignable to type '() => MapIterator<number>'.
     Type 'Generator<number, void, unknown>' is not assignable to type 'MapIterator<number>'.
@@ -14,7 +15,7 @@ iterableTReturnTNext.ts(44,7): error TS2416: Property 'values' in type 'MyMap' i
               Type 'void' is not assignable to type 'undefined'.
 
 
-==== iterableTReturnTNext.ts (3 errors) ====
+==== iterableTReturnTNext.ts (4 errors) ====
     declare const map: Map<string, number>;
     declare const set: Set<number>;
     
@@ -42,6 +43,9 @@ iterableTReturnTNext.ts(44,7): error TS2416: Property 'values' in type 'MyMap' i
     async function* source() { yield 1; yield 2; yield 3; }
     const doubles = source();
     doubles.return();
+            ~~~~~~
+!!! error TS2554: Expected 1 arguments, but got 0.
+!!! related TS6210 lib.es2018.asyncgenerator.d.ts:--:--: An argument for 'value' was not provided.
     
     // based on: https://github.com/backstage/backstage/blob/85d9346ef11c1c20e4405102b4f5d93afb1292c1/packages/core-app-api/src/routing/RouteTracker.tsx#L62
     const r3: number | undefined = set.values().next().value;

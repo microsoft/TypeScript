@@ -97,11 +97,11 @@ function foo7(y = (function*() {yield z})(), z = 1) {
 
 // ok - used inside immediately invoked async function
 function foo8(y = (async () => z)(), z = 1) {
->foo8 : (y?: Promise<number>, z?: number) => void
->y : Promise<number>
->(async () => z)() : Promise<number>
->(async () => z) : () => Promise<number>
->async () => z : () => Promise<number>
+>foo8 : (y?: Promise<number & not { then(): any; }>, z?: number) => void
+>y : Promise<number & not { then(): any; }>
+>(async () => z)() : Promise<number & not { then(): any; }>
+>(async () => z) : () => Promise<number & not { then(): any; }>
+>async () => z : () => Promise<number & not { then(): any; }>
 >z : number
 >z : number
 >1 : 1

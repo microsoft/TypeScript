@@ -42,7 +42,7 @@ const r2: Next<number> = map.values().next(); // error when strictBuiltinIterato
 
 // based on: https://github.com/graphql/graphql-js/blob/e15c3ec4dc21d9fd1df34fe9798cadf3bf02c6ea/src/execution/__tests__/mapAsyncIterable-test.ts#L175
 async function* source() { yield 1; yield 2; yield 3; }
->source : () => AsyncGenerator<1 | 2 | 3, void, unknown>
+>source : () => AsyncGenerator<(1 & not { then(): any; }) | (2 & not { then(): any; }) | (3 & not { then(): any; }), void & not { then(): any; }, unknown>
 >yield 1 : any
 >1 : 1
 >yield 2 : any
@@ -51,15 +51,15 @@ async function* source() { yield 1; yield 2; yield 3; }
 >3 : 3
 
 const doubles = source();
->doubles : AsyncGenerator<1 | 2 | 3, void, unknown>
->source() : AsyncGenerator<1 | 2 | 3, void, unknown>
->source : () => AsyncGenerator<1 | 2 | 3, void, unknown>
+>doubles : AsyncGenerator<(1 & not { then(): any; }) | (2 & not { then(): any; }) | (3 & not { then(): any; }), void & not { then(): any; }, unknown>
+>source() : AsyncGenerator<(1 & not { then(): any; }) | (2 & not { then(): any; }) | (3 & not { then(): any; }), void & not { then(): any; }, unknown>
+>source : () => AsyncGenerator<(1 & not { then(): any; }) | (2 & not { then(): any; }) | (3 & not { then(): any; }), void & not { then(): any; }, unknown>
 
 doubles.return();
->doubles.return() : Promise<IteratorResult<1 | 2 | 3, void>>
->doubles.return : (value: void | PromiseLike<void>) => Promise<IteratorResult<1 | 2 | 3, void>>
->doubles : AsyncGenerator<1 | 2 | 3, void, unknown>
->return : (value: void | PromiseLike<void>) => Promise<IteratorResult<1 | 2 | 3, void>>
+>doubles.return() : Promise<IteratorResult<(1 & not { then(): any; }) | (2 & not { then(): any; }) | (3 & not { then(): any; }), void & not { then(): any; }> & not { then(): any; }>
+>doubles.return : (value: PromiseLike<void & not { then(): any; }> | (void & not { then(): any; })) => Promise<IteratorResult<(1 & not { then(): any; }) | (2 & not { then(): any; }) | (3 & not { then(): any; }), void & not { then(): any; }> & not { then(): any; }>
+>doubles : AsyncGenerator<(1 & not { then(): any; }) | (2 & not { then(): any; }) | (3 & not { then(): any; }), void & not { then(): any; }, unknown>
+>return : (value: PromiseLike<void & not { then(): any; }> | (void & not { then(): any; })) => Promise<IteratorResult<(1 & not { then(): any; }) | (2 & not { then(): any; }) | (3 & not { then(): any; }), void & not { then(): any; }> & not { then(): any; }>
 
 // based on: https://github.com/backstage/backstage/blob/85d9346ef11c1c20e4405102b4f5d93afb1292c1/packages/core-app-api/src/routing/RouteTracker.tsx#L62
 const r3: number | undefined = set.values().next().value;

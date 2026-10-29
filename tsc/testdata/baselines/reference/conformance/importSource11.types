@@ -53,14 +53,14 @@ import.source();
 >source : any
 
 import.source("./a.js", {}, {});
->import.source("./a.js", {}, {}) : Promise<AbstractModuleSource>
+>import.source("./a.js", {}, {}) : Promise<AbstractModuleSource & not { then(): any; }>
 >source : any
 >"./a.js" : "./a.js"
 >{} : {}
 >{} : {}
 
 import.source?.("./a.js");
->import.source?.("./a.js") : Promise<AbstractModuleSource>
+>import.source?.("./a.js") : Promise<AbstractModuleSource & not { then(): any; }>
 >source : any
 >"./a.js" : "./a.js"
 
@@ -74,7 +74,7 @@ import.source<string>("./a.js");
 >"./a.js" : "./a.js"
 
 import.source(...["./a.js"]);
->import.source(...["./a.js"]) : Promise<AbstractModuleSource>
+>import.source(...["./a.js"]) : Promise<AbstractModuleSource & not { then(): any; }>
 >source : any
 >...["./a.js"] : string
 >["./a.js"] : [string]
@@ -84,7 +84,7 @@ import.source(...["./a.js"]);
 new import.source("./a.js");
 >new : any
 > : any
->import.source("./a.js") : Promise<AbstractModuleSource>
+>import.source("./a.js") : Promise<AbstractModuleSource & not { then(): any; }>
 >source : any
 >"./a.js" : "./a.js"
 
@@ -107,8 +107,8 @@ import source a from "./a.js" with { type: "javascript" };
 >type : any
 
 const b = import.source("./a.js", { with: { type: "javascript" } });
->b : Promise<AbstractModuleSource>
->import.source("./a.js", { with: { type: "javascript" } }) : Promise<AbstractModuleSource>
+>b : Promise<AbstractModuleSource & not { then(): any; }>
+>import.source("./a.js", { with: { type: "javascript" } }) : Promise<AbstractModuleSource & not { then(): any; }>
 >source : any
 >"./a.js" : "./a.js"
 >{ with: { type: "javascript" } } : { with: { readonly type: "javascript"; }; }
@@ -121,12 +121,12 @@ a;
 >a : AbstractModuleSource
 
 b;
->b : Promise<AbstractModuleSource>
+>b : Promise<AbstractModuleSource & not { then(): any; }>
 
 === k.js ===
 const a = import.source("./a.js", { with: { type: "javascript" } });
->a : Promise<AbstractModuleSource>
->import.source("./a.js", { with: { type: "javascript" } }) : Promise<AbstractModuleSource>
+>a : Promise<AbstractModuleSource & not { then(): any; }>
+>import.source("./a.js", { with: { type: "javascript" } }) : Promise<AbstractModuleSource & not { then(): any; }>
 >source : any
 >"./a.js" : "./a.js"
 >{ with: { type: "javascript" } } : { with: { readonly type: "javascript"; }; }
@@ -136,7 +136,7 @@ const a = import.source("./a.js", { with: { type: "javascript" } });
 >"javascript" : "javascript"
 
 a;
->a : Promise<AbstractModuleSource>
+>a : Promise<AbstractModuleSource & not { then(): any; }>
 
 === l.js ===
 import s\u006furce from "./a.js";
@@ -147,7 +147,7 @@ source;
 
 === m.js ===
 import.s\u006furce("./a.js");
->import.s\u006furce("./a.js") : Promise<AbstractModuleSource>
+>import.s\u006furce("./a.js") : Promise<AbstractModuleSource & not { then(): any; }>
 >s\u006furce : any
 >"./a.js" : "./a.js"
 

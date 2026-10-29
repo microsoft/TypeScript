@@ -634,10 +634,10 @@ export function returnsContainer() {
 >returnsContainer : () => Container
 
     return {
->{        async method(b, { a } = {}) {            /** @type {string} */            const c = a;            return [b];        },    } : { method(b: string, { a }?: Options | undefined): Promise<string[]>; }
+>{        async method(b, { a } = {}) {            /** @type {string} */            const c = a;            return [b];        },    } : { method(b: string, { a }?: Options | undefined): Promise<string[] & not { then(): any; }>; }
 
         async method(b, { a } = {}) {
->method : (b: string, { a }?: Options | undefined) => Promise<string[]>
+>method : (b: string, { a }?: Options | undefined) => Promise<string[] & not { then(): any; }>
 >b : string
 >a : number | undefined
 >{} : {}
@@ -660,7 +660,7 @@ export function returnsContainer() {
 export const cast = /** @type {Callback} */ (async (b, { a } = {}) => {
 >cast : Callback
 >(async (b, { a } = {}) => {    /** @type {string} */    const c = a;}) : Callback
->async (b, { a } = {}) => {    /** @type {string} */    const c = a;} : (b: number, { a }?: Options | undefined) => Promise<void>
+>async (b, { a } = {}) => {    /** @type {string} */    const c = a;} : (b: number, { a }?: Options | undefined) => Promise<void & not { then(): any; }>
 >b : number
 >a : number | undefined
 >{} : {}

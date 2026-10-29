@@ -10,7 +10,7 @@ declare var x, y, z, a, b, c;
 >c : any
 
 async function withStatement0() {
->withStatement0 : () => Promise<void>
+>withStatement0 : () => Promise<void & not { then(): any; }>
 
     with (x) {
 >x : any
@@ -21,7 +21,7 @@ async function withStatement0() {
 }
 
 async function withStatement1() {
->withStatement1 : () => Promise<void>
+>withStatement1 : () => Promise<void & not { then(): any; }>
 
     with (await x) {
 >await x : any
@@ -33,7 +33,7 @@ async function withStatement1() {
 }
 
 async function withStatement2() {
->withStatement2 : () => Promise<void>
+>withStatement2 : () => Promise<void & not { then(): any; }>
 
     with (x) {
 >x : any
@@ -51,7 +51,7 @@ async function withStatement2() {
 }
 
 async function withStatement3() {
->withStatement3 : () => Promise<void>
+>withStatement3 : () => Promise<void & not { then(): any; }>
 
     with (x) {
 >x : any

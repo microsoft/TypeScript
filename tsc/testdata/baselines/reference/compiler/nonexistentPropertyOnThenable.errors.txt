@@ -1,12 +1,13 @@
 nonexistentPropertyOnThenable.ts(6,10): error TS2339: Property 'x' does not exist on type 'Thenable<{ x: number; }>'.
 nonexistentPropertyOnThenable.ts(9,13): error TS2339: Property 'y' does not exist on type 'PromiseLike<{ y: string; }>'.
+nonexistentPropertyOnThenable.ts(11,32): error TS2344: Type '{ z: boolean; }' does not satisfy the constraint 'not { then(): any; }'.
 nonexistentPropertyOnThenable.ts(12,9): error TS2339: Property 'z' does not exist on type 'Promise<{ z: boolean; }>'.
 nonexistentPropertyOnThenable.ts(15,14): error TS2339: Property 'x' does not exist on type 'Thenable<{ x: number; }>'.
 nonexistentPropertyOnThenable.ts(16,17): error TS2339: Property 'y' does not exist on type 'PromiseLike<{ y: string; }>'.
 nonexistentPropertyOnThenable.ts(17,13): error TS2339: Property 'z' does not exist on type 'Promise<{ z: boolean; }>'.
 
 
-==== nonexistentPropertyOnThenable.ts (6 errors) ====
+==== nonexistentPropertyOnThenable.ts (7 errors) ====
     interface Thenable<T> {
         then(onfulfilled: (value: T) => void): void;
     }
@@ -24,6 +25,8 @@ nonexistentPropertyOnThenable.ts(17,13): error TS2339: Property 'z' does not exi
 !!! related TS2773 nonexistentPropertyOnThenable.ts:9:13: Did you forget to use 'await'?
     
     declare const promise: Promise<{ z: boolean }>;
+                                   ~~~~~~~~~~~~~~
+!!! error TS2344: Type '{ z: boolean; }' does not satisfy the constraint 'not { then(): any; }'.
     promise.z;
             ~
 !!! error TS2339: Property 'z' does not exist on type 'Promise<{ z: boolean; }>'.

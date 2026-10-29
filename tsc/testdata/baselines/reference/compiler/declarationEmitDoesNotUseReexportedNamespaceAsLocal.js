@@ -17,5 +17,7 @@ export * as Q from "./sub";
 //// [sub.d.ts]
 export declare function a(): void;
 //// [index.d.ts]
-export declare const x: typeof import("./sub");
+export declare const x: typeof import("./sub") & not {
+    then(): any;
+};
 export * as Q from "./sub";

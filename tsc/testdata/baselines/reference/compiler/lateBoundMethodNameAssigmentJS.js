@@ -16,6 +16,8 @@ export class MyClass {
 declare const _symbol: unique symbol;
 export declare class MyClass {
     constructor();
-    [_symbol](): Promise<void>;
+    [_symbol](): Promise<void & not {
+        then(): any;
+    }>;
 }
 export {};

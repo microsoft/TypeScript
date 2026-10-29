@@ -293,13 +293,13 @@ function foo17() {
 >foo17 : () => void
 
     const promise = (async () => {
->promise : Promise<void>
->(async () => {        promise        foo        await null        promise        foo    })() : Promise<void>
->(async () => {        promise        foo        await null        promise        foo    }) : () => Promise<void>
->async () => {        promise        foo        await null        promise        foo    } : () => Promise<void>
+>promise : Promise<void & not { then(): any; }>
+>(async () => {        promise        foo        await null        promise        foo    })() : Promise<void & not { then(): any; }>
+>(async () => {        promise        foo        await null        promise        foo    }) : () => Promise<void & not { then(): any; }>
+>async () => {        promise        foo        await null        promise        foo    } : () => Promise<void & not { then(): any; }>
 
         promise
->promise : Promise<void>
+>promise : Promise<void & not { then(): any; }>
 
         foo
 >foo : 1
@@ -308,7 +308,7 @@ function foo17() {
 >await null : null
 
         promise
->promise : Promise<void>
+>promise : Promise<void & not { then(): any; }>
 
         foo
 >foo : 1
@@ -345,14 +345,14 @@ function wrapI2() {
 >wrapI2 : () => void
 
     const iter = (async function* foo() {
->iter : AsyncGenerator<number, void, unknown>
->(async function* foo() {        iter;        yield 1;    })() : AsyncGenerator<number, void, unknown>
->(async function* foo() {        iter;        yield 1;    }) : () => AsyncGenerator<number, void, unknown>
->async function* foo() {        iter;        yield 1;    } : () => AsyncGenerator<number, void, unknown>
->foo : () => AsyncGenerator<number, void, unknown>
+>iter : AsyncGenerator<1 & not { then(): any; }, void & not { then(): any; }, unknown>
+>(async function* foo() {        iter;        yield 1;    })() : AsyncGenerator<1 & not { then(): any; }, void & not { then(): any; }, unknown>
+>(async function* foo() {        iter;        yield 1;    }) : () => AsyncGenerator<1 & not { then(): any; }, void & not { then(): any; }, unknown>
+>async function* foo() {        iter;        yield 1;    } : () => AsyncGenerator<1 & not { then(): any; }, void & not { then(): any; }, unknown>
+>foo : () => AsyncGenerator<1 & not { then(): any; }, void & not { then(): any; }, unknown>
 
         iter;
->iter : AsyncGenerator<number, void, unknown>
+>iter : AsyncGenerator<1 & not { then(): any; }, void & not { then(): any; }, unknown>
 
         yield 1;
 >yield 1 : any

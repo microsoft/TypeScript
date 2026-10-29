@@ -1,3 +1,5 @@
+jsxElementType.tsx(14,13): error TS2344: Type 'React18ReactNode' does not satisfy the constraint 'not { then(): any; }'.
+  Type 'string' is not assignable to type 'not { then(): any; }'.
 jsxElementType.tsx(34,2): error TS2741: Property 'title' is missing in type '{}' but required in type '{ title: string; }'.
 jsxElementType.tsx(36,16): error TS2322: Type '{ excessProp: true; }' is not assignable to type 'IntrinsicAttributes & { title: string; }'.
   Property 'excessProp' does not exist on type 'IntrinsicAttributes & { title: string; }'.
@@ -35,7 +37,7 @@ jsxElementType.tsx(111,19): error TS2322: Type '{ a: string; b: string; }' is no
   Property 'b' does not exist on type '{ a: string; }'.
 
 
-==== jsxElementType.tsx (20 errors) ====
+==== jsxElementType.tsx (21 errors) ====
     /// <reference path="/.lib/react16.d.ts" />
     import * as React from "react";
     
@@ -50,6 +52,9 @@ jsxElementType.tsx(111,19): error TS2322: Type '{ a: string; b: string; }' is no
       | null
       | undefined
       | Promise<React18ReactNode>;
+                ~~~~~~~~~~~~~~~~
+!!! error TS2344: Type 'React18ReactNode' does not satisfy the constraint 'not { then(): any; }'.
+!!! error TS2344:   Type 'string' is not assignable to type 'not { then(): any; }'.
     
     // // React.JSXElementConstructor but it now can return React nodes from function components.
     type NewReactJSXElementConstructor<P> =

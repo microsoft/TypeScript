@@ -1,3 +1,14 @@
+errorOnUnionVsObjectShouldDeeplyDisambiguate.ts(2,23): error TS2344: Type 'number[]' does not satisfy the constraint 'not { then(): any; }'.
+errorOnUnionVsObjectShouldDeeplyDisambiguate.ts(3,22): error TS2344: Type 'string' does not satisfy the constraint 'not { then(): any; }'.
+errorOnUnionVsObjectShouldDeeplyDisambiguate.ts(4,22): error TS2344: Type 'string' does not satisfy the constraint 'not { then(): any; }'.
+errorOnUnionVsObjectShouldDeeplyDisambiguate.ts(5,22): error TS2344: Type 'string' does not satisfy the constraint 'not { then(): any; }'.
+errorOnUnionVsObjectShouldDeeplyDisambiguate.ts(6,22): error TS2344: Type 'string' does not satisfy the constraint 'not { then(): any; }'.
+errorOnUnionVsObjectShouldDeeplyDisambiguate.ts(7,22): error TS2344: Type 'string' does not satisfy the constraint 'not { then(): any; }'.
+errorOnUnionVsObjectShouldDeeplyDisambiguate.ts(8,22): error TS2344: Type 'string' does not satisfy the constraint 'not { then(): any; }'.
+errorOnUnionVsObjectShouldDeeplyDisambiguate.ts(9,22): error TS2344: Type 'string' does not satisfy the constraint 'not { then(): any; }'.
+errorOnUnionVsObjectShouldDeeplyDisambiguate.ts(10,22): error TS2344: Type 'string' does not satisfy the constraint 'not { then(): any; }'.
+errorOnUnionVsObjectShouldDeeplyDisambiguate.ts(11,22): error TS2344: Type 'string' does not satisfy the constraint 'not { then(): any; }'.
+errorOnUnionVsObjectShouldDeeplyDisambiguate.ts(12,22): error TS2344: Type 'number' does not satisfy the constraint 'not { then(): any; }'.
 errorOnUnionVsObjectShouldDeeplyDisambiguate.ts(17,7): error TS2322: Type '() => number[]' is not assignable to type '() => Promise<number[]>'.
   Type 'number[]' is missing the following properties from type 'Promise<number[]>': then, catch, [Symbol.toStringTag]
 errorOnUnionVsObjectShouldDeeplyDisambiguate.ts(18,16): error TS2322: Type 'string' is not assignable to type 'Promise<string>'.
@@ -12,19 +23,41 @@ errorOnUnionVsObjectShouldDeeplyDisambiguate.ts(26,16): error TS2322: Type 'stri
 errorOnUnionVsObjectShouldDeeplyDisambiguate.ts(27,16): error TS2322: Type 'number' is not assignable to type 'Promise<number>'.
 
 
-==== errorOnUnionVsObjectShouldDeeplyDisambiguate.ts (11 errors) ====
+==== errorOnUnionVsObjectShouldDeeplyDisambiguate.ts (22 errors) ====
     interface Stuff {
         a?: () => Promise<number[]>;
+                          ~~~~~~~~
+!!! error TS2344: Type 'number[]' does not satisfy the constraint 'not { then(): any; }'.
         b: () => Promise<string>;
+                         ~~~~~~
+!!! error TS2344: Type 'string' does not satisfy the constraint 'not { then(): any; }'.
         c: () => Promise<string>;
+                         ~~~~~~
+!!! error TS2344: Type 'string' does not satisfy the constraint 'not { then(): any; }'.
         d: () => Promise<string>;
+                         ~~~~~~
+!!! error TS2344: Type 'string' does not satisfy the constraint 'not { then(): any; }'.
         e: () => Promise<string>;
+                         ~~~~~~
+!!! error TS2344: Type 'string' does not satisfy the constraint 'not { then(): any; }'.
         f: () => Promise<string>;
+                         ~~~~~~
+!!! error TS2344: Type 'string' does not satisfy the constraint 'not { then(): any; }'.
         g: () => Promise<string>;
+                         ~~~~~~
+!!! error TS2344: Type 'string' does not satisfy the constraint 'not { then(): any; }'.
         h: () => Promise<string>;
+                         ~~~~~~
+!!! error TS2344: Type 'string' does not satisfy the constraint 'not { then(): any; }'.
         i: () => Promise<string>;
+                         ~~~~~~
+!!! error TS2344: Type 'string' does not satisfy the constraint 'not { then(): any; }'.
         j: () => Promise<string>;
+                         ~~~~~~
+!!! error TS2344: Type 'string' does not satisfy the constraint 'not { then(): any; }'.
         k: () => Promise<number>;
+                         ~~~~~~
+!!! error TS2344: Type 'number' does not satisfy the constraint 'not { then(): any; }'.
       }
       
       function foo(): Stuff | string {

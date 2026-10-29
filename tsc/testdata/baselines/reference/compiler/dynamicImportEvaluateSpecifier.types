@@ -21,8 +21,8 @@ import(String(i++));
 >i : number
 
 const getPath = async () => {
->getPath : () => Promise<string>
->async () => {	/* in reality this would do some async FS operation, or a web request */	return "/root/my/cool/path";} : () => Promise<string>
+>getPath : () => Promise<"/root/my/cool/path" & not { then(): any; }>
+>async () => {	/* in reality this would do some async FS operation, or a web request */	return "/root/my/cool/path";} : () => Promise<"/root/my/cool/path" & not { then(): any; }>
 
 	/* in reality this would do some async FS operation, or a web request */
 	return "/root/my/cool/path";
@@ -31,16 +31,16 @@ const getPath = async () => {
 };
 
 const someFunction = async () => {
->someFunction : () => Promise<void>
->async () => {	const result = await import(await getPath());} : () => Promise<void>
+>someFunction : () => Promise<void & not { then(): any; }>
+>async () => {	const result = await import(await getPath());} : () => Promise<void & not { then(): any; }>
 
 	const result = await import(await getPath());
 >result : any
 >await import(await getPath()) : any
 >import(await getPath()) : Promise<any>
->await getPath() : string
->getPath() : Promise<string>
->getPath : () => Promise<string>
+>await getPath() : "/root/my/cool/path" & not { then(): any; }
+>getPath() : Promise<"/root/my/cool/path" & not { then(): any; }>
+>getPath : () => Promise<"/root/my/cool/path" & not { then(): any; }>
 
 };
 

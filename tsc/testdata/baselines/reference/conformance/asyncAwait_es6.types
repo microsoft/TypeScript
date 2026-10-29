@@ -15,7 +15,7 @@ declare var mp: MyPromise<number>;
 >mp : MyPromise<number>
 
 async function f0() { }
->f0 : () => Promise<void>
+>f0 : () => Promise<void & not { then(): any; }>
 
 async function f1(): Promise<void> { }
 >f1 : () => Promise<void>
@@ -24,8 +24,8 @@ async function f3(): MyPromise<void> { }
 >f3 : () => MyPromise<void>
 
 let f4 = async function() { }
->f4 : () => Promise<void>
->async function() { } : () => Promise<void>
+>f4 : () => Promise<void & not { then(): any; }>
+>async function() { } : () => Promise<void & not { then(): any; }>
 
 let f5 = async function(): Promise<void> { }
 >f5 : () => Promise<void>
@@ -36,8 +36,8 @@ let f6 = async function(): MyPromise<void> { }
 >async function(): MyPromise<void> { } : () => MyPromise<void>
 
 let f7 = async () => { };
->f7 : () => Promise<void>
->async () => { } : () => Promise<void>
+>f7 : () => Promise<void & not { then(): any; }>
+>async () => { } : () => Promise<void & not { then(): any; }>
 
 let f8 = async (): Promise<void> => { };
 >f8 : () => Promise<void>
@@ -48,13 +48,13 @@ let f9 = async (): MyPromise<void> => { };
 >async (): MyPromise<void> => { } : () => MyPromise<void>
 
 let f10 = async () => p;
->f10 : () => Promise<number>
->async () => p : () => Promise<number>
+>f10 : () => Promise<number & not { then(): any; }>
+>async () => p : () => Promise<number & not { then(): any; }>
 >p : Promise<number>
 
 let f11 = async () => mp;
->f11 : () => Promise<number>
->async () => mp : () => Promise<number>
+>f11 : () => Promise<number & not { then(): any; }>
+>async () => mp : () => Promise<number & not { then(): any; }>
 >mp : MyPromise<number>
 
 let f12 = async (): Promise<number> => mp;
@@ -68,11 +68,11 @@ let f13 = async (): MyPromise<number> => p;
 >p : Promise<number>
 
 let o = {
->o : { m1(): Promise<void>; m2(): Promise<void>; m3(): MyPromise<void>; }
->{	async m1() { },	async m2(): Promise<void> { },	async m3(): MyPromise<void> { }} : { m1(): Promise<void>; m2(): Promise<void>; m3(): MyPromise<void>; }
+>o : { m1(): Promise<void & not { then(): any; }>; m2(): Promise<void>; m3(): MyPromise<void>; }
+>{	async m1() { },	async m2(): Promise<void> { },	async m3(): MyPromise<void> { }} : { m1(): Promise<void & not { then(): any; }>; m2(): Promise<void>; m3(): MyPromise<void>; }
 
 	async m1() { },
->m1 : () => Promise<void>
+>m1 : () => Promise<void & not { then(): any; }>
 
 	async m2(): Promise<void> { },
 >m2 : () => Promise<void>
@@ -86,7 +86,7 @@ class C {
 >C : C
 
 	async m1() { }
->m1 : () => Promise<void>
+>m1 : () => Promise<void & not { then(): any; }>
 
 	async m2(): Promise<void> { }
 >m2 : () => Promise<void>
@@ -95,7 +95,7 @@ class C {
 >m3 : () => MyPromise<void>
 
 	static async m4() { }
->m4 : () => Promise<void>
+>m4 : () => Promise<void & not { then(): any; }>
 
 	static async m5(): Promise<void> { }
 >m5 : () => Promise<void>
@@ -108,17 +108,17 @@ namespace M {
 >M : typeof M
 
 	export async function f1() { }
->f1 : () => Promise<void>
+>f1 : () => Promise<void & not { then(): any; }>
 }
 
 async function f14() {
->f14 : () => Promise<void>
+>f14 : () => Promise<void & not { then(): any; }>
 
     block: {
 >block : any
 
         await 1;
->await 1 : 1
+>await 1 : 1 & not { then(): any; }
 >1 : 1
 
         break block;

@@ -10,7 +10,7 @@ function f1() {
 >async () => {        await 10        throw new Error();    } : () => Promise<never>
 
         await 10
->await 10 : 10
+>await 10 : 10 & not { then(): any; }
 >10 : 10
 
         throw new Error();

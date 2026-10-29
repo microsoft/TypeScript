@@ -2,21 +2,21 @@
 
 === promiseAllOnAny01.ts ===
 async function foo(x: any) {
->foo : (x: any) => Promise<any[]>
+>foo : (x: any) => Promise<any[] & not { then(): any; }>
 >x : any
 
     let abc = await Promise.all(x);
->abc : any[]
->await Promise.all(x) : any[]
->Promise.all(x) : Promise<any[]>
->Promise.all : <T extends readonly unknown[] | []>(values: T) => Promise<{ -readonly [P in keyof T]: Awaited<T[P]>; }>
+>abc : any[] & not { then(): any; } & not { then(): any; }
+>await Promise.all(x) : any[] & not { then(): any; } & not { then(): any; }
+>Promise.all(x) : Promise<any[] & not { then(): any; }>
+>Promise.all : <T extends readonly unknown[] | []>(values: T) => Promise<{ -readonly [P in keyof T]: Awaited<T[P]>; } & not { then(): any; }>
 >Promise : PromiseConstructor
->all : <T extends readonly unknown[] | []>(values: T) => Promise<{ -readonly [P in keyof T]: Awaited<T[P]>; }>
+>all : <T extends readonly unknown[] | []>(values: T) => Promise<{ -readonly [P in keyof T]: Awaited<T[P]>; } & not { then(): any; }>
 >x : any
 
     let result: any[] = abc;
 >result : any[]
->abc : any[]
+>abc : any[] & not { then(): any; } & not { then(): any; }
 
     return result;
 >result : any[]

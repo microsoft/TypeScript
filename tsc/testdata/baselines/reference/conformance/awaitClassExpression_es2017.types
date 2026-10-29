@@ -14,7 +14,7 @@ async function func(): Promise<void> {
     class D extends (await p) {
 >D : D
 >(await p) : C
->await p : typeof C
+>await p : typeof C & not { then(): any; }
 >p : Promise<typeof C>
     }
 }

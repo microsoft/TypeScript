@@ -10,7 +10,7 @@ declare var x, y, z, a, b, c;
 >c : any
 
 async function callExpression0() {
->callExpression0 : () => Promise<void>
+>callExpression0 : () => Promise<void & not { then(): any; }>
 
     await x(y, z);
 >await x(y, z) : any
@@ -21,7 +21,7 @@ async function callExpression0() {
 }
 
 async function callExpression1() {
->callExpression1 : () => Promise<void>
+>callExpression1 : () => Promise<void & not { then(): any; }>
 
     (await x)(y, z);
 >(await x)(y, z) : any
@@ -33,7 +33,7 @@ async function callExpression1() {
 }
 
 async function callExpression2() {
->callExpression2 : () => Promise<void>
+>callExpression2 : () => Promise<void & not { then(): any; }>
 
     x(await y, z);
 >x(await y, z) : any
@@ -44,7 +44,7 @@ async function callExpression2() {
 }
 
 async function callExpression3() {
->callExpression3 : () => Promise<void>
+>callExpression3 : () => Promise<void & not { then(): any; }>
 
     x(y, await z);
 >x(y, await z) : any
@@ -55,7 +55,7 @@ async function callExpression3() {
 }
 
 async function callExpression4() {
->callExpression4 : () => Promise<void>
+>callExpression4 : () => Promise<void & not { then(): any; }>
 
     await x(...y, z);
 >await x(...y, z) : any
@@ -67,7 +67,7 @@ async function callExpression4() {
 }
 
 async function callExpression5() {
->callExpression5 : () => Promise<void>
+>callExpression5 : () => Promise<void & not { then(): any; }>
 
     (await x)(...y, z);
 >(await x)(...y, z) : any
@@ -80,7 +80,7 @@ async function callExpression5() {
 }
 
 async function callExpression6() {
->callExpression6 : () => Promise<void>
+>callExpression6 : () => Promise<void & not { then(): any; }>
 
     x(...(await y), z);
 >x(...(await y), z) : any
@@ -93,7 +93,7 @@ async function callExpression6() {
 }
 
 async function callExpression7() {
->callExpression7 : () => Promise<void>
+>callExpression7 : () => Promise<void & not { then(): any; }>
 
     x(...y, await z);
 >x(...y, await z) : any
@@ -105,7 +105,7 @@ async function callExpression7() {
 }
 
 async function callExpression8() {
->callExpression8 : () => Promise<void>
+>callExpression8 : () => Promise<void & not { then(): any; }>
 
     x(await y, ...z);
 >x(await y, ...z) : any
@@ -117,7 +117,7 @@ async function callExpression8() {
 }
 
 async function callExpression9() {
->callExpression9 : () => Promise<void>
+>callExpression9 : () => Promise<void & not { then(): any; }>
 
     x(y, ...(await z));
 >x(y, ...(await z)) : any
@@ -130,7 +130,7 @@ async function callExpression9() {
 }
 
 async function callExpression10() {
->callExpression10 : () => Promise<void>
+>callExpression10 : () => Promise<void & not { then(): any; }>
 
     await x.a(y, z);
 >await x.a(y, z) : any
@@ -143,7 +143,7 @@ async function callExpression10() {
 }
 
 async function callExpression11() {
->callExpression11 : () => Promise<void>
+>callExpression11 : () => Promise<void & not { then(): any; }>
 
     (await x.a)(y, z);
 >(await x.a)(y, z) : any
@@ -157,7 +157,7 @@ async function callExpression11() {
 }
 
 async function callExpression12() {
->callExpression12 : () => Promise<void>
+>callExpression12 : () => Promise<void & not { then(): any; }>
 
     (await x).a(y, z);
 >(await x).a(y, z) : any
@@ -171,7 +171,7 @@ async function callExpression12() {
 }
 
 async function callExpression13() {
->callExpression13 : () => Promise<void>
+>callExpression13 : () => Promise<void & not { then(): any; }>
 
     x.a(await y, z);
 >x.a(await y, z) : any
@@ -184,7 +184,7 @@ async function callExpression13() {
 }
 
 async function callExpression14() {
->callExpression14 : () => Promise<void>
+>callExpression14 : () => Promise<void & not { then(): any; }>
 
     x.a(y, await z);
 >x.a(y, await z) : any
@@ -197,7 +197,7 @@ async function callExpression14() {
 }
 
 async function callExpression15() {
->callExpression15 : () => Promise<void>
+>callExpression15 : () => Promise<void & not { then(): any; }>
 
     await x[a](y, z);
 >await x[a](y, z) : any
@@ -210,7 +210,7 @@ async function callExpression15() {
 }
 
 async function callExpression16() {
->callExpression16 : () => Promise<void>
+>callExpression16 : () => Promise<void & not { then(): any; }>
 
     (await x[a])(y, z);
 >(await x[a])(y, z) : any
@@ -224,7 +224,7 @@ async function callExpression16() {
 }
 
 async function callExpression17() {
->callExpression17 : () => Promise<void>
+>callExpression17 : () => Promise<void & not { then(): any; }>
 
     (await x)[a](y, z);
 >(await x)[a](y, z) : any
@@ -238,7 +238,7 @@ async function callExpression17() {
 }
 
 async function callExpression18() {
->callExpression18 : () => Promise<void>
+>callExpression18 : () => Promise<void & not { then(): any; }>
 
     x[await a](y, z);
 >x[await a](y, z) : any
@@ -251,7 +251,7 @@ async function callExpression18() {
 }
 
 async function callExpression19() {
->callExpression19 : () => Promise<void>
+>callExpression19 : () => Promise<void & not { then(): any; }>
 
     x[a](await y, z);
 >x[a](await y, z) : any
@@ -264,7 +264,7 @@ async function callExpression19() {
 }
 
 async function callExpression20() {
->callExpression20 : () => Promise<void>
+>callExpression20 : () => Promise<void & not { then(): any; }>
 
     x[a](y, await z);
 >x[a](y, await z) : any

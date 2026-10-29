@@ -1,0 +1,15 @@
+b.js(7,20): error TS2344: Type 'AbstractModuleSource' does not satisfy the constraint 'not { then(): any; }'.
+
+
+==== b.js (1 errors) ====
+    import source a from "./a.wasm";
+    const b = import.source("./a.wasm");
+    
+    /** @type {AbstractModuleSource} */
+    const c = a;
+    
+    /** @type {Promise<AbstractModuleSource>} */
+                       ~~~~~~~~~~~~~~~~~~~~
+!!! error TS2344: Type 'AbstractModuleSource' does not satisfy the constraint 'not { then(): any; }'.
+    const d = b;
+    

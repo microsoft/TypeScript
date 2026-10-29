@@ -63,14 +63,14 @@ const a2 = require("./a"); // Error in TS
 >"./a" : "./a"
 
 const a3 = await import("./a"); // { x: 0 }
->a3 : typeof a1
->await import("./a") : typeof a1
->import("./a") : Promise<typeof a1>
+>a3 : typeof a1 & not { then(): any; }
+>await import("./a") : typeof a1 & not { then(): any; }
+>import("./a") : Promise<typeof a1 & not { then(): any; }>
 >"./a" : "./a"
 
 a3.x;
 >a3.x : 0
->a3 : typeof a1
+>a3 : typeof a1 & not { then(): any; }
 >x : 0
 
 import b1 from "./b"; // 0
@@ -85,14 +85,14 @@ b2.default;
 >default : 0
 
 const b3 = await import("./b"); // { default: 0 }
->b3 : typeof b2
->await import("./b") : typeof b2
->import("./b") : Promise<typeof b2>
+>b3 : typeof b2 & not { then(): any; }
+>await import("./b") : typeof b2 & not { then(): any; }
+>import("./b") : Promise<typeof b2 & not { then(): any; }>
 >"./b" : "./b"
 
 b3.default;
 >b3.default : 0
->b3 : typeof b2
+>b3 : typeof b2 & not { then(): any; }
 >default : 0
 
 import c1 from "./c"; // { default: [Function: default] }

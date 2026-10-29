@@ -27,7 +27,7 @@ var obj = {
 };
 
 async function* g() {
->g : () => AsyncGenerator<any, void, unknown>
+>g : () => AsyncGenerator<any, void & not { then(): any; }, unknown>
 
     yield* obj;
 >yield* obj : any

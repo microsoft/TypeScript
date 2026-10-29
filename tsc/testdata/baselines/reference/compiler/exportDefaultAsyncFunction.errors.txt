@@ -1,0 +1,9 @@
+exportDefaultAsyncFunction.ts(1,46): error TS2344: Type 'void' does not satisfy the constraint 'not { then(): any; }'.
+
+
+==== exportDefaultAsyncFunction.ts (1 errors) ====
+    export default async function foo(): Promise<void> {}
+                                                 ~~~~
+!!! error TS2344: Type 'void' does not satisfy the constraint 'not { then(): any; }'.
+    foo();
+    

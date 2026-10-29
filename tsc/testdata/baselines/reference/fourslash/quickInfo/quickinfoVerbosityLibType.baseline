@@ -51,9 +51,11 @@
 //               ^^^^^^^
 // | ----------------------------------------------------------------------
 // | ```typescript
-// | interface Promise<T>
+// | interface Promise<T extends not {
+// |     then(): any;
+// | }>
 // | ```
-// | Represents the completion of an asynchronous operation
+// | Represents the completion of an asynchronous operation whose fulfilled value is not thenable.
 // | (verbosity level: 0)
 // | ----------------------------------------------------------------------
 [
@@ -193,7 +195,7 @@
       "hover": {
         "contents": {
           "kind": "markdown",
-          "value": "```typescript\ninterface Promise<T>\n```\nRepresents the completion of an asynchronous operation"
+          "value": "```typescript\ninterface Promise<T extends not {\n    then(): any;\n}>\n```\nRepresents the completion of an asynchronous operation whose fulfilled value is not thenable."
         },
         "range": {
           "start": {

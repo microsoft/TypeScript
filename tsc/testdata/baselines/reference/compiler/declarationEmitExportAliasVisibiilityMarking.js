@@ -74,8 +74,10 @@ declare function _default(suit: Suit, rank: Rank): {
     rank: Rank;
 };
 //// [index.d.ts]
-export declare let lazyCard: () => Promise<(suit: import("./Types").Suit, rank: import("./Types").Rank) => {
+export declare let lazyCard: () => Promise<((suit: import("./Types").Suit, rank: import("./Types").Rank) => {
     suit: import("./Types").Suit;
     rank: import("./Types").Rank;
+}) & not {
+    then(): any;
 }>;
 export { Suit, Rank } from './Types';

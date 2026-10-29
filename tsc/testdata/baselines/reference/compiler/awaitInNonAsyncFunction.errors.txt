@@ -1,23 +1,32 @@
+awaitInNonAsyncFunction.ts(3,32): error TS2344: Type 'number' does not satisfy the constraint 'not { then(): any; }'.
 awaitInNonAsyncFunction.ts(4,7): error TS1103: 'for await' loops are only allowed within async functions and at the top levels of modules.
 awaitInNonAsyncFunction.ts(5,10): error TS1308: 'await' expressions are only allowed within async functions and at the top levels of modules.
+awaitInNonAsyncFunction.ts(8,41): error TS2344: Type 'number' does not satisfy the constraint 'not { then(): any; }'.
 awaitInNonAsyncFunction.ts(9,7): error TS1103: 'for await' loops are only allowed within async functions and at the top levels of modules.
 awaitInNonAsyncFunction.ts(10,10): error TS1308: 'await' expressions are only allowed within async functions and at the top levels of modules.
+awaitInNonAsyncFunction.ts(13,48): error TS2344: Type 'number' does not satisfy the constraint 'not { then(): any; }'.
 awaitInNonAsyncFunction.ts(14,7): error TS1103: 'for await' loops are only allowed within async functions and at the top levels of modules.
 awaitInNonAsyncFunction.ts(15,3): error TS1308: 'await' expressions are only allowed within async functions and at the top levels of modules.
+awaitInNonAsyncFunction.ts(18,31): error TS2344: Type 'number' does not satisfy the constraint 'not { then(): any; }'.
 awaitInNonAsyncFunction.ts(19,7): error TS1103: 'for await' loops are only allowed within async functions and at the top levels of modules.
 awaitInNonAsyncFunction.ts(20,10): error TS1308: 'await' expressions are only allowed within async functions and at the top levels of modules.
+awaitInNonAsyncFunction.ts(23,36): error TS2344: Type 'number' does not satisfy the constraint 'not { then(): any; }'.
 awaitInNonAsyncFunction.ts(24,7): error TS1103: 'for await' loops are only allowed within async functions and at the top levels of modules.
 awaitInNonAsyncFunction.ts(25,9): error TS1308: 'await' expressions are only allowed within async functions and at the top levels of modules.
+awaitInNonAsyncFunction.ts(29,26): error TS2344: Type 'number' does not satisfy the constraint 'not { then(): any; }'.
 awaitInNonAsyncFunction.ts(30,9): error TS1103: 'for await' loops are only allowed within async functions and at the top levels of modules.
 awaitInNonAsyncFunction.ts(31,5): error TS1308: 'await' expressions are only allowed within async functions and at the top levels of modules.
+awaitInNonAsyncFunction.ts(33,21): error TS2344: Type 'number' does not satisfy the constraint 'not { then(): any; }'.
 awaitInNonAsyncFunction.ts(34,7): error TS1103: 'for await' loops are only allowed within async functions and at the top levels of modules.
 awaitInNonAsyncFunction.ts(35,5): error TS1308: 'await' expressions are only allowed within async functions and at the top levels of modules.
 
 
-==== awaitInNonAsyncFunction.ts (14 errors) ====
+==== awaitInNonAsyncFunction.ts (21 errors) ====
     // https://github.com/Microsoft/TypeScript/issues/26586
     
     function normalFunc(p: Promise<number>) {
+                                   ~~~~~~
+!!! error TS2344: Type 'number' does not satisfy the constraint 'not { then(): any; }'.
       for await (const _ of []);
           ~~~~~
 !!! error TS1103: 'for await' loops are only allowed within async functions and at the top levels of modules.
@@ -29,6 +38,8 @@ awaitInNonAsyncFunction.ts(35,5): error TS1308: 'await' expressions are only all
     }
     
     export function exportedFunc(p: Promise<number>) {
+                                            ~~~~~~
+!!! error TS2344: Type 'number' does not satisfy the constraint 'not { then(): any; }'.
       for await (const _ of []);
           ~~~~~
 !!! error TS1103: 'for await' loops are only allowed within async functions and at the top levels of modules.
@@ -40,6 +51,8 @@ awaitInNonAsyncFunction.ts(35,5): error TS1308: 'await' expressions are only all
     }
     
     const functionExpression = function(p: Promise<number>) {
+                                                   ~~~~~~
+!!! error TS2344: Type 'number' does not satisfy the constraint 'not { then(): any; }'.
       for await (const _ of []);
           ~~~~~
 !!! error TS1103: 'for await' loops are only allowed within async functions and at the top levels of modules.
@@ -51,6 +64,8 @@ awaitInNonAsyncFunction.ts(35,5): error TS1308: 'await' expressions are only all
     }
     
     const arrowFunc = (p: Promise<number>) => {
+                                  ~~~~~~
+!!! error TS2344: Type 'number' does not satisfy the constraint 'not { then(): any; }'.
       for await (const _ of []);
           ~~~~~
 !!! error TS1103: 'for await' loops are only allowed within async functions and at the top levels of modules.
@@ -62,6 +77,8 @@ awaitInNonAsyncFunction.ts(35,5): error TS1308: 'await' expressions are only all
     };
     
     function* generatorFunc(p: Promise<number>) {
+                                       ~~~~~~
+!!! error TS2344: Type 'number' does not satisfy the constraint 'not { then(): any; }'.
       for await (const _ of []);
           ~~~~~
 !!! error TS1103: 'for await' loops are only allowed within async functions and at the top levels of modules.
@@ -74,6 +91,8 @@ awaitInNonAsyncFunction.ts(35,5): error TS1308: 'await' expressions are only all
     
     class clazz {
       constructor(p: Promise<number>) {
+                             ~~~~~~
+!!! error TS2344: Type 'number' does not satisfy the constraint 'not { then(): any; }'.
         for await (const _ of []);
             ~~~~~
 !!! error TS1103: 'for await' loops are only allowed within async functions and at the top levels of modules.
@@ -82,6 +101,8 @@ awaitInNonAsyncFunction.ts(35,5): error TS1308: 'await' expressions are only all
 !!! error TS1308: 'await' expressions are only allowed within async functions and at the top levels of modules.
       }
       method(p: Promise<number>) {
+                        ~~~~~~
+!!! error TS2344: Type 'number' does not satisfy the constraint 'not { then(): any; }'.
       for await (const _ of []);
           ~~~~~
 !!! error TS1103: 'for await' loops are only allowed within async functions and at the top levels of modules.

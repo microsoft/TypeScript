@@ -5,6 +5,7 @@ unionAndIntersectionInference1.ts(24,5): error TS2322: Type 'undefined' is not a
 unionAndIntersectionInference1.ts(48,4): error TS2322: Type 'null' is not assignable to type 'U'.
   'U' could be instantiated with an arbitrary type which could be unrelated to 'null'.
 unionAndIntersectionInference1.ts(52,5): error TS2454: Variable 'foo' is used before being assigned.
+unionAndIntersectionInference1.ts(80,37): error TS2344: Type 'ITest' does not satisfy the constraint 'not { then(): any; }'.
 unionAndIntersectionInference1.ts(95,52): error TS2769: No overload matches this call.
   The last overload gave the following error.
     Argument of type 'T' is not assignable to parameter of type 'object'.
@@ -13,7 +14,7 @@ unionAndIntersectionInference1.ts(96,7): error TS2322: Type '{ func: <T>() => vo
     Type '{ func: <T>() => void; }' provides no match for the signature '(): void'.
 
 
-==== unionAndIntersectionInference1.ts (8 errors) ====
+==== unionAndIntersectionInference1.ts (9 errors) ====
     // Repro from #2264
     
     interface Y { 'i am a very certain type': Y }
@@ -107,6 +108,8 @@ unionAndIntersectionInference1.ts(96,7): error TS2322: Type '{ func: <T>() => vo
     }
     
     const createTestAsync = (): Promise<ITest> => Promise.resolve().then(() => ({ name: 'test' }))
+                                        ~~~~~
+!!! error TS2344: Type 'ITest' does not satisfy the constraint 'not { then(): any; }'.
     
     const createTest = (): ITest => {
       return { name: 'test' }

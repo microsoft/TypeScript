@@ -1,7 +1,11 @@
+correctOrderOfPromiseMethod.ts(10,43): error TS2344: Type 'number' does not satisfy the constraint 'not { then(): any; }'.
+correctOrderOfPromiseMethod.ts(11,41): error TS2344: Type 'A[]' does not satisfy the constraint 'not { then(): any; }'.
+correctOrderOfPromiseMethod.ts(12,41): error TS2344: Type 'B[]' does not satisfy the constraint 'not { then(): any; }'.
+correctOrderOfPromiseMethod.ts(29,25): error TS2344: Type '["a", "b", "c"]' does not satisfy the constraint 'not { then(): any; }'.
 correctOrderOfPromiseMethod.ts(29,56): error TS2352: Conversion of type 'undefined' to type 'readonly ["a", "b", "c"]' may be a mistake because neither type sufficiently overlaps with the other. If this was intentional, convert the expression to 'unknown' first.
 
 
-==== correctOrderOfPromiseMethod.ts (1 errors) ====
+==== correctOrderOfPromiseMethod.ts (5 errors) ====
     interface A {
         id: string
     }
@@ -12,8 +16,14 @@ correctOrderOfPromiseMethod.ts(29,56): error TS2352: Conversion of type 'undefin
     }
     
     async function countEverything(): Promise<number> {
+                                              ~~~~~~
+!!! error TS2344: Type 'number' does not satisfy the constraint 'not { then(): any; }'.
         const providerA = async (): Promise<A[]> => { return [] }
+                                            ~~~
+!!! error TS2344: Type 'A[]' does not satisfy the constraint 'not { then(): any; }'.
         const providerB = async (): Promise<B[]> => { return [] }
+                                            ~~~
+!!! error TS2344: Type 'B[]' does not satisfy the constraint 'not { then(): any; }'.
     
         const [resultA, resultB] = await Promise.all([
             providerA(),
@@ -31,6 +41,8 @@ correctOrderOfPromiseMethod.ts(29,56): error TS2352: Conversion of type 'undefin
     // #31179
     
     const expected: Promise<["a", "b", "c"]> = Promise.all(undefined as readonly ["a", "b", "c"]);
+                            ~~~~~~~~~~~~~~~
+!!! error TS2344: Type '["a", "b", "c"]' does not satisfy the constraint 'not { then(): any; }'.
                                                            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 !!! error TS2352: Conversion of type 'undefined' to type 'readonly ["a", "b", "c"]' may be a mistake because neither type sufficiently overlaps with the other. If this was intentional, convert the expression to 'unknown' first.
     

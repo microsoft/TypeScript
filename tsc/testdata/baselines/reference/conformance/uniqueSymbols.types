@@ -138,30 +138,30 @@ function* genFuncYieldConstCallWithTypeQuery(): IterableIterator<typeof constCal
 
 // async function return inference
 async function asyncFuncReturnConstCall() { return constCall; }
->asyncFuncReturnConstCall : () => Promise<symbol>
+>asyncFuncReturnConstCall : () => Promise<unique symbol & not { then(): any; }>
 >constCall : unique symbol
 
 async function asyncFuncReturnLetCall() { return letCall; }
->asyncFuncReturnLetCall : () => Promise<symbol>
+>asyncFuncReturnLetCall : () => Promise<symbol & not { then(): any; }>
 >letCall : symbol
 
 async function asyncFuncReturnVarCall() { return varCall; }
->asyncFuncReturnVarCall : () => Promise<symbol>
+>asyncFuncReturnVarCall : () => Promise<symbol & not { then(): any; }>
 >varCall : symbol
 
 // async generator function yield inference
 async function* asyncGenFuncYieldConstCall() { yield constCall; }
->asyncGenFuncYieldConstCall : () => AsyncGenerator<symbol, void, unknown>
+>asyncGenFuncYieldConstCall : () => AsyncGenerator<unique symbol & not { then(): any; }, void & not { then(): any; }, unknown>
 >yield constCall : any
 >constCall : unique symbol
 
 async function* asyncGenFuncYieldLetCall() { yield letCall; }
->asyncGenFuncYieldLetCall : () => AsyncGenerator<symbol, void, unknown>
+>asyncGenFuncYieldLetCall : () => AsyncGenerator<symbol & not { then(): any; }, void & not { then(): any; }, unknown>
 >yield letCall : any
 >letCall : symbol
 
 async function* asyncGenFuncYieldVarCall() { yield varCall; }
->asyncGenFuncYieldVarCall : () => AsyncGenerator<symbol, void, unknown>
+>asyncGenFuncYieldVarCall : () => AsyncGenerator<symbol & not { then(): any; }, void & not { then(): any; }, unknown>
 >yield varCall : any
 >varCall : symbol
 
@@ -400,11 +400,11 @@ const constInitToLReadonlyNestedTypeWithIndexedAccess: L["nested"]["readonlyNest
 
 // type argument inference
 const promiseForConstCall = Promise.resolve(constCall);
->promiseForConstCall : Promise<unique symbol>
->Promise.resolve(constCall) : Promise<unique symbol>
->Promise.resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T>(value: T | PromiseLike<T>): Promise<Awaited<T>>; }
+>promiseForConstCall : Promise<unique symbol & not { then(): any; }>
+>Promise.resolve(constCall) : Promise<unique symbol & not { then(): any; }>
+>Promise.resolve : { (): Promise<void & not { then(): any; }>; <T>(value: T): Promise<Awaited<T>>; <T>(value: T | PromiseLike<T>): Promise<Awaited<T>>; }
 >Promise : PromiseConstructor
->resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T>(value: T | PromiseLike<T>): Promise<Awaited<T>>; }
+>resolve : { (): Promise<void & not { then(): any; }>; <T>(value: T): Promise<Awaited<T>>; <T>(value: T | PromiseLike<T>): Promise<Awaited<T>>; }
 >constCall : unique symbol
 
 const arrayOfConstCall = [constCall];
@@ -486,8 +486,8 @@ f(N["s"]);
 
 // property assignments/methods
 const o2 = {
->o2 : { a: symbol; b: symbol; c: symbol; method1(): symbol; method2(): Promise<symbol>; method3(): AsyncGenerator<symbol, void, unknown>; method4(): Generator<symbol, void, unknown>; method5(p?: symbol): symbol; }
->{    a: s,    b: N.s,    c: N["s"],    method1() { return s; },    async method2() { return s; },    async * method3() { yield s; },    * method4() { yield s; },    method5(p = s) { return p; },} : { a: symbol; b: symbol; c: symbol; method1(): symbol; method2(): Promise<symbol>; method3(): AsyncGenerator<symbol, void, unknown>; method4(): Generator<symbol, void, unknown>; method5(p?: symbol): symbol; }
+>o2 : { a: symbol; b: symbol; c: symbol; method1(): symbol; method2(): Promise<unique symbol & not { then(): any; }>; method3(): AsyncGenerator<unique symbol & not { then(): any; }, void & not { then(): any; }, unknown>; method4(): Generator<symbol, void, unknown>; method5(p?: symbol): symbol; }
+>{    a: s,    b: N.s,    c: N["s"],    method1() { return s; },    async method2() { return s; },    async * method3() { yield s; },    * method4() { yield s; },    method5(p = s) { return p; },} : { a: symbol; b: symbol; c: symbol; method1(): symbol; method2(): Promise<unique symbol & not { then(): any; }>; method3(): AsyncGenerator<unique symbol & not { then(): any; }, void & not { then(): any; }, unknown>; method4(): Generator<symbol, void, unknown>; method5(p?: symbol): symbol; }
 
     a: s,
 >a : symbol
@@ -510,11 +510,11 @@ const o2 = {
 >s : unique symbol
 
     async method2() { return s; },
->method2 : () => Promise<symbol>
+>method2 : () => Promise<unique symbol & not { then(): any; }>
 >s : unique symbol
 
     async * method3() { yield s; },
->method3 : () => AsyncGenerator<symbol, void, unknown>
+>method3 : () => AsyncGenerator<unique symbol & not { then(): any; }, void & not { then(): any; }, unknown>
 >yield s : any
 >s : unique symbol
 
@@ -604,11 +604,11 @@ class C0 {
 >s : unique symbol
 
     async method2() { return s; }
->method2 : () => Promise<symbol>
+>method2 : () => Promise<unique symbol & not { then(): any; }>
 >s : unique symbol
 
     async * method3() { yield s; }
->method3 : () => AsyncGenerator<symbol, void, unknown>
+>method3 : () => AsyncGenerator<unique symbol & not { then(): any; }, void & not { then(): any; }, unknown>
 >yield s : any
 >s : unique symbol
 
@@ -821,7 +821,7 @@ interface Context {
 
 const o3: Context = {
 >o3 : Context
->{    method1() {        return s; // return type should not widen due to contextual type    },    async method2() {        return s; // return type should not widen due to contextual type    },    async * method3() {        yield s; // yield type should not widen due to contextual type    },    * method4() {        yield s; // yield type should not widen due to contextual type    },    method5(p = s) { // parameter should not widen due to contextual type        return p;    },} : { method1(): unique symbol; method2(): Promise<unique symbol>; method3(): AsyncGenerator<unique symbol, void, any>; method4(): Generator<unique symbol, void, any>; method5(p?: unique symbol | undefined): unique symbol; }
+>{    method1() {        return s; // return type should not widen due to contextual type    },    async method2() {        return s; // return type should not widen due to contextual type    },    async * method3() {        yield s; // yield type should not widen due to contextual type    },    * method4() {        yield s; // yield type should not widen due to contextual type    },    method5(p = s) { // parameter should not widen due to contextual type        return p;    },} : { method1(): unique symbol; method2(): Promise<unique symbol & not { then(): any; }>; method3(): AsyncGenerator<unique symbol & not { then(): any; }, void & not { then(): any; }, any>; method4(): Generator<unique symbol, void, any>; method5(p?: unique symbol | undefined): unique symbol; }
 
     method1() {
 >method1 : () => unique symbol
@@ -831,14 +831,14 @@ const o3: Context = {
 
     },
     async method2() {
->method2 : () => Promise<unique symbol>
+>method2 : () => Promise<unique symbol & not { then(): any; }>
 
         return s; // return type should not widen due to contextual type
 >s : unique symbol
 
     },
     async * method3() {
->method3 : () => AsyncGenerator<unique symbol, void, any>
+>method3 : () => AsyncGenerator<unique symbol & not { then(): any; }, void & not { then(): any; }, any>
 
         yield s; // yield type should not widen due to contextual type
 >yield s : any

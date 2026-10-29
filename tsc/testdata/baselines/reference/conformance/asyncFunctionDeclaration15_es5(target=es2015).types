@@ -16,7 +16,7 @@ declare let thenable: Thenable;
 >thenable : Thenable
 
 async function fn1() { } // valid: Promise<void>
->fn1 : () => Promise<void>
+>fn1 : () => Promise<void & not { then(): any; }>
 
 async function fn2(): { } { } // error
 >fn2 : () => {}
@@ -34,17 +34,17 @@ async function fn6(): Thenable { } // error
 >fn6 : () => Thenable
 
 async function fn7() { return; } // valid: Promise<void>
->fn7 : () => Promise<void>
+>fn7 : () => Promise<void & not { then(): any; }>
 
 async function fn8() { return 1; } // valid: Promise<number>
->fn8 : () => Promise<number>
+>fn8 : () => Promise<1 & not { then(): any; }>
 >1 : 1
 
 async function fn9() { return null; } // valid: Promise<any>
->fn9 : () => Promise<any>
+>fn9 : () => Promise<null>
 
 async function fn10() { return undefined; } // valid: Promise<any>
->fn10 : () => Promise<any>
+>fn10 : () => Promise<undefined>
 >undefined : undefined
 
 async function fn11() { return a; } // valid: Promise<any>
@@ -52,7 +52,7 @@ async function fn11() { return a; } // valid: Promise<any>
 >a : any
 
 async function fn12() { return obj; } // valid: Promise<{ then: string; }>
->fn12 : () => Promise<{ then: string; }>
+>fn12 : () => Promise<{ then: string; } & not { then(): any; }>
 >obj : { then: string; }
 
 async function fn13() { return thenable; } // error
@@ -60,31 +60,31 @@ async function fn13() { return thenable; } // error
 >thenable : Thenable
 
 async function fn14() { await 1; } // valid: Promise<void>
->fn14 : () => Promise<void>
->await 1 : 1
+>fn14 : () => Promise<void & not { then(): any; }>
+>await 1 : 1 & not { then(): any; }
 >1 : 1
 
 async function fn15() { await null; } // valid: Promise<void>
->fn15 : () => Promise<void>
+>fn15 : () => Promise<void & not { then(): any; }>
 >await null : null
 
 async function fn16() { await undefined; } // valid: Promise<void>
->fn16 : () => Promise<void>
+>fn16 : () => Promise<void & not { then(): any; }>
 >await undefined : undefined
 >undefined : undefined
 
 async function fn17() { await a; } // valid: Promise<void>
->fn17 : () => Promise<void>
+>fn17 : () => Promise<void & not { then(): any; }>
 >await a : any
 >a : any
 
 async function fn18() { await obj; } // valid: Promise<void>
->fn18 : () => Promise<void>
->await obj : { then: string; }
+>fn18 : () => Promise<void & not { then(): any; }>
+>await obj : { then: string; } & not { then(): any; }
 >obj : { then: string; }
 
 async function fn19() { await thenable; } // error
->fn19 : () => Promise<void>
+>fn19 : () => Promise<void & not { then(): any; }>
 >await thenable : any
 >thenable : Thenable
 

@@ -1,3 +1,4 @@
+/exported.d.ts(1,29): error TS2344: Type 'T' does not satisfy the constraint 'not { then(): any; }'.
 /types.js(3,21): error TS2304: Cannot find name 'Keyword'.
 /types.js(3,30): error TS2304: Cannot find name 'ParamValueTyped'.
 
@@ -9,8 +10,11 @@
       };
     };
     
-==== /exported.d.ts (0 errors) ====
+==== /exported.d.ts (1 errors) ====
     type _ERef<T> = T | Promise<T>;
+                                ~
+!!! error TS2344: Type 'T' does not satisfy the constraint 'not { then(): any; }'.
+!!! related TS2208 /exported.d.ts:1:12: This type parameter might need an `extends not { then(): any; }` constraint.
     import { ParamStateRecord as _ParamStateRecord } from './types.js';
     declare global {
       // @ts-ignore TS2666

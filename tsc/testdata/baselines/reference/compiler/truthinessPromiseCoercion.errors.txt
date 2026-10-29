@@ -1,15 +1,28 @@
+truthinessPromiseCoercion.ts(1,26): error TS2344: Type 'number' does not satisfy the constraint 'not { then(): any; }'.
+truthinessPromiseCoercion.ts(2,34): error TS2344: Type 'number' does not satisfy the constraint 'not { then(): any; }'.
+truthinessPromiseCoercion.ts(3,33): error TS2344: Type 'unknown' does not satisfy the constraint 'not { then(): any; }'.
+truthinessPromiseCoercion.ts(4,32): error TS2344: Type 'boolean' does not satisfy the constraint 'not { then(): any; }'.
 truthinessPromiseCoercion.ts(7,9): error TS2801: This condition will always return true since this 'Promise<number>' is always defined.
 truthinessPromiseCoercion.ts(11,5): error TS2801: This condition will always return true since this 'Promise<number>' is always defined.
 truthinessPromiseCoercion.ts(32,9): error TS2801: This condition will always return true since this 'Promise<unknown>' is always defined.
+truthinessPromiseCoercion.ts(39,29): error TS2344: Type 'string' does not satisfy the constraint 'not { then(): any; }'.
 truthinessPromiseCoercion.ts(40,9): error TS2801: This condition will always return true since this 'Promise<boolean>' is always defined.
 truthinessPromiseCoercion.ts(43,9): error TS2801: This condition will always return true since this 'Promise<boolean>' is always defined.
 
 
-==== truthinessPromiseCoercion.ts (5 errors) ====
+==== truthinessPromiseCoercion.ts (10 errors) ====
     declare const p: Promise<number>
+                             ~~~~~~
+!!! error TS2344: Type 'number' does not satisfy the constraint 'not { then(): any; }'.
     declare const p2: null | Promise<number>
+                                     ~~~~~~
+!!! error TS2344: Type 'number' does not satisfy the constraint 'not { then(): any; }'.
     declare const obj: { p: Promise<unknown> }
+                                    ~~~~~~~
+!!! error TS2344: Type 'unknown' does not satisfy the constraint 'not { then(): any; }'.
     declare function pf(): Promise<boolean>
+                                   ~~~~~~~
+!!! error TS2344: Type 'boolean' does not satisfy the constraint 'not { then(): any; }'.
     
     async function f() {
         if (p) {} // err
@@ -54,6 +67,8 @@ truthinessPromiseCoercion.ts(43,9): error TS2801: This condition will always ret
     }
     
     async function i(): Promise<string> {
+                                ~~~~~~
+!!! error TS2344: Type 'string' does not satisfy the constraint 'not { then(): any; }'.
         if (pf()) { // error
             ~~~~
 !!! error TS2801: This condition will always return true since this 'Promise<boolean>' is always defined.

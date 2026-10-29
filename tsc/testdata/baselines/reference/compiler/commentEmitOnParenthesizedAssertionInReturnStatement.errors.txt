@@ -1,0 +1,22 @@
+commentEmitOnParenthesizedAssertionInReturnStatement.ts(6,18): error TS2344: Type 'void' does not satisfy the constraint 'not { then(): any; }'.
+commentEmitOnParenthesizedAssertionInReturnStatement.ts(9,43): error TS2344: Type 'void' does not satisfy the constraint 'not { then(): any; }'.
+
+
+==== commentEmitOnParenthesizedAssertionInReturnStatement.ts (2 errors) ====
+    export class Foo {
+      client = {
+        getThing: () => Promise.resolve('')
+      }
+    
+      foo(): Promise<void> {
+                     ~~~~
+!!! error TS2344: Type 'void' does not satisfy the constraint 'not { then(): any; }'.
+        return (
+          /* TODO: Avoid using type assertions, please refactor. */ this.client
+            .getThing() as unknown as Promise<void>
+                                              ~~~~
+!!! error TS2344: Type 'void' does not satisfy the constraint 'not { then(): any; }'.
+        );
+      }
+    }
+    

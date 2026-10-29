@@ -2,7 +2,7 @@
 
 === asyncDestructuringArgumentsProperty.ts ===
 async function f() {
->f : () => Promise<number>
+>f : () => Promise<number & not { then(): any; }>
 
   const { arguments: args } = await { arguments: 42 };
 >arguments : any

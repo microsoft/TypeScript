@@ -1,7 +1,8 @@
 asyncAwaitWithCapturedBlockScopeVar.ts(27,23): error TS2366: Function lacks ending return statement and return type does not include 'undefined'.
+asyncAwaitWithCapturedBlockScopeVar.ts(27,31): error TS2344: Type 'number' does not satisfy the constraint 'not { then(): any; }'.
 
 
-==== asyncAwaitWithCapturedBlockScopeVar.ts (1 errors) ====
+==== asyncAwaitWithCapturedBlockScopeVar.ts (2 errors) ====
     async function fn1() {
         let ar = [];
         for (let i = 0; i < 1; i++) {
@@ -31,6 +32,8 @@ asyncAwaitWithCapturedBlockScopeVar.ts(27,23): error TS2366: Function lacks endi
     async function fn4(): Promise<number> {
                           ~~~~~~~~~~~~~~~
 !!! error TS2366: Function lacks ending return statement and return type does not include 'undefined'.
+                                  ~~~~~~
+!!! error TS2344: Type 'number' does not satisfy the constraint 'not { then(): any; }'.
         let ar = [];
         for (let i = 0; i < 1; i++) {
             await 1;

@@ -20,7 +20,9 @@ declare const r1: {
 };
 export type R1 = typeof r1;
 declare const r2: {
-    [Symbol.asyncDispose](): Promise<void>;
+    [Symbol.asyncDispose](): Promise<void & not {
+        then(): any;
+    }>;
 };
 export type R2 = typeof r2;
 export {};

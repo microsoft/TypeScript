@@ -7,33 +7,33 @@ declare function getT<T>(): T;
 >getT : <T>() => T
 
 Promise.all([getT<string>(), ...getT<any>()]).then((result) => {
->Promise.all([getT<string>(), ...getT<any>()]).then((result) => {  const head = result[0]; // string  const tail = result.slice(1); // any[]  tail satisfies string[]; // ok}) : Promise<void>
->Promise.all([getT<string>(), ...getT<any>()]).then : <TResult1 = [string, ...any[]], TResult2 = never>(onfulfilled?: ((value: [string, ...any[]]) => TResult1 | PromiseLike<TResult1>) | null | undefined, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | null | undefined) => Promise<TResult1 | TResult2>
->Promise.all([getT<string>(), ...getT<any>()]) : Promise<[string, ...any[]]>
->Promise.all : { <T>(values: Iterable<T | PromiseLike<T>>): Promise<Awaited<T>[]>; <T extends readonly unknown[] | []>(values: T): Promise<{ -readonly [P in keyof T]: Awaited<T[P]>; }>; }
+>Promise.all([getT<string>(), ...getT<any>()]).then((result) => {  const head = result[0]; // string  const tail = result.slice(1); // any[]  tail satisfies string[]; // ok}) : Promise<void & not { then(): any; }>
+>Promise.all([getT<string>(), ...getT<any>()]).then : <TResult1 = [string & not { then(): any; }, ...any[]] & not { then(): any; }, TResult2 = never>(onfulfilled?: ((value: [string & not { then(): any; }, ...any[]] & not { then(): any; }) => TResult1 | PromiseLike<TResult1>) | null | undefined, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | null | undefined) => Promise<Awaited<TResult1> | Awaited<TResult2>>
+>Promise.all([getT<string>(), ...getT<any>()]) : Promise<[string & not { then(): any; }, ...any[]] & not { then(): any; }>
+>Promise.all : { <T>(values: Iterable<T | PromiseLike<T>>): Promise<Awaited<T>[] & not { then(): any; }>; <T extends readonly unknown[] | []>(values: T): Promise<{ -readonly [P in keyof T]: Awaited<T[P]>; } & not { then(): any; }>; }
 >Promise : PromiseConstructor
->all : { <T>(values: Iterable<T | PromiseLike<T>>): Promise<Awaited<T>[]>; <T extends readonly unknown[] | []>(values: T): Promise<{ -readonly [P in keyof T]: Awaited<T[P]>; }>; }
+>all : { <T>(values: Iterable<T | PromiseLike<T>>): Promise<Awaited<T>[] & not { then(): any; }>; <T extends readonly unknown[] | []>(values: T): Promise<{ -readonly [P in keyof T]: Awaited<T[P]>; } & not { then(): any; }>; }
 >[getT<string>(), ...getT<any>()] : [string, ...any[]]
 >getT<string>() : string
 >getT : <T>() => T
 >...getT<any>() : any
 >getT<any>() : any
 >getT : <T>() => T
->then : <TResult1 = [string, ...any[]], TResult2 = never>(onfulfilled?: ((value: [string, ...any[]]) => TResult1 | PromiseLike<TResult1>) | null | undefined, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | null | undefined) => Promise<TResult1 | TResult2>
->(result) => {  const head = result[0]; // string  const tail = result.slice(1); // any[]  tail satisfies string[]; // ok} : (result: [string, ...any[]]) => void
->result : [string, ...any[]]
+>then : <TResult1 = [string & not { then(): any; }, ...any[]] & not { then(): any; }, TResult2 = never>(onfulfilled?: ((value: [string & not { then(): any; }, ...any[]] & not { then(): any; }) => TResult1 | PromiseLike<TResult1>) | null | undefined, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | null | undefined) => Promise<Awaited<TResult1> | Awaited<TResult2>>
+>(result) => {  const head = result[0]; // string  const tail = result.slice(1); // any[]  tail satisfies string[]; // ok} : (result: [string & not { then(): any; }, ...any[]] & not { then(): any; }) => void
+>result : [string & not { then(): any; }, ...any[]] & not { then(): any; }
 
   const head = result[0]; // string
->head : string
->result[0] : string
->result : [string, ...any[]]
+>head : string & not { then(): any; }
+>result[0] : string & not { then(): any; }
+>result : [string & not { then(): any; }, ...any[]] & not { then(): any; }
 >0 : 0
 
   const tail = result.slice(1); // any[]
 >tail : any[]
 >result.slice(1) : any[]
 >result.slice : (start?: number, end?: number) => any[]
->result : [string, ...any[]]
+>result : [string & not { then(): any; }, ...any[]] & not { then(): any; }
 >slice : (start?: number, end?: number) => any[]
 >1 : 1
 

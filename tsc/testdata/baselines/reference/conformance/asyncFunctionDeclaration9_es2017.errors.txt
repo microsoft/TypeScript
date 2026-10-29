@@ -1,8 +1,11 @@
+asyncFunctionDeclaration9_es2017.ts(1,31): error TS2344: Type 'void' does not satisfy the constraint 'not { then(): any; }'.
 asyncFunctionDeclaration9_es2017.ts(2,19): error TS1109: Expression expected.
 
 
-==== asyncFunctionDeclaration9_es2017.ts (1 errors) ====
+==== asyncFunctionDeclaration9_es2017.ts (2 errors) ====
     async function foo(): Promise<void> {
+                                  ~~~~
+!!! error TS2344: Type 'void' does not satisfy the constraint 'not { then(): any; }'.
       var v = { [await]: foo }
                       ~
 !!! error TS1109: Expression expected.

@@ -9,7 +9,7 @@ console.log(await bar());
 >console.log : (...data: any[]) => void
 >console : Console
 >log : (...data: any[]) => void
->await bar() : string
+>await bar() : string & not { then(): any; }
 >bar() : Promise<string>
 >bar : () => Promise<string>
 

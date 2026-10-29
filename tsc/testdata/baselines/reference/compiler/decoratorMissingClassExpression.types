@@ -18,7 +18,7 @@ x = @@a 1;
 
 === forAwait.ts ===
 async function f(y: any) {
->f : (y: any) => Promise<void>
+>f : (y: any) => Promise<void & not { then(): any; }>
 >y : any
 
     for await (@d of y) {}

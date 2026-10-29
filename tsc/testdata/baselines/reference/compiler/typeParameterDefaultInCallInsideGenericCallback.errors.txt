@@ -1,11 +1,16 @@
+typeParameterDefaultInCallInsideGenericCallback.ts(4,52): error TS2344: Type 'D' does not satisfy the constraint 'not { then(): any; }'.
 typeParameterDefaultInCallInsideGenericCallback.ts(18,28): error TS2345: Argument of type '{ v: number; }' is not assignable to parameter of type 'undefined'.
+typeParameterDefaultInCallInsideGenericCallback.ts(21,29): error TS2344: Type 'string' does not satisfy the constraint 'not { then(): any; }'.
 
 
-==== typeParameterDefaultInCallInsideGenericCallback.ts (1 errors) ====
+==== typeParameterDefaultInCallInsideGenericCallback.ts (3 errors) ====
     // The default of T applies to the call inside the callback passed to another
     // generic function as it does elsewhere, so data is accepted.
     
     declare function fetcher<D>(cfg: unknown): Promise<D>;
+                                                       ~
+!!! error TS2344: Type 'D' does not satisfy the constraint 'not { then(): any; }'.
+!!! related TS2208 typeParameterDefaultInCallInsideGenericCallback.ts:4:26: This type parameter might need an `extends not { then(): any; }` constraint.
     
     type Routes<R> = R extends 'x' ? { IN: { v: number }, OUT: string } : never;
     
@@ -25,4 +30,6 @@ typeParameterDefaultInCallInsideGenericCallback.ts(18,28): error TS2345: Argumen
     }, []);
     
     export const check: Promise<string> = cb({ v: 1 });
+                                ~~~~~~
+!!! error TS2344: Type 'string' does not satisfy the constraint 'not { then(): any; }'.
     

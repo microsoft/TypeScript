@@ -1,0 +1,16 @@
+b.ts(6,18): error TS2344: Type 'AbstractModuleSource' does not satisfy the constraint 'not { then(): any; }'.
+
+
+==== a.d.wasm.ts (0 errors) ====
+    export const a: number;
+    
+==== b.ts (1 errors) ====
+    import { a } from "./a.wasm";
+    import source b from "./a.wasm";
+    
+    const c: number = a;
+    const d: AbstractModuleSource = b;
+    const e: Promise<AbstractModuleSource> = import.source("./a.wasm");
+                     ~~~~~~~~~~~~~~~~~~~~
+!!! error TS2344: Type 'AbstractModuleSource' does not satisfy the constraint 'not { then(): any; }'.
+    

@@ -1,3 +1,4 @@
+awaitAndYieldInProperty.ts(1,33): error TS2344: Type 'string' does not satisfy the constraint 'not { then(): any; }'.
 awaitAndYieldInProperty.ts(3,9): error TS1166: A computed property name in a class property declaration must have a simple literal type or a 'unique symbol' type.
 awaitAndYieldInProperty.ts(3,21): error TS1308: 'await' expressions are only allowed within async functions and at the top levels of modules.
 awaitAndYieldInProperty.ts(4,16): error TS1166: A computed property name in a class property declaration must have a simple literal type or a 'unique symbol' type.
@@ -16,8 +17,10 @@ awaitAndYieldInProperty.ts(15,16): error TS1166: A computed property name in a c
 awaitAndYieldInProperty.ts(15,28): error TS1163: A 'yield' expression is only allowed in a generator body.
 
 
-==== awaitAndYieldInProperty.ts (16 errors) ====
+==== awaitAndYieldInProperty.ts (17 errors) ====
     async function* test(x: Promise<string>) {
+                                    ~~~~~~
+!!! error TS2344: Type 'string' does not satisfy the constraint 'not { then(): any; }'.
         class C {
             [await x] = await x;
             ~~~~~~~~~

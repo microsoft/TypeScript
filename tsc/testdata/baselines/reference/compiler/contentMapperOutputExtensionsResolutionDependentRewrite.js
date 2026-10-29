@@ -81,6 +81,8 @@ export { identity } from "./blob.identity";
 export { declaration } from "./declaration.js";
 export type { TypeOnly as ExportedType } from "./root.toml";
 export declare const root: import("./root.toml").Root;
-export declare const load: () => Promise<typeof import("./root.toml")>;
+export declare const load: () => Promise<typeof import("./root.toml") & not {
+    then(): any;
+}>;
 export type RootType = import("./root.toml").Root;
 export type DirectType = TypeOnly;

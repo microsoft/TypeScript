@@ -24,7 +24,7 @@ class MyIterator extends Iterator<string> {
 }
 
 async function f() {
->f : () => Promise<void>
+>f : () => Promise<void & not { then(): any; }>
 
     // should pass
     await using it0 = io;

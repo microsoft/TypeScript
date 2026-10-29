@@ -1,4 +1,7 @@
+/package1/index.ts(2,31): error TS2344: Type 'void' does not satisfy the constraint 'not { then(): any; }'.
+/package1/index.ts(3,31): error TS2344: Type 'void' does not satisfy the constraint 'not { then(): any; }'.
 /package2/index.ts(2,16): error TS2354: This syntax requires an imported helper but module 'tslib' cannot be found.
+/package2/index.ts(2,31): error TS2344: Type 'void' does not satisfy the constraint 'not { then(): any; }'.
 
 
 ==== /tsconfig.json (0 errors) ====
@@ -11,16 +14,22 @@
         }
     }
     
-==== /package1/index.ts (0 errors) ====
+==== /package1/index.ts (2 errors) ====
     export {};
     async function foo(): Promise<void> {}
+                                  ~~~~
+!!! error TS2344: Type 'void' does not satisfy the constraint 'not { then(): any; }'.
     async function bar(): Promise<void> {}
+                                  ~~~~
+!!! error TS2344: Type 'void' does not satisfy the constraint 'not { then(): any; }'.
     
-==== /package2/index.ts (1 errors) ====
+==== /package2/index.ts (2 errors) ====
     export {};
     async function foo(): Promise<void> {}
                    ~~~
 !!! error TS2354: This syntax requires an imported helper but module 'tslib' cannot be found.
+                                  ~~~~
+!!! error TS2344: Type 'void' does not satisfy the constraint 'not { then(): any; }'.
 ==== /package1/node_modules/tslib/package.json (0 errors) ====
     {
         "name": "tslib",

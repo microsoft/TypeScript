@@ -2,47 +2,47 @@
 
 === await_unaryExpression_es6_3.ts ===
 async function bar1() {
->bar1 : () => Promise<void>
+>bar1 : () => Promise<void & not { then(): any; }>
 
     ++await 42; // Error
 >++ : number
 > : any
->await 42 : 42
+>await 42 : 42 & not { then(): any; }
 >42 : 42
 }
 
 async function bar2() {
->bar2 : () => Promise<void>
+>bar2 : () => Promise<void & not { then(): any; }>
 
     --await 42; // Error
 >-- : number
 > : any
->await 42 : 42
+>await 42 : 42 & not { then(): any; }
 >42 : 42
 }
 
 async function bar3() {
->bar3 : () => Promise<void>
+>bar3 : () => Promise<void & not { then(): any; }>
 
     var x = 42;
 >x : number
 >42 : 42
 
     await x++; // OK but shouldn't need parenthesis
->await x++ : number
+>await x++ : number & not { then(): any; }
 >x++ : number
 >x : number
 }
 
 async function bar4() {
->bar4 : () => Promise<void>
+>bar4 : () => Promise<void & not { then(): any; }>
 
     var x = 42;
 >x : number
 >42 : 42
 
     await x--; // OK but shouldn't need parenthesis
->await x-- : number
+>await x-- : number & not { then(): any; }
 >x-- : number
 >x : number
 }

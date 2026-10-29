@@ -42,7 +42,13 @@ import source d from "./a.js";
 import source e from "./a.d.ts";
 import source f from "./a.ts";
 export { a, b, c, d, e, f };
-export declare const g: Promise<AbstractModuleSource>;
-export declare const h: Promise<AbstractModuleSource>;
-export declare const i: Promise<AbstractModuleSource>;
+export declare const g: Promise<AbstractModuleSource & not {
+    then(): any;
+}>;
+export declare const h: Promise<AbstractModuleSource & not {
+    then(): any;
+}>;
+export declare const i: Promise<AbstractModuleSource & not {
+    then(): any;
+}>;
 export declare function load(path: string): Promise<AbstractModuleSource>;

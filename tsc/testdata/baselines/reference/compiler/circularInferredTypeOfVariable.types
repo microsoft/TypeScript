@@ -38,9 +38,9 @@
 >a1 : string[]
 
         a1 = await bar(a2);
->a1 = await bar(a2) : string[]
+>a1 = await bar(a2) : string[] & not { then(): any; }
 >a1 : string[] | undefined
->await bar(a2) : string[]
+>await bar(a2) : string[] & not { then(): any; }
 >bar(a2) : string[]
 >bar : (p: string[]) => string[]
 >a2 : string[]

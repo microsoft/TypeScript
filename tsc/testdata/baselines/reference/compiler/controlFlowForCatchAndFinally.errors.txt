@@ -1,0 +1,61 @@
+controlFlowForCatchAndFinally.ts(1,31): error TS2344: Type 'void' does not satisfy the constraint 'not { then(): any; }'.
+controlFlowForCatchAndFinally.ts(1,57): error TS2344: Type 'string' does not satisfy the constraint 'not { then(): any; }'.
+controlFlowForCatchAndFinally.ts(2,34): error TS2344: Type 'void' does not satisfy the constraint 'not { then(): any; }'.
+controlFlowForCatchAndFinally.ts(3,35): error TS2344: Type 'Browser' does not satisfy the constraint 'not { then(): any; }'.
+controlFlowForCatchAndFinally.ts(4,47): error TS2344: Type 'Page' does not satisfy the constraint 'not { then(): any; }'.
+controlFlowForCatchAndFinally.ts(5,32): error TS2344: Type 'string' does not satisfy the constraint 'not { then(): any; }'.
+
+
+==== controlFlowForCatchAndFinally.ts (6 errors) ====
+    type Page = {close(): Promise<void>; content(): Promise<string>};
+                                  ~~~~
+!!! error TS2344: Type 'void' does not satisfy the constraint 'not { then(): any; }'.
+                                                            ~~~~~~
+!!! error TS2344: Type 'string' does not satisfy the constraint 'not { then(): any; }'.
+    type Browser = {close(): Promise<void>};
+                                     ~~~~
+!!! error TS2344: Type 'void' does not satisfy the constraint 'not { then(): any; }'.
+    declare function test1(): Promise<Browser>;
+                                      ~~~~~~~
+!!! error TS2344: Type 'Browser' does not satisfy the constraint 'not { then(): any; }'.
+    declare function test2(obj: Browser): Promise<Page>;
+                                                  ~~~~
+!!! error TS2344: Type 'Page' does not satisfy the constraint 'not { then(): any; }'.
+    async function test(): Promise<string> {
+                                   ~~~~~~
+!!! error TS2344: Type 'string' does not satisfy the constraint 'not { then(): any; }'.
+        let browser: Browser | undefined = undefined;
+        let page: Page | undefined = undefined;
+        try {
+            browser = await test1();
+            page = await test2(browser);
+            return await page.content();;
+        } finally {
+            if (page) {
+                await page.close(); // ok
+            }
+    
+            if (browser) {
+                await browser.close(); // ok
+            }
+        }
+    }
+    
+    declare class Aborter { abort(): void };
+    class Foo {
+        abortController: Aborter | undefined = undefined;
+    
+        async operation() {
+            if (this.abortController !== undefined) {
+                this.abortController.abort();
+                this.abortController = undefined;
+            }
+            try {
+                this.abortController = new Aborter();
+            } catch (error) {
+                if (this.abortController !== undefined) {
+                    this.abortController.abort(); // ok
+                }
+            }
+        }
+    }

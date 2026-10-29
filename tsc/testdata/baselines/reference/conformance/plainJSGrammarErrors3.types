@@ -7,8 +7,8 @@ function foo() {
 >foo : () => void
 
     await new Promise(undefined);
->await new Promise(undefined) : any
->new Promise(undefined) : Promise<any>
+>await new Promise(undefined) : not { then(): any; } & not { then(): any; }
+>new Promise(undefined) : Promise<not { then(): any; }>
 >Promise : PromiseConstructor
 >undefined : undefined
 }

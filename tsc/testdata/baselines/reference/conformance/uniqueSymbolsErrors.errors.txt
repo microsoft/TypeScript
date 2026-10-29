@@ -51,6 +51,7 @@ uniqueSymbolsErrors.ts(69,21): error TS1335: 'unique symbol' types are not allow
 uniqueSymbolsErrors.ts(70,52): error TS1335: 'unique symbol' types are not allowed here.
 uniqueSymbolsErrors.ts(71,49): error TS1335: 'unique symbol' types are not allowed here.
 uniqueSymbolsErrors.ts(74,44): error TS1335: 'unique symbol' types are not allowed here.
+uniqueSymbolsErrors.ts(74,44): error TS2344: Type 'symbol' does not satisfy the constraint 'not { then(): any; }'.
 uniqueSymbolsErrors.ts(75,34): error TS1335: 'unique symbol' types are not allowed here.
 uniqueSymbolsErrors.ts(76,34): error TS1335: 'unique symbol' types are not allowed here.
 uniqueSymbolsErrors.ts(79,51): error TS1335: 'unique symbol' types are not allowed here.
@@ -61,7 +62,7 @@ uniqueSymbolsErrors.ts(83,52): error TS1335: 'unique symbol' types are not allow
 uniqueSymbolsErrors.ts(87,7): error TS2322: Type 'typeof shouldNotBeAssignable' is not assignable to type 'string'.
 
 
-==== uniqueSymbolsErrors.ts (61 errors) ====
+==== uniqueSymbolsErrors.ts (62 errors) ====
     // declarations
     declare const invalidUniqueType: unique number;
                                             ~~~~~~
@@ -242,6 +243,8 @@ uniqueSymbolsErrors.ts(87,7): error TS2322: Type 'typeof shouldNotBeAssignable' 
     declare const invalidTypeArgument: Promise<unique symbol>;
                                                ~~~~~~~~~~~~~
 !!! error TS1335: 'unique symbol' types are not allowed here.
+                                               ~~~~~~~~~~~~~
+!!! error TS2344: Type 'symbol' does not satisfy the constraint 'not { then(): any; }'.
     declare const invalidArrayType: (unique symbol)[];
                                      ~~~~~~~~~~~~~
 !!! error TS1335: 'unique symbol' types are not allowed here.

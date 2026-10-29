@@ -1,0 +1,24 @@
+specializationError.ts(6,33): error TS2344: Type 'string' does not satisfy the constraint 'not { then(): any; }'.
+specializationError.ts(7,53): error TS2344: Type 'T' does not satisfy the constraint 'not { then(): any; }'.
+specializationError.ts(8,36): error TS2344: Type 'T' does not satisfy the constraint 'not { then(): any; }'.
+
+
+==== specializationError.ts (3 errors) ====
+    interface Promise<T> {
+        then<U>(value: T): void;
+    }
+    
+    interface Bar {
+        bar(value: "Menu"): Promise<string>;
+                                    ~~~~~~
+!!! error TS2344: Type 'string' does not satisfy the constraint 'not { then(): any; }'.
+        bar<T>(value: string, element: string): Promise<T>;
+                                                        ~
+!!! error TS2344: Type 'T' does not satisfy the constraint 'not { then(): any; }'.
+!!! related TS2208 specializationError.ts:7:9: This type parameter might need an `extends not { then(): any; }` constraint.
+        bar<T>(value: string): Promise<T>;
+                                       ~
+!!! error TS2344: Type 'T' does not satisfy the constraint 'not { then(): any; }'.
+!!! related TS2208 specializationError.ts:8:9: This type parameter might need an `extends not { then(): any; }` constraint.
+    }
+    

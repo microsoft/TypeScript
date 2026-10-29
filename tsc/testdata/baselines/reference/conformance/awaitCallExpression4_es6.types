@@ -49,8 +49,8 @@ async function func(): Promise<void> {
     var b = (await pfn)(a, a, a);
 >b : void
 >(await pfn)(a, a, a) : void
->(await pfn) : (arg0: boolean, arg1: boolean, arg2: boolean) => void
->await pfn : (arg0: boolean, arg1: boolean, arg2: boolean) => void
+>(await pfn) : ((arg0: boolean, arg1: boolean, arg2: boolean) => void) & not { then(): any; }
+>await pfn : ((arg0: boolean, arg1: boolean, arg2: boolean) => void) & not { then(): any; }
 >pfn : Promise<(arg0: boolean, arg1: boolean, arg2: boolean) => void>
 >a : boolean
 >a : boolean

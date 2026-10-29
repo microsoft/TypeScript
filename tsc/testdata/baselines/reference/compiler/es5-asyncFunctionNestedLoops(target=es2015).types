@@ -10,7 +10,7 @@ declare var x, y, z, a, b, c;
 >c : any
 
 async function nestedLoops() {
->nestedLoops : () => Promise<void>
+>nestedLoops : () => Promise<void & not { then(): any; }>
 
     A: while (x) {
 >A : any

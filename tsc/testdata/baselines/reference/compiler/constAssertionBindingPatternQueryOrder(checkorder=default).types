@@ -6,26 +6,26 @@ declare function settle<T extends readonly unknown[]>(fn: () => T): Promise<{ [K
 >fn : () => T
 
 async function f() {
->f : () => Promise<void>
+>f : () => Promise<void & not { then(): any; }>
 
   const [[a], b] = await settle(() => [Promise.resolve(0), Promise.reject(1)] as const);
->a : number
+>a : number & not { then(): any; } & not { then(): any; }
 >b : [never]
->await settle(() => [Promise.resolve(0), Promise.reject(1)] as const) : [[number], [never]]
->settle(() => [Promise.resolve(0), Promise.reject(1)] as const) : Promise<[[number], [never]]>
+>await settle(() => [Promise.resolve(0), Promise.reject(1)] as const) : [[number & not { then(): any; } & not { then(): any; }], [never]] & not { then(): any; }
+>settle(() => [Promise.resolve(0), Promise.reject(1)] as const) : Promise<[[number & not { then(): any; } & not { then(): any; }], [never]]>
 >settle : <T extends readonly unknown[]>(fn: () => T) => Promise<{ [K in keyof T]: [Awaited<T[K]>]; }>
->() => [Promise.resolve(0), Promise.reject(1)] as const : () => [Promise<number>, Promise<never>]
->[Promise.resolve(0), Promise.reject(1)] as const : [Promise<number>, Promise<never>]
->[Promise.resolve(0), Promise.reject(1)] : [Promise<number>, Promise<never>]
->Promise.resolve(0) : Promise<number>
->Promise.resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T>(value: T | PromiseLike<T>): Promise<Awaited<T>>; }
+>() => [Promise.resolve(0), Promise.reject(1)] as const : () => [Promise<number & not { then(): any; }>, Promise<never>]
+>[Promise.resolve(0), Promise.reject(1)] as const : [Promise<number & not { then(): any; }>, Promise<never>]
+>[Promise.resolve(0), Promise.reject(1)] : [Promise<number & not { then(): any; }>, Promise<never>]
+>Promise.resolve(0) : Promise<number & not { then(): any; }>
+>Promise.resolve : { (): Promise<void & not { then(): any; }>; <T>(value: T): Promise<Awaited<T>>; <T>(value: T | PromiseLike<T>): Promise<Awaited<T>>; }
 >Promise : PromiseConstructor
->resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T>(value: T | PromiseLike<T>): Promise<Awaited<T>>; }
+>resolve : { (): Promise<void & not { then(): any; }>; <T>(value: T): Promise<Awaited<T>>; <T>(value: T | PromiseLike<T>): Promise<Awaited<T>>; }
 >0 : 0
 >Promise.reject(1) : Promise<never>
->Promise.reject : <T = never>(reason?: any) => Promise<T>
+>Promise.reject : <T extends not { then(): any; } = never>(reason?: any) => Promise<T>
 >Promise : PromiseConstructor
->reject : <T = never>(reason?: any) => Promise<T>
+>reject : <T extends not { then(): any; } = never>(reason?: any) => Promise<T>
 >1 : 1
 }
 

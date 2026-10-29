@@ -32,12 +32,12 @@ declare module "x" {
 }
 
 const a = import("x").then((m) => 1);
->a : Promise<number>
->import("x").then((m) => 1) : Promise<number>
->import("x").then : <TResult1 = { stub<T extends import("x").Stubable>(value: T): import("x").Provider<T>; default: typeof import("x"); }, TResult2 = never>(onfulfilled?: ((value: { stub<T extends import("x").Stubable>(value: T): import("x").Provider<T>; default: typeof import("x"); }) => TResult1 | PromiseLike<TResult1>) | null | undefined, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | null | undefined) => Promise<TResult1 | TResult2>
+>a : Promise<number & not { then(): any; }>
+>import("x").then((m) => 1) : Promise<number & not { then(): any; }>
+>import("x").then : <TResult1 = { stub<T extends import("x").Stubable>(value: T): import("x").Provider<T>; default: typeof import("x"); }, TResult2 = never>(onfulfilled?: ((value: { stub<T extends import("x").Stubable>(value: T): import("x").Provider<T>; default: typeof import("x"); }) => TResult1 | PromiseLike<TResult1>) | null | undefined, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | null | undefined) => Promise<Awaited<TResult1> | Awaited<TResult2>>
 >import("x") : Promise<{ stub<T extends import("x").Stubable>(value: T): import("x").Provider<T>; default: typeof import("x"); }>
 >"x" : "x"
->then : <TResult1 = { stub<T extends import("x").Stubable>(value: T): import("x").Provider<T>; default: typeof import("x"); }, TResult2 = never>(onfulfilled?: ((value: { stub<T extends import("x").Stubable>(value: T): import("x").Provider<T>; default: typeof import("x"); }) => TResult1 | PromiseLike<TResult1>) | null | undefined, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | null | undefined) => Promise<TResult1 | TResult2>
+>then : <TResult1 = { stub<T extends import("x").Stubable>(value: T): import("x").Provider<T>; default: typeof import("x"); }, TResult2 = never>(onfulfilled?: ((value: { stub<T extends import("x").Stubable>(value: T): import("x").Provider<T>; default: typeof import("x"); }) => TResult1 | PromiseLike<TResult1>) | null | undefined, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | null | undefined) => Promise<Awaited<TResult1> | Awaited<TResult2>>
 >(m) => 1 : (m: { stub<T extends import("x").Stubable>(value: T): import("x").Provider<T>; default: typeof import("x"); }) => number
 >m : { stub<T extends import("x").Stubable>(value: T): import("x").Provider<T>; default: typeof import("x"); }
 >1 : 1

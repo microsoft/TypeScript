@@ -1,0 +1,33 @@
+promiseTypeInferenceUnion.ts(1,42): error TS2344: Type 'number' does not satisfy the constraint 'not { then(): any; }'.
+promiseTypeInferenceUnion.ts(9,42): error TS2344: Type 'number' does not satisfy the constraint 'not { then(): any; }'.
+promiseTypeInferenceUnion.ts(13,19): error TS2344: Type 'number' does not satisfy the constraint 'not { then(): any; }'.
+promiseTypeInferenceUnion.ts(14,19): error TS2344: Type 'number' does not satisfy the constraint 'not { then(): any; }'.
+promiseTypeInferenceUnion.ts(15,19): error TS2344: Type 'number' does not satisfy the constraint 'not { then(): any; }'.
+
+
+==== promiseTypeInferenceUnion.ts (5 errors) ====
+    function f1(x: number): number | Promise<number> {
+                                             ~~~~~~
+!!! error TS2344: Type 'number' does not satisfy the constraint 'not { then(): any; }'.
+      return Promise.resolve(x);
+    }
+    
+    function f2(x: number): number | PromiseLike<number> {
+      return Promise.resolve(x);
+    }
+    
+    function f3(x: number): number | Promise<number> | PromiseLike<number> {
+                                             ~~~~~~
+!!! error TS2344: Type 'number' does not satisfy the constraint 'not { then(): any; }'.
+      return Promise.resolve(x);
+    }
+    
+    const g1: Promise<number> = Promise.resolve(f1(42));
+                      ~~~~~~
+!!! error TS2344: Type 'number' does not satisfy the constraint 'not { then(): any; }'.
+    const g2: Promise<number> = Promise.resolve(f2(42));
+                      ~~~~~~
+!!! error TS2344: Type 'number' does not satisfy the constraint 'not { then(): any; }'.
+    const g3: Promise<number> = Promise.resolve(f3(42));
+                      ~~~~~~
+!!! error TS2344: Type 'number' does not satisfy the constraint 'not { then(): any; }'.

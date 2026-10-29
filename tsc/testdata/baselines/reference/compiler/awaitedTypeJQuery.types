@@ -214,5 +214,5 @@ interface Promise3<TR, TJ, TN,
     never, never, never> { }
 
 type T = Awaited<Promise3<string, Error, number, {}, string, boolean, any, Element, never>>; // string
->T : string
+>T : string & not { then(): any; }
 

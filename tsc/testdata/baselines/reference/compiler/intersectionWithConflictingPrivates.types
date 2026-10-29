@@ -99,7 +99,7 @@ class Foo {
 >Foo : Foo
 
   private async foo(node: CommitFileNode | ResultsFileNode | StashFileNode) {
->foo : (node: CommitFileNode | ResultsFileNode | StashFileNode) => Promise<void>
+>foo : (node: CommitFileNode | ResultsFileNode | StashFileNode) => Promise<void & not { then(): any; }>
 >node : CommitFileNode | ResultsFileNode | StashFileNode
 
 		if (
@@ -146,9 +146,9 @@ class Foo {
 
     return Promise.resolve(undefined);
 >Promise.resolve(undefined) : Promise<undefined>
->Promise.resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T>(value: T | PromiseLike<T>): Promise<Awaited<T>>; }
+>Promise.resolve : { (): Promise<void & not { then(): any; }>; <T>(value: T): Promise<Awaited<T>>; <T>(value: T | PromiseLike<T>): Promise<Awaited<T>>; }
 >Promise : PromiseConstructor
->resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T>(value: T | PromiseLike<T>): Promise<Awaited<T>>; }
+>resolve : { (): Promise<void & not { then(): any; }>; <T>(value: T): Promise<Awaited<T>>; <T>(value: T | PromiseLike<T>): Promise<Awaited<T>>; }
 >undefined : undefined
   }
 }

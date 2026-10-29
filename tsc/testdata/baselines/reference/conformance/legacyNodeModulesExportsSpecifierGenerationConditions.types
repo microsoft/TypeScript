@@ -2,8 +2,8 @@
 
 === index.ts ===
 export const a = async () => (await import("inner")).x();
->a : () => Promise<import("./node_modules/inner/private").Thing>
->async () => (await import("inner")).x() : () => Promise<import("./node_modules/inner/private").Thing>
+>a : () => Promise<import("./node_modules/inner/private").Thing & not { then(): any; }>
+>async () => (await import("inner")).x() : () => Promise<import("./node_modules/inner/private").Thing & not { then(): any; }>
 >(await import("inner")).x() : import("./node_modules/inner/private").Thing
 >(await import("inner")).x : () => import("./node_modules/inner/private").Thing
 >(await import("inner")) : { x: () => import("./node_modules/inner/private").Thing; default: typeof import("inner"); }

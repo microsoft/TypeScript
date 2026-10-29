@@ -74,13 +74,29 @@ import './0' with { type: "json" };
 //// [2.d.ts]
 export {};
 //// [3.d.ts]
-declare const a: Promise<typeof import("./0")>;
-declare const b: Promise<typeof import("./0")>;
-declare const c: Promise<typeof import("./0")>;
-declare const d: Promise<typeof import("./0")>;
-declare const dd: Promise<typeof import("./0")>;
+declare const a: Promise<typeof import("./0") & not {
+    then(): any;
+}>;
+declare const b: Promise<typeof import("./0") & not {
+    then(): any;
+}>;
+declare const c: Promise<typeof import("./0") & not {
+    then(): any;
+}>;
+declare const d: Promise<typeof import("./0") & not {
+    then(): any;
+}>;
+declare const dd: Promise<typeof import("./0") & not {
+    then(): any;
+}>;
 declare function foo(): any;
-declare const e: Promise<typeof import("./0")>;
+declare const e: Promise<typeof import("./0") & not {
+    then(): any;
+}>;
 declare const f: Promise<any>;
-declare const g: Promise<typeof import("./0")>;
-declare const h: Promise<typeof import("./0")>;
+declare const g: Promise<typeof import("./0") & not {
+    then(): any;
+}>;
+declare const h: Promise<typeof import("./0") & not {
+    then(): any;
+}>;

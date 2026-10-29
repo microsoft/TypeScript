@@ -11,14 +11,14 @@ export class B {
 
 === 2.ts ===
 async function foo() {
->foo : () => Promise<void>
+>foo : () => Promise<void & not { then(): any; }>
 
     class C extends (await import("./0")).B {}
 >C : C
 >(await import("./0")).B : import("./0").B
->(await import("./0")) : typeof import("./0")
->await import("./0") : typeof import("./0")
->import("./0") : Promise<typeof import("./0")>
+>(await import("./0")) : typeof import("./0") & not { then(): any; }
+>await import("./0") : typeof import("./0") & not { then(): any; }
+>import("./0") : Promise<typeof import("./0") & not { then(): any; }>
 >"./0" : "./0"
 >B : typeof import("./0").B
 
@@ -34,6 +34,6 @@ async function foo() {
 >print : () => string
 }
 foo();
->foo() : Promise<void>
->foo : () => Promise<void>
+>foo() : Promise<void & not { then(): any; }>
+>foo : () => Promise<void & not { then(): any; }>
 

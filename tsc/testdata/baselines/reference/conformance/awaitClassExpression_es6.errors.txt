@@ -1,0 +1,16 @@
+awaitClassExpression_es6.ts(2,24): error TS2344: Type 'typeof C' does not satisfy the constraint 'not { then(): any; }'.
+awaitClassExpression_es6.ts(4,32): error TS2344: Type 'void' does not satisfy the constraint 'not { then(): any; }'.
+
+
+==== awaitClassExpression_es6.ts (2 errors) ====
+    declare class C { }
+    declare var p: Promise<typeof C>;
+                           ~~~~~~~~
+!!! error TS2344: Type 'typeof C' does not satisfy the constraint 'not { then(): any; }'.
+    
+    async function func(): Promise<void> {
+                                   ~~~~
+!!! error TS2344: Type 'void' does not satisfy the constraint 'not { then(): any; }'.
+        class D extends (await p) {
+        }
+    }

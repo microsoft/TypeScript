@@ -10,7 +10,7 @@ declare var x, y, z, a, b, c;
 >c : any
 
 async function forInStatement0() {
->forInStatement0 : () => Promise<void>
+>forInStatement0 : () => Promise<void & not { then(): any; }>
 
     for (x in y) { z; }
 >x : any
@@ -19,7 +19,7 @@ async function forInStatement0() {
 }
 
 async function forInStatement1() {
->forInStatement1 : () => Promise<void>
+>forInStatement1 : () => Promise<void & not { then(): any; }>
 
     for (x in await y) { z; }
 >x : any
@@ -29,7 +29,7 @@ async function forInStatement1() {
 }
 
 async function forInStatement2() {
->forInStatement2 : () => Promise<void>
+>forInStatement2 : () => Promise<void & not { then(): any; }>
 
     for (x in y) { await z; }
 >x : any
@@ -39,7 +39,7 @@ async function forInStatement2() {
 }
 
 async function forInStatement3() {
->forInStatement3 : () => Promise<void>
+>forInStatement3 : () => Promise<void & not { then(): any; }>
 
     for ((await x).a in y) { z; }
 >(await x).a : any
@@ -52,7 +52,7 @@ async function forInStatement3() {
 }
 
 async function forInStatement4() {
->forInStatement4 : () => Promise<void>
+>forInStatement4 : () => Promise<void & not { then(): any; }>
 
     for (x.a in await y) { z; }
 >x.a : any
@@ -64,7 +64,7 @@ async function forInStatement4() {
 }
 
 async function forInStatement5() {
->forInStatement5 : () => Promise<void>
+>forInStatement5 : () => Promise<void & not { then(): any; }>
 
     for (x.a in y) { await z; }
 >x.a : any
@@ -76,7 +76,7 @@ async function forInStatement5() {
 }
 
 async function forInStatement6() {
->forInStatement6 : () => Promise<void>
+>forInStatement6 : () => Promise<void & not { then(): any; }>
 
     for (var a in y) { z; }
 >a : string
@@ -85,7 +85,7 @@ async function forInStatement6() {
 }
 
 async function forInStatement7() {
->forInStatement7 : () => Promise<void>
+>forInStatement7 : () => Promise<void & not { then(): any; }>
 
     for (var b in await y) { z; }
 >b : string
@@ -95,7 +95,7 @@ async function forInStatement7() {
 }
 
 async function forInStatement8() {
->forInStatement8 : () => Promise<void>
+>forInStatement8 : () => Promise<void & not { then(): any; }>
 
     for (var c in y) { await z; }
 >c : string

@@ -1,0 +1,27 @@
+promiseUnionCallbackStateInference.ts(2,47): error TS2344: Type 'State' does not satisfy the constraint 'not { then(): any; }'.
+promiseUnionCallbackStateInference.ts(6,64): error TS2344: Type 'State' does not satisfy the constraint 'not { then(): any; }'.
+promiseUnionCallbackStateInference.ts(10,69): error TS2344: Type 'string' does not satisfy the constraint 'not { then(): any; }'.
+
+
+==== promiseUnionCallbackStateInference.ts (3 errors) ====
+    declare function createAction<State>(
+        action: (state: State) => State | Promise<State>,
+                                                  ~~~~~
+!!! error TS2344: Type 'State' does not satisfy the constraint 'not { then(): any; }'.
+!!! related TS2208 promiseUnionCallbackStateInference.ts:1:31: This type parameter might need an `extends not { then(): any; }` constraint.
+        initialState: State,
+    ): () => void;
+    declare function createAction<State>(
+        action: (state: State, payload: string) => State | Promise<State>,
+                                                                   ~~~~~
+!!! error TS2344: Type 'State' does not satisfy the constraint 'not { then(): any; }'.
+!!! related TS2208 promiseUnionCallbackStateInference.ts:5:31: This type parameter might need an `extends not { then(): any; }` constraint.
+        initialState: State,
+    ): (payload: string) => void;
+    
+    declare const action: (previous: unknown, value: string) => Promise<string>;
+                                                                        ~~~~~~
+!!! error TS2344: Type 'string' does not satisfy the constraint 'not { then(): any; }'.
+    const dispatch = createAction(action, null);
+    const bound = dispatch.bind(null, "value");
+    

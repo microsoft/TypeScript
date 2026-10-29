@@ -1,14 +1,21 @@
-asyncAwaitNestedClasses_es5.ts(5,55): error TS2345: Argument of type 'null' is not assignable to parameter of type 'void | PromiseLike<void>'.
+asyncAwaitNestedClasses_es5.ts(4,33): error TS2344: Type 'void' does not satisfy the constraint 'not { then(): any; }'.
+asyncAwaitNestedClasses_es5.ts(5,13): error TS2322: Type 'Promise<not { then(): any; }>' is not assignable to type 'Promise<void>'.
+  Type 'not { then(): any; }' is not assignable to type 'void'.
+    Type 'unknown' is not assignable to type 'void'.
 
 
-==== asyncAwaitNestedClasses_es5.ts (1 errors) ====
+==== asyncAwaitNestedClasses_es5.ts (2 errors) ====
     // https://github.com/Microsoft/TypeScript/issues/20744
     class A {
         static B = class B {
             static func2(): Promise<void> {
+                                    ~~~~
+!!! error TS2344: Type 'void' does not satisfy the constraint 'not { then(): any; }'.
                 return new Promise((resolve) => { resolve(null); });
-                                                          ~~~~
-!!! error TS2345: Argument of type 'null' is not assignable to parameter of type 'void | PromiseLike<void>'.
+                ~~~~~~
+!!! error TS2322: Type 'Promise<not { then(): any; }>' is not assignable to type 'Promise<void>'.
+!!! error TS2322:   Type 'not { then(): any; }' is not assignable to type 'void'.
+!!! error TS2322:     Type 'unknown' is not assignable to type 'void'.
             }
             static C = class C {
                 static async func() {

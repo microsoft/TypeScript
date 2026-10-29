@@ -1,9 +1,11 @@
-generatorReturnContextualType.ts(29,3): error TS2322: Type '{ x: string; }' is not assignable to type '{ x: "x"; }'.
-  Types of property 'x' are incompatible.
-    Type 'string' is not assignable to type '"x"'.
-generatorReturnContextualType.ts(34,3): error TS2322: Type '{ x: string; }' is not assignable to type '{ x: "x"; }'.
-  Types of property 'x' are incompatible.
-    Type 'string' is not assignable to type '"x"'.
+generatorReturnContextualType.ts(29,3): error TS2322: Type '{ x: string; } & not { then(): any; } & not { then(): any; }' is not assignable to type '{ x: "x"; } & not { then(): any; }'.
+  Type '{ x: string; } & not { then(): any; } & not { then(): any; }' is not assignable to type '{ x: "x"; }'.
+    Types of property 'x' are incompatible.
+      Type 'string' is not assignable to type '"x"'.
+generatorReturnContextualType.ts(34,3): error TS2322: Type '{ x: string; } & not { then(): any; } & not { then(): any; }' is not assignable to type '{ x: "x"; } & not { then(): any; }'.
+  Type '{ x: string; } & not { then(): any; } & not { then(): any; }' is not assignable to type '{ x: "x"; }'.
+    Types of property 'x' are incompatible.
+      Type 'string' is not assignable to type '"x"'.
 
 
 ==== generatorReturnContextualType.ts (2 errors) ====
@@ -37,17 +39,19 @@ generatorReturnContextualType.ts(34,3): error TS2322: Type '{ x: string; }' is n
       const ret = { x: 'x' };
       return Promise.resolve(ret); // Error
       ~~~~~~
-!!! error TS2322: Type '{ x: string; }' is not assignable to type '{ x: "x"; }'.
-!!! error TS2322:   Types of property 'x' are incompatible.
-!!! error TS2322:     Type 'string' is not assignable to type '"x"'.
+!!! error TS2322: Type '{ x: string; } & not { then(): any; } & not { then(): any; }' is not assignable to type '{ x: "x"; } & not { then(): any; }'.
+!!! error TS2322:   Type '{ x: string; } & not { then(): any; } & not { then(): any; }' is not assignable to type '{ x: "x"; }'.
+!!! error TS2322:     Types of property 'x' are incompatible.
+!!! error TS2322:       Type 'string' is not assignable to type '"x"'.
     }
     
     async function* g4(): AsyncIterator<any, { x: 'x' }, any> {
       const ret = { x: 'x' };
       return Promise.resolve(ret); // Error
       ~~~~~~
-!!! error TS2322: Type '{ x: string; }' is not assignable to type '{ x: "x"; }'.
-!!! error TS2322:   Types of property 'x' are incompatible.
-!!! error TS2322:     Type 'string' is not assignable to type '"x"'.
+!!! error TS2322: Type '{ x: string; } & not { then(): any; } & not { then(): any; }' is not assignable to type '{ x: "x"; } & not { then(): any; }'.
+!!! error TS2322:   Type '{ x: string; } & not { then(): any; } & not { then(): any; }' is not assignable to type '{ x: "x"; }'.
+!!! error TS2322:     Types of property 'x' are incompatible.
+!!! error TS2322:       Type 'string' is not assignable to type '"x"'.
     }
     

@@ -1,0 +1,36 @@
+checkJsxSubtleSkipContextSensitiveBug.tsx(7,35): error TS2344: Type 'TResult' does not satisfy the constraint 'not { then(): any; }'.
+checkJsxSubtleSkipContextSensitiveBug.tsx(16,32): error TS2344: Type 'ErrorResult | { success: true; }' does not satisfy the constraint 'not { then(): any; }'.
+  Type 'ErrorResult' is not assignable to type 'not { then(): any; }'.
+
+
+==== checkJsxSubtleSkipContextSensitiveBug.tsx (2 errors) ====
+    /// <reference path="/.lib/react16.d.ts" />
+    import * as React from "react";
+    
+    interface ErrorResult { error: true }
+    
+    interface AsyncLoaderProps<TResult> {
+        readonly prop1: () => Promise<TResult>;
+                                      ~~~~~~~
+!!! error TS2344: Type 'TResult' does not satisfy the constraint 'not { then(): any; }'.
+!!! related TS2208 checkJsxSubtleSkipContextSensitiveBug.tsx:6:28: This type parameter might need an `extends not { then(): any; }` constraint.
+    
+        readonly prop2: (result: Exclude<TResult, ErrorResult>) => any;
+    }
+    
+    class AsyncLoader<TResult> extends React.Component<AsyncLoaderProps<TResult>> {
+        render() { return null; }
+    }
+    
+    async function load(): Promise<{ success: true } | ErrorResult> {
+                                   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2344: Type 'ErrorResult | { success: true; }' does not satisfy the constraint 'not { then(): any; }'.
+!!! error TS2344:   Type 'ErrorResult' is not assignable to type 'not { then(): any; }'.
+        return { success: true };
+    }
+    
+    const loader = <AsyncLoader
+        prop1={load}
+        prop2={result => result}
+    />;
+    

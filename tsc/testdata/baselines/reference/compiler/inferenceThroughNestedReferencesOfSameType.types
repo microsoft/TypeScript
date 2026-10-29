@@ -26,8 +26,8 @@ declare const c: Promise<C<{ a: 1 }>>;
 >a : 1
 
 const n = g(c);
->n : { a: 1; }
->g(c) : { a: 1; }
+>n : any
+>g(c) : any
 >g : <T>(x: Promise<AsyncIterable<T>>) => T
 >c : Promise<C<{ a: 1; }>>
 
@@ -42,9 +42,9 @@ follow(() => c, frame => frame.a);
 >follow : <T>(open: () => Promise<AsyncIterable<T>>, onFrame: (frame: T) => void) => void
 >() => c : () => Promise<C<{ a: 1; }>>
 >c : Promise<C<{ a: 1; }>>
->frame => frame.a : (frame: { a: 1; }) => 1
->frame : { a: 1; }
->frame.a : 1
->frame : { a: 1; }
->a : 1
+>frame => frame.a : (frame: any) => any
+>frame : any
+>frame.a : any
+>frame : any
+>a : any
 

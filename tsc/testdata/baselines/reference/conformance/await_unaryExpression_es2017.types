@@ -2,37 +2,37 @@
 
 === await_unaryExpression_es2017.ts ===
 async function bar() {
->bar : () => Promise<void>
+>bar : () => Promise<void & not { then(): any; }>
 
     !await 42; // OK
 >!await 42 : false
->await 42 : 42
+>await 42 : 42 & not { then(): any; }
 >42 : 42
 }
 
 async function bar1() {
->bar1 : () => Promise<void>
+>bar1 : () => Promise<void & not { then(): any; }>
 
     +await 42; // OK
 >+await 42 : number
->await 42 : 42
+>await 42 : 42 & not { then(): any; }
 >42 : 42
 }
 
 async function bar3() {
->bar3 : () => Promise<void>
+>bar3 : () => Promise<void & not { then(): any; }>
 
     -await 42; // OK
 >-await 42 : number
->await 42 : 42
+>await 42 : 42 & not { then(): any; }
 >42 : 42
 }
 
 async function bar4() {
->bar4 : () => Promise<void>
+>bar4 : () => Promise<void & not { then(): any; }>
 
     ~await 42; // OK
 >~await 42 : number
->await 42 : 42
+>await 42 : 42 & not { then(): any; }
 >42 : 42
 }

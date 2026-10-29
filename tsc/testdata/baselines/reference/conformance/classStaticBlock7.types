@@ -6,7 +6,7 @@ class C {
 
     static {
         await 1;
->await 1 : 1
+>await 1 : 1 & not { then(): any; }
 >1 : 1
 
         yield 1;
@@ -19,21 +19,21 @@ class C {
 }
 
 async function f1 () {
->f1 : () => Promise<void>
+>f1 : () => Promise<void & not { then(): any; }>
 
     class C {
 >C : C
 
         static {
             await 1;
->await 1 : 1
+>await 1 : 1 & not { then(): any; }
 >1 : 1
 
             async function ff () {
->ff : () => Promise<void>
+>ff : () => Promise<void & not { then(): any; }>
 
                 await 1;
->await 1 : 1
+>await 1 : 1 & not { then(): any; }
 >1 : 1
             }
         }

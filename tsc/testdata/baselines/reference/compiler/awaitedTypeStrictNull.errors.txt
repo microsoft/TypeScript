@@ -1,13 +1,41 @@
+awaitedTypeStrictNull.ts(2,27): error TS2344: Type 'number' does not satisfy the constraint 'not { then(): any; }'.
+awaitedTypeStrictNull.ts(3,36): error TS2344: Type 'number' does not satisfy the constraint 'not { then(): any; }'.
+awaitedTypeStrictNull.ts(4,36): error TS2344: Type 'string' does not satisfy the constraint 'not { then(): any; }'.
+awaitedTypeStrictNull.ts(12,28): error TS2344: Type 'Promise<number>' does not satisfy the constraint 'not { then(): any; }'.
+awaitedTypeStrictNull.ts(12,36): error TS2344: Type 'number' does not satisfy the constraint 'not { then(): any; }'.
+awaitedTypeStrictNull.ts(13,36): error TS2344: Type 'Promise<number>' does not satisfy the constraint 'not { then(): any; }'.
+awaitedTypeStrictNull.ts(13,44): error TS2344: Type 'number' does not satisfy the constraint 'not { then(): any; }'.
+awaitedTypeStrictNull.ts(14,36): error TS2344: Type 'Promise<number>' does not satisfy the constraint 'not { then(): any; }'.
+awaitedTypeStrictNull.ts(14,44): error TS2344: Type 'number' does not satisfy the constraint 'not { then(): any; }'.
+awaitedTypeStrictNull.ts(15,36): error TS2344: Type 'Promise<number>' does not satisfy the constraint 'not { then(): any; }'.
+awaitedTypeStrictNull.ts(15,44): error TS2344: Type 'number' does not satisfy the constraint 'not { then(): any; }'.
 awaitedTypeStrictNull.ts(22,12): error TS2589: Type instantiation is excessively deep and possibly infinite.
 awaitedTypeStrictNull.ts(26,12): error TS2589: Type instantiation is excessively deep and possibly infinite.
 awaitedTypeStrictNull.ts(29,22): error TS7010: 'then', which lacks return-type annotation, implicitly has an 'any' return type.
+awaitedTypeStrictNull.ts(32,36): error TS2344: Type 'T' does not satisfy the constraint 'not { then(): any; }'.
+awaitedTypeStrictNull.ts(52,30): error TS2344: Type 'D' does not satisfy the constraint 'not { then(): any; }'.
+awaitedTypeStrictNull.ts(58,33): error TS2344: Type 'T extends object ? { [K in keyof T]: Obj; } : Obj' does not satisfy the constraint 'not { then(): any; }'.
+  Type 'T extends object ? { [K in keyof T]: Obj; } : Obj' is not assignable to type 'not { then(): any; }'.
+    Type 'Obj | { [K in keyof T]: Obj; }' is not assignable to type 'not { then(): any; }'.
+      Type 'Obj' is not assignable to type 'not { then(): any; }'.
+awaitedTypeStrictNull.ts(61,2): error TS2322: Type 'Awaited<T> | Awaited<{ [K in keyof T]: Obj; }>' is not assignable to type 'T extends object ? { [K in keyof T]: Obj; } : Obj'.
+  Type 'Awaited<T>' is not assignable to type 'T extends object ? { [K in keyof T]: Obj; } : Obj'.
+    Type 'T | (T extends object & { then(onfulfilled: infer F, ...args: infer _): any; } ? F extends (value: infer V, ...args: infer _) => any ? Awaited<V> : never : T & not { then(): any; })' is not assignable to type 'T extends object ? { [K in keyof T]: Obj; } : Obj'.
+      Type '(null | undefined) & T' is not assignable to type 'T extends object ? { [K in keyof T]: Obj; } : Obj'.
+        Type 'undefined & T' is not assignable to type 'T extends object ? { [K in keyof T]: Obj; } : Obj'.
 
 
-==== awaitedTypeStrictNull.ts (3 errors) ====
+==== awaitedTypeStrictNull.ts (18 errors) ====
     type T1 = Awaited<number>;
     type T2 = Awaited<Promise<number>>;
+                              ~~~~~~
+!!! error TS2344: Type 'number' does not satisfy the constraint 'not { then(): any; }'.
     type T3 = Awaited<number | Promise<number>>;
+                                       ~~~~~~
+!!! error TS2344: Type 'number' does not satisfy the constraint 'not { then(): any; }'.
     type T4 = Awaited<number | Promise<string>>;
+                                       ~~~~~~
+!!! error TS2344: Type 'string' does not satisfy the constraint 'not { then(): any; }'.
     type T5 = Awaited<{ then: number }>;
     type T6 = Awaited<{ then(): void }>; // never (non-promise "thenable")
     type T7 = Awaited<{ then(x: number): void }>; // never (non-promise "thenable")
@@ -16,9 +44,25 @@ awaitedTypeStrictNull.ts(29,22): error TS7010: 'then', which lacks return-type a
     type T10 = Awaited<never>;
     type T11 = Awaited<unknown>;
     type T12 = Awaited<Promise<Promise<number>>>;
+                               ~~~~~~~~~~~~~~~
+!!! error TS2344: Type 'Promise<number>' does not satisfy the constraint 'not { then(): any; }'.
+                                       ~~~~~~
+!!! error TS2344: Type 'number' does not satisfy the constraint 'not { then(): any; }'.
     type T13 = _Expect<Awaited<Promise<Promise<number>> | string | null>, /*expected*/ string | number | null>; // otherwise just prints T13 in types tests, which isn't very helpful
+                                       ~~~~~~~~~~~~~~~
+!!! error TS2344: Type 'Promise<number>' does not satisfy the constraint 'not { then(): any; }'.
+                                               ~~~~~~
+!!! error TS2344: Type 'number' does not satisfy the constraint 'not { then(): any; }'.
     type T14 = _Expect<Awaited<Promise<Promise<number>> | string | undefined>, /*expected*/ string | number | undefined>; // otherwise just prints T14 in types tests, which isn't very helpful
+                                       ~~~~~~~~~~~~~~~
+!!! error TS2344: Type 'Promise<number>' does not satisfy the constraint 'not { then(): any; }'.
+                                               ~~~~~~
+!!! error TS2344: Type 'number' does not satisfy the constraint 'not { then(): any; }'.
     type T15 = _Expect<Awaited<Promise<Promise<number>> | string | null | undefined>, /*expected*/ string | number | null | undefined>; // otherwise just prints T15 in types tests, which isn't very helpful
+                                       ~~~~~~~~~~~~~~~
+!!! error TS2344: Type 'Promise<number>' does not satisfy the constraint 'not { then(): any; }'.
+                                               ~~~~~~
+!!! error TS2344: Type 'number' does not satisfy the constraint 'not { then(): any; }'.
     
     type TUndefined = Awaited<undefined>;
     type TNull = Awaited<null>;
@@ -42,6 +86,9 @@ awaitedTypeStrictNull.ts(29,22): error TS7010: 'then', which lacks return-type a
     
     // https://github.com/microsoft/TypeScript/issues/33562
     type MaybePromise<T> = T | Promise<T> | PromiseLike<T>
+                                       ~
+!!! error TS2344: Type 'T' does not satisfy the constraint 'not { then(): any; }'.
+!!! related TS2208 awaitedTypeStrictNull.ts:32:19: This type parameter might need an `extends not { then(): any; }` constraint.
     declare function MaybePromise<T>(value: T): MaybePromise<T>;
     
     async function main() {
@@ -62,15 +109,29 @@ awaitedTypeStrictNull.ts(29,22): error TS7010: 'then', which lacks return-type a
     	// Should result in `Promise<T>` instead of `Promise<Awaited<T>>`.
     	async post<T = D>() { return this.request<T>(); }
     	async request<D>(): Promise<D> { throw new Error(); }
+    	                            ~
+!!! error TS2344: Type 'D' does not satisfy the constraint 'not { then(): any; }'.
+!!! related TS2208 awaitedTypeStrictNull.ts:52:16: This type parameter might need an `extends not { then(): any; }` constraint.
     }
     
     declare const api: Api;
     interface Obj { x: number }
     
     async function fn<T>(): Promise<T extends object ? { [K in keyof T]: Obj } : Obj> {
+                                    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2344: Type 'T extends object ? { [K in keyof T]: Obj; } : Obj' does not satisfy the constraint 'not { then(): any; }'.
+!!! error TS2344:   Type 'T extends object ? { [K in keyof T]: Obj; } : Obj' is not assignable to type 'not { then(): any; }'.
+!!! error TS2344:     Type 'Obj | { [K in keyof T]: Obj; }' is not assignable to type 'not { then(): any; }'.
+!!! error TS2344:       Type 'Obj' is not assignable to type 'not { then(): any; }'.
     	// Per #45924, this was failing due to incorrect inference both above and here.
     	// Should not error.
     	return api.post();
+    	~~~~~~
+!!! error TS2322: Type 'Awaited<T> | Awaited<{ [K in keyof T]: Obj; }>' is not assignable to type 'T extends object ? { [K in keyof T]: Obj; } : Obj'.
+!!! error TS2322:   Type 'Awaited<T>' is not assignable to type 'T extends object ? { [K in keyof T]: Obj; } : Obj'.
+!!! error TS2322:     Type 'T | (T extends object & { then(onfulfilled: infer F, ...args: infer _): any; } ? F extends (value: infer V, ...args: infer _) => any ? Awaited<V> : never : T & not { then(): any; })' is not assignable to type 'T extends object ? { [K in keyof T]: Obj; } : Obj'.
+!!! error TS2322:       Type '(null | undefined) & T' is not assignable to type 'T extends object ? { [K in keyof T]: Obj; } : Obj'.
+!!! error TS2322:         Type 'undefined & T' is not assignable to type 'T extends object ? { [K in keyof T]: Obj; } : Obj'.
     }
     
     // helps with tests where '.types' just prints out the type alias name

@@ -9,11 +9,11 @@ class A {
 >a : number
 
     async #bar(a: number) {}
->#bar : (a: number) => Promise<void>
+>#bar : (a: number) => Promise<void & not { then(): any; }>
 >a : number
 
     async *#baz(a: number) {
->#baz : (a: number) => AsyncGenerator<never, number, unknown>
+>#baz : (a: number) => AsyncGenerator<never, 3 & not { then(): any; }, unknown>
 >a : number
 
         return 3;
@@ -47,14 +47,14 @@ class A {
 >30 : 30
 
         this.#bar(30);
->this.#bar(30) : Promise<void>
->this.#bar : (a: number) => Promise<void>
+>this.#bar(30) : Promise<void & not { then(): any; }>
+>this.#bar : (a: number) => Promise<void & not { then(): any; }>
 >this : this
 >30 : 30
 
         this.#baz(30);
->this.#baz(30) : AsyncGenerator<never, number, unknown>
->this.#baz : (a: number) => AsyncGenerator<never, number, unknown>
+>this.#baz(30) : AsyncGenerator<never, 3 & not { then(): any; }, unknown>
+>this.#baz : (a: number) => AsyncGenerator<never, 3 & not { then(): any; }, unknown>
 >this : this
 >30 : 30
 

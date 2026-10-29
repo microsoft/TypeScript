@@ -844,7 +844,7 @@ declare namespace React {
     };
 
     function lazy<T extends ComponentType<any>>(
-        factory: () => Promise<{ default: T }>
+        factory: () => Promise<{ default: T } & not { then(): any }>
     ): LazyExoticComponent<T>;
 
     //

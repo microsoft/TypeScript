@@ -1,8 +1,9 @@
 noImplicitReturnsInAsync2.ts(2,16): error TS7030: Not all code paths return a value.
 noImplicitReturnsInAsync2.ts(24,48): error TS7030: Not all code paths return a value.
+noImplicitReturnsInAsync2.ts(24,56): error TS2344: Type 'number' does not satisfy the constraint 'not { then(): any; }'.
 
 
-==== noImplicitReturnsInAsync2.ts (2 errors) ====
+==== noImplicitReturnsInAsync2.ts (3 errors) ====
     // Should be an error, Promise<number>, currently retorted correctly 
     async function test3(isError: boolean = true) {
                    ~~~~~
@@ -31,6 +32,8 @@ noImplicitReturnsInAsync2.ts(24,48): error TS7030: Not all code paths return a v
     async function test6(isError: boolean = true): Promise<number> { 
                                                    ~~~~~~~~~~~~~~~
 !!! error TS7030: Not all code paths return a value.
+                                                           ~~~~~~
+!!! error TS2344: Type 'number' does not satisfy the constraint 'not { then(): any; }'.
         if (isError === true) {
             return undefined;
         }

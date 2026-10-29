@@ -31,12 +31,12 @@
 // asyncIterator.next();
 //                    ^
 // | ----------------------------------------------------------------------
-// | next(): Promise<IteratorResult<string, void>>
+// | next(): Promise<IteratorResult<string, void> & not { then(): any; }>
 // | ----------------------------------------------------------------------
 // asyncIterator.next( 0);
 //                    ^
 // | ----------------------------------------------------------------------
-// | next(**value: number**): Promise<IteratorResult<string, void>>
+// | next(**value: number**): Promise<IteratorResult<string, void> & not { then(): any; }>
 // | ----------------------------------------------------------------------
 // 
 // declare const asyncGenerator: AsyncGenerator<string, void, number>;
@@ -44,12 +44,12 @@
 // asyncGenerator.next();
 //                     ^
 // | ----------------------------------------------------------------------
-// | next(): Promise<IteratorResult<string, void>>
+// | next(): Promise<IteratorResult<string, void> & not { then(): any; }>
 // | ----------------------------------------------------------------------
 // asyncGenerator.next( 0);
 //                     ^
 // | ----------------------------------------------------------------------
-// | next(**value: number**): Promise<IteratorResult<string, void>>
+// | next(**value: number**): Promise<IteratorResult<string, void> & not { then(): any; }>
 // | ----------------------------------------------------------------------
 [
   {
@@ -181,11 +181,11 @@
     "item": {
       "signatures": [
         {
-          "label": "next(): Promise<IteratorResult<string, void>>",
+          "label": "next(): Promise<IteratorResult<string, void> & not { then(): any; }>",
           "parameters": []
         },
         {
-          "label": "next(value: number): Promise<IteratorResult<string, void>>",
+          "label": "next(value: number): Promise<IteratorResult<string, void> & not { then(): any; }>",
           "parameters": [
             {
               "label": "value: number"
@@ -210,11 +210,11 @@
     "item": {
       "signatures": [
         {
-          "label": "next(): Promise<IteratorResult<string, void>>",
+          "label": "next(): Promise<IteratorResult<string, void> & not { then(): any; }>",
           "parameters": []
         },
         {
-          "label": "next(value: number): Promise<IteratorResult<string, void>>",
+          "label": "next(value: number): Promise<IteratorResult<string, void> & not { then(): any; }>",
           "parameters": [
             {
               "label": "value: number"
@@ -239,11 +239,11 @@
     "item": {
       "signatures": [
         {
-          "label": "next(): Promise<IteratorResult<string, void>>",
+          "label": "next(): Promise<IteratorResult<string, void> & not { then(): any; }>",
           "parameters": []
         },
         {
-          "label": "next(value: number): Promise<IteratorResult<string, void>>",
+          "label": "next(value: number): Promise<IteratorResult<string, void> & not { then(): any; }>",
           "parameters": [
             {
               "label": "value: number"
@@ -268,11 +268,11 @@
     "item": {
       "signatures": [
         {
-          "label": "next(): Promise<IteratorResult<string, void>>",
+          "label": "next(): Promise<IteratorResult<string, void> & not { then(): any; }>",
           "parameters": []
         },
         {
-          "label": "next(value: number): Promise<IteratorResult<string, void>>",
+          "label": "next(value: number): Promise<IteratorResult<string, void> & not { then(): any; }>",
           "parameters": [
             {
               "label": "value: number"

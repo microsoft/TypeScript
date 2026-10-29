@@ -1,0 +1,141 @@
+negatedPromiseConstraint.ts(4,30): error TS2344: Type 'Promise<Value>' does not satisfy the constraint 'not { then(): any; }'.
+negatedPromiseConstraint.ts(5,32): error TS2344: Type 'PromiseLike<Value>' does not satisfy the constraint 'not { then(): any; }'.
+negatedPromiseConstraint.ts(6,36): error TS2344: Type '{ then(): any; }' does not satisfy the constraint 'not { then(): any; }'.
+negatedPromiseConstraint.ts(7,29): error TS2344: Type 'Promise<Text> | Value' does not satisfy the constraint 'not { then(): any; }'.
+  Type 'Promise<Text>' is not assignable to type 'not { then(): any; }'.
+negatedPromiseConstraint.ts(8,31): error TS2344: Type 'unknown' does not satisfy the constraint 'not { then(): any; }'.
+negatedPromiseConstraint.ts(9,34): error TS2344: Type '{ value: number; }' does not satisfy the constraint 'not { then(): any; }'.
+negatedPromiseConstraint.ts(10,33): error TS2344: Type 'number' does not satisfy the constraint 'not { then(): any; }'.
+negatedPromiseConstraint.ts(11,28): error TS2344: Type 'void' does not satisfy the constraint 'not { then(): any; }'.
+negatedPromiseConstraint.ts(17,39): error TS2344: Type '{ then: number; }' does not satisfy the constraint 'not { then(): any; }'.
+negatedPromiseConstraint.ts(49,13): error TS2344: Type 'Promise<Value>' does not satisfy the constraint 'not { then(): any; }'.
+negatedPromiseConstraint.ts(50,16): error TS2344: Type 'Promise<Value>' does not satisfy the constraint 'not { then(): any; }'.
+negatedPromiseConstraint.ts(51,23): error TS2344: Type 'Promise<Value>' does not satisfy the constraint 'not { then(): any; }'.
+negatedPromiseConstraint.ts(52,45): error TS2344: Type 'Promise<Value>' does not satisfy the constraint 'not { then(): any; }'.
+negatedPromiseConstraint.ts(81,41): error TS2344: Type 'Promise<Value>' does not satisfy the constraint 'not { then(): any; }'.
+
+
+==== negatedPromiseConstraint.ts (14 errors) ====
+    type Value = number & not { then(): any };
+    type Text = string & not { then(): any };
+    
+    type NestedPromise = Promise<Promise<Value>>;
+                                 ~~~~~~~~~~~~~~
+!!! error TS2344: Type 'Promise<Value>' does not satisfy the constraint 'not { then(): any; }'.
+    type ThenablePromise = Promise<PromiseLike<Value>>;
+                                   ~~~~~~~~~~~~~~~~~~
+!!! error TS2344: Type 'PromiseLike<Value>' does not satisfy the constraint 'not { then(): any; }'.
+    type CallableThenPromise = Promise<{ then(): any }>;
+                                       ~~~~~~~~~~~~~~~
+!!! error TS2344: Type '{ then(): any; }' does not satisfy the constraint 'not { then(): any; }'.
+    type UnionPromise = Promise<Value | Promise<Text>>;
+                                ~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2344: Type 'Promise<Text> | Value' does not satisfy the constraint 'not { then(): any; }'.
+!!! error TS2344:   Type 'Promise<Text>' is not assignable to type 'not { then(): any; }'.
+    type UnknownPromise = Promise<unknown>;
+                                  ~~~~~~~
+!!! error TS2344: Type 'unknown' does not satisfy the constraint 'not { then(): any; }'.
+    type OpenObjectPromise = Promise<{ value: number }>;
+                                     ~~~~~~~~~~~~~~~~~
+!!! error TS2344: Type '{ value: number; }' does not satisfy the constraint 'not { then(): any; }'.
+    type PrimitivePromise = Promise<number>;
+                                    ~~~~~~
+!!! error TS2344: Type 'number' does not satisfy the constraint 'not { then(): any; }'.
+    type VoidPromise = Promise<void>;
+                               ~~~~
+!!! error TS2344: Type 'void' does not satisfy the constraint 'not { then(): any; }'.
+    
+    type ValuePromise = Promise<Value>;
+    type NullishPromise = Promise<null | undefined>;
+    type NeverPromise = Promise<never>;
+    type AnyPromise = Promise<any>;
+    type NonCallableThenPromise = Promise<{ then: number }>;
+                                          ~~~~~~~~~~~~~~~~
+!!! error TS2344: Type '{ then: number; }' does not satisfy the constraint 'not { then(): any; }'.
+    
+    declare const value: Value;
+    declare const text: Text;
+    declare const nestedThenable: PromiseLike<PromiseLike<Value>>;
+    declare const valuePromise: Promise<Value>;
+    
+    const resolved: Promise<Value> = Promise.resolve(nestedThenable);
+    const constructed: Promise<Value> = new Promise<Value>(resolve => resolve(valuePromise));
+    const rejected: Promise<Value> = Promise.reject<Value>("reason");
+    const chained: Promise<Text> = valuePromise.then(() => Promise.resolve(text));
+    const nestedChained: Promise<Value> = valuePromise.then(() => nestedThenable);
+    const caught: Promise<Value | Text> = valuePromise.catch(() => Promise.resolve(text));
+    const nestedCaught: Promise<Value> = valuePromise.catch(() => nestedThenable);
+    const finalized: Promise<Value> = valuePromise.finally(() => Promise.resolve(text));
+    const all = Promise.all([nestedThenable, Promise.resolve(text)]);
+    const race: Promise<Value | Text> = Promise.race([nestedThenable, Promise.resolve(text)]);
+    const any: Promise<Value | Text> = Promise.any([nestedThenable, Promise.resolve(text)]);
+    const settled = Promise.allSettled([nestedThenable]);
+    const tried: Promise<Value> = Promise.try(() => nestedThenable);
+    const resolvers: PromiseWithResolvers<Value> = Promise.withResolvers<Value>();
+    resolvers.resolve(valuePromise);
+    const empty: Promise<Awaited<void>> = Promise.resolve();
+    const inferredAsync = async () => 1;
+    const asyncResult: Promise<Awaited<number>> = inferredAsync();
+    const inferredGenericAsync = async <T>(value: T) => value;
+    const genericAsyncResult: Promise<Value> = inferredGenericAsync(nestedThenable);
+    const keyed = Promise.allKeyed({
+        then: (resolve: (value: Value) => void) => resolve(value),
+    });
+    const keyedValue: Awaited<typeof keyed> = value;
+    
+    new Promise<Promise<Value>>(() => {});
+                ~~~~~~~~~~~~~~
+!!! error TS2344: Type 'Promise<Value>' does not satisfy the constraint 'not { then(): any; }'.
+    Promise.reject<Promise<Value>>("reason");
+                   ~~~~~~~~~~~~~~
+!!! error TS2344: Type 'Promise<Value>' does not satisfy the constraint 'not { then(): any; }'.
+    Promise.withResolvers<Promise<Value>>();
+                          ~~~~~~~~~~~~~~
+!!! error TS2344: Type 'Promise<Value>' does not satisfy the constraint 'not { then(): any; }'.
+    type NestedResolvers = PromiseWithResolvers<Promise<Value>>;
+                                                ~~~~~~~~~~~~~~
+!!! error TS2344: Type 'Promise<Value>' does not satisfy the constraint 'not { then(): any; }'.
+    
+    function resolveGeneric<T>(value: T): Promise<Awaited<T>> {
+        return Promise.resolve(value);
+    }
+    
+    function chainGeneric<T>(value: T): Promise<Awaited<T>> {
+        return valuePromise.then(() => value);
+    }
+    
+    async function awaitGeneric<T>(value: T): Promise<Awaited<T>> {
+        return value;
+    }
+    
+    async function awaitPrimitive(): Promise<Awaited<number>> {
+        const result: Awaited<number> = await 1;
+        return result;
+    }
+    
+    async function returnPrimitive(): Promise<Awaited<number>> {
+        return 1;
+    }
+    
+    async function returnVoid(): Promise<Awaited<void>> {}
+    
+    async function returnConstrained<T extends not { then(): any }>(value: T): Promise<T> {
+        return value;
+    }
+    
+    async function invalidReturn(): Promise<Promise<Value>> {
+                                            ~~~~~~~~~~~~~~
+!!! error TS2344: Type 'Promise<Value>' does not satisfy the constraint 'not { then(): any; }'.
+        return valuePromise;
+    }
+    
+    type AwaitedValue = Awaited<Promise<Value>>;
+    type AwaitedNestedThenable = Awaited<typeof nestedThenable>;
+    type AwaitedUnknown = Awaited<unknown>;
+    type AwaitedNonCallableThen = Awaited<{ then: number }>;
+    type AwaitedInvalidThenable = Awaited<{ then(): any }>;
+    
+    interface RecursiveValue {
+        settled: Promise<RecursiveValue & not { then(): any }>;
+    }
+    

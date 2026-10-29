@@ -40,7 +40,7 @@ const f1 = async str => {
 /** @type {T1} */
 const f2 = async str => {
 >f2 : T1
->async str => {    return str;} : (str: string) => Promise<string>
+>async str => {    return str;} : (str: string) => Promise<string & not { then(): any; }>
 >str : string
 
     return str;
@@ -63,7 +63,7 @@ const f3 = async str => {
 /** @type {T2} */
 const f4 = async str => {
 >f4 : T2
->async str => {    return str;} : (str: string) => Promise<string>
+>async str => {    return str;} : (str: string) => Promise<string & not { then(): any; }>
 >str : string
 
     return str;
@@ -73,7 +73,7 @@ const f4 = async str => {
 /** @type {T3} */
 const f5 = async str => {
 >f5 : T3
->async str => {    return str;} : (str: string) => Promise<string>
+>async str => {    return str;} : (str: string) => Promise<string & not { then(): any; }>
 >str : string
 
     return str;

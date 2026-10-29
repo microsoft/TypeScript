@@ -1,0 +1,21 @@
+fetchReplacementInputCompatibility.ts(1,96): error TS2344: Type 'Response' does not satisfy the constraint 'not { then(): any; }'.
+fetchReplacementInputCompatibility.ts(2,7): error TS2322: Type '(input: string | Request | URL, init?: RequestInit | undefined) => Promise<Response>' is not assignable to type '(input: URL | RequestInfo, init?: RequestInit | undefined) => Promise<Response & not { then(): any; }>'.
+  Type 'Promise<Response>' is not assignable to type 'Promise<Response & not { then(): any; }>'.
+    Type 'Response' is not assignable to type 'Response & not { then(): any; }'.
+      Type 'Response' is not assignable to type 'not { then(): any; }'.
+
+
+==== fetchReplacementInputCompatibility.ts (2 errors) ====
+    declare const fetchReplacement: (input: string | URL | Request, init?: RequestInit) => Promise<Response>;
+                                                                                                   ~~~~~~~~
+!!! error TS2344: Type 'Response' does not satisfy the constraint 'not { then(): any; }'.
+    const replacement: typeof fetch = fetchReplacement;
+          ~~~~~~~~~~~
+!!! error TS2322: Type '(input: string | Request | URL, init?: RequestInit | undefined) => Promise<Response>' is not assignable to type '(input: URL | RequestInfo, init?: RequestInit | undefined) => Promise<Response & not { then(): any; }>'.
+!!! error TS2322:   Type 'Promise<Response>' is not assignable to type 'Promise<Response & not { then(): any; }>'.
+!!! error TS2322:     Type 'Response' is not assignable to type 'Response & not { then(): any; }'.
+!!! error TS2322:       Type 'Response' is not assignable to type 'not { then(): any; }'.
+    
+    declare const input: Parameters<typeof fetch>[0];
+    fetchReplacement(input);
+    

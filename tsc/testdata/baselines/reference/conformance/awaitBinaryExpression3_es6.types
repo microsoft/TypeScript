@@ -23,7 +23,7 @@ async function func(): Promise<void> {
     var b = await p + a;
 >b : number
 >await p + a : number
->await p : number
+>await p : number & not { then(): any; }
 >p : Promise<number>
 >a : number
 

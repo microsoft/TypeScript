@@ -6,17 +6,17 @@ export const x = 1;
 >1 : 1
 
 await x;
->await x : 1
+>await x : 1 & not { then(): any; }
 >x : 1
 
 // reparse element access as await
 await [x];
->await [x] : number[]
+>await [x] : number[] & not { then(): any; }
 >[x] : number[]
 >x : 1
 
 await [x, x];
->await [x, x] : number[]
+>await [x, x] : number[] & not { then(): any; }
 >[x, x] : number[]
 >x : 1
 >x : 1
@@ -26,12 +26,12 @@ declare function f(): number;
 >f : () => number
 
 await (x);
->await (x) : 1
+>await (x) : 1 & not { then(): any; }
 >(x) : 1
 >x : 1
 
 await (f(), x);
->await (f(), x) : 1
+>await (f(), x) : 1 & not { then(): any; }
 >(f(), x) : 1
 >f(), x : 1
 >f() : number
@@ -39,13 +39,13 @@ await (f(), x);
 >x : 1
 
 await <number>(x);
->await <number>(x) : number
+>await <number>(x) : number & not { then(): any; }
 ><number>(x) : number
 >(x) : 1
 >x : 1
 
 await <number>(f(), x);
->await <number>(f(), x) : number
+>await <number>(f(), x) : number & not { then(): any; }
 ><number>(f(), x) : number
 >(f(), x) : 1
 >f(), x : 1
@@ -55,11 +55,11 @@ await <number>(f(), x);
 
 // reparse tagged template as await
 await ``;
->await `` : ""
+>await `` : "" & not { then(): any; }
 >`` : ""
 
 await <string> ``;
->await <string> `` : string
+>await <string> `` : string & not { then(): any; }
 ><string> `` : string
 >`` : ""
 
@@ -148,22 +148,22 @@ import { await as _await } from "./other";
 // newlines
 // await in throw
 throw await
->await    1 : 1
+>await    1 : 1 & not { then(): any; }
 
     1;
 >1 : 1
 
 // await in var
 let y = await
->y : number
->await    1 : 1
+>y : 1 & not { then(): any; }
+>await    1 : 1 & not { then(): any; }
 
     1;
 >1 : 1
 
 // await in expression statement;
 await
->await    1 : 1
+>await    1 : 1 & not { then(): any; }
 
     1;
 >1 : 1
@@ -180,18 +180,18 @@ export { _await as await };
 
 // for-await-of
 const arr = [Promise.resolve()];
->arr : Promise<void>[]
->[Promise.resolve()] : Promise<void>[]
->Promise.resolve() : Promise<void>
->Promise.resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T>(value: T | PromiseLike<T>): Promise<Awaited<T>>; }
+>arr : Promise<void & not { then(): any; }>[]
+>[Promise.resolve()] : Promise<void & not { then(): any; }>[]
+>Promise.resolve() : Promise<void & not { then(): any; }>
+>Promise.resolve : { (): Promise<void & not { then(): any; }>; <T>(value: T): Promise<Awaited<T>>; <T>(value: T | PromiseLike<T>): Promise<Awaited<T>>; }
 >Promise : PromiseConstructor
->resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T>(value: T | PromiseLike<T>): Promise<Awaited<T>>; }
+>resolve : { (): Promise<void & not { then(): any; }>; <T>(value: T): Promise<Awaited<T>>; <T>(value: T | PromiseLike<T>): Promise<Awaited<T>>; }
 
 for await (const item of arr) {
->item : void
->arr : Promise<void>[]
+>item : void & not { then(): any; } & not { then(): any; }
+>arr : Promise<void & not { then(): any; }>[]
 
   item;
->item : void
+>item : void & not { then(): any; } & not { then(): any; }
 }
 

@@ -60,7 +60,5 @@ follow(() => c, frame => frame.a);
 >follow : Symbol(follow, Decl(inferenceThroughNestedReferencesOfSameType.ts, 12, 15))
 >c : Symbol(c, Decl(inferenceThroughNestedReferencesOfSameType.ts, 11, 13))
 >frame : Symbol(frame, Decl(inferenceThroughNestedReferencesOfSameType.ts, 15, 15))
->frame.a : Symbol(a, Decl(inferenceThroughNestedReferencesOfSameType.ts, 11, 28))
 >frame : Symbol(frame, Decl(inferenceThroughNestedReferencesOfSameType.ts, 15, 15))
->a : Symbol(a, Decl(inferenceThroughNestedReferencesOfSameType.ts, 11, 28))
 

@@ -1,16 +1,31 @@
+promiseTest.ts(2,45): error TS2344: Type 'A' does not satisfy the constraint 'not { then(): any; }'.
+promiseTest.ts(2,58): error TS2344: Type 'A' does not satisfy the constraint 'not { then(): any; }'.
+promiseTest.ts(3,49): error TS2344: Type 'B' does not satisfy the constraint 'not { then(): any; }'.
 promiseTest.ts(7,5): error TS2322: Type 'null' is not assignable to type 'Promise<number>'.
+promiseTest.ts(7,16): error TS2344: Type 'number' does not satisfy the constraint 'not { then(): any; }'.
 
 
-==== promiseTest.ts (1 errors) ====
+==== promiseTest.ts (5 errors) ====
     interface Promise<T> {
         then<A>(success?: (value: T) => Promise<A>): Promise<A>;
+                                                ~
+!!! error TS2344: Type 'A' does not satisfy the constraint 'not { then(): any; }'.
+!!! related TS2208 promiseTest.ts:2:10: This type parameter might need an `extends not { then(): any; }` constraint.
+                                                             ~
+!!! error TS2344: Type 'A' does not satisfy the constraint 'not { then(): any; }'.
+!!! related TS2208 promiseTest.ts:2:10: This type parameter might need an `extends not { then(): any; }` constraint.
         then<B>(success?: (value: T) => B): Promise<B>;
+                                                    ~
+!!! error TS2344: Type 'B' does not satisfy the constraint 'not { then(): any; }'.
+!!! related TS2208 promiseTest.ts:3:10: This type parameter might need an `extends not { then(): any; }` constraint.
         data: T;
     }
     
     var p: Promise<number> = null;
         ~
 !!! error TS2322: Type 'null' is not assignable to type 'Promise<number>'.
+                   ~~~~~~
+!!! error TS2344: Type 'number' does not satisfy the constraint 'not { then(): any; }'.
     var p2 = p.then(function (x) {
         return p;
     } );

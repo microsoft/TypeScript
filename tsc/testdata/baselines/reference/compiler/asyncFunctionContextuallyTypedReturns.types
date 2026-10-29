@@ -9,30 +9,30 @@ declare function f(cb: (v: boolean) => [0] | PromiseLike<[0]>): void;
 f(v => v ? [0] : Promise.reject());
 >f(v => v ? [0] : Promise.reject()) : void
 >f : (cb: (v: boolean) => [0] | PromiseLike<[0]>) => void
->v => v ? [0] : Promise.reject() : (v: boolean) => Promise<[0]> | [0]
+>v => v ? [0] : Promise.reject() : (v: boolean) => Promise<not { then(): any; }> | [0]
 >v : boolean
->v ? [0] : Promise.reject() : Promise<[0]> | [0]
+>v ? [0] : Promise.reject() : Promise<not { then(): any; }> | [0]
 >v : boolean
 >[0] : [0]
 >0 : 0
->Promise.reject() : Promise<[0]>
->Promise.reject : <T = never>(reason?: any) => Promise<T>
+>Promise.reject() : Promise<not { then(): any; }>
+>Promise.reject : <T extends not { then(): any; } = never>(reason?: any) => Promise<T>
 >Promise : PromiseConstructor
->reject : <T = never>(reason?: any) => Promise<T>
+>reject : <T extends not { then(): any; } = never>(reason?: any) => Promise<T>
 
 f(async v => v ? [0] : Promise.reject());
 >f(async v => v ? [0] : Promise.reject()) : void
 >f : (cb: (v: boolean) => [0] | PromiseLike<[0]>) => void
->async v => v ? [0] : Promise.reject() : (v: boolean) => Promise<[0]>
+>async v => v ? [0] : Promise.reject() : (v: boolean) => Promise<not { then(): any; }>
 >v : boolean
->v ? [0] : Promise.reject() : Promise<[0]> | [0]
+>v ? [0] : Promise.reject() : Promise<not { then(): any; }> | [0]
 >v : boolean
 >[0] : [0]
 >0 : 0
->Promise.reject() : Promise<[0]>
->Promise.reject : <T = never>(reason?: any) => Promise<T>
+>Promise.reject() : Promise<not { then(): any; }>
+>Promise.reject : <T extends not { then(): any; } = never>(reason?: any) => Promise<T>
 >Promise : PromiseConstructor
->reject : <T = never>(reason?: any) => Promise<T>
+>reject : <T extends not { then(): any; } = never>(reason?: any) => Promise<T>
 
 declare function g(cb: (v: boolean) => "contextuallyTypable" | PromiseLike<"contextuallyTypable">): void;
 >g : (cb: (v: boolean) => "contextuallyTypable" | PromiseLike<"contextuallyTypable">) => void
@@ -42,28 +42,28 @@ declare function g(cb: (v: boolean) => "contextuallyTypable" | PromiseLike<"cont
 g(v => v ? "contextuallyTypable" : Promise.reject());
 >g(v => v ? "contextuallyTypable" : Promise.reject()) : void
 >g : (cb: (v: boolean) => "contextuallyTypable" | PromiseLike<"contextuallyTypable">) => void
->v => v ? "contextuallyTypable" : Promise.reject() : (v: boolean) => "contextuallyTypable" | Promise<"contextuallyTypable">
+>v => v ? "contextuallyTypable" : Promise.reject() : (v: boolean) => "contextuallyTypable" | Promise<not { then(): any; }>
 >v : boolean
->v ? "contextuallyTypable" : Promise.reject() : "contextuallyTypable" | Promise<"contextuallyTypable">
+>v ? "contextuallyTypable" : Promise.reject() : "contextuallyTypable" | Promise<not { then(): any; }>
 >v : boolean
 >"contextuallyTypable" : "contextuallyTypable"
->Promise.reject() : Promise<"contextuallyTypable">
->Promise.reject : <T = never>(reason?: any) => Promise<T>
+>Promise.reject() : Promise<not { then(): any; }>
+>Promise.reject : <T extends not { then(): any; } = never>(reason?: any) => Promise<T>
 >Promise : PromiseConstructor
->reject : <T = never>(reason?: any) => Promise<T>
+>reject : <T extends not { then(): any; } = never>(reason?: any) => Promise<T>
 
 g(async v => v ? "contextuallyTypable" : Promise.reject());
 >g(async v => v ? "contextuallyTypable" : Promise.reject()) : void
 >g : (cb: (v: boolean) => "contextuallyTypable" | PromiseLike<"contextuallyTypable">) => void
->async v => v ? "contextuallyTypable" : Promise.reject() : (v: boolean) => Promise<"contextuallyTypable">
+>async v => v ? "contextuallyTypable" : Promise.reject() : (v: boolean) => Promise<not { then(): any; }>
 >v : boolean
->v ? "contextuallyTypable" : Promise.reject() : "contextuallyTypable" | Promise<"contextuallyTypable">
+>v ? "contextuallyTypable" : Promise.reject() : "contextuallyTypable" | Promise<not { then(): any; }>
 >v : boolean
 >"contextuallyTypable" : "contextuallyTypable"
->Promise.reject() : Promise<"contextuallyTypable">
->Promise.reject : <T = never>(reason?: any) => Promise<T>
+>Promise.reject() : Promise<not { then(): any; }>
+>Promise.reject : <T extends not { then(): any; } = never>(reason?: any) => Promise<T>
 >Promise : PromiseConstructor
->reject : <T = never>(reason?: any) => Promise<T>
+>reject : <T extends not { then(): any; } = never>(reason?: any) => Promise<T>
 
 type MyCallback = (thing: string) => void;
 >MyCallback : MyCallback
@@ -77,30 +77,30 @@ declare function h(cb: (v: boolean) => MyCallback | PromiseLike<MyCallback>): vo
 h(v => v ? (abc) => { } : Promise.reject());
 >h(v => v ? (abc) => { } : Promise.reject()) : void
 >h : (cb: (v: boolean) => MyCallback | PromiseLike<MyCallback>) => void
->v => v ? (abc) => { } : Promise.reject() : (v: boolean) => Promise<MyCallback> | ((abc: string) => void)
+>v => v ? (abc) => { } : Promise.reject() : (v: boolean) => Promise<not { then(): any; }> | ((abc: string) => void)
 >v : boolean
->v ? (abc) => { } : Promise.reject() : Promise<MyCallback> | ((abc: string) => void)
+>v ? (abc) => { } : Promise.reject() : Promise<not { then(): any; }> | ((abc: string) => void)
 >v : boolean
 >(abc) => { } : (abc: string) => void
 >abc : string
->Promise.reject() : Promise<MyCallback>
->Promise.reject : <T = never>(reason?: any) => Promise<T>
+>Promise.reject() : Promise<not { then(): any; }>
+>Promise.reject : <T extends not { then(): any; } = never>(reason?: any) => Promise<T>
 >Promise : PromiseConstructor
->reject : <T = never>(reason?: any) => Promise<T>
+>reject : <T extends not { then(): any; } = never>(reason?: any) => Promise<T>
 
 h(async v => v ? (def) => { } : Promise.reject());
 >h(async v => v ? (def) => { } : Promise.reject()) : void
 >h : (cb: (v: boolean) => MyCallback | PromiseLike<MyCallback>) => void
->async v => v ? (def) => { } : Promise.reject() : (v: boolean) => Promise<MyCallback | ((def: string) => void)>
+>async v => v ? (def) => { } : Promise.reject() : (v: boolean) => Promise<not { then(): any; }>
 >v : boolean
->v ? (def) => { } : Promise.reject() : Promise<MyCallback> | ((def: string) => void)
+>v ? (def) => { } : Promise.reject() : Promise<not { then(): any; }> | ((def: string) => void)
 >v : boolean
 >(def) => { } : (def: string) => void
 >def : string
->Promise.reject() : Promise<MyCallback>
->Promise.reject : <T = never>(reason?: any) => Promise<T>
+>Promise.reject() : Promise<not { then(): any; }>
+>Promise.reject : <T extends not { then(): any; } = never>(reason?: any) => Promise<T>
 >Promise : PromiseConstructor
->reject : <T = never>(reason?: any) => Promise<T>
+>reject : <T extends not { then(): any; } = never>(reason?: any) => Promise<T>
 
 // repro from #29196
 const increment: (
@@ -114,7 +114,7 @@ const increment: (
 
 ) => Promise<((s: string) => any) | string> | string = async (num, str) => {
 >s : string
->async (num, str) => {  return a => {    return a.length  }} : (num: number, str: string) => Promise<(a: string) => number>
+>async (num, str) => {  return a => {    return a.length  }} : (num: number, str: string) => Promise<((a: string) => number) & not { then(): any; }>
 >num : number
 >str : string
 
@@ -140,7 +140,7 @@ const increment2: (
 
 ) => Promise<((s: string) => any) | string> = async (num, str) => {
 >s : string
->async (num, str) => {  return a => {    return a.length  }} : (num: number, str: string) => Promise<(a: string) => number>
+>async (num, str) => {  return a => {    return a.length  }} : (num: number, str: string) => Promise<((a: string) => number) & not { then(): any; }>
 >num : number
 >str : string
 

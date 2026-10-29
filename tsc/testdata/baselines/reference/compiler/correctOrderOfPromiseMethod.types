@@ -28,13 +28,13 @@ async function countEverything(): Promise<number> {
 >[] : never[]
 
     const [resultA, resultB] = await Promise.all([
->resultA : A[]
->resultB : B[]
->await Promise.all([        providerA(),        providerB(),    ]) : [A[], B[]]
->Promise.all([        providerA(),        providerB(),    ]) : Promise<[A[], B[]]>
->Promise.all : { <T>(values: Iterable<T | PromiseLike<T>>): Promise<Awaited<T>[]>; <T extends readonly unknown[] | []>(values: T): Promise<{ -readonly [P in keyof T]: Awaited<T[P]>; }>; }
+>resultA : A[] & not { then(): any; }
+>resultB : B[] & not { then(): any; }
+>await Promise.all([        providerA(),        providerB(),    ]) : [A[] & not { then(): any; }, B[] & not { then(): any; }] & not { then(): any; } & not { then(): any; }
+>Promise.all([        providerA(),        providerB(),    ]) : Promise<[A[] & not { then(): any; }, B[] & not { then(): any; }] & not { then(): any; }>
+>Promise.all : { <T>(values: Iterable<T | PromiseLike<T>>): Promise<Awaited<T>[] & not { then(): any; }>; <T extends readonly unknown[] | []>(values: T): Promise<{ -readonly [P in keyof T]: Awaited<T[P]>; } & not { then(): any; }>; }
 >Promise : PromiseConstructor
->all : { <T>(values: Iterable<T | PromiseLike<T>>): Promise<Awaited<T>[]>; <T extends readonly unknown[] | []>(values: T): Promise<{ -readonly [P in keyof T]: Awaited<T[P]>; }>; }
+>all : { <T>(values: Iterable<T | PromiseLike<T>>): Promise<Awaited<T>[] & not { then(): any; }>; <T extends readonly unknown[] | []>(values: T): Promise<{ -readonly [P in keyof T]: Awaited<T[P]>; } & not { then(): any; }>; }
 >[        providerA(),        providerB(),    ] : [Promise<A[]>, Promise<B[]>]
 
         providerA(),
@@ -49,11 +49,11 @@ async function countEverything(): Promise<number> {
 
     const dataA: A[] = resultA;
 >dataA : A[]
->resultA : A[]
+>resultA : A[] & not { then(): any; }
 
     const dataB: B[] = resultB;
 >dataB : B[]
->resultB : B[]
+>resultB : B[] & not { then(): any; }
 
     if (dataA && dataB) {
 >dataA && dataB : B[]
@@ -77,10 +77,10 @@ async function countEverything(): Promise<number> {
 
 const expected: Promise<["a", "b", "c"]> = Promise.all(undefined as readonly ["a", "b", "c"]);
 >expected : Promise<["a", "b", "c"]>
->Promise.all(undefined as readonly ["a", "b", "c"]) : Promise<["a", "b", "c"]>
->Promise.all : { <T>(values: Iterable<T | PromiseLike<T>>): Promise<Awaited<T>[]>; <T extends readonly unknown[] | []>(values: T): Promise<{ -readonly [P in keyof T]: Awaited<T[P]>; }>; }
+>Promise.all(undefined as readonly ["a", "b", "c"]) : Promise<["a" & not { then(): any; }, "b" & not { then(): any; }, "c" & not { then(): any; }] & not { then(): any; }>
+>Promise.all : { <T>(values: Iterable<T | PromiseLike<T>>): Promise<Awaited<T>[] & not { then(): any; }>; <T extends readonly unknown[] | []>(values: T): Promise<{ -readonly [P in keyof T]: Awaited<T[P]>; } & not { then(): any; }>; }
 >Promise : PromiseConstructor
->all : { <T>(values: Iterable<T | PromiseLike<T>>): Promise<Awaited<T>[]>; <T extends readonly unknown[] | []>(values: T): Promise<{ -readonly [P in keyof T]: Awaited<T[P]>; }>; }
+>all : { <T>(values: Iterable<T | PromiseLike<T>>): Promise<Awaited<T>[] & not { then(): any; }>; <T extends readonly unknown[] | []>(values: T): Promise<{ -readonly [P in keyof T]: Awaited<T[P]>; } & not { then(): any; }>; }
 >undefined as readonly ["a", "b", "c"] : readonly ["a", "b", "c"]
 >undefined : undefined
 

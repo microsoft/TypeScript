@@ -6,18 +6,18 @@ await x;
 >x : any
 
 const arr = [Promise.resolve()];
->arr : Promise<void>[]
->[Promise.resolve()] : Promise<void>[]
->Promise.resolve() : Promise<void>
->Promise.resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T>(value: T | PromiseLike<T>): Promise<Awaited<T>>; }
+>arr : Promise<void & not { then(): any; }>[]
+>[Promise.resolve()] : Promise<void & not { then(): any; }>[]
+>Promise.resolve() : Promise<void & not { then(): any; }>
+>Promise.resolve : { (): Promise<void & not { then(): any; }>; <T>(value: T): Promise<Awaited<T>>; <T>(value: T | PromiseLike<T>): Promise<Awaited<T>>; }
 >Promise : PromiseConstructor
->resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T>(value: T | PromiseLike<T>): Promise<Awaited<T>>; }
+>resolve : { (): Promise<void & not { then(): any; }>; <T>(value: T): Promise<Awaited<T>>; <T>(value: T | PromiseLike<T>): Promise<Awaited<T>>; }
 
 for await (const item of arr) {
->item : void
->arr : Promise<void>[]
+>item : void & not { then(): any; } & not { then(): any; }
+>arr : Promise<void & not { then(): any; }>[]
 
   item;
->item : void
+>item : void & not { then(): any; } & not { then(): any; }
 }
 

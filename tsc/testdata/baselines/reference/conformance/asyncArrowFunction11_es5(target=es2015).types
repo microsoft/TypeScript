@@ -6,16 +6,16 @@ class A {
 >A : A
 
     b = async (...args: any[]) => {
->b : (...args: any[]) => Promise<void>
->async (...args: any[]) => {        await Promise.resolve();        const obj = { ["a"]: () => this }; // computed property name after `await` triggers case    } : (...args: any[]) => Promise<void>
+>b : (...args: any[]) => Promise<void & not { then(): any; }>
+>async (...args: any[]) => {        await Promise.resolve();        const obj = { ["a"]: () => this }; // computed property name after `await` triggers case    } : (...args: any[]) => Promise<void & not { then(): any; }>
 >args : any[]
 
         await Promise.resolve();
->await Promise.resolve() : void
->Promise.resolve() : Promise<void>
->Promise.resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T>(value: T | PromiseLike<T>): Promise<Awaited<T>>; }
+>await Promise.resolve() : void & not { then(): any; } & not { then(): any; }
+>Promise.resolve() : Promise<void & not { then(): any; }>
+>Promise.resolve : { (): Promise<void & not { then(): any; }>; <T>(value: T): Promise<Awaited<T>>; <T>(value: T | PromiseLike<T>): Promise<Awaited<T>>; }
 >Promise : PromiseConstructor
->resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T>(value: T | PromiseLike<T>): Promise<Awaited<T>>; }
+>resolve : { (): Promise<void & not { then(): any; }>; <T>(value: T): Promise<Awaited<T>>; <T>(value: T | PromiseLike<T>): Promise<Awaited<T>>; }
 
         const obj = { ["a"]: () => this }; // computed property name after `await` triggers case
 >obj : { a: () => this; }

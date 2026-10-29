@@ -30,22 +30,22 @@ async function test(): Promise<string> {
 
     try {
         browser = await test1();
->browser = await test1() : Browser
+>browser = await test1() : Browser & not { then(): any; }
 >browser : Browser | undefined
->await test1() : Browser
+>await test1() : Browser & not { then(): any; }
 >test1() : Promise<Browser>
 >test1 : () => Promise<Browser>
 
         page = await test2(browser);
->page = await test2(browser) : Page
+>page = await test2(browser) : Page & not { then(): any; }
 >page : Page | undefined
->await test2(browser) : Page
+>await test2(browser) : Page & not { then(): any; }
 >test2(browser) : Promise<Page>
 >test2 : (obj: Browser) => Promise<Page>
 >browser : Browser
 
         return await page.content();;
->await page.content() : string
+>await page.content() : string & not { then(): any; }
 >page.content() : Promise<string>
 >page.content : () => Promise<string>
 >page : Page
@@ -56,7 +56,7 @@ async function test(): Promise<string> {
 >page : Page | undefined
 
             await page.close(); // ok
->await page.close() : void
+>await page.close() : void & not { then(): any; }
 >page.close() : Promise<void>
 >page.close : () => Promise<void>
 >page : Page
@@ -67,7 +67,7 @@ async function test(): Promise<string> {
 >browser : Browser | undefined
 
             await browser.close(); // ok
->await browser.close() : void
+>await browser.close() : void & not { then(): any; }
 >browser.close() : Promise<void>
 >browser.close : () => Promise<void>
 >browser : Browser
@@ -88,7 +88,7 @@ class Foo {
 >undefined : undefined
 
     async operation() {
->operation : () => Promise<void>
+>operation : () => Promise<void & not { then(): any; }>
 
         if (this.abortController !== undefined) {
 >this.abortController !== undefined : boolean

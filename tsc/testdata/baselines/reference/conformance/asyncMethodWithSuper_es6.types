@@ -18,7 +18,7 @@ class B extends A {
 
     // async method with only call/get on 'super' does not require a binding
     async simple() {
->simple : () => Promise<void>
+>simple : () => Promise<void & not { then(): any; }>
 
         // call with property access
         super.x();
@@ -58,7 +58,7 @@ class B extends A {
 
     // async method with assignment/destructuring on 'super' requires a binding
     async advanced() {
->advanced : () => Promise<void>
+>advanced : () => Promise<void & not { then(): any; }>
 
         const f = () => {};
 >f : () => void
@@ -152,8 +152,8 @@ class B extends A {
 
         // property access in async arrow
         (async () => super.x());
->(async () => super.x()) : () => Promise<void>
->async () => super.x() : () => Promise<void>
+>(async () => super.x()) : () => Promise<void & not { then(): any; }>
+>async () => super.x() : () => Promise<void & not { then(): any; }>
 >super.x() : void
 >super.x : () => void
 >super : A
@@ -161,8 +161,8 @@ class B extends A {
 
         // element access in async arrow
         (async () => super["x"]());
->(async () => super["x"]()) : () => Promise<void>
->async () => super["x"]() : () => Promise<void>
+>(async () => super["x"]()) : () => Promise<void & not { then(): any; }>
+>async () => super["x"]() : () => Promise<void & not { then(): any; }>
 >super["x"]() : void
 >super["x"] : () => void
 >super : A
@@ -170,7 +170,7 @@ class B extends A {
     }
 
     async property_access_only_read_only() {
->property_access_only_read_only : () => Promise<void>
+>property_access_only_read_only : () => Promise<void & not { then(): any; }>
 
         // call with property access
         super.x();
@@ -197,8 +197,8 @@ class B extends A {
 
         // property access in async arrow
         (async () => super.x());
->(async () => super.x()) : () => Promise<void>
->async () => super.x() : () => Promise<void>
+>(async () => super.x()) : () => Promise<void & not { then(): any; }>
+>async () => super.x() : () => Promise<void & not { then(): any; }>
 >super.x() : void
 >super.x : () => void
 >super : A
@@ -206,7 +206,7 @@ class B extends A {
     }
 
     async property_access_only_write_only() {
->property_access_only_write_only : () => Promise<void>
+>property_access_only_write_only : () => Promise<void & not { then(): any; }>
 
         const f = () => {};
 >f : () => void
@@ -244,8 +244,8 @@ class B extends A {
 
         // property access (assign) in async arrow
         (async () => super.x = f);
->(async () => super.x = f) : () => Promise<() => void>
->async () => super.x = f : () => Promise<() => void>
+>(async () => super.x = f) : () => Promise<(() => void) & not { then(): any; }>
+>async () => super.x = f : () => Promise<(() => void) & not { then(): any; }>
 >super.x = f : () => void
 >super.x : () => void
 >super : A
@@ -254,7 +254,7 @@ class B extends A {
     }
 
     async element_access_only_read_only() {
->element_access_only_read_only : () => Promise<void>
+>element_access_only_read_only : () => Promise<void & not { then(): any; }>
 
         // call with element access
         super["x"]();
@@ -281,8 +281,8 @@ class B extends A {
 
         // element access in async arrow
         (async () => super["x"]());
->(async () => super["x"]()) : () => Promise<void>
->async () => super["x"]() : () => Promise<void>
+>(async () => super["x"]()) : () => Promise<void & not { then(): any; }>
+>async () => super["x"]() : () => Promise<void & not { then(): any; }>
 >super["x"]() : void
 >super["x"] : () => void
 >super : A
@@ -290,7 +290,7 @@ class B extends A {
     }
 
     async element_access_only_write_only() {
->element_access_only_write_only : () => Promise<void>
+>element_access_only_write_only : () => Promise<void & not { then(): any; }>
 
         const f = () => {};
 >f : () => void
@@ -328,8 +328,8 @@ class B extends A {
 
         // element access (assign) in async arrow
         (async () => super["x"] = f);
->(async () => super["x"] = f) : () => Promise<() => void>
->async () => super["x"] = f : () => Promise<() => void>
+>(async () => super["x"] = f) : () => Promise<(() => void) & not { then(): any; }>
+>async () => super["x"] = f : () => Promise<(() => void) & not { then(): any; }>
 >super["x"] = f : () => void
 >super["x"] : () => void
 >super : A
@@ -338,7 +338,7 @@ class B extends A {
     }
 
     async * property_access_only_read_only_in_generator() {
->property_access_only_read_only_in_generator : () => AsyncGenerator<never, void, unknown>
+>property_access_only_read_only_in_generator : () => AsyncGenerator<never, void & not { then(): any; }, unknown>
 
         // call with property access
         super.x();
@@ -365,8 +365,8 @@ class B extends A {
 
         // property access in async arrow
         (async () => super.x());
->(async () => super.x()) : () => Promise<void>
->async () => super.x() : () => Promise<void>
+>(async () => super.x()) : () => Promise<void & not { then(): any; }>
+>async () => super.x() : () => Promise<void & not { then(): any; }>
 >super.x() : void
 >super.x : () => void
 >super : A
@@ -374,7 +374,7 @@ class B extends A {
     }
 
     async * property_access_only_write_only_in_generator() {
->property_access_only_write_only_in_generator : () => AsyncGenerator<never, void, unknown>
+>property_access_only_write_only_in_generator : () => AsyncGenerator<never, void & not { then(): any; }, unknown>
 
         const f = () => {};
 >f : () => void
@@ -412,8 +412,8 @@ class B extends A {
 
         // property access (assign) in async arrow
         (async () => super.x = f);
->(async () => super.x = f) : () => Promise<() => void>
->async () => super.x = f : () => Promise<() => void>
+>(async () => super.x = f) : () => Promise<(() => void) & not { then(): any; }>
+>async () => super.x = f : () => Promise<(() => void) & not { then(): any; }>
 >super.x = f : () => void
 >super.x : () => void
 >super : A
@@ -422,7 +422,7 @@ class B extends A {
     }
 
     async * element_access_only_read_only_in_generator() {
->element_access_only_read_only_in_generator : () => AsyncGenerator<never, void, unknown>
+>element_access_only_read_only_in_generator : () => AsyncGenerator<never, void & not { then(): any; }, unknown>
 
         // call with element access
         super["x"]();
@@ -449,8 +449,8 @@ class B extends A {
 
         // element access in async arrow
         (async () => super["x"]());
->(async () => super["x"]()) : () => Promise<void>
->async () => super["x"]() : () => Promise<void>
+>(async () => super["x"]()) : () => Promise<void & not { then(): any; }>
+>async () => super["x"]() : () => Promise<void & not { then(): any; }>
 >super["x"]() : void
 >super["x"] : () => void
 >super : A
@@ -458,7 +458,7 @@ class B extends A {
     }
 
     async * element_access_only_write_only_in_generator() {
->element_access_only_write_only_in_generator : () => AsyncGenerator<never, void, unknown>
+>element_access_only_write_only_in_generator : () => AsyncGenerator<never, void & not { then(): any; }, unknown>
 
         const f = () => {};
 >f : () => void
@@ -496,8 +496,8 @@ class B extends A {
 
         // element access (assign) in async arrow
         (async () => super["x"] = f);
->(async () => super["x"] = f) : () => Promise<() => void>
->async () => super["x"] = f : () => Promise<() => void>
+>(async () => super["x"] = f) : () => Promise<(() => void) & not { then(): any; }>
+>async () => super["x"] = f : () => Promise<(() => void) & not { then(): any; }>
 >super["x"] = f : () => void
 >super["x"] : () => void
 >super : A
@@ -554,8 +554,8 @@ class Derived extends Base {
 >getter : any
 
     c() { return async () => super.setter = '' }
->c : () => () => Promise<string>
->async () => super.setter = '' : () => Promise<string>
+>c : () => () => Promise<"" & not { then(): any; }>
+>async () => super.setter = '' : () => Promise<"" & not { then(): any; }>
 >super.setter = '' : ""
 >super.setter : any
 >super : Base
@@ -579,8 +579,8 @@ class Derived extends Base {
 >"getter" : "getter"
 
     f() { return async () => super["setter"] = '' }
->f : () => () => Promise<string>
->async () => super["setter"] = '' : () => Promise<string>
+>f : () => () => Promise<"" & not { then(): any; }>
+>async () => super["setter"] = '' : () => Promise<"" & not { then(): any; }>
 >super["setter"] = '' : ""
 >super["setter"] : any
 >super : Base
@@ -604,8 +604,8 @@ class Derived extends Base {
 >getter : any
 
     static c() { return async () => super.setter = '' }
->c : () => () => Promise<string>
->async () => super.setter = '' : () => Promise<string>
+>c : () => () => Promise<"" & not { then(): any; }>
+>async () => super.setter = '' : () => Promise<"" & not { then(): any; }>
 >super.setter = '' : ""
 >super.setter : any
 >super : typeof Base
@@ -629,8 +629,8 @@ class Derived extends Base {
 >"getter" : "getter"
 
     static f() { return async () => super["setter"] = '' }
->f : () => () => Promise<string>
->async () => super["setter"] = '' : () => Promise<string>
+>f : () => () => Promise<"" & not { then(): any; }>
+>async () => super["setter"] = '' : () => Promise<"" & not { then(): any; }>
 >super["setter"] = '' : ""
 >super["setter"] : any
 >super : typeof Base

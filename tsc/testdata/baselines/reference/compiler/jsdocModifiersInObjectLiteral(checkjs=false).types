@@ -6,8 +6,8 @@
 // errors, regardless of checkJs (#4437).
 
 const obj = {
->obj : { created(): void; onClose_(): void; value: number; load(): Promise<void>; }
->{  /** @override */  created() {  },  /** @private */  onClose_() {  },  /** @readonly */  get value() {    return 1;  },  /** @protected */  set value(v) {  },  /** @public */  async load() {  },} : { created(): void; onClose_(): void; value: number; load(): Promise<void>; }
+>obj : { created(): void; onClose_(): void; value: number; load(): Promise<void & not { then(): any; }>; }
+>{  /** @override */  created() {  },  /** @private */  onClose_() {  },  /** @readonly */  get value() {    return 1;  },  /** @protected */  set value(v) {  },  /** @public */  async load() {  },} : { created(): void; onClose_(): void; value: number; load(): Promise<void & not { then(): any; }>; }
 
   /** @override */
   created() {
@@ -39,7 +39,7 @@ const obj = {
 
   /** @public */
   async load() {
->load : () => Promise<void>
+>load : () => Promise<void & not { then(): any; }>
 
   },
 };

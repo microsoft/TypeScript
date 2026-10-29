@@ -9,11 +9,11 @@ class A {
 >a : number
 
     static async #bar(a: number) {}
->#bar : (a: number) => Promise<void>
+>#bar : (a: number) => Promise<void & not { then(): any; }>
 >a : number
 
     static async *#baz(a: number) {
->#baz : (a: number) => AsyncGenerator<never, number, unknown>
+>#baz : (a: number) => AsyncGenerator<never, 3 & not { then(): any; }, unknown>
 >a : number
 
         return 3;
@@ -47,14 +47,14 @@ class A {
 >30 : 30
 
         A.#bar(30);
->A.#bar(30) : Promise<void>
->A.#bar : (a: number) => Promise<void>
+>A.#bar(30) : Promise<void & not { then(): any; }>
+>A.#bar : (a: number) => Promise<void & not { then(): any; }>
 >A : typeof A
 >30 : 30
 
         A.#bar(30);
->A.#bar(30) : Promise<void>
->A.#bar : (a: number) => Promise<void>
+>A.#bar(30) : Promise<void & not { then(): any; }>
+>A.#bar : (a: number) => Promise<void & not { then(): any; }>
 >A : typeof A
 >30 : 30
 

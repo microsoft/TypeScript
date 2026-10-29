@@ -205,25 +205,25 @@ declare function map<T, U>(iterable: AsyncIterable<T>, fn: (value: T) => U): Asy
 >value : T
 
 export function mappable<T extends AsyncIterable<any>, U>(iterable: T) {
->mappable : <T extends AsyncIterable<any>, U>(iterable: T) => T & { map(fn: (value: T extends AsyncIterable<infer V> ? V : never) => U): AsyncGenerator<Awaited<U>, void, unknown> & { map(fn: (value: unknown) => unknown): AsyncGenerator<Awaited<U>, void, unknown> & any; }; }
+>mappable : <T extends AsyncIterable<any>, U>(iterable: T) => T & { map(fn: (value: T extends AsyncIterable<infer V> ? V : never) => U): AsyncGenerator<Awaited<U>, void, unknown> & { map(fn: (value: void | not { then(): any; }) => unknown): AsyncGenerator<Awaited<U>, void, unknown> & any; }; }
 >iterable : T
 
     return Object.assign(iterable, {
->Object.assign(iterable, {        map(fn: (value: T extends AsyncIterable<infer V> ? V : never) => U) {            return mappable(map(iterable, fn));        },    }) : T & { map(fn: (value: T extends AsyncIterable<infer V> ? V : never) => U): AsyncGenerator<Awaited<U>, void, unknown> & { map(fn: (value: unknown) => unknown): AsyncGenerator<Awaited<U>, void, unknown> & any; }; }
+>Object.assign(iterable, {        map(fn: (value: T extends AsyncIterable<infer V> ? V : never) => U) {            return mappable(map(iterable, fn));        },    }) : T & { map(fn: (value: T extends AsyncIterable<infer V> ? V : never) => U): AsyncGenerator<Awaited<U>, void, unknown> & { map(fn: (value: void | not { then(): any; }) => unknown): AsyncGenerator<Awaited<U>, void, unknown> & any; }; }
 >Object.assign : { <T_1 extends {}, U_1>(target: T_1, source: U_1): T_1 & U_1; <T_1 extends {}, U_1, V>(target: T_1, source1: U_1, source2: V): T_1 & U_1 & V; <T_1 extends {}, U_1, V, W>(target: T_1, source1: U_1, source2: V, source3: W): T_1 & U_1 & V & W; (target: object, ...sources: any[]): any; }
 >Object : ObjectConstructor
 >assign : { <T_1 extends {}, U_1>(target: T_1, source: U_1): T_1 & U_1; <T_1 extends {}, U_1, V>(target: T_1, source1: U_1, source2: V): T_1 & U_1 & V; <T_1 extends {}, U_1, V, W>(target: T_1, source1: U_1, source2: V, source3: W): T_1 & U_1 & V & W; (target: object, ...sources: any[]): any; }
 >iterable : T
->{        map(fn: (value: T extends AsyncIterable<infer V> ? V : never) => U) {            return mappable(map(iterable, fn));        },    } : { map(fn: (value: T extends AsyncIterable<infer V> ? V : never) => U): AsyncGenerator<Awaited<U>, void, unknown> & { map(fn: (value: unknown) => unknown): AsyncGenerator<Awaited<U>, void, unknown> & any; }; }
+>{        map(fn: (value: T extends AsyncIterable<infer V> ? V : never) => U) {            return mappable(map(iterable, fn));        },    } : { map(fn: (value: T extends AsyncIterable<infer V> ? V : never) => U): AsyncGenerator<Awaited<U>, void, unknown> & { map(fn: (value: void | not { then(): any; }) => unknown): AsyncGenerator<Awaited<U>, void, unknown> & any; }; }
 
         map(fn: (value: T extends AsyncIterable<infer V> ? V : never) => U) {
->map : (fn: (value: T extends AsyncIterable<infer V> ? V : never) => U) => AsyncGenerator<Awaited<U>, void, unknown> & { map(fn: (value: unknown) => unknown): AsyncGenerator<Awaited<U>, void, unknown> & any; }
+>map : (fn: (value: T extends AsyncIterable<infer V> ? V : never) => U) => AsyncGenerator<Awaited<U>, void, unknown> & { map(fn: (value: void | not { then(): any; }) => unknown): AsyncGenerator<Awaited<U>, void, unknown> & any; }
 >fn : (value: T extends AsyncIterable<infer V> ? V : never) => U
 >value : T extends AsyncIterable<infer V> ? V : never
 
             return mappable(map(iterable, fn));
->mappable(map(iterable, fn)) : AsyncGenerator<Awaited<U>, void, unknown> & { map(fn: (value: unknown) => unknown): AsyncGenerator<unknown, void, unknown> & { map(fn: (value: unknown) => unknown): AsyncGenerator<unknown, void, unknown> & any; }; }
->mappable : <T extends AsyncIterable<any>, U>(iterable: T) => T & { map(fn: (value: T extends AsyncIterable<infer V> ? V : never) => U): AsyncGenerator<Awaited<U>, void, unknown> & { map(fn: (value: unknown) => unknown): AsyncGenerator<Awaited<U>, void, unknown> & any; }; }
+>mappable(map(iterable, fn)) : AsyncGenerator<Awaited<U>, void, unknown> & { map(fn: (value: void | not { then(): any; }) => unknown): AsyncGenerator<not { then(): any; }, void, unknown> & { map(fn: (value: void | not { then(): any; }) => unknown): AsyncGenerator<not { then(): any; }, void, unknown> & any; }; }
+>mappable : <T extends AsyncIterable<any>, U>(iterable: T) => T & { map(fn: (value: T extends AsyncIterable<infer V> ? V : never) => U): AsyncGenerator<Awaited<U>, void, unknown> & { map(fn: (value: void | not { then(): any; }) => unknown): AsyncGenerator<Awaited<U>, void, unknown> & any; }; }
 >map(iterable, fn) : AsyncGenerator<Awaited<U>, void, unknown>
 >map : <T_1, U_1>(iterable: AsyncIterable<T_1>, fn: (value: T_1) => U_1) => AsyncGenerator<Awaited<U_1>, void, unknown>
 >iterable : T

@@ -10,7 +10,7 @@ declare var x, y, z, a, b, c;
 >c : any
 
 async function doStatement0() {
->doStatement0 : () => Promise<void>
+>doStatement0 : () => Promise<void & not { then(): any; }>
 
     do { x; } while (y);
 >x : any
@@ -18,7 +18,7 @@ async function doStatement0() {
 }
 
 async function doStatement1() {
->doStatement1 : () => Promise<void>
+>doStatement1 : () => Promise<void & not { then(): any; }>
 
     do { await x; } while (y);
 >await x : any
@@ -27,7 +27,7 @@ async function doStatement1() {
 }
 
 async function doStatement2() {
->doStatement2 : () => Promise<void>
+>doStatement2 : () => Promise<void & not { then(): any; }>
 
     do { x; } while (await y);
 >x : any
@@ -36,14 +36,14 @@ async function doStatement2() {
 }
 
 async function doStatement3() {
->doStatement3 : () => Promise<void>
+>doStatement3 : () => Promise<void & not { then(): any; }>
 
     do { continue; } while (y);
 >y : any
 }
 
 async function doStatement4() {
->doStatement4 : () => Promise<void>
+>doStatement4 : () => Promise<void & not { then(): any; }>
 
     do { await x; continue; } while (y);
 >await x : any
@@ -52,7 +52,7 @@ async function doStatement4() {
 }
 
 async function doStatement5() {
->doStatement5 : () => Promise<void>
+>doStatement5 : () => Promise<void & not { then(): any; }>
 
     do { if (1) continue; await x; } while (y);
 >1 : 1
@@ -62,7 +62,7 @@ async function doStatement5() {
 }
 
 async function doStatement6() {
->doStatement6 : () => Promise<void>
+>doStatement6 : () => Promise<void & not { then(): any; }>
 
     do { continue; } while (await y);
 >await y : any
@@ -70,7 +70,7 @@ async function doStatement6() {
 }
 
 async function doStatement7() {
->doStatement7 : () => Promise<void>
+>doStatement7 : () => Promise<void & not { then(): any; }>
 
     A: do { continue A; } while (y);
 >A : any
@@ -79,7 +79,7 @@ async function doStatement7() {
 }
 
 async function doStatement8() {
->doStatement8 : () => Promise<void>
+>doStatement8 : () => Promise<void & not { then(): any; }>
 
     B: do { await x; continue B; } while (y);
 >B : any
@@ -90,7 +90,7 @@ async function doStatement8() {
 }
 
 async function doStatement9() {
->doStatement9 : () => Promise<void>
+>doStatement9 : () => Promise<void & not { then(): any; }>
 
     C: do { if (1) continue C; await x; } while (y);
 >C : any
@@ -102,7 +102,7 @@ async function doStatement9() {
 }
 
 async function doStatement10() {
->doStatement10 : () => Promise<void>
+>doStatement10 : () => Promise<void & not { then(): any; }>
 
     D: do { continue D; } while (await y);
 >D : any
@@ -112,14 +112,14 @@ async function doStatement10() {
 }
 
 async function doStatement11() {
->doStatement11 : () => Promise<void>
+>doStatement11 : () => Promise<void & not { then(): any; }>
 
     do { break; } while (y);
 >y : any
 }
 
 async function doStatement12() {
->doStatement12 : () => Promise<void>
+>doStatement12 : () => Promise<void & not { then(): any; }>
 
     do { await x; break; } while (y);
 >await x : any
@@ -128,7 +128,7 @@ async function doStatement12() {
 }
 
 async function doStatement13() {
->doStatement13 : () => Promise<void>
+>doStatement13 : () => Promise<void & not { then(): any; }>
 
     do { if (1) break; await x; } while (y);
 >1 : 1
@@ -138,7 +138,7 @@ async function doStatement13() {
 }
 
 async function doStatement14() {
->doStatement14 : () => Promise<void>
+>doStatement14 : () => Promise<void & not { then(): any; }>
 
     do { break; } while (await y);
 >await y : any
@@ -146,7 +146,7 @@ async function doStatement14() {
 }
 
 async function doStatement15() {
->doStatement15 : () => Promise<void>
+>doStatement15 : () => Promise<void & not { then(): any; }>
 
     E: do { break E; } while (y);
 >E : any
@@ -155,7 +155,7 @@ async function doStatement15() {
 }
 
 async function doStatement16() {
->doStatement16 : () => Promise<void>
+>doStatement16 : () => Promise<void & not { then(): any; }>
 
     F: do { await x; break F; } while (y);
 >F : any
@@ -166,7 +166,7 @@ async function doStatement16() {
 }
 
 async function doStatement17() {
->doStatement17 : () => Promise<void>
+>doStatement17 : () => Promise<void & not { then(): any; }>
 
     G: do { if (1) break G; await x; } while (y);
 >G : any
@@ -178,7 +178,7 @@ async function doStatement17() {
 }
 
 async function doStatement18() {
->doStatement18 : () => Promise<void>
+>doStatement18 : () => Promise<void & not { then(): any; }>
 
     H: do { break H; } while (await y);
 >H : any

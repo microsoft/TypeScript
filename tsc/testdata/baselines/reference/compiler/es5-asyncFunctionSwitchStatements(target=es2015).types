@@ -10,7 +10,7 @@ declare var x, y, z, a, b, c;
 >c : any
 
 async function switchStatement0() {
->switchStatement0 : () => Promise<void>
+>switchStatement0 : () => Promise<void & not { then(): any; }>
 
     switch (x) {
 >x : any
@@ -25,7 +25,7 @@ async function switchStatement0() {
 }
 
 async function switchStatement1() {
->switchStatement1 : () => Promise<void>
+>switchStatement1 : () => Promise<void & not { then(): any; }>
 
     switch (await x) {
 >await x : any
@@ -41,7 +41,7 @@ async function switchStatement1() {
 }
 
 async function switchStatement2() {
->switchStatement2 : () => Promise<void>
+>switchStatement2 : () => Promise<void & not { then(): any; }>
 
     switch (x) {
 >x : any
@@ -57,7 +57,7 @@ async function switchStatement2() {
 }
 
 async function switchStatement3() {
->switchStatement3 : () => Promise<void>
+>switchStatement3 : () => Promise<void & not { then(): any; }>
 
     switch (x) {
 >x : any
@@ -73,7 +73,7 @@ async function switchStatement3() {
 }
 
 async function switchStatement4() {
->switchStatement4 : () => Promise<void>
+>switchStatement4 : () => Promise<void & not { then(): any; }>
 
     switch (x) {
 >x : any
@@ -89,7 +89,7 @@ async function switchStatement4() {
 }
 
 async function switchStatement5() {
->switchStatement5 : () => Promise<void>
+>switchStatement5 : () => Promise<void & not { then(): any; }>
 
     switch (x) {
 >x : any
@@ -106,7 +106,7 @@ async function switchStatement5() {
 }
 
 async function switchStatement6() {
->switchStatement6 : () => Promise<void>
+>switchStatement6 : () => Promise<void & not { then(): any; }>
 
     switch (x) {
 >x : any
@@ -126,7 +126,7 @@ async function switchStatement6() {
 }
 
 async function switchStatement7() {
->switchStatement7 : () => Promise<void>
+>switchStatement7 : () => Promise<void & not { then(): any; }>
 
     switch (x) {
 >x : any
@@ -146,7 +146,7 @@ async function switchStatement7() {
 }
 
 async function switchStatement8() {
->switchStatement8 : () => Promise<void>
+>switchStatement8 : () => Promise<void & not { then(): any; }>
 
     switch (x) {
 >x : any

@@ -8,17 +8,17 @@ async function f<T extends number>(): Promise<Awaited<T>> {
 >f : <T extends number>() => Promise<Awaited<T>>
 
     return await make();
->await make() : T
+>await make() : T & not { then(): any; }
 >make() : PromiseLike<T>
 >make : <U>() => PromiseLike<U>
 }
 
 async function g<T extends number>() {
->g : <T extends number>() => Promise<T>
+>g : <T extends number>() => Promise<T & not { then(): any; }>
 
     const x: Awaited<T> = await make();
 >x : Awaited<T>
->await make() : T
+>await make() : T & not { then(): any; }
 >make() : PromiseLike<T>
 >make : <U>() => PromiseLike<U>
 

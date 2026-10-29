@@ -86,9 +86,9 @@ export const root = make();
 >make : () => import("./root.toml").Root
 
 export const load = () => import("./root.toml");
->load : () => Promise<typeof import("./root.toml")>
->() => import("./root.toml") : () => Promise<typeof import("./root.toml")>
->import("./root.toml") : Promise<typeof import("./root.toml")>
+>load : () => Promise<typeof import("./root.toml") & not { then(): any; }>
+>() => import("./root.toml") : () => Promise<typeof import("./root.toml") & not { then(): any; }>
+>import("./root.toml") : Promise<typeof import("./root.toml") & not { then(): any; }>
 >"./root.toml" : "./root.toml"
 
 export type RootType = import("./root.toml").Root;

@@ -1,0 +1,27 @@
+inferenceContextualReturnTypeUnion4.ts(4,51): error TS2344: Type 'T' does not satisfy the constraint 'not { then(): any; }'.
+  Type 'string' is not assignable to type 'not { then(): any; }'.
+inferenceContextualReturnTypeUnion4.ts(12,56): error TS2344: Type 'T' does not satisfy the constraint 'not { then(): any; }'.
+  Type 'string' is not assignable to type 'not { then(): any; }'.
+
+
+==== inferenceContextualReturnTypeUnion4.ts (2 errors) ====
+    // https://github.com/microsoft/TypeScript/issues/57905
+    
+    export abstract class Storage {
+        abstract get<T extends string>(): T | Promise<T>;
+                                                      ~
+!!! error TS2344: Type 'T' does not satisfy the constraint 'not { then(): any; }'.
+!!! error TS2344:   Type 'string' is not assignable to type 'not { then(): any; }'.
+    }
+    
+    export abstract class SyncStorage extends Storage {
+        abstract override get<T extends string>(): T;
+    }
+    
+    export abstract class ASyncStorage extends Storage {
+        abstract override get<T extends string>(): Promise<T>;
+                                                           ~
+!!! error TS2344: Type 'T' does not satisfy the constraint 'not { then(): any; }'.
+!!! error TS2344:   Type 'string' is not assignable to type 'not { then(): any; }'.
+    }
+    

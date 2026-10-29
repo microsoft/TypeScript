@@ -835,28 +835,28 @@ const fn30: Fn = pipe(
 );
 
 const promise = Promise.resolve(1);
->promise : Promise<number>
->Promise.resolve(1) : Promise<number>
->Promise.resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T>(value: T | PromiseLike<T>): Promise<Awaited<T>>; }
+>promise : Promise<number & not { then(): any; }>
+>Promise.resolve(1) : Promise<number & not { then(): any; }>
+>Promise.resolve : { (): Promise<void & not { then(): any; }>; <T>(value: T): Promise<Awaited<T>>; <T>(value: T | PromiseLike<T>): Promise<Awaited<T>>; }
 >Promise : PromiseConstructor
->resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T>(value: T | PromiseLike<T>): Promise<Awaited<T>>; }
+>resolve : { (): Promise<void & not { then(): any; }>; <T>(value: T): Promise<Awaited<T>>; <T>(value: T | PromiseLike<T>): Promise<Awaited<T>>; }
 >1 : 1
 
 promise.then(
->promise.then(    pipe(        x => x + 1,        x => x * 2,    ),) : Promise<number>
->promise.then : <TResult1 = number, TResult2 = never>(onfulfilled?: ((value: number) => TResult1 | PromiseLike<TResult1>) | null | undefined, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | null | undefined) => Promise<TResult1 | TResult2>
->promise : Promise<number>
->then : <TResult1 = number, TResult2 = never>(onfulfilled?: ((value: number) => TResult1 | PromiseLike<TResult1>) | null | undefined, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | null | undefined) => Promise<TResult1 | TResult2>
+>promise.then(    pipe(        x => x + 1,        x => x * 2,    ),) : Promise<number & not { then(): any; }>
+>promise.then : <TResult1 = number & not { then(): any; }, TResult2 = never>(onfulfilled?: ((value: number & not { then(): any; }) => TResult1 | PromiseLike<TResult1>) | null | undefined, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | null | undefined) => Promise<Awaited<TResult1> | Awaited<TResult2>>
+>promise : Promise<number & not { then(): any; }>
+>then : <TResult1 = number & not { then(): any; }, TResult2 = never>(onfulfilled?: ((value: number & not { then(): any; }) => TResult1 | PromiseLike<TResult1>) | null | undefined, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | null | undefined) => Promise<Awaited<TResult1> | Awaited<TResult2>>
 
     pipe(
->pipe(        x => x + 1,        x => x * 2,    ) : (x: number) => number
+>pipe(        x => x + 1,        x => x * 2,    ) : (x: number & not { then(): any; }) => number
 >pipe : { <A extends any[], B>(ab: (...args: A) => B): (...args: A) => B; <A extends any[], B, C>(ab: (...args: A) => B, bc: (b: B) => C): (...args: A) => C; <A extends any[], B, C, D>(ab: (...args: A) => B, bc: (b: B) => C, cd: (c: C) => D): (...args: A) => D; }
 
         x => x + 1,
->x => x + 1 : (x: number) => number
->x : number
+>x => x + 1 : (x: number & not { then(): any; }) => number
+>x : number & not { then(): any; }
 >x + 1 : number
->x : number
+>x : number & not { then(): any; }
 >1 : 1
 
         x => x * 2,

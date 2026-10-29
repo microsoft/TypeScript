@@ -8,8 +8,8 @@ class Test {
 >Test : Test
 
     static member = async (x: string) => { };
->member : (x: string) => Promise<void>
->async (x: string) => { } : (x: string) => Promise<void>
+>member : (x: string) => Promise<void & not { then(): any; }>
+>async (x: string) => { } : (x: string) => Promise<void & not { then(): any; }>
 >x : string
 }
 

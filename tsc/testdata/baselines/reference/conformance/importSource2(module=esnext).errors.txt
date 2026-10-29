@@ -1,0 +1,39 @@
+b.ts(3,18): error TS2344: Type 'AbstractModuleSource' does not satisfy the constraint 'not { then(): any; }'.
+c.ts(3,18): error TS2344: Type 'AbstractModuleSource' does not satisfy the constraint 'not { then(): any; }'.
+d.ts(3,18): error TS2344: Type 'AbstractModuleSource' does not satisfy the constraint 'not { then(): any; }'.
+d.ts(5,18): error TS2344: Type 'AbstractModuleSource' does not satisfy the constraint 'not { then(): any; }'.
+e.ts(3,18): error TS2344: Type 'AbstractModuleSource' does not satisfy the constraint 'not { then(): any; }'.
+
+
+==== b.ts (1 errors) ====
+    export {};
+    const a = import.source("./a.wasm");
+    const b: Promise<AbstractModuleSource> = a;
+                     ~~~~~~~~~~~~~~~~~~~~
+!!! error TS2344: Type 'AbstractModuleSource' does not satisfy the constraint 'not { then(): any; }'.
+    
+==== c.ts (1 errors) ====
+    export {};
+    const a = import.source("./a.wasm", { with: { type: "webassembly" } });
+    const b: Promise<AbstractModuleSource> = a;
+                     ~~~~~~~~~~~~~~~~~~~~
+!!! error TS2344: Type 'AbstractModuleSource' does not satisfy the constraint 'not { then(): any; }'.
+    
+==== d.ts (2 errors) ====
+    export {};
+    const a = import.source("./a.wasm",);
+    const b: Promise<AbstractModuleSource> = a;
+                     ~~~~~~~~~~~~~~~~~~~~
+!!! error TS2344: Type 'AbstractModuleSource' does not satisfy the constraint 'not { then(): any; }'.
+    const c = import.source("./a.wasm", { with: { type: "webassembly" } },);
+    const d: Promise<AbstractModuleSource> = c;
+                     ~~~~~~~~~~~~~~~~~~~~
+!!! error TS2344: Type 'AbstractModuleSource' does not satisfy the constraint 'not { then(): any; }'.
+    
+==== e.ts (1 errors) ====
+    export {};
+    const a = import.source(`./a.wasm`);
+    const b: Promise<AbstractModuleSource> = a;
+                     ~~~~~~~~~~~~~~~~~~~~
+!!! error TS2344: Type 'AbstractModuleSource' does not satisfy the constraint 'not { then(): any; }'.
+    

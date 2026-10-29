@@ -13,12 +13,12 @@
 }
 
 async function f() {
->f : () => Promise<void>
+>f : () => Promise<void & not { then(): any; }>
   {
     await using _ = { async [Symbol.asyncDispose]() {}, value: null };
->_ : { [Symbol.asyncDispose](): Promise<void>; value: any; }
->{ async [Symbol.asyncDispose]() {}, value: null } : { [Symbol.asyncDispose](): Promise<void>; value: null; }
->[Symbol.asyncDispose] : () => Promise<void>
+>_ : { [Symbol.asyncDispose](): Promise<void & not { then(): any; }>; value: any; }
+>{ async [Symbol.asyncDispose]() {}, value: null } : { [Symbol.asyncDispose](): Promise<void & not { then(): any; }>; value: null; }
+>[Symbol.asyncDispose] : () => Promise<void & not { then(): any; }>
 >Symbol.asyncDispose : unique symbol
 >Symbol : SymbolConstructor
 >asyncDispose : unique symbol

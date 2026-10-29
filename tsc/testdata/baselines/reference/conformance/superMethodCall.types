@@ -23,7 +23,7 @@ class Derived extends Base {
     }
 
     async asyncMethod() {
->asyncMethod : () => Promise<void | undefined>
+>asyncMethod : () => Promise<(void & not { then(): any; }) | undefined>
 
         return super.method?.();
 >super.method?.() : void | undefined

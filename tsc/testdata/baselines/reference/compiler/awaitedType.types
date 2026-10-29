@@ -2,19 +2,19 @@
 
 === awaitedType.ts ===
 type T1 = Awaited<number>;
->T1 : number
+>T1 : number & not { then(): any; }
 
 type T2 = Awaited<Promise<number>>;
->T2 : number
+>T2 : number & not { then(): any; }
 
 type T3 = Awaited<number | Promise<number>>;
->T3 : number
+>T3 : number & not { then(): any; }
 
 type T4 = Awaited<number | Promise<string>>;
 >T4 : T4
 
 type T5 = Awaited<{ then: number }>;
->T5 : { then: number; }
+>T5 : { then: number; } & not { then(): any; }
 >then : number
 
 type T6 = Awaited<{ then(): void }>; // never (non-promise "thenable")
@@ -27,7 +27,7 @@ type T7 = Awaited<{ then(x: number): void }>; // never (non-promise "thenable")
 >x : number
 
 type T8 = Awaited<{ then(x: () => void): void }>; // unknown
->T8 : unknown
+>T8 : not { then(): any; }
 >then : (x: () => void) => void
 >x : () => void
 
@@ -38,19 +38,19 @@ type T10 = Awaited<never>;
 >T10 : never
 
 type T11 = Awaited<unknown>;
->T11 : unknown
+>T11 : not { then(): any; }
 
 type T12 = Awaited<Promise<Promise<number>>>;
->T12 : number
+>T12 : number & not { then(): any; }
 
 type T13 = _Expect<Awaited<Promise<Promise<number>> | string | null>, /*expected*/ string | number | null>; // otherwise just prints T13 in types tests, which isn't very helpful
->T13 : string | number
+>T13 : (string & not { then(): any; }) | (number & not { then(): any; })
 
 type T14 = _Expect<Awaited<Promise<Promise<number>> | string | undefined>, /*expected*/ string | number | undefined>; // otherwise just prints T14 in types tests, which isn't very helpful
->T14 : string | number
+>T14 : (string & not { then(): any; }) | (number & not { then(): any; })
 
 type T15 = _Expect<Awaited<Promise<Promise<number>> | string | null | undefined>, /*expected*/ string | number | null | undefined>; // otherwise just prints T15 in types tests, which isn't very helpful
->T15 : string | number
+>T15 : (string & not { then(): any; }) | (number & not { then(): any; })
 
 type TUndefined = Awaited<undefined>;
 >TUndefined : undefined
@@ -84,7 +84,7 @@ type T17 = Awaited<BadPromise1>; // error
 
 // https://github.com/microsoft/TypeScript/issues/46934
 type T18 = Awaited<{ then(cb: (value: number, other: { }) => void)}>; // number
->T18 : number
+>T18 : number & not { then(): any; }
 >then : (cb: (value: number, other: {}) => void) => any
 >cb : (value: number, other: {}) => void
 >value : number
@@ -99,7 +99,7 @@ declare function MaybePromise<T>(value: T): MaybePromise<T>;
 >value : T
 
 async function main() {
->main : () => Promise<void>
+>main : () => Promise<void & not { then(): any; }>
 
     let aaa: number;
 >aaa : number
@@ -108,7 +108,7 @@ async function main() {
 >bbb : string
 
     [
->[        aaa,        bbb,    ] = await Promise.all([        MaybePromise(1),        MaybePromise('2'),        MaybePromise(true),    ]) : [number, string, boolean]
+>[        aaa,        bbb,    ] = await Promise.all([        MaybePromise(1),        MaybePromise('2'),        MaybePromise(true),    ]) : [(number & not { then(): any; }) | (1 & not { then(): any; }), (string & not { then(): any; }) | ("2" & not { then(): any; }), (false & not { then(): any; }) | (true & not { then(): any; })] & not { then(): any; } & not { then(): any; }
 >[        aaa,        bbb,    ] : [number, string]
 
         aaa,
@@ -118,11 +118,11 @@ async function main() {
 >bbb : string
 
     ] = await Promise.all([
->await Promise.all([        MaybePromise(1),        MaybePromise('2'),        MaybePromise(true),    ]) : [number, string, boolean]
->Promise.all([        MaybePromise(1),        MaybePromise('2'),        MaybePromise(true),    ]) : Promise<[number, string, boolean]>
->Promise.all : { <T>(values: Iterable<T | PromiseLike<T>>): Promise<Awaited<T>[]>; <T extends readonly unknown[] | []>(values: T): Promise<{ -readonly [P in keyof T]: Awaited<T[P]>; }>; }
+>await Promise.all([        MaybePromise(1),        MaybePromise('2'),        MaybePromise(true),    ]) : [(number & not { then(): any; }) | (1 & not { then(): any; }), (string & not { then(): any; }) | ("2" & not { then(): any; }), (false & not { then(): any; }) | (true & not { then(): any; })] & not { then(): any; } & not { then(): any; }
+>Promise.all([        MaybePromise(1),        MaybePromise('2'),        MaybePromise(true),    ]) : Promise<[(number & not { then(): any; }) | (1 & not { then(): any; }), (string & not { then(): any; }) | ("2" & not { then(): any; }), (false & not { then(): any; }) | (true & not { then(): any; })] & not { then(): any; }>
+>Promise.all : { <T>(values: Iterable<T | PromiseLike<T>>): Promise<Awaited<T>[] & not { then(): any; }>; <T extends readonly unknown[] | []>(values: T): Promise<{ -readonly [P in keyof T]: Awaited<T[P]>; } & not { then(): any; }>; }
 >Promise : PromiseConstructor
->all : { <T>(values: Iterable<T | PromiseLike<T>>): Promise<Awaited<T>[]>; <T extends readonly unknown[] | []>(values: T): Promise<{ -readonly [P in keyof T]: Awaited<T[P]>; }>; }
+>all : { <T>(values: Iterable<T | PromiseLike<T>>): Promise<Awaited<T>[] & not { then(): any; }>; <T extends readonly unknown[] | []>(values: T): Promise<{ -readonly [P in keyof T]: Awaited<T[P]>; } & not { then(): any; }>; }
 >[        MaybePromise(1),        MaybePromise('2'),        MaybePromise(true),    ] : [number | Promise<1> | PromiseLike<1>, string | Promise<"2"> | PromiseLike<"2">, true | Promise<true> | PromiseLike<true>]
 
         MaybePromise(1),
@@ -145,75 +145,75 @@ async function main() {
 
 // non-generic
 async function f1(x: string) {
->f1 : (x: string) => Promise<void>
+>f1 : (x: string) => Promise<void & not { then(): any; }>
 >x : string
 
     // y: string
     const y = await x;
->y : string
->await x : string
+>y : string & not { then(): any; }
+>await x : string & not { then(): any; }
 >x : string
 }
 
 async function f2(x: unknown) {
->f2 : (x: unknown) => Promise<void>
+>f2 : (x: unknown) => Promise<void & not { then(): any; }>
 >x : unknown
 
     // y: unknown
     const y = await x;
->y : unknown
->await x : unknown
+>y : not { then(): any; }
+>await x : not { then(): any; }
 >x : unknown
 }
 
 async function f3(x: object) {
->f3 : (x: object) => Promise<void>
+>f3 : (x: object) => Promise<void & not { then(): any; }>
 >x : object
 
     // y: object
     const y = await x;
->y : object
->await x : object
+>y : object & not { then(): any; }
+>await x : object & not { then(): any; }
 >x : object
 }
 
 async function f4(x: Promise<string>) {
->f4 : (x: Promise<string>) => Promise<void>
+>f4 : (x: Promise<string>) => Promise<void & not { then(): any; }>
 >x : Promise<string>
 
     // y: string
     const y = await x;
->y : string
->await x : string
+>y : string & not { then(): any; }
+>await x : string & not { then(): any; }
 >x : Promise<string>
 }
 
 async function f5(x: Promise<unknown>) {
->f5 : (x: Promise<unknown>) => Promise<void>
+>f5 : (x: Promise<unknown>) => Promise<void & not { then(): any; }>
 >x : Promise<unknown>
 
     // y: unknown
     const y = await x;
->y : unknown
->await x : unknown
+>y : not { then(): any; }
+>await x : not { then(): any; }
 >x : Promise<unknown>
 }
 
 async function f6(x: Promise<object>) {
->f6 : (x: Promise<object>) => Promise<void>
+>f6 : (x: Promise<object>) => Promise<void & not { then(): any; }>
 >x : Promise<object>
 
     // y: object
     const y = await x;
->y : object
->await x : object
+>y : object & not { then(): any; }
+>await x : object & not { then(): any; }
 >x : Promise<object>
 }
 
 // generic
 
 async function f7<T>(x: T) {
->f7 : <T>(x: T) => Promise<void>
+>f7 : <T>(x: T) => Promise<void & not { then(): any; }>
 >x : T
 
     // NOTE: T does not belong solely to the domain of primitive types and either does
@@ -228,7 +228,7 @@ async function f7<T>(x: T) {
 }
 
 async function f8<T extends any>(x: T) {
->f8 : <T extends unknown>(x: T) => Promise<void>
+>f8 : <T extends unknown>(x: T) => Promise<void & not { then(): any; }>
 >x : T
 
     // NOTE: T does not belong solely to the domain of primitive types and either does
@@ -243,7 +243,7 @@ async function f8<T extends any>(x: T) {
 }
 
 async function f9<T extends unknown>(x: T) {
->f9 : <T extends unknown>(x: T) => Promise<void>
+>f9 : <T extends unknown>(x: T) => Promise<void & not { then(): any; }>
 >x : T
 
     // NOTE: T does not belong solely to the domain of primitive types and either does
@@ -258,7 +258,7 @@ async function f9<T extends unknown>(x: T) {
 }
 
 async function f10<T extends {}>(x: T) {
->f10 : <T extends {}>(x: T) => Promise<void>
+>f10 : <T extends {}>(x: T) => Promise<void & not { then(): any; }>
 >x : T
 
     // NOTE: T does not belong solely to the domain of primitive types and either does
@@ -273,7 +273,7 @@ async function f10<T extends {}>(x: T) {
 }
 
 async function f11<T extends { then(onfulfilled: (value: unknown) => void): void }>(x: T) {
->f11 : <T extends { then(onfulfilled: (value: unknown) => void): void; }>(x: T) => Promise<void>
+>f11 : <T extends { then(onfulfilled: (value: unknown) => void): void; }>(x: T) => Promise<void & not { then(): any; }>
 >then : (onfulfilled: (value: unknown) => void) => void
 >onfulfilled : (value: unknown) => void
 >value : unknown
@@ -291,7 +291,7 @@ async function f11<T extends { then(onfulfilled: (value: unknown) => void): void
 }
 
 async function f12<T extends string | object>(x: T) {
->f12 : <T extends string | object>(x: T) => Promise<void>
+>f12 : <T extends string | object>(x: T) => Promise<void & not { then(): any; }>
 >x : T
 
     // NOTE: T does not belong solely to the domain of primitive types and either does
@@ -306,20 +306,20 @@ async function f12<T extends string | object>(x: T) {
 }
 
 async function f13<T extends string>(x: T) {
->f13 : <T extends string>(x: T) => Promise<void>
+>f13 : <T extends string>(x: T) => Promise<void & not { then(): any; }>
 >x : T
 
     // NOTE: T belongs to the domain of primitive types
 
     // y: T
     const y = await x;
->y : T
->await x : T
+>y : T & not { then(): any; }
+>await x : T & not { then(): any; }
 >x : T
 }
 
 async function f14<T extends { x: number }>(x: T) {
->f14 : <T extends { x: number; }>(x: T) => Promise<void>
+>f14 : <T extends { x: number; }>(x: T) => Promise<void & not { then(): any; }>
 >x : number
 >x : T
 
@@ -327,13 +327,13 @@ async function f14<T extends { x: number }>(x: T) {
 
     // y: T
     const y = await x;
->y : T
->await x : T
+>y : T & not { then(): any; }
+>await x : T & not { then(): any; }
 >x : T
 }
 
 async function f15<T extends { then: number }>(x: T) {
->f15 : <T extends { then: number; }>(x: T) => Promise<void>
+>f15 : <T extends { then: number; }>(x: T) => Promise<void & not { then(): any; }>
 >then : number
 >x : T
 
@@ -341,13 +341,13 @@ async function f15<T extends { then: number }>(x: T) {
 
     // y: T
     const y = await x;
->y : T
->await x : T
+>y : T & not { then(): any; }
+>await x : T & not { then(): any; }
 >x : T
 }
 
 async function f16<T extends number & { then(): void }>(x: T) {
->f16 : <T extends number & { then(): void; }>(x: T) => Promise<void>
+>f16 : <T extends number & { then(): void; }>(x: T) => Promise<void & not { then(): any; }>
 >then : () => void
 >x : T
 
@@ -355,8 +355,8 @@ async function f16<T extends number & { then(): void }>(x: T) {
 
     // y: T
     const y = await x;
->y : T
->await x : T
+>y : never
+>await x : never
 >x : T
 }
 
@@ -367,7 +367,7 @@ type _Expect<TActual extends TExpected, TExpected> = TActual;
 
 // https://github.com/microsoft/TypeScript/issues/48320
 async function f17<T extends (...args: any[]) => Promise<any>>(fn: T) {
->f17 : <T extends (...args: any[]) => Promise<any>>(fn: T) => Promise<ReturnType<T>>
+>f17 : <T extends (...args: any[]) => Promise<any>>(fn: T) => Promise<never>
 >args : any[]
 >fn : T
 
@@ -384,20 +384,20 @@ async function f17<T extends (...args: any[]) => Promise<any>>(fn: T) {
 >ret : Awaited<ReturnType<T>>
 }
 async function f17_usage() {
->f17_usage : () => Promise<{ x: 123; }>
+>f17_usage : () => Promise<{ x: never; } & not { then(): any; }>
 
     const x = await f17(async () => 123 as const);
->x : 123
->await f17(async () => 123 as const) : 123
->f17(async () => 123 as const) : Promise<Promise<123>>
->f17 : <T extends (...args: any[]) => Promise<any>>(fn: T) => Promise<ReturnType<T>>
->async () => 123 as const : () => Promise<123>
+>x : never
+>await f17(async () => 123 as const) : never
+>f17(async () => 123 as const) : Promise<never>
+>f17 : <T extends (...args: any[]) => Promise<any>>(fn: T) => Promise<never>
+>async () => 123 as const : () => Promise<123 & not { then(): any; }>
 >123 as const : 123
 >123 : 123
 
     return { x };
->{ x } : { x: 123; }
->x : 123
+>{ x } : { x: never; }
+>x : never
 }
 
 // https://github.com/microsoft/TypeScript/issues/47144
@@ -413,14 +413,14 @@ async function brokenExample<AcceptableKeyType extends string = string>(structur
 >key : AcceptableKeyType
 
   const structure = await structurePromise;
->structure : GenericStructure<AcceptableKeyType>
->await structurePromise : GenericStructure<AcceptableKeyType>
+>structure : GenericStructure<AcceptableKeyType> & not { then(): any; }
+>await structurePromise : GenericStructure<AcceptableKeyType> & not { then(): any; }
 >structurePromise : Promise<GenericStructure<AcceptableKeyType>>
 
   structure[key] = 1;
 >structure[key] = 1 : 1
->structure[key] : GenericStructure<AcceptableKeyType>[AcceptableKeyType]
->structure : GenericStructure<AcceptableKeyType>
+>structure[key] : (GenericStructure<AcceptableKeyType> & not { then(): any; })[AcceptableKeyType]
+>structure : GenericStructure<AcceptableKeyType> & not { then(): any; }
 >key : AcceptableKeyType
 >1 : 1
 }
@@ -473,7 +473,7 @@ declare function findMany<T extends { select?: string; include?: string }>(
 ): CheckSelect<T, Promise<1>, Promise<2>>;
 
 async function findManyWrapper<
->findManyWrapper : <T extends { select?: string; include?: string; }>(args: T) => Promise<CheckSelect<T, Promise<1>, Promise<2>>>
+>findManyWrapper : <T extends { select?: string; include?: string; }>(args: T) => Promise<Awaited<CheckSelect<T, Promise<1>, Promise<2>>>>
 
   T extends { select?: string; include?: string }
 >select : string
@@ -494,13 +494,13 @@ async function findManyWrapper<
 }
 
 async function mainFindMany() {
->mainFindMany : () => Promise<void>
+>mainFindMany : () => Promise<void & not { then(): any; }>
 
   const shouldBeErrorText = await findManyWrapper({
->shouldBeErrorText : "Please either choose `select` or `include`"
->await findManyWrapper({    select: "foo",    include: "bar",  }) : "Please either choose `select` or `include`"
->findManyWrapper({    select: "foo",    include: "bar",  }) : Promise<"Please either choose `select` or `include`">
->findManyWrapper : <T extends { select?: string; include?: string; }>(args: T) => Promise<CheckSelect<T, Promise<1>, Promise<2>>>
+>shouldBeErrorText : "Please either choose `select` or `include`" & not { then(): any; } & not { then(): any; }
+>await findManyWrapper({    select: "foo",    include: "bar",  }) : "Please either choose `select` or `include`" & not { then(): any; } & not { then(): any; }
+>findManyWrapper({    select: "foo",    include: "bar",  }) : Promise<"Please either choose `select` or `include`" & not { then(): any; }>
+>findManyWrapper : <T extends { select?: string; include?: string; }>(args: T) => Promise<Awaited<CheckSelect<T, Promise<1>, Promise<2>>>>
 >{    select: "foo",    include: "bar",  } : { select: string; include: string; }
 
     select: "foo",
@@ -513,26 +513,26 @@ async function mainFindMany() {
 
   });
   const itsOne = await findManyWrapper({});
->itsOne : 1
->await findManyWrapper({}) : 1
->findManyWrapper({}) : Promise<Promise<1>>
->findManyWrapper : <T extends { select?: string; include?: string; }>(args: T) => Promise<CheckSelect<T, Promise<1>, Promise<2>>>
+>itsOne : 1 & not { then(): any; } & not { then(): any; }
+>await findManyWrapper({}) : 1 & not { then(): any; } & not { then(): any; }
+>findManyWrapper({}) : Promise<1 & not { then(): any; }>
+>findManyWrapper : <T extends { select?: string; include?: string; }>(args: T) => Promise<Awaited<CheckSelect<T, Promise<1>, Promise<2>>>>
 >{} : {}
 
   const itsTwo1 = await findManyWrapper({ select: "foo" });
->itsTwo1 : 2
->await findManyWrapper({ select: "foo" }) : 2
->findManyWrapper({ select: "foo" }) : Promise<Promise<2>>
->findManyWrapper : <T extends { select?: string; include?: string; }>(args: T) => Promise<CheckSelect<T, Promise<1>, Promise<2>>>
+>itsTwo1 : 2 & not { then(): any; } & not { then(): any; }
+>await findManyWrapper({ select: "foo" }) : 2 & not { then(): any; } & not { then(): any; }
+>findManyWrapper({ select: "foo" }) : Promise<2 & not { then(): any; }>
+>findManyWrapper : <T extends { select?: string; include?: string; }>(args: T) => Promise<Awaited<CheckSelect<T, Promise<1>, Promise<2>>>>
 >{ select: "foo" } : { select: string; }
 >select : string
 >"foo" : "foo"
 
   const itsTwo2 = await findManyWrapper({ include: "bar" });
->itsTwo2 : 2
->await findManyWrapper({ include: "bar" }) : 2
->findManyWrapper({ include: "bar" }) : Promise<Promise<2>>
->findManyWrapper : <T extends { select?: string; include?: string; }>(args: T) => Promise<CheckSelect<T, Promise<1>, Promise<2>>>
+>itsTwo2 : 2 & not { then(): any; } & not { then(): any; }
+>await findManyWrapper({ include: "bar" }) : 2 & not { then(): any; } & not { then(): any; }
+>findManyWrapper({ include: "bar" }) : Promise<2 & not { then(): any; }>
+>findManyWrapper : <T extends { select?: string; include?: string; }>(args: T) => Promise<Awaited<CheckSelect<T, Promise<1>, Promise<2>>>>
 >{ include: "bar" } : { include: string; }
 >include : string
 >"bar" : "bar"
@@ -542,37 +542,37 @@ async function mainFindMany() {
 
 {
   const promises = [Promise.resolve(0)] as const
->promises : readonly [Promise<number>]
->[Promise.resolve(0)] as const : readonly [Promise<number>]
->[Promise.resolve(0)] : readonly [Promise<number>]
->Promise.resolve(0) : Promise<number>
->Promise.resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T>(value: T | PromiseLike<T>): Promise<Awaited<T>>; }
+>promises : readonly [Promise<number & not { then(): any; }>]
+>[Promise.resolve(0)] as const : readonly [Promise<number & not { then(): any; }>]
+>[Promise.resolve(0)] : readonly [Promise<number & not { then(): any; }>]
+>Promise.resolve(0) : Promise<number & not { then(): any; }>
+>Promise.resolve : { (): Promise<void & not { then(): any; }>; <T>(value: T): Promise<Awaited<T>>; <T>(value: T | PromiseLike<T>): Promise<Awaited<T>>; }
 >Promise : PromiseConstructor
->resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T>(value: T | PromiseLike<T>): Promise<Awaited<T>>; }
+>resolve : { (): Promise<void & not { then(): any; }>; <T>(value: T): Promise<Awaited<T>>; <T>(value: T | PromiseLike<T>): Promise<Awaited<T>>; }
 >0 : 0
 
   Promise.all(promises).then((results) => {
->Promise.all(promises).then((results) => {    const first = results[0]    const second = results[1] // error  }) : Promise<void>
->Promise.all(promises).then : <TResult1 = [number], TResult2 = never>(onfulfilled?: (value: [number]) => TResult1 | PromiseLike<TResult1>, onrejected?: (reason: any) => TResult2 | PromiseLike<TResult2>) => Promise<TResult1 | TResult2>
->Promise.all(promises) : Promise<[number]>
->Promise.all : { <T>(values: Iterable<T | PromiseLike<T>>): Promise<Awaited<T>[]>; <T extends readonly unknown[] | []>(values: T): Promise<{ -readonly [P in keyof T]: Awaited<T[P]>; }>; }
+>Promise.all(promises).then((results) => {    const first = results[0]    const second = results[1] // error  }) : Promise<void & not { then(): any; }>
+>Promise.all(promises).then : <TResult1 = [number & not { then(): any; } & not { then(): any; }] & not { then(): any; }, TResult2 = never>(onfulfilled?: (value: [number & not { then(): any; } & not { then(): any; }] & not { then(): any; }) => TResult1 | PromiseLike<TResult1>, onrejected?: (reason: any) => TResult2 | PromiseLike<TResult2>) => Promise<Awaited<TResult1> | Awaited<TResult2>>
+>Promise.all(promises) : Promise<[number & not { then(): any; } & not { then(): any; }] & not { then(): any; }>
+>Promise.all : { <T>(values: Iterable<T | PromiseLike<T>>): Promise<Awaited<T>[] & not { then(): any; }>; <T extends readonly unknown[] | []>(values: T): Promise<{ -readonly [P in keyof T]: Awaited<T[P]>; } & not { then(): any; }>; }
 >Promise : PromiseConstructor
->all : { <T>(values: Iterable<T | PromiseLike<T>>): Promise<Awaited<T>[]>; <T extends readonly unknown[] | []>(values: T): Promise<{ -readonly [P in keyof T]: Awaited<T[P]>; }>; }
->promises : readonly [Promise<number>]
->then : <TResult1 = [number], TResult2 = never>(onfulfilled?: (value: [number]) => TResult1 | PromiseLike<TResult1>, onrejected?: (reason: any) => TResult2 | PromiseLike<TResult2>) => Promise<TResult1 | TResult2>
->(results) => {    const first = results[0]    const second = results[1] // error  } : (results: [number]) => void
->results : [number]
+>all : { <T>(values: Iterable<T | PromiseLike<T>>): Promise<Awaited<T>[] & not { then(): any; }>; <T extends readonly unknown[] | []>(values: T): Promise<{ -readonly [P in keyof T]: Awaited<T[P]>; } & not { then(): any; }>; }
+>promises : readonly [Promise<number & not { then(): any; }>]
+>then : <TResult1 = [number & not { then(): any; } & not { then(): any; }] & not { then(): any; }, TResult2 = never>(onfulfilled?: (value: [number & not { then(): any; } & not { then(): any; }] & not { then(): any; }) => TResult1 | PromiseLike<TResult1>, onrejected?: (reason: any) => TResult2 | PromiseLike<TResult2>) => Promise<Awaited<TResult1> | Awaited<TResult2>>
+>(results) => {    const first = results[0]    const second = results[1] // error  } : (results: [number & not { then(): any; } & not { then(): any; }] & not { then(): any; }) => void
+>results : [number & not { then(): any; } & not { then(): any; }] & not { then(): any; }
 
     const first = results[0]
->first : number
->results[0] : number
->results : [number]
+>first : number & not { then(): any; } & not { then(): any; }
+>results[0] : number & not { then(): any; } & not { then(): any; }
+>results : [number & not { then(): any; } & not { then(): any; }] & not { then(): any; }
 >0 : 0
 
     const second = results[1] // error
 >second : undefined
 >results[1] : undefined
->results : [number]
+>results : [number & not { then(): any; } & not { then(): any; }] & not { then(): any; }
 >1 : 1
 
   })
@@ -581,37 +581,37 @@ async function mainFindMany() {
 // repro from #40330
 
 async function test40330() {
->test40330 : () => Promise<void>
+>test40330 : () => Promise<void & not { then(): any; }>
 
     const promiseNumber = Promise.resolve(1);
->promiseNumber : Promise<number>
->Promise.resolve(1) : Promise<number>
->Promise.resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T>(value: T | PromiseLike<T>): Promise<Awaited<T>>; }
+>promiseNumber : Promise<number & not { then(): any; }>
+>Promise.resolve(1) : Promise<number & not { then(): any; }>
+>Promise.resolve : { (): Promise<void & not { then(): any; }>; <T>(value: T): Promise<Awaited<T>>; <T>(value: T | PromiseLike<T>): Promise<Awaited<T>>; }
 >Promise : PromiseConstructor
->resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T>(value: T | PromiseLike<T>): Promise<Awaited<T>>; }
+>resolve : { (): Promise<void & not { then(): any; }>; <T>(value: T): Promise<Awaited<T>>; <T>(value: T | PromiseLike<T>): Promise<Awaited<T>>; }
 >1 : 1
 
     const promiseVoid = async () => {}
->promiseVoid : () => Promise<void>
->async () => {} : () => Promise<void>
+>promiseVoid : () => Promise<void & not { then(): any; }>
+>async () => {} : () => Promise<void & not { then(): any; }>
 
     const res = await Promise.all([
->res : [number, ...void[]]
->await Promise.all([        promiseNumber,        ...[promiseVoid()]    ]) : [number, ...void[]]
->Promise.all([        promiseNumber,        ...[promiseVoid()]    ]) : Promise<[number, ...void[]]>
->Promise.all : { <T>(values: Iterable<T | PromiseLike<T>>): Promise<Awaited<T>[]>; <T extends readonly unknown[] | []>(values: T): Promise<{ -readonly [P in keyof T]: Awaited<T[P]>; }>; }
+>res : [number & not { then(): any; } & not { then(): any; }, ...(void & not { then(): any; } & not { then(): any; })[]] & not { then(): any; } & not { then(): any; }
+>await Promise.all([        promiseNumber,        ...[promiseVoid()]    ]) : [number & not { then(): any; } & not { then(): any; }, ...(void & not { then(): any; } & not { then(): any; })[]] & not { then(): any; } & not { then(): any; }
+>Promise.all([        promiseNumber,        ...[promiseVoid()]    ]) : Promise<[number & not { then(): any; } & not { then(): any; }, ...(void & not { then(): any; } & not { then(): any; })[]] & not { then(): any; }>
+>Promise.all : { <T>(values: Iterable<T | PromiseLike<T>>): Promise<Awaited<T>[] & not { then(): any; }>; <T extends readonly unknown[] | []>(values: T): Promise<{ -readonly [P in keyof T]: Awaited<T[P]>; } & not { then(): any; }>; }
 >Promise : PromiseConstructor
->all : { <T>(values: Iterable<T | PromiseLike<T>>): Promise<Awaited<T>[]>; <T extends readonly unknown[] | []>(values: T): Promise<{ -readonly [P in keyof T]: Awaited<T[P]>; }>; }
->[        promiseNumber,        ...[promiseVoid()]    ] : [Promise<number>, ...Promise<void>[]]
+>all : { <T>(values: Iterable<T | PromiseLike<T>>): Promise<Awaited<T>[] & not { then(): any; }>; <T extends readonly unknown[] | []>(values: T): Promise<{ -readonly [P in keyof T]: Awaited<T[P]>; } & not { then(): any; }>; }
+>[        promiseNumber,        ...[promiseVoid()]    ] : [Promise<number & not { then(): any; }>, ...Promise<void & not { then(): any; }>[]]
 
         promiseNumber,
->promiseNumber : Promise<number>
+>promiseNumber : Promise<number & not { then(): any; }>
 
         ...[promiseVoid()]
->...[promiseVoid()] : Promise<void>
->[promiseVoid()] : Promise<void>[]
->promiseVoid() : Promise<void>
->promiseVoid : () => Promise<void>
+>...[promiseVoid()] : Promise<void & not { then(): any; }>
+>[promiseVoid()] : Promise<void & not { then(): any; }>[]
+>promiseVoid() : Promise<void & not { then(): any; }>
+>promiseVoid : () => Promise<void & not { then(): any; }>
 
     ])
 }

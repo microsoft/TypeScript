@@ -76,7 +76,7 @@ class CC {
 }
 
 async function foo () {
->foo : () => Promise<void>
+>foo : () => Promise<void & not { then(): any; }>
 
     class C extends B {
 >C : C
@@ -91,7 +91,7 @@ async function foo () {
 > : any
 
             async function ff () {
->ff : () => Promise<void>
+>ff : () => Promise<void & not { then(): any; }>
 
                 arguments;
 >arguments : IArguments

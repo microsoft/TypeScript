@@ -13,11 +13,11 @@ declare var dec: any;
 >1 : 1
 
     async f() { this.#x = await this.#x; }
->f : () => Promise<void>
->this.#x = await this.#x : number
+>f : () => Promise<void & not { then(): any; }>
+>this.#x = await this.#x : number & not { then(): any; }
 >this.#x : number
 >this : this
->await this.#x : number
+>await this.#x : number & not { then(): any; }
 >this.#x : number
 >this : this
 

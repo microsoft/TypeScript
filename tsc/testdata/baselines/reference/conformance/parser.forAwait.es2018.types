@@ -47,7 +47,7 @@ function f6() {
 }
 === inAsyncFunctionWithDeclIsOk.ts ===
 async function f7() {
->f7 : () => Promise<void>
+>f7 : () => Promise<void & not { then(): any; }>
 
     let y: any;
 >y : any
@@ -59,7 +59,7 @@ async function f7() {
 }
 === inAsyncFunctionWithExprIsOk.ts ===
 async function f8() {
->f8 : () => Promise<void>
+>f8 : () => Promise<void & not { then(): any; }>
 
     let x: any, y: any;
 >x : any
@@ -72,7 +72,7 @@ async function f8() {
 }
 === inAsyncGeneratorWithDeclIsOk.ts ===
 async function* f9() {
->f9 : () => AsyncGenerator<never, void, unknown>
+>f9 : () => AsyncGenerator<never, void & not { then(): any; }, unknown>
 
     let y: any;
 >y : any
@@ -84,7 +84,7 @@ async function* f9() {
 }
 === inAsyncGeneratorWithExpressionIsOk.ts ===
 async function* f10() {
->f10 : () => AsyncGenerator<never, void, unknown>
+>f10 : () => AsyncGenerator<never, void & not { then(): any; }, unknown>
 
     let x: any, y: any;
 >x : any

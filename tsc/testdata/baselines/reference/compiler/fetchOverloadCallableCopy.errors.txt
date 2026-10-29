@@ -1,0 +1,20 @@
+fetchOverloadCallableCopy.ts(1,79): error TS2344: Type 'Response' does not satisfy the constraint 'not { then(): any; }'.
+fetchOverloadCallableCopy.ts(4,7): error TS2322: Type 'CallableCopy<{ (input: URL | RequestInfo, init?: RequestInit | undefined): Promise<Response & not { then(): any; }>; (input: URL | RequestInfo, init?: RequestInit | undefined): Promise<Response>; }>' is not assignable to type '{ (input: URL | RequestInfo, init?: RequestInit | undefined): Promise<Response & not { then(): any; }>; (input: URL | RequestInfo, init?: RequestInit | undefined): Promise<Response>; }'.
+  Type 'Promise<Response>' is not assignable to type 'Promise<Response & not { then(): any; }>'.
+    Type 'Response' is not assignable to type 'Response & not { then(): any; }'.
+      Type 'Response' is not assignable to type 'not { then(): any; }'.
+
+
+==== fetchOverloadCallableCopy.ts (2 errors) ====
+    declare function fetch(input: RequestInfo | URL, init?: RequestInit): Promise<Response>;
+                                                                                  ~~~~~~~~
+!!! error TS2344: Type 'Response' does not satisfy the constraint 'not { then(): any; }'.
+    type CallableCopy<T extends (...args: never[]) => unknown> = (...args: Parameters<T>) => ReturnType<T>;
+    declare const copiedFetch: CallableCopy<typeof fetch>;
+    const replacementFetch: typeof fetch = copiedFetch;
+          ~~~~~~~~~~~~~~~~
+!!! error TS2322: Type 'CallableCopy<{ (input: URL | RequestInfo, init?: RequestInit | undefined): Promise<Response & not { then(): any; }>; (input: URL | RequestInfo, init?: RequestInit | undefined): Promise<Response>; }>' is not assignable to type '{ (input: URL | RequestInfo, init?: RequestInit | undefined): Promise<Response & not { then(): any; }>; (input: URL | RequestInfo, init?: RequestInit | undefined): Promise<Response>; }'.
+!!! error TS2322:   Type 'Promise<Response>' is not assignable to type 'Promise<Response & not { then(): any; }>'.
+!!! error TS2322:     Type 'Response' is not assignable to type 'Response & not { then(): any; }'.
+!!! error TS2322:       Type 'Response' is not assignable to type 'not { then(): any; }'.
+    

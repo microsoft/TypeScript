@@ -46,6 +46,52 @@ async function foo () {
       }
     },
     {
+      "value": " & "
+    },
+    {
+      "value": "not"
+    },
+    {
+      "value": "{"
+    },
+    {
+      "value": " "
+    },
+    {
+      "value": "then",
+      "location": {
+        "uri": "bundled:///libs/lib.es5.d.ts",
+        "range": {
+          "start": {
+            "line": 0,
+            "character": 0
+          },
+          "end": {
+            "line": 0,
+            "character": 0
+          }
+        }
+      }
+    },
+    {
+      "value": "("
+    },
+    {
+      "value": ")"
+    },
+    {
+      "value": ": "
+    },
+    {
+      "value": "any"
+    },
+    {
+      "value": " "
+    },
+    {
+      "value": "}"
+    },
+    {
       "value": ">"
     }
   ],
@@ -96,6 +142,52 @@ function bar () { return import('./a') }
       "value": ")"
     },
     {
+      "value": " & "
+    },
+    {
+      "value": "not"
+    },
+    {
+      "value": "{"
+    },
+    {
+      "value": " "
+    },
+    {
+      "value": "then",
+      "location": {
+        "uri": "bundled:///libs/lib.es5.d.ts",
+        "range": {
+          "start": {
+            "line": 0,
+            "character": 0
+          },
+          "end": {
+            "line": 0,
+            "character": 0
+          }
+        }
+      }
+    },
+    {
+      "value": "("
+    },
+    {
+      "value": ")"
+    },
+    {
+      "value": ": "
+    },
+    {
+      "value": "any"
+    },
+    {
+      "value": " "
+    },
+    {
+      "value": "}"
+    },
+    {
       "value": ">"
     }
   ],
@@ -137,6 +229,52 @@ async function main () {
       "value": "void"
     },
     {
+      "value": " & "
+    },
+    {
+      "value": "not"
+    },
+    {
+      "value": "{"
+    },
+    {
+      "value": " "
+    },
+    {
+      "value": "then",
+      "location": {
+        "uri": "bundled:///libs/lib.es5.d.ts",
+        "range": {
+          "start": {
+            "line": 0,
+            "character": 0
+          },
+          "end": {
+            "line": 0,
+            "character": 0
+          }
+        }
+      }
+    },
+    {
+      "value": "("
+    },
+    {
+      "value": ")"
+    },
+    {
+      "value": ": "
+    },
+    {
+      "value": "any"
+    },
+    {
+      "value": " "
+    },
+    {
+      "value": "}"
+    },
+    {
       "value": ">"
     }
   ],
@@ -170,6 +308,126 @@ async function main () {
           }
         }
       }
+    },
+    {
+      "value": " & "
+    },
+    {
+      "value": "not"
+    },
+    {
+      "value": "{"
+    },
+    {
+      "value": " "
+    },
+    {
+      "value": "then",
+      "location": {
+        "uri": "bundled:///libs/lib.es5.d.ts",
+        "range": {
+          "start": {
+            "line": 0,
+            "character": 0
+          },
+          "end": {
+            "line": 0,
+            "character": 0
+          }
+        }
+      }
+    },
+    {
+      "value": "("
+    },
+    {
+      "value": ")"
+    },
+    {
+      "value": ": "
+    },
+    {
+      "value": "any"
+    },
+    {
+      "value": " "
+    },
+    {
+      "value": "}"
+    }
+  ],
+  "kind": 1,
+  "paddingLeft": true
+}
+
+    const b = await bar()
+           ^
+{
+  "position": {
+    "line": 6,
+    "character": 11
+  },
+  "label": [
+    {
+      "value": ": "
+    },
+    {
+      "value": "typeof "
+    },
+    {
+      "value": "import("
+    },
+    {
+      "value": "'/a'"
+    },
+    {
+      "value": ")"
+    },
+    {
+      "value": " & "
+    },
+    {
+      "value": "not"
+    },
+    {
+      "value": "{"
+    },
+    {
+      "value": " "
+    },
+    {
+      "value": "then",
+      "location": {
+        "uri": "bundled:///libs/lib.es5.d.ts",
+        "range": {
+          "start": {
+            "line": 0,
+            "character": 0
+          },
+          "end": {
+            "line": 0,
+            "character": 0
+          }
+        }
+      }
+    },
+    {
+      "value": "("
+    },
+    {
+      "value": ")"
+    },
+    {
+      "value": ": "
+    },
+    {
+      "value": "any"
+    },
+    {
+      "value": " "
+    },
+    {
+      "value": "}"
     }
   ],
   "kind": 1,

@@ -8,7 +8,7 @@ declare const iterable: Iterable<number>;
 >iterable : Iterable<number>
 
 async function f() {
->f : () => Promise<void>
+>f : () => Promise<void & not { then(): any; }>
 
     let y: number;
 >y : number

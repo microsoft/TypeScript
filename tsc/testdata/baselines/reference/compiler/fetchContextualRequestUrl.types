@@ -2,9 +2,9 @@
 
 === fetchContextualRequestUrl.ts ===
 const fetchUsingRequestUrl: typeof fetch = async input => {
->fetchUsingRequestUrl : (input: RequestInfo | URL, init?: RequestInit) => Promise<Response>
->fetch : (input: RequestInfo | URL, init?: RequestInit) => Promise<Response>
->async input => {    const url = typeof input === "string" ? input : input instanceof URL ? input.href : input.url;    return new Response(url);} : (input: URL | RequestInfo) => Promise<Response>
+>fetchUsingRequestUrl : (input: RequestInfo | URL, init?: RequestInit) => Promise<Response & not { then(): any; }>
+>fetch : (input: RequestInfo | URL, init?: RequestInit) => Promise<Response & not { then(): any; }>
+>async input => {    const url = typeof input === "string" ? input : input instanceof URL ? input.href : input.url;    return new Response(url);} : (input: URL | RequestInfo) => Promise<Response & not { then(): any; }>
 >input : URL | RequestInfo
 
     const url = typeof input === "string" ? input : input instanceof URL ? input.href : input.url;

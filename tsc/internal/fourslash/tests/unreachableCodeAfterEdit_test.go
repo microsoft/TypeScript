@@ -24,15 +24,15 @@ import { addDisposableListener } from './base/browser/dom';
 import { mainWindow } from './base/browser/window';
 
 interface ISecretStorageCrypto {
-    seal(data: string): Promise<string>;
-    unseal(data: string): Promise<string>;
+    seal(data: string): Promise<Awaited<string>>;
+    unseal(data: string): Promise<Awaited<string>>;
 }
 
 export class TransparentCrypto implements ISecretStorageCrypto {
-    async seal(data: string): Promise<string> {
+    async seal(data: string): Promise<Awaited<string>> {
         return data;
     }
-    async unseal(data: string): Promise<string> {
+    async unseal(data: string): Promise<Awaited<string>> {
         return data;
     }
 }`

@@ -1,0 +1,40 @@
+types.forAwait.es2018.1.ts(3,51): error TS2344: Type 'number' does not satisfy the constraint 'not { then(): any; }'.
+
+
+==== types.forAwait.es2018.1.ts (1 errors) ====
+    declare const asyncIterable: AsyncIterable<number>;
+    declare const iterable: Iterable<number>;
+    declare const iterableOfPromise: Iterable<Promise<number>>;
+                                                      ~~~~~~
+!!! error TS2344: Type 'number' does not satisfy the constraint 'not { then(): any; }'.
+    async function f1() {
+        let y: number;
+        for await (const x of asyncIterable) {
+        }
+        for await (const x of iterable) {
+        }
+        for await (const x of iterableOfPromise) {
+        }
+        for await (y of asyncIterable) {
+        }
+        for await (y of iterable) {
+        }
+        for await (y of iterableOfPromise) {
+        }
+    }
+    async function * f2() {
+        let y: number;
+        for await (const x of asyncIterable) {
+        }
+        for await (const x of iterable) {
+        }
+        for await (const x of iterableOfPromise) {
+        }
+        for await (y of asyncIterable) {
+        }
+        for await (y of iterable) {
+        }
+        for await (y of iterableOfPromise) {
+        }
+    }
+    

@@ -1,12 +1,16 @@
 circularReturnTypeThroughCallbackArgument.ts(3,17): error TS7023: 'a' implicitly has return type 'any' because it does not have a return type annotation and is referenced directly or indirectly in one of its return expressions.
 circularReturnTypeThroughCallbackArgument.ts(4,16): error TS7024: Function implicitly has return type 'any' because it does not have a return type annotation and is referenced directly or indirectly in one of its return expressions.
+circularReturnTypeThroughCallbackArgument.ts(7,42): error TS2344: Type '{ ok: boolean; }' does not satisfy the constraint 'not { then(): any; }'.
+circularReturnTypeThroughCallbackArgument.ts(7,69): error TS2344: Type '{ ok: boolean; }' does not satisfy the constraint 'not { then(): any; }'.
 circularReturnTypeThroughCallbackArgument.ts(9,23): error TS7023: 'b' implicitly has return type 'any' because it does not have a return type annotation and is referenced directly or indirectly in one of its return expressions.
 circularReturnTypeThroughCallbackArgument.ts(11,23): error TS7024: Function implicitly has return type 'any' because it does not have a return type annotation and is referenced directly or indirectly in one of its return expressions.
+circularReturnTypeThroughCallbackArgument.ts(18,52): error TS2344: Type 'Result' does not satisfy the constraint 'not { then(): any; }'.
+circularReturnTypeThroughCallbackArgument.ts(18,70): error TS2344: Type 'Result' does not satisfy the constraint 'not { then(): any; }'.
 circularReturnTypeThroughCallbackArgument.ts(21,23): error TS7023: 'c' implicitly has return type 'any' because it does not have a return type annotation and is referenced directly or indirectly in one of its return expressions.
 circularReturnTypeThroughCallbackArgument.ts(23,19): error TS7024: Function implicitly has return type 'any' because it does not have a return type annotation and is referenced directly or indirectly in one of its return expressions.
 
 
-==== circularReturnTypeThroughCallbackArgument.ts (6 errors) ====
+==== circularReturnTypeThroughCallbackArgument.ts (10 errors) ====
     declare function fan(g: () => number): number;
     
     export function a(n: number) {
@@ -18,6 +22,10 @@ circularReturnTypeThroughCallbackArgument.ts(23,19): error TS7024: Function impl
     }
     
     declare function fanAll(g: () => Promise<{ ok: boolean }>): Promise<{ ok: boolean }>;
+                                             ~~~~~~~~~~~~~~~
+!!! error TS2344: Type '{ ok: boolean; }' does not satisfy the constraint 'not { then(): any; }'.
+                                                                        ~~~~~~~~~~~~~~~
+!!! error TS2344: Type '{ ok: boolean; }' does not satisfy the constraint 'not { then(): any; }'.
     
     export async function b(n: number) {
                           ~
@@ -33,6 +41,10 @@ circularReturnTypeThroughCallbackArgument.ts(23,19): error TS7024: Function impl
     type Result = { success: boolean; [key: string]: unknown };
     interface Other { success: boolean; url: string }
     declare function fanOut(generateOne: () => Promise<Result>): Promise<Result>;
+                                                       ~~~~~~
+!!! error TS2344: Type 'Result' does not satisfy the constraint 'not { then(): any; }'.
+                                                                         ~~~~~~
+!!! error TS2344: Type 'Result' does not satisfy the constraint 'not { then(): any; }'.
     declare const other: Other;
     
     export async function c(n: number) {

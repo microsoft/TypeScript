@@ -3,20 +3,20 @@
 === b.ts ===
 export {};
 const a = import.source("./a.wasm");
->a : Promise<AbstractModuleSource>
->import.source("./a.wasm") : Promise<AbstractModuleSource>
+>a : Promise<AbstractModuleSource & not { then(): any; }>
+>import.source("./a.wasm") : Promise<AbstractModuleSource & not { then(): any; }>
 >source : any
 >"./a.wasm" : "./a.wasm"
 
 const b: Promise<AbstractModuleSource> = a;
 >b : Promise<AbstractModuleSource>
->a : Promise<AbstractModuleSource>
+>a : Promise<AbstractModuleSource & not { then(): any; }>
 
 === c.ts ===
 export {};
 const a = import.source("./a.wasm", { with: { type: "webassembly" } });
->a : Promise<AbstractModuleSource>
->import.source("./a.wasm", { with: { type: "webassembly" } }) : Promise<AbstractModuleSource>
+>a : Promise<AbstractModuleSource & not { then(): any; }>
+>import.source("./a.wasm", { with: { type: "webassembly" } }) : Promise<AbstractModuleSource & not { then(): any; }>
 >source : any
 >"./a.wasm" : "./a.wasm"
 >{ with: { type: "webassembly" } } : { with: { readonly type: "webassembly"; }; }
@@ -27,23 +27,23 @@ const a = import.source("./a.wasm", { with: { type: "webassembly" } });
 
 const b: Promise<AbstractModuleSource> = a;
 >b : Promise<AbstractModuleSource>
->a : Promise<AbstractModuleSource>
+>a : Promise<AbstractModuleSource & not { then(): any; }>
 
 === d.ts ===
 export {};
 const a = import.source("./a.wasm",);
->a : Promise<AbstractModuleSource>
->import.source("./a.wasm",) : Promise<AbstractModuleSource>
+>a : Promise<AbstractModuleSource & not { then(): any; }>
+>import.source("./a.wasm",) : Promise<AbstractModuleSource & not { then(): any; }>
 >source : any
 >"./a.wasm" : "./a.wasm"
 
 const b: Promise<AbstractModuleSource> = a;
 >b : Promise<AbstractModuleSource>
->a : Promise<AbstractModuleSource>
+>a : Promise<AbstractModuleSource & not { then(): any; }>
 
 const c = import.source("./a.wasm", { with: { type: "webassembly" } },);
->c : Promise<AbstractModuleSource>
->import.source("./a.wasm", { with: { type: "webassembly" } },) : Promise<AbstractModuleSource>
+>c : Promise<AbstractModuleSource & not { then(): any; }>
+>import.source("./a.wasm", { with: { type: "webassembly" } },) : Promise<AbstractModuleSource & not { then(): any; }>
 >source : any
 >"./a.wasm" : "./a.wasm"
 >{ with: { type: "webassembly" } } : { with: { readonly type: "webassembly"; }; }
@@ -54,17 +54,17 @@ const c = import.source("./a.wasm", { with: { type: "webassembly" } },);
 
 const d: Promise<AbstractModuleSource> = c;
 >d : Promise<AbstractModuleSource>
->c : Promise<AbstractModuleSource>
+>c : Promise<AbstractModuleSource & not { then(): any; }>
 
 === e.ts ===
 export {};
 const a = import.source(`./a.wasm`);
->a : Promise<AbstractModuleSource>
->import.source(`./a.wasm`) : Promise<AbstractModuleSource>
+>a : Promise<AbstractModuleSource & not { then(): any; }>
+>import.source(`./a.wasm`) : Promise<AbstractModuleSource & not { then(): any; }>
 >source : any
 >`./a.wasm` : "./a.wasm"
 
 const b: Promise<AbstractModuleSource> = a;
 >b : Promise<AbstractModuleSource>
->a : Promise<AbstractModuleSource>
+>a : Promise<AbstractModuleSource & not { then(): any; }>
 

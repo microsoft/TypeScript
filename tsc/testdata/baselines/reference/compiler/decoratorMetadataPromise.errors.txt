@@ -1,0 +1,23 @@
+decoratorMetadataPromise.ts(7,26): error TS2344: Type 'number' does not satisfy the constraint 'not { then(): any; }'.
+decoratorMetadataPromise.ts(9,20): error TS2344: Type 'number' does not satisfy the constraint 'not { then(): any; }'.
+decoratorMetadataPromise.ts(9,38): error TS2344: Type 'number' does not satisfy the constraint 'not { then(): any; }'.
+
+
+==== decoratorMetadataPromise.ts (3 errors) ====
+    declare const decorator: MethodDecorator;
+    
+    class A {
+        @decorator
+        async foo() {}
+        @decorator
+        async bar(): Promise<number> { return 0; }
+                             ~~~~~~
+!!! error TS2344: Type 'number' does not satisfy the constraint 'not { then(): any; }'.
+        @decorator
+        baz(n: Promise<number>): Promise<number> { return n; }
+                       ~~~~~~
+!!! error TS2344: Type 'number' does not satisfy the constraint 'not { then(): any; }'.
+                                         ~~~~~~
+!!! error TS2344: Type 'number' does not satisfy the constraint 'not { then(): any; }'.
+    }
+    

@@ -1,0 +1,452 @@
+//// [tests/cases/compiler/negatedPromiseConstraint.ts] ////
+
+=== negatedPromiseConstraint.ts ===
+type Value = number & not { then(): any };
+>Value : Symbol(Value, Decl(negatedPromiseConstraint.ts, 0, 0))
+>then : Symbol(then, Decl(negatedPromiseConstraint.ts, 0, 27))
+
+type Text = string & not { then(): any };
+>Text : Symbol(Text, Decl(negatedPromiseConstraint.ts, 0, 42))
+>then : Symbol(then, Decl(negatedPromiseConstraint.ts, 1, 26))
+
+type NestedPromise = Promise<Promise<Value>>;
+>NestedPromise : Symbol(NestedPromise, Decl(negatedPromiseConstraint.ts, 1, 41))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2018.promise.d.ts, --, --))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2018.promise.d.ts, --, --))
+>Value : Symbol(Value, Decl(negatedPromiseConstraint.ts, 0, 0))
+
+type ThenablePromise = Promise<PromiseLike<Value>>;
+>ThenablePromise : Symbol(ThenablePromise, Decl(negatedPromiseConstraint.ts, 3, 45))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2018.promise.d.ts, --, --))
+>PromiseLike : Symbol(PromiseLike, Decl(lib.es5.d.ts, --, --))
+>Value : Symbol(Value, Decl(negatedPromiseConstraint.ts, 0, 0))
+
+type CallableThenPromise = Promise<{ then(): any }>;
+>CallableThenPromise : Symbol(CallableThenPromise, Decl(negatedPromiseConstraint.ts, 4, 51))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2018.promise.d.ts, --, --))
+>then : Symbol(then, Decl(negatedPromiseConstraint.ts, 5, 36))
+
+type UnionPromise = Promise<Value | Promise<Text>>;
+>UnionPromise : Symbol(UnionPromise, Decl(negatedPromiseConstraint.ts, 5, 52))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2018.promise.d.ts, --, --))
+>Value : Symbol(Value, Decl(negatedPromiseConstraint.ts, 0, 0))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2018.promise.d.ts, --, --))
+>Text : Symbol(Text, Decl(negatedPromiseConstraint.ts, 0, 42))
+
+type UnknownPromise = Promise<unknown>;
+>UnknownPromise : Symbol(UnknownPromise, Decl(negatedPromiseConstraint.ts, 6, 51))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2018.promise.d.ts, --, --))
+
+type OpenObjectPromise = Promise<{ value: number }>;
+>OpenObjectPromise : Symbol(OpenObjectPromise, Decl(negatedPromiseConstraint.ts, 7, 39))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2018.promise.d.ts, --, --))
+>value : Symbol(value, Decl(negatedPromiseConstraint.ts, 8, 34))
+
+type PrimitivePromise = Promise<number>;
+>PrimitivePromise : Symbol(PrimitivePromise, Decl(negatedPromiseConstraint.ts, 8, 52))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2018.promise.d.ts, --, --))
+
+type VoidPromise = Promise<void>;
+>VoidPromise : Symbol(VoidPromise, Decl(negatedPromiseConstraint.ts, 9, 40))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2018.promise.d.ts, --, --))
+
+type ValuePromise = Promise<Value>;
+>ValuePromise : Symbol(ValuePromise, Decl(negatedPromiseConstraint.ts, 10, 33))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2018.promise.d.ts, --, --))
+>Value : Symbol(Value, Decl(negatedPromiseConstraint.ts, 0, 0))
+
+type NullishPromise = Promise<null | undefined>;
+>NullishPromise : Symbol(NullishPromise, Decl(negatedPromiseConstraint.ts, 12, 35))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2018.promise.d.ts, --, --))
+
+type NeverPromise = Promise<never>;
+>NeverPromise : Symbol(NeverPromise, Decl(negatedPromiseConstraint.ts, 13, 48))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2018.promise.d.ts, --, --))
+
+type AnyPromise = Promise<any>;
+>AnyPromise : Symbol(AnyPromise, Decl(negatedPromiseConstraint.ts, 14, 35))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2018.promise.d.ts, --, --))
+
+type NonCallableThenPromise = Promise<{ then: number }>;
+>NonCallableThenPromise : Symbol(NonCallableThenPromise, Decl(negatedPromiseConstraint.ts, 15, 31))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2018.promise.d.ts, --, --))
+>then : Symbol(then, Decl(negatedPromiseConstraint.ts, 16, 39))
+
+declare const value: Value;
+>value : Symbol(value, Decl(negatedPromiseConstraint.ts, 18, 13))
+>Value : Symbol(Value, Decl(negatedPromiseConstraint.ts, 0, 0))
+
+declare const text: Text;
+>text : Symbol(text, Decl(negatedPromiseConstraint.ts, 19, 13))
+>Text : Symbol(Text, Decl(negatedPromiseConstraint.ts, 0, 42))
+
+declare const nestedThenable: PromiseLike<PromiseLike<Value>>;
+>nestedThenable : Symbol(nestedThenable, Decl(negatedPromiseConstraint.ts, 20, 13))
+>PromiseLike : Symbol(PromiseLike, Decl(lib.es5.d.ts, --, --))
+>PromiseLike : Symbol(PromiseLike, Decl(lib.es5.d.ts, --, --))
+>Value : Symbol(Value, Decl(negatedPromiseConstraint.ts, 0, 0))
+
+declare const valuePromise: Promise<Value>;
+>valuePromise : Symbol(valuePromise, Decl(negatedPromiseConstraint.ts, 21, 13))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2018.promise.d.ts, --, --))
+>Value : Symbol(Value, Decl(negatedPromiseConstraint.ts, 0, 0))
+
+const resolved: Promise<Value> = Promise.resolve(nestedThenable);
+>resolved : Symbol(resolved, Decl(negatedPromiseConstraint.ts, 23, 5))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2018.promise.d.ts, --, --))
+>Value : Symbol(Value, Decl(negatedPromiseConstraint.ts, 0, 0))
+>Promise.resolve : Symbol(PromiseConstructor.resolve, Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2018.promise.d.ts, --, --))
+>resolve : Symbol(PromiseConstructor.resolve, Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
+>nestedThenable : Symbol(nestedThenable, Decl(negatedPromiseConstraint.ts, 20, 13))
+
+const constructed: Promise<Value> = new Promise<Value>(resolve => resolve(valuePromise));
+>constructed : Symbol(constructed, Decl(negatedPromiseConstraint.ts, 24, 5))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2018.promise.d.ts, --, --))
+>Value : Symbol(Value, Decl(negatedPromiseConstraint.ts, 0, 0))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2018.promise.d.ts, --, --))
+>Value : Symbol(Value, Decl(negatedPromiseConstraint.ts, 0, 0))
+>resolve : Symbol(resolve, Decl(negatedPromiseConstraint.ts, 24, 55))
+>resolve : Symbol(resolve, Decl(negatedPromiseConstraint.ts, 24, 55))
+>valuePromise : Symbol(valuePromise, Decl(negatedPromiseConstraint.ts, 21, 13))
+
+const rejected: Promise<Value> = Promise.reject<Value>("reason");
+>rejected : Symbol(rejected, Decl(negatedPromiseConstraint.ts, 25, 5))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2018.promise.d.ts, --, --))
+>Value : Symbol(Value, Decl(negatedPromiseConstraint.ts, 0, 0))
+>Promise.reject : Symbol(PromiseConstructor.reject, Decl(lib.es2015.promise.d.ts, --, --))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2018.promise.d.ts, --, --))
+>reject : Symbol(PromiseConstructor.reject, Decl(lib.es2015.promise.d.ts, --, --))
+>Value : Symbol(Value, Decl(negatedPromiseConstraint.ts, 0, 0))
+
+const chained: Promise<Text> = valuePromise.then(() => Promise.resolve(text));
+>chained : Symbol(chained, Decl(negatedPromiseConstraint.ts, 26, 5))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2018.promise.d.ts, --, --))
+>Text : Symbol(Text, Decl(negatedPromiseConstraint.ts, 0, 42))
+>valuePromise.then : Symbol(Promise.then, Decl(lib.es5.d.ts, --, --))
+>valuePromise : Symbol(valuePromise, Decl(negatedPromiseConstraint.ts, 21, 13))
+>then : Symbol(Promise.then, Decl(lib.es5.d.ts, --, --))
+>Promise.resolve : Symbol(PromiseConstructor.resolve, Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2018.promise.d.ts, --, --))
+>resolve : Symbol(PromiseConstructor.resolve, Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
+>text : Symbol(text, Decl(negatedPromiseConstraint.ts, 19, 13))
+
+const nestedChained: Promise<Value> = valuePromise.then(() => nestedThenable);
+>nestedChained : Symbol(nestedChained, Decl(negatedPromiseConstraint.ts, 27, 5))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2018.promise.d.ts, --, --))
+>Value : Symbol(Value, Decl(negatedPromiseConstraint.ts, 0, 0))
+>valuePromise.then : Symbol(Promise.then, Decl(lib.es5.d.ts, --, --))
+>valuePromise : Symbol(valuePromise, Decl(negatedPromiseConstraint.ts, 21, 13))
+>then : Symbol(Promise.then, Decl(lib.es5.d.ts, --, --))
+>nestedThenable : Symbol(nestedThenable, Decl(negatedPromiseConstraint.ts, 20, 13))
+
+const caught: Promise<Value | Text> = valuePromise.catch(() => Promise.resolve(text));
+>caught : Symbol(caught, Decl(negatedPromiseConstraint.ts, 28, 5))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2018.promise.d.ts, --, --))
+>Value : Symbol(Value, Decl(negatedPromiseConstraint.ts, 0, 0))
+>Text : Symbol(Text, Decl(negatedPromiseConstraint.ts, 0, 42))
+>valuePromise.catch : Symbol(Promise.catch, Decl(lib.es5.d.ts, --, --))
+>valuePromise : Symbol(valuePromise, Decl(negatedPromiseConstraint.ts, 21, 13))
+>catch : Symbol(Promise.catch, Decl(lib.es5.d.ts, --, --))
+>Promise.resolve : Symbol(PromiseConstructor.resolve, Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2018.promise.d.ts, --, --))
+>resolve : Symbol(PromiseConstructor.resolve, Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
+>text : Symbol(text, Decl(negatedPromiseConstraint.ts, 19, 13))
+
+const nestedCaught: Promise<Value> = valuePromise.catch(() => nestedThenable);
+>nestedCaught : Symbol(nestedCaught, Decl(negatedPromiseConstraint.ts, 29, 5))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2018.promise.d.ts, --, --))
+>Value : Symbol(Value, Decl(negatedPromiseConstraint.ts, 0, 0))
+>valuePromise.catch : Symbol(Promise.catch, Decl(lib.es5.d.ts, --, --))
+>valuePromise : Symbol(valuePromise, Decl(negatedPromiseConstraint.ts, 21, 13))
+>catch : Symbol(Promise.catch, Decl(lib.es5.d.ts, --, --))
+>nestedThenable : Symbol(nestedThenable, Decl(negatedPromiseConstraint.ts, 20, 13))
+
+const finalized: Promise<Value> = valuePromise.finally(() => Promise.resolve(text));
+>finalized : Symbol(finalized, Decl(negatedPromiseConstraint.ts, 30, 5))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2018.promise.d.ts, --, --))
+>Value : Symbol(Value, Decl(negatedPromiseConstraint.ts, 0, 0))
+>valuePromise.finally : Symbol(Promise.finally, Decl(lib.es2018.promise.d.ts, --, --))
+>valuePromise : Symbol(valuePromise, Decl(negatedPromiseConstraint.ts, 21, 13))
+>finally : Symbol(Promise.finally, Decl(lib.es2018.promise.d.ts, --, --))
+>Promise.resolve : Symbol(PromiseConstructor.resolve, Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2018.promise.d.ts, --, --))
+>resolve : Symbol(PromiseConstructor.resolve, Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
+>text : Symbol(text, Decl(negatedPromiseConstraint.ts, 19, 13))
+
+const all = Promise.all([nestedThenable, Promise.resolve(text)]);
+>all : Symbol(all, Decl(negatedPromiseConstraint.ts, 31, 5))
+>Promise.all : Symbol(PromiseConstructor.all, Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2018.promise.d.ts, --, --))
+>all : Symbol(PromiseConstructor.all, Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
+>nestedThenable : Symbol(nestedThenable, Decl(negatedPromiseConstraint.ts, 20, 13))
+>Promise.resolve : Symbol(PromiseConstructor.resolve, Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2018.promise.d.ts, --, --))
+>resolve : Symbol(PromiseConstructor.resolve, Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
+>text : Symbol(text, Decl(negatedPromiseConstraint.ts, 19, 13))
+
+const race: Promise<Value | Text> = Promise.race([nestedThenable, Promise.resolve(text)]);
+>race : Symbol(race, Decl(negatedPromiseConstraint.ts, 32, 5))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2018.promise.d.ts, --, --))
+>Value : Symbol(Value, Decl(negatedPromiseConstraint.ts, 0, 0))
+>Text : Symbol(Text, Decl(negatedPromiseConstraint.ts, 0, 42))
+>Promise.race : Symbol(PromiseConstructor.race, Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2018.promise.d.ts, --, --))
+>race : Symbol(PromiseConstructor.race, Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
+>nestedThenable : Symbol(nestedThenable, Decl(negatedPromiseConstraint.ts, 20, 13))
+>Promise.resolve : Symbol(PromiseConstructor.resolve, Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2018.promise.d.ts, --, --))
+>resolve : Symbol(PromiseConstructor.resolve, Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
+>text : Symbol(text, Decl(negatedPromiseConstraint.ts, 19, 13))
+
+const any: Promise<Value | Text> = Promise.any([nestedThenable, Promise.resolve(text)]);
+>any : Symbol(any, Decl(negatedPromiseConstraint.ts, 33, 5))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2018.promise.d.ts, --, --))
+>Value : Symbol(Value, Decl(negatedPromiseConstraint.ts, 0, 0))
+>Text : Symbol(Text, Decl(negatedPromiseConstraint.ts, 0, 42))
+>Promise.any : Symbol(PromiseConstructor.any, Decl(lib.es2021.promise.d.ts, --, --), Decl(lib.es2021.promise.d.ts, --, --))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2018.promise.d.ts, --, --))
+>any : Symbol(PromiseConstructor.any, Decl(lib.es2021.promise.d.ts, --, --), Decl(lib.es2021.promise.d.ts, --, --))
+>nestedThenable : Symbol(nestedThenable, Decl(negatedPromiseConstraint.ts, 20, 13))
+>Promise.resolve : Symbol(PromiseConstructor.resolve, Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2018.promise.d.ts, --, --))
+>resolve : Symbol(PromiseConstructor.resolve, Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
+>text : Symbol(text, Decl(negatedPromiseConstraint.ts, 19, 13))
+
+const settled = Promise.allSettled([nestedThenable]);
+>settled : Symbol(settled, Decl(negatedPromiseConstraint.ts, 34, 5))
+>Promise.allSettled : Symbol(PromiseConstructor.allSettled, Decl(lib.es2020.promise.d.ts, --, --), Decl(lib.es2020.promise.d.ts, --, --))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2018.promise.d.ts, --, --))
+>allSettled : Symbol(PromiseConstructor.allSettled, Decl(lib.es2020.promise.d.ts, --, --), Decl(lib.es2020.promise.d.ts, --, --))
+>nestedThenable : Symbol(nestedThenable, Decl(negatedPromiseConstraint.ts, 20, 13))
+
+const tried: Promise<Value> = Promise.try(() => nestedThenable);
+>tried : Symbol(tried, Decl(negatedPromiseConstraint.ts, 35, 5))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2018.promise.d.ts, --, --))
+>Value : Symbol(Value, Decl(negatedPromiseConstraint.ts, 0, 0))
+>Promise.try : Symbol(PromiseConstructor.try, Decl(lib.es2025.promise.d.ts, --, --))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2018.promise.d.ts, --, --))
+>try : Symbol(PromiseConstructor.try, Decl(lib.es2025.promise.d.ts, --, --))
+>nestedThenable : Symbol(nestedThenable, Decl(negatedPromiseConstraint.ts, 20, 13))
+
+const resolvers: PromiseWithResolvers<Value> = Promise.withResolvers<Value>();
+>resolvers : Symbol(resolvers, Decl(negatedPromiseConstraint.ts, 36, 5))
+>PromiseWithResolvers : Symbol(PromiseWithResolvers, Decl(lib.es2024.promise.d.ts, --, --))
+>Value : Symbol(Value, Decl(negatedPromiseConstraint.ts, 0, 0))
+>Promise.withResolvers : Symbol(PromiseConstructor.withResolvers, Decl(lib.es2024.promise.d.ts, --, --))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2018.promise.d.ts, --, --))
+>withResolvers : Symbol(PromiseConstructor.withResolvers, Decl(lib.es2024.promise.d.ts, --, --))
+>Value : Symbol(Value, Decl(negatedPromiseConstraint.ts, 0, 0))
+
+resolvers.resolve(valuePromise);
+>resolvers.resolve : Symbol(PromiseWithResolvers.resolve, Decl(lib.es2024.promise.d.ts, --, --))
+>resolvers : Symbol(resolvers, Decl(negatedPromiseConstraint.ts, 36, 5))
+>resolve : Symbol(PromiseWithResolvers.resolve, Decl(lib.es2024.promise.d.ts, --, --))
+>valuePromise : Symbol(valuePromise, Decl(negatedPromiseConstraint.ts, 21, 13))
+
+const empty: Promise<Awaited<void>> = Promise.resolve();
+>empty : Symbol(empty, Decl(negatedPromiseConstraint.ts, 38, 5))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2018.promise.d.ts, --, --))
+>Awaited : Symbol(Awaited, Decl(lib.es5.d.ts, --, --))
+>Promise.resolve : Symbol(PromiseConstructor.resolve, Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2018.promise.d.ts, --, --))
+>resolve : Symbol(PromiseConstructor.resolve, Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
+
+const inferredAsync = async () => 1;
+>inferredAsync : Symbol(inferredAsync, Decl(negatedPromiseConstraint.ts, 39, 5))
+
+const asyncResult: Promise<Awaited<number>> = inferredAsync();
+>asyncResult : Symbol(asyncResult, Decl(negatedPromiseConstraint.ts, 40, 5))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2018.promise.d.ts, --, --))
+>Awaited : Symbol(Awaited, Decl(lib.es5.d.ts, --, --))
+>inferredAsync : Symbol(inferredAsync, Decl(negatedPromiseConstraint.ts, 39, 5))
+
+const inferredGenericAsync = async <T>(value: T) => value;
+>inferredGenericAsync : Symbol(inferredGenericAsync, Decl(negatedPromiseConstraint.ts, 41, 5))
+>T : Symbol(T, Decl(negatedPromiseConstraint.ts, 41, 36))
+>value : Symbol(value, Decl(negatedPromiseConstraint.ts, 41, 39))
+>T : Symbol(T, Decl(negatedPromiseConstraint.ts, 41, 36))
+>value : Symbol(value, Decl(negatedPromiseConstraint.ts, 41, 39))
+
+const genericAsyncResult: Promise<Value> = inferredGenericAsync(nestedThenable);
+>genericAsyncResult : Symbol(genericAsyncResult, Decl(negatedPromiseConstraint.ts, 42, 5))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2018.promise.d.ts, --, --))
+>Value : Symbol(Value, Decl(negatedPromiseConstraint.ts, 0, 0))
+>inferredGenericAsync : Symbol(inferredGenericAsync, Decl(negatedPromiseConstraint.ts, 41, 5))
+>nestedThenable : Symbol(nestedThenable, Decl(negatedPromiseConstraint.ts, 20, 13))
+
+const keyed = Promise.allKeyed({
+>keyed : Symbol(keyed, Decl(negatedPromiseConstraint.ts, 43, 5))
+>Promise.allKeyed : Symbol(PromiseConstructor.allKeyed, Decl(lib.esnext.promise.d.ts, --, --))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2018.promise.d.ts, --, --))
+>allKeyed : Symbol(PromiseConstructor.allKeyed, Decl(lib.esnext.promise.d.ts, --, --))
+
+    then: (resolve: (value: Value) => void) => resolve(value),
+>then : Symbol(then, Decl(negatedPromiseConstraint.ts, 43, 32))
+>resolve : Symbol(resolve, Decl(negatedPromiseConstraint.ts, 44, 11))
+>value : Symbol(value, Decl(negatedPromiseConstraint.ts, 44, 21))
+>Value : Symbol(Value, Decl(negatedPromiseConstraint.ts, 0, 0))
+>resolve : Symbol(resolve, Decl(negatedPromiseConstraint.ts, 44, 11))
+>value : Symbol(value, Decl(negatedPromiseConstraint.ts, 18, 13))
+
+});
+const keyedValue: Awaited<typeof keyed> = value;
+>keyedValue : Symbol(keyedValue, Decl(negatedPromiseConstraint.ts, 46, 5))
+>Awaited : Symbol(Awaited, Decl(lib.es5.d.ts, --, --))
+>keyed : Symbol(keyed, Decl(negatedPromiseConstraint.ts, 43, 5))
+>value : Symbol(value, Decl(negatedPromiseConstraint.ts, 18, 13))
+
+new Promise<Promise<Value>>(() => {});
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2018.promise.d.ts, --, --))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2018.promise.d.ts, --, --))
+>Value : Symbol(Value, Decl(negatedPromiseConstraint.ts, 0, 0))
+
+Promise.reject<Promise<Value>>("reason");
+>Promise.reject : Symbol(PromiseConstructor.reject, Decl(lib.es2015.promise.d.ts, --, --))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2018.promise.d.ts, --, --))
+>reject : Symbol(PromiseConstructor.reject, Decl(lib.es2015.promise.d.ts, --, --))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2018.promise.d.ts, --, --))
+>Value : Symbol(Value, Decl(negatedPromiseConstraint.ts, 0, 0))
+
+Promise.withResolvers<Promise<Value>>();
+>Promise.withResolvers : Symbol(PromiseConstructor.withResolvers, Decl(lib.es2024.promise.d.ts, --, --))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2018.promise.d.ts, --, --))
+>withResolvers : Symbol(PromiseConstructor.withResolvers, Decl(lib.es2024.promise.d.ts, --, --))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2018.promise.d.ts, --, --))
+>Value : Symbol(Value, Decl(negatedPromiseConstraint.ts, 0, 0))
+
+type NestedResolvers = PromiseWithResolvers<Promise<Value>>;
+>NestedResolvers : Symbol(NestedResolvers, Decl(negatedPromiseConstraint.ts, 50, 40))
+>PromiseWithResolvers : Symbol(PromiseWithResolvers, Decl(lib.es2024.promise.d.ts, --, --))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2018.promise.d.ts, --, --))
+>Value : Symbol(Value, Decl(negatedPromiseConstraint.ts, 0, 0))
+
+function resolveGeneric<T>(value: T): Promise<Awaited<T>> {
+>resolveGeneric : Symbol(resolveGeneric, Decl(negatedPromiseConstraint.ts, 51, 60))
+>T : Symbol(T, Decl(negatedPromiseConstraint.ts, 53, 24))
+>value : Symbol(value, Decl(negatedPromiseConstraint.ts, 53, 27))
+>T : Symbol(T, Decl(negatedPromiseConstraint.ts, 53, 24))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2018.promise.d.ts, --, --))
+>Awaited : Symbol(Awaited, Decl(lib.es5.d.ts, --, --))
+>T : Symbol(T, Decl(negatedPromiseConstraint.ts, 53, 24))
+
+    return Promise.resolve(value);
+>Promise.resolve : Symbol(PromiseConstructor.resolve, Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2018.promise.d.ts, --, --))
+>resolve : Symbol(PromiseConstructor.resolve, Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
+>value : Symbol(value, Decl(negatedPromiseConstraint.ts, 53, 27))
+}
+
+function chainGeneric<T>(value: T): Promise<Awaited<T>> {
+>chainGeneric : Symbol(chainGeneric, Decl(negatedPromiseConstraint.ts, 55, 1))
+>T : Symbol(T, Decl(negatedPromiseConstraint.ts, 57, 22))
+>value : Symbol(value, Decl(negatedPromiseConstraint.ts, 57, 25))
+>T : Symbol(T, Decl(negatedPromiseConstraint.ts, 57, 22))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2018.promise.d.ts, --, --))
+>Awaited : Symbol(Awaited, Decl(lib.es5.d.ts, --, --))
+>T : Symbol(T, Decl(negatedPromiseConstraint.ts, 57, 22))
+
+    return valuePromise.then(() => value);
+>valuePromise.then : Symbol(Promise.then, Decl(lib.es5.d.ts, --, --))
+>valuePromise : Symbol(valuePromise, Decl(negatedPromiseConstraint.ts, 21, 13))
+>then : Symbol(Promise.then, Decl(lib.es5.d.ts, --, --))
+>value : Symbol(value, Decl(negatedPromiseConstraint.ts, 57, 25))
+}
+
+async function awaitGeneric<T>(value: T): Promise<Awaited<T>> {
+>awaitGeneric : Symbol(awaitGeneric, Decl(negatedPromiseConstraint.ts, 59, 1))
+>T : Symbol(T, Decl(negatedPromiseConstraint.ts, 61, 28))
+>value : Symbol(value, Decl(negatedPromiseConstraint.ts, 61, 31))
+>T : Symbol(T, Decl(negatedPromiseConstraint.ts, 61, 28))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2018.promise.d.ts, --, --))
+>Awaited : Symbol(Awaited, Decl(lib.es5.d.ts, --, --))
+>T : Symbol(T, Decl(negatedPromiseConstraint.ts, 61, 28))
+
+    return value;
+>value : Symbol(value, Decl(negatedPromiseConstraint.ts, 61, 31))
+}
+
+async function awaitPrimitive(): Promise<Awaited<number>> {
+>awaitPrimitive : Symbol(awaitPrimitive, Decl(negatedPromiseConstraint.ts, 63, 1))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2018.promise.d.ts, --, --))
+>Awaited : Symbol(Awaited, Decl(lib.es5.d.ts, --, --))
+
+    const result: Awaited<number> = await 1;
+>result : Symbol(result, Decl(negatedPromiseConstraint.ts, 66, 9))
+>Awaited : Symbol(Awaited, Decl(lib.es5.d.ts, --, --))
+
+    return result;
+>result : Symbol(result, Decl(negatedPromiseConstraint.ts, 66, 9))
+}
+
+async function returnPrimitive(): Promise<Awaited<number>> {
+>returnPrimitive : Symbol(returnPrimitive, Decl(negatedPromiseConstraint.ts, 68, 1))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2018.promise.d.ts, --, --))
+>Awaited : Symbol(Awaited, Decl(lib.es5.d.ts, --, --))
+
+    return 1;
+}
+
+async function returnVoid(): Promise<Awaited<void>> {}
+>returnVoid : Symbol(returnVoid, Decl(negatedPromiseConstraint.ts, 72, 1))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2018.promise.d.ts, --, --))
+>Awaited : Symbol(Awaited, Decl(lib.es5.d.ts, --, --))
+
+async function returnConstrained<T extends not { then(): any }>(value: T): Promise<T> {
+>returnConstrained : Symbol(returnConstrained, Decl(negatedPromiseConstraint.ts, 74, 54))
+>T : Symbol(T, Decl(negatedPromiseConstraint.ts, 76, 33))
+>then : Symbol(then, Decl(negatedPromiseConstraint.ts, 76, 48))
+>value : Symbol(value, Decl(negatedPromiseConstraint.ts, 76, 64))
+>T : Symbol(T, Decl(negatedPromiseConstraint.ts, 76, 33))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2018.promise.d.ts, --, --))
+>T : Symbol(T, Decl(negatedPromiseConstraint.ts, 76, 33))
+
+    return value;
+>value : Symbol(value, Decl(negatedPromiseConstraint.ts, 76, 64))
+}
+
+async function invalidReturn(): Promise<Promise<Value>> {
+>invalidReturn : Symbol(invalidReturn, Decl(negatedPromiseConstraint.ts, 78, 1))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2018.promise.d.ts, --, --))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2018.promise.d.ts, --, --))
+>Value : Symbol(Value, Decl(negatedPromiseConstraint.ts, 0, 0))
+
+    return valuePromise;
+>valuePromise : Symbol(valuePromise, Decl(negatedPromiseConstraint.ts, 21, 13))
+}
+
+type AwaitedValue = Awaited<Promise<Value>>;
+>AwaitedValue : Symbol(AwaitedValue, Decl(negatedPromiseConstraint.ts, 82, 1))
+>Awaited : Symbol(Awaited, Decl(lib.es5.d.ts, --, --))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2018.promise.d.ts, --, --))
+>Value : Symbol(Value, Decl(negatedPromiseConstraint.ts, 0, 0))
+
+type AwaitedNestedThenable = Awaited<typeof nestedThenable>;
+>AwaitedNestedThenable : Symbol(AwaitedNestedThenable, Decl(negatedPromiseConstraint.ts, 84, 44))
+>Awaited : Symbol(Awaited, Decl(lib.es5.d.ts, --, --))
+>nestedThenable : Symbol(nestedThenable, Decl(negatedPromiseConstraint.ts, 20, 13))
+
+type AwaitedUnknown = Awaited<unknown>;
+>AwaitedUnknown : Symbol(AwaitedUnknown, Decl(negatedPromiseConstraint.ts, 85, 60))
+>Awaited : Symbol(Awaited, Decl(lib.es5.d.ts, --, --))
+
+type AwaitedNonCallableThen = Awaited<{ then: number }>;
+>AwaitedNonCallableThen : Symbol(AwaitedNonCallableThen, Decl(negatedPromiseConstraint.ts, 86, 39))
+>Awaited : Symbol(Awaited, Decl(lib.es5.d.ts, --, --))
+>then : Symbol(then, Decl(negatedPromiseConstraint.ts, 87, 39))
+
+type AwaitedInvalidThenable = Awaited<{ then(): any }>;
+>AwaitedInvalidThenable : Symbol(AwaitedInvalidThenable, Decl(negatedPromiseConstraint.ts, 87, 56))
+>Awaited : Symbol(Awaited, Decl(lib.es5.d.ts, --, --))
+>then : Symbol(then, Decl(negatedPromiseConstraint.ts, 88, 39))
+
+interface RecursiveValue {
+>RecursiveValue : Symbol(RecursiveValue, Decl(negatedPromiseConstraint.ts, 88, 55))
+
+    settled: Promise<RecursiveValue & not { then(): any }>;
+>settled : Symbol(RecursiveValue.settled, Decl(negatedPromiseConstraint.ts, 90, 26))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2018.promise.d.ts, --, --))
+>RecursiveValue : Symbol(RecursiveValue, Decl(negatedPromiseConstraint.ts, 88, 55))
+>then : Symbol(then, Decl(negatedPromiseConstraint.ts, 91, 43))
+}
+

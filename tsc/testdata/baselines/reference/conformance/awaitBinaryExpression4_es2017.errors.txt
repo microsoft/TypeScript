@@ -1,0 +1,18 @@
+awaitBinaryExpression4_es2017.ts(2,24): error TS2344: Type 'boolean' does not satisfy the constraint 'not { then(): any; }'.
+awaitBinaryExpression4_es2017.ts(5,32): error TS2344: Type 'void' does not satisfy the constraint 'not { then(): any; }'.
+
+
+==== awaitBinaryExpression4_es2017.ts (2 errors) ====
+    declare var a: boolean;
+    declare var p: Promise<boolean>;
+                           ~~~~~~~
+!!! error TS2344: Type 'boolean' does not satisfy the constraint 'not { then(): any; }'.
+    declare function before(): void;
+    declare function after(): void;
+    async function func(): Promise<void> {
+                                   ~~~~
+!!! error TS2344: Type 'void' does not satisfy the constraint 'not { then(): any; }'.
+        before();
+        var b = (await p, a);
+        after();
+    }

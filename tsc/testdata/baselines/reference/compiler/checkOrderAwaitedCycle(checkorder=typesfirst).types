@@ -11,21 +11,21 @@ declare const p: Promise<S>;
 >p : Promise<S>
 
 async function f1() {
->f1 : () => Promise<void>
+>f1 : () => Promise<void & not { then(): any; }>
 
     const a: number = await p;
 >a : number
->await p : string
+>await p : string & not { then(): any; }
 >p : Promise<S>
 }
 
 === b.ts ===
 async function f2() {
->f2 : () => Promise<void>
+>f2 : () => Promise<void & not { then(): any; }>
 
     const b: number = await s;
 >b : number
->await s : string
+>await s : string & not { then(): any; }
 >s : S
 }
 

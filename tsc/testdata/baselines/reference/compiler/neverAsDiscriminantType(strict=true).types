@@ -158,7 +158,7 @@ function assertMessage(event: { a: 1 }) { }
 >a : 1
 
 export async function adaptSession(input: GatewayPayload) {
->adaptSession : (input: GatewayPayload) => Promise<void>
+>adaptSession : (input: GatewayPayload) => Promise<void & not { then(): any; }>
 >input : GatewayPayload
 
     if (input.t === 'MESSAGE_CREATE') {

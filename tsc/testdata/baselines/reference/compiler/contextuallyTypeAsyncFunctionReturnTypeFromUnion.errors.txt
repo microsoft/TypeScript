@@ -1,0 +1,74 @@
+contextuallyTypeAsyncFunctionReturnTypeFromUnion.ts(8,42): error TS2344: Type 'T' does not satisfy the constraint 'not { then(): any; }'.
+contextuallyTypeAsyncFunctionReturnTypeFromUnion.ts(13,23): error TS2322: Type 'Promise<not { then(): any; } & not { then(): any; }>' is not assignable to type 'Promise<{ count: number; }> | StateMachine<{ count: number; }>'.
+  Type 'Promise<not { then(): any; } & not { then(): any; }>' is not assignable to type 'Promise<{ count: number; }>'.
+    Type 'not { then(): any; } & not { then(): any; }' is not assignable to type '{ count: number; }'.
+contextuallyTypeAsyncFunctionReturnTypeFromUnion.ts(14,11): error TS2322: Type '() => Promise<not { then(): any; } & not { then(): any; }>' is not assignable to type '() => Promise<{ count: number; }> | StateMachine<{ count: number; }>'.
+  Type 'Promise<not { then(): any; } & not { then(): any; }>' is not assignable to type 'Promise<{ count: number; }> | StateMachine<{ count: number; }>'.
+    Type 'Promise<not { then(): any; } & not { then(): any; }>' is not assignable to type 'Promise<{ count: number; }>'.
+      Type 'not { then(): any; } & not { then(): any; }' is not assignable to type '{ count: number; }'.
+contextuallyTypeAsyncFunctionReturnTypeFromUnion.ts(20,31): error TS2344: Type '{ count: number; }' does not satisfy the constraint 'not { then(): any; }'.
+contextuallyTypeAsyncFunctionReturnTypeFromUnion.ts(21,22): error TS2322: Type 'Promise<not { then(): any; } & not { then(): any; }>' is not assignable to type 'Promise<{ count: number; }> | StateMachine<{ count: number; }>'.
+  Type 'Promise<not { then(): any; } & not { then(): any; }>' is not assignable to type 'Promise<{ count: number; }>'.
+    Type 'not { then(): any; } & not { then(): any; }' is not assignable to type '{ count: number; }'.
+contextuallyTypeAsyncFunctionReturnTypeFromUnion.ts(26,34): error TS2344: Type 'boolean' does not satisfy the constraint 'not { then(): any; }'.
+contextuallyTypeAsyncFunctionReturnTypeFromUnion.ts(28,35): error TS2344: Type 'boolean' does not satisfy the constraint 'not { then(): any; }'.
+
+
+==== contextuallyTypeAsyncFunctionReturnTypeFromUnion.ts (7 errors) ====
+    // repro #47682
+    
+    declare class StateMachine<T> {
+      onDone: (a: T) => void;
+    }
+    
+    declare function createMachine<T>(implementations: {
+      services: Record<string, () => Promise<T> | StateMachine<T>>;
+                                             ~
+!!! error TS2344: Type 'T' does not satisfy the constraint 'not { then(): any; }'.
+!!! related TS2208 contextuallyTypeAsyncFunctionReturnTypeFromUnion.ts:7:32: This type parameter might need an `extends not { then(): any; }` constraint.
+    }): void;
+    
+    createMachine<{ count: number }>({
+      services: {
+        test: async () => Promise.reject("some err"),
+                          ~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2322: Type 'Promise<not { then(): any; } & not { then(): any; }>' is not assignable to type 'Promise<{ count: number; }> | StateMachine<{ count: number; }>'.
+!!! error TS2322:   Type 'Promise<not { then(): any; } & not { then(): any; }>' is not assignable to type 'Promise<{ count: number; }>'.
+!!! error TS2322:     Type 'not { then(): any; } & not { then(): any; }' is not assignable to type '{ count: number; }'.
+!!! related TS6502 contextuallyTypeAsyncFunctionReturnTypeFromUnion.ts:8:28: The expected type comes from the return type of this signature.
+        async test2() {
+              ~~~~~
+!!! error TS2322: Type '() => Promise<not { then(): any; } & not { then(): any; }>' is not assignable to type '() => Promise<{ count: number; }> | StateMachine<{ count: number; }>'.
+!!! error TS2322:   Type 'Promise<not { then(): any; } & not { then(): any; }>' is not assignable to type 'Promise<{ count: number; }> | StateMachine<{ count: number; }>'.
+!!! error TS2322:     Type 'Promise<not { then(): any; } & not { then(): any; }>' is not assignable to type 'Promise<{ count: number; }>'.
+!!! error TS2322:       Type 'not { then(): any; } & not { then(): any; }' is not assignable to type '{ count: number; }'.
+          return Promise.reject("some err");
+        },
+      },
+    });
+    
+    function fn1(): () => Promise<{ count: number }> | StateMachine<{ count: number }> {
+                                  ~~~~~~~~~~~~~~~~~
+!!! error TS2344: Type '{ count: number; }' does not satisfy the constraint 'not { then(): any; }'.
+      return async () => Promise.reject('some err')
+                         ~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2322: Type 'Promise<not { then(): any; } & not { then(): any; }>' is not assignable to type 'Promise<{ count: number; }> | StateMachine<{ count: number; }>'.
+!!! error TS2322:   Type 'Promise<not { then(): any; } & not { then(): any; }>' is not assignable to type 'Promise<{ count: number; }>'.
+!!! error TS2322:     Type 'not { then(): any; } & not { then(): any; }' is not assignable to type '{ count: number; }'.
+!!! related TS6502 contextuallyTypeAsyncFunctionReturnTypeFromUnion.ts:20:17: The expected type comes from the return type of this signature.
+    }
+    
+    // repro #47682 issuecomment-1174099713
+    
+    declare function load(): Promise<boolean>;
+                                     ~~~~~~~
+!!! error TS2344: Type 'boolean' does not satisfy the constraint 'not { then(): any; }'.
+    
+    type LoadCallback = () => Promise<boolean> | string;
+                                      ~~~~~~~
+!!! error TS2344: Type 'boolean' does not satisfy the constraint 'not { then(): any; }'.
+    
+    // all of those are essentially the same and should be allowed
+    const cb1: LoadCallback = async () => load().then(m => m);
+    const cb2: LoadCallback = async () => load();
+    const cb3: LoadCallback = () => load().then(m => m);

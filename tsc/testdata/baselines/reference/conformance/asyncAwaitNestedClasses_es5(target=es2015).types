@@ -14,12 +14,12 @@ class A {
 >func2 : () => Promise<void>
 
             return new Promise((resolve) => { resolve(null); });
->new Promise((resolve) => { resolve(null); }) : Promise<void>
+>new Promise((resolve) => { resolve(null); }) : Promise<not { then(): any; }>
 >Promise : PromiseConstructor
->(resolve) => { resolve(null); } : (resolve: (value: void | PromiseLike<void>) => void) => void
->resolve : (value: void | PromiseLike<void>) => void
+>(resolve) => { resolve(null); } : (resolve: (value: PromiseLike<not { then(): any; }> | not { then(): any; }) => void) => void
+>resolve : (value: PromiseLike<not { then(): any; }> | not { then(): any; }) => void
 >resolve(null) : void
->resolve : (value: void | PromiseLike<void>) => void
+>resolve : (value: PromiseLike<not { then(): any; }> | not { then(): any; }) => void
         }
         static C = class C {
 >C : typeof C
@@ -27,10 +27,10 @@ class A {
 >C : typeof C
 
             static async func() {
->func : () => Promise<void>
+>func : () => Promise<void & not { then(): any; }>
 
                 await B.func2();
->await B.func2() : void
+>await B.func2() : void & not { then(): any; }
 >B.func2() : Promise<void>
 >B.func2 : () => Promise<void>
 >B : typeof B
@@ -41,12 +41,12 @@ class A {
 }
 
 A.B.C.func();
->A.B.C.func() : Promise<void>
->A.B.C.func : () => Promise<void>
+>A.B.C.func() : Promise<void & not { then(): any; }>
+>A.B.C.func : () => Promise<void & not { then(): any; }>
 >A.B.C : typeof C
 >A.B : typeof B
 >A : typeof A
 >B : typeof B
 >C : typeof C
->func : () => Promise<void>
+>func : () => Promise<void & not { then(): any; }>
 

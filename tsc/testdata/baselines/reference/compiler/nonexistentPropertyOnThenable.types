@@ -36,7 +36,7 @@ promise.z;
 >z : any
 
 async function f() {
->f : () => Promise<void>
+>f : () => Promise<void & not { then(): any; }>
 
     thenable.x;
 >thenable.x : any

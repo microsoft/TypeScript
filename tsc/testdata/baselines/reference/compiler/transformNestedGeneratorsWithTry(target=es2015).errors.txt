@@ -1,0 +1,27 @@
+bluebird.d.ts(2,32): error TS2344: Type 'T' does not satisfy the constraint 'not { then(): any; }'.
+
+
+==== main.ts (0 errors) ====
+    // https://github.com/Microsoft/TypeScript/issues/11177
+    import * as Bluebird from 'bluebird';
+    async function a(): Bluebird<void> {
+      try {
+        const b = async function b(): Bluebird<void> {
+          try {
+            await Bluebird.resolve(); // -- remove this and it compiles
+          } catch (error) { }
+        };
+    
+        await b(); // -- or remove this and it compiles
+      } catch (error) { }
+    }
+    
+==== bluebird.d.ts (1 errors) ====
+    declare module "bluebird" {
+        type Bluebird<T> = Promise<T>;
+                                   ~
+!!! error TS2344: Type 'T' does not satisfy the constraint 'not { then(): any; }'.
+!!! related TS2208 bluebird.d.ts:2:19: This type parameter might need an `extends not { then(): any; }` constraint.
+        const Bluebird: typeof Promise;
+        export = Bluebird;
+    }

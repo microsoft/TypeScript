@@ -6,10 +6,10 @@ var \u0061wait = 12; // ok
 >12 : 12
 
 async function main() {
->main : () => Promise<void>
+>main : () => Promise<void & not { then(): any; }>
 
     \u0061wait 12; // not ok
->\u0061wait 12 : 12
+>\u0061wait 12 : 12 & not { then(): any; }
 >12 : 12
 }
 
@@ -42,10 +42,10 @@ var \u{0061}wait = 12; // ok
 >12 : 12
 
 async function main() {
->main : () => Promise<void>
+>main : () => Promise<void & not { then(): any; }>
 
     \u{0061}wait 12; // not ok
->\u{0061}wait 12 : 12
+>\u{0061}wait 12 : 12 & not { then(): any; }
 >12 : 12
 }
 

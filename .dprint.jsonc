@@ -54,6 +54,18 @@
         "tsc/internal/bundled/libs/lib.webworker.d.ts",
         "tsc/internal/bundled/libs/lib.webworker.asynciterable.d.ts",
         "tsc/internal/bundled/libs/lib.webworker.iterable.d.ts",
+        // The formatter does not yet parse negated types.
+        "tsc/internal/bundled/libs/lib.es5.d.ts",
+        "tsc/internal/bundled/libs/lib.es2015.iterable.d.ts",
+        "tsc/internal/bundled/libs/lib.es2015.promise.d.ts",
+        "tsc/internal/bundled/libs/lib.es2018.asyncgenerator.d.ts",
+        "tsc/internal/bundled/libs/lib.es2018.asynciterable.d.ts",
+        "tsc/internal/bundled/libs/lib.es2020.promise.d.ts",
+        "tsc/internal/bundled/libs/lib.es2024.promise.d.ts",
+        "tsc/internal/bundled/libs/lib.es2024.sharedmemory.d.ts",
+        "tsc/internal/bundled/libs/lib.es2026.array.d.ts",
+        "tsc/internal/bundled/libs/lib.esnext.disposable.d.ts",
+        "tsc/internal/bundled/libs/lib.esnext.promise.d.ts",
         "tools/scripts/lsp/*.json",
         "tools/scripts/lsp/metaModelSchema.mts",
         // Needs to be LF to have a working shebang.

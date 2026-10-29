@@ -1,0 +1,46 @@
+inferenceContextualReturnTypeUnion2.ts(8,13): error TS2344: Type 'HTMLElement[]' does not satisfy the constraint 'not { then(): any; }'.
+inferenceContextualReturnTypeUnion2.ts(9,13): error TS2344: Type 'HTMLElement' does not satisfy the constraint 'not { then(): any; }'.
+inferenceContextualReturnTypeUnion2.ts(19,14): error TS2344: Type 'T' does not satisfy the constraint 'not { then(): any; }'.
+  Type 'HTMLElement' is not assignable to type 'not { then(): any; }'.
+
+
+==== inferenceContextualReturnTypeUnion2.ts (3 errors) ====
+    type Query = (
+      container: HTMLElement,
+      ...args: any[]
+    ) =>
+      | Error
+      | HTMLElement
+      | HTMLElement[]
+      | Promise<HTMLElement[]>
+                ~~~~~~~~~~~~~
+!!! error TS2344: Type 'HTMLElement[]' does not satisfy the constraint 'not { then(): any; }'.
+      | Promise<HTMLElement>
+                ~~~~~~~~~~~
+!!! error TS2344: Type 'HTMLElement' does not satisfy the constraint 'not { then(): any; }'.
+      | null;
+    
+    interface Queries {
+      [T: string]: Query;
+    }
+    
+    type FindByText<T extends HTMLElement = HTMLElement> = (
+      container: HTMLElement,
+      text: string,
+    ) => Promise<T>;
+                 ~
+!!! error TS2344: Type 'T' does not satisfy the constraint 'not { then(): any; }'.
+!!! error TS2344:   Type 'HTMLElement' is not assignable to type 'not { then(): any; }'.
+    
+    declare function findByLabelText<T extends HTMLElement = HTMLElement>(
+      ...args: Parameters<FindByText<T>>
+    ): ReturnType<FindByText<T>>;
+    
+    const queries = {
+      findByLabelText,
+    };
+    
+    type MapQueries<Q extends Queries = typeof queries> = {
+      [P in keyof Q]: Q[P];
+    };
+    

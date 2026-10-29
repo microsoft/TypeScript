@@ -18,7 +18,7 @@ declare module "typed/*.resource" with { type: "text" } {
 
 === /index.ts ===
 async function test() {
->test : () => Promise<void>
+>test : () => Promise<void & not { then(): any; }>
 
     const plain = await import("plain.resource");
 >plain : { kind: "plain"; default: typeof import("*.resource"); }

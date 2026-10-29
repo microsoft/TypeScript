@@ -1,13 +1,39 @@
+promisePermutations.ts(2,45): error TS2344: Type 'U' does not satisfy the constraint 'not { then(): any; }'.
+promisePermutations.ts(2,81): error TS2344: Type 'U' does not satisfy the constraint 'not { then(): any; }'.
+promisePermutations.ts(2,130): error TS2344: Type 'U' does not satisfy the constraint 'not { then(): any; }'.
+promisePermutations.ts(3,45): error TS2344: Type 'U' does not satisfy the constraint 'not { then(): any; }'.
+promisePermutations.ts(3,121): error TS2344: Type 'U' does not satisfy the constraint 'not { then(): any; }'.
+promisePermutations.ts(4,72): error TS2344: Type 'U' does not satisfy the constraint 'not { then(): any; }'.
+promisePermutations.ts(4,121): error TS2344: Type 'U' does not satisfy the constraint 'not { then(): any; }'.
+promisePermutations.ts(5,112): error TS2344: Type 'U' does not satisfy the constraint 'not { then(): any; }'.
+promisePermutations.ts(18,43): error TS2344: Type 'number' does not satisfy the constraint 'not { then(): any; }'.
+promisePermutations.ts(20,44): error TS2344: Type '{ x: number; }' does not satisfy the constraint 'not { then(): any; }'.
+promisePermutations.ts(22,53): error TS2344: Type 'number' does not satisfy the constraint 'not { then(): any; }'.
+promisePermutations.ts(24,65): error TS2344: Type 'string' does not satisfy the constraint 'not { then(): any; }'.
+promisePermutations.ts(26,80): error TS2344: Type 'string' does not satisfy the constraint 'not { then(): any; }'.
+promisePermutations.ts(28,73): error TS2344: Type 'string' does not satisfy the constraint 'not { then(): any; }'.
+promisePermutations.ts(30,62): error TS2344: Type 'string' does not satisfy the constraint 'not { then(): any; }'.
+promisePermutations.ts(32,68): error TS2344: Type 'T' does not satisfy the constraint 'not { then(): any; }'.
+promisePermutations.ts(34,71): error TS2344: Type 'T' does not satisfy the constraint 'not { then(): any; }'.
+promisePermutations.ts(36,66): error TS2344: Type 'T' does not satisfy the constraint 'not { then(): any; }'.
+promisePermutations.ts(40,54): error TS2344: Type 'number' does not satisfy the constraint 'not { then(): any; }'.
+promisePermutations.ts(41,54): error TS2344: Type 'string' does not satisfy the constraint 'not { then(): any; }'.
+promisePermutations.ts(46,58): error TS2344: Type 'T' does not satisfy the constraint 'not { then(): any; }'.
+promisePermutations.ts(52,25): error TS2344: Type 'number' does not satisfy the constraint 'not { then(): any; }'.
+promisePermutations.ts(61,25): error TS2344: Type '{ x: number; }' does not satisfy the constraint 'not { then(): any; }'.
+promisePermutations.ts(70,25): error TS2344: Type 'number' does not satisfy the constraint 'not { then(): any; }'.
 promisePermutations.ts(74,70): error TS2769: No overload matches this call.
   The last overload gave the following error.
     Argument of type '(x: number) => IPromise<number>' is not assignable to parameter of type '(value: IPromise<number>) => IPromise<number>'.
       Types of parameters 'x' and 'value' are incompatible.
         Type 'IPromise<number>' is not assignable to type 'number'.
+promisePermutations.ts(78,43): error TS2344: Type 'string' does not satisfy the constraint 'not { then(): any; }'.
 promisePermutations.ts(79,19): error TS2769: No overload matches this call.
   The last overload gave the following error.
     Argument of type '(x: number, y?: string) => IPromise<string>' is not assignable to parameter of type '(value: string) => IPromise<string>'.
       Types of parameters 'x' and 'value' are incompatible.
         Type 'string' is not assignable to type 'number'.
+promisePermutations.ts(81,25): error TS2344: Type 'string' does not satisfy the constraint 'not { then(): any; }'.
 promisePermutations.ts(82,19): error TS2769: No overload matches this call.
   The last overload gave the following error.
     Argument of type '(x: number, y?: string) => IPromise<string>' is not assignable to parameter of type '(value: string) => IPromise<string>'.
@@ -27,6 +53,7 @@ promisePermutations.ts(88,19): error TS2769: No overload matches this call.
   The last overload gave the following error.
     Argument of type '(x: number, cb: (a: string) => string) => IPromise<string>' is not assignable to parameter of type '(value: string) => IPromise<string>'.
       Target signature provides too few arguments. Expected 2 or more, but got 1.
+promisePermutations.ts(90,25): error TS2344: Type 'string' does not satisfy the constraint 'not { then(): any; }'.
 promisePermutations.ts(91,19): error TS2769: No overload matches this call.
   The last overload gave the following error.
     Argument of type '(x: number, cb: (a: string) => string) => IPromise<string>' is not assignable to parameter of type '(value: string) => IPromise<string>'.
@@ -43,6 +70,7 @@ promisePermutations.ts(97,19): error TS2769: No overload matches this call.
   The last overload gave the following error.
     Argument of type '(x: number, cb: <T>(a: T) => T) => IPromise<string>' is not assignable to parameter of type '(value: string) => IPromise<string>'.
       Target signature provides too few arguments. Expected 2 or more, but got 1.
+promisePermutations.ts(99,25): error TS2344: Type 'string' does not satisfy the constraint 'not { then(): any; }'.
 promisePermutations.ts(100,19): error TS2769: No overload matches this call.
   The last overload gave the following error.
     Argument of type '(x: number, cb: <T>(a: T) => T) => IPromise<string>' is not assignable to parameter of type '(value: string) => IPromise<string>'.
@@ -60,6 +88,7 @@ promisePermutations.ts(106,19): error TS2769: No overload matches this call.
     Argument of type '(cb: <T>(a: T) => T) => IPromise<string>' is not assignable to parameter of type '(value: string) => IPromise<string>'.
       Types of parameters 'cb' and 'value' are incompatible.
         Type 'string' is not assignable to type '<T>(a: T) => T'.
+promisePermutations.ts(108,25): error TS2344: Type 'string' does not satisfy the constraint 'not { then(): any; }'.
 promisePermutations.ts(109,19): error TS2769: No overload matches this call.
   The last overload gave the following error.
     Argument of type '(cb: <T>(a: T) => T) => IPromise<string>' is not assignable to parameter of type '(value: string) => IPromise<string>'.
@@ -75,10 +104,12 @@ promisePermutations.ts(111,19): error TS2769: No overload matches this call.
     Argument of type '(cb: <T>(a: T) => T) => Promise<string>' is not assignable to parameter of type '(value: string) => IPromise<string>'.
       Types of parameters 'cb' and 'value' are incompatible.
         Type 'string' is not assignable to type '<T>(a: T) => T'.
+promisePermutations.ts(116,43): error TS2344: Type 'number' does not satisfy the constraint 'not { then(): any; }'.
 promisePermutations.ts(117,19): error TS2769: No overload matches this call.
   The last overload gave the following error.
     Argument of type '<T>(x: T, cb: (a: T) => T) => IPromise<T>' is not assignable to parameter of type '(value: number) => IPromise<any>'.
       Target signature provides too few arguments. Expected 2 or more, but got 1.
+promisePermutations.ts(119,17): error TS2344: Type 'number' does not satisfy the constraint 'not { then(): any; }'.
 promisePermutations.ts(120,19): error TS2769: No overload matches this call.
   The last overload gave the following error.
     Argument of type '<T>(x: T, cb: (a: T) => T) => IPromise<T>' is not assignable to parameter of type '(value: number) => IPromise<any>'.
@@ -100,6 +131,7 @@ promisePermutations.ts(129,33): error TS2769: No overload matches this call.
     Argument of type '(x: any) => IPromise<string>' is not assignable to parameter of type '(error: any) => IPromise<number>'.
       Type 'IPromise<string>' is not assignable to type 'IPromise<number>'.
         Type 'string' is not assignable to type 'number'.
+promisePermutations.ts(131,25): error TS2344: Type 'number' does not satisfy the constraint 'not { then(): any; }'.
 promisePermutations.ts(132,19): error TS2769: No overload matches this call.
   The last overload gave the following error.
     Argument of type '<T>(x: T, cb: <U>(a: U) => U) => IPromise<T>' is not assignable to parameter of type '(value: number) => IPromise<any>'.
@@ -131,6 +163,7 @@ promisePermutations.ts(156,21): error TS2769: No overload matches this call.
     Argument of type '{ (x: number): IPromise<number>; (x: string): IPromise<string>; }' is not assignable to parameter of type '(value: number) => IPromise<string>'.
       Type 'IPromise<number>' is not assignable to type 'IPromise<string>'.
         Type 'number' is not assignable to type 'string'.
+promisePermutations.ts(157,26): error TS2344: Type 'number' does not satisfy the constraint 'not { then(): any; }'.
 promisePermutations.ts(158,21): error TS2769: No overload matches this call.
   The last overload gave the following error.
     Argument of type '{ (x: number): IPromise<number>; (x: string): IPromise<string>; }' is not assignable to parameter of type '(value: number) => IPromise<string>'.
@@ -146,18 +179,42 @@ promisePermutations.ts(160,21): error TS2769: No overload matches this call.
     Argument of type '{ (x: number): Promise<number>; (x: string): Promise<string>; }' is not assignable to parameter of type '(value: number) => IPromise<string>'.
       Type 'Promise<number>' is not assignable to type 'IPromise<string>'.
         Types of property 'then' are incompatible.
-          Type '{ <TResult1 = number, TResult2 = never>(onfulfilled?: (value: number) => TResult1 | PromiseLike<TResult1>, onrejected?: (reason: any) => TResult2 | PromiseLike<TResult2>): Promise<TResult1 | TResult2>; <U>(success?: (value: number) => Promise<U>, error?: (error: any) => Promise<U>, progress?: (progress: any) => void): Promise<U>; <U>(success?: (value: number) => Promise<U>, error?: (error: any) => U, progress?: (progress: any) => void): Promise<U>; <U>(success?: (value: number) => U, error?: (error: any) => Promise<U>, progress?: (progress: any) => void): Promise<U>; <U>(success?: (value: number) => U, error?: (error: any) => U, progress?: (progress: any) => void): Promise<U>; }' is not assignable to type '{ <U>(success?: (value: string) => IPromise<U>, error?: (error: any) => IPromise<U>, progress?: (progress: any) => void): IPromise<U>; <U>(success?: (value: string) => IPromise<U>, error?: (error: any) => U, progress?: (progress: any) => void): IPromise<U>; <U>(success?: (value: string) => U, error?: (error: any) => IPromise<U>, progress?: (progress: any) => void): IPromise<U>; <U>(success?: (value: string) => U, error?: (error: any) => U, progress?: (progress: any) => void): IPromise<U>; }'.
+          Type '{ <TResult1 = number, TResult2 = never>(onfulfilled?: (value: number) => TResult1 | PromiseLike<TResult1>, onrejected?: (reason: any) => TResult2 | PromiseLike<TResult2>): Promise<Awaited<TResult1> | Awaited<TResult2>>; <U>(success?: (value: number) => Promise<U>, error?: (error: any) => Promise<U>, progress?: (progress: any) => void): Promise<U>; <U>(success?: (value: number) => Promise<U>, error?: (error: any) => U, progress?: (progress: any) => void): Promise<U>; <U>(success?: (value: number) => U, error?: (error: any) => Promise<U>, progress?: (progress: any) => void): Promise<U>; <U>(success?: (value: number) => U, error?: (error: any) => U, progress?: (progress: any) => void): Promise<U>; }' is not assignable to type '{ <U>(success?: (value: string) => IPromise<U>, error?: (error: any) => IPromise<U>, progress?: (progress: any) => void): IPromise<U>; <U>(success?: (value: string) => IPromise<U>, error?: (error: any) => U, progress?: (progress: any) => void): IPromise<U>; <U>(success?: (value: string) => U, error?: (error: any) => IPromise<U>, progress?: (progress: any) => void): IPromise<U>; <U>(success?: (value: string) => U, error?: (error: any) => U, progress?: (progress: any) => void): IPromise<U>; }'.
             Types of parameters 'onfulfilled' and 'success' are incompatible.
               Types of parameters 'value' and 'value' are incompatible.
                 Type 'number' is not assignable to type 'string'.
 
 
-==== promisePermutations.ts (33 errors) ====
+==== promisePermutations.ts (66 errors) ====
     interface Promise<T> {
         then<U>(success?: (value: T) => Promise<U>, error?: (error: any) => Promise<U>, progress?: (progress: any) => void): Promise<U>;
+                                                ~
+!!! error TS2344: Type 'U' does not satisfy the constraint 'not { then(): any; }'.
+!!! related TS2208 promisePermutations.ts:2:10: This type parameter might need an `extends not { then(): any; }` constraint.
+                                                                                    ~
+!!! error TS2344: Type 'U' does not satisfy the constraint 'not { then(): any; }'.
+!!! related TS2208 promisePermutations.ts:2:10: This type parameter might need an `extends not { then(): any; }` constraint.
+                                                                                                                                     ~
+!!! error TS2344: Type 'U' does not satisfy the constraint 'not { then(): any; }'.
+!!! related TS2208 promisePermutations.ts:2:10: This type parameter might need an `extends not { then(): any; }` constraint.
         then<U>(success?: (value: T) => Promise<U>, error?: (error: any) => U, progress?: (progress: any) => void): Promise<U>;
+                                                ~
+!!! error TS2344: Type 'U' does not satisfy the constraint 'not { then(): any; }'.
+!!! related TS2208 promisePermutations.ts:3:10: This type parameter might need an `extends not { then(): any; }` constraint.
+                                                                                                                            ~
+!!! error TS2344: Type 'U' does not satisfy the constraint 'not { then(): any; }'.
+!!! related TS2208 promisePermutations.ts:3:10: This type parameter might need an `extends not { then(): any; }` constraint.
         then<U>(success?: (value: T) => U, error?: (error: any) => Promise<U>, progress?: (progress: any) => void): Promise<U>;
+                                                                           ~
+!!! error TS2344: Type 'U' does not satisfy the constraint 'not { then(): any; }'.
+!!! related TS2208 promisePermutations.ts:4:10: This type parameter might need an `extends not { then(): any; }` constraint.
+                                                                                                                            ~
+!!! error TS2344: Type 'U' does not satisfy the constraint 'not { then(): any; }'.
+!!! related TS2208 promisePermutations.ts:4:10: This type parameter might need an `extends not { then(): any; }` constraint.
         then<U>(success?: (value: T) => U, error?: (error: any) => U, progress?: (progress: any) => void): Promise<U>;
+                                                                                                                   ~
+!!! error TS2344: Type 'U' does not satisfy the constraint 'not { then(): any; }'.
+!!! related TS2208 promisePermutations.ts:5:10: This type parameter might need an `extends not { then(): any; }` constraint.
         done<U>(success?: (value: T) => any, error?: (error: any) => any, progress?: (progress: any) => void): void;
     }
     
@@ -171,40 +228,72 @@ promisePermutations.ts(160,21): error TS2769: No overload matches this call.
     
     declare function testFunction(): IPromise<number>;
     declare function testFunctionP(): Promise<number>;
+                                              ~~~~~~
+!!! error TS2344: Type 'number' does not satisfy the constraint 'not { then(): any; }'.
     declare function testFunction2(): IPromise<{ x: number }>;
     declare function testFunction2P(): Promise<{ x: number }>;
+                                               ~~~~~~~~~~~~~
+!!! error TS2344: Type '{ x: number; }' does not satisfy the constraint 'not { then(): any; }'.
     declare function testFunction3(x: number): IPromise<number>;
     declare function testFunction3P(x: number): Promise<number>;
+                                                        ~~~~~~
+!!! error TS2344: Type 'number' does not satisfy the constraint 'not { then(): any; }'.
     declare function testFunction4(x: number, y?: string): IPromise<string>;
     declare function testFunction4P(x: number, y?: string): Promise<string>;
+                                                                    ~~~~~~
+!!! error TS2344: Type 'string' does not satisfy the constraint 'not { then(): any; }'.
     declare function testFunction5(x: number, cb: (a: string) => string): IPromise<string>;
     declare function testFunction5P(x: number, cb: (a: string) => string): Promise<string>;
+                                                                                   ~~~~~~
+!!! error TS2344: Type 'string' does not satisfy the constraint 'not { then(): any; }'.
     declare function testFunction6(x: number, cb: <T>(a: T) => T): IPromise<string>;
     declare function testFunction6P(x: number, cb: <T>(a: T) => T): Promise<string>;
+                                                                            ~~~~~~
+!!! error TS2344: Type 'string' does not satisfy the constraint 'not { then(): any; }'.
     declare function testFunction7(cb: <T>(a: T) => T): IPromise<string>;
     declare function testFunction7P(cb: <T>(a: T) => T): Promise<string>;
+                                                                 ~~~~~~
+!!! error TS2344: Type 'string' does not satisfy the constraint 'not { then(): any; }'.
     declare function testFunction8<T>(x: T, cb: (a: T) => T): IPromise<T>;
     declare function testFunction8P<T>(x: T, cb: (a: T) => T): Promise<T>;
+                                                                       ~
+!!! error TS2344: Type 'T' does not satisfy the constraint 'not { then(): any; }'.
+!!! related TS2208 promisePermutations.ts:32:33: This type parameter might need an `extends not { then(): any; }` constraint.
     declare function testFunction9<T>(x: T, cb: <U>(a: U) => U): IPromise<T>;
     declare function testFunction9P<T>(x: T, cb: <U>(a: U) => U): Promise<T>;
+                                                                          ~
+!!! error TS2344: Type 'T' does not satisfy the constraint 'not { then(): any; }'.
+!!! related TS2208 promisePermutations.ts:34:33: This type parameter might need an `extends not { then(): any; }` constraint.
     declare function testFunction10<T>(cb: <U>(a: U) => U): IPromise<T>;
     declare function testFunction10P<T>(cb: <U>(a: U) => U): Promise<T>;
+                                                                     ~
+!!! error TS2344: Type 'T' does not satisfy the constraint 'not { then(): any; }'.
+!!! related TS2208 promisePermutations.ts:36:34: This type parameter might need an `extends not { then(): any; }` constraint.
     
     declare function testFunction11(x: number): IPromise<number>;
     declare function testFunction11(x: string): IPromise<string>;
     declare function testFunction11P(x: number): Promise<number>;
+                                                         ~~~~~~
+!!! error TS2344: Type 'number' does not satisfy the constraint 'not { then(): any; }'.
     declare function testFunction11P(x: string): Promise<string>;
+                                                         ~~~~~~
+!!! error TS2344: Type 'string' does not satisfy the constraint 'not { then(): any; }'.
     
     declare function testFunction12<T>(x: T): IPromise<T>;
     declare function testFunction12<T>(x: T, y: T): IPromise<T>;
     declare function testFunction12P<T>(x: T): IPromise<T>;
     declare function testFunction12P<T>(x: T, y: T): Promise<T>;
+                                                             ~
+!!! error TS2344: Type 'T' does not satisfy the constraint 'not { then(): any; }'.
+!!! related TS2208 promisePermutations.ts:46:34: This type parameter might need an `extends not { then(): any; }` constraint.
     
     declare var r1: IPromise<number>;
     var r1a = r1.then(testFunction, testFunction, testFunction);
     var r1b = r1.then(testFunction, testFunction, testFunction).then(testFunction, testFunction, testFunction);
     var r1c = r1.then(testFunctionP, testFunctionP, testFunctionP);
     declare var s1: Promise<number>;
+                            ~~~~~~
+!!! error TS2344: Type 'number' does not satisfy the constraint 'not { then(): any; }'.
     var s1a = s1.then(testFunction, testFunction, testFunction);
     var s1b = s1.then(testFunctionP, testFunctionP, testFunctionP);
     var s1c = s1.then(testFunctionP, testFunction, testFunction);
@@ -214,6 +303,8 @@ promisePermutations.ts(160,21): error TS2769: No overload matches this call.
     var r2a = r2.then(testFunction2, testFunction2, testFunction2);
     var r2b = r2.then(testFunction2, testFunction2, testFunction2).then(testFunction2, testFunction2, testFunction2);
     declare var s2: Promise<{ x: number; }>;
+                            ~~~~~~~~~~~~~~
+!!! error TS2344: Type '{ x: number; }' does not satisfy the constraint 'not { then(): any; }'.
     var s2a = s2.then(testFunction2, testFunction2, testFunction2);
     var s2b = s2.then(testFunction2P, testFunction2P, testFunction2P);
     var s2c = s2.then(testFunction2P, testFunction2, testFunction2);
@@ -223,6 +314,8 @@ promisePermutations.ts(160,21): error TS2769: No overload matches this call.
     var r3a = r3.then(testFunction3, testFunction3, testFunction3);
     var r3b = r3.then(testFunction3, testFunction3, testFunction3).then(testFunction3, testFunction3, testFunction3);
     declare var s3: Promise<number>;
+                            ~~~~~~
+!!! error TS2344: Type 'number' does not satisfy the constraint 'not { then(): any; }'.
     var s3a = s3.then(testFunction3, testFunction3, testFunction3);
     var s3b = s3.then(testFunction3P, testFunction3P, testFunction3P);
     var s3c = s3.then(testFunction3P, testFunction3, testFunction3);
@@ -238,6 +331,8 @@ promisePermutations.ts(160,21): error TS2769: No overload matches this call.
     declare var r4: IPromise<string>;
     declare var sIPromise: (x: any) => IPromise<string>;
     declare var sPromise: (x: any) => Promise<string>;
+                                              ~~~~~~
+!!! error TS2344: Type 'string' does not satisfy the constraint 'not { then(): any; }'.
     var r4a = r4.then(testFunction4, testFunction4, testFunction4); // error
                       ~~~~~~~~~~~~~
 !!! error TS2769: No overload matches this call.
@@ -248,6 +343,8 @@ promisePermutations.ts(160,21): error TS2769: No overload matches this call.
 !!! related TS2771 promisePermutations.ts:13:5: The last overload is declared here.
     var r4b = r4.then(sIPromise, testFunction4, testFunction4).then(sIPromise, testFunction4, testFunction4); // ok
     declare var s4: Promise<string>;
+                            ~~~~~~
+!!! error TS2344: Type 'string' does not satisfy the constraint 'not { then(): any; }'.
     var s4a = s4.then(testFunction4, testFunction4, testFunction4); // error
                       ~~~~~~~~~~~~~
 !!! error TS2769: No overload matches this call.
@@ -284,6 +381,8 @@ promisePermutations.ts(160,21): error TS2769: No overload matches this call.
 !!! related TS2771 promisePermutations.ts:13:5: The last overload is declared here.
     var r5b = r5.then(sIPromise, sIPromise, sIPromise).then(sIPromise, sIPromise, sIPromise); // ok
     declare var s5: Promise<string>;
+                            ~~~~~~
+!!! error TS2344: Type 'string' does not satisfy the constraint 'not { then(): any; }'.
     var s5a = s5.then(testFunction5, testFunction5, testFunction5); // error
                       ~~~~~~~~~~~~~
 !!! error TS2769: No overload matches this call.
@@ -317,6 +416,8 @@ promisePermutations.ts(160,21): error TS2769: No overload matches this call.
 !!! related TS2771 promisePermutations.ts:13:5: The last overload is declared here.
     var r6b = r6.then(sIPromise, sIPromise, sIPromise).then(sIPromise, sIPromise, sIPromise); // ok
     declare var s6: Promise<string>;
+                            ~~~~~~
+!!! error TS2344: Type 'string' does not satisfy the constraint 'not { then(): any; }'.
     var s6a = s6.then(testFunction6, testFunction6, testFunction6); // error
                       ~~~~~~~~~~~~~
 !!! error TS2769: No overload matches this call.
@@ -351,6 +452,8 @@ promisePermutations.ts(160,21): error TS2769: No overload matches this call.
 !!! related TS2771 promisePermutations.ts:13:5: The last overload is declared here.
     var r7b = r7.then(sIPromise, sIPromise, sIPromise).then(sIPromise, sIPromise, sIPromise); // ok
     declare var s7: Promise<string>;
+                            ~~~~~~
+!!! error TS2344: Type 'string' does not satisfy the constraint 'not { then(): any; }'.
     var s7a = r7.then(testFunction7, testFunction7, testFunction7); // error
                       ~~~~~~~~~~~~~
 !!! error TS2769: No overload matches this call.
@@ -380,6 +483,8 @@ promisePermutations.ts(160,21): error TS2769: No overload matches this call.
     declare var r8: IPromise<number>;
     declare var nIPromise: (x: any) => IPromise<number>;
     declare var nPromise: (x: any) => Promise<number>;
+                                              ~~~~~~
+!!! error TS2344: Type 'number' does not satisfy the constraint 'not { then(): any; }'.
     var r8a = r8.then(testFunction8, testFunction8, testFunction8); // error
                       ~~~~~~~~~~~~~
 !!! error TS2769: No overload matches this call.
@@ -389,6 +494,8 @@ promisePermutations.ts(160,21): error TS2769: No overload matches this call.
 !!! related TS2771 promisePermutations.ts:13:5: The last overload is declared here.
     var r8b = r8.then(nIPromise, nIPromise, nIPromise).then(nIPromise, nIPromise, nIPromise); // ok
     var s8: Promise<number>;
+                    ~~~~~~
+!!! error TS2344: Type 'number' does not satisfy the constraint 'not { then(): any; }'.
     var s8a = s8.then(testFunction8, testFunction8, testFunction8); // error
                       ~~~~~~~~~~~~~
 !!! error TS2769: No overload matches this call.
@@ -432,6 +539,8 @@ promisePermutations.ts(160,21): error TS2769: No overload matches this call.
 !!! related TS2771 promisePermutations.ts:13:5: The last overload is declared here.
     var r9e = r9.then(testFunction, nIPromise, sIPromise).then(sIPromise, sIPromise, sIPromise); // ok
     declare var s9: Promise<number>;
+                            ~~~~~~
+!!! error TS2344: Type 'number' does not satisfy the constraint 'not { then(): any; }'.
     var s9a = s9.then(testFunction9, testFunction9, testFunction9); // error
                       ~~~~~~~~~~~~~
 !!! error TS2769: No overload matches this call.
@@ -503,6 +612,8 @@ promisePermutations.ts(160,21): error TS2769: No overload matches this call.
 !!! error TS2769:         Type 'number' is not assignable to type 'string'.
 !!! related TS2771 promisePermutations.ts:13:5: The last overload is declared here.
     declare var s11: Promise<number>;
+                             ~~~~~~
+!!! error TS2344: Type 'number' does not satisfy the constraint 'not { then(): any; }'.
     var s11a = s11.then(testFunction11, testFunction11, testFunction11); // ok
                         ~~~~~~~~~~~~~~
 !!! error TS2769: No overload matches this call.
@@ -526,7 +637,7 @@ promisePermutations.ts(160,21): error TS2769: No overload matches this call.
 !!! error TS2769:     Argument of type '{ (x: number): Promise<number>; (x: string): Promise<string>; }' is not assignable to parameter of type '(value: number) => IPromise<string>'.
 !!! error TS2769:       Type 'Promise<number>' is not assignable to type 'IPromise<string>'.
 !!! error TS2769:         Types of property 'then' are incompatible.
-!!! error TS2769:           Type '{ <TResult1 = number, TResult2 = never>(onfulfilled?: (value: number) => TResult1 | PromiseLike<TResult1>, onrejected?: (reason: any) => TResult2 | PromiseLike<TResult2>): Promise<TResult1 | TResult2>; <U>(success?: (value: number) => Promise<U>, error?: (error: any) => Promise<U>, progress?: (progress: any) => void): Promise<U>; <U>(success?: (value: number) => Promise<U>, error?: (error: any) => U, progress?: (progress: any) => void): Promise<U>; <U>(success?: (value: number) => U, error?: (error: any) => Promise<U>, progress?: (progress: any) => void): Promise<U>; <U>(success?: (value: number) => U, error?: (error: any) => U, progress?: (progress: any) => void): Promise<U>; }' is not assignable to type '{ <U>(success?: (value: string) => IPromise<U>, error?: (error: any) => IPromise<U>, progress?: (progress: any) => void): IPromise<U>; <U>(success?: (value: string) => IPromise<U>, error?: (error: any) => U, progress?: (progress: any) => void): IPromise<U>; <U>(success?: (value: string) => U, error?: (error: any) => IPromise<U>, progress?: (progress: any) => void): IPromise<U>; <U>(success?: (value: string) => U, error?: (error: any) => U, progress?: (progress: any) => void): IPromise<U>; }'.
+!!! error TS2769:           Type '{ <TResult1 = number, TResult2 = never>(onfulfilled?: (value: number) => TResult1 | PromiseLike<TResult1>, onrejected?: (reason: any) => TResult2 | PromiseLike<TResult2>): Promise<Awaited<TResult1> | Awaited<TResult2>>; <U>(success?: (value: number) => Promise<U>, error?: (error: any) => Promise<U>, progress?: (progress: any) => void): Promise<U>; <U>(success?: (value: number) => Promise<U>, error?: (error: any) => U, progress?: (progress: any) => void): Promise<U>; <U>(success?: (value: number) => U, error?: (error: any) => Promise<U>, progress?: (progress: any) => void): Promise<U>; <U>(success?: (value: number) => U, error?: (error: any) => U, progress?: (progress: any) => void): Promise<U>; }' is not assignable to type '{ <U>(success?: (value: string) => IPromise<U>, error?: (error: any) => IPromise<U>, progress?: (progress: any) => void): IPromise<U>; <U>(success?: (value: string) => IPromise<U>, error?: (error: any) => U, progress?: (progress: any) => void): IPromise<U>; <U>(success?: (value: string) => U, error?: (error: any) => IPromise<U>, progress?: (progress: any) => void): IPromise<U>; <U>(success?: (value: string) => U, error?: (error: any) => U, progress?: (progress: any) => void): IPromise<U>; }'.
 !!! error TS2769:             Types of parameters 'onfulfilled' and 'success' are incompatible.
 !!! error TS2769:               Types of parameters 'value' and 'value' are incompatible.
 !!! error TS2769:                 Type 'number' is not assignable to type 'string'.

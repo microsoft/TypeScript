@@ -10,7 +10,7 @@ declare var x, y, z, a, b, c;
 >c : any
 
 async function forStatement0() {
->forStatement0 : () => Promise<void>
+>forStatement0 : () => Promise<void & not { then(): any; }>
 
     for (x; y; z) { a; }
 >x : any
@@ -20,7 +20,7 @@ async function forStatement0() {
 }
 
 async function forStatement1() {
->forStatement1 : () => Promise<void>
+>forStatement1 : () => Promise<void & not { then(): any; }>
 
     for (await x; y; z) { a; }
 >await x : any
@@ -31,7 +31,7 @@ async function forStatement1() {
 }
 
 async function forStatement2() {
->forStatement2 : () => Promise<void>
+>forStatement2 : () => Promise<void & not { then(): any; }>
 
     for (x; await y; z) { a; }
 >x : any
@@ -42,7 +42,7 @@ async function forStatement2() {
 }
 
 async function forStatement3() {
->forStatement3 : () => Promise<void>
+>forStatement3 : () => Promise<void & not { then(): any; }>
 
     for (x; y; await z) { a; }
 >x : any
@@ -53,7 +53,7 @@ async function forStatement3() {
 }
 
 async function forStatement4() {
->forStatement4 : () => Promise<void>
+>forStatement4 : () => Promise<void & not { then(): any; }>
 
     for (x; y; z) { await a; }
 >x : any
@@ -64,7 +64,7 @@ async function forStatement4() {
 }
 
 async function forStatement5() {
->forStatement5 : () => Promise<void>
+>forStatement5 : () => Promise<void & not { then(): any; }>
 
     for (var b; y; z) { a; }
 >b : any
@@ -74,7 +74,7 @@ async function forStatement5() {
 }
 
 async function forStatement6() {
->forStatement6 : () => Promise<void>
+>forStatement6 : () => Promise<void & not { then(): any; }>
 
     for (var c = x; y; z) { a; }
 >c : any

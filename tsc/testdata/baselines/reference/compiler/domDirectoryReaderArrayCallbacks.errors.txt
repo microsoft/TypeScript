@@ -1,0 +1,11 @@
+domDirectoryReaderArrayCallbacks.ts(4,13): error TS2344: Type 'readonly FileSystemEntry[]' does not satisfy the constraint 'not { then(): any; }'.
+
+
+==== domDirectoryReaderArrayCallbacks.ts (1 errors) ====
+    declare const reader: FileSystemDirectoryReader;
+    reader.readEntries(entries => entries.length);
+    reader.readEntries(async (entries: FileSystemEntry[]) => {});
+    new Promise<readonly FileSystemEntry[]>(resolve => reader.readEntries(resolve));
+                ~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2344: Type 'readonly FileSystemEntry[]' does not satisfy the constraint 'not { then(): any; }'.
+    

@@ -26,16 +26,16 @@ type Action2 = () => (AsyncGenerator<string, string, string[]> | string)
 
 const test2: Action2 = async function* () {
 >test2 : Action2
->async function* () {    const next = yield await Promise.resolve('')    return next[0]} : () => AsyncGenerator<string, string, string[]>
+>async function* () {    const next = yield await Promise.resolve('')    return next[0]} : () => AsyncGenerator<string & not { then(): any; } & not { then(): any; }, string & not { then(): any; }, string[]>
 
     const next = yield await Promise.resolve('')
 >next : string[]
 >yield await Promise.resolve('') : string[]
->await Promise.resolve('') : string
->Promise.resolve('') : Promise<string>
->Promise.resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T>(value: T | PromiseLike<T>): Promise<Awaited<T>>; }
+>await Promise.resolve('') : string & not { then(): any; } & not { then(): any; }
+>Promise.resolve('') : Promise<string & not { then(): any; }>
+>Promise.resolve : { (): Promise<void & not { then(): any; }>; <T>(value: T): Promise<Awaited<T>>; <T>(value: T | PromiseLike<T>): Promise<Awaited<T>>; }
 >Promise : PromiseConstructor
->resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T>(value: T | PromiseLike<T>): Promise<Awaited<T>>; }
+>resolve : { (): Promise<void & not { then(): any; }>; <T>(value: T): Promise<Awaited<T>>; <T>(value: T | PromiseLike<T>): Promise<Awaited<T>>; }
 >'' : ""
 
     return next[0]

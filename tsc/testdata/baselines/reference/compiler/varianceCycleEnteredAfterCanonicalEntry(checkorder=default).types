@@ -53,23 +53,23 @@ declare const api: Stub<{ sub(): Promise<Stub<{}>> }>;
 >sub : () => Promise<Stub<{}>>
 
 export async function g() {
->g : () => Promise<void>
+>g : () => Promise<void & not { then(): any; }>
 
   await api.sub();
->await api.sub() : {}
+>await api.sub() : {} & not { then(): any; }
 >api.sub() : RpcPromise<{}>
 >api.sub : () => RpcPromise<{}>
 >api : Provider<{ sub(): Promise<Stub<{}>>; }> & StubBase<{ sub(): Promise<Stub<{}>>; }>
 >sub : () => RpcPromise<{}>
 
   api.sub().then(s => s);
->api.sub().then(s => s) : Promise<{}>
->api.sub().then : <TResult1 = {}, TResult2 = never>(onfulfilled?: ((value: {}) => TResult1 | PromiseLike<TResult1>) | null | undefined, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | null | undefined) => Promise<TResult1 | TResult2>
+>api.sub().then(s => s) : Promise<{} & not { then(): any; }>
+>api.sub().then : <TResult1 = {}, TResult2 = never>(onfulfilled?: ((value: {}) => TResult1 | PromiseLike<TResult1>) | null | undefined, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | null | undefined) => Promise<Awaited<TResult1> | Awaited<TResult2>>
 >api.sub() : RpcPromise<{}>
 >api.sub : () => RpcPromise<{}>
 >api : Provider<{ sub(): Promise<Stub<{}>>; }> & StubBase<{ sub(): Promise<Stub<{}>>; }>
 >sub : () => RpcPromise<{}>
->then : <TResult1 = {}, TResult2 = never>(onfulfilled?: ((value: {}) => TResult1 | PromiseLike<TResult1>) | null | undefined, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | null | undefined) => Promise<TResult1 | TResult2>
+>then : <TResult1 = {}, TResult2 = never>(onfulfilled?: ((value: {}) => TResult1 | PromiseLike<TResult1>) | null | undefined, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | null | undefined) => Promise<Awaited<TResult1> | Awaited<TResult2>>
 >s => s : (s: {}) => {}
 >s : {}
 >s : {}

@@ -1,10 +1,15 @@
+promiseAllKeyed.ts(17,5): error TS2322: Type 'number' is not assignable to type 'number & not { then(): any; }'.
+  Type 'number' is not assignable to type 'not { then(): any; }'.
+promiseAllKeyed.ts(36,16): error TS2344: Type 'number' does not satisfy the constraint 'not { then(): any; }'.
+promiseAllKeyed.ts(42,26): error TS2344: Type '{ a: number; b: string; }' does not satisfy the constraint 'not { then(): any; }'.
+promiseAllKeyed.ts(43,33): error TS2344: Type '{ a: PromiseSettledResult<number>; b: PromiseSettledResult<string>; }' does not satisfy the constraint 'not { then(): any; }'.
 promiseAllKeyed.ts(50,18): error TS2345: Argument of type 'number' is not assignable to parameter of type 'object'.
 promiseAllKeyed.ts(52,25): error TS2345: Argument of type 'string' is not assignable to parameter of type 'object'.
 promiseAllKeyed.ts(54,18): error TS2345: Argument of type 'null' is not assignable to parameter of type 'object'.
 promiseAllKeyed.ts(56,25): error TS2345: Argument of type 'undefined' is not assignable to parameter of type 'object'.
 
 
-==== promiseAllKeyed.ts (4 errors) ====
+==== promiseAllKeyed.ts (8 errors) ====
     declare const key: unique symbol;
     
     const values = {
@@ -22,6 +27,9 @@ promiseAllKeyed.ts(56,25): error TS2345: Argument of type 'undefined' is not ass
         const d: number = result[key];
     
         result.a = 2;
+        ~~~~~~~~
+!!! error TS2322: Type 'number' is not assignable to type 'number & not { then(): any; }'.
+!!! error TS2322:   Type 'number' is not assignable to type 'not { then(): any; }'.
     }
     
     async function testAllSettledKeyed() {
@@ -41,16 +49,25 @@ promiseAllKeyed.ts(56,25): error TS2345: Argument of type 'undefined' is not ass
     
     interface Input {
         a: Promise<number>;
+                   ~~~~~~
+!!! error TS2344: Type 'number' does not satisfy the constraint 'not { then(): any; }'.
         b: string;
     }
     
     declare const input: Input;
     
     const allResult: Promise<{ a: number; b: string; }> = Promise.allKeyed(input);
+                             ~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2344: Type '{ a: number; b: string; }' does not satisfy the constraint 'not { then(): any; }'.
     const allSettledResult: Promise<{
+                                    ~
         a: PromiseSettledResult<number>;
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
         b: PromiseSettledResult<string>;
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     }> = Promise.allSettledKeyed(input);
+    ~
+!!! error TS2344: Type '{ a: PromiseSettledResult<number>; b: PromiseSettledResult<string>; }' does not satisfy the constraint 'not { then(): any; }'.
     
     Promise.try(() => 1);
     

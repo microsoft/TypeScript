@@ -2,7 +2,7 @@
 
 === asyncAwaitWithCapturedBlockScopeVar.ts ===
 async function fn1() {
->fn1 : () => Promise<void>
+>fn1 : () => Promise<void & not { then(): any; }>
 
     let ar = [];
 >ar : any[]
@@ -18,7 +18,7 @@ async function fn1() {
 >i : number
 
         await 1;
->await 1 : 1
+>await 1 : 1 & not { then(): any; }
 >1 : 1
 
         ar.push(() => i);
@@ -32,7 +32,7 @@ async function fn1() {
 }
 
 async function fn2() {
->fn2 : () => Promise<void>
+>fn2 : () => Promise<void & not { then(): any; }>
 
     let ar = [];
 >ar : any[]
@@ -48,7 +48,7 @@ async function fn2() {
 >i : number
 
         await 1;
->await 1 : 1
+>await 1 : 1 & not { then(): any; }
 >1 : 1
 
         ar.push(() => i);
@@ -64,7 +64,7 @@ async function fn2() {
 }
 
 async function fn3() {
->fn3 : () => Promise<void>
+>fn3 : () => Promise<void & not { then(): any; }>
 
     let ar = [];
 >ar : any[]
@@ -80,7 +80,7 @@ async function fn3() {
 >i : number
 
         await 1;
->await 1 : 1
+>await 1 : 1 & not { then(): any; }
 >1 : 1
 
         ar.push(() => i);
@@ -112,7 +112,7 @@ async function fn4(): Promise<number> {
 >i : number
 
         await 1;
->await 1 : 1
+>await 1 : 1 & not { then(): any; }
 >1 : 1
 
         ar.push(() => i);

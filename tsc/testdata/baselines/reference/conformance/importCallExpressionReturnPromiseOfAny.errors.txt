@@ -1,0 +1,43 @@
+1.ts(13,18): error TS2344: Type 'typeof import("defaultPath")' does not satisfy the constraint 'not { then(): any; }'.
+1.ts(14,74): error TS2344: Type 'typeof import("defaultPath")' does not satisfy the constraint 'not { then(): any; }'.
+1.ts(20,17): error TS2344: Type 'typeof import("defaultPath")' does not satisfy the constraint 'not { then(): any; }'.
+
+
+==== defaultPath.ts (0 errors) ====
+    export class C {}
+    
+==== 1.ts (3 errors) ====
+    import * as defaultModule from "./defaultPath";
+    declare function getSpecifier(): string;
+    declare function ValidSomeCondition(): boolean;
+    declare var whatToLoad: boolean;
+    declare const directory: string;
+    declare const moduleFile: number;
+    
+    import(`${directory}\\${moduleFile}`);
+    import(getSpecifier());
+    
+    var p1 = import(ValidSomeCondition() ? "./0" : "externalModule");
+    var p1: Promise<any> = import(getSpecifier());
+    var p11: Promise<typeof defaultModule> = import(getSpecifier());
+                     ~~~~~~~~~~~~~~~~~~~~
+!!! error TS2344: Type 'typeof import("defaultPath")' does not satisfy the constraint 'not { then(): any; }'.
+    const p2 = import(whatToLoad ? getSpecifier() : "defaulPath") as Promise<typeof defaultModule>;
+                                                                             ~~~~~~~~~~~~~~~~~~~~
+!!! error TS2344: Type 'typeof import("defaultPath")' does not satisfy the constraint 'not { then(): any; }'.
+    p1.then(zero => {
+        return zero.foo();  // ok, zero is any
+    });
+    
+    let j: string;
+    var p3: Promise<typeof defaultModule> = import(j=getSpecifier());
+                    ~~~~~~~~~~~~~~~~~~~~
+!!! error TS2344: Type 'typeof import("defaultPath")' does not satisfy the constraint 'not { then(): any; }'.
+    
+    function * loadModule(directories: string[]) {
+        for (const directory of directories) {
+            const path = `${directory}\\moduleFile`;
+            import(yield path);
+        }
+    }
+    

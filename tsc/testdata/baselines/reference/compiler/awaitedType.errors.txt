@@ -1,14 +1,40 @@
+awaitedType.ts(2,27): error TS2344: Type 'number' does not satisfy the constraint 'not { then(): any; }'.
+awaitedType.ts(3,36): error TS2344: Type 'number' does not satisfy the constraint 'not { then(): any; }'.
+awaitedType.ts(4,36): error TS2344: Type 'string' does not satisfy the constraint 'not { then(): any; }'.
+awaitedType.ts(12,28): error TS2344: Type 'Promise<number>' does not satisfy the constraint 'not { then(): any; }'.
+awaitedType.ts(12,36): error TS2344: Type 'number' does not satisfy the constraint 'not { then(): any; }'.
+awaitedType.ts(13,36): error TS2344: Type 'Promise<number>' does not satisfy the constraint 'not { then(): any; }'.
+awaitedType.ts(13,44): error TS2344: Type 'number' does not satisfy the constraint 'not { then(): any; }'.
+awaitedType.ts(14,36): error TS2344: Type 'Promise<number>' does not satisfy the constraint 'not { then(): any; }'.
+awaitedType.ts(14,44): error TS2344: Type 'number' does not satisfy the constraint 'not { then(): any; }'.
+awaitedType.ts(15,36): error TS2344: Type 'Promise<number>' does not satisfy the constraint 'not { then(): any; }'.
+awaitedType.ts(15,44): error TS2344: Type 'number' does not satisfy the constraint 'not { then(): any; }'.
 awaitedType.ts(22,12): error TS2589: Type instantiation is excessively deep and possibly infinite.
 awaitedType.ts(26,12): error TS2589: Type instantiation is excessively deep and possibly infinite.
 awaitedType.ts(29,22): error TS7010: 'then', which lacks return-type annotation, implicitly has an 'any' return type.
-awaitedType.ts(236,28): error TS2493: Tuple type '[number]' of length '1' has no element at index '1'.
+awaitedType.ts(32,36): error TS2344: Type 'T' does not satisfy the constraint 'not { then(): any; }'.
+awaitedType.ts(64,30): error TS2344: Type 'string' does not satisfy the constraint 'not { then(): any; }'.
+awaitedType.ts(69,30): error TS2344: Type 'unknown' does not satisfy the constraint 'not { then(): any; }'.
+awaitedType.ts(74,30): error TS2344: Type 'object' does not satisfy the constraint 'not { then(): any; }'.
+awaitedType.ts(182,99): error TS2344: Type 'GenericStructure<AcceptableKeyType>' does not satisfy the constraint 'not { then(): any; }'.
+awaitedType.ts(182,170): error TS2344: Type 'void' does not satisfy the constraint 'not { then(): any; }'.
+awaitedType.ts(184,3): error TS2322: Type 'number' is not assignable to type '(GenericStructure<AcceptableKeyType> & not { then(): any; })[AcceptableKeyType]'.
+awaitedType.ts(210,27): error TS2344: Type 'number' does not satisfy the constraint 'not { then(): any; }'.
+awaitedType.ts(210,39): error TS2344: Type 'number' does not satisfy the constraint 'not { then(): any; }'.
+awaitedType.ts(236,28): error TS2493: Tuple type '[number & not { then(): any; } & not { then(): any; }]' of length '1' has no element at index '1'.
 
 
-==== awaitedType.ts (4 errors) ====
+==== awaitedType.ts (24 errors) ====
     type T1 = Awaited<number>;
     type T2 = Awaited<Promise<number>>;
+                              ~~~~~~
+!!! error TS2344: Type 'number' does not satisfy the constraint 'not { then(): any; }'.
     type T3 = Awaited<number | Promise<number>>;
+                                       ~~~~~~
+!!! error TS2344: Type 'number' does not satisfy the constraint 'not { then(): any; }'.
     type T4 = Awaited<number | Promise<string>>;
+                                       ~~~~~~
+!!! error TS2344: Type 'string' does not satisfy the constraint 'not { then(): any; }'.
     type T5 = Awaited<{ then: number }>;
     type T6 = Awaited<{ then(): void }>; // never (non-promise "thenable")
     type T7 = Awaited<{ then(x: number): void }>; // never (non-promise "thenable")
@@ -17,9 +43,25 @@ awaitedType.ts(236,28): error TS2493: Tuple type '[number]' of length '1' has no
     type T10 = Awaited<never>;
     type T11 = Awaited<unknown>;
     type T12 = Awaited<Promise<Promise<number>>>;
+                               ~~~~~~~~~~~~~~~
+!!! error TS2344: Type 'Promise<number>' does not satisfy the constraint 'not { then(): any; }'.
+                                       ~~~~~~
+!!! error TS2344: Type 'number' does not satisfy the constraint 'not { then(): any; }'.
     type T13 = _Expect<Awaited<Promise<Promise<number>> | string | null>, /*expected*/ string | number | null>; // otherwise just prints T13 in types tests, which isn't very helpful
+                                       ~~~~~~~~~~~~~~~
+!!! error TS2344: Type 'Promise<number>' does not satisfy the constraint 'not { then(): any; }'.
+                                               ~~~~~~
+!!! error TS2344: Type 'number' does not satisfy the constraint 'not { then(): any; }'.
     type T14 = _Expect<Awaited<Promise<Promise<number>> | string | undefined>, /*expected*/ string | number | undefined>; // otherwise just prints T14 in types tests, which isn't very helpful
+                                       ~~~~~~~~~~~~~~~
+!!! error TS2344: Type 'Promise<number>' does not satisfy the constraint 'not { then(): any; }'.
+                                               ~~~~~~
+!!! error TS2344: Type 'number' does not satisfy the constraint 'not { then(): any; }'.
     type T15 = _Expect<Awaited<Promise<Promise<number>> | string | null | undefined>, /*expected*/ string | number | null | undefined>; // otherwise just prints T15 in types tests, which isn't very helpful
+                                       ~~~~~~~~~~~~~~~
+!!! error TS2344: Type 'Promise<number>' does not satisfy the constraint 'not { then(): any; }'.
+                                               ~~~~~~
+!!! error TS2344: Type 'number' does not satisfy the constraint 'not { then(): any; }'.
     
     type TUndefined = Awaited<undefined>;
     type TNull = Awaited<null>;
@@ -43,6 +85,9 @@ awaitedType.ts(236,28): error TS2493: Tuple type '[number]' of length '1' has no
     
     // https://github.com/microsoft/TypeScript/issues/33562
     type MaybePromise<T> = T | Promise<T> | PromiseLike<T>
+                                       ~
+!!! error TS2344: Type 'T' does not satisfy the constraint 'not { then(): any; }'.
+!!! related TS2208 awaitedType.ts:32:19: This type parameter might need an `extends not { then(): any; }` constraint.
     declare function MaybePromise<T>(value: T): MaybePromise<T>;
     
     async function main() {
@@ -75,16 +120,22 @@ awaitedType.ts(236,28): error TS2493: Tuple type '[number]' of length '1' has no
     }
     
     async function f4(x: Promise<string>) {
+                                 ~~~~~~
+!!! error TS2344: Type 'string' does not satisfy the constraint 'not { then(): any; }'.
         // y: string
         const y = await x;
     }
     
     async function f5(x: Promise<unknown>) {
+                                 ~~~~~~~
+!!! error TS2344: Type 'unknown' does not satisfy the constraint 'not { then(): any; }'.
         // y: unknown
         const y = await x;
     }
     
     async function f6(x: Promise<object>) {
+                                 ~~~~~~
+!!! error TS2344: Type 'object' does not satisfy the constraint 'not { then(): any; }'.
         // y: object
         const y = await x;
     }
@@ -193,8 +244,14 @@ awaitedType.ts(236,28): error TS2493: Tuple type '[number]' of length '1' has no
     > = Record<AcceptableKeyType, number>;
     
     async function brokenExample<AcceptableKeyType extends string = string>(structurePromise: Promise<GenericStructure<AcceptableKeyType>>, key: AcceptableKeyType): Promise<void> {
+                                                                                                      ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2344: Type 'GenericStructure<AcceptableKeyType>' does not satisfy the constraint 'not { then(): any; }'.
+                                                                                                                                                                             ~~~~
+!!! error TS2344: Type 'void' does not satisfy the constraint 'not { then(): any; }'.
       const structure = await structurePromise;
       structure[key] = 1;
+      ~~~~~~~~~~~~~~
+!!! error TS2322: Type 'number' is not assignable to type '(GenericStructure<AcceptableKeyType> & not { then(): any; })[AcceptableKeyType]'.
     }
     
     // repro from #46543
@@ -221,6 +278,10 @@ awaitedType.ts(236,28): error TS2493: Tuple type '[number]' of length '1' has no
     declare function findMany<T extends { select?: string; include?: string }>(
       args: T
     ): CheckSelect<T, Promise<1>, Promise<2>>;
+                              ~
+!!! error TS2344: Type 'number' does not satisfy the constraint 'not { then(): any; }'.
+                                          ~
+!!! error TS2344: Type 'number' does not satisfy the constraint 'not { then(): any; }'.
     
     async function findManyWrapper<
       T extends { select?: string; include?: string }
@@ -248,7 +309,7 @@ awaitedType.ts(236,28): error TS2493: Tuple type '[number]' of length '1' has no
         const first = results[0]
         const second = results[1] // error
                                ~
-!!! error TS2493: Tuple type '[number]' of length '1' has no element at index '1'.
+!!! error TS2493: Tuple type '[number & not { then(): any; } & not { then(): any; }]' of length '1' has no element at index '1'.
       })
     }
     

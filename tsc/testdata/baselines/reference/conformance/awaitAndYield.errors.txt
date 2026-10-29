@@ -1,9 +1,12 @@
+awaitAndYield.ts(1,33): error TS2344: Type 'number' does not satisfy the constraint 'not { then(): any; }'.
 awaitAndYield.ts(3,15): error TS1308: 'await' expressions are only allowed within async functions and at the top levels of modules.
 awaitAndYield.ts(4,15): error TS1163: A 'yield' expression is only allowed in a generator body.
 
 
-==== awaitAndYield.ts (2 errors) ====
+==== awaitAndYield.ts (3 errors) ====
     async function* test(x: Promise<number>) {
+                                    ~~~~~~
+!!! error TS2344: Type 'number' does not satisfy the constraint 'not { then(): any; }'.
         enum E {
             foo = await x,
                   ~~~~~

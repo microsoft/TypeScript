@@ -20,15 +20,15 @@ export default async(() => await(Promise.resolve(1)));
 >() => await(Promise.resolve(1)) : () => any
 >await(Promise.resolve(1)) : any
 >await : (...args: any[]) => any
->Promise.resolve(1) : Promise<number>
->Promise.resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T>(value: T | PromiseLike<T>): Promise<Awaited<T>>; }
+>Promise.resolve(1) : Promise<number & not { then(): any; }>
+>Promise.resolve : { (): Promise<void & not { then(): any; }>; <T>(value: T): Promise<Awaited<T>>; <T>(value: T | PromiseLike<T>): Promise<Awaited<T>>; }
 >Promise : PromiseConstructor
->resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T>(value: T | PromiseLike<T>): Promise<Awaited<T>>; }
+>resolve : { (): Promise<void & not { then(): any; }>; <T>(value: T): Promise<Awaited<T>>; <T>(value: T | PromiseLike<T>): Promise<Awaited<T>>; }
 >1 : 1
 
 === b.ts ===
 export default async () => { return 0; };
->async () => { return 0; } : () => Promise<number>
+>async () => { return 0; } : () => Promise<0 & not { then(): any; }>
 >0 : 0
 
 === c.ts ===

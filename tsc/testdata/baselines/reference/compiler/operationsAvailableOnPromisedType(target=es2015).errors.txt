@@ -1,3 +1,9 @@
+operationsAvailableOnPromisedType.ts(3,16): error TS2344: Type 'number' does not satisfy the constraint 'not { then(): any; }'.
+operationsAvailableOnPromisedType.ts(4,16): error TS2344: Type 'string[]' does not satisfy the constraint 'not { then(): any; }'.
+operationsAvailableOnPromisedType.ts(5,16): error TS2344: Type '{ prop: string; }' does not satisfy the constraint 'not { then(): any; }'.
+operationsAvailableOnPromisedType.ts(6,16): error TS2344: Type '() => void' does not satisfy the constraint 'not { then(): any; }'.
+operationsAvailableOnPromisedType.ts(7,16): error TS2344: Type '() => void' does not satisfy the constraint 'not { then(): any; }'.
+operationsAvailableOnPromisedType.ts(8,16): error TS2344: Type 'new () => any' does not satisfy the constraint 'not { then(): any; }'.
 operationsAvailableOnPromisedType.ts(11,9): error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
 operationsAvailableOnPromisedType.ts(12,5): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
 operationsAvailableOnPromisedType.ts(13,5): error TS2365: Operator '+' cannot be applied to types 'number' and 'Promise<number>'.
@@ -21,15 +27,27 @@ operationsAvailableOnPromisedType.ts(27,5): error TS2349: This expression is not
   Type 'Promise<number>' has no call signatures.
 
 
-==== operationsAvailableOnPromisedType.ts (16 errors) ====
+==== operationsAvailableOnPromisedType.ts (22 errors) ====
     async function fn(
         a: number,
         b: Promise<number>,
+                   ~~~~~~
+!!! error TS2344: Type 'number' does not satisfy the constraint 'not { then(): any; }'.
         c: Promise<string[]>,
+                   ~~~~~~~~
+!!! error TS2344: Type 'string[]' does not satisfy the constraint 'not { then(): any; }'.
         d: Promise<{ prop: string }>,
+                   ~~~~~~~~~~~~~~~~
+!!! error TS2344: Type '{ prop: string; }' does not satisfy the constraint 'not { then(): any; }'.
         e: Promise<() => void>,
+                   ~~~~~~~~~~
+!!! error TS2344: Type '() => void' does not satisfy the constraint 'not { then(): any; }'.
         f: Promise<() => void> | (() => void),
+                   ~~~~~~~~~~
+!!! error TS2344: Type '() => void' does not satisfy the constraint 'not { then(): any; }'.
         g: Promise<{ new(): any }>
+                   ~~~~~~~~~~~~~~
+!!! error TS2344: Type 'new () => any' does not satisfy the constraint 'not { then(): any; }'.
     ) {
         // All errors
         a | b;

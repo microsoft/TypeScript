@@ -1,7 +1,11 @@
+boundedRecursiveTypeInferredThroughClosure.ts(65,21): error TS2344: Type 'UnpackAsTopLevelItem<this, undefined>' does not satisfy the constraint 'not { then(): any; }'.
+  Type 'InferData<Transformer, Variant, -1, 0>' is not assignable to type 'not { then(): any; }'.
+    Type 'InferData<Record<string, any>, Variant, -1, 0>' is not assignable to type 'not { then(): any; }'.
+      Type '{ [K in keyof (UnpackRequiredValues<Awaited<ReturnType<({ [K in Variant]: (...args: any[]) => unknown; } & Record<string, any>)[Variant]>>, -1, 0> & UnpackOptionalValues<Awaited<ReturnType<({ [K in Variant]: (...args: any[]) => unknown; } & Record<string, any>)[Variant]>>, -1, 0>)]: (UnpackRequiredValues<Awaited<ReturnType<({ [K in Variant]: (...args: any[]) => unknown; } & Record<string, any>)[Variant]>>, -1, 0> & UnpackOptionalValues<Awaited<ReturnType<({ [K in Variant]: (...args: any[]) => unknown; } & Record<string, any>)[Variant]>>, -1, 0>)[K]; }' is not assignable to type 'not { then(): any; }'.
 boundedRecursiveTypeInferredThroughClosure.ts(79,12): error TS5115: Instantiations of the following types appear infinitely circular: 'InferData', 'UnpackKeyValue'.
 
 
-==== boundedRecursiveTypeInferredThroughClosure.ts (1 errors) ====
+==== boundedRecursiveTypeInferredThroughClosure.ts (2 errors) ====
     // The recursion of InferData and UnpackKeyValue is bounded by Next, so
     // inferring it through a closure must not report it as infinite.
     
@@ -67,6 +71,11 @@ boundedRecursiveTypeInferredThroughClosure.ts(79,12): error TS5115: Instantiatio
     	variant: Variant;
     	$type: 'item';
     	resolve(): Promise<UnpackAsTopLevelItem<this, undefined>>;
+    	                   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2344: Type 'UnpackAsTopLevelItem<this, undefined>' does not satisfy the constraint 'not { then(): any; }'.
+!!! error TS2344:   Type 'InferData<Transformer, Variant, -1, 0>' is not assignable to type 'not { then(): any; }'.
+!!! error TS2344:     Type 'InferData<Record<string, any>, Variant, -1, 0>' is not assignable to type 'not { then(): any; }'.
+!!! error TS2344:       Type '{ [K in keyof (UnpackRequiredValues<Awaited<ReturnType<({ [K in Variant]: (...args: any[]) => unknown; } & Record<string, any>)[Variant]>>, -1, 0> & UnpackOptionalValues<Awaited<ReturnType<({ [K in Variant]: (...args: any[]) => unknown; } & Record<string, any>)[Variant]>>, -1, 0>)]: (UnpackRequiredValues<Awaited<ReturnType<({ [K in Variant]: (...args: any[]) => unknown; } & Record<string, any>)[Variant]>>, -1, 0> & UnpackOptionalValues<Awaited<ReturnType<({ [K in Variant]: (...args: any[]) => unknown; } & Record<string, any>)[Variant]>>, -1, 0>)[K]; }' is not assignable to type 'not { then(): any; }'.
     }
     type Ctor = { new (resource: any, ...rest: any[]): any };
     declare abstract class BaseTransformer<T> {

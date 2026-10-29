@@ -2,7 +2,7 @@
 
 === noImplicitReturnsInAsync1.ts ===
 async function test(isError: boolean = false) {
->test : (isError?: boolean) => Promise<void>
+>test : (isError?: boolean) => Promise<void & not { then(): any; }>
 >isError : boolean
 >false : false
 
@@ -14,11 +14,11 @@ async function test(isError: boolean = false) {
         return;
     }
     let x = await Promise.resolve("The test is passed without an error.");
->x : string
->await Promise.resolve("The test is passed without an error.") : string
->Promise.resolve("The test is passed without an error.") : Promise<string>
->Promise.resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T>(value: T | PromiseLike<T>): Promise<Awaited<T>>; }
+>x : string & not { then(): any; } & not { then(): any; }
+>await Promise.resolve("The test is passed without an error.") : string & not { then(): any; } & not { then(): any; }
+>Promise.resolve("The test is passed without an error.") : Promise<string & not { then(): any; }>
+>Promise.resolve : { (): Promise<void & not { then(): any; }>; <T>(value: T): Promise<Awaited<T>>; <T>(value: T | PromiseLike<T>): Promise<Awaited<T>>; }
 >Promise : PromiseConstructor
->resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T>(value: T | PromiseLike<T>): Promise<Awaited<T>>; }
+>resolve : { (): Promise<void & not { then(): any; }>; <T>(value: T): Promise<Awaited<T>>; <T>(value: T | PromiseLike<T>): Promise<Awaited<T>>; }
 >"The test is passed without an error." : "The test is passed without an error."
 }

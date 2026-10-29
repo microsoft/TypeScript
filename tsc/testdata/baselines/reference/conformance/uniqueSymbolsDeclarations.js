@@ -437,12 +437,30 @@ declare function genFuncYieldConstCall(): Generator<symbol, void, unknown>;
 declare function genFuncYieldLetCall(): Generator<symbol, void, unknown>;
 declare function genFuncYieldVarCall(): Generator<symbol, void, unknown>;
 declare function genFuncYieldConstCallWithTypeQuery(): IterableIterator<typeof constCall>;
-declare function asyncFuncReturnConstCall(): Promise<symbol>;
-declare function asyncFuncReturnLetCall(): Promise<symbol>;
-declare function asyncFuncReturnVarCall(): Promise<symbol>;
-declare function asyncGenFuncYieldConstCall(): AsyncGenerator<symbol, void, unknown>;
-declare function asyncGenFuncYieldLetCall(): AsyncGenerator<symbol, void, unknown>;
-declare function asyncGenFuncYieldVarCall(): AsyncGenerator<symbol, void, unknown>;
+declare function asyncFuncReturnConstCall(): Promise<typeof constCall & not {
+    then(): any;
+}>;
+declare function asyncFuncReturnLetCall(): Promise<symbol & not {
+    then(): any;
+}>;
+declare function asyncFuncReturnVarCall(): Promise<symbol & not {
+    then(): any;
+}>;
+declare function asyncGenFuncYieldConstCall(): AsyncGenerator<typeof constCall & not {
+    then(): any;
+}, void & not {
+    then(): any;
+}, unknown>;
+declare function asyncGenFuncYieldLetCall(): AsyncGenerator<symbol & not {
+    then(): any;
+}, void & not {
+    then(): any;
+}, unknown>;
+declare function asyncGenFuncYieldVarCall(): AsyncGenerator<symbol & not {
+    then(): any;
+}, void & not {
+    then(): any;
+}, unknown>;
 declare class C {
     static readonly readonlyStaticCall: unique symbol;
     static readonly readonlyStaticType: unique symbol;
@@ -486,7 +504,9 @@ declare const constInitToLReadonlyTypeWithTypeQuery: typeof l.readonlyType;
 declare const constInitToLReadonlyNestedTypeWithTypeQuery: typeof l.nested.readonlyNestedType;
 declare const constInitToLReadonlyTypeWithIndexedAccess: L["readonlyType"];
 declare const constInitToLReadonlyNestedTypeWithIndexedAccess: L["nested"]["readonlyNestedType"];
-declare const promiseForConstCall: Promise<typeof constCall>;
+declare const promiseForConstCall: Promise<typeof constCall & not {
+    then(): any;
+}>;
 declare const arrayOfConstCall: symbol[];
 declare const s: unique symbol;
 declare namespace N {
@@ -504,8 +524,14 @@ declare const o2: {
     b: symbol;
     c: symbol;
     method1(): symbol;
-    method2(): Promise<symbol>;
-    method3(): AsyncGenerator<symbol, void, unknown>;
+    method2(): Promise<typeof s & not {
+        then(): any;
+    }>;
+    method3(): AsyncGenerator<typeof s & not {
+        then(): any;
+    }, void & not {
+        then(): any;
+    }, unknown>;
     method4(): Generator<symbol, void, unknown>;
     method5(p?: symbol): symbol;
 };
@@ -523,8 +549,14 @@ declare class C0 {
     e: symbol;
     f: symbol;
     method1(): symbol;
-    method2(): Promise<symbol>;
-    method3(): AsyncGenerator<symbol, void, unknown>;
+    method2(): Promise<typeof s & not {
+        then(): any;
+    }>;
+    method3(): AsyncGenerator<typeof s & not {
+        then(): any;
+    }, void & not {
+        then(): any;
+    }, unknown>;
     method4(): Generator<symbol, void, unknown>;
     method5(p?: symbol): symbol;
 }

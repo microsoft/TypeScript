@@ -9,8 +9,8 @@ import source a from "./a.js";
 >a : AbstractModuleSource
 
 const b = import.source("./a.js");
->b : Promise<AbstractModuleSource>
->import.source("./a.js") : Promise<AbstractModuleSource>
+>b : Promise<AbstractModuleSource & not { then(): any; }>
+>import.source("./a.js") : Promise<AbstractModuleSource & not { then(): any; }>
 >source : any
 >"./a.js" : "./a.js"
 

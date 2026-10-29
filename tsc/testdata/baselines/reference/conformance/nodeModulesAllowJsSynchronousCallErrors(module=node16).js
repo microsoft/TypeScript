@@ -63,6 +63,10 @@ async function f() {
 
 
 //// [index.d.ts]
-export declare function h(): Promise<void>;
+export declare function h(): Promise<void & not {
+    then(): any;
+}>;
 //// [index.d.ts]
-export declare function f(): Promise<void>;
+export declare function f(): Promise<void & not {
+    then(): any;
+}>;

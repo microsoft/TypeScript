@@ -39,6 +39,10 @@ class Foo {
 
 //// [a.d.ts]
 declare class Foo {
-    a(): Promise<void>;
-    b: () => Promise<void>;
+    a(): Promise<void & not {
+        then(): any;
+    }>;
+    b: () => Promise<void & not {
+        then(): any;
+    }>;
 }

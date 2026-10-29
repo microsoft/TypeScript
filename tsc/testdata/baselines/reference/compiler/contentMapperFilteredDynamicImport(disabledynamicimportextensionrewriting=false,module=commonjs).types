@@ -31,13 +31,13 @@ export const parenthesized = import(("./data.toml"));
 >"./data.toml" : "./data.toml"
 
 export const literal = import("./data.toml");
->literal : Promise<typeof import("./data.toml")>
->import("./data.toml") : Promise<typeof import("./data.toml")>
+>literal : Promise<typeof import("./data.toml") & not { then(): any; }>
+>import("./data.toml") : Promise<typeof import("./data.toml") & not { then(): any; }>
 >"./data.toml" : "./data.toml"
 
 export const literalTemplate = import(`./data.toml`);
->literalTemplate : Promise<typeof import("./data.toml")>
->import(`./data.toml`) : Promise<typeof import("./data.toml")>
+>literalTemplate : Promise<typeof import("./data.toml") & not { then(): any; }>
+>import(`./data.toml`) : Promise<typeof import("./data.toml") & not { then(): any; }>
 >`./data.toml` : "./data.toml"
 
 declare function require(path: string): unknown;

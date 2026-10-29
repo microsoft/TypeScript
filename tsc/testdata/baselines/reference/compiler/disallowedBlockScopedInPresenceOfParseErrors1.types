@@ -73,7 +73,7 @@ declare const asyncResource: AsyncDisposable
 >asyncResource : AsyncDisposable
 
 async function f4() {
->f4 : () => Promise<void>
+>f4 : () => Promise<void & not { then(): any; }>
 
   if (1 > 0)
 >1 > 0 : boolean

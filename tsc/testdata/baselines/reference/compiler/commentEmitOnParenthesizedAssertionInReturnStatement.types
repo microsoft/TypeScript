@@ -5,16 +5,16 @@ export class Foo {
 >Foo : Foo
 
   client = {
->client : { getThing: () => Promise<string>; }
->{    getThing: () => Promise.resolve('')  } : { getThing: () => Promise<string>; }
+>client : { getThing: () => Promise<string & not { then(): any; }>; }
+>{    getThing: () => Promise.resolve('')  } : { getThing: () => Promise<string & not { then(): any; }>; }
 
     getThing: () => Promise.resolve('')
->getThing : () => Promise<string>
->() => Promise.resolve('') : () => Promise<string>
->Promise.resolve('') : Promise<string>
->Promise.resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T>(value: T | PromiseLike<T>): Promise<Awaited<T>>; }
+>getThing : () => Promise<string & not { then(): any; }>
+>() => Promise.resolve('') : () => Promise<string & not { then(): any; }>
+>Promise.resolve('') : Promise<string & not { then(): any; }>
+>Promise.resolve : { (): Promise<void & not { then(): any; }>; <T>(value: T): Promise<Awaited<T>>; <T>(value: T | PromiseLike<T>): Promise<Awaited<T>>; }
 >Promise : PromiseConstructor
->resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T>(value: T | PromiseLike<T>): Promise<Awaited<T>>; }
+>resolve : { (): Promise<void & not { then(): any; }>; <T>(value: T): Promise<Awaited<T>>; <T>(value: T | PromiseLike<T>): Promise<Awaited<T>>; }
 >'' : ""
   }
 
@@ -27,14 +27,14 @@ export class Foo {
       /* TODO: Avoid using type assertions, please refactor. */ this.client
 >this.client        .getThing() as unknown as Promise<void> : Promise<void>
 >this.client        .getThing() as unknown : unknown
->this.client        .getThing() : Promise<string>
->this.client        .getThing : () => Promise<string>
->this.client : { getThing: () => Promise<string>; }
+>this.client        .getThing() : Promise<string & not { then(): any; }>
+>this.client        .getThing : () => Promise<string & not { then(): any; }>
+>this.client : { getThing: () => Promise<string & not { then(): any; }>; }
 >this : this
->client : { getThing: () => Promise<string>; }
+>client : { getThing: () => Promise<string & not { then(): any; }>; }
 
         .getThing() as unknown as Promise<void>
->getThing : () => Promise<string>
+>getThing : () => Promise<string & not { then(): any; }>
 
     );
   }

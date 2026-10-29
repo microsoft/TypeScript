@@ -2,7 +2,7 @@
 
 === generatorTransformFinalLabel.ts ===
 async function test(skip: boolean) {
->test : (skip: boolean) => Promise<void>
+>test : (skip: boolean) => Promise<void & not { then(): any; }>
 >skip : boolean
 
     if (!skip) {
@@ -10,7 +10,7 @@ async function test(skip: boolean) {
 >skip : boolean
 
         await 1
->await 1 : 1
+>await 1 : 1 & not { then(): any; }
 >1 : 1
     }
     else {

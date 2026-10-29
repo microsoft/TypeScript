@@ -13,7 +13,7 @@ export type T = {
 /** @import { T } from "./types.d.ts" */
 
 export default async function f() {
->f : () => Promise<T[]>
+>f : () => Promise<T[] & not { then(): any; }>
 
 	/** @type {T[]} */
 	const types = [];

@@ -1,0 +1,56 @@
+file1.ts(9,22): error TS2344: Type 'MyModel[]' does not satisfy the constraint 'not { then(): any; }'.
+file1.ts(24,13): error TS2345: Argument of type '(orders: Array<MyModule.MyModel>) => void' is not assignable to parameter of type '(value: (not { then(): any; } & not { then(): any; })[] & not { then(): any; }) => void | PromiseLike<void>'.
+  Types of parameters 'orders' and 'value' are incompatible.
+    Type '(not { then(): any; } & not { then(): any; })[] & not { then(): any; }' is not assignable to type 'MyModel[]'.
+      Type 'not { then(): any; } & not { then(): any; }' is not assignable to type 'MyModel'.
+        Property 'id' is missing in type '{}' but required in type 'MyModel'.
+
+
+==== file1.ts (2 errors) ====
+    "use strict";
+    import * as MyModule from "./mymodule";
+    
+    export class BrokenClass {
+    
+      constructor() {}
+    
+      public brokenMethod(field: string, value: string) {
+      return new Promise<Array<MyModule.MyModel>>((resolve, reject) => {
+                         ~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2344: Type 'MyModel[]' does not satisfy the constraint 'not { then(): any; }'.
+    
+        let result: Array<MyModule.MyModel> = [];
+    
+        let populateItems = (order) => {
+          return new Promise((resolve, reject) => {
+            this.doStuff(order.id)
+              .then((items) => {
+                order.items = items;
+                resolve(order);
+              });
+          });
+        };
+    
+        return Promise.all(result.map(populateItems))
+          .then((orders: Array<MyModule.MyModel>) => {
+                ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2345: Argument of type '(orders: Array<MyModule.MyModel>) => void' is not assignable to parameter of type '(value: (not { then(): any; } & not { then(): any; })[] & not { then(): any; }) => void | PromiseLike<void>'.
+!!! error TS2345:   Types of parameters 'orders' and 'value' are incompatible.
+!!! error TS2345:     Type '(not { then(): any; } & not { then(): any; })[] & not { then(): any; }' is not assignable to type 'MyModel[]'.
+!!! error TS2345:       Type 'not { then(): any; } & not { then(): any; }' is not assignable to type 'MyModel'.
+!!! error TS2345:         Property 'id' is missing in type '{}' but required in type 'MyModel'.
+!!! related TS2728 mymodule.ts:2:5: 'id' is declared here.
+            resolve(orders);
+          });
+        });
+      }
+    
+      public async doStuff(id: number) {
+        return;
+      }
+    }
+    
+==== mymodule.ts (0 errors) ====
+    export interface MyModel {
+        id: number;
+    }

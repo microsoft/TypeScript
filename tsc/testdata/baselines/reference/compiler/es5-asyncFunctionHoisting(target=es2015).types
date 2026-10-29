@@ -5,7 +5,7 @@ declare var y;
 >y : any
 
 async function hoisting() {
->hoisting : () => Promise<void>
+>hoisting : () => Promise<void & not { then(): any; }>
 
     var a0, a1 = 1;
 >a0 : any
@@ -51,7 +51,7 @@ async function hoisting() {
 }
 
 async function hoistingWithAwait() {
->hoistingWithAwait : () => Promise<void>
+>hoistingWithAwait : () => Promise<void & not { then(): any; }>
 
     var a0, a1 = 1;
 >a0 : any
@@ -68,7 +68,7 @@ async function hoistingWithAwait() {
     }
 
     await 0;
->await 0 : 0
+>await 0 : 0 & not { then(): any; }
 >0 : 0
 
     if (true) {

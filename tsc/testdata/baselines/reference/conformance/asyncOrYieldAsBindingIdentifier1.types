@@ -26,7 +26,7 @@ function f1_const () {
 }
 
 async function f2_let () {
->f2_let : () => Promise<void>
+>f2_let : () => Promise<void & not { then(): any; }>
 
     let await = 1
 >await : number
@@ -34,7 +34,7 @@ async function f2_let () {
 }
 
 async function f2_var () {
->f2_var : () => Promise<void>
+>f2_var : () => Promise<void & not { then(): any; }>
 
     var await = 1
 >await : number
@@ -42,7 +42,7 @@ async function f2_var () {
 }
 
 async function f2_const () {
->f2_const : () => Promise<void>
+>f2_const : () => Promise<void & not { then(): any; }>
 
     const await = 1
 >await : 1

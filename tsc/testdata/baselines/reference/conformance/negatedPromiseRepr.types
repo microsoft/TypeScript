@@ -149,34 +149,34 @@ const e = MyPromise.resolve(0).then(x => "ok");
 >"ok" : "ok"
 
 const f = MyPromise.all([1, 2, 3, Promise.resolve("ok")]);
->f : MyPromise<(string | number)[] & not AnyPromiseLikeObject, Error>
->MyPromise.all([1, 2, 3, Promise.resolve("ok")]) : MyPromise<(string | number)[] & not AnyPromiseLikeObject, Error>
+>f : MyPromise<(number | (string & not { then(): any; }))[] & not AnyPromiseLikeObject, Error>
+>MyPromise.all([1, 2, 3, Promise.resolve("ok")]) : MyPromise<(number | (string & not { then(): any; }))[] & not AnyPromiseLikeObject, Error>
 >MyPromise.all : <T, E = Error>(values: Iterable<T>) => MyPromise<AwaitValue<T>[] & not AnyPromiseLikeObject, E>
 >MyPromise : MyPromiseConstructor
 >all : <T, E = Error>(values: Iterable<T>) => MyPromise<AwaitValue<T>[] & not AnyPromiseLikeObject, E>
->[1, 2, 3, Promise.resolve("ok")] : (number | Promise<string>)[]
+>[1, 2, 3, Promise.resolve("ok")] : (number | Promise<string & not { then(): any; }>)[]
 >1 : 1
 >2 : 2
 >3 : 3
->Promise.resolve("ok") : Promise<string>
->Promise.resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T>(value: T | PromiseLike<T>): Promise<Awaited<T>>; }
+>Promise.resolve("ok") : Promise<string & not { then(): any; }>
+>Promise.resolve : { (): Promise<void & not { then(): any; }>; <T>(value: T): Promise<Awaited<T>>; <T>(value: T | PromiseLike<T>): Promise<Awaited<T>>; }
 >Promise : PromiseConstructor
->resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T>(value: T | PromiseLike<T>): Promise<Awaited<T>>; }
+>resolve : { (): Promise<void & not { then(): any; }>; <T>(value: T): Promise<Awaited<T>>; <T>(value: T | PromiseLike<T>): Promise<Awaited<T>>; }
 >"ok" : "ok"
 
 const g = MyPromise.race([1, 2, 3, Promise.resolve("ok")]);
->g : MyPromise<string | number, Error>
->MyPromise.race([1, 2, 3, Promise.resolve("ok")]) : MyPromise<string | number, Error>
+>g : MyPromise<number | (string & not { then(): any; }), Error>
+>MyPromise.race([1, 2, 3, Promise.resolve("ok")]) : MyPromise<number | (string & not { then(): any; }), Error>
 >MyPromise.race : <T, E = Error>(values: Iterable<T>) => MyPromise<AwaitValue<T>, E>
 >MyPromise : MyPromiseConstructor
 >race : <T, E = Error>(values: Iterable<T>) => MyPromise<AwaitValue<T>, E>
->[1, 2, 3, Promise.resolve("ok")] : (number | Promise<string>)[]
+>[1, 2, 3, Promise.resolve("ok")] : (number | Promise<string & not { then(): any; }>)[]
 >1 : 1
 >2 : 2
 >3 : 3
->Promise.resolve("ok") : Promise<string>
->Promise.resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T>(value: T | PromiseLike<T>): Promise<Awaited<T>>; }
+>Promise.resolve("ok") : Promise<string & not { then(): any; }>
+>Promise.resolve : { (): Promise<void & not { then(): any; }>; <T>(value: T): Promise<Awaited<T>>; <T>(value: T | PromiseLike<T>): Promise<Awaited<T>>; }
 >Promise : PromiseConstructor
->resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T>(value: T | PromiseLike<T>): Promise<Awaited<T>>; }
+>resolve : { (): Promise<void & not { then(): any; }>; <T>(value: T): Promise<Awaited<T>>; <T>(value: T | PromiseLike<T>): Promise<Awaited<T>>; }
 >"ok" : "ok"
 

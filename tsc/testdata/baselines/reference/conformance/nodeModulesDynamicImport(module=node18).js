@@ -39,6 +39,10 @@ export async function main() {
 
 
 //// [index.d.ts]
-export declare function main(): Promise<void>;
+export declare function main(): Promise<void & not {
+    then(): any;
+}>;
 //// [index.d.ts]
-export declare function main(): Promise<void>;
+export declare function main(): Promise<void & not {
+    then(): any;
+}>;

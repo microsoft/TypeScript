@@ -1,15 +1,24 @@
+unresolvableSelfReferencingAwaitedUnion.ts(5,36): error TS2344: Type 'SimpleType' does not satisfy the constraint 'not { then(): any; }'.
+  Type 'string' is not assignable to type 'not { then(): any; }'.
 unresolvableSelfReferencingAwaitedUnion.ts(9,32): error TS2322: Type 'SimpleType' is not assignable to type 'T'.
   'T' could be instantiated with an arbitrary type which could be unrelated to 'SimpleType'.
+unresolvableSelfReferencingAwaitedUnion.ts(13,23): error TS2344: Type 'T1' does not satisfy the constraint 'not { then(): any; }'.
+  Type 'number' is not assignable to type 'not { then(): any; }'.
 unresolvableSelfReferencingAwaitedUnion.ts(16,19): error TS1062: Type is referenced directly or indirectly in the fulfillment callback of its own 'then' method.
+unresolvableSelfReferencingAwaitedUnion.ts(23,13): error TS2344: Type 'EffectResult' does not satisfy the constraint 'not { then(): any; }'.
+  Type 'Promise<EffectResult>' is not assignable to type 'not { then(): any; }'.
 unresolvableSelfReferencingAwaitedUnion.ts(29,30): error TS1062: Type is referenced directly or indirectly in the fulfillment callback of its own 'then' method.
 
 
-==== unresolvableSelfReferencingAwaitedUnion.ts (3 errors) ====
+==== unresolvableSelfReferencingAwaitedUnion.ts (6 errors) ====
     // repro #49646
     
     type EnvFunction = <T>() => T;
     
     type SimpleType = string | Promise<SimpleType>;
+                                       ~~~~~~~~~~
+!!! error TS2344: Type 'SimpleType' does not satisfy the constraint 'not { then(): any; }'.
+!!! error TS2344:   Type 'string' is not assignable to type 'not { then(): any; }'.
     
     declare const simple: SimpleType;
     
@@ -22,6 +31,9 @@ unresolvableSelfReferencingAwaitedUnion.ts(29,30): error TS1062: Type is referen
     // repro #49723
     
     type T1 = 1 | Promise<T1> | T1[];
+                          ~~
+!!! error TS2344: Type 'T1' does not satisfy the constraint 'not { then(): any; }'.
+!!! error TS2344:   Type 'number' is not assignable to type 'not { then(): any; }'.
     
     export async function myFunction(param: T1) {
       const awaited = await param
@@ -34,6 +46,9 @@ unresolvableSelfReferencingAwaitedUnion.ts(29,30): error TS1062: Type is referen
     type EffectResult =
       | (() => EffectResult)
       | Promise<EffectResult>;
+                ~~~~~~~~~~~~
+!!! error TS2344: Type 'EffectResult' does not satisfy the constraint 'not { then(): any; }'.
+!!! error TS2344:   Type 'Promise<EffectResult>' is not assignable to type 'not { then(): any; }'.
     
     export async function handleEffectResult(result: EffectResult) {
       if (result instanceof Function) {

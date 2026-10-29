@@ -1,3 +1,4 @@
+negatedRepresentativeExamples.ts(4,43): error TS2344: Type 'string' does not satisfy the constraint 'not { then(): any; }'.
 negatedRepresentativeExamples.ts(7,8): error TS2345: Argument of type 'Promise<string>' is not assignable to parameter of type 'not (object & Promise<any>)'.
 negatedRepresentativeExamples.ts(14,16): error TS2345: Argument of type '() => void' is not assignable to parameter of type '(value: number) => not void'.
   Type 'void' is not assignable to type 'not void'.
@@ -9,11 +10,13 @@ negatedRepresentativeExamples.ts(32,7): error TS2345: Argument of type '(number 
     Type 'undefined' is not assignable to type 'not undefined'.
 
 
-==== negatedRepresentativeExamples.ts (5 errors) ====
+==== negatedRepresentativeExamples.ts (6 errors) ====
     // https://github.com/Microsoft/TypeScript/issues/7993
     
     declare function ignore<T extends not (object & Promise<any>)>(value: T): void;
     declare function readFileAsync(): Promise<string>;
+                                              ~~~~~~
+!!! error TS2344: Type 'string' does not satisfy the constraint 'not { then(): any; }'.
     declare function readFileSync(): string;
     ignore(readFileSync()); // OK
     ignore(readFileAsync()); // Should error

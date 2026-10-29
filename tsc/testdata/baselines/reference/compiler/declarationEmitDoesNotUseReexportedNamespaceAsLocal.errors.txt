@@ -1,0 +1,12 @@
+index.ts(3,36): error TS2344: Type 'T' does not satisfy the constraint 'not { then(): any; }'.
+
+
+==== sub.ts (0 errors) ====
+    export function a() {}
+==== index.ts (1 errors) ====
+    export const x = add(import("./sub"));
+    export * as Q from "./sub";
+    declare function add<T>(x: Promise<T>): T;
+                                       ~
+!!! error TS2344: Type 'T' does not satisfy the constraint 'not { then(): any; }'.
+!!! related TS2208 index.ts:3:22: This type parameter might need an `extends not { then(): any; }` constraint.

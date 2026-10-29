@@ -1,0 +1,8 @@
+asyncFunctionDeclaration11_es6.ts(1,33): error TS2344: Type 'void' does not satisfy the constraint 'not { then(): any; }'.
+
+
+==== asyncFunctionDeclaration11_es6.ts (1 errors) ====
+    async function await(): Promise<void> {
+                                    ~~~~
+!!! error TS2344: Type 'void' does not satisfy the constraint 'not { then(): any; }'.
+    }

@@ -41,4 +41,6 @@ export {};
 //// [e.d.ts]
 import source a from "./a.wasm";
 export type B = typeof a;
-export declare const b: Promise<AbstractModuleSource>;
+export declare const b: Promise<AbstractModuleSource & not {
+    then(): any;
+}>;

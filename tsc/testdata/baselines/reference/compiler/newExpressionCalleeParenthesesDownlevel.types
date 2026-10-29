@@ -59,7 +59,7 @@ class C extends B {
 >B : B
 
     static async m(key: "Plugins") {
->m : (key: "Plugins") => Promise<void>
+>m : (key: "Plugins") => Promise<void & not { then(): any; }>
 >key : "Plugins"
 
         new super[key].Linker();

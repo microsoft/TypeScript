@@ -30,4 +30,6 @@ export const e = import.source("./a.wasm");
 //// [index.d.ts]
 import source b from "./a.wasm";
 export { b };
-export declare const e: Promise<AbstractModuleSource>;
+export declare const e: Promise<AbstractModuleSource & not {
+    then(): any;
+}>;

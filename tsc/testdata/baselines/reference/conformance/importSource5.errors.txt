@@ -9,7 +9,7 @@ b.ts(9,1): error TS1326: This use of 'import' is invalid. 'import()' calls can b
 b.ts(10,15): error TS1325: Argument of dynamic import cannot be spread element.
 c.ts(1,5): error TS1109: Expression expected.
 d.ts(1,5): error TS1109: Expression expected.
-d.ts(1,29): error TS2339: Property 'a' does not exist on type 'Promise<AbstractModuleSource>'.
+d.ts(1,29): error TS2339: Property 'a' does not exist on type 'Promise<AbstractModuleSource & not { then(): any; }>'.
 e.ts(1,21): error TS1005: '(' expected.
 f.ts(1,8): error TS18061: 'a' is not a valid meta-property for keyword 'import'. Did you mean 'meta', 'defer', or 'source'?
 
@@ -57,7 +57,7 @@ f.ts(1,8): error TS18061: 'a' is not a valid meta-property for keyword 'import'.
         ~~~~~~
 !!! error TS1109: Expression expected.
                                 ~
-!!! error TS2339: Property 'a' does not exist on type 'Promise<AbstractModuleSource>'.
+!!! error TS2339: Property 'a' does not exist on type 'Promise<AbstractModuleSource & not { then(): any; }>'.
     
 ==== e.ts (1 errors) ====
     typeof import.source;

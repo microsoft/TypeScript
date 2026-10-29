@@ -5,10 +5,10 @@ class Promise<T> {}
 >Promise : Promise<T>
 
 async function foo() {}
->foo : () => Promise<void>
+>foo : () => Promise<void & not { then(): any; }>
 
 const x = foo();
->x : Promise<void>
->foo() : Promise<void>
->foo : () => Promise<void>
+>x : Promise<void & not { then(): any; }>
+>foo() : Promise<void & not { then(): any; }>
+>foo : () => Promise<void & not { then(): any; }>
 

@@ -60,12 +60,12 @@ interface MyAsyncDisposable {
 }
 
 async function f() {
->f : () => Promise<void>
+>f : () => Promise<void & not { then(): any; }>
   {
     await using _ = { async [Symbol.asyncDispose]() {} };
->_ : { [Symbol.asyncDispose](): Promise<void>; }
->{ async [Symbol.asyncDispose]() {} } : { [Symbol.asyncDispose](): Promise<void>; }
->[Symbol.asyncDispose] : () => Promise<void>
+>_ : { [Symbol.asyncDispose](): Promise<void & not { then(): any; }>; }
+>{ async [Symbol.asyncDispose]() {} } : { [Symbol.asyncDispose](): Promise<void & not { then(): any; }>; }
+>[Symbol.asyncDispose] : () => Promise<void & not { then(): any; }>
 >Symbol.asyncDispose : unique symbol
 >Symbol : SymbolConstructor
 >asyncDispose : unique symbol
@@ -73,9 +73,9 @@ async function f() {
 
   {
     await using _ = { async [Symbol.asyncDispose]() {}, value: 1 };
->_ : { [Symbol.asyncDispose](): Promise<void>; value: number; }
->{ async [Symbol.asyncDispose]() {}, value: 1 } : { [Symbol.asyncDispose](): Promise<void>; value: number; }
->[Symbol.asyncDispose] : () => Promise<void>
+>_ : { [Symbol.asyncDispose](): Promise<void & not { then(): any; }>; value: number; }
+>{ async [Symbol.asyncDispose]() {}, value: 1 } : { [Symbol.asyncDispose](): Promise<void & not { then(): any; }>; value: number; }
+>[Symbol.asyncDispose] : () => Promise<void & not { then(): any; }>
 >Symbol.asyncDispose : unique symbol
 >Symbol : SymbolConstructor
 >asyncDispose : unique symbol
@@ -86,10 +86,10 @@ async function f() {
   {
     await using _: MyAsyncDisposable = {
 >_ : MyAsyncDisposable
->{      async [Symbol.asyncDispose]() {},      value: 1,      extra: "foo",    } : { [Symbol.asyncDispose](): Promise<void>; value: number; extra: string; }
+>{      async [Symbol.asyncDispose]() {},      value: 1,      extra: "foo",    } : { [Symbol.asyncDispose](): Promise<void & not { then(): any; }>; value: number; extra: string; }
 
       async [Symbol.asyncDispose]() {},
->[Symbol.asyncDispose] : () => Promise<void>
+>[Symbol.asyncDispose] : () => Promise<void & not { then(): any; }>
 >Symbol.asyncDispose : unique symbol
 >Symbol : SymbolConstructor
 >asyncDispose : unique symbol

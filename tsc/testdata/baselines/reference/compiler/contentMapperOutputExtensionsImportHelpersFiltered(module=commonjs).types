@@ -17,8 +17,8 @@ export function dynamic(path: string) { return import(path); }
 >path : string
 
 export function literal() { return import("./Card.astro"); }
->literal : () => Promise<typeof import("./Card.astro")>
->import("./Card.astro") : Promise<typeof import("./Card.astro")>
+>literal : () => Promise<typeof import("./Card.astro") & not { then(): any; }>
+>import("./Card.astro") : Promise<typeof import("./Card.astro") & not { then(): any; }>
 >"./Card.astro" : "./Card.astro"
 
 === /require.js ===

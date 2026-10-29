@@ -1,0 +1,20 @@
+1.ts(5,24): error TS2344: Type 'typeof import("0")' does not satisfy the constraint 'not { then(): any; }'.
+1.ts(6,24): error TS2344: Type 'typeof import("0")' does not satisfy the constraint 'not { then(): any; }'.
+
+
+==== 0.ts (0 errors) ====
+    export function foo() { return "foo"; }
+    
+==== 1.ts (2 errors) ====
+    declare function getPath(): string;
+    import * as Zero from "./0";
+    import("./0");
+    
+    export var p0: Promise<typeof Zero> = import(getPath());
+                           ~~~~~~~~~~~
+!!! error TS2344: Type 'typeof import("0")' does not satisfy the constraint 'not { then(): any; }'.
+    export var p1: Promise<typeof Zero> = import("./0");
+                           ~~~~~~~~~~~
+!!! error TS2344: Type 'typeof import("0")' does not satisfy the constraint 'not { then(): any; }'.
+    export var p2: Promise<any> = import("./0");
+    

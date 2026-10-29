@@ -1,10 +1,14 @@
 Api.ts(6,5): error TS7056: The inferred type of this node exceeds the maximum length the compiler will serialize. An explicit type annotation is needed.
 Api.ts(7,5): error TS7056: The inferred type of this node exceeds the maximum length the compiler will serialize. An explicit type annotation is needed.
 Api.ts(8,5): error TS7056: The inferred type of this node exceeds the maximum length the compiler will serialize. An explicit type annotation is needed.
+http-client.ts(1,61): error TS2344: Type 'ResolveType' does not satisfy the constraint 'not { then(): any; }'.
 
 
-==== http-client.ts (0 errors) ====
+==== http-client.ts (1 errors) ====
     type TPromise<ResolveType, RejectType = any> = Omit<Promise<ResolveType>, "then" | "catch"> & {
+                                                                ~~~~~~~~~~~
+!!! error TS2344: Type 'ResolveType' does not satisfy the constraint 'not { then(): any; }'.
+!!! related TS2208 http-client.ts:1:15: This type parameter might need an `extends not { then(): any; }` constraint.
         then<TResult1 = ResolveType, TResult2 = never>(
             onfulfilled?: ((value: ResolveType) => TResult1 | PromiseLike<TResult1>) | undefined | null,
             onrejected?: ((reason: RejectType) => TResult2 | PromiseLike<TResult2>) | undefined | null,

@@ -1,0 +1,17 @@
+commentEmitOnParenthesizedAssertionInReturnStatement2.ts(9,41): error TS2344: Type 'string' does not satisfy the constraint 'not { then(): any; }'.
+
+
+==== commentEmitOnParenthesizedAssertionInReturnStatement2.ts (1 errors) ====
+    export class Foo {
+        client = {
+          getThing: () => Promise.resolve('')
+        }
+      
+        foo() {
+          return (
+            /* TODO: please refactor */ this.client
+              .getThing() satisfies Promise<string>);
+                                            ~~~~~~
+!!! error TS2344: Type 'string' does not satisfy the constraint 'not { then(): any; }'.
+        }
+      }

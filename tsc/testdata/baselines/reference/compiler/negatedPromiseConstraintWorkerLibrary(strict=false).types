@@ -1,0 +1,9 @@
+//// [tests/cases/compiler/negatedPromiseConstraintWorkerLibrary.ts] ////
+
+=== negatedPromiseConstraintWorkerLibrary.ts ===
+const response: Promise<Awaited<Response>> = fetch("");
+>response : Promise<Response & not { then(): any; }>
+>fetch("") : Promise<Response & not { then(): any; }>
+>fetch : (input: RequestInfo | URL, init?: RequestInit) => Promise<Response & not { then(): any; }>
+>"" : ""
+

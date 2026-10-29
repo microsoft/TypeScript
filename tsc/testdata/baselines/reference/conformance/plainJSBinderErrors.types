@@ -12,7 +12,7 @@ const yield = 2
 >2 : 2
 
 async function f() {
->f : () => Promise<void>
+>f : () => Promise<void & not { then(): any; }>
 
     const await = 3
 >await : 3

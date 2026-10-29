@@ -208,14 +208,14 @@ function f6() {
 >v : number
 
     (async function() {
->(async function() {        v = await 1;    })() : Promise<void>
->(async function() {        v = await 1;    }) : () => Promise<void>
->async function() {        v = await 1;    } : () => Promise<void>
+>(async function() {        v = await 1;    })() : Promise<void & not { then(): any; }>
+>(async function() {        v = await 1;    }) : () => Promise<void & not { then(): any; }>
+>async function() {        v = await 1;    } : () => Promise<void & not { then(): any; }>
 
         v = await 1;
->v = await 1 : 1
+>v = await 1 : 1 & not { then(): any; }
 >v : number
->await 1 : 1
+>await 1 : 1 & not { then(): any; }
 >1 : 1
 
     })();

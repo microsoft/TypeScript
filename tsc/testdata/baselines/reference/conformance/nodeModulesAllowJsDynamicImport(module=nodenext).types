@@ -3,7 +3,7 @@
 === subfolder/index.js ===
 // cjs format file
 export async function main() {
->main : () => Promise<void>
+>main : () => Promise<void & not { then(): any; }>
 
     const { readFile } = await import("fs");
 >readFile : any
@@ -14,7 +14,7 @@ export async function main() {
 === index.js ===
 // esm format file
 export async function main() {
->main : () => Promise<void>
+>main : () => Promise<void & not { then(): any; }>
 
     const { readFile } = await import("fs");
 >readFile : any

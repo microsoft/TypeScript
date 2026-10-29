@@ -14,7 +14,9 @@
 // | ----------------------------------------------------------------------
 // | ```typescript
 // | await using b: {
-// |     [Symbol.asyncDispose](): Promise<void>;
+// |     [Symbol.asyncDispose](): Promise<void & not {
+// |         then(): any;
+// |     }>;
 // | }
 // | ```
 // | 
@@ -61,7 +63,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```typescript\nawait using b: {\n    [Symbol.asyncDispose](): Promise<void>;\n}\n```\n"
+        "value": "```typescript\nawait using b: {\n    [Symbol.asyncDispose](): Promise<void & not {\n        then(): any;\n    }>;\n}\n```\n"
       },
       "range": {
         "start": {

@@ -316,7 +316,9 @@ export declare function make(): {
 //// [mappable.d.ts]
 export declare function mappable<T extends AsyncIterable<any>, U>(iterable: T): T & {
     map(fn: (value: T extends AsyncIterable<infer V> ? V : never) => U): AsyncGenerator<Awaited<U>, void, unknown> & {
-        map(fn: (value: unknown) => unknown): AsyncGenerator<Awaited<U>, void, unknown> & /*elided*/ any;
+        map(fn: (value: void | not {
+            then(): any;
+        }) => unknown): AsyncGenerator<Awaited<U>, void, unknown> & /*elided*/ any;
     };
 };
 //// [either.d.ts]
@@ -481,7 +483,9 @@ either.d.ts(12,90): error TS2344: Type 'T' does not satisfy the constraint 'abst
 ==== mappable.d.ts (0 errors) ====
     export declare function mappable<T extends AsyncIterable<any>, U>(iterable: T): T & {
         map(fn: (value: T extends AsyncIterable<infer V> ? V : never) => U): AsyncGenerator<Awaited<U>, void, unknown> & {
-            map(fn: (value: unknown) => unknown): AsyncGenerator<Awaited<U>, void, unknown> & /*elided*/ any;
+            map(fn: (value: void | not {
+                then(): any;
+            }) => unknown): AsyncGenerator<Awaited<U>, void, unknown> & /*elided*/ any;
         };
     };
     

@@ -11,11 +11,11 @@ class B1 {}
 >B1 : B1
 
 async function loop1(stream: Stream1<A1, B1>) {
->loop1 : (stream: Stream1<A1, B1>) => Promise<void>
+>loop1 : (stream: Stream1<A1, B1>) => Promise<void & not { then(): any; }>
 >stream : Stream1<A1, B1>
 
   for await (const b of stream) {}
->b : B1
+>b : B1 & not { then(): any; }
 >stream : Stream1<A1, B1>
 }
 
@@ -29,7 +29,7 @@ class B2 {}
 >B2 : B2
 
 async function loop2(stream: Stream2<A2, B2>) {
->loop2 : (stream: Stream2<A2, B2>) => Promise<void>
+>loop2 : (stream: Stream2<A2, B2>) => Promise<void & not { then(): any; }>
 >stream : Stream2<A2, B2>
 
   for (const a of stream) {}
@@ -47,11 +47,11 @@ class B3 {}
 >B3 : B3
 
 async function loop3(stream: Stream3<A3, B3>) {
->loop3 : (stream: Stream3<A3, B3>) => Promise<void>
+>loop3 : (stream: Stream3<A3, B3>) => Promise<void & not { then(): any; }>
 >stream : Stream3<A3, B3>
 
   for await (const b of stream) {}
->b : B3
+>b : B3 & not { then(): any; }
 >stream : Stream3<A3, B3>
 
   for (const a of stream) {}
@@ -70,7 +70,7 @@ class B4 {}
 
 // verify that resolving sync iteration first doesn't spoil the type for async iteration
 async function loop4(stream: Stream4<A4, B4>) {
->loop4 : (stream: Stream4<A4, B4>) => Promise<void>
+>loop4 : (stream: Stream4<A4, B4>) => Promise<void & not { then(): any; }>
 >stream : Stream4<A4, B4>
 
   for (const a of stream) {}
@@ -78,6 +78,6 @@ async function loop4(stream: Stream4<A4, B4>) {
 >stream : Stream4<A4, B4>
 
   for await (const b of stream) {}
->b : B4
+>b : B4 & not { then(): any; }
 >stream : Stream4<A4, B4>
 }

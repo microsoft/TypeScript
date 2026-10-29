@@ -34,8 +34,8 @@ export { b };
 >b : AbstractModuleSource
 
 export const e = import.source("./a.wasm");
->e : Promise<AbstractModuleSource>
->import.source("./a.wasm") : Promise<AbstractModuleSource>
+>e : Promise<AbstractModuleSource & not { then(): any; }>
+>import.source("./a.wasm") : Promise<AbstractModuleSource & not { then(): any; }>
 >source : any
 >"./a.wasm" : "./a.wasm"
 
