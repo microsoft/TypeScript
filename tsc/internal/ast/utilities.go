@@ -2795,19 +2795,48 @@ func GetNodeAtPosition(file *SourceFile, position int, includeJSDoc bool) *Node 
 			}
 		}
 		if child == nil {
-			current.ForEachChild(func(node *Node) bool {
-				if nodeContainsPosition(node, position) {
-					child = node
-					return true
-				}
-				return false
-			})
+			if current == file.AsNode() && !file.IsJS() {
+				child = getTopLevelNodeAtPosition(file, position)
+			} else {
+				current.ForEachChild(func(node *Node) bool {
+					if nodeContainsPosition(node, position) {
+						child = node
+						return true
+					}
+					return false
+				})
+			}
 		}
 		if child == nil || IsMetaProperty(child) {
 			return current
 		}
 		current = child
 	}
+}
+
+// getTopLevelNodeAtPosition is equivalent to a linear search over the children of
+// the source file, but binary searches the statements. This is only valid for
+// non-JS files, where the statements are in source order and do not overlap; JS
+// files may contain reparsed JSDoc statements whose ranges nest within other
+// statements.
+func getTopLevelNodeAtPosition(file *SourceFile, position int) *Node {
+	var statements []*Node
+	if file.Statements != nil {
+		statements = file.Statements.Nodes
+	}
+	i, _ := slices.BinarySearchFunc(statements, position, func(node *Node, position int) int {
+		if node.End() <= position {
+			return -1
+		}
+		return 1
+	})
+	if i < len(statements) && nodeContainsPosition(statements[i], position) {
+		return statements[i]
+	}
+	if file.EndOfFileToken != nil && nodeContainsPosition(file.EndOfFileToken, position) {
+		return file.EndOfFileToken
+	}
+	return nil
 }
 
 func nodeContainsPosition(node *Node, position int) bool {
