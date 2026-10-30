@@ -111,7 +111,38 @@ declare const reused: {
 };
 const copy/*reusedDeclaration*/ = reused;
 copy.first/*reusedFirst*/(1);
-copy.shadowed/*reusedShadowed*/(1);`
+copy.shadowed/*reusedShadowed*/(1);
+type Show<T> = { [K in keyof T]: T[K] } & unknown;
+type Resolve<M, K extends keyof M> = Show<{
+    [P in keyof M[K]]: M[K][P] extends "ref" ? Resolve<M, K> : M[K][P];
+}>;
+declare const build: <M>() => { [K in keyof M]: Resolve<M, K> };
+const mappedCycle/*mappedCycle*/ = build<{ Node: { value: number; next: "ref" } }>();
+mappedCycle.Node/*mappedNode*/.next/*mappedNext*/.next.value;
+const nestedCycle/*nestedMappedCycle*/ = { wrapped: mappedCycle };
+const sharedCycles/*sharedMappedCycles*/ = { first: mappedCycle, second: mappedCycle };
+declare const buildOptional: <M>() => { [K in keyof M]?: Resolve<M, K> };
+declare const buildNullable: <M>() => { [K in keyof M]: Resolve<M, K> | null };
+const optionalBox/*optionalMappedCycle*/ = { cycle: buildOptional<{ Node: { value: number; next: "ref" } }>() };
+const nullableBox/*nullableMappedCycle*/ = { cycle: buildNullable<{ Node: { value: number; next: "ref" } }>() };
+type ResolveNullable<M, K extends keyof M> = Show<{
+    [P in keyof M[K]]: M[K][P] extends "ref" ? ResolveNullable<M, K> | null : M[K][P];
+}>;
+declare const buildNullableLinks: <M>() => { [K in keyof M]: ResolveNullable<M, K> | null };
+const nullableLinkBox/*nullableMappedLinks*/ = { cycle: buildNullableLinks<{ Node: { value: number; next: "ref" } }>() };
+function captured<T>(value: T) {
+    const node = { value, next: () => node };
+    return node;
+}
+const capturedValue/*capturedValue*/ = captured(1);
+capturedValue.next/*capturedNext*/();
+function inferredCaptured<T>() {
+    type Node<V> = { value: V; next: Node<V> };
+    return null! as (T extends () => infer U ? Node<U> : never);
+}
+const inferredValue/*inferredCapturedValue*/ = inferredCaptured<() => string>();
+declare const buildMixed: <M>() => { [K in keyof M]?: Resolve<M, K> | false | null };
+const mixedBox/*mixedMappedCycle*/ = { cycle: buildMixed<{ Node: { value: number; next: "ref" } }>() };`
 	f, done := fourslash.NewFourslash(t, nil, content)
 	defer done()
 	f.VerifyNoErrors(t)
@@ -129,5 +160,11 @@ copy.shadowed/*reusedShadowed*/(1);`
 		"reusedFirst": {0}, "reusedShadowed": {0},
 		"nestedNumber": {0}, "nestedGeneric": {0}, "nestedOwnerMake": {0},
 		"nestedConstrained": {0}, "nestedCopied": {0}, "nestedRest": {0},
+		"mappedCycle": {0, 1}, "mappedNode": {0}, "mappedNext": {0},
+		"nestedMappedCycle": {0}, "sharedMappedCycles": {0},
+		"optionalMappedCycle": {0, 1}, "nullableMappedCycle": {0},
+		"nullableMappedLinks": {0},
+		"capturedValue":       {0, 1}, "capturedNext": {0},
+		"inferredCapturedValue": {0}, "mixedMappedCycle": {0},
 	})
 }
