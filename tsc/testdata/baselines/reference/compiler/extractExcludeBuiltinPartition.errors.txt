@@ -1,0 +1,54 @@
+extractExcludeBuiltinPartition.ts(18,7): error TS2322: Type 'string' is not assignable to type 'Exclude<string, "chosen">'.
+  Type 'string' is not assignable to type 'not "chosen"'.
+extractExcludeBuiltinPartition.ts(22,7): error TS2322: Type '"chosen"' is not assignable to type 'never'.
+extractExcludeBuiltinPartition.ts(23,7): error TS2322: Type '"chosen"' is not assignable to type 'never'.
+
+
+==== extractExcludeBuiltinPartition.ts (3 errors) ====
+    type Partition<T, U> = Extract<T, U> | Exclude<T, U>;
+    
+    function partition<T, U>(value: T): Partition<T, U> {
+        return value;
+    }
+    
+    function identity<T, U>(value: Partition<T, U>): T {
+        return value;
+    }
+    
+    function unionPartition<T, A, B>(value: T): Extract<T, A | B> | Exclude<T, A | B> {
+        return value;
+    }
+    
+    const extractedUnknown: Extract<unknown, string> = "chosen";
+    const extractedLiteral: Extract<string, "chosen"> = "chosen";
+    const excludedLiteral: Exclude<string, "chosen"> = "other";
+    const excludedChosen: Exclude<string, "chosen"> = "chosen";
+          ~~~~~~~~~~~~~~
+!!! error TS2322: Type 'string' is not assignable to type 'Exclude<string, "chosen">'.
+!!! error TS2322:   Type 'string' is not assignable to type 'not "chosen"'.
+    
+    const extractedAny: Extract<any, string> = 123;
+    const excludedAny: Exclude<any, string> = "chosen";
+    const extractedNever: Extract<string, never> = "chosen";
+          ~~~~~~~~~~~~~~
+!!! error TS2322: Type '"chosen"' is not assignable to type 'never'.
+    const excludedUnknown: Exclude<string, unknown> = "chosen";
+          ~~~~~~~~~~~~~~~
+!!! error TS2322: Type '"chosen"' is not assignable to type 'never'.
+    
+    type Props = { owner: string; count: number };
+    const omitted: Omit<Props, "owner"> = { count: 1 };
+    const restored: Props = { ...omitted, owner: "chosen" };
+    
+    declare function withOwner<T extends { owner: string }>(props: Omit<T, "owner"> & { owner: string }): T;
+    
+    function render<T extends { owner: string }>(props: T): T {
+        return withOwner<T>(props);
+    }
+    
+    type Product = { kind: "a"; value: 0 } | { kind: "b"; value: 1 };
+    type DoubleExcluded = {
+        [Kind in Product["kind"]]: Exclude<Product, Exclude<Product, { kind: Kind }>>;
+    };
+    const productA: DoubleExcluded["a"] = { kind: "a", value: 0 };
+    const productB: DoubleExcluded["b"] = { kind: "b", value: 1 };
