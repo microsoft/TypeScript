@@ -17231,11 +17231,12 @@ func (c *Checker) checkDeclarationInitializer(declaration *ast.Node, checkMode C
 			t = c.checkExpressionCachedEx(initializer, checkMode)
 		}
 	}
-	if ast.IsParameterDeclaration(ast.GetRootDeclaration(declaration)) {
+	root := ast.GetRootDeclaration(declaration)
+	if ast.IsParameterDeclaration(root) {
 		name := declaration.Name()
 		switch name.Kind {
 		case ast.KindObjectBindingPattern:
-			if isObjectLiteralType(t) {
+			if isObjectLiteralType(t) && c.getContextualTypeForVariableLikeDeclaration(root, ContextFlagsNone) == nil {
 				return c.padObjectLiteralType(t, name)
 			}
 		case ast.KindArrayBindingPattern:
