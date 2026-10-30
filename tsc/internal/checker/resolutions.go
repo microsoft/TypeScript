@@ -56,6 +56,7 @@ type memoStateSource interface {
 
 func (c *Checker) initResolutions() {
 	c.resolutions = []resolution{{}}
+	c.syncObserveFloor()
 }
 
 func (c *Checker) currentResolution() *resolution {
@@ -85,6 +86,7 @@ func (c *Checker) appendResolution(key memoKey, source memoStateSource, index in
 		depthStart: depthBase,
 		serial:     c.resolutionSerials,
 	})
+	c.syncObserveFloor()
 }
 
 // endResolution finishes the current resolution, returning its instantiation
@@ -105,6 +107,7 @@ func (c *Checker) endResolution() *instantiationCount {
 	}
 	c.resolutions[n] = resolution{}
 	c.resolutions = c.resolutions[:n]
+	c.syncObserveFloor()
 	if c.circularityStart > n {
 		c.endCircularity()
 	} else if len(c.innerCycles) != 0 {
