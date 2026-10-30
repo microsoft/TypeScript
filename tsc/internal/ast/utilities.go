@@ -33,6 +33,16 @@ func GetNodeId(node *Node) NodeId {
 	return NodeId(id)
 }
 
+// PeekNodeId returns the id of node, or 0 if it has none yet.
+func PeekNodeId(node *Node) NodeId {
+	return NodeId(node.id.Load())
+}
+
+// PeekSymbolId returns the id of symbol, or 0 if it has none yet.
+func PeekSymbolId(symbol *Symbol) SymbolId {
+	return SymbolId(symbol.id.Load())
+}
+
 func GetSymbolId(symbol *Symbol) SymbolId {
 	id := symbol.id.Load()
 	if id == 0 {
