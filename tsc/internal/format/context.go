@@ -21,6 +21,9 @@ type FormattingContext struct {
 	contextNodeBlockIsOnOneLine core.Tristate
 	nextNodeBlockIsOnOneLine    core.Tristate
 
+	lineStarts []core.TextPos
+	lastLine   int
+
 	SourceFile            *ast.SourceFile
 	FormattingRequestKind FormatRequestKind
 	Options               lsutil.FormatCodeSettings
@@ -31,6 +34,7 @@ func NewFormattingContext(file *ast.SourceFile, kind FormatRequestKind, options 
 		SourceFile:            file,
 		FormattingRequestKind: kind,
 		Options:               options,
+		lineStarts:            scanner.GetECMALineStarts(file),
 	}
 	return res
 }
@@ -60,10 +64,26 @@ func (this *FormattingContext) UpdateContext(cur TextRangeWithKind, curParent *a
 }
 
 func (this *FormattingContext) rangeIsOnOneLine(node core.TextRange) core.Tristate {
-	if rangeIsOnOneLine(node, this.SourceFile) {
+	if this.getLineOfPosition(node.Pos()) == this.getLineOfPosition(node.End()) {
 		return core.TSTrue
 	}
 	return core.TSFalse
+}
+
+func (this *FormattingContext) getLineOfPosition(pos int) int {
+	line := this.lastLine
+	if line >= 0 && pos >= int(this.lineStarts[line]) &&
+		(line+1 == len(this.lineStarts) || pos < int(this.lineStarts[line+1])) {
+		return line
+	}
+	line = scanner.ComputeLineOfPosition(this.lineStarts, pos)
+	this.lastLine = line
+	return line
+}
+
+func (this *FormattingContext) getLineAndByteOffsetOfPosition(pos int) (int, int) {
+	line := this.getLineOfPosition(pos)
+	return line, pos - int(this.lineStarts[line])
 }
 
 func (this *FormattingContext) nodeIsOnOneLine(node *ast.Node) core.Tristate {

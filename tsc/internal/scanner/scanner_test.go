@@ -1,6 +1,7 @@
 package scanner
 
 import (
+	"strconv"
 	"strings"
 	"testing"
 
@@ -106,4 +107,45 @@ func TestScanSourceKeyword(t *testing.T) {
 	assert.Equal(t, StringToToken("source"), ast.KindSourceKeyword)
 	assert.Equal(t, s.Scan(), ast.KindIdentifier)
 	assert.Equal(t, s.TokenValue(), "sourceValue")
+}
+
+func TestBulkTrivia(t *testing.T) {
+	t.Parallel()
+	for i, prefix := range []string{
+		"",
+		strings.Repeat(" \t\v\f", 40),
+		strings.Repeat(" ", 129) + "\u00a0\u2003\ufeff",
+		"// " + strings.Repeat("comment ", 40) + "\r\n",
+		"// " + strings.Repeat("\u4e2d", 40) + "\u2028",
+		"// \u20ac is not a line break\u2029",
+		"/* " + strings.Repeat("\u4e2d * / ", 40) + "*/",
+		"/* first */ /* second */\n\t",
+		"\r\n" + strings.Repeat(" ", 65),
+	} {
+		t.Run(strconv.Itoa(i), func(t *testing.T) {
+			t.Parallel()
+			text := prefix + "value"
+			assert.Equal(t, SkipTrivia(text, 0), len(prefix))
+			s := NewScanner()
+			s.SetText(text)
+			assert.Equal(t, s.Scan(), ast.KindIdentifier)
+			assert.Equal(t, s.TokenStart(), len(prefix))
+			s.ResetTokenState(0)
+			s.SetSkipTrivia(false)
+			end := 0
+			for s.Scan() != ast.KindIdentifier {
+				assert.Assert(t, ast.IsTrivia(s.Token()))
+				assert.Equal(t, s.TokenFullStart(), end)
+				end = s.TokenEnd()
+			}
+			assert.Equal(t, s.TokenFullStart(), end)
+			assert.Equal(t, s.TokenStart(), len(prefix))
+		})
+	}
+	for _, text := range []string{"// unterminated", "/* unterminated", "/* \xff", "/* trailing *"} {
+		assert.Equal(t, SkipTrivia(text, 0), len(text))
+	}
+	assert.Equal(t, SkipTriviaEx(" \t/* comment */value", 0, &SkipTriviaOptions{StopAtComments: true}), 2)
+	assert.Equal(t, SkipTriviaEx(" \t\r\n  value", 0, &SkipTriviaOptions{StopAfterLineBreak: true}), 4)
+	assert.Equal(t, SkipTriviaEx("\n \t* value", 0, &SkipTriviaOptions{InJSDoc: true}), 5)
 }

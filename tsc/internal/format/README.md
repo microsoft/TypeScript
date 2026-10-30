@@ -24,3 +24,25 @@ There are a lot of rules, which you can find in [rules.ts](./rules.ts) each one 
 ### Where is this used?
 
 The formatter is used mainly from any language service operation that inserts or modifies code.  The formatter is not exported publicly, and so all usage can only come through the language server.
+
+## Benchmarks
+
+Run the formatter benchmarks with:
+
+```sh
+GOEXPERIMENT=simd go -C ./tsc test ./internal/format -run '^$' -bench '^BenchmarkFormat(Document|Editor)$' -benchmem -count=5
+```
+
+In PowerShell, set `$env:GOEXPERIMENT = "simd"` before running the Go command.
+Use `GOEXPERIMENT=nosimd` for the scalar comparison.
+
+`BenchmarkFormatDocument` measures edit generation on an already parsed source file,
+both in its original form and after formatting. It covers the shared parser fixtures
+(compiler source, declarations, JavaScript, and TSX), a small editor document, long
+comments and templates, long whitespace runs, Unicode with CRLF, and minified JavaScript.
+`BenchmarkFormatEditor` measures selection, semicolon, and enter requests.
+Parsing, rule initialization, and edit application are outside the timed loops.
+The existing `BenchmarkFormat` also measures edit application and printer performance.
+
+For CPU profiles, select a case with `-bench`, add `-cpuprofile` and a longer
+`-benchtime`, and inspect the result with `go tool pprof`.
