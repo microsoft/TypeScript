@@ -665,7 +665,19 @@ func (c *Checker) beginMemo(key memoKey) {
 	state := c.peekMemoState(key)
 	resolving := c.beginResolving(key)
 	c.appendResolution(key, nil, 0, int32(len(c.instantiationStack)))
-	c.resolutions[len(c.resolutions)-1].resolving = resolving
+	n := len(c.resolutions) - 1
+	f := &c.resolutions[n]
+	f.resolving = resolving
+	if c.checking && c.memoPendingCount == 0 && c.memoTop|c.currentNodeResolution != 0 && !c.logEffects() {
+		// beginCheckedMemo for the common case, without the calls.
+		f.memo = true
+		f.prevMemo = int32(c.memoTop)
+		f.result = state
+		f.entry = c.currentNode
+		f.attachStart = int32(len(c.deferredAttach))
+		c.memoTop = n + 1
+		return
+	}
 	if c.checking {
 		if c.memoPendingCount != 0 {
 			c.replayPending(state)
@@ -971,6 +983,27 @@ func (c *Checker) replayPending(state *memoState) {
 // for replay by later reuse of the result. The effects also become part of
 // the enclosing computation, since it observed the result.
 func (c *Checker) endMemo() {
+	n := len(c.resolutions) - 1
+	if f := &c.resolutions[n]; f.memo && f.effects == nil && f.source == nil && !f.fromCheck {
+		// stopEffects and endResolution for the common case, without the
+		// calls.
+		c.memoTop = int(f.prevMemo)
+		if f.resolving {
+			c.resolving.delete(f.key)
+		}
+		if int(f.attachStart) != len(c.deferredAttach) {
+			clear(c.deferredAttach[f.attachStart:])
+			c.deferredAttach = c.deferredAttach[:f.attachStart]
+		}
+		*f = resolution{}
+		c.resolutions = c.resolutions[:n]
+		if c.circularityStart > n {
+			c.endCircularity()
+		} else if len(c.innerCycles) != 0 {
+			c.endInnerCycles(n)
+		}
+		return
+	}
 	if f := c.stopEffects(); f != nil && f.effects != nil {
 		c.retainEffects(c.resolutionState(f), f.effects)
 	}
