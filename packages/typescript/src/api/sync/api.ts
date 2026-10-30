@@ -84,6 +84,7 @@ import {
     toRootedPath,
 } from "../path.ts";
 import { prepareCompilerOptions } from "../prepareCompilerOptions.generated.ts";
+import type { PrintNodeComment } from "../proto.generated.ts";
 import type {
     BuildResponse,
     CleanBuildResponse,
@@ -6484,23 +6485,27 @@ export class Printer {
             owner,
             "printNode",
             function (node: Node, options: PrintNodeOptions = {}): string {
-                const encoded = encodeNode(node);
+                const comments: PrintNodeComment[] = [];
+                const encoded = encodeNode(node, comments);
                 const base64 = uint8ArrayToBase64(encoded);
                 return owner.client.apiRequest("printNode", {
                     data: base64,
                     preserveSourceNewlines: options.preserveSourceNewlines,
                     neverAsciiEscape: options.neverAsciiEscape,
                     terminateUnterminatedLiterals: options.terminateUnterminatedLiterals,
+                    comments: comments.length ? comments : undefined,
                 });
             },
             function* (node: Node, options: PrintNodeOptions = {}): Generator<ProtocolRequest, string, ProtocolResponse["result"]> {
-                const encoded = encodeNode(node);
+                const comments: PrintNodeComment[] = [];
+                const encoded = encodeNode(node, comments);
                 const base64 = uint8ArrayToBase64(encoded);
                 return yield* apiRequest("printNode", {
                     data: base64,
                     preserveSourceNewlines: options.preserveSourceNewlines,
                     neverAsciiEscape: options.neverAsciiEscape,
                     terminateUnterminatedLiterals: options.terminateUnterminatedLiterals,
+                    comments: comments.length ? comments : undefined,
                 });
             },
         );
@@ -6515,23 +6520,27 @@ export class Printer {
             owner,
             "printFile",
             function (sourceFile: SourceFile, options: PrintNodeOptions = {}): string {
-                const encoded = encodeNode(sourceFile);
+                const comments: PrintNodeComment[] = [];
+                const encoded = encodeNode(sourceFile, comments);
                 const base64 = uint8ArrayToBase64(encoded);
                 return owner.client.apiRequest("printNode", {
                     data: base64,
                     preserveSourceNewlines: options.preserveSourceNewlines,
                     neverAsciiEscape: options.neverAsciiEscape,
                     terminateUnterminatedLiterals: options.terminateUnterminatedLiterals,
+                    comments: comments.length ? comments : undefined,
                 });
             },
             function* (sourceFile: SourceFile, options: PrintNodeOptions = {}): Generator<ProtocolRequest, string, ProtocolResponse["result"]> {
-                const encoded = encodeNode(sourceFile);
+                const comments: PrintNodeComment[] = [];
+                const encoded = encodeNode(sourceFile, comments);
                 const base64 = uint8ArrayToBase64(encoded);
                 return yield* apiRequest("printNode", {
                     data: base64,
                     preserveSourceNewlines: options.preserveSourceNewlines,
                     neverAsciiEscape: options.neverAsciiEscape,
                     terminateUnterminatedLiterals: options.terminateUnterminatedLiterals,
+                    comments: comments.length ? comments : undefined,
                 });
             },
         );

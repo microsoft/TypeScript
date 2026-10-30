@@ -20,5 +20,6 @@ export * from "./is.ts";
 export * from "./jsdoc.ts";
 export * from "./scanner.ts";
 export * from "./spanMap.ts";
+export * from "./syntheticComments.ts";
 export * from "./utils.ts";
 export * from "./visitor.ts";

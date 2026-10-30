@@ -1778,6 +1778,17 @@ type PrintNodeParams struct {
 	PreserveSourceNewlines        bool   `json:"preserveSourceNewlines,omitempty"`
 	NeverAsciiEscape              bool   `json:"neverAsciiEscape,omitempty"`
 	TerminateUnterminatedLiterals bool   `json:"terminateUnterminatedLiterals,omitempty"`
+	// Comments are synthetic comments attached to nodes of the encoded AST.
+	Comments []PrintNodeComment `json:"comments,omitempty"`
+}
+
+// PrintNodeComment is a synthetic comment attached to a node of the encoded AST.
+type PrintNodeComment struct {
+	Node               int    `json:"node"` // index of the node in the encoded AST data
+	Trailing           bool   `json:"trailing,omitempty"`
+	Kind               int32  `json:"kind"` // SingleLineCommentTrivia or MultiLineCommentTrivia
+	Text               string `json:"text"`
+	HasTrailingNewLine bool   `json:"hasTrailingNewLine,omitempty"`
 }
 
 type EmitParams struct {

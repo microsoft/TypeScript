@@ -11,6 +11,7 @@ import (
 	"github.com/microsoft/TypeScript/tsc/internal/testutil/parsetestutil"
 	"github.com/microsoft/TypeScript/tsc/internal/transformers"
 	"github.com/microsoft/TypeScript/tsc/internal/transformers/tstransforms"
+	"gotest.tools/v3/assert"
 )
 
 func TestEmit(t *testing.T) {
@@ -587,6 +588,444 @@ func TestEmit(t *testing.T) {
 			parsetestutil.CheckDiagnostics(t, file)
 			emittestutil.CheckEmit(t, nil, file, rec.output)
 		})
+	}
+}
+
+func TestEmitJSDoc(t *testing.T) {
+	t.Parallel()
+
+	var factory ast.NodeFactory
+	doc := factory.NewJSDoc(
+		factory.NewNodeList([]*ast.Node{
+			factory.NewJSDocText([]string{"This is a function description"}),
+		}),
+		factory.NewNodeList([]*ast.Node{
+			factory.NewJSDocParameterOrPropertyTag(
+				ast.KindJSDocParameterTag,
+				factory.NewIdentifier("param"),
+				factory.NewIdentifier("foo"),
+				false, /*isBracketed*/
+				nil,   /*typeExpression*/
+				false, /*isNameFirst*/
+				factory.NewNodeList([]*ast.Node{
+					factory.NewJSDocText([]string{"The foo parameter"}),
+				}),
+			),
+		}),
+	)
+	actual := printer.NewPrinter(
+		printer.PrinterOptions{NewLine: core.NewLineKindLF},
+		printer.PrintHandlers{},
+		nil,
+	).Emit(doc, nil)
+	expected := "/**\n * This is a function description\n * @param foo The foo parameter\n */"
+	if actual != expected {
+		t.Errorf("unexpected JSDoc output:\n got: %q\nwant: %q", actual, expected)
+	}
+
+	file := parsetestutil.ParseTypeScript("/** function description */\nfunction f() {}", false)
+	emittestutil.CheckEmit(t, nil, file, "/** function description */\nfunction f() { }")
+}
+
+func TestEmitJSDocSingleLine(t *testing.T) {
+	t.Parallel()
+
+	var factory ast.NodeFactory
+	node := factory.NewJSDoc(
+		factory.NewNodeList([]*ast.Node{
+			factory.NewJSDocText([]string{"A short description"}),
+		}),
+		nil, /*tags*/
+	)
+	actual := printer.NewPrinter(
+		printer.PrinterOptions{NewLine: core.NewLineKindLF},
+		printer.PrintHandlers{},
+		nil,
+	).Emit(node, nil)
+	expected := "/**\n * A short description\n */"
+	if actual != expected {
+		t.Errorf("unexpected single-line JSDoc output: %q", actual)
+	}
+}
+
+func TestEmitJSDocTypeExpression(t *testing.T) {
+	t.Parallel()
+
+	var factory ast.NodeFactory
+	node := factory.NewJSDocTypeExpression(factory.NewKeywordTypeNode(ast.KindNumberKeyword))
+	actual := printer.NewPrinter(
+		printer.PrinterOptions{NewLine: core.NewLineKindLF},
+		printer.PrintHandlers{},
+		nil,
+	).Emit(node, nil)
+	if actual != "{number}" {
+		t.Errorf("unexpected JSDoc type output: %q", actual)
+	}
+}
+
+func TestEmitJSDocParameterType(t *testing.T) {
+	t.Parallel()
+
+	var factory ast.NodeFactory
+	node := factory.NewJSDocParameterOrPropertyTag(
+		ast.KindJSDocParameterTag,
+		factory.NewIdentifier("param"),
+		factory.NewIdentifier("foo"),
+		false, /*isBracketed*/
+		factory.NewKeywordTypeNode(ast.KindNumberKeyword),
+		false, /*isNameFirst*/
+		nil,   /*comment*/
+	)
+	actual := printer.NewPrinter(
+		printer.PrinterOptions{NewLine: core.NewLineKindLF},
+		printer.PrintHandlers{},
+		nil,
+	).Emit(node, nil)
+	if actual != "@param {number} foo" {
+		t.Errorf("unexpected JSDoc parameter output: %q", actual)
+	}
+}
+
+func TestEmitJSDocLink(t *testing.T) {
+	t.Parallel()
+
+	var factory ast.NodeFactory
+	node := factory.NewJSDoc(
+		factory.NewNodeList([]*ast.Node{
+			factory.NewJSDocText([]string{"See "}),
+			factory.NewJSDocLink(factory.NewIdentifier("Foo"), []string{"the docs"}),
+		}),
+		nil, /*tags*/
+	)
+	actual := printer.NewPrinter(
+		printer.PrinterOptions{NewLine: core.NewLineKindLF},
+		printer.PrintHandlers{},
+		nil,
+	).Emit(node, nil)
+	expected := "/**\n * See {@link Foo the docs}\n */"
+	if actual != expected {
+		t.Errorf("unexpected JSDoc link output:\n got: %q\nwant: %q", actual, expected)
+	}
+}
+
+func TestEmitJSDocReviewRegressions(t *testing.T) {
+	t.Parallel()
+
+	data := []struct {
+		name   string
+		input  string
+		output string
+	}{
+		{
+			name: "ObjectTypedefProperties",
+			input: `/**
+ * @typedef {Object} Options
+ * @property {number} count Number of items; see {@link Item}
+ */
+const options = {};`,
+			output: `/**
+ * @typedef {Object} Options
+ * @property {number} count Number of items; see {@link Item}
+ */
+const options = {};`,
+		},
+		{
+			name: "NestedParameterProperties",
+			input: `/**
+ * @param {Object} options The options
+ * @param {number} options.count Number of items
+ */
+function f(options) {}`,
+			output: `/**
+ * @param {Object} options The options
+ * @param {number} options.count Number of items
+ */
+function f(options) { }`,
+		},
+		{
+			name: "CallbackSignature",
+			input: `/**
+ * @callback Handler
+ * @param {string} value The value
+ * @returns {number} The result
+ */
+const handler = () => 0;`,
+			output: `/**
+ * @callback Handler
+ * @param {string} value The value
+ * @returns {number} The result
+ */
+const handler = () => 0;`,
+		},
+		{
+			name: "TemplateModifiersAndDefaults",
+			input: `/**
+ * @template const T
+ * @template [U=string]
+ */
+function f() {}`,
+			output: `/**
+ * @template const T
+ * @template [U=string]
+ */
+function f() { }`,
+		},
+		{
+			name: "ImportAndQualifiedTypedef",
+			input: `/**
+ * @import { Foo } from "pkg"
+ * @typedef {Object} Namespace.Foo
+ * @see {Foo}
+ */
+const value = 0;`,
+			output: `/**
+ * @import { Foo } from "pkg"
+ * @typedef {Object} Namespace.Foo
+ * @see {Foo}
+ */
+const value = 0;`,
+		},
+	}
+
+	for _, rec := range data {
+		t.Run(rec.name, func(t *testing.T) {
+			t.Parallel()
+			file := parsetestutil.ParseTypeScript(rec.input, false)
+			emittestutil.CheckEmit(t, nil, file, rec.output)
+		})
+	}
+}
+
+func TestEmitJSDocTypedefRecord(t *testing.T) {
+	t.Parallel()
+
+	var factory ast.NodeFactory
+	numberType := factory.NewJSDocTypeExpression(factory.NewKeywordTypeNode(ast.KindNumberKeyword))
+	nestedProperty := factory.NewJSDocParameterOrPropertyTag(
+		ast.KindJSDocPropertyTag,
+		factory.NewIdentifier("property"),
+		factory.NewQualifiedName(factory.NewIdentifier("options"), factory.NewIdentifier("count")),
+		true, /*isBracketed*/
+		numberType,
+		false, /*isNameFirst*/
+		factory.NewNodeList([]*ast.Node{
+			factory.NewJSDocText([]string{"Number of items"}),
+			factory.NewJSDocText([]string{"; see "}),
+			factory.NewJSDocLink(factory.NewIdentifier("Item"), nil),
+		}),
+	)
+	nestedType := factory.NewJSDocTypeLiteral([]*ast.Node{nestedProperty}, false)
+	optionsProperty := factory.NewJSDocParameterOrPropertyTag(
+		ast.KindJSDocPropertyTag,
+		factory.NewIdentifier("property"),
+		factory.NewIdentifier("options"),
+		false, /*isBracketed*/
+		factory.NewJSDocTypeExpression(nestedType),
+		false, /*isNameFirst*/
+		nil,   /*comment*/
+	)
+	recordType := factory.NewJSDocTypeLiteral([]*ast.Node{optionsProperty}, false)
+	typedef := factory.NewJSDocTypedefTag(
+		factory.NewIdentifier("typedef"),
+		recordType,
+		factory.NewIdentifier("Options"),
+		nil, /*comment*/
+	)
+	doc := factory.NewJSDoc(nil, factory.NewNodeList([]*ast.Node{typedef}))
+	actual := printer.NewPrinter(
+		printer.PrinterOptions{NewLine: core.NewLineKindLF},
+		printer.PrintHandlers{},
+		nil,
+	).Emit(doc, nil)
+	expected := "/**\n * @typedef {Object} Options\n * @property {Object} options\n * @property {number} [options.count] Number of items; see {@link Item}\n */"
+	if actual != expected {
+		t.Errorf("unexpected JSDoc typedef record:\n got: %q\nwant: %q", actual, expected)
+	}
+}
+
+func TestEmitJSDocOptionalTypeLiteralProperty(t *testing.T) {
+	t.Parallel()
+
+	var factory ast.NodeFactory
+	property := factory.NewJSDocParameterOrPropertyTag(
+		ast.KindJSDocPropertyTag,
+		factory.NewIdentifier("property"),
+		factory.NewIdentifier("count"),
+		false, /*isBracketed*/
+		factory.NewJSDocTypeExpression(factory.NewJSDocOptionalType(factory.NewKeywordTypeNode(ast.KindNumberKeyword))),
+		false, /*isNameFirst*/
+		nil,   /*comment*/
+	)
+	node := factory.NewJSDocTypeLiteral([]*ast.Node{property}, false)
+	actual := printer.NewPrinter(
+		printer.PrinterOptions{NewLine: core.NewLineKindLF},
+		printer.PrintHandlers{},
+		nil,
+	).Emit(node, nil)
+	if actual != "{ count?: number }" {
+		t.Errorf("unexpected optional JSDoc property output: %q", actual)
+	}
+}
+
+func TestEmitJSDocTagCommentWithLeadingNewline(t *testing.T) {
+	t.Parallel()
+
+	var factory ast.NodeFactory
+	tag := factory.NewJSDocUnknownTag(
+		factory.NewIdentifier("example"),
+		factory.NewNodeList([]*ast.Node{
+			factory.NewJSDocText([]string{"\nconsole.log(1)"}),
+		}),
+	)
+	doc := factory.NewJSDoc(nil, factory.NewNodeList([]*ast.Node{tag}))
+	actual := printer.NewPrinter(
+		printer.PrinterOptions{NewLine: core.NewLineKindLF},
+		printer.PrintHandlers{},
+		nil,
+	).Emit(doc, nil)
+	expected := "/**\n * @example\n * console.log(1)\n */"
+	if actual != expected {
+		t.Errorf("unexpected multiline JSDoc tag comment:\n got: %q\nwant: %q", actual, expected)
+	}
+}
+
+func TestEmitJSDocGenericCallbackAndOverload(t *testing.T) {
+	t.Parallel()
+
+	var factory ast.NodeFactory
+	typeParameter := factory.NewTypeParameterDeclaration(
+		nil, /*modifiers*/
+		factory.NewIdentifier("T"),
+		nil, /*constraint*/
+		nil, /*expression*/
+		nil, /*defaultType*/
+	)
+	parameter := factory.NewJSDocParameterOrPropertyTag(
+		ast.KindJSDocParameterTag,
+		factory.NewIdentifier("param"),
+		factory.NewIdentifier("value"),
+		false, /*isBracketed*/
+		factory.NewJSDocTypeExpression(factory.NewTypeReferenceNode(factory.NewIdentifier("T"), nil)),
+		false, /*isNameFirst*/
+		nil,   /*comment*/
+	)
+	signature := factory.NewJSDocSignature(
+		factory.NewNodeList([]*ast.Node{typeParameter}),
+		factory.NewNodeList([]*ast.Node{parameter}),
+		nil, /*type*/
+	)
+	nodes := []struct {
+		name string
+		tag  *ast.Node
+		want string
+	}{
+		{
+			name: "callback",
+			tag: factory.NewJSDocCallbackTag(
+				factory.NewIdentifier("callback"),
+				signature,
+				factory.NewIdentifier("Handler"),
+				nil, /*comment*/
+			),
+			want: "/**\n * @template T\n * @callback Handler\n * @param {T} value\n */",
+		},
+		{
+			name: "overload",
+			tag: factory.NewJSDocOverloadTag(
+				factory.NewIdentifier("overload"),
+				signature,
+				nil, /*comment*/
+			),
+			want: "/**\n * @template T\n * @overload\n * @param {T} value\n */",
+		},
+	}
+
+	for _, test := range nodes {
+		t.Run(test.name, func(t *testing.T) {
+			t.Parallel()
+			doc := factory.NewJSDoc(nil, factory.NewNodeList([]*ast.Node{test.tag}))
+			actual := printer.NewPrinter(
+				printer.PrinterOptions{NewLine: core.NewLineKindLF},
+				printer.PrintHandlers{},
+				nil,
+			).Emit(doc, nil)
+			if actual != test.want {
+				t.Fatalf("unexpected generic JSDoc %s:\n got: %q\nwant: %q", test.name, actual, test.want)
+			}
+			file := parsetestutil.ParseTypeScript(actual, false)
+			parsetestutil.CheckDiagnostics(t, file)
+		})
+	}
+}
+
+func TestEmitJSDocQualifiedTypedefName(t *testing.T) {
+	t.Parallel()
+
+	var factory ast.NodeFactory
+	fullName := factory.NewModuleDeclaration(
+		nil, /*modifiers*/
+		ast.KindNamespaceKeyword,
+		factory.NewIdentifier("Namespace"),
+		nil, /*attributes*/
+		factory.NewIdentifier("Foo"),
+	)
+	tag := factory.NewJSDocTypedefTag(
+		factory.NewIdentifier("typedef"),
+		factory.NewJSDocTypeExpression(factory.NewKeywordTypeNode(ast.KindNumberKeyword)),
+		fullName,
+		nil, /*comment*/
+	)
+	doc := factory.NewJSDoc(nil, factory.NewNodeList([]*ast.Node{tag}))
+	actual := printer.NewPrinter(
+		printer.PrinterOptions{NewLine: core.NewLineKindLF},
+		printer.PrintHandlers{},
+		nil,
+	).Emit(doc, nil)
+	if actual != "/**\n * @typedef {number} Namespace.Foo\n */" {
+		t.Errorf("unexpected qualified JSDoc typedef name: %q", actual)
+	}
+}
+
+func TestEmitJSDocNameReference(t *testing.T) {
+	t.Parallel()
+
+	var factory ast.NodeFactory
+	node := factory.NewJSDocNameReference(factory.NewIdentifier("Options"))
+	actual := printer.NewPrinter(
+		printer.PrinterOptions{NewLine: core.NewLineKindLF},
+		printer.PrintHandlers{},
+		nil,
+	).Emit(node, nil)
+	if actual != " {Options}" {
+		t.Errorf("unexpected JSDoc name reference output: %q", actual)
+	}
+}
+
+func TestEmitJSDocPreservesTextWhitespace(t *testing.T) {
+	t.Parallel()
+
+	var factory ast.NodeFactory
+	node := factory.NewJSDoc(
+		factory.NewNodeList([]*ast.Node{
+			factory.NewJSDocText([]string{"  first line\n\n    indented line\r"}),
+		}),
+		factory.NewNodeList([]*ast.Node{
+			factory.NewJSDocUnknownTag(
+				factory.NewIdentifier("example"),
+				factory.NewNodeList([]*ast.Node{
+					factory.NewJSDocText([]string{"  tag text\n    indented tag\r"}),
+				}),
+			),
+		}),
+	)
+	actual := printer.NewPrinter(
+		printer.PrinterOptions{NewLine: core.NewLineKindLF},
+		printer.PrintHandlers{},
+		nil,
+	).Emit(node, nil)
+	expected := "/**\n *   first line\n * \n *     indented line\n * @example   tag text\n *     indented tag\n */"
+	if actual != expected {
+		t.Errorf("unexpected JSDoc whitespace:\n got: %q\nwant: %q", actual, expected)
 	}
 }
 
@@ -2621,4 +3060,39 @@ func TestOmitTrailingSemicolon(t *testing.T) {
 	if got != "for (;;) { }" {
 		t.Fatalf("omit EmitSourceFile(for) = %q, want %q", got, "for (;;) { }")
 	}
+}
+
+func TestSyntheticCommentsWithoutSourceFile(t *testing.T) {
+	t.Parallel()
+
+	newStatement := func(emitContext *printer.EmitContext) *ast.Node {
+		f := emitContext.Factory.AsNodeFactory()
+		return f.NewExpressionStatement(f.NewIdentifier("x"))
+	}
+	emit := func(emitContext *printer.EmitContext, node *ast.Node, enabled bool) string {
+		p := printer.NewPrinter(printer.PrinterOptions{EmitSyntheticCommentsWithoutSourceFile: enabled}, printer.PrintHandlers{}, emitContext)
+		return strings.TrimRight(p.Emit(node, nil), "\n")
+	}
+
+	t.Run("leading and trailing", func(t *testing.T) {
+		t.Parallel()
+		emitContext := printer.NewEmitContext()
+		node := newStatement(emitContext)
+		emitContext.AddSyntheticLeadingComment(node, ast.KindMultiLineCommentTrivia, "*\n * Doc.\n ", true)
+		emitContext.AddSyntheticLeadingComment(node, ast.KindSingleLineCommentTrivia, " lead", true)
+		emitContext.AddSyntheticTrailingComment(node, ast.KindSingleLineCommentTrivia, " trail", false)
+		assert.Equal(t, emit(emitContext, node, true), "/**\n * Doc.\n */\n// lead\nx; // trail")
+	})
+	t.Run("disabled by default", func(t *testing.T) {
+		t.Parallel()
+		emitContext := printer.NewEmitContext()
+		node := newStatement(emitContext)
+		emitContext.AddSyntheticLeadingComment(node, ast.KindSingleLineCommentTrivia, " lead", true)
+		assert.Equal(t, emit(emitContext, node, false), "x;")
+	})
+	t.Run("no comments", func(t *testing.T) {
+		t.Parallel()
+		emitContext := printer.NewEmitContext()
+		assert.Equal(t, emit(emitContext, newStatement(emitContext), true), "x;")
+	})
 }

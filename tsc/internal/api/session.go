@@ -3944,8 +3944,12 @@ func (s *Session) handleTypeToString(ctx context.Context, params *TypeToTypeNode
 
 // handlePrintNode decodes a binary-encoded AST node and prints it to text.
 func (s *Session) handlePrintNode(_ context.Context, params *PrintNodeParams) (string, error) {
-	node, err := decodePrintNode(params.Data)
+	node, nodes, err := decodePrintNode(params.Data)
 	if err != nil {
+		return "", err
+	}
+	emitContext := printer.NewEmitContext()
+	if err := applyPrintNodeComments(emitContext, nodes, params.Comments); err != nil {
 		return "", err
 	}
 
@@ -3953,28 +3957,49 @@ func (s *Session) handlePrintNode(_ context.Context, params *PrintNodeParams) (s
 	if ast.IsSourceFile(node) {
 		sourceFile = node.AsSourceFile()
 	}
-	return newPrinter(params).Emit(node, sourceFile), nil
+	return newPrinter(params, emitContext).Emit(node, sourceFile), nil
 }
 
-func decodePrintNode(encoded string) (*ast.Node, error) {
+func applyPrintNodeComments(emitContext *printer.EmitContext, nodes []*ast.Node, comments []PrintNodeComment) error {
+	for _, comment := range comments {
+		if comment.Node < 1 || comment.Node >= len(nodes) || nodes[comment.Node] == nil {
+			return fmt.Errorf("%w: comment refers to invalid node index %d", ErrClientError, comment.Node)
+		}
+		kind := ast.Kind(comment.Kind)
+		if kind != ast.KindSingleLineCommentTrivia && kind != ast.KindMultiLineCommentTrivia {
+			return fmt.Errorf("%w: invalid comment kind %d", ErrClientError, comment.Kind)
+		}
+		node := nodes[comment.Node]
+		if comment.Trailing {
+			emitContext.AddSyntheticTrailingComment(node, kind, comment.Text, comment.HasTrailingNewLine)
+		} else {
+			emitContext.AddSyntheticLeadingComment(node, kind, comment.Text, comment.HasTrailingNewLine)
+		}
+	}
+	return nil
+}
+
+func decodePrintNode(encoded string) (*ast.Node, []*ast.Node, error) {
 	data, err := base64.StdEncoding.DecodeString(encoded)
 	if err != nil {
-		return nil, fmt.Errorf("%w: invalid base64 data: %w", ErrClientError, err)
+		return nil, nil, fmt.Errorf("%w: invalid base64 data: %w", ErrClientError, err)
 	}
 
-	node, err := encoder.DecodeNodes(data)
+	node, nodes, err := encoder.DecodeNodesIndexed(data)
 	if err != nil {
-		return nil, fmt.Errorf("%w: failed to decode AST: %w", ErrClientError, err)
+		return nil, nil, fmt.Errorf("%w: failed to decode AST: %w", ErrClientError, err)
 	}
-	return node, nil
+	return node, nodes, nil
 }
 
-func newPrinter(params *PrintNodeParams) *printer.Printer {
+func newPrinter(params *PrintNodeParams, emitContext *printer.EmitContext) *printer.Printer {
 	return printer.NewPrinter(printer.PrinterOptions{
 		PreserveSourceNewlines:        params.PreserveSourceNewlines,
 		NeverAsciiEscape:              params.NeverAsciiEscape,
 		TerminateUnterminatedLiterals: params.TerminateUnterminatedLiterals,
-	}, printer.PrintHandlers{}, nil)
+
+		EmitSyntheticCommentsWithoutSourceFile: true,
+	}, printer.PrintHandlers{}, emitContext)
 }
 
 func (s *Session) handleEmit(ctx context.Context, params *EmitParams) (*EmitResponse, error) {
