@@ -1,0 +1,1372 @@
+//// [tests/cases/compiler/recursiveFunctionDeclarationSerialization.ts] ////
+
+=== script.ts ===
+const scriptArrow = () => scriptArrow;
+>scriptArrow : () => typeof scriptArrow
+>() => scriptArrow : () => typeof scriptArrow
+>scriptArrow : () => typeof scriptArrow
+
+const scriptExpression = function () { return scriptExpression; };
+>scriptExpression : () => typeof scriptExpression
+>function () { return scriptExpression; } : () => typeof scriptExpression
+>scriptExpression : () => typeof scriptExpression
+
+function scriptDeclaration() { return scriptDeclaration; }
+>scriptDeclaration : () => typeof scriptDeclaration
+>scriptDeclaration : () => typeof scriptDeclaration
+
+=== exported.ts ===
+export const arrow = () => arrow;
+>arrow : () => typeof arrow
+>() => arrow : () => typeof arrow
+>arrow : () => typeof arrow
+
+export const expression = function () { return expression; };
+>expression : () => typeof expression
+>function () { return expression; } : () => typeof expression
+>expression : () => typeof expression
+
+export function declaration() { return declaration; }
+>declaration : () => typeof declaration
+>declaration : () => typeof declaration
+
+export const annotated: () => typeof annotated = () => annotated;
+>annotated : () => typeof annotated
+>annotated : () => typeof annotated
+>() => annotated : () => () => typeof annotated
+>annotated : () => typeof annotated
+
+export const first = () => second;
+>first : () => () => typeof first
+>() => second : () => () => typeof first
+>second : () => () => typeof second
+
+export const second = () => first;
+>second : () => () => typeof second
+>() => first : () => () => typeof second
+>first : () => () => typeof first
+
+export const generic = <T>(value: T) => generic;
+>generic : <T>(value: T) => typeof generic
+><T>(value: T) => generic : <T>(value: T) => typeof generic
+>value : T
+>generic : <T>(value: T) => typeof generic
+
+export const finite = () => () => 1;
+>finite : () => () => number
+>() => () => 1 : () => () => number
+>() => 1 : () => number
+>1 : 1
+
+export const wrapped = { arrow };
+>wrapped : { arrow: () => (typeof wrapped)["arrow"]; }
+>{ arrow } : { arrow: () => (typeof wrapped)["arrow"]; }
+>arrow : () => typeof arrow
+
+export const tuple = [arrow] as const;
+>tuple : readonly [() => typeof arrow]
+>[arrow] as const : readonly [() => typeof arrow]
+>[arrow] : readonly [() => typeof arrow]
+>arrow : () => typeof arrow
+
+export const named = function self() { return self; };
+>named : () => typeof named
+>function self() { return self; } : () => typeof named
+>self : () => typeof named
+>self : () => typeof named
+
+export const broad: unknown = function self() { return self; };
+>broad : unknown
+>function self() { return self; } : () => any
+>self : () => typeof self
+>self : () => typeof self
+
+export const contextual: () => unknown = function self() { return self; };
+>contextual : () => unknown
+>function self() { return self; } : () => any
+>self : () => typeof self
+>self : () => typeof self
+
+export const specialized = generic<number>;
+>specialized : (value: number) => <T>(value: T) => typeof generic
+>generic<number> : (value: number) => <T>(value: T) => typeof generic
+>generic : <T>(value: T) => typeof generic
+
+export const annotatedParameter = (value: string | number) => annotatedParameter;
+>annotatedParameter : (value: string | number) => typeof annotatedParameter
+>(value: string | number) => annotatedParameter : (value: string | number) => typeof annotatedParameter
+>value : string | number
+>annotatedParameter : (value: string | number) => typeof annotatedParameter
+
+export const renamedParameter = (other: number | string) => renamedParameter;
+>renamedParameter : (other: number | string) => typeof renamedParameter
+>(other: number | string) => renamedParameter : (other: number | string) => typeof renamedParameter
+>other : string | number
+>renamedParameter : (other: number | string) => typeof renamedParameter
+
+export const optionalParameter = (value?: string) => optionalParameter;
+>optionalParameter : (value?: string) => typeof optionalParameter
+>(value?: string) => optionalParameter : (value?: string) => typeof optionalParameter
+>value : string | undefined
+>optionalParameter : (value?: string) => typeof optionalParameter
+
+export const restParameter = (...values: string[]) => restParameter;
+>restParameter : (...values: string[]) => typeof restParameter
+>(...values: string[]) => restParameter : (...values: string[]) => typeof restParameter
+>values : string[]
+>restParameter : (...values: string[]) => typeof restParameter
+
+export const nestedReturn = () => () => nestedReturn;
+>nestedReturn : () => () => typeof nestedReturn
+>() => () => nestedReturn : () => () => typeof nestedReturn
+>() => nestedReturn : () => () => () => typeof nestedReturn
+>nestedReturn : () => () => typeof nestedReturn
+
+export const finiteObject = { call: (value: string) => ({ value }) };
+>finiteObject : { call: (value: string) => { value: string; }; }
+>{ call: (value: string) => ({ value }) } : { call: (value: string) => { value: string; }; }
+>call : (value: string) => { value: string; }
+>(value: string) => ({ value }) : (value: string) => { value: string; }
+>value : string
+>({ value }) : { value: string; }
+>{ value } : { value: string; }
+>value : string
+
+export const finiteTuple = [(value: number) => [value] as const] as const;
+>finiteTuple : readonly [(value: number) => readonly [number]]
+>[(value: number) => [value] as const] as const : readonly [(value: number) => readonly [number]]
+>[(value: number) => [value] as const] : readonly [(value: number) => readonly [number]]
+>(value: number) => [value] as const : (value: number) => readonly [number]
+>value : number
+>[value] as const : readonly [number]
+>[value] : readonly [number]
+>value : number
+
+export const nestedGeneric = <T>(value: T) => ({
+>nestedGeneric : <T>(value: T) => { call: (other: T) => readonly [T, T]; }
+><T>(value: T) => ({    call: (other: T) => [value, other] as const,}) : <T>(value: T) => { call: (other: T) => readonly [T, T]; }
+>value : T
+>({    call: (other: T) => [value, other] as const,}) : { call: (other: T) => readonly [T, T]; }
+>{    call: (other: T) => [value, other] as const,} : { call: (other: T) => readonly [T, T]; }
+
+    call: (other: T) => [value, other] as const,
+>call : (other: T) => readonly [T, T]
+>(other: T) => [value, other] as const : (other: T) => readonly [T, T]
+>other : T
+>[value, other] as const : readonly [T, T]
+>[value, other] : readonly [T, T]
+>value : T
+>other : T
+
+});
+export const instantiatedNested = nestedGeneric("text");
+>instantiatedNested : { call: (other: string) => readonly [string, string]; }
+>nestedGeneric("text") : { call: (other: string) => readonly [string, string]; }
+>nestedGeneric : <T>(value: T) => { call: (other: T) => readonly [T, T]; }
+>"text" : "text"
+
+export const objectReturn = () => ({ call: objectReturn });
+>objectReturn : () => { call: typeof objectReturn; }
+>() => ({ call: objectReturn }) : () => { call: typeof objectReturn; }
+>({ call: objectReturn }) : { call: () => { call: typeof objectReturn; }; }
+>{ call: objectReturn } : { call: () => { call: typeof objectReturn; }; }
+>call : () => { call: typeof objectReturn; }
+>objectReturn : () => { call: typeof objectReturn; }
+
+export const tupleReturn = () => [tupleReturn] as const;
+>tupleReturn : () => readonly [typeof tupleReturn]
+>() => [tupleReturn] as const : () => readonly [typeof tupleReturn]
+>[tupleReturn] as const : readonly [() => readonly [typeof tupleReturn]]
+>[tupleReturn] : readonly [() => readonly [typeof tupleReturn]]
+>tupleReturn : () => readonly [typeof tupleReturn]
+
+export const shadowed = function self(shadowed: number) { return self; };
+>shadowed : (shadowed: number) => typeof import("./exported").shadowed
+>function self(shadowed: number) { return self; } : (shadowed: number) => typeof import("./exported").shadowed
+>self : (shadowed: number) => typeof import("./exported").shadowed
+>shadowed : number
+>self : (shadowed: number) => typeof import("./exported").shadowed
+
+=== consumer.ts ===
+import { arrow, expression, declaration, first, generic, finite, wrapped, tuple } from "./exported";
+>arrow : () => typeof arrow
+>expression : () => typeof expression
+>declaration : () => typeof declaration
+>first : () => () => typeof first
+>generic : <T>(value: T) => typeof generic
+>finite : () => () => number
+>wrapped : { arrow: () => (typeof wrapped)["arrow"]; }
+>tuple : readonly [() => typeof arrow]
+
+import { instantiatedNested, objectReturn, tupleReturn, shadowed } from "./exported";
+>instantiatedNested : { call: (other: string) => readonly [string, string]; }
+>objectReturn : () => { call: typeof objectReturn; }
+>tupleReturn : () => readonly [typeof tupleReturn]
+>shadowed : (shadowed: number) => typeof import("./exported").shadowed
+
+const a: typeof arrow = arrow()()();
+>a : () => typeof arrow
+>arrow : () => typeof arrow
+>arrow()()() : () => typeof arrow
+>arrow()() : () => typeof arrow
+>arrow() : () => typeof arrow
+>arrow : () => typeof arrow
+
+const b: typeof expression = expression()()();
+>b : () => typeof expression
+>expression : () => typeof expression
+>expression()()() : () => typeof expression
+>expression()() : () => typeof expression
+>expression() : () => typeof expression
+>expression : () => typeof expression
+
+const c: typeof declaration = declaration()()();
+>c : () => typeof declaration
+>declaration : () => typeof declaration
+>declaration()()() : () => typeof declaration
+>declaration()() : () => typeof declaration
+>declaration() : () => typeof declaration
+>declaration : () => typeof declaration
+
+const d: typeof first = first()()();
+>d : () => () => typeof first
+>first : () => () => typeof first
+>first()()() : () => () => typeof import("./exported").second
+>first()() : () => () => typeof first
+>first() : () => () => typeof import("./exported").second
+>first : () => () => typeof first
+
+const e: typeof generic = generic(1)("text")(true);
+>e : <T>(value: T) => typeof generic
+>generic : <T>(value: T) => typeof generic
+>generic(1)("text")(true) : <T>(value: T) => typeof generic
+>generic(1)("text") : <T>(value: T) => typeof generic
+>generic(1) : <T>(value: T) => typeof generic
+>generic : <T>(value: T) => typeof generic
+>1 : 1
+>"text" : "text"
+>true : true
+
+const f: number = finite()();
+>f : number
+>finite()() : number
+>finite() : () => number
+>finite : () => () => number
+
+const g: typeof arrow = wrapped.arrow()();
+>g : () => typeof arrow
+>arrow : () => typeof arrow
+>wrapped.arrow()() : () => typeof arrow
+>wrapped.arrow() : () => typeof arrow
+>wrapped.arrow : () => typeof arrow
+>wrapped : { arrow: () => (typeof wrapped)["arrow"]; }
+>arrow : () => typeof arrow
+
+const h: typeof arrow = tuple[0]()();
+>h : () => typeof arrow
+>arrow : () => typeof arrow
+>tuple[0]()() : () => typeof arrow
+>tuple[0]() : () => typeof arrow
+>tuple[0] : () => typeof arrow
+>tuple : readonly [() => typeof arrow]
+>0 : 0
+
+const invalid: number = arrow()()();
+>invalid : number
+>arrow()()() : () => typeof arrow
+>arrow()() : () => typeof arrow
+>arrow() : () => typeof arrow
+>arrow : () => typeof arrow
+
+const nestedResult: readonly [string, string] = instantiatedNested.call("other");
+>nestedResult : readonly [string, string]
+>instantiatedNested.call("other") : readonly [string, string]
+>instantiatedNested.call : (other: string) => readonly [string, string]
+>instantiatedNested : { call: (other: string) => readonly [string, string]; }
+>call : (other: string) => readonly [string, string]
+>"other" : "other"
+
+instantiatedNested.call(1);
+>instantiatedNested.call(1) : readonly [string, string]
+>instantiatedNested.call : (other: string) => readonly [string, string]
+>instantiatedNested : { call: (other: string) => readonly [string, string]; }
+>call : (other: string) => readonly [string, string]
+>1 : 1
+
+const objectCall: typeof objectReturn = objectReturn().call().call;
+>objectCall : () => { call: typeof objectReturn; }
+>objectReturn : () => { call: typeof objectReturn; }
+>objectReturn().call().call : () => { call: typeof objectReturn; }
+>objectReturn().call() : { call: () => { call: typeof objectReturn; }; }
+>objectReturn().call : () => { call: typeof objectReturn; }
+>objectReturn() : { call: () => { call: typeof objectReturn; }; }
+>objectReturn : () => { call: typeof objectReturn; }
+>call : () => { call: typeof objectReturn; }
+>call : () => { call: typeof objectReturn; }
+
+const tupleCall: typeof tupleReturn = tupleReturn()[0]()[0];
+>tupleCall : () => readonly [typeof tupleReturn]
+>tupleReturn : () => readonly [typeof tupleReturn]
+>tupleReturn()[0]()[0] : () => readonly [typeof tupleReturn]
+>tupleReturn()[0]() : readonly [() => readonly [typeof tupleReturn]]
+>tupleReturn()[0] : () => readonly [typeof tupleReturn]
+>tupleReturn() : readonly [() => readonly [typeof tupleReturn]]
+>tupleReturn : () => readonly [typeof tupleReturn]
+>0 : 0
+>0 : 0
+
+const shadowedCall: typeof shadowed = shadowed(1)(2);
+>shadowedCall : (shadowed: number) => typeof import("./exported").shadowed
+>shadowed : (shadowed: number) => typeof import("./exported").shadowed
+>shadowed(1)(2) : (shadowed: number) => typeof import("./exported").shadowed
+>shadowed(1) : (shadowed: number) => typeof import("./exported").shadowed
+>shadowed : (shadowed: number) => typeof import("./exported").shadowed
+>1 : 1
+>2 : 2
+
+=== recursiveObject.ts ===
+export function recursiveObject<T>() {
+>recursiveObject : <T>() => { call: <U>(arg: U) => typeof value; consume: (arg: T) => typeof value; }
+
+    const value = {
+>value : { call: <U>(arg: U) => typeof value; consume: (arg: T) => typeof value; }
+>{        call: <U>(arg: U) => value,        consume: (arg: T) => value,    } : { call: <U>(arg: U) => typeof value; consume: (arg: T) => typeof value; }
+
+        call: <U>(arg: U) => value,
+>call : <U>(arg: U) => { call: (typeof value)["call"]; consume: (arg: T) => typeof value; }
+><U>(arg: U) => value : <U>(arg: U) => { call: (typeof value)["call"]; consume: (arg: T) => typeof value; }
+>arg : U
+>value : { call: <U>(arg: U) => typeof value; consume: (arg: T) => typeof value; }
+
+        consume: (arg: T) => value,
+>consume : (arg: T) => { call: <U>(arg: U) => typeof value; consume: (typeof value)["consume"]; }
+>(arg: T) => value : (arg: T) => { call: <U>(arg: U) => typeof value; consume: (typeof value)["consume"]; }
+>arg : T
+>value : { call: <U>(arg: U) => typeof value; consume: (arg: T) => typeof value; }
+
+    };
+    return value;
+>value : { call: <U>(arg: U) => typeof value; consume: (arg: T) => typeof value; }
+}
+
+const result = recursiveObject<number>().call("hello").consume(1);
+>result : { call: <U>(arg: U) => any; consume: (arg: number) => any; }
+>recursiveObject<number>().call("hello").consume(1) : { call: <U>(arg: U) => any; consume: (arg: number) => any; }
+>recursiveObject<number>().call("hello").consume : (arg: number) => { call: <U>(arg: U) => any; consume: any; }
+>recursiveObject<number>().call("hello") : { call: <U>(arg: U) => any; consume: (arg: number) => any; }
+>recursiveObject<number>().call : <U>(arg: U) => { call: any; consume: (arg: number) => any; }
+>recursiveObject<number>() : { call: <U>(arg: U) => any; consume: (arg: number) => any; }
+>recursiveObject : <T>() => { call: <U>(arg: U) => any; consume: (arg: T) => any; }
+>call : <U>(arg: U) => { call: any; consume: (arg: number) => any; }
+>"hello" : "hello"
+>consume : (arg: number) => { call: <U>(arg: U) => any; consume: any; }
+>1 : 1
+
+type IsAny<T> = 0 extends (1 & T) ? true : false;
+>IsAny : IsAny<T>
+>true : true
+>false : false
+
+const notAny: false = null as unknown as IsAny<typeof result.call>;
+>notAny : false
+>false : false
+>null as unknown as IsAny<typeof result.call> : false
+>null as unknown : unknown
+>result.call : <U>(arg: U) => { call: any; consume: (arg: number) => any; }
+>result : { call: <U>(arg: U) => any; consume: (arg: number) => any; }
+>call : <U>(arg: U) => { call: any; consume: (arg: number) => any; }
+
+const invalidCall: number = result.call;
+>invalidCall : number
+>result.call : <U>(arg: U) => { call: any; consume: (arg: number) => any; }
+>result : { call: <U>(arg: U) => any; consume: (arg: number) => any; }
+>call : <U>(arg: U) => { call: any; consume: (arg: number) => any; }
+
+result.consume("wrong");
+>result.consume("wrong") : { call: <U>(arg: U) => any; consume: (arg: number) => any; }
+>result.consume : (arg: number) => { call: <U>(arg: U) => any; consume: any; }
+>result : { call: <U>(arg: U) => any; consume: (arg: number) => any; }
+>consume : (arg: number) => { call: <U>(arg: U) => any; consume: any; }
+>"wrong" : "wrong"
+
+=== nestedNamedFunctions.ts ===
+export const nestedObject = { recur: () => nestedObject.recur };
+>nestedObject : { recur: () => (typeof nestedObject)["recur"]; }
+>{ recur: () => nestedObject.recur } : { recur: () => (typeof nestedObject)["recur"]; }
+>recur : () => (typeof nestedObject)["recur"]
+>() => nestedObject.recur : () => (typeof nestedObject)["recur"]
+>nestedObject.recur : () => (typeof nestedObject)["recur"]
+>nestedObject : { recur: () => (typeof nestedObject)["recur"]; }
+>recur : () => (typeof nestedObject)["recur"]
+
+export const nestedTuple = [() => nestedTuple[0]] as const;
+>nestedTuple : readonly [() => (typeof nestedTuple)[0]]
+>[() => nestedTuple[0]] as const : readonly [() => (typeof nestedTuple)[0]]
+>[() => nestedTuple[0]] : readonly [() => (typeof nestedTuple)[0]]
+>() => nestedTuple[0] : () => (typeof nestedTuple)[0]
+>nestedTuple[0] : () => (typeof nestedTuple)[0]
+>nestedTuple : readonly [() => (typeof nestedTuple)[0]]
+>0 : 0
+
+export const object = { recur: function self() { return self; } };
+>object : { recur: () => (typeof object)["recur"]; }
+>{ recur: function self() { return self; } } : { recur: () => (typeof object)["recur"]; }
+>recur : () => (typeof object)["recur"]
+>function self() { return self; } : () => (typeof object)["recur"]
+>self : () => (typeof object)["recur"]
+>self : () => (typeof object)["recur"]
+
+export const tuple = [function self() { return self; }] as const;
+>tuple : readonly [() => (typeof tuple)[0]]
+>[function self() { return self; }] as const : readonly [() => (typeof tuple)[0]]
+>[function self() { return self; }] : readonly [() => (typeof tuple)[0]]
+>function self() { return self; } : () => (typeof tuple)[0]
+>self : () => (typeof tuple)[0]
+>self : () => (typeof tuple)[0]
+
+export const factory = () => function self() { return self; };
+>factory : () => () => () => any
+>() => function self() { return self; } : () => () => () => any
+>function self() { return self; } : () => any
+>self : () => typeof self
+>self : () => typeof self
+
+export const method = { recur() { return method; } };
+>method : { recur(): typeof method; }
+>{ recur() { return method; } } : { recur(): typeof method; }
+>recur : () => { recur(): typeof method; }
+>method : { recur(): typeof method; }
+
+export const accessor = { get recur() { return accessor; } };
+>accessor : { readonly recur: typeof accessor; }
+>{ get recur() { return accessor; } } : { readonly recur: typeof accessor; }
+>recur : { readonly recur: typeof accessor; }
+>accessor : { readonly recur: typeof accessor; }
+
+export function local() {
+>local : () => () => typeof recur
+
+    function recur() { return recur; }
+>recur : () => typeof recur
+>recur : () => typeof recur
+
+    return recur;
+>recur : () => typeof recur
+}
+
+=== recursiveStructures.ts ===
+export const object = { value: 1, next: () => object };
+>object : { value: number; next: () => typeof object; }
+>{ value: 1, next: () => object } : { value: number; next: () => typeof object; }
+>value : number
+>1 : 1
+>next : () => { value: number; next: (typeof object)["next"]; }
+>() => object : () => { value: number; next: (typeof object)["next"]; }
+>object : { value: number; next: () => typeof object; }
+
+export const method = { value: 1, next() { return method; } };
+>method : { value: number; next(): typeof method; }
+>{ value: 1, next() { return method; } } : { value: number; next(): typeof method; }
+>value : number
+>1 : 1
+>next : () => { value: number; next(): typeof method; }
+>method : { value: number; next(): typeof method; }
+
+export const accessor = { value: 1, get next() { return accessor; } };
+>accessor : { value: number; readonly next: typeof accessor; }
+>{ value: 1, get next() { return accessor; } } : { value: number; readonly next: typeof accessor; }
+>value : number
+>1 : 1
+>next : { value: number; readonly next: typeof accessor; }
+>accessor : { value: number; readonly next: typeof accessor; }
+
+export const tuple = [() => tuple] as const;
+>tuple : readonly [() => any]
+>[() => tuple] as const : readonly [() => any]
+>[() => tuple] : readonly [() => any]
+>() => tuple : () => readonly [(typeof tuple)[0]]
+>tuple : readonly [() => any]
+
+export const tupleObject = [{ next: () => tupleObject }] as const;
+>tupleObject : readonly [{ readonly next: () => any; }]
+>[{ next: () => tupleObject }] as const : readonly [{ readonly next: () => readonly [(typeof tupleObject)[0]]; }]
+>[{ next: () => tupleObject }] : readonly [{ readonly next: () => readonly [(typeof tupleObject)[0]]; }]
+>{ next: () => tupleObject } : { readonly next: () => readonly [(typeof tupleObject)[0]]; }
+>next : () => readonly [{ readonly next: (typeof tupleObject)[0]["next"]; }]
+>() => tupleObject : () => readonly [{ readonly next: (typeof tupleObject)[0]["next"]; }]
+>tupleObject : readonly [{ readonly next: () => any; }]
+
+export const array = [() => array];
+>array : (() => any)[]
+>[() => array] : (() => any)[]
+>() => array : () => (typeof array)[0][]
+>array : (() => any)[]
+
+export const first = { next: () => second };
+>first : { next: () => { next: () => typeof first; }; }
+>{ next: () => second } : { next: () => { next: () => typeof first; }; }
+>next : () => { next: () => { next: (typeof first)["next"]; }; }
+>() => second : () => { next: () => { next: (typeof first)["next"]; }; }
+>second : { next: () => { next: () => typeof second; }; }
+
+export const second = { next: () => first };
+>second : { next: () => { next: () => typeof second; }; }
+>{ next: () => first } : { next: () => { next: () => typeof second; }; }
+>next : () => { next: () => { next: (typeof second)["next"]; }; }
+>() => first : () => { next: () => { next: (typeof second)["next"]; }; }
+>first : { next: () => { next: () => typeof first; }; }
+
+export const nested = { inner: { next() { return nested.inner; } } };
+>nested : { inner: { next(): (typeof nested)["inner"]; }; }
+>{ inner: { next() { return nested.inner; } } } : { inner: { next(): (typeof nested)["inner"]; }; }
+>inner : { next(): (typeof nested)["inner"]; }
+>{ next() { return nested.inner; } } : { next(): (typeof nested)["inner"]; }
+>next : () => { next(): (typeof nested)["inner"]; }
+>nested.inner : { next(): (typeof nested)["inner"]; }
+>nested : { inner: { next(): (typeof nested)["inner"]; }; }
+>inner : { next(): (typeof nested)["inner"]; }
+
+export const shadowed = { next: function self(shadowed: number) { return self; } };
+>shadowed : { next: (shadowed: number) => typeof import("./recursiveStructures").shadowed["next"]; }
+>{ next: function self(shadowed: number) { return self; } } : { next: (shadowed: number) => typeof import("./recursiveStructures").shadowed["next"]; }
+>next : (shadowed: number) => typeof import("./recursiveStructures").shadowed["next"]
+>function self(shadowed: number) { return self; } : (shadowed: number) => typeof import("./recursiveStructures").shadowed["next"]
+>self : (shadowed: number) => typeof import("./recursiveStructures").shadowed["next"]
+>shadowed : number
+>self : (shadowed: number) => typeof import("./recursiveStructures").shadowed["next"]
+
+export const memberTuple = [function self() { return self; }] as const;
+>memberTuple : readonly [() => (typeof memberTuple)[0]]
+>[function self() { return self; }] as const : readonly [() => (typeof memberTuple)[0]]
+>[function self() { return self; }] : readonly [() => (typeof memberTuple)[0]]
+>function self() { return self; } : () => (typeof memberTuple)[0]
+>self : () => (typeof memberTuple)[0]
+>self : () => (typeof memberTuple)[0]
+
+export const memberArray = [function self() { return self; }];
+>memberArray : (() => (typeof memberArray)[0])[]
+>[function self() { return self; }] : (() => (typeof memberArray)[0])[]
+>function self() { return self; } : () => (typeof memberArray)[0]
+>self : () => (typeof memberArray)[0]
+>self : () => (typeof memberArray)[0]
+
+export const quoted = { "a-b": function self() { return self; } };
+>quoted : { "a-b": () => (typeof quoted)["a-b"]; }
+>{ "a-b": function self() { return self; } } : { "a-b": () => (typeof quoted)["a-b"]; }
+>"a-b" : () => (typeof quoted)["a-b"]
+>function self() { return self; } : () => (typeof quoted)["a-b"]
+>self : () => (typeof quoted)["a-b"]
+>self : () => (typeof quoted)["a-b"]
+
+export const numeric = { 0: function self() { return self; } };
+>numeric : { 0: () => (typeof numeric)[0]; }
+>{ 0: function self() { return self; } } : { 0: () => (typeof numeric)[0]; }
+>0 : () => (typeof numeric)[0]
+>function self() { return self; } : () => (typeof numeric)[0]
+>self : () => (typeof numeric)[0]
+>self : () => (typeof numeric)[0]
+
+export const key = Symbol();
+>key : unique symbol
+>Symbol() : unique symbol
+>Symbol : SymbolConstructor
+
+export const computed = { [key]: function self() { return self; } };
+>computed : { [key]: () => (typeof computed)[typeof key]; }
+>{ [key]: function self() { return self; } } : { [key]: () => (typeof computed)[typeof key]; }
+>[key] : () => (typeof computed)[typeof key]
+>key : unique symbol
+>function self() { return self; } : () => (typeof computed)[typeof key]
+>self : () => (typeof computed)[typeof key]
+>self : () => (typeof computed)[typeof key]
+
+export const union = Math.random() ? { next: () => union } : undefined;
+>union : { next: () => any | undefined; } | undefined
+>Math.random() ? { next: () => union } : undefined : { next: () => any | undefined; } | undefined
+>Math.random() : number
+>Math.random : () => number
+>Math : Math
+>random : () => number
+>{ next: () => union } : { next: () => any | undefined; }
+>next : () => { next: () => any | undefined; } | undefined
+>() => union : () => { next: () => any | undefined; } | undefined
+>union : { next: () => any | undefined; } | undefined
+>undefined : undefined
+
+function create<T>(value: T) {
+>create : <T>(value: T) => { value: T; next: () => typeof result; }
+>value : T
+
+    const result = { value, next: () => result };
+>result : { value: T; next: () => typeof result; }
+>{ value, next: () => result } : { value: T; next: () => typeof result; }
+>value : T
+>next : () => { value: T; next: (typeof result)["next"]; }
+>() => result : () => { value: T; next: (typeof result)["next"]; }
+>result : { value: T; next: () => typeof result; }
+
+    return result;
+>result : { value: T; next: () => typeof result; }
+}
+export const specialized = create("text");
+>specialized : { value: string; next: () => any; }
+>create("text") : { value: string; next: () => any; }
+>create : <T>(value: T) => { value: T; next: () => any; }
+>"text" : "text"
+
+export const broad: unknown = { next() { return this; } };
+>broad : unknown
+>{ next() { return this; } } : { next(): {}; }
+>next : () => {}
+>this : {}
+
+function createIndexed() {
+>createIndexed : () => { [key: string]: any; }
+
+    const value: { [key: string]: typeof value } = {};
+>value : { [key: string]: any; }
+>key : string
+>value : { [key: string]: any; }
+>{} : {}
+
+    return value;
+>value : { [key: string]: any; }
+}
+export const indexed = createIndexed();
+>indexed : { [key: string]: any; }
+>createIndexed() : { [key: string]: any; }
+>createIndexed : () => { [key: string]: any; }
+
+function createMapped<T>() {
+>createMapped : <T>() => { [K in keyof T]: any; }
+
+    const value: { [K in keyof T]: typeof value } = null!;
+>value : { [K in keyof T]: any; }
+>value : { [K in keyof T]: any; }
+>null! : never
+
+    return value;
+>value : { [K in keyof T]: any; }
+}
+export const mapped = createMapped<{ next: unknown }>();
+>mapped : { next: any; }
+>createMapped<{ next: unknown }>() : { next: any; }
+>createMapped : <T>() => { [K in keyof T]: any; }
+>next : unknown
+
+function createAnnotated<T>(value: T) {
+>createAnnotated : <T>(value: T) => { value: T; next: () => any; }
+>value : T
+
+    const node: { value: T; next: () => typeof node } = { value, next: () => node };
+>node : { value: T; next: () => any; }
+>value : T
+>next : () => { value: T; next: () => any; }
+>node : { value: T; next: () => any; }
+>{ value, next: () => node } : { value: T; next: () => { value: T; next: () => any; }; }
+>value : T
+>next : () => { value: T; next: () => any; }
+>() => node : () => { value: T; next: () => any; }
+>node : { value: T; next: () => any; }
+
+    return node;
+>node : { value: T; next: () => any; }
+}
+export const viaAnnotation = createAnnotated("text");
+>viaAnnotation : { value: string; next: () => any; }
+>createAnnotated("text") : { value: string; next: () => any; }
+>createAnnotated : <T>(value: T) => { value: T; next: () => any; }
+>"text" : "text"
+
+const objectValue: number = object.next().next().value;
+>objectValue : number
+>object.next().next().value : number
+>object.next().next() : { value: number; next: () => typeof object; }
+>object.next().next : () => { value: number; next: (typeof object)["next"]; }
+>object.next() : { value: number; next: () => typeof object; }
+>object.next : () => { value: number; next: (typeof object)["next"]; }
+>object : { value: number; next: () => typeof object; }
+>next : () => { value: number; next: (typeof object)["next"]; }
+>next : () => { value: number; next: (typeof object)["next"]; }
+>value : number
+
+const tupleValue: typeof tuple = tuple[0]()[0]();
+>tupleValue : readonly [() => any]
+>tuple : readonly [() => any]
+>tuple[0]()[0]() : readonly [() => any]
+>tuple[0]()[0] : () => readonly [(typeof tuple)[0]]
+>tuple[0]() : readonly [() => any]
+>tuple[0] : () => readonly [(typeof tuple)[0]]
+>tuple : readonly [() => any]
+>0 : 0
+>0 : 0
+
+const tupleObjectValue: typeof tupleObject = tupleObject[0].next();
+>tupleObjectValue : readonly [{ readonly next: () => any; }]
+>tupleObject : readonly [{ readonly next: () => any; }]
+>tupleObject[0].next() : readonly [{ readonly next: () => any; }]
+>tupleObject[0].next : () => readonly [{ readonly next: (typeof tupleObject)[0]["next"]; }]
+>tupleObject[0] : { readonly next: () => readonly [(typeof tupleObject)[0]]; }
+>tupleObject : readonly [{ readonly next: () => any; }]
+>0 : 0
+>next : () => readonly [{ readonly next: (typeof tupleObject)[0]["next"]; }]
+
+const arrayValue: typeof array = array[0]()[0]();
+>arrayValue : (() => any)[]
+>array : (() => any)[]
+>array[0]()[0]() : (() => any)[]
+>array[0]()[0] : () => (typeof array)[0][]
+>array[0]() : (() => any)[]
+>array[0] : () => (typeof array)[0][]
+>array : (() => any)[]
+>0 : 0
+>0 : 0
+
+const nestedValue: typeof nested.inner = nested.inner.next().next();
+>nestedValue : { next(): (typeof nested)["inner"]; }
+>nested.inner : { next(): (typeof nested)["inner"]; }
+>nested : { inner: { next(): (typeof nested)["inner"]; }; }
+>inner : { next(): (typeof nested)["inner"]; }
+>nested.inner.next().next() : { next(): (typeof nested)["inner"]; }
+>nested.inner.next().next : () => { next(): (typeof nested)["inner"]; }
+>nested.inner.next() : { next(): (typeof nested)["inner"]; }
+>nested.inner.next : () => { next(): (typeof nested)["inner"]; }
+>nested.inner : { next(): (typeof nested)["inner"]; }
+>nested : { inner: { next(): (typeof nested)["inner"]; }; }
+>inner : { next(): (typeof nested)["inner"]; }
+>next : () => { next(): (typeof nested)["inner"]; }
+>next : () => { next(): (typeof nested)["inner"]; }
+
+const specializedValue: string = specialized.next().next().value;
+>specializedValue : string
+>specialized.next().next().value : string
+>specialized.next().next() : { value: string; next: () => any; }
+>specialized.next().next : () => { value: string; next: any; }
+>specialized.next() : { value: string; next: () => any; }
+>specialized.next : () => { value: string; next: any; }
+>specialized : { value: string; next: () => any; }
+>next : () => { value: string; next: any; }
+>next : () => { value: string; next: any; }
+>value : string
+
+const invalidValue: number = specialized.next().value;
+>invalidValue : number
+>specialized.next().value : string
+>specialized.next() : { value: string; next: () => any; }
+>specialized.next : () => { value: string; next: any; }
+>specialized : { value: string; next: () => any; }
+>next : () => { value: string; next: any; }
+>value : string
+
+=== recursiveAnnotations.ts ===
+declare const object: { next: typeof object };
+>object : { next: typeof object; }
+>next : { next: typeof object; }
+>object : { next: typeof object; }
+
+declare const tuple: readonly [typeof tuple];
+>tuple : any
+>tuple : any
+
+declare const array: Array<typeof array>;
+>array : any
+>array : any
+
+declare const tupleFunction: readonly [() => typeof tupleFunction];
+>tupleFunction : readonly [() => typeof tupleFunction]
+>tupleFunction : readonly [() => typeof tupleFunction]
+
+declare const tupleObject: readonly [{ next: typeof tupleObject }];
+>tupleObject : readonly [{ next: typeof tupleObject; }]
+>next : readonly [{ next: typeof tupleObject; }]
+>tupleObject : readonly [{ next: typeof tupleObject; }]
+
+declare const objectTuple: { next: readonly [typeof objectTuple] };
+>objectTuple : { next: readonly [typeof objectTuple]; }
+>next : readonly [{ next: readonly [typeof objectTuple]; }]
+>objectTuple : { next: readonly [typeof objectTuple]; }
+
+declare const mapped: { [K in "next"]: typeof mapped };
+>mapped : { next: any; }
+>mapped : { next: any; }
+
+declare const union: typeof union | undefined;
+>union : any
+>union : any
+
+declare const conditional: true extends false ? never : typeof conditional;
+>conditional : any
+>true : true
+>false : false
+>conditional : any
+
+=== namedReferences.ts ===
+export type Link<T> = { value: T; next: Link<T> };
+>Link : Link<T>
+>value : T
+>next : Link<T>
+
+export type Callable<T> = { (value: T): Callable<T>; link: Link<T> };
+>Callable : Callable<T>
+>value : T
+>link : Link<T>
+
+export type Wrapped = ( { next: Wrapped } );
+>Wrapped : Wrapped
+>next : Wrapped
+
+export declare const link: Link<string>;
+>link : Link<string>
+
+export declare const callable: Callable<number>;
+>callable : Callable<number>
+
+export const nextLink = link.next;
+>nextLink : Link<string>
+>link.next : Link<string>
+>link : Link<string>
+>next : Link<string>
+
+export const nextCallable = callable(1);
+>nextCallable : Callable<number>
+>callable(1) : Callable<number>
+>callable : Callable<number>
+>1 : 1
+
+export const parenthesized = (function self() { return self; });
+>parenthesized : () => typeof parenthesized
+>(function self() { return self; }) : () => typeof parenthesized
+>function self() { return self; } : () => typeof parenthesized
+>self : () => typeof parenthesized
+>self : () => typeof parenthesized
+
+export const asserted = (function self() { return self; }) satisfies () => unknown;
+>asserted : () => typeof asserted
+>(function self() { return self; }) satisfies () => unknown : () => typeof asserted
+>(function self() { return self; }) : () => typeof asserted
+>function self() { return self; } : () => typeof asserted
+>self : () => typeof asserted
+>self : () => typeof asserted
+
+export const widened: () => unknown = (function self() { return self; });
+>widened : () => unknown
+>(function self() { return self; }) : () => any
+>function self() { return self; } : () => any
+>self : () => typeof self
+>self : () => typeof self
+
+function createHidden<T>(value: T) {
+>createHidden : <T>(value: T) => { value: T; next: any; }
+>value : T
+
+    type Hidden = { value: T; next: Hidden };
+>Hidden : { value: T; next: any; }
+>value : T
+>next : { value: T; next: any; }
+
+    return null! as Hidden;
+>null! as Hidden : { value: T; next: any; }
+>null! : never
+}
+export const hiddenAlias = createHidden("text");
+>hiddenAlias : { value: string; next: any; }
+>createHidden("text") : { value: string; next: any; }
+>createHidden : <T>(value: T) => { value: T; next: any; }
+>"text" : "text"
+
+export const siblingHiddenAliases = { first: hiddenAlias, second: hiddenAlias };
+>siblingHiddenAliases : { first: { value: string; next: (typeof siblingHiddenAliases)["first"]; }; second: { value: string; next: (typeof siblingHiddenAliases)["second"]; }; }
+>{ first: hiddenAlias, second: hiddenAlias } : { first: { value: string; next: (typeof siblingHiddenAliases)["first"]; }; second: { value: string; next: (typeof siblingHiddenAliases)["second"]; }; }
+>first : { value: string; next: any; }
+>hiddenAlias : { value: string; next: any; }
+>second : { value: string; next: any; }
+>hiddenAlias : { value: string; next: any; }
+
+export const methodKey = Symbol();
+>methodKey : unique symbol
+>Symbol() : unique symbol
+>Symbol : SymbolConstructor
+
+export class Methods {
+>Methods : Methods
+
+    static recur() { return Methods.recur; }
+>recur : () => (typeof Methods)["recur"]
+>Methods.recur : () => (typeof Methods)["recur"]
+>Methods : typeof Methods
+>recur : () => (typeof Methods)["recur"]
+
+    static "a-b"() { return Methods["a-b"]; }
+>"a-b" : () => (typeof Methods)["a-b"]
+>Methods["a-b"] : () => (typeof Methods)["a-b"]
+>Methods : typeof Methods
+>"a-b" : "a-b"
+
+    static [methodKey]() { return Methods[methodKey]; }
+>[methodKey] : () => (typeof Methods)[typeof methodKey]
+>methodKey : unique symbol
+>Methods[methodKey] : () => (typeof Methods)[typeof methodKey]
+>Methods : typeof Methods
+>methodKey : unique symbol
+
+    recur() { return this.recur; }
+>recur : () => Methods["recur"]
+>this.recur : () => Methods["recur"]
+>this : this
+>recur : () => Methods["recur"]
+}
+export function overloaded(value: string): typeof overloaded;
+>overloaded : { (value: string): typeof overloaded; (value: number): typeof overloaded; }
+>value : string
+>overloaded : { (value: string): typeof overloaded; (value: number): typeof overloaded; }
+
+export function overloaded(value: number): typeof overloaded;
+>overloaded : { (value: string): typeof overloaded; (value: number): typeof overloaded; }
+>value : number
+>overloaded : { (value: string): typeof overloaded; (value: number): typeof overloaded; }
+
+export function overloaded(value: string | number) { return overloaded; }
+>overloaded : { (value: string): typeof overloaded; (value: number): typeof overloaded; }
+>value : string | number
+>overloaded : { (value: string): typeof overloaded; (value: number): typeof overloaded; }
+
+const text: string = nextLink.next.value;
+>text : string
+>nextLink.next.value : string
+>nextLink.next : Link<string>
+>nextLink : Link<string>
+>next : Link<string>
+>value : string
+
+const invalid: number = nextLink.next.value;
+>invalid : number
+>nextLink.next.value : string
+>nextLink.next : Link<string>
+>nextLink : Link<string>
+>next : Link<string>
+>value : string
+
+nextCallable("wrong");
+>nextCallable("wrong") : Callable<number>
+>nextCallable : Callable<number>
+>"wrong" : "wrong"
+
+=== hiddenReferences.ts ===
+export class Hidden {
+>Hidden : Hidden
+
+    private static recur() { return Hidden.recur; }
+>recur : () => (typeof Hidden)["recur"]
+>Hidden.recur : () => (typeof Hidden)["recur"]
+>Hidden : typeof Hidden
+>recur : () => (typeof Hidden)["recur"]
+
+    static expose() { return Hidden.recur; }
+>expose : () => () => (typeof Hidden)["recur"]
+>Hidden.recur : () => (typeof Hidden)["recur"]
+>Hidden : typeof Hidden
+>recur : () => (typeof Hidden)["recur"]
+
+    protected next() { return this.next; }
+>next : () => Hidden["next"]
+>this.next : () => Hidden["next"]
+>this : this
+>next : () => Hidden["next"]
+
+    expose() { return this.next; }
+>expose : () => () => Hidden["next"]
+>this.next : () => Hidden["next"]
+>this : this
+>next : () => Hidden["next"]
+}
+
+=== signatureScopes.ts ===
+export const scoped = {
+>scoped : { first<T>(outer: T): { nested<T_1>(inner: T_1): { outer: T; inner: T_1; next: typeof scoped; }; sibling<T_1>(inner: T_1): { outer: T; inner: T_1; next: typeof scoped; }; }; second<T>(value: T): { value: T; next: typeof scoped; }; }
+>{    first<T>(outer: T) {        return {            nested<T>(inner: T) { return { outer, inner, next: scoped }; },            sibling<T>(inner: T) { return { outer, inner, next: scoped }; },        };    },    second<T>(value: T) { return { value, next: scoped }; },} : { first<T>(outer: T): { nested<T_1>(inner: T_1): { outer: T; inner: T_1; next: typeof scoped; }; sibling<T_1>(inner: T_1): { outer: T; inner: T_1; next: typeof scoped; }; }; second<T>(value: T): { value: T; next: typeof scoped; }; }
+
+    first<T>(outer: T) {
+>first : <T>(outer: T) => { nested<T_1>(inner: T_1): { outer: T; inner: T_1; next: { first<T>(outer: T): any; second<T_2>(value: T_2): { value: T_2; next: typeof scoped; }; }; }; sibling<T_1>(inner: T_1): { outer: T; inner: T_1; next: { first<T>(outer: T): any; second<T_2>(value: T_2): { value: T_2; next: typeof scoped; }; }; }; }
+>outer : T
+
+        return {
+>{            nested<T>(inner: T) { return { outer, inner, next: scoped }; },            sibling<T>(inner: T) { return { outer, inner, next: scoped }; },        } : { nested<T_1>(inner: T_1): { outer: T; inner: T_1; next: { first<T>(outer: T): any; second<T_2>(value: T_2): { value: T_2; next: typeof scoped; }; }; }; sibling<T_1>(inner: T_1): { outer: T; inner: T_1; next: { first<T>(outer: T): any; second<T_2>(value: T_2): { value: T_2; next: typeof scoped; }; }; }; }
+
+            nested<T>(inner: T) { return { outer, inner, next: scoped }; },
+>nested : <T>(inner: T) => { outer: T_1; inner: T; next: { first<T_1>(outer: T_1): { nested<T>(inner: T): any; sibling<T_2>(inner: T_2): { outer: T_1; inner: T_2; next: typeof scoped; }; }; second<T_2>(value: T_2): { value: T_2; next: typeof scoped; }; }; }
+>inner : T
+>{ outer, inner, next: scoped } : { outer: T_1; inner: T; next: { first<T_1>(outer: T_1): { nested<T>(inner: T): any; sibling<T_2>(inner: T_2): { outer: T_1; inner: T_2; next: typeof scoped; }; }; second<T_2>(value: T_2): { value: T_2; next: typeof scoped; }; }; }
+>outer : T_1
+>inner : T
+>next : { first<T_1>(outer: T_1): { nested<T>(inner: T): { outer: T_1; inner: T; next: typeof scoped; }; sibling<T_2>(inner: T_2): { outer: T_1; inner: T_2; next: typeof scoped; }; }; second<T_1>(value: T_1): { value: T_1; next: typeof scoped; }; }
+>scoped : { first<T_1>(outer: T_1): { nested<T>(inner: T): { outer: T_1; inner: T; next: typeof scoped; }; sibling<T_2>(inner: T_2): { outer: T_1; inner: T_2; next: typeof scoped; }; }; second<T_1>(value: T_1): { value: T_1; next: typeof scoped; }; }
+
+            sibling<T>(inner: T) { return { outer, inner, next: scoped }; },
+>sibling : <T>(inner: T) => { outer: T_1; inner: T; next: { first<T_1>(outer: T_1): { nested<T_2>(inner: T_2): { outer: T_1; inner: T_2; next: typeof scoped; }; sibling<T>(inner: T): any; }; second<T_2>(value: T_2): { value: T_2; next: typeof scoped; }; }; }
+>inner : T
+>{ outer, inner, next: scoped } : { outer: T_1; inner: T; next: { first<T_1>(outer: T_1): { nested<T_2>(inner: T_2): { outer: T_1; inner: T_2; next: typeof scoped; }; sibling<T>(inner: T): any; }; second<T_2>(value: T_2): { value: T_2; next: typeof scoped; }; }; }
+>outer : T_1
+>inner : T
+>next : { first<T_1>(outer: T_1): { nested<T_2>(inner: T_2): { outer: T_1; inner: T_2; next: typeof scoped; }; sibling<T>(inner: T): { outer: T_1; inner: T; next: typeof scoped; }; }; second<T_1>(value: T_1): { value: T_1; next: typeof scoped; }; }
+>scoped : { first<T_1>(outer: T_1): { nested<T_2>(inner: T_2): { outer: T_1; inner: T_2; next: typeof scoped; }; sibling<T>(inner: T): { outer: T_1; inner: T; next: typeof scoped; }; }; second<T_1>(value: T_1): { value: T_1; next: typeof scoped; }; }
+
+        };
+    },
+    second<T>(value: T) { return { value, next: scoped }; },
+>second : <T>(value: T) => { value: T; next: { first<T_1>(outer: T_1): { nested<T_2>(inner: T_2): { outer: T_1; inner: T_2; next: typeof scoped; }; sibling<T_2>(inner: T_2): { outer: T_1; inner: T_2; next: typeof scoped; }; }; second<T>(value: T): any; }; }
+>value : T
+>{ value, next: scoped } : { value: T; next: { first<T_1>(outer: T_1): { nested<T_2>(inner: T_2): { outer: T_1; inner: T_2; next: typeof scoped; }; sibling<T_2>(inner: T_2): { outer: T_1; inner: T_2; next: typeof scoped; }; }; second<T>(value: T): any; }; }
+>value : T
+>next : { first<T_1>(outer: T_1): { nested<T_2>(inner: T_2): { outer: T_1; inner: T_2; next: typeof scoped; }; sibling<T_2>(inner: T_2): { outer: T_1; inner: T_2; next: typeof scoped; }; }; second<T>(value: T): { value: T; next: typeof scoped; }; }
+>scoped : { first<T_1>(outer: T_1): { nested<T_2>(inner: T_2): { outer: T_1; inner: T_2; next: typeof scoped; }; sibling<T_2>(inner: T_2): { outer: T_1; inner: T_2; next: typeof scoped; }; }; second<T>(value: T): { value: T; next: typeof scoped; }; }
+
+};
+export const numberScope = scoped.first(1);
+>numberScope : { nested<T>(inner: T): { outer: number; inner: T; next: { first<T_1>(outer: T_1): { nested<T_2>(inner: T_2): { outer: T_1; inner: T_2; next: typeof scoped; }; sibling<T_2>(inner: T_2): { outer: T_1; inner: T_2; next: typeof scoped; }; }; second<T_1>(value: T_1): { value: T_1; next: typeof scoped; }; }; }; sibling<T>(inner: T): { outer: number; inner: T; next: { first<T_1>(outer: T_1): { nested<T_2>(inner: T_2): { outer: T_1; inner: T_2; next: typeof scoped; }; sibling<T_2>(inner: T_2): { outer: T_1; inner: T_2; next: typeof scoped; }; }; second<T_1>(value: T_1): { value: T_1; next: typeof scoped; }; }; }; }
+>scoped.first(1) : { nested<T>(inner: T): { outer: number; inner: T; next: { first<T_1>(outer: T_1): { nested<T_2>(inner: T_2): { outer: T_1; inner: T_2; next: typeof scoped; }; sibling<T_2>(inner: T_2): { outer: T_1; inner: T_2; next: typeof scoped; }; }; second<T_1>(value: T_1): { value: T_1; next: typeof scoped; }; }; }; sibling<T>(inner: T): { outer: number; inner: T; next: { first<T_1>(outer: T_1): { nested<T_2>(inner: T_2): { outer: T_1; inner: T_2; next: typeof scoped; }; sibling<T_2>(inner: T_2): { outer: T_1; inner: T_2; next: typeof scoped; }; }; second<T_1>(value: T_1): { value: T_1; next: typeof scoped; }; }; }; }
+>scoped.first : <T>(outer: T) => { nested<T_1>(inner: T_1): { outer: T; inner: T_1; next: { first<T>(outer: T): any; second<T_2>(value: T_2): { value: T_2; next: typeof scoped; }; }; }; sibling<T_1>(inner: T_1): { outer: T; inner: T_1; next: { first<T>(outer: T): any; second<T_2>(value: T_2): { value: T_2; next: typeof scoped; }; }; }; }
+>scoped : { first<T>(outer: T): { nested<T_1>(inner: T_1): { outer: T; inner: T_1; next: typeof scoped; }; sibling<T_1>(inner: T_1): { outer: T; inner: T_1; next: typeof scoped; }; }; second<T>(value: T): { value: T; next: typeof scoped; }; }
+>first : <T>(outer: T) => { nested<T_1>(inner: T_1): { outer: T; inner: T_1; next: { first<T>(outer: T): any; second<T_2>(value: T_2): { value: T_2; next: typeof scoped; }; }; }; sibling<T_1>(inner: T_1): { outer: T; inner: T_1; next: { first<T>(outer: T): any; second<T_2>(value: T_2): { value: T_2; next: typeof scoped; }; }; }; }
+>1 : 1
+
+export const stringScope = scoped.first("outer");
+>stringScope : { nested<T>(inner: T): { outer: string; inner: T; next: { first<T_1>(outer: T_1): { nested<T_2>(inner: T_2): { outer: T_1; inner: T_2; next: typeof scoped; }; sibling<T_2>(inner: T_2): { outer: T_1; inner: T_2; next: typeof scoped; }; }; second<T_1>(value: T_1): { value: T_1; next: typeof scoped; }; }; }; sibling<T>(inner: T): { outer: string; inner: T; next: { first<T_1>(outer: T_1): { nested<T_2>(inner: T_2): { outer: T_1; inner: T_2; next: typeof scoped; }; sibling<T_2>(inner: T_2): { outer: T_1; inner: T_2; next: typeof scoped; }; }; second<T_1>(value: T_1): { value: T_1; next: typeof scoped; }; }; }; }
+>scoped.first("outer") : { nested<T>(inner: T): { outer: string; inner: T; next: { first<T_1>(outer: T_1): { nested<T_2>(inner: T_2): { outer: T_1; inner: T_2; next: typeof scoped; }; sibling<T_2>(inner: T_2): { outer: T_1; inner: T_2; next: typeof scoped; }; }; second<T_1>(value: T_1): { value: T_1; next: typeof scoped; }; }; }; sibling<T>(inner: T): { outer: string; inner: T; next: { first<T_1>(outer: T_1): { nested<T_2>(inner: T_2): { outer: T_1; inner: T_2; next: typeof scoped; }; sibling<T_2>(inner: T_2): { outer: T_1; inner: T_2; next: typeof scoped; }; }; second<T_1>(value: T_1): { value: T_1; next: typeof scoped; }; }; }; }
+>scoped.first : <T>(outer: T) => { nested<T_1>(inner: T_1): { outer: T; inner: T_1; next: { first<T>(outer: T): any; second<T_2>(value: T_2): { value: T_2; next: typeof scoped; }; }; }; sibling<T_1>(inner: T_1): { outer: T; inner: T_1; next: { first<T>(outer: T): any; second<T_2>(value: T_2): { value: T_2; next: typeof scoped; }; }; }; }
+>scoped : { first<T>(outer: T): { nested<T_1>(inner: T_1): { outer: T; inner: T_1; next: typeof scoped; }; sibling<T_1>(inner: T_1): { outer: T; inner: T_1; next: typeof scoped; }; }; second<T>(value: T): { value: T; next: typeof scoped; }; }
+>first : <T>(outer: T) => { nested<T_1>(inner: T_1): { outer: T; inner: T_1; next: { first<T>(outer: T): any; second<T_2>(value: T_2): { value: T_2; next: typeof scoped; }; }; }; sibling<T_1>(inner: T_1): { outer: T; inner: T_1; next: { first<T>(outer: T): any; second<T_2>(value: T_2): { value: T_2; next: typeof scoped; }; }; }; }
+>"outer" : "outer"
+
+const nested = numberScope.nested("inner");
+>nested : { outer: number; inner: string; next: { first<T>(outer: T): { nested<T_1>(inner: T_1): { outer: T; inner: T_1; next: typeof scoped; }; sibling<T_1>(inner: T_1): { outer: T; inner: T_1; next: typeof scoped; }; }; second<T>(value: T): { value: T; next: typeof scoped; }; }; }
+>numberScope.nested("inner") : { outer: number; inner: string; next: { first<T>(outer: T): { nested<T_1>(inner: T_1): { outer: T; inner: T_1; next: typeof scoped; }; sibling<T_1>(inner: T_1): { outer: T; inner: T_1; next: typeof scoped; }; }; second<T>(value: T): { value: T; next: typeof scoped; }; }; }
+>numberScope.nested : <T>(inner: T) => { outer: number; inner: T; next: { first<T_1>(outer: T_1): { nested<T_2>(inner: T_2): { outer: T_1; inner: T_2; next: typeof scoped; }; sibling<T_2>(inner: T_2): { outer: T_1; inner: T_2; next: typeof scoped; }; }; second<T_1>(value: T_1): { value: T_1; next: typeof scoped; }; }; }
+>numberScope : { nested<T>(inner: T): { outer: number; inner: T; next: { first<T_1>(outer: T_1): { nested<T_2>(inner: T_2): { outer: T_1; inner: T_2; next: typeof scoped; }; sibling<T_2>(inner: T_2): { outer: T_1; inner: T_2; next: typeof scoped; }; }; second<T_1>(value: T_1): { value: T_1; next: typeof scoped; }; }; }; sibling<T>(inner: T): { outer: number; inner: T; next: { first<T_1>(outer: T_1): { nested<T_2>(inner: T_2): { outer: T_1; inner: T_2; next: typeof scoped; }; sibling<T_2>(inner: T_2): { outer: T_1; inner: T_2; next: typeof scoped; }; }; second<T_1>(value: T_1): { value: T_1; next: typeof scoped; }; }; }; }
+>nested : <T>(inner: T) => { outer: number; inner: T; next: { first<T_1>(outer: T_1): { nested<T_2>(inner: T_2): { outer: T_1; inner: T_2; next: typeof scoped; }; sibling<T_2>(inner: T_2): { outer: T_1; inner: T_2; next: typeof scoped; }; }; second<T_1>(value: T_1): { value: T_1; next: typeof scoped; }; }; }
+>"inner" : "inner"
+
+const sibling = numberScope.sibling(true);
+>sibling : { outer: number; inner: boolean; next: { first<T>(outer: T): { nested<T_1>(inner: T_1): { outer: T; inner: T_1; next: typeof scoped; }; sibling<T_1>(inner: T_1): { outer: T; inner: T_1; next: typeof scoped; }; }; second<T>(value: T): { value: T; next: typeof scoped; }; }; }
+>numberScope.sibling(true) : { outer: number; inner: boolean; next: { first<T>(outer: T): { nested<T_1>(inner: T_1): { outer: T; inner: T_1; next: typeof scoped; }; sibling<T_1>(inner: T_1): { outer: T; inner: T_1; next: typeof scoped; }; }; second<T>(value: T): { value: T; next: typeof scoped; }; }; }
+>numberScope.sibling : <T>(inner: T) => { outer: number; inner: T; next: { first<T_1>(outer: T_1): { nested<T_2>(inner: T_2): { outer: T_1; inner: T_2; next: typeof scoped; }; sibling<T_2>(inner: T_2): { outer: T_1; inner: T_2; next: typeof scoped; }; }; second<T_1>(value: T_1): { value: T_1; next: typeof scoped; }; }; }
+>numberScope : { nested<T>(inner: T): { outer: number; inner: T; next: { first<T_1>(outer: T_1): { nested<T_2>(inner: T_2): { outer: T_1; inner: T_2; next: typeof scoped; }; sibling<T_2>(inner: T_2): { outer: T_1; inner: T_2; next: typeof scoped; }; }; second<T_1>(value: T_1): { value: T_1; next: typeof scoped; }; }; }; sibling<T>(inner: T): { outer: number; inner: T; next: { first<T_1>(outer: T_1): { nested<T_2>(inner: T_2): { outer: T_1; inner: T_2; next: typeof scoped; }; sibling<T_2>(inner: T_2): { outer: T_1; inner: T_2; next: typeof scoped; }; }; second<T_1>(value: T_1): { value: T_1; next: typeof scoped; }; }; }; }
+>sibling : <T>(inner: T) => { outer: number; inner: T; next: { first<T_1>(outer: T_1): { nested<T_2>(inner: T_2): { outer: T_1; inner: T_2; next: typeof scoped; }; sibling<T_2>(inner: T_2): { outer: T_1; inner: T_2; next: typeof scoped; }; }; second<T_1>(value: T_1): { value: T_1; next: typeof scoped; }; }; }
+>true : true
+
+const nestedOuter: number = nested.outer;
+>nestedOuter : number
+>nested.outer : number
+>nested : { outer: number; inner: string; next: { first<T>(outer: T): { nested<T_1>(inner: T_1): { outer: T; inner: T_1; next: typeof scoped; }; sibling<T_1>(inner: T_1): { outer: T; inner: T_1; next: typeof scoped; }; }; second<T>(value: T): { value: T; next: typeof scoped; }; }; }
+>outer : number
+
+const nestedInner: string = nested.inner;
+>nestedInner : string
+>nested.inner : string
+>nested : { outer: number; inner: string; next: { first<T>(outer: T): { nested<T_1>(inner: T_1): { outer: T; inner: T_1; next: typeof scoped; }; sibling<T_1>(inner: T_1): { outer: T; inner: T_1; next: typeof scoped; }; }; second<T>(value: T): { value: T; next: typeof scoped; }; }; }
+>inner : string
+
+const siblingOuter: number = sibling.outer;
+>siblingOuter : number
+>sibling.outer : number
+>sibling : { outer: number; inner: boolean; next: { first<T>(outer: T): { nested<T_1>(inner: T_1): { outer: T; inner: T_1; next: typeof scoped; }; sibling<T_1>(inner: T_1): { outer: T; inner: T_1; next: typeof scoped; }; }; second<T>(value: T): { value: T; next: typeof scoped; }; }; }
+>outer : number
+
+const siblingInner: boolean = sibling.inner;
+>siblingInner : boolean
+>sibling.inner : boolean
+>sibling : { outer: number; inner: boolean; next: { first<T>(outer: T): { nested<T_1>(inner: T_1): { outer: T; inner: T_1; next: typeof scoped; }; sibling<T_1>(inner: T_1): { outer: T; inner: T_1; next: typeof scoped; }; }; second<T>(value: T): { value: T; next: typeof scoped; }; }; }
+>inner : boolean
+
+const stringOuter: string = stringScope.nested(1).outer;
+>stringOuter : string
+>stringScope.nested(1).outer : string
+>stringScope.nested(1) : { outer: string; inner: number; next: { first<T>(outer: T): { nested<T_1>(inner: T_1): { outer: T; inner: T_1; next: typeof scoped; }; sibling<T_1>(inner: T_1): { outer: T; inner: T_1; next: typeof scoped; }; }; second<T>(value: T): { value: T; next: typeof scoped; }; }; }
+>stringScope.nested : <T>(inner: T) => { outer: string; inner: T; next: { first<T_1>(outer: T_1): { nested<T_2>(inner: T_2): { outer: T_1; inner: T_2; next: typeof scoped; }; sibling<T_2>(inner: T_2): { outer: T_1; inner: T_2; next: typeof scoped; }; }; second<T_1>(value: T_1): { value: T_1; next: typeof scoped; }; }; }
+>stringScope : { nested<T>(inner: T): { outer: string; inner: T; next: { first<T_1>(outer: T_1): { nested<T_2>(inner: T_2): { outer: T_1; inner: T_2; next: typeof scoped; }; sibling<T_2>(inner: T_2): { outer: T_1; inner: T_2; next: typeof scoped; }; }; second<T_1>(value: T_1): { value: T_1; next: typeof scoped; }; }; }; sibling<T>(inner: T): { outer: string; inner: T; next: { first<T_1>(outer: T_1): { nested<T_2>(inner: T_2): { outer: T_1; inner: T_2; next: typeof scoped; }; sibling<T_2>(inner: T_2): { outer: T_1; inner: T_2; next: typeof scoped; }; }; second<T_1>(value: T_1): { value: T_1; next: typeof scoped; }; }; }; }
+>nested : <T>(inner: T) => { outer: string; inner: T; next: { first<T_1>(outer: T_1): { nested<T_2>(inner: T_2): { outer: T_1; inner: T_2; next: typeof scoped; }; sibling<T_2>(inner: T_2): { outer: T_1; inner: T_2; next: typeof scoped; }; }; second<T_1>(value: T_1): { value: T_1; next: typeof scoped; }; }; }
+>1 : 1
+>outer : string
+
+const again: number = nested.next.second(1).value;
+>again : number
+>nested.next.second(1).value : number
+>nested.next.second(1) : { value: number; next: { first<T>(outer: T): { nested<T_1>(inner: T_1): { outer: T; inner: T_1; next: typeof scoped; }; sibling<T_1>(inner: T_1): { outer: T; inner: T_1; next: typeof scoped; }; }; second<T>(value: T): { value: T; next: typeof scoped; }; }; }
+>nested.next.second : <T>(value: T) => { value: T; next: { first<T_1>(outer: T_1): { nested<T_2>(inner: T_2): { outer: T_1; inner: T_2; next: typeof scoped; }; sibling<T_2>(inner: T_2): { outer: T_1; inner: T_2; next: typeof scoped; }; }; second<T>(value: T): any; }; }
+>nested.next : { first<T>(outer: T): { nested<T_1>(inner: T_1): { outer: T; inner: T_1; next: typeof scoped; }; sibling<T_1>(inner: T_1): { outer: T; inner: T_1; next: typeof scoped; }; }; second<T>(value: T): { value: T; next: typeof scoped; }; }
+>nested : { outer: number; inner: string; next: { first<T>(outer: T): { nested<T_1>(inner: T_1): { outer: T; inner: T_1; next: typeof scoped; }; sibling<T_1>(inner: T_1): { outer: T; inner: T_1; next: typeof scoped; }; }; second<T>(value: T): { value: T; next: typeof scoped; }; }; }
+>next : { first<T>(outer: T): { nested<T_1>(inner: T_1): { outer: T; inner: T_1; next: typeof scoped; }; sibling<T_1>(inner: T_1): { outer: T; inner: T_1; next: typeof scoped; }; }; second<T>(value: T): { value: T; next: typeof scoped; }; }
+>second : <T>(value: T) => { value: T; next: { first<T_1>(outer: T_1): { nested<T_2>(inner: T_2): { outer: T_1; inner: T_2; next: typeof scoped; }; sibling<T_2>(inner: T_2): { outer: T_1; inner: T_2; next: typeof scoped; }; }; second<T>(value: T): any; }; }
+>1 : 1
+>value : number
+
+export const nestedOwner = {
+>nestedOwner : { make<T>(outer: T): { nested<U>(inner: U): { outer: T; inner: U; owner: typeof nestedOwner; }; constrained<U extends T = T>(inner: U): { outer: T; inner: U; owner: typeof nestedOwner; }; copied<U>(inner: U): { outer: T; inner: U; owner: typeof nestedOwner; }; rest<U>(values_0: U): { outer: T; inner: U; owner: typeof nestedOwner; }; }; }
+>{    make<T>(outer: T) {        return {            nested<U>(inner: U) { return { outer, inner, owner: nestedOwner }; },            constrained<U extends T = T>(inner: U) { return { outer, inner, owner: nestedOwner }; },            copied<U>(inner: U): { outer: T; inner: U; owner: typeof nestedOwner } {                return { outer, inner, owner: nestedOwner };            },            rest<U>(...values: [U]) { return { outer, inner: values[0], owner: nestedOwner }; },        };    },} : { make<T>(outer: T): { nested<U>(inner: U): { outer: T; inner: U; owner: typeof nestedOwner; }; constrained<U extends T = T>(inner: U): { outer: T; inner: U; owner: typeof nestedOwner; }; copied<U>(inner: U): { outer: T; inner: U; owner: typeof nestedOwner; }; rest<U>(values_0: U): { outer: T; inner: U; owner: typeof nestedOwner; }; }; }
+
+    make<T>(outer: T) {
+>make : <T>(outer: T) => { nested<U>(inner: U): { outer: T; inner: U; owner: { make<T>(outer: T): any; }; }; constrained<U extends T = T>(inner: U): { outer: T; inner: U; owner: { make<T>(outer: T): any; }; }; copied<U>(inner: U): { outer: T; inner: U; owner: typeof nestedOwner; }; rest<U>(values_0: U): { outer: T; inner: U; owner: { make<T>(outer: T): any; }; }; }
+>outer : T
+
+        return {
+>{            nested<U>(inner: U) { return { outer, inner, owner: nestedOwner }; },            constrained<U extends T = T>(inner: U) { return { outer, inner, owner: nestedOwner }; },            copied<U>(inner: U): { outer: T; inner: U; owner: typeof nestedOwner } {                return { outer, inner, owner: nestedOwner };            },            rest<U>(...values: [U]) { return { outer, inner: values[0], owner: nestedOwner }; },        } : { nested<U>(inner: U): { outer: T; inner: U; owner: { make<T>(outer: T): any; }; }; constrained<U extends T = T>(inner: U): { outer: T; inner: U; owner: { make<T>(outer: T): any; }; }; copied<U>(inner: U): { outer: T; inner: U; owner: typeof nestedOwner; }; rest<U>(values_0: U): { outer: T; inner: U; owner: { make<T>(outer: T): any; }; }; }
+
+            nested<U>(inner: U) { return { outer, inner, owner: nestedOwner }; },
+>nested : <U>(inner: U) => { outer: T; inner: U; owner: { make<T>(outer: T): { nested<U>(inner: U): any; constrained<U_1 extends T = T>(inner: U_1): { outer: T; inner: U_1; owner: typeof nestedOwner; }; copied<U_1>(inner: U_1): { outer: T; inner: U_1; owner: typeof nestedOwner; }; rest<U_1>(values_0: U_1): { outer: T; inner: U_1; owner: typeof nestedOwner; }; }; }; }
+>inner : U
+>{ outer, inner, owner: nestedOwner } : { outer: T; inner: U; owner: { make<T>(outer: T): { nested<U>(inner: U): any; constrained<U_1 extends T = T>(inner: U_1): { outer: T; inner: U_1; owner: typeof nestedOwner; }; copied<U_1>(inner: U_1): { outer: T; inner: U_1; owner: typeof nestedOwner; }; rest<U_1>(values_0: U_1): { outer: T; inner: U_1; owner: typeof nestedOwner; }; }; }; }
+>outer : T
+>inner : U
+>owner : { make<T>(outer: T): { nested<U>(inner: U): { outer: T; inner: U; owner: typeof nestedOwner; }; constrained<U_1 extends T = T>(inner: U_1): { outer: T; inner: U_1; owner: typeof nestedOwner; }; copied<U_1>(inner: U_1): { outer: T; inner: U_1; owner: typeof nestedOwner; }; rest<U_1>(values_0: U_1): { outer: T; inner: U_1; owner: typeof nestedOwner; }; }; }
+>nestedOwner : { make<T>(outer: T): { nested<U>(inner: U): { outer: T; inner: U; owner: typeof nestedOwner; }; constrained<U_1 extends T = T>(inner: U_1): { outer: T; inner: U_1; owner: typeof nestedOwner; }; copied<U_1>(inner: U_1): { outer: T; inner: U_1; owner: typeof nestedOwner; }; rest<U_1>(values_0: U_1): { outer: T; inner: U_1; owner: typeof nestedOwner; }; }; }
+
+            constrained<U extends T = T>(inner: U) { return { outer, inner, owner: nestedOwner }; },
+>constrained : <U extends T = T>(inner: U) => { outer: T; inner: U; owner: { make<T>(outer: T): { nested<U_1>(inner: U_1): { outer: T; inner: U_1; owner: typeof nestedOwner; }; constrained<U extends T = T>(inner: U): any; copied<U_1>(inner: U_1): { outer: T; inner: U_1; owner: typeof nestedOwner; }; rest<U_1>(values_0: U_1): { outer: T; inner: U_1; owner: typeof nestedOwner; }; }; }; }
+>inner : U
+>{ outer, inner, owner: nestedOwner } : { outer: T; inner: U; owner: { make<T>(outer: T): { nested<U_1>(inner: U_1): { outer: T; inner: U_1; owner: typeof nestedOwner; }; constrained<U extends T = T>(inner: U): any; copied<U_1>(inner: U_1): { outer: T; inner: U_1; owner: typeof nestedOwner; }; rest<U_1>(values_0: U_1): { outer: T; inner: U_1; owner: typeof nestedOwner; }; }; }; }
+>outer : T
+>inner : U
+>owner : { make<T>(outer: T): { nested<U_1>(inner: U_1): { outer: T; inner: U_1; owner: typeof nestedOwner; }; constrained<U extends T = T>(inner: U): { outer: T; inner: U; owner: typeof nestedOwner; }; copied<U_1>(inner: U_1): { outer: T; inner: U_1; owner: typeof nestedOwner; }; rest<U_1>(values_0: U_1): { outer: T; inner: U_1; owner: typeof nestedOwner; }; }; }
+>nestedOwner : { make<T>(outer: T): { nested<U_1>(inner: U_1): { outer: T; inner: U_1; owner: typeof nestedOwner; }; constrained<U extends T = T>(inner: U): { outer: T; inner: U; owner: typeof nestedOwner; }; copied<U_1>(inner: U_1): { outer: T; inner: U_1; owner: typeof nestedOwner; }; rest<U_1>(values_0: U_1): { outer: T; inner: U_1; owner: typeof nestedOwner; }; }; }
+
+            copied<U>(inner: U): { outer: T; inner: U; owner: typeof nestedOwner } {
+>copied : <U>(inner: U) => { outer: T; inner: U; owner: typeof nestedOwner; }
+>inner : U
+>outer : T
+>inner : U
+>owner : { make<T>(outer: T): { nested<U_1>(inner: U_1): { outer: T; inner: U_1; owner: typeof nestedOwner; }; constrained<U_1 extends T = T>(inner: U_1): { outer: T; inner: U_1; owner: typeof nestedOwner; }; copied<U>(inner: U): { outer: T; inner: U; owner: typeof nestedOwner; }; rest<U_1>(values_0: U_1): { outer: T; inner: U_1; owner: typeof nestedOwner; }; }; }
+>nestedOwner : { make<T>(outer: T): { nested<U_1>(inner: U_1): { outer: T; inner: U_1; owner: typeof nestedOwner; }; constrained<U_1 extends T = T>(inner: U_1): { outer: T; inner: U_1; owner: typeof nestedOwner; }; copied<U>(inner: U): { outer: T; inner: U; owner: typeof nestedOwner; }; rest<U_1>(values_0: U_1): { outer: T; inner: U_1; owner: typeof nestedOwner; }; }; }
+
+                return { outer, inner, owner: nestedOwner };
+>{ outer, inner, owner: nestedOwner } : { outer: T; inner: U; owner: { make<T>(outer: T): { nested<U_1>(inner: U_1): { outer: T; inner: U_1; owner: typeof nestedOwner; }; constrained<U_1 extends T = T>(inner: U_1): { outer: T; inner: U_1; owner: typeof nestedOwner; }; copied<U>(inner: U): { outer: T; inner: U; owner: typeof nestedOwner; }; rest<U_1>(values_0: U_1): { outer: T; inner: U_1; owner: typeof nestedOwner; }; }; }; }
+>outer : T
+>inner : U
+>owner : { make<T>(outer: T): { nested<U_1>(inner: U_1): { outer: T; inner: U_1; owner: typeof nestedOwner; }; constrained<U_1 extends T = T>(inner: U_1): { outer: T; inner: U_1; owner: typeof nestedOwner; }; copied<U>(inner: U): { outer: T; inner: U; owner: typeof nestedOwner; }; rest<U_1>(values_0: U_1): { outer: T; inner: U_1; owner: typeof nestedOwner; }; }; }
+>nestedOwner : { make<T>(outer: T): { nested<U_1>(inner: U_1): { outer: T; inner: U_1; owner: typeof nestedOwner; }; constrained<U_1 extends T = T>(inner: U_1): { outer: T; inner: U_1; owner: typeof nestedOwner; }; copied<U>(inner: U): { outer: T; inner: U; owner: typeof nestedOwner; }; rest<U_1>(values_0: U_1): { outer: T; inner: U_1; owner: typeof nestedOwner; }; }; }
+
+            },
+            rest<U>(...values: [U]) { return { outer, inner: values[0], owner: nestedOwner }; },
+>rest : <U>(values_0: U) => { outer: T; inner: U; owner: { make<T>(outer: T): { nested<U_1>(inner: U_1): { outer: T; inner: U_1; owner: typeof nestedOwner; }; constrained<U_1 extends T = T>(inner: U_1): { outer: T; inner: U_1; owner: typeof nestedOwner; }; copied<U_1>(inner: U_1): { outer: T; inner: U_1; owner: typeof nestedOwner; }; rest<U>(values_0: U): any; }; }; }
+>values : [U]
+>{ outer, inner: values[0], owner: nestedOwner } : { outer: T; inner: U; owner: { make<T>(outer: T): { nested<U_1>(inner: U_1): { outer: T; inner: U_1; owner: typeof nestedOwner; }; constrained<U_1 extends T = T>(inner: U_1): { outer: T; inner: U_1; owner: typeof nestedOwner; }; copied<U_1>(inner: U_1): { outer: T; inner: U_1; owner: typeof nestedOwner; }; rest<U>(values_0: U): any; }; }; }
+>outer : T
+>inner : U
+>values[0] : U
+>values : [U]
+>0 : 0
+>owner : { make<T>(outer: T): { nested<U_1>(inner: U_1): { outer: T; inner: U_1; owner: typeof nestedOwner; }; constrained<U_1 extends T = T>(inner: U_1): { outer: T; inner: U_1; owner: typeof nestedOwner; }; copied<U_1>(inner: U_1): { outer: T; inner: U_1; owner: typeof nestedOwner; }; rest<U>(values_0: U): { outer: T; inner: U; owner: typeof nestedOwner; }; }; }
+>nestedOwner : { make<T>(outer: T): { nested<U_1>(inner: U_1): { outer: T; inner: U_1; owner: typeof nestedOwner; }; constrained<U_1 extends T = T>(inner: U_1): { outer: T; inner: U_1; owner: typeof nestedOwner; }; copied<U_1>(inner: U_1): { outer: T; inner: U_1; owner: typeof nestedOwner; }; rest<U>(values_0: U): { outer: T; inner: U; owner: typeof nestedOwner; }; }; }
+
+        };
+    },
+};
+export const nestedNumber = nestedOwner.make(1);
+>nestedNumber : { nested<U>(inner: U): { outer: number; inner: U; owner: { make<T>(outer: T): { nested<U_1>(inner: U_1): { outer: T; inner: U_1; owner: typeof nestedOwner; }; constrained<U_1 extends T = T>(inner: U_1): { outer: T; inner: U_1; owner: typeof nestedOwner; }; copied<U_1>(inner: U_1): { outer: T; inner: U_1; owner: typeof nestedOwner; }; rest<U_1>(values_0: U_1): { outer: T; inner: U_1; owner: typeof nestedOwner; }; }; }; }; constrained<U extends number = number>(inner: U): { outer: number; inner: U; owner: { make<T>(outer: T): { nested<U_1>(inner: U_1): { outer: T; inner: U_1; owner: typeof nestedOwner; }; constrained<U_1 extends T = T>(inner: U_1): { outer: T; inner: U_1; owner: typeof nestedOwner; }; copied<U_1>(inner: U_1): { outer: T; inner: U_1; owner: typeof nestedOwner; }; rest<U_1>(values_0: U_1): { outer: T; inner: U_1; owner: typeof nestedOwner; }; }; }; }; copied<U>(inner: U): { outer: number; inner: U; owner: typeof nestedOwner; }; rest<U>(values_0: U): { outer: number; inner: U; owner: { make<T>(outer: T): { nested<U_1>(inner: U_1): { outer: T; inner: U_1; owner: typeof nestedOwner; }; constrained<U_1 extends T = T>(inner: U_1): { outer: T; inner: U_1; owner: typeof nestedOwner; }; copied<U_1>(inner: U_1): { outer: T; inner: U_1; owner: typeof nestedOwner; }; rest<U_1>(values_0: U_1): { outer: T; inner: U_1; owner: typeof nestedOwner; }; }; }; }; }
+>nestedOwner.make(1) : { nested<U>(inner: U): { outer: number; inner: U; owner: { make<T>(outer: T): { nested<U_1>(inner: U_1): { outer: T; inner: U_1; owner: typeof nestedOwner; }; constrained<U_1 extends T = T>(inner: U_1): { outer: T; inner: U_1; owner: typeof nestedOwner; }; copied<U_1>(inner: U_1): { outer: T; inner: U_1; owner: typeof nestedOwner; }; rest<U_1>(values_0: U_1): { outer: T; inner: U_1; owner: typeof nestedOwner; }; }; }; }; constrained<U extends number = number>(inner: U): { outer: number; inner: U; owner: { make<T>(outer: T): { nested<U_1>(inner: U_1): { outer: T; inner: U_1; owner: typeof nestedOwner; }; constrained<U_1 extends T = T>(inner: U_1): { outer: T; inner: U_1; owner: typeof nestedOwner; }; copied<U_1>(inner: U_1): { outer: T; inner: U_1; owner: typeof nestedOwner; }; rest<U_1>(values_0: U_1): { outer: T; inner: U_1; owner: typeof nestedOwner; }; }; }; }; copied<U>(inner: U): { outer: number; inner: U; owner: typeof nestedOwner; }; rest<U>(values_0: U): { outer: number; inner: U; owner: { make<T>(outer: T): { nested<U_1>(inner: U_1): { outer: T; inner: U_1; owner: typeof nestedOwner; }; constrained<U_1 extends T = T>(inner: U_1): { outer: T; inner: U_1; owner: typeof nestedOwner; }; copied<U_1>(inner: U_1): { outer: T; inner: U_1; owner: typeof nestedOwner; }; rest<U_1>(values_0: U_1): { outer: T; inner: U_1; owner: typeof nestedOwner; }; }; }; }; }
+>nestedOwner.make : <T>(outer: T) => { nested<U>(inner: U): { outer: T; inner: U; owner: { make<T>(outer: T): any; }; }; constrained<U extends T = T>(inner: U): { outer: T; inner: U; owner: { make<T>(outer: T): any; }; }; copied<U>(inner: U): { outer: T; inner: U; owner: typeof nestedOwner; }; rest<U>(values_0: U): { outer: T; inner: U; owner: { make<T>(outer: T): any; }; }; }
+>nestedOwner : { make<T>(outer: T): { nested<U>(inner: U): { outer: T; inner: U; owner: typeof nestedOwner; }; constrained<U extends T = T>(inner: U): { outer: T; inner: U; owner: typeof nestedOwner; }; copied<U>(inner: U): { outer: T; inner: U; owner: typeof nestedOwner; }; rest<U>(values_0: U): { outer: T; inner: U; owner: typeof nestedOwner; }; }; }
+>make : <T>(outer: T) => { nested<U>(inner: U): { outer: T; inner: U; owner: { make<T>(outer: T): any; }; }; constrained<U extends T = T>(inner: U): { outer: T; inner: U; owner: { make<T>(outer: T): any; }; }; copied<U>(inner: U): { outer: T; inner: U; owner: typeof nestedOwner; }; rest<U>(values_0: U): { outer: T; inner: U; owner: { make<T>(outer: T): any; }; }; }
+>1 : 1
+
+export const nestedString = nestedNumber.nested(true).owner.make("text").nested(2);
+>nestedString : { outer: string; inner: number; owner: { make<T>(outer: T): { nested<U>(inner: U): { outer: T; inner: U; owner: typeof nestedOwner; }; constrained<U extends T = T>(inner: U): { outer: T; inner: U; owner: typeof nestedOwner; }; copied<U>(inner: U): { outer: T; inner: U; owner: typeof nestedOwner; }; rest<U>(values_0: U): { outer: T; inner: U; owner: typeof nestedOwner; }; }; }; }
+>nestedNumber.nested(true).owner.make("text").nested(2) : { outer: string; inner: number; owner: { make<T>(outer: T): { nested<U>(inner: U): { outer: T; inner: U; owner: typeof nestedOwner; }; constrained<U extends T = T>(inner: U): { outer: T; inner: U; owner: typeof nestedOwner; }; copied<U>(inner: U): { outer: T; inner: U; owner: typeof nestedOwner; }; rest<U>(values_0: U): { outer: T; inner: U; owner: typeof nestedOwner; }; }; }; }
+>nestedNumber.nested(true).owner.make("text").nested : <U>(inner: U) => { outer: string; inner: U; owner: { make<T>(outer: T): { nested<U_1>(inner: U_1): { outer: T; inner: U_1; owner: typeof nestedOwner; }; constrained<U_1 extends T = T>(inner: U_1): { outer: T; inner: U_1; owner: typeof nestedOwner; }; copied<U_1>(inner: U_1): { outer: T; inner: U_1; owner: typeof nestedOwner; }; rest<U_1>(values_0: U_1): { outer: T; inner: U_1; owner: typeof nestedOwner; }; }; }; }
+>nestedNumber.nested(true).owner.make("text") : { nested<U>(inner: U): { outer: string; inner: U; owner: { make<T>(outer: T): { nested<U_1>(inner: U_1): { outer: T; inner: U_1; owner: typeof nestedOwner; }; constrained<U_1 extends T = T>(inner: U_1): { outer: T; inner: U_1; owner: typeof nestedOwner; }; copied<U_1>(inner: U_1): { outer: T; inner: U_1; owner: typeof nestedOwner; }; rest<U_1>(values_0: U_1): { outer: T; inner: U_1; owner: typeof nestedOwner; }; }; }; }; constrained<U extends string = string>(inner: U): { outer: string; inner: U; owner: { make<T>(outer: T): { nested<U_1>(inner: U_1): { outer: T; inner: U_1; owner: typeof nestedOwner; }; constrained<U_1 extends T = T>(inner: U_1): { outer: T; inner: U_1; owner: typeof nestedOwner; }; copied<U_1>(inner: U_1): { outer: T; inner: U_1; owner: typeof nestedOwner; }; rest<U_1>(values_0: U_1): { outer: T; inner: U_1; owner: typeof nestedOwner; }; }; }; }; copied<U>(inner: U): { outer: string; inner: U; owner: typeof nestedOwner; }; rest<U>(values_0: U): { outer: string; inner: U; owner: { make<T>(outer: T): { nested<U_1>(inner: U_1): { outer: T; inner: U_1; owner: typeof nestedOwner; }; constrained<U_1 extends T = T>(inner: U_1): { outer: T; inner: U_1; owner: typeof nestedOwner; }; copied<U_1>(inner: U_1): { outer: T; inner: U_1; owner: typeof nestedOwner; }; rest<U_1>(values_0: U_1): { outer: T; inner: U_1; owner: typeof nestedOwner; }; }; }; }; }
+>nestedNumber.nested(true).owner.make : <T>(outer: T) => { nested<U>(inner: U): { outer: T; inner: U; owner: { make<T>(outer: T): any; }; }; constrained<U extends T = T>(inner: U): { outer: T; inner: U; owner: { make<T>(outer: T): any; }; }; copied<U>(inner: U): { outer: T; inner: U; owner: typeof nestedOwner; }; rest<U>(values_0: U): { outer: T; inner: U; owner: { make<T>(outer: T): any; }; }; }
+>nestedNumber.nested(true).owner : { make<T>(outer: T): { nested<U>(inner: U): { outer: T; inner: U; owner: typeof nestedOwner; }; constrained<U extends T = T>(inner: U): { outer: T; inner: U; owner: typeof nestedOwner; }; copied<U>(inner: U): { outer: T; inner: U; owner: typeof nestedOwner; }; rest<U>(values_0: U): { outer: T; inner: U; owner: typeof nestedOwner; }; }; }
+>nestedNumber.nested(true) : { outer: number; inner: boolean; owner: { make<T>(outer: T): { nested<U>(inner: U): { outer: T; inner: U; owner: typeof nestedOwner; }; constrained<U extends T = T>(inner: U): { outer: T; inner: U; owner: typeof nestedOwner; }; copied<U>(inner: U): { outer: T; inner: U; owner: typeof nestedOwner; }; rest<U>(values_0: U): { outer: T; inner: U; owner: typeof nestedOwner; }; }; }; }
+>nestedNumber.nested : <U>(inner: U) => { outer: number; inner: U; owner: { make<T>(outer: T): { nested<U_1>(inner: U_1): { outer: T; inner: U_1; owner: typeof nestedOwner; }; constrained<U_1 extends T = T>(inner: U_1): { outer: T; inner: U_1; owner: typeof nestedOwner; }; copied<U_1>(inner: U_1): { outer: T; inner: U_1; owner: typeof nestedOwner; }; rest<U_1>(values_0: U_1): { outer: T; inner: U_1; owner: typeof nestedOwner; }; }; }; }
+>nestedNumber : { nested<U>(inner: U): { outer: number; inner: U; owner: { make<T>(outer: T): { nested<U_1>(inner: U_1): { outer: T; inner: U_1; owner: typeof nestedOwner; }; constrained<U_1 extends T = T>(inner: U_1): { outer: T; inner: U_1; owner: typeof nestedOwner; }; copied<U_1>(inner: U_1): { outer: T; inner: U_1; owner: typeof nestedOwner; }; rest<U_1>(values_0: U_1): { outer: T; inner: U_1; owner: typeof nestedOwner; }; }; }; }; constrained<U extends number = number>(inner: U): { outer: number; inner: U; owner: { make<T>(outer: T): { nested<U_1>(inner: U_1): { outer: T; inner: U_1; owner: typeof nestedOwner; }; constrained<U_1 extends T = T>(inner: U_1): { outer: T; inner: U_1; owner: typeof nestedOwner; }; copied<U_1>(inner: U_1): { outer: T; inner: U_1; owner: typeof nestedOwner; }; rest<U_1>(values_0: U_1): { outer: T; inner: U_1; owner: typeof nestedOwner; }; }; }; }; copied<U>(inner: U): { outer: number; inner: U; owner: typeof nestedOwner; }; rest<U>(values_0: U): { outer: number; inner: U; owner: { make<T>(outer: T): { nested<U_1>(inner: U_1): { outer: T; inner: U_1; owner: typeof nestedOwner; }; constrained<U_1 extends T = T>(inner: U_1): { outer: T; inner: U_1; owner: typeof nestedOwner; }; copied<U_1>(inner: U_1): { outer: T; inner: U_1; owner: typeof nestedOwner; }; rest<U_1>(values_0: U_1): { outer: T; inner: U_1; owner: typeof nestedOwner; }; }; }; }; }
+>nested : <U>(inner: U) => { outer: number; inner: U; owner: { make<T>(outer: T): { nested<U_1>(inner: U_1): { outer: T; inner: U_1; owner: typeof nestedOwner; }; constrained<U_1 extends T = T>(inner: U_1): { outer: T; inner: U_1; owner: typeof nestedOwner; }; copied<U_1>(inner: U_1): { outer: T; inner: U_1; owner: typeof nestedOwner; }; rest<U_1>(values_0: U_1): { outer: T; inner: U_1; owner: typeof nestedOwner; }; }; }; }
+>true : true
+>owner : { make<T>(outer: T): { nested<U>(inner: U): { outer: T; inner: U; owner: typeof nestedOwner; }; constrained<U extends T = T>(inner: U): { outer: T; inner: U; owner: typeof nestedOwner; }; copied<U>(inner: U): { outer: T; inner: U; owner: typeof nestedOwner; }; rest<U>(values_0: U): { outer: T; inner: U; owner: typeof nestedOwner; }; }; }
+>make : <T>(outer: T) => { nested<U>(inner: U): { outer: T; inner: U; owner: { make<T>(outer: T): any; }; }; constrained<U extends T = T>(inner: U): { outer: T; inner: U; owner: { make<T>(outer: T): any; }; }; copied<U>(inner: U): { outer: T; inner: U; owner: typeof nestedOwner; }; rest<U>(values_0: U): { outer: T; inner: U; owner: { make<T>(outer: T): any; }; }; }
+>"text" : "text"
+>nested : <U>(inner: U) => { outer: string; inner: U; owner: { make<T>(outer: T): { nested<U_1>(inner: U_1): { outer: T; inner: U_1; owner: typeof nestedOwner; }; constrained<U_1 extends T = T>(inner: U_1): { outer: T; inner: U_1; owner: typeof nestedOwner; }; copied<U_1>(inner: U_1): { outer: T; inner: U_1; owner: typeof nestedOwner; }; rest<U_1>(values_0: U_1): { outer: T; inner: U_1; owner: typeof nestedOwner; }; }; }; }
+>2 : 2
+
+export const nestedBoolean = nestedString.owner.make(true).nested("inner");
+>nestedBoolean : { outer: boolean; inner: string; owner: { make<T>(outer: T): { nested<U>(inner: U): { outer: T; inner: U; owner: typeof nestedOwner; }; constrained<U extends T = T>(inner: U): { outer: T; inner: U; owner: typeof nestedOwner; }; copied<U>(inner: U): { outer: T; inner: U; owner: typeof nestedOwner; }; rest<U>(values_0: U): { outer: T; inner: U; owner: typeof nestedOwner; }; }; }; }
+>nestedString.owner.make(true).nested("inner") : { outer: boolean; inner: string; owner: { make<T>(outer: T): { nested<U>(inner: U): { outer: T; inner: U; owner: typeof nestedOwner; }; constrained<U extends T = T>(inner: U): { outer: T; inner: U; owner: typeof nestedOwner; }; copied<U>(inner: U): { outer: T; inner: U; owner: typeof nestedOwner; }; rest<U>(values_0: U): { outer: T; inner: U; owner: typeof nestedOwner; }; }; }; }
+>nestedString.owner.make(true).nested : <U>(inner: U) => { outer: boolean; inner: U; owner: { make<T>(outer: T): { nested<U_1>(inner: U_1): { outer: T; inner: U_1; owner: typeof nestedOwner; }; constrained<U_1 extends T = T>(inner: U_1): { outer: T; inner: U_1; owner: typeof nestedOwner; }; copied<U_1>(inner: U_1): { outer: T; inner: U_1; owner: typeof nestedOwner; }; rest<U_1>(values_0: U_1): { outer: T; inner: U_1; owner: typeof nestedOwner; }; }; }; }
+>nestedString.owner.make(true) : { nested<U>(inner: U): { outer: boolean; inner: U; owner: { make<T>(outer: T): { nested<U_1>(inner: U_1): { outer: T; inner: U_1; owner: typeof nestedOwner; }; constrained<U_1 extends T = T>(inner: U_1): { outer: T; inner: U_1; owner: typeof nestedOwner; }; copied<U_1>(inner: U_1): { outer: T; inner: U_1; owner: typeof nestedOwner; }; rest<U_1>(values_0: U_1): { outer: T; inner: U_1; owner: typeof nestedOwner; }; }; }; }; constrained<U extends boolean = boolean>(inner: U): { outer: boolean; inner: U; owner: { make<T>(outer: T): { nested<U_1>(inner: U_1): { outer: T; inner: U_1; owner: typeof nestedOwner; }; constrained<U_1 extends T = T>(inner: U_1): { outer: T; inner: U_1; owner: typeof nestedOwner; }; copied<U_1>(inner: U_1): { outer: T; inner: U_1; owner: typeof nestedOwner; }; rest<U_1>(values_0: U_1): { outer: T; inner: U_1; owner: typeof nestedOwner; }; }; }; }; copied<U>(inner: U): { outer: boolean; inner: U; owner: typeof nestedOwner; }; rest<U>(values_0: U): { outer: boolean; inner: U; owner: { make<T>(outer: T): { nested<U_1>(inner: U_1): { outer: T; inner: U_1; owner: typeof nestedOwner; }; constrained<U_1 extends T = T>(inner: U_1): { outer: T; inner: U_1; owner: typeof nestedOwner; }; copied<U_1>(inner: U_1): { outer: T; inner: U_1; owner: typeof nestedOwner; }; rest<U_1>(values_0: U_1): { outer: T; inner: U_1; owner: typeof nestedOwner; }; }; }; }; }
+>nestedString.owner.make : <T>(outer: T) => { nested<U>(inner: U): { outer: T; inner: U; owner: { make<T>(outer: T): any; }; }; constrained<U extends T = T>(inner: U): { outer: T; inner: U; owner: { make<T>(outer: T): any; }; }; copied<U>(inner: U): { outer: T; inner: U; owner: typeof nestedOwner; }; rest<U>(values_0: U): { outer: T; inner: U; owner: { make<T>(outer: T): any; }; }; }
+>nestedString.owner : { make<T>(outer: T): { nested<U>(inner: U): { outer: T; inner: U; owner: typeof nestedOwner; }; constrained<U extends T = T>(inner: U): { outer: T; inner: U; owner: typeof nestedOwner; }; copied<U>(inner: U): { outer: T; inner: U; owner: typeof nestedOwner; }; rest<U>(values_0: U): { outer: T; inner: U; owner: typeof nestedOwner; }; }; }
+>nestedString : { outer: string; inner: number; owner: { make<T>(outer: T): { nested<U>(inner: U): { outer: T; inner: U; owner: typeof nestedOwner; }; constrained<U extends T = T>(inner: U): { outer: T; inner: U; owner: typeof nestedOwner; }; copied<U>(inner: U): { outer: T; inner: U; owner: typeof nestedOwner; }; rest<U>(values_0: U): { outer: T; inner: U; owner: typeof nestedOwner; }; }; }; }
+>owner : { make<T>(outer: T): { nested<U>(inner: U): { outer: T; inner: U; owner: typeof nestedOwner; }; constrained<U extends T = T>(inner: U): { outer: T; inner: U; owner: typeof nestedOwner; }; copied<U>(inner: U): { outer: T; inner: U; owner: typeof nestedOwner; }; rest<U>(values_0: U): { outer: T; inner: U; owner: typeof nestedOwner; }; }; }
+>make : <T>(outer: T) => { nested<U>(inner: U): { outer: T; inner: U; owner: { make<T>(outer: T): any; }; }; constrained<U extends T = T>(inner: U): { outer: T; inner: U; owner: { make<T>(outer: T): any; }; }; copied<U>(inner: U): { outer: T; inner: U; owner: typeof nestedOwner; }; rest<U>(values_0: U): { outer: T; inner: U; owner: { make<T>(outer: T): any; }; }; }
+>true : true
+>nested : <U>(inner: U) => { outer: boolean; inner: U; owner: { make<T>(outer: T): { nested<U_1>(inner: U_1): { outer: T; inner: U_1; owner: typeof nestedOwner; }; constrained<U_1 extends T = T>(inner: U_1): { outer: T; inner: U_1; owner: typeof nestedOwner; }; copied<U_1>(inner: U_1): { outer: T; inner: U_1; owner: typeof nestedOwner; }; rest<U_1>(values_0: U_1): { outer: T; inner: U_1; owner: typeof nestedOwner; }; }; }; }
+>"inner" : "inner"
+
+const nestedStringOuter: string = nestedString.outer;
+>nestedStringOuter : string
+>nestedString.outer : string
+>nestedString : { outer: string; inner: number; owner: { make<T>(outer: T): { nested<U>(inner: U): { outer: T; inner: U; owner: typeof nestedOwner; }; constrained<U extends T = T>(inner: U): { outer: T; inner: U; owner: typeof nestedOwner; }; copied<U>(inner: U): { outer: T; inner: U; owner: typeof nestedOwner; }; rest<U>(values_0: U): { outer: T; inner: U; owner: typeof nestedOwner; }; }; }; }
+>outer : string
+
+const nestedStringInner: number = nestedString.inner;
+>nestedStringInner : number
+>nestedString.inner : number
+>nestedString : { outer: string; inner: number; owner: { make<T>(outer: T): { nested<U>(inner: U): { outer: T; inner: U; owner: typeof nestedOwner; }; constrained<U extends T = T>(inner: U): { outer: T; inner: U; owner: typeof nestedOwner; }; copied<U>(inner: U): { outer: T; inner: U; owner: typeof nestedOwner; }; rest<U>(values_0: U): { outer: T; inner: U; owner: typeof nestedOwner; }; }; }; }
+>inner : number
+
+const nestedBooleanOuter: boolean = nestedBoolean.outer;
+>nestedBooleanOuter : boolean
+>nestedBoolean.outer : boolean
+>nestedBoolean : { outer: boolean; inner: string; owner: { make<T>(outer: T): { nested<U>(inner: U): { outer: T; inner: U; owner: typeof nestedOwner; }; constrained<U extends T = T>(inner: U): { outer: T; inner: U; owner: typeof nestedOwner; }; copied<U>(inner: U): { outer: T; inner: U; owner: typeof nestedOwner; }; rest<U>(values_0: U): { outer: T; inner: U; owner: typeof nestedOwner; }; }; }; }
+>outer : boolean
+
+const nestedBooleanInner: string = nestedBoolean.inner;
+>nestedBooleanInner : string
+>nestedBoolean.inner : string
+>nestedBoolean : { outer: boolean; inner: string; owner: { make<T>(outer: T): { nested<U>(inner: U): { outer: T; inner: U; owner: typeof nestedOwner; }; constrained<U extends T = T>(inner: U): { outer: T; inner: U; owner: typeof nestedOwner; }; copied<U>(inner: U): { outer: T; inner: U; owner: typeof nestedOwner; }; rest<U>(values_0: U): { outer: T; inner: U; owner: typeof nestedOwner; }; }; }; }
+>inner : string
+
+const constrainedOuter: number = nestedNumber.constrained(2).outer;
+>constrainedOuter : number
+>nestedNumber.constrained(2).outer : number
+>nestedNumber.constrained(2) : { outer: number; inner: 2; owner: { make<T>(outer: T): { nested<U>(inner: U): { outer: T; inner: U; owner: typeof nestedOwner; }; constrained<U extends T = T>(inner: U): { outer: T; inner: U; owner: typeof nestedOwner; }; copied<U>(inner: U): { outer: T; inner: U; owner: typeof nestedOwner; }; rest<U>(values_0: U): { outer: T; inner: U; owner: typeof nestedOwner; }; }; }; }
+>nestedNumber.constrained : <U extends number = number>(inner: U) => { outer: number; inner: U; owner: { make<T>(outer: T): { nested<U_1>(inner: U_1): { outer: T; inner: U_1; owner: typeof nestedOwner; }; constrained<U_1 extends T = T>(inner: U_1): { outer: T; inner: U_1; owner: typeof nestedOwner; }; copied<U_1>(inner: U_1): { outer: T; inner: U_1; owner: typeof nestedOwner; }; rest<U_1>(values_0: U_1): { outer: T; inner: U_1; owner: typeof nestedOwner; }; }; }; }
+>nestedNumber : { nested<U>(inner: U): { outer: number; inner: U; owner: { make<T>(outer: T): { nested<U_1>(inner: U_1): { outer: T; inner: U_1; owner: typeof nestedOwner; }; constrained<U_1 extends T = T>(inner: U_1): { outer: T; inner: U_1; owner: typeof nestedOwner; }; copied<U_1>(inner: U_1): { outer: T; inner: U_1; owner: typeof nestedOwner; }; rest<U_1>(values_0: U_1): { outer: T; inner: U_1; owner: typeof nestedOwner; }; }; }; }; constrained<U extends number = number>(inner: U): { outer: number; inner: U; owner: { make<T>(outer: T): { nested<U_1>(inner: U_1): { outer: T; inner: U_1; owner: typeof nestedOwner; }; constrained<U_1 extends T = T>(inner: U_1): { outer: T; inner: U_1; owner: typeof nestedOwner; }; copied<U_1>(inner: U_1): { outer: T; inner: U_1; owner: typeof nestedOwner; }; rest<U_1>(values_0: U_1): { outer: T; inner: U_1; owner: typeof nestedOwner; }; }; }; }; copied<U>(inner: U): { outer: number; inner: U; owner: typeof nestedOwner; }; rest<U>(values_0: U): { outer: number; inner: U; owner: { make<T>(outer: T): { nested<U_1>(inner: U_1): { outer: T; inner: U_1; owner: typeof nestedOwner; }; constrained<U_1 extends T = T>(inner: U_1): { outer: T; inner: U_1; owner: typeof nestedOwner; }; copied<U_1>(inner: U_1): { outer: T; inner: U_1; owner: typeof nestedOwner; }; rest<U_1>(values_0: U_1): { outer: T; inner: U_1; owner: typeof nestedOwner; }; }; }; }; }
+>constrained : <U extends number = number>(inner: U) => { outer: number; inner: U; owner: { make<T>(outer: T): { nested<U_1>(inner: U_1): { outer: T; inner: U_1; owner: typeof nestedOwner; }; constrained<U_1 extends T = T>(inner: U_1): { outer: T; inner: U_1; owner: typeof nestedOwner; }; copied<U_1>(inner: U_1): { outer: T; inner: U_1; owner: typeof nestedOwner; }; rest<U_1>(values_0: U_1): { outer: T; inner: U_1; owner: typeof nestedOwner; }; }; }; }
+>2 : 2
+>outer : number
+
+const constrainedInner: number = nestedNumber.constrained(2).inner;
+>constrainedInner : number
+>nestedNumber.constrained(2).inner : 2
+>nestedNumber.constrained(2) : { outer: number; inner: 2; owner: { make<T>(outer: T): { nested<U>(inner: U): { outer: T; inner: U; owner: typeof nestedOwner; }; constrained<U extends T = T>(inner: U): { outer: T; inner: U; owner: typeof nestedOwner; }; copied<U>(inner: U): { outer: T; inner: U; owner: typeof nestedOwner; }; rest<U>(values_0: U): { outer: T; inner: U; owner: typeof nestedOwner; }; }; }; }
+>nestedNumber.constrained : <U extends number = number>(inner: U) => { outer: number; inner: U; owner: { make<T>(outer: T): { nested<U_1>(inner: U_1): { outer: T; inner: U_1; owner: typeof nestedOwner; }; constrained<U_1 extends T = T>(inner: U_1): { outer: T; inner: U_1; owner: typeof nestedOwner; }; copied<U_1>(inner: U_1): { outer: T; inner: U_1; owner: typeof nestedOwner; }; rest<U_1>(values_0: U_1): { outer: T; inner: U_1; owner: typeof nestedOwner; }; }; }; }
+>nestedNumber : { nested<U>(inner: U): { outer: number; inner: U; owner: { make<T>(outer: T): { nested<U_1>(inner: U_1): { outer: T; inner: U_1; owner: typeof nestedOwner; }; constrained<U_1 extends T = T>(inner: U_1): { outer: T; inner: U_1; owner: typeof nestedOwner; }; copied<U_1>(inner: U_1): { outer: T; inner: U_1; owner: typeof nestedOwner; }; rest<U_1>(values_0: U_1): { outer: T; inner: U_1; owner: typeof nestedOwner; }; }; }; }; constrained<U extends number = number>(inner: U): { outer: number; inner: U; owner: { make<T>(outer: T): { nested<U_1>(inner: U_1): { outer: T; inner: U_1; owner: typeof nestedOwner; }; constrained<U_1 extends T = T>(inner: U_1): { outer: T; inner: U_1; owner: typeof nestedOwner; }; copied<U_1>(inner: U_1): { outer: T; inner: U_1; owner: typeof nestedOwner; }; rest<U_1>(values_0: U_1): { outer: T; inner: U_1; owner: typeof nestedOwner; }; }; }; }; copied<U>(inner: U): { outer: number; inner: U; owner: typeof nestedOwner; }; rest<U>(values_0: U): { outer: number; inner: U; owner: { make<T>(outer: T): { nested<U_1>(inner: U_1): { outer: T; inner: U_1; owner: typeof nestedOwner; }; constrained<U_1 extends T = T>(inner: U_1): { outer: T; inner: U_1; owner: typeof nestedOwner; }; copied<U_1>(inner: U_1): { outer: T; inner: U_1; owner: typeof nestedOwner; }; rest<U_1>(values_0: U_1): { outer: T; inner: U_1; owner: typeof nestedOwner; }; }; }; }; }
+>constrained : <U extends number = number>(inner: U) => { outer: number; inner: U; owner: { make<T>(outer: T): { nested<U_1>(inner: U_1): { outer: T; inner: U_1; owner: typeof nestedOwner; }; constrained<U_1 extends T = T>(inner: U_1): { outer: T; inner: U_1; owner: typeof nestedOwner; }; copied<U_1>(inner: U_1): { outer: T; inner: U_1; owner: typeof nestedOwner; }; rest<U_1>(values_0: U_1): { outer: T; inner: U_1; owner: typeof nestedOwner; }; }; }; }
+>2 : 2
+>inner : 2
+
+const copiedOuter: number = nestedNumber.copied("inner").outer;
+>copiedOuter : number
+>nestedNumber.copied("inner").outer : number
+>nestedNumber.copied("inner") : { outer: number; inner: string; owner: typeof nestedOwner; }
+>nestedNumber.copied : <U>(inner: U) => { outer: number; inner: U; owner: typeof nestedOwner; }
+>nestedNumber : { nested<U>(inner: U): { outer: number; inner: U; owner: { make<T>(outer: T): { nested<U_1>(inner: U_1): { outer: T; inner: U_1; owner: typeof nestedOwner; }; constrained<U_1 extends T = T>(inner: U_1): { outer: T; inner: U_1; owner: typeof nestedOwner; }; copied<U_1>(inner: U_1): { outer: T; inner: U_1; owner: typeof nestedOwner; }; rest<U_1>(values_0: U_1): { outer: T; inner: U_1; owner: typeof nestedOwner; }; }; }; }; constrained<U extends number = number>(inner: U): { outer: number; inner: U; owner: { make<T>(outer: T): { nested<U_1>(inner: U_1): { outer: T; inner: U_1; owner: typeof nestedOwner; }; constrained<U_1 extends T = T>(inner: U_1): { outer: T; inner: U_1; owner: typeof nestedOwner; }; copied<U_1>(inner: U_1): { outer: T; inner: U_1; owner: typeof nestedOwner; }; rest<U_1>(values_0: U_1): { outer: T; inner: U_1; owner: typeof nestedOwner; }; }; }; }; copied<U>(inner: U): { outer: number; inner: U; owner: typeof nestedOwner; }; rest<U>(values_0: U): { outer: number; inner: U; owner: { make<T>(outer: T): { nested<U_1>(inner: U_1): { outer: T; inner: U_1; owner: typeof nestedOwner; }; constrained<U_1 extends T = T>(inner: U_1): { outer: T; inner: U_1; owner: typeof nestedOwner; }; copied<U_1>(inner: U_1): { outer: T; inner: U_1; owner: typeof nestedOwner; }; rest<U_1>(values_0: U_1): { outer: T; inner: U_1; owner: typeof nestedOwner; }; }; }; }; }
+>copied : <U>(inner: U) => { outer: number; inner: U; owner: typeof nestedOwner; }
+>"inner" : "inner"
+>outer : number
+
+const copiedInner: string = nestedNumber.copied("inner").inner;
+>copiedInner : string
+>nestedNumber.copied("inner").inner : string
+>nestedNumber.copied("inner") : { outer: number; inner: string; owner: typeof nestedOwner; }
+>nestedNumber.copied : <U>(inner: U) => { outer: number; inner: U; owner: typeof nestedOwner; }
+>nestedNumber : { nested<U>(inner: U): { outer: number; inner: U; owner: { make<T>(outer: T): { nested<U_1>(inner: U_1): { outer: T; inner: U_1; owner: typeof nestedOwner; }; constrained<U_1 extends T = T>(inner: U_1): { outer: T; inner: U_1; owner: typeof nestedOwner; }; copied<U_1>(inner: U_1): { outer: T; inner: U_1; owner: typeof nestedOwner; }; rest<U_1>(values_0: U_1): { outer: T; inner: U_1; owner: typeof nestedOwner; }; }; }; }; constrained<U extends number = number>(inner: U): { outer: number; inner: U; owner: { make<T>(outer: T): { nested<U_1>(inner: U_1): { outer: T; inner: U_1; owner: typeof nestedOwner; }; constrained<U_1 extends T = T>(inner: U_1): { outer: T; inner: U_1; owner: typeof nestedOwner; }; copied<U_1>(inner: U_1): { outer: T; inner: U_1; owner: typeof nestedOwner; }; rest<U_1>(values_0: U_1): { outer: T; inner: U_1; owner: typeof nestedOwner; }; }; }; }; copied<U>(inner: U): { outer: number; inner: U; owner: typeof nestedOwner; }; rest<U>(values_0: U): { outer: number; inner: U; owner: { make<T>(outer: T): { nested<U_1>(inner: U_1): { outer: T; inner: U_1; owner: typeof nestedOwner; }; constrained<U_1 extends T = T>(inner: U_1): { outer: T; inner: U_1; owner: typeof nestedOwner; }; copied<U_1>(inner: U_1): { outer: T; inner: U_1; owner: typeof nestedOwner; }; rest<U_1>(values_0: U_1): { outer: T; inner: U_1; owner: typeof nestedOwner; }; }; }; }; }
+>copied : <U>(inner: U) => { outer: number; inner: U; owner: typeof nestedOwner; }
+>"inner" : "inner"
+>inner : string
+
+const restOuter: number = nestedNumber.rest(true).outer;
+>restOuter : number
+>nestedNumber.rest(true).outer : number
+>nestedNumber.rest(true) : { outer: number; inner: boolean; owner: { make<T>(outer: T): { nested<U>(inner: U): { outer: T; inner: U; owner: typeof nestedOwner; }; constrained<U extends T = T>(inner: U): { outer: T; inner: U; owner: typeof nestedOwner; }; copied<U>(inner: U): { outer: T; inner: U; owner: typeof nestedOwner; }; rest<U>(values_0: U): { outer: T; inner: U; owner: typeof nestedOwner; }; }; }; }
+>nestedNumber.rest : <U>(values_0: U) => { outer: number; inner: U; owner: { make<T>(outer: T): { nested<U_1>(inner: U_1): { outer: T; inner: U_1; owner: typeof nestedOwner; }; constrained<U_1 extends T = T>(inner: U_1): { outer: T; inner: U_1; owner: typeof nestedOwner; }; copied<U_1>(inner: U_1): { outer: T; inner: U_1; owner: typeof nestedOwner; }; rest<U_1>(values_0: U_1): { outer: T; inner: U_1; owner: typeof nestedOwner; }; }; }; }
+>nestedNumber : { nested<U>(inner: U): { outer: number; inner: U; owner: { make<T>(outer: T): { nested<U_1>(inner: U_1): { outer: T; inner: U_1; owner: typeof nestedOwner; }; constrained<U_1 extends T = T>(inner: U_1): { outer: T; inner: U_1; owner: typeof nestedOwner; }; copied<U_1>(inner: U_1): { outer: T; inner: U_1; owner: typeof nestedOwner; }; rest<U_1>(values_0: U_1): { outer: T; inner: U_1; owner: typeof nestedOwner; }; }; }; }; constrained<U extends number = number>(inner: U): { outer: number; inner: U; owner: { make<T>(outer: T): { nested<U_1>(inner: U_1): { outer: T; inner: U_1; owner: typeof nestedOwner; }; constrained<U_1 extends T = T>(inner: U_1): { outer: T; inner: U_1; owner: typeof nestedOwner; }; copied<U_1>(inner: U_1): { outer: T; inner: U_1; owner: typeof nestedOwner; }; rest<U_1>(values_0: U_1): { outer: T; inner: U_1; owner: typeof nestedOwner; }; }; }; }; copied<U>(inner: U): { outer: number; inner: U; owner: typeof nestedOwner; }; rest<U>(values_0: U): { outer: number; inner: U; owner: { make<T>(outer: T): { nested<U_1>(inner: U_1): { outer: T; inner: U_1; owner: typeof nestedOwner; }; constrained<U_1 extends T = T>(inner: U_1): { outer: T; inner: U_1; owner: typeof nestedOwner; }; copied<U_1>(inner: U_1): { outer: T; inner: U_1; owner: typeof nestedOwner; }; rest<U_1>(values_0: U_1): { outer: T; inner: U_1; owner: typeof nestedOwner; }; }; }; }; }
+>rest : <U>(values_0: U) => { outer: number; inner: U; owner: { make<T>(outer: T): { nested<U_1>(inner: U_1): { outer: T; inner: U_1; owner: typeof nestedOwner; }; constrained<U_1 extends T = T>(inner: U_1): { outer: T; inner: U_1; owner: typeof nestedOwner; }; copied<U_1>(inner: U_1): { outer: T; inner: U_1; owner: typeof nestedOwner; }; rest<U_1>(values_0: U_1): { outer: T; inner: U_1; owner: typeof nestedOwner; }; }; }; }
+>true : true
+>outer : number
+
+const restInner: boolean = nestedNumber.rest(true).inner;
+>restInner : boolean
+>nestedNumber.rest(true).inner : boolean
+>nestedNumber.rest(true) : { outer: number; inner: boolean; owner: { make<T>(outer: T): { nested<U>(inner: U): { outer: T; inner: U; owner: typeof nestedOwner; }; constrained<U extends T = T>(inner: U): { outer: T; inner: U; owner: typeof nestedOwner; }; copied<U>(inner: U): { outer: T; inner: U; owner: typeof nestedOwner; }; rest<U>(values_0: U): { outer: T; inner: U; owner: typeof nestedOwner; }; }; }; }
+>nestedNumber.rest : <U>(values_0: U) => { outer: number; inner: U; owner: { make<T>(outer: T): { nested<U_1>(inner: U_1): { outer: T; inner: U_1; owner: typeof nestedOwner; }; constrained<U_1 extends T = T>(inner: U_1): { outer: T; inner: U_1; owner: typeof nestedOwner; }; copied<U_1>(inner: U_1): { outer: T; inner: U_1; owner: typeof nestedOwner; }; rest<U_1>(values_0: U_1): { outer: T; inner: U_1; owner: typeof nestedOwner; }; }; }; }
+>nestedNumber : { nested<U>(inner: U): { outer: number; inner: U; owner: { make<T>(outer: T): { nested<U_1>(inner: U_1): { outer: T; inner: U_1; owner: typeof nestedOwner; }; constrained<U_1 extends T = T>(inner: U_1): { outer: T; inner: U_1; owner: typeof nestedOwner; }; copied<U_1>(inner: U_1): { outer: T; inner: U_1; owner: typeof nestedOwner; }; rest<U_1>(values_0: U_1): { outer: T; inner: U_1; owner: typeof nestedOwner; }; }; }; }; constrained<U extends number = number>(inner: U): { outer: number; inner: U; owner: { make<T>(outer: T): { nested<U_1>(inner: U_1): { outer: T; inner: U_1; owner: typeof nestedOwner; }; constrained<U_1 extends T = T>(inner: U_1): { outer: T; inner: U_1; owner: typeof nestedOwner; }; copied<U_1>(inner: U_1): { outer: T; inner: U_1; owner: typeof nestedOwner; }; rest<U_1>(values_0: U_1): { outer: T; inner: U_1; owner: typeof nestedOwner; }; }; }; }; copied<U>(inner: U): { outer: number; inner: U; owner: typeof nestedOwner; }; rest<U>(values_0: U): { outer: number; inner: U; owner: { make<T>(outer: T): { nested<U_1>(inner: U_1): { outer: T; inner: U_1; owner: typeof nestedOwner; }; constrained<U_1 extends T = T>(inner: U_1): { outer: T; inner: U_1; owner: typeof nestedOwner; }; copied<U_1>(inner: U_1): { outer: T; inner: U_1; owner: typeof nestedOwner; }; rest<U_1>(values_0: U_1): { outer: T; inner: U_1; owner: typeof nestedOwner; }; }; }; }; }
+>rest : <U>(values_0: U) => { outer: number; inner: U; owner: { make<T>(outer: T): { nested<U_1>(inner: U_1): { outer: T; inner: U_1; owner: typeof nestedOwner; }; constrained<U_1 extends T = T>(inner: U_1): { outer: T; inner: U_1; owner: typeof nestedOwner; }; copied<U_1>(inner: U_1): { outer: T; inner: U_1; owner: typeof nestedOwner; }; rest<U_1>(values_0: U_1): { outer: T; inner: U_1; owner: typeof nestedOwner; }; }; }; }
+>true : true
+>inner : boolean
+
+export declare const reused: {
+>reused : { first<T>(values_0: T): { value: T; next: typeof reused; }; second<T>(value: T): { value: T; next: typeof reused; }; shadowed<T>(reused: T): { value: T; next: typeof reused; }; }
+
+    first<T>(...values: [T]): { value: T; next: typeof reused };
+>first : <T>(values_0: T) => { value: T; next: typeof reused; }
+>values : [T]
+>value : T
+>next : { first<T>(values_0: T): { value: T; next: typeof reused; }; second<T_1>(value: T_1): { value: T_1; next: typeof reused; }; shadowed<T_1>(reused: T_1): { value: T_1; next: typeof reused; }; }
+>reused : { first<T>(values_0: T): { value: T; next: typeof reused; }; second<T_1>(value: T_1): { value: T_1; next: typeof reused; }; shadowed<T_1>(reused: T_1): { value: T_1; next: typeof reused; }; }
+
+    second<T>(value: T): { value: T; next: typeof reused };
+>second : <T>(value: T) => { value: T; next: typeof reused; }
+>value : T
+>value : T
+>next : { first<T_1>(values_0: T_1): { value: T_1; next: typeof reused; }; second<T>(value: T): { value: T; next: typeof reused; }; shadowed<T_1>(reused: T_1): { value: T_1; next: typeof reused; }; }
+>reused : { first<T_1>(values_0: T_1): { value: T_1; next: typeof reused; }; second<T>(value: T): { value: T; next: typeof reused; }; shadowed<T_1>(reused: T_1): { value: T_1; next: typeof reused; }; }
+
+    shadowed<T>(reused: T): { value: T; next: typeof reused };
+>shadowed : <T>(reused: T) => { value: T; next: typeof reused; }
+>reused : T
+>value : T
+>next : T
+>reused : T
+
+};
+export const copy = reused;
+>copy : { first<T>(values_0: T): { value: T; next: typeof reused; }; second<T>(value: T): { value: T; next: typeof reused; }; shadowed<T>(reused: T): { value: T; next: typeof reused; }; }
+>reused : { first<T>(values_0: T): { value: T; next: typeof reused; }; second<T>(value: T): { value: T; next: typeof reused; }; shadowed<T>(reused: T): { value: T; next: typeof reused; }; }
+
+const restValue: number = copy.first(1).next.second(2).value;
+>restValue : number
+>copy.first(1).next.second(2).value : number
+>copy.first(1).next.second(2) : { value: number; next: typeof reused; }
+>copy.first(1).next.second : <T>(value: T) => { value: T; next: typeof reused; }
+>copy.first(1).next : { first<T>(values_0: T): { value: T; next: typeof reused; }; second<T>(value: T): { value: T; next: typeof reused; }; shadowed<T>(reused: T): { value: T; next: typeof reused; }; }
+>copy.first(1) : { value: number; next: typeof reused; }
+>copy.first : <T>(values_0: T) => { value: T; next: typeof reused; }
+>copy : { first<T>(values_0: T): { value: T; next: typeof reused; }; second<T>(value: T): { value: T; next: typeof reused; }; shadowed<T>(reused: T): { value: T; next: typeof reused; }; }
+>first : <T>(values_0: T) => { value: T; next: typeof reused; }
+>1 : 1
+>next : { first<T>(values_0: T): { value: T; next: typeof reused; }; second<T>(value: T): { value: T; next: typeof reused; }; shadowed<T>(reused: T): { value: T; next: typeof reused; }; }
+>second : <T>(value: T) => { value: T; next: typeof reused; }
+>2 : 2
+>value : number
+
+const shadowedValue: number = copy.shadowed(1).next;
+>shadowedValue : number
+>copy.shadowed(1).next : number
+>copy.shadowed(1) : { value: number; next: number; }
+>copy.shadowed : <T>(reused: T) => { value: T; next: typeof reused; }
+>copy : { first<T>(values_0: T): { value: T; next: typeof reused; }; second<T>(value: T): { value: T; next: typeof reused; }; shadowed<T>(reused: T): { value: T; next: typeof reused; }; }
+>shadowed : <T>(reused: T) => { value: T; next: typeof reused; }
+>1 : 1
+>next : number
+
+export type Inferred<T> = T extends (value: infer U) => infer R
+>Inferred : Inferred<T>
+>value : U
+
+    ? { [K in keyof R]: (value: U) => R[K] }
+>value : U
+
+    : never;
+export declare const inferred: Inferred<(value: number) => { next: typeof reused }>;
+>inferred : { next: (value: number) => { first<T>(values_0: T): { value: T; next: typeof reused; }; second<T>(value: T): { value: T; next: typeof reused; }; shadowed<T>(reused: T): { value: T; next: typeof reused; }; }; }
+>value : number
+>next : { first<T>(values_0: T): { value: T; next: typeof reused; }; second<T>(value: T): { value: T; next: typeof reused; }; shadowed<T>(reused: T): { value: T; next: typeof reused; }; }
+>reused : { first<T>(values_0: T): { value: T; next: typeof reused; }; second<T>(value: T): { value: T; next: typeof reused; }; shadowed<T>(reused: T): { value: T; next: typeof reused; }; }
+
+export const inferredCopy = inferred;
+>inferredCopy : { next: (value: number) => { first<T>(values_0: T): { value: T; next: typeof reused; }; second<T>(value: T): { value: T; next: typeof reused; }; shadowed<T>(reused: T): { value: T; next: typeof reused; }; }; }
+>inferred : { next: (value: number) => { first<T>(values_0: T): { value: T; next: typeof reused; }; second<T>(value: T): { value: T; next: typeof reused; }; shadowed<T>(reused: T): { value: T; next: typeof reused; }; }; }
+
+const inferredValue: string = inferredCopy.next(1).second("text").value;
+>inferredValue : string
+>inferredCopy.next(1).second("text").value : string
+>inferredCopy.next(1).second("text") : { value: string; next: typeof reused; }
+>inferredCopy.next(1).second : <T>(value: T) => { value: T; next: typeof reused; }
+>inferredCopy.next(1) : { first<T>(values_0: T): { value: T; next: typeof reused; }; second<T>(value: T): { value: T; next: typeof reused; }; shadowed<T>(reused: T): { value: T; next: typeof reused; }; }
+>inferredCopy.next : (value: number) => { first<T>(values_0: T): { value: T; next: typeof reused; }; second<T>(value: T): { value: T; next: typeof reused; }; shadowed<T>(reused: T): { value: T; next: typeof reused; }; }
+>inferredCopy : { next: (value: number) => { first<T>(values_0: T): { value: T; next: typeof reused; }; second<T>(value: T): { value: T; next: typeof reused; }; shadowed<T>(reused: T): { value: T; next: typeof reused; }; }; }
+>next : (value: number) => { first<T>(values_0: T): { value: T; next: typeof reused; }; second<T>(value: T): { value: T; next: typeof reused; }; shadowed<T>(reused: T): { value: T; next: typeof reused; }; }
+>1 : 1
+>second : <T>(value: T) => { value: T; next: typeof reused; }
+>"text" : "text"
+>value : string
+

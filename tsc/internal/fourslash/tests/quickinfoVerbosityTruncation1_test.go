@@ -1,9 +1,11 @@
 package fourslash_test
 
 import (
+	"strconv"
 	"testing"
 
 	"github.com/microsoft/TypeScript/tsc/internal/fourslash"
+	"github.com/microsoft/TypeScript/tsc/internal/ls/lsutil"
 	"github.com/microsoft/TypeScript/tsc/internal/testutil"
 )
 
@@ -38,4 +40,20 @@ const obj1/*o1*/: LotsOfProps = undefined as any as LotsOfProps;`
 	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
 	defer done()
 	f.VerifyBaselineHoverWithVerbosity(t, map[string][]int{"o1": {0, 1}})
+}
+
+func TestQuickinfoVerbosityInstantiationTruncation(t *testing.T) {
+	t.Parallel()
+	for _, length := range []int{20, 40, 80} {
+		t.Run("quickinfoVerbosityInstantiationTruncation"+strconv.Itoa(length), func(t *testing.T) {
+			t.Parallel()
+			defer testutil.RecoverAndFail(t, "Panic on fourslash test")
+			const content = `declare function f<T>(value: T): T;
+type Sample/*sample*/ = (aVeryLongParameterNameThatExceedsTheBudget: string) => typeof f<number>;`
+			f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+			defer done()
+			f.Configure(t, lsutil.UserPreferences{MaximumHoverLength: length})
+			f.VerifyBaselineHoverWithVerbosity(t, map[string][]int{"sample": {0, 1, 2}})
+		})
+	}
 }
