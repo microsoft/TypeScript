@@ -2387,8 +2387,8 @@ func (c *Checker) getSymbol(symbols ast.SymbolTable, name string, meaning ast.Sy
 		// skip it when those could not make the symbol match. Resolving the
 		// late-bound members here would otherwise be circular when looking up
 		// a name inside one of their computed property names.
-		if merged := c.mergedSymbols.TryGet(symbol); merged != nil && *merged != nil {
-			symbol = *merged
+		if merged := c.mergedSymbolOf(symbol); merged != nil {
+			symbol = merged
 		}
 		if symbol.Flags()&(meaning|ast.SymbolFlagsAlias) == 0 && meaning&(ast.SymbolFlagsClassMember|ast.SymbolFlagsAssignment) == 0 {
 			return nil
@@ -14949,8 +14949,8 @@ func (c *Checker) combineSymbolTables(first ast.SymbolTable, second ast.SymbolTa
 	// looked up without resolving the table, whose resolution is this one.
 	combined := ast.NewSymbolTableWithCapacity(first.Len() + second.Len())
 	for id, symbol := range first.All() {
-		if merged := c.mergedSymbols.TryGet(symbol); merged != nil && *merged != nil {
-			symbol = *merged
+		if merged := c.mergedSymbolOf(symbol); merged != nil {
+			symbol = merged
 		}
 		if merged, _ := c.lateMergedSymbols.get(c, symbol); merged != nil {
 			symbol = merged
@@ -15205,8 +15205,8 @@ func (c *Checker) getMergedSymbol(symbol *ast.Symbol) *ast.Symbol {
 	if symbol == nil {
 		return nil
 	}
-	if merged := c.mergedSymbols.TryGet(symbol); merged != nil && *merged != nil {
-		symbol = *merged
+	if merged := c.mergedSymbolOf(symbol); merged != nil {
+		symbol = merged
 	}
 	if symbol.Flags()&(ast.SymbolFlagsClassMember|ast.SymbolFlagsSignature) != 0 {
 		return c.getLateMergedSymbol(symbol)
@@ -15310,6 +15310,15 @@ func (c *Checker) recordMergedSymbol(target *ast.Symbol, source *ast.Symbol) {
 		return
 	}
 	*c.mergedSymbols.Get(source) = target
+}
+
+// mergedSymbolOf returns the symbol that symbol merged into before checking,
+// or nil.
+func (c *Checker) mergedSymbolOf(symbol *ast.Symbol) *ast.Symbol {
+	if merged := c.mergedSymbols.TryGet(symbol); merged != nil {
+		return *merged
+	}
+	return nil
 }
 
 func (c *Checker) getResolvedTarget(symbol *ast.Symbol) *ast.Symbol {
