@@ -8,6 +8,8 @@
 //
 import {
     type __String,
+    addSyntheticLeadingComment,
+    addSyntheticTrailingComment,
     cast,
     escapeLeadingUnderscores,
     type Expression,
@@ -53,6 +55,7 @@ import {
 import {
     cloneNode,
     createArrayTypeNode,
+    createBlock,
     createFunctionTypeNode,
     createIdentifier,
     createKeywordTypeNode,
@@ -7736,6 +7739,51 @@ export const obj = { m: 1, s: "hi", b: true };
         );
         const text = api.printer.printNode(node);
         assert.strictEqual(text, "(x: string) => number");
+    });
+
+    function createConstStatement(name: string, value: string) {
+        return createVariableStatement(
+            undefined,
+            createVariableDeclarationList(
+                [createVariableDeclaration(createIdentifier(name), undefined, undefined, createNumericLiteral(value, 0))],
+                NodeFlags.Const,
+            ),
+        );
+    }
+
+    test("printNode emits synthetic leading JSDoc comment", () => {
+        using api = spawnAPI(emitterFiles);
+
+        const statement = addSyntheticLeadingComment(createConstStatement("x", "1"), SyntaxKind.MultiLineCommentTrivia, "*\n * Hello.\n ", true);
+        const text = api.printer.printNode(statement);
+        assert.strictEqual(text.trimEnd(), "/**\n * Hello.\n */\nconst x = 1;");
+    });
+
+    test("printNode emits synthetic leading and trailing comments of both kinds", () => {
+        using api = spawnAPI(emitterFiles);
+
+        const statement = createConstStatement("y", "2");
+        addSyntheticLeadingComment(statement, SyntaxKind.SingleLineCommentTrivia, " first", true);
+        addSyntheticLeadingComment(statement, SyntaxKind.MultiLineCommentTrivia, " second ", true);
+        addSyntheticTrailingComment(statement, SyntaxKind.SingleLineCommentTrivia, " after");
+        const text = api.printer.printNode(statement);
+        assert.strictEqual(text.trimEnd(), "// first\n/* second */\nconst y = 2; // after");
+    });
+
+    test("printNode emits synthetic comments on nested nodes", () => {
+        using api = spawnAPI(emitterFiles);
+
+        const inner = createConstStatement("a", "1");
+        const outer = createBlock([inner, createConstStatement("b", "2")], true);
+        addSyntheticLeadingComment(inner, SyntaxKind.SingleLineCommentTrivia, " inner", true);
+        const text = api.printer.printNode(outer);
+        assert.match(text, /\{\n\s+\/\/ inner\n\s+const a = 1;\n\s+const b = 2;\n\}/);
+    });
+
+    test("printNode without synthetic comments is unchanged", () => {
+        using api = spawnAPI(emitterFiles);
+
+        assert.strictEqual((api.printer.printNode(createConstStatement("z", "3"))).trimEnd(), "const z = 3;");
     });
 
     test("printNode with factory-created type reference", () => {

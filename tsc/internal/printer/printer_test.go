@@ -11,6 +11,7 @@ import (
 	"github.com/microsoft/TypeScript/tsc/internal/testutil/parsetestutil"
 	"github.com/microsoft/TypeScript/tsc/internal/transformers"
 	"github.com/microsoft/TypeScript/tsc/internal/transformers/tstransforms"
+	"gotest.tools/v3/assert"
 )
 
 func TestEmit(t *testing.T) {
@@ -3059,4 +3060,39 @@ func TestOmitTrailingSemicolon(t *testing.T) {
 	if got != "for (;;) { }" {
 		t.Fatalf("omit EmitSourceFile(for) = %q, want %q", got, "for (;;) { }")
 	}
+}
+
+func TestSyntheticCommentsWithoutSourceFile(t *testing.T) {
+	t.Parallel()
+
+	newStatement := func(emitContext *printer.EmitContext) *ast.Node {
+		f := emitContext.Factory.AsNodeFactory()
+		return f.NewExpressionStatement(f.NewIdentifier("x"))
+	}
+	emit := func(emitContext *printer.EmitContext, node *ast.Node, enabled bool) string {
+		p := printer.NewPrinter(printer.PrinterOptions{EmitSyntheticCommentsWithoutSourceFile: enabled}, printer.PrintHandlers{}, emitContext)
+		return strings.TrimRight(p.Emit(node, nil), "\n")
+	}
+
+	t.Run("leading and trailing", func(t *testing.T) {
+		t.Parallel()
+		emitContext := printer.NewEmitContext()
+		node := newStatement(emitContext)
+		emitContext.AddSyntheticLeadingComment(node, ast.KindMultiLineCommentTrivia, "*\n * Doc.\n ", true)
+		emitContext.AddSyntheticLeadingComment(node, ast.KindSingleLineCommentTrivia, " lead", true)
+		emitContext.AddSyntheticTrailingComment(node, ast.KindSingleLineCommentTrivia, " trail", false)
+		assert.Equal(t, emit(emitContext, node, true), "/**\n * Doc.\n */\n// lead\nx; // trail")
+	})
+	t.Run("disabled by default", func(t *testing.T) {
+		t.Parallel()
+		emitContext := printer.NewEmitContext()
+		node := newStatement(emitContext)
+		emitContext.AddSyntheticLeadingComment(node, ast.KindSingleLineCommentTrivia, " lead", true)
+		assert.Equal(t, emit(emitContext, node, false), "x;")
+	})
+	t.Run("no comments", func(t *testing.T) {
+		t.Parallel()
+		emitContext := printer.NewEmitContext()
+		assert.Equal(t, emit(emitContext, newStatement(emitContext), true), "x;")
+	})
 }

@@ -46,7 +46,11 @@ type PrinterOptions struct {
 	OmitBraceSourceMapPositions bool
 	// ExtendedDiagnostics           bool
 	OnlyPrintJSDocStyle bool
-	NeverAsciiEscape    bool
+
+	// EmitSyntheticCommentsWithoutSourceFile emits synthetic comments even when no source file
+	// is being printed. Comments from original source text are still only emitted with a source file.
+	EmitSyntheticCommentsWithoutSourceFile bool
+	NeverAsciiEscape                       bool
 	// StripInternal                 bool
 	PreserveSourceNewlines        bool
 	TerminateUnterminatedLiterals bool // !!!
@@ -5815,7 +5819,19 @@ func (p *Printer) Write(node *ast.Node, sourceFile *ast.SourceFile, writer EmitT
 // Comments
 //
 
+func (p *Printer) shouldEmitSyntheticCommentsOnly(node *ast.Node) bool {
+	return p.Options.EmitSyntheticCommentsWithoutSourceFile &&
+		!p.commentsDisabled &&
+		p.currentSourceFile == nil &&
+		!ast.IsSourceFile(node)
+}
+
 func (p *Printer) emitCommentsBeforeNode(node *ast.Node) *commentState {
+	if p.shouldEmitSyntheticCommentsOnly(node) {
+		emitFlags := p.emitContext.EmitFlags(node)
+		p.emitLeadingSyntheticCommentsOfNode(node, emitFlags)
+		return &commentState{emitFlags: emitFlags}
+	}
 	if !p.shouldEmitComments(node) {
 		return nil
 	}
@@ -5840,6 +5856,11 @@ func (p *Printer) emitCommentsBeforeNode(node *ast.Node) *commentState {
 
 func (p *Printer) emitCommentsAfterNode(node *ast.Node, state *commentState) {
 	if state == nil {
+		return
+	}
+
+	if p.currentSourceFile == nil {
+		p.emitTrailingSyntheticCommentsOfNode(node, state.emitFlags)
 		return
 	}
 

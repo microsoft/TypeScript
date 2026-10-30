@@ -6,7 +6,12 @@ import type {
     SourceFile,
     TemplateLiteralLikeNode,
 } from "../../ast/index.ts";
-import { SyntaxKind } from "../../ast/index.ts";
+import {
+    getSyntheticLeadingComments,
+    getSyntheticTrailingComments,
+    SyntaxKind,
+} from "../../ast/index.ts";
+import type { PrintNodeComment } from "../proto.generated.ts";
 import {
     getNodeCommonData,
     getNodeDataType,
@@ -199,7 +204,7 @@ export function encodeSourceFile(sourceFile: SourceFile): Uint8Array {
  * Encode an arbitrary AST node into the binary format.
  * When encoding a non-SourceFile node, the header hash and parse options fields will be zero.
  */
-export function encodeNode(node: Node): Uint8Array {
+export function encodeNode(node: Node, comments?: PrintNodeComment[]): Uint8Array {
     const strs = new StringTable();
     const extendedDataValues: number[] = [];
     const structuredWriter = new MsgpackWriter();
@@ -214,9 +219,20 @@ export function encodeNode(node: Node): Uint8Array {
     let parentIndex = 0;
     let prevIndex = 0;
 
+    function collectComments(node: Node, index: number): void {
+        if (!comments) return;
+        for (const comment of getSyntheticLeadingComments(node) ?? []) {
+            comments.push({ node: index, kind: comment.kind, text: comment.text, hasTrailingNewLine: comment.hasTrailingNewLine || undefined });
+        }
+        for (const comment of getSyntheticTrailingComments(node) ?? []) {
+            comments.push({ node: index, trailing: true, kind: comment.kind, text: comment.text, hasTrailingNewLine: comment.hasTrailingNewLine || undefined });
+        }
+    }
+
     function visitNode(node: Node): void {
         nodeCount++;
         const currentIndex = nodeCount;
+        collectComments(node, currentIndex);
 
         if (prevIndex !== 0) {
             // Set next pointer on previous sibling
@@ -300,6 +316,7 @@ export function encodeNode(node: Node): Uint8Array {
 
     // Encode root node
     nodeCount++;
+    collectComments(node, 1);
     parentIndex++;
     const rootData = getNodeData(node, strs, extendedDataValues, structuredWriter);
     nodeValues.push(

@@ -67,6 +67,7 @@ import {
     toRootedPath,
 } from "../path.ts";
 import { prepareCompilerOptions } from "../prepareCompilerOptions.generated.ts";
+import type { PrintNodeComment } from "../proto.generated.ts";
 import type {
     BuildResponse,
     CleanBuildResponse,
@@ -3129,24 +3130,28 @@ export class Printer {
     }
 
     async printNode(node: Node, options: PrintNodeOptions = {}): Promise<string> {
-        const encoded = encodeNode(node);
+        const comments: PrintNodeComment[] = [];
+        const encoded = encodeNode(node, comments);
         const base64 = uint8ArrayToBase64(encoded);
         return this.client.apiRequest("printNode", {
             data: base64,
             preserveSourceNewlines: options.preserveSourceNewlines,
             neverAsciiEscape: options.neverAsciiEscape,
             terminateUnterminatedLiterals: options.terminateUnterminatedLiterals,
+            comments: comments.length ? comments : undefined,
         });
     }
 
     async printFile(sourceFile: SourceFile, options: PrintNodeOptions = {}): Promise<string> {
-        const encoded = encodeNode(sourceFile);
+        const comments: PrintNodeComment[] = [];
+        const encoded = encodeNode(sourceFile, comments);
         const base64 = uint8ArrayToBase64(encoded);
         return this.client.apiRequest("printNode", {
             data: base64,
             preserveSourceNewlines: options.preserveSourceNewlines,
             neverAsciiEscape: options.neverAsciiEscape,
             terminateUnterminatedLiterals: options.terminateUnterminatedLiterals,
+            comments: comments.length ? comments : undefined,
         });
     }
 }

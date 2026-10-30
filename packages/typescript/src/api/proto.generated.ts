@@ -1056,6 +1056,8 @@ export interface PrintNodeParams {
     preserveSourceNewlines?: boolean | undefined;
     neverAsciiEscape?: boolean | undefined;
     terminateUnterminatedLiterals?: boolean | undefined;
+    /** Comments are synthetic comments attached to nodes of the encoded AST. */
+    comments?: readonly PrintNodeComment[] | undefined;
 }
 
 export interface EmitParams {
@@ -1694,6 +1696,17 @@ export interface DiagnosticPositionResponse {
 export interface DiagnosticSourceLineResponse {
     line: number;
     text: string;
+}
+
+/** PrintNodeComment is a synthetic comment attached to a node of the encoded AST. */
+export interface PrintNodeComment {
+    /** index of the node in the encoded AST data */
+    node: number;
+    trailing?: boolean | undefined;
+    /** SingleLineCommentTrivia or MultiLineCommentTrivia */
+    kind: number;
+    text: string;
+    hasTrailingNewLine?: boolean | undefined;
 }
 
 export interface EmitOutputFile {
