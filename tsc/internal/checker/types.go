@@ -415,7 +415,6 @@ type NodeCheckFlags uint32
 
 const (
 	NodeCheckFlagsNone                                     NodeCheckFlags = 0
-	NodeCheckFlagsTypeChecked                              NodeCheckFlags = 1 << 0  // Node has been type checked
 	NodeCheckFlagsContextChecked                           NodeCheckFlags = 1 << 6  // Contextual types have been assigned
 	NodeCheckFlagsSignatureContextChecked                  NodeCheckFlags = 1 << 7  // Signature of a contextually typed function has been checked
 	NodeCheckFlagsEnumValuesComputed                       NodeCheckFlags = 1 << 10 // Values for enum members have been computed, and any errors have been reported for them.

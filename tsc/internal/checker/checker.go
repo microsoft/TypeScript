@@ -263,14 +263,6 @@ type PropertiesTypesKey struct {
 	includeOrigin bool
 }
 
-// NonExistentPropertyKey
-
-type NonExistentPropertyKey struct {
-	propNode       *ast.Node
-	containingType *Type
-	isUncheckedJS  bool
-}
-
 // FlowLoopKey
 
 type FlowLoopKey struct {
@@ -1025,7 +1017,7 @@ type memoStore struct {
 	ambientModules                          []*ast.Symbol
 	reportedUnreachableNodes                memoSet[*ast.Node]
 	checkedRegularExpressions               memoSet[*ast.Node]
-	nonExistentProperties                   collections.Set[NonExistentPropertyKey]
+	nonExistentPropertyNodes                collections.Set[*ast.Node] // Property names reported as nonexistent
 	deferredDiagnosticCallbacks             []func(c *Checker)
 	memoStates                              map[memoKey]*memoState // Memo state of results computed by queries; see memo.go
 	stateFilter                             []uint64               // Memo keys that may have a memo state; see memoState
@@ -12141,16 +12133,12 @@ func (c *Checker) reportNonexistentProperty(propNode *ast.Node, containingType *
 		c.recordEffect(func(c *Checker) { c.reportNonexistentProperty(propNode, containingType, isUncheckedJS) })
 		return
 	}
-	key := NonExistentPropertyKey{propNode, containingType, isUncheckedJS}
-	if c.nonExistentProperties.Has(key) {
+	// Only the first report for a name is made, even if it is reported again
+	// on another containing type.
+	if c.nonExistentPropertyNodes.Has(propNode) {
 		return
 	}
-	c.nonExistentProperties.Add(key)
-	links := c.nodeLinks.Get(propNode)
-	if links.flags&NodeCheckFlagsTypeChecked != 0 {
-		return // error already made/in progress
-	}
-	links.flags |= NodeCheckFlagsTypeChecked
+	c.nonExistentPropertyNodes.Add(propNode)
 	if ast.IsJSDocNameReferenceContext(propNode) {
 		return
 	}
