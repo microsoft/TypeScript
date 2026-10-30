@@ -1183,9 +1183,13 @@ func (c *Checker) isPropertyOfUnitType(prop *ast.Symbol) bool {
 				mappedType := links.getContainingType()
 				uninstantiated = c.getTemplateTypeFromMappedType(core.OrElse(mappedType.AsMappedType().target, mappedType))
 			}
-			// An object type other than a mapped type never instantiates to a unit type, so neither does a union containing one
+			// An object type other than a mapped type or a generic tuple type never instantiates to a unit type or to never,
+			// so neither does a union containing one. A homomorphic mapped type instantiated for a primitive is that
+			// primitive. A generic tuple type has a variadic element, like [string, ...T, number], and it normalizes to never
+			// when that element is instantiated to never. The tuple then drops out of a union, so with T = never the union
+			// [string, ...T, number] | K is just K, which can be a unit type.
 			if core.Some(uninstantiated.Distributed(), func(t *Type) bool {
-				return t.flags&TypeFlagsObject != 0 && t.objectFlags&ObjectFlagsMapped == 0
+				return t.flags&TypeFlagsObject != 0 && t.objectFlags&ObjectFlagsMapped == 0 && !isGenericTupleType(t)
 			}) {
 				return false
 			}
