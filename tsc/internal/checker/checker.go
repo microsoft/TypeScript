@@ -20922,12 +20922,19 @@ func (c *Checker) isApplicableIndexType(source *Type, target *Type) bool {
 }
 
 func (c *Checker) resolveStructuredTypeMembers(t *Type) *StructuredType {
+	if t.objectFlags&(ObjectFlagsMembersResolved|ObjectFlagsMembersResolving) == ObjectFlagsMembersResolved && !c.observingMemos {
+		return t.asResolvedStructuredType()
+	}
+	return c.resolveStructuredTypeMembersSlow(t)
+}
+
+// resolveStructuredTypeMembersSlow is the part of resolveStructuredTypeMembers
+// past reading resolved members, out of line so that the rest inlines.
+func (c *Checker) resolveStructuredTypeMembersSlow(t *Type) *StructuredType {
 	key := memoKeyOf(t, memoStructuredMembers)
 	if t.objectFlags&(ObjectFlagsMembersResolved|ObjectFlagsMembersResolving) == ObjectFlagsMembersResolved {
 		// Resolved members are only read.
-		if c.observing() {
-			c.observeMemo(key)
-		}
+		c.observeMemo(key)
 		return t.AsStructuredType()
 	}
 	if t.objectFlags&ObjectFlagsMembersResolving != 0 {
