@@ -104,3 +104,8 @@ export const f11: (input?: { a?: number }[]) => void = ([...[{ a } = {}]] = []) 
 export const f12: (input: { a: boolean; b?: string }) => string = ({ a, b } = { a: false }) => `${a}${b}`;
 
 export const f13 = (input: { a?: number; b?: string }[]) => input.map(({ a, b } = {}) => `${a}${b}`);
+
+export const f14: (args: string[], input?: { a?: string; b?: number }) => void = (args, { a, b = 1 } = {}) => {
+    const c: string | undefined = a;
+    const d: number = b;
+};

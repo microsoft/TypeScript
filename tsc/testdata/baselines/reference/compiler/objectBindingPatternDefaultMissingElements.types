@@ -387,3 +387,26 @@ export const f13 = (input: { a?: number; b?: string }[]) => input.map(({ a, b } 
 >a : number | undefined
 >b : string | undefined
 
+export const f14: (args: string[], input?: { a?: string; b?: number }) => void = (args, { a, b = 1 } = {}) => {
+>f14 : (args: string[], input?: { a?: string; b?: number; }) => void
+>args : string[]
+>input : { a?: string; b?: number; } | undefined
+>a : string | undefined
+>b : number | undefined
+>(args, { a, b = 1 } = {}) => {    const c: string | undefined = a;    const d: number = b;} : (args: string[], { a, b }?: { a?: string; b?: number; } | undefined) => void
+>args : string[]
+>a : string | undefined
+>b : number
+>1 : 1
+>{} : {}
+
+    const c: string | undefined = a;
+>c : string | undefined
+>a : string | undefined
+
+    const d: number = b;
+>d : number
+>b : number
+
+};
+

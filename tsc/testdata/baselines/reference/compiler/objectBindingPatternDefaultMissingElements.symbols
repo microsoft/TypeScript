@@ -294,3 +294,23 @@ export const f13 = (input: { a?: number; b?: string }[]) => input.map(({ a, b } 
 >a : Symbol(a, Decl(main.ts, 76, 72))
 >b : Symbol(b, Decl(main.ts, 76, 75))
 
+export const f14: (args: string[], input?: { a?: string; b?: number }) => void = (args, { a, b = 1 } = {}) => {
+>f14 : Symbol(f14, Decl(main.ts, 78, 12))
+>args : Symbol(args, Decl(main.ts, 78, 19))
+>input : Symbol(input, Decl(main.ts, 78, 34))
+>a : Symbol(a, Decl(main.ts, 78, 44))
+>b : Symbol(b, Decl(main.ts, 78, 56))
+>args : Symbol(args, Decl(main.ts, 78, 82))
+>a : Symbol(a, Decl(main.ts, 78, 89))
+>b : Symbol(b, Decl(main.ts, 78, 92))
+
+    const c: string | undefined = a;
+>c : Symbol(c, Decl(main.ts, 79, 9))
+>a : Symbol(a, Decl(main.ts, 78, 89))
+
+    const d: number = b;
+>d : Symbol(d, Decl(main.ts, 80, 9))
+>b : Symbol(b, Decl(main.ts, 78, 92))
+
+};
+
