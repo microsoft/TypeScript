@@ -388,6 +388,9 @@ func (b *ProjectCollectionBuilder) HandleAPIRequest(apiRequest *APISnapshotReque
 func (b *ProjectCollectionBuilder) nextSyntheticProjectID() SyntheticProjectID {
 	for id := 1; ; id++ {
 		projectID := NewSyntheticProjectID(id)
+		if _, ok := b.base.syntheticProjects[projectID]; ok {
+			continue
+		}
 		if _, ok := b.syntheticProjects.Load(projectID); !ok {
 			return projectID
 		}
