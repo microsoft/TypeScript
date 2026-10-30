@@ -24107,6 +24107,9 @@ func (c *Checker) getReducedType(t *Type) *Type {
 
 // isNeverIntersection reports whether the intersection t reduces to never.
 func (c *Checker) isNeverIntersection(t *Type) bool {
+	if c.objectFlagsKnown(t, ObjectFlagsIsNeverIntersectionComputed) {
+		return t.objectFlags&ObjectFlagsIsNeverIntersection != 0
+	}
 	return c.objectFlagsCell(t, memoNeverIntersection, ObjectFlagsIsNeverIntersectionComputed, ObjectFlagsIsNeverIntersection, true /*inProgress*/, func() ObjectFlags {
 		if !c.isMappingOfSameObjectType(t.Types()) && c.somePropertyReducesToNever(t) {
 			return ObjectFlagsIsNeverIntersection
@@ -24627,6 +24630,9 @@ func (c *Checker) clearActiveMapperCaches() {
 func (c *Checker) couldContainTypeVariablesWorker(t *Type) bool {
 	if t.flags&TypeFlagsStructuredOrInstantiable == 0 {
 		return false
+	}
+	if c.objectFlagsKnown(t, ObjectFlagsCouldContainTypeVariablesComputed) {
+		return t.objectFlags&ObjectFlagsCouldContainTypeVariables != 0
 	}
 	return c.objectFlagsCell(t, memoCouldContainTypeVariables, ObjectFlagsCouldContainTypeVariablesComputed, ObjectFlagsCouldContainTypeVariables, false /*inProgress*/, func() ObjectFlags {
 		return core.IfElse(c.computeCouldContainTypeVariables(t), ObjectFlagsCouldContainTypeVariables, 0)
@@ -27446,6 +27452,9 @@ func (c *Checker) isGenericIndexType(t *Type) bool {
 func (c *Checker) getGenericObjectFlags(t *Type) ObjectFlags {
 	var combinedFlags ObjectFlags
 	if t.flags&(TypeFlagsUnionOrIntersection|TypeFlagsSubstitution) != 0 {
+		if c.objectFlagsKnown(t, ObjectFlagsIsGenericTypeComputed) {
+			return t.objectFlags & ObjectFlagsIsGenericType
+		}
 		return c.objectFlagsCell(t, memoGenericObjectFlags, ObjectFlagsIsGenericTypeComputed, ObjectFlagsIsGenericType, false /*inProgress*/, func() ObjectFlags {
 			var flags ObjectFlags
 			if t.flags&TypeFlagsUnionOrIntersection != 0 {
@@ -30467,6 +30476,9 @@ func getNameFromIndexInfo(info *IndexInfo) string {
 
 func (c *Checker) isUnknownLikeUnionType(t *Type) bool {
 	if c.strictNullChecks && t.flags&TypeFlagsUnion != 0 {
+		if c.objectFlagsKnown(t, ObjectFlagsIsUnknownLikeUnionComputed) {
+			return t.objectFlags&ObjectFlagsIsUnknownLikeUnion != 0
+		}
 		return c.objectFlagsCell(t, memoUnknownLikeUnion, ObjectFlagsIsUnknownLikeUnionComputed, ObjectFlagsIsUnknownLikeUnion, true /*inProgress*/, func() ObjectFlags {
 			types := t.Types()
 			if len(types) >= 3 && types[0].flags&TypeFlagsUndefined != 0 && types[1].flags&TypeFlagsNull != 0 && core.Some(types, c.IsEmptyAnonymousObjectType) {
