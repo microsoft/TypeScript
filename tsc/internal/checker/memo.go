@@ -29,7 +29,9 @@ import (
 // reuses a memoized result, it replays the recorded effects of that result
 // and everything it transitively reused, exactly as if it had computed the
 // result itself. Effects produced outside any memoized computation belong
-// solely to the query and are discarded.
+// solely to the query and are discarded. A check applies its own effects as
+// they happen, except while results it computes may be discarded, when it
+// records them as a query does (see recordFromCheck).
 
 type memoField uint8
 
@@ -479,7 +481,7 @@ func (m *memoMap[K, V]) setWithCost(c *Checker, k K, v V, count *instantiationCo
 
 // attach is memoAttach for the entry for k.
 func (m *memoMap[K, V]) attach(c *Checker, k K) {
-	if c.memoTop == 0 {
+	if c.memoTop == 0 || c.checking {
 		return
 	}
 	if f := &c.resolutions[c.memoTop-1]; f.source == memoStateSource(m) && m.resolvingKeys[f.index] == k {
@@ -525,7 +527,8 @@ func (m *memoMap[K, V]) begin(c *Checker, k K) {
 		if c.memoPendingCount != 0 && m.memoStates != nil {
 			c.replayPending(m.memoStates[k])
 		}
-		c.beginQueryFromCheck()
+		c.beginCheckedMemo(m.memoStates[k])
+		return
 	}
 	c.beginState(m.memoStates[k], outer)
 }
@@ -637,9 +640,7 @@ func (c *Checker) beginMemo(key memoKey) {
 		if c.memoPendingCount != 0 {
 			c.replayPending(state)
 		}
-		c.beginQueryFromCheck()
-		// The outermost computation re-enters nothing.
-		c.beginState(state, 0)
+		c.beginCheckedMemo(state)
 		return
 	}
 	outer := c.resolvingIndex(key)
@@ -746,7 +747,7 @@ func (c *Checker) peekMemoState(key memoKey) *memoState {
 // memoAttach makes the result identified by key depend on the innermost
 // computation in progress, unless that computation is the result's own.
 func (c *Checker) memoAttach(key memoKey) {
-	if c.memoTop == 0 {
+	if c.memoTop == 0 || c.checking {
 		return
 	}
 	if f := &c.resolutions[c.memoTop-1]; f.source == nil && f.key == key {
@@ -1127,6 +1128,13 @@ func (c *Checker) withReferenceMarks(fn func()) {
 // belong to.
 func (c *Checker) withoutChecking(fn func()) {
 	debug.Assert(c.checking && c.flushStates == nil, "withoutChecking outside a check")
+	if c.memoTop != 0 {
+		// The effects of the computations in progress are recorded from
+		// here on, and with them those of everything fn computes.
+		c.recordFromCheck()
+		fn()
+		return
+	}
 	saveMemoTop := c.memoTop
 	var states []*memoState
 	c.checking = false
@@ -1149,20 +1157,42 @@ func (c *Checker) withoutChecking(fn func()) {
 	}
 }
 
-// beginQueryFromCheck makes the memoized computation starting in a check a
-// query, like withoutChecking, so that its effects are recorded with its
-// result and with every result observing it. They are replayed when it
-// finishes (see endQueryFromCheck), and those of results discarded with a
-// cycle are applied only if a result that is kept observed them.
-func (c *Checker) beginQueryFromCheck() {
-	debug.Assert(c.memoTop == 0 && c.flushStates == nil, "query from a check inside a query")
-	c.resolutions[len(c.resolutions)-1].fromCheck = true
+// beginCheckedMemo is beginMemo for a computation started in a check. Its
+// effects apply as they happen, and reading cached results accounts for
+// nothing, as every effect only adds to what the store has collected, which
+// is the same whichever check applies it first. Effects of results that a
+// cycle or a discard mark may discard are the exception (see recordFromCheck),
+// so a computation starting while one is in progress records them.
+func (c *Checker) beginCheckedMemo(state *memoState) {
+	c.startEffects(state)
+	if c.logEffects() {
+		c.recordFromCheck()
+	}
+}
+
+// recordFromCheck makes the outermost computation in progress in a check a
+// query from here on, like withoutChecking, because a cycle or a discard mark
+// begins, after which results and their effects may be discarded. Effects
+// are then recorded with the results computed and with every result
+// observing them, and are replayed when the outermost computation finishes
+// (see endQueryFromCheck), so that those of discarded results apply only if a
+// result that is kept observed them. The computations in progress applied
+// their earlier effects already, which is right since they are kept: a cycle
+// discards only what is computed after it is found, and a mark only what is
+// computed after it is taken.
+func (c *Checker) recordFromCheck() {
+	debug.Assert(c.checking && c.memoTop != 0 && c.flushStates == nil, "recording from a check outside a computation")
+	i := c.memoTop - 1
+	for c.resolutions[i].prevMemo != 0 {
+		i = int(c.resolutions[i].prevMemo) - 1
+	}
+	c.resolutions[i].fromCheck = true
 	c.checking = false
 	c.flushBuf = c.flushBuf[:0]
 	c.flushStates = &c.flushBuf
 }
 
-// endQueryFromCheck ends the query begun by beginQueryFromCheck, replaying
+// endQueryFromCheck ends the query begun by recordFromCheck, replaying
 // the effects of everything it computed in the check.
 func (c *Checker) endQueryFromCheck() {
 	states := *c.flushStates
@@ -1468,6 +1498,9 @@ func (c *Checker) discardCycle(mark int, retain bool) {
 // is incomplete is discarded when it finishes, as for the outermost, rather
 // than read by the rest of the outer cycle.
 func (c *Checker) extendCircularity(head int) {
+	if c.checking && c.memoTop != 0 {
+		c.recordFromCheck()
+	}
 	switch {
 	case c.circularityStart == 0:
 		c.circularityMark = len(c.discardLog)
@@ -1524,6 +1557,9 @@ type discardMark struct {
 }
 
 func (c *Checker) markDiscard() discardMark {
+	if c.checking {
+		c.recordFromCheck()
+	}
 	n := c.memoTop - 1
 	f := c.memoEffectsAt(n)
 	m := discardMark{

@@ -20448,6 +20448,9 @@ func (c *Checker) markCurrentNodeCircular() {
 // failing, so results cached while it is in progress are discarded when it
 // finishes.
 func (c *Checker) markTypeResolutionCircular(start int) {
+	if c.checking && c.memoTop != 0 {
+		c.recordFromCheck()
+	}
 	if !c.checking {
 		c.memoCycle(int(c.resolutions[start].prevMemo))
 	}
