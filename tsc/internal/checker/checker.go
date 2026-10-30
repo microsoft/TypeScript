@@ -1024,6 +1024,7 @@ type memoStore struct {
 	ambientModulesOnce                      sync.Once
 	ambientModules                          []*ast.Symbol
 	reportedUnreachableNodes                memoSet[*ast.Node]
+	checkedRegularExpressions               memoSet[*ast.Node]
 	nonExistentProperties                   collections.Set[NonExistentPropertyKey]
 	deferredDiagnosticCallbacks             []func(c *Checker)
 	memoStates                              map[memoKey]*memoState // Memo state of results computed by queries; see memo.go
@@ -8401,18 +8402,9 @@ func (c *Checker) isTemplateLiteralContextualType(t *Type) bool {
 }
 
 func (c *Checker) checkRegularExpressionLiteral(node *ast.Node) *Type {
-	c.beginMemo(memoKeyOf(node, memoRegularExpression))
-	result := c.checkRegularExpressionLiteralUncached(node)
-	c.endMemo()
-	return result
-}
-
-func (c *Checker) checkRegularExpressionLiteralUncached(node *ast.Node) *Type {
-	nodeLinks := c.nodeLinks.Get(node)
-	if nodeLinks.flags&NodeCheckFlagsTypeChecked == 0 {
-		nodeLinks.flags |= NodeCheckFlagsTypeChecked
+	c.checkedRegularExpressions.once(c, node, func() {
 		c.checkGrammarRegularExpressionLiteral(node.AsRegularExpressionLiteral())
-	}
+	})
 	return c.globalRegExpType
 }
 
