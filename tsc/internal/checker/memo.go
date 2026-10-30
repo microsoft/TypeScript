@@ -128,14 +128,6 @@ func (k memoKey) symbol() *ast.Symbol {
 	return *(**ast.Symbol)(unsafe.Pointer(&p))
 }
 
-// cell returns the memo identified by a key of field memoCell, which is the
-// address of the memo. The memo is alive, since its key is in use, and the
-// heap does not move.
-func (k memoKey) cell() *memoHeader {
-	p := uintptr(k >> 8)
-	return *(**memoHeader)(unsafe.Pointer(&p))
-}
-
 type memoEffects struct {
 	effects  []func(c *Checker)
 	marks    []*ast.Symbol // Aliases marked referenced, also among effects; see withReferenceMarks
@@ -187,8 +179,7 @@ type memo[T any] struct {
 // memoHeader is the part of a memo independent of its type, which identifies
 // it.
 type memoHeader struct {
-	_     memoNoCopy
-	state *memoState // Created on demand; see Checker.memoState
+	_ memoNoCopy
 }
 
 // memoNoCopy makes go vet reject copies of a memo, which would bypass it.
@@ -278,7 +269,7 @@ func (m *memo[T]) setReported(c *Checker, v T, r currentNodeErrors) {
 		r.list = nil
 	}
 	m.setIdentity(c, v)
-	if r.list != nil || c.memoErrorStates != 0 && m.state != nil {
+	if r.list != nil || c.memoErrorStates != 0 && c.peekMemoState(m.key()) != nil {
 		c.memoState(m.key()).setErrors(c, r.list)
 	}
 }
@@ -762,13 +753,6 @@ func (c *Checker) stopEffects() *resolution {
 }
 
 func (c *Checker) memoState(key memoKey) *memoState {
-	if key.field() == memoCell {
-		h := key.cell()
-		if h.state == nil {
-			h.state = &memoState{}
-		}
-		return h.state
-	}
 	state := c.memoStates[key]
 	if state == nil {
 		if c.memoStates == nil {
@@ -794,9 +778,6 @@ func stateFilterIndex(key memoKey) uint64 {
 // peekMemoState returns the memo state of the result identified by key, or
 // nil if it has none, consulting a filter first since most results have none.
 func (c *Checker) peekMemoState(key memoKey) *memoState {
-	if key.field() == memoCell {
-		return key.cell().state
-	}
 	if c.stateFilter == nil {
 		return nil
 	}
@@ -862,13 +843,7 @@ func (c *Checker) linkState(state *memoState, f *memoEffects) {
 //
 //go:noinline
 func (c *Checker) observeCell(h *memoHeader) {
-	state := h.state
-	if !c.memoActive() {
-		return
-	}
-	if c.observeState(state) || state == nil && !c.checking && c.resolving.count != 0 {
-		c.memoCycle(c.resolvingIndex(h.key()))
-	}
+	c.observeMemo(h.key())
 }
 
 //go:noinline
