@@ -821,6 +821,8 @@ func castType[T any](t *Type, kind typeKind) *T {
 	if t.kind != kind {
 		panic("Invalid type cast")
 	}
+	// SAFETY: Each kind is only assigned by newType to a Type embedded at offset zero of the
+	// struct for that kind, and every caller pairs T with its kind.
 	return (*T)(unsafe.Pointer(t))
 }
 
@@ -888,6 +890,7 @@ func (t *Type) AsConditionalType() *ConditionalType {
 
 func (t *Type) AsConstrainedType() *ConstrainedType {
 	if t.kind >= typeKindTypeParameter && t.kind <= typeKindIntersection {
+		// SAFETY: Types of these kinds are structs that embed ConstrainedType at offset zero.
 		return (*ConstrainedType)(unsafe.Pointer(t))
 	}
 	return nil
@@ -895,6 +898,7 @@ func (t *Type) AsConstrainedType() *ConstrainedType {
 
 func (t *Type) AsStructuredType() *StructuredType {
 	if t.kind >= typeKindObject && t.kind <= typeKindIntersection {
+		// SAFETY: Types of these kinds are structs that embed StructuredType at offset zero.
 		return (*StructuredType)(unsafe.Pointer(t))
 	}
 	return nil
@@ -902,6 +906,7 @@ func (t *Type) AsStructuredType() *StructuredType {
 
 func (t *Type) AsObjectType() *ObjectType {
 	if t.kind >= typeKindObject && t.kind <= typeKindEvolvingArray {
+		// SAFETY: Types of these kinds are structs that embed ObjectType at offset zero.
 		return (*ObjectType)(unsafe.Pointer(t))
 	}
 	return nil
@@ -909,6 +914,7 @@ func (t *Type) AsObjectType() *ObjectType {
 
 func (t *Type) AsTypeReference() *TypeReference {
 	if t.kind >= typeKindTypeReference && t.kind <= typeKindTuple {
+		// SAFETY: Types of these kinds are structs that embed TypeReference at offset zero.
 		return (*TypeReference)(unsafe.Pointer(t))
 	}
 	return nil
@@ -916,6 +922,7 @@ func (t *Type) AsTypeReference() *TypeReference {
 
 func (t *Type) AsInterfaceType() *InterfaceType {
 	if t.kind >= typeKindInterface && t.kind <= typeKindTuple {
+		// SAFETY: Types of these kinds are structs that embed InterfaceType at offset zero.
 		return (*InterfaceType)(unsafe.Pointer(t))
 	}
 	return nil
@@ -923,6 +930,7 @@ func (t *Type) AsInterfaceType() *InterfaceType {
 
 func (t *Type) AsUnionOrIntersectionType() *UnionOrIntersectionType {
 	if t.kind >= typeKindUnion && t.kind <= typeKindIntersection {
+		// SAFETY: Types of these kinds are structs that embed UnionOrIntersectionType at offset zero.
 		return (*UnionOrIntersectionType)(unsafe.Pointer(t))
 	}
 	return nil

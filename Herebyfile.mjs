@@ -1387,7 +1387,8 @@ const customLinterTool = createCachedTool({
     ],
     exclude: ["**/testdata/**"],
     build: async toolPath => {
-        await run("go", ["run", golangciLintPackage(), "custom"]);
+        // GOOS/GOARCH select the lint target, but the linter must run on the host.
+        await run("go", ["run", golangciLintPackage(), "custom"], { env: { GOOS: "", GOARCH: "" } });
         await run(toolPath, ["cache", "clean"]);
     },
 });
