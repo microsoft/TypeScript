@@ -1,0 +1,74 @@
+//// [tests/cases/compiler/isolatedDeclarationsComputedPropertiesErrors.ts] ////
+
+=== isolatedDeclarationsComputedPropertiesErrors.ts ===
+export const prop: unique symbol = Symbol();
+>prop : unique symbol
+>Symbol() : unique symbol
+>Symbol : SymbolConstructor
+
+export class MyClass {
+>MyClass : MyClass
+
+    [prop] = () => Math.random();
+>[prop] : () => number
+>prop : unique symbol
+>() => Math.random() : () => number
+>Math.random() : number
+>Math.random : () => number
+>Math : Math
+>random : () => number
+
+    ["a" + "b"]: number = 1;
+>["a" + "b"] : number
+>"a" + "b" : string
+>"a" : "a"
+>"b" : "b"
+>1 : 1
+}
+
+export const object = {
+>object : { [prop]: number; }
+>{    [prop]: Math.random(),} : { [prop]: number; }
+
+    [prop]: Math.random(),
+>[prop] : number
+>prop : unique symbol
+>Math.random() : number
+>Math.random : () => number
+>Math : Math
+>random : () => number
+
+};
+
+export const invalidName = {
+>invalidName : { [x: number]: number; }
+>{    [Math.random()]: 1,} : { [x: number]: number; }
+
+    [Math.random()]: 1,
+>[Math.random()] : number
+>Math.random() : number
+>Math.random : () => number
+>Math : Math
+>random : () => number
+>1 : 1
+
+};
+
+export const stringKey: string = "key";
+>stringKey : string
+>"key" : "key"
+
+export const indexedObject = {
+>indexedObject : { [stringKey]: number; }
+>{    [stringKey]: Math.random(),} : { [stringKey]: number; }
+
+    [stringKey]: Math.random(),
+>[stringKey] : number
+>stringKey : string
+>Math.random() : number
+>Math.random : () => number
+>Math : Math
+>random : () => number
+
+};
+

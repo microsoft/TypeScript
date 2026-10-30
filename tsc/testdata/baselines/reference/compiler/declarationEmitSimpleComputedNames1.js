@@ -71,20 +71,20 @@ exports.instanceLookup = (new Holder())["some" + "thing"];
 //// [declarationEmitSimpleComputedNames1.d.ts]
 export declare const fieldName: string;
 export declare const conatainer: {
-    [fieldName]: () => string;
+    [fieldName](): string;
 };
 declare const classFieldName: string;
 declare const otherField: string;
 declare const staticField: string;
 export declare class Holder {
-    static [staticField]: () => {
+    [classFieldName](): string;
+    [otherField](): number;
+    static [staticField](): {
         static: boolean;
     };
-    static [staticField]: () => {
+    static [staticField](): {
         static: string;
     };
-    [classFieldName]: () => string;
-    [otherField]: () => number;
 }
 /**
  * Could be `"prototype"`, so all static string indexers include the instance type

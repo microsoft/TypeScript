@@ -109,7 +109,7 @@ function foo8(y = (async () => z)(), z = 1) {
 
 // error - used as computed name of method
 function foo9(y = {[z]() { return z; }}, z = 1) {
->foo9 : (y?: { [z]: () => number; }, z?: number) => void
+>foo9 : (y?: { [z](): number; }, z?: number) => void
 >y : { [z]: () => number; }
 >{[z]() { return z; }} : { [z]: () => number; }
 >[z] : () => number
