@@ -191,10 +191,14 @@ export function* values() { yield 1; }
 
 
 tsgo 
-ExitStatus:: Success
+ExitStatus:: DiagnosticsPresent_OutputsGenerated
 Output::
+[91merror[0m[90m TS2318: [0mCannot find global type 'IterableIterator'.
+
+Found 1 error.
+
 //// [/home/src/workspaces/project/tsconfig.tsbuildinfo] *modified* 
-{"version":"FakeTSVersion","errors":true,"root":[2],"fileNames":["lib.es2026.full.d.ts","./repro.ts"],"fileInfos":[{"version":"8859c12c614ce56ba9a18e58384a198f-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ninterface SymbolConstructor {\n    (desc?: string | number): symbol;\n    for(name: string): symbol;\n    readonly toStringTag: symbol;\n}\ndeclare var Symbol: SymbolConstructor;\ninterface Symbol {\n    readonly [Symbol.toStringTag]: string;\n}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true,"impliedNodeFormat":1},{"version":"303d5119b8941b887ef975780b83caec-export function* values() { yield 1; }\n// comment-only edit\n","signature":"b9f7a0d32d9887fdd864bf1c0dcd3591-export declare function values(): {};\n","impliedNodeFormat":1}],"affectedFilesPendingEmit":[2]}
+{"version":"FakeTSVersion","errors":true,"root":[2],"fileNames":["lib.es2026.full.d.ts","./repro.ts"],"fileInfos":[{"version":"8859c12c614ce56ba9a18e58384a198f-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ninterface SymbolConstructor {\n    (desc?: string | number): symbol;\n    for(name: string): symbol;\n    readonly toStringTag: symbol;\n}\ndeclare var Symbol: SymbolConstructor;\ninterface Symbol {\n    readonly [Symbol.toStringTag]: string;\n}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true,"impliedNodeFormat":1},{"version":"303d5119b8941b887ef975780b83caec-export function* values() { yield 1; }\n// comment-only edit\n","signature":"b9f7a0d32d9887fdd864bf1c0dcd3591-export declare function values(): {};\n","impliedNodeFormat":1}],"semanticDiagnosticsPerFile":[[2,[{"noFile":true,"code":2318,"category":1,"messageKey":"Cannot_find_global_type_0_2318","messageArgs":["IterableIterator"]}]]],"affectedFilesPendingEmit":[2]}
 //// [/home/src/workspaces/project/tsconfig.tsbuildinfo.readable.baseline.txt] *modified* 
 {
   "version": "FakeTSVersion",
@@ -236,6 +240,22 @@ Output::
       }
     }
   ],
+  "semanticDiagnosticsPerFile": [
+    [
+      "./repro.ts",
+      [
+        {
+          "noFile": true,
+          "code": 2318,
+          "category": 1,
+          "messageKey": "Cannot_find_global_type_0_2318",
+          "messageArgs": [
+            "IterableIterator"
+          ]
+        }
+      ]
+    ]
+  ],
   "affectedFilesPendingEmit": [
     [
       "./repro.ts",
@@ -243,7 +263,7 @@ Output::
       2
     ]
   ],
-  "size": 1136
+  "size": 1295
 }
 
 tsconfig.json::
@@ -253,22 +273,17 @@ Signatures::
 (computed .d.ts) /home/src/workspaces/project/repro.ts
 
 
-Diff:: Like Strada, signature generation produces the missing-global diagnostic before semantic checking, so it is excluded from the file's semantic diagnostics.
---- nonIncremental.output.txt
-+++ incremental.output.txt
-@@ -1,4 +0,0 @@
--[91merror[0m[90m TS2318: [0mCannot find global type 'IterableIterator'.
--
--Found 1 error.
--
-
 Edit [2]:: no change
 
 tsgo 
-ExitStatus:: Success
+ExitStatus:: DiagnosticsPresent_OutputsGenerated
 Output::
+[91merror[0m[90m TS2318: [0mCannot find global type 'IterableIterator'.
+
+Found 1 error.
+
 //// [/home/src/workspaces/project/tsconfig.tsbuildinfo] *modified* 
-{"version":"FakeTSVersion","root":[2],"fileNames":["lib.es2026.full.d.ts","./repro.ts"],"fileInfos":[{"version":"8859c12c614ce56ba9a18e58384a198f-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ninterface SymbolConstructor {\n    (desc?: string | number): symbol;\n    for(name: string): symbol;\n    readonly toStringTag: symbol;\n}\ndeclare var Symbol: SymbolConstructor;\ninterface Symbol {\n    readonly [Symbol.toStringTag]: string;\n}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true,"impliedNodeFormat":1},{"version":"303d5119b8941b887ef975780b83caec-export function* values() { yield 1; }\n// comment-only edit\n","signature":"b9f7a0d32d9887fdd864bf1c0dcd3591-export declare function values(): {};\n","impliedNodeFormat":1}],"affectedFilesPendingEmit":[2]}
+{"version":"FakeTSVersion","root":[2],"fileNames":["lib.es2026.full.d.ts","./repro.ts"],"fileInfos":[{"version":"8859c12c614ce56ba9a18e58384a198f-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ninterface SymbolConstructor {\n    (desc?: string | number): symbol;\n    for(name: string): symbol;\n    readonly toStringTag: symbol;\n}\ndeclare var Symbol: SymbolConstructor;\ninterface Symbol {\n    readonly [Symbol.toStringTag]: string;\n}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true,"impliedNodeFormat":1},{"version":"303d5119b8941b887ef975780b83caec-export function* values() { yield 1; }\n// comment-only edit\n","signature":"b9f7a0d32d9887fdd864bf1c0dcd3591-export declare function values(): {};\n","impliedNodeFormat":1}],"semanticDiagnosticsPerFile":[[2,[{"noFile":true,"code":2318,"category":1,"messageKey":"Cannot_find_global_type_0_2318","messageArgs":["IterableIterator"]}]]],"affectedFilesPendingEmit":[2]}
 //// [/home/src/workspaces/project/tsconfig.tsbuildinfo.readable.baseline.txt] *modified* 
 {
   "version": "FakeTSVersion",
@@ -309,6 +324,22 @@ Output::
       }
     }
   ],
+  "semanticDiagnosticsPerFile": [
+    [
+      "./repro.ts",
+      [
+        {
+          "noFile": true,
+          "code": 2318,
+          "category": 1,
+          "messageKey": "Cannot_find_global_type_0_2318",
+          "messageArgs": [
+            "IterableIterator"
+          ]
+        }
+      ]
+    ]
+  ],
   "affectedFilesPendingEmit": [
     [
       "./repro.ts",
@@ -316,22 +347,13 @@ Output::
       2
     ]
   ],
-  "size": 1122
+  "size": 1281
 }
 
 tsconfig.json::
 SemanticDiagnostics::
 Signatures::
 
-
-Diff:: Like Strada, the cached semantic diagnostics do not include the missing-global diagnostic produced during signature generation.
---- nonIncremental.output.txt
-+++ incremental.output.txt
-@@ -1,4 +0,0 @@
--[91merror[0m[90m TS2318: [0mCannot find global type 'IterableIterator'.
--
--Found 1 error.
--
 
 Edit [3]:: delete build info to restore the semantic diagnostic
 //// [/home/src/workspaces/project/tsconfig.tsbuildinfo] *deleted*
