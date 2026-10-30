@@ -254,7 +254,7 @@ func (w *formatSpanWorker) execute(s *formattingScanner) []core.TextChange {
 			undecoratedStartLine = scanner.GetECMALineOfPosition(w.sourceFile, getNonDecoratorTokenPosOfNode(w.enclosingNode, w.sourceFile))
 		}
 
-		w.processNode(w.enclosingNode, w.enclosingNode, startLine, undecoratedStartLine, w.initialIndentation, w.delta)
+		w.processNode(w.enclosingNode, w.enclosingNode, startLine, undecoratedStartLine, w.initialIndentation, w.delta, nil)
 	}
 
 	// Leading trivia items get attached to and processed with the token that proceeds them. If the
@@ -425,7 +425,7 @@ func (w *formatSpanWorker) processChildNode(
 		childIndentation, delta = w.computeIndentation(child, childStartLine, childIndentationAmount, node, parentDynamicIndentation, effectiveParentStartLine)
 	}
 
-	w.processNode(child, w.childContextNode, childStartLine, undecoratedChildStartLine, childIndentation, delta)
+	w.processNode(child, w.childContextNode, childStartLine, undecoratedChildStartLine, childIndentation, delta, parentDynamicIndentation)
 
 	w.childContextNode = node
 
@@ -612,12 +612,13 @@ func (w *formatSpanWorker) tryComputeIndentationForListItem(startPos int, endPos
 	return -1
 }
 
-func (w *formatSpanWorker) processNode(node *ast.Node, contextNode *ast.Node, nodeStartLine int, undecoratedNodeStartLine int, indentation int, delta int) {
+func (w *formatSpanWorker) processNode(node *ast.Node, contextNode *ast.Node, nodeStartLine int, undecoratedNodeStartLine int, indentation int, delta int, parentDynamicIndentation *dynamicIndenter) {
 	if !w.originalRange.Overlaps(withTokenStart(node, w.sourceFile)) {
 		return
 	}
 
 	nodeDynamicIndentation := w.getDynamicIndentation(node, nodeStartLine, indentation, delta)
+	nodeDynamicIndentation.parent = parentDynamicIndentation
 
 	// a useful observations when tracking context node
 	//        /
@@ -1123,6 +1124,7 @@ type dynamicIndenter struct {
 	nodeStartLine int
 	indentation   int
 	delta         int
+	parent        *dynamicIndenter
 
 	options    lsutil.FormatCodeSettings
 	sourceFile *ast.SourceFile
@@ -1177,15 +1179,26 @@ func (i *dynamicIndenter) getDelta(child *ast.Node) int {
 
 func (i *dynamicIndenter) recomputeIndentation(lineAdded bool, parent *ast.Node) {
 	if ShouldIndentChildNode(i.options, parent, i.node, i.sourceFile) {
-		if lineAdded {
-			i.indentation += i.options.IndentSize // !!! no nil check???
-		} else {
-			i.indentation -= i.options.IndentSize // !!! no nil check???
+		shift := i.options.IndentSize // !!! no nil check???
+		if !lineAdded {
+			shift = -shift
 		}
-		if ShouldIndentChildNode(i.options, i.node, nil, nil) {
-			i.delta = i.options.IndentSize
-		} else {
-			i.delta = 0
+		i.indentation += shift
+		start := scanner.GetTokenPosOfNode(i.node, i.sourceFile, false)
+		// A node that starts at the same token as its parent, like `x + y` in the
+		// statement `x + y`, stays on its parent's line and keeps its inherited delta.
+		if i.parent == nil || scanner.GetTokenPosOfNode(i.parent.node, i.sourceFile, false) != start {
+			if ShouldIndentChildNode(i.options, i.node, nil, nil) {
+				i.delta = i.options.IndentSize
+			} else {
+				i.delta = 0
+			}
+		}
+		// Enclosing nodes that start at the same token, like the call in `0!("")`,
+		// moved with this node, so shift them too. Keep their deltas: resetting one
+		// would drop the delta a binary expression inherits from its statement.
+		for p := i.parent; p != nil && scanner.GetTokenPosOfNode(p.node, i.sourceFile, false) == start; p = p.parent {
+			p.indentation += shift
 		}
 	}
 }
