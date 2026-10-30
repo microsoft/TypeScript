@@ -1148,7 +1148,7 @@ func NewChecker(program Program, tracer *Tracer) (*Checker, *sync.Mutex) {
 	c.comparableRelation = &Relation{}
 	c.identityRelation = &Relation{}
 	for _, r := range []*Relation{c.subtypeRelation, c.strictSubtypeRelation, c.assignableRelation, c.comparableRelation, c.identityRelation} {
-		r.results.keyBits = relationKeyBits
+		r.results.setKeyBits(relationKeyBits)
 	}
 	c.initializeChecker()
 	c.mergesFrozen = true
