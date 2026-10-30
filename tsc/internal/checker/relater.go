@@ -194,6 +194,9 @@ func (c *Checker) isTypeRelatedTo(source *Type, target *Type, relation *Relation
 		id, _ := getRelationKey(source, target, IntersectionStateNone, relation == c.identityRelation, false)
 		related := relation.get(id)
 		if related != RelationComparisonResultNone {
+			// Propagate the reliability flags recorded with the cached result so that variance measurement
+			// doesn't lose `Unmeasurable`/`Unreliable` when a probe is answered from the cache.
+			c.reliabilityFlags |= related & (RelationComparisonResultReportsUnmeasurable | RelationComparisonResultReportsUnreliable)
 			return related&RelationComparisonResultSucceeded != 0
 		}
 	}
