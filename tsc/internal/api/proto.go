@@ -217,6 +217,8 @@ const (
 	MethodGetMemberInModuleExports          Method = "getMemberInModuleExports"
 	MethodGetJSDocTags                      Method = "getJsDocTags"
 	MethodGetDocumentationComment           Method = "getDocumentationComment"
+	MethodGetSymbolDocumentations           Method = "getSymbolDocumentations"
+	MethodGetMembersOfType                  Method = "getMembersOfType"
 	MethodIsArrayType                       Method = "isArrayType"
 	MethodIsReadonlySymbol                  Method = "isReadonlySymbol"
 
@@ -740,6 +742,8 @@ var unmarshalers = map[Method]func([]byte) (any, error){
 	MethodGetMemberInModuleExports:          unmarshallerFor[GetMemberInModuleExportsParams],
 	MethodGetJSDocTags:                      unmarshallerFor[CheckerSymbolParams],
 	MethodGetDocumentationComment:           unmarshallerFor[CheckerSymbolParams],
+	MethodGetSymbolDocumentations:           unmarshallerFor[GetSymbolDocumentationsParams],
+	MethodGetMembersOfType:                  unmarshallerFor[GetMembersOfTypeParams],
 	MethodIsArrayType:                       unmarshallerFor[CheckerTypeParams],
 	MethodIsReadonlySymbol:                  unmarshallerFor[CheckerSymbolParams],
 	MethodGetReferencesToSymbolInFile:       unmarshallerFor[GetReferencesToSymbolInFileParams],
@@ -1869,6 +1873,73 @@ type CheckerSymbolParams struct {
 type JSDocTagInfo struct {
 	Name string `json:"name"`
 	Text string `json:"text,omitempty"`
+}
+
+// SymbolDocumentationResponse is the JSDoc getJsDocTags and getDocumentationComment
+// return for one symbol. Tags is null when the symbol has no tags, matching getJsDocTags.
+type SymbolDocumentationResponse struct {
+	Tags    []*JSDocTagInfo `json:"tags"`
+	Comment string          `json:"comment"`
+}
+
+// GetSymbolDocumentationsParams requests the documentation of many symbols at once.
+type GetSymbolDocumentationsParams struct {
+	Snapshot SnapshotID        `json:"snapshot"`
+	Project  project.Handle    `json:"project"`
+	Symbols  []SymbolReference `json:"symbols"`
+}
+
+// Member kind and visibility names accepted by getMembersOfType.
+const (
+	MemberKindProperty          = "property"
+	MemberKindAccessor          = "accessor"
+	MemberKindMethod            = "method"
+	MemberKindParameterProperty = "parameterProperty"
+
+	MemberVisibilityPublic    = "public"
+	MemberVisibilityProtected = "protected"
+	MemberVisibilityPrivate   = "private"
+)
+
+// MembersInheritedFrom selects declaring types whose members are included in
+// addition to the queried type's own members. All includes every member
+// getPropertiesOfType would return. An absent filter, or one with neither All
+// nor Types, returns own members only.
+type MembersInheritedFrom struct {
+	All   bool     `json:"all,omitempty"`
+	Types []TypeID `json:"types,omitempty"`
+}
+
+// MembersOfTypeFilter drops members before their types are materialized.
+// Every condition is optional. Visibility and Kinds are independent allow-lists;
+// an empty list does not filter. ExcludeNamePattern is a RE2 regular expression.
+type MembersOfTypeFilter struct {
+	Visibility           []string              `json:"visibility,omitempty"`
+	Kinds                []string              `json:"kinds,omitempty"`
+	ExcludeJsDocTags     []string              `json:"excludeJsDocTags,omitempty"`
+	ExcludeNamePattern   string                `json:"excludeNamePattern,omitempty"`
+	IncludeInheritedFrom *MembersInheritedFrom `json:"includeInheritedFrom,omitempty"`
+	IncludeDeclaredType  bool                  `json:"includeDeclaredType,omitempty"`
+}
+
+// GetMembersOfTypeParams requests the members of one type.
+type GetMembersOfTypeParams struct {
+	Snapshot SnapshotID           `json:"snapshot"`
+	Project  project.Handle       `json:"project"`
+	Type     TypeID               `json:"type"`
+	Filter   *MembersOfTypeFilter `json:"filter,omitempty"`
+}
+
+// MemberOfTypeResponse is one member of a type. Symbol and DeclaringSymbol use
+// the same handles as getPropertiesOfType and getParentOfSymbol. DeclaredType,
+// when requested, is the same type getTypeOfSymbol returns.
+type MemberOfTypeResponse struct {
+	Symbol          *SymbolResponse `json:"symbol"`
+	DeclaringSymbol *SymbolResponse `json:"declaringSymbol,omitempty"`
+	Kind            string          `json:"kind"`
+	Tags            []*JSDocTagInfo `json:"tags"`
+	Comment         string          `json:"comment"`
+	DeclaredType    *TypeResponse   `json:"declaredType,omitempty"`
 }
 
 // CheckerSignatureParams are parameters for checker methods that operate on a signature.

@@ -59,6 +59,7 @@ import {
     type TimingInfo,
     type Type,
     TypeFlags,
+    type TypeMember,
     type TypeParameter,
     type TypePredicate,
     type TypeReference,
@@ -230,6 +231,26 @@ function assertArrayElementsEquivalent<T>(actual: readonly T[], expected: readon
     assert.equal(actual.length, expected.length, message);
     for (let index = 0; index < actual.length; index++) {
         assertElementEquivalent(actual[index], expected[index], `${message ?? "value"}[${index}]`);
+    }
+}
+
+function assertTypeMembersEquivalent(actual: readonly TypeMember[], expected: readonly TypeMember[], message?: string): void {
+    assert.equal(actual.length, expected.length, message);
+    for (let index = 0; index < actual.length; index++) {
+        const item = `${message ?? "member"}[${index}]`;
+        assert.strictEqual(actual[index].symbol, expected[index].symbol, item);
+        assert.equal(actual[index].symbol.id, expected[index].symbol.id, item);
+        assert.equal(actual[index].kind, expected[index].kind, item);
+        assert.equal(actual[index].comment, expected[index].comment, item);
+        assert.deepEqual(actual[index].tags, expected[index].tags, item);
+        assert.strictEqual(actual[index].declaringSymbol, expected[index].declaringSymbol, item);
+        if (actual[index].declaredType === undefined || expected[index].declaredType === undefined) {
+            assert.equal(actual[index].declaredType, expected[index].declaredType, item);
+        }
+        else {
+            assert.strictEqual(actual[index].declaredType, expected[index].declaredType, item);
+            assert.equal(actual[index].declaredType.id, expected[index].declaredType.id, item);
+        }
     }
 }
 
@@ -1725,6 +1746,14 @@ describe("API - generator batching", { concurrency: areTestsFiltered() }, () => 
                 parityCase("Checker", "getMemberInModuleExports", checker.getMemberInModuleExports, assertOptionalSymbolsEquivalent, moduleSymbol, "Derived"),
                 parityCase("Checker", "getJsDocTagsOfSymbol", checker.getJsDocTagsOfSymbol, assertDeepEquivalent, combineSymbol),
                 parityCase("Checker", "getDocumentationCommentOfSymbol", checker.getDocumentationCommentOfSymbol, assertDeepEquivalent, combineSymbol),
+                parityCase("Checker", "getSymbolDocumentations", checker.getSymbolDocumentations, assertDeepEquivalent, [combineSymbol, derivedMemberSymbol]),
+                parityCase("Checker", "getMembersOfType", checker.getMembersOfType, assertTypeMembersEquivalent, interfaceType, {
+                    visibility: ["public"],
+                    kinds: ["property", "method"],
+                    excludeJsDocTags: ["internal"],
+                    includeInheritedFrom: { all: true },
+                    includeDeclaredType: true,
+                }),
                 parityCase("Checker", "getTypeArguments", checker.getTypeArguments, assertTypeArraysEquivalent, boxedType),
                 parityCase("Checker", "getNonMissingTypeOfSymbol", checker.getNonMissingTypeOfSymbol, assertTypesEquivalent, boxedOptSymbol),
                 parityCase("Checker", "isReadonlySymbol", checker.isReadonlySymbol, assertDeepEquivalent, boxedOptSymbol),

@@ -178,6 +178,8 @@ export interface APIMethodInfo {
     getMemberInModuleExports: APIMethod<GetMemberInModuleExportsParams, SymbolResponse | null>;
     getJsDocTags: APIMethod<CheckerSymbolParams, JSDocTagInfo[] | null>;
     getDocumentationComment: APIMethod<CheckerSymbolParams, string>;
+    getSymbolDocumentations: APIMethod<GetSymbolDocumentationsParams, SymbolDocumentationResponse[]>;
+    getMembersOfType: APIMethod<GetMembersOfTypeParams, MemberOfTypeResponse[]>;
     isArrayType: APIMethod<CheckerTypeParams, boolean>;
     isReadonlySymbol: APIMethod<CheckerSymbolParams, boolean>;
     getReferencesToSymbolInFile: APIMethod<GetReferencesToSymbolInFileParams, string[]>;
@@ -950,6 +952,44 @@ export interface JSDocTagInfo {
     text?: string | undefined;
 }
 
+/** GetSymbolDocumentationsParams requests the documentation of many symbols at once. */
+export interface GetSymbolDocumentationsParams {
+    snapshot: number;
+    project: number;
+    symbols: readonly SymbolReference[] | null;
+}
+
+/**
+ * SymbolDocumentationResponse is the JSDoc getJsDocTags and getDocumentationComment
+ * return for one symbol. Tags is null when the symbol has no tags, matching getJsDocTags.
+ */
+export interface SymbolDocumentationResponse {
+    tags: JSDocTagInfo[] | null;
+    comment: string;
+}
+
+/** GetMembersOfTypeParams requests the members of one type. */
+export interface GetMembersOfTypeParams {
+    snapshot: number;
+    project: number;
+    type: number;
+    filter?: MembersOfTypeFilter | undefined;
+}
+
+/**
+ * MemberOfTypeResponse is one member of a type. Symbol and DeclaringSymbol use
+ * the same handles as getPropertiesOfType and getParentOfSymbol. DeclaredType,
+ * when requested, is the same type getTypeOfSymbol returns.
+ */
+export interface MemberOfTypeResponse {
+    symbol: SymbolResponse | null;
+    declaringSymbol?: SymbolResponse | undefined;
+    kind: string;
+    tags: JSDocTagInfo[] | null;
+    comment: string;
+    declaredType?: TypeResponse | undefined;
+}
+
 /** GetReferencesToSymbolInFileParams are the parameters for the getReferencesToSymbolInFile method. */
 export interface GetReferencesToSymbolInFileParams {
     snapshot: number;
@@ -1220,6 +1260,7 @@ export interface BatchRequest {
         | "getLocalTypeParametersOfType"
         | "getMemberInModuleExports"
         | "getMembersOfSymbol"
+        | "getMembersOfType"
         | "getMergedSymbol"
         | "getModeForResolutionAtIndex"
         | "getModeForUsageLocation"
@@ -1262,6 +1303,7 @@ export interface BatchRequest {
         | "getSuggestionDiagnostics"
         | "getSymbolAtLocation"
         | "getSymbolAtPosition"
+        | "getSymbolDocumentations"
         | "getSymbolOfDeclaration"
         | "getSymbolOfDeclarationForChecker"
         | "getSymbolOfNode"
@@ -1402,6 +1444,7 @@ export interface BatchResponse {
         | "getLocalTypeParametersOfType"
         | "getMemberInModuleExports"
         | "getMembersOfSymbol"
+        | "getMembersOfType"
         | "getMergedSymbol"
         | "getModeForResolutionAtIndex"
         | "getModeForUsageLocation"
@@ -1444,6 +1487,7 @@ export interface BatchResponse {
         | "getSuggestionDiagnostics"
         | "getSymbolAtLocation"
         | "getSymbolAtPosition"
+        | "getSymbolDocumentations"
         | "getSymbolOfDeclaration"
         | "getSymbolOfDeclarationForChecker"
         | "getSymbolOfNode"
@@ -1682,6 +1726,20 @@ export interface ImportAdderAction {
     isValidTypeOnlyUseSite?: boolean | undefined;
 }
 
+/**
+ * MembersOfTypeFilter drops members before their types are materialized.
+ * Every condition is optional. Visibility and Kinds are independent allow-lists;
+ * an empty list does not filter. ExcludeNamePattern is a RE2 regular expression.
+ */
+export interface MembersOfTypeFilter {
+    visibility?: string[] | undefined;
+    kinds?: string[] | undefined;
+    excludeJsDocTags?: string[] | undefined;
+    excludeNamePattern?: string | undefined;
+    includeInheritedFrom?: MembersInheritedFrom | undefined;
+    includeDeclaredType?: boolean | undefined;
+}
+
 /** CompletionEntryResponse represents a single completion item. */
 export interface CompletionEntryResponse {
     name: string;
@@ -1770,6 +1828,17 @@ export interface ModuleResolutionEntry {
     containingDirectory?: DocumentIdentifier | undefined;
     resolutionMode?: ResolutionMode | undefined;
     result: StaticModuleResolution;
+}
+
+/**
+ * MembersInheritedFrom selects declaring types whose members are included in
+ * addition to the queried type's own members. All includes every member
+ * getPropertiesOfType would return. An absent filter, or one with neither All
+ * nor Types, returns own members only.
+ */
+export interface MembersInheritedFrom {
+    all?: boolean | undefined;
+    types?: number[] | undefined;
 }
 
 /** CompletionEntryLabelDetailsResponse holds additional label display text for a completion entry. */
