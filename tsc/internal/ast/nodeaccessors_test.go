@@ -81,11 +81,11 @@ func TestNodeAccessorsSharedKinds(t *testing.T) {
 	factory := ast.NewNodeFactory(ast.NodeFactoryHooks{})
 	name := factory.NewIdentifier("T")
 	modifiers := factory.NewModifierList([]*ast.Node{factory.NewToken(ast.KindExportKeyword)})
-	node := factory.NewTypeAliasDeclaration(modifiers, name, nil, nil)
-	data := node.AsTypeAliasDeclaration()
-
-	for _, kind := range []ast.Kind{ast.KindTypeAliasDeclaration, ast.KindJSTypeAliasDeclaration} {
-		node.Kind = kind
+	for _, node := range []*ast.Node{
+		factory.NewTypeAliasDeclaration(modifiers, name, nil, nil),
+		factory.NewJSTypeAliasDeclaration(modifiers, name, nil, nil),
+	} {
+		data := node.AsTypeAliasDeclaration()
 		assert.Equal(t, node.Name(), name)
 		assert.Equal(t, node.Modifiers(), modifiers)
 		assert.Equal(t, node.DeclarationData(), &data.DeclarationBase)

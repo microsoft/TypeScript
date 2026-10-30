@@ -1,0 +1,23 @@
+//// [tests/cases/compiler/classExtendsNullValuedIdentifier.ts] ////
+
+=== classExtendsNullValuedIdentifier.ts ===
+const N = null;
+>N : Symbol(N, Decl(classExtendsNullValuedIdentifier.ts, 0, 5))
+
+class A extends N { constructor() { } }
+>A : Symbol(A, Decl(classExtendsNullValuedIdentifier.ts, 0, 15))
+>N : Symbol(N, Decl(classExtendsNullValuedIdentifier.ts, 0, 5))
+
+class B extends (null) { constructor() { } }
+>B : Symbol(B, Decl(classExtendsNullValuedIdentifier.ts, 1, 39))
+
+class C extends null { constructor() { super(); } }
+>C : Symbol(C, Decl(classExtendsNullValuedIdentifier.ts, 2, 44))
+
+let n = null;
+>n : Symbol(n, Decl(classExtendsNullValuedIdentifier.ts, 4, 3))
+
+class D extends n { constructor() { } }
+>D : Symbol(D, Decl(classExtendsNullValuedIdentifier.ts, 4, 13))
+>n : Symbol(n, Decl(classExtendsNullValuedIdentifier.ts, 4, 3))
+

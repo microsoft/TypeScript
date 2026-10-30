@@ -496,7 +496,6 @@
   "Containing_file_is_not_specified_and_root_directory_cannot_be_determined_skipping_lookup_in_node_mod_6126": "包含するファイルが指定されていないため、ルート ディレクトリを決定できません。'node_modules' フォルダーのルックアップをスキップします。",
   "Containing_function_is_not_an_arrow_function_95128": "含まれている関数はアロー関数ではありません",
   "Content_mapper_extension_0_must_not_contain_path_separators_18123": "コンテンツ マッパー拡張子 '{0}' にパス区切り記号を含めることはできません。",
-  "Content_mapper_file_extension_0_is_a_built_in_extension_and_cannot_be_registered_by_a_content_mapper_18066": "コンテンツ マッパーのファイル拡張子 '{0}' は組み込みの拡張子であるため、コンテンツ マッパーでは登録できません。",
   "Content_mapper_file_extension_0_is_registered_by_more_than_one_content_mapper_18067": "コンテンツ マッパーのファイル拡張子 '{0}' は、複数のコンテンツ マッパーによって登録されています。",
   "Content_mapper_file_extension_0_must_begin_with_a_18065": "コンテンツ マッパーのファイル拡張子 '{0}' は、'.' で始まる必要があります。",
   "Content_mapper_output_extension_0_must_be_non_empty_and_begin_with_a_18118": "コンテンツ マッパーの出力拡張子 '{0}' は空ではなく、'.' で始まる必要があります。",

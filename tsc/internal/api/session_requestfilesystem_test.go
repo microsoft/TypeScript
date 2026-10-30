@@ -4,6 +4,7 @@ import (
 	"context"
 	"errors"
 	"fmt"
+	"runtime"
 	"strconv"
 	"sync"
 	"testing"
@@ -1032,6 +1033,8 @@ func TestSnapshotReleaseCompactionSupportsConcurrentReaders(t *testing.T) {
 					readerError <- errors.New("inherited file disappeared")
 					return
 				}
+				// Yield so the release can run where goroutines are not preempted (wasip1).
+				runtime.Gosched()
 			}
 		}
 	})

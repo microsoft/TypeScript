@@ -496,7 +496,6 @@
   "Containing_file_is_not_specified_and_root_directory_cannot_be_determined_skipping_lookup_in_node_mod_6126": "Die enthaltene Datei wird nicht angegeben, und das Stammverzeichnis kann nicht ermittelt werden. Die Suche im Ordner \"node_modules\" wird übersprungen.",
   "Containing_function_is_not_an_arrow_function_95128": "Die enthaltende Funktion ist keine Pfeilfunktion.",
   "Content_mapper_extension_0_must_not_contain_path_separators_18123": "Die Inhaltszuordnungserweiterung „{0}“ darf keine Pfadtrennzeichen enthalten.",
-  "Content_mapper_file_extension_0_is_a_built_in_extension_and_cannot_be_registered_by_a_content_mapper_18066": "Die Dateierweiterung „{0}“ des Inhaltsmappermoduls ist eine integrierte Erweiterung und kann nicht von einem Inhaltsmapper registriert werden.",
   "Content_mapper_file_extension_0_is_registered_by_more_than_one_content_mapper_18067": "Die Dateierweiterung „{0}“ des Inhaltsmappermoduls wird von mehreren Inhaltsmappern registriert.",
   "Content_mapper_file_extension_0_must_begin_with_a_18065": "Die Dateierweiterung „{0}“ des Inhaltsmappers muss mit einem „.“ beginnen.",
   "Content_mapper_output_extension_0_must_be_non_empty_and_begin_with_a_18118": "Die Inhaltszuordnungs-Ausgabeerweiterung '{0}' darf nicht leer sein und muss mit \".\" beginnen.",
