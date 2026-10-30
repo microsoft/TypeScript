@@ -4252,7 +4252,7 @@ func (c *Checker) checkSwitchStatement(node *ast.Node) {
 		}
 		c.checkSourceElements(clause.Statements())
 		if c.compilerOptions.NoFallthroughCasesInSwitch.IsTrue() {
-			if flowNode := clause.AsCaseOrDefaultClause().FallthroughFlowNode; flowNode != nil && c.isReachableFlowNode(flowNode) {
+			if flowNode := clause.CaseOrDefaultClauseData().FallthroughFlowNode; flowNode != nil && c.isReachableFlowNode(flowNode) {
 				c.error(clause, diagnostics.Fallthrough_case_in_switch)
 			}
 		}

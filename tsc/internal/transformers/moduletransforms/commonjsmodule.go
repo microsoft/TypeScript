@@ -116,7 +116,7 @@ func (tx *CommonJSModuleTransformer) visitTopLevelNestedNoStack(node *ast.Node) 
 	case ast.KindCaseBlock:
 		node = tx.visitTopLevelNestedCaseBlock(node.AsCaseBlock())
 	case ast.KindCaseClause, ast.KindDefaultClause:
-		node = tx.visitTopLevelNestedCaseOrDefaultClause(node.AsCaseOrDefaultClause())
+		node = tx.visitTopLevelNestedCaseOrDefaultClause(node)
 	case ast.KindTryStatement:
 		node = tx.visitTopLevelNestedTryStatement(node.AsTryStatement())
 	case ast.KindCatchClause:
@@ -1304,10 +1304,16 @@ func (tx *CommonJSModuleTransformer) visitTopLevelNestedCaseBlock(node *ast.Case
 // Visits a top-level nested `case` or `default` clause as it may contain `var` declarations that are hoisted and may
 // still be exported with `export {}`.
 func (tx *CommonJSModuleTransformer) visitTopLevelNestedCaseOrDefaultClause(node *ast.CaseOrDefaultClause) *ast.Node {
-	return tx.Factory().UpdateCaseOrDefaultClause(
-		node,
-		tx.Visitor().VisitNode(node.Expression),
-		tx.topLevelNestedVisitor.VisitNodes(node.Statements),
+	if node.Kind == ast.KindCaseClause {
+		return tx.Factory().UpdateCaseClause(
+			node.AsCaseClause(),
+			tx.Visitor().VisitNode(node.Expression()),
+			tx.topLevelNestedVisitor.VisitNodes(node.StatementList()),
+		)
+	}
+	return tx.Factory().UpdateDefaultClause(
+		node.AsDefaultClause(),
+		tx.topLevelNestedVisitor.VisitNodes(node.StatementList()),
 	)
 }
 

@@ -338,7 +338,7 @@ func (n *Node) Expression() *Node {
 	case KindSwitchStatement:
 		return n.AsSwitchStatement().Expression
 	case KindCaseClause:
-		return n.AsCaseOrDefaultClause().Expression
+		return n.AsCaseClause().Expression
 	case KindExpressionStatement:
 		return n.AsExpressionStatement().Expression
 	case KindReturnStatement:
@@ -427,7 +427,7 @@ func (m *MutableNode) SetExpression(expr *Node) {
 	case KindSwitchStatement:
 		n.AsSwitchStatement().Expression = expr
 	case KindCaseClause:
-		n.AsCaseOrDefaultClause().Expression = expr
+		n.AsCaseClause().Expression = expr
 	case KindExpressionStatement:
 		n.AsExpressionStatement().Expression = expr
 	case KindReturnStatement:
@@ -563,7 +563,7 @@ func (n *Node) StatementList() *NodeList {
 	case KindModuleBlock:
 		return n.AsModuleBlock().Statements
 	case KindCaseClause, KindDefaultClause:
-		return n.AsCaseOrDefaultClause().Statements
+		return n.CaseOrDefaultClauseData().Statements
 	}
 	panic("Unhandled case in Node.StatementList: " + n.Kind.String())
 }
@@ -1473,6 +1473,10 @@ func (node *FunctionLikeBase) FunctionLikeData() *FunctionLikeBase { return node
 // BodyBase
 
 func (node *BodyBase) BodyData() *BodyBase { return node }
+
+func (node *CaseOrDefaultClauseBase) CaseOrDefaultClauseData() *CaseOrDefaultClauseBase {
+	return node
+}
 
 // FunctionLikeWithBodyBase
 
