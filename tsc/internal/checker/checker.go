@@ -21336,30 +21336,32 @@ func (c *Checker) instantiateSymbolTable(symbols ast.SymbolTable, m *TypeMapper)
 }
 
 func (c *Checker) instantiateSymbol(symbol *ast.Symbol, m *TypeMapper) *ast.Symbol {
-	if symbol == nil || m == nil {
+	if symbol == nil || m == nil || m.MapsThisOnly() && isThisless(symbol) {
 		return symbol
 	}
-	links := c.valueSymbolLinks.Get(symbol)
-	if m.MapsThisOnly() && isThisless(symbol) {
-		return symbol
-	}
-	// If the type of the symbol is already resolved, and if that type could not possibly
-	// be affected by instantiation, simply return the symbol itself.
-	if links.resolvedType != nil && !c.couldContainTypeVariables(links.resolvedType) {
-		if symbol.Flags()&ast.SymbolFlagsSetAccessor == 0 {
-			return symbol
+	// Use TryGet to avoid allocating links for a symbol whose type has never been resolved.
+	// Instantiated symbols always have links.
+	var nameType *Type
+	if links := c.valueSymbolLinks.TryGet(symbol); links != nil {
+		// If the type of the symbol is already resolved, and if that type could not possibly
+		// be affected by instantiation, simply return the symbol itself.
+		if links.resolvedType != nil && !c.couldContainTypeVariables(links.resolvedType) {
+			if symbol.Flags()&ast.SymbolFlagsSetAccessor == 0 {
+				return symbol
+			}
+			// If we're a setter, check writeType.
+			if links.getWriteType() != nil && !c.couldContainTypeVariables(links.getWriteType()) {
+				return symbol
+			}
 		}
-		// If we're a setter, check writeType.
-		if links.getWriteType() != nil && !c.couldContainTypeVariables(links.getWriteType()) {
-			return symbol
+		if symbol.CheckFlags()&ast.CheckFlagsInstantiated != 0 {
+			// If symbol being instantiated is itself a instantiation, fetch the original target and combine the
+			// type mappers. This ensures that original type identities are properly preserved and that aliases
+			// always reference a non-aliases.
+			symbol = links.target
+			m = c.combineTypeMappers(links.mapper, m)
 		}
-	}
-	if symbol.CheckFlags()&ast.CheckFlagsInstantiated != 0 {
-		// If symbol being instantiated is itself a instantiation, fetch the original target and combine the
-		// type mappers. This ensures that original type identities are properly preserved and that aliases
-		// always reference a non-aliases.
-		symbol = links.target
-		m = c.combineTypeMappers(links.mapper, m)
+		nameType = links.getNameType()
 	}
 	// Create a new transient symbol that shares the underlying data with the original symbol.
 	result := c.newSharedDataSymbol(symbol)
@@ -21367,7 +21369,7 @@ func (c *Checker) instantiateSymbol(symbol *ast.Symbol, m *TypeMapper) *ast.Symb
 	resultLinks := c.valueSymbolLinks.Get(result)
 	resultLinks.target = symbol
 	resultLinks.mapper = m
-	resultLinks.setNameType(c, links.getNameType())
+	resultLinks.setNameType(c, nameType)
 	return result
 }
 
@@ -22755,7 +22757,7 @@ func (c *Checker) instantiateTypeWithAlias(t *Type, m *TypeMapper, alias *TypeAl
 	// Check for type variables in the alias, so things like `type Brand<T> = number & {}` can potentially be copied with new alias type args, despite them being unreferenced.
 	// This is the behavior most people using aliases expect, and prevents the cache from leaking type parameters outside their scope of validity.
 	// tests/cases/compiler/declarationEmitArrowFunctionNoRenaming.ts contains an example of this, which previously only worked in strada via some input node reuse logic instead.
-	if t == nil || m == nil || !(c.couldContainTypeVariables(t) || (t.alias != nil && len(t.alias.typeArguments) > 0 && core.Some(t.alias.typeArguments, c.couldContainTypeVariables))) {
+	if t == nil || m == nil || c.isTypeVariableFree(t) {
 		return t
 	}
 	if len(c.instantiationStack) == 100 || c.instantiationCount >= 5_000_000 {
@@ -22799,6 +22801,18 @@ func (c *Checker) instantiateTypeWithAlias(t *Type, m *TypeMapper, alias *TypeAl
 	c.instantiationStack[len(c.instantiationStack)-1] = nil
 	c.instantiationStack = c.instantiationStack[:len(c.instantiationStack)-1]
 	return result
+}
+
+// Returns true if no instantiation of t can differ from t itself, because neither t nor its alias
+// type arguments could contain type variables. The result is cached on the types involved.
+func (c *Checker) isTypeVariableFree(t *Type) bool {
+	// Check the cached result inline before falling back to couldContainTypeVariables, as this is on a hot path.
+	knownFree := t.flags&TypeFlagsStructuredOrInstantiable == 0 ||
+		t.objectFlags&(ObjectFlagsCouldContainTypeVariablesComputed|ObjectFlagsCouldContainTypeVariables) == ObjectFlagsCouldContainTypeVariablesComputed
+	if !knownFree && c.couldContainTypeVariables(t) {
+		return false
+	}
+	return t.alias == nil || !core.Some(t.alias.typeArguments, c.couldContainTypeVariables)
 }
 
 // Without an alias the key is just the type ID, which avoids hashing. Hashed keys have
@@ -22913,12 +22927,7 @@ func (c *Checker) instantiateTypeWorker(t *Type, m *TypeMapper, alias *TypeAlias
 		objectFlags := t.objectFlags
 		if objectFlags&(ObjectFlagsReference|ObjectFlagsAnonymous|ObjectFlagsMapped) != 0 {
 			if objectFlags&ObjectFlagsReference != 0 && t.AsTypeReference().node == nil {
-				resolvedTypeArguments := t.AsTypeReference().resolvedTypeArguments
-				newTypeArguments := c.instantiateTypes(resolvedTypeArguments, m)
-				if core.Same(newTypeArguments, resolvedTypeArguments) {
-					return t
-				}
-				return c.createNormalizedTypeReference(t.Target(), newTypeArguments)
+				return c.instantiateTypeReference(t, m)
 			}
 			if objectFlags&ObjectFlagsReverseMapped != 0 {
 				return c.instantiateReverseMappedType(t, m)
@@ -22983,6 +22992,42 @@ func (c *Checker) instantiateTypeWorker(t *Type, m *TypeMapper, alias *TypeAlias
 	return t
 }
 
+func (c *Checker) instantiateTypeReference(t *Type, m *TypeMapper) *Type {
+	resolvedTypeArguments := t.AsTypeReference().resolvedTypeArguments
+	// Instantiate small argument lists into a temporary buffer, and only copy them once we know
+	// they're needed for a new type reference. Retained arguments are kept in a separate variable
+	// that never aliases buf, so that buf does not escape to the heap.
+	var buf [8]*Type
+	var ownedTypeArguments []*Type
+	var newTypeArguments []*Type
+	if len(resolvedTypeArguments) <= len(buf) {
+		newTypeArguments = c.instantiateListInto(resolvedTypeArguments, m, (*Checker).instantiateType, buf[:])
+	} else {
+		ownedTypeArguments = c.instantiateList(resolvedTypeArguments, m, (*Checker).instantiateType)
+		newTypeArguments = ownedTypeArguments
+	}
+	if core.Same(newTypeArguments, resolvedTypeArguments) {
+		return t
+	}
+	target := t.Target()
+	normalize := target.objectFlags&ObjectFlagsTuple != 0 && target.AsTupleType().combinedFlags&ElementFlagsNonRequired != 0
+	var id CacheHashKey
+	if !normalize {
+		// No normalization is needed, so check for an existing instantiation first.
+		id = getTypeListKey(newTypeArguments)
+		if existing, ok := target.AsInterfaceType().instantiations[id]; ok {
+			return existing
+		}
+	}
+	if ownedTypeArguments == nil {
+		ownedTypeArguments = slices.Clone(newTypeArguments)
+	}
+	if normalize {
+		return c.createNormalizedTypeReference(target, ownedTypeArguments)
+	}
+	return c.newTypeReferenceInstantiation(target, id, ownedTypeArguments, ObjectFlagsNone)
+}
+
 // Handles instantiation of the following object types:
 // AnonymousType (ObjectFlagsAnonymous|ObjectFlagsSingleSignatureType)
 // TypeReference with node != nil (ObjectFlagsReference)
@@ -23039,8 +23084,18 @@ func (c *Checker) getObjectTypeInstantiation(t *Type, m *TypeMapper, alias *Type
 	}
 	// We are instantiating an anonymous type that has one or more type parameters in scope. Apply the
 	// mapper to the type parameters to produce the effective list of type arguments, and compute the
-	// instantiation cache key from the type IDs of the type arguments.
-	typeArguments := make([]*Type, len(typeParameters))
+	// instantiation cache key from the type IDs of the type arguments. The type arguments are computed
+	// into a temporary buffer and only copied when creating a new instantiation. Retained arguments
+	// are kept in a separate variable that never aliases buf, so that buf does not escape to the heap.
+	var buf [8]*Type
+	var ownedTypeArguments []*Type
+	var typeArguments []*Type
+	if len(typeParameters) <= len(buf) {
+		typeArguments = buf[:len(typeParameters)]
+	} else {
+		ownedTypeArguments = make([]*Type, len(typeParameters))
+		typeArguments = ownedTypeArguments
+	}
 	for i, tp := range typeParameters {
 		typeArguments[i] = c.mapTypeWithCompositeMapper(tp, t.Mapper(), m)
 	}
@@ -23056,7 +23111,10 @@ func (c *Checker) getObjectTypeInstantiation(t *Type, m *TypeMapper, alias *Type
 	}
 	result := data.instantiations[key]
 	if result == nil {
-		newMapper := newTypeMapper(typeParameters, typeArguments)
+		if ownedTypeArguments == nil {
+			ownedTypeArguments = slices.Clone(typeArguments)
+		}
+		newMapper := newTypeMapper(typeParameters, ownedTypeArguments)
 		if target.objectFlags&ObjectFlagsSingleSignatureType != 0 && m != nil {
 			newMapper = c.combineTypeMappers(newMapper, m)
 		}
@@ -23448,7 +23506,11 @@ func (c *Checker) instantiateTypeAlias(alias *TypeAlias, m *TypeMapper) *TypeAli
 	if alias == nil {
 		return nil
 	}
-	return &TypeAlias{symbol: alias.symbol, typeArguments: c.instantiateTypes(alias.typeArguments, m)}
+	typeArguments := c.instantiateTypes(alias.typeArguments, m)
+	if core.Same(typeArguments, alias.typeArguments) {
+		return alias
+	}
+	return &TypeAlias{symbol: alias.symbol, typeArguments: typeArguments}
 }
 
 func (c *Checker) instantiateTypes(types []*Type, m *TypeMapper) []*Type {
@@ -23468,10 +23530,21 @@ func (c *Checker) instantiateIndexInfos(indexInfos []*IndexInfo, m *TypeMapper) 
 }
 
 func (c *Checker) instantiateList[T comparable](values []T, m *TypeMapper, instantiator func(c *Checker, value T, m *TypeMapper) T) []T {
+	return c.instantiateListInto(values, m, instantiator, nil)
+}
+
+// Like instantiateList, but if any value changes, the result is written into buf when it has
+// sufficient capacity. Callers must copy such a result before retaining it.
+func (c *Checker) instantiateListInto[T comparable](values []T, m *TypeMapper, instantiator func(c *Checker, value T, m *TypeMapper) T, buf []T) []T {
 	for i, value := range values {
 		mapped := instantiator(c, value, m)
 		if mapped != value {
-			result := make([]T, len(values))
+			var result []T
+			if cap(buf) >= len(values) {
+				result = buf[:len(values)]
+			} else {
+				result = make([]T, len(values))
+			}
 			copy(result, values[:i])
 			result[i] = mapped
 			for j := i + 1; j < len(values); j++ {
@@ -25210,7 +25283,7 @@ func (c *Checker) isDeferredType(t *Type, checkTuples bool) bool {
 }
 
 func (c *Checker) getPermissiveInstantiation(t *Type) *Type {
-	if t.flags&(TypeFlagsPrimitive|TypeFlagsAnyOrUnknown|TypeFlagsNever) != 0 {
+	if t.flags&(TypeFlagsPrimitive|TypeFlagsAnyOrUnknown|TypeFlagsNever) != 0 || c.isTypeVariableFree(t) {
 		return t
 	}
 	key := CachedTypeKey{kind: CachedTypeKindPermissiveInstantiation, typeId: t.id}
@@ -25223,7 +25296,7 @@ func (c *Checker) getPermissiveInstantiation(t *Type) *Type {
 }
 
 func (c *Checker) getRestrictiveInstantiation(t *Type) *Type {
-	if t.flags&(TypeFlagsPrimitive|TypeFlagsAnyOrUnknown|TypeFlagsNever) != 0 {
+	if t.flags&(TypeFlagsPrimitive|TypeFlagsAnyOrUnknown|TypeFlagsNever) != 0 || c.isTypeVariableFree(t) {
 		return t
 	}
 	key := CachedTypeKey{kind: CachedTypeKindRestrictiveInstantiation, typeId: t.id}
@@ -25847,10 +25920,14 @@ func (c *Checker) createTypeReference(target *Type, typeArguments []*Type) *Type
 
 func (c *Checker) createTypeReferenceEx(target *Type, typeArguments []*Type, objectFlags ObjectFlags) *Type {
 	id := getTypeListKey(typeArguments)
-	intf := target.AsInterfaceType()
-	if t, ok := intf.instantiations[id]; ok {
+	if t, ok := target.AsInterfaceType().instantiations[id]; ok {
 		return t
 	}
+	return c.newTypeReferenceInstantiation(target, id, typeArguments, objectFlags)
+}
+
+func (c *Checker) newTypeReferenceInstantiation(target *Type, id CacheHashKey, typeArguments []*Type, objectFlags ObjectFlags) *Type {
+	intf := target.AsInterfaceType()
 	t := c.newObjectType(ObjectFlagsReference|objectFlags|c.getPropagatingFlagsOfTypes(typeArguments, TypeFlagsNone), target.symbol)
 	d := t.AsTypeReference()
 	d.target = target
