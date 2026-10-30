@@ -592,7 +592,7 @@ var unmemoizedCacheFields = map[string]string{
 	"memoStore.mu":                                      unmemoizedMemoState,
 	"memoStore.diagnostics":                             unmemoizedChecking,
 	"memoStore.suggestionDiagnostics":                   unmemoizedChecking,
-	"memoStore.nonExistentProperties":                   unmemoizedChecking,
+	"memoStore.nonExistentPropertyNodes":                unmemoizedChecking,
 	"memoStore.deferredDiagnosticCallbacks":             unmemoizedChecking,
 	"SymbolReferenceLinks.referenceKinds":               unmemoizedChecking,
 	"AliasSymbolLinks.referenced":                       unmemoizedMark,
