@@ -12293,6 +12293,9 @@ func (c *Checker) getContextualThisParameterType(fn *ast.Node) *Type {
 			// for 'this' is the non-null form of the contextual type for the containing object literal or
 			// the type of the object literal itself.
 			if contextualType != nil {
+				if contextualType.flags&TypeFlagsUnion != 0 {
+					contextualType = c.removeSynthesizedPromiseLike(containingLiteral, contextualType)
+				}
 				thisType = c.GetNonNullableType(contextualType)
 			} else {
 				thisType = c.checkExpressionCached(containingLiteral)
@@ -12316,6 +12319,61 @@ func (c *Checker) getContextualThisParameterType(fn *ast.Node) *Type {
 				return c.getWidenedType(c.checkExpressionCached(expression))
 			}
 		}
+	}
+	return nil
+}
+
+// The contextual type of an async function's return expression is `T | PromiseLike<T>`, where `T` is the awaited
+// contextual return type. For `this` in methods of a returned object literal, the `PromiseLike<T>` member is an
+// artifact of that wrapping, so remove exactly that synthesized member. It is kept if the literal has a `then`
+// member, since the literal may then be intended as the thenable.
+func (c *Checker) removeSynthesizedPromiseLike(literal *ast.Node, contextualType *Type) *Type {
+	fn := getAsyncFunctionReturningExpression(literal)
+	if fn == nil {
+		return contextualType
+	}
+	for _, p := range literal.AsObjectLiteralExpression().Properties.Nodes {
+		if p.Name() != nil {
+			if name, ok := ast.TryGetTextOfPropertyName(p.Name()); ok && name == "then" {
+				return contextualType
+			}
+		}
+	}
+	returnType := c.getContextualReturnType(fn, ContextFlagsNone)
+	if returnType == nil {
+		return contextualType
+	}
+	awaitedType := c.mapType(returnType, c.getAwaitedTypeNoAlias)
+	if awaitedType == nil {
+		return contextualType
+	}
+	synthesized := c.createPromiseLikeType(awaitedType)
+	return c.filterType(contextualType, func(t *Type) bool { return t != synthesized })
+}
+
+// Returns the async, non-generator function whose return value (a `return` operand or concise arrow body) is node.
+func getAsyncFunctionReturningExpression(node *ast.Node) *ast.Node {
+	parent := node.Parent
+	for parent != nil && ast.IsParenthesizedExpression(parent) {
+		node = parent
+		parent = parent.Parent
+	}
+	if parent == nil {
+		return nil
+	}
+	var fn *ast.Node
+	switch {
+	case ast.IsReturnStatement(parent):
+		fn = ast.GetContainingFunction(parent)
+	case ast.IsArrowFunction(parent) && parent.Body() == node:
+		fn = parent
+	}
+	if fn == nil {
+		return nil
+	}
+	flags := ast.GetFunctionFlags(fn)
+	if flags&ast.FunctionFlagsAsync != 0 && flags&ast.FunctionFlagsGenerator == 0 {
+		return fn
 	}
 	return nil
 }
