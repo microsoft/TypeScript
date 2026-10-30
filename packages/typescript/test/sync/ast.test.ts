@@ -61,6 +61,7 @@ import {
     createStringLiteral,
     createToken,
 } from "@typescript/typescript/ast/factory";
+import * as factory from "@typescript/typescript/ast/factory";
 import {
     visitEachChild,
     visitNode,
@@ -69,6 +70,7 @@ import {
 import {
     Checker,
     isRemoteNode,
+    SignatureKind,
     TypeFlags,
 } from "@typescript/typescript/sync";
 import assert from "node:assert";
@@ -103,6 +105,195 @@ describe("NodeObject + childrenIter", { concurrency }, () => {
     test("skips absent optional child lists", () => {
         const node = createMissingDeclaration();
         assert.deepStrictEqual([...node.childrenIter()], []);
+    });
+});
+
+describe("AST property contracts", { concurrency }, () => {
+    test("absent parser children have optional types", () => {
+        const absent: {
+            exportType: astModule.ExportAssignment["type"];
+            propertyType: astModule.PropertyAssignment["type"];
+            shorthandType: astModule.ShorthandPropertyAssignment["type"];
+            signatureType: astModule.PropertySignatureDeclaration["type"];
+            signatureInitializer: astModule.PropertySignatureDeclaration["initializer"];
+            indexType: astModule.IndexSignatureDeclaration["type"];
+            questionDotToken: astModule.TaggedTemplateExpression["questionDotToken"];
+            constraint: astModule.JSDocTemplateTag["constraint"];
+            nameExpression: astModule.JSDocSeeTag["nameExpression"];
+            arrowToken: astModule.ArrowFunction["equalsGreaterThanToken"];
+        } = {
+            exportType: undefined,
+            propertyType: undefined,
+            shorthandType: undefined,
+            signatureType: undefined,
+            signatureInitializer: undefined,
+            indexType: undefined,
+            questionDotToken: undefined,
+            constraint: undefined,
+            nameExpression: undefined,
+            arrowToken: undefined,
+        };
+        using api = spawnAPI();
+        const seen: Record<string, unknown> = {};
+        function walk(node: Node): void {
+            if (astModule.isDefaultClause(node)) assert.strictEqual(Reflect.get(node, "expression"), undefined);
+            if (astModule.isExportAssignment(node)) seen.exportType = node.type;
+            if (astModule.isPropertyAssignment(node)) seen.propertyType = node.type;
+            if (astModule.isShorthandPropertyAssignment(node)) seen.shorthandType = node.type;
+            if (astModule.isPropertySignatureDeclaration(node)) {
+                seen.signatureType = node.type;
+                seen.signatureInitializer = node.initializer;
+            }
+            if (astModule.isIndexSignatureDeclaration(node)) seen.indexType = node.type;
+            if (astModule.isTaggedTemplateExpression(node)) seen.questionDotToken = node.questionDotToken;
+            if (astModule.isJSDocTemplateTag(node)) seen.constraint = node.constraint;
+            if (astModule.isJSDocSeeTag(node)) seen.nameExpression = node.nameExpression;
+            node.forEachChild(walk);
+            node.jsDoc?.forEach(walk);
+        }
+        walk(
+            api.createSourceFile(
+                "/repro.ts",
+                `
+    switch (x) { default: break; }
+    export default 0;
+    const object = { x, y: 1 };
+    interface I { p; [key: string]; }
+    tag\`text\`;
+    `,
+            ).sourceFile,
+        );
+        walk(
+            api.createSourceFile(
+                "/repro.js",
+                `
+    /** @see */ function a() {}
+    /** @template T */ function b() {}
+    `,
+            ).sourceFile,
+        );
+        // Synthesized arrows need not carry a punctuation token.
+        using programAPI = spawnAPI({
+            "/tsconfig.json": "{}",
+            "/src/index.ts": "declare function f(): number;",
+        });
+        const [source, checker] = getRemoteSourceFileAndChecker(programAPI, "/tsconfig.json", "/src/index.ts");
+        const signature = checker.getSignaturesOfType(checker.getTypeAtLocation(source.statements[0]), SignatureKind.Call)[0];
+        const arrow = checker.signatureToSignatureDeclaration(signature, SyntaxKind.ArrowFunction);
+        assert.ok(arrow && astModule.isArrowFunction(arrow));
+        seen.arrowToken = arrow.equalsGreaterThanToken;
+        assert.deepStrictEqual(Object.keys(seen).sort(), Object.keys(absent).sort());
+        for (const name of Object.keys(absent)) {
+            assert.strictEqual(seen[name] === undefined, true, name);
+        }
+    });
+
+    test("required parser children and binding holes retain their contracts", () => {
+        using api = spawnAPI();
+        const source = api.createSourceFile(
+            "/repro.ts",
+            `
+    switch (x) { case 0: break; }
+    type F = () => number;
+    type C = new () => object;
+    const [,, x] = value;
+    `,
+        ).sourceFile;
+        let cases = 0;
+        let returns = 0;
+        let holes = 0;
+        function walk(node: Node): void {
+            if (astModule.isCaseClause(node)) {
+                const expression: astModule.Expression = node.expression;
+                assert.strictEqual(expression.kind, SyntaxKind.NumericLiteral);
+                cases++;
+            }
+            if (astModule.isFunctionTypeNode(node) || astModule.isConstructorTypeNode(node)) {
+                const type: astModule.TypeNode = node.type;
+                assert.ok(type);
+                returns++;
+            }
+            if (astModule.isBindingElement(node) && !node.name) holes++;
+            node.forEachChild(walk);
+        }
+        walk(source);
+        const docs = api.createSourceFile("/repro.js", "/** @see */ function f() {}").sourceFile.statements[0].jsDoc;
+        assert.ok(docs && astModule.isJSDoc(docs[0]));
+        assert.strictEqual(docs[0].comment.length, 0);
+        assert.deepStrictEqual({ cases, returns, holes }, { cases: 1, returns: 2, holes: 2 });
+    });
+
+    test("factory scalar defaults agree with their declared types", () => {
+        const type = factory.createKeywordTypeNode(SyntaxKind.UnknownKeyword);
+        assert.deepStrictEqual({
+            block: factory.createBlock([]).multiLine,
+            array: factory.createArrayLiteralExpression([]).multiLine,
+            object: factory.createObjectLiteralExpression([]).multiLine,
+            attributes: factory.createImportAttributes(SyntaxKind.WithKeyword, []).multiLine,
+            export: factory.createExportDeclaration().isTypeOnly,
+            spread: factory.createSyntheticExpression(type).isSpread,
+            whitespace: factory.createJsxText("text").containsOnlyTriviaWhiteSpaces,
+            arrayType: factory.createJSDocTypeLiteral().isArrayType,
+        }, {
+            block: false,
+            array: false,
+            object: false,
+            attributes: false,
+            export: false,
+            spread: false,
+            whitespace: false,
+            arrayType: false,
+        });
+        assert.strictEqual(factory.createNodeArray([]).transformFlags, 0);
+    });
+
+    test("factory modifierFlags are computed from modifiers", () => {
+        assert.strictEqual(factory.createExportDeclaration().modifierFlags, ModifierFlags.None);
+        const declaration = factory.createFunctionDeclaration(
+            [factory.createToken(SyntaxKind.ExportKeyword), factory.createToken(SyntaxKind.AsyncKeyword)],
+            undefined,
+            factory.createIdentifier("f"),
+            undefined,
+            [],
+        );
+        assert.strictEqual(declaration.modifierFlags, ModifierFlags.Export | ModifierFlags.Async);
+        assert.strictEqual(cloneNode(declaration).modifierFlags, declaration.modifierFlags);
+    });
+
+    test("factory scalar accessors preserve explicit values", () => {
+        assert.strictEqual(factory.createBlock([], true).multiLine, true);
+        assert.strictEqual(factory.createArrayLiteralExpression([], true).multiLine, true);
+        assert.strictEqual(factory.createObjectLiteralExpression([], true).multiLine, true);
+        assert.strictEqual(factory.createImportAttributes(SyntaxKind.WithKeyword, [], true).multiLine, true);
+        assert.strictEqual(factory.createJsxText(" ", true).containsOnlyTriviaWhiteSpaces, true);
+        assert.strictEqual(factory.createJSDocTypeLiteral(undefined, true).isArrayType, true);
+        assert.strictEqual(factory.createExportDeclaration(undefined, true).isTypeOnly, true);
+        assert.strictEqual(factory.createSyntheticExpression(factory.createKeywordTypeNode(SyntaxKind.UnknownKeyword), true).isSpread, true);
+    });
+
+    test("optional factory children survive cloning and visiting", () => {
+        const name = factory.createIdentifier("p");
+        const property = factory.createPropertySignatureDeclaration(undefined, name);
+        assert.strictEqual(property.type, undefined);
+        assert.strictEqual(property.initializer, undefined);
+        assert.deepStrictEqual(collectKinds(getSynthesizedDeepClone(property)), [SyntaxKind.PropertySignature, SyntaxKind.Identifier]);
+
+        const clause = factory.createDefaultClause([]);
+        const hasExpression: "expression" extends keyof astModule.DefaultClause ? true : false = false;
+        assert.strictEqual(hasExpression, false);
+        assert.strictEqual(Reflect.get(clause, "expression"), undefined);
+        assert.deepStrictEqual([...clause.childrenIter()], []);
+        assert.strictEqual(visitEachChild(clause, node => node), clause);
+
+        const type = factory.createKeywordTypeNode(SyntaxKind.StringKeyword);
+        const initializer = factory.createStringLiteral("value", TokenFlags.None);
+        const populated = factory.createPropertySignatureDeclaration(undefined, name, undefined, type, initializer);
+        assert.deepStrictEqual(collectKinds(getSynthesizedDeepClone(populated)), [
+            SyntaxKind.PropertySignature,
+            SyntaxKind.Identifier,
+            SyntaxKind.StringKeyword,
+            SyntaxKind.StringLiteral,
+        ]);
     });
 });
 

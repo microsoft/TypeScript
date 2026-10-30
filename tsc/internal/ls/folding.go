@@ -436,7 +436,7 @@ func getOutliningSpanForNode(ctx context.Context, n *ast.Node, sourceFile *ast.S
 	case ast.KindTupleType:
 		return spanForNode(ctx, n, ast.KindOpenBracketToken, !ast.IsTupleTypeNode(n.Parent) /*useFullStart*/, sourceFile, l)
 	case ast.KindCaseClause, ast.KindDefaultClause:
-		return spanForNodeArray(ctx, n.AsCaseOrDefaultClause().Statements, sourceFile, l)
+		return spanForNodeArray(ctx, n.StatementList(), sourceFile, l)
 	case ast.KindObjectLiteralExpression:
 		return spanForNode(ctx, n, ast.KindOpenBraceToken, !ast.IsArrayLiteralExpression(n.Parent) && !ast.IsCallExpression(n.Parent) /*useFullStart*/, sourceFile, l)
 	case ast.KindArrayLiteralExpression:

@@ -842,6 +842,7 @@ function generatePropagateSubtreeFactsDispatch(w: CodeWriter) {
 }
 
 const NODE_ACCESSORS: { method: string; ret: string; base: string; }[] = [
+    { method: "CaseOrDefaultClauseData", ret: "*CaseOrDefaultClauseBase", base: "CaseOrDefaultClauseBase" },
     { method: "FlowNodeData", ret: "*FlowNodeBase", base: "FlowNodeBase" },
     { method: "DeclarationData", ret: "*DeclarationBase", base: "DeclarationBase" },
     { method: "ExportableData", ret: "*ExportableBase", base: "ExportableBase" },

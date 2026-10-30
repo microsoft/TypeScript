@@ -240,6 +240,11 @@ type JSDocTagBase struct {
 	Comment *NodeList // Optional
 }
 
+type CaseOrDefaultClauseBase struct {
+	Statements          *StatementList
+	FallthroughFlowNode *FlowNode
+}
+
 type JSDocCommentBase struct {
 	NodeBase
 	text []string
@@ -268,7 +273,8 @@ type (
 	WithStatementNode                 = Node
 	SwitchStatementNode               = Node
 	CaseBlockNode                     = Node
-	CaseOrDefaultClauseNode           = Node
+	CaseClauseNode                    = Node
+	DefaultClauseNode                 = Node
 	ThrowStatementNode                = Node
 	TryStatementNode                  = Node
 	CatchClauseNode                   = Node
@@ -541,6 +547,7 @@ type (
 	JsxAttributeName               = Node // Identifier | JsxNamespacedName
 	JsxAttributeValue              = Node // StringLiteral | JsxExpression | JsxElement | JsxSelfClosingElement | JsxFragment
 	JsxTagNameExpression           = Node // Identifier | ThisExpression | JsxTagNamePropertyAccess | JsxNamespacedName
+	CaseOrDefaultClause            = Node // CaseClause | DefaultClause
 	ClassLikeDeclaration           = Node // ClassDeclaration | ClassExpression
 	AccessorDeclaration            = Node // GetAccessorDeclaration | SetAccessorDeclaration
 	LiteralLikeNode                = Node // StringLiteral | NumericLiteral | BigIntLiteral | RegularExpressionLiteral | TemplateLiteralLikeNode | JsxText
@@ -1363,55 +1370,88 @@ func IsCaseBlock(node *Node) bool {
 }
 
 // ──────────────────────────────────────────────────────────────────────
-// CaseOrDefaultClause
+// CaseClause
 // ──────────────────────────────────────────────────────────────────────
 
-type CaseOrDefaultClause struct {
+type CaseClause struct {
 	NodeBase
+	CaseOrDefaultClauseBase
 	CompositeBase
-	Expression          *Expression
-	Statements          *StatementList
-	FallthroughFlowNode *FlowNode
+	Expression *Expression
 }
 
-func (f *NodeFactory) NewCaseOrDefaultClause(kind Kind, expression *Expression, statements *StatementList) *Node {
-	switch kind {
-	case KindCaseClause, KindDefaultClause:
-	default:
-		panic("Invalid node kind for CaseOrDefaultClause")
-	}
-	data := &CaseOrDefaultClause{}
+func (f *NodeFactory) NewCaseClause(expression *Expression, statements *StatementList) *Node {
+	data := &CaseClause{}
 	data.Expression = expression
 	data.Statements = statements
-	return f.newNode(kind, data.AsNode())
+	return f.newNode(KindCaseClause, data.AsNode())
 }
 
-func (f *NodeFactory) UpdateCaseOrDefaultClause(node *CaseOrDefaultClause, expression *Expression, statements *StatementList) *Node {
+func (f *NodeFactory) UpdateCaseClause(node *CaseClause, expression *Expression, statements *StatementList) *Node {
 	if expression != node.Expression || statements != node.Statements {
-		return updateNode(f.NewCaseOrDefaultClause(node.Kind, expression, statements), node.AsNode(), f.hooks)
+		return updateNode(f.NewCaseClause(expression, statements), node.AsNode(), f.hooks)
 	}
 	return node.AsNode()
 }
 
-func (node *CaseOrDefaultClause) ForEachChild(v Visitor) bool {
+func (node *CaseClause) ForEachChild(v Visitor) bool {
 	return visit(v, node.Expression) || visitNodeList(v, node.Statements)
 }
 
-func (node *CaseOrDefaultClause) VisitEachChild(v *NodeVisitor) *Node {
-	return v.Factory.UpdateCaseOrDefaultClause(node, v.visitNode(node.Expression), v.visitNodes(node.Statements))
+func (node *CaseClause) VisitEachChild(v *NodeVisitor) *Node {
+	return v.Factory.UpdateCaseClause(node, v.visitNode(node.Expression), v.visitNodes(node.Statements))
 }
 
-func (node *CaseOrDefaultClause) Clone(f NodeFactoryCoercible) *Node {
-	return cloneNode(f.AsNodeFactory().NewCaseOrDefaultClause(node.Kind, node.Expression, node.Statements), node.AsNode(), f.AsNodeFactory().hooks)
+func (node *CaseClause) Clone(f NodeFactoryCoercible) *Node {
+	return cloneNode(f.AsNodeFactory().NewCaseClause(node.Expression, node.Statements), node.AsNode(), f.AsNodeFactory().hooks)
 }
 
-func (node *CaseOrDefaultClause) computeSubtreeFacts() SubtreeFacts {
+func (node *CaseClause) computeSubtreeFacts() SubtreeFacts {
 	return propagateSubtreeFacts(node.Expression) |
 		propagateNodeListSubtreeFacts(node.Statements, propagateSubtreeFacts)
 }
 
 func IsCaseClause(node *Node) bool {
 	return node.Kind == KindCaseClause
+}
+
+// ──────────────────────────────────────────────────────────────────────
+// DefaultClause
+// ──────────────────────────────────────────────────────────────────────
+
+type DefaultClause struct {
+	NodeBase
+	CaseOrDefaultClauseBase
+	CompositeBase
+}
+
+func (f *NodeFactory) NewDefaultClause(statements *StatementList) *Node {
+	data := &DefaultClause{}
+	data.Statements = statements
+	return f.newNode(KindDefaultClause, data.AsNode())
+}
+
+func (f *NodeFactory) UpdateDefaultClause(node *DefaultClause, statements *StatementList) *Node {
+	if statements != node.Statements {
+		return updateNode(f.NewDefaultClause(statements), node.AsNode(), f.hooks)
+	}
+	return node.AsNode()
+}
+
+func (node *DefaultClause) ForEachChild(v Visitor) bool {
+	return visitNodeList(v, node.Statements)
+}
+
+func (node *DefaultClause) VisitEachChild(v *NodeVisitor) *Node {
+	return v.Factory.UpdateDefaultClause(node, v.visitNodes(node.Statements))
+}
+
+func (node *DefaultClause) Clone(f NodeFactoryCoercible) *Node {
+	return cloneNode(f.AsNodeFactory().NewDefaultClause(node.Statements), node.AsNode(), f.AsNodeFactory().hooks)
+}
+
+func (node *DefaultClause) computeSubtreeFacts() SubtreeFacts {
+	return propagateNodeListSubtreeFacts(node.Statements, propagateSubtreeFacts)
 }
 
 func IsDefaultClause(node *Node) bool {
@@ -2795,7 +2835,7 @@ type ExportAssignment struct {
 	ModifiersBase
 	CompositeBase
 	IsExportEquals bool
-	Type           *TypeNode
+	Type           *TypeNode // Optional
 	Expression     *Expression
 }
 
@@ -3436,8 +3476,8 @@ type PropertySignatureDeclaration struct {
 	NodeBase
 	DeclarationBase
 	NamedMemberBase
-	Type        *TypeNode
-	Initializer *Expression
+	Type        *TypeNode   // Optional
+	Initializer *Expression // Optional
 }
 
 func (f *NodeFactory) NewPropertySignatureDeclaration(modifiers *ModifierList, name *PropertyName, postfixToken *TokenNode, typeNode *TypeNode, initializer *Expression) *Node {
@@ -3969,7 +4009,7 @@ type ArrowFunction struct {
 	FunctionLikeWithBodyBase
 	FlowNodeBase
 	CompositeBase
-	EqualsGreaterThanToken *EqualsGreaterThanToken
+	EqualsGreaterThanToken *EqualsGreaterThanToken // Optional
 }
 
 func (f *NodeFactory) NewArrowFunction(modifiers *ModifierList, typeParameters *TypeParameterList, parameters *ParameterList, typeNode *TypeNode, fullSignature *TypeNode, equalsGreaterThanToken *EqualsGreaterThanToken, body *ConciseBody) *Node {
@@ -4633,8 +4673,8 @@ type TaggedTemplateExpression struct {
 	MemberExpressionBase
 	CompositeBase
 	Tag              *Expression
-	QuestionDotToken *QuestionDotToken
-	TypeArguments    *TypeList // Optional
+	QuestionDotToken *QuestionDotToken // Optional
+	TypeArguments    *TypeList         // Optional
 	Template         *TemplateLiteral
 }
 
@@ -4858,7 +4898,7 @@ type PropertyAssignment struct {
 	DeclarationBase
 	NamedMemberBase
 	CompositeBase
-	Type        *TypeNode
+	Type        *TypeNode // Optional
 	Initializer *Expression
 }
 
@@ -4913,7 +4953,7 @@ type ShorthandPropertyAssignment struct {
 	DeclarationBase
 	NamedMemberBase
 	CompositeBase
-	Type                        *TypeNode
+	Type                        *TypeNode    // Optional
 	EqualsToken                 *EqualsToken // Optional
 	ObjectAssignmentInitializer *Expression  // Optional
 }
@@ -7275,7 +7315,7 @@ func IsJSDocUnknownTag(node *Node) bool {
 
 type JSDocTemplateTag struct {
 	JSDocTagBase
-	Constraint     *Node
+	Constraint     *Node // Optional
 	TypeParameters *TypeParameterList
 }
 
@@ -7588,7 +7628,7 @@ func IsJSDocDeprecatedTag(node *Node) bool {
 
 type JSDocSeeTag struct {
 	JSDocTagBase
-	NameExpression *TypeNode
+	NameExpression *TypeNode // Optional
 }
 
 func (f *NodeFactory) NewJSDocSeeTag(tagName *IdentifierNode, nameExpression *TypeNode, comment *NodeList) *Node {
@@ -8810,9 +8850,12 @@ func (n *Node) ForEachChild(v Visitor) bool {
 	case KindCaseBlock:
 		// SAFETY: This case only matches kinds allocated as a CaseBlock, which embeds its Node header at offset zero.
 		return (*CaseBlock)(unsafe.Pointer(n)).ForEachChild(v)
-	case KindCaseClause, KindDefaultClause:
-		// SAFETY: This case only matches kinds allocated as a CaseOrDefaultClause, which embeds its Node header at offset zero.
-		return (*CaseOrDefaultClause)(unsafe.Pointer(n)).ForEachChild(v)
+	case KindCaseClause:
+		// SAFETY: This case only matches kinds allocated as a CaseClause, which embeds its Node header at offset zero.
+		return (*CaseClause)(unsafe.Pointer(n)).ForEachChild(v)
+	case KindDefaultClause:
+		// SAFETY: This case only matches kinds allocated as a DefaultClause, which embeds its Node header at offset zero.
+		return (*DefaultClause)(unsafe.Pointer(n)).ForEachChild(v)
 	case KindThrowStatement:
 		// SAFETY: This case only matches kinds allocated as a ThrowStatement, which embeds its Node header at offset zero.
 		return (*ThrowStatement)(unsafe.Pointer(n)).ForEachChild(v)
@@ -9322,9 +9365,12 @@ func (n *Node) VisitEachChild(v *NodeVisitor) *Node {
 	case KindCaseBlock:
 		// SAFETY: This case only matches kinds allocated as a CaseBlock, which embeds its Node header at offset zero.
 		return (*CaseBlock)(unsafe.Pointer(n)).VisitEachChild(v)
-	case KindCaseClause, KindDefaultClause:
-		// SAFETY: This case only matches kinds allocated as a CaseOrDefaultClause, which embeds its Node header at offset zero.
-		return (*CaseOrDefaultClause)(unsafe.Pointer(n)).VisitEachChild(v)
+	case KindCaseClause:
+		// SAFETY: This case only matches kinds allocated as a CaseClause, which embeds its Node header at offset zero.
+		return (*CaseClause)(unsafe.Pointer(n)).VisitEachChild(v)
+	case KindDefaultClause:
+		// SAFETY: This case only matches kinds allocated as a DefaultClause, which embeds its Node header at offset zero.
+		return (*DefaultClause)(unsafe.Pointer(n)).VisitEachChild(v)
 	case KindThrowStatement:
 		// SAFETY: This case only matches kinds allocated as a ThrowStatement, which embeds its Node header at offset zero.
 		return (*ThrowStatement)(unsafe.Pointer(n)).VisitEachChild(v)
@@ -9881,9 +9927,12 @@ func (n *Node) Clone(f NodeFactoryCoercible) *Node {
 	case KindCaseBlock:
 		// SAFETY: This case only matches kinds allocated as a CaseBlock, which embeds its Node header at offset zero.
 		return (*CaseBlock)(unsafe.Pointer(n)).Clone(f)
-	case KindCaseClause, KindDefaultClause:
-		// SAFETY: This case only matches kinds allocated as a CaseOrDefaultClause, which embeds its Node header at offset zero.
-		return (*CaseOrDefaultClause)(unsafe.Pointer(n)).Clone(f)
+	case KindCaseClause:
+		// SAFETY: This case only matches kinds allocated as a CaseClause, which embeds its Node header at offset zero.
+		return (*CaseClause)(unsafe.Pointer(n)).Clone(f)
+	case KindDefaultClause:
+		// SAFETY: This case only matches kinds allocated as a DefaultClause, which embeds its Node header at offset zero.
+		return (*DefaultClause)(unsafe.Pointer(n)).Clone(f)
 	case KindThrowStatement:
 		// SAFETY: This case only matches kinds allocated as a ThrowStatement, which embeds its Node header at offset zero.
 		return (*ThrowStatement)(unsafe.Pointer(n)).Clone(f)
@@ -10453,9 +10502,12 @@ func (n *Node) SubtreeFacts() SubtreeFacts {
 	case KindCaseBlock:
 		// SAFETY: This case only matches kinds allocated as a CaseBlock, which embeds its Node header at offset zero.
 		return (*CaseBlock)(unsafe.Pointer(n)).subtreeFactsWorker(n)
-	case KindCaseClause, KindDefaultClause:
-		// SAFETY: This case only matches kinds allocated as a CaseOrDefaultClause, which embeds its Node header at offset zero.
-		return (*CaseOrDefaultClause)(unsafe.Pointer(n)).subtreeFactsWorker(n)
+	case KindCaseClause:
+		// SAFETY: This case only matches kinds allocated as a CaseClause, which embeds its Node header at offset zero.
+		return (*CaseClause)(unsafe.Pointer(n)).subtreeFactsWorker(n)
+	case KindDefaultClause:
+		// SAFETY: This case only matches kinds allocated as a DefaultClause, which embeds its Node header at offset zero.
+		return (*DefaultClause)(unsafe.Pointer(n)).subtreeFactsWorker(n)
 	case KindThrowStatement:
 		// SAFETY: This case only matches kinds allocated as a ThrowStatement, which embeds its Node header at offset zero.
 		return (*ThrowStatement)(unsafe.Pointer(n)).subtreeFactsWorker(n)
@@ -10933,9 +10985,12 @@ func (n *Node) computeSubtreeFacts() SubtreeFacts {
 	case KindCaseBlock:
 		// SAFETY: This case only matches kinds allocated as a CaseBlock, which embeds its Node header at offset zero.
 		return (*CaseBlock)(unsafe.Pointer(n)).computeSubtreeFacts()
-	case KindCaseClause, KindDefaultClause:
-		// SAFETY: This case only matches kinds allocated as a CaseOrDefaultClause, which embeds its Node header at offset zero.
-		return (*CaseOrDefaultClause)(unsafe.Pointer(n)).computeSubtreeFacts()
+	case KindCaseClause:
+		// SAFETY: This case only matches kinds allocated as a CaseClause, which embeds its Node header at offset zero.
+		return (*CaseClause)(unsafe.Pointer(n)).computeSubtreeFacts()
+	case KindDefaultClause:
+		// SAFETY: This case only matches kinds allocated as a DefaultClause, which embeds its Node header at offset zero.
+		return (*DefaultClause)(unsafe.Pointer(n)).computeSubtreeFacts()
 	case KindThrowStatement:
 		// SAFETY: This case only matches kinds allocated as a ThrowStatement, which embeds its Node header at offset zero.
 		return (*ThrowStatement)(unsafe.Pointer(n)).computeSubtreeFacts()
@@ -11516,9 +11571,12 @@ func (n *Node) propagateSubtreeFacts() SubtreeFacts {
 	case KindCaseBlock:
 		// SAFETY: This case only matches kinds allocated as a CaseBlock, which embeds its Node header at offset zero.
 		return (*CaseBlock)(unsafe.Pointer(n)).propagateSubtreeFacts()
-	case KindCaseClause, KindDefaultClause:
-		// SAFETY: This case only matches kinds allocated as a CaseOrDefaultClause, which embeds its Node header at offset zero.
-		return (*CaseOrDefaultClause)(unsafe.Pointer(n)).propagateSubtreeFacts()
+	case KindCaseClause:
+		// SAFETY: This case only matches kinds allocated as a CaseClause, which embeds its Node header at offset zero.
+		return (*CaseClause)(unsafe.Pointer(n)).propagateSubtreeFacts()
+	case KindDefaultClause:
+		// SAFETY: This case only matches kinds allocated as a DefaultClause, which embeds its Node header at offset zero.
+		return (*DefaultClause)(unsafe.Pointer(n)).propagateSubtreeFacts()
 	case KindThrowStatement:
 		// SAFETY: This case only matches kinds allocated as a ThrowStatement, which embeds its Node header at offset zero.
 		return (*ThrowStatement)(unsafe.Pointer(n)).propagateSubtreeFacts()
@@ -12013,6 +12071,19 @@ func (n *Node) propagateSubtreeFacts() SubtreeFacts {
 // ──────────────────────────────────────────────────────────────────────
 // Node accessor dispatch
 // ──────────────────────────────────────────────────────────────────────
+
+func (n *Node) CaseOrDefaultClauseData() *CaseOrDefaultClauseBase {
+	switch n.Kind {
+	case KindCaseClause:
+		// SAFETY: This case only matches kinds allocated as a CaseClause, which embeds its Node header at offset zero.
+		return (*CaseClause)(unsafe.Pointer(n)).CaseOrDefaultClauseData()
+	case KindDefaultClause:
+		// SAFETY: This case only matches kinds allocated as a DefaultClause, which embeds its Node header at offset zero.
+		return (*DefaultClause)(unsafe.Pointer(n)).CaseOrDefaultClauseData()
+	default:
+		return nil
+	}
+}
 
 var nodeFlowNodeDataDispatch = [kindFlowReduceLabelData + 1]uint8{
 	KindIdentifier:                 1,
@@ -13255,7 +13326,8 @@ var (
 	_ [0 - unsafe.Offsetof(WithStatement{}.Node)]byte
 	_ [0 - unsafe.Offsetof(SwitchStatement{}.Node)]byte
 	_ [0 - unsafe.Offsetof(CaseBlock{}.Node)]byte
-	_ [0 - unsafe.Offsetof(CaseOrDefaultClause{}.Node)]byte
+	_ [0 - unsafe.Offsetof(CaseClause{}.Node)]byte
+	_ [0 - unsafe.Offsetof(DefaultClause{}.Node)]byte
 	_ [0 - unsafe.Offsetof(ThrowStatement{}.Node)]byte
 	_ [0 - unsafe.Offsetof(TryStatement{}.Node)]byte
 	_ [0 - unsafe.Offsetof(CatchClause{}.Node)]byte
@@ -13579,14 +13651,20 @@ func (n *Node) AsCaseBlock() *CaseBlock {
 	return (*CaseBlock)(unsafe.Pointer(n))
 }
 
-func (n *Node) AsCaseOrDefaultClause() *CaseOrDefaultClause {
-	switch n.Kind {
-	case KindCaseClause, KindDefaultClause:
-	default:
-		panic("Invalid node cast to CaseOrDefaultClause")
+func (n *Node) AsCaseClause() *CaseClause {
+	if n.Kind != KindCaseClause {
+		panic("Invalid node cast to CaseClause")
 	}
-	// SAFETY: The kind check guarantees n was allocated as a CaseOrDefaultClause, which embeds its Node header at offset zero.
-	return (*CaseOrDefaultClause)(unsafe.Pointer(n))
+	// SAFETY: The kind check guarantees n was allocated as a CaseClause, which embeds its Node header at offset zero.
+	return (*CaseClause)(unsafe.Pointer(n))
+}
+
+func (n *Node) AsDefaultClause() *DefaultClause {
+	if n.Kind != KindDefaultClause {
+		panic("Invalid node cast to DefaultClause")
+	}
+	// SAFETY: The kind check guarantees n was allocated as a DefaultClause, which embeds its Node header at offset zero.
+	return (*DefaultClause)(unsafe.Pointer(n))
 }
 
 func (n *Node) AsThrowStatement() *ThrowStatement {
