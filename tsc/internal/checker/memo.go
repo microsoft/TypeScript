@@ -510,27 +510,34 @@ func (m *memoMap[K, V]) compute(c *Checker, k K, fn func() V) V {
 
 // enter starts the computation of the result for k; see beginMemo.
 func (m *memoMap[K, V]) begin(c *Checker, k K) {
-	if c.inResolution() {
-		// Entering a computed result reads it.
-		if state := m.memoStates[k]; state != nil {
-			c.observeCost(state.count)
-		}
+	var state *memoState
+	if m.memoStates != nil {
+		state = m.memoStates[k]
 	}
-	outer := m.resolvingIndex(c, k)
+	if state != nil && c.inResolution() {
+		// Entering a computed result reads it.
+		c.observeCost(state.count)
+	}
+	outer := 0
+	if len(m.resolvingKeys) != 0 {
+		outer = m.resolvingIndex(c, k)
+	}
 	if outer != 0 {
 		// Re-entering an entry marks the cycle circular; see reentryCircular.
 		c.markCircular(outer - 1)
+		// Marking may have given the entry a state.
+		state = m.memoStates[k]
 	}
 	m.resolvingKeys = append(m.resolvingKeys, k)
 	c.beginResolution(m, len(m.resolvingKeys)-1)
 	if c.checking {
-		if c.memoPendingCount != 0 && m.memoStates != nil {
-			c.replayPending(m.memoStates[k])
+		if c.memoPendingCount != 0 && state != nil {
+			c.replayPending(state)
 		}
-		c.beginCheckedMemo(m.memoStates[k])
+		c.beginCheckedMemo(state)
 		return
 	}
-	c.beginState(m.memoStates[k], outer)
+	c.beginState(state, outer)
 }
 
 // resolvingIndex returns 1 + the index in resolutions of the computation of
