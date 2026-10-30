@@ -130,6 +130,49 @@ var textToKeyword = map[string]ast.Kind{
 	"of":          ast.KindOfKeyword,
 }
 
+const (
+	minKeywordLength = 2
+	maxKeywordLength = 11
+)
+
+type keywordEntry struct {
+	text string
+	kind ast.Kind
+}
+
+// keywordTable is a direct-mapped table of all keywords, indexed by keywordHash.
+// The hash is perfect over textToKeyword; this is verified at init.
+var keywordTable = func() (table [512]keywordEntry) {
+	for text, kind := range textToKeyword {
+		if len(text) < minKeywordLength || len(text) > maxKeywordLength || text[0] < 'a' || text[0] > 'z' {
+			panic("keyword " + text + " is outside the bounds handled by keywordTable")
+		}
+		entry := &table[keywordHash(text)]
+		if entry.text != "" {
+			panic("keywords " + entry.text + " and " + text + " collide in keywordTable")
+		}
+		*entry = keywordEntry{text: text, kind: kind}
+	}
+	return table
+}()
+
+// keywordHash hashes the length, first two characters, and last character of str
+// into an index into keywordTable. str must be at least two bytes long.
+func keywordHash(str string) uint32 {
+	n := len(str)
+	k := uint32(n) | uint32(str[0])<<8 | uint32(str[1])<<16 | uint32(str[n-1])<<24
+	return (k * 231325) >> (32 - 9)
+}
+
+func lookupKeyword(str string) ast.Kind {
+	if len(str) >= minKeywordLength && len(str) <= maxKeywordLength && str[0] >= 'a' && str[0] <= 'z' {
+		if entry := &keywordTable[keywordHash(str)]; entry.text == str {
+			return entry.kind
+		}
+	}
+	return ast.KindUnknown
+}
+
 var textToToken = func() map[string]ast.Kind {
 	m := map[string]ast.Kind{
 		"{":    ast.KindOpenBraceToken,
@@ -486,6 +529,11 @@ func (s *Scanner) Scan() ast.Kind {
 		case '\t', '\v', '\f', ' ':
 			s.pos++
 			if s.skipTrivia {
+				text, end, pos := s.text, s.end, s.pos
+				for pos < end && (text[pos] == ' ' || text[pos] == '\t') {
+					pos++
+				}
+				s.pos = pos
 				continue
 			}
 			for {
@@ -1482,6 +1530,13 @@ func (s *Scanner) ScanJSDocToken() ast.Kind {
 	return s.token
 }
 
+var isASCIIIdentifierPart = func() (table [256]bool) {
+	for b := range table {
+		table[b] = stringutil.IsASCIILetter(rune(b)) || stringutil.IsDigit(rune(b)) || b == '_' || b == '$'
+	}
+	return table
+}()
+
 func (s *Scanner) scanIdentifier(prefixLength int, variant identifierVariant) bool {
 	start := s.pos
 	s.pos += prefixLength
@@ -1489,10 +1544,12 @@ func (s *Scanner) scanIdentifier(prefixLength int, variant identifierVariant) bo
 	ch := s.char()
 	// Fast path for simple ASCII identifiers
 	if variant != identifierVariantJSX && (stringutil.IsASCIILetter(ch) || ch == '_' || ch == '$') {
-		s.pos++
-		s.scanASCIIWhile(func(b byte) bool {
-			return (b >= 'a' && b <= 'z') || (b >= 'A' && b <= 'Z') || (b >= '0' && b <= '9') || b == '_' || b == '$'
-		})
+		text, end := s.text, s.end
+		pos := s.pos + 1
+		for pos < end && isASCIIIdentifierPart[text[pos]] {
+			pos++
+		}
+		s.pos = pos
 		ch = s.char()
 		if ch < utf8.RuneSelf && ch != '\\' {
 			s.tokenValue = s.text[start:s.pos]
@@ -2212,11 +2269,8 @@ func (s *Scanner) scanInvalidCharacter() {
 }
 
 func GetIdentifierToken(str string) ast.Kind {
-	if len(str) >= 2 && len(str) <= 12 && str[0] >= 'a' && str[0] <= 'z' {
-		keyword := textToKeyword[str]
-		if keyword != ast.KindUnknown {
-			return keyword
-		}
+	if keyword := lookupKeyword(str); keyword != ast.KindUnknown {
+		return keyword
 	}
 	return ast.KindIdentifier
 }
