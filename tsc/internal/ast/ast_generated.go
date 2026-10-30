@@ -4009,10 +4009,13 @@ type ArrowFunction struct {
 	FunctionLikeWithBodyBase
 	FlowNodeBase
 	CompositeBase
-	EqualsGreaterThanToken *EqualsGreaterThanToken // Optional
+	EqualsGreaterThanToken *EqualsGreaterThanToken
 }
 
 func (f *NodeFactory) NewArrowFunction(modifiers *ModifierList, typeParameters *TypeParameterList, parameters *ParameterList, typeNode *TypeNode, fullSignature *TypeNode, equalsGreaterThanToken *EqualsGreaterThanToken, body *ConciseBody) *Node {
+	if equalsGreaterThanToken == nil {
+		equalsGreaterThanToken = f.NewToken(KindEqualsGreaterThanToken)
+	}
 	data := &ArrowFunction{}
 	data.modifiers = modifiers
 	data.TypeParameters = typeParameters

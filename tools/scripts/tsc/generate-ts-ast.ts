@@ -1048,7 +1048,10 @@ function generateFactory(): string {
             const memberType = m.type;
             const isBool = !m.isChild() && memberType.kind === "primitive" && memberType.name === "bool";
 
-            if (isBool) {
+            if (node.name === "ArrowFunction" && m.name === "EqualsGreaterThanToken") {
+                paramParts.push(`${paramName}: ${paramType} = createToken(SyntaxKind.EqualsGreaterThanToken)`);
+            }
+            else if (isBool) {
                 paramParts.push(`${paramName}: ${paramType} = false`);
             }
             else if (m.optional) {

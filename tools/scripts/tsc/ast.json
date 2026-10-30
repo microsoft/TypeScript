@@ -2937,8 +2937,7 @@
                     },
                     {
                         "name": "EqualsGreaterThanToken",
-                        "type": "EqualsGreaterThanToken",
-                        "optional": true
+                        "type": "EqualsGreaterThanToken"
                     },
                     {
                         "name": "Body",

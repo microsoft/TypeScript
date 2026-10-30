@@ -454,6 +454,14 @@ function emitNewFactory(
         generateKindCheck(w, node, kindMember.goParamName(), `Invalid node kind for ${structName}`);
     }
 
+    if (node.name === "ArrowFunction") {
+        w.write("if equalsGreaterThanToken == nil {");
+        w.push();
+        w.write("equalsGreaterThanToken = f.NewToken(KindEqualsGreaterThanToken)");
+        w.pop();
+        w.write("}");
+    }
+
     if (node.arena) {
         w.write(`data := f.${api.uncapitalize(structName)}Arena.New()`);
     }

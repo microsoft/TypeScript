@@ -120,7 +120,6 @@ describe("AST property contracts", { concurrency }, () => {
             questionDotToken: astModule.TaggedTemplateExpression["questionDotToken"];
             constraint: astModule.JSDocTemplateTag["constraint"];
             nameExpression: astModule.JSDocSeeTag["nameExpression"];
-            arrowToken: astModule.ArrowFunction["equalsGreaterThanToken"];
         } = {
             exportType: undefined,
             propertyType: undefined,
@@ -131,7 +130,6 @@ describe("AST property contracts", { concurrency }, () => {
             questionDotToken: undefined,
             constraint: undefined,
             nameExpression: undefined,
-            arrowToken: undefined,
         };
         using api = spawnAPI();
         const seen: Record<string, unknown> = {};
@@ -172,7 +170,13 @@ describe("AST property contracts", { concurrency }, () => {
     `,
             ).sourceFile,
         );
-        // Synthesized arrows need not carry a punctuation token.
+        assert.deepStrictEqual(Object.keys(seen).sort(), Object.keys(absent).sort());
+        for (const name of Object.keys(absent)) {
+            assert.strictEqual(seen[name] === undefined, true, name);
+        }
+    });
+
+    test("synthesized arrows have an equalsGreaterThanToken", () => {
         using programAPI = spawnAPI({
             "/tsconfig.json": "{}",
             "/src/index.ts": "declare function f(): number;",
@@ -181,11 +185,17 @@ describe("AST property contracts", { concurrency }, () => {
         const signature = checker.getSignaturesOfType(checker.getTypeAtLocation(source.statements[0]), SignatureKind.Call)[0];
         const arrow = checker.signatureToSignatureDeclaration(signature, SyntaxKind.ArrowFunction);
         assert.ok(arrow && astModule.isArrowFunction(arrow));
-        seen.arrowToken = arrow.equalsGreaterThanToken;
-        assert.deepStrictEqual(Object.keys(seen).sort(), Object.keys(absent).sort());
-        for (const name of Object.keys(absent)) {
-            assert.strictEqual(seen[name] === undefined, true, name);
-        }
+        const remoteToken: astModule.EqualsGreaterThanToken = arrow.equalsGreaterThanToken;
+        assert.strictEqual(remoteToken.kind, SyntaxKind.EqualsGreaterThanToken);
+
+        const body = factory.createBlock([]);
+        const local = factory.createArrowFunction(undefined, undefined, [], undefined, undefined, body);
+        const localToken: astModule.EqualsGreaterThanToken = local.equalsGreaterThanToken;
+        assert.strictEqual(localToken.kind, SyntaxKind.EqualsGreaterThanToken);
+        assert.strictEqual(cloneNode(local).equalsGreaterThanToken, local.equalsGreaterThanToken);
+        const explicitToken = factory.createToken(SyntaxKind.EqualsGreaterThanToken);
+        const explicit = factory.createArrowFunction(undefined, undefined, [], undefined, explicitToken, body);
+        assert.strictEqual(explicit.equalsGreaterThanToken, explicitToken);
     });
 
     test("required parser children and binding holes retain their contracts", () => {

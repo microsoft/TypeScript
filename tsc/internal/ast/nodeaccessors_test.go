@@ -75,6 +75,25 @@ func TestNodeAccessors(t *testing.T) {
 	assert.Equal(t, literal.LiteralLikeData(), &literal.AsStringLiteral().LiteralLikeNodeBase)
 }
 
+func TestArrowFunctionToken(t *testing.T) {
+	t.Parallel()
+	factory := ast.NewNodeFactory(ast.NodeFactoryHooks{})
+	parameters := factory.NewNodeList(nil)
+	body := factory.NewBlock(factory.NewNodeList(nil), false)
+	arrow := factory.NewArrowFunction(nil, nil, parameters, nil, nil, nil, body)
+	token := arrow.AsArrowFunction().EqualsGreaterThanToken
+	assert.Assert(t, token != nil)
+	assert.Equal(t, token.Kind, ast.KindEqualsGreaterThanToken)
+	assert.Equal(t, arrow.Clone(factory).AsArrowFunction().EqualsGreaterThanToken, token)
+
+	explicitToken := factory.NewToken(ast.KindEqualsGreaterThanToken)
+	explicit := factory.NewArrowFunction(nil, nil, parameters, nil, nil, explicitToken, body)
+	assert.Equal(t, explicit.AsArrowFunction().EqualsGreaterThanToken, explicitToken)
+	updated := factory.UpdateArrowFunction(explicit.AsArrowFunction(), nil, nil, parameters, nil, nil, nil, body)
+	assert.Assert(t, updated.AsArrowFunction().EqualsGreaterThanToken != nil)
+	assert.Equal(t, updated.AsArrowFunction().EqualsGreaterThanToken.Kind, ast.KindEqualsGreaterThanToken)
+}
+
 func TestClauseNodeAccessors(t *testing.T) {
 	t.Parallel()
 	factory := ast.NewNodeFactory(ast.NodeFactoryHooks{})

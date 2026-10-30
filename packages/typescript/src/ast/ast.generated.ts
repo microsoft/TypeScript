@@ -824,7 +824,7 @@ export interface YieldExpression extends ExpressionBase {
 }
 export interface ArrowFunction extends ExpressionBase, DeclarationBase, ModifiersBase, FunctionLikeWithBodyBase {
     readonly kind: SyntaxKind.ArrowFunction;
-    readonly equalsGreaterThanToken?: EqualsGreaterThanToken;
+    readonly equalsGreaterThanToken: EqualsGreaterThanToken;
     readonly body: ConciseBody;
 }
 export interface FunctionExpression extends PrimaryExpressionBase, DeclarationBase, ModifiersBase, FunctionLikeWithBodyBase {
