@@ -3004,17 +3004,25 @@ func (c *Checker) getRelater() *Relater {
 }
 
 func (c *Checker) putRelater(r *Relater) {
-	clear(r.maybeKeysSet)
-	*r = Relater{
-		c:            c,
-		maybeKeys:    r.maybeKeys[:0],
-		maybeKeysSet: r.maybeKeysSet,
-		sourceStack:  r.sourceStack[:0],
-		targetStack:  r.targetStack[:0],
-		sourceDepths: r.sourceDepths[:0],
-		targetDepths: r.targetDepths[:0],
-		next:         c.freeRelater,
+	if len(r.maybeKeysSet) != 0 {
+		clear(r.maybeKeysSet)
 	}
+	// Reset field by field, which is cheaper than assigning a whole Relater.
+	r.relation = nil
+	r.errorNode = nil
+	r.errorChain = nil
+	r.relatedInfo = nil
+	r.maybeKeys = r.maybeKeys[:0]
+	r.sourceStack, r.targetStack = r.sourceStack[:0], r.targetStack[:0]
+	r.sourceDepths, r.targetDepths = r.sourceDepths[:0], r.targetDepths[:0]
+	r.depth, r.low, r.truncated = 0, 0, false
+	r.topSource, r.topTarget = nil, nil
+	r.topKey, r.topConstrained = CacheHashKey{}, false
+	r.topEntry, r.topEntryValid, r.topHasKey, r.topBegun = RelationComparisonResultNone, false, false, false
+	r.expandingFlags, r.expandingSourceDepth, r.expandingTargetDepth = ExpandingFlagsNone, 0, 0
+	r.overflow = false
+	r.relationCount = 0
+	r.next = c.freeRelater
 	c.freeRelater = r
 }
 
