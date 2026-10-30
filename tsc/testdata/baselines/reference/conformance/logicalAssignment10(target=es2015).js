@@ -17,8 +17,7 @@ oobj["obj"][incr()] ??= incr();
 
 //// [logicalAssignment10.js]
 "use strict";
-var _a, _b;
-var _c, _d, _e;
+var _a, _b, _c, _d, _e;
 var count = 0;
 var obj = {};
 function incr() {
@@ -27,5 +26,5 @@ function incr() {
 const oobj = {
     obj
 };
-(_a = obj[_c = incr()]) !== null && _a !== void 0 ? _a : (obj[_c] = incr());
-(_b = (_d = oobj["obj"])[_e = incr()]) !== null && _b !== void 0 ? _b : (_d[_e] = incr());
+(_b = obj[_a = incr()]) !== null && _b !== void 0 ? _b : (obj[_a] = incr());
+(_e = (_c = oobj["obj"])[_d = incr()]) !== null && _e !== void 0 ? _e : (_c[_d] = incr());
