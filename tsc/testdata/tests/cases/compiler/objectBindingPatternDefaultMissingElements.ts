@@ -2,6 +2,7 @@
 // @checkJs: false
 // @noEmit: true
 // @strict: true
+// @lib: es5,es2015.promise
 
 // @filename: /unchecked.js
 export const uncheckedObject = ({
@@ -25,6 +26,23 @@ export const checkedArray = ([
     required,
     optional = false,
 ] = []) => {};
+
+/** @typedef {{ a?: number }} A */
+/** @typedef {{ f: (b: string, c?: A) => Promise<string[]> }} B */
+/** @returns {B} */
+export function f15() {
+    return {
+        async f(b, { a } = {}) {
+            a?.toFixed();
+            return [b];
+        },
+    };
+}
+
+/** @typedef {(b: number, c?: A) => Promise<void>} F */
+export const f16 = /** @type {F} */ (async (b, { a } = {}) => {
+    a?.toFixed();
+});
 
 // @filename: /main.ts
 import { checkedArray, checkedObject } from "./checked";

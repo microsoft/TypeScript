@@ -47,6 +47,43 @@ export const checkedArray = ([
 
 ] = []) => {};
 
+/** @typedef {{ a?: number }} A */
+/** @typedef {{ f: (b: string, c?: A) => Promise<string[]> }} B */
+/** @returns {B} */
+export function f15() {
+>f15 : Symbol(f15, Decl(checked.js, 9, 14))
+
+    return {
+        async f(b, { a } = {}) {
+>f : Symbol(f, Decl(checked.js, 15, 12))
+>b : Symbol(b, Decl(checked.js, 16, 16))
+>a : Symbol(a, Decl(checked.js, 16, 20))
+
+            a?.toFixed();
+>a?.toFixed : Symbol(Number.toFixed, Decl(lib.es5.d.ts, --, --))
+>a : Symbol(a, Decl(checked.js, 16, 20))
+>toFixed : Symbol(Number.toFixed, Decl(lib.es5.d.ts, --, --))
+
+            return [b];
+>b : Symbol(b, Decl(checked.js, 16, 16))
+
+        },
+    };
+}
+
+/** @typedef {(b: number, c?: A) => Promise<void>} F */
+export const f16 = /** @type {F} */ (async (b, { a } = {}) => {
+>f16 : Symbol(f16, Decl(checked.js, 24, 12))
+>b : Symbol(b, Decl(checked.js, 24, 44))
+>a : Symbol(a, Decl(checked.js, 24, 48))
+
+    a?.toFixed();
+>a?.toFixed : Symbol(Number.toFixed, Decl(lib.es5.d.ts, --, --))
+>a : Symbol(a, Decl(checked.js, 24, 48))
+>toFixed : Symbol(Number.toFixed, Decl(lib.es5.d.ts, --, --))
+
+});
+
 === /main.ts ===
 import { checkedArray, checkedObject } from "./checked";
 >checkedArray : Symbol(checkedArray, Decl(main.ts, 0, 8))

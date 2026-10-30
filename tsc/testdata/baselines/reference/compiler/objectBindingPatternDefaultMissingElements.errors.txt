@@ -50,6 +50,23 @@
         optional = false,
     ] = []) => {};
     
+    /** @typedef {{ a?: number }} A */
+    /** @typedef {{ f: (b: string, c?: A) => Promise<string[]> }} B */
+    /** @returns {B} */
+    export function f15() {
+        return {
+            async f(b, { a } = {}) {
+                a?.toFixed();
+                return [b];
+            },
+        };
+    }
+    
+    /** @typedef {(b: number, c?: A) => Promise<void>} F */
+    export const f16 = /** @type {F} */ (async (b, { a } = {}) => {
+        a?.toFixed();
+    });
+    
 ==== /main.ts (13 errors) ====
     import { checkedArray, checkedObject } from "./checked";
     import { uncheckedArray, uncheckedObject } from "./unchecked";

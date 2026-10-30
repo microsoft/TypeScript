@@ -59,6 +59,52 @@ export const checkedArray = ([
 ] = []) => {};
 >[] : []
 
+/** @typedef {{ a?: number }} A */
+/** @typedef {{ f: (b: string, c?: A) => Promise<string[]> }} B */
+/** @returns {B} */
+export function f15() {
+>f15 : () => B
+
+    return {
+>{        async f(b, { a } = {}) {            a?.toFixed();            return [b];        },    } : { f(b: string, { a }?: A | undefined): Promise<string[]>; }
+
+        async f(b, { a } = {}) {
+>f : (b: string, { a }?: A | undefined) => Promise<string[]>
+>b : string
+>a : number | undefined
+>{} : {}
+
+            a?.toFixed();
+>a?.toFixed() : string | undefined
+>a?.toFixed : ((fractionDigits?: number) => string) | undefined
+>a : number | undefined
+>toFixed : ((fractionDigits?: number) => string) | undefined
+
+            return [b];
+>[b] : string[]
+>b : string
+
+        },
+    };
+}
+
+/** @typedef {(b: number, c?: A) => Promise<void>} F */
+export const f16 = /** @type {F} */ (async (b, { a } = {}) => {
+>f16 : F
+>(async (b, { a } = {}) => {    a?.toFixed();}) : F
+>async (b, { a } = {}) => {    a?.toFixed();} : (b: number, { a }?: A | undefined) => Promise<void>
+>b : number
+>a : number | undefined
+>{} : {}
+
+    a?.toFixed();
+>a?.toFixed() : string | undefined
+>a?.toFixed : ((fractionDigits?: number) => string) | undefined
+>a : number | undefined
+>toFixed : ((fractionDigits?: number) => string) | undefined
+
+});
+
 === /main.ts ===
 import { checkedArray, checkedObject } from "./checked";
 >checkedArray : ([required, optional,]?: [any?, (boolean | undefined)?]) => void
