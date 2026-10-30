@@ -2383,12 +2383,11 @@ func (p *Printer) emitTypeNode(node *ast.TypeNode, precedence ast.TypePrecedence
 		}
 		p.writePunctuation("}")
 	case ast.KindJSDocNameReference:
-		p.emitEntityName(node.AsJSDocNameReference().Name())
+		p.emitJSDocNameReference(node.AsJSDocNameReference())
 	case ast.KindJSDocTypeLiteral:
 		p.emitJSDocTypeLiteral(node.AsJSDocTypeLiteral())
 	case ast.KindJSDocSignature:
-		p.write("function")
-		p.emitSignature(node)
+		p.emitJSDocSignature(node.AsJSDocSignature())
 	case ast.KindJSDocNonNullableType:
 		p.emitJSDocNonNullableType(node.AsJSDocNonNullableType())
 	case ast.KindJSDocNullableType:
@@ -4624,12 +4623,11 @@ func (p *Printer) emitJSDocNode(node *ast.Node) {
 		}
 		p.writePunctuation("}")
 	case ast.KindJSDocNameReference:
-		p.emitEntityName(node.AsJSDocNameReference().Name())
+		p.emitJSDocNameReference(node.AsJSDocNameReference())
 	case ast.KindJSDocTypeLiteral:
 		p.emitJSDocTypeLiteral(node.AsJSDocTypeLiteral())
 	case ast.KindJSDocSignature:
-		p.write("function")
-		p.emitSignature(node)
+		p.emitJSDocSignature(node.AsJSDocSignature())
 	case ast.KindJSDocText:
 		p.write(node.Text())
 	case ast.KindJSDocLink, ast.KindJSDocLinkCode, ast.KindJSDocLinkPlain:
@@ -4659,7 +4657,7 @@ func (p *Printer) emitJSDoc(node *ast.JSDoc) {
 	if hasComment && !hasTags && len(node.Comment.Nodes) == 1 && text != "" &&
 		len(text) <= 80 && !strings.Contains(text, "\n") {
 		p.writeSpace()
-		p.write(strings.TrimSpace(text))
+		p.write(strings.TrimSuffix(text, "\r"))
 		p.writeSpace()
 		p.write("*/")
 		return
@@ -4690,11 +4688,19 @@ func (p *Printer) emitJSDocCommentLines(text string) {
 			p.writeLine()
 		}
 		p.write(" *")
-		if line = strings.TrimSpace(line); line != "" {
+		line = strings.TrimSuffix(line, "\r")
+		if line != "" {
 			p.writeSpace()
 			p.write(line)
 		}
 	}
+}
+
+func (p *Printer) emitJSDocNameReference(node *ast.JSDocNameReference) {
+	p.writeSpace()
+	p.writePunctuation("{")
+	p.emitEntityName(node.Name())
+	p.writePunctuation("}")
 }
 
 func (p *Printer) writeJSDocCommentNode(text *strings.Builder, node *ast.Node) {
@@ -4763,6 +4769,7 @@ func (p *Printer) emitJSDocType(node *ast.Node) {
 
 func (p *Printer) emitJSDocTag(node *ast.Node) {
 	tagName, comment := jsDocTagBase(node)
+	var signature *ast.JSDocSignature
 	p.write("@")
 	if tagName != nil {
 		p.write(tagName.Text())
@@ -4809,36 +4816,48 @@ func (p *Printer) emitJSDocTag(node *ast.Node) {
 					p.writePunctuation(",")
 					p.writeSpace()
 				}
-				p.emitEntityName(typeParameter.AsTypeParameterDeclaration().Name())
+				p.emitJSDocTemplateTypeParameter(typeParameter.AsTypeParameterDeclaration())
 			}
 		}
 	case ast.KindJSDocSeeTag:
 		tag := node.AsJSDocSeeTag()
 		if tag.NameExpression != nil {
-			p.writeSpace()
-			p.emitTypeNode(tag.NameExpression, ast.TypePrecedenceJSDoc)
+			if tag.NameExpression.Kind == ast.KindJSDocNameReference {
+				p.emitJSDocNameReference(tag.NameExpression.AsJSDocNameReference())
+			} else {
+				p.writeSpace()
+				p.emitTypeNode(tag.NameExpression, ast.TypePrecedenceJSDoc)
+			}
 		}
 	case ast.KindJSDocImplementsTag:
 		tag := node.AsJSDocImplementsTag()
 		if tag.ClassName != nil {
 			p.writeSpace()
+			p.writePunctuation("{")
 			p.emitExpressionWithTypeArguments(tag.ClassName.AsExpressionWithTypeArguments())
+			p.writePunctuation("}")
 		}
 	case ast.KindJSDocAugmentsTag:
 		tag := node.AsJSDocAugmentsTag()
 		if tag.ClassName != nil {
 			p.writeSpace()
+			p.writePunctuation("{")
 			p.emitExpressionWithTypeArguments(tag.ClassName.AsExpressionWithTypeArguments())
+			p.writePunctuation("}")
 		}
 	case ast.KindJSDocCallbackTag:
 		tag := node.AsJSDocCallbackTag()
-		p.emitJSDocType(tag.TypeExpression)
 		if tag.Name() != nil {
 			p.writeSpace()
 			p.emitJSDocFullName(tag.Name())
 		}
+		if tag.TypeExpression != nil {
+			signature = tag.TypeExpression.AsJSDocSignature()
+		}
 	case ast.KindJSDocOverloadTag:
-		p.emitJSDocType(node.AsJSDocOverloadTag().TypeExpression)
+		if typeExpression := node.AsJSDocOverloadTag().TypeExpression; typeExpression != nil {
+			signature = typeExpression.AsJSDocSignature()
+		}
 	case ast.KindJSDocTypedefTag:
 		tag := node.AsJSDocTypedefTag()
 		p.emitJSDocType(tag.TypeExpression)
@@ -4850,7 +4869,17 @@ func (p *Printer) emitJSDocTag(node *ast.Node) {
 		tag := node.AsJSDocImportTag()
 		if tag.ImportClause != nil {
 			p.writeSpace()
-			p.emitImportClause(tag.ImportClause.AsImportClause())
+			importClause := tag.ImportClause.AsImportClause()
+			if name := importClause.Name(); name != nil {
+				p.emitBindingIdentifier(name.AsIdentifier())
+				if importClause.NamedBindings != nil {
+					p.writePunctuation(",")
+					p.writeSpace()
+				}
+			}
+			p.emitNamedImportBindings(importClause.NamedBindings)
+			p.writeSpace()
+			p.write("from")
 		}
 		if tag.ModuleSpecifier != nil {
 			p.writeSpace()
@@ -4867,16 +4896,19 @@ func (p *Printer) emitJSDocTag(node *ast.Node) {
 		for _, commentNode := range comment.Nodes {
 			p.writeJSDocCommentNode(&text, commentNode)
 		}
-		lines := strings.Split(strings.TrimSpace(text.String()), "\n")
+		lines := strings.Split(text.String(), "\n")
 		if len(lines) > 0 && lines[0] != "" {
 			p.writeSpace()
-			p.write(strings.TrimSpace(lines[0]))
+			p.write(strings.TrimSuffix(lines[0], "\r"))
 			for _, line := range lines[1:] {
 				p.writeLine()
 				p.write(" * ")
-				p.write(strings.TrimSpace(line))
+				p.write(strings.TrimSuffix(line, "\r"))
 			}
 		}
+	}
+	if signature != nil {
+		p.emitJSDocSignature(signature)
 	}
 }
 
@@ -4891,12 +4923,21 @@ func (p *Printer) emitJSDocTypeLiteral(node *ast.JSDocTypeLiteral) {
 			}
 			tag := property.AsJSDocParameterOrPropertyTag()
 			if tag.Name() != nil {
-				p.emitEntityName(tag.Name())
+				p.emitJSDocPropertyName(tag.Name())
+				if tag.IsBracketed {
+					p.writePunctuation("?")
+				}
 			}
 			if tag.TypeExpression != nil {
 				p.writePunctuation(":")
 				p.writeSpace()
-				p.emitTypeNode(tag.TypeExpression, ast.TypePrecedenceJSDoc)
+				typeNode := tag.TypeExpression
+				if typeNode.Kind == ast.KindJSDocTypeExpression {
+					typeNode = typeNode.AsJSDocTypeExpression().Type
+				}
+				if typeNode != nil {
+					p.emitTypeNode(typeNode, ast.TypePrecedenceJSDoc)
+				}
 			}
 		}
 		p.writeSpace()
@@ -4908,12 +4949,60 @@ func (p *Printer) emitJSDocTypeLiteral(node *ast.JSDocTypeLiteral) {
 	}
 }
 
+func (p *Printer) emitJSDocPropertyName(name *ast.EntityName) {
+	if ast.IsIdentifier(name) {
+		p.emitEntityName(name)
+		return
+	}
+	p.emitEntityName(name.AsQualifiedName().Right)
+}
+
+func (p *Printer) emitJSDocTemplateTypeParameter(typeParameter *ast.TypeParameterDeclaration) {
+	if typeParameter.DefaultType != nil {
+		p.writePunctuation("[")
+	}
+	p.emitModifierList(typeParameter.AsNode(), typeParameter.Modifiers(), false /*allowDecorators*/)
+	p.emitBindingIdentifier(typeParameter.Name().AsIdentifier())
+	if typeParameter.DefaultType != nil {
+		p.writePunctuation("=")
+		p.emitTypeNode(typeParameter.DefaultType, ast.TypePrecedenceJSDoc)
+		p.writePunctuation("]")
+	}
+}
+
+func (p *Printer) emitJSDocSignature(signature *ast.JSDocSignature) {
+	if signature.TypeParameters != nil {
+		for _, typeParameter := range signature.TypeParameters.Nodes {
+			p.writeLine()
+			p.write(" * @template ")
+			p.emitJSDocTemplateTypeParameter(typeParameter.AsTypeParameterDeclaration())
+		}
+	}
+	if signature.Parameters != nil {
+		for _, parameter := range signature.Parameters.Nodes {
+			p.writeLine()
+			p.write(" * ")
+			p.emitJSDocTag(parameter)
+		}
+	}
+	if signature.Type != nil {
+		p.writeLine()
+		p.write(" * ")
+		p.emitJSDocTag(signature.Type.AsNode())
+	}
+}
+
 func (p *Printer) emitJSDocFullName(node *ast.JSDocFullName) {
 	switch node.Kind {
 	case ast.KindIdentifier:
 		p.emitIdentifierName(node.AsIdentifier())
 	case ast.KindModuleDeclaration:
-		p.emitModuleDeclaration(node.AsModuleDeclaration())
+		declaration := node.AsModuleDeclaration()
+		p.emitJSDocFullName(declaration.Name())
+		if declaration.Body != nil && declaration.Body.Kind == ast.KindModuleDeclaration {
+			p.writePunctuation(".")
+			p.emitJSDocFullName(declaration.Body)
+		}
 	default:
 		panic(fmt.Sprintf("unhandled JSDoc full name: %v", node.Kind))
 	}
