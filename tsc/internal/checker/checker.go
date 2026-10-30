@@ -697,6 +697,8 @@ type Checker struct {
 	layoutMemberInfos                           map[string]MemberInfo
 	freeTypeSets                                *temporaryTypeSet
 	freePropertyCounts                          *temporaryPropertyCounts
+	freeObjectLiteralSeenMaps                   []map[string]DeclarationMeaning
+	freeCandidateLists                          [][]*Signature
 	mergedSymbols                               map[*ast.Symbol]*ast.Symbol
 	mergedExportsChecked                        collections.Set[*ast.Symbol]
 	factory                                     ast.NodeFactory
@@ -9081,9 +9083,13 @@ func (c *Checker) resolveCall(node *ast.Node, signatures []*Signature, candidate
 			c.checkSourceElements(s.typeArguments)
 		}
 	}
-	s.candidates = c.reorderCandidates(signatures, callChainFlags)
 	if candidatesOutArray != nil {
+		s.candidates = c.reorderCandidates(nil, signatures, callChainFlags)
 		*candidatesOutArray = s.candidates
+	} else {
+		// The candidate list does not outlive this call, so its storage can be reused.
+		s.candidates = c.reorderCandidates(c.getCandidateList(), signatures, callChainFlags)
+		defer c.releaseCandidateList(s.candidates)
 	}
 
 	if len(s.candidates) == 0 {
@@ -9183,14 +9189,45 @@ func (c *Checker) resolveCall(node *ast.Node, signatures []*Signature, candidate
 	return result
 }
 
-func (c *Checker) reorderCandidates(signatures []*Signature, callChainFlags SignatureFlags) []*Signature {
+func (c *Checker) getCandidateList() []*Signature {
+	if n := len(c.freeCandidateLists); n > 0 {
+		list := c.freeCandidateLists[n-1]
+		c.freeCandidateLists[n-1] = nil
+		c.freeCandidateLists = c.freeCandidateLists[:n-1]
+		return list
+	}
+	return nil
+}
+
+func (c *Checker) releaseCandidateList(list []*Signature) {
+	if cap(list) == 0 || cap(list) > 64 {
+		return
+	}
+	clear(list)
+	c.freeCandidateLists = append(c.freeCandidateLists, list[:0])
+}
+
+// reorderCandidates appends the reordered candidates to dst[:0], reusing its storage when possible.
+func (c *Checker) reorderCandidates(dst []*Signature, signatures []*Signature, callChainFlags SignatureFlags) []*Signature {
+	result := dst[:0]
+	if len(signatures) <= 1 {
+		for _, signature := range signatures {
+			if callChainFlags != 0 {
+				signature = c.getOptionalCallSignature(signature, callChainFlags)
+			}
+			result = append(result, signature)
+		}
+		return result
+	}
+	if cap(result) < len(signatures) {
+		result = make([]*Signature, 0, len(signatures))
+	}
 	var lastParent *ast.Node
 	var lastSymbol *ast.Symbol
 	var index int
 	var cutoffIndex int
 	var spliceIndex int
 	specializedIndex := -1
-	result := make([]*Signature, 0, len(signatures))
 	for _, signature := range signatures {
 		var symbol *ast.Symbol
 		var parent *ast.Node
@@ -13408,11 +13445,10 @@ func (c *Checker) checkObjectLiteral(node *ast.Node, checkMode CheckMode) *Type 
 	inDestructuringPattern := ast.IsAssignmentTarget(node)
 	// Grammar checking
 	c.checkGrammarObjectLiteralExpression(node.AsObjectLiteralExpression(), inDestructuringPattern)
+	// allPropertiesTable is only needed to check properties overwritten by spreads.
 	var allPropertiesTable ast.SymbolTable
-	if c.strictNullChecks {
-		allPropertiesTable = ast.NewSymbolTable()
-	}
-	propertiesTable := ast.NewSymbolTable()
+	// propertiesTable is created on first use, as spreads often leave it unused.
+	var propertiesTable ast.SymbolTable
 	var propertiesArray []*ast.Symbol
 	spread := c.emptyObjectType
 	c.pushCachedContextualType(node)
@@ -13437,6 +13473,9 @@ func (c *Checker) checkObjectLiteral(node *ast.Node, checkMode CheckMode) *Type 
 	// As otherwise they may not be checked until exports for the type at this position are retrieved,
 	// which may never occur.
 	for _, elem := range node.Properties() {
+		if elem.Kind == ast.KindSpreadAssignment && c.strictNullChecks && allPropertiesTable == nil {
+			allPropertiesTable = ast.NewSymbolTable()
+		}
 		if elem.Name() != nil && ast.IsComputedPropertyName(elem.Name()) {
 			c.checkComputedPropertyName(elem.Name())
 		}
@@ -13453,6 +13492,9 @@ func (c *Checker) checkObjectLiteral(node *ast.Node, checkMode CheckMode) *Type 
 		}
 		if hasComputedSymbolProperty {
 			indexInfos = append(indexInfos, c.getObjectLiteralIndexInfo(isReadonly, propertiesArray[offset:], c.esSymbolType))
+		}
+		if propertiesTable == nil {
+			propertiesTable = ast.NewSymbolTable()
 		}
 		result := c.newAnonymousType(node.Symbol(), propertiesTable, nil, nil, indexInfos)
 		result.objectFlags |= objectFlags | ObjectFlagsObjectLiteral | ObjectFlagsContainsObjectOrArrayLiteral
@@ -13534,7 +13576,7 @@ func (c *Checker) checkObjectLiteral(node *ast.Node, checkMode CheckMode) *Type 
 			if len(propertiesArray) > 0 {
 				spread = c.getSpreadType(spread, createObjectLiteralType(), node.Symbol(), objectFlags, inConstContext)
 				propertiesArray = nil
-				propertiesTable = ast.NewSymbolTable()
+				propertiesTable = nil
 				hasComputedStringProperty = false
 				hasComputedNumberProperty = false
 				hasComputedSymbolProperty = false
@@ -13578,6 +13620,9 @@ func (c *Checker) checkObjectLiteral(node *ast.Node, checkMode CheckMode) *Type 
 				}
 			}
 		} else {
+			if propertiesTable == nil {
+				propertiesTable = ast.NewSymbolTable()
+			}
 			propertiesTable.Set(member.Name(), member)
 		}
 		propertiesArray = append(propertiesArray, member)
@@ -13590,11 +13635,17 @@ func (c *Checker) checkObjectLiteral(node *ast.Node, checkMode CheckMode) *Type 
 		if len(propertiesArray) > 0 {
 			spread = c.getSpreadType(spread, createObjectLiteralType(), node.Symbol(), objectFlags, inConstContext)
 			propertiesArray = nil
-			propertiesTable = ast.NewSymbolTable()
+			propertiesTable = nil
 			hasComputedStringProperty = false
 			hasComputedNumberProperty = false
 		}
 		// remap the raw emptyObjectType fed in at the top into a fresh empty object literal type, unique to this use site
+		if spread.flags&TypeFlagsUnion == 0 {
+			if spread == c.emptyObjectType {
+				return createObjectLiteralType()
+			}
+			return spread
+		}
 		return c.mapType(spread, func(t *Type) *Type {
 			if t == c.emptyObjectType {
 				return createObjectLiteralType()
@@ -13875,12 +13926,31 @@ func (c *Checker) hasDefaultValue(node *ast.Node) bool {
 }
 
 func (c *Checker) isConstContext(node *ast.Node) bool {
+	isConst, _, _ := c.isConstContextWorker(node)
+	return isConst
+}
+
+// isConstContextWorker additionally returns the contextual type of node when it was computed in the process and
+// determined the (false) result, so that callers can reuse it.
+func (c *Checker) isConstContextWorker(node *ast.Node) (isConst bool, contextualType *Type, hasContextualType bool) {
 	parent := node.Parent
-	return ast.IsConstAssertion(parent) ||
-		c.isInlineImportAttributes(node) ||
-		c.isValidConstAssertionArgument(node) && c.isConstTypeVariable(c.getContextualType(node, ContextFlagsNone), 0) ||
-		(ast.IsParenthesizedExpression(parent) || ast.IsArrayLiteralExpression(parent) || ast.IsSpreadElement(parent)) && c.isConstContext(parent) ||
-		(ast.IsPropertyAssignment(parent) || ast.IsShorthandPropertyAssignment(parent) || ast.IsTemplateSpan(parent)) && c.isConstContext(parent.Parent)
+	if ast.IsConstAssertion(parent) || c.isInlineImportAttributes(node) {
+		return true, nil, false
+	}
+	if c.isValidConstAssertionArgument(node) {
+		contextualType = c.getContextualType(node, ContextFlagsNone)
+		if c.isConstTypeVariable(contextualType, 0) {
+			return true, nil, false
+		}
+		hasContextualType = true
+	}
+	switch {
+	case ast.IsParenthesizedExpression(parent) || ast.IsArrayLiteralExpression(parent) || ast.IsSpreadElement(parent):
+		return c.isConstContext(parent), nil, false
+	case ast.IsPropertyAssignment(parent) || ast.IsShorthandPropertyAssignment(parent) || ast.IsTemplateSpan(parent):
+		return c.isConstContext(parent.Parent), nil, false
+	}
+	return false, contextualType, hasContextualType
 }
 
 func (c *Checker) isInlineImportAttributes(node *ast.Node) bool {
@@ -14156,13 +14226,17 @@ func (c *Checker) checkObjectLiteralMethod(node *ast.Node, checkMode CheckMode) 
 
 func (c *Checker) checkExpressionForMutableLocation(node *ast.Node, checkMode CheckMode) *Type {
 	t := c.checkExpressionEx(node, checkMode)
+	isConst, contextualType, hasContextualType := c.isConstContextWorker(node)
 	switch {
-	case c.isConstContext(node):
+	case isConst:
 		return c.getRegularTypeOfLiteralType(t)
 	case isTypeAssertion(node):
 		return t
 	default:
-		return c.getWidenedLiteralLikeTypeForContextualType(t, c.instantiateContextualType(c.getContextualType(node, ContextFlagsNone), node, ContextFlagsNone))
+		if !hasContextualType {
+			contextualType = c.getContextualType(node, ContextFlagsNone)
+		}
+		return c.getWidenedLiteralLikeTypeForContextualType(t, c.instantiateContextualType(contextualType, node, ContextFlagsNone))
 	}
 }
 
