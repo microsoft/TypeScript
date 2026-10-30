@@ -449,7 +449,7 @@ func (s *Session) DidChangeWatchedFiles(ctx context.Context, changes []*lsproto.
 		if !hasRelevantChange {
 			filePath := change.Uri.Path()
 			path := s.caseSensitivity.PathKey(filePath).RemoveTrailingDirectorySeparator()
-			if contentMapperWatchedFiles.Has(path) {
+			if contentMapperWatchedFiles.Has(path) || path.ExtensionIsOneOf(contentMapperExtensions) {
 				hasRelevantChange = true
 				continue
 			}
@@ -469,10 +469,7 @@ func (s *Session) DidChangeWatchedFiles(ctx context.Context, changes []*lsproto.
 					}
 				}
 			} else {
-				if isRelevantExtension(extension) ||
-					path.ExtensionIsOneOf(contentMapperExtensions) {
-					hasRelevantChange = true
-				}
+				hasRelevantChange = true
 			}
 		}
 	}

@@ -265,6 +265,32 @@ func TestContentMapperInProject(t *testing.T) {
 		assert.Assert(t, strings.Contains(updated.Text(), "export const watched = true;"), "updated app.box missing watched change: %q", updated.Text())
 	})
 
+	t.Run("watch change to a content-mapped file schedules diagnostics refresh", func(t *testing.T) {
+		t.Parallel()
+		session, utils := newSession(true)
+		defer session.Close()
+
+		ctx := context.Background()
+		mainURI := lsproto.DocumentUri("file:///home/project/main.ts")
+		session.DidOpenFile(ctx, mainURI, 1, files["/home/project/main.ts"].(string), lsproto.LanguageKindTypeScript)
+		_, err := session.GetLanguageService(ctx, mainURI)
+		assert.NilError(t, err)
+		session.WaitForBackgroundTasks()
+
+		baselineRefreshCount := len(utils.Client().RefreshDiagnosticsCalls())
+		assert.NilError(t, utils.FS().WriteFile("/home/project/app.box", "export const version = #{target};\nexport const watched = true;\n"))
+		session.DidChangeWatchedFiles(ctx, []*lsproto.FileEvent{{
+			Uri:  "file:///home/project/app.box",
+			Type: lsproto.FileChangeTypeChanged,
+		}})
+		session.WaitForBackgroundTasks()
+
+		refreshCount := len(utils.Client().RefreshDiagnosticsCalls())
+		assert.Assert(t, refreshCount > baselineRefreshCount,
+			"expected RefreshDiagnostics to be called after app.box changed on disk, got %d calls (baseline %d)",
+			refreshCount, baselineRefreshCount)
+	})
+
 	t.Run("unchanged content-mapped file is reused from the cache across a full rebuild", func(t *testing.T) {
 		t.Parallel()
 		session, utils := newSession(true)
