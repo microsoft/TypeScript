@@ -1,9 +1,9 @@
 import * as vscode from "vscode";
 import {
-    LanguageClient,
-    Location,
+    type BaseLanguageClient,
+    type Location,
     LocationLink,
-} from "vscode-languageclient/node";
+} from "vscode-languageclient";
 
 const sourceDefinitionMethod = "custom/textDocument/sourceDefinition";
 const sourceDefinitionCommand = "typescript.native-preview.goToSourceDefinition";
@@ -11,7 +11,7 @@ const sourceDefinitionContext = "tsSupportsSourceDefinition";
 
 type SourceDefinitionResponse = Location | Location[] | LocationLink[] | null;
 
-export function registerSourceDefinitionFeature(client: LanguageClient): vscode.Disposable {
+export function registerSourceDefinitionFeature(client: BaseLanguageClient): vscode.Disposable {
     const experimental = client.initializeResult?.capabilities?.experimental as { customSourceDefinitionProvider?: boolean; } | undefined;
     const enabled = !!experimental?.customSourceDefinitionProvider;
     void vscode.commands.executeCommand("setContext", sourceDefinitionContext, enabled);

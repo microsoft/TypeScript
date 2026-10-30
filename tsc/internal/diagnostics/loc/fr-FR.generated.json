@@ -496,7 +496,6 @@
   "Containing_file_is_not_specified_and_root_directory_cannot_be_determined_skipping_lookup_in_node_mod_6126": "Fichier conteneur non spécifié et répertoire racine impossible à déterminer. Recherche ignorée dans le dossier 'node_modules'.",
   "Containing_function_is_not_an_arrow_function_95128": "La fonction conteneur n'est pas une fonction arrow",
   "Content_mapper_extension_0_must_not_contain_path_separators_18123": "L’extension du mappeur de contenu « {0} » ne doit pas contenir de séparateurs de chemin d’accès.",
-  "Content_mapper_file_extension_0_is_a_built_in_extension_and_cannot_be_registered_by_a_content_mapper_18066": "L’extension de fichier du mappeur de contenu '{0}' est une extension intégrée et ne peut pas être inscrite par un mappeur de contenu.",
   "Content_mapper_file_extension_0_is_registered_by_more_than_one_content_mapper_18067": "L’extension de fichier du mappeur de contenu '{0}' est inscrite par plusieurs mappeurs de contenu.",
   "Content_mapper_file_extension_0_must_begin_with_a_18065": "L’extension de fichier du mappeur de contenu « {0} » doit commencer par « . ».",
   "Content_mapper_output_extension_0_must_be_non_empty_and_begin_with_a_18118": "L’extension de sortie du mappeur de contenu « {0} » ne doit pas être vide et doit commencer par un « . ».",

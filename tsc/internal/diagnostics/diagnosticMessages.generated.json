@@ -1900,7 +1900,7 @@
     "Duplicate_named_capturing_groups_are_only_available_when_targeting_0_or_later_18063": "Duplicate named capturing groups are only available when targeting '{0}' or later.",
     "Private_identifiers_cannot_be_used_in_destructuring_patterns_18064": "Private identifiers cannot be used in destructuring patterns.",
     "Content_mapper_file_extension_0_must_begin_with_a_18065": "Content mapper file extension '{0}' must begin with a '.'.",
-    "Content_mapper_file_extension_0_is_a_built_in_extension_and_cannot_be_registered_by_a_content_mapper_18066": "Content mapper file extension '{0}' is a built-in extension and cannot be registered by a content mapper.",
+    "Content_mapper_file_extension_0_cannot_be_registered_because_it_ends_in_a_built_in_extension_18066": "Content mapper file extension '{0}' cannot be registered because it ends in a built-in extension.",
     "Content_mapper_file_extension_0_is_registered_by_more_than_one_content_mapper_18067": "Content mapper file extension '{0}' is registered by more than one content mapper.",
     "Content_mappers_require_the_runExternalCode_command_line_flag_to_be_enabled_18068": "Content mappers require the '--runExternalCode' command line flag to be enabled.",
     "The_content_mapper_0_failed_to_transform_this_file_18069": "The content mapper '{0}' failed to transform this file.",

@@ -1,0 +1,110 @@
+//// [tests/cases/compiler/staticPropertyUsedBeforeInitializationWithStaticBlocks.ts] ////
+
+=== staticPropertyUsedBeforeInitializationWithStaticBlocks.ts ===
+class A {
+>A : A
+
+    static {}
+    static a = A.b;
+>a : number
+>A.b : number
+>A : typeof A
+>b : number
+
+    static b: number = 1;
+>b : number
+>1 : 1
+}
+class B {
+>B : B
+
+    static { B.b = 2; }
+>B.b = 2 : 2
+>B.b : number
+>B : typeof B
+>b : number
+>2 : 2
+
+    static a = B.b;
+>a : number
+>B.b : number
+>B : typeof B
+>b : number
+
+    static b: number;
+>b : number
+}
+class C {
+>C : C
+
+    static { if (Math.random()) C.b = 2; }
+>Math.random() : number
+>Math.random : () => number
+>Math : Math
+>random : () => number
+>C.b = 2 : 2
+>C.b : number
+>C : typeof C
+>b : number
+>2 : 2
+
+    static a = C.b;
+>a : number
+>C.b : number
+>C : typeof C
+>b : number
+
+    static b: number;
+>b : number
+}
+class D {
+>D : D
+
+    static { this.#b = 2; }
+>this.#b = 2 : 2
+>this.#b : number
+>this : typeof D
+>2 : 2
+
+    static a = D.#b;
+>a : number
+>D.#b : number
+>D : typeof D
+
+    static #b: number;
+>#b : number
+}
+class E {
+>E : E
+
+    static { }
+    static a = this.b;
+>a : number
+>this.b : number
+>this : typeof E
+>b : number
+
+    static b = 1;
+>b : number
+>1 : 1
+}
+class F {
+>F : F
+
+    static { this.b = 1; }
+>this.b = 1 : 1
+>this.b : number
+>this : typeof F
+>b : number
+>1 : 1
+
+    static a = this.b;
+>a : number
+>this.b : number
+>this : typeof F
+>b : number
+
+    static b: number;
+>b : number
+}
+
