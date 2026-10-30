@@ -17,6 +17,8 @@ import (
 	"gotest.tools/v3/assert"
 )
 
+func stringSlice(values ...string) *[]string { return &values }
+
 func TestSetContentMapperContributionsBeforeDidOpen(t *testing.T) {
 	t.Parallel()
 	if !bundled.Embedded {
@@ -31,7 +33,7 @@ export const title = "Profile";
 	files := map[string]string{
 		"/home/project/tsconfig.json": `{
 			"compilerOptions": { "target": "es2020", "module": "esnext", "moduleResolution": "bundler", "strict": true },
-			"contentMappers": [ { "package": "mapper", "extensions": [".vue"] } ]
+			"contentMappers": [ { "package": "mapper", "extensions": [".vue"], "include": ["*.vue"] } ]
 		}`,
 		"/home/project/node_modules/mapper/package.json": contentmappertest.PackageJSON(contentmappertest.ComponentMapper),
 		"/home/project/ProfileCard.vue":                  component,
@@ -122,7 +124,7 @@ export const title = "Profile";
 		OpenDocuments: []lsproto.TextDocumentIdentifier{{Uri: uri}},
 		Contributions: []*lsproto.ContentMapperContribution{{
 			ContributorId: "test",
-			Extensions:    []string{".vue", ".svelte"},
+			Extensions:    stringSlice(".vue", ".svelte"),
 		}},
 	})
 	assert.Assert(t, ok && msg.AsResponse().Error == nil)
@@ -159,17 +161,29 @@ export const title = "Profile";
 			assert.Assert(t, registration.RegisterOptions != nil && registration.RegisterOptions.TextDocumentDidOpen != nil)
 			selector := registration.RegisterOptions.TextDocumentDidOpen.DocumentSelector.DocumentSelector
 			assert.Assert(t, selector != nil && len(*selector) == 1)
-			assert.Equal(t, *(*selector)[0].Pattern.Pattern.Pattern, "**/*.vue")
+			pattern := (*selector)[0].Pattern.Pattern.RelativePattern
+			assert.Assert(t, pattern != nil)
+			assert.Equal(t, string(*pattern.BaseUri.URI), "file:///home/project")
+			assert.Equal(t, pattern.Pattern, "*.vue")
 		}
 		if registration.Id == "content-mapper-semantic-tokens" {
 			assert.Assert(t, registration.RegisterOptions != nil && registration.RegisterOptions.TextDocumentSemanticTokens != nil)
 			selector := registration.RegisterOptions.TextDocumentSemanticTokens.DocumentSelector.DocumentSelector
 			assert.Assert(t, selector != nil && len(*selector) == 1)
-			assert.Equal(t, *(*selector)[0].Pattern.Pattern.Pattern, "**/*.vue")
+			pattern := (*selector)[0].Pattern.Pattern.RelativePattern
+			assert.Assert(t, pattern != nil)
+			assert.Equal(t, string(*pattern.BaseUri.URI), "file:///home/project")
+			assert.Equal(t, pattern.Pattern, "*.vue")
 		}
 		if registration.Id == "content-mapper-code-action" {
 			assert.Assert(t, registration.RegisterOptions != nil && registration.RegisterOptions.TextDocumentCodeAction != nil)
 			assert.DeepEqual(t, *registration.RegisterOptions.TextDocumentCodeAction.CodeActionKinds, expectedCodeActionKinds())
+		}
+		if registration.Id == "content-mapper-will-rename-files" {
+			// Rename filters deliberately cover the whole extension, even for narrowed selectors.
+			filters := registration.RegisterOptions.WorkspaceWillRenameFiles.Filters
+			assert.Equal(t, len(filters), 1)
+			assert.Equal(t, filters[0].Pattern.Glob, "**/*.vue")
 		}
 	}
 	for id, found := range expectedMapperRegistrations {

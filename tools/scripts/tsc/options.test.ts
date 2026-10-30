@@ -352,6 +352,10 @@ test("schemas accept representative valid configs and reject malformed configs",
         { compilerOptions: { paths: { "@/*": ["src/*"] }, plugins: [{ name: "some-plugin", customSetting: true }], moduleSuffixes: ["", ".native"] } },
         { typeAcquisition: { enable: true, include: ["node"], exclude: [] } },
         { contentMappers: [{ package: "mapper", extensions: [".vue"], options: { customSetting: true } }] },
+        { contentMappers: [{ package: "mapper" }] },
+        { contentMappers: [{ package: "mapper", include: ["src", "**/blob.toml"] }] },
+        { contentMappers: [{ package: "mapper", include: [], outputExtensions: { ".vue": ".js" } }] },
+        { contentMappers: [{ package: "mapper", outputExtensions: null }] },
         { "$schema": "./tsconfig.schema.json", "tool-specific": { anything: true } },
     ];
     const invalid = [
@@ -378,8 +382,10 @@ test("schemas accept representative valid configs and reject malformed configs",
         { references: [{ path: "" }] },
         { references: [{ path: null }] },
         { contentMappers: [{ package: "", extensions: [] }] },
-        { contentMappers: [{ package: "mapper" }] },
         { contentMappers: [{ package: "mapper", extensions: [1] }] },
+        { contentMappers: [{ package: "mapper", include: "src" }] },
+        { contentMappers: [{ package: "mapper", include: [1] }] },
+        { contentMappers: [{ package: "mapper", outputExtensions: { ".vue": 1 } }] },
         { contentMappers: [{ package: "mapper", extensions: [], options: null }] },
     ];
     for (const kind of ["tsconfig", "jsconfig"] as const) {

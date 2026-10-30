@@ -111,8 +111,8 @@ func (host *emitHost) CommonSourceDirectory() tspath.RootedDirectoryPath {
 	return host.program.CommonSourceDirectory()
 }
 
-func (host *emitHost) ContentMapperExtensions() []string {
-	return host.program.ContentMapperExtensions()
+func (host *emitHost) ContentMapperExtensionForFileName(fileName tspath.RootedFilePath) string {
+	return host.program.ContentMapperExtensionForFileName(fileName)
 }
 
 func (host *emitHost) ContentMapperExtensionRewrites() []tspath.ExtensionRewrite {

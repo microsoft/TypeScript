@@ -3922,6 +3922,16 @@ var Content_mapper_extension_0_must_not_contain_path_separators = &Message{code:
 
 var The_content_mapper_package_0_is_outside_the_open_workspace_and_will_not_be_loaded = &Message{code: 18124, category: CategoryError, key: "The_content_mapper_package_0_is_outside_the_open_workspace_and_will_not_be_loaded_18124", text: "The content mapper package '{0}' is outside the open workspace and will not be loaded."}
 
+var Content_mapper_0_must_specify_extensions_in_tsconfig_or_its_package_manifest = &Message{code: 18125, category: CategoryError, key: "Content_mapper_0_must_specify_extensions_in_tsconfig_or_its_package_manifest_18125", text: "Content mapper '{0}' must specify 'extensions' in tsconfig or its package manifest."}
+
+var Content_mapper_0_is_also_registered_for_the_extension_1_but_has_a_conflicting_outputExtensions_mapping_Each_registration_for_this_extension_must_produce_the_same_output_file_name = &Message{code: 18127, category: CategoryError, key: "Content_mapper_0_is_also_registered_for_the_extension_1_but_has_a_conflicting_outputExtensions_mappi_18127", text: "Content mapper '{0}' is also registered for the extension '{1}', but has a conflicting 'outputExtensions' mapping. Each registration for this extension must produce the same output file name."}
+
+var Content_mapper_0_is_also_registered_for_the_extension_1_but_has_no_outputExtensions_mapping_Each_registration_for_this_extension_must_produce_the_same_output_file_name = &Message{code: 18128, category: CategoryError, key: "Content_mapper_0_is_also_registered_for_the_extension_1_but_has_no_outputExtensions_mapping_Each_reg_18128", text: "Content mapper '{0}' is also registered for the extension '{1}', but has no 'outputExtensions' mapping. Each registration for this extension must produce the same output file name."}
+
+var The_conflicting_mapper_registration_is_declared_here = &Message{code: 18130, category: CategoryMessage, key: "The_conflicting_mapper_registration_is_declared_here_18130", text: "The conflicting mapper registration is declared here."}
+
+var The_conflicting_mapper_registration_is_declared_here_Its_outputExtensions_setting_is_inherited_from_the_mapper_s_package_json = &Message{code: 18131, category: CategoryMessage, key: "The_conflicting_mapper_registration_is_declared_here_Its_outputExtensions_setting_is_inherited_from__18131", text: "The conflicting mapper registration is declared here. Its 'outputExtensions' setting is inherited from the mapper's package.json."}
+
 var X_nodenext_if_module_is_nodenext_node16_if_module_is_node16_or_node18_otherwise_bundler = &Message{code: 69010, category: CategoryMessage, key: "nodenext_if_module_is_nodenext_node16_if_module_is_node16_or_node18_otherwise_bundler_69010", text: "`nodenext` if `module` is `nodenext`; `node16` if `module` is `node16` or `node18`; otherwise, `bundler`."}
 
 var File_is_a_CommonJS_module_it_may_be_converted_to_an_ES_module = &Message{code: 80001, category: CategorySuggestion, key: "File_is_a_CommonJS_module_it_may_be_converted_to_an_ES_module_80001", text: "File is a CommonJS module; it may be converted to an ES module."}
@@ -6423,6 +6433,11 @@ var allMessages = [...]**Message{
 	&The_typescript_contentMapper_outputExtensions_of_the_content_mapper_package_0_must_be_an_object_with_string_values,
 	&Content_mapper_extension_0_must_not_contain_path_separators,
 	&The_content_mapper_package_0_is_outside_the_open_workspace_and_will_not_be_loaded,
+	&Content_mapper_0_must_specify_extensions_in_tsconfig_or_its_package_manifest,
+	&Content_mapper_0_is_also_registered_for_the_extension_1_but_has_a_conflicting_outputExtensions_mapping_Each_registration_for_this_extension_must_produce_the_same_output_file_name,
+	&Content_mapper_0_is_also_registered_for_the_extension_1_but_has_no_outputExtensions_mapping_Each_registration_for_this_extension_must_produce_the_same_output_file_name,
+	&The_conflicting_mapper_registration_is_declared_here,
+	&The_conflicting_mapper_registration_is_declared_here_Its_outputExtensions_setting_is_inherited_from_the_mapper_s_package_json,
 	&X_nodenext_if_module_is_nodenext_node16_if_module_is_node16_or_node18_otherwise_bundler,
 	&File_is_a_CommonJS_module_it_may_be_converted_to_an_ES_module,
 	&This_constructor_function_may_be_converted_to_a_class_declaration,

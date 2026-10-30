@@ -356,11 +356,18 @@ func (s *Session) handleResolveModuleName(ctx context.Context, params *ResolveMo
 		if err != nil {
 			return nil, err
 		}
-		resolver = module.NewResolver(module.ResolverOptions{
+		options := module.ResolverOptions{
 			Host:            sd.snapshot,
 			CompilerOptions: data.compilerOptions,
 			ExtraExtensions: sd.snapshot.ContentMapperExtensions(),
-		})
+		}
+		if configPath := data.compilerOptions.ConfigFilePath; configPath != "" {
+			if config := sd.snapshot.ConfigFileRegistry.GetConfig(s.caseSensitivity().PathKey(configPath.AsPath())); config != nil {
+				options.ExtraExtensions = config.ContentMapperExtensions()
+				options.ContentMapperFileMatcher = config.ContentMapperFileMatcher()
+			}
+		}
+		resolver = module.NewResolver(options)
 	} else {
 		resolver = module.NewResolver(module.ResolverOptions{
 			Host:            s,

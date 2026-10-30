@@ -206,7 +206,7 @@ type Server struct {
 	watcherID        atomic.Uint32
 	watchers         collections.SyncSet[project.WatcherID]
 
-	// contentMapperRegistrationMu serializes RegisterContentMapperExtensions so the method is correctly
+	// contentMapperRegistrationMu serializes RegisterContentMapperSelectors so the method is correctly
 	// synchronized on its own rather than relying on callers to serialize it. It guards
 	// contentMapperExtensionsRegistered and the ordered unregister/register requests the method sends.
 	contentMapperRegistrationMu sync.Mutex
@@ -452,11 +452,21 @@ func (s *Server) supportsContentMapperRegistration(id string) bool {
 	}
 }
 
-// RegisterContentMapperExtensions implements project.Client. It dynamically registers text document
-// synchronization and pull diagnostics for the given otherwise unsupported file extensions so the editor forwards their
-// open/change/close notifications to the server and requests diagnostics for them. It is called with the
-// full desired set each time it changes; an empty slice removes any prior registration.
-func (s *Server) RegisterContentMapperExtensions(ctx context.Context, extensions []string) error {
+func contentMapperDocumentPattern(selector project.ContentMapperSelector) lsproto.PatternOrRelativePattern {
+	if selector.Base == "" {
+		return lsproto.PatternOrRelativePattern{Pattern: new(selector.Pattern)}
+	}
+	baseURI := lsproto.URI(lsconv.FileNameToDocumentURI(tspath.RootedFilePathFromPath(selector.Base.AsPath())))
+	return lsproto.PatternOrRelativePattern{
+		RelativePattern: &lsproto.RelativePattern{
+			BaseUri: lsproto.WorkspaceFolderOrURI{URI: &baseURI},
+			Pattern: selector.Pattern,
+		},
+	}
+}
+
+// RegisterContentMapperSelectors replaces the client registrations; an empty slice removes them.
+func (s *Server) RegisterContentMapperSelectors(ctx context.Context, selectors []project.ContentMapperSelector) error {
 	if !s.clientCapabilities.TextDocument.Synchronization.DynamicRegistration {
 		return nil
 	}
@@ -504,25 +514,29 @@ func (s *Server) RegisterContentMapperExtensions(ctx context.Context, extensions
 		s.contentMapperExtensionsRegistered = false
 	}
 
-	if len(extensions) == 0 {
+	if len(selectors) == 0 {
 		return nil
 	}
 
-	filters := make([]lsproto.TextDocumentFilterLanguageOrSchemeOrPattern, 0, len(extensions))
-	for _, ext := range extensions {
+	filters := make([]lsproto.TextDocumentFilterLanguageOrSchemeOrPattern, 0, len(selectors))
+	for _, selector := range selectors {
 		filters = append(filters, lsproto.TextDocumentFilterLanguageOrSchemeOrPattern{
 			Pattern: &lsproto.TextDocumentFilterPattern{
-				Pattern: lsproto.PatternOrRelativePattern{Pattern: new("**/*" + ext)},
+				Pattern: contentMapperDocumentPattern(selector),
 			},
 		})
 	}
 	selector := lsproto.DocumentSelectorOrNull{DocumentSelector: &filters}
-	contentMapperFileRenameFilters := make([]*lsproto.FileOperationFilter, 0, len(extensions))
-	for _, extension := range extensions {
+	contentMapperFileRenameFilters := make([]*lsproto.FileOperationFilter, 0, len(selectors))
+	var seenExtensions collections.Set[string]
+	for _, selector := range selectors {
+		if !seenExtensions.AddIfAbsent(selector.Extension) {
+			continue
+		}
 		contentMapperFileRenameFilters = append(contentMapperFileRenameFilters, &lsproto.FileOperationFilter{
 			Scheme: new("file"),
 			Pattern: &lsproto.FileOperationPattern{
-				Glob: "**/*" + extension,
+				Glob: project.ContentMapperExtensionPattern(selector.Extension),
 			},
 		})
 	}
@@ -2559,8 +2573,12 @@ func parseContentMapperContributions(values []*lsproto.ContentMapperContribution
 			return result, errors.New("content mapper contribution requires a contributorId")
 		}
 		identity := fmt.Sprintf("%s[%d]", value.ContributorId, index)
-		validExtensions := make([]string, 0, len(value.Extensions))
-		for _, extension := range value.Extensions {
+		extensions := valueOrZero(value.Extensions)
+		if len(extensions) == 0 && value.InferredProjectContribution != nil && value.InferredProjectContribution.Manifest != nil {
+			extensions = valueOrZero(value.InferredProjectContribution.Manifest.Extensions)
+		}
+		validExtensions := make([]string, 0, len(extensions))
+		for _, extension := range extensions {
 			if !isValidContributedContentMapperExtension(extension) {
 				return result, fmt.Errorf("content mapper contribution %q has invalid extension %q", identity, extension)
 			}
@@ -2607,6 +2625,7 @@ func parseContentMapperContributions(values []*lsproto.ContentMapperContribution
 			DynamicConfig:   valueOrZero(manifest.DynamicConfig),
 			ContributionID:  identity,
 		}
+		mapper.Manifest.DefaultExtensions = slices.Clone(valueOrZero(manifest.Extensions))
 		mapper.Manifest.DefaultOutputExtensions = maps.Clone(valueOrZero(manifest.OutputExtensions))
 		mapper.Definition.OutputExtensions = maps.Clone(mapper.Manifest.DefaultOutputExtensions)
 		if manifest.Cwd != nil {

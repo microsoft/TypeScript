@@ -1463,7 +1463,7 @@ func TestContentMappersValidation(t *testing.T) {
 		{
 			name:           "missing extensions",
 			contentMappers: `[{ "package": "x" }]`,
-			expectedCode:   diagnostics.Compiler_option_0_requires_a_value_of_type_1.Code(),
+			expectedCode:   diagnostics.Content_mapper_0_must_specify_extensions_in_tsconfig_or_its_package_manifest.Code(),
 		},
 		{
 			name:           "duplicate extension across mappers",
@@ -1495,6 +1495,29 @@ func TestContentMappersValidation(t *testing.T) {
 			contentMappers: `[{ "package": "x", "extensions": [".vue"], "options": ["strict"] }]`,
 			expectedCode:   diagnostics.Compiler_option_0_requires_a_value_of_type_1.Code(),
 		},
+		{
+			name:           "include is not an array",
+			contentMappers: `[{ "package": "x", "extensions": [".vue"], "include": "src" }]`,
+			expectedCode:   diagnostics.Compiler_option_0_requires_a_value_of_type_1.Code(),
+		},
+		{
+			name:           "include contains a non-string",
+			contentMappers: `[{ "package": "x", "extensions": [".vue"], "include": [1] }]`,
+			expectedCode:   diagnostics.Compiler_option_0_requires_a_value_of_type_1.Code(),
+		},
+		{
+			name:           "include ends in recursion",
+			contentMappers: `[{ "package": "x", "extensions": [".vue"], "include": ["src/**"] }]`,
+			expectedCode:   diagnostics.File_specification_cannot_end_in_a_recursive_directory_wildcard_Asterisk_Asterisk_Colon_0.Code(),
+		},
+		{
+			name: "incompatible output extensions",
+			contentMappers: `[
+				{ "package": "a", "extensions": [".vue"], "outputExtensions": {".vue": ".js"}, "include": ["src"] },
+				{ "package": "b", "extensions": [".vue"] }
+			]`,
+			expectedCode: diagnostics.Content_mapper_0_is_also_registered_for_the_extension_1_but_has_a_conflicting_outputExtensions_mapping_Each_registration_for_this_extension_must_produce_the_same_output_file_name.Code(),
+		},
 	}
 
 	for _, test := range tests {
@@ -1507,9 +1530,12 @@ func TestContentMappersValidation(t *testing.T) {
 				allFileList:     map[string]string{"/app.ts": "export {}"},
 				existingOptions: &core.CompilerOptions{RunExternalCode: core.TSTrue},
 			}
-			if test.name == "duplicate extension across mappers" {
+			if test.name == "duplicate extension across mappers" || test.name == "incompatible output extensions" {
 				config.allFileList["/node_modules/a/package.json"] = `{ "name": "a", "version": "1.0.0", "typescript": { "contentMapper": { "exec": ["a"] } } }`
 				config.allFileList["/node_modules/b/package.json"] = `{ "name": "b", "version": "1.0.0", "typescript": { "contentMapper": { "exec": ["b"] } } }`
+			}
+			if test.name == "missing extensions" {
+				config.allFileList["/node_modules/x/package.json"] = `{ "name": "x", "typescript": { "contentMapper": { "exec": ["x"] } } }`
 			}
 			for apiName, getParsed := range map[string]func(testConfig, vfs.FS, tspath.RootedDirectoryPath) *tsoptions.ParsedCommandLine{
 				"json api":           getParsedWithJsonApi,

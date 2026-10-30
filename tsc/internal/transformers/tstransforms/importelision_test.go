@@ -50,8 +50,8 @@ func (p *fakeProgram) CommonSourceDirectory() tspath.RootedDirectoryPath {
 	panic("unimplemented")
 }
 
-func (p *fakeProgram) ContentMapperExtensions() []string {
-	return nil
+func (p *fakeProgram) ContentMapperExtensionForFileName(tspath.RootedFilePath) string {
+	return ""
 }
 
 func (p *fakeProgram) ContentMapperExtensionRewrites() []tspath.ExtensionRewrite {

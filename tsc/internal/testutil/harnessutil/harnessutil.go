@@ -851,7 +851,8 @@ func (c *CompilationResult) getOutputPath(filePath tspath.RootedFilePath, ext st
 		}
 	}
 	if ext == outputPath.DeclarationEmitExtension() {
-		return outputpaths.ChangeToDeclarationExtension(outputPath, c.Program.Program())
+		declarationPath := outputpaths.ChangeToDeclarationExtension(filePath, c.Program.Program())
+		return outputPath.Directory().ResolveFile(declarationPath.BaseName())
 	}
 	return outputPath.ChangeExtension(ext)
 }

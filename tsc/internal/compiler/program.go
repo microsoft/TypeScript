@@ -550,7 +550,9 @@ func (p *Program) GetContentMapper(file *ast.SourceFile) *contentmapper.Mapper {
 	return nil
 }
 
-func (p *Program) ContentMapperExtensions() []string { return p.opts.Config.ContentMapperExtensions() }
+func (p *Program) ContentMapperExtensionForFileName(fileName tspath.RootedFilePath) string {
+	return p.opts.Config.ContentMapperExtensionForFileName(fileName)
+}
 
 func (p *Program) ContentMapperExtensionRewrites() []tspath.ExtensionRewrite {
 	return p.opts.Config.ContentMapperExtensionRewrites()
