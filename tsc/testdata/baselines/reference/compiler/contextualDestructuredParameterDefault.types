@@ -1,0 +1,65 @@
+//// [tests/cases/compiler/contextualDestructuredParameterDefault.ts] ////
+
+=== /a.js ===
+/** @typedef {{ signal?: AbortSignal }} Opts */
+/** @typedef {{ structure: (c: string, o?: Opts) => Promise<string[]> }} Adapter */
+/** @returns {Adapter} */
+export function make() {
+>make : () => Adapter
+
+  return {
+>{    async structure(c, { signal } = {}) {      signal?.throwIfAborted()      return [c]    },  } : { structure(c: string, { signal }?: Opts | undefined): Promise<string[]>; }
+
+    async structure(c, { signal } = {}) {
+>structure : (c: string, { signal }?: Opts | undefined) => Promise<string[]>
+>c : string
+>signal : AbortSignal | undefined
+>{} : {}
+
+      signal?.throwIfAborted()
+>signal?.throwIfAborted() : void | undefined
+>signal?.throwIfAborted : (() => void) | undefined
+>signal : AbortSignal | undefined
+>throwIfAborted : (() => void) | undefined
+
+      return [c]
+>[c] : string[]
+>c : string
+
+    },
+  }
+}
+
+/** @typedef {(n: number, o?: Opts) => Promise<void>} Fn */
+export const p = /** @type {Fn} */ (async (n, { signal } = {}) => {
+>p : Fn
+>(async (n, { signal } = {}) => {  signal?.throwIfAborted()}) : Fn
+>async (n, { signal } = {}) => {  signal?.throwIfAborted()} : (n: number, { signal }?: Opts | undefined) => Promise<void>
+>n : number
+>signal : AbortSignal | undefined
+>{} : {}
+
+  signal?.throwIfAborted()
+>signal?.throwIfAborted() : void | undefined
+>signal?.throwIfAborted : (() => void) | undefined
+>signal : AbortSignal | undefined
+>throwIfAborted : (() => void) | undefined
+
+})
+
+=== /b.ts ===
+type O = { signal?: AbortSignal }
+>O : O
+>signal : AbortSignal | undefined
+
+const f: (o?: O) => void = ({ signal } = {}) => { signal?.throwIfAborted() }
+>f : (o?: O) => void
+>o : O | undefined
+>({ signal } = {}) => { signal?.throwIfAborted() } : ({ signal }?: O | undefined) => void
+>signal : AbortSignal | undefined
+>{} : {}
+>signal?.throwIfAborted() : void | undefined
+>signal?.throwIfAborted : (() => void) | undefined
+>signal : AbortSignal | undefined
+>throwIfAborted : (() => void) | undefined
+

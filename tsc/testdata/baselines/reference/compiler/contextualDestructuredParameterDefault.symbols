@@ -1,0 +1,55 @@
+//// [tests/cases/compiler/contextualDestructuredParameterDefault.ts] ////
+
+=== /a.js ===
+/** @typedef {{ signal?: AbortSignal }} Opts */
+/** @typedef {{ structure: (c: string, o?: Opts) => Promise<string[]> }} Adapter */
+/** @returns {Adapter} */
+export function make() {
+>make : Symbol(make, Decl(a.js, 0, 0))
+
+  return {
+    async structure(c, { signal } = {}) {
+>structure : Symbol(structure, Decl(a.js, 4, 10))
+>c : Symbol(c, Decl(a.js, 5, 20))
+>signal : Symbol(signal, Decl(a.js, 5, 24))
+
+      signal?.throwIfAborted()
+>signal?.throwIfAborted : Symbol(AbortSignal.throwIfAborted, Decl(lib.dom.d.ts, --, --))
+>signal : Symbol(signal, Decl(a.js, 5, 24))
+>throwIfAborted : Symbol(AbortSignal.throwIfAborted, Decl(lib.dom.d.ts, --, --))
+
+      return [c]
+>c : Symbol(c, Decl(a.js, 5, 20))
+
+    },
+  }
+}
+
+/** @typedef {(n: number, o?: Opts) => Promise<void>} Fn */
+export const p = /** @type {Fn} */ (async (n, { signal } = {}) => {
+>p : Symbol(p, Decl(a.js, 13, 12))
+>n : Symbol(n, Decl(a.js, 13, 43))
+>signal : Symbol(signal, Decl(a.js, 13, 47))
+
+  signal?.throwIfAborted()
+>signal?.throwIfAborted : Symbol(AbortSignal.throwIfAborted, Decl(lib.dom.d.ts, --, --))
+>signal : Symbol(signal, Decl(a.js, 13, 47))
+>throwIfAborted : Symbol(AbortSignal.throwIfAborted, Decl(lib.dom.d.ts, --, --))
+
+})
+
+=== /b.ts ===
+type O = { signal?: AbortSignal }
+>O : Symbol(O, Decl(b.ts, 0, 0))
+>signal : Symbol(signal, Decl(b.ts, 0, 10))
+>AbortSignal : Symbol(AbortSignal, Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --))
+
+const f: (o?: O) => void = ({ signal } = {}) => { signal?.throwIfAborted() }
+>f : Symbol(f, Decl(b.ts, 1, 5))
+>o : Symbol(o, Decl(b.ts, 1, 10))
+>O : Symbol(O, Decl(b.ts, 0, 0))
+>signal : Symbol(signal, Decl(b.ts, 1, 29))
+>signal?.throwIfAborted : Symbol(AbortSignal.throwIfAborted, Decl(lib.dom.d.ts, --, --))
+>signal : Symbol(signal, Decl(b.ts, 1, 29))
+>throwIfAborted : Symbol(AbortSignal.throwIfAborted, Decl(lib.dom.d.ts, --, --))
+
