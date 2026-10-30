@@ -185,6 +185,7 @@ const symbolTableLinearMax = 16
 type SymbolMap struct {
 	entries []*Symbol
 	index   []int32 // open addressing table of entry positions plus one (0 is empty), only past symbolTableLinearMax
+	symbols [4]*Symbol
 }
 
 var symbolTableSeed = maphash.MakeSeed()
@@ -195,7 +196,9 @@ func NewSymbolTable() SymbolTable {
 
 func NewSymbolTableWithCapacity(capacity int) SymbolTable {
 	m := &SymbolMap{}
-	if capacity > 0 {
+	if capacity <= len(m.symbols) {
+		m.entries = m.symbols[:0]
+	} else {
 		m.entries = make([]*Symbol, 0, capacity)
 		if capacity > symbolTableLinearMax {
 			m.index = make([]int32, indexSizeFor(capacity))
@@ -283,10 +286,13 @@ func (m *SymbolMap) Set(key string, symbol *Symbol) {
 	}
 	i := int32(len(m.entries))
 	if cap(m.entries) == 0 {
-		// Most tables hold one or two entries, so start with room for two rather than growing from one.
-		m.entries = make([]*Symbol, 0, 2)
+		m.entries = m.symbols[:0]
 	}
 	m.entries = append(m.entries, symbol)
+	if len(m.entries) == len(m.symbols)+1 {
+		// Once entries outgrow inline storage, don't retain the copied symbols.
+		clear(m.symbols[:])
+	}
 	if m.index != nil && len(m.entries)*4 <= len(m.index)*3 {
 		m.insertIndex(key, i)
 	} else if len(m.entries) > symbolTableLinearMax {
@@ -369,7 +375,12 @@ func (m *SymbolMap) Clone() SymbolTable {
 	if m == nil {
 		return nil
 	}
-	clone := &SymbolMap{entries: slices.Clone(m.entries), index: slices.Clone(m.index)}
+	clone := &SymbolMap{index: slices.Clone(m.index)}
+	if len(m.entries) <= len(clone.symbols) {
+		clone.entries = append(clone.symbols[:0], m.entries...)
+	} else {
+		clone.entries = slices.Clone(m.entries)
+	}
 	return clone
 }
 
