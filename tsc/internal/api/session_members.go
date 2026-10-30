@@ -232,11 +232,25 @@ func memberKind(symbol *ast.Symbol) (string, bool) {
 		return MemberKindMethod, true
 	case flags&ast.SymbolFlagsAccessor != 0:
 		return MemberKindAccessor, true
-	case flags&(ast.SymbolFlagsProperty|ast.SymbolFlagsEnumMember) != 0:
+	case flags&ast.SymbolFlagsValue != 0:
+		// getPropertiesOfType also returns variables and functions, such as
+		// namespace exports. They are properties of that type for this query.
 		return MemberKindProperty, true
 	default:
 		return "", false
 	}
+}
+
+// isECMAScriptPrivateName reports a #name member. The binder stores those
+// symbols as "\xFE#<classId>@#name". A public string-literal property such as
+// "#x" starts with "#" and is not private.
+func isECMAScriptPrivateName(symbol *ast.Symbol) bool {
+	for _, decl := range symbol.Declarations() {
+		if decl != nil && ast.IsPrivateIdentifierClassElementDeclaration(decl) {
+			return true
+		}
+	}
+	return strings.HasPrefix(symbol.Name(), ast.InternalSymbolNamePrefix+"#")
 }
 
 // memberFilterName is the name a caller writes. ECMAScript private names are
@@ -253,12 +267,7 @@ func memberFilterName(symbol *ast.Symbol) string {
 }
 
 func memberVisibility(symbol *ast.Symbol) string {
-	for _, decl := range symbol.Declarations() {
-		if decl != nil && ast.IsPrivateIdentifierClassElementDeclaration(decl) {
-			return MemberVisibilityPrivate
-		}
-	}
-	if strings.HasPrefix(symbol.Name(), "#") {
+	if isECMAScriptPrivateName(symbol) {
 		return MemberVisibilityPrivate
 	}
 	flags := checker.GetDeclarationModifierFlagsFromSymbol(symbol)

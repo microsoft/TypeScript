@@ -39,6 +39,13 @@ export class Derived extends Base {
 export interface Left { left: number; }
 export interface Right { right: string; }
 export interface Both extends Left, Right { own: boolean; }
+export namespace N {
+    export const value = 1;
+    export function run(): void {}
+}
+export interface HashName {
+    "#x": number;
+}
 `
 
 func setupMembersFixture(t *testing.T) (*Session, SnapshotID, project.Handle) {
@@ -284,6 +291,57 @@ func TestGetMembersOfTypeSelectsDeclaringInterfaces(t *testing.T) {
 	assert.NilError(t, err)
 	assert.DeepEqual(t, memberNames(withLeft), []string{"own", "left"})
 	assert.Equal(t, withLeft[1].DeclaringSymbol.Name, "Left")
+}
+
+func TestGetMembersOfTypeKeepsNamespaceValuesAndPublicHashNames(t *testing.T) {
+	t.Parallel()
+	session, snapshot, projectHandle := setupMembersFixture(t)
+	namespaceSymbol, _ := session.classType(t, snapshot, projectHandle, "N")
+	namespaceType, err := session.handleGetTypeOfSymbol(context.Background(), &GetTypeOfSymbolParams{
+		Snapshot: snapshot,
+		Project:  projectHandle,
+		Symbol:   namespaceSymbol.Reference,
+	})
+	assert.NilError(t, err)
+	_, hashType := session.classType(t, snapshot, projectHandle, "HashName")
+
+	props, err := session.handleGetPropertiesOfType(context.Background(), &CheckerTypeParams{
+		Snapshot: snapshot,
+		Project:  projectHandle,
+		Type:     namespaceType.Id,
+	})
+	assert.NilError(t, err)
+	members, err := session.handleGetMembersOfType(context.Background(), &GetMembersOfTypeParams{
+		Snapshot: snapshot,
+		Project:  projectHandle,
+		Type:     namespaceType.Id,
+		Filter:   &MembersOfTypeFilter{IncludeInheritedFrom: &MembersInheritedFrom{All: true}},
+	})
+	assert.NilError(t, err)
+	assert.DeepEqual(t, memberNames(members), []string{"value", "run"})
+	assert.Equal(t, len(members), len(props))
+	for i := range props {
+		assert.Equal(t, members[i].Symbol.Reference.Id, props[i].Reference.Id)
+		assert.Equal(t, members[i].Kind, MemberKindProperty)
+	}
+
+	publicOnly, err := session.handleGetMembersOfType(context.Background(), &GetMembersOfTypeParams{
+		Snapshot: snapshot,
+		Project:  projectHandle,
+		Type:     hashType.Id,
+		Filter:   &MembersOfTypeFilter{Visibility: []string{MemberVisibilityPublic}},
+	})
+	assert.NilError(t, err)
+	assert.DeepEqual(t, memberNames(publicOnly), []string{"#x"})
+
+	privateOnly, err := session.handleGetMembersOfType(context.Background(), &GetMembersOfTypeParams{
+		Snapshot: snapshot,
+		Project:  projectHandle,
+		Type:     hashType.Id,
+		Filter:   &MembersOfTypeFilter{Visibility: []string{MemberVisibilityPrivate}},
+	})
+	assert.NilError(t, err)
+	assert.Equal(t, len(privateOnly), 0)
 }
 
 func TestGetMembersOfTypeRejectsInvalidFilters(t *testing.T) {

@@ -2316,9 +2316,9 @@ export type MemberVisibility = "public" | "protected" | "private";
  */
 export interface MembersInheritedFrom {
     /** Include every member {@link Checker.getPropertiesOfType} would return. */
-    readonly all?: boolean;
+    readonly all?: boolean | undefined;
     /** Declaring types whose members are included along with the queried type's own members. */
-    readonly types?: readonly Type[];
+    readonly types?: readonly Type[] | undefined;
 }
 
 /**
@@ -2327,14 +2327,14 @@ export interface MembersInheritedFrom {
  * `excludeNamePattern` is a RE2 regular expression matched against the source name.
  */
 export interface GetMembersOfTypeOptions {
-    readonly visibility?: readonly MemberVisibility[];
-    readonly kinds?: readonly MemberKind[];
-    readonly excludeJsDocTags?: readonly string[];
+    readonly visibility?: readonly MemberVisibility[] | undefined;
+    readonly kinds?: readonly MemberKind[] | undefined;
+    readonly excludeJsDocTags?: readonly string[] | undefined;
     /** Drop members whose source name matches. ECMAScript private names are matched as written (`#name`). */
-    readonly excludeNamePattern?: string;
-    readonly includeInheritedFrom?: MembersInheritedFrom;
+    readonly excludeNamePattern?: string | undefined;
+    readonly includeInheritedFrom?: MembersInheritedFrom | undefined;
     /** Attach each member's declared type, the same type {@link Checker.getTypeOfSymbol} returns. */
-    readonly includeDeclaredType?: boolean;
+    readonly includeDeclaredType?: boolean | undefined;
 }
 
 /** One member returned by {@link Checker.getMembersOfType}. */
@@ -3229,9 +3229,9 @@ export class Checker {
             project: this.project.handle,
             type: type.id,
             filter: options && {
-                visibility: options.visibility,
-                kinds: options.kinds,
-                excludeJsDocTags: options.excludeJsDocTags,
+                visibility: options.visibility && [...options.visibility],
+                kinds: options.kinds && [...options.kinds],
+                excludeJsDocTags: options.excludeJsDocTags && [...options.excludeJsDocTags],
                 excludeNamePattern: options.excludeNamePattern,
                 includeDeclaredType: options.includeDeclaredType,
                 includeInheritedFrom: options.includeInheritedFrom && {
