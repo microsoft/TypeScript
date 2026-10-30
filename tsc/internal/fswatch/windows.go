@@ -349,8 +349,8 @@ func (s *windowsSubscription) processCompletion(callErr error, buf []byte, bytes
 		}
 	}
 
-	// A successful read of zero bytes means the buffer overflowed and the
-	// kernel discarded its events.
+	// A successful read of 0 bytes means the buffer was too small
+	// to hold all the events
 	if bytes == 0 {
 		s.dirWatch.events.setError(ErrOverflow)
 		s.dirWatch.notify()
