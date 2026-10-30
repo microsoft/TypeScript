@@ -1,0 +1,43 @@
+//// [tests/cases/compiler/objectBindingPatternDefaultAnnotated.ts] ////
+
+=== objectBindingPatternDefaultAnnotated.ts ===
+interface Inner {
+>Inner : Symbol(Inner, Decl(objectBindingPatternDefaultAnnotated.ts, 0, 0))
+
+    a?: number;
+>a : Symbol(Inner.a, Decl(objectBindingPatternDefaultAnnotated.ts, 0, 17))
+
+    b?: number;
+>b : Symbol(Inner.b, Decl(objectBindingPatternDefaultAnnotated.ts, 1, 15))
+}
+
+interface Outer {
+>Outer : Symbol(Outer, Decl(objectBindingPatternDefaultAnnotated.ts, 3, 1))
+
+    inner?: Inner;
+>inner : Symbol(Outer.inner, Decl(objectBindingPatternDefaultAnnotated.ts, 5, 17))
+>Inner : Symbol(Inner, Decl(objectBindingPatternDefaultAnnotated.ts, 0, 0))
+}
+
+export function withSibling({ inner: { a = 1, b } = {} }: Outer) {
+>withSibling : Symbol(withSibling, Decl(objectBindingPatternDefaultAnnotated.ts, 7, 1))
+>inner : Symbol(Outer.inner, Decl(objectBindingPatternDefaultAnnotated.ts, 5, 17))
+>a : Symbol(a, Decl(objectBindingPatternDefaultAnnotated.ts, 9, 38))
+>b : Symbol(b, Decl(objectBindingPatternDefaultAnnotated.ts, 9, 45))
+>Outer : Symbol(Outer, Decl(objectBindingPatternDefaultAnnotated.ts, 3, 1))
+
+    return [a, b];
+>a : Symbol(a, Decl(objectBindingPatternDefaultAnnotated.ts, 9, 38))
+>b : Symbol(b, Decl(objectBindingPatternDefaultAnnotated.ts, 9, 45))
+}
+
+export function alone({ inner: { b } = {} }: Outer) {
+>alone : Symbol(alone, Decl(objectBindingPatternDefaultAnnotated.ts, 11, 1))
+>inner : Symbol(Outer.inner, Decl(objectBindingPatternDefaultAnnotated.ts, 5, 17))
+>b : Symbol(b, Decl(objectBindingPatternDefaultAnnotated.ts, 13, 32))
+>Outer : Symbol(Outer, Decl(objectBindingPatternDefaultAnnotated.ts, 3, 1))
+
+    return b;
+>b : Symbol(b, Decl(objectBindingPatternDefaultAnnotated.ts, 13, 32))
+}
+
