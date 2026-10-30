@@ -372,7 +372,9 @@ export declare const widget: import("./gadget").Gadget;
 {"pid":1,"tid":1,"ph":"B","cat":"emit","ts":136,"name":"emitDeclarationFileOrBundle","args":{"declarationFilePath":"/home/src/workspaces/project/out/main.d.ts"}},
 {"pid":1,"tid":1,"ph":"E","cat":"emit","ts":137,"name":"emitDeclarationFileOrBundle","args":{"declarationFilePath":"/home/src/workspaces/project/out/main.d.ts"}},
 {"pid":1,"tid":100209852,"ph":"E","cat":"emit","ts":138,"name":"emit","args":{"path":"/home/src/workspaces/project/main.ts"}},
-{"pid":1,"tid":1,"ph":"E","cat":"emit","ts":139,"name":"emit"}
+{"pid":1,"tid":100209852,"ph":"B","cat":"emit","ts":139,"name":"emitPrint","args":{"path":"/home/src/workspaces/project/main.ts"}},
+{"pid":1,"tid":100209852,"ph":"E","cat":"emit","ts":140,"name":"emitPrint","args":{"path":"/home/src/workspaces/project/main.ts"}},
+{"pid":1,"tid":1,"ph":"E","cat":"emit","ts":141,"name":"emit"}
 ]
 
 //// [/home/src/workspaces/project/trace/types_0.json] *new* 
