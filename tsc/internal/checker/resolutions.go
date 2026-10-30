@@ -29,7 +29,7 @@ type resolution struct {
 	memo      bool
 	isQuery   bool
 	resolving bool         // The resolution is the one in Checker.resolving for key
-	fromCheck bool         // The query began in a check; see beginQueryFromCheck
+	fromCheck bool         // The query began in a check; see recordFromCheck
 	prevMemo  int32        // Checker.memoTop on entry
 	result    *memoState   // Memo state of the result computed
 	effects   *memoEffects // Allocated on first use
