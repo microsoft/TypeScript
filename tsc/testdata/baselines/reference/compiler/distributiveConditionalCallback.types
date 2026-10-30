@@ -1,0 +1,91 @@
+//// [tests/cases/compiler/distributiveConditionalCallback.ts] ////
+
+=== distributiveConditionalCallback.ts ===
+// https://github.com/microsoft/TypeScript/issues/64892
+
+export class C {
+>C : C
+
+    m1<T>(
+>m1 : <T>(item: T, callback: T extends string ? (item: T) => void : (item: T) => void) => void
+
+        item: T,
+>item : T
+
+        callback: T extends string
+>callback : T extends string ? (item: T) => void : (item: T) => void
+
+            ? (item: T) => void
+>item : T
+
+            : (item: T) => void
+>item : T
+
+    ): void {
+        callback(item);
+>callback(item) : void
+>callback : ((item: T) => void) | ((item: T) => void)
+>item : T
+
+        callback(item as T extends string ? T : T);
+>callback(item as T extends string ? T : T) : void
+>callback : ((item: T) => void) | ((item: T) => void)
+>item as T extends string ? T : T : T extends string ? T : T
+>item : T
+    }
+
+    m2(
+>m2 : { (item: string, callback?: (item: string) => void): void; <T>(item: T, callback: (item: T) => void): void; }
+
+        item: string,
+>item : string
+
+        callback?: (item: string) => void
+>callback : ((item: string) => void) | undefined
+>item : string
+
+    ): void;
+    m2<T>(
+>m2 : { (item: string, callback?: (item: string) => void): void; <T>(item: T, callback: (item: T) => void): void; }
+
+        item: T,
+>item : T
+
+        callback: (item: T) => void
+>callback : (item: T) => void
+>item : T
+
+    ): void;
+    m2<T>(
+>m2 : { (item: string, callback?: (item: string) => void): void; <T_1>(item: T_1, callback: (item: T_1) => void): void; }
+
+        item: T,
+>item : T
+
+        callback: T extends string
+>callback : T extends string ? ((item: T) => void) | undefined : (item: T) => void
+
+            ? ((item: T) => void) | undefined
+>item : T
+
+            : (item: T) => void
+>item : T
+
+    ): void {
+        if (callback) {
+>callback : T extends string ? ((item: T) => void) | undefined : (item: T) => void
+
+            callback(item);
+>callback(item) : void
+>callback : ((item: T) => void) | ((item: T) => void)
+>item : T
+
+            callback(item as T extends string ? T : T);
+>callback(item as T extends string ? T : T) : void
+>callback : ((item: T) => void) | ((item: T) => void)
+>item as T extends string ? T : T : T extends string ? T : T
+>item : T
+        }
+    }
+}
+

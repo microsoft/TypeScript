@@ -493,3 +493,333 @@ type Foo2<A extends any[]> = ReturnType<(...args: A) => string>;
 >Foo2 : string
 >args : A
 
+// Inference between distributive conditional types should infer the original
+// type parameter, not its distributed representation.
+declare function inferFromConditional<T>(value: T extends unknown ? T : never): T;
+>inferFromConditional : <T>(value: T extends unknown ? T : never) => T
+>value : T extends unknown ? T : never
+
+function f100<U>(value: U extends unknown ? U : never, ordinary: U) {
+>f100 : <U>(value: U extends unknown ? U : never, ordinary: U) => void
+>value : U extends unknown ? U : never
+>ordinary : U
+
+    const inferred = inferFromConditional(value);
+>inferred : U
+>inferFromConditional(value) : U
+>inferFromConditional : <T>(value: T extends unknown ? T : never) => T
+>value : U extends unknown ? U : never
+
+    const accept: typeof inferred = ordinary;
+>accept : U
+>inferred : U
+>ordinary : U
+}
+
+type Boxed<T> = { value: T };
+>Boxed : Boxed<T>
+>value : T
+
+declare function inferFromNestedConditional<X, T>(value: X extends unknown ? Boxed<T> : never): T;
+>inferFromNestedConditional : <X, T>(value: X extends unknown ? Boxed<T> : never) => T
+>value : X extends unknown ? Boxed<T> : never
+
+function f101<U>(value: U extends unknown ? Boxed<U> : never, ordinary: U) {
+>f101 : <U>(value: U extends unknown ? Boxed<U> : never, ordinary: U) => void
+>value : U extends unknown ? Boxed<U> : never
+>ordinary : U
+
+    const inferred = inferFromNestedConditional(value);
+>inferred : U
+>inferFromNestedConditional(value) : U
+>inferFromNestedConditional : <X, T>(value: X extends unknown ? Boxed<T> : never) => T
+>value : U extends unknown ? Boxed<U> : never
+
+    const accept: typeof inferred = ordinary;
+>accept : U
+>inferred : U
+>ordinary : U
+}
+
+declare function inferFromInlineObject<X, T>(value: X extends unknown ? { value: T } : never): T;
+>inferFromInlineObject : <X, T>(value: X extends unknown ? { value: T; } : never) => T
+>value : X extends unknown ? { value: T; } : never
+>value : T
+
+function f102<U>(value: U extends unknown ? { value: U } : never, ordinary: U) {
+>f102 : <U>(value: U extends unknown ? { value: U; } : never, ordinary: U) => void
+>value : U extends unknown ? { value: U; } : never
+>value : U
+>ordinary : U
+
+    const inferred = inferFromInlineObject(value);
+>inferred : U
+>inferFromInlineObject(value) : U
+>inferFromInlineObject : <X, T>(value: X extends unknown ? { value: T; } : never) => T
+>value : U extends unknown ? { value: U; } : never
+
+    const accept: typeof inferred = ordinary;
+>accept : U
+>inferred : U
+>ordinary : U
+}
+
+declare function inferFromInlineFunction<X, T>(value: X extends unknown ? (arg: T) => T : never): T;
+>inferFromInlineFunction : <X, T>(value: X extends unknown ? (arg: T) => T : never) => T
+>value : X extends unknown ? (arg: T) => T : never
+>arg : T
+
+function f103<U>(value: U extends unknown ? (arg: U) => U : never, ordinary: U) {
+>f103 : <U>(value: U extends unknown ? (arg: U) => U : never, ordinary: U) => void
+>value : U extends unknown ? (arg: U) => U : never
+>arg : U
+>ordinary : U
+
+    const inferred = inferFromInlineFunction(value);
+>inferred : U
+>inferFromInlineFunction(value) : U
+>inferFromInlineFunction : <X, T>(value: X extends unknown ? (arg: T) => T : never) => T
+>value : U extends unknown ? (arg: U) => U : never
+
+    const accept: typeof inferred = ordinary;
+>accept : U
+>inferred : U
+>ordinary : U
+}
+
+declare function inferFromInlineIntersection<X, T>(value: X extends unknown ? { a: T } & { b: T } : never): T;
+>inferFromInlineIntersection : <X, T>(value: X extends unknown ? { a: T; } & { b: T; } : never) => T
+>value : X extends unknown ? { a: T; } & { b: T; } : never
+>a : T
+>b : T
+
+function f104<U>(value: U extends unknown ? { a: U } & { b: U } : never, ordinary: U) {
+>f104 : <U>(value: U extends unknown ? { a: U; } & { b: U; } : never, ordinary: U) => void
+>value : U extends unknown ? { a: U; } & { b: U; } : never
+>a : U
+>b : U
+>ordinary : U
+
+    const inferred = inferFromInlineIntersection(value);
+>inferred : U
+>inferFromInlineIntersection(value) : U
+>inferFromInlineIntersection : <X, T>(value: X extends unknown ? { a: T; } & { b: T; } : never) => T
+>value : U extends unknown ? { a: U; } & { b: U; } : never
+
+    const accept: typeof inferred = ordinary;
+>accept : U
+>inferred : U
+>ordinary : U
+}
+
+declare function inferFromInlineMapped<X, T extends object>(value: X extends unknown ? { [K in keyof T]: T[K] } : never): T;
+>inferFromInlineMapped : <X, T extends object>(value: X extends unknown ? { [K in keyof T]: T[K]; } : never) => T
+>value : X extends unknown ? { [K in keyof T]: T[K]; } : never
+
+function f105<U extends object>(value: U extends unknown ? { [K in keyof U]: U[K] } : never, ordinary: U) {
+>f105 : <U extends object>(value: U extends unknown ? { [K in keyof U]: U[K]; } : never, ordinary: U) => void
+>value : U extends unknown ? { [K in keyof U]: U[K]; } : never
+>ordinary : U
+
+    const inferred = inferFromInlineMapped(value);
+>inferred : U
+>inferFromInlineMapped(value) : U
+>inferFromInlineMapped : <X, T extends object>(value: X extends unknown ? { [K in keyof T]: T[K]; } : never) => T
+>value : U extends unknown ? { [K in keyof U]: U[K]; } : never
+
+    const accept: typeof inferred = ordinary;
+>accept : U
+>inferred : U
+>ordinary : U
+}
+
+declare function inferFromNestedNonDistributiveConditional<X, T>(value: X extends unknown ? ([X] extends [string] ? { value: T } : never) : never): T;
+>inferFromNestedNonDistributiveConditional : <X, T>(value: X extends unknown ? ([X] extends [string] ? { value: T; } : never) : never) => T
+>value : X extends unknown ? [X] extends [string] ? { value: T; } : never : never
+>value : T
+
+function f106<U>(value: U extends unknown ? ([U] extends [string] ? { value: U } : never) : never, ordinary: U) {
+>f106 : <U>(value: U extends unknown ? ([U] extends [string] ? { value: U; } : never) : never, ordinary: U) => void
+>value : U extends unknown ? [U] extends [string] ? { value: U; } : never : never
+>value : U
+>ordinary : U
+
+    const inferred = inferFromNestedNonDistributiveConditional(value);
+>inferred : U
+>inferFromNestedNonDistributiveConditional(value) : U
+>inferFromNestedNonDistributiveConditional : <X, T>(value: X extends unknown ? ([X] extends [string] ? { value: T; } : never) : never) => T
+>value : U extends unknown ? [U] extends [string] ? { value: U; } : never : never
+
+    const accept: typeof inferred = ordinary;
+>accept : U
+>inferred : U
+>ordinary : U
+}
+
+declare function inferFromNestedDistributiveConditional<X, T>(value: X extends unknown ? (X extends string ? { value: T } : never) : never): T;
+>inferFromNestedDistributiveConditional : <X, T>(value: X extends unknown ? (X extends string ? { value: T; } : never) : never) => T
+>value : X extends unknown ? X extends string ? { value: T; } : never : never
+>value : T
+
+function f107<U>(value: U extends unknown ? (U extends string ? { value: U } : never) : never, ordinary: U) {
+>f107 : <U>(value: U extends unknown ? (U extends string ? { value: U; } : never) : never, ordinary: U) => void
+>value : U extends unknown ? U extends string ? { value: U; } : never : never
+>value : U
+>ordinary : U
+
+    const inferred = inferFromNestedDistributiveConditional(value);
+>inferred : U
+>inferFromNestedDistributiveConditional(value) : U
+>inferFromNestedDistributiveConditional : <X, T>(value: X extends unknown ? (X extends string ? { value: T; } : never) : never) => T
+>value : U extends unknown ? U extends string ? { value: U; } : never : never
+
+    const accept: typeof inferred = ordinary;
+>accept : U
+>inferred : U
+>ordinary : U
+}
+
+declare function inferFromFalseBranch<X, T>(value: X extends string ? never : { value: T }): T;
+>inferFromFalseBranch : <X, T>(value: X extends string ? never : { value: T; }) => T
+>value : X extends string ? never : { value: T; }
+>value : T
+
+function f108<U>(value: U extends string ? never : { value: U }, ordinary: U) {
+>f108 : <U>(value: U extends string ? never : { value: U; }, ordinary: U) => void
+>value : U extends string ? never : { value: U; }
+>value : U
+>ordinary : U
+
+    const inferred = inferFromFalseBranch(value);
+>inferred : U
+>inferFromFalseBranch(value) : U
+>inferFromFalseBranch : <X, T>(value: X extends string ? never : { value: T; }) => T
+>value : U extends string ? never : { value: U; }
+
+    const accept: typeof inferred = ordinary;
+>accept : U
+>inferred : U
+>ordinary : U
+}
+
+declare function inferFromExtendsType<X, T>(value: X extends { value: T } ? 1 : 2): T;
+>inferFromExtendsType : <X, T>(value: X extends { value: T; } ? 1 : 2) => T
+>value : X extends { value: T; } ? 1 : 2
+>value : T
+
+function f109<U>(value: U extends { value: U } ? 1 : 2, ordinary: U) {
+>f109 : <U>(value: U extends { value: U; } ? 1 : 2, ordinary: U) => void
+>value : U extends { value: U; } ? 1 : 2
+>value : U
+>ordinary : U
+
+    const inferred = inferFromExtendsType(value);
+>inferred : U
+>inferFromExtendsType(value) : U
+>inferFromExtendsType : <X, T>(value: X extends { value: T; } ? 1 : 2) => T
+>value : U extends { value: U; } ? 1 : 2
+
+    const accept: typeof inferred = ordinary;
+>accept : U
+>inferred : U
+>ordinary : U
+}
+
+declare function inferFromPlainTarget<T>(value: { value: T }): T;
+>inferFromPlainTarget : <T>(value: { value: T; }) => T
+>value : { value: T; }
+>value : T
+
+function f110<U>(value: U extends unknown ? { value: U } : never, ordinary: U) {
+>f110 : <U>(value: U extends unknown ? { value: U; } : never, ordinary: U) => void
+>value : U extends unknown ? { value: U; } : never
+>value : U
+>ordinary : U
+
+    const inferred = inferFromPlainTarget(value);
+>inferred : U
+>inferFromPlainTarget(value) : U
+>inferFromPlainTarget : <T>(value: { value: T; }) => T
+>value : U extends unknown ? { value: U; } : never
+
+    const accept: typeof inferred = ordinary;
+>accept : U
+>inferred : U
+>ordinary : U
+}
+
+declare function inferFromWrappedConditional<X, T>(value: { wrap: X extends unknown ? { value: T } : never }): T;
+>inferFromWrappedConditional : <X, T>(value: { wrap: X extends unknown ? { value: T; } : never; }) => T
+>value : { wrap: X extends unknown ? { value: T; } : never; }
+>wrap : X extends unknown ? { value: T; } : never
+>value : T
+
+function f111<U>(value: { wrap: U extends unknown ? { value: U } : never }, ordinary: U) {
+>f111 : <U>(value: { wrap: U extends unknown ? { value: U; } : never; }, ordinary: U) => void
+>value : { wrap: U extends unknown ? { value: U; } : never; }
+>wrap : U extends unknown ? { value: U; } : never
+>value : U
+>ordinary : U
+
+    const inferred = inferFromWrappedConditional(value);
+>inferred : U
+>inferFromWrappedConditional(value) : U
+>inferFromWrappedConditional : <X, T>(value: { wrap: X extends unknown ? { value: T; } : never; }) => T
+>value : { wrap: U extends unknown ? { value: U; } : never; }
+
+    const accept: typeof inferred = ordinary;
+>accept : U
+>inferred : U
+>ordinary : U
+}
+
+declare function inferFromCallbackParameter<X, T>(cb: (arg: X extends unknown ? { value: T } : never) => void): T;
+>inferFromCallbackParameter : <X, T>(cb: (arg: X extends unknown ? { value: T; } : never) => void) => T
+>cb : (arg: X extends unknown ? { value: T; } : never) => void
+>arg : X extends unknown ? { value: T; } : never
+>value : T
+
+function f112<U>(cb: (arg: U extends unknown ? { value: U } : never) => void, ordinary: U) {
+>f112 : <U>(cb: (arg: U extends unknown ? { value: U; } : never) => void, ordinary: U) => void
+>cb : (arg: U extends unknown ? { value: U; } : never) => void
+>arg : U extends unknown ? { value: U; } : never
+>value : U
+>ordinary : U
+
+    const inferred = inferFromCallbackParameter(cb);
+>inferred : U
+>inferFromCallbackParameter(cb) : U
+>inferFromCallbackParameter : <X, T>(cb: (arg: X extends unknown ? { value: T; } : never) => void) => T
+>cb : (arg: U extends unknown ? { value: U; } : never) => void
+
+    const accept: typeof inferred = ordinary;
+>accept : U
+>inferred : U
+>ordinary : U
+}
+
+declare function inferFromDeeplyNested<X, T>(value: X extends unknown ? { a: { b: [() => T] } } : never): T;
+>inferFromDeeplyNested : <X, T>(value: X extends unknown ? { a: { b: [() => T]; }; } : never) => T
+>value : X extends unknown ? { a: { b: [() => T]; }; } : never
+>a : { b: [() => T]; }
+>b : [() => T]
+
+function f113<U>(value: U extends unknown ? { a: { b: [() => U] } } : never, ordinary: U) {
+>f113 : <U>(value: U extends unknown ? { a: { b: [() => U]; }; } : never, ordinary: U) => void
+>value : U extends unknown ? { a: { b: [() => U]; }; } : never
+>a : { b: [() => U]; }
+>b : [() => U]
+>ordinary : U
+
+    const inferred = inferFromDeeplyNested(value);
+>inferred : U
+>inferFromDeeplyNested(value) : U
+>inferFromDeeplyNested : <X, T>(value: X extends unknown ? { a: { b: [() => T]; }; } : never) => T
+>value : U extends unknown ? { a: { b: [() => U]; }; } : never
+
+    const accept: typeof inferred = ordinary;
+>accept : U
+>inferred : U
+>ordinary : U
+}
+
