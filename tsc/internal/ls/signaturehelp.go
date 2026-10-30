@@ -8,6 +8,7 @@ import (
 	"github.com/microsoft/TypeScript/tsc/internal/ast"
 	"github.com/microsoft/TypeScript/tsc/internal/astnav"
 	"github.com/microsoft/TypeScript/tsc/internal/checker"
+	"github.com/microsoft/TypeScript/tsc/internal/collections"
 	"github.com/microsoft/TypeScript/tsc/internal/compiler"
 	"github.com/microsoft/TypeScript/tsc/internal/core"
 	"github.com/microsoft/TypeScript/tsc/internal/debug"
@@ -454,18 +455,43 @@ func (l *LanguageService) getSignatureHelpItem(candidate *checker.Signature, isT
 	if isTypeParameterList {
 		infos = l.itemInfoForTypeParameters(candidate, c, enclosingDeclaration, sourceFile, docFormat, vsCapability, emitContext)
 	} else {
-		infos = l.itemInfoForParameters(candidate, c, enclosingDeclaration, sourceFile, docFormat, vsCapability, emitContext)
+		infos = l.itemInfoForParameters(candidate, c, callTargetSym, enclosingDeclaration, sourceFile, docFormat, vsCapability, emitContext)
 	}
 
 	suffixDpw := returnTypeToDisplayParts(candidate, c, enclosingDeclaration, sourceFile, vsCapability, emitContext)
 
-	// Generate documentation from the signature's declaration
+	// Generate documentation from the signature's declaration.
 	var documentation *string
+	var doc string
 	if declaration := candidate.Declaration(); declaration != nil {
-		doc := getDocumentationFromDeclaration(l.documentationLocationMapper(spanmap.FeatureSignatureHelp), c, nil, declaration, nil, docFormat, true /*commentOnly*/)
-		if doc != "" {
-			documentation = &doc
+		doc = getDocumentationFromDeclaration(
+			l.documentationLocationMapper(spanmap.FeatureSignatureHelp),
+			c, nil, declaration, nil, docFormat, true, /*commentOnly*/
+		)
+	}
+	if doc == "" && callTargetSym != nil {
+		for _, declaration := range callTargetSym.Declarations() {
+			if ast.IsFunctionLike(declaration) {
+				continue
+			}
+			doc = getDocumentationFromDeclaration(
+				l.documentationLocationMapper(spanmap.FeatureSignatureHelp),
+				c, callTargetSym, declaration, nil, docFormat, true, /*commentOnly*/
+			)
+			if doc != "" {
+				break
+			}
 		}
+		if doc == "" {
+			doc = documentationFromAlias(
+				l.documentationLocationMapper(spanmap.FeatureSignatureHelp),
+				c, callTargetSym, nil, docFormat, true, /*commentOnly*/
+			)
+		}
+	}
+
+	if doc != "" {
+		documentation = &doc
 	}
 
 	result := make([]signatureInformation, len(infos))
@@ -574,7 +600,7 @@ func (l *LanguageService) itemInfoForTypeParameters(candidateSignature *checker.
 			paramLabel := tempDpw.String()
 			paramDpw.WriteFrom(tempDpw)
 
-			parameter := l.createSignatureHelpParameterFromLabel(param, paramLabel, c, docFormat)
+			parameter := l.createSignatureHelpParameterFromLabel(param, paramLabel, c, docFormat, nil /*callTargetSym*/)
 			parameters = append(parameters, parameter)
 		}
 		closeParen := scanner.TokenToString(ast.KindCloseParenToken)
@@ -589,7 +615,7 @@ func (l *LanguageService) itemInfoForTypeParameters(candidateSignature *checker.
 	return result
 }
 
-func (l *LanguageService) itemInfoForParameters(candidateSignature *checker.Signature, c *checker.Checker, enclosingDeclaratipn *ast.Node, sourceFile *ast.SourceFile, docFormat lsproto.MarkupKind, vsCapability bool, emitContext *printer.EmitContext) []*signatureHelpItemInfo {
+func (l *LanguageService) itemInfoForParameters(candidateSignature *checker.Signature, c *checker.Checker, callTargetSym *ast.Symbol, enclosingDeclaratipn *ast.Node, sourceFile *ast.SourceFile, docFormat lsproto.MarkupKind, vsCapability bool, emitContext *printer.EmitContext) []*signatureHelpItemInfo {
 	builder := checker.NewNodeBuilder(c, emitContext)
 	p := printer.NewPrinter(printer.PrinterOptions{NewLine: core.NewLineKindLF}, printer.PrintHandlers{}, emitContext)
 
@@ -653,7 +679,7 @@ func (l *LanguageService) itemInfoForParameters(candidateSignature *checker.Sign
 			paramLabel := tempDpw.String()
 			paramDpw.WriteFrom(tempDpw)
 
-			parameter := l.createSignatureHelpParameterFromLabel(param, paramLabel, c, docFormat)
+			parameter := l.createSignatureHelpParameterFromLabel(param, paramLabel, c, docFormat, callTargetSym)
 			parameters[j] = parameter
 		}
 		closeParen := scanner.TokenToString(ast.KindCloseParenToken)
@@ -671,21 +697,68 @@ func (l *LanguageService) itemInfoForParameters(candidateSignature *checker.Sign
 const signatureHelpNodeBuilderFlags = nodebuilder.FlagsOmitParameterModifiers | nodebuilder.FlagsIgnoreErrors | nodebuilder.FlagsUseAliasDefinedOutsideCurrentScope
 
 // createSignatureHelpParameterFromLabel creates a signatureHelpParameter from a pre-computed label string.
-func (l *LanguageService) createSignatureHelpParameterFromLabel(parameter *ast.Symbol, label string, c *checker.Checker, docFormat lsproto.MarkupKind) signatureHelpParameter {
+// callTargetSym is the symbol of the call target, used as a fallback source of JSDoc @param
+// documentation when the parameter's own declaration has none (e.g. const function types).
+func (l *LanguageService) createSignatureHelpParameterFromLabel(parameter *ast.Symbol, label string, c *checker.Checker, docFormat lsproto.MarkupKind, callTargetSym *ast.Symbol) signatureHelpParameter {
 	isOptional := parameter.CheckFlags()&ast.CheckFlagsOptionalParameter != 0
 	isRest := parameter.CheckFlags()&ast.CheckFlagsRestParameter != 0
 	var documentation *lsproto.StringOrMarkupContent
+
+	var doc string
 	if parameter.ValueDeclaration() != nil {
-		doc := getDocumentationFromDeclaration(l.documentationLocationMapper(spanmap.FeatureSignatureHelp), c, nil, parameter.ValueDeclaration(), nil, docFormat, true /*commentOnly*/)
-		if doc != "" {
-			documentation = &lsproto.StringOrMarkupContent{
-				MarkupContent: &lsproto.MarkupContent{
-					Kind:  docFormat,
-					Value: doc,
-				},
+		doc = getDocumentationFromDeclaration(
+			l.documentationLocationMapper(spanmap.FeatureSignatureHelp),
+			c, nil, parameter.ValueDeclaration(), nil, docFormat, true, /*commentOnly*/
+		)
+	}
+
+	if doc == "" && callTargetSym != nil {
+		// The parameter's own declaration has no documentation; look for a matching @param tag
+		// on the call target's non-function-like declarations (e.g. a const with a function type).
+		// Function-like declarations are skipped so that an overload never inherits parameter
+		// documentation from a different overload.
+		declarations := callTargetSym.Declarations()
+		if callTargetSym.Flags()&ast.SymbolFlagsAlias != 0 {
+			// For a named import, the call target's declarations are import specifiers rather
+			// than the exported declaration, so also consider the aliased symbol's declarations.
+			if aliasedSymbol := c.GetAliasedSymbol(callTargetSym); aliasedSymbol != nil && aliasedSymbol != c.GetUnknownSymbol() {
+				declarations = core.Concatenate(declarations, aliasedSymbol.Declarations())
+			}
+		}
+		for _, declaration := range declarations {
+			if ast.IsFunctionLike(declaration) {
+				continue
+			}
+
+			tag := getMatchingJSDocTag(c, declaration, parameter.Name(), isMatchingParameterTag, &collections.Set[*ast.Symbol]{})
+			if tag == nil {
+				continue
+			}
+
+			var b strings.Builder
+			writeComments(
+				l.documentationLocationMapper(spanmap.FeatureSignatureHelp),
+				&b,
+				c,
+				tag.Comments(),
+				docFormat == lsproto.MarkupKindMarkdown,
+			)
+			doc = b.String()
+			if doc != "" {
+				break
 			}
 		}
 	}
+
+	if doc != "" {
+		documentation = &lsproto.StringOrMarkupContent{
+			MarkupContent: &lsproto.MarkupContent{
+				Kind:  docFormat,
+				Value: doc,
+			},
+		}
+	}
+
 	return signatureHelpParameter{
 		parameterInfo: &lsproto.ParameterInformation{
 			Label:         lsproto.StringOrTuple{String: &label},
@@ -699,7 +772,7 @@ func (l *LanguageService) createSignatureHelpParameterFromLabel(parameter *ast.S
 func (l *LanguageService) createSignatureHelpParameterForParameter(parameter *ast.Symbol, enclosingDeclaratipn *ast.Node, builder *checker.NodeBuilder, p *printer.Printer, sourceFile *ast.SourceFile, c *checker.Checker, docFormat lsproto.MarkupKind) signatureHelpParameter {
 	defer builder.EmitContext().Factory.ReleaseArenas()
 	display := p.Emit(builder.SymbolToParameterDeclaration(parameter, enclosingDeclaratipn, signatureHelpNodeBuilderFlags, nodebuilder.InternalFlagsNone, nil), sourceFile)
-	return l.createSignatureHelpParameterFromLabel(parameter, display, c, docFormat)
+	return l.createSignatureHelpParameterFromLabel(parameter, display, c, docFormat, nil /*callTargetSym*/)
 }
 
 func createSignatureHelpParameterForTypeParameter(t *checker.Type, sourceFile *ast.SourceFile, enclosingDeclaration *ast.Node, builder *checker.NodeBuilder, p *printer.Printer) signatureHelpParameter {
