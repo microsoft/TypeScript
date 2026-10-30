@@ -40,3 +40,26 @@ func TestPrintNodeRestoresEmitFlags(t *testing.T) {
 	assert.Equal(t, roundTrip(true), "[Date, string, { a: string; }]")
 	assert.Assert(t, roundTrip(false) != "[Date, string, { a: string; }]") // no hint, default multi-line layout
 }
+
+// EFNoAsciiEscaping must also survive the round trip: a synthesized non-ASCII string literal is escaped by default
+// and printed verbatim when the node builder marked it.
+func TestPrintNodeRestoresNoAsciiEscaping(t *testing.T) {
+	t.Parallel()
+
+	roundTrip := func(noEscape bool) string {
+		ec := printer.NewEmitContext()
+		f := ec.Factory.AsNodeFactory()
+		node := f.NewLiteralTypeNode(f.NewStringLiteral("é", ast.TokenFlagsNone))
+		if noEscape {
+			ec.SetEmitFlags(node.AsLiteralTypeNode().Literal, printer.EFNoAsciiEscaping)
+		}
+		data, _, err := encoder.EncodeNodeWithEmitContext(node, nil, ec)
+		assert.NilError(t, err)
+		decoded, err := encoder.DecodeNodes(data)
+		assert.NilError(t, err)
+		return newPrinter(&PrintNodeParams{}, decoded).Emit(decoded, nil)
+	}
+
+	assert.Equal(t, roundTrip(true), `"é"`)
+	assert.Equal(t, roundTrip(false), `"\u00E9"`)
+}
