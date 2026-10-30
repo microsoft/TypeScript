@@ -19431,6 +19431,22 @@ func (c *Checker) getPropertyOfTypeEx(t *Type, name string, skipObjectFunctionPr
 	return nil
 }
 
+// Looks up a property of an object type whose members are already resolved, giving the same result as
+// getPropertyOfTypeEx on its apparent type without the work of getting there. Reports false when the
+// full lookup is needed: for other kinds of types, module types, members that aren't plain values, and
+// missing members that may come from the global Object or Function types.
+func getValueMemberOfResolvedObjectType(t *Type, name string, skipObjectFunctionPropertyAugment bool) (*ast.Symbol, bool) {
+	if t.flags != TypeFlagsObject || t.objectFlags&(ObjectFlagsMapped|ObjectFlagsMembersResolved) != ObjectFlagsMembersResolved ||
+		t.symbol != nil && t.symbol.Flags()&ast.SymbolFlagsValueModule != 0 {
+		return nil, false
+	}
+	prop := t.AsStructuredType().getMember(name)
+	if prop == nil {
+		return nil, skipObjectFunctionPropertyAugment
+	}
+	return prop, prop.Flags()&ast.SymbolFlagsValue != 0
+}
+
 // Return the type of the given property in the given type, or nil if no such property exists
 func (c *Checker) getTypeOfPropertyOfType(t *Type, name string) *Type {
 	prop := c.getPropertyOfType(t, name)
@@ -19497,45 +19513,54 @@ func (c *Checker) getApplicableIndexInfo(t *Type, keyType *Type) *IndexInfo {
 }
 
 func (c *Checker) getApplicableIndexInfoForName(t *Type, name string) *IndexInfo {
-	if isLateBoundName(name) {
-		return c.getApplicableIndexInfo(t, c.esSymbolType)
+	indexInfos := c.getIndexInfosOfType(t)
+	// Most types have no index signatures, so avoid creating a literal type for the name.
+	if len(indexInfos) == 0 {
+		return nil
 	}
-	return c.getApplicableIndexInfo(t, c.getStringLiteralType(name))
+	if isLateBoundName(name) {
+		return c.findApplicableIndexInfo(indexInfos, c.esSymbolType)
+	}
+	return c.findApplicableIndexInfo(indexInfos, c.getStringLiteralType(name))
 }
 
 func (c *Checker) findApplicableIndexInfo(indexInfos []*IndexInfo, keyType *Type) *IndexInfo {
 	// Index signatures for type 'string' are considered only when no other index signatures apply.
 	var stringIndexInfo *IndexInfo
-	applicableInfos := make([]*IndexInfo, 0, 8)
+	var applicableInfo *IndexInfo
+	// Value types of all applicable index signatures, collected only when there is more than one.
+	var applicableTypes []*Type
+	isReadonly := true
 	for _, info := range indexInfos {
 		if info.keyType == c.stringType {
 			stringIndexInfo = info
 		} else if c.isApplicableIndexType(keyType, info.keyType) {
-			applicableInfos = append(applicableInfos, info)
-		}
-	}
-	// When more than one index signature is applicable we create a synthetic IndexInfo. Instead of computing
-	// the intersected key type, we just use unknownType for the key type as nothing actually depends on the
-	// keyType property of the returned IndexInfo.
-	switch len(applicableInfos) {
-	case 0:
-		if stringIndexInfo != nil && c.isApplicableIndexType(keyType, c.stringType) {
-			return stringIndexInfo
-		}
-		return nil
-	case 1:
-		return applicableInfos[0]
-	default:
-		isReadonly := true
-		types := make([]*Type, len(applicableInfos))
-		for i, info := range applicableInfos {
-			types[i] = info.valueType
+			if applicableInfo == nil {
+				applicableInfo = info
+			} else {
+				if applicableTypes == nil {
+					applicableTypes = append(make([]*Type, 0, len(indexInfos)), applicableInfo.valueType)
+				}
+				applicableTypes = append(applicableTypes, info.valueType)
+			}
 			if !info.isReadonly {
 				isReadonly = false
 			}
 		}
-		return c.newIndexInfo(c.unknownType, c.getIntersectionType(types), isReadonly, nil, nil)
 	}
+	if applicableInfo == nil {
+		if stringIndexInfo != nil && c.isApplicableIndexType(keyType, c.stringType) {
+			return stringIndexInfo
+		}
+		return nil
+	}
+	if applicableTypes == nil {
+		return applicableInfo
+	}
+	// When more than one index signature is applicable we create a synthetic IndexInfo. Instead of computing
+	// the intersected key type, we just use unknownType for the key type as nothing actually depends on the
+	// keyType property of the returned IndexInfo.
+	return c.newIndexInfo(c.unknownType, c.getIntersectionType(applicableTypes), isReadonly, nil, nil)
 }
 
 func (c *Checker) isApplicableIndexType(source *Type, target *Type) bool {
@@ -20175,16 +20200,23 @@ func (c *Checker) getTypeWithThisArgument(t *Type, thisArgument *Type, needAppar
 
 func (c *Checker) addInheritedMembers(symbols ast.SymbolTable, baseSymbols []*ast.Symbol) ast.SymbolTable {
 	for _, base := range baseSymbols {
-		if !isStaticPrivateIdentifierProperty(base) {
-			if s, ok := symbols.Lookup(base.Name()); !ok || s.Flags()&ast.SymbolFlagsValue == 0 {
-				if symbols == nil {
-					symbols = ast.NewSymbolTable()
-				}
-				symbols.Set(base.Name(), base)
+		if isInheritedMember(symbols, base) {
+			if symbols == nil {
+				symbols = ast.NewSymbolTable()
 			}
+			symbols.Set(base.Name(), base)
 		}
 	}
 	return symbols
+}
+
+// Reports whether addInheritedMembers would add the base symbol to the given symbols.
+func isInheritedMember(symbols ast.SymbolTable, base *ast.Symbol) bool {
+	if isStaticPrivateIdentifierProperty(base) {
+		return false
+	}
+	s, ok := symbols.Lookup(base.Name())
+	return !ok || s.Flags()&ast.SymbolFlagsValue == 0
 }
 
 func (c *Checker) resolveDeclaredMembers(t *Type) *InterfaceType {
@@ -21264,9 +21296,14 @@ func (c *Checker) resolveAnonymousTypeMembers(t *Type) {
 		classType := c.getDeclaredTypeOfClassOrInterface(symbol)
 		baseConstructorType := c.getBaseConstructorTypeOfClass(classType)
 		if baseConstructorType.flags&(TypeFlagsObject|TypeFlagsIntersection|TypeFlagsTypeVariable) != 0 {
-			members = members.Clone()
-			c.addInheritedMembers(members, c.getPropertiesOfType(baseConstructorType))
-			c.setStructuredTypeMembers(t, members, nil, nil, nil)
+			// Base static members are usually all shadowed (e.g. 'prototype'), in which case
+			// the exports table can be used as is.
+			baseProps := c.getPropertiesOfType(baseConstructorType)
+			if i := slices.IndexFunc(baseProps, func(base *ast.Symbol) bool { return isInheritedMember(members, base) }); i >= 0 {
+				members = members.Clone()
+				c.addInheritedMembers(members, baseProps[i:])
+				c.setStructuredTypeMembers(t, members, nil, nil, nil)
+			}
 		} else if baseConstructorType == c.anyType {
 			baseConstructorIndexInfo = c.anyBaseTypeIndexInfo
 		}
@@ -22048,95 +22085,102 @@ func (c *Checker) createUnionOrIntersectionProperty(containingType *Type, name s
 	syntheticFlag := ast.CheckFlagsSyntheticMethod
 	mergedInstantiations := false
 	for _, current := range containingType.Types() {
-		t := c.getApparentType(current)
-		if !c.isErrorType(t) && t.flags&TypeFlagsNever == 0 {
-			prop := c.getPropertyOfTypeEx(t, name, skipObjectFunctionPropertyAugment, false)
-			var modifiers ast.ModifierFlags
-			if prop != nil {
-				modifiers = getDeclarationModifierFlagsFromSymbol(prop)
-				writeModifiers := getDeclarationModifierFlagsFromSymbolEx(prop, true /*isWrite*/)
-				if prop.Flags()&ast.SymbolFlagsClassMember != 0 {
-					if isUnion {
-						optionalFlag |= prop.Flags() & ast.SymbolFlagsOptional
-					} else {
-						optionalFlag &= prop.Flags()
-					}
-				}
-				if singleProp == nil {
-					singleProp = prop
-					propFlags = core.OrElse(prop.Flags()&ast.SymbolFlagsAccessor, ast.SymbolFlagsProperty)
-				} else if prop != singleProp {
-					isInstantiation := c.getTargetSymbol(prop) == c.getTargetSymbol(singleProp)
-					// If the symbols are instances of one another with identical types - consider the symbols
-					// equivalent and just use the first one, which thus allows us to avoid eliding private
-					// members when intersecting a (this-)instantiations of a class with its raw base or another instance
-					if isInstantiation && c.compareProperties(singleProp, prop, compareTypesEqual) == TernaryTrue {
-						// If we merged instantiations of a generic type, we replicate the symbol parent resetting behavior we used
-						// to do when we recorded multiple distinct symbols so that we still get, eg, `Array<T>.length` printed
-						// back and not `Array<string>.length` when we're looking at a `.length` access on a `string[] | number[]`
-						mergedInstantiations = singleProp.Parent() != nil && len(c.getLocalTypeParametersOfClassOrInterfaceOrTypeAlias(singleProp.Parent())) != 0
-					} else {
-						if propSet.Size() == 0 {
-							propSet.Add(singleProp)
-						}
-						propSet.Add(prop)
-					}
-					// classes created by mixins are represented as intersections
-					// and overriding a property in a derived class redefines it completely at runtime
-					// so a get accessor can't be merged with a set accessor in a base class,
-					// for that reason the accessor flags are only used when they are the same in all constituents
-					if propFlags&ast.SymbolFlagsAccessor != 0 && (prop.Flags()&ast.SymbolFlagsAccessor != (propFlags & ast.SymbolFlagsAccessor)) {
-						propFlags = (propFlags &^ ast.SymbolFlagsAccessor) | ast.SymbolFlagsProperty
-					}
-				}
-				if isUnion && c.isReadonlySymbol(prop) {
-					checkFlags |= ast.CheckFlagsReadonly
-				} else if !isUnion && !c.isReadonlySymbol(prop) {
-					checkFlags &^= ast.CheckFlagsReadonly
-				}
-				if modifiers&ast.ModifierFlagsProtected != 0 && modifiers&ast.ModifierFlagsPublic == 0 {
-					checkFlags |= ast.CheckFlagsContainsProtected
-				} else if modifiers&ast.ModifierFlagsPrivate != 0 && modifiers&ast.ModifierFlagsPublic == 0 {
-					checkFlags |= ast.CheckFlagsContainsPrivate
+		t := current
+		var prop *ast.Symbol
+		if member, ok := getValueMemberOfResolvedObjectType(current, name, skipObjectFunctionPropertyAugment); ok {
+			prop = member
+		} else {
+			t = c.getApparentType(current)
+			if c.isErrorType(t) || t.flags&TypeFlagsNever != 0 {
+				continue
+			}
+			prop = c.getPropertyOfTypeEx(t, name, skipObjectFunctionPropertyAugment, false)
+		}
+		var modifiers ast.ModifierFlags
+		if prop != nil {
+			modifiers = getDeclarationModifierFlagsFromSymbol(prop)
+			writeModifiers := getDeclarationModifierFlagsFromSymbolEx(prop, true /*isWrite*/)
+			if prop.Flags()&ast.SymbolFlagsClassMember != 0 {
+				if isUnion {
+					optionalFlag |= prop.Flags() & ast.SymbolFlagsOptional
 				} else {
-					checkFlags |= ast.CheckFlagsContainsPublic
+					optionalFlag &= prop.Flags()
 				}
-				if writeModifiers&ast.ModifierFlagsProtected != 0 && writeModifiers&ast.ModifierFlagsPublic == 0 {
-					checkFlags |= ast.CheckFlagsContainsWriteProtected
-				} else if writeModifiers&ast.ModifierFlagsPrivate != 0 && writeModifiers&ast.ModifierFlagsPublic == 0 {
-					checkFlags |= ast.CheckFlagsContainsWritePrivate
+			}
+			if singleProp == nil {
+				singleProp = prop
+				propFlags = core.OrElse(prop.Flags()&ast.SymbolFlagsAccessor, ast.SymbolFlagsProperty)
+			} else if prop != singleProp {
+				isInstantiation := c.getTargetSymbol(prop) == c.getTargetSymbol(singleProp)
+				// If the symbols are instances of one another with identical types - consider the symbols
+				// equivalent and just use the first one, which thus allows us to avoid eliding private
+				// members when intersecting a (this-)instantiations of a class with its raw base or another instance
+				if isInstantiation && c.compareProperties(singleProp, prop, compareTypesEqual) == TernaryTrue {
+					// If we merged instantiations of a generic type, we replicate the symbol parent resetting behavior we used
+					// to do when we recorded multiple distinct symbols so that we still get, eg, `Array<T>.length` printed
+					// back and not `Array<string>.length` when we're looking at a `.length` access on a `string[] | number[]`
+					mergedInstantiations = singleProp.Parent() != nil && len(c.getLocalTypeParametersOfClassOrInterfaceOrTypeAlias(singleProp.Parent())) != 0
 				} else {
-					checkFlags |= ast.CheckFlagsContainsWritePublic
-				}
-				if modifiers&ast.ModifierFlagsStatic != 0 {
-					checkFlags |= ast.CheckFlagsContainsStatic
-				}
-				if !isPrototypeProperty(prop) {
-					syntheticFlag = ast.CheckFlagsSyntheticProperty
-				}
-			} else if isUnion {
-				var indexInfo *IndexInfo
-				if !isLateBoundName(name) {
-					indexInfo = c.getApplicableIndexInfoForName(t, name)
-				}
-				if indexInfo != nil {
-					propFlags = propFlags&^ast.SymbolFlagsAccessor | ast.SymbolFlagsProperty
-					checkFlags |= ast.CheckFlagsWritePartial | core.IfElse(indexInfo.isReadonly, ast.CheckFlagsReadonly, 0)
-					if isTupleType(t) {
-						indexType := c.getRestTypeOfTupleType(t)
-						if indexType == nil {
-							indexType = c.undefinedType
-						}
-						indexTypes = append(indexTypes, indexType)
-					} else {
-						indexTypes = append(indexTypes, indexInfo.valueType)
+					if propSet.Size() == 0 {
+						propSet.Add(singleProp)
 					}
-				} else if isObjectLiteralType(t) && t.objectFlags&ObjectFlagsContainsSpread == 0 {
-					checkFlags |= ast.CheckFlagsWritePartial
-					indexTypes = append(indexTypes, c.undefinedType)
-				} else {
-					checkFlags |= ast.CheckFlagsReadPartial
+					propSet.Add(prop)
 				}
+				// classes created by mixins are represented as intersections
+				// and overriding a property in a derived class redefines it completely at runtime
+				// so a get accessor can't be merged with a set accessor in a base class,
+				// for that reason the accessor flags are only used when they are the same in all constituents
+				if propFlags&ast.SymbolFlagsAccessor != 0 && (prop.Flags()&ast.SymbolFlagsAccessor != (propFlags & ast.SymbolFlagsAccessor)) {
+					propFlags = (propFlags &^ ast.SymbolFlagsAccessor) | ast.SymbolFlagsProperty
+				}
+			}
+			if isUnion && c.isReadonlySymbol(prop) {
+				checkFlags |= ast.CheckFlagsReadonly
+			} else if !isUnion && !c.isReadonlySymbol(prop) {
+				checkFlags &^= ast.CheckFlagsReadonly
+			}
+			if modifiers&ast.ModifierFlagsProtected != 0 && modifiers&ast.ModifierFlagsPublic == 0 {
+				checkFlags |= ast.CheckFlagsContainsProtected
+			} else if modifiers&ast.ModifierFlagsPrivate != 0 && modifiers&ast.ModifierFlagsPublic == 0 {
+				checkFlags |= ast.CheckFlagsContainsPrivate
+			} else {
+				checkFlags |= ast.CheckFlagsContainsPublic
+			}
+			if writeModifiers&ast.ModifierFlagsProtected != 0 && writeModifiers&ast.ModifierFlagsPublic == 0 {
+				checkFlags |= ast.CheckFlagsContainsWriteProtected
+			} else if writeModifiers&ast.ModifierFlagsPrivate != 0 && writeModifiers&ast.ModifierFlagsPublic == 0 {
+				checkFlags |= ast.CheckFlagsContainsWritePrivate
+			} else {
+				checkFlags |= ast.CheckFlagsContainsWritePublic
+			}
+			if modifiers&ast.ModifierFlagsStatic != 0 {
+				checkFlags |= ast.CheckFlagsContainsStatic
+			}
+			if !isPrototypeProperty(prop) {
+				syntheticFlag = ast.CheckFlagsSyntheticProperty
+			}
+		} else if isUnion {
+			var indexInfo *IndexInfo
+			if !isLateBoundName(name) {
+				indexInfo = c.getApplicableIndexInfoForName(t, name)
+			}
+			if indexInfo != nil {
+				propFlags = propFlags&^ast.SymbolFlagsAccessor | ast.SymbolFlagsProperty
+				checkFlags |= ast.CheckFlagsWritePartial | core.IfElse(indexInfo.isReadonly, ast.CheckFlagsReadonly, 0)
+				if isTupleType(t) {
+					indexType := c.getRestTypeOfTupleType(t)
+					if indexType == nil {
+						indexType = c.undefinedType
+					}
+					indexTypes = append(indexTypes, indexType)
+				} else {
+					indexTypes = append(indexTypes, indexInfo.valueType)
+				}
+			} else if isObjectLiteralType(t) && t.objectFlags&ObjectFlagsContainsSpread == 0 {
+				checkFlags |= ast.CheckFlagsWritePartial
+				indexTypes = append(indexTypes, c.undefinedType)
+			} else {
+				checkFlags |= ast.CheckFlagsReadPartial
 			}
 		}
 	}
@@ -22331,6 +22375,15 @@ func (c *Checker) isMappedTypeGenericIndexedAccess(t *Type) bool {
  * type itself.
  */
 func (c *Checker) getApparentType(t *Type) *Type {
+	// Object types other than mapped types are their own apparent types. Checking this here
+	// keeps the common case cheap enough to inline.
+	if t.flags&TypeFlagsObject != 0 && t.objectFlags&ObjectFlagsMapped == 0 {
+		return t
+	}
+	return c.getApparentTypeWorker(t)
+}
+
+func (c *Checker) getApparentTypeWorker(t *Type) *Type {
 	originalType := t
 	if t.flags&TypeFlagsInstantiable != 0 {
 		t = c.getBaseConstraintOfType(t)
@@ -22421,6 +22474,15 @@ func (c *Checker) getApparentTypeOfIntersectionType(t *Type, thisArgument *Type)
  * no constituent property has type 'never', but the intersection of the constituent property types is 'never'.
  */
 func (c *Checker) getReducedType(t *Type) *Type {
+	// Only unions and intersections can reduce. Checking this here keeps the common case
+	// cheap enough to inline.
+	if t.flags&(TypeFlagsUnion|TypeFlagsIntersection) == 0 {
+		return t
+	}
+	return c.getReducedTypeWorker(t)
+}
+
+func (c *Checker) getReducedTypeWorker(t *Type) *Type {
 	switch {
 	case t.flags&TypeFlagsUnion != 0:
 		if t.objectFlags&ObjectFlagsContainsIntersections != 0 {
@@ -22507,6 +22569,10 @@ func (c *Checker) getReducedApparentType(t *Type) *Type {
 	// type reduction both before and after obtaining the apparent type. For example, given a type parameter
 	// 'T extends A | B', the type 'T & X' becomes 'A & X | B & X' after obtaining the apparent type, and
 	// that type may need further reduction to remove empty intersections.
+	if t.flags&TypeFlagsObject != 0 && t.objectFlags&ObjectFlagsMapped == 0 {
+		// Neither reduces nor has a different apparent type.
+		return t
+	}
 	return c.getReducedType(c.getApparentType(c.getReducedType(t)))
 }
 
@@ -31349,55 +31415,66 @@ func (c *Checker) getTypeOfPropertyOfContextualType(t *Type, name string) *Type 
 }
 
 func (c *Checker) getTypeOfPropertyOfContextualTypeEx(t *Type, name string, nameType *Type) *Type {
-	return c.mapTypeEx(t, func(t *Type) *Type {
-		if t.flags&TypeFlagsIntersection != 0 {
-			var types []*Type
-			var indexInfoCandidates []*Type
-			ignoreIndexInfos := false
-			for _, constituentType := range t.Types() {
-				if constituentType.flags&TypeFlagsObject == 0 {
-					continue
-				}
-				if c.isGenericMappedType(constituentType) && c.getMappedTypeNameTypeKind(constituentType) != MappedTypeNameTypeKindRemapping {
-					substitutedType := c.getIndexedMappedTypeSubstitutedTypeOfContextualType(constituentType, name, nameType)
-					types = c.appendContextualPropertyTypeConstituent(types, substitutedType)
-					continue
-				}
-				propertyType := c.getTypeOfConcretePropertyOfContextualType(constituentType, name)
-				if propertyType == nil {
-					if !ignoreIndexInfos {
-						indexInfoCandidates = append(indexInfoCandidates, constituentType)
-					}
-					continue
-				}
-				ignoreIndexInfos = true
-				indexInfoCandidates = nil
-				types = c.appendContextualPropertyTypeConstituent(types, propertyType)
-			}
-			for _, candidate := range indexInfoCandidates {
-				indexInfoType := c.getTypeFromIndexInfosOfContextualType(candidate, name, nameType)
-				types = c.appendContextualPropertyTypeConstituent(types, indexInfoType)
-			}
-			if len(types) == 0 {
-				return nil
-			}
-			if len(types) == 1 {
-				return types[0]
-			}
-			return c.getIntersectionType(types)
+	if t.flags&TypeFlagsUnion == 0 {
+		// Avoid allocating a closure for mapType when there is a single type to look in.
+		if t.flags&TypeFlagsNever != 0 {
+			return t
 		}
-		if t.flags&TypeFlagsObject == 0 {
+		return c.getTypeOfPropertyOfContextualTypeWorker(t, name, nameType)
+	}
+	return c.mapTypeEx(t, func(t *Type) *Type {
+		return c.getTypeOfPropertyOfContextualTypeWorker(t, name, nameType)
+	}, true /*noReductions*/)
+}
+
+func (c *Checker) getTypeOfPropertyOfContextualTypeWorker(t *Type, name string, nameType *Type) *Type {
+	if t.flags&TypeFlagsIntersection != 0 {
+		var types []*Type
+		var indexInfoCandidates []*Type
+		ignoreIndexInfos := false
+		for _, constituentType := range t.Types() {
+			if constituentType.flags&TypeFlagsObject == 0 {
+				continue
+			}
+			if c.isGenericMappedType(constituentType) && c.getMappedTypeNameTypeKind(constituentType) != MappedTypeNameTypeKindRemapping {
+				substitutedType := c.getIndexedMappedTypeSubstitutedTypeOfContextualType(constituentType, name, nameType)
+				types = c.appendContextualPropertyTypeConstituent(types, substitutedType)
+				continue
+			}
+			propertyType := c.getTypeOfConcretePropertyOfContextualType(constituentType, name)
+			if propertyType == nil {
+				if !ignoreIndexInfos {
+					indexInfoCandidates = append(indexInfoCandidates, constituentType)
+				}
+				continue
+			}
+			ignoreIndexInfos = true
+			indexInfoCandidates = nil
+			types = c.appendContextualPropertyTypeConstituent(types, propertyType)
+		}
+		for _, candidate := range indexInfoCandidates {
+			indexInfoType := c.getTypeFromIndexInfosOfContextualType(candidate, name, nameType)
+			types = c.appendContextualPropertyTypeConstituent(types, indexInfoType)
+		}
+		if len(types) == 0 {
 			return nil
 		}
-		if c.isGenericMappedType(t) && c.getMappedTypeNameTypeKind(t) != MappedTypeNameTypeKindRemapping {
-			return c.getIndexedMappedTypeSubstitutedTypeOfContextualType(t, name, nameType)
+		if len(types) == 1 {
+			return types[0]
 		}
-		result := c.getTypeOfConcretePropertyOfContextualType(t, name)
-		if result != nil {
-			return result
-		}
-		return c.getTypeFromIndexInfosOfContextualType(t, name, nameType)
-	}, true /*noReductions*/)
+		return c.getIntersectionType(types)
+	}
+	if t.flags&TypeFlagsObject == 0 {
+		return nil
+	}
+	if c.isGenericMappedType(t) && c.getMappedTypeNameTypeKind(t) != MappedTypeNameTypeKindRemapping {
+		return c.getIndexedMappedTypeSubstitutedTypeOfContextualType(t, name, nameType)
+	}
+	result := c.getTypeOfConcretePropertyOfContextualType(t, name)
+	if result != nil {
+		return result
+	}
+	return c.getTypeFromIndexInfosOfContextualType(t, name, nameType)
 }
 
 func (c *Checker) getIndexedMappedTypeSubstitutedTypeOfContextualType(t *Type, name string, nameType *Type) *Type {
@@ -31446,10 +31523,14 @@ func (c *Checker) getTypeFromIndexInfosOfContextualType(t *Type, name string, na
 			return restType
 		}
 	}
+	indexInfos := c.getIndexInfosOfStructuredType(t)
+	if len(indexInfos) == 0 {
+		return nil
+	}
 	if nameType == nil {
 		nameType = c.getStringLiteralType(name)
 	}
-	indexInfo := c.findApplicableIndexInfo(c.getIndexInfosOfStructuredType(t), nameType)
+	indexInfo := c.findApplicableIndexInfo(indexInfos, nameType)
 	if indexInfo == nil {
 		return nil
 	}
