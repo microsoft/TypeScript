@@ -641,7 +641,8 @@ func TestEmitJSDocSingleLine(t *testing.T) {
 		printer.PrintHandlers{},
 		nil,
 	).Emit(node, nil)
-	if actual != "/** A short description */" {
+	expected := "/**\n * A short description\n */"
+	if actual != expected {
 		t.Errorf("unexpected single-line JSDoc output: %q", actual)
 	}
 }
@@ -718,14 +719,27 @@ func TestEmitJSDocReviewRegressions(t *testing.T) {
 			name: "ObjectTypedefProperties",
 			input: `/**
  * @typedef {Object} Options
- * @property {number} count
+ * @property {number} count Number of items; see {@link Item}
  */
 const options = {};`,
 			output: `/**
  * @typedef {Object} Options
- * @property {number} count
+ * @property {number} count Number of items; see {@link Item}
  */
 const options = {};`,
+		},
+		{
+			name: "NestedParameterProperties",
+			input: `/**
+ * @param {Object} options The options
+ * @param {number} options.count Number of items
+ */
+function f(options) {}`,
+			output: `/**
+ * @param {Object} options The options
+ * @param {number} options.count Number of items
+ */
+function f(options) { }`,
 		},
 		{
 			name: "CallbackSignature",
@@ -793,7 +807,11 @@ func TestEmitJSDocTypedefRecord(t *testing.T) {
 		true, /*isBracketed*/
 		numberType,
 		false, /*isNameFirst*/
-		nil,   /*comment*/
+		factory.NewNodeList([]*ast.Node{
+			factory.NewJSDocText([]string{"Number of items"}),
+			factory.NewJSDocText([]string{"; see "}),
+			factory.NewJSDocLink(factory.NewIdentifier("Item"), nil),
+		}),
 	)
 	nestedType := factory.NewJSDocTypeLiteral([]*ast.Node{nestedProperty}, false)
 	optionsProperty := factory.NewJSDocParameterOrPropertyTag(
@@ -818,9 +836,152 @@ func TestEmitJSDocTypedefRecord(t *testing.T) {
 		printer.PrintHandlers{},
 		nil,
 	).Emit(doc, nil)
-	expected := "/**\n * @typedef {{ options: { count?: number } }} Options\n */"
+	expected := "/**\n * @typedef {Object} Options\n * @property {Object} options\n * @property {number} [options.count] Number of items; see {@link Item}\n */"
 	if actual != expected {
 		t.Errorf("unexpected JSDoc typedef record:\n got: %q\nwant: %q", actual, expected)
+	}
+}
+
+func TestEmitJSDocOptionalTypeLiteralProperty(t *testing.T) {
+	t.Parallel()
+
+	var factory ast.NodeFactory
+	property := factory.NewJSDocParameterOrPropertyTag(
+		ast.KindJSDocPropertyTag,
+		factory.NewIdentifier("property"),
+		factory.NewIdentifier("count"),
+		false, /*isBracketed*/
+		factory.NewJSDocTypeExpression(factory.NewJSDocOptionalType(factory.NewKeywordTypeNode(ast.KindNumberKeyword))),
+		false, /*isNameFirst*/
+		nil,   /*comment*/
+	)
+	node := factory.NewJSDocTypeLiteral([]*ast.Node{property}, false)
+	actual := printer.NewPrinter(
+		printer.PrinterOptions{NewLine: core.NewLineKindLF},
+		printer.PrintHandlers{},
+		nil,
+	).Emit(node, nil)
+	if actual != "{ count?: number }" {
+		t.Errorf("unexpected optional JSDoc property output: %q", actual)
+	}
+}
+
+func TestEmitJSDocTagCommentWithLeadingNewline(t *testing.T) {
+	t.Parallel()
+
+	var factory ast.NodeFactory
+	tag := factory.NewJSDocUnknownTag(
+		factory.NewIdentifier("example"),
+		factory.NewNodeList([]*ast.Node{
+			factory.NewJSDocText([]string{"\nconsole.log(1)"}),
+		}),
+	)
+	doc := factory.NewJSDoc(nil, factory.NewNodeList([]*ast.Node{tag}))
+	actual := printer.NewPrinter(
+		printer.PrinterOptions{NewLine: core.NewLineKindLF},
+		printer.PrintHandlers{},
+		nil,
+	).Emit(doc, nil)
+	expected := "/**\n * @example\n * console.log(1)\n */"
+	if actual != expected {
+		t.Errorf("unexpected multiline JSDoc tag comment:\n got: %q\nwant: %q", actual, expected)
+	}
+}
+
+func TestEmitJSDocGenericCallbackAndOverload(t *testing.T) {
+	t.Parallel()
+
+	var factory ast.NodeFactory
+	typeParameter := factory.NewTypeParameterDeclaration(
+		nil, /*modifiers*/
+		factory.NewIdentifier("T"),
+		nil, /*constraint*/
+		nil, /*expression*/
+		nil, /*defaultType*/
+	)
+	parameter := factory.NewJSDocParameterOrPropertyTag(
+		ast.KindJSDocParameterTag,
+		factory.NewIdentifier("param"),
+		factory.NewIdentifier("value"),
+		false, /*isBracketed*/
+		factory.NewJSDocTypeExpression(factory.NewTypeReferenceNode(factory.NewIdentifier("T"), nil)),
+		false, /*isNameFirst*/
+		nil,   /*comment*/
+	)
+	signature := factory.NewJSDocSignature(
+		factory.NewNodeList([]*ast.Node{typeParameter}),
+		factory.NewNodeList([]*ast.Node{parameter}),
+		nil, /*type*/
+	)
+	nodes := []struct {
+		name string
+		tag  *ast.Node
+		want string
+	}{
+		{
+			name: "callback",
+			tag: factory.NewJSDocCallbackTag(
+				factory.NewIdentifier("callback"),
+				signature,
+				factory.NewIdentifier("Handler"),
+				nil, /*comment*/
+			),
+			want: "/**\n * @template T\n * @callback Handler\n * @param {T} value\n */",
+		},
+		{
+			name: "overload",
+			tag: factory.NewJSDocOverloadTag(
+				factory.NewIdentifier("overload"),
+				signature,
+				nil, /*comment*/
+			),
+			want: "/**\n * @template T\n * @overload\n * @param {T} value\n */",
+		},
+	}
+
+	for _, test := range nodes {
+		t.Run(test.name, func(t *testing.T) {
+			t.Parallel()
+			doc := factory.NewJSDoc(nil, factory.NewNodeList([]*ast.Node{test.tag}))
+			actual := printer.NewPrinter(
+				printer.PrinterOptions{NewLine: core.NewLineKindLF},
+				printer.PrintHandlers{},
+				nil,
+			).Emit(doc, nil)
+			if actual != test.want {
+				t.Fatalf("unexpected generic JSDoc %s:\n got: %q\nwant: %q", test.name, actual, test.want)
+			}
+			file := parsetestutil.ParseTypeScript(actual, false)
+			parsetestutil.CheckDiagnostics(t, file)
+		})
+	}
+}
+
+func TestEmitJSDocQualifiedTypedefName(t *testing.T) {
+	t.Parallel()
+
+	var factory ast.NodeFactory
+	fullName := factory.NewModuleDeclaration(
+		nil, /*modifiers*/
+		ast.KindNamespaceKeyword,
+		factory.NewIdentifier("Namespace"),
+		nil, /*attributes*/
+		factory.NewIdentifier("Foo"),
+	)
+	tag := factory.NewJSDocTypedefTag(
+		factory.NewIdentifier("typedef"),
+		factory.NewJSDocTypeExpression(factory.NewKeywordTypeNode(ast.KindNumberKeyword)),
+		fullName,
+		nil, /*comment*/
+	)
+	doc := factory.NewJSDoc(nil, factory.NewNodeList([]*ast.Node{tag}))
+	actual := printer.NewPrinter(
+		printer.PrinterOptions{NewLine: core.NewLineKindLF},
+		printer.PrintHandlers{},
+		nil,
+	).Emit(doc, nil)
+	if actual != "/**\n * @typedef {number} Namespace.Foo\n */" {
+		t.Errorf("unexpected qualified JSDoc typedef name: %q", actual)
 	}
 }
 
@@ -845,7 +1006,7 @@ func TestEmitJSDocPreservesTextWhitespace(t *testing.T) {
 	var factory ast.NodeFactory
 	node := factory.NewJSDoc(
 		factory.NewNodeList([]*ast.Node{
-			factory.NewJSDocText([]string{"  first line\n    indented line\r"}),
+			factory.NewJSDocText([]string{"  first line\n\n    indented line\r"}),
 		}),
 		factory.NewNodeList([]*ast.Node{
 			factory.NewJSDocUnknownTag(
@@ -861,7 +1022,7 @@ func TestEmitJSDocPreservesTextWhitespace(t *testing.T) {
 		printer.PrintHandlers{},
 		nil,
 	).Emit(node, nil)
-	expected := "/**\n *   first line\n *     indented line\n * @example   tag text\n *     indented tag\n */"
+	expected := "/**\n *   first line\n * \n *     indented line\n * @example   tag text\n *     indented tag\n */"
 	if actual != expected {
 		t.Errorf("unexpected JSDoc whitespace:\n got: %q\nwant: %q", actual, expected)
 	}
