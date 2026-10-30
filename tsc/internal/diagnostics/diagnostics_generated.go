@@ -3804,7 +3804,7 @@ var Private_identifiers_cannot_be_used_in_destructuring_patterns = &Message{code
 
 var Content_mapper_file_extension_0_must_begin_with_a = &Message{code: 18065, category: CategoryError, key: "Content_mapper_file_extension_0_must_begin_with_a_18065", text: "Content mapper file extension '{0}' must begin with a '.'."}
 
-var Content_mapper_file_extension_0_is_a_built_in_extension_and_cannot_be_registered_by_a_content_mapper = &Message{code: 18066, category: CategoryError, key: "Content_mapper_file_extension_0_is_a_built_in_extension_and_cannot_be_registered_by_a_content_mapper_18066", text: "Content mapper file extension '{0}' is a built-in extension and cannot be registered by a content mapper."}
+var Content_mapper_file_extension_0_cannot_be_registered_because_it_ends_in_a_built_in_extension = &Message{code: 18066, category: CategoryError, key: "Content_mapper_file_extension_0_cannot_be_registered_because_it_ends_in_a_built_in_extension_18066", text: "Content mapper file extension '{0}' cannot be registered because it ends in a built-in extension."}
 
 var Content_mapper_file_extension_0_is_registered_by_more_than_one_content_mapper = &Message{code: 18067, category: CategoryError, key: "Content_mapper_file_extension_0_is_registered_by_more_than_one_content_mapper_18067", text: "Content mapper file extension '{0}' is registered by more than one content mapper."}
 
@@ -6364,7 +6364,7 @@ var allMessages = [...]**Message{
 	&Duplicate_named_capturing_groups_are_only_available_when_targeting_0_or_later,
 	&Private_identifiers_cannot_be_used_in_destructuring_patterns,
 	&Content_mapper_file_extension_0_must_begin_with_a,
-	&Content_mapper_file_extension_0_is_a_built_in_extension_and_cannot_be_registered_by_a_content_mapper,
+	&Content_mapper_file_extension_0_cannot_be_registered_because_it_ends_in_a_built_in_extension,
 	&Content_mapper_file_extension_0_is_registered_by_more_than_one_content_mapper,
 	&Content_mappers_require_the_runExternalCode_command_line_flag_to_be_enabled,
 	&The_content_mapper_0_failed_to_transform_this_file,

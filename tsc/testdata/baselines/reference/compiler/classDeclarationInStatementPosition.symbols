@@ -1,0 +1,82 @@
+//// [tests/cases/compiler/classDeclarationInStatementPosition.ts] ////
+
+=== a.ts ===
+declare const cond: boolean;
+>cond : Symbol(cond, Decl(a.ts, 0, 13))
+
+if (cond) class C1 {}
+>cond : Symbol(cond, Decl(a.ts, 0, 13))
+>C1 : Symbol(C1, Decl(a.ts, 2, 9))
+
+if (cond) {} else class C2 {}
+>cond : Symbol(cond, Decl(a.ts, 0, 13))
+>C2 : Symbol(C2, Decl(a.ts, 3, 17))
+
+while (cond) class C3 {}
+>cond : Symbol(cond, Decl(a.ts, 0, 13))
+>C3 : Symbol(C3, Decl(a.ts, 4, 12))
+
+do class C4 {} while (cond);
+>C4 : Symbol(C4, Decl(a.ts, 5, 2))
+>cond : Symbol(cond, Decl(a.ts, 0, 13))
+
+for (;;) class C5 {}
+>C5 : Symbol(C5, Decl(a.ts, 6, 8))
+
+for (const k in {}) class C6 {}
+>k : Symbol(k, Decl(a.ts, 7, 10))
+>C6 : Symbol(C6, Decl(a.ts, 7, 19))
+
+for (const v of []) class C7 {}
+>v : Symbol(v, Decl(a.ts, 8, 10))
+>C7 : Symbol(C7, Decl(a.ts, 8, 19))
+
+if (cond) label: class C8 {}
+>cond : Symbol(cond, Decl(a.ts, 0, 13))
+>C8 : Symbol(C8, Decl(a.ts, 9, 16))
+
+// OK
+if (cond) {
+>cond : Symbol(cond, Decl(a.ts, 0, 13))
+
+    class C10 {}
+>C10 : Symbol(C10, Decl(a.ts, 12, 11))
+}
+class C11 {}
+>C11 : Symbol(C11, Decl(a.ts, 14, 1))
+
+switch (0) {
+    case 0:
+        class C12 {}
+>C12 : Symbol(C12, Decl(a.ts, 17, 11))
+}
+namespace N {
+>N : Symbol(N, Decl(a.ts, 19, 1))
+
+    class C13 {}
+>C13 : Symbol(C13, Decl(a.ts, 20, 13))
+}
+function f() {
+>f : Symbol(f, Decl(a.ts, 22, 1))
+
+    class C14 {}
+>C14 : Symbol(C14, Decl(a.ts, 23, 14))
+
+    return class C15 {};
+>C15 : Symbol(C15, Decl(a.ts, 25, 10))
+}
+let x;
+>x : Symbol(x, Decl(a.ts, 27, 3))
+
+if (cond) x = class C16 {};
+>cond : Symbol(cond, Decl(a.ts, 0, 13))
+>x : Symbol(x, Decl(a.ts, 27, 3))
+>C16 : Symbol(C16, Decl(a.ts, 28, 13))
+
+=== b.js ===
+if (Math.random()) class C17 {}
+>Math.random : Symbol(Math.random, Decl(lib.es5.d.ts, --, --))
+>Math : Symbol(Math, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>random : Symbol(Math.random, Decl(lib.es5.d.ts, --, --))
+>C17 : Symbol(C17, Decl(b.js, 0, 18))
+

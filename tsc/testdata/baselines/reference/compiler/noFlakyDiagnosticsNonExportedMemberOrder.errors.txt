@@ -1,0 +1,70 @@
+/main.ts(2,10): error TS2459: Module '"mt"' declares 'zz' locally, but it is not exported.
+/main.ts(6,14): error TS2322: Type '{ pb: 0; readonly mb: 1; v: 0; }' is not assignable to type 'never'.
+/main.ts(7,14): error TS2322: Type '{ v: 0; }' is not assignable to type 'never'.
+
+
+==== /main.ts (3 errors) ====
+    /// <reference path="./ambient.d.ts" />
+    import { zz } from "mt";
+             ~~
+!!! error TS2459: Module '"mt"' declares 'zz' locally, but it is not exported.
+!!! related TS2728 /ambient.d.ts:46:11: 'zz' is declared here.
+    declare const oxa: typeof import("xa");
+    declare const oxb: typeof import("xb");
+    declare function expand<X>(): { [K in keyof X]: X[K] };
+    export const obsA: never = expand<typeof oxa>();
+                 ~~~~
+!!! error TS2322: Type '{ pb: 0; readonly mb: 1; v: 0; }' is not assignable to type 'never'.
+    export const obsB: never = expand<typeof oxb>();
+                 ~~~~
+!!! error TS2322: Type '{ v: 0; }' is not assignable to type 'never'.
+    
+==== /ambient.d.ts (0 errors) ====
+    declare module "ma" {
+        export { v as pa } from "xa";
+        export const ma: 1;
+    }
+    declare module "mb" {
+        export { v as pb } from "xb";
+        export const mb: 1;
+    }
+    declare module "xa" {
+        type T = typeof import("mb");
+        interface O extends T { v: 0 }
+        const o: O;
+        export = o;
+    }
+    declare module "xb" {
+        type T = typeof import("ma");
+        interface O extends T { v: 0 }
+        const o: O;
+        export = o;
+    }
+    declare module "ia" {
+        type T = typeof import("ma");
+        interface O extends T { v: 0 }
+        const o: O;
+        export = o;
+    }
+    declare module "ib" {
+        type T = typeof import("mb");
+        interface O extends T { v: 0 }
+        const o: O;
+        export = o;
+    }
+    declare module "mt" {
+        export { v as a } from "ia";
+        export { v as b } from "ib";
+        export const f1: 1;
+        export const f2: 2;
+        export const f3: 3;
+        export const f4: 4;
+        export const f5: 5;
+        export const f6: 6;
+        export const f7: 7;
+        export const f8: 8;
+        export const f9: 9;
+        export const f10: 10;
+        const zz: 1;
+    }
+    
