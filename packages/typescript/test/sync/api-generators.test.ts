@@ -173,6 +173,8 @@ const privateGeneratorGetters = new Set([
     "NodeHandle.fetchOwnerFile",
     "NodeHandle.resolveInFile",
     "Program.disposeWorker",
+    "Program.getStatistics",
+    "Program.fetchResolvedProjectReferences",
     "Program.fetchSourceFileMetadata",
     "Program.getSourceFileWorker",
     "Snapshot.disposeWorker",
@@ -1599,6 +1601,15 @@ describe("API - generator batching", { concurrency: areTestsFiltered() }, () => 
                 parityCase("Snapshot", "getDefaultProjectForFile", snapshot.getDefaultProjectForFile, assertOptionalProjectsEquivalent, "/src/index.ts"),
                 parityCase("ModuleResolver", "resolveModuleName", moduleResolver.resolveModuleName, assertDeepEquivalent, "models", "/src"),
                 parityCase("Snapshot", "update", snapshot.update, assertSnapshotsEquivalent, {}),
+                parityCase("Project", "containsFile", project.containsFile, assertDeepEquivalent, "/src/index.ts"),
+                parityCase("Project", "containsFile", project.containsFile, assertDeepEquivalent, "/src/index.ts", true),
+                parityCase("Project", "getFileNames", project.getFileNames, assertDeepEquivalent),
+                parityCase("Project", "getFileNames", project.getFileNames, assertDeepEquivalent, true, true),
+                parityCase("Project", "getRootFiles", project.getRootFiles, assertDeepEquivalent),
+                parityCase("Project", "hasRoots", project.hasRoots, assertDeepEquivalent),
+                parityCase("Project", "isRoot", project.isRoot, assertDeepEquivalent, "/src/index.ts"),
+                parityCase("Project", "hasConfigFile", project.hasConfigFile, assertDeepEquivalent, "/tsconfig.json"),
+                parityCase("Project", "getSourceFile", project.getSourceFile, assertOptionalSourceFilesEquivalent, "/src/index.ts"),
 
                 parityCase("LanguageService", "getImportAdderEdits", languageService.getImportAdderEdits, assertDeepEquivalent, "/src/index.ts", [{ kind: "importSymbol", symbol: unimportedSymbol }]),
                 parityCase("LanguageService", "getImportEditsForSymbols", languageService.getImportEditsForSymbols, assertDeepEquivalent, "/src/index.ts", [unimportedSymbol], { isValidTypeOnlyUseSite: true }),
@@ -1616,6 +1627,13 @@ describe("API - generator batching", { concurrency: areTestsFiltered() }, () => 
                 parityCase("Program", "getResolvedTypeReferenceDirectiveFromTypeReferenceDirective", program.getResolvedTypeReferenceDirectiveFromTypeReferenceDirective, assertDeepEquivalent, typeReferenceDirective, "/src/index.ts"),
                 parityCase("Program", "getSourceFileByPath", program.getSourceFileByPath, assertOptionalSourceFilesEquivalent, indexFile.path),
                 parityCase("Program", "getSourceFileNames", program.getSourceFileNames, assertDeepEquivalent),
+                parityCase("Program", "getRootFileNames", program.getRootFileNames, assertDeepEquivalent),
+                parityCase("Program", "getSourceFiles", program.getSourceFiles, (actual, expected, message) => {
+                    assertArrayElementsEquivalent(actual, expected, assertSourceFilesEquivalent, message);
+                }),
+                parityCase("Program", "getProjectReferences", program.getProjectReferences, assertDeepEquivalent),
+                parityCase("Program", "getResolvedProjectReferences", program.getResolvedProjectReferences, assertDeepEquivalent),
+                parityCase("Program", "getTypeChecker", program.getTypeChecker, assert.strictEqual),
                 parityCase("Program", "getSourceFileMetadata", program.getSourceFileMetadata, assertDeepEquivalent, "/src/index.ts"),
                 parityCase("Program", "getSourceFileMetadataByPath", program.getSourceFileMetadataByPath, assertDeepEquivalent, indexFile.path),
                 parityCase("Program", "isSourceFileFromExternalLibrary", program.isSourceFileFromExternalLibrary, assertDeepEquivalent, indexFile),
@@ -1632,6 +1650,7 @@ describe("API - generator batching", { concurrency: areTestsFiltered() }, () => 
                 parityCase("Program", "getSuggestionDiagnostics", program.getSuggestionDiagnostics, assertDeepEquivalent, "/src/suggestions.ts"),
                 parityCase("Program", "getDeclarationDiagnostics", program.getDeclarationDiagnostics, assertDeepEquivalent, "/src/index.ts"),
                 parityCase("Program", "getProgramDiagnostics", program.getProgramDiagnostics, assertDeepEquivalent),
+                parityCase("Program", "getOptionsDiagnostics", program.getOptionsDiagnostics, assertDeepEquivalent),
                 parityCase("Program", "getGlobalDiagnostics", program.getGlobalDiagnostics, assertDeepEquivalent),
                 parityCase("Program", "getConfigFileParsingDiagnostics", program.getConfigFileParsingDiagnostics, assertDeepEquivalent),
                 parityCase("Program", "emit", program.emit, assertDeepEquivalent),
@@ -1789,6 +1808,14 @@ describe("API - generator batching", { concurrency: areTestsFiltered() }, () => 
             ];
 
             runParityBatch(api, cases);
+            runParityBatch(api, [
+                parityCase("Program", "getIdentifierCount", program.getIdentifierCount, assertDeepEquivalent),
+                parityCase("Program", "getNodeCount", program.getNodeCount, assertDeepEquivalent),
+                parityCase("Program", "getSymbolCount", program.getSymbolCount, assertDeepEquivalent),
+                parityCase("Program", "getTypeCount", program.getTypeCount, assertDeepEquivalent),
+                parityCase("Program", "getInstantiationCount", program.getInstantiationCount, assertDeepEquivalent),
+                parityCase("Program", "getRelationCacheSizes", program.getRelationCacheSizes, assertDeepEquivalent),
+            ]);
             assert.deepEqual(temporaryProjects, ["/tsconfig.json", "/tsconfig.json"]);
 
             const snapshotFiles = {

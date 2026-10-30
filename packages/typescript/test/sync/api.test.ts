@@ -135,8 +135,19 @@ import {
     type UserPreferences,
 } from "@typescript/typescript/sync";
 import assert from "node:assert";
-import { globSync } from "node:fs";
-import { resolve } from "node:path";
+import {
+    existsSync,
+    globSync,
+    mkdirSync,
+    mkdtempSync,
+    rmSync,
+    writeFileSync,
+} from "node:fs";
+import { tmpdir } from "node:os";
+import {
+    join,
+    resolve,
+} from "node:path";
 import {
     describe,
     test,
@@ -2553,6 +2564,269 @@ describe("SourceFile", { concurrency }, () => {
                 message: "Expected a string or { uri } for the document, received an object with keys: fileName",
             },
         );
+    });
+
+    test("Program accessors distinguish root files from source files and reuse the checker", () => {
+        using api = spawnAPI({
+            "/src/main.ts": `import { value } from "./dependency"; export const result = value;`,
+            "/src/dependency.ts": `export const value = 1;`,
+        });
+        using program = api.createProgram(["/src/main.ts"], { noLib: true });
+        assert.deepEqual(program.getRootFileNames(), ["/src/main.ts"]);
+        const files = program.getSourceFiles();
+        assert.deepEqual(files.map(file => file.fileName), ["/src/dependency.ts", "/src/main.ts"]);
+        assert.strictEqual(files[1], program.getSourceFile("/src/main.ts"));
+        const checker = program.getTypeChecker();
+        assert.strictEqual(program.getTypeChecker(), checker);
+        assert.ok(checker.getSymbolAtLocation(cast(files[1].statements[1], isVariableStatement).declarationList.declarations[0].name));
+        assert.equal(program.getProjectReferences(), undefined);
+        assert.equal(program.getResolvedProjectReferences(), undefined);
+    });
+
+    test("Program counters reflect work on its type checker without forcing diagnostics", () => {
+        using api = spawnAPI({
+            "/src/main.ts": `type Box<T> = { value: T };
+export const box: Box<string> = { value: "hello" };
+export const other: { value: string } = box;`,
+        });
+        using program = api.createProgram(["/src/main.ts"], { noLib: true });
+        const identifiers = program.getIdentifierCount();
+        const nodes = program.getNodeCount();
+        const symbols = program.getSymbolCount();
+        const types = program.getTypeCount();
+        const instantiations = program.getInstantiationCount();
+        const relations = program.getRelationCacheSizes();
+        assert.ok(identifiers > 0);
+        assert.ok(nodes > identifiers);
+        assert.ok(symbols > 0);
+        assert.ok(types > 0);
+        assert.equal(instantiations, 0);
+        assert.deepEqual(relations, { assignable: 0, identity: 0, subtype: 0, strictSubtype: 0 });
+
+        const file = (program.getSourceFile("/src/main.ts"))!;
+        const checker = program.getTypeChecker();
+        const declaration = cast(file.statements[1], isVariableStatement).declarationList.declarations[0];
+        const type = checker.getTypeAtLocation(declaration.name);
+        type.getProperties();
+        assert.ok(program.getInstantiationCount() > instantiations);
+        assert.ok(program.getTypeCount() > types);
+        assert.ok(program.getSymbolCount() >= symbols);
+        const other = cast(file.statements[2], isVariableStatement).declarationList.declarations[0];
+        checker.isTypeAssignableTo(type, checker.getTypeAtLocation(other.name));
+        assert.ok((program.getRelationCacheSizes()).assignable > relations.assignable);
+        assert.equal(program.getIdentifierCount(), identifiers);
+        assert.equal(program.getNodeCount(), nodes);
+    });
+
+    test("Program accessors handle empty programs and missing root files", () => {
+        using api = spawnAPI({});
+        using empty = api.createProgram([], { noLib: true });
+        assert.deepEqual(empty.getRootFileNames(), []);
+        assert.deepEqual(empty.getSourceFiles(), []);
+        assert.equal(empty.getNodeCount(), 0);
+        assert.equal(empty.getIdentifierCount(), 0);
+        assert.equal(empty.getProjectReferences(), undefined);
+        assert.equal(empty.getResolvedProjectReferences(), undefined);
+        assert.deepEqual(empty.getOptionsDiagnostics(), []);
+
+        using noReferences = api.createProgram([], { noLib: true }, { projectReferences: [] });
+        assert.deepEqual(noReferences.getProjectReferences(), []);
+        assert.deepEqual(noReferences.getResolvedProjectReferences(), []);
+
+        using missing = api.createProgram(["/missing.ts"], { noLib: true });
+        assert.deepEqual(missing.getRootFileNames(), ["/missing.ts"]);
+        assert.deepEqual(missing.getSourceFiles(), []);
+        assert.ok((missing.getOptionsDiagnostics()).some(diagnostic => diagnostic.code === 6053));
+    });
+
+    test("Program options diagnostics exclude source-file and config parsing diagnostics", () => {
+        using api = spawnAPI({
+            "/tsconfig.json": JSON.stringify({
+                compilerOptions: { noLib: true, strictNullChecks: false, exactOptionalPropertyTypes: true, unknownOption: true },
+                files: ["src/main.ts"],
+            }),
+            "/src/main.ts": `/// <reference path="./missing.ts" />
+const value: string = 1;`,
+        });
+        const snapshot = api.createSnapshot({ openProjects: ["/tsconfig.json"] });
+        const program = snapshot.getConfiguredProject("/tsconfig.json")!.program;
+        const diagnostics = program.getOptionsDiagnostics();
+        assert.ok(diagnostics.some(diagnostic => diagnostic.code === 5052));
+        assert.ok(diagnostics.every(diagnostic => !diagnostic.fileName || diagnostic.fileName === "/tsconfig.json"));
+        assert.ok(!(diagnostics.some(diagnostic => diagnostic.code === 5023 || diagnostic.code === 6053 || diagnostic.code === 2322)));
+        assert.ok((program.getConfigFileParsingDiagnostics()).some(diagnostic => diagnostic.code === 5023));
+    });
+
+    test("Program resolved project references preserve missing, nested, shared, and circular references", () => {
+        using api = spawnAPI({
+            "/tsconfig.json": JSON.stringify({ files: [], references: [{ path: "./a" }, { path: "./missing" }, { path: "./b" }, { path: "./a" }] }),
+            "/a/tsconfig.json": JSON.stringify({ compilerOptions: { composite: true }, files: ["index.ts"], references: [{ path: "../b" }] }),
+            "/a/index.ts": "export const a = 1;",
+            "/b/tsconfig.json": JSON.stringify({ compilerOptions: { composite: true }, files: ["index.ts"], references: [{ path: "../a", circular: true }, { path: "../missing" }] }),
+            "/b/index.ts": "export const b = 1;",
+        });
+        const snapshot = api.createSnapshot({ openProjects: ["/tsconfig.json"] });
+        const program = snapshot.getConfiguredProject("/tsconfig.json")!.program;
+        const references = program.getProjectReferences();
+        assert.equal(references?.length, 4);
+        const resolved = program.getResolvedProjectReferences();
+        assert.equal(resolved?.length, 4);
+        assert.equal(resolved![1], undefined);
+        const a = resolved![0]!;
+        const b = resolved![2]!;
+        assert.strictEqual(resolved![3], a);
+        assert.strictEqual(a.references![0], b);
+        assert.strictEqual(b.references![0], a);
+        assert.equal(b.references![1], undefined);
+        assert.equal(a.sourceFile.fileName, "/a/tsconfig.json");
+        assert.equal(a.commandLine.options.composite, true);
+        assert.deepEqual(a.commandLine.fileNames, ["/a/index.ts"]);
+        assert.strictEqual((program.getResolvedProjectReferences())![0], a);
+
+        using synthetic = api.createProgram([], { noLib: true }, {
+            projectReferences: [{ path: "/a/tsconfig.json" }, { path: "/missing/tsconfig.json" }],
+        });
+        assert.equal((synthetic.getProjectReferences())!.length, 2);
+        const syntheticResolved = synthetic.getResolvedProjectReferences();
+        assert.equal(syntheticResolved!.length, 2);
+        assert.equal(syntheticResolved![0]!.sourceFile.fileName, "/a/tsconfig.json");
+        assert.equal(syntheticResolved![1], undefined);
+    });
+
+    test("Project membership distinguishes roots, dependencies, and open files", () => {
+        using api = spawnAPI({
+            "/tsconfig.json": JSON.stringify({ compilerOptions: { noLib: true }, files: ["src/main.ts", "missing.ts"] }),
+            "/src/main.ts": `import { value } from "./dependency"; export const result = value;`,
+            "/src/dependency.ts": `export const value = 1;`,
+            "/outside.ts": "export {};",
+        });
+        const snapshot = api.createSnapshot({ openProjects: ["/tsconfig.json"], openFiles: ["/src/main.ts", "/outside.ts"] });
+        const project = snapshot.getConfiguredProject("/tsconfig.json")!;
+        assert.equal(project.hasRoots(), true);
+        assert.deepEqual(project.getRootFiles(), ["/src/main.ts"]);
+        assert.equal(project.isRoot("src/main.ts"), true);
+        assert.equal(project.isRoot({ uri: "file:///src/main.ts" }), true);
+        assert.equal(project.isRoot("/missing.ts"), false);
+        assert.equal(project.isRoot("/src/dependency.ts"), false);
+        assert.equal(project.containsFile("src/main.ts"), true);
+        assert.equal(project.containsFile({ uri: "file:///src/main.ts" }, true), true);
+        assert.equal(project.containsFile("/src/dependency.ts"), true);
+        assert.equal(project.containsFile("/src/dependency.ts", true), false);
+        assert.equal(project.containsFile("/outside.ts"), false);
+        assert.equal(project.containsFile("/outside.ts", true), false);
+        assert.equal(project.containsFile("/missing.ts"), false);
+        assert.strictEqual(project.getSourceFile("src/main.ts"), project.program.getSourceFile("/src/main.ts"));
+        assert.equal(project.getSourceFile("/outside.ts"), undefined);
+        assert.equal(project.hasConfigFile("tsconfig.json"), true);
+        assert.equal(project.hasConfigFile("/src/main.ts"), false);
+
+        const updated = snapshot.update({ closeFiles: ["/src/main.ts"] });
+        assert.equal(updated.getConfiguredProject("/tsconfig.json")!.containsFile("/src/main.ts", true), false);
+        assert.equal(project.containsFile("/src/main.ts", true), true);
+    });
+
+    test("Project membership includes supplemental files without physical files", t => {
+        const directory = mkdtempSync(join(tmpdir(), "ts-project-membership-"));
+        t.after(() => rmSync(directory, { recursive: true, force: true }));
+        const mapperDirectory = join(directory, "node_modules", "mapper");
+        mkdirSync(mapperDirectory, { recursive: true });
+        const mapperScript = `
+            import { createMessageConnection } from ${JSON.stringify(new URL("../../vendor/vscode-jsonrpc/lib/node/main.js", import.meta.url).href)};
+            const connection = createMessageConnection(process.stdin, process.stdout);
+            connection.onRequest("initialize", () => ({ positionEncoding: "utf-8", diagnosticSource: "mapper" }));
+            connection.onRequest("openProject", () => ({}));
+            connection.onRequest("closeProject", () => null);
+            connection.onRequest("transform", ({ content }) => ({
+                text: "export {};",
+                extension: ".ts",
+                supplemental: [{ text: content, extension: ".ts" }],
+            }));
+            connection.listen();
+        `;
+        writeFileSync(
+            join(mapperDirectory, "package.json"),
+            JSON.stringify({
+                name: "mapper",
+                version: "1.0.0",
+                typescript: { contentMapper: { exec: [process.execPath, "--input-type=module", "--eval", mapperScript] } },
+            }),
+        );
+        const configFileName = toRootedFilePath(join(directory, "tsconfig.json"), undefined);
+        writeFileSync(
+            configFileName,
+            JSON.stringify({
+                compilerOptions: { noLib: true },
+                files: ["app.box", "main.ts", "missing.ts"],
+                contentMappers: [{ package: "mapper", extensions: [".box"] }],
+            }),
+        );
+        writeFileSync(join(directory, "app.box"), "declare const supplementalValue: number;");
+        writeFileSync(join(directory, "main.ts"), "const value: number = supplementalValue;");
+        using api = new API({ cwd: directory, runExternalCode: true });
+        const snapshot = api.createSnapshot({ openProjects: [configFileName] });
+        const project = snapshot.getConfiguredProject(configFileName)!;
+        const supplementalFileName = toRootedFilePath(join(directory, "app.box.0.ts"), undefined);
+        assert.equal(existsSync(supplementalFileName), false);
+        assert.ok(project.getSourceFile(supplementalFileName));
+        assert.equal(project.containsFile(supplementalFileName), true);
+        assert.equal(project.containsFile(supplementalFileName, true), false);
+        assert.equal(project.containsFile(join(directory, "missing.ts")), false);
+    });
+
+    test("Project file lists include extended configs and optionally exclude external libraries", () => {
+        using api = spawnAPI({
+            "/tsconfig.json": JSON.stringify({ extends: "./base.json", files: ["src/main.ts"] }),
+            "/base.json": JSON.stringify({ compilerOptions: { noLib: true, moduleResolution: "node10" } }),
+            "/src/main.ts": `import { value } from "my-lib"; export const result = value;`,
+            "/node_modules/my-lib/package.json": JSON.stringify({ types: "./index.d.ts" }),
+            "/node_modules/my-lib/index.d.ts": "export declare const value: number;",
+        });
+        const snapshot = api.createSnapshot({ openProjects: ["/tsconfig.json"] });
+        const project = snapshot.getConfiguredProject("/tsconfig.json")!;
+        assert.deepEqual(project.getFileNames(), ["/node_modules/my-lib/index.d.ts", "/src/main.ts", "/tsconfig.json", "/base.json"]);
+        assert.deepEqual(project.getFileNames(true), ["/src/main.ts", "/tsconfig.json", "/base.json"]);
+        assert.deepEqual(project.getFileNames(false, true), ["/node_modules/my-lib/index.d.ts", "/src/main.ts"]);
+        assert.deepEqual(project.getFileNames(true, true), ["/src/main.ts"]);
+        assert.equal(project.hasConfigFile("./base.json"), true);
+        assert.equal(project.hasConfigFile({ uri: "file:///base.json" }), true);
+        assert.equal(project.hasConfigFile("/other.json"), false);
+        assert.equal(project.containsFile("/tsconfig.json"), false);
+    });
+
+    test("Project roots preserve missing declarations and empty projects", () => {
+        using api = spawnAPI({
+            "/tsconfig.json": JSON.stringify({ compilerOptions: { noLib: true }, files: [] }),
+        });
+        const snapshot = api.createSnapshot({
+            openProjects: ["/tsconfig.json"],
+            createPrograms: [{ rootFiles: ["/missing.ts"], compilerOptions: { noLib: true } }],
+        });
+        const empty = snapshot.getConfiguredProject("/tsconfig.json")!;
+        assert.equal(empty.hasRoots(), false);
+        assert.deepEqual(empty.getRootFiles(), []);
+        assert.deepEqual(empty.getFileNames(), ["/tsconfig.json"]);
+        const missing = snapshot.getProject(snapshot.operation.createdPrograms![0].id)!;
+        assert.equal(missing.hasRoots(), true);
+        assert.deepEqual(missing.getRootFiles(), []);
+        assert.equal(missing.isRoot("/missing.ts"), false);
+        assert.equal(missing.containsFile("/missing.ts"), false);
+        assert.deepEqual(missing.getFileNames(), []);
+        assert.equal(missing.hasConfigFile("/tsconfig.json"), false);
+    });
+
+    test("Project membership uses configured path case sensitivity", () => {
+        const files = {
+            "/tsconfig.json": JSON.stringify({ compilerOptions: { noLib: true }, files: ["src/main.ts"] }),
+            "/src/main.ts": "export {};",
+        };
+        for (const useCaseSensitiveFileNames of [true, false]) {
+            using api = new API({ cwd: "/", fs: createVirtualFileSystem(files), useCaseSensitiveFileNames });
+            const snapshot = api.createSnapshot({ openProjects: ["/tsconfig.json"], openFiles: ["/src/main.ts"] });
+            const project = snapshot.getConfiguredProject("/tsconfig.json")!;
+            assert.equal(project.isRoot("/SRC/MAIN.TS"), !useCaseSensitiveFileNames);
+            assert.equal(project.hasConfigFile("/TSCONFIG.JSON"), !useCaseSensitiveFileNames);
+            assert.equal(project.containsFile("/SRC/MAIN.TS", true), !useCaseSensitiveFileNames);
+        }
     });
 
     test("getSourceFileNames returns all program files, not just root files", () => {

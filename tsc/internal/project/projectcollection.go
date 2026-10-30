@@ -224,6 +224,14 @@ func (c *ProjectCollection) GetOpenConfiguredProjects() *collections.Set[Configu
 	return c.openConfiguredProjects
 }
 
+func (c *ProjectCollection) IsFileOpen(path tspath.PathKey) bool {
+	if c.openFiles.Has(path) {
+		return true
+	}
+	_, ok := c.apiState.openFiles[path]
+	return ok
+}
+
 func openFilePaths(overlays map[tspath.PathKey]*Overlay) collections.Set[tspath.PathKey] {
 	openFiles := collections.Set[tspath.PathKey]{M: make(map[tspath.PathKey]struct{}, len(overlays))}
 	for path := range overlays {

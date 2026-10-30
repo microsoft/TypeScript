@@ -59,6 +59,7 @@ import {
 import { assertNever } from "../../internal/utils.ts";
 import {
     encodeNode,
+    sourceFileResponseToUint8Array,
     uint8ArrayToBase64,
 } from "../node/encoder.ts";
 import {
@@ -112,6 +113,7 @@ import type {
     ModuleResolutionSpec,
     PackageId,
     ParsedCommandLine,
+    ProgramStatisticsResponse,
     ProjectId,
     ProjectReference,
     ProjectResponse,
@@ -119,6 +121,7 @@ import type {
     RawCompilerOptions,
     ReadConfigFileResponse,
     ReconfigureSnapshotProgramParams as ProtocolReconfigureSnapshotProgramParams,
+    RelationCacheSizes,
     ResolutionMode,
     ResolvedModule,
     ResolvedTypeReferenceDirective,
@@ -258,6 +261,7 @@ export type {
     ProjectReference,
     RawCompilerOptions,
     ReadConfigFileResponse,
+    RelationCacheSizes,
     RequestTiming,
     ResolutionMode,
     ResolvedModule,
@@ -358,7 +362,6 @@ export interface TranspileOutput {
 }
 
 export { all, type AllAPIRequestGenerator, type AnyAPIRequestGenerator, type APIRequestGenerator, defer, type DeferredAPIRequestGenerator, type ExecutedGeneratorsResults } from "./generatorSupport.ts";
-import { sourceFileResponseToUint8Array } from "../node/encoder.ts";
 import {
     type AnyAPIRequestGenerator,
     type ExecutedGeneratorsResults,
@@ -2606,11 +2609,13 @@ export class Project<Id extends ProjectId = ProjectId> {
     readonly program: Program<Id>;
     readonly checker: Checker;
     readonly languageService: LanguageService;
+    private readonly toPath: (fileName: string, basePath?: string) => PathKey;
 
     constructor(data: ProjectResponse, snapshotId: number, toPath: (fileName: string, basePath?: string) => PathKey, api: API<boolean>, snapshotRegistry: SnapshotObjectRegistry) {
         this.id = data.id as Id;
         this.handle = data.handle;
         this.api = api;
+        this.toPath = toPath;
         this.configFileName = data.configFileName;
         this.currentDirectory = data.currentDirectory;
         this.dirty = data.dirty;
@@ -2622,6 +2627,176 @@ export class Project<Id extends ProjectId = ProjectId> {
         const objectRegistry = new ProjectObjectRegistry(snapshotId, this, snapshotRegistry);
         this.checker = new Checker(snapshotId, this, objectRegistry);
         this.languageService = new LanguageService(snapshotId, this, objectRegistry);
+    }
+
+    get containsFile(): {
+        (file: DocumentIdentifier, requireOpen?: boolean): boolean;
+        gen(file: DocumentIdentifier, requireOpen?: boolean): Generator<ProtocolRequest, boolean, ProtocolResponse["result"]>;
+    } {
+        const owner = this;
+        return cacheGeneratorMethod(
+            owner,
+            "containsFile",
+            function (file: DocumentIdentifier, requireOpen?: boolean): boolean {
+                return owner.api.client.apiRequest("containsProjectFile", {
+                    snapshot: owner.program.snapshotId,
+                    project: owner.handle,
+                    file,
+                    requireOpen,
+                });
+            },
+            function* (file: DocumentIdentifier, requireOpen?: boolean): Generator<ProtocolRequest, boolean, ProtocolResponse["result"]> {
+                return yield* apiRequest("containsProjectFile", {
+                    snapshot: owner.program.snapshotId,
+                    project: owner.handle,
+                    file,
+                    requireOpen,
+                });
+            },
+        );
+    }
+
+    get getFileNames(): {
+        (excludeFilesFromExternalLibraries?: boolean, excludeConfigFiles?: boolean): readonly RootedFilePath[];
+        gen(excludeFilesFromExternalLibraries?: boolean, excludeConfigFiles?: boolean): Generator<ProtocolRequest, readonly RootedFilePath[], ProtocolResponse["result"]>;
+    } {
+        const owner = this;
+        return cacheGeneratorMethod(
+            owner,
+            "getFileNames",
+            function (excludeFilesFromExternalLibraries?: boolean, excludeConfigFiles?: boolean): readonly RootedFilePath[] {
+                const files = owner.program.getSourceFileNames();
+                const result: RootedFilePath[] = [];
+                for (const file of files) {
+                    if (excludeFilesFromExternalLibraries) {
+                        const metadata = owner.program.getSourceFileMetadata(file);
+                        if (!metadata) {
+                            throw new Error(`Program source file '${file}' has no metadata`);
+                        }
+                        if (metadata.isFromExternalLibrary) continue;
+                    }
+                    result.push(file);
+                }
+                if (!excludeConfigFiles) {
+                    result.push(...owner.program.getConfigFileNames());
+                }
+                return result;
+            },
+            function* (excludeFilesFromExternalLibraries?: boolean, excludeConfigFiles?: boolean): Generator<ProtocolRequest, readonly RootedFilePath[], ProtocolResponse["result"]> {
+                const files = yield* owner.program.getSourceFileNames.gen();
+                const result: RootedFilePath[] = [];
+                for (const file of files) {
+                    if (excludeFilesFromExternalLibraries) {
+                        const metadata = yield* owner.program.getSourceFileMetadata.gen(file);
+                        if (!metadata) {
+                            throw new Error(`Program source file '${file}' has no metadata`);
+                        }
+                        if (metadata.isFromExternalLibrary) continue;
+                    }
+                    result.push(file);
+                }
+                if (!excludeConfigFiles) {
+                    result.push(...(yield* owner.program.getConfigFileNames.gen()));
+                }
+                return result;
+            },
+        );
+    }
+
+    /** Returns existing root files, excluding missing root declarations. */
+    get getRootFiles(): {
+        (): readonly RootedFilePath[];
+        gen(): Generator<ProtocolRequest, readonly RootedFilePath[], ProtocolResponse["result"]>;
+    } {
+        const owner = this;
+        return cacheGeneratorMethod(
+            owner,
+            "getRootFiles",
+            function (): readonly RootedFilePath[] {
+                return owner.api.client.apiRequest("getProjectRootFiles", {
+                    snapshot: owner.program.snapshotId,
+                    project: owner.handle,
+                });
+            },
+            function* (): Generator<ProtocolRequest, readonly RootedFilePath[], ProtocolResponse["result"]> {
+                return yield* apiRequest("getProjectRootFiles", {
+                    snapshot: owner.program.snapshotId,
+                    project: owner.handle,
+                });
+            },
+        );
+    }
+
+    get hasRoots(): {
+        (): boolean;
+        gen(): Generator<ProtocolRequest, boolean, ProtocolResponse["result"]>;
+    } {
+        const owner = this;
+        return cacheGeneratorMethod(
+            owner,
+            "hasRoots",
+            function (): boolean {
+                return owner.parsedCommandLine.fileNames.length > 0;
+            },
+            function* (): Generator<ProtocolRequest, boolean, ProtocolResponse["result"]> {
+                return owner.parsedCommandLine.fileNames.length > 0;
+            },
+        );
+    }
+
+    get isRoot(): {
+        (file: DocumentIdentifier): boolean;
+        gen(file: DocumentIdentifier): Generator<ProtocolRequest, boolean, ProtocolResponse["result"]>;
+    } {
+        const owner = this;
+        return cacheGeneratorMethod(
+            owner,
+            "isRoot",
+            function (file: DocumentIdentifier): boolean {
+                const path = owner.toPath(resolveFileName(file), owner.currentDirectory);
+                return (owner.getRootFiles()).some(root => owner.toPath(root, owner.currentDirectory) === path);
+            },
+            function* (file: DocumentIdentifier): Generator<ProtocolRequest, boolean, ProtocolResponse["result"]> {
+                const path = owner.toPath(resolveFileName(file), owner.currentDirectory);
+                return (yield* owner.getRootFiles.gen()).some(root => owner.toPath(root, owner.currentDirectory) === path);
+            },
+        );
+    }
+
+    get hasConfigFile(): {
+        (file: DocumentIdentifier): boolean;
+        gen(file: DocumentIdentifier): Generator<ProtocolRequest, boolean, ProtocolResponse["result"]>;
+    } {
+        const owner = this;
+        return cacheGeneratorMethod(
+            owner,
+            "hasConfigFile",
+            function (file: DocumentIdentifier): boolean {
+                const path = owner.toPath(resolveFileName(file), owner.currentDirectory);
+                return (owner.program.getConfigFileNames()).some(config => owner.toPath(config, owner.currentDirectory) === path);
+            },
+            function* (file: DocumentIdentifier): Generator<ProtocolRequest, boolean, ProtocolResponse["result"]> {
+                const path = owner.toPath(resolveFileName(file), owner.currentDirectory);
+                return (yield* owner.program.getConfigFileNames.gen()).some(config => owner.toPath(config, owner.currentDirectory) === path);
+            },
+        );
+    }
+
+    get getSourceFile(): {
+        (file: DocumentIdentifier): SourceFile | undefined;
+        gen(file: DocumentIdentifier): Generator<ProtocolRequest, SourceFile | undefined, ProtocolResponse["result"]>;
+    } {
+        const owner = this;
+        return cacheGeneratorMethod(
+            owner,
+            "getSourceFile",
+            function (file: DocumentIdentifier): SourceFile | undefined {
+                return owner.program.getSourceFile(file);
+            },
+            function* (file: DocumentIdentifier): Generator<ProtocolRequest, SourceFile | undefined, ProtocolResponse["result"]> {
+                return yield* owner.program.getSourceFile.gen(file);
+            },
+        );
     }
 
     dispose(): void {
@@ -2912,6 +3087,12 @@ export class LanguageService {
     }
 }
 
+export interface ResolvedProjectReference {
+    commandLine: ParsedCommandLine;
+    sourceFile: SourceFile;
+    references?: readonly (ResolvedProjectReference | undefined)[] | undefined;
+}
+
 export class Program<Id extends ProjectId = ProjectId> implements FormatDiagnosticsHost {
     /** @internal */
     readonly snapshotId: number;
@@ -2922,6 +3103,7 @@ export class Program<Id extends ProjectId = ProjectId> implements FormatDiagnost
     private readonly sourceFileMetadataCache = new Map<PathKey, SourceFileMetadata | undefined>();
     private ownedSnapshot: Snapshot | undefined;
     private disposePromise: void | undefined;
+    private resolvedProjectReferences: readonly (ResolvedProjectReference | undefined)[] | undefined | undefined;
 
     private get client(): Client {
         return this.project.api.client;
@@ -2999,6 +3181,281 @@ export class Program<Id extends ProjectId = ProjectId> implements FormatDiagnost
 
     getCompilerOptions(): CompilerOptions {
         return this.project.parsedCommandLine.options;
+    }
+
+    get getRootFileNames(): {
+        (): readonly RootedFilePath[];
+        gen(): Generator<ProtocolRequest, readonly RootedFilePath[], ProtocolResponse["result"]>;
+    } {
+        const owner = this;
+        return cacheGeneratorMethod(
+            owner,
+            "getRootFileNames",
+            function (): readonly RootedFilePath[] {
+                return owner.project.parsedCommandLine.fileNames;
+            },
+            function* (): Generator<ProtocolRequest, readonly RootedFilePath[], ProtocolResponse["result"]> {
+                return owner.project.parsedCommandLine.fileNames;
+            },
+        );
+    }
+
+    get getProjectReferences(): {
+        (): readonly ProjectReference[] | undefined;
+        gen(): Generator<ProtocolRequest, readonly ProjectReference[] | undefined, ProtocolResponse["result"]>;
+    } {
+        const owner = this;
+        return cacheGeneratorMethod(
+            owner,
+            "getProjectReferences",
+            function (): readonly ProjectReference[] | undefined {
+                return owner.project.parsedCommandLine.projectReferences;
+            },
+            function* (): Generator<ProtocolRequest, readonly ProjectReference[] | undefined, ProtocolResponse["result"]> {
+                return owner.project.parsedCommandLine.projectReferences;
+            },
+        );
+    }
+
+    get getTypeChecker(): {
+        (): Checker;
+        gen(): Generator<ProtocolRequest, Checker, ProtocolResponse["result"]>;
+    } {
+        const owner = this;
+        return cacheGeneratorMethod(
+            owner,
+            "getTypeChecker",
+            function (): Checker {
+                owner.client.apiRequest("ensureTypeChecker", {
+                    snapshot: owner.snapshotId,
+                    project: owner.project.handle,
+                });
+                return owner.project.checker;
+            },
+            function* (): Generator<ProtocolRequest, Checker, ProtocolResponse["result"]> {
+                yield* apiRequest("ensureTypeChecker", {
+                    snapshot: owner.snapshotId,
+                    project: owner.project.handle,
+                });
+                return owner.project.checker;
+            },
+        );
+    }
+
+    get getSourceFiles(): {
+        (): readonly SourceFile[];
+        gen(): Generator<ProtocolRequest, readonly SourceFile[], ProtocolResponse["result"]>;
+    } {
+        const owner = this;
+        return cacheGeneratorMethod(
+            owner,
+            "getSourceFiles",
+            function (): readonly SourceFile[] {
+                const files: SourceFile[] = [];
+                for (const fileName of owner.getSourceFileNames()) {
+                    const file = owner.getSourceFile(fileName);
+                    if (!file) {
+                        throw new Error(`Program source file '${fileName}' could not be loaded`);
+                    }
+                    files.push(file);
+                }
+                return files;
+            },
+            function* (): Generator<ProtocolRequest, readonly SourceFile[], ProtocolResponse["result"]> {
+                const files: SourceFile[] = [];
+                for (const fileName of (yield* owner.getSourceFileNames.gen())) {
+                    const file = yield* owner.getSourceFile.gen(fileName);
+                    if (!file) {
+                        throw new Error(`Program source file '${fileName}' could not be loaded`);
+                    }
+                    files.push(file);
+                }
+                return files;
+            },
+        );
+    }
+
+    private get getStatistics(): {
+        (): ProgramStatisticsResponse;
+        gen(): Generator<ProtocolRequest, ProgramStatisticsResponse, ProtocolResponse["result"]>;
+    } {
+        const owner = this;
+        return cacheGeneratorMethod(
+            owner,
+            "getStatistics",
+            function (): ProgramStatisticsResponse {
+                return owner.client.apiRequest("getProgramStatistics", {
+                    snapshot: owner.snapshotId,
+                    project: owner.project.handle,
+                });
+            },
+            function* (): Generator<ProtocolRequest, ProgramStatisticsResponse, ProtocolResponse["result"]> {
+                return yield* apiRequest("getProgramStatistics", {
+                    snapshot: owner.snapshotId,
+                    project: owner.project.handle,
+                });
+            },
+        );
+    }
+
+    get getIdentifierCount(): {
+        (): number;
+        gen(): Generator<ProtocolRequest, number, ProtocolResponse["result"]>;
+    } {
+        const owner = this;
+        return cacheGeneratorMethod(
+            owner,
+            "getIdentifierCount",
+            function (): number {
+                return (owner.getStatistics()).identifierCount;
+            },
+            function* (): Generator<ProtocolRequest, number, ProtocolResponse["result"]> {
+                return (yield* owner.getStatistics.gen()).identifierCount;
+            },
+        );
+    }
+
+    get getInstantiationCount(): {
+        (): number;
+        gen(): Generator<ProtocolRequest, number, ProtocolResponse["result"]>;
+    } {
+        const owner = this;
+        return cacheGeneratorMethod(
+            owner,
+            "getInstantiationCount",
+            function (): number {
+                return (owner.getStatistics()).instantiationCount;
+            },
+            function* (): Generator<ProtocolRequest, number, ProtocolResponse["result"]> {
+                return (yield* owner.getStatistics.gen()).instantiationCount;
+            },
+        );
+    }
+
+    get getNodeCount(): {
+        (): number;
+        gen(): Generator<ProtocolRequest, number, ProtocolResponse["result"]>;
+    } {
+        const owner = this;
+        return cacheGeneratorMethod(
+            owner,
+            "getNodeCount",
+            function (): number {
+                return (owner.getStatistics()).nodeCount;
+            },
+            function* (): Generator<ProtocolRequest, number, ProtocolResponse["result"]> {
+                return (yield* owner.getStatistics.gen()).nodeCount;
+            },
+        );
+    }
+
+    get getSymbolCount(): {
+        (): number;
+        gen(): Generator<ProtocolRequest, number, ProtocolResponse["result"]>;
+    } {
+        const owner = this;
+        return cacheGeneratorMethod(
+            owner,
+            "getSymbolCount",
+            function (): number {
+                return (owner.getStatistics()).symbolCount;
+            },
+            function* (): Generator<ProtocolRequest, number, ProtocolResponse["result"]> {
+                return (yield* owner.getStatistics.gen()).symbolCount;
+            },
+        );
+    }
+
+    get getTypeCount(): {
+        (): number;
+        gen(): Generator<ProtocolRequest, number, ProtocolResponse["result"]>;
+    } {
+        const owner = this;
+        return cacheGeneratorMethod(
+            owner,
+            "getTypeCount",
+            function (): number {
+                return (owner.getStatistics()).typeCount;
+            },
+            function* (): Generator<ProtocolRequest, number, ProtocolResponse["result"]> {
+                return (yield* owner.getStatistics.gen()).typeCount;
+            },
+        );
+    }
+
+    get getRelationCacheSizes(): {
+        (): RelationCacheSizes;
+        gen(): Generator<ProtocolRequest, RelationCacheSizes, ProtocolResponse["result"]>;
+    } {
+        const owner = this;
+        return cacheGeneratorMethod(
+            owner,
+            "getRelationCacheSizes",
+            function (): RelationCacheSizes {
+                return (owner.getStatistics()).relationCacheSizes;
+            },
+            function* (): Generator<ProtocolRequest, RelationCacheSizes, ProtocolResponse["result"]> {
+                return (yield* owner.getStatistics.gen()).relationCacheSizes;
+            },
+        );
+    }
+
+    get getResolvedProjectReferences(): {
+        (): readonly (ResolvedProjectReference | undefined)[] | undefined;
+        gen(): Generator<ProtocolRequest, readonly (ResolvedProjectReference | undefined)[] | undefined, ProtocolResponse["result"]>;
+    } {
+        const owner = this;
+        return cacheGeneratorMethod(
+            owner,
+            "getResolvedProjectReferences",
+            function (): readonly (ResolvedProjectReference | undefined)[] | undefined {
+                return owner.resolvedProjectReferences ??= owner.fetchResolvedProjectReferences();
+            },
+            function* (): Generator<ProtocolRequest, readonly (ResolvedProjectReference | undefined)[] | undefined, ProtocolResponse["result"]> {
+                return owner.resolvedProjectReferences ??= yield* owner.fetchResolvedProjectReferences.gen();
+            },
+        );
+    }
+
+    private get fetchResolvedProjectReferences(): {
+        (): readonly (ResolvedProjectReference | undefined)[] | undefined;
+        gen(): Generator<ProtocolRequest, readonly (ResolvedProjectReference | undefined)[] | undefined, ProtocolResponse["result"]>;
+    } {
+        const owner = this;
+        return cacheGeneratorMethod(
+            owner,
+            "fetchResolvedProjectReferences",
+            function (): readonly (ResolvedProjectReference | undefined)[] | undefined {
+                const data = owner.client.apiRequest("getResolvedProjectReferences", {
+                    snapshot: owner.snapshotId,
+                    project: owner.project.handle,
+                });
+                const projects: ResolvedProjectReference[] = data.projects.map(project => ({
+                    commandLine: project.commandLine,
+                    sourceFile: new RemoteSourceFile(sourceFileResponseToUint8Array(project.sourceFile)!, owner.decoder, undefined, owner.project.api) as unknown as SourceFile,
+                }));
+                const resolve = (indices: readonly number[] | null | undefined): (ResolvedProjectReference | undefined)[] | undefined => indices?.map(index => index === 0 ? undefined : projects[index - 1]);
+                for (let i = 0; i < projects.length; i++) {
+                    projects[i].references = resolve(data.projects[i].references);
+                }
+                return resolve(data.references);
+            },
+            function* (): Generator<ProtocolRequest, readonly (ResolvedProjectReference | undefined)[] | undefined, ProtocolResponse["result"]> {
+                const data = yield* apiRequest("getResolvedProjectReferences", {
+                    snapshot: owner.snapshotId,
+                    project: owner.project.handle,
+                });
+                const projects: ResolvedProjectReference[] = data.projects.map(project => ({
+                    commandLine: project.commandLine,
+                    sourceFile: new RemoteSourceFile(sourceFileResponseToUint8Array(project.sourceFile)!, owner.decoder, undefined, owner.project.api) as unknown as SourceFile,
+                }));
+                const resolve = (indices: readonly number[] | null | undefined): (ResolvedProjectReference | undefined)[] | undefined => indices?.map(index => index === 0 ? undefined : projects[index - 1]);
+                for (let i = 0; i < projects.length; i++) {
+                    projects[i].references = resolve(data.projects[i].references);
+                }
+                return resolve(data.references);
+            },
+        );
     }
 
     get getSourceFile(): {
@@ -3715,6 +4172,31 @@ export class Program<Id extends ProjectId = ProjectId> implements FormatDiagnost
             },
             function* (): Generator<ProtocolRequest, readonly Diagnostic[], ProtocolResponse["result"]> {
                 const data = yield* apiRequest("getProgramDiagnostics", {
+                    snapshot: owner.snapshotId,
+                    project: owner.project.handle,
+                });
+                return data ?? [];
+            },
+        );
+    }
+
+    get getOptionsDiagnostics(): {
+        (): readonly Diagnostic[];
+        gen(): Generator<ProtocolRequest, readonly Diagnostic[], ProtocolResponse["result"]>;
+    } {
+        const owner = this;
+        return cacheGeneratorMethod(
+            owner,
+            "getOptionsDiagnostics",
+            function (): readonly Diagnostic[] {
+                const data = owner.client.apiRequest("getOptionsDiagnostics", {
+                    snapshot: owner.snapshotId,
+                    project: owner.project.handle,
+                });
+                return data ?? [];
+            },
+            function* (): Generator<ProtocolRequest, readonly Diagnostic[], ProtocolResponse["result"]> {
+                const data = yield* apiRequest("getOptionsDiagnostics", {
                     snapshot: owner.snapshotId,
                     project: owner.project.handle,
                 });

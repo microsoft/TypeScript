@@ -7,6 +7,15 @@ import (
 	"github.com/microsoft/TypeScript/tsc/internal/diagnostics"
 )
 
+func (c *Checker) GetRelationCacheSizes() RelationCacheSizes {
+	return RelationCacheSizes{
+		Assignable:    c.assignableRelation.size(),
+		Identity:      c.identityRelation.size(),
+		Subtype:       c.subtypeRelation.size(),
+		StrictSubtype: c.strictSubtypeRelation.size(),
+	}
+}
+
 func (c *Checker) GetStringType() *Type {
 	return c.stringType
 }
