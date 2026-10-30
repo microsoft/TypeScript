@@ -11,14 +11,14 @@ var map = new Map([["", true]]);
 >true : true
 
 for (var [k = "", v = false] of map) {
->k : string
+>k : string (origin: string | "")
 >"" : ""
 >v : boolean
 >false : false
 >map : Map<string, boolean>
 
     k;
->k : string
+>k : string (origin: string | "")
 
     v;
 >v : boolean

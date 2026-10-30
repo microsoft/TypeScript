@@ -29,20 +29,20 @@ function f03([x, y] = [1, 'foo']) {}
 
 function f10([x = 0, y]) {}
 >f10 : ([x, y]: [number | undefined, any]) => void
->x : number
+>x : number (origin: number | 0)
 >0 : 0
 >y : any
 
 function f11([x = 0, y] = []) {}
 >f11 : ([x, y]?: [(number | undefined)?, any?]) => void
->x : number
+>x : number (origin: number | 0)
 >0 : 0
 >y : any
 >[] : []
 
 function f12([x = 0, y] = [1]) {}
 >f12 : ([x, y]?: [number, any?]) => void
->x : number
+>x : number (origin: number | 0)
 >0 : 0
 >y : any
 >[1] : [number]
@@ -50,7 +50,7 @@ function f12([x = 0, y] = [1]) {}
 
 function f13([x = 0, y] = [1, 'foo']) {}
 >f13 : ([x, y]?: [number, string]) => void
->x : number
+>x : number (origin: number | 0)
 >0 : 0
 >y : string
 >[1, 'foo'] : [number, string]
@@ -59,33 +59,33 @@ function f13([x = 0, y] = [1, 'foo']) {}
 
 function f20([x = 0, y = 'bar']) {}
 >f20 : ([x, y]: [(number | undefined)?, (string | undefined)?]) => void
->x : number
+>x : number (origin: number | 0)
 >0 : 0
->y : string
+>y : string (origin: string | "bar")
 >'bar' : "bar"
 
 function f21([x = 0, y = 'bar'] = []) {}
 >f21 : ([x, y]?: [(number | undefined)?, (string | undefined)?]) => void
->x : number
+>x : number (origin: number | 0)
 >0 : 0
->y : string
+>y : string (origin: string | "bar")
 >'bar' : "bar"
 >[] : []
 
 function f22([x = 0, y = 'bar'] = [1]) {}
 >f22 : ([x, y]?: [number, (string | undefined)?]) => void
->x : number
+>x : number (origin: number | 0)
 >0 : 0
->y : string
+>y : string (origin: string | "bar")
 >'bar' : "bar"
 >[1] : [number]
 >1 : 1
 
 function f23([x = 0, y = 'bar'] = [1, 'foo']) {}
 >f23 : ([x, y]?: [number, string]) => void
->x : number
+>x : number (origin: number | 0)
 >0 : 0
->y : string
+>y : string (origin: string | "bar")
 >'bar' : "bar"
 >[1, 'foo'] : [number, string]
 >1 : 1
@@ -99,33 +99,33 @@ declare const sx: string | undefined;
 
 function f30([x = 0, y = 'bar']) {}
 >f30 : ([x, y]: [(number | undefined)?, (string | undefined)?]) => void
->x : number
+>x : number (origin: number | 0)
 >0 : 0
->y : string
+>y : string (origin: string | "bar")
 >'bar' : "bar"
 
 function f31([x = 0, y = 'bar'] = []) {}
 >f31 : ([x, y]?: [(number | undefined)?, (string | undefined)?]) => void
->x : number
+>x : number (origin: number | 0)
 >0 : 0
->y : string
+>y : string (origin: string | "bar")
 >'bar' : "bar"
 >[] : []
 
 function f32([x = 0, y = 'bar'] = [nx]) {}
 >f32 : ([x, y]?: [number | undefined, (string | undefined)?]) => void
->x : number
+>x : number (origin: number | 0)
 >0 : 0
->y : string
+>y : string (origin: string | "bar")
 >'bar' : "bar"
 >[nx] : [number | undefined]
 >nx : number | undefined
 
 function f33([x = 0, y = 'bar'] = [nx, sx]) {}
 >f33 : ([x, y]?: [number | undefined, string | undefined]) => void
->x : number
+>x : number (origin: number | 0)
 >0 : 0
->y : string
+>y : string (origin: string | "bar")
 >'bar' : "bar"
 >[nx, sx] : [number | undefined, string | undefined]
 >nx : number | undefined
@@ -133,16 +133,16 @@ function f33([x = 0, y = 'bar'] = [nx, sx]) {}
 
 function f40([x = 0, y = 'bar']) {}
 >f40 : ([x, y]: [(number | undefined)?, (string | undefined)?]) => void
->x : number
+>x : number (origin: number | 0)
 >0 : 0
->y : string
+>y : string (origin: string | "bar")
 >'bar' : "bar"
 
 function f41([x = 0, y = 'bar'] = []) {}
 >f41 : ([x, y]?: [(number | undefined)?, (string | undefined)?]) => void
->x : number
+>x : number (origin: number | 0)
 >0 : 0
->y : string
+>y : string (origin: string | "bar")
 >'bar' : "bar"
 >[] : []
 
@@ -150,7 +150,7 @@ function f42([x = 0, y = 'bar'] = [sx]) {}
 >f42 : ([x, y]?: [string | undefined, (string | undefined)?]) => void
 >x : string | number
 >0 : 0
->y : string
+>y : string (origin: string | "bar")
 >'bar' : "bar"
 >[sx] : [string | undefined]
 >sx : string | undefined

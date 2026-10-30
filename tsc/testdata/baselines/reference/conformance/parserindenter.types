@@ -172,8 +172,8 @@ namespace Formatting {
 
                     "t2=[" + (nextToken == null ? "null" : (nextToken.Span.startPosition() + "," + nextToken.Span.endPosition())) + "]" +
 >"t2=[" : "t2=["
->(nextToken == null ? "null" : (nextToken.Span.startPosition() + "," + nextToken.Span.endPosition())) : string
->nextToken == null ? "null" : (nextToken.Span.startPosition() + "," + nextToken.Span.endPosition()) : string
+>(nextToken == null ? "null" : (nextToken.Span.startPosition() + "," + nextToken.Span.endPosition())) : string (origin: string | "null")
+>nextToken == null ? "null" : (nextToken.Span.startPosition() + "," + nextToken.Span.endPosition()) : string (origin: string | "null")
 >nextToken == null : boolean
 >nextToken : TokenSpan
 >"null" : "null"

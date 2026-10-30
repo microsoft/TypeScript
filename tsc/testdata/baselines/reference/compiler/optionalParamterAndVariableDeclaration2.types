@@ -9,8 +9,8 @@ class C {
 
         var options = (options || 0);
 >options : number | undefined
->(options || 0) : number
->options || 0 : number
+>(options || 0) : number (origin: number | 0)
+>options || 0 : number (origin: number | 0)
 >options : number | undefined
 >0 : 0
     }

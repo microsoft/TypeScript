@@ -396,7 +396,7 @@ function makeAdder(n?: number) {
 >n : number | undefined
 
     n ??= 0;
->n ??= 0 : number
+>n ??= 0 : number (origin: number | 0)
 >n : number | undefined
 >0 : 0
 

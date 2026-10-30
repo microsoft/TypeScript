@@ -52,7 +52,7 @@ function getMultiRobot() {
 }
 
 for (let [, nameA ="name"] = robotA, i = 0; i < 1; i++) {
->nameA : string
+>nameA : string (origin: string | "name")
 >"name" : "name"
 >robotA : Robot
 >i : number
@@ -68,10 +68,10 @@ for (let [, nameA ="name"] = robotA, i = 0; i < 1; i++) {
 >console.log : (msg: any) => void
 >console : { log(msg: any): void; }
 >log : (msg: any) => void
->nameA : string
+>nameA : string (origin: string | "name")
 }
 for (let [, nameA = "name"] = getRobot(), i = 0; i < 1; i++) {
->nameA : string
+>nameA : string (origin: string | "name")
 >"name" : "name"
 >getRobot() : Robot
 >getRobot : () => Robot
@@ -88,10 +88,10 @@ for (let [, nameA = "name"] = getRobot(), i = 0; i < 1; i++) {
 >console.log : (msg: any) => void
 >console : { log(msg: any): void; }
 >log : (msg: any) => void
->nameA : string
+>nameA : string (origin: string | "name")
 }
 for (let [, nameA = "name"] = [2, "trimmer", "trimming"], i = 0; i < 1; i++) {
->nameA : string
+>nameA : string (origin: string | "name")
 >"name" : "name"
 >[2, "trimmer", "trimming"] : [number, string, string]
 >2 : 2
@@ -110,15 +110,15 @@ for (let [, nameA = "name"] = [2, "trimmer", "trimming"], i = 0; i < 1; i++) {
 >console.log : (msg: any) => void
 >console : { log(msg: any): void; }
 >log : (msg: any) => void
->nameA : string
+>nameA : string (origin: string | "name")
 }
 for (let [, [
     primarySkillA = "primary",
->primarySkillA : string
+>primarySkillA : string (origin: string | "primary")
 >"primary" : "primary"
 
     secondarySkillA = "secondary"
->secondarySkillA : string
+>secondarySkillA : string (origin: string | "secondary")
 >"secondary" : "secondary"
 
 ] = ["none", "none"]] = multiRobotA, i = 0; i < 1; i++) {
@@ -139,15 +139,15 @@ for (let [, [
 >console.log : (msg: any) => void
 >console : { log(msg: any): void; }
 >log : (msg: any) => void
->primarySkillA : string
+>primarySkillA : string (origin: string | "primary")
 }
 for (let [, [
     primarySkillA = "primary",
->primarySkillA : string
+>primarySkillA : string (origin: string | "primary")
 >"primary" : "primary"
 
     secondarySkillA = "secondary"
->secondarySkillA : string
+>secondarySkillA : string (origin: string | "secondary")
 >"secondary" : "secondary"
 
 ] = ["none", "none"]] = getMultiRobot(), i = 0; i < 1; i++) {
@@ -169,15 +169,15 @@ for (let [, [
 >console.log : (msg: any) => void
 >console : { log(msg: any): void; }
 >log : (msg: any) => void
->primarySkillA : string
+>primarySkillA : string (origin: string | "primary")
 }
 for (let [, [
     primarySkillA = "primary",
->primarySkillA : string
+>primarySkillA : string (origin: string | "primary")
 >"primary" : "primary"
 
     secondarySkillA = "secondary"
->secondarySkillA : string
+>secondarySkillA : string (origin: string | "secondary")
 >"secondary" : "secondary"
 
 ] = ["none", "none"]] = ["trimmer", ["trimming", "edging"]], i = 0; i < 1; i++) {
@@ -202,11 +202,11 @@ for (let [, [
 >console.log : (msg: any) => void
 >console : { log(msg: any): void; }
 >log : (msg: any) => void
->primarySkillA : string
+>primarySkillA : string (origin: string | "primary")
 }
 
 for (let [numberB = -1] = robotA, i = 0; i < 1; i++) {
->numberB : number
+>numberB : number (origin: number | -1)
 >-1 : -1
 >1 : 1
 >robotA : Robot
@@ -223,10 +223,10 @@ for (let [numberB = -1] = robotA, i = 0; i < 1; i++) {
 >console.log : (msg: any) => void
 >console : { log(msg: any): void; }
 >log : (msg: any) => void
->numberB : number
+>numberB : number (origin: number | -1)
 }
 for (let [numberB = -1] = getRobot(), i = 0; i < 1; i++) {
->numberB : number
+>numberB : number (origin: number | -1)
 >-1 : -1
 >1 : 1
 >getRobot() : Robot
@@ -244,10 +244,10 @@ for (let [numberB = -1] = getRobot(), i = 0; i < 1; i++) {
 >console.log : (msg: any) => void
 >console : { log(msg: any): void; }
 >log : (msg: any) => void
->numberB : number
+>numberB : number (origin: number | -1)
 }
 for (let [numberB = -1] = [2, "trimmer", "trimming"], i = 0; i < 1; i++) {
->numberB : number
+>numberB : number (origin: number | -1)
 >-1 : -1
 >1 : 1
 >[2, "trimmer", "trimming"] : [number, string, string]
@@ -267,10 +267,10 @@ for (let [numberB = -1] = [2, "trimmer", "trimming"], i = 0; i < 1; i++) {
 >console.log : (msg: any) => void
 >console : { log(msg: any): void; }
 >log : (msg: any) => void
->numberB : number
+>numberB : number (origin: number | -1)
 }
 for (let [nameB = "name"] = multiRobotA, i = 0; i < 1; i++) {
->nameB : string
+>nameB : string (origin: string | "name")
 >"name" : "name"
 >multiRobotA : MultiSkilledRobot
 >i : number
@@ -286,10 +286,10 @@ for (let [nameB = "name"] = multiRobotA, i = 0; i < 1; i++) {
 >console.log : (msg: any) => void
 >console : { log(msg: any): void; }
 >log : (msg: any) => void
->nameB : string
+>nameB : string (origin: string | "name")
 }
 for (let [nameB = "name"] = getMultiRobot(), i = 0; i < 1; i++) {
->nameB : string
+>nameB : string (origin: string | "name")
 >"name" : "name"
 >getMultiRobot() : MultiSkilledRobot
 >getMultiRobot : () => MultiSkilledRobot
@@ -306,10 +306,10 @@ for (let [nameB = "name"] = getMultiRobot(), i = 0; i < 1; i++) {
 >console.log : (msg: any) => void
 >console : { log(msg: any): void; }
 >log : (msg: any) => void
->nameB : string
+>nameB : string (origin: string | "name")
 }
 for (let [nameB = "name"] = ["trimmer", ["trimming", "edging"]], i = 0; i < 1; i++) {
->nameB : string
+>nameB : string (origin: string | "name")
 >"name" : "name"
 >["trimmer", ["trimming", "edging"]] : [string, string[]]
 >"trimmer" : "trimmer"
@@ -329,16 +329,16 @@ for (let [nameB = "name"] = ["trimmer", ["trimming", "edging"]], i = 0; i < 1; i
 >console.log : (msg: any) => void
 >console : { log(msg: any): void; }
 >log : (msg: any) => void
->nameB : string
+>nameB : string (origin: string | "name")
 }
 
 for (let [numberA2 = -1, nameA2 = "name", skillA2 = "skill"] = robotA, i = 0; i < 1; i++) {
->numberA2 : number
+>numberA2 : number (origin: number | -1)
 >-1 : -1
 >1 : 1
->nameA2 : string
+>nameA2 : string (origin: string | "name")
 >"name" : "name"
->skillA2 : string
+>skillA2 : string (origin: string | "skill")
 >"skill" : "skill"
 >robotA : Robot
 >i : number
@@ -354,15 +354,15 @@ for (let [numberA2 = -1, nameA2 = "name", skillA2 = "skill"] = robotA, i = 0; i 
 >console.log : (msg: any) => void
 >console : { log(msg: any): void; }
 >log : (msg: any) => void
->nameA2 : string
+>nameA2 : string (origin: string | "name")
 }
 for (let [numberA2 = -1, nameA2 = "name", skillA2 = "skill"] = getRobot(), i = 0; i < 1; i++) {
->numberA2 : number
+>numberA2 : number (origin: number | -1)
 >-1 : -1
 >1 : 1
->nameA2 : string
+>nameA2 : string (origin: string | "name")
 >"name" : "name"
->skillA2 : string
+>skillA2 : string (origin: string | "skill")
 >"skill" : "skill"
 >getRobot() : Robot
 >getRobot : () => Robot
@@ -379,15 +379,15 @@ for (let [numberA2 = -1, nameA2 = "name", skillA2 = "skill"] = getRobot(), i = 0
 >console.log : (msg: any) => void
 >console : { log(msg: any): void; }
 >log : (msg: any) => void
->nameA2 : string
+>nameA2 : string (origin: string | "name")
 }
 for (let [numberA2 = -1, nameA2 = "name", skillA2 = "skill"] = [2, "trimmer", "trimming"], i = 0; i < 1; i++) {
->numberA2 : number
+>numberA2 : number (origin: number | -1)
 >-1 : -1
 >1 : 1
->nameA2 : string
+>nameA2 : string (origin: string | "name")
 >"name" : "name"
->skillA2 : string
+>skillA2 : string (origin: string | "skill")
 >"skill" : "skill"
 >[2, "trimmer", "trimming"] : [number, string, string]
 >2 : 2
@@ -406,20 +406,20 @@ for (let [numberA2 = -1, nameA2 = "name", skillA2 = "skill"] = [2, "trimmer", "t
 >console.log : (msg: any) => void
 >console : { log(msg: any): void; }
 >log : (msg: any) => void
->nameA2 : string
+>nameA2 : string (origin: string | "name")
 }
 for (let
     [nameMA = "noName",
->nameMA : string
+>nameMA : string (origin: string | "noName")
 >"noName" : "noName"
 
         [
             primarySkillA = "primary",
->primarySkillA : string
+>primarySkillA : string (origin: string | "primary")
 >"primary" : "primary"
 
             secondarySkillA = "secondary"
->secondarySkillA : string
+>secondarySkillA : string (origin: string | "secondary")
 >"secondary" : "secondary"
 
         ] = ["none", "none"]
@@ -442,19 +442,19 @@ for (let
 >console.log : (msg: any) => void
 >console : { log(msg: any): void; }
 >log : (msg: any) => void
->nameMA : string
+>nameMA : string (origin: string | "noName")
 }
 for (let [nameMA = "noName",
->nameMA : string
+>nameMA : string (origin: string | "noName")
 >"noName" : "noName"
 
     [
         primarySkillA = "primary",
->primarySkillA : string
+>primarySkillA : string (origin: string | "primary")
 >"primary" : "primary"
 
         secondarySkillA = "secondary"
->secondarySkillA : string
+>secondarySkillA : string (origin: string | "secondary")
 >"secondary" : "secondary"
 
     ] = ["none", "none"]
@@ -478,19 +478,19 @@ for (let [nameMA = "noName",
 >console.log : (msg: any) => void
 >console : { log(msg: any): void; }
 >log : (msg: any) => void
->nameMA : string
+>nameMA : string (origin: string | "noName")
 }
 for (let [nameMA = "noName",
->nameMA : string
+>nameMA : string (origin: string | "noName")
 >"noName" : "noName"
 
     [
         primarySkillA = "primary",
->primarySkillA : string
+>primarySkillA : string (origin: string | "primary")
 >"primary" : "primary"
 
         secondarySkillA = "secondary"
->secondarySkillA : string
+>secondarySkillA : string (origin: string | "secondary")
 >"secondary" : "secondary"
 
     ] = ["none", "none"]
@@ -517,11 +517,11 @@ for (let [nameMA = "noName",
 >console.log : (msg: any) => void
 >console : { log(msg: any): void; }
 >log : (msg: any) => void
->nameMA : string
+>nameMA : string (origin: string | "noName")
 }
 
 for (let [numberA3 = -1, ...robotAInfo] = robotA, i = 0; i < 1; i++) {
->numberA3 : number
+>numberA3 : number (origin: number | -1)
 >-1 : -1
 >1 : 1
 >robotAInfo : [string, string]
@@ -539,10 +539,10 @@ for (let [numberA3 = -1, ...robotAInfo] = robotA, i = 0; i < 1; i++) {
 >console.log : (msg: any) => void
 >console : { log(msg: any): void; }
 >log : (msg: any) => void
->numberA3 : number
+>numberA3 : number (origin: number | -1)
 }
 for (let [numberA3 = -1, ...robotAInfo] = getRobot(), i = 0; i < 1; i++) {
->numberA3 : number
+>numberA3 : number (origin: number | -1)
 >-1 : -1
 >1 : 1
 >robotAInfo : [string, string]
@@ -561,10 +561,10 @@ for (let [numberA3 = -1, ...robotAInfo] = getRobot(), i = 0; i < 1; i++) {
 >console.log : (msg: any) => void
 >console : { log(msg: any): void; }
 >log : (msg: any) => void
->numberA3 : number
+>numberA3 : number (origin: number | -1)
 }
 for (let [numberA3 = -1, ...robotAInfo] = [2, "trimmer", "trimming"], i = 0; i < 1; i++) {
->numberA3 : number
+>numberA3 : number (origin: number | -1)
 >-1 : -1
 >1 : 1
 >robotAInfo : [string, string]
@@ -585,5 +585,5 @@ for (let [numberA3 = -1, ...robotAInfo] = [2, "trimmer", "trimming"], i = 0; i <
 >console.log : (msg: any) => void
 >console : { log(msg: any): void; }
 >log : (msg: any) => void
->numberA3 : number
+>numberA3 : number (origin: number | -1)
 }

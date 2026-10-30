@@ -362,16 +362,16 @@ type EmptyString = '' | null | undefined;
 
 function isEmpty(value: string | EmptyString): value is EmptyString {
 >isEmpty : (value: string | EmptyString) => value is EmptyString
->value : string | null | undefined
+>value : string | null | undefined (origin: string | "" | null | undefined)
 
     return value === '' || value === null || value === undefined;
 >value === '' || value === null || value === undefined : boolean
 >value === '' || value === null : boolean
 >value === '' : boolean
->value : string | null | undefined
+>value : string | null | undefined (origin: string | "" | null | undefined)
 >'' : ""
 >value === null : boolean
->value : string | null | undefined
+>value : string | null | undefined (origin: string | "" | null | undefined)
 >value === undefined : boolean
 >value : string | undefined
 >undefined : undefined

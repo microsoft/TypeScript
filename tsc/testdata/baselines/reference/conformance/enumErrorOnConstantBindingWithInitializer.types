@@ -13,7 +13,7 @@ declare const thing: Thing;
 >thing : Thing
 
 const { value = "123" } = thing;
->value : string | number
+>value : string | number (origin: string | number | "123")
 >"123" : "123"
 >thing : Thing
 
@@ -22,6 +22,6 @@ enum E {
 
   test = value,
 >test : E.test
->value : string | number
+>value : string | number (origin: string | number | "123")
 }
 

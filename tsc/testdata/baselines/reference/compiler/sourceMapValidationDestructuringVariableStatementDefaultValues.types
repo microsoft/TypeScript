@@ -37,25 +37,25 @@ var robotB: Robot = { name: "trimmer", skill: "trimming" };
 
 var { name: nameA = "<NoName>" } = robotA;
 >name : any
->nameA : string
+>nameA : string (origin: string | "<NoName>")
 >"<NoName>" : "<NoName>"
 >robotA : Robot
 
 var { name: nameB = "<NoName>", skill: skillB = "<skillUnspecified>" } = robotB;
 >name : any
->nameB : string
+>nameB : string (origin: string | "<NoName>")
 >"<NoName>" : "<NoName>"
 >skill : any
->skillB : string
+>skillB : string (origin: string | "<skillUnspecified>")
 >"<skillUnspecified>" : "<skillUnspecified>"
 >robotB : Robot
 
 var { name: nameC = "<NoName>", skill: skillC = "<skillUnspecified>" } = { name: "Edger", skill: "cutting edges" };
 >name : any
->nameC : string
+>nameC : string (origin: string | "<NoName>")
 >"<NoName>" : "<NoName>"
 >skill : any
->skillC : string
+>skillC : string (origin: string | "<skillUnspecified>")
 >"<skillUnspecified>" : "<skillUnspecified>"
 >{ name: "Edger", skill: "cutting edges" } : { name?: string; skill?: string; }
 >name : string
@@ -65,15 +65,15 @@ var { name: nameC = "<NoName>", skill: skillC = "<skillUnspecified>" } = { name:
 
 if (nameA == nameB) {
 >nameA == nameB : boolean
->nameA : string
->nameB : string
+>nameA : string (origin: string | "<NoName>")
+>nameB : string (origin: string | "<NoName>")
 
     console.log(skillB);
 >console.log(skillB) : void
 >console.log : (msg: string) => void
 >console : { log(msg: string): void; }
 >log : (msg: string) => void
->skillB : string
+>skillB : string (origin: string | "<skillUnspecified>")
 }
 else {
     console.log(nameC);
@@ -81,5 +81,5 @@ else {
 >console.log : (msg: string) => void
 >console : { log(msg: string): void; }
 >log : (msg: string) => void
->nameC : string
+>nameC : string (origin: string | "<NoName>")
 }

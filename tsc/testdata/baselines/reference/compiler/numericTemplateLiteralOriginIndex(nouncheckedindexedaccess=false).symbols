@@ -1,0 +1,35 @@
+//// [tests/cases/compiler/numericTemplateLiteralOriginIndex.ts] ////
+
+=== numericTemplateLiteralOriginIndex.ts ===
+declare const dictionary: { [key: number]: boolean };
+>dictionary : Symbol(dictionary, Decl(numericTemplateLiteralOriginIndex.ts, 0, 13))
+>key : Symbol(key, Decl(numericTemplateLiteralOriginIndex.ts, 0, 29))
+
+declare const plain: `${number}`;
+>plain : Symbol(plain, Decl(numericTemplateLiteralOriginIndex.ts, 1, 13))
+
+declare const tracked: "1" | `${number}`;
+>tracked : Symbol(tracked, Decl(numericTemplateLiteralOriginIndex.ts, 2, 13))
+
+type Key = "1" | "2" | `${number}`;
+>Key : Symbol(Key, Decl(numericTemplateLiteralOriginIndex.ts, 2, 41))
+
+declare const aliased: Key;
+>aliased : Symbol(aliased, Decl(numericTemplateLiteralOriginIndex.ts, 4, 13))
+>Key : Symbol(Key, Decl(numericTemplateLiteralOriginIndex.ts, 2, 41))
+
+export const plainResult = dictionary[plain];
+>plainResult : Symbol(plainResult, Decl(numericTemplateLiteralOriginIndex.ts, 6, 12))
+>dictionary : Symbol(dictionary, Decl(numericTemplateLiteralOriginIndex.ts, 0, 13))
+>plain : Symbol(plain, Decl(numericTemplateLiteralOriginIndex.ts, 1, 13))
+
+export const trackedResult = dictionary[tracked];
+>trackedResult : Symbol(trackedResult, Decl(numericTemplateLiteralOriginIndex.ts, 7, 12))
+>dictionary : Symbol(dictionary, Decl(numericTemplateLiteralOriginIndex.ts, 0, 13))
+>tracked : Symbol(tracked, Decl(numericTemplateLiteralOriginIndex.ts, 2, 13))
+
+export const aliasedResult = dictionary[aliased];
+>aliasedResult : Symbol(aliasedResult, Decl(numericTemplateLiteralOriginIndex.ts, 8, 12))
+>dictionary : Symbol(dictionary, Decl(numericTemplateLiteralOriginIndex.ts, 0, 13))
+>aliased : Symbol(aliased, Decl(numericTemplateLiteralOriginIndex.ts, 4, 13))
+

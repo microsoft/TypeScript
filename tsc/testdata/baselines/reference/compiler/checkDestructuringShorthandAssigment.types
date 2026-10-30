@@ -4,7 +4,7 @@
 // should not crash while checking
 function Test({ b = '' } = {}) {}
 >Test : ({ b }?: { b?: string | undefined; }) => void
->b : string
+>b : string (origin: string | "")
 >'' : ""
 >{} : {}
 

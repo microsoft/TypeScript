@@ -1,0 +1,37 @@
+//// [tests/cases/compiler/numericTemplateLiteralOriginIndex.ts] ////
+
+=== numericTemplateLiteralOriginIndex.ts ===
+declare const dictionary: { [key: number]: boolean };
+>dictionary : { [key: number]: boolean; }
+>key : number
+
+declare const plain: `${number}`;
+>plain : `${number}`
+
+declare const tracked: "1" | `${number}`;
+>tracked : `${number}` (origin: "1" | `${number}`)
+
+type Key = "1" | "2" | `${number}`;
+>Key : Key (origin: "1" | "2" | `${number}`)
+
+declare const aliased: Key;
+>aliased : Key (origin: "1" | "2" | `${number}`)
+
+export const plainResult = dictionary[plain];
+>plainResult : boolean | undefined
+>dictionary[plain] : boolean | undefined
+>dictionary : { [key: number]: boolean; }
+>plain : `${number}`
+
+export const trackedResult = dictionary[tracked];
+>trackedResult : boolean | undefined
+>dictionary[tracked] : boolean | undefined
+>dictionary : { [key: number]: boolean; }
+>tracked : `${number}` (origin: "1" | `${number}`)
+
+export const aliasedResult = dictionary[aliased];
+>aliasedResult : boolean | undefined
+>dictionary[aliased] : boolean | undefined
+>dictionary : { [key: number]: boolean; }
+>aliased : Key (origin: "1" | "2" | `${number}`)
+

@@ -13,14 +13,14 @@ function example(parameters: Params) {
 >parameters : Params
 
   const { value = '123' } = parameters
->value : string | number
+>value : string | number (origin: string | number | "123")
 >'123' : "123"
 >parameters : Params
 
   return `${value}` === '345'
 >`${value}` === '345' : boolean
 >`${value}` : string
->value : string | number
+>value : string | number (origin: string | number | "123")
 >'345' : "345"
 }
 
@@ -29,14 +29,14 @@ function example2(parameters: Params) {
 >parameters : Params
 
   const { value = '123' } = parameters
->value : string | number
+>value : string | number (origin: string | number | "123")
 >'123' : "123"
 >parameters : Params
 
   const b = `${value}`;
 >b : string
 >`${value}` : string
->value : string | number
+>value : string | number (origin: string | number | "123")
 
   return b;
 >b : string

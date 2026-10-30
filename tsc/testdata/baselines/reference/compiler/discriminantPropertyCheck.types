@@ -346,7 +346,7 @@ const u: U = {} as any;
 
 u.a && u.b && f(u.a, u.b);
 >u.a && u.b && f(u.a, u.b) : void | "" | undefined
->u.a && u.b : string | undefined
+>u.a && u.b : string | undefined (origin: string | "" | undefined)
 >u.a : string | undefined
 >u : U
 >a : string | undefined
@@ -364,7 +364,7 @@ u.a && u.b && f(u.a, u.b);
 
 u.b && u.a && f(u.a, u.b);
 >u.b && u.a && f(u.a, u.b) : void | "" | undefined
->u.b && u.a : string | undefined
+>u.b && u.a : string | undefined (origin: string | "" | undefined)
 >u.b : string | undefined
 >u : U
 >b : string | undefined
