@@ -787,7 +787,7 @@ type Type struct {
 	flags       TypeFlags
 	objectFlags ObjectFlags
 	id          TypeId
-	kind        typeKind
+	kind        typeKind `customlint:"protected"`
 	symbol      *ast.Symbol
 	alias       *TypeAlias
 	checker     *Checker
@@ -1145,7 +1145,7 @@ func (t *StructuredType) ConstructSignatures() []*Signature {
 
 func (t *StructuredType) getMember(name string) *ast.Symbol {
 	if t.members != nil {
-		return t.members[name]
+		return t.members.Get(name)
 	}
 	lazy := t.getLazyState()
 	if lazy == nil {
@@ -1161,9 +1161,9 @@ func (t *StructuredType) getMember(name string) *ast.Symbol {
 func (t *StructuredType) getMembers() ast.SymbolTable {
 	if t.members == nil {
 		if properties := t.getProperties(); len(properties) != 0 {
-			t.members = make(ast.SymbolTable, len(properties))
+			t.members = ast.NewSymbolTableWithCapacity(len(properties))
 			for _, member := range properties {
-				t.members[member.Name()] = member
+				t.members.Set(member.Name(), member)
 			}
 		}
 	}
