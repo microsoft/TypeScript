@@ -581,6 +581,7 @@ var unmemoizedCacheFields = map[string]string{
 	"memoStore.SignatureCount":                          unmemoizedCounter,
 	"memoStore.TotalInstantiationCount":                 unmemoizedCounter,
 	"memoStore.nanType":                                 unmemoizedInterned,
+	"memoStore.parentLateBindableKinds":                 unmemoizedSyntax,
 	"memoStore.packagesMap":                             unmemoizedProgram,
 	"memoStore.ambientModulesOnce":                      unmemoizedProgram,
 	"memoStore.ambientModules":                          unmemoizedProgram,
