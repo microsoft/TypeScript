@@ -1,0 +1,63 @@
+//// [tests/cases/compiler/varianceCycleDiscardedDiagnostics.ts] ////
+
+=== varianceCycleDiscardedDiagnostics.ts ===
+// Measuring the variances of Bar resolves the type of Value, which picks an
+// overload by relating Foo<T> to Foo<number> while the variances of Foo are
+// still a guess. Diagnostics from that attempt must not outlive it.
+
+interface A { a: string }
+>a : string
+
+interface B { foo: string }
+>foo : string
+
+declare function pick(x: Foo<number>): A;
+>pick : { (x: Foo<number>): A; (x: object): B; }
+>x : Foo<number>
+
+declare function pick(x: object): B;
+>pick : { (x: Foo<number>): A; (x: object): B; }
+>x : object
+
+class Bar<T> {
+>Bar : Bar<T>
+
+    x!: T;
+>x : T
+
+    Value = pick(new Foo(this)).foo;
+>Value : string
+>pick(new Foo(this)).foo : string
+>pick(new Foo(this)) : B
+>pick : { (x: Foo<number>): A; (x: object): B; }
+>new Foo(this) : Foo<T>
+>Foo : typeof Foo
+>this : this
+>foo : string
+}
+
+class Foo<T> {
+>Foo : Foo<T>
+
+    bar!: Bar<T>;
+>bar : Bar<T>
+
+    constructor(bar: Bar<T>) {
+>bar : Bar<T>
+
+        this.bar = bar;
+>this.bar = bar : Bar<T>
+>this.bar : Bar<T>
+>this : this
+>bar : Bar<T>
+>bar : Bar<T>
+    }
+}
+
+const v: number = new Bar<string>().Value;
+>v : number
+>new Bar<string>().Value : string
+>new Bar<string>() : Bar<string>
+>Bar : typeof Bar
+>Value : string
+

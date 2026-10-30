@@ -61,7 +61,9 @@ export const checkA: 0 = oxa.pb;
 
 export const checkB: 0 = oxb.pa;
 >checkB : Symbol(checkB, Decl(mm.ts, 18, 12))
+>oxb.pa : Symbol(pa, Decl(ambient.d.ts, 1, 12))
 >oxb : Symbol(oxb, Decl(mm.ts, 2, 13))
+>pa : Symbol(pa, Decl(ambient.d.ts, 1, 12))
 
 === /ambient.d.ts ===
 declare module "ma" {

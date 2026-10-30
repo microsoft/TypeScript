@@ -28,9 +28,11 @@ export const fromB = MB.pb;
 
 export const checkA: 1 = MA.pa.mb;
 >checkA : Symbol(checkA, Decl(main.ts, 6, 12))
+>MA.pa.mb : Symbol(mb, Decl(mb.js, 1, 12))
 >MA.pa : Symbol(MA.pa, Decl(ma.js, 0, 8))
 >MA : Symbol(MA, Decl(main.ts, 2, 6))
 >pa : Symbol(MA.pa, Decl(ma.js, 0, 8))
+>mb : Symbol(mb, Decl(mb.js, 1, 12))
 
 export const checkB: 1 = MB.pb.ma;
 >checkB : Symbol(checkB, Decl(main.ts, 7, 12))

@@ -153,7 +153,7 @@ func (c *Checker) ForEachExportAndPropertyOfModule(moduleSymbol *ast.Symbol, cb 
 	if reducedType.flags&TypeFlagsStructuredType == 0 {
 		return
 	}
-	for name, symbol := range c.resolveStructuredTypeMembers(reducedType).getMembers().All() {
+	for name, symbol := range c.resolveStructuredTypeMembers(reducedType).getMembers(c).All() {
 		if c.isNamedMember(symbol, name) {
 			cb(symbol, name)
 		}
@@ -369,22 +369,19 @@ func (c *Checker) runWithoutResolvedSignatureCaching[T any](node *ast.Node, fn f
 		cachedTypes := make(map[*ValueSymbolLinks]*Type)
 		for ancestorNode != nil {
 			signatureLinks := c.signatureLinks.Get(ancestorNode)
-			cachedResolvedSignatures[signatureLinks] = signatureLinks.resolvedSignature
-			signatureLinks.resolvedSignature = nil
+			cachedResolvedSignatures[signatureLinks] = signatureLinks.resolvedSignature.swap(nil)
 			if ast.IsFunctionExpressionOrArrowFunction(ancestorNode) {
 				symbolLinks := c.valueSymbolLinks.Get(c.getSymbolOfDeclaration(ancestorNode))
-				resolvedType := symbolLinks.resolvedType
-				cachedTypes[symbolLinks] = resolvedType
-				symbolLinks.resolvedType = nil
+				cachedTypes[symbolLinks] = symbolLinks.resolvedType.swap(nil)
 			}
 			ancestorNode = ast.FindAncestor(ancestorNode.Parent, ast.IsCallLikeOrFunctionLikeExpression)
 		}
 		result := fn()
 		for signatureLinks, resolvedSignature := range cachedResolvedSignatures {
-			signatureLinks.resolvedSignature = resolvedSignature
+			signatureLinks.resolvedSignature.swap(resolvedSignature)
 		}
 		for symbolLinks, resolvedType := range cachedTypes {
-			symbolLinks.resolvedType = resolvedType
+			symbolLinks.resolvedType.swap(resolvedType)
 		}
 		return result
 	}
@@ -870,10 +867,10 @@ func (c *Checker) GetConstantValue(node *ast.Node) any {
 		return c.getEnumMemberValue(node).Value
 	}
 
-	if c.symbolNodeLinks.Get(node).resolvedSymbol == nil {
+	if c.symbolNodeLinks.Get(node).resolvedSymbol.get(c) == nil {
 		c.checkExpressionCached(node) // ensure cached resolved symbol is set
 	}
-	symbol := c.symbolNodeLinks.Get(node).resolvedSymbol
+	symbol := c.symbolNodeLinks.Get(node).resolvedSymbol.get(c)
 	if symbol == nil && ast.IsEntityNameExpression(node) {
 		symbol = c.resolveEntityName(
 			node,

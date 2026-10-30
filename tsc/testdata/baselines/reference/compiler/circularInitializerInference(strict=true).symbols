@@ -1,0 +1,98 @@
+//// [tests/cases/compiler/circularInitializerInference.ts] ////
+
+=== circularInitializerInference.ts ===
+export {};
+
+type IsAny<Type> = 0 extends (1 & Type) ? true : false;
+>IsAny : Symbol(IsAny, Decl(circularInitializerInference.ts, 0, 10))
+>Type : Symbol(Type, Decl(circularInitializerInference.ts, 2, 11))
+>Type : Symbol(Type, Decl(circularInitializerInference.ts, 2, 11))
+
+type Assert<Condition extends true> = Condition;
+>Assert : Symbol(Assert, Decl(circularInitializerInference.ts, 2, 55))
+>Condition : Symbol(Condition, Decl(circularInitializerInference.ts, 3, 12))
+>Condition : Symbol(Condition, Decl(circularInitializerInference.ts, 3, 12))
+
+var comma = (comma, 3);
+>comma : Symbol(comma, Decl(circularInitializerInference.ts, 5, 3))
+>comma : Symbol(comma, Decl(circularInitializerInference.ts, 5, 3))
+
+type CommaInference = Assert<IsAny<typeof comma>>;
+>CommaInference : Symbol(CommaInference, Decl(circularInitializerInference.ts, 5, 23))
+>Assert : Symbol(Assert, Decl(circularInitializerInference.ts, 2, 55))
+>IsAny : Symbol(IsAny, Decl(circularInitializerInference.ts, 0, 10))
+>comma : Symbol(comma, Decl(circularInitializerInference.ts, 5, 3))
+
+var nestedComma = (comma, nestedComma, comma);
+>nestedComma : Symbol(nestedComma, Decl(circularInitializerInference.ts, 8, 3))
+>comma : Symbol(comma, Decl(circularInitializerInference.ts, 5, 3))
+>nestedComma : Symbol(nestedComma, Decl(circularInitializerInference.ts, 8, 3))
+>comma : Symbol(comma, Decl(circularInitializerInference.ts, 5, 3))
+
+type NestedCommaInference = Assert<IsAny<typeof nestedComma>>;
+>NestedCommaInference : Symbol(NestedCommaInference, Decl(circularInitializerInference.ts, 8, 46))
+>Assert : Symbol(Assert, Decl(circularInitializerInference.ts, 2, 55))
+>IsAny : Symbol(IsAny, Decl(circularInitializerInference.ts, 0, 10))
+>nestedComma : Symbol(nestedComma, Decl(circularInitializerInference.ts, 8, 3))
+
+var assignment = (assignment = 2);
+>assignment : Symbol(assignment, Decl(circularInitializerInference.ts, 11, 3))
+>assignment : Symbol(assignment, Decl(circularInitializerInference.ts, 11, 3))
+
+type AssignmentInference = Assert<IsAny<typeof assignment>>;
+>AssignmentInference : Symbol(AssignmentInference, Decl(circularInitializerInference.ts, 11, 34))
+>Assert : Symbol(Assert, Decl(circularInitializerInference.ts, 2, 55))
+>IsAny : Symbol(IsAny, Decl(circularInitializerInference.ts, 0, 10))
+>assignment : Symbol(assignment, Decl(circularInitializerInference.ts, 11, 3))
+
+var nestedAssignment = (nestedAssignment = nestedAssignment = 2);
+>nestedAssignment : Symbol(nestedAssignment, Decl(circularInitializerInference.ts, 14, 3))
+>nestedAssignment : Symbol(nestedAssignment, Decl(circularInitializerInference.ts, 14, 3))
+>nestedAssignment : Symbol(nestedAssignment, Decl(circularInitializerInference.ts, 14, 3))
+
+type NestedAssignmentInference = Assert<IsAny<typeof nestedAssignment>>;
+>NestedAssignmentInference : Symbol(NestedAssignmentInference, Decl(circularInitializerInference.ts, 14, 65))
+>Assert : Symbol(Assert, Decl(circularInitializerInference.ts, 2, 55))
+>IsAny : Symbol(IsAny, Decl(circularInitializerInference.ts, 0, 10))
+>nestedAssignment : Symbol(nestedAssignment, Decl(circularInitializerInference.ts, 14, 3))
+
+var conditional = conditional ? 0 : 1;
+>conditional : Symbol(conditional, Decl(circularInitializerInference.ts, 17, 3))
+>conditional : Symbol(conditional, Decl(circularInitializerInference.ts, 17, 3))
+
+type ConditionalInference = Assert<IsAny<typeof conditional>>;
+>ConditionalInference : Symbol(ConditionalInference, Decl(circularInitializerInference.ts, 17, 38))
+>Assert : Symbol(Assert, Decl(circularInitializerInference.ts, 2, 55))
+>IsAny : Symbol(IsAny, Decl(circularInitializerInference.ts, 0, 10))
+>conditional : Symbol(conditional, Decl(circularInitializerInference.ts, 17, 3))
+
+var logicalAnd = logicalAnd && "";
+>logicalAnd : Symbol(logicalAnd, Decl(circularInitializerInference.ts, 20, 3))
+>logicalAnd : Symbol(logicalAnd, Decl(circularInitializerInference.ts, 20, 3))
+
+type LogicalAndInference = Assert<IsAny<typeof logicalAnd>>;
+>LogicalAndInference : Symbol(LogicalAndInference, Decl(circularInitializerInference.ts, 20, 34))
+>Assert : Symbol(Assert, Decl(circularInitializerInference.ts, 2, 55))
+>IsAny : Symbol(IsAny, Decl(circularInitializerInference.ts, 0, 10))
+>logicalAnd : Symbol(logicalAnd, Decl(circularInitializerInference.ts, 20, 3))
+
+var propertyAccess = { member: propertyAccess.member };
+>propertyAccess : Symbol(propertyAccess, Decl(circularInitializerInference.ts, 23, 3))
+>member : Symbol(member, Decl(circularInitializerInference.ts, 23, 22))
+>propertyAccess : Symbol(propertyAccess, Decl(circularInitializerInference.ts, 23, 3))
+
+type PropertyAccessInference = Assert<IsAny<typeof propertyAccess>>;
+>PropertyAccessInference : Symbol(PropertyAccessInference, Decl(circularInitializerInference.ts, 23, 55))
+>Assert : Symbol(Assert, Decl(circularInitializerInference.ts, 2, 55))
+>IsAny : Symbol(IsAny, Decl(circularInitializerInference.ts, 0, 10))
+>propertyAccess : Symbol(propertyAccess, Decl(circularInitializerInference.ts, 23, 3))
+
+const nonCircular: number = 3;
+>nonCircular : Symbol(nonCircular, Decl(circularInitializerInference.ts, 26, 5))
+
+type NonCircularInference = Assert<IsAny<typeof nonCircular> extends false ? true : false>;
+>NonCircularInference : Symbol(NonCircularInference, Decl(circularInitializerInference.ts, 26, 30))
+>Assert : Symbol(Assert, Decl(circularInitializerInference.ts, 2, 55))
+>IsAny : Symbol(IsAny, Decl(circularInitializerInference.ts, 0, 10))
+>nonCircular : Symbol(nonCircular, Decl(circularInitializerInference.ts, 26, 5))
+

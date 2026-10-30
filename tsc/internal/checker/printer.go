@@ -60,7 +60,7 @@ func (c *Checker) typeToStringEx(t *Type, enclosingDeclaration *ast.Node, flags 
 	// Serialization of types can lead to (lazy) resolution of members, which can cause diagnostics that again require
 	// serialization of types. This can potentially result in infinite recursion and stack overflows. To prevent that,
 	// after a certain number of recursive invocations the function simply returns "?".
-	if c.serializationLevel >= maxSerializationLevel {
+	if c.depthLimitReached(&c.serializationLevel, maxSerializationLevel) {
 		return "?"
 	}
 	newLine := ""
@@ -80,9 +80,9 @@ func (c *Checker) typeToStringEx(t *Type, enclosingDeclaration *ast.Node, flags 
 	defer func() {
 		nodeBuilder.verbosity = oldVerbosity
 	}()
-	c.serializationLevel++
+	c.enterDepthLimit(&c.serializationLevel)
 	typeNode := nodeBuilder.TypeToTypeNode(t, enclosingDeclaration, combinedFlags, nodebuilder.InternalFlagsNone, nil)
-	c.serializationLevel--
+	c.serializationLevel.exit()
 	if typeNode == nil {
 		panic("should always get typenode")
 	}

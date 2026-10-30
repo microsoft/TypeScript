@@ -1,0 +1,22 @@
+//// [tests/cases/compiler/checkOrderCircularDefaults.ts] ////
+
+=== a.ts ===
+import type { B } from "./b";
+>B : B<U>
+
+export interface A<T = B> { a: T }
+>a : T
+
+export declare const a: A;
+>a : A<B<unknown>>
+
+=== b.ts ===
+import type { A } from "./a";
+>A : A<T>
+
+export interface B<U = A> { b: U }
+>b : U
+
+export declare const b: B;
+>b : B<unknown>
+

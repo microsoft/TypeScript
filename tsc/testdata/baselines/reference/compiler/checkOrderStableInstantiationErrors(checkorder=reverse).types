@@ -1,0 +1,64 @@
+//// [tests/cases/compiler/checkOrderStableInstantiationErrors.ts] ////
+
+=== lib.ts ===
+export type Dec<N extends number> =
+>Dec : Dec<N>
+
+    N extends 5 ? 4 : N extends 4 ? 3 : N extends 3 ? 2 :
+    N extends 2 ? any :
+    N extends 1 ? 0 : 0;
+export type Recur<N extends number, S extends string> =
+>Recur : Recur<N, S>
+
+    N extends 0 ? S : Recur<Dec<N>, `${S}_${S}`>;
+
+=== a.ts ===
+import { Recur } from "./lib";
+>Recur : any
+
+export let a: Recur<5, "a">;
+>a : any
+
+=== b.ts ===
+import { Recur } from "./lib";
+>Recur : any
+
+export let b: Recur<5, "a">;
+>b : any
+
+=== c.ts ===
+class T<A> {
+>T : T<A>
+
+    declare a: A;
+>a : A
+
+    declare b: any;
+>b : any
+}
+class L<RT extends { a: 'a' | 'b', b: any }> extends T<RT[RT['a']]> {}
+>L : L<RT>
+>a : "a" | "b"
+>b : any
+>T : T<RT[RT["a"]]>
+
+export class X extends L<X> {
+>X : X
+>L : L<X>
+
+    declare a: 'a' | 'b';
+>a : "a" | "b"
+
+    declare b: number;
+>b : number
+
+    m() {
+>m : () => void
+
+        this.a;
+>this.a : "a" | "b"
+>this : this
+>a : "a" | "b"
+    }
+}
+

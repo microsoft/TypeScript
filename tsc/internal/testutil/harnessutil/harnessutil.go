@@ -18,6 +18,7 @@ import (
 
 	"github.com/microsoft/TypeScript/tsc/internal/ast"
 	"github.com/microsoft/TypeScript/tsc/internal/bundled"
+	"github.com/microsoft/TypeScript/tsc/internal/checker"
 	"github.com/microsoft/TypeScript/tsc/internal/collections"
 	"github.com/microsoft/TypeScript/tsc/internal/compiler"
 	"github.com/microsoft/TypeScript/tsc/internal/contentmapper"
@@ -76,6 +77,7 @@ type HarnessOptions struct {
 	ReportDiagnostics    bool
 	CaptureSuggestions   bool
 	TypescriptVersion    string
+	CheckOrder           string
 }
 
 func CompileFiles(
@@ -226,6 +228,7 @@ func CompileFilesEx(
 	result := compileFilesWithHost(host, config, harnessOptions)
 	result.Symlinks = symlinks
 	result.Trace = host.tracer.String()
+	fuzzCheckOrder(t, host, config, harnessOptions)
 	result.Repeat = func(testConfig TestConfiguration) *CompilationResult {
 		newHarnessOptions := *harnessOptions
 		newCompilerOptions := compilerOptions.Clone()
@@ -362,6 +365,28 @@ var harnessCommandLineOptions = []*tsoptions.CommandLineOption{
 		Name: "captureSuggestions",
 		Kind: tsoptions.CommandLineOptionTypeBoolean,
 	},
+	// Changes the order in which the checker is queried; see checkOrders
+	{
+		Name: "checkOrder",
+		Kind: tsoptions.CommandLineOptionTypeString,
+	},
+}
+
+// Checker results should not depend on the order in which files and
+// locations are queried. These orders let tests demonstrate that. Each
+// applies to both checking and emit, which queries the checker too.
+var checkOrders = []string{
+	// Check and emit all files in program order.
+	"default",
+	// Check and emit files one at a time in reverse program order.
+	"reverse",
+	// Check and emit each file with a fresh program that has checked
+	// nothing else.
+	"isolated",
+	// Before checking or emitting, ask for the type and symbol of every
+	// expression and name in each file, innermost and last first, as an
+	// editor might.
+	"typesfirst",
 }
 
 func getHarnessOption(name string) *tsoptions.CommandLineOption {
@@ -407,6 +432,12 @@ func parseHarnessOption(t *testing.T, key string, value any, harnessOptions *Har
 		harnessOptions.CaptureSuggestions = value.(bool)
 	case "typescriptVersion":
 		harnessOptions.TypescriptVersion = value.(string)
+	case "checkOrder":
+		order := strings.ToLower(value.(string))
+		if !slices.Contains(checkOrders, order) {
+			t.Fatalf("Unknown check order '%s'.", value)
+		}
+		harnessOptions.CheckOrder = order
 	default:
 		t.Fatalf("Unknown harness option '%s'.", key)
 	}
@@ -644,8 +675,7 @@ func compileFilesWithHost(
 	preErrors = append(preErrors, preProgram.GetConfigFileParsingDiagnostics()...)
 	preErrors = append(preErrors, preProgram.GetProgramDiagnostics()...)
 	preErrors = append(preErrors, preProgram.GetSyntacticDiagnostics(ctx, nil)...)
-	preErrors = append(preErrors, preProgram.GetSemanticDiagnostics(ctx, nil)...)
-	preErrors = append(preErrors, preProgram.GetGlobalDiagnostics(ctx)...)
+	preErrors = append(preErrors, getCheckerDiagnostics(ctx, host, preConfig, preProgram, harnessOptions.CheckOrder)...)
 	if harnessOptions.CaptureSuggestions {
 		preErrors = append(preErrors, preProgram.GetSuggestionDiagnostics(ctx, nil)...)
 	}
@@ -655,13 +685,12 @@ func compileFilesWithHost(
 	preErrors = compiler.SortAndDeduplicateDiagnostics(preErrors)
 
 	postProgram := createProgram(host, config)
-	emitResult := postProgram.Emit(ctx, compiler.EmitOptions{})
+	emitResult := emitInOrder(ctx, host, config, postProgram, harnessOptions.CheckOrder)
 	var postErrors []*ast.Diagnostic
 	postErrors = append(postErrors, postProgram.GetConfigFileParsingDiagnostics()...)
 	postErrors = append(postErrors, postProgram.GetProgramDiagnostics()...)
 	postErrors = append(postErrors, postProgram.GetSyntacticDiagnostics(ctx, nil)...)
-	postErrors = append(postErrors, postProgram.GetSemanticDiagnostics(ctx, nil)...)
-	postErrors = append(postErrors, postProgram.GetGlobalDiagnostics(ctx)...)
+	postErrors = append(postErrors, getCheckerDiagnostics(ctx, host, config, postProgram, harnessOptions.CheckOrder)...)
 	if postProgram.Options().GetEmitDeclarations() {
 		postErrors = append(postErrors, postProgram.GetDeclarationDiagnostics(ctx, nil)...)
 	}
@@ -699,6 +728,114 @@ func compileFilesWithHost(
 	}
 
 	return newCompilationResult(host, harnessOptions.CurrentDirectory, config.CompilerOptions(), postProgram, emitResult, errors, harnessOptions)
+}
+
+// getCheckerDiagnostics returns the semantic and global diagnostics of
+// program, querying the checker in the given order.
+func getCheckerDiagnostics(ctx context.Context, host compiler.CompilerHost, config *tsoptions.ParsedCommandLine, program compiler.ProgramLike, order string) []*ast.Diagnostic {
+	var files []*ast.SourceFile
+	for _, file := range program.GetSourceFiles() {
+		if !program.Program().SkipTypeChecking(file, false) {
+			files = append(files, file)
+		}
+	}
+	var result []*ast.Diagnostic
+	switch order {
+	case "", "default":
+		result = append(result, program.GetSemanticDiagnostics(ctx, nil)...)
+		result = append(result, program.GetGlobalDiagnostics(ctx)...)
+	case "reverse":
+		for _, file := range slices.Backward(files) {
+			result = append(result, program.GetSemanticDiagnostics(ctx, file)...)
+		}
+		result = append(result, program.GetGlobalDiagnostics(ctx)...)
+	case "isolated":
+		for _, file := range files {
+			isolated := createProgram(host, config)
+			isolatedFile := isolated.GetSourceFile(file.FileName())
+			result = append(result, isolated.GetSemanticDiagnostics(ctx, isolatedFile)...)
+			result = append(result, isolated.GetGlobalDiagnostics(ctx)...)
+		}
+	case "typesfirst":
+		for _, file := range slices.Backward(files) {
+			c, done := program.Program().GetTypeCheckerForFile(ctx, file)
+			queryTypesAndSymbols(c, file)
+			done()
+		}
+		result = append(result, program.GetSemanticDiagnostics(ctx, nil)...)
+		result = append(result, program.GetGlobalDiagnostics(ctx)...)
+	default:
+		panic("unknown check order " + order)
+	}
+	return compiler.SortAndDeduplicateDiagnostics(result)
+}
+
+// emitInOrder emits program, querying the checker in the given order: each
+// file emitted separately, in reverse or in a program of its own, or after
+// querying the types and symbols of every file in reverse.
+func emitInOrder(ctx context.Context, host compiler.CompilerHost, config *tsoptions.ParsedCommandLine, program compiler.ProgramLike, order string) *compiler.EmitResult {
+	options := program.Options()
+	if order == "" || order == "default" || options.OutFile != "" || options.NoEmitOnError.IsTrue() {
+		// Emitting files separately would change what a bundle or an emit
+		// blocked by errors contains.
+		return program.Emit(ctx, compiler.EmitOptions{})
+	}
+	files := program.GetSourceFiles()
+	if order == "typesfirst" {
+		for _, file := range slices.Backward(files) {
+			if program.Program().SkipTypeChecking(file, false) {
+				continue
+			}
+			c, done := program.Program().GetTypeCheckerForFile(ctx, file)
+			queryTypesAndSymbols(c, file)
+			done()
+		}
+		return program.Emit(ctx, compiler.EmitOptions{})
+	}
+	result := &compiler.EmitResult{}
+	emitFile := func(p compiler.ProgramLike, file *ast.SourceFile) {
+		r := p.Emit(ctx, compiler.EmitOptions{TargetSourceFiles: []*ast.SourceFile{file}})
+		result.EmitSkipped = result.EmitSkipped || r.EmitSkipped
+		result.Diagnostics = append(result.Diagnostics, r.Diagnostics...)
+		result.EmittedFiles = append(result.EmittedFiles, r.EmittedFiles...)
+		result.SourceMaps = append(result.SourceMaps, r.SourceMaps...)
+	}
+	switch order {
+	case "reverse":
+		for _, file := range slices.Backward(files) {
+			emitFile(program, file)
+		}
+	case "isolated":
+		for _, file := range files {
+			isolated := createProgram(host, config)
+			emitFile(isolated, isolated.GetSourceFile(file.FileName()))
+		}
+	default:
+		panic("unknown check order " + order)
+	}
+	result.Diagnostics = compiler.SortAndDeduplicateDiagnostics(result.Diagnostics)
+	return result
+}
+
+func queryTypesAndSymbols(c *checker.Checker, file *ast.SourceFile) {
+	var nodes []*ast.Node
+	var visit func(n *ast.Node) bool
+	visit = func(n *ast.Node) bool {
+		if n.Flags&ast.NodeFlagsReparsed == 0 {
+			nodes = append(nodes, n)
+		}
+		n.ForEachChild(visit)
+		return false
+	}
+	file.AsNode().ForEachChild(visit)
+	for _, n := range slices.Backward(nodes) {
+		if ast.IsExpressionNode(n) || n.Kind == ast.KindIdentifier || ast.IsDeclarationName(n) {
+			if !ast.IsPartOfTypeNode(n) && !ast.IsOmittedExpression(n) {
+				c.GetTypeAtLocation(n)
+			}
+			c.GetSymbolAtLocation(n)
+		}
+	}
 }
 
 type CompilationResult struct {
@@ -1159,6 +1296,9 @@ func getValueOfOptionString(t *testing.T, option string, value string) tsoptions
 
 func tryGetValueOfOptionString(option string, value string) (tsoptions.CompilerOptionsValue, bool) {
 	optionDecl := getCommandLineOption(option)
+	if optionDecl == nil {
+		optionDecl = getHarnessOption(option)
+	}
 	if optionDecl == nil {
 		return nil, false
 	}

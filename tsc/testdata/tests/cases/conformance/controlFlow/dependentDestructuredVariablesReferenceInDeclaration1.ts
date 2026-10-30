@@ -1,6 +1,7 @@
 // @strict: true
 // @target: esnext
 // @noEmit: true
+// @checkOrder: default, typesfirst
 
 // https://github.com/microsoft/TypeScript/issues/62993
 

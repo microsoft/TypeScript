@@ -19,8 +19,8 @@ export const obsA = expand<typeof oxa>();
 >oxa : O
 
 export const obsB = expand<typeof oxb>();
->obsB : { v: 0; }
->expand<typeof oxb>() : { v: 0; }
+>obsB : { pa: 0; readonly ma: 1; v: 0; }
+>expand<typeof oxb>() : { pa: 0; readonly ma: 1; v: 0; }
 >expand : <X>() => { [K in keyof X]: X[K]; }
 >oxb : O
 

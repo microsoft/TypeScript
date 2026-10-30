@@ -1,5 +1,6 @@
 // @strict: true
 // @noEmit: true
+// @checkOrder: default, typesfirst
 
 interface A { kind: string; m: this["kind"] }
 interface B { m: "a" }

@@ -1,0 +1,77 @@
+//// [tests/cases/compiler/relationComplexityError.ts] ////
+
+=== relationComplexityError.ts ===
+// Repro from #55630
+// Every comparison that needs a comparison that is too complex is too complex
+// itself, whether or not that comparison happened before.
+
+type Digits = '0' | '1' | '2' | '3' | '4' | '5' | '6' | '7';
+>Digits : Digits
+
+type T1 = `${Digits}${Digits}${Digits}${Digits}` | undefined;
+>T1 : T1
+
+type T2 = { a: string } | { b: number };
+>T2 : T2
+>a : string
+>b : number
+
+function f0(x: { p: T1 | null }, y: { p: T1 & T2 }) {
+>f0 : (x: { p: T1 | null; }, y: { p: T1 & T2; }) => void
+>x : { p: T1 | null; }
+>p : T1 | null
+>y : { p: T1 & T2; }
+>p : T1 & T2
+
+    x = y;  // Complexity error
+>x = y : { p: T1 & T2; }
+>x : { p: T1 | null; }
+>y : { p: T1 & T2; }
+}
+
+function f1(x: T1, y: T1 & T2) {
+>f1 : (x: T1, y: T1 & T2) => void
+>x : T1
+>y : T1 & T2
+
+    x = y;
+>x = y : T1 & T2
+>x : T1
+>y : T1 & T2
+}
+
+function f2(x: T1 | null, y: T1 & T2) {
+>f2 : (x: T1 | null, y: T1 & T2) => void
+>x : T1 | null
+>y : T1 & T2
+
+    x = y;  // Complexity error
+>x = y : T1 & T2
+>x : T1 | null
+>y : T1 & T2
+}
+
+function f3(x: T1 | null, y: T1 & T2) {
+>f3 : (x: T1 | null, y: T1 & T2) => void
+>x : T1 | null
+>y : T1 & T2
+
+    x = y;  // Complexity error
+>x = y : T1 & T2
+>x : T1 | null
+>y : T1 & T2
+}
+
+function f4(x: { p: T1 | null }, y: { p: T1 & T2 }) {
+>f4 : (x: { p: T1 | null; }, y: { p: T1 & T2; }) => void
+>x : { p: T1 | null; }
+>p : T1 | null
+>y : { p: T1 & T2; }
+>p : T1 & T2
+
+    x = y;  // Complexity error
+>x = y : { p: T1 & T2; }
+>x : { p: T1 | null; }
+>y : { p: T1 & T2; }
+}
+

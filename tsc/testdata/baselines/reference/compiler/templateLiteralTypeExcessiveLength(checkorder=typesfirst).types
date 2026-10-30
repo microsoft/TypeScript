@@ -1,0 +1,58 @@
+//// [tests/cases/compiler/templateLiteralTypeExcessiveLength.ts] ////
+
+=== templateLiteralTypeExcessiveLength.ts ===
+// Regression test for #63271: `Dec<2>` is `any`, so `Recur` produces both conditional branches and
+// keeps tail-recursing forever. The checker must report an error instead of building an unbounded
+// template literal type.
+
+type Dec<N extends number> =
+>Dec : Dec<N>
+
+    N extends 5 ? 4 : N extends 4 ? 3 : N extends 3 ? 2 :
+    N extends 2 ? any :
+    N extends 1 ? 0 : 0;
+
+type Recur<N extends number, S extends string> =
+>Recur : Recur<N, S>
+
+    N extends 0 ? S : Recur<Dec<N>, `${S}_${S}`>;
+
+// The string literal doubles on every iteration.
+type Explode = {
+>Explode : Explode
+
+    [P in Recur<5, "a"> as `${P}_key`]: any;
+};
+
+// The number of placeholders doubles on every iteration.
+type ExplodeSpans = {
+>ExplodeSpans : ExplodeSpans
+
+    [P in Recur<5, string> as `${P}_key`]: any;
+};
+
+// Every text segment stays small, but the number of segments doubles on every iteration,
+// so the combined text length grows without bound.
+type A16 = "aaaaaaaaaaaaaaaa";
+>A16 : "aaaaaaaaaaaaaaaa"
+
+type A64 = `${A16}${A16}${A16}${A16}`;
+>A64 : "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+
+type A256 = `${A64}${A64}${A64}${A64}`;
+>A256 : "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+
+type A1024 = `${A256}${A256}${A256}${A256}`;
+>A1024 : "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+
+type RecurSegments<N extends number, S extends string> =
+>RecurSegments : RecurSegments<N, S>
+
+    N extends 0 ? S : RecurSegments<Dec<N>, `${S}${string}${S}`>;
+
+type ExplodeSegments = {
+>ExplodeSegments : ExplodeSegments
+
+    [P in RecurSegments<5, A1024> as `${P}_key`]: any;
+};
+

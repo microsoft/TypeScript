@@ -182,8 +182,8 @@ declare const abc: A | B | C;
 >abc : A | B | C
 
 const obj5 = {
->obj5 : { id: string; name: string; } | { name: string; age: number; id: string; } | { name: string; id: string; }
->{    id: "123",    ...abc,} : { id: string; name: string; } | { name: string; age: number; id: string; } | { name: string; id: string; }
+>obj5 : { id: string; name: string; } | { name: string; id: string; } | { name: string; age: number; id: string; }
+>{    id: "123",    ...abc,} : { id: string; name: string; } | { name: string; id: string; } | { name: string; age: number; id: string; }
 
     id: "123",
 >id : string
@@ -195,8 +195,8 @@ const obj5 = {
 }; // OK - id is only in A
 
 const obj6 = {
->obj6 : { id: string; name: string; } | { name: string; age: number; } | { name: string; }
->{    name: "test",    ...abc,} : { id: string; name: string; } | { name: string; age: number; } | { name: string; }
+>obj6 : { name: string; } | { id: string; name: string; } | { name: string; age: number; }
+>{    name: "test",    ...abc,} : { name: string; } | { id: string; name: string; } | { name: string; age: number; }
 
     name: "test",
 >name : string

@@ -1,0 +1,34 @@
+/ia.js(3,1): error TS5088: The inferred type of '(Missing)' references a type with a cyclic structure which cannot be trivially serialized. A type annotation is necessary.
+/xa.js(3,1): error TS5088: The inferred type of '(Missing)' references a type with a cyclic structure which cannot be trivially serialized. A type annotation is necessary.
+/xb.js(3,1): error TS5088: The inferred type of '(Missing)' references a type with a cyclic structure which cannot be trivially serialized. A type annotation is necessary.
+
+
+==== /ia.js (1 errors) ====
+    /** @type {typeof import("./ma")} */
+    const M = /** @type {any} */ (null);
+    module.exports = { v: { ...M } };
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS5088: The inferred type of '(Missing)' references a type with a cyclic structure which cannot be trivially serialized. A type annotation is necessary.
+    
+==== /ma.js (0 errors) ====
+    export { v as pa } from "./xa";
+    export const ma = 1;
+    
+==== /mb.js (0 errors) ====
+    export { v as pb } from "./xb";
+    export const mb = 1;
+    
+==== /xa.js (1 errors) ====
+    /** @type {typeof import("./mb")} */
+    const M = /** @type {any} */ (null);
+    module.exports = { v: { ...M } };
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS5088: The inferred type of '(Missing)' references a type with a cyclic structure which cannot be trivially serialized. A type annotation is necessary.
+    
+==== /xb.js (1 errors) ====
+    /** @type {typeof import("./ma")} */
+    const M = /** @type {any} */ (null);
+    module.exports = { v: { ...M } };
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS5088: The inferred type of '(Missing)' references a type with a cyclic structure which cannot be trivially serialized. A type annotation is necessary.
+    

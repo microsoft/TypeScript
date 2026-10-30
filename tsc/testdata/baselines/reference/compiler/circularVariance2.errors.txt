@@ -1,10 +1,38 @@
 circularVariance2.ts(17,1): error TS2322: Type 'Bar<string>' is not assignable to type 'Bar<unknown>'.
-  Type 'unknown' is not assignable to type 'string'.
+  Types of parameters 'x' and 'x' are incompatible.
+    Type 'Baz<unknown[]>' is not assignable to type 'Baz<string[]>'.
+      The types of 'value.x' are incompatible between these types.
+        Type 'unknown[][]' is not assignable to type 'string[][]'.
+          Type 'unknown[]' is not assignable to type 'string[]'.
+            Type 'unknown' is not assignable to type 'string'.
+circularVariance2.ts(18,1): error TS2322: Type 'Bar<unknown>' is not assignable to type 'Bar<string>'.
+  Types of parameters 'x' and 'x' are incompatible.
+    Type 'Baz<string[]>' is not assignable to type 'Baz<unknown[]>'.
+      The types of 'value.f' are incompatible between these types.
+        Type 'Bar<string[][]>' is not assignable to type 'Bar<unknown[][]>'.
+          Types of parameters 'x' and 'x' are incompatible.
+            Type 'Baz<unknown[][][]>' is not assignable to type 'Baz<string[][][]>'.
+              The types of 'value.x' are incompatible between these types.
+                Type 'unknown[][][][]' is not assignable to type 'string[][][][]'.
+                  Type 'unknown[][][]' is not assignable to type 'string[][][]'.
+                    Type 'unknown[][]' is not assignable to type 'string[][]'.
+                      Type 'unknown[]' is not assignable to type 'string[]'.
+                        Type 'unknown' is not assignable to type 'string'.
+circularVariance2.ts(23,1): error TS2322: Type 'Foo<string>' is not assignable to type 'Foo<unknown>'.
+  Types of property 'f' are incompatible.
+    Type 'Bar<string>' is not assignable to type 'Bar<unknown>'.
+      Types of parameters 'x' and 'x' are incompatible.
+        Type 'Baz<unknown[]>' is not assignable to type 'Baz<string[]>'.
+          The types of 'value.x' are incompatible between these types.
+            Type 'unknown[][]' is not assignable to type 'string[][]'.
+              Type 'unknown[]' is not assignable to type 'string[]'.
+                Type 'unknown' is not assignable to type 'string'.
 circularVariance2.ts(24,1): error TS2322: Type 'Foo<unknown>' is not assignable to type 'Foo<string>'.
-  Type 'unknown' is not assignable to type 'string'.
+  Types of property 'x' are incompatible.
+    Type 'unknown' is not assignable to type 'string'.
 
 
-==== circularVariance2.ts (2 errors) ====
+==== circularVariance2.ts (4 errors) ====
     // https://github.com/microsoft/TypeScript/tsc/pull/4820
     
     type Bar<U> = (x: Baz<U[]>) => void;
@@ -24,15 +52,45 @@ circularVariance2.ts(24,1): error TS2322: Type 'Foo<unknown>' is not assignable 
     bar1 = bar2;  // Error
     ~~~~
 !!! error TS2322: Type 'Bar<string>' is not assignable to type 'Bar<unknown>'.
-!!! error TS2322:   Type 'unknown' is not assignable to type 'string'.
+!!! error TS2322:   Types of parameters 'x' and 'x' are incompatible.
+!!! error TS2322:     Type 'Baz<unknown[]>' is not assignable to type 'Baz<string[]>'.
+!!! error TS2322:       The types of 'value.x' are incompatible between these types.
+!!! error TS2322:         Type 'unknown[][]' is not assignable to type 'string[][]'.
+!!! error TS2322:           Type 'unknown[]' is not assignable to type 'string[]'.
+!!! error TS2322:             Type 'unknown' is not assignable to type 'string'.
     bar2 = bar1;
+    ~~~~
+!!! error TS2322: Type 'Bar<unknown>' is not assignable to type 'Bar<string>'.
+!!! error TS2322:   Types of parameters 'x' and 'x' are incompatible.
+!!! error TS2322:     Type 'Baz<string[]>' is not assignable to type 'Baz<unknown[]>'.
+!!! error TS2322:       The types of 'value.f' are incompatible between these types.
+!!! error TS2322:         Type 'Bar<string[][]>' is not assignable to type 'Bar<unknown[][]>'.
+!!! error TS2322:           Types of parameters 'x' and 'x' are incompatible.
+!!! error TS2322:             Type 'Baz<unknown[][][]>' is not assignable to type 'Baz<string[][][]>'.
+!!! error TS2322:               The types of 'value.x' are incompatible between these types.
+!!! error TS2322:                 Type 'unknown[][][][]' is not assignable to type 'string[][][][]'.
+!!! error TS2322:                   Type 'unknown[][][]' is not assignable to type 'string[][][]'.
+!!! error TS2322:                     Type 'unknown[][]' is not assignable to type 'string[][]'.
+!!! error TS2322:                       Type 'unknown[]' is not assignable to type 'string[]'.
+!!! error TS2322:                         Type 'unknown' is not assignable to type 'string'.
     
     declare let foo1: Foo<unknown>;
     declare let foo2: Foo<string>;
     
     foo1 = foo2;
+    ~~~~
+!!! error TS2322: Type 'Foo<string>' is not assignable to type 'Foo<unknown>'.
+!!! error TS2322:   Types of property 'f' are incompatible.
+!!! error TS2322:     Type 'Bar<string>' is not assignable to type 'Bar<unknown>'.
+!!! error TS2322:       Types of parameters 'x' and 'x' are incompatible.
+!!! error TS2322:         Type 'Baz<unknown[]>' is not assignable to type 'Baz<string[]>'.
+!!! error TS2322:           The types of 'value.x' are incompatible between these types.
+!!! error TS2322:             Type 'unknown[][]' is not assignable to type 'string[][]'.
+!!! error TS2322:               Type 'unknown[]' is not assignable to type 'string[]'.
+!!! error TS2322:                 Type 'unknown' is not assignable to type 'string'.
     foo2 = foo1;  // Error
     ~~~~
 !!! error TS2322: Type 'Foo<unknown>' is not assignable to type 'Foo<string>'.
-!!! error TS2322:   Type 'unknown' is not assignable to type 'string'.
+!!! error TS2322:   Types of property 'x' are incompatible.
+!!! error TS2322:     Type 'unknown' is not assignable to type 'string'.
     

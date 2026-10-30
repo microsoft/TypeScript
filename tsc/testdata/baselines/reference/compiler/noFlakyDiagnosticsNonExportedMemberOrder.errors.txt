@@ -1,6 +1,6 @@
 /main.ts(2,10): error TS2459: Module '"mt"' declares 'zz' locally, but it is not exported.
 /main.ts(6,14): error TS2322: Type '{ pb: 0; readonly mb: 1; v: 0; }' is not assignable to type 'never'.
-/main.ts(7,14): error TS2322: Type '{ v: 0; }' is not assignable to type 'never'.
+/main.ts(7,14): error TS2322: Type '{ pa: 0; readonly ma: 1; v: 0; }' is not assignable to type 'never'.
 
 
 ==== /main.ts (3 errors) ====
@@ -17,7 +17,7 @@
 !!! error TS2322: Type '{ pb: 0; readonly mb: 1; v: 0; }' is not assignable to type 'never'.
     export const obsB: never = expand<typeof oxb>();
                  ~~~~
-!!! error TS2322: Type '{ v: 0; }' is not assignable to type 'never'.
+!!! error TS2322: Type '{ pa: 0; readonly ma: 1; v: 0; }' is not assignable to type 'never'.
     
 ==== /ambient.d.ts (0 errors) ====
     declare module "ma" {

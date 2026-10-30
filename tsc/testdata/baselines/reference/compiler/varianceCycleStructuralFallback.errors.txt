@@ -1,0 +1,148 @@
+maFirst.ts(8,1): error TS2322: Type 'MA<{ p: string; }>' is not assignable to type 'MA<{ p: "lit"; }>'.
+  The types of 'x.p' are incompatible between these types.
+    Type 'string' is not assignable to type '"lit"'.
+maFirst.ts(9,1): error TS2322: Type 'MA<{ p: "lit"; }>' is not assignable to type 'MA<{ p: string; }>'.
+  The types of 'b.f' are incompatible between these types.
+    Type '(u: MA<{ p: "lit"; }>) => void' is not assignable to type '(u: MA<{ p: string; }>) => void'.
+      Types of parameters 'u' and 'u' are incompatible.
+        Type 'MA<{ p: string; }>' is not assignable to type 'MA<{ p: "lit"; }>'.
+          The types of 'x.p' are incompatible between these types.
+            Type 'string' is not assignable to type '"lit"'.
+maFirst.ts(10,1): error TS2322: Type 'MB<{ p: string; }>' is not assignable to type 'MB<{ p: "lit"; }>'.
+  The types of 'a.b.f' are incompatible between these types.
+    Type '(u: MA<MB<{ p: string; }>>) => void' is not assignable to type '(u: MA<MB<{ p: "lit"; }>>) => void'.
+      Types of parameters 'u' and 'u' are incompatible.
+        Type 'MA<MB<{ p: "lit"; }>>' is not assignable to type 'MA<MB<{ p: string; }>>'.
+          The types of 'x.f' are incompatible between these types.
+            Type '(u: { p: "lit"; }) => void' is not assignable to type '(u: { p: string; }) => void'.
+              Types of parameters 'u' and 'u' are incompatible.
+                Type '{ p: string; }' is not assignable to type '{ p: "lit"; }'.
+                  Types of property 'p' are incompatible.
+                    Type 'string' is not assignable to type '"lit"'.
+maFirst.ts(11,1): error TS2322: Type 'MB<{ p: "lit"; }>' is not assignable to type 'MB<{ p: string; }>'.
+  Types of property 'f' are incompatible.
+    Type '(u: { p: "lit"; }) => void' is not assignable to type '(u: { p: string; }) => void'.
+      Types of parameters 'u' and 'u' are incompatible.
+        Type '{ p: string; }' is not assignable to type '{ p: "lit"; }'.
+          Types of property 'p' are incompatible.
+            Type 'string' is not assignable to type '"lit"'.
+mbFirst.ts(8,1): error TS2322: Type 'MB<{ p: string; }>' is not assignable to type 'MB<{ p: "lit"; }>'.
+  The types of 'a.b.f' are incompatible between these types.
+    Type '(u: MA<MB<{ p: string; }>>) => void' is not assignable to type '(u: MA<MB<{ p: "lit"; }>>) => void'.
+      Types of parameters 'u' and 'u' are incompatible.
+        Type 'MA<MB<{ p: "lit"; }>>' is not assignable to type 'MA<MB<{ p: string; }>>'.
+          The types of 'x.f' are incompatible between these types.
+            Type '(u: { p: "lit"; }) => void' is not assignable to type '(u: { p: string; }) => void'.
+              Types of parameters 'u' and 'u' are incompatible.
+                Type '{ p: string; }' is not assignable to type '{ p: "lit"; }'.
+                  Types of property 'p' are incompatible.
+                    Type 'string' is not assignable to type '"lit"'.
+mbFirst.ts(9,1): error TS2322: Type 'MB<{ p: "lit"; }>' is not assignable to type 'MB<{ p: string; }>'.
+  Types of property 'f' are incompatible.
+    Type '(u: { p: "lit"; }) => void' is not assignable to type '(u: { p: string; }) => void'.
+      Types of parameters 'u' and 'u' are incompatible.
+        Type '{ p: string; }' is not assignable to type '{ p: "lit"; }'.
+          Types of property 'p' are incompatible.
+            Type 'string' is not assignable to type '"lit"'.
+mbFirst.ts(10,1): error TS2322: Type 'MA<{ p: string; }>' is not assignable to type 'MA<{ p: "lit"; }>'.
+  The types of 'x.p' are incompatible between these types.
+    Type 'string' is not assignable to type '"lit"'.
+mbFirst.ts(11,1): error TS2322: Type 'MA<{ p: "lit"; }>' is not assignable to type 'MA<{ p: string; }>'.
+  The types of 'b.f' are incompatible between these types.
+    Type '(u: MA<{ p: "lit"; }>) => void' is not assignable to type '(u: MA<{ p: string; }>) => void'.
+      Types of parameters 'u' and 'u' are incompatible.
+        Type 'MA<{ p: string; }>' is not assignable to type 'MA<{ p: "lit"; }>'.
+          The types of 'x.p' are incompatible between these types.
+            Type 'string' is not assignable to type '"lit"'.
+
+
+==== maFirst.ts (4 errors) ====
+    export {};
+    
+    type MA<T> = { x: { [K in keyof T]-?: T[K] }; b: MB<MA<T>> };
+    type MB<U> = { f: (u: U) => void; a: MA<MB<U>> };
+    
+    declare let as: MA<{ p: string }>, al: MA<{ p: "lit" }>;
+    declare let bs: MB<{ p: string }>, bl: MB<{ p: "lit" }>;
+    al = as;
+    ~~
+!!! error TS2322: Type 'MA<{ p: string; }>' is not assignable to type 'MA<{ p: "lit"; }>'.
+!!! error TS2322:   The types of 'x.p' are incompatible between these types.
+!!! error TS2322:     Type 'string' is not assignable to type '"lit"'.
+    as = al;
+    ~~
+!!! error TS2322: Type 'MA<{ p: "lit"; }>' is not assignable to type 'MA<{ p: string; }>'.
+!!! error TS2322:   The types of 'b.f' are incompatible between these types.
+!!! error TS2322:     Type '(u: MA<{ p: "lit"; }>) => void' is not assignable to type '(u: MA<{ p: string; }>) => void'.
+!!! error TS2322:       Types of parameters 'u' and 'u' are incompatible.
+!!! error TS2322:         Type 'MA<{ p: string; }>' is not assignable to type 'MA<{ p: "lit"; }>'.
+!!! error TS2322:           The types of 'x.p' are incompatible between these types.
+!!! error TS2322:             Type 'string' is not assignable to type '"lit"'.
+    bl = bs;
+    ~~
+!!! error TS2322: Type 'MB<{ p: string; }>' is not assignable to type 'MB<{ p: "lit"; }>'.
+!!! error TS2322:   The types of 'a.b.f' are incompatible between these types.
+!!! error TS2322:     Type '(u: MA<MB<{ p: string; }>>) => void' is not assignable to type '(u: MA<MB<{ p: "lit"; }>>) => void'.
+!!! error TS2322:       Types of parameters 'u' and 'u' are incompatible.
+!!! error TS2322:         Type 'MA<MB<{ p: "lit"; }>>' is not assignable to type 'MA<MB<{ p: string; }>>'.
+!!! error TS2322:           The types of 'x.f' are incompatible between these types.
+!!! error TS2322:             Type '(u: { p: "lit"; }) => void' is not assignable to type '(u: { p: string; }) => void'.
+!!! error TS2322:               Types of parameters 'u' and 'u' are incompatible.
+!!! error TS2322:                 Type '{ p: string; }' is not assignable to type '{ p: "lit"; }'.
+!!! error TS2322:                   Types of property 'p' are incompatible.
+!!! error TS2322:                     Type 'string' is not assignable to type '"lit"'.
+    bs = bl;
+    ~~
+!!! error TS2322: Type 'MB<{ p: "lit"; }>' is not assignable to type 'MB<{ p: string; }>'.
+!!! error TS2322:   Types of property 'f' are incompatible.
+!!! error TS2322:     Type '(u: { p: "lit"; }) => void' is not assignable to type '(u: { p: string; }) => void'.
+!!! error TS2322:       Types of parameters 'u' and 'u' are incompatible.
+!!! error TS2322:         Type '{ p: string; }' is not assignable to type '{ p: "lit"; }'.
+!!! error TS2322:           Types of property 'p' are incompatible.
+!!! error TS2322:             Type 'string' is not assignable to type '"lit"'.
+    
+==== mbFirst.ts (4 errors) ====
+    export {};
+    
+    type MA<T> = { x: { [K in keyof T]-?: T[K] }; b: MB<MA<T>> };
+    type MB<U> = { f: (u: U) => void; a: MA<MB<U>> };
+    
+    declare let as: MA<{ p: string }>, al: MA<{ p: "lit" }>;
+    declare let bs: MB<{ p: string }>, bl: MB<{ p: "lit" }>;
+    bl = bs;
+    ~~
+!!! error TS2322: Type 'MB<{ p: string; }>' is not assignable to type 'MB<{ p: "lit"; }>'.
+!!! error TS2322:   The types of 'a.b.f' are incompatible between these types.
+!!! error TS2322:     Type '(u: MA<MB<{ p: string; }>>) => void' is not assignable to type '(u: MA<MB<{ p: "lit"; }>>) => void'.
+!!! error TS2322:       Types of parameters 'u' and 'u' are incompatible.
+!!! error TS2322:         Type 'MA<MB<{ p: "lit"; }>>' is not assignable to type 'MA<MB<{ p: string; }>>'.
+!!! error TS2322:           The types of 'x.f' are incompatible between these types.
+!!! error TS2322:             Type '(u: { p: "lit"; }) => void' is not assignable to type '(u: { p: string; }) => void'.
+!!! error TS2322:               Types of parameters 'u' and 'u' are incompatible.
+!!! error TS2322:                 Type '{ p: string; }' is not assignable to type '{ p: "lit"; }'.
+!!! error TS2322:                   Types of property 'p' are incompatible.
+!!! error TS2322:                     Type 'string' is not assignable to type '"lit"'.
+    bs = bl;
+    ~~
+!!! error TS2322: Type 'MB<{ p: "lit"; }>' is not assignable to type 'MB<{ p: string; }>'.
+!!! error TS2322:   Types of property 'f' are incompatible.
+!!! error TS2322:     Type '(u: { p: "lit"; }) => void' is not assignable to type '(u: { p: string; }) => void'.
+!!! error TS2322:       Types of parameters 'u' and 'u' are incompatible.
+!!! error TS2322:         Type '{ p: string; }' is not assignable to type '{ p: "lit"; }'.
+!!! error TS2322:           Types of property 'p' are incompatible.
+!!! error TS2322:             Type 'string' is not assignable to type '"lit"'.
+    al = as;
+    ~~
+!!! error TS2322: Type 'MA<{ p: string; }>' is not assignable to type 'MA<{ p: "lit"; }>'.
+!!! error TS2322:   The types of 'x.p' are incompatible between these types.
+!!! error TS2322:     Type 'string' is not assignable to type '"lit"'.
+    as = al;
+    ~~
+!!! error TS2322: Type 'MA<{ p: "lit"; }>' is not assignable to type 'MA<{ p: string; }>'.
+!!! error TS2322:   The types of 'b.f' are incompatible between these types.
+!!! error TS2322:     Type '(u: MA<{ p: "lit"; }>) => void' is not assignable to type '(u: MA<{ p: string; }>) => void'.
+!!! error TS2322:       Types of parameters 'u' and 'u' are incompatible.
+!!! error TS2322:         Type 'MA<{ p: string; }>' is not assignable to type 'MA<{ p: "lit"; }>'.
+!!! error TS2322:           The types of 'x.p' are incompatible between these types.
+!!! error TS2322:             Type 'string' is not assignable to type '"lit"'.
+    

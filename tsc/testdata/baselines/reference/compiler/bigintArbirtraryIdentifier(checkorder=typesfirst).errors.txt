@@ -1,0 +1,69 @@
+badExport.ts(1,10): error TS2304: Cannot find name 'foo'.
+badExport.ts(1,17): error TS1003: Identifier expected.
+badExport.ts(1,20): error TS1128: Declaration or statement expected.
+badExport2.ts(1,10): error TS1003: Identifier expected.
+badExport2.ts(1,16): error TS2304: Cannot find name 'foo'.
+badExport2.ts(1,20): error TS1128: Declaration or statement expected.
+badImport.ts(1,10): error TS1003: Identifier expected.
+badImport.ts(1,10): error TS1141: String literal expected.
+badImport.ts(1,20): error TS1128: Declaration or statement expected.
+badImport.ts(1,22): error TS1434: Unexpected keyword or identifier.
+badImport.ts(1,22): error TS2304: Cannot find name 'from'.
+badImport2.ts(1,17): error TS1003: Identifier expected.
+badImport2.ts(1,17): error TS1141: String literal expected.
+badImport2.ts(1,20): error TS1128: Declaration or statement expected.
+badImport2.ts(1,22): error TS1434: Unexpected keyword or identifier.
+badImport2.ts(1,22): error TS2304: Cannot find name 'from'.
+
+
+==== foo.ts (0 errors) ====
+    const foo = 0n;
+    export { foo as "0n" };
+    
+==== correctUse.ts (0 errors) ====
+    import { "0n" as foo } from "./foo";
+    export { foo as "0n" };
+    
+==== badImport.ts (5 errors) ====
+    import { 0n as foo } from "./foo";
+             ~~
+!!! error TS1003: Identifier expected.
+             ~~~~~~~~~
+!!! error TS1141: String literal expected.
+                       ~
+!!! error TS1128: Declaration or statement expected.
+                         ~~~~
+!!! error TS1434: Unexpected keyword or identifier.
+                         ~~~~
+!!! error TS2304: Cannot find name 'from'.
+    
+==== badImport2.ts (5 errors) ====
+    import { foo as 0n } from "./foo";
+                    ~~
+!!! error TS1003: Identifier expected.
+                    ~~
+!!! error TS1141: String literal expected.
+                       ~
+!!! error TS1128: Declaration or statement expected.
+                         ~~~~
+!!! error TS1434: Unexpected keyword or identifier.
+                         ~~~~
+!!! error TS2304: Cannot find name 'from'.
+    
+==== badExport.ts (3 errors) ====
+    export { foo as 0n };
+             ~~~
+!!! error TS2304: Cannot find name 'foo'.
+                    ~~
+!!! error TS1003: Identifier expected.
+                       ~
+!!! error TS1128: Declaration or statement expected.
+    
+==== badExport2.ts (3 errors) ====
+    export { 0n as foo };
+             ~~
+!!! error TS1003: Identifier expected.
+                   ~~~
+!!! error TS2304: Cannot find name 'foo'.
+                       ~
+!!! error TS1128: Declaration or statement expected.

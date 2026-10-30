@@ -1,0 +1,71 @@
+//// [tests/cases/compiler/varianceCycleDiscardedDiagnostics.ts] ////
+
+=== varianceCycleDiscardedDiagnostics.ts ===
+// Measuring the variances of Bar resolves the type of Value, which picks an
+// overload by relating Foo<T> to Foo<number> while the variances of Foo are
+// still a guess. Diagnostics from that attempt must not outlive it.
+
+interface A { a: string }
+>A : Symbol(A, Decl(varianceCycleDiscardedDiagnostics.ts, 0, 0))
+>a : Symbol(A.a, Decl(varianceCycleDiscardedDiagnostics.ts, 4, 13))
+
+interface B { foo: string }
+>B : Symbol(B, Decl(varianceCycleDiscardedDiagnostics.ts, 4, 25))
+>foo : Symbol(B.foo, Decl(varianceCycleDiscardedDiagnostics.ts, 5, 13))
+
+declare function pick(x: Foo<number>): A;
+>pick : Symbol(pick, Decl(varianceCycleDiscardedDiagnostics.ts, 5, 27), Decl(varianceCycleDiscardedDiagnostics.ts, 6, 41))
+>x : Symbol(x, Decl(varianceCycleDiscardedDiagnostics.ts, 6, 22))
+>Foo : Symbol(Foo, Decl(varianceCycleDiscardedDiagnostics.ts, 12, 1))
+>A : Symbol(A, Decl(varianceCycleDiscardedDiagnostics.ts, 0, 0))
+
+declare function pick(x: object): B;
+>pick : Symbol(pick, Decl(varianceCycleDiscardedDiagnostics.ts, 5, 27), Decl(varianceCycleDiscardedDiagnostics.ts, 6, 41))
+>x : Symbol(x, Decl(varianceCycleDiscardedDiagnostics.ts, 7, 22))
+>B : Symbol(B, Decl(varianceCycleDiscardedDiagnostics.ts, 4, 25))
+
+class Bar<T> {
+>Bar : Symbol(Bar, Decl(varianceCycleDiscardedDiagnostics.ts, 7, 36))
+>T : Symbol(T, Decl(varianceCycleDiscardedDiagnostics.ts, 9, 10))
+
+    x!: T;
+>x : Symbol(Bar.x, Decl(varianceCycleDiscardedDiagnostics.ts, 9, 14))
+>T : Symbol(T, Decl(varianceCycleDiscardedDiagnostics.ts, 9, 10))
+
+    Value = pick(new Foo(this)).foo;
+>Value : Symbol(Bar.Value, Decl(varianceCycleDiscardedDiagnostics.ts, 10, 10))
+>pick(new Foo(this)).foo : Symbol(B.foo, Decl(varianceCycleDiscardedDiagnostics.ts, 5, 13))
+>pick : Symbol(pick, Decl(varianceCycleDiscardedDiagnostics.ts, 5, 27), Decl(varianceCycleDiscardedDiagnostics.ts, 6, 41))
+>Foo : Symbol(Foo, Decl(varianceCycleDiscardedDiagnostics.ts, 12, 1))
+>this : Symbol(Bar, Decl(varianceCycleDiscardedDiagnostics.ts, 7, 36))
+>foo : Symbol(B.foo, Decl(varianceCycleDiscardedDiagnostics.ts, 5, 13))
+}
+
+class Foo<T> {
+>Foo : Symbol(Foo, Decl(varianceCycleDiscardedDiagnostics.ts, 12, 1))
+>T : Symbol(T, Decl(varianceCycleDiscardedDiagnostics.ts, 14, 10))
+
+    bar!: Bar<T>;
+>bar : Symbol(Foo.bar, Decl(varianceCycleDiscardedDiagnostics.ts, 14, 14))
+>Bar : Symbol(Bar, Decl(varianceCycleDiscardedDiagnostics.ts, 7, 36))
+>T : Symbol(T, Decl(varianceCycleDiscardedDiagnostics.ts, 14, 10))
+
+    constructor(bar: Bar<T>) {
+>bar : Symbol(bar, Decl(varianceCycleDiscardedDiagnostics.ts, 16, 16))
+>Bar : Symbol(Bar, Decl(varianceCycleDiscardedDiagnostics.ts, 7, 36))
+>T : Symbol(T, Decl(varianceCycleDiscardedDiagnostics.ts, 14, 10))
+
+        this.bar = bar;
+>this.bar : Symbol(Foo.bar, Decl(varianceCycleDiscardedDiagnostics.ts, 14, 14))
+>this : Symbol(Foo, Decl(varianceCycleDiscardedDiagnostics.ts, 12, 1))
+>bar : Symbol(Foo.bar, Decl(varianceCycleDiscardedDiagnostics.ts, 14, 14))
+>bar : Symbol(bar, Decl(varianceCycleDiscardedDiagnostics.ts, 16, 16))
+    }
+}
+
+const v: number = new Bar<string>().Value;
+>v : Symbol(v, Decl(varianceCycleDiscardedDiagnostics.ts, 21, 5))
+>new Bar<string>().Value : Symbol(Bar.Value, Decl(varianceCycleDiscardedDiagnostics.ts, 10, 10))
+>Bar : Symbol(Bar, Decl(varianceCycleDiscardedDiagnostics.ts, 7, 36))
+>Value : Symbol(Bar.Value, Decl(varianceCycleDiscardedDiagnostics.ts, 10, 10))
+

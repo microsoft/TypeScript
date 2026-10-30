@@ -699,6 +699,14 @@ func (b *NodeBuilderImpl) pseudoTypeToType(t *pseudochecker.PseudoType) *Type {
 			return b.ch.getReturnTypeOfSignature(b.ch.getSignatureFromDeclaration(node))
 		}
 		ty := b.ch.getWidenedType(b.ch.getRegularTypeOfExpression(node))
+		if ast.IsPropertyAssignment(node.Parent) {
+			// pseudoTypeToNode serializes the type of the property's symbol, which is
+			// not widened in the context of its containing object literal.
+			declared := b.ch.getWidenedLiteralType(b.ch.getTypeOfSymbol(b.ch.getSymbolOfDeclaration(node.Parent)))
+			if declared != ty {
+				return nil
+			}
+		}
 		return ty
 	case pseudochecker.PseudoTypeKindNoResult:
 		return nil // TODO: extract type selection logic from `serializeTypeForDeclaration`, not needed for current usecases but needed if completeness becomes required

@@ -1,0 +1,455 @@
+//// [tests/cases/compiler/recursiveVarianceFixedPoint.ts] ////
+
+=== storeFirst.ts ===
+export {};
+
+interface Store<T> {
+>Store : Symbol(Store, Decl(storeFirst.ts, 0, 10))
+>T : Symbol(T, Decl(storeFirst.ts, 2, 16))
+
+    value: T;
+>value : Symbol(Store.value, Decl(storeFirst.ts, 2, 20))
+>T : Symbol(T, Decl(storeFirst.ts, 2, 16))
+
+    listener: Listener<T>;
+>listener : Symbol(Store.listener, Decl(storeFirst.ts, 3, 13))
+>Listener : Symbol(Listener, Decl(storeFirst.ts, 5, 1))
+>T : Symbol(T, Decl(storeFirst.ts, 2, 16))
+}
+type Listener<T> = (batch: Store<T[]>) => void;
+>Listener : Symbol(Listener, Decl(storeFirst.ts, 5, 1))
+>T : Symbol(T, Decl(storeFirst.ts, 6, 14))
+>batch : Symbol(batch, Decl(storeFirst.ts, 6, 20))
+>Store : Symbol(Store, Decl(storeFirst.ts, 0, 10))
+>T : Symbol(T, Decl(storeFirst.ts, 6, 14))
+
+declare let strings: Store<string>;
+>strings : Symbol(strings, Decl(storeFirst.ts, 8, 11))
+>Store : Symbol(Store, Decl(storeFirst.ts, 0, 10))
+
+declare let unknowns: Store<unknown>;
+>unknowns : Symbol(unknowns, Decl(storeFirst.ts, 9, 11))
+>Store : Symbol(Store, Decl(storeFirst.ts, 0, 10))
+
+declare let stringListener: Listener<string>;
+>stringListener : Symbol(stringListener, Decl(storeFirst.ts, 10, 11))
+>Listener : Symbol(Listener, Decl(storeFirst.ts, 5, 1))
+
+declare let unknownListener: Listener<unknown>;
+>unknownListener : Symbol(unknownListener, Decl(storeFirst.ts, 11, 11))
+>Listener : Symbol(Listener, Decl(storeFirst.ts, 5, 1))
+
+unknowns = strings; // Error
+>unknowns : Symbol(unknowns, Decl(storeFirst.ts, 9, 11))
+>strings : Symbol(strings, Decl(storeFirst.ts, 8, 11))
+
+unknownListener = stringListener; // Error
+>unknownListener : Symbol(unknownListener, Decl(storeFirst.ts, 11, 11))
+>stringListener : Symbol(stringListener, Decl(storeFirst.ts, 10, 11))
+
+=== listenerFirst.ts ===
+export {};
+
+type Listener<T> = (batch: Store<T[]>) => void;
+>Listener : Symbol(Listener, Decl(listenerFirst.ts, 0, 10))
+>T : Symbol(T, Decl(listenerFirst.ts, 2, 14))
+>batch : Symbol(batch, Decl(listenerFirst.ts, 2, 20))
+>Store : Symbol(Store, Decl(listenerFirst.ts, 2, 47))
+>T : Symbol(T, Decl(listenerFirst.ts, 2, 14))
+
+interface Store<T> {
+>Store : Symbol(Store, Decl(listenerFirst.ts, 2, 47))
+>T : Symbol(T, Decl(listenerFirst.ts, 3, 16))
+
+    listener: Listener<T>;
+>listener : Symbol(Store.listener, Decl(listenerFirst.ts, 3, 20))
+>Listener : Symbol(Listener, Decl(listenerFirst.ts, 0, 10))
+>T : Symbol(T, Decl(listenerFirst.ts, 3, 16))
+
+    value: T;
+>value : Symbol(Store.value, Decl(listenerFirst.ts, 4, 26))
+>T : Symbol(T, Decl(listenerFirst.ts, 3, 16))
+}
+
+declare let strings: Store<string>;
+>strings : Symbol(strings, Decl(listenerFirst.ts, 8, 11))
+>Store : Symbol(Store, Decl(listenerFirst.ts, 2, 47))
+
+declare let unknowns: Store<unknown>;
+>unknowns : Symbol(unknowns, Decl(listenerFirst.ts, 9, 11))
+>Store : Symbol(Store, Decl(listenerFirst.ts, 2, 47))
+
+declare let stringListener: Listener<string>;
+>stringListener : Symbol(stringListener, Decl(listenerFirst.ts, 10, 11))
+>Listener : Symbol(Listener, Decl(listenerFirst.ts, 0, 10))
+
+declare let unknownListener: Listener<unknown>;
+>unknownListener : Symbol(unknownListener, Decl(listenerFirst.ts, 11, 11))
+>Listener : Symbol(Listener, Decl(listenerFirst.ts, 0, 10))
+
+unknownListener = stringListener; // Error
+>unknownListener : Symbol(unknownListener, Decl(listenerFirst.ts, 11, 11))
+>stringListener : Symbol(stringListener, Decl(listenerFirst.ts, 10, 11))
+
+unknowns = strings; // Error
+>unknowns : Symbol(unknowns, Decl(listenerFirst.ts, 9, 11))
+>strings : Symbol(strings, Decl(listenerFirst.ts, 8, 11))
+
+=== columnDefFirst.ts ===
+export {};
+
+interface ColumnDef<Row, Value = unknown> {
+>ColumnDef : Symbol(ColumnDef, Decl(columnDefFirst.ts, 0, 10))
+>Row : Symbol(Row, Decl(columnDefFirst.ts, 2, 20))
+>Value : Symbol(Value, Decl(columnDefFirst.ts, 2, 24))
+
+    cell?: (column: Column<Row, Value>) => void;
+>cell : Symbol(ColumnDef.cell, Decl(columnDefFirst.ts, 2, 43))
+>column : Symbol(column, Decl(columnDefFirst.ts, 3, 12))
+>Column : Symbol(Column, Decl(columnDefFirst.ts, 4, 1))
+>Row : Symbol(Row, Decl(columnDefFirst.ts, 2, 20))
+>Value : Symbol(Value, Decl(columnDefFirst.ts, 2, 24))
+}
+interface Column<Row, Value = unknown> {
+>Column : Symbol(Column, Decl(columnDefFirst.ts, 4, 1))
+>Row : Symbol(Row, Decl(columnDefFirst.ts, 5, 17))
+>Value : Symbol(Value, Decl(columnDefFirst.ts, 5, 21))
+
+    accessorFn?: (row: Row) => Value;
+>accessorFn : Symbol(Column.accessorFn, Decl(columnDefFirst.ts, 5, 40))
+>row : Symbol(row, Decl(columnDefFirst.ts, 6, 18))
+>Row : Symbol(Row, Decl(columnDefFirst.ts, 5, 17))
+>Value : Symbol(Value, Decl(columnDefFirst.ts, 5, 21))
+
+    columnDef: ColumnDef<Row, Value>;
+>columnDef : Symbol(Column.columnDef, Decl(columnDefFirst.ts, 6, 37))
+>ColumnDef : Symbol(ColumnDef, Decl(columnDefFirst.ts, 0, 10))
+>Row : Symbol(Row, Decl(columnDefFirst.ts, 5, 17))
+>Value : Symbol(Value, Decl(columnDefFirst.ts, 5, 21))
+}
+
+declare let stringColumn: ColumnDef<{ name: string }, string>;
+>stringColumn : Symbol(stringColumn, Decl(columnDefFirst.ts, 10, 11))
+>ColumnDef : Symbol(ColumnDef, Decl(columnDefFirst.ts, 0, 10))
+>name : Symbol(name, Decl(columnDefFirst.ts, 10, 37))
+
+declare let unknownColumn: ColumnDef<{ name: string }, unknown>;
+>unknownColumn : Symbol(unknownColumn, Decl(columnDefFirst.ts, 11, 11))
+>ColumnDef : Symbol(ColumnDef, Decl(columnDefFirst.ts, 0, 10))
+>name : Symbol(name, Decl(columnDefFirst.ts, 11, 38))
+
+unknownColumn = stringColumn; // Error
+>unknownColumn : Symbol(unknownColumn, Decl(columnDefFirst.ts, 11, 11))
+>stringColumn : Symbol(stringColumn, Decl(columnDefFirst.ts, 10, 11))
+
+stringColumn = unknownColumn; // Error
+>stringColumn : Symbol(stringColumn, Decl(columnDefFirst.ts, 10, 11))
+>unknownColumn : Symbol(unknownColumn, Decl(columnDefFirst.ts, 11, 11))
+
+=== columnFirst.ts ===
+export {};
+
+interface Column<Row, Value = unknown> {
+>Column : Symbol(Column, Decl(columnFirst.ts, 0, 10))
+>Row : Symbol(Row, Decl(columnFirst.ts, 2, 17))
+>Value : Symbol(Value, Decl(columnFirst.ts, 2, 21))
+
+    columnDef: ColumnDef<Row, Value>;
+>columnDef : Symbol(Column.columnDef, Decl(columnFirst.ts, 2, 40))
+>ColumnDef : Symbol(ColumnDef, Decl(columnFirst.ts, 5, 1))
+>Row : Symbol(Row, Decl(columnFirst.ts, 2, 17))
+>Value : Symbol(Value, Decl(columnFirst.ts, 2, 21))
+
+    accessorFn?: (row: Row) => Value;
+>accessorFn : Symbol(Column.accessorFn, Decl(columnFirst.ts, 3, 37))
+>row : Symbol(row, Decl(columnFirst.ts, 4, 18))
+>Row : Symbol(Row, Decl(columnFirst.ts, 2, 17))
+>Value : Symbol(Value, Decl(columnFirst.ts, 2, 21))
+}
+interface ColumnDef<Row, Value = unknown> {
+>ColumnDef : Symbol(ColumnDef, Decl(columnFirst.ts, 5, 1))
+>Row : Symbol(Row, Decl(columnFirst.ts, 6, 20))
+>Value : Symbol(Value, Decl(columnFirst.ts, 6, 24))
+
+    cell?: (column: Column<Row, Value>) => void;
+>cell : Symbol(ColumnDef.cell, Decl(columnFirst.ts, 6, 43))
+>column : Symbol(column, Decl(columnFirst.ts, 7, 12))
+>Column : Symbol(Column, Decl(columnFirst.ts, 0, 10))
+>Row : Symbol(Row, Decl(columnFirst.ts, 6, 20))
+>Value : Symbol(Value, Decl(columnFirst.ts, 6, 24))
+}
+
+declare let stringColumn: ColumnDef<{ name: string }, string>;
+>stringColumn : Symbol(stringColumn, Decl(columnFirst.ts, 10, 11))
+>ColumnDef : Symbol(ColumnDef, Decl(columnFirst.ts, 5, 1))
+>name : Symbol(name, Decl(columnFirst.ts, 10, 37))
+
+declare let unknownColumn: ColumnDef<{ name: string }, unknown>;
+>unknownColumn : Symbol(unknownColumn, Decl(columnFirst.ts, 11, 11))
+>ColumnDef : Symbol(ColumnDef, Decl(columnFirst.ts, 5, 1))
+>name : Symbol(name, Decl(columnFirst.ts, 11, 38))
+
+unknownColumn = stringColumn; // Error
+>unknownColumn : Symbol(unknownColumn, Decl(columnFirst.ts, 11, 11))
+>stringColumn : Symbol(stringColumn, Decl(columnFirst.ts, 10, 11))
+
+stringColumn = unknownColumn; // Error
+>stringColumn : Symbol(stringColumn, Decl(columnFirst.ts, 10, 11))
+>unknownColumn : Symbol(unknownColumn, Decl(columnFirst.ts, 11, 11))
+
+=== positiveRecursion.ts ===
+export {};
+
+interface Tree<T> {
+>Tree : Symbol(Tree, Decl(positiveRecursion.ts, 0, 10))
+>T : Symbol(T, Decl(positiveRecursion.ts, 2, 15))
+
+    readonly value: T;
+>value : Symbol(Tree.value, Decl(positiveRecursion.ts, 2, 19))
+>T : Symbol(T, Decl(positiveRecursion.ts, 2, 15))
+
+    readonly children: readonly Tree<T>[];
+>children : Symbol(Tree.children, Decl(positiveRecursion.ts, 3, 22))
+>Tree : Symbol(Tree, Decl(positiveRecursion.ts, 0, 10))
+>T : Symbol(T, Decl(positiveRecursion.ts, 2, 15))
+
+    readonly metadata: Map<string, number>;
+>metadata : Symbol(Tree.metadata, Decl(positiveRecursion.ts, 4, 42))
+>Map : Symbol(Map, Decl(lib.es2015.collection.d.ts, --, --), Decl(lib.es2015.collection.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+}
+interface Phantom<T> {
+>Phantom : Symbol(Phantom, Decl(positiveRecursion.ts, 6, 1))
+>T : Symbol(T, Decl(positiveRecursion.ts, 7, 18))
+
+    next: Phantom<T>;
+>next : Symbol(Phantom.next, Decl(positiveRecursion.ts, 7, 22))
+>Phantom : Symbol(Phantom, Decl(positiveRecursion.ts, 6, 1))
+>T : Symbol(T, Decl(positiveRecursion.ts, 7, 18))
+}
+
+declare let stringTree: Tree<string>;
+>stringTree : Symbol(stringTree, Decl(positiveRecursion.ts, 11, 11))
+>Tree : Symbol(Tree, Decl(positiveRecursion.ts, 0, 10))
+
+declare let unknownTree: Tree<unknown>;
+>unknownTree : Symbol(unknownTree, Decl(positiveRecursion.ts, 12, 11))
+>Tree : Symbol(Tree, Decl(positiveRecursion.ts, 0, 10))
+
+declare let stringPhantom: Phantom<string>;
+>stringPhantom : Symbol(stringPhantom, Decl(positiveRecursion.ts, 13, 11))
+>Phantom : Symbol(Phantom, Decl(positiveRecursion.ts, 6, 1))
+
+declare let numberPhantom: Phantom<number>;
+>numberPhantom : Symbol(numberPhantom, Decl(positiveRecursion.ts, 14, 11))
+>Phantom : Symbol(Phantom, Decl(positiveRecursion.ts, 6, 1))
+
+unknownTree = stringTree;
+>unknownTree : Symbol(unknownTree, Decl(positiveRecursion.ts, 12, 11))
+>stringTree : Symbol(stringTree, Decl(positiveRecursion.ts, 11, 11))
+
+stringTree = unknownTree; // Error
+>stringTree : Symbol(stringTree, Decl(positiveRecursion.ts, 11, 11))
+>unknownTree : Symbol(unknownTree, Decl(positiveRecursion.ts, 12, 11))
+
+stringPhantom = numberPhantom;
+>stringPhantom : Symbol(stringPhantom, Decl(positiveRecursion.ts, 13, 11))
+>numberPhantom : Symbol(numberPhantom, Decl(positiveRecursion.ts, 14, 11))
+
+numberPhantom = stringPhantom;
+>numberPhantom : Symbol(numberPhantom, Decl(positiveRecursion.ts, 14, 11))
+>stringPhantom : Symbol(stringPhantom, Decl(positiveRecursion.ts, 13, 11))
+
+=== nestedComposition.ts ===
+export {};
+
+interface Outer<T> {
+>Outer : Symbol(Outer, Decl(nestedComposition.ts, 0, 10))
+>T : Symbol(T, Decl(nestedComposition.ts, 2, 16))
+
+    value: T;
+>value : Symbol(Outer.value, Decl(nestedComposition.ts, 2, 20))
+>T : Symbol(T, Decl(nestedComposition.ts, 2, 16))
+
+    next: Inner<Outer<T>>;
+>next : Symbol(Outer.next, Decl(nestedComposition.ts, 3, 13))
+>Inner : Symbol(Inner, Decl(nestedComposition.ts, 5, 1))
+>Outer : Symbol(Outer, Decl(nestedComposition.ts, 0, 10))
+>T : Symbol(T, Decl(nestedComposition.ts, 2, 16))
+}
+interface Inner<T> {
+>Inner : Symbol(Inner, Decl(nestedComposition.ts, 5, 1))
+>T : Symbol(T, Decl(nestedComposition.ts, 6, 16))
+
+    consume: (value: T) => void;
+>consume : Symbol(Inner.consume, Decl(nestedComposition.ts, 6, 20))
+>value : Symbol(value, Decl(nestedComposition.ts, 7, 14))
+>T : Symbol(T, Decl(nestedComposition.ts, 6, 16))
+}
+
+declare let strings: Outer<string>;
+>strings : Symbol(strings, Decl(nestedComposition.ts, 10, 11))
+>Outer : Symbol(Outer, Decl(nestedComposition.ts, 0, 10))
+
+declare let unknowns: Outer<unknown>;
+>unknowns : Symbol(unknowns, Decl(nestedComposition.ts, 11, 11))
+>Outer : Symbol(Outer, Decl(nestedComposition.ts, 0, 10))
+
+unknowns = strings; // Error
+>unknowns : Symbol(unknowns, Decl(nestedComposition.ts, 11, 11))
+>strings : Symbol(strings, Decl(nestedComposition.ts, 10, 11))
+
+strings = unknowns; // Error
+>strings : Symbol(strings, Decl(nestedComposition.ts, 10, 11))
+>unknowns : Symbol(unknowns, Decl(nestedComposition.ts, 11, 11))
+
+=== annotations.ts ===
+export {};
+
+interface AnnotatedTree<out T> {
+>AnnotatedTree : Symbol(AnnotatedTree, Decl(annotations.ts, 0, 10))
+>T : Symbol(T, Decl(annotations.ts, 2, 24))
+
+    readonly value: T;
+>value : Symbol(AnnotatedTree.value, Decl(annotations.ts, 2, 32))
+>T : Symbol(T, Decl(annotations.ts, 2, 24))
+
+    readonly children: AnnotatedTree<T>[];
+>children : Symbol(AnnotatedTree.children, Decl(annotations.ts, 3, 22))
+>AnnotatedTree : Symbol(AnnotatedTree, Decl(annotations.ts, 0, 10))
+>T : Symbol(T, Decl(annotations.ts, 2, 24))
+}
+interface AnnotatedStore<in out T> {
+>AnnotatedStore : Symbol(AnnotatedStore, Decl(annotations.ts, 5, 1))
+>T : Symbol(T, Decl(annotations.ts, 6, 25))
+
+    value: T;
+>value : Symbol(AnnotatedStore.value, Decl(annotations.ts, 6, 36))
+>T : Symbol(T, Decl(annotations.ts, 6, 25))
+
+    listener: (batch: AnnotatedStore<T[]>) => void;
+>listener : Symbol(AnnotatedStore.listener, Decl(annotations.ts, 7, 13))
+>batch : Symbol(batch, Decl(annotations.ts, 8, 15))
+>AnnotatedStore : Symbol(AnnotatedStore, Decl(annotations.ts, 5, 1))
+>T : Symbol(T, Decl(annotations.ts, 6, 25))
+}
+
+declare let stringTree: AnnotatedTree<string>;
+>stringTree : Symbol(stringTree, Decl(annotations.ts, 11, 11))
+>AnnotatedTree : Symbol(AnnotatedTree, Decl(annotations.ts, 0, 10))
+
+declare let unknownTree: AnnotatedTree<unknown>;
+>unknownTree : Symbol(unknownTree, Decl(annotations.ts, 12, 11))
+>AnnotatedTree : Symbol(AnnotatedTree, Decl(annotations.ts, 0, 10))
+
+declare let stringStore: AnnotatedStore<string>;
+>stringStore : Symbol(stringStore, Decl(annotations.ts, 13, 11))
+>AnnotatedStore : Symbol(AnnotatedStore, Decl(annotations.ts, 5, 1))
+
+declare let unknownStore: AnnotatedStore<unknown>;
+>unknownStore : Symbol(unknownStore, Decl(annotations.ts, 14, 11))
+>AnnotatedStore : Symbol(AnnotatedStore, Decl(annotations.ts, 5, 1))
+
+unknownTree = stringTree;
+>unknownTree : Symbol(unknownTree, Decl(annotations.ts, 12, 11))
+>stringTree : Symbol(stringTree, Decl(annotations.ts, 11, 11))
+
+stringTree = unknownTree; // Error
+>stringTree : Symbol(stringTree, Decl(annotations.ts, 11, 11))
+>unknownTree : Symbol(unknownTree, Decl(annotations.ts, 12, 11))
+
+unknownStore = stringStore; // Error
+>unknownStore : Symbol(unknownStore, Decl(annotations.ts, 14, 11))
+>stringStore : Symbol(stringStore, Decl(annotations.ts, 13, 11))
+
+stringStore = unknownStore; // Error
+>stringStore : Symbol(stringStore, Decl(annotations.ts, 13, 11))
+>unknownStore : Symbol(unknownStore, Decl(annotations.ts, 14, 11))
+
+=== structuralMeasurement.ts ===
+export {};
+
+interface GenericMethod<T> {
+>GenericMethod : Symbol(GenericMethod, Decl(structuralMeasurement.ts, 0, 10))
+>T : Symbol(T, Decl(structuralMeasurement.ts, 2, 24))
+
+    value: T;
+>value : Symbol(GenericMethod.value, Decl(structuralMeasurement.ts, 2, 28))
+>T : Symbol(T, Decl(structuralMeasurement.ts, 2, 24))
+
+    next: <U>(value: U) => GenericMethod<T>;
+>next : Symbol(GenericMethod.next, Decl(structuralMeasurement.ts, 3, 13))
+>U : Symbol(U, Decl(structuralMeasurement.ts, 4, 11))
+>value : Symbol(value, Decl(structuralMeasurement.ts, 4, 14))
+>U : Symbol(U, Decl(structuralMeasurement.ts, 4, 11))
+>GenericMethod : Symbol(GenericMethod, Decl(structuralMeasurement.ts, 0, 10))
+>T : Symbol(T, Decl(structuralMeasurement.ts, 2, 24))
+}
+interface Projected<T extends { value: unknown }> {
+>Projected : Symbol(Projected, Decl(structuralMeasurement.ts, 5, 1))
+>T : Symbol(T, Decl(structuralMeasurement.ts, 6, 20))
+>value : Symbol(value, Decl(structuralMeasurement.ts, 6, 31))
+
+    value: T["value"];
+>value : Symbol(Projected.value, Decl(structuralMeasurement.ts, 6, 51))
+>T : Symbol(T, Decl(structuralMeasurement.ts, 6, 20))
+
+    next: Projected<T>;
+>next : Symbol(Projected.next, Decl(structuralMeasurement.ts, 7, 22))
+>Projected : Symbol(Projected, Decl(structuralMeasurement.ts, 5, 1))
+>T : Symbol(T, Decl(structuralMeasurement.ts, 6, 20))
+}
+interface Method<T> {
+>Method : Symbol(Method, Decl(structuralMeasurement.ts, 9, 1))
+>T : Symbol(T, Decl(structuralMeasurement.ts, 10, 17))
+
+    value: T;
+>value : Symbol(Method.value, Decl(structuralMeasurement.ts, 10, 21))
+>T : Symbol(T, Decl(structuralMeasurement.ts, 10, 17))
+
+    accept(value: Method<T>): void;
+>accept : Symbol(Method.accept, Decl(structuralMeasurement.ts, 11, 13))
+>value : Symbol(value, Decl(structuralMeasurement.ts, 12, 11))
+>Method : Symbol(Method, Decl(structuralMeasurement.ts, 9, 1))
+>T : Symbol(T, Decl(structuralMeasurement.ts, 10, 17))
+}
+
+declare let strings: GenericMethod<string>;
+>strings : Symbol(strings, Decl(structuralMeasurement.ts, 15, 11))
+>GenericMethod : Symbol(GenericMethod, Decl(structuralMeasurement.ts, 0, 10))
+
+declare let unknowns: GenericMethod<unknown>;
+>unknowns : Symbol(unknowns, Decl(structuralMeasurement.ts, 16, 11))
+>GenericMethod : Symbol(GenericMethod, Decl(structuralMeasurement.ts, 0, 10))
+
+declare let stringMethod: Method<string>;
+>stringMethod : Symbol(stringMethod, Decl(structuralMeasurement.ts, 17, 11))
+>Method : Symbol(Method, Decl(structuralMeasurement.ts, 9, 1))
+
+declare let unknownMethod: Method<unknown>;
+>unknownMethod : Symbol(unknownMethod, Decl(structuralMeasurement.ts, 18, 11))
+>Method : Symbol(Method, Decl(structuralMeasurement.ts, 9, 1))
+
+declare let projected: Projected<{ value: string; extra: number }>;
+>projected : Symbol(projected, Decl(structuralMeasurement.ts, 19, 11))
+>Projected : Symbol(Projected, Decl(structuralMeasurement.ts, 5, 1))
+>value : Symbol(value, Decl(structuralMeasurement.ts, 19, 34))
+>extra : Symbol(extra, Decl(structuralMeasurement.ts, 19, 49))
+
+unknowns = strings;
+>unknowns : Symbol(unknowns, Decl(structuralMeasurement.ts, 16, 11))
+>strings : Symbol(strings, Decl(structuralMeasurement.ts, 15, 11))
+
+strings = unknowns; // Error
+>strings : Symbol(strings, Decl(structuralMeasurement.ts, 15, 11))
+>unknowns : Symbol(unknowns, Decl(structuralMeasurement.ts, 16, 11))
+
+unknownMethod = stringMethod;
+>unknownMethod : Symbol(unknownMethod, Decl(structuralMeasurement.ts, 18, 11))
+>stringMethod : Symbol(stringMethod, Decl(structuralMeasurement.ts, 17, 11))
+
+const widened: Projected<{ value: string }> = projected;
+>widened : Symbol(widened, Decl(structuralMeasurement.ts, 24, 5))
+>Projected : Symbol(Projected, Decl(structuralMeasurement.ts, 5, 1))
+>value : Symbol(value, Decl(structuralMeasurement.ts, 24, 26))
+>projected : Symbol(projected, Decl(structuralMeasurement.ts, 19, 11))
+

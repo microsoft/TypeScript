@@ -1,0 +1,68 @@
+//// [tests/cases/compiler/exhaustiveSwitchCheckCircularity.ts] ////
+
+=== exhaustiveSwitchCheckCircularity.ts ===
+// Repro from #47539
+
+declare function isNever(n: never): boolean;
+>isNever : Symbol(isNever, Decl(exhaustiveSwitchCheckCircularity.ts, 0, 0))
+>n : Symbol(n, Decl(exhaustiveSwitchCheckCircularity.ts, 2, 25))
+
+function f() {
+>f : Symbol(f, Decl(exhaustiveSwitchCheckCircularity.ts, 2, 44))
+
+    let foo: "aaa" | "bbb" = "aaa";
+>foo : Symbol(foo, Decl(exhaustiveSwitchCheckCircularity.ts, 5, 7))
+
+    while (true) {
+        switch (foo) {
+>foo : Symbol(foo, Decl(exhaustiveSwitchCheckCircularity.ts, 5, 7))
+
+            case "aaa":
+        }
+        if (foo === "aaa") {
+>foo : Symbol(foo, Decl(exhaustiveSwitchCheckCircularity.ts, 5, 7))
+
+            foo = "bbb";
+>foo : Symbol(foo, Decl(exhaustiveSwitchCheckCircularity.ts, 5, 7))
+        }
+        else if (isNever(foo)) {  // Error expected
+>isNever : Symbol(isNever, Decl(exhaustiveSwitchCheckCircularity.ts, 0, 0))
+>foo : Symbol(foo, Decl(exhaustiveSwitchCheckCircularity.ts, 5, 7))
+
+            break;
+        }
+    }
+}
+
+// Repro from #51688
+
+declare function functionB(key: string): string;
+>functionB : Symbol(functionB, Decl(exhaustiveSwitchCheckCircularity.ts, 17, 1))
+>key : Symbol(key, Decl(exhaustiveSwitchCheckCircularity.ts, 21, 27))
+
+function functionC(): void {
+>functionC : Symbol(functionC, Decl(exhaustiveSwitchCheckCircularity.ts, 21, 48))
+
+    let unionVal: "A" | "B" = "A";
+>unionVal : Symbol(unionVal, Decl(exhaustiveSwitchCheckCircularity.ts, 24, 7))
+
+    while (true) {
+        let key: string;
+>key : Symbol(key, Decl(exhaustiveSwitchCheckCircularity.ts, 26, 11))
+
+        switch (unionVal) {
+>unionVal : Symbol(unionVal, Decl(exhaustiveSwitchCheckCircularity.ts, 24, 7))
+
+            case "A": {
+                key = "AA";
+>key : Symbol(key, Decl(exhaustiveSwitchCheckCircularity.ts, 26, 11))
+
+                break;
+            }
+        }
+        functionB(key);
+>functionB : Symbol(functionB, Decl(exhaustiveSwitchCheckCircularity.ts, 17, 1))
+>key : Symbol(key, Decl(exhaustiveSwitchCheckCircularity.ts, 26, 11))
+    }
+}
+

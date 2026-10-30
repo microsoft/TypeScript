@@ -191,7 +191,7 @@ func (a *tracedTypeAdapter) ConditionalTrueType() tracing.TracedType {
 	if a.t.flags&TypeFlagsConditional == 0 {
 		return nil
 	}
-	t := a.t.AsConditionalType().resolvedTrueType
+	t := a.t.AsConditionalType().resolvedTrueType.peek()
 	if t == nil {
 		return nil
 	}
@@ -202,7 +202,7 @@ func (a *tracedTypeAdapter) ConditionalFalseType() tracing.TracedType {
 	if a.t.flags&TypeFlagsConditional == 0 {
 		return nil
 	}
-	t := a.t.AsConditionalType().resolvedFalseType
+	t := a.t.AsConditionalType().resolvedFalseType.peek()
 	if t == nil {
 		return nil
 	}
@@ -246,7 +246,7 @@ func (a *tracedTypeAdapter) ReferenceTypeArguments() []tracing.TracedType {
 	if a.t.flags&TypeFlagsObject == 0 || a.t.objectFlags&ObjectFlagsReference == 0 {
 		return nil
 	}
-	return wrapTypes(a.t.AsTypeReference().resolvedTypeArguments)
+	return wrapTypes(a.t.AsTypeReference().resolvedTypeArguments.peek())
 }
 
 func (a *tracedTypeAdapter) ReferenceNode() *ast.Node {
@@ -304,7 +304,7 @@ func (a *tracedTypeAdapter) EvolvingArrayFinalType() tracing.TracedType {
 	if a.t.flags&TypeFlagsObject == 0 || a.t.objectFlags&ObjectFlagsEvolvingArray == 0 {
 		return nil
 	}
-	t := a.t.AsEvolvingArrayType().finalArrayType
+	t := a.t.AsEvolvingArrayType().finalArrayType.peek()
 	if t == nil {
 		return nil
 	}
@@ -319,11 +319,12 @@ func (a *tracedTypeAdapter) Pattern() *ast.Node {
 	if a.checker == nil {
 		return nil
 	}
-	return a.checker.patternForType[a.t]
+	p, _ := a.checker.patternForType.get(a.checker, a.t)
+	return p
 }
 
 func (a *tracedTypeAdapter) RecursionIdentity() any {
-	return getRecursionIdentity(a.t).value
+	return a.checker.getRecursionIdentity(a.t).value
 }
 
 func (a *tracedTypeAdapter) Display() string {
