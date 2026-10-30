@@ -131,6 +131,15 @@ export interface APIMethodInfo {
     getAwaitedType: APIMethod<CheckerTypeParams, TypeResponse | null>;
     getBaseTypeOfLiteralType: APIMethod<GetBaseTypeOfLiteralTypeParams, TypeResponse>;
     getNonNullableType: APIMethod<GetTypePropertyParams, TypeResponse>;
+    getNullableType: APIMethod<GetNullableTypeParams, TypeResponse>;
+    getStringLiteralType: APIMethod<GetStringLiteralTypeParams, TypeResponse>;
+    getNumberLiteralType: APIMethod<GetNumberLiteralTypeParams, TypeResponse>;
+    getBigIntLiteralType: APIMethod<GetBigIntLiteralTypeParams, TypeResponse>;
+    getFalseType: APIMethod<GetIntrinsicTypeParams, TypeResponse>;
+    getTrueType: APIMethod<GetIntrinsicTypeParams, TypeResponse>;
+    getAugmentedPropertiesOfType: APIMethod<GetTypePropertyParams, SymbolResponse[] | null>;
+    getJsxIntrinsicTagNamesAt: APIMethod<CheckerNodeParams, SymbolResponse[] | null>;
+    getPrivateIdentifierPropertyOfType: APIMethod<GetPrivateIdentifierPropertyOfTypeParams, SymbolResponse>;
     getTypeFromTypeNode: APIMethod<GetTypeFromTypeNodeParams, TypeResponse>;
     getWidenedType: APIMethod<GetWidenedTypeParams, TypeResponse>;
     getParameterType: APIMethod<GetParameterTypeParams, TypeResponse>;
@@ -180,6 +189,9 @@ export interface APIMethodInfo {
     getDocumentationComment: APIMethod<CheckerSymbolParams, string>;
     isArrayType: APIMethod<CheckerTypeParams, boolean>;
     isReadonlySymbol: APIMethod<CheckerSymbolParams, boolean>;
+    isImplementationOfOverload: APIMethod<CheckerNodeParams, boolean>;
+    getPropertySymbolOfDestructuringAssignment: APIMethod<CheckerNodeParams, SymbolResponse | null>;
+    getAmbientModules: APIMethod<GetIntrinsicTypeParams, SymbolResponse[] | null>;
     getReferencesToSymbolInFile: APIMethod<GetReferencesToSymbolInFileParams, string[]>;
     getReferencedSymbolsForNode: APIMethod<GetReferencedSymbolsForNodeParams, ReferencedSymbolEntry[] | null>;
     getSignatureUsages: APIMethod<GetSignatureUsagesParams, SignatureUsageResponse[] | null>;
@@ -799,6 +811,61 @@ export interface GetBaseTypeOfLiteralTypeParams {
     type: number;
 }
 
+/** GetNullableTypeParams are the parameters for the getNullableType method. */
+export interface GetNullableTypeParams {
+    snapshot: number;
+    project: number;
+    type: number;
+    flags: number;
+}
+
+/** GetStringLiteralTypeParams are the parameters for the getStringLiteralType method. */
+export interface GetStringLiteralTypeParams {
+    snapshot: number;
+    project: number;
+    value: string;
+}
+
+/** GetNumberLiteralTypeParams are the parameters for the getNumberLiteralType method. */
+export interface GetNumberLiteralTypeParams {
+    snapshot: number;
+    project: number;
+    value: number;
+}
+
+/**
+ * GetBigIntLiteralTypeParams are the parameters for the getBigIntLiteralType method.
+ * Base10Value is the absolute value in base 10 with no leading zeros (empty for zero).
+ */
+export interface GetBigIntLiteralTypeParams {
+    snapshot: number;
+    project: number;
+    negative?: boolean | undefined;
+    base10Value?: string | undefined;
+}
+
+/** GetIntrinsicTypeParams is used for intrinsic type getters (anyType, stringType, etc.). */
+export interface GetIntrinsicTypeParams {
+    snapshot: number;
+    project: number;
+}
+
+/** CheckerNodeParams are parameters for checker methods that operate on a node location. */
+export interface CheckerNodeParams {
+    snapshot: number;
+    project: number;
+    location: string;
+}
+
+/** GetPrivateIdentifierPropertyOfTypeParams are the parameters for the getPrivateIdentifierPropertyOfType method. */
+export interface GetPrivateIdentifierPropertyOfTypeParams {
+    snapshot: number;
+    project: number;
+    type: number;
+    name: string;
+    location: string;
+}
+
 /** GetTypeFromTypeNodeParams are the parameters for the getTypeFromTypeNode method. */
 export interface GetTypeFromTypeNodeParams {
     snapshot: number;
@@ -912,13 +979,6 @@ export interface TextEdit {
     pos: number;
     end: number;
     newText: string;
-}
-
-/** CheckerNodeParams are parameters for checker methods that operate on a node location. */
-export interface CheckerNodeParams {
-    snapshot: number;
-    project: number;
-    location: string;
 }
 
 export interface ConstantValueResponse {
@@ -1091,12 +1151,6 @@ export interface SelectedFilesEmitParams {
     files: readonly DocumentIdentifier[] | null;
 }
 
-/** GetIntrinsicTypeParams is used for intrinsic type getters (anyType, stringType, etc.). */
-export interface GetIntrinsicTypeParams {
-    snapshot: number;
-    project: number;
-}
-
 /**
  * WellKnownSymbolsResponse carries the handle ids of the per-checker singleton
  * symbols (unknown, undefined, arguments) so the client can identify them by id
@@ -1169,14 +1223,17 @@ export interface BatchRequest {
         | "getAliasSymbolOfType"
         | "getAliasTypeArgumentsOfType"
         | "getAliasedSymbol"
+        | "getAmbientModules"
         | "getAnyType"
         | "getApparentPropertiesOfType"
         | "getApparentType"
+        | "getAugmentedPropertiesOfType"
         | "getAwaitedType"
         | "getBaseConstraintOfType"
         | "getBaseTypeOfLiteralType"
         | "getBaseTypeOfType"
         | "getBaseTypes"
+        | "getBigIntLiteralType"
         | "getBigIntType"
         | "getBindDiagnostics"
         | "getBooleanType"
@@ -1206,6 +1263,7 @@ export interface BatchRequest {
         | "getExportsOfModule"
         | "getExportsOfSymbol"
         | "getExtendsTypeOfType"
+        | "getFalseType"
         | "getFalseTypeOfConditionalType"
         | "getFreshTypeOfType"
         | "getFullyQualifiedName"
@@ -1217,6 +1275,7 @@ export interface BatchRequest {
         | "getIndexTypeOfType"
         | "getJavaScriptEmit"
         | "getJsDocTags"
+        | "getJsxIntrinsicTagNamesAt"
         | "getLocalTypeParametersOfType"
         | "getMemberInModuleExports"
         | "getMembersOfSymbol"
@@ -1229,6 +1288,8 @@ export interface BatchRequest {
         | "getNonNullableType"
         | "getNonPrimitiveType"
         | "getNullType"
+        | "getNullableType"
+        | "getNumberLiteralType"
         | "getNumberType"
         | "getObjectTypeOfType"
         | "getOuterTypeParametersOfType"
@@ -1236,9 +1297,11 @@ export interface BatchRequest {
         | "getParametersOfSignature"
         | "getParentOfSymbol"
         | "getParentOfSymbolForChecker"
+        | "getPrivateIdentifierPropertyOfType"
         | "getProgramDiagnostics"
         | "getPropertiesOfType"
         | "getPropertyOfType"
+        | "getPropertySymbolOfDestructuringAssignment"
         | "getReducedType"
         | "getReferencedSymbolsForNode"
         | "getReferencesToSymbolInFile"
@@ -1258,6 +1321,7 @@ export interface BatchRequest {
         | "getSourceFile"
         | "getSourceFileMetadata"
         | "getSourceFileNames"
+        | "getStringLiteralType"
         | "getStringType"
         | "getSuggestionDiagnostics"
         | "getSymbolAtLocation"
@@ -1278,6 +1342,7 @@ export interface BatchRequest {
         | "getTemplateTypeOfMappedType"
         | "getThisParameterOfSignature"
         | "getThisTypeOfType"
+        | "getTrueType"
         | "getTrueTypeOfConditionalType"
         | "getTypeArguments"
         | "getTypeAtLocation"
@@ -1305,6 +1370,7 @@ export interface BatchRequest {
         | "isArrayLikeType"
         | "isArrayType"
         | "isContextSensitive"
+        | "isImplementationOfOverload"
         | "isReadonlySymbol"
         | "isTypeAssignableTo"
         | "parseCommandLine"
@@ -1351,14 +1417,17 @@ export interface BatchResponse {
         | "getAliasSymbolOfType"
         | "getAliasTypeArgumentsOfType"
         | "getAliasedSymbol"
+        | "getAmbientModules"
         | "getAnyType"
         | "getApparentPropertiesOfType"
         | "getApparentType"
+        | "getAugmentedPropertiesOfType"
         | "getAwaitedType"
         | "getBaseConstraintOfType"
         | "getBaseTypeOfLiteralType"
         | "getBaseTypeOfType"
         | "getBaseTypes"
+        | "getBigIntLiteralType"
         | "getBigIntType"
         | "getBindDiagnostics"
         | "getBooleanType"
@@ -1388,6 +1457,7 @@ export interface BatchResponse {
         | "getExportsOfModule"
         | "getExportsOfSymbol"
         | "getExtendsTypeOfType"
+        | "getFalseType"
         | "getFalseTypeOfConditionalType"
         | "getFreshTypeOfType"
         | "getFullyQualifiedName"
@@ -1399,6 +1469,7 @@ export interface BatchResponse {
         | "getIndexTypeOfType"
         | "getJavaScriptEmit"
         | "getJsDocTags"
+        | "getJsxIntrinsicTagNamesAt"
         | "getLocalTypeParametersOfType"
         | "getMemberInModuleExports"
         | "getMembersOfSymbol"
@@ -1411,6 +1482,8 @@ export interface BatchResponse {
         | "getNonNullableType"
         | "getNonPrimitiveType"
         | "getNullType"
+        | "getNullableType"
+        | "getNumberLiteralType"
         | "getNumberType"
         | "getObjectTypeOfType"
         | "getOuterTypeParametersOfType"
@@ -1418,9 +1491,11 @@ export interface BatchResponse {
         | "getParametersOfSignature"
         | "getParentOfSymbol"
         | "getParentOfSymbolForChecker"
+        | "getPrivateIdentifierPropertyOfType"
         | "getProgramDiagnostics"
         | "getPropertiesOfType"
         | "getPropertyOfType"
+        | "getPropertySymbolOfDestructuringAssignment"
         | "getReducedType"
         | "getReferencedSymbolsForNode"
         | "getReferencesToSymbolInFile"
@@ -1440,6 +1515,7 @@ export interface BatchResponse {
         | "getSourceFile"
         | "getSourceFileMetadata"
         | "getSourceFileNames"
+        | "getStringLiteralType"
         | "getStringType"
         | "getSuggestionDiagnostics"
         | "getSymbolAtLocation"
@@ -1460,6 +1536,7 @@ export interface BatchResponse {
         | "getTemplateTypeOfMappedType"
         | "getThisParameterOfSignature"
         | "getThisTypeOfType"
+        | "getTrueType"
         | "getTrueTypeOfConditionalType"
         | "getTypeArguments"
         | "getTypeAtLocation"
@@ -1487,6 +1564,7 @@ export interface BatchResponse {
         | "isArrayLikeType"
         | "isArrayType"
         | "isContextSensitive"
+        | "isImplementationOfOverload"
         | "isReadonlySymbol"
         | "isTypeAssignableTo"
         | "parseCommandLine"
