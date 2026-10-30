@@ -1,0 +1,13 @@
+classExtendsNullValuedIdentifier.ts(4,40): error TS17005: A constructor cannot contain a 'super' call when its class extends 'null'.
+
+
+==== classExtendsNullValuedIdentifier.ts (1 errors) ====
+    const N = null;
+    class A extends N { constructor() { } }
+    class B extends (null) { constructor() { } }
+    class C extends null { constructor() { super(); } }
+                                           ~~~~~~~
+!!! error TS17005: A constructor cannot contain a 'super' call when its class extends 'null'.
+    let n = null;
+    class D extends n { constructor() { } }
+    
