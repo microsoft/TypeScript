@@ -1,0 +1,24 @@
+distributiveConditionalTypeInferenceNonStrict.ts(4,11): error TS2322: Type 'T' is not assignable to type 'InferredParameter<T>'.
+  Type '(value: unknown) => unknown' is not assignable to type 'InferredParameter<T>'.
+distributiveConditionalTypeInferenceNonStrict.ts(12,7): error TS2322: Type '{ (value: string): void; (left: number, right: number): void; }' is not assignable to type 'never'.
+
+
+==== distributiveConditionalTypeInferenceNonStrict.ts (2 errors) ====
+    type InferredParameter<T> = T extends (value: infer P) => unknown ? T | P : never;
+    
+    function inference<T extends (value: unknown) => unknown>(value: T) {
+        const result: InferredParameter<T> = value; // Error: bivariant constraints admit narrower parameters.
+              ~~~~~~
+!!! error TS2322: Type 'T' is not assignable to type 'InferredParameter<T>'.
+!!! error TS2322:   Type '(value: unknown) => unknown' is not assignable to type 'InferredParameter<T>'.
+    }
+    
+    declare const overloaded: {
+        (value: string): void;
+        (left: number, right: number): void;
+    };
+    const constraint: (value: unknown) => unknown = overloaded;
+    const rejected: InferredParameter<typeof overloaded> = overloaded; // Error
+          ~~~~~~~~
+!!! error TS2322: Type '{ (value: string): void; (left: number, right: number): void; }' is not assignable to type 'never'.
+    

@@ -774,6 +774,7 @@ type Checker struct {
 	reportUnmeasurableMapper                    *TypeMapper
 	restrictiveMapper                           *TypeMapper
 	permissiveMapper                            *TypeMapper
+	rigidInferenceMapper                        *TypeMapper
 	emptyObjectType                             *Type
 	emptyJsxObjectType                          *Type
 	emptyFreshJsxObjectType                     *Type
@@ -857,6 +858,7 @@ type Checker struct {
 	assignableRelation                          *Relation
 	comparableRelation                          *Relation
 	identityRelation                            *Relation
+	inferencePatternRelation                    *Relation
 	enumRelation                                map[EnumRelationKey]RelationComparisonResult
 	getGlobalESSymbolType                       func() *Type
 	getGlobalBigIntType                         func() *Type
@@ -926,6 +928,7 @@ type Checker struct {
 	packagesMap                                 map[string]bool
 	activeMappers                               []*TypeMapper
 	activeTypeMappersCaches                     []map[CacheHashKey]*Type
+	activeTypeMapperStateCaches                 []map[CacheHashKey]typeMapperCacheState
 	ambientModulesOnce                          sync.Once
 	ambientModules                              []*ast.Symbol
 	withinUnreachableCode                       bool
@@ -1052,11 +1055,12 @@ func NewChecker(program Program, tracer *Tracer) (*Checker, *sync.Mutex) {
 	c.numericStringType = c.getTemplateLiteralType([]string{"", ""}, []*Type{c.numberType}) // The `${number}` type
 	c.templateConstraintType = c.getUnionType([]*Type{c.stringType, c.numberType, c.booleanType, c.bigintType, c.nullType, c.undefinedType})
 	c.uniqueLiteralType = c.newIntrinsicType(TypeFlagsNever, "never") // Special `never` flagged by union reduction to behave as a literal
-	c.uniqueLiteralMapper = newFunctionTypeMapper(c.getUniqueLiteralTypeForTypeParameter)
-	c.reportUnreliableMapper = newFunctionTypeMapper(c.reportUnreliableWorker)
-	c.reportUnmeasurableMapper = newFunctionTypeMapper(c.reportUnmeasurableWorker)
-	c.restrictiveMapper = newFunctionTypeMapper(c.restrictiveMapperWorker)
-	c.permissiveMapper = newFunctionTypeMapper(c.permissiveMapperWorker)
+	c.uniqueLiteralMapper = newFunctionTypeMapper(c.getUniqueLiteralTypeForTypeParameter, nil, nil)
+	c.reportUnreliableMapper = newFunctionTypeMapper(c.reportUnreliableWorker, nil, nil)
+	c.reportUnmeasurableMapper = newFunctionTypeMapper(c.reportUnmeasurableWorker, nil, nil)
+	c.restrictiveMapper = newFunctionTypeMapper(c.restrictiveMapperWorker, nil, nil)
+	c.permissiveMapper = newFunctionTypeMapper(c.permissiveMapperWorker, nil, nil)
+	c.rigidInferenceMapper = newFunctionTypeMapper(c.rigidInferenceMapperWorker, nil, nil)
 	c.emptyObjectType = c.newAnonymousType(nil /*symbol*/, nil, nil, nil, nil)
 	c.emptyJsxObjectType = c.newAnonymousType(nil /*symbol*/, nil, nil, nil, nil)
 	c.emptyFreshJsxObjectType = c.newAnonymousType(nil /*symbol*/, nil, nil, nil, nil)
@@ -1097,6 +1101,7 @@ func NewChecker(program Program, tracer *Tracer) (*Checker, *sync.Mutex) {
 	c.assignableRelation = &Relation{}
 	c.comparableRelation = &Relation{}
 	c.identityRelation = &Relation{}
+	c.inferencePatternRelation = &Relation{}
 	c.enumRelation = make(map[EnumRelationKey]RelationComparisonResult)
 	c.moduleImportAttributesTypes = make(map[*ast.Symbol]*Type)
 	c.getGlobalESSymbolType = c.getGlobalTypeResolver("Symbol", 0 /*arity*/, false /*reportErrors*/)
@@ -18063,13 +18068,14 @@ func getConditionalTypeKey(typeArguments []*Type, alias *TypeAlias, forConstrain
 	return b.hash()
 }
 
-func getRelationKey(source *Type, target *Type, intersectionState IntersectionState, isIdentity bool, ignoreConstraints bool) (CacheHashKey, bool) {
-	if isIdentity && source.id > target.id {
+func (c *Checker) getRelationKey(source *Type, target *Type, intersectionState IntersectionState, relation *Relation, ignoreConstraints bool) (CacheHashKey, bool) {
+	if relation == c.identityRelation && source.id > target.id {
 		source, target = target, source
 	}
 	var b keyBuilder
 	var constrained bool
-	if isTypeReferenceWithGenericArguments(source) && isTypeReferenceWithGenericArguments(target) {
+	// Inference-pattern cache effects identify particular binders, so their keys cannot alpha-rename type parameters.
+	if relation != c.inferencePatternRelation && isTypeReferenceWithGenericArguments(source) && isTypeReferenceWithGenericArguments(target) {
 		b.writeByte('g')
 		constrained = b.writeGenericTypeReferences(source, target, ignoreConstraints)
 	} else {
@@ -22751,10 +22757,19 @@ func (c *Checker) instantiateType(t *Type, m *TypeMapper) *Type {
 }
 
 func (c *Checker) instantiateTypeWithAlias(t *Type, m *TypeMapper, alias *TypeAlias) *Type {
+	if t == nil || m == nil {
+		return t
+	}
+	if m.Store(nil) {
+		mapped := getMappedType(t, m)
+		if mapped != t || t.flags&TypeFlagsTypeParameter != 0 {
+			return mapped
+		}
+	}
 	// Check for type variables in the alias, so things like `type Brand<T> = number & {}` can potentially be copied with new alias type args, despite them being unreferenced.
 	// This is the behavior most people using aliases expect, and prevents the cache from leaking type parameters outside their scope of validity.
 	// tests/cases/compiler/declarationEmitArrowFunctionNoRenaming.ts contains an example of this, which previously only worked in strada via some input node reuse logic instead.
-	if t == nil || m == nil || !(c.couldContainTypeVariables(t) || (t.alias != nil && len(t.alias.typeArguments) > 0 && core.Some(t.alias.typeArguments, c.couldContainTypeVariables))) {
+	if !(c.couldContainTypeVariables(t) || (t.alias != nil && len(t.alias.typeArguments) > 0 && core.Some(t.alias.typeArguments, c.couldContainTypeVariables))) {
 		return t
 	}
 	if len(c.instantiationStack) == 100 || c.instantiationCount >= 5_000_000 {
@@ -22783,9 +22798,16 @@ func (c *Checker) instantiateTypeWithAlias(t *Type, m *TypeMapper, alias *TypeAl
 	b.writeType(t)
 	b.writeAlias(alias)
 	key := b.hash()
-	cache := c.activeTypeMappersCaches[core.IfElse(index != -1, index, len(c.activeTypeMappersCaches)-1)]
+	cacheIndex := core.IfElse(index != -1, index, len(c.activeTypeMappersCaches)-1)
+	cache := c.activeTypeMappersCaches[cacheIndex]
 	if cachedType, ok := cache[key]; ok {
+		state := c.activeTypeMapperStateCaches[cacheIndex][key]
+		m.Load(state.before, state.after)
 		return cachedType
+	}
+	var before TypeMapperState
+	if index != -1 {
+		m.Store(&before)
 	}
 	c.TotalInstantiationCount++
 	c.instantiationCount++
@@ -22795,6 +22817,18 @@ func (c *Checker) instantiateTypeWithAlias(t *Type, m *TypeMapper, alias *TypeAl
 		c.popActiveMapper()
 	} else {
 		cache[key] = result
+		stateCache := c.activeTypeMapperStateCaches[cacheIndex]
+		if len(before) != 0 {
+			var after TypeMapperState
+			m.Store(&after)
+			if stateCache == nil {
+				stateCache = make(map[CacheHashKey]typeMapperCacheState)
+				c.activeTypeMapperStateCaches[cacheIndex] = stateCache
+			}
+			stateCache[key] = typeMapperCacheState{before: before, after: after}
+		} else {
+			delete(stateCache, key)
+		}
 	}
 	c.instantiationStack[len(c.instantiationStack)-1] = nil
 	c.instantiationStack = c.instantiationStack[:len(c.instantiationStack)-1]
@@ -22834,6 +22868,11 @@ func (c *Checker) pushActiveMapper(mapper *TypeMapper) {
 	} else {
 		c.activeTypeMappersCaches = append(c.activeTypeMappersCaches, make(map[CacheHashKey]*Type, 1))
 	}
+	if cap(c.activeTypeMapperStateCaches) > lastIndex {
+		c.activeTypeMapperStateCaches = c.activeTypeMapperStateCaches[:lastIndex+1]
+	} else {
+		c.activeTypeMapperStateCaches = append(c.activeTypeMapperStateCaches, nil)
+	}
 }
 
 func (c *Checker) popActiveMapper() {
@@ -22844,6 +22883,8 @@ func (c *Checker) popActiveMapper() {
 	lastIndex := len(c.activeTypeMappersCaches) - 1
 	clear(c.activeTypeMappersCaches[lastIndex])
 	c.activeTypeMappersCaches = c.activeTypeMappersCaches[:lastIndex]
+	clear(c.activeTypeMapperStateCaches[lastIndex])
+	c.activeTypeMapperStateCaches = c.activeTypeMapperStateCaches[:lastIndex]
 }
 
 func (c *Checker) findActiveMapper(mapper *TypeMapper) int {
@@ -22852,6 +22893,9 @@ func (c *Checker) findActiveMapper(mapper *TypeMapper) int {
 
 func (c *Checker) clearActiveMapperCaches() {
 	for _, cache := range c.activeTypeMappersCaches {
+		clear(cache)
+	}
+	for _, cache := range c.activeTypeMapperStateCaches {
 		clear(cache)
 	}
 }
@@ -25256,6 +25300,22 @@ func (c *Checker) restrictiveMapperWorker(t *Type) *Type {
 func (c *Checker) permissiveMapperWorker(t *Type) *Type {
 	if t.flags&TypeFlagsTypeParameter != 0 {
 		return c.wildcardType
+	}
+	return t
+}
+
+func isInferencePatternParameter(t *Type) bool {
+	return t.flags&TypeFlagsTypeParameter != 0 && t.AsTypeParameter().isInferencePattern
+}
+
+func (c *Checker) rigidInferenceMapperWorker(t *Type) *Type {
+	if isInferencePatternParameter(t) {
+		d := t.AsTypeParameter()
+		if d.rigidInferenceType == nil {
+			d.rigidInferenceType = c.cloneTypeParameter(t)
+			d.rigidInferenceType.AsTypeParameter().mapper = c.rigidInferenceMapper
+		}
+		return d.rigidInferenceType
 	}
 	return t
 }

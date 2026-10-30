@@ -417,12 +417,17 @@ func TestTypeMapperDispatch(t *testing.T) {
 				return target
 			}
 			return typ
-		}), TypeMapperKindFunction, target},
+		}, nil, nil), TypeMapperKindFunction, target},
 		{newCompositeTypeMapper(c, newSimpleTypeMapper(other, target), simple), TypeMapperKindComposite, target},
 	} {
 		assert.Equal(t, test.mapper.Kind(), test.kind)
 		assert.Equal(t, test.mapper.Map(source), test.result)
 		assert.Assert(t, !test.mapper.MapsThisOnly())
+		var state TypeMapperState
+		assert.Assert(t, !test.mapper.Store(nil))
+		assert.Assert(t, !test.mapper.Store(&state))
+		assert.Equal(t, len(state), 0)
+		test.mapper.Load(nil, nil)
 	}
 	assert.Equal(t, compareTypeMappers(simple, newSimpleTypeMapper(source, target)), 0)
 	assert.Equal(t, compareTypeMappers(array, newArrayTypeMapper([]*Type{source, other}, []*Type{target, source})), 0)
@@ -457,6 +462,461 @@ func TestCompactTypeMapperLayout(t *testing.T) {
 	runtime.KeepAlive(c)
 }
 
+func TestStrictSubtypeDoesNotProveConditionalInference(t *testing.T) {
+	t.Parallel()
+	c, primitives := newCompositeTestChecker()
+	c.strictFunctionTypes = true
+	c.anyType = c.newIntrinsicType(TypeFlagsAny, "any")
+	c.assignableRelation = &Relation{}
+	c.strictSubtypeRelation = &Relation{}
+	c.identityRelation = &Relation{}
+	c.emptyObjectType = c.newAnonymousType(nil, nil, nil, nil, nil)
+	c.globalStringType = c.emptyObjectType
+	c.globalNumberType = c.emptyObjectType
+	c.getGlobalNonNullableTypeAliasOrNil = func() *ast.Symbol { return nil }
+	functionType := func(parameterType *Type) *Type {
+		parameter := c.createSymbolWithType(c.newSymbol(ast.SymbolFlagsFunctionScopedVariable, "value"), parameterType)
+		signature := c.newSignature(SignatureFlagsNone, nil, nil, nil, []*ast.Symbol{parameter}, c.unknownType, nil, 1)
+		return c.newAnonymousType(nil, nil, []*Signature{signature}, nil, nil)
+	}
+	constraint := functionType(c.anyType)
+	pattern := functionType(primitives[0])
+	instantiation := functionType(primitives[1])
+	assert.Assert(t, c.isTypeStrictSubtypeOf(constraint, pattern))
+	assert.Assert(t, c.isTypeAssignableTo(instantiation, constraint))
+	assert.Assert(t, !c.isTypeStrictSubtypeOf(instantiation, constraint))
+	assert.Assert(t, !c.isTypeAssignableTo(instantiation, pattern))
+}
+
+func newInferenceRelationTestChecker() (*Checker, []*Type) {
+	c, primitives := newCompositeTestChecker()
+	c.strictFunctionTypes = true
+	c.couldContainTypeVariables = c.couldContainTypeVariablesWorker
+	c.cachedTypes = make(map[CachedTypeKey]*Type)
+	c.anyType = c.newIntrinsicType(TypeFlagsAny, "any")
+	c.voidType = c.newIntrinsicType(TypeFlagsVoid, "void")
+	c.undefinedType = c.newIntrinsicType(TypeFlagsUndefined, "undefined")
+	c.nullType = c.newIntrinsicType(TypeFlagsNull, "null")
+	c.noConstraintType = c.newAnonymousType(nil, nil, nil, nil, nil)
+	c.circularConstraintType = c.newAnonymousType(nil, nil, nil, nil, nil)
+	c.emptyObjectType = c.newAnonymousType(nil, nil, nil, nil, nil)
+	c.emptyTypeLiteralType = c.emptyObjectType
+	c.globalStringType = c.emptyObjectType
+	c.globalNumberType = c.emptyObjectType
+	c.getGlobalNonNullableTypeAliasOrNil = func() *ast.Symbol { return nil }
+	c.assignableRelation = &Relation{}
+	c.subtypeRelation = &Relation{}
+	c.strictSubtypeRelation = &Relation{}
+	c.identityRelation = &Relation{}
+	c.comparableRelation = &Relation{}
+	c.inferencePatternRelation = &Relation{}
+	c.rigidInferenceMapper = newFunctionTypeMapper(c.rigidInferenceMapperWorker, nil, nil)
+	return c, primitives
+}
+
+func newInferencePatternTestParameter(c *Checker) *Type {
+	parameter := c.cloneTypeParameter(c.newTypeParameter(nil))
+	parameter.AsTypeParameter().isInferencePattern = true
+	return parameter
+}
+
+func TestInferencePatternRelationContext(t *testing.T) {
+	t.Parallel()
+	c, primitives := newInferenceRelationTestChecker()
+	first := newInferencePatternTestParameter(c)
+	second := newInferencePatternTestParameter(c)
+	relation := c.inferencePatternRelation
+	assert.Assert(t, c.isTypeRelatedTo(primitives[0], first, relation))
+	assert.Assert(t, !c.isTypeRelatedTo(primitives[0], first.AsTypeParameter().target, relation))
+	assert.Assert(t, !c.isTypeRelatedTo(primitives[0], first, c.assignableRelation))
+	// Captured binders are rigid, even though all comparisons use the same relation.
+	rigidFirst := c.instantiateType(first, c.rigidInferenceMapper)
+	assert.Assert(t, !isInferencePatternParameter(rigidFirst))
+	assert.Equal(t, c.instantiateType(first, c.rigidInferenceMapper), rigidFirst)
+	assert.Assert(t, c.isTypeRelatedTo(first, rigidFirst, relation))
+	assert.Assert(t, c.isTypeRelatedTo(c.unknownType, first, relation))
+	assert.Assert(t, c.isTypeRelatedTo(first, second, relation))
+	assert.Assert(t, !c.isTypeRelatedTo(c.unknownType, c.instantiateType(second, c.rigidInferenceMapper), relation))
+}
+
+func TestInferencePatternRelationRigidConstraints(t *testing.T) {
+	t.Parallel()
+	c, primitives := newInferenceRelationTestChecker()
+	outer := newInferencePatternTestParameter(c)
+	inner := newInferencePatternTestParameter(c)
+	inner.AsTypeParameter().constraint = outer
+	rigidInner := c.instantiateType(inner, c.rigidInferenceMapper)
+	rigidOuter := c.instantiateType(outer, c.rigidInferenceMapper)
+	assert.Equal(t, c.getConstraintOfTypeParameter(rigidInner), rigidOuter)
+	assert.Assert(t, !isInferencePatternParameter(rigidOuter))
+	assert.Assert(t, c.isTypeRelatedTo(inner, rigidOuter, c.inferencePatternRelation))
+	assert.Assert(t, c.isTypeRelatedTo(outer, inner, c.inferencePatternRelation))
+	assert.Assert(t, !c.isTypeRelatedTo(primitives[0], inner, c.inferencePatternRelation))
+	assert.Assert(t, !c.isTypeRelatedTo(primitives[1], inner, c.inferencePatternRelation))
+	assert.Assert(t, c.isTypeRelatedTo(c.neverType, inner, c.inferencePatternRelation))
+}
+
+func TestInferencePatternRelationCacheEffects(t *testing.T) {
+	t.Parallel()
+	c, primitives := newInferenceRelationTestChecker()
+	inferred := newInferencePatternTestParameter(c)
+	relation := c.inferencePatternRelation
+	objectType := func(properties map[string]*Type) *Type {
+		members := ast.NewSymbolTable()
+		for name, typ := range properties {
+			members.Set(name, c.createSymbolWithType(c.newSymbol(ast.SymbolFlagsProperty, name), typ))
+		}
+		return c.newAnonymousType(nil, members, nil, nil, nil)
+	}
+	functionType := func(parameterType *Type) *Type {
+		parameter := c.createSymbolWithType(c.newSymbol(ast.SymbolFlagsFunctionScopedVariable, "value"), parameterType)
+		signature := c.newSignature(SignatureFlagsNone, nil, nil, nil, []*ast.Symbol{parameter}, c.unknownType, nil, 1)
+		return c.newAnonymousType(nil, nil, []*Signature{signature}, nil, nil)
+	}
+	source := objectType(map[string]*Type{"value": primitives[0]})
+	target := objectType(map[string]*Type{"value": inferred})
+	// Record an effect even when that polarity was already observed by the caller.
+	r := c.getRelater()
+	r.relation = relation
+	r.relationCount = 1_000_000
+	r.inferenceUsages = map[*Type]inferenceUsage{inferred: {covariant: 1}}
+	assert.Equal(t, r.isRelatedToSimple(source, target), TernaryTrue)
+	assert.Equal(t, r.inferenceUsages[inferred].covariant, 2)
+	c.putRelater(r)
+	assert.Equal(t, len(r.inferenceUsages), 0)
+	key, _ := c.getRelationKey(source, target, IntersectionStateNone, relation, false)
+	assert.Assert(t, relation.get(key)&RelationComparisonResultSucceeded != 0)
+	assert.Equal(t, relation.inferenceUsages[key][inferred], inferenceUsage{covariant: 1})
+	instantiationProbes := 0
+	couldContainTypeVariables := c.couldContainTypeVariables
+	c.couldContainTypeVariables = func(typ *Type) bool {
+		instantiationProbes++
+		return couldContainTypeVariables(typ)
+	}
+	relation.set(key, relation.get(key)|RelationComparisonResultReportsUnreliable)
+	c.reliabilityFlags = 0
+	freeRelater := c.freeRelater
+	c.freeRelater = nil
+	assert.Assert(t, c.isTypeRelatedTo(source, target, relation))
+	assert.Assert(t, c.freeRelater == nil)
+	c.freeRelater = freeRelater
+	assert.Equal(t, instantiationProbes, 0)
+	assert.Assert(t, c.reliabilityFlags&RelationComparisonResultReportsUnreliable != 0)
+	mixedSource := objectType(map[string]*Type{"child": source, "input": functionType(c.unknownType)})
+	mixedTarget := objectType(map[string]*Type{"child": target, "input": functionType(inferred)})
+	assert.Assert(t, !c.isTypeRelatedTo(mixedSource, mixedTarget, relation))
+	mixedKey, _ := c.getRelationKey(mixedSource, mixedTarget, IntersectionStateNone, relation, false)
+	assert.Assert(t, relation.get(mixedKey)&RelationComparisonResultFailed != 0)
+	assert.Equal(t, relation.inferenceUsages[mixedKey][inferred], inferenceUsage{covariant: 1, contravariant: 1})
+	probesBeforeCacheHit := instantiationProbes
+	freeRelater = c.freeRelater
+	c.freeRelater = nil
+	assert.Assert(t, !c.isTypeRelatedTo(mixedSource, mixedTarget, relation))
+	assert.Assert(t, c.freeRelater == nil)
+	c.freeRelater = freeRelater
+	assert.Equal(t, instantiationProbes, probesBeforeCacheHit)
+	second := newInferencePatternTestParameter(c)
+	secondTarget := objectType(map[string]*Type{"value": second})
+	assert.Assert(t, c.isTypeRelatedTo(source, secondTarget, relation))
+	secondKey, _ := c.getRelationKey(source, secondTarget, IntersectionStateNone, relation, false)
+	assert.Equal(t, relation.inferenceUsages[secondKey][second], inferenceUsage{covariant: 1})
+	assert.Equal(t, relation.inferenceUsages[secondKey][inferred], inferenceUsage{})
+	independentTarget := objectType(map[string]*Type{"child": target, "input": functionType(second)})
+	assert.Assert(t, c.isTypeRelatedTo(mixedSource, independentTarget, relation))
+	secondMixedTarget := objectType(map[string]*Type{"child": secondTarget, "input": functionType(second)})
+	assert.Assert(t, !c.isTypeRelatedTo(mixedSource, secondMixedTarget, relation))
+
+	childSource := objectType(map[string]*Type{"value": primitives[0]})
+	childTarget := objectType(map[string]*Type{"value": inferred})
+	r = c.getRelater()
+	r.relation = relation
+	r.relationCount = 1_000_000
+	r.inferenceUsages = map[*Type]inferenceUsage{inferred: {contravariant: 1}}
+	result := r.isRelatedToSimple(childSource, childTarget)
+	assert.Equal(t, result, TernaryTrue)
+	assert.Equal(t, checkInferencePatternResult(result, r.inferenceUsages), TernaryFalse)
+	c.putRelater(r)
+	childKey, _ := c.getRelationKey(childSource, childTarget, IntersectionStateNone, relation, false)
+	assert.Assert(t, relation.get(childKey)&RelationComparisonResultSucceeded != 0)
+	assert.Equal(t, relation.inferenceUsages[childKey][inferred], inferenceUsage{covariant: 1})
+	assert.Assert(t, c.isTypeRelatedTo(childSource, childTarget, relation))
+}
+
+func TestInferencePatternRelationGenericCacheKeys(t *testing.T) {
+	t.Parallel()
+	c, _ := newInferenceRelationTestChecker()
+	sourceParameter := c.newTypeParameter(nil)
+	first := newInferencePatternTestParameter(c)
+	second := newInferencePatternTestParameter(c)
+	generic := c.newObjectType(ObjectFlagsInterface, nil)
+	generic.AsInterfaceType().instantiations = make(map[CacheHashKey]*Type)
+	source := c.createTypeReference(generic, []*Type{sourceParameter})
+	firstTarget := c.createTypeReference(generic, []*Type{first})
+	secondTarget := c.createTypeReference(generic, []*Type{second})
+	firstKey, _ := c.getRelationKey(source, firstTarget, IntersectionStateNone, c.assignableRelation, false)
+	secondKey, _ := c.getRelationKey(source, secondTarget, IntersectionStateNone, c.assignableRelation, false)
+	assert.Equal(t, firstKey, secondKey)
+	firstKey, _ = c.getRelationKey(source, firstTarget, IntersectionStateNone, c.inferencePatternRelation, false)
+	secondKey, _ = c.getRelationKey(source, secondTarget, IntersectionStateNone, c.inferencePatternRelation, false)
+	assert.Assert(t, firstKey != secondKey)
+}
+
+func TestInferencePatternRelationUnknownIsNotCached(t *testing.T) {
+	t.Parallel()
+	c, _ := newInferenceRelationTestChecker()
+	relation := c.inferencePatternRelation
+	source := c.newAnonymousType(nil, nil, nil, nil, nil)
+	target := c.newAnonymousType(nil, nil, nil, nil, nil)
+	r := c.getRelater()
+	r.relation = relation
+	r.relationCount = 1_000_000
+	r.sourceStack = []*Type{c.emptyObjectType}
+	r.targetStack = []*Type{c.emptyObjectType}
+	r.expandingFlags = ExpandingFlagsBoth
+	assert.Equal(t, r.recursiveTypeRelatedTo(source, target, false, IntersectionStateNone, RecursionFlagsNone), TernaryUnknown)
+	assert.Equal(t, len(r.maybeKeys), 0)
+	key, _ := c.getRelationKey(source, target, IntersectionStateNone, relation, false)
+	assert.Assert(t, !r.maybeKeysSet.Has(key))
+	assert.Equal(t, relation.get(key), RelationComparisonResultNone)
+	c.putRelater(r)
+}
+
+func TestInferencePatternRelationGroundEntailment(t *testing.T) {
+	t.Parallel()
+	c, primitives := newInferenceRelationTestChecker()
+	relation := c.inferencePatternRelation
+	objectType := func(properties map[string]*Type) *Type {
+		members := ast.NewSymbolTable()
+		for name, typ := range properties {
+			members.Set(name, c.createSymbolWithType(c.newSymbol(ast.SymbolFlagsProperty, name), typ))
+		}
+		return c.newAnonymousType(nil, members, nil, nil, nil)
+	}
+	first := objectType(map[string]*Type{"value": primitives[0], "extra": primitives[1]})
+	second := objectType(map[string]*Type{"value": primitives[0]})
+	third := objectType(map[string]*Type{"value": c.unknownType})
+	assert.Assert(t, c.isTypeRelatedTo(first, second, relation))
+	assert.Assert(t, c.isTypeRelatedTo(second, third, relation))
+	assert.Assert(t, c.isTypeRelatedTo(first, third, relation))
+}
+
+func TestInferencePatternRelationIsNotTransitive(t *testing.T) {
+	t.Parallel()
+	c, _ := newInferenceRelationTestChecker()
+	inferred := newInferencePatternTestParameter(c)
+	empty := c.newTypeParameter(nil)
+	empty.AsTypeParameter().constraint = c.neverType
+	relation := c.inferencePatternRelation
+	functionType := func(parameterType *Type) *Type {
+		parameter := c.createSymbolWithType(c.newSymbol(ast.SymbolFlagsFunctionScopedVariable, "value"), parameterType)
+		signature := c.newSignature(SignatureFlagsNone, nil, nil, nil, []*ast.Symbol{parameter}, c.unknownType, nil, 1)
+		return c.newAnonymousType(nil, nil, []*Signature{signature}, nil, nil)
+	}
+	objectType := func(valueType *Type, inputType *Type) *Type {
+		members := ast.NewSymbolTable()
+		members.Set("value", c.createSymbolWithType(c.newSymbol(ast.SymbolFlagsProperty, "value"), valueType))
+		members.Set("input", c.createSymbolWithType(c.newSymbol(ast.SymbolFlagsProperty, "input"), inputType))
+		return c.newAnonymousType(nil, members, nil, nil, nil)
+	}
+	input := functionType(c.unknownType)
+	first := objectType(empty, input)
+	second := objectType(c.neverType, input)
+	third := objectType(inferred, functionType(inferred))
+	assert.Assert(t, c.isTypeRelatedTo(first, second, relation))
+	assert.Assert(t, c.isTypeRelatedTo(second, third, relation))
+	assert.Assert(t, !c.isTypeRelatedTo(first, third, relation))
+}
+
+type functionMapperCacheTestState struct {
+	occurrences   int
+	invalidations int
+}
+
+func newFunctionMapperCacheTest(source *Type, target *Type) (*TypeMapper, *functionMapperCacheTestState) {
+	state := &functionMapperCacheTestState{}
+	mapper := newFunctionTypeMapper(func(typ *Type) *Type {
+		if typ == source {
+			state.occurrences++
+			return target
+		}
+		return typ
+	}, func() any {
+		return *state
+	}, func(before, after any) {
+		previous := before.(functionMapperCacheTestState)
+		current := after.(functionMapperCacheTestState)
+		state.occurrences += min(2, current.occurrences-previous.occurrences)
+		state.invalidations += min(1, current.invalidations-previous.invalidations)
+	})
+	return mapper, state
+}
+
+func TestFunctionMapperCacheHooks(t *testing.T) {
+	t.Parallel()
+	c, _ := newCompositeTestChecker()
+	c.couldContainTypeVariables = c.couldContainTypeVariablesWorker
+	c.templateLiteralTypes = make(map[CacheHashKey]*Type)
+	source := c.newTypeParameter(nil)
+	target := c.newTypeParameter(nil)
+	other := c.newTypeParameter(nil)
+	inner := c.newTemplateLiteralType([]string{"inner-", ""}, []*Type{source})
+	outer := c.newTemplateLiteralType([]string{"", "-", ""}, []*Type{inner, inner})
+	observer, observerState := newFunctionMapperCacheTest(source, target)
+	second, secondState := newFunctionMapperCacheTest(target, other)
+	identity := newSimpleTypeMapper(target, target)
+	for _, test := range []struct {
+		mapper               *TypeMapper
+		secondaryOccurrences int
+	}{
+		{observer, 0},
+		{newMergedTypeMapper(identity, observer), 0},
+		{newMergedTypeMapper(observer, observer), 0},
+		{newCompositeTypeMapper(c, identity, observer), 0},
+		{newCompositeTypeMapper(c, observer, observer), 0},
+		{newCompositeTypeMapper(c, observer, nil), 0},
+		{newMergedTypeMapper(observer, second), 2},
+		{newCompositeTypeMapper(c, observer, second), 2},
+	} {
+		observerState.occurrences = 0
+		secondState.occurrences = 0
+		assert.Assert(t, test.mapper.Store(nil))
+		instantiations := c.TotalInstantiationCount
+		result := c.instantiateType(outer, test.mapper)
+		assert.Equal(t, observerState.occurrences, 2)
+		assert.Equal(t, secondState.occurrences, test.secondaryOccurrences)
+		assert.Equal(t, c.TotalInstantiationCount-instantiations, uint32(2))
+		assert.Assert(t, result != outer)
+	}
+	wholeType, _ := newFunctionMapperCacheTest(inner, c.neverType)
+	assert.Equal(t, c.instantiateType(outer, wholeType), c.neverType)
+}
+
+func TestFunctionMapperCachedInvalidations(t *testing.T) {
+	t.Parallel()
+	c, _ := newCompositeTestChecker()
+	c.couldContainTypeVariables = c.couldContainTypeVariablesWorker
+	c.templateLiteralTypes = make(map[CacheHashKey]*Type)
+	source := c.newTypeParameter(nil)
+	target := c.newTypeParameter(nil)
+	inner := c.newTemplateLiteralType([]string{"inner-", ""}, []*Type{source})
+	outer := c.newTemplateLiteralType([]string{"", "-", ""}, []*Type{inner, inner})
+	observer, state := newFunctionMapperCacheTest(source, target)
+	// Cache invalidation effects even when the mapper was already invalid.
+	state.invalidations = 1
+	invalidations := 0
+	hook := newFunctionTypeMapper(func(typ *Type) *Type {
+		if typ == source {
+			invalidations++
+			state.invalidations++
+		}
+		return typ
+	}, nil, nil)
+	mapper := newMergedTypeMapper(hook, observer)
+	c.instantiateType(outer, mapper)
+	assert.Equal(t, state.occurrences, 2)
+	assert.Equal(t, state.invalidations, 3)
+	assert.Equal(t, invalidations, 1)
+
+	c.pushActiveMapper(mapper)
+	c.instantiateType(inner, mapper)
+	assert.Equal(t, len(c.activeTypeMappersCaches[0]), 1)
+	assert.Equal(t, len(c.activeTypeMapperStateCaches[0]), 1)
+	c.clearActiveMapperCaches()
+	assert.Equal(t, len(c.activeTypeMappersCaches[0]), 0)
+	assert.Equal(t, len(c.activeTypeMapperStateCaches[0]), 0)
+	c.instantiateType(inner, mapper)
+	state.occurrences = 0
+	state.invalidations = 0
+	instantiations := c.TotalInstantiationCount
+	c.instantiateType(inner, mapper)
+	assert.Equal(t, c.TotalInstantiationCount, instantiations)
+	assert.Equal(t, state.occurrences, 1)
+	assert.Equal(t, state.invalidations, 1)
+	c.popActiveMapper()
+	assert.Equal(t, len(c.activeTypeMappersCaches), 0)
+	assert.Equal(t, len(c.activeTypeMapperStateCaches), 0)
+
+	other, otherState := newFunctionMapperCacheTest(source, c.newTypeParameter(nil))
+	c.pushActiveMapper(other)
+	c.instantiateType(inner, other)
+	assert.Equal(t, otherState.occurrences, 1)
+	assert.Equal(t, state.occurrences, 1)
+	assert.Equal(t, state.invalidations, 1)
+	c.popActiveMapper()
+}
+
+func TestFunctionMapperNilCacheState(t *testing.T) {
+	t.Parallel()
+	c, _ := newCompositeTestChecker()
+	c.couldContainTypeVariables = c.couldContainTypeVariablesWorker
+	c.templateLiteralTypes = make(map[CacheHashKey]*Type)
+	source := c.newTypeParameter(nil)
+	target := c.newTypeParameter(nil)
+	inner := c.newTemplateLiteralType([]string{"inner-", ""}, []*Type{source})
+	outer := c.newTemplateLiteralType([]string{"", "-", ""}, []*Type{inner, inner})
+	stores, loads := 0, 0
+	mapper := newFunctionTypeMapper(func(typ *Type) *Type {
+		if typ == source {
+			return target
+		}
+		return typ
+	}, func() any {
+		stores++
+		return nil
+	}, func(before, after any) {
+		assert.Assert(t, before == nil && after == nil)
+		loads++
+	})
+	c.instantiateType(outer, mapper)
+	assert.Equal(t, stores, 2)
+	assert.Equal(t, loads, 1)
+}
+
+func TestFunctionMapperRequiresPairedHandlers(t *testing.T) {
+	t.Parallel()
+	for _, test := range []struct {
+		store func() any
+		load  func(any, any)
+	}{
+		{store: func() any { return nil }},
+		{load: func(any, any) {}},
+	} {
+		func() {
+			defer func() { assert.Assert(t, recover() != nil) }()
+			newFunctionTypeMapper(func(typ *Type) *Type { return typ }, test.store, test.load)
+		}()
+	}
+}
+
+func TestTypeMapperStoreLoadDispatch(t *testing.T) {
+	t.Parallel()
+	stores := [2]int{}
+	loads := [2]int{}
+	newMapper := func(index int) *TypeMapper {
+		return newFunctionTypeMapper(func(typ *Type) *Type { return typ }, func() any {
+			stores[index]++
+			return nil
+		}, func(before, after any) {
+			assert.Assert(t, before == nil && after == nil)
+			loads[index]++
+		})
+	}
+	first, second := newMapper(0), newMapper(1)
+	c, _ := newCompositeTestChecker()
+	mapper := newCompositeTypeMapper(c, newMergedTypeMapper(first, second), first)
+	assert.Assert(t, mapper.Store(nil))
+	assert.Equal(t, stores, [2]int{})
+	var before, after TypeMapperState
+	assert.Assert(t, mapper.Store(&before))
+	assert.Assert(t, mapper.Store(&after))
+	assert.Equal(t, stores, [2]int{2, 2})
+	assert.Equal(t, len(before), 2)
+	assert.Equal(t, len(after), 2)
+	mapper.Load(before, after)
+	mapper.Load(before, after)
+	assert.Equal(t, loads, [2]int{2, 2})
+}
+
 func TestInferenceContextMappers(t *testing.T) { //nolint:paralleltest
 	c, types := newCompositeTestChecker()
 	c.errorType = types[0]
@@ -464,6 +924,10 @@ func TestInferenceContextMappers(t *testing.T) { //nolint:paralleltest
 	info.inferredType = types[1]
 	info.candidates = []*Type{types[1]}
 	context := c.newInferenceContextWorker([]*InferenceInfo{info}, nil, InferenceFlagsNone, nil)
+	var state TypeMapperState
+	assert.Assert(t, !context.nonFixingMapper.Store(&state))
+	assert.Equal(t, len(state), 0)
+	context.nonFixingMapper.Load(nil, nil)
 	assert.Equal(t, context.nonFixingMapper.Map(types[0]), types[1])
 	assert.Assert(t, !info.isFixed)
 	clone := c.cloneInferenceContext(context, InferenceFlagsNone)

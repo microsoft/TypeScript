@@ -1,0 +1,387 @@
+//// [tests/cases/compiler/distributiveConditionalTypeInferencePatterns.ts] ////
+
+=== distributiveConditionalTypeInferencePatterns.ts ===
+namespace IntersectionInference {
+>IntersectionInference : Symbol(IntersectionInference, Decl(distributiveConditionalTypeInferencePatterns.ts, 0, 0))
+
+    type Result<T> = T extends { a: infer U & string; b: infer U } ? T : never;
+>Result : Symbol(Result, Decl(distributiveConditionalTypeInferencePatterns.ts, 0, 33))
+>T : Symbol(T, Decl(distributiveConditionalTypeInferencePatterns.ts, 1, 16))
+>T : Symbol(T, Decl(distributiveConditionalTypeInferencePatterns.ts, 1, 16))
+>a : Symbol(a, Decl(distributiveConditionalTypeInferencePatterns.ts, 1, 32))
+>U : Symbol(U, Decl(distributiveConditionalTypeInferencePatterns.ts, 1, 41), Decl(distributiveConditionalTypeInferencePatterns.ts, 1, 62))
+>b : Symbol(b, Decl(distributiveConditionalTypeInferencePatterns.ts, 1, 53))
+>U : Symbol(U, Decl(distributiveConditionalTypeInferencePatterns.ts, 1, 41), Decl(distributiveConditionalTypeInferencePatterns.ts, 1, 62))
+>T : Symbol(T, Decl(distributiveConditionalTypeInferencePatterns.ts, 1, 16))
+
+    type NonDistributive<T> = [T] extends [{ a: infer U & string; b: infer U }] ? T : never;
+>NonDistributive : Symbol(NonDistributive, Decl(distributiveConditionalTypeInferencePatterns.ts, 1, 79))
+>T : Symbol(T, Decl(distributiveConditionalTypeInferencePatterns.ts, 2, 25))
+>T : Symbol(T, Decl(distributiveConditionalTypeInferencePatterns.ts, 2, 25))
+>a : Symbol(a, Decl(distributiveConditionalTypeInferencePatterns.ts, 2, 44))
+>U : Symbol(U, Decl(distributiveConditionalTypeInferencePatterns.ts, 2, 53), Decl(distributiveConditionalTypeInferencePatterns.ts, 2, 74))
+>b : Symbol(b, Decl(distributiveConditionalTypeInferencePatterns.ts, 2, 65))
+>U : Symbol(U, Decl(distributiveConditionalTypeInferencePatterns.ts, 2, 53), Decl(distributiveConditionalTypeInferencePatterns.ts, 2, 74))
+>T : Symbol(T, Decl(distributiveConditionalTypeInferencePatterns.ts, 2, 25))
+
+    export function generic<T extends { a: string; b: number }>(value: T): Result<T> {
+>generic : Symbol(generic, Decl(distributiveConditionalTypeInferencePatterns.ts, 2, 92))
+>T : Symbol(T, Decl(distributiveConditionalTypeInferencePatterns.ts, 4, 28))
+>a : Symbol(a, Decl(distributiveConditionalTypeInferencePatterns.ts, 4, 39))
+>b : Symbol(b, Decl(distributiveConditionalTypeInferencePatterns.ts, 4, 50))
+>value : Symbol(value, Decl(distributiveConditionalTypeInferencePatterns.ts, 4, 64))
+>T : Symbol(T, Decl(distributiveConditionalTypeInferencePatterns.ts, 4, 28))
+>Result : Symbol(Result, Decl(distributiveConditionalTypeInferencePatterns.ts, 0, 33))
+>T : Symbol(T, Decl(distributiveConditionalTypeInferencePatterns.ts, 4, 28))
+
+        return value; // Error: string is removed before inferring U from b.
+>value : Symbol(value, Decl(distributiveConditionalTypeInferencePatterns.ts, 4, 64))
+    }
+
+    export function nonDistributive<T extends { a: string; b: number }>(value: T): NonDistributive<T> {
+>nonDistributive : Symbol(nonDistributive, Decl(distributiveConditionalTypeInferencePatterns.ts, 6, 5))
+>T : Symbol(T, Decl(distributiveConditionalTypeInferencePatterns.ts, 8, 36))
+>a : Symbol(a, Decl(distributiveConditionalTypeInferencePatterns.ts, 8, 47))
+>b : Symbol(b, Decl(distributiveConditionalTypeInferencePatterns.ts, 8, 58))
+>value : Symbol(value, Decl(distributiveConditionalTypeInferencePatterns.ts, 8, 72))
+>T : Symbol(T, Decl(distributiveConditionalTypeInferencePatterns.ts, 8, 36))
+>NonDistributive : Symbol(NonDistributive, Decl(distributiveConditionalTypeInferencePatterns.ts, 1, 79))
+>T : Symbol(T, Decl(distributiveConditionalTypeInferencePatterns.ts, 8, 36))
+
+        return value; // Error
+>value : Symbol(value, Decl(distributiveConditionalTypeInferencePatterns.ts, 8, 72))
+    }
+
+    export const rejected: Result<{ a: string; b: number }> = { a: "", b: 1 }; // Error
+>rejected : Symbol(rejected, Decl(distributiveConditionalTypeInferencePatterns.ts, 12, 16))
+>Result : Symbol(Result, Decl(distributiveConditionalTypeInferencePatterns.ts, 0, 33))
+>a : Symbol(a, Decl(distributiveConditionalTypeInferencePatterns.ts, 12, 35))
+>b : Symbol(b, Decl(distributiveConditionalTypeInferencePatterns.ts, 12, 46))
+>a : Symbol(a, Decl(distributiveConditionalTypeInferencePatterns.ts, 12, 63))
+>b : Symbol(b, Decl(distributiveConditionalTypeInferencePatterns.ts, 12, 70))
+
+    export const accepted: Result<{ a: string; b: string }> = { a: "", b: "" };
+>accepted : Symbol(accepted, Decl(distributiveConditionalTypeInferencePatterns.ts, 13, 16))
+>Result : Symbol(Result, Decl(distributiveConditionalTypeInferencePatterns.ts, 0, 33))
+>a : Symbol(a, Decl(distributiveConditionalTypeInferencePatterns.ts, 13, 35))
+>b : Symbol(b, Decl(distributiveConditionalTypeInferencePatterns.ts, 13, 46))
+>a : Symbol(a, Decl(distributiveConditionalTypeInferencePatterns.ts, 13, 63))
+>b : Symbol(b, Decl(distributiveConditionalTypeInferencePatterns.ts, 13, 70))
+
+    type Covariant<T> = T extends { a: infer U; b: infer U } ? T : never;
+>Covariant : Symbol(Covariant, Decl(distributiveConditionalTypeInferencePatterns.ts, 13, 79))
+>T : Symbol(T, Decl(distributiveConditionalTypeInferencePatterns.ts, 15, 19))
+>T : Symbol(T, Decl(distributiveConditionalTypeInferencePatterns.ts, 15, 19))
+>a : Symbol(a, Decl(distributiveConditionalTypeInferencePatterns.ts, 15, 35))
+>U : Symbol(U, Decl(distributiveConditionalTypeInferencePatterns.ts, 15, 44), Decl(distributiveConditionalTypeInferencePatterns.ts, 15, 56))
+>b : Symbol(b, Decl(distributiveConditionalTypeInferencePatterns.ts, 15, 47))
+>U : Symbol(U, Decl(distributiveConditionalTypeInferencePatterns.ts, 15, 44), Decl(distributiveConditionalTypeInferencePatterns.ts, 15, 56))
+>T : Symbol(T, Decl(distributiveConditionalTypeInferencePatterns.ts, 15, 19))
+
+    type ObjectIntersection<T> = T extends { a: infer U } & { b: number } ? T : never;
+>ObjectIntersection : Symbol(ObjectIntersection, Decl(distributiveConditionalTypeInferencePatterns.ts, 15, 73))
+>T : Symbol(T, Decl(distributiveConditionalTypeInferencePatterns.ts, 16, 28))
+>T : Symbol(T, Decl(distributiveConditionalTypeInferencePatterns.ts, 16, 28))
+>a : Symbol(a, Decl(distributiveConditionalTypeInferencePatterns.ts, 16, 44))
+>U : Symbol(U, Decl(distributiveConditionalTypeInferencePatterns.ts, 16, 53))
+>b : Symbol(b, Decl(distributiveConditionalTypeInferencePatterns.ts, 16, 61))
+>T : Symbol(T, Decl(distributiveConditionalTypeInferencePatterns.ts, 16, 28))
+
+    export function covariant<T extends { a: string; b: number }>(value: T): Covariant<T> {
+>covariant : Symbol(covariant, Decl(distributiveConditionalTypeInferencePatterns.ts, 16, 86))
+>T : Symbol(T, Decl(distributiveConditionalTypeInferencePatterns.ts, 18, 30))
+>a : Symbol(a, Decl(distributiveConditionalTypeInferencePatterns.ts, 18, 41))
+>b : Symbol(b, Decl(distributiveConditionalTypeInferencePatterns.ts, 18, 52))
+>value : Symbol(value, Decl(distributiveConditionalTypeInferencePatterns.ts, 18, 66))
+>T : Symbol(T, Decl(distributiveConditionalTypeInferencePatterns.ts, 18, 30))
+>Covariant : Symbol(Covariant, Decl(distributiveConditionalTypeInferencePatterns.ts, 13, 79))
+>T : Symbol(T, Decl(distributiveConditionalTypeInferencePatterns.ts, 18, 30))
+
+        return value;
+>value : Symbol(value, Decl(distributiveConditionalTypeInferencePatterns.ts, 18, 66))
+    }
+
+    export function objectIntersection<T extends { a: string; b: number }>(value: T): ObjectIntersection<T> {
+>objectIntersection : Symbol(objectIntersection, Decl(distributiveConditionalTypeInferencePatterns.ts, 20, 5))
+>T : Symbol(T, Decl(distributiveConditionalTypeInferencePatterns.ts, 22, 39))
+>a : Symbol(a, Decl(distributiveConditionalTypeInferencePatterns.ts, 22, 50))
+>b : Symbol(b, Decl(distributiveConditionalTypeInferencePatterns.ts, 22, 61))
+>value : Symbol(value, Decl(distributiveConditionalTypeInferencePatterns.ts, 22, 75))
+>T : Symbol(T, Decl(distributiveConditionalTypeInferencePatterns.ts, 22, 39))
+>ObjectIntersection : Symbol(ObjectIntersection, Decl(distributiveConditionalTypeInferencePatterns.ts, 15, 73))
+>T : Symbol(T, Decl(distributiveConditionalTypeInferencePatterns.ts, 22, 39))
+
+        return value;
+>value : Symbol(value, Decl(distributiveConditionalTypeInferencePatterns.ts, 22, 75))
+    }
+}
+
+namespace DependentConstraints {
+>DependentConstraints : Symbol(DependentConstraints, Decl(distributiveConditionalTypeInferencePatterns.ts, 25, 1))
+
+    interface Dep<A, B extends A> {
+>Dep : Symbol(Dep, Decl(distributiveConditionalTypeInferencePatterns.ts, 27, 32))
+>A : Symbol(A, Decl(distributiveConditionalTypeInferencePatterns.ts, 28, 18))
+>B : Symbol(B, Decl(distributiveConditionalTypeInferencePatterns.ts, 28, 20))
+>A : Symbol(A, Decl(distributiveConditionalTypeInferencePatterns.ts, 28, 18))
+
+        a: A;
+>a : Symbol(Dep.a, Decl(distributiveConditionalTypeInferencePatterns.ts, 28, 35))
+>A : Symbol(A, Decl(distributiveConditionalTypeInferencePatterns.ts, 28, 18))
+
+        b: B;
+>b : Symbol(Dep.b, Decl(distributiveConditionalTypeInferencePatterns.ts, 29, 13))
+>B : Symbol(B, Decl(distributiveConditionalTypeInferencePatterns.ts, 28, 20))
+    }
+
+    type Result<T> = T extends Dep<infer A, infer B> ? T : never;
+>Result : Symbol(Result, Decl(distributiveConditionalTypeInferencePatterns.ts, 31, 5))
+>T : Symbol(T, Decl(distributiveConditionalTypeInferencePatterns.ts, 33, 16))
+>T : Symbol(T, Decl(distributiveConditionalTypeInferencePatterns.ts, 33, 16))
+>Dep : Symbol(Dep, Decl(distributiveConditionalTypeInferencePatterns.ts, 27, 32))
+>A : Symbol(A, Decl(distributiveConditionalTypeInferencePatterns.ts, 33, 40))
+>B : Symbol(B, Decl(distributiveConditionalTypeInferencePatterns.ts, 33, 49))
+>T : Symbol(T, Decl(distributiveConditionalTypeInferencePatterns.ts, 33, 16))
+
+    type NonDistributive<T> = [T] extends [Dep<infer A, infer B>] ? T : never;
+>NonDistributive : Symbol(NonDistributive, Decl(distributiveConditionalTypeInferencePatterns.ts, 33, 65))
+>T : Symbol(T, Decl(distributiveConditionalTypeInferencePatterns.ts, 34, 25))
+>T : Symbol(T, Decl(distributiveConditionalTypeInferencePatterns.ts, 34, 25))
+>Dep : Symbol(Dep, Decl(distributiveConditionalTypeInferencePatterns.ts, 27, 32))
+>A : Symbol(A, Decl(distributiveConditionalTypeInferencePatterns.ts, 34, 52))
+>B : Symbol(B, Decl(distributiveConditionalTypeInferencePatterns.ts, 34, 61))
+>T : Symbol(T, Decl(distributiveConditionalTypeInferencePatterns.ts, 34, 25))
+
+    export function generic<T extends { a: string; b: number }>(value: T): Result<T> {
+>generic : Symbol(generic, Decl(distributiveConditionalTypeInferencePatterns.ts, 34, 78))
+>T : Symbol(T, Decl(distributiveConditionalTypeInferencePatterns.ts, 36, 28))
+>a : Symbol(a, Decl(distributiveConditionalTypeInferencePatterns.ts, 36, 39))
+>b : Symbol(b, Decl(distributiveConditionalTypeInferencePatterns.ts, 36, 50))
+>value : Symbol(value, Decl(distributiveConditionalTypeInferencePatterns.ts, 36, 64))
+>T : Symbol(T, Decl(distributiveConditionalTypeInferencePatterns.ts, 36, 28))
+>Result : Symbol(Result, Decl(distributiveConditionalTypeInferencePatterns.ts, 31, 5))
+>T : Symbol(T, Decl(distributiveConditionalTypeInferencePatterns.ts, 36, 28))
+
+        return value; // Error: the inferred B must satisfy the same A.
+>value : Symbol(value, Decl(distributiveConditionalTypeInferencePatterns.ts, 36, 64))
+    }
+
+    export function nonDistributive<T extends { a: string; b: number }>(value: T): NonDistributive<T> {
+>nonDistributive : Symbol(nonDistributive, Decl(distributiveConditionalTypeInferencePatterns.ts, 38, 5))
+>T : Symbol(T, Decl(distributiveConditionalTypeInferencePatterns.ts, 40, 36))
+>a : Symbol(a, Decl(distributiveConditionalTypeInferencePatterns.ts, 40, 47))
+>b : Symbol(b, Decl(distributiveConditionalTypeInferencePatterns.ts, 40, 58))
+>value : Symbol(value, Decl(distributiveConditionalTypeInferencePatterns.ts, 40, 72))
+>T : Symbol(T, Decl(distributiveConditionalTypeInferencePatterns.ts, 40, 36))
+>NonDistributive : Symbol(NonDistributive, Decl(distributiveConditionalTypeInferencePatterns.ts, 33, 65))
+>T : Symbol(T, Decl(distributiveConditionalTypeInferencePatterns.ts, 40, 36))
+
+        return value; // Error
+>value : Symbol(value, Decl(distributiveConditionalTypeInferencePatterns.ts, 40, 72))
+    }
+
+    export const rejected: Result<{ a: string; b: number }> = { a: "", b: 1 }; // Error
+>rejected : Symbol(rejected, Decl(distributiveConditionalTypeInferencePatterns.ts, 44, 16))
+>Result : Symbol(Result, Decl(distributiveConditionalTypeInferencePatterns.ts, 31, 5))
+>a : Symbol(a, Decl(distributiveConditionalTypeInferencePatterns.ts, 44, 35))
+>b : Symbol(b, Decl(distributiveConditionalTypeInferencePatterns.ts, 44, 46))
+>a : Symbol(a, Decl(distributiveConditionalTypeInferencePatterns.ts, 44, 63))
+>b : Symbol(b, Decl(distributiveConditionalTypeInferencePatterns.ts, 44, 70))
+
+    export const accepted: Result<{ a: string; b: string }> = { a: "", b: "" };
+>accepted : Symbol(accepted, Decl(distributiveConditionalTypeInferencePatterns.ts, 45, 16))
+>Result : Symbol(Result, Decl(distributiveConditionalTypeInferencePatterns.ts, 31, 5))
+>a : Symbol(a, Decl(distributiveConditionalTypeInferencePatterns.ts, 45, 35))
+>b : Symbol(b, Decl(distributiveConditionalTypeInferencePatterns.ts, 45, 46))
+>a : Symbol(a, Decl(distributiveConditionalTypeInferencePatterns.ts, 45, 63))
+>b : Symbol(b, Decl(distributiveConditionalTypeInferencePatterns.ts, 45, 70))
+
+    interface Independent<A, B extends string> {
+>Independent : Symbol(Independent, Decl(distributiveConditionalTypeInferencePatterns.ts, 45, 79))
+>A : Symbol(A, Decl(distributiveConditionalTypeInferencePatterns.ts, 47, 26))
+>B : Symbol(B, Decl(distributiveConditionalTypeInferencePatterns.ts, 47, 28))
+
+        a: A;
+>a : Symbol(Independent.a, Decl(distributiveConditionalTypeInferencePatterns.ts, 47, 48))
+>A : Symbol(A, Decl(distributiveConditionalTypeInferencePatterns.ts, 47, 26))
+
+        b: B;
+>b : Symbol(Independent.b, Decl(distributiveConditionalTypeInferencePatterns.ts, 48, 13))
+>B : Symbol(B, Decl(distributiveConditionalTypeInferencePatterns.ts, 47, 28))
+    }
+
+    type IndependentResult<T> = T extends Independent<infer A, infer B> ? T : never;
+>IndependentResult : Symbol(IndependentResult, Decl(distributiveConditionalTypeInferencePatterns.ts, 50, 5))
+>T : Symbol(T, Decl(distributiveConditionalTypeInferencePatterns.ts, 52, 27))
+>T : Symbol(T, Decl(distributiveConditionalTypeInferencePatterns.ts, 52, 27))
+>Independent : Symbol(Independent, Decl(distributiveConditionalTypeInferencePatterns.ts, 45, 79))
+>A : Symbol(A, Decl(distributiveConditionalTypeInferencePatterns.ts, 52, 59))
+>B : Symbol(B, Decl(distributiveConditionalTypeInferencePatterns.ts, 52, 68))
+>T : Symbol(T, Decl(distributiveConditionalTypeInferencePatterns.ts, 52, 27))
+
+    export function independent<T extends { a: number; b: string }>(value: T): IndependentResult<T> {
+>independent : Symbol(independent, Decl(distributiveConditionalTypeInferencePatterns.ts, 52, 84))
+>T : Symbol(T, Decl(distributiveConditionalTypeInferencePatterns.ts, 54, 32))
+>a : Symbol(a, Decl(distributiveConditionalTypeInferencePatterns.ts, 54, 43))
+>b : Symbol(b, Decl(distributiveConditionalTypeInferencePatterns.ts, 54, 54))
+>value : Symbol(value, Decl(distributiveConditionalTypeInferencePatterns.ts, 54, 68))
+>T : Symbol(T, Decl(distributiveConditionalTypeInferencePatterns.ts, 54, 32))
+>IndependentResult : Symbol(IndependentResult, Decl(distributiveConditionalTypeInferencePatterns.ts, 50, 5))
+>T : Symbol(T, Decl(distributiveConditionalTypeInferencePatterns.ts, 54, 32))
+
+        return value;
+>value : Symbol(value, Decl(distributiveConditionalTypeInferencePatterns.ts, 54, 68))
+    }
+}
+
+namespace InferredBranchDependence {
+>InferredBranchDependence : Symbol(InferredBranchDependence, Decl(distributiveConditionalTypeInferencePatterns.ts, 57, 1))
+
+    type Box<T> = T extends infer U ? { value?: U } : never;
+>Box : Symbol(Box, Decl(distributiveConditionalTypeInferencePatterns.ts, 59, 36))
+>T : Symbol(T, Decl(distributiveConditionalTypeInferencePatterns.ts, 60, 13))
+>T : Symbol(T, Decl(distributiveConditionalTypeInferencePatterns.ts, 60, 13))
+>U : Symbol(U, Decl(distributiveConditionalTypeInferencePatterns.ts, 60, 33))
+>value : Symbol(value, Decl(distributiveConditionalTypeInferencePatterns.ts, 60, 39))
+>U : Symbol(U, Decl(distributiveConditionalTypeInferencePatterns.ts, 60, 33))
+
+    type PropertyBox<T> = T extends { value: infer U } ? { copy?: U } : never;
+>PropertyBox : Symbol(PropertyBox, Decl(distributiveConditionalTypeInferencePatterns.ts, 60, 60))
+>T : Symbol(T, Decl(distributiveConditionalTypeInferencePatterns.ts, 61, 21))
+>T : Symbol(T, Decl(distributiveConditionalTypeInferencePatterns.ts, 61, 21))
+>value : Symbol(value, Decl(distributiveConditionalTypeInferencePatterns.ts, 61, 37))
+>U : Symbol(U, Decl(distributiveConditionalTypeInferencePatterns.ts, 61, 50))
+>copy : Symbol(copy, Decl(distributiveConditionalTypeInferencePatterns.ts, 61, 58))
+>U : Symbol(U, Decl(distributiveConditionalTypeInferencePatterns.ts, 61, 50))
+
+    type Constant<T> = T extends infer U ? { done: true } : never;
+>Constant : Symbol(Constant, Decl(distributiveConditionalTypeInferencePatterns.ts, 61, 78))
+>T : Symbol(T, Decl(distributiveConditionalTypeInferencePatterns.ts, 62, 18))
+>T : Symbol(T, Decl(distributiveConditionalTypeInferencePatterns.ts, 62, 18))
+>U : Symbol(U, Decl(distributiveConditionalTypeInferencePatterns.ts, 62, 38))
+>done : Symbol(done, Decl(distributiveConditionalTypeInferencePatterns.ts, 62, 44))
+
+    export function box<T>(): Box<T> {
+>box : Symbol(box, Decl(distributiveConditionalTypeInferencePatterns.ts, 62, 66))
+>T : Symbol(T, Decl(distributiveConditionalTypeInferencePatterns.ts, 64, 24))
+>Box : Symbol(Box, Decl(distributiveConditionalTypeInferencePatterns.ts, 59, 36))
+>T : Symbol(T, Decl(distributiveConditionalTypeInferencePatterns.ts, 64, 24))
+
+        return {}; // Error: Box<never> is never even though the branch only references U.
+    }
+
+    export function propertyBox<T extends { value: unknown }>(): PropertyBox<T> {
+>propertyBox : Symbol(propertyBox, Decl(distributiveConditionalTypeInferencePatterns.ts, 66, 5))
+>T : Symbol(T, Decl(distributiveConditionalTypeInferencePatterns.ts, 68, 32))
+>value : Symbol(value, Decl(distributiveConditionalTypeInferencePatterns.ts, 68, 43))
+>PropertyBox : Symbol(PropertyBox, Decl(distributiveConditionalTypeInferencePatterns.ts, 60, 60))
+>T : Symbol(T, Decl(distributiveConditionalTypeInferencePatterns.ts, 68, 32))
+
+        return {}; // Error
+    }
+
+    export function constant<T>(): Constant<T> {
+>constant : Symbol(constant, Decl(distributiveConditionalTypeInferencePatterns.ts, 70, 5))
+>T : Symbol(T, Decl(distributiveConditionalTypeInferencePatterns.ts, 72, 29))
+>Constant : Symbol(Constant, Decl(distributiveConditionalTypeInferencePatterns.ts, 61, 78))
+>T : Symbol(T, Decl(distributiveConditionalTypeInferencePatterns.ts, 72, 29))
+
+        return { done: true }; // Error: an unused infer binder still requires a nonempty check type.
+>done : Symbol(done, Decl(distributiveConditionalTypeInferencePatterns.ts, 73, 16))
+    }
+
+    export const rejectedBox: Box<never> = {}; // Error
+>rejectedBox : Symbol(rejectedBox, Decl(distributiveConditionalTypeInferencePatterns.ts, 76, 16))
+>Box : Symbol(Box, Decl(distributiveConditionalTypeInferencePatterns.ts, 59, 36))
+
+    export const rejectedProperty: PropertyBox<never> = {}; // Error
+>rejectedProperty : Symbol(rejectedProperty, Decl(distributiveConditionalTypeInferencePatterns.ts, 77, 16))
+>PropertyBox : Symbol(PropertyBox, Decl(distributiveConditionalTypeInferencePatterns.ts, 60, 60))
+
+    export const rejectedConstant: Constant<never> = { done: true }; // Error
+>rejectedConstant : Symbol(rejectedConstant, Decl(distributiveConditionalTypeInferencePatterns.ts, 78, 16))
+>Constant : Symbol(Constant, Decl(distributiveConditionalTypeInferencePatterns.ts, 61, 78))
+>done : Symbol(done, Decl(distributiveConditionalTypeInferencePatterns.ts, 78, 54))
+
+    type NonDistributive<T> = [T] extends [infer U] ? { value?: U } : never;
+>NonDistributive : Symbol(NonDistributive, Decl(distributiveConditionalTypeInferencePatterns.ts, 78, 68))
+>T : Symbol(T, Decl(distributiveConditionalTypeInferencePatterns.ts, 80, 25))
+>T : Symbol(T, Decl(distributiveConditionalTypeInferencePatterns.ts, 80, 25))
+>U : Symbol(U, Decl(distributiveConditionalTypeInferencePatterns.ts, 80, 48))
+>value : Symbol(value, Decl(distributiveConditionalTypeInferencePatterns.ts, 80, 55))
+>U : Symbol(U, Decl(distributiveConditionalTypeInferencePatterns.ts, 80, 48))
+
+    export function nonDistributive<T>(): NonDistributive<T> {
+>nonDistributive : Symbol(nonDistributive, Decl(distributiveConditionalTypeInferencePatterns.ts, 80, 76))
+>T : Symbol(T, Decl(distributiveConditionalTypeInferencePatterns.ts, 82, 36))
+>NonDistributive : Symbol(NonDistributive, Decl(distributiveConditionalTypeInferencePatterns.ts, 78, 68))
+>T : Symbol(T, Decl(distributiveConditionalTypeInferencePatterns.ts, 82, 36))
+
+        return {};
+    }
+
+    export const emptyNonDistributive: NonDistributive<never> = {};
+>emptyNonDistributive : Symbol(emptyNonDistributive, Decl(distributiveConditionalTypeInferencePatterns.ts, 86, 16))
+>NonDistributive : Symbol(NonDistributive, Decl(distributiveConditionalTypeInferencePatterns.ts, 78, 68))
+
+    export function nonNeverUnion<T>(): Box<T | number> {
+>nonNeverUnion : Symbol(nonNeverUnion, Decl(distributiveConditionalTypeInferencePatterns.ts, 86, 67))
+>T : Symbol(T, Decl(distributiveConditionalTypeInferencePatterns.ts, 88, 34))
+>Box : Symbol(Box, Decl(distributiveConditionalTypeInferencePatterns.ts, 59, 36))
+>T : Symbol(T, Decl(distributiveConditionalTypeInferencePatterns.ts, 88, 34))
+
+        return {};
+    }
+
+    export function nonNeverProperty<T extends { value: unknown }>(): PropertyBox<T | { value: number }> {
+>nonNeverProperty : Symbol(nonNeverProperty, Decl(distributiveConditionalTypeInferencePatterns.ts, 90, 5))
+>T : Symbol(T, Decl(distributiveConditionalTypeInferencePatterns.ts, 92, 37))
+>value : Symbol(value, Decl(distributiveConditionalTypeInferencePatterns.ts, 92, 48))
+>PropertyBox : Symbol(PropertyBox, Decl(distributiveConditionalTypeInferencePatterns.ts, 60, 60))
+>T : Symbol(T, Decl(distributiveConditionalTypeInferencePatterns.ts, 92, 37))
+>value : Symbol(value, Decl(distributiveConditionalTypeInferencePatterns.ts, 92, 87))
+
+        return {};
+    }
+
+    export function nonNeverObject<T>(): Box<{ value: T }> {
+>nonNeverObject : Symbol(nonNeverObject, Decl(distributiveConditionalTypeInferencePatterns.ts, 94, 5))
+>T : Symbol(T, Decl(distributiveConditionalTypeInferencePatterns.ts, 96, 35))
+>Box : Symbol(Box, Decl(distributiveConditionalTypeInferencePatterns.ts, 59, 36))
+>value : Symbol(value, Decl(distributiveConditionalTypeInferencePatterns.ts, 96, 46))
+>T : Symbol(T, Decl(distributiveConditionalTypeInferencePatterns.ts, 96, 35))
+
+        return {};
+    }
+
+    export function nonNeverConditional<T>(): Box<[T] extends [never] ? { value: T } : number> {
+>nonNeverConditional : Symbol(nonNeverConditional, Decl(distributiveConditionalTypeInferencePatterns.ts, 98, 5))
+>T : Symbol(T, Decl(distributiveConditionalTypeInferencePatterns.ts, 100, 40))
+>Box : Symbol(Box, Decl(distributiveConditionalTypeInferencePatterns.ts, 59, 36))
+>T : Symbol(T, Decl(distributiveConditionalTypeInferencePatterns.ts, 100, 40))
+>value : Symbol(value, Decl(distributiveConditionalTypeInferencePatterns.ts, 100, 73))
+>T : Symbol(T, Decl(distributiveConditionalTypeInferencePatterns.ts, 100, 40))
+
+        return {};
+    }
+
+    type Identity<T> = T extends infer U ? U : never;
+>Identity : Symbol(Identity, Decl(distributiveConditionalTypeInferencePatterns.ts, 102, 5))
+>T : Symbol(T, Decl(distributiveConditionalTypeInferencePatterns.ts, 104, 18))
+>T : Symbol(T, Decl(distributiveConditionalTypeInferencePatterns.ts, 104, 18))
+>U : Symbol(U, Decl(distributiveConditionalTypeInferencePatterns.ts, 104, 38))
+>U : Symbol(U, Decl(distributiveConditionalTypeInferencePatterns.ts, 104, 38))
+
+    export function identity<T>(value: T): Identity<T> {
+>identity : Symbol(identity, Decl(distributiveConditionalTypeInferencePatterns.ts, 104, 53))
+>T : Symbol(T, Decl(distributiveConditionalTypeInferencePatterns.ts, 106, 29))
+>value : Symbol(value, Decl(distributiveConditionalTypeInferencePatterns.ts, 106, 32))
+>T : Symbol(T, Decl(distributiveConditionalTypeInferencePatterns.ts, 106, 29))
+>Identity : Symbol(Identity, Decl(distributiveConditionalTypeInferencePatterns.ts, 102, 5))
+>T : Symbol(T, Decl(distributiveConditionalTypeInferencePatterns.ts, 106, 29))
+
+        return value;
+>value : Symbol(value, Decl(distributiveConditionalTypeInferencePatterns.ts, 106, 32))
+    }
+}
+

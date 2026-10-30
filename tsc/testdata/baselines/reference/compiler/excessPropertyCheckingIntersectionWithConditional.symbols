@@ -17,7 +17,7 @@ const createDefaultExample = <K,>(x: K): Foo<K> & { x: K; } => {
 >x : Symbol(x, Decl(excessPropertyCheckingIntersectionWithConditional.ts, 1, 51))
 >K : Symbol(K, Decl(excessPropertyCheckingIntersectionWithConditional.ts, 1, 30))
 
-  return { a: 1, x: x }; // okay in TS 4.7.4, error in TS 4.8.2
+  return { a: 1, x: x };
 >a : Symbol(a, Decl(excessPropertyCheckingIntersectionWithConditional.ts, 2, 10))
 >x : Symbol(x, Decl(excessPropertyCheckingIntersectionWithConditional.ts, 2, 16))
 >x : Symbol(x, Decl(excessPropertyCheckingIntersectionWithConditional.ts, 1, 34))

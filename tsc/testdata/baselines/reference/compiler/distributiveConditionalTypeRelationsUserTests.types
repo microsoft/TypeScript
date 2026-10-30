@@ -1,0 +1,258 @@
+//// [tests/cases/compiler/distributiveConditionalTypeRelationsUserTests.ts] ////
+
+=== distributiveConditionalTypeRelationsUserTests.ts ===
+namespace Inquirer {
+>Inquirer : typeof Inquirer
+
+    type Answer<R extends boolean> = R extends true ? number : number | undefined;
+>Answer : Answer<R>
+>true : true
+
+    export function answer<R extends boolean>(validate: (value: Answer<R>) => boolean, value: number) {
+>answer : <R extends boolean>(validate: (value: Answer<R>) => boolean, value: number) => boolean
+>validate : (value: Answer<R>) => boolean
+>value : Answer<R>
+>value : number
+
+        return validate(value);
+>validate(value) : boolean
+>validate : (value: Answer<R>) => boolean
+>value : number
+    }
+}
+
+namespace VSCode {
+>VSCode : typeof VSCode
+
+    interface Separator {
+        separator: true;
+>separator : true
+>true : true
+    }
+
+    export class QuickPick<T, O extends { useSeparators: boolean }> {
+>QuickPick : QuickPick<T, O>
+>useSeparators : boolean
+
+        private items: O extends { useSeparators: true } ? (T | Separator)[] : T[] = [];
+>items : O extends { useSeparators: true; } ? (T | Separator)[] : T[]
+>useSeparators : true
+>true : true
+>[] : never[]
+    }
+}
+
+namespace Fabric {
+>Fabric : typeof Fabric
+
+    type Easing<T> = T extends number[]
+>Easing : Easing<T>
+
+        ? (time: number, start: number, delta: number, duration: number, index: number) => number
+>time : number
+>start : number
+>delta : number
+>duration : number
+>index : number
+
+        : (time: number, start: number, delta: number, duration: number) => number;
+>time : number
+>start : number
+>delta : number
+>duration : number
+
+    const defaultEasing = (time: number, start: number, delta: number, duration: number) => start;
+>defaultEasing : (time: number, start: number, delta: number, duration: number) => number
+>(time: number, start: number, delta: number, duration: number) => start : (time: number, start: number, delta: number, duration: number) => number
+>time : number
+>start : number
+>delta : number
+>duration : number
+>start : number
+
+    export function easing<T extends number | number[]>(): Easing<T> {
+>easing : <T extends number | number[]>() => Easing<T>
+
+        return defaultEasing;
+>defaultEasing : (time: number, start: number, delta: number, duration: number) => number
+    }
+}
+
+namespace Supabase {
+>Supabase : typeof Supabase
+
+    interface Row {
+        id: number;
+>id : number
+
+        columns?: string[];
+>columns : string[] | undefined
+    }
+
+    type Selected<T extends boolean | undefined> = T extends true ? Row : Omit<Row, "columns">;
+>Selected : Selected<T>
+>true : true
+
+    export function rows<T extends boolean | undefined>(value: Row[]): Selected<T>[] {
+>rows : <T extends boolean | undefined>(value: Row[]) => Selected<T>[]
+>value : Row[]
+
+        return value;
+>value : Row[]
+    }
+}
+
+namespace Lexical {
+>Lexical : typeof Lexical
+
+    class Slot {
+>Slot : Slot
+
+        value = 0;
+>value : number
+>0 : 0
+    }
+
+    class ElementSlot extends Slot {
+>ElementSlot : ElementSlot
+>Slot : Slot
+
+        element = true;
+>element : boolean
+>true : true
+
+        withAfter(): ElementSlot {
+>withAfter : () => ElementSlot
+
+            return this;
+>this : this
+        }
+    }
+
+    class BaseNode {
+>BaseNode : BaseNode
+
+        node = true;
+>node : boolean
+>true : true
+    }
+
+    type SlotForNode<N extends BaseNode> = N extends ElementNode ? ElementSlot : Slot;
+>SlotForNode : SlotForNode<N>
+
+    declare function getSlot<N extends BaseNode>(node: N): SlotForNode<N>;
+>getSlot : <N extends BaseNode>(node: N) => SlotForNode<N>
+>node : N
+
+    export class ElementNode extends BaseNode {
+>ElementNode : ElementNode
+>BaseNode : BaseNode
+
+        element = true;
+>element : boolean
+>true : true
+
+        refresh() {
+>refresh : () => void
+
+            let slot = getSlot(this);
+>slot : SlotForNode<this>
+>getSlot(this) : SlotForNode<this>
+>getSlot : <N extends BaseNode>(node: N) => SlotForNode<N>
+>this : this
+
+            slot = slot.withAfter();
+>slot = slot.withAfter() : ElementSlot
+>slot : SlotForNode<this>
+>slot.withAfter() : ElementSlot
+>slot.withAfter : () => ElementSlot
+>slot : SlotForNode<this>
+>withAfter : () => ElementSlot
+        }
+    }
+}
+
+namespace LobeHub {
+>LobeHub : typeof LobeHub
+
+    type RequestResult<Data, Throw extends boolean> = Throw extends true ? Promise<Data> : Promise<Data | undefined>;
+>RequestResult : RequestResult<Data, Throw>
+>true : true
+
+    export const request: <Data, Throw extends boolean>(
+>request : <Data, Throw extends boolean>(data: Data, flag: Throw) => RequestResult<Data, Throw>
+
+        data: Data,
+>data : Data
+
+        flag: Throw,
+>flag : Throw
+
+    ) => RequestResult<Data, Throw> = async (data, flag) => data;
+>async (data, flag) => data : <Data, Throw extends boolean>(data: Data, flag: Throw) => Promise<Data>
+>data : Data
+>flag : Throw
+>data : Data
+}
+
+namespace Effect {
+>Effect : typeof Effect
+
+    interface Box<T> {
+        value: T;
+>value : T
+    }
+
+    type With<S extends Iterable<any>, T> = S extends readonly [any, ...any[]] ? [T, ...T[]] : T[];
+>With : With<S, T>
+
+    export function join<A extends Iterable<Box<any>>>(
+>join : <A extends Iterable<Box<any>>>(value: [any, ...any[]]) => With<A, A extends Iterable<Box<infer T>> ? T : never>
+
+        value: [any, ...any[]],
+>value : [any, ...any[]]
+
+    ): With<A, A extends Iterable<Box<infer T>> ? T : never> {
+        return value;
+>value : [any, ...any[]]
+    }
+
+    type Result<T> = [T] extends [Box<infer U>] ? Box<U> : never;
+>Result : Result<T>
+
+    export function result<T extends Box<any>>(value: Box<any>): Result<T> {
+>result : <T extends Box<any>>(value: Box<any>) => Result<T>
+>value : Box<any>
+
+        return value;
+>value : Box<any>
+    }
+}
+
+namespace NonDistributive {
+>NonDistributive : typeof NonDistributive
+
+    export function answer<R extends boolean>(value: number): [R] extends [true] ? number : number | undefined {
+>answer : <R extends boolean>(value: number) => [R] extends [true] ? number : number | undefined
+>value : number
+>true : true
+
+        return value;
+>value : number
+    }
+
+    export function items<T, O extends { useSeparators: boolean }>():
+>items : <T, O extends { useSeparators: boolean; }>() => [O] extends [{ useSeparators: true; }] ? (T | { separator: true; })[] : T[]
+>useSeparators : boolean
+
+        [O] extends [{ useSeparators: true }] ? (T | { separator: true })[] : T[] {
+>useSeparators : true
+>true : true
+>separator : true
+>true : true
+
+        return [];
+>[] : never[]
+    }
+}
+

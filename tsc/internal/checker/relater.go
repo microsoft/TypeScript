@@ -1,6 +1,7 @@
 package checker
 
 import (
+	"maps"
 	"math/bits"
 	"slices"
 	"strconv"
@@ -19,13 +20,14 @@ import (
 type SignatureCheckMode uint32
 
 const (
-	SignatureCheckModeNone               SignatureCheckMode = 0
-	SignatureCheckModeBivariantCallback  SignatureCheckMode = 1 << 0
-	SignatureCheckModeStrictCallback     SignatureCheckMode = 1 << 1
-	SignatureCheckModeIgnoreReturnTypes  SignatureCheckMode = 1 << 2
-	SignatureCheckModeStrictArity        SignatureCheckMode = 1 << 3
-	SignatureCheckModeStrictTopSignature SignatureCheckMode = 1 << 4
-	SignatureCheckModeCallback           SignatureCheckMode = SignatureCheckModeBivariantCallback | SignatureCheckModeStrictCallback
+	SignatureCheckModeNone                 SignatureCheckMode = 0
+	SignatureCheckModeBivariantCallback    SignatureCheckMode = 1 << 0
+	SignatureCheckModeStrictCallback       SignatureCheckMode = 1 << 1
+	SignatureCheckModeIgnoreReturnTypes    SignatureCheckMode = 1 << 2
+	SignatureCheckModeStrictArity          SignatureCheckMode = 1 << 3
+	SignatureCheckModeStrictTopSignature   SignatureCheckMode = 1 << 4
+	SignatureCheckModeIgnoreParameterTypes SignatureCheckMode = 1 << 5
+	SignatureCheckModeCallback             SignatureCheckMode = SignatureCheckModeBivariantCallback | SignatureCheckModeStrictCallback
 )
 
 type MinArgumentCountFlags uint32
@@ -97,7 +99,8 @@ func asRecursionId[T *ast.Node | *ast.Symbol | *Type](value T) RecursionId {
 }
 
 type Relation struct {
-	results map[CacheHashKey]RelationComparisonResult
+	results         map[CacheHashKey]RelationComparisonResult
+	inferenceUsages map[CacheHashKey]map[*Type]inferenceUsage
 }
 
 func (r *Relation) get(key CacheHashKey) RelationComparisonResult {
@@ -168,36 +171,48 @@ func (c *Checker) areTypesComparable(type1 *Type, type2 *Type) bool {
 }
 
 func (c *Checker) isTypeRelatedTo(source *Type, target *Type, relation *Relation) bool {
-	if isFreshLiteralType(source) {
-		source = source.AsLiteralType().regularType
-	}
-	if isFreshLiteralType(target) {
-		target = target.AsLiteralType().regularType
-	}
-	if source == target {
-		return true
-	}
-	if relation != c.identityRelation {
-		if relation == c.comparableRelation && target.flags&TypeFlagsNever == 0 && c.isSimpleTypeRelatedTo(target, source, relation, nil) || c.isSimpleTypeRelatedTo(source, target, relation, nil) {
+	// Pattern matching needs rigid source parameters and infer-usage observations,
+	// which identity/simple compatibility shortcuts cannot provide. The result
+	// cache below can still be used by replaying its recorded effects.
+	if relation != c.inferencePatternRelation {
+		if isFreshLiteralType(source) {
+			source = source.AsLiteralType().regularType
+		}
+		if isFreshLiteralType(target) {
+			target = target.AsLiteralType().regularType
+		}
+		if source == target {
 			return true
 		}
-	} else if !((source.flags|target.flags)&(TypeFlagsUnionOrIntersection|TypeFlagsIndexedAccess|TypeFlagsConditional|TypeFlagsSubstitution) != 0) {
-		// We have excluded types that may simplify to other forms, so types must have identical flags
-		if source.flags != target.flags {
-			return false
-		}
-		if source.flags&TypeFlagsSingleton != 0 {
-			return true
+		if relation != c.identityRelation {
+			if relation == c.comparableRelation && target.flags&TypeFlagsNever == 0 && c.isSimpleTypeRelatedTo(target, source, relation, nil) || c.isSimpleTypeRelatedTo(source, target, relation, nil) {
+				return true
+			}
+		} else if !((source.flags|target.flags)&(TypeFlagsUnionOrIntersection|TypeFlagsIndexedAccess|TypeFlagsConditional|TypeFlagsSubstitution) != 0) {
+			// We have excluded types that may simplify to other forms, so types must have identical flags
+			if source.flags != target.flags {
+				return false
+			}
+			if source.flags&TypeFlagsSingleton != 0 {
+				return true
+			}
 		}
 	}
 	if source.flags&TypeFlagsObject != 0 && target.flags&TypeFlagsObject != 0 {
-		id, _ := getRelationKey(source, target, IntersectionStateNone, relation == c.identityRelation, false)
+		id, _ := c.getRelationKey(source, target, IntersectionStateNone, relation, false)
 		related := relation.get(id)
 		if related != RelationComparisonResultNone {
+			// Pattern results are checked before caching. At the top level only
+			// reliability effects need replaying; no enclosing infer uses can conflict.
+			if relation == c.inferencePatternRelation {
+				c.reliabilityFlags |= related & (RelationComparisonResultReportsUnmeasurable | RelationComparisonResultReportsUnreliable)
+			}
 			return related&RelationComparisonResultSucceeded != 0
 		}
 	}
-	if source.flags&TypeFlagsStructuredOrInstantiable != 0 || target.flags&TypeFlagsStructuredOrInstantiable != 0 {
+	// Scalar patterns also need the inference-pattern rules, not the compatibility
+	// shortcuts above (for example, never succeeds without an inference candidate).
+	if relation == c.inferencePatternRelation || source.flags&TypeFlagsStructuredOrInstantiable != 0 || target.flags&TypeFlagsStructuredOrInstantiable != 0 {
 		return c.checkTypeRelatedTo(source, target, relation, nil /*errorNode*/)
 	}
 	return false
@@ -369,9 +384,14 @@ func (c *Checker) checkTypeRelatedToEx(
 	r.errorNode = errorNode
 	r.relationCount = (16_000_000 - relation.size()) / 8
 	result := r.isRelatedToEx(source, target, RecursionFlagsBoth, errorNode != nil /*reportErrors*/, headMessage, IntersectionStateNone)
+	// Subcomparisons cache only their local infer uses. Combining them can introduce
+	// conflicting binder choices, and coinductive success is not branch reachability.
+	if relation == c.inferencePatternRelation {
+		result = checkInferencePatternResult(result, r.inferenceUsages)
+	}
 	if r.overflow {
 		// Record this relation as having failed such that we don't attempt the overflowing operation again.
-		id, _ := getRelationKey(source, target, IntersectionStateNone, relation == c.identityRelation, false /*ignoreConstraints*/)
+		id, _ := c.getRelationKey(source, target, IntersectionStateNone, relation, false /*ignoreConstraints*/)
 		relation.set(id, RelationComparisonResultFailed|RelationComparisonResultComplexityOverflow)
 		if tr := c.tracer; tr != nil {
 			tr.Instant(tracing.PhaseCheckTypes, "checkTypeRelatedTo_DepthLimit", map[string]any{"sourceId": source.id, "targetId": target.id, "depth": len(r.sourceStack), "targetDepth": len(r.targetStack)})
@@ -1491,6 +1511,11 @@ func (c *Checker) isSignatureAssignableTo(source *Signature, target *Signature, 
 	return c.compareSignaturesRelated(source, target, core.IfElse(ignoreReturnTypes, SignatureCheckModeIgnoreReturnTypes, SignatureCheckModeNone), false /*reportErrors*/, nil /*errorReporter*/, c.compareTypesAssignable, nil /*reportUnreliableMarkers*/) != TernaryFalse
 }
 
+func isBivariantSignature(signature *Signature) bool {
+	return signature.declaration != nil && (signature.declaration.Kind == ast.KindMethodDeclaration ||
+		signature.declaration.Kind == ast.KindMethodSignature || signature.declaration.Kind == ast.KindConstructor)
+}
+
 func (c *Checker) compareSignaturesRelated(source *Signature, target *Signature, checkMode SignatureCheckMode, reportErrors bool, errorReporter ErrorReporter, compareTypes TypeComparer, reportUnreliableMarkers *TypeMapper) Ternary {
 	if source == target {
 		return TernaryTrue
@@ -1528,11 +1553,7 @@ func (c *Checker) compareSignaturesRelated(source *Signature, target *Signature,
 	if sourceRestType != nil || targetRestType != nil {
 		c.instantiateType(core.IfElse(sourceRestType != nil, sourceRestType, targetRestType), reportUnreliableMarkers)
 	}
-	kind := ast.KindUnknown
-	if target.declaration != nil {
-		kind = target.declaration.Kind
-	}
-	strictVariance := checkMode&SignatureCheckModeCallback == 0 && c.strictFunctionTypes && kind != ast.KindMethodDeclaration && kind != ast.KindMethodSignature && kind != ast.KindConstructor
+	strictVariance := checkMode&SignatureCheckModeCallback == 0 && c.strictFunctionTypes && !isBivariantSignature(target)
 	result := TernaryTrue
 	sourceThisType := c.getThisTypeOfSignature(source)
 	if sourceThisType != nil && sourceThisType != c.voidType {
@@ -1568,6 +1589,9 @@ func (c *Checker) compareSignaturesRelated(source *Signature, target *Signature,
 		restIndex = -1
 	}
 	for i := range paramCount {
+		if checkMode&SignatureCheckModeIgnoreParameterTypes != 0 {
+			break
+		}
 		var sourceType *Type
 		if i == restIndex {
 			sourceType = c.getRestOrAnyTypeAtPosition(source, i)
@@ -2582,22 +2606,28 @@ type ErrorChain struct {
 }
 
 type Relater struct {
-	c              *Checker
-	relation       *Relation
-	errorNode      *ast.Node
-	errorChain     *ErrorChain
-	relatedInfo    []*ast.Diagnostic
-	maybeKeys      []CacheHashKey
-	maybeKeysSet   collections.Set[CacheHashKey]
-	sourceStack    []*Type
-	targetStack    []*Type
-	maybeCount     int
-	sourceDepth    int
-	targetDepth    int
-	expandingFlags ExpandingFlags
-	overflow       bool
-	relationCount  int
-	next           *Relater
+	c               *Checker
+	relation        *Relation
+	errorNode       *ast.Node
+	errorChain      *ErrorChain
+	relatedInfo     []*ast.Diagnostic
+	maybeKeys       []CacheHashKey
+	maybeKeysSet    collections.Set[CacheHashKey]
+	sourceStack     []*Type
+	targetStack     []*Type
+	maybeCount      int
+	sourceDepth     int
+	targetDepth     int
+	expandingFlags  ExpandingFlags
+	overflow        bool
+	relationCount   int
+	inferenceUsages map[*Type]inferenceUsage
+	next            *Relater
+}
+
+type inferenceUsage struct {
+	covariant     int
+	contravariant int
 }
 
 func (c *Checker) getRelater() *Relater {
@@ -2611,15 +2641,47 @@ func (c *Checker) getRelater() *Relater {
 
 func (c *Checker) putRelater(r *Relater) {
 	r.maybeKeysSet.Clear()
+	clear(r.inferenceUsages)
 	*r = Relater{
-		c:            c,
-		maybeKeys:    r.maybeKeys[:0],
-		maybeKeysSet: r.maybeKeysSet,
-		sourceStack:  r.sourceStack[:0],
-		targetStack:  r.targetStack[:0],
-		next:         c.freeRelater,
+		c:               c,
+		maybeKeys:       r.maybeKeys[:0],
+		maybeKeysSet:    r.maybeKeysSet,
+		sourceStack:     r.sourceStack[:0],
+		targetStack:     r.targetStack[:0],
+		inferenceUsages: r.inferenceUsages,
+		next:            c.freeRelater,
 	}
 	c.freeRelater = r
+}
+
+func (r *Relater) recordInferenceUsage(parameter *Type, usage inferenceUsage) {
+	if r.inferenceUsages == nil {
+		r.inferenceUsages = make(map[*Type]inferenceUsage)
+	}
+	current := r.inferenceUsages[parameter]
+	current.covariant += usage.covariant
+	current.contravariant += usage.contravariant
+	r.inferenceUsages[parameter] = current
+}
+
+func (r *Relater) loadCachedRelationResult(id CacheHashKey, entry RelationComparisonResult) Ternary {
+	for parameter, usage := range r.relation.inferenceUsages[id] {
+		r.recordInferenceUsage(parameter, usage)
+	}
+	r.c.reliabilityFlags |= entry & (RelationComparisonResultReportsUnmeasurable | RelationComparisonResultReportsUnreliable)
+	return core.IfElse(entry&RelationComparisonResultSucceeded != 0, TernaryTrue, TernaryFalse)
+}
+
+func checkInferencePatternResult(result Ternary, usages map[*Type]inferenceUsage) Ternary {
+	if result != TernaryTrue {
+		return TernaryFalse
+	}
+	for _, usage := range usages {
+		if usage.covariant != 0 && usage.contravariant != 0 {
+			return TernaryFalse
+		}
+	}
+	return TernaryTrue
 }
 
 func (r *Relater) isRelatedToSimple(source *Type, target *Type) Ternary {
@@ -2635,6 +2697,31 @@ func (r *Relater) isRelatedTo(source *Type, target *Type, recursionFlags Recursi
 }
 
 func (r *Relater) isRelatedToEx(originalSource *Type, originalTarget *Type, recursionFlags RecursionFlags, reportErrors bool, headMessage *diagnostics.Message, intersectionState IntersectionState) Ternary {
+	// Marked parameters are existential only in the target; captured source uses
+	// must be rigid. Handle binders before identity/constraint shortcuts so their
+	// variance and bounds are checked rather than treating them as ordinary parameters.
+	if r.relation == r.c.inferencePatternRelation {
+		originalSource = r.c.instantiateType(originalSource, r.c.rigidInferenceMapper)
+		if originalSource.flags&TypeFlagsNever != 0 {
+			// never supplies no inference candidate, so it must not record a variance.
+			return TernaryTrue
+		}
+		if isInferencePatternParameter(originalTarget) {
+			r.recordInferenceUsage(originalTarget, inferenceUsage{covariant: 1})
+			constraint := r.c.getConstraintOfTypeParameter(originalTarget)
+			if constraint == nil {
+				return TernaryTrue
+			}
+			// A referenced infer binder constrains this match; it is not another inference site.
+			constraint = r.c.instantiateType(constraint, r.c.rigidInferenceMapper)
+			return r.isRelatedToEx(originalSource, constraint, recursionFlags, false, nil, intersectionState)
+		}
+		// Intersection inference removes matching constituents before selecting candidates.
+		// Independent wildcard matches do not establish that the resulting binding works.
+		if originalTarget.flags&TypeFlagsIntersection != 0 && core.Some(originalTarget.Types(), isInferencePatternParameter) {
+			return TernaryFalse
+		}
+	}
 	if originalSource == originalTarget {
 		return TernaryTrue
 	}
@@ -2658,6 +2745,24 @@ func (r *Relater) isRelatedToEx(originalSource *Type, originalTarget *Type, recu
 	target := r.c.getNormalizedType(originalTarget, true /*writing*/)
 	if source == target {
 		return TernaryTrue
+	}
+	// Compatibility of a bound is weaker than matching every argument it admits.
+	// Leave unresolved operations and mapped patterns unmatched: instantiation can
+	// change their shape or inference sites beyond what this structural matcher handles.
+	if r.relation == r.c.inferencePatternRelation {
+		if target.flags&TypeFlagsAnyOrUnknown != 0 {
+			// Top targets impose no matching requirement, even when the source is any.
+			return TernaryTrue
+		}
+		// any admits arguments that fail nontrivial patterns. Likewise, a structural
+		// object bound can admit primitives, so it does not establish the object keyword.
+		if source.flags&TypeFlagsAny != 0 ||
+			target.flags&(TypeFlagsConditional|TypeFlagsIndexedAccess|TypeFlagsIndex|TypeFlagsTemplateLiteral|TypeFlagsStringMapping) != 0 ||
+			source.flags&TypeFlagsConditional != 0 ||
+			target.objectFlags&ObjectFlagsMapped != 0 ||
+			source.flags&TypeFlagsObject != 0 && target.flags&TypeFlagsNonPrimitive != 0 {
+			return TernaryFalse
+		}
 	}
 	if r.relation == r.c.identityRelation {
 		if source.flags != target.flags {
@@ -3120,20 +3225,19 @@ func (r *Relater) recursiveTypeRelatedTo(source *Type, target *Type, reportError
 		// important to have well-defined behavior even in cases that shouldn't normally occur.
 		return TernaryFalse
 	}
-	id, constrained := getRelationKey(source, target, intersectionState, r.relation == r.c.identityRelation, false /*ignoreConstraints*/)
+	id, constrained := r.c.getRelationKey(source, target, intersectionState, r.relation, false /*ignoreConstraints*/)
 	if entry := r.relation.get(id); entry != RelationComparisonResultNone {
 		if reportErrors && entry&RelationComparisonResultFailed != 0 && entry&RelationComparisonResultOverflow == 0 {
 			// We are elaborating errors and the cached result is a failure not due to a comparison overflow,
 			// so we will do the comparison again to generate an error message.
 		} else {
-			r.c.reliabilityFlags |= entry & (RelationComparisonResultReportsUnmeasurable | RelationComparisonResultReportsUnreliable)
+			// A cached pattern result must replay binder observations; otherwise an
+			// enclosing comparison could miss a conflicting use in the opposite variance.
+			result := r.loadCachedRelationResult(id, entry)
 			if reportErrors && entry&RelationComparisonResultOverflow != 0 {
 				r.reportError(diagnostics.Excessive_complexity_comparing_types_0_and_1, r.c.TypeToString(source), r.c.TypeToString(target))
 			}
-			if entry&RelationComparisonResultSucceeded != 0 {
-				return TernaryTrue
-			}
-			return TernaryFalse
+			return result
 		}
 	}
 	if r.relationCount <= 0 {
@@ -3142,14 +3246,24 @@ func (r *Relater) recursiveTypeRelatedTo(source *Type, target *Type, reportError
 	}
 	// If source and target are already being compared, consider them related with assumptions
 	if r.maybeKeysSet.Has(id) {
+		// A structural cycle can close coinductively for assignment/subtyping, but
+		// assuming it matches could skip inference sites needed for pattern matching.
+		if r.relation == r.c.inferencePatternRelation {
+			return TernaryUnknown
+		}
 		return TernaryMaybe
 	}
 	// A constrained key indicates that we have type references that reference constrained
 	// type parameters. For such keys we also check against the key we would have gotten if all type parameters
 	// were unconstrained.
 	if constrained {
-		broadestEquivalentId, _ := getRelationKey(source, target, intersectionState, r.relation == r.c.identityRelation, true /*ignoreConstraints*/)
+		broadestEquivalentId, _ := r.c.getRelationKey(source, target, intersectionState, r.relation, true /*ignoreConstraints*/)
 		if r.maybeKeysSet.Has(broadestEquivalentId) {
+			// An equivalent recursive comparison is still only an assumption, not
+			// evidence that every argument satisfies the pattern and its infer bounds.
+			if r.relation == r.c.inferencePatternRelation {
+				return TernaryUnknown
+			}
 			return TernaryMaybe
 		}
 	}
@@ -3157,7 +3271,8 @@ func (r *Relater) recursiveTypeRelatedTo(source *Type, target *Type, reportError
 		// We stop relating if we reach 100 levels of nesting. This is a backstop to catch infinite recursion
 		// that wasn't caught by isDeeplyNestedType. It will also stop relating types that truly are over 100
 		// levels deep, but those are exceedingly rare.
-		return TernaryMaybe
+		// Depth exhaustion must not become positive evidence of an irrefutable match.
+		return core.IfElse(r.relation == r.c.inferencePatternRelation, TernaryUnknown, TernaryMaybe)
 	}
 	maybeStart := len(r.maybeKeys)
 	r.maybeKeys = append(r.maybeKeys, id)
@@ -3177,17 +3292,61 @@ func (r *Relater) recursiveTypeRelatedTo(source *Type, target *Type, reportError
 	}
 	saveReliabilityFlags := r.c.reliabilityFlags
 	r.c.reliabilityFlags = 0
+	var inferenceBefore map[*Type]inferenceUsage
+	// Pattern-cache entries need the binder effects of this comparison, not just
+	// truth/reliability flags. Counters preserve effects already seen by the caller.
+	if r.relation == r.c.inferencePatternRelation {
+		inferenceBefore = maps.Clone(r.inferenceUsages)
+	}
 	var result Ternary
 	if r.expandingFlags == ExpandingFlagsBoth {
 		if tr := r.c.tracer; tr != nil {
 			tr.Instant(tracing.PhaseCheckTypes, "recursiveTypeRelatedTo_DepthLimit", map[string]any{"sourceId": source.id, "targetId": target.id, "depth": len(r.sourceStack), "targetDepth": len(r.targetStack)})
 		}
-		result = TernaryMaybe
+		// Expanding structures can justify a coinductive relation, but do not
+		// establish that all admitted arguments match an inference pattern.
+		result = core.IfElse(r.relation == r.c.inferencePatternRelation, TernaryUnknown, TernaryMaybe)
 	} else {
 		if tr := r.c.tracer; tr != nil {
 			defer tr.Push(tracing.PhaseCheckTypes, "structuredTypeRelatedTo", map[string]any{"sourceId": source.id, "targetId": target.id}, false)()
 		}
 		result = r.structuredTypeRelatedTo(source, target, reportErrors, intersectionState)
+	}
+	// Ordinary relations may commit assumed successes while unwinding recursion.
+	// Pattern matching must leave those results unknown and cache binder effects with
+	// definite results so a later cache hit cannot silently bypass inference consistency.
+	if r.relation == r.c.inferencePatternRelation {
+		if result == TernaryMaybe {
+			result = TernaryUnknown
+		}
+		if result == TernaryTrue || result == TernaryFalse {
+			var usages map[*Type]inferenceUsage
+			for parameter, usage := range r.inferenceUsages {
+				// Replay each observed direction once; multiplicity does not affect consistency.
+				var cachedUsage inferenceUsage
+				if usage.covariant != inferenceBefore[parameter].covariant {
+					cachedUsage.covariant = 1
+				}
+				if usage.contravariant != inferenceBefore[parameter].contravariant {
+					cachedUsage.contravariant = 1
+				}
+				if cachedUsage != (inferenceUsage{}) {
+					if usages == nil {
+						usages = make(map[*Type]inferenceUsage)
+					}
+					usages[parameter] = cachedUsage
+				}
+			}
+			if len(usages) != 0 {
+				if r.relation.inferenceUsages == nil {
+					r.relation.inferenceUsages = make(map[CacheHashKey]map[*Type]inferenceUsage)
+				}
+				r.relation.inferenceUsages[id] = usages
+			}
+			// Check only this pair's observations before caching its result.
+			// Uses from earlier siblings are not part of this pair's cache key.
+			result = checkInferencePatternResult(result, usages)
+		}
 	}
 	propagatingVarianceFlags := r.c.reliabilityFlags
 	r.c.reliabilityFlags |= saveReliabilityFlags
@@ -3199,7 +3358,9 @@ func (r *Relater) recursiveTypeRelatedTo(source *Type, target *Type, reportError
 	}
 	r.expandingFlags = saveExpandingFlags
 	if result != TernaryFalse {
-		if result == TernaryTrue || (len(r.sourceStack) == 0 && len(r.targetStack) == 0) {
+		// Unresolved pattern comparisons must discard pending keys immediately; a successful
+		// ancestor must not promote an unchecked comparison into a cached success.
+		if result == TernaryTrue || (len(r.sourceStack) == 0 && len(r.targetStack) == 0) || r.relation == r.c.inferencePatternRelation {
 			if result == TernaryTrue || result == TernaryMaybe {
 				// If result is definitely true, record all maybe keys as having succeeded. Also, record Ternary.Maybe
 				// results as having succeeded once we reach depth 0, but never record Ternary.Unknown results.
@@ -3444,7 +3605,9 @@ func (r *Relater) structuredTypeRelatedToWorker(source *Type, target *Type, repo
 	// We limit alias variance probing to only object and conditional types since their alias behavior
 	// is more predictable than other, interned types, which may or may not have an alias depending on
 	// the order in which things were checked.
-	if source.flags&(TypeFlagsObject|TypeFlagsConditional) != 0 && source.alias != nil && len(source.alias.typeArguments) != 0 &&
+	// Alias variances describe ordinary type arguments, not existential binders.
+	// Inspect the body to observe each infer site's variance and detect conflicts.
+	if r.relation != r.c.inferencePatternRelation && source.flags&(TypeFlagsObject|TypeFlagsConditional) != 0 && source.alias != nil && len(source.alias.typeArguments) != 0 &&
 		target.alias != nil && source.alias.symbol == target.alias.symbol && !(r.c.isMarkerType(source) || r.c.isMarkerType(target)) {
 		variances := r.c.getAliasVariances(source.alias.symbol)
 		if len(variances) == 0 {
@@ -3598,31 +3761,9 @@ func (r *Relater) structuredTypeRelatedToWorker(source *Type, target *Type, repo
 		if r.c.isDeeplyNestedType(target, r.targetStack, 10) {
 			return TernaryMaybe
 		}
-		c := target.AsConditionalType()
-		// We check for a relationship to a conditional type target only when the conditional type has no
-		// 'infer' positions, is not distributive or is distributive but doesn't reference the check type
-		// parameter in either of the result types, and the source isn't an instantiation of the same
-		// conditional type (as happens when computing variance).
-		if c.root.inferTypeParameters == nil && !r.c.isDistributionDependent(c.root) && !(source.flags&TypeFlagsConditional != 0 && source.AsConditionalType().root == c.root) {
-			// Check if the conditional is always true or always false but still deferred for distribution purposes.
-			skipTrue := !r.c.isTypeAssignableTo(r.c.getPermissiveInstantiation(c.checkType), r.c.getPermissiveInstantiation(c.extendsType))
-			skipFalse := !skipTrue && r.c.isTypeAssignableTo(r.c.getRestrictiveInstantiation(c.checkType), r.c.getRestrictiveInstantiation(c.extendsType))
-			// TODO: Find a nice way to include potential conditional type breakdowns in error output, if they seem good (they usually don't)
-			if skipTrue {
-				result = TernaryTrue
-			} else {
-				result = r.isRelatedToEx(source, r.c.getTrueTypeFromConditionalType(target), RecursionFlagsTarget, false /*reportErrors*/, nil /*headMessage*/, intersectionState)
-			}
-			if result != TernaryFalse {
-				if skipFalse {
-					result &= TernaryTrue
-				} else {
-					result &= r.isRelatedToEx(source, r.c.getFalseTypeFromConditionalType(target), RecursionFlagsTarget, false /*reportErrors*/, nil /*headMessage*/, intersectionState)
-				}
-				if result != TernaryFalse {
-					return result
-				}
-			}
+		result = r.typeRelatedToConditionalType(source, target, intersectionState)
+		if result != TernaryFalse {
+			return result
 		}
 	case target.flags&TypeFlagsTemplateLiteral != 0:
 		if source.flags&TypeFlagsTemplateLiteral != 0 {
@@ -3873,7 +4014,9 @@ func (r *Relater) structuredTypeRelatedToWorker(source *Type, target *Type, repo
 			return TernaryFalse
 		}
 		switch {
-		case source.objectFlags&ObjectFlagsReference != 0 && target.objectFlags&ObjectFlagsReference != 0 && source.Target() == target.Target() && !isTupleType(source) && !r.c.isMarkerType(source) && !r.c.isMarkerType(target):
+		// Same-target argument comparison can hide mixed infer positions inside
+		// members; inference-pattern comparisons must traverse those members instead.
+		case r.relation != r.c.inferencePatternRelation && source.objectFlags&ObjectFlagsReference != 0 && target.objectFlags&ObjectFlagsReference != 0 && source.Target() == target.Target() && !isTupleType(source) && !r.c.isMarkerType(source) && !r.c.isMarkerType(target):
 			// When strictNullChecks is disabled, the element type of the empty array literal is undefinedWideningType,
 			// and an empty array literal wouldn't be assignable to a `never[]` without this check.
 			if r.c.isEmptyArrayLiteralType(source) {
@@ -4284,7 +4427,11 @@ func (r *Relater) propertiesRelatedTo(source *Type, target *Type, reportErrors b
 			return TernaryFalse
 		}
 	}
-	requireOptionalProperties := (r.relation == r.c.subtypeRelation || r.relation == r.c.strictSubtypeRelation) && !isObjectLiteralType(source) && !r.c.isEmptyArrayLiteralType(source) && !isTupleType(source)
+	// An optional property omitted by a bound can be added with an incompatible
+	// type by an admitted argument. Require it even for fresh objects and tuples,
+	// where assignment/subtyping can otherwise allow omission.
+	requireOptionalProperties := r.relation == r.c.inferencePatternRelation ||
+		(r.relation == r.c.subtypeRelation || r.relation == r.c.strictSubtypeRelation) && !isObjectLiteralType(source) && !r.c.isEmptyArrayLiteralType(source) && !isTupleType(source)
 	unmatchedProperty := r.c.getUnmatchedProperty(source, target, requireOptionalProperties, false /*matchDiscriminantProperties*/)
 	if unmatchedProperty != nil {
 		if reportErrors && r.c.shouldReportUnmatchedPropertyError(source, target) {
@@ -4498,7 +4645,9 @@ func (r *Relater) signaturesRelatedTo(source *Type, target *Type, kind Signature
 		return r.signaturesIdenticalTo(source, target, kind)
 	}
 	// With respect to signatures, the anyFunctionType wildcard is a subtype of every other function type.
-	if source == r.c.anyFunctionType {
+	// That compatibility wildcard supplies no concrete signature guaranteeing that
+	// every admitted argument matches an inference pattern.
+	if source == r.c.anyFunctionType && r.relation != r.c.inferencePatternRelation {
 		return TernaryTrue
 	}
 	if target == r.c.anyFunctionType {
@@ -4602,6 +4751,45 @@ func (r *Relater) signatureRelatedTo(source *Signature, target *Signature, erase
 		checkMode = SignatureCheckModeStrictTopSignature
 	case r.relation == r.c.strictSubtypeRelation:
 		checkMode = SignatureCheckModeStrictTopSignature | SignatureCheckModeStrictArity
+	// Assignment/subtyping compare the displayed signatures. A pattern match must
+	// remain valid with narrowed parameter domains and added overloads in admitted arguments.
+	case r.relation == r.c.inferencePatternRelation:
+		// Optional/rest domains, this parameters, and predicates need additional
+		// universal reasoning; ordinary signature compatibility is not sufficient.
+		if r.c.hasEffectiveRestParameter(target) || r.c.getThisTypeOfSignature(target) != nil || r.c.getTypePredicateOfSignature(target) != nil ||
+			r.c.getMinArgumentCount(target) != r.c.getParameterCount(target) {
+			return TernaryFalse
+		}
+		// Do not infer source generics from the target as assignment does: that
+		// could introduce the target's existential binders into the source.
+		source = r.c.getBaseSignature(source)
+		for i := range r.c.getParameterCount(target) {
+			parameterType := r.c.getTypeAtPosition(target, i)
+			if isInferencePatternParameter(parameterType) || parameterType.flags&TypeFlagsUnknown != 0 {
+				if isInferencePatternParameter(parameterType) {
+					r.recordInferenceUsage(parameterType, inferenceUsage{contravariant: 1})
+				}
+				// An ignored argument accepts every domain. Otherwise only a strict,
+				// non-bivariant unknown bound prevents admitted functions narrowing it.
+				if i < r.c.getParameterCount(source) && (!r.c.strictFunctionTypes || isBivariantSignature(source) ||
+					r.c.getTypeAtPosition(source, i).flags&TypeFlagsUnknown == 0) {
+					return TernaryFalse
+				}
+			} else if parameterType.flags&(TypeFlagsAny|TypeFlagsNever) == 0 {
+				return TernaryFalse
+			} else if parameterType.flags&TypeFlagsAny != 0 && i < r.c.getParameterCount(source) &&
+				r.c.strictFunctionTypes && isBivariantSignature(source) && !isBivariantSignature(target) {
+				// A bivariant method bound admits a never parameter, which cannot
+				// satisfy an any parameter in a strict function pattern.
+				return TernaryFalse
+			}
+		}
+		// An admissible type can add overloads that drive inference. The signature
+		// guaranteed by the constraint must work for any resulting infer bindings.
+		target = r.c.instantiateSignature(target, r.c.rigidInferenceMapper)
+		// Admitted functions can make optional source parameters required, so check
+		// total arity, not assignment's minimum arity. Domains were validated above.
+		checkMode = SignatureCheckModeStrictTopSignature | SignatureCheckModeStrictArity | SignatureCheckModeIgnoreParameterTypes
 	}
 	if erase {
 		source = r.c.getErasedSignature(source)
@@ -4640,9 +4828,13 @@ func (r *Relater) indexSignaturesRelatedTo(source *Type, target *Type, sourceIsP
 	for _, targetInfo := range indexInfos {
 		var related Ternary
 		switch {
-		case r.relation != r.c.strictSubtypeRelation && !sourceIsPrimitive && targetHasStringIndex && targetInfo.valueType.flags&TypeFlagsAny != 0:
+		// An any-valued index shortcut does not guarantee that every argument
+		// admitted by a structural bound actually has the required index signature.
+		case r.relation != r.c.strictSubtypeRelation && r.relation != r.c.inferencePatternRelation && !sourceIsPrimitive && targetHasStringIndex && targetInfo.valueType.flags&TypeFlagsAny != 0:
 			related = TernaryTrue
-		case r.c.isGenericMappedType(source) && targetHasStringIndex:
+		// Comparing only a mapped template skips the key domain; it cannot establish
+		// a string index signature on every admitted instantiation.
+		case r.relation != r.c.inferencePatternRelation && r.c.isGenericMappedType(source) && targetHasStringIndex:
 			related = r.isRelatedTo(r.c.getTemplateTypeFromMappedType(source), targetInfo.valueType, RecursionFlagsBoth, reportErrors)
 		default:
 			related = r.typeRelatedToIndexInfo(source, targetInfo, reportErrors, intersectionState)
@@ -4663,7 +4855,10 @@ func (r *Relater) typeRelatedToIndexInfo(source *Type, targetInfo *IndexInfo, re
 	// Intersection constituents are never considered to have an inferred index signature. Also, in the strict subtype relation,
 	// only fresh object literals are considered to have inferred index signatures. This ensures { [x: string]: xxx } <: {} but
 	// not vice-versa. Without this rule, those types would be mutual strict subtypes.
-	if intersectionState&IntersectionStateSource == 0 && (r.relation != r.c.strictSubtypeRelation || source.objectFlags&ObjectFlagsFreshLiteral != 0) && r.c.isObjectTypeWithInferableIndex(source) {
+	// An index signature inferred from compatible known members permits assignment
+	// of this object, but admitted arguments can add incompatible members.
+	// Pattern matching therefore requires an explicit source index signature.
+	if r.relation != r.c.inferencePatternRelation && intersectionState&IntersectionStateSource == 0 && (r.relation != r.c.strictSubtypeRelation || source.objectFlags&ObjectFlagsFreshLiteral != 0) && r.c.isObjectTypeWithInferableIndex(source) {
 		return r.membersRelatedToIndexInfo(source, targetInfo, reportErrors, intersectionState)
 	}
 	if reportErrors {
@@ -5046,8 +5241,150 @@ func (c *Checker) isTypeDerivedFrom(source *Type, target *Type) bool {
 	}
 }
 
-func (c *Checker) isDistributionDependent(root *ConditionalRoot) bool {
-	return root.isDistributive && (c.isTypeParameterPossiblyReferenced(root.checkType, root.node.TrueType) || c.isTypeParameterPossiblyReferenced(root.checkType, root.node.FalseType))
+// These types cannot acquire a top-level union or become never through instantiation.
+// Homomorphic mapped types and variadic tuples are exceptions to the object case.
+func isFixedConditionalCheckType(t *Type) bool {
+	return t.flags&(TypeFlagsAnyOrUnknown|TypeFlagsPrimitive|TypeFlagsNonPrimitive) != 0 && t.flags&(TypeFlagsTemplateLiteral|TypeFlagsStringMapping) == 0 ||
+		t.flags&TypeFlagsObject != 0 && t.objectFlags&ObjectFlagsMapped == 0 && !isGenericTupleType(t)
+}
+
+func (c *Checker) isDefinitelyNonNeverType(t *Type, depth int) bool {
+	if isFixedConditionalCheckType(t) {
+		return true
+	}
+	if depth == 10 {
+		return false
+	}
+	isNonNever := func(t *Type) bool { return c.isDefinitelyNonNeverType(t, depth+1) }
+	switch {
+	case t.flags&TypeFlagsUnion != 0:
+		return core.Some(t.Types(), isNonNever)
+	case t.flags&TypeFlagsConditional != 0:
+		d := t.AsConditionalType()
+		return (!d.root.isDistributive || isNonNever(d.checkType)) &&
+			isNonNever(c.getTrueTypeFromConditionalType(t)) && isNonNever(c.getFalseTypeFromConditionalType(t))
+	case t.flags&TypeFlagsTemplateLiteral != 0:
+		return core.Every(t.AsTemplateLiteralType().types, isNonNever)
+	case t.flags&TypeFlagsStringMapping != 0:
+		return isNonNever(t.AsStringMappingType().target)
+	}
+	return false
+}
+
+func (r *Relater) typeRelatedToConditionalType(source *Type, target *Type, intersectionState IntersectionState) Ternary {
+	d := target.AsConditionalType()
+	// In particular, do not use branch-wise reasoning to establish alias variance.
+	if source.flags&TypeFlagsConditional != 0 && source.AsConditionalType().root == d.root {
+		return TernaryFalse
+	}
+	trueSource, falseSource := source, source
+	var isValidSource func() bool
+	mapper := d.mapper
+	checkType, extendsType := d.checkType, d.extendsType
+	// Preserve branch-wise comparison for independent branches, but inferred
+	// results must still account for an empty distributive check type.
+	if d.root.isDistributive && !isFixedConditionalCheckType(d.checkType) &&
+		(len(d.root.inferTypeParameters) != 0 && !r.c.isDefinitelyNonNeverType(d.checkType, 0) ||
+			r.c.isTypeParameterPossiblyReferenced(d.root.checkType, d.root.node.TrueType) ||
+			r.c.isTypeParameterPossiblyReferenced(d.root.checkType, d.root.node.FalseType)) {
+		if d.resolvedDistributiveCheckType == nil {
+			d.resolvedDistributiveCheckType = r.c.newTypeParameter(nil)
+			d.resolvedDistributiveCheckType.AsTypeParameter().constraint = d.checkType
+		}
+		constituent := d.resolvedDistributiveCheckType
+		sourceCheckType := getNonDistributedTypeParameter(d.checkType)
+		type sourceMapperState struct {
+			occurrences   int
+			invalidations int
+		}
+		var state sourceMapperState
+		sourceMapper := newFunctionTypeMapper(func(t *Type) *Type {
+			if getNonDistributedTypeParameter(t) == sourceCheckType {
+				state.occurrences++
+				return constituent
+			}
+			if t.flags&TypeFlagsConditional != 0 {
+				conditional := t.AsConditionalType()
+				if !conditional.root.isDistributive || getNonDistributedTypeParameter(conditional.checkType) != sourceCheckType {
+					state.invalidations++
+				}
+			}
+			return t
+		}, func() any {
+			return state
+		}, func(before, after any) {
+			previous := before.(sourceMapperState)
+			current := after.(sourceMapperState)
+			// Only zero, one, and multiple occurrences matter to this distributivity check.
+			state.occurrences += min(2, current.occurrences-previous.occurrences)
+			state.invalidations += min(1, current.invalidations-previous.invalidations)
+		})
+		falseSource = r.c.instantiateType(source, sourceMapper)
+		isValidSource = func() bool { return state.occurrences == 1 && state.invalidations == 0 }
+		distributedSource := isValidSource() &&
+			r.c.isTypeAssignableTo(r.c.instantiateType(falseSource, newSimpleTypeMapper(constituent, r.c.neverType)), r.c.neverType) &&
+			isValidSource()
+		if !distributedSource {
+			return TernaryFalse
+		}
+		checkType = constituent
+		mapper = prependTypeMapping(d.root.checkType, checkType, mapper)
+		extendsType = r.c.instantiateType(d.root.extendsType, mapper)
+		trueSource = r.c.instantiateType(falseSource, newSimpleTypeMapper(checkType, r.c.getSubstitutionType(checkType, extendsType)))
+	}
+	// Inferred parameters remain universally quantified in the result type. An
+	// irrefutable inference pattern justifies checking only the true branch, but
+	// must not make a narrower inferred result writable through its constraint.
+	skipTrue := !r.c.isTypeAssignableTo(r.c.getPermissiveInstantiation(checkType), r.c.getPermissiveInstantiation(extendsType))
+	skipFalse := !skipTrue && (r.c.isTypeAssignableTo(r.c.getRestrictiveInstantiation(checkType), r.c.getRestrictiveInstantiation(extendsType)) ||
+		len(d.root.inferTypeParameters) != 0 && r.c.isConditionalInferencePatternIrrefutable(checkType, d, mapper))
+	result := TernaryTrue
+	if !skipTrue {
+		trueType := r.c.instantiateType(r.c.getTypeFromTypeNode(d.root.node.TrueType), mapper)
+		result = r.isRelatedToEx(trueSource, trueType, RecursionFlagsBoth, false /*reportErrors*/, nil /*headMessage*/, intersectionState)
+	}
+	if result != TernaryFalse && !skipFalse {
+		falseType := r.c.instantiateType(r.c.getTypeFromTypeNode(d.root.node.FalseType), mapper)
+		result &= r.isRelatedToEx(falseSource, falseType, RecursionFlagsBoth, false /*reportErrors*/, nil /*headMessage*/, intersectionState)
+	}
+	if isValidSource != nil && !isValidSource() {
+		return TernaryFalse
+	}
+	return result
+}
+
+// The inference-pattern relation checks whether every admissible source instantiation
+// matches a target pattern, allowing its infer parameters to vary between matches.
+// This identifies a lower bound for a conditional type's true branch. Unlike
+// assignment/subtyping, it rejects compatibility coercions and unstable input
+// domains but can match marked infer parameters.
+//
+// This conservative pattern-matching relation is not transitive: replacing a never type
+// parameter with never can erase an inference observation. Do not chain successful matches
+// or use them for variance/type reduction. Without binders, the intended relationship is
+// inclusion of admissible-type sets, a transitive preorder.
+func (c *Checker) isConditionalInferencePatternIrrefutable(source *Type, target *ConditionalType, mapper *TypeMapper) bool {
+	if !target.inferencePatternResolved {
+		target.inferencePatternResolved = true
+		parameters := core.Map(target.root.inferTypeParameters, c.cloneTypeParameter)
+		inferenceMapper := c.combineTypeMappers(newTypeMapper(target.root.inferTypeParameters, parameters), mapper)
+		inferenceMapper = c.combineTypeMappers(inferenceMapper, c.rigidInferenceMapper)
+		for _, parameter := range parameters {
+			parameter.AsTypeParameter().mapper = inferenceMapper
+		}
+		pattern := c.instantiateType(c.getTypeFromTypeNode(target.root.node.ExtendsType), inferenceMapper)
+		// Resolve captured outer binders before introducing this pattern's marked clones.
+		binders := core.Map(parameters, c.cloneTypeParameter)
+		binderMapper := newTypeMapper(parameters, binders)
+		for _, binder := range binders {
+			binder.AsTypeParameter().isInferencePattern = true
+			binder.AsTypeParameter().mapper = binderMapper
+		}
+		target.resolvedInferencePattern = c.instantiateType(pattern, binderMapper)
+	}
+	// Assignment of the instantiated bound alone does not establish that all
+	// admitted arguments match; use the inference-pattern relation and its infer-usage checks.
+	return target.resolvedInferencePattern != nil && c.isTypeRelatedTo(source, target.resolvedInferencePattern, c.inferencePatternRelation)
 }
 
 func (r *Relater) traceUnionsOrIntersectionsTooLarge(source *Type, target *Type) {

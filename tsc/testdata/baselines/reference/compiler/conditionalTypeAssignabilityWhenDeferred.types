@@ -128,7 +128,7 @@ function test<T>(x: Foo<T>, s: string) {
 >x : Foo<T>
 >s : string
 
-  x = "a"; // Currently an error, should be ok
+  x = "a"; // OK: both branches accept "a".
 >x = "a" : "a"
 >x : Foo<T>
 >"a" : "a"
@@ -195,19 +195,14 @@ function testAssignabilityToConditionalType<T>() {
 >b : number
 >o : { a: number; b: number; }
 
-  // The next 4 are arguable - if you choose to ignore the `never` distribution case,
-  // then they're all good. The `never` case _is_ a bit of an outlier - we say distributive types
-  // look approximately like the sum of their branches, but the `never` case bucks that.
-  // There's an argument for the result of dumping `never` into a distributive conditional
-  // being not `never`, but instead the intersection of the branches - a much more precise bound
-  // on that "impossible" input.
+  // Independent branches retain branch-wise checking without a distributive source.
 
-  // Distributive where T might instantiate to never: no good
+  // Distributive with independent branches: OK
   const o3: Distributive<T> = o;
 >o3 : Distributive<T>
 >o : { a: number; b: number; }
 
-  // Distributive where T & string might instantiate to never: also no good
+  // Intersection check type with independent branches: OK
   const o4: Distributive<T & string> = o;
 >o4 : Distributive<T & string>
 >o : { a: number; b: number; }
@@ -218,7 +213,7 @@ function testAssignabilityToConditionalType<T>() {
 >a : T
 >o : { a: number; b: number; }
 
-  // Distributive where check type is a conditional which returns a non-never type upon instantiation with `never` but can still return never otherwise: no good
+  // Conditional check type with independent branches: OK
   const o6: Distributive<[T] extends [never] ? { a: number } : never> = o;
 >o6 : Distributive<[T] extends [never] ? { a: number; } : never>
 >a : number
@@ -284,7 +279,7 @@ function f3<Q extends (arg: any) => any>(x: Q): InferBecauseWhyNot<Q> {
 >arg : any
 >x : Q
 
-  return x;
+  return x; // Error: Q can add overloads that change the inferred parameter.
 >x : Q
 }
 
@@ -303,7 +298,7 @@ function f4<Q extends (arg: any) => any>(
 >x : Q
 
 ): InferBecauseWhyNotDistributive<Q> {
-  return x; // should fail
+  return x; // Error: additional overloads can make the extends check fail.
 >x : Q
 }
 

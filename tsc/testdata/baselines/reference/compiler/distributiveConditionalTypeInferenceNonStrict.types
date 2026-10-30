@@ -1,0 +1,38 @@
+//// [tests/cases/compiler/distributiveConditionalTypeInferenceNonStrict.ts] ////
+
+=== distributiveConditionalTypeInferenceNonStrict.ts ===
+type InferredParameter<T> = T extends (value: infer P) => unknown ? T | P : never;
+>InferredParameter : InferredParameter<T>
+>value : P
+
+function inference<T extends (value: unknown) => unknown>(value: T) {
+>inference : <T extends (value: unknown) => unknown>(value: T) => void
+>value : unknown
+>value : T
+
+    const result: InferredParameter<T> = value; // Error: bivariant constraints admit narrower parameters.
+>result : InferredParameter<T>
+>value : T
+}
+
+declare const overloaded: {
+>overloaded : { (value: string): void; (left: number, right: number): void; }
+
+    (value: string): void;
+>value : string
+
+    (left: number, right: number): void;
+>left : number
+>right : number
+
+};
+const constraint: (value: unknown) => unknown = overloaded;
+>constraint : (value: unknown) => unknown
+>value : unknown
+>overloaded : { (value: string): void; (left: number, right: number): void; }
+
+const rejected: InferredParameter<typeof overloaded> = overloaded; // Error
+>rejected : never
+>overloaded : { (value: string): void; (left: number, right: number): void; }
+>overloaded : { (value: string): void; (left: number, right: number): void; }
+

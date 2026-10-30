@@ -1,0 +1,48 @@
+//// [tests/cases/compiler/distributiveConditionalTypeInferenceNonStrict.ts] ////
+
+=== distributiveConditionalTypeInferenceNonStrict.ts ===
+type InferredParameter<T> = T extends (value: infer P) => unknown ? T | P : never;
+>InferredParameter : Symbol(InferredParameter, Decl(distributiveConditionalTypeInferenceNonStrict.ts, 0, 0))
+>T : Symbol(T, Decl(distributiveConditionalTypeInferenceNonStrict.ts, 0, 23))
+>T : Symbol(T, Decl(distributiveConditionalTypeInferenceNonStrict.ts, 0, 23))
+>value : Symbol(value, Decl(distributiveConditionalTypeInferenceNonStrict.ts, 0, 39))
+>P : Symbol(P, Decl(distributiveConditionalTypeInferenceNonStrict.ts, 0, 51))
+>T : Symbol(T, Decl(distributiveConditionalTypeInferenceNonStrict.ts, 0, 23))
+>P : Symbol(P, Decl(distributiveConditionalTypeInferenceNonStrict.ts, 0, 51))
+
+function inference<T extends (value: unknown) => unknown>(value: T) {
+>inference : Symbol(inference, Decl(distributiveConditionalTypeInferenceNonStrict.ts, 0, 82))
+>T : Symbol(T, Decl(distributiveConditionalTypeInferenceNonStrict.ts, 2, 19))
+>value : Symbol(value, Decl(distributiveConditionalTypeInferenceNonStrict.ts, 2, 30))
+>value : Symbol(value, Decl(distributiveConditionalTypeInferenceNonStrict.ts, 2, 58))
+>T : Symbol(T, Decl(distributiveConditionalTypeInferenceNonStrict.ts, 2, 19))
+
+    const result: InferredParameter<T> = value; // Error: bivariant constraints admit narrower parameters.
+>result : Symbol(result, Decl(distributiveConditionalTypeInferenceNonStrict.ts, 3, 9))
+>InferredParameter : Symbol(InferredParameter, Decl(distributiveConditionalTypeInferenceNonStrict.ts, 0, 0))
+>T : Symbol(T, Decl(distributiveConditionalTypeInferenceNonStrict.ts, 2, 19))
+>value : Symbol(value, Decl(distributiveConditionalTypeInferenceNonStrict.ts, 2, 58))
+}
+
+declare const overloaded: {
+>overloaded : Symbol(overloaded, Decl(distributiveConditionalTypeInferenceNonStrict.ts, 6, 13))
+
+    (value: string): void;
+>value : Symbol(value, Decl(distributiveConditionalTypeInferenceNonStrict.ts, 7, 5))
+
+    (left: number, right: number): void;
+>left : Symbol(left, Decl(distributiveConditionalTypeInferenceNonStrict.ts, 8, 5))
+>right : Symbol(right, Decl(distributiveConditionalTypeInferenceNonStrict.ts, 8, 18))
+
+};
+const constraint: (value: unknown) => unknown = overloaded;
+>constraint : Symbol(constraint, Decl(distributiveConditionalTypeInferenceNonStrict.ts, 10, 5))
+>value : Symbol(value, Decl(distributiveConditionalTypeInferenceNonStrict.ts, 10, 19))
+>overloaded : Symbol(overloaded, Decl(distributiveConditionalTypeInferenceNonStrict.ts, 6, 13))
+
+const rejected: InferredParameter<typeof overloaded> = overloaded; // Error
+>rejected : Symbol(rejected, Decl(distributiveConditionalTypeInferenceNonStrict.ts, 11, 5))
+>InferredParameter : Symbol(InferredParameter, Decl(distributiveConditionalTypeInferenceNonStrict.ts, 0, 0))
+>overloaded : Symbol(overloaded, Decl(distributiveConditionalTypeInferenceNonStrict.ts, 6, 13))
+>overloaded : Symbol(overloaded, Decl(distributiveConditionalTypeInferenceNonStrict.ts, 6, 13))
+

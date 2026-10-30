@@ -1,0 +1,280 @@
+//// [tests/cases/compiler/distributiveConditionalTypeInferencePatterns.ts] ////
+
+=== distributiveConditionalTypeInferencePatterns.ts ===
+namespace IntersectionInference {
+>IntersectionInference : typeof IntersectionInference
+
+    type Result<T> = T extends { a: infer U & string; b: infer U } ? T : never;
+>Result : Result<T>
+>a : U & string
+>b : U
+
+    type NonDistributive<T> = [T] extends [{ a: infer U & string; b: infer U }] ? T : never;
+>NonDistributive : NonDistributive<T>
+>a : U & string
+>b : U
+
+    export function generic<T extends { a: string; b: number }>(value: T): Result<T> {
+>generic : <T extends { a: string; b: number; }>(value: T) => Result<T>
+>a : string
+>b : number
+>value : T
+
+        return value; // Error: string is removed before inferring U from b.
+>value : T
+    }
+
+    export function nonDistributive<T extends { a: string; b: number }>(value: T): NonDistributive<T> {
+>nonDistributive : <T extends { a: string; b: number; }>(value: T) => NonDistributive<T>
+>a : string
+>b : number
+>value : T
+
+        return value; // Error
+>value : T
+    }
+
+    export const rejected: Result<{ a: string; b: number }> = { a: "", b: 1 }; // Error
+>rejected : never
+>a : string
+>b : number
+>{ a: "", b: 1 } : { a: string; b: number; }
+>a : string
+>"" : ""
+>b : number
+>1 : 1
+
+    export const accepted: Result<{ a: string; b: string }> = { a: "", b: "" };
+>accepted : { a: string; b: string; }
+>a : string
+>b : string
+>{ a: "", b: "" } : { a: string; b: string; }
+>a : string
+>"" : ""
+>b : string
+>"" : ""
+
+    type Covariant<T> = T extends { a: infer U; b: infer U } ? T : never;
+>Covariant : Covariant<T>
+>a : U
+>b : U
+
+    type ObjectIntersection<T> = T extends { a: infer U } & { b: number } ? T : never;
+>ObjectIntersection : ObjectIntersection<T>
+>a : U
+>b : number
+
+    export function covariant<T extends { a: string; b: number }>(value: T): Covariant<T> {
+>covariant : <T extends { a: string; b: number; }>(value: T) => Covariant<T>
+>a : string
+>b : number
+>value : T
+
+        return value;
+>value : T
+    }
+
+    export function objectIntersection<T extends { a: string; b: number }>(value: T): ObjectIntersection<T> {
+>objectIntersection : <T extends { a: string; b: number; }>(value: T) => ObjectIntersection<T>
+>a : string
+>b : number
+>value : T
+
+        return value;
+>value : T
+    }
+}
+
+namespace DependentConstraints {
+>DependentConstraints : typeof DependentConstraints
+
+    interface Dep<A, B extends A> {
+        a: A;
+>a : A
+
+        b: B;
+>b : B
+    }
+
+    type Result<T> = T extends Dep<infer A, infer B> ? T : never;
+>Result : Result<T>
+
+    type NonDistributive<T> = [T] extends [Dep<infer A, infer B>] ? T : never;
+>NonDistributive : NonDistributive<T>
+
+    export function generic<T extends { a: string; b: number }>(value: T): Result<T> {
+>generic : <T extends { a: string; b: number; }>(value: T) => Result<T>
+>a : string
+>b : number
+>value : T
+
+        return value; // Error: the inferred B must satisfy the same A.
+>value : T
+    }
+
+    export function nonDistributive<T extends { a: string; b: number }>(value: T): NonDistributive<T> {
+>nonDistributive : <T extends { a: string; b: number; }>(value: T) => NonDistributive<T>
+>a : string
+>b : number
+>value : T
+
+        return value; // Error
+>value : T
+    }
+
+    export const rejected: Result<{ a: string; b: number }> = { a: "", b: 1 }; // Error
+>rejected : never
+>a : string
+>b : number
+>{ a: "", b: 1 } : { a: string; b: number; }
+>a : string
+>"" : ""
+>b : number
+>1 : 1
+
+    export const accepted: Result<{ a: string; b: string }> = { a: "", b: "" };
+>accepted : { a: string; b: string; }
+>a : string
+>b : string
+>{ a: "", b: "" } : { a: string; b: string; }
+>a : string
+>"" : ""
+>b : string
+>"" : ""
+
+    interface Independent<A, B extends string> {
+        a: A;
+>a : A
+
+        b: B;
+>b : B
+    }
+
+    type IndependentResult<T> = T extends Independent<infer A, infer B> ? T : never;
+>IndependentResult : IndependentResult<T>
+
+    export function independent<T extends { a: number; b: string }>(value: T): IndependentResult<T> {
+>independent : <T extends { a: number; b: string; }>(value: T) => IndependentResult<T>
+>a : number
+>b : string
+>value : T
+
+        return value;
+>value : T
+    }
+}
+
+namespace InferredBranchDependence {
+>InferredBranchDependence : typeof InferredBranchDependence
+
+    type Box<T> = T extends infer U ? { value?: U } : never;
+>Box : Box<T>
+>value : U | undefined
+
+    type PropertyBox<T> = T extends { value: infer U } ? { copy?: U } : never;
+>PropertyBox : PropertyBox<T>
+>value : U
+>copy : U | undefined
+
+    type Constant<T> = T extends infer U ? { done: true } : never;
+>Constant : Constant<T>
+>done : true
+>true : true
+
+    export function box<T>(): Box<T> {
+>box : <T>() => Box<T>
+
+        return {}; // Error: Box<never> is never even though the branch only references U.
+>{} : {}
+    }
+
+    export function propertyBox<T extends { value: unknown }>(): PropertyBox<T> {
+>propertyBox : <T extends { value: unknown; }>() => PropertyBox<T>
+>value : unknown
+
+        return {}; // Error
+>{} : {}
+    }
+
+    export function constant<T>(): Constant<T> {
+>constant : <T>() => Constant<T>
+
+        return { done: true }; // Error: an unused infer binder still requires a nonempty check type.
+>{ done: true } : { done: true; }
+>done : true
+>true : true
+    }
+
+    export const rejectedBox: Box<never> = {}; // Error
+>rejectedBox : never
+>{} : {}
+
+    export const rejectedProperty: PropertyBox<never> = {}; // Error
+>rejectedProperty : never
+>{} : {}
+
+    export const rejectedConstant: Constant<never> = { done: true }; // Error
+>rejectedConstant : never
+>{ done: true } : { done: boolean; }
+>done : boolean
+>true : true
+
+    type NonDistributive<T> = [T] extends [infer U] ? { value?: U } : never;
+>NonDistributive : NonDistributive<T>
+>value : U | undefined
+
+    export function nonDistributive<T>(): NonDistributive<T> {
+>nonDistributive : <T>() => NonDistributive<T>
+
+        return {};
+>{} : {}
+    }
+
+    export const emptyNonDistributive: NonDistributive<never> = {};
+>emptyNonDistributive : { value?: undefined; }
+>{} : {}
+
+    export function nonNeverUnion<T>(): Box<T | number> {
+>nonNeverUnion : <T>() => Box<T | number>
+
+        return {};
+>{} : {}
+    }
+
+    export function nonNeverProperty<T extends { value: unknown }>(): PropertyBox<T | { value: number }> {
+>nonNeverProperty : <T extends { value: unknown; }>() => PropertyBox<T | { value: number; }>
+>value : unknown
+>value : number
+
+        return {};
+>{} : {}
+    }
+
+    export function nonNeverObject<T>(): Box<{ value: T }> {
+>nonNeverObject : <T>() => Box<{ value: T; }>
+>value : T
+
+        return {};
+>{} : {}
+    }
+
+    export function nonNeverConditional<T>(): Box<[T] extends [never] ? { value: T } : number> {
+>nonNeverConditional : <T>() => Box<[T] extends [never] ? { value: T; } : number>
+>value : T
+
+        return {};
+>{} : {}
+    }
+
+    type Identity<T> = T extends infer U ? U : never;
+>Identity : Identity<T>
+
+    export function identity<T>(value: T): Identity<T> {
+>identity : <T>(value: T) => Identity<T>
+>value : T
+
+        return value;
+>value : T
+    }
+}
+

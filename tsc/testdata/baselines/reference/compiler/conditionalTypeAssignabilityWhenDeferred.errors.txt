@@ -3,10 +3,10 @@ conditionalTypeAssignabilityWhenDeferred.ts(29,21): error TS2345: Argument of ty
 conditionalTypeAssignabilityWhenDeferred.ts(39,3): error TS2322: Type '{ x: T; y: T; }' is not assignable to type 'T extends T ? { x: T; y: T; } : never'.
 conditionalTypeAssignabilityWhenDeferred.ts(46,3): error TS2322: Type 'string' is not assignable to type 'Foo<T>'.
 conditionalTypeAssignabilityWhenDeferred.ts(63,9): error TS2322: Type '{ a: number; b: number; }' is not assignable to type '[T] extends [[infer U]] ? U : { b: number; }'.
-conditionalTypeAssignabilityWhenDeferred.ts(95,23): error TS2345: Argument of type 'string' is not assignable to parameter of type 'Unwrap<this["prop"]>'.
-conditionalTypeAssignabilityWhenDeferred.ts(106,3): error TS2322: Type 'Q' is not assignable to type 'InferBecauseWhyNot<Q>'.
+conditionalTypeAssignabilityWhenDeferred.ts(90,23): error TS2345: Argument of type 'string' is not assignable to parameter of type 'Unwrap<this["prop"]>'.
+conditionalTypeAssignabilityWhenDeferred.ts(101,3): error TS2322: Type 'Q' is not assignable to type 'InferBecauseWhyNot<Q>'.
   Type '(arg: any) => any' is not assignable to type 'InferBecauseWhyNot<Q>'.
-conditionalTypeAssignabilityWhenDeferred.ts(116,3): error TS2322: Type 'Q' is not assignable to type 'InferBecauseWhyNotDistributive<Q>'.
+conditionalTypeAssignabilityWhenDeferred.ts(111,3): error TS2322: Type 'Q' is not assignable to type 'InferBecauseWhyNotDistributive<Q>'.
   Type '(arg: any) => any' is not assignable to type 'InferBecauseWhyNotDistributive<Q>'.
 
 
@@ -61,7 +61,7 @@ conditionalTypeAssignabilityWhenDeferred.ts(116,3): error TS2322: Type 'Q' is no
     type Foo<T> = T extends true ? string : "a";
     
     function test<T>(x: Foo<T>, s: string) {
-      x = "a"; // Currently an error, should be ok
+      x = "a"; // OK: both branches accept "a".
       x = s; // Error
       ~
 !!! error TS2322: Type 'string' is not assignable to type 'Foo<T>'.
@@ -85,20 +85,15 @@ conditionalTypeAssignabilityWhenDeferred.ts(116,3): error TS2322: Type 'Q' is no
             ~~
 !!! error TS2322: Type '{ a: number; b: number; }' is not assignable to type '[T] extends [[infer U]] ? U : { b: number; }'.
     
-      // The next 4 are arguable - if you choose to ignore the `never` distribution case,
-      // then they're all good. The `never` case _is_ a bit of an outlier - we say distributive types
-      // look approximately like the sum of their branches, but the `never` case bucks that.
-      // There's an argument for the result of dumping `never` into a distributive conditional
-      // being not `never`, but instead the intersection of the branches - a much more precise bound
-      // on that "impossible" input.
+      // Independent branches retain branch-wise checking without a distributive source.
     
-      // Distributive where T might instantiate to never: no good
+      // Distributive with independent branches: OK
       const o3: Distributive<T> = o;
-      // Distributive where T & string might instantiate to never: also no good
+      // Intersection check type with independent branches: OK
       const o4: Distributive<T & string> = o;
       // Distributive where {a: T} cannot instantiate to never: OK
       const o5: Distributive<{ a: T }> = o;
-      // Distributive where check type is a conditional which returns a non-never type upon instantiation with `never` but can still return never otherwise: no good
+      // Conditional check type with independent branches: OK
       const o6: Distributive<[T] extends [never] ? { a: number } : never> = o;
     }
     
@@ -128,7 +123,7 @@ conditionalTypeAssignabilityWhenDeferred.ts(116,3): error TS2322: Type 'Q' is no
       : never;
     
     function f3<Q extends (arg: any) => any>(x: Q): InferBecauseWhyNot<Q> {
-      return x;
+      return x; // Error: Q can add overloads that change the inferred parameter.
       ~~~~~~
 !!! error TS2322: Type 'Q' is not assignable to type 'InferBecauseWhyNot<Q>'.
 !!! error TS2322:   Type '(arg: any) => any' is not assignable to type 'InferBecauseWhyNot<Q>'.
@@ -141,7 +136,7 @@ conditionalTypeAssignabilityWhenDeferred.ts(116,3): error TS2322: Type 'Q' is no
     function f4<Q extends (arg: any) => any>(
       x: Q
     ): InferBecauseWhyNotDistributive<Q> {
-      return x; // should fail
+      return x; // Error: additional overloads can make the extends check fail.
       ~~~~~~
 !!! error TS2322: Type 'Q' is not assignable to type 'InferBecauseWhyNotDistributive<Q>'.
 !!! error TS2322:   Type '(arg: any) => any' is not assignable to type 'InferBecauseWhyNotDistributive<Q>'.

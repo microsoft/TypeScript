@@ -1,0 +1,333 @@
+//// [tests/cases/compiler/distributiveConditionalTypeRelationsUserTests.ts] ////
+
+=== distributiveConditionalTypeRelationsUserTests.ts ===
+namespace Inquirer {
+>Inquirer : Symbol(Inquirer, Decl(distributiveConditionalTypeRelationsUserTests.ts, 0, 0))
+
+    type Answer<R extends boolean> = R extends true ? number : number | undefined;
+>Answer : Symbol(Answer, Decl(distributiveConditionalTypeRelationsUserTests.ts, 0, 20))
+>R : Symbol(R, Decl(distributiveConditionalTypeRelationsUserTests.ts, 1, 16))
+>R : Symbol(R, Decl(distributiveConditionalTypeRelationsUserTests.ts, 1, 16))
+
+    export function answer<R extends boolean>(validate: (value: Answer<R>) => boolean, value: number) {
+>answer : Symbol(answer, Decl(distributiveConditionalTypeRelationsUserTests.ts, 1, 82))
+>R : Symbol(R, Decl(distributiveConditionalTypeRelationsUserTests.ts, 3, 27))
+>validate : Symbol(validate, Decl(distributiveConditionalTypeRelationsUserTests.ts, 3, 46))
+>value : Symbol(value, Decl(distributiveConditionalTypeRelationsUserTests.ts, 3, 57))
+>Answer : Symbol(Answer, Decl(distributiveConditionalTypeRelationsUserTests.ts, 0, 20))
+>R : Symbol(R, Decl(distributiveConditionalTypeRelationsUserTests.ts, 3, 27))
+>value : Symbol(value, Decl(distributiveConditionalTypeRelationsUserTests.ts, 3, 86))
+
+        return validate(value);
+>validate : Symbol(validate, Decl(distributiveConditionalTypeRelationsUserTests.ts, 3, 46))
+>value : Symbol(value, Decl(distributiveConditionalTypeRelationsUserTests.ts, 3, 86))
+    }
+}
+
+namespace VSCode {
+>VSCode : Symbol(VSCode, Decl(distributiveConditionalTypeRelationsUserTests.ts, 6, 1))
+
+    interface Separator {
+>Separator : Symbol(Separator, Decl(distributiveConditionalTypeRelationsUserTests.ts, 8, 18))
+
+        separator: true;
+>separator : Symbol(Separator.separator, Decl(distributiveConditionalTypeRelationsUserTests.ts, 9, 25))
+    }
+
+    export class QuickPick<T, O extends { useSeparators: boolean }> {
+>QuickPick : Symbol(QuickPick, Decl(distributiveConditionalTypeRelationsUserTests.ts, 11, 5))
+>T : Symbol(T, Decl(distributiveConditionalTypeRelationsUserTests.ts, 13, 27))
+>O : Symbol(O, Decl(distributiveConditionalTypeRelationsUserTests.ts, 13, 29))
+>useSeparators : Symbol(useSeparators, Decl(distributiveConditionalTypeRelationsUserTests.ts, 13, 41))
+
+        private items: O extends { useSeparators: true } ? (T | Separator)[] : T[] = [];
+>items : Symbol(QuickPick.items, Decl(distributiveConditionalTypeRelationsUserTests.ts, 13, 69))
+>O : Symbol(O, Decl(distributiveConditionalTypeRelationsUserTests.ts, 13, 29))
+>useSeparators : Symbol(useSeparators, Decl(distributiveConditionalTypeRelationsUserTests.ts, 14, 34))
+>T : Symbol(T, Decl(distributiveConditionalTypeRelationsUserTests.ts, 13, 27))
+>Separator : Symbol(Separator, Decl(distributiveConditionalTypeRelationsUserTests.ts, 8, 18))
+>T : Symbol(T, Decl(distributiveConditionalTypeRelationsUserTests.ts, 13, 27))
+    }
+}
+
+namespace Fabric {
+>Fabric : Symbol(Fabric, Decl(distributiveConditionalTypeRelationsUserTests.ts, 16, 1))
+
+    type Easing<T> = T extends number[]
+>Easing : Symbol(Easing, Decl(distributiveConditionalTypeRelationsUserTests.ts, 18, 18))
+>T : Symbol(T, Decl(distributiveConditionalTypeRelationsUserTests.ts, 19, 16))
+>T : Symbol(T, Decl(distributiveConditionalTypeRelationsUserTests.ts, 19, 16))
+
+        ? (time: number, start: number, delta: number, duration: number, index: number) => number
+>time : Symbol(time, Decl(distributiveConditionalTypeRelationsUserTests.ts, 20, 11))
+>start : Symbol(start, Decl(distributiveConditionalTypeRelationsUserTests.ts, 20, 24))
+>delta : Symbol(delta, Decl(distributiveConditionalTypeRelationsUserTests.ts, 20, 39))
+>duration : Symbol(duration, Decl(distributiveConditionalTypeRelationsUserTests.ts, 20, 54))
+>index : Symbol(index, Decl(distributiveConditionalTypeRelationsUserTests.ts, 20, 72))
+
+        : (time: number, start: number, delta: number, duration: number) => number;
+>time : Symbol(time, Decl(distributiveConditionalTypeRelationsUserTests.ts, 21, 11))
+>start : Symbol(start, Decl(distributiveConditionalTypeRelationsUserTests.ts, 21, 24))
+>delta : Symbol(delta, Decl(distributiveConditionalTypeRelationsUserTests.ts, 21, 39))
+>duration : Symbol(duration, Decl(distributiveConditionalTypeRelationsUserTests.ts, 21, 54))
+
+    const defaultEasing = (time: number, start: number, delta: number, duration: number) => start;
+>defaultEasing : Symbol(defaultEasing, Decl(distributiveConditionalTypeRelationsUserTests.ts, 23, 9))
+>time : Symbol(time, Decl(distributiveConditionalTypeRelationsUserTests.ts, 23, 27))
+>start : Symbol(start, Decl(distributiveConditionalTypeRelationsUserTests.ts, 23, 40))
+>delta : Symbol(delta, Decl(distributiveConditionalTypeRelationsUserTests.ts, 23, 55))
+>duration : Symbol(duration, Decl(distributiveConditionalTypeRelationsUserTests.ts, 23, 70))
+>start : Symbol(start, Decl(distributiveConditionalTypeRelationsUserTests.ts, 23, 40))
+
+    export function easing<T extends number | number[]>(): Easing<T> {
+>easing : Symbol(easing, Decl(distributiveConditionalTypeRelationsUserTests.ts, 23, 98))
+>T : Symbol(T, Decl(distributiveConditionalTypeRelationsUserTests.ts, 25, 27))
+>Easing : Symbol(Easing, Decl(distributiveConditionalTypeRelationsUserTests.ts, 18, 18))
+>T : Symbol(T, Decl(distributiveConditionalTypeRelationsUserTests.ts, 25, 27))
+
+        return defaultEasing;
+>defaultEasing : Symbol(defaultEasing, Decl(distributiveConditionalTypeRelationsUserTests.ts, 23, 9))
+    }
+}
+
+namespace Supabase {
+>Supabase : Symbol(Supabase, Decl(distributiveConditionalTypeRelationsUserTests.ts, 28, 1))
+
+    interface Row {
+>Row : Symbol(Row, Decl(distributiveConditionalTypeRelationsUserTests.ts, 30, 20))
+
+        id: number;
+>id : Symbol(Row.id, Decl(distributiveConditionalTypeRelationsUserTests.ts, 31, 19))
+
+        columns?: string[];
+>columns : Symbol(Row.columns, Decl(distributiveConditionalTypeRelationsUserTests.ts, 32, 19))
+    }
+
+    type Selected<T extends boolean | undefined> = T extends true ? Row : Omit<Row, "columns">;
+>Selected : Symbol(Selected, Decl(distributiveConditionalTypeRelationsUserTests.ts, 34, 5))
+>T : Symbol(T, Decl(distributiveConditionalTypeRelationsUserTests.ts, 36, 18))
+>T : Symbol(T, Decl(distributiveConditionalTypeRelationsUserTests.ts, 36, 18))
+>Row : Symbol(Row, Decl(distributiveConditionalTypeRelationsUserTests.ts, 30, 20))
+>Omit : Symbol(Omit, Decl(lib.es5.d.ts, --, --))
+>Row : Symbol(Row, Decl(distributiveConditionalTypeRelationsUserTests.ts, 30, 20))
+
+    export function rows<T extends boolean | undefined>(value: Row[]): Selected<T>[] {
+>rows : Symbol(rows, Decl(distributiveConditionalTypeRelationsUserTests.ts, 36, 95))
+>T : Symbol(T, Decl(distributiveConditionalTypeRelationsUserTests.ts, 38, 25))
+>value : Symbol(value, Decl(distributiveConditionalTypeRelationsUserTests.ts, 38, 56))
+>Row : Symbol(Row, Decl(distributiveConditionalTypeRelationsUserTests.ts, 30, 20))
+>Selected : Symbol(Selected, Decl(distributiveConditionalTypeRelationsUserTests.ts, 34, 5))
+>T : Symbol(T, Decl(distributiveConditionalTypeRelationsUserTests.ts, 38, 25))
+
+        return value;
+>value : Symbol(value, Decl(distributiveConditionalTypeRelationsUserTests.ts, 38, 56))
+    }
+}
+
+namespace Lexical {
+>Lexical : Symbol(Lexical, Decl(distributiveConditionalTypeRelationsUserTests.ts, 41, 1))
+
+    class Slot {
+>Slot : Symbol(Slot, Decl(distributiveConditionalTypeRelationsUserTests.ts, 43, 19))
+
+        value = 0;
+>value : Symbol(Slot.value, Decl(distributiveConditionalTypeRelationsUserTests.ts, 44, 16))
+    }
+
+    class ElementSlot extends Slot {
+>ElementSlot : Symbol(ElementSlot, Decl(distributiveConditionalTypeRelationsUserTests.ts, 46, 5))
+>Slot : Symbol(Slot, Decl(distributiveConditionalTypeRelationsUserTests.ts, 43, 19))
+
+        element = true;
+>element : Symbol(ElementSlot.element, Decl(distributiveConditionalTypeRelationsUserTests.ts, 48, 36))
+
+        withAfter(): ElementSlot {
+>withAfter : Symbol(ElementSlot.withAfter, Decl(distributiveConditionalTypeRelationsUserTests.ts, 49, 23))
+>ElementSlot : Symbol(ElementSlot, Decl(distributiveConditionalTypeRelationsUserTests.ts, 46, 5))
+
+            return this;
+>this : Symbol(ElementSlot, Decl(distributiveConditionalTypeRelationsUserTests.ts, 46, 5))
+        }
+    }
+
+    class BaseNode {
+>BaseNode : Symbol(BaseNode, Decl(distributiveConditionalTypeRelationsUserTests.ts, 53, 5))
+
+        node = true;
+>node : Symbol(BaseNode.node, Decl(distributiveConditionalTypeRelationsUserTests.ts, 55, 20))
+    }
+
+    type SlotForNode<N extends BaseNode> = N extends ElementNode ? ElementSlot : Slot;
+>SlotForNode : Symbol(SlotForNode, Decl(distributiveConditionalTypeRelationsUserTests.ts, 57, 5))
+>N : Symbol(N, Decl(distributiveConditionalTypeRelationsUserTests.ts, 59, 21))
+>BaseNode : Symbol(BaseNode, Decl(distributiveConditionalTypeRelationsUserTests.ts, 53, 5))
+>N : Symbol(N, Decl(distributiveConditionalTypeRelationsUserTests.ts, 59, 21))
+>ElementNode : Symbol(ElementNode, Decl(distributiveConditionalTypeRelationsUserTests.ts, 60, 74))
+>ElementSlot : Symbol(ElementSlot, Decl(distributiveConditionalTypeRelationsUserTests.ts, 46, 5))
+>Slot : Symbol(Slot, Decl(distributiveConditionalTypeRelationsUserTests.ts, 43, 19))
+
+    declare function getSlot<N extends BaseNode>(node: N): SlotForNode<N>;
+>getSlot : Symbol(getSlot, Decl(distributiveConditionalTypeRelationsUserTests.ts, 59, 86))
+>N : Symbol(N, Decl(distributiveConditionalTypeRelationsUserTests.ts, 60, 29))
+>BaseNode : Symbol(BaseNode, Decl(distributiveConditionalTypeRelationsUserTests.ts, 53, 5))
+>node : Symbol(node, Decl(distributiveConditionalTypeRelationsUserTests.ts, 60, 49))
+>N : Symbol(N, Decl(distributiveConditionalTypeRelationsUserTests.ts, 60, 29))
+>SlotForNode : Symbol(SlotForNode, Decl(distributiveConditionalTypeRelationsUserTests.ts, 57, 5))
+>N : Symbol(N, Decl(distributiveConditionalTypeRelationsUserTests.ts, 60, 29))
+
+    export class ElementNode extends BaseNode {
+>ElementNode : Symbol(ElementNode, Decl(distributiveConditionalTypeRelationsUserTests.ts, 60, 74))
+>BaseNode : Symbol(BaseNode, Decl(distributiveConditionalTypeRelationsUserTests.ts, 53, 5))
+
+        element = true;
+>element : Symbol(ElementNode.element, Decl(distributiveConditionalTypeRelationsUserTests.ts, 62, 47))
+
+        refresh() {
+>refresh : Symbol(ElementNode.refresh, Decl(distributiveConditionalTypeRelationsUserTests.ts, 63, 23))
+
+            let slot = getSlot(this);
+>slot : Symbol(slot, Decl(distributiveConditionalTypeRelationsUserTests.ts, 65, 15))
+>getSlot : Symbol(getSlot, Decl(distributiveConditionalTypeRelationsUserTests.ts, 59, 86))
+>this : Symbol(ElementNode, Decl(distributiveConditionalTypeRelationsUserTests.ts, 60, 74))
+
+            slot = slot.withAfter();
+>slot : Symbol(slot, Decl(distributiveConditionalTypeRelationsUserTests.ts, 65, 15))
+>slot.withAfter : Symbol(ElementSlot.withAfter, Decl(distributiveConditionalTypeRelationsUserTests.ts, 49, 23))
+>slot : Symbol(slot, Decl(distributiveConditionalTypeRelationsUserTests.ts, 65, 15))
+>withAfter : Symbol(ElementSlot.withAfter, Decl(distributiveConditionalTypeRelationsUserTests.ts, 49, 23))
+        }
+    }
+}
+
+namespace LobeHub {
+>LobeHub : Symbol(LobeHub, Decl(distributiveConditionalTypeRelationsUserTests.ts, 69, 1))
+
+    type RequestResult<Data, Throw extends boolean> = Throw extends true ? Promise<Data> : Promise<Data | undefined>;
+>RequestResult : Symbol(RequestResult, Decl(distributiveConditionalTypeRelationsUserTests.ts, 71, 19))
+>Data : Symbol(Data, Decl(distributiveConditionalTypeRelationsUserTests.ts, 72, 23))
+>Throw : Symbol(Throw, Decl(distributiveConditionalTypeRelationsUserTests.ts, 72, 28))
+>Throw : Symbol(Throw, Decl(distributiveConditionalTypeRelationsUserTests.ts, 72, 28))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2018.promise.d.ts, --, --))
+>Data : Symbol(Data, Decl(distributiveConditionalTypeRelationsUserTests.ts, 72, 23))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2018.promise.d.ts, --, --))
+>Data : Symbol(Data, Decl(distributiveConditionalTypeRelationsUserTests.ts, 72, 23))
+
+    export const request: <Data, Throw extends boolean>(
+>request : Symbol(request, Decl(distributiveConditionalTypeRelationsUserTests.ts, 74, 16))
+>Data : Symbol(Data, Decl(distributiveConditionalTypeRelationsUserTests.ts, 74, 27))
+>Throw : Symbol(Throw, Decl(distributiveConditionalTypeRelationsUserTests.ts, 74, 32))
+
+        data: Data,
+>data : Symbol(data, Decl(distributiveConditionalTypeRelationsUserTests.ts, 74, 56))
+>Data : Symbol(Data, Decl(distributiveConditionalTypeRelationsUserTests.ts, 74, 27))
+
+        flag: Throw,
+>flag : Symbol(flag, Decl(distributiveConditionalTypeRelationsUserTests.ts, 75, 19))
+>Throw : Symbol(Throw, Decl(distributiveConditionalTypeRelationsUserTests.ts, 74, 32))
+
+    ) => RequestResult<Data, Throw> = async (data, flag) => data;
+>RequestResult : Symbol(RequestResult, Decl(distributiveConditionalTypeRelationsUserTests.ts, 71, 19))
+>Data : Symbol(Data, Decl(distributiveConditionalTypeRelationsUserTests.ts, 74, 27))
+>Throw : Symbol(Throw, Decl(distributiveConditionalTypeRelationsUserTests.ts, 74, 32))
+>data : Symbol(data, Decl(distributiveConditionalTypeRelationsUserTests.ts, 77, 45))
+>flag : Symbol(flag, Decl(distributiveConditionalTypeRelationsUserTests.ts, 77, 50))
+>data : Symbol(data, Decl(distributiveConditionalTypeRelationsUserTests.ts, 77, 45))
+}
+
+namespace Effect {
+>Effect : Symbol(Effect, Decl(distributiveConditionalTypeRelationsUserTests.ts, 78, 1))
+
+    interface Box<T> {
+>Box : Symbol(Box, Decl(distributiveConditionalTypeRelationsUserTests.ts, 80, 18))
+>T : Symbol(T, Decl(distributiveConditionalTypeRelationsUserTests.ts, 81, 18))
+
+        value: T;
+>value : Symbol(Box.value, Decl(distributiveConditionalTypeRelationsUserTests.ts, 81, 22))
+>T : Symbol(T, Decl(distributiveConditionalTypeRelationsUserTests.ts, 81, 18))
+    }
+
+    type With<S extends Iterable<any>, T> = S extends readonly [any, ...any[]] ? [T, ...T[]] : T[];
+>With : Symbol(With, Decl(distributiveConditionalTypeRelationsUserTests.ts, 83, 5))
+>S : Symbol(S, Decl(distributiveConditionalTypeRelationsUserTests.ts, 85, 14))
+>Iterable : Symbol(Iterable, Decl(lib.es2015.iterable.d.ts, --, --))
+>T : Symbol(T, Decl(distributiveConditionalTypeRelationsUserTests.ts, 85, 38))
+>S : Symbol(S, Decl(distributiveConditionalTypeRelationsUserTests.ts, 85, 14))
+>T : Symbol(T, Decl(distributiveConditionalTypeRelationsUserTests.ts, 85, 38))
+>T : Symbol(T, Decl(distributiveConditionalTypeRelationsUserTests.ts, 85, 38))
+>T : Symbol(T, Decl(distributiveConditionalTypeRelationsUserTests.ts, 85, 38))
+
+    export function join<A extends Iterable<Box<any>>>(
+>join : Symbol(join, Decl(distributiveConditionalTypeRelationsUserTests.ts, 85, 99))
+>A : Symbol(A, Decl(distributiveConditionalTypeRelationsUserTests.ts, 87, 25))
+>Iterable : Symbol(Iterable, Decl(lib.es2015.iterable.d.ts, --, --))
+>Box : Symbol(Box, Decl(distributiveConditionalTypeRelationsUserTests.ts, 80, 18))
+
+        value: [any, ...any[]],
+>value : Symbol(value, Decl(distributiveConditionalTypeRelationsUserTests.ts, 87, 55))
+
+    ): With<A, A extends Iterable<Box<infer T>> ? T : never> {
+>With : Symbol(With, Decl(distributiveConditionalTypeRelationsUserTests.ts, 83, 5))
+>A : Symbol(A, Decl(distributiveConditionalTypeRelationsUserTests.ts, 87, 25))
+>A : Symbol(A, Decl(distributiveConditionalTypeRelationsUserTests.ts, 87, 25))
+>Iterable : Symbol(Iterable, Decl(lib.es2015.iterable.d.ts, --, --))
+>Box : Symbol(Box, Decl(distributiveConditionalTypeRelationsUserTests.ts, 80, 18))
+>T : Symbol(T, Decl(distributiveConditionalTypeRelationsUserTests.ts, 89, 43))
+>T : Symbol(T, Decl(distributiveConditionalTypeRelationsUserTests.ts, 89, 43))
+
+        return value;
+>value : Symbol(value, Decl(distributiveConditionalTypeRelationsUserTests.ts, 87, 55))
+    }
+
+    type Result<T> = [T] extends [Box<infer U>] ? Box<U> : never;
+>Result : Symbol(Result, Decl(distributiveConditionalTypeRelationsUserTests.ts, 91, 5))
+>T : Symbol(T, Decl(distributiveConditionalTypeRelationsUserTests.ts, 93, 16))
+>T : Symbol(T, Decl(distributiveConditionalTypeRelationsUserTests.ts, 93, 16))
+>Box : Symbol(Box, Decl(distributiveConditionalTypeRelationsUserTests.ts, 80, 18))
+>U : Symbol(U, Decl(distributiveConditionalTypeRelationsUserTests.ts, 93, 43))
+>Box : Symbol(Box, Decl(distributiveConditionalTypeRelationsUserTests.ts, 80, 18))
+>U : Symbol(U, Decl(distributiveConditionalTypeRelationsUserTests.ts, 93, 43))
+
+    export function result<T extends Box<any>>(value: Box<any>): Result<T> {
+>result : Symbol(result, Decl(distributiveConditionalTypeRelationsUserTests.ts, 93, 65))
+>T : Symbol(T, Decl(distributiveConditionalTypeRelationsUserTests.ts, 95, 27))
+>Box : Symbol(Box, Decl(distributiveConditionalTypeRelationsUserTests.ts, 80, 18))
+>value : Symbol(value, Decl(distributiveConditionalTypeRelationsUserTests.ts, 95, 47))
+>Box : Symbol(Box, Decl(distributiveConditionalTypeRelationsUserTests.ts, 80, 18))
+>Result : Symbol(Result, Decl(distributiveConditionalTypeRelationsUserTests.ts, 91, 5))
+>T : Symbol(T, Decl(distributiveConditionalTypeRelationsUserTests.ts, 95, 27))
+
+        return value;
+>value : Symbol(value, Decl(distributiveConditionalTypeRelationsUserTests.ts, 95, 47))
+    }
+}
+
+namespace NonDistributive {
+>NonDistributive : Symbol(NonDistributive, Decl(distributiveConditionalTypeRelationsUserTests.ts, 98, 1))
+
+    export function answer<R extends boolean>(value: number): [R] extends [true] ? number : number | undefined {
+>answer : Symbol(answer, Decl(distributiveConditionalTypeRelationsUserTests.ts, 100, 27))
+>R : Symbol(R, Decl(distributiveConditionalTypeRelationsUserTests.ts, 101, 27))
+>value : Symbol(value, Decl(distributiveConditionalTypeRelationsUserTests.ts, 101, 46))
+>R : Symbol(R, Decl(distributiveConditionalTypeRelationsUserTests.ts, 101, 27))
+
+        return value;
+>value : Symbol(value, Decl(distributiveConditionalTypeRelationsUserTests.ts, 101, 46))
+    }
+
+    export function items<T, O extends { useSeparators: boolean }>():
+>items : Symbol(items, Decl(distributiveConditionalTypeRelationsUserTests.ts, 103, 5))
+>T : Symbol(T, Decl(distributiveConditionalTypeRelationsUserTests.ts, 105, 26))
+>O : Symbol(O, Decl(distributiveConditionalTypeRelationsUserTests.ts, 105, 28))
+>useSeparators : Symbol(useSeparators, Decl(distributiveConditionalTypeRelationsUserTests.ts, 105, 40))
+
+        [O] extends [{ useSeparators: true }] ? (T | { separator: true })[] : T[] {
+>O : Symbol(O, Decl(distributiveConditionalTypeRelationsUserTests.ts, 105, 28))
+>useSeparators : Symbol(useSeparators, Decl(distributiveConditionalTypeRelationsUserTests.ts, 106, 22))
+>T : Symbol(T, Decl(distributiveConditionalTypeRelationsUserTests.ts, 105, 26))
+>separator : Symbol(separator, Decl(distributiveConditionalTypeRelationsUserTests.ts, 106, 54))
+>T : Symbol(T, Decl(distributiveConditionalTypeRelationsUserTests.ts, 105, 26))
+
+        return [];
+    }
+}
+
