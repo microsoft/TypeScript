@@ -1,0 +1,13 @@
+//// [tests/cases/conformance/types/negated/negatedFreshOptionalProperties.ts] ////
+
+=== negatedFreshOptionalProperties.ts ===
+declare const optionalStringProperty: { value?: string };
+>optionalStringProperty : { value?: string; }
+>value : string | undefined
+
+const overlappingOptionalProperties: not { value?: number } = { ...optionalStringProperty }; // Should error
+>overlappingOptionalProperties : not { value?: number; }
+>value : number | undefined
+>{ ...optionalStringProperty } : { value?: string; }
+>optionalStringProperty : { value?: string; }
+

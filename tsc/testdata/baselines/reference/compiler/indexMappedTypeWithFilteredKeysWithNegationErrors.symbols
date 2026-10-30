@@ -1,0 +1,283 @@
+//// [tests/cases/compiler/indexMappedTypeWithFilteredKeysWithNegationErrors.ts] ////
+
+=== indexMappedTypeWithFilteredKeysWithNegationErrors.ts ===
+type FilteredFunction<T> = T extends string ? never : () => T;
+>FilteredFunction : Symbol(FilteredFunction, Decl(indexMappedTypeWithFilteredKeysWithNegationErrors.ts, 0, 0))
+>T : Symbol(T, Decl(indexMappedTypeWithFilteredKeysWithNegationErrors.ts, 0, 22))
+>T : Symbol(T, Decl(indexMappedTypeWithFilteredKeysWithNegationErrors.ts, 0, 22))
+>T : Symbol(T, Decl(indexMappedTypeWithFilteredKeysWithNegationErrors.ts, 0, 22))
+
+function makeFunction<T>(): FilteredFunction<T> {
+>makeFunction : Symbol(makeFunction, Decl(indexMappedTypeWithFilteredKeysWithNegationErrors.ts, 0, 62))
+>T : Symbol(T, Decl(indexMappedTypeWithFilteredKeysWithNegationErrors.ts, 2, 22))
+>FilteredFunction : Symbol(FilteredFunction, Decl(indexMappedTypeWithFilteredKeysWithNegationErrors.ts, 0, 0))
+>T : Symbol(T, Decl(indexMappedTypeWithFilteredKeysWithNegationErrors.ts, 2, 22))
+
+    // When T is string, FilteredFunction<T> is never, but this still returns a function.
+    return () => { throw new Error(); };
+>Error : Symbol(Error, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2022.error.d.ts, --, --))
+}
+
+const impossibleFunction: never = makeFunction<string>();
+>impossibleFunction : Symbol(impossibleFunction, Decl(indexMappedTypeWithFilteredKeysWithNegationErrors.ts, 7, 5))
+>makeFunction : Symbol(makeFunction, Decl(indexMappedTypeWithFilteredKeysWithNegationErrors.ts, 0, 62))
+
+type FilteredPair<T> = T extends boolean ? never : [T, T];
+>FilteredPair : Symbol(FilteredPair, Decl(indexMappedTypeWithFilteredKeysWithNegationErrors.ts, 7, 57))
+>T : Symbol(T, Decl(indexMappedTypeWithFilteredKeysWithNegationErrors.ts, 9, 18))
+>T : Symbol(T, Decl(indexMappedTypeWithFilteredKeysWithNegationErrors.ts, 9, 18))
+>T : Symbol(T, Decl(indexMappedTypeWithFilteredKeysWithNegationErrors.ts, 9, 18))
+>T : Symbol(T, Decl(indexMappedTypeWithFilteredKeysWithNegationErrors.ts, 9, 18))
+
+function makePair<T>(value: [T & not boolean, T & not boolean]): FilteredPair<T> {
+>makePair : Symbol(makePair, Decl(indexMappedTypeWithFilteredKeysWithNegationErrors.ts, 9, 58))
+>T : Symbol(T, Decl(indexMappedTypeWithFilteredKeysWithNegationErrors.ts, 11, 18))
+>value : Symbol(value, Decl(indexMappedTypeWithFilteredKeysWithNegationErrors.ts, 11, 21))
+>T : Symbol(T, Decl(indexMappedTypeWithFilteredKeysWithNegationErrors.ts, 11, 18))
+>T : Symbol(T, Decl(indexMappedTypeWithFilteredKeysWithNegationErrors.ts, 11, 18))
+>FilteredPair : Symbol(FilteredPair, Decl(indexMappedTypeWithFilteredKeysWithNegationErrors.ts, 7, 57))
+>T : Symbol(T, Decl(indexMappedTypeWithFilteredKeysWithNegationErrors.ts, 11, 18))
+
+    // The tuple elements can come from different union members, unlike the distributed FilteredPair<T>.
+    return value;
+>value : Symbol(value, Decl(indexMappedTypeWithFilteredKeysWithNegationErrors.ts, 11, 21))
+}
+
+const homogeneousPair: [string, string] | [number, number] = makePair<string | number>(["a", 1]);
+>homogeneousPair : Symbol(homogeneousPair, Decl(indexMappedTypeWithFilteredKeysWithNegationErrors.ts, 16, 5))
+>makePair : Symbol(makePair, Decl(indexMappedTypeWithFilteredKeysWithNegationErrors.ts, 9, 58))
+
+type Omitted<T> = "a" extends T ? never : "b";
+>Omitted : Symbol(Omitted, Decl(indexMappedTypeWithFilteredKeysWithNegationErrors.ts, 16, 97))
+>T : Symbol(T, Decl(indexMappedTypeWithFilteredKeysWithNegationErrors.ts, 18, 13))
+>T : Symbol(T, Decl(indexMappedTypeWithFilteredKeysWithNegationErrors.ts, 18, 13))
+
+type DependentFilter<T> = T extends Omitted<T> ? never : T;
+>DependentFilter : Symbol(DependentFilter, Decl(indexMappedTypeWithFilteredKeysWithNegationErrors.ts, 18, 46))
+>T : Symbol(T, Decl(indexMappedTypeWithFilteredKeysWithNegationErrors.ts, 19, 21))
+>T : Symbol(T, Decl(indexMappedTypeWithFilteredKeysWithNegationErrors.ts, 19, 21))
+>Omitted : Symbol(Omitted, Decl(indexMappedTypeWithFilteredKeysWithNegationErrors.ts, 16, 97))
+>T : Symbol(T, Decl(indexMappedTypeWithFilteredKeysWithNegationErrors.ts, 19, 21))
+>T : Symbol(T, Decl(indexMappedTypeWithFilteredKeysWithNegationErrors.ts, 19, 21))
+
+function dependentFilter<T>(value: T & not Omitted<T>): DependentFilter<T> {
+>dependentFilter : Symbol(dependentFilter, Decl(indexMappedTypeWithFilteredKeysWithNegationErrors.ts, 19, 59))
+>T : Symbol(T, Decl(indexMappedTypeWithFilteredKeysWithNegationErrors.ts, 21, 25))
+>value : Symbol(value, Decl(indexMappedTypeWithFilteredKeysWithNegationErrors.ts, 21, 28))
+>T : Symbol(T, Decl(indexMappedTypeWithFilteredKeysWithNegationErrors.ts, 21, 25))
+>Omitted : Symbol(Omitted, Decl(indexMappedTypeWithFilteredKeysWithNegationErrors.ts, 16, 97))
+>T : Symbol(T, Decl(indexMappedTypeWithFilteredKeysWithNegationErrors.ts, 21, 25))
+>DependentFilter : Symbol(DependentFilter, Decl(indexMappedTypeWithFilteredKeysWithNegationErrors.ts, 18, 46))
+>T : Symbol(T, Decl(indexMappedTypeWithFilteredKeysWithNegationErrors.ts, 21, 25))
+
+    // For T = "a" | "b", Omitted<T> is never, so value can be "b", but DependentFilter<T> is "a".
+    return value;
+>value : Symbol(value, Decl(indexMappedTypeWithFilteredKeysWithNegationErrors.ts, 21, 28))
+}
+
+const onlyA: "a" = dependentFilter<"a" | "b">("b");
+>onlyA : Symbol(onlyA, Decl(indexMappedTypeWithFilteredKeysWithNegationErrors.ts, 26, 5))
+>dependentFilter : Symbol(dependentFilter, Decl(indexMappedTypeWithFilteredKeysWithNegationErrors.ts, 19, 59))
+
+type Filter<T, U> = T extends U ? never : T;
+>Filter : Symbol(Filter, Decl(indexMappedTypeWithFilteredKeysWithNegationErrors.ts, 26, 51))
+>T : Symbol(T, Decl(indexMappedTypeWithFilteredKeysWithNegationErrors.ts, 28, 12))
+>U : Symbol(U, Decl(indexMappedTypeWithFilteredKeysWithNegationErrors.ts, 28, 14))
+>T : Symbol(T, Decl(indexMappedTypeWithFilteredKeysWithNegationErrors.ts, 28, 12))
+>U : Symbol(U, Decl(indexMappedTypeWithFilteredKeysWithNegationErrors.ts, 28, 14))
+>T : Symbol(T, Decl(indexMappedTypeWithFilteredKeysWithNegationErrors.ts, 28, 12))
+
+function unfiltered<T, U>(value: T): Filter<T, U> {
+>unfiltered : Symbol(unfiltered, Decl(indexMappedTypeWithFilteredKeysWithNegationErrors.ts, 28, 44))
+>T : Symbol(T, Decl(indexMappedTypeWithFilteredKeysWithNegationErrors.ts, 30, 20))
+>U : Symbol(U, Decl(indexMappedTypeWithFilteredKeysWithNegationErrors.ts, 30, 22))
+>value : Symbol(value, Decl(indexMappedTypeWithFilteredKeysWithNegationErrors.ts, 30, 26))
+>T : Symbol(T, Decl(indexMappedTypeWithFilteredKeysWithNegationErrors.ts, 30, 20))
+>Filter : Symbol(Filter, Decl(indexMappedTypeWithFilteredKeysWithNegationErrors.ts, 26, 51))
+>T : Symbol(T, Decl(indexMappedTypeWithFilteredKeysWithNegationErrors.ts, 30, 20))
+>U : Symbol(U, Decl(indexMappedTypeWithFilteredKeysWithNegationErrors.ts, 30, 22))
+
+    // value can still belong to U, whose members are excluded from Filter<T, U>.
+    return value;
+>value : Symbol(value, Decl(indexMappedTypeWithFilteredKeysWithNegationErrors.ts, 30, 26))
+}
+
+type FilteredKeys<T> = {
+>FilteredKeys : Symbol(FilteredKeys, Decl(indexMappedTypeWithFilteredKeysWithNegationErrors.ts, 33, 1))
+>T : Symbol(T, Decl(indexMappedTypeWithFilteredKeysWithNegationErrors.ts, 35, 18))
+
+    [K in keyof T as K extends "b" ? never : K]: T[K]
+>K : Symbol(K, Decl(indexMappedTypeWithFilteredKeysWithNegationErrors.ts, 36, 5))
+>T : Symbol(T, Decl(indexMappedTypeWithFilteredKeysWithNegationErrors.ts, 35, 18))
+>K : Symbol(K, Decl(indexMappedTypeWithFilteredKeysWithNegationErrors.ts, 36, 5))
+>K : Symbol(K, Decl(indexMappedTypeWithFilteredKeysWithNegationErrors.ts, 36, 5))
+>T : Symbol(T, Decl(indexMappedTypeWithFilteredKeysWithNegationErrors.ts, 35, 18))
+>K : Symbol(K, Decl(indexMappedTypeWithFilteredKeysWithNegationErrors.ts, 36, 5))
+
+};
+
+function excludedKey<T>(value: keyof T & not "c"): keyof FilteredKeys<T> {
+>excludedKey : Symbol(excludedKey, Decl(indexMappedTypeWithFilteredKeysWithNegationErrors.ts, 37, 2))
+>T : Symbol(T, Decl(indexMappedTypeWithFilteredKeysWithNegationErrors.ts, 39, 21))
+>value : Symbol(value, Decl(indexMappedTypeWithFilteredKeysWithNegationErrors.ts, 39, 24))
+>T : Symbol(T, Decl(indexMappedTypeWithFilteredKeysWithNegationErrors.ts, 39, 21))
+>FilteredKeys : Symbol(FilteredKeys, Decl(indexMappedTypeWithFilteredKeysWithNegationErrors.ts, 33, 1))
+>T : Symbol(T, Decl(indexMappedTypeWithFilteredKeysWithNegationErrors.ts, 39, 21))
+
+    // Excluding "c" does not prevent value from being the filtered-out key "b".
+    return value;
+>value : Symbol(value, Decl(indexMappedTypeWithFilteredKeysWithNegationErrors.ts, 39, 24))
+}
+
+function unrelatedKey<T>(value: string & not "b"): keyof FilteredKeys<T> {
+>unrelatedKey : Symbol(unrelatedKey, Decl(indexMappedTypeWithFilteredKeysWithNegationErrors.ts, 42, 1))
+>T : Symbol(T, Decl(indexMappedTypeWithFilteredKeysWithNegationErrors.ts, 44, 22))
+>value : Symbol(value, Decl(indexMappedTypeWithFilteredKeysWithNegationErrors.ts, 44, 25))
+>FilteredKeys : Symbol(FilteredKeys, Decl(indexMappedTypeWithFilteredKeysWithNegationErrors.ts, 33, 1))
+>T : Symbol(T, Decl(indexMappedTypeWithFilteredKeysWithNegationErrors.ts, 44, 22))
+
+    // value is not constrained to keyof T and may name a property T does not have.
+    return value;
+>value : Symbol(value, Decl(indexMappedTypeWithFilteredKeysWithNegationErrors.ts, 44, 25))
+}
+
+type RemappedKeys<T> = {
+>RemappedKeys : Symbol(RemappedKeys, Decl(indexMappedTypeWithFilteredKeysWithNegationErrors.ts, 47, 1))
+>T : Symbol(T, Decl(indexMappedTypeWithFilteredKeysWithNegationErrors.ts, 49, 18))
+
+    [K in keyof T as ("a" | "b") extends K ? K : never]: T[K]
+>K : Symbol(K, Decl(indexMappedTypeWithFilteredKeysWithNegationErrors.ts, 50, 5))
+>T : Symbol(T, Decl(indexMappedTypeWithFilteredKeysWithNegationErrors.ts, 49, 18))
+>K : Symbol(K, Decl(indexMappedTypeWithFilteredKeysWithNegationErrors.ts, 50, 5))
+>K : Symbol(K, Decl(indexMappedTypeWithFilteredKeysWithNegationErrors.ts, 50, 5))
+>T : Symbol(T, Decl(indexMappedTypeWithFilteredKeysWithNegationErrors.ts, 49, 18))
+>K : Symbol(K, Decl(indexMappedTypeWithFilteredKeysWithNegationErrors.ts, 50, 5))
+
+};
+
+function remappedKey<T extends { a: unknown; b: unknown }>(
+>remappedKey : Symbol(remappedKey, Decl(indexMappedTypeWithFilteredKeysWithNegationErrors.ts, 51, 2))
+>T : Symbol(T, Decl(indexMappedTypeWithFilteredKeysWithNegationErrors.ts, 53, 21))
+>a : Symbol(a, Decl(indexMappedTypeWithFilteredKeysWithNegationErrors.ts, 53, 32))
+>b : Symbol(b, Decl(indexMappedTypeWithFilteredKeysWithNegationErrors.ts, 53, 44))
+
+    value: keyof T & not "c"
+>value : Symbol(value, Decl(indexMappedTypeWithFilteredKeysWithNegationErrors.ts, 53, 59))
+>T : Symbol(T, Decl(indexMappedTypeWithFilteredKeysWithNegationErrors.ts, 53, 21))
+
+): keyof RemappedKeys<T> {
+>RemappedKeys : Symbol(RemappedKeys, Decl(indexMappedTypeWithFilteredKeysWithNegationErrors.ts, 47, 1))
+>T : Symbol(T, Decl(indexMappedTypeWithFilteredKeysWithNegationErrors.ts, 53, 21))
+
+    // For T with just "a" and "b", neither key accepts their union, so no keys survive.
+    return value;
+>value : Symbol(value, Decl(indexMappedTypeWithFilteredKeysWithNegationErrors.ts, 53, 59))
+}
+
+type DependentKeys<T> = {
+>DependentKeys : Symbol(DependentKeys, Decl(indexMappedTypeWithFilteredKeysWithNegationErrors.ts, 58, 1))
+>T : Symbol(T, Decl(indexMappedTypeWithFilteredKeysWithNegationErrors.ts, 60, 19))
+
+    [K in keyof T as K extends Omitted<K> ? never : K]: T[K]
+>K : Symbol(K, Decl(indexMappedTypeWithFilteredKeysWithNegationErrors.ts, 61, 5))
+>T : Symbol(T, Decl(indexMappedTypeWithFilteredKeysWithNegationErrors.ts, 60, 19))
+>K : Symbol(K, Decl(indexMappedTypeWithFilteredKeysWithNegationErrors.ts, 61, 5))
+>Omitted : Symbol(Omitted, Decl(indexMappedTypeWithFilteredKeysWithNegationErrors.ts, 16, 97))
+>K : Symbol(K, Decl(indexMappedTypeWithFilteredKeysWithNegationErrors.ts, 61, 5))
+>K : Symbol(K, Decl(indexMappedTypeWithFilteredKeysWithNegationErrors.ts, 61, 5))
+>T : Symbol(T, Decl(indexMappedTypeWithFilteredKeysWithNegationErrors.ts, 60, 19))
+>K : Symbol(K, Decl(indexMappedTypeWithFilteredKeysWithNegationErrors.ts, 61, 5))
+
+};
+
+function dependentKey<T>(value: keyof T & not Omitted<keyof T>): keyof DependentKeys<T> {
+>dependentKey : Symbol(dependentKey, Decl(indexMappedTypeWithFilteredKeysWithNegationErrors.ts, 62, 2))
+>T : Symbol(T, Decl(indexMappedTypeWithFilteredKeysWithNegationErrors.ts, 64, 22))
+>value : Symbol(value, Decl(indexMappedTypeWithFilteredKeysWithNegationErrors.ts, 64, 25))
+>T : Symbol(T, Decl(indexMappedTypeWithFilteredKeysWithNegationErrors.ts, 64, 22))
+>Omitted : Symbol(Omitted, Decl(indexMappedTypeWithFilteredKeysWithNegationErrors.ts, 16, 97))
+>T : Symbol(T, Decl(indexMappedTypeWithFilteredKeysWithNegationErrors.ts, 64, 22))
+>DependentKeys : Symbol(DependentKeys, Decl(indexMappedTypeWithFilteredKeysWithNegationErrors.ts, 58, 1))
+>T : Symbol(T, Decl(indexMappedTypeWithFilteredKeysWithNegationErrors.ts, 64, 22))
+
+    // For T = { a: number; b: number }, value can be "b", but only "a" survives the per-key filter.
+    return value;
+>value : Symbol(value, Decl(indexMappedTypeWithFilteredKeysWithNegationErrors.ts, 64, 25))
+}
+
+type Repeated<T extends string> = T extends "skip" ? never : `${T}-${T}`;
+>Repeated : Symbol(Repeated, Decl(indexMappedTypeWithFilteredKeysWithNegationErrors.ts, 67, 1))
+>T : Symbol(T, Decl(indexMappedTypeWithFilteredKeysWithNegationErrors.ts, 69, 14))
+>T : Symbol(T, Decl(indexMappedTypeWithFilteredKeysWithNegationErrors.ts, 69, 14))
+>T : Symbol(T, Decl(indexMappedTypeWithFilteredKeysWithNegationErrors.ts, 69, 14))
+>T : Symbol(T, Decl(indexMappedTypeWithFilteredKeysWithNegationErrors.ts, 69, 14))
+
+function repeated<T extends string>(value: `${T & not "skip"}-${T & not "skip"}`): Repeated<T> {
+>repeated : Symbol(repeated, Decl(indexMappedTypeWithFilteredKeysWithNegationErrors.ts, 69, 73))
+>T : Symbol(T, Decl(indexMappedTypeWithFilteredKeysWithNegationErrors.ts, 71, 18))
+>value : Symbol(value, Decl(indexMappedTypeWithFilteredKeysWithNegationErrors.ts, 71, 36))
+>T : Symbol(T, Decl(indexMappedTypeWithFilteredKeysWithNegationErrors.ts, 71, 18))
+>T : Symbol(T, Decl(indexMappedTypeWithFilteredKeysWithNegationErrors.ts, 71, 18))
+>Repeated : Symbol(Repeated, Decl(indexMappedTypeWithFilteredKeysWithNegationErrors.ts, 67, 1))
+>T : Symbol(T, Decl(indexMappedTypeWithFilteredKeysWithNegationErrors.ts, 71, 18))
+
+    // value can mix different union members in its two T positions, unlike Repeated<T>.
+    return value;
+>value : Symbol(value, Decl(indexMappedTypeWithFilteredKeysWithNegationErrors.ts, 71, 36))
+}
+
+const same: "a-a" | "b-b" = repeated<"a" | "b">("a-b");
+>same : Symbol(same, Decl(indexMappedTypeWithFilteredKeysWithNegationErrors.ts, 76, 5))
+>repeated : Symbol(repeated, Decl(indexMappedTypeWithFilteredKeysWithNegationErrors.ts, 69, 73))
+
+type Correlated<T> = T extends string ? never : T & { value: T };
+>Correlated : Symbol(Correlated, Decl(indexMappedTypeWithFilteredKeysWithNegationErrors.ts, 76, 55))
+>T : Symbol(T, Decl(indexMappedTypeWithFilteredKeysWithNegationErrors.ts, 78, 16))
+>T : Symbol(T, Decl(indexMappedTypeWithFilteredKeysWithNegationErrors.ts, 78, 16))
+>T : Symbol(T, Decl(indexMappedTypeWithFilteredKeysWithNegationErrors.ts, 78, 16))
+>value : Symbol(value, Decl(indexMappedTypeWithFilteredKeysWithNegationErrors.ts, 78, 53))
+>T : Symbol(T, Decl(indexMappedTypeWithFilteredKeysWithNegationErrors.ts, 78, 16))
+
+function correlated<T>(value: T & not string & { value: T & not string }): Correlated<T> {
+>correlated : Symbol(correlated, Decl(indexMappedTypeWithFilteredKeysWithNegationErrors.ts, 78, 65))
+>T : Symbol(T, Decl(indexMappedTypeWithFilteredKeysWithNegationErrors.ts, 80, 20))
+>value : Symbol(value, Decl(indexMappedTypeWithFilteredKeysWithNegationErrors.ts, 80, 23))
+>T : Symbol(T, Decl(indexMappedTypeWithFilteredKeysWithNegationErrors.ts, 80, 20))
+>value : Symbol(value, Decl(indexMappedTypeWithFilteredKeysWithNegationErrors.ts, 80, 48))
+>T : Symbol(T, Decl(indexMappedTypeWithFilteredKeysWithNegationErrors.ts, 80, 20))
+>Correlated : Symbol(Correlated, Decl(indexMappedTypeWithFilteredKeysWithNegationErrors.ts, 76, 55))
+>T : Symbol(T, Decl(indexMappedTypeWithFilteredKeysWithNegationErrors.ts, 80, 20))
+
+    // The outer T and the value property's T can come from different union members, unlike Correlated<T>.
+    return value;
+>value : Symbol(value, Decl(indexMappedTypeWithFilteredKeysWithNegationErrors.ts, 80, 23))
+}
+
+function trueFunction<T>(value: () => (string & { value: T })): FilteredFunction<string & { value: T }> {
+>trueFunction : Symbol(trueFunction, Decl(indexMappedTypeWithFilteredKeysWithNegationErrors.ts, 83, 1))
+>T : Symbol(T, Decl(indexMappedTypeWithFilteredKeysWithNegationErrors.ts, 85, 22))
+>value : Symbol(value, Decl(indexMappedTypeWithFilteredKeysWithNegationErrors.ts, 85, 25))
+>value : Symbol(value, Decl(indexMappedTypeWithFilteredKeysWithNegationErrors.ts, 85, 49))
+>T : Symbol(T, Decl(indexMappedTypeWithFilteredKeysWithNegationErrors.ts, 85, 22))
+>FilteredFunction : Symbol(FilteredFunction, Decl(indexMappedTypeWithFilteredKeysWithNegationErrors.ts, 0, 0))
+>value : Symbol(value, Decl(indexMappedTypeWithFilteredKeysWithNegationErrors.ts, 85, 91))
+>T : Symbol(T, Decl(indexMappedTypeWithFilteredKeysWithNegationErrors.ts, 85, 22))
+
+    // The check type always extends string, so the result is never, not a function.
+    return value;
+>value : Symbol(value, Decl(indexMappedTypeWithFilteredKeysWithNegationErrors.ts, 85, 25))
+}
+
+function unionFunction<T>(value: () => ([T] | string)): FilteredFunction<[T] | string> {
+>unionFunction : Symbol(unionFunction, Decl(indexMappedTypeWithFilteredKeysWithNegationErrors.ts, 88, 1))
+>T : Symbol(T, Decl(indexMappedTypeWithFilteredKeysWithNegationErrors.ts, 90, 23))
+>value : Symbol(value, Decl(indexMappedTypeWithFilteredKeysWithNegationErrors.ts, 90, 26))
+>T : Symbol(T, Decl(indexMappedTypeWithFilteredKeysWithNegationErrors.ts, 90, 23))
+>FilteredFunction : Symbol(FilteredFunction, Decl(indexMappedTypeWithFilteredKeysWithNegationErrors.ts, 0, 0))
+>T : Symbol(T, Decl(indexMappedTypeWithFilteredKeysWithNegationErrors.ts, 90, 23))
+
+    // The string union member is filtered out, so the returned function must return [T], not string.
+    return value;
+>value : Symbol(value, Decl(indexMappedTypeWithFilteredKeysWithNegationErrors.ts, 90, 26))
+}
+

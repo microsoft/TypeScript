@@ -15,10 +15,10 @@ function readRuntime(value: string): Runtime {
 >value : string
 >"node" : "node"
 >value !== "deno" : boolean
->value : string
+>value : string & not "node"
 >"deno" : "deno"
 >value !== "bun" : boolean
->value : string
+>value : string & not "node" & not "deno"
 >"bun" : "bun"
 
         throw new Error();

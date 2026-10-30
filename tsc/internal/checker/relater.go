@@ -1086,7 +1086,8 @@ func (c *Checker) isDiscriminantProperty(t *Type, name string) bool {
 		if prop != nil && prop.CheckFlags()&ast.CheckFlagsSyntheticProperty != 0 {
 			if prop.CheckFlags()&ast.CheckFlagsIsDiscriminantComputed == 0 {
 				prop.SetCheckFlags(prop.CheckFlags() | ast.CheckFlagsIsDiscriminantComputed)
-				if prop.CheckFlags()&ast.CheckFlagsNonUniformAndLiteral == ast.CheckFlagsNonUniformAndLiteral && !c.isGenericType(c.getTypeOfSymbol(prop)) {
+				pt := c.getTypeOfSymbol(prop)
+				if prop.CheckFlags()&ast.CheckFlagsNonUniformAndLiteral == ast.CheckFlagsNonUniformAndLiteral && !c.isGenericType(pt) {
 					prop.SetCheckFlags(prop.CheckFlags() | ast.CheckFlagsIsDiscriminant)
 				}
 			}
@@ -2320,7 +2321,7 @@ func (c *Checker) getEffectiveConstraintOfIntersection(types []*Type, targetIsUn
 	var constraints []*Type
 	hasDisjointDomainType := false
 	for _, t := range types {
-		if t.flags&TypeFlagsInstantiable != 0 {
+		if t.flags&TypeFlagsInstantiable != 0 && t.flags&TypeFlagsNegated == 0 {
 			// We keep following constraints as long as we have an instantiable type that is known
 			// not to be circular or infinite (hence we stop on index access types).
 			constraint := c.getConstraintOfType(t)
@@ -2333,7 +2334,7 @@ func (c *Checker) getEffectiveConstraintOfIntersection(types []*Type, targetIsUn
 					constraints = append(constraints, t)
 				}
 			}
-		} else if t.flags&TypeFlagsDisjointDomains != 0 || c.IsEmptyAnonymousObjectType(t) {
+		} else if t.flags&(TypeFlagsDisjointDomains|TypeFlagsNegated) != 0 || c.IsEmptyAnonymousObjectType(t) {
 			hasDisjointDomainType = true
 		}
 	}
@@ -2344,7 +2345,7 @@ func (c *Checker) getEffectiveConstraintOfIntersection(types []*Type, targetIsUn
 			// We add any types belong to one of the disjoint domains because they might cause the final
 			// intersection operation to reduce the union constraints.
 			for _, t := range types {
-				if t.flags&TypeFlagsDisjointDomains != 0 || c.IsEmptyAnonymousObjectType(t) {
+				if t.flags&(TypeFlagsDisjointDomains|TypeFlagsNegated) != 0 || c.IsEmptyAnonymousObjectType(t) {
 					constraints = append(constraints, t)
 				}
 			}
@@ -2941,7 +2942,7 @@ func (r *Relater) unionOrIntersectionRelatedTo(source *Type, target *Type, repor
 	// appear to be comparable to '2'.
 	if r.relation == r.c.comparableRelation && target.flags&TypeFlagsPrimitive != 0 {
 		constraints := core.SameMap(source.Types(), func(t *Type) *Type {
-			if t.flags&TypeFlagsInstantiable != 0 {
+			if t.flags&(TypeFlagsInstantiable & ^TypeFlagsNegated) != 0 {
 				constraint := r.c.getBaseConstraintOfType(t)
 				if constraint != nil {
 					return constraint
@@ -2968,7 +2969,25 @@ func (r *Relater) unionOrIntersectionRelatedTo(source *Type, target *Type, repor
 	// Don't report errors though. Elaborating on whether a source constituent is related to the target is
 	// not actually useful and leads to some confusing error messages. Instead, we rely on the caller
 	// checking whether the full intersection viewed as an object is related to the target.
-	return r.someTypeRelatedToType(source, target, false /*reportErrors*/, IntersectionStateSource)
+	result := r.someTypeRelatedToType(source, target, false /*reportErrors*/, IntersectionStateSource)
+	if r.relation == r.c.comparableRelation {
+		// In the comparable relation we may have, e.g., 'string & not "a"' being related to '"a"' because
+		// 'string' and '"a"' are usually comparable - it's only the additional domain limiting provided by
+		// the negated intersection that narrows further. So we collect the negated domain bits and check
+		// that the target is comparable with each. If there's any negated domain bit for which it's not
+		// comparable, then the intersection as a whole shouldn't be comparable.
+		for _, negation := range source.Types() {
+			if negation.flags&TypeFlagsNegated == 0 {
+				continue
+			}
+			rel := r.isRelatedTo(target, negation, RecursionFlagsTarget, false /*reportErrors*/)
+			result &= rel
+			if result == TernaryFalse {
+				break
+			}
+		}
+	}
+	return result
 }
 
 func (r *Relater) someTypeRelatedToType(source *Type, target *Type, reportErrors bool, intersectionState IntersectionState) Ternary {
@@ -3420,6 +3439,9 @@ func (r *Relater) structuredTypeRelatedToWorker(source *Type, target *Type, repo
 			if source.AsStringMappingType().Symbol() == target.AsStringMappingType().Symbol() {
 				return r.isRelatedTo(source.AsStringMappingType().target, target.AsStringMappingType().target, RecursionFlagsBoth, false /*reportErrors*/)
 			}
+		case source.flags&TypeFlagsNegated != 0:
+			// 'not S' is identical to 'not T' if S is identical to T.
+			return r.isRelatedTo(source.AsNegatedType().baseType, target.AsNegatedType().baseType, RecursionFlagsBoth, false /*reportErrors*/)
 		}
 		if source.flags&TypeFlagsObject == 0 {
 			return TernaryFalse
@@ -3475,6 +3497,46 @@ func (r *Relater) structuredTypeRelatedToWorker(source *Type, target *Type, repo
 		}
 	}
 	switch {
+	case target.flags&TypeFlagsNegated != 0:
+		if source.flags&TypeFlagsNegated != 0 {
+			// 'not S' is related to 'not T' if T is related to S.
+			return r.isRelatedTo(target.AsNegatedType().baseType, source.AsNegatedType().baseType, RecursionFlagsBoth, reportErrors)
+		}
+		// A type S is related to 'not T' if S and T are disjoint, i.e. S & T is never.
+		if r.c.getIntersectionType([]*Type{source, target.AsNegatedType().baseType}).flags&TypeFlagsNever != 0 {
+			return TernaryTrue
+		}
+		// A fresh object literal type is treated as a closed set of values that have exactly the
+		// declared properties. Such a type is disjoint from T (and thus related to 'not T') when it
+		// isn't related to T and their property domains cannot overlap. The latter check is the dual
+		// of relating a property union to a discriminated union: under negation, any overlap with the
+		// negated base prevents the source from relating to the complement.
+		if isObjectLiteralType(source) {
+			regularSource := r.c.getRegularTypeOfObjectLiteral(source)
+			negatedBase := target.AsNegatedType().baseType
+			switch r.isRelatedTo(regularSource, negatedBase, RecursionFlagsBoth, false /*reportErrors*/) {
+			case TernaryFalse:
+				if r.c.objectTypesAreDisjointByProperties(regularSource, negatedBase, true /*sourceIsClosed*/) {
+					return TernaryTrue
+				}
+				return TernaryFalse
+			case TernaryMaybe:
+				return TernaryMaybe
+			default:
+				return TernaryFalse
+			}
+		}
+		// Otherwise, if the source is a concrete (non-instantiable) type, it isn't assignable to 'not T'.
+		// For comparability, however, S overlaps with 'not T' unless every value in S is excluded by T.
+		// We must not fall through to the generic instantiable handling below, which would relate S to the
+		// (permissive) constraint of the negated type and incorrectly report relatedness. For instantiable
+		// sources we do fall through, so that constraint-based reasoning can still apply.
+		if source.flags&TypeFlagsInstantiable == 0 {
+			if r.relation == r.c.comparableRelation && !r.c.isTypeSubtypeOf(source, target.AsNegatedType().baseType) {
+				return TernaryTrue
+			}
+			return TernaryFalse
+		}
 	case target.flags&TypeFlagsTypeParameter != 0:
 		// A source type { [P in Q]: X } is related to a target type T if keyof T is related to Q and X is related to T[Q].
 		if source.objectFlags&ObjectFlagsMapped != 0 && source.AsMappedType().declaration.NameType == nil && r.isRelatedTo(r.c.getIndexType(target), r.c.getConstraintTypeFromMappedType(source), RecursionFlagsBoth, false) != TernaryFalse {
@@ -3576,7 +3638,8 @@ func (r *Relater) structuredTypeRelatedToWorker(source *Type, target *Type, repo
 				nameType := r.c.getNameTypeFromMappedType(targetType)
 				constraintType := r.c.getConstraintTypeFromMappedType(targetType)
 				var targetKeys *Type
-				if nameType != nil && r.c.isMappedTypeWithKeyofConstraintDeclaration(targetType) {
+				isRemappedKeyof := nameType != nil && r.c.isMappedTypeWithKeyofConstraintDeclaration(targetType)
+				if isRemappedKeyof {
 					// we need to get the apparent mappings and union them with the generic mappings, since some properties may be
 					// missing from the `constraintType` which will otherwise be mapped in the object
 					mappedKeys := r.c.getApparentMappedTypeKeys(nameType, targetType)
@@ -3586,6 +3649,16 @@ func (r *Relater) structuredTypeRelatedToWorker(source *Type, target *Type, repo
 					targetKeys = nameType
 				} else {
 					targetKeys = constraintType
+				}
+				if isRemappedKeyof && source.flags&TypeFlagsIntersection != 0 {
+					if filteredNameType := r.getOptionalSimplificationOfConditional(nameType); filteredNameType != nil && r.someTypeRelatedToType(source, constraintType, false, intersectionState) == TernaryTrue {
+						// Apply the filter only to a source already constrained to the mapped keys.
+						sourceInstantiatedTarget := r.c.instantiateType(filteredNameType, newSimpleTypeMapper(r.c.getTypeParameterFromMappedType(targetType), source))
+						broadTargetKeys := r.c.getUnionType([]*Type{targetKeys, sourceInstantiatedTarget})
+						if r.isRelatedTo(source, broadTargetKeys, RecursionFlagsTarget, false) == TernaryTrue {
+							return TernaryTrue
+						}
+					}
 				}
 				if r.isRelatedTo(source, targetKeys, RecursionFlagsTarget, reportErrors) == TernaryTrue {
 					return TernaryTrue
@@ -3622,6 +3695,11 @@ func (r *Relater) structuredTypeRelatedToWorker(source *Type, target *Type, repo
 				if result != TernaryFalse {
 					return result
 				}
+			}
+		} else if simplifiedTarget := r.getOptionalSimplificationOfConditional(target); simplifiedTarget != nil {
+			result = r.isRelatedToEx(source, simplifiedTarget, RecursionFlagsTarget, false /*reportErrors*/, nil /*headMessage*/, intersectionState)
+			if result != TernaryFalse {
+				return result
 			}
 		}
 	case target.flags&TypeFlagsTemplateLiteral != 0:
@@ -3717,6 +3795,17 @@ func (r *Relater) structuredTypeRelatedToWorker(source *Type, target *Type, repo
 		}
 	}
 	switch {
+	case source.flags&TypeFlagsNegated != 0:
+		// 'not S' is related to a non-negated type T only via its base constraint (unknown),
+		// i.e. essentially only when T is 'unknown' or 'any'.
+		constraint := r.c.getBaseConstraintOfType(source)
+		if constraint == nil {
+			constraint = r.c.unknownType
+		}
+		result = r.isRelatedTo(constraint, target, RecursionFlagsSource, reportErrors)
+		if result != TernaryFalse {
+			return result
+		}
 	case source.flags&TypeFlagsTypeVariable != 0:
 		// IndexedAccess comparisons are handled above in the `target.flags&TypeFlagsIndexedAccess` branch
 		if source.flags&TypeFlagsIndexedAccess == 0 || target.flags&TypeFlagsIndexedAccess == 0 {
@@ -3867,6 +3956,7 @@ func (r *Relater) structuredTypeRelatedToWorker(source *Type, target *Type, repo
 			return TernaryFalse
 		}
 		sourceIsPrimitive := source.flags&TypeFlagsPrimitive != 0
+		originalSource := source
 		if r.relation != r.c.identityRelation {
 			source = r.c.getApparentType(source)
 		} else if r.c.isGenericMappedType(source) {
@@ -3945,7 +4035,7 @@ func (r *Relater) structuredTypeRelatedToWorker(source *Type, target *Type, repo
 		if source.flags&(TypeFlagsObject|TypeFlagsIntersection) != 0 && target.flags&TypeFlagsUnion != 0 {
 			objectOnlyTarget := r.c.extractTypesOfKind(target, TypeFlagsObject|TypeFlagsIntersection|TypeFlagsSubstitution)
 			if objectOnlyTarget.flags&TypeFlagsUnion != 0 {
-				result := r.typeRelatedToDiscriminatedType(source, objectOnlyTarget)
+				result := r.typeRelatedToDiscriminatedType(originalSource, objectOnlyTarget)
 				if result != TernaryFalse {
 					return result
 				}
@@ -3953,6 +4043,74 @@ func (r *Relater) structuredTypeRelatedToWorker(source *Type, target *Type, repo
 		}
 	}
 	return TernaryFalse
+}
+
+// TODO: Replace this heuristic with proper distributive conditional type relationship rules.
+// For a distributive A extends B ? never : Q<A> without infer parameters, rewrite to Q<A & not B>.
+// A definitely false check uses Q<A> unchanged; a definitely true check cannot use the rewrite.
+// Otherwise B must be independent of A, and Q<never> must be never. The conditional already distributes,
+// but we also probe whether Q<X | Y> agrees with Q<X> | Q<Y> before moving the union inside Q.
+// See Repeated in indexMappedTypeWithFilteredKeysWithNegationErrors.ts, where moving the union
+// inside `${A}-${A}` would lose the correlation between occurrences of A.
+func (r *Relater) getOptionalSimplificationOfConditional(target *Type) *Type {
+	if target.flags&TypeFlagsConditional == 0 {
+		return nil
+	}
+	conditional := target.AsConditionalType()
+	root := conditional.root
+	if !root.isDistributive || len(root.inferTypeParameters) != 0 || r.c.getTrueTypeFromConditionalType(target).flags&TypeFlagsNever == 0 {
+		return nil
+	}
+	permissiveExtendsType := r.c.getPermissiveInstantiation(conditional.extendsType)
+	skipTrue := !someType(r.c.getPermissiveInstantiation(conditional.checkType), func(t *Type) bool {
+		return r.c.isTypeAssignableTo(t, permissiveExtendsType)
+	})
+	if skipTrue {
+		return r.c.getFalseTypeFromConditionalType(target)
+	}
+	if r.c.isTypeAssignableTo(r.c.getRestrictiveInstantiation(conditional.checkType), r.c.getRestrictiveInstantiation(conditional.extendsType)) {
+		return nil
+	}
+	checkType := getNonDistributedTypeParameter(root.checkType)
+	if r.c.isTypeParameterPossiblyReferenced(checkType, root.node.ExtendsType) {
+		return nil
+	}
+	falseType := r.c.getTypeFromTypeNode(root.node.FalseType)
+	if !r.canDistributeTypeInstantiation(falseType, checkType) {
+		return nil
+	}
+	return r.c.instantiateType(
+		falseType,
+		r.c.combineTypeMappers(
+			newSimpleTypeMapper(checkType, r.c.getIntersectionType([]*Type{root.checkType, r.c.getNegatedType(root.extendsType)})),
+			conditional.mapper,
+		),
+	)
+}
+
+func (r *Relater) canDistributeTypeInstantiation(t *Type, typeParameter *Type) bool {
+	key := DistributiveInstantiationKey{typeId: t.id, typeParameterId: typeParameter.id}
+	if result, ok := r.c.distributiveInstantiationCache[key]; ok {
+		return result
+	}
+	// A recursive probe is unproven until the outer comparison completes.
+	r.c.distributiveInstantiationCache[key] = false
+	// Filtering can remove the entire check type, so the false branch must also preserve never.
+	if r.c.instantiateType(t, newSimpleTypeMapper(typeParameter, r.c.neverType)).flags&TypeFlagsNever == 0 {
+		return false
+	}
+	left := r.c.markerSuperType
+	right := r.c.markerOtherType
+	instantiate := func(argument *Type) *Type {
+		return r.c.getSimplifiedType(r.c.instantiateType(t, newSimpleTypeMapper(typeParameter, argument)), false /*writing*/)
+	}
+	// Require execution over unrelated union members to agree with distributing first.
+	// Use the existing identity comparison rather than introducing conditional relationship rules.
+	instantiatedUnion := instantiate(r.c.getUnionType([]*Type{left, right}))
+	unionOfInstantiations := r.c.getUnionType([]*Type{instantiate(left), instantiate(right)})
+	result := r.c.isTypeIdenticalTo(instantiatedUnion, unionOfInstantiations)
+	r.c.distributiveInstantiationCache[key] = result
+	return result
 }
 
 func (r *Relater) typeArgumentsRelatedTo(sources []*Type, targets []*Type, variances []VarianceFlags, reportErrors bool, intersectionState IntersectionState) Ternary {
@@ -4041,7 +4199,7 @@ func (r *Relater) mappedTypeRelatedTo(source *Type, target *Type, reportErrors b
 	return TernaryFalse
 }
 
-func (r *Relater) typeRelatedToDiscriminatedType(source *Type, target *Type) Ternary {
+func (r *Relater) typeRelatedToDiscriminatedType(originalSource *Type, target *Type) Ternary {
 	// 1. Generate the combinations of discriminant properties & types 'source' can satisfy.
 	//    a. If the number of combinations is above a set limit, the comparison is too complex.
 	// 2. Filter 'target' to the subset of types whose discriminants exist in the matrix.
@@ -4051,6 +4209,7 @@ func (r *Relater) typeRelatedToDiscriminatedType(source *Type, target *Type) Ter
 	//
 	// NOTE: See ~/tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithDiscriminatedUnion.ts
 	//       for examples.
+	source := r.c.getApparentType(originalSource)
 	sourceProperties := r.c.getPropertiesOfType(source)
 	sourcePropertiesFiltered := r.c.findDiscriminantProperties(sourceProperties, target)
 	if len(sourcePropertiesFiltered) == 0 {
@@ -4102,6 +4261,13 @@ func (r *Relater) typeRelatedToDiscriminatedType(source *Type, target *Type) Ter
 		hasMatch := false
 	outer:
 		for _, t := range target.Types() {
+			if t.flags&TypeFlagsIntersection != 0 {
+				for _, constituent := range t.Types() {
+					if isNegatedType(constituent) && r.isRelatedTo(originalSource, constituent, RecursionFlagsTarget, false /*reportErrors*/) == TernaryFalse {
+						continue outer
+					}
+				}
+			}
 			for i := range sourcePropertiesFiltered {
 				sourceProperty := sourcePropertiesFiltered[i]
 				targetProperty := r.c.getPropertyOfType(t, sourceProperty.Name())
@@ -4793,12 +4959,13 @@ func (r *Relater) reportErrorResults(originalSource *Type, originalTarget *Type,
 		}
 	}
 	r.reportRelationError(headMessage, source, target)
-	if source.flags&TypeFlagsTypeParameter != 0 && source.symbol != nil && len(source.symbol.Declarations()) != 0 && r.c.getConstraintOfType(source) == nil {
-		syntheticParam := r.c.cloneTypeParameter(source)
-		syntheticParam.AsTypeParameter().constraint = r.c.instantiateType(target, newSimpleTypeMapper(source, syntheticParam))
+	filteredSource := r.c.removeFreshNegatedTypes(source) // strip fresh negated types from the source for the next related info span
+	if filteredSource.flags&TypeFlagsTypeParameter != 0 && filteredSource.symbol != nil && len(filteredSource.symbol.Declarations()) != 0 && r.c.getConstraintOfType(filteredSource) == nil {
+		syntheticParam := r.c.cloneTypeParameter(filteredSource)
+		syntheticParam.AsTypeParameter().constraint = r.c.instantiateType(target, newSimpleTypeMapper(filteredSource, syntheticParam))
 		if r.c.hasNonCircularBaseConstraint(syntheticParam) {
 			targetConstraintString := r.c.TypeToString(target)
-			r.relatedInfo = append(r.relatedInfo, NewDiagnosticForNode(source.symbol.Declarations()[0], diagnostics.This_type_parameter_might_need_an_extends_0_constraint, targetConstraintString))
+			r.relatedInfo = append(r.relatedInfo, NewDiagnosticForNode(filteredSource.symbol.Declarations()[0], diagnostics.This_type_parameter_might_need_an_extends_0_constraint, targetConstraintString))
 		}
 	}
 }

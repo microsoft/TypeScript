@@ -1,0 +1,65 @@
+negatedTypesInIndexSignatures.ts(10,10): error TS2339: Property 'method' does not exist on type 'NoMethod'.
+negatedTypesInIndexSignatures.ts(20,6): error TS2339: Property 'a' does not exist on type 'NoAB'.
+negatedTypesInIndexSignatures.ts(21,6): error TS2339: Property 'b' does not exist on type 'NoAB'.
+negatedTypesInIndexSignatures.ts(40,5): error TS2322: Type 'number' is not assignable to type 'string'.
+negatedTypesInIndexSignatures.ts(45,6): error TS1268: An index signature parameter type must be 'string', 'number', 'symbol', or a template literal type.
+
+
+==== negatedTypesInIndexSignatures.ts (5 errors) ====
+    // Negated types used to build index signature key types.
+    
+    // The canonical example: a string index that excludes a specific key.
+    type NoMethod = {
+        [idx: string & not "method"]: number;
+    };
+    
+    declare let noMethod: NoMethod;
+    noMethod.foo = 1;      // ok
+    noMethod.method = 1;   // excluded key
+             ~~~~~~
+!!! error TS2339: Property 'method' does not exist on type 'NoMethod'.
+    noMethod["bar"] = 2;   // ok
+    
+    // Excluding a union of keys.
+    type NoAB = {
+        [idx: string & not ("a" | "b")]: number;
+    };
+    
+    declare let noAB: NoAB;
+    noAB.c = 1;   // ok
+    noAB.a = 1;   // excluded key
+         ~
+!!! error TS2339: Property 'a' does not exist on type 'NoAB'.
+    noAB.b = 1;   // excluded key
+         ~
+!!! error TS2339: Property 'b' does not exist on type 'NoAB'.
+    
+    // Mapped-type form that produces the same key type.
+    type Config = {
+        foo: number;
+        bar: number;
+    } & {
+        [k in (string & not ("foo" | "bar"))]: string;
+    };
+    
+    const conf: Config = {
+        foo: 12,
+        bar: 12,
+        other: "string",
+    }; // ok
+    
+    const conf2: Config = {
+        foo: 12,
+        bar: 12,
+        other: 0,
+        ~~~~~
+!!! error TS2322: Type 'number' is not assignable to type 'string'.
+    }; // other should be a string
+    
+    // A bare negated type as an index key (not intersected with string).
+    type BareNegated = {
+        [idx: not "method"]: number;
+         ~~~
+!!! error TS1268: An index signature parameter type must be 'string', 'number', 'symbol', or a template literal type.
+    };
+    

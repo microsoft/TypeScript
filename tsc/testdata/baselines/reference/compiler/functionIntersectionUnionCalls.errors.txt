@@ -1,0 +1,41 @@
+functionIntersectionUnionCalls.ts(9,7): error TS2345: Argument of type 'string' is not assignable to parameter of type 'number'.
+functionIntersectionUnionCalls.ts(12,14): error TS2345: Argument of type '1' is not assignable to parameter of type 'never'.
+functionIntersectionUnionCalls.ts(15,1): error TS2349: This expression is not callable.
+  Not all constituents of type '{ tag: string; } | (() => void)' are callable.
+    Type '{ tag: string; }' has no call signatures.
+functionIntersectionUnionCalls.ts(18,1): error TS2349: This expression is not callable.
+  Not all constituents of type '(() => void) | (Function & (new () => object))' are callable.
+    Type 'Function & (new () => object)' has no call signatures.
+
+
+==== functionIntersectionUnionCalls.ts (4 errors) ====
+    declare const untyped: (Function & { tag: string }) | (() => string);
+    const result = untyped();
+    
+    declare const primitive: (string & Function) | (() => string);
+    const primitiveResult = primitive();
+    
+    declare const typed: (Function & ((value: number) => number)) | ((value: number) => string);
+    const typedResult: number | string = typed(1);
+    typed("wrong");
+          ~~~~~~~
+!!! error TS2345: Argument of type 'string' is not assignable to parameter of type 'number'.
+    
+    declare const incompatible: ((value: number) => void) | ((value: string) => void);
+    incompatible(1);
+                 ~
+!!! error TS2345: Argument of type '1' is not assignable to parameter of type 'never'.
+    
+    declare const nonCallable: { tag: string } | (() => void);
+    nonCallable();
+    ~~~~~~~~~~~
+!!! error TS2349: This expression is not callable.
+!!! error TS2349:   Not all constituents of type '{ tag: string; } | (() => void)' are callable.
+!!! error TS2349:     Type '{ tag: string; }' has no call signatures.
+    
+    declare const constructor: (Function & (new () => object)) | (() => void);
+    constructor();
+    ~~~~~~~~~~~
+!!! error TS2349: This expression is not callable.
+!!! error TS2349:   Not all constituents of type '(() => void) | (Function & (new () => object))' are callable.
+!!! error TS2349:     Type 'Function & (new () => object)' has no call signatures.

@@ -18,6 +18,6 @@ function normalize(value: unknown) {
 >value : string
 >identity(value) : unknown
 >identity : <T>(value: T) => T
->value : unknown
+>value : not string
 }
 

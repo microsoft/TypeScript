@@ -1,0 +1,211 @@
+//// [tests/cases/compiler/negatedComplementEqualityNarrowing.ts] ////
+
+=== negatedComplementEqualityNarrowing.ts ===
+type Full = string | not string;
+>Full : unknown
+
+function complementEquality(value: Full) {
+>complementEquality : (value: Full) => void
+>value : unknown
+
+    if (value == 42 && typeof value === "string") {
+>value == 42 && typeof value === "string" : boolean
+>value == 42 : boolean
+>value : unknown
+>42 : 42
+>typeof value === "string" : boolean
+>typeof value : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
+>value : unknown
+>"string" : "string"
+
+        const text: string = value;
+>text : string
+>value : string
+
+        // Error: "42" reaches this branch through coercion.
+        const impossible: never = value;
+>impossible : never
+>value : string
+    }
+    if (42 != value) {
+>42 != value : boolean
+>42 : 42
+>value : unknown
+
+    } else if (typeof value === "string") {
+>typeof value === "string" : boolean
+>typeof value : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
+>value : unknown
+>"string" : "string"
+
+        const text: string = value;
+>text : string
+>value : string
+
+        // Error: Reversing the operands and negating the comparison still allows strings.
+        const impossible: never = value;
+>impossible : never
+>value : string
+    }
+    if (value === 42) {
+>value === 42 : boolean
+>value : unknown
+>42 : 42
+
+        const literal: 42 = value;
+>literal : 42
+>value : 42
+    }
+    if (value !== 42) {
+>value !== 42 : boolean
+>value : unknown
+>42 : 42
+
+        const excluded: not 42 = value;
+>excluded : not 42
+>value : not 42
+    }
+}
+
+function unknownEquality(value: unknown) {
+>unknownEquality : (value: unknown) => void
+>value : unknown
+
+    if (value == 42 && typeof value === "string") {
+>value == 42 && typeof value === "string" : boolean
+>value == 42 : boolean
+>value : unknown
+>42 : 42
+>typeof value === "string" : boolean
+>typeof value : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
+>value : unknown
+>"string" : "string"
+
+        const text: string = value;
+>text : string
+>value : string
+
+        // Error: "42" reaches this branch through coercion.
+        const impossible: never = value;
+>impossible : never
+>value : string
+    }
+    if (42 != value) {
+>42 != value : boolean
+>42 : 42
+>value : unknown
+
+    } else if (typeof value === "string") {
+>typeof value === "string" : boolean
+>typeof value : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
+>value : unknown
+>"string" : "string"
+
+        const text: string = value;
+>text : string
+>value : string
+
+        // Error: Reversing the operands and negating the comparison still allows strings.
+        const impossible: never = value;
+>impossible : never
+>value : string
+    }
+    if (value === 42) {
+>value === 42 : boolean
+>value : unknown
+>42 : 42
+
+        const literal: 42 = value;
+>literal : 42
+>value : 42
+    }
+    if (value !== 42) {
+>value !== 42 : boolean
+>value : unknown
+>42 : 42
+
+        const excluded: not 42 = value;
+>excluded : not 42
+>value : not 42
+    }
+}
+
+function complementPropertyEquality(value: { full: Full }) {
+>complementPropertyEquality : (value: { full: Full; }) => void
+>value : { full: Full; }
+>full : unknown
+
+    if (value.full == 42 && typeof value.full === "string") {
+>value.full == 42 && typeof value.full === "string" : boolean
+>value.full == 42 : boolean
+>value.full : unknown
+>value : { full: Full; }
+>full : unknown
+>42 : 42
+>typeof value.full === "string" : boolean
+>typeof value.full : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
+>value.full : unknown
+>value : { full: Full; }
+>full : unknown
+>"string" : "string"
+
+        const text: string = value.full;
+>text : string
+>value.full : string
+>value : { full: Full; }
+>full : string
+
+        // Error: A property can also contain the coerced string.
+        const impossible: never = value.full;
+>impossible : never
+>value.full : string
+>value : { full: Full; }
+>full : string
+    }
+    if (42 != value.full) {
+>42 != value.full : boolean
+>42 : 42
+>value.full : unknown
+>value : { full: Full; }
+>full : unknown
+
+    } else if (typeof value.full === "string") {
+>typeof value.full === "string" : boolean
+>typeof value.full : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
+>value.full : unknown
+>value : { full: Full; }
+>full : unknown
+>"string" : "string"
+
+        const text: string = value.full;
+>text : string
+>value.full : string
+>value : { full: Full; }
+>full : string
+
+        // Error: The false inequality branch still allows strings.
+        const impossible: never = value.full;
+>impossible : never
+>value.full : string
+>value : { full: Full; }
+>full : string
+    }
+}
+
+complementEquality("42");
+>complementEquality("42") : void
+>complementEquality : (value: Full) => void
+>"42" : "42"
+
+unknownEquality("42");
+>unknownEquality("42") : void
+>unknownEquality : (value: unknown) => void
+>"42" : "42"
+
+complementPropertyEquality({ full: "42" });
+>complementPropertyEquality({ full: "42" }) : void
+>complementPropertyEquality : (value: { full: Full; }) => void
+>{ full: "42" } : { full: string; }
+>full : string
+>"42" : "42"
+

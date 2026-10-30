@@ -33,7 +33,7 @@ class B extends A {
         }
         while (x < 2) {
 >x < 2 : boolean
->x : number
+>x : number & not 1
 >2 : 2
 
             return;

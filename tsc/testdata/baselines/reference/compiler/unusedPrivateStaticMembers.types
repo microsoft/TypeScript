@@ -62,13 +62,13 @@ class Test4 {
 >1 : 1
 >(n * Test4.m1(n - 1)) : number
 >n * Test4.m1(n - 1) : number
->n : number
+>n : number & not 0
 >Test4.m1(n - 1) : number
 >Test4.m1 : (n: number) => number
 >Test4 : typeof Test4
 >m1 : (n: number) => number
 >n - 1 : number
->n : number
+>n : number & not 0
 >1 : 1
     }
 
@@ -85,13 +85,13 @@ class Test4 {
 >1 : 1
 >(n * Test4["m2"](n - 1)) : number
 >n * Test4["m2"](n - 1) : number
->n : number
+>n : number & not 0
 >Test4["m2"](n - 1) : number
 >Test4["m2"] : (n: number) => number
 >Test4 : typeof Test4
 >"m2" : "m2"
 >n - 1 : number
->n : number
+>n : number & not 0
 >1 : 1
     }
 }
