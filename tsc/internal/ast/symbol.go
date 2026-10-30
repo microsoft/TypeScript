@@ -1,14 +1,16 @@
 package ast
 
 import (
-	"hash/maphash"
+	"errors"
 	"iter"
 	"slices"
 	"strings"
 	"sync/atomic"
+	"unicode/utf8"
 
 	"github.com/microsoft/TypeScript/tsc/internal/core"
 	"github.com/microsoft/TypeScript/tsc/internal/debug"
+	"github.com/microsoft/TypeScript/tsc/internal/json"
 )
 
 // Symbol stores flags, checkFlags, and id uniquely for every symbol instance, but may share
@@ -24,7 +26,7 @@ type Symbol struct {
 
 // Every symbol references a symbolData structure that may be shared with other symbols.
 type symbolData struct {
-	name             string
+	name             SymbolName
 	declarations     []*Node
 	valueDeclaration *Node
 	parent           *Symbol
@@ -45,7 +47,7 @@ type SymbolExtraArena struct {
 
 func (s *Symbol) Flags() SymbolFlags      { return s.flags }
 func (s *Symbol) CheckFlags() CheckFlags  { return s.checkFlags }
-func (s *Symbol) Name() string            { return s.data.name }
+func (s *Symbol) Name() SymbolName        { return s.data.name }
 func (s *Symbol) Declarations() []*Node   { return s.data.declarations }
 func (s *Symbol) ValueDeclaration() *Node { return s.data.valueDeclaration }
 func (s *Symbol) Parent() *Symbol         { return s.data.parent }
@@ -73,7 +75,7 @@ func (s *Symbol) ExportSymbol() *Symbol {
 
 func (s *Symbol) SetFlags(value SymbolFlags)      { s.flags = value }
 func (s *Symbol) SetCheckFlags(value CheckFlags)  { s.checkFlags = value }
-func (s *Symbol) SetName(value string)            { s.data.name = value }
+func (s *Symbol) SetName(value SymbolName)        { s.data.name = value }
 func (s *Symbol) SetDeclarations(value []*Node)   { s.data.declarations = value }
 func (s *Symbol) SetValueDeclaration(value *Node) { s.data.valueDeclaration = value }
 func (s *Symbol) SetParent(value *Symbol)         { s.data.parent = value }
@@ -112,6 +114,7 @@ type SymbolWithData struct {
 // Initializes a SymbolWithData instance and returns the embedded Symbol.
 func (sd *SymbolWithData) Initialize() *Symbol {
 	sd.s.data = &sd.d
+	sd.d.name = EmptySymbolName
 	return &sd.s
 }
 
@@ -166,6 +169,55 @@ func (s *Symbol) CombinedLocalAndExportSymbolFlags() SymbolFlags {
 	return s.Flags()
 }
 
+// SymbolName is an interned name used for symbol identity and lookup.
+// Its zero value is EmptySymbolName.
+//
+// The low bits hold an intern table ID; the upper bits encode derived names
+// and tag internal names. See symbolname_derived.go.
+//
+// Fixed names, such as SymbolNamePrototype, are constants generated from the
+// list in tools/scripts/tsc/symbolNames.ts by `npx hereby generate:ast`.
+type SymbolName uint64
+
+func MakeSymbolName(text string) SymbolName {
+	return symbolNames.make(text, hashSymbolNameText(text))
+}
+
+func (name SymbolName) String() string {
+	if name.derivedKind() != derivedNamePlain {
+		return name.derivedValue()
+	}
+	return symbolNames.text(uint32(name))
+}
+
+// MarshalText uses the escaped spelling so internal names remain valid UTF-8.
+func (name SymbolName) MarshalText() ([]byte, error) {
+	text := EscapeSymbolName(name)
+	if !utf8.ValidString(text) {
+		return nil, errors.New("symbol name contains invalid UTF-8")
+	}
+	return []byte(text), nil
+}
+
+func (name *SymbolName) UnmarshalText(text []byte) error {
+	if !utf8.Valid(text) {
+		return errors.New("symbol name contains invalid UTF-8")
+	}
+	*name = UnescapeSymbolName(string(text))
+	return nil
+}
+
+func (name *SymbolName) UnmarshalJSON(data []byte) error {
+	if !utf8.Valid(data) {
+		return errors.New("symbol name contains invalid UTF-8")
+	}
+	var text string
+	if err := json.Unmarshal(data, &text); err != nil {
+		return err
+	}
+	return name.UnmarshalText([]byte(text))
+}
+
 // SymbolTable
 //
 // A SymbolTable maps names to symbols and iterates in insertion order, like Strada's Map, so that iterating a table
@@ -187,7 +239,11 @@ type SymbolMap struct {
 	index   []int32 // open addressing table of entry positions plus one (0 is empty), only past symbolTableLinearMax
 }
 
-var symbolTableSeed = maphash.MakeSeed()
+// hashSymbolTableKey spreads interned name IDs, which are small and dense, across the index.
+func hashSymbolTableKey(name SymbolName) uint64 {
+	h := uint64(name) * 0x9e3779b97f4a7c15
+	return h ^ h>>32
+}
 
 func NewSymbolTable() SymbolTable {
 	return NewSymbolTableWithCapacity(0)
@@ -205,13 +261,13 @@ func NewSymbolTableWithCapacity(capacity int) SymbolTable {
 }
 
 // SymbolTableOf returns a new table holding symbol under name.
-func SymbolTableOf(name string, symbol *Symbol) SymbolTable {
+func SymbolTableOf(name SymbolName, symbol *Symbol) SymbolTable {
 	m := NewSymbolTableWithCapacity(1)
 	m.Set(name, symbol)
 	return m
 }
 
-func (m *SymbolMap) keyAt(i int) string {
+func (m *SymbolMap) keyAt(i int) SymbolName {
 	return m.entries[i].Name()
 }
 
@@ -223,13 +279,13 @@ func (m *SymbolMap) symbolAt(i int) *Symbol {
 	return symbol
 }
 
-func (m *SymbolMap) find(key string) int {
+func (m *SymbolMap) find(key SymbolName) int {
 	if m == nil {
 		return -1
 	}
 	if m.index != nil {
 		mask := uint64(len(m.index) - 1)
-		for slot := maphash.String(symbolTableSeed, key) & mask; ; slot = (slot + 1) & mask {
+		for slot := hashSymbolTableKey(key) & mask; ; slot = (slot + 1) & mask {
 			p := m.index[slot]
 			if p == 0 {
 				return -1
@@ -254,14 +310,14 @@ func (m *SymbolMap) Len() int {
 	return len(m.entries)
 }
 
-func (m *SymbolMap) Get(key string) *Symbol {
+func (m *SymbolMap) Get(key SymbolName) *Symbol {
 	if i := m.find(key); i >= 0 {
 		return m.symbolAt(i)
 	}
 	return nil
 }
 
-func (m *SymbolMap) Lookup(key string) (*Symbol, bool) {
+func (m *SymbolMap) Lookup(key SymbolName) (*Symbol, bool) {
 	if i := m.find(key); i >= 0 {
 		return m.symbolAt(i), true
 	}
@@ -269,7 +325,7 @@ func (m *SymbolMap) Lookup(key string) (*Symbol, bool) {
 }
 
 // Set replaces the symbol of an existing key in place, keeping its position, or adds the key at the end.
-func (m *SymbolMap) Set(key string, symbol *Symbol) {
+func (m *SymbolMap) Set(key SymbolName, symbol *Symbol) {
 	if key != symbol.Name() {
 		proxy := NewSymbol()
 		proxy.flags = SymbolFlagsNameProxy
@@ -302,9 +358,9 @@ func indexSizeFor(n int) int {
 	return size
 }
 
-func (m *SymbolMap) insertIndex(key string, i int32) {
+func (m *SymbolMap) insertIndex(key SymbolName, i int32) {
 	mask := uint64(len(m.index) - 1)
-	slot := maphash.String(symbolTableSeed, key) & mask
+	slot := hashSymbolTableKey(key) & mask
 	for m.index[slot] != 0 {
 		slot = (slot + 1) & mask
 	}
@@ -318,7 +374,7 @@ func (m *SymbolMap) buildIndex() {
 	}
 }
 
-func (m *SymbolMap) Delete(key string) {
+func (m *SymbolMap) Delete(key SymbolName) {
 	d := m.find(key)
 	if d < 0 {
 		return
@@ -331,8 +387,8 @@ func (m *SymbolMap) Delete(key string) {
 }
 
 // All iterates over the keys and symbols of the table in insertion order.
-func (m *SymbolMap) All() iter.Seq2[string, *Symbol] {
-	return func(yield func(string, *Symbol) bool) {
+func (m *SymbolMap) All() iter.Seq2[SymbolName, *Symbol] {
+	return func(yield func(SymbolName, *Symbol) bool) {
 		if m == nil {
 			return
 		}
@@ -345,8 +401,8 @@ func (m *SymbolMap) All() iter.Seq2[string, *Symbol] {
 	}
 }
 
-func (m *SymbolMap) Keys() iter.Seq[string] {
-	return func(yield func(string) bool) {
+func (m *SymbolMap) Keys() iter.Seq[SymbolName] {
+	return func(yield func(SymbolName) bool) {
 		for key := range m.All() {
 			if !yield(key) {
 				return
@@ -375,34 +431,12 @@ func (m *SymbolMap) Clone() SymbolTable {
 
 const InternalSymbolNamePrefix = "\xFE" // Invalid UTF8 sequence, will never occur as IdentifierName
 
-const (
-	InternalSymbolNameCall                    = InternalSymbolNamePrefix + "call"                    // Call signatures
-	InternalSymbolNameConstructor             = InternalSymbolNamePrefix + "constructor"             // Constructor implementations
-	InternalSymbolNameNew                     = InternalSymbolNamePrefix + "new"                     // Constructor signatures
-	InternalSymbolNameIndex                   = InternalSymbolNamePrefix + "index"                   // Index signatures
-	InternalSymbolNameExportStar              = InternalSymbolNamePrefix + "export"                  // Module export * declarations
-	InternalSymbolNameGlobal                  = InternalSymbolNamePrefix + "global"                  // Global self-reference
-	InternalSymbolNameMissing                 = InternalSymbolNamePrefix + "missing"                 // Indicates missing symbol
-	InternalSymbolNameType                    = InternalSymbolNamePrefix + "type"                    // Anonymous type literal symbol
-	InternalSymbolNameObject                  = InternalSymbolNamePrefix + "object"                  // Anonymous object literal declaration
-	InternalSymbolNameJSXAttributes           = InternalSymbolNamePrefix + "jsxAttributes"           // Anonymous JSX attributes object literal declaration
-	InternalSymbolNameClass                   = InternalSymbolNamePrefix + "class"                   // Unnamed class expression
-	InternalSymbolNameFunction                = InternalSymbolNamePrefix + "function"                // Unnamed function expression
-	InternalSymbolNameComputed                = InternalSymbolNamePrefix + "computed"                // Computed property name declaration with dynamic name
-	InternalSymbolNameAssignmentDeclaration   = InternalSymbolNamePrefix + "assignment"              // Assignment declarations
-	InternalSymbolNameInstantiationExpression = InternalSymbolNamePrefix + "instantiationExpression" // Instantiation expressions
-	InternalSymbolNameImportAttributes        = InternalSymbolNamePrefix + "importAttributes"
-	InternalSymbolNameExportEquals            = "export=" // Export assignment symbol
-	InternalSymbolNameDefault                 = "default" // Default export symbol (technically not wholly internal, but included here for usability)
-	InternalSymbolNameThis                    = "this"
-	InternalSymbolNameModuleExports           = "module.exports"
-)
-
-func SymbolName(symbol *Symbol) string {
+// SymbolNameText returns a display name, preserving private identifier spelling.
+func SymbolNameText(symbol *Symbol) string {
 	if symbol.ValueDeclaration() != nil && IsPrivateIdentifierClassElementDeclaration(symbol.ValueDeclaration()) {
 		return symbol.ValueDeclaration().Name().Text()
 	}
-	return symbol.Name()
+	return symbol.Name().String()
 }
 
 // EscapeAllInternalSymbolNames replaces internal symbol name markers ("\xFE") with "__".
@@ -410,7 +444,8 @@ func EscapeAllInternalSymbolNames(name string) string {
 	return strings.ReplaceAll(name, InternalSymbolNamePrefix, "__")
 }
 
-func EscapeInternalSymbolName(name string) string {
+func EscapeInternalSymbolName(symbolName SymbolName) string {
+	name := symbolName.String()
 	if rest, ok := strings.CutPrefix(name, InternalSymbolNamePrefix); ok {
 		return "__" + rest
 	}
@@ -421,7 +456,8 @@ func EscapeInternalSymbolName(name string) string {
 // form. Internal names (prefixed with the "\xFE" sentinel) become "__"-prefixed,
 // and user names that already begin with "__" gain an extra leading underscore
 // so they can be distinguished from internal names.
-func EscapeSymbolName(name string) string {
+func EscapeSymbolName(symbolName SymbolName) string {
+	name := symbolName.String()
 	if rest, ok := strings.CutPrefix(name, InternalSymbolNamePrefix); ok {
 		return "__" + rest
 	}
@@ -429,4 +465,14 @@ func EscapeSymbolName(name string) string {
 		return "_" + name
 	}
 	return name
+}
+
+// UnescapeSymbolName reverses EscapeSymbolName and interns the decoded name.
+func UnescapeSymbolName(name string) SymbolName {
+	if strings.HasPrefix(name, "___") {
+		name = name[1:]
+	} else if rest, ok := strings.CutPrefix(name, "__"); ok {
+		name = InternalSymbolNamePrefix + rest
+	}
+	return MakeSymbolName(name)
 }

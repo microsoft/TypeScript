@@ -13,6 +13,8 @@
  *   - Polymorphic accessor switch statements (Expression(), Type(), etc.)
  *   - Compact kind-indexed dispatch for shared node accessors
  *   - Is*() type guard functions
+ *
+ * It also produces internal/ast/symbolnames_generated.go from symbolNames.ts.
  */
 
 import * as path from "node:path";
@@ -32,6 +34,7 @@ import {
     api,
     kindGuardName,
 } from "./schema.ts";
+import { symbolNames } from "./symbolNames.ts";
 
 // ────────────────────────────────────────────────────────────────────────────
 // Load schema
@@ -44,7 +47,7 @@ function schemaMembers(node: NodeType): MemberInfo[] {
 
 function isTextContentType(type: Type): boolean {
     if (type.kind === "primitive") {
-        return type.name === "string";
+        return type.name === "string" || type.name === "SymbolName";
     }
     if (type.kind === "list" && type.listKind === "raw") {
         return type.elementType.kind === "primitive" && type.elementType.name === "string";
@@ -491,11 +494,39 @@ function emitNewFactory(
     w.write("");
 }
 
+function isSymbolNameMember(m: MemberInfo): boolean {
+    return m.type.kind === "primitive" && m.type.name === "SymbolName";
+}
+
+// Nodes with SymbolName members get a New*FromSymbolName factory taking the
+// interned name, plus a New* convenience factory that accepts a string.
+function factoryName(name: string, node: NodeType): string {
+    return schemaMembers(node).some(isSymbolNameMember) ? `New${name}FromSymbolName` : `New${name}`;
+}
+
+function emitStringFactory(w: CodeWriter, name: string, node: NodeType, members: MemberInfo[]) {
+    const params = members.map(m => `${m.goParamName()} ${isSymbolNameMember(m) ? "string" : m.type.formatGoReference()}`).join(", ");
+    const args = members.map(m => isSymbolNameMember(m) ? `MakeSymbolName(${m.goParamName()})` : m.goParamName()).join(", ");
+    w.write(`func (f *NodeFactory) New${name}(${params}) *Node {`);
+    w.push();
+    w.write(`return f.${factoryName(name, node)}(${args})`);
+    w.pop();
+    w.write("}");
+    w.write("");
+}
+
 function generateNewFactory(w: CodeWriter, node: NodeType) {
     const structName = node.name;
     const members = schemaMembers(node);
     const kindMember = members.find(m => m.isKindParam());
     const nodeFlagsMembers = members.filter(m => isNodeFlagsMember(m));
+    const hasSymbolName = members.some(isSymbolNameMember);
+    const emit = (name: string, kindName: string) => {
+        if (hasSymbolName) {
+            emitStringFactory(w, name, node, members);
+        }
+        emitNewFactory(w, factoryName(name, node), kindName, structName, node, members, kindMember, nodeFlagsMembers);
+    };
     if (node.name === "Token") {
         const tokenKinds = new Set(node.allKinds().map(kind => kind.formatGoConstant()));
         w.write("func (f *NodeFactory) NewToken(kind TokenSyntaxKind) *Node {");
@@ -528,10 +559,10 @@ function generateNewFactory(w: CodeWriter, node: NodeType) {
         w.write("");
     }
     else {
-        emitNewFactory(w, `New${node.name}`, node.syntaxKindName, structName, node, members, kindMember, nodeFlagsMembers);
+        emit(node.name, node.syntaxKindName);
     }
     for (const alias of node.kindAliases) {
-        emitNewFactory(w, `New${alias}`, alias, structName, node, members, kindMember, nodeFlagsMembers);
+        emit(alias, alias);
     }
 }
 
@@ -1041,12 +1072,12 @@ function generateClone(w: CodeWriter, node: NodeType) {
         w.push();
         w.write(`case ${api.kindType(`SyntaxKind.${node.syntaxKindName}`).formatGoConstant()}:`);
         w.push();
-        w.write(`return cloneNode(f.AsNodeFactory().New${node.name}(${args}), node.AsNode(), f.AsNodeFactory().hooks)`);
+        w.write(`return cloneNode(f.AsNodeFactory().${factoryName(node.name, node)}(${args}), node.AsNode(), f.AsNodeFactory().hooks)`);
         w.pop();
         for (const alias of node.kindAliases) {
             w.write(`case Kind${alias}:`);
             w.push();
-            w.write(`return cloneNode(f.AsNodeFactory().New${alias}(${args}), node.AsNode(), f.AsNodeFactory().hooks)`);
+            w.write(`return cloneNode(f.AsNodeFactory().${factoryName(alias, node)}(${args}), node.AsNode(), f.AsNodeFactory().hooks)`);
             w.pop();
         }
         w.write("default:");
@@ -1057,7 +1088,7 @@ function generateClone(w: CodeWriter, node: NodeType) {
         w.write("}");
     }
     else {
-        w.write(`return cloneNode(f.AsNodeFactory().New${node.name}(${args}), node.AsNode(), f.AsNodeFactory().hooks)`);
+        w.write(`return cloneNode(f.AsNodeFactory().${factoryName(node.name, node)}(${args}), node.AsNode(), f.AsNodeFactory().hooks)`);
     }
 
     w.pop();
@@ -1471,8 +1502,83 @@ function generateKind(): string {
     return w.toString();
 }
 
-function writeAndFormat(filePath: string, generateContent: () => string, force: boolean) {
-    const generated = new GeneratedFile(filePath, [import.meta.filename, path.join(ROOT, "tools/scripts/tsc/schema.ts"), path.join(ROOT, "tools/scripts/tsc/ast.json")]);
+function goStringLiteral(text: string): string {
+    if (!/^[\x20-\x7E]*$/.test(text)) {
+        throw new Error(`Fixed symbol name text must be printable ASCII: ${JSON.stringify(text)}`);
+    }
+    return `"${text.replace(/["\\]/g, "\\$&")}"`;
+}
+
+function generateSymbolNames(): string {
+    const seenNames = new Set<string>();
+    const seenTexts = new Map<string, string>([["", "EmptySymbolName"]]);
+    for (const { name, text, internal } of symbolNames) {
+        const fullText = internal ? "\xFE" + text : text;
+        if (seenNames.has(name)) {
+            throw new Error(`Duplicate fixed symbol name ${name}`);
+        }
+        const other = seenTexts.get(fullText);
+        if (other !== undefined) {
+            throw new Error(`${name} and ${other} have the same text ${JSON.stringify(fullText)}`);
+        }
+        seenNames.add(name);
+        seenTexts.set(fullText, name);
+    }
+
+    // A name's ID is the offset, in 8-byte units, of its record in the intern
+    // table's text arena: a 4-byte length followed by the text. The fixed
+    // names are inserted first, in this order, so their IDs are known here;
+    // the table checks that they match. See symbolname_intern.go.
+    const recordUnits = (text: string) => Math.ceil((4 + Buffer.byteLength(text, "latin1")) / 8);
+    let nextID = recordUnits("");
+
+    const w = new CodeWriter();
+    w.write("// Code generated by tools/scripts/tsc/generate-go-ast.ts. DO NOT EDIT.");
+    w.write("");
+    w.write("package ast");
+    w.write("");
+    w.write("// Fixed symbol names are inserted into the intern table first, so their IDs");
+    w.write("// are compile-time constants. Internal names carry the same tag that");
+    w.write("// internedSymbolName gives them.");
+    w.write("const (");
+    w.push();
+    w.write("EmptySymbolName SymbolName = 0 // The zero value.");
+    const ids: number[] = [];
+    for (const { name, text, internal, comment } of symbolNames) {
+        const id = nextID;
+        ids.push(id);
+        nextID += recordUnits(internal ? "\xFE" + text : text);
+        let line = `${name} SymbolName = ${id}`;
+        if (internal) {
+            // The marker is the byte after the prefix plus one, or zero if there is none.
+            const marker = text === "" ? "0" : `('${text[0] === "'" || text[0] === "\\" ? "\\" + text[0] : text[0]}' + 1)`;
+            line += ` | internalSymbolNameBits | ${marker}<<internalMarkerShift`;
+        }
+        if (comment) {
+            line += ` // ${comment}`;
+        }
+        w.write(line);
+    }
+    w.pop();
+    w.write(")");
+    w.write("");
+    w.write("var fixedSymbolNames = [...]struct {");
+    w.push();
+    w.write("id   uint32");
+    w.write("text string");
+    w.pop();
+    w.write("}{");
+    w.push();
+    symbolNames.forEach(({ text, internal }, i) => {
+        w.write(`{${ids[i]}, ${internal ? "InternalSymbolNamePrefix + " : ""}${goStringLiteral(text)}},`);
+    });
+    w.pop();
+    w.write("}");
+    return w.toString();
+}
+
+function writeAndFormat(filePath: string, generateContent: () => string, force: boolean, inputs = [path.join(ROOT, "tools/scripts/tsc/schema.ts"), path.join(ROOT, "tools/scripts/tsc/ast.json")]) {
+    const generated = new GeneratedFile(filePath, [import.meta.filename, ...inputs]);
     if (generated.isCurrent(force)) return;
     generated.write(generateContent());
     formatFilesSync([filePath]);
@@ -1480,7 +1586,7 @@ function writeAndFormat(filePath: string, generateContent: () => string, force: 
     console.log(`Wrote ${filePath}`);
 }
 
-export const outputs = ["tsc/internal/ast/ast_generated.go", "tsc/internal/ast/kind_generated.go"] as const;
+export const outputs = ["tsc/internal/ast/ast_generated.go", "tsc/internal/ast/kind_generated.go", "tsc/internal/ast/symbolnames_generated.go"] as const;
 
 export default function main(force = false) {
     verifyNoDuplicateBases();
@@ -1491,6 +1597,9 @@ export default function main(force = false) {
 
     const kindOutPath = path.join(ROOT, outputs[1]);
     writeAndFormat(kindOutPath, () => generateKind() + "\n", force);
+
+    const symbolNamesOutPath = path.join(ROOT, outputs[2]);
+    writeAndFormat(symbolNamesOutPath, () => generateSymbolNames() + "\n", force, [path.join(ROOT, "tools/scripts/tsc/symbolNames.ts")]);
 }
 
 if (process.argv[1] === fileURLToPath(import.meta.url)) {

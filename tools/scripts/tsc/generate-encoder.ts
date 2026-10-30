@@ -22,6 +22,7 @@ import type {
     KindType,
     MemberInfo,
     NodeType,
+    Type,
 } from "./schema.ts";
 import { api } from "./schema.ts";
 
@@ -153,7 +154,7 @@ function needsHandWrittenCommonData(node: NodeType): boolean {
         if (m.isChild() || m.isKindParam()) return false;
         const dt = m.declaredType;
         if (dt.kind === "primitive" && dt.name === "bool") return false;
-        if (dt.kind === "primitive" && dt.name === "string") return false;
+        if (isStringPrimitive(dt)) return false;
         if (isSyntaxKindUnion(m)) return false;
         if (isNodeFlagsMember(m)) return false;
         return true;
@@ -170,7 +171,7 @@ function getHandWrittenDataMembers(node: NodeType): MemberInfo[] {
     return members.filter(m => {
         if (m.isChild() || m.isKindParam()) return false;
         const dt = m.declaredType;
-        if (dt.kind === "primitive" && dt.name === "string") return false;
+        if (isStringPrimitive(dt)) return false;
         if (isNodeFlagsMember(m)) return false;
         return true;
     });
@@ -182,12 +183,21 @@ function getHandWrittenDataMembers(node: NodeType): MemberInfo[] {
 
 type DataType = "string" | "children" | "extended";
 
+function isSymbolNamePrimitive(type: Type | undefined): boolean {
+    return type?.kind === "primitive" && type.name === "SymbolName";
+}
+
+// SymbolName is an interned string in Go and is encoded as a string.
+function isStringPrimitive(type: Type | undefined): boolean {
+    return type?.kind === "primitive" && (type.name === "string" || type.name === "SymbolName");
+}
+
 function classifyDataType(node: NodeType): DataType {
     if (node.handWritten) return "extended";
     const members = schemaMembers(node);
     const stringMembers = members.filter(m =>
         !m.isChild() && !m.isKindParam() &&
-        m.declaredType.kind === "primitive" && m.declaredType.name === "string"
+        isStringPrimitive(m.declaredType)
     );
     if (stringMembers.length > 1) return "extended";
     if (stringMembers.length === 1) {
@@ -292,7 +302,7 @@ function analyzeNode(node: NodeType): EncoderNodeInfo {
     const textMember = dataType === "string"
         ? members.find(m =>
             !m.isChild() && !m.isKindParam() &&
-            m.declaredType.kind === "primitive" && m.declaredType.name === "string"
+            isStringPrimitive(m.declaredType)
         )
         : undefined;
     // Factory members include all non-noFactory members (even noTS ones),
@@ -538,10 +548,11 @@ function generateGoRecordNodeStrings(w: CodeWriter) {
         const textAccess = info.textMember.private
             ? `node.${castName}().${api.capitalize(info.textMember.name)}()`
             : `node.${castName}().${info.textMember.name}`;
+        const textValue = isSymbolNamePrimitive(info.textMember.declaredType) ? `${textAccess}.String()` : textAccess;
 
         w.write(`case ${kinds.join(", ")}:`);
         w.push();
-        w.write(`return strs.add(${textAccess}, node.Kind, node.Pos(), node.End())`);
+        w.write(`return strs.add(${textValue}, node.Kind, node.Pos(), node.End())`);
         w.pop();
     }
 

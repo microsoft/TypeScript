@@ -30,19 +30,21 @@ func NewNodeFactory(context *EmitContext) *NodeFactory {
 func (f *NodeFactory) newGeneratedIdentifier(kind GeneratedIdentifierFlags, text string, node *ast.Node, options AutoGenerateOptions) *ast.IdentifierNode {
 	id := AutoGenerateId(nextAutoGenerateId.Add(1))
 
+	var name *ast.IdentifierNode
 	if len(text) == 0 {
+		prefix, suffix := removeLeadingHash(options.Prefix), removeLeadingHash(options.Suffix)
 		switch {
 		case node == nil:
-			text = fmt.Sprintf("(auto@%d)", id)
+			name = f.NewIdentifierFromSymbolName(ast.MakeGeneratedSymbolName(prefix, false /*forNode*/, uint64(id), suffix))
 		case ast.IsMemberName(node):
-			text = node.Text()
+			name = f.NewIdentifier(FormatGeneratedName(false /*privateName*/, options.Prefix, node.Text(), options.Suffix))
 		default:
-			text = fmt.Sprintf("(generated@%v)", ast.GetNodeId(f.emitContext.getNodeForGeneratedNameWorker(node, id)))
+			nodeId := ast.GetNodeId(f.emitContext.getNodeForGeneratedNameWorker(node, id))
+			name = f.NewIdentifierFromSymbolName(ast.MakeGeneratedSymbolName(prefix, true /*forNode*/, uint64(nodeId), suffix))
 		}
-		text = FormatGeneratedName(false /*privateName*/, options.Prefix, text, options.Suffix)
+	} else {
+		name = f.NewIdentifier(text)
 	}
-
-	name := f.NewIdentifier(text)
 	autoGenerate := &AutoGenerateInfo{
 		Id:     id,
 		Flags:  kind | (options.Flags & ^GeneratedIdentifierFlagsKindMask),

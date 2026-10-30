@@ -996,7 +996,7 @@ func (c *Checker) checkGrammarForInvalidExclamationToken(postfixToken *ast.Token
 }
 
 func (c *Checker) checkGrammarObjectLiteralExpression(node *ast.ObjectLiteralExpression, inDestructuring bool) bool {
-	seen := make(map[string]DeclarationMeaning)
+	seen := make(map[ast.SymbolName]DeclarationMeaning)
 
 	var properties []*ast.Node
 	if node.Properties != nil {

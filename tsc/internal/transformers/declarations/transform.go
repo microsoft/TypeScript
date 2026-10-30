@@ -1193,7 +1193,7 @@ func (tx *DeclarationTransformer) tryGetNameOfAssignedExpression(unwrapped *ast.
 		nameText = unwrapped.Text()
 	}
 	if nameText != "" && nameText != "default" {
-		if tx.resolver.IsNameResolvable(tx.enclosingDeclaration, nameText) {
+		if tx.resolver.IsNameResolvable(tx.enclosingDeclaration, ast.MakeSymbolName(nameText)) {
 			// create a unique name that shares the same text as its' base
 			nameNode = tx.Factory().NewUniqueNameEx(nameText, printer.AutoGenerateOptions{Flags: printer.GeneratedIdentifierFlagsOptimistic})
 		} else {
@@ -2814,7 +2814,7 @@ func (tx *DeclarationTransformer) transformExpandoAssignment(node *ast.BinaryExp
 
 	exportName := tx.Factory().NewIdentifier(property)
 	localName := tx.tryGetNameOfAssignedExpression(node.AsNode())
-	if localName == nil && !tx.resolver.IsNameResolvable(tx.enclosingDeclaration, property) && !ast.IsNonContextualKeyword(scanner.StringToToken(exportName.Text())) {
+	if localName == nil && !tx.resolver.IsNameResolvable(tx.enclosingDeclaration, ast.MakeSymbolName(property)) && !ast.IsNonContextualKeyword(scanner.StringToToken(exportName.Text())) {
 		// use exportName as localName if there won't be any conflicts or keyword issues
 		localName = exportName
 	}
@@ -2850,7 +2850,7 @@ func (tx *DeclarationTransformer) transformExpandoAssignment(node *ast.BinaryExp
 	declarationData.Symbol = host
 	containerData := synthesizedNamespace.LocalsContainerData()
 	containerData.Locals = ast.NewSymbolTable()
-	containerData.Locals.Set(localName.Text(), symbol)
+	containerData.Locals.Set(localName.TextSymbolName(), symbol)
 
 	oldEnclosing := tx.enclosingDeclaration
 	tx.enclosingDeclaration = synthesizedNamespace
@@ -3023,7 +3023,7 @@ func extractExpandoHostParams(node *ast.Node) (typeParameters *ast.TypeParameter
 
 func (tx *DeclarationTransformer) tryGetPropertyName(node *ast.Node) string {
 	if ast.IsElementAccessExpression(node) {
-		return tx.resolver.GetElementAccessExpressionName(node.AsElementAccessExpression())
+		return tx.resolver.GetElementAccessExpressionName(node.AsElementAccessExpression()).String()
 	}
 	if ast.IsPropertyAccessExpression(node) {
 		return node.Name().Text()

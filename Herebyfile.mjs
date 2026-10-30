@@ -658,7 +658,7 @@ async function runGenerateAST() {
 
 export const generateAST = task({
     name: "generate:ast",
-    description: "Generates AST, kind stringer, and encoder files from ast.json. Pass --force to regenerate unchanged files.",
+    description: "Generates AST, kind stringer, symbol name, and encoder files from ast.json and symbolNames.ts. Pass --force to regenerate unchanged files.",
     outputs: [...goASTOutputs, ...tsASTOutputs, ...encoderOutputs],
     run: runGenerateAST,
 });
@@ -835,6 +835,7 @@ export const buildWatch = task({
                 "tsc/cmd",
                 "tsc/internal",
                 "tools/scripts/tsc/ast.json",
+                "tools/scripts/tsc/symbolNames.ts",
                 "tools/gen-proto",
                 "tools/gen-preferences",
                 "tools/userPreferences.schema.json",

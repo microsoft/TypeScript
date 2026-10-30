@@ -9,6 +9,7 @@ import (
 	"unicode"
 	"unicode/utf16"
 	"unicode/utf8"
+	"unsafe"
 
 	"github.com/microsoft/TypeScript/tsc/internal/ast"
 	"github.com/microsoft/TypeScript/tsc/internal/core"
@@ -210,12 +211,18 @@ type ScannerState struct {
 }
 
 type Scanner struct {
-	text            string
-	end             int
-	languageVariant core.LanguageVariant
-	scriptTarget    core.ScriptTarget
-	onError         ErrorCallback
-	skipTrivia      bool
+	text string
+	// Hash of the most recent identifier scanned by the ASCII fast path, keyed
+	// by the address and length of its token value. Stored as integers so
+	// updating them needs no write barriers.
+	identifierHash     uint64
+	identifierHashData uintptr
+	identifierHashLen  int
+	end                int
+	languageVariant    core.LanguageVariant
+	scriptTarget       core.ScriptTarget
+	onError            ErrorCallback
+	skipTrivia         bool
 	ScannerState
 
 	numberCache    map[string]string
@@ -280,6 +287,15 @@ func (s *Scanner) TokenText() string {
 
 func (s *Scanner) TokenValue() string {
 	return s.tokenValue
+}
+
+// IdentifierHash returns ast.SymbolNameHash(text) if text is the exact string
+// most recently produced by the identifier fast path.
+func (s *Scanner) IdentifierHash(text string) (uint64, bool) {
+	if len(text) != 0 && len(text) == s.identifierHashLen && uintptr(unsafe.Pointer(unsafe.StringData(text))) == s.identifierHashData {
+		return s.identifierHash, true
+	}
+	return 0, false
 }
 
 func (s *Scanner) TokenRange() core.TextRange {
@@ -1489,13 +1505,25 @@ func (s *Scanner) scanIdentifier(prefixLength int, variant identifierVariant) bo
 	ch := s.char()
 	// Fast path for simple ASCII identifiers
 	if variant != identifierVariantJSX && (stringutil.IsASCIILetter(ch) || ch == '_' || ch == '$') {
-		s.pos++
-		s.scanASCIIWhile(func(b byte) bool {
-			return (b >= 'a' && b <= 'z') || (b >= 'A' && b <= 'Z') || (b >= '0' && b <= '9') || b == '_' || b == '$'
-		})
+		h := ast.SymbolNameHashAdd(ast.SymbolNameHashSeed, byte(ch))
+		text := s.text[:s.end]
+		i := s.pos + 1
+		for ; i < len(text); i++ {
+			b := text[i]
+			if !((b >= 'a' && b <= 'z') || (b >= 'A' && b <= 'Z') || (b >= '0' && b <= '9') || b == '_' || b == '$') {
+				break
+			}
+			h = ast.SymbolNameHashAdd(h, b)
+		}
+		s.pos = i
 		ch = s.char()
 		if ch < utf8.RuneSelf && ch != '\\' {
 			s.tokenValue = s.text[start:s.pos]
+			if start == identifierStart {
+				s.identifierHash = ast.SymbolNameHashFinish(h)
+				s.identifierHashData = uintptr(unsafe.Pointer(unsafe.StringData(s.tokenValue)))
+				s.identifierHashLen = len(s.tokenValue)
+			}
 			return true
 		}
 		s.pos = identifierStart

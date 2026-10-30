@@ -892,7 +892,7 @@ func (c *Checker) getClassExpressionNameTable(location *ast.Node) ast.SymbolTabl
 	if len(nameText) == 0 || classSymbol == nil {
 		return nil
 	}
-	table := ast.SymbolTableOf(nameText, classSymbol)
+	table := ast.SymbolTableOf(ast.MakeSymbolName(nameText), classSymbol)
 	if c.classExpressionNameTables == nil {
 		c.classExpressionNameTables = make(map[ast.NodeId]ast.SymbolTable)
 	}

@@ -13,6 +13,7 @@ import {
 import generateOptions from "./generate-options.ts";
 import { options } from "./options.ts";
 import { api } from "./schema.ts";
+import { symbolNames } from "./symbolNames.ts";
 
 function runOutput(command: string, args: readonly string[]) {
     return run(command, args, { captureOutput: true, cwd: ROOT });
@@ -75,8 +76,21 @@ export const enumDefs = [
     { name: "CompletionItemKind", goPrefix: "CompletionItemKind", goFile: "tsc/internal/lsp/lsproto/lsp_generated.go", outDir: "packages/typescript/enums" },
     { name: "EmitOnly", goPrefix: "Emit", goFile: "tsc/internal/compiler/emitter.go", outDir: "packages/typescript/enums", excludeMembers: ["OnlyBuilderSignature"] },
     // String enum: Go stores internal names with a "\xFE" sentinel prefix, but the escaped
-    // form sent over the wire uses "__" (see EscapeSymbolName), so map the sentinel accordingly.
-    { name: "InternalSymbolName", goPrefix: "InternalSymbolName", goFile: "tsc/internal/ast/symbol.go", outDir: "packages/typescript/enums", stringEnum: true, valueReplacements: { InternalSymbolNamePrefix: "__" } },
+    // form sent over the wire uses "__" (see EscapeSymbolName).
+    {
+        name: "InternalSymbolName",
+        goPrefix: "InternalSymbolName",
+        goFile: "tsc/internal/ast/symbolnames_generated.go",
+        outDir: "packages/typescript/enums",
+        stringEnum: true,
+        metadata: {
+            file: "tools/scripts/tsc/symbolNames.ts",
+            members: symbolNames.filter(n => n.name.startsWith("InternalSymbolName")).map(n => ({
+                name: n.name.slice("InternalSymbolName".length),
+                value: JSON.stringify(n.internal ? "__" + n.text : n.text),
+            })),
+        },
+    },
 ] satisfies EnumDef[];
 
 function syntaxKindMembers(): EnumMember[] {
@@ -492,6 +506,7 @@ export default async function generateEnums(force = false) {
         path.join(import.meta.dirname, "options.ts"),
         path.join(import.meta.dirname, "options-model.ts"),
         path.join(import.meta.dirname, "schema.ts"),
+        path.join(import.meta.dirname, "symbolNames.ts"),
         ...goInputs(),
     ];
     const enumFiles = enumDefs.map(def => {
