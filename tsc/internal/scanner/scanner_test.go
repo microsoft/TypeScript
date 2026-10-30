@@ -107,3 +107,21 @@ func TestScanSourceKeyword(t *testing.T) {
 	assert.Equal(t, s.Scan(), ast.KindIdentifier)
 	assert.Equal(t, s.TokenValue(), "sourceValue")
 }
+
+func TestLookupKeywordMatchesKeywordMap(t *testing.T) {
+	t.Parallel()
+	for text, kind := range textToKeyword {
+		assert.Equal(t, lookupKeyword(text), kind, text)
+		assert.Equal(t, GetIdentifierToken(text), kind, text)
+		for _, other := range []string{text + "s", text[:len(text)-1], strings.ToUpper(text[:1]) + text[1:], "x" + text[1:], "_" + text} {
+			if _, ok := textToKeyword[other]; !ok {
+				assert.Equal(t, lookupKeyword(other), ast.KindUnknown, other)
+				assert.Equal(t, GetIdentifierToken(other), ast.KindIdentifier, other)
+			}
+		}
+	}
+	for _, text := range []string{"", "a", "\x00\x00", "élse"} {
+		assert.Equal(t, lookupKeyword(text), ast.KindUnknown, text)
+		assert.Equal(t, GetIdentifierToken(text), ast.KindIdentifier, text)
+	}
+}
