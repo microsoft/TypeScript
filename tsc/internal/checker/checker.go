@@ -599,6 +599,10 @@ type Checker struct {
 	TotalInstantiationCount                     uint32
 	instantiationCount                          uint32
 	memberLayoutCount                           uint32
+	instantiationCountResets                    uint32
+	diagnosticAdds                              uint32
+	transientReads                              uint32
+	inferMemo                                   inferMemo
 	instantiationStack                          []*Type
 	conditionalConstraintDepth                  uint32
 	inlineLevel                                 int
@@ -2316,6 +2320,7 @@ func (c *Checker) checkSourceElement(node *ast.Node) bool {
 		saveWithinUnreachableCode := c.withinUnreachableCode
 		c.currentNode = node
 		c.instantiationCount = 0
+		c.instantiationCountResets++
 		c.checkSourceElementWorker(node)
 		c.currentNode = saveCurrentNode
 		c.withinUnreachableCode = saveWithinUnreachableCode
@@ -2579,6 +2584,7 @@ func (c *Checker) checkDeferredNode(node *ast.Node) {
 	saveCurrentNode := c.currentNode
 	c.currentNode = node
 	c.instantiationCount = 0
+	c.instantiationCountResets++
 	switch node.Kind {
 	case ast.KindCallExpression, ast.KindNewExpression, ast.KindTaggedTemplateExpression, ast.KindDecorator, ast.KindJsxOpeningElement:
 		// These node kinds are deferred checked when overload resolution fails. To save on work,
@@ -7551,6 +7557,7 @@ func (c *Checker) getTypeOfExpression(node *ast.Node) *Type {
 	}
 	// If a type has been cached for the node, return it.
 	if cachedType := c.flowTypeCache[node]; cachedType != nil {
+		c.noteTransientRead()
 		return cachedType
 	}
 	startInvocationCount := c.flowInvocationCount
@@ -7770,6 +7777,7 @@ func (c *Checker) checkExpressionEx(node *ast.Node, checkMode CheckMode) *Type {
 	saveCurrentNode := c.currentNode
 	c.currentNode = node
 	c.instantiationCount = 0
+	c.instantiationCountResets++
 	uninstantiatedType := c.checkExpressionWorker(node, checkMode)
 	t := c.instantiateTypeWithSingleGenericCallSignature(node, uninstantiatedType, checkMode)
 	if isConstEnumObjectType(t) {
@@ -8628,6 +8636,9 @@ func (c *Checker) getResolvedSignature(node *ast.Node, candidatesOutArray *[]*Si
 	cached := links.resolvedSignature
 	if cached != nil && cached != c.resolvingSignature && candidatesOutArray == nil {
 		return cached
+	}
+	if cached == c.resolvingSignature {
+		c.noteTransientRead()
 	}
 	saveResolutionStart := c.resolutionStart
 	if cached == nil {
@@ -14252,6 +14263,7 @@ func (c *Checker) GetGlobalDiagnostics() []*ast.Diagnostic {
 }
 
 func (c *Checker) addDeferredDiagnostic(callback func()) {
+	c.diagnosticAdds++
 	c.deferredDiagnosticCallbacks = append(c.deferredDiagnosticCallbacks, callback)
 }
 
@@ -14264,6 +14276,7 @@ func (c *Checker) produceDeferredDiagnostics() {
 
 func (c *Checker) addDiagnostic(diagnostic *ast.Diagnostic) *ast.Diagnostic {
 	// Discard diagnostics created while at the maximum number of recursive TypeToString invocations.
+	c.diagnosticAdds++
 	if c.serializationLevel < maxSerializationLevel {
 		return c.diagnostics.Add(diagnostic)
 	}
@@ -14272,6 +14285,7 @@ func (c *Checker) addDiagnostic(diagnostic *ast.Diagnostic) *ast.Diagnostic {
 
 func (c *Checker) addSuggestionDiagnostic(diagnostic *ast.Diagnostic) *ast.Diagnostic {
 	// Discard diagnostics created while at the maximum number of recursive TypeToString invocations.
+	c.diagnosticAdds++
 	if c.serializationLevel < maxSerializationLevel {
 		return c.suggestionDiagnostics.Add(diagnostic)
 	}
@@ -19244,6 +19258,7 @@ func (c *Checker) findResolutionCycleStartIndex(target TypeSystemEntity, propert
 			return -1
 		}
 		if resolution.target == target && resolution.propertyName == propertyName {
+			c.noteTransientRead()
 			return i
 		}
 	}
@@ -30591,6 +30606,7 @@ func (c *Checker) getContextualTypeForArgumentAtIndex(callTarget *ast.Node, argI
 	// that could cause infinite recursion. Instead, return anySignature.
 	var signature *Signature
 	if c.signatureLinks.Get(callTarget).resolvedSignature == c.resolvingSignature {
+		c.noteTransientRead()
 		signature = c.resolvingSignature
 	} else {
 		signature = c.getResolvedSignature(callTarget, nil, CheckModeNormal)
