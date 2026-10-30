@@ -1,8 +1,9 @@
 // @noEmit: true
 
-// Instantiation limits must not depend on what was instantiated before:
-// Wide2All reaches the limit on the number of instantiations like WideAll,
-// although Wide2Tail already performed half of them.
+// The depth limit on instantiations must not depend on what was
+// instantiated before. The limit on the number of instantiations does, as
+// it only stops runaway instantiations, so it is only tested for a single
+// statement whose work nothing else shares.
 
 type D = 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9;
 type K = `${D}${D}${D}`;
@@ -10,12 +11,6 @@ type K = `${D}${D}${D}`;
 // Several million instantiations, well over the limit, for one statement.
 type Wide<N extends 0[], I> = N["length"] extends 8 ? I : { [J in K]: Wide<[...N, 0], [J, I][0]> }[K];
 type WideAll = Wide<[], "">;
-
-// The same, but half of the instantiations already happened for another
-// statement.
-type Wide2<N extends 0[], I> = N["length"] extends 8 ? I : { [J in K]: Wide2<[...N, 0], [J, I][0]> }[K];
-type Wide2Tail = Wide2<[0, 0, 0, 0], "">;
-type Wide2All = Wide2<[], "">;
 
 // Over a hundred nested instantiations, half of which already happened for
 // another statement.

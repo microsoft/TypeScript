@@ -1,8 +1,6 @@
 package checker
 
 import (
-	"math/bits"
-
 	"github.com/microsoft/TypeScript/tsc/internal/ast"
 	"github.com/microsoft/TypeScript/tsc/internal/debug"
 )
@@ -11,16 +9,14 @@ import (
 // comparison, or a checked node. The innermost is the last in
 // Checker.resolutions, above a root resolution for work outside any of them.
 type resolution struct {
-	count *instantiationCount // Allocated on first use
-	// The instantiation count is stored for the memo identified by key, or in
-	// the memo state source creates for index, if either is given.
+	// The result computed is the memo identified by key, or the one whose
+	// memo state source creates for index, if either is given.
 	key    memoKey
 	source memoStateSource
 	index  int32
-	start  int32 // Length of the instantiation stack on entry
 	// Length of the instantiation stack from which the depth limit counts:
-	// start for a computation, or that of the enclosing resolution for a
-	// node.
+	// that on entry for a computation, or that of the enclosing resolution
+	// for a node.
 	depthStart int32
 	serial     uint32 // Identifies the resolution among all entered
 
@@ -56,7 +52,7 @@ type memoStateSource interface {
 
 func (c *Checker) initResolutions() {
 	c.resolutions = []resolution{{}}
-	c.syncObserveFloor()
+	c.syncObserving()
 }
 
 // pushResolution pushes a resolution with every field zero and returns it.
@@ -77,16 +73,17 @@ func (c *Checker) currentResolution() *resolution {
 	return &c.resolutions[len(c.resolutions)-1]
 }
 
-// beginResolution starts a resolution with an empty instantiation count for a
-// computation, which also starts the depth limit of instantiations (see
-// "Instantiation limits" in memo.go).
+// beginResolution starts a resolution for a computation, which also starts the
+// depth limit of instantiations (see "Instantiation limits" in memo.go).
 func (c *Checker) beginResolution(source memoStateSource, index int) {
 	c.appendResolution(0, source, index, int32(len(c.instantiationStack)))
 }
 
 // beginNodeResolution starts a resolution for checking a node, which
-// continues the depth limit of the enclosing resolution.
+// continues the depth limit of the enclosing resolution and starts the count
+// of instantiations again.
 func (c *Checker) beginNodeResolution() {
+	c.instantiationCount = 0
 	c.appendResolution(0, nil, 0, c.currentResolution().depthStart)
 }
 
@@ -96,88 +93,39 @@ func (c *Checker) appendResolution(key memoKey, source memoStateSource, index in
 	f.key = key
 	f.source = source
 	f.index = int32(index)
-	f.start = int32(len(c.instantiationStack))
 	f.depthStart = depthBase
 	f.serial = c.resolutionSerials
-	c.syncObserveFloor()
 }
 
-// endResolution finishes the current resolution, returning its instantiation
-// count, or nil if it did no instantiations.
-func (c *Checker) endResolution() *instantiationCount {
+// endResolution finishes the current resolution.
+func (c *Checker) endResolution() {
 	n := len(c.resolutions) - 1
 	f := &c.resolutions[n]
 	debug.Assert(!f.isTypeResolution, "resolution left on the stack")
 	c.endResolving(f)
-	count := f.count
 	fromCheck := f.fromCheck
 	if f.memo {
 		clear(c.deferredAttach[f.attachStart:])
 		c.deferredAttach = c.deferredAttach[:f.attachStart]
 	}
-	if count != nil || f.source != nil {
-		c.finishResolution(f)
+	if f.source != nil {
+		f.source.popState(int(f.index))
 	}
 	c.resolutions[n] = resolution{}
 	c.resolutions = c.resolutions[:n]
-	c.syncObserveFloor()
 	if c.circularityStart > n {
 		c.endCircularity()
 	} else if len(c.innerCycles) != 0 {
 		c.endInnerCycles(n)
 	}
-	if count != nil {
-		c.observeCost(count)
-	}
 	if fromCheck {
 		c.endQueryFromCheck()
 	}
-	return count
 }
 
-// finishResolution stores the instantiation count of a resolution for the
-// results it computed.
-func (c *Checker) finishResolution(f *resolution) {
-	if count := f.count; count != nil {
-		var state *memoState
-		if f.source != nil {
-			state = f.source.stateAt(int(f.index))
-		} else if f.key != 0 {
-			state = c.memoState(f.key)
-			c.markCost(f.key)
-		}
-		if state != nil {
-			if state.count != nil {
-				count.merge(state.count)
-			}
-			state.count = count
-		}
-	}
-	if f.source != nil {
-		f.source.popState(int(f.index))
-	}
-}
-
-// savedCountOf returns the instantiation count stored in the memo state for
-// k, so that discarding a result can discard the count stored for it since.
-func savedCountOf[K comparable](states map[K]*memoState, k K) *instantiationCount {
-	if s := states[k]; s != nil {
-		return s.count
-	}
-	return nil
-}
-
-// restoreCount makes count the instantiation count stored in the memo state
-// for k, if it has one.
-func restoreCount[K comparable](states map[K]*memoState, k K, count *instantiationCount) {
-	if s := states[k]; s != nil {
-		s.count = count
-	}
-}
-
-// forgetCost makes the current resolution store its instantiation count for
-// no result, for a computation that did not cache its result.
-func (c *Checker) forgetCost() {
+// forgetResult makes the current resolution compute no result, for a
+// computation that did not cache its result.
+func (c *Checker) forgetResult() {
 	f := c.currentResolution()
 	if f.source != nil {
 		f.source.popState(int(f.index))
@@ -310,206 +258,4 @@ func (c *Checker) endResolving(f *resolution) {
 		c.resolving.delete(f.key)
 		f.resolving = false
 	}
-}
-
-// inResolution reports whether an instantiation of the current resolution is
-// in progress, so that results it reads are part of its work.
-func (c *Checker) inResolution() bool {
-	return len(c.instantiationStack) > int(c.currentResolution().start)
-}
-
-// observeCost accounts for the work of a result read by the current
-// resolution.
-func (c *Checker) observeCost(count *instantiationCount) {
-	if count == nil || !c.inResolution() {
-		return
-	}
-	f := c.currentResolution()
-	if count == f.count {
-		return
-	}
-	if f.count == nil {
-		f.count = newInstantiationCount()
-	}
-	f.count.merge(count)
-}
-
-func (c *Checker) addInstantiation(h uint64) {
-	f := c.currentResolution()
-	if f.count == nil {
-		f.count = newInstantiationCount()
-	}
-	f.count.add(h)
-}
-
-// linkCost gives a memo set outside a computation of its own the
-// instantiation count of the current resolution so far. Recomputing the memo
-// from scratch repeats those instantiations, but not those the resolution goes
-// on to do after setting it.
-func (c *Checker) linkCost(key memoKey) {
-	if len(c.resolutions) <= 1 {
-		return
-	}
-	if key == c.currentResolution().key {
-		return
-	}
-	if count := c.costSoFar(); count != nil {
-		c.memoState(key).count = count
-		c.markCost(key)
-	}
-}
-
-// costSoFar returns a copy of the instantiation count of the current
-// resolution so far, or nil if it did no instantiations.
-func (c *Checker) costSoFar() *instantiationCount {
-	f := c.currentResolution()
-	if f.count != nil {
-		return f.count.clone()
-	}
-	return nil
-}
-
-// The work filter is a set of the memo keys whose memo states may store work,
-// so that reading a result without effects to account for can skip looking up
-// its memo state. Most reads within computations only account for work, and
-// most results need none.
-
-const costFilterBits = 22
-
-func costFilterIndex(key memoKey) uint64 {
-	return uint64(key) * 0x9E3779B97F4A7C15 >> (64 - costFilterBits)
-}
-
-func (c *Checker) markCost(key memoKey) {
-	if c.costFilter == nil {
-		c.costFilter = make([]uint64, 1<<costFilterBits/64)
-	}
-	i := costFilterIndex(key)
-	c.costFilter[i/64] |= 1 << (i % 64)
-}
-
-func (c *Checker) mayHaveCost(key memoKey) bool {
-	if c.costFilter == nil {
-		return false
-	}
-	i := costFilterIndex(key)
-	return c.costFilter[i/64]&(1<<(i%64)) != 0
-}
-
-// Instantiation counts
-//
-// The limit on the number of instantiations bounds the work needed to compute
-// a result from scratch, which does not depend on what was cached before.
-// Each memoized computation is a resolution with an instantiation count of
-// the distinct instantiations its result needs: those it performs itself, and
-// those of every result it reads while an instantiation of its own is in
-// progress, whether that result is computed then or reused. Reused results
-// contribute the instantiation count stored when they were computed. Counting
-// distinct instantiations rather than summing the work of each result keeps
-// results shared by many others from being counted many times over.
-//
-// The instantiation count is a HyperLogLog estimate of the number of distinct
-// instantiations, identified by structural hashes (see typeHash), so that the
-// estimate does not depend on the order in which types were created.
-
-const (
-	instantiationCountIndexBits = 6
-	instantiationCountRegisters = 1 << instantiationCountIndexBits
-	instantiationCountMaxRank   = 40
-	// The estimate is 0.709 * registers^2 / sum(2^-register). The sum is kept
-	// as an integer scaled by 2^instantiationCountMaxRank, so that it is
-	// exact whatever the order of additions.
-	instantiationCountThreshold = 709 * instantiationCountRegisters * instantiationCountRegisters * (1 << instantiationCountMaxRank) / (1000 * instantiationCountLimit)
-)
-
-// Most counts have few nonzero registers, so those are kept as a short list
-// until there are too many for it.
-const instantiationCountSparse = 8
-
-type instantiationCount struct {
-	inverse uint64 // Sum of 2^(instantiationCountMaxRank-register)
-	// Nonzero registers as index<<8 | value, in order of index, while dense
-	// is nil.
-	sparse [instantiationCountSparse]uint16
-	dense  *[instantiationCountRegisters]uint8
-}
-
-func newInstantiationCount() *instantiationCount {
-	return &instantiationCount{inverse: instantiationCountRegisters << instantiationCountMaxRank}
-}
-
-func (s *instantiationCount) clone() *instantiationCount {
-	count := *s
-	if s.dense != nil {
-		dense := *s.dense
-		count.dense = &dense
-	}
-	return &count
-}
-
-func (s *instantiationCount) raise(i uint64, rank uint8) {
-	var old uint8
-	if s.dense != nil {
-		old = s.dense[i]
-		if rank <= old {
-			return
-		}
-		s.dense[i] = rank
-	} else {
-		j := 0
-		for ; j < instantiationCountSparse && s.sparse[j] != 0; j++ {
-			if index := uint64(s.sparse[j] >> 8); index >= i {
-				if index == i {
-					old = uint8(s.sparse[j])
-				}
-				break
-			}
-		}
-		if rank <= old {
-			return
-		}
-		switch {
-		case old != 0:
-			s.sparse[j] = uint16(i)<<8 | uint16(rank)
-		case s.sparse[instantiationCountSparse-1] == 0:
-			copy(s.sparse[j+1:], s.sparse[j:instantiationCountSparse-1])
-			s.sparse[j] = uint16(i)<<8 | uint16(rank)
-		default:
-			s.dense = new([instantiationCountRegisters]uint8)
-			for _, e := range s.sparse {
-				s.dense[e>>8] = uint8(e)
-			}
-			s.sparse = [instantiationCountSparse]uint16{}
-			s.dense[i] = rank
-		}
-	}
-	s.inverse -= 1 << (instantiationCountMaxRank - old)
-	s.inverse += 1 << (instantiationCountMaxRank - rank)
-}
-
-func (s *instantiationCount) add(h uint64) {
-	rank := uint8(bits.LeadingZeros64(h<<instantiationCountIndexBits|1<<(instantiationCountIndexBits-1)) + 1)
-	s.raise(h>>(64-instantiationCountIndexBits), min(rank, instantiationCountMaxRank))
-}
-
-func (s *instantiationCount) merge(other *instantiationCount) {
-	if other.dense != nil {
-		for i, rank := range other.dense {
-			if rank != 0 {
-				s.raise(uint64(i), rank)
-			}
-		}
-		return
-	}
-	for _, e := range other.sparse {
-		if e == 0 {
-			break
-		}
-		s.raise(uint64(e>>8), uint8(e))
-	}
-}
-
-// exceedsLimit reports whether the estimate reaches instantiationCountLimit.
-func (s *instantiationCount) exceedsLimit() bool {
-	return s != nil && s.inverse <= instantiationCountThreshold
 }
