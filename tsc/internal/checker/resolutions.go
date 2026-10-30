@@ -364,8 +364,7 @@ func (c *Checker) linkCost(key memoKey) {
 func (c *Checker) costSoFar() *instantiationCount {
 	f := c.currentResolution()
 	if f.count != nil {
-		count := *f.count
-		return &count
+		return f.count.clone()
 	}
 	return nil
 }
@@ -423,21 +422,69 @@ const (
 	instantiationCountThreshold = 709 * instantiationCountRegisters * instantiationCountRegisters * (1 << instantiationCountMaxRank) / (1000 * instantiationCountLimit)
 )
 
+// Most counts have few nonzero registers, so those are kept as a short list
+// until there are too many for it.
+const instantiationCountSparse = 8
+
 type instantiationCount struct {
-	registers [instantiationCountRegisters]uint8
-	inverse   uint64 // Sum of 2^(instantiationCountMaxRank-register)
+	inverse uint64 // Sum of 2^(instantiationCountMaxRank-register)
+	// Nonzero registers as index<<8 | value, in order of index, while dense
+	// is nil.
+	sparse [instantiationCountSparse]uint16
+	dense  *[instantiationCountRegisters]uint8
 }
 
 func newInstantiationCount() *instantiationCount {
 	return &instantiationCount{inverse: instantiationCountRegisters << instantiationCountMaxRank}
 }
 
-func (s *instantiationCount) raise(i uint64, rank uint8) {
-	if old := s.registers[i]; rank > old {
-		s.inverse -= 1 << (instantiationCountMaxRank - old)
-		s.inverse += 1 << (instantiationCountMaxRank - rank)
-		s.registers[i] = rank
+func (s *instantiationCount) clone() *instantiationCount {
+	count := *s
+	if s.dense != nil {
+		dense := *s.dense
+		count.dense = &dense
 	}
+	return &count
+}
+
+func (s *instantiationCount) raise(i uint64, rank uint8) {
+	var old uint8
+	if s.dense != nil {
+		old = s.dense[i]
+		if rank <= old {
+			return
+		}
+		s.dense[i] = rank
+	} else {
+		j := 0
+		for ; j < instantiationCountSparse && s.sparse[j] != 0; j++ {
+			if index := uint64(s.sparse[j] >> 8); index >= i {
+				if index == i {
+					old = uint8(s.sparse[j])
+				}
+				break
+			}
+		}
+		if rank <= old {
+			return
+		}
+		switch {
+		case old != 0:
+			s.sparse[j] = uint16(i)<<8 | uint16(rank)
+		case s.sparse[instantiationCountSparse-1] == 0:
+			copy(s.sparse[j+1:], s.sparse[j:instantiationCountSparse-1])
+			s.sparse[j] = uint16(i)<<8 | uint16(rank)
+		default:
+			s.dense = new([instantiationCountRegisters]uint8)
+			for _, e := range s.sparse {
+				s.dense[e>>8] = uint8(e)
+			}
+			s.sparse = [instantiationCountSparse]uint16{}
+			s.dense[i] = rank
+		}
+	}
+	s.inverse -= 1 << (instantiationCountMaxRank - old)
+	s.inverse += 1 << (instantiationCountMaxRank - rank)
 }
 
 func (s *instantiationCount) add(h uint64) {
@@ -446,8 +493,19 @@ func (s *instantiationCount) add(h uint64) {
 }
 
 func (s *instantiationCount) merge(other *instantiationCount) {
-	for i, rank := range other.registers {
-		s.raise(uint64(i), rank)
+	if other.dense != nil {
+		for i, rank := range other.dense {
+			if rank != 0 {
+				s.raise(uint64(i), rank)
+			}
+		}
+		return
+	}
+	for _, e := range other.sparse {
+		if e == 0 {
+			break
+		}
+		s.raise(uint64(e>>8), uint8(e))
 	}
 }
 
