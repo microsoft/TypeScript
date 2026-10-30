@@ -134,6 +134,9 @@ Generate pprof CPU/memory profiles to the given directory.
 [94m--checkers[39m
 Set the number of checkers per project.
 
+[94m--maxMemory[39m
+Set the memory limit in MiB for recycling checkers during no-emit type checking.
+
 [94m--runExternalCode[39m
 Allow loading external content mapper plugins that execute code during compilation.
 

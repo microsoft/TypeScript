@@ -64,6 +64,7 @@ type Statistics struct {
 	symbols          int
 	types            int
 	instantiations   int
+	retiredCheckers  int
 	memoryUsed       uint64
 	memoryAllocs     uint64
 	compileTimes     *CompileTimes
@@ -71,15 +72,16 @@ type Statistics struct {
 
 func statisticsFromProgram(input EmitInput, memStats *runtime.MemStats) *Statistics {
 	return &Statistics{
-		files:          len(input.Program.SourceFiles()),
-		lines:          input.Program.LineCount(),
-		identifiers:    input.Program.IdentifierCount(),
-		symbols:        input.Program.SymbolCount(),
-		types:          input.Program.TypeCount(),
-		instantiations: input.Program.InstantiationCount(),
-		memoryUsed:     memStats.Alloc,
-		memoryAllocs:   memStats.Mallocs,
-		compileTimes:   input.CompileTimes,
+		files:           len(input.Program.SourceFiles()),
+		lines:           input.Program.LineCount(),
+		identifiers:     input.Program.IdentifierCount(),
+		symbols:         input.Program.SymbolCount(),
+		types:           input.Program.TypeCount(),
+		instantiations:  input.Program.InstantiationCount(),
+		retiredCheckers: input.Program.RetiredCheckerCount(),
+		memoryUsed:      memStats.Alloc,
+		memoryAllocs:    memStats.Mallocs,
+		compileTimes:    input.CompileTimes,
 	}
 }
 
@@ -103,6 +105,9 @@ func (s *Statistics) Report(w io.Writer, testing CommandLineTesting) {
 	table.add(prefix+"Symbols", s.symbols)
 	table.add(prefix+"Types", s.types)
 	table.add(prefix+"Instantiations", s.instantiations)
+	if s.retiredCheckers != 0 {
+		table.add(prefix+"Checkers retired", s.retiredCheckers)
+	}
 	table.add(prefix+"Memory used", fmt.Sprintf("%vK", s.memoryUsed/1024))
 	table.add(prefix+"Memory allocs", strconv.FormatUint(s.memoryAllocs, 10))
 	if s.compileTimes.ConfigTime != 0 {

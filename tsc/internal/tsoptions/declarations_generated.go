@@ -235,6 +235,13 @@ var commonOptionsWithBuild = []*CommandLineOption{
 		minValue:                1,
 	},
 	{
+		Name:        "maxMemory",
+		Kind:        CommandLineOptionTypeNumber,
+		Category:    diagnostics.Command_line_Options,
+		Description: diagnostics.Set_the_memory_limit_in_MiB_for_recycling_checkers_during_no_emit_type_checking,
+		minValue:    1,
+	},
+	{
 		Name:                    "runExternalCode",
 		Kind:                    CommandLineOptionTypeBoolean,
 		Category:                diagnostics.Command_line_Options,

@@ -6819,6 +6819,10 @@
         "category": "Message",
         "code": 6940
     },
+    "Set the memory limit in MiB for recycling checkers during no-emit type checking.": {
+        "category": "Message",
+        "code": 6941
+    },
 
     "Variable '{0}' implicitly has an '{1}' type.": {
         "category": "Error",
