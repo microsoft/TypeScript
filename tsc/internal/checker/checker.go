@@ -19165,12 +19165,12 @@ func (c *Checker) getEffectivePropertyNameForPropertyNameNode(node *ast.Property
 	case ast.IsComputedPropertyName(node):
 		// This is cached so `getTypeOfExpression` isn't constantly reinvoked for every property name lookup
 		links := c.computedNameLinks.Get(node)
-		if links != nil && links.hasName != nil {
-			return links.name, *links.hasName
+		if links != nil && !links.hasName.IsUnknown() {
+			return links.name, links.hasName.IsTrue()
 		}
 		name, exists := c.tryGetNameFromType(c.getTypeOfExpression(node.Expression()))
 		links.name = name
-		links.hasName = &exists
+		links.hasName = core.BoolToTristate(exists)
 		return name, exists
 	}
 	return "", false
