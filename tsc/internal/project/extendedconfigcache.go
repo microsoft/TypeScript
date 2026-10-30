@@ -1,6 +1,8 @@
 package project
 
 import (
+	"slices"
+
 	"github.com/microsoft/TypeScript/tsc/internal/tsoptions"
 	"github.com/microsoft/TypeScript/tsc/internal/tspath"
 	"github.com/microsoft/TypeScript/tsc/internal/vfs"
@@ -47,6 +49,9 @@ func hash(entry *tsoptions.ExtendedConfigCacheEntry, args ExtendedConfigParseArg
 			return xxh3.Uint128{}
 		}
 		_, _ = hasher.WriteString(fh.Content())
+		if slices.Contains(args.ResolutionStack, args.ConfigFS.CaseSensitivity().PathKey(fileName.AsPath())) {
+			_, _ = hasher.WriteString(fileName.AsString())
+		}
 	}
 	return hasher.Sum128()
 }
