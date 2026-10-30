@@ -1177,6 +1177,10 @@ func (s *Session) HandleRequest(ctx context.Context, method string, params json.
 		return s.handleGetJSDocTags(ctx, parsed.(*CheckerSymbolParams))
 	case string(MethodGetDocumentationComment):
 		return s.handleGetDocumentationComment(ctx, parsed.(*CheckerSymbolParams))
+	case string(MethodGetSymbolDocumentations):
+		return s.handleGetSymbolDocumentations(ctx, parsed.(*GetSymbolDocumentationsParams))
+	case string(MethodGetMembersOfType):
+		return s.handleGetMembersOfType(ctx, parsed.(*GetMembersOfTypeParams))
 	case string(MethodIsArrayType):
 		return s.handleIsArrayType(ctx, parsed.(*CheckerTypeParams))
 	case string(MethodIsReadonlySymbol):

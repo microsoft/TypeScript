@@ -4148,6 +4148,59 @@ function toEmitOutput(response: ProtocolEmitOutputResponse): EmitOutput {
     };
 }
 
+/** The documentation comment and JSDoc tags of one symbol. */
+export interface SymbolDocumentation {
+    /** Tag name/text pairs. Empty when the symbol has no tags. */
+    readonly tags: readonly JSDocTagInfo[];
+    /** The rendered documentation comment, or an empty string. */
+    readonly comment: string;
+}
+
+/** Member kinds accepted by {@link Checker.getMembersOfType}. */
+export type MemberKind = "property" | "accessor" | "method" | "parameterProperty";
+
+/** Visibilities accepted by {@link Checker.getMembersOfType}. ECMAScript private names count as private. */
+export type MemberVisibility = "public" | "protected" | "private";
+
+/**
+ * Which declaring types contribute members beyond the queried type's own members.
+ * Omit it, or pass neither `all` nor `types`, for own members only.
+ */
+export interface MembersInheritedFrom {
+    /** Include every member {@link Checker.getPropertiesOfType} would return. */
+    readonly all?: boolean;
+    /** Declaring types whose members are included along with the queried type's own members. */
+    readonly types?: readonly Type[];
+}
+
+/**
+ * Filters applied before a member's type is computed. Every field is optional.
+ * `visibility` and `kinds` are allow-lists; an empty list does not filter.
+ * `excludeNamePattern` is a RE2 regular expression matched against the source name.
+ */
+export interface GetMembersOfTypeOptions {
+    readonly visibility?: readonly MemberVisibility[];
+    readonly kinds?: readonly MemberKind[];
+    readonly excludeJsDocTags?: readonly string[];
+    /** Drop members whose source name matches. ECMAScript private names are matched as written (`#name`). */
+    readonly excludeNamePattern?: string;
+    readonly includeInheritedFrom?: MembersInheritedFrom;
+    /** Attach each member's declared type, the same type {@link Checker.getTypeOfSymbol} returns. */
+    readonly includeDeclaredType?: boolean;
+}
+
+/** One member returned by {@link Checker.getMembersOfType}. */
+export interface TypeMember {
+    readonly symbol: Symbol;
+    /** The symbol of the class or interface that declares this member. */
+    readonly declaringSymbol?: Symbol | undefined;
+    readonly kind: MemberKind;
+    readonly tags: readonly JSDocTagInfo[];
+    readonly comment: string;
+    /** Present when {@link GetMembersOfTypeOptions.includeDeclaredType} is set. */
+    readonly declaredType?: Type | undefined;
+}
+
 export class Checker {
     private snapshotId: number;
     private project: Project;
@@ -6459,6 +6512,128 @@ export class Checker {
                     snapshot: owner.snapshotId,
                     project: owner.project.handle,
                     symbol: symbol.reference,
+                });
+            },
+        );
+    }
+
+    /**
+     * Returns the documentation comment and JSDoc tags of many symbols in one request.
+     * Each entry matches {@link getJsDocTagsOfSymbol} and {@link getDocumentationCommentOfSymbol}.
+     */
+    get getSymbolDocumentations(): {
+        (symbols: readonly Symbol[]): SymbolDocumentation[];
+        gen(symbols: readonly Symbol[]): Generator<ProtocolRequest, SymbolDocumentation[], ProtocolResponse["result"]>;
+    } {
+        const owner = this;
+        return cacheGeneratorMethod(
+            owner,
+            "getSymbolDocumentations",
+            function (symbols: readonly Symbol[]): SymbolDocumentation[] {
+                if (symbols.length === 0) {
+                    return [];
+                }
+                const data = owner.client.apiRequest("getSymbolDocumentations", {
+                    snapshot: owner.snapshotId,
+                    project: owner.project.handle,
+                    symbols: symbols.map(symbol => symbol.reference),
+                });
+                return data.map(entry => ({
+                    tags: entry.tags ?? [],
+                    comment: entry.comment,
+                }));
+            },
+            function* (symbols: readonly Symbol[]): Generator<ProtocolRequest, SymbolDocumentation[], ProtocolResponse["result"]> {
+                if (symbols.length === 0) {
+                    return [];
+                }
+                const data = yield* apiRequest("getSymbolDocumentations", {
+                    snapshot: owner.snapshotId,
+                    project: owner.project.handle,
+                    symbols: symbols.map(symbol => symbol.reference),
+                });
+                return data.map(entry => ({
+                    tags: entry.tags ?? [],
+                    comment: entry.comment,
+                }));
+            },
+        );
+    }
+
+    /**
+     * Returns the members of a type that pass `options`, in one request.
+     * Member symbols are the same objects {@link getPropertiesOfType} returns, and
+     * `declaredType` is the same type {@link getTypeOfSymbol} returns.
+     * Without `includeInheritedFrom`, only members declared on the type itself are returned.
+     */
+    get getMembersOfType(): {
+        (type: Type, options?: GetMembersOfTypeOptions): TypeMember[];
+        gen(type: Type, options?: GetMembersOfTypeOptions): Generator<ProtocolRequest, TypeMember[], ProtocolResponse["result"]>;
+    } {
+        const owner = this;
+        return cacheGeneratorMethod(
+            owner,
+            "getMembersOfType",
+            function (type: Type, options?: GetMembersOfTypeOptions): TypeMember[] {
+                const data = owner.client.apiRequest("getMembersOfType", {
+                    snapshot: owner.snapshotId,
+                    project: owner.project.handle,
+                    type: type.id,
+                    filter: options && {
+                        visibility: options.visibility,
+                        kinds: options.kinds,
+                        excludeJsDocTags: options.excludeJsDocTags,
+                        excludeNamePattern: options.excludeNamePattern,
+                        includeDeclaredType: options.includeDeclaredType,
+                        includeInheritedFrom: options.includeInheritedFrom && {
+                            all: options.includeInheritedFrom.all,
+                            types: options.includeInheritedFrom.types?.map(inherited => inherited.id),
+                        },
+                    },
+                });
+                return data.map(entry => {
+                    if (!entry.symbol) {
+                        throw new Error("getMembersOfType returned a member without a symbol");
+                    }
+                    return {
+                        symbol: owner.objectRegistry.getOrCreateSymbol(entry.symbol),
+                        declaringSymbol: entry.declaringSymbol ? owner.objectRegistry.getOrCreateSymbol(entry.declaringSymbol) : undefined,
+                        kind: entry.kind as MemberKind,
+                        tags: entry.tags ?? [],
+                        comment: entry.comment,
+                        declaredType: entry.declaredType ? owner.objectRegistry.getOrCreateType(entry.declaredType) : undefined,
+                    };
+                });
+            },
+            function* (type: Type, options?: GetMembersOfTypeOptions): Generator<ProtocolRequest, TypeMember[], ProtocolResponse["result"]> {
+                const data = yield* apiRequest("getMembersOfType", {
+                    snapshot: owner.snapshotId,
+                    project: owner.project.handle,
+                    type: type.id,
+                    filter: options && {
+                        visibility: options.visibility,
+                        kinds: options.kinds,
+                        excludeJsDocTags: options.excludeJsDocTags,
+                        excludeNamePattern: options.excludeNamePattern,
+                        includeDeclaredType: options.includeDeclaredType,
+                        includeInheritedFrom: options.includeInheritedFrom && {
+                            all: options.includeInheritedFrom.all,
+                            types: options.includeInheritedFrom.types?.map(inherited => inherited.id),
+                        },
+                    },
+                });
+                return data.map(entry => {
+                    if (!entry.symbol) {
+                        throw new Error("getMembersOfType returned a member without a symbol");
+                    }
+                    return {
+                        symbol: owner.objectRegistry.getOrCreateSymbol(entry.symbol),
+                        declaringSymbol: entry.declaringSymbol ? owner.objectRegistry.getOrCreateSymbol(entry.declaringSymbol) : undefined,
+                        kind: entry.kind as MemberKind,
+                        tags: entry.tags ?? [],
+                        comment: entry.comment,
+                        declaredType: entry.declaredType ? owner.objectRegistry.getOrCreateType(entry.declaredType) : undefined,
+                    };
                 });
             },
         );
