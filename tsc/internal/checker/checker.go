@@ -624,9 +624,10 @@ type Checker struct {
 	compareSymbolChains                         func([]*ast.Symbol, []*ast.Symbol) int
 	resolutionSerials                           uint32
 	resolutions                                 []resolution
-	symbolHashes                                map[*ast.Symbol]uint64
-	typeHashes                                  map[*Type]*[typeHashDepth]uint64
-	mapperHashes                                map[*TypeMapper]uint64
+	symbolHashes                                symbolLinkStore[uint64]
+	typeHashes                                  core.PagedLinkStore[[typeHashDepth]uint64]
+	foreignTypeHashes                           map[*Type]*[typeHashDepth]uint64
+	mapperHashes                                *[mapperHashCacheSize]mapperHashCacheEntry
 	fileHashes                                  map[*ast.SourceFile]uint64
 	instantiationStack                          []*Type
 	conditionalConstraintDepth                  depthLimit

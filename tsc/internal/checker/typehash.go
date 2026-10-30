@@ -2,6 +2,7 @@ package checker
 
 import (
 	"math"
+	"unsafe"
 
 	"github.com/microsoft/TypeScript/tsc/internal/ast"
 	"github.com/microsoft/TypeScript/tsc/internal/jsnum"
@@ -45,13 +46,16 @@ func (c *Checker) typeHashAt(t *Type, depth int) uint64 {
 	if t == nil {
 		return 0
 	}
+	var entry *[typeHashDepth]uint64
+	if depth != 0 {
+		entry = c.typeHashEntry(t)
+		if entry[depth-1] != 0 {
+			return entry[depth-1]
+		}
+	}
 	h := hashCombine(hashCombine(uint64(t.kind), uint64(t.flags)), c.symbolHash(t.symbol))
 	if depth == 0 {
 		return h
-	}
-	entry := c.typeHashes[t]
-	if entry != nil && entry[depth-1] != 0 {
-		return entry[depth-1]
 	}
 	h = hashCombine(h, c.typeHashWorker(t, depth-1))
 	if t.alias != nil {
@@ -60,18 +64,25 @@ func (c *Checker) typeHashAt(t *Type, depth int) uint64 {
 	}
 	// Zero marks an absent entry.
 	h |= 1
-	if entry == nil {
-		// The worker may have added an entry for t at another depth.
-		if entry = c.typeHashes[t]; entry == nil {
-			entry = new([typeHashDepth]uint64)
-			if c.typeHashes == nil {
-				c.typeHashes = make(map[*Type]*[typeHashDepth]uint64)
-			}
-			c.typeHashes[t] = entry
-		}
-	}
 	entry[depth-1] = h
 	return h
+}
+
+// typeHashEntry returns the cached hashes of t. Types created by this
+// checker's store are keyed by their dense IDs.
+func (c *Checker) typeHashEntry(t *Type) *[typeHashDepth]uint64 {
+	if t.checker == c.root {
+		return c.typeHashes.Get(uint64(t.id))
+	}
+	entry := c.foreignTypeHashes[t]
+	if entry == nil {
+		entry = new([typeHashDepth]uint64)
+		if c.foreignTypeHashes == nil {
+			c.foreignTypeHashes = make(map[*Type]*[typeHashDepth]uint64)
+		}
+		c.foreignTypeHashes[t] = entry
+	}
+	return entry
 }
 
 func (c *Checker) hashTypes(h uint64, types []*Type, depth int) uint64 {
@@ -238,8 +249,9 @@ func (c *Checker) symbolHash(s *ast.Symbol) uint64 {
 	if s == nil {
 		return 0
 	}
-	if h, ok := c.symbolHashes[s]; ok {
-		return h
+	cached := c.symbolHashes.Get(s)
+	if *cached != 0 {
+		return *cached
 	}
 	h := hashCombine(xxh3.HashString(s.Name()), uint64(s.Flags()))
 	if decls := s.Declarations(); len(decls) != 0 {
@@ -247,25 +259,33 @@ func (c *Checker) symbolHash(s *ast.Symbol) uint64 {
 	} else if s.Parent() != nil {
 		h = hashCombine(h, c.symbolHash(s.Parent()))
 	}
-	if c.symbolHashes == nil {
-		c.symbolHashes = make(map[*ast.Symbol]uint64)
-	}
-	c.symbolHashes[s] = h
+	// Zero marks an absent entry; a zero hash is merely recomputed.
+	*c.symbolHashes.Get(s) = h
 	return h
 }
 
 func (c *Checker) mapperHash(m *TypeMapper) uint64 {
 	// Mappers are immutable, and one mapper is typically used for many
 	// instantiations, so its hash is computed once.
-	if h, ok := c.mapperHashes[m]; ok {
-		return h
+	// A small direct-mapped cache suffices; a miss only recomputes the hash.
+	if c.mapperHashes == nil {
+		c.mapperHashes = new([mapperHashCacheSize]mapperHashCacheEntry)
+	}
+	p := uintptr(unsafe.Pointer(m))
+	e := &c.mapperHashes[(p^p>>12)>>4&(mapperHashCacheSize-1)]
+	if e.mapper == m {
+		return e.hash
 	}
 	h := c.mapperHashAt(m, typeHashDepth)
-	if c.mapperHashes == nil {
-		c.mapperHashes = make(map[*TypeMapper]uint64)
-	}
-	c.mapperHashes[m] = h
+	*e = mapperHashCacheEntry{m, h}
 	return h
+}
+
+const mapperHashCacheSize = 1 << 12
+
+type mapperHashCacheEntry struct {
+	mapper *TypeMapper
+	hash   uint64
 }
 
 // mapperHashAt returns the structural hash of m, looking depth levels into
