@@ -2226,14 +2226,17 @@ func (b *NodeBuilderImpl) indexInfoToIndexSignatureDeclarationHelper(indexInfo *
 
 	indexingParameter := b.f.NewParameterDeclaration(nil, nil, b.newIdentifier(name, nil /*symbol*/), nil, indexerTypeNode, nil)
 	if typeNode == nil {
-		if indexInfo.valueType == nil {
+		// Resolve deferred index value types (see getIndexInfosOfIndexSymbol / #64998).
+		// Intentionally empty index infos (no declaration and no value type) still surface as any
+		// and set encounteredError unless AllowEmptyIndexInfoType is set.
+		if indexInfo.Declaration() == nil && indexInfo.ValueType() == nil {
 			typeNode = b.f.NewKeywordTypeNode(ast.KindAnyKeyword)
+			if b.ctx.flags&nodebuilder.FlagsAllowEmptyIndexInfoType == 0 {
+				b.ctx.encounteredError = true
+			}
 		} else {
-			typeNode = b.typeToTypeNode(indexInfo.valueType)
+			typeNode = b.typeToTypeNode(b.ch.getValueTypeOfIndexInfo(indexInfo))
 		}
-	}
-	if indexInfo.valueType == nil && b.ctx.flags&nodebuilder.FlagsAllowEmptyIndexInfoType == 0 {
-		b.ctx.encounteredError = true
 	}
 	b.ctx.approximateLength += len(name) + 4
 	var modifiers *ast.ModifierList

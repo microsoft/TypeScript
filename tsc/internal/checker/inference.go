@@ -940,18 +940,18 @@ func (c *Checker) inferFromIndexTypes(n *InferenceState, source *Type, target *T
 			}
 			for _, info := range c.getIndexInfosOfType(source) {
 				if c.isApplicableIndexType(info.keyType, targetInfo.keyType) {
-					propTypes = append(propTypes, info.valueType)
+					propTypes = append(propTypes, c.getValueTypeOfIndexInfo(info))
 				}
 			}
 			if len(propTypes) != 0 {
-				c.inferWithPriority(n, c.getUnionType(propTypes), targetInfo.valueType, priority)
+				c.inferWithPriority(n, c.getUnionType(propTypes), c.getValueTypeOfIndexInfo(targetInfo), priority)
 			}
 		}
 	}
 	for _, targetInfo := range indexInfos {
 		sourceInfo := c.getApplicableIndexInfo(source, targetInfo.keyType)
 		if sourceInfo != nil {
-			c.inferWithPriority(n, sourceInfo.valueType, targetInfo.valueType, priority)
+			c.inferWithPriority(n, c.getValueTypeOfIndexInfo(sourceInfo), c.getValueTypeOfIndexInfo(targetInfo), priority)
 		}
 	}
 }
@@ -998,7 +998,7 @@ func (c *Checker) inferToMappedType(n *InferenceState, source *Type, target *Typ
 		propTypes := core.Map(c.getPropertiesOfType(source), c.getTypeOfSymbol)
 		indexTypes := core.Map(c.getIndexInfosOfType(source), func(info *IndexInfo) *Type {
 			if info != c.enumNumberIndexInfo {
-				return info.valueType
+				return c.getValueTypeOfIndexInfo(info)
 			}
 			return c.neverType
 		})
@@ -1115,7 +1115,7 @@ func (c *Checker) resolveReverseMappedTypeMembers(t *Type) {
 	optionalMask := core.IfElse(modifiers&MappedTypeModifiersIncludeOptional != 0, 0, ast.SymbolFlagsOptional)
 	var indexInfos []*IndexInfo
 	if indexInfo != nil {
-		indexInfos = []*IndexInfo{c.newIndexInfo(c.stringType, core.OrElse(c.inferReverseMappedType(indexInfo.valueType, r.mappedType, r.constraintType), c.unknownType), readonlyMask && indexInfo.isReadonly, nil, nil)}
+		indexInfos = []*IndexInfo{c.newIndexInfo(c.stringType, core.OrElse(c.inferReverseMappedType(c.getValueTypeOfIndexInfo(indexInfo), r.mappedType, r.constraintType), c.unknownType), readonlyMask && indexInfo.isReadonly, nil, nil)}
 	}
 	members := ast.NewSymbolTable()
 	limitedConstraint := c.getLimitedConstraint(t)

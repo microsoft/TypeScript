@@ -65,6 +65,7 @@ const (
 	TypeSystemPropertyNameWriteType
 	TypeSystemPropertyNameInitializerIsUndefined
 	TypeSystemPropertyNameAliasTarget
+	TypeSystemPropertyNameIndexInfoValueType
 )
 
 type TypeResolution struct {
@@ -4957,8 +4958,8 @@ func (c *Checker) checkIndexConstraintForProperty(t *Type, prop *ast.Symbol, pro
 		}) {
 			errorNode = interfaceDeclaration
 		}
-		if errorNode != nil && !c.isTypeAssignableTo(propType, info.valueType) {
-			diagnostic := NewDiagnosticForNode(errorNode, diagnostics.Property_0_of_type_1_is_not_assignable_to_2_index_type_3, c.symbolToString(prop), c.TypeToString(propType), c.TypeToString(info.keyType), c.TypeToString(info.valueType))
+		if errorNode != nil && !c.isTypeAssignableTo(propType, c.getValueTypeOfIndexInfo(info)) {
+			diagnostic := NewDiagnosticForNode(errorNode, diagnostics.Property_0_of_type_1_is_not_assignable_to_2_index_type_3, c.symbolToString(prop), c.TypeToString(propType), c.TypeToString(info.keyType), c.TypeToString(c.getValueTypeOfIndexInfo(info)))
 			if propDeclaration != nil && errorNode != propDeclaration {
 				diagnostic.AddRelatedInfo(NewDiagnosticForNode(propDeclaration, diagnostics.X_0_is_declared_here, c.symbolToString(prop)))
 			}
@@ -4998,8 +4999,8 @@ func (c *Checker) checkIndexConstraintForIndexSignature(t *Type, checkInfo *Inde
 		}) {
 			errorNode = interfaceDeclaration
 		}
-		if errorNode != nil && !c.isTypeAssignableTo(checkInfo.valueType, info.valueType) {
-			c.error(errorNode, diagnostics.X_0_index_type_1_is_not_assignable_to_2_index_type_3, c.TypeToString(checkInfo.keyType), c.TypeToString(checkInfo.valueType), c.TypeToString(info.keyType), c.TypeToString(info.valueType))
+		if errorNode != nil && !c.isTypeAssignableTo(c.getValueTypeOfIndexInfo(checkInfo), c.getValueTypeOfIndexInfo(info)) {
+			c.error(errorNode, diagnostics.X_0_index_type_1_is_not_assignable_to_2_index_type_3, c.TypeToString(checkInfo.keyType), c.TypeToString(c.getValueTypeOfIndexInfo(checkInfo)), c.TypeToString(info.keyType), c.TypeToString(c.getValueTypeOfIndexInfo(info)))
 		}
 	}
 }
@@ -11598,7 +11599,7 @@ func (c *Checker) checkPropertyAccessExpressionOrQualifiedName(node *ast.Node, l
 		if indexInfo.isReadonly && (ast.IsAssignmentTarget(node) || isDeleteTarget(node)) {
 			c.error(node, diagnostics.Index_signature_in_type_0_only_permits_reading, c.TypeToString(apparentType))
 		}
-		propType = indexInfo.valueType
+		propType = c.getValueTypeOfIndexInfo(indexInfo)
 		if c.compilerOptions.NoUncheckedIndexedAccess == core.TSTrue && getAssignmentTargetKind(node) != AssignmentKindDefinite {
 			propType = c.getUnionType([]*Type{propType, c.missingType})
 		}
@@ -13758,7 +13759,7 @@ func (c *Checker) getSpreadType(left *Type, right *Type, symbol *ast.Symbol, obj
 
 func (c *Checker) getIndexInfoWithReadonly(info *IndexInfo, readonly bool) *IndexInfo {
 	if info.isReadonly != readonly {
-		return c.newIndexInfo(info.keyType, info.valueType, readonly, info.declaration, info.components)
+		return c.newIndexInfo(info.keyType, c.getValueTypeOfIndexInfo(info), readonly, info.declaration, info.components)
 	}
 	return info
 }
@@ -18872,7 +18873,7 @@ func (c *Checker) getWidenedTypeOfObjectLiteral(t *Type, context *WideningContex
 		}
 	}
 	result := c.newAnonymousType(t.symbol, members, nil, nil, core.SameMap(c.getIndexInfosOfType(t), func(info *IndexInfo) *IndexInfo {
-		return c.newIndexInfo(info.keyType, c.getWidenedType(info.valueType), info.isReadonly, info.declaration, info.components)
+		return c.newIndexInfo(info.keyType, c.getWidenedType(c.getValueTypeOfIndexInfo(info)), info.isReadonly, info.declaration, info.components)
 	}))
 	// Retain js literal flag through widening
 	result.objectFlags |= t.objectFlags & (ObjectFlagsJSLiteral | ObjectFlagsNonInferrableType)
@@ -19272,6 +19273,8 @@ func (c *Checker) typeResolutionHasProperty(r *TypeResolution) bool {
 		return c.valueSymbolLinks.Get(r.target.(*ast.Symbol)).getWriteType() != nil
 	case TypeSystemPropertyNameAliasTarget:
 		return c.aliasSymbolLinks.Get(r.target.(*ast.Symbol)).aliasTarget != nil
+	case TypeSystemPropertyNameIndexInfoValueType:
+		return r.target.(*IndexInfo).valueType != nil
 	}
 	panic("Unhandled case in typeResolutionHasProperty")
 }
@@ -19480,7 +19483,7 @@ func (c *Checker) getIndexInfoOfType(t *Type, keyType *Type) *IndexInfo {
 func (c *Checker) getIndexTypeOfType(t *Type, keyType *Type) *Type {
 	info := c.getIndexInfoOfType(t, keyType)
 	if info != nil {
-		return info.valueType
+		return c.getValueTypeOfIndexInfo(info)
 	}
 	return nil
 }
@@ -19529,7 +19532,7 @@ func (c *Checker) findApplicableIndexInfo(indexInfos []*IndexInfo, keyType *Type
 		isReadonly := true
 		types := make([]*Type, len(applicableInfos))
 		for i, info := range applicableInfos {
-			types[i] = info.valueType
+			types[i] = c.getValueTypeOfIndexInfo(info)
 			if !info.isReadonly {
 				isReadonly = false
 			}
@@ -20225,12 +20228,18 @@ func (c *Checker) getIndexInfosOfIndexSymbol(indexSymbol *ast.Symbol, siblingSym
 			if len(parameters) == 1 {
 				typeNode := parameters[0].Type()
 				if typeNode != nil {
-					valueType := c.anyType
-					if returnTypeNode != nil {
-						valueType = c.getTypeFromTypeNode(returnTypeNode)
-					}
+					// Defer resolving the index signature's value type. Eager resolution is
+					// problematic for patterns like `type T = keyof C` where C declares
+					// `[key: K]: T` — computing keyof only needs key types, and resolving the
+					// value type while T is still resolving incorrectly marks T circular
+					// (see microsoft/TypeScript#64998). The value type is resolved lazily via
+					// getValueTypeOfIndexInfo when first needed.
 					forEachType(c.getTypeFromTypeNode(typeNode), func(keyType *Type) {
 						if c.isValidIndexKeyType(keyType) && findIndexInfo(indexInfos, keyType) == nil {
+							var valueType *Type
+							if returnTypeNode == nil {
+								valueType = c.anyType
+							}
 							indexInfo := c.newIndexInfo(keyType, valueType, ast.HasModifier(declaration, ast.ModifierFlagsReadonly), declaration, nil)
 							indexInfos = append(indexInfos, indexInfo)
 						}
@@ -21218,8 +21227,23 @@ func (c *Checker) instantiateSignatureEx(sig *Signature, m *TypeMapper, eraseTyp
 }
 
 func (c *Checker) instantiateIndexInfo(info *IndexInfo, m *TypeMapper) *IndexInfo {
-	newValueType := c.instantiateType(info.valueType, m)
-	if newValueType == info.valueType {
+	// Keep deferred value types deferred across instantiation. Eagerly resolving the
+	// value type here reintroduces circularity for `type T = keyof C` where C has an
+	// index signature typed as T — classes always instantiate index infos because of
+	// the implicit `this` type (microsoft/TypeScript#64998).
+	if info.valueType == nil && info.declaration != nil {
+		keyType := c.instantiateType(info.keyType, m)
+		combined := c.combineTypeMappers(info.mapper, m)
+		if keyType == info.keyType && combined == info.mapper {
+			return info
+		}
+		result := c.newIndexInfo(keyType, nil, info.isReadonly, info.declaration, info.components)
+		result.mapper = combined
+		return result
+	}
+	valueType := c.getValueTypeOfIndexInfo(info)
+	newValueType := c.instantiateType(valueType, m)
+	if newValueType == valueType {
 		return info
 	}
 	return c.newIndexInfo(info.keyType, newValueType, info.isReadonly, info.declaration, info.components)
@@ -21932,10 +21956,10 @@ func (c *Checker) appendIndexInfo(indexInfos []*IndexInfo, newInfo *IndexInfo, u
 			var valueType *Type
 			var isReadonly bool
 			if union {
-				valueType = c.getUnionType([]*Type{info.valueType, newInfo.valueType})
+				valueType = c.getUnionType([]*Type{c.getValueTypeOfIndexInfo(info), c.getValueTypeOfIndexInfo(newInfo)})
 				isReadonly = info.isReadonly || newInfo.isReadonly
 			} else {
-				valueType = c.getIntersectionType([]*Type{info.valueType, newInfo.valueType})
+				valueType = c.getIntersectionType([]*Type{c.getValueTypeOfIndexInfo(info), c.getValueTypeOfIndexInfo(newInfo)})
 				isReadonly = info.isReadonly && newInfo.isReadonly
 			}
 			indexInfos[i] = c.newIndexInfo(info.keyType, valueType, isReadonly, nil, nil)
@@ -22132,7 +22156,7 @@ func (c *Checker) createUnionOrIntersectionProperty(containingType *Type, name s
 						}
 						indexTypes = append(indexTypes, indexType)
 					} else {
-						indexTypes = append(indexTypes, indexInfo.valueType)
+						indexTypes = append(indexTypes, c.getValueTypeOfIndexInfo(indexInfo))
 					}
 				} else if isObjectLiteralType(t) && t.objectFlags&ObjectFlagsContainsSpread == 0 {
 					checkFlags |= ast.CheckFlagsWritePartial
@@ -26013,6 +26037,40 @@ func (c *Checker) newIndexInfo(keyType *Type, valueType *Type, isReadonly bool, 
 	return info
 }
 
+// getValueTypeOfIndexInfo returns the value type of an index signature, resolving it
+// lazily from the declaration when it was deferred by getIndexInfosOfIndexSymbol.
+// Resolution is tracked with the type-resolution stack so direct recursion such as
+// `interface I { [k: string]: I[string] }` reports circularity instead of caching the
+// in-progress unresolved sentinel as a usable any-flagged type (#64998 review).
+func (c *Checker) getValueTypeOfIndexInfo(info *IndexInfo) *Type {
+	if info.valueType != nil {
+		return info.valueType
+	}
+	if info.declaration == nil {
+		info.valueType = c.anyType
+		return info.valueType
+	}
+	returnTypeNode := info.declaration.Type()
+	if returnTypeNode == nil {
+		info.valueType = c.anyType
+		return info.valueType
+	}
+	if !c.pushTypeResolution(info, TypeSystemPropertyNameIndexInfoValueType) {
+		return c.errorType
+	}
+	t := c.instantiateType(c.getTypeFromTypeNode(returnTypeNode), info.mapper)
+	if !c.popTypeResolution() {
+		// Index signature value types are the annotation on the index signature
+		// declaration (analogous to a return type annotation).
+		c.error(returnTypeNode, diagnostics.Return_type_annotation_circularly_references_itself)
+		t = c.errorType
+	}
+	if info.valueType == nil {
+		info.valueType = t
+	}
+	return info.valueType
+}
+
 func (c *Checker) getRegularTypeOfLiteralType(t *Type) *Type {
 	if t.flags&TypeFlagsFreshable != 0 {
 		return t.AsLiteralType().regularType
@@ -27865,9 +27923,9 @@ func (c *Checker) getPropertyTypeForIndexType(originalObjectType *Type, objectTy
 				indexNode := getIndexNodeForAccessExpression(accessNode)
 				c.error(indexNode, diagnostics.Type_0_cannot_be_used_as_an_index_type, c.TypeToString(indexType))
 				if accessFlags&AccessFlagsIncludeUndefined != 0 {
-					return c.getUnionType([]*Type{indexInfo.valueType, c.missingType})
+					return c.getUnionType([]*Type{c.getValueTypeOfIndexInfo(indexInfo), c.missingType})
 				} else {
-					return indexInfo.valueType
+					return c.getValueTypeOfIndexInfo(indexInfo)
 				}
 			}
 			c.errorIfWritingToReadonlyIndex(indexInfo, objectType, accessExpression)
@@ -27880,9 +27938,9 @@ func (c *Checker) getPropertyTypeForIndexType(originalObjectType *Type, objectTy
 					(indexType.symbol != nil &&
 						indexType.flags&TypeFlagsEnumLiteral != 0 &&
 						c.getParentOfSymbol(indexType.symbol) == objectType.symbol)) {
-				return c.getUnionType([]*Type{indexInfo.valueType, c.missingType})
+				return c.getUnionType([]*Type{c.getValueTypeOfIndexInfo(indexInfo), c.missingType})
 			}
-			return indexInfo.valueType
+			return c.getValueTypeOfIndexInfo(indexInfo)
 		}
 		if indexType.flags&TypeFlagsNever != 0 {
 			return c.neverType
@@ -30116,7 +30174,7 @@ func (c *Checker) getTypeOfPropertyOrIndexSignatureOfType(t *Type, name string) 
 	}
 	indexInfo := c.getApplicableIndexInfoForName(t, name)
 	if indexInfo != nil {
-		return c.addOptionalityEx(indexInfo.valueType, true /*isProperty*/, true /*isOptional*/)
+		return c.addOptionalityEx(c.getValueTypeOfIndexInfo(indexInfo), true /*isProperty*/, true /*isOptional*/)
 	}
 	return nil
 }
@@ -30750,7 +30808,7 @@ func (c *Checker) getContextualTypeForObjectLiteralElement(element *ast.Node, co
 				if indexInfo == nil {
 					return nil
 				}
-				return indexInfo.valueType
+				return c.getValueTypeOfIndexInfo(indexInfo)
 			}, true /*noReductions*/)
 		}
 	}
@@ -31456,7 +31514,7 @@ func (c *Checker) getTypeFromIndexInfosOfContextualType(t *Type, name string, na
 	if indexInfo == nil {
 		return nil
 	}
-	return indexInfo.valueType
+	return c.getValueTypeOfIndexInfo(indexInfo)
 }
 
 func (c *Checker) isCircularMappedProperty(symbol *ast.Symbol) bool {
@@ -32906,7 +32964,7 @@ func (c *Checker) getApplicableIndexSymbol(t *Type, keyType *Type) *ast.Symbol {
 				symbol.SetValueDeclaration(declarations[0])
 				symbol.SetParent(t.symbol)
 				links := c.valueSymbolLinks.Get(symbol)
-				links.resolvedType = info.valueType
+				links.resolvedType = c.getValueTypeOfIndexInfo(info)
 				info.indexSymbol = symbol
 			}
 		}
