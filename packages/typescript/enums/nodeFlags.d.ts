@@ -31,6 +31,8 @@ export declare enum NodeFlags {
     PossiblyContainsDeprecatedTag = 1 << 26,
     Unreachable = 1 << 27,
     ReparserTransformedLiteral = 1 << 28,
+    EmitSingleLine = 1 << 29,
+    EmitNoAsciiEscaping = 1 << 30,
     BlockScoped = Let | Const | Using,
     Constant = Const | Using,
     AwaitUsing = Const | Using,

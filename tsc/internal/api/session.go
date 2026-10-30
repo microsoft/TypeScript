@@ -3888,7 +3888,7 @@ func (s *Session) handleTypeToTypeNode(ctx context.Context, params *TypeToTypeNo
 		}
 	}
 
-	typeNode := setup.checker.TypeToTypeNode(t, enclosingDeclaration, nodebuilder.Flags(params.Flags), nil)
+	typeNode, emitContext := setup.checker.TypeToTypeNodeWithEmitContext(t, enclosingDeclaration, nodebuilder.Flags(params.Flags), nil)
 	if typeNode == nil {
 		if s.useBinaryResponses {
 			return RawBinary(nil), nil
@@ -3896,7 +3896,7 @@ func (s *Session) handleTypeToTypeNode(ctx context.Context, params *TypeToTypeNo
 		return nil, nil
 	}
 
-	data, _, err := encoder.EncodeNode(typeNode.AsNode(), nil)
+	data, _, err := encoder.EncodeNodeWithEmitContext(typeNode.AsNode(), nil, emitContext)
 	if err != nil {
 		return nil, fmt.Errorf("failed to encode type node: %w", err)
 	}
@@ -3931,7 +3931,7 @@ func (s *Session) handleSignatureToSignatureDeclaration(ctx context.Context, par
 		}
 	}
 
-	node := setup.checker.SignatureToSignatureDeclaration(sig, ast.Kind(params.Kind), enclosingDeclaration, nodebuilder.Flags(params.Flags))
+	node, emitContext := setup.checker.SignatureToSignatureDeclarationWithEmitContext(sig, ast.Kind(params.Kind), enclosingDeclaration, nodebuilder.Flags(params.Flags))
 	if node == nil {
 		if s.useBinaryResponses {
 			return RawBinary(nil), nil
@@ -3939,7 +3939,7 @@ func (s *Session) handleSignatureToSignatureDeclaration(ctx context.Context, par
 		return nil, nil
 	}
 
-	data, _, err := encoder.EncodeNode(node.AsNode(), nil)
+	data, _, err := encoder.EncodeNodeWithEmitContext(node.AsNode(), nil, emitContext)
 	if err != nil {
 		return nil, fmt.Errorf("failed to encode signature declaration: %w", err)
 	}
@@ -3990,7 +3990,7 @@ func (s *Session) handlePrintNode(_ context.Context, params *PrintNodeParams) (s
 	if ast.IsSourceFile(node) {
 		sourceFile = node.AsSourceFile()
 	}
-	return newPrinter(params).Emit(node, sourceFile), nil
+	return newPrinter(params, node).Emit(node, sourceFile), nil
 }
 
 func decodePrintNode(encoded string) (*ast.Node, error) {
@@ -4006,12 +4006,35 @@ func decodePrintNode(encoded string) (*ast.Node, error) {
 	return node, nil
 }
 
-func newPrinter(params *PrintNodeParams) *printer.Printer {
+func newPrinter(params *PrintNodeParams, root *ast.Node) *printer.Printer {
+	emitContext := printer.NewEmitContext()
+	restoreEmitFlags(emitContext, root)
 	return printer.NewPrinter(printer.PrinterOptions{
 		PreserveSourceNewlines:        params.PreserveSourceNewlines,
 		NeverAsciiEscape:              params.NeverAsciiEscape,
 		TerminateUnterminatedLiterals: params.TerminateUnterminatedLiterals,
-	}, printer.PrintHandlers{}, nil)
+	}, printer.PrintHandlers{}, emitContext)
+}
+
+// restoreEmitFlags converts the printer hints that the encoder transported in node flags (see
+// encoder.EncodeNodeWithEmitContext) back into emit flags on emitContext, for every node in the tree.
+func restoreEmitFlags(emitContext *printer.EmitContext, root *ast.Node) {
+	const transported = ast.NodeFlagsEmitSingleLine | ast.NodeFlagsEmitNoAsciiEscaping
+	var visit func(n *ast.Node) bool
+	visit = func(n *ast.Node) bool {
+		if n.Flags&transported != 0 {
+			var flags printer.EmitFlags
+			if n.Flags&ast.NodeFlagsEmitSingleLine != 0 {
+				flags |= printer.EFSingleLine
+			}
+			if n.Flags&ast.NodeFlagsEmitNoAsciiEscaping != 0 {
+				flags |= printer.EFNoAsciiEscaping
+			}
+			emitContext.AddEmitFlags(n, flags)
+		}
+		return n.ForEachChild(visit)
+	}
+	visit(root)
 }
 
 func (s *Session) handleEmit(ctx context.Context, params *EmitParams) (*EmitResponse, error) {
