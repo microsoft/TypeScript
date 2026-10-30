@@ -882,6 +882,9 @@ type memoStore struct {
 	mergedSymbols                          symbolLinkStore[*ast.Symbol]
 	lateMergedSymbols                      memoMap[*ast.Symbol, *ast.Symbol]
 	lateBindableKinds                      memoMap[*ast.Symbol, uint8]
+	// lateBindableKinds of the parent of a member, with lateBindableKnown
+	// set once known; see getLateMergedSymbol.
+	parentLateBindableKinds symbolLinkStore[uint8]
 	// mergesFrozen is set once global merging is done; mergedSymbols is
 	// immutable from then on.
 	mergesFrozen                            bool
@@ -15218,12 +15221,21 @@ func (c *Checker) getLateMergedSymbol(symbol *ast.Symbol) *ast.Symbol {
 	if !c.mergesFrozen || symbol.Parent() == nil {
 		return symbol
 	}
-	parent := c.getMergedSymbol(symbol.Parent())
 	late := symbol.CheckFlags()&ast.CheckFlagsLate != 0
-	lateBindable := c.getLateBindableKinds(parent)
-	if !late && lateBindable == 0 {
-		return symbol
+	var lateBindable uint8
+	if !late {
+		// Most members cannot merge, which depends only on syntax and on
+		// the merges done before checking, so it is looked up cheaply.
+		known := c.parentLateBindableKinds.Get(symbol)
+		if *known == 0 {
+			*known = c.getLateBindableKinds(c.getMergedSymbol(symbol.Parent())) | lateBindableKnown
+		}
+		lateBindable = *known &^ lateBindableKnown
+		if lateBindable == 0 {
+			return symbol
+		}
 	}
+	parent := c.getMergedSymbol(symbol.Parent())
 	var kind MembersOrExportsResolutionKind
 	switch symbol {
 	case parent.Members().Get(symbol.Name()):
@@ -15247,6 +15259,8 @@ func (c *Checker) getLateMergedSymbol(symbol *ast.Symbol) *ast.Symbol {
 	}
 	return symbol
 }
+
+const lateBindableKnown uint8 = 1 << 7
 
 // getLateBindableKinds reports, judging from syntax alone, which of the
 // members and exports of symbol could late-bind any when resolved, as a set
