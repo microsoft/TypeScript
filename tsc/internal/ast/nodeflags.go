@@ -46,6 +46,12 @@ const (
 	NodeFlagsUnreachable                   NodeFlags = 1 << 27 // If node is unreachable according to the binder
 	NodeFlagsReparserTransformedLiteral    NodeFlags = 1 << 28 // If node was transformed during parsing, making its' naive text source not match the AST
 
+	// The following flags are only used to carry printer hints (see printer.EmitFlags) across the API boundary,
+	// where the emit context that normally holds them is not available. They are set by the API encoder on nodes
+	// that were given the corresponding emit flag (e.g. by the node builder), and are never set by the parser or binder.
+	NodeFlagsEmitSingleLine      NodeFlags = 1 << 29 // Node should be printed on a single line (printer.EFSingleLine)
+	NodeFlagsEmitNoAsciiEscaping NodeFlags = 1 << 30 // Node's text should not be ASCII-escaped when printed (printer.EFNoAsciiEscaping)
+
 	NodeFlagsBlockScoped = NodeFlagsLet | NodeFlagsConst | NodeFlagsUsing
 	NodeFlagsConstant    = NodeFlagsConst | NodeFlagsUsing
 	NodeFlagsAwaitUsing  = NodeFlagsConst | NodeFlagsUsing // Variable declaration (NOTE: on a single node these flags would otherwise be mutually exclusive)

@@ -9,6 +9,7 @@ import (
 
 	"github.com/microsoft/TypeScript/tsc/internal/ast"
 	"github.com/microsoft/TypeScript/tsc/internal/core"
+	"github.com/microsoft/TypeScript/tsc/internal/printer"
 	"github.com/microsoft/TypeScript/tsc/internal/spanmap"
 	"github.com/zeebo/xxh3"
 )
@@ -420,7 +421,7 @@ func GetNodeIndexTable(sourceFile *ast.SourceFile) *NodeIndexTable {
 // EncodeSourceFile encodes an entire source file AST into the binary format.
 // Returns the encoded bytes and a NodeIndexTable mapping encoder indices to AST nodes.
 func EncodeSourceFile(sourceFile *ast.SourceFile) ([]byte, *NodeIndexTable, error) {
-	data, nodeTable, err := encodeTree(sourceFile.AsNode(), sourceFile)
+	data, nodeTable, err := encodeTree(sourceFile.AsNode(), sourceFile, nil)
 	if err != nil {
 		return nil, nil, err
 	}
@@ -445,10 +446,33 @@ func SetSourceFileID(data []byte, id uint64) {
 // When encoding a non-SourceFile node, the header hash and parse options fields will be zero.
 // Returns the encoded bytes and a NodeIndexTable mapping encoder indices to AST nodes.
 func EncodeNode(node *ast.Node, sourceFile *ast.SourceFile) ([]byte, *NodeIndexTable, error) {
-	return encodeTree(node, sourceFile)
+	return encodeTree(node, sourceFile, nil)
 }
 
-func encodeTree(rootNode *ast.Node, sourceFile *ast.SourceFile) ([]byte, *NodeIndexTable, error) {
+// EncodeNodeWithEmitContext is like EncodeNode, but also transmits printer hints recorded for synthesized nodes in
+// emitContext (currently single-line and no-ASCII-escaping), as ast.NodeFlagsEmitSingleLine and
+// ast.NodeFlagsEmitNoAsciiEscaping in each node's flags. This allows nodes built by the node builder to print
+// the same way after a round trip through the API as they would in-process.
+func EncodeNodeWithEmitContext(node *ast.Node, sourceFile *ast.SourceFile, emitContext *printer.EmitContext) ([]byte, *NodeIndexTable, error) {
+	return encodeTree(node, sourceFile, emitContext)
+}
+
+// encodedNodeFlags returns the flags to encode for node, including transported emit flags.
+func encodedNodeFlags(node *ast.Node, emitContext *printer.EmitContext) uint32 {
+	flags := node.Flags
+	if emitContext != nil {
+		emitFlags := emitContext.EmitFlags(node)
+		if emitFlags&printer.EFSingleLine != 0 {
+			flags |= ast.NodeFlagsEmitSingleLine
+		}
+		if emitFlags&printer.EFNoAsciiEscaping != 0 {
+			flags |= ast.NodeFlagsEmitNoAsciiEscaping
+		}
+	}
+	return uint32(flags)
+}
+
+func encodeTree(rootNode *ast.Node, sourceFile *ast.SourceFile, emitContext *printer.EmitContext) ([]byte, *NodeIndexTable, error) {
 	var parentIndex, nodeCount, prevIndex uint32
 	var extendedData []byte
 	var structuredData []byte
@@ -554,7 +578,7 @@ func encodeTree(rootNode *ast.Node, sourceFile *ast.SourceFile) ([]byte, *NodeIn
 			nodes[prevIndex*NodeSize+NodeOffsetNext+3] = b3
 		}
 
-		nodes = appendUint32s(nodes, uint32(node.Kind), utf16(node.Pos()), utf16(node.End()), 0, parentIndex, getNodeData(node, strs, positionMap, &extendedData, &structuredData), uint32(node.Flags))
+		nodes = appendUint32s(nodes, uint32(node.Kind), utf16(node.Pos()), utf16(node.End()), 0, parentIndex, getNodeData(node, strs, positionMap, &extendedData, &structuredData), encodedNodeFlags(node, emitContext))
 
 		if nodeIndexMap != nil {
 			if _, ok := nodeIndexMap[node]; ok {
@@ -585,7 +609,7 @@ func encodeTree(rootNode *ast.Node, sourceFile *ast.SourceFile) ([]byte, *NodeIn
 	nodeTable = append(nodeTable, rootNode) // index 1 = root node
 
 	sfExtendedDataOffset = len(extendedData)
-	nodes = appendUint32s(nodes, uint32(rootNode.Kind), utf16(rootNode.Pos()), utf16(rootNode.End()), 0, 0, getNodeData(rootNode, strs, positionMap, &extendedData, &structuredData), uint32(rootNode.Flags))
+	nodes = appendUint32s(nodes, uint32(rootNode.Kind), utf16(rootNode.Pos()), utf16(rootNode.End()), 0, 0, getNodeData(rootNode, strs, positionMap, &extendedData, &structuredData), encodedNodeFlags(rootNode, emitContext))
 
 	visitor.VisitEachChild(rootNode)
 	if sourceFile != nil {

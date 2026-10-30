@@ -7857,6 +7857,35 @@ export const obj = { m: 1, s: "hi", b: true };
         assert.strictEqual(text, "number[]");
     });
 
+    test("typeToTypeNode + printNode keeps tuples and type literals on a single line", () => {
+        using api = spawnAPI({
+            "/tsconfig.json": JSON.stringify({ compilerOptions: { strict: true } }),
+            "/src/main.ts": `export type Shape = { tuple: [Date, number]; obj: { a: string } };`,
+        });
+
+        const snapshot = api.createSnapshot({ openProjects: ["/tsconfig.json"] });
+        const { checker, program } = snapshot.getConfiguredProject("/tsconfig.json")!;
+        const sourceFile = program.getSourceFile("/src/main.ts");
+        assert.ok(sourceFile);
+        const alias = sourceFile.statements.find(s => (s as any).name?.text === "Shape") as any;
+        assert.ok(alias);
+        const symbol = checker.getSymbolAtLocation(alias.name);
+        assert.ok(symbol);
+        const shape = checker.getDeclaredTypeOfSymbol(symbol);
+        assert.ok(shape);
+
+        const printed: Record<string, string> = {};
+        for (const prop of checker.getPropertiesOfType(shape)) {
+            const type = checker.getTypeOfSymbol(prop);
+            assert.ok(type);
+            const node = checker.typeToTypeNode(type);
+            assert.ok(node);
+            printed[prop.name] = api.printer.printNode(node);
+            assert.strictEqual(printed[prop.name], checker.typeToString(type));
+        }
+        assert.deepStrictEqual(printed, { tuple: "[Date, number]", obj: "{ a: string; }" });
+    });
+
     test("typeToTypeNode + printNode round-trip", () => {
         using api = spawnAPI(emitterFiles);
 
