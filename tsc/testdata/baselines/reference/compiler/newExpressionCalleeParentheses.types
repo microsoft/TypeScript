@@ -1,0 +1,250 @@
+//// [tests/cases/compiler/newExpressionCalleeParentheses.ts] ////
+
+=== newExpressionCalleeParentheses.ts ===
+declare function getPlugins(): any;
+>getPlugins : () => any
+
+declare function getPluginsGeneric<T>(): T;
+>getPluginsGeneric : <T>() => T
+
+declare function getPluginsFactory(): <T>() => T;
+>getPluginsFactory : () => <T>() => T
+
+declare const obj: any;
+>obj : any
+
+declare class Foo { [key: string]: any }
+>Foo : Foo
+>key : string
+
+// Parentheses are required when a call is at the start of the member chain of a `new` expression's target
+const a1 = new (getPlugins() as any).Linker();
+>a1 : any
+>new (getPlugins() as any).Linker() : any
+>(getPlugins() as any).Linker : any
+>(getPlugins() as any) : any
+>getPlugins() as any : any
+>getPlugins() : any
+>getPlugins : () => any
+>Linker : any
+
+const a2 = new (getPlugins() satisfies any).Linker();
+>a2 : any
+>new (getPlugins() satisfies any).Linker() : any
+>(getPlugins() satisfies any).Linker : any
+>(getPlugins() satisfies any) : any
+>getPlugins() satisfies any : any
+>getPlugins() : any
+>getPlugins : () => any
+>Linker : any
+
+const a3 = new (<any>getPlugins()).Linker();
+>a3 : any
+>new (<any>getPlugins()).Linker() : any
+>(<any>getPlugins()).Linker : any
+>(<any>getPlugins()) : any
+><any>getPlugins() : any
+>getPlugins() : any
+>getPlugins : () => any
+>Linker : any
+
+const a4 = new (getPlugins() as any)!.Linker();
+>a4 : any
+>new (getPlugins() as any)!.Linker() : any
+>(getPlugins() as any)!.Linker : any
+>(getPlugins() as any)! : any
+>(getPlugins() as any) : any
+>getPlugins() as any : any
+>getPlugins() : any
+>getPlugins : () => any
+>Linker : any
+
+const a5 = new (getPlugins() as any)["Linker"]();
+>a5 : any
+>new (getPlugins() as any)["Linker"]() : any
+>(getPlugins() as any)["Linker"] : any
+>(getPlugins() as any) : any
+>getPlugins() as any : any
+>getPlugins() : any
+>getPlugins : () => any
+>"Linker" : "Linker"
+
+const a6 = new (getPlugins() as any).ns.Linker();
+>a6 : any
+>new (getPlugins() as any).ns.Linker() : any
+>(getPlugins() as any).ns.Linker : any
+>(getPlugins() as any).ns : any
+>(getPlugins() as any) : any
+>getPlugins() as any : any
+>getPlugins() : any
+>getPlugins : () => any
+>ns : any
+>Linker : any
+
+const a7 = new (getPlugins() as any).Linker;
+>a7 : any
+>new (getPlugins() as any).Linker : any
+>(getPlugins() as any).Linker : any
+>(getPlugins() as any) : any
+>getPlugins() as any : any
+>getPlugins() : any
+>getPlugins : () => any
+>Linker : any
+
+const a8 = new (getPlugins() as any)`tag`();
+>a8 : any
+>new (getPlugins() as any)`tag`() : any
+>(getPlugins() as any)`tag` : any
+>(getPlugins() as any) : any
+>getPlugins() as any : any
+>getPlugins() : any
+>getPlugins : () => any
+>`tag` : "tag"
+
+const a9 = new (obj.getPlugins() as any).Linker();
+>a9 : any
+>new (obj.getPlugins() as any).Linker() : any
+>(obj.getPlugins() as any).Linker : any
+>(obj.getPlugins() as any) : any
+>obj.getPlugins() as any : any
+>obj.getPlugins() : any
+>obj.getPlugins : any
+>obj : any
+>getPlugins : any
+>Linker : any
+
+const a10 = new (getPlugins().ns as any).Linker();
+>a10 : any
+>new (getPlugins().ns as any).Linker() : any
+>(getPlugins().ns as any).Linker : any
+>(getPlugins().ns as any) : any
+>getPlugins().ns as any : any
+>getPlugins().ns : any
+>getPlugins() : any
+>getPlugins : () => any
+>ns : any
+>Linker : any
+
+const a11 = new ((getPlugins() as any) as any).Linker();
+>a11 : any
+>new ((getPlugins() as any) as any).Linker() : any
+>((getPlugins() as any) as any).Linker : any
+>((getPlugins() as any) as any) : any
+>(getPlugins() as any) as any : any
+>(getPlugins() as any) : any
+>getPlugins() as any : any
+>getPlugins() : any
+>getPlugins : () => any
+>Linker : any
+
+const a12 = new (getPluginsGeneric<any>() as any).Linker();
+>a12 : any
+>new (getPluginsGeneric<any>() as any).Linker() : any
+>(getPluginsGeneric<any>() as any).Linker : any
+>(getPluginsGeneric<any>() as any) : any
+>getPluginsGeneric<any>() as any : any
+>getPluginsGeneric<any>() : any
+>getPluginsGeneric : <T>() => T
+>Linker : any
+
+const a13 = new (getPluginsFactory()<string> as any).Linker();
+>a13 : any
+>new (getPluginsFactory()<string> as any).Linker() : any
+>(getPluginsFactory()<string> as any).Linker : any
+>(getPluginsFactory()<string> as any) : any
+>getPluginsFactory()<string> as any : any
+>getPluginsFactory()<string> : () => string
+>getPluginsFactory() : <T>() => T
+>getPluginsFactory : () => <T>() => T
+>Linker : any
+
+const a14 = new (getPlugins() as any).Linker(new (getPlugins() as any).Options());
+>a14 : any
+>new (getPlugins() as any).Linker(new (getPlugins() as any).Options()) : any
+>(getPlugins() as any).Linker : any
+>(getPlugins() as any) : any
+>getPlugins() as any : any
+>getPlugins() : any
+>getPlugins : () => any
+>Linker : any
+>new (getPlugins() as any).Options() : any
+>(getPlugins() as any).Options : any
+>(getPlugins() as any) : any
+>getPlugins() as any : any
+>getPlugins() : any
+>getPlugins : () => any
+>Options : any
+
+// Parentheses are not required, or are already present
+const b1 = new (getPlugins() as any)();
+>b1 : any
+>new (getPlugins() as any)() : any
+>(getPlugins() as any) : any
+>getPlugins() as any : any
+>getPlugins() : any
+>getPlugins : () => any
+
+const b2 = new (getPlugins()).Linker();
+>b2 : any
+>new (getPlugins()).Linker() : any
+>(getPlugins()).Linker : any
+>(getPlugins()) : any
+>getPlugins() : any
+>getPlugins : () => any
+>Linker : any
+
+const b3 = new (new Foo() as any).Linker();
+>b3 : any
+>new (new Foo() as any).Linker() : any
+>(new Foo() as any).Linker : any
+>(new Foo() as any) : any
+>new Foo() as any : any
+>new Foo() : Foo
+>Foo : typeof Foo
+>Linker : any
+
+const b4 = new (new Foo as any).Linker();
+>b4 : any
+>new (new Foo as any).Linker() : any
+>(new Foo as any).Linker : any
+>(new Foo as any) : any
+>new Foo as any : any
+>new Foo : Foo
+>Foo : typeof Foo
+>Linker : any
+
+const b5 = new (obj?.getPlugins() as any).Linker();
+>b5 : any
+>new (obj?.getPlugins() as any).Linker() : any
+>(obj?.getPlugins() as any).Linker : any
+>(obj?.getPlugins() as any) : any
+>obj?.getPlugins() as any : any
+>obj?.getPlugins() : any
+>obj?.getPlugins : any
+>obj : any
+>getPlugins : any
+>Linker : any
+
+const b6 = new (obj[getPlugins()] as any).Linker();
+>b6 : any
+>new (obj[getPlugins()] as any).Linker() : any
+>(obj[getPlugins()] as any).Linker : any
+>(obj[getPlugins()] as any) : any
+>obj[getPlugins()] as any : any
+>obj[getPlugins()] : any
+>obj : any
+>getPlugins() : any
+>getPlugins : () => any
+>Linker : any
+
+const b7 = new (obj.ns as any).Linker();
+>b7 : any
+>new (obj.ns as any).Linker() : any
+>(obj.ns as any).Linker : any
+>(obj.ns as any) : any
+>obj.ns as any : any
+>obj.ns : any
+>obj : any
+>ns : any
+>Linker : any
+
