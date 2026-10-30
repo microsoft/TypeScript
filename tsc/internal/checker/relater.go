@@ -193,13 +193,14 @@ func (c *Checker) isTypeRelatedTo(source *Type, target *Type, relation *Relation
 		}
 	}
 	if source.flags&TypeFlagsObject != 0 && target.flags&TypeFlagsObject != 0 {
-		id, _ := c.getRelationKey(source, target, IntersectionStateNone, relation == c.identityRelation, false)
+		id, constrained := c.getRelationKey(source, target, IntersectionStateNone, relation == c.identityRelation, false)
 		// An overflow is reported by each comparison that reaches it, so it
 		// is left to checkTypeRelatedTo.
 		related := relation.get(c, id)
 		if related != RelationComparisonResultNone && related&RelationComparisonResultOverflow == 0 {
 			return related&RelationComparisonResultSucceeded != 0
 		}
+		return c.checkTypeRelatedToWithKey(source, target, relation, nil /*errorNode*/, nil, nil, id, constrained)
 	}
 	if source.flags&TypeFlagsStructuredOrInstantiable != 0 || target.flags&TypeFlagsStructuredOrInstantiable != 0 {
 		return c.checkTypeRelatedTo(source, target, relation, nil /*errorNode*/)
@@ -377,6 +378,22 @@ func (c *Checker) checkTypeRelatedToEx(
 	headMessage *diagnostics.Message,
 	diagnosticOutput *[]*ast.Diagnostic,
 ) bool {
+	id, constrained := c.getRelationKey(source, target, IntersectionStateNone, relation == c.identityRelation, false /*ignoreConstraints*/)
+	return c.checkTypeRelatedToWithKey(source, target, relation, errorNode, headMessage, diagnosticOutput, id, constrained)
+}
+
+// checkTypeRelatedToWithKey is checkTypeRelatedToEx given the relation key
+// of source and target, as returned by getRelationKey.
+func (c *Checker) checkTypeRelatedToWithKey(
+	source *Type,
+	target *Type,
+	relation *Relation,
+	errorNode *ast.Node,
+	headMessage *diagnostics.Message,
+	diagnosticOutput *[]*ast.Diagnostic,
+	id CacheHashKey,
+	constrained bool,
+) bool {
 	r := c.getRelater()
 	r.relation = relation
 	r.errorNode = errorNode
@@ -386,7 +403,7 @@ func (c *Checker) checkTypeRelatedToEx(
 	// The comparison is a computation of its own, so that reusing any result it
 	// caches accounts for the effects of the whole comparison. Errors are
 	// reported after it, since they belong to the caller rather than the result.
-	id, _ := c.getRelationKey(source, target, IntersectionStateNone, relation == c.identityRelation, false /*ignoreConstraints*/)
+	r.topSource, r.topTarget, r.topKey, r.topConstrained = source, target, id, constrained
 	var result Ternary
 	if relation.get(c, id)&RelationComparisonResultOverflow != 0 {
 		// The comparison overflowed before, and would again.
@@ -2897,8 +2914,12 @@ type Relater struct {
 	// them by key.
 	maybeKeys    []maybeKey
 	maybeKeysSet map[CacheHashKey]int
-	sourceStack  []*Type
-	targetStack  []*Type
+	// The outermost comparison and its relation key.
+	topSource, topTarget *Type
+	topKey               CacheHashKey
+	topConstrained       bool
+	sourceStack          []*Type
+	targetStack          []*Type
 	// sourceDepths and targetDepths are the depths of the comparisons that
 	// pushed each entry of sourceStack and targetStack.
 	sourceDepths []int
@@ -3453,7 +3474,13 @@ func (r *Relater) recursiveTypeRelatedTo(source *Type, target *Type, reportError
 		// important to have well-defined behavior even in cases that shouldn't normally occur.
 		return TernaryFalse
 	}
-	id, constrained := r.c.getRelationKey(source, target, intersectionState, r.relation == r.c.identityRelation, false /*ignoreConstraints*/)
+	var id CacheHashKey
+	var constrained bool
+	if source == r.topSource && target == r.topTarget && intersectionState == IntersectionStateNone {
+		id, constrained = r.topKey, r.topConstrained
+	} else {
+		id, constrained = r.c.getRelationKey(source, target, intersectionState, r.relation == r.c.identityRelation, false /*ignoreConstraints*/)
+	}
 	if entry := r.relation.get(r.c, id); entry != RelationComparisonResultNone {
 		if entry&RelationComparisonResultOverflow != 0 {
 			// Computing the comparison overflowed, so computing this one,
