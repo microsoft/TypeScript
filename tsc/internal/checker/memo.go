@@ -1450,6 +1450,13 @@ func (c *Checker) logFlagMemoDiscard(restore func()) {
 	c.discardLog = append(c.discardLog, discardEntry{nil, restore, false})
 }
 
+// objectFlagsKnown reports whether the flag memo of t whose result is cached
+// once computed is set can be read without objectFlagsCell, which callers
+// check first since objectFlagsCell is too large to inline.
+func (c *Checker) objectFlagsKnown(t *Type, computed ObjectFlags) bool {
+	return t.objectFlags&computed != 0 && !c.observingMemos
+}
+
 // objectFlagsCell returns the flags under value of t, a flag memo whose
 // result is cached once the computed flag is set, computing them in a
 // computation of their own if needed. With inProgress, the computed flag is
@@ -1457,7 +1464,7 @@ func (c *Checker) logFlagMemoDiscard(restore func()) {
 func (c *Checker) objectFlagsCell(t *Type, field memoField, computed ObjectFlags, value ObjectFlags, inProgress bool, compute func() ObjectFlags) ObjectFlags {
 	key := memoKeyOf(t, field)
 	if t.objectFlags&computed != 0 {
-		c.observeFlagMemo(key)
+		c.observeMemo(key)
 		return t.objectFlags & value
 	}
 	c.beginMemo(key)
