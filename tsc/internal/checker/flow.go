@@ -1619,11 +1619,12 @@ func (c *Checker) isMatchingReference(source *ast.Node, target *ast.Node) bool {
 	case ast.KindNonNullExpression, ast.KindParenthesizedExpression, ast.KindSatisfiesExpression:
 		return c.isMatchingReference(source.Expression(), target)
 	case ast.KindPropertyAccessExpression, ast.KindElementAccessExpression:
+		if !ast.IsAccessExpression(target) {
+			return false
+		}
 		if sourcePropertyName, ok := c.getAccessedPropertyName(source); ok {
-			if ast.IsAccessExpression(target) {
-				if targetPropertyName, ok := c.getAccessedPropertyName(target); ok {
-					return targetPropertyName == sourcePropertyName && c.isMatchingReference(source.Expression(), target.Expression())
-				}
+			if targetPropertyName, ok := c.getAccessedPropertyName(target); ok {
+				return targetPropertyName == sourcePropertyName && c.isMatchingReference(source.Expression(), target.Expression())
 			}
 		}
 		if ast.IsElementAccessExpression(source) && ast.IsElementAccessExpression(target) {
