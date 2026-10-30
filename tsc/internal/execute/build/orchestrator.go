@@ -60,7 +60,7 @@ func (b *OrchestratorResult) reportWithFilesToDelete(o *Orchestrator, reportFile
 		return
 	}
 	b.Statistics.SetTotalTime(o.opts.Sys.SinceStart())
-	b.Statistics.Report(o.opts.Sys.Writer(), o.opts.Testing)
+	b.Statistics.Report(o.opts.Sys.Writer(), o.opts.Testing, o.opts.Command.CompilerOptions.ExtendedDiagnostics.IsTrue())
 }
 
 type Orchestrator struct {
