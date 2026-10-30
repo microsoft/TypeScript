@@ -15,6 +15,23 @@ func TestJSONValue(t *testing.T) {
 		t.Parallel()
 		testJSONValue(t, func(in []byte, out any) error { return json.Unmarshal(in, out) })
 	})
+
+	t.Run("MarshalJSONV2", func(t *testing.T) {
+		t.Parallel()
+		type packageJson struct {
+			Private    packagejson.JSONValue        `json:"private,omitzero"`
+			Version    packagejson.JSONValue        `json:"version,omitzero"`
+			Exports    packagejson.ExportsOrImports `json:"exports,omitzero"`
+			Imports    packagejson.ExportsOrImports `json:"imports,omitzero"`
+			NotPresent packagejson.JSONValue        `json:"notPresent,omitzero"`
+		}
+		jsonString := `{"private":true,"version":2,"exports":{".":{"import":"./test.ts","default":"./test.ts"},"./test":["./test1.ts",null],"./null":null},"imports":null}`
+		var p packageJson
+		assert.NilError(t, json.Unmarshal([]byte(jsonString), &p))
+		out, err := json.Marshal(p)
+		assert.NilError(t, err)
+		assert.Equal(t, string(out), jsonString)
+	})
 }
 
 func testJSONValue(t *testing.T, unmarshal func([]byte, any) error) {
