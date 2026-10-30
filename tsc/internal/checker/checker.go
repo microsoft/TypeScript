@@ -19447,24 +19447,23 @@ func (c *Checker) getPropertyOfTypeEx(t *Type, name string, skipObjectFunctionPr
 // eventually propagated into the resolved members of the class or interface.
 func (c *Checker) getDeclaredPropertyOfResolvingType(t *Type, name string) *ast.Symbol {
 	for i := len(c.resolvingObjectTypeStack) - 1; i >= 0; i-- {
-		r := &c.resolvingObjectTypeStack[i]
-		if r.t == t {
-			resolved := r.resolvedMembers.Get(name)
+		if c.resolvingObjectTypeStack[i].t == t {
+			resolved := c.resolvingObjectTypeStack[i].resolvedMembers.Get(name)
 			if resolved == nil {
 				if symbol := c.resolveDeclaredMembers(getTargetType(t)).declaredMembers.Get(name); symbol != nil {
-					resolved = c.instantiateSymbol(symbol, r.mapper)
+					resolved = c.instantiateSymbol(symbol, c.resolvingObjectTypeStack[i].mapper)
 				} else {
-					for _, baseType := range r.baseTypes {
+					for _, baseType := range c.resolvingObjectTypeStack[i].baseTypes {
 						if resolved = c.getPropertyOfTypeEx(baseType, name, true, false); resolved != nil {
 							break
 						}
 					}
 				}
 				if resolved != nil {
-					if r.resolvedMembers == nil {
-						r.resolvedMembers = ast.NewSymbolTableWithCapacity(1)
+					if c.resolvingObjectTypeStack[i].resolvedMembers == nil {
+						c.resolvingObjectTypeStack[i].resolvedMembers = ast.NewSymbolTableWithCapacity(1)
 					}
-					r.resolvedMembers.Set(name, resolved)
+					c.resolvingObjectTypeStack[i].resolvedMembers.Set(name, resolved)
 				}
 			}
 			return resolved
