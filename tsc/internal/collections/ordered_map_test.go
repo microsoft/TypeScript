@@ -3,6 +3,7 @@ package collections_test
 import (
 	"fmt"
 	"slices"
+	"strconv"
 	"strings"
 	"testing"
 
@@ -222,4 +223,42 @@ func testOrderedMapUnmarshalJSON(t *testing.T, unmarshal func([]byte, any) error
 	var invalidMap collections.OrderedMap[int, any]
 	err = unmarshal([]byte(`{"a": 1, "b": "two"}`), &invalidMap)
 	assert.ErrorContains(t, err, "unmarshal")
+}
+
+func TestOrderedMapDeleteSuffix(t *testing.T) {
+	t.Parallel()
+
+	m := collections.NewOrderedMapFromList([]collections.MapEntry[int, string]{
+		{Key: 1, Value: "one"},
+		{Key: 2, Value: "two"},
+		{Key: 3, Value: "three"},
+		{Key: 4, Value: "four"},
+	})
+	for _, key := range []int{4, 3, 2} {
+		want, _ := m.Get(key)
+		value, ok := m.Delete(key)
+		assert.Assert(t, ok)
+		assert.Equal(t, value, want)
+		assert.Assert(t, !m.Has(key))
+	}
+	assert.Equal(t, m.Size(), 1)
+	assert.DeepEqual(t, slices.Collect(m.Keys()), []int{1})
+	m.Set(2, "new")
+	assert.DeepEqual(t, slices.Collect(m.Values()), []string{"one", "new"})
+}
+
+func BenchmarkOrderedMapDeleteSuffix(b *testing.B) {
+	for _, size := range []int{1024, 8192, 32768} {
+		b.Run(strconv.Itoa(size), func(b *testing.B) {
+			m := collections.NewOrderedMapWithSizeHint[int, int](size)
+			for b.Loop() {
+				for key := range size {
+					m.Set(key, key)
+				}
+				for key := size - 1; key > 0; key-- {
+					m.Delete(key)
+				}
+			}
+		})
+	}
 }
