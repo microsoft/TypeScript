@@ -20426,14 +20426,39 @@ func (c *Checker) enterCurrentNode(node *ast.Node) savedCurrentNode {
 		c.endCircularity()
 	}
 	c.currentNode = node
-	c.beginTypeResolution(node, TypeSystemPropertyNameCurrentNode)
+	// beginTypeResolution, without the call, for a resolution that is not
+	// searchable.
+	f := c.pushResolution()
+	parent := &c.resolutions[len(c.resolutions)-2]
+	f.depthStart = parent.depthStart
+	f.serial = parent.serial
+	f.prevMemo = int32(c.memoTop)
+	f.isTypeResolution = true
+	f.prevTypeResolution = int32(c.typeResolutionTop)
+	f.typeResolution.target = node
+	f.typeResolution.propertyName = TypeSystemPropertyNameCurrentNode
+	f.typeResolution.result = true
+	c.typeResolutionTop = len(c.resolutions)
 	c.currentNodeResolution = c.typeResolutionTop
 	return save
 }
 
 func (c *Checker) exitCurrentNode(save savedCurrentNode) {
-	debug.Assert(len(c.resolutions) == c.currentNodeResolution, "resolutions left on the stack")
-	c.popTypeResolution()
+	// popTypeResolution, without the call.
+	n := len(c.resolutions) - 1
+	debug.Assert(c.currentNodeResolution == n+1 && c.typeResolutionTop == n+1, "resolutions left on the stack")
+	f := &c.resolutions[n]
+	c.typeResolutionTop = int(f.prevTypeResolution)
+	*f = resolution{}
+	c.resolutions = c.resolutions[:n]
+	if c.circularityStart > n {
+		c.endCircularity()
+	} else if len(c.innerCycles) != 0 {
+		c.endInnerCycles(n)
+	}
+	if len(c.cycleYields) != 0 && c.cycleYields[len(c.cycleYields)-1].end == n {
+		c.endCycleYield()
+	}
 	c.currentNode = save.node
 	c.currentNodeResolution = save.resolution
 }
