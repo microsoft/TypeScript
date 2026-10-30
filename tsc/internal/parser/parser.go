@@ -4666,6 +4666,14 @@ func (p *Parser) parseBinaryExpressionRest(precedence ast.OperatorPrecedence, le
 		// We either have a binary operator here, or we're finished.  We call
 		// reScanGreaterToken so that we merge token sequences like > and = into >=
 		operator := p.reScanGreaterThanToken()
+		// A keyword written with Unicode escapes is an IdentifierName, not a keyword
+		// terminal (ECMA-262 §5.1.5). Do not treat escaped `in` / `instanceof` / `as` /
+		// `satisfies` as binary operators so ASI can end the previous expression
+		// (e.g. a class field initializer) and the escaped name can start a new member.
+		// See https://github.com/microsoft/TypeScript/issues/64883.
+		if p.isEscapedKeyword() {
+			break
+		}
 		newPrecedence := ast.GetBinaryOperatorPrecedence(operator)
 		// Check the precedence to see if we should "take" this operator
 		// - For left associative operator (all operator but **), consume the operator,
@@ -6358,8 +6366,16 @@ func (p *Parser) isImportAttributeName() bool {
 	return tokenIsIdentifierOrKeyword(p.token) || p.token == ast.KindStringLiteral
 }
 
+func (p *Parser) isEscapedKeyword() bool {
+	return ast.IsKeyword(p.token) && (p.scanner.HasUnicodeEscape() || p.scanner.HasExtendedUnicodeEscape())
+}
+
 func (p *Parser) isBinaryOperator() bool {
 	if p.inDisallowInContext() && p.token == ast.KindInKeyword {
+		return false
+	}
+	// Escaped keywords are IdentifierNames, not keyword operators.
+	if p.isEscapedKeyword() {
 		return false
 	}
 	return ast.GetBinaryOperatorPrecedence(p.token) != ast.OperatorPrecedenceInvalid
