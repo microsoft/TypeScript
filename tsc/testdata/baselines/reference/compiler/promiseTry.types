@@ -64,7 +64,6 @@ Promise.try((foo) => "Async result", "foo");
 >"Async result" : "Async result"
 >"foo" : "foo"
 
-// @ts-expect-error too few parameters
 Promise.try((foo) => "Async result");
 >Promise.try((foo) => "Async result") : Promise<unknown>
 >Promise.try : <T, U extends unknown[]>(callbackFn: (...args: U) => T | PromiseLike<T>, ...args: U) => Promise<Awaited<T>>
@@ -104,7 +103,6 @@ Promise.try((foo) => "Async result", undefined);
 >"Async result" : "Async result"
 >undefined : undefined
 
-// @ts-expect-error too many parameters
 Promise.try(() => "Async result", "foo");
 >Promise.try(() => "Async result", "foo") : Promise<string>
 >Promise.try : <T, U extends unknown[]>(callbackFn: (...args: U) => T | PromiseLike<T>, ...args: U) => Promise<Awaited<T>>
@@ -127,7 +125,6 @@ Promise.try((foo: string, bar: number) => "Async result", "foo", 42);
 >"foo" : "foo"
 >42 : 42
 
-// @ts-expect-error too many parameters
 Promise.try((foo: string, bar: number) => "Async result", "foo", 42, "baz");
 >Promise.try((foo: string, bar: number) => "Async result", "foo", 42, "baz") : Promise<string>
 >Promise.try : <T, U extends unknown[]>(callbackFn: (...args: U) => T | PromiseLike<T>, ...args: U) => Promise<Awaited<T>>
@@ -141,7 +138,6 @@ Promise.try((foo: string, bar: number) => "Async result", "foo", 42, "baz");
 >42 : 42
 >"baz" : "baz"
 
-// @ts-expect-error too few parameters
 Promise.try((foo: string, bar: number) => "Async result", "foo");
 >Promise.try((foo: string, bar: number) => "Async result", "foo") : Promise<string>
 >Promise.try : <T, U extends unknown[]>(callbackFn: (...args: U) => T | PromiseLike<T>, ...args: U) => Promise<Awaited<T>>
