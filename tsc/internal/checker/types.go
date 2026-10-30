@@ -1313,7 +1313,7 @@ type LazyState struct {
 type MemberLayout struct {
 	id               uint32                 // Unique identifier for the member layout
 	memberInfoMap    map[string]*MemberInfo // MemberInfos keyed by property name
-	memberInfos      []MemberInfo           // MemberInfos in sorted order
+	memberInfos      []MemberInfo           // Declared members, then inherited members in base order
 	layoutProperties []*ast.Symbol          // Lazily created list of layout properties (symbols corresponding to memberInfos)
 }
 

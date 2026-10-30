@@ -1,0 +1,105 @@
+//// [tests/cases/compiler/emptySubtypeInheritedMemberOrder.ts] ////
+
+=== emptySubtypeInheritedMemberOrder.ts ===
+// Inherited members keep the base type's order. Sorting them by declaration position
+// makes an empty subtype invariant and drops the assignability error.
+// https://github.com/microsoft/TypeScript/issues/65052
+
+export const empty: C<string> = {};
+>empty : Symbol(empty, Decl(emptySubtypeInheritedMemberOrder.ts, 4, 12))
+>C : Symbol(C, Decl(emptySubtypeInheritedMemberOrder.ts, 23, 1))
+
+declare const narrowB: B<{ a: string }>;
+>narrowB : Symbol(narrowB, Decl(emptySubtypeInheritedMemberOrder.ts, 6, 13))
+>B : Symbol(B, Decl(emptySubtypeInheritedMemberOrder.ts, 19, 1))
+>a : Symbol(a, Decl(emptySubtypeInheritedMemberOrder.ts, 6, 26))
+
+export const wideB: B<{ a: string; b?: number }> = narrowB;
+>wideB : Symbol(wideB, Decl(emptySubtypeInheritedMemberOrder.ts, 7, 12))
+>B : Symbol(B, Decl(emptySubtypeInheritedMemberOrder.ts, 19, 1))
+>a : Symbol(a, Decl(emptySubtypeInheritedMemberOrder.ts, 7, 23))
+>b : Symbol(b, Decl(emptySubtypeInheritedMemberOrder.ts, 7, 34))
+>narrowB : Symbol(narrowB, Decl(emptySubtypeInheritedMemberOrder.ts, 6, 13))
+
+declare const narrowC: C<{ a: string }>;
+>narrowC : Symbol(narrowC, Decl(emptySubtypeInheritedMemberOrder.ts, 9, 13))
+>C : Symbol(C, Decl(emptySubtypeInheritedMemberOrder.ts, 23, 1))
+>a : Symbol(a, Decl(emptySubtypeInheritedMemberOrder.ts, 9, 26))
+
+export const wideC: C<{ a: string; b?: number }> = narrowC;
+>wideC : Symbol(wideC, Decl(emptySubtypeInheritedMemberOrder.ts, 10, 12))
+>C : Symbol(C, Decl(emptySubtypeInheritedMemberOrder.ts, 23, 1))
+>a : Symbol(a, Decl(emptySubtypeInheritedMemberOrder.ts, 10, 23))
+>b : Symbol(b, Decl(emptySubtypeInheritedMemberOrder.ts, 10, 34))
+>narrowC : Symbol(narrowC, Decl(emptySubtypeInheritedMemberOrder.ts, 9, 13))
+
+declare const narrowD: D<{ a: string }>;
+>narrowD : Symbol(narrowD, Decl(emptySubtypeInheritedMemberOrder.ts, 12, 13))
+>D : Symbol(D, Decl(emptySubtypeInheritedMemberOrder.ts, 25, 30))
+>a : Symbol(a, Decl(emptySubtypeInheritedMemberOrder.ts, 12, 26))
+
+export const wideD: D<{ a: string; b?: number }> = narrowD;
+>wideD : Symbol(wideD, Decl(emptySubtypeInheritedMemberOrder.ts, 13, 12))
+>D : Symbol(D, Decl(emptySubtypeInheritedMemberOrder.ts, 25, 30))
+>a : Symbol(a, Decl(emptySubtypeInheritedMemberOrder.ts, 13, 23))
+>b : Symbol(b, Decl(emptySubtypeInheritedMemberOrder.ts, 13, 34))
+>narrowD : Symbol(narrowD, Decl(emptySubtypeInheritedMemberOrder.ts, 12, 13))
+
+export const both: Both = {};
+>both : Symbol(both, Decl(emptySubtypeInheritedMemberOrder.ts, 15, 12))
+>Both : Symbol(Both, Decl(emptySubtypeInheritedMemberOrder.ts, 35, 1))
+
+interface A<T> {
+>A : Symbol(A, Decl(emptySubtypeInheritedMemberOrder.ts, 15, 29))
+>T : Symbol(T, Decl(emptySubtypeInheritedMemberOrder.ts, 17, 12))
+
+    inherited: () => T;
+>inherited : Symbol(A.inherited, Decl(emptySubtypeInheritedMemberOrder.ts, 17, 16))
+>T : Symbol(T, Decl(emptySubtypeInheritedMemberOrder.ts, 17, 12))
+}
+
+interface B<T> extends A<T> {
+>B : Symbol(B, Decl(emptySubtypeInheritedMemberOrder.ts, 19, 1))
+>T : Symbol(T, Decl(emptySubtypeInheritedMemberOrder.ts, 21, 12))
+>A : Symbol(A, Decl(emptySubtypeInheritedMemberOrder.ts, 15, 29))
+>T : Symbol(T, Decl(emptySubtypeInheritedMemberOrder.ts, 21, 12))
+
+    own: (x: T) => Required<T>;
+>own : Symbol(B.own, Decl(emptySubtypeInheritedMemberOrder.ts, 21, 29))
+>x : Symbol(x, Decl(emptySubtypeInheritedMemberOrder.ts, 22, 10))
+>T : Symbol(T, Decl(emptySubtypeInheritedMemberOrder.ts, 21, 12))
+>Required : Symbol(Required, Decl(lib.es5.d.ts, --, --))
+>T : Symbol(T, Decl(emptySubtypeInheritedMemberOrder.ts, 21, 12))
+}
+
+interface C<T> extends B<T> {}
+>C : Symbol(C, Decl(emptySubtypeInheritedMemberOrder.ts, 23, 1))
+>T : Symbol(T, Decl(emptySubtypeInheritedMemberOrder.ts, 25, 12))
+>B : Symbol(B, Decl(emptySubtypeInheritedMemberOrder.ts, 19, 1))
+>T : Symbol(T, Decl(emptySubtypeInheritedMemberOrder.ts, 25, 12))
+
+interface D<T> extends C<T> {}
+>D : Symbol(D, Decl(emptySubtypeInheritedMemberOrder.ts, 25, 30))
+>T : Symbol(T, Decl(emptySubtypeInheritedMemberOrder.ts, 27, 12))
+>C : Symbol(C, Decl(emptySubtypeInheritedMemberOrder.ts, 23, 1))
+>T : Symbol(T, Decl(emptySubtypeInheritedMemberOrder.ts, 27, 12))
+
+interface Left {
+>Left : Symbol(Left, Decl(emptySubtypeInheritedMemberOrder.ts, 27, 30))
+
+    left: string;
+>left : Symbol(Left.left, Decl(emptySubtypeInheritedMemberOrder.ts, 29, 16))
+}
+
+interface Right {
+>Right : Symbol(Right, Decl(emptySubtypeInheritedMemberOrder.ts, 31, 1))
+
+    right: string;
+>right : Symbol(Right.right, Decl(emptySubtypeInheritedMemberOrder.ts, 33, 17))
+}
+
+interface Both extends Right, Left {}
+>Both : Symbol(Both, Decl(emptySubtypeInheritedMemberOrder.ts, 35, 1))
+>Right : Symbol(Right, Decl(emptySubtypeInheritedMemberOrder.ts, 31, 1))
+>Left : Symbol(Left, Decl(emptySubtypeInheritedMemberOrder.ts, 27, 30))
+
