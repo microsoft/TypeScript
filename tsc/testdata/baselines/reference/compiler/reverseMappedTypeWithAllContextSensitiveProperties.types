@@ -1,0 +1,91 @@
+//// [tests/cases/compiler/reverseMappedTypeWithAllContextSensitiveProperties.ts] ////
+
+=== reverseMappedTypeWithAllContextSensitiveProperties.ts ===
+createMachine({
+>createMachine({  initial: "a",  context: { foo: 1 },  states: {    a: {      entry: (context, state) => {        context.foo.toFixed();        const currentState: "a" = state;      }    }  }}) : { initial: "a"; context: { foo: number; }; states: { a: { entry?: ((context: { foo: number; }, state: "a") => void) | undefined; }; }; }
+>createMachine : <D extends { initial: keyof D["states"]; context: D["context"] extends object ? D["context"] : object; states: { [S in keyof D["states"]]: { entry?: (context: D["context"], state: S) => void; }; }; }>(definition: IdentityObject<D>) => D
+>{  initial: "a",  context: { foo: 1 },  states: {    a: {      entry: (context, state) => {        context.foo.toFixed();        const currentState: "a" = state;      }    }  }} : { initial: "a"; context: { foo: number; }; states: { a: { entry: (context: { foo: number; }, state: "a") => void; }; }; }
+
+  initial: "a",
+>initial : "a"
+>"a" : "a"
+
+  context: { foo: 1 },
+>context : { foo: number; }
+>{ foo: 1 } : { foo: number; }
+>foo : number
+>1 : 1
+
+  states: {
+>states : { a: { entry: (context: { foo: number; }, state: "a") => void; }; }
+>{    a: {      entry: (context, state) => {        context.foo.toFixed();        const currentState: "a" = state;      }    }  } : { a: { entry: (context: { foo: number; }, state: "a") => void; }; }
+
+    a: {
+>a : { entry: (context: { foo: number; }, state: "a") => void; }
+>{      entry: (context, state) => {        context.foo.toFixed();        const currentState: "a" = state;      }    } : { entry: (context: { foo: number; }, state: "a") => void; }
+
+      entry: (context, state) => {
+>entry : (context: { foo: number; }, state: "a") => void
+>(context, state) => {        context.foo.toFixed();        const currentState: "a" = state;      } : (context: { foo: number; }, state: "a") => void
+>context : { foo: number; }
+>state : "a"
+
+        context.foo.toFixed();
+>context.foo.toFixed() : string
+>context.foo.toFixed : (fractionDigits?: number) => string
+>context.foo : number
+>context : { foo: number; }
+>foo : number
+>toFixed : (fractionDigits?: number) => string
+
+        const currentState: "a" = state;
+>currentState : "a"
+>state : "a"
+      }
+    }
+  }
+})
+
+declare const createMachine:
+>createMachine : <D extends { initial: keyof D["states"]; context: D["context"] extends object ? D["context"] : object; states: { [S in keyof D["states"]]: { entry?: (context: D["context"], state: S) => void; }; }; }>(definition: IdentityObject<D>) => D
+
+  <D extends {
+    initial: keyof D["states"],
+>initial : keyof D["states"]
+
+    context: D["context"] extends object ? D["context"] : object,
+>context : D["context"] extends object ? D["context"] : object
+
+    states: {
+>states : { [S in keyof D["states"]]: { entry?: (context: D["context"], state: S) => void; }; }
+
+      [S in keyof D["states"]]: {
+        entry?: (context: D["context"], state: S) => void
+>entry : ((context: D["context"], state: S) => void) | undefined
+>context : D["context"]
+>state : S
+      }
+    }
+  }>
+    (definition: IdentityObject<D>) =>
+>definition : IdentityObject<D>
+
+      D
+
+type Identity<T> =
+>Identity : Identity<T>
+
+  T extends any
+    ? ( T extends (...a: never) => unknown ? T :
+>a : never
+
+        T extends object ? IdentityObject<T> :
+        T
+      )
+    : never
+
+type IdentityObject<T> =
+>IdentityObject : IdentityObject<T>
+
+  { [K in keyof T]: Identity<T[K]> }
+
