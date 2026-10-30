@@ -1,0 +1,165 @@
+//// [tests/cases/compiler/freshNegatedIntersectionReduction.ts] ////
+
+=== freshNegatedIntersectionReduction.ts ===
+export function narrowedArray<Value extends unknown[] | undefined>(value: Value) {
+>narrowedArray : <Value extends unknown[] | undefined>(value: Value) => (Value & {})[number][]
+>value : Value
+
+    if (typeof value !== "undefined") {
+>typeof value !== "undefined" : boolean
+>typeof value : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
+>value : Value
+>"undefined" : "undefined"
+
+        for (const element of value) {}
+>element : unknown
+>value : Value & {}
+
+        return [...value];
+>[...value] : (Value & {})[number][]
+>...value : unknown
+>value : Value & {}
+    }
+    return [];
+>[] : never[]
+}
+
+export function explicitUndefined<Value>(value: Value & not undefined) {
+>explicitUndefined : <Value>(value: Value & not undefined) => Value & not undefined
+>value : Value & not undefined
+
+    if (typeof value !== "undefined") {
+>typeof value !== "undefined" : boolean
+>typeof value : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
+>value : Value & not undefined
+>"undefined" : "undefined"
+
+        const retained = value;
+>retained : Value & not undefined
+>value : Value & not undefined
+
+        return retained;
+>retained : Value & not undefined
+    }
+    throw new Error();
+>new Error() : Error
+>Error : ErrorConstructor
+}
+
+export function explicitNull<Value>(value: Value & not null) {
+>explicitNull : <Value>(value: Value & not null) => Value & not null
+>value : Value & not null
+
+    if (value !== null) {
+>value !== null : boolean
+>value : Value & not null
+
+        const retained = value;
+>retained : Value & not null
+>value : Value & not null
+
+        return retained;
+>retained : Value & not null
+    }
+    throw new Error();
+>new Error() : Error
+>Error : ErrorConstructor
+}
+
+export function freshOnly<Value>(value: Value) {
+>freshOnly : <Value>(value: Value) => Value
+>value : Value
+
+    if (typeof value !== "string") {
+>typeof value !== "string" : boolean
+>typeof value : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
+>value : Value
+>"string" : "string"
+
+        const widened = value;
+>widened : Value
+>value : Value & not string
+
+        return widened;
+>widened : Value
+    }
+    throw new Error();
+>new Error() : Error
+>Error : ErrorConstructor
+}
+
+export function explicitString<Value>(value: Value & not string) {
+>explicitString : <Value>(value: Value & not string) => Value & not string
+>value : Value & not string
+
+    if (typeof value !== "string") {
+>typeof value !== "string" : boolean
+>typeof value : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
+>value : Value & not string
+>"string" : "string"
+
+        const retained = value;
+>retained : Value & not string
+>value : Value & not string
+
+        return retained;
+>retained : Value & not string
+    }
+    throw new Error();
+>new Error() : Error
+>Error : ErrorConstructor
+}
+
+export function unionFreshFirst(value: unknown, regular: not string, choose: boolean) {
+>unionFreshFirst : (value: unknown, regular: not string, choose: boolean) => not string
+>value : unknown
+>regular : not string
+>choose : boolean
+
+    if (typeof value !== "string") {
+>typeof value !== "string" : boolean
+>typeof value : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
+>value : unknown
+>"string" : "string"
+
+        const merged = choose ? value : regular;
+>merged : not string
+>choose ? value : regular : not string
+>choose : boolean
+>value : not string
+>regular : not string
+
+        return merged;
+>merged : not string
+    }
+    throw new Error();
+>new Error() : Error
+>Error : ErrorConstructor
+}
+
+export function unionRegularFirst(value: unknown, regular: not string, choose: boolean) {
+>unionRegularFirst : (value: unknown, regular: not string, choose: boolean) => not string
+>value : unknown
+>regular : not string
+>choose : boolean
+
+    if (typeof value !== "string") {
+>typeof value !== "string" : boolean
+>typeof value : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
+>value : unknown
+>"string" : "string"
+
+        const merged = choose ? regular : value;
+>merged : not string
+>choose ? regular : value : not string
+>choose : boolean
+>regular : not string
+>value : not string
+
+        return merged;
+>merged : not string
+    }
+    throw new Error();
+>new Error() : Error
+>Error : ErrorConstructor
+}

@@ -1,0 +1,190 @@
+//// [tests/cases/compiler/negatedConditionalFalseBranchConstraints.ts] ////
+
+=== negatedConditionalFalseBranchConstraints.ts ===
+type OnlyNumber<T extends number> = T;
+>OnlyNumber : T
+
+type OnlySymbol<T extends symbol> = T;
+>OnlySymbol : T
+
+type OnlyBoolean<T extends boolean> = T;
+>OnlyBoolean : T
+
+type OnlyB<T extends "b"> = T;
+>OnlyB : T
+
+type NonString<T extends not string> = T;
+>NonString : T
+
+type NonA<T extends not "a"> = T;
+>NonA : T
+
+type OnlyString<T extends string> = T;
+>OnlyString : T
+
+type Primitive<T extends string | number> = T extends string ? never : OnlyNumber<T>;
+>Primitive : Primitive<T>
+
+type NegativeConstraint<T extends string | number> = T extends string ? never : NonString<T>;
+>NegativeConstraint : NegativeConstraint<T>
+
+type Keys<T extends PropertyKey> = T extends string | number ? never : OnlySymbol<T>;
+>Keys : Keys<T>
+
+type Literals<T extends "a" | "b"> = T extends "a" ? never : OnlyB<T>;
+>Literals : Literals<T>
+
+type NegativeLiteral<T extends "a" | "b"> = T extends "a" ? never : NonA<T>;
+>NegativeLiteral : NegativeLiteral<T>
+
+type Booleans<T extends boolean> = T extends true ? never : OnlyBoolean<T>;
+>Booleans : Booleans<T>
+>true : true
+
+type DoubleNegation<T extends string | number> = T extends not string ? never : OnlyString<T>;
+>DoubleNegation : DoubleNegation<T>
+
+type Nested<T extends string | number | boolean> =
+>Nested : Nested<T>
+
+    T extends string ? T : T extends number ? OnlyNumber<T> : OnlyBoolean<T>;
+type Callback<T extends string | number> = T extends string ? never : (value: NonString<T>) => OnlyNumber<T>;
+>Callback : Callback<T>
+>value : T
+
+type Parenthesized<T extends string | number> = (T) extends (string) ? never : NonString<T>;
+>Parenthesized : Parenthesized<T>
+
+type WrappedOuter<T extends string | number> =
+>WrappedOuter : WrappedOuter<T>
+
+    [T] extends [string | number] ? T extends string ? never : OnlyNumber<T> : never;
+
+const primitive: Primitive<"a" | 1 | 2> = 1;
+>primitive : 1 | 2
+>1 : 1
+
+const anyPrimitive: Primitive<any> = "a";
+>anyPrimitive : any
+>"a" : "a"
+
+const negativeConstraint: NegativeConstraint<string | number> = 1;
+>negativeConstraint : number
+>1 : 1
+
+declare const key: Keys<symbol | "a" | 1>;
+>key : symbol
+
+const symbolKey: symbol = key;
+>symbolKey : symbol
+>key : symbol
+
+const literal: Literals<"a" | "b"> = "b";
+>literal : "b"
+>"b" : "b"
+
+const negativeLiteral: NegativeLiteral<"a" | "b"> = "b";
+>negativeLiteral : "b"
+>"b" : "b"
+
+const boolean: Booleans<boolean> = false;
+>boolean : false
+>false : false
+
+const doubleNegation: DoubleNegation<string | number> = "a";
+>doubleNegation : string
+>"a" : "a"
+
+const nested: Nested<string | number | boolean> = true;
+>nested : string | number | boolean
+>true : true
+
+const callback: Callback<string | number> = value => value;
+>callback : (value: number) => number
+>value => value : (value: number) => number
+>value : number
+>value : number
+
+const parenthesized: Parenthesized<string | number> = 1;
+>parenthesized : number
+>1 : 1
+
+const wrappedOuter: WrappedOuter<string | number> = 1;
+>wrappedOuter : number
+>1 : 1
+
+// Filtering must still happen separately for each union member.
+const rejectedPrimitive: Primitive<string | number> = "a";
+>rejectedPrimitive : number
+>"a" : "a"
+
+const rejectedKey: Keys<PropertyKey> = 1;
+>rejectedKey : symbol
+>1 : 1
+
+const rejectedLiteral: Literals<"a" | "b"> = "a";
+>rejectedLiteral : "b"
+>"a" : "a"
+
+const rejectedBoolean: Booleans<boolean> = true;
+>rejectedBoolean : false
+>true : true
+
+const rejectedDoubleNegation: DoubleNegation<string | number> = 1;
+>rejectedDoubleNegation : string
+>1 : 1
+
+const rejectedNever: Primitive<never> = 1;
+>rejectedNever : never
+>1 : 1
+
+const rejectedWrappedOuter: WrappedOuter<string | number> = "a";
+>rejectedWrappedOuter : number
+>"a" : "a"
+
+// Existing true-branch constraints and explicit negative intersections remain valid.
+type TrueBranch<T> = T extends number ? OnlyNumber<T> : never;
+>TrueBranch : TrueBranch<T>
+
+type Explicit<T> = T extends string ? never : NonString<T & not string>;
+>Explicit : Explicit<T>
+
+type Inherited<T extends string | number, U extends T> = U extends string ? never : NonString<U>;
+>Inherited : Inherited<T, U>
+
+const inherited: Inherited<string | number, number> = 1;
+>inherited : number
+>1 : 1
+
+interface Values {
+    a: 1;
+>a : 1
+
+    b: 2;
+>b : 2
+
+    skip: 3;
+>skip : 3
+}
+type Lookup<T extends keyof Values> = T extends "skip" ? never : Values[T];
+>Lookup : Lookup<T>
+
+function lookup<T extends keyof Values>(value: Values[T & not "skip"]): Lookup<T> {
+>lookup : <T extends keyof Values>(value: Values[T & not "skip"]) => Lookup<T>
+>value : Values[T & not "skip"]
+
+    return value;
+>value : Values[T & not "skip"]
+}
+
+type SelfChecks<T extends string | number> =
+>SelfChecks : SelfChecks<T>
+
+    T extends T ? 0 : T extends T ? 1 : T extends T ? 2 : T extends T ? 3 :
+    T extends T ? 4 : T extends T ? 5 : T extends T ? 6 : T extends T ? 7 :
+    T extends T ? 8 : T extends T ? 9 : T extends T ? 10 : T extends T ? 11 :
+    T extends T ? 12 : T extends T ? 13 : T extends T ? 14 : T extends T ? 15 : T;
+const selfChecks: SelfChecks<string | number> = 0;
+>selfChecks : 0
+>0 : 0
+

@@ -1,0 +1,109 @@
+negatedTypeSmokePreservation.ts(3,9): error TS2367: This comparison appears to be unintentional because the types 'string & not "first"' and '"first"' have no overlap.
+negatedTypeSmokePreservation.ts(9,59): error TS2339: Property 'trim' does not exist on type 'never'.
+negatedTypeSmokePreservation.ts(16,14): error TS2678: Type 'number' is not comparable to type 'number & not 25'.
+  Type 'number' is not comparable to type 'not 25'.
+negatedTypeSmokePreservation.ts(43,5): error TS2322: Type '"fourth"' is not assignable to type '"second" | "third"'.
+
+
+==== negatedTypeSmokePreservation.ts (4 errors) ====
+    export function repeatedComparison(value: string) {
+        if (value === "first") return 1;
+        if (value === "first") return 2;
+            ~~~~~~~~~~~~~~~~~
+!!! error TS2367: This comparison appears to be unintentional because the types 'string & not "first"' and '"first"' have no overlap.
+        return 3;
+    }
+    
+    export function repeatedTypeof(value: { text: unknown }) {
+        if (typeof value.text === "string") return value.text.trim();
+        if (typeof value.text === "string") return value.text.trim();
+                                                              ~~~~
+!!! error TS2339: Property 'trim' does not exist on type 'never'.
+        return "";
+    }
+    
+    export function repeatedCase(value: number) {
+        if (value === 25) return;
+        switch (value) {
+            case 25: return;
+                 ~~
+!!! error TS2678: Type 'number' is not comparable to type 'number & not 25'.
+!!! error TS2678:   Type 'number' is not comparable to type 'not 25'.
+        }
+    }
+    
+    export function numericToken(value: number) {
+        if (value === 0) return value;
+        if (value === 1 || value === 2) {
+            let copy = value;
+            copy = 3;
+            return copy;
+        }
+        return value;
+    }
+    
+    export function bigintToken(value: bigint) {
+        if (value === 0n) return value;
+        if (value === 1n || value === 2n) {
+            let copy = value;
+            copy = 3n;
+            return copy;
+        }
+        return value;
+    }
+    
+    export function declaredLiteral(value: "first" | "second" | "third") {
+        if (value === "first") return;
+        let copy = value;
+        copy = "fourth";
+        ~~~~
+!!! error TS2322: Type '"fourth"' is not assignable to type '"second" | "third"'.
+        return copy;
+    }
+    
+    export function explicitBounds(value: not string) {
+        if (value === null) {
+            const result: null = value;
+            return result;
+        }
+        if (value === undefined) {
+            const result: undefined = value;
+            return result;
+        }
+        if (typeof value === "string") {
+            const result: never = value;
+            return result;
+        }
+        return value;
+    }
+    
+    export function symbolValue(value: unknown): symbol | undefined {
+        if (typeof value === "boolean" || typeof value === "number") return;
+        if (typeof value === "symbol") return value;
+    }
+    
+    export function permission(input: { mode: unknown }): { mode?: "read" | "write" } {
+        const mode = input.mode;
+        if (mode !== undefined && mode !== "read" && mode !== "write") throw new Error();
+        return mode === undefined ? {} : { mode };
+    }
+    
+    export function release(input: { asset: unknown }) {
+        return (typeof input.asset === "string" || input.asset === null) &&
+            (input.asset === null || /^asset/.test(input.asset));
+    }
+    
+    export function notString(value: unknown) {
+        return typeof value !== "string";
+    }
+    
+    export function inferredContainer(value: unknown) {
+        if (typeof value === "string") return undefined;
+        return { value, values: [value] };
+    }
+    
+    export function matchingLiteral(value: unknown): "read" | "write" {
+        if (typeof value === "undefined") return "read";
+        if (value === "read" || value === "write") return value;
+        throw new Error();
+    }

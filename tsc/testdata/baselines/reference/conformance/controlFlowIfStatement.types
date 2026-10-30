@@ -110,7 +110,7 @@ function c<T>(data: string | T): T {
     }
     else {
         return data;
->data : T
+>data : T & not string
     }
 }
 function d<T extends string>(data: string | T): never {

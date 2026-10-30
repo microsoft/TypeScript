@@ -25,6 +25,13 @@ func (ft *FlowType) isNil() bool {
 	return ft.t == nil
 }
 
+func (c *Checker) getReducedFlowType(t *Type) *Type {
+	if t.flags&TypeFlagsUnion != 0 {
+		return c.getReducedType(t)
+	}
+	return t
+}
+
 func (c *Checker) newFlowType(t *Type, incomplete bool) FlowType {
 	if incomplete && t.flags&TypeFlagsNever != 0 {
 		t = c.silentNeverType
@@ -88,10 +95,12 @@ func (c *Checker) getFlowTypeOfReferenceEx(reference *ast.Node, declaredType *Ty
 			return declaredType
 		}
 	}
+	reducedDeclaredType := c.getReducedFlowType(declaredType)
+	reducedInitialType := c.getReducedFlowType(core.Coalesce(initialType, declaredType))
 	f := c.getFlowState()
 	f.reference = reference
-	f.declaredType = declaredType
-	f.initialType = core.Coalesce(initialType, declaredType)
+	f.declaredType = reducedDeclaredType
+	f.initialType = reducedInitialType
 	f.flowContainer = flowContainer
 	f.sharedFlowStart = len(c.sharedFlows)
 	c.flowInvocationCount++
@@ -196,6 +205,7 @@ func (c *Checker) getTypeAtFlowNode(f *FlowState, flow *ast.FlowNode) FlowType {
 			// simply return the non-auto declared type to reduce follow-on errors.
 			t = FlowType{t: c.convertAutoToAny(f.declaredType)}
 		}
+		t = c.newFlowType(c.getReducedFlowType(t.t), t.incomplete)
 		if sharedFlow != nil {
 			// Record visited node and the associated type in the cache.
 			c.sharedFlows = append(c.sharedFlows, SharedFlow{flow: sharedFlow, flowType: t})
@@ -217,6 +227,15 @@ func getBranchLabelAntecedents(flow *ast.FlowNode, reduceLabels []*ast.FlowReduc
 	return flow.Antecedents
 }
 
+// Compound assignments, updates, and compound-like assignments can change the value, so
+// their flow types must generalize literal types and discard fresh negations describing
+// the old value (e.g. 'number & not 0' before a decrement). This approximates the type
+// after the operation without checking its expression here; regular negated constraints
+// are preserved.
+func (c *Checker) getTypeForCompoundAssignment(typeToGeneralize *Type) *Type {
+	return c.getBaseTypeOfLiteralType(c.removeFreshNegatedTypes(typeToGeneralize))
+}
+
 func (c *Checker) getTypeAtFlowAssignment(f *FlowState, flow *ast.FlowNode) FlowType {
 	node := flow.Node
 	// Assignments only narrow the computed type if the declared type is a union type. Thus, we
@@ -227,7 +246,7 @@ func (c *Checker) getTypeAtFlowAssignment(f *FlowState, flow *ast.FlowNode) Flow
 		}
 		if getAssignmentTargetKind(node) == AssignmentKindCompound {
 			flowType := c.getTypeAtFlowNode(f, flow.Antecedent)
-			return c.newFlowType(c.getBaseTypeOfLiteralType(flowType.t), flowType.incomplete)
+			return c.newFlowType(c.getTypeForCompoundAssignment(flowType.t), flowType.incomplete)
 		}
 		if f.declaredType == c.autoType || f.declaredType == c.autoArrayType {
 			if c.isEmptyArrayAssignment(node) {
@@ -241,7 +260,7 @@ func (c *Checker) getTypeAtFlowAssignment(f *FlowState, flow *ast.FlowNode) Flow
 		}
 		t := f.declaredType
 		if isInCompoundLikeAssignment(node) {
-			t = c.getBaseTypeOfLiteralType(t)
+			t = c.getTypeForCompoundAssignment(t)
 		}
 		if t.flags&TypeFlagsUnion != 0 {
 			return FlowType{t: c.getAssignmentReducedType(t, c.getInitialOrAssignedType(f, flow))}
@@ -375,6 +394,7 @@ func (c *Checker) getTypeAtFlowCondition(f *FlowState, flow *ast.FlowNode) FlowT
 // Narrow the given type based on the given expression having the assumed boolean value. The returned type
 // will be a subtype or the same type as the argument.
 func (c *Checker) narrowType(f *FlowState, t *Type, expr *ast.Node, assumeTrue bool) *Type {
+	t = c.getReducedFlowType(t)
 	// for `a?.b`, we emulate a synthetic `a !== null && a !== undefined` condition for `a`
 	if ast.IsExpressionOfOptionalChainRoot(expr) || ast.IsBinaryExpression(expr.Parent) && (expr.Parent.AsBinaryExpression().OperatorToken.Kind == ast.KindQuestionQuestionToken || expr.Parent.AsBinaryExpression().OperatorToken.Kind == ast.KindQuestionQuestionEqualsToken) && expr.Parent.AsBinaryExpression().Left == expr {
 		return c.narrowTypeByOptionality(f, t, expr, assumeTrue)
@@ -481,10 +501,10 @@ func (c *Checker) narrowTypeByBinaryExpression(f *FlowState, t *Type, expr *ast.
 			return c.narrowTypeByTypeof(f, t, right.AsTypeOfExpression(), operator, left, assumeTrue)
 		}
 		if c.isMatchingReference(f.reference, left) {
-			return c.narrowTypeByEquality(t, operator, right, assumeTrue)
+			return c.narrowTypeByEquality(t, operator, right, assumeTrue, !ast.IsAccessExpression(f.reference))
 		}
 		if c.isMatchingReference(f.reference, right) {
-			return c.narrowTypeByEquality(t, operator, left, assumeTrue)
+			return c.narrowTypeByEquality(t, operator, left, assumeTrue, !ast.IsAccessExpression(f.reference))
 		}
 		if c.strictNullChecks {
 			if c.optionalChainContainsReference(left, f.reference) {
@@ -553,7 +573,30 @@ func (c *Checker) narrowTypeByBinaryExpression(f *FlowState, t *Type, expr *ast.
 	return t
 }
 
-func (c *Checker) narrowTypeByEquality(t *Type, operator ast.Kind, value *ast.Node, assumeTrue bool) *Type {
+// Returns true if the type includes the "top" of the type hierarchy, or close enough to it - `unknown`, `{}`, and negated types and intersections thereof
+// Used to determine if we should narrow to a literal type in `===` comparisons
+func (c *Checker) typeIsTopInclusive(t *Type) bool {
+	if t.flags&TypeFlagsUnion != 0 {
+		return core.Some(t.Types(), c.typeIsTopInclusive)
+	}
+	if t.flags&TypeFlagsUnknown != 0 || c.IsEmptyAnonymousObjectType(t) {
+		return true
+	}
+	if t.flags&TypeFlagsNegated != 0 {
+		return true
+	}
+	if t.flags&TypeFlagsIntersection != 0 {
+		for _, t2 := range t.AsIntersectionType().Types() {
+			if !c.typeIsTopInclusive(t2) {
+				return false
+			}
+		}
+		return true
+	}
+	return false
+}
+
+func (c *Checker) narrowTypeByEquality(t *Type, operator ast.Kind, value *ast.Node, assumeTrue bool, introduceNegation bool) *Type {
 	if t.flags&TypeFlagsAny != 0 {
 		return t
 	}
@@ -578,7 +621,7 @@ func (c *Checker) narrowTypeByEquality(t *Type, operator ast.Kind, value *ast.No
 		return c.getAdjustedTypeWithFacts(t, facts)
 	}
 	if assumeTrue {
-		if !doubleEquals && (t.flags&TypeFlagsUnknown != 0 || someType(t, c.IsEmptyAnonymousObjectType)) {
+		if !doubleEquals && c.typeIsTopInclusive(t) {
 			if valueType.flags&(TypeFlagsPrimitive|TypeFlagsNonPrimitive) != 0 || c.IsEmptyAnonymousObjectType(valueType) {
 				return valueType
 			}
@@ -604,9 +647,19 @@ func (c *Checker) narrowTypeByEquality(t *Type, operator ast.Kind, value *ast.No
 				return filteredType
 			}
 		}
-		return c.filterType(t, func(t *Type) bool {
+		filtered := c.filterType(t, func(t *Type) bool {
 			return !(c.isUnitLikeType(t) && c.areTypesComparable(t, valueType))
 		})
+		// In the false branch of a strict literal comparison, introduce a fresh negation so that a base
+		// type that overlaps the compared value records the exclusion. For example, the else branch of
+		// 'n === 0' where 'n: number' produces 'number & not 0'. The negation reduces away for
+		// constituents already disjoint from the value (e.g. 'string & not 0' -> 'string'). We restrict
+		// this to strict '==='/'!==' because loose '=='/'!=' coerces operands, so excluding a single
+		// literal would not soundly capture the comparison's semantics.
+		if introduceNegation && !doubleEquals {
+			return c.introduceNegationIntoNarrowedType(filtered, valueType)
+		}
+		return filtered
 	}
 	return t
 }
@@ -651,7 +704,32 @@ func (c *Checker) narrowTypeByLiteralExpression(t *Type, literal *ast.LiteralExp
 	if !ok {
 		facts = TypeFactsTypeofNEHostObject
 	}
-	return c.getAdjustedTypeWithFacts(t, facts)
+	result := c.getAdjustedTypeWithFacts(t, facts)
+	if impliedType := c.getImpliedTypeForTypeofNegation(literal.Text()); impliedType != nil {
+		result = c.introduceNegationIntoNarrowedType(result, impliedType)
+	}
+	return result
+}
+
+// getImpliedTypeForTypeofNegation returns the primitive type that a value is known *not* to be in the
+// false branch of a 'typeof x === "..."' check, or nil for typeof names whose negation isn't a simple
+// primitive. It is used to introduce negated types (e.g. 'not string') during control flow narrowing.
+func (c *Checker) getImpliedTypeForTypeofNegation(typeName string) *Type {
+	switch typeName {
+	case "string":
+		return c.stringType
+	case "number":
+		return c.numberType
+	case "bigint":
+		return c.bigintType
+	case "boolean":
+		return c.booleanType
+	case "symbol":
+		return c.esSymbolType
+	case "undefined":
+		return c.undefinedType
+	}
+	return nil
 }
 
 func (c *Checker) narrowTypeByTypeName(t *Type, typeName string) *Type {
@@ -684,6 +762,17 @@ func (c *Checker) narrowTypeByTypeName(t *Type, typeName string) *Type {
 
 func (c *Checker) narrowTypeByTypeFacts(t *Type, impliedType *Type, facts TypeFacts) *Type {
 	return c.mapType(t, func(t *Type) *Type {
+		if t.flags&TypeFlagsIntersection != 0 && containsFreshNegatedType(t) {
+			return c.getIntersectionType(append(core.Map(t.Types(), func(t *Type) *Type {
+				if isFreshNegatedType(t) {
+					if c.typesAreInDisjointDomainsIncludingObjects(impliedType, t.AsNegatedType().baseType) {
+						return c.unknownType
+					}
+					return t
+				}
+				return c.narrowTypeByTypeFacts(t, impliedType, facts)
+			}), impliedType))
+		}
 		switch {
 		case c.isTypeRelatedTo(t, impliedType, c.strictSubtypeRelation):
 			if c.hasTypeFacts(t, facts) {
@@ -718,7 +807,12 @@ func (c *Checker) narrowTypeByDiscriminantProperty(t *Type, access *ast.Node, op
 		}
 	}
 	return c.narrowTypeByDiscriminant(t, access, func(t *Type) *Type {
-		return c.narrowTypeByEquality(t, operator, value, assumeTrue)
+		// When narrowing a discriminant property, the narrowed property type is only used for a
+		// comparability test against each constituent's discriminant. Introducing a negated type here
+		// would produce a structurally different (though semantically equivalent) negation that
+		// 'areTypesComparable' may fail to relate to a constituent's existing negated discriminant, so
+		// we suppress negation introduction on this path.
+		return c.narrowTypeByEquality(t, operator, value, assumeTrue, false /*introduceNegation*/)
 	})
 }
 
@@ -856,12 +950,29 @@ func (c *Checker) getNarrowedType(t *Type, candidate *Type, assumeTrue bool, che
 	return narrowedType
 }
 
+// introduceNegationIntoNarrowedType intersects each constituent of a control-flow-narrowed type with
+// 'not candidate' in the false branch of a narrowing check. The resulting negated intersections are
+// reduced away by getIntersectionType when redundant (e.g. 'number & not string' -> 'number'), so this
+// only meaningfully affects narrowings whose base type overlaps the removed candidate (such as '{}',
+// 'unknown', 'object', or a type parameter). For example, narrowing '{}' in the false branch of
+// 'typeof x === "string"' produces '{} & not string'.
+func (c *Checker) introduceNegationIntoNarrowedType(t *Type, candidate *Type) *Type {
+	if t.flags&TypeFlagsNever != 0 || candidate.flags&TypeFlagsNever != 0 {
+		return t
+	}
+	return c.getIntersectionType([]*Type{t, c.getFreshNegatedType(candidate)})
+}
+
 func (c *Checker) getNarrowedTypeWorker(t *Type, candidate *Type, assumeTrue bool, checkDerived bool) *Type {
 	if !assumeTrue {
 		if t == candidate {
 			return c.neverType
 		}
 		if checkDerived {
+			// 'instanceof' (and other prototype-based) narrowing is nominal, so we deliberately do not
+			// introduce a structural 'not candidate' here. Many class types lack nominal tags and are
+			// structural subtypes of one another (e.g. 'Derived2' structurally extends 'Derived1'), so a
+			// structural negation would unsoundly reduce a nominally-kept constituent to never.
 			return c.filterType(t, func(t *Type) bool {
 				return !c.isTypeDerivedFrom(t, candidate)
 			})
@@ -1170,9 +1281,20 @@ func (c *Checker) narrowTypeBySwitchOnTypeOf(t *Type, data *ast.FlowSwitchClause
 	if hasDefaultClause {
 		// In the default clause we filter constituents down to those that are not-equal to all handled cases.
 		notEqualFacts := c.getNotEqualFactsFromTypeofSwitch(clauseStart, clauseEnd, witnesses)
-		return c.filterType(t, func(t *Type) bool {
+		filtered := c.filterType(t, func(t *Type) bool {
 			return c.getTypeFacts(t, notEqualFacts) == notEqualFacts
 		})
+		// Mirror the false branch of `if (typeof x === "...")`: introduce a fresh `not <primitive>`
+		// for each handled case whose negation is a simple primitive, so that a base type overlapping
+		// those primitives (such as `{}` or a type parameter) records the exclusion.
+		for i, witness := range witnesses {
+			if (i < clauseStart || i >= clauseEnd) && witness != "" {
+				if impliedType := c.getImpliedTypeForTypeofNegation(witness); impliedType != nil {
+					filtered = c.introduceNegationIntoNarrowedType(filtered, impliedType)
+				}
+			}
+		}
+		return filtered
 	}
 	// In the non-default cause we create a union of the type narrowed by each of the listed cases.
 	clauseWitnesses := witnesses[clauseStart:clauseEnd]
@@ -1311,11 +1433,11 @@ func (c *Checker) getTypeAtFlowBranchLabel(f *FlowState, flow *ast.FlowNode, ant
 // At flow control branch or loop junctions, if the type along every antecedent code path
 // is an evolving array type, we construct a combined evolving array type. Otherwise we
 // finalize all evolving array types.
-func (c *Checker) getUnionOrEvolvingArrayType(f *FlowState, types []*Type, subtypeReduction UnionReduction) *Type {
+func (c *Checker) getUnionOrEvolvingArrayType(f *FlowState, types []*Type, unionReduction UnionReduction) *Type {
 	if isEvolvingArrayTypeList(types) {
 		return c.getEvolvingArrayType(c.getUnionType(core.Map(types, c.getElementTypeOfEvolvingArrayType)))
 	}
-	result := c.recombineUnknownType(c.getUnionTypeEx(core.SameMap(types, c.finalizeEvolvingArrayType), subtypeReduction, nil, nil))
+	result := c.recombineUnknownType(c.getReducedType(c.getUnionTypeEx(core.SameMap(types, c.finalizeEvolvingArrayType), unionReduction, nil, nil)))
 	if result != f.declaredType && result.flags&f.declaredType.flags&TypeFlagsUnion != 0 && slices.Equal(result.AsUnionType().types, f.declaredType.AsUnionType().types) {
 		return f.declaredType
 	}
@@ -1909,6 +2031,18 @@ func (c *Checker) replacePrimitivesWithLiterals(typeWithPrimitives *Type, typeWi
 		c.maybeTypeOfKind(typeWithLiterals, TypeFlagsStringLiteral|TypeFlagsTemplateLiteral|TypeFlagsStringMapping|TypeFlagsNumberLiteral|TypeFlagsBigIntLiteral) {
 		return c.mapType(typeWithPrimitives, func(t *Type) *Type {
 			switch {
+			case t.flags&TypeFlagsIntersection != 0 && containsFreshNegatedType(t):
+				result := c.getIntersectionType(core.Map(t.Types(), func(t *Type) *Type {
+					return c.replacePrimitivesWithLiterals(t, typeWithLiterals)
+				}))
+				return c.mapType(result, func(reduced *Type) *Type {
+					if someType(typeWithLiterals, func(literal *Type) bool {
+						return isFreshLiteralType(literal) && c.getRegularTypeOfLiteralType(literal) == reduced
+					}) {
+						return c.getFreshTypeOfLiteralType(reduced)
+					}
+					return reduced
+				})
 			case t.flags&TypeFlagsString != 0:
 				return c.extractTypesOfKind(typeWithLiterals, TypeFlagsString|TypeFlagsStringLiteral|TypeFlagsTemplateLiteral|TypeFlagsStringMapping)
 			case c.isPatternLiteralType(t) && !c.maybeTypeOfKind(typeWithLiterals, TypeFlagsString|TypeFlagsTemplateLiteral|TypeFlagsStringMapping):
@@ -2397,6 +2531,7 @@ func (c *Checker) getTypeWithDefault(t *Type, defaultExpression *ast.Node) *Type
 // For example, when a variable of type number | string | boolean is assigned a value of type number | boolean,
 // we remove type string.
 func (c *Checker) getAssignmentReducedType(declaredType *Type, assignedType *Type) *Type {
+	assignedType = c.getReducedType(assignedType)
 	if declaredType == assignedType {
 		return declaredType
 	}

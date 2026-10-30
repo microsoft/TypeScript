@@ -1,0 +1,198 @@
+negatedConditionalFalseBranchSoundness.ts(9,62): error TS2344: Type 'T' does not satisfy the constraint 'not string'.
+  Type 'T' is not assignable to type 'not string'.
+negatedConditionalFalseBranchSoundness.ts(10,67): error TS2344: Type 'T' does not satisfy the constraint 'not "a"'.
+  Type 'T' is not assignable to type 'not "a"'.
+    Type 'string' is not assignable to type 'not "a"'.
+negatedConditionalFalseBranchSoundness.ts(12,48): error TS2344: Type 'T' does not satisfy the constraint 'not { kind: "a"; }'.
+  Type 'T' is not assignable to type 'not { kind: "a"; }'.
+    Type '{ kind: "a" | "b"; }' is not assignable to type 'not { kind: "a"; }'.
+negatedConditionalFalseBranchSoundness.ts(14,52): error TS2344: Type 'T' does not satisfy the constraint 'not { length: 1; }'.
+  Type 'T' is not assignable to type 'not { length: 1; }'.
+    Type 'string | number' is not assignable to type 'not { length: 1; }'.
+      Type 'string' is not assignable to type 'not { length: 1; }'.
+negatedConditionalFalseBranchSoundness.ts(23,83): error TS2344: Type 'T' does not satisfy the constraint 'not { kind: "a"; }'.
+  Type 'T' is not assignable to type 'not { kind: "a"; }'.
+    Type 'Tagged' is not assignable to type 'not { kind: "a"; }'.
+      Type '{ kind: "a"; }' is not assignable to type 'not { kind: "a"; }'.
+negatedConditionalFalseBranchSoundness.ts(28,46): error TS2344: Type 'T' does not satisfy the constraint 'not string'.
+  Type 'string | number' is not assignable to type 'not string'.
+    Type 'string' is not assignable to type 'not string'.
+negatedConditionalFalseBranchSoundness.ts(30,50): error TS2344: Type 'T' does not satisfy the constraint 'not string'.
+  Type 'string | number' is not assignable to type 'not string'.
+    Type 'string' is not assignable to type 'not string'.
+negatedConditionalFalseBranchSoundness.ts(32,50): error TS2344: Type 'T' does not satisfy the constraint 'not string'.
+  Type 'string | number' is not assignable to type 'not string'.
+    Type 'string' is not assignable to type 'not string'.
+negatedConditionalFalseBranchSoundness.ts(38,51): error TS2344: Type 'T' does not satisfy the constraint 'not string'.
+  Type 'string | number' is not assignable to type 'not string'.
+    Type 'string' is not assignable to type 'not string'.
+negatedConditionalFalseBranchSoundness.ts(43,54): error TS2344: Type 'T' does not satisfy the constraint 'not string'.
+  Type 'T' is not assignable to type 'not string'.
+    Type 'string | number' is not assignable to type 'not string'.
+      Type 'string' is not assignable to type 'not string'.
+negatedConditionalFalseBranchSoundness.ts(45,60): error TS2344: Type 'T' does not satisfy the constraint 'not { kind: "a"; }'.
+  Type 'T' is not assignable to type 'not { kind: "a"; }'.
+    Type 'Tagged' is not assignable to type 'not { kind: "a"; }'.
+      Type '{ kind: "a"; }' is not assignable to type 'not { kind: "a"; }'.
+negatedConditionalFalseBranchSoundness.ts(47,58): error TS2344: Type 'T' does not satisfy the constraint 'not string'.
+  Type 'string | number' is not assignable to type 'not string'.
+    Type 'string' is not assignable to type 'not string'.
+negatedConditionalFalseBranchSoundness.ts(54,37): error TS2344: Type 'T' does not satisfy the constraint 'not string'.
+  Type 'T' is not assignable to type 'not string'.
+    Type 'string | number' is not assignable to type 'not string'.
+      Type 'string' is not assignable to type 'not string'.
+negatedConditionalFalseBranchSoundness.ts(58,73): error TS2344: Type 'T' does not satisfy the constraint 'not string'.
+  Type 'T' is not assignable to type 'not string'.
+    Type '{}' is not assignable to type 'not string'.
+negatedConditionalFalseBranchSoundness.ts(59,92): error TS2344: Type 'T' does not satisfy the constraint 'not string'.
+  Type 'T' is not assignable to type 'not string'.
+    Type '{ length: number; }' is not assignable to type 'not string'.
+negatedConditionalFalseBranchSoundness.ts(64,82): error TS2344: Type 'T' does not satisfy the constraint 'not undefined'.
+  Type 'T' is not assignable to type 'not undefined'.
+    Type 'void' is not assignable to type 'not undefined'.
+
+
+==== negatedConditionalFalseBranchSoundness.ts (16 errors) ====
+    type NonString<T extends not string> = T;
+    type NonA<T extends not "a"> = T;
+    type NonKindA<T extends not { kind: "a" }> = T;
+    type NonLengthOne<T extends not { length: 1 }> = T;
+    type NonUndefined<T extends not undefined> = T;
+    type NonZero<T extends not 0> = T;
+    
+    // A false subtype check does not imply disjointness, even when distributive.
+    type Unconstrained<T> = T extends string ? never : NonString<T>;
+                                                                 ~
+!!! error TS2344: Type 'T' does not satisfy the constraint 'not string'.
+!!! error TS2344:   Type 'T' is not assignable to type 'not string'.
+!!! related TS2208 negatedConditionalFalseBranchSoundness.ts:9:20: This type parameter might need an `extends not string` constraint.
+    type BroadString<T extends string> = T extends "a" ? never : NonA<T>;
+                                                                      ~
+!!! error TS2344: Type 'T' does not satisfy the constraint 'not "a"'.
+!!! error TS2344:   Type 'T' is not assignable to type 'not "a"'.
+!!! error TS2344:     Type 'string' is not assignable to type 'not "a"'.
+    type Structural<T extends { kind: "a" | "b" }> =
+        T extends { kind: "a" } ? never : NonKindA<T>;
+                                                   ~
+!!! error TS2344: Type 'T' does not satisfy the constraint 'not { kind: "a"; }'.
+!!! error TS2344:   Type 'T' is not assignable to type 'not { kind: "a"; }'.
+!!! error TS2344:     Type '{ kind: "a" | "b"; }' is not assignable to type 'not { kind: "a"; }'.
+    type PrimitiveStructure<T extends string | number> =
+        T extends { length: 1 } ? never : NonLengthOne<T>;
+                                                       ~
+!!! error TS2344: Type 'T' does not satisfy the constraint 'not { length: 1; }'.
+!!! error TS2344:   Type 'T' is not assignable to type 'not { length: 1; }'.
+!!! error TS2344:     Type 'string | number' is not assignable to type 'not { length: 1; }'.
+!!! error TS2344:       Type 'string' is not assignable to type 'not { length: 1; }'.
+    
+    const unknownString: Unconstrained<unknown> = "a";
+    const broadString: BroadString<string> = "a";
+    const structural: Structural<{ kind: "a" | "b" }> = { kind: "a" };
+    const primitiveStructure: PrimitiveStructure<string> = "a";
+    
+    // Even a discriminated-union constraint admits a single object with a union property.
+    type Tagged = { kind: "a" } | { kind: "b" };
+    type Discriminated<T extends Tagged> = T extends { kind: "a" } ? never : NonKindA<T>;
+                                                                                      ~
+!!! error TS2344: Type 'T' does not satisfy the constraint 'not { kind: "a"; }'.
+!!! error TS2344:   Type 'T' is not assignable to type 'not { kind: "a"; }'.
+!!! error TS2344:     Type 'Tagged' is not assignable to type 'not { kind: "a"; }'.
+!!! error TS2344:       Type '{ kind: "a"; }' is not assignable to type 'not { kind: "a"; }'.
+    const discriminated: Discriminated<{ kind: "a" | "b" }> = { kind: "a" };
+    
+    // Non-distributive checks retain the entire union, including matching members.
+    type NonDistributive<T extends string | number> =
+        [T] extends [string] ? never : NonString<T>;
+                                                 ~
+!!! error TS2344: Type 'T' does not satisfy the constraint 'not string'.
+!!! error TS2344:   Type 'string | number' is not assignable to type 'not string'.
+!!! error TS2344:     Type 'string' is not assignable to type 'not string'.
+    type NestedTuple<T extends string | number> =
+        [[T]] extends [[string]] ? never : NonString<T>;
+                                                     ~
+!!! error TS2344: Type 'T' does not satisfy the constraint 'not string'.
+!!! error TS2344:   Type 'string | number' is not assignable to type 'not string'.
+!!! error TS2344:     Type 'string' is not assignable to type 'not string'.
+    type ParenthesizedTuple<T extends string | number> =
+        ([T]) extends ([string]) ? never : NonString<T>;
+                                                     ~
+!!! error TS2344: Type 'T' does not satisfy the constraint 'not string'.
+!!! error TS2344:   Type 'string | number' is not assignable to type 'not string'.
+!!! error TS2344:     Type 'string' is not assignable to type 'not string'.
+    const nonDistributiveString: NonDistributive<string | number> = "a";
+    const nonDistributiveNumber: NonDistributive<string | number> = 1;
+    const nestedTuple: NestedTuple<string | number> = "a";
+    const parenthesizedTuple: ParenthesizedTuple<string | number> = "a";
+    type NoInferCheck<T extends string | number> =
+        NoInfer<T> extends string ? never : NonString<T>;
+                                                      ~
+!!! error TS2344: Type 'T' does not satisfy the constraint 'not string'.
+!!! error TS2344:   Type 'string | number' is not assignable to type 'not string'.
+!!! error TS2344:     Type 'string' is not assignable to type 'not string'.
+    const noInferCheck: NoInferCheck<string | number> = "a";
+    
+    // False-branch infer parameters are out of scope; their upper bounds need not be exact matches.
+    type WithInfer<T extends string | number> =
+        T extends infer U extends string ? U : NonString<T>;
+                                                         ~
+!!! error TS2344: Type 'T' does not satisfy the constraint 'not string'.
+!!! error TS2344:   Type 'T' is not assignable to type 'not string'.
+!!! error TS2344:     Type 'string | number' is not assignable to type 'not string'.
+!!! error TS2344:       Type 'string' is not assignable to type 'not string'.
+    type StructuralInfer<T extends Tagged> =
+        T extends { kind: infer K extends "a" } ? K : NonKindA<T>;
+                                                               ~
+!!! error TS2344: Type 'T' does not satisfy the constraint 'not { kind: "a"; }'.
+!!! error TS2344:   Type 'T' is not assignable to type 'not { kind: "a"; }'.
+!!! error TS2344:     Type 'Tagged' is not assignable to type 'not { kind: "a"; }'.
+!!! error TS2344:       Type '{ kind: "a"; }' is not assignable to type 'not { kind: "a"; }'.
+    type NonDistributiveInfer<T extends string | number> =
+        [T] extends [infer U extends string] ? U : NonString<T>;
+                                                             ~
+!!! error TS2344: Type 'T' does not satisfy the constraint 'not string'.
+!!! error TS2344:   Type 'string | number' is not assignable to type 'not string'.
+!!! error TS2344:     Type 'string' is not assignable to type 'not string'.
+    const withInfer: WithInfer<string | number> = 1;
+    const structuralInfer: StructuralInfer<{ kind: "a" | "b" }> = { kind: "a" };
+    const nonDistributiveInfer: NonDistributiveInfer<string | number> = "a";
+    
+    // A generic extends type may select only part of a primitive domain.
+    type GenericTarget<T extends string | number, U extends string> =
+        T extends U ? never : NonString<T>;
+                                        ~
+!!! error TS2344: Type 'T' does not satisfy the constraint 'not string'.
+!!! error TS2344:   Type 'T' is not assignable to type 'not string'.
+!!! error TS2344:     Type 'string | number' is not assignable to type 'not string'.
+!!! error TS2344:       Type 'string' is not assignable to type 'not string'.
+    const genericTarget: GenericTarget<string, "a"> = "a";
+    
+    // Unknown and structural supertypes can overlap strings without being string subtypes.
+    type TopConstraint<T extends {}> = T extends string ? never : NonString<T>;
+                                                                            ~
+!!! error TS2344: Type 'T' does not satisfy the constraint 'not string'.
+!!! error TS2344:   Type 'T' is not assignable to type 'not string'.
+!!! error TS2344:     Type '{}' is not assignable to type 'not string'.
+    type ObjectConstraint<T extends { length: number }> = T extends string ? never : NonString<T>;
+                                                                                               ~
+!!! error TS2344: Type 'T' does not satisfy the constraint 'not string'.
+!!! error TS2344:   Type 'T' is not assignable to type 'not string'.
+!!! error TS2344:     Type '{ length: number; }' is not assignable to type 'not string'.
+    const topConstraint: TopConstraint<{}> = "a";
+    const objectConstraint: ObjectConstraint<{ length: number }> = "a";
+    
+    // Void also overlaps undefined without extending it.
+    type VoidConstraint<T extends void> = T extends undefined ? never : NonUndefined<T>;
+                                                                                     ~
+!!! error TS2344: Type 'T' does not satisfy the constraint 'not undefined'.
+!!! error TS2344:   Type 'T' is not assignable to type 'not undefined'.
+!!! error TS2344:     Type 'void' is not assignable to type 'not undefined'.
+    const voidConstraint: VoidConstraint<void> = undefined;
+    
+    // Numeric enum constraints admit broad number types, not just their literal members.
+    enum Numeric {
+        A,
+        B,
+    }
+    type EnumConstraint<T extends Numeric> = T extends 0 ? never : NonZero<T>;
+    const enumConstraint: EnumConstraint<number> = 0;
+    

@@ -1,0 +1,185 @@
+//// [tests/cases/compiler/indexMappedTypeWithFilteredKeysWithNegationErrors.ts] ////
+
+=== indexMappedTypeWithFilteredKeysWithNegationErrors.ts ===
+type FilteredFunction<T> = T extends string ? never : () => T;
+>FilteredFunction : FilteredFunction<T>
+
+function makeFunction<T>(): FilteredFunction<T> {
+>makeFunction : <T>() => FilteredFunction<T>
+
+    // When T is string, FilteredFunction<T> is never, but this still returns a function.
+    return () => { throw new Error(); };
+>() => { throw new Error(); } : () => never
+>new Error() : Error
+>Error : ErrorConstructor
+}
+
+const impossibleFunction: never = makeFunction<string>();
+>impossibleFunction : never
+>makeFunction<string>() : never
+>makeFunction : <T>() => FilteredFunction<T>
+
+type FilteredPair<T> = T extends boolean ? never : [T, T];
+>FilteredPair : FilteredPair<T>
+
+function makePair<T>(value: [T & not boolean, T & not boolean]): FilteredPair<T> {
+>makePair : <T>(value: [T & not boolean, T & not boolean]) => FilteredPair<T>
+>value : [T & not false & not true, T & not false & not true]
+
+    // The tuple elements can come from different union members, unlike the distributed FilteredPair<T>.
+    return value;
+>value : [T & not false & not true, T & not false & not true]
+}
+
+const homogeneousPair: [string, string] | [number, number] = makePair<string | number>(["a", 1]);
+>homogeneousPair : [string, string] | [number, number]
+>makePair<string | number>(["a", 1]) : [string, string] | [number, number]
+>makePair : <T>(value: [T & not boolean, T & not boolean]) => FilteredPair<T>
+>["a", 1] : [string, number]
+>"a" : "a"
+>1 : 1
+
+type Omitted<T> = "a" extends T ? never : "b";
+>Omitted : Omitted<T>
+
+type DependentFilter<T> = T extends Omitted<T> ? never : T;
+>DependentFilter : DependentFilter<T>
+
+function dependentFilter<T>(value: T & not Omitted<T>): DependentFilter<T> {
+>dependentFilter : <T>(value: T & not Omitted<T>) => DependentFilter<T>
+>value : T & not Omitted<T>
+
+    // For T = "a" | "b", Omitted<T> is never, so value can be "b", but DependentFilter<T> is "a".
+    return value;
+>value : T & not Omitted<T>
+}
+
+const onlyA: "a" = dependentFilter<"a" | "b">("b");
+>onlyA : "a"
+>dependentFilter<"a" | "b">("b") : "a"
+>dependentFilter : <T>(value: T & not Omitted<T>) => DependentFilter<T>
+>"b" : "b"
+
+type Filter<T, U> = T extends U ? never : T;
+>Filter : Filter<T, U>
+
+function unfiltered<T, U>(value: T): Filter<T, U> {
+>unfiltered : <T, U>(value: T) => Filter<T, U>
+>value : T
+
+    // value can still belong to U, whose members are excluded from Filter<T, U>.
+    return value;
+>value : T
+}
+
+type FilteredKeys<T> = {
+>FilteredKeys : FilteredKeys<T>
+
+    [K in keyof T as K extends "b" ? never : K]: T[K]
+};
+
+function excludedKey<T>(value: keyof T & not "c"): keyof FilteredKeys<T> {
+>excludedKey : <T>(value: keyof T & not "c") => keyof FilteredKeys<T>
+>value : keyof T & not "c"
+
+    // Excluding "c" does not prevent value from being the filtered-out key "b".
+    return value;
+>value : keyof T & not "c"
+}
+
+function unrelatedKey<T>(value: string & not "b"): keyof FilteredKeys<T> {
+>unrelatedKey : <T>(value: string & not "b") => keyof FilteredKeys<T>
+>value : string & not "b"
+
+    // value is not constrained to keyof T and may name a property T does not have.
+    return value;
+>value : string & not "b"
+}
+
+type RemappedKeys<T> = {
+>RemappedKeys : RemappedKeys<T>
+
+    [K in keyof T as ("a" | "b") extends K ? K : never]: T[K]
+};
+
+function remappedKey<T extends { a: unknown; b: unknown }>(
+>remappedKey : <T extends { a: unknown; b: unknown; }>(value: keyof T & not "c") => keyof RemappedKeys<T>
+>a : unknown
+>b : unknown
+
+    value: keyof T & not "c"
+>value : keyof T & not "c"
+
+): keyof RemappedKeys<T> {
+    // For T with just "a" and "b", neither key accepts their union, so no keys survive.
+    return value;
+>value : keyof T & not "c"
+}
+
+type DependentKeys<T> = {
+>DependentKeys : DependentKeys<T>
+
+    [K in keyof T as K extends Omitted<K> ? never : K]: T[K]
+};
+
+function dependentKey<T>(value: keyof T & not Omitted<keyof T>): keyof DependentKeys<T> {
+>dependentKey : <T>(value: keyof T & not Omitted<keyof T>) => keyof DependentKeys<T>
+>value : keyof T & not Omitted<keyof T>
+
+    // For T = { a: number; b: number }, value can be "b", but only "a" survives the per-key filter.
+    return value;
+>value : keyof T & not Omitted<keyof T>
+}
+
+type Repeated<T extends string> = T extends "skip" ? never : `${T}-${T}`;
+>Repeated : Repeated<T>
+
+function repeated<T extends string>(value: `${T & not "skip"}-${T & not "skip"}`): Repeated<T> {
+>repeated : <T extends string>(value: `${T & not "skip"}-${T & not "skip"}`) => Repeated<T>
+>value : `${T & not "skip"}-${T & not "skip"}`
+
+    // value can mix different union members in its two T positions, unlike Repeated<T>.
+    return value;
+>value : `${T & not "skip"}-${T & not "skip"}`
+}
+
+const same: "a-a" | "b-b" = repeated<"a" | "b">("a-b");
+>same : "a-a" | "b-b"
+>repeated<"a" | "b">("a-b") : "a-a" | "b-b"
+>repeated : <T extends string>(value: `${T & not "skip"}-${T & not "skip"}`) => Repeated<T>
+>"a-b" : "a-b"
+
+type Correlated<T> = T extends string ? never : T & { value: T };
+>Correlated : Correlated<T>
+>value : T
+
+function correlated<T>(value: T & not string & { value: T & not string }): Correlated<T> {
+>correlated : <T>(value: T & not string & { value: T & not string; }) => Correlated<T>
+>value : T & not string & { value: T & not string; }
+>value : T & not string
+
+    // The outer T and the value property's T can come from different union members, unlike Correlated<T>.
+    return value;
+>value : T & not string & { value: T & not string; }
+}
+
+function trueFunction<T>(value: () => (string & { value: T })): FilteredFunction<string & { value: T }> {
+>trueFunction : <T>(value: () => (string & { value: T; })) => FilteredFunction<string & { value: T; }>
+>value : () => (string & { value: T; })
+>value : T
+>value : T
+
+    // The check type always extends string, so the result is never, not a function.
+    return value;
+>value : () => (string & { value: T; })
+}
+
+function unionFunction<T>(value: () => ([T] | string)): FilteredFunction<[T] | string> {
+>unionFunction : <T>(value: () => ([T] | string)) => FilteredFunction<[T] | string>
+>value : () => ([T] | string)
+
+    // The string union member is filtered out, so the returned function must return [T], not string.
+    return value;
+>value : () => ([T] | string)
+}
+

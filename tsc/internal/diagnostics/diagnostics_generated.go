@@ -2394,6 +2394,8 @@ var Instantiations_of_the_following_types_appear_infinitely_circular_Colon_0 = &
 
 var Network_path_0_is_not_supported = &Message{code: 5116, category: CategoryError, key: "Network_path_0_is_not_supported_5116", text: "Network path '{0}' is not supported."}
 
+var Conditional_type_constraint_circularly_references_itself = &Message{code: 5117, category: CategoryError, key: "Conditional_type_constraint_circularly_references_itself_5117", text: "Conditional type constraint circularly references itself."}
+
 var Generates_a_sourcemap_for_each_corresponding_d_ts_file = &Message{code: 6000, category: CategoryMessage, key: "Generates_a_sourcemap_for_each_corresponding_d_ts_file_6000", text: "Generates a sourcemap for each corresponding '.d.ts' file."}
 
 var Concatenate_and_emit_output_to_single_file = &Message{code: 6001, category: CategoryMessage, key: "Concatenate_and_emit_output_to_single_file_6001", text: "Concatenate and emit output to single file."}
@@ -5659,6 +5661,7 @@ var allMessages = [...]**Message{
 	&Instantiations_of_type_0_appear_infinitely_circular,
 	&Instantiations_of_the_following_types_appear_infinitely_circular_Colon_0,
 	&Network_path_0_is_not_supported,
+	&Conditional_type_constraint_circularly_references_itself,
 	&Generates_a_sourcemap_for_each_corresponding_d_ts_file,
 	&Concatenate_and_emit_output_to_single_file,
 	&Generates_corresponding_d_ts_file,

@@ -1,0 +1,94 @@
+//// [tests/cases/conformance/types/negated/negatedTypesInConditionalTypesAndInfer.ts] ////
+
+=== negatedTypesInConditionalTypesAndInfer.ts ===
+// Negated types combined with conditional types and `infer`.
+
+// A conditional that tests assignability to a negated type.
+type IsNotString<T> = T extends not string ? true : false;
+>IsNotString : Symbol(IsNotString, Decl(negatedTypesInConditionalTypesAndInfer.ts, 0, 0))
+>T : Symbol(T, Decl(negatedTypesInConditionalTypesAndInfer.ts, 3, 17))
+>T : Symbol(T, Decl(negatedTypesInConditionalTypesAndInfer.ts, 3, 17))
+
+type A1 = IsNotString<number>; // number is not a string -> true
+>A1 : Symbol(A1, Decl(negatedTypesInConditionalTypesAndInfer.ts, 3, 58))
+>IsNotString : Symbol(IsNotString, Decl(negatedTypesInConditionalTypesAndInfer.ts, 0, 0))
+
+type A2 = IsNotString<"hello">; // a string literal -> false
+>A2 : Symbol(A2, Decl(negatedTypesInConditionalTypesAndInfer.ts, 4, 30))
+>IsNotString : Symbol(IsNotString, Decl(negatedTypesInConditionalTypesAndInfer.ts, 0, 0))
+
+type A3 = IsNotString<object>; // an object -> true
+>A3 : Symbol(A3, Decl(negatedTypesInConditionalTypesAndInfer.ts, 5, 31))
+>IsNotString : Symbol(IsNotString, Decl(negatedTypesInConditionalTypesAndInfer.ts, 0, 0))
+
+// Distributive conditional producing negated types in a branch.
+type Branch<T> = T extends string ? T : not T;
+>Branch : Symbol(Branch, Decl(negatedTypesInConditionalTypesAndInfer.ts, 6, 30))
+>T : Symbol(T, Decl(negatedTypesInConditionalTypesAndInfer.ts, 9, 12))
+>T : Symbol(T, Decl(negatedTypesInConditionalTypesAndInfer.ts, 9, 12))
+>T : Symbol(T, Decl(negatedTypesInConditionalTypesAndInfer.ts, 9, 12))
+>T : Symbol(T, Decl(negatedTypesInConditionalTypesAndInfer.ts, 9, 12))
+
+type B1 = Branch<string>;         // string
+>B1 : Symbol(B1, Decl(negatedTypesInConditionalTypesAndInfer.ts, 9, 46))
+>Branch : Symbol(Branch, Decl(negatedTypesInConditionalTypesAndInfer.ts, 6, 30))
+
+type B2 = Branch<number>;         // not number
+>B2 : Symbol(B2, Decl(negatedTypesInConditionalTypesAndInfer.ts, 10, 25))
+>Branch : Symbol(Branch, Decl(negatedTypesInConditionalTypesAndInfer.ts, 6, 30))
+
+type B3 = Branch<string | number>; // distributes: string | not number
+>B3 : Symbol(B3, Decl(negatedTypesInConditionalTypesAndInfer.ts, 11, 25))
+>Branch : Symbol(Branch, Decl(negatedTypesInConditionalTypesAndInfer.ts, 6, 30))
+
+// `infer` underneath the `not` operator.
+type InferUnderNot<T> = T extends not (infer U) ? U : never;
+>InferUnderNot : Symbol(InferUnderNot, Decl(negatedTypesInConditionalTypesAndInfer.ts, 12, 34))
+>T : Symbol(T, Decl(negatedTypesInConditionalTypesAndInfer.ts, 15, 19))
+>T : Symbol(T, Decl(negatedTypesInConditionalTypesAndInfer.ts, 15, 19))
+>U : Symbol(U, Decl(negatedTypesInConditionalTypesAndInfer.ts, 15, 44))
+>U : Symbol(U, Decl(negatedTypesInConditionalTypesAndInfer.ts, 15, 44))
+
+type C1 = InferUnderNot<not string>; // infer binds U = string
+>C1 : Symbol(C1, Decl(negatedTypesInConditionalTypesAndInfer.ts, 15, 60))
+>InferUnderNot : Symbol(InferUnderNot, Decl(negatedTypesInConditionalTypesAndInfer.ts, 12, 34))
+
+type C2 = InferUnderNot<number>;     // number is not a negated type -> false branch -> never
+>C2 : Symbol(C2, Decl(negatedTypesInConditionalTypesAndInfer.ts, 16, 36))
+>InferUnderNot : Symbol(InferUnderNot, Decl(negatedTypesInConditionalTypesAndInfer.ts, 12, 34))
+
+// `infer` capturing a negated type.
+type InferNegated<T> = T extends Box<infer U> ? U : never;
+>InferNegated : Symbol(InferNegated, Decl(negatedTypesInConditionalTypesAndInfer.ts, 17, 32))
+>T : Symbol(T, Decl(negatedTypesInConditionalTypesAndInfer.ts, 20, 18))
+>T : Symbol(T, Decl(negatedTypesInConditionalTypesAndInfer.ts, 20, 18))
+>Box : Symbol(Box, Decl(negatedTypesInConditionalTypesAndInfer.ts, 20, 58))
+>U : Symbol(U, Decl(negatedTypesInConditionalTypesAndInfer.ts, 20, 42))
+>U : Symbol(U, Decl(negatedTypesInConditionalTypesAndInfer.ts, 20, 42))
+
+interface Box<T> { value: T; }
+>Box : Symbol(Box, Decl(negatedTypesInConditionalTypesAndInfer.ts, 20, 58))
+>T : Symbol(T, Decl(negatedTypesInConditionalTypesAndInfer.ts, 21, 14))
+>value : Symbol(Box.value, Decl(negatedTypesInConditionalTypesAndInfer.ts, 21, 18))
+>T : Symbol(T, Decl(negatedTypesInConditionalTypesAndInfer.ts, 21, 14))
+
+type D1 = InferNegated<Box<not string>>; // U should be not string
+>D1 : Symbol(D1, Decl(negatedTypesInConditionalTypesAndInfer.ts, 21, 30))
+>InferNegated : Symbol(InferNegated, Decl(negatedTypesInConditionalTypesAndInfer.ts, 17, 32))
+>Box : Symbol(Box, Decl(negatedTypesInConditionalTypesAndInfer.ts, 20, 58))
+
+// Conditional constraint using not.
+type NonNullish<T> = T extends not (null | undefined) ? T : never;
+>NonNullish : Symbol(NonNullish, Decl(negatedTypesInConditionalTypesAndInfer.ts, 22, 40))
+>T : Symbol(T, Decl(negatedTypesInConditionalTypesAndInfer.ts, 25, 16))
+>T : Symbol(T, Decl(negatedTypesInConditionalTypesAndInfer.ts, 25, 16))
+>T : Symbol(T, Decl(negatedTypesInConditionalTypesAndInfer.ts, 25, 16))
+
+type E1 = NonNullish<string | null>; // distributes to string
+>E1 : Symbol(E1, Decl(negatedTypesInConditionalTypesAndInfer.ts, 25, 66))
+>NonNullish : Symbol(NonNullish, Decl(negatedTypesInConditionalTypesAndInfer.ts, 22, 40))
+
+type E2 = NonNullish<null>;          // never
+>E2 : Symbol(E2, Decl(negatedTypesInConditionalTypesAndInfer.ts, 26, 36))
+>NonNullish : Symbol(NonNullish, Decl(negatedTypesInConditionalTypesAndInfer.ts, 22, 40))
+

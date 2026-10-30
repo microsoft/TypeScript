@@ -1,0 +1,365 @@
+//// [tests/cases/compiler/negatedComplementFlowNormalization.ts] ////
+
+=== negatedComplementFlowNormalization.ts ===
+type Full = string | not string;
+>Full : unknown
+
+declare const numericCase: number;
+>numericCase : number
+
+declare const objectCase: { value: string };
+>objectCase : { value: string; }
+>value : string
+
+declare function isFull(value: unknown): value is Full;
+>isFull : (value: unknown) => value is Full
+>value : unknown
+
+declare function assertFull(value: unknown): asserts value is Full;
+>assertFull : (value: unknown) => asserts value is Full
+>value : unknown
+
+declare function assertCondition(value: unknown): asserts value;
+>assertCondition : (value: unknown) => asserts value
+>value : unknown
+
+function complementFlow(value: Full, condition: boolean) {
+>complementFlow : (value: Full, condition: boolean) => void
+>value : unknown
+>condition : boolean
+
+    switch (value) {
+>value : unknown
+
+        case numericCase:
+>numericCase : number
+
+            const numeric: number = value;
+>numeric : number
+>value : number
+
+            break;
+        case objectCase:
+>objectCase : { value: string; }
+
+            const objectValue: object = value;
+>objectValue : object
+>value : object
+
+            break;
+    }
+    if (value) {
+>value : unknown
+
+        const nonNull: {} = value;
+>nonNull : {}
+>value : {}
+    }
+    if (typeof value === "string") {
+>typeof value === "string" : boolean
+>typeof value : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
+>value : unknown
+>"string" : "string"
+
+        const text: string = value;
+>text : string
+>value : string
+    }
+    if (typeof value === "object" && value !== null && "value" in value) {
+>typeof value === "object" && value !== null && "value" in value : boolean
+>typeof value === "object" && value !== null : boolean
+>typeof value === "object" : boolean
+>typeof value : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
+>value : unknown
+>"object" : "object"
+>value !== null : boolean
+>value : object | null
+>"value" in value : boolean
+>"value" : "value"
+>value : object
+
+        const member: unknown = value.value;
+>member : unknown
+>value.value : unknown
+>value : object & Record<"value", unknown>
+>value : unknown
+    }
+    value = 42;
+>value = 42 : 42
+>value : unknown
+>42 : 42
+
+    // Error: An exhaustive complement behaves like unknown after assignment.
+    const assigned: number = value;
+>assigned : number
+>value : unknown
+
+    if (condition) {
+>condition : boolean
+
+        value = "42";
+>value = "42" : "42"
+>value : unknown
+>"42" : "42"
+    }
+    // Error: Joining assignments must retain unknown.
+    const joined: string | number = value;
+>joined : string | number
+>value : unknown
+
+    while (condition) {
+>condition : boolean
+
+        value = condition ? "42" : 42;
+>value = condition ? "42" : 42 : "42" | 42
+>value : unknown
+>condition ? "42" : 42 : "42" | 42
+>condition : true
+>"42" : "42"
+>42 : 42
+
+        condition = false;
+>condition = false : false
+>condition : boolean
+>false : false
+    }
+    // Error: The loop result must also retain unknown.
+    const looped: string | number = value;
+>looped : string | number
+>value : unknown
+}
+
+function unknownFlow(value: unknown, condition: boolean) {
+>unknownFlow : (value: unknown, condition: boolean) => void
+>value : unknown
+>condition : boolean
+
+    switch (value) {
+>value : unknown
+
+        case numericCase:
+>numericCase : number
+
+            const numeric: number = value;
+>numeric : number
+>value : number
+
+            break;
+        case objectCase:
+>objectCase : { value: string; }
+
+            const objectValue: object = value;
+>objectValue : object
+>value : object
+
+            break;
+    }
+    if (value) {
+>value : unknown
+
+        const nonNull: {} = value;
+>nonNull : {}
+>value : {}
+    }
+    if (typeof value === "string") {
+>typeof value === "string" : boolean
+>typeof value : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
+>value : unknown
+>"string" : "string"
+
+        const text: string = value;
+>text : string
+>value : string
+    }
+    if (typeof value === "object" && value !== null && "value" in value) {
+>typeof value === "object" && value !== null && "value" in value : boolean
+>typeof value === "object" && value !== null : boolean
+>typeof value === "object" : boolean
+>typeof value : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
+>value : unknown
+>"object" : "object"
+>value !== null : boolean
+>value : object | null
+>"value" in value : boolean
+>"value" : "value"
+>value : object
+
+        const member: unknown = value.value;
+>member : unknown
+>value.value : unknown
+>value : object & Record<"value", unknown>
+>value : unknown
+    }
+    value = 42;
+>value = 42 : 42
+>value : unknown
+>42 : 42
+
+    // Error: Unknown is not assignment-narrowed.
+    const assigned: number = value;
+>assigned : number
+>value : unknown
+
+    if (condition) {
+>condition : boolean
+
+        value = "42";
+>value = "42" : "42"
+>value : unknown
+>"42" : "42"
+    }
+    // Error: Joining assignments must retain unknown.
+    const joined: string | number = value;
+>joined : string | number
+>value : unknown
+
+    while (condition) {
+>condition : boolean
+
+        value = condition ? "42" : 42;
+>value = condition ? "42" : 42 : "42" | 42
+>value : unknown
+>condition ? "42" : 42 : "42" | 42
+>condition : true
+>"42" : "42"
+>42 : 42
+
+        condition = false;
+>condition = false : false
+>condition : boolean
+>false : false
+    }
+    // Error: The loop result must also retain unknown.
+    const looped: string | number = value;
+>looped : string | number
+>value : unknown
+}
+
+function predicateFlow(value: unknown) {
+>predicateFlow : (value: unknown) => void
+>value : unknown
+
+    if (isFull(value)) {
+>isFull(value) : boolean
+>isFull : (value: unknown) => value is Full
+>value : unknown
+
+        switch (value) {
+>value : unknown
+
+            case objectCase:
+>objectCase : { value: string; }
+
+                const objectValue: object = value;
+>objectValue : object
+>value : object
+
+                break;
+        }
+    }
+}
+
+function assertionFlow(value: unknown) {
+>assertionFlow : (value: unknown) => void
+>value : unknown
+
+    assertFull(value);
+>assertFull(value) : void
+>assertFull : (value: unknown) => asserts value is Full
+>value : unknown
+
+    switch (value) {
+>value : unknown
+
+        case objectCase:
+>objectCase : { value: string; }
+
+            const objectValue: object = value;
+>objectValue : object
+>value : object
+
+            break;
+    }
+    assertCondition(value == 42);
+>assertCondition(value == 42) : void
+>assertCondition : (value: unknown) => asserts value
+>value == 42 : boolean
+>value : unknown
+>42 : 42
+
+    if (typeof value === "string") {
+>typeof value === "string" : boolean
+>typeof value : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
+>value : unknown
+>"string" : "string"
+
+        // Error: Assertion narrowing must preserve the reachable string branch.
+        const impossible: never = value;
+>impossible : never
+>value : string
+    }
+}
+
+function compoundAssertionFlow(value: unknown) {
+>compoundAssertionFlow : (value: unknown) => void
+>value : unknown
+
+    assertCondition(isFull(value) && value == 42 && typeof value === "string");
+>assertCondition(isFull(value) && value == 42 && typeof value === "string") : void
+>assertCondition : (value: unknown) => asserts value
+>isFull(value) && value == 42 && typeof value === "string" : boolean
+>isFull(value) && value == 42 : boolean
+>isFull(value) : boolean
+>isFull : (value: unknown) => value is Full
+>value : unknown
+>value == 42 : boolean
+>value : unknown
+>42 : 42
+>typeof value === "string" : boolean
+>typeof value : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
+>value : unknown
+>"string" : "string"
+
+    const text: string = value;
+>text : string
+>value : string
+
+    // Error: Narrowing steps within one assertion must also preserve strings.
+    const impossible: never = value;
+>impossible : never
+>value : string
+}
+
+function evolvingArray(condition: boolean) {
+>evolvingArray : (condition: boolean) => (string | number)[]
+>condition : boolean
+
+    const values = [];
+>values : any[]
+>[] : never[]
+
+    if (condition) {
+>condition : boolean
+
+        values.push(42);
+>values.push(42) : number
+>values.push : (...items: any[]) => number
+>values : any[]
+>push : (...items: any[]) => number
+>42 : 42
+
+    } else {
+        values.push("42");
+>values.push("42") : number
+>values.push : (...items: any[]) => number
+>values : any[]
+>push : (...items: any[]) => number
+>"42" : "42"
+    }
+    const result: (string | number)[] = values;
+>result : (string | number)[]
+>values : (string | number)[]
+
+    return result;
+>result : (string | number)[]
+}

@@ -1,0 +1,85 @@
+//// [tests/cases/conformance/types/negated/negatedNarrowingAssertion.ts] ////
+
+=== negatedNarrowingAssertion.ts ===
+// Assertion signatures narrow only the (single) continuation after the call. Because there is no
+// `false` branch, no fresh CFA negation is introduced; a negation only appears when the assertion
+// predicate itself is written with `not`.
+
+interface Cat {
+    meow(): void;
+>meow : () => void
+}
+
+declare function assertCat(x: unknown): asserts x is Cat;
+>assertCat : (x: unknown) => asserts x is Cat
+>x : unknown
+
+declare function assertNotCat(x: unknown): asserts x is not Cat;
+>assertNotCat : (x: unknown) => asserts x is not Cat
+>x : unknown
+
+declare function assertDefined<T>(x: T): asserts x is NonNullable<T>;
+>assertDefined : <T>(x: T) => asserts x is NonNullable<T>
+>x : T
+
+declare function assertTruthy(x: unknown): asserts x;
+>assertTruthy : (x: unknown) => asserts x
+>x : unknown
+
+declare function wantsNotCat(x: not Cat): void;
+>wantsNotCat : (x: not Cat) => void
+>x : not Cat
+
+// `asserts x is Cat` narrows to Cat.
+declare const a: {};
+>a : {}
+
+assertCat(a);
+>assertCat(a) : void
+>assertCat : (x: unknown) => asserts x is Cat
+>a : {}
+
+a; // {} & Cat
+>a : Cat
+
+// `asserts x is not Cat` narrows to `not Cat` (the negation comes from the annotation).
+declare const b: {};
+>b : {}
+
+assertNotCat(b);
+>assertNotCat(b) : void
+>assertNotCat : (x: unknown) => asserts x is not Cat
+>b : {}
+
+b; // {} & not Cat
+>b : {} & not Cat
+
+wantsNotCat(b);
+>wantsNotCat(b) : void
+>wantsNotCat : (x: not Cat) => void
+>b : {} & not Cat
+
+// `asserts x is NonNullable<T>` removes null/undefined without introducing a negation.
+declare const c: string | undefined;
+>c : string | undefined
+
+assertDefined(c);
+>assertDefined(c) : void
+>assertDefined : <T>(x: T) => asserts x is NonNullable<T>
+>c : string | undefined
+
+c; // string
+>c : string
+
+// `asserts x` (truthiness assertion) removes falsy constituents, no negation.
+declare const d: {} | undefined | 0;
+>d : 0 | {} | undefined
+
+assertTruthy(d);
+>assertTruthy(d) : void
+>assertTruthy : (x: unknown) => asserts x
+>d : 0 | {} | undefined
+
+d; // {}
+>d : {}
+

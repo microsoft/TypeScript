@@ -1,0 +1,264 @@
+//// [tests/cases/compiler/negatedTypeSmokePreservation.ts] ////
+
+=== negatedTypeSmokePreservation.ts ===
+export function repeatedComparison(value: string) {
+>repeatedComparison : Symbol(repeatedComparison, Decl(negatedTypeSmokePreservation.ts, 0, 0))
+>value : Symbol(value, Decl(negatedTypeSmokePreservation.ts, 0, 35))
+
+    if (value === "first") return 1;
+>value : Symbol(value, Decl(negatedTypeSmokePreservation.ts, 0, 35))
+
+    if (value === "first") return 2;
+>value : Symbol(value, Decl(negatedTypeSmokePreservation.ts, 0, 35))
+
+    return 3;
+}
+
+export function repeatedTypeof(value: { text: unknown }) {
+>repeatedTypeof : Symbol(repeatedTypeof, Decl(negatedTypeSmokePreservation.ts, 4, 1))
+>value : Symbol(value, Decl(negatedTypeSmokePreservation.ts, 6, 31))
+>text : Symbol(text, Decl(negatedTypeSmokePreservation.ts, 6, 39))
+
+    if (typeof value.text === "string") return value.text.trim();
+>value.text : Symbol(text, Decl(negatedTypeSmokePreservation.ts, 6, 39))
+>value : Symbol(value, Decl(negatedTypeSmokePreservation.ts, 6, 31))
+>text : Symbol(text, Decl(negatedTypeSmokePreservation.ts, 6, 39))
+>value.text.trim : Symbol(String.trim, Decl(lib.es5.d.ts, --, --))
+>value.text : Symbol(text, Decl(negatedTypeSmokePreservation.ts, 6, 39))
+>value : Symbol(value, Decl(negatedTypeSmokePreservation.ts, 6, 31))
+>text : Symbol(text, Decl(negatedTypeSmokePreservation.ts, 6, 39))
+>trim : Symbol(String.trim, Decl(lib.es5.d.ts, --, --))
+
+    if (typeof value.text === "string") return value.text.trim();
+>value.text : Symbol(text, Decl(negatedTypeSmokePreservation.ts, 6, 39))
+>value : Symbol(value, Decl(negatedTypeSmokePreservation.ts, 6, 31))
+>text : Symbol(text, Decl(negatedTypeSmokePreservation.ts, 6, 39))
+>value.text : Symbol(text, Decl(negatedTypeSmokePreservation.ts, 6, 39))
+>value : Symbol(value, Decl(negatedTypeSmokePreservation.ts, 6, 31))
+>text : Symbol(text, Decl(negatedTypeSmokePreservation.ts, 6, 39))
+
+    return "";
+}
+
+export function repeatedCase(value: number) {
+>repeatedCase : Symbol(repeatedCase, Decl(negatedTypeSmokePreservation.ts, 10, 1))
+>value : Symbol(value, Decl(negatedTypeSmokePreservation.ts, 12, 29))
+
+    if (value === 25) return;
+>value : Symbol(value, Decl(negatedTypeSmokePreservation.ts, 12, 29))
+
+    switch (value) {
+>value : Symbol(value, Decl(negatedTypeSmokePreservation.ts, 12, 29))
+
+        case 25: return;
+    }
+}
+
+export function numericToken(value: number) {
+>numericToken : Symbol(numericToken, Decl(negatedTypeSmokePreservation.ts, 17, 1))
+>value : Symbol(value, Decl(negatedTypeSmokePreservation.ts, 19, 29))
+
+    if (value === 0) return value;
+>value : Symbol(value, Decl(negatedTypeSmokePreservation.ts, 19, 29))
+>value : Symbol(value, Decl(negatedTypeSmokePreservation.ts, 19, 29))
+
+    if (value === 1 || value === 2) {
+>value : Symbol(value, Decl(negatedTypeSmokePreservation.ts, 19, 29))
+>value : Symbol(value, Decl(negatedTypeSmokePreservation.ts, 19, 29))
+
+        let copy = value;
+>copy : Symbol(copy, Decl(negatedTypeSmokePreservation.ts, 22, 11))
+>value : Symbol(value, Decl(negatedTypeSmokePreservation.ts, 19, 29))
+
+        copy = 3;
+>copy : Symbol(copy, Decl(negatedTypeSmokePreservation.ts, 22, 11))
+
+        return copy;
+>copy : Symbol(copy, Decl(negatedTypeSmokePreservation.ts, 22, 11))
+    }
+    return value;
+>value : Symbol(value, Decl(negatedTypeSmokePreservation.ts, 19, 29))
+}
+
+export function bigintToken(value: bigint) {
+>bigintToken : Symbol(bigintToken, Decl(negatedTypeSmokePreservation.ts, 27, 1))
+>value : Symbol(value, Decl(negatedTypeSmokePreservation.ts, 29, 28))
+
+    if (value === 0n) return value;
+>value : Symbol(value, Decl(negatedTypeSmokePreservation.ts, 29, 28))
+>value : Symbol(value, Decl(negatedTypeSmokePreservation.ts, 29, 28))
+
+    if (value === 1n || value === 2n) {
+>value : Symbol(value, Decl(negatedTypeSmokePreservation.ts, 29, 28))
+>value : Symbol(value, Decl(negatedTypeSmokePreservation.ts, 29, 28))
+
+        let copy = value;
+>copy : Symbol(copy, Decl(negatedTypeSmokePreservation.ts, 32, 11))
+>value : Symbol(value, Decl(negatedTypeSmokePreservation.ts, 29, 28))
+
+        copy = 3n;
+>copy : Symbol(copy, Decl(negatedTypeSmokePreservation.ts, 32, 11))
+
+        return copy;
+>copy : Symbol(copy, Decl(negatedTypeSmokePreservation.ts, 32, 11))
+    }
+    return value;
+>value : Symbol(value, Decl(negatedTypeSmokePreservation.ts, 29, 28))
+}
+
+export function declaredLiteral(value: "first" | "second" | "third") {
+>declaredLiteral : Symbol(declaredLiteral, Decl(negatedTypeSmokePreservation.ts, 37, 1))
+>value : Symbol(value, Decl(negatedTypeSmokePreservation.ts, 39, 32))
+
+    if (value === "first") return;
+>value : Symbol(value, Decl(negatedTypeSmokePreservation.ts, 39, 32))
+
+    let copy = value;
+>copy : Symbol(copy, Decl(negatedTypeSmokePreservation.ts, 41, 7))
+>value : Symbol(value, Decl(negatedTypeSmokePreservation.ts, 39, 32))
+
+    copy = "fourth";
+>copy : Symbol(copy, Decl(negatedTypeSmokePreservation.ts, 41, 7))
+
+    return copy;
+>copy : Symbol(copy, Decl(negatedTypeSmokePreservation.ts, 41, 7))
+}
+
+export function explicitBounds(value: not string) {
+>explicitBounds : Symbol(explicitBounds, Decl(negatedTypeSmokePreservation.ts, 44, 1))
+>value : Symbol(value, Decl(negatedTypeSmokePreservation.ts, 46, 31))
+
+    if (value === null) {
+>value : Symbol(value, Decl(negatedTypeSmokePreservation.ts, 46, 31))
+
+        const result: null = value;
+>result : Symbol(result, Decl(negatedTypeSmokePreservation.ts, 48, 13))
+>value : Symbol(value, Decl(negatedTypeSmokePreservation.ts, 46, 31))
+
+        return result;
+>result : Symbol(result, Decl(negatedTypeSmokePreservation.ts, 48, 13))
+    }
+    if (value === undefined) {
+>value : Symbol(value, Decl(negatedTypeSmokePreservation.ts, 46, 31))
+>undefined : Symbol(undefined)
+
+        const result: undefined = value;
+>result : Symbol(result, Decl(negatedTypeSmokePreservation.ts, 52, 13))
+>value : Symbol(value, Decl(negatedTypeSmokePreservation.ts, 46, 31))
+
+        return result;
+>result : Symbol(result, Decl(negatedTypeSmokePreservation.ts, 52, 13))
+    }
+    if (typeof value === "string") {
+>value : Symbol(value, Decl(negatedTypeSmokePreservation.ts, 46, 31))
+
+        const result: never = value;
+>result : Symbol(result, Decl(negatedTypeSmokePreservation.ts, 56, 13))
+>value : Symbol(value, Decl(negatedTypeSmokePreservation.ts, 46, 31))
+
+        return result;
+>result : Symbol(result, Decl(negatedTypeSmokePreservation.ts, 56, 13))
+    }
+    return value;
+>value : Symbol(value, Decl(negatedTypeSmokePreservation.ts, 46, 31))
+}
+
+export function symbolValue(value: unknown): symbol | undefined {
+>symbolValue : Symbol(symbolValue, Decl(negatedTypeSmokePreservation.ts, 60, 1))
+>value : Symbol(value, Decl(negatedTypeSmokePreservation.ts, 62, 28))
+
+    if (typeof value === "boolean" || typeof value === "number") return;
+>value : Symbol(value, Decl(negatedTypeSmokePreservation.ts, 62, 28))
+>value : Symbol(value, Decl(negatedTypeSmokePreservation.ts, 62, 28))
+
+    if (typeof value === "symbol") return value;
+>value : Symbol(value, Decl(negatedTypeSmokePreservation.ts, 62, 28))
+>value : Symbol(value, Decl(negatedTypeSmokePreservation.ts, 62, 28))
+}
+
+export function permission(input: { mode: unknown }): { mode?: "read" | "write" } {
+>permission : Symbol(permission, Decl(negatedTypeSmokePreservation.ts, 65, 1))
+>input : Symbol(input, Decl(negatedTypeSmokePreservation.ts, 67, 27))
+>mode : Symbol(mode, Decl(negatedTypeSmokePreservation.ts, 67, 35))
+>mode : Symbol(mode, Decl(negatedTypeSmokePreservation.ts, 67, 55))
+
+    const mode = input.mode;
+>mode : Symbol(mode, Decl(negatedTypeSmokePreservation.ts, 68, 9))
+>input.mode : Symbol(mode, Decl(negatedTypeSmokePreservation.ts, 67, 35))
+>input : Symbol(input, Decl(negatedTypeSmokePreservation.ts, 67, 27))
+>mode : Symbol(mode, Decl(negatedTypeSmokePreservation.ts, 67, 35))
+
+    if (mode !== undefined && mode !== "read" && mode !== "write") throw new Error();
+>mode : Symbol(mode, Decl(negatedTypeSmokePreservation.ts, 68, 9))
+>undefined : Symbol(undefined)
+>mode : Symbol(mode, Decl(negatedTypeSmokePreservation.ts, 68, 9))
+>mode : Symbol(mode, Decl(negatedTypeSmokePreservation.ts, 68, 9))
+>Error : Symbol(Error, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2022.error.d.ts, --, --))
+
+    return mode === undefined ? {} : { mode };
+>mode : Symbol(mode, Decl(negatedTypeSmokePreservation.ts, 68, 9))
+>undefined : Symbol(undefined)
+>mode : Symbol(mode, Decl(negatedTypeSmokePreservation.ts, 70, 38))
+}
+
+export function release(input: { asset: unknown }) {
+>release : Symbol(release, Decl(negatedTypeSmokePreservation.ts, 71, 1))
+>input : Symbol(input, Decl(negatedTypeSmokePreservation.ts, 73, 24))
+>asset : Symbol(asset, Decl(negatedTypeSmokePreservation.ts, 73, 32))
+
+    return (typeof input.asset === "string" || input.asset === null) &&
+>input.asset : Symbol(asset, Decl(negatedTypeSmokePreservation.ts, 73, 32))
+>input : Symbol(input, Decl(negatedTypeSmokePreservation.ts, 73, 24))
+>asset : Symbol(asset, Decl(negatedTypeSmokePreservation.ts, 73, 32))
+>input.asset : Symbol(asset, Decl(negatedTypeSmokePreservation.ts, 73, 32))
+>input : Symbol(input, Decl(negatedTypeSmokePreservation.ts, 73, 24))
+>asset : Symbol(asset, Decl(negatedTypeSmokePreservation.ts, 73, 32))
+
+        (input.asset === null || /^asset/.test(input.asset));
+>input.asset : Symbol(asset, Decl(negatedTypeSmokePreservation.ts, 73, 32))
+>input : Symbol(input, Decl(negatedTypeSmokePreservation.ts, 73, 24))
+>asset : Symbol(asset, Decl(negatedTypeSmokePreservation.ts, 73, 32))
+>/^asset/.test : Symbol(RegExp.test, Decl(lib.es5.d.ts, --, --))
+>test : Symbol(RegExp.test, Decl(lib.es5.d.ts, --, --))
+>input.asset : Symbol(asset, Decl(negatedTypeSmokePreservation.ts, 73, 32))
+>input : Symbol(input, Decl(negatedTypeSmokePreservation.ts, 73, 24))
+>asset : Symbol(asset, Decl(negatedTypeSmokePreservation.ts, 73, 32))
+}
+
+export function notString(value: unknown) {
+>notString : Symbol(notString, Decl(negatedTypeSmokePreservation.ts, 76, 1))
+>value : Symbol(value, Decl(negatedTypeSmokePreservation.ts, 78, 26))
+
+    return typeof value !== "string";
+>value : Symbol(value, Decl(negatedTypeSmokePreservation.ts, 78, 26))
+}
+
+export function inferredContainer(value: unknown) {
+>inferredContainer : Symbol(inferredContainer, Decl(negatedTypeSmokePreservation.ts, 80, 1))
+>value : Symbol(value, Decl(negatedTypeSmokePreservation.ts, 82, 34))
+
+    if (typeof value === "string") return undefined;
+>value : Symbol(value, Decl(negatedTypeSmokePreservation.ts, 82, 34))
+>undefined : Symbol(undefined)
+
+    return { value, values: [value] };
+>value : Symbol(value, Decl(negatedTypeSmokePreservation.ts, 84, 12))
+>values : Symbol(values, Decl(negatedTypeSmokePreservation.ts, 84, 19))
+>value : Symbol(value, Decl(negatedTypeSmokePreservation.ts, 82, 34))
+}
+
+export function matchingLiteral(value: unknown): "read" | "write" {
+>matchingLiteral : Symbol(matchingLiteral, Decl(negatedTypeSmokePreservation.ts, 85, 1))
+>value : Symbol(value, Decl(negatedTypeSmokePreservation.ts, 87, 32))
+
+    if (typeof value === "undefined") return "read";
+>value : Symbol(value, Decl(negatedTypeSmokePreservation.ts, 87, 32))
+
+    if (value === "read" || value === "write") return value;
+>value : Symbol(value, Decl(negatedTypeSmokePreservation.ts, 87, 32))
+>value : Symbol(value, Decl(negatedTypeSmokePreservation.ts, 87, 32))
+>value : Symbol(value, Decl(negatedTypeSmokePreservation.ts, 87, 32))
+
+    throw new Error();
+>Error : Symbol(Error, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2022.error.d.ts, --, --))
+}

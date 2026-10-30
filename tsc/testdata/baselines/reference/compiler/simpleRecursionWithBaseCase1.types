@@ -18,7 +18,7 @@ function fn1(n: number) {
 >fn1(n - 1) : number
 >fn1 : (n: number) => number
 >n - 1 : number
->n : number
+>n : number & not 0
 >1 : 1
     }
 }
