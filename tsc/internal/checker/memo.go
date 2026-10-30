@@ -356,12 +356,19 @@ func (c *Checker) memoCompute[T comparable](m *memo[T], compute func() T) T {
 // entries are only accessible through methods. Memo state is kept per entry
 // in a side map allocated on first use by a query.
 //
+// Most maps never need anything but their entries, and many are embedded in
+// types, so everything else lives in a side table allocated on first use.
+//
 // An entry should be computed between enter and endMemo, so that reusing it
 // replays the effects of computing that entry alone. An entry set outside its
 // own computation depends on the whole enclosing computation instead.
 type memoMap[K comparable, V any] struct {
-	_             memoNoCopy
-	memoEntries   map[K]V
+	_           memoNoCopy
+	memoEntries map[K]V
+	side        *memoMapSide[K]
+}
+
+type memoMapSide[K comparable] struct {
 	memoStates    map[K]*memoState
 	resolvingKeys []K // Keys of computations in progress without a memo state yet
 	// If set, keyBits returns well-mixed bits of a key, with which stateKeys
@@ -371,25 +378,47 @@ type memoMap[K comparable, V any] struct {
 	stateKeys []uint64
 }
 
+func (m *memoMap[K, V]) sideTable() *memoMapSide[K] {
+	if m.side == nil {
+		m.side = &memoMapSide[K]{}
+	}
+	return m.side
+}
+
+// setKeyBits makes the map filter the keys that may have a memo state with
+// keyBits; see memoMapSide.
+func (m *memoMap[K, V]) setKeyBits(keyBits func(K) uint64) {
+	m.sideTable().keyBits = keyBits
+}
+
+// states returns the memo states of the entries, or nil.
+func (m *memoMap[K, V]) states() map[K]*memoState {
+	if m.side == nil {
+		return nil
+	}
+	return m.side.memoStates
+}
+
 const memoMapStateFilterBits = 20
 
 // stateOf returns the memo state of the entry for k, or nil.
 func (m *memoMap[K, V]) stateOf(k K) *memoState {
-	if m.memoStates == nil {
+	s := m.side
+	if s == nil || s.memoStates == nil {
 		return nil
 	}
-	if m.keyBits != nil {
-		if i := m.keyBits(k) >> (64 - memoMapStateFilterBits); m.stateKeys[i/64]&(1<<(i%64)) == 0 {
+	if s.keyBits != nil {
+		if i := s.keyBits(k) >> (64 - memoMapStateFilterBits); s.stateKeys[i/64]&(1<<(i%64)) == 0 {
 			return nil
 		}
 	}
-	return m.memoStates[k]
+	return s.memoStates[k]
 }
 
 // get returns the cached result for k, accounting for the effects of
 // computing it.
 func (m *memoMap[K, V]) get(c *Checker, k K) (V, bool) {
-	if (m.memoStates != nil || len(m.resolvingKeys) != 0) && c.observing() {
+	if m.side != nil && c.observing() {
 		m.observe(c, k)
 	}
 	v, ok := m.memoEntries[k]
@@ -407,6 +436,9 @@ func (m *memoMap[K, V]) peek(k K) (V, bool) {
 //
 //go:noinline
 func (m *memoMap[K, V]) observe(c *Checker, k K) {
+	if m.side.memoStates == nil && len(m.side.resolvingKeys) == 0 {
+		return
+	}
 	// A computation in progress may not have a memo state yet; see
 	// resolutionState.
 	if state := m.stateOf(k); c.observeState(state) || state == nil && !c.checking {
@@ -448,14 +480,14 @@ func (m *memoMap[K, V]) set(c *Checker, k K, v V) {
 //go:noinline
 func (m *memoMap[K, V]) logDiscard(c *Checker, k K) {
 	old, ok := m.memoEntries[k]
-	oldCount := savedCountOf(m.memoStates, k)
+	oldCount := savedCountOf(m.states(), k)
 	c.discardLog = append(c.discardLog, discardEntry{nil, func() {
 		if ok {
 			m.memoEntries[k] = old
 		} else {
 			delete(m.memoEntries, k)
 		}
-		restoreCount(m.memoStates, k, oldCount)
+		restoreCount(m.states(), k, oldCount)
 	}, false})
 }
 
@@ -504,7 +536,7 @@ func (m *memoMap[K, V]) attach(c *Checker, k K) {
 	if c.memoTop == 0 || c.checking {
 		return
 	}
-	if f := &c.resolutions[c.memoTop-1]; f.source == memoStateSource(m) && m.resolvingKeys[f.index] == k {
+	if f := &c.resolutions[c.memoTop-1]; f.source == memoStateSource(m) && m.side.resolvingKeys[f.index] == k {
 		return
 	}
 	c.attachState(m.state(k))
@@ -535,8 +567,9 @@ func (m *memoMap[K, V]) begin(c *Checker, k K) {
 		// Entering a computed result reads it.
 		c.observeCost(state.count)
 	}
+	side := m.sideTable()
 	outer := 0
-	if len(m.resolvingKeys) != 0 {
+	if len(side.resolvingKeys) != 0 {
 		outer = m.resolvingIndex(c, k)
 	}
 	if outer != 0 {
@@ -545,8 +578,8 @@ func (m *memoMap[K, V]) begin(c *Checker, k K) {
 		// Marking may have given the entry a state.
 		state = m.stateOf(k)
 	}
-	m.resolvingKeys = append(m.resolvingKeys, k)
-	c.beginResolution(m, len(m.resolvingKeys)-1)
+	side.resolvingKeys = append(side.resolvingKeys, k)
+	c.beginResolution(m, len(side.resolvingKeys)-1)
 	if c.checking {
 		if c.memoPendingCount != 0 && state != nil {
 			c.replayPending(state)
@@ -560,7 +593,10 @@ func (m *memoMap[K, V]) begin(c *Checker, k K) {
 // resolvingIndex returns 1 + the index in resolutions of the computation of
 // the entry for k in progress, or 0.
 func (m *memoMap[K, V]) resolvingIndex(c *Checker, k K) int {
-	for i, key := range m.resolvingKeys {
+	if m.side == nil {
+		return 0
+	}
+	for i, key := range m.side.resolvingKeys {
 		if key != k {
 			continue
 		}
@@ -586,32 +622,33 @@ func (m *memoMap[K, V]) resolutionIndex(c *Checker, i int) int {
 // for k.
 func (m *memoMap[K, V]) isOwnResolution(c *Checker, k K) bool {
 	f := c.currentResolution()
-	return f.source == memoStateSource(m) && m.resolvingKeys[f.index] == k
+	return f.source == memoStateSource(m) && m.side.resolvingKeys[f.index] == k
 }
 
 func (m *memoMap[K, V]) stateAt(i int) *memoState {
-	return m.state(m.resolvingKeys[i])
+	return m.state(m.side.resolvingKeys[i])
 }
 
 func (m *memoMap[K, V]) popState(i int) {
-	clear(m.resolvingKeys[i:])
-	m.resolvingKeys = m.resolvingKeys[:i]
+	clear(m.side.resolvingKeys[i:])
+	m.side.resolvingKeys = m.side.resolvingKeys[:i]
 }
 
 func (m *memoMap[K, V]) state(k K) *memoState {
 	state := m.stateOf(k)
 	if state == nil {
-		if m.memoStates == nil {
-			m.memoStates = make(map[K]*memoState)
-			if m.keyBits != nil {
-				m.stateKeys = make([]uint64, 1<<memoMapStateFilterBits/64)
+		s := m.sideTable()
+		if s.memoStates == nil {
+			s.memoStates = make(map[K]*memoState)
+			if s.keyBits != nil {
+				s.stateKeys = make([]uint64, 1<<memoMapStateFilterBits/64)
 			}
 		}
 		state = &memoState{}
-		m.memoStates[k] = state
-		if m.keyBits != nil {
-			i := m.keyBits(k) >> (64 - memoMapStateFilterBits)
-			m.stateKeys[i/64] |= 1 << (i % 64)
+		s.memoStates[k] = state
+		if s.keyBits != nil {
+			i := s.keyBits(k) >> (64 - memoMapStateFilterBits)
+			s.stateKeys[i/64] |= 1 << (i % 64)
 		}
 	}
 	return state
