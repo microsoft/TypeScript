@@ -364,6 +364,26 @@ type memoMap[K comparable, V any] struct {
 	memoEntries   map[K]V
 	memoStates    map[K]*memoState
 	resolvingKeys []K // Keys of computations in progress without a memo state yet
+	// If set, keyBits returns well-mixed bits of a key, with which stateKeys
+	// filters the keys that may have a memo state, since few do and looking
+	// up one that does not costs as much as one that does.
+	keyBits   func(K) uint64
+	stateKeys []uint64
+}
+
+const memoMapStateFilterBits = 20
+
+// stateOf returns the memo state of the entry for k, or nil.
+func (m *memoMap[K, V]) stateOf(k K) *memoState {
+	if m.memoStates == nil {
+		return nil
+	}
+	if m.keyBits != nil {
+		if i := m.keyBits(k) >> (64 - memoMapStateFilterBits); m.stateKeys[i/64]&(1<<(i%64)) == 0 {
+			return nil
+		}
+	}
+	return m.memoStates[k]
 }
 
 // get returns the cached result for k, accounting for the effects of
@@ -389,7 +409,7 @@ func (m *memoMap[K, V]) peek(k K) (V, bool) {
 func (m *memoMap[K, V]) observe(c *Checker, k K) {
 	// A computation in progress may not have a memo state yet; see
 	// resolutionState.
-	if state := m.memoStates[k]; c.observeState(state) || state == nil && !c.checking {
+	if state := m.stateOf(k); c.observeState(state) || state == nil && !c.checking {
 		c.memoCycle(m.resolvingIndex(c, k))
 	}
 }
@@ -448,7 +468,7 @@ func (m *memoMap[K, V]) setReported(c *Checker, k K, v V, r currentNodeErrors) {
 		r.list = nil
 	}
 	m.setIdentity(c, k, v)
-	if r.list != nil || c.memoErrorStates != 0 && m.memoStates[k] != nil {
+	if r.list != nil || c.memoErrorStates != 0 && m.stateOf(k) != nil {
 		m.state(k).setErrors(c, r.list)
 	}
 }
@@ -510,10 +530,7 @@ func (m *memoMap[K, V]) compute(c *Checker, k K, fn func() V) V {
 
 // enter starts the computation of the result for k; see beginMemo.
 func (m *memoMap[K, V]) begin(c *Checker, k K) {
-	var state *memoState
-	if m.memoStates != nil {
-		state = m.memoStates[k]
-	}
+	state := m.stateOf(k)
 	if state != nil && c.inResolution() {
 		// Entering a computed result reads it.
 		c.observeCost(state.count)
@@ -526,7 +543,7 @@ func (m *memoMap[K, V]) begin(c *Checker, k K) {
 		// Re-entering an entry marks the cycle circular; see reentryCircular.
 		c.markCircular(outer - 1)
 		// Marking may have given the entry a state.
-		state = m.memoStates[k]
+		state = m.stateOf(k)
 	}
 	m.resolvingKeys = append(m.resolvingKeys, k)
 	c.beginResolution(m, len(m.resolvingKeys)-1)
@@ -582,13 +599,20 @@ func (m *memoMap[K, V]) popState(i int) {
 }
 
 func (m *memoMap[K, V]) state(k K) *memoState {
-	state := m.memoStates[k]
+	state := m.stateOf(k)
 	if state == nil {
 		if m.memoStates == nil {
 			m.memoStates = make(map[K]*memoState)
+			if m.keyBits != nil {
+				m.stateKeys = make([]uint64, 1<<memoMapStateFilterBits/64)
+			}
 		}
 		state = &memoState{}
 		m.memoStates[k] = state
+		if m.keyBits != nil {
+			i := m.keyBits(k) >> (64 - memoMapStateFilterBits)
+			m.stateKeys[i/64] |= 1 << (i % 64)
+		}
 	}
 	return state
 }
