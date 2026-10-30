@@ -31,7 +31,7 @@ Output::
 [[90mHH:MM:SS AM[0m] Found 1 error. Watching for file changes.
 
 //// [/home/src/projects/project/tsconfig.tsbuildinfo] *new* 
-{"version":"FakeTSVersion","root":["./a.ts"],"semanticErrors":true}
+{"version":"FakeTSVersion","root":["./a.ts"],"watchDirectories":[],"semanticErrors":true,"nonIncrementalFileNames":[]}
 //// [/home/src/projects/project/tsconfig.tsbuildinfo.readable.baseline.txt] *new* 
 {
   "version": "FakeTSVersion",
@@ -43,7 +43,7 @@ Output::
       "original": "./a.ts"
     }
   ],
-  "size": 67,
+  "size": 118,
   "semanticErrors": true
 }
 //// [/home/src/tslibs/TS/Lib/lib.es2026.full.d.ts] *Lib*
@@ -98,7 +98,7 @@ Output::
 [[90mHH:MM:SS AM[0m] Found 0 errors. Watching for file changes.
 
 //// [/home/src/projects/project/tsconfig.tsbuildinfo] *modified* 
-{"version":"FakeTSVersion","root":["./a.ts"]}
+{"version":"FakeTSVersion","root":["./a.ts"],"watchDirectories":[],"nonIncrementalFileNames":[]}
 //// [/home/src/projects/project/tsconfig.tsbuildinfo.readable.baseline.txt] *modified* 
 {
   "version": "FakeTSVersion",
@@ -110,7 +110,7 @@ Output::
       "original": "./a.ts"
     }
   ],
-  "size": 45
+  "size": 96
 }
 
 Watch Registrations::
@@ -220,7 +220,7 @@ Output::
 [[90mHH:MM:SS AM[0m] Found 1 error. Watching for file changes.
 
 //// [/home/src/projects/project/tsconfig.tsbuildinfo] *modified* 
-{"version":"FakeTSVersion","root":["./a.ts"],"semanticErrors":true}
+{"version":"FakeTSVersion","root":["./a.ts"],"watchDirectories":[],"semanticErrors":true,"nonIncrementalFileNames":[]}
 //// [/home/src/projects/project/tsconfig.tsbuildinfo.readable.baseline.txt] *modified* 
 {
   "version": "FakeTSVersion",
@@ -232,7 +232,7 @@ Output::
       "original": "./a.ts"
     }
   ],
-  "size": 67,
+  "size": 118,
   "semanticErrors": true
 }
 

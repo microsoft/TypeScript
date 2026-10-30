@@ -1,6 +1,7 @@
 package build
 
 import (
+	"sync"
 	"time"
 
 	"github.com/microsoft/TypeScript/tsc/internal/ast"
@@ -20,13 +21,19 @@ type host struct {
 	host         compiler.CompilerHost
 
 	// Caches that last only for build cycle and then cleared out
-	extendedConfigCache tsc.ExtendedConfigCache
-	sourceFiles         parseCache[ast.SourceFileParseOptions, *ast.SourceFile]
-	configTimes         collections.SyncMap[tspath.PathKey, time.Duration]
+	extendedConfigCache  tsc.ExtendedConfigCache
+	sourceFiles          parseCache[ast.SourceFileParseOptions, *ast.SourceFile]
+	sourceFileIdentities collections.SyncMap[tspath.PathKey, *sourceFileIdentity]
+	configTimes          collections.SyncMap[tspath.PathKey, time.Duration]
 
 	// caches that stay as long as they are needed
 	resolvedReferences parseCache[tspath.PathKey, *tsoptions.ParsedCommandLine]
 	mTimes             *collections.SyncMap[tspath.PathKey, time.Time]
+}
+
+type sourceFileIdentity struct {
+	mu      sync.Mutex
+	options map[ast.SourceFileParseOptions]struct{}
 }
 
 var (
@@ -48,11 +55,39 @@ func (h *host) Trace(msg *diagnostics.Message, args ...any) {
 }
 
 func (h *host) GetSourceFile(opts ast.SourceFileParseOptions) *ast.SourceFile {
-	if opts.FileName.IsDeclarationFile() || opts.FileName.ExtensionIs(tspath.ExtensionJson) {
-		// Cache dts and json files as they will be reused
-		return h.sourceFiles.loadOrStore(opts, h.host.GetSourceFile, false /* allowZero */)
+	if !isCachedSourceFile(opts.FileName) {
+		return h.host.GetSourceFile(opts)
 	}
-	return h.host.GetSourceFile(opts)
+	// Cache dts and json files as they will be reused. Serialize cache access for
+	// aliases of the same physical file so an emitted replacement cannot race
+	// with insertion under a logical symlink path.
+	path := h.orchestrator.caseSensitivity.PathKey(h.FS().Realpath(opts.FileName.AsPath()))
+	identity, _ := h.sourceFileIdentities.LoadOrStore(path, &sourceFileIdentity{
+		options: make(map[ast.SourceFileParseOptions]struct{}),
+	})
+	identity.mu.Lock()
+	defer identity.mu.Unlock()
+	identity.options[opts] = struct{}{}
+	return h.sourceFiles.loadOrStore(opts, h.host.GetSourceFile, false /* allowZero */)
+}
+
+func (h *host) invalidateSourceFile(fileName tspath.RootedFilePath) {
+	if !isCachedSourceFile(fileName) {
+		return
+	}
+	path := h.orchestrator.caseSensitivity.PathKey(h.FS().Realpath(fileName.AsPath()))
+	if identity, ok := h.sourceFileIdentities.Load(path); ok {
+		identity.mu.Lock()
+		for opts := range identity.options {
+			h.sourceFiles.delete(opts)
+		}
+		clear(identity.options)
+		identity.mu.Unlock()
+	}
+}
+
+func isCachedSourceFile(fileName tspath.RootedFilePath) bool {
+	return fileName.IsDeclarationFile() || fileName.ExtensionIs(tspath.ExtensionJson)
 }
 
 func (h *host) GetContentMappedSourceFiles(parseOptions ast.SourceFileParseOptions, mapper *contentmapper.Mapper) (contentmapper.SourceFiles, error) {

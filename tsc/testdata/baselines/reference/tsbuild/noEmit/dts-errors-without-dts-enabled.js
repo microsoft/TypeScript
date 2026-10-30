@@ -22,7 +22,7 @@ Output::
 [[90mHH:MM:SS AM[0m] Building project 'tsconfig.json'...
 
 //// [/home/src/projects/project/tsconfig.tsbuildinfo] *new* 
-{"version":"FakeTSVersion","root":["./a.ts"]}
+{"version":"FakeTSVersion","root":["./a.ts"],"watchDirectories":[],"nonIncrementalFileNames":[]}
 //// [/home/src/projects/project/tsconfig.tsbuildinfo.readable.baseline.txt] *new* 
 {
   "version": "FakeTSVersion",
@@ -34,7 +34,7 @@ Output::
       "original": "./a.ts"
     }
   ],
-  "size": 45
+  "size": 96
 }
 //// [/home/src/tslibs/TS/Lib/lib.es2026.full.d.ts] *Lib*
 /// <reference no-default-lib="true"/>

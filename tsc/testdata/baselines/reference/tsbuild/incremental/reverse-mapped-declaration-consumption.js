@@ -80,7 +80,7 @@ interface Symbol {
 }
 declare const console: { log(msg: any): void; };
 //// [/home/src/workspaces/project/consumer/tsconfig.tsbuildinfo] *new* 
-{"version":"FakeTSVersion","root":["./index.ts"],"semanticErrors":true}
+{"version":"FakeTSVersion","root":["./index.ts"],"watchDirectories":["..","../producer"],"semanticErrors":true,"nonIncrementalFileNames":["../producer/dist/index.d.ts"]}
 //// [/home/src/workspaces/project/consumer/tsconfig.tsbuildinfo.readable.baseline.txt] *new* 
 {
   "version": "FakeTSVersion",
@@ -92,7 +92,7 @@ declare const console: { log(msg: any): void; };
       "original": "./index.ts"
     }
   ],
-  "size": 71,
+  "size": 169,
   "semanticErrors": true
 }
 //// [/home/src/workspaces/project/producer/dist/index.d.ts] *new* 
@@ -120,7 +120,7 @@ export const deep = decode({ a: { b: { c: { d: stringValidator } } } });
 export const named = decode(namedInput);
 
 //// [/home/src/workspaces/project/producer/dist/tsconfig.tsbuildinfo] *new* 
-{"version":"FakeTSVersion","root":[2],"fileNames":["lib.es2026.full.d.ts","../index.ts"],"fileInfos":[{"version":"8859c12c614ce56ba9a18e58384a198f-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ninterface SymbolConstructor {\n    (desc?: string | number): symbol;\n    for(name: string): symbol;\n    readonly toStringTag: symbol;\n}\ndeclare var Symbol: SymbolConstructor;\ninterface Symbol {\n    readonly [Symbol.toStringTag]: string;\n}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true,"impliedNodeFormat":1},{"version":"6f4074b2f28fc7614cd7f712938fd82f-declare function unwrap<T>(input: { [K in keyof T]: { value: T[K] } }): T;\ndeclare const indexedInput: { [key: string]: { value: string } };\nexport const indexed = unwrap(indexedInput);\ntype Validator<T> = ((input: unknown) => T | undefined) | {\n    [K in keyof T]: Validator<T[K]>;\n};\ndeclare function decode<T>(input: { [K in keyof T]: Validator<T[K]> }): T;\ndeclare const stringValidator: (input: unknown) => string | undefined;\nexport const deep = decode({ a: { b: { c: { d: stringValidator } } } });\ninterface NamedInput { leaf: typeof stringValidator }\ndeclare const namedInput: { node: NamedInput };\nexport const named = decode(namedInput);","signature":"39ea880b65ae57c83c7fd5b8a0ea6ebb-export declare const indexed: {\n    [x: string]: string;\n};\nexport declare const deep: {\n    a: {\n        b: {\n            c: {\n                d: string;\n            };\n        };\n    };\n};\nexport declare const named: {\n    node: {\n        leaf: string;\n    };\n};\n","impliedNodeFormat":1}],"options":{"composite":true,"outDir":"./","strict":true},"latestChangedDtsFile":"./index.d.ts"}
+{"version":"FakeTSVersion","root":[2],"watchDirectories":["../.."],"fileNames":["lib.es2026.full.d.ts","../index.ts"],"fileInfos":[{"version":"8859c12c614ce56ba9a18e58384a198f-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ninterface SymbolConstructor {\n    (desc?: string | number): symbol;\n    for(name: string): symbol;\n    readonly toStringTag: symbol;\n}\ndeclare var Symbol: SymbolConstructor;\ninterface Symbol {\n    readonly [Symbol.toStringTag]: string;\n}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true,"impliedNodeFormat":1},{"version":"6f4074b2f28fc7614cd7f712938fd82f-declare function unwrap<T>(input: { [K in keyof T]: { value: T[K] } }): T;\ndeclare const indexedInput: { [key: string]: { value: string } };\nexport const indexed = unwrap(indexedInput);\ntype Validator<T> = ((input: unknown) => T | undefined) | {\n    [K in keyof T]: Validator<T[K]>;\n};\ndeclare function decode<T>(input: { [K in keyof T]: Validator<T[K]> }): T;\ndeclare const stringValidator: (input: unknown) => string | undefined;\nexport const deep = decode({ a: { b: { c: { d: stringValidator } } } });\ninterface NamedInput { leaf: typeof stringValidator }\ndeclare const namedInput: { node: NamedInput };\nexport const named = decode(namedInput);","signature":"39ea880b65ae57c83c7fd5b8a0ea6ebb-export declare const indexed: {\n    [x: string]: string;\n};\nexport declare const deep: {\n    a: {\n        b: {\n            c: {\n                d: string;\n            };\n        };\n    };\n};\nexport declare const named: {\n    node: {\n        leaf: string;\n    };\n};\n","impliedNodeFormat":1}],"options":{"composite":true,"outDir":"./","strict":true},"latestChangedDtsFile":"./index.d.ts"}
 //// [/home/src/workspaces/project/producer/dist/tsconfig.tsbuildinfo.readable.baseline.txt] *new* 
 {
   "version": "FakeTSVersion",
@@ -167,7 +167,7 @@ export const named = decode(namedInput);
     "strict": true
   },
   "latestChangedDtsFile": "./index.d.ts",
-  "size": 2026
+  "size": 2055
 }
 
 producer/tsconfig.json::
@@ -266,7 +266,7 @@ export const named = decode(namedInput);
 // comment-only edit
 
 //// [/home/src/workspaces/project/producer/dist/tsconfig.tsbuildinfo] *modified* 
-{"version":"FakeTSVersion","root":[2],"fileNames":["lib.es2026.full.d.ts","../index.ts"],"fileInfos":[{"version":"8859c12c614ce56ba9a18e58384a198f-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ninterface SymbolConstructor {\n    (desc?: string | number): symbol;\n    for(name: string): symbol;\n    readonly toStringTag: symbol;\n}\ndeclare var Symbol: SymbolConstructor;\ninterface Symbol {\n    readonly [Symbol.toStringTag]: string;\n}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true,"impliedNodeFormat":1},{"version":"7b3972037d74f8acb94c246976ef7ffa-declare function unwrap<T>(input: { [K in keyof T]: { value: T[K] } }): T;\ndeclare const indexedInput: { [key: string]: { value: string } };\nexport const indexed = unwrap(indexedInput);\ntype Validator<T> = ((input: unknown) => T | undefined) | {\n    [K in keyof T]: Validator<T[K]>;\n};\ndeclare function decode<T>(input: { [K in keyof T]: Validator<T[K]> }): T;\ndeclare const stringValidator: (input: unknown) => string | undefined;\nexport const deep = decode({ a: { b: { c: { d: stringValidator } } } });\ninterface NamedInput { leaf: typeof stringValidator }\ndeclare const namedInput: { node: NamedInput };\nexport const named = decode(namedInput);\n// comment-only edit\n","signature":"39ea880b65ae57c83c7fd5b8a0ea6ebb-export declare const indexed: {\n    [x: string]: string;\n};\nexport declare const deep: {\n    a: {\n        b: {\n            c: {\n                d: string;\n            };\n        };\n    };\n};\nexport declare const named: {\n    node: {\n        leaf: string;\n    };\n};\n","impliedNodeFormat":1}],"options":{"composite":true,"outDir":"./","strict":true},"latestChangedDtsFile":"./index.d.ts"}
+{"version":"FakeTSVersion","root":[2],"watchDirectories":["../.."],"fileNames":["lib.es2026.full.d.ts","../index.ts"],"fileInfos":[{"version":"8859c12c614ce56ba9a18e58384a198f-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ninterface SymbolConstructor {\n    (desc?: string | number): symbol;\n    for(name: string): symbol;\n    readonly toStringTag: symbol;\n}\ndeclare var Symbol: SymbolConstructor;\ninterface Symbol {\n    readonly [Symbol.toStringTag]: string;\n}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true,"impliedNodeFormat":1},{"version":"7b3972037d74f8acb94c246976ef7ffa-declare function unwrap<T>(input: { [K in keyof T]: { value: T[K] } }): T;\ndeclare const indexedInput: { [key: string]: { value: string } };\nexport const indexed = unwrap(indexedInput);\ntype Validator<T> = ((input: unknown) => T | undefined) | {\n    [K in keyof T]: Validator<T[K]>;\n};\ndeclare function decode<T>(input: { [K in keyof T]: Validator<T[K]> }): T;\ndeclare const stringValidator: (input: unknown) => string | undefined;\nexport const deep = decode({ a: { b: { c: { d: stringValidator } } } });\ninterface NamedInput { leaf: typeof stringValidator }\ndeclare const namedInput: { node: NamedInput };\nexport const named = decode(namedInput);\n// comment-only edit\n","signature":"39ea880b65ae57c83c7fd5b8a0ea6ebb-export declare const indexed: {\n    [x: string]: string;\n};\nexport declare const deep: {\n    a: {\n        b: {\n            c: {\n                d: string;\n            };\n        };\n    };\n};\nexport declare const named: {\n    node: {\n        leaf: string;\n    };\n};\n","impliedNodeFormat":1}],"options":{"composite":true,"outDir":"./","strict":true},"latestChangedDtsFile":"./index.d.ts"}
 //// [/home/src/workspaces/project/producer/dist/tsconfig.tsbuildinfo.readable.baseline.txt] *modified* 
 {
   "version": "FakeTSVersion",
@@ -313,7 +313,7 @@ export const named = decode(namedInput);
     "strict": true
   },
   "latestChangedDtsFile": "./index.d.ts",
-  "size": 2050
+  "size": 2079
 }
 
 producer/tsconfig.json::

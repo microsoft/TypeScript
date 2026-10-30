@@ -56,7 +56,7 @@ interface Symbol {
 }
 declare const console: { log(msg: any): void; };
 //// [/home/src/workspaces/project/tsconfig.tsbuildinfo] *new* 
-{"version":"FakeTSVersion","errors":true,"checkPending":true,"root":[2],"contentMapperIdentities":["mapper@1.0.0:f8bda358cf5ca3162625594e4ea48580"],"fileNames":["lib.es2026.full.d.ts","./app.vue"],"fileInfos":[{"version":"8859c12c614ce56ba9a18e58384a198f-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ninterface SymbolConstructor {\n    (desc?: string | number): symbol;\n    for(name: string): symbol;\n    readonly toStringTag: symbol;\n}\ndeclare var Symbol: SymbolConstructor;\ninterface Symbol {\n    readonly [Symbol.toStringTag]: string;\n}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true,"impliedNodeFormat":1},"524c966cec21221cb68a7d73bb38aaf5-export const value = 1;\u0000mapper@1.0.0:f8bda358cf5ca3162625594e4ea48580"],"semanticDiagnosticsPerFile":[1,2]}
+{"version":"FakeTSVersion","errors":true,"checkPending":true,"root":[2],"contentMapperIdentities":["mapper@1.0.0:f8bda358cf5ca3162625594e4ea48580"],"watchDirectories":[],"fileNames":["lib.es2026.full.d.ts","./app.vue"],"fileInfos":[{"version":"8859c12c614ce56ba9a18e58384a198f-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ninterface SymbolConstructor {\n    (desc?: string | number): symbol;\n    for(name: string): symbol;\n    readonly toStringTag: symbol;\n}\ndeclare var Symbol: SymbolConstructor;\ninterface Symbol {\n    readonly [Symbol.toStringTag]: string;\n}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true,"impliedNodeFormat":1},"524c966cec21221cb68a7d73bb38aaf5-export const value = 1;\u0000mapper@1.0.0:f8bda358cf5ca3162625594e4ea48580"],"semanticDiagnosticsPerFile":[1,2]}
 //// [/home/src/workspaces/project/tsconfig.tsbuildinfo.readable.baseline.txt] *new* 
 {
   "version": "FakeTSVersion",
@@ -98,7 +98,7 @@ declare const console: { log(msg: any): void; };
     "lib.es2026.full.d.ts",
     "./app.vue"
   ],
-  "size": 1126
+  "size": 1148
 }
 
 tsconfig.json::
