@@ -724,8 +724,9 @@ func (c *Checker) startEffects(state *memoState) {
 		// reportAtCurrentNode), and every reuse computes them again. The
 		// node's resolution is entered above the computation's resolution.
 		f.isQuery = true
-		query := c.enterCurrentNode(c.currentNode)
-		c.resolutions[n].query = query
+		debug.Assert(!c.inQuery, "nested query")
+		c.inQuery = true
+		c.querySave = c.enterCurrentNode(c.currentNode)
 	}
 	c.memoTop = n + 1
 }
@@ -737,7 +738,8 @@ func (c *Checker) stopEffects() *resolution {
 	if c.resolutions[n].isTypeResolution {
 		n--
 		debug.Assert(c.resolutions[n].isQuery, "resolution left on the stack")
-		c.exitCurrentNode(c.resolutions[n].query)
+		c.exitCurrentNode(c.querySave)
+		c.inQuery = false
 	}
 	f := &c.resolutions[n]
 	if !f.memo {

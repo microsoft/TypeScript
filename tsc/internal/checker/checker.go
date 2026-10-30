@@ -629,7 +629,9 @@ type Checker struct {
 	inlineLevel                      depthLimit
 	serializationLevel               depthLimit
 	currentNode                      *ast.Node
-	currentNodeResolution            int // 1-based index in resolutions of the resolution of currentNode, or 0; see enterCurrentNode
+	currentNodeResolution            int              // 1-based index in resolutions of the resolution of currentNode, or 0; see enterCurrentNode
+	querySave                        savedCurrentNode // Saved by the query in progress made outside of checking; see startEffects
+	inQuery                          bool
 	varianceTypeParameter            *Type
 	isInferencePartiallyBlocked      bool
 	wasCanceled                      bool
