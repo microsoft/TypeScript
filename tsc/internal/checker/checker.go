@@ -696,6 +696,7 @@ type Checker struct {
 	memberLayoutArena                           core.Arena[MemberLayout]
 	layoutMemberInfos                           map[string]MemberInfo
 	freeTypeSets                                *temporaryTypeSet
+	unionRunStarts                              []int
 	freePropertyCounts                          *temporaryPropertyCounts
 	mergedSymbols                               map[*ast.Symbol]*ast.Symbol
 	mergedExportsChecked                        collections.Set[*ast.Symbol]
@@ -26540,9 +26541,14 @@ func (c *Checker) addTypesToUnion(sourceTypes []*Type, types []*Type) ([]*Type, 
 		}
 		types = append(types, t)
 	}
+	// Each source type contributes an already sorted run of types (a single type or the sorted
+	// constituents of a union). Record where a run is out of order with its predecessor so that
+	// the runs can be merged instead of sorting everything from scratch.
+	runStarts := c.unionRunStarts[:0]
 	var lastType *Type
 	for _, t := range sourceTypes {
 		if t != lastType {
+			start := len(types)
 			if t.flags&TypeFlagsUnion != 0 {
 				u := t.AsUnionType()
 				if t.alias != nil || u.origin != nil {
@@ -26554,12 +26560,17 @@ func (c *Checker) addTypesToUnion(sourceTypes []*Type, types []*Type) ([]*Type, 
 			} else {
 				addType(t)
 			}
+			if start > 0 && len(types) > start && CompareTypes(types[start-1], types[start]) > 0 {
+				runStarts = append(runStarts, start)
+			}
 			lastType = t
 		}
 	}
 	if len(types) >= 2 {
 		// Sort and deduplicate types
-		slices.SortStableFunc(types, CompareTypes)
+		if len(runStarts) != 0 {
+			c.mergeSortedRuns(types, runStarts)
+		}
 		unique := 1
 		for _, t := range types[1:] {
 			if t != types[unique-1] {
@@ -26570,7 +26581,72 @@ func (c *Checker) addTypesToUnion(sourceTypes []*Type, types []*Type) ([]*Type, 
 		clear(types[unique:])
 		types = types[:unique]
 	}
+	// Do not retain arbitrarily large run buffers, matching releaseTemporaryTypeSet.
+	if cap(runStarts) <= 4096 {
+		c.unionRunStarts = runStarts[:0]
+	} else {
+		c.unionRunStarts = nil
+	}
 	return types, includes
+}
+
+// mergeSortedRuns sorts types, which consists of consecutive runs that are each already sorted.
+// runStarts holds the start index of every run except the first, and is reused as scratch space.
+func (c *Checker) mergeSortedRuns(types []*Type, runStarts []int) {
+	n := len(types)
+	scratch := c.getTemporaryTypeSet()
+	defer c.releaseTemporaryTypeSet(scratch)
+	scratch.values = slices.Grow(scratch.values[:0], n)[:n]
+	src, dst := types, scratch.values
+	for len(runStarts) != 0 {
+		runs := len(runStarts) + 1
+		runBound := func(i int) int {
+			switch {
+			case i == 0:
+				return 0
+			case i == runs:
+				return n
+			}
+			return runStarts[i-1]
+		}
+		// Merge adjacent pairs of runs, compacting the start indices of the merged runs in place.
+		merged := 0
+		for i := 0; i < runs; i += 2 {
+			lo := runBound(i)
+			mid := runBound(i + 1)
+			hi := mid
+			if i+1 < runs {
+				hi = runBound(i + 2)
+			}
+			mergeSortedTypes(dst[lo:hi], src[lo:mid], src[mid:hi])
+			if i != 0 {
+				runStarts[merged] = lo
+				merged++
+			}
+		}
+		runStarts = runStarts[:merged]
+		src, dst = dst, src
+	}
+	if &src[0] != &types[0] {
+		copy(types, src)
+	}
+}
+
+// mergeSortedTypes merges the sorted lists left and right into dst, preferring left on ties.
+func mergeSortedTypes(dst []*Type, left []*Type, right []*Type) {
+	i, j, k := 0, 0, 0
+	for i < len(left) && j < len(right) {
+		if CompareTypes(right[j], left[i]) < 0 {
+			dst[k] = right[j]
+			j++
+		} else {
+			dst[k] = left[i]
+			i++
+		}
+		k++
+	}
+	k += copy(dst[k:], left[i:])
+	copy(dst[k:], right[j:])
 }
 
 func (c *Checker) addNamedUnions(namedUnions []*Type, types []*Type) []*Type {
@@ -26598,12 +26674,18 @@ func (c *Checker) removeRedundantLiteralTypes(types []*Type, includes TypeFlags,
 			flags&TypeFlagsBigIntLiteral != 0 && includes&TypeFlagsBigInt != 0 ||
 			flags&TypeFlagsUniqueESSymbol != 0 && includes&TypeFlagsESSymbol != 0 ||
 			reduceVoidUndefined && flags&TypeFlagsUndefined != 0 && includes&TypeFlagsVoid != 0 ||
-			isFreshLiteralType(t) && containsType(types, t.AsLiteralType().regularType)
+			isFreshLiteralType(t) && containsAdjacentType(types, i, t.AsLiteralType().regularType)
 		if remove {
 			types = slices.Delete(types, i, i+1)
 		}
 	}
 	return types
+}
+
+// containsAdjacentType reports whether t is a neighbor of types[i] in the sorted list types. A fresh literal
+// type and its regular counterpart differ only in type ID, so CompareTypes orders them next to each other.
+func containsAdjacentType(types []*Type, i int, t *Type) bool {
+	return i > 0 && types[i-1] == t || i+1 < len(types) && types[i+1] == t
 }
 
 func (c *Checker) removeStringLiteralsMatchedByTemplateLiterals(types []*Type) []*Type {
@@ -26614,13 +26696,25 @@ func (c *Checker) removeStringLiteralsMatchedByTemplateLiterals(types []*Type) [
 			i--
 			t := types[i]
 			if t.flags&TypeFlagsStringLiteral != 0 && core.Some(templates, func(template *Type) bool {
-				return c.isTypeMatchedByTemplateLiteralOrStringMapping(t, template)
+				return couldStringLiteralMatchTemplate(t, template) && c.isTypeMatchedByTemplateLiteralOrStringMapping(t, template)
 			}) {
 				types = slices.Delete(types, i, i+1)
 			}
 		}
 	}
 	return types
+}
+
+// couldStringLiteralMatchTemplate cheaply rejects a string literal whose value lacks the leading and trailing
+// text of a template literal type, which inferFromLiteralPartsToTemplateLiteral requires for a match.
+func couldStringLiteralMatchTemplate(t *Type, template *Type) bool {
+	if template.flags&TypeFlagsTemplateLiteral == 0 {
+		return true
+	}
+	value := getStringLiteralValue(t)
+	texts := template.AsTemplateLiteralType().texts
+	start, end := texts[0], texts[len(texts)-1]
+	return len(value) >= len(start)+len(end) && strings.HasPrefix(value, start) && strings.HasSuffix(value, end)
 }
 
 func (c *Checker) isTypeMatchedByTemplateLiteralOrStringMapping(t *Type, template *Type) bool {
@@ -27371,6 +27465,20 @@ func (c *Checker) removeType(t *Type, targetType *Type) *Type {
 }
 
 func containsType(types []*Type, t *Type) bool {
+	n := len(types)
+	if n == 0 {
+		return false
+	}
+	// Types are sorted primarily by sort order flags, so t can't be present when its flags fall outside
+	// the range spanned by the list.
+	flags := getSortOrderFlags(t)
+	if flags < getSortOrderFlags(types[0]) || flags > getSortOrderFlags(types[n-1]) {
+		return false
+	}
+	// For short lists, scanning by identity is cheaper than the CompareTypes calls of a binary search.
+	if n <= 16 {
+		return slices.Contains(types, t)
+	}
 	_, ok := slices.BinarySearchFunc(types, t, CompareTypes)
 	return ok
 }
