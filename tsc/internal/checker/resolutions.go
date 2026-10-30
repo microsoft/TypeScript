@@ -24,23 +24,26 @@ type resolution struct {
 	// reuse of its result; see memo.go.
 	memo      bool
 	isQuery   bool
-	resolving bool         // The resolution is the one in Checker.resolving for key
-	fromCheck bool         // The query began in a check; see recordFromCheck
-	prevMemo  int32        // Checker.memoTop on entry
-	result    *memoState   // Memo state of the result computed
-	effects   *memoEffects // Allocated on first use
+	resolving bool  // The resolution is the one in Checker.resolving for key
+	fromCheck bool  // The query began in a check; see recordFromCheck
+	prevMemo  int32 // Checker.memoTop on entry
 	// Index in Checker.deferredAttach of the first result cached by the
 	// computation before it had effects; see attachState.
 	attachStart int32
-	entry       *ast.Node // Current node when the computation started
+	result      *memoState   // Memo state of the result computed
+	effects     *memoEffects // Allocated on first use
+	entry       *ast.Node    // Current node when the computation started
 	query       savedCurrentNode
 
 	// A type resolution is a computation that re-entering detects as a cycle;
 	// see beginTypeResolution. Its other fields are those of the resolution
 	// below it, whose work it shares.
+	typeResolution     TypeResolution
 	isTypeResolution   bool
 	prevTypeResolution int32 // Checker.typeResolutionTop on entry
-	typeResolution     TypeResolution
+	// Checker.searchableTop on entry, for a type resolution other than that
+	// of a current node.
+	prevSearchable int32
 }
 
 // A memoStateSource creates the memo state of a computation in progress on
