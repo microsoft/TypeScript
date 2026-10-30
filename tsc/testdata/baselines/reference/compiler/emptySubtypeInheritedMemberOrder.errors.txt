@@ -1,0 +1,72 @@
+emptySubtypeInheritedMemberOrder.ts(5,14): error TS2739: Type '{}' is missing the following properties from type 'C<string>': own, inherited
+emptySubtypeInheritedMemberOrder.ts(8,14): error TS2322: Type 'B<{ a: string; }>' is not assignable to type 'B<{ a: string; b?: number | undefined; }>'.
+  The types returned by 'own(...)' are incompatible between these types.
+    Property 'b' is missing in type 'Required<{ a: string; }>' but required in type 'Required<{ a: string; b?: number | undefined; }>'.
+emptySubtypeInheritedMemberOrder.ts(11,14): error TS2322: Type 'C<{ a: string; }>' is not assignable to type 'C<{ a: string; b?: number | undefined; }>'.
+  The types returned by 'own(...)' are incompatible between these types.
+    Property 'b' is missing in type 'Required<{ a: string; }>' but required in type 'Required<{ a: string; b?: number | undefined; }>'.
+emptySubtypeInheritedMemberOrder.ts(14,14): error TS2322: Type 'D<{ a: string; }>' is not assignable to type 'D<{ a: string; b?: number | undefined; }>'.
+  The types returned by 'own(...)' are incompatible between these types.
+    Property 'b' is missing in type 'Required<{ a: string; }>' but required in type 'Required<{ a: string; b?: number | undefined; }>'.
+emptySubtypeInheritedMemberOrder.ts(16,14): error TS2739: Type '{}' is missing the following properties from type 'Both': right, left
+
+
+==== emptySubtypeInheritedMemberOrder.ts (5 errors) ====
+    // Inherited members keep the base type's order. Sorting them by declaration position
+    // makes an empty subtype invariant and drops the assignability error.
+    // https://github.com/microsoft/TypeScript/issues/65052
+    
+    export const empty: C<string> = {};
+                 ~~~~~
+!!! error TS2739: Type '{}' is missing the following properties from type 'C<string>': own, inherited
+    
+    declare const narrowB: B<{ a: string }>;
+    export const wideB: B<{ a: string; b?: number }> = narrowB;
+                 ~~~~~
+!!! error TS2322: Type 'B<{ a: string; }>' is not assignable to type 'B<{ a: string; b?: number | undefined; }>'.
+!!! error TS2322:   The types returned by 'own(...)' are incompatible between these types.
+!!! error TS2322:     Property 'b' is missing in type 'Required<{ a: string; }>' but required in type 'Required<{ a: string; b?: number | undefined; }>'.
+!!! related TS2728 emptySubtypeInheritedMemberOrder.ts:8:36: 'b' is declared here.
+    
+    declare const narrowC: C<{ a: string }>;
+    export const wideC: C<{ a: string; b?: number }> = narrowC;
+                 ~~~~~
+!!! error TS2322: Type 'C<{ a: string; }>' is not assignable to type 'C<{ a: string; b?: number | undefined; }>'.
+!!! error TS2322:   The types returned by 'own(...)' are incompatible between these types.
+!!! error TS2322:     Property 'b' is missing in type 'Required<{ a: string; }>' but required in type 'Required<{ a: string; b?: number | undefined; }>'.
+!!! related TS2728 emptySubtypeInheritedMemberOrder.ts:11:36: 'b' is declared here.
+    
+    declare const narrowD: D<{ a: string }>;
+    export const wideD: D<{ a: string; b?: number }> = narrowD;
+                 ~~~~~
+!!! error TS2322: Type 'D<{ a: string; }>' is not assignable to type 'D<{ a: string; b?: number | undefined; }>'.
+!!! error TS2322:   The types returned by 'own(...)' are incompatible between these types.
+!!! error TS2322:     Property 'b' is missing in type 'Required<{ a: string; }>' but required in type 'Required<{ a: string; b?: number | undefined; }>'.
+!!! related TS2728 emptySubtypeInheritedMemberOrder.ts:14:36: 'b' is declared here.
+    
+    export const both: Both = {};
+                 ~~~~
+!!! error TS2739: Type '{}' is missing the following properties from type 'Both': right, left
+    
+    interface A<T> {
+        inherited: () => T;
+    }
+    
+    interface B<T> extends A<T> {
+        own: (x: T) => Required<T>;
+    }
+    
+    interface C<T> extends B<T> {}
+    
+    interface D<T> extends C<T> {}
+    
+    interface Left {
+        left: string;
+    }
+    
+    interface Right {
+        right: string;
+    }
+    
+    interface Both extends Right, Left {}
+    

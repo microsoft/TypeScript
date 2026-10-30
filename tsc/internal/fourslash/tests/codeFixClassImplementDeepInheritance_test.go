@@ -38,6 +38,7 @@ interface I6 extends C4 {}
 class C5 implements I6 {}`
 	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
 	defer done()
+	// Implemented members follow I6's base order: C4's fields, then C3's, then C2's.
 	f.VerifyCodeFix(t, fourslash.VerifyCodeFixOptions{
 		Description: "Implement interface 'I6'",
 		NewFileContent: `// Referenced throughout the inheritance chain.
@@ -64,12 +65,12 @@ class C4 extends C3 implements I0, I4, I5 {
 
 interface I6 extends C4 {}
 class C5 implements I6 {
-    c: number;
+    e: number;
+    f: number;
     a: number;
     b: number;
     d: number;
-    e: number;
-    f: number;
+    c: number;
 }`,
 		Index: 0,
 	})

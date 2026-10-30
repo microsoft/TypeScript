@@ -1,0 +1,72 @@
+//// [tests/cases/compiler/emptySubtypeInheritedMemberOrder.ts] ////
+
+=== emptySubtypeInheritedMemberOrder.ts ===
+// Inherited members keep the base type's order. Sorting them by declaration position
+// makes an empty subtype invariant and drops the assignability error.
+// https://github.com/microsoft/TypeScript/issues/65052
+
+export const empty: C<string> = {};
+>empty : C<string>
+>{} : {}
+
+declare const narrowB: B<{ a: string }>;
+>narrowB : B<{ a: string; }>
+>a : string
+
+export const wideB: B<{ a: string; b?: number }> = narrowB;
+>wideB : B<{ a: string; b?: number; }>
+>a : string
+>b : number | undefined
+>narrowB : B<{ a: string; }>
+
+declare const narrowC: C<{ a: string }>;
+>narrowC : C<{ a: string; }>
+>a : string
+
+export const wideC: C<{ a: string; b?: number }> = narrowC;
+>wideC : C<{ a: string; b?: number; }>
+>a : string
+>b : number | undefined
+>narrowC : C<{ a: string; }>
+
+declare const narrowD: D<{ a: string }>;
+>narrowD : D<{ a: string; }>
+>a : string
+
+export const wideD: D<{ a: string; b?: number }> = narrowD;
+>wideD : D<{ a: string; b?: number; }>
+>a : string
+>b : number | undefined
+>narrowD : D<{ a: string; }>
+
+export const both: Both = {};
+>both : Both
+>{} : {}
+
+interface A<T> {
+    inherited: () => T;
+>inherited : () => T
+}
+
+interface B<T> extends A<T> {
+    own: (x: T) => Required<T>;
+>own : (x: T) => Required<T>
+>x : T
+}
+
+interface C<T> extends B<T> {}
+
+interface D<T> extends C<T> {}
+
+interface Left {
+    left: string;
+>left : string
+}
+
+interface Right {
+    right: string;
+>right : string
+}
+
+interface Both extends Right, Left {}
+

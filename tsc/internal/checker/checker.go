@@ -19668,24 +19668,37 @@ func (c *Checker) getMemberLayoutKey(t *Type, baseTypes []*Type) CacheHashKey {
 }
 
 func (c *Checker) createMemberLayout(t *Type, baseTypes []*Type) *MemberLayout {
-	// Reuse c.layoutMemberInfos to avoid repeated allocations
-	layoutMemberInfos := c.layoutMemberInfos
+	// Reuse c.layoutMemberInfos to avoid repeated allocations. The map records names already
+	// placed so a later base cannot override an earlier declaration.
+	seen := c.layoutMemberInfos
 	c.layoutMemberInfos = nil
+	memberInfos := make([]MemberInfo, 0)
 	addMember := func(symbol *ast.Symbol, baseIndex int) {
-		if _, ok := layoutMemberInfos[symbol.Name()]; !ok {
-			if layoutMemberInfos == nil {
-				layoutMemberInfos = make(map[string]MemberInfo)
-			}
-			layoutMemberInfos[symbol.Name()] = MemberInfo{symbol: symbol, baseIndex: int32(baseIndex)}
+		if _, ok := seen[symbol.Name()]; ok {
+			return
 		}
+		if seen == nil {
+			seen = make(map[string]MemberInfo)
+		}
+		info := MemberInfo{symbol: symbol, baseIndex: int32(baseIndex)}
+		seen[symbol.Name()] = info
+		memberInfos = append(memberInfos, info)
 	}
-	// Add declared members
+	// Declared members come first. Variance measurement stops at the first failing member,
+	// and declared members are the ones most likely to carry the structural difference.
 	for id, symbol := range t.AsInterfaceType().declaredMembers.All() {
 		if c.isNamedMember(symbol, id) {
 			addMember(symbol, -1)
 		}
 	}
-	// Add inherited members
+	declaredCount := len(memberInfos)
+	slices.SortFunc(memberInfos[:declaredCount], func(a, b MemberInfo) int {
+		return c.compareSymbols(a.symbol, b.symbol)
+	})
+	// Inherited members follow in base-clause order, and within a base in that base's order.
+	// Sorting them by declaration position pulls a grandbase member ahead of the base's own
+	// members, so an empty subtype is measured differently from its base.
+	// See https://github.com/microsoft/TypeScript/issues/65052.
 	for baseIndex, baseType := range baseTypes {
 		if baseType.objectFlags&(ObjectFlagsReference|ObjectFlagsClassOrInterface) != 0 {
 			c.resolveStructuredTypeMembers(baseType)
@@ -19702,20 +19715,9 @@ func (c *Checker) createMemberLayout(t *Type, baseTypes []*Type) *MemberLayout {
 			}
 		}
 	}
-	memberInfos := slices.AppendSeq(make([]MemberInfo, 0, len(layoutMemberInfos)), maps.Values(layoutMemberInfos))
-	clear(layoutMemberInfos)
-	c.layoutMemberInfos = layoutMemberInfos
-	// Sort by symbols, but put declared members (baseIndex < 0) first
-	slices.SortFunc(memberInfos, func(a, b MemberInfo) int {
-		if a.baseIndex < 0 && b.baseIndex >= 0 {
-			return -1
-		}
-		if a.baseIndex >= 0 && b.baseIndex < 0 {
-			return 1
-		}
-		return c.CompareSymbols(a.symbol, b.symbol)
-	})
-	// Store slot indices in the sorted memberInfos and build the memberInfoMap. Slot indices are used to
+	clear(seen)
+	c.layoutMemberInfos = seen
+	// Store slot indices in memberInfos and build the memberInfoMap. Slot indices are used to
 	// identify slots in the instantiated type's properties list.
 	memberInfoMap := make(map[string]*MemberInfo, len(memberInfos))
 	for i := range memberInfos {
