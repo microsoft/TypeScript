@@ -102,6 +102,11 @@ func asRecursionId[T *ast.Node | *ast.Symbol | *Type](value T) RecursionId {
 // a relation before it is considered too complex.
 const relationCountLimit = 16_000_000 / 8
 
+// relationKeyBits returns well-mixed bits of a relation key, which is a hash.
+func relationKeyBits(k CacheHashKey) uint64 {
+	return k.Lo
+}
+
 type Relation struct {
 	results memoMap[CacheHashKey, RelationComparisonResult]
 }
