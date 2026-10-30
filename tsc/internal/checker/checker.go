@@ -18089,9 +18089,19 @@ func getNodeListKey(nodes []*ast.Node) CacheHashKey {
 }
 
 func isTypeReferenceWithGenericArguments(t *Type) bool {
-	return isNonDeferredTypeReference(t) && core.Some(t.checker.getTypeArguments(t), func(t *Type) bool {
-		return t.flags&TypeFlagsTypeParameter != 0 || isTypeReferenceWithGenericArguments(t)
-	})
+	if !isNonDeferredTypeReference(t) {
+		return false
+	}
+	// The type arguments of a non-deferred type reference are fixed at creation, so the answer never changes.
+	if t.cacheFlags&typeCacheHasGenericArgumentsComputed == 0 {
+		if core.Some(t.checker.getTypeArguments(t), func(t *Type) bool {
+			return t.flags&TypeFlagsTypeParameter != 0 || isTypeReferenceWithGenericArguments(t)
+		}) {
+			t.cacheFlags |= typeCacheHasGenericArguments
+		}
+		t.cacheFlags |= typeCacheHasGenericArgumentsComputed
+	}
+	return t.cacheFlags&typeCacheHasGenericArguments != 0
 }
 
 func isNonDeferredTypeReference(t *Type) bool {
@@ -19546,29 +19556,42 @@ func (c *Checker) isApplicableIndexType(source *Type, target *Type) bool {
 
 func (c *Checker) resolveStructuredTypeMembers(t *Type) *StructuredType {
 	if t.objectFlags&ObjectFlagsMembersResolved == 0 {
+		c.resolveStructuredTypeMembersWorker(t)
+	}
+	return t.AsStructuredType()
+}
+
+func (c *Checker) resolveStructuredTypeMembersWorker(t *Type) {
+	resolving := t.cacheFlags & typeCacheResolvingMembers
+	t.cacheFlags |= typeCacheResolvingMembers
+	switch {
+	case t.flags&TypeFlagsObject != 0:
 		switch {
-		case t.flags&TypeFlagsObject != 0:
-			switch {
-			case t.objectFlags&(ObjectFlagsClassOrInterface|ObjectFlagsReference) != 0:
-				c.resolveObjectTypeMembers(t)
-			case t.objectFlags&ObjectFlagsReverseMapped != 0:
-				c.resolveReverseMappedTypeMembers(t)
-			case t.objectFlags&ObjectFlagsAnonymous != 0:
-				c.resolveAnonymousTypeMembers(t)
-			case t.objectFlags&ObjectFlagsMapped != 0:
-				c.resolveMappedTypeMembers(t)
-			default:
-				panic("Unhandled case in resolveStructuredTypeMembers")
-			}
-		case t.flags&TypeFlagsUnion != 0:
-			c.resolveUnionTypeMembers(t)
-		case t.flags&TypeFlagsIntersection != 0:
-			c.resolveIntersectionTypeMembers(t)
+		case t.objectFlags&(ObjectFlagsClassOrInterface|ObjectFlagsReference) != 0:
+			c.resolveObjectTypeMembers(t)
+		case t.objectFlags&ObjectFlagsReverseMapped != 0:
+			c.resolveReverseMappedTypeMembers(t)
+		case t.objectFlags&ObjectFlagsAnonymous != 0:
+			c.resolveAnonymousTypeMembers(t)
+		case t.objectFlags&ObjectFlagsMapped != 0:
+			c.resolveMappedTypeMembers(t)
 		default:
 			panic("Unhandled case in resolveStructuredTypeMembers")
 		}
+	case t.flags&TypeFlagsUnion != 0:
+		c.resolveUnionTypeMembers(t)
+	case t.flags&TypeFlagsIntersection != 0:
+		c.resolveIntersectionTypeMembers(t)
+	default:
+		panic("Unhandled case in resolveStructuredTypeMembers")
 	}
-	return t.AsStructuredType()
+	t.cacheFlags = t.cacheFlags&^typeCacheResolvingMembers | resolving
+}
+
+// Reports whether the members of a structured type are resolved and will no longer change. Some
+// resolvers publish partial (e.g. empty) members while resolution is still in progress.
+func hasFinalMembers(t *Type) bool {
+	return t.objectFlags&ObjectFlagsMembersResolved != 0 && t.cacheFlags&typeCacheResolvingMembers == 0
 }
 
 func (c *Checker) resolveObjectTypeMembers(t *Type) {
@@ -19774,6 +19797,7 @@ func (c *Checker) getBaseTypes(t *Type) []*Type {
 		// members partially resolved. Here we ensure any such partial resolution is reset.
 		// See https://github.com/microsoft/TypeScript/issues/16861 for an example.
 		t.objectFlags &^= ObjectFlagsMembersResolved
+		t.cacheFlags &^= typeCacheIsWeakComputed | typeCacheIsWeak
 		data.baseTypesResolved = true
 	}
 	return data.resolvedBaseTypes
@@ -26506,6 +26530,9 @@ func (c *Checker) getUnionTypeFromSortedList(types []*Type, precomputedObjectFla
 	t := c.unionTypes[key]
 	if t == nil {
 		t = c.newUnionType(precomputedObjectFlags|c.getPropagatingFlagsOfTypes(types, TypeFlagsNullable), types)
+		if core.Every(types, func(t *Type) bool { return t.flags&(TypeFlagsDefinitelyNonNullable&^TypeFlagsInstantiable) != 0 }) {
+			t.cacheFlags |= typeCacheNonNullableUnion
+		}
 		t.AsUnionType().origin = origin
 		t.alias = alias
 		if len(types) == 2 && types[0].flags&TypeFlagsBooleanLiteral != 0 && types[1].flags&TypeFlagsBooleanLiteral != 0 {
@@ -28844,16 +28871,30 @@ func (c *Checker) getNormalizedUnionOrIntersectionType(t *Type, writing bool) *T
 }
 
 func (c *Checker) shouldNormalizeIntersection(t *Type) bool {
+	if t.cacheFlags&typeCacheShouldNormalizeComputed != 0 {
+		return t.cacheFlags&typeCacheShouldNormalize != 0
+	}
+	result := false
+	// Whether an anonymous object type is empty can change until its members are fully resolved,
+	// so the result is only cached if every answer it depends on is final.
+	cacheable := true
 	hasInstantiable := false
 	hasNullableOrEmpty := false
-	for _, t := range t.Types() {
-		hasInstantiable = hasInstantiable || t.flags&TypeFlagsInstantiable != 0
-		hasNullableOrEmpty = hasNullableOrEmpty || t.flags&TypeFlagsNullable != 0 || c.IsEmptyAnonymousObjectType(t)
+	for _, u := range t.Types() {
+		hasInstantiable = hasInstantiable || u.flags&TypeFlagsInstantiable != 0
+		if !hasNullableOrEmpty && u.flags&TypeFlagsNullable == 0 && u.objectFlags&ObjectFlagsAnonymous != 0 && !hasFinalMembers(u) {
+			cacheable = false
+		}
+		hasNullableOrEmpty = hasNullableOrEmpty || u.flags&TypeFlagsNullable != 0 || c.IsEmptyAnonymousObjectType(u)
 		if hasInstantiable && hasNullableOrEmpty {
-			return true
+			result = true
+			break
 		}
 	}
-	return false
+	if cacheable {
+		t.cacheFlags |= typeCacheShouldNormalizeComputed | core.IfElse(result, typeCacheShouldNormalize, 0)
+	}
+	return result
 }
 
 func (c *Checker) getNormalizedTupleType(t *Type, writing bool) *Type {
@@ -28876,6 +28917,9 @@ func (c *Checker) getSingleBaseForNonAugmentingSubtype(t *Type) *Type {
 	}
 	key := CachedTypeKey{kind: CachedTypeKindEquivalentBaseType, typeId: t.id}
 	if t.objectFlags&ObjectFlagsIdenticalBaseTypeCalculated != 0 {
+		if t.objectFlags&ObjectFlagsIdenticalBaseTypeExists == 0 {
+			return nil
+		}
 		return c.cachedTypes[key]
 	}
 	t.objectFlags |= ObjectFlagsIdenticalBaseTypeCalculated
@@ -28906,6 +28950,7 @@ func (c *Checker) getSingleBaseForNonAugmentingSubtype(t *Type) *Type {
 	if len(c.getTypeArguments(t)) > len(typeParameters) {
 		instantiatedBase = c.getTypeWithThisArgument(instantiatedBase, core.LastOrNil(c.getTypeArguments(t)), false)
 	}
+	t.objectFlags |= ObjectFlagsIdenticalBaseTypeExists
 	c.cachedTypes[key] = instantiatedBase
 	return instantiatedBase
 }
@@ -31909,6 +31954,13 @@ func (c *Checker) getTypeFactsWorker(t *Type, callerOnlyNeeds TypeFacts) TypeFac
 	case flags&TypeFlagsNever != 0:
 		return TypeFactsNone
 	case flags&TypeFlagsUnion != 0:
+		if t.cacheFlags&typeCacheNonNullableUnion != 0 {
+			// Like object types below, none of the constituents can produce facts outside of these.
+			possibleFacts := core.IfElse(c.strictNullChecks, TypeFactsEmptyObjectStrictFacts, TypeFactsEmptyObjectFacts)
+			if callerOnlyNeeds&possibleFacts == 0 {
+				return TypeFactsNone
+			}
+		}
 		var facts TypeFacts
 		for _, t := range t.Types() {
 			facts |= c.getTypeFactsWorker(t, callerOnlyNeeds)

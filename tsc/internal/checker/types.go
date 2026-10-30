@@ -780,7 +780,22 @@ const (
 	typeKindReverseMapped
 	typeKindEvolvingArray
 	typeKindUnion
-	typeKindIntersection
+	typeKindIntersection // Must be last; AsStructuredType relies on this
+)
+
+// typeCacheFlags record internal state and memoized answers for a type. They fit in what would otherwise
+// be padding in Type.
+type typeCacheFlags uint8
+
+const (
+	typeCacheResolvingMembers            typeCacheFlags = 1 << iota // Structured type members are being resolved
+	typeCacheShouldNormalizeComputed                                // shouldNormalizeIntersection result has been computed
+	typeCacheShouldNormalize                                        // shouldNormalizeIntersection result
+	typeCacheNonNullableUnion                                       // Union of only definitely non-nullable, non-instantiable types
+	typeCacheIsWeakComputed                                         // isWeakType result has been computed
+	typeCacheIsWeak                                                 // isWeakType result
+	typeCacheHasGenericArgumentsComputed                            // isTypeReferenceWithGenericArguments result has been computed
+	typeCacheHasGenericArguments                                    // isTypeReferenceWithGenericArguments result
 )
 
 type Type struct {
@@ -788,6 +803,7 @@ type Type struct {
 	objectFlags ObjectFlags
 	id          TypeId
 	kind        typeKind `customlint:"protected"`
+	cacheFlags  typeCacheFlags
 	symbol      *ast.Symbol
 	alias       *TypeAlias
 	checker     *Checker
@@ -897,7 +913,7 @@ func (t *Type) AsConstrainedType() *ConstrainedType {
 }
 
 func (t *Type) AsStructuredType() *StructuredType {
-	if t.kind >= typeKindObject && t.kind <= typeKindIntersection {
+	if t.kind >= typeKindObject {
 		// SAFETY: Types of these kinds are structs that embed StructuredType at offset zero.
 		return (*StructuredType)(unsafe.Pointer(t))
 	}
