@@ -670,8 +670,9 @@ func (s *Scanner) Scan() ast.Kind {
 					s.pos += size
 
 					if stringutil.IsLineBreak(ch1) {
-						lastLineStart = s.pos
 						s.tokenFlags |= ast.TokenFlagsPrecedingLineBreak
+						commentClosed, lastLineStart = s.scanMultiLineCommentTail()
+						break
 					}
 				}
 
@@ -964,6 +965,37 @@ func (s *Scanner) Scan() ast.Kind {
 		}
 		return s.token
 	}
+}
+
+// scanMultiLineCommentTail finishes a multi-line comment after its first line break. From there on only the
+// closing delimiter and the start of the last line matter, so the delimiter is found with a substring search
+// and the last line break with a backward scan of the comment body.
+func (s *Scanner) scanMultiLineCommentTail() (commentClosed bool, lastLineStart int) {
+	rest := s.text[s.pos:s.end]
+	bodyLen := strings.Index(rest, "*/")
+	commentClosed = bodyLen >= 0
+	if !commentClosed {
+		bodyLen = len(rest)
+	}
+	lastLineStart = s.pos
+search:
+	for i := bodyLen - 1; i >= 0; i-- {
+		switch rest[i] {
+		case '\n', '\r':
+			lastLineStart = s.pos + i + 1
+			break search
+		case 0xE2: // first byte of U+2028 and U+2029
+			if strings.HasPrefix(rest[i:], "\u2028") || strings.HasPrefix(rest[i:], "\u2029") {
+				lastLineStart = s.pos + i + 3
+				break search
+			}
+		}
+	}
+	s.pos += bodyLen
+	if commentClosed {
+		s.pos += 2
+	}
+	return commentClosed, lastLineStart
 }
 
 func (s *Scanner) processCommentDirective(start int, end int, multiline bool) {
