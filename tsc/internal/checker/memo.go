@@ -48,7 +48,6 @@ const (
 	memoEnumMemberValue
 	memoBaseConstraint
 	memoAccessorType
-	memoRegularExpression
 	memoContextualParameters
 	memoContextChecked
 	memoInitializerIsUndefined
