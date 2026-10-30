@@ -552,6 +552,13 @@ type VarianceStackEntry struct {
 	typeParameters []*Type
 }
 
+type ResolvingObjectType struct {
+	t               *Type           // Type being resolved
+	mapper          *TypeMapper     // Instantiation mapper
+	baseTypes       []*Type         // Instantiated base types
+	resolvedMembers ast.SymbolTable // Members resolved by getDeclaredPropertyOfResolvingType
+}
+
 const maxSerializationLevel = 2
 
 type Program interface {
@@ -850,6 +857,7 @@ type Checker struct {
 	awaitedTypeStack                            []*Type
 	reverseMappedSourceStack                    []*Type
 	reverseMappedTargetStack                    []*Type
+	resolvingObjectTypeStack                    []ResolvingObjectType
 	reverseExpandingFlags                       ExpandingFlags
 	freeRelater                                 *Relater
 	subtypeRelation                             *Relation
@@ -19382,6 +19390,11 @@ func (c *Checker) getPropertyOfTypeEx(t *Type, name string, skipObjectFunctionPr
 	t = c.getReducedApparentType(t)
 	switch {
 	case t.flags&TypeFlagsObject != 0:
+		if t.objectFlags&ObjectFlagsMembersResolved == 0 && len(c.resolvingObjectTypeStack) != 0 {
+			if symbol := c.getDeclaredPropertyOfResolvingType(t, name); symbol != nil {
+				return symbol
+			}
+		}
 		resolved := c.resolveStructuredTypeMembers(t)
 		symbol := resolved.getMember(name)
 		if symbol != nil {
@@ -19425,6 +19438,37 @@ func (c *Checker) getPropertyOfTypeEx(t *Type, name string, skipObjectFunctionPr
 		return nil
 	case t.flags&TypeFlagsUnion != 0:
 		return c.getPropertyOfUnionOrIntersectionType(t, name, skipObjectFunctionPropertyAugment)
+	}
+	return nil
+}
+
+// We allow accessing declared members of a class or interface while building its member layout. This
+// means that base classes of a class or interface can access members declared in the class or interface
+// during its resolution without causing a circularity error. Members resolved by this function are
+// eventually propagated into the resolved members of the class or interface.
+func (c *Checker) getDeclaredPropertyOfResolvingType(t *Type, name string) *ast.Symbol {
+	for i := len(c.resolvingObjectTypeStack) - 1; i >= 0; i-- {
+		if c.resolvingObjectTypeStack[i].t == t {
+			resolved := c.resolvingObjectTypeStack[i].resolvedMembers.Get(name)
+			if resolved == nil {
+				if symbol := c.resolveDeclaredMembers(getTargetType(t)).declaredMembers.Get(name); symbol != nil {
+					resolved = c.instantiateSymbol(symbol, c.resolvingObjectTypeStack[i].mapper)
+				} else {
+					for _, baseType := range c.resolvingObjectTypeStack[i].baseTypes {
+						if resolved = c.getPropertyOfTypeEx(baseType, name, true, false); resolved != nil {
+							break
+						}
+					}
+				}
+				if resolved != nil {
+					if c.resolvingObjectTypeStack[i].resolvedMembers == nil {
+						c.resolvingObjectTypeStack[i].resolvedMembers = ast.NewSymbolTableWithCapacity(1)
+					}
+					c.resolvingObjectTypeStack[i].resolvedMembers.Set(name, resolved)
+				}
+			}
+			return resolved
+		}
 	}
 	return nil
 }
@@ -19575,7 +19619,6 @@ func (c *Checker) resolveObjectTypeMembers(t *Type) {
 	var mapper *TypeMapper
 	var typeParameters []*Type
 	var typeArguments []*Type
-	var members ast.SymbolTable
 	var callSignatures []*Signature
 	var constructSignatures []*Signature
 	var indexInfos []*IndexInfo
@@ -19607,6 +19650,7 @@ func (c *Checker) resolveObjectTypeMembers(t *Type) {
 			instantiatedBaseTypes[i] = c.getTypeWithThisArgument(c.instantiateType(baseType, mapper), thisArgument, false /*needsApparentType*/)
 		}
 	}
+	c.resolvingObjectTypeStack = append(c.resolvingObjectTypeStack, ResolvingObjectType{t: t, mapper: mapper, baseTypes: instantiatedBaseTypes})
 	// Member layout must be computed before inherited signatures, which may circularly depend on it
 	layout := c.getMemberLayout(t, instantiatedBaseTypes)
 	for _, instantiatedBaseType := range instantiatedBaseTypes {
@@ -19622,12 +19666,29 @@ func (c *Checker) resolveObjectTypeMembers(t *Type) {
 			return findIndexInfo(indexInfos, info.keyType) == nil
 		}))
 	}
-	c.setStructuredTypeMembers(t, members, callSignatures, constructSignatures, indexInfos)
+	c.setStructuredTypeMembers(t, nil, callSignatures, constructSignatures, indexInfos)
 	lazyState := c.lazyStateArena.New()
 	lazyState.layout = layout
 	lazyState.mapper = mapper
 	lazyState.baseTypes = instantiatedBaseTypes
 	t.AsTypeReference().lazy = lazyState
+	c.propagateResolvedDeclaredMembers()
+	c.resolvingObjectTypeStack = c.resolvingObjectTypeStack[:len(c.resolvingObjectTypeStack)-1]
+}
+
+// Propagate members resolved by getDeclaredPropertyOfResolvingType
+func (c *Checker) propagateResolvedDeclaredMembers() {
+	r := &c.resolvingObjectTypeStack[len(c.resolvingObjectTypeStack)-1]
+	s := r.t.AsTypeReference()
+	for symbol := range r.resolvedMembers.Values() {
+		if memberInfo := s.lazy.layout.memberInfoMap[symbol.Name()]; memberInfo != nil {
+			if s.properties == nil {
+				s.properties = make([]*ast.Symbol, len(s.lazy.layout.memberInfos))
+			}
+			s.properties[memberInfo.slotIndex] = symbol
+		}
+	}
+	r.resolvedMembers = nil
 }
 
 func (c *Checker) getMemberLayout(t *Type, baseTypes []*Type) *MemberLayout {
@@ -28129,7 +28190,7 @@ func (c *Checker) getPropertyNameFromIndex(indexType *Type, accessNode *ast.Node
 }
 
 func (c *Checker) isStringIndexSignatureOnlyTypeWorker(t *Type) bool {
-	return t.flags&TypeFlagsObject != 0 && !c.isGenericMappedType(t) && len(c.getLayoutPropertiesOfType(t)) == 0 && len(c.getIndexInfosOfType(t)) == 1 && c.getIndexInfoOfType(t, c.stringType) != nil ||
+	return t.flags&TypeFlagsObject != 0 && t.objectFlags&(ObjectFlagsClassOrInterface|ObjectFlagsReference) == 0 && !c.isGenericMappedType(t) && len(c.getLayoutPropertiesOfType(t)) == 0 && len(c.getIndexInfosOfType(t)) == 1 && c.getIndexInfoOfType(t, c.stringType) != nil ||
 		t.flags&TypeFlagsUnionOrIntersection != 0 && core.Every(t.Types(), c.isStringIndexSignatureOnlyType)
 }
 
