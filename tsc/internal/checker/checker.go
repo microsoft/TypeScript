@@ -83,12 +83,12 @@ const (
 )
 
 type TypeResolution struct {
-	target       TypeSystemEntity
-	propertyName TypeSystemPropertyName
-	result       bool
+	target TypeSystemEntity
 	// canonical is the member of a cycle headed by this resolution that is
 	// resolved first; see observeCircularHead.
-	canonical TypeSystemEntity
+	canonical    TypeSystemEntity
+	propertyName TypeSystemPropertyName
+	result       bool
 	// restartHidden records that a cycle entered below this resolution of a
 	// module table passes through it; see resolveModuleTableMembers.
 	restartHidden bool
@@ -620,59 +620,62 @@ var nextCheckerID atomic.Uint32
 // checkers may share one store; see Clone.
 type Checker struct {
 	*memoStore
-	compareSymbols                              func(*ast.Symbol, *ast.Symbol) int
-	compareSymbolChains                         func([]*ast.Symbol, []*ast.Symbol) int
-	resolutionSerials                           uint32
-	resolutions                                 []resolution
-	instantiationStack                          []*Type
-	conditionalConstraintDepth                  depthLimit
-	inlineLevel                                 depthLimit
-	serializationLevel                          depthLimit
-	currentNode                                 *ast.Node
-	currentNodeResolution                       int // 1-based index in resolutions of the resolution of currentNode, or 0; see enterCurrentNode
-	varianceTypeParameter                       *Type
-	isInferencePartiallyBlocked                 bool
-	wasCanceled                                 bool
-	buildingExternalModuleContainers            bool
-	evaluate                                    evaluator.Evaluator
-	resolveName                                 func(location *ast.Node, name string, meaning ast.SymbolFlags, nameNotFoundMessage *diagnostics.Message, isUse bool, excludeGlobals bool) *ast.Symbol
-	resolveNameForSymbolSuggestion              func(location *ast.Node, name string, meaning ast.SymbolFlags, nameNotFoundMessage *diagnostics.Message, isUse bool, excludeGlobals bool) *ast.Symbol
-	symbolArena                                 core.Arena[ast.Symbol]
-	symbolWithDataArena                         core.Arena[ast.SymbolWithData]
-	symbolExtraArena                            ast.SymbolExtraArena
-	signatureArena                              core.Arena[Signature]
-	signatureExtraArena                         core.Arena[signatureExtra]
-	indexInfoArena                              core.Arena[IndexInfo]
-	literalTypeArena                            core.Arena[LiteralType]
-	objectTypeArena                             core.Arena[ObjectType]
-	typeReferenceArena                          core.Arena[TypeReference]
-	interfaceTypeArena                          core.Arena[InterfaceType]
-	mappedTypeArena                             core.Arena[MappedType]
-	unionTypeArena                              core.Arena[UnionType]
-	intersectionTypeArena                       core.Arena[IntersectionType]
-	typeParameterArena                          core.Arena[TypeParameter]
-	indexedAccessTypeArena                      core.Arena[IndexedAccessType]
-	conditionalTypeArena                        core.Arena[ConditionalType]
-	typeListArena                               core.Arena[*Type]
-	outerTypeParameterListArena                 core.Arena[[]*Type]
-	valueSymbolExtraArena                       core.Arena[valueSymbolExtra]
-	structuredTypeExtraArena                    core.Arena[structuredTypeExtra]
-	lazyStateArena                              core.Arena[LazyState]
-	memberLayoutArena                           core.Arena[MemberLayout]
-	layoutMemberInfos                           map[string]MemberInfo
-	freeTypeSets                                *temporaryTypeSet
-	freePropertyCounts                          *temporaryPropertyCounts
-	factory                                     ast.NodeFactory
-	regExpScanner                               *scanner.Scanner
-	uniqueLiteralMapper                         *TypeMapper
-	reliabilityFlags                            RelationComparisonResult
-	reportUnreliableMapper                      *TypeMapper
-	reportUnmeasurableMapper                    *TypeMapper
-	restrictiveMapper                           *TypeMapper
-	permissiveMapper                            *TypeMapper
-	contextualBindingPatterns                   []*ast.Node
-	resolving                                   resolvingTable      // Index in resolutions of the outermost computation of each key in progress
-	typeResolutionTop                           int                 // 1-based index in resolutions of the innermost resolution, or 0
+	compareSymbols                   func(*ast.Symbol, *ast.Symbol) int
+	compareSymbolChains              func([]*ast.Symbol, []*ast.Symbol) int
+	resolutionSerials                uint32
+	resolutions                      []resolution
+	instantiationStack               []*Type
+	conditionalConstraintDepth       depthLimit
+	inlineLevel                      depthLimit
+	serializationLevel               depthLimit
+	currentNode                      *ast.Node
+	currentNodeResolution            int // 1-based index in resolutions of the resolution of currentNode, or 0; see enterCurrentNode
+	varianceTypeParameter            *Type
+	isInferencePartiallyBlocked      bool
+	wasCanceled                      bool
+	buildingExternalModuleContainers bool
+	evaluate                         evaluator.Evaluator
+	resolveName                      func(location *ast.Node, name string, meaning ast.SymbolFlags, nameNotFoundMessage *diagnostics.Message, isUse bool, excludeGlobals bool) *ast.Symbol
+	resolveNameForSymbolSuggestion   func(location *ast.Node, name string, meaning ast.SymbolFlags, nameNotFoundMessage *diagnostics.Message, isUse bool, excludeGlobals bool) *ast.Symbol
+	symbolArena                      core.Arena[ast.Symbol]
+	symbolWithDataArena              core.Arena[ast.SymbolWithData]
+	symbolExtraArena                 ast.SymbolExtraArena
+	signatureArena                   core.Arena[Signature]
+	signatureExtraArena              core.Arena[signatureExtra]
+	indexInfoArena                   core.Arena[IndexInfo]
+	literalTypeArena                 core.Arena[LiteralType]
+	objectTypeArena                  core.Arena[ObjectType]
+	typeReferenceArena               core.Arena[TypeReference]
+	interfaceTypeArena               core.Arena[InterfaceType]
+	mappedTypeArena                  core.Arena[MappedType]
+	unionTypeArena                   core.Arena[UnionType]
+	intersectionTypeArena            core.Arena[IntersectionType]
+	typeParameterArena               core.Arena[TypeParameter]
+	indexedAccessTypeArena           core.Arena[IndexedAccessType]
+	conditionalTypeArena             core.Arena[ConditionalType]
+	typeListArena                    core.Arena[*Type]
+	outerTypeParameterListArena      core.Arena[[]*Type]
+	valueSymbolExtraArena            core.Arena[valueSymbolExtra]
+	structuredTypeExtraArena         core.Arena[structuredTypeExtra]
+	lazyStateArena                   core.Arena[LazyState]
+	memberLayoutArena                core.Arena[MemberLayout]
+	layoutMemberInfos                map[string]MemberInfo
+	freeTypeSets                     *temporaryTypeSet
+	freePropertyCounts               *temporaryPropertyCounts
+	factory                          ast.NodeFactory
+	regExpScanner                    *scanner.Scanner
+	uniqueLiteralMapper              *TypeMapper
+	reliabilityFlags                 RelationComparisonResult
+	reportUnreliableMapper           *TypeMapper
+	reportUnmeasurableMapper         *TypeMapper
+	restrictiveMapper                *TypeMapper
+	permissiveMapper                 *TypeMapper
+	contextualBindingPatterns        []*ast.Node
+	resolving                        resolvingTable // Index in resolutions of the outermost computation of each key in progress
+	typeResolutionTop                int            // 1-based index in resolutions of the innermost resolution, or 0
+	// Like typeResolutionTop, but skipping the type resolutions of current
+	// nodes, which are many and which nothing searches for.
+	searchableTop                               int
 	resolutionStart                             int                 // Index in resolutions below which resolutions are not searched for cycles
 	visibleStart                                int                 // Index in resolutions below which nothing in progress is visible; see yieldCycle
 	cycleYields                                 []cycleYield        // Canonical recomputations in progress; see yieldCycle
@@ -20364,7 +20367,7 @@ func (c *Checker) isResolvingAnywhere(target TypeSystemEntity, propertyName Type
 // resolvingAnywhereIndex returns the index in resolutions of the visible
 // resolution of the property of target in progress, or -1.
 func (c *Checker) resolvingAnywhereIndex(target TypeSystemEntity, propertyName TypeSystemPropertyName) int {
-	for i := c.typeResolutionTop - 1; i >= c.visibleStart; i = int(c.resolutions[i].prevTypeResolution) - 1 {
+	for i := c.searchableTop - 1; i >= c.visibleStart; i = int(c.resolutions[i].prevSearchable) - 1 {
 		if r := &c.resolutions[i].typeResolution; r.target == target && r.propertyName == propertyName {
 			return i
 		}
@@ -20526,6 +20529,9 @@ func (c *Checker) popTypeResolution() bool {
 	f := &c.resolutions[n]
 	result := f.typeResolution.result
 	c.typeResolutionTop = int(f.prevTypeResolution)
+	if f.typeResolution.propertyName != TypeSystemPropertyNameCurrentNode {
+		c.searchableTop = int(f.prevSearchable)
+	}
 	c.resolutions[n] = resolution{}
 	c.resolutions = c.resolutions[:n]
 	if c.circularityStart > n {
@@ -20554,6 +20560,10 @@ func (c *Checker) beginTypeResolution(target TypeSystemEntity, propertyName Type
 	f.typeResolution.propertyName = propertyName
 	f.typeResolution.result = true
 	c.typeResolutionTop = len(c.resolutions)
+	if propertyName != TypeSystemPropertyNameCurrentNode {
+		f.prevSearchable = int32(c.searchableTop)
+		c.searchableTop = len(c.resolutions)
+	}
 }
 
 // topTypeResolution returns the innermost resolution, which must be the
@@ -20564,7 +20574,7 @@ func (c *Checker) topTypeResolution() *TypeResolution {
 }
 
 func (c *Checker) findResolutionCycleStartIndex(target TypeSystemEntity, propertyName TypeSystemPropertyName) int {
-	for i := c.typeResolutionTop - 1; i >= c.resolutionStart; i = int(c.resolutions[i].prevTypeResolution) - 1 {
+	for i := c.searchableTop - 1; i >= c.resolutionStart; i = int(c.resolutions[i].prevSearchable) - 1 {
 		resolution := &c.resolutions[i].typeResolution
 		if c.typeResolutionHasProperty(resolution) {
 			// The result was set before its computation finished, which
@@ -20587,7 +20597,7 @@ func (c *Checker) findResolutionCycleStartIndex(target TypeSystemEntity, propert
 // findResolutionBelow reports whether a type resolution of target below the
 // one at index i is in progress.
 func (c *Checker) findResolutionBelow(i int, target TypeSystemEntity, propertyName TypeSystemPropertyName) bool {
-	for i = int(c.resolutions[i].prevTypeResolution) - 1; i >= c.resolutionStart; i = int(c.resolutions[i].prevTypeResolution) - 1 {
+	for i = int(c.resolutions[i].prevSearchable) - 1; i >= c.resolutionStart; i = int(c.resolutions[i].prevSearchable) - 1 {
 		r := &c.resolutions[i].typeResolution
 		if r.target == target && r.propertyName == propertyName {
 			return true
