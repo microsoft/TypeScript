@@ -133,6 +133,13 @@ func (c *Checker) compareTypesAssignableSimple(source *Type, target *Type) Terna
 	return TernaryFalse
 }
 
+func (c *Checker) compareTypesComparableSimple(source *Type, target *Type) Ternary {
+	if c.isTypeRelatedTo(source, target, c.comparableRelation) {
+		return TernaryTrue
+	}
+	return TernaryFalse
+}
+
 func (c *Checker) compareTypesAssignableWorker(source *Type, target *Type, reportErrors bool) Ternary {
 	if c.isTypeRelatedTo(source, target, c.assignableRelation) {
 		return TernaryTrue
@@ -1034,6 +1041,7 @@ type TypeDiscriminator struct {
 	c           *Checker
 	props       []*ast.Symbol
 	isRelatedTo func(*Type, *Type) Ternary
+	reverse     bool
 }
 
 func (d *TypeDiscriminator) len() int {
@@ -1044,19 +1052,62 @@ func (d *TypeDiscriminator) name(index int) string {
 	return d.props[index].Name()
 }
 
-func (d *TypeDiscriminator) matches(index int, t *Type) bool {
-	propType := d.c.getTypeOfSymbol(d.props[index])
-	for _, s := range propType.Distributed() {
-		if d.isRelatedTo(s, t) != TernaryFalse {
+func (d *TypeDiscriminator) matches(index int, t *Type, isOptional bool) bool {
+	// Two optional discriminants always overlap through absence. Under strictNullChecks this is what the
+	// relation below would conclude anyway, so skip the property type resolution and the comparisons.
+	if isOptional && d.c.strictNullChecks && d.props[index].Flags()&ast.SymbolFlagsOptional != 0 {
+		return true
+	}
+	sourceType, targetType := d.c.getTypeOfSymbol(d.props[index]), t
+	if d.reverse {
+		sourceType, targetType = targetType, sourceType
+	}
+	for _, sourceType := range sourceType.Distributed() {
+		if d.isRelatedTo(sourceType, targetType) != TernaryFalse {
 			return true
 		}
 	}
 	return false
 }
 
+// A union can only be narrowed by discriminants when it has at least two non-primitive constituents to
+// tell apart. This rules out the very common `T | undefined` shaped unions before any property work.
+func isDiscriminableUnion(t *Type) bool {
+	if t.objectFlags&ObjectFlagsPrimitiveUnion != 0 {
+		return false
+	}
+	count := 0
+	for _, s := range t.Types() {
+		if s.flags&TypeFlagsPrimitive == 0 {
+			count++
+			if count == 2 {
+				return true
+			}
+		}
+	}
+	return false
+}
+
+// Discriminating a union always drops its primitive and never constituents, even when there are no
+// discriminants to go by. Callers that skip the discrimination for unions that cannot be narrowed still
+// rely on that, for instance when looking up a contextual property, so this reproduces just that part.
+func (c *Checker) removeNonDiscriminableConstituents(t *Type) *Type {
+	types := t.Types()
+	filtered := make([]*Type, 0, len(types))
+	for _, s := range types {
+		if s.flags&TypeFlagsPrimitive == 0 && c.getReducedType(s).flags&TypeFlagsNever == 0 {
+			filtered = append(filtered, s)
+		}
+	}
+	if len(filtered) == 0 || len(filtered) == len(types) {
+		return t
+	}
+	return c.getUnionTypeEx(filtered, UnionReductionNone, nil, nil)
+}
+
 // Keep this up-to-date with the same logic within `getApparentTypeOfContextualType`, since they should behave similarly
 func (c *Checker) findMatchingDiscriminantType(source *Type, target *Type, isRelatedTo func(source *Type, target *Type) Ternary) *Type {
-	if target.flags&TypeFlagsUnion != 0 && source.flags&(TypeFlagsIntersection|TypeFlagsObject) != 0 {
+	if target.flags&TypeFlagsUnion != 0 && source.flags&(TypeFlagsIntersection|TypeFlagsObject) != 0 && isDiscriminableUnion(target) {
 		if match := c.getMatchingUnionConstituentForType(target, source); match != nil {
 			return match
 		}
@@ -1200,12 +1251,21 @@ func (c *Checker) mapTypesByKeyProperty(types []*Type, keyPropertyName string) m
 }
 
 type Discriminator interface {
-	len() int                        // Number of discriminant properties
-	name(index int) string           // Property name of index-th discriminator
-	matches(index int, t *Type) bool // True if index-th discriminator matches the given type
+	len() int                                         // Number of discriminant properties
+	name(index int) string                            // Property name of index-th discriminator
+	matches(index int, t *Type, isOptional bool) bool // True if index-th discriminator matches the given type, which is optional if isOptional is set
 }
 
 func (c *Checker) discriminateTypeByDiscriminableItems(target *Type, discriminator Discriminator) *Type {
+	if filtered := c.discriminateTypesByDiscriminableItems(target, discriminator); filtered != nil {
+		return c.getUnionTypeEx(filtered, UnionReductionNone, nil, nil)
+	}
+	return target
+}
+
+// Returns the constituents of the union target that are not ruled out by the discriminator, in union order,
+// or nil when the discriminator rules out nothing (or everything, which is treated the same way).
+func (c *Checker) discriminateTypesByDiscriminableItems(target *Type, discriminator Discriminator) []*Type {
 	types := target.Types()
 	include := make([]Ternary, len(types))
 	for i, t := range types {
@@ -1220,9 +1280,17 @@ func (c *Checker) discriminateTypeByDiscriminableItems(target *Type, discriminat
 		matched := false
 		for i := range types {
 			if include[i] != TernaryFalse {
-				targetType := c.getTypeOfPropertyOrIndexSignatureOfType(types[i], discriminator.name(n))
+				name := discriminator.name(n)
+				var targetType *Type
+				isOptional := false
+				if prop := c.getPropertyOfType(types[i], name); prop != nil {
+					targetType = c.getTypeOfSymbol(prop)
+					isOptional = prop.Flags()&ast.SymbolFlagsOptional != 0
+				} else if indexInfo := c.getApplicableIndexInfoForName(types[i], name); indexInfo != nil {
+					targetType = c.addOptionalityEx(indexInfo.valueType, true /*isProperty*/, true /*isOptional*/)
+				}
 				if targetType != nil {
-					if discriminator.matches(n, targetType) {
+					if discriminator.matches(n, targetType, isOptional) {
 						matched = true
 					} else {
 						include[i] = TernaryMaybe
@@ -1248,12 +1316,11 @@ func (c *Checker) discriminateTypeByDiscriminableItems(target *Type, discriminat
 				filteredTypes = append(filteredTypes, t)
 			}
 		}
-		filtered := c.getUnionTypeEx(filteredTypes, UnionReductionNone, nil, nil)
-		if filtered.flags&TypeFlagsNever == 0 {
-			return filtered
+		if len(filteredTypes) != 0 {
+			return filteredTypes
 		}
 	}
-	return target
+	return nil
 }
 
 func (c *Checker) filterPrimitivesIfContainsNonPrimitive(unionType *Type) *Type {

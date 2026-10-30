@@ -31523,7 +31523,7 @@ func (d *ObjectLiteralDiscriminator) name(index int) string {
 	return d.members[index-len(d.props)].Name()
 }
 
-func (d *ObjectLiteralDiscriminator) matches(index int, t *Type) bool {
+func (d *ObjectLiteralDiscriminator) matches(index int, t *Type, _ bool) bool {
 	var propType *Type
 	if index < len(d.props) {
 		prop := d.props[index]
@@ -31549,6 +31549,9 @@ func (d *ObjectLiteralDiscriminator) matches(index int, t *Type) bool {
 }
 
 func (c *Checker) discriminateContextualTypeByObjectMembers(node *ast.Node, contextualType *Type) *Type {
+	if !isDiscriminableUnion(contextualType) {
+		return c.removeNonDiscriminableConstituents(contextualType)
+	}
 	key := DiscriminatedContextualTypeKey{nodeId: ast.GetNodeId(node), typeId: contextualType.id}
 	if discriminated := c.discriminatedContextualTypes[key]; discriminated != nil {
 		return discriminated

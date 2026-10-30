@@ -247,10 +247,13 @@ func (c *Checker) inferFromTypes(n *InferenceState, source *Type, target *Type) 
 	case target.flags&TypeFlagsConditional != 0:
 		c.invokeOnce(n, source, target, (*Checker).inferToConditionalType)
 	case target.flags&TypeFlagsUnionOrIntersection != 0:
-		c.inferToMultipleTypes(n, source, target.Types(), target.flags)
+		c.inferToUnionOrIntersectionType(n, source, target)
 	case source.flags&TypeFlagsUnion != 0:
-		// Source is a union or intersection type, infer from each constituent type
-		for _, sourceType := range source.Types() {
+		sources := source.Types()
+		if filtered := c.getInferenceDiscriminatedTypes(source, target, true /*reverse*/); filtered != nil {
+			sources = filtered
+		}
+		for _, sourceType := range sources {
 			c.inferFromTypes(n, sourceType, target)
 		}
 	case target.flags&TypeFlagsTemplateLiteral != 0:
@@ -456,7 +459,43 @@ func getTypeListDepth(types []*Type, maxDepth int) int {
 	return depth
 }
 
-func (c *Checker) inferToMultipleTypes(n *InferenceState, source *Type, targets []*Type, targetFlags TypeFlags) {
+func (c *Checker) inferToUnionOrIntersectionType(n *InferenceState, source *Type, target *Type) {
+	// Each entry contains the remaining allowed targets for the corresponding source constituent.
+	// A nil entry means unrestricted.
+	var filteredTargetsBySource [][]*Type
+	if target.flags&TypeFlagsUnion != 0 && isDiscriminableUnion(target) {
+		sources := source.Distributed()
+		for i, s := range sources {
+			if filtered := c.getInferenceDiscriminatedTypes(target, s, false /*reverse*/); filtered != nil {
+				if filteredTargetsBySource == nil {
+					filteredTargetsBySource = make([][]*Type, len(sources))
+				}
+				filteredTargetsBySource[i] = filtered
+			}
+		}
+	}
+	c.inferToMultipleTypes(n, source, target.Types(), target.flags, filteredTargetsBySource)
+}
+
+func (c *Checker) getInferenceDiscriminatedTypes(union *Type, object *Type, reverse bool) []*Type {
+	if object.flags&TypeFlagsObject == 0 || !isDiscriminableUnion(union) {
+		return nil
+	}
+	if match := c.getMatchingUnionConstituentForType(union, object); match != nil {
+		return match.Distributed()
+	}
+	literalProps := core.Filter(c.getPropertiesOfType(object), func(prop *ast.Symbol) bool {
+		return isLiteralType(c.getNonMissingTypeOfSymbol(prop))
+	})
+	discriminants := c.findDiscriminantProperties(literalProps, union)
+	if len(discriminants) == 0 {
+		return nil
+	}
+	discriminator := &TypeDiscriminator{c: c, props: discriminants, reverse: reverse, isRelatedTo: c.compareTypesComparableSimple}
+	return c.discriminateTypesByDiscriminableItems(union, discriminator)
+}
+
+func (c *Checker) inferToMultipleTypes(n *InferenceState, source *Type, targets []*Type, targetFlags TypeFlags, filteredTargetsBySource [][]*Type) {
 	typeVariableCount := 0
 	if targetFlags&TypeFlagsUnion != 0 {
 		var nakedTypeVariable *Type
@@ -476,8 +515,22 @@ func (c *Checker) inferToMultipleTypes(n *InferenceState, source *Type, targets 
 			if getInferenceInfoForType(n, t) != nil {
 				nakedTypeVariable = t
 				typeVariableCount++
+				// Naked type parameters still consume their entries in the filtered target lists.
+				for i, remaining := range filteredTargetsBySource {
+					if len(remaining) != 0 && remaining[0] == t {
+						filteredTargetsBySource[i] = remaining[1:]
+					}
+				}
 			} else {
 				for i := range sources {
+					if len(filteredTargetsBySource) != 0 && filteredTargetsBySource[i] != nil {
+						// Filtering preserves union order, so the next allowed target must be first.
+						remaining := filteredTargetsBySource[i]
+						if len(remaining) == 0 || remaining[0] != t {
+							continue
+						}
+						filteredTargetsBySource[i] = remaining[1:]
+					}
 					saveInferencePriority := n.inferencePriority
 					n.inferencePriority = InferencePriorityMaxValue
 					c.inferFromTypes(n, sources[i], t)
@@ -558,7 +611,7 @@ func getSingleTypeVariableFromIntersectionTypes(n *InferenceState, types []*Type
 func (c *Checker) inferToMultipleTypesWithPriority(n *InferenceState, source *Type, targets []*Type, targetFlags TypeFlags, newPriority InferencePriority) {
 	savePriority := n.priority
 	n.priority |= newPriority
-	c.inferToMultipleTypes(n, source, targets, targetFlags)
+	c.inferToMultipleTypes(n, source, targets, targetFlags, nil)
 	n.priority = savePriority
 }
 
