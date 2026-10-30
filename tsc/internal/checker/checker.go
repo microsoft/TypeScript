@@ -11836,7 +11836,12 @@ func (c *Checker) reportNonexistentProperty(propNode *ast.Node, containingType *
 }
 
 func (c *Checker) getSuggestedLibForNonExistentProperty(missingProperty string, containingType *Type) string {
-	container := c.getApparentType(containingType).symbol
+	t := c.getApparentType(containingType)
+	if isTupleType(t) {
+		// Tuple types have no symbol; use their Array or ReadonlyArray base.
+		t = core.IfElse(t.TargetTupleType().readonly, c.globalReadonlyArrayType, c.globalArrayType)
+	}
+	container := t.symbol
 	if container != nil {
 		featureMap := getFeatureMap()
 		if typeFeatures, ok := featureMap[container.Name()]; ok {
