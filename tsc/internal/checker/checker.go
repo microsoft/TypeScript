@@ -2464,9 +2464,8 @@ func (c *Checker) checkSourceElement(node *ast.Node) bool {
 	if node != nil {
 		saveCurrentNode := c.enterCurrentNode(node)
 		saveWithinUnreachableCode := c.withinUnreachableCode
-		c.beginNodeResolution()
+		c.instantiationCount = 0
 		c.checkSourceElementWorker(node)
-		c.endResolution()
 		c.exitCurrentNode(saveCurrentNode)
 		c.withinUnreachableCode = saveWithinUnreachableCode
 	}
@@ -2706,7 +2705,7 @@ func (c *Checker) checkDeferredNode(node *ast.Node) {
 		defer tr.Push(tracing.PhaseCheck, "checkDeferredNode", map[string]any{"kind": node.Kind, "pos": node.Pos(), "end": node.End(), "path": ast.GetSourceFileOfNode(node).FileName()}, false)()
 	}
 	saveCurrentNode := c.enterCurrentNode(node)
-	c.beginNodeResolution()
+	c.instantiationCount = 0
 	switch node.Kind {
 	case ast.KindCallExpression, ast.KindNewExpression, ast.KindTaggedTemplateExpression, ast.KindDecorator, ast.KindJsxOpeningElement:
 		// These node kinds are deferred checked when overload resolution fails. To save on work,
@@ -2735,7 +2734,6 @@ func (c *Checker) checkDeferredNode(node *ast.Node) {
 	case ast.KindObjectLiteralExpression, ast.KindJsxAttributes:
 		c.checkContextualDeprecations(node)
 	}
-	c.endResolution()
 	c.exitCurrentNode(saveCurrentNode)
 }
 
@@ -7948,13 +7946,12 @@ func (c *Checker) checkExpressionEx(node *ast.Node, checkMode CheckMode) *Type {
 		defer tr.Push(tracing.PhaseCheck, "checkExpression", map[string]any{"kind": node.Kind, "pos": node.Pos(), "end": node.End(), "path": ast.GetSourceFileOfNode(node).FileName()}, false)()
 	}
 	saveCurrentNode := c.enterCurrentNode(node)
-	c.beginNodeResolution()
+	c.instantiationCount = 0
 	uninstantiatedType := c.checkExpressionWorker(node, checkMode)
 	t := c.instantiateTypeWithSingleGenericCallSignature(node, uninstantiatedType, checkMode)
 	if isConstEnumObjectType(t) {
 		c.checkConstEnumAccess(node, t)
 	}
-	c.endResolution()
 	c.exitCurrentNode(saveCurrentNode)
 	return t
 }

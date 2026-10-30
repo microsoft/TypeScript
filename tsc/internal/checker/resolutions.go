@@ -79,11 +79,9 @@ func (c *Checker) beginResolution(source memoStateSource, index int) {
 	c.appendResolution(0, source, index, int32(len(c.instantiationStack)))
 }
 
-// beginNodeResolution starts a resolution for checking a node, which
-// continues the depth limit of the enclosing resolution and starts the count
-// of instantiations again.
+// beginNodeResolution starts a resolution that is not a computation, which
+// continues the depth limit of the enclosing resolution.
 func (c *Checker) beginNodeResolution() {
-	c.instantiationCount = 0
 	c.appendResolution(0, nil, 0, c.currentResolution().depthStart)
 }
 
