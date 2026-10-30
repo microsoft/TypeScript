@@ -524,7 +524,7 @@ func (s *snapshotFSBuilder) markDirtyFiles(change FileChangeSummary) FileChangeS
 			return changes
 		}
 		var filteredChanged collections.SyncSet[lsproto.DocumentUri]
-		wg := core.NewWorkGroup(false)
+		wg := core.NewWorkGroup(0)
 		for uri := range changes.Keys() {
 			path := s.caseSensitivity.PathKey(uri.FileName().AsPath())
 			if created {
