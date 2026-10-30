@@ -903,6 +903,14 @@ func (t *Type) AsStructuredType() *StructuredType {
 	return nil
 }
 
+// asResolvedStructuredType is AsStructuredType for a type known to be
+// structured, such as one with resolved members, without checking.
+func (t *Type) asResolvedStructuredType() *StructuredType {
+	// SAFETY: Callers only pass types of the kinds AsStructuredType accepts,
+	// which embed StructuredType at offset zero.
+	return (*StructuredType)(unsafe.Pointer(t))
+}
+
 func (t *Type) AsObjectType() *ObjectType {
 	if t.kind >= typeKindObject && t.kind <= typeKindEvolvingArray {
 		// SAFETY: Types of these kinds are structs that embed ObjectType at offset zero.
