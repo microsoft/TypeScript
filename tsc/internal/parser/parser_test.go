@@ -24,6 +24,16 @@ import (
 )
 
 func BenchmarkParse(b *testing.B) {
+	benchmarkParse(b, false)
+}
+
+// BenchmarkParseWithPositionMaps includes the lazy maps used for diagnostics
+// and JavaScript API positions; BenchmarkParse measures syntax parsing alone.
+func BenchmarkParseWithPositionMaps(b *testing.B) {
+	benchmarkParse(b, true)
+}
+
+func benchmarkParse(b *testing.B, withPositionMaps bool) {
 	for _, f := range fixtures.BenchFixtures {
 		b.Run(f.Name(), func(b *testing.B) {
 			f.SkipIfNotExist(b)
@@ -38,8 +48,14 @@ func BenchmarkParse(b *testing.B) {
 				PathKey:  path,
 			}
 
+			b.SetBytes(int64(len(sourceText)))
+			b.ReportAllocs()
 			for b.Loop() {
-				parser.ParseSourceFile(opts, sourceText, scriptKind)
+				file := parser.ParseSourceFile(opts, sourceText, scriptKind)
+				if withPositionMaps {
+					file.ECMALineMap()
+					file.GetPositionMap()
+				}
 			}
 		})
 	}
