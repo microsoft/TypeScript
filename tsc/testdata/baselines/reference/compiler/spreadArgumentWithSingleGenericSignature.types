@@ -1,0 +1,20 @@
+//// [tests/cases/compiler/spreadArgumentWithSingleGenericSignature.ts] ////
+
+=== spreadArgumentWithSingleGenericSignature.ts ===
+declare function apply<A, R>(f: (a: A) => R, a: A): R;
+>apply : <A, R>(f: (a: A) => R, a: A) => R
+>f : (a: A) => R
+>a : A
+>a : A
+
+declare const args: [<T>(x: T) => T[], number];
+>args : [<T>(x: T) => T[], number]
+>x : T
+
+const r = apply(...args);
+>r : number[]
+>apply(...args) : number[]
+>apply : <A, R>(f: (a: A) => R, a: A) => R
+>...args : number | (<T>(x: T) => T[])
+>args : [<T>(x: T) => T[], number]
+

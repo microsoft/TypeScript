@@ -1150,6 +1150,8 @@ func (n *Node) AsFlowSwitchClauseData() *FlowSwitchClauseData {
 	if n.Kind != kindFlowSwitchClauseData {
 		panic("Invalid node cast to FlowSwitchClauseData")
 	}
+	// SAFETY: Only NewFlowSwitchClauseData assigns this kind, to the Node header embedded at
+	// offset zero of a FlowSwitchClauseData.
 	return (*FlowSwitchClauseData)(unsafe.Pointer(n))
 }
 
@@ -1157,6 +1159,8 @@ func (n *Node) AsFlowReduceLabelData() *FlowReduceLabelData {
 	if n.Kind != kindFlowReduceLabelData {
 		panic("Invalid node cast to FlowReduceLabelData")
 	}
+	// SAFETY: Only NewFlowReduceLabelData assigns this kind, to the Node header embedded at
+	// offset zero of a FlowReduceLabelData.
 	return (*FlowReduceLabelData)(unsafe.Pointer(n))
 }
 

@@ -43,6 +43,7 @@ func (h *Header) AsLarge() *Large {
 	if h.Kind != KindLarge {
 		panic("bad cast")
 	}
+	// SAFETY: Kind is KindLarge, so h is the Header embedded at the start of a Large.
 	return (*Large)(unsafe.Pointer(h))
 }
 
