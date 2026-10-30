@@ -177,6 +177,20 @@ func (t *resolvingTable) get(key memoKey) (int32, bool) {
 	}
 }
 
+// slot returns the slot holding key, or else the empty slot where it would
+// be inserted, with room for the insertion.
+func (t *resolvingTable) slot(key memoKey) *resolvingSlot {
+	if 2*(t.count+1) > len(t.slots) {
+		t.grow()
+	}
+	mask := len(t.slots) - 1
+	for i := t.home(key); ; i = (i + 1) & mask {
+		if k := t.slots[i].key; k == key || k == 0 {
+			return &t.slots[i]
+		}
+	}
+}
+
 func (t *resolvingTable) set(key memoKey, index int32) {
 	if 2*(t.count+1) > len(t.slots) {
 		t.grow()
@@ -235,18 +249,22 @@ func (t *resolvingTable) grow() {
 // one re-enters it as the policy of its kind says; see memoReentry. It reports
 // whether the resolution is recorded.
 func (c *Checker) beginResolving(key memoKey) bool {
-	i, ok := c.resolving.get(key)
-	if ok {
-		if int(i) >= c.visibleStart {
-			if memoReentry[key.field()] == reentryCircular {
-				c.markCircular(int(i))
-			}
-			return false
-		}
-		y := &c.cycleYields[len(c.cycleYields)-1]
-		y.shadowed = append(y.shadowed, shadowedResolving{key, i})
+	slot := c.resolving.slot(key)
+	if slot.key == 0 {
+		*slot = resolvingSlot{key, int32(len(c.resolutions))}
+		c.resolving.count++
+		return true
 	}
-	c.resolving.set(key, int32(len(c.resolutions)))
+	i := slot.index
+	if int(i) >= c.visibleStart {
+		if memoReentry[key.field()] == reentryCircular {
+			c.markCircular(int(i))
+		}
+		return false
+	}
+	y := &c.cycleYields[len(c.cycleYields)-1]
+	y.shadowed = append(y.shadowed, shadowedResolving{key, i})
+	slot.index = int32(len(c.resolutions))
 	return true
 }
 
