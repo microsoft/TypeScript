@@ -33,7 +33,6 @@ type resolution struct {
 	result      *memoState   // Memo state of the result computed
 	effects     *memoEffects // Allocated on first use
 	entry       *ast.Node    // Current node when the computation started
-	query       savedCurrentNode
 
 	// A type resolution is a computation that re-entering detects as a cycle;
 	// see beginTypeResolution. Its other fields are those of the resolution
