@@ -582,6 +582,12 @@ func (p *Parser) reparseTopLevelAwait(sourceFile *ast.SourceFile) *ast.Node {
 				}
 			}
 		}
+		if p.token == ast.KindEndOfFile {
+			// The reparse reached the end of the file, so it replaced every
+			// statement after the span; none is left to copy or reparse.
+			afterAwaitStatement = len(sourceFile.Statements.Nodes)
+			i = len(p.possibleAwaitSpans)
+		}
 
 		// Keep diagnostics from the reparse
 		state.diagnosticsLen = len(p.diagnostics)
