@@ -18799,10 +18799,8 @@ func (c *Checker) getObjectLiteralTypeKey(node *ast.Node, flags ObjectFlags, pro
 	var b keyBuilder
 	b.writeNode(node)
 	b.writeUint32(uint32(flags))
-	names := slices.Sorted(properties.Keys())
-	b.writeInt(len(names))
-	for _, name := range names {
-		prop := properties.Get(name)
+	b.writeInt(properties.Len())
+	for name, prop := range properties.All() {
 		b.writeString(name)
 		b.writeByte(0)
 		b.writeUint32(uint32(prop.Flags()))
@@ -19312,12 +19310,11 @@ func (c *Checker) getTypeFromObjectBindingPattern(pattern *ast.Node, includePatt
 	}
 	b.writeUint32(uint32(objectFlags))
 	b.writeInt(len(indexInfos))
-	names := slices.Sorted(members.Keys())
-	for _, name := range names {
+	for name, member := range members.All() {
 		b.writeString(name)
 		b.writeByte(0)
-		b.writeUint32(uint32(members.Get(name).Flags()))
-		b.writeType(c.valueSymbolLinks.Get(members.Get(name)).resolvedType.peek())
+		b.writeUint32(uint32(member.Flags()))
+		b.writeType(c.valueSymbolLinks.Get(member).resolvedType.peek())
 	}
 	key := b.hash()
 	if existing, _ := c.bindingPatternTypes.get(c, key); existing != nil {
