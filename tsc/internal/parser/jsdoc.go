@@ -1197,6 +1197,7 @@ func (p *Parser) parseChildParameterOrPropertyTag(target propertyLikeParse, inde
 				child := p.tryParseChildTag(target, indent)
 				if child != nil && name != nil &&
 					(child.Kind == ast.KindJSDocParameterTag || child.Kind == ast.KindJSDocPropertyTag) &&
+					!ast.NodeIsMissing(child.Name()) &&
 					(ast.IsIdentifier(child.Name()) || !textsEqual(name, child.Name().AsQualifiedName().Left)) {
 					return nil
 				}
