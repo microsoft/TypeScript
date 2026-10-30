@@ -606,8 +606,8 @@ describe("API", { concurrency }, () => {
         assert.ok(lease.sourceFile instanceof RemoteSourceFile);
         assert.strictEqual(lease.sourceFile.api, api);
         const declaration = cast(lease.sourceFile.statements[0], isFunctionDeclaration);
-        // Materialize the sync API's lazy method before mocking it.
-        void api.getSymbol;
+        // Shadow the sync API's prototype getter with a mockable own method.
+        Object.defineProperty(api, "getSymbol", { configurable: true, writable: true, value: api.getSymbol });
         const method = context.mock.method(api, "getSymbol");
         const symbol = await getSymbol(declaration);
         assert.ok(symbol);

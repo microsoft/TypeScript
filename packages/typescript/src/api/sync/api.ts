@@ -12,7 +12,9 @@ import type {
 } from "../proto.ts";
 import {
     apiRequest,
-    cacheGeneratorMethod,
+    createGeneratorMethodCache,
+    type GeneratorMethodCache,
+    getGeneratorMethod,
 } from "./generatorSupport.ts";
 
 import { CheckFlags } from "../../../enums/checkFlags.js";
@@ -366,6 +368,8 @@ import {
 } from "./generatorSupport.ts";
 
 export class API<FromLSP extends boolean = false> implements FormatDiagnosticsHost {
+    #generatorMethods: GeneratorMethodCache | undefined;
+    static #staticGeneratorMethods: GeneratorMethodCache | undefined;
     /** @internal */
     readonly client: Client;
     /** @internal */
@@ -396,82 +400,78 @@ export class API<FromLSP extends boolean = false> implements FormatDiagnosticsHo
         (declaration: Declaration): Symbol;
         gen(declaration: Declaration): Generator<ProtocolRequest, Symbol, ProtocolResponse["result"]>;
     } {
-        const owner = this;
-        return cacheGeneratorMethod(
-            owner,
-            "getSymbol",
-            function (declaration: Declaration): Symbol {
-                const file = getRemoteSourceFile(declaration);
-                if (!file) throw new Error(`Source file not found for declaration`);
-                const record = file.symbolCache as CachedSourceFile<Symbol> | undefined;
-                if (!record) throw new Error(`Cached source file not found for declaration`);
-                const index = parseNodeHandleFromCompiler(getNodeId(declaration)).index;
-                const cached = record.symbolsByDeclarationNodeIndex.get(index);
-                if (cached) return cached;
-                return owner.fetchDeclarationSymbol(record, index);
-            },
-            function* (declaration: Declaration): Generator<ProtocolRequest, Symbol, ProtocolResponse["result"]> {
-                const file = getRemoteSourceFile(declaration);
-                if (!file) throw new Error(`Source file not found for declaration`);
-                const record = file.symbolCache as CachedSourceFile<Symbol> | undefined;
-                if (!record) throw new Error(`Cached source file not found for declaration`);
-                const index = parseNodeHandleFromCompiler(getNodeId(declaration)).index;
-                const cached = record.symbolsByDeclarationNodeIndex.get(index);
-                if (cached) return cached;
-                return yield* owner.fetchDeclarationSymbol.gen(record, index);
-            },
-        );
+        return getGeneratorMethod(this, this.#generatorMethods ??= createGeneratorMethodCache(25), 0, this.#getSymbol, this.#getSymbolGen);
+    }
+
+    #getSymbol(declaration: Declaration): Symbol {
+        const file = getRemoteSourceFile(declaration);
+        if (!file) throw new Error(`Source file not found for declaration`);
+        const record = file.symbolCache as CachedSourceFile<Symbol> | undefined;
+        if (!record) throw new Error(`Cached source file not found for declaration`);
+        const index = parseNodeHandleFromCompiler(getNodeId(declaration)).index;
+        const cached = record.symbolsByDeclarationNodeIndex.get(index);
+        if (cached) return cached;
+        return this.#fetchDeclarationSymbol(record, index);
+    }
+
+    *#getSymbolGen(declaration: Declaration): Generator<ProtocolRequest, Symbol, ProtocolResponse["result"]> {
+        const file = getRemoteSourceFile(declaration);
+        if (!file) throw new Error(`Source file not found for declaration`);
+        const record = file.symbolCache as CachedSourceFile<Symbol> | undefined;
+        if (!record) throw new Error(`Cached source file not found for declaration`);
+        const index = parseNodeHandleFromCompiler(getNodeId(declaration)).index;
+        const cached = record.symbolsByDeclarationNodeIndex.get(index);
+        if (cached) return cached;
+        return yield* this.#fetchDeclarationSymbolGen(record, index);
     }
 
     private get fetchDeclarationSymbol(): {
         (record: CachedSourceFile<Symbol>, index: number): Symbol;
         gen(record: CachedSourceFile<Symbol>, index: number): Generator<ProtocolRequest, Symbol, ProtocolResponse["result"]>;
     } {
-        const owner = this;
-        return cacheGeneratorMethod(
-            owner,
-            "fetchDeclarationSymbol",
-            function (record: CachedSourceFile<Symbol>, index: number): Symbol {
-                const data = owner.client.apiRequest("getSymbolOfDeclaration", {
-                    file: record.descriptor,
-                    index,
-                });
-                validateSymbolResponse(data);
-                const reference = data.reference;
-                if (reference.kind !== SymbolOwnerKind.File) {
-                    throw new Error(`Symbol ${reference.id} is not file-owned`);
-                }
-                const fileOwner: SourceFileOwner = { record, api: owner };
-                const symbol = owner.sourceFileCache.getOrCreateSymbol(
-                    record,
-                    reference.file,
-                    reference.id,
-                    () => new Symbol(data, { kind: SymbolOwnerKind.File, owner: fileOwner }),
-                );
-                record.symbolsByDeclarationNodeIndex.set(index, symbol);
-                return symbol;
-            },
-            function* (record: CachedSourceFile<Symbol>, index: number): Generator<ProtocolRequest, Symbol, ProtocolResponse["result"]> {
-                const data = yield* apiRequest("getSymbolOfDeclaration", {
-                    file: record.descriptor,
-                    index,
-                });
-                validateSymbolResponse(data);
-                const reference = data.reference;
-                if (reference.kind !== SymbolOwnerKind.File) {
-                    throw new Error(`Symbol ${reference.id} is not file-owned`);
-                }
-                const fileOwner: SourceFileOwner = { record, api: owner };
-                const symbol = owner.sourceFileCache.getOrCreateSymbol(
-                    record,
-                    reference.file,
-                    reference.id,
-                    () => new Symbol(data, { kind: SymbolOwnerKind.File, owner: fileOwner }),
-                );
-                record.symbolsByDeclarationNodeIndex.set(index, symbol);
-                return symbol;
-            },
+        return getGeneratorMethod(this, this.#generatorMethods ??= createGeneratorMethodCache(25), 1, this.#fetchDeclarationSymbol, this.#fetchDeclarationSymbolGen);
+    }
+
+    #fetchDeclarationSymbol(record: CachedSourceFile<Symbol>, index: number): Symbol {
+        const data = this.client.apiRequest("getSymbolOfDeclaration", {
+            file: record.descriptor,
+            index,
+        });
+        validateSymbolResponse(data);
+        const reference = data.reference;
+        if (reference.kind !== SymbolOwnerKind.File) {
+            throw new Error(`Symbol ${reference.id} is not file-owned`);
+        }
+        const fileOwner: SourceFileOwner = { record, api: this };
+        const symbol = this.sourceFileCache.getOrCreateSymbol(
+            record,
+            reference.file,
+            reference.id,
+            () => new Symbol(data, { kind: SymbolOwnerKind.File, owner: fileOwner }),
         );
+        record.symbolsByDeclarationNodeIndex.set(index, symbol);
+        return symbol;
+    }
+
+    *#fetchDeclarationSymbolGen(record: CachedSourceFile<Symbol>, index: number): Generator<ProtocolRequest, Symbol, ProtocolResponse["result"]> {
+        const data = yield* apiRequest("getSymbolOfDeclaration", {
+            file: record.descriptor,
+            index,
+        });
+        validateSymbolResponse(data);
+        const reference = data.reference;
+        if (reference.kind !== SymbolOwnerKind.File) {
+            throw new Error(`Symbol ${reference.id} is not file-owned`);
+        }
+        const fileOwner: SourceFileOwner = { record, api: this };
+        const symbol = this.sourceFileCache.getOrCreateSymbol(
+            record,
+            reference.file,
+            reference.id,
+            () => new Symbol(data, { kind: SymbolOwnerKind.File, owner: fileOwner }),
+        );
+        record.symbolsByDeclarationNodeIndex.set(index, symbol);
+        return symbol;
     }
 
     /**
@@ -482,21 +482,19 @@ export class API<FromLSP extends boolean = false> implements FormatDiagnosticsHo
         (options: LSPConnectionOptions): API<true>;
         gen(options: LSPConnectionOptions): Generator<ProtocolRequest, API<true>, ProtocolResponse["result"]>;
     } {
-        const owner = this;
-        return cacheGeneratorMethod(
-            owner,
-            "fromLSPConnection",
-            function (options: LSPConnectionOptions): API<true> {
-                const api = new API<true>(options);
-                api.ensureInitialized();
-                return api;
-            },
-            function* (options: LSPConnectionOptions): Generator<ProtocolRequest, API<true>, ProtocolResponse["result"]> {
-                const api = new API<true>(options);
-                yield* api.ensureInitialized.gen();
-                return api;
-            },
-        );
+        return getGeneratorMethod(this, API.#staticGeneratorMethods ??= createGeneratorMethodCache(1), 0, this.#fromLSPConnection, this.#fromLSPConnectionGen);
+    }
+
+    static #fromLSPConnection(options: LSPConnectionOptions): API<true> {
+        const api = new API<true>(options);
+        api.ensureInitialized();
+        return api;
+    }
+
+    static *#fromLSPConnectionGen(options: LSPConnectionOptions): Generator<ProtocolRequest, API<true>, ProtocolResponse["result"]> {
+        const api = new API<true>(options);
+        yield* api.ensureInitialized.gen();
+        return api;
     }
 
     batch<T extends readonly AnyAPIRequestGenerator[]>(...requestGenerators: T): ExecutedGeneratorsResults<T> {
@@ -507,56 +505,52 @@ export class API<FromLSP extends boolean = false> implements FormatDiagnosticsHo
         (): void;
         gen(): Generator<ProtocolRequest, void, ProtocolResponse["result"]>;
     } {
-        const owner = this;
-        return cacheGeneratorMethod(
-            owner,
-            "ensureInitialized",
-            function (): void {
-                if (owner.initialized) return;
-                return owner.initializing ??= owner.initializeWorker();
-            },
-            function* (): Generator<ProtocolRequest, void, ProtocolResponse["result"]> {
-                if (owner.initialized) return;
-                return owner.initializing ??= yield* owner.initializeWorker.gen();
-            },
-        );
+        return getGeneratorMethod(this, this.#generatorMethods ??= createGeneratorMethodCache(25), 2, this.#ensureInitialized, this.#ensureInitializedGen);
+    }
+
+    #ensureInitialized(): void {
+        if (this.initialized) return;
+        return this.initializing ??= this.#initializeWorker();
+    }
+
+    *#ensureInitializedGen(): Generator<ProtocolRequest, void, ProtocolResponse["result"]> {
+        if (this.initialized) return;
+        return this.initializing ??= yield* this.#initializeWorkerGen();
     }
 
     private get initializeWorker(): {
         (): void;
         gen(): Generator<ProtocolRequest, void, ProtocolResponse["result"]>;
     } {
-        const owner = this;
-        return cacheGeneratorMethod(
-            owner,
-            "initializeWorker",
-            function (): void {
-                try {
-                    const response = owner.client.apiRequest("initialize", null);
-                    owner.currentDirectory = response.currentDirectory;
-                    owner.caseSensitivity = response.caseSensitivity;
-                    owner.toPath = (fileName: string, basePath = response.currentDirectory) => pathKey(toRootedPath(fileName, toRootedDirectoryPath(basePath, response.currentDirectory)), response.caseSensitivity);
-                    owner.initialized = true;
-                }
-                catch (error) {
-                    owner.initializing = undefined;
-                    throw error;
-                }
-            },
-            function* (): Generator<ProtocolRequest, void, ProtocolResponse["result"]> {
-                try {
-                    const response = yield* apiRequest("initialize", null);
-                    owner.currentDirectory = response.currentDirectory;
-                    owner.caseSensitivity = response.caseSensitivity;
-                    owner.toPath = (fileName: string, basePath = response.currentDirectory) => pathKey(toRootedPath(fileName, toRootedDirectoryPath(basePath, response.currentDirectory)), response.caseSensitivity);
-                    owner.initialized = true;
-                }
-                catch (error) {
-                    owner.initializing = undefined;
-                    throw error;
-                }
-            },
-        );
+        return getGeneratorMethod(this, this.#generatorMethods ??= createGeneratorMethodCache(25), 3, this.#initializeWorker, this.#initializeWorkerGen);
+    }
+
+    #initializeWorker(): void {
+        try {
+            const response = this.client.apiRequest("initialize", null);
+            this.currentDirectory = response.currentDirectory;
+            this.caseSensitivity = response.caseSensitivity;
+            this.toPath = (fileName: string, basePath = response.currentDirectory) => pathKey(toRootedPath(fileName, toRootedDirectoryPath(basePath, response.currentDirectory)), response.caseSensitivity);
+            this.initialized = true;
+        }
+        catch (error) {
+            this.initializing = undefined;
+            throw error;
+        }
+    }
+
+    *#initializeWorkerGen(): Generator<ProtocolRequest, void, ProtocolResponse["result"]> {
+        try {
+            const response = yield* apiRequest("initialize", null);
+            this.currentDirectory = response.currentDirectory;
+            this.caseSensitivity = response.caseSensitivity;
+            this.toPath = (fileName: string, basePath = response.currentDirectory) => pathKey(toRootedPath(fileName, toRootedDirectoryPath(basePath, response.currentDirectory)), response.caseSensitivity);
+            this.initialized = true;
+        }
+        catch (error) {
+            this.initializing = undefined;
+            throw error;
+        }
     }
 
     getCurrentDirectory(): RootedDirectoryPath {
@@ -586,102 +580,94 @@ export class API<FromLSP extends boolean = false> implements FormatDiagnosticsHo
         (rootNames: readonly string[], buildOrchestratorOptions: BuildOrchestratorOptions): BuildOrchestrator;
         gen(rootNames: readonly string[], buildOrchestratorOptions: BuildOrchestratorOptions): Generator<ProtocolRequest, BuildOrchestrator, ProtocolResponse["result"]>;
     } {
-        const owner = this;
-        return cacheGeneratorMethod(
-            owner,
-            "createBuildOrchestrator",
-            function (rootNames: readonly string[], buildOrchestratorOptions: BuildOrchestratorOptions): BuildOrchestrator {
-                owner.ensureInitialized();
-                const orchestratorResponse = owner.client.apiRequest("createBuildOrchestrator", {
-                    ...buildOrchestratorOptions,
-                    ...buildOrchestratorOptions.overrideCompilerOptions,
-                    cwd: buildOrchestratorOptions.cwd === undefined
-                        ? undefined
-                        : toRootedDirectoryPath(buildOrchestratorOptions.cwd, owner.getCurrentDirectory()),
-                    rootNames,
-                });
+        return getGeneratorMethod(this, this.#generatorMethods ??= createGeneratorMethodCache(25), 4, this.#createBuildOrchestrator, this.#createBuildOrchestratorGen);
+    }
 
-                const orchestrator = new BuildOrchestrator(owner.client, orchestratorResponse, () => {
-                    owner.activeBuildOrchestrators.delete(orchestrator);
-                });
-                owner.activeBuildOrchestrators.add(orchestrator);
-                return orchestrator;
-            },
-            function* (rootNames: readonly string[], buildOrchestratorOptions: BuildOrchestratorOptions): Generator<ProtocolRequest, BuildOrchestrator, ProtocolResponse["result"]> {
-                yield* owner.ensureInitialized.gen();
-                const orchestratorResponse = yield* apiRequest("createBuildOrchestrator", {
-                    ...buildOrchestratorOptions,
-                    ...buildOrchestratorOptions.overrideCompilerOptions,
-                    cwd: buildOrchestratorOptions.cwd === undefined
-                        ? undefined
-                        : toRootedDirectoryPath(buildOrchestratorOptions.cwd, owner.getCurrentDirectory()),
-                    rootNames,
-                });
+    #createBuildOrchestrator(rootNames: readonly string[], buildOrchestratorOptions: BuildOrchestratorOptions): BuildOrchestrator {
+        this.#ensureInitialized();
+        const orchestratorResponse = this.client.apiRequest("createBuildOrchestrator", {
+            ...buildOrchestratorOptions,
+            ...buildOrchestratorOptions.overrideCompilerOptions,
+            cwd: buildOrchestratorOptions.cwd === undefined
+                ? undefined
+                : toRootedDirectoryPath(buildOrchestratorOptions.cwd, this.getCurrentDirectory()),
+            rootNames,
+        });
 
-                const orchestrator = new BuildOrchestrator(owner.client, orchestratorResponse, () => {
-                    owner.activeBuildOrchestrators.delete(orchestrator);
-                });
-                owner.activeBuildOrchestrators.add(orchestrator);
-                return orchestrator;
-            },
-        );
+        const orchestrator = new BuildOrchestrator(this.client, orchestratorResponse, () => {
+            this.activeBuildOrchestrators.delete(orchestrator);
+        });
+        this.activeBuildOrchestrators.add(orchestrator);
+        return orchestrator;
+    }
+
+    *#createBuildOrchestratorGen(rootNames: readonly string[], buildOrchestratorOptions: BuildOrchestratorOptions): Generator<ProtocolRequest, BuildOrchestrator, ProtocolResponse["result"]> {
+        yield* this.#ensureInitializedGen();
+        const orchestratorResponse = yield* apiRequest("createBuildOrchestrator", {
+            ...buildOrchestratorOptions,
+            ...buildOrchestratorOptions.overrideCompilerOptions,
+            cwd: buildOrchestratorOptions.cwd === undefined
+                ? undefined
+                : toRootedDirectoryPath(buildOrchestratorOptions.cwd, this.getCurrentDirectory()),
+            rootNames,
+        });
+
+        const orchestrator = new BuildOrchestrator(this.client, orchestratorResponse, () => {
+            this.activeBuildOrchestrators.delete(orchestrator);
+        });
+        this.activeBuildOrchestrators.add(orchestrator);
+        return orchestrator;
     }
 
     get parseConfigFile(): {
         (file: DocumentIdentifier): ParsedCommandLine;
         gen(file: DocumentIdentifier): Generator<ProtocolRequest, ParsedCommandLine, ProtocolResponse["result"]>;
     } {
-        const owner = this;
-        return cacheGeneratorMethod(
-            owner,
-            "parseConfigFile",
-            function (file: DocumentIdentifier): ParsedCommandLine {
-                owner.ensureInitialized();
-                return owner.client.apiRequest("parseConfigFile", { file });
-            },
-            function* (file: DocumentIdentifier): Generator<ProtocolRequest, ParsedCommandLine, ProtocolResponse["result"]> {
-                yield* owner.ensureInitialized.gen();
-                return yield* apiRequest("parseConfigFile", { file });
-            },
-        );
+        return getGeneratorMethod(this, this.#generatorMethods ??= createGeneratorMethodCache(25), 5, this.#parseConfigFile, this.#parseConfigFileGen);
+    }
+
+    #parseConfigFile(file: DocumentIdentifier): ParsedCommandLine {
+        this.#ensureInitialized();
+        return this.client.apiRequest("parseConfigFile", { file });
+    }
+
+    *#parseConfigFileGen(file: DocumentIdentifier): Generator<ProtocolRequest, ParsedCommandLine, ProtocolResponse["result"]> {
+        yield* this.#ensureInitializedGen();
+        return yield* apiRequest("parseConfigFile", { file });
     }
 
     get parseCommandLine(): {
         (commandLine: readonly string[]): ParsedCommandLine;
         gen(commandLine: readonly string[]): Generator<ProtocolRequest, ParsedCommandLine, ProtocolResponse["result"]>;
     } {
-        const owner = this;
-        return cacheGeneratorMethod(
-            owner,
-            "parseCommandLine",
-            function (commandLine: readonly string[]): ParsedCommandLine {
-                owner.ensureInitialized();
-                return owner.client.apiRequest("parseCommandLine", { commandLine });
-            },
-            function* (commandLine: readonly string[]): Generator<ProtocolRequest, ParsedCommandLine, ProtocolResponse["result"]> {
-                yield* owner.ensureInitialized.gen();
-                return yield* apiRequest("parseCommandLine", { commandLine });
-            },
-        );
+        return getGeneratorMethod(this, this.#generatorMethods ??= createGeneratorMethodCache(25), 6, this.#parseCommandLine, this.#parseCommandLineGen);
+    }
+
+    #parseCommandLine(commandLine: readonly string[]): ParsedCommandLine {
+        this.#ensureInitialized();
+        return this.client.apiRequest("parseCommandLine", { commandLine });
+    }
+
+    *#parseCommandLineGen(commandLine: readonly string[]): Generator<ProtocolRequest, ParsedCommandLine, ProtocolResponse["result"]> {
+        yield* this.#ensureInitializedGen();
+        return yield* apiRequest("parseCommandLine", { commandLine });
     }
 
     get readConfigFile(): {
         (file: DocumentIdentifier): ReadConfigFileResponse;
         gen(file: DocumentIdentifier): Generator<ProtocolRequest, ReadConfigFileResponse, ProtocolResponse["result"]>;
     } {
-        const owner = this;
-        return cacheGeneratorMethod(
-            owner,
-            "readConfigFile",
-            function (file: DocumentIdentifier): ReadConfigFileResponse {
-                owner.ensureInitialized();
-                return owner.client.apiRequest("readConfigFile", { file });
-            },
-            function* (file: DocumentIdentifier): Generator<ProtocolRequest, ReadConfigFileResponse, ProtocolResponse["result"]> {
-                yield* owner.ensureInitialized.gen();
-                return yield* apiRequest("readConfigFile", { file });
-            },
-        );
+        return getGeneratorMethod(this, this.#generatorMethods ??= createGeneratorMethodCache(25), 7, this.#readConfigFile, this.#readConfigFileGen);
+    }
+
+    #readConfigFile(file: DocumentIdentifier): ReadConfigFileResponse {
+        this.#ensureInitialized();
+        return this.client.apiRequest("readConfigFile", { file });
+    }
+
+    *#readConfigFileGen(file: DocumentIdentifier): Generator<ProtocolRequest, ReadConfigFileResponse, ProtocolResponse["result"]> {
+        yield* this.#ensureInitializedGen();
+        return yield* apiRequest("readConfigFile", { file });
     }
 
     get parseJsonConfigFileContent(): {
@@ -698,29 +684,27 @@ export class API<FromLSP extends boolean = false> implements FormatDiagnosticsHo
                 | { configFileName: DocumentIdentifier; configDirectory?: never; },
         ): Generator<ProtocolRequest, ParsedCommandLine, ProtocolResponse["result"]>;
     } {
-        const owner = this;
-        return cacheGeneratorMethod(
-            owner,
-            "parseJsonConfigFileContent",
-            function (
-                json: any,
-                options:
-                    | { configDirectory: string; configFileName?: never; }
-                    | { configFileName: DocumentIdentifier; configDirectory?: never; },
-            ): ParsedCommandLine {
-                owner.ensureInitialized();
-                return owner.client.apiRequest("parseJsonConfigFileContent", { json, ...options });
-            },
-            function* (
-                json: any,
-                options:
-                    | { configDirectory: string; configFileName?: never; }
-                    | { configFileName: DocumentIdentifier; configDirectory?: never; },
-            ): Generator<ProtocolRequest, ParsedCommandLine, ProtocolResponse["result"]> {
-                yield* owner.ensureInitialized.gen();
-                return yield* apiRequest("parseJsonConfigFileContent", { json, ...options });
-            },
-        );
+        return getGeneratorMethod(this, this.#generatorMethods ??= createGeneratorMethodCache(25), 8, this.#parseJsonConfigFileContent, this.#parseJsonConfigFileContentGen);
+    }
+
+    #parseJsonConfigFileContent(
+        json: any,
+        options:
+            | { configDirectory: string; configFileName?: never; }
+            | { configFileName: DocumentIdentifier; configDirectory?: never; },
+    ): ParsedCommandLine {
+        this.#ensureInitialized();
+        return this.client.apiRequest("parseJsonConfigFileContent", { json, ...options });
+    }
+
+    *#parseJsonConfigFileContentGen(
+        json: any,
+        options:
+            | { configDirectory: string; configFileName?: never; }
+            | { configFileName: DocumentIdentifier; configDirectory?: never; },
+    ): Generator<ProtocolRequest, ParsedCommandLine, ProtocolResponse["result"]> {
+        yield* this.#ensureInitializedGen();
+        return yield* apiRequest("parseJsonConfigFileContent", { json, ...options });
     }
 
     /**
@@ -731,27 +715,25 @@ export class API<FromLSP extends boolean = false> implements FormatDiagnosticsHo
         (fileName: string, sourceText: string, options?: CreateSourceFileOptions): RetainedSourceFile;
         gen(fileName: string, sourceText: string, options?: CreateSourceFileOptions): Generator<ProtocolRequest, RetainedSourceFile, ProtocolResponse["result"]>;
     } {
-        const owner = this;
-        return cacheGeneratorMethod(
-            owner,
-            "createSourceFile",
-            function (fileName: string, sourceText: string, options: CreateSourceFileOptions = {}): RetainedSourceFile {
-                owner.ensureInitialized();
-                const data = owner.client.apiRequestBinary("createSourceFile", { fileName, sourceText, options });
-                if (!data) {
-                    throw new Error("createSourceFile returned no source file");
-                }
-                return owner.retainSourceFileResponse(data);
-            },
-            function* (fileName: string, sourceText: string, options: CreateSourceFileOptions = {}): Generator<ProtocolRequest, RetainedSourceFile, ProtocolResponse["result"]> {
-                yield* owner.ensureInitialized.gen();
-                const data = sourceFileResponseToUint8Array(yield* apiRequest("createSourceFile", { fileName, sourceText, options }));
-                if (!data) {
-                    throw new Error("createSourceFile returned no source file");
-                }
-                return owner.retainSourceFileResponse(data);
-            },
-        );
+        return getGeneratorMethod(this, this.#generatorMethods ??= createGeneratorMethodCache(25), 9, this.#createSourceFile, this.#createSourceFileGen);
+    }
+
+    #createSourceFile(fileName: string, sourceText: string, options: CreateSourceFileOptions = {}): RetainedSourceFile {
+        this.#ensureInitialized();
+        const data = this.client.apiRequestBinary("createSourceFile", { fileName, sourceText, options });
+        if (!data) {
+            throw new Error("createSourceFile returned no source file");
+        }
+        return this.retainSourceFileResponse(data);
+    }
+
+    *#createSourceFileGen(fileName: string, sourceText: string, options: CreateSourceFileOptions = {}): Generator<ProtocolRequest, RetainedSourceFile, ProtocolResponse["result"]> {
+        yield* this.#ensureInitializedGen();
+        const data = sourceFileResponseToUint8Array(yield* apiRequest("createSourceFile", { fileName, sourceText, options }));
+        if (!data) {
+            throw new Error("createSourceFile returned no source file");
+        }
+        return this.retainSourceFileResponse(data);
     }
 
     /**
@@ -762,27 +744,25 @@ export class API<FromLSP extends boolean = false> implements FormatDiagnosticsHo
         (file: DocumentIdentifier, options?: CreateSourceFileOptions): RetainedSourceFile;
         gen(file: DocumentIdentifier, options?: CreateSourceFileOptions): Generator<ProtocolRequest, RetainedSourceFile, ProtocolResponse["result"]>;
     } {
-        const owner = this;
-        return cacheGeneratorMethod(
-            owner,
-            "createSourceFileFromFile",
-            function (file: DocumentIdentifier, options: CreateSourceFileOptions = {}): RetainedSourceFile {
-                owner.ensureInitialized();
-                const data = owner.client.apiRequestBinary("createSourceFileFromFile", { fileName: resolveFileName(file), options });
-                if (!data) {
-                    throw new Error("createSourceFileFromFile returned no source file");
-                }
-                return owner.retainSourceFileResponse(data);
-            },
-            function* (file: DocumentIdentifier, options: CreateSourceFileOptions = {}): Generator<ProtocolRequest, RetainedSourceFile, ProtocolResponse["result"]> {
-                yield* owner.ensureInitialized.gen();
-                const data = sourceFileResponseToUint8Array(yield* apiRequest("createSourceFileFromFile", { fileName: resolveFileName(file), options }));
-                if (!data) {
-                    throw new Error("createSourceFileFromFile returned no source file");
-                }
-                return owner.retainSourceFileResponse(data);
-            },
-        );
+        return getGeneratorMethod(this, this.#generatorMethods ??= createGeneratorMethodCache(25), 10, this.#createSourceFileFromFile, this.#createSourceFileFromFileGen);
+    }
+
+    #createSourceFileFromFile(file: DocumentIdentifier, options: CreateSourceFileOptions = {}): RetainedSourceFile {
+        this.#ensureInitialized();
+        const data = this.client.apiRequestBinary("createSourceFileFromFile", { fileName: resolveFileName(file), options });
+        if (!data) {
+            throw new Error("createSourceFileFromFile returned no source file");
+        }
+        return this.retainSourceFileResponse(data);
+    }
+
+    *#createSourceFileFromFileGen(file: DocumentIdentifier, options: CreateSourceFileOptions = {}): Generator<ProtocolRequest, RetainedSourceFile, ProtocolResponse["result"]> {
+        yield* this.#ensureInitializedGen();
+        const data = sourceFileResponseToUint8Array(yield* apiRequest("createSourceFileFromFile", { fileName: resolveFileName(file), options }));
+        if (!data) {
+            throw new Error("createSourceFileFromFile returned no source file");
+        }
+        return this.retainSourceFileResponse(data);
     }
 
     /**
@@ -792,35 +772,33 @@ export class API<FromLSP extends boolean = false> implements FormatDiagnosticsHo
         (sourceFile: SourceFile): RetainedSourceFile;
         gen(sourceFile: SourceFile): Generator<ProtocolRequest, RetainedSourceFile, ProtocolResponse["result"]>;
     } {
-        const owner = this;
-        return cacheGeneratorMethod(
-            owner,
-            "retainSourceFile",
-            function (sourceFile: SourceFile): RetainedSourceFile {
-                owner.ensureInitialized();
-                if (!(sourceFile instanceof RemoteSourceFile)) {
-                    throw new TypeError("Only remote source files can be retained");
-                }
-                const cached = owner.sourceFileCache.get(sourceFile);
-                if (cached && cached !== sourceFile) {
-                    throw new Error("Source file is no longer the canonical cached instance");
-                }
-                const result = owner.client.apiRequest("retainSourceFile", { file: sourceFileDescriptor(sourceFile) });
-                return owner.addSourceFileLease(sourceFile, result.lease);
-            },
-            function* (sourceFile: SourceFile): Generator<ProtocolRequest, RetainedSourceFile, ProtocolResponse["result"]> {
-                yield* owner.ensureInitialized.gen();
-                if (!(sourceFile instanceof RemoteSourceFile)) {
-                    throw new TypeError("Only remote source files can be retained");
-                }
-                const cached = owner.sourceFileCache.get(sourceFile);
-                if (cached && cached !== sourceFile) {
-                    throw new Error("Source file is no longer the canonical cached instance");
-                }
-                const result = yield* apiRequest("retainSourceFile", { file: sourceFileDescriptor(sourceFile) });
-                return owner.addSourceFileLease(sourceFile, result.lease);
-            },
-        );
+        return getGeneratorMethod(this, this.#generatorMethods ??= createGeneratorMethodCache(25), 11, this.#retainSourceFile, this.#retainSourceFileGen);
+    }
+
+    #retainSourceFile(sourceFile: SourceFile): RetainedSourceFile {
+        this.#ensureInitialized();
+        if (!(sourceFile instanceof RemoteSourceFile)) {
+            throw new TypeError("Only remote source files can be retained");
+        }
+        const cached = this.sourceFileCache.get(sourceFile);
+        if (cached && cached !== sourceFile) {
+            throw new Error("Source file is no longer the canonical cached instance");
+        }
+        const result = this.client.apiRequest("retainSourceFile", { file: sourceFileDescriptor(sourceFile) });
+        return this.addSourceFileLease(sourceFile, result.lease);
+    }
+
+    *#retainSourceFileGen(sourceFile: SourceFile): Generator<ProtocolRequest, RetainedSourceFile, ProtocolResponse["result"]> {
+        yield* this.#ensureInitializedGen();
+        if (!(sourceFile instanceof RemoteSourceFile)) {
+            throw new TypeError("Only remote source files can be retained");
+        }
+        const cached = this.sourceFileCache.get(sourceFile);
+        if (cached && cached !== sourceFile) {
+            throw new Error("Source file is no longer the canonical cached instance");
+        }
+        const result = yield* apiRequest("retainSourceFile", { file: sourceFileDescriptor(sourceFile) });
+        return this.addSourceFileLease(sourceFile, result.lease);
     }
 
     private retainSourceFileResponse(data: Uint8Array): RetainedSourceFile {
@@ -853,76 +831,68 @@ export class API<FromLSP extends boolean = false> implements FormatDiagnosticsHo
         (input: string, options?: TranspileOptions): TranspileOutput;
         gen(input: string, options?: TranspileOptions): Generator<ProtocolRequest, TranspileOutput, ProtocolResponse["result"]>;
     } {
-        const owner = this;
-        return cacheGeneratorMethod(
-            owner,
-            "transpileModule",
-            function (input: string, options: TranspileOptions = {}): TranspileOutput {
-                owner.ensureInitialized();
-                return owner.client.apiRequest("transpileModule", { input, options });
-            },
-            function* (input: string, options: TranspileOptions = {}): Generator<ProtocolRequest, TranspileOutput, ProtocolResponse["result"]> {
-                yield* owner.ensureInitialized.gen();
-                return yield* apiRequest("transpileModule", { input, options });
-            },
-        );
+        return getGeneratorMethod(this, this.#generatorMethods ??= createGeneratorMethodCache(25), 12, this.#transpileModule, this.#transpileModuleGen);
+    }
+
+    #transpileModule(input: string, options: TranspileOptions = {}): TranspileOutput {
+        this.#ensureInitialized();
+        return this.client.apiRequest("transpileModule", { input, options });
+    }
+
+    *#transpileModuleGen(input: string, options: TranspileOptions = {}): Generator<ProtocolRequest, TranspileOutput, ProtocolResponse["result"]> {
+        yield* this.#ensureInitializedGen();
+        return yield* apiRequest("transpileModule", { input, options });
     }
 
     get transpileModuleFromFile(): {
         (file: DocumentIdentifier, options?: TranspileOptions): TranspileOutput;
         gen(file: DocumentIdentifier, options?: TranspileOptions): Generator<ProtocolRequest, TranspileOutput, ProtocolResponse["result"]>;
     } {
-        const owner = this;
-        return cacheGeneratorMethod(
-            owner,
-            "transpileModuleFromFile",
-            function (file: DocumentIdentifier, options: TranspileOptions = {}): TranspileOutput {
-                owner.ensureInitialized();
-                return owner.client.apiRequest("transpileModuleFromFile", { fileName: resolveFileName(file), options });
-            },
-            function* (file: DocumentIdentifier, options: TranspileOptions = {}): Generator<ProtocolRequest, TranspileOutput, ProtocolResponse["result"]> {
-                yield* owner.ensureInitialized.gen();
-                return yield* apiRequest("transpileModuleFromFile", { fileName: resolveFileName(file), options });
-            },
-        );
+        return getGeneratorMethod(this, this.#generatorMethods ??= createGeneratorMethodCache(25), 13, this.#transpileModuleFromFile, this.#transpileModuleFromFileGen);
+    }
+
+    #transpileModuleFromFile(file: DocumentIdentifier, options: TranspileOptions = {}): TranspileOutput {
+        this.#ensureInitialized();
+        return this.client.apiRequest("transpileModuleFromFile", { fileName: resolveFileName(file), options });
+    }
+
+    *#transpileModuleFromFileGen(file: DocumentIdentifier, options: TranspileOptions = {}): Generator<ProtocolRequest, TranspileOutput, ProtocolResponse["result"]> {
+        yield* this.#ensureInitializedGen();
+        return yield* apiRequest("transpileModuleFromFile", { fileName: resolveFileName(file), options });
     }
 
     get transpileDeclaration(): {
         (input: string, options?: TranspileOptions): TranspileOutput;
         gen(input: string, options?: TranspileOptions): Generator<ProtocolRequest, TranspileOutput, ProtocolResponse["result"]>;
     } {
-        const owner = this;
-        return cacheGeneratorMethod(
-            owner,
-            "transpileDeclaration",
-            function (input: string, options: TranspileOptions = {}): TranspileOutput {
-                owner.ensureInitialized();
-                return owner.client.apiRequest("transpileDeclaration", { input, options });
-            },
-            function* (input: string, options: TranspileOptions = {}): Generator<ProtocolRequest, TranspileOutput, ProtocolResponse["result"]> {
-                yield* owner.ensureInitialized.gen();
-                return yield* apiRequest("transpileDeclaration", { input, options });
-            },
-        );
+        return getGeneratorMethod(this, this.#generatorMethods ??= createGeneratorMethodCache(25), 14, this.#transpileDeclaration, this.#transpileDeclarationGen);
+    }
+
+    #transpileDeclaration(input: string, options: TranspileOptions = {}): TranspileOutput {
+        this.#ensureInitialized();
+        return this.client.apiRequest("transpileDeclaration", { input, options });
+    }
+
+    *#transpileDeclarationGen(input: string, options: TranspileOptions = {}): Generator<ProtocolRequest, TranspileOutput, ProtocolResponse["result"]> {
+        yield* this.#ensureInitializedGen();
+        return yield* apiRequest("transpileDeclaration", { input, options });
     }
 
     get transpileDeclarationFromFile(): {
         (file: DocumentIdentifier, options?: TranspileOptions): TranspileOutput;
         gen(file: DocumentIdentifier, options?: TranspileOptions): Generator<ProtocolRequest, TranspileOutput, ProtocolResponse["result"]>;
     } {
-        const owner = this;
-        return cacheGeneratorMethod(
-            owner,
-            "transpileDeclarationFromFile",
-            function (file: DocumentIdentifier, options: TranspileOptions = {}): TranspileOutput {
-                owner.ensureInitialized();
-                return owner.client.apiRequest("transpileDeclarationFromFile", { fileName: resolveFileName(file), options });
-            },
-            function* (file: DocumentIdentifier, options: TranspileOptions = {}): Generator<ProtocolRequest, TranspileOutput, ProtocolResponse["result"]> {
-                yield* owner.ensureInitialized.gen();
-                return yield* apiRequest("transpileDeclarationFromFile", { fileName: resolveFileName(file), options });
-            },
-        );
+        return getGeneratorMethod(this, this.#generatorMethods ??= createGeneratorMethodCache(25), 15, this.#transpileDeclarationFromFile, this.#transpileDeclarationFromFileGen);
+    }
+
+    #transpileDeclarationFromFile(file: DocumentIdentifier, options: TranspileOptions = {}): TranspileOutput {
+        this.#ensureInitialized();
+        return this.client.apiRequest("transpileDeclarationFromFile", { fileName: resolveFileName(file), options });
+    }
+
+    *#transpileDeclarationFromFileGen(file: DocumentIdentifier, options: TranspileOptions = {}): Generator<ProtocolRequest, TranspileOutput, ProtocolResponse["result"]> {
+        yield* this.#ensureInitializedGen();
+        return yield* apiRequest("transpileDeclarationFromFile", { fileName: resolveFileName(file), options });
     }
 
     get createSnapshot(): {
@@ -931,123 +901,122 @@ export class API<FromLSP extends boolean = false> implements FormatDiagnosticsHo
         gen<const CreatePrograms extends CreateSnapshotParams["createPrograms"] = undefined, const OpenFiles extends CreateSnapshotParams["openFiles"] = undefined>(params: SnapshotOperationParams<CreateSnapshotParams, CreatePrograms, OpenFiles>): Generator<ProtocolRequest, SnapshotForOperationResults<CreatePrograms, OpenFiles>, ProtocolResponse["result"]>;
         gen(): Generator<ProtocolRequest, Snapshot, ProtocolResponse["result"]>;
     } {
-        const owner = this;
-        function createSnapshot<const CreatePrograms extends CreateSnapshotParams["createPrograms"] = undefined, const OpenFiles extends CreateSnapshotParams["openFiles"] = undefined>(params: SnapshotOperationParams<CreateSnapshotParams, CreatePrograms, OpenFiles>): SnapshotForOperationResults<CreatePrograms, OpenFiles>;
-        function createSnapshot(): Snapshot;
-        function createSnapshot(params?: CreateSnapshotParams): Snapshot {
-            owner.ensureInitialized();
+        return getGeneratorMethod(this, this.#generatorMethods ??= createGeneratorMethodCache(25), 16, this.#createSnapshot, this.#createSnapshotGen);
+    }
 
-            const requestParams = owner.prepareCreateSnapshotParams(params);
-            const data = owner.client.apiRequest("createSnapshot", requestParams);
+    #createSnapshot<const CreatePrograms extends CreateSnapshotParams["createPrograms"] = undefined, const OpenFiles extends CreateSnapshotParams["openFiles"] = undefined>(params: SnapshotOperationParams<CreateSnapshotParams, CreatePrograms, OpenFiles>): SnapshotForOperationResults<CreatePrograms, OpenFiles>;
+    #createSnapshot(): Snapshot;
+    #createSnapshot(params?: CreateSnapshotParams): Snapshot {
+        this.#ensureInitialized();
 
-            const snapshot = new Snapshot(
-                data,
-                owner.toPath!,
-                owner,
-                () => {
-                    owner.activeSnapshots.delete(snapshot.id);
-                    owner.sourceFileCache.releaseSnapshot(snapshot.id);
-                },
-                owner.createSnapshotUpdater(() => snapshot),
-                undefined,
-            );
-            owner.activeSnapshots.set(snapshot.id, snapshot);
+        const requestParams = this.prepareCreateSnapshotParams(params);
+        const data = this.client.apiRequest("createSnapshot", requestParams);
 
-            return snapshot;
-        }
-        function gen<const CreatePrograms extends CreateSnapshotParams["createPrograms"] = undefined, const OpenFiles extends CreateSnapshotParams["openFiles"] = undefined>(params: SnapshotOperationParams<CreateSnapshotParams, CreatePrograms, OpenFiles>): Generator<ProtocolRequest, SnapshotForOperationResults<CreatePrograms, OpenFiles>, ProtocolResponse["result"]>;
-        function gen(): Generator<ProtocolRequest, Snapshot, ProtocolResponse["result"]>;
-        function* gen(params?: CreateSnapshotParams): Generator<ProtocolRequest, Snapshot, ProtocolResponse["result"]> {
-            yield* owner.ensureInitialized.gen();
+        const snapshot = new Snapshot(
+            data,
+            this.toPath!,
+            this,
+            () => {
+                this.activeSnapshots.delete(snapshot.id);
+                this.sourceFileCache.releaseSnapshot(snapshot.id);
+            },
+            this.createSnapshotUpdater(() => snapshot),
+            undefined,
+        );
+        this.activeSnapshots.set(snapshot.id, snapshot);
 
-            const requestParams = owner.prepareCreateSnapshotParams(params);
-            const data = yield* apiRequest("createSnapshot", requestParams);
+        return snapshot;
+    }
 
-            const snapshot = new Snapshot(
-                data,
-                owner.toPath!,
-                owner,
-                () => {
-                    owner.activeSnapshots.delete(snapshot.id);
-                    owner.sourceFileCache.releaseSnapshot(snapshot.id);
-                },
-                owner.createSnapshotUpdater(() => snapshot),
-                undefined,
-            );
-            owner.activeSnapshots.set(snapshot.id, snapshot);
+    #createSnapshotGen<const CreatePrograms extends CreateSnapshotParams["createPrograms"] = undefined, const OpenFiles extends CreateSnapshotParams["openFiles"] = undefined>(params: SnapshotOperationParams<CreateSnapshotParams, CreatePrograms, OpenFiles>): Generator<ProtocolRequest, SnapshotForOperationResults<CreatePrograms, OpenFiles>, ProtocolResponse["result"]>;
+    #createSnapshotGen(): Generator<ProtocolRequest, Snapshot, ProtocolResponse["result"]>;
+    *#createSnapshotGen(params?: CreateSnapshotParams): Generator<ProtocolRequest, Snapshot, ProtocolResponse["result"]> {
+        yield* this.#ensureInitializedGen();
 
-            return snapshot;
-        }
-        return cacheGeneratorMethod(owner, "createSnapshot", createSnapshot, gen);
+        const requestParams = this.prepareCreateSnapshotParams(params);
+        const data = yield* apiRequest("createSnapshot", requestParams);
+
+        const snapshot = new Snapshot(
+            data,
+            this.toPath!,
+            this,
+            () => {
+                this.activeSnapshots.delete(snapshot.id);
+                this.sourceFileCache.releaseSnapshot(snapshot.id);
+            },
+            this.createSnapshotUpdater(() => snapshot),
+            undefined,
+        );
+        this.activeSnapshots.set(snapshot.id, snapshot);
+
+        return snapshot;
     }
 
     private get updateSnapshot(): {
         (baseSnapshot: Snapshot, params: CreateSnapshotParams): Snapshot;
         gen(baseSnapshot: Snapshot, params: CreateSnapshotParams): Generator<ProtocolRequest, Snapshot, ProtocolResponse["result"]>;
     } {
-        const owner = this;
-        return cacheGeneratorMethod(
-            owner,
-            "updateSnapshot",
-            function (baseSnapshot: Snapshot, params: CreateSnapshotParams): Snapshot {
-                owner.ensureInitialized();
-                if (owner.activeSnapshots.get(baseSnapshot.id) !== baseSnapshot || baseSnapshot.isDisposed()) {
-                    throw new Error("Cannot update an inactive snapshot");
-                }
+        return getGeneratorMethod(this, this.#generatorMethods ??= createGeneratorMethodCache(25), 17, this.#updateSnapshot, this.#updateSnapshotGen);
+    }
 
-                const data = owner.client.apiRequest("updateSnapshot", {
-                    snapshot: baseSnapshot.id,
-                    changes: owner.prepareCreateSnapshotParams(params),
-                });
-                if (data.snapshot === baseSnapshot.id) {
-                    owner.client.apiRequest("release", { snapshot: data.snapshot });
-                    return baseSnapshot;
-                }
-                owner.sourceFileCache.retainForSnapshot(data.snapshot, baseSnapshot.id, data.changes);
-                const snapshot = new Snapshot(
-                    data,
-                    owner.toPath!,
-                    owner,
-                    () => {
-                        owner.activeSnapshots.delete(snapshot.id);
-                        owner.sourceFileCache.releaseSnapshot(snapshot.id);
-                    },
-                    owner.createSnapshotUpdater(() => snapshot),
-                    baseSnapshot,
-                );
-                owner.activeSnapshots.set(snapshot.id, snapshot);
-                return snapshot;
-            },
-            function* (baseSnapshot: Snapshot, params: CreateSnapshotParams): Generator<ProtocolRequest, Snapshot, ProtocolResponse["result"]> {
-                yield* owner.ensureInitialized.gen();
-                if (owner.activeSnapshots.get(baseSnapshot.id) !== baseSnapshot || baseSnapshot.isDisposed()) {
-                    throw new Error("Cannot update an inactive snapshot");
-                }
+    #updateSnapshot(baseSnapshot: Snapshot, params: CreateSnapshotParams): Snapshot {
+        this.#ensureInitialized();
+        if (this.activeSnapshots.get(baseSnapshot.id) !== baseSnapshot || baseSnapshot.isDisposed()) {
+            throw new Error("Cannot update an inactive snapshot");
+        }
 
-                const data = yield* apiRequest("updateSnapshot", {
-                    snapshot: baseSnapshot.id,
-                    changes: owner.prepareCreateSnapshotParams(params),
-                });
-                if (data.snapshot === baseSnapshot.id) {
-                    yield* apiRequest("release", { snapshot: data.snapshot });
-                    return baseSnapshot;
-                }
-                owner.sourceFileCache.retainForSnapshot(data.snapshot, baseSnapshot.id, data.changes);
-                const snapshot = new Snapshot(
-                    data,
-                    owner.toPath!,
-                    owner,
-                    () => {
-                        owner.activeSnapshots.delete(snapshot.id);
-                        owner.sourceFileCache.releaseSnapshot(snapshot.id);
-                    },
-                    owner.createSnapshotUpdater(() => snapshot),
-                    baseSnapshot,
-                );
-                owner.activeSnapshots.set(snapshot.id, snapshot);
-                return snapshot;
+        const data = this.client.apiRequest("updateSnapshot", {
+            snapshot: baseSnapshot.id,
+            changes: this.prepareCreateSnapshotParams(params),
+        });
+        if (data.snapshot === baseSnapshot.id) {
+            this.client.apiRequest("release", { snapshot: data.snapshot });
+            return baseSnapshot;
+        }
+        this.sourceFileCache.retainForSnapshot(data.snapshot, baseSnapshot.id, data.changes);
+        const snapshot = new Snapshot(
+            data,
+            this.toPath!,
+            this,
+            () => {
+                this.activeSnapshots.delete(snapshot.id);
+                this.sourceFileCache.releaseSnapshot(snapshot.id);
             },
+            this.createSnapshotUpdater(() => snapshot),
+            baseSnapshot,
         );
+        this.activeSnapshots.set(snapshot.id, snapshot);
+        return snapshot;
+    }
+
+    *#updateSnapshotGen(baseSnapshot: Snapshot, params: CreateSnapshotParams): Generator<ProtocolRequest, Snapshot, ProtocolResponse["result"]> {
+        yield* this.#ensureInitializedGen();
+        if (this.activeSnapshots.get(baseSnapshot.id) !== baseSnapshot || baseSnapshot.isDisposed()) {
+            throw new Error("Cannot update an inactive snapshot");
+        }
+
+        const data = yield* apiRequest("updateSnapshot", {
+            snapshot: baseSnapshot.id,
+            changes: this.prepareCreateSnapshotParams(params),
+        });
+        if (data.snapshot === baseSnapshot.id) {
+            yield* apiRequest("release", { snapshot: data.snapshot });
+            return baseSnapshot;
+        }
+        this.sourceFileCache.retainForSnapshot(data.snapshot, baseSnapshot.id, data.changes);
+        const snapshot = new Snapshot(
+            data,
+            this.toPath!,
+            this,
+            () => {
+                this.activeSnapshots.delete(snapshot.id);
+                this.sourceFileCache.releaseSnapshot(snapshot.id);
+            },
+            this.createSnapshotUpdater(() => snapshot),
+            baseSnapshot,
+        );
+        this.activeSnapshots.set(snapshot.id, snapshot);
+        return snapshot;
     }
 
     private prepareCreateSnapshotParams(params: CreateSnapshotParams | undefined): ProtocolCreateSnapshotParams {
@@ -1086,7 +1055,7 @@ export class API<FromLSP extends boolean = false> implements FormatDiagnosticsHo
     }
 
     private createSnapshotUpdater(getSnapshot: () => Snapshot): SnapshotUpdater {
-        const update = ((params: CreateSnapshotParams) => this.updateSnapshot(getSnapshot(), params)) as SnapshotUpdater;
+        const update = ((params: CreateSnapshotParams) => this.#updateSnapshot(getSnapshot(), params)) as SnapshotUpdater;
         const owner = this;
         update.gen = function* (params: CreateSnapshotParams) {
             return yield* owner.updateSnapshot.gen(getSnapshot(), params);
@@ -1110,180 +1079,177 @@ export class API<FromLSP extends boolean = false> implements FormatDiagnosticsHo
         ): Generator<ProtocolRequest, SnapshotForOperationResults<CreatePrograms, OpenFiles>, ProtocolResponse["result"]>;
         gen(...args: FromLSP extends true ? [changes?: LanguageServerSnapshotChanges, baseSnapshot?: Snapshot] : [changes: never, baseSnapshot?: never]): Generator<ProtocolRequest, Snapshot, ProtocolResponse["result"]>;
     } {
-        const owner = this;
-        function getCurrentLanguageServerSnapshot<const CreatePrograms extends LanguageServerSnapshotChanges["createPrograms"] = undefined, const OpenFiles extends LanguageServerSnapshotChanges["openFiles"] = undefined>(
-            ...args: FromLSP extends true ? [changes: SnapshotOperationParams<LanguageServerSnapshotChanges, CreatePrograms, OpenFiles>, baseSnapshot?: Snapshot]
-                : [changes: never, baseSnapshot?: never]
-        ): SnapshotForOperationResults<CreatePrograms, OpenFiles>;
-        function getCurrentLanguageServerSnapshot(...args: FromLSP extends true ? [changes?: LanguageServerSnapshotChanges, baseSnapshot?: Snapshot] : [changes: never, baseSnapshot?: never]): Snapshot;
-        function getCurrentLanguageServerSnapshot(...args: FromLSP extends true ? [changes?: LanguageServerSnapshotChanges, baseSnapshot?: Snapshot] : [changes: never, baseSnapshot?: never]): Snapshot {
-            owner.ensureInitialized();
+        return getGeneratorMethod(this, this.#generatorMethods ??= createGeneratorMethodCache(25), 18, this.#getCurrentLanguageServerSnapshot, this.#getCurrentLanguageServerSnapshotGen);
+    }
 
-            const changes = args[0] as LanguageServerSnapshotChanges | undefined;
-            const baseSnapshot = args[1] as Snapshot | undefined;
-            if (baseSnapshot && (owner.activeSnapshots.get(baseSnapshot.id) !== baseSnapshot || baseSnapshot.isDisposed())) {
-                throw new Error("Cannot use an inactive snapshot as a response base");
-            }
-            const data = owner.client.apiRequest("getCurrentLanguageServerSnapshot", {
-                baseSnapshot: baseSnapshot?.id,
-                changes: owner.prepareLanguageServerSnapshotChanges(changes),
-            });
-            if (baseSnapshot) {
-                owner.sourceFileCache.retainForSnapshot(data.snapshot, baseSnapshot.id, data.changes);
-            }
-            const snapshot = new Snapshot(
-                data,
-                owner.toPath!,
-                owner,
-                () => {
-                    owner.activeSnapshots.delete(snapshot.id);
-                    owner.sourceFileCache.releaseSnapshot(snapshot.id);
-                },
-                owner.createSnapshotUpdater(() => snapshot),
-                baseSnapshot,
-            );
-            owner.activeSnapshots.set(snapshot.id, snapshot);
-            return snapshot;
-        }
-        function gen<const CreatePrograms extends LanguageServerSnapshotChanges["createPrograms"] = undefined, const OpenFiles extends LanguageServerSnapshotChanges["openFiles"] = undefined>(
-            ...args: FromLSP extends true ? [changes: SnapshotOperationParams<LanguageServerSnapshotChanges, CreatePrograms, OpenFiles>, baseSnapshot?: Snapshot]
-                : [changes: never, baseSnapshot?: never]
-        ): Generator<ProtocolRequest, SnapshotForOperationResults<CreatePrograms, OpenFiles>, ProtocolResponse["result"]>;
-        function gen(...args: FromLSP extends true ? [changes?: LanguageServerSnapshotChanges, baseSnapshot?: Snapshot] : [changes: never, baseSnapshot?: never]): Generator<ProtocolRequest, Snapshot, ProtocolResponse["result"]>;
-        function* gen(...args: FromLSP extends true ? [changes?: LanguageServerSnapshotChanges, baseSnapshot?: Snapshot] : [changes: never, baseSnapshot?: never]): Generator<ProtocolRequest, Snapshot, ProtocolResponse["result"]> {
-            yield* owner.ensureInitialized.gen();
+    #getCurrentLanguageServerSnapshot<const CreatePrograms extends LanguageServerSnapshotChanges["createPrograms"] = undefined, const OpenFiles extends LanguageServerSnapshotChanges["openFiles"] = undefined>(
+        ...args: FromLSP extends true ? [changes: SnapshotOperationParams<LanguageServerSnapshotChanges, CreatePrograms, OpenFiles>, baseSnapshot?: Snapshot]
+            : [changes: never, baseSnapshot?: never]
+    ): SnapshotForOperationResults<CreatePrograms, OpenFiles>;
+    #getCurrentLanguageServerSnapshot(...args: FromLSP extends true ? [changes?: LanguageServerSnapshotChanges, baseSnapshot?: Snapshot] : [changes: never, baseSnapshot?: never]): Snapshot;
+    #getCurrentLanguageServerSnapshot(...args: FromLSP extends true ? [changes?: LanguageServerSnapshotChanges, baseSnapshot?: Snapshot] : [changes: never, baseSnapshot?: never]): Snapshot {
+        this.#ensureInitialized();
 
-            const changes = args[0] as LanguageServerSnapshotChanges | undefined;
-            const baseSnapshot = args[1] as Snapshot | undefined;
-            if (baseSnapshot && (owner.activeSnapshots.get(baseSnapshot.id) !== baseSnapshot || baseSnapshot.isDisposed())) {
-                throw new Error("Cannot use an inactive snapshot as a response base");
-            }
-            const data = yield* apiRequest("getCurrentLanguageServerSnapshot", {
-                baseSnapshot: baseSnapshot?.id,
-                changes: owner.prepareLanguageServerSnapshotChanges(changes),
-            });
-            if (baseSnapshot) {
-                owner.sourceFileCache.retainForSnapshot(data.snapshot, baseSnapshot.id, data.changes);
-            }
-            const snapshot = new Snapshot(
-                data,
-                owner.toPath!,
-                owner,
-                () => {
-                    owner.activeSnapshots.delete(snapshot.id);
-                    owner.sourceFileCache.releaseSnapshot(snapshot.id);
-                },
-                owner.createSnapshotUpdater(() => snapshot),
-                baseSnapshot,
-            );
-            owner.activeSnapshots.set(snapshot.id, snapshot);
-            return snapshot;
+        const changes = args[0] as LanguageServerSnapshotChanges | undefined;
+        const baseSnapshot = args[1] as Snapshot | undefined;
+        if (baseSnapshot && (this.activeSnapshots.get(baseSnapshot.id) !== baseSnapshot || baseSnapshot.isDisposed())) {
+            throw new Error("Cannot use an inactive snapshot as a response base");
         }
-        return cacheGeneratorMethod(owner, "getCurrentLanguageServerSnapshot", getCurrentLanguageServerSnapshot, gen);
+        const data = this.client.apiRequest("getCurrentLanguageServerSnapshot", {
+            baseSnapshot: baseSnapshot?.id,
+            changes: this.prepareLanguageServerSnapshotChanges(changes),
+        });
+        if (baseSnapshot) {
+            this.sourceFileCache.retainForSnapshot(data.snapshot, baseSnapshot.id, data.changes);
+        }
+        const snapshot = new Snapshot(
+            data,
+            this.toPath!,
+            this,
+            () => {
+                this.activeSnapshots.delete(snapshot.id);
+                this.sourceFileCache.releaseSnapshot(snapshot.id);
+            },
+            this.createSnapshotUpdater(() => snapshot),
+            baseSnapshot,
+        );
+        this.activeSnapshots.set(snapshot.id, snapshot);
+        return snapshot;
+    }
+
+    #getCurrentLanguageServerSnapshotGen<const CreatePrograms extends LanguageServerSnapshotChanges["createPrograms"] = undefined, const OpenFiles extends LanguageServerSnapshotChanges["openFiles"] = undefined>(
+        ...args: FromLSP extends true ? [changes: SnapshotOperationParams<LanguageServerSnapshotChanges, CreatePrograms, OpenFiles>, baseSnapshot?: Snapshot]
+            : [changes: never, baseSnapshot?: never]
+    ): Generator<ProtocolRequest, SnapshotForOperationResults<CreatePrograms, OpenFiles>, ProtocolResponse["result"]>;
+    #getCurrentLanguageServerSnapshotGen(...args: FromLSP extends true ? [changes?: LanguageServerSnapshotChanges, baseSnapshot?: Snapshot] : [changes: never, baseSnapshot?: never]): Generator<ProtocolRequest, Snapshot, ProtocolResponse["result"]>;
+    *#getCurrentLanguageServerSnapshotGen(...args: FromLSP extends true ? [changes?: LanguageServerSnapshotChanges, baseSnapshot?: Snapshot] : [changes: never, baseSnapshot?: never]): Generator<ProtocolRequest, Snapshot, ProtocolResponse["result"]> {
+        yield* this.#ensureInitializedGen();
+
+        const changes = args[0] as LanguageServerSnapshotChanges | undefined;
+        const baseSnapshot = args[1] as Snapshot | undefined;
+        if (baseSnapshot && (this.activeSnapshots.get(baseSnapshot.id) !== baseSnapshot || baseSnapshot.isDisposed())) {
+            throw new Error("Cannot use an inactive snapshot as a response base");
+        }
+        const data = yield* apiRequest("getCurrentLanguageServerSnapshot", {
+            baseSnapshot: baseSnapshot?.id,
+            changes: this.prepareLanguageServerSnapshotChanges(changes),
+        });
+        if (baseSnapshot) {
+            this.sourceFileCache.retainForSnapshot(data.snapshot, baseSnapshot.id, data.changes);
+        }
+        const snapshot = new Snapshot(
+            data,
+            this.toPath!,
+            this,
+            () => {
+                this.activeSnapshots.delete(snapshot.id);
+                this.sourceFileCache.releaseSnapshot(snapshot.id);
+            },
+            this.createSnapshotUpdater(() => snapshot),
+            baseSnapshot,
+        );
+        this.activeSnapshots.set(snapshot.id, snapshot);
+        return snapshot;
     }
 
     [globalThis.Symbol.dispose](): void {
-        this.close();
+        this.#close();
     }
 
     get close(): {
         (): void;
         gen(): Generator<ProtocolRequest, void, ProtocolResponse["result"]>;
     } {
-        const owner = this;
-        return cacheGeneratorMethod(
-            owner,
-            "close",
-            function (): void {
-                try {
-                    for (const retained of [...owner.activeSourceFileLeases.values()]) {
-                        retained.dispose();
-                    }
+        return getGeneratorMethod(this, this.#generatorMethods ??= createGeneratorMethodCache(25), 19, this.#close, this.#closeGen);
+    }
+
+    #close(): void {
+        try {
+            for (const retained of [...this.activeSourceFileLeases.values()]) {
+                retained.dispose();
+            }
+        }
+        finally {
+            try {
+                for (const orchestrator of [...this.activeBuildOrchestrators]) {
+                    orchestrator.dispose();
                 }
-                finally {
-                    try {
-                        for (const orchestrator of [...owner.activeBuildOrchestrators]) {
-                            orchestrator.dispose();
-                        }
-                        for (const snapshot of [...owner.activeSnapshots.values()]) {
-                            snapshot.dispose();
-                        }
-                        owner.sourceFileCache.clear();
-                    }
-                    finally {
-                        owner.client.close(); // always close the underlying connection
-                    }
+                for (const snapshot of [...this.activeSnapshots.values()]) {
+                    snapshot.dispose();
                 }
-            },
-            function* (): Generator<ProtocolRequest, void, ProtocolResponse["result"]> {
-                try {
-                    for (const retained of [...owner.activeSourceFileLeases.values()]) {
-                        yield* retained.dispose.gen();
-                    }
+                this.sourceFileCache.clear();
+            }
+            finally {
+                this.client.close(); // always close the underlying connection
+            }
+        }
+    }
+
+    *#closeGen(): Generator<ProtocolRequest, void, ProtocolResponse["result"]> {
+        try {
+            for (const retained of [...this.activeSourceFileLeases.values()]) {
+                yield* retained.dispose.gen();
+            }
+        }
+        finally {
+            try {
+                for (const orchestrator of [...this.activeBuildOrchestrators]) {
+                    yield* orchestrator.dispose.gen();
                 }
-                finally {
-                    try {
-                        for (const orchestrator of [...owner.activeBuildOrchestrators]) {
-                            yield* orchestrator.dispose.gen();
-                        }
-                        for (const snapshot of [...owner.activeSnapshots.values()]) {
-                            yield* snapshot.dispose.gen();
-                        }
-                        owner.sourceFileCache.clear();
-                    }
-                    finally {
-                        owner.client.close(); // always close the underlying connection
-                    }
+                for (const snapshot of [...this.activeSnapshots.values()]) {
+                    yield* snapshot.dispose.gen();
                 }
-            },
-        );
+                this.sourceFileCache.clear();
+            }
+            finally {
+                this.client.close(); // always close the underlying connection
+            }
+        }
     }
 
     get createModuleResolver(): {
         (compilerOptions: RawCompilerOptions, options?: ModuleResolverOptions): ModuleResolver;
         gen(compilerOptions: RawCompilerOptions, options?: ModuleResolverOptions): Generator<ProtocolRequest, ModuleResolver, ProtocolResponse["result"]>;
     } {
-        const owner = this;
-        return cacheGeneratorMethod(
-            owner,
-            "createModuleResolver",
-            function (compilerOptions: RawCompilerOptions, options?: ModuleResolverOptions): ModuleResolver {
-                owner.ensureInitialized();
-                const callback = options?.resolveModuleName
-                    ? registerModuleResolutionCallback(owner.client, options.resolveModuleName, id => owner.activeSnapshots.get(id))
-                    : undefined;
-                try {
-                    const id = owner.client.apiRequest("createModuleResolver", {
-                        compilerOptions: prepareCompilerOptions(compilerOptions, owner.getCurrentDirectory()),
-                        moduleResolutions: options?.moduleResolutions,
-                        resolveModuleNameCallback: callback?.name,
-                    });
-                    return new ModuleResolver(id, owner.client, callback?.dispose);
-                }
-                catch (error) {
-                    callback?.dispose();
-                    throw error;
-                }
-            },
-            function* (compilerOptions: RawCompilerOptions, options?: ModuleResolverOptions): Generator<ProtocolRequest, ModuleResolver, ProtocolResponse["result"]> {
-                yield* owner.ensureInitialized.gen();
-                const callback = options?.resolveModuleName
-                    ? registerModuleResolutionCallback(owner.client, options.resolveModuleName, id => owner.activeSnapshots.get(id))
-                    : undefined;
-                try {
-                    const id = yield* apiRequest("createModuleResolver", {
-                        compilerOptions: prepareCompilerOptions(compilerOptions, owner.getCurrentDirectory()),
-                        moduleResolutions: options?.moduleResolutions,
-                        resolveModuleNameCallback: callback?.name,
-                    });
-                    return new ModuleResolver(id, owner.client, callback?.dispose);
-                }
-                catch (error) {
-                    callback?.dispose();
-                    throw error;
-                }
-            },
-        );
+        return getGeneratorMethod(this, this.#generatorMethods ??= createGeneratorMethodCache(25), 20, this.#createModuleResolver, this.#createModuleResolverGen);
+    }
+
+    #createModuleResolver(compilerOptions: RawCompilerOptions, options?: ModuleResolverOptions): ModuleResolver {
+        this.#ensureInitialized();
+        const callback = options?.resolveModuleName
+            ? registerModuleResolutionCallback(this.client, options.resolveModuleName, id => this.activeSnapshots.get(id))
+            : undefined;
+        try {
+            const id = this.client.apiRequest("createModuleResolver", {
+                compilerOptions: prepareCompilerOptions(compilerOptions, this.getCurrentDirectory()),
+                moduleResolutions: options?.moduleResolutions,
+                resolveModuleNameCallback: callback?.name,
+            });
+            return new ModuleResolver(id, this.client, callback?.dispose);
+        }
+        catch (error) {
+            callback?.dispose();
+            throw error;
+        }
+    }
+
+    *#createModuleResolverGen(compilerOptions: RawCompilerOptions, options?: ModuleResolverOptions): Generator<ProtocolRequest, ModuleResolver, ProtocolResponse["result"]> {
+        yield* this.#ensureInitializedGen();
+        const callback = options?.resolveModuleName
+            ? registerModuleResolutionCallback(this.client, options.resolveModuleName, id => this.activeSnapshots.get(id))
+            : undefined;
+        try {
+            const id = yield* apiRequest("createModuleResolver", {
+                compilerOptions: prepareCompilerOptions(compilerOptions, this.getCurrentDirectory()),
+                moduleResolutions: options?.moduleResolutions,
+                resolveModuleNameCallback: callback?.name,
+            });
+            return new ModuleResolver(id, this.client, callback?.dispose);
+        }
+        catch (error) {
+            callback?.dispose();
+            throw error;
+        }
     }
 
     clearSourceFileCache(): void {
@@ -1294,53 +1260,51 @@ export class API<FromLSP extends boolean = false> implements FormatDiagnosticsHo
         (baseSnapshot: Snapshot, file: DocumentIdentifier, newText: string, cb: (newSnapshot: Snapshot) => void): void;
         gen(baseSnapshot: Snapshot, file: DocumentIdentifier, newText: string, cb: (newSnapshot: Snapshot) => void | Generator<ProtocolRequest, void, ProtocolResponse["result"]>): Generator<ProtocolRequest, void, ProtocolResponse["result"]>;
     } {
-        const owner = this;
-        return cacheGeneratorMethod(
-            owner,
-            "runWithTemporaryFileUpdate",
-            function (baseSnapshot: Snapshot, file: DocumentIdentifier, newText: string, cb: (newSnapshot: Snapshot) => void): void {
-                owner.ensureInitialized();
+        return getGeneratorMethod(this, this.#generatorMethods ??= createGeneratorMethodCache(25), 21, this.#runWithTemporaryFileUpdate, this.#runWithTemporaryFileUpdateGen);
+    }
 
-                if (owner.activeSnapshots.get(baseSnapshot.id) !== baseSnapshot || baseSnapshot.isDisposed()) {
-                    throw new Error("Cannot run a temporary file update on an inactive snapshot");
-                }
-                const snapshot = baseSnapshot.update({
-                    fileSystem: {
-                        kind: "layer",
-                        files: { [resolveFileName(file)]: newText },
-                    },
-                    ensurePrograms: true,
-                });
+    #runWithTemporaryFileUpdate(baseSnapshot: Snapshot, file: DocumentIdentifier, newText: string, cb: (newSnapshot: Snapshot) => void): void {
+        this.#ensureInitialized();
 
-                try {
-                    cb(snapshot);
-                }
-                finally {
-                    snapshot.dispose();
-                }
+        if (this.activeSnapshots.get(baseSnapshot.id) !== baseSnapshot || baseSnapshot.isDisposed()) {
+            throw new Error("Cannot run a temporary file update on an inactive snapshot");
+        }
+        const snapshot = baseSnapshot.update({
+            fileSystem: {
+                kind: "layer",
+                files: { [resolveFileName(file)]: newText },
             },
-            function* (baseSnapshot: Snapshot, file: DocumentIdentifier, newText: string, cb: (newSnapshot: Snapshot) => void | Generator<ProtocolRequest, void, ProtocolResponse["result"]>): Generator<ProtocolRequest, void, ProtocolResponse["result"]> {
-                yield* owner.ensureInitialized.gen();
+            ensurePrograms: true,
+        });
 
-                if (owner.activeSnapshots.get(baseSnapshot.id) !== baseSnapshot || baseSnapshot.isDisposed()) {
-                    throw new Error("Cannot run a temporary file update on an inactive snapshot");
-                }
-                const snapshot = yield* baseSnapshot.update.gen({
-                    fileSystem: {
-                        kind: "layer",
-                        files: { [resolveFileName(file)]: newText },
-                    },
-                    ensurePrograms: true,
-                });
+        try {
+            cb(snapshot);
+        }
+        finally {
+            snapshot.dispose();
+        }
+    }
 
-                try {
-                    yield* (cb(snapshot) ?? []);
-                }
-                finally {
-                    yield* snapshot.dispose.gen();
-                }
+    *#runWithTemporaryFileUpdateGen(baseSnapshot: Snapshot, file: DocumentIdentifier, newText: string, cb: (newSnapshot: Snapshot) => void | Generator<ProtocolRequest, void, ProtocolResponse["result"]>): Generator<ProtocolRequest, void, ProtocolResponse["result"]> {
+        yield* this.#ensureInitializedGen();
+
+        if (this.activeSnapshots.get(baseSnapshot.id) !== baseSnapshot || baseSnapshot.isDisposed()) {
+            throw new Error("Cannot run a temporary file update on an inactive snapshot");
+        }
+        const snapshot = yield* baseSnapshot.update.gen({
+            fileSystem: {
+                kind: "layer",
+                files: { [resolveFileName(file)]: newText },
             },
-        );
+            ensurePrograms: true,
+        });
+
+        try {
+            yield* (cb(snapshot) ?? []);
+        }
+        finally {
+            yield* snapshot.dispose.gen();
+        }
     }
 
     /**
@@ -1358,17 +1322,15 @@ export class API<FromLSP extends boolean = false> implements FormatDiagnosticsHo
         (): TimingInfo;
         gen(): Generator<ProtocolRequest, TimingInfo, ProtocolResponse["result"]>;
     } {
-        const owner = this;
-        return cacheGeneratorMethod(
-            owner,
-            "getTimingInfo",
-            function (): TimingInfo {
-                return owner.client.getTimingInfo();
-            },
-            function* (): Generator<ProtocolRequest, TimingInfo, ProtocolResponse["result"]> {
-                return owner.client.getTimingInfo();
-            },
-        );
+        return getGeneratorMethod(this, this.#generatorMethods ??= createGeneratorMethodCache(25), 22, this.#getTimingInfo, this.#getTimingInfoGen);
+    }
+
+    #getTimingInfo(): TimingInfo {
+        return this.client.getTimingInfo();
+    }
+
+    *#getTimingInfoGen(): Generator<ProtocolRequest, TimingInfo, ProtocolResponse["result"]> {
+        return this.client.getTimingInfo();
     }
 
     /** Clears all accumulated timing totals and recent-request history, on both the client and the server. */
@@ -1376,17 +1338,15 @@ export class API<FromLSP extends boolean = false> implements FormatDiagnosticsHo
         (): void;
         gen(): Generator<ProtocolRequest, void, ProtocolResponse["result"]>;
     } {
-        const owner = this;
-        return cacheGeneratorMethod(
-            owner,
-            "resetTimingInfo",
-            function (): void {
-                return owner.client.resetTimingInfo();
-            },
-            function* (): Generator<ProtocolRequest, void, ProtocolResponse["result"]> {
-                return owner.client.resetTimingInfo();
-            },
-        );
+        return getGeneratorMethod(this, this.#generatorMethods ??= createGeneratorMethodCache(25), 23, this.#resetTimingInfo, this.#resetTimingInfoGen);
+    }
+
+    #resetTimingInfo(): void {
+        return this.client.resetTimingInfo();
+    }
+
+    *#resetTimingInfoGen(): Generator<ProtocolRequest, void, ProtocolResponse["result"]> {
+        return this.client.resetTimingInfo();
     }
 
     /** Creates a program from current filesystem state. */
@@ -1394,39 +1354,37 @@ export class API<FromLSP extends boolean = false> implements FormatDiagnosticsHo
         (rootFiles: readonly DocumentIdentifier[], compilerOptions: RawCompilerOptions, createProgramOptions?: CreateProgramOptions): Program;
         gen(rootFiles: readonly DocumentIdentifier[], compilerOptions: RawCompilerOptions, createProgramOptions?: CreateProgramOptions): Generator<ProtocolRequest, Program, ProtocolResponse["result"]>;
     } {
-        const owner = this;
-        return cacheGeneratorMethod(
-            owner,
-            "createProgram",
-            function (rootFiles: readonly DocumentIdentifier[], compilerOptions: RawCompilerOptions, createProgramOptions?: CreateProgramOptions): Program {
-                owner.ensureInitialized();
+        return getGeneratorMethod(this, this.#generatorMethods ??= createGeneratorMethodCache(25), 24, this.#createProgram, this.#createProgramGen);
+    }
 
-                const snapshot = owner.createSnapshot({
-                    createPrograms: [{ rootFiles, compilerOptions, options: createProgramOptions }],
-                });
-                const program = snapshot.operation.createdPrograms![0];
-                if (!program) {
-                    snapshot.dispose();
-                    throw new Error("createProgram did not return a project");
-                }
-                program.setOwnedSnapshot(snapshot);
-                return program;
-            },
-            function* (rootFiles: readonly DocumentIdentifier[], compilerOptions: RawCompilerOptions, createProgramOptions?: CreateProgramOptions): Generator<ProtocolRequest, Program, ProtocolResponse["result"]> {
-                yield* owner.ensureInitialized.gen();
+    #createProgram(rootFiles: readonly DocumentIdentifier[], compilerOptions: RawCompilerOptions, createProgramOptions?: CreateProgramOptions): Program {
+        this.#ensureInitialized();
 
-                const snapshot = yield* owner.createSnapshot.gen({
-                    createPrograms: [{ rootFiles, compilerOptions, options: createProgramOptions }],
-                });
-                const program = snapshot.operation.createdPrograms![0];
-                if (!program) {
-                    yield* snapshot.dispose.gen();
-                    throw new Error("createProgram did not return a project");
-                }
-                program.setOwnedSnapshot(snapshot);
-                return program;
-            },
-        );
+        const snapshot = this.#createSnapshot({
+            createPrograms: [{ rootFiles, compilerOptions, options: createProgramOptions }],
+        });
+        const program = snapshot.operation.createdPrograms![0];
+        if (!program) {
+            snapshot.dispose();
+            throw new Error("createProgram did not return a project");
+        }
+        program.setOwnedSnapshot(snapshot);
+        return program;
+    }
+
+    *#createProgramGen(rootFiles: readonly DocumentIdentifier[], compilerOptions: RawCompilerOptions, createProgramOptions?: CreateProgramOptions): Generator<ProtocolRequest, Program, ProtocolResponse["result"]> {
+        yield* this.#ensureInitializedGen();
+
+        const snapshot = yield* this.#createSnapshotGen({
+            createPrograms: [{ rootFiles, compilerOptions, options: createProgramOptions }],
+        });
+        const program = snapshot.operation.createdPrograms![0];
+        if (!program) {
+            yield* snapshot.dispose.gen();
+            throw new Error("createProgram did not return a project");
+        }
+        program.setOwnedSnapshot(snapshot);
+        return program;
     }
 }
 
@@ -1479,6 +1437,7 @@ getSymbol.gen = function* (declaration: Declaration): Generator<ProtocolRequest,
 
 /** An independently retained source file and its disposable remote-lifetime lease. */
 export class RetainedSourceFile {
+    #generatorMethods: GeneratorMethodCache | undefined;
     readonly sourceFile: SourceFile;
     private readonly lease: number;
     private readonly onDispose: () => void;
@@ -1492,63 +1451,60 @@ export class RetainedSourceFile {
     }
 
     [globalThis.Symbol.dispose](): void {
-        this.dispose();
+        this.#dispose();
     }
 
     get dispose(): {
         (): void;
         gen(): Generator<ProtocolRequest, void, ProtocolResponse["result"]>;
     } {
-        const owner = this;
-        return cacheGeneratorMethod(
-            owner,
-            "dispose",
-            function (): void {
-                return owner.disposePromise ??= owner.disposeWorker();
-            },
-            function* (): Generator<ProtocolRequest, void, ProtocolResponse["result"]> {
-                return owner.disposePromise ??= yield* owner.disposeWorker.gen();
-            },
-        );
+        return getGeneratorMethod(this, this.#generatorMethods ??= createGeneratorMethodCache(2), 0, this.#dispose, this.#disposeGen);
+    }
+
+    #dispose(): void {
+        return this.disposePromise ??= this.#disposeWorker();
+    }
+
+    *#disposeGen(): Generator<ProtocolRequest, void, ProtocolResponse["result"]> {
+        return this.disposePromise ??= yield* this.#disposeWorkerGen();
     }
 
     private get disposeWorker(): {
         (): void;
         gen(): Generator<ProtocolRequest, void, ProtocolResponse["result"]>;
     } {
-        const owner = this;
-        return cacheGeneratorMethod(
-            owner,
-            "disposeWorker",
-            function (): void {
-                if (owner.disposed) return;
-                const api = getNodeAPI(owner.sourceFile);
-                if (!api) throw new Error("Retained source file has no owning API");
-                owner.disposed = true;
-                try {
-                    api.client.apiRequest("releaseSourceFile", { lease: owner.lease });
-                }
-                finally {
-                    owner.onDispose();
-                }
-            },
-            function* (): Generator<ProtocolRequest, void, ProtocolResponse["result"]> {
-                if (owner.disposed) return;
-                const api = getNodeAPI(owner.sourceFile);
-                if (!api) throw new Error("Retained source file has no owning API");
-                owner.disposed = true;
-                try {
-                    yield* apiRequest("releaseSourceFile", { lease: owner.lease });
-                }
-                finally {
-                    owner.onDispose();
-                }
-            },
-        );
+        return getGeneratorMethod(this, this.#generatorMethods ??= createGeneratorMethodCache(2), 1, this.#disposeWorker, this.#disposeWorkerGen);
+    }
+
+    #disposeWorker(): void {
+        if (this.disposed) return;
+        const api = getNodeAPI(this.sourceFile);
+        if (!api) throw new Error("Retained source file has no owning API");
+        this.disposed = true;
+        try {
+            api.client.apiRequest("releaseSourceFile", { lease: this.lease });
+        }
+        finally {
+            this.onDispose();
+        }
+    }
+
+    *#disposeWorkerGen(): Generator<ProtocolRequest, void, ProtocolResponse["result"]> {
+        if (this.disposed) return;
+        const api = getNodeAPI(this.sourceFile);
+        if (!api) throw new Error("Retained source file has no owning API");
+        this.disposed = true;
+        try {
+            yield* apiRequest("releaseSourceFile", { lease: this.lease });
+        }
+        finally {
+            this.onDispose();
+        }
     }
 }
 
 export class DebugHandlers {
+    #generatorMethods: GeneratorMethodCache | undefined;
     private client: Client;
     private ensureInitialized: EnsureInitialized;
 
@@ -1561,61 +1517,55 @@ export class DebugHandlers {
         (dir: string): void;
         gen(dir: string): Generator<ProtocolRequest, void, ProtocolResponse["result"]>;
     } {
-        const owner = this;
-        return cacheGeneratorMethod(
-            owner,
-            "startCPUProfile",
-            function (dir: string): void {
-                owner.ensureInitialized();
-                owner.client.apiRequest("startCPUProfile", { dir });
-            },
-            function* (dir: string): Generator<ProtocolRequest, void, ProtocolResponse["result"]> {
-                yield* owner.ensureInitialized.gen();
-                yield* apiRequest("startCPUProfile", { dir });
-            },
-        );
+        return getGeneratorMethod(this, this.#generatorMethods ??= createGeneratorMethodCache(3), 0, this.#startCPUProfile, this.#startCPUProfileGen);
+    }
+
+    #startCPUProfile(dir: string): void {
+        this.ensureInitialized();
+        this.client.apiRequest("startCPUProfile", { dir });
+    }
+
+    *#startCPUProfileGen(dir: string): Generator<ProtocolRequest, void, ProtocolResponse["result"]> {
+        yield* this.ensureInitialized.gen();
+        yield* apiRequest("startCPUProfile", { dir });
     }
 
     get stopCPUProfile(): {
         (): RootedFilePath;
         gen(): Generator<ProtocolRequest, RootedFilePath, ProtocolResponse["result"]>;
     } {
-        const owner = this;
-        return cacheGeneratorMethod(
-            owner,
-            "stopCPUProfile",
-            function (): RootedFilePath {
-                owner.ensureInitialized();
-                const result = owner.client.apiRequest("stopCPUProfile", null);
-                return result.file;
-            },
-            function* (): Generator<ProtocolRequest, RootedFilePath, ProtocolResponse["result"]> {
-                yield* owner.ensureInitialized.gen();
-                const result = yield* apiRequest("stopCPUProfile", null);
-                return result.file;
-            },
-        );
+        return getGeneratorMethod(this, this.#generatorMethods ??= createGeneratorMethodCache(3), 1, this.#stopCPUProfile, this.#stopCPUProfileGen);
+    }
+
+    #stopCPUProfile(): RootedFilePath {
+        this.ensureInitialized();
+        const result = this.client.apiRequest("stopCPUProfile", null);
+        return result.file;
+    }
+
+    *#stopCPUProfileGen(): Generator<ProtocolRequest, RootedFilePath, ProtocolResponse["result"]> {
+        yield* this.ensureInitialized.gen();
+        const result = yield* apiRequest("stopCPUProfile", null);
+        return result.file;
     }
 
     get saveHeapProfile(): {
         (dir: string): RootedFilePath;
         gen(dir: string): Generator<ProtocolRequest, RootedFilePath, ProtocolResponse["result"]>;
     } {
-        const owner = this;
-        return cacheGeneratorMethod(
-            owner,
-            "saveHeapProfile",
-            function (dir: string): RootedFilePath {
-                owner.ensureInitialized();
-                const result = owner.client.apiRequest("saveHeapProfile", { dir });
-                return result.file;
-            },
-            function* (dir: string): Generator<ProtocolRequest, RootedFilePath, ProtocolResponse["result"]> {
-                yield* owner.ensureInitialized.gen();
-                const result = yield* apiRequest("saveHeapProfile", { dir });
-                return result.file;
-            },
-        );
+        return getGeneratorMethod(this, this.#generatorMethods ??= createGeneratorMethodCache(3), 2, this.#saveHeapProfile, this.#saveHeapProfileGen);
+    }
+
+    #saveHeapProfile(dir: string): RootedFilePath {
+        this.ensureInitialized();
+        const result = this.client.apiRequest("saveHeapProfile", { dir });
+        return result.file;
+    }
+
+    *#saveHeapProfileGen(dir: string): Generator<ProtocolRequest, RootedFilePath, ProtocolResponse["result"]> {
+        yield* this.ensureInitialized.gen();
+        const result = yield* apiRequest("saveHeapProfile", { dir });
+        return result.file;
     }
 }
 
@@ -1680,6 +1630,7 @@ export type SnapshotForOperation<Params extends CreateSnapshotParams> = Snapshot
 >;
 
 export class Snapshot {
+    #generatorMethods: GeneratorMethodCache | undefined;
     readonly id: number;
     readonly operation: SnapshotOperation;
     private projectMap: Map<ProjectId, Project>;
@@ -1756,20 +1707,21 @@ export class Snapshot {
         gen<const CreatePrograms extends CreateSnapshotParams["createPrograms"] = undefined, const OpenFiles extends CreateSnapshotParams["openFiles"] = undefined>(params: SnapshotOperationParams<CreateSnapshotParams, CreatePrograms, OpenFiles>): Generator<ProtocolRequest, SnapshotForOperationResults<CreatePrograms, OpenFiles>, ProtocolResponse["result"]>;
         gen(params: CreateSnapshotParams): Generator<ProtocolRequest, Snapshot, ProtocolResponse["result"]>;
     } {
-        const owner = this;
-        function update<const CreatePrograms extends CreateSnapshotParams["createPrograms"] = undefined, const OpenFiles extends CreateSnapshotParams["openFiles"] = undefined>(params: SnapshotOperationParams<CreateSnapshotParams, CreatePrograms, OpenFiles>): SnapshotForOperationResults<CreatePrograms, OpenFiles>;
-        function update(params: CreateSnapshotParams): Snapshot;
-        function update(params: CreateSnapshotParams): Snapshot {
-            owner.ensureNotDisposed();
-            return owner.updateSnapshot(params);
-        }
-        function gen<const CreatePrograms extends CreateSnapshotParams["createPrograms"] = undefined, const OpenFiles extends CreateSnapshotParams["openFiles"] = undefined>(params: SnapshotOperationParams<CreateSnapshotParams, CreatePrograms, OpenFiles>): Generator<ProtocolRequest, SnapshotForOperationResults<CreatePrograms, OpenFiles>, ProtocolResponse["result"]>;
-        function gen(params: CreateSnapshotParams): Generator<ProtocolRequest, Snapshot, ProtocolResponse["result"]>;
-        function* gen(params: CreateSnapshotParams): Generator<ProtocolRequest, Snapshot, ProtocolResponse["result"]> {
-            owner.ensureNotDisposed();
-            return yield* owner.updateSnapshot.gen(params);
-        }
-        return cacheGeneratorMethod(owner, "update", update, gen);
+        return getGeneratorMethod(this, this.#generatorMethods ??= createGeneratorMethodCache(4), 0, this.#update, this.#updateGen);
+    }
+
+    #update<const CreatePrograms extends CreateSnapshotParams["createPrograms"] = undefined, const OpenFiles extends CreateSnapshotParams["openFiles"] = undefined>(params: SnapshotOperationParams<CreateSnapshotParams, CreatePrograms, OpenFiles>): SnapshotForOperationResults<CreatePrograms, OpenFiles>;
+    #update(params: CreateSnapshotParams): Snapshot;
+    #update(params: CreateSnapshotParams): Snapshot {
+        this.ensureNotDisposed();
+        return this.updateSnapshot(params);
+    }
+
+    #updateGen<const CreatePrograms extends CreateSnapshotParams["createPrograms"] = undefined, const OpenFiles extends CreateSnapshotParams["openFiles"] = undefined>(params: SnapshotOperationParams<CreateSnapshotParams, CreatePrograms, OpenFiles>): Generator<ProtocolRequest, SnapshotForOperationResults<CreatePrograms, OpenFiles>, ProtocolResponse["result"]>;
+    #updateGen(params: CreateSnapshotParams): Generator<ProtocolRequest, Snapshot, ProtocolResponse["result"]>;
+    *#updateGen(params: CreateSnapshotParams): Generator<ProtocolRequest, Snapshot, ProtocolResponse["result"]> {
+        this.ensureNotDisposed();
+        return yield* this.updateSnapshot.gen(params);
     }
 
     /**
@@ -1782,90 +1734,84 @@ export class Snapshot {
         (file: DocumentIdentifier): Project | undefined;
         gen(file: DocumentIdentifier): Generator<ProtocolRequest, Project | undefined, ProtocolResponse["result"]>;
     } {
-        const owner = this;
-        return cacheGeneratorMethod(
-            owner,
-            "getDefaultProjectForFile",
-            function (file: DocumentIdentifier): Project | undefined {
-                owner.ensureNotDisposed();
-                const data = owner.client.apiRequest("getDefaultProjectForFile", {
-                    snapshot: owner.id,
-                    file,
-                });
-                if (!data) return undefined;
-                return owner.projectMap.get(data.id);
-            },
-            function* (file: DocumentIdentifier): Generator<ProtocolRequest, Project | undefined, ProtocolResponse["result"]> {
-                owner.ensureNotDisposed();
-                const data = yield* apiRequest("getDefaultProjectForFile", {
-                    snapshot: owner.id,
-                    file,
-                });
-                if (!data) return undefined;
-                return owner.projectMap.get(data.id);
-            },
-        );
+        return getGeneratorMethod(this, this.#generatorMethods ??= createGeneratorMethodCache(4), 1, this.#getDefaultProjectForFile, this.#getDefaultProjectForFileGen);
+    }
+
+    #getDefaultProjectForFile(file: DocumentIdentifier): Project | undefined {
+        this.ensureNotDisposed();
+        const data = this.client.apiRequest("getDefaultProjectForFile", {
+            snapshot: this.id,
+            file,
+        });
+        if (!data) return undefined;
+        return this.projectMap.get(data.id);
+    }
+
+    *#getDefaultProjectForFileGen(file: DocumentIdentifier): Generator<ProtocolRequest, Project | undefined, ProtocolResponse["result"]> {
+        this.ensureNotDisposed();
+        const data = yield* apiRequest("getDefaultProjectForFile", {
+            snapshot: this.id,
+            file,
+        });
+        if (!data) return undefined;
+        return this.projectMap.get(data.id);
     }
 
     [globalThis.Symbol.dispose](): void {
-        this.dispose();
+        this.#dispose();
     }
     get dispose(): {
         (): void;
         gen(): Generator<ProtocolRequest, void, ProtocolResponse["result"]>;
     } {
-        const owner = this;
-        return cacheGeneratorMethod(
-            owner,
-            "dispose",
-            function (): void {
-                return owner.disposePromise ??= owner.disposeWorker();
-            },
-            function* (): Generator<ProtocolRequest, void, ProtocolResponse["result"]> {
-                return owner.disposePromise ??= yield* owner.disposeWorker.gen();
-            },
-        );
+        return getGeneratorMethod(this, this.#generatorMethods ??= createGeneratorMethodCache(4), 2, this.#dispose, this.#disposeGen);
+    }
+
+    #dispose(): void {
+        return this.disposePromise ??= this.#disposeWorker();
+    }
+
+    *#disposeGen(): Generator<ProtocolRequest, void, ProtocolResponse["result"]> {
+        return this.disposePromise ??= yield* this.#disposeWorkerGen();
     }
 
     private get disposeWorker(): {
         (): void;
         gen(): Generator<ProtocolRequest, void, ProtocolResponse["result"]>;
     } {
-        const owner = this;
-        return cacheGeneratorMethod(
-            owner,
-            "disposeWorker",
-            function (): void {
-                if (owner.disposed) return;
-                owner.disposed = true;
-                for (const project of owner.projectMap.values()) {
-                    project.dispose();
-                }
-                owner.projectMap.clear();
-                owner.snapshotRegistry.clear();
-                try {
-                    owner.client.apiRequest("release", { snapshot: owner.id });
-                }
-                finally {
-                    owner.onDispose();
-                }
-            },
-            function* (): Generator<ProtocolRequest, void, ProtocolResponse["result"]> {
-                if (owner.disposed) return;
-                owner.disposed = true;
-                for (const project of owner.projectMap.values()) {
-                    project.dispose();
-                }
-                owner.projectMap.clear();
-                owner.snapshotRegistry.clear();
-                try {
-                    yield* apiRequest("release", { snapshot: owner.id });
-                }
-                finally {
-                    owner.onDispose();
-                }
-            },
-        );
+        return getGeneratorMethod(this, this.#generatorMethods ??= createGeneratorMethodCache(4), 3, this.#disposeWorker, this.#disposeWorkerGen);
+    }
+
+    #disposeWorker(): void {
+        if (this.disposed) return;
+        this.disposed = true;
+        for (const project of this.projectMap.values()) {
+            project.dispose();
+        }
+        this.projectMap.clear();
+        this.snapshotRegistry.clear();
+        try {
+            this.client.apiRequest("release", { snapshot: this.id });
+        }
+        finally {
+            this.onDispose();
+        }
+    }
+
+    *#disposeWorkerGen(): Generator<ProtocolRequest, void, ProtocolResponse["result"]> {
+        if (this.disposed) return;
+        this.disposed = true;
+        for (const project of this.projectMap.values()) {
+            project.dispose();
+        }
+        this.projectMap.clear();
+        this.snapshotRegistry.clear();
+        try {
+            yield* apiRequest("release", { snapshot: this.id });
+        }
+        finally {
+            this.onDispose();
+        }
     }
 
     isDisposed(): boolean {
@@ -1888,6 +1834,7 @@ export class Snapshot {
 }
 
 export class ModuleResolver {
+    #generatorMethods: GeneratorMethodCache | undefined;
     readonly id: number;
     private readonly client: Client;
     private readonly disposeCallback: (() => void) | undefined;
@@ -1903,66 +1850,62 @@ export class ModuleResolver {
         (moduleName: string, containingDirectory: DocumentIdentifier, resolutionMode?: ResolutionMode, options?: { snapshot?: Snapshot | InProgressSnapshot | undefined; }): ResolveModuleNameResult;
         gen(moduleName: string, containingDirectory: DocumentIdentifier, resolutionMode?: ResolutionMode, options?: { snapshot?: Snapshot | InProgressSnapshot | undefined; }): Generator<ProtocolRequest, ResolveModuleNameResult, ProtocolResponse["result"]>;
     } {
-        const owner = this;
-        return cacheGeneratorMethod(
-            owner,
-            "resolveModuleName",
-            function (moduleName: string, containingDirectory: DocumentIdentifier, resolutionMode?: ResolutionMode, options?: { snapshot?: Snapshot | InProgressSnapshot | undefined; }): ResolveModuleNameResult {
-                owner.ensureNotDisposed();
-                if (options?.snapshot instanceof Snapshot && options.snapshot.isDisposed()) {
-                    throw new Error("Snapshot is disposed");
-                }
-                return owner.client.apiRequest("resolveModuleName", {
-                    snapshot: options?.snapshot instanceof Snapshot ? options.snapshot.id : undefined,
-                    inProgressSnapshot: typeof options?.snapshot === "number" ? -options.snapshot : undefined,
-                    resolver: owner.id,
-                    moduleName,
-                    containingDirectory,
-                    resolutionMode,
-                });
-            },
-            function* (moduleName: string, containingDirectory: DocumentIdentifier, resolutionMode?: ResolutionMode, options?: { snapshot?: Snapshot | InProgressSnapshot | undefined; }): Generator<ProtocolRequest, ResolveModuleNameResult, ProtocolResponse["result"]> {
-                owner.ensureNotDisposed();
-                if (options?.snapshot instanceof Snapshot && options.snapshot.isDisposed()) {
-                    throw new Error("Snapshot is disposed");
-                }
-                return yield* apiRequest("resolveModuleName", {
-                    snapshot: options?.snapshot instanceof Snapshot ? options.snapshot.id : undefined,
-                    inProgressSnapshot: typeof options?.snapshot === "number" ? -options.snapshot : undefined,
-                    resolver: owner.id,
-                    moduleName,
-                    containingDirectory,
-                    resolutionMode,
-                });
-            },
-        );
+        return getGeneratorMethod(this, this.#generatorMethods ??= createGeneratorMethodCache(2), 0, this.#resolveModuleName, this.#resolveModuleNameGen);
+    }
+
+    #resolveModuleName(moduleName: string, containingDirectory: DocumentIdentifier, resolutionMode?: ResolutionMode, options?: { snapshot?: Snapshot | InProgressSnapshot | undefined; }): ResolveModuleNameResult {
+        this.ensureNotDisposed();
+        if (options?.snapshot instanceof Snapshot && options.snapshot.isDisposed()) {
+            throw new Error("Snapshot is disposed");
+        }
+        return this.client.apiRequest("resolveModuleName", {
+            snapshot: options?.snapshot instanceof Snapshot ? options.snapshot.id : undefined,
+            inProgressSnapshot: typeof options?.snapshot === "number" ? -options.snapshot : undefined,
+            resolver: this.id,
+            moduleName,
+            containingDirectory,
+            resolutionMode,
+        });
+    }
+
+    *#resolveModuleNameGen(moduleName: string, containingDirectory: DocumentIdentifier, resolutionMode?: ResolutionMode, options?: { snapshot?: Snapshot | InProgressSnapshot | undefined; }): Generator<ProtocolRequest, ResolveModuleNameResult, ProtocolResponse["result"]> {
+        this.ensureNotDisposed();
+        if (options?.snapshot instanceof Snapshot && options.snapshot.isDisposed()) {
+            throw new Error("Snapshot is disposed");
+        }
+        return yield* apiRequest("resolveModuleName", {
+            snapshot: options?.snapshot instanceof Snapshot ? options.snapshot.id : undefined,
+            inProgressSnapshot: typeof options?.snapshot === "number" ? -options.snapshot : undefined,
+            resolver: this.id,
+            moduleName,
+            containingDirectory,
+            resolutionMode,
+        });
     }
 
     [globalThis.Symbol.dispose](): void {
-        return this.dispose();
+        return this.#dispose();
     }
 
     get dispose(): {
         (): void;
         gen(): Generator<ProtocolRequest, void, ProtocolResponse["result"]>;
     } {
-        const owner = this;
-        return cacheGeneratorMethod(
-            owner,
-            "dispose",
-            function (): void {
-                if (owner.disposed) return;
-                owner.client.apiRequest("releaseModuleResolver", { resolver: owner.id });
-                owner.disposed = true;
-                owner.disposeCallback?.();
-            },
-            function* (): Generator<ProtocolRequest, void, ProtocolResponse["result"]> {
-                if (owner.disposed) return;
-                yield* apiRequest("releaseModuleResolver", { resolver: owner.id });
-                owner.disposed = true;
-                owner.disposeCallback?.();
-            },
-        );
+        return getGeneratorMethod(this, this.#generatorMethods ??= createGeneratorMethodCache(2), 1, this.#dispose, this.#disposeGen);
+    }
+
+    #dispose(): void {
+        if (this.disposed) return;
+        this.client.apiRequest("releaseModuleResolver", { resolver: this.id });
+        this.disposed = true;
+        this.disposeCallback?.();
+    }
+
+    *#disposeGen(): Generator<ProtocolRequest, void, ProtocolResponse["result"]> {
+        if (this.disposed) return;
+        yield* apiRequest("releaseModuleResolver", { resolver: this.id });
+        this.disposed = true;
+        this.disposeCallback?.();
     }
 
     /** @internal */
@@ -2023,6 +1966,7 @@ class SnapshotObjectRegistry {
 }
 
 class ProjectObjectRegistry {
+    #generatorMethods: GeneratorMethodCache | undefined;
     private snapshotId: number;
     readonly project: Project;
     private snapshotRegistry: SnapshotObjectRegistry;
@@ -2118,263 +2062,249 @@ class ProjectObjectRegistry {
         <T extends Type>(source: Symbol | Signature | Type, method: TypePropertyMethod, handle: number | false | undefined): T | undefined;
         gen<T extends Type>(source: Symbol | Signature | Type, method: TypePropertyMethod, handle: number | false | undefined): Generator<ProtocolRequest, T | undefined, ProtocolResponse["result"]>;
     } {
-        const owner = this;
-        return cacheGeneratorMethod(
-            owner,
-            "fetchOptionalType",
-            function <T extends Type>(source: Symbol | Signature | Type, method: TypePropertyMethod, handle: number | false | undefined): T | undefined {
-                if (handle !== false) {
-                    if (!handle) return undefined;
-                    const cached = owner.getType(handle);
-                    if (cached) return cached as unknown as T;
-                }
+        return getGeneratorMethod(this, this.#generatorMethods ??= createGeneratorMethodCache(14), 0, this.#fetchOptionalType, this.#fetchOptionalTypeGen);
+    }
 
-                const data = owner.client.apiRequest(method, {
-                    snapshot: owner.snapshotId,
-                    project: owner.project.handle,
-                    objectId: source.id,
-                });
-                if (!data) return undefined;
-                return owner.getOrCreateType(data) as unknown as T;
-            },
-            function* <T extends Type>(source: Symbol | Signature | Type, method: TypePropertyMethod, handle: number | false | undefined): Generator<ProtocolRequest, T | undefined, ProtocolResponse["result"]> {
-                if (handle !== false) {
-                    if (!handle) return undefined;
-                    const cached = owner.getType(handle);
-                    if (cached) return cached as unknown as T;
-                }
+    #fetchOptionalType<T extends Type>(source: Symbol | Signature | Type, method: TypePropertyMethod, handle: number | false | undefined): T | undefined {
+        if (handle !== false) {
+            if (!handle) return undefined;
+            const cached = this.getType(handle);
+            if (cached) return cached as unknown as T;
+        }
 
-                const data = yield* apiRequest(method, {
-                    snapshot: owner.snapshotId,
-                    project: owner.project.handle,
-                    objectId: source.id,
-                });
-                if (!data) return undefined;
-                return owner.getOrCreateType(data) as unknown as T;
-            },
-        );
+        const data = this.client.apiRequest(method, {
+            snapshot: this.snapshotId,
+            project: this.project.handle,
+            objectId: source.id,
+        });
+        if (!data) return undefined;
+        return this.getOrCreateType(data) as unknown as T;
+    }
+
+    *#fetchOptionalTypeGen<T extends Type>(source: Symbol | Signature | Type, method: TypePropertyMethod, handle: number | false | undefined): Generator<ProtocolRequest, T | undefined, ProtocolResponse["result"]> {
+        if (handle !== false) {
+            if (!handle) return undefined;
+            const cached = this.getType(handle);
+            if (cached) return cached as unknown as T;
+        }
+
+        const data = yield* apiRequest(method, {
+            snapshot: this.snapshotId,
+            project: this.project.handle,
+            objectId: source.id,
+        });
+        if (!data) return undefined;
+        return this.getOrCreateType(data) as unknown as T;
     }
 
     get fetchType(): {
         <T extends Type>(source: Symbol | Signature | Type, method: TypePropertyMethod, handle: number | false | undefined): T;
         gen<T extends Type>(source: Symbol | Signature | Type, method: TypePropertyMethod, handle: number | false | undefined): Generator<ProtocolRequest, T, ProtocolResponse["result"]>;
     } {
-        const owner = this;
-        return cacheGeneratorMethod(
-            owner,
-            "fetchType",
-            function <T extends Type>(source: Symbol | Signature | Type, method: TypePropertyMethod, handle: number | false | undefined): T {
-                const result = owner.fetchOptionalType<T>(source, method, handle);
-                if (result === undefined) throw new Error(`${method} returned no type for ${source.constructor.name} ${source.id}`);
-                return result;
-            },
-            function* <T extends Type>(source: Symbol | Signature | Type, method: TypePropertyMethod, handle: number | false | undefined): Generator<ProtocolRequest, T, ProtocolResponse["result"]> {
-                const result = yield* owner.fetchOptionalType.gen<T>(source, method, handle);
-                if (result === undefined) throw new Error(`${method} returned no type for ${source.constructor.name} ${source.id}`);
-                return result;
-            },
-        );
+        return getGeneratorMethod(this, this.#generatorMethods ??= createGeneratorMethodCache(14), 1, this.#fetchType, this.#fetchTypeGen);
+    }
+
+    #fetchType<T extends Type>(source: Symbol | Signature | Type, method: TypePropertyMethod, handle: number | false | undefined): T {
+        const result = this.#fetchOptionalType<T>(source, method, handle);
+        if (result === undefined) throw new Error(`${method} returned no type for ${source.constructor.name} ${source.id}`);
+        return result;
+    }
+
+    *#fetchTypeGen<T extends Type>(source: Symbol | Signature | Type, method: TypePropertyMethod, handle: number | false | undefined): Generator<ProtocolRequest, T, ProtocolResponse["result"]> {
+        const result = yield* this.#fetchOptionalTypeGen<T>(source, method, handle);
+        if (result === undefined) throw new Error(`${method} returned no type for ${source.constructor.name} ${source.id}`);
+        return result;
     }
 
     get fetchSymbol(): {
         (source: Symbol | Signature | Type, method: SymbolPropertyMethod, reference: CompactSymbolReference | undefined): Symbol;
         gen(source: Symbol | Signature | Type, method: SymbolPropertyMethod, reference: CompactSymbolReference | undefined): Generator<ProtocolRequest, Symbol, ProtocolResponse["result"]>;
     } {
-        const owner = this;
-        return cacheGeneratorMethod(
-            owner,
-            "fetchSymbol",
-            function (source: Symbol | Signature | Type, method: SymbolPropertyMethod, reference: CompactSymbolReference | undefined): Symbol {
-                if (!reference) return undefined as unknown as Symbol;
-                const cached = owner.getCachedSymbol(reference);
-                if (cached) return cached;
-                const data = source instanceof Symbol
-                    ? owner.client.apiRequest(method, { symbol: source.reference })
-                    : owner.client.apiRequest(method, {
-                        snapshot: owner.snapshotId,
-                        project: owner.project.handle,
-                        objectId: source.id,
-                    });
-                if (!data) throw new Error(`${method} returned null symbol for ${source.constructor.name} ${source.id}`);
-                return owner.getOrCreateSymbol(data);
-            },
-            function* (source: Symbol | Signature | Type, method: SymbolPropertyMethod, reference: CompactSymbolReference | undefined): Generator<ProtocolRequest, Symbol, ProtocolResponse["result"]> {
-                if (!reference) return undefined as unknown as Symbol;
-                const cached = owner.getCachedSymbol(reference);
-                if (cached) return cached;
-                const data = source instanceof Symbol
-                    ? yield* apiRequest(method, { symbol: source.reference })
-                    : yield* apiRequest(method, {
-                        snapshot: owner.snapshotId,
-                        project: owner.project.handle,
-                        objectId: source.id,
-                    });
-                if (!data) throw new Error(`${method} returned null symbol for ${source.constructor.name} ${source.id}`);
-                return owner.getOrCreateSymbol(data);
-            },
-        );
+        return getGeneratorMethod(this, this.#generatorMethods ??= createGeneratorMethodCache(14), 2, this.#fetchSymbol, this.#fetchSymbolGen);
+    }
+
+    #fetchSymbol(source: Symbol | Signature | Type, method: SymbolPropertyMethod, reference: CompactSymbolReference | undefined): Symbol {
+        if (!reference) return undefined as unknown as Symbol;
+        const cached = this.getCachedSymbol(reference);
+        if (cached) return cached;
+        const data = source instanceof Symbol
+            ? this.client.apiRequest(method, { symbol: source.reference })
+            : this.client.apiRequest(method, {
+                snapshot: this.snapshotId,
+                project: this.project.handle,
+                objectId: source.id,
+            });
+        if (!data) throw new Error(`${method} returned null symbol for ${source.constructor.name} ${source.id}`);
+        return this.getOrCreateSymbol(data);
+    }
+
+    *#fetchSymbolGen(source: Symbol | Signature | Type, method: SymbolPropertyMethod, reference: CompactSymbolReference | undefined): Generator<ProtocolRequest, Symbol, ProtocolResponse["result"]> {
+        if (!reference) return undefined as unknown as Symbol;
+        const cached = this.getCachedSymbol(reference);
+        if (cached) return cached;
+        const data = source instanceof Symbol
+            ? yield* apiRequest(method, { symbol: source.reference })
+            : yield* apiRequest(method, {
+                snapshot: this.snapshotId,
+                project: this.project.handle,
+                objectId: source.id,
+            });
+        if (!data) throw new Error(`${method} returned null symbol for ${source.constructor.name} ${source.id}`);
+        return this.getOrCreateSymbol(data);
     }
 
     get fetchSignature(): {
         (source: Symbol | Signature | Type, method: SignaturePropertyMethod, handle: number | undefined): Signature;
         gen(source: Symbol | Signature | Type, method: SignaturePropertyMethod, handle: number | undefined): Generator<ProtocolRequest, Signature, ProtocolResponse["result"]>;
     } {
-        const owner = this;
-        return cacheGeneratorMethod(
-            owner,
-            "fetchSignature",
-            function (source: Symbol | Signature | Type, method: SignaturePropertyMethod, handle: number | undefined): Signature {
-                if (!handle) return undefined as unknown as Signature;
-                const cached = owner.getSignature(handle);
-                if (cached) return cached;
+        return getGeneratorMethod(this, this.#generatorMethods ??= createGeneratorMethodCache(14), 3, this.#fetchSignature, this.#fetchSignatureGen);
+    }
 
-                const data = owner.client.apiRequest(method, {
-                    snapshot: owner.snapshotId,
-                    project: owner.project.handle,
-                    objectId: source.id,
-                });
-                if (!data) throw new Error(`${method} returned null signature for ${source.constructor.name} ${source.id}`);
-                return owner.getOrCreateSignature(data);
-            },
-            function* (source: Symbol | Signature | Type, method: SignaturePropertyMethod, handle: number | undefined): Generator<ProtocolRequest, Signature, ProtocolResponse["result"]> {
-                if (!handle) return undefined as unknown as Signature;
-                const cached = owner.getSignature(handle);
-                if (cached) return cached;
+    #fetchSignature(source: Symbol | Signature | Type, method: SignaturePropertyMethod, handle: number | undefined): Signature {
+        if (!handle) return undefined as unknown as Signature;
+        const cached = this.getSignature(handle);
+        if (cached) return cached;
 
-                const data = yield* apiRequest(method, {
-                    snapshot: owner.snapshotId,
-                    project: owner.project.handle,
-                    objectId: source.id,
-                });
-                if (!data) throw new Error(`${method} returned null signature for ${source.constructor.name} ${source.id}`);
-                return owner.getOrCreateSignature(data);
-            },
-        );
+        const data = this.client.apiRequest(method, {
+            snapshot: this.snapshotId,
+            project: this.project.handle,
+            objectId: source.id,
+        });
+        if (!data) throw new Error(`${method} returned null signature for ${source.constructor.name} ${source.id}`);
+        return this.getOrCreateSignature(data);
+    }
+
+    *#fetchSignatureGen(source: Symbol | Signature | Type, method: SignaturePropertyMethod, handle: number | undefined): Generator<ProtocolRequest, Signature, ProtocolResponse["result"]> {
+        if (!handle) return undefined as unknown as Signature;
+        const cached = this.getSignature(handle);
+        if (cached) return cached;
+
+        const data = yield* apiRequest(method, {
+            snapshot: this.snapshotId,
+            project: this.project.handle,
+            objectId: source.id,
+        });
+        if (!data) throw new Error(`${method} returned null signature for ${source.constructor.name} ${source.id}`);
+        return this.getOrCreateSignature(data);
     }
 
     get fetchTypes(): {
         (source: Symbol | Signature | Type, method: TypesPropertyMethod, handles?: readonly number[]): readonly Type[];
         gen(source: Symbol | Signature | Type, method: TypesPropertyMethod, handles?: readonly number[]): Generator<ProtocolRequest, readonly Type[], ProtocolResponse["result"]>;
     } {
-        const owner = this;
-        return cacheGeneratorMethod(
-            owner,
-            "fetchTypes",
-            function (source: Symbol | Signature | Type, method: TypesPropertyMethod, handles?: readonly number[]): readonly Type[] {
-                if (handles) {
-                    const result = new Array<Type>(handles.length);
-                    let allCached = true;
-                    for (let i = 0; i < handles.length; i++) {
-                        const cached = owner.getType(handles[i]);
-                        if (!cached) {
-                            allCached = false;
-                            break;
-                        }
-                        result[i] = cached;
-                    }
-                    if (allCached) return result;
+        return getGeneratorMethod(this, this.#generatorMethods ??= createGeneratorMethodCache(14), 4, this.#fetchTypes, this.#fetchTypesGen);
+    }
+
+    #fetchTypes(source: Symbol | Signature | Type, method: TypesPropertyMethod, handles?: readonly number[]): readonly Type[] {
+        if (handles) {
+            const result = new Array<Type>(handles.length);
+            let allCached = true;
+            for (let i = 0; i < handles.length; i++) {
+                const cached = this.getType(handles[i]);
+                if (!cached) {
+                    allCached = false;
+                    break;
                 }
-                const typesData = owner.client.apiRequest(method, {
-                    snapshot: owner.snapshotId,
-                    project: owner.project.handle,
-                    objectId: source.id,
-                });
-                if (typesData == null) return [];
-                else return typesData.map(data => owner.getOrCreateType(data));
-            },
-            function* (source: Symbol | Signature | Type, method: TypesPropertyMethod, handles?: readonly number[]): Generator<ProtocolRequest, readonly Type[], ProtocolResponse["result"]> {
-                if (handles) {
-                    const result = new Array<Type>(handles.length);
-                    let allCached = true;
-                    for (let i = 0; i < handles.length; i++) {
-                        const cached = owner.getType(handles[i]);
-                        if (!cached) {
-                            allCached = false;
-                            break;
-                        }
-                        result[i] = cached;
-                    }
-                    if (allCached) return result;
+                result[i] = cached;
+            }
+            if (allCached) return result;
+        }
+        const typesData = this.client.apiRequest(method, {
+            snapshot: this.snapshotId,
+            project: this.project.handle,
+            objectId: source.id,
+        });
+        if (typesData == null) return [];
+        else return typesData.map(data => this.getOrCreateType(data));
+    }
+
+    *#fetchTypesGen(source: Symbol | Signature | Type, method: TypesPropertyMethod, handles?: readonly number[]): Generator<ProtocolRequest, readonly Type[], ProtocolResponse["result"]> {
+        if (handles) {
+            const result = new Array<Type>(handles.length);
+            let allCached = true;
+            for (let i = 0; i < handles.length; i++) {
+                const cached = this.getType(handles[i]);
+                if (!cached) {
+                    allCached = false;
+                    break;
                 }
-                const typesData = yield* apiRequest(method, {
-                    snapshot: owner.snapshotId,
-                    project: owner.project.handle,
-                    objectId: source.id,
-                });
-                if (typesData == null) return [];
-                else return typesData.map(data => owner.getOrCreateType(data));
-            },
-        );
+                result[i] = cached;
+            }
+            if (allCached) return result;
+        }
+        const typesData = yield* apiRequest(method, {
+            snapshot: this.snapshotId,
+            project: this.project.handle,
+            objectId: source.id,
+        });
+        if (typesData == null) return [];
+        else return typesData.map(data => this.getOrCreateType(data));
     }
 
     get fetchSymbols(): {
         (source: Symbol | Signature | Type, method: SymbolsPropertyMethod, references?: readonly CompactSymbolReference[]): readonly Symbol[];
         gen(source: Symbol | Signature | Type, method: SymbolsPropertyMethod, references?: readonly CompactSymbolReference[]): Generator<ProtocolRequest, readonly Symbol[], ProtocolResponse["result"]>;
     } {
-        const owner = this;
-        return cacheGeneratorMethod(
-            owner,
-            "fetchSymbols",
-            function (source: Symbol | Signature | Type, method: SymbolsPropertyMethod, references?: readonly CompactSymbolReference[]): readonly Symbol[] {
-                if (references) {
-                    const result = new Array<Symbol>(references.length);
-                    for (let i = 0; i < references.length; i++) {
-                        const cached = owner.getCachedSymbol(references[i]);
-                        if (!cached) {
-                            return owner.fetchSymbolsFromServer(source, method);
-                        }
-                        result[i] = cached;
-                    }
-                    return result;
+        return getGeneratorMethod(this, this.#generatorMethods ??= createGeneratorMethodCache(14), 5, this.#fetchSymbols, this.#fetchSymbolsGen);
+    }
+
+    #fetchSymbols(source: Symbol | Signature | Type, method: SymbolsPropertyMethod, references?: readonly CompactSymbolReference[]): readonly Symbol[] {
+        if (references) {
+            const result = new Array<Symbol>(references.length);
+            for (let i = 0; i < references.length; i++) {
+                const cached = this.getCachedSymbol(references[i]);
+                if (!cached) {
+                    return this.#fetchSymbolsFromServer(source, method);
                 }
-                return owner.fetchSymbolsFromServer(source, method);
-            },
-            function* (source: Symbol | Signature | Type, method: SymbolsPropertyMethod, references?: readonly CompactSymbolReference[]): Generator<ProtocolRequest, readonly Symbol[], ProtocolResponse["result"]> {
-                if (references) {
-                    const result = new Array<Symbol>(references.length);
-                    for (let i = 0; i < references.length; i++) {
-                        const cached = owner.getCachedSymbol(references[i]);
-                        if (!cached) {
-                            return yield* owner.fetchSymbolsFromServer.gen(source, method);
-                        }
-                        result[i] = cached;
-                    }
-                    return result;
+                result[i] = cached;
+            }
+            return result;
+        }
+        return this.#fetchSymbolsFromServer(source, method);
+    }
+
+    *#fetchSymbolsGen(source: Symbol | Signature | Type, method: SymbolsPropertyMethod, references?: readonly CompactSymbolReference[]): Generator<ProtocolRequest, readonly Symbol[], ProtocolResponse["result"]> {
+        if (references) {
+            const result = new Array<Symbol>(references.length);
+            for (let i = 0; i < references.length; i++) {
+                const cached = this.getCachedSymbol(references[i]);
+                if (!cached) {
+                    return yield* this.#fetchSymbolsFromServerGen(source, method);
                 }
-                return yield* owner.fetchSymbolsFromServer.gen(source, method);
-            },
-        );
+                result[i] = cached;
+            }
+            return result;
+        }
+        return yield* this.#fetchSymbolsFromServerGen(source, method);
     }
 
     private get fetchSymbolsFromServer(): {
         (source: Symbol | Signature | Type, method: SymbolsPropertyMethod): readonly Symbol[];
         gen(source: Symbol | Signature | Type, method: SymbolsPropertyMethod): Generator<ProtocolRequest, readonly Symbol[], ProtocolResponse["result"]>;
     } {
-        const owner = this;
-        return cacheGeneratorMethod(
-            owner,
-            "fetchSymbolsFromServer",
-            function (source: Symbol | Signature | Type, method: SymbolsPropertyMethod): readonly Symbol[] {
-                const data = source instanceof Symbol
-                    ? owner.client.apiRequest(method, { symbol: source.reference })
-                    : owner.client.apiRequest(method, {
-                        snapshot: owner.snapshotId,
-                        project: owner.project.handle,
-                        objectId: source.id,
-                    });
-                return data?.map(symbol => owner.getOrCreateSymbol(symbol)) ?? [];
-            },
-            function* (source: Symbol | Signature | Type, method: SymbolsPropertyMethod): Generator<ProtocolRequest, readonly Symbol[], ProtocolResponse["result"]> {
-                const data = source instanceof Symbol
-                    ? yield* apiRequest(method, { symbol: source.reference })
-                    : yield* apiRequest(method, {
-                        snapshot: owner.snapshotId,
-                        project: owner.project.handle,
-                        objectId: source.id,
-                    });
-                return data?.map(symbol => owner.getOrCreateSymbol(symbol)) ?? [];
-            },
-        );
+        return getGeneratorMethod(this, this.#generatorMethods ??= createGeneratorMethodCache(14), 6, this.#fetchSymbolsFromServer, this.#fetchSymbolsFromServerGen);
+    }
+
+    #fetchSymbolsFromServer(source: Symbol | Signature | Type, method: SymbolsPropertyMethod): readonly Symbol[] {
+        const data = source instanceof Symbol
+            ? this.client.apiRequest(method, { symbol: source.reference })
+            : this.client.apiRequest(method, {
+                snapshot: this.snapshotId,
+                project: this.project.handle,
+                objectId: source.id,
+            });
+        return data?.map(symbol => this.getOrCreateSymbol(symbol)) ?? [];
+    }
+
+    *#fetchSymbolsFromServerGen(source: Symbol | Signature | Type, method: SymbolsPropertyMethod): Generator<ProtocolRequest, readonly Symbol[], ProtocolResponse["result"]> {
+        const data = source instanceof Symbol
+            ? yield* apiRequest(method, { symbol: source.reference })
+            : yield* apiRequest(method, {
+                snapshot: this.snapshotId,
+                project: this.project.handle,
+                objectId: source.id,
+            });
+        return data?.map(symbol => this.getOrCreateSymbol(symbol)) ?? [];
     }
 
     // getBaseTypes is a checker-level endpoint keyed by `type` (not `objectId`),
@@ -2383,209 +2313,195 @@ class ProjectObjectRegistry {
         (source: Type): readonly Type[];
         gen(source: Type): Generator<ProtocolRequest, readonly Type[], ProtocolResponse["result"]>;
     } {
-        const owner = this;
-        return cacheGeneratorMethod(
-            owner,
-            "fetchBaseTypes",
-            function (source: Type): readonly Type[] {
-                const typesData = owner.client.apiRequest("getBaseTypes", {
-                    snapshot: owner.snapshotId,
-                    project: owner.project.handle,
-                    type: source.id,
-                });
-                if (typesData == null) return [];
-                return typesData.map(data => owner.getOrCreateType(data));
-            },
-            function* (source: Type): Generator<ProtocolRequest, readonly Type[], ProtocolResponse["result"]> {
-                const typesData = yield* apiRequest("getBaseTypes", {
-                    snapshot: owner.snapshotId,
-                    project: owner.project.handle,
-                    type: source.id,
-                });
-                if (typesData == null) return [];
-                return typesData.map(data => owner.getOrCreateType(data));
-            },
-        );
+        return getGeneratorMethod(this, this.#generatorMethods ??= createGeneratorMethodCache(14), 7, this.#fetchBaseTypes, this.#fetchBaseTypesGen);
+    }
+
+    #fetchBaseTypes(source: Type): readonly Type[] {
+        const typesData = this.client.apiRequest("getBaseTypes", {
+            snapshot: this.snapshotId,
+            project: this.project.handle,
+            type: source.id,
+        });
+        if (typesData == null) return [];
+        return typesData.map(data => this.getOrCreateType(data));
+    }
+
+    *#fetchBaseTypesGen(source: Type): Generator<ProtocolRequest, readonly Type[], ProtocolResponse["result"]> {
+        const typesData = yield* apiRequest("getBaseTypes", {
+            snapshot: this.snapshotId,
+            project: this.project.handle,
+            type: source.id,
+        });
+        if (typesData == null) return [];
+        return typesData.map(data => this.getOrCreateType(data));
     }
 
     get fetchPropertiesOfType(): {
         (source: Type): readonly Symbol[];
         gen(source: Type): Generator<ProtocolRequest, readonly Symbol[], ProtocolResponse["result"]>;
     } {
-        const owner = this;
-        return cacheGeneratorMethod(
-            owner,
-            "fetchPropertiesOfType",
-            function (source: Type): readonly Symbol[] {
-                const data = owner.client.apiRequest("getPropertiesOfType", {
-                    snapshot: owner.snapshotId,
-                    project: owner.project.handle,
-                    type: source.id,
-                });
-                return data ? data.map(symbol => owner.getOrCreateSymbol(symbol)) : [];
-            },
-            function* (source: Type): Generator<ProtocolRequest, readonly Symbol[], ProtocolResponse["result"]> {
-                const data = yield* apiRequest("getPropertiesOfType", {
-                    snapshot: owner.snapshotId,
-                    project: owner.project.handle,
-                    type: source.id,
-                });
-                return data ? data.map(symbol => owner.getOrCreateSymbol(symbol)) : [];
-            },
-        );
+        return getGeneratorMethod(this, this.#generatorMethods ??= createGeneratorMethodCache(14), 8, this.#fetchPropertiesOfType, this.#fetchPropertiesOfTypeGen);
+    }
+
+    #fetchPropertiesOfType(source: Type): readonly Symbol[] {
+        const data = this.client.apiRequest("getPropertiesOfType", {
+            snapshot: this.snapshotId,
+            project: this.project.handle,
+            type: source.id,
+        });
+        return data ? data.map(symbol => this.getOrCreateSymbol(symbol)) : [];
+    }
+
+    *#fetchPropertiesOfTypeGen(source: Type): Generator<ProtocolRequest, readonly Symbol[], ProtocolResponse["result"]> {
+        const data = yield* apiRequest("getPropertiesOfType", {
+            snapshot: this.snapshotId,
+            project: this.project.handle,
+            type: source.id,
+        });
+        return data ? data.map(symbol => this.getOrCreateSymbol(symbol)) : [];
     }
 
     get fetchApparentPropertiesOfType(): {
         (source: Type): readonly Symbol[];
         gen(source: Type): Generator<ProtocolRequest, readonly Symbol[], ProtocolResponse["result"]>;
     } {
-        const owner = this;
-        return cacheGeneratorMethod(
-            owner,
-            "fetchApparentPropertiesOfType",
-            function (source: Type): readonly Symbol[] {
-                const data = owner.client.apiRequest("getApparentPropertiesOfType", {
-                    snapshot: owner.snapshotId,
-                    project: owner.project.handle,
-                    objectId: source.id,
-                });
-                return data ? data.map(symbol => owner.getOrCreateSymbol(symbol)) : [];
-            },
-            function* (source: Type): Generator<ProtocolRequest, readonly Symbol[], ProtocolResponse["result"]> {
-                const data = yield* apiRequest("getApparentPropertiesOfType", {
-                    snapshot: owner.snapshotId,
-                    project: owner.project.handle,
-                    objectId: source.id,
-                });
-                return data ? data.map(symbol => owner.getOrCreateSymbol(symbol)) : [];
-            },
-        );
+        return getGeneratorMethod(this, this.#generatorMethods ??= createGeneratorMethodCache(14), 9, this.#fetchApparentPropertiesOfType, this.#fetchApparentPropertiesOfTypeGen);
+    }
+
+    #fetchApparentPropertiesOfType(source: Type): readonly Symbol[] {
+        const data = this.client.apiRequest("getApparentPropertiesOfType", {
+            snapshot: this.snapshotId,
+            project: this.project.handle,
+            objectId: source.id,
+        });
+        return data ? data.map(symbol => this.getOrCreateSymbol(symbol)) : [];
+    }
+
+    *#fetchApparentPropertiesOfTypeGen(source: Type): Generator<ProtocolRequest, readonly Symbol[], ProtocolResponse["result"]> {
+        const data = yield* apiRequest("getApparentPropertiesOfType", {
+            snapshot: this.snapshotId,
+            project: this.project.handle,
+            objectId: source.id,
+        });
+        return data ? data.map(symbol => this.getOrCreateSymbol(symbol)) : [];
     }
 
     get fetchPropertyOfType(): {
         (source: Type, name: string): Symbol | undefined;
         gen(source: Type, name: string): Generator<ProtocolRequest, Symbol | undefined, ProtocolResponse["result"]>;
     } {
-        const owner = this;
-        return cacheGeneratorMethod(
-            owner,
-            "fetchPropertyOfType",
-            function (source: Type, name: string): Symbol | undefined {
-                const data = owner.client.apiRequest("getPropertyOfType", {
-                    snapshot: owner.snapshotId,
-                    project: owner.project.handle,
-                    type: source.id,
-                    name,
-                });
-                return data ? owner.getOrCreateSymbol(data) : undefined;
-            },
-            function* (source: Type, name: string): Generator<ProtocolRequest, Symbol | undefined, ProtocolResponse["result"]> {
-                const data = yield* apiRequest("getPropertyOfType", {
-                    snapshot: owner.snapshotId,
-                    project: owner.project.handle,
-                    type: source.id,
-                    name,
-                });
-                return data ? owner.getOrCreateSymbol(data) : undefined;
-            },
-        );
+        return getGeneratorMethod(this, this.#generatorMethods ??= createGeneratorMethodCache(14), 10, this.#fetchPropertyOfType, this.#fetchPropertyOfTypeGen);
+    }
+
+    #fetchPropertyOfType(source: Type, name: string): Symbol | undefined {
+        const data = this.client.apiRequest("getPropertyOfType", {
+            snapshot: this.snapshotId,
+            project: this.project.handle,
+            type: source.id,
+            name,
+        });
+        return data ? this.getOrCreateSymbol(data) : undefined;
+    }
+
+    *#fetchPropertyOfTypeGen(source: Type, name: string): Generator<ProtocolRequest, Symbol | undefined, ProtocolResponse["result"]> {
+        const data = yield* apiRequest("getPropertyOfType", {
+            snapshot: this.snapshotId,
+            project: this.project.handle,
+            type: source.id,
+            name,
+        });
+        return data ? this.getOrCreateSymbol(data) : undefined;
     }
 
     get fetchSignaturesOfType(): {
         (source: Type, kind: SignatureKind): readonly Signature[];
         gen(source: Type, kind: SignatureKind): Generator<ProtocolRequest, readonly Signature[], ProtocolResponse["result"]>;
     } {
-        const owner = this;
-        return cacheGeneratorMethod(
-            owner,
-            "fetchSignaturesOfType",
-            function (source: Type, kind: SignatureKind): readonly Signature[] {
-                const data = owner.client.apiRequest("getSignaturesOfType", {
-                    snapshot: owner.snapshotId,
-                    project: owner.project.handle,
-                    type: source.id,
-                    kind,
-                });
-                return data.map(signature => owner.getOrCreateSignature(signature));
-            },
-            function* (source: Type, kind: SignatureKind): Generator<ProtocolRequest, readonly Signature[], ProtocolResponse["result"]> {
-                const data = yield* apiRequest("getSignaturesOfType", {
-                    snapshot: owner.snapshotId,
-                    project: owner.project.handle,
-                    type: source.id,
-                    kind,
-                });
-                return data.map(signature => owner.getOrCreateSignature(signature));
-            },
-        );
+        return getGeneratorMethod(this, this.#generatorMethods ??= createGeneratorMethodCache(14), 11, this.#fetchSignaturesOfType, this.#fetchSignaturesOfTypeGen);
+    }
+
+    #fetchSignaturesOfType(source: Type, kind: SignatureKind): readonly Signature[] {
+        const data = this.client.apiRequest("getSignaturesOfType", {
+            snapshot: this.snapshotId,
+            project: this.project.handle,
+            type: source.id,
+            kind,
+        });
+        return data.map(signature => this.getOrCreateSignature(signature));
+    }
+
+    *#fetchSignaturesOfTypeGen(source: Type, kind: SignatureKind): Generator<ProtocolRequest, readonly Signature[], ProtocolResponse["result"]> {
+        const data = yield* apiRequest("getSignaturesOfType", {
+            snapshot: this.snapshotId,
+            project: this.project.handle,
+            type: source.id,
+            kind,
+        });
+        return data.map(signature => this.getOrCreateSignature(signature));
     }
 
     get fetchIndexInfosOfType(): {
         (source: Type): readonly IndexInfo[];
         gen(source: Type): Generator<ProtocolRequest, readonly IndexInfo[], ProtocolResponse["result"]>;
     } {
-        const owner = this;
-        return cacheGeneratorMethod(
-            owner,
-            "fetchIndexInfosOfType",
-            function (source: Type): readonly IndexInfo[] {
-                const data = owner.client.apiRequest("getIndexInfosOfType", {
-                    snapshot: owner.snapshotId,
-                    project: owner.project.handle,
-                    type: source.id,
-                });
-                if (!data) return [];
-                return data.map(info => ({
-                    keyType: owner.getOrCreateType(info.keyType),
-                    valueType: owner.getOrCreateType(info.valueType),
-                    isReadonly: info.isReadonly ?? false,
-                    declaration: info.declaration ? owner.createNodeHandle<IndexSignatureDeclaration>(info.declaration) : undefined,
-                }));
-            },
-            function* (source: Type): Generator<ProtocolRequest, readonly IndexInfo[], ProtocolResponse["result"]> {
-                const data = yield* apiRequest("getIndexInfosOfType", {
-                    snapshot: owner.snapshotId,
-                    project: owner.project.handle,
-                    type: source.id,
-                });
-                if (!data) return [];
-                return data.map(info => ({
-                    keyType: owner.getOrCreateType(info.keyType),
-                    valueType: owner.getOrCreateType(info.valueType),
-                    isReadonly: info.isReadonly ?? false,
-                    declaration: info.declaration ? owner.createNodeHandle<IndexSignatureDeclaration>(info.declaration) : undefined,
-                }));
-            },
-        );
+        return getGeneratorMethod(this, this.#generatorMethods ??= createGeneratorMethodCache(14), 12, this.#fetchIndexInfosOfType, this.#fetchIndexInfosOfTypeGen);
+    }
+
+    #fetchIndexInfosOfType(source: Type): readonly IndexInfo[] {
+        const data = this.client.apiRequest("getIndexInfosOfType", {
+            snapshot: this.snapshotId,
+            project: this.project.handle,
+            type: source.id,
+        });
+        if (!data) return [];
+        return data.map(info => ({
+            keyType: this.getOrCreateType(info.keyType),
+            valueType: this.getOrCreateType(info.valueType),
+            isReadonly: info.isReadonly ?? false,
+            declaration: info.declaration ? this.createNodeHandle<IndexSignatureDeclaration>(info.declaration) : undefined,
+        }));
+    }
+
+    *#fetchIndexInfosOfTypeGen(source: Type): Generator<ProtocolRequest, readonly IndexInfo[], ProtocolResponse["result"]> {
+        const data = yield* apiRequest("getIndexInfosOfType", {
+            snapshot: this.snapshotId,
+            project: this.project.handle,
+            type: source.id,
+        });
+        if (!data) return [];
+        return data.map(info => ({
+            keyType: this.getOrCreateType(info.keyType),
+            valueType: this.getOrCreateType(info.valueType),
+            isReadonly: info.isReadonly ?? false,
+            declaration: info.declaration ? this.createNodeHandle<IndexSignatureDeclaration>(info.declaration) : undefined,
+        }));
     }
 
     get fetchTypeParameterAtPosition(): {
         (source: Signature, pos: number): Type;
         gen(source: Signature, pos: number): Generator<ProtocolRequest, Type, ProtocolResponse["result"]>;
     } {
-        const owner = this;
-        return cacheGeneratorMethod(
-            owner,
-            "fetchTypeParameterAtPosition",
-            function (source: Signature, pos: number): Type {
-                const data = owner.client.apiRequest("getTypeParameterAtPosition", {
-                    snapshot: owner.snapshotId,
-                    project: owner.project.handle,
-                    signature: source.id,
-                    index: pos,
-                });
-                return owner.getOrCreateType(data);
-            },
-            function* (source: Signature, pos: number): Generator<ProtocolRequest, Type, ProtocolResponse["result"]> {
-                const data = yield* apiRequest("getTypeParameterAtPosition", {
-                    snapshot: owner.snapshotId,
-                    project: owner.project.handle,
-                    signature: source.id,
-                    index: pos,
-                });
-                return owner.getOrCreateType(data);
-            },
-        );
+        return getGeneratorMethod(this, this.#generatorMethods ??= createGeneratorMethodCache(14), 13, this.#fetchTypeParameterAtPosition, this.#fetchTypeParameterAtPositionGen);
+    }
+
+    #fetchTypeParameterAtPosition(source: Signature, pos: number): Type {
+        const data = this.client.apiRequest("getTypeParameterAtPosition", {
+            snapshot: this.snapshotId,
+            project: this.project.handle,
+            signature: source.id,
+            index: pos,
+        });
+        return this.getOrCreateType(data);
+    }
+
+    *#fetchTypeParameterAtPositionGen(source: Signature, pos: number): Generator<ProtocolRequest, Type, ProtocolResponse["result"]> {
+        const data = yield* apiRequest("getTypeParameterAtPosition", {
+            snapshot: this.snapshotId,
+            project: this.project.handle,
+            signature: source.id,
+            index: pos,
+        });
+        return this.getOrCreateType(data);
     }
 }
 
@@ -2630,6 +2546,7 @@ export class Project<Id extends ProjectId = ProjectId> {
 }
 
 export class LanguageService {
+    #generatorMethods: GeneratorMethodCache | undefined;
     private snapshotId: number;
     private project: Project;
     private objectRegistry: ProjectObjectRegistry;
@@ -2648,107 +2565,103 @@ export class LanguageService {
         (file: DocumentIdentifier, actions: readonly APIImportAdderAction[]): readonly TextEdit[];
         gen(file: DocumentIdentifier, actions: readonly APIImportAdderAction[]): Generator<ProtocolRequest, readonly TextEdit[], ProtocolResponse["result"]>;
     } {
-        const owner = this;
-        return cacheGeneratorMethod(
-            owner,
-            "getImportAdderEdits",
-            function (file: DocumentIdentifier, actions: readonly APIImportAdderAction[]): readonly TextEdit[] {
-                const requestActions: ImportAdderAction[] = actions.map(action => {
-                    switch (action.kind) {
-                        case "importSymbol":
-                            const importSymbolAction: ImportAdderAction = {
-                                kind: "importSymbol",
-                                symbol: action.symbol.reference,
-                            };
-                            if (action.isValidTypeOnlyUseSite !== undefined) {
-                                importSymbolAction.isValidTypeOnlyUseSite = action.isValidTypeOnlyUseSite;
-                            }
-                            return importSymbolAction;
-                        default:
-                            return assertNever(action.kind);
-                    }
-                });
+        return getGeneratorMethod(this, this.#generatorMethods ??= createGeneratorMethodCache(6), 0, this.#getImportAdderEdits, this.#getImportAdderEditsGen);
+    }
 
-                const data = owner.client.apiRequest("getImportAdderEdits", {
-                    snapshot: owner.snapshotId,
-                    project: owner.project.handle,
-                    file,
-                    actions: requestActions,
-                });
-                return data ?? [];
-            },
-            function* (file: DocumentIdentifier, actions: readonly APIImportAdderAction[]): Generator<ProtocolRequest, readonly TextEdit[], ProtocolResponse["result"]> {
-                const requestActions: ImportAdderAction[] = actions.map(action => {
-                    switch (action.kind) {
-                        case "importSymbol":
-                            const importSymbolAction: ImportAdderAction = {
-                                kind: "importSymbol",
-                                symbol: action.symbol.reference,
-                            };
-                            if (action.isValidTypeOnlyUseSite !== undefined) {
-                                importSymbolAction.isValidTypeOnlyUseSite = action.isValidTypeOnlyUseSite;
-                            }
-                            return importSymbolAction;
-                        default:
-                            return assertNever(action.kind);
+    #getImportAdderEdits(file: DocumentIdentifier, actions: readonly APIImportAdderAction[]): readonly TextEdit[] {
+        const requestActions: ImportAdderAction[] = actions.map(action => {
+            switch (action.kind) {
+                case "importSymbol":
+                    const importSymbolAction: ImportAdderAction = {
+                        kind: "importSymbol",
+                        symbol: action.symbol.reference,
+                    };
+                    if (action.isValidTypeOnlyUseSite !== undefined) {
+                        importSymbolAction.isValidTypeOnlyUseSite = action.isValidTypeOnlyUseSite;
                     }
-                });
+                    return importSymbolAction;
+                default:
+                    return assertNever(action.kind);
+            }
+        });
 
-                const data = yield* apiRequest("getImportAdderEdits", {
-                    snapshot: owner.snapshotId,
-                    project: owner.project.handle,
-                    file,
-                    actions: requestActions,
-                });
-                return data ?? [];
-            },
-        );
+        const data = this.client.apiRequest("getImportAdderEdits", {
+            snapshot: this.snapshotId,
+            project: this.project.handle,
+            file,
+            actions: requestActions,
+        });
+        return data ?? [];
+    }
+
+    *#getImportAdderEditsGen(file: DocumentIdentifier, actions: readonly APIImportAdderAction[]): Generator<ProtocolRequest, readonly TextEdit[], ProtocolResponse["result"]> {
+        const requestActions: ImportAdderAction[] = actions.map(action => {
+            switch (action.kind) {
+                case "importSymbol":
+                    const importSymbolAction: ImportAdderAction = {
+                        kind: "importSymbol",
+                        symbol: action.symbol.reference,
+                    };
+                    if (action.isValidTypeOnlyUseSite !== undefined) {
+                        importSymbolAction.isValidTypeOnlyUseSite = action.isValidTypeOnlyUseSite;
+                    }
+                    return importSymbolAction;
+                default:
+                    return assertNever(action.kind);
+            }
+        });
+
+        const data = yield* apiRequest("getImportAdderEdits", {
+            snapshot: this.snapshotId,
+            project: this.project.handle,
+            file,
+            actions: requestActions,
+        });
+        return data ?? [];
     }
 
     get getImportEditsForSymbols(): {
         (file: DocumentIdentifier, symbols: readonly Symbol[], options?: GetImportEditsForSymbolsOptions): readonly TextEdit[];
         gen(file: DocumentIdentifier, symbols: readonly Symbol[], options?: GetImportEditsForSymbolsOptions): Generator<ProtocolRequest, readonly TextEdit[], ProtocolResponse["result"]>;
     } {
-        const owner = this;
-        return cacheGeneratorMethod(
-            owner,
-            "getImportEditsForSymbols",
-            function (file: DocumentIdentifier, symbols: readonly Symbol[], options: GetImportEditsForSymbolsOptions = {}): readonly TextEdit[] {
-                return owner.getImportAdderEdits(
-                    file,
-                    symbols.map((symbol): APIImportAdderAction => {
-                        if (options.isValidTypeOnlyUseSite !== undefined) {
-                            return {
-                                kind: "importSymbol",
-                                symbol,
-                                isValidTypeOnlyUseSite: options.isValidTypeOnlyUseSite,
-                            };
-                        }
-                        return {
-                            kind: "importSymbol",
-                            symbol,
-                        };
-                    }),
-                );
-            },
-            function* (file: DocumentIdentifier, symbols: readonly Symbol[], options: GetImportEditsForSymbolsOptions = {}): Generator<ProtocolRequest, readonly TextEdit[], ProtocolResponse["result"]> {
-                return yield* owner.getImportAdderEdits.gen(
-                    file,
-                    symbols.map((symbol): APIImportAdderAction => {
-                        if (options.isValidTypeOnlyUseSite !== undefined) {
-                            return {
-                                kind: "importSymbol",
-                                symbol,
-                                isValidTypeOnlyUseSite: options.isValidTypeOnlyUseSite,
-                            };
-                        }
-                        return {
-                            kind: "importSymbol",
-                            symbol,
-                        };
-                    }),
-                );
-            },
+        return getGeneratorMethod(this, this.#generatorMethods ??= createGeneratorMethodCache(6), 1, this.#getImportEditsForSymbols, this.#getImportEditsForSymbolsGen);
+    }
+
+    #getImportEditsForSymbols(file: DocumentIdentifier, symbols: readonly Symbol[], options: GetImportEditsForSymbolsOptions = {}): readonly TextEdit[] {
+        return this.#getImportAdderEdits(
+            file,
+            symbols.map((symbol): APIImportAdderAction => {
+                if (options.isValidTypeOnlyUseSite !== undefined) {
+                    return {
+                        kind: "importSymbol",
+                        symbol,
+                        isValidTypeOnlyUseSite: options.isValidTypeOnlyUseSite,
+                    };
+                }
+                return {
+                    kind: "importSymbol",
+                    symbol,
+                };
+            }),
+        );
+    }
+
+    *#getImportEditsForSymbolsGen(file: DocumentIdentifier, symbols: readonly Symbol[], options: GetImportEditsForSymbolsOptions = {}): Generator<ProtocolRequest, readonly TextEdit[], ProtocolResponse["result"]> {
+        return yield* this.#getImportAdderEditsGen(
+            file,
+            symbols.map((symbol): APIImportAdderAction => {
+                if (options.isValidTypeOnlyUseSite !== undefined) {
+                    return {
+                        kind: "importSymbol",
+                        symbol,
+                        isValidTypeOnlyUseSite: options.isValidTypeOnlyUseSite,
+                    };
+                }
+                return {
+                    kind: "importSymbol",
+                    symbol,
+                };
+            }),
         );
     }
 
@@ -2756,117 +2669,111 @@ export class LanguageService {
         (node: Node, position: number): ReferencedSymbolEntry[];
         gen(node: Node, position: number): Generator<ProtocolRequest, ReferencedSymbolEntry[], ProtocolResponse["result"]>;
     } {
-        const owner = this;
-        return cacheGeneratorMethod(
-            owner,
-            "getReferencedSymbolsForNode",
-            function (node: Node, position: number): ReferencedSymbolEntry[] {
-                const data = owner.client.apiRequest("getReferencedSymbolsForNode", {
-                    snapshot: owner.snapshotId,
-                    project: owner.project.handle,
-                    node: getNodeRequestHandle(node),
-                    position,
-                });
-                return (data ?? []).map(entry => ({
-                    definition: owner.objectRegistry.createNodeHandle(entry.definition),
-                    symbol: entry.symbol ? owner.objectRegistry.getOrCreateSymbol(entry.symbol) : undefined,
-                    references: (entry.references ?? []).map(h => owner.objectRegistry.createNodeHandle(h)),
-                }));
-            },
-            function* (node: Node, position: number): Generator<ProtocolRequest, ReferencedSymbolEntry[], ProtocolResponse["result"]> {
-                const data = yield* apiRequest("getReferencedSymbolsForNode", {
-                    snapshot: owner.snapshotId,
-                    project: owner.project.handle,
-                    node: getNodeRequestHandle(node),
-                    position,
-                });
-                return (data ?? []).map(entry => ({
-                    definition: owner.objectRegistry.createNodeHandle(entry.definition),
-                    symbol: entry.symbol ? owner.objectRegistry.getOrCreateSymbol(entry.symbol) : undefined,
-                    references: (entry.references ?? []).map(h => owner.objectRegistry.createNodeHandle(h)),
-                }));
-            },
-        );
+        return getGeneratorMethod(this, this.#generatorMethods ??= createGeneratorMethodCache(6), 2, this.#getReferencedSymbolsForNode, this.#getReferencedSymbolsForNodeGen);
+    }
+
+    #getReferencedSymbolsForNode(node: Node, position: number): ReferencedSymbolEntry[] {
+        const data = this.client.apiRequest("getReferencedSymbolsForNode", {
+            snapshot: this.snapshotId,
+            project: this.project.handle,
+            node: getNodeRequestHandle(node),
+            position,
+        });
+        return (data ?? []).map(entry => ({
+            definition: this.objectRegistry.createNodeHandle(entry.definition),
+            symbol: entry.symbol ? this.objectRegistry.getOrCreateSymbol(entry.symbol) : undefined,
+            references: (entry.references ?? []).map(h => this.objectRegistry.createNodeHandle(h)),
+        }));
+    }
+
+    *#getReferencedSymbolsForNodeGen(node: Node, position: number): Generator<ProtocolRequest, ReferencedSymbolEntry[], ProtocolResponse["result"]> {
+        const data = yield* apiRequest("getReferencedSymbolsForNode", {
+            snapshot: this.snapshotId,
+            project: this.project.handle,
+            node: getNodeRequestHandle(node),
+            position,
+        });
+        return (data ?? []).map(entry => ({
+            definition: this.objectRegistry.createNodeHandle(entry.definition),
+            symbol: entry.symbol ? this.objectRegistry.getOrCreateSymbol(entry.symbol) : undefined,
+            references: (entry.references ?? []).map(h => this.objectRegistry.createNodeHandle(h)),
+        }));
     }
 
     get getSignatureUsage(): {
         (signatureDecl: Node): SignatureUsage[];
         gen(signatureDecl: Node): Generator<ProtocolRequest, SignatureUsage[], ProtocolResponse["result"]>;
     } {
-        const owner = this;
-        return cacheGeneratorMethod(
-            owner,
-            "getSignatureUsage",
-            function (signatureDecl: Node): SignatureUsage[] {
-                const data = owner.client.apiRequest("getSignatureUsages", {
-                    snapshot: owner.snapshotId,
-                    project: owner.project.handle,
-                    signatureDecl: getNodeRequestHandle(signatureDecl),
-                });
-                return (data ?? []).map(entry => ({
-                    name: owner.objectRegistry.createNodeHandle(entry.name),
-                    call: entry.call ? owner.objectRegistry.createNodeHandle(entry.call) : undefined,
-                }));
-            },
-            function* (signatureDecl: Node): Generator<ProtocolRequest, SignatureUsage[], ProtocolResponse["result"]> {
-                const data = yield* apiRequest("getSignatureUsages", {
-                    snapshot: owner.snapshotId,
-                    project: owner.project.handle,
-                    signatureDecl: getNodeRequestHandle(signatureDecl),
-                });
-                return (data ?? []).map(entry => ({
-                    name: owner.objectRegistry.createNodeHandle(entry.name),
-                    call: entry.call ? owner.objectRegistry.createNodeHandle(entry.call) : undefined,
-                }));
-            },
-        );
+        return getGeneratorMethod(this, this.#generatorMethods ??= createGeneratorMethodCache(6), 3, this.#getSignatureUsage, this.#getSignatureUsageGen);
+    }
+
+    #getSignatureUsage(signatureDecl: Node): SignatureUsage[] {
+        const data = this.client.apiRequest("getSignatureUsages", {
+            snapshot: this.snapshotId,
+            project: this.project.handle,
+            signatureDecl: getNodeRequestHandle(signatureDecl),
+        });
+        return (data ?? []).map(entry => ({
+            name: this.objectRegistry.createNodeHandle(entry.name),
+            call: entry.call ? this.objectRegistry.createNodeHandle(entry.call) : undefined,
+        }));
+    }
+
+    *#getSignatureUsageGen(signatureDecl: Node): Generator<ProtocolRequest, SignatureUsage[], ProtocolResponse["result"]> {
+        const data = yield* apiRequest("getSignatureUsages", {
+            snapshot: this.snapshotId,
+            project: this.project.handle,
+            signatureDecl: getNodeRequestHandle(signatureDecl),
+        });
+        return (data ?? []).map(entry => ({
+            name: this.objectRegistry.createNodeHandle(entry.name),
+            call: entry.call ? this.objectRegistry.createNodeHandle(entry.call) : undefined,
+        }));
     }
 
     get getCompletionsAtPosition(): {
         (document: string, position: number, options?: CompletionOptions): CompletionInfo | undefined;
         gen(document: string, position: number, options?: CompletionOptions): Generator<ProtocolRequest, CompletionInfo | undefined, ProtocolResponse["result"]>;
     } {
-        const owner = this;
-        return cacheGeneratorMethod(
-            owner,
-            "getCompletionsAtPosition",
-            function (document: string, position: number, options?: CompletionOptions): CompletionInfo | undefined {
-                const data = owner.client.apiRequest("getCompletionsAtPosition", {
-                    snapshot: owner.snapshotId,
-                    project: owner.project.handle,
-                    file: document,
-                    position,
-                    triggerCharacter: options?.triggerCharacter,
-                    includeSymbol: options?.includeSymbol,
-                });
-                if (!data) return undefined;
-                return {
-                    isIncomplete: data.isIncomplete,
-                    entries: data.entries.map(e => ({
-                        ...e,
-                        symbol: e.symbol ? owner.objectRegistry.getOrCreateSymbol(e.symbol) : undefined,
-                    })),
-                };
-            },
-            function* (document: string, position: number, options?: CompletionOptions): Generator<ProtocolRequest, CompletionInfo | undefined, ProtocolResponse["result"]> {
-                const data = yield* apiRequest("getCompletionsAtPosition", {
-                    snapshot: owner.snapshotId,
-                    project: owner.project.handle,
-                    file: document,
-                    position,
-                    triggerCharacter: options?.triggerCharacter,
-                    includeSymbol: options?.includeSymbol,
-                });
-                if (!data) return undefined;
-                return {
-                    isIncomplete: data.isIncomplete,
-                    entries: data.entries.map(e => ({
-                        ...e,
-                        symbol: e.symbol ? owner.objectRegistry.getOrCreateSymbol(e.symbol) : undefined,
-                    })),
-                };
-            },
-        );
+        return getGeneratorMethod(this, this.#generatorMethods ??= createGeneratorMethodCache(6), 4, this.#getCompletionsAtPosition, this.#getCompletionsAtPositionGen);
+    }
+
+    #getCompletionsAtPosition(document: string, position: number, options?: CompletionOptions): CompletionInfo | undefined {
+        const data = this.client.apiRequest("getCompletionsAtPosition", {
+            snapshot: this.snapshotId,
+            project: this.project.handle,
+            file: document,
+            position,
+            triggerCharacter: options?.triggerCharacter,
+            includeSymbol: options?.includeSymbol,
+        });
+        if (!data) return undefined;
+        return {
+            isIncomplete: data.isIncomplete,
+            entries: data.entries.map(e => ({
+                ...e,
+                symbol: e.symbol ? this.objectRegistry.getOrCreateSymbol(e.symbol) : undefined,
+            })),
+        };
+    }
+
+    *#getCompletionsAtPositionGen(document: string, position: number, options?: CompletionOptions): Generator<ProtocolRequest, CompletionInfo | undefined, ProtocolResponse["result"]> {
+        const data = yield* apiRequest("getCompletionsAtPosition", {
+            snapshot: this.snapshotId,
+            project: this.project.handle,
+            file: document,
+            position,
+            triggerCharacter: options?.triggerCharacter,
+            includeSymbol: options?.includeSymbol,
+        });
+        if (!data) return undefined;
+        return {
+            isIncomplete: data.isIncomplete,
+            entries: data.entries.map(e => ({
+                ...e,
+                symbol: e.symbol ? this.objectRegistry.getOrCreateSymbol(e.symbol) : undefined,
+            })),
+        };
     }
 
     /**
@@ -2882,37 +2789,36 @@ export class LanguageService {
         (node: Node, file: DocumentIdentifier, position: number): string;
         gen(node: Node, file: DocumentIdentifier, position: number): Generator<ProtocolRequest, string, ProtocolResponse["result"]>;
     } {
-        const owner = this;
-        return cacheGeneratorMethod(
-            owner,
-            "formatNodeForInsertion",
-            function (node: Node, file: DocumentIdentifier, position: number): string {
-                const encoded = encodeNode(node);
-                const base64 = uint8ArrayToBase64(encoded);
-                return owner.client.apiRequest("formatNodeForInsertion", {
-                    snapshot: owner.snapshotId,
-                    project: owner.project.handle,
-                    file,
-                    position,
-                    data: base64,
-                });
-            },
-            function* (node: Node, file: DocumentIdentifier, position: number): Generator<ProtocolRequest, string, ProtocolResponse["result"]> {
-                const encoded = encodeNode(node);
-                const base64 = uint8ArrayToBase64(encoded);
-                return yield* apiRequest("formatNodeForInsertion", {
-                    snapshot: owner.snapshotId,
-                    project: owner.project.handle,
-                    file,
-                    position,
-                    data: base64,
-                });
-            },
-        );
+        return getGeneratorMethod(this, this.#generatorMethods ??= createGeneratorMethodCache(6), 5, this.#formatNodeForInsertion, this.#formatNodeForInsertionGen);
+    }
+
+    #formatNodeForInsertion(node: Node, file: DocumentIdentifier, position: number): string {
+        const encoded = encodeNode(node);
+        const base64 = uint8ArrayToBase64(encoded);
+        return this.client.apiRequest("formatNodeForInsertion", {
+            snapshot: this.snapshotId,
+            project: this.project.handle,
+            file,
+            position,
+            data: base64,
+        });
+    }
+
+    *#formatNodeForInsertionGen(node: Node, file: DocumentIdentifier, position: number): Generator<ProtocolRequest, string, ProtocolResponse["result"]> {
+        const encoded = encodeNode(node);
+        const base64 = uint8ArrayToBase64(encoded);
+        return yield* apiRequest("formatNodeForInsertion", {
+            snapshot: this.snapshotId,
+            project: this.project.handle,
+            file,
+            position,
+            data: base64,
+        });
     }
 }
 
 export class Program<Id extends ProjectId = ProjectId> implements FormatDiagnosticsHost {
+    #generatorMethods: GeneratorMethodCache | undefined;
     /** @internal */
     readonly snapshotId: number;
     readonly id: Id;
@@ -2956,45 +2862,41 @@ export class Program<Id extends ProjectId = ProjectId> implements FormatDiagnost
     }
 
     [globalThis.Symbol.dispose](): void {
-        this.dispose();
+        this.#dispose();
     }
 
     get dispose(): {
         (): void;
         gen(): Generator<ProtocolRequest, void, ProtocolResponse["result"]>;
     } {
-        const owner = this;
-        return cacheGeneratorMethod(
-            owner,
-            "dispose",
-            function (): void {
-                return owner.disposePromise ??= owner.disposeWorker();
-            },
-            function* (): Generator<ProtocolRequest, void, ProtocolResponse["result"]> {
-                return owner.disposePromise ??= yield* owner.disposeWorker.gen();
-            },
-        );
+        return getGeneratorMethod(this, this.#generatorMethods ??= createGeneratorMethodCache(31), 0, this.#dispose, this.#disposeGen);
+    }
+
+    #dispose(): void {
+        return this.disposePromise ??= this.#disposeWorker();
+    }
+
+    *#disposeGen(): Generator<ProtocolRequest, void, ProtocolResponse["result"]> {
+        return this.disposePromise ??= yield* this.#disposeWorkerGen();
     }
 
     private get disposeWorker(): {
         (): void;
         gen(): Generator<ProtocolRequest, void, ProtocolResponse["result"]>;
     } {
-        const owner = this;
-        return cacheGeneratorMethod(
-            owner,
-            "disposeWorker",
-            function (): void {
-                const snapshot = owner.ownedSnapshot;
-                owner.ownedSnapshot = undefined;
-                if (snapshot) snapshot.dispose();
-            },
-            function* (): Generator<ProtocolRequest, void, ProtocolResponse["result"]> {
-                const snapshot = owner.ownedSnapshot;
-                owner.ownedSnapshot = undefined;
-                if (snapshot) yield* snapshot.dispose.gen();
-            },
-        );
+        return getGeneratorMethod(this, this.#generatorMethods ??= createGeneratorMethodCache(31), 1, this.#disposeWorker, this.#disposeWorkerGen);
+    }
+
+    #disposeWorker(): void {
+        const snapshot = this.ownedSnapshot;
+        this.ownedSnapshot = undefined;
+        if (snapshot) snapshot.dispose();
+    }
+
+    *#disposeWorkerGen(): Generator<ProtocolRequest, void, ProtocolResponse["result"]> {
+        const snapshot = this.ownedSnapshot;
+        this.ownedSnapshot = undefined;
+        if (snapshot) yield* snapshot.dispose.gen();
     }
 
     getCompilerOptions(): CompilerOptions {
@@ -3005,21 +2907,19 @@ export class Program<Id extends ProjectId = ProjectId> implements FormatDiagnost
         (file: DocumentIdentifier): SourceFile | undefined;
         gen(file: DocumentIdentifier): Generator<ProtocolRequest, SourceFile | undefined, ProtocolResponse["result"]>;
     } {
-        const owner = this;
-        return cacheGeneratorMethod(
-            owner,
-            "getSourceFile",
-            function (file: DocumentIdentifier): SourceFile | undefined {
-                const fileName = resolveFileName(file);
-                const path = owner.pathKeyForFileName(fileName);
-                return owner.getSourceFileWorker(file, path);
-            },
-            function* (file: DocumentIdentifier): Generator<ProtocolRequest, SourceFile | undefined, ProtocolResponse["result"]> {
-                const fileName = resolveFileName(file);
-                const path = owner.pathKeyForFileName(fileName);
-                return yield* owner.getSourceFileWorker.gen(file, path);
-            },
-        );
+        return getGeneratorMethod(this, this.#generatorMethods ??= createGeneratorMethodCache(31), 2, this.#getSourceFile, this.#getSourceFileGen);
+    }
+
+    #getSourceFile(file: DocumentIdentifier): SourceFile | undefined {
+        const fileName = resolveFileName(file);
+        const path = this.pathKeyForFileName(fileName);
+        return this.#getSourceFileWorker(file, path);
+    }
+
+    *#getSourceFileGen(file: DocumentIdentifier): Generator<ProtocolRequest, SourceFile | undefined, ProtocolResponse["result"]> {
+        const fileName = resolveFileName(file);
+        const path = this.pathKeyForFileName(fileName);
+        return yield* this.#getSourceFileWorkerGen(file, path);
     }
 
     /**
@@ -3029,277 +2929,259 @@ export class Program<Id extends ProjectId = ProjectId> implements FormatDiagnost
         (path: PathKey): SourceFile | undefined;
         gen(path: PathKey): Generator<ProtocolRequest, SourceFile | undefined, ProtocolResponse["result"]>;
     } {
-        const owner = this;
-        return cacheGeneratorMethod(
-            owner,
-            "getSourceFileByPath",
-            function (path: PathKey): SourceFile | undefined {
-                // The wire format is a string, but the cache key remains the supplied
-                // PathKey and is never treated as a RootedPath.
-                return owner.getSourceFileWorker(path, path);
-            },
-            function* (path: PathKey): Generator<ProtocolRequest, SourceFile | undefined, ProtocolResponse["result"]> {
-                // The wire format is a string, but the cache key remains the supplied
-                // PathKey and is never treated as a RootedPath.
-                return yield* owner.getSourceFileWorker.gen(path, path);
-            },
-        );
+        return getGeneratorMethod(this, this.#generatorMethods ??= createGeneratorMethodCache(31), 3, this.#getSourceFileByPath, this.#getSourceFileByPathGen);
+    }
+
+    #getSourceFileByPath(path: PathKey): SourceFile | undefined {
+        // The wire format is a string, but the cache key remains the supplied
+        // PathKey and is never treated as a RootedPath.
+        return this.#getSourceFileWorker(path, path);
+    }
+
+    *#getSourceFileByPathGen(path: PathKey): Generator<ProtocolRequest, SourceFile | undefined, ProtocolResponse["result"]> {
+        // The wire format is a string, but the cache key remains the supplied
+        // PathKey and is never treated as a RootedPath.
+        return yield* this.#getSourceFileWorkerGen(path, path);
     }
 
     private get getSourceFileWorker(): {
         (file: DocumentIdentifier, path: PathKey): SourceFile | undefined;
         gen(file: DocumentIdentifier, path: PathKey): Generator<ProtocolRequest, SourceFile | undefined, ProtocolResponse["result"]>;
     } {
-        const owner = this;
-        return cacheGeneratorMethod(
-            owner,
-            "getSourceFileWorker",
-            function (file: DocumentIdentifier, path: PathKey): SourceFile | undefined {
-                // Check if we already have a retained cache entry for this (snapshot, project) pair
-                const retained = owner.sourceFileCache.getRetained(path, owner.snapshotId, owner.project.id);
-                if (retained) {
-                    return retained as unknown as SourceFile;
-                }
+        return getGeneratorMethod(this, this.#generatorMethods ??= createGeneratorMethodCache(31), 4, this.#getSourceFileWorker, this.#getSourceFileWorkerGen);
+    }
 
-                // Fetch from server
-                const binaryData = owner.client.apiRequestBinary("getSourceFile", {
-                    snapshot: owner.snapshotId,
-                    project: owner.project.handle,
-                    file,
-                });
-                if (!binaryData) {
-                    return undefined;
-                }
+    #getSourceFileWorker(file: DocumentIdentifier, path: PathKey): SourceFile | undefined {
+        // Check if we already have a retained cache entry for this (snapshot, project) pair
+        const retained = this.sourceFileCache.getRetained(path, this.snapshotId, this.project.id);
+        if (retained) {
+            return retained as unknown as SourceFile;
+        }
 
-                // Create a new RemoteSourceFile and cache it (set returns existing if hash matches)
-                const decoded = new RemoteSourceFile(binaryData, owner.decoder, owner.client.getTimingCollector(), owner.project.api);
-                return owner.sourceFileCache.set(decoded, owner.snapshotId, owner.project.id) as unknown as SourceFile;
-            },
-            function* (file: DocumentIdentifier, path: PathKey): Generator<ProtocolRequest, SourceFile | undefined, ProtocolResponse["result"]> {
-                // Check if we already have a retained cache entry for this (snapshot, project) pair
-                const retained = owner.sourceFileCache.getRetained(path, owner.snapshotId, owner.project.id);
-                if (retained) {
-                    return retained as unknown as SourceFile;
-                }
+        // Fetch from server
+        const binaryData = this.client.apiRequestBinary("getSourceFile", {
+            snapshot: this.snapshotId,
+            project: this.project.handle,
+            file,
+        });
+        if (!binaryData) {
+            return undefined;
+        }
 
-                // Fetch from server
-                const binaryData = sourceFileResponseToUint8Array(
-                    yield* apiRequest("getSourceFile", {
-                        snapshot: owner.snapshotId,
-                        project: owner.project.handle,
-                        file,
-                    }),
-                );
-                if (!binaryData) {
-                    return undefined;
-                }
+        // Create a new RemoteSourceFile and cache it (set returns existing if hash matches)
+        const decoded = new RemoteSourceFile(binaryData, this.decoder, this.client.getTimingCollector(), this.project.api);
+        return this.sourceFileCache.set(decoded, this.snapshotId, this.project.id) as unknown as SourceFile;
+    }
 
-                // Create a new RemoteSourceFile and cache it (set returns existing if hash matches)
-                const decoded = new RemoteSourceFile(binaryData, owner.decoder, owner.client.getTimingCollector(), owner.project.api);
-                return owner.sourceFileCache.set(decoded, owner.snapshotId, owner.project.id) as unknown as SourceFile;
-            },
+    *#getSourceFileWorkerGen(file: DocumentIdentifier, path: PathKey): Generator<ProtocolRequest, SourceFile | undefined, ProtocolResponse["result"]> {
+        // Check if we already have a retained cache entry for this (snapshot, project) pair
+        const retained = this.sourceFileCache.getRetained(path, this.snapshotId, this.project.id);
+        if (retained) {
+            return retained as unknown as SourceFile;
+        }
+
+        // Fetch from server
+        const binaryData = sourceFileResponseToUint8Array(
+            yield* apiRequest("getSourceFile", {
+                snapshot: this.snapshotId,
+                project: this.project.handle,
+                file,
+            }),
         );
+        if (!binaryData) {
+            return undefined;
+        }
+
+        // Create a new RemoteSourceFile and cache it (set returns existing if hash matches)
+        const decoded = new RemoteSourceFile(binaryData, this.decoder, this.client.getTimingCollector(), this.project.api);
+        return this.sourceFileCache.set(decoded, this.snapshotId, this.project.id) as unknown as SourceFile;
     }
 
     get getResolvedModule(): {
         (file: DocumentIdentifier, moduleName: string, mode: ModuleKind): ResolvedModule | undefined;
         gen(file: DocumentIdentifier, moduleName: string, mode: ModuleKind): Generator<ProtocolRequest, ResolvedModule | undefined, ProtocolResponse["result"]>;
     } {
-        const owner = this;
-        return cacheGeneratorMethod(
-            owner,
-            "getResolvedModule",
-            function (file: DocumentIdentifier, moduleName: string, mode: ModuleKind): ResolvedModule | undefined {
-                const result = owner.client.apiRequest("getResolvedModule", {
-                    snapshot: owner.snapshotId,
-                    project: owner.project.handle,
-                    file,
-                    moduleName,
-                    mode,
-                });
-                return result ?? undefined;
-            },
-            function* (file: DocumentIdentifier, moduleName: string, mode: ModuleKind): Generator<ProtocolRequest, ResolvedModule | undefined, ProtocolResponse["result"]> {
-                const result = yield* apiRequest("getResolvedModule", {
-                    snapshot: owner.snapshotId,
-                    project: owner.project.handle,
-                    file,
-                    moduleName,
-                    mode,
-                });
-                return result ?? undefined;
-            },
-        );
+        return getGeneratorMethod(this, this.#generatorMethods ??= createGeneratorMethodCache(31), 5, this.#getResolvedModule, this.#getResolvedModuleGen);
+    }
+
+    #getResolvedModule(file: DocumentIdentifier, moduleName: string, mode: ModuleKind): ResolvedModule | undefined {
+        const result = this.client.apiRequest("getResolvedModule", {
+            snapshot: this.snapshotId,
+            project: this.project.handle,
+            file,
+            moduleName,
+            mode,
+        });
+        return result ?? undefined;
+    }
+
+    *#getResolvedModuleGen(file: DocumentIdentifier, moduleName: string, mode: ModuleKind): Generator<ProtocolRequest, ResolvedModule | undefined, ProtocolResponse["result"]> {
+        const result = yield* apiRequest("getResolvedModule", {
+            snapshot: this.snapshotId,
+            project: this.project.handle,
+            file,
+            moduleName,
+            mode,
+        });
+        return result ?? undefined;
     }
 
     get getModeForUsageLocation(): {
         (file: DocumentIdentifier, usage: StringLiteralLikeNode): ModuleKind;
         gen(file: DocumentIdentifier, usage: StringLiteralLikeNode): Generator<ProtocolRequest, ModuleKind, ProtocolResponse["result"]>;
     } {
-        const owner = this;
-        return cacheGeneratorMethod(
-            owner,
-            "getModeForUsageLocation",
-            function (file: DocumentIdentifier, usage: StringLiteralLikeNode): ModuleKind {
-                return owner.client.apiRequest("getModeForUsageLocation", {
-                    snapshot: owner.snapshotId,
-                    project: owner.project.handle,
-                    file,
-                    usage: getNodeRequestHandle(usage),
-                });
-            },
-            function* (file: DocumentIdentifier, usage: StringLiteralLikeNode): Generator<ProtocolRequest, ModuleKind, ProtocolResponse["result"]> {
-                return yield* apiRequest("getModeForUsageLocation", {
-                    snapshot: owner.snapshotId,
-                    project: owner.project.handle,
-                    file,
-                    usage: getNodeRequestHandle(usage),
-                });
-            },
-        );
+        return getGeneratorMethod(this, this.#generatorMethods ??= createGeneratorMethodCache(31), 6, this.#getModeForUsageLocation, this.#getModeForUsageLocationGen);
+    }
+
+    #getModeForUsageLocation(file: DocumentIdentifier, usage: StringLiteralLikeNode): ModuleKind {
+        return this.client.apiRequest("getModeForUsageLocation", {
+            snapshot: this.snapshotId,
+            project: this.project.handle,
+            file,
+            usage: getNodeRequestHandle(usage),
+        });
+    }
+
+    *#getModeForUsageLocationGen(file: DocumentIdentifier, usage: StringLiteralLikeNode): Generator<ProtocolRequest, ModuleKind, ProtocolResponse["result"]> {
+        return yield* apiRequest("getModeForUsageLocation", {
+            snapshot: this.snapshotId,
+            project: this.project.handle,
+            file,
+            usage: getNodeRequestHandle(usage),
+        });
     }
 
     get getModeForResolutionAtIndex(): {
         (file: DocumentIdentifier, index: number): ModuleKind;
         gen(file: DocumentIdentifier, index: number): Generator<ProtocolRequest, ModuleKind, ProtocolResponse["result"]>;
     } {
-        const owner = this;
-        return cacheGeneratorMethod(
-            owner,
-            "getModeForResolutionAtIndex",
-            function (file: DocumentIdentifier, index: number): ModuleKind {
-                return owner.client.apiRequest("getModeForResolutionAtIndex", {
-                    snapshot: owner.snapshotId,
-                    project: owner.project.handle,
-                    file,
-                    index,
-                });
-            },
-            function* (file: DocumentIdentifier, index: number): Generator<ProtocolRequest, ModuleKind, ProtocolResponse["result"]> {
-                return yield* apiRequest("getModeForResolutionAtIndex", {
-                    snapshot: owner.snapshotId,
-                    project: owner.project.handle,
-                    file,
-                    index,
-                });
-            },
-        );
+        return getGeneratorMethod(this, this.#generatorMethods ??= createGeneratorMethodCache(31), 7, this.#getModeForResolutionAtIndex, this.#getModeForResolutionAtIndexGen);
+    }
+
+    #getModeForResolutionAtIndex(file: DocumentIdentifier, index: number): ModuleKind {
+        return this.client.apiRequest("getModeForResolutionAtIndex", {
+            snapshot: this.snapshotId,
+            project: this.project.handle,
+            file,
+            index,
+        });
+    }
+
+    *#getModeForResolutionAtIndexGen(file: DocumentIdentifier, index: number): Generator<ProtocolRequest, ModuleKind, ProtocolResponse["result"]> {
+        return yield* apiRequest("getModeForResolutionAtIndex", {
+            snapshot: this.snapshotId,
+            project: this.project.handle,
+            file,
+            index,
+        });
     }
 
     get getResolvedModuleFromModuleSpecifier(): {
         (moduleSpecifier: StringLiteralLikeNode, sourceFile?: DocumentIdentifier): ResolvedModule | undefined;
         gen(moduleSpecifier: StringLiteralLikeNode, sourceFile?: DocumentIdentifier): Generator<ProtocolRequest, ResolvedModule | undefined, ProtocolResponse["result"]>;
     } {
-        const owner = this;
-        return cacheGeneratorMethod(
-            owner,
-            "getResolvedModuleFromModuleSpecifier",
-            function (moduleSpecifier: StringLiteralLikeNode, sourceFile?: DocumentIdentifier): ResolvedModule | undefined {
-                const result = owner.client.apiRequest("getResolvedModuleFromModuleSpecifier", {
-                    snapshot: owner.snapshotId,
-                    project: owner.project.handle,
-                    moduleSpecifier: getNodeRequestHandle(moduleSpecifier),
-                    sourceFile,
-                });
-                return result ?? undefined;
-            },
-            function* (moduleSpecifier: StringLiteralLikeNode, sourceFile?: DocumentIdentifier): Generator<ProtocolRequest, ResolvedModule | undefined, ProtocolResponse["result"]> {
-                const result = yield* apiRequest("getResolvedModuleFromModuleSpecifier", {
-                    snapshot: owner.snapshotId,
-                    project: owner.project.handle,
-                    moduleSpecifier: getNodeRequestHandle(moduleSpecifier),
-                    sourceFile,
-                });
-                return result ?? undefined;
-            },
-        );
+        return getGeneratorMethod(this, this.#generatorMethods ??= createGeneratorMethodCache(31), 8, this.#getResolvedModuleFromModuleSpecifier, this.#getResolvedModuleFromModuleSpecifierGen);
+    }
+
+    #getResolvedModuleFromModuleSpecifier(moduleSpecifier: StringLiteralLikeNode, sourceFile?: DocumentIdentifier): ResolvedModule | undefined {
+        const result = this.client.apiRequest("getResolvedModuleFromModuleSpecifier", {
+            snapshot: this.snapshotId,
+            project: this.project.handle,
+            moduleSpecifier: getNodeRequestHandle(moduleSpecifier),
+            sourceFile,
+        });
+        return result ?? undefined;
+    }
+
+    *#getResolvedModuleFromModuleSpecifierGen(moduleSpecifier: StringLiteralLikeNode, sourceFile?: DocumentIdentifier): Generator<ProtocolRequest, ResolvedModule | undefined, ProtocolResponse["result"]> {
+        const result = yield* apiRequest("getResolvedModuleFromModuleSpecifier", {
+            snapshot: this.snapshotId,
+            project: this.project.handle,
+            moduleSpecifier: getNodeRequestHandle(moduleSpecifier),
+            sourceFile,
+        });
+        return result ?? undefined;
     }
 
     get getResolvedTypeReferenceDirective(): {
         (file: DocumentIdentifier, typeDirectiveName: string, mode: ModuleKind): ResolvedTypeReferenceDirective | undefined;
         gen(file: DocumentIdentifier, typeDirectiveName: string, mode: ModuleKind): Generator<ProtocolRequest, ResolvedTypeReferenceDirective | undefined, ProtocolResponse["result"]>;
     } {
-        const owner = this;
-        return cacheGeneratorMethod(
-            owner,
-            "getResolvedTypeReferenceDirective",
-            function (file: DocumentIdentifier, typeDirectiveName: string, mode: ModuleKind): ResolvedTypeReferenceDirective | undefined {
-                const result = owner.client.apiRequest("getResolvedTypeReferenceDirective", {
-                    snapshot: owner.snapshotId,
-                    project: owner.project.handle,
-                    file,
-                    typeDirectiveName,
-                    mode,
-                });
-                return result ?? undefined;
-            },
-            function* (file: DocumentIdentifier, typeDirectiveName: string, mode: ModuleKind): Generator<ProtocolRequest, ResolvedTypeReferenceDirective | undefined, ProtocolResponse["result"]> {
-                const result = yield* apiRequest("getResolvedTypeReferenceDirective", {
-                    snapshot: owner.snapshotId,
-                    project: owner.project.handle,
-                    file,
-                    typeDirectiveName,
-                    mode,
-                });
-                return result ?? undefined;
-            },
-        );
+        return getGeneratorMethod(this, this.#generatorMethods ??= createGeneratorMethodCache(31), 9, this.#getResolvedTypeReferenceDirective, this.#getResolvedTypeReferenceDirectiveGen);
+    }
+
+    #getResolvedTypeReferenceDirective(file: DocumentIdentifier, typeDirectiveName: string, mode: ModuleKind): ResolvedTypeReferenceDirective | undefined {
+        const result = this.client.apiRequest("getResolvedTypeReferenceDirective", {
+            snapshot: this.snapshotId,
+            project: this.project.handle,
+            file,
+            typeDirectiveName,
+            mode,
+        });
+        return result ?? undefined;
+    }
+
+    *#getResolvedTypeReferenceDirectiveGen(file: DocumentIdentifier, typeDirectiveName: string, mode: ModuleKind): Generator<ProtocolRequest, ResolvedTypeReferenceDirective | undefined, ProtocolResponse["result"]> {
+        const result = yield* apiRequest("getResolvedTypeReferenceDirective", {
+            snapshot: this.snapshotId,
+            project: this.project.handle,
+            file,
+            typeDirectiveName,
+            mode,
+        });
+        return result ?? undefined;
     }
 
     get getResolvedTypeReferenceDirectiveFromTypeReferenceDirective(): {
         (typeReferenceDirective: FileReference, sourceFile: DocumentIdentifier): ResolvedTypeReferenceDirective | undefined;
         gen(typeReferenceDirective: FileReference, sourceFile: DocumentIdentifier): Generator<ProtocolRequest, ResolvedTypeReferenceDirective | undefined, ProtocolResponse["result"]>;
     } {
-        const owner = this;
-        return cacheGeneratorMethod(
-            owner,
-            "getResolvedTypeReferenceDirectiveFromTypeReferenceDirective",
-            function (typeReferenceDirective: FileReference, sourceFile: DocumentIdentifier): ResolvedTypeReferenceDirective | undefined {
-                const result = owner.client.apiRequest("getResolvedTypeReferenceDirectiveFromTypeReferenceDirective", {
-                    snapshot: owner.snapshotId,
-                    project: owner.project.handle,
-                    sourceFile,
-                    typeDirectiveName: typeReferenceDirective.fileName,
-                    resolutionMode: typeReferenceDirective.resolutionMode,
-                });
-                return result ?? undefined;
-            },
-            function* (typeReferenceDirective: FileReference, sourceFile: DocumentIdentifier): Generator<ProtocolRequest, ResolvedTypeReferenceDirective | undefined, ProtocolResponse["result"]> {
-                const result = yield* apiRequest("getResolvedTypeReferenceDirectiveFromTypeReferenceDirective", {
-                    snapshot: owner.snapshotId,
-                    project: owner.project.handle,
-                    sourceFile,
-                    typeDirectiveName: typeReferenceDirective.fileName,
-                    resolutionMode: typeReferenceDirective.resolutionMode,
-                });
-                return result ?? undefined;
-            },
-        );
+        return getGeneratorMethod(this, this.#generatorMethods ??= createGeneratorMethodCache(31), 10, this.#getResolvedTypeReferenceDirectiveFromTypeReferenceDirective, this.#getResolvedTypeReferenceDirectiveFromTypeReferenceDirectiveGen);
+    }
+
+    #getResolvedTypeReferenceDirectiveFromTypeReferenceDirective(typeReferenceDirective: FileReference, sourceFile: DocumentIdentifier): ResolvedTypeReferenceDirective | undefined {
+        const result = this.client.apiRequest("getResolvedTypeReferenceDirectiveFromTypeReferenceDirective", {
+            snapshot: this.snapshotId,
+            project: this.project.handle,
+            sourceFile,
+            typeDirectiveName: typeReferenceDirective.fileName,
+            resolutionMode: typeReferenceDirective.resolutionMode,
+        });
+        return result ?? undefined;
+    }
+
+    *#getResolvedTypeReferenceDirectiveFromTypeReferenceDirectiveGen(typeReferenceDirective: FileReference, sourceFile: DocumentIdentifier): Generator<ProtocolRequest, ResolvedTypeReferenceDirective | undefined, ProtocolResponse["result"]> {
+        const result = yield* apiRequest("getResolvedTypeReferenceDirectiveFromTypeReferenceDirective", {
+            snapshot: this.snapshotId,
+            project: this.project.handle,
+            sourceFile,
+            typeDirectiveName: typeReferenceDirective.fileName,
+            resolutionMode: typeReferenceDirective.resolutionMode,
+        });
+        return result ?? undefined;
     }
 
     get getSourceFileNames(): {
         (): readonly RootedFilePath[];
         gen(): Generator<ProtocolRequest, readonly RootedFilePath[], ProtocolResponse["result"]>;
     } {
-        const owner = this;
-        return cacheGeneratorMethod(
-            owner,
-            "getSourceFileNames",
-            function (): readonly RootedFilePath[] {
-                const data = owner.client.apiRequest("getSourceFileNames", {
-                    snapshot: owner.snapshotId,
-                    project: owner.project.handle,
-                });
-                return data ?? [];
-            },
-            function* (): Generator<ProtocolRequest, readonly RootedFilePath[], ProtocolResponse["result"]> {
-                const data = yield* apiRequest("getSourceFileNames", {
-                    snapshot: owner.snapshotId,
-                    project: owner.project.handle,
-                });
-                return data ?? [];
-            },
-        );
+        return getGeneratorMethod(this, this.#generatorMethods ??= createGeneratorMethodCache(31), 11, this.#getSourceFileNames, this.#getSourceFileNamesGen);
+    }
+
+    #getSourceFileNames(): readonly RootedFilePath[] {
+        const data = this.client.apiRequest("getSourceFileNames", {
+            snapshot: this.snapshotId,
+            project: this.project.handle,
+        });
+        return data ?? [];
+    }
+
+    *#getSourceFileNamesGen(): Generator<ProtocolRequest, readonly RootedFilePath[], ProtocolResponse["result"]> {
+        const data = yield* apiRequest("getSourceFileNames", {
+            snapshot: this.snapshotId,
+            project: this.project.handle,
+        });
+        return data ?? [];
     }
 
     /**
@@ -3311,17 +3193,15 @@ export class Program<Id extends ProjectId = ProjectId> implements FormatDiagnost
         (file: DocumentIdentifier): SourceFileMetadata | undefined;
         gen(file: DocumentIdentifier): Generator<ProtocolRequest, SourceFileMetadata | undefined, ProtocolResponse["result"]>;
     } {
-        const owner = this;
-        return cacheGeneratorMethod(
-            owner,
-            "getSourceFileMetadata",
-            function (file: DocumentIdentifier): SourceFileMetadata | undefined {
-                return owner.getSourceFileMetadataByPath(owner.pathKeyForFileName(resolveFileName(file)));
-            },
-            function* (file: DocumentIdentifier): Generator<ProtocolRequest, SourceFileMetadata | undefined, ProtocolResponse["result"]> {
-                return yield* owner.getSourceFileMetadataByPath.gen(owner.pathKeyForFileName(resolveFileName(file)));
-            },
-        );
+        return getGeneratorMethod(this, this.#generatorMethods ??= createGeneratorMethodCache(31), 12, this.#getSourceFileMetadata, this.#getSourceFileMetadataGen);
+    }
+
+    #getSourceFileMetadata(file: DocumentIdentifier): SourceFileMetadata | undefined {
+        return this.#getSourceFileMetadataByPath(this.pathKeyForFileName(resolveFileName(file)));
+    }
+
+    *#getSourceFileMetadataGen(file: DocumentIdentifier): Generator<ProtocolRequest, SourceFileMetadata | undefined, ProtocolResponse["result"]> {
+        return yield* this.#getSourceFileMetadataByPathGen(this.pathKeyForFileName(resolveFileName(file)));
     }
 
     /**
@@ -3334,58 +3214,54 @@ export class Program<Id extends ProjectId = ProjectId> implements FormatDiagnost
         (path: PathKey): SourceFileMetadata | undefined;
         gen(path: PathKey): Generator<ProtocolRequest, SourceFileMetadata | undefined, ProtocolResponse["result"]>;
     } {
-        const owner = this;
-        return cacheGeneratorMethod(
-            owner,
-            "getSourceFileMetadataByPath",
-            function (path: PathKey): SourceFileMetadata | undefined {
-                let metadata = owner.sourceFileMetadataCache.get(path);
-                if (metadata === undefined) {
-                    metadata = owner.fetchSourceFileMetadata(path);
-                    owner.sourceFileMetadataCache.set(path, metadata);
-                }
-                return metadata;
-            },
-            function* (path: PathKey): Generator<ProtocolRequest, SourceFileMetadata | undefined, ProtocolResponse["result"]> {
-                let metadata = owner.sourceFileMetadataCache.get(path);
-                if (metadata === undefined) {
-                    metadata = yield* owner.fetchSourceFileMetadata.gen(path);
-                    owner.sourceFileMetadataCache.set(path, metadata);
-                }
-                return metadata;
-            },
-        );
+        return getGeneratorMethod(this, this.#generatorMethods ??= createGeneratorMethodCache(31), 13, this.#getSourceFileMetadataByPath, this.#getSourceFileMetadataByPathGen);
+    }
+
+    #getSourceFileMetadataByPath(path: PathKey): SourceFileMetadata | undefined {
+        let metadata = this.sourceFileMetadataCache.get(path);
+        if (metadata === undefined) {
+            metadata = this.#fetchSourceFileMetadata(path);
+            this.sourceFileMetadataCache.set(path, metadata);
+        }
+        return metadata;
+    }
+
+    *#getSourceFileMetadataByPathGen(path: PathKey): Generator<ProtocolRequest, SourceFileMetadata | undefined, ProtocolResponse["result"]> {
+        let metadata = this.sourceFileMetadataCache.get(path);
+        if (metadata === undefined) {
+            metadata = yield* this.#fetchSourceFileMetadataGen(path);
+            this.sourceFileMetadataCache.set(path, metadata);
+        }
+        return metadata;
     }
 
     private get fetchSourceFileMetadata(): {
         (path: PathKey): SourceFileMetadata | undefined;
         gen(path: PathKey): Generator<ProtocolRequest, SourceFileMetadata | undefined, ProtocolResponse["result"]>;
     } {
-        const owner = this;
-        return cacheGeneratorMethod(
-            owner,
-            "fetchSourceFileMetadata",
-            function (path: PathKey): SourceFileMetadata | undefined {
-                // PathKey is serialized as a string; the server deliberately treats all
-                // client-provided path text as untrusted input.
-                const data = owner.client.apiRequest("getSourceFileMetadata", {
-                    snapshot: owner.snapshotId,
-                    project: owner.project.handle,
-                    file: path,
-                });
-                return data ?? undefined;
-            },
-            function* (path: PathKey): Generator<ProtocolRequest, SourceFileMetadata | undefined, ProtocolResponse["result"]> {
-                // PathKey is serialized as a string; the server deliberately treats all
-                // client-provided path text as untrusted input.
-                const data = yield* apiRequest("getSourceFileMetadata", {
-                    snapshot: owner.snapshotId,
-                    project: owner.project.handle,
-                    file: path,
-                });
-                return data ?? undefined;
-            },
-        );
+        return getGeneratorMethod(this, this.#generatorMethods ??= createGeneratorMethodCache(31), 14, this.#fetchSourceFileMetadata, this.#fetchSourceFileMetadataGen);
+    }
+
+    #fetchSourceFileMetadata(path: PathKey): SourceFileMetadata | undefined {
+        // PathKey is serialized as a string; the server deliberately treats all
+        // client-provided path text as untrusted input.
+        const data = this.client.apiRequest("getSourceFileMetadata", {
+            snapshot: this.snapshotId,
+            project: this.project.handle,
+            file: path,
+        });
+        return data ?? undefined;
+    }
+
+    *#fetchSourceFileMetadataGen(path: PathKey): Generator<ProtocolRequest, SourceFileMetadata | undefined, ProtocolResponse["result"]> {
+        // PathKey is serialized as a string; the server deliberately treats all
+        // client-provided path text as untrusted input.
+        const data = yield* apiRequest("getSourceFileMetadata", {
+            snapshot: this.snapshotId,
+            project: this.project.handle,
+            file: path,
+        });
+        return data ?? undefined;
     }
 
     private pathKeyForFileName(fileName: string): PathKey {
@@ -3401,19 +3277,17 @@ export class Program<Id extends ProjectId = ProjectId> implements FormatDiagnost
         (file: SourceFile): boolean;
         gen(file: SourceFile): Generator<ProtocolRequest, boolean, ProtocolResponse["result"]>;
     } {
-        const owner = this;
-        return cacheGeneratorMethod(
-            owner,
-            "isSourceFileFromExternalLibrary",
-            function (file: SourceFile): boolean {
-                const metadata = owner.getSourceFileMetadataByPath(file.path);
-                return metadata?.isFromExternalLibrary ?? false;
-            },
-            function* (file: SourceFile): Generator<ProtocolRequest, boolean, ProtocolResponse["result"]> {
-                const metadata = yield* owner.getSourceFileMetadataByPath.gen(file.path);
-                return metadata?.isFromExternalLibrary ?? false;
-            },
-        );
+        return getGeneratorMethod(this, this.#generatorMethods ??= createGeneratorMethodCache(31), 15, this.#isSourceFileFromExternalLibrary, this.#isSourceFileFromExternalLibraryGen);
+    }
+
+    #isSourceFileFromExternalLibrary(file: SourceFile): boolean {
+        const metadata = this.#getSourceFileMetadataByPath(file.path);
+        return metadata?.isFromExternalLibrary ?? false;
+    }
+
+    *#isSourceFileFromExternalLibraryGen(file: SourceFile): Generator<ProtocolRequest, boolean, ProtocolResponse["result"]> {
+        const metadata = yield* this.#getSourceFileMetadataByPathGen(file.path);
+        return metadata?.isFromExternalLibrary ?? false;
     }
 
     /**
@@ -3425,19 +3299,17 @@ export class Program<Id extends ProjectId = ProjectId> implements FormatDiagnost
         (file: SourceFile): boolean;
         gen(file: SourceFile): Generator<ProtocolRequest, boolean, ProtocolResponse["result"]>;
     } {
-        const owner = this;
-        return cacheGeneratorMethod(
-            owner,
-            "isSourceFileDefaultLibrary",
-            function (file: SourceFile): boolean {
-                const metadata = owner.getSourceFileMetadataByPath(file.path);
-                return metadata?.isDefaultLibrary ?? false;
-            },
-            function* (file: SourceFile): Generator<ProtocolRequest, boolean, ProtocolResponse["result"]> {
-                const metadata = yield* owner.getSourceFileMetadataByPath.gen(file.path);
-                return metadata?.isDefaultLibrary ?? false;
-            },
-        );
+        return getGeneratorMethod(this, this.#generatorMethods ??= createGeneratorMethodCache(31), 16, this.#isSourceFileDefaultLibrary, this.#isSourceFileDefaultLibraryGen);
+    }
+
+    #isSourceFileDefaultLibrary(file: SourceFile): boolean {
+        const metadata = this.#getSourceFileMetadataByPath(file.path);
+        return metadata?.isDefaultLibrary ?? false;
+    }
+
+    *#isSourceFileDefaultLibraryGen(file: SourceFile): Generator<ProtocolRequest, boolean, ProtocolResponse["result"]> {
+        const metadata = yield* this.#getSourceFileMetadataByPathGen(file.path);
+        return metadata?.isDefaultLibrary ?? false;
     }
 
     /**
@@ -3448,25 +3320,23 @@ export class Program<Id extends ProjectId = ProjectId> implements FormatDiagnost
         (): readonly RootedFilePath[];
         gen(): Generator<ProtocolRequest, readonly RootedFilePath[], ProtocolResponse["result"]>;
     } {
-        const owner = this;
-        return cacheGeneratorMethod(
-            owner,
-            "getConfigFileNames",
-            function (): readonly RootedFilePath[] {
-                const data = owner.client.apiRequest("getConfigFileNames", {
-                    snapshot: owner.snapshotId,
-                    project: owner.project.handle,
-                });
-                return data ?? [];
-            },
-            function* (): Generator<ProtocolRequest, readonly RootedFilePath[], ProtocolResponse["result"]> {
-                const data = yield* apiRequest("getConfigFileNames", {
-                    snapshot: owner.snapshotId,
-                    project: owner.project.handle,
-                });
-                return data ?? [];
-            },
-        );
+        return getGeneratorMethod(this, this.#generatorMethods ??= createGeneratorMethodCache(31), 17, this.#getConfigFileNames, this.#getConfigFileNamesGen);
+    }
+
+    #getConfigFileNames(): readonly RootedFilePath[] {
+        const data = this.client.apiRequest("getConfigFileNames", {
+            snapshot: this.snapshotId,
+            project: this.project.handle,
+        });
+        return data ?? [];
+    }
+
+    *#getConfigFileNamesGen(): Generator<ProtocolRequest, readonly RootedFilePath[], ProtocolResponse["result"]> {
+        const data = yield* apiRequest("getConfigFileNames", {
+            snapshot: this.snapshotId,
+            project: this.project.handle,
+        });
+        return data ?? [];
     }
 
     /**
@@ -3477,37 +3347,35 @@ export class Program<Id extends ProjectId = ProjectId> implements FormatDiagnost
         (file: DocumentIdentifier): SourceFile | undefined;
         gen(file: DocumentIdentifier): Generator<ProtocolRequest, SourceFile | undefined, ProtocolResponse["result"]>;
     } {
-        const owner = this;
-        return cacheGeneratorMethod(
-            owner,
-            "getConfigSourceFile",
-            function (file: DocumentIdentifier): SourceFile | undefined {
-                const binaryData = owner.client.apiRequestBinary("getConfigSourceFile", {
-                    snapshot: owner.snapshotId,
-                    project: owner.project.handle,
-                    file,
-                });
-                if (!binaryData) {
-                    return undefined;
-                }
+        return getGeneratorMethod(this, this.#generatorMethods ??= createGeneratorMethodCache(31), 18, this.#getConfigSourceFile, this.#getConfigSourceFileGen);
+    }
 
-                return new RemoteSourceFile(binaryData, owner.decoder, undefined, owner.project.api) as unknown as SourceFile;
-            },
-            function* (file: DocumentIdentifier): Generator<ProtocolRequest, SourceFile | undefined, ProtocolResponse["result"]> {
-                const binaryData = sourceFileResponseToUint8Array(
-                    yield* apiRequest("getConfigSourceFile", {
-                        snapshot: owner.snapshotId,
-                        project: owner.project.handle,
-                        file,
-                    }),
-                );
-                if (!binaryData) {
-                    return undefined;
-                }
+    #getConfigSourceFile(file: DocumentIdentifier): SourceFile | undefined {
+        const binaryData = this.client.apiRequestBinary("getConfigSourceFile", {
+            snapshot: this.snapshotId,
+            project: this.project.handle,
+            file,
+        });
+        if (!binaryData) {
+            return undefined;
+        }
 
-                return new RemoteSourceFile(binaryData, owner.decoder, undefined, owner.project.api) as unknown as SourceFile;
-            },
+        return new RemoteSourceFile(binaryData, this.decoder, undefined, this.project.api) as unknown as SourceFile;
+    }
+
+    *#getConfigSourceFileGen(file: DocumentIdentifier): Generator<ProtocolRequest, SourceFile | undefined, ProtocolResponse["result"]> {
+        const binaryData = sourceFileResponseToUint8Array(
+            yield* apiRequest("getConfigSourceFile", {
+                snapshot: this.snapshotId,
+                project: this.project.handle,
+                file,
+            }),
         );
+        if (!binaryData) {
+            return undefined;
+        }
+
+        return new RemoteSourceFile(binaryData, this.decoder, undefined, this.project.api) as unknown as SourceFile;
     }
 
     /**
@@ -3518,33 +3386,31 @@ export class Program<Id extends ProjectId = ProjectId> implements FormatDiagnost
         (file?: DocumentIdentifier | readonly DocumentIdentifier[]): readonly Diagnostic[];
         gen(file?: DocumentIdentifier | readonly DocumentIdentifier[]): Generator<ProtocolRequest, readonly Diagnostic[], ProtocolResponse["result"]>;
     } {
-        const owner = this;
-        return cacheGeneratorMethod(
-            owner,
-            "getSyntacticDiagnostics",
-            function (file?: DocumentIdentifier | readonly DocumentIdentifier[]): readonly Diagnostic[] {
-                const files = file === undefined ? undefined
-                    : Array.isArray(file) ? file
-                    : [file];
-                const data = owner.client.apiRequest("getSyntacticDiagnostics", {
-                    snapshot: owner.snapshotId,
-                    project: owner.project.handle,
-                    files,
-                });
-                return data ?? [];
-            },
-            function* (file?: DocumentIdentifier | readonly DocumentIdentifier[]): Generator<ProtocolRequest, readonly Diagnostic[], ProtocolResponse["result"]> {
-                const files = file === undefined ? undefined
-                    : Array.isArray(file) ? file
-                    : [file];
-                const data = yield* apiRequest("getSyntacticDiagnostics", {
-                    snapshot: owner.snapshotId,
-                    project: owner.project.handle,
-                    files,
-                });
-                return data ?? [];
-            },
-        );
+        return getGeneratorMethod(this, this.#generatorMethods ??= createGeneratorMethodCache(31), 19, this.#getSyntacticDiagnostics, this.#getSyntacticDiagnosticsGen);
+    }
+
+    #getSyntacticDiagnostics(file?: DocumentIdentifier | readonly DocumentIdentifier[]): readonly Diagnostic[] {
+        const files = file === undefined ? undefined
+            : Array.isArray(file) ? file
+            : [file];
+        const data = this.client.apiRequest("getSyntacticDiagnostics", {
+            snapshot: this.snapshotId,
+            project: this.project.handle,
+            files,
+        });
+        return data ?? [];
+    }
+
+    *#getSyntacticDiagnosticsGen(file?: DocumentIdentifier | readonly DocumentIdentifier[]): Generator<ProtocolRequest, readonly Diagnostic[], ProtocolResponse["result"]> {
+        const files = file === undefined ? undefined
+            : Array.isArray(file) ? file
+            : [file];
+        const data = yield* apiRequest("getSyntacticDiagnostics", {
+            snapshot: this.snapshotId,
+            project: this.project.handle,
+            files,
+        });
+        return data ?? [];
     }
 
     /**
@@ -3555,33 +3421,31 @@ export class Program<Id extends ProjectId = ProjectId> implements FormatDiagnost
         (file?: DocumentIdentifier | readonly DocumentIdentifier[]): readonly Diagnostic[];
         gen(file?: DocumentIdentifier | readonly DocumentIdentifier[]): Generator<ProtocolRequest, readonly Diagnostic[], ProtocolResponse["result"]>;
     } {
-        const owner = this;
-        return cacheGeneratorMethod(
-            owner,
-            "getBindDiagnostics",
-            function (file?: DocumentIdentifier | readonly DocumentIdentifier[]): readonly Diagnostic[] {
-                const files = file === undefined ? undefined
-                    : Array.isArray(file) ? file
-                    : [file];
-                const data = owner.client.apiRequest("getBindDiagnostics", {
-                    snapshot: owner.snapshotId,
-                    project: owner.project.handle,
-                    files,
-                });
-                return data ?? [];
-            },
-            function* (file?: DocumentIdentifier | readonly DocumentIdentifier[]): Generator<ProtocolRequest, readonly Diagnostic[], ProtocolResponse["result"]> {
-                const files = file === undefined ? undefined
-                    : Array.isArray(file) ? file
-                    : [file];
-                const data = yield* apiRequest("getBindDiagnostics", {
-                    snapshot: owner.snapshotId,
-                    project: owner.project.handle,
-                    files,
-                });
-                return data ?? [];
-            },
-        );
+        return getGeneratorMethod(this, this.#generatorMethods ??= createGeneratorMethodCache(31), 20, this.#getBindDiagnostics, this.#getBindDiagnosticsGen);
+    }
+
+    #getBindDiagnostics(file?: DocumentIdentifier | readonly DocumentIdentifier[]): readonly Diagnostic[] {
+        const files = file === undefined ? undefined
+            : Array.isArray(file) ? file
+            : [file];
+        const data = this.client.apiRequest("getBindDiagnostics", {
+            snapshot: this.snapshotId,
+            project: this.project.handle,
+            files,
+        });
+        return data ?? [];
+    }
+
+    *#getBindDiagnosticsGen(file?: DocumentIdentifier | readonly DocumentIdentifier[]): Generator<ProtocolRequest, readonly Diagnostic[], ProtocolResponse["result"]> {
+        const files = file === undefined ? undefined
+            : Array.isArray(file) ? file
+            : [file];
+        const data = yield* apiRequest("getBindDiagnostics", {
+            snapshot: this.snapshotId,
+            project: this.project.handle,
+            files,
+        });
+        return data ?? [];
     }
 
     /**
@@ -3592,33 +3456,31 @@ export class Program<Id extends ProjectId = ProjectId> implements FormatDiagnost
         (file?: DocumentIdentifier | readonly DocumentIdentifier[]): readonly Diagnostic[];
         gen(file?: DocumentIdentifier | readonly DocumentIdentifier[]): Generator<ProtocolRequest, readonly Diagnostic[], ProtocolResponse["result"]>;
     } {
-        const owner = this;
-        return cacheGeneratorMethod(
-            owner,
-            "getSemanticDiagnostics",
-            function (file?: DocumentIdentifier | readonly DocumentIdentifier[]): readonly Diagnostic[] {
-                const files = file === undefined ? undefined
-                    : Array.isArray(file) ? file
-                    : [file];
-                const data = owner.client.apiRequest("getSemanticDiagnostics", {
-                    snapshot: owner.snapshotId,
-                    project: owner.project.handle,
-                    files,
-                });
-                return data ?? [];
-            },
-            function* (file?: DocumentIdentifier | readonly DocumentIdentifier[]): Generator<ProtocolRequest, readonly Diagnostic[], ProtocolResponse["result"]> {
-                const files = file === undefined ? undefined
-                    : Array.isArray(file) ? file
-                    : [file];
-                const data = yield* apiRequest("getSemanticDiagnostics", {
-                    snapshot: owner.snapshotId,
-                    project: owner.project.handle,
-                    files,
-                });
-                return data ?? [];
-            },
-        );
+        return getGeneratorMethod(this, this.#generatorMethods ??= createGeneratorMethodCache(31), 21, this.#getSemanticDiagnostics, this.#getSemanticDiagnosticsGen);
+    }
+
+    #getSemanticDiagnostics(file?: DocumentIdentifier | readonly DocumentIdentifier[]): readonly Diagnostic[] {
+        const files = file === undefined ? undefined
+            : Array.isArray(file) ? file
+            : [file];
+        const data = this.client.apiRequest("getSemanticDiagnostics", {
+            snapshot: this.snapshotId,
+            project: this.project.handle,
+            files,
+        });
+        return data ?? [];
+    }
+
+    *#getSemanticDiagnosticsGen(file?: DocumentIdentifier | readonly DocumentIdentifier[]): Generator<ProtocolRequest, readonly Diagnostic[], ProtocolResponse["result"]> {
+        const files = file === undefined ? undefined
+            : Array.isArray(file) ? file
+            : [file];
+        const data = yield* apiRequest("getSemanticDiagnostics", {
+            snapshot: this.snapshotId,
+            project: this.project.handle,
+            files,
+        });
+        return data ?? [];
     }
 
     /**
@@ -3629,33 +3491,31 @@ export class Program<Id extends ProjectId = ProjectId> implements FormatDiagnost
         (file?: DocumentIdentifier | readonly DocumentIdentifier[]): readonly Diagnostic[];
         gen(file?: DocumentIdentifier | readonly DocumentIdentifier[]): Generator<ProtocolRequest, readonly Diagnostic[], ProtocolResponse["result"]>;
     } {
-        const owner = this;
-        return cacheGeneratorMethod(
-            owner,
-            "getSuggestionDiagnostics",
-            function (file?: DocumentIdentifier | readonly DocumentIdentifier[]): readonly Diagnostic[] {
-                const files = file === undefined ? undefined
-                    : Array.isArray(file) ? file
-                    : [file];
-                const data = owner.client.apiRequest("getSuggestionDiagnostics", {
-                    snapshot: owner.snapshotId,
-                    project: owner.project.handle,
-                    files,
-                });
-                return data ?? [];
-            },
-            function* (file?: DocumentIdentifier | readonly DocumentIdentifier[]): Generator<ProtocolRequest, readonly Diagnostic[], ProtocolResponse["result"]> {
-                const files = file === undefined ? undefined
-                    : Array.isArray(file) ? file
-                    : [file];
-                const data = yield* apiRequest("getSuggestionDiagnostics", {
-                    snapshot: owner.snapshotId,
-                    project: owner.project.handle,
-                    files,
-                });
-                return data ?? [];
-            },
-        );
+        return getGeneratorMethod(this, this.#generatorMethods ??= createGeneratorMethodCache(31), 22, this.#getSuggestionDiagnostics, this.#getSuggestionDiagnosticsGen);
+    }
+
+    #getSuggestionDiagnostics(file?: DocumentIdentifier | readonly DocumentIdentifier[]): readonly Diagnostic[] {
+        const files = file === undefined ? undefined
+            : Array.isArray(file) ? file
+            : [file];
+        const data = this.client.apiRequest("getSuggestionDiagnostics", {
+            snapshot: this.snapshotId,
+            project: this.project.handle,
+            files,
+        });
+        return data ?? [];
+    }
+
+    *#getSuggestionDiagnosticsGen(file?: DocumentIdentifier | readonly DocumentIdentifier[]): Generator<ProtocolRequest, readonly Diagnostic[], ProtocolResponse["result"]> {
+        const files = file === undefined ? undefined
+            : Array.isArray(file) ? file
+            : [file];
+        const data = yield* apiRequest("getSuggestionDiagnostics", {
+            snapshot: this.snapshotId,
+            project: this.project.handle,
+            files,
+        });
+        return data ?? [];
     }
 
     /**
@@ -3666,33 +3526,31 @@ export class Program<Id extends ProjectId = ProjectId> implements FormatDiagnost
         (file?: DocumentIdentifier | readonly DocumentIdentifier[]): readonly Diagnostic[];
         gen(file?: DocumentIdentifier | readonly DocumentIdentifier[]): Generator<ProtocolRequest, readonly Diagnostic[], ProtocolResponse["result"]>;
     } {
-        const owner = this;
-        return cacheGeneratorMethod(
-            owner,
-            "getDeclarationDiagnostics",
-            function (file?: DocumentIdentifier | readonly DocumentIdentifier[]): readonly Diagnostic[] {
-                const files = file === undefined ? undefined
-                    : Array.isArray(file) ? file
-                    : [file];
-                const data = owner.client.apiRequest("getDeclarationDiagnostics", {
-                    snapshot: owner.snapshotId,
-                    project: owner.project.handle,
-                    files,
-                });
-                return data ?? [];
-            },
-            function* (file?: DocumentIdentifier | readonly DocumentIdentifier[]): Generator<ProtocolRequest, readonly Diagnostic[], ProtocolResponse["result"]> {
-                const files = file === undefined ? undefined
-                    : Array.isArray(file) ? file
-                    : [file];
-                const data = yield* apiRequest("getDeclarationDiagnostics", {
-                    snapshot: owner.snapshotId,
-                    project: owner.project.handle,
-                    files,
-                });
-                return data ?? [];
-            },
-        );
+        return getGeneratorMethod(this, this.#generatorMethods ??= createGeneratorMethodCache(31), 23, this.#getDeclarationDiagnostics, this.#getDeclarationDiagnosticsGen);
+    }
+
+    #getDeclarationDiagnostics(file?: DocumentIdentifier | readonly DocumentIdentifier[]): readonly Diagnostic[] {
+        const files = file === undefined ? undefined
+            : Array.isArray(file) ? file
+            : [file];
+        const data = this.client.apiRequest("getDeclarationDiagnostics", {
+            snapshot: this.snapshotId,
+            project: this.project.handle,
+            files,
+        });
+        return data ?? [];
+    }
+
+    *#getDeclarationDiagnosticsGen(file?: DocumentIdentifier | readonly DocumentIdentifier[]): Generator<ProtocolRequest, readonly Diagnostic[], ProtocolResponse["result"]> {
+        const files = file === undefined ? undefined
+            : Array.isArray(file) ? file
+            : [file];
+        const data = yield* apiRequest("getDeclarationDiagnostics", {
+            snapshot: this.snapshotId,
+            project: this.project.handle,
+            files,
+        });
+        return data ?? [];
     }
 
     /**
@@ -3702,25 +3560,23 @@ export class Program<Id extends ProjectId = ProjectId> implements FormatDiagnost
         (): readonly Diagnostic[];
         gen(): Generator<ProtocolRequest, readonly Diagnostic[], ProtocolResponse["result"]>;
     } {
-        const owner = this;
-        return cacheGeneratorMethod(
-            owner,
-            "getProgramDiagnostics",
-            function (): readonly Diagnostic[] {
-                const data = owner.client.apiRequest("getProgramDiagnostics", {
-                    snapshot: owner.snapshotId,
-                    project: owner.project.handle,
-                });
-                return data ?? [];
-            },
-            function* (): Generator<ProtocolRequest, readonly Diagnostic[], ProtocolResponse["result"]> {
-                const data = yield* apiRequest("getProgramDiagnostics", {
-                    snapshot: owner.snapshotId,
-                    project: owner.project.handle,
-                });
-                return data ?? [];
-            },
-        );
+        return getGeneratorMethod(this, this.#generatorMethods ??= createGeneratorMethodCache(31), 24, this.#getProgramDiagnostics, this.#getProgramDiagnosticsGen);
+    }
+
+    #getProgramDiagnostics(): readonly Diagnostic[] {
+        const data = this.client.apiRequest("getProgramDiagnostics", {
+            snapshot: this.snapshotId,
+            project: this.project.handle,
+        });
+        return data ?? [];
+    }
+
+    *#getProgramDiagnosticsGen(): Generator<ProtocolRequest, readonly Diagnostic[], ProtocolResponse["result"]> {
+        const data = yield* apiRequest("getProgramDiagnostics", {
+            snapshot: this.snapshotId,
+            project: this.project.handle,
+        });
+        return data ?? [];
     }
 
     /**
@@ -3730,25 +3586,23 @@ export class Program<Id extends ProjectId = ProjectId> implements FormatDiagnost
         (): readonly Diagnostic[];
         gen(): Generator<ProtocolRequest, readonly Diagnostic[], ProtocolResponse["result"]>;
     } {
-        const owner = this;
-        return cacheGeneratorMethod(
-            owner,
-            "getGlobalDiagnostics",
-            function (): readonly Diagnostic[] {
-                const data = owner.client.apiRequest("getGlobalDiagnostics", {
-                    snapshot: owner.snapshotId,
-                    project: owner.project.handle,
-                });
-                return data ?? [];
-            },
-            function* (): Generator<ProtocolRequest, readonly Diagnostic[], ProtocolResponse["result"]> {
-                const data = yield* apiRequest("getGlobalDiagnostics", {
-                    snapshot: owner.snapshotId,
-                    project: owner.project.handle,
-                });
-                return data ?? [];
-            },
-        );
+        return getGeneratorMethod(this, this.#generatorMethods ??= createGeneratorMethodCache(31), 25, this.#getGlobalDiagnostics, this.#getGlobalDiagnosticsGen);
+    }
+
+    #getGlobalDiagnostics(): readonly Diagnostic[] {
+        const data = this.client.apiRequest("getGlobalDiagnostics", {
+            snapshot: this.snapshotId,
+            project: this.project.handle,
+        });
+        return data ?? [];
+    }
+
+    *#getGlobalDiagnosticsGen(): Generator<ProtocolRequest, readonly Diagnostic[], ProtocolResponse["result"]> {
+        const data = yield* apiRequest("getGlobalDiagnostics", {
+            snapshot: this.snapshotId,
+            project: this.project.handle,
+        });
+        return data ?? [];
     }
 
     /**
@@ -3758,25 +3612,23 @@ export class Program<Id extends ProjectId = ProjectId> implements FormatDiagnost
         (): readonly Diagnostic[];
         gen(): Generator<ProtocolRequest, readonly Diagnostic[], ProtocolResponse["result"]>;
     } {
-        const owner = this;
-        return cacheGeneratorMethod(
-            owner,
-            "getConfigFileParsingDiagnostics",
-            function (): readonly Diagnostic[] {
-                const data = owner.client.apiRequest("getConfigFileParsingDiagnostics", {
-                    snapshot: owner.snapshotId,
-                    project: owner.project.handle,
-                });
-                return data ?? [];
-            },
-            function* (): Generator<ProtocolRequest, readonly Diagnostic[], ProtocolResponse["result"]> {
-                const data = yield* apiRequest("getConfigFileParsingDiagnostics", {
-                    snapshot: owner.snapshotId,
-                    project: owner.project.handle,
-                });
-                return data ?? [];
-            },
-        );
+        return getGeneratorMethod(this, this.#generatorMethods ??= createGeneratorMethodCache(31), 26, this.#getConfigFileParsingDiagnostics, this.#getConfigFileParsingDiagnosticsGen);
+    }
+
+    #getConfigFileParsingDiagnostics(): readonly Diagnostic[] {
+        const data = this.client.apiRequest("getConfigFileParsingDiagnostics", {
+            snapshot: this.snapshotId,
+            project: this.project.handle,
+        });
+        return data ?? [];
+    }
+
+    *#getConfigFileParsingDiagnosticsGen(): Generator<ProtocolRequest, readonly Diagnostic[], ProtocolResponse["result"]> {
+        const data = yield* apiRequest("getConfigFileParsingDiagnostics", {
+            snapshot: this.snapshotId,
+            project: this.project.handle,
+        });
+        return data ?? [];
     }
 
     /**
@@ -3788,49 +3640,47 @@ export class Program<Id extends ProjectId = ProjectId> implements FormatDiagnost
         (emitOnly?: EmitOnly): EmitResult;
         gen(emitOnly?: EmitOnly): Generator<ProtocolRequest, EmitResult, ProtocolResponse["result"]>;
     } {
-        const owner = this;
-        return cacheGeneratorMethod(
-            owner,
-            "emit",
-            function (emitOnly?: EmitOnly): EmitResult {
-                const response = owner.client.apiRequest("emit", {
-                    snapshot: owner.snapshotId,
-                    project: owner.project.handle,
-                    emitOnly,
-                });
-                const fileSystem = response.emittedFilesContents.length
-                    ? {
-                        kind: "layer" as const,
-                        files: Object.fromEntries(response.emittedFiles.map((fileName, index) => [fileName, response.emittedFilesContents[index]])),
-                    }
-                    : undefined;
-                return {
-                    emitSkipped: response.emitSkipped,
-                    diagnostics: response.diagnostics,
-                    emittedFiles: response.emittedFiles,
-                    fileSystem,
-                };
-            },
-            function* (emitOnly?: EmitOnly): Generator<ProtocolRequest, EmitResult, ProtocolResponse["result"]> {
-                const response = yield* apiRequest("emit", {
-                    snapshot: owner.snapshotId,
-                    project: owner.project.handle,
-                    emitOnly,
-                });
-                const fileSystem = response.emittedFilesContents.length
-                    ? {
-                        kind: "layer" as const,
-                        files: Object.fromEntries(response.emittedFiles.map((fileName, index) => [fileName, response.emittedFilesContents[index]])),
-                    }
-                    : undefined;
-                return {
-                    emitSkipped: response.emitSkipped,
-                    diagnostics: response.diagnostics,
-                    emittedFiles: response.emittedFiles,
-                    fileSystem,
-                };
-            },
-        );
+        return getGeneratorMethod(this, this.#generatorMethods ??= createGeneratorMethodCache(31), 27, this.#emit, this.#emitGen);
+    }
+
+    #emit(emitOnly?: EmitOnly): EmitResult {
+        const response = this.client.apiRequest("emit", {
+            snapshot: this.snapshotId,
+            project: this.project.handle,
+            emitOnly,
+        });
+        const fileSystem = response.emittedFilesContents.length
+            ? {
+                kind: "layer" as const,
+                files: Object.fromEntries(response.emittedFiles.map((fileName, index) => [fileName, response.emittedFilesContents[index]])),
+            }
+            : undefined;
+        return {
+            emitSkipped: response.emitSkipped,
+            diagnostics: response.diagnostics,
+            emittedFiles: response.emittedFiles,
+            fileSystem,
+        };
+    }
+
+    *#emitGen(emitOnly?: EmitOnly): Generator<ProtocolRequest, EmitResult, ProtocolResponse["result"]> {
+        const response = yield* apiRequest("emit", {
+            snapshot: this.snapshotId,
+            project: this.project.handle,
+            emitOnly,
+        });
+        const fileSystem = response.emittedFilesContents.length
+            ? {
+                kind: "layer" as const,
+                files: Object.fromEntries(response.emittedFiles.map((fileName, index) => [fileName, response.emittedFilesContents[index]])),
+            }
+            : undefined;
+        return {
+            emitSkipped: response.emitSkipped,
+            diagnostics: response.diagnostics,
+            emittedFiles: response.emittedFiles,
+            fileSystem,
+        };
     }
 
     /**
@@ -3840,27 +3690,25 @@ export class Program<Id extends ProjectId = ProjectId> implements FormatDiagnost
         (emitOnly?: EmitOnly): EmitOutput;
         gen(emitOnly?: EmitOnly): Generator<ProtocolRequest, EmitOutput, ProtocolResponse["result"]>;
     } {
-        const owner = this;
-        return cacheGeneratorMethod(
-            owner,
-            "emitToString",
-            function (emitOnly?: EmitOnly): EmitOutput {
-                const response = owner.client.apiRequest("emitToString", {
-                    snapshot: owner.snapshotId,
-                    project: owner.project.handle,
-                    emitOnly,
-                });
-                return toEmitOutput(response);
-            },
-            function* (emitOnly?: EmitOnly): Generator<ProtocolRequest, EmitOutput, ProtocolResponse["result"]> {
-                const response = yield* apiRequest("emitToString", {
-                    snapshot: owner.snapshotId,
-                    project: owner.project.handle,
-                    emitOnly,
-                });
-                return toEmitOutput(response);
-            },
-        );
+        return getGeneratorMethod(this, this.#generatorMethods ??= createGeneratorMethodCache(31), 28, this.#emitToString, this.#emitToStringGen);
+    }
+
+    #emitToString(emitOnly?: EmitOnly): EmitOutput {
+        const response = this.client.apiRequest("emitToString", {
+            snapshot: this.snapshotId,
+            project: this.project.handle,
+            emitOnly,
+        });
+        return toEmitOutput(response);
+    }
+
+    *#emitToStringGen(emitOnly?: EmitOnly): Generator<ProtocolRequest, EmitOutput, ProtocolResponse["result"]> {
+        const response = yield* apiRequest("emitToString", {
+            snapshot: this.snapshotId,
+            project: this.project.handle,
+            emitOnly,
+        });
+        return toEmitOutput(response);
     }
 
     /**
@@ -3870,27 +3718,25 @@ export class Program<Id extends ProjectId = ProjectId> implements FormatDiagnost
         (files: readonly DocumentIdentifier[]): EmitOutput;
         gen(files: readonly DocumentIdentifier[]): Generator<ProtocolRequest, EmitOutput, ProtocolResponse["result"]>;
     } {
-        const owner = this;
-        return cacheGeneratorMethod(
-            owner,
-            "getJavaScriptEmit",
-            function (files: readonly DocumentIdentifier[]): EmitOutput {
-                const response = owner.client.apiRequest("getJavaScriptEmit", {
-                    snapshot: owner.snapshotId,
-                    project: owner.project.handle,
-                    files,
-                });
-                return toEmitOutput(response);
-            },
-            function* (files: readonly DocumentIdentifier[]): Generator<ProtocolRequest, EmitOutput, ProtocolResponse["result"]> {
-                const response = yield* apiRequest("getJavaScriptEmit", {
-                    snapshot: owner.snapshotId,
-                    project: owner.project.handle,
-                    files,
-                });
-                return toEmitOutput(response);
-            },
-        );
+        return getGeneratorMethod(this, this.#generatorMethods ??= createGeneratorMethodCache(31), 29, this.#getJavaScriptEmit, this.#getJavaScriptEmitGen);
+    }
+
+    #getJavaScriptEmit(files: readonly DocumentIdentifier[]): EmitOutput {
+        const response = this.client.apiRequest("getJavaScriptEmit", {
+            snapshot: this.snapshotId,
+            project: this.project.handle,
+            files,
+        });
+        return toEmitOutput(response);
+    }
+
+    *#getJavaScriptEmitGen(files: readonly DocumentIdentifier[]): Generator<ProtocolRequest, EmitOutput, ProtocolResponse["result"]> {
+        const response = yield* apiRequest("getJavaScriptEmit", {
+            snapshot: this.snapshotId,
+            project: this.project.handle,
+            files,
+        });
+        return toEmitOutput(response);
     }
 
     /**
@@ -3900,27 +3746,25 @@ export class Program<Id extends ProjectId = ProjectId> implements FormatDiagnost
         (files: readonly DocumentIdentifier[]): EmitOutput;
         gen(files: readonly DocumentIdentifier[]): Generator<ProtocolRequest, EmitOutput, ProtocolResponse["result"]>;
     } {
-        const owner = this;
-        return cacheGeneratorMethod(
-            owner,
-            "getDeclarationEmit",
-            function (files: readonly DocumentIdentifier[]): EmitOutput {
-                const response = owner.client.apiRequest("getDeclarationEmit", {
-                    snapshot: owner.snapshotId,
-                    project: owner.project.handle,
-                    files,
-                });
-                return toEmitOutput(response);
-            },
-            function* (files: readonly DocumentIdentifier[]): Generator<ProtocolRequest, EmitOutput, ProtocolResponse["result"]> {
-                const response = yield* apiRequest("getDeclarationEmit", {
-                    snapshot: owner.snapshotId,
-                    project: owner.project.handle,
-                    files,
-                });
-                return toEmitOutput(response);
-            },
-        );
+        return getGeneratorMethod(this, this.#generatorMethods ??= createGeneratorMethodCache(31), 30, this.#getDeclarationEmit, this.#getDeclarationEmitGen);
+    }
+
+    #getDeclarationEmit(files: readonly DocumentIdentifier[]): EmitOutput {
+        const response = this.client.apiRequest("getDeclarationEmit", {
+            snapshot: this.snapshotId,
+            project: this.project.handle,
+            files,
+        });
+        return toEmitOutput(response);
+    }
+
+    *#getDeclarationEmitGen(files: readonly DocumentIdentifier[]): Generator<ProtocolRequest, EmitOutput, ProtocolResponse["result"]> {
+        const response = yield* apiRequest("getDeclarationEmit", {
+            snapshot: this.snapshotId,
+            project: this.project.handle,
+            files,
+        });
+        return toEmitOutput(response);
     }
 
     getProject(): Project<Id> {
@@ -3949,6 +3793,7 @@ export interface OverrideCompilerOptions {
 }
 
 export class BuildOrchestrator {
+    #generatorMethods: GeneratorMethodCache | undefined;
     private client: Client;
     private id: number;
     private disposed = false;
@@ -3966,163 +3811,151 @@ export class BuildOrchestrator {
     }
 
     [globalThis.Symbol.dispose](): void {
-        this.dispose();
+        this.#dispose();
     }
     get dispose(): {
         (): void;
         gen(): Generator<ProtocolRequest, void, ProtocolResponse["result"]>;
     } {
-        const owner = this;
-        return cacheGeneratorMethod(
-            owner,
-            "dispose",
-            function (): void {
-                return owner.disposePromise ??= owner.disposeWorker();
-            },
-            function* (): Generator<ProtocolRequest, void, ProtocolResponse["result"]> {
-                return owner.disposePromise ??= yield* owner.disposeWorker.gen();
-            },
-        );
+        return getGeneratorMethod(this, this.#generatorMethods ??= createGeneratorMethodCache(6), 0, this.#dispose, this.#disposeGen);
+    }
+
+    #dispose(): void {
+        return this.disposePromise ??= this.#disposeWorker();
+    }
+
+    *#disposeGen(): Generator<ProtocolRequest, void, ProtocolResponse["result"]> {
+        return this.disposePromise ??= yield* this.#disposeWorkerGen();
     }
 
     private get disposeWorker(): {
         (): void;
         gen(): Generator<ProtocolRequest, void, ProtocolResponse["result"]>;
     } {
-        const owner = this;
-        return cacheGeneratorMethod(
-            owner,
-            "disposeWorker",
-            function (): void {
-                if (owner.disposed) return;
-                owner.disposed = true;
-                try {
-                    owner.client.apiRequest("disposeBuildOrchestrator", {
-                        buildOrchestratorID: owner.id,
-                    });
-                }
-                finally {
-                    owner.onDispose();
-                }
-            },
-            function* (): Generator<ProtocolRequest, void, ProtocolResponse["result"]> {
-                if (owner.disposed) return;
-                owner.disposed = true;
-                try {
-                    yield* apiRequest("disposeBuildOrchestrator", {
-                        buildOrchestratorID: owner.id,
-                    });
-                }
-                finally {
-                    owner.onDispose();
-                }
-            },
-        );
+        return getGeneratorMethod(this, this.#generatorMethods ??= createGeneratorMethodCache(6), 1, this.#disposeWorker, this.#disposeWorkerGen);
+    }
+
+    #disposeWorker(): void {
+        if (this.disposed) return;
+        this.disposed = true;
+        try {
+            this.client.apiRequest("disposeBuildOrchestrator", {
+                buildOrchestratorID: this.id,
+            });
+        }
+        finally {
+            this.onDispose();
+        }
+    }
+
+    *#disposeWorkerGen(): Generator<ProtocolRequest, void, ProtocolResponse["result"]> {
+        if (this.disposed) return;
+        this.disposed = true;
+        try {
+            yield* apiRequest("disposeBuildOrchestrator", {
+                buildOrchestratorID: this.id,
+            });
+        }
+        finally {
+            this.onDispose();
+        }
     }
 
     get build(): {
         (project?: string): BuildResponse;
         gen(project?: string): Generator<ProtocolRequest, BuildResponse, ProtocolResponse["result"]>;
     } {
-        const owner = this;
-        return cacheGeneratorMethod(
-            owner,
-            "build",
-            function (project?: string): BuildResponse {
-                owner.ensureNotDisposed();
-                const response = owner.client.apiRequest("build", {
-                    buildOrchestratorID: owner.id,
-                    ...(project !== undefined ? { project } : {}),
-                });
-                return response;
-            },
-            function* (project?: string): Generator<ProtocolRequest, BuildResponse, ProtocolResponse["result"]> {
-                owner.ensureNotDisposed();
-                const response = yield* apiRequest("build", {
-                    buildOrchestratorID: owner.id,
-                    ...(project !== undefined ? { project } : {}),
-                });
-                return response;
-            },
-        );
+        return getGeneratorMethod(this, this.#generatorMethods ??= createGeneratorMethodCache(6), 2, this.#build, this.#buildGen);
+    }
+
+    #build(project?: string): BuildResponse {
+        this.ensureNotDisposed();
+        const response = this.client.apiRequest("build", {
+            buildOrchestratorID: this.id,
+            ...(project !== undefined ? { project } : {}),
+        });
+        return response;
+    }
+
+    *#buildGen(project?: string): Generator<ProtocolRequest, BuildResponse, ProtocolResponse["result"]> {
+        this.ensureNotDisposed();
+        const response = yield* apiRequest("build", {
+            buildOrchestratorID: this.id,
+            ...(project !== undefined ? { project } : {}),
+        });
+        return response;
     }
     get buildReferences(): {
         (project: string): BuildResponse;
         gen(project: string): Generator<ProtocolRequest, BuildResponse, ProtocolResponse["result"]>;
     } {
-        const owner = this;
-        return cacheGeneratorMethod(
-            owner,
-            "buildReferences",
-            function (project: string): BuildResponse {
-                owner.ensureNotDisposed();
-                const response = owner.client.apiRequest("buildReferences", {
-                    buildOrchestratorID: owner.id,
-                    project,
-                });
-                return response;
-            },
-            function* (project: string): Generator<ProtocolRequest, BuildResponse, ProtocolResponse["result"]> {
-                owner.ensureNotDisposed();
-                const response = yield* apiRequest("buildReferences", {
-                    buildOrchestratorID: owner.id,
-                    project,
-                });
-                return response;
-            },
-        );
+        return getGeneratorMethod(this, this.#generatorMethods ??= createGeneratorMethodCache(6), 3, this.#buildReferences, this.#buildReferencesGen);
+    }
+
+    #buildReferences(project: string): BuildResponse {
+        this.ensureNotDisposed();
+        const response = this.client.apiRequest("buildReferences", {
+            buildOrchestratorID: this.id,
+            project,
+        });
+        return response;
+    }
+
+    *#buildReferencesGen(project: string): Generator<ProtocolRequest, BuildResponse, ProtocolResponse["result"]> {
+        this.ensureNotDisposed();
+        const response = yield* apiRequest("buildReferences", {
+            buildOrchestratorID: this.id,
+            project,
+        });
+        return response;
     }
     get clean(): {
         (project?: string): CleanBuildResponse;
         gen(project?: string): Generator<ProtocolRequest, CleanBuildResponse, ProtocolResponse["result"]>;
     } {
-        const owner = this;
-        return cacheGeneratorMethod(
-            owner,
-            "clean",
-            function (project?: string): CleanBuildResponse {
-                owner.ensureNotDisposed();
-                const response = owner.client.apiRequest("cleanBuild", {
-                    buildOrchestratorID: owner.id,
-                    ...(project !== undefined ? { project } : {}),
-                });
-                return response;
-            },
-            function* (project?: string): Generator<ProtocolRequest, CleanBuildResponse, ProtocolResponse["result"]> {
-                owner.ensureNotDisposed();
-                const response = yield* apiRequest("cleanBuild", {
-                    buildOrchestratorID: owner.id,
-                    ...(project !== undefined ? { project } : {}),
-                });
-                return response;
-            },
-        );
+        return getGeneratorMethod(this, this.#generatorMethods ??= createGeneratorMethodCache(6), 4, this.#clean, this.#cleanGen);
+    }
+
+    #clean(project?: string): CleanBuildResponse {
+        this.ensureNotDisposed();
+        const response = this.client.apiRequest("cleanBuild", {
+            buildOrchestratorID: this.id,
+            ...(project !== undefined ? { project } : {}),
+        });
+        return response;
+    }
+
+    *#cleanGen(project?: string): Generator<ProtocolRequest, CleanBuildResponse, ProtocolResponse["result"]> {
+        this.ensureNotDisposed();
+        const response = yield* apiRequest("cleanBuild", {
+            buildOrchestratorID: this.id,
+            ...(project !== undefined ? { project } : {}),
+        });
+        return response;
     }
     get cleanReferences(): {
         (project?: string): CleanBuildResponse;
         gen(project?: string): Generator<ProtocolRequest, CleanBuildResponse, ProtocolResponse["result"]>;
     } {
-        const owner = this;
-        return cacheGeneratorMethod(
-            owner,
-            "cleanReferences",
-            function (project?: string): CleanBuildResponse {
-                owner.ensureNotDisposed();
-                const response = owner.client.apiRequest("cleanReferences", {
-                    buildOrchestratorID: owner.id,
-                    ...(project !== undefined ? { project } : {}),
-                });
-                return response;
-            },
-            function* (project?: string): Generator<ProtocolRequest, CleanBuildResponse, ProtocolResponse["result"]> {
-                owner.ensureNotDisposed();
-                const response = yield* apiRequest("cleanReferences", {
-                    buildOrchestratorID: owner.id,
-                    ...(project !== undefined ? { project } : {}),
-                });
-                return response;
-            },
-        );
+        return getGeneratorMethod(this, this.#generatorMethods ??= createGeneratorMethodCache(6), 5, this.#cleanReferences, this.#cleanReferencesGen);
+    }
+
+    #cleanReferences(project?: string): CleanBuildResponse {
+        this.ensureNotDisposed();
+        const response = this.client.apiRequest("cleanReferences", {
+            buildOrchestratorID: this.id,
+            ...(project !== undefined ? { project } : {}),
+        });
+        return response;
+    }
+
+    *#cleanReferencesGen(project?: string): Generator<ProtocolRequest, CleanBuildResponse, ProtocolResponse["result"]> {
+        this.ensureNotDisposed();
+        const response = yield* apiRequest("cleanReferences", {
+            buildOrchestratorID: this.id,
+            ...(project !== undefined ? { project } : {}),
+        });
+        return response;
     }
 
     isDisposed(): boolean {
@@ -4149,6 +3982,7 @@ function toEmitOutput(response: ProtocolEmitOutputResponse): EmitOutput {
 }
 
 export class Checker {
+    #generatorMethods: GeneratorMethodCache | undefined;
     private snapshotId: number;
     private project: Project;
     private objectRegistry: ProjectObjectRegistry;
@@ -4174,27 +4008,25 @@ export class Checker {
         (symbol: Symbol): Symbol;
         gen(symbol: Symbol): Generator<ProtocolRequest, Symbol, ProtocolResponse["result"]>;
     } {
-        const owner = this;
-        return cacheGeneratorMethod(
-            owner,
-            "getMergedSymbol",
-            function (symbol: Symbol): Symbol {
-                const data = owner.client.apiRequest("getMergedSymbol", {
-                    snapshot: owner.snapshotId,
-                    project: owner.project.handle,
-                    symbol: symbol.reference,
-                });
-                return owner.objectRegistry.getOrCreateSymbol(data);
-            },
-            function* (symbol: Symbol): Generator<ProtocolRequest, Symbol, ProtocolResponse["result"]> {
-                const data = yield* apiRequest("getMergedSymbol", {
-                    snapshot: owner.snapshotId,
-                    project: owner.project.handle,
-                    symbol: symbol.reference,
-                });
-                return owner.objectRegistry.getOrCreateSymbol(data);
-            },
-        );
+        return getGeneratorMethod(this, this.#generatorMethods ??= createGeneratorMethodCache(85), 0, this.#getMergedSymbol, this.#getMergedSymbolGen);
+    }
+
+    #getMergedSymbol(symbol: Symbol): Symbol {
+        const data = this.client.apiRequest("getMergedSymbol", {
+            snapshot: this.snapshotId,
+            project: this.project.handle,
+            symbol: symbol.reference,
+        });
+        return this.objectRegistry.getOrCreateSymbol(data);
+    }
+
+    *#getMergedSymbolGen(symbol: Symbol): Generator<ProtocolRequest, Symbol, ProtocolResponse["result"]> {
+        const data = yield* apiRequest("getMergedSymbol", {
+            snapshot: this.snapshotId,
+            project: this.project.handle,
+            symbol: symbol.reference,
+        });
+        return this.objectRegistry.getOrCreateSymbol(data);
     }
 
     /**
@@ -4205,27 +4037,25 @@ export class Checker {
         (node: Node): Symbol | undefined;
         gen(node: Node): Generator<ProtocolRequest, Symbol | undefined, ProtocolResponse["result"]>;
     } {
-        const owner = this;
-        return cacheGeneratorMethod(
-            owner,
-            "getSymbolOfNode",
-            function (node: Node): Symbol | undefined {
-                const data = owner.client.apiRequest("getSymbolOfNode", {
-                    snapshot: owner.snapshotId,
-                    project: owner.project.handle,
-                    location: getNodeRequestHandle(node),
-                });
-                return data ? owner.objectRegistry.getOrCreateSymbol(data) : undefined;
-            },
-            function* (node: Node): Generator<ProtocolRequest, Symbol | undefined, ProtocolResponse["result"]> {
-                const data = yield* apiRequest("getSymbolOfNode", {
-                    snapshot: owner.snapshotId,
-                    project: owner.project.handle,
-                    location: getNodeRequestHandle(node),
-                });
-                return data ? owner.objectRegistry.getOrCreateSymbol(data) : undefined;
-            },
-        );
+        return getGeneratorMethod(this, this.#generatorMethods ??= createGeneratorMethodCache(85), 1, this.#getSymbolOfNode, this.#getSymbolOfNodeGen);
+    }
+
+    #getSymbolOfNode(node: Node): Symbol | undefined {
+        const data = this.client.apiRequest("getSymbolOfNode", {
+            snapshot: this.snapshotId,
+            project: this.project.handle,
+            location: getNodeRequestHandle(node),
+        });
+        return data ? this.objectRegistry.getOrCreateSymbol(data) : undefined;
+    }
+
+    *#getSymbolOfNodeGen(node: Node): Generator<ProtocolRequest, Symbol | undefined, ProtocolResponse["result"]> {
+        const data = yield* apiRequest("getSymbolOfNode", {
+            snapshot: this.snapshotId,
+            project: this.project.handle,
+            location: getNodeRequestHandle(node),
+        });
+        return data ? this.objectRegistry.getOrCreateSymbol(data) : undefined;
     }
 
     /** Get a declaration's merged symbol. */
@@ -4233,29 +4063,27 @@ export class Checker {
         (node: Declaration): Symbol;
         gen(node: Declaration): Generator<ProtocolRequest, Symbol, ProtocolResponse["result"]>;
     } {
-        const owner = this;
-        return cacheGeneratorMethod(
-            owner,
-            "getSymbolOfDeclaration",
-            function (node: Declaration): Symbol {
-                const data = owner.client.apiRequest("getSymbolOfDeclarationForChecker", {
-                    snapshot: owner.snapshotId,
-                    project: owner.project.handle,
-                    location: getNodeRequestHandle(node),
-                });
-                // Declarations normally have symbols, but preserve unexpected null results at runtime.
-                return (data && owner.objectRegistry.getOrCreateSymbol(data))!;
-            },
-            function* (node: Declaration): Generator<ProtocolRequest, Symbol, ProtocolResponse["result"]> {
-                const data = yield* apiRequest("getSymbolOfDeclarationForChecker", {
-                    snapshot: owner.snapshotId,
-                    project: owner.project.handle,
-                    location: getNodeRequestHandle(node),
-                });
-                // Declarations normally have symbols, but preserve unexpected null results at runtime.
-                return (data && owner.objectRegistry.getOrCreateSymbol(data))!;
-            },
-        );
+        return getGeneratorMethod(this, this.#generatorMethods ??= createGeneratorMethodCache(85), 2, this.#getSymbolOfDeclaration, this.#getSymbolOfDeclarationGen);
+    }
+
+    #getSymbolOfDeclaration(node: Declaration): Symbol {
+        const data = this.client.apiRequest("getSymbolOfDeclarationForChecker", {
+            snapshot: this.snapshotId,
+            project: this.project.handle,
+            location: getNodeRequestHandle(node),
+        });
+        // Declarations normally have symbols, but preserve unexpected null results at runtime.
+        return (data && this.objectRegistry.getOrCreateSymbol(data))!;
+    }
+
+    *#getSymbolOfDeclarationGen(node: Declaration): Generator<ProtocolRequest, Symbol, ProtocolResponse["result"]> {
+        const data = yield* apiRequest("getSymbolOfDeclarationForChecker", {
+            snapshot: this.snapshotId,
+            project: this.project.handle,
+            location: getNodeRequestHandle(node),
+        });
+        // Declarations normally have symbols, but preserve unexpected null results at runtime.
+        return (data && this.objectRegistry.getOrCreateSymbol(data))!;
     }
 
     /** Get a symbol's merged parent, if any. */
@@ -4263,27 +4091,25 @@ export class Checker {
         (symbol: Symbol): Symbol | undefined;
         gen(symbol: Symbol): Generator<ProtocolRequest, Symbol | undefined, ProtocolResponse["result"]>;
     } {
-        const owner = this;
-        return cacheGeneratorMethod(
-            owner,
-            "getParentOfSymbol",
-            function (symbol: Symbol): Symbol | undefined {
-                const data = owner.client.apiRequest("getParentOfSymbolForChecker", {
-                    snapshot: owner.snapshotId,
-                    project: owner.project.handle,
-                    symbol: symbol.reference,
-                });
-                return data ? owner.objectRegistry.getOrCreateSymbol(data) : undefined;
-            },
-            function* (symbol: Symbol): Generator<ProtocolRequest, Symbol | undefined, ProtocolResponse["result"]> {
-                const data = yield* apiRequest("getParentOfSymbolForChecker", {
-                    snapshot: owner.snapshotId,
-                    project: owner.project.handle,
-                    symbol: symbol.reference,
-                });
-                return data ? owner.objectRegistry.getOrCreateSymbol(data) : undefined;
-            },
-        );
+        return getGeneratorMethod(this, this.#generatorMethods ??= createGeneratorMethodCache(85), 3, this.#getParentOfSymbol, this.#getParentOfSymbolGen);
+    }
+
+    #getParentOfSymbol(symbol: Symbol): Symbol | undefined {
+        const data = this.client.apiRequest("getParentOfSymbolForChecker", {
+            snapshot: this.snapshotId,
+            project: this.project.handle,
+            symbol: symbol.reference,
+        });
+        return data ? this.objectRegistry.getOrCreateSymbol(data) : undefined;
+    }
+
+    *#getParentOfSymbolGen(symbol: Symbol): Generator<ProtocolRequest, Symbol | undefined, ProtocolResponse["result"]> {
+        const data = yield* apiRequest("getParentOfSymbolForChecker", {
+            snapshot: this.snapshotId,
+            project: this.project.handle,
+            symbol: symbol.reference,
+        });
+        return data ? this.objectRegistry.getOrCreateSymbol(data) : undefined;
     }
 
     get getSymbolAtLocation(): {
@@ -4292,44 +4118,45 @@ export class Checker {
         gen(node: Node): Generator<ProtocolRequest, Symbol | undefined, ProtocolResponse["result"]>;
         gen(nodes: readonly Node[]): Generator<ProtocolRequest, (Symbol | undefined)[], ProtocolResponse["result"]>;
     } {
-        const owner = this;
-        function getSymbolAtLocation(node: Node): Symbol | undefined;
-        function getSymbolAtLocation(nodes: readonly Node[]): (Symbol | undefined)[];
-        function getSymbolAtLocation(nodeOrNodes: Node | readonly Node[]): Symbol | (Symbol | undefined)[] | undefined {
-            if (Array.isArray(nodeOrNodes)) {
-                const data = owner.client.apiRequest("getSymbolsAtLocations", {
-                    snapshot: owner.snapshotId,
-                    project: owner.project.handle,
-                    locations: nodeOrNodes.map(node => getNodeRequestHandle(node)),
-                });
-                return data.map(d => d ? owner.objectRegistry.getOrCreateSymbol(d) : undefined);
-            }
-            const data = owner.client.apiRequest("getSymbolAtLocation", {
-                snapshot: owner.snapshotId,
-                project: owner.project.handle,
-                location: getNodeRequestHandle(nodeOrNodes as Node),
+        return getGeneratorMethod(this, this.#generatorMethods ??= createGeneratorMethodCache(85), 4, this.#getSymbolAtLocation, this.#getSymbolAtLocationGen);
+    }
+
+    #getSymbolAtLocation(node: Node): Symbol | undefined;
+    #getSymbolAtLocation(nodes: readonly Node[]): (Symbol | undefined)[];
+    #getSymbolAtLocation(nodeOrNodes: Node | readonly Node[]): Symbol | (Symbol | undefined)[] | undefined {
+        if (Array.isArray(nodeOrNodes)) {
+            const data = this.client.apiRequest("getSymbolsAtLocations", {
+                snapshot: this.snapshotId,
+                project: this.project.handle,
+                locations: nodeOrNodes.map(node => getNodeRequestHandle(node)),
             });
-            return data ? owner.objectRegistry.getOrCreateSymbol(data) : undefined;
+            return data.map(d => d ? this.objectRegistry.getOrCreateSymbol(d) : undefined);
         }
-        function gen(node: Node): Generator<ProtocolRequest, Symbol | undefined, ProtocolResponse["result"]>;
-        function gen(nodes: readonly Node[]): Generator<ProtocolRequest, (Symbol | undefined)[], ProtocolResponse["result"]>;
-        function* gen(nodeOrNodes: Node | readonly Node[]): Generator<ProtocolRequest, Symbol | (Symbol | undefined)[] | undefined, ProtocolResponse["result"]> {
-            if (Array.isArray(nodeOrNodes)) {
-                const data = yield* apiRequest("getSymbolsAtLocations", {
-                    snapshot: owner.snapshotId,
-                    project: owner.project.handle,
-                    locations: nodeOrNodes.map(node => getNodeRequestHandle(node)),
-                });
-                return data.map(d => d ? owner.objectRegistry.getOrCreateSymbol(d) : undefined);
-            }
-            const data = yield* apiRequest("getSymbolAtLocation", {
-                snapshot: owner.snapshotId,
-                project: owner.project.handle,
-                location: getNodeRequestHandle(nodeOrNodes as Node),
+        const data = this.client.apiRequest("getSymbolAtLocation", {
+            snapshot: this.snapshotId,
+            project: this.project.handle,
+            location: getNodeRequestHandle(nodeOrNodes as Node),
+        });
+        return data ? this.objectRegistry.getOrCreateSymbol(data) : undefined;
+    }
+
+    #getSymbolAtLocationGen(node: Node): Generator<ProtocolRequest, Symbol | undefined, ProtocolResponse["result"]>;
+    #getSymbolAtLocationGen(nodes: readonly Node[]): Generator<ProtocolRequest, (Symbol | undefined)[], ProtocolResponse["result"]>;
+    *#getSymbolAtLocationGen(nodeOrNodes: Node | readonly Node[]): Generator<ProtocolRequest, Symbol | (Symbol | undefined)[] | undefined, ProtocolResponse["result"]> {
+        if (Array.isArray(nodeOrNodes)) {
+            const data = yield* apiRequest("getSymbolsAtLocations", {
+                snapshot: this.snapshotId,
+                project: this.project.handle,
+                locations: nodeOrNodes.map(node => getNodeRequestHandle(node)),
             });
-            return data ? owner.objectRegistry.getOrCreateSymbol(data) : undefined;
+            return data.map(d => d ? this.objectRegistry.getOrCreateSymbol(d) : undefined);
         }
-        return cacheGeneratorMethod(owner, "getSymbolAtLocation", getSymbolAtLocation, gen);
+        const data = yield* apiRequest("getSymbolAtLocation", {
+            snapshot: this.snapshotId,
+            project: this.project.handle,
+            location: getNodeRequestHandle(nodeOrNodes as Node),
+        });
+        return data ? this.objectRegistry.getOrCreateSymbol(data) : undefined;
     }
 
     get getSymbolAtPosition(): {
@@ -4338,48 +4165,49 @@ export class Checker {
         gen(file: DocumentIdentifier, position: number): Generator<ProtocolRequest, Symbol | undefined, ProtocolResponse["result"]>;
         gen(file: DocumentIdentifier, positions: readonly number[]): Generator<ProtocolRequest, (Symbol | undefined)[], ProtocolResponse["result"]>;
     } {
-        const owner = this;
-        function getSymbolAtPosition(file: DocumentIdentifier, position: number): Symbol | undefined;
-        function getSymbolAtPosition(file: DocumentIdentifier, positions: readonly number[]): (Symbol | undefined)[];
-        function getSymbolAtPosition(file: DocumentIdentifier, positionOrPositions: number | readonly number[]): Symbol | (Symbol | undefined)[] | undefined {
-            if (typeof positionOrPositions === "number") {
-                const data = owner.client.apiRequest("getSymbolAtPosition", {
-                    snapshot: owner.snapshotId,
-                    project: owner.project.handle,
-                    file,
-                    position: positionOrPositions,
-                });
-                return data ? owner.objectRegistry.getOrCreateSymbol(data) : undefined;
-            }
-            const data = owner.client.apiRequest("getSymbolsAtPositions", {
-                snapshot: owner.snapshotId,
-                project: owner.project.handle,
+        return getGeneratorMethod(this, this.#generatorMethods ??= createGeneratorMethodCache(85), 5, this.#getSymbolAtPosition, this.#getSymbolAtPositionGen);
+    }
+
+    #getSymbolAtPosition(file: DocumentIdentifier, position: number): Symbol | undefined;
+    #getSymbolAtPosition(file: DocumentIdentifier, positions: readonly number[]): (Symbol | undefined)[];
+    #getSymbolAtPosition(file: DocumentIdentifier, positionOrPositions: number | readonly number[]): Symbol | (Symbol | undefined)[] | undefined {
+        if (typeof positionOrPositions === "number") {
+            const data = this.client.apiRequest("getSymbolAtPosition", {
+                snapshot: this.snapshotId,
+                project: this.project.handle,
                 file,
-                positions: positionOrPositions,
+                position: positionOrPositions,
             });
-            return data.map(d => d ? owner.objectRegistry.getOrCreateSymbol(d) : undefined);
+            return data ? this.objectRegistry.getOrCreateSymbol(data) : undefined;
         }
-        function gen(file: DocumentIdentifier, position: number): Generator<ProtocolRequest, Symbol | undefined, ProtocolResponse["result"]>;
-        function gen(file: DocumentIdentifier, positions: readonly number[]): Generator<ProtocolRequest, (Symbol | undefined)[], ProtocolResponse["result"]>;
-        function* gen(file: DocumentIdentifier, positionOrPositions: number | readonly number[]): Generator<ProtocolRequest, Symbol | (Symbol | undefined)[] | undefined, ProtocolResponse["result"]> {
-            if (typeof positionOrPositions === "number") {
-                const data = yield* apiRequest("getSymbolAtPosition", {
-                    snapshot: owner.snapshotId,
-                    project: owner.project.handle,
-                    file,
-                    position: positionOrPositions,
-                });
-                return data ? owner.objectRegistry.getOrCreateSymbol(data) : undefined;
-            }
-            const data = yield* apiRequest("getSymbolsAtPositions", {
-                snapshot: owner.snapshotId,
-                project: owner.project.handle,
+        const data = this.client.apiRequest("getSymbolsAtPositions", {
+            snapshot: this.snapshotId,
+            project: this.project.handle,
+            file,
+            positions: positionOrPositions,
+        });
+        return data.map(d => d ? this.objectRegistry.getOrCreateSymbol(d) : undefined);
+    }
+
+    #getSymbolAtPositionGen(file: DocumentIdentifier, position: number): Generator<ProtocolRequest, Symbol | undefined, ProtocolResponse["result"]>;
+    #getSymbolAtPositionGen(file: DocumentIdentifier, positions: readonly number[]): Generator<ProtocolRequest, (Symbol | undefined)[], ProtocolResponse["result"]>;
+    *#getSymbolAtPositionGen(file: DocumentIdentifier, positionOrPositions: number | readonly number[]): Generator<ProtocolRequest, Symbol | (Symbol | undefined)[] | undefined, ProtocolResponse["result"]> {
+        if (typeof positionOrPositions === "number") {
+            const data = yield* apiRequest("getSymbolAtPosition", {
+                snapshot: this.snapshotId,
+                project: this.project.handle,
                 file,
-                positions: positionOrPositions,
+                position: positionOrPositions,
             });
-            return data.map(d => d ? owner.objectRegistry.getOrCreateSymbol(d) : undefined);
+            return data ? this.objectRegistry.getOrCreateSymbol(data) : undefined;
         }
-        return cacheGeneratorMethod(owner, "getSymbolAtPosition", getSymbolAtPosition, gen);
+        const data = yield* apiRequest("getSymbolsAtPositions", {
+            snapshot: this.snapshotId,
+            project: this.project.handle,
+            file,
+            positions: positionOrPositions,
+        });
+        return data.map(d => d ? this.objectRegistry.getOrCreateSymbol(d) : undefined);
     }
 
     get getSymbolOfSourceFile(): {
@@ -4388,44 +4216,45 @@ export class Checker {
         gen(file: DocumentIdentifier): Generator<ProtocolRequest, Symbol | undefined, ProtocolResponse["result"]>;
         gen(files: readonly DocumentIdentifier[]): Generator<ProtocolRequest, (Symbol | undefined)[], ProtocolResponse["result"]>;
     } {
-        const owner = this;
-        function getSymbolOfSourceFile(file: DocumentIdentifier): Symbol | undefined;
-        function getSymbolOfSourceFile(files: readonly DocumentIdentifier[]): (Symbol | undefined)[];
-        function getSymbolOfSourceFile(fileOrFiles: DocumentIdentifier | readonly DocumentIdentifier[]): Symbol | (Symbol | undefined)[] | undefined {
-            if (Array.isArray(fileOrFiles)) {
-                const data = owner.client.apiRequest("getSymbolsOfSourceFiles", {
-                    snapshot: owner.snapshotId,
-                    project: owner.project.handle,
-                    files: fileOrFiles,
-                });
-                return data.map(d => d ? owner.objectRegistry.getOrCreateSymbol(d) : undefined);
-            }
-            const data = owner.client.apiRequest("getSymbolOfSourceFile", {
-                snapshot: owner.snapshotId,
-                project: owner.project.handle,
-                file: fileOrFiles as DocumentIdentifier,
+        return getGeneratorMethod(this, this.#generatorMethods ??= createGeneratorMethodCache(85), 6, this.#getSymbolOfSourceFile, this.#getSymbolOfSourceFileGen);
+    }
+
+    #getSymbolOfSourceFile(file: DocumentIdentifier): Symbol | undefined;
+    #getSymbolOfSourceFile(files: readonly DocumentIdentifier[]): (Symbol | undefined)[];
+    #getSymbolOfSourceFile(fileOrFiles: DocumentIdentifier | readonly DocumentIdentifier[]): Symbol | (Symbol | undefined)[] | undefined {
+        if (Array.isArray(fileOrFiles)) {
+            const data = this.client.apiRequest("getSymbolsOfSourceFiles", {
+                snapshot: this.snapshotId,
+                project: this.project.handle,
+                files: fileOrFiles,
             });
-            return data ? owner.objectRegistry.getOrCreateSymbol(data) : undefined;
+            return data.map(d => d ? this.objectRegistry.getOrCreateSymbol(d) : undefined);
         }
-        function gen(file: DocumentIdentifier): Generator<ProtocolRequest, Symbol | undefined, ProtocolResponse["result"]>;
-        function gen(files: readonly DocumentIdentifier[]): Generator<ProtocolRequest, (Symbol | undefined)[], ProtocolResponse["result"]>;
-        function* gen(fileOrFiles: DocumentIdentifier | readonly DocumentIdentifier[]): Generator<ProtocolRequest, Symbol | (Symbol | undefined)[] | undefined, ProtocolResponse["result"]> {
-            if (Array.isArray(fileOrFiles)) {
-                const data = yield* apiRequest("getSymbolsOfSourceFiles", {
-                    snapshot: owner.snapshotId,
-                    project: owner.project.handle,
-                    files: fileOrFiles,
-                });
-                return data.map(d => d ? owner.objectRegistry.getOrCreateSymbol(d) : undefined);
-            }
-            const data = yield* apiRequest("getSymbolOfSourceFile", {
-                snapshot: owner.snapshotId,
-                project: owner.project.handle,
-                file: fileOrFiles as DocumentIdentifier,
+        const data = this.client.apiRequest("getSymbolOfSourceFile", {
+            snapshot: this.snapshotId,
+            project: this.project.handle,
+            file: fileOrFiles as DocumentIdentifier,
+        });
+        return data ? this.objectRegistry.getOrCreateSymbol(data) : undefined;
+    }
+
+    #getSymbolOfSourceFileGen(file: DocumentIdentifier): Generator<ProtocolRequest, Symbol | undefined, ProtocolResponse["result"]>;
+    #getSymbolOfSourceFileGen(files: readonly DocumentIdentifier[]): Generator<ProtocolRequest, (Symbol | undefined)[], ProtocolResponse["result"]>;
+    *#getSymbolOfSourceFileGen(fileOrFiles: DocumentIdentifier | readonly DocumentIdentifier[]): Generator<ProtocolRequest, Symbol | (Symbol | undefined)[] | undefined, ProtocolResponse["result"]> {
+        if (Array.isArray(fileOrFiles)) {
+            const data = yield* apiRequest("getSymbolsOfSourceFiles", {
+                snapshot: this.snapshotId,
+                project: this.project.handle,
+                files: fileOrFiles,
             });
-            return data ? owner.objectRegistry.getOrCreateSymbol(data) : undefined;
+            return data.map(d => d ? this.objectRegistry.getOrCreateSymbol(d) : undefined);
         }
-        return cacheGeneratorMethod(owner, "getSymbolOfSourceFile", getSymbolOfSourceFile, gen);
+        const data = yield* apiRequest("getSymbolOfSourceFile", {
+            snapshot: this.snapshotId,
+            project: this.project.handle,
+            file: fileOrFiles as DocumentIdentifier,
+        });
+        return data ? this.objectRegistry.getOrCreateSymbol(data) : undefined;
     }
 
     /**
@@ -4439,44 +4268,45 @@ export class Checker {
         gen(symbol: Symbol): Generator<ProtocolRequest, Type, ProtocolResponse["result"]>;
         gen(symbols: readonly Symbol[]): Generator<ProtocolRequest, Type[], ProtocolResponse["result"]>;
     } {
-        const owner = this;
-        function getTypeOfSymbol(symbol: Symbol): Type;
-        function getTypeOfSymbol(symbols: readonly Symbol[]): Type[];
-        function getTypeOfSymbol(symbolOrSymbols: Symbol | readonly Symbol[]): Type | Type[] {
-            if (Array.isArray(symbolOrSymbols)) {
-                const data = owner.client.apiRequest("getTypesOfSymbols", {
-                    snapshot: owner.snapshotId,
-                    project: owner.project.handle,
-                    symbols: symbolOrSymbols.map(symbol => symbol.reference),
-                });
-                return data.map(d => owner.objectRegistry.getOrCreateType(d));
-            }
-            const data = owner.client.apiRequest("getTypeOfSymbol", {
-                snapshot: owner.snapshotId,
-                project: owner.project.handle,
-                symbol: (symbolOrSymbols as Symbol).reference,
+        return getGeneratorMethod(this, this.#generatorMethods ??= createGeneratorMethodCache(85), 7, this.#getTypeOfSymbol, this.#getTypeOfSymbolGen);
+    }
+
+    #getTypeOfSymbol(symbol: Symbol): Type;
+    #getTypeOfSymbol(symbols: readonly Symbol[]): Type[];
+    #getTypeOfSymbol(symbolOrSymbols: Symbol | readonly Symbol[]): Type | Type[] {
+        if (Array.isArray(symbolOrSymbols)) {
+            const data = this.client.apiRequest("getTypesOfSymbols", {
+                snapshot: this.snapshotId,
+                project: this.project.handle,
+                symbols: symbolOrSymbols.map(symbol => symbol.reference),
             });
-            return owner.objectRegistry.getOrCreateType(data);
+            return data.map(d => this.objectRegistry.getOrCreateType(d));
         }
-        function gen(symbol: Symbol): Generator<ProtocolRequest, Type, ProtocolResponse["result"]>;
-        function gen(symbols: readonly Symbol[]): Generator<ProtocolRequest, Type[], ProtocolResponse["result"]>;
-        function* gen(symbolOrSymbols: Symbol | readonly Symbol[]): Generator<ProtocolRequest, Type | Type[], ProtocolResponse["result"]> {
-            if (Array.isArray(symbolOrSymbols)) {
-                const data = yield* apiRequest("getTypesOfSymbols", {
-                    snapshot: owner.snapshotId,
-                    project: owner.project.handle,
-                    symbols: symbolOrSymbols.map(symbol => symbol.reference),
-                });
-                return data.map(d => owner.objectRegistry.getOrCreateType(d));
-            }
-            const data = yield* apiRequest("getTypeOfSymbol", {
-                snapshot: owner.snapshotId,
-                project: owner.project.handle,
-                symbol: (symbolOrSymbols as Symbol).reference,
+        const data = this.client.apiRequest("getTypeOfSymbol", {
+            snapshot: this.snapshotId,
+            project: this.project.handle,
+            symbol: (symbolOrSymbols as Symbol).reference,
+        });
+        return this.objectRegistry.getOrCreateType(data);
+    }
+
+    #getTypeOfSymbolGen(symbol: Symbol): Generator<ProtocolRequest, Type, ProtocolResponse["result"]>;
+    #getTypeOfSymbolGen(symbols: readonly Symbol[]): Generator<ProtocolRequest, Type[], ProtocolResponse["result"]>;
+    *#getTypeOfSymbolGen(symbolOrSymbols: Symbol | readonly Symbol[]): Generator<ProtocolRequest, Type | Type[], ProtocolResponse["result"]> {
+        if (Array.isArray(symbolOrSymbols)) {
+            const data = yield* apiRequest("getTypesOfSymbols", {
+                snapshot: this.snapshotId,
+                project: this.project.handle,
+                symbols: symbolOrSymbols.map(symbol => symbol.reference),
             });
-            return owner.objectRegistry.getOrCreateType(data);
+            return data.map(d => this.objectRegistry.getOrCreateType(d));
         }
-        return cacheGeneratorMethod(owner, "getTypeOfSymbol", getTypeOfSymbol, gen);
+        const data = yield* apiRequest("getTypeOfSymbol", {
+            snapshot: this.snapshotId,
+            project: this.project.handle,
+            symbol: (symbolOrSymbols as Symbol).reference,
+        });
+        return this.objectRegistry.getOrCreateType(data);
     }
 
     /**
@@ -4488,27 +4318,25 @@ export class Checker {
         (symbol: Symbol): Type;
         gen(symbol: Symbol): Generator<ProtocolRequest, Type, ProtocolResponse["result"]>;
     } {
-        const owner = this;
-        return cacheGeneratorMethod(
-            owner,
-            "getDeclaredTypeOfSymbol",
-            function (symbol: Symbol): Type {
-                const data = owner.client.apiRequest("getDeclaredTypeOfSymbol", {
-                    snapshot: owner.snapshotId,
-                    project: owner.project.handle,
-                    symbol: symbol.reference,
-                });
-                return owner.objectRegistry.getOrCreateType(data);
-            },
-            function* (symbol: Symbol): Generator<ProtocolRequest, Type, ProtocolResponse["result"]> {
-                const data = yield* apiRequest("getDeclaredTypeOfSymbol", {
-                    snapshot: owner.snapshotId,
-                    project: owner.project.handle,
-                    symbol: symbol.reference,
-                });
-                return owner.objectRegistry.getOrCreateType(data);
-            },
-        );
+        return getGeneratorMethod(this, this.#generatorMethods ??= createGeneratorMethodCache(85), 8, this.#getDeclaredTypeOfSymbol, this.#getDeclaredTypeOfSymbolGen);
+    }
+
+    #getDeclaredTypeOfSymbol(symbol: Symbol): Type {
+        const data = this.client.apiRequest("getDeclaredTypeOfSymbol", {
+            snapshot: this.snapshotId,
+            project: this.project.handle,
+            symbol: symbol.reference,
+        });
+        return this.objectRegistry.getOrCreateType(data);
+    }
+
+    *#getDeclaredTypeOfSymbolGen(symbol: Symbol): Generator<ProtocolRequest, Type, ProtocolResponse["result"]> {
+        const data = yield* apiRequest("getDeclaredTypeOfSymbol", {
+            snapshot: this.snapshotId,
+            project: this.project.handle,
+            symbol: symbol.reference,
+        });
+        return this.objectRegistry.getOrCreateType(data);
     }
 
     /**
@@ -4521,56 +4349,52 @@ export class Checker {
         (symbol: Symbol): Type;
         gen(symbol: Symbol): Generator<ProtocolRequest, Type, ProtocolResponse["result"]>;
     } {
-        const owner = this;
-        return cacheGeneratorMethod(
-            owner,
-            "getNonMissingTypeOfSymbol",
-            function (symbol: Symbol): Type {
-                const data = owner.client.apiRequest("getNonMissingTypeOfSymbol", {
-                    snapshot: owner.snapshotId,
-                    project: owner.project.handle,
-                    symbol: symbol.reference,
-                });
-                return owner.objectRegistry.getOrCreateType(data);
-            },
-            function* (symbol: Symbol): Generator<ProtocolRequest, Type, ProtocolResponse["result"]> {
-                const data = yield* apiRequest("getNonMissingTypeOfSymbol", {
-                    snapshot: owner.snapshotId,
-                    project: owner.project.handle,
-                    symbol: symbol.reference,
-                });
-                return owner.objectRegistry.getOrCreateType(data);
-            },
-        );
+        return getGeneratorMethod(this, this.#generatorMethods ??= createGeneratorMethodCache(85), 9, this.#getNonMissingTypeOfSymbol, this.#getNonMissingTypeOfSymbolGen);
+    }
+
+    #getNonMissingTypeOfSymbol(symbol: Symbol): Type {
+        const data = this.client.apiRequest("getNonMissingTypeOfSymbol", {
+            snapshot: this.snapshotId,
+            project: this.project.handle,
+            symbol: symbol.reference,
+        });
+        return this.objectRegistry.getOrCreateType(data);
+    }
+
+    *#getNonMissingTypeOfSymbolGen(symbol: Symbol): Generator<ProtocolRequest, Type, ProtocolResponse["result"]> {
+        const data = yield* apiRequest("getNonMissingTypeOfSymbol", {
+            snapshot: this.snapshotId,
+            project: this.project.handle,
+            symbol: symbol.reference,
+        });
+        return this.objectRegistry.getOrCreateType(data);
     }
 
     get getReferencesToSymbolInFile(): {
         (file: DocumentIdentifier, symbol: Symbol): NodeHandle[];
         gen(file: DocumentIdentifier, symbol: Symbol): Generator<ProtocolRequest, NodeHandle[], ProtocolResponse["result"]>;
     } {
-        const owner = this;
-        return cacheGeneratorMethod(
-            owner,
-            "getReferencesToSymbolInFile",
-            function (file: DocumentIdentifier, symbol: Symbol): NodeHandle[] {
-                const data = owner.client.apiRequest("getReferencesToSymbolInFile", {
-                    snapshot: owner.snapshotId,
-                    project: owner.project.handle,
-                    file,
-                    symbol: symbol.reference,
-                });
-                return (data ?? []).map(h => owner.objectRegistry.createNodeHandle(h));
-            },
-            function* (file: DocumentIdentifier, symbol: Symbol): Generator<ProtocolRequest, NodeHandle[], ProtocolResponse["result"]> {
-                const data = yield* apiRequest("getReferencesToSymbolInFile", {
-                    snapshot: owner.snapshotId,
-                    project: owner.project.handle,
-                    file,
-                    symbol: symbol.reference,
-                });
-                return (data ?? []).map(h => owner.objectRegistry.createNodeHandle(h));
-            },
-        );
+        return getGeneratorMethod(this, this.#generatorMethods ??= createGeneratorMethodCache(85), 10, this.#getReferencesToSymbolInFile, this.#getReferencesToSymbolInFileGen);
+    }
+
+    #getReferencesToSymbolInFile(file: DocumentIdentifier, symbol: Symbol): NodeHandle[] {
+        const data = this.client.apiRequest("getReferencesToSymbolInFile", {
+            snapshot: this.snapshotId,
+            project: this.project.handle,
+            file,
+            symbol: symbol.reference,
+        });
+        return (data ?? []).map(h => this.objectRegistry.createNodeHandle(h));
+    }
+
+    *#getReferencesToSymbolInFileGen(file: DocumentIdentifier, symbol: Symbol): Generator<ProtocolRequest, NodeHandle[], ProtocolResponse["result"]> {
+        const data = yield* apiRequest("getReferencesToSymbolInFile", {
+            snapshot: this.snapshotId,
+            project: this.project.handle,
+            file,
+            symbol: symbol.reference,
+        });
+        return (data ?? []).map(h => this.objectRegistry.createNodeHandle(h));
     }
 
     /**
@@ -4584,61 +4408,60 @@ export class Checker {
         gen(node: Node): Generator<ProtocolRequest, Type, ProtocolResponse["result"]>;
         gen(nodes: readonly Node[]): Generator<ProtocolRequest, Type[], ProtocolResponse["result"]>;
     } {
-        const owner = this;
-        function getTypeAtLocation(node: Node): Type;
-        function getTypeAtLocation(nodes: readonly Node[]): Type[];
-        function getTypeAtLocation(nodeOrNodes: Node | readonly Node[]): Type | Type[] {
-            if (Array.isArray(nodeOrNodes)) {
-                const data = owner.client.apiRequest("getTypeAtLocations", {
-                    snapshot: owner.snapshotId,
-                    project: owner.project.handle,
-                    locations: nodeOrNodes.map(node => getNodeRequestHandle(node)),
-                });
-                return data.map(d => owner.objectRegistry.getOrCreateType(d));
-            }
-            const data = owner.client.apiRequest("getTypeAtLocation", {
-                snapshot: owner.snapshotId,
-                project: owner.project.handle,
-                location: getNodeRequestHandle(nodeOrNodes as Node),
+        return getGeneratorMethod(this, this.#generatorMethods ??= createGeneratorMethodCache(85), 11, this.#getTypeAtLocation, this.#getTypeAtLocationGen);
+    }
+
+    #getTypeAtLocation(node: Node): Type;
+    #getTypeAtLocation(nodes: readonly Node[]): Type[];
+    #getTypeAtLocation(nodeOrNodes: Node | readonly Node[]): Type | Type[] {
+        if (Array.isArray(nodeOrNodes)) {
+            const data = this.client.apiRequest("getTypeAtLocations", {
+                snapshot: this.snapshotId,
+                project: this.project.handle,
+                locations: nodeOrNodes.map(node => getNodeRequestHandle(node)),
             });
-            return owner.objectRegistry.getOrCreateType(data);
+            return data.map(d => this.objectRegistry.getOrCreateType(d));
         }
-        function gen(node: Node): Generator<ProtocolRequest, Type, ProtocolResponse["result"]>;
-        function gen(nodes: readonly Node[]): Generator<ProtocolRequest, Type[], ProtocolResponse["result"]>;
-        function* gen(nodeOrNodes: Node | readonly Node[]): Generator<ProtocolRequest, Type | Type[], ProtocolResponse["result"]> {
-            if (Array.isArray(nodeOrNodes)) {
-                const data = yield* apiRequest("getTypeAtLocations", {
-                    snapshot: owner.snapshotId,
-                    project: owner.project.handle,
-                    locations: nodeOrNodes.map(node => getNodeRequestHandle(node)),
-                });
-                return data.map(d => owner.objectRegistry.getOrCreateType(d));
-            }
-            const data = yield* apiRequest("getTypeAtLocation", {
-                snapshot: owner.snapshotId,
-                project: owner.project.handle,
-                location: getNodeRequestHandle(nodeOrNodes as Node),
+        const data = this.client.apiRequest("getTypeAtLocation", {
+            snapshot: this.snapshotId,
+            project: this.project.handle,
+            location: getNodeRequestHandle(nodeOrNodes as Node),
+        });
+        return this.objectRegistry.getOrCreateType(data);
+    }
+
+    #getTypeAtLocationGen(node: Node): Generator<ProtocolRequest, Type, ProtocolResponse["result"]>;
+    #getTypeAtLocationGen(nodes: readonly Node[]): Generator<ProtocolRequest, Type[], ProtocolResponse["result"]>;
+    *#getTypeAtLocationGen(nodeOrNodes: Node | readonly Node[]): Generator<ProtocolRequest, Type | Type[], ProtocolResponse["result"]> {
+        if (Array.isArray(nodeOrNodes)) {
+            const data = yield* apiRequest("getTypeAtLocations", {
+                snapshot: this.snapshotId,
+                project: this.project.handle,
+                locations: nodeOrNodes.map(node => getNodeRequestHandle(node)),
             });
-            return owner.objectRegistry.getOrCreateType(data);
+            return data.map(d => this.objectRegistry.getOrCreateType(d));
         }
-        return cacheGeneratorMethod(owner, "getTypeAtLocation", getTypeAtLocation, gen);
+        const data = yield* apiRequest("getTypeAtLocation", {
+            snapshot: this.snapshotId,
+            project: this.project.handle,
+            location: getNodeRequestHandle(nodeOrNodes as Node),
+        });
+        return this.objectRegistry.getOrCreateType(data);
     }
 
     get getSignaturesOfType(): {
         (type: Type, kind: SignatureKind): readonly Signature[];
         gen(type: Type, kind: SignatureKind): Generator<ProtocolRequest, readonly Signature[], ProtocolResponse["result"]>;
     } {
-        const owner = this;
-        return cacheGeneratorMethod(
-            owner,
-            "getSignaturesOfType",
-            function (type: Type, kind: SignatureKind): readonly Signature[] {
-                return kind === SignatureKind.Call ? type.getCallSignatures() : type.getConstructSignatures();
-            },
-            function* (type: Type, kind: SignatureKind): Generator<ProtocolRequest, readonly Signature[], ProtocolResponse["result"]> {
-                return kind === SignatureKind.Call ? (yield* type.getCallSignatures.gen()) : (yield* type.getConstructSignatures.gen());
-            },
-        );
+        return getGeneratorMethod(this, this.#generatorMethods ??= createGeneratorMethodCache(85), 12, this.#getSignaturesOfType, this.#getSignaturesOfTypeGen);
+    }
+
+    #getSignaturesOfType(type: Type, kind: SignatureKind): readonly Signature[] {
+        return kind === SignatureKind.Call ? type.getCallSignatures() : type.getConstructSignatures();
+    }
+
+    *#getSignaturesOfTypeGen(type: Type, kind: SignatureKind): Generator<ProtocolRequest, readonly Signature[], ProtocolResponse["result"]> {
+        return kind === SignatureKind.Call ? (yield* type.getCallSignatures.gen()) : (yield* type.getConstructSignatures.gen());
     }
 
     /**
@@ -4650,27 +4473,25 @@ export class Checker {
         (node: Node): Signature;
         gen(node: Node): Generator<ProtocolRequest, Signature, ProtocolResponse["result"]>;
     } {
-        const owner = this;
-        return cacheGeneratorMethod(
-            owner,
-            "getResolvedSignature",
-            function (node: Node): Signature {
-                const data = owner.client.apiRequest("getResolvedSignature", {
-                    snapshot: owner.snapshotId,
-                    project: owner.project.handle,
-                    location: getNodeRequestHandle(node),
-                });
-                return owner.objectRegistry.getOrCreateSignature(data);
-            },
-            function* (node: Node): Generator<ProtocolRequest, Signature, ProtocolResponse["result"]> {
-                const data = yield* apiRequest("getResolvedSignature", {
-                    snapshot: owner.snapshotId,
-                    project: owner.project.handle,
-                    location: getNodeRequestHandle(node),
-                });
-                return owner.objectRegistry.getOrCreateSignature(data);
-            },
-        );
+        return getGeneratorMethod(this, this.#generatorMethods ??= createGeneratorMethodCache(85), 13, this.#getResolvedSignature, this.#getResolvedSignatureGen);
+    }
+
+    #getResolvedSignature(node: Node): Signature {
+        const data = this.client.apiRequest("getResolvedSignature", {
+            snapshot: this.snapshotId,
+            project: this.project.handle,
+            location: getNodeRequestHandle(node),
+        });
+        return this.objectRegistry.getOrCreateSignature(data);
+    }
+
+    *#getResolvedSignatureGen(node: Node): Generator<ProtocolRequest, Signature, ProtocolResponse["result"]> {
+        const data = yield* apiRequest("getResolvedSignature", {
+            snapshot: this.snapshotId,
+            project: this.project.handle,
+            location: getNodeRequestHandle(node),
+        });
+        return this.objectRegistry.getOrCreateSignature(data);
     }
 
     get getTypeAtPosition(): {
@@ -4679,89 +4500,88 @@ export class Checker {
         gen(file: DocumentIdentifier, position: number): Generator<ProtocolRequest, Type | undefined, ProtocolResponse["result"]>;
         gen(file: DocumentIdentifier, positions: readonly number[]): Generator<ProtocolRequest, (Type | undefined)[], ProtocolResponse["result"]>;
     } {
-        const owner = this;
-        function getTypeAtPosition(file: DocumentIdentifier, position: number): Type | undefined;
-        function getTypeAtPosition(file: DocumentIdentifier, positions: readonly number[]): (Type | undefined)[];
-        function getTypeAtPosition(file: DocumentIdentifier, positionOrPositions: number | readonly number[]): Type | (Type | undefined)[] | undefined {
-            if (typeof positionOrPositions === "number") {
-                const data = owner.client.apiRequest("getTypeAtPosition", {
-                    snapshot: owner.snapshotId,
-                    project: owner.project.handle,
-                    file,
-                    position: positionOrPositions,
-                });
-                return data ? owner.objectRegistry.getOrCreateType(data) : undefined;
-            }
-            const data = owner.client.apiRequest("getTypesAtPositions", {
-                snapshot: owner.snapshotId,
-                project: owner.project.handle,
+        return getGeneratorMethod(this, this.#generatorMethods ??= createGeneratorMethodCache(85), 14, this.#getTypeAtPosition, this.#getTypeAtPositionGen);
+    }
+
+    #getTypeAtPosition(file: DocumentIdentifier, position: number): Type | undefined;
+    #getTypeAtPosition(file: DocumentIdentifier, positions: readonly number[]): (Type | undefined)[];
+    #getTypeAtPosition(file: DocumentIdentifier, positionOrPositions: number | readonly number[]): Type | (Type | undefined)[] | undefined {
+        if (typeof positionOrPositions === "number") {
+            const data = this.client.apiRequest("getTypeAtPosition", {
+                snapshot: this.snapshotId,
+                project: this.project.handle,
                 file,
-                positions: positionOrPositions,
+                position: positionOrPositions,
             });
-            return data.map(d => d ? owner.objectRegistry.getOrCreateType(d) : undefined);
+            return data ? this.objectRegistry.getOrCreateType(data) : undefined;
         }
-        function gen(file: DocumentIdentifier, position: number): Generator<ProtocolRequest, Type | undefined, ProtocolResponse["result"]>;
-        function gen(file: DocumentIdentifier, positions: readonly number[]): Generator<ProtocolRequest, (Type | undefined)[], ProtocolResponse["result"]>;
-        function* gen(file: DocumentIdentifier, positionOrPositions: number | readonly number[]): Generator<ProtocolRequest, Type | (Type | undefined)[] | undefined, ProtocolResponse["result"]> {
-            if (typeof positionOrPositions === "number") {
-                const data = yield* apiRequest("getTypeAtPosition", {
-                    snapshot: owner.snapshotId,
-                    project: owner.project.handle,
-                    file,
-                    position: positionOrPositions,
-                });
-                return data ? owner.objectRegistry.getOrCreateType(data) : undefined;
-            }
-            const data = yield* apiRequest("getTypesAtPositions", {
-                snapshot: owner.snapshotId,
-                project: owner.project.handle,
+        const data = this.client.apiRequest("getTypesAtPositions", {
+            snapshot: this.snapshotId,
+            project: this.project.handle,
+            file,
+            positions: positionOrPositions,
+        });
+        return data.map(d => d ? this.objectRegistry.getOrCreateType(d) : undefined);
+    }
+
+    #getTypeAtPositionGen(file: DocumentIdentifier, position: number): Generator<ProtocolRequest, Type | undefined, ProtocolResponse["result"]>;
+    #getTypeAtPositionGen(file: DocumentIdentifier, positions: readonly number[]): Generator<ProtocolRequest, (Type | undefined)[], ProtocolResponse["result"]>;
+    *#getTypeAtPositionGen(file: DocumentIdentifier, positionOrPositions: number | readonly number[]): Generator<ProtocolRequest, Type | (Type | undefined)[] | undefined, ProtocolResponse["result"]> {
+        if (typeof positionOrPositions === "number") {
+            const data = yield* apiRequest("getTypeAtPosition", {
+                snapshot: this.snapshotId,
+                project: this.project.handle,
                 file,
-                positions: positionOrPositions,
+                position: positionOrPositions,
             });
-            return data.map(d => d ? owner.objectRegistry.getOrCreateType(d) : undefined);
+            return data ? this.objectRegistry.getOrCreateType(data) : undefined;
         }
-        return cacheGeneratorMethod(owner, "getTypeAtPosition", getTypeAtPosition, gen);
+        const data = yield* apiRequest("getTypesAtPositions", {
+            snapshot: this.snapshotId,
+            project: this.project.handle,
+            file,
+            positions: positionOrPositions,
+        });
+        return data.map(d => d ? this.objectRegistry.getOrCreateType(d) : undefined);
     }
 
     get resolveName(): {
         (name: string, meaning: SymbolFlags, location?: Node | DocumentPosition, excludeGlobals?: boolean): Symbol | undefined;
         gen(name: string, meaning: SymbolFlags, location?: Node | DocumentPosition, excludeGlobals?: boolean): Generator<ProtocolRequest, Symbol | undefined, ProtocolResponse["result"]>;
     } {
-        const owner = this;
-        return cacheGeneratorMethod(
-            owner,
-            "resolveName",
-            function (name: string, meaning: SymbolFlags, location?: Node | DocumentPosition, excludeGlobals?: boolean): Symbol | undefined {
-                // Distinguish Node (has `kind`) from DocumentPosition (has `document` and `position`)
-                const isNode = location && "kind" in location;
-                const data = owner.client.apiRequest("resolveName", {
-                    snapshot: owner.snapshotId,
-                    project: owner.project.handle,
-                    name,
-                    meaning,
-                    location: isNode ? getNodeRequestHandle(location as Node) : undefined,
-                    file: !isNode && location ? (location as DocumentPosition).document : undefined,
-                    position: !isNode && location ? (location as DocumentPosition).position : undefined,
-                    excludeGlobals,
-                });
-                return data ? owner.objectRegistry.getOrCreateSymbol(data) : undefined;
-            },
-            function* (name: string, meaning: SymbolFlags, location?: Node | DocumentPosition, excludeGlobals?: boolean): Generator<ProtocolRequest, Symbol | undefined, ProtocolResponse["result"]> {
-                // Distinguish Node (has `kind`) from DocumentPosition (has `document` and `position`)
-                const isNode = location && "kind" in location;
-                const data = yield* apiRequest("resolveName", {
-                    snapshot: owner.snapshotId,
-                    project: owner.project.handle,
-                    name,
-                    meaning,
-                    location: isNode ? getNodeRequestHandle(location as Node) : undefined,
-                    file: !isNode && location ? (location as DocumentPosition).document : undefined,
-                    position: !isNode && location ? (location as DocumentPosition).position : undefined,
-                    excludeGlobals,
-                });
-                return data ? owner.objectRegistry.getOrCreateSymbol(data) : undefined;
-            },
-        );
+        return getGeneratorMethod(this, this.#generatorMethods ??= createGeneratorMethodCache(85), 15, this.#resolveName, this.#resolveNameGen);
+    }
+
+    #resolveName(name: string, meaning: SymbolFlags, location?: Node | DocumentPosition, excludeGlobals?: boolean): Symbol | undefined {
+        // Distinguish Node (has `kind`) from DocumentPosition (has `document` and `position`)
+        const isNode = location && "kind" in location;
+        const data = this.client.apiRequest("resolveName", {
+            snapshot: this.snapshotId,
+            project: this.project.handle,
+            name,
+            meaning,
+            location: isNode ? getNodeRequestHandle(location as Node) : undefined,
+            file: !isNode && location ? (location as DocumentPosition).document : undefined,
+            position: !isNode && location ? (location as DocumentPosition).position : undefined,
+            excludeGlobals,
+        });
+        return data ? this.objectRegistry.getOrCreateSymbol(data) : undefined;
+    }
+
+    *#resolveNameGen(name: string, meaning: SymbolFlags, location?: Node | DocumentPosition, excludeGlobals?: boolean): Generator<ProtocolRequest, Symbol | undefined, ProtocolResponse["result"]> {
+        // Distinguish Node (has `kind`) from DocumentPosition (has `document` and `position`)
+        const isNode = location && "kind" in location;
+        const data = yield* apiRequest("resolveName", {
+            snapshot: this.snapshotId,
+            project: this.project.handle,
+            name,
+            meaning,
+            location: isNode ? getNodeRequestHandle(location as Node) : undefined,
+            file: !isNode && location ? (location as DocumentPosition).document : undefined,
+            position: !isNode && location ? (location as DocumentPosition).position : undefined,
+            excludeGlobals,
+        });
+        return data ? this.objectRegistry.getOrCreateSymbol(data) : undefined;
     }
 
     /**
@@ -4771,141 +4591,131 @@ export class Checker {
         (location: Node | DocumentPosition, meaning: SymbolFlags): readonly Symbol[];
         gen(location: Node | DocumentPosition, meaning: SymbolFlags): Generator<ProtocolRequest, readonly Symbol[], ProtocolResponse["result"]>;
     } {
-        const owner = this;
-        return cacheGeneratorMethod(
-            owner,
-            "getSymbolsInScope",
-            function (location: Node | DocumentPosition, meaning: SymbolFlags): readonly Symbol[] {
-                // Distinguish Node (has `kind`) from DocumentPosition (has `document` and `position`)
-                const isNode = "kind" in location;
-                const data = owner.client.apiRequest("getSymbolsInScope", {
-                    snapshot: owner.snapshotId,
-                    project: owner.project.handle,
-                    meaning,
-                    location: isNode ? getNodeRequestHandle(location as Node) : undefined,
-                    file: isNode ? undefined : (location as DocumentPosition).document,
-                    position: isNode ? undefined : (location as DocumentPosition).position,
-                });
-                return data ? data.map(d => owner.objectRegistry.getOrCreateSymbol(d)) : [];
-            },
-            function* (location: Node | DocumentPosition, meaning: SymbolFlags): Generator<ProtocolRequest, readonly Symbol[], ProtocolResponse["result"]> {
-                // Distinguish Node (has `kind`) from DocumentPosition (has `document` and `position`)
-                const isNode = "kind" in location;
-                const data = yield* apiRequest("getSymbolsInScope", {
-                    snapshot: owner.snapshotId,
-                    project: owner.project.handle,
-                    meaning,
-                    location: isNode ? getNodeRequestHandle(location as Node) : undefined,
-                    file: isNode ? undefined : (location as DocumentPosition).document,
-                    position: isNode ? undefined : (location as DocumentPosition).position,
-                });
-                return data ? data.map(d => owner.objectRegistry.getOrCreateSymbol(d)) : [];
-            },
-        );
+        return getGeneratorMethod(this, this.#generatorMethods ??= createGeneratorMethodCache(85), 16, this.#getSymbolsInScope, this.#getSymbolsInScopeGen);
+    }
+
+    #getSymbolsInScope(location: Node | DocumentPosition, meaning: SymbolFlags): readonly Symbol[] {
+        // Distinguish Node (has `kind`) from DocumentPosition (has `document` and `position`)
+        const isNode = "kind" in location;
+        const data = this.client.apiRequest("getSymbolsInScope", {
+            snapshot: this.snapshotId,
+            project: this.project.handle,
+            meaning,
+            location: isNode ? getNodeRequestHandle(location as Node) : undefined,
+            file: isNode ? undefined : (location as DocumentPosition).document,
+            position: isNode ? undefined : (location as DocumentPosition).position,
+        });
+        return data ? data.map(d => this.objectRegistry.getOrCreateSymbol(d)) : [];
+    }
+
+    *#getSymbolsInScopeGen(location: Node | DocumentPosition, meaning: SymbolFlags): Generator<ProtocolRequest, readonly Symbol[], ProtocolResponse["result"]> {
+        // Distinguish Node (has `kind`) from DocumentPosition (has `document` and `position`)
+        const isNode = "kind" in location;
+        const data = yield* apiRequest("getSymbolsInScope", {
+            snapshot: this.snapshotId,
+            project: this.project.handle,
+            meaning,
+            location: isNode ? getNodeRequestHandle(location as Node) : undefined,
+            file: isNode ? undefined : (location as DocumentPosition).document,
+            position: isNode ? undefined : (location as DocumentPosition).position,
+        });
+        return data ? data.map(d => this.objectRegistry.getOrCreateSymbol(d)) : [];
     }
 
     get getResolvedSymbol(): {
         (node: Identifier): Symbol | undefined;
         gen(node: Identifier): Generator<ProtocolRequest, Symbol | undefined, ProtocolResponse["result"]>;
     } {
-        const owner = this;
-        return cacheGeneratorMethod(
-            owner,
-            "getResolvedSymbol",
-            function (node: Identifier): Symbol | undefined {
-                const text = node.text;
-                if (!text) return undefined;
-                return owner.resolveName(text, SymbolFlags.Value | SymbolFlags.ExportValue, node);
-            },
-            function* (node: Identifier): Generator<ProtocolRequest, Symbol | undefined, ProtocolResponse["result"]> {
-                const text = node.text;
-                if (!text) return undefined;
-                return yield* owner.resolveName.gen(text, SymbolFlags.Value | SymbolFlags.ExportValue, node);
-            },
-        );
+        return getGeneratorMethod(this, this.#generatorMethods ??= createGeneratorMethodCache(85), 17, this.#getResolvedSymbol, this.#getResolvedSymbolGen);
+    }
+
+    #getResolvedSymbol(node: Identifier): Symbol | undefined {
+        const text = node.text;
+        if (!text) return undefined;
+        return this.#resolveName(text, SymbolFlags.Value | SymbolFlags.ExportValue, node);
+    }
+
+    *#getResolvedSymbolGen(node: Identifier): Generator<ProtocolRequest, Symbol | undefined, ProtocolResponse["result"]> {
+        const text = node.text;
+        if (!text) return undefined;
+        return yield* this.#resolveNameGen(text, SymbolFlags.Value | SymbolFlags.ExportValue, node);
     }
 
     get getContextualType(): {
         (node: Expression): Type | undefined;
         gen(node: Expression): Generator<ProtocolRequest, Type | undefined, ProtocolResponse["result"]>;
     } {
-        const owner = this;
-        return cacheGeneratorMethod(
-            owner,
-            "getContextualType",
-            function (node: Expression): Type | undefined {
-                const data = owner.client.apiRequest("getContextualType", {
-                    snapshot: owner.snapshotId,
-                    project: owner.project.handle,
-                    location: getNodeRequestHandle(node),
-                });
-                return data ? owner.objectRegistry.getOrCreateType(data) : undefined;
-            },
-            function* (node: Expression): Generator<ProtocolRequest, Type | undefined, ProtocolResponse["result"]> {
-                const data = yield* apiRequest("getContextualType", {
-                    snapshot: owner.snapshotId,
-                    project: owner.project.handle,
-                    location: getNodeRequestHandle(node),
-                });
-                return data ? owner.objectRegistry.getOrCreateType(data) : undefined;
-            },
-        );
+        return getGeneratorMethod(this, this.#generatorMethods ??= createGeneratorMethodCache(85), 18, this.#getContextualType, this.#getContextualTypeGen);
+    }
+
+    #getContextualType(node: Expression): Type | undefined {
+        const data = this.client.apiRequest("getContextualType", {
+            snapshot: this.snapshotId,
+            project: this.project.handle,
+            location: getNodeRequestHandle(node),
+        });
+        return data ? this.objectRegistry.getOrCreateType(data) : undefined;
+    }
+
+    *#getContextualTypeGen(node: Expression): Generator<ProtocolRequest, Type | undefined, ProtocolResponse["result"]> {
+        const data = yield* apiRequest("getContextualType", {
+            snapshot: this.snapshotId,
+            project: this.project.handle,
+            location: getNodeRequestHandle(node),
+        });
+        return data ? this.objectRegistry.getOrCreateType(data) : undefined;
     }
 
     get getContextualTypeForArgumentAtIndex(): {
         (node: CallLikeExpression, argIndex: number): Type | undefined;
         gen(node: CallLikeExpression, argIndex: number): Generator<ProtocolRequest, Type | undefined, ProtocolResponse["result"]>;
     } {
-        const owner = this;
-        return cacheGeneratorMethod(
-            owner,
-            "getContextualTypeForArgumentAtIndex",
-            function (node: CallLikeExpression, argIndex: number): Type | undefined {
-                const data = owner.client.apiRequest("getContextualTypeForArgument", {
-                    snapshot: owner.snapshotId,
-                    project: owner.project.handle,
-                    location: getNodeRequestHandle(node),
-                    index: argIndex,
-                });
-                return data ? owner.objectRegistry.getOrCreateType(data) : undefined;
-            },
-            function* (node: CallLikeExpression, argIndex: number): Generator<ProtocolRequest, Type | undefined, ProtocolResponse["result"]> {
-                const data = yield* apiRequest("getContextualTypeForArgument", {
-                    snapshot: owner.snapshotId,
-                    project: owner.project.handle,
-                    location: getNodeRequestHandle(node),
-                    index: argIndex,
-                });
-                return data ? owner.objectRegistry.getOrCreateType(data) : undefined;
-            },
-        );
+        return getGeneratorMethod(this, this.#generatorMethods ??= createGeneratorMethodCache(85), 19, this.#getContextualTypeForArgumentAtIndex, this.#getContextualTypeForArgumentAtIndexGen);
+    }
+
+    #getContextualTypeForArgumentAtIndex(node: CallLikeExpression, argIndex: number): Type | undefined {
+        const data = this.client.apiRequest("getContextualTypeForArgument", {
+            snapshot: this.snapshotId,
+            project: this.project.handle,
+            location: getNodeRequestHandle(node),
+            index: argIndex,
+        });
+        return data ? this.objectRegistry.getOrCreateType(data) : undefined;
+    }
+
+    *#getContextualTypeForArgumentAtIndexGen(node: CallLikeExpression, argIndex: number): Generator<ProtocolRequest, Type | undefined, ProtocolResponse["result"]> {
+        const data = yield* apiRequest("getContextualTypeForArgument", {
+            snapshot: this.snapshotId,
+            project: this.project.handle,
+            location: getNodeRequestHandle(node),
+            index: argIndex,
+        });
+        return data ? this.objectRegistry.getOrCreateType(data) : undefined;
     }
 
     get getAwaitedType(): {
         (type: Type): Type | undefined;
         gen(type: Type): Generator<ProtocolRequest, Type | undefined, ProtocolResponse["result"]>;
     } {
-        const owner = this;
-        return cacheGeneratorMethod(
-            owner,
-            "getAwaitedType",
-            function (type: Type): Type | undefined {
-                const data = owner.client.apiRequest("getAwaitedType", {
-                    snapshot: owner.snapshotId,
-                    project: owner.project.handle,
-                    type: type.id,
-                });
-                return data ? owner.objectRegistry.getOrCreateType(data) : undefined;
-            },
-            function* (type: Type): Generator<ProtocolRequest, Type | undefined, ProtocolResponse["result"]> {
-                const data = yield* apiRequest("getAwaitedType", {
-                    snapshot: owner.snapshotId,
-                    project: owner.project.handle,
-                    type: type.id,
-                });
-                return data ? owner.objectRegistry.getOrCreateType(data) : undefined;
-            },
-        );
+        return getGeneratorMethod(this, this.#generatorMethods ??= createGeneratorMethodCache(85), 20, this.#getAwaitedType, this.#getAwaitedTypeGen);
+    }
+
+    #getAwaitedType(type: Type): Type | undefined {
+        const data = this.client.apiRequest("getAwaitedType", {
+            snapshot: this.snapshotId,
+            project: this.project.handle,
+            type: type.id,
+        });
+        return data ? this.objectRegistry.getOrCreateType(data) : undefined;
+    }
+
+    *#getAwaitedTypeGen(type: Type): Generator<ProtocolRequest, Type | undefined, ProtocolResponse["result"]> {
+        const data = yield* apiRequest("getAwaitedType", {
+            snapshot: this.snapshotId,
+            project: this.project.handle,
+            type: type.id,
+        });
+        return data ? this.objectRegistry.getOrCreateType(data) : undefined;
     }
 
     /** Get the base type of a literal type (e.g. `number` for `42`). Always returns a type. */
@@ -4913,27 +4723,25 @@ export class Checker {
         (type: Type): Type;
         gen(type: Type): Generator<ProtocolRequest, Type, ProtocolResponse["result"]>;
     } {
-        const owner = this;
-        return cacheGeneratorMethod(
-            owner,
-            "getBaseTypeOfLiteralType",
-            function (type: Type): Type {
-                const data = owner.client.apiRequest("getBaseTypeOfLiteralType", {
-                    snapshot: owner.snapshotId,
-                    project: owner.project.handle,
-                    type: type.id,
-                });
-                return owner.objectRegistry.getOrCreateType(data);
-            },
-            function* (type: Type): Generator<ProtocolRequest, Type, ProtocolResponse["result"]> {
-                const data = yield* apiRequest("getBaseTypeOfLiteralType", {
-                    snapshot: owner.snapshotId,
-                    project: owner.project.handle,
-                    type: type.id,
-                });
-                return owner.objectRegistry.getOrCreateType(data);
-            },
-        );
+        return getGeneratorMethod(this, this.#generatorMethods ??= createGeneratorMethodCache(85), 21, this.#getBaseTypeOfLiteralType, this.#getBaseTypeOfLiteralTypeGen);
+    }
+
+    #getBaseTypeOfLiteralType(type: Type): Type {
+        const data = this.client.apiRequest("getBaseTypeOfLiteralType", {
+            snapshot: this.snapshotId,
+            project: this.project.handle,
+            type: type.id,
+        });
+        return this.objectRegistry.getOrCreateType(data);
+    }
+
+    *#getBaseTypeOfLiteralTypeGen(type: Type): Generator<ProtocolRequest, Type, ProtocolResponse["result"]> {
+        const data = yield* apiRequest("getBaseTypeOfLiteralType", {
+            snapshot: this.snapshotId,
+            project: this.project.handle,
+            type: type.id,
+        });
+        return this.objectRegistry.getOrCreateType(data);
     }
 
     /** Get the type with `null` and `undefined` removed. Always returns a type. */
@@ -4941,17 +4749,15 @@ export class Checker {
         (type: Type): Type;
         gen(type: Type): Generator<ProtocolRequest, Type, ProtocolResponse["result"]>;
     } {
-        const owner = this;
-        return cacheGeneratorMethod(
-            owner,
-            "getNonNullableType",
-            function (type: Type): Type {
-                return type.getNonNullableType();
-            },
-            function* (type: Type): Generator<ProtocolRequest, Type, ProtocolResponse["result"]> {
-                return yield* type.getNonNullableType.gen();
-            },
-        );
+        return getGeneratorMethod(this, this.#generatorMethods ??= createGeneratorMethodCache(85), 22, this.#getNonNullableType, this.#getNonNullableTypeGen);
+    }
+
+    #getNonNullableType(type: Type): Type {
+        return type.getNonNullableType();
+    }
+
+    *#getNonNullableTypeGen(type: Type): Generator<ProtocolRequest, Type, ProtocolResponse["result"]> {
+        return yield* type.getNonNullableType.gen();
     }
 
     /**
@@ -4963,27 +4769,25 @@ export class Checker {
         (node: TypeNode): Type;
         gen(node: TypeNode): Generator<ProtocolRequest, Type, ProtocolResponse["result"]>;
     } {
-        const owner = this;
-        return cacheGeneratorMethod(
-            owner,
-            "getTypeFromTypeNode",
-            function (node: TypeNode): Type {
-                const data = owner.client.apiRequest("getTypeFromTypeNode", {
-                    snapshot: owner.snapshotId,
-                    project: owner.project.handle,
-                    location: getNodeRequestHandle(node),
-                });
-                return owner.objectRegistry.getOrCreateType(data);
-            },
-            function* (node: TypeNode): Generator<ProtocolRequest, Type, ProtocolResponse["result"]> {
-                const data = yield* apiRequest("getTypeFromTypeNode", {
-                    snapshot: owner.snapshotId,
-                    project: owner.project.handle,
-                    location: getNodeRequestHandle(node),
-                });
-                return owner.objectRegistry.getOrCreateType(data);
-            },
-        );
+        return getGeneratorMethod(this, this.#generatorMethods ??= createGeneratorMethodCache(85), 23, this.#getTypeFromTypeNode, this.#getTypeFromTypeNodeGen);
+    }
+
+    #getTypeFromTypeNode(node: TypeNode): Type {
+        const data = this.client.apiRequest("getTypeFromTypeNode", {
+            snapshot: this.snapshotId,
+            project: this.project.handle,
+            location: getNodeRequestHandle(node),
+        });
+        return this.objectRegistry.getOrCreateType(data);
+    }
+
+    *#getTypeFromTypeNodeGen(node: TypeNode): Generator<ProtocolRequest, Type, ProtocolResponse["result"]> {
+        const data = yield* apiRequest("getTypeFromTypeNode", {
+            snapshot: this.snapshotId,
+            project: this.project.handle,
+            location: getNodeRequestHandle(node),
+        });
+        return this.objectRegistry.getOrCreateType(data);
     }
 
     /** Get the widened type. Always returns a type. */
@@ -4991,27 +4795,25 @@ export class Checker {
         (type: Type): Type;
         gen(type: Type): Generator<ProtocolRequest, Type, ProtocolResponse["result"]>;
     } {
-        const owner = this;
-        return cacheGeneratorMethod(
-            owner,
-            "getWidenedType",
-            function (type: Type): Type {
-                const data = owner.client.apiRequest("getWidenedType", {
-                    snapshot: owner.snapshotId,
-                    project: owner.project.handle,
-                    type: type.id,
-                });
-                return owner.objectRegistry.getOrCreateType(data);
-            },
-            function* (type: Type): Generator<ProtocolRequest, Type, ProtocolResponse["result"]> {
-                const data = yield* apiRequest("getWidenedType", {
-                    snapshot: owner.snapshotId,
-                    project: owner.project.handle,
-                    type: type.id,
-                });
-                return owner.objectRegistry.getOrCreateType(data);
-            },
-        );
+        return getGeneratorMethod(this, this.#generatorMethods ??= createGeneratorMethodCache(85), 24, this.#getWidenedType, this.#getWidenedTypeGen);
+    }
+
+    #getWidenedType(type: Type): Type {
+        const data = this.client.apiRequest("getWidenedType", {
+            snapshot: this.snapshotId,
+            project: this.project.handle,
+            type: type.id,
+        });
+        return this.objectRegistry.getOrCreateType(data);
+    }
+
+    *#getWidenedTypeGen(type: Type): Generator<ProtocolRequest, Type, ProtocolResponse["result"]> {
+        const data = yield* apiRequest("getWidenedType", {
+            snapshot: this.snapshotId,
+            project: this.project.handle,
+            type: type.id,
+        });
+        return this.objectRegistry.getOrCreateType(data);
     }
 
     /**
@@ -5022,108 +4824,100 @@ export class Checker {
         (signature: Signature, index: number): Type;
         gen(signature: Signature, index: number): Generator<ProtocolRequest, Type, ProtocolResponse["result"]>;
     } {
-        const owner = this;
-        return cacheGeneratorMethod(
-            owner,
-            "getParameterType",
-            function (signature: Signature, index: number): Type {
-                const data = owner.client.apiRequest("getParameterType", {
-                    snapshot: owner.snapshotId,
-                    project: owner.project.handle,
-                    signature: signature.id,
-                    index,
-                });
-                return owner.objectRegistry.getOrCreateType(data);
-            },
-            function* (signature: Signature, index: number): Generator<ProtocolRequest, Type, ProtocolResponse["result"]> {
-                const data = yield* apiRequest("getParameterType", {
-                    snapshot: owner.snapshotId,
-                    project: owner.project.handle,
-                    signature: signature.id,
-                    index,
-                });
-                return owner.objectRegistry.getOrCreateType(data);
-            },
-        );
+        return getGeneratorMethod(this, this.#generatorMethods ??= createGeneratorMethodCache(85), 25, this.#getParameterType, this.#getParameterTypeGen);
+    }
+
+    #getParameterType(signature: Signature, index: number): Type {
+        const data = this.client.apiRequest("getParameterType", {
+            snapshot: this.snapshotId,
+            project: this.project.handle,
+            signature: signature.id,
+            index,
+        });
+        return this.objectRegistry.getOrCreateType(data);
+    }
+
+    *#getParameterTypeGen(signature: Signature, index: number): Generator<ProtocolRequest, Type, ProtocolResponse["result"]> {
+        const data = yield* apiRequest("getParameterType", {
+            snapshot: this.snapshotId,
+            project: this.project.handle,
+            signature: signature.id,
+            index,
+        });
+        return this.objectRegistry.getOrCreateType(data);
     }
 
     get isArrayLikeType(): {
         (type: Type): boolean;
         gen(type: Type): Generator<ProtocolRequest, boolean, ProtocolResponse["result"]>;
     } {
-        const owner = this;
-        return cacheGeneratorMethod(
-            owner,
-            "isArrayLikeType",
-            function (type: Type): boolean {
-                return owner.client.apiRequest("isArrayLikeType", {
-                    snapshot: owner.snapshotId,
-                    project: owner.project.handle,
-                    type: type.id,
-                });
-            },
-            function* (type: Type): Generator<ProtocolRequest, boolean, ProtocolResponse["result"]> {
-                return yield* apiRequest("isArrayLikeType", {
-                    snapshot: owner.snapshotId,
-                    project: owner.project.handle,
-                    type: type.id,
-                });
-            },
-        );
+        return getGeneratorMethod(this, this.#generatorMethods ??= createGeneratorMethodCache(85), 26, this.#isArrayLikeType, this.#isArrayLikeTypeGen);
+    }
+
+    #isArrayLikeType(type: Type): boolean {
+        return this.client.apiRequest("isArrayLikeType", {
+            snapshot: this.snapshotId,
+            project: this.project.handle,
+            type: type.id,
+        });
+    }
+
+    *#isArrayLikeTypeGen(type: Type): Generator<ProtocolRequest, boolean, ProtocolResponse["result"]> {
+        return yield* apiRequest("isArrayLikeType", {
+            snapshot: this.snapshotId,
+            project: this.project.handle,
+            type: type.id,
+        });
     }
 
     get isTypeAssignableTo(): {
         (source: Type, target: Type): boolean;
         gen(source: Type, target: Type): Generator<ProtocolRequest, boolean, ProtocolResponse["result"]>;
     } {
-        const owner = this;
-        return cacheGeneratorMethod(
-            owner,
-            "isTypeAssignableTo",
-            function (source: Type, target: Type): boolean {
-                return owner.client.apiRequest("isTypeAssignableTo", {
-                    snapshot: owner.snapshotId,
-                    project: owner.project.handle,
-                    source: source.id,
-                    target: target.id,
-                });
-            },
-            function* (source: Type, target: Type): Generator<ProtocolRequest, boolean, ProtocolResponse["result"]> {
-                return yield* apiRequest("isTypeAssignableTo", {
-                    snapshot: owner.snapshotId,
-                    project: owner.project.handle,
-                    source: source.id,
-                    target: target.id,
-                });
-            },
-        );
+        return getGeneratorMethod(this, this.#generatorMethods ??= createGeneratorMethodCache(85), 27, this.#isTypeAssignableTo, this.#isTypeAssignableToGen);
+    }
+
+    #isTypeAssignableTo(source: Type, target: Type): boolean {
+        return this.client.apiRequest("isTypeAssignableTo", {
+            snapshot: this.snapshotId,
+            project: this.project.handle,
+            source: source.id,
+            target: target.id,
+        });
+    }
+
+    *#isTypeAssignableToGen(source: Type, target: Type): Generator<ProtocolRequest, boolean, ProtocolResponse["result"]> {
+        return yield* apiRequest("isTypeAssignableTo", {
+            snapshot: this.snapshotId,
+            project: this.project.handle,
+            source: source.id,
+            target: target.id,
+        });
     }
 
     get getShorthandAssignmentValueSymbol(): {
         (node: Node): Symbol | undefined;
         gen(node: Node): Generator<ProtocolRequest, Symbol | undefined, ProtocolResponse["result"]>;
     } {
-        const owner = this;
-        return cacheGeneratorMethod(
-            owner,
-            "getShorthandAssignmentValueSymbol",
-            function (node: Node): Symbol | undefined {
-                const data = owner.client.apiRequest("getShorthandAssignmentValueSymbol", {
-                    snapshot: owner.snapshotId,
-                    project: owner.project.handle,
-                    location: getNodeRequestHandle(node),
-                });
-                return data ? owner.objectRegistry.getOrCreateSymbol(data) : undefined;
-            },
-            function* (node: Node): Generator<ProtocolRequest, Symbol | undefined, ProtocolResponse["result"]> {
-                const data = yield* apiRequest("getShorthandAssignmentValueSymbol", {
-                    snapshot: owner.snapshotId,
-                    project: owner.project.handle,
-                    location: getNodeRequestHandle(node),
-                });
-                return data ? owner.objectRegistry.getOrCreateSymbol(data) : undefined;
-            },
-        );
+        return getGeneratorMethod(this, this.#generatorMethods ??= createGeneratorMethodCache(85), 28, this.#getShorthandAssignmentValueSymbol, this.#getShorthandAssignmentValueSymbolGen);
+    }
+
+    #getShorthandAssignmentValueSymbol(node: Node): Symbol | undefined {
+        const data = this.client.apiRequest("getShorthandAssignmentValueSymbol", {
+            snapshot: this.snapshotId,
+            project: this.project.handle,
+            location: getNodeRequestHandle(node),
+        });
+        return data ? this.objectRegistry.getOrCreateSymbol(data) : undefined;
+    }
+
+    *#getShorthandAssignmentValueSymbolGen(node: Node): Generator<ProtocolRequest, Symbol | undefined, ProtocolResponse["result"]> {
+        const data = yield* apiRequest("getShorthandAssignmentValueSymbol", {
+            snapshot: this.snapshotId,
+            project: this.project.handle,
+            location: getNodeRequestHandle(node),
+        });
+        return data ? this.objectRegistry.getOrCreateSymbol(data) : undefined;
     }
 
     /**
@@ -5135,436 +4929,394 @@ export class Checker {
         (symbol: Symbol, location: Node): Type;
         gen(symbol: Symbol, location: Node): Generator<ProtocolRequest, Type, ProtocolResponse["result"]>;
     } {
-        const owner = this;
-        return cacheGeneratorMethod(
-            owner,
-            "getTypeOfSymbolAtLocation",
-            function (symbol: Symbol, location: Node): Type {
-                const data = owner.client.apiRequest("getTypeOfSymbolAtLocation", {
-                    snapshot: owner.snapshotId,
-                    project: owner.project.handle,
-                    symbol: symbol.reference,
-                    location: getNodeRequestHandle(location),
-                });
-                return owner.objectRegistry.getOrCreateType(data);
-            },
-            function* (symbol: Symbol, location: Node): Generator<ProtocolRequest, Type, ProtocolResponse["result"]> {
-                const data = yield* apiRequest("getTypeOfSymbolAtLocation", {
-                    snapshot: owner.snapshotId,
-                    project: owner.project.handle,
-                    symbol: symbol.reference,
-                    location: getNodeRequestHandle(location),
-                });
-                return owner.objectRegistry.getOrCreateType(data);
-            },
-        );
+        return getGeneratorMethod(this, this.#generatorMethods ??= createGeneratorMethodCache(85), 29, this.#getTypeOfSymbolAtLocation, this.#getTypeOfSymbolAtLocationGen);
+    }
+
+    #getTypeOfSymbolAtLocation(symbol: Symbol, location: Node): Type {
+        const data = this.client.apiRequest("getTypeOfSymbolAtLocation", {
+            snapshot: this.snapshotId,
+            project: this.project.handle,
+            symbol: symbol.reference,
+            location: getNodeRequestHandle(location),
+        });
+        return this.objectRegistry.getOrCreateType(data);
+    }
+
+    *#getTypeOfSymbolAtLocationGen(symbol: Symbol, location: Node): Generator<ProtocolRequest, Type, ProtocolResponse["result"]> {
+        const data = yield* apiRequest("getTypeOfSymbolAtLocation", {
+            snapshot: this.snapshotId,
+            project: this.project.handle,
+            symbol: symbol.reference,
+            location: getNodeRequestHandle(location),
+        });
+        return this.objectRegistry.getOrCreateType(data);
     }
 
     private get getIntrinsicType(): {
         (method: IntrinsicTypeMethod): Type;
         gen(method: IntrinsicTypeMethod): Generator<ProtocolRequest, Type, ProtocolResponse["result"]>;
     } {
-        const owner = this;
-        return cacheGeneratorMethod(
-            owner,
-            "getIntrinsicType",
-            function (method: IntrinsicTypeMethod): Type {
-                const data = owner.client.apiRequest(method, {
-                    snapshot: owner.snapshotId,
-                    project: owner.project.handle,
-                });
-                return owner.objectRegistry.getOrCreateType(data);
-            },
-            function* (method: IntrinsicTypeMethod): Generator<ProtocolRequest, Type, ProtocolResponse["result"]> {
-                const data = yield* apiRequest(method, {
-                    snapshot: owner.snapshotId,
-                    project: owner.project.handle,
-                });
-                return owner.objectRegistry.getOrCreateType(data);
-            },
-        );
+        return getGeneratorMethod(this, this.#generatorMethods ??= createGeneratorMethodCache(85), 30, this.#getIntrinsicType, this.#getIntrinsicTypeGen);
+    }
+
+    #getIntrinsicType(method: IntrinsicTypeMethod): Type {
+        const data = this.client.apiRequest(method, {
+            snapshot: this.snapshotId,
+            project: this.project.handle,
+        });
+        return this.objectRegistry.getOrCreateType(data);
+    }
+
+    *#getIntrinsicTypeGen(method: IntrinsicTypeMethod): Generator<ProtocolRequest, Type, ProtocolResponse["result"]> {
+        const data = yield* apiRequest(method, {
+            snapshot: this.snapshotId,
+            project: this.project.handle,
+        });
+        return this.objectRegistry.getOrCreateType(data);
     }
 
     get getAnyType(): {
         (): Type;
         gen(): Generator<ProtocolRequest, Type, ProtocolResponse["result"]>;
     } {
-        const owner = this;
-        return cacheGeneratorMethod(
-            owner,
-            "getAnyType",
-            function (): Type {
-                return owner.getIntrinsicType("getAnyType");
-            },
-            function* (): Generator<ProtocolRequest, Type, ProtocolResponse["result"]> {
-                return yield* owner.getIntrinsicType.gen("getAnyType");
-            },
-        );
+        return getGeneratorMethod(this, this.#generatorMethods ??= createGeneratorMethodCache(85), 31, this.#getAnyType, this.#getAnyTypeGen);
+    }
+
+    #getAnyType(): Type {
+        return this.#getIntrinsicType("getAnyType");
+    }
+
+    *#getAnyTypeGen(): Generator<ProtocolRequest, Type, ProtocolResponse["result"]> {
+        return yield* this.#getIntrinsicTypeGen("getAnyType");
     }
     get getStringType(): {
         (): Type;
         gen(): Generator<ProtocolRequest, Type, ProtocolResponse["result"]>;
     } {
-        const owner = this;
-        return cacheGeneratorMethod(
-            owner,
-            "getStringType",
-            function (): Type {
-                return owner.getIntrinsicType("getStringType");
-            },
-            function* (): Generator<ProtocolRequest, Type, ProtocolResponse["result"]> {
-                return yield* owner.getIntrinsicType.gen("getStringType");
-            },
-        );
+        return getGeneratorMethod(this, this.#generatorMethods ??= createGeneratorMethodCache(85), 32, this.#getStringType, this.#getStringTypeGen);
+    }
+
+    #getStringType(): Type {
+        return this.#getIntrinsicType("getStringType");
+    }
+
+    *#getStringTypeGen(): Generator<ProtocolRequest, Type, ProtocolResponse["result"]> {
+        return yield* this.#getIntrinsicTypeGen("getStringType");
     }
     get getNumberType(): {
         (): Type;
         gen(): Generator<ProtocolRequest, Type, ProtocolResponse["result"]>;
     } {
-        const owner = this;
-        return cacheGeneratorMethod(
-            owner,
-            "getNumberType",
-            function (): Type {
-                return owner.getIntrinsicType("getNumberType");
-            },
-            function* (): Generator<ProtocolRequest, Type, ProtocolResponse["result"]> {
-                return yield* owner.getIntrinsicType.gen("getNumberType");
-            },
-        );
+        return getGeneratorMethod(this, this.#generatorMethods ??= createGeneratorMethodCache(85), 33, this.#getNumberType, this.#getNumberTypeGen);
+    }
+
+    #getNumberType(): Type {
+        return this.#getIntrinsicType("getNumberType");
+    }
+
+    *#getNumberTypeGen(): Generator<ProtocolRequest, Type, ProtocolResponse["result"]> {
+        return yield* this.#getIntrinsicTypeGen("getNumberType");
     }
     get getBooleanType(): {
         (): Type;
         gen(): Generator<ProtocolRequest, Type, ProtocolResponse["result"]>;
     } {
-        const owner = this;
-        return cacheGeneratorMethod(
-            owner,
-            "getBooleanType",
-            function (): Type {
-                return owner.getIntrinsicType("getBooleanType");
-            },
-            function* (): Generator<ProtocolRequest, Type, ProtocolResponse["result"]> {
-                return yield* owner.getIntrinsicType.gen("getBooleanType");
-            },
-        );
+        return getGeneratorMethod(this, this.#generatorMethods ??= createGeneratorMethodCache(85), 34, this.#getBooleanType, this.#getBooleanTypeGen);
+    }
+
+    #getBooleanType(): Type {
+        return this.#getIntrinsicType("getBooleanType");
+    }
+
+    *#getBooleanTypeGen(): Generator<ProtocolRequest, Type, ProtocolResponse["result"]> {
+        return yield* this.#getIntrinsicTypeGen("getBooleanType");
     }
     get getVoidType(): {
         (): Type;
         gen(): Generator<ProtocolRequest, Type, ProtocolResponse["result"]>;
     } {
-        const owner = this;
-        return cacheGeneratorMethod(
-            owner,
-            "getVoidType",
-            function (): Type {
-                return owner.getIntrinsicType("getVoidType");
-            },
-            function* (): Generator<ProtocolRequest, Type, ProtocolResponse["result"]> {
-                return yield* owner.getIntrinsicType.gen("getVoidType");
-            },
-        );
+        return getGeneratorMethod(this, this.#generatorMethods ??= createGeneratorMethodCache(85), 35, this.#getVoidType, this.#getVoidTypeGen);
+    }
+
+    #getVoidType(): Type {
+        return this.#getIntrinsicType("getVoidType");
+    }
+
+    *#getVoidTypeGen(): Generator<ProtocolRequest, Type, ProtocolResponse["result"]> {
+        return yield* this.#getIntrinsicTypeGen("getVoidType");
     }
     get getUndefinedType(): {
         (): Type;
         gen(): Generator<ProtocolRequest, Type, ProtocolResponse["result"]>;
     } {
-        const owner = this;
-        return cacheGeneratorMethod(
-            owner,
-            "getUndefinedType",
-            function (): Type {
-                return owner.getIntrinsicType("getUndefinedType");
-            },
-            function* (): Generator<ProtocolRequest, Type, ProtocolResponse["result"]> {
-                return yield* owner.getIntrinsicType.gen("getUndefinedType");
-            },
-        );
+        return getGeneratorMethod(this, this.#generatorMethods ??= createGeneratorMethodCache(85), 36, this.#getUndefinedType, this.#getUndefinedTypeGen);
+    }
+
+    #getUndefinedType(): Type {
+        return this.#getIntrinsicType("getUndefinedType");
+    }
+
+    *#getUndefinedTypeGen(): Generator<ProtocolRequest, Type, ProtocolResponse["result"]> {
+        return yield* this.#getIntrinsicTypeGen("getUndefinedType");
     }
     get getNullType(): {
         (): Type;
         gen(): Generator<ProtocolRequest, Type, ProtocolResponse["result"]>;
     } {
-        const owner = this;
-        return cacheGeneratorMethod(
-            owner,
-            "getNullType",
-            function (): Type {
-                return owner.getIntrinsicType("getNullType");
-            },
-            function* (): Generator<ProtocolRequest, Type, ProtocolResponse["result"]> {
-                return yield* owner.getIntrinsicType.gen("getNullType");
-            },
-        );
+        return getGeneratorMethod(this, this.#generatorMethods ??= createGeneratorMethodCache(85), 37, this.#getNullType, this.#getNullTypeGen);
+    }
+
+    #getNullType(): Type {
+        return this.#getIntrinsicType("getNullType");
+    }
+
+    *#getNullTypeGen(): Generator<ProtocolRequest, Type, ProtocolResponse["result"]> {
+        return yield* this.#getIntrinsicTypeGen("getNullType");
     }
     get getNeverType(): {
         (): Type;
         gen(): Generator<ProtocolRequest, Type, ProtocolResponse["result"]>;
     } {
-        const owner = this;
-        return cacheGeneratorMethod(
-            owner,
-            "getNeverType",
-            function (): Type {
-                return owner.getIntrinsicType("getNeverType");
-            },
-            function* (): Generator<ProtocolRequest, Type, ProtocolResponse["result"]> {
-                return yield* owner.getIntrinsicType.gen("getNeverType");
-            },
-        );
+        return getGeneratorMethod(this, this.#generatorMethods ??= createGeneratorMethodCache(85), 38, this.#getNeverType, this.#getNeverTypeGen);
+    }
+
+    #getNeverType(): Type {
+        return this.#getIntrinsicType("getNeverType");
+    }
+
+    *#getNeverTypeGen(): Generator<ProtocolRequest, Type, ProtocolResponse["result"]> {
+        return yield* this.#getIntrinsicTypeGen("getNeverType");
     }
     get getUnknownType(): {
         (): Type;
         gen(): Generator<ProtocolRequest, Type, ProtocolResponse["result"]>;
     } {
-        const owner = this;
-        return cacheGeneratorMethod(
-            owner,
-            "getUnknownType",
-            function (): Type {
-                return owner.getIntrinsicType("getUnknownType");
-            },
-            function* (): Generator<ProtocolRequest, Type, ProtocolResponse["result"]> {
-                return yield* owner.getIntrinsicType.gen("getUnknownType");
-            },
-        );
+        return getGeneratorMethod(this, this.#generatorMethods ??= createGeneratorMethodCache(85), 39, this.#getUnknownType, this.#getUnknownTypeGen);
+    }
+
+    #getUnknownType(): Type {
+        return this.#getIntrinsicType("getUnknownType");
+    }
+
+    *#getUnknownTypeGen(): Generator<ProtocolRequest, Type, ProtocolResponse["result"]> {
+        return yield* this.#getIntrinsicTypeGen("getUnknownType");
     }
     get getBigIntType(): {
         (): Type;
         gen(): Generator<ProtocolRequest, Type, ProtocolResponse["result"]>;
     } {
-        const owner = this;
-        return cacheGeneratorMethod(
-            owner,
-            "getBigIntType",
-            function (): Type {
-                return owner.getIntrinsicType("getBigIntType");
-            },
-            function* (): Generator<ProtocolRequest, Type, ProtocolResponse["result"]> {
-                return yield* owner.getIntrinsicType.gen("getBigIntType");
-            },
-        );
+        return getGeneratorMethod(this, this.#generatorMethods ??= createGeneratorMethodCache(85), 40, this.#getBigIntType, this.#getBigIntTypeGen);
+    }
+
+    #getBigIntType(): Type {
+        return this.#getIntrinsicType("getBigIntType");
+    }
+
+    *#getBigIntTypeGen(): Generator<ProtocolRequest, Type, ProtocolResponse["result"]> {
+        return yield* this.#getIntrinsicTypeGen("getBigIntType");
     }
     get getESSymbolType(): {
         (): Type;
         gen(): Generator<ProtocolRequest, Type, ProtocolResponse["result"]>;
     } {
-        const owner = this;
-        return cacheGeneratorMethod(
-            owner,
-            "getESSymbolType",
-            function (): Type {
-                return owner.getIntrinsicType("getESSymbolType");
-            },
-            function* (): Generator<ProtocolRequest, Type, ProtocolResponse["result"]> {
-                return yield* owner.getIntrinsicType.gen("getESSymbolType");
-            },
-        );
+        return getGeneratorMethod(this, this.#generatorMethods ??= createGeneratorMethodCache(85), 41, this.#getESSymbolType, this.#getESSymbolTypeGen);
+    }
+
+    #getESSymbolType(): Type {
+        return this.#getIntrinsicType("getESSymbolType");
+    }
+
+    *#getESSymbolTypeGen(): Generator<ProtocolRequest, Type, ProtocolResponse["result"]> {
+        return yield* this.#getIntrinsicTypeGen("getESSymbolType");
     }
     get getNonPrimitiveType(): {
         (): Type;
         gen(): Generator<ProtocolRequest, Type, ProtocolResponse["result"]>;
     } {
-        const owner = this;
-        return cacheGeneratorMethod(
-            owner,
-            "getNonPrimitiveType",
-            function (): Type {
-                return owner.getIntrinsicType("getNonPrimitiveType");
-            },
-            function* (): Generator<ProtocolRequest, Type, ProtocolResponse["result"]> {
-                return yield* owner.getIntrinsicType.gen("getNonPrimitiveType");
-            },
-        );
+        return getGeneratorMethod(this, this.#generatorMethods ??= createGeneratorMethodCache(85), 42, this.#getNonPrimitiveType, this.#getNonPrimitiveTypeGen);
+    }
+
+    #getNonPrimitiveType(): Type {
+        return this.#getIntrinsicType("getNonPrimitiveType");
+    }
+
+    *#getNonPrimitiveTypeGen(): Generator<ProtocolRequest, Type, ProtocolResponse["result"]> {
+        return yield* this.#getIntrinsicTypeGen("getNonPrimitiveType");
     }
 
     get typeToTypeNode(): {
         (type: Type, enclosingDeclaration?: Node, flags?: number): TypeNode | undefined;
         gen(type: Type, enclosingDeclaration?: Node, flags?: number): Generator<ProtocolRequest, TypeNode | undefined, ProtocolResponse["result"]>;
     } {
-        const owner = this;
-        return cacheGeneratorMethod(
-            owner,
-            "typeToTypeNode",
-            function (type: Type, enclosingDeclaration?: Node, flags?: number): TypeNode | undefined {
-                const binaryData = owner.client.apiRequestBinary("typeToTypeNode", {
-                    snapshot: owner.snapshotId,
-                    project: owner.project.handle,
-                    type: type.id,
-                    location: enclosingDeclaration ? getNodeRequestHandle(enclosingDeclaration) : undefined,
-                    flags,
-                });
-                if (!binaryData) return undefined;
-                return decodeNode(binaryData) as TypeNode;
-            },
-            function* (type: Type, enclosingDeclaration?: Node, flags?: number): Generator<ProtocolRequest, TypeNode | undefined, ProtocolResponse["result"]> {
-                const binaryData = sourceFileResponseToUint8Array(
-                    yield* apiRequest("typeToTypeNode", {
-                        snapshot: owner.snapshotId,
-                        project: owner.project.handle,
-                        type: type.id,
-                        location: enclosingDeclaration ? getNodeRequestHandle(enclosingDeclaration) : undefined,
-                        flags,
-                    }),
-                );
-                if (!binaryData) return undefined;
-                return decodeNode(binaryData) as TypeNode;
-            },
+        return getGeneratorMethod(this, this.#generatorMethods ??= createGeneratorMethodCache(85), 43, this.#typeToTypeNode, this.#typeToTypeNodeGen);
+    }
+
+    #typeToTypeNode(type: Type, enclosingDeclaration?: Node, flags?: number): TypeNode | undefined {
+        const binaryData = this.client.apiRequestBinary("typeToTypeNode", {
+            snapshot: this.snapshotId,
+            project: this.project.handle,
+            type: type.id,
+            location: enclosingDeclaration ? getNodeRequestHandle(enclosingDeclaration) : undefined,
+            flags,
+        });
+        if (!binaryData) return undefined;
+        return decodeNode(binaryData) as TypeNode;
+    }
+
+    *#typeToTypeNodeGen(type: Type, enclosingDeclaration?: Node, flags?: number): Generator<ProtocolRequest, TypeNode | undefined, ProtocolResponse["result"]> {
+        const binaryData = sourceFileResponseToUint8Array(
+            yield* apiRequest("typeToTypeNode", {
+                snapshot: this.snapshotId,
+                project: this.project.handle,
+                type: type.id,
+                location: enclosingDeclaration ? getNodeRequestHandle(enclosingDeclaration) : undefined,
+                flags,
+            }),
         );
+        if (!binaryData) return undefined;
+        return decodeNode(binaryData) as TypeNode;
     }
 
     get signatureToSignatureDeclaration(): {
         (signature: Signature, kind: SyntaxKind, enclosingDeclaration?: Node, flags?: NodeBuilderFlags): Node | undefined;
         gen(signature: Signature, kind: SyntaxKind, enclosingDeclaration?: Node, flags?: NodeBuilderFlags): Generator<ProtocolRequest, Node | undefined, ProtocolResponse["result"]>;
     } {
-        const owner = this;
-        return cacheGeneratorMethod(
-            owner,
-            "signatureToSignatureDeclaration",
-            function (signature: Signature, kind: SyntaxKind, enclosingDeclaration?: Node, flags?: NodeBuilderFlags): Node | undefined {
-                const binaryData = owner.client.apiRequestBinary("signatureToSignatureDeclaration", {
-                    snapshot: owner.snapshotId,
-                    project: owner.project.handle,
-                    signature: signature.id,
-                    kind,
-                    location: enclosingDeclaration ? getNodeRequestHandle(enclosingDeclaration) : undefined,
-                    flags,
-                });
-                if (!binaryData) return undefined;
-                return decodeNode(binaryData) as Node;
-            },
-            function* (signature: Signature, kind: SyntaxKind, enclosingDeclaration?: Node, flags?: NodeBuilderFlags): Generator<ProtocolRequest, Node | undefined, ProtocolResponse["result"]> {
-                const binaryData = sourceFileResponseToUint8Array(
-                    yield* apiRequest("signatureToSignatureDeclaration", {
-                        snapshot: owner.snapshotId,
-                        project: owner.project.handle,
-                        signature: signature.id,
-                        kind,
-                        location: enclosingDeclaration ? getNodeRequestHandle(enclosingDeclaration) : undefined,
-                        flags,
-                    }),
-                );
-                if (!binaryData) return undefined;
-                return decodeNode(binaryData) as Node;
-            },
+        return getGeneratorMethod(this, this.#generatorMethods ??= createGeneratorMethodCache(85), 44, this.#signatureToSignatureDeclaration, this.#signatureToSignatureDeclarationGen);
+    }
+
+    #signatureToSignatureDeclaration(signature: Signature, kind: SyntaxKind, enclosingDeclaration?: Node, flags?: NodeBuilderFlags): Node | undefined {
+        const binaryData = this.client.apiRequestBinary("signatureToSignatureDeclaration", {
+            snapshot: this.snapshotId,
+            project: this.project.handle,
+            signature: signature.id,
+            kind,
+            location: enclosingDeclaration ? getNodeRequestHandle(enclosingDeclaration) : undefined,
+            flags,
+        });
+        if (!binaryData) return undefined;
+        return decodeNode(binaryData) as Node;
+    }
+
+    *#signatureToSignatureDeclarationGen(signature: Signature, kind: SyntaxKind, enclosingDeclaration?: Node, flags?: NodeBuilderFlags): Generator<ProtocolRequest, Node | undefined, ProtocolResponse["result"]> {
+        const binaryData = sourceFileResponseToUint8Array(
+            yield* apiRequest("signatureToSignatureDeclaration", {
+                snapshot: this.snapshotId,
+                project: this.project.handle,
+                signature: signature.id,
+                kind,
+                location: enclosingDeclaration ? getNodeRequestHandle(enclosingDeclaration) : undefined,
+                flags,
+            }),
         );
+        if (!binaryData) return undefined;
+        return decodeNode(binaryData) as Node;
     }
 
     get typeToString(): {
         (type: Type, enclosingDeclaration?: Node, flags?: TypeFormatFlags): string;
         gen(type: Type, enclosingDeclaration?: Node, flags?: TypeFormatFlags): Generator<ProtocolRequest, string, ProtocolResponse["result"]>;
     } {
-        const owner = this;
-        return cacheGeneratorMethod(
-            owner,
-            "typeToString",
-            function (type: Type, enclosingDeclaration?: Node, flags?: TypeFormatFlags): string {
-                const result = owner.client.apiRequest("typeToString", {
-                    snapshot: owner.snapshotId,
-                    project: owner.project.handle,
-                    type: type.id,
-                    location: enclosingDeclaration ? getNodeRequestHandle(enclosingDeclaration) : undefined,
-                    flags,
-                });
-                if (typeof result !== "string") throw new TypeError("typeToString returned a non-string result");
-                return result;
-            },
-            function* (type: Type, enclosingDeclaration?: Node, flags?: TypeFormatFlags): Generator<ProtocolRequest, string, ProtocolResponse["result"]> {
-                const result = yield* apiRequest("typeToString", {
-                    snapshot: owner.snapshotId,
-                    project: owner.project.handle,
-                    type: type.id,
-                    location: enclosingDeclaration ? getNodeRequestHandle(enclosingDeclaration) : undefined,
-                    flags,
-                });
-                if (typeof result !== "string") throw new TypeError("typeToString returned a non-string result");
-                return result;
-            },
-        );
+        return getGeneratorMethod(this, this.#generatorMethods ??= createGeneratorMethodCache(85), 45, this.#typeToString, this.#typeToStringGen);
+    }
+
+    #typeToString(type: Type, enclosingDeclaration?: Node, flags?: TypeFormatFlags): string {
+        const result = this.client.apiRequest("typeToString", {
+            snapshot: this.snapshotId,
+            project: this.project.handle,
+            type: type.id,
+            location: enclosingDeclaration ? getNodeRequestHandle(enclosingDeclaration) : undefined,
+            flags,
+        });
+        if (typeof result !== "string") throw new TypeError("typeToString returned a non-string result");
+        return result;
+    }
+
+    *#typeToStringGen(type: Type, enclosingDeclaration?: Node, flags?: TypeFormatFlags): Generator<ProtocolRequest, string, ProtocolResponse["result"]> {
+        const result = yield* apiRequest("typeToString", {
+            snapshot: this.snapshotId,
+            project: this.project.handle,
+            type: type.id,
+            location: enclosingDeclaration ? getNodeRequestHandle(enclosingDeclaration) : undefined,
+            flags,
+        });
+        if (typeof result !== "string") throw new TypeError("typeToString returned a non-string result");
+        return result;
     }
 
     get isContextSensitive(): {
         (node: Node): boolean;
         gen(node: Node): Generator<ProtocolRequest, boolean, ProtocolResponse["result"]>;
     } {
-        const owner = this;
-        return cacheGeneratorMethod(
-            owner,
-            "isContextSensitive",
-            function (node: Node): boolean {
-                return owner.client.apiRequest("isContextSensitive", {
-                    snapshot: owner.snapshotId,
-                    project: owner.project.handle,
-                    location: getNodeRequestHandle(node),
-                });
-            },
-            function* (node: Node): Generator<ProtocolRequest, boolean, ProtocolResponse["result"]> {
-                return yield* apiRequest("isContextSensitive", {
-                    snapshot: owner.snapshotId,
-                    project: owner.project.handle,
-                    location: getNodeRequestHandle(node),
-                });
-            },
-        );
+        return getGeneratorMethod(this, this.#generatorMethods ??= createGeneratorMethodCache(85), 46, this.#isContextSensitive, this.#isContextSensitiveGen);
+    }
+
+    #isContextSensitive(node: Node): boolean {
+        return this.client.apiRequest("isContextSensitive", {
+            snapshot: this.snapshotId,
+            project: this.project.handle,
+            location: getNodeRequestHandle(node),
+        });
+    }
+
+    *#isContextSensitiveGen(node: Node): Generator<ProtocolRequest, boolean, ProtocolResponse["result"]> {
+        return yield* apiRequest("isContextSensitive", {
+            snapshot: this.snapshotId,
+            project: this.project.handle,
+            location: getNodeRequestHandle(node),
+        });
     }
 
     get isArrayType(): {
         (type: Type): boolean;
         gen(type: Type): Generator<ProtocolRequest, boolean, ProtocolResponse["result"]>;
     } {
-        const owner = this;
-        return cacheGeneratorMethod(
-            owner,
-            "isArrayType",
-            function (type: Type): boolean {
-                return owner.client.apiRequest("isArrayType", {
-                    snapshot: owner.snapshotId,
-                    project: owner.project.handle,
-                    type: type.id,
-                });
-            },
-            function* (type: Type): Generator<ProtocolRequest, boolean, ProtocolResponse["result"]> {
-                return yield* apiRequest("isArrayType", {
-                    snapshot: owner.snapshotId,
-                    project: owner.project.handle,
-                    type: type.id,
-                });
-            },
-        );
+        return getGeneratorMethod(this, this.#generatorMethods ??= createGeneratorMethodCache(85), 47, this.#isArrayType, this.#isArrayTypeGen);
+    }
+
+    #isArrayType(type: Type): boolean {
+        return this.client.apiRequest("isArrayType", {
+            snapshot: this.snapshotId,
+            project: this.project.handle,
+            type: type.id,
+        });
+    }
+
+    *#isArrayTypeGen(type: Type): Generator<ProtocolRequest, boolean, ProtocolResponse["result"]> {
+        return yield* apiRequest("isArrayType", {
+            snapshot: this.snapshotId,
+            project: this.project.handle,
+            type: type.id,
+        });
     }
 
     get isTupleType(): {
         (type: Type): boolean;
         gen(type: Type): Generator<ProtocolRequest, boolean, ProtocolResponse["result"]>;
     } {
-        const owner = this;
-        return cacheGeneratorMethod(
-            owner,
-            "isTupleType",
-            function (type: Type): boolean {
-                return type.isTupleType();
-            },
-            function* (type: Type): Generator<ProtocolRequest, boolean, ProtocolResponse["result"]> {
-                return type.isTupleType();
-            },
-        );
+        return getGeneratorMethod(this, this.#generatorMethods ??= createGeneratorMethodCache(85), 48, this.#isTupleType, this.#isTupleTypeGen);
+    }
+
+    #isTupleType(type: Type): boolean {
+        return type.isTupleType();
+    }
+
+    *#isTupleTypeGen(type: Type): Generator<ProtocolRequest, boolean, ProtocolResponse["result"]> {
+        return type.isTupleType();
     }
 
     get isTupleTypeTarget(): {
         (type: Type): boolean;
         gen(type: Type): Generator<ProtocolRequest, boolean, ProtocolResponse["result"]>;
     } {
-        const owner = this;
-        return cacheGeneratorMethod(
-            owner,
-            "isTupleTypeTarget",
-            function (type: Type): boolean {
-                return type.isTupleTypeTarget();
-            },
-            function* (type: Type): Generator<ProtocolRequest, boolean, ProtocolResponse["result"]> {
-                return type.isTupleTypeTarget();
-            },
-        );
+        return getGeneratorMethod(this, this.#generatorMethods ??= createGeneratorMethodCache(85), 49, this.#isTupleTypeTarget, this.#isTupleTypeTargetGen);
+    }
+
+    #isTupleTypeTarget(type: Type): boolean {
+        return type.isTupleTypeTarget();
+    }
+
+    *#isTupleTypeTargetGen(type: Type): Generator<ProtocolRequest, boolean, ProtocolResponse["result"]> {
+        return type.isTupleTypeTarget();
     }
 
     /**
@@ -5580,25 +5332,23 @@ export class Checker {
         (symbol: Symbol): boolean;
         gen(symbol: Symbol): Generator<ProtocolRequest, boolean, ProtocolResponse["result"]>;
     } {
-        const owner = this;
-        return cacheGeneratorMethod(
-            owner,
-            "isReadonlySymbol",
-            function (symbol: Symbol): boolean {
-                return owner.client.apiRequest("isReadonlySymbol", {
-                    snapshot: owner.snapshotId,
-                    project: owner.project.handle,
-                    symbol: symbol.reference,
-                });
-            },
-            function* (symbol: Symbol): Generator<ProtocolRequest, boolean, ProtocolResponse["result"]> {
-                return yield* apiRequest("isReadonlySymbol", {
-                    snapshot: owner.snapshotId,
-                    project: owner.project.handle,
-                    symbol: symbol.reference,
-                });
-            },
-        );
+        return getGeneratorMethod(this, this.#generatorMethods ??= createGeneratorMethodCache(85), 50, this.#isReadonlySymbol, this.#isReadonlySymbolGen);
+    }
+
+    #isReadonlySymbol(symbol: Symbol): boolean {
+        return this.client.apiRequest("isReadonlySymbol", {
+            snapshot: this.snapshotId,
+            project: this.project.handle,
+            symbol: symbol.reference,
+        });
+    }
+
+    *#isReadonlySymbolGen(symbol: Symbol): Generator<ProtocolRequest, boolean, ProtocolResponse["result"]> {
+        return yield* apiRequest("isReadonlySymbol", {
+            snapshot: this.snapshotId,
+            project: this.project.handle,
+            symbol: symbol.reference,
+        });
     }
 
     /** Get the return type of a signature. Always returns a type. */
@@ -5606,17 +5356,15 @@ export class Checker {
         (signature: Signature): Type;
         gen(signature: Signature): Generator<ProtocolRequest, Type, ProtocolResponse["result"]>;
     } {
-        const owner = this;
-        return cacheGeneratorMethod(
-            owner,
-            "getReturnTypeOfSignature",
-            function (signature: Signature): Type {
-                return signature.getReturnType();
-            },
-            function* (signature: Signature): Generator<ProtocolRequest, Type, ProtocolResponse["result"]> {
-                return yield* signature.getReturnType.gen();
-            },
-        );
+        return getGeneratorMethod(this, this.#generatorMethods ??= createGeneratorMethodCache(85), 51, this.#getReturnTypeOfSignature, this.#getReturnTypeOfSignatureGen);
+    }
+
+    #getReturnTypeOfSignature(signature: Signature): Type {
+        return signature.getReturnType();
+    }
+
+    *#getReturnTypeOfSignatureGen(signature: Signature): Generator<ProtocolRequest, Type, ProtocolResponse["result"]> {
+        return yield* signature.getReturnType.gen();
     }
 
     /**
@@ -5627,66 +5375,62 @@ export class Checker {
         (signature: Signature): Type;
         gen(signature: Signature): Generator<ProtocolRequest, Type, ProtocolResponse["result"]>;
     } {
-        const owner = this;
-        return cacheGeneratorMethod(
-            owner,
-            "getRestTypeOfSignature",
-            function (signature: Signature): Type {
-                const data = owner.client.apiRequest("getRestTypeOfSignature", {
-                    snapshot: owner.snapshotId,
-                    project: owner.project.handle,
-                    signature: signature.id,
-                });
-                return owner.objectRegistry.getOrCreateType(data);
-            },
-            function* (signature: Signature): Generator<ProtocolRequest, Type, ProtocolResponse["result"]> {
-                const data = yield* apiRequest("getRestTypeOfSignature", {
-                    snapshot: owner.snapshotId,
-                    project: owner.project.handle,
-                    signature: signature.id,
-                });
-                return owner.objectRegistry.getOrCreateType(data);
-            },
-        );
+        return getGeneratorMethod(this, this.#generatorMethods ??= createGeneratorMethodCache(85), 52, this.#getRestTypeOfSignature, this.#getRestTypeOfSignatureGen);
+    }
+
+    #getRestTypeOfSignature(signature: Signature): Type {
+        const data = this.client.apiRequest("getRestTypeOfSignature", {
+            snapshot: this.snapshotId,
+            project: this.project.handle,
+            signature: signature.id,
+        });
+        return this.objectRegistry.getOrCreateType(data);
+    }
+
+    *#getRestTypeOfSignatureGen(signature: Signature): Generator<ProtocolRequest, Type, ProtocolResponse["result"]> {
+        const data = yield* apiRequest("getRestTypeOfSignature", {
+            snapshot: this.snapshotId,
+            project: this.project.handle,
+            signature: signature.id,
+        });
+        return this.objectRegistry.getOrCreateType(data);
     }
 
     get getTypePredicateOfSignature(): {
         (signature: Signature): TypePredicate | undefined;
         gen(signature: Signature): Generator<ProtocolRequest, TypePredicate | undefined, ProtocolResponse["result"]>;
     } {
-        const owner = this;
-        return cacheGeneratorMethod(
-            owner,
-            "getTypePredicateOfSignature",
-            function (signature: Signature): TypePredicate | undefined {
-                const data = owner.client.apiRequest("getTypePredicateOfSignature", {
-                    snapshot: owner.snapshotId,
-                    project: owner.project.handle,
-                    signature: signature.id,
-                });
-                if (!data) return undefined;
-                return {
-                    kind: data.kind,
-                    parameterIndex: data.parameterIndex,
-                    parameterName: data.parameterName,
-                    type: data.type ? owner.objectRegistry.getOrCreateType(data.type) : undefined,
-                } as TypePredicate;
-            },
-            function* (signature: Signature): Generator<ProtocolRequest, TypePredicate | undefined, ProtocolResponse["result"]> {
-                const data = yield* apiRequest("getTypePredicateOfSignature", {
-                    snapshot: owner.snapshotId,
-                    project: owner.project.handle,
-                    signature: signature.id,
-                });
-                if (!data) return undefined;
-                return {
-                    kind: data.kind,
-                    parameterIndex: data.parameterIndex,
-                    parameterName: data.parameterName,
-                    type: data.type ? owner.objectRegistry.getOrCreateType(data.type) : undefined,
-                } as TypePredicate;
-            },
-        );
+        return getGeneratorMethod(this, this.#generatorMethods ??= createGeneratorMethodCache(85), 53, this.#getTypePredicateOfSignature, this.#getTypePredicateOfSignatureGen);
+    }
+
+    #getTypePredicateOfSignature(signature: Signature): TypePredicate | undefined {
+        const data = this.client.apiRequest("getTypePredicateOfSignature", {
+            snapshot: this.snapshotId,
+            project: this.project.handle,
+            signature: signature.id,
+        });
+        if (!data) return undefined;
+        return {
+            kind: data.kind,
+            parameterIndex: data.parameterIndex,
+            parameterName: data.parameterName,
+            type: data.type ? this.objectRegistry.getOrCreateType(data.type) : undefined,
+        } as TypePredicate;
+    }
+
+    *#getTypePredicateOfSignatureGen(signature: Signature): Generator<ProtocolRequest, TypePredicate | undefined, ProtocolResponse["result"]> {
+        const data = yield* apiRequest("getTypePredicateOfSignature", {
+            snapshot: this.snapshotId,
+            project: this.project.handle,
+            signature: signature.id,
+        });
+        if (!data) return undefined;
+        return {
+            kind: data.kind,
+            parameterIndex: data.parameterIndex,
+            parameterName: data.parameterName,
+            type: data.type ? this.objectRegistry.getOrCreateType(data.type) : undefined,
+        } as TypePredicate;
     }
 
     /**
@@ -5697,17 +5441,15 @@ export class Checker {
         (type: InterfaceType): readonly Type[];
         gen(type: InterfaceType): Generator<ProtocolRequest, readonly Type[], ProtocolResponse["result"]>;
     } {
-        const owner = this;
-        return cacheGeneratorMethod(
-            owner,
-            "getBaseTypes",
-            function (type: InterfaceType): readonly Type[] {
-                return type.getBaseTypes() ?? [];
-            },
-            function* (type: InterfaceType): Generator<ProtocolRequest, readonly Type[], ProtocolResponse["result"]> {
-                return (yield* type.getBaseTypes.gen()) ?? [];
-            },
-        );
+        return getGeneratorMethod(this, this.#generatorMethods ??= createGeneratorMethodCache(85), 54, this.#getBaseTypes, this.#getBaseTypesGen);
+    }
+
+    #getBaseTypes(type: InterfaceType): readonly Type[] {
+        return type.getBaseTypes() ?? [];
+    }
+
+    *#getBaseTypesGen(type: InterfaceType): Generator<ProtocolRequest, readonly Type[], ProtocolResponse["result"]> {
+        return (yield* type.getBaseTypes.gen()) ?? [];
     }
 
     /** Get the apparent type of a type. Always returns a type. */
@@ -5715,17 +5457,15 @@ export class Checker {
         (type: Type): Type;
         gen(type: Type): Generator<ProtocolRequest, Type, ProtocolResponse["result"]>;
     } {
-        const owner = this;
-        return cacheGeneratorMethod(
-            owner,
-            "getApparentType",
-            function (type: Type): Type {
-                return type.getApparentType();
-            },
-            function* (type: Type): Generator<ProtocolRequest, Type, ProtocolResponse["result"]> {
-                return yield* type.getApparentType.gen();
-            },
-        );
+        return getGeneratorMethod(this, this.#generatorMethods ??= createGeneratorMethodCache(85), 55, this.#getApparentType, this.#getApparentTypeGen);
+    }
+
+    #getApparentType(type: Type): Type {
+        return type.getApparentType();
+    }
+
+    *#getApparentTypeGen(type: Type): Generator<ProtocolRequest, Type, ProtocolResponse["result"]> {
+        return yield* type.getApparentType.gen();
     }
 
     /** Get the reduced type of a type. Always returns a type. */
@@ -5733,136 +5473,124 @@ export class Checker {
         (type: Type): Type;
         gen(type: Type): Generator<ProtocolRequest, Type, ProtocolResponse["result"]>;
     } {
-        const owner = this;
-        return cacheGeneratorMethod(
-            owner,
-            "getReducedType",
-            function (type: Type): Type {
-                return type.getReducedType();
-            },
-            function* (type: Type): Generator<ProtocolRequest, Type, ProtocolResponse["result"]> {
-                return yield* type.getReducedType.gen();
-            },
-        );
+        return getGeneratorMethod(this, this.#generatorMethods ??= createGeneratorMethodCache(85), 56, this.#getReducedType, this.#getReducedTypeGen);
+    }
+
+    #getReducedType(type: Type): Type {
+        return type.getReducedType();
+    }
+
+    *#getReducedTypeGen(type: Type): Generator<ProtocolRequest, Type, ProtocolResponse["result"]> {
+        return yield* type.getReducedType.gen();
     }
 
     get getPropertiesOfType(): {
         (type: Type): readonly Symbol[];
         gen(type: Type): Generator<ProtocolRequest, readonly Symbol[], ProtocolResponse["result"]>;
     } {
-        const owner = this;
-        return cacheGeneratorMethod(
-            owner,
-            "getPropertiesOfType",
-            function (type: Type): readonly Symbol[] {
-                return type.getProperties();
-            },
-            function* (type: Type): Generator<ProtocolRequest, readonly Symbol[], ProtocolResponse["result"]> {
-                return yield* type.getProperties.gen();
-            },
-        );
+        return getGeneratorMethod(this, this.#generatorMethods ??= createGeneratorMethodCache(85), 57, this.#getPropertiesOfType, this.#getPropertiesOfTypeGen);
+    }
+
+    #getPropertiesOfType(type: Type): readonly Symbol[] {
+        return type.getProperties();
+    }
+
+    *#getPropertiesOfTypeGen(type: Type): Generator<ProtocolRequest, readonly Symbol[], ProtocolResponse["result"]> {
+        return yield* type.getProperties.gen();
     }
 
     get getIndexInfosOfType(): {
         (type: Type): readonly IndexInfo[];
         gen(type: Type): Generator<ProtocolRequest, readonly IndexInfo[], ProtocolResponse["result"]>;
     } {
-        const owner = this;
-        return cacheGeneratorMethod(
-            owner,
-            "getIndexInfosOfType",
-            function (type: Type): readonly IndexInfo[] {
-                return type.getIndexInfos();
-            },
-            function* (type: Type): Generator<ProtocolRequest, readonly IndexInfo[], ProtocolResponse["result"]> {
-                return yield* type.getIndexInfos.gen();
-            },
-        );
+        return getGeneratorMethod(this, this.#generatorMethods ??= createGeneratorMethodCache(85), 58, this.#getIndexInfosOfType, this.#getIndexInfosOfTypeGen);
+    }
+
+    #getIndexInfosOfType(type: Type): readonly IndexInfo[] {
+        return type.getIndexInfos();
+    }
+
+    *#getIndexInfosOfTypeGen(type: Type): Generator<ProtocolRequest, readonly IndexInfo[], ProtocolResponse["result"]> {
+        return yield* type.getIndexInfos.gen();
     }
 
     get getIndexInfoOfType(): {
         (type: Type, kind: IndexKind): IndexInfo | undefined;
         gen(type: Type, kind: IndexKind): Generator<ProtocolRequest, IndexInfo | undefined, ProtocolResponse["result"]>;
     } {
-        const owner = this;
-        return cacheGeneratorMethod(
-            owner,
-            "getIndexInfoOfType",
-            function (type: Type, kind: IndexKind): IndexInfo | undefined {
-                const data = owner.client.apiRequest("getIndexInfoOfType", {
-                    snapshot: owner.snapshotId,
-                    project: owner.project.handle,
-                    type: type.id,
-                    kind,
-                });
-                return data ? {
-                    keyType: owner.objectRegistry.getOrCreateType(data.keyType),
-                    valueType: owner.objectRegistry.getOrCreateType(data.valueType),
-                    isReadonly: data.isReadonly ?? false,
-                    declaration: data.declaration ? owner.objectRegistry.createNodeHandle<IndexSignatureDeclaration>(data.declaration) : undefined,
-                } : undefined;
-            },
-            function* (type: Type, kind: IndexKind): Generator<ProtocolRequest, IndexInfo | undefined, ProtocolResponse["result"]> {
-                const data = yield* apiRequest("getIndexInfoOfType", {
-                    snapshot: owner.snapshotId,
-                    project: owner.project.handle,
-                    type: type.id,
-                    kind,
-                });
-                return data ? {
-                    keyType: owner.objectRegistry.getOrCreateType(data.keyType),
-                    valueType: owner.objectRegistry.getOrCreateType(data.valueType),
-                    isReadonly: data.isReadonly ?? false,
-                    declaration: data.declaration ? owner.objectRegistry.createNodeHandle<IndexSignatureDeclaration>(data.declaration) : undefined,
-                } : undefined;
-            },
-        );
+        return getGeneratorMethod(this, this.#generatorMethods ??= createGeneratorMethodCache(85), 59, this.#getIndexInfoOfType, this.#getIndexInfoOfTypeGen);
+    }
+
+    #getIndexInfoOfType(type: Type, kind: IndexKind): IndexInfo | undefined {
+        const data = this.client.apiRequest("getIndexInfoOfType", {
+            snapshot: this.snapshotId,
+            project: this.project.handle,
+            type: type.id,
+            kind,
+        });
+        return data ? {
+            keyType: this.objectRegistry.getOrCreateType(data.keyType),
+            valueType: this.objectRegistry.getOrCreateType(data.valueType),
+            isReadonly: data.isReadonly ?? false,
+            declaration: data.declaration ? this.objectRegistry.createNodeHandle<IndexSignatureDeclaration>(data.declaration) : undefined,
+        } : undefined;
+    }
+
+    *#getIndexInfoOfTypeGen(type: Type, kind: IndexKind): Generator<ProtocolRequest, IndexInfo | undefined, ProtocolResponse["result"]> {
+        const data = yield* apiRequest("getIndexInfoOfType", {
+            snapshot: this.snapshotId,
+            project: this.project.handle,
+            type: type.id,
+            kind,
+        });
+        return data ? {
+            keyType: this.objectRegistry.getOrCreateType(data.keyType),
+            valueType: this.objectRegistry.getOrCreateType(data.valueType),
+            isReadonly: data.isReadonly ?? false,
+            declaration: data.declaration ? this.objectRegistry.createNodeHandle<IndexSignatureDeclaration>(data.declaration) : undefined,
+        } : undefined;
     }
 
     get getIndexTypeOfType(): {
         (type: Type, kind: IndexKind): Type | undefined;
         gen(type: Type, kind: IndexKind): Generator<ProtocolRequest, Type | undefined, ProtocolResponse["result"]>;
     } {
-        const owner = this;
-        return cacheGeneratorMethod(
-            owner,
-            "getIndexTypeOfType",
-            function (type: Type, kind: IndexKind): Type | undefined {
-                return kind === IndexKind.String ? type.getStringIndexType() : type.getNumberIndexType();
-            },
-            function* (type: Type, kind: IndexKind): Generator<ProtocolRequest, Type | undefined, ProtocolResponse["result"]> {
-                return kind === IndexKind.String ? (yield* type.getStringIndexType.gen()) : (yield* type.getNumberIndexType.gen());
-            },
-        );
+        return getGeneratorMethod(this, this.#generatorMethods ??= createGeneratorMethodCache(85), 60, this.#getIndexTypeOfType, this.#getIndexTypeOfTypeGen);
+    }
+
+    #getIndexTypeOfType(type: Type, kind: IndexKind): Type | undefined {
+        return kind === IndexKind.String ? type.getStringIndexType() : type.getNumberIndexType();
+    }
+
+    *#getIndexTypeOfTypeGen(type: Type, kind: IndexKind): Generator<ProtocolRequest, Type | undefined, ProtocolResponse["result"]> {
+        return kind === IndexKind.String ? (yield* type.getStringIndexType.gen()) : (yield* type.getNumberIndexType.gen());
     }
 
     get getTypeOfPropertyOfType(): {
         (type: Type, propertyName: string): Type | undefined;
         gen(type: Type, propertyName: string): Generator<ProtocolRequest, Type | undefined, ProtocolResponse["result"]>;
     } {
-        const owner = this;
-        return cacheGeneratorMethod(
-            owner,
-            "getTypeOfPropertyOfType",
-            function (type: Type, propertyName: string): Type | undefined {
-                const data = owner.client.apiRequest("getTypeOfPropertyOfType", {
-                    snapshot: owner.snapshotId,
-                    project: owner.project.handle,
-                    type: type.id,
-                    name: propertyName,
-                });
-                return data ? owner.objectRegistry.getOrCreateType(data) : undefined;
-            },
-            function* (type: Type, propertyName: string): Generator<ProtocolRequest, Type | undefined, ProtocolResponse["result"]> {
-                const data = yield* apiRequest("getTypeOfPropertyOfType", {
-                    snapshot: owner.snapshotId,
-                    project: owner.project.handle,
-                    type: type.id,
-                    name: propertyName,
-                });
-                return data ? owner.objectRegistry.getOrCreateType(data) : undefined;
-            },
-        );
+        return getGeneratorMethod(this, this.#generatorMethods ??= createGeneratorMethodCache(85), 61, this.#getTypeOfPropertyOfType, this.#getTypeOfPropertyOfTypeGen);
+    }
+
+    #getTypeOfPropertyOfType(type: Type, propertyName: string): Type | undefined {
+        const data = this.client.apiRequest("getTypeOfPropertyOfType", {
+            snapshot: this.snapshotId,
+            project: this.project.handle,
+            type: type.id,
+            name: propertyName,
+        });
+        return data ? this.objectRegistry.getOrCreateType(data) : undefined;
+    }
+
+    *#getTypeOfPropertyOfTypeGen(type: Type, propertyName: string): Generator<ProtocolRequest, Type | undefined, ProtocolResponse["result"]> {
+        const data = yield* apiRequest("getTypeOfPropertyOfType", {
+            snapshot: this.snapshotId,
+            project: this.project.handle,
+            type: type.id,
+            name: propertyName,
+        });
+        return data ? this.objectRegistry.getOrCreateType(data) : undefined;
     }
 
     /**
@@ -5873,141 +5601,131 @@ export class Checker {
         (type: TypeParameter): Type | undefined;
         gen(type: TypeParameter): Generator<ProtocolRequest, Type | undefined, ProtocolResponse["result"]>;
     } {
-        const owner = this;
-        return cacheGeneratorMethod(
-            owner,
-            "getConstraintOfTypeParameter",
-            function (type: TypeParameter): Type | undefined {
-                return type.getConstraint();
-            },
-            function* (type: TypeParameter): Generator<ProtocolRequest, Type | undefined, ProtocolResponse["result"]> {
-                return yield* type.getConstraint.gen();
-            },
-        );
+        return getGeneratorMethod(this, this.#generatorMethods ??= createGeneratorMethodCache(85), 62, this.#getConstraintOfTypeParameter, this.#getConstraintOfTypeParameterGen);
+    }
+
+    #getConstraintOfTypeParameter(type: TypeParameter): Type | undefined {
+        return type.getConstraint();
+    }
+
+    *#getConstraintOfTypeParameterGen(type: TypeParameter): Generator<ProtocolRequest, Type | undefined, ProtocolResponse["result"]> {
+        return yield* type.getConstraint.gen();
     }
 
     get getDefaultFromTypeParameter(): {
         (type: TypeParameter): Type | undefined;
         gen(type: TypeParameter): Generator<ProtocolRequest, Type | undefined, ProtocolResponse["result"]>;
     } {
-        const owner = this;
-        return cacheGeneratorMethod(
-            owner,
-            "getDefaultFromTypeParameter",
-            function (type: TypeParameter): Type | undefined {
-                return type.getDefault();
-            },
-            function* (type: TypeParameter): Generator<ProtocolRequest, Type | undefined, ProtocolResponse["result"]> {
-                return yield* type.getDefault.gen();
-            },
-        );
+        return getGeneratorMethod(this, this.#generatorMethods ??= createGeneratorMethodCache(85), 63, this.#getDefaultFromTypeParameter, this.#getDefaultFromTypeParameterGen);
+    }
+
+    #getDefaultFromTypeParameter(type: TypeParameter): Type | undefined {
+        return type.getDefault();
+    }
+
+    *#getDefaultFromTypeParameterGen(type: TypeParameter): Generator<ProtocolRequest, Type | undefined, ProtocolResponse["result"]> {
+        return yield* type.getDefault.gen();
     }
 
     get getBaseConstraintOfType(): {
         (type: Type): Type | undefined;
         gen(type: Type): Generator<ProtocolRequest, Type | undefined, ProtocolResponse["result"]>;
     } {
-        const owner = this;
-        return cacheGeneratorMethod(
-            owner,
-            "getBaseConstraintOfType",
-            function (type: Type): Type | undefined {
-                const data = owner.client.apiRequest("getBaseConstraintOfType", {
-                    snapshot: owner.snapshotId,
-                    project: owner.project.handle,
-                    type: type.id,
-                });
-                return data ? owner.objectRegistry.getOrCreateType(data) : undefined;
-            },
-            function* (type: Type): Generator<ProtocolRequest, Type | undefined, ProtocolResponse["result"]> {
-                const data = yield* apiRequest("getBaseConstraintOfType", {
-                    snapshot: owner.snapshotId,
-                    project: owner.project.handle,
-                    type: type.id,
-                });
-                return data ? owner.objectRegistry.getOrCreateType(data) : undefined;
-            },
-        );
+        return getGeneratorMethod(this, this.#generatorMethods ??= createGeneratorMethodCache(85), 64, this.#getBaseConstraintOfType, this.#getBaseConstraintOfTypeGen);
+    }
+
+    #getBaseConstraintOfType(type: Type): Type | undefined {
+        const data = this.client.apiRequest("getBaseConstraintOfType", {
+            snapshot: this.snapshotId,
+            project: this.project.handle,
+            type: type.id,
+        });
+        return data ? this.objectRegistry.getOrCreateType(data) : undefined;
+    }
+
+    *#getBaseConstraintOfTypeGen(type: Type): Generator<ProtocolRequest, Type | undefined, ProtocolResponse["result"]> {
+        const data = yield* apiRequest("getBaseConstraintOfType", {
+            snapshot: this.snapshotId,
+            project: this.project.handle,
+            type: type.id,
+        });
+        return data ? this.objectRegistry.getOrCreateType(data) : undefined;
     }
 
     get getPropertyOfType(): {
         (type: Type, name: string): Symbol | undefined;
         gen(type: Type, name: string): Generator<ProtocolRequest, Symbol | undefined, ProtocolResponse["result"]>;
     } {
-        const owner = this;
-        return cacheGeneratorMethod(
-            owner,
-            "getPropertyOfType",
-            function (type: Type, name: string): Symbol | undefined {
-                const data = owner.client.apiRequest("getPropertyOfType", {
-                    snapshot: owner.snapshotId,
-                    project: owner.project.handle,
-                    type: type.id,
-                    name,
-                });
-                return data ? owner.objectRegistry.getOrCreateSymbol(data) : undefined;
-            },
-            function* (type: Type, name: string): Generator<ProtocolRequest, Symbol | undefined, ProtocolResponse["result"]> {
-                const data = yield* apiRequest("getPropertyOfType", {
-                    snapshot: owner.snapshotId,
-                    project: owner.project.handle,
-                    type: type.id,
-                    name,
-                });
-                return data ? owner.objectRegistry.getOrCreateSymbol(data) : undefined;
-            },
-        );
+        return getGeneratorMethod(this, this.#generatorMethods ??= createGeneratorMethodCache(85), 65, this.#getPropertyOfType, this.#getPropertyOfTypeGen);
+    }
+
+    #getPropertyOfType(type: Type, name: string): Symbol | undefined {
+        const data = this.client.apiRequest("getPropertyOfType", {
+            snapshot: this.snapshotId,
+            project: this.project.handle,
+            type: type.id,
+            name,
+        });
+        return data ? this.objectRegistry.getOrCreateSymbol(data) : undefined;
+    }
+
+    *#getPropertyOfTypeGen(type: Type, name: string): Generator<ProtocolRequest, Symbol | undefined, ProtocolResponse["result"]> {
+        const data = yield* apiRequest("getPropertyOfType", {
+            snapshot: this.snapshotId,
+            project: this.project.handle,
+            type: type.id,
+            name,
+        });
+        return data ? this.objectRegistry.getOrCreateSymbol(data) : undefined;
     }
 
     get getConstantValue(): {
         (node: Node): string | number | undefined;
         gen(node: Node): Generator<ProtocolRequest, string | number | undefined, ProtocolResponse["result"]>;
     } {
-        const owner = this;
-        return cacheGeneratorMethod(
-            owner,
-            "getConstantValue",
-            function (node: Node): string | number | undefined {
-                const data = owner.client.apiRequest("getConstantValue", {
-                    snapshot: owner.snapshotId,
-                    project: owner.project.handle,
-                    location: getNodeRequestHandle(node),
-                });
-                if (!data || (typeof data.value !== "string" && typeof data.value !== "number")) {
-                    return undefined;
-                }
-                if (data.isNumber && typeof data.value === "string") {
-                    if (data.value === "+Infinity") {
-                        return Infinity;
-                    }
-                    else if (data.value === "-Infinity") {
-                        return -Infinity;
-                    }
-                    return NaN;
-                }
-                return data.value;
-            },
-            function* (node: Node): Generator<ProtocolRequest, string | number | undefined, ProtocolResponse["result"]> {
-                const data = yield* apiRequest("getConstantValue", {
-                    snapshot: owner.snapshotId,
-                    project: owner.project.handle,
-                    location: getNodeRequestHandle(node),
-                });
-                if (!data || (typeof data.value !== "string" && typeof data.value !== "number")) {
-                    return undefined;
-                }
-                if (data.isNumber && typeof data.value === "string") {
-                    if (data.value === "+Infinity") {
-                        return Infinity;
-                    }
-                    else if (data.value === "-Infinity") {
-                        return -Infinity;
-                    }
-                    return NaN;
-                }
-                return data.value;
-            },
-        );
+        return getGeneratorMethod(this, this.#generatorMethods ??= createGeneratorMethodCache(85), 66, this.#getConstantValue, this.#getConstantValueGen);
+    }
+
+    #getConstantValue(node: Node): string | number | undefined {
+        const data = this.client.apiRequest("getConstantValue", {
+            snapshot: this.snapshotId,
+            project: this.project.handle,
+            location: getNodeRequestHandle(node),
+        });
+        if (!data || (typeof data.value !== "string" && typeof data.value !== "number")) {
+            return undefined;
+        }
+        if (data.isNumber && typeof data.value === "string") {
+            if (data.value === "+Infinity") {
+                return Infinity;
+            }
+            else if (data.value === "-Infinity") {
+                return -Infinity;
+            }
+            return NaN;
+        }
+        return data.value;
+    }
+
+    *#getConstantValueGen(node: Node): Generator<ProtocolRequest, string | number | undefined, ProtocolResponse["result"]> {
+        const data = yield* apiRequest("getConstantValue", {
+            snapshot: this.snapshotId,
+            project: this.project.handle,
+            location: getNodeRequestHandle(node),
+        });
+        if (!data || (typeof data.value !== "string" && typeof data.value !== "number")) {
+            return undefined;
+        }
+        if (data.isNumber && typeof data.value === "string") {
+            if (data.value === "+Infinity") {
+                return Infinity;
+            }
+            else if (data.value === "-Infinity") {
+                return -Infinity;
+            }
+            return NaN;
+        }
+        return data.value;
     }
 
     /** Get the signature of a function-like declaration. Always returns a signature. */
@@ -6015,54 +5733,50 @@ export class Checker {
         (node: Node): Signature;
         gen(node: Node): Generator<ProtocolRequest, Signature, ProtocolResponse["result"]>;
     } {
-        const owner = this;
-        return cacheGeneratorMethod(
-            owner,
-            "getSignatureFromDeclaration",
-            function (node: Node): Signature {
-                const data = owner.client.apiRequest("getSignatureFromDeclaration", {
-                    snapshot: owner.snapshotId,
-                    project: owner.project.handle,
-                    location: getNodeRequestHandle(node),
-                });
-                return owner.objectRegistry.getOrCreateSignature(data);
-            },
-            function* (node: Node): Generator<ProtocolRequest, Signature, ProtocolResponse["result"]> {
-                const data = yield* apiRequest("getSignatureFromDeclaration", {
-                    snapshot: owner.snapshotId,
-                    project: owner.project.handle,
-                    location: getNodeRequestHandle(node),
-                });
-                return owner.objectRegistry.getOrCreateSignature(data);
-            },
-        );
+        return getGeneratorMethod(this, this.#generatorMethods ??= createGeneratorMethodCache(85), 67, this.#getSignatureFromDeclaration, this.#getSignatureFromDeclarationGen);
+    }
+
+    #getSignatureFromDeclaration(node: Node): Signature {
+        const data = this.client.apiRequest("getSignatureFromDeclaration", {
+            snapshot: this.snapshotId,
+            project: this.project.handle,
+            location: getNodeRequestHandle(node),
+        });
+        return this.objectRegistry.getOrCreateSignature(data);
+    }
+
+    *#getSignatureFromDeclarationGen(node: Node): Generator<ProtocolRequest, Signature, ProtocolResponse["result"]> {
+        const data = yield* apiRequest("getSignatureFromDeclaration", {
+            snapshot: this.snapshotId,
+            project: this.project.handle,
+            location: getNodeRequestHandle(node),
+        });
+        return this.objectRegistry.getOrCreateSignature(data);
     }
 
     get getExportSpecifierLocalTargetSymbol(): {
         (node: Node): Symbol | undefined;
         gen(node: Node): Generator<ProtocolRequest, Symbol | undefined, ProtocolResponse["result"]>;
     } {
-        const owner = this;
-        return cacheGeneratorMethod(
-            owner,
-            "getExportSpecifierLocalTargetSymbol",
-            function (node: Node): Symbol | undefined {
-                const data = owner.client.apiRequest("getExportSpecifierLocalTargetSymbol", {
-                    snapshot: owner.snapshotId,
-                    project: owner.project.handle,
-                    location: getNodeRequestHandle(node),
-                });
-                return data ? owner.objectRegistry.getOrCreateSymbol(data) : undefined;
-            },
-            function* (node: Node): Generator<ProtocolRequest, Symbol | undefined, ProtocolResponse["result"]> {
-                const data = yield* apiRequest("getExportSpecifierLocalTargetSymbol", {
-                    snapshot: owner.snapshotId,
-                    project: owner.project.handle,
-                    location: getNodeRequestHandle(node),
-                });
-                return data ? owner.objectRegistry.getOrCreateSymbol(data) : undefined;
-            },
-        );
+        return getGeneratorMethod(this, this.#generatorMethods ??= createGeneratorMethodCache(85), 68, this.#getExportSpecifierLocalTargetSymbol, this.#getExportSpecifierLocalTargetSymbolGen);
+    }
+
+    #getExportSpecifierLocalTargetSymbol(node: Node): Symbol | undefined {
+        const data = this.client.apiRequest("getExportSpecifierLocalTargetSymbol", {
+            snapshot: this.snapshotId,
+            project: this.project.handle,
+            location: getNodeRequestHandle(node),
+        });
+        return data ? this.objectRegistry.getOrCreateSymbol(data) : undefined;
+    }
+
+    *#getExportSpecifierLocalTargetSymbolGen(node: Node): Generator<ProtocolRequest, Symbol | undefined, ProtocolResponse["result"]> {
+        const data = yield* apiRequest("getExportSpecifierLocalTargetSymbol", {
+            snapshot: this.snapshotId,
+            project: this.project.handle,
+            location: getNodeRequestHandle(node),
+        });
+        return data ? this.objectRegistry.getOrCreateSymbol(data) : undefined;
     }
 
     /**
@@ -6074,27 +5788,25 @@ export class Checker {
         (symbol: Symbol): Symbol;
         gen(symbol: Symbol): Generator<ProtocolRequest, Symbol, ProtocolResponse["result"]>;
     } {
-        const owner = this;
-        return cacheGeneratorMethod(
-            owner,
-            "getAliasedSymbol",
-            function (symbol: Symbol): Symbol {
-                const data = owner.client.apiRequest("getAliasedSymbol", {
-                    snapshot: owner.snapshotId,
-                    project: owner.project.handle,
-                    symbol: symbol.reference,
-                });
-                return owner.objectRegistry.getOrCreateSymbol(data);
-            },
-            function* (symbol: Symbol): Generator<ProtocolRequest, Symbol, ProtocolResponse["result"]> {
-                const data = yield* apiRequest("getAliasedSymbol", {
-                    snapshot: owner.snapshotId,
-                    project: owner.project.handle,
-                    symbol: symbol.reference,
-                });
-                return owner.objectRegistry.getOrCreateSymbol(data);
-            },
-        );
+        return getGeneratorMethod(this, this.#generatorMethods ??= createGeneratorMethodCache(85), 69, this.#getAliasedSymbol, this.#getAliasedSymbolGen);
+    }
+
+    #getAliasedSymbol(symbol: Symbol): Symbol {
+        const data = this.client.apiRequest("getAliasedSymbol", {
+            snapshot: this.snapshotId,
+            project: this.project.handle,
+            symbol: symbol.reference,
+        });
+        return this.objectRegistry.getOrCreateSymbol(data);
+    }
+
+    *#getAliasedSymbolGen(symbol: Symbol): Generator<ProtocolRequest, Symbol, ProtocolResponse["result"]> {
+        const data = yield* apiRequest("getAliasedSymbol", {
+            snapshot: this.snapshotId,
+            project: this.project.handle,
+            symbol: symbol.reference,
+        });
+        return this.objectRegistry.getOrCreateSymbol(data);
     }
 
     /**
@@ -6105,52 +5817,48 @@ export class Checker {
         (symbol: Symbol): string;
         gen(symbol: Symbol): Generator<ProtocolRequest, string, ProtocolResponse["result"]>;
     } {
-        const owner = this;
-        return cacheGeneratorMethod(
-            owner,
-            "getFullyQualifiedName",
-            function (symbol: Symbol): string {
-                return owner.client.apiRequest("getFullyQualifiedName", {
-                    snapshot: owner.snapshotId,
-                    project: owner.project.handle,
-                    symbol: symbol.reference,
-                });
-            },
-            function* (symbol: Symbol): Generator<ProtocolRequest, string, ProtocolResponse["result"]> {
-                return yield* apiRequest("getFullyQualifiedName", {
-                    snapshot: owner.snapshotId,
-                    project: owner.project.handle,
-                    symbol: symbol.reference,
-                });
-            },
-        );
+        return getGeneratorMethod(this, this.#generatorMethods ??= createGeneratorMethodCache(85), 70, this.#getFullyQualifiedName, this.#getFullyQualifiedNameGen);
+    }
+
+    #getFullyQualifiedName(symbol: Symbol): string {
+        return this.client.apiRequest("getFullyQualifiedName", {
+            snapshot: this.snapshotId,
+            project: this.project.handle,
+            symbol: symbol.reference,
+        });
+    }
+
+    *#getFullyQualifiedNameGen(symbol: Symbol): Generator<ProtocolRequest, string, ProtocolResponse["result"]> {
+        return yield* apiRequest("getFullyQualifiedName", {
+            snapshot: this.snapshotId,
+            project: this.project.handle,
+            symbol: symbol.reference,
+        });
     }
 
     get getImmediateAliasedSymbol(): {
         (symbol: Symbol): Symbol | undefined;
         gen(symbol: Symbol): Generator<ProtocolRequest, Symbol | undefined, ProtocolResponse["result"]>;
     } {
-        const owner = this;
-        return cacheGeneratorMethod(
-            owner,
-            "getImmediateAliasedSymbol",
-            function (symbol: Symbol): Symbol | undefined {
-                const data = owner.client.apiRequest("getImmediateAliasedSymbol", {
-                    snapshot: owner.snapshotId,
-                    project: owner.project.handle,
-                    symbol: symbol.reference,
-                });
-                return data ? owner.objectRegistry.getOrCreateSymbol(data) : undefined;
-            },
-            function* (symbol: Symbol): Generator<ProtocolRequest, Symbol | undefined, ProtocolResponse["result"]> {
-                const data = yield* apiRequest("getImmediateAliasedSymbol", {
-                    snapshot: owner.snapshotId,
-                    project: owner.project.handle,
-                    symbol: symbol.reference,
-                });
-                return data ? owner.objectRegistry.getOrCreateSymbol(data) : undefined;
-            },
-        );
+        return getGeneratorMethod(this, this.#generatorMethods ??= createGeneratorMethodCache(85), 71, this.#getImmediateAliasedSymbol, this.#getImmediateAliasedSymbolGen);
+    }
+
+    #getImmediateAliasedSymbol(symbol: Symbol): Symbol | undefined {
+        const data = this.client.apiRequest("getImmediateAliasedSymbol", {
+            snapshot: this.snapshotId,
+            project: this.project.handle,
+            symbol: symbol.reference,
+        });
+        return data ? this.objectRegistry.getOrCreateSymbol(data) : undefined;
+    }
+
+    *#getImmediateAliasedSymbolGen(symbol: Symbol): Generator<ProtocolRequest, Symbol | undefined, ProtocolResponse["result"]> {
+        const data = yield* apiRequest("getImmediateAliasedSymbol", {
+            snapshot: this.snapshotId,
+            project: this.project.handle,
+            symbol: symbol.reference,
+        });
+        return data ? this.objectRegistry.getOrCreateSymbol(data) : undefined;
     }
 
     /**
@@ -6160,60 +5868,56 @@ export class Checker {
         (symbol: Symbol): Symbol;
         gen(symbol: Symbol): Generator<ProtocolRequest, Symbol, ProtocolResponse["result"]>;
     } {
-        const owner = this;
-        return cacheGeneratorMethod(
-            owner,
-            "getTargetSymbol",
-            function (symbol: Symbol): Symbol {
-                if (symbol.checkFlags & CheckFlags.Instantiated) {
-                    const data = owner.client.apiRequest("getTargetSymbol", {
-                        snapshot: owner.snapshotId,
-                        project: owner.project.handle,
-                        symbol: symbol.reference,
-                    });
-                    return owner.objectRegistry.getOrCreateSymbol(data);
-                }
-                return symbol;
-            },
-            function* (symbol: Symbol): Generator<ProtocolRequest, Symbol, ProtocolResponse["result"]> {
-                if (symbol.checkFlags & CheckFlags.Instantiated) {
-                    const data = yield* apiRequest("getTargetSymbol", {
-                        snapshot: owner.snapshotId,
-                        project: owner.project.handle,
-                        symbol: symbol.reference,
-                    });
-                    return owner.objectRegistry.getOrCreateSymbol(data);
-                }
-                return symbol;
-            },
-        );
+        return getGeneratorMethod(this, this.#generatorMethods ??= createGeneratorMethodCache(85), 72, this.#getTargetSymbol, this.#getTargetSymbolGen);
+    }
+
+    #getTargetSymbol(symbol: Symbol): Symbol {
+        if (symbol.checkFlags & CheckFlags.Instantiated) {
+            const data = this.client.apiRequest("getTargetSymbol", {
+                snapshot: this.snapshotId,
+                project: this.project.handle,
+                symbol: symbol.reference,
+            });
+            return this.objectRegistry.getOrCreateSymbol(data);
+        }
+        return symbol;
+    }
+
+    *#getTargetSymbolGen(symbol: Symbol): Generator<ProtocolRequest, Symbol, ProtocolResponse["result"]> {
+        if (symbol.checkFlags & CheckFlags.Instantiated) {
+            const data = yield* apiRequest("getTargetSymbol", {
+                snapshot: this.snapshotId,
+                project: this.project.handle,
+                symbol: symbol.reference,
+            });
+            return this.objectRegistry.getOrCreateSymbol(data);
+        }
+        return symbol;
     }
 
     get getExportSymbolOfSymbol(): {
         (symbol: Symbol): Symbol;
         gen(symbol: Symbol): Generator<ProtocolRequest, Symbol, ProtocolResponse["result"]>;
     } {
-        const owner = this;
-        return cacheGeneratorMethod(
-            owner,
-            "getExportSymbolOfSymbol",
-            function (symbol: Symbol): Symbol {
-                const data = owner.client.apiRequest("getExportSymbolOfSymbolForChecker", {
-                    snapshot: owner.snapshotId,
-                    project: owner.project.handle,
-                    symbol: symbol.reference,
-                });
-                return owner.objectRegistry.getOrCreateSymbol(data);
-            },
-            function* (symbol: Symbol): Generator<ProtocolRequest, Symbol, ProtocolResponse["result"]> {
-                const data = yield* apiRequest("getExportSymbolOfSymbolForChecker", {
-                    snapshot: owner.snapshotId,
-                    project: owner.project.handle,
-                    symbol: symbol.reference,
-                });
-                return owner.objectRegistry.getOrCreateSymbol(data);
-            },
-        );
+        return getGeneratorMethod(this, this.#generatorMethods ??= createGeneratorMethodCache(85), 73, this.#getExportSymbolOfSymbol, this.#getExportSymbolOfSymbolGen);
+    }
+
+    #getExportSymbolOfSymbol(symbol: Symbol): Symbol {
+        const data = this.client.apiRequest("getExportSymbolOfSymbolForChecker", {
+            snapshot: this.snapshotId,
+            project: this.project.handle,
+            symbol: symbol.reference,
+        });
+        return this.objectRegistry.getOrCreateSymbol(data);
+    }
+
+    *#getExportSymbolOfSymbolGen(symbol: Symbol): Generator<ProtocolRequest, Symbol, ProtocolResponse["result"]> {
+        const data = yield* apiRequest("getExportSymbolOfSymbolForChecker", {
+            snapshot: this.snapshotId,
+            project: this.project.handle,
+            symbol: symbol.reference,
+        });
+        return this.objectRegistry.getOrCreateSymbol(data);
     }
 
     /**
@@ -6226,23 +5930,21 @@ export class Checker {
         (): { unknown: number; undefined: number; arguments: number; };
         gen(): Generator<ProtocolRequest, { unknown: number; undefined: number; arguments: number; }, ProtocolResponse["result"]>;
     } {
-        const owner = this;
-        return cacheGeneratorMethod(
-            owner,
-            "getWellKnownSymbols",
-            function (): { unknown: number; undefined: number; arguments: number; } {
-                return owner.wellKnownSymbols ??= owner.client.apiRequest("getWellKnownSymbols", {
-                    snapshot: owner.snapshotId,
-                    project: owner.project.handle,
-                });
-            },
-            function* (): Generator<ProtocolRequest, { unknown: number; undefined: number; arguments: number; }, ProtocolResponse["result"]> {
-                return owner.wellKnownSymbols ??= yield* apiRequest("getWellKnownSymbols", {
-                    snapshot: owner.snapshotId,
-                    project: owner.project.handle,
-                });
-            },
-        );
+        return getGeneratorMethod(this, this.#generatorMethods ??= createGeneratorMethodCache(85), 74, this.#getWellKnownSymbols, this.#getWellKnownSymbolsGen);
+    }
+
+    #getWellKnownSymbols(): { unknown: number; undefined: number; arguments: number; } {
+        return this.wellKnownSymbols ??= this.client.apiRequest("getWellKnownSymbols", {
+            snapshot: this.snapshotId,
+            project: this.project.handle,
+        });
+    }
+
+    *#getWellKnownSymbolsGen(): Generator<ProtocolRequest, { unknown: number; undefined: number; arguments: number; }, ProtocolResponse["result"]> {
+        return this.wellKnownSymbols ??= yield* apiRequest("getWellKnownSymbols", {
+            snapshot: this.snapshotId,
+            project: this.project.handle,
+        });
     }
 
     /**
@@ -6253,17 +5955,15 @@ export class Checker {
         (symbol: Symbol): boolean;
         gen(symbol: Symbol): Generator<ProtocolRequest, boolean, ProtocolResponse["result"]>;
     } {
-        const owner = this;
-        return cacheGeneratorMethod(
-            owner,
-            "isUnknownSymbol",
-            function (symbol: Symbol): boolean {
-                return symbol.id === (owner.getWellKnownSymbols()).unknown;
-            },
-            function* (symbol: Symbol): Generator<ProtocolRequest, boolean, ProtocolResponse["result"]> {
-                return symbol.id === (yield* owner.getWellKnownSymbols.gen()).unknown;
-            },
-        );
+        return getGeneratorMethod(this, this.#generatorMethods ??= createGeneratorMethodCache(85), 75, this.#isUnknownSymbol, this.#isUnknownSymbolGen);
+    }
+
+    #isUnknownSymbol(symbol: Symbol): boolean {
+        return symbol.id === (this.#getWellKnownSymbols()).unknown;
+    }
+
+    *#isUnknownSymbolGen(symbol: Symbol): Generator<ProtocolRequest, boolean, ProtocolResponse["result"]> {
+        return symbol.id === (yield* this.#getWellKnownSymbolsGen()).unknown;
     }
 
     /**
@@ -6273,17 +5973,15 @@ export class Checker {
         (symbol: Symbol): boolean;
         gen(symbol: Symbol): Generator<ProtocolRequest, boolean, ProtocolResponse["result"]>;
     } {
-        const owner = this;
-        return cacheGeneratorMethod(
-            owner,
-            "isUndefinedSymbol",
-            function (symbol: Symbol): boolean {
-                return symbol.id === (owner.getWellKnownSymbols()).undefined;
-            },
-            function* (symbol: Symbol): Generator<ProtocolRequest, boolean, ProtocolResponse["result"]> {
-                return symbol.id === (yield* owner.getWellKnownSymbols.gen()).undefined;
-            },
-        );
+        return getGeneratorMethod(this, this.#generatorMethods ??= createGeneratorMethodCache(85), 76, this.#isUndefinedSymbol, this.#isUndefinedSymbolGen);
+    }
+
+    #isUndefinedSymbol(symbol: Symbol): boolean {
+        return symbol.id === (this.#getWellKnownSymbols()).undefined;
+    }
+
+    *#isUndefinedSymbolGen(symbol: Symbol): Generator<ProtocolRequest, boolean, ProtocolResponse["result"]> {
+        return symbol.id === (yield* this.#getWellKnownSymbolsGen()).undefined;
     }
 
     /**
@@ -6293,17 +5991,15 @@ export class Checker {
         (symbol: Symbol): boolean;
         gen(symbol: Symbol): Generator<ProtocolRequest, boolean, ProtocolResponse["result"]>;
     } {
-        const owner = this;
-        return cacheGeneratorMethod(
-            owner,
-            "isArgumentsSymbol",
-            function (symbol: Symbol): boolean {
-                return symbol.id === (owner.getWellKnownSymbols()).arguments;
-            },
-            function* (symbol: Symbol): Generator<ProtocolRequest, boolean, ProtocolResponse["result"]> {
-                return symbol.id === (yield* owner.getWellKnownSymbols.gen()).arguments;
-            },
-        );
+        return getGeneratorMethod(this, this.#generatorMethods ??= createGeneratorMethodCache(85), 77, this.#isArgumentsSymbol, this.#isArgumentsSymbolGen);
+    }
+
+    #isArgumentsSymbol(symbol: Symbol): boolean {
+        return symbol.id === (this.#getWellKnownSymbols()).arguments;
+    }
+
+    *#isArgumentsSymbolGen(symbol: Symbol): Generator<ProtocolRequest, boolean, ProtocolResponse["result"]> {
+        return symbol.id === (yield* this.#getWellKnownSymbolsGen()).arguments;
     }
 
     /**
@@ -6315,23 +6011,21 @@ export class Checker {
         (): { unknown: number; };
         gen(): Generator<ProtocolRequest, { unknown: number; }, ProtocolResponse["result"]>;
     } {
-        const owner = this;
-        return cacheGeneratorMethod(
-            owner,
-            "getWellKnownSignatures",
-            function (): { unknown: number; } {
-                return owner.wellKnownSignatures ??= owner.client.apiRequest("getWellKnownSignatures", {
-                    snapshot: owner.snapshotId,
-                    project: owner.project.handle,
-                });
-            },
-            function* (): Generator<ProtocolRequest, { unknown: number; }, ProtocolResponse["result"]> {
-                return owner.wellKnownSignatures ??= yield* apiRequest("getWellKnownSignatures", {
-                    snapshot: owner.snapshotId,
-                    project: owner.project.handle,
-                });
-            },
-        );
+        return getGeneratorMethod(this, this.#generatorMethods ??= createGeneratorMethodCache(85), 78, this.#getWellKnownSignatures, this.#getWellKnownSignaturesGen);
+    }
+
+    #getWellKnownSignatures(): { unknown: number; } {
+        return this.wellKnownSignatures ??= this.client.apiRequest("getWellKnownSignatures", {
+            snapshot: this.snapshotId,
+            project: this.project.handle,
+        });
+    }
+
+    *#getWellKnownSignaturesGen(): Generator<ProtocolRequest, { unknown: number; }, ProtocolResponse["result"]> {
+        return this.wellKnownSignatures ??= yield* apiRequest("getWellKnownSignatures", {
+            snapshot: this.snapshotId,
+            project: this.project.handle,
+        });
     }
 
     /**
@@ -6343,125 +6037,115 @@ export class Checker {
         (signature: Signature): boolean;
         gen(signature: Signature): Generator<ProtocolRequest, boolean, ProtocolResponse["result"]>;
     } {
-        const owner = this;
-        return cacheGeneratorMethod(
-            owner,
-            "isUnknownSignature",
-            function (signature: Signature): boolean {
-                return signature.id === (owner.getWellKnownSignatures()).unknown;
-            },
-            function* (signature: Signature): Generator<ProtocolRequest, boolean, ProtocolResponse["result"]> {
-                return signature.id === (yield* owner.getWellKnownSignatures.gen()).unknown;
-            },
-        );
+        return getGeneratorMethod(this, this.#generatorMethods ??= createGeneratorMethodCache(85), 79, this.#isUnknownSignature, this.#isUnknownSignatureGen);
+    }
+
+    #isUnknownSignature(signature: Signature): boolean {
+        return signature.id === (this.#getWellKnownSignatures()).unknown;
+    }
+
+    *#isUnknownSignatureGen(signature: Signature): Generator<ProtocolRequest, boolean, ProtocolResponse["result"]> {
+        return signature.id === (yield* this.#getWellKnownSignaturesGen()).unknown;
     }
 
     get getExportsOfModule(): {
         (symbol: Symbol): readonly Symbol[];
         gen(symbol: Symbol): Generator<ProtocolRequest, readonly Symbol[], ProtocolResponse["result"]>;
     } {
-        const owner = this;
-        return cacheGeneratorMethod(
-            owner,
-            "getExportsOfModule",
-            function (symbol: Symbol): readonly Symbol[] {
-                const data = owner.client.apiRequest("getExportsOfModule", {
-                    snapshot: owner.snapshotId,
-                    project: owner.project.handle,
-                    symbol: symbol.reference,
-                });
-                return data ? data.map(d => owner.objectRegistry.getOrCreateSymbol(d)) : [];
-            },
-            function* (symbol: Symbol): Generator<ProtocolRequest, readonly Symbol[], ProtocolResponse["result"]> {
-                const data = yield* apiRequest("getExportsOfModule", {
-                    snapshot: owner.snapshotId,
-                    project: owner.project.handle,
-                    symbol: symbol.reference,
-                });
-                return data ? data.map(d => owner.objectRegistry.getOrCreateSymbol(d)) : [];
-            },
-        );
+        return getGeneratorMethod(this, this.#generatorMethods ??= createGeneratorMethodCache(85), 80, this.#getExportsOfModule, this.#getExportsOfModuleGen);
+    }
+
+    #getExportsOfModule(symbol: Symbol): readonly Symbol[] {
+        const data = this.client.apiRequest("getExportsOfModule", {
+            snapshot: this.snapshotId,
+            project: this.project.handle,
+            symbol: symbol.reference,
+        });
+        return data ? data.map(d => this.objectRegistry.getOrCreateSymbol(d)) : [];
+    }
+
+    *#getExportsOfModuleGen(symbol: Symbol): Generator<ProtocolRequest, readonly Symbol[], ProtocolResponse["result"]> {
+        const data = yield* apiRequest("getExportsOfModule", {
+            snapshot: this.snapshotId,
+            project: this.project.handle,
+            symbol: symbol.reference,
+        });
+        return data ? data.map(d => this.objectRegistry.getOrCreateSymbol(d)) : [];
     }
 
     get getMemberInModuleExports(): {
         (symbol: Symbol, name: string): Symbol | undefined;
         gen(symbol: Symbol, name: string): Generator<ProtocolRequest, Symbol | undefined, ProtocolResponse["result"]>;
     } {
-        const owner = this;
-        return cacheGeneratorMethod(
-            owner,
-            "getMemberInModuleExports",
-            function (symbol: Symbol, name: string): Symbol | undefined {
-                const data = owner.client.apiRequest("getMemberInModuleExports", {
-                    snapshot: owner.snapshotId,
-                    project: owner.project.handle,
-                    symbol: symbol.reference,
-                    name,
-                });
-                return data ? owner.objectRegistry.getOrCreateSymbol(data) : undefined;
-            },
-            function* (symbol: Symbol, name: string): Generator<ProtocolRequest, Symbol | undefined, ProtocolResponse["result"]> {
-                const data = yield* apiRequest("getMemberInModuleExports", {
-                    snapshot: owner.snapshotId,
-                    project: owner.project.handle,
-                    symbol: symbol.reference,
-                    name,
-                });
-                return data ? owner.objectRegistry.getOrCreateSymbol(data) : undefined;
-            },
-        );
+        return getGeneratorMethod(this, this.#generatorMethods ??= createGeneratorMethodCache(85), 81, this.#getMemberInModuleExports, this.#getMemberInModuleExportsGen);
+    }
+
+    #getMemberInModuleExports(symbol: Symbol, name: string): Symbol | undefined {
+        const data = this.client.apiRequest("getMemberInModuleExports", {
+            snapshot: this.snapshotId,
+            project: this.project.handle,
+            symbol: symbol.reference,
+            name,
+        });
+        return data ? this.objectRegistry.getOrCreateSymbol(data) : undefined;
+    }
+
+    *#getMemberInModuleExportsGen(symbol: Symbol, name: string): Generator<ProtocolRequest, Symbol | undefined, ProtocolResponse["result"]> {
+        const data = yield* apiRequest("getMemberInModuleExports", {
+            snapshot: this.snapshotId,
+            project: this.project.handle,
+            symbol: symbol.reference,
+            name,
+        });
+        return data ? this.objectRegistry.getOrCreateSymbol(data) : undefined;
     }
 
     get getJsDocTagsOfSymbol(): {
         (symbol: Symbol): readonly JSDocTagInfo[];
         gen(symbol: Symbol): Generator<ProtocolRequest, readonly JSDocTagInfo[], ProtocolResponse["result"]>;
     } {
-        const owner = this;
-        return cacheGeneratorMethod(
-            owner,
-            "getJsDocTagsOfSymbol",
-            function (symbol: Symbol): readonly JSDocTagInfo[] {
-                const data = owner.client.apiRequest("getJsDocTags", {
-                    snapshot: owner.snapshotId,
-                    project: owner.project.handle,
-                    symbol: symbol.reference,
-                });
-                return data ?? [];
-            },
-            function* (symbol: Symbol): Generator<ProtocolRequest, readonly JSDocTagInfo[], ProtocolResponse["result"]> {
-                const data = yield* apiRequest("getJsDocTags", {
-                    snapshot: owner.snapshotId,
-                    project: owner.project.handle,
-                    symbol: symbol.reference,
-                });
-                return data ?? [];
-            },
-        );
+        return getGeneratorMethod(this, this.#generatorMethods ??= createGeneratorMethodCache(85), 82, this.#getJsDocTagsOfSymbol, this.#getJsDocTagsOfSymbolGen);
+    }
+
+    #getJsDocTagsOfSymbol(symbol: Symbol): readonly JSDocTagInfo[] {
+        const data = this.client.apiRequest("getJsDocTags", {
+            snapshot: this.snapshotId,
+            project: this.project.handle,
+            symbol: symbol.reference,
+        });
+        return data ?? [];
+    }
+
+    *#getJsDocTagsOfSymbolGen(symbol: Symbol): Generator<ProtocolRequest, readonly JSDocTagInfo[], ProtocolResponse["result"]> {
+        const data = yield* apiRequest("getJsDocTags", {
+            snapshot: this.snapshotId,
+            project: this.project.handle,
+            symbol: symbol.reference,
+        });
+        return data ?? [];
     }
 
     get getDocumentationCommentOfSymbol(): {
         (symbol: Symbol): string;
         gen(symbol: Symbol): Generator<ProtocolRequest, string, ProtocolResponse["result"]>;
     } {
-        const owner = this;
-        return cacheGeneratorMethod(
-            owner,
-            "getDocumentationCommentOfSymbol",
-            function (symbol: Symbol): string {
-                return owner.client.apiRequest("getDocumentationComment", {
-                    snapshot: owner.snapshotId,
-                    project: owner.project.handle,
-                    symbol: symbol.reference,
-                });
-            },
-            function* (symbol: Symbol): Generator<ProtocolRequest, string, ProtocolResponse["result"]> {
-                return yield* apiRequest("getDocumentationComment", {
-                    snapshot: owner.snapshotId,
-                    project: owner.project.handle,
-                    symbol: symbol.reference,
-                });
-            },
-        );
+        return getGeneratorMethod(this, this.#generatorMethods ??= createGeneratorMethodCache(85), 83, this.#getDocumentationCommentOfSymbol, this.#getDocumentationCommentOfSymbolGen);
+    }
+
+    #getDocumentationCommentOfSymbol(symbol: Symbol): string {
+        return this.client.apiRequest("getDocumentationComment", {
+            snapshot: this.snapshotId,
+            project: this.project.handle,
+            symbol: symbol.reference,
+        });
+    }
+
+    *#getDocumentationCommentOfSymbolGen(symbol: Symbol): Generator<ProtocolRequest, string, ProtocolResponse["result"]> {
+        return yield* apiRequest("getDocumentationComment", {
+            snapshot: this.snapshotId,
+            project: this.project.handle,
+            symbol: symbol.reference,
+        });
     }
 
     /**
@@ -6471,27 +6155,25 @@ export class Checker {
         (type: TypeReference): readonly Type[];
         gen(type: TypeReference): Generator<ProtocolRequest, readonly Type[], ProtocolResponse["result"]>;
     } {
-        const owner = this;
-        return cacheGeneratorMethod(
-            owner,
-            "getTypeArguments",
-            function (type: TypeReference): readonly Type[] {
-                const data = owner.client.apiRequest("getTypeArguments", {
-                    snapshot: owner.snapshotId,
-                    project: owner.project.handle,
-                    type: type.id,
-                });
-                return data ? data.map(d => owner.objectRegistry.getOrCreateType(d)) : [];
-            },
-            function* (type: TypeReference): Generator<ProtocolRequest, readonly Type[], ProtocolResponse["result"]> {
-                const data = yield* apiRequest("getTypeArguments", {
-                    snapshot: owner.snapshotId,
-                    project: owner.project.handle,
-                    type: type.id,
-                });
-                return data ? data.map(d => owner.objectRegistry.getOrCreateType(d)) : [];
-            },
-        );
+        return getGeneratorMethod(this, this.#generatorMethods ??= createGeneratorMethodCache(85), 84, this.#getTypeArguments, this.#getTypeArgumentsGen);
+    }
+
+    #getTypeArguments(type: TypeReference): readonly Type[] {
+        const data = this.client.apiRequest("getTypeArguments", {
+            snapshot: this.snapshotId,
+            project: this.project.handle,
+            type: type.id,
+        });
+        return data ? data.map(d => this.objectRegistry.getOrCreateType(d)) : [];
+    }
+
+    *#getTypeArgumentsGen(type: TypeReference): Generator<ProtocolRequest, readonly Type[], ProtocolResponse["result"]> {
+        const data = yield* apiRequest("getTypeArguments", {
+            snapshot: this.snapshotId,
+            project: this.project.handle,
+            type: type.id,
+        });
+        return data ? data.map(d => this.objectRegistry.getOrCreateType(d)) : [];
     }
 }
 
@@ -6502,6 +6184,7 @@ export interface PrintNodeOptions {
 }
 
 export class Printer {
+    #generatorMethods: GeneratorMethodCache | undefined;
     private client: Client;
 
     constructor(client: Client) {
@@ -6512,66 +6195,63 @@ export class Printer {
         (node: Node, options?: PrintNodeOptions): string;
         gen(node: Node, options?: PrintNodeOptions): Generator<ProtocolRequest, string, ProtocolResponse["result"]>;
     } {
-        const owner = this;
-        return cacheGeneratorMethod(
-            owner,
-            "printNode",
-            function (node: Node, options: PrintNodeOptions = {}): string {
-                const encoded = encodeNode(node);
-                const base64 = uint8ArrayToBase64(encoded);
-                return owner.client.apiRequest("printNode", {
-                    data: base64,
-                    preserveSourceNewlines: options.preserveSourceNewlines,
-                    neverAsciiEscape: options.neverAsciiEscape,
-                    terminateUnterminatedLiterals: options.terminateUnterminatedLiterals,
-                });
-            },
-            function* (node: Node, options: PrintNodeOptions = {}): Generator<ProtocolRequest, string, ProtocolResponse["result"]> {
-                const encoded = encodeNode(node);
-                const base64 = uint8ArrayToBase64(encoded);
-                return yield* apiRequest("printNode", {
-                    data: base64,
-                    preserveSourceNewlines: options.preserveSourceNewlines,
-                    neverAsciiEscape: options.neverAsciiEscape,
-                    terminateUnterminatedLiterals: options.terminateUnterminatedLiterals,
-                });
-            },
-        );
+        return getGeneratorMethod(this, this.#generatorMethods ??= createGeneratorMethodCache(2), 0, this.#printNode, this.#printNodeGen);
+    }
+
+    #printNode(node: Node, options: PrintNodeOptions = {}): string {
+        const encoded = encodeNode(node);
+        const base64 = uint8ArrayToBase64(encoded);
+        return this.client.apiRequest("printNode", {
+            data: base64,
+            preserveSourceNewlines: options.preserveSourceNewlines,
+            neverAsciiEscape: options.neverAsciiEscape,
+            terminateUnterminatedLiterals: options.terminateUnterminatedLiterals,
+        });
+    }
+
+    *#printNodeGen(node: Node, options: PrintNodeOptions = {}): Generator<ProtocolRequest, string, ProtocolResponse["result"]> {
+        const encoded = encodeNode(node);
+        const base64 = uint8ArrayToBase64(encoded);
+        return yield* apiRequest("printNode", {
+            data: base64,
+            preserveSourceNewlines: options.preserveSourceNewlines,
+            neverAsciiEscape: options.neverAsciiEscape,
+            terminateUnterminatedLiterals: options.terminateUnterminatedLiterals,
+        });
     }
 
     get printFile(): {
         (sourceFile: SourceFile, options?: PrintNodeOptions): string;
         gen(sourceFile: SourceFile, options?: PrintNodeOptions): Generator<ProtocolRequest, string, ProtocolResponse["result"]>;
     } {
-        const owner = this;
-        return cacheGeneratorMethod(
-            owner,
-            "printFile",
-            function (sourceFile: SourceFile, options: PrintNodeOptions = {}): string {
-                const encoded = encodeNode(sourceFile);
-                const base64 = uint8ArrayToBase64(encoded);
-                return owner.client.apiRequest("printNode", {
-                    data: base64,
-                    preserveSourceNewlines: options.preserveSourceNewlines,
-                    neverAsciiEscape: options.neverAsciiEscape,
-                    terminateUnterminatedLiterals: options.terminateUnterminatedLiterals,
-                });
-            },
-            function* (sourceFile: SourceFile, options: PrintNodeOptions = {}): Generator<ProtocolRequest, string, ProtocolResponse["result"]> {
-                const encoded = encodeNode(sourceFile);
-                const base64 = uint8ArrayToBase64(encoded);
-                return yield* apiRequest("printNode", {
-                    data: base64,
-                    preserveSourceNewlines: options.preserveSourceNewlines,
-                    neverAsciiEscape: options.neverAsciiEscape,
-                    terminateUnterminatedLiterals: options.terminateUnterminatedLiterals,
-                });
-            },
-        );
+        return getGeneratorMethod(this, this.#generatorMethods ??= createGeneratorMethodCache(2), 1, this.#printFile, this.#printFileGen);
+    }
+
+    #printFile(sourceFile: SourceFile, options: PrintNodeOptions = {}): string {
+        const encoded = encodeNode(sourceFile);
+        const base64 = uint8ArrayToBase64(encoded);
+        return this.client.apiRequest("printNode", {
+            data: base64,
+            preserveSourceNewlines: options.preserveSourceNewlines,
+            neverAsciiEscape: options.neverAsciiEscape,
+            terminateUnterminatedLiterals: options.terminateUnterminatedLiterals,
+        });
+    }
+
+    *#printFileGen(sourceFile: SourceFile, options: PrintNodeOptions = {}): Generator<ProtocolRequest, string, ProtocolResponse["result"]> {
+        const encoded = encodeNode(sourceFile);
+        const base64 = uint8ArrayToBase64(encoded);
+        return yield* apiRequest("printNode", {
+            data: base64,
+            preserveSourceNewlines: options.preserveSourceNewlines,
+            neverAsciiEscape: options.neverAsciiEscape,
+            terminateUnterminatedLiterals: options.terminateUnterminatedLiterals,
+        });
     }
 }
 
 export class NodeHandle<out T extends Node = Node> {
+    #generatorMethods: GeneratorMethodCache | undefined;
     /**
      * The project where this handle was first materialized, used as the default for {@link resolve}.
      * Node handles are only meaningful within a project's program, so the producing project
@@ -6608,35 +6288,33 @@ export class NodeHandle<out T extends Node = Node> {
         (project?: Project | undefined): T | undefined;
         gen(project?: Project | undefined): Generator<ProtocolRequest, T | undefined, ProtocolResponse["result"]>;
     } {
-        const owner = this;
-        return cacheGeneratorMethod(
-            owner,
-            "resolve",
-            function (project: Project | undefined = owner.canonicalProject): T | undefined {
-                if (owner.fileOwner) {
-                    const sourceFile = owner.fileOwner.record.file ?? owner.fetchOwnerFile(owner.fileOwner);
-                    return owner.resolveInFile(sourceFile);
-                }
-                if (!project) throw new Error(`Node handle for source file '${owner.sourceFileId}' has no project context`);
-                const sourceFile = project.program.getSourceFileByPath(owner.path);
-                if (!sourceFile) {
-                    throw new Error("Node handle source file is not part of the requested program");
-                }
-                return owner.resolveInFile(sourceFile as unknown as RemoteSourceFile);
-            },
-            function* (project: Project | undefined = owner.canonicalProject): Generator<ProtocolRequest, T | undefined, ProtocolResponse["result"]> {
-                if (owner.fileOwner) {
-                    const sourceFile = owner.fileOwner.record.file ?? (yield* owner.fetchOwnerFile.gen(owner.fileOwner));
-                    return owner.resolveInFile(sourceFile);
-                }
-                if (!project) throw new Error(`Node handle for source file '${owner.sourceFileId}' has no project context`);
-                const sourceFile = yield* project.program.getSourceFileByPath.gen(owner.path);
-                if (!sourceFile) {
-                    throw new Error("Node handle source file is not part of the requested program");
-                }
-                return owner.resolveInFile(sourceFile as unknown as RemoteSourceFile);
-            },
-        );
+        return getGeneratorMethod(this, this.#generatorMethods ??= createGeneratorMethodCache(2), 0, this.#resolve, this.#resolveGen);
+    }
+
+    #resolve(project: Project | undefined = this.canonicalProject): T | undefined {
+        if (this.fileOwner) {
+            const sourceFile = this.fileOwner.record.file ?? this.#fetchOwnerFile(this.fileOwner);
+            return this.resolveInFile(sourceFile);
+        }
+        if (!project) throw new Error(`Node handle for source file '${this.sourceFileId}' has no project context`);
+        const sourceFile = project.program.getSourceFileByPath(this.path);
+        if (!sourceFile) {
+            throw new Error("Node handle source file is not part of the requested program");
+        }
+        return this.resolveInFile(sourceFile as unknown as RemoteSourceFile);
+    }
+
+    *#resolveGen(project: Project | undefined = this.canonicalProject): Generator<ProtocolRequest, T | undefined, ProtocolResponse["result"]> {
+        if (this.fileOwner) {
+            const sourceFile = this.fileOwner.record.file ?? (yield* this.#fetchOwnerFileGen(this.fileOwner));
+            return this.resolveInFile(sourceFile);
+        }
+        if (!project) throw new Error(`Node handle for source file '${this.sourceFileId}' has no project context`);
+        const sourceFile = yield* project.program.getSourceFileByPath.gen(this.path);
+        if (!sourceFile) {
+            throw new Error("Node handle source file is not part of the requested program");
+        }
+        return this.resolveInFile(sourceFile as unknown as RemoteSourceFile);
     }
 
     private resolveInFile(sourceFile: RemoteSourceFile): T | undefined {
@@ -6654,26 +6332,24 @@ export class NodeHandle<out T extends Node = Node> {
         (fileOwner: SourceFileOwner): RemoteSourceFile;
         gen(fileOwner: SourceFileOwner): Generator<ProtocolRequest, RemoteSourceFile, ProtocolResponse["result"]>;
     } {
-        const owner = this;
-        return cacheGeneratorMethod(
-            owner,
-            "fetchOwnerFile",
-            function (fileOwner: SourceFileOwner): RemoteSourceFile {
-                const data = fileOwner.api.client.apiRequestBinary("getCachedSourceFile", { file: fileOwner.record.descriptor });
-                if (!data) throw new Error(`Source file '${fileOwner.record.descriptor.fileName}' is not available`);
-                return fileOwner.api.sourceFileCache.attachFile(
-                    fileOwner.record,
-                    new RemoteSourceFile(data, new Wtf8Decoder(), fileOwner.api.client.getTimingCollector(), fileOwner.api),
-                );
-            },
-            function* (fileOwner: SourceFileOwner): Generator<ProtocolRequest, RemoteSourceFile, ProtocolResponse["result"]> {
-                const data = sourceFileResponseToUint8Array(yield* apiRequest("getCachedSourceFile", { file: fileOwner.record.descriptor }));
-                if (!data) throw new Error(`Source file '${fileOwner.record.descriptor.fileName}' is not available`);
-                return fileOwner.api.sourceFileCache.attachFile(
-                    fileOwner.record,
-                    new RemoteSourceFile(data, new Wtf8Decoder(), fileOwner.api.client.getTimingCollector(), fileOwner.api),
-                );
-            },
+        return getGeneratorMethod(this, this.#generatorMethods ??= createGeneratorMethodCache(2), 1, this.#fetchOwnerFile, this.#fetchOwnerFileGen);
+    }
+
+    #fetchOwnerFile(fileOwner: SourceFileOwner): RemoteSourceFile {
+        const data = fileOwner.api.client.apiRequestBinary("getCachedSourceFile", { file: fileOwner.record.descriptor });
+        if (!data) throw new Error(`Source file '${fileOwner.record.descriptor.fileName}' is not available`);
+        return fileOwner.api.sourceFileCache.attachFile(
+            fileOwner.record,
+            new RemoteSourceFile(data, new Wtf8Decoder(), fileOwner.api.client.getTimingCollector(), fileOwner.api),
+        );
+    }
+
+    *#fetchOwnerFileGen(fileOwner: SourceFileOwner): Generator<ProtocolRequest, RemoteSourceFile, ProtocolResponse["result"]> {
+        const data = sourceFileResponseToUint8Array(yield* apiRequest("getCachedSourceFile", { file: fileOwner.record.descriptor }));
+        if (!data) throw new Error(`Source file '${fileOwner.record.descriptor.fileName}' is not available`);
+        return fileOwner.api.sourceFileCache.attachFile(
+            fileOwner.record,
+            new RemoteSourceFile(data, new Wtf8Decoder(), fileOwner.api.client.getTimingCollector(), fileOwner.api),
         );
     }
 }
@@ -6707,6 +6383,7 @@ type SymbolStorage =
     | { readonly kind: typeof SymbolOwnerKind.Snapshot; readonly registry: ProjectObjectRegistry; };
 
 export class Symbol {
+    #generatorMethods: GeneratorMethodCache | undefined;
     private readonly storage: SymbolStorage;
 
     get id(): number {
@@ -6770,19 +6447,17 @@ export class Symbol {
         (): Symbol | undefined;
         gen(): Generator<ProtocolRequest, Symbol | undefined, ProtocolResponse["result"]>;
     } {
-        const owner = this;
-        return cacheGeneratorMethod(
-            owner,
-            "getParent",
-            function (): Symbol | undefined {
-                if (!owner.parent) return undefined;
-                return owner.fetchSymbol("getParentOfSymbol", owner.parent);
-            },
-            function* (): Generator<ProtocolRequest, Symbol | undefined, ProtocolResponse["result"]> {
-                if (!owner.parent) return undefined;
-                return yield* owner.fetchSymbol.gen("getParentOfSymbol", owner.parent);
-            },
-        );
+        return getGeneratorMethod(this, this.#generatorMethods ??= createGeneratorMethodCache(9), 0, this.#getParent, this.#getParentGen);
+    }
+
+    #getParent(): Symbol | undefined {
+        if (!this.parent) return undefined;
+        return this.#fetchSymbol("getParentOfSymbol", this.parent);
+    }
+
+    *#getParentGen(): Generator<ProtocolRequest, Symbol | undefined, ProtocolResponse["result"]> {
+        if (!this.parent) return undefined;
+        return yield* this.#fetchSymbolGen("getParentOfSymbol", this.parent);
     }
 
     /**
@@ -6793,17 +6468,15 @@ export class Symbol {
         (): ReadonlyMap<__String, Symbol>;
         gen(): Generator<ProtocolRequest, ReadonlyMap<__String, Symbol>, ProtocolResponse["result"]>;
     } {
-        const owner = this;
-        return cacheGeneratorMethod(
-            owner,
-            "getMembers",
-            function (): ReadonlyMap<__String, Symbol> {
-                return owner.membersCache ??= owner.fetchSymbolTable("getMembersOfSymbol");
-            },
-            function* (): Generator<ProtocolRequest, ReadonlyMap<__String, Symbol>, ProtocolResponse["result"]> {
-                return owner.membersCache ??= yield* owner.fetchSymbolTable.gen("getMembersOfSymbol");
-            },
-        );
+        return getGeneratorMethod(this, this.#generatorMethods ??= createGeneratorMethodCache(9), 1, this.#getMembers, this.#getMembersGen);
+    }
+
+    #getMembers(): ReadonlyMap<__String, Symbol> {
+        return this.membersCache ??= this.#fetchSymbolTable("getMembersOfSymbol");
+    }
+
+    *#getMembersGen(): Generator<ProtocolRequest, ReadonlyMap<__String, Symbol>, ProtocolResponse["result"]> {
+        return this.membersCache ??= yield* this.#fetchSymbolTableGen("getMembersOfSymbol");
     }
 
     /**
@@ -6814,159 +6487,145 @@ export class Symbol {
         (): ReadonlyMap<__String, Symbol>;
         gen(): Generator<ProtocolRequest, ReadonlyMap<__String, Symbol>, ProtocolResponse["result"]>;
     } {
-        const owner = this;
-        return cacheGeneratorMethod(
-            owner,
-            "getExports",
-            function (): ReadonlyMap<__String, Symbol> {
-                return owner.exportsCache ??= owner.fetchSymbolTable("getExportsOfSymbol");
-            },
-            function* (): Generator<ProtocolRequest, ReadonlyMap<__String, Symbol>, ProtocolResponse["result"]> {
-                return owner.exportsCache ??= yield* owner.fetchSymbolTable.gen("getExportsOfSymbol");
-            },
-        );
+        return getGeneratorMethod(this, this.#generatorMethods ??= createGeneratorMethodCache(9), 2, this.#getExports, this.#getExportsGen);
+    }
+
+    #getExports(): ReadonlyMap<__String, Symbol> {
+        return this.exportsCache ??= this.#fetchSymbolTable("getExportsOfSymbol");
+    }
+
+    *#getExportsGen(): Generator<ProtocolRequest, ReadonlyMap<__String, Symbol>, ProtocolResponse["result"]> {
+        return this.exportsCache ??= yield* this.#fetchSymbolTableGen("getExportsOfSymbol");
     }
 
     private get fetchSymbolTable(): {
         (method: SymbolsPropertyMethod): ReadonlyMap<__String, Symbol>;
         gen(method: SymbolsPropertyMethod): Generator<ProtocolRequest, ReadonlyMap<__String, Symbol>, ProtocolResponse["result"]>;
     } {
-        const owner = this;
-        return cacheGeneratorMethod(
-            owner,
-            "fetchSymbolTable",
-            function (method: SymbolsPropertyMethod): ReadonlyMap<__String, Symbol> {
-                const symbols = owner.fetchSymbols(method);
-                const table = new Map<__String, Symbol>();
-                for (const symbol of symbols) {
-                    table.set(symbol.escapedName, symbol);
-                }
-                return table;
-            },
-            function* (method: SymbolsPropertyMethod): Generator<ProtocolRequest, ReadonlyMap<__String, Symbol>, ProtocolResponse["result"]> {
-                const symbols = yield* owner.fetchSymbols.gen(method);
-                const table = new Map<__String, Symbol>();
-                for (const symbol of symbols) {
-                    table.set(symbol.escapedName, symbol);
-                }
-                return table;
-            },
-        );
+        return getGeneratorMethod(this, this.#generatorMethods ??= createGeneratorMethodCache(9), 3, this.#fetchSymbolTable, this.#fetchSymbolTableGen);
+    }
+
+    #fetchSymbolTable(method: SymbolsPropertyMethod): ReadonlyMap<__String, Symbol> {
+        const symbols = this.#fetchSymbols(method);
+        const table = new Map<__String, Symbol>();
+        for (const symbol of symbols) {
+            table.set(symbol.escapedName, symbol);
+        }
+        return table;
+    }
+
+    *#fetchSymbolTableGen(method: SymbolsPropertyMethod): Generator<ProtocolRequest, ReadonlyMap<__String, Symbol>, ProtocolResponse["result"]> {
+        const symbols = yield* this.#fetchSymbolsGen(method);
+        const table = new Map<__String, Symbol>();
+        for (const symbol of symbols) {
+            table.set(symbol.escapedName, symbol);
+        }
+        return table;
     }
 
     get getExportSymbol(): {
         (): Symbol;
         gen(): Generator<ProtocolRequest, Symbol, ProtocolResponse["result"]>;
     } {
-        const owner = this;
-        return cacheGeneratorMethod(
-            owner,
-            "getExportSymbol",
-            function (): Symbol {
-                if (!owner.exportSymbol) return owner;
-                return owner.fetchSymbol("getExportSymbolOfSymbol", owner.exportSymbol);
-            },
-            function* (): Generator<ProtocolRequest, Symbol, ProtocolResponse["result"]> {
-                if (!owner.exportSymbol) return owner;
-                return yield* owner.fetchSymbol.gen("getExportSymbolOfSymbol", owner.exportSymbol);
-            },
-        );
+        return getGeneratorMethod(this, this.#generatorMethods ??= createGeneratorMethodCache(9), 4, this.#getExportSymbol, this.#getExportSymbolGen);
+    }
+
+    #getExportSymbol(): Symbol {
+        if (!this.exportSymbol) return this;
+        return this.#fetchSymbol("getExportSymbolOfSymbol", this.exportSymbol);
+    }
+
+    *#getExportSymbolGen(): Generator<ProtocolRequest, Symbol, ProtocolResponse["result"]> {
+        if (!this.exportSymbol) return this;
+        return yield* this.#fetchSymbolGen("getExportSymbolOfSymbol", this.exportSymbol);
     }
 
     get getJsDocTags(): {
         (checker: Checker): readonly JSDocTagInfo[];
         gen(checker: Checker): Generator<ProtocolRequest, readonly JSDocTagInfo[], ProtocolResponse["result"]>;
     } {
-        const owner = this;
-        return cacheGeneratorMethod(
-            owner,
-            "getJsDocTags",
-            function (checker: Checker): readonly JSDocTagInfo[] {
-                return checker.getJsDocTagsOfSymbol(owner);
-            },
-            function* (checker: Checker): Generator<ProtocolRequest, readonly JSDocTagInfo[], ProtocolResponse["result"]> {
-                return yield* checker.getJsDocTagsOfSymbol.gen(owner);
-            },
-        );
+        return getGeneratorMethod(this, this.#generatorMethods ??= createGeneratorMethodCache(9), 5, this.#getJsDocTags, this.#getJsDocTagsGen);
+    }
+
+    #getJsDocTags(checker: Checker): readonly JSDocTagInfo[] {
+        return checker.getJsDocTagsOfSymbol(this);
+    }
+
+    *#getJsDocTagsGen(checker: Checker): Generator<ProtocolRequest, readonly JSDocTagInfo[], ProtocolResponse["result"]> {
+        return yield* checker.getJsDocTagsOfSymbol.gen(this);
     }
 
     get getDocumentationComment(): {
         (checker: Checker): string;
         gen(checker: Checker): Generator<ProtocolRequest, string, ProtocolResponse["result"]>;
     } {
-        const owner = this;
-        return cacheGeneratorMethod(
-            owner,
-            "getDocumentationComment",
-            function (checker: Checker): string {
-                return checker.getDocumentationCommentOfSymbol(owner);
-            },
-            function* (checker: Checker): Generator<ProtocolRequest, string, ProtocolResponse["result"]> {
-                return yield* checker.getDocumentationCommentOfSymbol.gen(owner);
-            },
-        );
+        return getGeneratorMethod(this, this.#generatorMethods ??= createGeneratorMethodCache(9), 6, this.#getDocumentationComment, this.#getDocumentationCommentGen);
+    }
+
+    #getDocumentationComment(checker: Checker): string {
+        return checker.getDocumentationCommentOfSymbol(this);
+    }
+
+    *#getDocumentationCommentGen(checker: Checker): Generator<ProtocolRequest, string, ProtocolResponse["result"]> {
+        return yield* checker.getDocumentationCommentOfSymbol.gen(this);
     }
 
     private get fetchSymbol(): {
         (method: SymbolPropertyMethod, reference: CompactSymbolReference): Symbol;
         gen(method: SymbolPropertyMethod, reference: CompactSymbolReference): Generator<ProtocolRequest, Symbol, ProtocolResponse["result"]>;
     } {
-        const owner = this;
-        return cacheGeneratorMethod(
-            owner,
-            "fetchSymbol",
-            function (method: SymbolPropertyMethod, reference: CompactSymbolReference): Symbol {
-                if (owner.storage.kind === SymbolOwnerKind.Snapshot) {
-                    return owner.storage.registry.fetchSymbol(owner, method, reference);
-                }
-                const fileOwner = owner.storage.owner;
-                // A file-owned symbol's relationships are always owned by the same file.
-                const cached = reference.file === fileOwner.record.descriptor.nodeId ? fileOwner.record.symbolsById.get(reference.id) : undefined;
-                if (cached) return cached;
-                const data = fileOwner.api.client.apiRequest(method, { symbol: owner.reference });
-                if (!data) throw new Error(`${method} returned null symbol for Symbol ${owner.id}`);
-                return owner.internFileSymbol(fileOwner, data);
-            },
-            function* (method: SymbolPropertyMethod, reference: CompactSymbolReference): Generator<ProtocolRequest, Symbol, ProtocolResponse["result"]> {
-                if (owner.storage.kind === SymbolOwnerKind.Snapshot) {
-                    return yield* owner.storage.registry.fetchSymbol.gen(owner, method, reference);
-                }
-                const fileOwner = owner.storage.owner;
-                // A file-owned symbol's relationships are always owned by the same file.
-                const cached = reference.file === fileOwner.record.descriptor.nodeId ? fileOwner.record.symbolsById.get(reference.id) : undefined;
-                if (cached) return cached;
-                const data = yield* apiRequest(method, { symbol: owner.reference });
-                if (!data) throw new Error(`${method} returned null symbol for Symbol ${owner.id}`);
-                return owner.internFileSymbol(fileOwner, data);
-            },
-        );
+        return getGeneratorMethod(this, this.#generatorMethods ??= createGeneratorMethodCache(9), 7, this.#fetchSymbol, this.#fetchSymbolGen);
+    }
+
+    #fetchSymbol(method: SymbolPropertyMethod, reference: CompactSymbolReference): Symbol {
+        if (this.storage.kind === SymbolOwnerKind.Snapshot) {
+            return this.storage.registry.fetchSymbol(this, method, reference);
+        }
+        const fileOwner = this.storage.owner;
+        // A file-owned symbol's relationships are always owned by the same file.
+        const cached = reference.file === fileOwner.record.descriptor.nodeId ? fileOwner.record.symbolsById.get(reference.id) : undefined;
+        if (cached) return cached;
+        const data = fileOwner.api.client.apiRequest(method, { symbol: this.reference });
+        if (!data) throw new Error(`${method} returned null symbol for Symbol ${this.id}`);
+        return this.internFileSymbol(fileOwner, data);
+    }
+
+    *#fetchSymbolGen(method: SymbolPropertyMethod, reference: CompactSymbolReference): Generator<ProtocolRequest, Symbol, ProtocolResponse["result"]> {
+        if (this.storage.kind === SymbolOwnerKind.Snapshot) {
+            return yield* this.storage.registry.fetchSymbol.gen(this, method, reference);
+        }
+        const fileOwner = this.storage.owner;
+        // A file-owned symbol's relationships are always owned by the same file.
+        const cached = reference.file === fileOwner.record.descriptor.nodeId ? fileOwner.record.symbolsById.get(reference.id) : undefined;
+        if (cached) return cached;
+        const data = yield* apiRequest(method, { symbol: this.reference });
+        if (!data) throw new Error(`${method} returned null symbol for Symbol ${this.id}`);
+        return this.internFileSymbol(fileOwner, data);
     }
 
     private get fetchSymbols(): {
         (method: SymbolsPropertyMethod): readonly Symbol[];
         gen(method: SymbolsPropertyMethod): Generator<ProtocolRequest, readonly Symbol[], ProtocolResponse["result"]>;
     } {
-        const owner = this;
-        return cacheGeneratorMethod(
-            owner,
-            "fetchSymbols",
-            function (method: SymbolsPropertyMethod): readonly Symbol[] {
-                if (owner.storage.kind === SymbolOwnerKind.Snapshot) {
-                    return owner.storage.registry.fetchSymbols(owner, method);
-                }
-                const fileOwner = owner.storage.owner;
-                const data = fileOwner.api.client.apiRequest(method, { symbol: owner.reference });
-                return data?.map(symbol => owner.internFileSymbol(fileOwner, symbol)) ?? [];
-            },
-            function* (method: SymbolsPropertyMethod): Generator<ProtocolRequest, readonly Symbol[], ProtocolResponse["result"]> {
-                if (owner.storage.kind === SymbolOwnerKind.Snapshot) {
-                    return yield* owner.storage.registry.fetchSymbols.gen(owner, method);
-                }
-                const fileOwner = owner.storage.owner;
-                const data = yield* apiRequest(method, { symbol: owner.reference });
-                return data?.map(symbol => owner.internFileSymbol(fileOwner, symbol)) ?? [];
-            },
-        );
+        return getGeneratorMethod(this, this.#generatorMethods ??= createGeneratorMethodCache(9), 8, this.#fetchSymbols, this.#fetchSymbolsGen);
+    }
+
+    #fetchSymbols(method: SymbolsPropertyMethod): readonly Symbol[] {
+        if (this.storage.kind === SymbolOwnerKind.Snapshot) {
+            return this.storage.registry.fetchSymbols(this, method);
+        }
+        const fileOwner = this.storage.owner;
+        const data = fileOwner.api.client.apiRequest(method, { symbol: this.reference });
+        return data?.map(symbol => this.internFileSymbol(fileOwner, symbol)) ?? [];
+    }
+
+    *#fetchSymbolsGen(method: SymbolsPropertyMethod): Generator<ProtocolRequest, readonly Symbol[], ProtocolResponse["result"]> {
+        if (this.storage.kind === SymbolOwnerKind.Snapshot) {
+            return yield* this.storage.registry.fetchSymbols.gen(this, method);
+        }
+        const fileOwner = this.storage.owner;
+        const data = yield* apiRequest(method, { symbol: this.reference });
+        return data?.map(symbol => this.internFileSymbol(fileOwner, symbol)) ?? [];
     }
 
     private internFileSymbol(fileOwner: SourceFileOwner, data: ProtocolSymbolResponse): Symbol {
@@ -6978,6 +6637,7 @@ export class Symbol {
 }
 
 class TypeObject implements Type {
+    #generatorMethods: GeneratorMethodCache | undefined;
     private objectRegistry: ProjectObjectRegistry;
 
     // Fields included in TypeResponse. References to other objects are stored as IDs
@@ -7121,731 +6781,657 @@ class TypeObject implements Type {
         (): Symbol | undefined;
         gen(): Generator<ProtocolRequest, Symbol | undefined, ProtocolResponse["result"]>;
     } {
-        const owner = this;
-        return cacheGeneratorMethod(
-            owner,
-            "getSymbol",
-            function (): Symbol | undefined {
-                return owner.objectRegistry.fetchSymbol(owner, "getSymbolOfType", owner.symbol);
-            },
-            function* (): Generator<ProtocolRequest, Symbol | undefined, ProtocolResponse["result"]> {
-                return yield* owner.objectRegistry.fetchSymbol.gen(owner, "getSymbolOfType", owner.symbol);
-            },
-        );
+        return getGeneratorMethod(this, this.#generatorMethods ??= createGeneratorMethodCache(38), 0, this.#getSymbol, this.#getSymbolGen);
+    }
+
+    #getSymbol(): Symbol | undefined {
+        return this.objectRegistry.fetchSymbol(this, "getSymbolOfType", this.symbol);
+    }
+
+    *#getSymbolGen(): Generator<ProtocolRequest, Symbol | undefined, ProtocolResponse["result"]> {
+        return yield* this.objectRegistry.fetchSymbol.gen(this, "getSymbolOfType", this.symbol);
     }
 
     get getProperties(): {
         (): readonly Symbol[];
         gen(): Generator<ProtocolRequest, readonly Symbol[], ProtocolResponse["result"]>;
     } {
-        const owner = this;
-        return cacheGeneratorMethod(
-            owner,
-            "getProperties",
-            function (): readonly Symbol[] {
-                if (owner.properties === false) {
-                    owner.properties = owner.objectRegistry.fetchPropertiesOfType(owner);
-                }
-                return owner.properties;
-            },
-            function* (): Generator<ProtocolRequest, readonly Symbol[], ProtocolResponse["result"]> {
-                if (owner.properties === false) {
-                    owner.properties = yield* owner.objectRegistry.fetchPropertiesOfType.gen(owner);
-                }
-                return owner.properties;
-            },
-        );
+        return getGeneratorMethod(this, this.#generatorMethods ??= createGeneratorMethodCache(38), 1, this.#getProperties, this.#getPropertiesGen);
+    }
+
+    #getProperties(): readonly Symbol[] {
+        if (this.properties === false) {
+            this.properties = this.objectRegistry.fetchPropertiesOfType(this);
+        }
+        return this.properties;
+    }
+
+    *#getPropertiesGen(): Generator<ProtocolRequest, readonly Symbol[], ProtocolResponse["result"]> {
+        if (this.properties === false) {
+            this.properties = yield* this.objectRegistry.fetchPropertiesOfType.gen(this);
+        }
+        return this.properties;
     }
 
     get getProperty(): {
         (propertyName: string): Symbol | undefined;
         gen(propertyName: string): Generator<ProtocolRequest, Symbol | undefined, ProtocolResponse["result"]>;
     } {
-        const owner = this;
-        return cacheGeneratorMethod(
-            owner,
-            "getProperty",
-            function (propertyName: string): Symbol | undefined {
-                return owner.objectRegistry.fetchPropertyOfType(owner, propertyName);
-            },
-            function* (propertyName: string): Generator<ProtocolRequest, Symbol | undefined, ProtocolResponse["result"]> {
-                return yield* owner.objectRegistry.fetchPropertyOfType.gen(owner, propertyName);
-            },
-        );
+        return getGeneratorMethod(this, this.#generatorMethods ??= createGeneratorMethodCache(38), 2, this.#getProperty, this.#getPropertyGen);
+    }
+
+    #getProperty(propertyName: string): Symbol | undefined {
+        return this.objectRegistry.fetchPropertyOfType(this, propertyName);
+    }
+
+    *#getPropertyGen(propertyName: string): Generator<ProtocolRequest, Symbol | undefined, ProtocolResponse["result"]> {
+        return yield* this.objectRegistry.fetchPropertyOfType.gen(this, propertyName);
     }
 
     get getApparentProperties(): {
         (): readonly Symbol[];
         gen(): Generator<ProtocolRequest, readonly Symbol[], ProtocolResponse["result"]>;
     } {
-        const owner = this;
-        return cacheGeneratorMethod(
-            owner,
-            "getApparentProperties",
-            function (): readonly Symbol[] {
-                if (owner.apparentProperties === false) {
-                    owner.apparentProperties = owner.objectRegistry.fetchApparentPropertiesOfType(owner);
-                }
-                return owner.apparentProperties;
-            },
-            function* (): Generator<ProtocolRequest, readonly Symbol[], ProtocolResponse["result"]> {
-                if (owner.apparentProperties === false) {
-                    owner.apparentProperties = yield* owner.objectRegistry.fetchApparentPropertiesOfType.gen(owner);
-                }
-                return owner.apparentProperties;
-            },
-        );
+        return getGeneratorMethod(this, this.#generatorMethods ??= createGeneratorMethodCache(38), 3, this.#getApparentProperties, this.#getApparentPropertiesGen);
+    }
+
+    #getApparentProperties(): readonly Symbol[] {
+        if (this.apparentProperties === false) {
+            this.apparentProperties = this.objectRegistry.fetchApparentPropertiesOfType(this);
+        }
+        return this.apparentProperties;
+    }
+
+    *#getApparentPropertiesGen(): Generator<ProtocolRequest, readonly Symbol[], ProtocolResponse["result"]> {
+        if (this.apparentProperties === false) {
+            this.apparentProperties = yield* this.objectRegistry.fetchApparentPropertiesOfType.gen(this);
+        }
+        return this.apparentProperties;
     }
 
     get getCallSignatures(): {
         (): readonly Signature[];
         gen(): Generator<ProtocolRequest, readonly Signature[], ProtocolResponse["result"]>;
     } {
-        const owner = this;
-        return cacheGeneratorMethod(
-            owner,
-            "getCallSignatures",
-            function (): readonly Signature[] {
-                if (owner.callSignatures === false) {
-                    owner.callSignatures = owner.objectRegistry.fetchSignaturesOfType(owner, SignatureKind.Call);
-                }
-                return owner.callSignatures;
-            },
-            function* (): Generator<ProtocolRequest, readonly Signature[], ProtocolResponse["result"]> {
-                if (owner.callSignatures === false) {
-                    owner.callSignatures = yield* owner.objectRegistry.fetchSignaturesOfType.gen(owner, SignatureKind.Call);
-                }
-                return owner.callSignatures;
-            },
-        );
+        return getGeneratorMethod(this, this.#generatorMethods ??= createGeneratorMethodCache(38), 4, this.#getCallSignatures, this.#getCallSignaturesGen);
+    }
+
+    #getCallSignatures(): readonly Signature[] {
+        if (this.callSignatures === false) {
+            this.callSignatures = this.objectRegistry.fetchSignaturesOfType(this, SignatureKind.Call);
+        }
+        return this.callSignatures;
+    }
+
+    *#getCallSignaturesGen(): Generator<ProtocolRequest, readonly Signature[], ProtocolResponse["result"]> {
+        if (this.callSignatures === false) {
+            this.callSignatures = yield* this.objectRegistry.fetchSignaturesOfType.gen(this, SignatureKind.Call);
+        }
+        return this.callSignatures;
     }
 
     get getConstructSignatures(): {
         (): readonly Signature[];
         gen(): Generator<ProtocolRequest, readonly Signature[], ProtocolResponse["result"]>;
     } {
-        const owner = this;
-        return cacheGeneratorMethod(
-            owner,
-            "getConstructSignatures",
-            function (): readonly Signature[] {
-                if (owner.constructSignatures === false) {
-                    owner.constructSignatures = owner.objectRegistry.fetchSignaturesOfType(owner, SignatureKind.Construct);
-                }
-                return owner.constructSignatures;
-            },
-            function* (): Generator<ProtocolRequest, readonly Signature[], ProtocolResponse["result"]> {
-                if (owner.constructSignatures === false) {
-                    owner.constructSignatures = yield* owner.objectRegistry.fetchSignaturesOfType.gen(owner, SignatureKind.Construct);
-                }
-                return owner.constructSignatures;
-            },
-        );
+        return getGeneratorMethod(this, this.#generatorMethods ??= createGeneratorMethodCache(38), 5, this.#getConstructSignatures, this.#getConstructSignaturesGen);
+    }
+
+    #getConstructSignatures(): readonly Signature[] {
+        if (this.constructSignatures === false) {
+            this.constructSignatures = this.objectRegistry.fetchSignaturesOfType(this, SignatureKind.Construct);
+        }
+        return this.constructSignatures;
+    }
+
+    *#getConstructSignaturesGen(): Generator<ProtocolRequest, readonly Signature[], ProtocolResponse["result"]> {
+        if (this.constructSignatures === false) {
+            this.constructSignatures = yield* this.objectRegistry.fetchSignaturesOfType.gen(this, SignatureKind.Construct);
+        }
+        return this.constructSignatures;
     }
 
     get getNonNullableType(): {
         (): Type;
         gen(): Generator<ProtocolRequest, Type, ProtocolResponse["result"]>;
     } {
-        const owner = this;
-        return cacheGeneratorMethod(
-            owner,
-            "getNonNullableType",
-            function (): Type {
-                const result = owner.objectRegistry.fetchType(owner, "getNonNullableType", owner.nonNullableType);
-                owner.nonNullableType = result.id;
-                return result;
-            },
-            function* (): Generator<ProtocolRequest, Type, ProtocolResponse["result"]> {
-                const result = yield* owner.objectRegistry.fetchType.gen(owner, "getNonNullableType", owner.nonNullableType);
-                owner.nonNullableType = result.id;
-                return result;
-            },
-        );
+        return getGeneratorMethod(this, this.#generatorMethods ??= createGeneratorMethodCache(38), 6, this.#getNonNullableType, this.#getNonNullableTypeGen);
+    }
+
+    #getNonNullableType(): Type {
+        const result = this.objectRegistry.fetchType(this, "getNonNullableType", this.nonNullableType);
+        this.nonNullableType = result.id;
+        return result;
+    }
+
+    *#getNonNullableTypeGen(): Generator<ProtocolRequest, Type, ProtocolResponse["result"]> {
+        const result = yield* this.objectRegistry.fetchType.gen(this, "getNonNullableType", this.nonNullableType);
+        this.nonNullableType = result.id;
+        return result;
     }
 
     get getStringIndexType(): {
         (): Type | undefined;
         gen(): Generator<ProtocolRequest, Type | undefined, ProtocolResponse["result"]>;
     } {
-        const owner = this;
-        return cacheGeneratorMethod(
-            owner,
-            "getStringIndexType",
-            function (): Type | undefined {
-                if (owner.stringIndexType === false) {
-                    owner.stringIndexType = owner.getStringIndexTypeWorker();
-                }
-                return owner.stringIndexType;
-            },
-            function* (): Generator<ProtocolRequest, Type | undefined, ProtocolResponse["result"]> {
-                if (owner.stringIndexType === false) {
-                    owner.stringIndexType = yield* owner.getStringIndexTypeWorker.gen();
-                }
-                return owner.stringIndexType;
-            },
-        );
+        return getGeneratorMethod(this, this.#generatorMethods ??= createGeneratorMethodCache(38), 7, this.#getStringIndexType, this.#getStringIndexTypeGen);
+    }
+
+    #getStringIndexType(): Type | undefined {
+        if (this.stringIndexType === false) {
+            this.stringIndexType = this.#getStringIndexTypeWorker();
+        }
+        return this.stringIndexType;
+    }
+
+    *#getStringIndexTypeGen(): Generator<ProtocolRequest, Type | undefined, ProtocolResponse["result"]> {
+        if (this.stringIndexType === false) {
+            this.stringIndexType = yield* this.#getStringIndexTypeWorkerGen();
+        }
+        return this.stringIndexType;
     }
 
     private get getStringIndexTypeWorker(): {
         (): Type | undefined;
         gen(): Generator<ProtocolRequest, Type | undefined, ProtocolResponse["result"]>;
     } {
-        const owner = this;
-        return cacheGeneratorMethod(
-            owner,
-            "getStringIndexTypeWorker",
-            function (): Type | undefined {
-                const infos = owner.getIndexInfos();
-                return infos.find(info => (info.keyType.flags & TypeFlags.String) !== 0)?.valueType;
-            },
-            function* (): Generator<ProtocolRequest, Type | undefined, ProtocolResponse["result"]> {
-                const infos = yield* owner.getIndexInfos.gen();
-                return infos.find(info => (info.keyType.flags & TypeFlags.String) !== 0)?.valueType;
-            },
-        );
+        return getGeneratorMethod(this, this.#generatorMethods ??= createGeneratorMethodCache(38), 8, this.#getStringIndexTypeWorker, this.#getStringIndexTypeWorkerGen);
+    }
+
+    #getStringIndexTypeWorker(): Type | undefined {
+        const infos = this.#getIndexInfos();
+        return infos.find(info => (info.keyType.flags & TypeFlags.String) !== 0)?.valueType;
+    }
+
+    *#getStringIndexTypeWorkerGen(): Generator<ProtocolRequest, Type | undefined, ProtocolResponse["result"]> {
+        const infos = yield* this.#getIndexInfosGen();
+        return infos.find(info => (info.keyType.flags & TypeFlags.String) !== 0)?.valueType;
     }
 
     get getNumberIndexType(): {
         (): Type | undefined;
         gen(): Generator<ProtocolRequest, Type | undefined, ProtocolResponse["result"]>;
     } {
-        const owner = this;
-        return cacheGeneratorMethod(
-            owner,
-            "getNumberIndexType",
-            function (): Type | undefined {
-                if (owner.numberIndexType === false) {
-                    owner.numberIndexType = owner.getNumberIndexTypeWorker();
-                }
-                return owner.numberIndexType;
-            },
-            function* (): Generator<ProtocolRequest, Type | undefined, ProtocolResponse["result"]> {
-                if (owner.numberIndexType === false) {
-                    owner.numberIndexType = yield* owner.getNumberIndexTypeWorker.gen();
-                }
-                return owner.numberIndexType;
-            },
-        );
+        return getGeneratorMethod(this, this.#generatorMethods ??= createGeneratorMethodCache(38), 9, this.#getNumberIndexType, this.#getNumberIndexTypeGen);
+    }
+
+    #getNumberIndexType(): Type | undefined {
+        if (this.numberIndexType === false) {
+            this.numberIndexType = this.#getNumberIndexTypeWorker();
+        }
+        return this.numberIndexType;
+    }
+
+    *#getNumberIndexTypeGen(): Generator<ProtocolRequest, Type | undefined, ProtocolResponse["result"]> {
+        if (this.numberIndexType === false) {
+            this.numberIndexType = yield* this.#getNumberIndexTypeWorkerGen();
+        }
+        return this.numberIndexType;
     }
 
     private get getNumberIndexTypeWorker(): {
         (): Type | undefined;
         gen(): Generator<ProtocolRequest, Type | undefined, ProtocolResponse["result"]>;
     } {
-        const owner = this;
-        return cacheGeneratorMethod(
-            owner,
-            "getNumberIndexTypeWorker",
-            function (): Type | undefined {
-                const infos = owner.getIndexInfos();
-                return infos.find(info => (info.keyType.flags & TypeFlags.Number) !== 0)?.valueType;
-            },
-            function* (): Generator<ProtocolRequest, Type | undefined, ProtocolResponse["result"]> {
-                const infos = yield* owner.getIndexInfos.gen();
-                return infos.find(info => (info.keyType.flags & TypeFlags.Number) !== 0)?.valueType;
-            },
-        );
+        return getGeneratorMethod(this, this.#generatorMethods ??= createGeneratorMethodCache(38), 10, this.#getNumberIndexTypeWorker, this.#getNumberIndexTypeWorkerGen);
+    }
+
+    #getNumberIndexTypeWorker(): Type | undefined {
+        const infos = this.#getIndexInfos();
+        return infos.find(info => (info.keyType.flags & TypeFlags.Number) !== 0)?.valueType;
+    }
+
+    *#getNumberIndexTypeWorkerGen(): Generator<ProtocolRequest, Type | undefined, ProtocolResponse["result"]> {
+        const infos = yield* this.#getIndexInfosGen();
+        return infos.find(info => (info.keyType.flags & TypeFlags.Number) !== 0)?.valueType;
     }
 
     get getApparentType(): {
         (): Type;
         gen(): Generator<ProtocolRequest, Type, ProtocolResponse["result"]>;
     } {
-        const owner = this;
-        return cacheGeneratorMethod(
-            owner,
-            "getApparentType",
-            function (): Type {
-                const result = owner.objectRegistry.fetchType(owner, "getApparentType", owner.apparentType);
-                owner.apparentType = result.id;
-                return result;
-            },
-            function* (): Generator<ProtocolRequest, Type, ProtocolResponse["result"]> {
-                const result = yield* owner.objectRegistry.fetchType.gen(owner, "getApparentType", owner.apparentType);
-                owner.apparentType = result.id;
-                return result;
-            },
-        );
+        return getGeneratorMethod(this, this.#generatorMethods ??= createGeneratorMethodCache(38), 11, this.#getApparentType, this.#getApparentTypeGen);
+    }
+
+    #getApparentType(): Type {
+        const result = this.objectRegistry.fetchType(this, "getApparentType", this.apparentType);
+        this.apparentType = result.id;
+        return result;
+    }
+
+    *#getApparentTypeGen(): Generator<ProtocolRequest, Type, ProtocolResponse["result"]> {
+        const result = yield* this.objectRegistry.fetchType.gen(this, "getApparentType", this.apparentType);
+        this.apparentType = result.id;
+        return result;
     }
 
     get getReducedType(): {
         (): Type;
         gen(): Generator<ProtocolRequest, Type, ProtocolResponse["result"]>;
     } {
-        const owner = this;
-        return cacheGeneratorMethod(
-            owner,
-            "getReducedType",
-            function (): Type {
-                const result = owner.objectRegistry.fetchType(owner, "getReducedType", owner.reducedType);
-                owner.reducedType = result.id;
-                return result;
-            },
-            function* (): Generator<ProtocolRequest, Type, ProtocolResponse["result"]> {
-                const result = yield* owner.objectRegistry.fetchType.gen(owner, "getReducedType", owner.reducedType);
-                owner.reducedType = result.id;
-                return result;
-            },
-        );
+        return getGeneratorMethod(this, this.#generatorMethods ??= createGeneratorMethodCache(38), 12, this.#getReducedType, this.#getReducedTypeGen);
+    }
+
+    #getReducedType(): Type {
+        const result = this.objectRegistry.fetchType(this, "getReducedType", this.reducedType);
+        this.reducedType = result.id;
+        return result;
+    }
+
+    *#getReducedTypeGen(): Generator<ProtocolRequest, Type, ProtocolResponse["result"]> {
+        const result = yield* this.objectRegistry.fetchType.gen(this, "getReducedType", this.reducedType);
+        this.reducedType = result.id;
+        return result;
     }
 
     get getIndexInfos(): {
         (): readonly IndexInfo[];
         gen(): Generator<ProtocolRequest, readonly IndexInfo[], ProtocolResponse["result"]>;
     } {
-        const owner = this;
-        return cacheGeneratorMethod(
-            owner,
-            "getIndexInfos",
-            function (): readonly IndexInfo[] {
-                if (owner.indexInfos === false) {
-                    owner.indexInfos = owner.objectRegistry.fetchIndexInfosOfType(owner);
-                }
-                return owner.indexInfos;
-            },
-            function* (): Generator<ProtocolRequest, readonly IndexInfo[], ProtocolResponse["result"]> {
-                if (owner.indexInfos === false) {
-                    owner.indexInfos = yield* owner.objectRegistry.fetchIndexInfosOfType.gen(owner);
-                }
-                return owner.indexInfos;
-            },
-        );
+        return getGeneratorMethod(this, this.#generatorMethods ??= createGeneratorMethodCache(38), 13, this.#getIndexInfos, this.#getIndexInfosGen);
+    }
+
+    #getIndexInfos(): readonly IndexInfo[] {
+        if (this.indexInfos === false) {
+            this.indexInfos = this.objectRegistry.fetchIndexInfosOfType(this);
+        }
+        return this.indexInfos;
+    }
+
+    *#getIndexInfosGen(): Generator<ProtocolRequest, readonly IndexInfo[], ProtocolResponse["result"]> {
+        if (this.indexInfos === false) {
+            this.indexInfos = yield* this.objectRegistry.fetchIndexInfosOfType.gen(this);
+        }
+        return this.indexInfos;
     }
 
     get getAliasSymbol(): {
         (): Symbol | undefined;
         gen(): Generator<ProtocolRequest, Symbol | undefined, ProtocolResponse["result"]>;
     } {
-        const owner = this;
-        return cacheGeneratorMethod(
-            owner,
-            "getAliasSymbol",
-            function (): Symbol | undefined {
-                return owner.objectRegistry.fetchSymbol(owner, "getAliasSymbolOfType", owner.aliasSymbol);
-            },
-            function* (): Generator<ProtocolRequest, Symbol | undefined, ProtocolResponse["result"]> {
-                return yield* owner.objectRegistry.fetchSymbol.gen(owner, "getAliasSymbolOfType", owner.aliasSymbol);
-            },
-        );
+        return getGeneratorMethod(this, this.#generatorMethods ??= createGeneratorMethodCache(38), 14, this.#getAliasSymbol, this.#getAliasSymbolGen);
+    }
+
+    #getAliasSymbol(): Symbol | undefined {
+        return this.objectRegistry.fetchSymbol(this, "getAliasSymbolOfType", this.aliasSymbol);
+    }
+
+    *#getAliasSymbolGen(): Generator<ProtocolRequest, Symbol | undefined, ProtocolResponse["result"]> {
+        return yield* this.objectRegistry.fetchSymbol.gen(this, "getAliasSymbolOfType", this.aliasSymbol);
     }
 
     get getTarget(): {
         (): Type;
         gen(): Generator<ProtocolRequest, Type, ProtocolResponse["result"]>;
     } {
-        const owner = this;
-        return cacheGeneratorMethod(
-            owner,
-            "getTarget",
-            function (): Type {
-                return owner.objectRegistry.fetchType(owner, "getTargetOfType", owner.target);
-            },
-            function* (): Generator<ProtocolRequest, Type, ProtocolResponse["result"]> {
-                return yield* owner.objectRegistry.fetchType.gen(owner, "getTargetOfType", owner.target);
-            },
-        );
+        return getGeneratorMethod(this, this.#generatorMethods ??= createGeneratorMethodCache(38), 15, this.#getTarget, this.#getTargetGen);
+    }
+
+    #getTarget(): Type {
+        return this.objectRegistry.fetchType(this, "getTargetOfType", this.target);
+    }
+
+    *#getTargetGen(): Generator<ProtocolRequest, Type, ProtocolResponse["result"]> {
+        return yield* this.objectRegistry.fetchType.gen(this, "getTargetOfType", this.target);
     }
 
     get getFreshType(): {
         (): FreshableType | undefined;
         gen(): Generator<ProtocolRequest, FreshableType | undefined, ProtocolResponse["result"]>;
     } {
-        const owner = this;
-        return cacheGeneratorMethod(
-            owner,
-            "getFreshType",
-            function (): FreshableType | undefined {
-                return owner.objectRegistry.fetchOptionalType(owner, "getFreshTypeOfType", owner.freshType);
-            },
-            function* (): Generator<ProtocolRequest, FreshableType | undefined, ProtocolResponse["result"]> {
-                return yield* owner.objectRegistry.fetchOptionalType.gen(owner, "getFreshTypeOfType", owner.freshType);
-            },
-        );
+        return getGeneratorMethod(this, this.#generatorMethods ??= createGeneratorMethodCache(38), 16, this.#getFreshType, this.#getFreshTypeGen);
+    }
+
+    #getFreshType(): FreshableType | undefined {
+        return this.objectRegistry.fetchOptionalType(this, "getFreshTypeOfType", this.freshType);
+    }
+
+    *#getFreshTypeGen(): Generator<ProtocolRequest, FreshableType | undefined, ProtocolResponse["result"]> {
+        return yield* this.objectRegistry.fetchOptionalType.gen(this, "getFreshTypeOfType", this.freshType);
     }
 
     get getRegularType(): {
         (): FreshableType | undefined;
         gen(): Generator<ProtocolRequest, FreshableType | undefined, ProtocolResponse["result"]>;
     } {
-        const owner = this;
-        return cacheGeneratorMethod(
-            owner,
-            "getRegularType",
-            function (): FreshableType | undefined {
-                return owner.objectRegistry.fetchOptionalType(owner, "getRegularTypeOfType", owner.regularType);
-            },
-            function* (): Generator<ProtocolRequest, FreshableType | undefined, ProtocolResponse["result"]> {
-                return yield* owner.objectRegistry.fetchOptionalType.gen(owner, "getRegularTypeOfType", owner.regularType);
-            },
-        );
+        return getGeneratorMethod(this, this.#generatorMethods ??= createGeneratorMethodCache(38), 17, this.#getRegularType, this.#getRegularTypeGen);
+    }
+
+    #getRegularType(): FreshableType | undefined {
+        return this.objectRegistry.fetchOptionalType(this, "getRegularTypeOfType", this.regularType);
+    }
+
+    *#getRegularTypeGen(): Generator<ProtocolRequest, FreshableType | undefined, ProtocolResponse["result"]> {
+        return yield* this.objectRegistry.fetchOptionalType.gen(this, "getRegularTypeOfType", this.regularType);
     }
 
     get getTypes(): {
         (): readonly Type[] | undefined;
         gen(): Generator<ProtocolRequest, readonly Type[] | undefined, ProtocolResponse["result"]>;
     } {
-        const owner = this;
-        return cacheGeneratorMethod(
-            owner,
-            "getTypes",
-            function (): readonly Type[] | undefined {
-                // Only union, intersection, and template literal types have constituent
-                // types; any other kind has none, so return undefined rather than sending
-                // a request the server cannot satisfy.
-                if (!(owner.flags & (TypeFlags.UnionOrIntersection | TypeFlags.TemplateLiteral))) {
-                    return undefined;
-                }
-                if (owner.types === false) {
-                    owner.types = owner.objectRegistry.fetchTypes(owner, "getTypesOfType");
-                }
-                return owner.types;
-            },
-            function* (): Generator<ProtocolRequest, readonly Type[] | undefined, ProtocolResponse["result"]> {
-                // Only union, intersection, and template literal types have constituent
-                // types; any other kind has none, so return undefined rather than sending
-                // a request the server cannot satisfy.
-                if (!(owner.flags & (TypeFlags.UnionOrIntersection | TypeFlags.TemplateLiteral))) {
-                    return undefined;
-                }
-                if (owner.types === false) {
-                    owner.types = yield* owner.objectRegistry.fetchTypes.gen(owner, "getTypesOfType");
-                }
-                return owner.types;
-            },
-        );
+        return getGeneratorMethod(this, this.#generatorMethods ??= createGeneratorMethodCache(38), 18, this.#getTypes, this.#getTypesGen);
+    }
+
+    #getTypes(): readonly Type[] | undefined {
+        // Only union, intersection, and template literal types have constituent
+        // types; any other kind has none, so return undefined rather than sending
+        // a request the server cannot satisfy.
+        if (!(this.flags & (TypeFlags.UnionOrIntersection | TypeFlags.TemplateLiteral))) {
+            return undefined;
+        }
+        if (this.types === false) {
+            this.types = this.objectRegistry.fetchTypes(this, "getTypesOfType");
+        }
+        return this.types;
+    }
+
+    *#getTypesGen(): Generator<ProtocolRequest, readonly Type[] | undefined, ProtocolResponse["result"]> {
+        // Only union, intersection, and template literal types have constituent
+        // types; any other kind has none, so return undefined rather than sending
+        // a request the server cannot satisfy.
+        if (!(this.flags & (TypeFlags.UnionOrIntersection | TypeFlags.TemplateLiteral))) {
+            return undefined;
+        }
+        if (this.types === false) {
+            this.types = yield* this.objectRegistry.fetchTypes.gen(this, "getTypesOfType");
+        }
+        return this.types;
     }
 
     get getTypeParameters(): {
         (): readonly TypeParameter[];
         gen(): Generator<ProtocolRequest, readonly TypeParameter[], ProtocolResponse["result"]>;
     } {
-        const owner = this;
-        return cacheGeneratorMethod(
-            owner,
-            "getTypeParameters",
-            function (): readonly TypeParameter[] {
-                return owner.objectRegistry.fetchTypes(owner, "getTypeParametersOfType", owner.typeParameters) as readonly TypeParameter[];
-            },
-            function* (): Generator<ProtocolRequest, readonly TypeParameter[], ProtocolResponse["result"]> {
-                return (yield* owner.objectRegistry.fetchTypes.gen(owner, "getTypeParametersOfType", owner.typeParameters)) as readonly TypeParameter[];
-            },
-        );
+        return getGeneratorMethod(this, this.#generatorMethods ??= createGeneratorMethodCache(38), 19, this.#getTypeParameters, this.#getTypeParametersGen);
+    }
+
+    #getTypeParameters(): readonly TypeParameter[] {
+        return this.objectRegistry.fetchTypes(this, "getTypeParametersOfType", this.typeParameters) as readonly TypeParameter[];
+    }
+
+    *#getTypeParametersGen(): Generator<ProtocolRequest, readonly TypeParameter[], ProtocolResponse["result"]> {
+        return (yield* this.objectRegistry.fetchTypes.gen(this, "getTypeParametersOfType", this.typeParameters)) as readonly TypeParameter[];
     }
 
     get getOuterTypeParameters(): {
         (): readonly TypeParameter[];
         gen(): Generator<ProtocolRequest, readonly TypeParameter[], ProtocolResponse["result"]>;
     } {
-        const owner = this;
-        return cacheGeneratorMethod(
-            owner,
-            "getOuterTypeParameters",
-            function (): readonly TypeParameter[] {
-                return owner.objectRegistry.fetchTypes(owner, "getOuterTypeParametersOfType", owner.outerTypeParameters) as readonly TypeParameter[];
-            },
-            function* (): Generator<ProtocolRequest, readonly TypeParameter[], ProtocolResponse["result"]> {
-                return (yield* owner.objectRegistry.fetchTypes.gen(owner, "getOuterTypeParametersOfType", owner.outerTypeParameters)) as readonly TypeParameter[];
-            },
-        );
+        return getGeneratorMethod(this, this.#generatorMethods ??= createGeneratorMethodCache(38), 20, this.#getOuterTypeParameters, this.#getOuterTypeParametersGen);
+    }
+
+    #getOuterTypeParameters(): readonly TypeParameter[] {
+        return this.objectRegistry.fetchTypes(this, "getOuterTypeParametersOfType", this.outerTypeParameters) as readonly TypeParameter[];
+    }
+
+    *#getOuterTypeParametersGen(): Generator<ProtocolRequest, readonly TypeParameter[], ProtocolResponse["result"]> {
+        return (yield* this.objectRegistry.fetchTypes.gen(this, "getOuterTypeParametersOfType", this.outerTypeParameters)) as readonly TypeParameter[];
     }
 
     get getLocalTypeParameters(): {
         (): readonly TypeParameter[];
         gen(): Generator<ProtocolRequest, readonly TypeParameter[], ProtocolResponse["result"]>;
     } {
-        const owner = this;
-        return cacheGeneratorMethod(
-            owner,
-            "getLocalTypeParameters",
-            function (): readonly TypeParameter[] {
-                return owner.objectRegistry.fetchTypes(owner, "getLocalTypeParametersOfType", owner.localTypeParameters) as readonly TypeParameter[];
-            },
-            function* (): Generator<ProtocolRequest, readonly TypeParameter[], ProtocolResponse["result"]> {
-                return (yield* owner.objectRegistry.fetchTypes.gen(owner, "getLocalTypeParametersOfType", owner.localTypeParameters)) as readonly TypeParameter[];
-            },
-        );
+        return getGeneratorMethod(this, this.#generatorMethods ??= createGeneratorMethodCache(38), 21, this.#getLocalTypeParameters, this.#getLocalTypeParametersGen);
+    }
+
+    #getLocalTypeParameters(): readonly TypeParameter[] {
+        return this.objectRegistry.fetchTypes(this, "getLocalTypeParametersOfType", this.localTypeParameters) as readonly TypeParameter[];
+    }
+
+    *#getLocalTypeParametersGen(): Generator<ProtocolRequest, readonly TypeParameter[], ProtocolResponse["result"]> {
+        return (yield* this.objectRegistry.fetchTypes.gen(this, "getLocalTypeParametersOfType", this.localTypeParameters)) as readonly TypeParameter[];
     }
 
     get getThisType(): {
         (): TypeParameter | undefined;
         gen(): Generator<ProtocolRequest, TypeParameter | undefined, ProtocolResponse["result"]>;
     } {
-        const owner = this;
-        return cacheGeneratorMethod(
-            owner,
-            "getThisType",
-            function (): TypeParameter | undefined {
-                return owner.objectRegistry.fetchOptionalType(owner, "getThisTypeOfType", owner.thisType) as TypeParameter | undefined;
-            },
-            function* (): Generator<ProtocolRequest, TypeParameter | undefined, ProtocolResponse["result"]> {
-                return (yield* owner.objectRegistry.fetchOptionalType.gen(owner, "getThisTypeOfType", owner.thisType)) as TypeParameter | undefined;
-            },
-        );
+        return getGeneratorMethod(this, this.#generatorMethods ??= createGeneratorMethodCache(38), 22, this.#getThisType, this.#getThisTypeGen);
+    }
+
+    #getThisType(): TypeParameter | undefined {
+        return this.objectRegistry.fetchOptionalType(this, "getThisTypeOfType", this.thisType) as TypeParameter | undefined;
+    }
+
+    *#getThisTypeGen(): Generator<ProtocolRequest, TypeParameter | undefined, ProtocolResponse["result"]> {
+        return (yield* this.objectRegistry.fetchOptionalType.gen(this, "getThisTypeOfType", this.thisType)) as TypeParameter | undefined;
     }
 
     get getAliasTypeArguments(): {
         (): readonly Type[];
         gen(): Generator<ProtocolRequest, readonly Type[], ProtocolResponse["result"]>;
     } {
-        const owner = this;
-        return cacheGeneratorMethod(
-            owner,
-            "getAliasTypeArguments",
-            function (): readonly Type[] {
-                return owner.objectRegistry.fetchTypes(owner, "getAliasTypeArgumentsOfType", owner.aliasTypeArguments);
-            },
-            function* (): Generator<ProtocolRequest, readonly Type[], ProtocolResponse["result"]> {
-                return yield* owner.objectRegistry.fetchTypes.gen(owner, "getAliasTypeArgumentsOfType", owner.aliasTypeArguments);
-            },
-        );
+        return getGeneratorMethod(this, this.#generatorMethods ??= createGeneratorMethodCache(38), 23, this.#getAliasTypeArguments, this.#getAliasTypeArgumentsGen);
+    }
+
+    #getAliasTypeArguments(): readonly Type[] {
+        return this.objectRegistry.fetchTypes(this, "getAliasTypeArgumentsOfType", this.aliasTypeArguments);
+    }
+
+    *#getAliasTypeArgumentsGen(): Generator<ProtocolRequest, readonly Type[], ProtocolResponse["result"]> {
+        return yield* this.objectRegistry.fetchTypes.gen(this, "getAliasTypeArgumentsOfType", this.aliasTypeArguments);
     }
 
     get getTypeParameter(): {
         (): TypeParameter;
         gen(): Generator<ProtocolRequest, TypeParameter, ProtocolResponse["result"]>;
     } {
-        const owner = this;
-        return cacheGeneratorMethod(
-            owner,
-            "getTypeParameter",
-            function (): TypeParameter {
-                return owner.objectRegistry.fetchType(owner, "getTypeParameterOfMappedType", owner.typeParameter);
-            },
-            function* (): Generator<ProtocolRequest, TypeParameter, ProtocolResponse["result"]> {
-                return yield* owner.objectRegistry.fetchType.gen(owner, "getTypeParameterOfMappedType", owner.typeParameter);
-            },
-        );
+        return getGeneratorMethod(this, this.#generatorMethods ??= createGeneratorMethodCache(38), 24, this.#getTypeParameter, this.#getTypeParameterGen);
+    }
+
+    #getTypeParameter(): TypeParameter {
+        return this.objectRegistry.fetchType(this, "getTypeParameterOfMappedType", this.typeParameter);
+    }
+
+    *#getTypeParameterGen(): Generator<ProtocolRequest, TypeParameter, ProtocolResponse["result"]> {
+        return yield* this.objectRegistry.fetchType.gen(this, "getTypeParameterOfMappedType", this.typeParameter);
     }
 
     get getConstraintType(): {
         (): Type;
         gen(): Generator<ProtocolRequest, Type, ProtocolResponse["result"]>;
     } {
-        const owner = this;
-        return cacheGeneratorMethod(
-            owner,
-            "getConstraintType",
-            function (): Type {
-                return owner.objectRegistry.fetchType(owner, "getConstraintTypeOfMappedType", owner.constraintType);
-            },
-            function* (): Generator<ProtocolRequest, Type, ProtocolResponse["result"]> {
-                return yield* owner.objectRegistry.fetchType.gen(owner, "getConstraintTypeOfMappedType", owner.constraintType);
-            },
-        );
+        return getGeneratorMethod(this, this.#generatorMethods ??= createGeneratorMethodCache(38), 25, this.#getConstraintType, this.#getConstraintTypeGen);
+    }
+
+    #getConstraintType(): Type {
+        return this.objectRegistry.fetchType(this, "getConstraintTypeOfMappedType", this.constraintType);
+    }
+
+    *#getConstraintTypeGen(): Generator<ProtocolRequest, Type, ProtocolResponse["result"]> {
+        return yield* this.objectRegistry.fetchType.gen(this, "getConstraintTypeOfMappedType", this.constraintType);
     }
 
     get getNameType(): {
         (): Type | undefined;
         gen(): Generator<ProtocolRequest, Type | undefined, ProtocolResponse["result"]>;
     } {
-        const owner = this;
-        return cacheGeneratorMethod(
-            owner,
-            "getNameType",
-            function (): Type | undefined {
-                return owner.objectRegistry.fetchOptionalType(owner, "getNameTypeOfMappedType", owner.nameType);
-            },
-            function* (): Generator<ProtocolRequest, Type | undefined, ProtocolResponse["result"]> {
-                return yield* owner.objectRegistry.fetchOptionalType.gen(owner, "getNameTypeOfMappedType", owner.nameType);
-            },
-        );
+        return getGeneratorMethod(this, this.#generatorMethods ??= createGeneratorMethodCache(38), 26, this.#getNameType, this.#getNameTypeGen);
+    }
+
+    #getNameType(): Type | undefined {
+        return this.objectRegistry.fetchOptionalType(this, "getNameTypeOfMappedType", this.nameType);
+    }
+
+    *#getNameTypeGen(): Generator<ProtocolRequest, Type | undefined, ProtocolResponse["result"]> {
+        return yield* this.objectRegistry.fetchOptionalType.gen(this, "getNameTypeOfMappedType", this.nameType);
     }
 
     get getTemplateType(): {
         (): Type;
         gen(): Generator<ProtocolRequest, Type, ProtocolResponse["result"]>;
     } {
-        const owner = this;
-        return cacheGeneratorMethod(
-            owner,
-            "getTemplateType",
-            function (): Type {
-                return owner.objectRegistry.fetchType(owner, "getTemplateTypeOfMappedType", owner.templateType);
-            },
-            function* (): Generator<ProtocolRequest, Type, ProtocolResponse["result"]> {
-                return yield* owner.objectRegistry.fetchType.gen(owner, "getTemplateTypeOfMappedType", owner.templateType);
-            },
-        );
+        return getGeneratorMethod(this, this.#generatorMethods ??= createGeneratorMethodCache(38), 27, this.#getTemplateType, this.#getTemplateTypeGen);
+    }
+
+    #getTemplateType(): Type {
+        return this.objectRegistry.fetchType(this, "getTemplateTypeOfMappedType", this.templateType);
+    }
+
+    *#getTemplateTypeGen(): Generator<ProtocolRequest, Type, ProtocolResponse["result"]> {
+        return yield* this.objectRegistry.fetchType.gen(this, "getTemplateTypeOfMappedType", this.templateType);
     }
 
     get getObjectType(): {
         (): Type;
         gen(): Generator<ProtocolRequest, Type, ProtocolResponse["result"]>;
     } {
-        const owner = this;
-        return cacheGeneratorMethod(
-            owner,
-            "getObjectType",
-            function (): Type {
-                return owner.objectRegistry.fetchType(owner, "getObjectTypeOfType", owner.objectType);
-            },
-            function* (): Generator<ProtocolRequest, Type, ProtocolResponse["result"]> {
-                return yield* owner.objectRegistry.fetchType.gen(owner, "getObjectTypeOfType", owner.objectType);
-            },
-        );
+        return getGeneratorMethod(this, this.#generatorMethods ??= createGeneratorMethodCache(38), 28, this.#getObjectType, this.#getObjectTypeGen);
+    }
+
+    #getObjectType(): Type {
+        return this.objectRegistry.fetchType(this, "getObjectTypeOfType", this.objectType);
+    }
+
+    *#getObjectTypeGen(): Generator<ProtocolRequest, Type, ProtocolResponse["result"]> {
+        return yield* this.objectRegistry.fetchType.gen(this, "getObjectTypeOfType", this.objectType);
     }
 
     get getIndexType(): {
         (): Type;
         gen(): Generator<ProtocolRequest, Type, ProtocolResponse["result"]>;
     } {
-        const owner = this;
-        return cacheGeneratorMethod(
-            owner,
-            "getIndexType",
-            function (): Type {
-                return owner.objectRegistry.fetchType(owner, "getIndexTypeOfType", owner.indexType);
-            },
-            function* (): Generator<ProtocolRequest, Type, ProtocolResponse["result"]> {
-                return yield* owner.objectRegistry.fetchType.gen(owner, "getIndexTypeOfType", owner.indexType);
-            },
-        );
+        return getGeneratorMethod(this, this.#generatorMethods ??= createGeneratorMethodCache(38), 29, this.#getIndexType, this.#getIndexTypeGen);
+    }
+
+    #getIndexType(): Type {
+        return this.objectRegistry.fetchType(this, "getIndexTypeOfType", this.indexType);
+    }
+
+    *#getIndexTypeGen(): Generator<ProtocolRequest, Type, ProtocolResponse["result"]> {
+        return yield* this.objectRegistry.fetchType.gen(this, "getIndexTypeOfType", this.indexType);
     }
 
     get getCheckType(): {
         (): Type;
         gen(): Generator<ProtocolRequest, Type, ProtocolResponse["result"]>;
     } {
-        const owner = this;
-        return cacheGeneratorMethod(
-            owner,
-            "getCheckType",
-            function (): Type {
-                return owner.objectRegistry.fetchType(owner, "getCheckTypeOfType", owner.checkType);
-            },
-            function* (): Generator<ProtocolRequest, Type, ProtocolResponse["result"]> {
-                return yield* owner.objectRegistry.fetchType.gen(owner, "getCheckTypeOfType", owner.checkType);
-            },
-        );
+        return getGeneratorMethod(this, this.#generatorMethods ??= createGeneratorMethodCache(38), 30, this.#getCheckType, this.#getCheckTypeGen);
+    }
+
+    #getCheckType(): Type {
+        return this.objectRegistry.fetchType(this, "getCheckTypeOfType", this.checkType);
+    }
+
+    *#getCheckTypeGen(): Generator<ProtocolRequest, Type, ProtocolResponse["result"]> {
+        return yield* this.objectRegistry.fetchType.gen(this, "getCheckTypeOfType", this.checkType);
     }
 
     get getExtendsType(): {
         (): Type;
         gen(): Generator<ProtocolRequest, Type, ProtocolResponse["result"]>;
     } {
-        const owner = this;
-        return cacheGeneratorMethod(
-            owner,
-            "getExtendsType",
-            function (): Type {
-                return owner.objectRegistry.fetchType(owner, "getExtendsTypeOfType", owner.extendsType);
-            },
-            function* (): Generator<ProtocolRequest, Type, ProtocolResponse["result"]> {
-                return yield* owner.objectRegistry.fetchType.gen(owner, "getExtendsTypeOfType", owner.extendsType);
-            },
-        );
+        return getGeneratorMethod(this, this.#generatorMethods ??= createGeneratorMethodCache(38), 31, this.#getExtendsType, this.#getExtendsTypeGen);
+    }
+
+    #getExtendsType(): Type {
+        return this.objectRegistry.fetchType(this, "getExtendsTypeOfType", this.extendsType);
+    }
+
+    *#getExtendsTypeGen(): Generator<ProtocolRequest, Type, ProtocolResponse["result"]> {
+        return yield* this.objectRegistry.fetchType.gen(this, "getExtendsTypeOfType", this.extendsType);
     }
 
     get getBaseType(): {
         (): Type;
         gen(): Generator<ProtocolRequest, Type, ProtocolResponse["result"]>;
     } {
-        const owner = this;
-        return cacheGeneratorMethod(
-            owner,
-            "getBaseType",
-            function (): Type {
-                return owner.objectRegistry.fetchType(owner, "getBaseTypeOfType", owner.baseType);
-            },
-            function* (): Generator<ProtocolRequest, Type, ProtocolResponse["result"]> {
-                return yield* owner.objectRegistry.fetchType.gen(owner, "getBaseTypeOfType", owner.baseType);
-            },
-        );
+        return getGeneratorMethod(this, this.#generatorMethods ??= createGeneratorMethodCache(38), 32, this.#getBaseType, this.#getBaseTypeGen);
+    }
+
+    #getBaseType(): Type {
+        return this.objectRegistry.fetchType(this, "getBaseTypeOfType", this.baseType);
+    }
+
+    *#getBaseTypeGen(): Generator<ProtocolRequest, Type, ProtocolResponse["result"]> {
+        return yield* this.objectRegistry.fetchType.gen(this, "getBaseTypeOfType", this.baseType);
     }
 
     get getConstraint(): {
         (): Type | undefined;
         gen(): Generator<ProtocolRequest, Type | undefined, ProtocolResponse["result"]>;
     } {
-        const owner = this;
-        return cacheGeneratorMethod(
-            owner,
-            "getConstraint",
-            function (): Type | undefined {
-                // Type parameters resolve their constraint lazily through the checker,
-                // whereas substitution types carry a preloaded constraint handle.
-                if (owner.flags & TypeFlags.TypeParameter) {
-                    const result = owner.objectRegistry.fetchOptionalType(owner, "getConstraintOfTypeParameter", owner.constraint);
-                    owner.constraint = result ? result.id : 0;
-                    return result;
-                }
-                return owner.objectRegistry.fetchType(owner, "getConstraintOfType", owner.substConstraint);
-            },
-            function* (): Generator<ProtocolRequest, Type | undefined, ProtocolResponse["result"]> {
-                // Type parameters resolve their constraint lazily through the checker,
-                // whereas substitution types carry a preloaded constraint handle.
-                if (owner.flags & TypeFlags.TypeParameter) {
-                    const result = yield* owner.objectRegistry.fetchOptionalType.gen(owner, "getConstraintOfTypeParameter", owner.constraint);
-                    owner.constraint = result ? result.id : 0;
-                    return result;
-                }
-                return yield* owner.objectRegistry.fetchType.gen(owner, "getConstraintOfType", owner.substConstraint);
-            },
-        );
+        return getGeneratorMethod(this, this.#generatorMethods ??= createGeneratorMethodCache(38), 33, this.#getConstraint, this.#getConstraintGen);
+    }
+
+    #getConstraint(): Type | undefined {
+        // Type parameters resolve their constraint lazily through the checker,
+        // whereas substitution types carry a preloaded constraint handle.
+        if (this.flags & TypeFlags.TypeParameter) {
+            const result = this.objectRegistry.fetchOptionalType(this, "getConstraintOfTypeParameter", this.constraint);
+            this.constraint = result ? result.id : 0;
+            return result;
+        }
+        return this.objectRegistry.fetchType(this, "getConstraintOfType", this.substConstraint);
+    }
+
+    *#getConstraintGen(): Generator<ProtocolRequest, Type | undefined, ProtocolResponse["result"]> {
+        // Type parameters resolve their constraint lazily through the checker,
+        // whereas substitution types carry a preloaded constraint handle.
+        if (this.flags & TypeFlags.TypeParameter) {
+            const result = yield* this.objectRegistry.fetchOptionalType.gen(this, "getConstraintOfTypeParameter", this.constraint);
+            this.constraint = result ? result.id : 0;
+            return result;
+        }
+        return yield* this.objectRegistry.fetchType.gen(this, "getConstraintOfType", this.substConstraint);
     }
 
     get getDefault(): {
         (): Type | undefined;
         gen(): Generator<ProtocolRequest, Type | undefined, ProtocolResponse["result"]>;
     } {
-        const owner = this;
-        return cacheGeneratorMethod(
-            owner,
-            "getDefault",
-            function (): Type | undefined {
-                const result = owner.objectRegistry.fetchOptionalType(owner, "getDefaultFromTypeParameter", owner.default);
-                owner.default = result ? result.id : 0;
-                return result;
-            },
-            function* (): Generator<ProtocolRequest, Type | undefined, ProtocolResponse["result"]> {
-                const result = yield* owner.objectRegistry.fetchOptionalType.gen(owner, "getDefaultFromTypeParameter", owner.default);
-                owner.default = result ? result.id : 0;
-                return result;
-            },
-        );
+        return getGeneratorMethod(this, this.#generatorMethods ??= createGeneratorMethodCache(38), 34, this.#getDefault, this.#getDefaultGen);
+    }
+
+    #getDefault(): Type | undefined {
+        const result = this.objectRegistry.fetchOptionalType(this, "getDefaultFromTypeParameter", this.default);
+        this.default = result ? result.id : 0;
+        return result;
+    }
+
+    *#getDefaultGen(): Generator<ProtocolRequest, Type | undefined, ProtocolResponse["result"]> {
+        const result = yield* this.objectRegistry.fetchOptionalType.gen(this, "getDefaultFromTypeParameter", this.default);
+        this.default = result ? result.id : 0;
+        return result;
     }
 
     get getTrueType(): {
         (): Type;
         gen(): Generator<ProtocolRequest, Type, ProtocolResponse["result"]>;
     } {
-        const owner = this;
-        return cacheGeneratorMethod(
-            owner,
-            "getTrueType",
-            function (): Type {
-                const result = owner.objectRegistry.fetchType(owner, "getTrueTypeOfConditionalType", owner.trueType);
-                owner.trueType = result.id;
-                return result;
-            },
-            function* (): Generator<ProtocolRequest, Type, ProtocolResponse["result"]> {
-                const result = yield* owner.objectRegistry.fetchType.gen(owner, "getTrueTypeOfConditionalType", owner.trueType);
-                owner.trueType = result.id;
-                return result;
-            },
-        );
+        return getGeneratorMethod(this, this.#generatorMethods ??= createGeneratorMethodCache(38), 35, this.#getTrueType, this.#getTrueTypeGen);
+    }
+
+    #getTrueType(): Type {
+        const result = this.objectRegistry.fetchType(this, "getTrueTypeOfConditionalType", this.trueType);
+        this.trueType = result.id;
+        return result;
+    }
+
+    *#getTrueTypeGen(): Generator<ProtocolRequest, Type, ProtocolResponse["result"]> {
+        const result = yield* this.objectRegistry.fetchType.gen(this, "getTrueTypeOfConditionalType", this.trueType);
+        this.trueType = result.id;
+        return result;
     }
 
     get getFalseType(): {
         (): Type;
         gen(): Generator<ProtocolRequest, Type, ProtocolResponse["result"]>;
     } {
-        const owner = this;
-        return cacheGeneratorMethod(
-            owner,
-            "getFalseType",
-            function (): Type {
-                const result = owner.objectRegistry.fetchType(owner, "getFalseTypeOfConditionalType", owner.falseType);
-                owner.falseType = result.id;
-                return result;
-            },
-            function* (): Generator<ProtocolRequest, Type, ProtocolResponse["result"]> {
-                const result = yield* owner.objectRegistry.fetchType.gen(owner, "getFalseTypeOfConditionalType", owner.falseType);
-                owner.falseType = result.id;
-                return result;
-            },
-        );
+        return getGeneratorMethod(this, this.#generatorMethods ??= createGeneratorMethodCache(38), 36, this.#getFalseType, this.#getFalseTypeGen);
+    }
+
+    #getFalseType(): Type {
+        const result = this.objectRegistry.fetchType(this, "getFalseTypeOfConditionalType", this.falseType);
+        this.falseType = result.id;
+        return result;
+    }
+
+    *#getFalseTypeGen(): Generator<ProtocolRequest, Type, ProtocolResponse["result"]> {
+        const result = yield* this.objectRegistry.fetchType.gen(this, "getFalseTypeOfConditionalType", this.falseType);
+        this.falseType = result.id;
+        return result;
     }
 
     /**
@@ -7856,29 +7442,27 @@ class TypeObject implements Type {
         (): readonly Type[] | undefined;
         gen(): Generator<ProtocolRequest, readonly Type[] | undefined, ProtocolResponse["result"]>;
     } {
-        const owner = this;
-        return cacheGeneratorMethod(
-            owner,
-            "getBaseTypes",
-            function (): readonly Type[] | undefined {
-                if (!owner.isClassOrInterface()) {
-                    return undefined;
-                }
-                if (owner.baseTypes === false) {
-                    owner.baseTypes = owner.objectRegistry.fetchBaseTypes(owner);
-                }
-                return owner.baseTypes;
-            },
-            function* (): Generator<ProtocolRequest, readonly Type[] | undefined, ProtocolResponse["result"]> {
-                if (!owner.isClassOrInterface()) {
-                    return undefined;
-                }
-                if (owner.baseTypes === false) {
-                    owner.baseTypes = yield* owner.objectRegistry.fetchBaseTypes.gen(owner);
-                }
-                return owner.baseTypes;
-            },
-        );
+        return getGeneratorMethod(this, this.#generatorMethods ??= createGeneratorMethodCache(38), 37, this.#getBaseTypes, this.#getBaseTypesGen);
+    }
+
+    #getBaseTypes(): readonly Type[] | undefined {
+        if (!this.isClassOrInterface()) {
+            return undefined;
+        }
+        if (this.baseTypes === false) {
+            this.baseTypes = this.objectRegistry.fetchBaseTypes(this);
+        }
+        return this.baseTypes;
+    }
+
+    *#getBaseTypesGen(): Generator<ProtocolRequest, readonly Type[] | undefined, ProtocolResponse["result"]> {
+        if (!this.isClassOrInterface()) {
+            return undefined;
+        }
+        if (this.baseTypes === false) {
+            this.baseTypes = yield* this.objectRegistry.fetchBaseTypes.gen(this);
+        }
+        return this.baseTypes;
     }
 
     isClassOrInterface(): this is InterfaceType {
@@ -8061,6 +7645,7 @@ export function isTypeParameter(type: Type): type is TypeParameter {
 }
 
 export class Signature {
+    #generatorMethods: GeneratorMethodCache | undefined;
     private flags: number;
     private objectRegistry: ProjectObjectRegistry;
 
@@ -8099,106 +7684,94 @@ export class Signature {
         (): readonly TypeParameter[];
         gen(): Generator<ProtocolRequest, readonly TypeParameter[], ProtocolResponse["result"]>;
     } {
-        const owner = this;
-        return cacheGeneratorMethod(
-            owner,
-            "getTypeParameters",
-            function (): readonly TypeParameter[] {
-                return owner.objectRegistry.fetchTypes(owner, "getTypeParametersOfSignature", owner.typeParameters) as readonly TypeParameter[];
-            },
-            function* (): Generator<ProtocolRequest, readonly TypeParameter[], ProtocolResponse["result"]> {
-                return (yield* owner.objectRegistry.fetchTypes.gen(owner, "getTypeParametersOfSignature", owner.typeParameters)) as readonly TypeParameter[];
-            },
-        );
+        return getGeneratorMethod(this, this.#generatorMethods ??= createGeneratorMethodCache(6), 0, this.#getTypeParameters, this.#getTypeParametersGen);
+    }
+
+    #getTypeParameters(): readonly TypeParameter[] {
+        return this.objectRegistry.fetchTypes(this, "getTypeParametersOfSignature", this.typeParameters) as readonly TypeParameter[];
+    }
+
+    *#getTypeParametersGen(): Generator<ProtocolRequest, readonly TypeParameter[], ProtocolResponse["result"]> {
+        return (yield* this.objectRegistry.fetchTypes.gen(this, "getTypeParametersOfSignature", this.typeParameters)) as readonly TypeParameter[];
     }
 
     get getParameters(): {
         (): readonly Symbol[];
         gen(): Generator<ProtocolRequest, readonly Symbol[], ProtocolResponse["result"]>;
     } {
-        const owner = this;
-        return cacheGeneratorMethod(
-            owner,
-            "getParameters",
-            function (): readonly Symbol[] {
-                return owner.objectRegistry.fetchSymbols(owner, "getParametersOfSignature", owner.parameters);
-            },
-            function* (): Generator<ProtocolRequest, readonly Symbol[], ProtocolResponse["result"]> {
-                return yield* owner.objectRegistry.fetchSymbols.gen(owner, "getParametersOfSignature", owner.parameters);
-            },
-        );
+        return getGeneratorMethod(this, this.#generatorMethods ??= createGeneratorMethodCache(6), 1, this.#getParameters, this.#getParametersGen);
+    }
+
+    #getParameters(): readonly Symbol[] {
+        return this.objectRegistry.fetchSymbols(this, "getParametersOfSignature", this.parameters);
+    }
+
+    *#getParametersGen(): Generator<ProtocolRequest, readonly Symbol[], ProtocolResponse["result"]> {
+        return yield* this.objectRegistry.fetchSymbols.gen(this, "getParametersOfSignature", this.parameters);
     }
 
     get getThisParameter(): {
         (): Symbol | undefined;
         gen(): Generator<ProtocolRequest, Symbol | undefined, ProtocolResponse["result"]>;
     } {
-        const owner = this;
-        return cacheGeneratorMethod(
-            owner,
-            "getThisParameter",
-            function (): Symbol | undefined {
-                return owner.objectRegistry.fetchSymbol(owner, "getThisParameterOfSignature", owner.thisParameter);
-            },
-            function* (): Generator<ProtocolRequest, Symbol | undefined, ProtocolResponse["result"]> {
-                return yield* owner.objectRegistry.fetchSymbol.gen(owner, "getThisParameterOfSignature", owner.thisParameter);
-            },
-        );
+        return getGeneratorMethod(this, this.#generatorMethods ??= createGeneratorMethodCache(6), 2, this.#getThisParameter, this.#getThisParameterGen);
+    }
+
+    #getThisParameter(): Symbol | undefined {
+        return this.objectRegistry.fetchSymbol(this, "getThisParameterOfSignature", this.thisParameter);
+    }
+
+    *#getThisParameterGen(): Generator<ProtocolRequest, Symbol | undefined, ProtocolResponse["result"]> {
+        return yield* this.objectRegistry.fetchSymbol.gen(this, "getThisParameterOfSignature", this.thisParameter);
     }
 
     get getTarget(): {
         (): Signature | undefined;
         gen(): Generator<ProtocolRequest, Signature | undefined, ProtocolResponse["result"]>;
     } {
-        const owner = this;
-        return cacheGeneratorMethod(
-            owner,
-            "getTarget",
-            function (): Signature | undefined {
-                return owner.objectRegistry.fetchSignature(owner, "getTargetOfSignature", owner.target);
-            },
-            function* (): Generator<ProtocolRequest, Signature | undefined, ProtocolResponse["result"]> {
-                return yield* owner.objectRegistry.fetchSignature.gen(owner, "getTargetOfSignature", owner.target);
-            },
-        );
+        return getGeneratorMethod(this, this.#generatorMethods ??= createGeneratorMethodCache(6), 3, this.#getTarget, this.#getTargetGen);
+    }
+
+    #getTarget(): Signature | undefined {
+        return this.objectRegistry.fetchSignature(this, "getTargetOfSignature", this.target);
+    }
+
+    *#getTargetGen(): Generator<ProtocolRequest, Signature | undefined, ProtocolResponse["result"]> {
+        return yield* this.objectRegistry.fetchSignature.gen(this, "getTargetOfSignature", this.target);
     }
 
     get getReturnType(): {
         (): Type;
         gen(): Generator<ProtocolRequest, Type, ProtocolResponse["result"]>;
     } {
-        const owner = this;
-        return cacheGeneratorMethod(
-            owner,
-            "getReturnType",
-            function (): Type {
-                const result = owner.objectRegistry.fetchType(owner, "getReturnTypeOfSignature", owner.returnType);
-                owner.returnType = result.id;
-                return result;
-            },
-            function* (): Generator<ProtocolRequest, Type, ProtocolResponse["result"]> {
-                const result = yield* owner.objectRegistry.fetchType.gen(owner, "getReturnTypeOfSignature", owner.returnType);
-                owner.returnType = result.id;
-                return result;
-            },
-        );
+        return getGeneratorMethod(this, this.#generatorMethods ??= createGeneratorMethodCache(6), 4, this.#getReturnType, this.#getReturnTypeGen);
+    }
+
+    #getReturnType(): Type {
+        const result = this.objectRegistry.fetchType(this, "getReturnTypeOfSignature", this.returnType);
+        this.returnType = result.id;
+        return result;
+    }
+
+    *#getReturnTypeGen(): Generator<ProtocolRequest, Type, ProtocolResponse["result"]> {
+        const result = yield* this.objectRegistry.fetchType.gen(this, "getReturnTypeOfSignature", this.returnType);
+        this.returnType = result.id;
+        return result;
     }
 
     get getTypeParameterAtPosition(): {
         (pos: number): Type;
         gen(pos: number): Generator<ProtocolRequest, Type, ProtocolResponse["result"]>;
     } {
-        const owner = this;
-        return cacheGeneratorMethod(
-            owner,
-            "getTypeParameterAtPosition",
-            function (pos: number): Type {
-                return owner.objectRegistry.fetchTypeParameterAtPosition(owner, pos);
-            },
-            function* (pos: number): Generator<ProtocolRequest, Type, ProtocolResponse["result"]> {
-                return yield* owner.objectRegistry.fetchTypeParameterAtPosition.gen(owner, pos);
-            },
-        );
+        return getGeneratorMethod(this, this.#generatorMethods ??= createGeneratorMethodCache(6), 5, this.#getTypeParameterAtPosition, this.#getTypeParameterAtPositionGen);
+    }
+
+    #getTypeParameterAtPosition(pos: number): Type {
+        return this.objectRegistry.fetchTypeParameterAtPosition(this, pos);
+    }
+
+    *#getTypeParameterAtPositionGen(pos: number): Generator<ProtocolRequest, Type, ProtocolResponse["result"]> {
+        return yield* this.objectRegistry.fetchTypeParameterAtPosition.gen(this, pos);
     }
 
     get hasRestParameter(): boolean {
