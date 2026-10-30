@@ -20554,18 +20554,18 @@ func (c *Checker) popTypeResolution() bool {
 // re-entering detects as a cycle. Its resolution shares the work of the
 // resolution below it.
 func (c *Checker) beginTypeResolution(target TypeSystemEntity, propertyName TypeSystemPropertyName) {
-	parent := c.currentResolution()
-	f := resolution{
-		count:              parent.count,
-		start:              parent.start,
-		depthStart:         parent.depthStart,
-		serial:             parent.serial,
-		prevMemo:           int32(c.memoTop),
-		isTypeResolution:   true,
-		prevTypeResolution: int32(c.typeResolutionTop),
-		typeResolution:     TypeResolution{target: target, propertyName: propertyName, result: true},
-	}
-	c.resolutions = append(c.resolutions, f)
+	f := c.pushResolution()
+	parent := &c.resolutions[len(c.resolutions)-2]
+	f.count = parent.count
+	f.start = parent.start
+	f.depthStart = parent.depthStart
+	f.serial = parent.serial
+	f.prevMemo = int32(c.memoTop)
+	f.isTypeResolution = true
+	f.prevTypeResolution = int32(c.typeResolutionTop)
+	f.typeResolution.target = target
+	f.typeResolution.propertyName = propertyName
+	f.typeResolution.result = true
 	c.typeResolutionTop = len(c.resolutions)
 }
 
