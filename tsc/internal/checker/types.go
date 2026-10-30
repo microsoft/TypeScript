@@ -201,14 +201,14 @@ func (links *ValueSymbolLinks) getWriteType() *Type {
 }
 
 func (links *ValueSymbolLinks) getNameType() *Type {
-	if links.extra == nil {
+	if links == nil || links.extra == nil {
 		return nil
 	}
 	return links.extra.nameType
 }
 
 func (links *ValueSymbolLinks) getContainingType() *Type {
-	if links.extra == nil {
+	if links == nil || links.extra == nil {
 		return nil
 	}
 	return links.extra.containingType
