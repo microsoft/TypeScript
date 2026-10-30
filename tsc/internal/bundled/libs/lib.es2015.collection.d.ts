@@ -49,6 +49,7 @@ interface Map<K, V> {
 interface MapConstructor {
     new (): Map<any, any>;
     new <K, V>(entries?: readonly (readonly [K, V])[] | null): Map<K, V>;
+    new <KV extends readonly [any, any]>(entries?: readonly KV[] | null): Map<KV[0], KV[1]>;
     readonly prototype: Map<any, any>;
 }
 declare var Map: MapConstructor;

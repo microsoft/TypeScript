@@ -1,0 +1,23 @@
+//// [tests/cases/conformance/es6/mapConstruction/new-Map2.ts] ////
+
+=== new-Map2.ts ===
+const m1 = new Map([]);
+>m1 : Symbol(m1, Decl(new-Map2.ts, 0, 5))
+>Map : Symbol(Map, Decl(lib.es2015.collection.d.ts, --, --), Decl(lib.es2015.collection.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2026.collection.d.ts, --, --))
+
+const a2: any[] = [];
+>a2 : Symbol(a2, Decl(new-Map2.ts, 2, 5))
+
+const m2 = new Map(a2);
+>m2 : Symbol(m2, Decl(new-Map2.ts, 3, 5))
+>Map : Symbol(Map, Decl(lib.es2015.collection.d.ts, --, --), Decl(lib.es2015.collection.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2026.collection.d.ts, --, --))
+>a2 : Symbol(a2, Decl(new-Map2.ts, 2, 5))
+
+const a3 = [];
+>a3 : Symbol(a3, Decl(new-Map2.ts, 5, 5))
+
+const m3 = new Map(a3);
+>m3 : Symbol(m3, Decl(new-Map2.ts, 6, 5))
+>Map : Symbol(Map, Decl(lib.es2015.collection.d.ts, --, --), Decl(lib.es2015.collection.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2026.collection.d.ts, --, --))
+>a3 : Symbol(a3, Decl(new-Map2.ts, 5, 5))
+
