@@ -1324,6 +1324,48 @@ declare module "augmentation" {}`,
         await program.dispose();
     });
 
+    test("Program getAllDependencies", async () => {
+        await using api = spawnAPI({
+            "/src/index.ts": `/// <reference types="pkg-types" />
+import { a } from "./a";
+export const value = a;`,
+            "/src/a.ts": `import type { Shared } from "./shared";
+export const a: Shared["a"] = 1;`,
+            "/src/shared.ts": `export interface Shared { a: number; }`,
+            "/src/augment.ts": `export {};
+declare module "./shared" { interface Shared { b: string; } }`,
+            "/src/unrelated.ts": `export const unrelated = 1;`,
+            "/src/script.ts": `const scriptValue = 1;`,
+            "/node_modules/@types/pkg-types/package.json": JSON.stringify({ name: "@types/pkg-types", version: "1.0.0", types: "index.d.ts" }),
+            "/node_modules/@types/pkg-types/index.d.ts": `export {};`,
+        });
+
+        const program = await api.createProgram(
+            ["/src/index.ts", "/src/augment.ts", "/src/unrelated.ts", "/src/script.ts"],
+            { module: ModuleKind.ESNext, moduleResolution: ModuleResolutionKind.Bundler, noLib: true, types: [] },
+        );
+
+        assert.deepEqual(await program.getAllDependencies("/src/index.ts"), [
+            "/src/index.ts",
+            "/node_modules/@types/pkg-types/index.d.ts",
+            "/src/shared.ts",
+            "/src/a.ts",
+            "/src/augment.ts",
+        ]);
+        assert.deepEqual(await program.getAllDependencies("/src/augment.ts"), ["/src/augment.ts", "/src/shared.ts"]);
+        assert.deepEqual(await program.getAllDependencies("/src/unrelated.ts"), ["/src/unrelated.ts"]);
+
+        const sourceFileNames = await program.getSourceFileNames();
+        assert.deepEqual(await program.getAllDependencies("/src/script.ts"), [
+            "/src/script.ts",
+            ...sourceFileNames.filter(fileName => fileName !== "/src/script.ts"),
+        ]);
+
+        await assert.rejects(program.getAllDependencies("/src/missing.ts"), /source file not found/); // @sync: assert.throws(() => program.getAllDependencies("/src/missing.ts"), /source file not found/);
+
+        await program.dispose();
+    });
+
     test("createProgram resolves raw compiler option paths", async () => {
         await using api = spawnAPI({
             "/src/index.ts": `import { value } from "ba"; export { value };`,

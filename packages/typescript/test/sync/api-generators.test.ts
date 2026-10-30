@@ -1614,6 +1614,7 @@ describe("API - generator batching", { concurrency: areTestsFiltered() }, () => 
                 parityCase("Program", "getResolvedModuleFromModuleSpecifier", program.getResolvedModuleFromModuleSpecifier, assertDeepEquivalent, importSpecifier),
                 parityCase("Program", "getResolvedTypeReferenceDirective", program.getResolvedTypeReferenceDirective, assertDeepEquivalent, "/src/index.ts", "parity", ModuleKind.CommonJS),
                 parityCase("Program", "getResolvedTypeReferenceDirectiveFromTypeReferenceDirective", program.getResolvedTypeReferenceDirectiveFromTypeReferenceDirective, assertDeepEquivalent, typeReferenceDirective, "/src/index.ts"),
+                parityCase("Program", "getAllDependencies", program.getAllDependencies, assertDeepEquivalent, "/src/index.ts"),
                 parityCase("Program", "getSourceFileByPath", program.getSourceFileByPath, assertOptionalSourceFilesEquivalent, indexFile.path),
                 parityCase("Program", "getSourceFileNames", program.getSourceFileNames, assertDeepEquivalent),
                 parityCase("Program", "getSourceFileMetadata", program.getSourceFileMetadata, assertDeepEquivalent, "/src/index.ts"),

@@ -118,6 +118,7 @@ const (
 	MethodGetResolvedModuleFromModuleSpecifier           Method = "getResolvedModuleFromModuleSpecifier"
 	MethodGetResolvedTypeReferenceDirective              Method = "getResolvedTypeReferenceDirective"
 	MethodGetResolvedTypeReferenceDirectiveFromReference Method = "getResolvedTypeReferenceDirectiveFromTypeReferenceDirective"
+	MethodGetAllDependencies                             Method = "getAllDependencies"
 	MethodGetConfigFileNames                             Method = "getConfigFileNames"
 	MethodGetConfigSourceFile                            Method = "getConfigSourceFile"
 	MethodResolveName                                    Method = "resolveName"
@@ -635,6 +636,7 @@ var unmarshalers = map[Method]func([]byte) (any, error){
 	MethodGetResolvedModuleFromModuleSpecifier:           unmarshallerFor[GetResolvedModuleFromModuleSpecifierParams],
 	MethodGetResolvedTypeReferenceDirective:              unmarshallerFor[GetResolvedTypeReferenceDirectiveParams],
 	MethodGetResolvedTypeReferenceDirectiveFromReference: unmarshallerFor[GetResolvedTypeReferenceDirectiveFromReferenceParams],
+	MethodGetAllDependencies:                             unmarshallerFor[GetSourceFileParams],
 	MethodGetConfigFileNames:                             unmarshallerFor[GetProjectDiagnosticsParams],
 	MethodGetConfigSourceFile:                            unmarshallerFor[GetSourceFileParams],
 	MethodGetSymbolAtPosition:                            unmarshallerFor[GetSymbolAtPositionParams],
