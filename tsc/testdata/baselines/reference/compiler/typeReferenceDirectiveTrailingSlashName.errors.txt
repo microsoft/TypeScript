@@ -1,0 +1,15 @@
+/a.ts(2,1): error TS2304: Cannot find name 'fromFile'.
+
+
+==== /a.ts (1 errors) ====
+    fromDirectory;
+    fromFile;
+    ~~~~~~~~
+!!! error TS2304: Cannot find name 'fromFile'.
+    
+==== /typings/package.d.ts (0 errors) ====
+    declare const fromFile: number;
+    
+==== /typings/package/index.d.ts (0 errors) ====
+    declare const fromDirectory: number;
+    

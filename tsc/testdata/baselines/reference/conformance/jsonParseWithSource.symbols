@@ -1,0 +1,130 @@
+//// [tests/cases/conformance/es2026/jsonParseWithSource.ts] ////
+
+=== jsonParseWithSource.ts ===
+JSON.parse('{"value": 1}', function (key, parsedValue, context) {
+>JSON.parse : Symbol(JSON.parse, Decl(lib.es5.d.ts, --, --), Decl(lib.es2026.json.d.ts, --, --))
+>JSON : Symbol(JSON, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2026.json.d.ts, --, --))
+>parse : Symbol(JSON.parse, Decl(lib.es5.d.ts, --, --), Decl(lib.es2026.json.d.ts, --, --))
+>key : Symbol(key, Decl(jsonParseWithSource.ts, 0, 37))
+>parsedValue : Symbol(parsedValue, Decl(jsonParseWithSource.ts, 0, 41))
+>context : Symbol(context, Decl(jsonParseWithSource.ts, 0, 54))
+
+    const source: string | undefined = context.source;
+>source : Symbol(source, Decl(jsonParseWithSource.ts, 1, 9))
+>context.source : Symbol(source, Decl(lib.es2026.json.d.ts, --, --))
+>context : Symbol(context, Decl(jsonParseWithSource.ts, 0, 54))
+>source : Symbol(source, Decl(lib.es2026.json.d.ts, --, --))
+
+    return parsedValue;
+>parsedValue : Symbol(parsedValue, Decl(jsonParseWithSource.ts, 0, 41))
+
+});
+
+declare const text: string;
+>text : Symbol(text, Decl(jsonParseWithSource.ts, 5, 13))
+
+declare const condition: boolean;
+>condition : Symbol(condition, Decl(jsonParseWithSource.ts, 6, 13))
+
+JSON.parse(text);
+>JSON.parse : Symbol(JSON.parse, Decl(lib.es5.d.ts, --, --), Decl(lib.es2026.json.d.ts, --, --))
+>JSON : Symbol(JSON, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2026.json.d.ts, --, --))
+>parse : Symbol(JSON.parse, Decl(lib.es5.d.ts, --, --), Decl(lib.es2026.json.d.ts, --, --))
+>text : Symbol(text, Decl(jsonParseWithSource.ts, 5, 13))
+
+JSON.parse(text, undefined);
+>JSON.parse : Symbol(JSON.parse, Decl(lib.es5.d.ts, --, --), Decl(lib.es2026.json.d.ts, --, --))
+>JSON : Symbol(JSON, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2026.json.d.ts, --, --))
+>parse : Symbol(JSON.parse, Decl(lib.es5.d.ts, --, --), Decl(lib.es2026.json.d.ts, --, --))
+>text : Symbol(text, Decl(jsonParseWithSource.ts, 5, 13))
+>undefined : Symbol(undefined)
+
+JSON.parse.call(JSON, text);
+>JSON.parse.call : Symbol(CallableFunction.call, Decl(lib.es5.d.ts, --, --))
+>JSON.parse : Symbol(JSON.parse, Decl(lib.es5.d.ts, --, --), Decl(lib.es2026.json.d.ts, --, --))
+>JSON : Symbol(JSON, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2026.json.d.ts, --, --))
+>parse : Symbol(JSON.parse, Decl(lib.es5.d.ts, --, --), Decl(lib.es2026.json.d.ts, --, --))
+>call : Symbol(CallableFunction.call, Decl(lib.es5.d.ts, --, --))
+>JSON : Symbol(JSON, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2026.json.d.ts, --, --))
+>text : Symbol(text, Decl(jsonParseWithSource.ts, 5, 13))
+
+JSON.parse.apply(JSON, [text]);
+>JSON.parse.apply : Symbol(CallableFunction.apply, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>JSON.parse : Symbol(JSON.parse, Decl(lib.es5.d.ts, --, --), Decl(lib.es2026.json.d.ts, --, --))
+>JSON : Symbol(JSON, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2026.json.d.ts, --, --))
+>parse : Symbol(JSON.parse, Decl(lib.es5.d.ts, --, --), Decl(lib.es2026.json.d.ts, --, --))
+>apply : Symbol(CallableFunction.apply, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>JSON : Symbol(JSON, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2026.json.d.ts, --, --))
+>text : Symbol(text, Decl(jsonParseWithSource.ts, 5, 13))
+
+type P = Parameters<typeof JSON.parse>;
+>P : Symbol(P, Decl(jsonParseWithSource.ts, 11, 31))
+>Parameters : Symbol(Parameters, Decl(lib.es5.d.ts, --, --))
+>JSON.parse : Symbol(JSON.parse, Decl(lib.es5.d.ts, --, --), Decl(lib.es2026.json.d.ts, --, --))
+>JSON : Symbol(JSON, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2026.json.d.ts, --, --))
+>parse : Symbol(JSON.parse, Decl(lib.es5.d.ts, --, --), Decl(lib.es2026.json.d.ts, --, --))
+
+function parse(...args: P) {
+>parse : Symbol(parse, Decl(jsonParseWithSource.ts, 13, 39))
+>args : Symbol(args, Decl(jsonParseWithSource.ts, 14, 15))
+>P : Symbol(P, Decl(jsonParseWithSource.ts, 11, 31))
+
+    return JSON.parse(...args);
+>JSON.parse : Symbol(JSON.parse, Decl(lib.es5.d.ts, --, --), Decl(lib.es2026.json.d.ts, --, --))
+>JSON : Symbol(JSON, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2026.json.d.ts, --, --))
+>parse : Symbol(JSON.parse, Decl(lib.es5.d.ts, --, --), Decl(lib.es2026.json.d.ts, --, --))
+>args : Symbol(args, Decl(jsonParseWithSource.ts, 14, 15))
+}
+parse(text);
+>parse : Symbol(parse, Decl(jsonParseWithSource.ts, 13, 39))
+>text : Symbol(text, Decl(jsonParseWithSource.ts, 5, 13))
+
+function parseWith(input: string, reviver?: P[1]) {
+>parseWith : Symbol(parseWith, Decl(jsonParseWithSource.ts, 17, 12))
+>input : Symbol(input, Decl(jsonParseWithSource.ts, 19, 19))
+>reviver : Symbol(reviver, Decl(jsonParseWithSource.ts, 19, 33))
+>P : Symbol(P, Decl(jsonParseWithSource.ts, 11, 31))
+
+    return JSON.parse(input, reviver);
+>JSON.parse : Symbol(JSON.parse, Decl(lib.es5.d.ts, --, --), Decl(lib.es2026.json.d.ts, --, --))
+>JSON : Symbol(JSON, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2026.json.d.ts, --, --))
+>parse : Symbol(JSON.parse, Decl(lib.es5.d.ts, --, --), Decl(lib.es2026.json.d.ts, --, --))
+>input : Symbol(input, Decl(jsonParseWithSource.ts, 19, 19))
+>reviver : Symbol(reviver, Decl(jsonParseWithSource.ts, 19, 33))
+}
+
+const a = JSON.parse.bind(JSON);
+>a : Symbol(a, Decl(jsonParseWithSource.ts, 23, 5))
+>JSON.parse.bind : Symbol(CallableFunction.bind, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>JSON.parse : Symbol(JSON.parse, Decl(lib.es5.d.ts, --, --), Decl(lib.es2026.json.d.ts, --, --))
+>JSON : Symbol(JSON, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2026.json.d.ts, --, --))
+>parse : Symbol(JSON.parse, Decl(lib.es5.d.ts, --, --), Decl(lib.es2026.json.d.ts, --, --))
+>bind : Symbol(CallableFunction.bind, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>JSON : Symbol(JSON, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2026.json.d.ts, --, --))
+
+a(text);
+>a : Symbol(a, Decl(jsonParseWithSource.ts, 23, 5))
+>text : Symbol(text, Decl(jsonParseWithSource.ts, 5, 13))
+
+JSON.parse(text, condition ? (key, value, context) => {
+>JSON.parse : Symbol(JSON.parse, Decl(lib.es5.d.ts, --, --), Decl(lib.es2026.json.d.ts, --, --))
+>JSON : Symbol(JSON, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2026.json.d.ts, --, --))
+>parse : Symbol(JSON.parse, Decl(lib.es5.d.ts, --, --), Decl(lib.es2026.json.d.ts, --, --))
+>text : Symbol(text, Decl(jsonParseWithSource.ts, 5, 13))
+>condition : Symbol(condition, Decl(jsonParseWithSource.ts, 6, 13))
+>key : Symbol(key, Decl(jsonParseWithSource.ts, 26, 30))
+>value : Symbol(value, Decl(jsonParseWithSource.ts, 26, 34))
+>context : Symbol(context, Decl(jsonParseWithSource.ts, 26, 41))
+
+    const source: string | undefined = context.source;
+>source : Symbol(source, Decl(jsonParseWithSource.ts, 27, 9))
+>context.source : Symbol(source, Decl(lib.es2026.json.d.ts, --, --))
+>context : Symbol(context, Decl(jsonParseWithSource.ts, 26, 41))
+>source : Symbol(source, Decl(lib.es2026.json.d.ts, --, --))
+
+    return value;
+>value : Symbol(value, Decl(jsonParseWithSource.ts, 26, 34))
+
+} : undefined);
+>undefined : Symbol(undefined)
+

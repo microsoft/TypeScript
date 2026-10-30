@@ -1,0 +1,27 @@
+//// [tests/cases/compiler/conditionalFunctionUnionInference.ts] ////
+
+=== conditionalFunctionUnionInference.ts ===
+type DeepValue<T> = T extends () => unknown ? T :
+>DeepValue : DeepValue<T>
+
+    { [K in keyof T]: DeepValue<T[K]> };
+
+declare function createValue<T>(initialValue: DeepValue<T | (() => T)>): T;
+>createValue : <T>(initialValue: DeepValue<T | (() => T)>) => T
+>initialValue : (() => T) | DeepValue<T>
+
+const value = createValue(() => ({ ready: true }));
+>value : { ready: boolean; }
+>createValue(() => ({ ready: true })) : { ready: boolean; }
+>createValue : <T>(initialValue: DeepValue<T | (() => T)>) => T
+>() => ({ ready: true }) : () => { ready: boolean; }
+>({ ready: true }) : { ready: true; }
+>{ ready: true } : { ready: true; }
+>ready : true
+>true : true
+
+value.ready;
+>value.ready : boolean
+>value : { ready: boolean; }
+>ready : boolean
+

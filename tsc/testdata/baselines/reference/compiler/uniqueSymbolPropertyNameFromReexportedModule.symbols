@@ -1,0 +1,22 @@
+//// [tests/cases/compiler/uniqueSymbolPropertyNameFromReexportedModule.ts] ////
+
+=== b.ts ===
+export const key: unique symbol = Symbol();
+>key : Symbol(key, Decl(b.ts, 0, 12))
+>Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2019.symbol.d.ts, --, --))
+
+=== c.ts ===
+export { key } from "./b";
+>key : Symbol(key, Decl(c.ts, 0, 8))
+
+=== a.ts ===
+import { key } from "./c";
+>key : Symbol(key, Decl(a.ts, 0, 8))
+
+declare const o: {};
+>o : Symbol(o, Decl(a.ts, 1, 13))
+
+o[key];
+>o : Symbol(o, Decl(a.ts, 1, 13))
+>key : Symbol(key, Decl(a.ts, 0, 8))
+

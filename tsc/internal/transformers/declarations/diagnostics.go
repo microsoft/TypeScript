@@ -584,7 +584,7 @@ func addParentDeclarationRelatedInfo(node *ast.Node, diag *ast.Diagnostic) {
 }
 
 func createAccessorTypeError(node *ast.Node) *ast.Diagnostic {
-	allDeclarations := ast.GetAllAccessorDeclarationsForDeclaration(node, node.Symbol().Declarations)
+	allDeclarations := ast.GetAllAccessorDeclarationsForDeclaration(node, node.Symbol().Declarations())
 	getAccessor := allDeclarations.GetAccessor
 	setAccessor := allDeclarations.SetAccessor
 	targetNode := node

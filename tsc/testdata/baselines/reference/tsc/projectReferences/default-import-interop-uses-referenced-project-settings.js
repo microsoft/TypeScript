@@ -59,7 +59,7 @@ app/src/index.ts(1,8): error TS2613: Module '"/home/src/workspaces/project/app/s
 app/src/index.ts(2,8): error TS2613: Module '"/home/src/workspaces/project/node_modules/esm-package/index"' has no default export. Did you mean to use 'import { esm } from "/home/src/workspaces/project/node_modules/esm-package/index"' instead?
 app/src/index.ts(3,8): error TS1192: Module '"/home/src/workspaces/project/lib/dist/a"' has no default export.
 app/src/index.ts(4,8): error TS1192: Module '"/home/src/workspaces/project/lib/dist/a"' has no default export.
-//// [/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts] *Lib*
+//// [/home/src/tslibs/TS/Lib/lib.es2026.full.d.ts] *Lib*
 /// <reference no-default-lib="true"/>
 interface Boolean {}
 interface Function {}

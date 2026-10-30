@@ -43,8 +43,8 @@ Output::
 
 [[90mHH:MM:SS AM[0m] Building project 'a/tsconfig.json'...
 
-../../tslibs/TS/Lib/lib.es2025.full.d.ts
-   Default library for target 'ES2025'
+../../tslibs/TS/Lib/lib.es2026.full.d.ts
+   Default library for target 'ES2026'
 a/src/index.ts
    Matched by default include pattern '**/*'
 [[90mHH:MM:SS AM[0m] Project 'b/tsconfig.json' is out of date because output file 'b/tsconfig.tsbuildinfo' does not exist
@@ -67,15 +67,15 @@ Found 'package.json' at '/home/src/workspaces/project/node_modules/@types/pg/pac
 File '/home/src/workspaces/project/node_modules/@types/pg/index.d.ts' exists - use it as a name resolution result.
 Resolving real path for '/home/src/workspaces/project/node_modules/@types/pg/index.d.ts', result '/home/src/workspaces/project/node_modules/@types/pg/index.d.ts'.
 ======== Module name 'pg' was successfully resolved to '/home/src/workspaces/project/node_modules/@types/pg/index.d.ts'. ========
-../../tslibs/TS/Lib/lib.es2025.full.d.ts
-   Default library for target 'ES2025'
+../../tslibs/TS/Lib/lib.es2026.full.d.ts
+   Default library for target 'ES2026'
 node_modules/@types/pg/index.d.ts
    Imported via "pg" from file 'b/src/index.ts'
    File is CommonJS module because 'node_modules/@types/pg/package.json' does not have field "type"
 b/src/index.ts
    Matched by default include pattern '**/*'
    File is ECMAScript module because 'b/package.json' has field "type" with value "module"
-//// [/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts] *Lib*
+//// [/home/src/tslibs/TS/Lib/lib.es2026.full.d.ts] *Lib*
 /// <reference no-default-lib="true"/>
 interface Boolean {}
 interface Function {}
@@ -145,13 +145,13 @@ pg.foo();
 
 a/tsconfig.json::
 SemanticDiagnostics::
-*refresh*    /home/src/tslibs/TS/Lib/lib.es2025.full.d.ts
+*refresh*    /home/src/tslibs/TS/Lib/lib.es2026.full.d.ts
 *refresh*    /home/src/workspaces/project/a/src/index.ts
 Signatures::
 
 b/tsconfig.json::
 SemanticDiagnostics::
-*refresh*    /home/src/tslibs/TS/Lib/lib.es2025.full.d.ts
+*refresh*    /home/src/tslibs/TS/Lib/lib.es2026.full.d.ts
 *refresh*    /home/src/workspaces/project/node_modules/@types/pg/index.d.ts
 *refresh*    /home/src/workspaces/project/b/src/index.ts
 Signatures::

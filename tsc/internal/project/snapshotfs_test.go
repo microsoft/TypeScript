@@ -2,6 +2,7 @@ package project
 
 import (
 	"slices"
+	"strconv"
 	"sync"
 	"testing"
 
@@ -16,21 +17,20 @@ import (
 
 func newSnapshotFSBuilder(
 	fs vfs.FS,
-	previousOverlays map[tspath.Path]*Overlay,
-	overlays map[tspath.Path]*Overlay,
-	cacheFiles map[tspath.Path]*cachedFile,
-	cacheDirectories map[tspath.Path]dirty.CloneableMap[tspath.Path, string],
-	nodeModulesRealpathAliases map[tspath.Path]*realpathAliasSet,
+	previousOverlays map[tspath.PathKey]*Overlay,
+	overlays map[tspath.PathKey]*Overlay,
+	cacheFiles map[tspath.PathKey]*cachedFile,
+	cacheDirectories map[tspath.PathKey]dirty.CloneableMap[tspath.PathKey, string],
+	nodeModulesRealpathAliases map[tspath.PathKey]*realpathAliasSet,
 	positionEncoding lsproto.PositionEncodingKind,
-	toPath func(fileName string) tspath.Path,
 ) *snapshotFSBuilder {
 	_ = previousOverlays
-	layeredFS := layerOverlayFileSystem(fs, overlays, positionEncoding, toPath)
-	return newSnapshotFSBuilderFromSource(layeredFS, cacheFiles, cacheDirectories, nodeModulesRealpathAliases, toPath)
+	layeredFS := layerOverlayFileSystem(fs, overlays, positionEncoding)
+	return newSnapshotFSBuilderFromSource(layeredFS, cacheFiles, cacheDirectories, nodeModulesRealpathAliases)
 }
 
-func newTestLayeredFileSystem(fs vfs.FS, toPath func(string) tspath.Path) LayeredFileSystem {
-	return newOverlayFS(fs, nil, lsproto.PositionEncodingKindUTF16, toPath)
+func newTestLayeredFileSystem(fs vfs.FS) LayeredFileSystem {
+	return newOverlayFS(fs, nil, lsproto.PositionEncodingKindUTF16)
 }
 
 type countingHandleFileSystem struct {
@@ -40,28 +40,27 @@ type countingHandleFileSystem struct {
 	readFileCalls      int
 }
 
-func (fs *countingHandleFileSystem) GetFile(fileName string) FileHandle {
-	return fs.GetFileByPath(fileName, tspath.Path(fileName))
+func (fs *countingHandleFileSystem) GetFile(fileName tspath.RootedFilePath) FileHandle {
+	return fs.GetFileByPath(fileName, fs.CaseSensitivity().PathKey(fileName.AsPath()))
 }
 
-func (fs *countingHandleFileSystem) GetFileByPath(fileName string, path tspath.Path) FileHandle {
+func (fs *countingHandleFileSystem) GetFileByPath(fileName tspath.RootedFilePath, path tspath.PathKey) FileHandle {
 	fs.getFileByPathCalls++
 	return NewCachedFileHandle(fileName, fs.content)
 }
 
-func (fs *countingHandleFileSystem) ReadFile(path string) (string, bool) {
+func (fs *countingHandleFileSystem) ReadFile(path tspath.RootedFilePath) (string, bool) {
 	fs.readFileCalls++
 	return fs.content, true
 }
 
 func TestSnapshotFSBuilderCachesReturnedSourceHandle(t *testing.T) {
 	t.Parallel()
-	toPath := func(fileName string) tspath.Path { return tspath.Path(fileName) }
 	fileSystem := &countingHandleFileSystem{
-		LayeredFileSystem: newTestLayeredFileSystem(vfstest.FromMap(map[string]string{}, true), toPath),
+		LayeredFileSystem: newTestLayeredFileSystem(vfstest.FromMap(map[string]string{}, tspath.CaseSensitive)),
 		content:           "export const value = 1;",
 	}
-	builder := newSnapshotFSBuilderFromSource(fileSystem, nil, nil, nil, toPath)
+	builder := newSnapshotFSBuilderFromSource(fileSystem, nil, nil, nil)
 
 	file := builder.GetFile("/src/index.ts")
 	assert.Assert(t, file != nil)
@@ -74,25 +73,20 @@ func TestSnapshotFSBuilderCachesReturnedSourceHandle(t *testing.T) {
 func TestSnapshotFSBuilder(t *testing.T) {
 	t.Parallel()
 
-	toPath := func(fileName string) tspath.Path {
-		return tspath.Path(fileName)
-	}
-
 	t.Run("builds directory tree on file add", func(t *testing.T) {
 		t.Parallel()
 		testFS := vfstest.FromMap(map[string]string{
 			"/src/foo.ts": "const foo = 1;",
-		}, false /* useCaseSensitiveFileNames */)
+		}, tspath.CaseInsensitive)
 
 		builder := newSnapshotFSBuilder(
 			testFS,
-			make(map[tspath.Path]*Overlay), // prevOverlays
-			make(map[tspath.Path]*Overlay), // overlays
-			make(map[tspath.Path]*cachedFile),
-			make(map[tspath.Path]dirty.CloneableMap[tspath.Path, string]),
+			make(map[tspath.PathKey]*Overlay), // prevOverlays
+			make(map[tspath.PathKey]*Overlay), // overlays
+			make(map[tspath.PathKey]*cachedFile),
+			make(map[tspath.PathKey]dirty.CloneableMap[tspath.PathKey, string]),
 			nil, // nodeModulesRealpathAliases
 			lsproto.PositionEncodingKindUTF16,
-			toPath,
 		)
 
 		// Read the file to add it to the cacheFiles
@@ -106,15 +100,15 @@ func TestSnapshotFSBuilder(t *testing.T) {
 
 		// Check that directory structure was built
 		// /src should contain /src/foo.ts
-		srcDir, ok := snapshot.cacheDirectories[tspath.Path("/src")]
+		srcDir, ok := snapshot.cacheDirectories[tspath.PathKey("/src")]
 		assert.Assert(t, ok, "/src directory should exist")
-		_, hasFoo := srcDir[tspath.Path("/src/foo.ts")]
+		_, hasFoo := srcDir[tspath.PathKey("/src/foo.ts")]
 		assert.Assert(t, hasFoo, "/src should contain /src/foo.ts")
 
 		// / should contain /src
-		rootDir, ok := snapshot.cacheDirectories[tspath.Path("/")]
+		rootDir, ok := snapshot.cacheDirectories[tspath.PathKey("/")]
 		assert.Assert(t, ok, "/ directory should exist")
-		_, hasSrc := rootDir[tspath.Path("/src")]
+		_, hasSrc := rootDir[tspath.PathKey("/src")]
 		assert.Assert(t, hasSrc, "/ should contain /src")
 	})
 
@@ -122,17 +116,16 @@ func TestSnapshotFSBuilder(t *testing.T) {
 		t.Parallel()
 		testFS := vfstest.FromMap(map[string]string{
 			"/src/nested/deep/file.ts": "export const x = 1;",
-		}, false /* useCaseSensitiveFileNames */)
+		}, tspath.CaseInsensitive)
 
 		builder := newSnapshotFSBuilder(
 			testFS,
-			make(map[tspath.Path]*Overlay), // prevOverlays
-			make(map[tspath.Path]*Overlay), // overlays
-			make(map[tspath.Path]*cachedFile),
-			make(map[tspath.Path]dirty.CloneableMap[tspath.Path, string]),
+			make(map[tspath.PathKey]*Overlay), // prevOverlays
+			make(map[tspath.PathKey]*Overlay), // overlays
+			make(map[tspath.PathKey]*cachedFile),
+			make(map[tspath.PathKey]dirty.CloneableMap[tspath.PathKey, string]),
 			nil, // nodeModulesRealpathAliases
 			lsproto.PositionEncodingKindUTF16,
-			toPath,
 		)
 
 		// Read the file to add it to the cacheFiles
@@ -143,13 +136,13 @@ func TestSnapshotFSBuilder(t *testing.T) {
 		assert.Assert(t, changed, "should have changed")
 
 		// Check the complete directory tree
-		_, hasFile := snapshot.cacheDirectories[tspath.Path("/src/nested/deep")][tspath.Path("/src/nested/deep/file.ts")]
+		_, hasFile := snapshot.cacheDirectories[tspath.PathKey("/src/nested/deep")][tspath.PathKey("/src/nested/deep/file.ts")]
 		assert.Assert(t, hasFile)
-		_, hasDeep := snapshot.cacheDirectories[tspath.Path("/src/nested")][tspath.Path("/src/nested/deep")]
+		_, hasDeep := snapshot.cacheDirectories[tspath.PathKey("/src/nested")][tspath.PathKey("/src/nested/deep")]
 		assert.Assert(t, hasDeep)
-		_, hasNested := snapshot.cacheDirectories[tspath.Path("/src")][tspath.Path("/src/nested")]
+		_, hasNested := snapshot.cacheDirectories[tspath.PathKey("/src")][tspath.PathKey("/src/nested")]
 		assert.Assert(t, hasNested)
-		_, hasSrc := snapshot.cacheDirectories[tspath.Path("/")][tspath.Path("/src")]
+		_, hasSrc := snapshot.cacheDirectories[tspath.PathKey("/")][tspath.PathKey("/src")]
 		assert.Assert(t, hasSrc)
 	})
 
@@ -157,34 +150,33 @@ func TestSnapshotFSBuilder(t *testing.T) {
 		t.Parallel()
 		testFS := vfstest.FromMap(map[string]string{
 			"/src/foo.ts": "const foo = 1;",
-		}, false /* useCaseSensitiveFileNames */)
+		}, tspath.CaseInsensitive)
 
 		// Start with existing cacheFiles and directories
-		existingCacheFiles := map[tspath.Path]*cachedFile{
-			tspath.Path("/src/foo.ts"): newCachedFile("/src/foo.ts", "const foo = 1;"),
+		existingCacheFiles := map[tspath.PathKey]*cachedFile{
+			tspath.PathKey("/src/foo.ts"): newCachedFile("/src/foo.ts", "const foo = 1;"),
 		}
-		existingDirs := map[tspath.Path]dirty.CloneableMap[tspath.Path, string]{
-			tspath.Path("/"): {
-				tspath.Path("/src"): "src",
+		existingDirs := map[tspath.PathKey]dirty.CloneableMap[tspath.PathKey, string]{
+			tspath.PathKey("/"): {
+				tspath.PathKey("/src"): "src",
 			},
-			tspath.Path("/src"): {
-				tspath.Path("/src/foo.ts"): "foo.ts",
+			tspath.PathKey("/src"): {
+				tspath.PathKey("/src/foo.ts"): "foo.ts",
 			},
 		}
 
 		builder := newSnapshotFSBuilder(
 			testFS,
-			make(map[tspath.Path]*Overlay), // prevOverlays
-			make(map[tspath.Path]*Overlay), // overlays
+			make(map[tspath.PathKey]*Overlay), // prevOverlays
+			make(map[tspath.PathKey]*Overlay), // overlays
 			existingCacheFiles,
 			existingDirs,
 			nil, // nodeModulesRealpathAliases
 			lsproto.PositionEncodingKindUTF16,
-			toPath,
 		)
 
 		// Mark the file for deletion by loading and deleting
-		if entry, ok := builder.cacheFiles.Load(tspath.Path("/src/foo.ts")); ok {
+		if entry, ok := builder.cacheFiles.Load(tspath.PathKey("/src/foo.ts")); ok {
 			entry.Delete()
 		}
 
@@ -192,14 +184,14 @@ func TestSnapshotFSBuilder(t *testing.T) {
 		assert.Assert(t, changed, "should have changed")
 
 		// File should be deleted
-		_, hasFile := snapshot.cacheFiles[tspath.Path("/src/foo.ts")]
+		_, hasFile := snapshot.cacheFiles[tspath.PathKey("/src/foo.ts")]
 		assert.Assert(t, !hasFile, "file should be deleted")
 
 		// Directory tree should be cleaned up
-		_, hasSrcDir := snapshot.cacheDirectories[tspath.Path("/src")]
+		_, hasSrcDir := snapshot.cacheDirectories[tspath.PathKey("/src")]
 		assert.Assert(t, !hasSrcDir, "/src directory should be removed")
 
-		_, hasRootDir := snapshot.cacheDirectories[tspath.Path("/")]
+		_, hasRootDir := snapshot.cacheDirectories[tspath.PathKey("/")]
 		assert.Assert(t, !hasRootDir, "root directory should be removed")
 	})
 
@@ -208,36 +200,35 @@ func TestSnapshotFSBuilder(t *testing.T) {
 		testFS := vfstest.FromMap(map[string]string{
 			"/src/foo.ts": "const foo = 1;",
 			"/src/bar.ts": "const bar = 2;",
-		}, false /* useCaseSensitiveFileNames */)
+		}, tspath.CaseInsensitive)
 
 		// Start with existing cacheFiles and directories
-		existingCacheFiles := map[tspath.Path]*cachedFile{
-			tspath.Path("/src/foo.ts"): newCachedFile("/src/foo.ts", "const foo = 1;"),
-			tspath.Path("/src/bar.ts"): newCachedFile("/src/bar.ts", "const bar = 2;"),
+		existingCacheFiles := map[tspath.PathKey]*cachedFile{
+			tspath.PathKey("/src/foo.ts"): newCachedFile("/src/foo.ts", "const foo = 1;"),
+			tspath.PathKey("/src/bar.ts"): newCachedFile("/src/bar.ts", "const bar = 2;"),
 		}
-		existingDirs := map[tspath.Path]dirty.CloneableMap[tspath.Path, string]{
-			tspath.Path("/"): {
-				tspath.Path("/src"): "src",
+		existingDirs := map[tspath.PathKey]dirty.CloneableMap[tspath.PathKey, string]{
+			tspath.PathKey("/"): {
+				tspath.PathKey("/src"): "src",
 			},
-			tspath.Path("/src"): {
-				tspath.Path("/src/foo.ts"): "foo.ts",
-				tspath.Path("/src/bar.ts"): "bar.ts",
+			tspath.PathKey("/src"): {
+				tspath.PathKey("/src/foo.ts"): "foo.ts",
+				tspath.PathKey("/src/bar.ts"): "bar.ts",
 			},
 		}
 
 		builder := newSnapshotFSBuilder(
 			testFS,
-			make(map[tspath.Path]*Overlay), // prevOverlays
-			make(map[tspath.Path]*Overlay), // overlays
+			make(map[tspath.PathKey]*Overlay), // prevOverlays
+			make(map[tspath.PathKey]*Overlay), // overlays
 			existingCacheFiles,
 			existingDirs,
 			nil, // nodeModulesRealpathAliases
 			lsproto.PositionEncodingKindUTF16,
-			toPath,
 		)
 
 		// Delete only foo.ts
-		if entry, ok := builder.cacheFiles.Load(tspath.Path("/src/foo.ts")); ok {
+		if entry, ok := builder.cacheFiles.Load(tspath.PathKey("/src/foo.ts")); ok {
 			entry.Delete()
 		}
 
@@ -245,25 +236,25 @@ func TestSnapshotFSBuilder(t *testing.T) {
 		assert.Assert(t, changed, "should have changed")
 
 		// foo.ts should be deleted
-		_, hasFile := snapshot.cacheFiles[tspath.Path("/src/foo.ts")]
+		_, hasFile := snapshot.cacheFiles[tspath.PathKey("/src/foo.ts")]
 		assert.Assert(t, !hasFile, "foo.ts should be deleted")
 
 		// bar.ts should still exist
-		_, hasBar := snapshot.cacheFiles[tspath.Path("/src/bar.ts")]
+		_, hasBar := snapshot.cacheFiles[tspath.PathKey("/src/bar.ts")]
 		assert.Assert(t, hasBar, "bar.ts should still exist")
 
 		// /src directory should still exist with bar.ts
-		srcDir, hasSrcDir := snapshot.cacheDirectories[tspath.Path("/src")]
+		srcDir, hasSrcDir := snapshot.cacheDirectories[tspath.PathKey("/src")]
 		assert.Assert(t, hasSrcDir, "/src directory should still exist")
-		_, hasFoo := srcDir[tspath.Path("/src/foo.ts")]
+		_, hasFoo := srcDir[tspath.PathKey("/src/foo.ts")]
 		assert.Assert(t, !hasFoo, "/src should not contain foo.ts")
-		_, hasBarInDir := srcDir[tspath.Path("/src/bar.ts")]
+		_, hasBarInDir := srcDir[tspath.PathKey("/src/bar.ts")]
 		assert.Assert(t, hasBarInDir, "/src should contain bar.ts")
 
 		// root should still contain /src
-		rootDir, hasRootDir := snapshot.cacheDirectories[tspath.Path("/")]
+		rootDir, hasRootDir := snapshot.cacheDirectories[tspath.PathKey("/")]
 		assert.Assert(t, hasRootDir, "root directory should still exist")
-		_, hasSrc := rootDir[tspath.Path("/src")]
+		_, hasSrc := rootDir[tspath.PathKey("/src")]
 		assert.Assert(t, hasSrc, "root should contain /src")
 	})
 
@@ -272,30 +263,29 @@ func TestSnapshotFSBuilder(t *testing.T) {
 		testFS := vfstest.FromMap(map[string]string{
 			"/src/foo.ts": "const foo = 1;",
 			"/src/bar.ts": "const bar = 2;",
-		}, false /* useCaseSensitiveFileNames */)
+		}, tspath.CaseInsensitive)
 
 		// Start with existing file and directories
-		existingCacheFiles := map[tspath.Path]*cachedFile{
-			tspath.Path("/src/foo.ts"): newCachedFile("/src/foo.ts", "const foo = 1;"),
+		existingCacheFiles := map[tspath.PathKey]*cachedFile{
+			tspath.PathKey("/src/foo.ts"): newCachedFile("/src/foo.ts", "const foo = 1;"),
 		}
-		existingDirs := map[tspath.Path]dirty.CloneableMap[tspath.Path, string]{
-			tspath.Path("/"): {
-				tspath.Path("/src"): "src",
+		existingDirs := map[tspath.PathKey]dirty.CloneableMap[tspath.PathKey, string]{
+			tspath.PathKey("/"): {
+				tspath.PathKey("/src"): "src",
 			},
-			tspath.Path("/src"): {
-				tspath.Path("/src/foo.ts"): "foo.ts",
+			tspath.PathKey("/src"): {
+				tspath.PathKey("/src/foo.ts"): "foo.ts",
 			},
 		}
 
 		builder := newSnapshotFSBuilder(
 			testFS,
-			make(map[tspath.Path]*Overlay), // prevOverlays
-			make(map[tspath.Path]*Overlay), // overlays
+			make(map[tspath.PathKey]*Overlay), // prevOverlays
+			make(map[tspath.PathKey]*Overlay), // overlays
 			existingCacheFiles,
 			existingDirs,
 			nil, // nodeModulesRealpathAliases
 			lsproto.PositionEncodingKindUTF16,
-			toPath,
 		)
 
 		// Read bar.ts to add it
@@ -306,10 +296,10 @@ func TestSnapshotFSBuilder(t *testing.T) {
 		assert.Assert(t, changed, "should have changed")
 
 		// /src should contain both files
-		srcDir := snapshot.cacheDirectories[tspath.Path("/src")]
-		_, hasFoo := srcDir[tspath.Path("/src/foo.ts")]
+		srcDir := snapshot.cacheDirectories[tspath.PathKey("/src")]
+		_, hasFoo := srcDir[tspath.PathKey("/src/foo.ts")]
 		assert.Assert(t, hasFoo, "/src should contain foo.ts")
-		_, hasBar := srcDir[tspath.Path("/src/bar.ts")]
+		_, hasBar := srcDir[tspath.PathKey("/src/bar.ts")]
 		assert.Assert(t, hasBar, "/src should contain bar.ts")
 	})
 
@@ -317,29 +307,28 @@ func TestSnapshotFSBuilder(t *testing.T) {
 		t.Parallel()
 		testFS := vfstest.FromMap(map[string]string{
 			"/src/foo.ts": "const foo = 1;",
-		}, false /* useCaseSensitiveFileNames */)
+		}, tspath.CaseInsensitive)
 
-		existingCacheFiles := map[tspath.Path]*cachedFile{
-			tspath.Path("/src/foo.ts"): newCachedFile("/src/foo.ts", "const foo = 1;"),
+		existingCacheFiles := map[tspath.PathKey]*cachedFile{
+			tspath.PathKey("/src/foo.ts"): newCachedFile("/src/foo.ts", "const foo = 1;"),
 		}
-		existingDirs := map[tspath.Path]dirty.CloneableMap[tspath.Path, string]{
-			tspath.Path("/"): {
-				tspath.Path("/src"): "src",
+		existingDirs := map[tspath.PathKey]dirty.CloneableMap[tspath.PathKey, string]{
+			tspath.PathKey("/"): {
+				tspath.PathKey("/src"): "src",
 			},
-			tspath.Path("/src"): {
-				tspath.Path("/src/foo.ts"): "foo.ts",
+			tspath.PathKey("/src"): {
+				tspath.PathKey("/src/foo.ts"): "foo.ts",
 			},
 		}
 
 		builder := newSnapshotFSBuilder(
 			testFS,
-			make(map[tspath.Path]*Overlay), // prevOverlays
-			make(map[tspath.Path]*Overlay), // overlays
+			make(map[tspath.PathKey]*Overlay), // prevOverlays
+			make(map[tspath.PathKey]*Overlay), // overlays
 			existingCacheFiles,
 			existingDirs,
 			nil, // nodeModulesRealpathAliases
 			lsproto.PositionEncodingKindUTF16,
-			toPath,
 		)
 
 		// Don't add or delete any files
@@ -347,8 +336,8 @@ func TestSnapshotFSBuilder(t *testing.T) {
 		assert.Assert(t, !changed, "should not have changed")
 
 		// Directories should remain the same
-		srcDir := snapshot.cacheDirectories[tspath.Path("/src")]
-		_, hasFoo := srcDir[tspath.Path("/src/foo.ts")]
+		srcDir := snapshot.cacheDirectories[tspath.PathKey("/src")]
+		_, hasFoo := srcDir[tspath.PathKey("/src/foo.ts")]
 		assert.Assert(t, hasFoo)
 	})
 
@@ -356,23 +345,22 @@ func TestSnapshotFSBuilder(t *testing.T) {
 		t.Parallel()
 		testFS := vfstest.FromMap(map[string]string{
 			"/src/foo.ts": "const foo = 1;",
-		}, false /* useCaseSensitiveFileNames */)
+		}, tspath.CaseInsensitive)
 
-		overlays := map[tspath.Path]*Overlay{
-			tspath.Path("/src/foo.ts"): {
+		overlays := map[tspath.PathKey]*Overlay{
+			tspath.PathKey("/src/foo.ts"): {
 				fileBase: fileBase{fileName: "/src/foo.ts", content: "const foo = 999;"},
 			},
 		}
 
 		builder := newSnapshotFSBuilder(
 			testFS,
-			make(map[tspath.Path]*Overlay), // prevOverlays
+			make(map[tspath.PathKey]*Overlay), // prevOverlays
 			overlays,
-			make(map[tspath.Path]*cachedFile),
-			make(map[tspath.Path]dirty.CloneableMap[tspath.Path, string]),
+			make(map[tspath.PathKey]*cachedFile),
+			make(map[tspath.PathKey]dirty.CloneableMap[tspath.PathKey, string]),
 			nil, // nodeModulesRealpathAliases
 			lsproto.PositionEncodingKindUTF16,
-			toPath,
 		)
 
 		// Should return overlay content
@@ -389,35 +377,34 @@ func TestSnapshotFSBuilder(t *testing.T) {
 			"/lib/utils.ts":    "export const util = 1;",
 			"/lib/helpers.ts":  "export const helper = 1;",
 			"/other/single.ts": "const single = 1;",
-		}, false /* useCaseSensitiveFileNames */)
+		}, tspath.CaseInsensitive)
 
 		// Start with some existing files
-		existingCacheFiles := map[tspath.Path]*cachedFile{
-			tspath.Path("/src/a.ts"):        newCachedFile("/src/a.ts", "const a = 1;"),
-			tspath.Path("/other/single.ts"): newCachedFile("/other/single.ts", "const single = 1;"),
+		existingCacheFiles := map[tspath.PathKey]*cachedFile{
+			tspath.PathKey("/src/a.ts"):        newCachedFile("/src/a.ts", "const a = 1;"),
+			tspath.PathKey("/other/single.ts"): newCachedFile("/other/single.ts", "const single = 1;"),
 		}
-		existingDirs := map[tspath.Path]dirty.CloneableMap[tspath.Path, string]{
-			tspath.Path("/"): {
-				tspath.Path("/src"):   "src",
-				tspath.Path("/other"): "other",
+		existingDirs := map[tspath.PathKey]dirty.CloneableMap[tspath.PathKey, string]{
+			tspath.PathKey("/"): {
+				tspath.PathKey("/src"):   "src",
+				tspath.PathKey("/other"): "other",
 			},
-			tspath.Path("/src"): {
-				tspath.Path("/src/a.ts"): "a.ts",
+			tspath.PathKey("/src"): {
+				tspath.PathKey("/src/a.ts"): "a.ts",
 			},
-			tspath.Path("/other"): {
-				tspath.Path("/other/single.ts"): "single.ts",
+			tspath.PathKey("/other"): {
+				tspath.PathKey("/other/single.ts"): "single.ts",
 			},
 		}
 
 		builder := newSnapshotFSBuilder(
 			testFS,
-			make(map[tspath.Path]*Overlay), // prevOverlays
-			make(map[tspath.Path]*Overlay), // overlays
+			make(map[tspath.PathKey]*Overlay), // prevOverlays
+			make(map[tspath.PathKey]*Overlay), // overlays
 			existingCacheFiles,
 			existingDirs,
 			nil, // nodeModulesRealpathAliases
 			lsproto.PositionEncodingKindUTF16,
-			toPath,
 		)
 
 		// Add new files
@@ -429,10 +416,10 @@ func TestSnapshotFSBuilder(t *testing.T) {
 		assert.Assert(t, fh != nil)
 
 		// Delete existing files
-		if entry, ok := builder.cacheFiles.Load(tspath.Path("/src/a.ts")); ok {
+		if entry, ok := builder.cacheFiles.Load(tspath.PathKey("/src/a.ts")); ok {
 			entry.Delete()
 		}
-		if entry, ok := builder.cacheFiles.Load(tspath.Path("/other/single.ts")); ok {
+		if entry, ok := builder.cacheFiles.Load(tspath.PathKey("/other/single.ts")); ok {
 			entry.Delete()
 		}
 
@@ -440,71 +427,70 @@ func TestSnapshotFSBuilder(t *testing.T) {
 		assert.Assert(t, changed, "should have changed")
 
 		// Verify deleted files are gone
-		_, hasA := snapshot.cacheFiles[tspath.Path("/src/a.ts")]
+		_, hasA := snapshot.cacheFiles[tspath.PathKey("/src/a.ts")]
 		assert.Assert(t, !hasA, "/src/a.ts should be deleted")
-		_, hasSingle := snapshot.cacheFiles[tspath.Path("/other/single.ts")]
+		_, hasSingle := snapshot.cacheFiles[tspath.PathKey("/other/single.ts")]
 		assert.Assert(t, !hasSingle, "/other/single.ts should be deleted")
 
 		// Verify added files exist
-		_, hasB := snapshot.cacheFiles[tspath.Path("/src/b.ts")]
+		_, hasB := snapshot.cacheFiles[tspath.PathKey("/src/b.ts")]
 		assert.Assert(t, hasB, "/src/b.ts should exist")
-		_, hasUtils := snapshot.cacheFiles[tspath.Path("/lib/utils.ts")]
+		_, hasUtils := snapshot.cacheFiles[tspath.PathKey("/lib/utils.ts")]
 		assert.Assert(t, hasUtils, "/lib/utils.ts should exist")
-		_, hasHelpers := snapshot.cacheFiles[tspath.Path("/lib/helpers.ts")]
+		_, hasHelpers := snapshot.cacheFiles[tspath.PathKey("/lib/helpers.ts")]
 		assert.Assert(t, hasHelpers, "/lib/helpers.ts should exist")
 
 		// Verify /other directory is cleaned up (was only entry deleted)
-		_, hasOther := snapshot.cacheDirectories[tspath.Path("/other")]
+		_, hasOther := snapshot.cacheDirectories[tspath.PathKey("/other")]
 		assert.Assert(t, !hasOther, "/other directory should be removed")
 
 		// Verify /src still exists with b.ts (a.ts deleted, b.ts added)
-		srcDir, hasSrc := snapshot.cacheDirectories[tspath.Path("/src")]
+		srcDir, hasSrc := snapshot.cacheDirectories[tspath.PathKey("/src")]
 		assert.Assert(t, hasSrc, "/src directory should exist")
-		_, hasAInDir := srcDir[tspath.Path("/src/a.ts")]
+		_, hasAInDir := srcDir[tspath.PathKey("/src/a.ts")]
 		assert.Assert(t, !hasAInDir, "/src should not contain a.ts")
-		_, hasBInDir := srcDir[tspath.Path("/src/b.ts")]
+		_, hasBInDir := srcDir[tspath.PathKey("/src/b.ts")]
 		assert.Assert(t, hasBInDir, "/src should contain b.ts")
 
 		// Verify /lib was created with both files
-		libDir, hasLib := snapshot.cacheDirectories[tspath.Path("/lib")]
+		libDir, hasLib := snapshot.cacheDirectories[tspath.PathKey("/lib")]
 		assert.Assert(t, hasLib, "/lib directory should exist")
-		_, hasUtilsInDir := libDir[tspath.Path("/lib/utils.ts")]
+		_, hasUtilsInDir := libDir[tspath.PathKey("/lib/utils.ts")]
 		assert.Assert(t, hasUtilsInDir, "/lib should contain utils.ts")
-		_, hasHelpersInDir := libDir[tspath.Path("/lib/helpers.ts")]
+		_, hasHelpersInDir := libDir[tspath.PathKey("/lib/helpers.ts")]
 		assert.Assert(t, hasHelpersInDir, "/lib should contain helpers.ts")
 
 		// Verify root contains /src and /lib but not /other
-		rootDir := snapshot.cacheDirectories[tspath.Path("/")]
-		_, hasSrcInRoot := rootDir[tspath.Path("/src")]
+		rootDir := snapshot.cacheDirectories[tspath.PathKey("/")]
+		_, hasSrcInRoot := rootDir[tspath.PathKey("/src")]
 		assert.Assert(t, hasSrcInRoot, "root should contain /src")
-		_, hasLibInRoot := rootDir[tspath.Path("/lib")]
+		_, hasLibInRoot := rootDir[tspath.PathKey("/lib")]
 		assert.Assert(t, hasLibInRoot, "root should contain /lib")
-		_, hasOtherInRoot := rootDir[tspath.Path("/other")]
+		_, hasOtherInRoot := rootDir[tspath.PathKey("/other")]
 		assert.Assert(t, !hasOtherInRoot, "root should not contain /other")
 	})
 
 	t.Run("overlay directories are computed from overlays", func(t *testing.T) {
 		t.Parallel()
-		testFS := vfstest.FromMap(map[string]string{}, false /* useCaseSensitiveFileNames */)
+		testFS := vfstest.FromMap(map[string]string{}, tspath.CaseInsensitive)
 
-		overlays := map[tspath.Path]*Overlay{
-			tspath.Path("/src/overlay.ts"): {
+		overlays := map[tspath.PathKey]*Overlay{
+			tspath.PathKey("/src/overlay.ts"): {
 				fileBase: fileBase{fileName: "/src/overlay.ts", content: "const x = 1;"},
 			},
-			tspath.Path("/src/nested/deep.ts"): {
+			tspath.PathKey("/src/nested/deep.ts"): {
 				fileBase: fileBase{fileName: "/src/nested/deep.ts", content: "const y = 2;"},
 			},
 		}
 
 		builder := newSnapshotFSBuilder(
 			testFS,
-			make(map[tspath.Path]*Overlay), // prevOverlays
+			make(map[tspath.PathKey]*Overlay), // prevOverlays
 			overlays,
-			make(map[tspath.Path]*cachedFile),
-			make(map[tspath.Path]dirty.CloneableMap[tspath.Path, string]),
+			make(map[tspath.PathKey]*cachedFile),
+			make(map[tspath.PathKey]dirty.CloneableMap[tspath.PathKey, string]),
 			nil, // nodeModulesRealpathAliases
 			lsproto.PositionEncodingKindUTF16,
-			toPath,
 		)
 
 		srcEntries := builder.GetAccessibleEntries("/src")
@@ -522,23 +508,22 @@ func TestSnapshotFSBuilder(t *testing.T) {
 		t.Parallel()
 		testFS := vfstest.FromMap(map[string]string{
 			"/src/disk.ts": "const disk = 1;",
-		}, false /* useCaseSensitiveFileNames */)
+		}, tspath.CaseInsensitive)
 
-		overlays := map[tspath.Path]*Overlay{
-			tspath.Path("/src/overlay.ts"): {
+		overlays := map[tspath.PathKey]*Overlay{
+			tspath.PathKey("/src/overlay.ts"): {
 				fileBase: fileBase{fileName: "/src/overlay.ts", content: "const overlay = 1;"},
 			},
 		}
 
 		builder := newSnapshotFSBuilder(
 			testFS,
-			make(map[tspath.Path]*Overlay), // prevOverlays
+			make(map[tspath.PathKey]*Overlay), // prevOverlays
 			overlays,
-			make(map[tspath.Path]*cachedFile),
-			make(map[tspath.Path]dirty.CloneableMap[tspath.Path, string]),
+			make(map[tspath.PathKey]*cachedFile),
+			make(map[tspath.PathKey]dirty.CloneableMap[tspath.PathKey, string]),
 			nil, // nodeModulesRealpathAliases
 			lsproto.PositionEncodingKindUTF16,
-			toPath,
 		)
 
 		entries := builder.GetAccessibleEntries("/src")
@@ -556,23 +541,22 @@ func TestSnapshotFSBuilder(t *testing.T) {
 			"/src/c.ts": "",
 			"/src/d.ts": "",
 			"/src/e.ts": "",
-		}, false /* useCaseSensitiveFileNames */)
+		}, tspath.CaseInsensitive)
 
-		overlays := map[tspath.Path]*Overlay{
-			tspath.Path("/src/overlay.ts"): {
+		overlays := map[tspath.PathKey]*Overlay{
+			tspath.PathKey("/src/overlay.ts"): {
 				fileBase: fileBase{fileName: "/src/overlay.ts", content: ""},
 			},
 		}
 
 		builder := newSnapshotFSBuilder(
 			testFS,
-			make(map[tspath.Path]*Overlay), // prevOverlays
+			make(map[tspath.PathKey]*Overlay), // prevOverlays
 			overlays,
-			make(map[tspath.Path]*cachedFile),
-			make(map[tspath.Path]dirty.CloneableMap[tspath.Path, string]),
+			make(map[tspath.PathKey]*cachedFile),
+			make(map[tspath.PathKey]dirty.CloneableMap[tspath.PathKey, string]),
 			nil, // nodeModulesRealpathAliases
 			lsproto.PositionEncodingKindUTF16,
-			toPath,
 		)
 
 		_ = builder.fs.GetAccessibleEntries("/src")
@@ -597,28 +581,24 @@ func TestSnapshotFSBuilder(t *testing.T) {
 func TestSnapshotFS(t *testing.T) {
 	t.Parallel()
 
-	toPath := func(fileName string) tspath.Path {
-		return tspath.Path(fileName)
-	}
-
 	t.Run("GetFile returns overlay file", func(t *testing.T) {
 		t.Parallel()
 		testFS := vfstest.FromMap(map[string]string{
 			"/src/foo.ts": "disk content",
-		}, false /* useCaseSensitiveFileNames */)
+		}, tspath.CaseInsensitive)
 
-		overlays := map[tspath.Path]*Overlay{
-			tspath.Path("/src/foo.ts"): {
+		overlays := map[tspath.PathKey]*Overlay{
+			tspath.PathKey("/src/foo.ts"): {
 				fileBase: fileBase{fileName: "/src/foo.ts", content: "overlay content"},
 			},
 		}
-		overlayFS := newOverlayFS(testFS, overlays, lsproto.PositionEncodingKindUTF16, toPath)
+		overlayFS := newOverlayFS(testFS, overlays, lsproto.PositionEncodingKindUTF16)
 
 		snapshot := &SnapshotFS{
-			toPath:           toPath,
+			caseSensitivity:  testFS.CaseSensitivity(),
 			fs:               overlayFS,
-			cacheFiles:       make(map[tspath.Path]*cachedFile),
-			cacheDirectories: make(map[tspath.Path]dirty.CloneableMap[tspath.Path, string]),
+			cacheFiles:       make(map[tspath.PathKey]*cachedFile),
+			cacheDirectories: make(map[tspath.PathKey]dirty.CloneableMap[tspath.PathKey, string]),
 		}
 
 		fh := snapshot.GetFile("/src/foo.ts")
@@ -630,17 +610,17 @@ func TestSnapshotFS(t *testing.T) {
 		t.Parallel()
 		testFS := vfstest.FromMap(map[string]string{
 			"/src/foo.ts": "disk content",
-		}, false /* useCaseSensitiveFileNames */)
+		}, tspath.CaseInsensitive)
 
-		cacheFiles := map[tspath.Path]*cachedFile{
-			tspath.Path("/src/foo.ts"): newCachedFile("/src/foo.ts", "disk content"),
+		cacheFiles := map[tspath.PathKey]*cachedFile{
+			tspath.PathKey("/src/foo.ts"): newCachedFile("/src/foo.ts", "disk content"),
 		}
 
 		snapshot := &SnapshotFS{
-			toPath:           toPath,
-			fs:               newTestLayeredFileSystem(testFS, toPath),
+			caseSensitivity:  testFS.CaseSensitivity(),
+			fs:               newTestLayeredFileSystem(testFS),
 			cacheFiles:       cacheFiles,
-			cacheDirectories: make(map[tspath.Path]dirty.CloneableMap[tspath.Path, string]),
+			cacheDirectories: make(map[tspath.PathKey]dirty.CloneableMap[tspath.PathKey, string]),
 		}
 
 		fh := snapshot.GetFile("/src/foo.ts")
@@ -652,13 +632,13 @@ func TestSnapshotFS(t *testing.T) {
 		t.Parallel()
 		testFS := vfstest.FromMap(map[string]string{
 			"/src/foo.ts": "fs content",
-		}, false /* useCaseSensitiveFileNames */)
+		}, tspath.CaseInsensitive)
 
 		snapshot := &SnapshotFS{
-			toPath:           toPath,
-			fs:               newTestLayeredFileSystem(testFS, toPath),
-			cacheFiles:       make(map[tspath.Path]*cachedFile),
-			cacheDirectories: make(map[tspath.Path]dirty.CloneableMap[tspath.Path, string]),
+			caseSensitivity:  testFS.CaseSensitivity(),
+			fs:               newTestLayeredFileSystem(testFS),
+			cacheFiles:       make(map[tspath.PathKey]*cachedFile),
+			cacheDirectories: make(map[tspath.PathKey]dirty.CloneableMap[tspath.PathKey, string]),
 		}
 
 		fh := snapshot.GetFile("/src/foo.ts")
@@ -668,13 +648,13 @@ func TestSnapshotFS(t *testing.T) {
 
 	t.Run("GetFile returns nil for non-existent file", func(t *testing.T) {
 		t.Parallel()
-		testFS := vfstest.FromMap(map[string]string{}, false /* useCaseSensitiveFileNames */)
+		testFS := vfstest.FromMap(map[string]string{}, tspath.CaseInsensitive)
 
 		snapshot := &SnapshotFS{
-			toPath:           toPath,
-			fs:               newTestLayeredFileSystem(testFS, toPath),
-			cacheFiles:       make(map[tspath.Path]*cachedFile),
-			cacheDirectories: make(map[tspath.Path]dirty.CloneableMap[tspath.Path, string]),
+			caseSensitivity:  testFS.CaseSensitivity(),
+			fs:               newTestLayeredFileSystem(testFS),
+			cacheFiles:       make(map[tspath.PathKey]*cachedFile),
+			cacheDirectories: make(map[tspath.PathKey]dirty.CloneableMap[tspath.PathKey, string]),
 		}
 
 		fh := snapshot.GetFile("/src/nonexistent.ts")
@@ -683,15 +663,15 @@ func TestSnapshotFS(t *testing.T) {
 
 	t.Run("isOpenFile returns true for overlays", func(t *testing.T) {
 		t.Parallel()
-		testFS := vfstest.FromMap(map[string]string{}, false /* useCaseSensitiveFileNames */)
+		testFS := vfstest.FromMap(map[string]string{}, tspath.CaseInsensitive)
 
-		overlays := map[tspath.Path]*Overlay{
-			tspath.Path("/src/foo.ts"): {
+		overlays := map[tspath.PathKey]*Overlay{
+			tspath.PathKey("/src/foo.ts"): {
 				fileBase: fileBase{fileName: "/src/foo.ts", content: "overlay content"},
 			},
 		}
 
-		overlayFS := newOverlayFS(testFS, overlays, lsproto.PositionEncodingKindUTF16, toPath)
+		overlayFS := newOverlayFS(testFS, overlays, lsproto.PositionEncodingKindUTF16)
 		assert.Assert(t, overlayFS.GetFile("/src/foo.ts").IsOverlay(), "overlay file should be open")
 		assert.Assert(t, overlayFS.GetFile("/src/bar.ts") == nil, "non-overlay file should not be open")
 	})
@@ -700,52 +680,52 @@ func TestSnapshotFS(t *testing.T) {
 		t.Parallel()
 		testFS := vfstest.FromMap(map[string]string{
 			"/src/foo.ts": "disk content",
-		}, false /* useCaseSensitiveFileNames */)
+		}, tspath.CaseInsensitive)
 
-		overlays := map[tspath.Path]*Overlay{
-			tspath.Path("/src/foo.ts"): {
+		overlays := map[tspath.PathKey]*Overlay{
+			tspath.PathKey("/src/foo.ts"): {
 				fileBase: fileBase{fileName: "/src/foo.ts", content: "overlay content"},
 			},
 		}
-		overlayFS := newOverlayFS(testFS, overlays, lsproto.PositionEncodingKindUTF16, toPath)
+		overlayFS := newOverlayFS(testFS, overlays, lsproto.PositionEncodingKindUTF16)
 
 		snapshot := &SnapshotFS{
-			toPath:           toPath,
+			caseSensitivity:  testFS.CaseSensitivity(),
 			fs:               overlayFS,
-			cacheFiles:       make(map[tspath.Path]*cachedFile),
-			cacheDirectories: make(map[tspath.Path]dirty.CloneableMap[tspath.Path, string]),
+			cacheFiles:       make(map[tspath.PathKey]*cachedFile),
+			cacheDirectories: make(map[tspath.PathKey]dirty.CloneableMap[tspath.PathKey, string]),
 		}
 
 		// GetFileByPath should use the provided path directly
-		fh := snapshot.GetFileByPath("/src/foo.ts", tspath.Path("/src/foo.ts"))
+		fh := snapshot.GetFileByPath("/src/foo.ts", tspath.PathKey("/src/foo.ts"))
 		assert.Assert(t, fh != nil)
 		assert.Equal(t, fh.Content(), "overlay content")
 	})
 
 	t.Run("GetAccessibleEntries combines disk and overlay directories", func(t *testing.T) {
 		t.Parallel()
-		testFS := vfstest.FromMap(map[string]string{}, false /* useCaseSensitiveFileNames */)
+		testFS := vfstest.FromMap(map[string]string{}, tspath.CaseInsensitive)
 
-		overlays := map[tspath.Path]*Overlay{
-			tspath.Path("/src/overlay.ts"): {
+		overlays := map[tspath.PathKey]*Overlay{
+			tspath.PathKey("/src/overlay.ts"): {
 				fileBase: fileBase{fileName: "/src/overlay.ts", content: "overlay content"},
 			},
 		}
-		overlayFS := newOverlayFS(testFS, overlays, lsproto.PositionEncodingKindUTF16, toPath)
-		cacheFiles := map[tspath.Path]*cachedFile{
-			tspath.Path("/src/disk.ts"): newCachedFile("/src/disk.ts", "disk content"),
+		overlayFS := newOverlayFS(testFS, overlays, lsproto.PositionEncodingKindUTF16)
+		cacheFiles := map[tspath.PathKey]*cachedFile{
+			tspath.PathKey("/src/disk.ts"): newCachedFile("/src/disk.ts", "disk content"),
 		}
-		cacheDirectories := map[tspath.Path]dirty.CloneableMap[tspath.Path, string]{
-			tspath.Path("/"): {
-				tspath.Path("/src"): "src",
+		cacheDirectories := map[tspath.PathKey]dirty.CloneableMap[tspath.PathKey, string]{
+			tspath.PathKey("/"): {
+				tspath.PathKey("/src"): "src",
 			},
-			tspath.Path("/src"): {
-				tspath.Path("/src/disk.ts"): "disk.ts",
+			tspath.PathKey("/src"): {
+				tspath.PathKey("/src/disk.ts"): "disk.ts",
 			},
 		}
 
 		snapshot := &SnapshotFS{
-			toPath:           toPath,
+			caseSensitivity:  testFS.CaseSensitivity(),
 			fs:               overlayFS,
 			cacheFiles:       cacheFiles,
 			cacheDirectories: cacheDirectories,
@@ -762,57 +742,53 @@ func TestSnapshotFS(t *testing.T) {
 func TestSourceFS(t *testing.T) {
 	t.Parallel()
 
-	toPath := func(fileName string) tspath.Path {
-		return tspath.Path(fileName)
-	}
-
 	t.Run("tracks files when tracking enabled", func(t *testing.T) {
 		t.Parallel()
 		testFS := vfstest.FromMap(map[string]string{
 			"/src/foo.ts": "content",
-		}, false /* useCaseSensitiveFileNames */)
+		}, tspath.CaseInsensitive)
 
 		snapshot := &SnapshotFS{
-			toPath:           toPath,
-			fs:               newTestLayeredFileSystem(testFS, toPath),
-			cacheFiles:       make(map[tspath.Path]*cachedFile),
-			cacheDirectories: make(map[tspath.Path]dirty.CloneableMap[tspath.Path, string]),
+			caseSensitivity:  testFS.CaseSensitivity(),
+			fs:               newTestLayeredFileSystem(testFS),
+			cacheFiles:       make(map[tspath.PathKey]*cachedFile),
+			cacheDirectories: make(map[tspath.PathKey]dirty.CloneableMap[tspath.PathKey, string]),
 		}
 
-		sourceFS := newSourceFS(true /* tracking */, snapshot, toPath)
+		sourceFS := newSourceFS(true /* tracking */, snapshot)
 
 		// File should not be seen yet
-		assert.Assert(t, !sourceFS.SeenFile(tspath.Path("/src/foo.ts")))
+		assert.Assert(t, !sourceFS.SeenFile(tspath.PathKey("/src/foo.ts")))
 
 		// Read the file
 		fh := sourceFS.GetFile("/src/foo.ts")
 		assert.Assert(t, fh != nil)
 
 		// Now it should be seen
-		assert.Assert(t, sourceFS.SeenFile(tspath.Path("/src/foo.ts")))
+		assert.Assert(t, sourceFS.SeenFile(tspath.PathKey("/src/foo.ts")))
 	})
 
 	t.Run("does not track files when tracking disabled", func(t *testing.T) {
 		t.Parallel()
 		testFS := vfstest.FromMap(map[string]string{
 			"/src/foo.ts": "content",
-		}, false /* useCaseSensitiveFileNames */)
+		}, tspath.CaseInsensitive)
 
 		snapshot := &SnapshotFS{
-			toPath:           toPath,
-			fs:               newTestLayeredFileSystem(testFS, toPath),
-			cacheFiles:       make(map[tspath.Path]*cachedFile),
-			cacheDirectories: make(map[tspath.Path]dirty.CloneableMap[tspath.Path, string]),
+			caseSensitivity:  testFS.CaseSensitivity(),
+			fs:               newTestLayeredFileSystem(testFS),
+			cacheFiles:       make(map[tspath.PathKey]*cachedFile),
+			cacheDirectories: make(map[tspath.PathKey]dirty.CloneableMap[tspath.PathKey, string]),
 		}
 
-		sourceFS := newSourceFS(false /* tracking */, snapshot, toPath)
+		sourceFS := newSourceFS(false /* tracking */, snapshot)
 
 		// Read the file
 		fh := sourceFS.GetFile("/src/foo.ts")
 		assert.Assert(t, fh != nil)
 
 		// Should not be seen since tracking is disabled
-		assert.Assert(t, !sourceFS.SeenFile(tspath.Path("/src/foo.ts")))
+		assert.Assert(t, !sourceFS.SeenFile(tspath.PathKey("/src/foo.ts")))
 	})
 
 	t.Run("DisableTracking stops tracking", func(t *testing.T) {
@@ -820,43 +796,43 @@ func TestSourceFS(t *testing.T) {
 		testFS := vfstest.FromMap(map[string]string{
 			"/src/foo.ts": "content",
 			"/src/bar.ts": "content",
-		}, false /* useCaseSensitiveFileNames */)
+		}, tspath.CaseInsensitive)
 
 		snapshot := &SnapshotFS{
-			toPath:           toPath,
-			fs:               newTestLayeredFileSystem(testFS, toPath),
-			cacheFiles:       make(map[tspath.Path]*cachedFile),
-			cacheDirectories: make(map[tspath.Path]dirty.CloneableMap[tspath.Path, string]),
+			caseSensitivity:  testFS.CaseSensitivity(),
+			fs:               newTestLayeredFileSystem(testFS),
+			cacheFiles:       make(map[tspath.PathKey]*cachedFile),
+			cacheDirectories: make(map[tspath.PathKey]dirty.CloneableMap[tspath.PathKey, string]),
 		}
 
-		sourceFS := newSourceFS(true /* tracking */, snapshot, toPath)
+		sourceFS := newSourceFS(true /* tracking */, snapshot)
 
 		// Read foo while tracking
 		sourceFS.GetFile("/src/foo.ts")
-		assert.Assert(t, sourceFS.SeenFile(tspath.Path("/src/foo.ts")))
+		assert.Assert(t, sourceFS.SeenFile(tspath.PathKey("/src/foo.ts")))
 
 		// Disable tracking
 		sourceFS.DisableTracking()
 
 		// Read bar after tracking disabled
 		sourceFS.GetFile("/src/bar.ts")
-		assert.Assert(t, !sourceFS.SeenFile(tspath.Path("/src/bar.ts")))
+		assert.Assert(t, !sourceFS.SeenFile(tspath.PathKey("/src/bar.ts")))
 	})
 
 	t.Run("FileExists returns true for files in source", func(t *testing.T) {
 		t.Parallel()
 		testFS := vfstest.FromMap(map[string]string{
 			"/src/foo.ts": "content",
-		}, false /* useCaseSensitiveFileNames */)
+		}, tspath.CaseInsensitive)
 
 		snapshot := &SnapshotFS{
-			toPath:           toPath,
-			fs:               newTestLayeredFileSystem(testFS, toPath),
-			cacheFiles:       make(map[tspath.Path]*cachedFile),
-			cacheDirectories: make(map[tspath.Path]dirty.CloneableMap[tspath.Path, string]),
+			caseSensitivity:  testFS.CaseSensitivity(),
+			fs:               newTestLayeredFileSystem(testFS),
+			cacheFiles:       make(map[tspath.PathKey]*cachedFile),
+			cacheDirectories: make(map[tspath.PathKey]dirty.CloneableMap[tspath.PathKey, string]),
 		}
 
-		sourceFS := newSourceFS(false /* tracking */, snapshot, toPath)
+		sourceFS := newSourceFS(false /* tracking */, snapshot)
 
 		assert.Assert(t, sourceFS.FileExists("/src/foo.ts"))
 		assert.Assert(t, !sourceFS.FileExists("/src/nonexistent.ts"))
@@ -866,16 +842,16 @@ func TestSourceFS(t *testing.T) {
 		t.Parallel()
 		testFS := vfstest.FromMap(map[string]string{
 			"/src/foo.ts": "file content",
-		}, false /* useCaseSensitiveFileNames */)
+		}, tspath.CaseInsensitive)
 
 		snapshot := &SnapshotFS{
-			toPath:           toPath,
-			fs:               newTestLayeredFileSystem(testFS, toPath),
-			cacheFiles:       make(map[tspath.Path]*cachedFile),
-			cacheDirectories: make(map[tspath.Path]dirty.CloneableMap[tspath.Path, string]),
+			caseSensitivity:  testFS.CaseSensitivity(),
+			fs:               newTestLayeredFileSystem(testFS),
+			cacheFiles:       make(map[tspath.PathKey]*cachedFile),
+			cacheDirectories: make(map[tspath.PathKey]dirty.CloneableMap[tspath.PathKey, string]),
 		}
 
-		sourceFS := newSourceFS(false /* tracking */, snapshot, toPath)
+		sourceFS := newSourceFS(false /* tracking */, snapshot)
 
 		content, ok := sourceFS.ReadFile("/src/foo.ts")
 		assert.Assert(t, ok)
@@ -888,10 +864,6 @@ func TestSourceFS(t *testing.T) {
 
 func TestAutoImportBuilderFS(t *testing.T) {
 	t.Parallel()
-
-	toPath := func(fileName string) tspath.Path {
-		return tspath.Path(fileName)
-	}
 
 	// This test demonstrates that autoImportBuilderFS stores files in untrackedFiles keyed
 	// by the path derived from the filename. When module resolution reads a file via its
@@ -909,22 +881,21 @@ func TestAutoImportBuilderFS(t *testing.T) {
 		testFS := vfstest.FromMap(map[string]any{
 			"/real/pkg/index.d.ts":      "export declare const x: number;",
 			"/project/node_modules/pkg": vfstest.Symlink("/real/pkg"),
-		}, true /* useCaseSensitiveFileNames */)
+		}, tspath.CaseSensitive)
 
 		// Verify symlink works as expected
-		symlinkPath := "/project/node_modules/pkg/index.d.ts"
-		realpathPath := testFS.Realpath(symlinkPath)
-		assert.Equal(t, realpathPath, "/real/pkg/index.d.ts", "Realpath should resolve the symlink to the real path")
+		symlinkPath := tspath.RootedFilePath("/project/node_modules/pkg/index.d.ts")
+		realpathPath := tspath.RootedFilePathFromPath(testFS.Realpath(symlinkPath.AsPath()))
+		assert.Equal(t, realpathPath, tspath.RootedFilePath("/real/pkg/index.d.ts"), "Realpath should resolve the symlink to the real path")
 
 		builder := newSnapshotFSBuilder(
 			testFS,
-			make(map[tspath.Path]*Overlay),
-			make(map[tspath.Path]*Overlay),
-			make(map[tspath.Path]*cachedFile),
-			make(map[tspath.Path]dirty.CloneableMap[tspath.Path, string]),
+			make(map[tspath.PathKey]*Overlay),
+			make(map[tspath.PathKey]*Overlay),
+			make(map[tspath.PathKey]*cachedFile),
+			make(map[tspath.PathKey]dirty.CloneableMap[tspath.PathKey, string]),
 			nil, // nodeModulesRealpathAliases
 			lsproto.PositionEncodingKindUTF16,
-			toPath,
 		)
 
 		autoImportFS := &autoImportBuilderFS{
@@ -955,10 +926,6 @@ func TestAutoImportBuilderFS(t *testing.T) {
 func TestRealpathAliasLifecycle(t *testing.T) {
 	t.Parallel()
 
-	toPath := func(fileName string) tspath.Path {
-		return tspath.Path(fileName)
-	}
-
 	t.Run("alias recorded when reading symlinked node_modules file", func(t *testing.T) {
 		t.Parallel()
 		testFS := vfstest.FromMap(map[string]any{
@@ -966,17 +933,16 @@ func TestRealpathAliasLifecycle(t *testing.T) {
 			"/packages/mylib/package.json":              `{"name": "mylib", "main": "index.js"}`,
 			"/packages/mylib/index.d.ts":                `export declare const x: number;`,
 			"/project/node_modules/nolink/package.json": `{"name": "nolink"}`,
-		}, false)
+		}, tspath.CaseInsensitive)
 
 		builder := newSnapshotFSBuilder(
 			testFS,
-			make(map[tspath.Path]*Overlay),
-			make(map[tspath.Path]*Overlay),
-			make(map[tspath.Path]*cachedFile),
-			make(map[tspath.Path]dirty.CloneableMap[tspath.Path, string]),
+			make(map[tspath.PathKey]*Overlay),
+			make(map[tspath.PathKey]*Overlay),
+			make(map[tspath.PathKey]*cachedFile),
+			make(map[tspath.PathKey]dirty.CloneableMap[tspath.PathKey, string]),
 			nil,
 			lsproto.PositionEncodingKindUTF16,
-			toPath,
 		)
 
 		// Read a file through the symlink — should record an alias.
@@ -991,12 +957,12 @@ func TestRealpathAliasLifecycle(t *testing.T) {
 		snapshot, _ := builder.Finalize()
 
 		// Alias exists for the symlinked file.
-		aliases, ok := snapshot.nodeModulesRealpathAliases[tspath.Path("/packages/mylib/package.json")]
+		aliases, ok := snapshot.nodeModulesRealpathAliases[tspath.PathKey("/packages/mylib/package.json")]
 		assert.Assert(t, ok, "alias should exist for realpath of symlinked file")
-		assert.Assert(t, aliases.paths.Has(tspath.Path("/project/node_modules/mylib/package.json")))
+		assert.Assert(t, aliases.paths.Has(tspath.PathKey("/project/node_modules/mylib/package.json")))
 
 		// No alias for the non-symlinked file.
-		_, ok = snapshot.nodeModulesRealpathAliases[tspath.Path("/project/node_modules/nolink/package.json")]
+		_, ok = snapshot.nodeModulesRealpathAliases[tspath.PathKey("/project/node_modules/nolink/package.json")]
 		assert.Assert(t, !ok, "no alias should exist for non-symlinked file")
 	})
 
@@ -1005,17 +971,16 @@ func TestRealpathAliasLifecycle(t *testing.T) {
 		testFS := vfstest.FromMap(map[string]any{
 			"/project/link":       vfstest.Symlink("/elsewhere"),
 			"/elsewhere/index.ts": `export const x = 1;`,
-		}, false)
+		}, tspath.CaseInsensitive)
 
 		builder := newSnapshotFSBuilder(
 			testFS,
-			make(map[tspath.Path]*Overlay),
-			make(map[tspath.Path]*Overlay),
-			make(map[tspath.Path]*cachedFile),
-			make(map[tspath.Path]dirty.CloneableMap[tspath.Path, string]),
+			make(map[tspath.PathKey]*Overlay),
+			make(map[tspath.PathKey]*Overlay),
+			make(map[tspath.PathKey]*cachedFile),
+			make(map[tspath.PathKey]dirty.CloneableMap[tspath.PathKey, string]),
 			nil,
 			lsproto.PositionEncodingKindUTF16,
-			toPath,
 		)
 
 		fh := builder.GetFile("/project/link/index.ts")
@@ -1030,18 +995,17 @@ func TestRealpathAliasLifecycle(t *testing.T) {
 		testFS := vfstest.FromMap(map[string]any{
 			"/project/node_modules/mylib":  vfstest.Symlink("/packages/mylib"),
 			"/packages/mylib/package.json": `{"name": "mylib"}`,
-		}, false)
+		}, tspath.CaseInsensitive)
 
 		// Build first snapshot.
 		builder1 := newSnapshotFSBuilder(
 			testFS,
-			make(map[tspath.Path]*Overlay),
-			make(map[tspath.Path]*Overlay),
-			make(map[tspath.Path]*cachedFile),
-			make(map[tspath.Path]dirty.CloneableMap[tspath.Path, string]),
+			make(map[tspath.PathKey]*Overlay),
+			make(map[tspath.PathKey]*Overlay),
+			make(map[tspath.PathKey]*cachedFile),
+			make(map[tspath.PathKey]dirty.CloneableMap[tspath.PathKey, string]),
 			nil,
 			lsproto.PositionEncodingKindUTF16,
-			toPath,
 		)
 		builder1.GetFile("/project/node_modules/mylib/package.json")
 		snapshot1, _ := builder1.Finalize()
@@ -1049,20 +1013,19 @@ func TestRealpathAliasLifecycle(t *testing.T) {
 		// Build second snapshot from the first, without reading the file again.
 		builder2 := newSnapshotFSBuilder(
 			testFS,
-			make(map[tspath.Path]*Overlay),
-			make(map[tspath.Path]*Overlay),
+			make(map[tspath.PathKey]*Overlay),
+			make(map[tspath.PathKey]*Overlay),
 			snapshot1.cacheFiles,
 			snapshot1.cacheDirectories,
 			snapshot1.nodeModulesRealpathAliases,
 			lsproto.PositionEncodingKindUTF16,
-			toPath,
 		)
 		snapshot2, _ := builder2.Finalize()
 
 		// Alias should still be present.
-		aliases, ok := snapshot2.nodeModulesRealpathAliases[tspath.Path("/packages/mylib/package.json")]
+		aliases, ok := snapshot2.nodeModulesRealpathAliases[tspath.PathKey("/packages/mylib/package.json")]
 		assert.Assert(t, ok, "alias should survive across snapshots")
-		assert.Assert(t, aliases.paths.Has(tspath.Path("/project/node_modules/mylib/package.json")))
+		assert.Assert(t, aliases.paths.Has(tspath.PathKey("/project/node_modules/mylib/package.json")))
 	})
 
 	t.Run("alias pruned when symlinked file is deleted", func(t *testing.T) {
@@ -1071,56 +1034,54 @@ func TestRealpathAliasLifecycle(t *testing.T) {
 			"/project/node_modules/mylib":  vfstest.Symlink("/packages/mylib"),
 			"/packages/mylib/package.json": `{"name": "mylib"}`,
 			"/packages/mylib/index.d.ts":   `export declare const x: number;`,
-		}, false)
+		}, tspath.CaseInsensitive)
 
 		// Build first snapshot — read both files.
 		builder1 := newSnapshotFSBuilder(
 			testFS,
-			make(map[tspath.Path]*Overlay),
-			make(map[tspath.Path]*Overlay),
-			make(map[tspath.Path]*cachedFile),
-			make(map[tspath.Path]dirty.CloneableMap[tspath.Path, string]),
+			make(map[tspath.PathKey]*Overlay),
+			make(map[tspath.PathKey]*Overlay),
+			make(map[tspath.PathKey]*cachedFile),
+			make(map[tspath.PathKey]dirty.CloneableMap[tspath.PathKey, string]),
 			nil,
 			lsproto.PositionEncodingKindUTF16,
-			toPath,
 		)
 		builder1.GetFile("/project/node_modules/mylib/package.json")
 		builder1.GetFile("/project/node_modules/mylib/index.d.ts")
 		snapshot1, _ := builder1.Finalize()
 
 		// Both should be aliased under the same realpath directory but separate files.
-		_, ok := snapshot1.nodeModulesRealpathAliases[tspath.Path("/packages/mylib/package.json")]
+		_, ok := snapshot1.nodeModulesRealpathAliases[tspath.PathKey("/packages/mylib/package.json")]
 		assert.Assert(t, ok)
-		_, ok = snapshot1.nodeModulesRealpathAliases[tspath.Path("/packages/mylib/index.d.ts")]
+		_, ok = snapshot1.nodeModulesRealpathAliases[tspath.PathKey("/packages/mylib/index.d.ts")]
 		assert.Assert(t, ok)
 
 		// Build second snapshot — delete one file via markDirtyFiles.
 		builder2 := newSnapshotFSBuilder(
 			testFS,
-			make(map[tspath.Path]*Overlay),
-			make(map[tspath.Path]*Overlay),
+			make(map[tspath.PathKey]*Overlay),
+			make(map[tspath.PathKey]*Overlay),
 			snapshot1.cacheFiles,
 			snapshot1.cacheDirectories,
 			snapshot1.nodeModulesRealpathAliases,
 			lsproto.PositionEncodingKindUTF16,
-			toPath,
 		)
 
 		// Simulate deletion of index.d.ts from the disk file cache.
-		var entry *dirty.SyncMapEntry[tspath.Path, *cachedFile]
-		if entry, ok = builder2.cacheFiles.Load(tspath.Path("/project/node_modules/mylib/index.d.ts")); ok {
+		var entry *dirty.SyncMapEntry[tspath.PathKey, *cachedFile]
+		if entry, ok = builder2.cacheFiles.Load(tspath.PathKey("/project/node_modules/mylib/index.d.ts")); ok {
 			entry.Delete()
 		}
 
 		snapshot2, _ := builder2.Finalize()
 
 		// package.json alias should remain.
-		aliases, ok := snapshot2.nodeModulesRealpathAliases[tspath.Path("/packages/mylib/package.json")]
+		aliases, ok := snapshot2.nodeModulesRealpathAliases[tspath.PathKey("/packages/mylib/package.json")]
 		assert.Assert(t, ok, "package.json alias should survive")
-		assert.Assert(t, aliases.paths.Has(tspath.Path("/project/node_modules/mylib/package.json")))
+		assert.Assert(t, aliases.paths.Has(tspath.PathKey("/project/node_modules/mylib/package.json")))
 
 		// index.d.ts alias should be fully pruned (empty set → removed from map).
-		_, ok = snapshot2.nodeModulesRealpathAliases[tspath.Path("/packages/mylib/index.d.ts")]
+		_, ok = snapshot2.nodeModulesRealpathAliases[tspath.PathKey("/packages/mylib/index.d.ts")]
 		assert.Assert(t, !ok, "index.d.ts alias should be pruned after deletion")
 	})
 
@@ -1130,17 +1091,16 @@ func TestRealpathAliasLifecycle(t *testing.T) {
 			"/project/node_modules/mylib":  vfstest.Symlink("/packages/mylib"),
 			"/project/node_modules/alias":  vfstest.Symlink("/packages/mylib"),
 			"/packages/mylib/package.json": `{"name": "mylib"}`,
-		}, false)
+		}, tspath.CaseInsensitive)
 
 		builder := newSnapshotFSBuilder(
 			testFS,
-			make(map[tspath.Path]*Overlay),
-			make(map[tspath.Path]*Overlay),
-			make(map[tspath.Path]*cachedFile),
-			make(map[tspath.Path]dirty.CloneableMap[tspath.Path, string]),
+			make(map[tspath.PathKey]*Overlay),
+			make(map[tspath.PathKey]*Overlay),
+			make(map[tspath.PathKey]*cachedFile),
+			make(map[tspath.PathKey]dirty.CloneableMap[tspath.PathKey, string]),
 			nil,
 			lsproto.PositionEncodingKindUTF16,
-			toPath,
 		)
 
 		// Read via both symlinks.
@@ -1151,10 +1111,10 @@ func TestRealpathAliasLifecycle(t *testing.T) {
 
 		snapshot, _ := builder.Finalize()
 
-		aliases, ok := snapshot.nodeModulesRealpathAliases[tspath.Path("/packages/mylib/package.json")]
+		aliases, ok := snapshot.nodeModulesRealpathAliases[tspath.PathKey("/packages/mylib/package.json")]
 		assert.Assert(t, ok, "alias should exist")
-		assert.Assert(t, aliases.paths.Has(tspath.Path("/project/node_modules/mylib/package.json")))
-		assert.Assert(t, aliases.paths.Has(tspath.Path("/project/node_modules/alias/package.json")))
+		assert.Assert(t, aliases.paths.Has(tspath.PathKey("/project/node_modules/mylib/package.json")))
+		assert.Assert(t, aliases.paths.Has(tspath.PathKey("/project/node_modules/alias/package.json")))
 	})
 
 	t.Run("multiple symlinks pruned individually", func(t *testing.T) {
@@ -1163,18 +1123,17 @@ func TestRealpathAliasLifecycle(t *testing.T) {
 			"/project/node_modules/mylib":  vfstest.Symlink("/packages/mylib"),
 			"/project/node_modules/alias":  vfstest.Symlink("/packages/mylib"),
 			"/packages/mylib/package.json": `{"name": "mylib"}`,
-		}, false)
+		}, tspath.CaseInsensitive)
 
 		// Build first snapshot – read via both symlinks.
 		builder1 := newSnapshotFSBuilder(
 			testFS,
-			make(map[tspath.Path]*Overlay),
-			make(map[tspath.Path]*Overlay),
-			make(map[tspath.Path]*cachedFile),
-			make(map[tspath.Path]dirty.CloneableMap[tspath.Path, string]),
+			make(map[tspath.PathKey]*Overlay),
+			make(map[tspath.PathKey]*Overlay),
+			make(map[tspath.PathKey]*cachedFile),
+			make(map[tspath.PathKey]dirty.CloneableMap[tspath.PathKey, string]),
 			nil,
 			lsproto.PositionEncodingKindUTF16,
-			toPath,
 		)
 		builder1.GetFile("/project/node_modules/mylib/package.json")
 		builder1.GetFile("/project/node_modules/alias/package.json")
@@ -1183,24 +1142,23 @@ func TestRealpathAliasLifecycle(t *testing.T) {
 		// Build second snapshot – delete ONE of the symlink disk entries.
 		builder2 := newSnapshotFSBuilder(
 			testFS,
-			make(map[tspath.Path]*Overlay),
-			make(map[tspath.Path]*Overlay),
+			make(map[tspath.PathKey]*Overlay),
+			make(map[tspath.PathKey]*Overlay),
 			snapshot1.cacheFiles,
 			snapshot1.cacheDirectories,
 			snapshot1.nodeModulesRealpathAliases,
 			lsproto.PositionEncodingKindUTF16,
-			toPath,
 		)
-		if entry, ok := builder2.cacheFiles.Load(tspath.Path("/project/node_modules/alias/package.json")); ok {
+		if entry, ok := builder2.cacheFiles.Load(tspath.PathKey("/project/node_modules/alias/package.json")); ok {
 			entry.Delete()
 		}
 		snapshot2, _ := builder2.Finalize()
 
 		// The realpath alias set should still exist, but only contain the surviving symlink.
-		aliases, ok := snapshot2.nodeModulesRealpathAliases[tspath.Path("/packages/mylib/package.json")]
+		aliases, ok := snapshot2.nodeModulesRealpathAliases[tspath.PathKey("/packages/mylib/package.json")]
 		assert.Assert(t, ok, "alias set should still exist")
-		assert.Assert(t, aliases.paths.Has(tspath.Path("/project/node_modules/mylib/package.json")), "surviving symlink should remain")
-		assert.Assert(t, !aliases.paths.Has(tspath.Path("/project/node_modules/alias/package.json")), "deleted symlink should be pruned")
+		assert.Assert(t, aliases.paths.Has(tspath.PathKey("/project/node_modules/mylib/package.json")), "surviving symlink should remain")
+		assert.Assert(t, !aliases.paths.Has(tspath.PathKey("/project/node_modules/alias/package.json")), "deleted symlink should be pruned")
 	})
 
 	t.Run("expandRealpathAliases expands change events", func(t *testing.T) {
@@ -1208,17 +1166,16 @@ func TestRealpathAliasLifecycle(t *testing.T) {
 		testFS := vfstest.FromMap(map[string]any{
 			"/project/node_modules/mylib":  vfstest.Symlink("/packages/mylib"),
 			"/packages/mylib/package.json": `{"name": "mylib"}`,
-		}, false)
+		}, tspath.CaseInsensitive)
 
 		builder := newSnapshotFSBuilder(
 			testFS,
-			make(map[tspath.Path]*Overlay),
-			make(map[tspath.Path]*Overlay),
-			make(map[tspath.Path]*cachedFile),
-			make(map[tspath.Path]dirty.CloneableMap[tspath.Path, string]),
+			make(map[tspath.PathKey]*Overlay),
+			make(map[tspath.PathKey]*Overlay),
+			make(map[tspath.PathKey]*cachedFile),
+			make(map[tspath.PathKey]dirty.CloneableMap[tspath.PathKey, string]),
 			nil,
 			lsproto.PositionEncodingKindUTF16,
-			toPath,
 		)
 		builder.GetFile("/project/node_modules/mylib/package.json")
 		snapshot, _ := builder.Finalize()
@@ -1239,17 +1196,16 @@ func TestRealpathAliasLifecycle(t *testing.T) {
 		testFS := vfstest.FromMap(map[string]any{
 			"/project/node_modules/mylib":  vfstest.Symlink("/packages/mylib"),
 			"/packages/mylib/package.json": `{"name": "mylib"}`,
-		}, false)
+		}, tspath.CaseInsensitive)
 
 		builder := newSnapshotFSBuilder(
 			testFS,
-			make(map[tspath.Path]*Overlay),
-			make(map[tspath.Path]*Overlay),
-			make(map[tspath.Path]*cachedFile),
-			make(map[tspath.Path]dirty.CloneableMap[tspath.Path, string]),
+			make(map[tspath.PathKey]*Overlay),
+			make(map[tspath.PathKey]*Overlay),
+			make(map[tspath.PathKey]*cachedFile),
+			make(map[tspath.PathKey]dirty.CloneableMap[tspath.PathKey, string]),
 			nil,
 			lsproto.PositionEncodingKindUTF16,
-			toPath,
 		)
 		builder.GetFile("/project/node_modules/mylib/package.json")
 		snapshot, _ := builder.Finalize()
@@ -1263,10 +1219,59 @@ func TestRealpathAliasLifecycle(t *testing.T) {
 		assert.Assert(t, expanded.Deleted.Has("file:///project/node_modules/mylib/package.json"), "symlink deletion should be added")
 	})
 
+	t.Run("directory delete invalidates cached realpath and alias", func(t *testing.T) {
+		t.Parallel()
+		realpath := tspath.PathKey("/packages/mylib/package.json")
+		aliasPath := tspath.PathKey("/project/node_modules/mylib/package.json")
+		aliases := map[tspath.PathKey]*realpathAliasSet{
+			realpath: {
+				paths: aliasPaths{
+					aliasPath: tspath.RootedFilePath("/project/node_modules/mylib/package.json"),
+				},
+			},
+		}
+		snapshotFS := &SnapshotFS{
+			caseSensitivity: tspath.CaseInsensitive,
+			cacheFiles: map[tspath.PathKey]*cachedFile{
+				realpath:  newCachedFile(tspath.RootedFilePath("/packages/mylib/package.json"), `{"name":"mylib"}`),
+				aliasPath: newCachedFile(tspath.RootedFilePath("/project/node_modules/mylib/package.json"), `{"name":"mylib"}`),
+			},
+			cacheDirectories: map[tspath.PathKey]dirty.CloneableMap[tspath.PathKey, string]{
+				tspath.PathKey("/packages/mylib"): {realpath: "package.json"},
+			},
+			nodeModulesRealpathAliases: aliases,
+		}
+		builder := newSnapshotFSBuilder(
+			vfstest.FromMap(map[string]string{}, tspath.CaseInsensitive),
+			make(map[tspath.PathKey]*Overlay),
+			make(map[tspath.PathKey]*Overlay),
+			snapshotFS.cacheFiles,
+			snapshotFS.cacheDirectories,
+			aliases,
+			lsproto.PositionEncodingKindUTF16,
+		)
+		snapshot := &Snapshot{
+			fs:                 snapshotFS,
+			ProjectCollection:  &ProjectCollection{},
+			ConfigFileRegistry: &ConfigFileRegistry{},
+		}
+		change := FileChangeSummary{}
+		change.Deleted.Add("file:///packages/mylib")
+
+		change = snapshot.processFileChanges(builder, change, nil, nil, nil, nil)
+
+		assert.Assert(t, change.Deleted.Has("file:///packages/mylib/package.json"))
+		assert.Assert(t, change.Deleted.Has("file:///project/node_modules/mylib/package.json"))
+		_, realpathCached := builder.cacheFiles.Load(realpath)
+		_, aliasCached := builder.cacheFiles.Load(aliasPath)
+		assert.Assert(t, !realpathCached)
+		assert.Assert(t, !aliasCached)
+	})
+
 	t.Run("expandRealpathAliases is a no-op with no aliases", func(t *testing.T) {
 		t.Parallel()
 		snapshot := &SnapshotFS{
-			toPath:                     toPath,
+			caseSensitivity:            tspath.CaseInsensitive,
 			nodeModulesRealpathAliases: nil,
 		}
 
@@ -1278,23 +1283,73 @@ func TestRealpathAliasLifecycle(t *testing.T) {
 		assert.Assert(t, expanded.Changed.Has("file:///some/file.ts"))
 	})
 
+	t.Run("created cache expansion does not change excessive event classification", func(t *testing.T) {
+		t.Parallel()
+		files := map[string]any{
+			"/project/node_modules/pkg": vfstest.Symlink("/packages/pkg"),
+			"/project/src/index.ts":     "export {}",
+		}
+		for i := range 1001 {
+			files["/packages/pkg/file"+strconv.Itoa(i)+".ts"] = "export {}"
+		}
+		testFS := vfstest.FromMap(files, tspath.CaseSensitive)
+		builder1 := newSnapshotFSBuilder(
+			testFS,
+			make(map[tspath.PathKey]*Overlay),
+			make(map[tspath.PathKey]*Overlay),
+			make(map[tspath.PathKey]*cachedFile),
+			make(map[tspath.PathKey]dirty.CloneableMap[tspath.PathKey, string]),
+			nil,
+			lsproto.PositionEncodingKindUTF16,
+		)
+		for i := range 1001 {
+			assert.Assert(t, builder1.GetFile(tspath.RootedFilePathFromAbsolute("/project/node_modules/pkg/file"+strconv.Itoa(i)+".ts")) != nil)
+		}
+		assert.Assert(t, builder1.GetFile("/project/src/index.ts") != nil)
+		snapshot1, _ := builder1.Finalize()
+
+		assert.NilError(t, testFS.Remove("/packages/pkg"))
+		assert.NilError(t, testFS.WriteFile("/packages/pkg", "replacement file"))
+		builder2 := newSnapshotFSBuilder(
+			testFS,
+			make(map[tspath.PathKey]*Overlay),
+			make(map[tspath.PathKey]*Overlay),
+			snapshot1.cacheFiles,
+			snapshot1.cacheDirectories,
+			snapshot1.nodeModulesRealpathAliases,
+			lsproto.PositionEncodingKindUTF16,
+		)
+		snapshot := &Snapshot{
+			fs:                 snapshot1,
+			ProjectCollection:  &ProjectCollection{},
+			ConfigFileRegistry: &ConfigFileRegistry{},
+		}
+		change := FileChangeSummary{IncludesWatchChangeOutsideNodeModules: true}
+		change.Created.Add("file:///packages/pkg")
+
+		change = snapshot.processFileChanges(builder2, change, nil, nil, nil, nil)
+
+		assert.Assert(t, change.HasExcessiveWatchEvents())
+		_, unrelatedCached := builder2.cacheFiles.Load(tspath.PathKey("/project/src/index.ts"))
+		assert.Assert(t, unrelatedCached, "the original event batch should use the normal path")
+	})
+
 	t.Run("markDirtyFiles invalidates symlinked file via realpath event", func(t *testing.T) {
 		t.Parallel()
 		testFS := vfstest.FromMap(map[string]any{
 			"/project/node_modules/mylib":  vfstest.Symlink("/packages/mylib"),
 			"/packages/mylib/package.json": `{"name": "mylib", "main": "index.js"}`,
-		}, false)
+		}, tspath.CaseInsensitive)
 
 		// Build first snapshot — read the symlinked file.
 		builder1 := newSnapshotFSBuilder(
 			testFS,
-			make(map[tspath.Path]*Overlay),
-			make(map[tspath.Path]*Overlay),
-			make(map[tspath.Path]*cachedFile),
-			make(map[tspath.Path]dirty.CloneableMap[tspath.Path, string]),
+			make(map[tspath.PathKey]*Overlay),
+			make(map[tspath.PathKey]*Overlay),
+			make(map[tspath.PathKey]*cachedFile),
+			make(map[tspath.PathKey]dirty.CloneableMap[tspath.PathKey, string]),
 			nil,
 			lsproto.PositionEncodingKindUTF16,
-			toPath,
 		)
 		fh := builder1.GetFile("/project/node_modules/mylib/package.json")
 		assert.Assert(t, fh != nil)
@@ -1308,13 +1363,12 @@ func TestRealpathAliasLifecycle(t *testing.T) {
 		// Build second snapshot — simulate realpath change event, expanded via aliases.
 		builder2 := newSnapshotFSBuilder(
 			testFS,
-			make(map[tspath.Path]*Overlay),
-			make(map[tspath.Path]*Overlay),
+			make(map[tspath.PathKey]*Overlay),
+			make(map[tspath.PathKey]*Overlay),
 			snapshot1.cacheFiles,
 			snapshot1.cacheDirectories,
 			snapshot1.nodeModulesRealpathAliases,
 			lsproto.PositionEncodingKindUTF16,
-			toPath,
 		)
 
 		change := FileChangeSummary{}
@@ -1333,9 +1387,135 @@ func TestRealpathAliasLifecycle(t *testing.T) {
 		snapshot2, _ := builder2.Finalize()
 
 		// The file should have been reloaded with new content.
-		file, ok := snapshot2.cacheFiles[tspath.Path("/project/node_modules/mylib/package.json")]
+		file, ok := snapshot2.cacheFiles[tspath.PathKey("/project/node_modules/mylib/package.json")]
 		assert.Assert(t, ok, "file should still be in cacheFiles")
 		assert.Equal(t, file.Content(), `{"name": "mylib"}`, "content should be updated")
+	})
+
+	t.Run("created realpath events reload cached symlink alias", func(t *testing.T) {
+		t.Parallel()
+		testFS := vfstest.FromMap(map[string]any{
+			"/project/node_modules/mylib":  vfstest.Symlink("/packages/mylib"),
+			"/packages/mylib/package.json": `{"name": "mylib", "main": "index.js"}`,
+		}, tspath.CaseInsensitive)
+
+		builder1 := newSnapshotFSBuilder(
+			testFS,
+			make(map[tspath.PathKey]*Overlay),
+			make(map[tspath.PathKey]*Overlay),
+			make(map[tspath.PathKey]*cachedFile),
+			make(map[tspath.PathKey]dirty.CloneableMap[tspath.PathKey, string]),
+			nil,
+			lsproto.PositionEncodingKindUTF16,
+		)
+		fh := builder1.GetFile("/project/node_modules/mylib/package.json")
+		assert.Assert(t, fh != nil)
+		snapshot1, _ := builder1.Finalize()
+
+		err := testFS.WriteFile("/packages/mylib/package.json", `{"name": "mylib"}`)
+		assert.NilError(t, err)
+
+		builder2 := newSnapshotFSBuilder(
+			testFS,
+			make(map[tspath.PathKey]*Overlay),
+			make(map[tspath.PathKey]*Overlay),
+			snapshot1.cacheFiles,
+			snapshot1.cacheDirectories,
+			snapshot1.nodeModulesRealpathAliases,
+			lsproto.PositionEncodingKindUTF16,
+		)
+		change := FileChangeSummary{}
+		change.Created.Add("file:///packages/mylib")
+
+		change = snapshot1.expandRealpathAliases(change)
+		assert.Assert(t, change.Created.Has("file:///project/node_modules/mylib/package.json"))
+		change = builder2.markDirtyFiles(change)
+		assert.Assert(t, change.Created.Has("file:///project/node_modules/mylib/package.json"))
+
+		fh = builder2.GetFile("/project/node_modules/mylib/package.json")
+		assert.Assert(t, fh != nil)
+		assert.Equal(t, fh.Content(), `{"name": "mylib"}`)
+
+		snapshot2, _ := builder2.Finalize()
+		err = testFS.WriteFile("/packages/mylib/package.json", `{"name": "updated"}`)
+		assert.NilError(t, err)
+
+		builder3 := newSnapshotFSBuilder(
+			testFS,
+			make(map[tspath.PathKey]*Overlay),
+			make(map[tspath.PathKey]*Overlay),
+			snapshot2.cacheFiles,
+			snapshot2.cacheDirectories,
+			snapshot2.nodeModulesRealpathAliases,
+			lsproto.PositionEncodingKindUTF16,
+		)
+		excessiveChange := FileChangeSummary{IncludesWatchChangeOutsideNodeModules: true}
+		for i := range 1001 {
+			excessiveChange.Created.Add(lsproto.DocumentUri("file:///generated/file" + strconv.Itoa(i) + ".ts"))
+		}
+		excessiveChange.Created.Add("file:///packages/mylib")
+		assert.Assert(t, excessiveChange.HasExcessiveWatchEvents())
+		excessiveChange = snapshot2.expandRealpathAliases(excessiveChange)
+		assert.Assert(t, excessiveChange.Created.Has("file:///project/node_modules/mylib/package.json"))
+		assert.Assert(t, builder3.watchChangesOverlapCache(excessiveChange, nil, nil))
+
+		builder3.invalidateCache()
+		fh = builder3.GetFile("/project/node_modules/mylib/package.json")
+		assert.Assert(t, fh != nil)
+		assert.Equal(t, fh.Content(), `{"name": "updated"}`)
+	})
+
+	t.Run("markDirtyFiles invalidates existing cached file on created event", func(t *testing.T) {
+		t.Parallel()
+		testFS := vfstest.FromMap(map[string]string{
+			"/project/src/helper.ts": `export const other = 1;`,
+		}, tspath.CaseSensitive)
+
+		// Build first snapshot — read the file.
+		builder1 := newSnapshotFSBuilder(
+			testFS,
+			nil,
+			nil,
+			nil,
+			nil,
+			nil,
+			lsproto.PositionEncodingKindUTF16,
+		)
+		fh := builder1.GetFile("/project/src/helper.ts")
+		assert.Assert(t, fh != nil)
+		assert.Equal(t, fh.Content(), `export const other = 1;`)
+		snapshot1, _ := builder1.Finalize()
+
+		// Modify the file on disk (e.g. via atomic save rename).
+		err := testFS.WriteFile("/project/src/helper.ts", `export const thing = 1;`)
+		assert.NilError(t, err)
+
+		// Build second snapshot — simulate Created event.
+		builder2 := newSnapshotFSBuilder(
+			testFS,
+			nil,
+			nil,
+			snapshot1.cacheFiles,
+			snapshot1.cacheDirectories,
+			snapshot1.nodeModulesRealpathAliases,
+			lsproto.PositionEncodingKindUTF16,
+		)
+
+		change := FileChangeSummary{}
+		change.Created.Add("file:///project/src/helper.ts")
+
+		change = builder2.markDirtyFiles(change)
+		assert.Assert(t, change.Created.Has("file:///project/src/helper.ts"))
+
+		// Reading the file should return the updated content.
+		fh = builder2.GetFile("/project/src/helper.ts")
+		assert.Assert(t, fh != nil)
+		assert.Equal(t, fh.Content(), `export const thing = 1;`)
+
+		snapshot2, _ := builder2.Finalize()
+		file, ok := snapshot2.cacheFiles[tspath.PathKey("/project/src/helper.ts")]
+		assert.Assert(t, ok)
+		assert.Equal(t, file.Content(), `export const thing = 1;`)
 	})
 
 	t.Run("alias clone isolation between snapshots", func(t *testing.T) {
@@ -1345,18 +1525,17 @@ func TestRealpathAliasLifecycle(t *testing.T) {
 			"/project/node_modules/other":  vfstest.Symlink("/packages/other"),
 			"/packages/mylib/package.json": `{"name": "mylib"}`,
 			"/packages/other/package.json": `{"name": "other"}`,
-		}, false)
+		}, tspath.CaseInsensitive)
 
 		// Build first snapshot — read only mylib.
 		builder1 := newSnapshotFSBuilder(
 			testFS,
-			make(map[tspath.Path]*Overlay),
-			make(map[tspath.Path]*Overlay),
-			make(map[tspath.Path]*cachedFile),
-			make(map[tspath.Path]dirty.CloneableMap[tspath.Path, string]),
+			make(map[tspath.PathKey]*Overlay),
+			make(map[tspath.PathKey]*Overlay),
+			make(map[tspath.PathKey]*cachedFile),
+			make(map[tspath.PathKey]dirty.CloneableMap[tspath.PathKey, string]),
 			nil,
 			lsproto.PositionEncodingKindUTF16,
-			toPath,
 		)
 		builder1.GetFile("/project/node_modules/mylib/package.json")
 		snapshot1, _ := builder1.Finalize()
@@ -1364,27 +1543,26 @@ func TestRealpathAliasLifecycle(t *testing.T) {
 		// Build second snapshot — also read other.
 		builder2 := newSnapshotFSBuilder(
 			testFS,
-			make(map[tspath.Path]*Overlay),
-			make(map[tspath.Path]*Overlay),
+			make(map[tspath.PathKey]*Overlay),
+			make(map[tspath.PathKey]*Overlay),
 			snapshot1.cacheFiles,
 			snapshot1.cacheDirectories,
 			snapshot1.nodeModulesRealpathAliases,
 			lsproto.PositionEncodingKindUTF16,
-			toPath,
 		)
 		builder2.GetFile("/project/node_modules/other/package.json")
 		snapshot2, _ := builder2.Finalize()
 
 		// snapshot1 should only have mylib alias.
-		_, ok := snapshot1.nodeModulesRealpathAliases[tspath.Path("/packages/mylib/package.json")]
+		_, ok := snapshot1.nodeModulesRealpathAliases[tspath.PathKey("/packages/mylib/package.json")]
 		assert.Assert(t, ok, "snapshot1 should have mylib alias")
-		_, ok = snapshot1.nodeModulesRealpathAliases[tspath.Path("/packages/other/package.json")]
+		_, ok = snapshot1.nodeModulesRealpathAliases[tspath.PathKey("/packages/other/package.json")]
 		assert.Assert(t, !ok, "snapshot1 should NOT have other alias — it was added in a later snapshot")
 
 		// snapshot2 should have both.
-		_, ok = snapshot2.nodeModulesRealpathAliases[tspath.Path("/packages/mylib/package.json")]
+		_, ok = snapshot2.nodeModulesRealpathAliases[tspath.PathKey("/packages/mylib/package.json")]
 		assert.Assert(t, ok, "snapshot2 should have mylib alias")
-		_, ok = snapshot2.nodeModulesRealpathAliases[tspath.Path("/packages/other/package.json")]
+		_, ok = snapshot2.nodeModulesRealpathAliases[tspath.PathKey("/packages/other/package.json")]
 		assert.Assert(t, ok, "snapshot2 should have other alias")
 	})
 
@@ -1394,54 +1572,52 @@ func TestRealpathAliasLifecycle(t *testing.T) {
 			"/project/node_modules/mylib":  vfstest.Symlink("/packages/mylib"),
 			"/project/node_modules/alias":  vfstest.Symlink("/packages/mylib"),
 			"/packages/mylib/package.json": `{"name": "mylib"}`,
-		}, false)
+		}, tspath.CaseInsensitive)
 
 		// Snapshot 1: read via one symlink only.
 		builder1 := newSnapshotFSBuilder(
 			testFS,
-			make(map[tspath.Path]*Overlay),
-			make(map[tspath.Path]*Overlay),
-			make(map[tspath.Path]*cachedFile),
-			make(map[tspath.Path]dirty.CloneableMap[tspath.Path, string]),
+			make(map[tspath.PathKey]*Overlay),
+			make(map[tspath.PathKey]*Overlay),
+			make(map[tspath.PathKey]*cachedFile),
+			make(map[tspath.PathKey]dirty.CloneableMap[tspath.PathKey, string]),
 			nil,
 			lsproto.PositionEncodingKindUTF16,
-			toPath,
 		)
 		builder1.GetFile("/project/node_modules/mylib/package.json")
 		snapshot1, _ := builder1.Finalize()
 
 		// Verify snapshot1 has exactly one alias for the realpath.
-		aliases1, ok := snapshot1.nodeModulesRealpathAliases[tspath.Path("/packages/mylib/package.json")]
+		aliases1, ok := snapshot1.nodeModulesRealpathAliases[tspath.PathKey("/packages/mylib/package.json")]
 		assert.Assert(t, ok)
 		assert.Equal(t, aliases1.paths.Len(), 1)
-		assert.Assert(t, aliases1.paths.Has(tspath.Path("/project/node_modules/mylib/package.json")))
+		assert.Assert(t, aliases1.paths.Has(tspath.PathKey("/project/node_modules/mylib/package.json")))
 
 		// Snapshot 2: read via the SECOND symlink, which maps to the same realpath.
 		// This exercises the case where LoadOrStore finds the key in the base map
 		// and must clone-on-write rather than mutating the shared set.
 		builder2 := newSnapshotFSBuilder(
 			testFS,
-			make(map[tspath.Path]*Overlay),
-			make(map[tspath.Path]*Overlay),
+			make(map[tspath.PathKey]*Overlay),
+			make(map[tspath.PathKey]*Overlay),
 			snapshot1.cacheFiles,
 			snapshot1.cacheDirectories,
 			snapshot1.nodeModulesRealpathAliases,
 			lsproto.PositionEncodingKindUTF16,
-			toPath,
 		)
 		builder2.GetFile("/project/node_modules/alias/package.json")
 		snapshot2, _ := builder2.Finalize()
 
 		// Snapshot 2 should have both symlinks.
-		aliases2, ok := snapshot2.nodeModulesRealpathAliases[tspath.Path("/packages/mylib/package.json")]
+		aliases2, ok := snapshot2.nodeModulesRealpathAliases[tspath.PathKey("/packages/mylib/package.json")]
 		assert.Assert(t, ok)
 		assert.Equal(t, aliases2.paths.Len(), 2)
-		assert.Assert(t, aliases2.paths.Has(tspath.Path("/project/node_modules/mylib/package.json")))
-		assert.Assert(t, aliases2.paths.Has(tspath.Path("/project/node_modules/alias/package.json")))
+		assert.Assert(t, aliases2.paths.Has(tspath.PathKey("/project/node_modules/mylib/package.json")))
+		assert.Assert(t, aliases2.paths.Has(tspath.PathKey("/project/node_modules/alias/package.json")))
 
 		// Snapshot 1 must NOT have been mutated — it should still have only one alias.
 		assert.Equal(t, aliases1.paths.Len(), 1, "snapshot1 alias set must not be mutated by snapshot2")
-		assert.Assert(t, !aliases1.paths.Has(tspath.Path("/project/node_modules/alias/package.json")),
+		assert.Assert(t, !aliases1.paths.Has(tspath.PathKey("/project/node_modules/alias/package.json")),
 			"snapshot1 must not contain alias added in snapshot2")
 	})
 }
@@ -1449,20 +1625,15 @@ func TestRealpathAliasLifecycle(t *testing.T) {
 func TestExpandAndFilterWatchEvents(t *testing.T) {
 	t.Parallel()
 
-	toPath := func(fileName string) tspath.Path {
-		return tspath.Path(fileName)
-	}
-
 	newBuilder := func(testFS vfs.FS) *snapshotFSBuilder {
 		return newSnapshotFSBuilder(
 			testFS,
-			make(map[tspath.Path]*Overlay),
-			make(map[tspath.Path]*Overlay),
-			make(map[tspath.Path]*cachedFile),
-			make(map[tspath.Path]dirty.CloneableMap[tspath.Path, string]),
+			make(map[tspath.PathKey]*Overlay),
+			make(map[tspath.PathKey]*Overlay),
+			make(map[tspath.PathKey]*cachedFile),
+			make(map[tspath.PathKey]dirty.CloneableMap[tspath.PathKey, string]),
 			nil,
 			lsproto.PositionEncodingKindUTF16,
-			toPath,
 		)
 	}
 
@@ -1473,7 +1644,7 @@ func TestExpandAndFilterWatchEvents(t *testing.T) {
 		// expanded nor matched by extension. It must still be preserved.
 		builder := newBuilder(vfstest.FromMap(map[string]string{
 			"/project/index.ts": "export const x = 1;",
-		}, false))
+		}, tspath.CaseInsensitive))
 
 		change := FileChangeSummary{}
 		change.Deleted.Add("file:///project/node_modules")
@@ -1487,7 +1658,7 @@ func TestExpandAndFilterWatchEvents(t *testing.T) {
 		t.Parallel()
 		builder := newBuilder(vfstest.FromMap(map[string]string{
 			"/project/index.ts": "export const x = 1;",
-		}, false))
+		}, tspath.CaseInsensitive))
 
 		change := FileChangeSummary{}
 		change.Deleted.Add("file:///project/node_modules/@scope/pkg")
@@ -1501,7 +1672,7 @@ func TestExpandAndFilterWatchEvents(t *testing.T) {
 		t.Parallel()
 		builder := newBuilder(vfstest.FromMap(map[string]string{
 			"/project/index.ts": "export const x = 1;",
-		}, false))
+		}, tspath.CaseInsensitive))
 
 		change := FileChangeSummary{}
 		change.Deleted.Add("file:///project/build")
@@ -1515,8 +1686,8 @@ func TestExpandAndFilterWatchEvents(t *testing.T) {
 		t.Parallel()
 		builder := newBuilder(vfstest.FromMap(map[string]string{
 			"/project/index.ts": "export const x = 1;",
-		}, false))
-		watched := collections.NewSetFromItems(tspath.Path("/project/mapper.config"))
+		}, tspath.CaseInsensitive))
+		watched := collections.NewSetFromItems(tspath.PathKey("/project/mapper.config"))
 		change := FileChangeSummary{}
 		change.Changed.Add("file:///project/mapper.config")
 		change.Deleted.Add("file:///project/mapper.config")
@@ -1528,22 +1699,21 @@ func TestExpandAndFilterWatchEvents(t *testing.T) {
 
 	t.Run("expands tracked directory deletion into file deletions", func(t *testing.T) {
 		t.Parallel()
-		existingCacheFiles := map[tspath.Path]*cachedFile{
-			tspath.Path("/src/foo.ts"): newCachedFile("/src/foo.ts", "const foo = 1;"),
+		existingCacheFiles := map[tspath.PathKey]*cachedFile{
+			tspath.PathKey("/src/foo.ts"): newCachedFile("/src/foo.ts", "const foo = 1;"),
 		}
-		existingDirs := map[tspath.Path]dirty.CloneableMap[tspath.Path, string]{
-			tspath.Path("/"):    {tspath.Path("/src"): "src"},
-			tspath.Path("/src"): {tspath.Path("/src/foo.ts"): "foo.ts"},
+		existingDirs := map[tspath.PathKey]dirty.CloneableMap[tspath.PathKey, string]{
+			tspath.PathKey("/"):    {tspath.PathKey("/src"): "src"},
+			tspath.PathKey("/src"): {tspath.PathKey("/src/foo.ts"): "foo.ts"},
 		}
 		builder := newSnapshotFSBuilder(
-			vfstest.FromMap(map[string]string{"/src/foo.ts": "const foo = 1;"}, false),
-			make(map[tspath.Path]*Overlay),
-			make(map[tspath.Path]*Overlay),
+			vfstest.FromMap(map[string]string{"/src/foo.ts": "const foo = 1;"}, tspath.CaseInsensitive),
+			make(map[tspath.PathKey]*Overlay),
+			make(map[tspath.PathKey]*Overlay),
 			existingCacheFiles,
 			existingDirs,
 			nil,
 			lsproto.PositionEncodingKindUTF16,
-			toPath,
 		)
 
 		change := FileChangeSummary{}

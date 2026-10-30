@@ -1,0 +1,56 @@
+//// [tests/cases/compiler/nonexistentPropertyOnThenable.ts] ////
+
+=== nonexistentPropertyOnThenable.ts ===
+interface Thenable<T> {
+    then(onfulfilled: (value: T) => void): void;
+>then : (onfulfilled: (value: T) => void) => void
+>onfulfilled : (value: T) => void
+>value : T
+}
+
+declare const thenable: Thenable<{ x: number }>;
+>thenable : Thenable<{ x: number; }>
+>x : number
+
+thenable.x;
+>thenable.x : any
+>thenable : Thenable<{ x: number; }>
+>x : any
+
+declare const promiseLike: PromiseLike<{ y: string }>;
+>promiseLike : PromiseLike<{ y: string; }>
+>y : string
+
+promiseLike.y;
+>promiseLike.y : any
+>promiseLike : PromiseLike<{ y: string; }>
+>y : any
+
+declare const promise: Promise<{ z: boolean }>;
+>promise : Promise<{ z: boolean; }>
+>z : boolean
+
+promise.z;
+>promise.z : any
+>promise : Promise<{ z: boolean; }>
+>z : any
+
+async function f() {
+>f : () => Promise<void>
+
+    thenable.x;
+>thenable.x : any
+>thenable : Thenable<{ x: number; }>
+>x : any
+
+    promiseLike.y;
+>promiseLike.y : any
+>promiseLike : PromiseLike<{ y: string; }>
+>y : any
+
+    promise.z;
+>promise.z : any
+>promise : Promise<{ z: boolean; }>
+>z : any
+}
+

@@ -1,0 +1,75 @@
+//// [tests/cases/conformance/es2026/mapGetOrInsert.ts] ////
+
+=== mapGetOrInsert.ts ===
+const map = new Map<string, number>();
+>map : Map<string, number>
+>new Map<string, number>() : Map<string, number>
+>Map : MapConstructor
+
+const inserted: number = map.getOrInsert("a", 1);
+>inserted : number
+>map.getOrInsert("a", 1) : number
+>map.getOrInsert : (key: string, defaultValue: number) => number
+>map : Map<string, number>
+>getOrInsert : (key: string, defaultValue: number) => number
+>"a" : "a"
+>1 : 1
+
+const computed: number = map.getOrInsertComputed("b", key => key.length);
+>computed : number
+>map.getOrInsertComputed("b", key => key.length) : number
+>map.getOrInsertComputed : (key: string, callback: (key: string) => number) => number
+>map : Map<string, number>
+>getOrInsertComputed : (key: string, callback: (key: string) => number) => number
+>"b" : "b"
+>key => key.length : (key: string) => number
+>key : string
+>key.length : number
+>key : string
+>length : number
+
+const weakMap = new WeakMap<object, number>();
+>weakMap : WeakMap<object, number>
+>new WeakMap<object, number>() : WeakMap<object, number>
+>WeakMap : WeakMapConstructor
+
+const key = {};
+>key : {}
+>{} : {}
+
+const weakInserted: number = weakMap.getOrInsert(key, 1);
+>weakInserted : number
+>weakMap.getOrInsert(key, 1) : number
+>weakMap.getOrInsert : (key: object, defaultValue: number) => number
+>weakMap : WeakMap<object, number>
+>getOrInsert : (key: object, defaultValue: number) => number
+>key : {}
+>1 : 1
+
+const weakComputed: number = weakMap.getOrInsertComputed(key, value => value === key ? 1 : 0);
+>weakComputed : number
+>weakMap.getOrInsertComputed(key, value => value === key ? 1 : 0) : number
+>weakMap.getOrInsertComputed : (key: object, callback: (key: object) => number) => number
+>weakMap : WeakMap<object, number>
+>getOrInsertComputed : (key: object, callback: (key: object) => number) => number
+>key : {}
+>value => value === key ? 1 : 0 : (value: object) => 0 | 1
+>value : object
+>value === key ? 1 : 0 : 0 | 1
+>value === key : boolean
+>value : object
+>key : {}
+>1 : 1
+>0 : 0
+
+declare const readonlyMap: ReadonlyMap<string, number>;
+>readonlyMap : ReadonlyMap<string, number>
+
+readonlyMap.getOrInsert("a", 1);
+>readonlyMap.getOrInsert("a", 1) : any
+>readonlyMap.getOrInsert : any
+>readonlyMap : ReadonlyMap<string, number>
+>getOrInsert : any
+>"a" : "a"
+>1 : 1
+

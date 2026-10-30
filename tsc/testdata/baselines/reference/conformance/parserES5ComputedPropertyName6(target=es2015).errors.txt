@@ -1,9 +1,13 @@
 parserES5ComputedPropertyName6.ts(2,3): error TS1164: Computed property names are not allowed in enums.
+parserES5ComputedPropertyName6.ts(2,4): error TS2552: Cannot find name 'e'. Did you mean 'E'?
 
 
-==== parserES5ComputedPropertyName6.ts (1 errors) ====
+==== parserES5ComputedPropertyName6.ts (2 errors) ====
     enum E {
       [e] = 1
       ~~~
 !!! error TS1164: Computed property names are not allowed in enums.
+       ~
+!!! error TS2552: Cannot find name 'e'. Did you mean 'E'?
+!!! related TS2728 parserES5ComputedPropertyName6.ts:1:6: 'E' is declared here.
     }

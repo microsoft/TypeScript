@@ -1,0 +1,44 @@
+//// [tests/cases/compiler/enumPropertyExhaustiveNullableReceiver.ts] ////
+
+=== enumPropertyExhaustiveNullableReceiver.ts ===
+enum NotificationKind { Review, Comment }
+>NotificationKind : Symbol(NotificationKind, Decl(enumPropertyExhaustiveNullableReceiver.ts, 0, 0))
+>Review : Symbol(NotificationKind.Review, Decl(enumPropertyExhaustiveNullableReceiver.ts, 0, 23))
+>Comment : Symbol(NotificationKind.Comment, Decl(enumPropertyExhaustiveNullableReceiver.ts, 0, 31))
+
+declare function assertNever(value: never): never;
+>assertNever : Symbol(assertNever, Decl(enumPropertyExhaustiveNullableReceiver.ts, 0, 41))
+>value : Symbol(value, Decl(enumPropertyExhaustiveNullableReceiver.ts, 2, 29))
+
+function notify(notification: { kind: NotificationKind } | null) {
+>notify : Symbol(notify, Decl(enumPropertyExhaustiveNullableReceiver.ts, 2, 50))
+>notification : Symbol(notification, Decl(enumPropertyExhaustiveNullableReceiver.ts, 4, 16))
+>kind : Symbol(kind, Decl(enumPropertyExhaustiveNullableReceiver.ts, 4, 31))
+>NotificationKind : Symbol(NotificationKind, Decl(enumPropertyExhaustiveNullableReceiver.ts, 0, 0))
+
+    if (notification === null) return;
+>notification : Symbol(notification, Decl(enumPropertyExhaustiveNullableReceiver.ts, 4, 16))
+
+    switch (notification.kind) {
+>notification.kind : Symbol(kind, Decl(enumPropertyExhaustiveNullableReceiver.ts, 4, 31))
+>notification : Symbol(notification, Decl(enumPropertyExhaustiveNullableReceiver.ts, 4, 16))
+>kind : Symbol(kind, Decl(enumPropertyExhaustiveNullableReceiver.ts, 4, 31))
+
+        case NotificationKind.Review: return;
+>NotificationKind.Review : Symbol(NotificationKind.Review, Decl(enumPropertyExhaustiveNullableReceiver.ts, 0, 23))
+>NotificationKind : Symbol(NotificationKind, Decl(enumPropertyExhaustiveNullableReceiver.ts, 0, 0))
+>Review : Symbol(NotificationKind.Review, Decl(enumPropertyExhaustiveNullableReceiver.ts, 0, 23))
+
+        case NotificationKind.Comment: return;
+>NotificationKind.Comment : Symbol(NotificationKind.Comment, Decl(enumPropertyExhaustiveNullableReceiver.ts, 0, 31))
+>NotificationKind : Symbol(NotificationKind, Decl(enumPropertyExhaustiveNullableReceiver.ts, 0, 0))
+>Comment : Symbol(NotificationKind.Comment, Decl(enumPropertyExhaustiveNullableReceiver.ts, 0, 31))
+
+        default: return assertNever(notification.kind);
+>assertNever : Symbol(assertNever, Decl(enumPropertyExhaustiveNullableReceiver.ts, 0, 41))
+>notification.kind : Symbol(kind, Decl(enumPropertyExhaustiveNullableReceiver.ts, 4, 31))
+>notification : Symbol(notification, Decl(enumPropertyExhaustiveNullableReceiver.ts, 4, 16))
+>kind : Symbol(kind, Decl(enumPropertyExhaustiveNullableReceiver.ts, 4, 31))
+    }
+}
+

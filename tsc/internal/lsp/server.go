@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"io"
 	"iter"
+	"maps"
 	"math/rand/v2"
 	"runtime/debug"
 	"slices"
@@ -44,12 +45,12 @@ type ServerOptions struct {
 	Out Writer
 	Err io.Writer
 
-	Cwd                string
+	Cwd                tspath.RootedDirectoryPath
 	FS                 vfs.FS
-	DefaultLibraryPath string
-	TypingsLocation    string
+	DefaultLibraryPath tspath.RootedDirectoryPath
+	TypingsLocation    tspath.RootedDirectoryPath
 	ParseCache         *project.ParseCache
-	NpmInstall         func(cwd string, args []string) ([]byte, error)
+	NpmInstall         func(ctx context.Context, cwd string, args []string) ([]byte, error)
 	// Spawn launches a child process, returning its stdio as an io.ReadWriteCloser (Read is its stdout,
 	// Write is its stdin). It is nil when the host cannot spawn processes. Currently used for content mappers.
 	Spawn              func(command []string, dir string, stderr io.Writer) (io.ReadWriteCloser, error)
@@ -185,10 +186,10 @@ type Server struct {
 	pendingServerRequests   map[jsonrpc.ID]chan *lsproto.ResponseMessage
 	pendingServerRequestsMu sync.Mutex
 
-	cwd                string
+	cwd                tspath.RootedDirectoryPath
 	fs                 vfs.FS
-	defaultLibraryPath string
-	typingsLocation    string
+	defaultLibraryPath tspath.RootedDirectoryPath
+	typingsLocation    tspath.RootedDirectoryPath
 
 	initializeParams      *lsproto.InitializeParams
 	initializationOptions *lsproto.InitializationOptions
@@ -224,7 +225,7 @@ type Server struct {
 	session *project.Session
 
 	// apiSessions holds active API sessions keyed by their ID
-	apiSessions   map[string]*api.Session
+	apiSessions   map[string]*apiSessionState
 	apiSessionsMu sync.Mutex
 
 	// Test options for initializing session
@@ -239,7 +240,7 @@ type Server struct {
 	// parseCache can be passed in so separate tests can share ASTs
 	parseCache *project.ParseCache
 
-	npmInstall func(cwd string, args []string) ([]byte, error)
+	npmInstall func(ctx context.Context, cwd string, args []string) ([]byte, error)
 	spawn      func(command []string, dir string, stderr io.Writer) (io.ReadWriteCloser, error)
 
 	cpuProfiler pprof.CPUProfiler
@@ -250,6 +251,42 @@ type Server struct {
 	startWatchdog func(parentPID int)
 
 	flakeLogging lsproto.DiagnosticFlakeLogLevel
+}
+
+type apiSessionState struct {
+	session   *api.Session
+	transport ipc.Transport
+	cancel    context.CancelFunc
+	done      chan struct{}
+
+	mu         sync.Mutex
+	connection io.ReadWriteCloser
+	stopped    bool
+}
+
+func (s *apiSessionState) attachConnection(connection io.ReadWriteCloser) bool {
+	s.mu.Lock()
+	defer s.mu.Unlock()
+	if s.stopped {
+		_ = connection.Close()
+		return false
+	}
+	s.connection = connection
+	return true
+}
+
+func (s *apiSessionState) stop() {
+	s.mu.Lock()
+	if !s.stopped {
+		s.stopped = true
+		s.cancel()
+		_ = s.transport.Close()
+		if s.connection != nil {
+			_ = s.connection.Close()
+		}
+	}
+	s.mu.Unlock()
+	<-s.done
 }
 
 func (s *Server) Session() *project.Session { return s.session }
@@ -1453,7 +1490,7 @@ func (c *crossProjectOrchestrator) GetProjectsForFile(ctx context.Context, uri l
 	return c.server.session.GetProjectsForFile(ctx, uri)
 }
 
-func (c *crossProjectOrchestrator) GetProjectsLoadingProjectTree(ctx context.Context, requestedProjectTrees *collections.Set[tspath.Path]) iter.Seq[ls.Project] {
+func (c *crossProjectOrchestrator) GetProjectsLoadingProjectTree(ctx context.Context, requestedProjectTrees *collections.Set[tspath.PathKey]) iter.Seq[ls.Project] {
 	return func(yield func(ls.Project) bool) {
 		c.server.session.WithSnapshotLoadingProjectTree(ctx, requestedProjectTrees, func(snapshot *project.Snapshot) {
 			for _, p := range snapshot.ProjectCollection.LanguageServiceProjects() {
@@ -1708,19 +1745,24 @@ func (s *Server) handleInitialized(ctx context.Context, params *lsproto.Initiali
 		s.logger.Logf("file watching: disabled (client lacks dynamic watch registration and builtin watcher backend is not fast-recursive)")
 	}
 
+	workspaceRoots := getInitialWorkspaceRoots(s.initializeParams)
+
 	cwd := s.cwd
 	if s.clientCapabilities.Workspace.WorkspaceFolders &&
 		s.initializeParams.WorkspaceFolders != nil &&
 		s.initializeParams.WorkspaceFolders.WorkspaceFolders != nil &&
 		len(*s.initializeParams.WorkspaceFolders.WorkspaceFolders) == 1 {
-		cwd = lsproto.DocumentUri((*s.initializeParams.WorkspaceFolders.WorkspaceFolders)[0].Uri).FileName()
+		if fileName := lsproto.DocumentUri((*s.initializeParams.WorkspaceFolders.WorkspaceFolders)[0].Uri).FileName(); fileName != "" {
+			cwd = tspath.RootedDirectoryPathFromPath(tspath.RootedPath(fileName))
+		}
 	} else if s.initializeParams.RootUri.DocumentUri != nil {
-		cwd = s.initializeParams.RootUri.DocumentUri.FileName()
+		if fileName := s.initializeParams.RootUri.DocumentUri.FileName(); fileName != "" {
+			cwd = tspath.RootedDirectoryPathFromPath(tspath.RootedPath(fileName))
+		}
 	} else if s.initializeParams.RootPath != nil && s.initializeParams.RootPath.String != nil {
-		cwd = *s.initializeParams.RootPath.String
-	}
-	if !tspath.PathIsAbsolute(cwd) {
-		cwd = s.cwd
+		if rootPath := *s.initializeParams.RootPath.String; tspath.PathIsAbsolute(rootPath) {
+			cwd = tspath.RootedDirectoryPathFromAbsolute(rootPath)
+		}
 	}
 
 	s.telemetryEnabled = enableTelemetry
@@ -1738,6 +1780,7 @@ func (s *Server) handleInitialized(ctx context.Context, params *lsproto.Initiali
 			DebounceDelay:          500 * time.Millisecond,
 			PushDiagnosticsEnabled: !disablePushDiagnostics,
 			RunExternalCode:        runExternalCode,
+			InitialWorkspaceRoots:  workspaceRoots,
 		},
 		FS:                  s.fs,
 		Logger:              s.logger,
@@ -1789,12 +1832,30 @@ func (s *Server) handleShutdown(ctx context.Context, _ lsproto.NoParams, _ *lspr
 	if s.builtinWatcher != nil {
 		s.builtinWatcher.Close()
 	}
+	s.closeAPISessions()
 	s.session.Close()
 	return lsproto.ShutdownResponse{}, nil
 }
 
 func (s *Server) handleExit(ctx context.Context, _ lsproto.NoParams) error {
 	return io.EOF
+}
+
+func getInitialWorkspaceRoots(params *lsproto.InitializeParams) []tspath.RootedDirectoryPath {
+	workspaceRoots := []tspath.RootedDirectoryPath{}
+	if params.WorkspaceFolders != nil && params.WorkspaceFolders.WorkspaceFolders != nil {
+		for _, folder := range *params.WorkspaceFolders.WorkspaceFolders {
+			uri := lsproto.DocumentUri(folder.Uri)
+			if strings.HasPrefix(string(uri), "file://") {
+				workspaceRoots = append(workspaceRoots, tspath.RootedDirectoryPathFromPath(uri.Path()))
+			}
+		}
+	} else if params.RootUri.DocumentUri != nil && strings.HasPrefix(string(*params.RootUri.DocumentUri), "file://") {
+		workspaceRoots = append(workspaceRoots, tspath.RootedDirectoryPathFromPath(params.RootUri.DocumentUri.Path()))
+	} else if params.RootPath != nil && params.RootPath.String != nil && tspath.PathIsAbsolute(*params.RootPath.String) {
+		workspaceRoots = append(workspaceRoots, tspath.RootedDirectoryPathFromAbsolute(*params.RootPath.String))
+	}
+	return workspaceRoots
 }
 
 func (s *Server) handleDidChangeWorkspaceConfiguration(ctx context.Context, params *lsproto.DidChangeConfigurationParams) error {
@@ -1856,7 +1917,7 @@ func (s *Server) handleDocumentDiagnostic(ctx context.Context, languageService *
 		return direct, err
 	}
 	languageService.GetProgram().Emit(ctx, compiler.EmitOptions{
-		WriteFile: func(fileName, text string, data *compiler.WriteFileData) error {
+		WriteFile: func(fileName tspath.RootedFilePath, text string, data *compiler.WriteFileData) error {
 			// do nothing
 			return nil
 		},
@@ -1935,8 +1996,8 @@ func (s *Server) handleRename(ctx context.Context, params *lsproto.RenameParams,
 				{
 					RenameFile: &lsproto.RenameFile{
 						Kind:   lsproto.StringLiteralRename{},
-						OldUri: lsconv.FileNameToDocumentURI(info.FileToRename),
-						NewUri: lsconv.FileNameToDocumentURI(info.NewFileName),
+						OldUri: lsconv.PathToDocumentURI(info.FileToRename),
+						NewUri: lsconv.PathToDocumentURI(info.NewFileName),
 					},
 				},
 			}
@@ -1948,8 +2009,8 @@ func (s *Server) handleRename(ctx context.Context, params *lsproto.RenameParams,
 		}
 		renameFilesParams := &lsproto.RenameFilesParams{
 			Files: []*lsproto.FileRename{{
-				OldUri: lsconv.FileNameToDocumentURI(info.FileToRename),
-				NewUri: lsconv.FileNameToDocumentURI(info.NewFileName),
+				OldUri: lsconv.PathToDocumentURI(info.FileToRename),
+				NewUri: lsconv.PathToDocumentURI(info.NewFileName),
 			}},
 		}
 		return s.handleWillRenameFilesWorker(ctx, renameFilesParams, req, true /*sendRenameFile*/)
@@ -2118,12 +2179,25 @@ func (s *Server) handleCompletionItemResolve(ctx context.Context, params *lsprot
 	if data == nil {
 		return nil, errors.New("completion item data is nil")
 	}
-	languageService, err := s.session.GetLanguageService(ctx, lsconv.FileNameToDocumentURI(data.FileName))
+	fileName, ok := tspath.TryRootedFilePathFromAbsolute(data.FileName)
+	if !ok {
+		return nil, errors.New("completion item data fileName must be absolute")
+	}
+	var uri lsproto.DocumentUri
+	if fileName.IsDynamic() {
+		uri, ok = lsproto.TryDynamicFileNameToDocumentUri(fileName.AsPath())
+		if !ok {
+			return nil, errors.New("completion item data fileName must be a valid dynamic path")
+		}
+	} else {
+		uri = lsconv.FileNameToDocumentURI(fileName)
+	}
+	languageService, err := s.session.GetLanguageService(ctx, uri)
 	if err != nil {
 		return nil, err
 	}
 	defer s.recover(reqMsg)
-	return languageService.ResolveCompletionItem(ctx, params, data)
+	return languageService.ResolveCompletionItem(ctx, params, data, fileName)
 }
 
 func (s *Server) handleDocumentFormat(ctx context.Context, ls *ls.LanguageService, params *lsproto.DocumentFormattingParams) (lsproto.DocumentFormattingResponse, error) {
@@ -2282,27 +2356,35 @@ func (s *Server) handleInitializeAPISession(ctx context.Context, params *lsproto
 	defer s.apiSessionsMu.Unlock()
 
 	if s.apiSessions == nil {
-		s.apiSessions = make(map[string]*api.Session)
+		s.apiSessions = make(map[string]*apiSessionState)
 	}
 
-	var apiSession *api.Session
-	apiSession = api.NewLSPSession(s.session, nil)
+	apiSession := api.NewLSPSession(s.session, nil)
 
-	// Use provided pipe path or generate a unique one
-	var pipePath string
+	var transport *ipc.PipeTransport
+	var err error
 	if params.Pipe != nil && *params.Pipe != "" {
-		pipePath = *params.Pipe
+		transport, err = ipc.NewPipeTransport(*params.Pipe)
 	} else {
-		pipePath = s.generateAPIPipePath()
+		transport, err = ipc.NewPrivatePipeTransport(s.generateAPIPipeName())
 	}
-
-	transport, err := ipc.NewPipeTransport(pipePath)
 	if err != nil {
 		return nil, fmt.Errorf("failed to create API transport: %w", err)
 	}
 
+	apiCtx, apiCancel := context.WithCancel(s.backgroundCtx)
+	state := &apiSessionState{
+		session:   apiSession,
+		transport: transport,
+		cancel:    apiCancel,
+		done:      make(chan struct{}),
+	}
+	s.apiSessions[apiSession.ID()] = state
+
 	// Start accepting connections in the background
 	go func() {
+		defer close(state.done)
+		defer apiCancel()
 		defer func() {
 			apiSession.Close()
 			s.removeAPISession(apiSession.ID())
@@ -2314,10 +2396,10 @@ func (s *Server) handleInitializeAPISession(ctx context.Context, params *lsproto
 			s.logger.Errorf("API session %s: failed to accept connection: %v", apiSession.ID(), acceptErr)
 			return
 		}
-
-		// Create a cancellable context for the API connection
-		apiCtx, apiCancel := context.WithCancel(s.backgroundCtx)
-		defer apiCancel()
+		if !state.attachConnection(rwc) {
+			return
+		}
+		defer rwc.Close()
 
 		// Run the connection with panic recovery
 		defer func() {
@@ -2332,30 +2414,42 @@ func (s *Server) handleInitializeAPISession(ctx context.Context, params *lsproto
 		}()
 
 		conn := ipc.NewAsyncConn(rwc, apiSession)
+		apiSession.SetConnection(conn)
 		if apiErr := conn.Run(apiCtx); apiErr != nil {
 			s.logger.Errorf("API session %s: %v", apiSession.ID(), apiErr)
 		}
 	}()
 
-	s.apiSessions[apiSession.ID()] = apiSession
-
 	return &lsproto.InitializeAPISessionResult{
 		SessionId: apiSession.ID(),
-		Pipe:      pipePath,
+		Pipe:      transport.Path(),
 	}, nil
 }
 
-func (s *Server) generateAPIPipePath() string {
-	// Generate a high-entropy path using time and random source
+func (s *Server) generateAPIPipeName() string {
 	now := time.Now().UnixNano()
 	rnd := rand.Uint64()
-	return ipc.GeneratePipePath(fmt.Sprintf("tsgo-api-%x-%x", now, rnd))
+	return fmt.Sprintf("tsgo-api-%x-%x", now, rnd)
 }
 
 func (s *Server) removeAPISession(id string) {
 	s.apiSessionsMu.Lock()
 	defer s.apiSessionsMu.Unlock()
 	delete(s.apiSessions, id)
+}
+
+func (s *Server) closeAPISessions() {
+	s.apiSessionsMu.Lock()
+	apiSessions := make([]*apiSessionState, 0, len(s.apiSessions))
+	for id, state := range s.apiSessions {
+		apiSessions = append(apiSessions, state)
+		delete(s.apiSessions, id)
+	}
+	s.apiSessionsMu.Unlock()
+
+	for _, state := range apiSessions {
+		state.stop()
+	}
 }
 
 // !!! temporary; remove when we have `handleDidChangeConfiguration`/implicit project config support
@@ -2367,8 +2461,8 @@ func (s *Server) SetCompilerOptionsForInferredProjects(ctx context.Context, opti
 }
 
 // NpmInstall implements ata.NpmExecutor
-func (s *Server) NpmInstall(cwd string, args []string) ([]byte, error) {
-	return s.npmInstall(cwd, args)
+func (s *Server) NpmInstall(ctx context.Context, cwd tspath.RootedDirectoryPath, args []string) ([]byte, error) {
+	return s.npmInstall(ctx, cwd.AsString(), args)
 }
 
 // contentMapperSpawner adapts the server's spawn callback to a content mapper spawner, or returns nil when
@@ -2440,7 +2534,7 @@ func (s *Server) handleProjectInfo(ctx context.Context, params *lsproto.ProjectI
 	}
 	configFilePath := ""
 	if defaultProject != nil && defaultProject.Kind == project.KindConfigured {
-		configFilePath = defaultProject.ConfigFileName()
+		configFilePath = defaultProject.ConfigFileName().AsString()
 	}
 	return &lsproto.ProjectInfoResult{
 		ConfigFilePath: configFilePath,
@@ -2485,6 +2579,11 @@ func parseContentMapperContributions(values []*lsproto.ContentMapperContribution
 				return result, fmt.Errorf("content mapper contribution %q requests unknown compiler option %q", identity, option)
 			}
 		}
+		for source, output := range valueOrZero(manifest.OutputExtensions) {
+			if !contentmapper.IsValidExtension(source) || !contentmapper.IsValidExtension(output) {
+				return result, fmt.Errorf("content mapper contribution %q has invalid output extension mapping from %q to %q", identity, source, output)
+			}
+		}
 		for _, extension := range validExtensions {
 			if !claimedExtensions.AddIfAbsent(strings.ToLower(extension)) {
 				return result, fmt.Errorf("content mapper contributions both claim extension %q", extension)
@@ -2508,11 +2607,13 @@ func parseContentMapperContributions(values []*lsproto.ContentMapperContribution
 			DynamicConfig:   valueOrZero(manifest.DynamicConfig),
 			ContributionID:  identity,
 		}
+		mapper.Manifest.DefaultOutputExtensions = maps.Clone(valueOrZero(manifest.OutputExtensions))
+		mapper.Definition.OutputExtensions = maps.Clone(mapper.Manifest.DefaultOutputExtensions)
 		if manifest.Cwd != nil {
 			if !tspath.PathIsAbsolute(*manifest.Cwd) {
 				return result, fmt.Errorf("content mapper contribution %q has non-absolute cwd", identity)
 			}
-			mapper.PackageDirectory = *manifest.Cwd
+			mapper.PackageDirectory = tspath.RootedDirectoryPathFromAbsolute(*manifest.Cwd)
 		}
 		result.Mappers = append(result.Mappers, mapper)
 	}
@@ -2521,12 +2622,10 @@ func parseContentMapperContributions(values []*lsproto.ContentMapperContribution
 }
 
 func isValidContributedContentMapperExtension(extension string) bool {
-	if len(extension) <= 1 || extension[0] != '.' || tspath.GetAnyExtensionFromPath("file"+extension, nil, false) != extension {
+	if !contentmapper.IsValidExtension(extension) {
 		return false
 	}
-	return !slices.ContainsFunc(core.Flatten(tspath.AllSupportedExtensionsWithJson), func(nativeExtension string) bool {
-		return strings.EqualFold(nativeExtension, extension)
-	})
+	return !contentmapper.HasReservedSourceExtension(extension)
 }
 
 func valueOrZero[T any](value *T) T {

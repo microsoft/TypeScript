@@ -1,6 +1,8 @@
 package checker
 
 import (
+	"slices"
+
 	"github.com/microsoft/TypeScript/tsc/internal/ast"
 	"github.com/microsoft/TypeScript/tsc/internal/diagnostics"
 )
@@ -83,7 +85,7 @@ func (c *Checker) GetUnionType(types []*Type) *Type {
 
 func (c *Checker) GetNameTypeOfSymbol(symbol *ast.Symbol) *Type {
 	if links := c.valueSymbolLinks.TryGet(symbol); links != nil {
-		return links.nameType
+		return links.getNameType()
 	}
 	return nil
 }
@@ -102,6 +104,18 @@ func (c *Checker) GetGlobalSymbol(name string, meaning ast.SymbolFlags, diagnost
 
 func (c *Checker) GetMergedSymbol(symbol *ast.Symbol) *ast.Symbol {
 	return c.getMergedSymbol(symbol)
+}
+
+func (c *Checker) GetSymbolOfNode(node *ast.Node) *ast.Symbol {
+	return c.getSymbolOfNode(node)
+}
+
+func (c *Checker) GetSymbolOfDeclaration(node *ast.Node) *ast.Symbol {
+	return c.getSymbolOfDeclaration(node)
+}
+
+func (c *Checker) GetParentOfSymbol(symbol *ast.Symbol) *ast.Symbol {
+	return c.getParentOfSymbol(symbol)
 }
 
 func (c *Checker) TryFindAmbientModule(moduleName string) *ast.Symbol {
@@ -351,6 +365,14 @@ func (c *Checker) GetIndexInfosOfType(t *Type) []*IndexInfo {
 	return c.getIndexInfosOfType(t)
 }
 
+func (c *Checker) GetIndexInfosOfIndexSymbol(symbol *ast.Symbol) []*IndexInfo {
+	var siblingSymbols []*ast.Symbol
+	if symbol.Parent() != nil {
+		siblingSymbols = slices.Collect(c.getMembersOfSymbol(symbol.Parent()).Values())
+	}
+	return c.getIndexInfosOfIndexSymbol(symbol, siblingSymbols)
+}
+
 func (c *Checker) IsContextSensitive(node *ast.Node) bool {
 	return c.isContextSensitive(node)
 }
@@ -384,7 +406,7 @@ func (c *Checker) RequiresAddingImplicitUndefined(node *ast.Node) bool {
 	if symbol == nil {
 		return false
 	}
-	return c.GetEmitResolver().RequiresAddingImplicitUndefined(node, symbol, enclosingDeclaration)
+	return c.requiresAddingImplicitUndefined(node, symbol, enclosingDeclaration)
 }
 
 func (c *Checker) RemoveMissingOrUndefinedType(t *Type) *Type {

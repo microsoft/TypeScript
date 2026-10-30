@@ -4,11 +4,10 @@
 // 
 // export { <|b as [|{| name: B, kind: Variable |}B|]|> } from "a" 
 // 
-// <|export import [|{| name: e, kind: Variable |}e|] = require("a");|>
+// export import e = require("a");
 // 
 // export * from "a"; // no bindings here
 
 // === Details ===
 (Variable) a
 (Variable) B
-(Variable) e

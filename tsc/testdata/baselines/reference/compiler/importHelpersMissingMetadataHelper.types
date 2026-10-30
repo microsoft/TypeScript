@@ -1,0 +1,29 @@
+//// [tests/cases/compiler/importHelpersMissingMetadataHelper.ts] ////
+
+=== main.ts ===
+declare function dec(...args: any[]): any;
+>dec : (...args: any[]) => any
+>args : any[]
+
+@dec
+>dec : (...args: any[]) => any
+
+export class C {
+>C : C
+
+    constructor(x: number) {}
+>x : number
+
+    @dec
+>dec : (...args: any[]) => any
+
+    method(y: string) {}
+>method : (y: string) => void
+>y : string
+}
+
+=== node_modules/tslib/index.d.ts ===
+export declare function __decorate(...args: any[]): any;
+>__decorate : (...args: any[]) => any
+>args : any[]
+

@@ -630,7 +630,6 @@ function getIndent(source: string, position: number): string {
 // ── Main ─────────────────────────────────────────────────────────
 
 export function generateSync(force = false): void {
-    console.log("Generating sync API from async source...");
     const generatedFiles: (GeneratedFile | undefined)[] = [];
 
     // Source files
@@ -676,7 +675,6 @@ export function generateSync(force = false): void {
 
     const changedFiles = generatedFiles.filter(file => file !== undefined);
     if (!changedFiles.length) {
-        console.log("Sync API is up to date.");
         return;
     }
     console.log("Formatting...");

@@ -15,7 +15,7 @@ import (
 
 type autoImportBuilderFS struct {
 	snapshotFSBuilder *snapshotFSBuilder
-	untrackedFiles    collections.SyncMap[tspath.Path, FileHandle]
+	untrackedFiles    collections.SyncMap[tspath.PathKey, FileHandle]
 }
 
 var _ FileSource = (*autoImportBuilderFS)(nil)
@@ -26,13 +26,13 @@ func (a *autoImportBuilderFS) FS() vfs.FS {
 }
 
 // GetFile implements FileSource.
-func (a *autoImportBuilderFS) GetFile(fileName string) FileHandle {
-	path := a.snapshotFSBuilder.toPath(fileName)
+func (a *autoImportBuilderFS) GetFile(fileName tspath.RootedFilePath) FileHandle {
+	path := a.snapshotFSBuilder.caseSensitivity.PathKey(tspath.RootedPath(fileName))
 	return a.GetFileByPath(fileName, path)
 }
 
 // GetFileByPath implements FileSource.
-func (a *autoImportBuilderFS) GetFileByPath(fileName string, path tspath.Path) FileHandle {
+func (a *autoImportBuilderFS) GetFileByPath(fileName tspath.RootedFilePath, path tspath.PathKey) FileHandle {
 	// We want to avoid long-term caching of files referenced only by auto-imports, so we
 	// override GetFileByPath to avoid collecting more files into the snapshotFSBuilder's
 	// cacheFiles. (Note the reason we can't just use the finalized SnapshotFS is that changed
@@ -49,12 +49,12 @@ func (a *autoImportBuilderFS) GetFileByPath(fileName string, path tspath.Path) F
 	return fh
 }
 
-func (a *autoImportBuilderFS) GetAccessibleEntries(path string) vfs.Entries {
+func (a *autoImportBuilderFS) GetAccessibleEntries(path tspath.RootedDirectoryPath) vfs.Entries {
 	return a.snapshotFSBuilder.GetAccessibleEntries(path)
 }
 
 // FileExists implements FileSource.
-func (a *autoImportBuilderFS) FileExists(fileName string, path tspath.Path) bool {
+func (a *autoImportBuilderFS) FileExists(fileName tspath.RootedFilePath, path tspath.PathKey) bool {
 	return a.snapshotFSBuilder.FileExists(fileName, path)
 }
 
@@ -62,7 +62,6 @@ type autoImportRegistryCloneHost struct {
 	projectCollection *ProjectCollection
 	parseCache        *ParseCache
 	fs                *sourceFS
-	currentDirectory  string
 
 	filesMu sync.Mutex
 	files   []ParseCacheKey
@@ -74,14 +73,11 @@ func newAutoImportRegistryCloneHost(
 	projectCollection *ProjectCollection,
 	parseCache *ParseCache,
 	snapshotFSBuilder *snapshotFSBuilder,
-	currentDirectory string,
-	toPath func(fileName string) tspath.Path,
 ) *autoImportRegistryCloneHost {
 	return &autoImportRegistryCloneHost{
 		projectCollection: projectCollection,
 		parseCache:        parseCache,
-		fs:                newSourceFS(false, &autoImportBuilderFS{snapshotFSBuilder: snapshotFSBuilder}, toPath),
-		currentDirectory:  currentDirectory,
+		fs:                newSourceFS(false, &autoImportBuilderFS{snapshotFSBuilder: snapshotFSBuilder}),
 	}
 }
 
@@ -90,13 +86,8 @@ func (a *autoImportRegistryCloneHost) FS() vfs.FS {
 	return a.fs
 }
 
-// GetCurrentDirectory implements autoimport.RegistryCloneHost.
-func (a *autoImportRegistryCloneHost) GetCurrentDirectory() string {
-	return a.currentDirectory
-}
-
 // GetDefaultProject implements autoimport.RegistryCloneHost.
-func (a *autoImportRegistryCloneHost) GetDefaultProject(path tspath.Path) (autoimport.ProjectID, *compiler.Program) {
+func (a *autoImportRegistryCloneHost) GetDefaultProject(path tspath.PathKey) (autoimport.ProjectID, *compiler.Program) {
 	project := a.projectCollection.GetDefaultProject(path)
 	if project == nil {
 		return nil, nil
@@ -105,21 +96,22 @@ func (a *autoImportRegistryCloneHost) GetDefaultProject(path tspath.Path) (autoi
 }
 
 // GetPackageJson implements autoimport.RegistryCloneHost.
-func (a *autoImportRegistryCloneHost) GetPackageJson(fileName string) *packagejson.InfoCacheEntry {
+func (a *autoImportRegistryCloneHost) GetPackageJson(fileName tspath.RootedFilePath) *packagejson.InfoCacheEntry {
 	// !!! ref-counted shared cache
 	fh := a.fs.GetFile(fileName)
-	packageDirectory := tspath.GetDirectoryPath(fileName)
+	packageDirectory := fileName.Directory()
+	cachePackageDirectory := packagejson.NewPackageDirectory(packageDirectory, a.fs.CaseSensitivity())
 	if fh == nil {
 		return &packagejson.InfoCacheEntry{
 			DirectoryExists:  a.fs.DirectoryExists(packageDirectory),
-			PackageDirectory: packageDirectory,
+			PackageDirectory: cachePackageDirectory,
 		}
 	}
 	fields, err := packagejson.Parse([]byte(fh.Content()))
 	if err != nil {
 		return &packagejson.InfoCacheEntry{
 			DirectoryExists:  true,
-			PackageDirectory: tspath.GetDirectoryPath(fileName),
+			PackageDirectory: cachePackageDirectory,
 			Contents: &packagejson.PackageJson{
 				Parseable: false,
 			},
@@ -127,7 +119,7 @@ func (a *autoImportRegistryCloneHost) GetPackageJson(fileName string) *packagejs
 	}
 	return &packagejson.InfoCacheEntry{
 		DirectoryExists:  true,
-		PackageDirectory: tspath.GetDirectoryPath(fileName),
+		PackageDirectory: cachePackageDirectory,
 		Contents: &packagejson.PackageJson{
 			Fields:    fields,
 			Parseable: true,
@@ -149,14 +141,14 @@ func (a *autoImportRegistryCloneHost) GetProgramForProject(projectID autoimport.
 }
 
 // GetSourceFile implements autoimport.RegistryCloneHost.
-func (a *autoImportRegistryCloneHost) GetSourceFile(fileName string, path tspath.Path) *ast.SourceFile {
+func (a *autoImportRegistryCloneHost) GetSourceFile(fileName tspath.RootedFilePath, path tspath.PathKey) *ast.SourceFile {
 	fh := a.fs.GetFile(fileName)
 	if fh == nil {
 		return nil
 	}
 	opts := ast.SourceFileParseOptions{
-		FileName: fileName,
-		Path:     path,
+		FileName: fh.FileName(),
+		PathKey:  path,
 	}
 	key := NewParseCacheKey(opts, fh.Hash(), fh.Kind())
 	result := a.parseCache.Acquire(key, fh)

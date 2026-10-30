@@ -1,16 +1,19 @@
 package api
 
 import (
+	"cmp"
 	"context"
 	"encoding/base64"
 	"errors"
 	"fmt"
+	"io"
 	"runtime/debug"
 	"slices"
 	"strconv"
 	"strings"
 	"sync"
 	"sync/atomic"
+	"time"
 
 	"github.com/microsoft/TypeScript/tsc/internal/api/encoder"
 	"github.com/microsoft/TypeScript/tsc/internal/api/requestfilesystem"
@@ -20,7 +23,10 @@ import (
 	"github.com/microsoft/TypeScript/tsc/internal/collections"
 	"github.com/microsoft/TypeScript/tsc/internal/compiler"
 	"github.com/microsoft/TypeScript/tsc/internal/core"
+	compilerdebug "github.com/microsoft/TypeScript/tsc/internal/debug"
 	"github.com/microsoft/TypeScript/tsc/internal/diagnostics"
+	"github.com/microsoft/TypeScript/tsc/internal/execute/build"
+	"github.com/microsoft/TypeScript/tsc/internal/execute/tsc"
 	"github.com/microsoft/TypeScript/tsc/internal/format"
 	"github.com/microsoft/TypeScript/tsc/internal/ipc"
 	"github.com/microsoft/TypeScript/tsc/internal/jsnum"
@@ -31,7 +37,6 @@ import (
 	"github.com/microsoft/TypeScript/tsc/internal/lsp/lsproto"
 	"github.com/microsoft/TypeScript/tsc/internal/module"
 	"github.com/microsoft/TypeScript/tsc/internal/nodebuilder"
-	"github.com/microsoft/TypeScript/tsc/internal/parser"
 	"github.com/microsoft/TypeScript/tsc/internal/pprof"
 	"github.com/microsoft/TypeScript/tsc/internal/printer"
 	"github.com/microsoft/TypeScript/tsc/internal/project"
@@ -39,21 +44,69 @@ import (
 	"github.com/microsoft/TypeScript/tsc/internal/tsoptions"
 	"github.com/microsoft/TypeScript/tsc/internal/tspath"
 	"github.com/microsoft/TypeScript/tsc/internal/vfs"
+	"github.com/zeebo/xxh3"
 )
 
-var sessionIDCounter atomic.Uint64
+var (
+	sessionIDCounter         atomic.Uint64
+	sourceFileSymbolIndexKey = ast.NewSourceFileDataKey[map[SymbolID]*ast.Symbol]()
+)
+
+func getSourceFileSymbolIndex(sourceFile *ast.SourceFile) map[SymbolID]*ast.Symbol {
+	return sourceFile.GetOrComputeData(sourceFileSymbolIndexKey, func(file *ast.SourceFile) map[SymbolID]*ast.Symbol {
+		index := make(map[SymbolID]*ast.Symbol, file.SymbolCount)
+		var addSymbol func(*ast.Symbol)
+		addSymbol = func(symbol *ast.Symbol) {
+			if symbol == nil || symbol.Flags()&ast.SymbolFlagsTransient != 0 {
+				return
+			}
+			compilerdebug.Assert(ast.GetSourceFileOfSymbol(symbol) == file)
+			id := SymbolHandle(symbol)
+			if existing := index[id]; existing != nil {
+				compilerdebug.Assert(existing == symbol)
+				return
+			}
+			index[id] = symbol
+			addSymbol(symbol.Parent())
+			addSymbol(symbol.ExportSymbol())
+			for _, table := range []ast.SymbolTable{symbol.Members(), symbol.Exports()} {
+				for _, child := range table.All() {
+					addSymbol(child)
+				}
+			}
+		}
+		for _, node := range encoder.GetNodeIndexTable(file).Nodes {
+			if node == nil {
+				continue
+			}
+			addSymbol(node.Symbol())
+			addSymbol(node.LocalSymbol())
+			for _, symbol := range node.Locals().All() {
+				addSymbol(symbol)
+			}
+		}
+		for _, symbol := range file.GlobalExports.All() {
+			addSymbol(symbol)
+		}
+		for _, module := range file.PatternAmbientModules {
+			addSymbol(module.Symbol)
+		}
+		return index
+	})
+}
 
 // snapshotData holds the per-snapshot state including the snapshot itself
 // and symbol/type registries scoped to this snapshot.
 // Multiple clients may hold references to the same snapshot via ref counting;
 // the registries are cleaned up when refCount reaches zero.
 type snapshotData struct {
+	handle     SnapshotID
 	snapshot   *project.Snapshot
 	fileSystem vfs.FS
 	refCount   int
 
-	openProjects collections.Set[tspath.Path]
-	openFiles    collections.Set[tspath.Path]
+	openProjects collections.Set[tspath.PathKey]
+	openFiles    collections.Set[tspath.PathKey]
 
 	// Symbol IDs come from ast.GetSymbolId, a global atomic counter, so the same
 	// *ast.Symbol pointer always has the same unique ID across all projects in the
@@ -68,10 +121,17 @@ type snapshotData struct {
 	// a project context (e.g. member/export ordering, node handle resolution) but don't
 	// receive one from the caller default to this canonical project. First-writer wins so
 	// the choice is stable. Guarded by symbolRegistryMu.
-	symbolCanonicalProjects map[SymbolID]project.ID
+	symbolCanonicalProjects map[SymbolID]project.Handle
 
-	projectRegistries   map[project.ID]*projectRegistryData
+	projectRegistries   map[project.Handle]*projectRegistryData
 	projectRegistriesMu sync.RWMutex
+}
+
+type moduleResolverRegistration struct {
+	id                        ModuleResolverID
+	compilerOptions           *core.CompilerOptions
+	resolutions               *module.StaticResolutions
+	resolveModuleNameCallback string
 }
 
 // projectRegistryData holds per-project type and signature registries.
@@ -87,12 +147,11 @@ type projectRegistryData struct {
 }
 
 // getProgram looks up a program from a project handle within this snapshot.
-func (sd *snapshotData) getProgram(projectHandle project.ID) (*compiler.Program, error) {
+func (sd *snapshotData) getProgram(projectHandle project.Handle) (*compiler.Program, error) {
 	proj, err := sd.getProject(projectHandle)
 	if err != nil {
 		return nil, err
 	}
-
 	program := proj.GetProgram()
 	if program == nil {
 		return nil, fmt.Errorf("%w: project has no program", ErrClientError)
@@ -102,27 +161,23 @@ func (sd *snapshotData) getProgram(projectHandle project.ID) (*compiler.Program,
 }
 
 // getProject looks up a project from a project handle within this snapshot.
-func (sd *snapshotData) getProject(projectHandle project.ID) (*project.Project, error) {
-	proj := sd.snapshot.ProjectCollection.GetProject(projectHandle)
+func (sd *snapshotData) getProject(projectHandle project.Handle) (*project.Project, error) {
+	proj := sd.snapshot.ProjectCollection.GetProjectByHandle(projectHandle)
 	if proj == nil {
-		return nil, fmt.Errorf("%w: project %s not found", ErrClientError, projectHandle)
+		return nil, fmt.Errorf("%w: project %d not found", ErrClientError, projectHandle)
 	}
 	return proj, nil
 }
 
-// nodeHandleFrom creates an index-based node handle (index.kind.path), building a node index table
+// nodeHandleFrom creates an exact-AST response handle (index.kind.#fileID.path), building a node index table
 // for the file on-demand if needed.
 func (sd *snapshotData) nodeHandleFrom(node *ast.Node) NodeHandle {
-	sourceFile := ast.GetSourceFileOfNode(node)
-	path := sourceFile.Path()
-	table := encoder.GetNodeIndexTable(sourceFile)
-	idx := table.GetIndex(node)
-	return NodeHandle(fmt.Sprintf("%d.%d.%s", idx, node.Kind, path))
+	return nodeHandleFrom(node)
 }
 
 // getOrCreateProjectRegistry returns the registry for the given project, creating it if needed.
-func (sd *snapshotData) getOrCreateProjectRegistry(projectID project.ID) *projectRegistryData {
-	if projectID == "" {
+func (sd *snapshotData) getOrCreateProjectRegistry(projectID project.Handle) *projectRegistryData {
+	if projectID == 0 {
 		panic("getOrCreateProjectRegistry: empty project ID")
 	}
 	// Fast path: registry already exists — read lock only.
@@ -144,44 +199,103 @@ func (sd *snapshotData) getOrCreateProjectRegistry(projectID project.ID) *projec
 	return sd.projectRegistries[projectID]
 }
 
-// newSymbolResponse registers a symbol in the snapshot's registry and returns the response.
-// canonicalProject is the project the symbol was observed in and must be non-empty; it is recorded
-// as the symbol's canonical project (first writer wins) and returned to the client so it can default
-// project-scoped follow-up lookups (members/exports, node resolution) to it.
-func (sd *snapshotData) newSymbolResponse(symbol *ast.Symbol, canonicalProject project.ID) *SymbolResponse {
+// symbolOwnerFile returns the source file that owns a symbol's client identity, or nil when the
+// symbol is owned by its snapshot. Content-mapped outputs live in a cache that cannot yet be
+// addressed by file key, so their binder symbols remain snapshot-owned.
+func symbolOwnerFile(symbol *ast.Symbol) *ast.SourceFile {
+	if symbol.Flags()&ast.SymbolFlagsTransient != 0 {
+		return nil
+	}
+	file := ast.GetSourceFileOfSymbol(symbol)
+	if file.IsContentMapped() {
+		return nil
+	}
+	return file
+}
+
+// newSymbolResponse classifies a symbol's ownership before exposing its identity to a client.
+// Only snapshot-owned symbols are registered in the snapshot; file-owned symbols are resolved
+// through their source file.
+func (sd *snapshotData) newSymbolResponse(symbol *ast.Symbol, canonicalProject project.Handle) *SymbolResponse {
 	if symbol == nil {
 		return nil
 	}
-
-	id, project := sd.registerSymbol(symbol, canonicalProject)
-	resp := &SymbolResponse{
-		Id:         id,
-		Project:    project,
-		Name:       ast.EscapeSymbolName(symbol.Name),
-		Flags:      uint32(symbol.Flags),
-		CheckFlags: uint32(symbol.CheckFlags),
+	if symbolOwnerFile(symbol) != nil {
+		return newFileSymbolResponse(symbol)
 	}
+	id, project := sd.registerSymbol(symbol, canonicalProject)
+	reference := SymbolReference{
+		Id:       id,
+		Kind:     SymbolOwnerKindSnapshot,
+		Snapshot: sd.handle,
+		Project:  project,
+	}
+	return buildSymbolResponse(symbol, reference, nil)
+}
 
-	if len(symbol.Declarations) > 0 {
-		resp.Declarations = make([]NodeHandle, len(symbol.Declarations))
-		for i, decl := range symbol.Declarations {
-			resp.Declarations[i] = sd.nodeHandleFrom(decl)
+func newFileSymbolResponse(symbol *ast.Symbol) *SymbolResponse {
+	file := symbolOwnerFile(symbol)
+	compilerdebug.Assert(file != nil, "Expected a file-owned symbol")
+	descriptor := newSourceFileDescriptor(file)
+	reference := SymbolReference{
+		Id:   SymbolHandle(symbol),
+		Kind: SymbolOwnerKindFile,
+		File: &descriptor,
+	}
+	return buildSymbolResponse(symbol, reference, file)
+}
+
+func buildSymbolResponse(symbol *ast.Symbol, reference SymbolReference, owner *ast.SourceFile) *SymbolResponse {
+	resp := &SymbolResponse{
+		Reference:    reference,
+		Name:         ast.EscapeSymbolName(symbol.Name()),
+		Flags:        uint32(symbol.Flags()),
+		CheckFlags:   uint32(symbol.CheckFlags()),
+		Parent:       newSymbolReference(symbol.Parent()),
+		ExportSymbol: newSymbolReference(symbol.ExportSymbol()),
+	}
+	if owner != nil {
+		// A client resolves a file-owned symbol's relationships through its own source file.
+		compilerdebug.Assert(symbol.Parent() == nil || symbolOwnerFile(symbol.Parent()) == owner, "File-owned symbol parent belongs to another owner")
+		compilerdebug.Assert(symbol.ExportSymbol() == nil || symbolOwnerFile(symbol.ExportSymbol()) == owner, "File-owned export symbol belongs to another owner")
+	}
+	if len(symbol.Declarations()) > 0 {
+		resp.Declarations = make([]NodeHandle, len(symbol.Declarations()))
+		for i, decl := range symbol.Declarations() {
+			resp.Declarations[i] = symbolNodeHandleFrom(decl, owner)
 		}
 	}
-
-	if symbol.ValueDeclaration != nil {
-		resp.ValueDeclaration = sd.nodeHandleFrom(symbol.ValueDeclaration)
+	if symbol.ValueDeclaration() != nil {
+		resp.ValueDeclaration = symbolNodeHandleFrom(symbol.ValueDeclaration(), owner)
 	}
-
-	if symbol.Parent != nil {
-		resp.Parent = SymbolHandle(symbol.Parent)
-	}
-
-	if symbol.ExportSymbol != nil {
-		resp.ExportSymbol = SymbolHandle(symbol.ExportSymbol)
-	}
-
 	return resp
+}
+
+// newSymbolReference creates a compact reference to a symbol without registering it. Clients resolve
+// it from their caches or fetch the full response through the corresponding property method.
+func newSymbolReference(symbol *ast.Symbol) *CompactSymbolReference {
+	if symbol == nil {
+		return nil
+	}
+	reference := &CompactSymbolReference{Id: SymbolHandle(symbol)}
+	if file := symbolOwnerFile(symbol); file != nil {
+		reference.File = strconv.FormatUint(sourceFileNodeID(file), 10)
+	}
+	return reference
+}
+
+func symbolNodeHandleFrom(node *ast.Node, owner *ast.SourceFile) NodeHandle {
+	if owner != nil {
+		compilerdebug.Assert(ast.GetSourceFileOfNode(node) == owner, "File-owned symbol declaration belongs to another source file")
+	}
+	return nodeHandleFrom(node)
+}
+
+func nodeHandleFrom(node *ast.Node) NodeHandle {
+	sourceFile := ast.GetSourceFileOfNode(node)
+	table := encoder.GetNodeIndexTable(sourceFile)
+	idx := table.GetIndex(node)
+	return NodeHandle(fmt.Sprintf("%d.%d.#%d.%s", idx, node.Kind, sourceFileNodeID(sourceFile), sourceFile.PathKey()))
 }
 
 // registerSymbol registers a symbol in the snapshot's registry and returns its handle along with
@@ -189,11 +303,11 @@ func (sd *snapshotData) newSymbolResponse(symbol *ast.Symbol, canonicalProject p
 // (first writer wins for stability) and is always non-empty: every symbol handed to a client must
 // carry a project so that project-scoped follow-up lookups (members/exports, parent, node
 // resolution) have a default context. Callers must supply a non-empty project.
-func (sd *snapshotData) registerSymbol(symbol *ast.Symbol, canonicalProject project.ID) (SymbolID, project.ID) {
+func (sd *snapshotData) registerSymbol(symbol *ast.Symbol, canonicalProject project.Handle) (SymbolID, project.Handle) {
 	if symbol == nil {
-		return 0, project.ID("")
+		return 0, project.Handle(0)
 	}
-	if canonicalProject == "" {
+	if canonicalProject == 0 {
 		panic("registerSymbol requires a non-empty canonical project")
 	}
 	id := SymbolHandle(symbol)
@@ -216,11 +330,15 @@ func (sd *snapshotData) registerSymbol(symbol *ast.Symbol, canonicalProject proj
 }
 
 // newTypeResponse registers a type in the project's registry and returns the response.
-func (sd *snapshotData) newTypeResponse(projectID project.ID, t *checker.Type, c *checker.Checker) *TypeResponse {
+func (sd *snapshotData) newTypeResponse(projectID project.Handle, t *checker.Type, c *checker.Checker) *TypeResponse {
 	if t == nil {
 		return nil
 	}
 	resp := newTypeResponse(t, sd.registerType(projectID, t))
+	resp.Symbol = newSymbolReference(t.Symbol())
+	if t.Alias() != nil {
+		resp.AliasSymbol = newSymbolReference(t.Alias().Symbol())
+	}
 	if t.ObjectFlags()&checker.ObjectFlagsMapped != 0 {
 		mapped := t.AsMappedType()
 		mapped.ResolveComponents(c, t)
@@ -243,7 +361,7 @@ func (sd *snapshotData) newTypeResponse(projectID project.ID, t *checker.Type, c
 	return resp
 }
 
-func (sd *snapshotData) registerType(projectID project.ID, t *checker.Type) TypeID {
+func (sd *snapshotData) registerType(projectID project.Handle, t *checker.Type) TypeID {
 	if t == nil {
 		return 0
 	}
@@ -263,7 +381,7 @@ func (sd *snapshotData) registerType(projectID project.ID, t *checker.Type) Type
 	return id
 }
 
-// resolveSymbolHandle resolves a symbol handle within the snapshot's registry.
+// resolveSymbolHandle resolves a snapshot-owned symbol handle within the snapshot's registry.
 func (sd *snapshotData) resolveSymbolHandle(handle SymbolID) (*ast.Symbol, error) {
 	if handle == 0 {
 		return nil, fmt.Errorf("%w: empty symbol handle", ErrClientError)
@@ -280,12 +398,49 @@ func (sd *snapshotData) resolveSymbolHandle(handle SymbolID) (*ast.Symbol, error
 	return symbol, nil
 }
 
+// resolveSymbolReference resolves a symbol without a semantic context. A file reference holds the
+// exact cached AST until the returned release function is called; a snapshot reference also returns
+// the snapshot and canonical project that own the symbol.
+func (s *Session) resolveSymbolReference(ref SymbolReference) (*ast.Symbol, *snapshotData, project.Handle, func(), error) {
+	switch ref.Kind {
+	case SymbolOwnerKindFile:
+		if ref.File == nil || ref.Snapshot != 0 || ref.Project != 0 {
+			return nil, nil, 0, nil, fmt.Errorf("%w: invalid file symbol reference", ErrClientError)
+		}
+		lease, err := s.acquireCachedSourceFile(*ref.File)
+		if err != nil {
+			return nil, nil, 0, nil, err
+		}
+		symbol := getSourceFileSymbolIndex(lease.SourceFile())[ref.Id]
+		if symbol == nil {
+			lease.Release()
+			return nil, nil, 0, nil, fmt.Errorf("%w: symbol %d not found in source file", ErrClientError, ref.Id)
+		}
+		return symbol, nil, 0, lease.Release, nil
+	case SymbolOwnerKindSnapshot:
+		if ref.File != nil || ref.Snapshot == 0 || ref.Project == 0 {
+			return nil, nil, 0, nil, fmt.Errorf("%w: invalid snapshot symbol reference", ErrClientError)
+		}
+		sd, err := s.getSnapshotData(ref.Snapshot)
+		if err != nil {
+			return nil, nil, 0, nil, err
+		}
+		symbol, err := sd.resolveSymbolHandle(ref.Id)
+		if err != nil {
+			return nil, nil, 0, nil, err
+		}
+		return symbol, sd, ref.Project, func() {}, nil
+	default:
+		return nil, nil, 0, nil, fmt.Errorf("%w: invalid symbol reference kind %d", ErrClientError, ref.Kind)
+	}
+}
+
 // resolveTypeHandle resolves a type handle within the project's registry.
-func (sd *snapshotData) resolveTypeHandle(projectID project.ID, handle TypeID) (*checker.Type, error) {
+func (sd *snapshotData) resolveTypeHandle(projectID project.Handle, handle TypeID) (*checker.Type, error) {
 	if handle == 0 {
 		return nil, fmt.Errorf("%w: empty type handle", ErrClientError)
 	}
-	if projectID == "" {
+	if projectID == 0 {
 		return nil, fmt.Errorf("%w: empty project ID for type handle %d", ErrClientError, handle)
 	}
 
@@ -294,7 +449,7 @@ func (sd *snapshotData) resolveTypeHandle(projectID project.ID, handle TypeID) (
 	sd.projectRegistriesMu.RUnlock()
 
 	if reg == nil {
-		return nil, fmt.Errorf("%w: type handle %d not found (no registry for project %s)", ErrClientError, handle, projectID)
+		return nil, fmt.Errorf("%w: type handle %d not found (no registry for project %d)", ErrClientError, handle, projectID)
 	}
 
 	reg.typeRegistryMu.RLock()
@@ -309,11 +464,11 @@ func (sd *snapshotData) resolveTypeHandle(projectID project.ID, handle TypeID) (
 }
 
 // resolveSignatureHandle resolves a signature handle within the project's registry.
-func (sd *snapshotData) resolveSignatureHandle(projectID project.ID, handle SignatureID) (*checker.Signature, error) {
+func (sd *snapshotData) resolveSignatureHandle(projectID project.Handle, handle SignatureID) (*checker.Signature, error) {
 	if handle == 0 {
 		return nil, fmt.Errorf("%w: empty signature handle", ErrClientError)
 	}
-	if projectID == "" {
+	if projectID == 0 {
 		return nil, fmt.Errorf("%w: empty project ID for signature handle %d", ErrClientError, handle)
 	}
 
@@ -322,7 +477,7 @@ func (sd *snapshotData) resolveSignatureHandle(projectID project.ID, handle Sign
 	sd.projectRegistriesMu.RUnlock()
 
 	if reg == nil {
-		return nil, fmt.Errorf("%w: signature handle %d not found (no registry for project %s)", ErrClientError, handle, projectID)
+		return nil, fmt.Errorf("%w: signature handle %d not found (no registry for project %d)", ErrClientError, handle, projectID)
 	}
 
 	reg.signatureRegistryMu.RLock()
@@ -337,7 +492,7 @@ func (sd *snapshotData) resolveSignatureHandle(projectID project.ID, handle Sign
 }
 
 // newSignatureResponse registers a signature in the project's registry and returns the response.
-func (sd *snapshotData) newSignatureResponse(projectID project.ID, sig *checker.Signature) *SignatureResponse {
+func (sd *snapshotData) newSignatureResponse(projectID project.Handle, sig *checker.Signature) *SignatureResponse {
 	if sig == nil {
 		return nil
 	}
@@ -355,11 +510,14 @@ func (sd *snapshotData) newSignatureResponse(projectID project.ID, sig *checker.
 	}
 
 	if len(sig.Parameters()) > 0 {
-		resp.Parameters = symbolHandles(sig.Parameters())
+		resp.Parameters = make([]CompactSymbolReference, len(sig.Parameters()))
+		for i, parameter := range sig.Parameters() {
+			resp.Parameters[i] = *newSymbolReference(parameter)
+		}
 	}
 
 	if sig.ThisParameter() != nil {
-		resp.ThisParameter = SymbolHandle(sig.ThisParameter())
+		resp.ThisParameter = newSymbolReference(sig.ThisParameter())
 	}
 
 	if sig.Target() != nil {
@@ -369,7 +527,7 @@ func (sd *snapshotData) newSignatureResponse(projectID project.ID, sig *checker.
 	return resp
 }
 
-func (sd *snapshotData) registerSignature(projectID project.ID, sig *checker.Signature) SignatureID {
+func (sd *snapshotData) registerSignature(projectID project.Handle, sig *checker.Signature) SignatureID {
 	if sig == nil {
 		return 0
 	}
@@ -403,7 +561,7 @@ type Session struct {
 
 	closeOnce sync.Once
 
-	// This is set to true when using MessagePackProtocol.
+	// This is set to true when using TupleProtocol.
 	useBinaryResponses      bool
 	batchResponsePages      sync.Map
 	nextBatchResponsePageID atomic.Uint64
@@ -423,11 +581,25 @@ type Session struct {
 
 	// openProjects, openFiles, and createdPrograms are the canonical LSP-state resources
 	// owned by this API client. Guarded by languageServerUpdateMu.
-	openProjects    collections.Set[tspath.Path]
-	openFiles       collections.Set[tspath.Path]
+	openProjects    collections.Set[tspath.PathKey]
+	openFiles       collections.Set[tspath.PathKey]
 	createdPrograms collections.Set[project.SyntheticProjectID]
 
 	languageServerUpdateMu sync.Mutex
+
+	buildOrchestrators map[BuildOrchestratorID]*build.Orchestrator
+	buildMu            sync.Mutex
+
+	nextModuleResolverID           atomic.Uint64
+	moduleResolvers                map[ModuleResolverID]*moduleResolverRegistration
+	moduleResolversMu              sync.RWMutex
+	nextProgramResolutionContextID atomic.Uint64
+	programResolutionContexts      map[uint64]*programResolutionContext
+	programResolutionContextsMu    sync.RWMutex
+	sourceFileLeases               map[SourceFileLeaseID]*project.SourceFileLease
+	sourceFileLeasesMu             sync.Mutex
+	nextSourceFileLeaseID          atomic.Uint64
+	conn                           ipc.Conn
 
 	cpuProfiler pprof.CPUProfiler
 }
@@ -470,10 +642,14 @@ func newSession(snapshotHost *project.SnapshotHost, withLocale func(context.Cont
 		withLocale = func(ctx context.Context) context.Context { return ctx }
 	}
 	s := &Session{
-		id:           formatSessionID(id),
-		snapshotHost: snapshotHost,
-		withLocale:   withLocale,
-		snapshots:    make(map[SnapshotID]*snapshotData),
+		id:                        formatSessionID(id),
+		snapshotHost:              snapshotHost,
+		withLocale:                withLocale,
+		snapshots:                 make(map[SnapshotID]*snapshotData),
+		buildOrchestrators:        make(map[BuildOrchestratorID]*build.Orchestrator),
+		moduleResolvers:           make(map[ModuleResolverID]*moduleResolverRegistration),
+		programResolutionContexts: make(map[uint64]*programResolutionContext),
+		sourceFileLeases:          make(map[SourceFileLeaseID]*project.SourceFileLease),
 	}
 	if options != nil {
 		s.useBinaryResponses = options.UseBinaryResponses
@@ -486,19 +662,34 @@ func (s *Session) ID() string {
 	return s.id
 }
 
-func (s *Session) currentDirectory() string {
+func (s *Session) SetConnection(conn ipc.Conn) {
+	s.conn = conn
+}
+
+func (s *Session) GetCurrentDirectory() tspath.RootedDirectoryPath {
 	return s.snapshotHost.GetCurrentDirectory()
 }
 
-func (s *Session) fileSystem() vfs.FS {
+func (s *Session) currentDirectory() tspath.RootedDirectoryPath {
+	return s.GetCurrentDirectory()
+}
+
+func (s *Session) FS() vfs.FS {
 	if s.projectSession != nil {
 		return s.projectSession.FS()
 	}
 	return s.snapshotHost.FS()
 }
 
-func (s *Session) useCaseSensitiveFileNames() bool {
-	return s.snapshotHost.FS().UseCaseSensitiveFileNames()
+func (s *Session) DefaultLibraryPath() tspath.RootedDirectoryPath {
+	if s.projectSession != nil {
+		return s.projectSession.DefaultLibraryPath()
+	}
+	return s.snapshotHost.DefaultLibraryPath()
+}
+
+func (s *Session) caseSensitivity() tspath.CaseSensitivity {
+	return s.snapshotHost.FS().CaseSensitivity()
 }
 
 // snapshotHandle creates a snapshot handle from a snapshot's ID.
@@ -552,10 +743,11 @@ func (s *Session) releaseSnapshot(handle SnapshotID) error {
 // checkerSetup holds the common context needed by handlers that require a type checker.
 type checkerSetup struct {
 	sd        *snapshotData
+	snapshot  SnapshotID
 	program   *compiler.Program
 	checker   *checker.Checker
 	done      func()
-	projectID project.ID
+	projectID project.Handle
 }
 
 func (setup checkerSetup) newSymbolResponse(sym *ast.Symbol) *SymbolResponse {
@@ -585,8 +777,28 @@ func (setup checkerSetup) resolveTypeHandle(id TypeID) (*checker.Type, error) {
 	return setup.sd.resolveTypeHandle(setup.projectID, id)
 }
 
-func (setup checkerSetup) resolveSymbolHandle(id SymbolID) (*ast.Symbol, error) {
-	return setup.sd.resolveSymbolHandle(id)
+func (setup checkerSetup) resolveSymbolHandle(ref SymbolReference) (*ast.Symbol, error) {
+	if ref.Kind == SymbolOwnerKindSnapshot {
+		if ref.Snapshot != setup.snapshot || ref.File != nil {
+			return nil, fmt.Errorf("%w: snapshot symbol reference does not match the requested checker", ErrClientError)
+		}
+		return setup.sd.resolveSymbolHandle(ref.Id)
+	} else if ref.Kind == SymbolOwnerKindFile {
+		if ref.File == nil || ref.Snapshot != 0 || ref.Project != 0 {
+			return nil, fmt.Errorf("%w: invalid file symbol reference", ErrClientError)
+		}
+		sourceFile := setup.program.GetSourceFileByPath(ref.File.Path)
+		if sourceFile == nil || newSourceFileDescriptor(sourceFile) != *ref.File {
+			return nil, fmt.Errorf("%w: source file is not part of the requested program", ErrClientError)
+		}
+		symbol := getSourceFileSymbolIndex(sourceFile)[ref.Id]
+		if symbol == nil {
+			return nil, fmt.Errorf("%w: symbol handle %d not found in source file", ErrClientError, ref.Id)
+		}
+		return symbol, nil
+	} else {
+		return nil, fmt.Errorf("%w: invalid symbol reference kind %d", ErrClientError, ref.Kind)
+	}
 }
 
 func (setup checkerSetup) resolveSignatureHandle(id SignatureID) (*checker.Signature, error) {
@@ -600,7 +812,7 @@ func (setup checkerSetup) resolveLocation(handle NodeHandle, file *DocumentIdent
 		return setup.sd.resolveNodeHandle(setup.program, handle)
 	}
 	if file != nil && position != nil {
-		sourceFile := setup.program.GetSourceFile(file.ToFileName())
+		sourceFile := setup.program.GetSourceFile(file.ToFileName(setup.program.BaseDirectory()))
 		if sourceFile == nil {
 			return nil, fmt.Errorf("%w: source file not found: %v", ErrClientError, *file)
 		}
@@ -611,7 +823,7 @@ func (setup checkerSetup) resolveLocation(handle NodeHandle, file *DocumentIdent
 
 // setupChecker resolves snapshot, program, and type checker for a project.
 // Callers must defer setup.done() to release the checker.
-func (s *Session) setupChecker(ctx context.Context, snapshot SnapshotID, projectHandle project.ID) (checkerSetup, error) {
+func (s *Session) setupChecker(ctx context.Context, snapshot SnapshotID, projectHandle project.Handle) (checkerSetup, error) {
 	sd, err := s.getSnapshotData(snapshot)
 	if err != nil {
 		return checkerSetup{}, err
@@ -625,6 +837,7 @@ func (s *Session) setupChecker(ctx context.Context, snapshot SnapshotID, project
 	c, done := program.GetTypeChecker(core.WithCheckerLifetime(ctx, core.CheckerLifetimeAPI))
 	return checkerSetup{
 		sd:        sd,
+		snapshot:  snapshot,
 		program:   program,
 		checker:   c,
 		done:      done,
@@ -643,10 +856,10 @@ func (s *Session) setupChecker(ctx context.Context, snapshot SnapshotID, project
 // are produced on the persistent API checker and stay resolvable. Only safe when the
 // LS operation acquires a checker exactly once; nested acquisitions (e.g. find-all-
 // references) would deadlock on the single-slot persistent checker.
-func (s *Session) setupLanguageService(snapshot *project.Snapshot, program *compiler.Program, projectHandle project.ID, activeFile string) (*ls.LanguageService, error) {
-	proj := snapshot.ProjectCollection.GetProject(projectHandle)
+func (s *Session) setupLanguageService(snapshot *project.Snapshot, program *compiler.Program, projectHandle project.Handle, activeFile string) (*ls.LanguageService, error) {
+	proj := snapshot.ProjectCollection.GetProjectByHandle(projectHandle)
 	if proj == nil {
-		return nil, fmt.Errorf("%w: project %s not found", ErrClientError, projectHandle)
+		return nil, fmt.Errorf("%w: project %d not found", ErrClientError, projectHandle)
 	}
 	return ls.NewLanguageService(proj.ID(), program, snapshot, activeFile), nil
 }
@@ -678,6 +891,14 @@ func (s *Session) HandleRequest(ctx context.Context, method string, params json.
 		return s.handleBatchRequests(ctx, parsed.(*BatchRequestsParams))
 	case string(MethodRelease):
 		return s.handleRelease(ctx, parsed.(*ReleaseParams))
+	case string(MethodReleaseSourceFile):
+		return s.handleReleaseSourceFile(parsed.(*ReleaseSourceFileParams))
+	case string(MethodRetainSourceFile):
+		return s.handleRetainSourceFile(parsed.(*RetainSourceFileParams))
+	case string(MethodGetCachedSourceFile):
+		return s.handleGetCachedSourceFile(parsed.(*GetCachedSourceFileParams))
+	case string(MethodGetSymbolOfDeclaration):
+		return s.handleGetSymbolOfDeclaration(parsed.(*GetSymbolOfDeclarationParams))
 	case string(MethodInitialize):
 		return s.handleInitialize(ctx)
 	case string(MethodCreateSnapshot):
@@ -686,6 +907,12 @@ func (s *Session) HandleRequest(ctx context.Context, method string, params json.
 		return s.handleUpdateSnapshot(ctx, parsed.(*UpdateSnapshotParams))
 	case string(MethodGetCurrentLanguageServerSnapshot):
 		return s.handleGetCurrentLanguageServerSnapshot(ctx, parsed.(*GetCurrentLanguageServerSnapshotParams))
+	case string(MethodCreateModuleResolver):
+		return s.handleCreateModuleResolver(parsed.(*CreateModuleResolverParams))
+	case string(MethodReleaseModuleResolver):
+		return s.handleReleaseModuleResolver(parsed.(*ReleaseModuleResolverParams))
+	case string(MethodResolveModuleName):
+		return s.handleResolveModuleName(ctx, parsed.(*ResolveModuleNameParams))
 	case string(MethodParseCommandLine):
 		return s.handleParseCommandLine(ctx, parsed.(*ParseCommandLineParams))
 	case string(MethodReadConfigFile):
@@ -694,6 +921,18 @@ func (s *Session) HandleRequest(ctx context.Context, method string, params json.
 		return s.handleParseJsonConfigFileContent(ctx, parsed.(*ParseJsonConfigFileContentParams))
 	case string(MethodParseConfigFile):
 		return s.handleParseConfigFile(ctx, parsed.(*ParseConfigFileParams))
+	case string(MethodCreateBuildOrchestrator):
+		return s.handleCreateBuildOrchestrator(ctx, parsed.(*CreateBuildOrchestratorParams))
+	case string(MethodDisposeBuildOrchestrator):
+		return s.handleDisposeBuildOrchestrator(ctx, parsed.(*DisposeBuildOrchestratorParams))
+	case string(MethodBuild):
+		return s.handleBuild(ctx, parsed.(*BuildParams))
+	case string(MethodBuildReferences):
+		return s.handleBuildReferences(ctx, parsed.(*BuildParams))
+	case string(MethodCleanBuild):
+		return s.handleCleanBuild(ctx, parsed.(*CleanBuildParams))
+	case string(MethodCleanReferences):
+		return s.handleCleanReferences(ctx, parsed.(*CleanBuildParams))
 	case string(MethodCreateSourceFile):
 		return s.handleCreateSourceFile(ctx, parsed.(*CreateSourceFileParams))
 	case string(MethodCreateSourceFileFromFile):
@@ -862,8 +1101,6 @@ func (s *Session) HandleRequest(ctx context.Context, method string, params json.
 		return s.handleTypeToString(ctx, parsed.(*TypeToTypeNodeParams))
 	case string(MethodPrintNode):
 		return s.handlePrintNode(ctx, parsed.(*PrintNodeParams))
-	case string(MethodFormatNodeForInsertion):
-		return s.handleFormatNodeForInsertion(ctx, parsed.(*FormatNodeForInsertionParams))
 	case string(MethodEmit):
 		return s.handleEmit(ctx, parsed.(*EmitParams))
 	case string(MethodEmitToString):
@@ -896,8 +1133,6 @@ func (s *Session) HandleRequest(ctx context.Context, method string, params json.
 		return s.handleGetTypeOfPropertyOfType(ctx, parsed.(*GetPropertyOfTypeParams))
 	case string(MethodGetIndexInfoOfType):
 		return s.handleGetIndexInfoOfType(ctx, parsed.(*GetIndexInfoOfTypeParams))
-	case string(MethodGetIndexTypeOfTypeByKind):
-		return s.handleGetIndexTypeOfTypeByKind(ctx, parsed.(*GetIndexInfoOfTypeParams))
 	case string(MethodGetIndexInfosOfType):
 		return s.handleGetIndexInfosOfType(ctx, parsed.(*CheckerTypeParams))
 	case string(MethodGetConstraintOfTypeParameter):
@@ -922,6 +1157,14 @@ func (s *Session) HandleRequest(ctx context.Context, method string, params json.
 		return s.handleGetImmediateAliasedSymbol(ctx, parsed.(*CheckerSymbolParams))
 	case string(MethodGetTargetSymbol):
 		return s.handleMethodGetTargetSymbol(ctx, parsed.(*CheckerSymbolParams))
+	case string(MethodGetMergedSymbol):
+		return s.handleGetMergedSymbol(ctx, parsed.(*CheckerSymbolParams))
+	case string(MethodGetSymbolOfNode):
+		return s.handleGetSymbolOfNode(ctx, parsed.(*CheckerNodeParams))
+	case string(MethodGetSymbolOfDeclarationForChecker):
+		return s.handleGetSymbolOfDeclarationForChecker(ctx, parsed.(*CheckerNodeParams))
+	case string(MethodGetParentOfSymbolForChecker):
+		return s.handleGetParentOfSymbolForChecker(ctx, parsed.(*CheckerSymbolParams))
 	case string(MethodGetExportSymbolOfSymbolForChecker):
 		return s.handleGetExportSymbolOfSymbolForChecker(ctx, parsed.(*CheckerSymbolParams))
 	case string(MethodGetFullyQualifiedName):
@@ -996,6 +1239,8 @@ func (s *Session) HandleRequest(ctx context.Context, method string, params json.
 		return s.handleGetSignatureUsages(ctx, parsed.(*GetSignatureUsagesParams))
 	case string(MethodGetCompletionsAtPosition):
 		return s.handleGetCompletionsAtPosition(ctx, parsed.(*GetCompletionsAtPositionParams))
+	case string(MethodFormatNodeForInsertion):
+		return s.handleFormatNodeForInsertion(ctx, parsed.(*FormatNodeForInsertionParams))
 	default:
 		return nil, fmt.Errorf("unknown method: %s", method)
 	}
@@ -1114,6 +1359,7 @@ func isSourceFileResponseMethod(method Method) bool {
 	case MethodCreateSourceFile,
 		MethodCreateSourceFileFromFile,
 		MethodGetSourceFile,
+		MethodGetCachedSourceFile,
 		MethodGetConfigSourceFile,
 		MethodTypeToTypeNode,
 		MethodSignatureToSignatureDeclaration:
@@ -1127,7 +1373,8 @@ func (s *Session) handleStartCPUProfile(_ context.Context, params *ProfileParams
 	if params == nil || params.Dir == "" {
 		return nil, fmt.Errorf("%w: dir is required", ErrClientError)
 	}
-	if err := s.cpuProfiler.StartCPUProfile(params.Dir); err != nil {
+	profileDirectory := tspath.ToRootedDirectoryPath(params.Dir, s.currentDirectory())
+	if err := s.cpuProfiler.StartCPUProfile(profileDirectory.AsString()); err != nil {
 		return nil, fmt.Errorf("%w: failed to start CPU profile: %w", ErrClientError, err)
 	}
 	return nil, nil
@@ -1138,18 +1385,19 @@ func (s *Session) handleStopCPUProfile(_ context.Context) (*ProfileResult, error
 	if err != nil {
 		return nil, fmt.Errorf("%w: failed to stop CPU profile: %w", ErrClientError, err)
 	}
-	return &ProfileResult{File: filePath}, nil
+	return &ProfileResult{File: tspath.ToRootedFilePath(filePath, s.currentDirectory())}, nil
 }
 
 func (s *Session) handleSaveHeapProfile(_ context.Context, params *ProfileParams) (*ProfileResult, error) {
 	if params == nil || params.Dir == "" {
 		return nil, fmt.Errorf("%w: dir is required", ErrClientError)
 	}
-	filePath, err := pprof.SaveHeapProfile(params.Dir)
+	profileDirectory := tspath.ToRootedDirectoryPath(params.Dir, s.currentDirectory())
+	filePath, err := pprof.SaveHeapProfile(profileDirectory.AsString())
 	if err != nil {
 		return nil, fmt.Errorf("%w: failed to save heap profile: %w", ErrClientError, err)
 	}
-	return &ProfileResult{File: filePath}, nil
+	return &ProfileResult{File: tspath.ToRootedFilePath(filePath, s.currentDirectory())}, nil
 }
 
 // HandleNotification implements Handler.
@@ -1160,29 +1408,33 @@ func (s *Session) HandleNotification(ctx context.Context, method string, params 
 
 func (s *Session) handleInitialize(ctx context.Context) (*InitializeResponse, error) {
 	return &InitializeResponse{
-		UseCaseSensitiveFileNames: s.useCaseSensitiveFileNames(),
-		CurrentDirectory:          s.currentDirectory(),
+		CaseSensitivity:  s.caseSensitivity(),
+		CurrentDirectory: s.currentDirectory(),
 	}, nil
 }
 
 // handleCreateSnapshot creates a new independent snapshot.
 func (s *Session) handleCreateSnapshot(ctx context.Context, params *CreateSnapshotParams) (*CreateSnapshotResponse, error) {
-	apiRequest, err := s.toAPISnapshotRequest(&params.SnapshotRequestChangesParams)
+	apiRequest, err := s.toAPISnapshotRequest(ctx, &params.SnapshotRequestChangesParams)
 	if err != nil {
 		return nil, err
+	}
+	apiRequest.UserPreferences = params.UserPreferences
+	if params.PrepareAutoImports != nil {
+		apiRequest.PrepareAutoImports = params.PrepareAutoImports.ToURI(s.GetCurrentDirectory())
 	}
 
 	openState := s.reconcileSnapshotOpens(apiRequest, snapshotOpenState{})
 	fileChanges := s.toFileChangeSummary(params.FileNotifications)
 	var snapshotFileSystem vfs.FS
 	if params.FileSystem != nil {
-		fileSystem, fileSystemErr := requestfilesystem.NewForUpdate(params.FileSystem, s.fileSystem(), s.currentDirectory(), &fileChanges)
+		fileSystem, fileSystemErr := s.createRequestFileSystem(params.FileSystem, s.FS(), s.FS(), &fileChanges)
 		if fileSystemErr != nil {
 			return nil, fmt.Errorf("%w: %w", ErrClientError, fileSystemErr)
 		}
 		snapshotFileSystem = fileSystem
 		apiRequest.FileSystem = fileSystem
-		apiRequest.ReplaceFileSystem = params.FileSystem.Kind == requestfilesystem.KindFull
+		apiRequest.ReplaceFileSystem = params.FileSystem.ReplacesFileSystem()
 	}
 	root := s.snapshotHost.NewRootSnapshot()
 	snapshot, err := s.snapshotHost.CloneSnapshot(ctx, root, fileChanges, apiRequest)
@@ -1190,6 +1442,14 @@ func (s *Session) handleCreateSnapshot(ctx context.Context, params *CreateSnapsh
 	if err != nil {
 		snapshot.Deref()
 		return nil, fmt.Errorf("%w: failed to create snapshot: %w", ErrClientError, err)
+	}
+	if err := s.validatePreparedAutoImports(ctx, snapshot, params.PrepareAutoImports); err != nil {
+		snapshot.Deref()
+		return nil, err
+	}
+	if err := moduleResolutionError(snapshot); err != nil {
+		snapshot.Deref()
+		return nil, err
 	}
 
 	response := s.createSnapshotResponse(snapshot, nil, &params.SnapshotRequestChangesParams)
@@ -1208,9 +1468,13 @@ func (s *Session) handleUpdateSnapshot(ctx context.Context, params *UpdateSnapsh
 	if changes == nil {
 		changes = &CreateSnapshotParams{}
 	}
-	apiRequest, err := s.toAPISnapshotRequest(&changes.SnapshotRequestChangesParams)
+	apiRequest, err := s.toAPISnapshotRequest(ctx, &changes.SnapshotRequestChangesParams)
 	if err != nil {
 		return nil, err
+	}
+	apiRequest.UserPreferences = changes.UserPreferences
+	if changes.PrepareAutoImports != nil {
+		apiRequest.PrepareAutoImports = changes.PrepareAutoImports.ToURI(s.GetCurrentDirectory())
 	}
 	openState := s.reconcileSnapshotOpens(apiRequest, snapshotOpenState{openProjects: baseSD.openProjects, openFiles: baseSD.openFiles})
 	fileChanges := s.toFileChangeSummary(changes.FileNotifications)
@@ -1218,9 +1482,9 @@ func (s *Session) handleUpdateSnapshot(ctx context.Context, params *UpdateSnapsh
 	if changes.FileSystem != nil {
 		baseFileSystem := snapshotFileSystem
 		if baseFileSystem == nil {
-			baseFileSystem = s.fileSystem()
+			baseFileSystem = s.FS()
 		}
-		fileSystem, fileSystemErr := requestfilesystem.NewForUpdate(changes.FileSystem, baseFileSystem, s.currentDirectory(), &fileChanges)
+		fileSystem, fileSystemErr := s.createRequestFileSystem(changes.FileSystem, baseFileSystem, baseSD.snapshot.FS(), &fileChanges)
 		if fileSystemErr != nil {
 			return nil, fmt.Errorf("%w: %w", ErrClientError, fileSystemErr)
 		}
@@ -1228,12 +1492,20 @@ func (s *Session) handleUpdateSnapshot(ctx context.Context, params *UpdateSnapsh
 	}
 	if snapshotFileSystem != nil {
 		apiRequest.FileSystem = snapshotFileSystem
-		apiRequest.ReplaceFileSystem = changes.FileSystem != nil && changes.FileSystem.Kind == requestfilesystem.KindFull
+		apiRequest.ReplaceFileSystem = changes.FileSystem.ReplacesFileSystem()
 	}
 	snapshot, err := s.snapshotHost.CloneSnapshot(ctx, baseSD.snapshot, fileChanges, apiRequest)
 	if err != nil {
 		snapshot.Deref()
 		return nil, fmt.Errorf("%w: failed to update snapshot: %w", ErrClientError, err)
+	}
+	if err := s.validatePreparedAutoImports(ctx, snapshot, changes.PrepareAutoImports); err != nil {
+		snapshot.Deref()
+		return nil, err
+	}
+	if err := moduleResolutionError(snapshot); err != nil {
+		snapshot.Deref()
+		return nil, err
 	}
 
 	response := s.createSnapshotResponse(snapshot, baseSD.snapshot, &changes.SnapshotRequestChangesParams)
@@ -1241,12 +1513,38 @@ func (s *Session) handleUpdateSnapshot(ctx context.Context, params *UpdateSnapsh
 	return response, nil
 }
 
-func (s *Session) toAPISnapshotRequest(changes *SnapshotRequestChangesParams) (*project.APISnapshotRequest, error) {
+func (s *Session) createRequestFileSystem(params *requestfilesystem.RequestFileSystem, base vfs.FS, baseContents vfs.FS, fileChanges *project.FileChangeSummary) (vfs.FS, error) {
+	if params.Kind == requestfilesystem.KindSnapshot {
+		if len(params.Files) != 0 || len(params.Directories) != 0 || len(params.Symlinks) != 0 || len(params.RemovedPaths) != 0 {
+			return nil, fmt.Errorf("%w: snapshot filesystem entries must be supplied in fileSystem", ErrClientError)
+		}
+		if params.FileSystem != nil && params.FileSystem.Kind != requestfilesystem.KindLayer && params.FileSystem.Kind != requestfilesystem.KindFull {
+			return nil, fmt.Errorf("%w: only a layer or full filesystem can be applied on top of a snapshot filesystem", ErrClientError)
+		}
+		snapshotID := SnapshotID(params.Snapshot)
+		source, err := s.retainSnapshotData(snapshotID)
+		if err != nil {
+			return nil, err
+		}
+		defer func() { _ = s.releaseSnapshot(snapshotID) }()
+		base = requestfilesystem.Rebase(source.fileSystem, base, baseContents, fileChanges)
+		params = params.FileSystem
+		if params == nil {
+			return base, nil
+		}
+	}
+	if params.Snapshot != 0 || params.FileSystem != nil {
+		return nil, fmt.Errorf("%w: snapshot and fileSystem are only valid for a snapshot filesystem", ErrClientError)
+	}
+	return requestfilesystem.NewForUpdate(params, base, s.GetCurrentDirectory(), fileChanges)
+}
+
+func (s *Session) toAPISnapshotRequest(ctx context.Context, changes *SnapshotRequestChangesParams) (*project.APISnapshotRequest, error) {
 	apiRequest := &project.APISnapshotRequest{}
 
 	for _, p := range changes.OpenProjects {
-		configFileName := p.ToAbsoluteFileName(s.currentDirectory())
-		configuredProjectID, ok := project.ParseConfiguredProjectID(s.toPath(configFileName))
+		configFileName := p.ToFileName(s.currentDirectory())
+		configuredProjectID, ok := project.ParseConfiguredProjectID(s.pathKey(configFileName))
 		if !ok {
 			return nil, fmt.Errorf("%w: invalid configured project ID: %s", ErrClientError, configFileName)
 		}
@@ -1255,25 +1553,25 @@ func (s *Session) toAPISnapshotRequest(changes *SnapshotRequestChangesParams) (*
 		}
 		apiRequest.EnsurePrograms.Add(configuredProjectID.AsID())
 		if apiRequest.OpenProjects == nil {
-			apiRequest.OpenProjects = collections.NewSetWithSizeHint[string](len(changes.OpenProjects))
+			apiRequest.OpenProjects = collections.NewSetWithSizeHint[tspath.RootedFilePath](len(changes.OpenProjects))
 		}
 		apiRequest.OpenProjects.Add(configFileName)
 	}
 
 	for _, p := range changes.CloseProjects {
-		configPath := s.toPath(p.ToAbsoluteFileName(s.currentDirectory()))
+		configPath := s.pathKey(s.toFileName(p))
 		if apiRequest.CloseProjects == nil {
-			apiRequest.CloseProjects = collections.NewSetWithSizeHint[tspath.Path](len(changes.CloseProjects))
+			apiRequest.CloseProjects = collections.NewSetWithSizeHint[tspath.PathKey](len(changes.CloseProjects))
 		}
 		apiRequest.CloseProjects.Add(configPath)
 	}
 
 	for _, f := range changes.OpenFiles {
-		fileName := f.ToAbsoluteFileName(s.currentDirectory())
-		path := s.toPath(fileName)
+		fileName := f.ToFileName(s.currentDirectory())
+		path := s.pathKey(fileName)
 		if apiRequest.OpenFiles == nil {
-			apiRequest.OpenFiles = make(map[tspath.Path]string, len(changes.OpenFiles))
-			apiRequest.EnsureFiles = make(map[tspath.Path]string, len(changes.OpenFiles))
+			apiRequest.OpenFiles = make(map[tspath.PathKey]tspath.RootedFilePath, len(changes.OpenFiles))
+			apiRequest.EnsureFiles = make(map[tspath.PathKey]tspath.RootedFilePath, len(changes.OpenFiles))
 		}
 		if _, ok := apiRequest.OpenFiles[path]; !ok {
 			apiRequest.OpenFiles[path] = fileName
@@ -1282,9 +1580,9 @@ func (s *Session) toAPISnapshotRequest(changes *SnapshotRequestChangesParams) (*
 	}
 
 	for _, f := range changes.CloseFiles {
-		path := s.toPath(f.ToURI(s.currentDirectory()).FileName())
+		path := s.toURI(f).PathKey(s.caseSensitivity())
 		if apiRequest.CloseFiles == nil {
-			apiRequest.CloseFiles = collections.NewSetWithSizeHint[tspath.Path](len(changes.CloseFiles))
+			apiRequest.CloseFiles = collections.NewSetWithSizeHint[tspath.PathKey](len(changes.CloseFiles))
 		}
 		apiRequest.CloseFiles.Add(path)
 	}
@@ -1294,17 +1592,30 @@ func (s *Session) toAPISnapshotRequest(changes *SnapshotRequestChangesParams) (*
 		if programParams == nil {
 			return nil, fmt.Errorf("%w: createPrograms[%d] must not be null", ErrClientError, i)
 		}
-		rootFileNames := make([]string, len(programParams.RootFiles))
+		compilerOptions := &programParams.CompilerOptions
+		var optionDiagnostics []*ast.Diagnostic
+		if programParams.CompilerOptionsInput != nil {
+			compilerOptions, optionDiagnostics = programParams.CompilerOptionsInput.Finalize(s.currentDirectory())
+		}
+		rootFileNames := make([]tspath.RootedFilePath, len(programParams.RootFiles))
 		for j, rootFile := range programParams.RootFiles {
-			rootFileNames[j] = rootFile.ToAbsoluteFileName(s.currentDirectory())
+			rootFileNames[j] = s.toFileName(rootFile)
 		}
 		request := &project.APICreateProgramRequest{
 			RootFileNames:   rootFileNames,
-			CompilerOptions: &programParams.CompilerOptions,
+			CompilerOptions: compilerOptions,
 		}
 		if programParams.Options != nil {
 			request.ProjectReferences = programParams.Options.ProjectReferences
-			request.ConfigFileParsingDiagnostics = core.Map(programParams.Options.ConfigFileParsingDiagnostics, func(d *DiagnosticResponse) *ast.Diagnostic { return d.ToDiagnostic() })
+			request.ConfigFileParsingDiagnostics = append(optionDiagnostics, core.Map(programParams.Options.ConfigFileParsingDiagnostics, func(d *DiagnosticResponse) *ast.Diagnostic { return d.ToDiagnostic() })...)
+			factory, err := s.moduleResolverFactory(programParams.Options)
+			if err != nil {
+				return nil, err
+			}
+			request.ModuleResolverFactory = factory
+			request.ModuleResolverID = uint64(programParams.Options.ModuleResolver)
+		} else {
+			request.ConfigFileParsingDiagnostics = optionDiagnostics
 		}
 		apiRequest.CreatePrograms[i] = request
 	}
@@ -1322,18 +1633,31 @@ func (s *Session) toAPISnapshotRequest(changes *SnapshotRequestChangesParams) (*
 			return nil, fmt.Errorf("%w: synthetic program reconfigured more than once: %s", ErrClientError, programID)
 		}
 		reconfiguredProgramIDs.Add(programID)
-		rootFileNames := make([]string, len(programParams.RootFiles))
+		compilerOptions := &programParams.CompilerOptions
+		var optionDiagnostics []*ast.Diagnostic
+		if programParams.CompilerOptionsInput != nil {
+			compilerOptions, optionDiagnostics = programParams.CompilerOptionsInput.Finalize(s.currentDirectory())
+		}
+		rootFileNames := make([]tspath.RootedFilePath, len(programParams.RootFiles))
 		for j, rootFile := range programParams.RootFiles {
-			rootFileNames[j] = rootFile.ToAbsoluteFileName(s.currentDirectory())
+			rootFileNames[j] = s.toFileName(rootFile)
 		}
 		request := &project.APIReconfigureProgramRequest{
 			ProgramID:       programID,
 			RootFileNames:   rootFileNames,
-			CompilerOptions: &programParams.CompilerOptions,
+			CompilerOptions: compilerOptions,
 		}
 		if programParams.Options != nil {
 			request.ProjectReferences = programParams.Options.ProjectReferences
-			request.ConfigFileParsingDiagnostics = core.Map(programParams.Options.ConfigFileParsingDiagnostics, func(d *DiagnosticResponse) *ast.Diagnostic { return d.ToDiagnostic() })
+			request.ConfigFileParsingDiagnostics = append(optionDiagnostics, core.Map(programParams.Options.ConfigFileParsingDiagnostics, func(d *DiagnosticResponse) *ast.Diagnostic { return d.ToDiagnostic() })...)
+			factory, err := s.moduleResolverFactory(programParams.Options)
+			if err != nil {
+				return nil, err
+			}
+			request.ModuleResolverFactory = factory
+			request.ModuleResolverID = uint64(programParams.Options.ModuleResolver)
+		} else {
+			request.ConfigFileParsingDiagnostics = optionDiagnostics
 		}
 		apiRequest.ReconfigurePrograms[i] = request
 	}
@@ -1358,13 +1682,29 @@ func (s *Session) toAPISnapshotRequest(changes *SnapshotRequestChangesParams) (*
 	return apiRequest, nil
 }
 
+func (s *Session) validatePreparedAutoImports(ctx context.Context, snapshot *project.Snapshot, file *DocumentIdentifier) error {
+	if file == nil {
+		return nil
+	}
+	if err := ctx.Err(); err != nil {
+		return err
+	}
+	uri := file.ToURI(s.GetCurrentDirectory())
+	proj := snapshot.GetDefaultProject(uri)
+	if proj == nil || snapshot.AutoImportRegistry() == nil ||
+		!snapshot.AutoImportRegistry().IsPreparedForImportingFile(uri.FileName(), proj.ID(), snapshot.UserPreferences()) {
+		return fmt.Errorf("%w: could not prepare auto-imports for %s", ErrClientError, file)
+	}
+	return nil
+}
+
 type languageServerSnapshotUpdate struct {
 	request   *project.APISnapshotRequest
 	openState snapshotOpenState
 }
 
-func (s *Session) toLanguageServerSnapshotUpdate(changes *SnapshotRequestChangesParams) (*languageServerSnapshotUpdate, error) {
-	apiRequest, err := s.toAPISnapshotRequest(changes)
+func (s *Session) toLanguageServerSnapshotUpdate(ctx context.Context, changes *SnapshotRequestChangesParams) (*languageServerSnapshotUpdate, error) {
+	apiRequest, err := s.toAPISnapshotRequest(ctx, changes)
 	if err != nil {
 		return nil, err
 	}
@@ -1405,8 +1745,8 @@ func (u *languageServerSnapshotUpdate) commit(s *Session, snapshot *project.Snap
 }
 
 type snapshotOpenState struct {
-	openProjects collections.Set[tspath.Path]
-	openFiles    collections.Set[tspath.Path]
+	openProjects collections.Set[tspath.PathKey]
+	openFiles    collections.Set[tspath.PathKey]
 }
 
 func (s *Session) reconcileSnapshotOpens(apiRequest *project.APISnapshotRequest, base snapshotOpenState) snapshotOpenState {
@@ -1422,7 +1762,7 @@ func (s *Session) reconcileSnapshotOpens(apiRequest *project.APISnapshotRequest,
 		}
 	}
 	for configFileName := range apiRequest.OpenProjects.Keys() {
-		path := s.toPath(configFileName)
+		path := s.pathKey(configFileName)
 		if state.openProjects.Has(path) {
 			apiRequest.OpenProjects.Delete(configFileName)
 		} else {
@@ -1459,14 +1799,15 @@ func (s *Session) registerSnapshot(snapshot *project.Snapshot, openState snapsho
 		sd.refCount++
 	} else {
 		sd = &snapshotData{
+			handle:                  handle,
 			snapshot:                snapshot,
 			fileSystem:              fileSystem,
 			refCount:                1,
 			openProjects:            *openState.openProjects.Clone(),
 			openFiles:               *openState.openFiles.Clone(),
 			symbolRegistry:          make(map[SymbolID]*ast.Symbol),
-			symbolCanonicalProjects: make(map[SymbolID]project.ID),
-			projectRegistries:       make(map[project.ID]*projectRegistryData),
+			symbolCanonicalProjects: make(map[SymbolID]project.Handle),
+			projectRegistries:       make(map[project.Handle]*projectRegistryData),
 		}
 		s.snapshots[handle] = sd
 	}
@@ -1494,7 +1835,7 @@ func (s *Session) handleGetCurrentLanguageServerSnapshot(ctx context.Context, pa
 	if changes == nil {
 		changes = &LanguageServerSnapshotChanges{}
 	}
-	update, err := s.toLanguageServerSnapshotUpdate(&changes.SnapshotRequestChangesParams)
+	update, err := s.toLanguageServerSnapshotUpdate(ctx, &changes.SnapshotRequestChangesParams)
 	if err != nil {
 		return nil, err
 	}
@@ -1532,7 +1873,7 @@ func (s *Session) handleGetDefaultProjectForFile(ctx context.Context, params *Ge
 		return nil, err
 	}
 
-	uri := params.File.ToURI(s.currentDirectory())
+	uri := s.toURI(params.File)
 	proj := sd.snapshot.GetDefaultProject(uri)
 	if proj == nil {
 		return nil, nil
@@ -1541,14 +1882,144 @@ func (s *Session) handleGetDefaultProjectForFile(ctx context.Context, params *Ge
 	return NewProjectResponse(proj), nil
 }
 
+func (s *Session) handleCreateBuildOrchestrator(ctx context.Context, params *CreateBuildOrchestratorParams) (*CreateBuildOrchestratorResponse, error) {
+	buildSys := s.getBuildSys(params)
+	command := tsoptions.ParseBuildCommandLine(params.RootNames, buildSys.FS(), buildSys.GetCurrentDirectory())
+	createdOrchestratorResponse := &CreateBuildOrchestratorResponse{}
+	if params.CompilerOptions != nil {
+		command.CompilerOptions = params.CompilerOptions
+	}
+	if params.BuildOptions != nil {
+		command.BuildOptions = params.BuildOptions
+	}
+	orchestrator := build.NewOrchestrator(build.Options{
+		Sys:     buildSys,
+		Command: command,
+	})
+	createdOrchestratorResponse.BuildOrchestratorID = NewBuildOrchestratorID()
+	s.buildMu.Lock()
+	s.buildOrchestrators[createdOrchestratorResponse.BuildOrchestratorID] = orchestrator
+	s.buildMu.Unlock()
+	return createdOrchestratorResponse, nil
+}
+
+func (s *Session) handleDisposeBuildOrchestrator(ctx context.Context, params *DisposeBuildOrchestratorParams) (any, error) {
+	s.buildMu.Lock()
+	defer s.buildMu.Unlock()
+	if s.buildOrchestrators[params.BuildOrchestratorID] == nil {
+		return nil, errors.New("build orchestrator not found while disposing")
+	}
+	delete(s.buildOrchestrators, params.BuildOrchestratorID)
+	return true, nil
+}
+
+func (s *Session) handleBuild(ctx context.Context, params *BuildParams) (*BuildResponse, error) {
+	s.buildMu.Lock()
+	defer s.buildMu.Unlock()
+	if s.buildOrchestrators[params.BuildOrchestratorID] == nil {
+		return nil, fmt.Errorf("build orchestrator not found while building %s", params.Project)
+	}
+	result := s.buildOrchestrators[params.BuildOrchestratorID].Build(ctx, params.Project)
+
+	return &BuildResponse{
+		Status:      result.Result.Status,
+		Diagnostics: NewDiagnosticResponses(result.Errors),
+		Statistics:  result.Statistics,
+	}, nil
+}
+
+func (s *Session) handleBuildReferences(ctx context.Context, params *BuildParams) (*BuildResponse, error) {
+	s.buildMu.Lock()
+	defer s.buildMu.Unlock()
+	if s.buildOrchestrators[params.BuildOrchestratorID] == nil {
+		return nil, fmt.Errorf("build orchestrator not found for building references for %s", params.Project)
+	}
+	result := s.buildOrchestrators[params.BuildOrchestratorID].BuildReferences(ctx, params.Project)
+
+	return &BuildResponse{
+		Status:      result.Result.Status,
+		Diagnostics: NewDiagnosticResponses(result.Errors),
+		Statistics:  result.Statistics,
+	}, nil
+}
+
+func (s *Session) handleCleanBuild(ctx context.Context, params *CleanBuildParams) (*CleanBuildResponse, error) {
+	s.buildMu.Lock()
+	defer s.buildMu.Unlock()
+	if s.buildOrchestrators[params.BuildOrchestratorID] == nil {
+		return nil, fmt.Errorf("build orchestrator not found while cleaning %s", params.Project)
+	}
+	result := s.buildOrchestrators[params.BuildOrchestratorID].Clean(params.Project)
+	return &CleanBuildResponse{
+		Status:       result.Result.Status,
+		Diagnostics:  NewDiagnosticResponses(result.Errors),
+		Statistics:   result.Statistics,
+		FilesDeleted: result.FilesToDelete,
+	}, nil
+}
+
+func (s *Session) handleCleanReferences(ctx context.Context, params *CleanBuildParams) (*CleanBuildResponse, error) {
+	s.buildMu.Lock()
+	defer s.buildMu.Unlock()
+	if s.buildOrchestrators[params.BuildOrchestratorID] == nil {
+		return nil, fmt.Errorf("build orchestrator not found while cleaning references for %s", params.Project)
+	}
+	result := s.buildOrchestrators[params.BuildOrchestratorID].CleanReferences(params.Project)
+	return &CleanBuildResponse{
+		Status:       result.Result.Status,
+		Diagnostics:  NewDiagnosticResponses(result.Errors),
+		Statistics:   result.Statistics,
+		FilesDeleted: result.FilesToDelete,
+	}, nil
+}
+
+func (s *Session) getBuildSys(params *CreateBuildOrchestratorParams) tsc.System {
+	currentDirectory := params.Cwd
+	if currentDirectory == "" {
+		currentDirectory = s.GetCurrentDirectory()
+	}
+	return &apiBuildSystem{
+		session:          s,
+		currentDirectory: currentDirectory,
+		start:            time.Now(),
+	}
+}
+
+// Wrapper for the API session for build orchestrator
+type apiBuildSystem struct {
+	session          *Session
+	currentDirectory tspath.RootedDirectoryPath
+	start            time.Time
+}
+
+func (s *apiBuildSystem) Writer() io.Writer      { return io.Discard }
+func (s *apiBuildSystem) ErrorWriter() io.Writer { return io.Discard }
+func (s *apiBuildSystem) FS() vfs.FS             { return s.session.snapshotHost.FS() }
+func (s *apiBuildSystem) DefaultLibraryPath() tspath.RootedDirectoryPath {
+	return s.session.DefaultLibraryPath()
+}
+
+func (s *apiBuildSystem) GetCurrentDirectory() tspath.RootedDirectoryPath { return s.currentDirectory }
+func (s *apiBuildSystem) WriteOutputIsTTY() bool                          { return false }
+func (s *apiBuildSystem) GetWidthOfTerminal() int                         { return 0 }
+func (s *apiBuildSystem) GetEnvironmentVariable(name string) (string, bool) {
+	return "", false
+}
+
+func (s *apiBuildSystem) Spawn(command []string, dir string, stderr io.Writer) (io.ReadWriteCloser, error) {
+	return nil, errors.New("spawning processes is not supported by the API build orchestrator")
+}
+func (s *apiBuildSystem) Now() time.Time            { return time.Now() }
+func (s *apiBuildSystem) SinceStart() time.Duration { return time.Since(s.start) }
+
 // handleParseCommandLine parses command-line arguments.
 func (s *Session) handleParseCommandLine(ctx context.Context, params *ParseCommandLineParams) (*ConfigFileResponse, error) {
-	return NewConfigFileResponse(tsoptions.ParseCommandLine(params.CommandLine, s.snapshotHost)), nil
+	return NewConfigFileResponse(tsoptions.ParseCommandLine(params.CommandLine, s.snapshotHost.FS(), s.currentDirectory())), nil
 }
 
 // handleReadConfigFile reads and parses a JSON configuration file.
 func (s *Session) handleReadConfigFile(ctx context.Context, params *ReadConfigFileParams) (*ReadConfigFileResponse, error) {
-	configFileName := params.File.ToAbsoluteFileName(s.currentDirectory())
+	configFileName := s.toFileName(params.File)
 	configFileContent, ok := s.snapshotHost.FS().ReadFile(configFileName)
 	if !ok {
 		return &ReadConfigFileResponse{
@@ -1559,7 +2030,7 @@ func (s *Session) handleReadConfigFile(ctx context.Context, params *ReadConfigFi
 
 	config, parseErrors := tsoptions.ParseConfigFileTextToJson(
 		configFileName,
-		s.toPath(configFileName),
+		s.pathKey(configFileName),
 		configFileContent,
 	)
 	response := &ReadConfigFileResponse{Config: config}
@@ -1575,18 +2046,18 @@ func (s *Session) handleParseJsonConfigFileContent(ctx context.Context, params *
 		return nil, fmt.Errorf("%w: exactly one of configDirectory or configFileName is required", ErrClientError)
 	}
 
-	var basePath string
-	var configFileName string
+	var basePath tspath.RootedDirectoryPath
+	var configFileName tspath.RootedFilePath
 	if params.ConfigDirectory != nil {
-		basePath = tspath.GetNormalizedAbsolutePath(*params.ConfigDirectory, s.currentDirectory())
+		basePath = tspath.ToRootedDirectoryPath(*params.ConfigDirectory, s.currentDirectory())
 	} else {
-		configFileName = params.ConfigFileName.ToAbsoluteFileName(s.currentDirectory())
-		basePath = tspath.GetDirectoryPath(configFileName)
+		configFileName = s.toFileName(*params.ConfigFileName)
+		basePath = configFileName.Directory()
 	}
 
 	parsedCommandLine := tsoptions.ParseJsonConfigFileContent(
 		jsonValueToAny(params.JSON),
-		s.snapshotHost,
+		tsoptions.NewDefaultParseConfigHost(s.snapshotHost.FS()),
 		basePath,
 		nil, /*existingOptions*/
 		configFileName,
@@ -1598,25 +2069,24 @@ func (s *Session) handleParseJsonConfigFileContent(ctx context.Context, params *
 
 // handleParseConfigFile parses a tsconfig.json file and returns its contents.
 func (s *Session) handleParseConfigFile(ctx context.Context, params *ParseConfigFileParams) (*ConfigFileResponse, error) {
-	configFileName := params.File.ToAbsoluteFileName(s.currentDirectory())
+	configFileName := s.toFileName(params.File)
 	configFileContent, ok := s.snapshotHost.FS().ReadFile(configFileName)
 	if !ok {
 		return nil, fmt.Errorf("%w: could not read file %q", ErrClientError, configFileName)
 	}
 
-	configDir := tspath.GetDirectoryPath(configFileName)
+	configDir := configFileName.Directory()
 	tsConfigSourceFile := tsoptions.NewTsconfigSourceFileFromFilePath(
 		configFileName,
-		s.toPath(configFileName),
+		s.pathKey(configFileName),
 		configFileContent,
 	)
 	parsedCommandLine := tsoptions.ParseJsonSourceFileConfigFileContent(
 		tsConfigSourceFile,
-		s.snapshotHost,
+		tsoptions.NewDefaultParseConfigHost(s.snapshotHost.FS()),
 		configDir,
 		nil, /*existingOptions*/
 		nil, /*existingOptionsRaw*/
-		configFileName,
 		nil, /*resolutionStack*/
 		nil, /*extendedConfigCache*/
 	)
@@ -1624,33 +2094,47 @@ func (s *Session) handleParseConfigFile(ctx context.Context, params *ParseConfig
 }
 
 func (s *Session) handleTranspile(ctx context.Context, params *TranspileParams, declaration bool) (*TranspileOutputResponse, error) {
-	return transpileOutput(ctx, params.Input, params.Options, declaration)
+	return transpileOutput(ctx, params.Input, params.Options, declaration, s.currentDirectory())
 }
 
 // @gen-proto-result: SourceFileResponse
 func (s *Session) handleCreateSourceFile(ctx context.Context, params *CreateSourceFileParams) (any, error) {
-	sourceFile, err := s.createSourceFile(params.FileName, params.SourceText, params.Options)
+	fileName, err := s.resolveCreateSourceFileName(params.FileName)
 	if err != nil {
 		return nil, err
 	}
-	return s.encodeSourceFileResponse(sourceFile)
+	lease, err := s.createSourceFile(fileName, params.SourceText, params.Options)
+	if err != nil {
+		return nil, err
+	}
+	return s.encodeLeasedSourceFile(lease)
 }
 
 // @gen-proto-result: SourceFileResponse
 func (s *Session) handleCreateSourceFileFromFile(ctx context.Context, params *CreateSourceFileFromFileParams) (any, error) {
-	fileName := tspath.GetNormalizedAbsolutePath(params.FileName, s.currentDirectory())
+	fileName, err := s.resolveCreateSourceFileName(params.FileName)
+	if err != nil {
+		return nil, err
+	}
 	sourceText, ok := s.snapshotHost.FS().ReadFile(fileName)
 	if !ok {
 		return nil, fmt.Errorf("%w: could not read file %q", ErrClientError, fileName)
 	}
-	sourceFile, err := s.createSourceFile(fileName, sourceText, params.Options)
+	lease, err := s.createSourceFile(fileName, sourceText, params.Options)
 	if err != nil {
 		return nil, err
 	}
-	return s.encodeSourceFileResponse(sourceFile)
+	return s.encodeLeasedSourceFile(lease)
 }
 
-func (s *Session) createSourceFile(fileName string, sourceText string, options CreateSourceFileOptions) (*ast.SourceFile, error) {
+func (s *Session) resolveCreateSourceFileName(fileName string) (tspath.RootedFilePath, error) {
+	if fileName == "" {
+		return "", fmt.Errorf("%w: fileName must not be empty", ErrClientError)
+	}
+	return s.currentDirectory().ResolveFile(fileName), nil
+}
+
+func (s *Session) createSourceFile(fileName tspath.RootedFilePath, sourceText string, options CreateSourceFileOptions) (*project.SourceFileLease, error) {
 	scriptKind := options.ScriptKind
 	if scriptKind == core.ScriptKindUnknown {
 		scriptKind = core.EnsureScriptKindFromFileName(fileName)
@@ -1658,11 +2142,185 @@ func (s *Session) createSourceFile(fileName string, sourceText string, options C
 	if !isValidCreateSourceFileScriptKind(scriptKind) {
 		return nil, fmt.Errorf("%w: invalid scriptKind %d", ErrClientError, scriptKind)
 	}
-	fileName = tspath.GetNormalizedAbsolutePath(fileName, s.currentDirectory())
-	return parser.ParseSourceFile(ast.SourceFileParseOptions{
+	return s.acquireSourceFile(ast.SourceFileParseOptions{
 		FileName: fileName,
-		Path:     s.toPath(fileName),
+		PathKey:  s.pathKey(fileName),
 	}, sourceText, scriptKind), nil
+}
+
+func (s *Session) acquireSourceFile(options ast.SourceFileParseOptions, sourceText string, scriptKind core.ScriptKind) *project.SourceFileLease {
+	return s.snapshotHost.AcquireSourceFile(options, sourceText, scriptKind)
+}
+
+func (s *Session) encodeLeasedSourceFile(lease *project.SourceFileLease) (any, error) {
+	data, _, err := encoder.EncodeSourceFile(lease.SourceFile())
+	if err != nil {
+		lease.Release()
+		return nil, fmt.Errorf("failed to encode source file: %w", err)
+	}
+	encoder.SetSourceFileID(data, sourceFileNodeID(lease.SourceFile()))
+	id := s.registerSourceFileLease(lease)
+	encoder.SetSourceFileLease(data, uint64(id))
+	if s.useBinaryResponses {
+		return RawBinary(data), nil
+	}
+	return &SourceFileResponse{Data: base64.StdEncoding.EncodeToString(data)}, nil
+}
+
+func (s *Session) handleRetainSourceFile(params *RetainSourceFileParams) (*RetainSourceFileResponse, error) {
+	lease, err := s.acquireCachedSourceFile(params.File)
+	if err != nil {
+		return nil, err
+	}
+	return &RetainSourceFileResponse{
+		Lease: s.registerSourceFileLease(lease),
+	}, nil
+}
+
+// @gen-proto-result: SourceFileResponse
+func (s *Session) handleGetCachedSourceFile(params *GetCachedSourceFileParams) (any, error) {
+	lease, err := s.acquireCachedSourceFile(params.File)
+	if err != nil {
+		return nil, err
+	}
+	defer lease.Release()
+	return s.encodeSourceFileResponse(lease.SourceFile())
+}
+
+func (s *Session) handleGetSymbolOfDeclaration(params *GetSymbolOfDeclarationParams) (*SymbolResponse, error) {
+	lease, err := s.acquireCachedSourceFile(params.File)
+	if err != nil {
+		return nil, err
+	}
+	defer lease.Release()
+
+	table := encoder.GetNodeIndexTable(lease.SourceFile())
+	if params.Index == 0 || int(params.Index) >= len(table.Nodes) {
+		return nil, fmt.Errorf("%w: declaration node index %d is out of range", ErrClientError, params.Index)
+	}
+	node := table.Nodes[params.Index]
+	if node == nil || !ast.IsDeclaration(node) {
+		return nil, fmt.Errorf("%w: node index %d is not a declaration", ErrClientError, params.Index)
+	}
+	symbol := node.Symbol()
+	if symbol == nil {
+		return nil, fmt.Errorf("%w: declaration node index %d has no binder symbol", ErrClientError, params.Index)
+	}
+	return newFileSymbolResponse(symbol), nil
+}
+
+// acquireCachedSourceFile holds a reference to the exact ordinary cached AST identified by a
+// descriptor. It never parses; the caller must release the returned lease.
+func (s *Session) acquireCachedSourceFile(descriptor SourceFileDescriptor) (*project.SourceFileLease, error) {
+	key, err := descriptor.parseCacheKey()
+	if err != nil {
+		return nil, fmt.Errorf("%w: invalid source file descriptor: %w", ErrClientError, err)
+	}
+	lease := s.snapshotHost.AcquireExistingSourceFile(key)
+	if lease == nil {
+		return nil, fmt.Errorf("%w: source file is not available", ErrClientError)
+	}
+	// The parse-cache key addresses a live ordinary file, but an equal key can identify a new
+	// AST after the original entry is evicted. The node ID verifies that this is the exact AST
+	// observed by the client; it is not used to address or retain the file.
+	if newSourceFileDescriptor(lease.SourceFile()) != descriptor {
+		lease.Release()
+		return nil, fmt.Errorf("%w: source file descriptor no longer identifies the cached source file", ErrClientError)
+	}
+	return lease, nil
+}
+
+func (s *Session) registerSourceFileLease(lease *project.SourceFileLease) SourceFileLeaseID {
+	id := SourceFileLeaseID(s.nextSourceFileLeaseID.Add(1))
+	s.sourceFileLeasesMu.Lock()
+	s.sourceFileLeases[id] = lease
+	s.sourceFileLeasesMu.Unlock()
+	return id
+}
+
+func newSourceFileDescriptor(sourceFile *ast.SourceFile) SourceFileDescriptor {
+	parseOptions := sourceFile.ParseOptions()
+	var parseOptionsKey uint32
+	if parseOptions.ExternalModuleIndicatorOptions.JSX {
+		parseOptionsKey |= 1
+	}
+	if parseOptions.ExternalModuleIndicatorOptions.Force {
+		parseOptionsKey |= 2
+	}
+	return SourceFileDescriptor{
+		FileName:        parseOptions.FileName,
+		Path:            parseOptions.PathKey,
+		ContentHash:     encoder.SourceFileHash(sourceFile),
+		ParseOptionsKey: strconv.FormatUint(uint64(parseOptionsKey), 10),
+		ScriptKind:      sourceFile.ScriptKind,
+		NodeID:          strconv.FormatUint(sourceFileNodeID(sourceFile), 10),
+	}
+}
+
+// sourceFileNodeID is stable for one Go AST and changes when an equal parse-cache key is
+// recreated, making it suitable for validating remote references without introducing another
+// source-file identity or ownership registry.
+func sourceFileNodeID(sourceFile *ast.SourceFile) uint64 {
+	return uint64(ast.GetNodeId(sourceFile.AsNode()))
+}
+
+func (d SourceFileDescriptor) parseCacheKey() (project.ParseCacheKey, error) {
+	if len(d.ContentHash) != 32 {
+		return project.ParseCacheKey{}, errors.New("content hash must contain 32 hexadecimal digits")
+	}
+	hi, err := strconv.ParseUint(d.ContentHash[:16], 16, 64)
+	if err != nil {
+		return project.ParseCacheKey{}, fmt.Errorf("invalid content hash: %w", err)
+	}
+	lo, err := strconv.ParseUint(d.ContentHash[16:], 16, 64)
+	if err != nil {
+		return project.ParseCacheKey{}, fmt.Errorf("invalid content hash: %w", err)
+	}
+	parseOptionsKey, err := strconv.ParseUint(d.ParseOptionsKey, 10, 32)
+	if err != nil || parseOptionsKey&^3 != 0 {
+		return project.ParseCacheKey{}, fmt.Errorf("invalid parse options key %q", d.ParseOptionsKey)
+	}
+	if !isValidCreateSourceFileScriptKind(d.ScriptKind) {
+		return project.ParseCacheKey{}, fmt.Errorf("invalid script kind %d", d.ScriptKind)
+	}
+	return project.NewParseCacheKey(ast.SourceFileParseOptions{
+		FileName: d.FileName,
+		PathKey:  d.Path,
+		ExternalModuleIndicatorOptions: ast.ExternalModuleIndicatorOptions{
+			JSX:   parseOptionsKey&1 != 0,
+			Force: parseOptionsKey&2 != 0,
+		},
+	}, xxh3.Uint128{Hi: hi, Lo: lo}, d.ScriptKind), nil
+}
+
+func (s *Session) handleReleaseSourceFile(params *ReleaseSourceFileParams) (any, error) {
+	if params == nil || params.Lease == 0 {
+		return nil, fmt.Errorf("%w: empty source file lease", ErrClientError)
+	}
+	s.sourceFileLeasesMu.Lock()
+	lease := s.sourceFileLeases[params.Lease]
+	if lease != nil {
+		delete(s.sourceFileLeases, params.Lease)
+	}
+	s.sourceFileLeasesMu.Unlock()
+	if lease == nil {
+		return nil, fmt.Errorf("%w: source file lease %d not found", ErrClientError, params.Lease)
+	}
+	lease.Release()
+	return true, nil
+}
+
+func (s *Session) releaseSourceFileLeases() {
+	s.sourceFileLeasesMu.Lock()
+	leases := make([]*project.SourceFileLease, 0, len(s.sourceFileLeases))
+	for _, lease := range s.sourceFileLeases {
+		leases = append(leases, lease)
+	}
+	clear(s.sourceFileLeases)
+	s.sourceFileLeasesMu.Unlock()
+	for _, lease := range leases {
+		lease.Release()
+	}
 }
 
 func isValidCreateSourceFileScriptKind(scriptKind core.ScriptKind) bool {
@@ -1675,19 +2333,24 @@ func isValidCreateSourceFileScriptKind(scriptKind core.ScriptKind) bool {
 }
 
 func (s *Session) handleTranspileFromFile(ctx context.Context, params *TranspileFromFileParams, declaration bool) (*TranspileOutputResponse, error) {
-	fileName := tspath.GetNormalizedAbsolutePath(params.FileName, s.currentDirectory())
+	fileName := tspath.ToRootedFilePath(params.FileName, s.currentDirectory())
 	input, ok := s.snapshotHost.FS().ReadFile(fileName)
 	if !ok {
 		return nil, fmt.Errorf("%w: could not read file %q", ErrClientError, fileName)
 	}
 	options := params.Options
-	options.FileName = fileName
-	return transpileOutput(ctx, input, options, declaration)
+	options.FileName = fileName.AsString()
+	return transpileOutput(ctx, input, options, declaration, s.currentDirectory())
 }
 
-func transpileOutput(ctx context.Context, input string, options TranspileOptions, declaration bool) (*TranspileOutputResponse, error) {
+func transpileOutput(ctx context.Context, input string, options TranspileOptions, declaration bool, currentDirectory tspath.RootedDirectoryPath) (*TranspileOutputResponse, error) {
+	compilerOptions := options.CompilerOptions
+	var diagnostics []*ast.Diagnostic
+	if options.CompilerOptionsInput != nil {
+		compilerOptions, diagnostics = options.CompilerOptionsInput.Finalize(currentDirectory)
+	}
 	transpileOptions := transpile.Options{
-		CompilerOptions:   options.CompilerOptions,
+		CompilerOptions:   compilerOptions,
 		FileName:          options.FileName,
 		ReportDiagnostics: options.ReportDiagnostics,
 	}
@@ -1703,6 +2366,7 @@ func transpileOutput(ctx context.Context, input string, options TranspileOptions
 		}
 		return nil, errors.New("transpilation produced no output")
 	}
+	output.Diagnostics = append(diagnostics, output.Diagnostics...)
 	return &TranspileOutputResponse{
 		OutputText:    output.OutputText,
 		Diagnostics:   NewDiagnosticResponses(output.Diagnostics),
@@ -1724,12 +2388,12 @@ func (s *Session) handleGetSourceFile(ctx context.Context, params *GetSourceFile
 		return nil, err
 	}
 
-	return s.encodeSourceFileResponse(program.GetSourceFile(params.File.ToFileName()))
+	return s.encodeSourceFileResponse(program.GetSourceFile(params.File.ToFileName(program.BaseDirectory())))
 }
 
 // handleGetConfigFileNames returns tsconfig file names associated with the project's command line.
 // @gen-proto-nullable
-func (s *Session) handleGetConfigFileNames(ctx context.Context, params *GetProjectDiagnosticsParams) ([]string, error) {
+func (s *Session) handleGetConfigFileNames(ctx context.Context, params *GetProjectDiagnosticsParams) ([]tspath.RootedFilePath, error) {
 	sd, err := s.getSnapshotData(params.Snapshot)
 	if err != nil {
 		return nil, err
@@ -1746,7 +2410,7 @@ func (s *Session) handleGetConfigFileNames(ctx context.Context, params *GetProje
 	}
 
 	extendedFiles := commandLine.ExtendedSourceFiles()
-	configFiles := make([]string, 0, len(extendedFiles)+1)
+	configFiles := make([]tspath.RootedFilePath, 0, len(extendedFiles)+1)
 	configFiles = append(configFiles, commandLine.ConfigFile.SourceFile.FileName())
 	configFiles = append(configFiles, extendedFiles...)
 	return configFiles, nil
@@ -1771,14 +2435,14 @@ func (s *Session) handleGetConfigSourceFile(ctx context.Context, params *GetSour
 		return s.encodeSourceFileResponse(nil)
 	}
 
-	requestedPath := tspath.ToPath(params.File.ToFileName(), program.GetCurrentDirectory(), program.UseCaseSensitiveFileNames())
+	requestedPath := program.PathKeyForFileName(params.File.ToFileName(program.BaseDirectory()))
 	rootConfigSourceFile := commandLine.ConfigFile.SourceFile
-	if rootConfigSourceFile.Path() == requestedPath {
+	if rootConfigSourceFile.PathKey() == requestedPath {
 		return s.encodeSourceFileResponse(rootConfigSourceFile)
 	}
 
 	for _, configFileName := range commandLine.ExtendedSourceFiles() {
-		if tspath.ToPath(configFileName, program.GetCurrentDirectory(), program.UseCaseSensitiveFileNames()) != requestedPath {
+		if program.CaseSensitivity().PathKey(tspath.RootedPath(configFileName)) != requestedPath {
 			continue
 		}
 
@@ -1807,6 +2471,7 @@ func (s *Session) encodeSourceFileResponse(sourceFile *ast.SourceFile) (any, err
 	if err != nil {
 		return nil, fmt.Errorf("failed to encode source file: %w", err)
 	}
+	encoder.SetSourceFileID(data, sourceFileNodeID(sourceFile))
 
 	if s.useBinaryResponses {
 		return RawBinary(data), nil
@@ -1817,7 +2482,7 @@ func (s *Session) encodeSourceFileResponse(sourceFile *ast.SourceFile) (any, err
 }
 
 // handleGetSourceFileNames returns file names of all source files in a project.
-func (s *Session) handleGetSourceFileNames(ctx context.Context, params *GetSourceFileNamesParams) ([]string, error) {
+func (s *Session) handleGetSourceFileNames(ctx context.Context, params *GetSourceFileNamesParams) ([]tspath.RootedFilePath, error) {
 	sd, err := s.getSnapshotData(params.Snapshot)
 	if err != nil {
 		return nil, err
@@ -1829,7 +2494,7 @@ func (s *Session) handleGetSourceFileNames(ctx context.Context, params *GetSourc
 	}
 
 	sourceFiles := program.GetSourceFiles()
-	result := make([]string, len(sourceFiles))
+	result := make([]tspath.RootedFilePath, len(sourceFiles))
 	for i, sourceFile := range sourceFiles {
 		result[i] = sourceFile.FileName()
 	}
@@ -1850,14 +2515,14 @@ func (s *Session) handleGetSourceFileMetadata(ctx context.Context, params *GetSo
 		return nil, err
 	}
 
-	sourceFile := program.GetSourceFile(params.File.ToFileName())
+	sourceFile := program.GetSourceFile(params.File.ToFileName(program.BaseDirectory()))
 	if sourceFile == nil {
 		return nil, nil
 	}
 
-	metaData := program.GetSourceFileMetaData(sourceFile.Path())
+	metaData := program.GetSourceFileMetaData(sourceFile.PathKey())
 	return &SourceFileMetadata{
-		IsDefaultLibrary:      program.IsSourceFileDefaultLibrary(sourceFile.Path()),
+		IsDefaultLibrary:      program.IsSourceFileDefaultLibrary(sourceFile.PathKey()),
 		IsFromExternalLibrary: program.IsSourceFileFromExternalLibrary(sourceFile),
 		PackageJsonType:       metaData.PackageJsonType,
 		PackageJsonDirectory:  metaData.PackageJsonDirectory,
@@ -1870,14 +2535,14 @@ func newResolvedModuleResponse(resolution *module.ResolvedModule) *ResolvedModul
 		return nil
 	}
 	return &ResolvedModule{
-		ResolvedFileName:             resolution.ResolvedFileName,
-		OriginalPath:                 resolution.OriginalPath,
+		ResolvedFileName:             resolution.ResolvedFileName.AsString(),
+		OriginalPath:                 resolution.OriginalPath.AsString(),
 		Extension:                    resolution.Extension,
 		ResolvedUsingTsExtension:     resolution.ResolvedUsingTsExtension,
 		ResolvedUsingExtraExtensions: resolution.ResolvedUsingExtraExtensions,
 		PackageId:                    NewPackageId(resolution.PackageId),
 		IsExternalLibraryImport:      resolution.IsExternalLibraryImport,
-		AlternateResult:              resolution.AlternateResult,
+		AlternateResult:              resolution.AlternateResult.AsString(),
 	}
 }
 
@@ -1887,8 +2552,8 @@ func newResolvedTypeReferenceDirectiveResponse(resolution *module.ResolvedTypeRe
 	}
 	return &ResolvedTypeReferenceDirective{
 		Primary:                 resolution.Primary,
-		ResolvedFileName:        resolution.ResolvedFileName,
-		OriginalPath:            resolution.OriginalPath,
+		ResolvedFileName:        resolution.ResolvedFileName.AsString(),
+		OriginalPath:            resolution.OriginalPath.AsString(),
 		PackageId:               NewPackageId(resolution.PackageId),
 		IsExternalLibraryImport: resolution.IsExternalLibraryImport,
 	}
@@ -1986,8 +2651,7 @@ func (s *Session) handleGetResolvedModuleFromModuleSpecifier(ctx context.Context
 	if sourceFile == nil {
 		return nil, fmt.Errorf("%w: moduleSpecifier must have a SourceFile ancestor or sourceFile must be provided", ErrClientError)
 	}
-	mode := program.GetModeForUsageLocation(sourceFile, node)
-	return newResolvedModuleResponse(program.GetResolvedModule(sourceFile, node.Text(), mode)), nil
+	return newResolvedModuleResponse(program.GetResolvedModuleFromModuleSpecifier(sourceFile, node)), nil
 }
 
 // @gen-proto-nullable
@@ -2037,7 +2701,7 @@ func (s *Session) handleGetSymbolAtPosition(ctx context.Context, params *GetSymb
 	}
 	defer setup.done()
 
-	sourceFile := setup.program.GetSourceFile(params.File.ToFileName())
+	sourceFile := setup.program.GetSourceFile(params.File.ToFileName(setup.program.BaseDirectory()))
 	if sourceFile == nil {
 		return nil, fmt.Errorf("%w: source file not found: %v", ErrClientError, params.File)
 	}
@@ -2066,7 +2730,7 @@ func (s *Session) handleGetSymbolOfSourceFile(ctx context.Context, params *GetSy
 	}
 	defer setup.done()
 
-	sourceFile := setup.program.GetSourceFile(params.File.ToFileName())
+	sourceFile := setup.program.GetSourceFile(params.File.ToFileName(setup.program.BaseDirectory()))
 	if sourceFile == nil {
 		return nil, fmt.Errorf("%w: source file not found: %v", ErrClientError, params.File)
 	}
@@ -2088,7 +2752,7 @@ func (s *Session) handleGetSymbolsOfSourceFiles(ctx context.Context, params *Get
 
 	results := make([]*SymbolResponse, len(params.Files))
 	for i, file := range params.Files {
-		sourceFile := setup.program.GetSourceFile(file.ToFileName())
+		sourceFile := setup.program.GetSourceFile(file.ToFileName(setup.program.BaseDirectory()))
 		if sourceFile == nil {
 			return nil, fmt.Errorf("%w: source file not found: %v", ErrClientError, file)
 		}
@@ -2108,7 +2772,7 @@ func (s *Session) handleGetSymbolsAtPositions(ctx context.Context, params *GetSy
 	}
 	defer setup.done()
 
-	sourceFile := setup.program.GetSourceFile(params.File.ToFileName())
+	sourceFile := setup.program.GetSourceFile(params.File.ToFileName(setup.program.BaseDirectory()))
 	if sourceFile == nil {
 		return nil, fmt.Errorf("%w: source file not found: %v", ErrClientError, params.File)
 	}
@@ -2205,8 +2869,8 @@ func (s *Session) handleGetTypesOfSymbols(ctx context.Context, params *GetTypesO
 	defer setup.done()
 
 	results := make([]*TypeResponse, len(params.Symbols))
-	for i, symHandle := range params.Symbols {
-		symbol, err := setup.resolveSymbolHandle(symHandle)
+	for i, symbolReference := range params.Symbols {
+		symbol, err := setup.resolveSymbolHandle(symbolReference)
 		if err != nil {
 			return nil, err
 		}
@@ -2383,7 +3047,7 @@ func (s *Session) handleGetTypeAtPosition(ctx context.Context, params *GetTypeAt
 	}
 	defer setup.done()
 
-	sourceFile := setup.program.GetSourceFile(params.File.ToFileName())
+	sourceFile := setup.program.GetSourceFile(params.File.ToFileName(setup.program.BaseDirectory()))
 	if sourceFile == nil {
 		return nil, fmt.Errorf("%w: source file not found: %v", ErrClientError, params.File)
 	}
@@ -2410,7 +3074,7 @@ func (s *Session) handleGetTypesAtPositions(ctx context.Context, params *GetType
 	}
 	defer setup.done()
 
-	sourceFile := setup.program.GetSourceFile(params.File.ToFileName())
+	sourceFile := setup.program.GetSourceFile(params.File.ToFileName(setup.program.BaseDirectory()))
 	if sourceFile == nil {
 		return nil, fmt.Errorf("%w: source file not found: %v", ErrClientError, params.File)
 	}
@@ -2433,26 +3097,26 @@ func (s *Session) handleGetTypesAtPositions(ctx context.Context, params *GetType
 
 // @gen-proto-nullable
 func (s *Session) handleGetParentOfSymbol(_ context.Context, params *GetSymbolPropertyParams) (*SymbolResponse, error) {
-	return s.resolveSymbolPropertyOfSymbol(params, func(sym *ast.Symbol) *ast.Symbol { return sym.Parent })
+	return s.resolveSymbolPropertyOfSymbol(params, func(sym *ast.Symbol) *ast.Symbol { return sym.Parent() })
 }
 
 // @gen-proto-nullable
 func (s *Session) handleGetMembersOfSymbol(ctx context.Context, params *GetSymbolPropertyParams) ([]*SymbolResponse, error) {
 	return s.resolveSymbolTablePropertyOfSymbol(ctx, params, func(symbol *ast.Symbol) ast.SymbolTable {
-		return symbol.Members
+		return symbol.Members()
 	})
 }
 
 // @gen-proto-nullable
 func (s *Session) handleGetExportsOfSymbol(ctx context.Context, params *GetSymbolPropertyParams) ([]*SymbolResponse, error) {
 	return s.resolveSymbolTablePropertyOfSymbol(ctx, params, func(symbol *ast.Symbol) ast.SymbolTable {
-		return symbol.Exports
+		return symbol.Exports()
 	})
 }
 
 // @gen-proto-nullable
 func (s *Session) handleGetExportSymbolOfSymbol(_ context.Context, params *GetSymbolPropertyParams) (*SymbolResponse, error) {
-	return s.resolveSymbolPropertyOfSymbol(params, func(sym *ast.Symbol) *ast.Symbol { return sym.ExportSymbol })
+	return s.resolveSymbolPropertyOfSymbol(params, func(sym *ast.Symbol) *ast.Symbol { return sym.ExportSymbol() })
 }
 
 // @gen-proto-nullable
@@ -2589,35 +3253,40 @@ func (s *Session) handleGetImportAdderEdits(ctx context.Context, params *GetImpo
 	}
 
 	projectID := params.Project
+	proj, err := sd.getProject(projectID)
+	if err != nil {
+		return nil, err
+	}
+	logicalProjectID := proj.ID()
 	workingSnapshot := sd.snapshot
 	program, err := sd.getProgram(params.Project)
 	if err != nil {
 		return nil, err
 	}
-	sourceFile := program.GetSourceFile(params.File.ToFileName())
+	sourceFile := program.GetSourceFile(params.File.ToFileName(program.BaseDirectory()))
 	if sourceFile == nil {
 		return nil, fmt.Errorf("%w: source file not found: %v", ErrClientError, params.File)
 	}
 
 	userPreferences := workingSnapshot.UserPreferences()
 	if registry := workingSnapshot.AutoImportRegistry(); registry == nil ||
-		!registry.IsPreparedForImportingFile(sourceFile.FileName(), projectID, userPreferences) {
-		preparedSnapshot := s.snapshotHost.CloneSnapshotWithAutoImports(ctx, workingSnapshot, params.File.ToURI(s.currentDirectory()), nil)
+		!registry.IsPreparedForImportingFile(sourceFile.FileName(), logicalProjectID, userPreferences) {
+		preparedSnapshot := s.snapshotHost.CloneSnapshotWithAutoImports(ctx, workingSnapshot, lsconv.FileNameToDocumentURI(sourceFile.FileName()), nil)
 		if s.projectSession != nil {
 			s.projectSession.TryAdoptSnapshotInBackground(workingSnapshot, preparedSnapshot)
 		}
 		defer preparedSnapshot.Deref()
 
 		workingSnapshot = preparedSnapshot
-		proj := workingSnapshot.ProjectCollection.GetProject(projectID)
+		proj := workingSnapshot.ProjectCollection.GetProjectByHandle(projectID)
 		if proj == nil {
-			return nil, fmt.Errorf("%w: project %s not found", ErrClientError, projectID)
+			return nil, fmt.Errorf("%w: project %d not found", ErrClientError, projectID)
 		}
 		program = proj.GetProgram()
 		if program == nil {
 			return nil, fmt.Errorf("%w: project has no program", ErrClientError)
 		}
-		sourceFile = program.GetSourceFile(params.File.ToFileName())
+		sourceFile = program.GetSourceFile(params.File.ToFileName(program.BaseDirectory()))
 		if sourceFile == nil {
 			return nil, fmt.Errorf("%w: source file not found: %v", ErrClientError, params.File)
 		}
@@ -2635,7 +3304,7 @@ func (s *Session) handleGetImportAdderEdits(ctx context.Context, params *GetImpo
 	view := autoimport.NewView(
 		registry,
 		sourceFile,
-		projectID,
+		logicalProjectID,
 		program,
 		ch,
 		userPreferences.ModuleSpecifierPreferences(),
@@ -2646,7 +3315,7 @@ func (s *Session) handleGetImportAdderEdits(ctx context.Context, params *GetImpo
 		ch,
 		sourceFile,
 		view,
-		workingSnapshot.GetPreferences(sourceFile.FileName()).FormatCodeSettings,
+		workingSnapshot.GetPreferences(sourceFile.FileName().AsString()).FormatCodeSettings,
 		workingSnapshot.Converters(),
 		userPreferences,
 	)
@@ -2654,10 +3323,12 @@ func (s *Session) handleGetImportAdderEdits(ctx context.Context, params *GetImpo
 	for i, action := range params.Actions {
 		switch action.Kind {
 		case ImportAdderActionKindImportSymbol:
-			if action.Symbol == 0 {
+			if action.Symbol == nil {
 				return nil, fmt.Errorf("%w: import adder action %d missing symbol", ErrClientError, i)
 			}
-			symbol, err := sd.resolveSymbolHandle(action.Symbol)
+			symbol, err := (checkerSetup{
+				sd: sd, snapshot: params.Snapshot, program: program, projectID: params.Project,
+			}).resolveSymbolHandle(*action.Symbol)
 			if err != nil {
 				return nil, err
 			}
@@ -2779,58 +3450,89 @@ func (s *Session) resolveSymbolPropertyOfType(params *GetTypePropertyParams, get
 
 // resolveSymbolTablePropertyOfSymbol resolves a symbol property of type `Symbol` and returns a symbol response.
 func (s *Session) resolveSymbolPropertyOfSymbol(params *GetSymbolPropertyParams, getter func(*ast.Symbol) *ast.Symbol) (*SymbolResponse, error) {
-	sd, err := s.getSnapshotData(params.Snapshot)
+	symbol, sd, projectID, release, err := s.resolveSymbolReference(params.Symbol)
 	if err != nil {
 		return nil, err
 	}
-
-	symbol, err := sd.resolveSymbolHandle(params.Symbol)
-	if err != nil {
-		return nil, err
-	}
+	defer release()
 
 	result := getter(symbol)
 	if result == nil {
 		return nil, nil
 	}
-	return sd.newSymbolResponse(result, params.Project), nil
+	if sd == nil {
+		return newFileSymbolResponse(result), nil
+	}
+	return sd.newSymbolResponse(result, projectID), nil
 }
 
 // resolveSymbolTablePropertyOfSymbol resolves a symbol property of type `SymbolTable` and returns an array of symbol responses.
 // Results are sorted using the checker's canonical symbol ordering so that API consumers receive
 // a stable, deterministic order instead of Go's randomized map iteration order.
 func (s *Session) resolveSymbolTablePropertyOfSymbol(ctx context.Context, params *GetSymbolPropertyParams, getter func(*ast.Symbol) ast.SymbolTable) ([]*SymbolResponse, error) {
-	sd, err := s.getSnapshotData(params.Snapshot)
+	symbol, sd, projectID, release, err := s.resolveSymbolReference(params.Symbol)
 	if err != nil {
 		return nil, err
 	}
-
-	symbol, err := sd.resolveSymbolHandle(params.Symbol)
-	if err != nil {
-		return nil, err
-	}
+	defer release()
 
 	symbolTable := getter(symbol)
-	if len(symbolTable) == 0 {
+	if symbolTable.Len() == 0 {
 		return nil, nil
 	}
-	if len(symbolTable) == 1 {
-		for _, sub := range symbolTable {
-			return []*SymbolResponse{sd.newSymbolResponse(sub, params.Project)}, nil
+	if symbolTable.Len() == 1 {
+		for _, sub := range symbolTable.All() {
+			if sd == nil {
+				return []*SymbolResponse{newFileSymbolResponse(sub)}, nil
+			}
+			return []*SymbolResponse{sd.newSymbolResponse(sub, projectID)}, nil
 		}
 	}
 
-	// More than one symbol, need a checker to sort
-	setup, err := s.setupChecker(ctx, params.Snapshot, params.Project)
+	symbols := make([]*ast.Symbol, 0, symbolTable.Len())
+	for _, sub := range symbolTable.All() {
+		symbols = append(symbols, sub)
+	}
+	if sd == nil {
+		// Binder tables of a file-owned symbol only contain symbols from the same file, so they
+		// can be ordered by declaration position without a checker.
+		file := ast.GetSourceFileOfSymbol(symbol)
+		slices.SortFunc(symbols, func(left *ast.Symbol, right *ast.Symbol) int {
+			compilerdebug.Assert(ast.GetSourceFileOfSymbol(left) == file)
+			compilerdebug.Assert(ast.GetSourceFileOfSymbol(right) == file)
+			leftHasDeclaration := len(left.Declarations()) != 0
+			rightHasDeclaration := len(right.Declarations()) != 0
+			if leftHasDeclaration != rightHasDeclaration {
+				if leftHasDeclaration {
+					return -1
+				}
+				return 1
+			}
+			if leftHasDeclaration {
+				if order := cmp.Compare(left.Declarations()[0].Pos(), right.Declarations()[0].Pos()); order != 0 {
+					return order
+				}
+			}
+			if order := cmp.Compare(left.Name(), right.Name()); order != 0 {
+				return order
+			}
+			return cmp.Compare(ast.GetSymbolId(left), ast.GetSymbolId(right))
+		})
+		results := make([]*SymbolResponse, len(symbols))
+		for i, sub := range symbols {
+			results[i] = newFileSymbolResponse(sub)
+		}
+		return results, nil
+	}
+
+	// Tables of snapshot-owned symbols may contain symbols from several files, so they use the
+	// checker's ordering.
+	setup, err := s.setupChecker(ctx, params.Symbol.Snapshot, params.Symbol.Project)
 	if err != nil {
 		return nil, err
 	}
 	defer setup.done()
 
-	symbols := make([]*ast.Symbol, 0, len(symbolTable))
-	for _, sub := range symbolTable {
-		symbols = append(symbols, sub)
-	}
 	slices.SortFunc(symbols, setup.checker.CompareSymbols)
 
 	results := make([]*SymbolResponse, len(symbols))
@@ -3188,6 +3890,9 @@ func (s *Session) handleTypeToTypeNode(ctx context.Context, params *TypeToTypeNo
 
 	typeNode := setup.checker.TypeToTypeNode(t, enclosingDeclaration, nodebuilder.Flags(params.Flags), nil)
 	if typeNode == nil {
+		if s.useBinaryResponses {
+			return RawBinary(nil), nil
+		}
 		return nil, nil
 	}
 
@@ -3228,6 +3933,9 @@ func (s *Session) handleSignatureToSignatureDeclaration(ctx context.Context, par
 
 	node := setup.checker.SignatureToSignatureDeclaration(sig, ast.Kind(params.Kind), enclosingDeclaration, nodebuilder.Flags(params.Flags))
 	if node == nil {
+		if s.useBinaryResponses {
+			return RawBinary(nil), nil
+		}
 		return nil, nil
 	}
 
@@ -3311,22 +4019,22 @@ func (s *Session) handleEmit(ctx context.Context, params *EmitParams) (*EmitResp
 	if err != nil {
 		return nil, err
 	}
-	var outputFiles map[string]string
+	var outputFiles map[tspath.RootedFilePath]string
 	sd, err := s.getSnapshotData(params.Snapshot)
 	if err != nil {
 		return nil, err
 	}
 	if requestfilesystem.HasFullFileSystem(sd.fileSystem) {
-		outputFiles = make(map[string]string)
+		outputFiles = make(map[tspath.RootedFilePath]string)
 		var outputMu sync.Mutex
-		options.WriteFile = func(fileName string, text string, _ *compiler.WriteFileData) error {
+		options.WriteFile = func(fileName tspath.RootedFilePath, text string, _ *compiler.WriteFileData) error {
 			outputMu.Lock()
 			outputFiles[fileName] = text
 			outputMu.Unlock()
 			return nil
 		}
 	} else {
-		options.WriteFile = func(fileName string, text string, _ *compiler.WriteFileData) error {
+		options.WriteFile = func(fileName tspath.RootedFilePath, text string, _ *compiler.WriteFileData) error {
 			return s.snapshotHost.FS().WriteFile(fileName, text)
 		}
 	}
@@ -3336,7 +4044,7 @@ func (s *Session) handleEmit(ctx context.Context, params *EmitParams) (*EmitResp
 	}
 	emittedFiles := slices.Clone(result.EmittedFiles)
 	if emittedFiles == nil {
-		emittedFiles = []string{}
+		emittedFiles = []tspath.RootedFilePath{}
 	}
 	emittedFilesContents := []string{}
 	if outputFiles != nil {
@@ -3387,8 +4095,8 @@ func (s *Session) handleSelectedFilesEmit(ctx context.Context, params *SelectedF
 func emitToOutput(ctx context.Context, program *compiler.Program, options compiler.EmitOptions) (*EmitOutputResponse, error) {
 	var mu sync.Mutex
 	outputFiles := make([]*EmitOutputFile, 0)
-	options.WriteFile = func(fileName string, text string, data *compiler.WriteFileData) error {
-		var sourceFileName *string
+	options.WriteFile = func(fileName tspath.RootedFilePath, text string, data *compiler.WriteFileData) error {
+		var sourceFileName *tspath.RootedFilePath
 		if data.SourceFile != nil {
 			name := data.SourceFile.FileName()
 			sourceFileName = &name
@@ -3404,7 +4112,7 @@ func emitToOutput(ctx context.Context, program *compiler.Program, options compil
 		return nil, err
 	}
 	slices.SortFunc(outputFiles, func(a, b *EmitOutputFile) int {
-		return strings.Compare(a.FileName, b.FileName)
+		return a.FileName.Compare(b.FileName)
 	})
 	return &EmitOutputResponse{
 		EmitSkipped: result.EmitSkipped,
@@ -3427,7 +4135,7 @@ func (s *Session) getEmitOptions(params *EmitParams) (*compiler.Program, compile
 	}, nil
 }
 
-func (s *Session) getEmitProgram(snapshot SnapshotID, projectID project.ID) (*compiler.Program, error) {
+func (s *Session) getEmitProgram(snapshot SnapshotID, projectID project.Handle) (*compiler.Program, error) {
 	sd, err := s.getSnapshotData(snapshot)
 	if err != nil {
 		return nil, err
@@ -3540,9 +4248,15 @@ func (s *Session) handleGetWellKnownSymbols(ctx context.Context, params *GetIntr
 	}
 	defer setup.done()
 
-	unknown, _ := setup.sd.registerSymbol(setup.checker.GetUnknownSymbol(), setup.projectID)
-	undefined, _ := setup.sd.registerSymbol(setup.checker.GetUndefinedSymbol(), setup.projectID)
-	arguments, _ := setup.sd.registerSymbol(setup.checker.GetArgumentsSymbol(), setup.projectID)
+	unknownSymbol := setup.checker.GetUnknownSymbol()
+	undefinedSymbol := setup.checker.GetUndefinedSymbol()
+	argumentsSymbol := setup.checker.GetArgumentsSymbol()
+	compilerdebug.Assert(unknownSymbol.Flags()&ast.SymbolFlagsTransient != 0)
+	compilerdebug.Assert(undefinedSymbol.Flags()&ast.SymbolFlagsTransient != 0)
+	compilerdebug.Assert(argumentsSymbol.Flags()&ast.SymbolFlagsTransient != 0)
+	unknown, _ := setup.sd.registerSymbol(unknownSymbol, setup.projectID)
+	undefined, _ := setup.sd.registerSymbol(undefinedSymbol, setup.projectID)
+	arguments, _ := setup.sd.registerSymbol(argumentsSymbol, setup.projectID)
 	return &WellKnownSymbolsResponse{
 		Unknown:   unknown,
 		Undefined: undefined,
@@ -3848,16 +4562,6 @@ func (s *Session) handleGetIndexInfoOfType(ctx context.Context, params *GetIndex
 	return setup.newIndexInfoResponse(setup.checker.GetIndexInfoOfType(t, keyType)), nil
 }
 
-// @gen-proto-nullable
-func (s *Session) handleGetIndexTypeOfTypeByKind(ctx context.Context, params *GetIndexInfoOfTypeParams) (*TypeResponse, error) {
-	setup, t, keyType, err := s.resolveIndexInfoRequest(ctx, params)
-	if err != nil {
-		return nil, err
-	}
-	defer setup.done()
-	return setup.sd.newTypeResponse(setup.projectID, setup.checker.GetIndexTypeOfType(t, keyType), setup.checker), nil
-}
-
 // handleGetConstraintOfTypeParameter returns the constraint of a type parameter.
 // @gen-proto-nullable
 func (s *Session) handleGetConstraintOfTypeParameter(ctx context.Context, params *GetTypePropertyParams) (*TypeResponse, error) {
@@ -4020,6 +4724,68 @@ func (s *Session) handleGetExportSpecifierLocalTargetSymbol(ctx context.Context,
 	}
 
 	return setup.newSymbolResponse(symbol), nil
+}
+
+func (s *Session) handleGetMergedSymbol(ctx context.Context, params *CheckerSymbolParams) (*SymbolResponse, error) {
+	setup, err := s.setupChecker(ctx, params.Snapshot, params.Project)
+	if err != nil {
+		return nil, err
+	}
+	defer setup.done()
+
+	symbol, err := setup.resolveSymbolHandle(params.Symbol)
+	if err != nil {
+		return nil, err
+	}
+
+	return setup.newSymbolResponse(setup.checker.GetMergedSymbol(symbol)), nil
+}
+
+// @gen-proto-nullable
+func (s *Session) handleGetSymbolOfNode(ctx context.Context, params *CheckerNodeParams) (*SymbolResponse, error) {
+	setup, err := s.setupChecker(ctx, params.Snapshot, params.Project)
+	if err != nil {
+		return nil, err
+	}
+	defer setup.done()
+
+	node, err := setup.sd.resolveNodeHandle(setup.program, params.Location)
+	if err != nil {
+		return nil, err
+	}
+
+	return setup.newSymbolResponse(setup.checker.GetSymbolOfNode(node)), nil
+}
+
+// @gen-proto-nullable
+func (s *Session) handleGetSymbolOfDeclarationForChecker(ctx context.Context, params *CheckerNodeParams) (*SymbolResponse, error) {
+	setup, err := s.setupChecker(ctx, params.Snapshot, params.Project)
+	if err != nil {
+		return nil, err
+	}
+	defer setup.done()
+
+	node, err := setup.sd.resolveNodeHandle(setup.program, params.Location)
+	if err != nil {
+		return nil, err
+	}
+	return setup.newSymbolResponse(setup.checker.GetSymbolOfDeclaration(node)), nil
+}
+
+// @gen-proto-nullable
+func (s *Session) handleGetParentOfSymbolForChecker(ctx context.Context, params *CheckerSymbolParams) (*SymbolResponse, error) {
+	setup, err := s.setupChecker(ctx, params.Snapshot, params.Project)
+	if err != nil {
+		return nil, err
+	}
+	defer setup.done()
+
+	symbol, err := setup.resolveSymbolHandle(params.Symbol)
+	if err != nil {
+		return nil, err
+	}
+
+	return setup.newSymbolResponse(setup.checker.GetParentOfSymbol(symbol)), nil
 }
 
 // handleGetAliasedSymbol resolves an alias symbol to its target.
@@ -4277,24 +5043,24 @@ func (s *Session) handleGetFalseTypeOfConditionalType(ctx context.Context, param
 
 func (sd *snapshotData) resolveNodeHandle(program *compiler.Program, handle NodeHandle) (*ast.Node, error) {
 	s := string(handle)
-	// Format: "index.kind.path" — we need index and path, kind is informational only.
-	firstDot := strings.IndexByte(s, '.')
-	if firstDot == -1 {
+	// Request format: "index.#sourceFileID".
+	indexText, fileKey, ok := strings.Cut(s, ".")
+	if !ok {
 		return nil, fmt.Errorf("%w: invalid node handle %q", ErrClientError, handle)
 	}
-	secondDot := strings.IndexByte(s[firstDot+1:], '.')
-	if secondDot == -1 {
-		return nil, fmt.Errorf("%w: invalid node handle %q", ErrClientError, handle)
-	}
-	secondDot += firstDot + 1 // adjust to absolute index
-
-	idx, err := strconv.ParseUint(s[:firstDot], 10, 32)
+	idx, err := strconv.ParseUint(indexText, 10, 32)
 	if err != nil {
 		return nil, fmt.Errorf("%w: invalid node handle %q: %w", ErrClientError, handle, err)
 	}
-	path := tspath.Path(s[secondDot+1:])
 
-	sourceFile := program.GetSourceFileByPath(path)
+	if !strings.HasPrefix(fileKey, "#") {
+		return nil, fmt.Errorf("%w: invalid node handle %q", ErrClientError, handle)
+	}
+	nodeID, err := strconv.ParseUint(fileKey[1:], 10, 64)
+	if err != nil || nodeID == 0 {
+		return nil, fmt.Errorf("%w: invalid node handle %q", ErrClientError, handle)
+	}
+	sourceFile := program.GetSourceFileByNodeID(ast.NodeId(nodeID))
 	if sourceFile == nil {
 		return nil, fmt.Errorf("%w: node handle %q could not be resolved (file may not be loaded or handle may be stale)", ErrClientError, handle)
 	}
@@ -4331,7 +5097,7 @@ func computeSnapshotChanges(prev *project.Snapshot, next *project.Snapshot) *Sna
 			if oldProj.GetProgram() == newProj.GetProgram() {
 				return
 			}
-			var oldFiles, newFiles map[tspath.Path]*ast.SourceFile
+			var oldFiles, newFiles map[tspath.PathKey]*ast.SourceFile
 			if p := oldProj.GetProgram(); p != nil {
 				oldFiles = p.FilesByPath()
 			}
@@ -4342,10 +5108,10 @@ func computeSnapshotChanges(prev *project.Snapshot, next *project.Snapshot) *Sna
 			core.DiffMaps(
 				oldFiles, newFiles,
 				nil, // onAdded: new file in project, not a change.
-				func(path tspath.Path, _ *ast.SourceFile) {
+				func(path tspath.PathKey, _ *ast.SourceFile) {
 					projectChanges.DeletedFiles = append(projectChanges.DeletedFiles, path)
 				},
-				func(path tspath.Path, _ *ast.SourceFile, _ *ast.SourceFile) {
+				func(path tspath.PathKey, _ *ast.SourceFile, _ *ast.SourceFile) {
 					projectChanges.ChangedFiles = append(projectChanges.ChangedFiles, path)
 				},
 			)
@@ -4422,9 +5188,9 @@ func (s *Session) createSnapshotOperationResponse(snapshot *project.Snapshot, re
 	if request.OpenFiles != nil {
 		results := make([]*OpenedFileOperationResult, len(request.OpenFiles))
 		for i, file := range request.OpenFiles {
-			project := snapshot.GetDefaultProject(file.ToURI(s.currentDirectory()))
+			project := snapshot.GetDefaultProject(file.ToURI(s.GetCurrentDirectory()))
 			if project == nil {
-				panic("no project found for opened file " + file.ToAbsoluteFileName(s.currentDirectory()))
+				panic("no project found for opened file " + s.toFileName(file).AsString())
 			}
 			results[i] = &OpenedFileOperationResult{Project: project.ID()}
 		}
@@ -4438,6 +5204,7 @@ func (s *Session) createSnapshotOperationResponse(snapshot *project.Snapshot, re
 func (s *Session) Close() {
 	s.closeOnce.Do(func() {
 		s.releaseLanguageServerRefs()
+		s.releaseSourceFileLeases()
 
 		s.snapshotsMu.Lock()
 		snapshots := make([]*project.Snapshot, 0, len(s.snapshots))
@@ -4495,9 +5262,16 @@ func formatSessionID(id uint64) string {
 	return fmt.Sprintf("api-session-%d", id)
 }
 
-// toPath converts a file name to a normalized path.
-func (s *Session) toPath(fileName string) tspath.Path {
-	return tspath.ToPath(fileName, s.currentDirectory(), s.useCaseSensitiveFileNames())
+func (s *Session) pathKey(fileName tspath.RootedFilePath) tspath.PathKey {
+	return s.caseSensitivity().PathKey(tspath.RootedPath(fileName))
+}
+
+func (s *Session) toFileName(document DocumentIdentifier) tspath.RootedFilePath {
+	return document.ToFileName(s.currentDirectory())
+}
+
+func (s *Session) toURI(document DocumentIdentifier) lsproto.DocumentUri {
+	return document.ToURI(s.currentDirectory())
 }
 
 // toFileChangeSummary converts API file changes to a project.FileChangeSummary.
@@ -4511,7 +5285,7 @@ func (s *Session) toFileChangeSummary(changes *FileNotifications) project.FileCh
 		summary.IncludesWatchChangeOutsideNodeModules = true
 		return summary
 	}
-	cwd := s.currentDirectory()
+	cwd := s.GetCurrentDirectory()
 	for _, doc := range changes.Changed {
 		uri := doc.ToURI(cwd)
 		summary.Changed.Add(uri)
@@ -4658,7 +5432,7 @@ func (s *Session) resolveOptionalSourceFile(program *compiler.Program, file *Doc
 	if file == nil {
 		return nil, nil
 	}
-	sourceFile := program.GetSourceFile(file.ToFileName())
+	sourceFile := program.GetSourceFile(file.ToFileName(program.BaseDirectory()))
 	if sourceFile == nil {
 		return nil, fmt.Errorf("%w: source file not found: %v", ErrClientError, file)
 	}
@@ -4681,7 +5455,7 @@ func (s *Session) handleGetReferencesToSymbolInFile(ctx context.Context, params 
 		return nil, nil
 	}
 
-	sourceFile := setup.program.GetSourceFile(params.File.ToFileName())
+	sourceFile := setup.program.GetSourceFile(params.File.ToFileName(setup.program.BaseDirectory()))
 	if sourceFile == nil {
 		return nil, fmt.Errorf("%w: source file not found: %v", ErrClientError, params.File)
 	}
@@ -4747,13 +5521,13 @@ func (s *Session) handleGetCompletionsAtPosition(ctx context.Context, params *Ge
 		return nil, err
 	}
 	run := func(snapshot *project.Snapshot, program *compiler.Program) (*ls.CompletionList, error) {
-		sourceFile := program.GetSourceFile(params.File.ToFileName())
+		sourceFile := program.GetSourceFile(params.File.ToFileName(program.BaseDirectory()))
 		if sourceFile == nil {
 			return nil, nil
 		}
-		langSvc, e := s.setupLanguageService(snapshot, program, params.Project, "")
-		if e != nil {
-			return nil, e
+		langSvc, setupErr := s.setupLanguageService(snapshot, program, params.Project, sourceFile.FileName().AsString())
+		if setupErr != nil {
+			return nil, setupErr
 		}
 		internalPos := sourceFile.GetPositionMap().UTF16ToUTF8(int(params.Position))
 		return langSvc.GetCompletionsAtPosition(ctx, sourceFile, internalPos, params.TriggerCharacter, params.IncludeSymbol)
@@ -4765,7 +5539,14 @@ func (s *Session) handleGetCompletionsAtPosition(ctx context.Context, params *Ge
 	}
 	result, err := run(sd.snapshot, program)
 	if errors.Is(err, ls.ErrNeedsAutoImports) {
-		preparedSnapshot := s.snapshotHost.CloneSnapshotWithAutoImports(ctx, sd.snapshot, params.File.ToURI(s.currentDirectory()), nil)
+		if params.IncludeSymbol {
+			return nil, fmt.Errorf("%w: snapshot is not prepared for auto-imports for %s", ErrClientError, params.File)
+		}
+		sourceFile := program.GetSourceFile(params.File.ToFileName(program.BaseDirectory()))
+		if sourceFile == nil {
+			return nil, nil
+		}
+		preparedSnapshot := s.snapshotHost.CloneSnapshotWithAutoImports(ctx, sd.snapshot, lsconv.FileNameToDocumentURI(sourceFile.FileName()), nil)
 		if s.projectSession != nil {
 			s.projectSession.TryAdoptSnapshotInBackground(sd.snapshot, preparedSnapshot)
 		}
@@ -4774,9 +5555,9 @@ func (s *Session) handleGetCompletionsAtPosition(ctx context.Context, params *Ge
 			return nil, err
 		}
 		projectID := params.Project
-		proj := preparedSnapshot.ProjectCollection.GetProject(projectID)
+		proj := preparedSnapshot.ProjectCollection.GetProjectByHandle(projectID)
 		if proj == nil {
-			return nil, fmt.Errorf("%w: project %s not found", ErrClientError, projectID)
+			return nil, fmt.Errorf("%w: project %d not found", ErrClientError, projectID)
 		}
 		program = proj.GetProgram()
 		if program == nil {
