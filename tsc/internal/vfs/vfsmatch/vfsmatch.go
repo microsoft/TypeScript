@@ -2,6 +2,7 @@ package vfsmatch
 
 import (
 	"math"
+	"runtime"
 	"slices"
 	"strings"
 	"unicode/utf8"
@@ -31,8 +32,16 @@ type PathPatternInput interface {
 	string | tspath.PathPattern
 }
 
+// ReadDirectory returns the files below path matching the include and exclude
+// patterns. Directories may be read concurrently.
 func ReadDirectory[T PathPatternInput](host vfs.FS, path tspath.RootedDirectoryPath, extensions []string, excludes []T, includes []T, depth int) []tspath.RootedFilePath {
 	return matchFileNames(path, extensions, excludes, includes, depth, host)
+}
+
+// ReadDirectorySingleThreaded is ReadDirectory with all directory reads on the
+// calling goroutine.
+func ReadDirectorySingleThreaded[T PathPatternInput](host vfs.FS, path tspath.RootedDirectoryPath, extensions []string, excludes []T, includes []T, depth int) []tspath.RootedFilePath {
+	return matchFileNamesWithPrefetch(path, extensions, excludes, includes, depth, host, 0)
 }
 
 // IsImplicitGlob checks if a path component is implicitly a glob.
@@ -587,6 +596,7 @@ type globVisitor struct {
 	caseSensitivity  tspath.CaseSensitivity
 	visited          collections.Set[tspath.PathKey]
 	results          [][]tspath.RootedFilePath
+	prefetched       map[tspath.RootedDirectoryPath]prefetchedDirectory
 }
 
 // visit walks a directory tree, collecting files that match the glob patterns.
@@ -595,9 +605,12 @@ type globVisitor struct {
 // called to resolve symlinks.
 func (v *globVisitor) visit(absolutePath tspath.RootedDirectoryPath, depth int, resolvedRealPath tspath.RootedDirectoryPath) {
 	// Detect symlink cycles
+	prefetched, hasPrefetched := v.prefetched[absolutePath]
 	var realPath tspath.RootedDirectoryPath
 	if resolvedRealPath != "" {
 		realPath = resolvedRealPath
+	} else if hasPrefetched {
+		realPath = prefetched.realPath
 	} else {
 		realPath = tspath.RootedDirectoryPathFromPath(v.host.Realpath(absolutePath.AsPath()))
 	}
@@ -607,7 +620,12 @@ func (v *globVisitor) visit(absolutePath tspath.RootedDirectoryPath, depth int, 
 	}
 	v.visited.Add(canonicalPath)
 
-	entries := v.host.GetAccessibleEntries(absolutePath)
+	var entries vfs.Entries
+	if hasPrefetched {
+		entries = prefetched.entries
+	} else {
+		entries = v.host.GetAccessibleEntries(absolutePath)
+	}
 
 	absPrefix := tspath.EnsureTrailingDirectorySeparator(absolutePath.AsString())
 
@@ -647,6 +665,12 @@ func (v *globVisitor) visit(absolutePath tspath.RootedDirectoryPath, depth int, 
 }
 
 func matchFileNames[T PathPatternInput](path tspath.RootedDirectoryPath, extensions []string, excludes, includes []T, depth int, host vfs.FS) []tspath.RootedFilePath {
+	return matchFileNamesWithPrefetch(path, extensions, excludes, includes, depth, host, runtime.GOMAXPROCS(0))
+}
+
+// matchFileNamesWithPrefetch is matchFileNames with prefetchWorkers concurrent
+// directory readers; zero disables the prefetch.
+func matchFileNamesWithPrefetch[T PathPatternInput](path tspath.RootedDirectoryPath, extensions []string, excludes, includes []T, depth int, host vfs.FS, prefetchWorkers int) []tspath.RootedFilePath {
 	caseSensitivity := host.CaseSensitivity()
 
 	fileMatcher := newGlobMatcher(includes, excludes, path, caseSensitivity, UsageFiles)
@@ -661,7 +685,11 @@ func matchFileNames[T PathPatternInput](path tspath.RootedDirectoryPath, extensi
 		results:          make([][]tspath.RootedFilePath, max(len(fileMatcher.includes), 1)),
 	}
 
-	for _, basePath := range getBasePaths(path, includes, caseSensitivity) {
+	basePaths := getBasePaths(path, includes, caseSensitivity)
+	if prefetchWorkers > 0 {
+		v.prefetched = prefetchDirectories(host, directoryMatcher, caseSensitivity, basePaths, depth, prefetchWorkers)
+	}
+	for _, basePath := range basePaths {
 		v.visit(basePath, depth, "")
 	}
 
