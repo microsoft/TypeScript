@@ -59,6 +59,20 @@ func (c *Checker) initResolutions() {
 	c.syncObserveFloor()
 }
 
+// pushResolution pushes a resolution with every field zero and returns it.
+// Popping a resolution zeroes it, so space reused above the stack needs no
+// zeroing, and the caller sets only the fields it needs in place rather than
+// copying in a whole resolution.
+func (c *Checker) pushResolution() *resolution {
+	n := len(c.resolutions)
+	if n == cap(c.resolutions) {
+		c.resolutions = append(c.resolutions, resolution{})
+	} else {
+		c.resolutions = c.resolutions[:n+1]
+	}
+	return &c.resolutions[n]
+}
+
 func (c *Checker) currentResolution() *resolution {
 	return &c.resolutions[len(c.resolutions)-1]
 }
@@ -78,14 +92,13 @@ func (c *Checker) beginNodeResolution() {
 
 func (c *Checker) appendResolution(key memoKey, source memoStateSource, index int, depthBase int32) {
 	c.resolutionSerials++
-	c.resolutions = append(c.resolutions, resolution{
-		key:        key,
-		source:     source,
-		index:      int32(index),
-		start:      int32(len(c.instantiationStack)),
-		depthStart: depthBase,
-		serial:     c.resolutionSerials,
-	})
+	f := c.pushResolution()
+	f.key = key
+	f.source = source
+	f.index = int32(index)
+	f.start = int32(len(c.instantiationStack))
+	f.depthStart = depthBase
+	f.serial = c.resolutionSerials
 	c.syncObserveFloor()
 }
 
