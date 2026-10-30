@@ -130,6 +130,11 @@ var textToKeyword = map[string]ast.Kind{
 	"of":          ast.KindOfKeyword,
 }
 
+const (
+	minKeywordLength = 2
+	maxKeywordLength = 11
+)
+
 type keywordEntry struct {
 	text string
 	kind ast.Kind
@@ -143,6 +148,9 @@ const keywordHashMultiplier = 0x9E6867BF
 var keywordTable = func() [256]keywordEntry {
 	var table [256]keywordEntry
 	for text, kind := range textToKeyword {
+		if len(text) < minKeywordLength || len(text) > maxKeywordLength || text[0] < 'a' || text[0] > 'z' {
+			panic("keyword " + text + " is outside the bounds checked by lookupKeyword")
+		}
 		entry := &table[keywordHash(text, keywordHashMultiplier)]
 		if entry.text != "" {
 			panic("keywordHashMultiplier collides on " + entry.text + " and " + text)
@@ -156,6 +164,15 @@ var keywordTable = func() [256]keywordEntry {
 func keywordHash(s string, multiplier uint32) uint8 {
 	x := uint32(len(s)) | uint32(s[0])<<8 | uint32(s[1])<<16 | uint32(s[len(s)-1])<<24
 	return uint8((x * multiplier) >> 24)
+}
+
+func lookupKeyword(str string) ast.Kind {
+	if len(str) >= minKeywordLength && len(str) <= maxKeywordLength && str[0] >= 'a' && str[0] <= 'z' {
+		if entry := &keywordTable[keywordHash(str, keywordHashMultiplier)]; entry.text == str {
+			return entry.kind
+		}
+	}
+	return ast.KindUnknown
 }
 
 var textToToken = func() map[string]ast.Kind {
@@ -2240,11 +2257,8 @@ func (s *Scanner) scanInvalidCharacter() {
 }
 
 func GetIdentifierToken(str string) ast.Kind {
-	if len(str) >= 2 && len(str) <= 12 && str[0] >= 'a' && str[0] <= 'z' {
-		entry := &keywordTable[keywordHash(str, keywordHashMultiplier)]
-		if entry.text == str {
-			return entry.kind
-		}
+	if keyword := lookupKeyword(str); keyword != ast.KindUnknown {
+		return keyword
 	}
 	return ast.KindIdentifier
 }
