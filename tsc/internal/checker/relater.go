@@ -1156,13 +1156,42 @@ func (c *Checker) getKeyPropertyCandidateName(types []*Type) string {
 	for _, t := range types {
 		if t.flags&(TypeFlagsObject|TypeFlagsInstantiableNonPrimitive) != 0 {
 			for _, p := range c.getPropertiesOfType(t) {
-				if isUnitType(c.getTypeOfSymbol(p)) {
+				if c.isPropertyOfUnitType(p) {
 					return p.Name()
 				}
 			}
 		}
 	}
 	return ""
+}
+
+// Reports whether a property has a unit type, without resolving the types of methods, which are function types, or
+// instantiating the type of an instantiated or mapped property when the type it is instantiated from already rules
+// out a unit type.
+func (c *Checker) isPropertyOfUnitType(prop *ast.Symbol) bool {
+	// A method is typed as a function type only when none of the flags getTypeOfSymbol checks before it are set
+	if prop.Flags()&(ast.SymbolFlagsMethod|ast.SymbolFlagsAccessor|ast.SymbolFlagsVariable|ast.SymbolFlagsProperty) == ast.SymbolFlagsMethod {
+		return false
+	}
+	checkFlags := prop.CheckFlags()
+	if checkFlags&(ast.CheckFlagsInstantiated|ast.CheckFlagsMapped) != 0 {
+		if links := c.valueSymbolLinks.Get(prop); links.resolvedType == nil {
+			var uninstantiated *Type
+			if checkFlags&ast.CheckFlagsInstantiated != 0 {
+				uninstantiated = c.getTypeOfSymbol(links.target)
+			} else {
+				mappedType := links.getContainingType()
+				uninstantiated = c.getTemplateTypeFromMappedType(core.OrElse(mappedType.AsMappedType().target, mappedType))
+			}
+			// An object type other than a mapped type never instantiates to a unit type, so neither does a union containing one
+			if core.Some(uninstantiated.Distributed(), func(t *Type) bool {
+				return t.flags&TypeFlagsObject != 0 && t.objectFlags&ObjectFlagsMapped == 0
+			}) {
+				return false
+			}
+		}
+	}
+	return isUnitType(c.getTypeOfSymbol(prop))
 }
 
 // Given a set of constituent types and a property name, create and return a map keyed by the literal
