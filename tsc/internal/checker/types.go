@@ -461,8 +461,8 @@ func (links *TypeNodeLinks) setOuterTypeParameters(c *Checker, types []*Type) {
 }
 
 type ComputedNameNodeLinks struct {
-	hasName *bool  // If the node has a computable name
-	name    string // Resolved name associated with the type of the node
+	hasName core.Tristate // If the node has a computable name
+	name    string        // Resolved name associated with the type of the node
 }
 
 // Links for enum members
@@ -787,7 +787,7 @@ type Type struct {
 	flags       TypeFlags
 	objectFlags ObjectFlags
 	id          TypeId
-	kind        typeKind
+	kind        typeKind `customlint:"protected"`
 	symbol      *ast.Symbol
 	alias       *TypeAlias
 	checker     *Checker
@@ -821,6 +821,8 @@ func castType[T any](t *Type, kind typeKind) *T {
 	if t.kind != kind {
 		panic("Invalid type cast")
 	}
+	// SAFETY: Each kind is only assigned by newType to a Type embedded at offset zero of the
+	// struct for that kind, and every caller pairs T with its kind.
 	return (*T)(unsafe.Pointer(t))
 }
 
@@ -888,6 +890,7 @@ func (t *Type) AsConditionalType() *ConditionalType {
 
 func (t *Type) AsConstrainedType() *ConstrainedType {
 	if t.kind >= typeKindTypeParameter && t.kind <= typeKindIntersection {
+		// SAFETY: Types of these kinds are structs that embed ConstrainedType at offset zero.
 		return (*ConstrainedType)(unsafe.Pointer(t))
 	}
 	return nil
@@ -895,6 +898,7 @@ func (t *Type) AsConstrainedType() *ConstrainedType {
 
 func (t *Type) AsStructuredType() *StructuredType {
 	if t.kind >= typeKindObject && t.kind <= typeKindIntersection {
+		// SAFETY: Types of these kinds are structs that embed StructuredType at offset zero.
 		return (*StructuredType)(unsafe.Pointer(t))
 	}
 	return nil
@@ -902,6 +906,7 @@ func (t *Type) AsStructuredType() *StructuredType {
 
 func (t *Type) AsObjectType() *ObjectType {
 	if t.kind >= typeKindObject && t.kind <= typeKindEvolvingArray {
+		// SAFETY: Types of these kinds are structs that embed ObjectType at offset zero.
 		return (*ObjectType)(unsafe.Pointer(t))
 	}
 	return nil
@@ -909,6 +914,7 @@ func (t *Type) AsObjectType() *ObjectType {
 
 func (t *Type) AsTypeReference() *TypeReference {
 	if t.kind >= typeKindTypeReference && t.kind <= typeKindTuple {
+		// SAFETY: Types of these kinds are structs that embed TypeReference at offset zero.
 		return (*TypeReference)(unsafe.Pointer(t))
 	}
 	return nil
@@ -916,6 +922,7 @@ func (t *Type) AsTypeReference() *TypeReference {
 
 func (t *Type) AsInterfaceType() *InterfaceType {
 	if t.kind >= typeKindInterface && t.kind <= typeKindTuple {
+		// SAFETY: Types of these kinds are structs that embed InterfaceType at offset zero.
 		return (*InterfaceType)(unsafe.Pointer(t))
 	}
 	return nil
@@ -923,6 +930,7 @@ func (t *Type) AsInterfaceType() *InterfaceType {
 
 func (t *Type) AsUnionOrIntersectionType() *UnionOrIntersectionType {
 	if t.kind >= typeKindUnion && t.kind <= typeKindIntersection {
+		// SAFETY: Types of these kinds are structs that embed UnionOrIntersectionType at offset zero.
 		return (*UnionOrIntersectionType)(unsafe.Pointer(t))
 	}
 	return nil
@@ -1145,7 +1153,7 @@ func (t *StructuredType) ConstructSignatures() []*Signature {
 
 func (t *StructuredType) getMember(name string) *ast.Symbol {
 	if t.members != nil {
-		return t.members[name]
+		return t.members.Get(name)
 	}
 	lazy := t.getLazyState()
 	if lazy == nil {
@@ -1161,9 +1169,9 @@ func (t *StructuredType) getMember(name string) *ast.Symbol {
 func (t *StructuredType) getMembers() ast.SymbolTable {
 	if t.members == nil {
 		if properties := t.getProperties(); len(properties) != 0 {
-			t.members = make(ast.SymbolTable, len(properties))
+			t.members = ast.NewSymbolTableWithCapacity(len(properties))
 			for _, member := range properties {
-				t.members[member.Name()] = member
+				t.members.Set(member.Name(), member)
 			}
 		}
 	}
@@ -1459,7 +1467,7 @@ type EvolvingArrayType struct {
 type UnionOrIntersectionType struct {
 	StructuredType
 	types                                       []*Type
-	propertyCache                               ast.SymbolTable
+	propertyCache                               ast.SymbolTable // Augmented entries, except complete ones already in the non-augmented cache.
 	propertyCacheWithoutFunctionPropertyAugment ast.SymbolTable
 	resolvedProperties                          []*ast.Symbol
 }

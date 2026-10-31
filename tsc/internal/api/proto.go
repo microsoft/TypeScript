@@ -449,7 +449,9 @@ type CreateSnapshotParams struct {
 	FileNotifications *FileNotifications `json:"fileNotifications,omitempty"`
 	// FileSystem supplies file contents and directory listings for the new snapshot.
 	// A full filesystem is canonical and total. A filesystem layer is checked
-	// before falling back to the base snapshot or host filesystem.
+	// before falling back to the base snapshot or host filesystem. A snapshot
+	// filesystem overlays retained request entries from another active snapshot,
+	// then applies an optional layer or full filesystem.
 	FileSystem *requestfilesystem.RequestFileSystem `json:"fileSystem,omitempty"`
 }
 

@@ -1,0 +1,19 @@
+classExtendsNullValuedIdentifier.ts(2,21): error TS2377: Constructors for derived classes must contain a 'super' call.
+classExtendsNullValuedIdentifier.ts(4,40): error TS17005: A constructor cannot contain a 'super' call when its class extends 'null'.
+classExtendsNullValuedIdentifier.ts(6,21): error TS2377: Constructors for derived classes must contain a 'super' call.
+
+
+==== classExtendsNullValuedIdentifier.ts (3 errors) ====
+    const N = null;
+    class A extends N { constructor() { } }
+                        ~~~~~~~~~~~
+!!! error TS2377: Constructors for derived classes must contain a 'super' call.
+    class B extends (null) { constructor() { } }
+    class C extends null { constructor() { super(); } }
+                                           ~~~~~~~
+!!! error TS17005: A constructor cannot contain a 'super' call when its class extends 'null'.
+    let n = null;
+    class D extends n { constructor() { } }
+                        ~~~~~~~~~~~
+!!! error TS2377: Constructors for derived classes must contain a 'super' call.
+    

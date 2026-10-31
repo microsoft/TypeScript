@@ -1933,37 +1933,68 @@ func (p *Program) Emit(ctx context.Context, options EmitOptions) *EmitResult {
 	sourceFiles := p.getSourceFilesToEmit(options.TargetSourceFiles, forceDtsEmit, forceJsEmit)
 
 	for _, sourceFile := range sourceFiles {
-		emitter := &emitter{
+		emitters = append(emitters, &emitter{
 			writer:     nil,
 			sourceFile: sourceFile,
 			emitOnly:   options.EmitOnly,
 			forceEmit:  options.ForceEmit,
 			writeFile:  options.WriteFile,
 			tr:         p.hosts.Tracing,
-		}
-		emitters = append(emitters, emitter)
-		wg.Queue(func() {
-			host, done := newEmitHost(ctx, p, sourceFile)
-			defer done()
-			emitter.host = host
-
-			// take an unused writer
-			writer := writerPool.Get().(printer.EmitTextWriter)
-			writer.Clear()
-
-			// attach writer and perform emit
-			emitter.writer = writer
-			emitter.paths = outputpaths.GetOutputPathsFor(sourceFile, host.Options(), host, outputpaths.ForceEmitPaths{
-				Dts:            forceDtsEmit,
-				Js:             forceJsEmit,
-				DeclarationMap: options.ForceEmit && options.EmitOnly == EmitOnlyDts,
-			})
-			emitter.emit()
-			emitter.writer = nil
-
-			// put the writer back in the pool
-			writerPool.Put(writer)
 		})
+	}
+	transformFile := func(emitter *emitter) {
+		sourceFile := emitter.sourceFile
+		host, done := newEmitHost(ctx, p, sourceFile)
+		defer done()
+		emitter.host = host
+		emitter.paths = outputpaths.GetOutputPathsFor(sourceFile, host.Options(), host, outputpaths.ForceEmitPaths{
+			Dts:            forceDtsEmit,
+			Js:             forceJsEmit,
+			DeclarationMap: options.ForceEmit && options.EmitOnly == EmitOnlyDts,
+		})
+		emitter.transform()
+	}
+	printFile := func(emitter *emitter) {
+		// take an unused writer
+		writer := writerPool.Get().(printer.EmitTextWriter)
+		writer.Clear()
+
+		// attach writer and print
+		emitter.writer = writer
+		emitter.print()
+		emitter.writer = nil
+
+		// put the writer back in the pool
+		writerPool.Put(writer)
+	}
+	if p.compilerCheckerPool != nil && !p.SingleThreaded() {
+		// Transform the files of each checker in one task. Transforming can create types and resolve symbols, so a
+		// checker shared by concurrent tasks would do that work in an order that depends on scheduling. Files are
+		// transformed in reverse program order, the order in which a single-threaded work group runs per-file tasks,
+		// so that a program with one checker produces the same output whether or not it is single-threaded. Printing
+		// does not use the checker, so it runs in tasks of its own. Single-threaded programs emit file by file instead,
+		// since queued prints would only run after every file is transformed.
+		for _, group := range p.compilerCheckerPool.groupFilesByChecker(sourceFiles) {
+			if len(group) == 0 {
+				continue
+			}
+			wg.Queue(func() {
+				for _, i := range slices.Backward(group) {
+					emitter := emitters[i]
+					transformFile(emitter)
+					wg.Queue(func() {
+						printFile(emitter)
+					})
+				}
+			})
+		}
+	} else {
+		for _, emitter := range emitters {
+			wg.Queue(func() {
+				transformFile(emitter)
+				printFile(emitter)
+			})
+		}
 	}
 
 	// wait for emit to complete

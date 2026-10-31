@@ -17,6 +17,7 @@ func walkDir(dir string, recursive bool, fn func(path string, isDir bool) error)
 		return err
 	}
 	var rootData windows.Win32FileAttributeData
+	// SAFETY: GetFileExInfoStandard writes a Win32FileAttributeData, which rootData is.
 	if err := windows.GetFileAttributesEx(rootPtr, windows.GetFileExInfoStandard, (*byte)(unsafe.Pointer(&rootData))); err != nil {
 		return fmt.Errorf("error opening directory: %w", err)
 	}

@@ -33,6 +33,7 @@ export var SymbolFlags;
     SymbolFlags[SymbolFlags["ConstEnumOnlyModule"] = 268435456] = "ConstEnumOnlyModule";
     SymbolFlags[SymbolFlags["ReplaceableByMethod"] = 536870912] = "ReplaceableByMethod";
     SymbolFlags[SymbolFlags["GlobalLookup"] = 1073741824] = "GlobalLookup";
+    SymbolFlags[SymbolFlags["NameProxy"] = 1073741824] = "NameProxy";
     SymbolFlags[SymbolFlags["All"] = 1073741823] = "All";
     SymbolFlags[SymbolFlags["Enum"] = 384] = "Enum";
     SymbolFlags[SymbolFlags["Variable"] = 3] = "Variable";
