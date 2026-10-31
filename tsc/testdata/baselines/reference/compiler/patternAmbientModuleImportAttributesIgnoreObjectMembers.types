@@ -1,0 +1,63 @@
+//// [tests/cases/compiler/patternAmbientModuleImportAttributesIgnoreObjectMembers.ts] ////
+
+=== /types.d.ts ===
+declare module "*.style" with { type: "css" } {
+>"*.style" : typeof import("*.style", { with: { type: "css" } })
+>type : "css"
+
+    export const kind: "css";
+>kind : "css"
+}
+
+=== /object.ts ===
+export {};
+declare global {
+>global : any
+
+    interface Object {
+        type: "css";
+>type : "css"
+    }
+}
+
+=== /index.ts ===
+import * as withoutAttributes from "./a.style";
+>withoutAttributes : any
+
+import * as withAttributes from "./b.style" with { type: "css" };
+>withAttributes : typeof withAttributes
+>type : any
+
+const kind: "css" = withAttributes.kind;
+>kind : "css"
+>withAttributes.kind : "css"
+>withAttributes : typeof withAttributes
+>kind : "css"
+
+async function test() {
+>test : () => Promise<void>
+
+    const dynamicWithoutAttributes = await import("./c.style");
+>dynamicWithoutAttributes : any
+>await import("./c.style") : any
+>import("./c.style") : Promise<any>
+>"./c.style" : "./c.style"
+
+    const dynamicWithAttributes = await import("./d.style", { with: { type: "css" } });
+>dynamicWithAttributes : { kind: "css"; default: typeof withAttributes; }
+>await import("./d.style", { with: { type: "css" } }) : { kind: "css"; default: typeof withAttributes; }
+>import("./d.style", { with: { type: "css" } }) : Promise<{ kind: "css"; default: typeof withAttributes; }>
+>"./d.style" : "./d.style"
+>{ with: { type: "css" } } : { with: { readonly type: "css"; }; }
+>with : { readonly type: "css"; }
+>{ type: "css" } : { readonly type: "css"; }
+>type : "css"
+>"css" : "css"
+
+    const dynamicKind: "css" = dynamicWithAttributes.kind;
+>dynamicKind : "css"
+>dynamicWithAttributes.kind : "css"
+>dynamicWithAttributes : { kind: "css"; default: typeof withAttributes; }
+>kind : "css"
+}
+

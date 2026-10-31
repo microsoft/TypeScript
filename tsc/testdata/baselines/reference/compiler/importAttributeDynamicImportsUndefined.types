@@ -1,0 +1,134 @@
+//// [tests/cases/compiler/importAttributeDynamicImportsUndefined.ts] ////
+
+=== /types.d.ts ===
+declare module "*.resource" {
+>"*.resource" : typeof import("*.resource")
+
+    export const kind: "plain";
+>kind : "plain"
+}
+
+declare module "*.resource" with { type: "text" } {
+>"*.resource" : typeof import("*.resource", { with: { type: "text" } })
+>type : "text"
+
+    export const kind: "text";
+>kind : "text"
+}
+
+declare module "*.textonly" with { type: "text" } {
+>"*.textonly" : typeof import("*.textonly", { with: { type: "text" } })
+>type : "text"
+
+    export const kind: "text";
+>kind : "text"
+}
+
+=== /index.ts ===
+declare const options: ImportCallOptions;
+>options : ImportCallOptions
+
+declare const anyAttributes: any;
+>anyAttributes : any
+
+async function test() {
+>test : () => Promise<void>
+
+    const withUndefined = await import("a.resource", { with: undefined });
+>withUndefined : { kind: "plain"; default: typeof import("*.resource"); }
+>await import("a.resource", { with: undefined }) : { kind: "plain"; default: typeof import("*.resource"); }
+>import("a.resource", { with: undefined }) : Promise<{ kind: "plain"; default: typeof import("*.resource"); }>
+>"a.resource" : "a.resource"
+>{ with: undefined } : { with: undefined; }
+>with : undefined
+>undefined : undefined
+
+    const withUndefinedKind: "plain" = withUndefined.kind;
+>withUndefinedKind : "plain"
+>withUndefined.kind : "plain"
+>withUndefined : { kind: "plain"; default: typeof import("*.resource"); }
+>kind : "plain"
+
+    const fromOptions = await import("b.resource", options);
+>fromOptions : { kind: "plain"; default: typeof import("*.resource"); }
+>await import("b.resource", options) : { kind: "plain"; default: typeof import("*.resource"); }
+>import("b.resource", options) : Promise<{ kind: "plain"; default: typeof import("*.resource"); }>
+>"b.resource" : "b.resource"
+>options : ImportCallOptions
+
+    const fromOptionsKind: "plain" = fromOptions.kind;
+>fromOptionsKind : "plain"
+>fromOptions.kind : "plain"
+>fromOptions : { kind: "plain"; default: typeof import("*.resource"); }
+>kind : "plain"
+
+    const emptyOptions = await import("c.resource", {});
+>emptyOptions : { kind: "plain"; default: typeof import("*.resource"); }
+>await import("c.resource", {}) : { kind: "plain"; default: typeof import("*.resource"); }
+>import("c.resource", {}) : Promise<{ kind: "plain"; default: typeof import("*.resource"); }>
+>"c.resource" : "c.resource"
+>{} : {}
+
+    const emptyOptionsKind: "plain" = emptyOptions.kind;
+>emptyOptionsKind : "plain"
+>emptyOptions.kind : "plain"
+>emptyOptions : { kind: "plain"; default: typeof import("*.resource"); }
+>kind : "plain"
+
+    const emptyWith = await import("d.resource", { with: {} });
+>emptyWith : { kind: "plain"; default: typeof import("*.resource"); }
+>await import("d.resource", { with: {} }) : { kind: "plain"; default: typeof import("*.resource"); }
+>import("d.resource", { with: {} }) : Promise<{ kind: "plain"; default: typeof import("*.resource"); }>
+>"d.resource" : "d.resource"
+>{ with: {} } : { with: {}; }
+>with : {}
+>{} : {}
+
+    const emptyWithKind: "plain" = emptyWith.kind;
+>emptyWithKind : "plain"
+>emptyWith.kind : "plain"
+>emptyWith : { kind: "plain"; default: typeof import("*.resource"); }
+>kind : "plain"
+
+    const anyWith = await import("e.resource", { with: anyAttributes });
+>anyWith : { kind: "text"; default: typeof import("*.resource", { with: { type: "text" } }); }
+>await import("e.resource", { with: anyAttributes }) : { kind: "text"; default: typeof import("*.resource", { with: { type: "text" } }); }
+>import("e.resource", { with: anyAttributes }) : Promise<{ kind: "text"; default: typeof import("*.resource", { with: { type: "text" } }); }>
+>"e.resource" : "e.resource"
+>{ with: anyAttributes } : { with: any; }
+>with : any
+>anyAttributes : any
+
+    const anyWithKind: "text" = anyWith.kind;
+>anyWithKind : "text"
+>anyWith.kind : "text"
+>anyWith : { kind: "text"; default: typeof import("*.resource", { with: { type: "text" } }); }
+>kind : "text"
+
+    const textOnlyUndefined = await import("f.textonly", { with: undefined });
+>textOnlyUndefined : any
+>await import("f.textonly", { with: undefined }) : any
+>import("f.textonly", { with: undefined }) : Promise<any>
+>"f.textonly" : "f.textonly"
+>{ with: undefined } : { with: undefined; }
+>with : undefined
+>undefined : undefined
+
+    const textOnlyText = await import("g.textonly", { with: { type: "text" } });
+>textOnlyText : { kind: "text"; default: typeof import("*.textonly", { with: { type: "text" } }); }
+>await import("g.textonly", { with: { type: "text" } }) : { kind: "text"; default: typeof import("*.textonly", { with: { type: "text" } }); }
+>import("g.textonly", { with: { type: "text" } }) : Promise<{ kind: "text"; default: typeof import("*.textonly", { with: { type: "text" } }); }>
+>"g.textonly" : "g.textonly"
+>{ with: { type: "text" } } : { with: { readonly type: "text"; }; }
+>with : { readonly type: "text"; }
+>{ type: "text" } : { readonly type: "text"; }
+>type : "text"
+>"text" : "text"
+
+    const textOnlyTextKind: "text" = textOnlyText.kind;
+>textOnlyTextKind : "text"
+>textOnlyText.kind : "text"
+>textOnlyText : { kind: "text"; default: typeof import("*.textonly", { with: { type: "text" } }); }
+>kind : "text"
+}
+
