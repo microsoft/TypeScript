@@ -19450,11 +19450,12 @@ func (c *Checker) getDeclaredPropertyOfResolvingType(t *Type, name string) *ast.
 		if c.resolvingObjectTypeStack[i].t == t {
 			resolved := c.resolvingObjectTypeStack[i].resolvedMembers.Get(name)
 			if resolved == nil {
-				if symbol := c.resolveDeclaredMembers(getTargetType(t)).declaredMembers.Get(name); symbol != nil {
+				if symbol := c.resolveDeclaredMembers(getTargetType(t)).declaredMembers.Get(name); symbol != nil && c.isNamedMember(symbol, name) {
 					resolved = c.instantiateSymbol(symbol, c.resolvingObjectTypeStack[i].mapper)
 				} else {
 					for _, baseType := range c.resolvingObjectTypeStack[i].baseTypes {
-						if resolved = c.getPropertyOfTypeEx(baseType, name, true, false); resolved != nil {
+						if symbol := c.getPropertyOfTypeEx(baseType, name, true, false); symbol != nil && !isStaticPrivateIdentifierProperty(symbol) {
+							resolved = symbol
 							break
 						}
 					}
