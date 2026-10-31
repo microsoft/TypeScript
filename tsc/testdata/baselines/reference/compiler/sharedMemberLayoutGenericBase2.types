@@ -1,0 +1,57 @@
+//// [tests/cases/compiler/sharedMemberLayoutGenericBase2.ts] ////
+
+=== sharedMemberLayoutGenericBase2.ts ===
+declare function queryOptions<U>(): Omit<{
+>queryOptions : <U>() => Omit<{ queryKey: string; queryFn: () => { slug: string; }; }, keyof U>
+
+    queryKey: string;
+>queryKey : string
+
+    queryFn: () => { slug: string };
+>queryFn : () => { slug: string; }
+>slug : string
+
+}, keyof U>;
+
+// Keep the call before the interface declarations.
+const resume = ensureQueryData(queryOptions());
+>resume : { slug: string; }
+>ensureQueryData(queryOptions()) : { slug: string; }
+>ensureQueryData : <T, K>(options: EnsureQueryDataOptions<T, K>) => T
+>queryOptions() : Omit<{ queryKey: string; queryFn: () => { slug: string; }; }, never>
+>queryOptions : <U>() => Omit<{ queryKey: string; queryFn: () => { slug: string; }; }, keyof U>
+
+resume.slug;
+>resume.slug : string
+>resume : { slug: string; }
+>slug : string
+
+interface QueryOptions<T, K> {
+    queryKey?: K;
+>queryKey : K | undefined
+
+    queryFn?: () => T;
+>queryFn : (() => T) | undefined
+}
+type WithRequired<T> = T & { queryKey: {} };
+>WithRequired : WithRequired<T>
+>queryKey : {}
+
+interface FetchQueryOptions<T, K>
+    extends WithRequired<QueryOptions<T, K>> {
+    initialPageParam?: never;
+>initialPageParam : undefined
+}
+interface EnsureQueryDataOptions<T, K>
+    extends FetchQueryOptions<T, K> {}
+
+declare function ensureQueryData<T, K>(
+>ensureQueryData : <T, K>(options: EnsureQueryDataOptions<T, K>) => T
+
+    options: EnsureQueryDataOptions<T, K>
+>options : EnsureQueryDataOptions<T, K>
+
+): T;
+
+export {};
+

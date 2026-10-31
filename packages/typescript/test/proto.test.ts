@@ -1,5 +1,6 @@
 import assert from "node:assert";
 import test from "node:test";
+import { SymbolOwnerKind } from "../enums/symbolOwnerKind.js";
 import type {
     SymbolOwner as ProtocolSymbolOwner,
     SymbolResponse as ProtocolSymbolResponse,
@@ -14,7 +15,6 @@ import type {
     PathKey,
     RootedFilePath,
 } from "../src/ast/index.ts";
-import { SymbolOwnerKind } from "../src/enums/symbolOwnerKind.ts";
 
 test("symbol ownership protocol validation rejects mixed variants", () => {
     const project = 1;

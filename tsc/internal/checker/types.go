@@ -461,8 +461,8 @@ func (links *TypeNodeLinks) setOuterTypeParameters(c *Checker, types []*Type) {
 }
 
 type ComputedNameNodeLinks struct {
-	hasName *bool  // If the node has a computable name
-	name    string // Resolved name associated with the type of the node
+	hasName core.Tristate // If the node has a computable name
+	name    string        // Resolved name associated with the type of the node
 }
 
 // Links for enum members
@@ -787,7 +787,7 @@ type Type struct {
 	flags       TypeFlags
 	objectFlags ObjectFlags
 	id          TypeId
-	kind        typeKind
+	kind        typeKind `customlint:"protected"`
 	symbol      *ast.Symbol
 	alias       *TypeAlias
 	checker     *Checker
@@ -821,6 +821,8 @@ func castType[T any](t *Type, kind typeKind) *T {
 	if t.kind != kind {
 		panic("Invalid type cast")
 	}
+	// SAFETY: Each kind is only assigned by newType to a Type embedded at offset zero of the
+	// struct for that kind, and every caller pairs T with its kind.
 	return (*T)(unsafe.Pointer(t))
 }
 
@@ -888,6 +890,7 @@ func (t *Type) AsConditionalType() *ConditionalType {
 
 func (t *Type) AsConstrainedType() *ConstrainedType {
 	if t.kind >= typeKindTypeParameter && t.kind <= typeKindIntersection {
+		// SAFETY: Types of these kinds are structs that embed ConstrainedType at offset zero.
 		return (*ConstrainedType)(unsafe.Pointer(t))
 	}
 	return nil
@@ -895,6 +898,7 @@ func (t *Type) AsConstrainedType() *ConstrainedType {
 
 func (t *Type) AsStructuredType() *StructuredType {
 	if t.kind >= typeKindObject && t.kind <= typeKindIntersection {
+		// SAFETY: Types of these kinds are structs that embed StructuredType at offset zero.
 		return (*StructuredType)(unsafe.Pointer(t))
 	}
 	return nil
@@ -902,6 +906,7 @@ func (t *Type) AsStructuredType() *StructuredType {
 
 func (t *Type) AsObjectType() *ObjectType {
 	if t.kind >= typeKindObject && t.kind <= typeKindEvolvingArray {
+		// SAFETY: Types of these kinds are structs that embed ObjectType at offset zero.
 		return (*ObjectType)(unsafe.Pointer(t))
 	}
 	return nil
@@ -909,6 +914,7 @@ func (t *Type) AsObjectType() *ObjectType {
 
 func (t *Type) AsTypeReference() *TypeReference {
 	if t.kind >= typeKindTypeReference && t.kind <= typeKindTuple {
+		// SAFETY: Types of these kinds are structs that embed TypeReference at offset zero.
 		return (*TypeReference)(unsafe.Pointer(t))
 	}
 	return nil
@@ -916,6 +922,7 @@ func (t *Type) AsTypeReference() *TypeReference {
 
 func (t *Type) AsInterfaceType() *InterfaceType {
 	if t.kind >= typeKindInterface && t.kind <= typeKindTuple {
+		// SAFETY: Types of these kinds are structs that embed InterfaceType at offset zero.
 		return (*InterfaceType)(unsafe.Pointer(t))
 	}
 	return nil
@@ -923,6 +930,7 @@ func (t *Type) AsInterfaceType() *InterfaceType {
 
 func (t *Type) AsUnionOrIntersectionType() *UnionOrIntersectionType {
 	if t.kind >= typeKindUnion && t.kind <= typeKindIntersection {
+		// SAFETY: Types of these kinds are structs that embed UnionOrIntersectionType at offset zero.
 		return (*UnionOrIntersectionType)(unsafe.Pointer(t))
 	}
 	return nil
@@ -1143,6 +1151,82 @@ func (t *StructuredType) ConstructSignatures() []*Signature {
 	return slices.Clip(t.extra.signatures[t.extra.callSignatureCount:])
 }
 
+func (t *StructuredType) getMember(name string) *ast.Symbol {
+	if t.members != nil {
+		return t.members.Get(name)
+	}
+	lazy := t.getLazyState()
+	if lazy == nil {
+		return nil
+	}
+	memberInfo := lazy.layout.memberInfoMap[name]
+	if memberInfo == nil {
+		return nil
+	}
+	return t.getPropertyAt(int(memberInfo.slotIndex))
+}
+
+func (t *StructuredType) getMembers() ast.SymbolTable {
+	if t.members == nil {
+		if properties := t.getProperties(); len(properties) != 0 {
+			t.members = ast.NewSymbolTableWithCapacity(len(properties))
+			for _, member := range properties {
+				t.members.Set(member.Name(), member)
+			}
+		}
+	}
+	return t.members
+}
+
+func (t *StructuredType) getPropertyAt(index int) *ast.Symbol {
+	lazy := t.getLazyState()
+	if lazy == nil {
+		return t.properties[index]
+	}
+	if t.properties == nil {
+		t.properties = make([]*ast.Symbol, len(lazy.layout.memberInfos))
+	}
+	member := t.properties[index]
+	if member == nil {
+		memberInfo := lazy.layout.memberInfos[index]
+		if memberInfo.baseIndex < 0 {
+			member = t.checker.instantiateSymbol(memberInfo.symbol, lazy.mapper)
+		} else {
+			member = t.checker.getPropertyOfType(lazy.baseTypes[memberInfo.baseIndex], memberInfo.symbol.Name())
+		}
+		t.properties[index] = member
+	}
+	return member
+}
+
+func (t *StructuredType) getProperties() []*ast.Symbol {
+	if lazy := t.getLazyState(); lazy != nil && !lazy.propertiesResolved {
+		for i := range lazy.layout.memberInfos {
+			t.getPropertyAt(i)
+		}
+		lazy.propertiesResolved = true
+	}
+	return t.AsStructuredType().properties
+}
+
+func (t *StructuredType) hasProperties() bool {
+	if len(t.properties) != 0 {
+		return true
+	}
+	lazy := t.getLazyState()
+	if lazy == nil {
+		return false
+	}
+	return len(lazy.layout.memberInfos) != 0
+}
+
+func (t *StructuredType) getLazyState() *LazyState {
+	if t.objectFlags&(ObjectFlagsClassOrInterface|ObjectFlagsReference) != 0 {
+		return t.AsType().AsTypeReference().lazy
+	}
+	return nil
+}
+
 func (t *StructuredType) getSignatures() []*Signature {
 	if t.extra == nil {
 		return nil
@@ -1165,7 +1249,7 @@ func (t *StructuredType) ensureExtra() *structuredTypeExtra {
 }
 
 func (t *StructuredType) Properties() []*ast.Symbol {
-	return t.properties
+	return t.getProperties()
 }
 
 // Except for tuple type references and reverse mapped types, all object types have an associated symbol.
@@ -1216,6 +1300,27 @@ type TypeReference struct {
 	ObjectType
 	node                  *ast.Node // TypeReferenceNode | ArrayTypeNode | TupleTypeNode when deferred, else nil
 	resolvedTypeArguments []*Type
+	lazy                  *LazyState // Resolved member layout and instantiation state
+}
+
+type LazyState struct {
+	layout             *MemberLayout
+	mapper             *TypeMapper
+	baseTypes          []*Type
+	propertiesResolved bool
+}
+
+type MemberLayout struct {
+	id               uint32                 // Unique identifier for the member layout
+	memberInfoMap    map[string]*MemberInfo // MemberInfos keyed by property name
+	memberInfos      []MemberInfo           // MemberInfos in sorted order
+	layoutProperties []*ast.Symbol          // Lazily created list of layout properties (symbols corresponding to memberInfos)
+}
+
+type MemberInfo struct {
+	symbol    *ast.Symbol // Uninstantiated symbol
+	baseIndex int32       // Index of base type with symbol, or -1 if locally declared
+	slotIndex int32       // Index of resolved symbol in members array
 }
 
 func (t *TypeReference) AsTypeReference() *TypeReference { return t }
@@ -1362,7 +1467,7 @@ type EvolvingArrayType struct {
 type UnionOrIntersectionType struct {
 	StructuredType
 	types                                       []*Type
-	propertyCache                               ast.SymbolTable
+	propertyCache                               ast.SymbolTable // Augmented entries, except complete ones already in the non-augmented cache.
 	propertyCacheWithoutFunctionPropertyAugment ast.SymbolTable
 	resolvedProperties                          []*ast.Symbol
 }

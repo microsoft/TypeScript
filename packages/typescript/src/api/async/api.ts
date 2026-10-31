@@ -1,23 +1,23 @@
-import { CheckFlags } from "#enums/checkFlags";
-import { CompletionItemKind } from "#enums/completionItemKind";
-import { DiagnosticCategory } from "#enums/diagnosticCategory";
-import { ElementFlags } from "#enums/elementFlags";
-import { EmitOnly } from "#enums/emitOnly";
-import { IndexKind } from "#enums/indexKind";
-import { JsxEmit } from "#enums/jsxEmit";
-import { ModuleKind } from "#enums/moduleKind";
-import { ModuleResolutionKind } from "#enums/moduleResolutionKind";
-import { NewLineKind } from "#enums/newLineKind";
-import { NodeBuilderFlags } from "#enums/nodeBuilderFlags";
-import { ObjectFlags } from "#enums/objectFlags";
-import { ScriptKind } from "#enums/scriptKind";
-import { SignatureFlags } from "#enums/signatureFlags";
-import { SignatureKind } from "#enums/signatureKind";
-import { SymbolFlags } from "#enums/symbolFlags";
-import { SymbolOwnerKind } from "#enums/symbolOwnerKind";
-import { TypeFlags } from "#enums/typeFlags";
-import { TypeFormatFlags } from "#enums/typeFormatFlags";
-import { TypePredicateKind } from "#enums/typePredicateKind";
+import { CheckFlags } from "../../../enums/checkFlags.js";
+import { CompletionItemKind } from "../../../enums/completionItemKind.js";
+import { DiagnosticCategory } from "../../../enums/diagnosticCategory.js";
+import { ElementFlags } from "../../../enums/elementFlags.js";
+import { EmitOnly } from "../../../enums/emitOnly.js";
+import { IndexKind } from "../../../enums/indexKind.js";
+import { JsxEmit } from "../../../enums/jsxEmit.js";
+import { ModuleKind } from "../../../enums/moduleKind.js";
+import { ModuleResolutionKind } from "../../../enums/moduleResolutionKind.js";
+import { NewLineKind } from "../../../enums/newLineKind.js";
+import { NodeBuilderFlags } from "../../../enums/nodeBuilderFlags.js";
+import { ObjectFlags } from "../../../enums/objectFlags.js";
+import { ScriptKind } from "../../../enums/scriptKind.js";
+import { SignatureFlags } from "../../../enums/signatureFlags.js";
+import { SignatureKind } from "../../../enums/signatureKind.js";
+import { SymbolFlags } from "../../../enums/symbolFlags.js";
+import { SymbolOwnerKind } from "../../../enums/symbolOwnerKind.js";
+import { TypeFlags } from "../../../enums/typeFlags.js";
+import { TypeFormatFlags } from "../../../enums/typeFormatFlags.js";
+import { TypePredicateKind } from "../../../enums/typePredicateKind.js";
 import {
     type __String,
     type CallLikeExpression,
@@ -57,7 +57,7 @@ import {
 } from "../node/node.ts";
 import { Wtf8Decoder } from "../node/wtf8.ts";
 import type {
-    APIOptions,
+    APIOptions, // @sync:     SyncAPIOptions as APIOptions,
     LSPConnectionOptions,
 } from "../options.ts";
 import {
@@ -138,9 +138,10 @@ import type {
     TimingInfo,
 } from "../timing.ts";
 import {
-    Client,
+    type Client, // @sync:     Client,
     type ClientSocketOptions,
     type ClientSpawnOptions,
+    createClient, // @sync-skip
 } from "./client.ts";
 import type {
     AssertsIdentifierTypePredicate,
@@ -364,7 +365,7 @@ export class API<FromLSP extends boolean = false> implements FormatDiagnosticsHo
     readonly debug: DebugHandlers;
 
     constructor(options: APIOptions | LSPConnectionOptions = {}) {
-        this.client = new Client(options);
+        this.client = createClient(options); // @sync: this.client = new Client(options);
         this.sourceFileCache = new SourceFileCache<Symbol>();
         this.printer = new Printer(this.client);
         this.debug = new DebugHandlers(this.client, () => this.ensureInitialized()); // @sync: this.debug = new DebugHandlers(this.client, this.ensureInitialized);
@@ -678,6 +679,13 @@ export class API<FromLSP extends boolean = false> implements FormatDiagnosticsHo
 
     private prepareCreateSnapshotParams(params: CreateSnapshotParams | undefined): ProtocolCreateSnapshotParams {
         params ??= {};
+        if (params.fileSystem?.kind === "snapshot") {
+            const sourceId = params.fileSystem.snapshot;
+            const source = sourceId === undefined ? undefined : this.activeSnapshots.get(sourceId);
+            if (!source || source.isDisposed()) {
+                throw new Error("Cannot use an inactive snapshot filesystem");
+            }
+        }
         const prepareOptions = (options: CreateProgramOptions | undefined): ProtocolCreateProgramOptions | undefined => {
             if (!options) return undefined;
             const { moduleResolver, projectReferences, ...rest } = options;
@@ -764,6 +772,15 @@ export class API<FromLSP extends boolean = false> implements FormatDiagnosticsHo
     }
 
     async close(): Promise<void> {
+        // @sync-skip-block-start
+        if (this.initializing && !this.initialized) {
+            const initializing = this.initializing;
+            await this.client.close();
+            await initializing.catch(() => {});
+            this.sourceFileCache.clear();
+            return;
+        }
+        // @sync-skip-block-end
         await this.initializing?.catch(() => {}); // @sync-skip
         try {
             for (const retained of [...this.activeSourceFileLeases.values()]) {
@@ -1109,6 +1126,12 @@ export class Snapshot {
         return this.getProject(projectId)?.program;
     }
 
+    /**
+     * Creates a snapshot using this snapshot's projects and incremental state.
+     * Use `createFileSystemFromSnapshot(source)` from the filesystem API as `fileSystem`
+     * to overlay another snapshot's retained request entries without replaying
+     * intermediate updates. Changes and program reuse are relative to this snapshot.
+     */
     update<
         const CreatePrograms extends CreateSnapshotParams["createPrograms"] = undefined,
         const OpenFiles extends CreateSnapshotParams["openFiles"] = undefined,

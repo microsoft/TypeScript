@@ -1,0 +1,60 @@
+//// [tests/cases/compiler/ambientConstInitializerNonEnumReference.ts] ////
+
+=== a.d.ts ===
+declare enum E { A = 1, B = "b" }
+>E : Symbol(E, Decl(a.d.ts, 0, 0))
+>A : Symbol(E.A, Decl(a.d.ts, 0, 16))
+>B : Symbol(E.B, Decl(a.d.ts, 0, 23))
+
+declare namespace NS { const v: 1; }
+>NS : Symbol(NS, Decl(a.d.ts, 0, 33))
+>v : Symbol(v, Decl(a.d.ts, 1, 28))
+
+declare const obj: { readonly x: 1 };
+>obj : Symbol(obj, Decl(a.d.ts, 2, 13))
+>x : Symbol(x, Decl(a.d.ts, 2, 20))
+
+declare const e1 = E.A;
+>e1 : Symbol(e1, Decl(a.d.ts, 4, 13))
+>E.A : Symbol(E.A, Decl(a.d.ts, 0, 16))
+>E : Symbol(E, Decl(a.d.ts, 0, 0))
+>A : Symbol(E.A, Decl(a.d.ts, 0, 16))
+
+declare const e2 = E["B"];
+>e2 : Symbol(e2, Decl(a.d.ts, 5, 13))
+>E : Symbol(E, Decl(a.d.ts, 0, 0))
+>"B" : Symbol(E.B, Decl(a.d.ts, 0, 23))
+
+declare const n1 = NS.v;
+>n1 : Symbol(n1, Decl(a.d.ts, 6, 13))
+>NS.v : Symbol(NS.v, Decl(a.d.ts, 1, 28))
+>NS : Symbol(NS, Decl(a.d.ts, 0, 33))
+>v : Symbol(NS.v, Decl(a.d.ts, 1, 28))
+
+declare const n2 = NS["v"];
+>n2 : Symbol(n2, Decl(a.d.ts, 7, 13))
+>NS : Symbol(NS, Decl(a.d.ts, 0, 33))
+>"v" : Symbol(NS.v, Decl(a.d.ts, 1, 28))
+
+declare const o1 = obj.x;
+>o1 : Symbol(o1, Decl(a.d.ts, 8, 13))
+>obj.x : Symbol(x, Decl(a.d.ts, 2, 20))
+>obj : Symbol(obj, Decl(a.d.ts, 2, 13))
+>x : Symbol(x, Decl(a.d.ts, 2, 20))
+
+declare class C {
+>C : Symbol(C, Decl(a.d.ts, 8, 25))
+
+    static readonly r1 = E.A;
+>r1 : Symbol(C.r1, Decl(a.d.ts, 10, 17))
+>E.A : Symbol(E.A, Decl(a.d.ts, 0, 16))
+>E : Symbol(E, Decl(a.d.ts, 0, 0))
+>A : Symbol(E.A, Decl(a.d.ts, 0, 16))
+
+    static readonly r2 = NS.v;
+>r2 : Symbol(C.r2, Decl(a.d.ts, 11, 29))
+>NS.v : Symbol(NS.v, Decl(a.d.ts, 1, 28))
+>NS : Symbol(NS, Decl(a.d.ts, 0, 33))
+>v : Symbol(NS.v, Decl(a.d.ts, 1, 28))
+}
+

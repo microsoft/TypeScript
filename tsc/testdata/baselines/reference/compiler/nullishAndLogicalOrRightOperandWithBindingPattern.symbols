@@ -1,0 +1,18 @@
+//// [tests/cases/compiler/nullishAndLogicalOrRightOperandWithBindingPattern.ts] ////
+
+=== nullishAndLogicalOrRightOperandWithBindingPattern.ts ===
+declare const o: { p: "a" | "b" } | undefined;
+>o : Symbol(o, Decl(nullishAndLogicalOrRightOperandWithBindingPattern.ts, 0, 13))
+>p : Symbol(p, Decl(nullishAndLogicalOrRightOperandWithBindingPattern.ts, 0, 18))
+
+const { p } = o ?? { p: "d" };
+>p : Symbol(p, Decl(nullishAndLogicalOrRightOperandWithBindingPattern.ts, 2, 7))
+>o : Symbol(o, Decl(nullishAndLogicalOrRightOperandWithBindingPattern.ts, 0, 13))
+>p : Symbol(p, Decl(nullishAndLogicalOrRightOperandWithBindingPattern.ts, 2, 20))
+
+const { p: q } = o || { p: "d" };
+>p : Symbol(p, Decl(nullishAndLogicalOrRightOperandWithBindingPattern.ts, 0, 18), Decl(nullishAndLogicalOrRightOperandWithBindingPattern.ts, 3, 23))
+>q : Symbol(q, Decl(nullishAndLogicalOrRightOperandWithBindingPattern.ts, 3, 7))
+>o : Symbol(o, Decl(nullishAndLogicalOrRightOperandWithBindingPattern.ts, 0, 13))
+>p : Symbol(p, Decl(nullishAndLogicalOrRightOperandWithBindingPattern.ts, 3, 23))
+

@@ -1,6 +1,8 @@
 package checker
 
 import (
+	"slices"
+
 	"github.com/microsoft/TypeScript/tsc/internal/ast"
 	"github.com/microsoft/TypeScript/tsc/internal/diagnostics"
 )
@@ -232,6 +234,10 @@ func IsTupleType(t *Type) bool {
 	return isTupleType(t)
 }
 
+func GetEndElementCount(t *TupleType, flags ElementFlags) int {
+	return getEndElementCount(t, flags)
+}
+
 func IsTupleTypeTarget(t *Type) bool {
 	return isTupleType(t) && t.Target() == t
 }
@@ -357,6 +363,14 @@ func (c *Checker) GetIndexTypeOfType(t *Type, keyType *Type) *Type {
 
 func (c *Checker) GetIndexInfosOfType(t *Type) []*IndexInfo {
 	return c.getIndexInfosOfType(t)
+}
+
+func (c *Checker) GetIndexInfosOfIndexSymbol(symbol *ast.Symbol) []*IndexInfo {
+	var siblingSymbols []*ast.Symbol
+	if symbol.Parent() != nil {
+		siblingSymbols = slices.Collect(c.getMembersOfSymbol(symbol.Parent()).Values())
+	}
+	return c.getIndexInfosOfIndexSymbol(symbol, siblingSymbols)
 }
 
 func (c *Checker) IsContextSensitive(node *ast.Node) bool {

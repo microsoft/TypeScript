@@ -80,6 +80,17 @@ jobs:
           go test ./...
           go test -run=- -bench=. -benchtime=1x ./...
 
+  go-test-wasm:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version: 'lts/*'
+      - uses: ./.github/actions/setup-go
+      - run: npm ci
+      - run: npx hereby test:wasm
+
   test:
     strategy:
       fail-fast: ${{ github.event_name == 'merge_group' }}
@@ -155,8 +166,12 @@ jobs:
       - name: Tests
         id: test
         run: npx hereby test:tsc
+        env:
+          TMPDIR: ${{ runner.temp }}
       - name: Benchmarks
         run: npx hereby test:benchmarks
+        env:
+          TMPDIR: ${{ runner.temp }}
       - run: git add .
       - uses: codecov/codecov-action@303a32d7a59b442fa8d48b6a1cc6825c09c847a5 # v7.1.1
         if: ${{ always() && matrix.config.coverage && github.event_name != 'merge_group' }}
@@ -224,7 +239,12 @@ jobs:
       - run: npx hereby test:extension
       - run: npx hereby test:tools
       - run: npx hereby test:api
+      - run: npx hereby test:api:wasm
       - run: npx hereby test:benchmarks:api
+      - run: npx playwright install --with-deps chromium
+        if: ${{ matrix.config.main }}
+      - run: npx hereby test:api:browser-smoke
+        if: ${{ matrix.config.main }}
       - run: git add .
       - uses: codecov/codecov-action@303a32d7a59b442fa8d48b6a1cc6825c09c847a5 # v7.1.1
         if: ${{ always() && matrix.config.coverage && github.event_name != 'merge_group' }}
@@ -250,6 +270,27 @@ jobs:
             name: 'noembed'
             noembed: true
             skip: ${{ github.event_name == 'merge_group' }}
+          # Cross-lint OSes with build-tagged files we have no runner for.
+          - runner: ubuntu-latest
+            name: 'darwin'
+            goos: darwin
+            goarch: arm64
+            skip: ${{ github.event_name == 'merge_group' }}
+          - runner: ubuntu-latest
+            name: 'freebsd'
+            goos: freebsd
+            goarch: amd64
+            skip: ${{ github.event_name == 'merge_group' }}
+          - runner: ubuntu-latest
+            name: 'dragonfly'
+            goos: dragonfly
+            goarch: amd64
+            skip: ${{ github.event_name == 'merge_group' }}
+          - runner: ubuntu-latest
+            name: 'solaris'
+            goos: solaris
+            goarch: amd64
+            skip: ${{ github.event_name == 'merge_group' }}
         exclude:
           - config:
               skip: true
@@ -272,6 +313,9 @@ jobs:
           echo "::remove-matcher owner=go::"
       - run: npm ci
       - run: npx hereby lint
+        env:
+          GOOS: ${{ matrix.config.goos }}
+          GOARCH: ${{ matrix.config.goarch }}
 
   format:
     runs-on: ubuntu-slim
@@ -357,6 +401,7 @@ jobs:
       - format
       - generate
       - go-test
+      - go-test-wasm
       - lint
       - misc
       - package-feed-proxy

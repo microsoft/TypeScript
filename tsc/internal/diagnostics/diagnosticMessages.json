@@ -8720,7 +8720,7 @@
         "category": "Error",
         "code": 18065
     },
-    "Content mapper file extension '{0}' is a built-in extension and cannot be registered by a content mapper.": {
+    "Content mapper file extension '{0}' cannot be registered because it ends in a built-in extension.": {
         "category": "Error",
         "code": 18066
     },

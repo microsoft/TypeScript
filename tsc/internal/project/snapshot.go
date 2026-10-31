@@ -145,6 +145,8 @@ func (s *Snapshot) processFileChanges(
 	previousOpenFiles := overlayFileHandles(previousOverlays)
 	openFiles := overlayFileHandles(overlays)
 	if fileChanges.HasExcessiveWatchEvents() {
+		fileChanges = fs.expandCreatedCacheEntries(fileChanges)
+		fileChanges = s.fs.expandRealpathAliases(fileChanges)
 		invalidateStart := time.Now()
 		if fileChanges.InvalidateAll {
 			fs.invalidateCache()
@@ -178,6 +180,7 @@ func (s *Snapshot) processFileChanges(
 		}
 		_, contentMapperWatchedFiles := s.contentMapperWatchState()
 		fileChanges = fs.expandAndFilterWatchEvents(fileChanges, contentMapperExtensions, contentMapperWatchedFiles, previousOpenFiles, openFiles)
+		fileChanges = fs.expandCreatedCacheEntries(fileChanges)
 		fileChanges = s.fs.expandRealpathAliases(fileChanges)
 		fileChanges = fs.markDirtyFiles(fileChanges)
 		fileChanges = fs.convertOpenAndCloseToChanges(fileChanges, previousOpenFiles, openFiles)
@@ -576,6 +579,11 @@ func (s *Snapshot) Clone(
 	var apiError error
 	if change.apiRequest != nil {
 		apiError = projectCollectionBuilder.HandleAPIRequest(change.apiRequest, logger.Fork("HandleAPIRequest"))
+	}
+
+	if change.reason == UpdateReasonIdleCleanDiskCache {
+		var retain collections.Set[tspath.PathKey]
+		projectCollectionBuilder.cleanupConfiguredProjects(&retain, logger.Fork("cleanupConfiguredProjects"))
 	}
 
 	for _, uri := range change.Documents {
