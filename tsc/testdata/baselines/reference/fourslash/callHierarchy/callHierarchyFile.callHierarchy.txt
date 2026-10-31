@@ -18,7 +18,7 @@
 │ ╭ from:
 │ │ ╭ name: callers.ts
 │ │ ├ kind: file
-│ │ ├ containerName: src
+│ │ ├ containerName: /src
 │ │ ├ file: /src/callers.ts
 │ │ ├ span:
 │ │ │ ╭ /src/callers.ts:1:1-3:2

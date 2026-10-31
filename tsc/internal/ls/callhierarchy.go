@@ -163,7 +163,7 @@ func getSymbolOfCallHierarchyDeclaration(c *checker.Checker, node *ast.Node) *as
 func getCallHierarchyItemName(program *compiler.Program, node *ast.Node) (text string, pos int, end int) {
 	if ast.IsSourceFile(node) {
 		sourceFile := node.AsSourceFile()
-		return tspath.GetBaseFileName(sourceFile.OriginalFileName()), 0, 0
+		return sourceFile.OriginalFileName().BaseName(), 0, 0
 	}
 
 	if (ast.IsFunctionDeclaration(node) || ast.IsClassDeclaration(node)) && node.Name() == nil {
@@ -505,11 +505,27 @@ func (l *LanguageService) createCallHierarchyItem(program *compiler.Program, nod
 	nameText, namePos, nameEnd := getCallHierarchyItemName(program, node)
 	containerName := getCallHierarchyItemContainerName(program, node)
 	if ast.IsSourceFile(node) {
-		containerName = relativePathFromDirectory(
-			program.GetCurrentDirectory(),
-			tspath.GetDirectoryPath(sourceFile.OriginalFileName()),
-			l.UseCaseSensitiveFileNames(),
-		)
+		directory := sourceFile.OriginalFileName().Directory()
+		containerName = directory.AsString()
+		workspaceFolders := l.host.GetWorkspaceFolders()
+		var containingFolder *WorkspaceFolder
+		for _, folder := range workspaceFolders {
+			searchDirectory := directory
+			// Like workspace.asRelativePath, resolve a workspace directory through its parent.
+			if l.CaseSensitivity().ComparePaths(folder.Path.AsPath(), directory.AsPath()) == 0 {
+				searchDirectory = directory.AsPath().Directory()
+			}
+			if l.CaseSensitivity().ContainsPath(folder.Path, searchDirectory.AsPath()) && (containingFolder == nil || len(folder.Path) > len(containingFolder.Path)) {
+				containingFolder = &folder
+			}
+		}
+		if containingFolder != nil {
+			relativePath, _ := l.CaseSensitivity().RelativePathWithinDirectory(containingFolder.Path, directory.AsPath())
+			containerName = relativePath.AsString()
+			if len(workspaceFolders) > 1 && containingFolder.Name != "" {
+				containerName = containingFolder.Name + "/" + containerName
+			}
+		}
 	}
 
 	kind := getSymbolKindFromNode(node)

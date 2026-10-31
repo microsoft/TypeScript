@@ -25,6 +25,10 @@ func (caseInsensitiveHost) GetPreferences(activeFile string) lsutil.UserPreferen
 	panic("not implemented")
 }
 
+func (caseInsensitiveHost) GetWorkspaceFolders() []WorkspaceFolder {
+	panic("not implemented")
+}
+
 func (caseInsensitiveHost) GetECMALineInfo(fileName tspath.RootedFilePath) *sourcemap.ECMALineInfo {
 	panic("not implemented")
 }

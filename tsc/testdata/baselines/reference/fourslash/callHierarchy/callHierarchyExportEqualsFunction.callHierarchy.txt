@@ -1,6 +1,7 @@
 // === Call Hierarchy ===
 ╭ name: other.ts
 ├ kind: module
+├ containerName: /
 ├ file: /other.ts
 ├ span:
 │ ╭ /other.ts:1:1-6:2
