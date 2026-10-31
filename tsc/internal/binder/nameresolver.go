@@ -144,7 +144,7 @@ loop:
 			}
 			if name != ast.InternalSymbolNameDefault {
 				if result = r.lookup(moduleExports, name, meaning&ast.SymbolFlagsModuleMember); result != nil {
-					if ast.IsSourceFile(location) && location.AsSourceFile().CommonJSModuleIndicator != nil && result.Flags()&ast.SymbolFlagsType == 0 {
+					if ast.IsSourceFile(location) && location.AsSourceFile().IsCommonJSModule && result.Flags()&ast.SymbolFlagsType == 0 {
 						result = nil
 					} else {
 						break loop

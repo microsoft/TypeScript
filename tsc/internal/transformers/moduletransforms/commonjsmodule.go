@@ -244,7 +244,7 @@ func (tx *CommonJSModuleTransformer) visitSourceFile(node *ast.SourceFile) *ast.
 
 func (tx *CommonJSModuleTransformer) shouldEmitUnderscoreUnderscoreESModule() bool {
 	if tx.currentSourceFile.FileName().ExtensionIsOneOf(tspath.SupportedJSExtensionsFlat) &&
-		tx.currentSourceFile.CommonJSModuleIndicator != nil &&
+		tx.currentSourceFile.IsCommonJSModule &&
 		(tx.currentSourceFile.ExternalModuleIndicator == nil || tx.currentSourceFile.ExternalModuleIndicator.Kind == ast.KindSourceFile) {
 		return false
 	}

@@ -571,3 +571,43 @@ namespace N {
 	assert.Equal(t, positionMap.UTF8ToUTF16(afterBoxDrawingCharacter), afterBoxDrawingCharacter-2)
 	assert.Equal(t, positionMap.UTF8ToUTF16(len(sourceText)), len(sourceText)-2)
 }
+
+func TestCommonJSModuleIndicator(t *testing.T) {
+	t.Parallel()
+	tests := []struct {
+		fileName tspath.RootedFilePath
+		source   string
+		expected bool
+	}{
+		{"/a.js", `const x = require("x");`, true},
+		{"/a.js", `module.exports = {};`, true},
+		{"/a.js", `exports.x = 1;`, true},
+		{"/a.js", `module.exports.x = 1;`, true},
+		{"/a.js", `Object.defineProperty(exports, "x", { value: 1 });`, true},
+		{"/a.js", `function f() { exports.x = 1; }`, true},
+		{"/a.js", `var x = 1; foo(x);`, false},
+		{"/a.js", `/** @type {{ [require("x")]: number }} */ var x;`, true},
+		{"/a.js", `/** @param {number} [x=require("x")] */ function f(x) {}`, false},
+		{"/a.js", "/**\n * @type {{ [require('x')]: () => void }}\n * @type {() => void}\n */\nfunction f() {}", false},
+		{"/a.js", "/**\n * @type {{ [require('x')]: number }}\n * @type {number}\n */\nthis.x = 1;", false},
+		{"/a.js", "/**\n * @template {{ [require('x')]: number }} T\n * @typedef\n */\nfunction f() {}", false},
+		{"/a.js", `exports.x = 1; export {};`, false},
+		{"/a.js", `export const y = require("x");`, false},
+		{"/a.js", `/** @satisfies {any} */ module.exports = exports;`, true},
+		{"/a.js", "await / import.meta / 1;\nawait / require('x') / 1;", false},
+		{"/a.js", `await / 1 ; export {}; / ; require('x');`, true},
+		{"/a.cjs", `exports.x = 1;`, true},
+		{"/a.cjs", `await / 1 ; export {}; / ; require('x');`, true},
+		{"/a.mjs", `await /require("x")/;`, false},
+		{"/a.ts", `exports.x = 1; const y = require("x");`, false},
+	}
+	for _, test := range tests {
+		t.Run(test.fileName.AsString()+" "+test.source, func(t *testing.T) {
+			t.Parallel()
+			opts := ast.SourceFileParseOptions{FileName: test.fileName, PathKey: tspath.CaseSensitive.PathKey(test.fileName.AsPath())}
+			opts.ExternalModuleIndicatorOptions.Force = test.fileName.ExtensionIsOneOf([]string{tspath.ExtensionCjs, tspath.ExtensionMjs})
+			file := parser.ParseSourceFile(opts, test.source, core.GetScriptKindFromFileName(test.fileName))
+			assert.Equal(t, file.IsCommonJSModule, test.expected)
+		})
+	}
+}

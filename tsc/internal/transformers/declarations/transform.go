@@ -834,7 +834,7 @@ func (tx *DeclarationTransformer) transformTypeParameterDeclaration(input *ast.T
 }
 
 func (tx *DeclarationTransformer) transformVariableDeclaration(input *ast.VariableDeclaration) *ast.Node {
-	if tx.state.currentSourceFile.CommonJSModuleIndicator != nil && ast.IsVariableDeclarationInitializedToRequire(input.AsNode()) {
+	if tx.state.currentSourceFile.IsCommonJSModule && ast.IsVariableDeclarationInitializedToRequire(input.AsNode()) {
 		return tx.transformCjsRequireVariableDeclaration(input)
 	}
 	if ast.IsBindingPattern(input.Name()) && hasAnyBindingInitializers(input.Name().AsBindingPattern()) {
@@ -2253,7 +2253,7 @@ func (tx *DeclarationTransformer) transformVariableStatement(input *ast.Variable
 
 	inputNodes := input.DeclarationList.AsVariableDeclarationList().Declarations.Nodes
 	var extraImports []*ast.Node
-	if tx.state.currentSourceFile.CommonJSModuleIndicator != nil {
+	if tx.state.currentSourceFile.IsCommonJSModule {
 		var normalDeclarations []*ast.Node
 		var imports []*ast.Node
 		for _, n := range inputNodes {
@@ -2710,7 +2710,7 @@ func (tx *DeclarationTransformer) visitCJSExportAssignments(expression *ast.Node
 		defer cleanupDiagnosticContext()
 		switch ast.GetAssignmentDeclarationKind(expression) {
 		case ast.JSDeclarationKindModuleExports:
-			if tx.state.currentSourceFile.CommonJSModuleIndicator != nil {
+			if tx.state.currentSourceFile.IsCommonJSModule {
 				result := tx.transformExportAssignment(expression.Parent, expression, expression.AsBinaryExpression().Right, true /*isExportEquals*/)
 				if result != nil {
 					tx.cjsExportAssignment = result
@@ -2732,14 +2732,14 @@ func (tx *DeclarationTransformer) visitNestedExpression(expression *ast.Node) *a
 		case ast.JSDeclarationKindProperty:
 			tx.transformExpandoAssignment(expression.AsBinaryExpression())
 		case ast.JSDeclarationKindExportsProperty:
-			if tx.state.currentSourceFile.CommonJSModuleIndicator != nil {
+			if tx.state.currentSourceFile.IsCommonJSModule {
 				result := tx.transformCommonJSExport(expression, tx.getNameExpressionPreferringIdentifier(ast.GetElementOrPropertyAccessName(expression.AsBinaryExpression().Left)))
 				if result != nil {
 					tx.cjsExportMembers = append(tx.cjsExportMembers, result)
 				}
 			}
 		case ast.JSDeclarationKindObjectDefinePropertyExports:
-			if tx.state.currentSourceFile.CommonJSModuleIndicator != nil {
+			if tx.state.currentSourceFile.IsCommonJSModule {
 				result := tx.transformCommonJSExport(expression, tx.getNameExpressionPreferringIdentifier(expression.Arguments()[1]))
 				if result != nil {
 					tx.cjsExportMembers = append(tx.cjsExportMembers, result)
