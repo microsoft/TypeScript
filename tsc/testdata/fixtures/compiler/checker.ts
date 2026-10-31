@@ -34064,6 +34064,16 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         if (!runtimeImportSpecifier) {
             return undefined;
         }
+
+        // Check if the file is a script (not a module) - scripts can't use automatic JSX runtime
+        if (file && !isExternalOrCommonJsModule(file)) {
+            error(location, Diagnostics.JSX_cannot_be_used_in_a_script_file_when_using_automatic_JSX_runtime_jsx_react_jsx_or_react_jsxdev_Add_export_to_make_this_a_module_or_use_a_module_file);
+            if (links) {
+                links.jsxImplicitImportContainer = false;
+            }
+            return undefined;
+        }
+
         const isClassic = getEmitModuleResolutionKind(compilerOptions) === ModuleResolutionKind.Classic;
         const errorMessage = isClassic
             ? Diagnostics.Cannot_find_module_0_Did_you_mean_to_set_the_moduleResolution_option_to_nodenext_or_to_add_aliases_to_the_paths_option
