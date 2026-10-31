@@ -622,6 +622,30 @@ func isNewExpressionWithoutArguments(node *ast.Node) bool {
 	return node.Kind == ast.KindNewExpression && node.ArgumentList() == nil
 }
 
+// Determines whether the expression of a NewExpression would be emitted with an unparenthesized CallExpression at the
+// start of its member chain, such as `C()` in `C().D`. Such an expression must be parenthesized when used as the
+// expression of a NewExpression, since `new C().D()` would be parsed as `(new C()).D()` rather than `new (C().D)()`.
+func hasUnparenthesizedCallAtStartOfMemberChain(node *ast.Expression) bool {
+	for {
+		node = ast.SkipPartiallyEmittedExpressions(node)
+		if ast.GetExpressionPrecedence(node) < ast.OperatorPrecedenceMember {
+			// Each expression in the member chain is emitted with member precedence, so this expression will already
+			// be parenthesized, which ends the member chain.
+			return false
+		}
+		switch node.Kind {
+		case ast.KindCallExpression:
+			return true
+		case ast.KindPropertyAccessExpression, ast.KindElementAccessExpression, ast.KindExpressionWithTypeArguments:
+			node = node.Expression()
+		case ast.KindTaggedTemplateExpression:
+			node = node.AsTaggedTemplateExpression().Tag
+		default:
+			return false
+		}
+	}
+}
+
 func isBinaryOperation(node *ast.Node, token ast.Kind) bool {
 	node = ast.SkipPartiallyEmittedExpressions(node)
 	return node.Kind == ast.KindBinaryExpression &&

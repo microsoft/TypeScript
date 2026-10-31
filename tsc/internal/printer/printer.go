@@ -2593,8 +2593,9 @@ func (p *Printer) emitNewExpression(node *ast.NewExpression) {
 	state := p.enterNode(node.AsNode())
 	p.emitToken(ast.KindNewKeyword, node.Pos(), WriteKindKeyword, node.AsNode())
 	p.writeSpace()
-	if ast.SkipPartiallyEmittedExpressions(node.Expression).Kind == ast.KindCallExpression {
-		// Parenthesize `C()` inside of a NewExpression so it is treated as `new (C())` and not `new C()`
+	if hasUnparenthesizedCallAtStartOfMemberChain(node.Expression) {
+		// Parenthesize `C()` or `C().D` inside of a NewExpression so it is treated as `new (C())` or `new (C().D)`
+		// and not `new C()` or `new C().D`
 		p.emitExpression(node.Expression, ast.OperatorPrecedenceParentheses)
 	} else {
 		p.emitExpression(node.Expression, ast.OperatorPrecedenceMember)

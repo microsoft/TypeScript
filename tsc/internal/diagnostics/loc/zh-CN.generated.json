@@ -496,7 +496,6 @@
   "Containing_file_is_not_specified_and_root_directory_cannot_be_determined_skipping_lookup_in_node_mod_6126": "未指定包含文件，并且无法确定根目录，正在跳过在 \"node_modules\" 文件夹中查找。",
   "Containing_function_is_not_an_arrow_function_95128": "包含函数不是箭头函数",
   "Content_mapper_extension_0_must_not_contain_path_separators_18123": "内容映射器扩展 '{0}' 不得包含路径分隔符。",
-  "Content_mapper_file_extension_0_is_a_built_in_extension_and_cannot_be_registered_by_a_content_mapper_18066": "内容映射器文件扩展名 '{0}' 是内置扩展名，不能由内容映射器注册。",
   "Content_mapper_file_extension_0_is_registered_by_more_than_one_content_mapper_18067": "内容映射器文件扩展名“{0}”已由多个内容映射器注册。",
   "Content_mapper_file_extension_0_must_begin_with_a_18065": "内容映射器文件扩展名 '{0}' 必须以 “.” 开头。",
   "Content_mapper_output_extension_0_must_be_non_empty_and_begin_with_a_18118": "内容映射器输出扩展插件“{0}”必须为非空，并以 '.' 开头。",

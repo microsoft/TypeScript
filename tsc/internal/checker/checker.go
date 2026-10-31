@@ -697,7 +697,7 @@ type Checker struct {
 	layoutMemberInfos                           map[string]MemberInfo
 	freeTypeSets                                *temporaryTypeSet
 	freePropertyCounts                          *temporaryPropertyCounts
-	mergedSymbols                               map[*ast.Symbol]*ast.Symbol
+	mergedSymbols                               symbolLinkStore[*ast.Symbol]
 	mergedExportsChecked                        collections.Set[*ast.Symbol]
 	factory                                     ast.NodeFactory
 	nodeLinks                                   core.LinkStore[*ast.Node, NodeLinks]
@@ -925,7 +925,7 @@ type Checker struct {
 	ctx                                         context.Context
 	packagesMap                                 map[string]bool
 	activeMappers                               []*TypeMapper
-	activeTypeMappersCaches                     []map[CacheHashKey]*Type
+	activeTypeMappersCaches                     []clearableMap[*Type]
 	ambientModulesOnce                          sync.Once
 	ambientModules                              []*ast.Symbol
 	withinUnreachableCode                       bool
@@ -1008,7 +1008,6 @@ func NewChecker(program Program, tracer *Tracer) (*Checker, *sync.Mutex) {
 	c.unionOfUnionTypes = make(map[UnionOfUnionKey]*Type)
 	c.intersectionTypes = make(map[CacheHashKey]*Type)
 	c.propertiesTypes = make(map[PropertiesTypesKey]*Type)
-	c.mergedSymbols = make(map[*ast.Symbol]*ast.Symbol)
 	c.patternForType = make(map[*Type]*ast.Node)
 	c.contextFreeTypes = make(map[*ast.Node]*Type)
 	c.anyType = c.newIntrinsicType(TypeFlagsAny, "any")
@@ -4342,6 +4341,9 @@ func (c *Checker) checkClassDeclaration(node *ast.Node) {
 	}
 	if node.Name() == nil && !ast.HasSyntacticModifier(node, ast.ModifierFlagsDefault) {
 		c.grammarErrorOnFirstToken(node, diagnostics.A_class_declaration_without_the_default_modifier_must_have_a_name)
+	}
+	if !c.containerAllowsBlockScopedVariable(node.Parent) {
+		c.grammarErrorOnNode(node, diagnostics.X_0_declarations_can_only_be_declared_inside_a_block, "class")
 	}
 	c.checkClassLikeDeclaration(node)
 	c.checkSourceElements(node.Members())
@@ -14632,9 +14634,8 @@ func (c *Checker) cloneSymbol(symbol *ast.Symbol) *ast.Symbol {
 
 func (c *Checker) getMergedSymbol(symbol *ast.Symbol) *ast.Symbol {
 	if symbol != nil {
-		merged := c.mergedSymbols[symbol]
-		if merged != nil {
-			return merged
+		if merged := c.mergedSymbols.TryGet(symbol); merged != nil && *merged != nil {
+			return *merged
 		}
 	}
 	return symbol
@@ -14648,7 +14649,7 @@ func (c *Checker) getParentOfSymbol(symbol *ast.Symbol) *ast.Symbol {
 }
 
 func (c *Checker) recordMergedSymbol(target *ast.Symbol, source *ast.Symbol) {
-	c.mergedSymbols[source] = target
+	*c.mergedSymbols.Get(source) = target
 }
 
 func (c *Checker) getResolvedTarget(symbol *ast.Symbol) *ast.Symbol {
@@ -19170,12 +19171,12 @@ func (c *Checker) getEffectivePropertyNameForPropertyNameNode(node *ast.Property
 	case ast.IsComputedPropertyName(node):
 		// This is cached so `getTypeOfExpression` isn't constantly reinvoked for every property name lookup
 		links := c.computedNameLinks.Get(node)
-		if links != nil && links.hasName != nil {
-			return links.name, *links.hasName
+		if links != nil && !links.hasName.IsUnknown() {
+			return links.name, links.hasName.IsTrue()
 		}
 		name, exists := c.tryGetNameFromType(c.getTypeOfExpression(node.Expression()))
 		links.name = name
-		links.hasName = &exists
+		links.hasName = core.BoolToTristate(exists)
 		return name, exists
 	}
 	return "", false
@@ -22014,24 +22015,27 @@ func (c *Checker) getPropertyOfUnionOrIntersectionType(t *Type, name string, ski
 // these partial properties when identifying discriminant properties, but otherwise they are filtered out
 // and do not appear to be present in the union type.
 func (c *Checker) getUnionOrIntersectionProperty(t *Type, name string, skipObjectFunctionPropertyAugment bool) *ast.Symbol {
-	var cache ast.SymbolTable
+	data := t.AsUnionOrIntersectionType()
 	if skipObjectFunctionPropertyAugment {
-		cache = ast.GetSymbolTable(&t.AsUnionOrIntersectionType().propertyCacheWithoutFunctionPropertyAugment)
+		if prop := data.propertyCacheWithoutFunctionPropertyAugment.Get(name); prop != nil {
+			return prop
+		}
 	} else {
-		cache = ast.GetSymbolTable(&t.AsUnionOrIntersectionType().propertyCache)
-	}
-	if prop := cache.Get(name); prop != nil {
-		return prop
+		if prop := data.propertyCache.Get(name); prop != nil {
+			return prop
+		}
+		// Complete non-augmented properties are also valid for augmented
+		// lookup. Share the entry instead of retaining it in both tables.
+		if prop := data.propertyCacheWithoutFunctionPropertyAugment.Get(name); prop != nil && prop.CheckFlags()&ast.CheckFlagsPartial == 0 {
+			return prop
+		}
 	}
 	prop := c.createUnionOrIntersectionProperty(t, name, skipObjectFunctionPropertyAugment)
 	if prop != nil {
-		cache.Set(name, prop)
-		// Propagate an entry from the non-augmented cache to the augmented cache unless the property is partial.
-		if skipObjectFunctionPropertyAugment && prop.CheckFlags()&ast.CheckFlagsPartial == 0 {
-			augmentedCache := ast.GetSymbolTable(&t.AsUnionOrIntersectionType().propertyCache)
-			if augmentedCache.Get(name) == nil {
-				augmentedCache.Set(name, prop)
-			}
+		if skipObjectFunctionPropertyAugment {
+			ast.GetSymbolTable(&data.propertyCacheWithoutFunctionPropertyAugment).Set(name, prop)
+		} else {
+			ast.GetSymbolTable(&data.propertyCache).Set(name, prop)
 		}
 	}
 	return prop
@@ -22781,16 +22785,15 @@ func (c *Checker) instantiateTypeWithAlias(t *Type, m *TypeMapper, alias *TypeAl
 		return c.errorType
 	}
 	index := c.findActiveMapper(m)
+	var key CacheHashKey
 	if index == -1 {
+		// A newly pushed mapper has an empty cache, and the result is not cached below.
 		c.pushActiveMapper(m)
-	}
-	var b keyBuilder
-	b.writeType(t)
-	b.writeAlias(alias)
-	key := b.hash()
-	cache := c.activeTypeMappersCaches[core.IfElse(index != -1, index, len(c.activeTypeMappersCaches)-1)]
-	if cachedType, ok := cache[key]; ok {
-		return cachedType
+	} else {
+		key = getActiveMapperCacheKey(t, alias)
+		if cachedType, ok := c.activeTypeMappersCaches[index].get(key); ok {
+			return cachedType
+		}
 	}
 	c.TotalInstantiationCount++
 	c.instantiationCount++
@@ -22799,11 +22802,23 @@ func (c *Checker) instantiateTypeWithAlias(t *Type, m *TypeMapper, alias *TypeAl
 	if index == -1 {
 		c.popActiveMapper()
 	} else {
-		cache[key] = result
+		c.activeTypeMappersCaches[index].set(key, result)
 	}
 	c.instantiationStack[len(c.instantiationStack)-1] = nil
 	c.instantiationStack = c.instantiationStack[:len(c.instantiationStack)-1]
 	return result
+}
+
+// Without an alias the key is just the type ID, which avoids hashing. Hashed keys have
+// a nonzero high half with overwhelming probability, so the two kinds do not collide.
+func getActiveMapperCacheKey(t *Type, alias *TypeAlias) CacheHashKey {
+	if alias == nil {
+		return CacheHashKey{Lo: uint64(t.id)}
+	}
+	var b keyBuilder
+	b.writeType(t)
+	b.writeAlias(alias)
+	return b.hash()
 }
 
 func (c *Checker) getCircularTypeNames() []string {
@@ -22831,13 +22846,10 @@ func (c *Checker) pushActiveMapper(mapper *TypeMapper) {
 
 	lastIndex := len(c.activeTypeMappersCaches)
 	if cap(c.activeTypeMappersCaches) > lastIndex {
-		// The cap may contain an empty map from popActiveMapper; reuse it.
+		// The cap may contain an empty cache from popActiveMapper; reuse it.
 		c.activeTypeMappersCaches = c.activeTypeMappersCaches[:lastIndex+1]
-		if c.activeTypeMappersCaches[lastIndex] == nil {
-			c.activeTypeMappersCaches[lastIndex] = make(map[CacheHashKey]*Type, 1)
-		}
 	} else {
-		c.activeTypeMappersCaches = append(c.activeTypeMappersCaches, make(map[CacheHashKey]*Type, 1))
+		c.activeTypeMappersCaches = append(c.activeTypeMappersCaches, clearableMap[*Type]{})
 	}
 }
 
@@ -22845,9 +22857,9 @@ func (c *Checker) popActiveMapper() {
 	c.activeMappers[len(c.activeMappers)-1] = nil
 	c.activeMappers = c.activeMappers[:len(c.activeMappers)-1]
 
-	// Clear the map, but leave it in the list for later reuse.
+	// Clear the cache, but leave it in the list for later reuse.
 	lastIndex := len(c.activeTypeMappersCaches) - 1
-	clear(c.activeTypeMappersCaches[lastIndex])
+	c.activeTypeMappersCaches[lastIndex].clear()
 	c.activeTypeMappersCaches = c.activeTypeMappersCaches[:lastIndex]
 }
 
@@ -22856,8 +22868,8 @@ func (c *Checker) findActiveMapper(mapper *TypeMapper) int {
 }
 
 func (c *Checker) clearActiveMapperCaches() {
-	for _, cache := range c.activeTypeMappersCaches {
-		clear(cache)
+	for i := range c.activeTypeMappersCaches {
+		c.activeTypeMappersCaches[i].clear()
 	}
 }
 
@@ -25745,7 +25757,7 @@ func (c *Checker) newType(flags TypeFlags, objectFlags ObjectFlags, t *Type, kin
 	t.flags = flags
 	t.objectFlags = objectFlags &^ (ObjectFlagsCouldContainTypeVariablesComputed | ObjectFlagsCouldContainTypeVariables | ObjectFlagsMembersResolved)
 	t.id = TypeId(c.TypeCount)
-	t.kind = kind
+	t.kind = kind //nolint:customlint
 	t.checker = c
 	if c.tracer != nil {
 		c.tracer.RecordType(t)
