@@ -16244,9 +16244,7 @@ func (c *Checker) resolveEntityName(name *ast.Node, meaning ast.SymbolFlags, ign
 			c.markSymbolOfAliasDeclarationIfTypeOnly(getAliasDeclarationFromName(name), nil)
 		}
 		// We know a symbol with the given meaning exists along the alias chain, so resolve until we find it.
-		for symbol.Flags()&meaning == 0 && !dontResolveAlias && symbol.Flags()&ast.SymbolFlagsAlias != 0 {
-			symbol = c.resolveAlias(symbol)
-		}
+		symbol = c.resolveAliasRecursively(symbol, meaning, dontResolveAlias)
 	}
 	return symbol
 }
@@ -16685,6 +16683,16 @@ func (c *Checker) ResolveAlias(symbol *ast.Symbol) (*ast.Symbol, bool) {
 	}
 	resolved := c.resolveAlias(symbol)
 	return resolved, resolved != c.unknownSymbol
+}
+
+// resolveAliasRecursively follows alias symbols until one with the requested meaning is found
+// (or dontResolveAlias is set). Used by resolveEntityName and constant enum ElementAccess evaluation —
+// the only places that fully walk the alias chain for a meaning.
+func (c *Checker) resolveAliasRecursively(symbol *ast.Symbol, meaning ast.SymbolFlags, dontResolveAlias bool) *ast.Symbol {
+	for symbol.Flags()&meaning == 0 && !dontResolveAlias && symbol.Flags()&ast.SymbolFlagsAlias != 0 {
+		symbol = c.resolveAlias(symbol)
+	}
+	return symbol
 }
 
 // Resolve an alias symbol to the first target symbol in the resolution chain that includes some other
@@ -24769,11 +24777,8 @@ func (c *Checker) evaluateEntity(expr *ast.Node, location *ast.Node) evaluator.R
 				return evaluator.NewResult(jsnum.FromString(expr.Text()), false, false, false)
 			}
 		}
-		if symbol.Flags()&ast.SymbolFlagsEnumMember != 0 {
-			if location != nil {
-				return c.evaluateEnumMember(expr, symbol, location)
-			}
-			return c.getEnumMemberValue(symbol.ValueDeclaration())
+		if result, ok := c.tryEvaluateEnumMemberSymbol(expr, symbol, location); ok {
+			return result
 		}
 		if c.isConstantVariable(symbol) {
 			declaration := symbol.ValueDeclaration()
@@ -24795,16 +24800,30 @@ func (c *Checker) evaluateEntity(expr *ast.Node, location *ast.Node) evaluator.R
 				name := expr.AsElementAccessExpression().ArgumentExpression.Text()
 				member := rootSymbol.Exports().Get(name)
 				if member != nil {
-					if location != nil {
-						return c.evaluateEnumMember(expr, member, location)
+					// e.g. export import C = F.A — walk aliases until a Value meaning appears.
+					member = c.resolveAliasRecursively(member, ast.SymbolFlagsValue, false /*dontResolveAlias*/)
+					if result, ok := c.tryEvaluateEnumMemberSymbol(expr, member, location); ok {
+						return result
 					}
-					return c.getEnumMemberValue(member.ValueDeclaration())
 				}
 			}
 		}
 		return evaluator.NewResult(nil, false, false, false)
 	}
 	panic("Unhandled case in evaluateEntity")
+}
+
+// tryEvaluateEnumMemberSymbol evaluates a symbol as a constant enum member when applicable.
+// Shared by Identifier/PropertyAccess and ElementAccess paths in evaluateEntity. Merged
+// namespace+enum symbols can export non-enum members (e.g. a class); those return ok=false.
+func (c *Checker) tryEvaluateEnumMemberSymbol(expr *ast.Node, symbol *ast.Symbol, location *ast.Node) (evaluator.Result, bool) {
+	if symbol.Flags()&ast.SymbolFlagsEnumMember == 0 {
+		return evaluator.NewResult(nil, false, false, false), false
+	}
+	if location != nil {
+		return c.evaluateEnumMember(expr, symbol, location), true
+	}
+	return c.getEnumMemberValue(symbol.ValueDeclaration()), true
 }
 
 func (c *Checker) evaluateEnumMember(expr *ast.Node, symbol *ast.Symbol, location *ast.Node) evaluator.Result {
