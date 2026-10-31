@@ -236,6 +236,10 @@ func (s *Snapshot) GetPreferences(activeFile string) lsutil.UserPreferences {
 	return s.userPreferences
 }
 
+func (s *Snapshot) GetWorkspaceFolders() []ls.WorkspaceFolder {
+	return s.host.options.InitialWorkspaceFolders
+}
+
 func (s *Snapshot) UserPreferences() lsutil.UserPreferences {
 	return s.userPreferences
 }

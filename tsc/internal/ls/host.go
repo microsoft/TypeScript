@@ -8,11 +8,17 @@ import (
 	"github.com/microsoft/TypeScript/tsc/internal/tspath"
 )
 
+type WorkspaceFolder struct {
+	Path tspath.RootedDirectoryPath
+	Name string
+}
+
 type Host interface {
 	CaseSensitivity() tspath.CaseSensitivity
 	ReadFile(path tspath.RootedFilePath) (contents string, ok bool)
 	Converters() *lsconv.Converters
 	GetPreferences(activeFile string) lsutil.UserPreferences
+	GetWorkspaceFolders() []WorkspaceFolder
 	GetECMALineInfo(fileName tspath.RootedFilePath) *sourcemap.ECMALineInfo
 	AutoImportRegistry() *autoimport.Registry
 
