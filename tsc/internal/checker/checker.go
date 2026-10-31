@@ -770,6 +770,7 @@ type Checker struct {
 	uniqueLiteralType                           *Type
 	uniqueLiteralMapper                         *TypeMapper
 	reliabilityFlags                            RelationComparisonResult
+	sawCircularVariance                         bool
 	reportUnreliableMapper                      *TypeMapper
 	reportUnmeasurableMapper                    *TypeMapper
 	restrictiveMapper                           *TypeMapper
