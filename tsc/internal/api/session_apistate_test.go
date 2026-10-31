@@ -152,6 +152,66 @@ func TestGetCurrentLanguageServerSnapshotCloseAndReopenProject(t *testing.T) {
 	assert.Equal(t, session.openProjects.Len(), 0)
 }
 
+// Regression for #65071: closeProjects then openFiles used to nil-deref in
+// acquireConfigForFile when dirty.SyncMap.LoadOrStore returned a tombstone as nil.
+func TestCloseProjectsThenOpenFilesDoesNotPanic(t *testing.T) {
+	t.Parallel()
+
+	const (
+		configFileName = "/home/projects/p/tsconfig.json"
+		fileName       = "/home/projects/p/a.ts"
+	)
+	init, _ := projecttestutil.GetSessionInitOptions(map[string]any{
+		configFileName: `{ "compilerOptions": { "strict": true }, "files": ["a.ts"] }`,
+		fileName:       `export const a = 1;`,
+	}, nil, &projecttestutil.TypingsInstallerOptions{})
+	session := NewStandaloneSession(init, nil)
+	defer session.Close()
+	ctx := context.Background()
+
+	config := DocumentIdentifier{FileName: configFileName}
+	file := DocumentIdentifier{FileName: fileName}
+
+	snap, err := session.handleCreateSnapshot(ctx, &CreateSnapshotParams{
+		OpenProjects: []DocumentIdentifier{config},
+		OpenFiles:    []DocumentIdentifier{file},
+	})
+	assert.NilError(t, err)
+
+	// Same update: closeProjects + openFiles (previously panicked).
+	_, err = session.handleUpdateSnapshot(ctx, &UpdateSnapshotParams{
+		Snapshot: snap.Snapshot,
+		Changes: &CreateSnapshotParams{
+			CloseProjects: []DocumentIdentifier{config},
+			OpenFiles:     []DocumentIdentifier{file},
+		},
+	})
+	assert.NilError(t, err)
+
+	// Separate updates: closeProjects, then openFiles.
+	snap2, err := session.handleCreateSnapshot(ctx, &CreateSnapshotParams{
+		OpenProjects: []DocumentIdentifier{config},
+		OpenFiles:    []DocumentIdentifier{file},
+	})
+	assert.NilError(t, err)
+	closed, err := session.handleUpdateSnapshot(ctx, &UpdateSnapshotParams{
+		Snapshot: snap2.Snapshot,
+		Changes: &CreateSnapshotParams{
+			CloseProjects: []DocumentIdentifier{config},
+		},
+	})
+	assert.NilError(t, err)
+	reopened, err := session.handleUpdateSnapshot(ctx, &UpdateSnapshotParams{
+		Snapshot: closed.Snapshot,
+		Changes: &CreateSnapshotParams{
+			OpenFiles: []DocumentIdentifier{file},
+		},
+	})
+	assert.NilError(t, err)
+	assert.Assert(t, reopened.Operation.OpenedFiles != nil)
+	assert.Equal(t, len(*reopened.Operation.OpenedFiles), 1)
+}
+
 func TestGetCurrentLanguageServerSnapshotCloseAndReopenFile(t *testing.T) {
 	t.Parallel()
 

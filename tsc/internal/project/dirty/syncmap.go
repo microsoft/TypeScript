@@ -230,7 +230,14 @@ func (m *SyncMap[K, V]) LoadOrStore(key K, value V) (*SyncMapEntry[K, V], bool) 
 			dirty.mu.Lock()
 			defer dirty.mu.Unlock()
 			if dirty.delete {
-				return nil, false
+				// Resurrect a tombstone instead of returning nil. Callers such as
+				// acquireConfigForFile / findOrCreateProject treat LoadOrStore as
+				// "get or create" and immediately dereference the entry; a nil
+				// return after Delete panics (#65071, #65054, #64911).
+				dirty.value = value
+				dirty.delete = false
+				dirty.dirty = true
+				return dirty, false
 			}
 			return dirty, true
 		}
@@ -253,7 +260,10 @@ func (m *SyncMap[K, V]) LoadOrStore(key K, value V) (*SyncMapEntry[K, V], bool) 
 		entry.mu.Lock()
 		defer entry.mu.Unlock()
 		if entry.delete {
-			return nil, false
+			entry.value = value
+			entry.delete = false
+			entry.dirty = true
+			return entry, false
 		}
 	}
 	return entry, loaded
