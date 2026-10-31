@@ -121,3 +121,81 @@ g(async () => ({ value: 1, method() { this satisfies X; } }));
 >this satisfies X : X
 >this : X
 
+// non-callable `then` is not a thenable
+type Y = { value: number; then: number; method(): void };
+>Y : Y
+>value : number
+>then : number
+>method : () => void
+
+const nonCallableThen: () => Promise<Y> = async () => ({ value: 1, then: 0, method() { this.value.toFixed(); } });
+>nonCallableThen : () => Promise<Y>
+>async () => ({ value: 1, then: 0, method() { this.value.toFixed(); } }) : () => Promise<{ value: number; then: number; method(): void; }>
+>({ value: 1, then: 0, method() { this.value.toFixed(); } }) : { value: number; then: number; method(): void; }
+>{ value: 1, then: 0, method() { this.value.toFixed(); } } : { value: number; then: number; method(): void; }
+>value : number
+>1 : 1
+>then : number
+>0 : 0
+>method : () => void
+>this.value.toFixed() : string
+>this.value.toFixed : (fractionDigits?: number) => string
+>this.value : number
+>this : Y
+>value : number
+>toFixed : (fractionDigits?: number) => string
+
+// thenables supplied by a computed key or a spread keep the PromiseLike branch
+type V = { value: number };
+>V : V
+>value : number
+
+const key = "then";
+>key : "then"
+>"then" : "then"
+
+declare const thenableSource: { then(resolve: (x: V) => void): void };
+>thenableSource : { then(resolve: (x: V) => void): void; }
+>then : (resolve: (x: V) => void) => void
+>resolve : (x: V) => void
+>x : V
+
+const computedThen: () => Promise<V> = async () => ({
+>computedThen : () => Promise<V>
+>async () => ({  [key](resolve: (x: V) => void) { this.value.toFixed(); },}) : () => Promise<V>
+>({  [key](resolve: (x: V) => void) { this.value.toFixed(); },}) : { then<TResult1 = V, TResult2 = never>(resolve: (x: V) => void): void; }
+>{  [key](resolve: (x: V) => void) { this.value.toFixed(); },} : { then<TResult1 = V, TResult2 = never>(resolve: (x: V) => void): void; }
+
+  [key](resolve: (x: V) => void) { this.value.toFixed(); },
+>[key] : <TResult1 = V, TResult2 = never>(resolve: (x: V) => void) => void
+>key : "then"
+>resolve : (x: V) => void
+>x : V
+>this.value.toFixed() : any
+>this.value.toFixed : any
+>this.value : any
+>this : PromiseLike<V> | V
+>value : any
+>toFixed : any
+
+});
+const spreadThen: () => Promise<V> = async () => ({
+>spreadThen : () => Promise<V>
+>async () => ({  ...thenableSource,  extra() { this.value.toFixed(); },}) : () => Promise<V>
+>({  ...thenableSource,  extra() { this.value.toFixed(); },}) : { then(resolve: (x: V) => void): void; extra(): void; }
+>{  ...thenableSource,  extra() { this.value.toFixed(); },} : { then(resolve: (x: V) => void): void; extra(): void; }
+
+  ...thenableSource,
+>thenableSource : { then(resolve: (x: V) => void): void; }
+
+  extra() { this.value.toFixed(); },
+>extra : () => void
+>this.value.toFixed() : any
+>this.value.toFixed : any
+>this.value : any
+>this : PromiseLike<V> | V
+>value : any
+>toFixed : any
+
+});
+

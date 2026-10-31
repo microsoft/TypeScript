@@ -12330,12 +12330,8 @@ func (c *Checker) removeSynthesizedPromiseLike(literal *ast.Node, contextualType
 	if fn == nil {
 		return contextualType
 	}
-	for _, p := range literal.AsObjectLiteralExpression().Properties.Nodes {
-		if p.Name() != nil {
-			if name, ok := ast.TryGetTextOfPropertyName(p.Name()); ok && name == "then" {
-				return contextualType
-			}
-		}
+	if objectLiteralMayBeThenable(literal) {
+		return contextualType
 	}
 	returnType := c.getContextualReturnType(fn, ContextFlagsNone)
 	if returnType == nil {
@@ -12347,6 +12343,45 @@ func (c *Checker) removeSynthesizedPromiseLike(literal *ast.Node, contextualType
 	}
 	synthesized := c.createPromiseLikeType(awaitedType)
 	return c.filterType(contextualType, func(t *Type) bool { return t != synthesized })
+}
+
+// Conservatively determines whether an object literal might be a thenable (i.e. have a callable `then` member).
+// Spread members, property names that can't be resolved syntactically, and `then` members whose initializers
+// aren't known to be non-callable are all treated as possibly thenable. This avoids resolving types, which could
+// be circular while we're computing the contextual type.
+func objectLiteralMayBeThenable(literal *ast.Node) bool {
+	for _, p := range literal.AsObjectLiteralExpression().Properties.Nodes {
+		if p.Kind == ast.KindSpreadAssignment {
+			return true
+		}
+		name := p.Name()
+		if name == nil {
+			continue
+		}
+		text, ok := ast.TryGetTextOfPropertyName(name)
+		if !ok {
+			return true
+		}
+		if text != "then" {
+			continue
+		}
+		if p.Kind == ast.KindPropertyAssignment && isKnownNonCallableExpression(p.Initializer()) {
+			continue
+		}
+		return true
+	}
+	return false
+}
+
+func isKnownNonCallableExpression(node *ast.Node) bool {
+	node = ast.SkipParentheses(node)
+	switch node.Kind {
+	case ast.KindNumericLiteral, ast.KindBigIntLiteral, ast.KindStringLiteral, ast.KindNoSubstitutionTemplateLiteral,
+		ast.KindTemplateExpression, ast.KindTrueKeyword, ast.KindFalseKeyword, ast.KindNullKeyword,
+		ast.KindObjectLiteralExpression, ast.KindArrayLiteralExpression, ast.KindRegularExpressionLiteral:
+		return true
+	}
+	return false
 }
 
 // Returns the async, non-generator function whose return value (a `return` operand or concise arrow body) is node.

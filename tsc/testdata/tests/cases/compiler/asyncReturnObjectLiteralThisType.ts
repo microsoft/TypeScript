@@ -19,3 +19,19 @@ const t: () => Promise<{ value: number }> = async () => ({
 // declared PromiseLike remains
 declare function g(cb: () => X | PromiseLike<X>): void;
 g(async () => ({ value: 1, method() { this satisfies X; } }));
+
+// non-callable `then` is not a thenable
+type Y = { value: number; then: number; method(): void };
+const nonCallableThen: () => Promise<Y> = async () => ({ value: 1, then: 0, method() { this.value.toFixed(); } });
+
+// thenables supplied by a computed key or a spread keep the PromiseLike branch
+type V = { value: number };
+const key = "then";
+declare const thenableSource: { then(resolve: (x: V) => void): void };
+const computedThen: () => Promise<V> = async () => ({
+  [key](resolve: (x: V) => void) { this.value.toFixed(); },
+});
+const spreadThen: () => Promise<V> = async () => ({
+  ...thenableSource,
+  extra() { this.value.toFixed(); },
+});
