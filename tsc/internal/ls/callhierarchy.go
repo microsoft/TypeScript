@@ -506,21 +506,12 @@ func (l *LanguageService) createCallHierarchyItem(program *compiler.Program, nod
 	containerName := getCallHierarchyItemContainerName(program, node)
 	if ast.IsSourceFile(node) {
 		directory := sourceFile.OriginalFileName().Directory()
+		directoryPath := directory.AsPath()
 		containerName = directory.AsString()
 		workspaceFolders := l.host.GetWorkspaceFolders()
-		var containingFolder *WorkspaceFolder
-		for _, folder := range workspaceFolders {
-			searchDirectory := directory
-			// Like workspace.asRelativePath, resolve a workspace directory through its parent.
-			if l.CaseSensitivity().ComparePaths(folder.Path.AsPath(), directory.AsPath()) == 0 {
-				searchDirectory = directory.AsPath().Directory()
-			}
-			if l.CaseSensitivity().ContainsPath(folder.Path, searchDirectory.AsPath()) && (containingFolder == nil || len(folder.Path) > len(containingFolder.Path)) {
-				containingFolder = &folder
-			}
-		}
+		containingFolder := getContainingWorkspaceFolder(directory, workspaceFolders, l.CaseSensitivity())
 		if containingFolder != nil {
-			relativePath, _ := l.CaseSensitivity().RelativePathWithinDirectory(containingFolder.Path, directory.AsPath())
+			relativePath, _ := l.CaseSensitivity().RelativePathWithinDirectory(containingFolder.Path, directoryPath)
 			containerName = relativePath.AsString()
 			if len(workspaceFolders) > 1 && containingFolder.Name != "" {
 				containerName = containingFolder.Name + "/" + containerName
@@ -553,6 +544,29 @@ func (l *LanguageService) createCallHierarchyItem(program *compiler.Program, nod
 	}
 
 	return item
+}
+
+func getContainingWorkspaceFolder(directory tspath.RootedDirectoryPath, workspaceFolders []WorkspaceFolder, caseSensitivity tspath.CaseSensitivity) *WorkspaceFolder {
+	directoryPath := directory.AsPath()
+	var containingFolder *WorkspaceFolder
+	for i := range workspaceFolders {
+		folder := &workspaceFolders[i]
+		searchDirectory := directoryPath
+		// Like workspace.asRelativePath, resolve a workspace directory through its parent.
+		if caseSensitivity.ComparePaths(folder.Path.AsPath(), directoryPath) == 0 {
+			searchDirectory = directoryPath.Directory().AsPath()
+		}
+		if !caseSensitivity.ContainsPath(folder.Path, searchDirectory) {
+			continue
+		}
+		if containingFolder != nil &&
+			(caseSensitivity.ComparePaths(containingFolder.Path.AsPath(), folder.Path.AsPath()) == 0 ||
+				!caseSensitivity.ContainsPath(containingFolder.Path, folder.Path.AsPath())) {
+			continue
+		}
+		containingFolder = folder
+	}
+	return containingFolder
 }
 
 type callSite struct {
