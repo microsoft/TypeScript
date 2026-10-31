@@ -5,9 +5,11 @@ asyncReturnObjectLiteralThisType.ts(28,41): error TS2339: Property 'value' does 
   Property 'value' does not exist on type 'PromiseLike<V>'.
 asyncReturnObjectLiteralThisType.ts(32,18): error TS2339: Property 'value' does not exist on type 'PromiseLike<V> | V'.
   Property 'value' does not exist on type 'PromiseLike<V>'.
+asyncReturnObjectLiteralThisType.ts(43,18): error TS2339: Property 'value' does not exist on type 'PromiseLike<V> | V'.
+  Property 'value' does not exist on type 'PromiseLike<V>'.
 
 
-==== asyncReturnObjectLiteralThisType.ts (4 errors) ====
+==== asyncReturnObjectLiteralThisType.ts (5 errors) ====
     type X = { value: number; method(): void };
     declare function foo(cb: () => Promise<X>): void;
     foo(async () => ({ value: 5, method() { this satisfies X; } }));
@@ -49,6 +51,20 @@ asyncReturnObjectLiteralThisType.ts(32,18): error TS2339: Property 'value' does 
     });
     const spreadThen: () => Promise<V> = async () => ({
       ...thenableSource,
+      extra() { this.value.toFixed(); },
+                     ~~~~~
+!!! error TS2339: Property 'value' does not exist on type 'PromiseLike<V> | V'.
+!!! error TS2339:   Property 'value' does not exist on type 'PromiseLike<V>'.
+    });
+    
+    // spreads of object literals and statically known computed keys other than `then` are not thenables
+    const valueKey = "value";
+    foo(async () => ({ ...{ value: 5 }, method() { this satisfies X; } }));
+    foo(async () => ({ ...({ value: 5 }), method() { this satisfies X; } }));
+    foo(async () => ({ [valueKey]: 5, method() { this satisfies X; } }));
+    // a spread object literal containing `then` is still a thenable
+    const nestedSpreadThen: () => Promise<V> = async () => ({
+      ...{ then(resolve: (x: V) => void) {} },
       extra() { this.value.toFixed(); },
                      ~~~~~
 !!! error TS2339: Property 'value' does not exist on type 'PromiseLike<V> | V'.

@@ -199,3 +199,72 @@ const spreadThen: () => Promise<V> = async () => ({
 
 });
 
+// spreads of object literals and statically known computed keys other than `then` are not thenables
+const valueKey = "value";
+>valueKey : "value"
+>"value" : "value"
+
+foo(async () => ({ ...{ value: 5 }, method() { this satisfies X; } }));
+>foo(async () => ({ ...{ value: 5 }, method() { this satisfies X; } })) : void
+>foo : (cb: () => Promise<X>) => void
+>async () => ({ ...{ value: 5 }, method() { this satisfies X; } }) : () => Promise<{ value: number; method(): void; }>
+>({ ...{ value: 5 }, method() { this satisfies X; } }) : { value: number; method(): void; }
+>{ ...{ value: 5 }, method() { this satisfies X; } } : { value: number; method(): void; }
+>{ value: 5 } : { value: number; }
+>value : number
+>5 : 5
+>method : () => void
+>this satisfies X : X
+>this : X
+
+foo(async () => ({ ...({ value: 5 }), method() { this satisfies X; } }));
+>foo(async () => ({ ...({ value: 5 }), method() { this satisfies X; } })) : void
+>foo : (cb: () => Promise<X>) => void
+>async () => ({ ...({ value: 5 }), method() { this satisfies X; } }) : () => Promise<{ value: number; method(): void; }>
+>({ ...({ value: 5 }), method() { this satisfies X; } }) : { value: number; method(): void; }
+>{ ...({ value: 5 }), method() { this satisfies X; } } : { value: number; method(): void; }
+>({ value: 5 }) : { value: number; }
+>{ value: 5 } : { value: number; }
+>value : number
+>5 : 5
+>method : () => void
+>this satisfies X : X
+>this : X
+
+foo(async () => ({ [valueKey]: 5, method() { this satisfies X; } }));
+>foo(async () => ({ [valueKey]: 5, method() { this satisfies X; } })) : void
+>foo : (cb: () => Promise<X>) => void
+>async () => ({ [valueKey]: 5, method() { this satisfies X; } }) : () => Promise<{ value: number; method(): void; }>
+>({ [valueKey]: 5, method() { this satisfies X; } }) : { value: number; method(): void; }
+>{ [valueKey]: 5, method() { this satisfies X; } } : { value: number; method(): void; }
+>[valueKey] : number
+>valueKey : "value"
+>5 : 5
+>method : () => void
+>this satisfies X : X
+>this : X
+
+// a spread object literal containing `then` is still a thenable
+const nestedSpreadThen: () => Promise<V> = async () => ({
+>nestedSpreadThen : () => Promise<V>
+>async () => ({  ...{ then(resolve: (x: V) => void) {} },  extra() { this.value.toFixed(); },}) : () => Promise<V>
+>({  ...{ then(resolve: (x: V) => void) {} },  extra() { this.value.toFixed(); },}) : { then(resolve: (x: V) => void): void; extra(): void; }
+>{  ...{ then(resolve: (x: V) => void) {} },  extra() { this.value.toFixed(); },} : { then(resolve: (x: V) => void): void; extra(): void; }
+
+  ...{ then(resolve: (x: V) => void) {} },
+>{ then(resolve: (x: V) => void) {} } : { then(resolve: (x: V) => void): void; }
+>then : (resolve: (x: V) => void) => void
+>resolve : (x: V) => void
+>x : V
+
+  extra() { this.value.toFixed(); },
+>extra : () => void
+>this.value.toFixed() : any
+>this.value.toFixed : any
+>this.value : any
+>this : PromiseLike<V> | V
+>value : any
+>toFixed : any
+
+});
+

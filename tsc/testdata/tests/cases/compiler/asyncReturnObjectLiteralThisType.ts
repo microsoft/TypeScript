@@ -35,3 +35,14 @@ const spreadThen: () => Promise<V> = async () => ({
   ...thenableSource,
   extra() { this.value.toFixed(); },
 });
+
+// spreads of object literals and statically known computed keys other than `then` are not thenables
+const valueKey = "value";
+foo(async () => ({ ...{ value: 5 }, method() { this satisfies X; } }));
+foo(async () => ({ ...({ value: 5 }), method() { this satisfies X; } }));
+foo(async () => ({ [valueKey]: 5, method() { this satisfies X; } }));
+// a spread object literal containing `then` is still a thenable
+const nestedSpreadThen: () => Promise<V> = async () => ({
+  ...{ then(resolve: (x: V) => void) {} },
+  extra() { this.value.toFixed(); },
+});

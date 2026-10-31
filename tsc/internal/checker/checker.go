@@ -12330,7 +12330,7 @@ func (c *Checker) removeSynthesizedPromiseLike(literal *ast.Node, contextualType
 	if fn == nil {
 		return contextualType
 	}
-	if objectLiteralMayBeThenable(literal) {
+	if c.objectLiteralMayBeThenable(literal) {
 		return contextualType
 	}
 	returnType := c.getContextualReturnType(fn, ContextFlagsNone)
@@ -12346,12 +12346,16 @@ func (c *Checker) removeSynthesizedPromiseLike(literal *ast.Node, contextualType
 }
 
 // Conservatively determines whether an object literal might be a thenable (i.e. have a callable `then` member).
-// Spread members, property names that can't be resolved syntactically, and `then` members whose initializers
-// aren't known to be non-callable are all treated as possibly thenable. This avoids resolving types, which could
-// be circular while we're computing the contextual type.
-func objectLiteralMayBeThenable(literal *ast.Node) bool {
+// Spreads of non-literal expressions, property names that can't be statically resolved, and `then` members whose
+// initializers aren't known to be non-callable are all treated as possibly thenable. Spreads of object literals are
+// inspected recursively, and computed names are resolved through their (cached) computed-name type.
+func (c *Checker) objectLiteralMayBeThenable(literal *ast.Node) bool {
 	for _, p := range literal.AsObjectLiteralExpression().Properties.Nodes {
 		if p.Kind == ast.KindSpreadAssignment {
+			expression := ast.SkipParentheses(p.Expression())
+			if expression.Kind == ast.KindObjectLiteralExpression && !c.objectLiteralMayBeThenable(expression) {
+				continue
+			}
 			return true
 		}
 		name := p.Name()
@@ -12360,7 +12364,14 @@ func objectLiteralMayBeThenable(literal *ast.Node) bool {
 		}
 		text, ok := ast.TryGetTextOfPropertyName(name)
 		if !ok {
-			return true
+			if name.Kind != ast.KindComputedPropertyName {
+				return true
+			}
+			nameType := c.checkComputedPropertyName(name)
+			if !isTypeUsableAsPropertyName(nameType) {
+				return true
+			}
+			text = getPropertyNameFromType(nameType)
 		}
 		if text != "then" {
 			continue
