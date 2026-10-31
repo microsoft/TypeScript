@@ -1,0 +1,40 @@
+decoratorMetadataTypeOnlyUnresolvedImport.ts(1,22): error TS2307: Cannot find module './missing-default' or its corresponding type declarations.
+decoratorMetadataTypeOnlyUnresolvedImport.ts(2,26): error TS2307: Cannot find module './missing-named' or its corresponding type declarations.
+decoratorMetadataTypeOnlyUnresolvedImport.ts(3,37): error TS2307: Cannot find module './missing-default-specifier' or its corresponding type declarations.
+decoratorMetadataTypeOnlyUnresolvedImport.ts(13,11): error TS1361: 'Foo' cannot be used as a value because it was imported using 'import type'.
+decoratorMetadataTypeOnlyUnresolvedImport.ts(14,11): error TS1361: 'Bar' cannot be used as a value because it was imported using 'import type'.
+decoratorMetadataTypeOnlyUnresolvedImport.ts(15,11): error TS1361: 'Baz' cannot be used as a value because it was imported using 'import type'.
+
+
+==== decoratorMetadataTypeOnlyUnresolvedImport.ts (6 errors) ====
+    import type Foo from "./missing-default";
+                         ~~~~~~~~~~~~~~~~~~~
+!!! error TS2307: Cannot find module './missing-default' or its corresponding type declarations.
+    import { type Bar } from "./missing-named";
+                             ~~~~~~~~~~~~~~~~~
+!!! error TS2307: Cannot find module './missing-named' or its corresponding type declarations.
+    import type { default as Baz } from "./missing-default-specifier";
+                                        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2307: Cannot find module './missing-default-specifier' or its corresponding type declarations.
+    
+    function dec(_target: unknown, _key: unknown) {}
+    
+    class C {
+        @dec a!: Foo;
+        @dec b!: Bar;
+        @dec c!: Baz;
+    }
+    
+    const x = Foo;
+              ~~~
+!!! error TS1361: 'Foo' cannot be used as a value because it was imported using 'import type'.
+!!! related TS1376 decoratorMetadataTypeOnlyUnresolvedImport.ts:1:8: 'Foo' was imported here.
+    const y = Bar;
+              ~~~
+!!! error TS1361: 'Bar' cannot be used as a value because it was imported using 'import type'.
+!!! related TS1376 decoratorMetadataTypeOnlyUnresolvedImport.ts:2:10: 'Bar' was imported here.
+    const z = Baz;
+              ~~~
+!!! error TS1361: 'Baz' cannot be used as a value because it was imported using 'import type'.
+!!! related TS1376 decoratorMetadataTypeOnlyUnresolvedImport.ts:3:15: 'Baz' was imported here.
+    
