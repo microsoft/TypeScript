@@ -77,3 +77,433 @@ const a = {def\u0061ult: 12}; // OK, `default` not in keyword position
 
 // chrome and jsc may still error on this, ref https://bugs.chromium.org/p/chromium/issues/detail?id=993000 and https://bugs.webkit.org/show_bug.cgi?id=200638
 
+=== a.ts ===
+export {};
+
+class A {
+>A : A
+
+    a = 1
+>a : number
+>1 : 1
+
+    \u{69}n
+>\u{69}n : any
+
+    b = 2
+>b : number
+>2 : 2
+
+    \u{69}nstanceof
+>\u{69}nstanceof : any
+}
+
+class B {
+>B : B
+
+    a = 1
+>a : number
+>1 : 1
+
+    \u0069n
+>\u0069n : any
+
+    b = 2
+>b : number
+>2 : 2
+
+    \u0069nstanceof
+>\u0069nstanceof : any
+}
+
+class C {
+>C : C
+
+    a = () => 1
+>a : () => number
+>() => 1 : () => number
+>1 : 1
+
+    \u{69}nstanceof
+>\u{69}nstanceof : any
+
+    b = 2
+>b : number
+>2 : 2
+
+    \u0069n() {}
+>\u0069n : () => void
+}
+
+class D {
+>D : D
+
+    a = "a"
+>a : boolean
+>"a"    in    { a: 1 } : boolean
+>"a" : "a"
+
+    in
+    { a: 1 }
+>{ a: 1 } : { a: number; }
+>a : number
+>1 : 1
+
+    b = {}
+>b : boolean
+>{}    instanceof    Object : boolean
+>{} : {}
+
+    instanceof
+    Object
+>Object : ObjectConstructor
+}
+
+class E {
+>E : E
+
+    a = 1;
+>a : number
+>1 : 1
+
+    \u0069n = 2;
+>\u0069n : number
+>2 : 2
+
+    b = 3;
+>b : number
+>3 : 3
+
+    \u{69}nstanceof = 4;
+>\u{69}nstanceof : number
+>4 : 4
+}
+
+const a = Object.keys(new A());
+>a : string[]
+>Object.keys(new A()) : string[]
+>Object.keys : { (o: object): string[]; (o: {}): string[]; }
+>Object : ObjectConstructor
+>keys : { (o: object): string[]; (o: {}): string[]; }
+>new A() : A
+>A : typeof A
+
+const b = Object.keys(new B());
+>b : string[]
+>Object.keys(new B()) : string[]
+>Object.keys : { (o: object): string[]; (o: {}): string[]; }
+>Object : ObjectConstructor
+>keys : { (o: object): string[]; (o: {}): string[]; }
+>new B() : B
+>B : typeof B
+
+const c = new C();
+>c : C
+>new C() : C
+>C : typeof C
+
+const d = new D();
+>d : D
+>new D() : D
+>D : typeof D
+
+const e = 1;
+>e : 1
+>1 : 1
+
+const f = \u0065
+>f : number
+>\u0065    + 1 : number
+>\u0065 : 1
+
+    + 1;
+>1 : 1
+
+=== b.js ===
+export {};
+
+class A {
+>A : A
+
+    a = 1
+>a : number
+>1 : 1
+
+    \u{69}n
+>\u{69}n : any
+
+    b = 2
+>b : number
+>2 : 2
+
+    \u{69}nstanceof
+>\u{69}nstanceof : any
+}
+
+class B {
+>B : B
+
+    a = 1
+>a : number
+>1 : 1
+
+    \u0069n
+>\u0069n : any
+
+    b = 2
+>b : number
+>2 : 2
+
+    \u0069nstanceof
+>\u0069nstanceof : any
+}
+
+class C {
+>C : C
+
+    a = () => 1
+>a : () => number
+>() => 1 : () => number
+>1 : 1
+
+    \u{69}nstanceof
+>\u{69}nstanceof : any
+
+    b = 2
+>b : number
+>2 : 2
+
+    \u0069n() {}
+>\u0069n : () => void
+}
+
+class D {
+>D : D
+
+    a = "a"
+>a : boolean
+>"a"    in    { a: 1 } : boolean
+>"a" : "a"
+
+    in
+    { a: 1 }
+>{ a: 1 } : { a: number; }
+>a : number
+>1 : 1
+
+    b = {}
+>b : boolean
+>{}    instanceof    Object : boolean
+>{} : {}
+
+    instanceof
+    Object
+>Object : ObjectConstructor
+}
+
+class E {
+>E : E
+
+    a = 1;
+>a : number
+>1 : 1
+
+    \u0069n = 2;
+>\u0069n : number
+>2 : 2
+
+    b = 3;
+>b : number
+>3 : 3
+
+    \u{69}nstanceof = 4;
+>\u{69}nstanceof : number
+>4 : 4
+}
+
+const a = Object.keys(new A());
+>a : string[]
+>Object.keys(new A()) : string[]
+>Object.keys : { (o: object): string[]; (o: {}): string[]; }
+>Object : ObjectConstructor
+>keys : { (o: object): string[]; (o: {}): string[]; }
+>new A() : A
+>A : typeof A
+
+const b = Object.keys(new B());
+>b : string[]
+>Object.keys(new B()) : string[]
+>Object.keys : { (o: object): string[]; (o: {}): string[]; }
+>Object : ObjectConstructor
+>keys : { (o: object): string[]; (o: {}): string[]; }
+>new B() : B
+>B : typeof B
+
+const c = new C();
+>c : C
+>new C() : C
+>C : typeof C
+
+const d = new D();
+>d : D
+>new D() : D
+>D : typeof D
+
+const e = 1;
+>e : 1
+>1 : 1
+
+const f = \u0065
+>f : number
+>\u0065    + 1 : number
+>\u0065 : 1
+
+    + 1;
+>1 : 1
+
+=== c.ts ===
+export {};
+
+const a = "a" \u0069n { a: 1 };
+>a : boolean
+>"a" \u0069n { a: 1 } : boolean
+>"a" : "a"
+>{ a: 1 } : { a: number; }
+>a : number
+>1 : 1
+
+const b = {} \u{69}nstanceof Object;
+>b : boolean
+>{} \u{69}nstanceof Object : boolean
+>{} : {}
+>Object : ObjectConstructor
+
+=== d.js ===
+export {};
+
+const a = "a" \u0069n { a: 1 };
+>a : boolean
+>"a" \u0069n { a: 1 } : boolean
+>"a" : "a"
+>{ a: 1 } : { a: number; }
+>a : number
+>1 : 1
+
+const b = {} \u{69}nstanceof Object;
+>b : boolean
+>{} \u{69}nstanceof Object : boolean
+>{} : {}
+>Object : ObjectConstructor
+
+=== e.ts ===
+export {};
+
+class A {
+>A : A
+
+    #a;
+>#a : any
+
+    b = #a
+>b : any
+
+    \u0069n
+>\u0069n : any
+}
+
+=== f.js ===
+export {};
+
+class A {
+>A : A
+
+    #a;
+>#a : any
+
+    b = #a
+>b : any
+
+    \u0069n
+>\u0069n : any
+}
+
+=== g.ts ===
+declare var x: any, y: any;
+>x : any
+>y : any
+
+x
+>x : any
+
+\u0069n
+>\u0069n : boolean
+> : any
+
+> : any
+
+=== h.ts ===
+declare var x: any, y: any;
+>x : any
+>y : any
+
+x
+>x : any
+
+\u{69}nstanceof y
+>\u{69}nstanceof y : boolean
+> : any
+>y : any
+
+=== i.ts ===
+declare var x: any, y: any;
+>x : any
+>y : any
+
+if (x
+>x : any
+
+    \u0069n y) {}
+>\u0069n y : boolean
+> : any
+>y : any
+
+=== j.js ===
+var x, y;
+>x : any
+>y : any
+
+x
+>x : any
+
+\u0069n
+>\u0069n : boolean
+> : any
+
+> : any
+
+=== k.js ===
+var x, y;
+>x : any
+>y : any
+
+x
+>x : any
+
+\u{69}nstanceof y
+>\u{69}nstanceof y : boolean
+> : any
+>y : any
+
+=== l.js ===
+var x, y;
+>x : any
+>y : any
+
+if (x
+>x : any
+
+    \u0069n y) {}
+>\u0069n y : boolean
+> : any
+>y : any
+
