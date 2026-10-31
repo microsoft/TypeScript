@@ -1,0 +1,46 @@
+//// [tests/cases/compiler/declarationEmitInaccessibleHeritageType.ts] ////
+
+=== interface.ts ===
+label: interface I {}
+>I : Symbol(I, Decl(interface.ts, 0, 6))
+
+export interface J extends I {}
+>J : Symbol(J, Decl(interface.ts, 0, 21))
+>I : Symbol(I, Decl(interface.ts, 0, 6))
+
+=== implements.ts ===
+label: interface I {}
+>I : Symbol(I, Decl(implements.ts, 0, 6))
+
+export class C implements I {}
+>C : Symbol(C, Decl(implements.ts, 0, 21))
+>I : Symbol(I, Decl(implements.ts, 0, 6))
+
+=== typeArgument.ts ===
+label: interface I {}
+>I : Symbol(I, Decl(typeArgument.ts, 0, 6))
+
+interface Base<T> {}
+>Base : Symbol(Base, Decl(typeArgument.ts, 0, 21))
+>T : Symbol(T, Decl(typeArgument.ts, 1, 15))
+
+export interface J extends Base<I> {}
+>J : Symbol(J, Decl(typeArgument.ts, 1, 20))
+>Base : Symbol(Base, Decl(typeArgument.ts, 0, 21))
+>I : Symbol(I, Decl(typeArgument.ts, 0, 6))
+
+=== namedClassExpression.ts ===
+label: interface I {}
+>I : Symbol(I, Decl(namedClassExpression.ts, 0, 6))
+
+export default (class C implements I {});
+>C : Symbol(C, Decl(namedClassExpression.ts, 1, 16))
+>I : Symbol(I, Decl(namedClassExpression.ts, 0, 6))
+
+=== anonymousClassExpression.ts ===
+label: interface I {}
+>I : Symbol(I, Decl(anonymousClassExpression.ts, 0, 6))
+
+export default (class implements I {});
+>I : Symbol(I, Decl(anonymousClassExpression.ts, 0, 6))
+

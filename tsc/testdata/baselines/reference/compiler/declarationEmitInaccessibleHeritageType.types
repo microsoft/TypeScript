@@ -1,0 +1,39 @@
+//// [tests/cases/compiler/declarationEmitInaccessibleHeritageType.ts] ////
+
+=== interface.ts ===
+label: interface I {}
+>label : any
+
+export interface J extends I {}
+
+=== implements.ts ===
+label: interface I {}
+>label : any
+
+export class C implements I {}
+>C : C
+
+=== typeArgument.ts ===
+label: interface I {}
+>label : any
+
+interface Base<T> {}
+export interface J extends Base<I> {}
+
+=== namedClassExpression.ts ===
+label: interface I {}
+>label : any
+
+export default (class C implements I {});
+>(class C implements I {}) : typeof C
+>class C implements I {} : typeof C
+>C : typeof C
+
+=== anonymousClassExpression.ts ===
+label: interface I {}
+>label : any
+
+export default (class implements I {});
+>(class implements I {}) : typeof (Anonymous class)
+>class implements I {} : typeof (Anonymous class)
+
