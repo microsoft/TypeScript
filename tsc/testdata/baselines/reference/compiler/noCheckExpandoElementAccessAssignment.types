@@ -1,0 +1,17 @@
+//// [tests/cases/compiler/noCheckExpandoElementAccessAssignment.ts] ////
+
+=== noCheckExpandoElementAccessAssignment.ts ===
+const k = "bar";
+>k : "bar"
+>"bar" : "bar"
+
+foo[k] = 1;
+>foo[k] = 1 : 1
+>foo[k] : number
+>foo : { (): void; bar: number; }
+>k : "bar"
+>1 : 1
+
+function foo() {}
+>foo : { (): void; bar: number; }
+
