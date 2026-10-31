@@ -53,3 +53,27 @@ checkedObject({ required: "value" });
 checkedArray(["value"]);
 typedObject({ required: "value" });
 typedArray(["value"]);
+
+// Contextual typing must win over padding for parameter defaults (#64974 / #65069).
+type Obj = (input?: { a?: string; b?: number }) => number;
+export const obj1: Obj = ({ a, b } = {}) => (a ? 1 : 0) + (b ?? 0);
+
+type Arr = (input?: [string?, number?]) => number;
+export const arr1: Arr = ([a, b] = []) => (a ? 1 : 0) + (b ?? 0);
+
+export const arr2: (input: [string?, number?]) => number = ([a, b] = []) => (a ? 1 : 0) + (b ?? 0);
+
+declare function takeArr(callback: Arr): void;
+takeArr(([a, b] = []) => {
+    const c: number = a;
+    const d: string = b;
+    return 0;
+});
+
+export const arr3: (input?: [{ a?: number }?]) => void = ([{ a } = {}] = []) => {
+    const b: string = a;
+};
+
+export const arr4: (input?: { a?: number }[]) => void = ([...[{ a } = {}]] = []) => {
+    const b: string = a;
+};
