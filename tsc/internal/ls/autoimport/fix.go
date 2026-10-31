@@ -922,7 +922,7 @@ func detectSyntax(file *ast.SourceFile, options *core.CompilerOptions) fileSynta
 // ExternalModuleIndicator may be the source file itself rather than a real
 // statement, so we look at Imports() for actual import/export declarations.
 func detectSyntaxIndicators(file *ast.SourceFile, options *core.CompilerOptions) (hasESM bool, hasCJS bool) {
-	hasCJS = file.CommonJSModuleIndicator != nil
+	hasCJS = file.IsCommonJSModule
 	if options.GetEmitModuleDetectionKind() != core.ModuleDetectionKindForce {
 		// ExternalModuleIndicator is reliable when moduleDetection is not "force"
 		hasESM = file.ExternalModuleIndicator != nil

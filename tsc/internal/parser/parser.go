@@ -98,6 +98,9 @@ type Parser struct {
 	currentParent        *ast.Node
 	setParentFromContext ast.Visitor
 	reparsedClones       []*ast.Node
+
+	hasCommonJSConstruct      bool
+	jsdocHasCommonJSConstruct bool
 }
 
 func newParser() *Parser {
@@ -346,6 +349,8 @@ type ParserState struct {
 	reparsedClonesLen           int
 	statementHasAwaitIdentifier bool
 	hasParseError               bool
+	hasCommonJSConstruct        bool
+	jsdocHasCommonJSConstruct   bool
 }
 
 func (p *Parser) mark() ParserState {
@@ -358,6 +363,8 @@ func (p *Parser) mark() ParserState {
 		reparsedClonesLen:           len(p.reparsedClones),
 		statementHasAwaitIdentifier: p.statementHasAwaitIdentifier,
 		hasParseError:               p.hasParseError,
+		hasCommonJSConstruct:        p.hasCommonJSConstruct,
+		jsdocHasCommonJSConstruct:   p.jsdocHasCommonJSConstruct,
 	}
 }
 
@@ -371,6 +378,8 @@ func (p *Parser) rewind(state ParserState) {
 	p.reparsedClones = p.reparsedClones[0:state.reparsedClonesLen]
 	p.statementHasAwaitIdentifier = state.statementHasAwaitIdentifier
 	p.hasParseError = state.hasParseError
+	p.hasCommonJSConstruct = state.hasCommonJSConstruct
+	p.jsdocHasCommonJSConstruct = state.jsdocHasCommonJSConstruct
 }
 
 func (p *Parser) lookAhead(callback func(p *Parser) bool) bool {
@@ -451,6 +460,10 @@ func (p *Parser) parseSourceFileWorker() *ast.SourceFile {
 	if !result.IsDeclarationFile && result.ExternalModuleIndicator != nil && len(p.possibleAwaitSpans) > 0 {
 		reparse := p.finishNode(p.reparseTopLevelAwait(result), pos)
 		if node != reparse {
+			// Reparsing can change which CommonJS constructs exist, so recompute from the final tree.
+			if p.contextFlags&ast.NodeFlagsJavaScriptFile != 0 {
+				p.hasCommonJSConstruct = containsCommonJSModuleIndicator(reparse)
+			}
 			result = reparse.AsSourceFile()
 			p.finishSourceFile(result, isDeclarationFile)
 		}
@@ -483,6 +496,47 @@ func (p *Parser) finishSourceFile(result *ast.SourceFile, isDeclarationFile bool
 	slices.SortFunc(p.reparsedClones, ast.CompareNodePositions)
 	result.ReparsedClones = slices.Clone(p.reparsedClones)
 	ast.SetExternalModuleIndicator(result, p.opts.ExternalModuleIndicatorOptions)
+	// CommonJS constructs only make a file a module when it has no ES module syntax.
+	if result.ExternalModuleIndicator == nil || result.ExternalModuleIndicator == result.AsNode() {
+		if !p.hasCommonJSConstruct && p.jsdocHasCommonJSConstruct {
+			// Only reparsed JSDoc clones that survive into the tree are bound.
+			p.hasCommonJSConstruct = containsCommonJSModuleIndicator(result.AsNode())
+		}
+		result.IsCommonJSModule = p.hasCommonJSConstruct
+	} else {
+		result.IsCommonJSModule = false
+	}
+}
+
+// checkCommonJSModuleIndicator records whether a JavaScript file contains a CommonJS construct
+// (a require call, or an assignment or Object.defineProperty on exports or module.exports).
+// The binder binds the same constructs as CommonJS exports. Nodes parsed within JSDoc are
+// only bound if reparsed, so for those we just note that the final tree needs checking.
+func (p *Parser) checkCommonJSModuleIndicator(node *ast.Node) *ast.Node {
+	if !p.hasCommonJSConstruct && node.Flags&ast.NodeFlagsJavaScriptFile != 0 && isCommonJSModuleIndicator(node) {
+		if node.Flags&ast.NodeFlagsJSDoc == 0 {
+			p.hasCommonJSConstruct = true
+		} else {
+			p.jsdocHasCommonJSConstruct = true
+		}
+	}
+	return node
+}
+
+func containsCommonJSModuleIndicator(node *ast.Node) bool {
+	var visit func(*ast.Node) bool
+	visit = func(n *ast.Node) bool {
+		return isCommonJSModuleIndicator(n) || n.ForEachChild(visit)
+	}
+	return visit(node)
+}
+
+func isCommonJSModuleIndicator(node *ast.Node) bool {
+	switch ast.GetAssignmentDeclarationKind(node) {
+	case ast.JSDeclarationKindModuleExports, ast.JSDeclarationKindExportsProperty, ast.JSDeclarationKindObjectDefinePropertyExports:
+		return true
+	}
+	return ast.IsRequireCall(node, false /*requireStringLiteralLikeArgument*/)
 }
 
 func (p *Parser) createJSDocCache() map[*ast.Node][]*ast.Node {
@@ -4740,7 +4794,7 @@ func (p *Parser) makeAsExpression(left *ast.Expression, right *ast.TypeNode) *as
 }
 
 func (p *Parser) makeBinaryExpression(left *ast.Expression, operatorToken *ast.Node, right *ast.Expression, pos int) *ast.Node {
-	return p.finishNode(p.factory.NewBinaryExpression(nil /*modifiers*/, left, nil /*typeNode*/, operatorToken, right), pos)
+	return p.checkCommonJSModuleIndicator(p.finishNode(p.factory.NewBinaryExpression(nil /*modifiers*/, left, nil /*typeNode*/, operatorToken, right), pos))
 }
 
 func (p *Parser) parseUnaryExpressionOrHigher() *ast.Expression {
@@ -5556,7 +5610,7 @@ func (p *Parser) parseCallExpressionRest(pos int, expression *ast.Expression) *a
 			inner := expression
 			argumentList := p.parseArgumentList()
 			isOptionalChain := questionDotToken != nil || p.tryReparseOptionalChain(expression)
-			expression = p.checkJSSyntax(p.finishNode(p.factory.NewCallExpression(expression, questionDotToken, typeArguments, argumentList, core.IfElse(isOptionalChain, ast.NodeFlagsOptionalChain, ast.NodeFlagsNone)), pos))
+			expression = p.checkCommonJSModuleIndicator(p.checkJSSyntax(p.finishNode(p.factory.NewCallExpression(expression, questionDotToken, typeArguments, argumentList, core.IfElse(isOptionalChain, ast.NodeFlagsOptionalChain, ast.NodeFlagsNone)), pos)))
 			p.unparseExpressionWithTypeArguments(inner, typeArguments, expression)
 			continue
 		}

@@ -12309,7 +12309,7 @@ func (c *Checker) getContextualThisParameterType(fn *ast.Node) *Type {
 				// Don't contextually type `this` as `exports` in `exports.Point = function(x, y) { this.x = x; this.y = y; }`
 				if inJs && ast.IsIdentifier(expression) {
 					sourceFile := ast.GetSourceFileOfNode(parent)
-					if sourceFile.CommonJSModuleIndicator != nil && c.getResolvedSymbol(expression).Flags()&ast.SymbolFlagsModuleExports != 0 {
+					if sourceFile.IsCommonJSModule && c.getResolvedSymbol(expression).Flags()&ast.SymbolFlagsModuleExports != 0 {
 						return nil
 					}
 				}
@@ -17341,7 +17341,7 @@ func (c *Checker) getTypeOfFuncClassEnumModuleWorker(symbol *ast.Symbol) *Type {
 	if symbol.Flags()&ast.SymbolFlagsModule != 0 && isShorthandAmbientModuleSymbol(symbol) {
 		return c.anyType
 	} else if symbol.Flags()&ast.SymbolFlagsValueModule != 0 && symbol.ValueDeclaration() != nil &&
-		ast.IsSourceFile(symbol.ValueDeclaration()) && symbol.ValueDeclaration().AsSourceFile().CommonJSModuleIndicator != nil {
+		ast.IsSourceFile(symbol.ValueDeclaration()) && symbol.ValueDeclaration().AsSourceFile().IsCommonJSModule {
 		resolvedModule := c.resolveExternalModuleSymbol(symbol, false /*dontResolveAlias*/)
 		if resolvedModule != symbol {
 			return c.getTypeOfSymbol(resolvedModule)

@@ -141,7 +141,7 @@ func (r *EmitResolver) PrecalculateDeclarationEmitVisibility(file *ast.SourceFil
 
 func isCommonJSModuleExports(node *ast.Node) bool {
 	if ast.IsBinaryExpression(node) && ast.IsExpressionStatement(node.Parent) && ast.IsSourceFile(node.Parent.Parent) &&
-		node.Parent.Parent.AsSourceFile().CommonJSModuleIndicator != nil {
+		node.Parent.Parent.AsSourceFile().IsCommonJSModule {
 		switch ast.GetAssignmentDeclarationKind(node) {
 		case ast.JSDeclarationKindModuleExports, ast.JSDeclarationKindExportsProperty:
 			return true
