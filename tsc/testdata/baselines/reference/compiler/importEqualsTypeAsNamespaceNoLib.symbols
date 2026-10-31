@@ -1,0 +1,9 @@
+//// [tests/cases/compiler/importEqualsTypeAsNamespaceNoLib.ts] ////
+
+=== importEqualsTypeAsNamespaceNoLib.ts ===
+interface C {}
+>C : Symbol(C, Decl(importEqualsTypeAsNamespaceNoLib.ts, 0, 0))
+
+import x = C.m;
+>x : Symbol(x, Decl(importEqualsTypeAsNamespaceNoLib.ts, 0, 14))
+
