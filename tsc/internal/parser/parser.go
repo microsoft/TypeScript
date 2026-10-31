@@ -5338,9 +5338,17 @@ func (p *Parser) tryParseTypeArgumentsInExpression() *ast.NodeList {
 		return nil
 	}
 	state := p.mark()
+	isLessThanLessThan := p.token == ast.KindLessThanLessThanToken
 	if p.reScanLessThanToken() == ast.KindLessThanToken {
 		p.nextToken()
 		typeArguments := p.parseDelimitedList(PCTypeArguments, (*Parser).parseType)
+		// A `<<` can only start a type argument list whose first type argument is a generic function
+		// or constructor type, as in `f<<T>(x: T) => T>(g)`. If parsing such a list reported errors,
+		// we instead treat `<<` as a left shift operator, as in `1 << f<T[]>()`.
+		if isLessThanLessThan && len(p.diagnostics) != state.diagnosticsLen {
+			p.rewind(state)
+			return nil
+		}
 		// If it doesn't have the closing `>` then it's definitely not an type argument list.
 		if p.reScanGreaterThanToken() == ast.KindGreaterThanToken {
 			p.nextToken()
