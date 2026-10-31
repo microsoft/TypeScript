@@ -1,0 +1,264 @@
+//// [tests/cases/compiler/declarationEmitShadowedTypeParameterSharesParameterName.ts] ////
+
+=== declarationEmitShadowedTypeParameterSharesParameterName.ts ===
+export function predicate<value>(value: value) {
+>predicate : <value>(value: value) => <value_1>(value: value_1) => value is value_1 & string
+>value : value
+
+    return function <value>(value: value): value is value & string {
+>function <value>(value: value): value is value & string {        return typeof value === "string";    } : <value>(value: value) => value is value & string
+>value : value
+
+        return typeof value === "string";
+>typeof value === "string" : boolean
+>typeof value : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
+>value : value
+>"string" : "string"
+
+    };
+}
+
+export function assertion<value>(value: value) {
+>assertion : <value>(value: value) => <value_1>(value: value_1) => asserts value is value_1 & string
+>value : value
+
+    return function <value>(value: value): asserts value is value & string {
+>function <value>(value: value): asserts value is value & string {        if (typeof value !== "string") throw value;    } : <value>(value: value) => asserts value is value & string
+>value : value
+
+        if (typeof value !== "string") throw value;
+>typeof value !== "string" : boolean
+>typeof value : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
+>value : value
+>"string" : "string"
+>value : value
+
+    };
+}
+
+export function truthyAssertion<value>(value: value) {
+>truthyAssertion : <value>(value: value) => <value_1>(value: value_1) => asserts value
+>value : value
+
+    return function <value>(value: value): asserts value {
+>function <value>(value: value): asserts value {        if (!value) throw value;    } : <value>(value: value) => asserts value
+>value : value
+
+        if (!value) throw value;
+>!value : boolean
+>value : value
+>value : value
+
+    };
+}
+
+export function query<value>(value: value) {
+>query : <value>(value: value) => <value_1>(value: value_1, other: typeof value) => typeof value
+>value : value
+
+    return function <value>(value: value, other: typeof value): typeof value {
+>function <value>(value: value, other: typeof value): typeof value {        return value;    } : <value>(value: value, other: typeof value) => typeof value
+>value : value
+>other : value
+>value : value
+>value : value
+
+        return value;
+>value : value
+
+    };
+}
+
+export function qualifiedQuery<value>(value: value) {
+>qualifiedQuery : <value>(value: value) => <value_1 extends { a: number; }>(value: value_1) => typeof value.a
+>value : value
+
+    return function <value extends { a: number }>(value: value): typeof value.a {
+>function <value extends { a: number }>(value: value): typeof value.a {        return value.a;    } : <value extends { a: number; }>(value: value) => typeof value.a
+>a : number
+>value : value
+>value.a : number
+>value : value
+>a : number
+
+        return value.a;
+>value.a : number
+>value : value
+>a : number
+
+    };
+}
+
+declare const key: unique symbol;
+>key : unique symbol
+
+export function computed<value>(value: value) {
+>computed : <value>(value: value) => <value_1>(value: typeof key) => { [value]: number; }
+>value : value
+
+    return function <value>(value: typeof key): { [value]: number } {
+>function <value>(value: typeof key): { [value]: number } {        return { [value]: 1 };    } : <value>(value: typeof key) => { [value]: number; }
+>value : unique symbol
+>key : unique symbol
+>[value] : number
+>value : unique symbol
+
+        return { [value]: 1 };
+>{ [value]: 1 } : { [key]: number; }
+>[value] : number
+>value : unique symbol
+>1 : 1
+
+    };
+}
+
+export function capturedPredicate<value>(value: value) {
+>capturedPredicate : <value>(value: value) => <value_1>(value: value_1, value_1: unknown) => value is value_1 & string
+>value : value
+
+    return function <value>(value: value, value_1: unknown): value is value & string {
+>function <value>(value: value, value_1: unknown): value is value & string {        return typeof value === "string";    } : <value>(value: value, value_1: unknown) => value is value & string
+>value : value
+>value_1 : unknown
+
+        return typeof value === "string";
+>typeof value === "string" : boolean
+>typeof value : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
+>value : value
+>"string" : "string"
+
+    };
+}
+
+export function capturedAssertion<value>(value: value) {
+>capturedAssertion : <value>(value: value) => <value_1>(value: value_1, value_1: unknown) => asserts value is value_1 & string
+>value : value
+
+    return function <value>(value: value, value_1: unknown): asserts value is value & string {
+>function <value>(value: value, value_1: unknown): asserts value is value & string {        if (typeof value !== "string") throw value;    } : <value>(value: value, value_1: unknown) => asserts value is value & string
+>value : value
+>value_1 : unknown
+
+        if (typeof value !== "string") throw value;
+>typeof value !== "string" : boolean
+>typeof value : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
+>value : value
+>"string" : "string"
+>value : value
+
+    };
+}
+
+export function capturedTruthyAssertion<value>(value: value) {
+>capturedTruthyAssertion : <value>(value: value) => <value_1>(value: value_1, value_1: unknown) => asserts value
+>value : value
+
+    return function <value>(value: value, value_1: unknown): asserts value {
+>function <value>(value: value, value_1: unknown): asserts value {        if (!value) throw value;    } : <value>(value: value, value_1: unknown) => asserts value
+>value : value
+>value_1 : unknown
+
+        if (!value) throw value;
+>!value : boolean
+>value : value
+>value : value
+
+    };
+}
+
+export function capturedQuery<value>(value: value) {
+>capturedQuery : <value>(value: value) => <value_1>(value: value_1, value_1: number) => typeof value
+>value : value
+
+    return function <value>(value: value, value_1: number): typeof value {
+>function <value>(value: value, value_1: number): typeof value {        return value;    } : <value>(value: value, value_1: number) => typeof value
+>value : value
+>value_1 : number
+>value : value
+
+        return value;
+>value : value
+
+    };
+}
+
+export function nested<value>(value: value) {
+>nested : <value>(value: value) => <value_1>(value: value_1) => <value_2>(value: value_2) => typeof value
+>value : value
+
+    return function <value>(value: value) {
+>function <value>(value: value) {        return function <value>(value: value): typeof value {            return value;        };    } : <value>(value: value) => <value_1>(value: value_1) => typeof value
+>value : value
+
+        return function <value>(value: value): typeof value {
+>function <value>(value: value): typeof value {            return value;        } : <value>(value: value) => typeof value
+>value : value
+>value : value
+
+            return value;
+>value : value
+
+        };
+    };
+}
+
+export const arrow = <value>(value: value) => <value>(value: value): value is value & string => typeof value === "string";
+>arrow : <value>(value: value) => <value_1>(value: value_1) => value is value_1 & string
+><value>(value: value) => <value>(value: value): value is value & string => typeof value === "string" : <value>(value: value) => <value_1>(value: value_1) => value is value_1 & string
+>value : value
+><value>(value: value): value is value & string => typeof value === "string" : <value>(value: value) => value is value & string
+>value : value
+>typeof value === "string" : boolean
+>typeof value : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
+>value : value
+>"string" : "string"
+
+export function method<value>(value: value) {
+>method : <value>(value: value) => { m<value_1>(value: value_1): asserts value; }
+>value : value
+
+    return {
+>{        m<value>(value: value): asserts value {            if (!value) throw value;        },    } : { m<value>(value: value): asserts value; }
+
+        m<value>(value: value): asserts value {
+>m : <value>(value: value) => asserts value
+>value : value
+
+            if (!value) throw value;
+>!value : boolean
+>value : value
+>value : value
+
+        },
+    };
+}
+
+export function local<value>(value: value) {
+>local : <value>(value: value) => <value_1>(x: value_1) => { a: 1; b: value_1; }
+>value : value
+
+    return function <value>(x: value) {
+>function <value>(x: value) {        const value = 1;        const result: { a: typeof value; b: value } = { a: value, b: x };        return result;    } : <value_1>(x: value_1) => { a: 1; b: value_1; }
+>x : value
+
+        const value = 1;
+>value : 1
+>1 : 1
+
+        const result: { a: typeof value; b: value } = { a: value, b: x };
+>result : { a: 1; b: value; }
+>a : 1
+>value : 1
+>b : value
+>{ a: value, b: x } : { a: 1; b: value; }
+>a : 1
+>value : 1
+>b : value
+>x : value
+
+        return result;
+>result : { a: 1; b: value; }
+
+    };
+}
+
