@@ -28,6 +28,11 @@ func FromContext(ctx context.Context) Locale {
 	return locale
 }
 
+func HasLocale(ctx context.Context) bool {
+	_, ok := ctx.Value(contextKey(0)).(Locale)
+	return ok
+}
+
 func Parse(localeStr string) (locale Locale, ok bool) {
 	// Parse gracefully fails.
 	tag, err := language.Parse(localeStr)

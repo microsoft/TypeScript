@@ -1,0 +1,44 @@
+/index.ts(11,7): error TS2339: Property 'augmented' does not exist on type 'typeof import("*.asset")'.
+
+
+==== /a.d.ts (0 errors) ====
+    declare module "*.asset" {
+        export const fromA: "a";
+    }
+    
+==== /b.d.ts (0 errors) ====
+    declare module "*.asset" {
+        export const fromB: "b";
+    }
+    
+==== /c.d.ts (0 errors) ====
+    declare module "*.asset" with {} {
+        export const fromAttributed: "attributed";
+    }
+    
+==== /augmentation.ts (0 errors) ====
+    export {};
+    
+    declare module "augmented.asset" {
+        export const augmented: "augmented";
+    }
+    
+==== /index.ts (1 errors) ====
+    import * as augmented from "augmented.asset";
+    augmented.fromA;
+    augmented.fromB;
+    augmented.fromAttributed;
+    augmented.augmented;
+    
+    import * as other from "other.asset";
+    other.fromA;
+    other.fromB;
+    other.fromAttributed;
+    other.augmented;
+          ~~~~~~~~~
+!!! error TS2339: Property 'augmented' does not exist on type 'typeof import("*.asset")'.
+    
+    import * as explicitlyEmpty from "other.asset" with {};
+    explicitlyEmpty.fromA;
+    explicitlyEmpty.fromB;
+    explicitlyEmpty.fromAttributed;

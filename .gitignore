@@ -93,6 +93,7 @@ tsc/testdata/baselines/tmp
 /TEST-results.xml
 /*v8.log
 /lib/
+/packages/typescript-wasip1-wasm/lib/
 /internal/
 /scripts/eslint/built/
 /scripts/debug.bat
@@ -128,6 +129,11 @@ tsc/testdata/baselines/tmp
 tools/custom-gcl
 tools/custom-gcl.exe
 tools/custom-gcl.hash
+tools/custom-gcl.exe.hash
+tools/gotestsum
+tools/gotestsum.exe
+tools/gotestsum.hash
+tools/gotestsum.exe.hash
 
 # Keep tracked text assets that overlap broad output patterns
 !tsc/testdata/baselines/reference/**/*.txt

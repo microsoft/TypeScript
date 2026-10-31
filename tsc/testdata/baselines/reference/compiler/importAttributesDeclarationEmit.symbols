@@ -1,0 +1,57 @@
+//// [tests/cases/compiler/importAttributesDeclarationEmit.ts] ////
+
+=== /types.d.ts ===
+declare module "*.style" with { type: "css" } {
+>"*.style" : Symbol("*.style", Decl(types.d.ts, 0, 0))
+>type : Symbol(type, Decl(types.d.ts, 0, 31))
+
+    export interface Style {
+>Style : Symbol(Style, Decl(types.d.ts, 0, 47))
+
+        kind: "css";
+>kind : Symbol(Style.kind, Decl(types.d.ts, 1, 28))
+    }
+}
+
+declare module "formatted/*.style" with { type: "css", format: "module" } {
+>"formatted/*.style" : Symbol("formatted/*.style", Decl(types.d.ts, 4, 1))
+>type : Symbol(type, Decl(types.d.ts, 6, 41))
+>format : Symbol(format, Decl(types.d.ts, 6, 54))
+
+    export interface FormattedStyle {
+>FormattedStyle : Symbol(FormattedStyle, Decl(types.d.ts, 6, 75))
+
+        kind: "css-module";
+>kind : Symbol(FormattedStyle.kind, Decl(types.d.ts, 7, 37))
+    }
+}
+
+=== /index.ts ===
+import type { Style } from "plain.style" with { type: "css" };
+>Style : Symbol(Style, Decl(index.ts, 0, 13))
+
+import type { FormattedStyle } from "formatted/import.style" with { type: "css", format: "module" };
+>FormattedStyle : Symbol(FormattedStyle, Decl(index.ts, 1, 13))
+
+export interface LocalStyle extends Style {}
+>LocalStyle : Symbol(LocalStyle, Decl(index.ts, 1, 100))
+>Style : Symbol(Style, Decl(index.ts, 0, 13))
+
+export interface LocalFormattedStyle extends FormattedStyle {}
+>LocalFormattedStyle : Symbol(LocalFormattedStyle, Decl(index.ts, 3, 44))
+>FormattedStyle : Symbol(FormattedStyle, Decl(index.ts, 1, 13))
+
+export type { Style } from "reexport.style" with { type: "css" };
+>Style : Symbol(Style, Decl(index.ts, 6, 13))
+
+export type { FormattedStyle } from "formatted/reexport.style" with { type: "css", format: "module" };
+>FormattedStyle : Symbol(FormattedStyle, Decl(index.ts, 7, 13))
+
+export type InlineStyle = import("inline.style", { with: { type: "css" } }).Style;
+>InlineStyle : Symbol(InlineStyle, Decl(index.ts, 7, 102))
+>Style : Symbol(Style, Decl(types.d.ts, 0, 47))
+
+export type InlineFormattedStyle = import("formatted/inline.style", { with: { type: "css", format: "module" } }).FormattedStyle;
+>InlineFormattedStyle : Symbol(InlineFormattedStyle, Decl(index.ts, 9, 82))
+>FormattedStyle : Symbol(FormattedStyle, Decl(types.d.ts, 6, 75))
+

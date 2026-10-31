@@ -1,0 +1,107 @@
+//// [tests/cases/compiler/importAttributeDuplicatePatternMergedResolution.ts] ////
+
+=== /a.d.ts ===
+declare module "*.asset" with { type: "css", format: "module" } {
+>"*.asset" : Symbol("*.asset", Decl(a.d.ts, 0, 0), Decl(b.d.ts, 0, 0))
+>type : Symbol(type, Decl(a.d.ts, 0, 31))
+>format : Symbol(format, Decl(a.d.ts, 0, 44))
+
+    export const fromA: "a";
+>fromA : Symbol(fromA, Decl(a.d.ts, 1, 16))
+}
+
+=== /b.d.ts ===
+declare module "*.asset" with { format: "module", type: "css" } {
+>"*.asset" : Symbol("*.asset", Decl(a.d.ts, 0, 0), Decl(b.d.ts, 0, 0))
+>format : Symbol(format, Decl(b.d.ts, 0, 31))
+>type : Symbol(type, Decl(b.d.ts, 0, 49))
+
+    export const fromB: "b";
+>fromB : Symbol(fromB, Decl(b.d.ts, 1, 16))
+}
+
+=== /variantsA.d.ts ===
+declare module "*.variant" with { type: "css" } {
+>"*.variant" : Symbol("*.variant", Decl(variantsA.d.ts, 0, 0), Decl(variantsB.d.ts, 0, 0))
+>type : Symbol(type, Decl(variantsA.d.ts, 0, 33))
+
+    export const cssOnly: "css";
+>cssOnly : Symbol(cssOnly, Decl(variantsA.d.ts, 1, 16))
+}
+
+declare module "*.variant" with { type: "text" } {
+>"*.variant" : Symbol("*.variant", Decl(variantsA.d.ts, 2, 1), Decl(variantsB.d.ts, 2, 1))
+>type : Symbol(type, Decl(variantsA.d.ts, 4, 33))
+
+    export const textOnly: "text";
+>textOnly : Symbol(textOnly, Decl(variantsA.d.ts, 5, 16))
+}
+
+=== /variantsB.d.ts ===
+declare module "*.variant" with { type: "css" } {
+>"*.variant" : Symbol("*.variant", Decl(variantsA.d.ts, 0, 0), Decl(variantsB.d.ts, 0, 0))
+>type : Symbol(type, Decl(variantsB.d.ts, 0, 33))
+
+    export const cssAlso: "css-also";
+>cssAlso : Symbol(cssAlso, Decl(variantsB.d.ts, 1, 16))
+}
+
+declare module "*.variant" with { type: "text" } {
+>"*.variant" : Symbol("*.variant", Decl(variantsA.d.ts, 2, 1), Decl(variantsB.d.ts, 2, 1))
+>type : Symbol(type, Decl(variantsB.d.ts, 4, 33))
+
+    export const textAlso: "text-also";
+>textAlso : Symbol(textAlso, Decl(variantsB.d.ts, 5, 16))
+}
+
+=== /index.ts ===
+import { fromA, fromB } from "./file.asset" with { type: "css", format: "module" };
+>fromA : Symbol(fromA, Decl(index.ts, 0, 8))
+>fromB : Symbol(fromB, Decl(index.ts, 0, 15))
+
+import * as css from "./file.variant" with { type: "css" };
+>css : Symbol(css, Decl(index.ts, 1, 6))
+
+import * as text from "./file.variant" with { type: "text" };
+>text : Symbol(text, Decl(index.ts, 2, 6))
+
+const a: "a" = fromA;
+>a : Symbol(a, Decl(index.ts, 4, 5))
+>fromA : Symbol(fromA, Decl(index.ts, 0, 8))
+
+const b: "b" = fromB;
+>b : Symbol(b, Decl(index.ts, 5, 5))
+>fromB : Symbol(fromB, Decl(index.ts, 0, 15))
+
+const cssValue: "css" = css.cssOnly;
+>cssValue : Symbol(cssValue, Decl(index.ts, 6, 5))
+>css.cssOnly : Symbol(css.cssOnly, Decl(variantsA.d.ts, 1, 16))
+>css : Symbol(css, Decl(index.ts, 1, 6))
+>cssOnly : Symbol(css.cssOnly, Decl(variantsA.d.ts, 1, 16))
+
+const cssAlsoValue: "css-also" = css.cssAlso;
+>cssAlsoValue : Symbol(cssAlsoValue, Decl(index.ts, 7, 5))
+>css.cssAlso : Symbol(css.cssAlso, Decl(variantsB.d.ts, 1, 16))
+>css : Symbol(css, Decl(index.ts, 1, 6))
+>cssAlso : Symbol(css.cssAlso, Decl(variantsB.d.ts, 1, 16))
+
+const textValue: "text" = text.textOnly;
+>textValue : Symbol(textValue, Decl(index.ts, 8, 5))
+>text.textOnly : Symbol(text.textOnly, Decl(variantsA.d.ts, 5, 16))
+>text : Symbol(text, Decl(index.ts, 2, 6))
+>textOnly : Symbol(text.textOnly, Decl(variantsA.d.ts, 5, 16))
+
+const textAlsoValue: "text-also" = text.textAlso;
+>textAlsoValue : Symbol(textAlsoValue, Decl(index.ts, 9, 5))
+>text.textAlso : Symbol(text.textAlso, Decl(variantsB.d.ts, 5, 16))
+>text : Symbol(text, Decl(index.ts, 2, 6))
+>textAlso : Symbol(text.textAlso, Decl(variantsB.d.ts, 5, 16))
+
+const cssDoesNotHaveText: "textOnly" extends keyof typeof css ? false : true = true;
+>cssDoesNotHaveText : Symbol(cssDoesNotHaveText, Decl(index.ts, 11, 5))
+>css : Symbol(css, Decl(index.ts, 1, 6))
+
+const textDoesNotHaveCss: "cssOnly" extends keyof typeof text ? false : true = true;
+>textDoesNotHaveCss : Symbol(textDoesNotHaveCss, Decl(index.ts, 12, 5))
+>text : Symbol(text, Decl(index.ts, 2, 6))
+

@@ -1,5 +1,5 @@
 // @target: es2015
-// @outFile: test.js
+// @outDir: out
 
 // @fileName: A.ts
 namespace ts {

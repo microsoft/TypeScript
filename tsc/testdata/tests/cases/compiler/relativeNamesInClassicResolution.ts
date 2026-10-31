@@ -1,5 +1,5 @@
 // @target: es2015
-// @module:amd
+// @module:commonjs
 
 // @filename: somefolder/a.ts
 import {x} from "./b"

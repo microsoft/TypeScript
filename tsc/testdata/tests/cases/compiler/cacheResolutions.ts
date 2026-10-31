@@ -1,5 +1,5 @@
 // @target: es2015
-// @module: amd
+// @module: commonjs
 // @importHelpers: true
 // @traceResolution: true
 

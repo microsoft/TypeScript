@@ -24,7 +24,7 @@ func (supplementalHandler) HandleRequest(ctx context.Context, method string, par
 			return nil, err
 		}
 		return contentmapper.TransformResult{
-			MappedOutput: contentmapper.MappedOutput{Text: "export {};", Extension: ".ts"},
+			Text: "export {};", Extension: ".ts",
 			Supplemental: []contentmapper.SupplementalOutput{{MappedOutput: mappedOutput}},
 		}, nil
 	default:

@@ -1,0 +1,20 @@
+//// [tests/cases/compiler/es6ImportNameSpaceImportWithExport.ts] ////
+
+=== server.ts ===
+export var a = 10;
+>a : number
+>10 : 10
+
+=== client.ts ===
+export import * as nameSpaceBinding from "server";
+>nameSpaceBinding : any
+
+export var x = nameSpaceBinding.a;
+>x : any
+>nameSpaceBinding.a : any
+>nameSpaceBinding : any
+>a : any
+
+export import * as nameSpaceBinding2 from "server"; // Not referenced imports
+>nameSpaceBinding2 : any
+

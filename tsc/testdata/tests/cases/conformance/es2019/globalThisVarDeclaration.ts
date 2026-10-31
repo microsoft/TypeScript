@@ -1,4 +1,4 @@
-// @outFile: output.js
+// @outDir: out
 // @target: esnext
 // @lib: esnext, dom
 // @Filename: b.js

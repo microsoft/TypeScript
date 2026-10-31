@@ -1,0 +1,12 @@
+main.ts(2,21): error TS2307: Cannot find module 'external' or its corresponding type declarations.
+
+
+==== external.d.ts (0 errors) ====
+    export var x: number
+    
+==== main.ts (1 errors) ====
+    declare module "M" {
+        export {x} from "external"
+                        ~~~~~~~~~~
+!!! error TS2307: Cannot find module 'external' or its corresponding type declarations.
+    }

@@ -5,6 +5,7 @@ import (
 	"io"
 	"os"
 	"os/exec"
+	"runtime"
 	"strings"
 	"testing"
 
@@ -37,16 +38,12 @@ func (stdio) Close() error                { return nil }
 
 func testMapper() *contentmapper.Mapper {
 	return &contentmapper.Mapper{
-		Definition: contentmapper.Definition{
-			Package:    contentmappertest.PackageName,
-			Extensions: []string{".box"},
-		},
-		Manifest: contentmapper.Manifest{
-			Name:            contentmappertest.PackageName,
-			Version:         "1.0.0",
-			Exec:            []string{contentmappertest.TransformingMapper},
-			CompilerOptions: contentmappertest.DeclaredOptions,
-		},
+		Package:          contentmappertest.PackageName,
+		Extensions:       []string{".box"},
+		Name:             contentmappertest.PackageName,
+		Version:          "1.0.0",
+		Exec:             []string{contentmappertest.TransformingMapper},
+		CompilerOptions:  contentmappertest.DeclaredOptions,
 		PackageDirectory: "/node_modules/" + contentmappertest.PackageName,
 	}
 }
@@ -62,6 +59,9 @@ func transformRequest() contentmapper.Request {
 // subprocess and drives it over stdio through the production content mapper host.
 func TestOutOfProcess(t *testing.T) {
 	t.Parallel()
+	if runtime.GOOS == "wasip1" {
+		t.Skip("wasip1 cannot run subprocesses")
+	}
 	host := contentmapper.NewHost(t.Context(), execSpawner{}, locale.Default)
 	defer host.Close()
 	mapper := testMapper()

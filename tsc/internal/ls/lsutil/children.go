@@ -1,6 +1,8 @@
 package lsutil
 
 import (
+	"slices"
+
 	"github.com/microsoft/TypeScript/tsc/internal/ast"
 	"github.com/microsoft/TypeScript/tsc/internal/astnav"
 	"github.com/microsoft/TypeScript/tsc/internal/core"
@@ -68,9 +70,9 @@ func GetLastVisitedChild(node *ast.Node, sourceFile *ast.SourceFile) *ast.Node {
 	}
 	visitNodeList := func(nodeList *ast.NodeList, _ *ast.NodeVisitor) *ast.NodeList {
 		if nodeList != nil && len(nodeList.Nodes) > 0 {
-			for i := len(nodeList.Nodes) - 1; i >= 0; i-- {
-				if nodeList.Nodes[i].Flags&ast.NodeFlagsReparsed == 0 {
-					lastChild = nodeList.Nodes[i]
+			for _, v := range slices.Backward(nodeList.Nodes) {
+				if v.Flags&ast.NodeFlagsReparsed == 0 {
+					lastChild = v
 					break
 				}
 			}

@@ -20,12 +20,12 @@ export * as Drink from "./constants";
 
 === index.ts ===
 import { Drink } from "./drink";
->Drink : typeof import("./constants")
+>Drink : typeof Drink
 
 // 'Drink' only refers to a type, but is being used as a value here
 const x: Drink = Drink.TEA;
 >x : Drink
 >Drink.TEA : 1
->Drink : typeof import("./constants")
+>Drink : typeof Drink
 >TEA : 1
 

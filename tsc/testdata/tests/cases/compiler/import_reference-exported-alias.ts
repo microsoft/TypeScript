@@ -14,7 +14,7 @@ import Mod = App;
 export = Mod;
 
 // @Filename: file2.ts
-// @module: amd
+// @module: commonjs
 import appJs = require("file1");
 import Services = appJs.Services;
 import UserServices = Services.UserServices;

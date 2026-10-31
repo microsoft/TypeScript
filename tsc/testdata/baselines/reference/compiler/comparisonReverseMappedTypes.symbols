@@ -1,0 +1,69 @@
+//// [tests/cases/compiler/comparisonReverseMappedTypes.ts] ////
+
+=== comparisonReverseMappedTypes.ts ===
+declare function unbox<T>(value: { [K in keyof T]: { value: T[K] } }): T;
+>unbox : Symbol(unbox, Decl(comparisonReverseMappedTypes.ts, 0, 0))
+>T : Symbol(T, Decl(comparisonReverseMappedTypes.ts, 0, 23))
+>value : Symbol(value, Decl(comparisonReverseMappedTypes.ts, 0, 26))
+>K : Symbol(K, Decl(comparisonReverseMappedTypes.ts, 0, 36))
+>T : Symbol(T, Decl(comparisonReverseMappedTypes.ts, 0, 23))
+>value : Symbol(value, Decl(comparisonReverseMappedTypes.ts, 0, 52))
+>T : Symbol(T, Decl(comparisonReverseMappedTypes.ts, 0, 23))
+>K : Symbol(K, Decl(comparisonReverseMappedTypes.ts, 0, 36))
+>T : Symbol(T, Decl(comparisonReverseMappedTypes.ts, 0, 23))
+
+declare const strings: { value: { value: string } };
+>strings : Symbol(strings, Decl(comparisonReverseMappedTypes.ts, 2, 13))
+>value : Symbol(value, Decl(comparisonReverseMappedTypes.ts, 2, 24))
+>value : Symbol(value, Decl(comparisonReverseMappedTypes.ts, 2, 33))
+
+declare const numbers: { value: { value: number } };
+>numbers : Symbol(numbers, Decl(comparisonReverseMappedTypes.ts, 3, 13))
+>value : Symbol(value, Decl(comparisonReverseMappedTypes.ts, 3, 24))
+>value : Symbol(value, Decl(comparisonReverseMappedTypes.ts, 3, 33))
+
+declare const booleans: { value: { value: boolean } };
+>booleans : Symbol(booleans, Decl(comparisonReverseMappedTypes.ts, 4, 13))
+>value : Symbol(value, Decl(comparisonReverseMappedTypes.ts, 4, 25))
+>value : Symbol(value, Decl(comparisonReverseMappedTypes.ts, 4, 34))
+
+export const values = [unbox(numbers), unbox(strings), unbox(booleans)];
+>values : Symbol(values, Decl(comparisonReverseMappedTypes.ts, 6, 12))
+>unbox : Symbol(unbox, Decl(comparisonReverseMappedTypes.ts, 0, 0))
+>numbers : Symbol(numbers, Decl(comparisonReverseMappedTypes.ts, 3, 13))
+>unbox : Symbol(unbox, Decl(comparisonReverseMappedTypes.ts, 0, 0))
+>strings : Symbol(strings, Decl(comparisonReverseMappedTypes.ts, 2, 13))
+>unbox : Symbol(unbox, Decl(comparisonReverseMappedTypes.ts, 0, 0))
+>booleans : Symbol(booleans, Decl(comparisonReverseMappedTypes.ts, 4, 13))
+
+export const reversed = [unbox(booleans), unbox(strings), unbox(numbers)];
+>reversed : Symbol(reversed, Decl(comparisonReverseMappedTypes.ts, 7, 12))
+>unbox : Symbol(unbox, Decl(comparisonReverseMappedTypes.ts, 0, 0))
+>booleans : Symbol(booleans, Decl(comparisonReverseMappedTypes.ts, 4, 13))
+>unbox : Symbol(unbox, Decl(comparisonReverseMappedTypes.ts, 0, 0))
+>strings : Symbol(strings, Decl(comparisonReverseMappedTypes.ts, 2, 13))
+>unbox : Symbol(unbox, Decl(comparisonReverseMappedTypes.ts, 0, 0))
+>numbers : Symbol(numbers, Decl(comparisonReverseMappedTypes.ts, 3, 13))
+
+declare function identity<T>(value: { [K in keyof T]: T[K] }): T;
+>identity : Symbol(identity, Decl(comparisonReverseMappedTypes.ts, 7, 74))
+>T : Symbol(T, Decl(comparisonReverseMappedTypes.ts, 9, 26))
+>value : Symbol(value, Decl(comparisonReverseMappedTypes.ts, 9, 29))
+>K : Symbol(K, Decl(comparisonReverseMappedTypes.ts, 9, 39))
+>T : Symbol(T, Decl(comparisonReverseMappedTypes.ts, 9, 26))
+>T : Symbol(T, Decl(comparisonReverseMappedTypes.ts, 9, 26))
+>K : Symbol(K, Decl(comparisonReverseMappedTypes.ts, 9, 39))
+>T : Symbol(T, Decl(comparisonReverseMappedTypes.ts, 9, 26))
+
+declare const nested: { value: { value: string } };
+>nested : Symbol(nested, Decl(comparisonReverseMappedTypes.ts, 10, 13))
+>value : Symbol(value, Decl(comparisonReverseMappedTypes.ts, 10, 23))
+>value : Symbol(value, Decl(comparisonReverseMappedTypes.ts, 10, 32))
+
+export const sameSource = [identity(nested), unbox(nested)];
+>sameSource : Symbol(sameSource, Decl(comparisonReverseMappedTypes.ts, 11, 12))
+>identity : Symbol(identity, Decl(comparisonReverseMappedTypes.ts, 7, 74))
+>nested : Symbol(nested, Decl(comparisonReverseMappedTypes.ts, 10, 13))
+>unbox : Symbol(unbox, Decl(comparisonReverseMappedTypes.ts, 0, 0))
+>nested : Symbol(nested, Decl(comparisonReverseMappedTypes.ts, 10, 13))
+

@@ -1,6 +1,6 @@
 // @target: es2015
 // @strict: false
-// @module: amd
+// @module: commonjs
 // @declaration: true
 
 // @filename: map1.ts

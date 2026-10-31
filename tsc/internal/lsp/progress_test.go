@@ -85,8 +85,7 @@ func TestProgress(t *testing.T) {
 			synctest.Wait()
 
 			// Advance time past the delay to ensure no progress is sent.
-			time.Sleep(600 * time.Millisecond)
-			synctest.Wait()
+			synctest.Sleep(600 * time.Millisecond)
 
 			calls := reporter.getCalls()
 			if len(calls) != 0 {
@@ -109,8 +108,7 @@ func TestProgress(t *testing.T) {
 			synctest.Wait()
 
 			// Let the delay fire.
-			time.Sleep(500 * time.Millisecond)
-			synctest.Wait()
+			synctest.Sleep(500 * time.Millisecond)
 
 			calls := reporter.getCalls()
 			if len(calls) != 2 {
@@ -154,8 +152,7 @@ func TestProgress(t *testing.T) {
 			synctest.Wait()
 
 			// Let the delay fire.
-			time.Sleep(100 * time.Millisecond)
-			synctest.Wait()
+			synctest.Sleep(100 * time.Millisecond)
 
 			calls := reporter.getCalls()
 			// Should have: create, begin (with first message).
@@ -212,8 +209,7 @@ func TestProgress(t *testing.T) {
 			p.start(diagnostics.Project_0, "proj")
 			synctest.Wait()
 
-			time.Sleep(100 * time.Millisecond)
-			synctest.Wait()
+			synctest.Sleep(100 * time.Millisecond)
 
 			// Finish once (ref count = 1) — should NOT end.
 			p.finish(diagnostics.Project_0, "proj")
@@ -251,8 +247,7 @@ func TestProgress(t *testing.T) {
 			// First cycle.
 			p.start(diagnostics.Project_0, "proj")
 			synctest.Wait()
-			time.Sleep(100 * time.Millisecond)
-			synctest.Wait()
+			synctest.Sleep(100 * time.Millisecond)
 
 			calls := reporter.getCalls()
 			firstToken := calls[0].token
@@ -263,8 +258,7 @@ func TestProgress(t *testing.T) {
 			// Second cycle — should get a new token.
 			p.start(diagnostics.Project_0, "proj2")
 			synctest.Wait()
-			time.Sleep(100 * time.Millisecond)
-			synctest.Wait()
+			synctest.Sleep(100 * time.Millisecond)
 
 			calls = reporter.getCalls()
 			var secondToken string
@@ -301,8 +295,7 @@ func TestProgress(t *testing.T) {
 			synctest.Wait()
 
 			// Let delay fire.
-			time.Sleep(200 * time.Millisecond)
-			synctest.Wait()
+			synctest.Sleep(200 * time.Millisecond)
 
 			calls := reporter.getCalls()
 			if len(calls) < 2 {

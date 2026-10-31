@@ -1,0 +1,51 @@
+//// [tests/cases/compiler/nonexistentPropertyOnThenable.ts] ////
+
+=== nonexistentPropertyOnThenable.ts ===
+interface Thenable<T> {
+>Thenable : Symbol(Thenable, Decl(nonexistentPropertyOnThenable.ts, 0, 0))
+>T : Symbol(T, Decl(nonexistentPropertyOnThenable.ts, 0, 19))
+
+    then(onfulfilled: (value: T) => void): void;
+>then : Symbol(Thenable.then, Decl(nonexistentPropertyOnThenable.ts, 0, 23))
+>onfulfilled : Symbol(onfulfilled, Decl(nonexistentPropertyOnThenable.ts, 1, 9))
+>value : Symbol(value, Decl(nonexistentPropertyOnThenable.ts, 1, 23))
+>T : Symbol(T, Decl(nonexistentPropertyOnThenable.ts, 0, 19))
+}
+
+declare const thenable: Thenable<{ x: number }>;
+>thenable : Symbol(thenable, Decl(nonexistentPropertyOnThenable.ts, 4, 13))
+>Thenable : Symbol(Thenable, Decl(nonexistentPropertyOnThenable.ts, 0, 0))
+>x : Symbol(x, Decl(nonexistentPropertyOnThenable.ts, 4, 34))
+
+thenable.x;
+>thenable : Symbol(thenable, Decl(nonexistentPropertyOnThenable.ts, 4, 13))
+
+declare const promiseLike: PromiseLike<{ y: string }>;
+>promiseLike : Symbol(promiseLike, Decl(nonexistentPropertyOnThenable.ts, 7, 13))
+>PromiseLike : Symbol(PromiseLike, Decl(lib.es5.d.ts, --, --))
+>y : Symbol(y, Decl(nonexistentPropertyOnThenable.ts, 7, 40))
+
+promiseLike.y;
+>promiseLike : Symbol(promiseLike, Decl(nonexistentPropertyOnThenable.ts, 7, 13))
+
+declare const promise: Promise<{ z: boolean }>;
+>promise : Symbol(promise, Decl(nonexistentPropertyOnThenable.ts, 10, 13))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>z : Symbol(z, Decl(nonexistentPropertyOnThenable.ts, 10, 32))
+
+promise.z;
+>promise : Symbol(promise, Decl(nonexistentPropertyOnThenable.ts, 10, 13))
+
+async function f() {
+>f : Symbol(f, Decl(nonexistentPropertyOnThenable.ts, 11, 10))
+
+    thenable.x;
+>thenable : Symbol(thenable, Decl(nonexistentPropertyOnThenable.ts, 4, 13))
+
+    promiseLike.y;
+>promiseLike : Symbol(promiseLike, Decl(nonexistentPropertyOnThenable.ts, 7, 13))
+
+    promise.z;
+>promise : Symbol(promise, Decl(nonexistentPropertyOnThenable.ts, 10, 13))
+}
+

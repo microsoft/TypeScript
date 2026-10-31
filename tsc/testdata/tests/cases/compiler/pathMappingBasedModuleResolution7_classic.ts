@@ -1,6 +1,6 @@
 // @target: es2015
 // @strict: false
-// @module: amd
+// @module: commonjs
 // @traceResolution: true
 
 // @filename: c:/root/src/tsconfig.json

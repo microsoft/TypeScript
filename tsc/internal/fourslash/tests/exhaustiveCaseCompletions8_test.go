@@ -34,8 +34,8 @@ export function foo(position: -1n | 0n) {
 		Items: &fourslash.CompletionsExpectedItems{
 			Includes: []fourslash.CompletionsExpectedItem{
 				&lsproto.CompletionItem{
-					Label:            "case 0n: ...",
-					InsertText:       new("case 0n:$1\ncase -1n:$2"),
+					Label:            "case -1n: ...",
+					InsertText:       new("case -1n:$1\ncase 0n:$2"),
 					SortText:         new(string(ls.SortTextGlobalsOrKeywords)),
 					InsertTextFormat: new(lsproto.InsertTextFormatSnippet),
 				},

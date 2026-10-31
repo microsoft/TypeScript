@@ -1,0 +1,74 @@
+//// [tests/cases/compiler/newExpressionCalleeParenthesesDownlevel.ts] ////
+
+=== newExpressionCalleeParenthesesDownlevel.ts ===
+class Plugins {
+>Plugins : Plugins
+
+    static Linker = class {};
+>Linker : typeof (Anonymous class)
+>class {} : typeof (Anonymous class)
+}
+
+class A {
+>A : A
+
+    #plugins = Plugins;
+>#plugins : typeof Plugins
+>Plugins : typeof Plugins
+
+    static #staticPlugins = Plugins;
+>#staticPlugins : typeof Plugins
+>Plugins : typeof Plugins
+
+    m() {
+>m : () => void
+
+        new this.#plugins.Linker();
+>new this.#plugins.Linker() : (Anonymous class)
+>this.#plugins.Linker : typeof (Anonymous class)
+>this.#plugins : typeof Plugins
+>this : this
+>Linker : typeof (Anonymous class)
+
+        new this.#plugins["Linker"]();
+>new this.#plugins["Linker"]() : (Anonymous class)
+>this.#plugins["Linker"] : typeof (Anonymous class)
+>this.#plugins : typeof Plugins
+>this : this
+>"Linker" : "Linker"
+
+        new A.#staticPlugins.Linker();
+>new A.#staticPlugins.Linker() : (Anonymous class)
+>A.#staticPlugins.Linker : typeof (Anonymous class)
+>A.#staticPlugins : typeof Plugins
+>A : typeof A
+>Linker : typeof (Anonymous class)
+    }
+}
+
+class B {
+>B : B
+
+    static Plugins = Plugins;
+>Plugins : typeof Plugins
+>Plugins : typeof Plugins
+}
+
+class C extends B {
+>C : C
+>B : B
+
+    static async m(key: "Plugins") {
+>m : (key: "Plugins") => Promise<void>
+>key : "Plugins"
+
+        new super[key].Linker();
+>new super[key].Linker() : (Anonymous class)
+>super[key].Linker : typeof (Anonymous class)
+>super[key] : typeof Plugins
+>super : typeof B
+>key : "Plugins"
+>Linker : typeof (Anonymous class)
+    }
+}
+

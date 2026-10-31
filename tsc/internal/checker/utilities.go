@@ -5,7 +5,6 @@ import (
 	"slices"
 	"strings"
 	"sync"
-	"unicode/utf8"
 
 	"github.com/microsoft/TypeScript/tsc/internal/ast"
 	"github.com/microsoft/TypeScript/tsc/internal/binder"
@@ -70,7 +69,7 @@ func hasReadonlyModifier(node *ast.Node) bool {
 }
 
 func isStaticPrivateIdentifierProperty(s *ast.Symbol) bool {
-	return s.ValueDeclaration != nil && ast.IsPrivateIdentifierClassElementDeclaration(s.ValueDeclaration) && ast.IsStatic(s.ValueDeclaration)
+	return s.ValueDeclaration() != nil && ast.IsPrivateIdentifierClassElementDeclaration(s.ValueDeclaration()) && ast.IsStatic(s.ValueDeclaration())
 }
 
 func isEmptyObjectLiteral(expression *ast.Node) bool {
@@ -196,7 +195,7 @@ func canHaveLocals(node *ast.Node) bool {
 }
 
 func isShorthandAmbientModuleSymbol(moduleSymbol *ast.Symbol) bool {
-	return isShorthandAmbientModule(moduleSymbol.ValueDeclaration)
+	return isShorthandAmbientModule(moduleSymbol.ValueDeclaration())
 }
 
 func isShorthandAmbientModule(node *ast.Node) bool {
@@ -255,7 +254,7 @@ func isSyntacticDefault(node *ast.Node) bool {
 }
 
 func hasExportAssignmentSymbol(moduleSymbol *ast.Symbol) bool {
-	return moduleSymbol.Exports[ast.InternalSymbolNameExportEquals] != nil
+	return moduleSymbol.Exports().Get(ast.InternalSymbolNameExportEquals) != nil
 }
 
 func isTypeAlias(node *ast.Node) bool {
@@ -352,9 +351,9 @@ func createSymbolTable(symbols []*ast.Symbol) ast.SymbolTable {
 	if len(symbols) == 0 {
 		return nil
 	}
-	result := make(ast.SymbolTable)
+	result := ast.NewSymbolTable()
 	for _, symbol := range symbols {
-		result[symbol.Name] = symbol
+		result.Set(symbol.Name(), symbol)
 	}
 	return result
 }
@@ -373,21 +372,21 @@ func (c *Checker) compareSymbolsWorker(s1, s2 *ast.Symbol) int {
 	if s2 == nil {
 		return -1
 	}
-	if len(s1.Declarations) != 0 && len(s2.Declarations) != 0 {
-		if r := c.compareNodes(s1.Declarations[0], s2.Declarations[0]); r != 0 {
+	if len(s1.Declarations()) != 0 && len(s2.Declarations()) != 0 {
+		if r := c.compareNodes(s1.Declarations()[0], s2.Declarations()[0]); r != 0 {
 			return r
 		}
-	} else if len(s1.Declarations) != 0 {
+	} else if len(s1.Declarations()) != 0 {
 		return -1
-	} else if len(s2.Declarations) != 0 {
+	} else if len(s2.Declarations()) != 0 {
 		return 1
 	}
-	if r := strings.Compare(s1.Name, s2.Name); r != 0 {
+	if r := strings.Compare(s1.Name(), s2.Name()); r != 0 {
 		return r
 	}
 	// Fall back to symbol IDs. This is a last resort that should happen only when symbols have
 	// no declaration and duplicate names.
-	return int(ast.GetSymbolId(s1)) - int(ast.GetSymbolId(s2))
+	return cmp.Compare(ast.GetSymbolId(s1), ast.GetSymbolId(s2))
 }
 
 func (c *Checker) compareNodes(n1, n2 *ast.Node) int {
@@ -399,6 +398,9 @@ func (c *Checker) compareNodes(n1, n2 *ast.Node) int {
 	}
 	if n2 == nil {
 		return -1
+	}
+	if n1.Parent != nil && n1.Parent == n2.Parent {
+		return n1.Pos() - n2.Pos()
 	}
 	s1 := ast.GetSourceFileOfNode(n1)
 	s2 := ast.GetSourceFileOfNode(n2)
@@ -438,8 +440,25 @@ func CompareTypes(t1, t2 *Type) int {
 	case t1.flags&(TypeFlagsAny|TypeFlagsUnknown|TypeFlagsString|TypeFlagsNumber|TypeFlagsBoolean|TypeFlagsBigInt|TypeFlagsESSymbol|TypeFlagsVoid|TypeFlagsUndefined|TypeFlagsNull|TypeFlagsNever|TypeFlagsNonPrimitive) != 0:
 		// Only distinguished by type IDs, handled below.
 	case t1.flags&TypeFlagsObject != 0:
-		// Order unnamed or identically named object types by symbol.
-		if c := t1.checker.compareSymbols(t1.symbol, t2.symbol); c != 0 {
+		// Order instantiation expression types without relying on lazy symbol IDs.
+		// Order other unnamed or identically named object types by symbol.
+		if t1.objectFlags&ObjectFlagsInstantiationExpressionType != 0 && t2.objectFlags&ObjectFlagsInstantiationExpressionType != 0 {
+			var declaration1, declaration2 *ast.Node
+			if t1.symbol != nil && len(t1.symbol.Declarations()) != 0 {
+				declaration1 = t1.symbol.Declarations()[0]
+			}
+			if t2.symbol != nil && len(t2.symbol.Declarations()) != 0 {
+				declaration2 = t2.symbol.Declarations()[0]
+			}
+			// A single instantiation expression can produce multiple types for union constituents,
+			// so compare their source declarations before comparing the shared expression node.
+			if c := t1.checker.compareNodes(declaration1, declaration2); c != 0 {
+				return c
+			}
+			if c := t1.checker.compareNodes(t1.AsInstantiationExpressionType().node, t2.AsInstantiationExpressionType().node); c != 0 {
+				return c
+			}
+		} else if c := t1.checker.compareSymbols(t1.symbol, t2.symbol); c != 0 {
 			return c
 		}
 		// When object types have the same or no symbol, order by kind. We order type references before other kinds.
@@ -474,13 +493,36 @@ func CompareTypes(t1, t2 *Type) int {
 		} else if t2.objectFlags&ObjectFlagsReference != 0 {
 			return 1
 		} else {
-			// Order unnamed non-reference object types by kind associated type mappers. Reverse mapped types have
-			// neither symbols nor mappers so they're ultimately ordered by unstable type IDs, but given their rarity
-			// this should be fine.
+			// Order unnamed non-reference object types by kind and instantiation data.
 			if c := int(t1.objectFlags&ObjectFlagsObjectTypeKindMask) - int(t2.objectFlags&ObjectFlagsObjectTypeKindMask); c != 0 {
 				return c
 			}
-			if c := compareTypeMappers(t1.AsObjectType().mapper, t2.AsObjectType().mapper); c != 0 {
+			if t1.objectFlags&ObjectFlagsReverseMapped != 0 {
+				r1 := t1.AsReverseMappedType()
+				r2 := t2.AsReverseMappedType()
+				if c := CompareTypes(r1.source, r2.source); c != 0 {
+					return c
+				}
+				if c := CompareTypes(r1.mappedType, r2.mappedType); c != 0 {
+					return c
+				}
+				if c := CompareTypes(r1.constraintType, r2.constraintType); c != 0 {
+					return c
+				}
+			}
+			m1 := t1.AsObjectType().mapper
+			m2 := t2.AsObjectType().mapper
+			if t1.objectFlags&ObjectFlagsMapped != 0 {
+				// instantiateAnonymousType prepends a fresh type parameter mapping.
+				// Compare the effective instantiation, not the identity of that fresh parameter.
+				if m1 != nil {
+					m1 = castTypeMapper[CompositeTypeMapper](m1, TypeMapperKindComposite).m2
+				}
+				if m2 != nil {
+					m2 = castTypeMapper[CompositeTypeMapper](m2, TypeMapperKindComposite).m2
+				}
+			}
+			if c := compareTypeMappers(m1, m2); c != 0 {
 				return c
 			}
 		}
@@ -519,6 +561,10 @@ func CompareTypes(t1, t2 *Type) int {
 	case t1.flags&TypeFlagsNumberLiteral != 0:
 		// Numeric literal types are ordered by their values.
 		if c := cmp.Compare(t1.AsLiteralType().value.(jsnum.Number), t2.AsLiteralType().value.(jsnum.Number)); c != 0 {
+			return c
+		}
+	case t1.flags&TypeFlagsBigIntLiteral != 0:
+		if c := getBigIntLiteralValue(t1).Compare(getBigIntLiteralValue(t2)); c != 0 {
 			return c
 		}
 	case t1.flags&TypeFlagsBooleanLiteral != 0:
@@ -590,10 +636,7 @@ func compareTypeNames(t1, t2 *Type) int {
 	s1 := getTypeNameSymbol(t1)
 	s2 := getTypeNameSymbol(t2)
 	if s1 == s2 {
-		if t1.alias != nil {
-			return compareTypeLists(t1.alias.typeArguments, t2.alias.typeArguments)
-		}
-		return 0
+		return compareTypeLists(t1.alias.TypeArguments(), t2.alias.TypeArguments())
 	}
 	if s1 == nil {
 		return 1
@@ -601,7 +644,11 @@ func compareTypeNames(t1, t2 *Type) int {
 	if s2 == nil {
 		return -1
 	}
-	return strings.Compare(s1.Name, s2.Name)
+	if c := strings.Compare(s1.Name(), s2.Name()); c != 0 {
+		return c
+	}
+	// Keep distinct same-named declarations together before comparing alias arguments or structure.
+	return t1.checker.compareSymbols(s1, s2)
 }
 
 func getTypeNameSymbol(t *Type) *ast.Symbol {
@@ -679,29 +726,29 @@ func compareTypeMappers(m1, m2 *TypeMapper) int {
 	if m2 == nil {
 		return -1
 	}
-	kind1 := m1.Kind()
-	kind2 := m2.Kind()
+	kind1 := comparableMapperKind(m1.Kind())
+	kind2 := comparableMapperKind(m2.Kind())
 	if kind1 != kind2 {
 		return int(kind1) - int(kind2)
 	}
 	switch kind1 {
 	case TypeMapperKindSimple:
-		m1 := m1.data.(*SimpleTypeMapper)
-		m2 := m2.data.(*SimpleTypeMapper)
+		m1 := castTypeMapper[SimpleTypeMapper](m1, TypeMapperKindSimple)
+		m2 := castTypeMapper[SimpleTypeMapper](m2, TypeMapperKindSimple)
 		if c := CompareTypes(m1.source, m2.source); c != 0 {
 			return c
 		}
 		return CompareTypes(m1.target, m2.target)
 	case TypeMapperKindArray:
-		m1 := m1.data.(*ArrayTypeMapper)
-		m2 := m2.data.(*ArrayTypeMapper)
+		m1 := castTypeMapper[ArrayTypeMapper](m1, TypeMapperKindArray)
+		m2 := castTypeMapper[ArrayTypeMapper](m2, TypeMapperKindArray)
 		if c := compareTypeLists(m1.sources, m2.sources); c != 0 {
 			return c
 		}
 		return compareTypeLists(m1.targets, m2.targets)
 	case TypeMapperKindMerged:
-		m1 := m1.data.(*MergedTypeMapper)
-		m2 := m2.data.(*MergedTypeMapper)
+		m1 := castTypeMapper[MergedTypeMapper](m1, TypeMapperKindMerged)
+		m2 := castTypeMapper[MergedTypeMapper](m2, TypeMapperKindMerged)
 		if c := compareTypeMappers(m1.m1, m2.m1); c != 0 {
 			return c
 		}
@@ -710,44 +757,54 @@ func compareTypeMappers(m1, m2 *TypeMapper) int {
 	return 0
 }
 
+// Only simple, array, and merged mappers have a structural ordering; all other
+// kinds compare as equal.
+func comparableMapperKind(kind TypeMapperKind) TypeMapperKind {
+	switch kind {
+	case TypeMapperKindSimple, TypeMapperKindArray, TypeMapperKindMerged:
+		return kind
+	}
+	return TypeMapperKindUnknown
+}
+
 func getDeclarationModifierFlagsFromSymbol(s *ast.Symbol) ast.ModifierFlags {
 	return getDeclarationModifierFlagsFromSymbolEx(s, false /*isWrite*/)
 }
 
 func getDeclarationModifierFlagsFromSymbolEx(s *ast.Symbol, isWrite bool) ast.ModifierFlags {
-	if s.CheckFlags&ast.CheckFlagsSynthetic != 0 {
+	if s.CheckFlags()&ast.CheckFlagsSynthetic != 0 {
 		var accessModifier ast.ModifierFlags
 		switch {
-		case !isWrite && s.CheckFlags&ast.CheckFlagsContainsPublic != 0 || isWrite && s.CheckFlags&ast.CheckFlagsContainsWritePublic != 0:
+		case !isWrite && s.CheckFlags()&ast.CheckFlagsContainsPublic != 0 || isWrite && s.CheckFlags()&ast.CheckFlagsContainsWritePublic != 0:
 			accessModifier = ast.ModifierFlagsPublic
-		case !isWrite && s.CheckFlags&ast.CheckFlagsContainsProtected != 0 || isWrite && s.CheckFlags&ast.CheckFlagsContainsWriteProtected != 0:
+		case !isWrite && s.CheckFlags()&ast.CheckFlagsContainsProtected != 0 || isWrite && s.CheckFlags()&ast.CheckFlagsContainsWriteProtected != 0:
 			accessModifier = ast.ModifierFlagsProtected
-		case !isWrite && s.CheckFlags&ast.CheckFlagsContainsPrivate != 0 || isWrite && s.CheckFlags&ast.CheckFlagsContainsWritePrivate != 0:
+		case !isWrite && s.CheckFlags()&ast.CheckFlagsContainsPrivate != 0 || isWrite && s.CheckFlags()&ast.CheckFlagsContainsWritePrivate != 0:
 			accessModifier = ast.ModifierFlagsPrivate
 		}
-		if s.CheckFlags&ast.CheckFlagsContainsStatic != 0 {
+		if s.CheckFlags()&ast.CheckFlagsContainsStatic != 0 {
 			return accessModifier | ast.ModifierFlagsStatic
 		}
 		return accessModifier
 	}
-	if s.ValueDeclaration != nil {
+	if s.ValueDeclaration() != nil {
 		var declaration *ast.Node
 		if isWrite {
-			declaration = core.Find(s.Declarations, ast.IsSetAccessorDeclaration)
+			declaration = core.Find(s.Declarations(), ast.IsSetAccessorDeclaration)
 		}
-		if declaration == nil && s.Flags&ast.SymbolFlagsGetAccessor != 0 {
-			declaration = core.Find(s.Declarations, ast.IsGetAccessorDeclaration)
+		if declaration == nil && s.Flags()&ast.SymbolFlagsGetAccessor != 0 {
+			declaration = core.Find(s.Declarations(), ast.IsGetAccessorDeclaration)
 		}
 		if declaration == nil {
-			declaration = s.ValueDeclaration
+			declaration = s.ValueDeclaration()
 		}
 		flags := ast.GetCombinedModifierFlags(declaration)
-		if s.Parent != nil && s.Parent.Flags&ast.SymbolFlagsClass != 0 {
+		if s.Parent() != nil && s.Parent().Flags()&ast.SymbolFlagsClass != 0 {
 			return flags
 		}
 		return flags & ^ast.ModifierFlagsAccessibilityModifier
 	}
-	if s.Flags&ast.SymbolFlagsPrototype != 0 {
+	if s.Flags()&ast.SymbolFlagsPrototype != 0 {
 		return ast.ModifierFlagsPublic | ast.ModifierFlagsStatic
 	}
 	return ast.ModifierFlagsNone
@@ -835,6 +892,112 @@ const orderedSetMapThreshold = 16
 type orderedSet[T comparable] struct {
 	valuesByKey map[T]struct{}
 	values      []T
+}
+
+// Composite type construction often finds an existing interned type. Borrow
+// workspace for normalization, and copy constituents only when publishing a
+// new type. Each recursive construction borrows a separate set.
+type temporaryTypeSet struct {
+	orderedSet[*Type]
+	inline [16]*Type
+	next   *temporaryTypeSet
+}
+
+func (c *Checker) getTemporaryTypeSet() *temporaryTypeSet {
+	set := c.freeTypeSets
+	if set == nil {
+		set = &temporaryTypeSet{}
+		set.values = set.inline[:0]
+	} else {
+		c.freeTypeSets = set.next
+		set.next = nil
+	}
+	return set
+}
+
+func (c *Checker) releaseTemporaryTypeSet(set *temporaryTypeSet) {
+	clear(set.values)
+	if cap(set.values) > len(set.inline) {
+		clear(set.inline[:])
+	}
+	clear(set.valuesByKey)
+	// Do not retain arbitrarily large temporary unions and their dedup maps.
+	if cap(set.values) > 4096 {
+		set.values = set.inline[:0]
+		set.valuesByKey = nil
+	} else {
+		set.values = set.values[:0]
+	}
+	set.next = c.freeTypeSets
+	c.freeTypeSets = set
+}
+
+// temporaryPropertyCounts counts property names in first-occurrence order.
+type temporaryPropertyCounts struct {
+	entries []propertyCount
+	indices map[string]int32
+	next    *temporaryPropertyCounts
+}
+
+type propertyCount struct {
+	name  string
+	count int32
+}
+
+func (p *temporaryPropertyCounts) Add(name string) {
+	if i, ok := p.indices[name]; ok {
+		p.entries[i].count++
+		return
+	}
+	p.AddNew(name)
+}
+
+// AddNew adds a name known not to have been added yet, skipping the lookup.
+func (p *temporaryPropertyCounts) AddNew(name string) {
+	if p.indices == nil {
+		p.indices = make(map[string]int32)
+	}
+	p.indices[name] = int32(len(p.entries))
+	p.entries = append(p.entries, propertyCount{name: name, count: 1})
+}
+
+func (p *temporaryPropertyCounts) Count(name string) int {
+	if i, ok := p.indices[name]; ok {
+		return int(p.entries[i].count)
+	}
+	return 0
+}
+
+func (p *temporaryPropertyCounts) Size() int {
+	return len(p.entries)
+}
+
+func (p *temporaryPropertyCounts) Clear() {
+	clear(p.entries)
+	p.entries = p.entries[:0]
+	clear(p.indices)
+}
+
+func (c *Checker) getTemporaryPropertyCounts() *temporaryPropertyCounts {
+	counts := c.freePropertyCounts
+	if counts == nil {
+		return &temporaryPropertyCounts{}
+	}
+	c.freePropertyCounts = counts.next
+	counts.next = nil
+	return counts
+}
+
+func (c *Checker) releaseTemporaryPropertyCounts(counts *temporaryPropertyCounts) {
+	size := counts.Size()
+	counts.Clear()
+	// Recursive reductions borrow separate maps. Do not retain unusually
+	// large property tables or references to their names in the free list.
+	if size > 4096 {
+		return
+	}
+	counts.next = c.freePropertyCounts
+	c.freePropertyCounts = counts
 }
 
 func (s *orderedSet[T]) contains(value T) bool {
@@ -972,14 +1135,14 @@ func isVariableDeclarationInVariableStatement(node *ast.Node) bool {
 }
 
 func IsKnownSymbol(symbol *ast.Symbol) bool {
-	return isLateBoundName(symbol.Name)
+	return isLateBoundName(symbol.Name())
 }
 
 func IsPrivateIdentifierSymbol(symbol *ast.Symbol) bool {
 	if symbol == nil {
 		return false
 	}
-	return strings.HasPrefix(symbol.Name, ast.InternalSymbolNamePrefix+"#")
+	return strings.HasPrefix(symbol.Name(), ast.InternalSymbolNamePrefix+"#")
 }
 
 func isLateBoundName(name string) bool {
@@ -1037,13 +1200,13 @@ func isInfinityOrNaNString(name string) bool {
 }
 
 func (c *Checker) isConstantVariable(symbol *ast.Symbol) bool {
-	return symbol.Flags&ast.SymbolFlagsVariable != 0 && (c.getDeclarationNodeFlagsFromSymbol(symbol)&ast.NodeFlagsConstant) != 0
+	return symbol.Flags()&ast.SymbolFlagsVariable != 0 && (c.getDeclarationNodeFlagsFromSymbol(symbol)&ast.NodeFlagsConstant) != 0
 }
 
 func (c *Checker) isParameterOrMutableLocalVariable(symbol *ast.Symbol) bool {
 	// Return true if symbol is a parameter, a catch clause variable, or a mutable local variable
-	if symbol.ValueDeclaration != nil {
-		declaration := ast.GetRootDeclaration(symbol.ValueDeclaration)
+	if symbol.ValueDeclaration() != nil {
+		declaration := ast.GetRootDeclaration(symbol.ValueDeclaration())
 		return declaration != nil && (ast.IsParameterDeclaration(declaration) || ast.IsVariableDeclaration(declaration) && (ast.IsCatchClause(declaration.Parent) || c.isMutableLocalVariableDeclaration(declaration)))
 	}
 	return false
@@ -1151,7 +1314,7 @@ func isInNameOfExpressionWithTypeArgumentsOrHeritageTypeReference(node *ast.Node
 }
 
 func getIndexSymbolFromSymbolTable(symbolTable ast.SymbolTable) *ast.Symbol {
-	return symbolTable[ast.InternalSymbolNameIndex]
+	return symbolTable.Get(ast.InternalSymbolNameIndex)
 }
 
 // Indicates whether the result of an `Expression` will be unused.
@@ -1258,7 +1421,7 @@ func getEnclosingContainer(node *ast.Node) *ast.Node {
 }
 
 func getDeclarationsOfKind(symbol *ast.Symbol, kind ast.Kind) []*ast.Node {
-	return core.Filter(symbol.Declarations, func(d *ast.Node) bool { return d.Kind == kind })
+	return core.Filter(symbol.Declarations(), func(d *ast.Node) bool { return d.Kind == kind })
 }
 
 func hasType(node *ast.Node) bool {
@@ -1300,6 +1463,15 @@ var getFeatureMap = sync.OnceValue(func() map[string][]FeatureMapEntry {
 		},
 		"Iterator": {
 			{lib: "es2015", props: []string{}},
+		},
+		"IteratorConstructor": {
+			{lib: "es2026", props: []string{"concat"}},
+		},
+		"RawJSON": {
+			{lib: "es2026", props: []string{}},
+		},
+		"JSON": {
+			{lib: "es2026", props: []string{"isRawJSON", "rawJSON"}},
 		},
 		"AsyncIterator": {
 			{lib: "es2015", props: []string{}},
@@ -1369,7 +1541,7 @@ var getFeatureMap = sync.OnceValue(func() map[string][]FeatureMapEntry {
 		},
 		"ArrayConstructor": {
 			{lib: "es2015", props: []string{"from", "of"}},
-			{lib: "esnext", props: []string{"fromAsync"}},
+			{lib: "es2026", props: []string{"fromAsync"}},
 		},
 		"ObjectConstructor": {
 			{lib: "es2015", props: []string{"assign", "getOwnPropertySymbols", "keys", "is", "setPrototypeOf"}},
@@ -1384,10 +1556,11 @@ var getFeatureMap = sync.OnceValue(func() map[string][]FeatureMapEntry {
 		"Math": {
 			{lib: "es2015", props: []string{"clz32", "imul", "sign", "log10", "log2", "log1p", "expm1", "cosh", "sinh", "tanh", "acosh", "asinh", "atanh", "hypot", "trunc", "fround", "cbrt"}},
 			{lib: "es2025", props: []string{"f16round"}},
+			{lib: "es2026", props: []string{"sumPrecise"}},
 		},
 		"Map": {
 			{lib: "es2015", props: []string{"entries", "keys", "values"}},
-			{lib: "esnext", props: []string{
+			{lib: "es2026", props: []string{
 				"getOrInsert",
 				"getOrInsertComputed",
 			}},
@@ -1420,7 +1593,7 @@ var getFeatureMap = sync.OnceValue(func() map[string][]FeatureMapEntry {
 		},
 		"WeakMap": {
 			{lib: "es2015", props: []string{}},
-			{lib: "esnext", props: []string{
+			{lib: "es2026", props: []string{
 				"getOrInsert",
 				"getOrInsertComputed",
 			}},
@@ -1488,6 +1661,7 @@ var getFeatureMap = sync.OnceValue(func() map[string][]FeatureMapEntry {
 		"Uint8Array": {
 			{lib: "es2022", props: []string{"at"}},
 			{lib: "es2023", props: []string{"findLastIndex", "findLast", "toReversed", "toSorted", "toSpliced", "with"}},
+			{lib: "es2026", props: []string{"toBase64", "setFromBase64", "toHex", "setFromHex"}},
 		},
 		"Uint8ClampedArray": {
 			{lib: "es2022", props: []string{"at"}},
@@ -1534,10 +1708,10 @@ var getFeatureMap = sync.OnceValue(func() map[string][]FeatureMapEntry {
 			{lib: "es2022", props: []string{"cause"}},
 		},
 		"ErrorConstructor": {
-			{lib: "esnext", props: []string{"isError"}},
+			{lib: "es2026", props: []string{"isError"}},
 		},
 		"Uint8ArrayConstructor": {
-			{lib: "esnext", props: []string{"fromBase64", "fromHex"}},
+			{lib: "es2026", props: []string{"fromBase64", "fromHex"}},
 		},
 		"DisposableStack": {
 			{lib: "esnext", props: []string{}},
@@ -1576,9 +1750,9 @@ func tryGetPropertyAccessOrIdentifierToString(expr *ast.Node) string {
 }
 
 func allDeclarationsInSameSourceFile(symbol *ast.Symbol) bool {
-	if len(symbol.Declarations) > 1 {
+	if len(symbol.Declarations()) > 1 {
 		var sourceFile *ast.SourceFile
-		for i, d := range symbol.Declarations {
+		for i, d := range symbol.Declarations() {
 			if i == 0 {
 				sourceFile = ast.GetSourceFileOfNode(d)
 			} else if ast.GetSourceFileOfNode(d) != sourceFile {
@@ -1634,7 +1808,7 @@ func introducesArgumentsExoticObject(node *ast.Node) bool {
 
 func symbolsToArray(symbols ast.SymbolTable) []*ast.Symbol {
 	var result []*ast.Symbol
-	for id, symbol := range symbols {
+	for id, symbol := range symbols.All() {
 		if !isReservedMemberName(id) {
 			result = append(result, symbol)
 		}
@@ -1643,7 +1817,7 @@ func symbolsToArray(symbols ast.SymbolTable) []*ast.Symbol {
 }
 
 func SkipAlias(symbol *ast.Symbol, checker *Checker) *ast.Symbol {
-	if symbol.Flags&ast.SymbolFlagsAlias != 0 {
+	if symbol.Flags()&ast.SymbolFlagsAlias != 0 {
 		return checker.GetAliasedSymbol(symbol)
 	}
 	return symbol
@@ -1651,8 +1825,7 @@ func SkipAlias(symbol *ast.Symbol, checker *Checker) *ast.Symbol {
 
 // True if the symbol is for an external module, as opposed to a namespace.
 func IsExternalModuleSymbol(moduleSymbol *ast.Symbol) bool {
-	firstRune, _ := utf8.DecodeRuneInString(moduleSymbol.Name)
-	return moduleSymbol.Flags&ast.SymbolFlagsModule != 0 && firstRune == '"'
+	return moduleSymbol.IsExternalModule()
 }
 
 func (c *Checker) isCanceled() bool {
@@ -1726,17 +1899,17 @@ func (c *Checker) isUncheckedJSSuggestion(node *ast.Node, suggestion *ast.Symbol
 		if c.compilerOptions.CheckJs.IsUnknown() && file.CheckJsDirective == nil && (file.ScriptKind == core.ScriptKindJS || file.ScriptKind == core.ScriptKindJSX) {
 			var declarationFile *ast.SourceFile
 			if suggestion != nil {
-				if firstDeclaration := core.FirstOrNil(suggestion.Declarations); firstDeclaration != nil {
+				if firstDeclaration := core.FirstOrNil(suggestion.Declarations()); firstDeclaration != nil {
 					declarationFile = ast.GetSourceFileOfNode(firstDeclaration)
 				}
 			}
 			suggestionHasNoExtendsOrDecorators := suggestion == nil ||
-				suggestion.ValueDeclaration == nil ||
-				!ast.IsClassLike(suggestion.ValueDeclaration) ||
-				len(ast.GetExtendsHeritageClauseElements(suggestion.ValueDeclaration)) != 0 ||
-				ast.ClassOrConstructorParameterIsDecorated(false, suggestion.ValueDeclaration)
+				suggestion.ValueDeclaration() == nil ||
+				!ast.IsClassLike(suggestion.ValueDeclaration()) ||
+				len(ast.GetExtendsHeritageClauseElements(suggestion.ValueDeclaration())) != 0 ||
+				ast.ClassOrConstructorParameterIsDecorated(false, suggestion.ValueDeclaration())
 			return !(file != declarationFile && declarationFile != nil && ast.IsGlobalSourceFile(declarationFile.AsNode())) &&
-				!(excludeClasses && suggestion != nil && suggestion.Flags&ast.SymbolFlagsClass != 0 && suggestionHasNoExtendsOrDecorators) &&
+				!(excludeClasses && suggestion != nil && suggestion.Flags()&ast.SymbolFlagsClass != 0 && suggestionHasNoExtendsOrDecorators) &&
 				!(node != nil && excludeClasses && ast.IsPropertyAccessExpression(node) && node.Expression().Kind == ast.KindThisKeyword && suggestionHasNoExtendsOrDecorators)
 		}
 	}
@@ -1786,7 +1959,7 @@ func CreateModuleNotFoundChain(program Program, file *ast.SourceFile, moduleRefe
 	resolvedModule := program.GetResolvedModule(file, moduleReference, mode)
 
 	if resolvedModule != nil && resolvedModule.AlternateResult != "" {
-		if strings.Contains(resolvedModule.AlternateResult, "/node_modules/@types/") {
+		if resolvedModule.AlternateResult.ContainsLowercaseDirectorySequence("/node_modules/@types/") {
 			packageName = "@types/" + module.MangleScopedPackageName(packageName)
 		}
 		return DiagnosticDetails{
@@ -1819,9 +1992,9 @@ func CreateModuleNotFoundChain(program Program, file *ast.SourceFile, moduleRefe
 // incremental builder (repopulation of cached diagnostics).
 // Mirrors createModeMismatchDetails in the TypeScript compiler's utilities.ts.
 func CreateModeMismatchDetails(program Program, file *ast.SourceFile) DiagnosticDetails {
-	ext := tspath.TryGetExtensionFromPath(file.FileName())
+	ext := file.FileName().Extension()
 	targetExt := core.IfElse(ext == tspath.ExtensionTs, tspath.ExtensionMts, core.IfElse(ext == tspath.ExtensionJs, tspath.ExtensionMjs, ""))
-	meta := program.GetSourceFileMetaData(file.Path())
+	meta := program.GetSourceFileMetaData(file.PathKey())
 	packageJsonType := meta.PackageJsonType
 	packageJsonDirectory := meta.PackageJsonDirectory
 
@@ -1829,12 +2002,12 @@ func CreateModeMismatchDetails(program Program, file *ast.SourceFile) Diagnostic
 		if targetExt != "" {
 			return DiagnosticDetails{
 				Message: diagnostics.To_convert_this_file_to_an_ECMAScript_module_change_its_file_extension_to_0_or_add_the_field_type_Colon_module_to_1,
-				Args:    []any{targetExt, tspath.CombinePaths(packageJsonDirectory, "package.json")},
+				Args:    []any{targetExt, packageJsonDirectory.ResolveFile("package.json").AsString()},
 			}
 		}
 		return DiagnosticDetails{
 			Message: diagnostics.To_convert_this_file_to_an_ECMAScript_module_add_the_field_type_Colon_module_to_0,
-			Args:    []any{tspath.CombinePaths(packageJsonDirectory, "package.json")},
+			Args:    []any{packageJsonDirectory.ResolveFile("package.json").AsString()},
 		}
 	}
 	if targetExt != "" {
@@ -1864,4 +2037,8 @@ func GetSetAccessorValueParameter(accessor *ast.Node) *ast.Node {
 		return parameters[core.IfElse(hasThis, 1, 0)]
 	}
 	return nil
+}
+
+func quotedAndCommaSeparated(items []string) string {
+	return strings.Join(core.Map(items, func(item string) string { return "'" + item + "'" }), ", ")
 }

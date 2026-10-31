@@ -1,5 +1,5 @@
 // @target: es2015
-//@module: amd
+//@module: commonjs
 //@filename: collisionExportsRequireAndModule_externalmodule.ts
 export namespace require {
     export interface I {

@@ -1,5 +1,5 @@
 // @target: es2015
-//@module: amd
+//@module: commonjs
 //@Filename: m1.ts
 const enum E {
     V = 100

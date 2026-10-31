@@ -88,7 +88,7 @@ func (l *LanguageService) adjustFoldingEnd(ranges []*lsproto.FoldingRange, sourc
 	result := make([]*lsproto.FoldingRange, 0, len(ranges))
 	for _, r := range ranges {
 		if r.EndCharacter != nil && *r.EndCharacter > 0 {
-			positions := lsconv.FromLSPPositionForSourceFile(l.converters, sourceFile, lsproto.Position{
+			positions := l.converters.FromLSPPositionForSourceFile(sourceFile, lsproto.Position{
 				Line:      r.EndLine,
 				Character: *r.EndCharacter,
 			}, spanmap.FeatureFoldingRanges)
@@ -343,7 +343,6 @@ func addOutliningForLeadingCommentsForPos(ctx context.Context, pos int, sourceFi
 			}
 			lastSingleLineCommentEnd = commentEnd
 			singleLineCommentCount++
-			break
 		case ast.KindMultiLineCommentTrivia:
 			comments := combineAndAddMultipleSingleLineComments()
 			if comments != nil {
@@ -354,7 +353,6 @@ func addOutliningForLeadingCommentsForPos(ctx context.Context, pos int, sourceFi
 				foldingRange = append(foldingRange, comment)
 			}
 			singleLineCommentCount = 0
-			break
 		default:
 			debug.AssertNever(comment.Kind)
 		}

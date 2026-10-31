@@ -10,6 +10,7 @@ import (
 	"github.com/microsoft/TypeScript/tsc/internal/lsp"
 	"github.com/microsoft/TypeScript/tsc/internal/lsp/lsproto"
 	"github.com/microsoft/TypeScript/tsc/internal/testutil/lsptestutil"
+	"github.com/microsoft/TypeScript/tsc/internal/tspath"
 	"github.com/microsoft/TypeScript/tsc/internal/vfs/vfstest"
 	"gotest.tools/v3/assert"
 )
@@ -36,7 +37,7 @@ func TestSemanticTokensCRLF(t *testing.T) {
 		"/home/projects/test.ts":       fileOnDisk,
 		"/home/projects/other.ts":      "export {}",
 	}
-	fs := bundled.WrapFS(vfstest.FromMap(files, false))
+	fs := bundled.WrapFS(vfstest.FromMap(files, tspath.CaseInsensitive))
 
 	onServerRequest := func(_ context.Context, req *lsproto.RequestMessage) *lsproto.ResponseMessage {
 		if req.Method == lsproto.MethodClientRegisterCapability || req.Method == lsproto.MethodClientUnregisterCapability {
@@ -50,7 +51,7 @@ func TestSemanticTokensCRLF(t *testing.T) {
 	}, onServerRequest)
 	t.Cleanup(func() { _ = closeClient() })
 
-	initMsg, _, ok := lsptestutil.SendRequest(t, client, lsproto.InitializeInfo, &lsproto.InitializeParams{
+	initMsg, _, ok := client.SendRequest(t, lsproto.InitializeInfo, &lsproto.InitializeParams{
 		Capabilities: &lsproto.ClientCapabilities{
 			TextDocument: &lsproto.TextDocumentClientCapabilities{
 				SemanticTokens: &lsproto.SemanticTokensClientCapabilities{
@@ -64,27 +65,27 @@ func TestSemanticTokensCRLF(t *testing.T) {
 		},
 	})
 	assert.Assert(t, ok && initMsg.AsResponse().Error == nil, "Initialize failed")
-	lsptestutil.SendNotification(t, client, lsproto.InitializedInfo, &lsproto.InitializedParams{})
+	client.SendNotification(t, lsproto.InitializedInfo, &lsproto.InitializedParams{})
 	<-client.Server.InitComplete()
 
 	// Open another project file to force the project to load test.ts from disk (LF).
 	otherUri := lsproto.DocumentUri("file:///home/projects/other.ts")
-	lsptestutil.SendNotification(t, client, lsproto.TextDocumentDidOpenInfo, &lsproto.DidOpenTextDocumentParams{
+	client.SendNotification(t, lsproto.TextDocumentDidOpenInfo, &lsproto.DidOpenTextDocumentParams{
 		TextDocument: &lsproto.TextDocumentItem{Uri: otherUri, LanguageId: "typescript", Text: files["/home/projects/other.ts"]},
 	})
-	msg1, _, _ := lsptestutil.SendRequest(t, client, lsproto.TextDocumentSemanticTokensFullInfo, &lsproto.SemanticTokensParams{
+	msg1, _, _ := client.SendRequest(t, lsproto.TextDocumentSemanticTokensFullInfo, &lsproto.SemanticTokensParams{
 		TextDocument: lsproto.TextDocumentIdentifier{Uri: otherUri},
 	})
 	assert.Assert(t, msg1.AsResponse().Error == nil, "Initial request failed")
 
 	// Open test.ts with CRLF content; the project already parsed it from disk (LF).
 	uri := lsproto.DocumentUri("file:///home/projects/test.ts")
-	lsptestutil.SendNotification(t, client, lsproto.TextDocumentDidOpenInfo, &lsproto.DidOpenTextDocumentParams{
+	client.SendNotification(t, lsproto.TextDocumentDidOpenInfo, &lsproto.DidOpenTextDocumentParams{
 		TextDocument: &lsproto.TextDocumentItem{Uri: uri, LanguageId: "typescript", Text: fileFromEditor},
 	})
 
 	// This panics: AST positions are LF-based but the line map is CRLF-based.
-	msg, _, _ := lsptestutil.SendRequest(t, client, lsproto.TextDocumentSemanticTokensFullInfo, &lsproto.SemanticTokensParams{
+	msg, _, _ := client.SendRequest(t, lsproto.TextDocumentSemanticTokensFullInfo, &lsproto.SemanticTokensParams{
 		TextDocument: lsproto.TextDocumentIdentifier{Uri: uri},
 	})
 	if msg.AsResponse().Error != nil {
@@ -95,7 +96,7 @@ func TestSemanticTokensCRLF(t *testing.T) {
 // TestSemanticTokensDefaultLibraryCaseInsensitive reproduces #4635: on
 // case-insensitive file systems, tokens for default-library symbols never
 // carried the defaultLibrary modifier. The lib files map in the program is
-// keyed by canonical (lowercased) tspath.Path, but semantic tokens looked up
+// keyed by canonical (lowercased) tspath.PathKey, but semantic tokens looked up
 // declarations by their raw case-preserving file name. With the default
 // library under a mixed-case directory (/TSLib), the lookup always missed.
 func TestSemanticTokensDefaultLibraryCaseInsensitive(t *testing.T) {
@@ -123,7 +124,7 @@ declare const console: { log(msg: any): void; };
 	}
 	// Case-insensitive VFS: canonical paths are lowercased, so the lib's
 	// canonical path (/tslib/lib.es5.d.ts) differs from its file name.
-	fs := vfstest.FromMap(files, false)
+	fs := vfstest.FromMap(files, tspath.CaseInsensitive)
 
 	onServerRequest := func(_ context.Context, req *lsproto.RequestMessage) *lsproto.ResponseMessage {
 		if req.Method == lsproto.MethodClientRegisterCapability || req.Method == lsproto.MethodClientUnregisterCapability {
@@ -137,7 +138,7 @@ declare const console: { log(msg: any): void; };
 	}, onServerRequest)
 	t.Cleanup(func() { _ = closeClient() })
 
-	initMsg, _, ok := lsptestutil.SendRequest(t, client, lsproto.InitializeInfo, &lsproto.InitializeParams{
+	initMsg, _, ok := client.SendRequest(t, lsproto.InitializeInfo, &lsproto.InitializeParams{
 		Capabilities: &lsproto.ClientCapabilities{
 			TextDocument: &lsproto.TextDocumentClientCapabilities{
 				SemanticTokens: &lsproto.SemanticTokensClientCapabilities{
@@ -151,15 +152,15 @@ declare const console: { log(msg: any): void; };
 		},
 	})
 	assert.Assert(t, ok && initMsg.AsResponse().Error == nil, "Initialize failed")
-	lsptestutil.SendNotification(t, client, lsproto.InitializedInfo, &lsproto.InitializedParams{})
+	client.SendNotification(t, lsproto.InitializedInfo, &lsproto.InitializedParams{})
 	<-client.Server.InitComplete()
 
 	uri := lsproto.DocumentUri("file:///home/projects/test.ts")
-	lsptestutil.SendNotification(t, client, lsproto.TextDocumentDidOpenInfo, &lsproto.DidOpenTextDocumentParams{
+	client.SendNotification(t, lsproto.TextDocumentDidOpenInfo, &lsproto.DidOpenTextDocumentParams{
 		TextDocument: &lsproto.TextDocumentItem{Uri: uri, LanguageId: "typescript", Text: files["/home/projects/test.ts"]},
 	})
 
-	msg, result, ok := lsptestutil.SendRequest(t, client, lsproto.TextDocumentSemanticTokensFullInfo, &lsproto.SemanticTokensParams{
+	msg, result, ok := client.SendRequest(t, lsproto.TextDocumentSemanticTokensFullInfo, &lsproto.SemanticTokensParams{
 		TextDocument: lsproto.TextDocumentIdentifier{Uri: uri},
 	})
 	assert.Assert(t, ok, "Semantic tokens request did not return a result")

@@ -1,0 +1,17 @@
+//// [tests/cases/conformance/salsa/topLevelThisAssignment.ts] ////
+
+=== a.js ===
+this.a = 10;
+>this : Symbol(globalThis)
+
+this.a;
+>this : Symbol(globalThis)
+
+a;
+
+=== b.js ===
+this.a;
+>this : Symbol(globalThis)
+
+a;
+

@@ -1,5 +1,5 @@
 // @target: es2015
-//@module: amd
+//@module: commonjs
 import foo = m1;
  
 export namespace m1 { }

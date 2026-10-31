@@ -1,0 +1,14 @@
+//// [tests/cases/compiler/declFileExportAssignmentOfGenericInterface.ts] ////
+
+=== declFileExportAssignmentOfGenericInterface_1.ts ===
+import a = require('declFileExportAssignmentOfGenericInterface_0');
+>a : Symbol(a, Decl(declFileExportAssignmentOfGenericInterface_1.ts, 0, 0))
+
+export var x: a<a<string>>;
+>x : Symbol(x, Decl(declFileExportAssignmentOfGenericInterface_1.ts, 1, 10))
+>a : Symbol(a, Decl(declFileExportAssignmentOfGenericInterface_1.ts, 0, 0))
+>a : Symbol(a, Decl(declFileExportAssignmentOfGenericInterface_1.ts, 0, 0))
+
+x.a;
+>x : Symbol(x, Decl(declFileExportAssignmentOfGenericInterface_1.ts, 1, 10))
+

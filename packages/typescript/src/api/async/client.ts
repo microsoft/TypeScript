@@ -1,24 +1,25 @@
-import {
-    createMessageConnection,
-    type MessageConnection,
-    RequestType,
-    SocketMessageReader,
-    SocketMessageWriter,
-    StreamMessageReader,
-    StreamMessageWriter,
-} from "#vscode-jsonrpc/node";
 import type { ChildProcess } from "node:child_process";
 import type { Socket } from "node:net";
+import type {
+    RootedDirectoryPath,
+    RootedFilePath,
+    RootedPath,
+} from "../../ast/index.ts";
+import type { FileSystemCallbacks } from "../fs.ts";
 import {
-    type FileSystem,
-    fsCallbackNames,
-} from "../fs.ts";
+    configureFileSystemCallbacks,
+    encodeFileSystemCallbackResult,
+    type FileSystemCallbackConfiguration,
+} from "../fsCallbacks.ts";
+import { nodeProcess } from "../nodeProcess.ts";
 import {
+    type AsyncClientOptions,
     type ClientOptions,
     type ClientSocketOptions,
     type ClientSpawnOptions,
     getAPIProcessArgs,
     isSpawnOptions,
+    isTransportOptions,
     resolveExePath,
 } from "../options.ts";
 import type {
@@ -36,33 +37,66 @@ import {
     TimingCollector,
     type TimingInfo,
 } from "../timing.ts";
+import { TimingDump } from "../timingDump.ts";
+import type * as JsonRpc from "./jsonrpc.ts";
+import {
+    createTransportClient,
+    type TransportClient,
+} from "./transportClient.ts";
 
-export type { ClientOptions, ClientSocketOptions, ClientSpawnOptions };
+export type { AsyncClientOptions as ClientOptions, AsyncClientTransportOptions, ClientSocketOptions, ClientSpawnOptions } from "../options.ts";
+export type { AsyncTransport } from "./transport.ts";
+
+export type Client = TransportClient | RpcClient;
+
+export function createClient(options: AsyncClientOptions): Client {
+    return isTransportOptions(options) ? createTransportClient(options) : new RpcClient(options);
+}
 
 /**
  * Client handles communication with the TypeScript API server
  * over STDIO (spawned process) or a Unix domain socket using JSON-RPC.
  */
-export class Client {
+class RpcClient {
     private socket: Socket | undefined;
     private process: ChildProcess | undefined;
-    private connection: MessageConnection | undefined;
+    private connection: JsonRpc.MessageConnection | undefined;
+    // Loaded on connection so that injected-transport clients never load it.
+    private jsonrpc: typeof JsonRpc | undefined;
     private options: ClientOptions;
     private connected = false;
+    private closed = false;
+    private connecting: Promise<void> | undefined;
     private timing: TimingCollector | undefined;
+    private timingDump: TimingDump | undefined;
+    private closing: Promise<void> | undefined;
     private batchedRequests: { method: APIRequest["method"]; params: APIRequest["params"]; resolve: (value: unknown) => void; reject: (reason?: any) => void; }[] = [];
     private nextBatch: NodeJS.Immediate | "manual" | undefined;
 
     constructor(options: ClientOptions) {
-        this.options = options;
-        if (isSpawnOptions(options) && options.collectTiming) {
+        this.timingDump = TimingDump.fromEnvironment("async", isSpawnOptions(options) ? "spawn" : "socket");
+        if (this.timingDump || isSpawnOptions(options) && options.collectTiming) {
             this.timing = new TimingCollector();
+        }
+        if (this.timingDump && isSpawnOptions(options)) {
+            options = { ...options, collectTiming: true };
+        }
+        this.options = options;
+        if (isSpawnOptions(options)) {
+            configureFileSystemCallbacks(options.fs);
         }
     }
 
-    async connect(): Promise<void> {
-        if (this.connected) return;
+    connect(): Promise<void> {
+        if (this.closed) return Promise.reject(new Error("Client is closed"));
+        if (this.connected) return Promise.resolve();
+        return this.connecting ??= this.connectWorker().finally(() => {
+            this.connecting = undefined;
+        });
+    }
 
+    private async connectWorker(): Promise<void> {
+        this.jsonrpc ??= await import("./jsonrpc.ts");
         if (isSpawnOptions(this.options)) {
             await this.connectViaSpawn(this.options);
         }
@@ -72,22 +106,14 @@ export class Client {
     }
 
     private async connectViaSpawn(options: ClientSpawnOptions): Promise<void> {
-        const { spawn } = await import("node:child_process");
+        const { spawn } = nodeProcess().getBuiltinModule("node:child_process");
 
         return new Promise((resolve, reject) => {
             const args = getAPIProcessArgs(options, true);
+            const fsConfiguration = configureFileSystemCallbacks(options.fs);
 
-            // Enable virtual FS callbacks for each provided FS function
-            const enabledCallbacks: string[] = [];
-            if (options.fs) {
-                for (const name of fsCallbackNames) {
-                    if (options.fs[name]) {
-                        enabledCallbacks.push(name);
-                    }
-                }
-            }
-            if (enabledCallbacks.length > 0) {
-                args.push(`--callbacks=${enabledCallbacks.join(",")}`);
+            if (fsConfiguration.arguments.length > 0) {
+                args.push(`--callbacks=${fsConfiguration.arguments.join(",")}`);
             }
 
             this.process = spawn(resolveExePath(options), args, {
@@ -103,22 +129,18 @@ export class Client {
                 resolve();
             });
 
-            const reader = new StreamMessageReader(this.process.stdout!);
-            const writer = new StreamMessageWriter(this.process.stdin!);
-            this.connection = createMessageConnection(reader, writer);
-            this.registerFSCallbacks(this.connection, options.fs);
+            this.connection = this.jsonrpc!.createStreamConnection(this.process.stdout!, this.process.stdin!);
+            this.registerFSCallbacks(this.connection, options.fs, fsConfiguration);
             this.connection.listen();
         });
     }
 
     private async connectViaSocket(options: ClientSocketOptions): Promise<void> {
-        const { createConnection } = await import("node:net");
+        const { createConnection } = nodeProcess().getBuiltinModule("node:net");
 
         return new Promise((resolve, reject) => {
             this.socket = createConnection(options.pipe, () => {
-                const reader = new SocketMessageReader(this.socket!);
-                const writer = new SocketMessageWriter(this.socket!);
-                this.connection = createMessageConnection(reader, writer);
+                this.connection = this.jsonrpc!.createStreamConnection(this.socket!, this.socket!);
                 this.connection.listen();
                 this.connected = true;
                 resolve();
@@ -130,40 +152,88 @@ export class Client {
         });
     }
 
-    private registerFSCallbacks(connection: MessageConnection, fs: FileSystem | undefined): void {
+    private registerFSCallbacks(
+        connection: JsonRpc.MessageConnection,
+        fs: FileSystemCallbacks | undefined,
+        configuration: FileSystemCallbackConfiguration,
+    ): void {
         if (!fs) return;
-        for (const name of fsCallbackNames) {
-            if (name === "writeFile") {
-                if (!fs.writeFile) continue;
-                const callback = fs.writeFile;
-
-                const requestType = new RequestType<{ path: string; data: string; }, unknown, void>(name);
-                connection.onRequest(requestType, (arg: { path: string; data: string; }) => {
-                    callback(arg.path, arg.data);
-                    return null;
-                });
-
-                continue;
-            }
-
-            const callback = fs[name];
-            if (callback) {
-                const requestType = new RequestType<unknown, unknown, void>(name);
-                connection.onRequest(requestType, (arg: unknown) => {
-                    const result = callback(arg as any);
-                    if (name === "readFile") {
-                        // readFile has 3 returns: string (content), null (not found), undefined (fall back).
-                        // JSON-RPC can't distinguish null from undefined, so wrap in object.
-                        if (result === undefined) return null;
-                        return { content: result };
-                    }
-                    return result ?? null;
-                });
+        for (const name of configuration.callbackNames) {
+            switch (name) {
+                case "readFile": {
+                    const callback = fs.readFile;
+                    if (typeof callback !== "function") throw new Error("Invalid readFile callback configuration");
+                    connection.onRequest(this.requestType<RootedFilePath, unknown>(name), fileName => {
+                        return encodeFileSystemCallbackResult(name, callback(fileName));
+                    });
+                    break;
+                }
+                case "fileExists": {
+                    const callback = fs.fileExists;
+                    if (typeof callback !== "function") throw new Error("Invalid fileExists callback configuration");
+                    connection.onRequest(this.requestType<RootedFilePath, unknown>(name), fileName => {
+                        return encodeFileSystemCallbackResult(name, callback(fileName));
+                    });
+                    break;
+                }
+                case "directoryExists": {
+                    const callback = fs.directoryExists;
+                    if (typeof callback !== "function") throw new Error("Invalid directoryExists callback configuration");
+                    connection.onRequest(this.requestType<RootedDirectoryPath, unknown>(name), directoryName => {
+                        return encodeFileSystemCallbackResult(name, callback(directoryName));
+                    });
+                    break;
+                }
+                case "getAccessibleEntries": {
+                    const callback = fs.getAccessibleEntries;
+                    if (typeof callback !== "function") throw new Error("Invalid getAccessibleEntries callback configuration");
+                    connection.onRequest(this.requestType<RootedDirectoryPath, unknown>(name), directoryName => {
+                        return encodeFileSystemCallbackResult(name, callback(directoryName));
+                    });
+                    break;
+                }
+                case "realpath": {
+                    const callback = fs.realpath;
+                    if (typeof callback !== "function") throw new Error("Invalid realpath callback configuration");
+                    connection.onRequest(this.requestType<RootedPath, unknown>(name), path => {
+                        return encodeFileSystemCallbackResult(name, callback(path));
+                    });
+                    break;
+                }
+                case "stat": {
+                    const callback = fs.stat;
+                    if (typeof callback !== "function") throw new Error("Invalid stat callback configuration");
+                    connection.onRequest(this.requestType<RootedPath, unknown>(name), path => {
+                        return encodeFileSystemCallbackResult(name, callback(path));
+                    });
+                    break;
+                }
+                case "writeFile": {
+                    const callback = fs.writeFile;
+                    if (typeof callback !== "function") throw new Error("Invalid writeFile callback configuration");
+                    connection.onRequest(this.requestType<{ path: RootedFilePath; data: string; }, unknown>(name), arg => {
+                        return encodeFileSystemCallbackResult(name, callback(arg.path, arg.data));
+                    });
+                    break;
+                }
+                case "removeFile": {
+                    const callback = fs.removeFile;
+                    if (typeof callback !== "function") throw new Error("Invalid removeFile callback configuration");
+                    connection.onRequest(this.requestType<RootedPath, unknown>(name), path => {
+                        return encodeFileSystemCallbackResult(name, callback(path));
+                    });
+                    break;
+                }
             }
         }
     }
 
-    private async sendRequestWithTiming<TResponse>(requestType: RequestType<unknown, TResponse, void>, params: unknown): Promise<TResponse> {
+    private requestType<P, R>(method: string): JsonRpc.RequestType<P, R, void> {
+        if (!this.jsonrpc) throw new Error("Connection not established");
+        return new this.jsonrpc.RequestType(method);
+    }
+
+    private async sendRequestWithTiming<TResponse>(requestType: JsonRpc.RequestType<unknown, TResponse, void>, params: unknown): Promise<TResponse> {
         if (!this.connection) {
             throw new Error("Connection not established");
         }
@@ -191,6 +261,14 @@ export class Client {
         return result;
     }
 
+    registerCallback(name: string, callback: (params: unknown) => unknown | Promise<unknown>): () => void {
+        if (!this.connection) {
+            throw new Error("Connection not established");
+        }
+        const disposable = this.connection.onRequest(this.requestType<unknown, unknown>(name), callback);
+        return () => disposable.dispose();
+    }
+
     private async doBatch(): Promise<void> {
         this.nextBatch = undefined;
         if (!this.batchedRequests.length) return;
@@ -206,18 +284,35 @@ export class Client {
 
             if (requests.length === 1) {
                 // send single queued requests directly instead of as a batched request
-                const requestType = new RequestType<unknown, unknown, void>(requests[0].method);
+                const requestType = this.requestType<unknown, unknown>(requests[0].method);
                 const response = await this.sendRequestWithTiming(requestType, requests[0].params);
                 requests[0].resolve(response);
                 return;
             }
 
-            const requestType = new RequestType<unknown, BatchRequestsResponse, void>("batchRequests");
+            const requestType = this.requestType<unknown, BatchRequestsResponse>("batchRequests");
             const params: BatchRequestsParams = { requests: requests.map(request => ({ method: request.method, params: request.params })) };
+            if (this.options.maxResponseBytesPerPage !== undefined) {
+                params.maxResponseBytesPerPage = this.options.maxResponseBytesPerPage;
+            }
             const response = await this.sendRequestWithTiming(requestType, params);
+            let responses = response.responses;
+            let continuationToken = response.continuationToken;
+            while (continuationToken) {
+                const pageParams: BatchRequestsParams = {
+                    requests: [],
+                    continuationToken,
+                };
+                if (this.options.maxResponseBytesPerPage !== undefined) {
+                    pageParams.maxResponseBytesPerPage = this.options.maxResponseBytesPerPage;
+                }
+                const page = await this.sendRequestWithTiming(requestType, pageParams);
+                responses = responses.concat(page.responses);
+                continuationToken = page.continuationToken;
+            }
             for (let i = 0; i < requests.length; i++) {
                 const { resolve, reject } = requests[i];
-                const item = response.responses[i];
+                const item = responses[i];
                 if (item.error !== undefined) {
                     reject(new Error(item.error));
                 }
@@ -232,7 +327,7 @@ export class Client {
     }
 
     private scheduleImmediateBatch(): void {
-        if (this.nextBatch) return;
+        if (this.closed || this.nextBatch) return;
         this.nextBatch = setImmediate(this.doBatch.bind(this));
     }
 
@@ -253,10 +348,12 @@ export class Client {
         };
     }
 
-    async apiRequest<K extends keyof APIMethodInfo>(method: K, params: APIMethodInfo[K]["params"]): Promise<APIMethodInfo[K]["result"]> {
+    async apiRequest<K extends APIRequest["method"]>(method: K, params: APIMethodInfo[K]["params"]): Promise<APIMethodInfo[K]["result"]> {
+        if (this.closed) throw new Error("Client is closed");
         if (!this.connected) {
             await this.connect();
         }
+        if (this.closed) throw new Error("Client is closed");
         if (!this.connection) {
             throw new Error("Connection not established");
         }
@@ -307,7 +404,7 @@ export class Client {
         this.timing.reset();
         if (this.connected && this.connection) {
             // Keep the server's collection in sync so combined totals stay meaningful.
-            const requestType = new RequestType<unknown, void, void>("resetServerTiming");
+            const requestType = this.requestType<unknown, void>("resetServerTiming");
             await this.connection.sendRequest(requestType, undefined);
         }
     }
@@ -318,28 +415,65 @@ export class Client {
         }
         // Fetch the server's own timing collection via a dedicated request. This
         // bypasses the client-side collector so the query does not pollute it.
-        const requestType = new RequestType<unknown, ServerTimingInfo, void>("getServerTiming");
+        const requestType = this.requestType<unknown, ServerTimingInfo>("getServerTiming");
         return this.connection.sendRequest(requestType, undefined);
     }
 
-    async close(): Promise<void> {
-        if (this.connection) {
-            this.connection.dispose();
-            this.connection = undefined;
+    close(): Promise<void> {
+        return this.closing ??= this.closeWorker();
+    }
+
+    private async closeWorker(): Promise<void> {
+        this.closed = true;
+        if (this.nextBatch && this.nextBatch !== "manual") {
+            clearImmediate(this.nextBatch);
         }
-        if (this.socket) {
-            this.socket.destroy();
-            this.socket = undefined;
+        this.nextBatch = undefined;
+        const requests = this.batchedRequests;
+        this.batchedRequests = [];
+        for (const { reject } of requests) {
+            reject(new Error("Client is closed"));
         }
-        if (this.process) {
-            // Close stdin to unblock the server's read loop, allowing it to exit cleanly.
-            // The server is blocked on stdin.Read(), so just sending SIGTERM would deadlock:
-            // - Node won't exit while child is alive
-            // - Child can't process SIGTERM while blocked on read
-            // - Read won't error until stdin is closed
-            this.process.stdin?.end();
-            this.process = undefined;
+        await this.connecting?.catch(() => {}); // if connection is still in-progress, wait for it to finish before closing the connection
+        try {
+            if (this.timingDump && this.timing) {
+                const local = this.timing.getInfo();
+                let server: ServerTimingInfo | undefined;
+                let serverTimingError: string | undefined;
+                const connection = this.connection;
+                // Closing alone does not reject pending JSON-RPC requests.
+                const onClose = connection?.onClose(() => connection.dispose());
+                try {
+                    if (this.connected) server = await this.fetchServerTiming();
+                }
+                catch (error) {
+                    serverTimingError = String(error);
+                }
+                finally {
+                    onClose?.dispose();
+                }
+                this.timingDump.write(local, server, serverTimingError);
+            }
         }
-        this.connected = false;
+        finally {
+            if (this.connection) {
+                this.connection.dispose();
+                this.connection = undefined;
+            }
+            if (this.socket) {
+                this.socket.destroy();
+                this.socket = undefined;
+            }
+            if (this.process) {
+                // Close stdin to unblock the server's read loop, allowing it to exit cleanly.
+                // The server is blocked on stdin.Read(), so just sending SIGTERM would deadlock:
+                // - Node won't exit while child is alive
+                // - Child can't process SIGTERM while blocked on read
+                // - Read won't error until stdin is closed
+                this.process.stdin?.end();
+                this.process = undefined;
+            }
+            this.connected = false;
+        }
     }
 }

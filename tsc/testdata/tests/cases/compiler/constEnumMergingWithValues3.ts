@@ -1,5 +1,5 @@
 // @target: es2015
-//@module: amd
+//@module: commonjs
 //@filename: m1.ts
 
 enum foo { A }

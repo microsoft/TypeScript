@@ -1,0 +1,37 @@
+//// [tests/cases/compiler/contextualFactoryReturnToOptionalClassField.ts] ////
+
+=== contextualFactoryReturnToOptionalClassField.ts ===
+class Reply<T extends string | number> { value!: T; }
+>Reply : Symbol(Reply, Decl(contextualFactoryReturnToOptionalClassField.ts, 0, 0))
+>T : Symbol(T, Decl(contextualFactoryReturnToOptionalClassField.ts, 0, 12))
+>value : Symbol(Reply.value, Decl(contextualFactoryReturnToOptionalClassField.ts, 0, 40))
+>T : Symbol(T, Decl(contextualFactoryReturnToOptionalClassField.ts, 0, 12))
+
+declare function create<Ctor extends new () => unknown, R extends InstanceType<Ctor>>(ctor: Ctor): R;
+>create : Symbol(create, Decl(contextualFactoryReturnToOptionalClassField.ts, 0, 53))
+>Ctor : Symbol(Ctor, Decl(contextualFactoryReturnToOptionalClassField.ts, 1, 24))
+>R : Symbol(R, Decl(contextualFactoryReturnToOptionalClassField.ts, 1, 55))
+>InstanceType : Symbol(InstanceType, Decl(lib.es5.d.ts, --, --))
+>Ctor : Symbol(Ctor, Decl(contextualFactoryReturnToOptionalClassField.ts, 1, 24))
+>ctor : Symbol(ctor, Decl(contextualFactoryReturnToOptionalClassField.ts, 1, 86))
+>Ctor : Symbol(Ctor, Decl(contextualFactoryReturnToOptionalClassField.ts, 1, 24))
+>R : Symbol(R, Decl(contextualFactoryReturnToOptionalClassField.ts, 1, 55))
+
+class Container<T extends string | number> {
+>Container : Symbol(Container, Decl(contextualFactoryReturnToOptionalClassField.ts, 1, 101))
+>T : Symbol(T, Decl(contextualFactoryReturnToOptionalClassField.ts, 2, 16))
+
+    item?: Reply<T>;
+>item : Symbol(Container.item, Decl(contextualFactoryReturnToOptionalClassField.ts, 2, 44))
+>Reply : Symbol(Reply, Decl(contextualFactoryReturnToOptionalClassField.ts, 0, 0))
+>T : Symbol(T, Decl(contextualFactoryReturnToOptionalClassField.ts, 2, 16))
+
+    initialize() { this.item = create(Reply); }
+>initialize : Symbol(Container.initialize, Decl(contextualFactoryReturnToOptionalClassField.ts, 3, 20))
+>this.item : Symbol(Container.item, Decl(contextualFactoryReturnToOptionalClassField.ts, 2, 44))
+>this : Symbol(Container, Decl(contextualFactoryReturnToOptionalClassField.ts, 1, 101))
+>item : Symbol(Container.item, Decl(contextualFactoryReturnToOptionalClassField.ts, 2, 44))
+>create : Symbol(create, Decl(contextualFactoryReturnToOptionalClassField.ts, 0, 53))
+>Reply : Symbol(Reply, Decl(contextualFactoryReturnToOptionalClassField.ts, 0, 0))
+}
+

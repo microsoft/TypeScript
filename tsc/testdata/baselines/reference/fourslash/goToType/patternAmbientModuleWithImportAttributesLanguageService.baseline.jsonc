@@ -1,0 +1,34 @@
+// === goToType ===
+// === /types.d.ts ===
+// declare module "*.asset" with { type: "css" } {
+//     <|export interface [|CssPayload|] { kind: "css" }|>
+//     export const shared: CssPayload;
+// }
+// declare module "*.asset" with { type: "text" } {
+// --- (line: 6) skipped ---
+
+// === /index.ts ===
+// import * as css from "./style.asset" with { type: "css" };
+// import * as text from "./copy.asset" with { type: "text" };
+// css./*GOTO TYPE*/shared;
+// text.shared;
+
+
+
+// === goToType ===
+// === /types.d.ts ===
+// declare module "*.asset" with { type: "css" } {
+//     export interface CssPayload { kind: "css" }
+//     export const shared: CssPayload;
+// }
+// declare module "*.asset" with { type: "text" } {
+//     <|export interface [|TextPayload|] { kind: "text" }|>
+//     export const shared: TextPayload;
+// }
+// 
+
+// === /index.ts ===
+// import * as css from "./style.asset" with { type: "css" };
+// import * as text from "./copy.asset" with { type: "text" };
+// css.shared;
+// text./*GOTO TYPE*/shared;

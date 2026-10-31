@@ -1,0 +1,92 @@
+//// [tests/cases/compiler/declarationEmitExportAssignmentWithTypeExports.ts] ////
+
+=== route.d.ts ===
+export type Schema = { value: number };
+>Schema : Symbol(Schema, Decl(route.d.ts, 0, 0))
+>value : Symbol(value, Decl(route.d.ts, 0, 22))
+
+declare class Route<T> {
+>Route : Symbol(Route, Decl(route.d.ts, 0, 39))
+>T : Symbol(T, Decl(route.d.ts, 1, 20))
+
+    private parts;
+>parts : Symbol(Route.parts, Decl(route.d.ts, 1, 24))
+
+    protected typeHints: unknown;
+>typeHints : Symbol(Route.typeHints, Decl(route.d.ts, 2, 18))
+
+    readonly schema: T;
+>schema : Symbol(Route.schema, Decl(route.d.ts, 3, 33))
+>T : Symbol(T, Decl(route.d.ts, 1, 20))
+
+    constructor(schema: T);
+>schema : Symbol(schema, Decl(route.d.ts, 5, 16))
+>T : Symbol(T, Decl(route.d.ts, 1, 20))
+}
+export = Route;
+>Route : Symbol(Route, Decl(route.d.ts, 0, 39))
+
+=== defaultImport.ts ===
+import Route, { Schema } from "./route";
+>Route : Symbol(Route, Decl(defaultImport.ts, 0, 6))
+>Schema : Symbol(Schema, Decl(defaultImport.ts, 0, 15))
+
+export const route = new Route<Schema>({ value: 0 });
+>route : Symbol(route, Decl(defaultImport.ts, 1, 12))
+>Route : Symbol(Route, Decl(defaultImport.ts, 0, 6))
+>Schema : Symbol(Schema, Decl(defaultImport.ts, 0, 15))
+>value : Symbol(value, Decl(defaultImport.ts, 1, 40))
+
+export const constructor = Route;
+>constructor : Symbol(constructor, Decl(defaultImport.ts, 2, 12))
+>Route : Symbol(Route, Decl(defaultImport.ts, 0, 6))
+
+export function createRoute() {
+>createRoute : Symbol(createRoute, Decl(defaultImport.ts, 2, 33))
+
+    return new Route({ value: "" });
+>Route : Symbol(Route, Decl(defaultImport.ts, 0, 6))
+>value : Symbol(value, Decl(defaultImport.ts, 4, 22))
+}
+
+=== namedDefaultImport.ts ===
+import { default as Route, Schema } from "./route";
+>default : Symbol(Route, Decl(route.d.ts, 6, 1))
+>Route : Symbol(Route, Decl(namedDefaultImport.ts, 0, 8))
+>Schema : Symbol(Schema, Decl(namedDefaultImport.ts, 0, 26))
+
+export const route = new Route<Schema>({ value: 0 });
+>route : Symbol(route, Decl(namedDefaultImport.ts, 1, 12))
+>Route : Symbol(Route, Decl(namedDefaultImport.ts, 0, 8))
+>Schema : Symbol(Schema, Decl(namedDefaultImport.ts, 0, 26))
+>value : Symbol(value, Decl(namedDefaultImport.ts, 1, 40))
+
+=== importEquals.ts ===
+import Route = require("./route");
+>Route : Symbol(Route, Decl(importEquals.ts, 0, 0))
+
+export const route = new Route<Route.Schema>({ value: 0 });
+>route : Symbol(route, Decl(importEquals.ts, 1, 12))
+>Route : Symbol(Route, Decl(importEquals.ts, 0, 0))
+>Route : Symbol(Route, Decl(importEquals.ts, 0, 0))
+>Schema : Symbol(Route.Schema, Decl(route.d.ts, 0, 0))
+>value : Symbol(value, Decl(importEquals.ts, 1, 46))
+
+=== reexport.ts ===
+export { default } from "./route";
+>default : Symbol(default, Decl(reexport.ts, 0, 8))
+
+export type { Schema } from "./route";
+>Schema : Symbol(Schema, Decl(reexport.ts, 1, 13))
+
+=== reexportImport.ts ===
+import Route, { Schema } from "./reexport";
+>Route : Symbol(Route, Decl(reexportImport.ts, 0, 6))
+>Schema : Symbol(Schema, Decl(reexportImport.ts, 0, 15))
+
+export const route = new Route<Schema>({ value: 0 });
+>route : Symbol(route, Decl(reexportImport.ts, 1, 12))
+>Route : Symbol(Route, Decl(reexportImport.ts, 0, 6))
+>Schema : Symbol(Schema, Decl(reexportImport.ts, 0, 15))
+>value : Symbol(value, Decl(reexportImport.ts, 1, 40))
+

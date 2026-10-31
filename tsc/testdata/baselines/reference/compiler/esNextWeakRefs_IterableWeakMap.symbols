@@ -30,7 +30,7 @@ export class IterableWeakMap<K extends object, V> implements WeakMap<K, V> {
 >IterableWeakMap : Symbol(IterableWeakMap, Decl(esNextWeakRefs_IterableWeakMap.ts, 6, 2))
 >K : Symbol(K, Decl(esNextWeakRefs_IterableWeakMap.ts, 9, 29))
 >V : Symbol(V, Decl(esNextWeakRefs_IterableWeakMap.ts, 9, 46))
->WeakMap : Symbol(WeakMap, Decl(lib.es2015.collection.d.ts, --, --), Decl(lib.es2015.collection.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.esnext.collection.d.ts, --, --))
+>WeakMap : Symbol(WeakMap, Decl(lib.es2015.collection.d.ts, --, --), Decl(lib.es2015.collection.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2026.collection.d.ts, --, --))
 >K : Symbol(K, Decl(esNextWeakRefs_IterableWeakMap.ts, 9, 29))
 >V : Symbol(V, Decl(esNextWeakRefs_IterableWeakMap.ts, 9, 46))
 
@@ -42,7 +42,7 @@ export class IterableWeakMap<K extends object, V> implements WeakMap<K, V> {
 
     #weakMap = new WeakMap<K, { readonly ref: WeakRef<K>; value: V }>();
 >#weakMap : Symbol(IterableWeakMap.#weakMap, Decl(esNextWeakRefs_IterableWeakMap.ts, 10, 61))
->WeakMap : Symbol(WeakMap, Decl(lib.es2015.collection.d.ts, --, --), Decl(lib.es2015.collection.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.esnext.collection.d.ts, --, --))
+>WeakMap : Symbol(WeakMap, Decl(lib.es2015.collection.d.ts, --, --), Decl(lib.es2015.collection.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2026.collection.d.ts, --, --))
 >K : Symbol(K, Decl(esNextWeakRefs_IterableWeakMap.ts, 9, 29))
 >ref : Symbol(ref, Decl(esNextWeakRefs_IterableWeakMap.ts, 12, 31))
 >WeakRef : Symbol(WeakRef, Decl(lib.es2021.weakref.d.ts, --, --), Decl(lib.es2021.weakref.d.ts, --, --))

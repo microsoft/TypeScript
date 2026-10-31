@@ -1,5 +1,5 @@
 // @target: es2015
-//@module: amd
+//@module: commonjs
 // @Filename: exportAssignmentFunction_A.ts
 function foo() { return 0; }
 

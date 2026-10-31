@@ -1,0 +1,156 @@
+//// [tests/cases/compiler/declarationEmitStaticMethodNonIdentifierNames.ts] ////
+
+=== declarationEmitStaticMethodNonIdentifierNames.ts ===
+declare const uniqueSym: unique symbol;
+>uniqueSym : Symbol(uniqueSym, Decl(declarationEmitStaticMethodNonIdentifierNames.ts, 0, 13))
+
+// none of these names can be written as `typeof Foo.<name>`
+export class Foo {
+>Foo : Symbol(Foo, Decl(declarationEmitStaticMethodNonIdentifierNames.ts, 0, 39))
+
+    static #priv() { }
+>#priv : Symbol(Foo.#priv, Decl(declarationEmitStaticMethodNonIdentifierNames.ts, 3, 18))
+
+    static getPriv() {
+>getPriv : Symbol(Foo.getPriv, Decl(declarationEmitStaticMethodNonIdentifierNames.ts, 4, 22))
+
+        return Foo.#priv;
+>Foo.#priv : Symbol(Foo.#priv, Decl(declarationEmitStaticMethodNonIdentifierNames.ts, 3, 18))
+>Foo : Symbol(Foo, Decl(declarationEmitStaticMethodNonIdentifierNames.ts, 0, 39))
+    }
+
+    static "quoted-name"() { }
+>"quoted-name" : Symbol(Foo["quoted-name"], Decl(declarationEmitStaticMethodNonIdentifierNames.ts, 7, 5))
+
+    static getQuoted() {
+>getQuoted : Symbol(Foo.getQuoted, Decl(declarationEmitStaticMethodNonIdentifierNames.ts, 9, 30))
+
+        return Foo["quoted-name"];
+>Foo : Symbol(Foo, Decl(declarationEmitStaticMethodNonIdentifierNames.ts, 0, 39))
+>"quoted-name" : Symbol(Foo["quoted-name"], Decl(declarationEmitStaticMethodNonIdentifierNames.ts, 7, 5))
+    }
+
+    static ["computed-name"]() { }
+>["computed-name"] : Symbol(Foo["computed-name"], Decl(declarationEmitStaticMethodNonIdentifierNames.ts, 12, 5))
+>"computed-name" : Symbol(Foo["computed-name"], Decl(declarationEmitStaticMethodNonIdentifierNames.ts, 12, 5))
+
+    static getComputed() {
+>getComputed : Symbol(Foo.getComputed, Decl(declarationEmitStaticMethodNonIdentifierNames.ts, 14, 34))
+
+        return Foo["computed-name"];
+>Foo : Symbol(Foo, Decl(declarationEmitStaticMethodNonIdentifierNames.ts, 0, 39))
+>"computed-name" : Symbol(Foo["computed-name"], Decl(declarationEmitStaticMethodNonIdentifierNames.ts, 12, 5))
+    }
+
+    static 1() { }
+>1 : Symbol(Foo[1], Decl(declarationEmitStaticMethodNonIdentifierNames.ts, 17, 5))
+
+    static getNumeric() {
+>getNumeric : Symbol(Foo.getNumeric, Decl(declarationEmitStaticMethodNonIdentifierNames.ts, 19, 18))
+
+        return Foo[1];
+>Foo : Symbol(Foo, Decl(declarationEmitStaticMethodNonIdentifierNames.ts, 0, 39))
+>1 : Symbol(Foo[1], Decl(declarationEmitStaticMethodNonIdentifierNames.ts, 17, 5))
+    }
+
+    static [uniqueSym]() { }
+>[uniqueSym] : Symbol(Foo[uniqueSym], Decl(declarationEmitStaticMethodNonIdentifierNames.ts, 22, 5))
+>uniqueSym : Symbol(uniqueSym, Decl(declarationEmitStaticMethodNonIdentifierNames.ts, 0, 13))
+
+    static getUnique() {
+>getUnique : Symbol(Foo.getUnique, Decl(declarationEmitStaticMethodNonIdentifierNames.ts, 24, 28))
+
+        return Foo[uniqueSym];
+>Foo : Symbol(Foo, Decl(declarationEmitStaticMethodNonIdentifierNames.ts, 0, 39))
+>uniqueSym : Symbol(uniqueSym, Decl(declarationEmitStaticMethodNonIdentifierNames.ts, 0, 13))
+    }
+
+    // property types go through the same path
+    static privRef = Foo.#priv;
+>privRef : Symbol(Foo.privRef, Decl(declarationEmitStaticMethodNonIdentifierNames.ts, 27, 5))
+>Foo.#priv : Symbol(Foo.#priv, Decl(declarationEmitStaticMethodNonIdentifierNames.ts, 3, 18))
+>Foo : Symbol(Foo, Decl(declarationEmitStaticMethodNonIdentifierNames.ts, 0, 39))
+}
+
+// identifier names still use `typeof`
+export class Writable {
+>Writable : Symbol(Writable, Decl(declarationEmitStaticMethodNonIdentifierNames.ts, 31, 1))
+
+    static normalName() { }
+>normalName : Symbol(Writable.normalName, Decl(declarationEmitStaticMethodNonIdentifierNames.ts, 34, 23))
+
+    static getNormal() {
+>getNormal : Symbol(Writable.getNormal, Decl(declarationEmitStaticMethodNonIdentifierNames.ts, 35, 27))
+
+        return Writable.normalName;
+>Writable.normalName : Symbol(Writable.normalName, Decl(declarationEmitStaticMethodNonIdentifierNames.ts, 34, 23))
+>Writable : Symbol(Writable, Decl(declarationEmitStaticMethodNonIdentifierNames.ts, 31, 1))
+>normalName : Symbol(Writable.normalName, Decl(declarationEmitStaticMethodNonIdentifierNames.ts, 34, 23))
+    }
+
+    static $dollar() { }
+>$dollar : Symbol(Writable.$dollar, Decl(declarationEmitStaticMethodNonIdentifierNames.ts, 38, 5))
+
+    static getDollar() {
+>getDollar : Symbol(Writable.getDollar, Decl(declarationEmitStaticMethodNonIdentifierNames.ts, 40, 24))
+
+        return Writable.$dollar;
+>Writable.$dollar : Symbol(Writable.$dollar, Decl(declarationEmitStaticMethodNonIdentifierNames.ts, 38, 5))
+>Writable : Symbol(Writable, Decl(declarationEmitStaticMethodNonIdentifierNames.ts, 31, 1))
+>$dollar : Symbol(Writable.$dollar, Decl(declarationEmitStaticMethodNonIdentifierNames.ts, 38, 5))
+    }
+}
+
+export class Generic {
+>Generic : Symbol(Generic, Decl(declarationEmitStaticMethodNonIdentifierNames.ts, 44, 1))
+
+    static #priv<T>(x: T): T { return x; }
+>#priv : Symbol(Generic.#priv, Decl(declarationEmitStaticMethodNonIdentifierNames.ts, 46, 22))
+>T : Symbol(T, Decl(declarationEmitStaticMethodNonIdentifierNames.ts, 47, 17))
+>x : Symbol(x, Decl(declarationEmitStaticMethodNonIdentifierNames.ts, 47, 20))
+>T : Symbol(T, Decl(declarationEmitStaticMethodNonIdentifierNames.ts, 47, 17))
+>T : Symbol(T, Decl(declarationEmitStaticMethodNonIdentifierNames.ts, 47, 17))
+>x : Symbol(x, Decl(declarationEmitStaticMethodNonIdentifierNames.ts, 47, 20))
+
+    static getPriv() {
+>getPriv : Symbol(Generic.getPriv, Decl(declarationEmitStaticMethodNonIdentifierNames.ts, 47, 42))
+
+        return Generic.#priv;
+>Generic.#priv : Symbol(Generic.#priv, Decl(declarationEmitStaticMethodNonIdentifierNames.ts, 46, 22))
+>Generic : Symbol(Generic, Decl(declarationEmitStaticMethodNonIdentifierNames.ts, 44, 1))
+    }
+}
+
+export class Recursive {
+>Recursive : Symbol(Recursive, Decl(declarationEmitStaticMethodNonIdentifierNames.ts, 51, 1))
+
+    static #rec() { return Recursive.#rec; }
+>#rec : Symbol(Recursive.#rec, Decl(declarationEmitStaticMethodNonIdentifierNames.ts, 53, 24))
+>Recursive.#rec : Symbol(Recursive.#rec, Decl(declarationEmitStaticMethodNonIdentifierNames.ts, 53, 24))
+>Recursive : Symbol(Recursive, Decl(declarationEmitStaticMethodNonIdentifierNames.ts, 51, 1))
+
+    static getRec() {
+>getRec : Symbol(Recursive.getRec, Decl(declarationEmitStaticMethodNonIdentifierNames.ts, 54, 44))
+
+        return Recursive.#rec;
+>Recursive.#rec : Symbol(Recursive.#rec, Decl(declarationEmitStaticMethodNonIdentifierNames.ts, 53, 24))
+>Recursive : Symbol(Recursive, Decl(declarationEmitStaticMethodNonIdentifierNames.ts, 51, 1))
+    }
+}
+
+// instance members already fall back to a structural type
+export class Instance {
+>Instance : Symbol(Instance, Decl(declarationEmitStaticMethodNonIdentifierNames.ts, 58, 1))
+
+    #priv() { }
+>#priv : Symbol(Instance.#priv, Decl(declarationEmitStaticMethodNonIdentifierNames.ts, 61, 23))
+
+    getPriv() {
+>getPriv : Symbol(Instance.getPriv, Decl(declarationEmitStaticMethodNonIdentifierNames.ts, 62, 15))
+
+        return this.#priv;
+>this.#priv : Symbol(Instance.#priv, Decl(declarationEmitStaticMethodNonIdentifierNames.ts, 61, 23))
+>this : Symbol(Instance, Decl(declarationEmitStaticMethodNonIdentifierNames.ts, 58, 1))
+    }
+}
+

@@ -452,7 +452,7 @@ func getContainingNodeArray(node *ast.Node) *ast.NodeList {
 		case ast.IsFunctionLike(parent) || ast.IsClassLike(parent) || ast.IsInterfaceDeclaration(parent) || ast.IsTypeOrJSTypeAliasDeclaration(parent):
 			return parent.TypeParameterList()
 		case ast.IsInferTypeNode(parent):
-			break
+			// infer type nodes have no associated type parameter list
 		default:
 			panic(fmt.Sprintf("Unexpected TypeParameter parent: %#v", parent.Kind))
 		}
@@ -603,8 +603,7 @@ func tryGetEnd(node interface{ End() int }) (int, bool) {
 }
 
 func greatestEnd(end int, nodes ...interface{ End() int }) int {
-	for i := len(nodes) - 1; i >= 0; i-- {
-		node := nodes[i]
+	for _, node := range slices.Backward(nodes) {
 		if nodeEnd, ok := tryGetEnd(node); ok && end < nodeEnd {
 			end = nodeEnd
 		}
@@ -621,6 +620,30 @@ func skipSynthesizedParentheses(node *ast.Node) *ast.Node {
 
 func isNewExpressionWithoutArguments(node *ast.Node) bool {
 	return node.Kind == ast.KindNewExpression && node.ArgumentList() == nil
+}
+
+// Determines whether the expression of a NewExpression would be emitted with an unparenthesized CallExpression at the
+// start of its member chain, such as `C()` in `C().D`. Such an expression must be parenthesized when used as the
+// expression of a NewExpression, since `new C().D()` would be parsed as `(new C()).D()` rather than `new (C().D)()`.
+func hasUnparenthesizedCallAtStartOfMemberChain(node *ast.Expression) bool {
+	for {
+		node = ast.SkipPartiallyEmittedExpressions(node)
+		if ast.GetExpressionPrecedence(node) < ast.OperatorPrecedenceMember {
+			// Each expression in the member chain is emitted with member precedence, so this expression will already
+			// be parenthesized, which ends the member chain.
+			return false
+		}
+		switch node.Kind {
+		case ast.KindCallExpression:
+			return true
+		case ast.KindPropertyAccessExpression, ast.KindElementAccessExpression, ast.KindExpressionWithTypeArguments:
+			node = node.Expression()
+		case ast.KindTaggedTemplateExpression:
+			node = node.AsTaggedTemplateExpression().Tag
+		default:
+			return false
+		}
+	}
 }
 
 func isBinaryOperation(node *ast.Node, token ast.Kind) bool {

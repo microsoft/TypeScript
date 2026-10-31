@@ -1,5 +1,5 @@
 // @target: es2015
-// @outFile: output.js
+// @outDir: out
 // @allowJs: true
 // @checkJs: true
 // @Filename: eof.js

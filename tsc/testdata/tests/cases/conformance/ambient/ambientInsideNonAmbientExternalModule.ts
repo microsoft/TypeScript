@@ -1,6 +1,6 @@
 // @target: es2015
 // @strict: false
-// @module: amd
+// @module: commonjs
 export declare var x;
 export declare function f();
 export declare class C { }

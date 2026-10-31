@@ -1,0 +1,11 @@
+//// [tests/cases/compiler/exportAssignmentFunction.ts] ////
+
+=== exportAssignmentFunction_B.ts ===
+import fooFunc = require("exportAssignmentFunction_A");
+>fooFunc : any
+
+var n: number = fooFunc();
+>n : number
+>fooFunc() : any
+>fooFunc : any
+

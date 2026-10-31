@@ -149,6 +149,34 @@ logical root, physical root, event-ID cutoff, and termination state, so
 late-added watches don't receive older queued events and symlinked watch roots
 continue reporting caller-visible paths.
 
+### macOS path comparison
+
+FSEvents and kqueue use the watched volume's case sensitivity, queried with
+`pathconf`, rather than assuming event paths have the same spelling as the
+subscription. On case-insensitive volumes, CoreFoundation case folding and NFC
+normalization recognize Unicode aliases, including expansions such as sharp s /
+`SS` and ligatures / letter sequences. This is not width- or
+diacritic-insensitive comparison.
+
+Folded forms are comparison keys, never displayed or opened paths. Watch roots
+and subscribed filenames are normalized to NFC. Directory events retain the
+caller's root casing, with NFC suffixes for FSEvents and on-disk child spellings
+for kqueue; `WatchFile` events use the subscribed NFC filename. Rebasing uses
+original path boundaries rather than folded byte lengths. FSEvents routing,
+shared callback filtering, overflow matching, and logical-root deletion use the
+same comparison rules.
+
+An allocation-free ASCII comparison fast path avoids native folding. Watch-root
+comparison forms are prepared at subscription time, while event paths are
+folded lazily and reused across routing comparisons and within callback
+filtering passes. `WatchFile` reuses its parent subscription's comparer rather
+than querying filesystem case sensitivity twice.
+
+The native fold has been compared with aliases and distinct names on
+case-insensitive APFS, but is not a guarantee of identical lookup tables on every
+filesystem or macOS version. Case-sensitive comparison and watcher backends on
+other platforms remain unchanged.
+
 ## New backends
 
 **fanotify** (Linux, kernel ≥ 5.13) is the default on Linux when available. It

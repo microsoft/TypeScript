@@ -101,7 +101,7 @@ func (this *FormattingContext) NextNodeAllOnSameLine() bool {
 
 func (this *FormattingContext) TokensAreOnSameLine() bool {
 	if this.tokensAreOnSameLine == core.TSUnknown {
-		this.tokensAreOnSameLine = this.rangeIsOnOneLine(core.NewTextRange(this.currentTokenSpan.Loc.Pos(), this.nextTokenSpan.Loc.End()))
+		this.tokensAreOnSameLine = this.rangeIsOnOneLine(core.NewTextRange(this.currentTokenSpan.Loc.Pos(), this.nextTokenSpan.Loc.Pos()))
 	}
 	return this.tokensAreOnSameLine == core.TSTrue
 }

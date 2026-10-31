@@ -1,0 +1,26 @@
+//// [tests/cases/compiler/domIterableGenericDatasetKeys.ts] ////
+
+=== domIterableGenericDatasetKeys.ts ===
+function restore<Key extends keyof CSSStyleDeclaration>(key: Key, element: HTMLElement) {
+>restore : Symbol(restore, Decl(domIterableGenericDatasetKeys.ts, 0, 0))
+>Key : Symbol(Key, Decl(domIterableGenericDatasetKeys.ts, 0, 17))
+>CSSStyleDeclaration : Symbol(CSSStyleDeclaration, Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --))
+>key : Symbol(key, Decl(domIterableGenericDatasetKeys.ts, 0, 56))
+>Key : Symbol(Key, Decl(domIterableGenericDatasetKeys.ts, 0, 17))
+>element : Symbol(element, Decl(domIterableGenericDatasetKeys.ts, 0, 65))
+>HTMLElement : Symbol(HTMLElement, Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --))
+
+    const value = element.dataset[key];
+>value : Symbol(value, Decl(domIterableGenericDatasetKeys.ts, 1, 9))
+>element.dataset : Symbol(HTMLOrSVGOrMathMLElement.dataset, Decl(lib.dom.d.ts, --, --))
+>element : Symbol(element, Decl(domIterableGenericDatasetKeys.ts, 0, 65))
+>dataset : Symbol(HTMLOrSVGOrMathMLElement.dataset, Decl(lib.dom.d.ts, --, --))
+>key : Symbol(key, Decl(domIterableGenericDatasetKeys.ts, 0, 56))
+
+    delete element.dataset[key];
+>element.dataset : Symbol(HTMLOrSVGOrMathMLElement.dataset, Decl(lib.dom.d.ts, --, --))
+>element : Symbol(element, Decl(domIterableGenericDatasetKeys.ts, 0, 65))
+>dataset : Symbol(HTMLOrSVGOrMathMLElement.dataset, Decl(lib.dom.d.ts, --, --))
+>key : Symbol(key, Decl(domIterableGenericDatasetKeys.ts, 0, 56))
+}
+

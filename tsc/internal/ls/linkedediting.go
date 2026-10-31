@@ -7,7 +7,6 @@ import (
 	"github.com/microsoft/TypeScript/tsc/internal/astnav"
 	"github.com/microsoft/TypeScript/tsc/internal/core"
 	"github.com/microsoft/TypeScript/tsc/internal/debug"
-	"github.com/microsoft/TypeScript/tsc/internal/ls/lsconv"
 	"github.com/microsoft/TypeScript/tsc/internal/lsp/lsproto"
 	"github.com/microsoft/TypeScript/tsc/internal/scanner"
 	"github.com/microsoft/TypeScript/tsc/internal/spanmap"
@@ -18,7 +17,7 @@ var jsxTagWordPattern = new("[a-zA-Z0-9:\\-\\._$]*")
 
 func (l *LanguageService) ProvideLinkedEditingRange(ctx context.Context, params *lsproto.LinkedEditingRangeParams) (lsproto.LinkedEditingRangeResponse, error) {
 	_, sourceFile := l.getProgramAndFile(params.TextDocument.Uri)
-	positions := lsconv.FromLSPPositionForSourceFile(l.converters, sourceFile, params.Position, spanmap.FeatureLinkedEditing)
+	positions := l.converters.FromLSPPositionForSourceFile(sourceFile, params.Position, spanmap.FeatureLinkedEditing)
 	if len(positions) != 1 || !positions[0].Fidelity.IsExact() {
 		return lsproto.LinkedEditingRangeResponse{}, nil
 	}

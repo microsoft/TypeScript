@@ -1,0 +1,12 @@
+//// [tests/cases/compiler/jsFileCompilationWithEnabledCompositeOption.ts] ////
+
+=== a.ts ===
+class c {
+>c : Symbol(c, Decl(a.ts, 0, 0))
+}
+
+=== b.js ===
+function foo() {
+>foo : Symbol(foo, Decl(b.js, 0, 0))
+}
+

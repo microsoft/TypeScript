@@ -2,6 +2,7 @@ package astnav
 
 import (
 	"fmt"
+	"slices"
 
 	"github.com/microsoft/TypeScript/tsc/internal/ast"
 	"github.com/microsoft/TypeScript/tsc/internal/core"
@@ -142,9 +143,9 @@ func getTokenAtPosition(
 			if nodeList.End() == position && includePrecedingTokenAtEndPosition != nil {
 				left = nodeList.End()
 				nodeAfterLeft = nil
-				for i := len(nodeList.Nodes) - 1; i >= 0; i-- {
-					if nodeList.Nodes[i].Flags&ast.NodeFlagsReparsed == 0 {
-						prevSubtree = nodeList.Nodes[i]
+				for _, v := range slices.Backward(nodeList.Nodes) {
+					if v.Flags&ast.NodeFlagsReparsed == 0 {
+						prevSubtree = v
 						break
 					}
 				}
@@ -196,8 +197,9 @@ func getTokenAtPosition(
 		return nodeList
 	}
 
+	visitor := getNodeVisitor(visitNode, visitNodeList)
 	for {
-		VisitEachChildAndJSDoc(current, sourceFile, visitNode, visitNodeList)
+		visitEachChildAndJSDoc(current, sourceFile, visitor)
 		// If prevSubtree was set on the last iteration, it ends at the target position.
 		// Check if the rightmost token of prevSubtree should be returned based on the
 		// `includePrecedingTokenAtEndPosition` callback.
@@ -314,7 +316,10 @@ func VisitEachChildAndJSDoc(
 	visitNode func(*ast.Node, *ast.NodeVisitor) *ast.Node,
 	visitNodes func(*ast.NodeList, *ast.NodeVisitor) *ast.NodeList,
 ) {
-	visitor := getNodeVisitor(visitNode, visitNodes)
+	visitEachChildAndJSDoc(node, sourceFile, getNodeVisitor(visitNode, visitNodes))
+}
+
+func visitEachChildAndJSDoc(node *ast.Node, sourceFile *ast.SourceFile, visitor *ast.NodeVisitor) {
 	for _, jsdoc := range node.JSDoc(sourceFile) {
 		if visitor.Hooks.VisitNode != nil {
 			visitor.Hooks.VisitNode(jsdoc, visitor)
@@ -416,9 +421,9 @@ func FindPrecedingTokenEx(sourceFile *ast.SourceFile, position int, startNode *a
 					// Find jsdoc preceding the foundChild.
 					var jsDoc *ast.Node
 					nodeJSDoc := n.JSDoc(sourceFile)
-					for i := len(nodeJSDoc) - 1; i >= 0; i-- {
-						if nodeJSDoc[i].Pos() >= foundChild.Pos() {
-							jsDoc = nodeJSDoc[i]
+					for _, n := range slices.Backward(nodeJSDoc) {
+						if n.Pos() >= foundChild.Pos() {
+							jsDoc = n
 							break
 						}
 					}

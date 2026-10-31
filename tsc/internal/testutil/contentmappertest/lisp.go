@@ -33,11 +33,11 @@ func (lispHandler) HandleRequest(ctx context.Context, method string, params json
 		if err != nil {
 			return nil, err
 		}
-		return contentmapper.TransformResult{MappedOutput: contentmapper.MappedOutput{
+		return contentmapper.TransformResult{
 			Text:      `add(1, 2, "oops");`,
 			Extension: ".ts",
 			Mappings:  json.Value(mappings),
-		}}, nil
+		}, nil
 	default:
 		return nil, fmt.Errorf("contentmappertest: unexpected method %q", method)
 	}

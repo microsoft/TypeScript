@@ -1,0 +1,15 @@
+decoratorRestNoCrash1.ts(4,29): error TS2339: Property 'greeting' does not exist on type 'Greeter'.
+
+
+==== decoratorRestNoCrash1.ts (1 errors) ====
+    class Greeter {
+      @deco
+      greet1() {
+        return "Hello, " + this.greeting;
+                                ~~~~~~~~
+!!! error TS2339: Property 'greeting' does not exist on type 'Greeter'.
+      }
+    }
+    
+    declare function deco(...args: [any, any, any]): any;
+    

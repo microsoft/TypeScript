@@ -1,0 +1,18 @@
+exportAssignmentInterface_B.ts(1,21): error TS2307: Cannot find module 'exportAssignmentInterface_A' or its corresponding type declarations.
+
+
+==== exportAssignmentInterface_B.ts (1 errors) ====
+    import I1 = require("exportAssignmentInterface_A");
+                        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2307: Cannot find module 'exportAssignmentInterface_A' or its corresponding type declarations.
+    
+    var i: I1;
+    
+    var n: number = i.p1;
+==== exportAssignmentInterface_A.ts (0 errors) ====
+    interface A {
+    	p1: number;
+    }
+    
+    export = A;
+    

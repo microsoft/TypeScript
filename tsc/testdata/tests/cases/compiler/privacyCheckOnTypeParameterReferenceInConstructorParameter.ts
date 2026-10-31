@@ -1,5 +1,5 @@
 // @target: es2015
-//@module: amd
+//@module: commonjs
 //@declaration: true
 export class A<T1>{
     constructor(callback: (self: A<T1>) => void) {

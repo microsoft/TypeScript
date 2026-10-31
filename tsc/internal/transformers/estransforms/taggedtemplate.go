@@ -1,6 +1,7 @@
 package estransforms
 
 import (
+	"slices"
 	"strings"
 
 	"github.com/microsoft/TypeScript/tsc/internal/ast"
@@ -45,7 +46,7 @@ func (tx *taggedTemplateTransformer) visitSourceFile(node *ast.SourceFile) *ast.
 	if len(tx.taggedTemplateStringDeclarations) > 0 {
 		visitedSourceFile := visited.AsSourceFile()
 		statements := append(
-			visitedSourceFile.Statements.Nodes[:len(visitedSourceFile.Statements.Nodes):len(visitedSourceFile.Statements.Nodes)],
+			slices.Clip(visitedSourceFile.Statements.Nodes),
 			tx.Factory().NewVariableStatement(
 				nil, /*modifiers*/
 				tx.Factory().NewVariableDeclarationList(

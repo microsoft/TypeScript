@@ -1,0 +1,13 @@
+Bar.ts(1,24): error TS2307: Cannot find module 'Foo' or its corresponding type declarations.
+
+
+==== Bar.ts (1 errors) ====
+    import Error = require('Foo');
+                           ~~~~~
+!!! error TS2307: Cannot find module 'Foo' or its corresponding type declarations.
+    class Bar extends Error {}
+    export = Bar;
+==== Foo.ts (0 errors) ====
+    class Foo {}
+    export = Foo;
+    

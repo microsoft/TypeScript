@@ -3,7 +3,6 @@
 /main.mts(2,22): error TS1543: Importing a JSON file into an ECMAScript module requires a 'type: "json"' import attribute when 'module' is set to 'Node20'.
 /main.mts(3,19): error TS1543: Importing a JSON file into an ECMAScript module requires a 'type: "json"' import attribute when 'module' is set to 'Node20'.
 /main.mts(7,21): error TS1543: Importing a JSON file into an ECMAScript module requires a 'type: "json"' import attribute when 'module' is set to 'Node20'.
-/main.mts(9,47): error TS2857: Import attributes cannot be used with type-only imports or exports.
 /main.mts(10,10): error TS1544: Named imports from a JSON file into an ECMAScript module are not allowed when 'module' is set to 'Node20'.
 /main.mts(12,9): error TS2339: Property 'version' does not exist on type '{ default: { version: number; }; }'.
 
@@ -42,7 +41,7 @@
       "version": 1
     }
     
-==== /main.mts (6 errors) ====
+==== /main.mts (5 errors) ====
     import { oops } from "not.json"; // Ok
     import moreOops from "actually-json"; // Error in nodenext
                          ~~~~~~~~~~~~~~~
@@ -58,8 +57,6 @@
 !!! error TS1543: Importing a JSON file into an ECMAScript module requires a 'type: "json"' import attribute when 'module' is set to 'Node20'.
     import type config2Type from "./config.json"; // Ok, type-only
     import type config2Type2 from "./config.json" with { type: "json" }; // Error, import attributes not allowed on type-only imports
-                                                  ~~~~~~~~~~~~~~~~~~~~~
-!!! error TS2857: Import attributes cannot be used with type-only imports or exports.
     import { version } from "./config.json" with { type: "json" }; // Error, named import
              ~~~~~~~
 !!! error TS1544: Named imports from a JSON file into an ECMAScript module are not allowed when 'module' is set to 'Node20'.

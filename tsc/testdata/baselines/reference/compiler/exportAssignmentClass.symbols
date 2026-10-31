@@ -1,0 +1,14 @@
+//// [tests/cases/compiler/exportAssignmentClass.ts] ////
+
+=== exportAssignmentClass_B.ts ===
+import D = require("exportAssignmentClass_A");
+>D : Symbol(D, Decl(exportAssignmentClass_B.ts, 0, 0))
+
+var d = new D();
+>d : Symbol(d, Decl(exportAssignmentClass_B.ts, 2, 3))
+>D : Symbol(D, Decl(exportAssignmentClass_B.ts, 0, 0))
+
+var x = d.p;
+>x : Symbol(x, Decl(exportAssignmentClass_B.ts, 3, 3))
+>d : Symbol(d, Decl(exportAssignmentClass_B.ts, 2, 3))
+

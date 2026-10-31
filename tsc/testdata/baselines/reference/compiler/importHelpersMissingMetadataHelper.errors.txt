@@ -1,0 +1,22 @@
+main.ts(3,1): error TS2343: This syntax requires an imported helper named '__metadata' which does not exist in 'tslib'. Consider upgrading your version of 'tslib'.
+
+
+==== main.ts (1 errors) ====
+    declare function dec(...args: any[]): any;
+    
+    @dec
+    ~~~~
+!!! error TS2343: This syntax requires an imported helper named '__metadata' which does not exist in 'tslib'. Consider upgrading your version of 'tslib'.
+    export class C {
+        constructor(x: number) {}
+    
+        @dec
+        method(y: string) {}
+    }
+    
+==== node_modules/tslib/index.d.ts (0 errors) ====
+    export declare function __decorate(...args: any[]): any;
+    
+==== node_modules/tslib/package.json (0 errors) ====
+    { "name": "tslib", "types": "index.d.ts" }
+    

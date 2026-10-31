@@ -1,0 +1,45 @@
+/types.d.ts(7,54): error TS1557: 'resolution-mode' is not a valid key for an import attributes type.
+
+
+==== /types.d.ts (1 errors) ====
+    declare module "*.style" with { type: "css" } {
+        export interface Style {
+            kind: "css";
+        }
+    }
+    
+    declare module "require/*.style" with { type: "css", "resolution-mode": "require" } {
+                                                         ~~~~~~~~~~~~~~~~~
+!!! error TS1557: 'resolution-mode' is not a valid key for an import attributes type.
+        export interface RequireStyle {
+            kind: "require-css";
+        }
+    }
+    
+==== /reexports.ts (0 errors) ====
+    export type { Style } from "plain.style" with { type: "css" };
+    export type { RequireStyle } from "require/reexport.style" with { type: "css", "resolution-mode": "require" };
+    
+==== /jsdoc.js (0 errors) ====
+    /** @import { Style } from "jsdoc.style" with { type: "css" } */
+    
+    /** @type {Style} */
+    const jsdocStyle = { kind: "css" };
+    const jsdocCssKind = jsdocStyle.kind;
+    
+==== /index.ts (0 errors) ====
+    import type { Style } from "plain.style" with { type: "css" };
+    import type { RequireStyle } from "require/import.style" with { type: "css", "resolution-mode": "require" };
+    
+    type ImportTypeStyle = import("inline.style", { with: { type: "css" } }).Style;
+    type ImportTypeRequireStyle = import("require/inline.style", { with: { type: "css", "resolution-mode": "require" } }).RequireStyle;
+    
+    declare const importedStyle: Style;
+    declare const importedRequireStyle: RequireStyle;
+    declare const importTypeStyle: ImportTypeStyle;
+    declare const importTypeRequireStyle: ImportTypeRequireStyle;
+    
+    const cssKind: "css" = importedStyle.kind;
+    const requireCssKind: "require-css" = importedRequireStyle.kind;
+    const importTypeCssKind: "css" = importTypeStyle.kind;
+    const importTypeRequireCssKind: "require-css" = importTypeRequireStyle.kind;

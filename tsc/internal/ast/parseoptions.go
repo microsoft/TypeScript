@@ -6,8 +6,8 @@ import (
 )
 
 type SourceFileParseOptions struct {
-	FileName                       string
-	Path                           tspath.Path
+	FileName                       tspath.RootedFilePath
+	PathKey                        tspath.PathKey
 	ExternalModuleIndicatorOptions ExternalModuleIndicatorOptions
 }
 
@@ -16,8 +16,8 @@ type ExternalModuleIndicatorOptions struct {
 	Force bool
 }
 
-func GetExternalModuleIndicatorOptions(fileName string, options *core.CompilerOptions, metadata SourceFileMetaData) ExternalModuleIndicatorOptions {
-	if tspath.IsDeclarationFileName(fileName) {
+func GetExternalModuleIndicatorOptions(fileName tspath.RootedFilePath, options *core.CompilerOptions, metadata SourceFileMetaData) ExternalModuleIndicatorOptions {
+	if fileName.IsDeclarationFile() {
 		return ExternalModuleIndicatorOptions{}
 	}
 
@@ -43,11 +43,11 @@ func GetExternalModuleIndicatorOptions(fileName string, options *core.CompilerOp
 
 var isFileForcedToBeModuleByFormatExtensions = []string{tspath.ExtensionCjs, tspath.ExtensionCts, tspath.ExtensionMjs, tspath.ExtensionMts}
 
-func isFileForcedToBeModuleByFormat(fileName string, options *core.CompilerOptions, metadata SourceFileMetaData) bool {
+func isFileForcedToBeModuleByFormat(fileName tspath.RootedFilePath, options *core.CompilerOptions, metadata SourceFileMetaData) bool {
 	// Excludes declaration files - they still require an explicit `export {}` or the like
 	// for back compat purposes. The only non-declaration files _not_ forced to be a module are `.js` files
 	// that aren't esm-mode (meaning not in a `type: module` scope).
-	if GetImpliedNodeFormatForEmitWorker(fileName, options.GetEmitModuleKind(), metadata) == core.ModuleKindESNext || tspath.FileExtensionIsOneOf(fileName, isFileForcedToBeModuleByFormatExtensions) {
+	if GetImpliedNodeFormatForEmitWorker(fileName, options.GetEmitModuleKind(), metadata) == core.ModuleKindESNext || fileName.ExtensionIsOneOf(isFileForcedToBeModuleByFormatExtensions) {
 		return true
 	}
 	return false

@@ -28,6 +28,7 @@ import {
     NODE_LEN,
     PROTOCOL_VERSION,
 } from "./protocol.ts";
+import { encodeWtf8 } from "./wtf8.ts";
 
 const NODE_FIELDS = NODE_LEN / 4;
 const NODE_FIELD_NEXT = 3;
@@ -35,7 +36,7 @@ const NO_STRUCTURED_DATA = 0xFFFFFFFF;
 
 // String table that accumulates strings into a flat byte pool.
 class StringTable {
-    private parts: string[];
+    private parts: Uint8Array[];
     private byteLen: number;
     private offsets: number[];
 
@@ -47,26 +48,27 @@ class StringTable {
 
     add(text: string): number {
         const index = this.offsets.length;
-        const encoder = cachedEncoder();
-        const encodedLength = encoder.encode(text).length;
+        const encoded = encodeWtf8(text);
         const offset = this.byteLen;
-        this.parts.push(text);
-        this.byteLen += encodedLength;
-        this.offsets.push(offset, offset + encodedLength);
+        this.parts.push(encoded);
+        this.byteLen += encoded.length;
+        this.offsets.push(offset, offset + encoded.length);
         return index;
     }
 
     encode(): Uint8Array {
-        const encoder = cachedEncoder();
-        const dataBytes = encoder.encode(this.parts.join(""));
         const offsetBytes = new Uint8Array(this.offsets.length * 4);
         const view = new DataView(offsetBytes.buffer);
         for (let i = 0; i < this.offsets.length; i++) {
             view.setUint32(i * 4, this.offsets[i], true);
         }
-        const result = new Uint8Array(offsetBytes.length + dataBytes.length);
+        const result = new Uint8Array(offsetBytes.length + this.byteLen);
         result.set(offsetBytes, 0);
-        result.set(dataBytes, offsetBytes.length);
+        let offset = offsetBytes.length;
+        for (const part of this.parts) {
+            result.set(part, offset);
+            offset += part.length;
+        }
         return result;
     }
 
@@ -77,11 +79,6 @@ class StringTable {
     offsetsCount(): number {
         return this.offsets.length;
     }
-}
-
-let _encoder: TextEncoder | undefined;
-function cachedEncoder(): TextEncoder {
-    return _encoder ??= new TextEncoder();
 }
 
 function getChildrenPropertyMask(node: Node): number {
@@ -371,9 +368,41 @@ export function encodeNode(node: Node): Uint8Array {
     return result;
 }
 
+interface NodeBuffer extends Uint8Array {
+    toString(encoding?: "base64"): string;
+}
+
+const nodeBuffer = (globalThis as {
+    Buffer?: {
+        from(buffer: ArrayBufferLike, byteOffset: number, length: number): NodeBuffer;
+        from(data: string, encoding: "base64"): NodeBuffer;
+    };
+}).Buffer;
+
 /**
  * Encode a Uint8Array to a base64 string.
  */
-export function uint8ArrayToBase64(data: Uint8Array): string {
-    return Buffer.from(data).toString("base64");
+export const uint8ArrayToBase64: (data: Uint8Array) => string = "toBase64" in Uint8Array.prototype
+    ? data => (data as Uint8Array & { toBase64(): string; }).toBase64()
+    : nodeBuffer
+    ? data => nodeBuffer.from(data.buffer, data.byteOffset, data.byteLength).toString("base64")
+    : data => {
+        let binary = "";
+        for (let i = 0; i < data.length; i += 0x8000) {
+            binary += String.fromCharCode(...data.subarray(i, i + 0x8000));
+        }
+        return btoa(binary);
+    };
+
+const base64ToUint8Array: (data: string) => Uint8Array = "fromBase64" in Uint8Array
+    ? (Uint8Array as unknown as { fromBase64(data: string): Uint8Array; }).fromBase64
+    : nodeBuffer
+    ? data => {
+        const buffer = nodeBuffer.from(data, "base64");
+        return new Uint8Array(buffer.buffer, buffer.byteOffset, buffer.byteLength);
+    }
+    : data => Uint8Array.from(atob(data), character => character.charCodeAt(0));
+
+export function sourceFileResponseToUint8Array(response: { readonly data: string; } | null | undefined): Uint8Array | undefined {
+    return response ? base64ToUint8Array(response.data) : undefined;
 }

@@ -10,11 +10,12 @@ func _() {
 	var x [1]struct{}
 	_ = x[KindInferred-0]
 	_ = x[KindConfigured-1]
+	_ = x[KindSynthetic-2]
 }
 
-const _Kind_name = "InferredConfigured"
+const _Kind_name = "InferredConfiguredSynthetic"
 
-var _Kind_index = [...]uint8{0, 8, 18}
+var _Kind_index = [...]uint8{0, 8, 18, 27}
 
 func (i Kind) String() string {
 	idx := int(i) - 0

@@ -1,0 +1,70 @@
+//// [tests/cases/compiler/comparisonSameNamedAliases.ts] ////
+
+=== comparisonSameNamedAliases.ts ===
+interface First { first: string }
+>First : Symbol(First, Decl(comparisonSameNamedAliases.ts, 0, 0))
+>first : Symbol(First.first, Decl(comparisonSameNamedAliases.ts, 0, 17))
+
+interface Middle { middle: string }
+>Middle : Symbol(Middle, Decl(comparisonSameNamedAliases.ts, 0, 33))
+>middle : Symbol(Middle.middle, Decl(comparisonSameNamedAliases.ts, 1, 18))
+
+interface ZLast { last: string }
+>ZLast : Symbol(ZLast, Decl(comparisonSameNamedAliases.ts, 1, 35))
+>last : Symbol(ZLast.last, Decl(comparisonSameNamedAliases.ts, 2, 17))
+
+namespace A {
+>A : Symbol(A, Decl(comparisonSameNamedAliases.ts, 2, 32))
+
+    export type Alias<T> = (T extends string ? ZLast : First) & { common: unknown };
+>Alias : Symbol(Alias, Decl(comparisonSameNamedAliases.ts, 4, 13))
+>T : Symbol(T, Decl(comparisonSameNamedAliases.ts, 5, 22))
+>T : Symbol(T, Decl(comparisonSameNamedAliases.ts, 5, 22))
+>ZLast : Symbol(ZLast, Decl(comparisonSameNamedAliases.ts, 1, 35))
+>First : Symbol(First, Decl(comparisonSameNamedAliases.ts, 0, 0))
+>common : Symbol(common, Decl(comparisonSameNamedAliases.ts, 5, 65))
+}
+namespace B {
+>B : Symbol(B, Decl(comparisonSameNamedAliases.ts, 6, 1))
+
+    export type Alias<T> = T & { common: unknown };
+>Alias : Symbol(Alias, Decl(comparisonSameNamedAliases.ts, 7, 13))
+>T : Symbol(T, Decl(comparisonSameNamedAliases.ts, 8, 22))
+>T : Symbol(T, Decl(comparisonSameNamedAliases.ts, 8, 22))
+>common : Symbol(common, Decl(comparisonSameNamedAliases.ts, 8, 32))
+}
+
+declare const a: A.Alias<string>;
+>a : Symbol(a, Decl(comparisonSameNamedAliases.ts, 11, 13))
+>A : Symbol(A, Decl(comparisonSameNamedAliases.ts, 2, 32))
+>Alias : Symbol(A.Alias, Decl(comparisonSameNamedAliases.ts, 4, 13))
+
+declare const b: A.Alias<number>;
+>b : Symbol(b, Decl(comparisonSameNamedAliases.ts, 12, 13))
+>A : Symbol(A, Decl(comparisonSameNamedAliases.ts, 2, 32))
+>Alias : Symbol(A.Alias, Decl(comparisonSameNamedAliases.ts, 4, 13))
+
+declare const c: B.Alias<Middle>;
+>c : Symbol(c, Decl(comparisonSameNamedAliases.ts, 13, 13))
+>B : Symbol(B, Decl(comparisonSameNamedAliases.ts, 6, 1))
+>Alias : Symbol(B.Alias, Decl(comparisonSameNamedAliases.ts, 7, 13))
+>Middle : Symbol(Middle, Decl(comparisonSameNamedAliases.ts, 0, 33))
+
+export const values = [a, b, c];
+>values : Symbol(values, Decl(comparisonSameNamedAliases.ts, 14, 12))
+>a : Symbol(a, Decl(comparisonSameNamedAliases.ts, 11, 13))
+>b : Symbol(b, Decl(comparisonSameNamedAliases.ts, 12, 13))
+>c : Symbol(c, Decl(comparisonSameNamedAliases.ts, 13, 13))
+
+export const reversed = [c, b, a];
+>reversed : Symbol(reversed, Decl(comparisonSameNamedAliases.ts, 15, 12))
+>c : Symbol(c, Decl(comparisonSameNamedAliases.ts, 13, 13))
+>b : Symbol(b, Decl(comparisonSameNamedAliases.ts, 12, 13))
+>a : Symbol(a, Decl(comparisonSameNamedAliases.ts, 11, 13))
+
+export const shuffled = [b, a, c];
+>shuffled : Symbol(shuffled, Decl(comparisonSameNamedAliases.ts, 16, 12))
+>b : Symbol(b, Decl(comparisonSameNamedAliases.ts, 12, 13))
+>a : Symbol(a, Decl(comparisonSameNamedAliases.ts, 11, 13))
+>c : Symbol(c, Decl(comparisonSameNamedAliases.ts, 13, 13))
+

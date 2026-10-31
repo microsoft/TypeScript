@@ -1,6 +1,6 @@
 // @target: es2015
 // @allowJs: true
-// @outFile: out_1.js
+// @outDir: out
 // @filename: jsDocOptionality.js
 function MyClass() {
   this.prop = null;

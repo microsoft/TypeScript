@@ -1,0 +1,48 @@
+//// [tests/cases/compiler/declarationEmitPrivateMethodSignatures.ts] ////
+
+=== a.ts ===
+interface A<T> { private a(): boolean {} }
+>A : Symbol(A, Decl(a.ts, 0, 0))
+>T : Symbol(T, Decl(a.ts, 0, 12))
+>a : Symbol(A.a, Decl(a.ts, 0, 16))
+
+interface B {
+>B : Symbol(B, Decl(a.ts, 0, 42))
+
+    /** Method documentation. */
+    private a<T>(x: T): T;
+>a : Symbol(B.a, Decl(a.ts, 2, 13))
+>T : Symbol(T, Decl(a.ts, 4, 14))
+>x : Symbol(x, Decl(a.ts, 4, 17))
+>T : Symbol(T, Decl(a.ts, 4, 14))
+>T : Symbol(T, Decl(a.ts, 4, 14))
+
+    private b(x: string): string;
+>b : Symbol(B.b, Decl(a.ts, 4, 26), Decl(a.ts, 5, 33))
+>x : Symbol(x, Decl(a.ts, 5, 14))
+
+    private b(x: number): number;
+>b : Symbol(B.b, Decl(a.ts, 4, 26), Decl(a.ts, 5, 33))
+>x : Symbol(x, Decl(a.ts, 6, 14))
+
+    private c?(): boolean;
+>c : Symbol(B.c, Decl(a.ts, 6, 33))
+}
+
+type C = {
+>C : Symbol(C, Decl(a.ts, 8, 1))
+
+    /** Method documentation. */
+    private a(): boolean;
+>a : Symbol(a, Decl(a.ts, 10, 10))
+
+    private b(x: string): string;
+>b : Symbol(b, Decl(a.ts, 12, 25), Decl(a.ts, 13, 33))
+>x : Symbol(x, Decl(a.ts, 13, 14))
+
+    private b(x: number): number;
+>b : Symbol(b, Decl(a.ts, 12, 25), Decl(a.ts, 13, 33))
+>x : Symbol(x, Decl(a.ts, 14, 14))
+
+};
+

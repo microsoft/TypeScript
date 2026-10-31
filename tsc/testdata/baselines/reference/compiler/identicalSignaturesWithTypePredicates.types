@@ -1,0 +1,19 @@
+//// [tests/cases/compiler/identicalSignaturesWithTypePredicates.ts] ////
+
+=== identicalSignaturesWithTypePredicates.ts ===
+declare var isString: (x: unknown) => x is string;
+>isString : (x: unknown) => x is string
+>x : unknown
+
+declare var isString: (x: unknown) => boolean;
+>isString : (x: unknown) => x is string
+>x : unknown
+
+declare var isNumber: (x: unknown) => x is number;
+>isNumber : (x: unknown) => x is number
+>x : unknown
+
+declare var isNumber: (x: unknown) => x is number;
+>isNumber : (x: unknown) => x is number
+>x : unknown
+

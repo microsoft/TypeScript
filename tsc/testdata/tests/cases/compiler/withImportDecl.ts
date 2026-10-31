@@ -1,6 +1,6 @@
 // @target: es2015
 // @strict: false
-//@module: amd
+//@module: commonjs
 // @declaration: true
 // @Filename: withImportDecl_0.ts
 export class A { foo: string; }

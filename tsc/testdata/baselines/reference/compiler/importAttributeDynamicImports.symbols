@@ -1,0 +1,95 @@
+//// [tests/cases/compiler/importAttributeDynamicImports.ts] ////
+
+=== /types.d.ts ===
+declare module "*.resource" {
+>"*.resource" : Symbol("*.resource", Decl(types.d.ts, 0, 0))
+
+    export const kind: "plain";
+>kind : Symbol(kind, Decl(types.d.ts, 1, 16))
+}
+
+declare module "typed/*.resource" with { type: "text" } {
+>"typed/*.resource" : Symbol("typed/*.resource", Decl(types.d.ts, 2, 1))
+>type : Symbol(type, Decl(types.d.ts, 4, 40))
+
+    export const kind: "text";
+>kind : Symbol(kind, Decl(types.d.ts, 5, 16))
+}
+
+=== /index.ts ===
+async function test() {
+>test : Symbol(test, Decl(index.ts, 0, 0))
+
+    const plain = await import("plain.resource");
+>plain : Symbol(plain, Decl(index.ts, 1, 9))
+>"plain.resource" : Symbol("*.resource", Decl(types.d.ts, 0, 0))
+
+    const plainKind: "plain" = plain.kind;
+>plainKind : Symbol(plainKind, Decl(index.ts, 2, 9))
+>plain.kind : Symbol(kind, Decl(types.d.ts, 1, 16))
+>plain : Symbol(plain, Decl(index.ts, 1, 9))
+>kind : Symbol(kind, Decl(types.d.ts, 1, 16))
+
+    const attributed = await import("typed/file.resource", { with: { type: "text" } });
+>attributed : Symbol(attributed, Decl(index.ts, 4, 9))
+>"typed/file.resource" : Symbol("typed/*.resource", Decl(types.d.ts, 2, 1))
+>with : Symbol(with, Decl(index.ts, 4, 60))
+>type : Symbol(type, Decl(index.ts, 4, 68))
+
+    const attributedKind: "text" = attributed.kind;
+>attributedKind : Symbol(attributedKind, Decl(index.ts, 5, 9))
+>attributed.kind : Symbol(kind, Decl(types.d.ts, 5, 16))
+>attributed : Symbol(attributed, Decl(index.ts, 4, 9))
+>kind : Symbol(kind, Decl(types.d.ts, 5, 16))
+
+    const parenthesized = await import("typed/parenthesized.resource", ({ with: { type: "text" } }));
+>parenthesized : Symbol(parenthesized, Decl(index.ts, 7, 9))
+>"typed/parenthesized.resource" : Symbol("typed/*.resource", Decl(types.d.ts, 2, 1))
+>with : Symbol(with, Decl(index.ts, 7, 73))
+>type : Symbol(type, Decl(index.ts, 7, 81))
+
+    const parenthesizedKind: "text" = parenthesized.kind;
+>parenthesizedKind : Symbol(parenthesizedKind, Decl(index.ts, 8, 9))
+>parenthesized.kind : Symbol(kind, Decl(types.d.ts, 5, 16))
+>parenthesized : Symbol(parenthesized, Decl(index.ts, 7, 9))
+>kind : Symbol(kind, Decl(types.d.ts, 5, 16))
+
+    const options = { with: { type: "text" as const } };
+>options : Symbol(options, Decl(index.ts, 10, 9))
+>with : Symbol(with, Decl(index.ts, 10, 21))
+>type : Symbol(type, Decl(index.ts, 10, 29))
+>const : Symbol(const)
+
+    const attributedWithOptions = await import("typed/other.resource", options);
+>attributedWithOptions : Symbol(attributedWithOptions, Decl(index.ts, 11, 9))
+>"typed/other.resource" : Symbol("typed/*.resource", Decl(types.d.ts, 2, 1))
+>options : Symbol(options, Decl(index.ts, 10, 9))
+
+    const attributedWithOptionsKind: "text" = attributedWithOptions.kind;
+>attributedWithOptionsKind : Symbol(attributedWithOptionsKind, Decl(index.ts, 12, 9))
+>attributedWithOptions.kind : Symbol(kind, Decl(types.d.ts, 5, 16))
+>attributedWithOptions : Symbol(attributedWithOptions, Decl(index.ts, 11, 9))
+>kind : Symbol(kind, Decl(types.d.ts, 5, 16))
+
+    const withoutAttributes = await import("typed/unattributed.resource");
+>withoutAttributes : Symbol(withoutAttributes, Decl(index.ts, 14, 9))
+>"typed/unattributed.resource" : Symbol("*.resource", Decl(types.d.ts, 0, 0))
+
+    const withoutAttributesKind: "plain" = withoutAttributes.kind;
+>withoutAttributesKind : Symbol(withoutAttributesKind, Decl(index.ts, 15, 9))
+>withoutAttributes.kind : Symbol(kind, Decl(types.d.ts, 1, 16))
+>withoutAttributes : Symbol(withoutAttributes, Decl(index.ts, 14, 9))
+>kind : Symbol(kind, Decl(types.d.ts, 1, 16))
+
+    const unmatchedAttributes = await import("fallback.resource", { with: { type: "unknown" } });
+>unmatchedAttributes : Symbol(unmatchedAttributes, Decl(index.ts, 17, 9))
+>"fallback.resource" : Symbol("*.resource", Decl(types.d.ts, 0, 0))
+>with : Symbol(with, Decl(index.ts, 17, 67))
+>type : Symbol(type, Decl(index.ts, 17, 75))
+
+    const unmatchedAttributesKind: "plain" = unmatchedAttributes.kind;
+>unmatchedAttributesKind : Symbol(unmatchedAttributesKind, Decl(index.ts, 18, 9))
+>unmatchedAttributes.kind : Symbol(kind, Decl(types.d.ts, 1, 16))
+>unmatchedAttributes : Symbol(unmatchedAttributes, Decl(index.ts, 17, 9))
+>kind : Symbol(kind, Decl(types.d.ts, 1, 16))
+}

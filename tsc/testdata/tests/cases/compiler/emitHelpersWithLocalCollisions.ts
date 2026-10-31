@@ -1,5 +1,5 @@
 // @target: es6
-// @module: *
+// @module: *, -amd
 // @experimentalDecorators: true
 // @filename: a.ts
 // @noTypesAndSymbols: true

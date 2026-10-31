@@ -1,4 +1,4 @@
-// @module: amd
+// @module: commonjs
 // @declaration: true
 // @target: es5, es2015
 namespace MsPortalFx.ViewModels.Dialogs {

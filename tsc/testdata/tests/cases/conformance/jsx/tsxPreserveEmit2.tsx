@@ -1,4 +1,4 @@
-//@module: amd
+//@module: commonjs
 //@jsx: preserve
 //@target: ES5, ES2015
 
