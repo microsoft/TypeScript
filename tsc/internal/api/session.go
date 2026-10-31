@@ -4954,7 +4954,7 @@ func (s *Session) handleGetJSDocTags(ctx context.Context, params *CheckerSymbolP
 		return nil, nil
 	}
 
-	tags := ls.GetSymbolJSDocTags(symbol)
+	tags := ls.GetSymbolJSDocTags(setup.checker, symbol)
 	if len(tags) == 0 {
 		return nil, nil
 	}
