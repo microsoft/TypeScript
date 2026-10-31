@@ -1220,7 +1220,10 @@ func parseJsonConfigFileContentWorker(
 				}
 				diagnosticMessage := diagnostics.The_files_list_in_config_file_0_is_empty
 				nodeValue := ForEachTsConfigPropArray(sourceFile.SourceFile, "files", func(property *ast.PropertyAssignment) *ast.Node { return property.Initializer })
-				errors = append(errors, CreateDiagnosticForNodeInSourceFile(sourceFile.SourceFile, nodeValue, diagnosticMessage, fileName))
+				// Prefer a node-anchored diagnostic when the "files" property is present in the AST;
+				// under parse recovery the raw value can still be an empty array while the property
+				// node is missing, so fall back to a compiler diagnostic (matches Strada).
+				errors = append(errors, CreateDiagnosticForNodeInSourceFileOrCompilerDiagnostic(sourceFile.SourceFile, nodeValue, diagnosticMessage, fileName))
 			} else {
 				errors = append(errors, ast.NewCompilerDiagnostic(diagnostics.The_files_list_in_config_file_0_is_empty, configFileName))
 			}
