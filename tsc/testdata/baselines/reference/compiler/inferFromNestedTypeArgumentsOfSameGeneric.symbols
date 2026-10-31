@@ -1,0 +1,233 @@
+//// [tests/cases/compiler/inferFromNestedTypeArgumentsOfSameGeneric.ts] ////
+
+=== inferFromNestedTypeArgumentsOfSameGeneric.ts ===
+// Repro from #64757. Inference from the type arguments of two references to the
+// same generic type must not stop when that type also appears nested inside
+// one of its own arguments: `Box<() => Box<A, R>>` is not a cycle, and the
+// inner `R` must still be inferred. These shapes come from Effect's
+// `HttpRouter.middleware`, Prisma's nested `select` results and
+// `Saga.toLayer` of alchemy.run.
+
+interface Eff<out A, out R> {
+>Eff : Symbol(Eff, Decl(inferFromNestedTypeArgumentsOfSameGeneric.ts, 0, 0))
+>A : Symbol(A, Decl(inferFromNestedTypeArgumentsOfSameGeneric.ts, 7, 14))
+>R : Symbol(R, Decl(inferFromNestedTypeArgumentsOfSameGeneric.ts, 7, 20))
+
+  readonly _a: A;
+>_a : Symbol(Eff._a, Decl(inferFromNestedTypeArgumentsOfSameGeneric.ts, 7, 29))
+>A : Symbol(A, Decl(inferFromNestedTypeArgumentsOfSameGeneric.ts, 7, 14))
+
+  readonly _r: R;
+>_r : Symbol(Eff._r, Decl(inferFromNestedTypeArgumentsOfSameGeneric.ts, 8, 17))
+>R : Symbol(R, Decl(inferFromNestedTypeArgumentsOfSameGeneric.ts, 7, 20))
+
+  [Symbol.iterator](): Iterator<Eff<A, R>, A>;
+>[Symbol.iterator] : Symbol(Eff[Symbol.iterator], Decl(inferFromNestedTypeArgumentsOfSameGeneric.ts, 9, 17))
+>Symbol.iterator : Symbol(SymbolConstructor.iterator, Decl(lib.es2015.iterable.d.ts, --, --))
+>Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2019.symbol.d.ts, --, --))
+>iterator : Symbol(SymbolConstructor.iterator, Decl(lib.es2015.iterable.d.ts, --, --))
+>Iterator : Symbol(Iterator, Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2025.iterator.d.ts, --, --))
+>Eff : Symbol(Eff, Decl(inferFromNestedTypeArgumentsOfSameGeneric.ts, 0, 0))
+>A : Symbol(A, Decl(inferFromNestedTypeArgumentsOfSameGeneric.ts, 7, 14))
+>R : Symbol(R, Decl(inferFromNestedTypeArgumentsOfSameGeneric.ts, 7, 20))
+>A : Symbol(A, Decl(inferFromNestedTypeArgumentsOfSameGeneric.ts, 7, 14))
+}
+type ReqOf<E> = [E] extends [never] ? never : [E] extends [Eff<any, infer R>] ? R : never;
+>ReqOf : Symbol(ReqOf, Decl(inferFromNestedTypeArgumentsOfSameGeneric.ts, 11, 1))
+>E : Symbol(E, Decl(inferFromNestedTypeArgumentsOfSameGeneric.ts, 12, 11))
+>E : Symbol(E, Decl(inferFromNestedTypeArgumentsOfSameGeneric.ts, 12, 11))
+>E : Symbol(E, Decl(inferFromNestedTypeArgumentsOfSameGeneric.ts, 12, 11))
+>Eff : Symbol(Eff, Decl(inferFromNestedTypeArgumentsOfSameGeneric.ts, 0, 0))
+>R : Symbol(R, Decl(inferFromNestedTypeArgumentsOfSameGeneric.ts, 12, 73))
+>R : Symbol(R, Decl(inferFromNestedTypeArgumentsOfSameGeneric.ts, 12, 73))
+
+declare function fn<E extends Eff<any, any>, A, Args extends any[]>(
+>fn : Symbol(fn, Decl(inferFromNestedTypeArgumentsOfSameGeneric.ts, 12, 90))
+>E : Symbol(E, Decl(inferFromNestedTypeArgumentsOfSameGeneric.ts, 13, 20))
+>Eff : Symbol(Eff, Decl(inferFromNestedTypeArgumentsOfSameGeneric.ts, 0, 0))
+>A : Symbol(A, Decl(inferFromNestedTypeArgumentsOfSameGeneric.ts, 13, 44))
+>Args : Symbol(Args, Decl(inferFromNestedTypeArgumentsOfSameGeneric.ts, 13, 47))
+
+  body: (...args: Args) => Generator<E, A, any>,
+>body : Symbol(body, Decl(inferFromNestedTypeArgumentsOfSameGeneric.ts, 13, 68))
+>args : Symbol(args, Decl(inferFromNestedTypeArgumentsOfSameGeneric.ts, 14, 9))
+>Args : Symbol(Args, Decl(inferFromNestedTypeArgumentsOfSameGeneric.ts, 13, 47))
+>Generator : Symbol(Generator, Decl(lib.es2015.generator.d.ts, --, --))
+>E : Symbol(E, Decl(inferFromNestedTypeArgumentsOfSameGeneric.ts, 13, 20))
+>A : Symbol(A, Decl(inferFromNestedTypeArgumentsOfSameGeneric.ts, 13, 44))
+
+): (...args: Args) => Eff<A, ReqOf<E>>;
+>args : Symbol(args, Decl(inferFromNestedTypeArgumentsOfSameGeneric.ts, 15, 4))
+>Args : Symbol(Args, Decl(inferFromNestedTypeArgumentsOfSameGeneric.ts, 13, 47))
+>Eff : Symbol(Eff, Decl(inferFromNestedTypeArgumentsOfSameGeneric.ts, 0, 0))
+>A : Symbol(A, Decl(inferFromNestedTypeArgumentsOfSameGeneric.ts, 13, 44))
+>ReqOf : Symbol(ReqOf, Decl(inferFromNestedTypeArgumentsOfSameGeneric.ts, 11, 1))
+>E : Symbol(E, Decl(inferFromNestedTypeArgumentsOfSameGeneric.ts, 13, 20))
+
+declare function succeed<A>(a: A): Eff<A, never>;
+>succeed : Symbol(succeed, Decl(inferFromNestedTypeArgumentsOfSameGeneric.ts, 15, 39))
+>A : Symbol(A, Decl(inferFromNestedTypeArgumentsOfSameGeneric.ts, 16, 25))
+>a : Symbol(a, Decl(inferFromNestedTypeArgumentsOfSameGeneric.ts, 16, 28))
+>A : Symbol(A, Decl(inferFromNestedTypeArgumentsOfSameGeneric.ts, 16, 25))
+>Eff : Symbol(Eff, Decl(inferFromNestedTypeArgumentsOfSameGeneric.ts, 0, 0))
+>A : Symbol(A, Decl(inferFromNestedTypeArgumentsOfSameGeneric.ts, 16, 25))
+
+interface Request {
+>Request : Symbol(Request, Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --), Decl(inferFromNestedTypeArgumentsOfSameGeneric.ts, 16, 49))
+
+  readonly url: string;
+>url : Symbol(Request.url, Decl(lib.dom.d.ts, --, --), Decl(inferFromNestedTypeArgumentsOfSameGeneric.ts, 18, 19))
+}
+declare const request: Eff<Request, Request>;
+>request : Symbol(request, Decl(inferFromNestedTypeArgumentsOfSameGeneric.ts, 21, 13))
+>Eff : Symbol(Eff, Decl(inferFromNestedTypeArgumentsOfSameGeneric.ts, 0, 0))
+>Request : Symbol(Request, Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --), Decl(inferFromNestedTypeArgumentsOfSameGeneric.ts, 16, 49))
+>Request : Symbol(Request, Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --), Decl(inferFromNestedTypeArgumentsOfSameGeneric.ts, 16, 49))
+
+// Shape 1: a call signature from an instantiated generic type alias.
+type Make<P> = <R>(m: Eff<() => Eff<string, R>, never>) => [R];
+>Make : Symbol(Make, Decl(inferFromNestedTypeArgumentsOfSameGeneric.ts, 21, 45))
+>P : Symbol(P, Decl(inferFromNestedTypeArgumentsOfSameGeneric.ts, 24, 10))
+>R : Symbol(R, Decl(inferFromNestedTypeArgumentsOfSameGeneric.ts, 24, 16))
+>m : Symbol(m, Decl(inferFromNestedTypeArgumentsOfSameGeneric.ts, 24, 19))
+>Eff : Symbol(Eff, Decl(inferFromNestedTypeArgumentsOfSameGeneric.ts, 0, 0))
+>Eff : Symbol(Eff, Decl(inferFromNestedTypeArgumentsOfSameGeneric.ts, 0, 0))
+>R : Symbol(R, Decl(inferFromNestedTypeArgumentsOfSameGeneric.ts, 24, 16))
+>R : Symbol(R, Decl(inferFromNestedTypeArgumentsOfSameGeneric.ts, 24, 16))
+
+declare const make: Make<unknown>;
+>make : Symbol(make, Decl(inferFromNestedTypeArgumentsOfSameGeneric.ts, 25, 13))
+>Make : Symbol(Make, Decl(inferFromNestedTypeArgumentsOfSameGeneric.ts, 21, 45))
+
+const r1 = make(succeed(fn(function* () {
+>r1 : Symbol(r1, Decl(inferFromNestedTypeArgumentsOfSameGeneric.ts, 26, 5))
+>make : Symbol(make, Decl(inferFromNestedTypeArgumentsOfSameGeneric.ts, 25, 13))
+>succeed : Symbol(succeed, Decl(inferFromNestedTypeArgumentsOfSameGeneric.ts, 15, 39))
+>fn : Symbol(fn, Decl(inferFromNestedTypeArgumentsOfSameGeneric.ts, 12, 90))
+
+  yield* request;
+>request : Symbol(request, Decl(inferFromNestedTypeArgumentsOfSameGeneric.ts, 21, 13))
+
+  return "";
+})));
+const check1: [Request] = r1;
+>check1 : Symbol(check1, Decl(inferFromNestedTypeArgumentsOfSameGeneric.ts, 30, 5))
+>Request : Symbol(Request, Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --), Decl(inferFromNestedTypeArgumentsOfSameGeneric.ts, 16, 49))
+>r1 : Symbol(r1, Decl(inferFromNestedTypeArgumentsOfSameGeneric.ts, 26, 5))
+
+// Shape 2: a method of an instantiated generic interface, where the outer
+// type argument appears inside the nested type.
+interface S<F> {
+>S : Symbol(S, Decl(inferFromNestedTypeArgumentsOfSameGeneric.ts, 30, 29))
+>F : Symbol(F, Decl(inferFromNestedTypeArgumentsOfSameGeneric.ts, 34, 12))
+
+  toLayer<Req>(build: Eff<(p: { n: number }) => Eff<F, Req>, never>): Req;
+>toLayer : Symbol(S.toLayer, Decl(inferFromNestedTypeArgumentsOfSameGeneric.ts, 34, 16))
+>Req : Symbol(Req, Decl(inferFromNestedTypeArgumentsOfSameGeneric.ts, 35, 10))
+>build : Symbol(build, Decl(inferFromNestedTypeArgumentsOfSameGeneric.ts, 35, 15))
+>Eff : Symbol(Eff, Decl(inferFromNestedTypeArgumentsOfSameGeneric.ts, 0, 0))
+>p : Symbol(p, Decl(inferFromNestedTypeArgumentsOfSameGeneric.ts, 35, 27))
+>n : Symbol(n, Decl(inferFromNestedTypeArgumentsOfSameGeneric.ts, 35, 31))
+>Eff : Symbol(Eff, Decl(inferFromNestedTypeArgumentsOfSameGeneric.ts, 0, 0))
+>F : Symbol(F, Decl(inferFromNestedTypeArgumentsOfSameGeneric.ts, 34, 12))
+>Req : Symbol(Req, Decl(inferFromNestedTypeArgumentsOfSameGeneric.ts, 35, 10))
+>Req : Symbol(Req, Decl(inferFromNestedTypeArgumentsOfSameGeneric.ts, 35, 10))
+}
+declare const s: S<{ p: boolean }>;
+>s : Symbol(s, Decl(inferFromNestedTypeArgumentsOfSameGeneric.ts, 37, 13))
+>S : Symbol(S, Decl(inferFromNestedTypeArgumentsOfSameGeneric.ts, 30, 29))
+>p : Symbol(p, Decl(inferFromNestedTypeArgumentsOfSameGeneric.ts, 37, 20))
+
+const r2 = s.toLayer(succeed(fn(function* ({ n }) { return { p: n > 0 }; })));
+>r2 : Symbol(r2, Decl(inferFromNestedTypeArgumentsOfSameGeneric.ts, 38, 5))
+>s.toLayer : Symbol(S.toLayer, Decl(inferFromNestedTypeArgumentsOfSameGeneric.ts, 34, 16))
+>s : Symbol(s, Decl(inferFromNestedTypeArgumentsOfSameGeneric.ts, 37, 13))
+>toLayer : Symbol(S.toLayer, Decl(inferFromNestedTypeArgumentsOfSameGeneric.ts, 34, 16))
+>succeed : Symbol(succeed, Decl(inferFromNestedTypeArgumentsOfSameGeneric.ts, 15, 39))
+>fn : Symbol(fn, Decl(inferFromNestedTypeArgumentsOfSameGeneric.ts, 12, 90))
+>n : Symbol(n, Decl(inferFromNestedTypeArgumentsOfSameGeneric.ts, 38, 44))
+>p : Symbol(p, Decl(inferFromNestedTypeArgumentsOfSameGeneric.ts, 38, 60))
+>n : Symbol(n, Decl(inferFromNestedTypeArgumentsOfSameGeneric.ts, 38, 44))
+
+const check2: never = r2;
+>check2 : Symbol(check2, Decl(inferFromNestedTypeArgumentsOfSameGeneric.ts, 39, 5))
+>r2 : Symbol(r2, Decl(inferFromNestedTypeArgumentsOfSameGeneric.ts, 38, 5))
+
+const r3 = s.toLayer(succeed(fn(function* ({ n }) {
+>r3 : Symbol(r3, Decl(inferFromNestedTypeArgumentsOfSameGeneric.ts, 40, 5))
+>s.toLayer : Symbol(S.toLayer, Decl(inferFromNestedTypeArgumentsOfSameGeneric.ts, 34, 16))
+>s : Symbol(s, Decl(inferFromNestedTypeArgumentsOfSameGeneric.ts, 37, 13))
+>toLayer : Symbol(S.toLayer, Decl(inferFromNestedTypeArgumentsOfSameGeneric.ts, 34, 16))
+>succeed : Symbol(succeed, Decl(inferFromNestedTypeArgumentsOfSameGeneric.ts, 15, 39))
+>fn : Symbol(fn, Decl(inferFromNestedTypeArgumentsOfSameGeneric.ts, 12, 90))
+>n : Symbol(n, Decl(inferFromNestedTypeArgumentsOfSameGeneric.ts, 40, 44))
+
+  yield* request;
+>request : Symbol(request, Decl(inferFromNestedTypeArgumentsOfSameGeneric.ts, 21, 13))
+
+  return { p: n > 0 };
+>p : Symbol(p, Decl(inferFromNestedTypeArgumentsOfSameGeneric.ts, 42, 10))
+>n : Symbol(n, Decl(inferFromNestedTypeArgumentsOfSameGeneric.ts, 40, 44))
+
+})));
+const check3: Request = r3;
+>check3 : Symbol(check3, Decl(inferFromNestedTypeArgumentsOfSameGeneric.ts, 44, 5))
+>Request : Symbol(Request, Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --), Decl(inferFromNestedTypeArgumentsOfSameGeneric.ts, 16, 49))
+>r3 : Symbol(r3, Decl(inferFromNestedTypeArgumentsOfSameGeneric.ts, 40, 5))
+
+// Shape 3: a generic alias as a parameter type, with the result nested two
+// levels deep (cut down from Prisma's nested `select` results).
+type Payload<T> = { readonly data: T };
+>Payload : Symbol(Payload, Decl(inferFromNestedTypeArgumentsOfSameGeneric.ts, 44, 27))
+>T : Symbol(T, Decl(inferFromNestedTypeArgumentsOfSameGeneric.ts, 48, 13))
+>data : Symbol(data, Decl(inferFromNestedTypeArgumentsOfSameGeneric.ts, 48, 19))
+>T : Symbol(T, Decl(inferFromNestedTypeArgumentsOfSameGeneric.ts, 48, 13))
+
+type Selected<T, S> = S extends { select: infer Sel } ? { [K in keyof Sel & keyof T]: T[K] } : T;
+>Selected : Symbol(Selected, Decl(inferFromNestedTypeArgumentsOfSameGeneric.ts, 48, 39))
+>T : Symbol(T, Decl(inferFromNestedTypeArgumentsOfSameGeneric.ts, 49, 14))
+>S : Symbol(S, Decl(inferFromNestedTypeArgumentsOfSameGeneric.ts, 49, 16))
+>S : Symbol(S, Decl(inferFromNestedTypeArgumentsOfSameGeneric.ts, 49, 16))
+>select : Symbol(select, Decl(inferFromNestedTypeArgumentsOfSameGeneric.ts, 49, 33))
+>Sel : Symbol(Sel, Decl(inferFromNestedTypeArgumentsOfSameGeneric.ts, 49, 47))
+>K : Symbol(K, Decl(inferFromNestedTypeArgumentsOfSameGeneric.ts, 49, 59))
+>Sel : Symbol(Sel, Decl(inferFromNestedTypeArgumentsOfSameGeneric.ts, 49, 47))
+>T : Symbol(T, Decl(inferFromNestedTypeArgumentsOfSameGeneric.ts, 49, 14))
+>T : Symbol(T, Decl(inferFromNestedTypeArgumentsOfSameGeneric.ts, 49, 14))
+>K : Symbol(K, Decl(inferFromNestedTypeArgumentsOfSameGeneric.ts, 49, 59))
+>T : Symbol(T, Decl(inferFromNestedTypeArgumentsOfSameGeneric.ts, 49, 14))
+
+declare function viaAlias<T, S>(p: Payload<Payload<Selected<T, S>>>, s: S): Selected<T, S>;
+>viaAlias : Symbol(viaAlias, Decl(inferFromNestedTypeArgumentsOfSameGeneric.ts, 49, 97))
+>T : Symbol(T, Decl(inferFromNestedTypeArgumentsOfSameGeneric.ts, 50, 26))
+>S : Symbol(S, Decl(inferFromNestedTypeArgumentsOfSameGeneric.ts, 50, 28))
+>p : Symbol(p, Decl(inferFromNestedTypeArgumentsOfSameGeneric.ts, 50, 32))
+>Payload : Symbol(Payload, Decl(inferFromNestedTypeArgumentsOfSameGeneric.ts, 44, 27))
+>Payload : Symbol(Payload, Decl(inferFromNestedTypeArgumentsOfSameGeneric.ts, 44, 27))
+>Selected : Symbol(Selected, Decl(inferFromNestedTypeArgumentsOfSameGeneric.ts, 48, 39))
+>T : Symbol(T, Decl(inferFromNestedTypeArgumentsOfSameGeneric.ts, 50, 26))
+>S : Symbol(S, Decl(inferFromNestedTypeArgumentsOfSameGeneric.ts, 50, 28))
+>s : Symbol(s, Decl(inferFromNestedTypeArgumentsOfSameGeneric.ts, 50, 68))
+>S : Symbol(S, Decl(inferFromNestedTypeArgumentsOfSameGeneric.ts, 50, 28))
+>Selected : Symbol(Selected, Decl(inferFromNestedTypeArgumentsOfSameGeneric.ts, 48, 39))
+>T : Symbol(T, Decl(inferFromNestedTypeArgumentsOfSameGeneric.ts, 50, 26))
+>S : Symbol(S, Decl(inferFromNestedTypeArgumentsOfSameGeneric.ts, 50, 28))
+
+declare const p: Payload<Payload<{ id: number }>>;
+>p : Symbol(p, Decl(inferFromNestedTypeArgumentsOfSameGeneric.ts, 51, 13))
+>Payload : Symbol(Payload, Decl(inferFromNestedTypeArgumentsOfSameGeneric.ts, 44, 27))
+>Payload : Symbol(Payload, Decl(inferFromNestedTypeArgumentsOfSameGeneric.ts, 44, 27))
+>id : Symbol(id, Decl(inferFromNestedTypeArgumentsOfSameGeneric.ts, 51, 34))
+
+const r4 = viaAlias(p, { select: { id: true } });
+>r4 : Symbol(r4, Decl(inferFromNestedTypeArgumentsOfSameGeneric.ts, 52, 5))
+>viaAlias : Symbol(viaAlias, Decl(inferFromNestedTypeArgumentsOfSameGeneric.ts, 49, 97))
+>p : Symbol(p, Decl(inferFromNestedTypeArgumentsOfSameGeneric.ts, 51, 13))
+>select : Symbol(select, Decl(inferFromNestedTypeArgumentsOfSameGeneric.ts, 52, 24))
+>id : Symbol(id, Decl(inferFromNestedTypeArgumentsOfSameGeneric.ts, 52, 34))
+
+const check4: { id: number } = r4;
+>check4 : Symbol(check4, Decl(inferFromNestedTypeArgumentsOfSameGeneric.ts, 53, 5))
+>id : Symbol(id, Decl(inferFromNestedTypeArgumentsOfSameGeneric.ts, 53, 15))
+>r4 : Symbol(r4, Decl(inferFromNestedTypeArgumentsOfSameGeneric.ts, 52, 5))
+

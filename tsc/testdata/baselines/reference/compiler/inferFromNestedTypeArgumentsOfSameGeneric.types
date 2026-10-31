@@ -1,0 +1,176 @@
+//// [tests/cases/compiler/inferFromNestedTypeArgumentsOfSameGeneric.ts] ////
+
+=== inferFromNestedTypeArgumentsOfSameGeneric.ts ===
+// Repro from #64757. Inference from the type arguments of two references to the
+// same generic type must not stop when that type also appears nested inside
+// one of its own arguments: `Box<() => Box<A, R>>` is not a cycle, and the
+// inner `R` must still be inferred. These shapes come from Effect's
+// `HttpRouter.middleware`, Prisma's nested `select` results and
+// `Saga.toLayer` of alchemy.run.
+
+interface Eff<out A, out R> {
+  readonly _a: A;
+>_a : A
+
+  readonly _r: R;
+>_r : R
+
+  [Symbol.iterator](): Iterator<Eff<A, R>, A>;
+>[Symbol.iterator] : () => Iterator<Eff<A, R>, A>
+>Symbol.iterator : unique symbol
+>Symbol : SymbolConstructor
+>iterator : unique symbol
+}
+type ReqOf<E> = [E] extends [never] ? never : [E] extends [Eff<any, infer R>] ? R : never;
+>ReqOf : ReqOf<E>
+
+declare function fn<E extends Eff<any, any>, A, Args extends any[]>(
+>fn : <E extends Eff<any, any>, A, Args extends any[]>(body: (...args: Args) => Generator<E, A, any>) => (...args: Args) => Eff<A, ReqOf<E>>
+
+  body: (...args: Args) => Generator<E, A, any>,
+>body : (...args: Args) => Generator<E, A, any>
+>args : Args
+
+): (...args: Args) => Eff<A, ReqOf<E>>;
+>args : Args
+
+declare function succeed<A>(a: A): Eff<A, never>;
+>succeed : <A>(a: A) => Eff<A, never>
+>a : A
+
+interface Request {
+  readonly url: string;
+>url : string
+}
+declare const request: Eff<Request, Request>;
+>request : Eff<Request, Request>
+
+// Shape 1: a call signature from an instantiated generic type alias.
+type Make<P> = <R>(m: Eff<() => Eff<string, R>, never>) => [R];
+>Make : Make<P>
+>m : Eff<() => Eff<string, R>, never>
+
+declare const make: Make<unknown>;
+>make : Make<unknown>
+
+const r1 = make(succeed(fn(function* () {
+>r1 : [Request]
+>make(succeed(fn(function* () {  yield* request;  return "";}))) : [Request]
+>make : Make<unknown>
+>succeed(fn(function* () {  yield* request;  return "";})) : Eff<() => Eff<string, Request>, never>
+>succeed : <A>(a: A) => Eff<A, never>
+>fn(function* () {  yield* request;  return "";}) : () => Eff<string, Request>
+>fn : <E extends Eff<any, any>, A, Args extends any[]>(body: (...args: Args) => Generator<E, A, any>) => (...args: Args) => Eff<A, ReqOf<E>>
+>function* () {  yield* request;  return "";} : () => Generator<Eff<Request, Request>, string, any>
+
+  yield* request;
+>yield* request : Request
+>request : Eff<Request, Request>
+
+  return "";
+>"" : ""
+
+})));
+const check1: [Request] = r1;
+>check1 : [Request]
+>r1 : [Request]
+
+// Shape 2: a method of an instantiated generic interface, where the outer
+// type argument appears inside the nested type.
+interface S<F> {
+  toLayer<Req>(build: Eff<(p: { n: number }) => Eff<F, Req>, never>): Req;
+>toLayer : <Req>(build: Eff<(p: { n: number; }) => Eff<F, Req>, never>) => Req
+>build : Eff<(p: { n: number; }) => Eff<F, Req>, never>
+>p : { n: number; }
+>n : number
+}
+declare const s: S<{ p: boolean }>;
+>s : S<{ p: boolean; }>
+>p : boolean
+
+const r2 = s.toLayer(succeed(fn(function* ({ n }) { return { p: n > 0 }; })));
+>r2 : never
+>s.toLayer(succeed(fn(function* ({ n }) { return { p: n > 0 }; }))) : never
+>s.toLayer : <Req>(build: Eff<(p: { n: number; }) => Eff<{ p: boolean; }, Req>, never>) => Req
+>s : S<{ p: boolean; }>
+>toLayer : <Req>(build: Eff<(p: { n: number; }) => Eff<{ p: boolean; }, Req>, never>) => Req
+>succeed(fn(function* ({ n }) { return { p: n > 0 }; })) : Eff<(args_0: { n: number; }) => Eff<{ p: boolean; }, never>, never>
+>succeed : <A>(a: A) => Eff<A, never>
+>fn(function* ({ n }) { return { p: n > 0 }; }) : (args_0: { n: number; }) => Eff<{ p: boolean; }, never>
+>fn : <E extends Eff<any, any>, A, Args extends any[]>(body: (...args: Args) => Generator<E, A, any>) => (...args: Args) => Eff<A, ReqOf<E>>
+>function* ({ n }) { return { p: n > 0 }; } : ({ n }: { n: number; }) => Generator<never, { p: boolean; }, any>
+>n : number
+>{ p: n > 0 } : { p: boolean; }
+>p : boolean
+>n > 0 : boolean
+>n : number
+>0 : 0
+
+const check2: never = r2;
+>check2 : never
+>r2 : never
+
+const r3 = s.toLayer(succeed(fn(function* ({ n }) {
+>r3 : Request
+>s.toLayer(succeed(fn(function* ({ n }) {  yield* request;  return { p: n > 0 };}))) : Request
+>s.toLayer : <Req>(build: Eff<(p: { n: number; }) => Eff<{ p: boolean; }, Req>, never>) => Req
+>s : S<{ p: boolean; }>
+>toLayer : <Req>(build: Eff<(p: { n: number; }) => Eff<{ p: boolean; }, Req>, never>) => Req
+>succeed(fn(function* ({ n }) {  yield* request;  return { p: n > 0 };})) : Eff<(args_0: { n: number; }) => Eff<{ p: boolean; }, Request>, never>
+>succeed : <A>(a: A) => Eff<A, never>
+>fn(function* ({ n }) {  yield* request;  return { p: n > 0 };}) : (args_0: { n: number; }) => Eff<{ p: boolean; }, Request>
+>fn : <E extends Eff<any, any>, A, Args extends any[]>(body: (...args: Args) => Generator<E, A, any>) => (...args: Args) => Eff<A, ReqOf<E>>
+>function* ({ n }) {  yield* request;  return { p: n > 0 };} : ({ n }: { n: number; }) => Generator<Eff<Request, Request>, { p: boolean; }, any>
+>n : number
+
+  yield* request;
+>yield* request : Request
+>request : Eff<Request, Request>
+
+  return { p: n > 0 };
+>{ p: n > 0 } : { p: boolean; }
+>p : boolean
+>n > 0 : boolean
+>n : number
+>0 : 0
+
+})));
+const check3: Request = r3;
+>check3 : Request
+>r3 : Request
+
+// Shape 3: a generic alias as a parameter type, with the result nested two
+// levels deep (cut down from Prisma's nested `select` results).
+type Payload<T> = { readonly data: T };
+>Payload : Payload<T>
+>data : T
+
+type Selected<T, S> = S extends { select: infer Sel } ? { [K in keyof Sel & keyof T]: T[K] } : T;
+>Selected : Selected<T, S>
+>select : Sel
+
+declare function viaAlias<T, S>(p: Payload<Payload<Selected<T, S>>>, s: S): Selected<T, S>;
+>viaAlias : <T, S>(p: Payload<Payload<Selected<T, S>>>, s: S) => Selected<T, S>
+>p : Payload<Payload<Selected<T, S>>>
+>s : S
+
+declare const p: Payload<Payload<{ id: number }>>;
+>p : Payload<Payload<{ id: number; }>>
+>id : number
+
+const r4 = viaAlias(p, { select: { id: true } });
+>r4 : { id: number; }
+>viaAlias(p, { select: { id: true } }) : { id: number; }
+>viaAlias : <T, S>(p: Payload<Payload<Selected<T, S>>>, s: S) => Selected<T, S>
+>p : Payload<Payload<{ id: number; }>>
+>{ select: { id: true } } : { select: { id: true; }; }
+>select : { id: true; }
+>{ id: true } : { id: true; }
+>id : true
+>true : true
+
+const check4: { id: number } = r4;
+>check4 : { id: number; }
+>id : number
+>r4 : { id: number; }
+
