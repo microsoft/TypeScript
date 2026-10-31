@@ -48,11 +48,36 @@ const r3 = s.toLayer(succeed(fn(function* ({ n }) {
 })));
 const check3: Request = r3;
 
-// Shape 3: a generic alias as a parameter type, with the result nested two
-// levels deep (cut down from Prisma's nested `select` results).
-type Payload<T> = { readonly data: T };
-type Selected<T, S> = S extends { select: infer Sel } ? { [K in keyof Sel & keyof T]: T[K] } : T;
-declare function viaAlias<T, S>(p: Payload<Payload<Selected<T, S>>>, s: S): Selected<T, S>;
-declare const p: Payload<Payload<{ id: number }>>;
-const r4 = viaAlias(p, { select: { id: true } });
-const check4: { id: number } = r4;
+// Shape 3: a generic alias as a parameter type, with the inference descending
+// through nested arrays of a type computed by a recursive conditional type
+// (cut down from Prisma's nested `select` results). The same type written
+// inline still infers on every version.
+type Payload = { scalars: object; objects: object };
+
+type FindResult<P extends Payload, A> = A extends { select: infer S extends object }
+  ? {
+      [K in keyof S]: S[K] extends object
+        ? P extends { objects: { [k in K]: (infer O)[] } }
+          ? FindResult<O & Payload, S[K]>[]
+          : never
+        : P['scalars'][K & keyof P['scalars']];
+    }
+  : never;
+
+type MessagePayload = { objects: {}; scalars: { body: string } };
+type ConversationPayload = { objects: { messages: MessagePayload[] }; scalars: {} };
+type ThreadPayload = { objects: { conversations: ConversationPayload[] }; scalars: {} };
+
+declare function findThread<A>(args: A): FindResult<ThreadPayload, A>;
+
+const thread = findThread({
+  select: { conversations: { select: { messages: { select: { body: true } } } } },
+});
+
+type ThreadRow<M> = { conversations: Array<{ messages: Array<M> }> };
+
+declare function firstMessageViaAlias<M>(thread: ThreadRow<M>): M;
+declare function firstMessageInline<M>(thread: { conversations: Array<{ messages: Array<M> }> }): M;
+
+const inline: string = firstMessageInline(thread).body;
+const viaAlias: string = firstMessageViaAlias(thread).body;

@@ -175,59 +175,135 @@ const check3: Request = r3;
 >Request : Symbol(Request, Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --), Decl(inferFromNestedTypeArgumentsOfSameGeneric.ts, 16, 49))
 >r3 : Symbol(r3, Decl(inferFromNestedTypeArgumentsOfSameGeneric.ts, 40, 5))
 
-// Shape 3: a generic alias as a parameter type, with the result nested two
-// levels deep (cut down from Prisma's nested `select` results).
-type Payload<T> = { readonly data: T };
+// Shape 3: a generic alias as a parameter type, with the inference descending
+// through nested arrays of a type computed by a recursive conditional type
+// (cut down from Prisma's nested `select` results). The same type written
+// inline still infers on every version.
+type Payload = { scalars: object; objects: object };
 >Payload : Symbol(Payload, Decl(inferFromNestedTypeArgumentsOfSameGeneric.ts, 44, 27))
->T : Symbol(T, Decl(inferFromNestedTypeArgumentsOfSameGeneric.ts, 48, 13))
->data : Symbol(data, Decl(inferFromNestedTypeArgumentsOfSameGeneric.ts, 48, 19))
->T : Symbol(T, Decl(inferFromNestedTypeArgumentsOfSameGeneric.ts, 48, 13))
+>scalars : Symbol(scalars, Decl(inferFromNestedTypeArgumentsOfSameGeneric.ts, 50, 16))
+>objects : Symbol(objects, Decl(inferFromNestedTypeArgumentsOfSameGeneric.ts, 50, 33))
 
-type Selected<T, S> = S extends { select: infer Sel } ? { [K in keyof Sel & keyof T]: T[K] } : T;
->Selected : Symbol(Selected, Decl(inferFromNestedTypeArgumentsOfSameGeneric.ts, 48, 39))
->T : Symbol(T, Decl(inferFromNestedTypeArgumentsOfSameGeneric.ts, 49, 14))
->S : Symbol(S, Decl(inferFromNestedTypeArgumentsOfSameGeneric.ts, 49, 16))
->S : Symbol(S, Decl(inferFromNestedTypeArgumentsOfSameGeneric.ts, 49, 16))
->select : Symbol(select, Decl(inferFromNestedTypeArgumentsOfSameGeneric.ts, 49, 33))
->Sel : Symbol(Sel, Decl(inferFromNestedTypeArgumentsOfSameGeneric.ts, 49, 47))
->K : Symbol(K, Decl(inferFromNestedTypeArgumentsOfSameGeneric.ts, 49, 59))
->Sel : Symbol(Sel, Decl(inferFromNestedTypeArgumentsOfSameGeneric.ts, 49, 47))
->T : Symbol(T, Decl(inferFromNestedTypeArgumentsOfSameGeneric.ts, 49, 14))
->T : Symbol(T, Decl(inferFromNestedTypeArgumentsOfSameGeneric.ts, 49, 14))
->K : Symbol(K, Decl(inferFromNestedTypeArgumentsOfSameGeneric.ts, 49, 59))
->T : Symbol(T, Decl(inferFromNestedTypeArgumentsOfSameGeneric.ts, 49, 14))
-
-declare function viaAlias<T, S>(p: Payload<Payload<Selected<T, S>>>, s: S): Selected<T, S>;
->viaAlias : Symbol(viaAlias, Decl(inferFromNestedTypeArgumentsOfSameGeneric.ts, 49, 97))
->T : Symbol(T, Decl(inferFromNestedTypeArgumentsOfSameGeneric.ts, 50, 26))
->S : Symbol(S, Decl(inferFromNestedTypeArgumentsOfSameGeneric.ts, 50, 28))
->p : Symbol(p, Decl(inferFromNestedTypeArgumentsOfSameGeneric.ts, 50, 32))
+type FindResult<P extends Payload, A> = A extends { select: infer S extends object }
+>FindResult : Symbol(FindResult, Decl(inferFromNestedTypeArgumentsOfSameGeneric.ts, 50, 52))
+>P : Symbol(P, Decl(inferFromNestedTypeArgumentsOfSameGeneric.ts, 52, 16))
 >Payload : Symbol(Payload, Decl(inferFromNestedTypeArgumentsOfSameGeneric.ts, 44, 27))
->Payload : Symbol(Payload, Decl(inferFromNestedTypeArgumentsOfSameGeneric.ts, 44, 27))
->Selected : Symbol(Selected, Decl(inferFromNestedTypeArgumentsOfSameGeneric.ts, 48, 39))
->T : Symbol(T, Decl(inferFromNestedTypeArgumentsOfSameGeneric.ts, 50, 26))
->S : Symbol(S, Decl(inferFromNestedTypeArgumentsOfSameGeneric.ts, 50, 28))
->s : Symbol(s, Decl(inferFromNestedTypeArgumentsOfSameGeneric.ts, 50, 68))
->S : Symbol(S, Decl(inferFromNestedTypeArgumentsOfSameGeneric.ts, 50, 28))
->Selected : Symbol(Selected, Decl(inferFromNestedTypeArgumentsOfSameGeneric.ts, 48, 39))
->T : Symbol(T, Decl(inferFromNestedTypeArgumentsOfSameGeneric.ts, 50, 26))
->S : Symbol(S, Decl(inferFromNestedTypeArgumentsOfSameGeneric.ts, 50, 28))
+>A : Symbol(A, Decl(inferFromNestedTypeArgumentsOfSameGeneric.ts, 52, 34))
+>A : Symbol(A, Decl(inferFromNestedTypeArgumentsOfSameGeneric.ts, 52, 34))
+>select : Symbol(select, Decl(inferFromNestedTypeArgumentsOfSameGeneric.ts, 52, 51))
+>S : Symbol(S, Decl(inferFromNestedTypeArgumentsOfSameGeneric.ts, 52, 65))
 
-declare const p: Payload<Payload<{ id: number }>>;
->p : Symbol(p, Decl(inferFromNestedTypeArgumentsOfSameGeneric.ts, 51, 13))
->Payload : Symbol(Payload, Decl(inferFromNestedTypeArgumentsOfSameGeneric.ts, 44, 27))
->Payload : Symbol(Payload, Decl(inferFromNestedTypeArgumentsOfSameGeneric.ts, 44, 27))
->id : Symbol(id, Decl(inferFromNestedTypeArgumentsOfSameGeneric.ts, 51, 34))
+  ? {
+      [K in keyof S]: S[K] extends object
+>K : Symbol(K, Decl(inferFromNestedTypeArgumentsOfSameGeneric.ts, 54, 7))
+>S : Symbol(S, Decl(inferFromNestedTypeArgumentsOfSameGeneric.ts, 52, 65))
+>S : Symbol(S, Decl(inferFromNestedTypeArgumentsOfSameGeneric.ts, 52, 65))
+>K : Symbol(K, Decl(inferFromNestedTypeArgumentsOfSameGeneric.ts, 54, 7))
 
-const r4 = viaAlias(p, { select: { id: true } });
->r4 : Symbol(r4, Decl(inferFromNestedTypeArgumentsOfSameGeneric.ts, 52, 5))
->viaAlias : Symbol(viaAlias, Decl(inferFromNestedTypeArgumentsOfSameGeneric.ts, 49, 97))
->p : Symbol(p, Decl(inferFromNestedTypeArgumentsOfSameGeneric.ts, 51, 13))
->select : Symbol(select, Decl(inferFromNestedTypeArgumentsOfSameGeneric.ts, 52, 24))
->id : Symbol(id, Decl(inferFromNestedTypeArgumentsOfSameGeneric.ts, 52, 34))
+        ? P extends { objects: { [k in K]: (infer O)[] } }
+>P : Symbol(P, Decl(inferFromNestedTypeArgumentsOfSameGeneric.ts, 52, 16))
+>objects : Symbol(objects, Decl(inferFromNestedTypeArgumentsOfSameGeneric.ts, 55, 21))
+>k : Symbol(k, Decl(inferFromNestedTypeArgumentsOfSameGeneric.ts, 55, 34))
+>K : Symbol(K, Decl(inferFromNestedTypeArgumentsOfSameGeneric.ts, 54, 7))
+>O : Symbol(O, Decl(inferFromNestedTypeArgumentsOfSameGeneric.ts, 55, 49))
 
-const check4: { id: number } = r4;
->check4 : Symbol(check4, Decl(inferFromNestedTypeArgumentsOfSameGeneric.ts, 53, 5))
->id : Symbol(id, Decl(inferFromNestedTypeArgumentsOfSameGeneric.ts, 53, 15))
->r4 : Symbol(r4, Decl(inferFromNestedTypeArgumentsOfSameGeneric.ts, 52, 5))
+          ? FindResult<O & Payload, S[K]>[]
+>FindResult : Symbol(FindResult, Decl(inferFromNestedTypeArgumentsOfSameGeneric.ts, 50, 52))
+>O : Symbol(O, Decl(inferFromNestedTypeArgumentsOfSameGeneric.ts, 55, 49))
+>Payload : Symbol(Payload, Decl(inferFromNestedTypeArgumentsOfSameGeneric.ts, 44, 27))
+>S : Symbol(S, Decl(inferFromNestedTypeArgumentsOfSameGeneric.ts, 52, 65))
+>K : Symbol(K, Decl(inferFromNestedTypeArgumentsOfSameGeneric.ts, 54, 7))
+
+          : never
+        : P['scalars'][K & keyof P['scalars']];
+>P : Symbol(P, Decl(inferFromNestedTypeArgumentsOfSameGeneric.ts, 52, 16))
+>K : Symbol(K, Decl(inferFromNestedTypeArgumentsOfSameGeneric.ts, 54, 7))
+>P : Symbol(P, Decl(inferFromNestedTypeArgumentsOfSameGeneric.ts, 52, 16))
+    }
+  : never;
+
+type MessagePayload = { objects: {}; scalars: { body: string } };
+>MessagePayload : Symbol(MessagePayload, Decl(inferFromNestedTypeArgumentsOfSameGeneric.ts, 60, 10))
+>objects : Symbol(objects, Decl(inferFromNestedTypeArgumentsOfSameGeneric.ts, 62, 23))
+>scalars : Symbol(scalars, Decl(inferFromNestedTypeArgumentsOfSameGeneric.ts, 62, 36))
+>body : Symbol(body, Decl(inferFromNestedTypeArgumentsOfSameGeneric.ts, 62, 47))
+
+type ConversationPayload = { objects: { messages: MessagePayload[] }; scalars: {} };
+>ConversationPayload : Symbol(ConversationPayload, Decl(inferFromNestedTypeArgumentsOfSameGeneric.ts, 62, 65))
+>objects : Symbol(objects, Decl(inferFromNestedTypeArgumentsOfSameGeneric.ts, 63, 28))
+>messages : Symbol(messages, Decl(inferFromNestedTypeArgumentsOfSameGeneric.ts, 63, 39))
+>MessagePayload : Symbol(MessagePayload, Decl(inferFromNestedTypeArgumentsOfSameGeneric.ts, 60, 10))
+>scalars : Symbol(scalars, Decl(inferFromNestedTypeArgumentsOfSameGeneric.ts, 63, 69))
+
+type ThreadPayload = { objects: { conversations: ConversationPayload[] }; scalars: {} };
+>ThreadPayload : Symbol(ThreadPayload, Decl(inferFromNestedTypeArgumentsOfSameGeneric.ts, 63, 84))
+>objects : Symbol(objects, Decl(inferFromNestedTypeArgumentsOfSameGeneric.ts, 64, 22))
+>conversations : Symbol(conversations, Decl(inferFromNestedTypeArgumentsOfSameGeneric.ts, 64, 33))
+>ConversationPayload : Symbol(ConversationPayload, Decl(inferFromNestedTypeArgumentsOfSameGeneric.ts, 62, 65))
+>scalars : Symbol(scalars, Decl(inferFromNestedTypeArgumentsOfSameGeneric.ts, 64, 73))
+
+declare function findThread<A>(args: A): FindResult<ThreadPayload, A>;
+>findThread : Symbol(findThread, Decl(inferFromNestedTypeArgumentsOfSameGeneric.ts, 64, 88))
+>A : Symbol(A, Decl(inferFromNestedTypeArgumentsOfSameGeneric.ts, 66, 28))
+>args : Symbol(args, Decl(inferFromNestedTypeArgumentsOfSameGeneric.ts, 66, 31))
+>A : Symbol(A, Decl(inferFromNestedTypeArgumentsOfSameGeneric.ts, 66, 28))
+>FindResult : Symbol(FindResult, Decl(inferFromNestedTypeArgumentsOfSameGeneric.ts, 50, 52))
+>ThreadPayload : Symbol(ThreadPayload, Decl(inferFromNestedTypeArgumentsOfSameGeneric.ts, 63, 84))
+>A : Symbol(A, Decl(inferFromNestedTypeArgumentsOfSameGeneric.ts, 66, 28))
+
+const thread = findThread({
+>thread : Symbol(thread, Decl(inferFromNestedTypeArgumentsOfSameGeneric.ts, 68, 5))
+>findThread : Symbol(findThread, Decl(inferFromNestedTypeArgumentsOfSameGeneric.ts, 64, 88))
+
+  select: { conversations: { select: { messages: { select: { body: true } } } } },
+>select : Symbol(select, Decl(inferFromNestedTypeArgumentsOfSameGeneric.ts, 68, 27))
+>conversations : Symbol(conversations, Decl(inferFromNestedTypeArgumentsOfSameGeneric.ts, 69, 11))
+>select : Symbol(select, Decl(inferFromNestedTypeArgumentsOfSameGeneric.ts, 69, 28))
+>messages : Symbol(messages, Decl(inferFromNestedTypeArgumentsOfSameGeneric.ts, 69, 38))
+>select : Symbol(select, Decl(inferFromNestedTypeArgumentsOfSameGeneric.ts, 69, 50))
+>body : Symbol(body, Decl(inferFromNestedTypeArgumentsOfSameGeneric.ts, 69, 60))
+
+});
+
+type ThreadRow<M> = { conversations: Array<{ messages: Array<M> }> };
+>ThreadRow : Symbol(ThreadRow, Decl(inferFromNestedTypeArgumentsOfSameGeneric.ts, 70, 3))
+>M : Symbol(M, Decl(inferFromNestedTypeArgumentsOfSameGeneric.ts, 72, 15))
+>conversations : Symbol(conversations, Decl(inferFromNestedTypeArgumentsOfSameGeneric.ts, 72, 21))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --) ... and 4 more)
+>messages : Symbol(messages, Decl(inferFromNestedTypeArgumentsOfSameGeneric.ts, 72, 44))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --) ... and 4 more)
+>M : Symbol(M, Decl(inferFromNestedTypeArgumentsOfSameGeneric.ts, 72, 15))
+
+declare function firstMessageViaAlias<M>(thread: ThreadRow<M>): M;
+>firstMessageViaAlias : Symbol(firstMessageViaAlias, Decl(inferFromNestedTypeArgumentsOfSameGeneric.ts, 72, 69))
+>M : Symbol(M, Decl(inferFromNestedTypeArgumentsOfSameGeneric.ts, 74, 38))
+>thread : Symbol(thread, Decl(inferFromNestedTypeArgumentsOfSameGeneric.ts, 74, 41))
+>ThreadRow : Symbol(ThreadRow, Decl(inferFromNestedTypeArgumentsOfSameGeneric.ts, 70, 3))
+>M : Symbol(M, Decl(inferFromNestedTypeArgumentsOfSameGeneric.ts, 74, 38))
+>M : Symbol(M, Decl(inferFromNestedTypeArgumentsOfSameGeneric.ts, 74, 38))
+
+declare function firstMessageInline<M>(thread: { conversations: Array<{ messages: Array<M> }> }): M;
+>firstMessageInline : Symbol(firstMessageInline, Decl(inferFromNestedTypeArgumentsOfSameGeneric.ts, 74, 66))
+>M : Symbol(M, Decl(inferFromNestedTypeArgumentsOfSameGeneric.ts, 75, 36))
+>thread : Symbol(thread, Decl(inferFromNestedTypeArgumentsOfSameGeneric.ts, 75, 39))
+>conversations : Symbol(conversations, Decl(inferFromNestedTypeArgumentsOfSameGeneric.ts, 75, 48))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --) ... and 4 more)
+>messages : Symbol(messages, Decl(inferFromNestedTypeArgumentsOfSameGeneric.ts, 75, 71))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --) ... and 4 more)
+>M : Symbol(M, Decl(inferFromNestedTypeArgumentsOfSameGeneric.ts, 75, 36))
+>M : Symbol(M, Decl(inferFromNestedTypeArgumentsOfSameGeneric.ts, 75, 36))
+
+const inline: string = firstMessageInline(thread).body;
+>inline : Symbol(inline, Decl(inferFromNestedTypeArgumentsOfSameGeneric.ts, 77, 5))
+>firstMessageInline(thread).body : Symbol(body, Decl(inferFromNestedTypeArgumentsOfSameGeneric.ts, 69, 60))
+>firstMessageInline : Symbol(firstMessageInline, Decl(inferFromNestedTypeArgumentsOfSameGeneric.ts, 74, 66))
+>thread : Symbol(thread, Decl(inferFromNestedTypeArgumentsOfSameGeneric.ts, 68, 5))
+>body : Symbol(body, Decl(inferFromNestedTypeArgumentsOfSameGeneric.ts, 69, 60))
+
+const viaAlias: string = firstMessageViaAlias(thread).body;
+>viaAlias : Symbol(viaAlias, Decl(inferFromNestedTypeArgumentsOfSameGeneric.ts, 78, 5))
+>firstMessageViaAlias(thread).body : Symbol(body, Decl(inferFromNestedTypeArgumentsOfSameGeneric.ts, 69, 60))
+>firstMessageViaAlias : Symbol(firstMessageViaAlias, Decl(inferFromNestedTypeArgumentsOfSameGeneric.ts, 72, 69))
+>thread : Symbol(thread, Decl(inferFromNestedTypeArgumentsOfSameGeneric.ts, 68, 5))
+>body : Symbol(body, Decl(inferFromNestedTypeArgumentsOfSameGeneric.ts, 69, 60))
 

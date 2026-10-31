@@ -139,38 +139,102 @@ const check3: Request = r3;
 >check3 : Request
 >r3 : Request
 
-// Shape 3: a generic alias as a parameter type, with the result nested two
-// levels deep (cut down from Prisma's nested `select` results).
-type Payload<T> = { readonly data: T };
->Payload : Payload<T>
->data : T
+// Shape 3: a generic alias as a parameter type, with the inference descending
+// through nested arrays of a type computed by a recursive conditional type
+// (cut down from Prisma's nested `select` results). The same type written
+// inline still infers on every version.
+type Payload = { scalars: object; objects: object };
+>Payload : Payload
+>scalars : object
+>objects : object
 
-type Selected<T, S> = S extends { select: infer Sel } ? { [K in keyof Sel & keyof T]: T[K] } : T;
->Selected : Selected<T, S>
->select : Sel
+type FindResult<P extends Payload, A> = A extends { select: infer S extends object }
+>FindResult : FindResult<P, A>
+>select : S
 
-declare function viaAlias<T, S>(p: Payload<Payload<Selected<T, S>>>, s: S): Selected<T, S>;
->viaAlias : <T, S>(p: Payload<Payload<Selected<T, S>>>, s: S) => Selected<T, S>
->p : Payload<Payload<Selected<T, S>>>
->s : S
+  ? {
+      [K in keyof S]: S[K] extends object
+        ? P extends { objects: { [k in K]: (infer O)[] } }
+>objects : { [k in K]: O[]; }
 
-declare const p: Payload<Payload<{ id: number }>>;
->p : Payload<Payload<{ id: number; }>>
->id : number
+          ? FindResult<O & Payload, S[K]>[]
+          : never
+        : P['scalars'][K & keyof P['scalars']];
+    }
+  : never;
 
-const r4 = viaAlias(p, { select: { id: true } });
->r4 : { id: number; }
->viaAlias(p, { select: { id: true } }) : { id: number; }
->viaAlias : <T, S>(p: Payload<Payload<Selected<T, S>>>, s: S) => Selected<T, S>
->p : Payload<Payload<{ id: number; }>>
->{ select: { id: true } } : { select: { id: true; }; }
->select : { id: true; }
->{ id: true } : { id: true; }
->id : true
+type MessagePayload = { objects: {}; scalars: { body: string } };
+>MessagePayload : MessagePayload
+>objects : {}
+>scalars : { body: string; }
+>body : string
+
+type ConversationPayload = { objects: { messages: MessagePayload[] }; scalars: {} };
+>ConversationPayload : ConversationPayload
+>objects : { messages: MessagePayload[]; }
+>messages : MessagePayload[]
+>scalars : {}
+
+type ThreadPayload = { objects: { conversations: ConversationPayload[] }; scalars: {} };
+>ThreadPayload : ThreadPayload
+>objects : { conversations: ConversationPayload[]; }
+>conversations : ConversationPayload[]
+>scalars : {}
+
+declare function findThread<A>(args: A): FindResult<ThreadPayload, A>;
+>findThread : <A>(args: A) => FindResult<ThreadPayload, A>
+>args : A
+
+const thread = findThread({
+>thread : { conversations: { messages: { body: string; }[]; }[]; }
+>findThread({  select: { conversations: { select: { messages: { select: { body: true } } } } },}) : { conversations: { messages: { body: string; }[]; }[]; }
+>findThread : <A>(args: A) => FindResult<ThreadPayload, A>
+>{  select: { conversations: { select: { messages: { select: { body: true } } } } },} : { select: { conversations: { select: { messages: { select: { body: true; }; }; }; }; }; }
+
+  select: { conversations: { select: { messages: { select: { body: true } } } } },
+>select : { conversations: { select: { messages: { select: { body: true; }; }; }; }; }
+>{ conversations: { select: { messages: { select: { body: true } } } } } : { conversations: { select: { messages: { select: { body: true; }; }; }; }; }
+>conversations : { select: { messages: { select: { body: true; }; }; }; }
+>{ select: { messages: { select: { body: true } } } } : { select: { messages: { select: { body: true; }; }; }; }
+>select : { messages: { select: { body: true; }; }; }
+>{ messages: { select: { body: true } } } : { messages: { select: { body: true; }; }; }
+>messages : { select: { body: true; }; }
+>{ select: { body: true } } : { select: { body: true; }; }
+>select : { body: true; }
+>{ body: true } : { body: true; }
+>body : true
 >true : true
 
-const check4: { id: number } = r4;
->check4 : { id: number; }
->id : number
->r4 : { id: number; }
+});
+
+type ThreadRow<M> = { conversations: Array<{ messages: Array<M> }> };
+>ThreadRow : ThreadRow<M>
+>conversations : { messages: Array<M>; }[]
+>messages : M[]
+
+declare function firstMessageViaAlias<M>(thread: ThreadRow<M>): M;
+>firstMessageViaAlias : <M>(thread: ThreadRow<M>) => M
+>thread : ThreadRow<M>
+
+declare function firstMessageInline<M>(thread: { conversations: Array<{ messages: Array<M> }> }): M;
+>firstMessageInline : <M>(thread: { conversations: Array<{ messages: Array<M>; }>; }) => M
+>thread : { conversations: Array<{ messages: Array<M>; }>; }
+>conversations : { messages: Array<M>; }[]
+>messages : M[]
+
+const inline: string = firstMessageInline(thread).body;
+>inline : string
+>firstMessageInline(thread).body : string
+>firstMessageInline(thread) : { body: string; }
+>firstMessageInline : <M>(thread: { conversations: Array<{ messages: Array<M>; }>; }) => M
+>thread : { conversations: { messages: { body: string; }[]; }[]; }
+>body : string
+
+const viaAlias: string = firstMessageViaAlias(thread).body;
+>viaAlias : string
+>firstMessageViaAlias(thread).body : string
+>firstMessageViaAlias(thread) : { body: string; }
+>firstMessageViaAlias : <M>(thread: ThreadRow<M>) => M
+>thread : { conversations: { messages: { body: string; }[]; }[]; }
+>body : string
 
