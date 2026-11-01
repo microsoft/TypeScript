@@ -148,10 +148,6 @@ var memoAccessors = map[string]map[string]bool{
 	},
 	"lateMergedSymbols": {"getLateMergedSymbol": true, "combineSymbolTables": true},
 	"relation":          {"cachedRelation": true},
-	// Inferring the return type of a contextually typed function resolves
-	// it without its memo, so whether it is in progress cannot be asked of
-	// the memo.
-	"resolvedReturnType": {"isResolvingReturnTypeOfSignature": true},
 }
 
 // A result an entity's creator sets is part of the entity, which can outlive

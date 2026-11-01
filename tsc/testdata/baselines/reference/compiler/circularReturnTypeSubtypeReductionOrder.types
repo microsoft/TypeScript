@@ -61,23 +61,23 @@ class K {
 >K : K
 
     rebuild() {
->rebuild : () => B
+>rebuild : () => any
 
         return flag ? this : new B();
->flag ? this : new B() : B
+>flag ? this : new B() : this | B
 >flag : boolean
 >this : this
 >new B() : B
 >B : new () => B
     }
     b() {
->b : () => B
+>b : () => any
 
         return this.rebuild();
->this.rebuild() : B
->this.rebuild : () => B
+>this.rebuild() : any
+>this.rebuild : () => any
 >this : this
->rebuild : () => B
+>rebuild : () => any
     }
 }
 const B: new () => B = K;
