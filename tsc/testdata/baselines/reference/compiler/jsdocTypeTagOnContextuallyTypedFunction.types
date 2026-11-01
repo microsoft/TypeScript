@@ -19,16 +19,16 @@ context.f =
     /** @type {(content: string, ...rest: [boolean?]) => string} */
     (content, ...rest) => content.toUpperCase() + rest.length;
 >(content, ...rest) => content.toUpperCase() + rest.length : (content: string, rest_0?: boolean | undefined) => string
->content : string | number
->rest : unknown[]
->content.toUpperCase() + rest.length : any
->content.toUpperCase() : any
->content.toUpperCase : any
->content : string | number
->toUpperCase : any
->rest.length : number
->rest : unknown[]
->length : number
+>content : string
+>rest : [(boolean | undefined)?]
+>content.toUpperCase() + rest.length : string
+>content.toUpperCase() : string
+>content.toUpperCase : () => string
+>content : string
+>toUpperCase : () => string
+>rest.length : 0 | 1
+>rest : [(boolean | undefined)?]
+>length : 0 | 1
 
 /** @type {(content: string | number) => string} */
 const g =
@@ -37,9 +37,9 @@ const g =
     /** @type {(content: string) => string} */
     (content) => content.toUpperCase();
 >(content) => content.toUpperCase() : (content: string) => string
->content : string | number
->content.toUpperCase() : any
->content.toUpperCase : any
->content : string | number
->toUpperCase : any
+>content : string
+>content.toUpperCase() : string
+>content.toUpperCase : () => string
+>content : string
+>toUpperCase : () => string
 
