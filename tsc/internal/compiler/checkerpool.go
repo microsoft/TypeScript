@@ -492,4 +492,16 @@ func (p *checkerPool) forEachCheckerGroupDo(ctx context.Context, files []*ast.So
 	wg.RunAndWait()
 }
 
+// groupFilesByChecker returns the indices of files grouped by the checker each file is associated with. Files keep
+// their order within each group.
+func (p *checkerPool) groupFilesByChecker(files []*ast.SourceFile) [][]int {
+	p.createCheckers()
+	groups := make([][]int, len(p.checkers))
+	for i, file := range files {
+		idx := slices.Index(p.checkers, p.fileAssociations[file])
+		groups[idx] = append(groups[idx], i)
+	}
+	return groups
+}
+
 func noop() {}

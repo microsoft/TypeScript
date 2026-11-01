@@ -1458,7 +1458,7 @@ func TestContentMappersValidation(t *testing.T) {
 		{
 			name:           "built-in extension",
 			contentMappers: `[{ "package": "x", "extensions": [".ts"] }]`,
-			expectedCode:   diagnostics.Content_mapper_file_extension_0_is_a_built_in_extension_and_cannot_be_registered_by_a_content_mapper.Code(),
+			expectedCode:   diagnostics.Content_mapper_file_extension_0_cannot_be_registered_because_it_ends_in_a_built_in_extension.Code(),
 		},
 		{
 			name:           "missing extensions",
@@ -1562,7 +1562,7 @@ func TestContentMapperExtensionValidationUsesHostCaseSensitivity(t *testing.T) {
 			name:            "built-in extension on case-insensitive host",
 			caseSensitivity: tspath.CaseInsensitive,
 			contentMappers:  `[{ "package": "mapper", "extensions": [".TS"] }]`,
-			expectedCode:    diagnostics.Content_mapper_file_extension_0_is_a_built_in_extension_and_cannot_be_registered_by_a_content_mapper.Code(),
+			expectedCode:    diagnostics.Content_mapper_file_extension_0_cannot_be_registered_because_it_ends_in_a_built_in_extension.Code(),
 		},
 		{
 			name:            "duplicate extension on case-insensitive host",
@@ -1574,7 +1574,7 @@ func TestContentMapperExtensionValidationUsesHostCaseSensitivity(t *testing.T) {
 			name:            "built-in extension on case-sensitive host",
 			caseSensitivity: tspath.CaseSensitive,
 			contentMappers:  `[{ "package": "mapper", "extensions": [".TS"] }]`,
-			expectedCode:    diagnostics.Content_mapper_file_extension_0_is_a_built_in_extension_and_cannot_be_registered_by_a_content_mapper.Code(),
+			expectedCode:    diagnostics.Content_mapper_file_extension_0_cannot_be_registered_because_it_ends_in_a_built_in_extension.Code(),
 		},
 		{
 			name:            "mapper extension casing is distinct on case-sensitive host",
@@ -1643,7 +1643,7 @@ func TestContentMapperCompoundExtensionValidation(t *testing.T) {
 					assert.DeepEqual(t, parsed.ContentMapperExtensions(), []string{extension})
 				} else {
 					assert.Equal(t, len(parsed.Errors), 1)
-					assert.Equal(t, parsed.Errors[0].Code(), diagnostics.Content_mapper_file_extension_0_is_a_built_in_extension_and_cannot_be_registered_by_a_content_mapper.Code())
+					assert.Equal(t, parsed.Errors[0].Code(), diagnostics.Content_mapper_file_extension_0_cannot_be_registered_because_it_ends_in_a_built_in_extension.Code())
 					assert.Equal(t, len(parsed.ContentMapperExtensions()), 0)
 				}
 			})

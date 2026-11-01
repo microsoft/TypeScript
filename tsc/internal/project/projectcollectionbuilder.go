@@ -505,7 +505,7 @@ func (b *ProjectCollectionBuilder) refreshContentMapperProjectForChanges(entry d
 // solution tree built for a freshly opened overlay file). Every other configured
 // project is deleted, the inferred project roots are recomputed, and the config file
 // registry is cleaned up. This is the shared mechanism that keeps the set of loaded
-// projects minimal for both LSP file opens and API file opens/closes.
+// projects minimal for LSP file opens, idle cleanup, and API file opens/closes.
 func (b *ProjectCollectionBuilder) cleanupConfiguredProjects(retain *collections.Set[tspath.PathKey], logger *logging.LogTree) {
 	var toRemoveProjects collections.Set[tspath.PathKey]
 	b.configuredProjects.Range(func(entry *dirty.SyncMapEntry[ConfiguredProjectID, *Project]) bool {

@@ -8,6 +8,7 @@ import (
 	"os"
 	"os/exec"
 	"path/filepath"
+	"runtime"
 	"slices"
 	"strings"
 	"testing"
@@ -215,6 +216,9 @@ func TestLocaleFilesIgnoreStaleDiagnostics(t *testing.T) {
 
 func TestGenerateLocalizations(t *testing.T) {
 	t.Parallel()
+	if runtime.GOOS == "wasip1" {
+		t.Skip("wasip1 cannot run subprocesses")
+	}
 
 	dir := t.TempDir()
 	locDir := filepath.Join(dir, "loc")
