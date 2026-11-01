@@ -2,17 +2,13 @@ a.js(4,1): error TS2322: Type '(content: string, rest_0?: boolean | undefined) =
   Types of parameters 'content' and 'a' are incompatible.
     Type 'string | number' is not assignable to type 'string'.
       Type 'number' is not assignable to type 'string'.
-a.js(6,35): error TS2339: Property 'toUpperCase' does not exist on type 'string | number'.
-  Property 'toUpperCase' does not exist on type 'number'.
 a.js(9,7): error TS2322: Type '(content: string) => string' is not assignable to type '(content: string | number) => string'.
   Types of parameters 'content' and 'content' are incompatible.
     Type 'string | number' is not assignable to type 'string'.
       Type 'number' is not assignable to type 'string'.
-a.js(11,26): error TS2339: Property 'toUpperCase' does not exist on type 'string | number'.
-  Property 'toUpperCase' does not exist on type 'number'.
 
 
-==== a.js (4 errors) ====
+==== a.js (2 errors) ====
     /** @type {{ f: (a: string | number, ...rest: unknown[]) => string }} */
     const context = { f: (a) => "" };
     
@@ -24,9 +20,6 @@ a.js(11,26): error TS2339: Property 'toUpperCase' does not exist on type 'string
 !!! error TS2322:       Type 'number' is not assignable to type 'string'.
         /** @type {(content: string, ...rest: [boolean?]) => string} */
         (content, ...rest) => content.toUpperCase() + rest.length;
-                                      ~~~~~~~~~~~
-!!! error TS2339: Property 'toUpperCase' does not exist on type 'string | number'.
-!!! error TS2339:   Property 'toUpperCase' does not exist on type 'number'.
     
     /** @type {(content: string | number) => string} */
     const g =
@@ -37,7 +30,4 @@ a.js(11,26): error TS2339: Property 'toUpperCase' does not exist on type 'string
 !!! error TS2322:       Type 'number' is not assignable to type 'string'.
         /** @type {(content: string) => string} */
         (content) => content.toUpperCase();
-                             ~~~~~~~~~~~
-!!! error TS2339: Property 'toUpperCase' does not exist on type 'string | number'.
-!!! error TS2339:   Property 'toUpperCase' does not exist on type 'number'.
     
