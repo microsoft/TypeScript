@@ -1,0 +1,21 @@
+======== Resolving module 'theme/tokens' from '/index.mts'. ========
+Explicitly specified module resolution kind: 'Bundler'.
+Resolving in CJS mode with conditions 'import', 'types'.
+File '/package.json' does not exist.
+Loading module 'theme/tokens' from 'node_modules' folder, target file types: TypeScript, JavaScript, Declaration, JSON.
+Searching all ancestor node_modules directories for preferred extensions: TypeScript, Declaration.
+Found 'package.json' at '/node_modules/theme/package.json'.
+Entering conditional exports.
+Matched 'exports' condition 'types'.
+Using 'exports' subpath './tokens' with target './tokens.d.ts'.
+File '/node_modules/theme/tokens.d.ts' does not exist.
+Failed to resolve under condition 'types'.
+Matched 'exports' condition 'import'.
+Using 'exports' subpath './tokens' with target './tokens.mjs'.
+File name '/node_modules/theme/tokens.mjs' has a '.mjs' extension - stripping it.
+File '/node_modules/theme/tokens.mts' does not exist.
+File '/node_modules/theme/tokens.d.mts' exists - use it as a name resolution result.
+Resolved under condition 'import'.
+Exiting conditional exports.
+Resolving real path for '/node_modules/theme/tokens.d.mts', result '/node_modules/theme/tokens.d.mts'.
+======== Module name 'theme/tokens' was successfully resolved to '/node_modules/theme/tokens.d.mts'. ========

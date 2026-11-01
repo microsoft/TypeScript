@@ -1,0 +1,54 @@
+//// [tests/cases/compiler/unknownAfterTypeofEarlyReturn.ts] ////
+
+=== unknownAfterTypeofEarlyReturn.ts ===
+declare function fromString(value: string): number;
+>fromString : (value: string) => number
+>value : string
+
+declare function fromBigint(value: bigint): number;
+>fromBigint : (value: bigint) => number
+>value : bigint
+
+declare function fromNumber(value: number): boolean;
+>fromNumber : (value: number) => boolean
+>value : number
+
+function coerce(value: unknown) {
+>coerce : (value: unknown) => number | boolean | undefined
+>value : unknown
+
+    if (typeof value === "boolean") return value;
+>typeof value === "boolean" : boolean
+>typeof value : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
+>value : unknown
+>"boolean" : "boolean"
+>value : boolean
+
+    if (typeof value === "string") return fromString(value);
+>typeof value === "string" : boolean
+>typeof value : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
+>value : unknown
+>"string" : "string"
+>fromString(value) : number
+>fromString : (value: string) => number
+>value : string
+
+    if (typeof value === "bigint") return fromBigint(value);
+>typeof value === "bigint" : boolean
+>typeof value : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
+>value : unknown
+>"bigint" : "bigint"
+>fromBigint(value) : number
+>fromBigint : (value: bigint) => number
+>value : bigint
+
+    if (typeof value === "number") return fromNumber(value);
+>typeof value === "number" : boolean
+>typeof value : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
+>value : unknown
+>"number" : "number"
+>fromNumber(value) : boolean
+>fromNumber : (value: number) => boolean
+>value : number
+}
+

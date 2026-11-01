@@ -1,4 +1,4 @@
-import { SymbolOwnerKind } from "#enums/symbolOwnerKind";
+import { SymbolOwnerKind } from "../../enums/symbolOwnerKind.js";
 import {
     documentURIToFileName,
     fileNameToDocumentURI,
@@ -7,7 +7,6 @@ import type {
     APIMethodInfo,
     CreateSnapshotParams as CoreCreateSnapshotParams,
     DocumentIdentifier,
-    ProjectId,
     SignatureResponse,
     SourceFileDescriptor,
     SourceFileResponse,
@@ -32,7 +31,7 @@ export interface SnapshotSymbolOwner {
     readonly kind: typeof SymbolOwnerKind.Snapshot;
     readonly file?: never;
     readonly snapshot: number;
-    readonly project: ProjectId;
+    readonly project: number;
 }
 
 export type SymbolOwner = FileSymbolOwner | SnapshotSymbolOwner;

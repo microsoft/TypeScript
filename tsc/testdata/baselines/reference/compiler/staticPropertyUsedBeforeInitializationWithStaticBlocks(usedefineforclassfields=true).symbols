@@ -1,0 +1,99 @@
+//// [tests/cases/compiler/staticPropertyUsedBeforeInitializationWithStaticBlocks.ts] ////
+
+=== staticPropertyUsedBeforeInitializationWithStaticBlocks.ts ===
+class A {
+>A : Symbol(A, Decl(staticPropertyUsedBeforeInitializationWithStaticBlocks.ts, 0, 0))
+
+    static {}
+    static a = A.b;
+>a : Symbol(A.a, Decl(staticPropertyUsedBeforeInitializationWithStaticBlocks.ts, 1, 13))
+>A.b : Symbol(A.b, Decl(staticPropertyUsedBeforeInitializationWithStaticBlocks.ts, 2, 19))
+>A : Symbol(A, Decl(staticPropertyUsedBeforeInitializationWithStaticBlocks.ts, 0, 0))
+>b : Symbol(A.b, Decl(staticPropertyUsedBeforeInitializationWithStaticBlocks.ts, 2, 19))
+
+    static b: number = 1;
+>b : Symbol(A.b, Decl(staticPropertyUsedBeforeInitializationWithStaticBlocks.ts, 2, 19))
+}
+class B {
+>B : Symbol(B, Decl(staticPropertyUsedBeforeInitializationWithStaticBlocks.ts, 4, 1))
+
+    static { B.b = 2; }
+>B.b : Symbol(B.b, Decl(staticPropertyUsedBeforeInitializationWithStaticBlocks.ts, 7, 19))
+>B : Symbol(B, Decl(staticPropertyUsedBeforeInitializationWithStaticBlocks.ts, 4, 1))
+>b : Symbol(B.b, Decl(staticPropertyUsedBeforeInitializationWithStaticBlocks.ts, 7, 19))
+
+    static a = B.b;
+>a : Symbol(B.a, Decl(staticPropertyUsedBeforeInitializationWithStaticBlocks.ts, 6, 23))
+>B.b : Symbol(B.b, Decl(staticPropertyUsedBeforeInitializationWithStaticBlocks.ts, 7, 19))
+>B : Symbol(B, Decl(staticPropertyUsedBeforeInitializationWithStaticBlocks.ts, 4, 1))
+>b : Symbol(B.b, Decl(staticPropertyUsedBeforeInitializationWithStaticBlocks.ts, 7, 19))
+
+    static b: number;
+>b : Symbol(B.b, Decl(staticPropertyUsedBeforeInitializationWithStaticBlocks.ts, 7, 19))
+}
+class C {
+>C : Symbol(C, Decl(staticPropertyUsedBeforeInitializationWithStaticBlocks.ts, 9, 1))
+
+    static { if (Math.random()) C.b = 2; }
+>Math.random : Symbol(Math.random, Decl(lib.es5.d.ts, --, --))
+>Math : Symbol(Math, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>random : Symbol(Math.random, Decl(lib.es5.d.ts, --, --))
+>C.b : Symbol(C.b, Decl(staticPropertyUsedBeforeInitializationWithStaticBlocks.ts, 12, 19))
+>C : Symbol(C, Decl(staticPropertyUsedBeforeInitializationWithStaticBlocks.ts, 9, 1))
+>b : Symbol(C.b, Decl(staticPropertyUsedBeforeInitializationWithStaticBlocks.ts, 12, 19))
+
+    static a = C.b;
+>a : Symbol(C.a, Decl(staticPropertyUsedBeforeInitializationWithStaticBlocks.ts, 11, 42))
+>C.b : Symbol(C.b, Decl(staticPropertyUsedBeforeInitializationWithStaticBlocks.ts, 12, 19))
+>C : Symbol(C, Decl(staticPropertyUsedBeforeInitializationWithStaticBlocks.ts, 9, 1))
+>b : Symbol(C.b, Decl(staticPropertyUsedBeforeInitializationWithStaticBlocks.ts, 12, 19))
+
+    static b: number;
+>b : Symbol(C.b, Decl(staticPropertyUsedBeforeInitializationWithStaticBlocks.ts, 12, 19))
+}
+class D {
+>D : Symbol(D, Decl(staticPropertyUsedBeforeInitializationWithStaticBlocks.ts, 14, 1))
+
+    static { this.#b = 2; }
+>this.#b : Symbol(D.#b, Decl(staticPropertyUsedBeforeInitializationWithStaticBlocks.ts, 17, 20))
+>this : Symbol(D, Decl(staticPropertyUsedBeforeInitializationWithStaticBlocks.ts, 14, 1))
+
+    static a = D.#b;
+>a : Symbol(D.a, Decl(staticPropertyUsedBeforeInitializationWithStaticBlocks.ts, 16, 27))
+>D.#b : Symbol(D.#b, Decl(staticPropertyUsedBeforeInitializationWithStaticBlocks.ts, 17, 20))
+>D : Symbol(D, Decl(staticPropertyUsedBeforeInitializationWithStaticBlocks.ts, 14, 1))
+
+    static #b: number;
+>#b : Symbol(D.#b, Decl(staticPropertyUsedBeforeInitializationWithStaticBlocks.ts, 17, 20))
+}
+class E {
+>E : Symbol(E, Decl(staticPropertyUsedBeforeInitializationWithStaticBlocks.ts, 19, 1))
+
+    static { }
+    static a = this.b;
+>a : Symbol(E.a, Decl(staticPropertyUsedBeforeInitializationWithStaticBlocks.ts, 21, 14))
+>this.b : Symbol(E.b, Decl(staticPropertyUsedBeforeInitializationWithStaticBlocks.ts, 22, 22))
+>this : Symbol(E, Decl(staticPropertyUsedBeforeInitializationWithStaticBlocks.ts, 19, 1))
+>b : Symbol(E.b, Decl(staticPropertyUsedBeforeInitializationWithStaticBlocks.ts, 22, 22))
+
+    static b = 1;
+>b : Symbol(E.b, Decl(staticPropertyUsedBeforeInitializationWithStaticBlocks.ts, 22, 22))
+}
+class F {
+>F : Symbol(F, Decl(staticPropertyUsedBeforeInitializationWithStaticBlocks.ts, 24, 1))
+
+    static { this.b = 1; }
+>this.b : Symbol(F.b, Decl(staticPropertyUsedBeforeInitializationWithStaticBlocks.ts, 27, 22))
+>this : Symbol(F, Decl(staticPropertyUsedBeforeInitializationWithStaticBlocks.ts, 24, 1))
+>b : Symbol(F.b, Decl(staticPropertyUsedBeforeInitializationWithStaticBlocks.ts, 27, 22))
+
+    static a = this.b;
+>a : Symbol(F.a, Decl(staticPropertyUsedBeforeInitializationWithStaticBlocks.ts, 26, 26))
+>this.b : Symbol(F.b, Decl(staticPropertyUsedBeforeInitializationWithStaticBlocks.ts, 27, 22))
+>this : Symbol(F, Decl(staticPropertyUsedBeforeInitializationWithStaticBlocks.ts, 24, 1))
+>b : Symbol(F.b, Decl(staticPropertyUsedBeforeInitializationWithStaticBlocks.ts, 27, 22))
+
+    static b: number;
+>b : Symbol(F.b, Decl(staticPropertyUsedBeforeInitializationWithStaticBlocks.ts, 27, 22))
+}
+

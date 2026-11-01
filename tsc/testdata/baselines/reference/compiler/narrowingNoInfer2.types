@@ -1,0 +1,71 @@
+//// [tests/cases/compiler/narrowingNoInfer2.ts] ////
+
+=== narrowingNoInfer2.ts ===
+type U1 = NoInfer<{ kind: "a"; a: number } | { kind: "b"; b: number }> | { kind: "c" };
+>U1 : U1
+>kind : "a"
+>a : number
+>kind : "b"
+>b : number
+>kind : "c"
+
+function f1(u: U1) {
+>f1 : (u: U1) => void
+>u : U1
+
+    if (u.kind === "a") {
+>u.kind === "a" : boolean
+>u.kind : "a" | "b" | "c"
+>u : { kind: "a"; a: number; } | { kind: "b"; b: number; } | { kind: "c"; }
+>kind : "a" | "b" | "c"
+>"a" : "a"
+
+        u.a;
+>u.a : number
+>u : { kind: "a"; a: number; }
+>a : number
+    }
+}
+
+type U2 = NoInfer<{ kind: "a"; a: number } | { kind: "b"; b: number }> | { kind: "c" };
+>U2 : U2
+>kind : "a"
+>a : number
+>kind : "b"
+>b : number
+>kind : "c"
+
+interface Box<T> {
+    u: U2;
+>u : U2
+
+    t: T;
+>t : T
+}
+
+declare const box: Box<string>;
+>box : Box<string>
+
+box.u;
+>box.u : U2
+>box : Box<string>
+>u : U2
+
+function f2(u: U2) {
+>f2 : (u: U2) => void
+>u : U2
+
+    if (u.kind === "a") {
+>u.kind === "a" : boolean
+>u.kind : "a" | "b" | "c"
+>u : { kind: "a"; a: number; } | { kind: "b"; b: number; } | { kind: "c"; }
+>kind : "a" | "b" | "c"
+>"a" : "a"
+
+        u.a;
+>u.a : number
+>u : { kind: "a"; a: number; }
+>a : number
+    }
+}
+

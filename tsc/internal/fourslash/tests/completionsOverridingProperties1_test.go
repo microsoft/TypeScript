@@ -16,9 +16,11 @@ func TestCompletionsOverridingProperties1(t *testing.T) {
 	t.Parallel()
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
 	const content = `// @newline: LF
+// @strict: true
 // @Filename: a.ts
 class Base {
     protected foo: string = "bar";
+    protected bar?: number = 1;
 }
 
 class Sub extends Base {
@@ -38,6 +40,12 @@ class Sub extends Base {
 					Label:      "foo",
 					InsertText: new("protected foo: string;"),
 					FilterText: new("foo"),
+					SortText:   new(string(ls.SortTextLocationPriority)),
+				},
+				&lsproto.CompletionItem{
+					Label:      "bar?",
+					InsertText: new("protected bar?: number | undefined;"),
+					FilterText: new("bar"),
 					SortText:   new(string(ls.SortTextLocationPriority)),
 				},
 			},

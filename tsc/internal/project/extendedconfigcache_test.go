@@ -203,7 +203,7 @@ func TestExtendedConfigCacheOwnership(t *testing.T) {
 		fsFromMap := vfstest.FromMap(files, tspath.CaseInsensitive /*caseSensitivity*/)
 		fs := bundled.WrapFS(fsFromMap)
 
-		cmd, diags := tsoptions.GetParsedCommandLineOfConfigFile("/project/tsconfig.json", nil, nil, fs, nil /*extendedConfigCache*/)
+		cmd, diags := tsoptions.GetParsedCommandLineOfConfigFile("/project/tsconfig.json", nil, nil, tsoptions.NewDefaultParseConfigHost(fs), nil /*extendedConfigCache*/)
 		assert.Equal(t, len(diags), 0)
 		assert.Assert(t, cmd != nil)
 

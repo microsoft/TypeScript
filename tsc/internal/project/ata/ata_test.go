@@ -10,6 +10,7 @@ import (
 	"github.com/microsoft/TypeScript/tsc/internal/lsp/lsproto"
 	"github.com/microsoft/TypeScript/tsc/internal/project"
 	"github.com/microsoft/TypeScript/tsc/internal/testutil/projecttestutil"
+	"github.com/microsoft/TypeScript/tsc/internal/tspath"
 	"gotest.tools/v3/assert"
 )
 
@@ -18,6 +19,36 @@ func TestATA(t *testing.T) {
 	if !bundled.Embedded {
 		t.Skip("bundled files are not embedded")
 	}
+
+	t.Run("no typings cache disables acquisition", func(t *testing.T) {
+		t.Parallel()
+
+		files := map[string]any{
+			"/user/username/projects/project/app.js": `const $ = require("jquery");`,
+			"/user/username/projects/project/jsconfig.json": `{
+				"typeAcquisition": { "enable": true }
+			}`,
+		}
+		session, utils := projecttestutil.SetupWithOptionsAndTypingsInstaller(files, &project.SessionOptions{
+			CurrentDirectory:   tspath.RootedDirectoryPathFromNormalized("/"),
+			DefaultLibraryPath: bundled.LibPath(),
+			WatchEnabled:       true,
+		}, &projecttestutil.TypingsInstallerOptions{
+			PackageToFile: map[string]string{
+				"jquery": `export const x: number;`,
+			},
+		})
+
+		uri := lsproto.DocumentUri("file:///user/username/projects/project/app.js")
+		session.DidOpenFile(context.Background(), uri, 1, files["/user/username/projects/project/app.js"].(string), lsproto.LanguageKindJavaScript)
+		session.WaitForBackgroundTasks()
+
+		ls, err := session.GetLanguageService(context.Background(), uri)
+		assert.NilError(t, err)
+		assert.Assert(t, ls.GetProgram().GetSourceFile("/user/username/projects/project/app.js") != nil)
+		assert.Equal(t, len(utils.NpmExecutor().NpmInstallCalls()), 0)
+		assert.Assert(t, !session.FS().FileExists(projecttestutil.TestTypingsDirectory.ResolveFile("package.json")))
+	})
 
 	t.Run("local module should not be picked up", func(t *testing.T) {
 		t.Parallel()

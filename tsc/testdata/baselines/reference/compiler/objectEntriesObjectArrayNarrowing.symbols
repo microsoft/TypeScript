@@ -1,0 +1,26 @@
+//// [tests/cases/compiler/objectEntriesObjectArrayNarrowing.ts] ////
+
+=== objectEntriesObjectArrayNarrowing.ts ===
+declare const record: object;
+>record : Symbol(record, Decl(objectEntriesObjectArrayNarrowing.ts, 0, 13))
+
+for (const [, value] of Object.entries(record)) {
+>value : Symbol(value, Decl(objectEntriesObjectArrayNarrowing.ts, 1, 13))
+>Object.entries : Symbol(ObjectConstructor.entries, Decl(lib.es2017.object.d.ts, --, --), Decl(lib.es2017.object.d.ts, --, --))
+>Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>entries : Symbol(ObjectConstructor.entries, Decl(lib.es2017.object.d.ts, --, --), Decl(lib.es2017.object.d.ts, --, --))
+>record : Symbol(record, Decl(objectEntriesObjectArrayNarrowing.ts, 0, 13))
+
+    if (Array.isArray(value)) {
+>Array.isArray : Symbol(ArrayConstructor.isArray, Decl(lib.es5.d.ts, --, --))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --) ... and 1 more)
+>isArray : Symbol(ArrayConstructor.isArray, Decl(lib.es5.d.ts, --, --))
+>value : Symbol(value, Decl(objectEntriesObjectArrayNarrowing.ts, 1, 13))
+
+        value.forEach(() => {});
+>value.forEach : Symbol(Array.forEach, Decl(lib.es5.d.ts, --, --))
+>value : Symbol(value, Decl(objectEntriesObjectArrayNarrowing.ts, 1, 13))
+>forEach : Symbol(Array.forEach, Decl(lib.es5.d.ts, --, --))
+    }
+}
+

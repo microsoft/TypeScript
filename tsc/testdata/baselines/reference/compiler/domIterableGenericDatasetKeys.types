@@ -1,0 +1,25 @@
+//// [tests/cases/compiler/domIterableGenericDatasetKeys.ts] ////
+
+=== domIterableGenericDatasetKeys.ts ===
+function restore<Key extends keyof CSSStyleDeclaration>(key: Key, element: HTMLElement) {
+>restore : <Key extends keyof CSSStyleDeclaration>(key: Key, element: HTMLElement) => void
+>key : Key
+>element : HTMLElement
+
+    const value = element.dataset[key];
+>value : any
+>element.dataset[key] : any
+>element.dataset : DOMStringMap
+>element : HTMLElement
+>dataset : DOMStringMap
+>key : Key
+
+    delete element.dataset[key];
+>delete element.dataset[key] : boolean
+>element.dataset[key] : any
+>element.dataset : DOMStringMap
+>element : HTMLElement
+>dataset : DOMStringMap
+>key : Key
+}
+

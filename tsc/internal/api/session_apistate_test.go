@@ -52,6 +52,8 @@ func TestGetCurrentLanguageServerSnapshotAdoptsChanges(t *testing.T) {
 	assert.NilError(t, err)
 	assert.Equal(t, session.openProjects.Len(), 1)
 	assert.Equal(t, response.Snapshot, snapshotHandle(projectSession.Snapshot()))
+	projectHandle := response.Projects[0].Handle
+	assert.Assert(t, projectHandle != 0)
 	assert.Assert(t, projectSession.Snapshot().ProjectCollection.ConfiguredProject(tspath.PathKeyFromCanonical(configFileName)) != nil)
 	assert.NilError(t, utils.FS().WriteFile(fileName, `export const x = 2;`))
 	projectSession.DidChangeWatchedFiles(context.Background(), []*lsproto.FileEvent{{
@@ -70,6 +72,7 @@ func TestGetCurrentLanguageServerSnapshotAdoptsChanges(t *testing.T) {
 	})
 	assert.NilError(t, err)
 	assert.Equal(t, unchanged.Projects[0].Dirty, false)
+	assert.Equal(t, unchanged.Projects[0].Handle, projectHandle)
 	assert.Equal(t, session.openProjects.Len(), 1)
 
 	removed, err := session.handleGetCurrentLanguageServerSnapshot(context.Background(), &GetCurrentLanguageServerSnapshotParams{
@@ -82,6 +85,10 @@ func TestGetCurrentLanguageServerSnapshotAdoptsChanges(t *testing.T) {
 	assert.Equal(t, len(removed.Projects), 0)
 	assert.DeepEqual(t, removed.Changes.RemovedProjects, []project.ID{configuredProjectID(configFileName)})
 	assert.Equal(t, session.openProjects.Len(), 0)
+	_, err = session.snapshots[removed.Snapshot].getProject(projectHandle)
+	assert.ErrorContains(t, err, "not found")
+	_, err = session.snapshots[response.Snapshot].getProject(projectHandle)
+	assert.NilError(t, err)
 
 	session.Close()
 	assert.Equal(t, session.openProjects.Len(), 0)
@@ -303,7 +310,7 @@ func TestOpenFilePreservesWindowsDriveLetterCase(t *testing.T) {
 	project := response.Projects[0]
 	snapshot, err := session.getSnapshotData(response.Snapshot)
 	assert.NilError(t, err)
-	program, err := snapshot.getProgram(project.Id)
+	program, err := snapshot.getProgram(project.Handle)
 	assert.NilError(t, err)
 	assert.Equal(t, program.GetSourceFile(fileName).FileName(), tspath.RootedFilePathFromNormalized(fileName))
 }
@@ -524,9 +531,11 @@ func TestOpenProjectsWithCircularExtendsReportCircularity(t *testing.T) {
 		OpenProjects: []DocumentIdentifier{{FileName: second}},
 	})
 	assert.NilError(t, err)
+	secondProject := session.snapshots[response.Snapshot].snapshot.ProjectCollection.GetProject(configuredProjectID(second))
+	assert.Assert(t, secondProject != nil)
 	diagnostics, err := session.handleGetConfigFileParsingDiagnostics(context.Background(), &GetProjectDiagnosticsParams{
 		Snapshot: response.Snapshot,
-		Project:  configuredProjectID(second),
+		Project:  secondProject.Handle(),
 	})
 	assert.NilError(t, err)
 	codes := make([]int32, 0, len(diagnostics))

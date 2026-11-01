@@ -1,0 +1,20 @@
+//// [tests/cases/compiler/iteratorResultNullishValueAssignment.ts] ////
+
+=== iteratorResultNullishValueAssignment.ts ===
+function initialize(result: IteratorResult<object, void>) {
+>initialize : Symbol(initialize, Decl(iteratorResultNullishValueAssignment.ts, 0, 0))
+>result : Symbol(result, Decl(iteratorResultNullishValueAssignment.ts, 0, 20))
+>IteratorResult : Symbol(IteratorResult, Decl(lib.es2015.iterable.d.ts, --, --))
+
+    if (result.value == null) {
+>result.value : Symbol(value, Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --))
+>result : Symbol(result, Decl(iteratorResultNullishValueAssignment.ts, 0, 20))
+>value : Symbol(value, Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --))
+
+        result.value = {};
+>result.value : Symbol(value, Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --))
+>result : Symbol(result, Decl(iteratorResultNullishValueAssignment.ts, 0, 20))
+>value : Symbol(value, Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --))
+    }
+}
+

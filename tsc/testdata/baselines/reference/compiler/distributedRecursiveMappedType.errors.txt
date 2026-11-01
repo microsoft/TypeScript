@@ -1,0 +1,17 @@
+distributedRecursiveMappedType.ts(2,49): error TS2344: Type 'Input[Key]' does not satisfy the constraint 'Shape[Key]'.
+  Type 'Input' is not assignable to type 'Shape'.
+    'Input' is only assignable to the non-distributed 'Shape', but 'Shape' has been distributed here.
+distributedRecursiveMappedType.ts(2,49): error TS2536: Type 'Key' cannot be used to index type 'Input'.
+
+
+==== distributedRecursiveMappedType.ts (2 errors) ====
+    type Exact<Shape, Input extends Shape> = Shape extends Shape
+        ? { [Key in keyof Shape]: Exact<Shape[Key], Input[Key]> }
+                                                    ~~~~~~~~~~
+!!! error TS2344: Type 'Input[Key]' does not satisfy the constraint 'Shape[Key]'.
+!!! error TS2344:   Type 'Input' is not assignable to type 'Shape'.
+!!! error TS2344:     'Input' is only assignable to the non-distributed 'Shape', but 'Shape' has been distributed here.
+                                                    ~~~~~~~~~~
+!!! error TS2536: Type 'Key' cannot be used to index type 'Input'.
+        : never;
+    

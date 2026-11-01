@@ -1,12 +1,12 @@
 // ast.ts — Hand-written AST type definitions
 // Generated types are in ast.generated.ts
 
-import type { DiagnosticDirectivePolicy } from "#enums/diagnosticDirectivePolicy";
-import type { InternalSymbolName } from "#enums/internalSymbolName";
-import type { LanguageVariant } from "#enums/languageVariant";
-import type { NodeFlags } from "#enums/nodeFlags";
-import type { ScriptKind } from "#enums/scriptKind";
-import { SyntaxKind } from "#enums/syntaxKind";
+import type { DiagnosticDirectivePolicy } from "../../enums/diagnosticDirectivePolicy.js";
+import type { InternalSymbolName } from "../../enums/internalSymbolName.js";
+import type { LanguageVariant } from "../../enums/languageVariant.js";
+import type { NodeFlags } from "../../enums/nodeFlags.js";
+import type { ScriptKind } from "../../enums/scriptKind.js";
+import { SyntaxKind } from "../../enums/syntaxKind.js";
 import type {
     AssertionExpression,
     BindingElement,
@@ -52,8 +52,8 @@ import type {
 } from "./ast.generated.ts";
 import type { SpanMap } from "./spanMap.ts";
 
-export { SyntaxKind } from "#enums/syntaxKind";
-export { TokenFlags } from "#enums/tokenFlags";
+export { SyntaxKind } from "../../enums/syntaxKind.js";
+export { TokenFlags } from "../../enums/tokenFlags.js";
 
 export * from "./ast.generated.ts";
 export * as factory from "./factory.generated.ts";

@@ -235,7 +235,7 @@ export function generateCompilerOptionsAPI(model = options): string {
     const enumNames = [...imports].sort();
     const pathTypes = enumNames.filter(name => name.startsWith("Rooted"));
     const optionEnums = enumNames.filter(name => !name.startsWith("Rooted"));
-    const enumPath = (name: string) => `#enums/${name[0].toLowerCase() + name.slice(1)}`;
+    const enumPath = (name: string) => `../../enums/${name[0].toLowerCase() + name.slice(1)}.js`;
     return `${header}
 ${optionEnums.map(name => `import type { ${name} } from "${enumPath(name)}";`).join("\n")}
 ${pathTypes.length ? `import type {\n    ${pathTypes.join(",\n    ")},\n} from "../ast/index.ts";` : ""}

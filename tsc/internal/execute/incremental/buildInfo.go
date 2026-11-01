@@ -687,6 +687,10 @@ func (b *BuildInfoRootInfoReader) Roots() iter.Seq[tspath.PathKey] {
 	return b.rootToResolved.Keys()
 }
 
+func (b *BuildInfoRootInfoReader) HasRoot(path tspath.PathKey) bool {
+	return b.rootToResolved.Has(path)
+}
+
 func (b *BuildInfoRootInfoReader) RootFileName(path tspath.PathKey) tspath.RootedFilePath {
 	fileName, ok := b.rootFileNames[path]
 	if !ok {

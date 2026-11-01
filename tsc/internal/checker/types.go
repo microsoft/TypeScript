@@ -181,12 +181,67 @@ type SymbolReferenceLinks struct {
 // Links for value symbols
 
 type ValueSymbolLinks struct {
-	resolvedType   *Type // Type of value symbol
+	resolvedType *Type // Type of value symbol
+	target       *ast.Symbol
+	mapper       *TypeMapper
+	extra        *valueSymbolExtra
+}
+
+type valueSymbolExtra struct {
 	writeType      *Type
-	target         *ast.Symbol
-	mapper         *TypeMapper
 	nameType       *Type
 	containingType *Type // Mapped type for mapped type property, containing union or intersection type for synthetic property
+}
+
+func (links *ValueSymbolLinks) getWriteType() *Type {
+	if links.extra == nil {
+		return nil
+	}
+	return links.extra.writeType
+}
+
+func (links *ValueSymbolLinks) getNameType() *Type {
+	if links.extra == nil {
+		return nil
+	}
+	return links.extra.nameType
+}
+
+func (links *ValueSymbolLinks) getContainingType() *Type {
+	if links.extra == nil {
+		return nil
+	}
+	return links.extra.containingType
+}
+
+func (links *ValueSymbolLinks) setWriteType(c *Checker, typ *Type) {
+	if links.extra == nil {
+		if typ == nil {
+			return
+		}
+		links.extra = c.valueSymbolExtraArena.New()
+	}
+	links.extra.writeType = typ
+}
+
+func (links *ValueSymbolLinks) setNameType(c *Checker, typ *Type) {
+	if links.extra == nil {
+		if typ == nil {
+			return
+		}
+		links.extra = c.valueSymbolExtraArena.New()
+	}
+	links.extra.nameType = typ
+}
+
+func (links *ValueSymbolLinks) setContainingType(c *Checker, typ *Type) {
+	if links.extra == nil {
+		if typ == nil {
+			return
+		}
+		links.extra = c.valueSymbolExtraArena.New()
+	}
+	links.extra.containingType = typ
 }
 
 // Additional links for mapped symbols
@@ -383,13 +438,31 @@ type SymbolNodeLinks struct {
 }
 
 type TypeNodeLinks struct {
-	resolvedType        *Type   // Resolved type associated with node
-	outerTypeParameters []*Type // Outer type parameters of anonymous object type
+	resolvedType        *Type    // Resolved type associated with node
+	outerTypeParameters *[]*Type // Outer type parameters of anonymous object type
+}
+
+func (links *TypeNodeLinks) getOuterTypeParameters() []*Type {
+	if links.outerTypeParameters == nil {
+		return nil
+	}
+	return *links.outerTypeParameters
+}
+
+func (links *TypeNodeLinks) setOuterTypeParameters(c *Checker, types []*Type) {
+	if types == nil {
+		links.outerTypeParameters = nil
+		return
+	}
+	if links.outerTypeParameters == nil {
+		links.outerTypeParameters = c.outerTypeParameterListArena.New()
+	}
+	*links.outerTypeParameters = types
 }
 
 type ComputedNameNodeLinks struct {
-	hasName *bool  // If the node has a computable name
-	name    string // Resolved name associated with the type of the node
+	hasName core.Tristate // If the node has a computable name
+	name    string        // Resolved name associated with the type of the node
 }
 
 // Links for enum members
@@ -714,7 +787,7 @@ type Type struct {
 	flags       TypeFlags
 	objectFlags ObjectFlags
 	id          TypeId
-	kind        typeKind
+	kind        typeKind `customlint:"protected"`
 	symbol      *ast.Symbol
 	alias       *TypeAlias
 	checker     *Checker
@@ -748,6 +821,8 @@ func castType[T any](t *Type, kind typeKind) *T {
 	if t.kind != kind {
 		panic("Invalid type cast")
 	}
+	// SAFETY: Each kind is only assigned by newType to a Type embedded at offset zero of the
+	// struct for that kind, and every caller pairs T with its kind.
 	return (*T)(unsafe.Pointer(t))
 }
 
@@ -815,6 +890,7 @@ func (t *Type) AsConditionalType() *ConditionalType {
 
 func (t *Type) AsConstrainedType() *ConstrainedType {
 	if t.kind >= typeKindTypeParameter && t.kind <= typeKindIntersection {
+		// SAFETY: Types of these kinds are structs that embed ConstrainedType at offset zero.
 		return (*ConstrainedType)(unsafe.Pointer(t))
 	}
 	return nil
@@ -822,6 +898,7 @@ func (t *Type) AsConstrainedType() *ConstrainedType {
 
 func (t *Type) AsStructuredType() *StructuredType {
 	if t.kind >= typeKindObject && t.kind <= typeKindIntersection {
+		// SAFETY: Types of these kinds are structs that embed StructuredType at offset zero.
 		return (*StructuredType)(unsafe.Pointer(t))
 	}
 	return nil
@@ -829,6 +906,7 @@ func (t *Type) AsStructuredType() *StructuredType {
 
 func (t *Type) AsObjectType() *ObjectType {
 	if t.kind >= typeKindObject && t.kind <= typeKindEvolvingArray {
+		// SAFETY: Types of these kinds are structs that embed ObjectType at offset zero.
 		return (*ObjectType)(unsafe.Pointer(t))
 	}
 	return nil
@@ -836,6 +914,7 @@ func (t *Type) AsObjectType() *ObjectType {
 
 func (t *Type) AsTypeReference() *TypeReference {
 	if t.kind >= typeKindTypeReference && t.kind <= typeKindTuple {
+		// SAFETY: Types of these kinds are structs that embed TypeReference at offset zero.
 		return (*TypeReference)(unsafe.Pointer(t))
 	}
 	return nil
@@ -843,6 +922,7 @@ func (t *Type) AsTypeReference() *TypeReference {
 
 func (t *Type) AsInterfaceType() *InterfaceType {
 	if t.kind >= typeKindInterface && t.kind <= typeKindTuple {
+		// SAFETY: Types of these kinds are structs that embed InterfaceType at offset zero.
 		return (*InterfaceType)(unsafe.Pointer(t))
 	}
 	return nil
@@ -850,6 +930,7 @@ func (t *Type) AsInterfaceType() *InterfaceType {
 
 func (t *Type) AsUnionOrIntersectionType() *UnionOrIntersectionType {
 	if t.kind >= typeKindUnion && t.kind <= typeKindIntersection {
+		// SAFETY: Types of these kinds are structs that embed UnionOrIntersectionType at offset zero.
 		return (*UnionOrIntersectionType)(unsafe.Pointer(t))
 	}
 	return nil
@@ -1041,8 +1122,12 @@ func (t *ConstrainedType) AsConstrainedType() *ConstrainedType { return t }
 
 type StructuredType struct {
 	ConstrainedType
-	members            ast.SymbolTable
-	properties         []*ast.Symbol
+	members    ast.SymbolTable
+	properties []*ast.Symbol
+	extra      *structuredTypeExtra
+}
+
+type structuredTypeExtra struct {
 	signatures         []*Signature // Signatures (call + construct)
 	callSignatureCount int          // Count of call signatures
 	indexInfos         []*IndexInfo
@@ -1053,15 +1138,118 @@ type StructuredType struct {
 func (t *StructuredType) AsStructuredType() *StructuredType { return t }
 
 func (t *StructuredType) CallSignatures() []*Signature {
-	return slices.Clip(t.signatures[:t.callSignatureCount])
+	if t.extra == nil {
+		return nil
+	}
+	return slices.Clip(t.extra.signatures[:t.extra.callSignatureCount])
 }
 
 func (t *StructuredType) ConstructSignatures() []*Signature {
-	return slices.Clip(t.signatures[t.callSignatureCount:])
+	if t.extra == nil {
+		return nil
+	}
+	return slices.Clip(t.extra.signatures[t.extra.callSignatureCount:])
+}
+
+func (t *StructuredType) getMember(name string) *ast.Symbol {
+	if t.members != nil {
+		return t.members.Get(name)
+	}
+	lazy := t.getLazyState()
+	if lazy == nil {
+		return nil
+	}
+	memberInfo := lazy.layout.memberInfoMap[name]
+	if memberInfo == nil {
+		return nil
+	}
+	return t.getPropertyAt(int(memberInfo.slotIndex))
+}
+
+func (t *StructuredType) getMembers() ast.SymbolTable {
+	if t.members == nil {
+		if properties := t.getProperties(); len(properties) != 0 {
+			t.members = ast.NewSymbolTableWithCapacity(len(properties))
+			for _, member := range properties {
+				t.members.Set(member.Name(), member)
+			}
+		}
+	}
+	return t.members
+}
+
+func (t *StructuredType) getPropertyAt(index int) *ast.Symbol {
+	lazy := t.getLazyState()
+	if lazy == nil {
+		return t.properties[index]
+	}
+	if t.properties == nil {
+		t.properties = make([]*ast.Symbol, len(lazy.layout.memberInfos))
+	}
+	member := t.properties[index]
+	if member == nil {
+		memberInfo := lazy.layout.memberInfos[index]
+		if memberInfo.baseIndex < 0 {
+			member = t.checker.instantiateSymbol(memberInfo.symbol, lazy.mapper)
+		} else {
+			member = t.checker.getPropertyOfType(lazy.baseTypes[memberInfo.baseIndex], memberInfo.symbol.Name())
+		}
+		t.properties[index] = member
+	}
+	return member
+}
+
+func (t *StructuredType) getProperties() []*ast.Symbol {
+	if lazy := t.getLazyState(); lazy != nil && !lazy.propertiesResolved {
+		for i := range lazy.layout.memberInfos {
+			t.getPropertyAt(i)
+		}
+		lazy.propertiesResolved = true
+	}
+	return t.AsStructuredType().properties
+}
+
+func (t *StructuredType) hasProperties() bool {
+	if len(t.properties) != 0 {
+		return true
+	}
+	lazy := t.getLazyState()
+	if lazy == nil {
+		return false
+	}
+	return len(lazy.layout.memberInfos) != 0
+}
+
+func (t *StructuredType) getLazyState() *LazyState {
+	if t.objectFlags&(ObjectFlagsClassOrInterface|ObjectFlagsReference) != 0 {
+		return t.AsType().AsTypeReference().lazy
+	}
+	return nil
+}
+
+func (t *StructuredType) getSignatures() []*Signature {
+	if t.extra == nil {
+		return nil
+	}
+	return t.extra.signatures
+}
+
+func (t *StructuredType) getIndexInfos() []*IndexInfo {
+	if t.extra == nil {
+		return nil
+	}
+	return t.extra.indexInfos
+}
+
+func (t *StructuredType) ensureExtra() *structuredTypeExtra {
+	if t.extra == nil {
+		t.extra = t.checker.structuredTypeExtraArena.New()
+	}
+	return t.extra
 }
 
 func (t *StructuredType) Properties() []*ast.Symbol {
-	return t.properties
+	return t.getProperties()
 }
 
 // Except for tuple type references and reverse mapped types, all object types have an associated symbol.
@@ -1112,6 +1300,27 @@ type TypeReference struct {
 	ObjectType
 	node                  *ast.Node // TypeReferenceNode | ArrayTypeNode | TupleTypeNode when deferred, else nil
 	resolvedTypeArguments []*Type
+	lazy                  *LazyState // Resolved member layout and instantiation state
+}
+
+type LazyState struct {
+	layout             *MemberLayout
+	mapper             *TypeMapper
+	baseTypes          []*Type
+	propertiesResolved bool
+}
+
+type MemberLayout struct {
+	id               uint32                 // Unique identifier for the member layout
+	memberInfoMap    map[string]*MemberInfo // MemberInfos keyed by property name
+	memberInfos      []MemberInfo           // MemberInfos in sorted order
+	layoutProperties []*ast.Symbol          // Lazily created list of layout properties (symbols corresponding to memberInfos)
+}
+
+type MemberInfo struct {
+	symbol    *ast.Symbol // Uninstantiated symbol
+	baseIndex int32       // Index of base type with symbol, or -1 if locally declared
+	slotIndex int32       // Index of resolved symbol in members array
 }
 
 func (t *TypeReference) AsTypeReference() *TypeReference { return t }
@@ -1258,7 +1467,7 @@ type EvolvingArrayType struct {
 type UnionOrIntersectionType struct {
 	StructuredType
 	types                                       []*Type
-	propertyCache                               ast.SymbolTable
+	propertyCache                               ast.SymbolTable // Augmented entries, except complete ones already in the non-augmented cache.
 	propertyCacheWithoutFunctionPropertyAugment ast.SymbolTable
 	resolvedProperties                          []*ast.Symbol
 }
@@ -1406,6 +1615,7 @@ const (
 	SignatureFlagsIsUntypedSignatureInJSFile             SignatureFlags = 1 << 6 // Indicates signature is from a js file and has no types
 	SignatureFlagsIsNonInferrable                        SignatureFlags = 1 << 7 // Indicates signature comes from a non-inferrable type
 	SignatureFlagsIsSignatureCandidateForOverloadFailure SignatureFlags = 1 << 8
+	signatureFlagsNoTypePredicate                        SignatureFlags = 1 << 9
 	// We do not propagate `IsInnerCallChain` or `IsOuterCallChain` to instantiated signatures, as that would result in us
 	// attempting to add `| undefined` on each recursive call to `getReturnTypeOfSignature` when
 	// instantiating the return type.
@@ -1421,15 +1631,79 @@ type Signature struct {
 	minArgumentCount         int32
 	resolvedMinArgumentCount int32
 	declaration              *ast.Node
-	typeParameters           []*Type
 	parameters               []*ast.Symbol
-	thisParameter            *ast.Symbol
 	resolvedReturnType       *Type
-	resolvedTypePredicate    *TypePredicate
 	target                   *Signature
 	mapper                   *TypeMapper
-	isolatedSignatureType    *Type
-	composite                *CompositeSignature
+	extra                    *signatureExtra
+}
+
+type signatureExtra struct {
+	typeParameters        []*Type
+	thisParameter         *ast.Symbol
+	resolvedTypePredicate *TypePredicate
+	isolatedSignatureType *Type
+	composite             *CompositeSignature
+}
+
+func (s *Signature) ensureExtra(c *Checker) *signatureExtra {
+	if s.extra == nil {
+		s.extra = c.signatureExtraArena.New()
+	}
+	return s.extra
+}
+
+func (s *Signature) setTypeParameters(c *Checker, types []*Type) {
+	if types != nil || s.extra != nil {
+		s.ensureExtra(c).typeParameters = types
+	}
+}
+
+func (s *Signature) setThisParameter(c *Checker, parameter *ast.Symbol) {
+	if parameter != nil || s.extra != nil {
+		s.ensureExtra(c).thisParameter = parameter
+	}
+}
+
+func (s *Signature) getResolvedTypePredicate(c *Checker) *TypePredicate {
+	if s.flags&signatureFlagsNoTypePredicate != 0 {
+		return c.noTypePredicate
+	}
+	if s.extra == nil {
+		return nil
+	}
+	return s.extra.resolvedTypePredicate
+}
+
+func (s *Signature) setResolvedTypePredicate(c *Checker, predicate *TypePredicate) {
+	s.flags &^= signatureFlagsNoTypePredicate
+	if predicate != nil && predicate == c.noTypePredicate {
+		s.flags |= signatureFlagsNoTypePredicate
+		predicate = nil
+	}
+	if predicate != nil || s.extra != nil {
+		s.ensureExtra(c).resolvedTypePredicate = predicate
+	}
+}
+
+func (s *Signature) getComposite() *CompositeSignature {
+	if s.extra == nil {
+		return nil
+	}
+	return s.extra.composite
+}
+
+func (s *Signature) setComposite(c *Checker, composite *CompositeSignature) {
+	if composite != nil || s.extra != nil {
+		s.ensureExtra(c).composite = composite
+	}
+}
+
+func (s *Signature) getIsolatedSignatureType() *Type {
+	if s.extra == nil {
+		return nil
+	}
+	return s.extra.isolatedSignatureType
 }
 
 func (s *Signature) Id() SignatureId {
@@ -1437,11 +1711,14 @@ func (s *Signature) Id() SignatureId {
 }
 
 func (s *Signature) Flags() SignatureFlags {
-	return s.flags
+	return s.flags &^ signatureFlagsNoTypePredicate
 }
 
 func (s *Signature) TypeParameters() []*Type {
-	return s.typeParameters
+	if s.extra == nil {
+		return nil
+	}
+	return s.extra.typeParameters
 }
 
 func (s *Signature) Declaration() *ast.Node {
@@ -1453,7 +1730,10 @@ func (s *Signature) Target() *Signature {
 }
 
 func (s *Signature) ThisParameter() *ast.Symbol {
-	return s.thisParameter
+	if s.extra == nil {
+		return nil
+	}
+	return s.extra.thisParameter
 }
 
 func (s *Signature) Parameters() []*ast.Symbol {

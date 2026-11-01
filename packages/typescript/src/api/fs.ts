@@ -1,10 +1,14 @@
-import getExePath from "#getExePath";
-import { dirname } from "node:path";
 import type {
     RootedDirectoryPath,
     RootedFilePath,
     RootedPath,
 } from "../ast/index.ts";
+import type { Snapshot } from "./async/api.ts";
+import { serverFS } from "./fsCallbacks.ts";
+import {
+    getDefaultExePath,
+    nodeProcess,
+} from "./nodeProcess.ts";
 import { normalizePath } from "./path.ts";
 import type {
     RequestDirectoryEntries,
@@ -32,30 +36,7 @@ export interface FileSystemStat {
     mtime: Date;
 }
 
-const useOS: unique symbol = Symbol("useOS");
-const identity: unique symbol = Symbol("identity");
-const fakeStat: unique symbol = Symbol("fakeStat");
-const noop: unique symbol = Symbol("noop");
-const error: unique symbol = Symbol("error");
-
-export const serverFS: {
-    /** Delegate the configured operation, or the current callback invocation, to the server's operating-system filesystem. */
-    readonly useOS: typeof useOS;
-    /** Use the input path as its own real path without consulting a filesystem. Valid only for `realpath`. */
-    readonly identity: typeof identity;
-    /** Synthesize stat information from `directoryExists` and `fileExists`. Valid only for `stat`. */
-    readonly fakeStat: typeof fakeStat;
-    /** Ignore writes without invoking a callback or writing to the server's operating-system filesystem. Valid only for `writeFile`. */
-    readonly noop: typeof noop;
-    /** Panic if the configured operation, or current callback invocation, reaches the server filesystem. */
-    readonly error: typeof error;
-} = {
-    useOS: useOS,
-    identity: identity,
-    fakeStat: fakeStat,
-    noop: noop,
-    error: error,
-};
+export { serverFS };
 
 export interface FileSystemCallbacks {
     directoryExists:
@@ -143,11 +124,11 @@ export function createFileSystemWithLib(
         : [normalizePath("bundled:///libs")];
     if (!options.defaultLibraryPath) {
         try {
-            defaultLibraryPaths.push(normalizePath(dirname(getExePath())));
+            defaultLibraryPaths.push(normalizePath(nodeProcess().getBuiltinModule("node:path").dirname(getDefaultExePath())));
         }
         catch {
-            // A socket-connected embedded server can provide bundled libs without
-            // a locally installed compiler executable.
+            // A socket-connected embedded server or a WebAssembly transport can
+            // provide bundled libs without a locally installed compiler executable.
         }
     }
     const symlinks = { ...options.symlinks };
@@ -167,6 +148,26 @@ export function createFileSystemLayer(
     options: CreateFileSystemOptions = {},
 ): RequestFileSystem {
     return createRequestFileSystem("layer", files, options);
+}
+
+/**
+ * Reuses a snapshot's retained request filesystem without resending its contents.
+ * Entries take precedence over the receiving snapshot's filesystem; a full source
+ * filesystem remains total. Host and editor contents are not copied.
+ * An optional layer or full filesystem is applied over the reused filesystem.
+ * The source must remain active until the snapshot operation completes.
+ */
+export function createFileSystemFromSnapshot(
+    snapshot: Pick<Snapshot, "id" | "isDisposed">,
+    fileSystem?: RequestFileSystem | undefined,
+): RequestFileSystem {
+    if (snapshot.isDisposed()) {
+        throw new Error("Cannot create a filesystem from a disposed snapshot");
+    }
+    if (fileSystem?.kind === "snapshot") {
+        throw new Error("Only a layer or full filesystem can be applied on top of a snapshot filesystem");
+    }
+    return { kind: "snapshot", snapshot: snapshot.id, files: {}, fileSystem };
 }
 
 function createRequestFileSystem(

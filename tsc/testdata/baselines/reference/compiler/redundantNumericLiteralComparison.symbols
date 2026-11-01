@@ -1,0 +1,15 @@
+//// [tests/cases/compiler/redundantNumericLiteralComparison.ts] ////
+
+=== redundantNumericLiteralComparison.ts ===
+function shouldRetry(retryCount: number, currentCount: number) {
+>shouldRetry : Symbol(shouldRetry, Decl(redundantNumericLiteralComparison.ts, 0, 0))
+>retryCount : Symbol(retryCount, Decl(redundantNumericLiteralComparison.ts, 0, 21))
+>currentCount : Symbol(currentCount, Decl(redundantNumericLiteralComparison.ts, 0, 40))
+
+    return retryCount === -1 || (retryCount !== -1 && currentCount <= retryCount);
+>retryCount : Symbol(retryCount, Decl(redundantNumericLiteralComparison.ts, 0, 21))
+>retryCount : Symbol(retryCount, Decl(redundantNumericLiteralComparison.ts, 0, 21))
+>currentCount : Symbol(currentCount, Decl(redundantNumericLiteralComparison.ts, 0, 40))
+>retryCount : Symbol(retryCount, Decl(redundantNumericLiteralComparison.ts, 0, 21))
+}
+

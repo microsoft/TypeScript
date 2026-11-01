@@ -1,0 +1,8 @@
+//// [tests/cases/compiler/domResizeObserverExplicitArrayCallback.ts] ////
+
+=== domResizeObserverExplicitArrayCallback.ts ===
+new ResizeObserver((entries: ResizeObserverEntry[]) => {});
+>ResizeObserver : Symbol(ResizeObserver, Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --))
+>entries : Symbol(entries, Decl(domResizeObserverExplicitArrayCallback.ts, 0, 20))
+>ResizeObserverEntry : Symbol(ResizeObserverEntry, Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --))
+

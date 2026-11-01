@@ -1,0 +1,28 @@
+error TS5011: The common source directory of 'tsconfig.json' is '../src'. The 'rootDir' setting must be explicitly set to this or another path to adjust your output's file layout.
+  Visit https://aka.ms/ts6 for migration information.
+error TS6059: File '/project/src/index.ts' is not under 'rootDir' '/project/example'. 'rootDir' is expected to contain all source files.
+  The file is in the program because:
+    Matched by include pattern '../src' in '/project/example/tsconfig.json'
+
+
+!!! error TS5011: The common source directory of 'tsconfig.json' is '../src'. The 'rootDir' setting must be explicitly set to this or another path to adjust your output's file layout.
+!!! error TS5011:   Visit https://aka.ms/ts6 for migration information.
+!!! error TS6059: File '/project/src/index.ts' is not under 'rootDir' '/project/example'. 'rootDir' is expected to contain all source files.
+!!! error TS6059:   The file is in the program because:
+!!! error TS6059:     Matched by include pattern '../src' in '/project/example/tsconfig.json'
+==== /project/example/tsconfig.json (0 errors) ====
+    {
+        "extends": "../tsconfig.json"
+    }
+    
+==== /project/src/index.ts (0 errors) ====
+    export const value = 0;
+    
+==== /project/tsconfig.json (0 errors) ====
+    {
+        "compilerOptions": {
+            "outDir": "lib"
+        },
+        "include": ["src"]
+    }
+    

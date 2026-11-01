@@ -1,0 +1,11 @@
+//// [tests/cases/compiler/defaultTypesExcludeLibraryReferences.ts] ////
+
+=== /main.ts ===
+["workflow.yml"].includes("workflow.yml");
+>["workflow.yml"].includes("workflow.yml") : any
+>["workflow.yml"].includes : any
+>["workflow.yml"] : string[]
+>"workflow.yml" : "workflow.yml"
+>includes : any
+>"workflow.yml" : "workflow.yml"
+

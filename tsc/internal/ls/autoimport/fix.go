@@ -22,6 +22,7 @@ import (
 	"github.com/microsoft/TypeScript/tsc/internal/ls/lsutil"
 	"github.com/microsoft/TypeScript/tsc/internal/lsp/lsproto"
 	"github.com/microsoft/TypeScript/tsc/internal/modulespecifiers"
+	"github.com/microsoft/TypeScript/tsc/internal/printer"
 	"github.com/microsoft/TypeScript/tsc/internal/scanner"
 	"github.com/microsoft/TypeScript/tsc/internal/stringutil"
 	"github.com/microsoft/TypeScript/tsc/internal/tspath"
@@ -147,11 +148,11 @@ func addImportType(f *Fix, file *ast.SourceFile, preferences lsutil.UserPreferen
 		panic("UsagePosition must be set for JSDoc type import fix")
 	}
 	quotePreference := lsutil.GetQuotePreference(file, preferences)
-	quoteChar := "\""
+	quoteChar := printer.QuoteCharDoubleQuote
 	if quotePreference == lsutil.QuotePreferenceSingle {
-		quoteChar = "'"
+		quoteChar = printer.QuoteCharSingleQuote
 	}
-	importTypePrefix := fmt.Sprintf("import(%s%s%s).", quoteChar, f.ModuleSpecifier, quoteChar)
+	importTypePrefix := fmt.Sprintf("import(%c%s%c).", quoteChar, printer.EscapeString(f.ModuleSpecifier, quoteChar), quoteChar)
 	tracker.InsertText(file, *f.UsagePosition, importTypePrefix)
 	return diagnostics.Change_0_to_1.Localize(locale, f.Name, importTypePrefix+f.Name)
 }

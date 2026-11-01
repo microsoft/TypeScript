@@ -1745,6 +1745,8 @@ func (s *Server) handleInitialized(ctx context.Context, params *lsproto.Initiali
 		s.logger.Logf("file watching: disabled (client lacks dynamic watch registration and builtin watcher backend is not fast-recursive)")
 	}
 
+	workspaceRoots := getInitialWorkspaceRoots(s.initializeParams)
+
 	cwd := s.cwd
 	if s.clientCapabilities.Workspace.WorkspaceFolders &&
 		s.initializeParams.WorkspaceFolders != nil &&
@@ -1778,6 +1780,7 @@ func (s *Server) handleInitialized(ctx context.Context, params *lsproto.Initiali
 			DebounceDelay:          500 * time.Millisecond,
 			PushDiagnosticsEnabled: !disablePushDiagnostics,
 			RunExternalCode:        runExternalCode,
+			InitialWorkspaceRoots:  workspaceRoots,
 		},
 		FS:                  s.fs,
 		Logger:              s.logger,
@@ -1836,6 +1839,23 @@ func (s *Server) handleShutdown(ctx context.Context, _ lsproto.NoParams, _ *lspr
 
 func (s *Server) handleExit(ctx context.Context, _ lsproto.NoParams) error {
 	return io.EOF
+}
+
+func getInitialWorkspaceRoots(params *lsproto.InitializeParams) []tspath.RootedDirectoryPath {
+	workspaceRoots := []tspath.RootedDirectoryPath{}
+	if params.WorkspaceFolders != nil && params.WorkspaceFolders.WorkspaceFolders != nil {
+		for _, folder := range *params.WorkspaceFolders.WorkspaceFolders {
+			uri := lsproto.DocumentUri(folder.Uri)
+			if strings.HasPrefix(string(uri), "file://") {
+				workspaceRoots = append(workspaceRoots, tspath.RootedDirectoryPathFromPath(uri.Path()))
+			}
+		}
+	} else if params.RootUri.DocumentUri != nil && strings.HasPrefix(string(*params.RootUri.DocumentUri), "file://") {
+		workspaceRoots = append(workspaceRoots, tspath.RootedDirectoryPathFromPath(params.RootUri.DocumentUri.Path()))
+	} else if params.RootPath != nil && params.RootPath.String != nil && tspath.PathIsAbsolute(*params.RootPath.String) {
+		workspaceRoots = append(workspaceRoots, tspath.RootedDirectoryPathFromAbsolute(*params.RootPath.String))
+	}
+	return workspaceRoots
 }
 
 func (s *Server) handleDidChangeWorkspaceConfiguration(ctx context.Context, params *lsproto.DidChangeConfigurationParams) error {
@@ -2341,15 +2361,13 @@ func (s *Server) handleInitializeAPISession(ctx context.Context, params *lsproto
 
 	apiSession := api.NewLSPSession(s.session, nil)
 
-	// Use provided pipe path or generate a unique one
-	var pipePath string
+	var transport *ipc.PipeTransport
+	var err error
 	if params.Pipe != nil && *params.Pipe != "" {
-		pipePath = *params.Pipe
+		transport, err = ipc.NewPipeTransport(*params.Pipe)
 	} else {
-		pipePath = s.generateAPIPipePath()
+		transport, err = ipc.NewPrivatePipeTransport(s.generateAPIPipeName())
 	}
-
-	transport, err := ipc.NewPipeTransport(pipePath)
 	if err != nil {
 		return nil, fmt.Errorf("failed to create API transport: %w", err)
 	}
@@ -2404,15 +2422,14 @@ func (s *Server) handleInitializeAPISession(ctx context.Context, params *lsproto
 
 	return &lsproto.InitializeAPISessionResult{
 		SessionId: apiSession.ID(),
-		Pipe:      pipePath,
+		Pipe:      transport.Path(),
 	}, nil
 }
 
-func (s *Server) generateAPIPipePath() string {
-	// Generate a high-entropy path using time and random source
+func (s *Server) generateAPIPipeName() string {
 	now := time.Now().UnixNano()
 	rnd := rand.Uint64()
-	return ipc.GeneratePipePath(fmt.Sprintf("tsgo-api-%x-%x", now, rnd))
+	return fmt.Sprintf("tsgo-api-%x-%x", now, rnd)
 }
 
 func (s *Server) removeAPISession(id string) {

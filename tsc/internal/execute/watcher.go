@@ -704,7 +704,7 @@ func (w *Watcher) recheckTsConfig(force bool) bool {
 
 func (w *Watcher) parseConfigFile() *tsoptions.ParsedCommandLine {
 	extendedConfigCache := &tsc.ExtendedConfigCache{}
-	configParseResult, errors := tsoptions.GetParsedCommandLineOfConfigFile(w.configFileName, w.compilerOptionsFromCommandLine, w.commandLineRaw, w.sys.FS(), extendedConfigCache)
+	configParseResult, errors := tsoptions.GetParsedCommandLineOfConfigFile(w.configFileName, w.compilerOptionsFromCommandLine, w.commandLineRaw, tsoptions.NewDefaultParseConfigHost(w.sys.FS()), extendedConfigCache)
 	if len(errors) > 0 {
 		for _, e := range errors {
 			w.reportDiagnostic(e)

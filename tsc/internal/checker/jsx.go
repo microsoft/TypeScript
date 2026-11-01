@@ -285,7 +285,7 @@ func (c *Checker) discriminateContextualTypeByJSXAttributes(node *ast.Node, cont
 		if s.Name() == jsxChildrenPropertyName && ast.IsJsxElement(element) && len(ast.GetSemanticJsxChildren(element.Children().Nodes)) != 0 {
 			return false
 		}
-		return node.Symbol().Members()[s.Name()] == nil && c.isDiscriminantProperty(contextualType, s.Name())
+		return node.Symbol().Members().Get(s.Name()) == nil && c.isDiscriminantProperty(contextualType, s.Name())
 	})
 	discriminator := &ObjectLiteralDiscriminator{c: c, props: discriminantProperties, members: discriminantMembers}
 	discriminated := c.discriminateTypeByDiscriminableItems(contextualType, discriminator)
@@ -710,9 +710,9 @@ func (c *Checker) checkApplicableSignatureForJsxCallLikeElement(node *ast.Node, 
 func (c *Checker) createJsxAttributesTypeFromAttributesProperty(openingLikeElement *ast.Node, checkMode CheckMode) *Type {
 	var allAttributesTable ast.SymbolTable
 	if c.strictNullChecks {
-		allAttributesTable = make(ast.SymbolTable)
+		allAttributesTable = ast.NewSymbolTable()
 	}
-	attributesTable := make(ast.SymbolTable)
+	attributesTable := ast.NewSymbolTable()
 	var attributesSymbol *ast.Symbol
 	attributeParent := openingLikeElement
 	spread := c.emptyJsxObjectType
@@ -750,9 +750,9 @@ func (c *Checker) createJsxAttributesTypeFromAttributesProperty(openingLikeEleme
 				links := c.valueSymbolLinks.Get(attributeSymbol)
 				links.resolvedType = exprType
 				links.target = member
-				attributesTable[attributeSymbol.Name()] = attributeSymbol
+				attributesTable.Set(attributeSymbol.Name(), attributeSymbol)
 				if allAttributesTable != nil {
-					allAttributesTable[attributeSymbol.Name()] = attributeSymbol
+					allAttributesTable.Set(attributeSymbol.Name(), attributeSymbol)
 				}
 				if attributeDecl.Name().Text() == jsxChildrenPropertyName {
 					explicitlySpecifyChildrenAttribute = true
@@ -766,9 +766,9 @@ func (c *Checker) createJsxAttributesTypeFromAttributesProperty(openingLikeEleme
 				}
 			} else {
 				debug.Assert(attributeDecl.Kind == ast.KindJsxSpreadAttribute)
-				if len(attributesTable) != 0 {
+				if attributesTable.Len() != 0 {
 					spread = c.getSpreadType(spread, createJsxAttributesType(), attributesSymbol, objectFlags, false /*readonly*/)
-					attributesTable = make(ast.SymbolTable)
+					attributesTable = ast.NewSymbolTable()
 				}
 				exprType := c.getReducedType(c.checkExpressionEx(attributeDecl.Expression(), checkMode&CheckModeInferential))
 				if IsTypeAny(exprType) {
@@ -790,7 +790,7 @@ func (c *Checker) createJsxAttributesTypeFromAttributesProperty(openingLikeEleme
 			}
 		}
 		if !hasSpreadAnyType {
-			if len(attributesTable) != 0 {
+			if attributesTable.Len() != 0 {
 				spread = c.getSpreadType(spread, createJsxAttributesType(), attributesSymbol, objectFlags, false /*readonly*/)
 			}
 		}
@@ -846,8 +846,8 @@ func (c *Checker) createJsxAttributesTypeFromAttributesProperty(openingLikeEleme
 			childrenPropSymbol.SetValueDeclaration(c.factory.NewPropertySignatureDeclaration(nil, c.factory.NewIdentifier(jsxChildrenPropertyName), nil /*postfixToken*/, nil /*type*/, nil /*initializer*/))
 			childrenPropSymbol.ValueDeclaration().Parent = attributeParent
 			childrenPropSymbol.ValueDeclaration().AsPropertySignatureDeclaration().Symbol = childrenPropSymbol
-			childPropMap := make(ast.SymbolTable)
-			childPropMap[jsxChildrenPropertyName] = childrenPropSymbol
+			childPropMap := ast.NewSymbolTable()
+			childPropMap.Set(jsxChildrenPropertyName, childrenPropSymbol)
 			spread = c.getSpreadType(spread, c.newAnonymousType(attributesSymbol, childPropMap, nil, nil, nil), attributesSymbol, objectFlags|c.getPropagatingFlagsOfTypes(childTypes, TypeFlagsNone), false /*readonly*/)
 		}
 	}
@@ -987,14 +987,14 @@ func (c *Checker) getJsxPropsTypeFromClassType(sig *Signature, context *ast.Node
 }
 
 func (c *Checker) getJsxPropsTypeForSignatureFromMember(sig *Signature, forcedLookupLocation string) *Type {
-	if sig.composite != nil {
+	if sig.getComposite() != nil {
 		// JSX Elements using the legacy `props`-field based lookup (eg, react class components) need to treat the `props` member as an input
 		// instead of an output position when resolving the signature. We need to go back to the input signatures of the composite signature,
 		// get the type of `props` on each return type individually, and then _intersect them_, rather than union them (as would normally occur
 		// for a union signature). It's an unfortunate quirk of looking in the output of the signature for the type we want to use for the input.
 		// The default behavior of `getTypeOfFirstParameterOfSignatureWithFallback` when no `props` member name is defined is much more sane.
 		var results []*Type
-		for _, signature := range sig.composite.signatures {
+		for _, signature := range sig.getComposite().signatures {
 			instance := c.getReturnTypeOfSignature(signature)
 			if IsTypeAny(instance) {
 				return instance
