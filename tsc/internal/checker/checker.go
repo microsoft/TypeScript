@@ -24841,12 +24841,13 @@ func getActiveMapperCacheKey(t *Type, alias *TypeAlias) CacheHashKey {
 
 func (c *Checker) getCircularTypeNames() []string {
 	typeCounts := make(map[*Type]int)
-	var circularTypeNames []string
+	var circularSymbols []*ast.Symbol
 	// A computation reaching the depth limit names only its own
 	// instantiations, which do not depend on where it was first computed;
 	// see "Instantiation limits".
 	stack := c.instantiationStack
-	if len(stack) != instantiationTotalDepthLimit {
+	total := len(stack) == instantiationTotalDepthLimit
+	if !total {
 		stack = stack[c.currentResolution().depthStart:]
 	}
 	for _, t := range stack {
@@ -24856,11 +24857,27 @@ func (c *Checker) getCircularTypeNames() []string {
 			if t.alias != nil {
 				symbol = t.alias.symbol
 			}
-			if symbol != nil && len(symbol.Name()) != 0 && symbol.Name()[0] != '\xFE' {
-				if name := c.SymbolToString(symbol); !slices.Contains(circularTypeNames, name) {
-					circularTypeNames = append(circularTypeNames, name)
-				}
+			if symbol != nil && len(symbol.Name()) != 0 && symbol.Name()[0] != '\xFE' && !slices.Contains(circularSymbols, symbol) {
+				circularSymbols = append(circularSymbols, symbol)
 			}
+		}
+	}
+	if total && len(circularSymbols) > 1 {
+		// The whole instantiation is named, and which of the types in the
+		// cycle it entered first depends on what was cached before, so the
+		// cycle is named starting from the type declared first.
+		first := 0
+		for i, s := range circularSymbols {
+			if c.compareSymbols(s, circularSymbols[first]) < 0 {
+				first = i
+			}
+		}
+		circularSymbols = append(circularSymbols[first:], circularSymbols[:first]...)
+	}
+	var circularTypeNames []string
+	for _, s := range circularSymbols {
+		if name := c.SymbolToString(s); !slices.Contains(circularTypeNames, name) {
+			circularTypeNames = append(circularTypeNames, name)
 		}
 	}
 	return circularTypeNames
