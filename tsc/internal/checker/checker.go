@@ -10857,7 +10857,12 @@ func (c *Checker) assignContextualParameterTypesOfFunctionUncached(node *ast.Nod
 		// already assigned contextual types.
 		if links.flags&NodeCheckFlagsContextChecked == 0 {
 			setFlagMemoBits(c, memoKeyOf(node, memoContextualParameters), &links.flags, NodeCheckFlagsContextChecked, NodeCheckFlagsContextChecked)
-			signature := c.getSignatureFromDeclarationUncontextual(node)
+			// A JSDoc @type tag on the function supplies the signature of its
+			// symbol, and the types of its parameters.
+			signature := c.getSignatureOfFullSignatureType(node)
+			if signature == nil {
+				signature = c.getSignatureFromDeclarationUncontextual(node)
+			}
 			c.beginTypeResolution(node, TypeSystemPropertyNameContextChecked, nil)
 			if c.isContextSensitive(node) {
 				if contextualSignature != nil {
