@@ -6,6 +6,7 @@ import {
     AbstractMessageBuffer,
     createMessageConnection,
     Disposable,
+    Message,
     type MessageConnection,
     NullLogger,
     RAL,
@@ -97,16 +98,74 @@ function installRuntime(): void {
 }
 
 /** Creates a JSON-RPC connection over Node.js streams. */
-export function createStreamConnection(readable: EventSource, writable: WritableStream): MessageConnection {
+export function createStreamConnection(readable: EventSource, writable: WritableStream): { connection: MessageConnection; drain(): Promise<void>; } {
     installRuntime();
+    const frames = new IncomingFrames();
+    const responses = new Map<string, Message>();
+    let closing = false;
+    let resolveDrain: (() => void) | undefined;
+
+    function finishDrain(): void {
+        if (frames.pending === 0 && responses.size === 0 && resolveDrain) {
+            resolveDrain();
+            resolveDrain = undefined;
+        }
+    }
+
+    function onClose(stream: EventSource, listener: () => void): Disposable {
+        return listen(stream, "close", () => {
+            // A write-side close can precede EOF on the read side. Only frames
+            // received before close belong to this drain; do not wait for later data.
+            closing = true;
+            listener();
+        });
+    }
+
+    const decoder = RAL().applicationJson.decoder;
     const reader = new ReadableStreamMessageReader({
-        onClose: listener => listen(readable, "close", listener),
+        onClose: listener => onClose(readable, listener),
         onError: listener => listen(readable, "error", listener),
         onEnd: listener => listen(readable, "end", listener),
-        onData: listener => listen(readable, "data", listener),
+        onData: listener =>
+            listen(readable, "data", (data: Uint8Array | string) => {
+                if (closing) return;
+                const bytes = typeof data === "string" ? Buffer.from(data, "utf8") : data;
+                frames.append(bytes);
+                listener(bytes);
+            }),
+    }, {
+        contentTypeDecoder: {
+            name: decoder.name,
+            async decode(data, options) {
+                try {
+                    return await decoder.decode(data, options);
+                }
+                catch (error) {
+                    frames.finish();
+                    finishDrain();
+                    throw error;
+                }
+            },
+        },
     });
+    // This connection does not consume partial-message events. In particular,
+    // avoid leaving their repeating timer alive after a truncated frame closes.
+    reader.partialMessageTimeout = 0;
+    const listenForMessages = reader.listen.bind(reader);
+    reader.listen = callback =>
+        listenForMessages(message => {
+            const key = responseKey(message);
+            if (key !== undefined) responses.set(key, message);
+            try {
+                callback(message);
+            }
+            finally {
+                frames.finish();
+                finishDrain();
+            }
+        });
     const writer = new WriteableStreamMessageWriter({
-        onClose: listener => listen(writable, "close", listener),
+        onClose: listener => onClose(writable, listener),
         onError: listener => listen(writable, "error", listener),
         onEnd: listener => listen(writable, "end", listener),
         write: (data: Uint8Array | string, encoding?: RAL.MessageBufferEncoding) =>
@@ -121,5 +180,85 @@ export function createStreamConnection(readable: EventSource, writable: Writable
             }),
         end: () => writable.end(),
     });
-    return createMessageConnection(reader, writer, NullLogger);
+    const connection = createMessageConnection(reader, writer, NullLogger, {
+        messageStrategy: {
+            handleMessage(message, next) {
+                try {
+                    return next(message);
+                }
+                finally {
+                    const key = responseKey(message);
+                    if (key !== undefined && responses.get(key) === message) responses.delete(key);
+                    finishDrain();
+                }
+            },
+        },
+    });
+    return {
+        connection,
+        drain: () =>
+            frames.pending === 0 && responses.size === 0
+                ? Promise.resolve()
+                : new Promise<void>(resolve => {
+                    resolveDrain = resolve;
+                }),
+    };
+}
+
+function responseKey(message: Message): string | undefined {
+    // Match the vendored connection's request-first classification and its
+    // response queue key, which stringifies both numeric and string IDs.
+    return !Message.isRequest(message) && Message.isResponse(message) && message.id !== null
+        ? String(message.id)
+        : undefined;
+}
+
+/** Counts complete Content-Length frames without retaining or copying their bodies. */
+class IncomingFrames {
+    private header = "";
+    private remaining: number | undefined;
+    private valid = true;
+    pending = 0;
+
+    append(data: Uint8Array): void {
+        if (!this.valid) return;
+        let offset = 0;
+        while (offset < data.length) {
+            if (this.remaining !== undefined) {
+                const consumed = Math.min(this.remaining, data.length - offset);
+                this.remaining -= consumed;
+                offset += consumed;
+                if (this.remaining === 0) {
+                    this.pending++;
+                    this.remaining = undefined;
+                }
+                continue;
+            }
+            this.header += String.fromCharCode(data[offset++] & 0x7f);
+            if (!this.header.endsWith("\r\n\r\n")) continue;
+            let contentLength: string | undefined;
+            for (const line of this.header.slice(0, -4).split("\r\n")) {
+                const separator = line.indexOf(":");
+                if (separator < 0) {
+                    this.valid = false;
+                    return;
+                }
+                if (line.slice(0, separator).toLowerCase() === "content-length") contentLength = line.slice(separator + 1).trim();
+            }
+            const length = contentLength ? parseInt(contentLength) : NaN;
+            if (!Number.isSafeInteger(length) || length < 0) {
+                this.valid = false;
+                return;
+            }
+            this.header = "";
+            if (length === 0) this.pending++;
+            else this.remaining = length;
+        }
+    }
+
+    finish(): void {
+        // After an invalid header, the reader may recover on a later data event
+        // even though frame tracking has stopped.
+        if (this.pending > 0) this.pending--;
+    }
 }
