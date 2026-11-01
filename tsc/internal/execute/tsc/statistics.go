@@ -126,10 +126,10 @@ func (s *Statistics) Report(w io.Writer, testing CommandLineTesting) {
 		table.add(prefix+"Changes compute time", s.compileTimes.ChangesComputeTime)
 	}
 	s.addContentMapperStatistics(&table, prefix)
-	table.add(prefix+"Total time", s.compileTimes.totalTime)
 	if cpuTime, err := osutil.ProcessCPUTime(); err == nil {
 		table.add("CPU time", cpuTime)
 	}
+	table.add(prefix+"Total time", s.compileTimes.totalTime)
 	table.print(w)
 }
 
