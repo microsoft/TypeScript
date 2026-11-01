@@ -14,7 +14,7 @@ class Base {
 >Base : Base
 
     private add() {
->add : () => number
+>add : () => any
 
         if (isDerived(this)) {
 >isDerived(this) : boolean
@@ -28,14 +28,14 @@ class Base {
 >1 : 1
         }
         const w = this.add2();
->w : number
+>w : any
 >this.add2() : number
 >this.add2 : () => number
 >this : this
 >add2 : () => number
 
         return w;
->w : number
+>w : any
     }
     private add2() { return 2; }
 >add2 : () => number
