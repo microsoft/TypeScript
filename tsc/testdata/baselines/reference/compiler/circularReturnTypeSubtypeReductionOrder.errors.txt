@@ -1,3 +1,5 @@
+declaration.ts(6,5): error TS7023: 'rebuild' implicitly has return type 'any' because it does not have a return type annotation and is referenced directly or indirectly in one of its return expressions.
+declaration.ts(9,5): error TS7023: 'b' implicitly has return type 'any' because it does not have a return type annotation and is referenced directly or indirectly in one of its return expressions.
 expression.ts(10,7): error TS2322: Type 'typeof A' is not assignable to type 'new () => A'.
   Type 'A' is not assignable to type 'A'. Two different types with this name exist, but they are unrelated.
     Types of property 'c' are incompatible.
@@ -38,16 +40,20 @@ expression.ts(14,5): error TS7023: 'b' implicitly has return type 'any' because 
     };
     export {};
     
-==== declaration.ts (0 errors) ====
+==== declaration.ts (2 errors) ====
     interface B {
         b(): B;
     }
     declare const flag: boolean;
     class K {
         rebuild() {
+        ~~~~~~~
+!!! error TS7023: 'rebuild' implicitly has return type 'any' because it does not have a return type annotation and is referenced directly or indirectly in one of its return expressions.
             return flag ? this : new B();
         }
         b() {
+        ~
+!!! error TS7023: 'b' implicitly has return type 'any' because it does not have a return type annotation and is referenced directly or indirectly in one of its return expressions.
             return this.rebuild();
         }
     }

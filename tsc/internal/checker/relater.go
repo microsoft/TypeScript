@@ -2517,7 +2517,18 @@ func (c *Checker) isResolvingReturnTypeOfSignature(signature *Signature) bool {
 	if signature.getComposite() != nil && core.Some(signature.getComposite().signatures, c.isResolvingReturnTypeOfSignature) {
 		return true
 	}
-	return signature.resolvedReturnType.get(c) == nil && c.isResolutionInProgress(signature, TypeSystemPropertyNameResolvedReturnType)
+	if signature.resolvedReturnType.get(c) != nil {
+		return false
+	}
+	start := c.findResolutionCycleStartIndex(signature, TypeSystemPropertyNameResolvedReturnType)
+	if start < 0 {
+		return false
+	}
+	c.markTypeResolutionCircular(start)
+	// Computed from the first member of the cycle, the return type may be
+	// available after all.
+	c.yieldObservedCycle(start)
+	return signature.resolvedReturnType.get(c) == nil
 }
 
 func (c *Checker) findMatchingSignatures(signatureLists [][]*Signature, signature *Signature, listIndex int) []*Signature {

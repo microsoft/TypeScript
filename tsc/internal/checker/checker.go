@@ -10808,23 +10808,30 @@ func (c *Checker) contextuallyCheckFunctionExpressionOrObjectLiteralMethodUncach
 	if links.flags&NodeCheckFlagsContextChecked == 0 || links.flags&NodeCheckFlagsSignatureContextChecked != 0 && !hidden {
 		return
 	}
+	// The flag guards against checking the function again from within the
+	// check, so it is set now, and is only discarded if a cycle in progress
+	// logs it.
+	markerLogged := c.logResults()
 	setFlagMemoBits(c, memoKeyOf(node, memoContextChecked), &links.flags, NodeCheckFlagsSignatureContextChecked, NodeCheckFlagsSignatureContextChecked)
 	signature := c.getSignatureFromDeclarationUncontextual(node)
 	contextualSignature := c.getContextualSignature(node)
 	// The return type is inferred now, while the contextual types of the
 	// function's enclosing expressions are in place; a later request may
 	// come from where they are not.
-	if contextualSignature != nil && checkMode&^CheckModeTypeOnly == CheckModeNormal && c.getReturnTypeFromAnnotation(node) == nil && !c.isResolvingReturnTypeOfSignature(signature) {
-		c.getReturnTypeOfSignature(signature)
-	} else if contextualSignature != nil && c.getReturnTypeFromAnnotation(node) == nil && signature.resolvedReturnType.get(c) == nil && !c.isResolvingReturnTypeOfSignature(signature) && c.pushTypeResolution(signature, TypeSystemPropertyNameResolvedReturnType, nil) {
+	if contextualSignature != nil && c.getReturnTypeFromAnnotation(node) == nil && signature.resolvedReturnType.get(c) == nil && !c.isResolvingReturnTypeOfSignature(signature) {
 		// resolvedReturnType is cached indefinitely, so the return type here has to be computed without CheckModeSkipContextSensitive;
 		// otherwise anyFunctionType could leak as part of the computed (and cached) return type.
 		returnType := c.getReturnTypeFromBody(node, checkMode&^CheckModeSkipContextSensitive)
-		if !c.popTypeResolution() {
-			returnType = c.circularReturnType(signature)
-		}
 		if signature.resolvedReturnType.get(c) == nil {
-			signature.resolvedReturnType.set(c, returnType)
+			if markerLogged {
+				signature.resolvedReturnType.set(c, returnType)
+			} else {
+				// A cycle detected since the flag was set would discard the
+				// return type but keep the flag, so a later request would
+				// infer the return type without the contextual types in
+				// place now. Keep the return type with the flag instead.
+				signature.resolvedReturnType.setIdentity(c, returnType)
+			}
 		}
 	}
 	c.checkSignatureDeclaration(node)
@@ -20299,36 +20306,116 @@ type shadowedResolving struct {
 
 // yieldCycle handles re-entering the resolution in progress at start, a
 // cycle that would fail the resolution re-entered. Which resolution is
-// re-entered depends on which was entered first, so a cycle through the
-// types of symbols declared before the one re-entered (if it is one)
-// fails at the first of those instead, as if that symbol had been resolved
-// first: its type is computed again from scratch, with nothing in progress
-// visible, and the resolution re-entered is then computed again likewise,
-// by the caller, which pushes it. The computations in progress then continue
-// from those results. Termination: a resolution is never computed again
-// while it is already being computed again.
+// re-entered depends on which was entered first, so a cycle through members
+// declared before the one re-entered (see compareCycleMembers) fails at the
+// first of those instead, as if it had been resolved first: it is computed
+// again from scratch, with nothing in progress visible, and the resolution
+// re-entered is then computed again likewise, by the caller, which pushes it.
+// The computations in progress then continue from those results.
+// Termination: a resolution is never computed again while it is already
+// being computed again.
 func (c *Checker) yieldCycle(start int) bool {
-	r := &c.resolutions[start].typeResolution
-	var first *ast.Symbol
-	if r.propertyName == TypeSystemPropertyNameType {
-		first = r.target.(*ast.Symbol)
-	}
-	entered := first
-	for i := start + 1; i < len(c.resolutions); i++ {
-		if f := &c.resolutions[i]; f.isTypeResolution && f.typeResolution.propertyName == TypeSystemPropertyNameType {
-			if s := f.typeResolution.target.(*ast.Symbol); first == nil || c.compareSymbols(s, first) < 0 {
-				first = s
-			}
-		}
-	}
-	if first == nil || first == entered || c.isYieldingTo(first, TypeSystemPropertyNameType) || c.isYieldingTo(r.target, r.propertyName) {
+	r := c.resolutions[start].typeResolution
+	if c.isYieldingTo(r.target, r.propertyName) {
 		return false
 	}
-	c.beginCycleYield(first, TypeSystemPropertyNameType, -1, len(c.resolutions))
-	c.getTypeOfSymbol(first)
-	c.endCycleYield()
+	first := c.firstCycleMember(start)
+	if first == nil {
+		return false
+	}
+	c.resolveCycleMember(*first)
 	c.beginCycleYield(r.target, r.propertyName, len(c.resolutions), len(c.resolutions))
 	return true
+}
+
+// yieldObservedCycle handles observing the resolution in progress at start
+// without failing it, as yieldCycle handles re-entering it: if members of
+// the cycle are declared before the resolution observed, the first of them
+// is computed again from scratch, as if it had been resolved first, so that
+// the caller can use its result.
+func (c *Checker) yieldObservedCycle(start int) {
+	if r := &c.resolutions[start].typeResolution; c.isYieldingTo(r.target, r.propertyName) {
+		return
+	}
+	if first := c.firstCycleMember(start); first != nil {
+		c.resolveCycleMember(*first)
+	}
+}
+
+// firstCycleMember returns the member of the cycle from the resolution at
+// start to the top of the stack that is resolved first, if it is not the
+// resolution at start, and is not already being computed again.
+func (c *Checker) firstCycleMember(start int) *TypeResolution {
+	entered := &c.resolutions[start].typeResolution
+	var first *TypeResolution
+	if isCycleMember(entered) {
+		first = entered
+	}
+	for i := start + 1; i < len(c.resolutions); i++ {
+		if f := &c.resolutions[i]; f.isTypeResolution && isCycleMember(&f.typeResolution) && (first == nil || c.compareCycleMembers(&f.typeResolution, first) < 0) {
+			first = &f.typeResolution
+		}
+	}
+	if first == nil || first == entered || c.isYieldingTo(first.target, first.propertyName) {
+		return nil
+	}
+	return first
+}
+
+// isCycleMember reports whether a type resolution may be resolved first in
+// place of the one a cycle re-entered: the type of a symbol, or the return
+// type of a declared signature.
+func isCycleMember(r *TypeResolution) bool {
+	switch r.propertyName {
+	case TypeSystemPropertyNameType:
+		return true
+	case TypeSystemPropertyNameResolvedReturnType:
+		sig := r.target.(*Signature)
+		return sig.target == nil && sig.getComposite() == nil && sig.declaration != nil
+	}
+	return false
+}
+
+// compareCycleMembers orders the members of a cycle in program order of
+// their declarations, symbols first among members with the same one.
+func (c *Checker) compareCycleMembers(a, b *TypeResolution) int {
+	aSymbol, aIsSymbol := a.target.(*ast.Symbol)
+	bSymbol, bIsSymbol := b.target.(*ast.Symbol)
+	switch {
+	case aIsSymbol && bIsSymbol:
+		return c.compareSymbols(aSymbol, bSymbol)
+	case aIsSymbol:
+		return c.compareSymbolToNode(aSymbol, b.target.(*Signature).declaration)
+	case bIsSymbol:
+		return -c.compareSymbolToNode(bSymbol, a.target.(*Signature).declaration)
+	}
+	return c.compareNodes(a.target.(*Signature).declaration, b.target.(*Signature).declaration)
+}
+
+// compareSymbolToNode orders a symbol by its first declaration against node,
+// the symbol first if that is node.
+func (c *Checker) compareSymbolToNode(s *ast.Symbol, node *ast.Node) int {
+	if len(s.Declarations()) == 0 {
+		return 1
+	}
+	if r := c.compareNodes(s.Declarations()[0], node); r != 0 {
+		return r
+	}
+	return -1
+}
+
+// resolveCycleMember computes the result of a member of a cycle again from
+// scratch, with nothing in progress visible.
+func (c *Checker) resolveCycleMember(r TypeResolution) {
+	target, propertyName := r.target, r.propertyName
+	c.beginCycleYield(target, propertyName, -1, len(c.resolutions))
+	switch propertyName {
+	case TypeSystemPropertyNameType:
+		c.getTypeOfSymbol(target.(*ast.Symbol))
+	case TypeSystemPropertyNameResolvedReturnType:
+		c.getReturnTypeOfSignature(target.(*Signature))
+	}
+	c.endCycleYield()
 }
 
 // yieldCycleToMembers handles re-entering the type resolution in progress
