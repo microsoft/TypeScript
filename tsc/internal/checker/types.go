@@ -1202,7 +1202,7 @@ func (t *StructuredType) getPropertyAt(index int) *ast.Symbol {
 
 func (t *StructuredType) getProperties() []*ast.Symbol {
 	if lazy := t.getLazyState(); lazy != nil && !lazy.propertiesResolved {
-		for i := 0; i < lazy.layout.members.Len(); i++ {
+		for i := range lazy.layout.members.Len() {
 			t.getPropertyAt(i)
 		}
 		lazy.propertiesResolved = true
