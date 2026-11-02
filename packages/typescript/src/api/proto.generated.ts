@@ -137,9 +137,8 @@ export interface APIMethodInfo {
     getBigIntLiteralType: APIMethod<GetBigIntLiteralTypeParams, TypeResponse>;
     getFalseType: APIMethod<GetIntrinsicTypeParams, TypeResponse>;
     getTrueType: APIMethod<GetIntrinsicTypeParams, TypeResponse>;
-    getAugmentedPropertiesOfType: APIMethod<GetTypePropertyParams, SymbolResponse[] | null>;
     getJsxIntrinsicTagNamesAt: APIMethod<CheckerNodeParams, SymbolResponse[] | null>;
-    getPrivateIdentifierPropertyOfType: APIMethod<GetPrivateIdentifierPropertyOfTypeParams, SymbolResponse>;
+    getPrivateIdentifierPropertyOfType: APIMethod<GetPrivateIdentifierPropertyOfTypeParams, SymbolResponse | null>;
     getTypeFromTypeNode: APIMethod<GetTypeFromTypeNodeParams, TypeResponse>;
     getWidenedType: APIMethod<GetWidenedTypeParams, TypeResponse>;
     getParameterType: APIMethod<GetParameterTypeParams, TypeResponse>;
@@ -811,7 +810,6 @@ export interface GetBaseTypeOfLiteralTypeParams {
     type: number;
 }
 
-/** GetNullableTypeParams are the parameters for the getNullableType method. */
 export interface GetNullableTypeParams {
     snapshot: number;
     project: number;
@@ -819,24 +817,19 @@ export interface GetNullableTypeParams {
     flags: number;
 }
 
-/** GetStringLiteralTypeParams are the parameters for the getStringLiteralType method. */
 export interface GetStringLiteralTypeParams {
     snapshot: number;
     project: number;
     value: string;
 }
 
-/** GetNumberLiteralTypeParams are the parameters for the getNumberLiteralType method. */
 export interface GetNumberLiteralTypeParams {
     snapshot: number;
     project: number;
     value: number;
 }
 
-/**
- * GetBigIntLiteralTypeParams are the parameters for the getBigIntLiteralType method.
- * Base10Value is the absolute value in base 10 with no leading zeros (empty for zero).
- */
+/** Base10Value is the absolute value in base 10 with no leading zeros (empty for zero). */
 export interface GetBigIntLiteralTypeParams {
     snapshot: number;
     project: number;
@@ -857,7 +850,6 @@ export interface CheckerNodeParams {
     location: string;
 }
 
-/** GetPrivateIdentifierPropertyOfTypeParams are the parameters for the getPrivateIdentifierPropertyOfType method. */
 export interface GetPrivateIdentifierPropertyOfTypeParams {
     snapshot: number;
     project: number;
@@ -866,21 +858,18 @@ export interface GetPrivateIdentifierPropertyOfTypeParams {
     location: string;
 }
 
-/** GetTypeFromTypeNodeParams are the parameters for the getTypeFromTypeNode method. */
 export interface GetTypeFromTypeNodeParams {
     snapshot: number;
     project: number;
     location: string;
 }
 
-/** GetWidenedTypeParams are the parameters for the getWidenedType method. */
 export interface GetWidenedTypeParams {
     snapshot: number;
     project: number;
     type: number;
 }
 
-/** GetParameterTypeParams are the parameters for the getParameterType method. */
 export interface GetParameterTypeParams {
     snapshot: number;
     project: number;
@@ -888,14 +877,12 @@ export interface GetParameterTypeParams {
     index: number;
 }
 
-/** IsArrayLikeTypeParams checks whether a type is array-like. */
 export interface IsArrayLikeTypeParams {
     snapshot: number;
     project: number;
     type: number;
 }
 
-/** IsTypeAssignableToParams checks assignability between two types. */
 export interface IsTypeAssignableToParams {
     snapshot: number;
     project: number;
@@ -1227,7 +1214,6 @@ export interface BatchRequest {
         | "getAnyType"
         | "getApparentPropertiesOfType"
         | "getApparentType"
-        | "getAugmentedPropertiesOfType"
         | "getAwaitedType"
         | "getBaseConstraintOfType"
         | "getBaseTypeOfLiteralType"
@@ -1421,7 +1407,6 @@ export interface BatchResponse {
         | "getAnyType"
         | "getApparentPropertiesOfType"
         | "getApparentType"
-        | "getAugmentedPropertiesOfType"
         | "getAwaitedType"
         | "getBaseConstraintOfType"
         | "getBaseTypeOfLiteralType"

@@ -2807,12 +2807,7 @@ export class Checker {
      * interfaces not already present.
      */
     async getAugmentedPropertiesOfType(type: Type): Promise<readonly Symbol[]> {
-        const data = await this.client.apiRequest("getAugmentedPropertiesOfType", {
-            snapshot: this.snapshotId,
-            project: this.project.handle,
-            objectId: type.id,
-        });
-        return data ? data.map(d => this.objectRegistry.getOrCreateSymbol(d)) : [];
+        return type.getApparentProperties();
     }
 
     async getJsxIntrinsicTagNamesAt(location: Node): Promise<readonly Symbol[]> {

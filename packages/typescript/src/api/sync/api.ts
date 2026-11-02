@@ -5549,20 +5549,10 @@ export class Checker {
             owner,
             "getAugmentedPropertiesOfType",
             function (type: Type): readonly Symbol[] {
-                const data = owner.client.apiRequest("getAugmentedPropertiesOfType", {
-                    snapshot: owner.snapshotId,
-                    project: owner.project.handle,
-                    objectId: type.id,
-                });
-                return data ? data.map(d => owner.objectRegistry.getOrCreateSymbol(d)) : [];
+                return type.getApparentProperties();
             },
             function* (type: Type): Generator<ProtocolRequest, readonly Symbol[], ProtocolResponse["result"]> {
-                const data = yield* apiRequest("getAugmentedPropertiesOfType", {
-                    snapshot: owner.snapshotId,
-                    project: owner.project.handle,
-                    objectId: type.id,
-                });
-                return data ? data.map(d => owner.objectRegistry.getOrCreateSymbol(d)) : [];
+                return yield* type.getApparentProperties.gen();
             },
         );
     }

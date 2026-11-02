@@ -1085,8 +1085,6 @@ func (s *Session) HandleRequest(ctx context.Context, method string, params json.
 		return s.handleGetNumberLiteralType(ctx, parsed.(*GetNumberLiteralTypeParams))
 	case string(MethodGetBigIntLiteralType):
 		return s.handleGetBigIntLiteralType(ctx, parsed.(*GetBigIntLiteralTypeParams))
-	case string(MethodGetAugmentedPropertiesOfType):
-		return s.handleGetAugmentedPropertiesOfType(ctx, parsed.(*GetTypePropertyParams))
 	case string(MethodGetJsxIntrinsicTagNamesAt):
 		return s.handleGetJsxIntrinsicTagNamesAt(ctx, parsed.(*CheckerNodeParams))
 	case string(MethodGetPrivateIdentifierPropertyOfType):
@@ -3787,34 +3785,6 @@ func (s *Session) handleGetBigIntLiteralType(ctx context.Context, params *GetBig
 	return setup.sd.newTypeResponse(setup.projectID, t, setup.checker), nil
 }
 
-// handleGetAugmentedPropertiesOfType returns the augmented properties of a type: its properties,
-// plus (when the type has call or construct signatures) the properties of the global
-// CallableFunction/NewableFunction interfaces not already present.
-// @gen-proto-nullable
-func (s *Session) handleGetAugmentedPropertiesOfType(ctx context.Context, params *GetTypePropertyParams) ([]*SymbolResponse, error) {
-	setup, err := s.setupChecker(ctx, params.Snapshot, params.Project)
-	if err != nil {
-		return nil, err
-	}
-	defer setup.done()
-
-	t, err := setup.resolveTypeHandle(params.Type)
-	if err != nil {
-		return nil, err
-	}
-
-	props := setup.checker.GetApparentProperties(t)
-	if len(props) == 0 {
-		return nil, nil
-	}
-
-	results := make([]*SymbolResponse, len(props))
-	for i, prop := range props {
-		results[i] = setup.newSymbolResponse(prop)
-	}
-	return results, nil
-}
-
 // @gen-proto-nullable
 func (s *Session) handleGetJsxIntrinsicTagNamesAt(ctx context.Context, params *CheckerNodeParams) ([]*SymbolResponse, error) {
 	setup, err := s.setupChecker(ctx, params.Snapshot, params.Project)
@@ -3845,6 +3815,7 @@ func (s *Session) handleGetJsxIntrinsicTagNamesAt(ctx context.Context, params *C
 
 // handleGetPrivateIdentifierPropertyOfType looks up a private identifier (e.g. "#foo") lexically in
 // scope at the given location, and if found, returns the corresponding property of the type.
+// @gen-proto-nullable
 func (s *Session) handleGetPrivateIdentifierPropertyOfType(ctx context.Context, params *GetPrivateIdentifierPropertyOfTypeParams) (*SymbolResponse, error) {
 	setup, err := s.setupChecker(ctx, params.Snapshot, params.Project)
 	if err != nil {

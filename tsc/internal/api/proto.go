@@ -176,7 +176,6 @@ const (
 	MethodGetBigIntLiteralType                       Method = "getBigIntLiteralType"
 	MethodGetFalseType                               Method = "getFalseType"
 	MethodGetTrueType                                Method = "getTrueType"
-	MethodGetAugmentedPropertiesOfType               Method = "getAugmentedPropertiesOfType"
 	MethodGetJsxIntrinsicTagNamesAt                  Method = "getJsxIntrinsicTagNamesAt"
 	MethodGetPrivateIdentifierPropertyOfType         Method = "getPrivateIdentifierPropertyOfType"
 	MethodGetTypeFromTypeNode                        Method = "getTypeFromTypeNode"
@@ -713,7 +712,6 @@ var unmarshalers = map[Method]func([]byte) (any, error){
 	MethodGetBigIntLiteralType:                       unmarshallerFor[GetBigIntLiteralTypeParams],
 	MethodGetFalseType:                               unmarshallerFor[GetIntrinsicTypeParams],
 	MethodGetTrueType:                                unmarshallerFor[GetIntrinsicTypeParams],
-	MethodGetAugmentedPropertiesOfType:               unmarshallerFor[GetTypePropertyParams],
 	MethodGetJsxIntrinsicTagNamesAt:                  unmarshallerFor[CheckerNodeParams],
 	MethodGetPrivateIdentifierPropertyOfType:         unmarshallerFor[GetPrivateIdentifierPropertyOfTypeParams],
 	MethodGetTypeFromTypeNode:                        unmarshallerFor[GetTypeFromTypeNodeParams],
