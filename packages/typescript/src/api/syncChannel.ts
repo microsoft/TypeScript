@@ -165,6 +165,7 @@ export class SyncRpcChannel {
             const pipePath = createPipePath();
             this.child = spawn(exe, [...args, "--pipe", pipePath], {
                 stdio: ["ignore", "ignore", "inherit"],
+                windowsHide: true,
             });
 
             // Retry openSync until the child creates the named pipe.
@@ -195,6 +196,7 @@ export class SyncRpcChannel {
             // POSIX: use stdio pipe file descriptors directly.
             this.child = spawn(exe, args, {
                 stdio: ["pipe", "pipe", "inherit"],
+                windowsHide: true,
             });
 
             const stdout = this.child.stdout! as StdoutWithHandle;
