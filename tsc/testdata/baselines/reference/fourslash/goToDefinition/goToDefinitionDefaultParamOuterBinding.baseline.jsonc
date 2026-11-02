@@ -1,0 +1,108 @@
+// === goToDefinition ===
+// === /goToDefinitionDefaultParamOuterBinding.ts ===
+// const styles = { root: "outer" };
+// export function read(value = /*GOTO DEF*/styles.root) {
+//   <|function [|styles|]() {}|>
+//   styles();
+//   return value;
+// }
+// --- (line: 7) skipped ---
+
+
+
+// === goToDefinition ===
+// === /goToDefinitionDefaultParamOuterBinding.ts ===
+// const styles = { root: "outer" };
+// export function read(value = styles.root) {
+//   <|function [|styles|]() {}|>
+//   /*GOTO DEF*/styles();
+//   return value;
+// }
+// 
+// --- (line: 8) skipped ---
+
+
+
+// === goToDefinition ===
+// === /goToDefinitionDefaultParamOuterBinding.ts ===
+// --- (line: 4) skipped ---
+//   return value;
+// }
+// 
+// <|const [|Foo|] = 1;|>
+// export function readClass(value = /*GOTO DEF*/Foo) {
+//   class Foo {}
+//   return new Foo();
+// }
+// --- (line: 13) skipped ---
+
+
+
+// === goToDefinition ===
+// === /goToDefinitionDefaultParamOuterBinding.ts ===
+// --- (line: 6) skipped ---
+// 
+// const Foo = 1;
+// export function readClass(value = Foo) {
+//   <|class [|Foo|] {}|>
+//   return new /*GOTO DEF*/Foo();
+// }
+// 
+// const E = 1;
+// --- (line: 15) skipped ---
+
+
+
+// === goToDefinition ===
+// === /goToDefinitionDefaultParamOuterBinding.ts ===
+// --- (line: 10) skipped ---
+//   return new Foo();
+// }
+// 
+// <|const [|E|] = 1;|>
+// export function readEnum(value = /*GOTO DEF*/E) {
+//   enum E { A }
+//   return E.A;
+// }
+// --- (line: 19) skipped ---
+
+
+
+// === goToDefinition ===
+// === /goToDefinitionDefaultParamOuterBinding.ts ===
+// --- (line: 12) skipped ---
+// 
+// const E = 1;
+// export function readEnum(value = E) {
+//   <|enum [|E|] { A }|>
+//   return /*GOTO DEF*/E.A;
+// }
+// 
+// const v = 1;
+// --- (line: 21) skipped ---
+
+
+
+// === goToDefinition ===
+// === /goToDefinitionDefaultParamOuterBinding.ts ===
+// --- (line: 16) skipped ---
+//   return E.A;
+// }
+// 
+// <|const [|v|] = 1;|>
+// export function readVar(value = /*GOTO DEF*/v) {
+//   var v = 2;
+//   return v;
+// }
+
+
+
+// === goToDefinition ===
+// === /goToDefinitionDefaultParamOuterBinding.ts ===
+// --- (line: 18) skipped ---
+// 
+// const v = 1;
+// export function readVar(value = v) {
+//   <|var [|v|] = 2;|>
+//   return /*GOTO DEF*/v;
+// }
