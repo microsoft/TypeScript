@@ -2725,7 +2725,9 @@ const value: string = 1;`,
         assert.equal(project.containsFile("/src/main.ts", true), true);
     });
 
-    test("Project membership includes supplemental files without physical files", t => {
+    test("Project membership includes supplemental files without physical files", {
+        skip: process.env.TS_API_TEST_WASM ? "WASM cannot spawn external content mapper processes" : false,
+    }, t => {
         const directory = mkdtempSync(join(tmpdir(), "ts-project-membership-"));
         t.after(() => rmSync(directory, { recursive: true, force: true }));
         const mapperDirectory = join(directory, "node_modules", "mapper");

@@ -1595,7 +1595,8 @@ describe("API - automatic batching", { concurrency }, () => {
         const files = await program.getSourceFiles();
         assert.deepEqual(files.map(file => file.fileName), ["/node_modules/my-lib/index.d.ts", "/src/local.ts", "/src/main.ts"]);
         assert.strictEqual(files[1], local);
-        assert.equal((await api.getTimingInfo()).totals.requestCount, 2);
+        // The WASM transport sends the two uncached binary source-file requests individually.
+        assert.equal((await api.getTimingInfo()).totals.requestCount, process.env.TS_API_TEST_WASM ? 3 : 2);
 
         await api.resetTimingInfo();
         const cached = await program.getSourceFiles();
@@ -2904,7 +2905,9 @@ const value: string = 1;`,
         assert.equal(await project.containsFile("/src/main.ts", true), true);
     });
 
-    test("Project membership includes supplemental files without physical files", async t => {
+    test("Project membership includes supplemental files without physical files", {
+        skip: process.env.TS_API_TEST_WASM ? "WASM cannot spawn external content mapper processes" : false,
+    }, async t => {
         const directory = mkdtempSync(join(tmpdir(), "ts-project-membership-"));
         t.after(() => rmSync(directory, { recursive: true, force: true }));
         const mapperDirectory = join(directory, "node_modules", "mapper");
