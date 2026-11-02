@@ -2,6 +2,8 @@ currentDirectory::/home/src/workspaces/project
 useCaseSensitiveFileNames::true
 Input::
 //// [/home/src/workspaces/project/ambient.d.ts] *new* 
+interface Promise<T> {}
+declare var Promise: { new <T>(): Promise<T> };
 declare module "*.toml" { export const ambient: string; }
 //// [/home/src/workspaces/project/ambient.toml] *new* 
 not TypeScript
@@ -13,6 +15,7 @@ export const value = 1;
 				export { other } from "./other.toml";
 				export { packaged } from "./node_modules/pkg/blob.toml";
 				export { ambient } from "./ambient.toml";
+				export const load = (path: string) => import(path);
 				
 //// [/home/src/workspaces/project/node_modules/mapper/package.json] *new* 
 {
@@ -71,11 +74,13 @@ export { value } from "./blob.toml";
 export { other } from "./other.toml";
 export { packaged } from "./node_modules/pkg/blob.toml";
 export { ambient } from "./ambient.toml";
+export declare const load: (path: string) => Promise<any>;
 
 //// [/home/src/workspaces/project/dist/index.js] *new* 
 export { value } from "./blob.toml";
 export { other } from "./other.toml";
 export { packaged } from "./node_modules/pkg/blob.toml";
 export { ambient } from "./ambient.toml";
+export const load = (path) => import(path);
 
 

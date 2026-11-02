@@ -422,7 +422,7 @@ func (p *ParsedCommandLine) computeContentMapperExtensionRewrites() []tspath.Ext
 			} else {
 				hasNonIdentityMapping = true
 			}
-			result = append(result, tspath.ExtensionRewrite{Source: source, Target: target})
+			result = append(result, tspath.ExtensionRewrite{Source: source, Target: target, Runtime: mapper.Include == nil})
 		}
 	}
 	if !hasNonIdentityMapping {
