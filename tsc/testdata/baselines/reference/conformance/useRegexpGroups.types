@@ -67,9 +67,9 @@ let foo = "foo".match(/(?<bar>foo)/)!.groups.foo;
 >"foo".match(/(?<bar>foo)/)!.groups : { [key: string]: string; } | undefined
 >"foo".match(/(?<bar>foo)/)! : RegExpMatchArray
 >"foo".match(/(?<bar>foo)/) : RegExpMatchArray | null
->"foo".match : { (regexp: string | RegExp): RegExpMatchArray | null; (matcher: { [Symbol.match](string: string): RegExpMatchArray | null; }): RegExpMatchArray | null; }
+>"foo".match : { (regexp: string | RegExp): RegExpMatchArray | null; <This, R>(this: This, matcher: { [Symbol.match](string: This): R; }): R; }
 >"foo" : "foo"
->match : { (regexp: string | RegExp): RegExpMatchArray | null; (matcher: { [Symbol.match](string: string): RegExpMatchArray | null; }): RegExpMatchArray | null; }
+>match : { (regexp: string | RegExp): RegExpMatchArray | null; <This, R>(this: This, matcher: { [Symbol.match](string: This): R; }): R; }
 >/(?<bar>foo)/ : RegExp
 >groups : { [key: string]: string; } | undefined
 >foo : string

@@ -3,21 +3,21 @@
 ├ kind: method
 ├ file: bundled:///libs/lib.es5.d.ts
 ├ span:
-│ ╭ bundled:///libs/lib.es5.d.ts:1341:5-1345:33
-│ │ 1341:     /**
+│ ╭ bundled:///libs/lib.es5.d.ts:1346:5-1350:33
+│ │ 1346:     /**
 │ │           ^^^
-│ │ 1342:      * Appends new elements to the end of an array, and returns the new length of the array.
+│ │ 1347:      * Appends new elements to the end of an array, and returns the new length of the array.
 │ │       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-│ │ 1343:      * @param items New elements to add to the array.
+│ │ 1348:      * @param items New elements to add to the array.
 │ │       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-│ │ 1344:      */
+│ │ 1349:      */
 │ │       ^^^^^^^
-│ │ 1345:     push(...items: T[]): number;
+│ │ 1350:     push(...items: T[]): number;
 │ │       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 │ ╰
 ├ selectionSpan:
-│ ╭ bundled:///libs/lib.es5.d.ts:1345:5-1345:9
-│ │ 1345:     push(...items: T[]): number;
+│ ╭ bundled:///libs/lib.es5.d.ts:1350:5-1350:9
+│ │ 1350:     push(...items: T[]): number;
 │ │           ^^^^
 │ ╰
 ├ incoming:

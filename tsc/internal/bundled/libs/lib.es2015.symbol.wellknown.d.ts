@@ -180,48 +180,37 @@ interface PromiseConstructor {
 
 interface RegExp {
     /**
-     * Matches a string with this regular expression, and returns an array containing the results of
-     * that search.
+     * Matches a string with this regular expression.
      * @param string A string to search within.
+     * @returns An array containing the matches, or `null` if no matches are present.
      */
     [Symbol.match](string: string): RegExpMatchArray | null;
 
     /**
-     * Replaces text in a string, using this regular expression.
-     * @param string A String object or string literal whose contents matching against
-     *               this regular expression will be replaced
-     * @param replaceValue A String object or string literal containing the text to replace for every
-     *                     successful match of this regular expression.
+     * Replaces one or more occurrences of substrings that match this regular expression.
+     * All matches are replaced if the `g` (global) flag is set
+     * (or only those matches at the beginning, if the `y` (sticky) flag is also present).
+     * Otherwise, only the first match is replaced.
+     * @param string A string to search within.
+     * @param replaceValue The replacement text, or a callback function that returns the replacement text.
      */
-    [Symbol.replace](string: string, replaceValue: string): string;
+    [Symbol.replace](string: string, replaceValue: string | ((substring: string, ...args: any[]) => string)): string;
 
     /**
-     * Replaces text in a string, using this regular expression.
-     * @param string A String object or string literal whose contents matching against
-     *               this regular expression will be replaced
-     * @param replacer A function that returns the replacement text.
-     */
-    [Symbol.replace](string: string, replacer: (substring: string, ...args: any[]) => string): string;
-
-    /**
-     * Finds the position beginning first substring match in a regular expression search
-     * using this regular expression.
-     *
-     * @param string The string to search within.
+     * Returns the index of the first occurrence that matches this regular expression, or `-1` if no matches are present.
+     * @param string A string to search within.
      */
     [Symbol.search](string: string): number;
 
     /**
-     * Returns an array of substrings that were delimited by strings in the original input that
-     * match against this regular expression.
+     * Returns an array of substrings that were delimited by separators that match this regular expression.
      *
      * If the regular expression contains capturing parentheses, then each time this
      * regular expression matches, the results (including any undefined results) of the
      * capturing parentheses are spliced.
      *
-     * @param string string value to split
-     * @param limit if not undefined, the output array is truncated so that it contains no more
-     * than 'limit' elements.
+     * @param string The string value to be split.
+     * @param limit If specified, the output array is truncated so that it contains no more than `limit` elements.
      */
     [Symbol.split](string: string, limit?: number): string[];
 }
@@ -232,38 +221,34 @@ interface RegExpConstructor {
 
 interface String {
     /**
-     * Matches a string or an object that supports being matched against, and returns an array
-     * containing the results of that search, or null if no matches are found.
+     * Passes the string to the `[Symbol.match]` method on {@linkcode matcher}.
+     * This method is expected to implement its own matching algorithm.
      * @param matcher An object that supports being matched against.
      */
-    match(matcher: { [Symbol.match](string: string): RegExpMatchArray | null; }): RegExpMatchArray | null;
+    match<This, R>(this: This, matcher: { [Symbol.match](string: This): R; }): R;
 
     /**
-     * Passes a string and {@linkcode replaceValue} to the `[Symbol.replace]` method on {@linkcode searchValue}. This method is expected to implement its own replacement algorithm.
+     * Passes the string and {@linkcode replaceValue} to the `[Symbol.replace]` method on {@linkcode searchValue}.
+     * This method is expected to implement its own replacement algorithm.
      * @param searchValue An object that supports searching for and replacing matches within a string.
-     * @param replaceValue The replacement text.
+     * @param replaceValue A value to be passed into {@linkcode searchValue}.
      */
-    replace(searchValue: { [Symbol.replace](string: string, replaceValue: string): string; }, replaceValue: string): string;
+    replace<This, T, R>(this: This, searchValue: { [Symbol.replace](string: This, replaceValue: T): R; }, replaceValue: T): R;
 
     /**
-     * Replaces text in a string, using an object that supports replacement within a string.
-     * @param searchValue A object can search for and replace matches within a string.
-     * @param replacer A function that returns the replacement text.
+     * Passes the string to the `[Symbol.search]` method on {@linkcode searcher}.
+     * This method is expected to implement its own searching algorithm.
+     * @param searcher An object that supports searching within a string.
      */
-    replace(searchValue: { [Symbol.replace](string: string, replacer: (substring: string, ...args: any[]) => string): string; }, replacer: (substring: string, ...args: any[]) => string): string;
+    search<This, R>(this: This, searcher: { [Symbol.search](string: This): R; }): R;
 
     /**
-     * Finds the first substring match in a regular expression search.
-     * @param searcher An object which supports searching within a string.
+     * Passes the string and {@linkcode limit} to the `[Symbol.split]` method on {@linkcode splitter}.
+     * This method is expected to implement its own splitting algorithm.
+     * @param splitter An object that supports splitting a string.
+     * @param limit A value to be passed into {@linkcode splitter}.
      */
-    search(searcher: { [Symbol.search](string: string): number; }): number;
-
-    /**
-     * Split a string into substrings using the specified separator and return them as an array.
-     * @param splitter An object that can split a string.
-     * @param limit A value used to limit the number of elements returned in the array.
-     */
-    split(splitter: { [Symbol.split](string: string, limit?: number): string[]; }, limit?: number): string[];
+    split<This, T, R>(this: This, splitter: { [Symbol.split](string: This, limit?: T): R; }, limit?: T): R;
 }
 
 interface ArrayBuffer {

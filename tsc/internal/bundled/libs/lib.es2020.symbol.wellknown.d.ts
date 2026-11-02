@@ -31,9 +31,9 @@ interface RegExpStringIterator<T> extends IteratorObject<T, BuiltinIteratorRetur
 
 interface RegExp {
     /**
-     * Matches a string with this regular expression, and returns an iterable of matches
-     * containing the results of that search.
+     * Matches a string with this regular expression.
      * @param string A string to search within.
+     * @returns An iterator of regular expression matches.
      */
-    [Symbol.matchAll](str: string): RegExpStringIterator<RegExpExecArray>;
+    [Symbol.matchAll](string: string): RegExpStringIterator<RegExpExecArray>;
 }

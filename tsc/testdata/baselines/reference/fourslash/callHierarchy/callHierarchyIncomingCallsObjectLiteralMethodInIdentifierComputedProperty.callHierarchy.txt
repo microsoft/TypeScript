@@ -3,23 +3,25 @@
 ├ kind: method
 ├ file: bundled:///libs/lib.es2015.symbol.wellknown.d.ts
 ├ span:
-│ ╭ bundled:///libs/lib.es2015.symbol.wellknown.d.ts:261:5-266:110
-│ │ 261:     /**
+│ ╭ bundled:///libs/lib.es2015.symbol.wellknown.d.ts:245:5-251:108
+│ │ 245:     /**
 │ │          ^^^
-│ │ 262:      * Split a string into substrings using the specified separator and return them as an array.
-│ │      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-│ │ 263:      * @param splitter An object that can split a string.
-│ │      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-│ │ 264:      * @param limit A value used to limit the number of elements returned in the array.
-│ │      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-│ │ 265:      */
+│ │ 246:      * Passes the string and {@linkcode limit} to the `[Symbol.split]` method on {@linkcode splitter}.
+│ │      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ 247:      * This method is expected to implement its own splitting algorithm.
+│ │      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ 248:      * @param splitter An object that supports splitting a string.
+│ │      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ 249:      * @param limit A value to be passed into {@linkcode splitter}.
+│ │      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ 250:      */
 │ │      ^^^^^^^
-│ │ 266:     split(splitter: { [Symbol.split](string: string, limit?: number): string[]; }, limit?: number): string[];
-│ │      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ 251:     split<This, T, R>(this: This, splitter: { [Symbol.split](string: This, limit?: T): R; }, limit?: T): R;
+│ │      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 │ ╰
 ├ selectionSpan:
-│ ╭ bundled:///libs/lib.es2015.symbol.wellknown.d.ts:266:5-266:10
-│ │ 266:     split(splitter: { [Symbol.split](string: string, limit?: number): string[]; }, limit?: number): string[];
+│ ╭ bundled:///libs/lib.es2015.symbol.wellknown.d.ts:251:5-251:10
+│ │ 251:     split<This, T, R>(this: This, splitter: { [Symbol.split](string: This, limit?: T): R; }, limit?: T): R;
 │ │          ^^^^^
 │ ╰
 ├ incoming:
@@ -53,23 +55,35 @@
 ├ kind: method
 ├ file: bundled:///libs/lib.es5.d.ts
 ├ span:
-│ ╭ bundled:///libs/lib.es5.d.ts:484:5-489:65
-│ │ 484:     /**
+│ ╭ bundled:///libs/lib.es5.d.ts:483:5-494:65
+│ │ 483:     /**
 │ │          ^^^
-│ │ 485:      * Split a string into substrings using the specified separator and return them as an array.
-│ │      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-│ │ 486:      * @param separator A string that identifies character or characters to use in separating the string. If omitted, a single-element array containing the entire string is returned.
-│ │      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-│ │ 487:      * @param limit A value used to limit the number of elements returned in the array.
+│ │ 484:      * Returns an array of substrings that were delimited by separators in the string.
+│ │      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ 485:      * @param separator A string or a regular expression that identifies characters to use in separating the string.
+│ │      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ 486:      * If omitted, a single-element array containing the entire string is returned.
+│ │      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ 487:      *
+│ │      ^^^^^^
+│ │ 488:      * If the regular expression contains capturing parentheses, then each time this
+│ │      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ 489:      * regular expression matches, the results (including any undefined results) of the
 │ │      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-│ │ 488:      */
+│ │ 490:      * capturing parentheses are spliced into the output array.
+│ │      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ 491:      *
+│ │      ^^^^^^
+│ │ 492:      * @param limit If specified, the output array is truncated so that it contains no more than `limit` elements.
+│ │      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ 493:      */
 │ │      ^^^^^^^
-│ │ 489:     split(separator: string | RegExp, limit?: number): string[];
+│ │ 494:     split(separator: string | RegExp, limit?: number): string[];
 │ │      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 │ ╰
 ├ selectionSpan:
-│ ╭ bundled:///libs/lib.es5.d.ts:489:5-489:10
-│ │ 489:     split(separator: string | RegExp, limit?: number): string[];
+│ ╭ bundled:///libs/lib.es5.d.ts:494:5-494:10
+│ │ 494:     split(separator: string | RegExp, limit?: number): string[];
 │ │          ^^^^^
 │ ╰
 ├ incoming:
