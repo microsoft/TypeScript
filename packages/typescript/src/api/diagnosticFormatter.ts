@@ -190,11 +190,16 @@ export function formatDiagnosticsWithColorAndContext(
 
         if (diagnostic.relatedInformation?.length) {
             for (const related of diagnostic.relatedInformation) {
+                output += host.getNewLine();
                 if (related.fileName && related.startPosition) {
-                    output += host.getNewLine();
+                    // Location heading and source context require a file location.
                     output += halfIndent + formatLocation(related, host);
                     output += " - " + flattenDiagnosticMessage(related, host.getNewLine());
                     output += formatCodeSpan(related, indent, foregroundColorEscapeCyan, host);
+                }
+                else {
+                    // Match classic: still emit related message text without a location.
+                    output += indent + flattenDiagnosticMessage(related, host.getNewLine());
                 }
                 output += host.getNewLine();
             }

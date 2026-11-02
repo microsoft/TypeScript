@@ -93,6 +93,61 @@ describe("diagnosticFormatter", { concurrency: areTestsFiltered() }, () => {
         }
     });
 
+    test("keeps related information text without a file location", () => {
+        // Regression for #65087: classic emits related message text even when the
+        // related diagnostic has no file/position; only location/context need those.
+        const host: FormatDiagnosticsHost = {
+            getCurrentDirectory: () => "/project",
+            getCanonicalFileName: name => name,
+            getNewLine: () => "\n",
+        };
+        const relatedText = "This related explanation must remain visible.";
+        const output = formatDiagnosticsWithColorAndContext([{
+            category: 1,
+            code: 2322,
+            pos: 0,
+            end: 0,
+            text: "Primary error.",
+            relatedInformation: [{
+                category: 3,
+                code: 9999,
+                pos: 0,
+                end: 0,
+                text: relatedText,
+            }],
+        }], host);
+        const plain = output.replace(/\x1b\[[0-9;]*m/g, "");
+        assert.ok(plain.includes("error TS2322: Primary error."), plain);
+        assert.ok(plain.includes(relatedText), plain);
+        assert.match(plain, new RegExp(`\\n {4}${relatedText.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}\\n`), plain);
+
+        const chainChild = "Chained detail.";
+        const chainOutput = formatDiagnosticsWithColorAndContext([{
+            category: 1,
+            code: 2322,
+            pos: 0,
+            end: 0,
+            text: "Primary error.",
+            relatedInformation: [{
+                category: 3,
+                code: 9999,
+                pos: 0,
+                end: 0,
+                text: relatedText,
+                messageChain: [{
+                    category: 3,
+                    code: 9999,
+                    pos: 0,
+                    end: 0,
+                    text: chainChild,
+                }],
+            }],
+        }], host);
+        const chainPlain = chainOutput.replace(/\x1b\[[0-9;]*m/g, "");
+        assert.ok(chainPlain.includes(relatedText), chainPlain);
+        assert.ok(chainPlain.includes(chainChild), chainPlain);
+    });
+
     test("uses the API host for standalone diagnostics", async () => {
         const configText = `{ "compilerOptions": { "target": "invalid" } }`;
         const api = spawnAPI({
