@@ -16,7 +16,7 @@ import (
 
 var diagnosticArgsAnalyzer = &analysis.Analyzer{
 	Name:      "diagnosticargs",
-	Doc:       "checks diagnostic message formatting argument counts",
+	Doc:       "checks diagnostic messages have enough formatting arguments",
 	Requires:  []*analysis.Analyzer{inspect.Analyzer},
 	FactTypes: []analysis.Fact{new(diagnosticArgumentCount)},
 	Run:       runDiagnosticArgs,
@@ -105,8 +105,8 @@ func runDiagnosticArgs(pass *analysis.Pass) (any, error) {
 		if !ok && !pass.ImportObjectFact(object, &count) {
 			return
 		}
-		if actual != count.Count {
-			pass.ReportRangef(call, "diagnostic %s expects %d formatting arguments, got %d", object.Name(), count.Count, actual)
+		if actual < count.Count {
+			pass.ReportRangef(call, "diagnostic %s requires at least %d formatting arguments, got %d", object.Name(), count.Count, actual)
 		}
 	}
 
@@ -124,11 +124,9 @@ func runDiagnosticArgs(pass *analysis.Pass) (any, error) {
 		if len(call.Args) < fixed {
 			return
 		}
-		for i := range fixed {
-			if isDiagnosticMessage(signature.Params().At(i).Type()) {
-				check(call, call.Args[i], len(call.Args)-fixed)
-				return
-			}
+		if fixed > 0 && isDiagnosticMessage(signature.Params().At(fixed-1).Type()) {
+			check(call, call.Args[fixed-1], len(call.Args)-fixed)
+			return
 		}
 		if selector, ok := call.Fun.(*ast.SelectorExpr); ok {
 			selection := pass.TypesInfo.Selections[selector]

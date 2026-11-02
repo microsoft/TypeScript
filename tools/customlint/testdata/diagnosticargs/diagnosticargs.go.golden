@@ -6,37 +6,38 @@
 	
 	func nodeDiagnostic(node int, message *d.Message, args ...any) {}
 	
+	func optionDiagnostic(message *d.Message, option string, args ...any) {
+		diagnostic(message, append([]any{option}, args...)...)
+	}
+	
 	func calls(args []any, message *d.Message) {
 		diagnostic(d.Circularity)
 		~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! diagnosticargs: diagnostic Circularity expects 1 formatting arguments, got 0
+!!! diagnosticargs: diagnostic Circularity requires at least 1 formatting arguments, got 0
 		diagnostic(d.Circularity, "a -> b -> a")
 		diagnostic(d.Plain)
 		diagnostic(d.Plain, "extra")
-		~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! diagnosticargs: diagnostic Plain expects 0 formatting arguments, got 1
 		diagnostic(d.Multiple, "one")
 		~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! diagnosticargs: diagnostic Multiple expects 2 formatting arguments, got 1
+!!! diagnosticargs: diagnostic Multiple requires at least 2 formatting arguments, got 1
 		diagnostic(d.Multiple, "one", "two")
 		diagnostic(d.Multiple, "one", "two", "three")
-		~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! diagnosticargs: diagnostic Multiple expects 2 formatting arguments, got 3
 		diagnostic(d.Sparse, "one", "two")
 		~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! diagnosticargs: diagnostic Sparse expects 3 formatting arguments, got 2
+!!! diagnosticargs: diagnostic Sparse requires at least 3 formatting arguments, got 2
 		diagnostic(d.Sparse, "one", "two", "three")
 		nodeDiagnostic(0, d.Circularity)
 		~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! diagnosticargs: diagnostic Circularity expects 1 formatting arguments, got 0
+!!! diagnosticargs: diagnostic Circularity requires at least 1 formatting arguments, got 0
 		nodeDiagnostic(0, d.Circularity, "cycle")
+		optionDiagnostic(d.Circularity, "cycle")
 		d.Circularity.Localize()
 		~~~~~~~~~~~~~~~~~~~~~~~~
-!!! diagnosticargs: diagnostic Circularity expects 1 formatting arguments, got 0
+!!! diagnosticargs: diagnostic Circularity requires at least 1 formatting arguments, got 0
 		d.Circularity.Localize("cycle")
 		(*d.Message).Localize(d.Circularity)
 		~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! diagnosticargs: diagnostic Circularity expects 1 formatting arguments, got 0
+!!! diagnosticargs: diagnostic Circularity requires at least 1 formatting arguments, got 0
 		(*d.Message).Localize(d.Circularity, "cycle")
 		diagnostic(d.Circularity, args...)
 		diagnostic(message)
