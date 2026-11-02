@@ -28,31 +28,31 @@ function direct({ a = 1 as number | undefined, b = a } = {}) {
 }
 
 function viaCall({ a = 1 as number | undefined, b = id(a) } = {}) {
->viaCall : ({ a, b }?: { a?: number | undefined; b?: unknown; }) => void
->a : number | undefined
+>viaCall : ({ a, b }?: { a?: number | undefined; b?: any; }) => void
+>a : any
 >1 as number | undefined : number | undefined
 >1 : 1
->b : unknown
->id(a) : unknown
+>b : any
+>id(a) : any
 >id : <T>(v: T) => T
->a : number | undefined
+>a : any
 >{} : {}
 
     const n: string = b;
 >n : string
->b : unknown
+>b : any
 }
 
 function viaCallArray({ a = 1 as number | undefined, b = id([a]) } = {}) {
 >viaCallArray : ({ a, b }?: { a?: number | undefined; b?: any[] | undefined; }) => void
->a : number | undefined
+>a : any
 >1 as number | undefined : number | undefined
 >1 : 1
 >b : any[]
 >id([a]) : any[]
 >id : <T>(v: T) => T
->[a] : (number | undefined)[]
->a : number | undefined
+>[a] : any[]
+>a : any
 >{} : {}
 
     const n: string = b;
