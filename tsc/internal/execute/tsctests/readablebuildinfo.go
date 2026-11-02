@@ -37,7 +37,7 @@ type readableBuildInfo struct {
 	EmitSignatures             []*readableBuildInfoEmitSignature         `json:"emitSignatures,omitzero"`
 	ResolvedRoot               []*readableBuildInfoResolvedRoot          `json:"resolvedRoot,omitzero"`
 	Size                       int                                       `json:"size,omitzero"` // Size of the build info file
-
+	// NonIncrementalProgram info
 	// NonIncrementalProgram info
 	SemanticErrors bool `json:"semanticErrors,omitzero"`
 }

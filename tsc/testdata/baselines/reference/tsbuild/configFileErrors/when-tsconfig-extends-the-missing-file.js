@@ -37,7 +37,7 @@ Output::
 Found 4 errors.
 
 //// [/home/src/workspaces/project/tsconfig.first.tsbuildinfo] *new* 
-{"version":"FakeTSVersion","errors":true,"fileInfos":[],"options":{"composite":true}}
+{"version":"FakeTSVersion","errors":true,"watchDirectories":[],"fileInfos":[],"options":{"composite":true}}
 //// [/home/src/workspaces/project/tsconfig.first.tsbuildinfo.readable.baseline.txt] *new* 
 {
   "version": "FakeTSVersion",
@@ -46,10 +46,10 @@ Found 4 errors.
   "options": {
     "composite": true
   },
-  "size": 85
+  "size": 107
 }
 //// [/home/src/workspaces/project/tsconfig.second.tsbuildinfo] *new* 
-{"version":"FakeTSVersion","errors":true,"fileInfos":[],"options":{"composite":true}}
+{"version":"FakeTSVersion","errors":true,"watchDirectories":[],"fileInfos":[],"options":{"composite":true}}
 //// [/home/src/workspaces/project/tsconfig.second.tsbuildinfo.readable.baseline.txt] *new* 
 {
   "version": "FakeTSVersion",
@@ -58,7 +58,7 @@ Found 4 errors.
   "options": {
     "composite": true
   },
-  "size": 85
+  "size": 107
 }
 
 tsconfig.first.json::

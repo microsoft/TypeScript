@@ -66,7 +66,7 @@ interface Symbol {
 }
 declare const console: { log(msg: any): void; };
 //// [/user/username/projects/noEmitOnError/dev-build/tsconfig.tsbuildinfo] *new* 
-{"version":"FakeTSVersion","errors":true,"root":["../shared/types/db.ts","../src/main.ts","../src/other.ts"]}
+{"version":"FakeTSVersion","errors":true,"root":["../shared/types/db.ts","../src/main.ts","../src/other.ts"],"watchDirectories":["../shared"],"nonIncrementalFileNames":[]}
 //// [/user/username/projects/noEmitOnError/dev-build/tsconfig.tsbuildinfo.readable.baseline.txt] *new* 
 {
   "version": "FakeTSVersion",
@@ -91,7 +91,7 @@ declare const console: { log(msg: any): void; };
       "original": "../src/other.ts"
     }
   ],
-  "size": 109
+  "size": 171
 }
 
 Watch Registrations::
@@ -176,7 +176,7 @@ console.log("hi");
 export {};
 
 //// [/user/username/projects/noEmitOnError/dev-build/tsconfig.tsbuildinfo] *modified* 
-{"version":"FakeTSVersion","root":["../shared/types/db.ts","../src/main.ts","../src/other.ts"]}
+{"version":"FakeTSVersion","root":["../shared/types/db.ts","../src/main.ts","../src/other.ts"],"watchDirectories":["../shared"],"nonIncrementalFileNames":[]}
 //// [/user/username/projects/noEmitOnError/dev-build/tsconfig.tsbuildinfo.readable.baseline.txt] *modified* 
 {
   "version": "FakeTSVersion",
@@ -200,7 +200,7 @@ export {};
       "original": "../src/other.ts"
     }
   ],
-  "size": 95
+  "size": 157
 }
 
 Watch Registrations::
@@ -273,7 +273,7 @@ Output::
 [[90mHH:MM:SS AM[0m] Found 1 error. Watching for file changes.
 
 //// [/user/username/projects/noEmitOnError/dev-build/tsconfig.tsbuildinfo] *modified* 
-{"version":"FakeTSVersion","root":["../shared/types/db.ts","../src/main.ts","../src/other.ts"],"semanticErrors":true}
+{"version":"FakeTSVersion","root":["../shared/types/db.ts","../src/main.ts","../src/other.ts"],"watchDirectories":["../shared"],"semanticErrors":true,"nonIncrementalFileNames":[]}
 //// [/user/username/projects/noEmitOnError/dev-build/tsconfig.tsbuildinfo.readable.baseline.txt] *modified* 
 {
   "version": "FakeTSVersion",
@@ -297,7 +297,7 @@ Output::
       "original": "../src/other.ts"
     }
   ],
-  "size": 117,
+  "size": 179,
   "semanticErrors": true
 }
 
@@ -374,7 +374,7 @@ export {};
 
 //// [/user/username/projects/noEmitOnError/dev-build/src/other.js] *rewrite with same content*
 //// [/user/username/projects/noEmitOnError/dev-build/tsconfig.tsbuildinfo] *modified* 
-{"version":"FakeTSVersion","root":["../shared/types/db.ts","../src/main.ts","../src/other.ts"]}
+{"version":"FakeTSVersion","root":["../shared/types/db.ts","../src/main.ts","../src/other.ts"],"watchDirectories":["../shared"],"nonIncrementalFileNames":[]}
 //// [/user/username/projects/noEmitOnError/dev-build/tsconfig.tsbuildinfo.readable.baseline.txt] *modified* 
 {
   "version": "FakeTSVersion",
@@ -398,7 +398,7 @@ export {};
       "original": "../src/other.ts"
     }
   ],
-  "size": 95
+  "size": 157
 }
 
 Watch Registrations::

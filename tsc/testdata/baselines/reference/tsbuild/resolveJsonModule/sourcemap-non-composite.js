@@ -93,7 +93,7 @@ exports.default = hello_json_1.default.hello;
 //// [/home/src/workspaces/solution/project/dist/src/index.js.map] *new* 
 {"version":3,"file":"index.js","sources":["../../src/index.ts"],"names":[],"mappings":";;;;;AAAA,8DAAgC;kBACjB,oBAAK,CAAC,KAAK"}
 //// [/home/src/workspaces/solution/project/dist/tsconfig.tsbuildinfo] *new* 
-{"version":"FakeTSVersion","errors":true,"root":["../src/index.ts","../src/hello.json"]}
+{"version":"FakeTSVersion","errors":true,"root":["../src/index.ts","../src/hello.json"],"watchDirectories":["../.."],"nonIncrementalFileNames":[]}
 //// [/home/src/workspaces/solution/project/dist/tsconfig.tsbuildinfo.readable.baseline.txt] *new* 
 {
   "version": "FakeTSVersion",
@@ -112,7 +112,7 @@ exports.default = hello_json_1.default.hello;
       "original": "../src/hello.json"
     }
   ],
-  "size": 88
+  "size": 146
 }
 
 project/tsconfig.json::

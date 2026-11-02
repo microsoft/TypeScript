@@ -470,16 +470,40 @@ func (b *BuildInfoResolvedRoot) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
+type BuildInfoInputAlias struct {
+	Path     BuildInfoPath
+	RealPath BuildInfoPath
+}
+
+func (b *BuildInfoInputAlias) MarshalJSON() ([]byte, error) {
+	return json.Marshal([2]BuildInfoPath{b.Path, b.RealPath})
+}
+
+func (b *BuildInfoInputAlias) UnmarshalJSON(data []byte) error {
+	var pathAndRealPath [2]BuildInfoPath
+	if err := json.Unmarshal(data, &pathAndRealPath); err != nil {
+		return fmt.Errorf("invalid BuildInfoInputAlias: %s", data)
+	}
+	*b = BuildInfoInputAlias{
+		Path:     pathAndRealPath[0],
+		RealPath: pathAndRealPath[1],
+	}
+	return nil
+}
+
 type BuildInfo struct {
 	Version string `json:"version,omitzero"`
 
 	// Common between incremental and tsc -b buildinfo for non incremental programs
-	Errors                  bool             `json:"errors,omitzero"`
-	CheckPending            bool             `json:"checkPending,omitzero"`
-	Root                    []*BuildInfoRoot `json:"root,omitzero"`
-	PackageJsons            []BuildInfoPath  `json:"packageJsons,omitzero"`
-	MissingPackageJsons     []BuildInfoPath  `json:"missingPackageJsons,omitzero"`
-	ContentMapperIdentities []string         `json:"contentMapperIdentities,omitzero"`
+	Errors                  bool                   `json:"errors,omitzero"`
+	CheckPending            bool                   `json:"checkPending,omitzero"`
+	Root                    []*BuildInfoRoot       `json:"root,omitzero"`
+	PackageJsons            []BuildInfoPath        `json:"packageJsons,omitzero"`
+	MissingPackageJsons     []BuildInfoPath        `json:"missingPackageJsons,omitzero"`
+	ContentMapperIdentities []string               `json:"contentMapperIdentities,omitzero"`
+	InputAliases            []*BuildInfoInputAlias `json:"inputAliases,omitzero"`
+	// A nil fallback inventory predates dependency tracking; an empty inventory is complete.
+	WatchDirectories []BuildInfoPath `json:"watchDirectories,omitzero"`
 
 	// IncrementalProgram info
 	FileNames                  []BuildInfoPath                      `json:"fileNames,omitzero"`
@@ -497,6 +521,8 @@ type BuildInfo struct {
 
 	// NonIncrementalProgram info
 	SemanticErrors bool `json:"semanticErrors,omitzero"`
+	// A nil inventory predates dependency tracking; an empty inventory is complete.
+	NonIncrementalFileNames []BuildInfoPath `json:"nonIncrementalFileNames,omitzero"`
 }
 
 func (b *BuildInfo) IsValidVersion() bool {
@@ -593,6 +619,33 @@ func (b *BuildInfo) GetPackageJsons(buildInfoDirectory tspath.RootedDirectoryPat
 
 func (b *BuildInfo) GetMissingPackageJsons(buildInfoDirectory tspath.RootedDirectoryPath) iter.Seq[tspath.RootedFilePath] {
 	return getBuildInfoFileNames(b.MissingPackageJsons, buildInfoDirectory)
+}
+
+func (b *BuildInfo) GetNonIncrementalFileNames(buildInfoDirectory tspath.RootedDirectoryPath) iter.Seq[tspath.RootedFilePath] {
+	return getBuildInfoFileNames(b.NonIncrementalFileNames, buildInfoDirectory)
+}
+
+func (b *BuildInfo) GetInputAliases(buildInfoDirectory tspath.RootedDirectoryPath) iter.Seq2[tspath.RootedFilePath, tspath.RootedFilePath] {
+	return func(yield func(tspath.RootedFilePath, tspath.RootedFilePath) bool) {
+		for _, alias := range b.InputAliases {
+			if !yield(
+				ResolveBuildInfoFileName(alias.Path, buildInfoDirectory, ""),
+				ResolveBuildInfoFileName(alias.RealPath, buildInfoDirectory, ""),
+			) {
+				return
+			}
+		}
+	}
+}
+
+func (b *BuildInfo) GetWatchDirectories(buildInfoDirectory tspath.RootedDirectoryPath) iter.Seq[tspath.RootedDirectoryPath] {
+	return func(yield func(tspath.RootedDirectoryPath) bool) {
+		for _, path := range b.WatchDirectories {
+			if !yield(buildInfoDirectory.ResolveDirectory(path.AsString())) {
+				return
+			}
+		}
+	}
 }
 
 func getBuildInfoFileNames(paths []BuildInfoPath, buildInfoDirectory tspath.RootedDirectoryPath) iter.Seq[tspath.RootedFilePath] {

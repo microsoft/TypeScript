@@ -76,7 +76,7 @@ export declare const x = 10;
 export const y = 10;
 
 //// [/home/src/projects/myproject/outDir/tsconfig.tsbuildinfo] *new* 
-{"version":"FakeTSVersion","root":["../main.ts"]}
+{"version":"FakeTSVersion","root":["../main.ts"],"watchDirectories":[],"nonIncrementalFileNames":["../types/sometype.ts"]}
 //// [/home/src/projects/myproject/outDir/tsconfig.tsbuildinfo.readable.baseline.txt] *new* 
 {
   "version": "FakeTSVersion",
@@ -88,7 +88,7 @@ export const y = 10;
       "original": "../main.ts"
     }
   ],
-  "size": 49
+  "size": 122
 }
 //// [/home/src/projects/myproject/outDir/types/sometype.js] *new* 
 export const x = 10;

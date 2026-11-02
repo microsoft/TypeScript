@@ -59,7 +59,7 @@ export declare const b = 10;
 export const b = 10;
 
 //// [/home/src/workspaces/project/tsconfig.tsbuildinfo] *new* 
-{"version":"FakeTSVersion","checkPending":true,"root":["./a.ts","./b.ts"]}
+{"version":"FakeTSVersion","checkPending":true,"root":["./a.ts","./b.ts"],"watchDirectories":[],"nonIncrementalFileNames":[]}
 //// [/home/src/workspaces/project/tsconfig.tsbuildinfo.readable.baseline.txt] *new* 
 {
   "version": "FakeTSVersion",
@@ -78,7 +78,7 @@ export const b = 10;
       "original": "./b.ts"
     }
   ],
-  "size": 74
+  "size": 125
 }
 
 tsconfig.json::
@@ -163,7 +163,7 @@ Output::
 //// [/home/src/workspaces/project/b.d.ts] *rewrite with same content*
 //// [/home/src/workspaces/project/b.js] *rewrite with same content*
 //// [/home/src/workspaces/project/tsconfig.tsbuildinfo] *modified* 
-{"version":"FakeTSVersion","root":["./a.ts","./b.ts"]}
+{"version":"FakeTSVersion","root":["./a.ts","./b.ts"],"watchDirectories":[],"nonIncrementalFileNames":[]}
 //// [/home/src/workspaces/project/tsconfig.tsbuildinfo.readable.baseline.txt] *modified* 
 {
   "version": "FakeTSVersion",
@@ -181,7 +181,7 @@ Output::
       "original": "./b.ts"
     }
   ],
-  "size": 54
+  "size": 105
 }
 
 tsconfig.json::
@@ -239,7 +239,7 @@ export declare const a: number;
 //// [/home/src/workspaces/project/b.d.ts] *rewrite with same content*
 //// [/home/src/workspaces/project/b.js] *rewrite with same content*
 //// [/home/src/workspaces/project/tsconfig.tsbuildinfo] *modified* 
-{"version":"FakeTSVersion","checkPending":true,"root":["./a.ts","./b.ts"]}
+{"version":"FakeTSVersion","checkPending":true,"root":["./a.ts","./b.ts"],"watchDirectories":[],"nonIncrementalFileNames":[]}
 //// [/home/src/workspaces/project/tsconfig.tsbuildinfo.readable.baseline.txt] *modified* 
 {
   "version": "FakeTSVersion",
@@ -258,7 +258,7 @@ export declare const a: number;
       "original": "./b.ts"
     }
   ],
-  "size": 74
+  "size": 125
 }
 
 tsconfig.json::
@@ -307,7 +307,7 @@ Found 1 error in a.ts[90m:1[0m
 //// [/home/src/workspaces/project/b.d.ts] *rewrite with same content*
 //// [/home/src/workspaces/project/b.js] *rewrite with same content*
 //// [/home/src/workspaces/project/tsconfig.tsbuildinfo] *modified* 
-{"version":"FakeTSVersion","root":["./a.ts","./b.ts"],"semanticErrors":true}
+{"version":"FakeTSVersion","root":["./a.ts","./b.ts"],"watchDirectories":[],"semanticErrors":true,"nonIncrementalFileNames":[]}
 //// [/home/src/workspaces/project/tsconfig.tsbuildinfo.readable.baseline.txt] *modified* 
 {
   "version": "FakeTSVersion",
@@ -325,7 +325,7 @@ Found 1 error in a.ts[90m:1[0m
       "original": "./b.ts"
     }
   ],
-  "size": 76,
+  "size": 127,
   "semanticErrors": true
 }
 
@@ -358,7 +358,7 @@ export declare const a = "hello";
 //// [/home/src/workspaces/project/b.d.ts] *rewrite with same content*
 //// [/home/src/workspaces/project/b.js] *rewrite with same content*
 //// [/home/src/workspaces/project/tsconfig.tsbuildinfo] *modified* 
-{"version":"FakeTSVersion","checkPending":true,"root":["./a.ts","./b.ts"]}
+{"version":"FakeTSVersion","checkPending":true,"root":["./a.ts","./b.ts"],"watchDirectories":[],"nonIncrementalFileNames":[]}
 //// [/home/src/workspaces/project/tsconfig.tsbuildinfo.readable.baseline.txt] *modified* 
 {
   "version": "FakeTSVersion",
@@ -377,7 +377,7 @@ export declare const a = "hello";
       "original": "./b.ts"
     }
   ],
-  "size": 74
+  "size": 125
 }
 
 tsconfig.json::
@@ -405,7 +405,7 @@ Output::
 //// [/home/src/workspaces/project/b.d.ts] *rewrite with same content*
 //// [/home/src/workspaces/project/b.js] *rewrite with same content*
 //// [/home/src/workspaces/project/tsconfig.tsbuildinfo] *modified* 
-{"version":"FakeTSVersion","root":["./a.ts","./b.ts"]}
+{"version":"FakeTSVersion","root":["./a.ts","./b.ts"],"watchDirectories":[],"nonIncrementalFileNames":[]}
 //// [/home/src/workspaces/project/tsconfig.tsbuildinfo.readable.baseline.txt] *modified* 
 {
   "version": "FakeTSVersion",
@@ -423,7 +423,7 @@ Output::
       "original": "./b.ts"
     }
   ],
-  "size": 54
+  "size": 105
 }
 
 tsconfig.json::
@@ -467,7 +467,7 @@ export declare const c: number;
 export const c = "hello";
 
 //// [/home/src/workspaces/project/tsconfig.tsbuildinfo] *modified* 
-{"version":"FakeTSVersion","root":["./a.ts","./b.ts","./c.ts"],"semanticErrors":true}
+{"version":"FakeTSVersion","root":["./a.ts","./b.ts","./c.ts"],"watchDirectories":[],"semanticErrors":true,"nonIncrementalFileNames":[]}
 //// [/home/src/workspaces/project/tsconfig.tsbuildinfo.readable.baseline.txt] *modified* 
 {
   "version": "FakeTSVersion",
@@ -491,7 +491,7 @@ export const c = "hello";
       "original": "./c.ts"
     }
   ],
-  "size": 85,
+  "size": 136,
   "semanticErrors": true
 }
 
@@ -527,7 +527,7 @@ export declare const a: number;
 //// [/home/src/workspaces/project/c.d.ts] *rewrite with same content*
 //// [/home/src/workspaces/project/c.js] *rewrite with same content*
 //// [/home/src/workspaces/project/tsconfig.tsbuildinfo] *modified* 
-{"version":"FakeTSVersion","checkPending":true,"root":["./a.ts","./b.ts","./c.ts"]}
+{"version":"FakeTSVersion","checkPending":true,"root":["./a.ts","./b.ts","./c.ts"],"watchDirectories":[],"nonIncrementalFileNames":[]}
 //// [/home/src/workspaces/project/tsconfig.tsbuildinfo.readable.baseline.txt] *modified* 
 {
   "version": "FakeTSVersion",
@@ -552,7 +552,7 @@ export declare const a: number;
       "original": "./c.ts"
     }
   ],
-  "size": 83
+  "size": 134
 }
 
 tsconfig.json::
@@ -625,7 +625,7 @@ Found 1 error in c.ts[90m:1[0m
 //// [/home/src/workspaces/project/c.d.ts] *rewrite with same content*
 //// [/home/src/workspaces/project/c.js] *rewrite with same content*
 //// [/home/src/workspaces/project/tsconfig.tsbuildinfo] *modified* 
-{"version":"FakeTSVersion","root":["./a.ts","./b.ts","./c.ts"],"semanticErrors":true}
+{"version":"FakeTSVersion","root":["./a.ts","./b.ts","./c.ts"],"watchDirectories":[],"semanticErrors":true,"nonIncrementalFileNames":[]}
 //// [/home/src/workspaces/project/tsconfig.tsbuildinfo.readable.baseline.txt] *modified* 
 {
   "version": "FakeTSVersion",
@@ -649,7 +649,7 @@ Found 1 error in c.ts[90m:1[0m
       "original": "./c.ts"
     }
   ],
-  "size": 85,
+  "size": 136,
   "semanticErrors": true
 }
 

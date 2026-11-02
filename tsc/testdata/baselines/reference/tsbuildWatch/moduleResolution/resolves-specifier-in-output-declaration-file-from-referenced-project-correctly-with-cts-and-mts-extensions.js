@@ -121,7 +121,7 @@ declare const console: { log(msg: any): void; };
 export const theNum = 42;
 
 //// [/user/username/projects/myproject/packages/pkg1/build/tsconfig.tsbuildinfo] *new* 
-{"version":"FakeTSVersion","root":["../index.ts"],"packageJsons":["../package.json","../../pkg2/package.json"]}
+{"version":"FakeTSVersion","root":["../index.ts"],"packageJsons":["../package.json","../../pkg2/package.json"],"inputAliases":[["../../../node_modules/pkg2/build/index.d.ts","../../pkg2/build/index.d.ts"]],"watchDirectories":["../..","../../pkg2"],"nonIncrementalFileNames":["../../pkg2/build/const.d.cts","../../pkg2/build/index.d.ts"]}
 //// [/user/username/projects/myproject/packages/pkg1/build/tsconfig.tsbuildinfo.readable.baseline.txt] *new* 
 {
   "version": "FakeTSVersion",
@@ -137,7 +137,7 @@ export const theNum = 42;
     "../package.json",
     "../../pkg2/package.json"
   ],
-  "size": 111
+  "size": 337
 }
 //// [/user/username/projects/myproject/packages/pkg2/build/const.cjs] *new* 
 "use strict";
@@ -153,7 +153,7 @@ export type { TheNum } from './const.cjs';
 export {};
 
 //// [/user/username/projects/myproject/packages/pkg2/build/tsconfig.tsbuildinfo] *new* 
-{"version":"FakeTSVersion","root":[[2,3]],"packageJsons":["../package.json"],"fileNames":["lib.es2026.full.d.ts","../const.cts","../index.ts"],"fileInfos":[{"version":"8859c12c614ce56ba9a18e58384a198f-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ninterface SymbolConstructor {\n    (desc?: string | number): symbol;\n    for(name: string): symbol;\n    readonly toStringTag: symbol;\n}\ndeclare var Symbol: SymbolConstructor;\ninterface Symbol {\n    readonly [Symbol.toStringTag]: string;\n}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true,"impliedNodeFormat":1},{"version":"be0f939ab1143e4064a3742586332724-export type TheNum = 42;","signature":"56e2d69d2edd1f0edd1a64ecfdf6de0d-export type TheNum = 42;\n","impliedNodeFormat":1},{"version":"7bb214373f4d1876e9a0040d287d1b6e-export type { TheNum } from './const.cjs';","signature":"2c7786a1f125eb57a4db00a4d58e384a-export type { TheNum } from './const.cjs';\n","impliedNodeFormat":99}],"fileIdsList":[[2]],"options":{"composite":true,"module":100,"outDir":"./"},"referencedMap":[[3,1]],"latestChangedDtsFile":"./index.d.ts"}
+{"version":"FakeTSVersion","root":[[2,3]],"packageJsons":["../package.json"],"watchDirectories":[],"fileNames":["lib.es2026.full.d.ts","../const.cts","../index.ts"],"fileInfos":[{"version":"8859c12c614ce56ba9a18e58384a198f-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ninterface SymbolConstructor {\n    (desc?: string | number): symbol;\n    for(name: string): symbol;\n    readonly toStringTag: symbol;\n}\ndeclare var Symbol: SymbolConstructor;\ninterface Symbol {\n    readonly [Symbol.toStringTag]: string;\n}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true,"impliedNodeFormat":1},{"version":"be0f939ab1143e4064a3742586332724-export type TheNum = 42;","signature":"56e2d69d2edd1f0edd1a64ecfdf6de0d-export type TheNum = 42;\n","impliedNodeFormat":1},{"version":"7bb214373f4d1876e9a0040d287d1b6e-export type { TheNum } from './const.cjs';","signature":"2c7786a1f125eb57a4db00a4d58e384a-export type { TheNum } from './const.cjs';\n","impliedNodeFormat":99}],"fileIdsList":[[2]],"options":{"composite":true,"module":100,"outDir":"./"},"referencedMap":[[3,1]],"latestChangedDtsFile":"./index.d.ts"}
 //// [/user/username/projects/myproject/packages/pkg2/build/tsconfig.tsbuildinfo.readable.baseline.txt] *new* 
 {
   "version": "FakeTSVersion",
@@ -229,12 +229,14 @@ export {};
     ]
   },
   "latestChangedDtsFile": "./index.d.ts",
-  "size": 1438
+  "size": 1460
 }
 
 Watch Registrations::
 Directory watches::
   /home/src/tslibs/TS/Lib
+  /user/username/projects/myproject/node_modules/pkg2/build
+  /user/username/projects/myproject/packages
   /user/username/projects/myproject/packages/pkg1 (recursive)
   /user/username/projects/myproject/packages/pkg2 (recursive)
 packages/pkg2/tsconfig.json::
@@ -322,7 +324,7 @@ exports.theNum = void 0;
 exports.theNum = 42;
 
 //// [/user/username/projects/myproject/packages/pkg1/build/tsconfig.tsbuildinfo] *modified* 
-{"version":"FakeTSVersion","root":["../index.ts"],"packageJsons":["../package.json","../../pkg2/package.json"],"semanticErrors":true}
+{"version":"FakeTSVersion","root":["../index.ts"],"packageJsons":["../package.json","../../pkg2/package.json"],"inputAliases":[["../../../node_modules/pkg2/build/index.d.ts","../../pkg2/build/index.d.ts"]],"watchDirectories":["../..","../../../node_modules","../../pkg2"],"semanticErrors":true,"nonIncrementalFileNames":["../../pkg2/build/const.d.cts","../../pkg2/build/index.d.ts"]}
 //// [/user/username/projects/myproject/packages/pkg1/build/tsconfig.tsbuildinfo.readable.baseline.txt] *modified* 
 {
   "version": "FakeTSVersion",
@@ -338,13 +340,16 @@ exports.theNum = 42;
     "../package.json",
     "../../pkg2/package.json"
   ],
-  "size": 133,
+  "size": 383,
   "semanticErrors": true
 }
 
 Watch Registrations::
 Directory watches::
   /home/src/tslibs/TS/Lib
+  /user/username/projects/myproject/node_modules
+  /user/username/projects/myproject/node_modules/pkg2/build
+  /user/username/projects/myproject/packages
   /user/username/projects/myproject/packages/pkg1 (recursive)
   /user/username/projects/myproject/packages/pkg2 (recursive)
 packages/pkg1/tsconfig.json::
@@ -411,7 +416,7 @@ File '/user/username/projects/myproject/packages/pkg2/const.cts' exists - use it
 export const theNum = 42;
 
 //// [/user/username/projects/myproject/packages/pkg1/build/tsconfig.tsbuildinfo] *modified* 
-{"version":"FakeTSVersion","root":["../index.ts"],"packageJsons":["../package.json","../../pkg2/package.json"]}
+{"version":"FakeTSVersion","root":["../index.ts"],"packageJsons":["../package.json","../../pkg2/package.json"],"inputAliases":[["../../../node_modules/pkg2/build/index.d.ts","../../pkg2/build/index.d.ts"]],"watchDirectories":["../..","../../pkg2"],"nonIncrementalFileNames":["../../pkg2/build/const.d.cts","../../pkg2/build/index.d.ts"]}
 //// [/user/username/projects/myproject/packages/pkg1/build/tsconfig.tsbuildinfo.readable.baseline.txt] *modified* 
 {
   "version": "FakeTSVersion",
@@ -427,12 +432,14 @@ export const theNum = 42;
     "../package.json",
     "../../pkg2/package.json"
   ],
-  "size": 111
+  "size": 337
 }
 
 Watch Registrations::
 Directory watches::
   /home/src/tslibs/TS/Lib
+  /user/username/projects/myproject/node_modules/pkg2/build
+  /user/username/projects/myproject/packages
   /user/username/projects/myproject/packages/pkg1 (recursive)
   /user/username/projects/myproject/packages/pkg2 (recursive)
 packages/pkg1/tsconfig.json::
@@ -511,7 +518,7 @@ exports.theNum = void 0;
 exports.theNum = 42;
 
 //// [/user/username/projects/myproject/packages/pkg1/build/tsconfig.tsbuildinfo] *modified* 
-{"version":"FakeTSVersion","root":["../index.ts"],"packageJsons":["../package.json","../../pkg2/package.json"],"semanticErrors":true}
+{"version":"FakeTSVersion","root":["../index.ts"],"packageJsons":["../package.json","../../pkg2/package.json"],"inputAliases":[["../../../node_modules/pkg2/build/index.d.ts","../../pkg2/build/index.d.ts"]],"watchDirectories":["../..","../../../node_modules","../../pkg2"],"semanticErrors":true,"nonIncrementalFileNames":["../../pkg2/build/const.d.cts","../../pkg2/build/index.d.ts"]}
 //// [/user/username/projects/myproject/packages/pkg1/build/tsconfig.tsbuildinfo.readable.baseline.txt] *modified* 
 {
   "version": "FakeTSVersion",
@@ -527,13 +534,16 @@ exports.theNum = 42;
     "../package.json",
     "../../pkg2/package.json"
   ],
-  "size": 133,
+  "size": 383,
   "semanticErrors": true
 }
 
 Watch Registrations::
 Directory watches::
   /home/src/tslibs/TS/Lib
+  /user/username/projects/myproject/node_modules
+  /user/username/projects/myproject/node_modules/pkg2/build
+  /user/username/projects/myproject/packages
   /user/username/projects/myproject/packages/pkg1 (recursive)
   /user/username/projects/myproject/packages/pkg2 (recursive)
 packages/pkg1/tsconfig.json::
@@ -614,7 +624,7 @@ File '/user/username/projects/myproject/packages/pkg2/const.cts' exists - use it
 
 //// [/user/username/projects/myproject/packages/pkg1/build/index.js] *rewrite with same content*
 //// [/user/username/projects/myproject/packages/pkg1/build/tsconfig.tsbuildinfo] *modified* 
-{"version":"FakeTSVersion","root":["../index.ts"],"packageJsons":["../package.json","../../pkg2/package.json"]}
+{"version":"FakeTSVersion","root":["../index.ts"],"packageJsons":["../package.json","../../pkg2/package.json"],"inputAliases":[["../../../node_modules/pkg2/build/index.d.cts","../../pkg2/build/index.d.cts"]],"watchDirectories":["../..","../../../node_modules","../../pkg2"],"nonIncrementalFileNames":["../../pkg2/build/const.d.cts","../../pkg2/build/index.d.cts"]}
 //// [/user/username/projects/myproject/packages/pkg1/build/tsconfig.tsbuildinfo.readable.baseline.txt] *modified* 
 {
   "version": "FakeTSVersion",
@@ -630,7 +640,7 @@ File '/user/username/projects/myproject/packages/pkg2/const.cts' exists - use it
     "../package.json",
     "../../pkg2/package.json"
   ],
-  "size": 111
+  "size": 364
 }
 //// [/user/username/projects/myproject/packages/pkg2/build/index.cjs] *new* 
 "use strict";
@@ -640,7 +650,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 export type { TheNum } from './const.cjs';
 
 //// [/user/username/projects/myproject/packages/pkg2/build/tsconfig.tsbuildinfo] *modified* 
-{"version":"FakeTSVersion","root":[[2,3]],"packageJsons":["../package.json"],"fileNames":["lib.es2026.full.d.ts","../const.cts","../index.cts"],"fileInfos":[{"version":"8859c12c614ce56ba9a18e58384a198f-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ninterface SymbolConstructor {\n    (desc?: string | number): symbol;\n    for(name: string): symbol;\n    readonly toStringTag: symbol;\n}\ndeclare var Symbol: SymbolConstructor;\ninterface Symbol {\n    readonly [Symbol.toStringTag]: string;\n}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true,"impliedNodeFormat":1},{"version":"be0f939ab1143e4064a3742586332724-export type TheNum = 42;","signature":"56e2d69d2edd1f0edd1a64ecfdf6de0d-export type TheNum = 42;\n","impliedNodeFormat":1},{"version":"7bb214373f4d1876e9a0040d287d1b6e-export type { TheNum } from './const.cjs';","signature":"2c7786a1f125eb57a4db00a4d58e384a-export type { TheNum } from './const.cjs';\n","impliedNodeFormat":1}],"fileIdsList":[[2]],"options":{"composite":true,"module":100,"outDir":"./"},"referencedMap":[[3,1]],"latestChangedDtsFile":"./index.d.cts"}
+{"version":"FakeTSVersion","root":[[2,3]],"packageJsons":["../package.json"],"watchDirectories":[],"fileNames":["lib.es2026.full.d.ts","../const.cts","../index.cts"],"fileInfos":[{"version":"8859c12c614ce56ba9a18e58384a198f-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ninterface SymbolConstructor {\n    (desc?: string | number): symbol;\n    for(name: string): symbol;\n    readonly toStringTag: symbol;\n}\ndeclare var Symbol: SymbolConstructor;\ninterface Symbol {\n    readonly [Symbol.toStringTag]: string;\n}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true,"impliedNodeFormat":1},{"version":"be0f939ab1143e4064a3742586332724-export type TheNum = 42;","signature":"56e2d69d2edd1f0edd1a64ecfdf6de0d-export type TheNum = 42;\n","impliedNodeFormat":1},{"version":"7bb214373f4d1876e9a0040d287d1b6e-export type { TheNum } from './const.cjs';","signature":"2c7786a1f125eb57a4db00a4d58e384a-export type { TheNum } from './const.cjs';\n","impliedNodeFormat":1}],"fileIdsList":[[2]],"options":{"composite":true,"module":100,"outDir":"./"},"referencedMap":[[3,1]],"latestChangedDtsFile":"./index.d.cts"}
 //// [/user/username/projects/myproject/packages/pkg2/build/tsconfig.tsbuildinfo.readable.baseline.txt] *modified* 
 {
   "version": "FakeTSVersion",
@@ -716,12 +726,15 @@ export type { TheNum } from './const.cjs';
     ]
   },
   "latestChangedDtsFile": "./index.d.cts",
-  "size": 1439
+  "size": 1461
 }
 
 Watch Registrations::
 Directory watches::
   /home/src/tslibs/TS/Lib
+  /user/username/projects/myproject/node_modules
+  /user/username/projects/myproject/node_modules/pkg2/build
+  /user/username/projects/myproject/packages
   /user/username/projects/myproject/packages/pkg1 (recursive)
   /user/username/projects/myproject/packages/pkg2 (recursive)
 packages/pkg2/tsconfig.json::

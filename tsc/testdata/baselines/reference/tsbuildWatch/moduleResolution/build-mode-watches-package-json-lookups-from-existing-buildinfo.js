@@ -22,7 +22,7 @@ export const theNum: TheNum = 42;
 export const theNum = 42;
 
 //// [/user/username/projects/myproject/packages/pkg1/zzbuild/tsconfig.tsbuildinfo] *new* 
-{"version":"FakeTSVersion","root":["../index.ts"],"packageJsons":["../../../node_modules/pkg2/package.json"]}
+{"version":"FakeTSVersion","root":["../index.ts"],"packageJsons":["../../../node_modules/pkg2/package.json"],"watchDirectories":["../..","../../..","../../../node_modules"],"nonIncrementalFileNames":["../../../node_modules/pkg2/index.d.ts"]}
 //// [/user/username/projects/myproject/packages/pkg1/zzbuild/tsconfig.tsbuildinfo.readable.baseline.txt] *new* 
 {
   "version": "FakeTSVersion",
@@ -37,7 +37,7 @@ export const theNum = 42;
   "packageJsons": [
     "../../../node_modules/pkg2/package.json"
   ],
-  "size": 109
+  "size": 241
 }
 
 tsgo -b packages/pkg1 -w --verbose --traceResolution
@@ -58,6 +58,7 @@ Directory watches::
   /user/username/projects/myproject
   /user/username/projects/myproject/node_modules
   /user/username/projects/myproject/node_modules/pkg2
+  /user/username/projects/myproject/packages
   /user/username/projects/myproject/packages/pkg1 (recursive)
 
 
@@ -72,7 +73,7 @@ Output::
 [[90mHH:MM:SS AM[0m] Projects in this build: 
     * packages/pkg1/tsconfig.json
 
-[[90mHH:MM:SS AM[0m] Project 'packages/pkg1/tsconfig.json' is out of date because input 'node_modules/pkg2/package.json' does not exist.
+[[90mHH:MM:SS AM[0m] Project 'packages/pkg1/tsconfig.json' is out of date because input 'node_modules/pkg2/index.d.ts' does not exist.
 
 [[90mHH:MM:SS AM[0m] Building project 'packages/pkg1/tsconfig.json'...
 
@@ -147,7 +148,7 @@ interface Symbol {
 declare const console: { log(msg: any): void; };
 //// [/user/username/projects/myproject/packages/pkg1/zzbuild/index.js] *rewrite with same content*
 //// [/user/username/projects/myproject/packages/pkg1/zzbuild/tsconfig.tsbuildinfo] *modified* 
-{"version":"FakeTSVersion","root":["../index.ts"],"missingPackageJsons":["../../../node_modules/pkg2/package.json"],"semanticErrors":true}
+{"version":"FakeTSVersion","root":["../index.ts"],"missingPackageJsons":["../../../node_modules/pkg2/package.json"],"watchDirectories":["../..","../../..","../../../node_modules","../../../node_modules/pkg2"],"semanticErrors":true,"nonIncrementalFileNames":[]}
 //// [/user/username/projects/myproject/packages/pkg1/zzbuild/tsconfig.tsbuildinfo.readable.baseline.txt] *modified* 
 {
   "version": "FakeTSVersion",
@@ -162,7 +163,7 @@ declare const console: { log(msg: any): void; };
   "missingPackageJsons": [
     "../../../node_modules/pkg2/package.json"
   ],
-  "size": 138,
+  "size": 260,
   "semanticErrors": true
 }
 

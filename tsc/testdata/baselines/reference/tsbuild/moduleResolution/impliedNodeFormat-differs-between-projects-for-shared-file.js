@@ -102,7 +102,7 @@ declare const console: { log(msg: any): void; };
 "use strict";
 
 //// [/home/src/workspaces/project/a/tsconfig.tsbuildinfo] *new* 
-{"version":"FakeTSVersion","root":["./src/index.ts"]}
+{"version":"FakeTSVersion","root":["./src/index.ts"],"watchDirectories":[".."],"nonIncrementalFileNames":[]}
 //// [/home/src/workspaces/project/a/tsconfig.tsbuildinfo.readable.baseline.txt] *new* 
 {
   "version": "FakeTSVersion",
@@ -114,14 +114,14 @@ declare const console: { log(msg: any): void; };
       "original": "./src/index.ts"
     }
   ],
-  "size": 53
+  "size": 108
 }
 //// [/home/src/workspaces/project/b/src/index.js] *new* 
 import pg from "pg";
 pg.foo();
 
 //// [/home/src/workspaces/project/b/tsconfig.tsbuildinfo] *new* 
-{"version":"FakeTSVersion","root":["./src/index.ts"],"packageJsons":["./package.json","../node_modules/@types/pg/package.json"],"missingPackageJsons":["../node_modules/pg/package.json"]}
+{"version":"FakeTSVersion","root":["./src/index.ts"],"packageJsons":["./package.json","../node_modules/@types/pg/package.json"],"missingPackageJsons":["../node_modules/pg/package.json"],"watchDirectories":["../node_modules"],"nonIncrementalFileNames":["../node_modules/@types/pg/index.d.ts"]}
 //// [/home/src/workspaces/project/b/tsconfig.tsbuildinfo.readable.baseline.txt] *new* 
 {
   "version": "FakeTSVersion",
@@ -140,7 +140,7 @@ pg.foo();
   "missingPackageJsons": [
     "../node_modules/pg/package.json"
   ],
-  "size": 186
+  "size": 292
 }
 
 a/tsconfig.json::
@@ -168,6 +168,6 @@ Output::
 
 [[90mHH:MM:SS AM[0m] Project 'a/tsconfig.json' is up to date because newest input 'a/src/index.ts' is older than output 'a/src/index.js'
 
-[[90mHH:MM:SS AM[0m] Project 'b/tsconfig.json' is up to date because newest input 'b/src/index.ts' is older than output 'b/src/index.js'
+[[90mHH:MM:SS AM[0m] Project 'b/tsconfig.json' is up to date because newest input 'node_modules/@types/pg/index.d.ts' is older than output 'b/src/index.js'
 
 

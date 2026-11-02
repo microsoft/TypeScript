@@ -71,7 +71,7 @@ export function child2() {
 }
 
 //// [/home/src/workspaces/solution/child/tsconfig.tsbuildinfo] *new* 
-{"version":"FakeTSVersion","root":["./child.ts","./child2.ts"]}
+{"version":"FakeTSVersion","root":["./child.ts","./child2.ts"],"watchDirectories":[".."],"nonIncrementalFileNames":[]}
 //// [/home/src/workspaces/solution/child/tsconfig.tsbuildinfo.readable.baseline.txt] *new* 
 {
   "version": "FakeTSVersion",
@@ -89,7 +89,7 @@ export function child2() {
       "original": "./child2.ts"
     }
   ],
-  "size": 63
+  "size": 118
 }
 
 child/tsconfig.json::
@@ -139,7 +139,7 @@ Found 1 error in child/child.ts[90m:1[0m
 
 //// [/home/src/workspaces/solution/child/child.js] *rewrite with same content*
 //// [/home/src/workspaces/solution/child/tsconfig.tsbuildinfo] *modified* 
-{"version":"FakeTSVersion","root":["./child.ts"],"semanticErrors":true}
+{"version":"FakeTSVersion","root":["./child.ts"],"watchDirectories":[".."],"semanticErrors":true,"nonIncrementalFileNames":[]}
 //// [/home/src/workspaces/solution/child/tsconfig.tsbuildinfo.readable.baseline.txt] *modified* 
 {
   "version": "FakeTSVersion",
@@ -151,7 +151,7 @@ Found 1 error in child/child.ts[90m:1[0m
       "original": "./child.ts"
     }
   ],
-  "size": 71,
+  "size": 126,
   "semanticErrors": true
 }
 

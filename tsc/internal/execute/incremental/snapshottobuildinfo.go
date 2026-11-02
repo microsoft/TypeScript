@@ -10,6 +10,7 @@ import (
 	"github.com/microsoft/TypeScript/tsc/internal/collections"
 	"github.com/microsoft/TypeScript/tsc/internal/compiler"
 	"github.com/microsoft/TypeScript/tsc/internal/core"
+	"github.com/microsoft/TypeScript/tsc/internal/module"
 	"github.com/microsoft/TypeScript/tsc/internal/tsoptions"
 	"github.com/microsoft/TypeScript/tsc/internal/tspath"
 )
@@ -49,12 +50,102 @@ func snapshotToBuildInfo(snapshot *snapshot, program *compiler.Program, buildInf
 		}
 	} else {
 		to.setRootOfNonIncrementalProgram()
+		buildInfo.NonIncrementalFileNames = []BuildInfoPath{}
+		roots := collections.NewSetFromItems(core.Map(program.CommandLine().FileNames(), func(file tspath.RootedFilePath) tspath.PathKey {
+			return program.CaseSensitivity().PathKey(file.AsPath())
+		})...)
+		for _, file := range program.GetSourceFiles() {
+			if roots.Has(file.PathKey()) || !program.Host().FS().FileExists(file.FileName()) {
+				continue
+			}
+			if lib := program.GetDefaultLibFile(file.PathKey()); lib != nil && !lib.Replaced {
+				continue
+			}
+			buildInfo.NonIncrementalFileNames = append(buildInfo.NonIncrementalFileNames, to.serializedPathKeyRelativeToBuildInfo(file.PathKey()))
+		}
+		slices.Sort(buildInfo.NonIncrementalFileNames)
 	}
+	to.setInputAliases()
+	to.setWatchDirectories()
 	buildInfo.Errors = snapshot.hasErrors.IsTrue()
 	buildInfo.SemanticErrors = snapshot.hasSemanticErrors
 	buildInfo.CheckPending = snapshot.checkPending
 	to.setPackageJsons()
 	return buildInfo, nil
+}
+
+type buildInfoInputAliasesProvider interface {
+	BuildInfoInputAliases() map[tspath.RootedPath]tspath.RootedPath
+}
+
+type buildInfoWatchDirectoriesProvider interface {
+	BuildInfoWatchDirectories() []tspath.RootedDirectoryPath
+}
+
+func (t *toBuildInfo) setInputAliases() {
+	aliases := make(map[tspath.RootedPath]tspath.RootedPath)
+	if provider, ok := t.program.Host().FS().(buildInfoInputAliasesProvider); ok {
+		maps.Copy(aliases, provider.BuildInfoInputAliases())
+	}
+	inputPaths := collections.NewSetWithSizeHint[tspath.PathKey](len(t.program.GetSourceFiles()) * 2)
+	for _, file := range t.program.GetSourceFiles() {
+		inputPaths.Add(file.PathKey())
+		realPath := t.program.Host().FS().Realpath(file.FileName().AsPath())
+		inputPaths.Add(t.caseSensitivity.PathKey(realPath))
+		if file.FileName().AsPath() != realPath {
+			aliases[file.FileName().AsPath()] = realPath
+		}
+		t.program.ForEachResolvedModule(func(resolution *module.ResolvedModule, _ string, _ core.ResolutionMode, _ tspath.PathKey) {
+			if resolution != nil && resolution.OriginalPath != "" {
+				aliases[resolution.OriginalPath.AsPath()] = resolution.ResolvedFileName.AsPath()
+			}
+		}, file)
+		t.program.ForEachResolvedTypeReferenceDirective(func(resolution *module.ResolvedTypeReferenceDirective, _ string, _ core.ResolutionMode, _ tspath.PathKey) {
+			if resolution != nil && resolution.OriginalPath != "" {
+				aliases[resolution.OriginalPath.AsPath()] = resolution.ResolvedFileName.AsPath()
+			}
+		}, file)
+	}
+	var referenceSources collections.Set[tspath.PathKey]
+	t.program.RangeResolvedProjectReference(func(_ tspath.PathKey, config, _ *tsoptions.ParsedCommandLine, _ int) bool {
+		if config == nil {
+			return true
+		}
+		for _, file := range config.FileNames() {
+			referenceSources.Add(t.caseSensitivity.PathKey(file.AsPath()))
+			referenceSources.Add(t.caseSensitivity.PathKey(t.program.Host().FS().Realpath(file.AsPath())))
+		}
+		return true
+	})
+	for path, realPath := range aliases {
+		pathKey := t.caseSensitivity.PathKey(path)
+		realPathKey := t.caseSensitivity.PathKey(realPath)
+		if pathKey == realPathKey || !inputPaths.Has(realPathKey) || referenceSources.Has(pathKey) || referenceSources.Has(realPathKey) {
+			continue
+		}
+		t.buildInfo.InputAliases = append(t.buildInfo.InputAliases, &BuildInfoInputAlias{
+			Path:     t.fileNameRelativeToBuildInfo(tspath.RootedFilePathFromPath(path)),
+			RealPath: t.fileNameRelativeToBuildInfo(tspath.RootedFilePathFromPath(realPath)),
+		})
+	}
+	slices.SortFunc(t.buildInfo.InputAliases, func(left, right *BuildInfoInputAlias) int {
+		if result := strings.Compare(left.Path.AsString(), right.Path.AsString()); result != 0 {
+			return result
+		}
+		return strings.Compare(left.RealPath.AsString(), right.RealPath.AsString())
+	})
+}
+
+func (t *toBuildInfo) setWatchDirectories() {
+	provider, ok := t.program.Host().FS().(buildInfoWatchDirectoriesProvider)
+	if !ok {
+		return
+	}
+	t.buildInfo.WatchDirectories = []BuildInfoPath{}
+	for _, dir := range provider.BuildInfoWatchDirectories() {
+		t.buildInfo.WatchDirectories = append(t.buildInfo.WatchDirectories, BuildInfoPath(t.relativeToBuildInfo(dir.AsPath())))
+	}
+	slices.Sort(t.buildInfo.WatchDirectories)
 }
 
 type toBuildInfo struct {

@@ -24,6 +24,8 @@ func TestBuildInfoPathJSONRoundTrip(t *testing.T) {
 		Root:                 []*BuildInfoRoot{{NonIncremental: "./src/root.ts"}},
 		PackageJsons:         []BuildInfoPath{"./package.json"},
 		MissingPackageJsons:  []BuildInfoPath{"../package.json"},
+		InputAliases:         []*BuildInfoInputAlias{{Path: "./node_modules/pkg/index.d.ts", RealPath: "../pkg/index.d.ts"}},
+		WatchDirectories:     []BuildInfoPath{"../generated"},
 		FileNames:            []BuildInfoPath{"./src/root.ts", "lib.es5.d.ts"},
 		LatestChangedDtsFile: "./dist/root.d.ts",
 	}
@@ -33,7 +35,7 @@ func TestBuildInfoPathJSONRoundTrip(t *testing.T) {
 	assert.Equal(
 		t,
 		string(data),
-		`{"root":["./src/root.ts"],"packageJsons":["./package.json"],"missingPackageJsons":["../package.json"],"fileNames":["./src/root.ts","lib.es5.d.ts"],"latestChangedDtsFile":"./dist/root.d.ts"}`,
+		`{"root":["./src/root.ts"],"packageJsons":["./package.json"],"missingPackageJsons":["../package.json"],"inputAliases":[["./node_modules/pkg/index.d.ts","../pkg/index.d.ts"]],"watchDirectories":["../generated"],"fileNames":["./src/root.ts","lib.es5.d.ts"],"latestChangedDtsFile":"./dist/root.d.ts"}`,
 	)
 
 	var roundTripped BuildInfo
@@ -41,6 +43,8 @@ func TestBuildInfoPathJSONRoundTrip(t *testing.T) {
 	assert.DeepEqual(t, roundTripped.Root, buildInfo.Root)
 	assert.DeepEqual(t, roundTripped.PackageJsons, buildInfo.PackageJsons)
 	assert.DeepEqual(t, roundTripped.MissingPackageJsons, buildInfo.MissingPackageJsons)
+	assert.DeepEqual(t, roundTripped.InputAliases, buildInfo.InputAliases)
+	assert.DeepEqual(t, roundTripped.WatchDirectories, buildInfo.WatchDirectories)
 	assert.DeepEqual(t, roundTripped.FileNames, buildInfo.FileNames)
 	assert.Equal(t, roundTripped.LatestChangedDtsFile, buildInfo.LatestChangedDtsFile)
 }
@@ -440,9 +444,50 @@ func TestGlobalDeletionPreservesSkippedLibraryDiagnostics(t *testing.T) {
 					t.Fatalf("global removal marked skipped library %s changed", file.FileName())
 				}
 			}
+
 			if diagnostics := current.GetSemanticDiagnostics(t.Context(), nil); len(diagnostics) != 0 {
 				t.Fatalf("skipped library produced diagnostics: %v", diagnostics)
 			}
 		})
 	}
+}
+
+func TestNonIncrementalBuildInfoDependenciesJSON(t *testing.T) {
+	t.Parallel()
+	info := &BuildInfo{
+		Root:                    []*BuildInfoRoot{{NonIncremental: "./root.ts"}},
+		NonIncrementalFileNames: []BuildInfoPath{"../shared/other.ts"},
+	}
+	data, err := json.Marshal(info)
+	assert.NilError(t, err)
+	assert.Equal(t, string(data), `{"root":["./root.ts"],"nonIncrementalFileNames":["../shared/other.ts"]}`)
+	var restored BuildInfo
+	assert.NilError(t, json.Unmarshal(data, &restored))
+	assert.DeepEqual(t, restored.NonIncrementalFileNames, info.NonIncrementalFileNames)
+	assert.Assert(t, !restored.IsIncremental())
+}
+
+func TestNonIncrementalBuildInfoEmptyInventory(t *testing.T) {
+	t.Parallel()
+	info := &BuildInfo{NonIncrementalFileNames: []BuildInfoPath{}}
+	data, err := json.Marshal(info)
+	assert.NilError(t, err)
+	assert.Equal(t, string(data), `{"nonIncrementalFileNames":[]}`)
+	var restored BuildInfo
+	assert.NilError(t, json.Unmarshal(data, &restored))
+	assert.Assert(t, restored.NonIncrementalFileNames != nil)
+	var legacy BuildInfo
+	assert.NilError(t, json.Unmarshal([]byte(`{}`), &legacy))
+	assert.Assert(t, legacy.NonIncrementalFileNames == nil)
+}
+
+func TestBuildInfoEmptyWatchDirectories(t *testing.T) {
+	t.Parallel()
+	info := &BuildInfo{WatchDirectories: []BuildInfoPath{}}
+	data, err := json.Marshal(info)
+	assert.NilError(t, err)
+	assert.Equal(t, string(data), `{"watchDirectories":[]}`)
+	var restored BuildInfo
+	assert.NilError(t, json.Unmarshal(data, &restored))
+	assert.Assert(t, restored.WatchDirectories != nil)
 }
