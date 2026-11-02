@@ -270,3 +270,31 @@ func TestResolveContentMapperManifest(t *testing.T) {
 	_, _, diagnostic = resolveContentMapperManifest(NewDefaultParseConfigHost(fs), "/home/project/tsconfig.json", "bad-output-extension")
 	assert.Equal(t, diagnostic.Code(), diagnostics.The_typescript_contentMapper_outputExtensions_of_the_content_mapper_package_0_contains_an_invalid_mapping_from_1_to_2_Extensions_must_be_non_empty_and_begin_with_a.Code())
 }
+
+func TestResolveContentMapperManifestRejectsPaths(t *testing.T) {
+	t.Parallel()
+
+	for _, packageName := range []string{".", "..", "./mapper", "../mapper", "../does-not-exist", `.\mapper`, `..\mapper`, "/home/mapper", `C:\mapper`} {
+		t.Run(packageName, func(t *testing.T) {
+			t.Parallel()
+			fs := vfstest.FromMap(map[string]string{
+				"/home/package.json": `{
+					"name": "unrelated",
+					"typescript": { "contentMapper": { "exec": ["run"] } }
+				}`,
+				"/home/node_modules/mapper/package.json": `{
+					"name": "mapper",
+					"typescript": { "contentMapper": { "exec": ["run"] } }
+				}`,
+				"/home/mapper/package.json": `{
+					"name": "mapper",
+					"typescript": { "contentMapper": { "exec": ["run"] } }
+				}`,
+			}, tspath.CaseSensitive)
+			_, packageDirectory, diagnostic := resolveContentMapperManifest(NewDefaultParseConfigHost(fs), "/home/project/tsconfig.json", packageName)
+			assert.Assert(t, diagnostic != nil)
+			assert.Equal(t, diagnostic.Code(), diagnostics.The_content_mapper_package_0_could_not_be_resolved.Code())
+			assert.Equal(t, packageDirectory, tspath.RootedDirectoryPath(""))
+		})
+	}
+}
