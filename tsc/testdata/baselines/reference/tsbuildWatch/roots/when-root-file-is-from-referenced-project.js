@@ -449,7 +449,6 @@ projects/shared/dist/src/random.d.ts
    File is output of project reference source 'projects/shared/src/random.ts'
 [[90mHH:MM:SS AM[0m] Found 0 errors. Watching for file changes.
 
-//// [/home/src/workspaces/solution/projects/server/dist/server/src/server.js] *rewrite with same content*
 //// [/home/src/workspaces/solution/projects/server/dist/server/tsconfig.tsbuildinfo] *modified* 
 {"version":"FakeTSVersion","root":[[2,5]],"fileNames":["lib.es2026.full.d.ts","../../../shared/dist/src/myClass.d.ts","../../src/server.ts","../../../shared/dist/src/logging.d.ts","../../../shared/dist/src/random.d.ts","../../../shared/src/myClass.ts","../../../shared/src/logging.ts","../../../shared/src/random.ts"],"fileInfos":[{"version":"8859c12c614ce56ba9a18e58384a198f-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ninterface SymbolConstructor {\n    (desc?: string | number): symbol;\n    for(name: string): symbol;\n    readonly toStringTag: symbol;\n}\ndeclare var Symbol: SymbolConstructor;\ninterface Symbol {\n    readonly [Symbol.toStringTag]: string;\n}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true,"impliedNodeFormat":1},"21b0030a128ccc5aedc6fdbe3cdf12e3-export declare class MyClass {\n}\n",{"version":"12354a7ec5afade35d10a2c1fa79eb29-import { MyClass } from ':shared/myClass.js';\nconsole.log('Hello, world!');","signature":"abe7d9981d6018efb6b2b794f40a1607-export {};\n","impliedNodeFormat":1},"5178e2a779ca8b29fb07201995347a09-export declare function log(str: string): void;\nexport declare const x = 10;\n","1d6adcd8c4dee61b744fc1ff84370372-export declare function randomFn(str: string): void;\n"],"fileIdsList":[[2]],"options":{"composite":true,"outDir":"..","paths":{":shared/*":["./src/../../shared/src/*"]},"rootDir":"../../..","pathsBasePath":"../.."},"referencedMap":[[3,1]],"latestChangedDtsFile":"./src/server.d.ts","resolvedRoot":[[2,6],[4,7],[5,8]]}
 //// [/home/src/workspaces/solution/projects/server/dist/server/tsconfig.tsbuildinfo.readable.baseline.txt] *modified* 
@@ -668,11 +667,7 @@ Signatures::
 
 projects/server/tsconfig.json::
 SemanticDiagnostics::
-*refresh*    /home/src/tslibs/TS/Lib/lib.es2026.full.d.ts
-*refresh*    /home/src/workspaces/solution/projects/shared/dist/src/myClass.d.ts
-*refresh*    /home/src/workspaces/solution/projects/server/src/server.ts
 *refresh*    /home/src/workspaces/solution/projects/shared/dist/src/logging.d.ts
-*refresh*    /home/src/workspaces/solution/projects/shared/dist/src/random.d.ts
 Signatures::
 (used version)   /home/src/workspaces/solution/projects/shared/dist/src/logging.d.ts
 
@@ -743,7 +738,6 @@ projects/shared/dist/src/logging.d.ts
    File is output of project reference source 'projects/shared/src/logging.ts'
 [[90mHH:MM:SS AM[0m] Found 0 errors. Watching for file changes.
 
-//// [/home/src/workspaces/solution/projects/server/dist/server/src/server.js] *rewrite with same content*
 //// [/home/src/workspaces/solution/projects/server/dist/server/tsconfig.tsbuildinfo] *modified* 
 {"version":"FakeTSVersion","root":[[2,4]],"fileNames":["lib.es2026.full.d.ts","../../../shared/dist/src/myClass.d.ts","../../src/server.ts","../../../shared/dist/src/logging.d.ts","../../../shared/src/myClass.ts","../../../shared/src/logging.ts"],"fileInfos":[{"version":"8859c12c614ce56ba9a18e58384a198f-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ninterface SymbolConstructor {\n    (desc?: string | number): symbol;\n    for(name: string): symbol;\n    readonly toStringTag: symbol;\n}\ndeclare var Symbol: SymbolConstructor;\ninterface Symbol {\n    readonly [Symbol.toStringTag]: string;\n}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true,"impliedNodeFormat":1},"21b0030a128ccc5aedc6fdbe3cdf12e3-export declare class MyClass {\n}\n",{"version":"12354a7ec5afade35d10a2c1fa79eb29-import { MyClass } from ':shared/myClass.js';\nconsole.log('Hello, world!');","signature":"abe7d9981d6018efb6b2b794f40a1607-export {};\n","impliedNodeFormat":1},"5178e2a779ca8b29fb07201995347a09-export declare function log(str: string): void;\nexport declare const x = 10;\n"],"fileIdsList":[[2]],"options":{"composite":true,"outDir":"..","paths":{":shared/*":["./src/../../shared/src/*"]},"rootDir":"../../..","pathsBasePath":"../.."},"referencedMap":[[3,1]],"latestChangedDtsFile":"./src/server.d.ts","resolvedRoot":[[2,5],[4,6]]}
 //// [/home/src/workspaces/solution/projects/server/dist/server/tsconfig.tsbuildinfo.readable.baseline.txt] *modified* 
@@ -924,10 +918,6 @@ Signatures::
 
 projects/server/tsconfig.json::
 SemanticDiagnostics::
-*refresh*    /home/src/tslibs/TS/Lib/lib.es2026.full.d.ts
-*refresh*    /home/src/workspaces/solution/projects/shared/dist/src/myClass.d.ts
-*refresh*    /home/src/workspaces/solution/projects/server/src/server.ts
-*refresh*    /home/src/workspaces/solution/projects/shared/dist/src/logging.d.ts
 Signatures::
 
 
