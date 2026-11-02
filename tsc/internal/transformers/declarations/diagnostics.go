@@ -704,10 +704,8 @@ func createGetIsolatedDeclarationErrors(resolver printer.EmitResolver) func(node
 		if heritageClause != nil {
 			return createDiagnosticForNode(node, diagnostics.Extends_clause_can_t_contain_an_expression_with_isolatedDeclarations)
 		}
-		if ast.IsPartOfTypeNode(node) || ast.IsTypeQueryNode(node) {
-			return createEntityInTypeNodeError(node)
-		}
-		if ast.IsEntityName(node) || ast.IsEntityNameExpression(node) {
+		if (ast.IsPartOfTypeNode(node) || node.Parent != nil && ast.IsTypeQueryNode(node.Parent)) &&
+			(ast.IsEntityName(node) || ast.IsEntityNameExpression(node)) {
 			return createEntityInTypeNodeError(node)
 		}
 		switch node.Kind {

@@ -1,0 +1,31 @@
+//// [tests/cases/compiler/isolatedDeclarationsReturnEntityName.ts] ////
+
+=== isolatedDeclarationsReturnEntityName.ts ===
+// Regression for #65106: value-position entity names in returns must produce
+// TS9007/TS9008 (explicit return type), not TS9039/TS9013 (private name / expression).
+
+export const x: { a: number } = { a: 1 };
+>x : { a: number; }
+>a : number
+>{ a: 1 } : { a: number; }
+>a : number
+>1 : 1
+
+export function f() { return x; }
+>f : () => { a: number; }
+>x : { a: number; }
+
+export class C {
+>C : C
+
+    x = 1;
+>x : number
+>1 : 1
+
+    method() { return this.x; }
+>method : () => number
+>this.x : number
+>this : this
+>x : number
+}
+

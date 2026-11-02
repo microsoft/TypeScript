@@ -1,0 +1,22 @@
+isolatedDeclarationsReturnEntityName.ts(5,17): error TS9007: Function must have an explicit return type annotation with --isolatedDeclarations.
+isolatedDeclarationsReturnEntityName.ts(9,5): error TS9008: Method must have an explicit return type annotation with --isolatedDeclarations.
+
+
+==== isolatedDeclarationsReturnEntityName.ts (2 errors) ====
+    // Regression for #65106: value-position entity names in returns must produce
+    // TS9007/TS9008 (explicit return type), not TS9039/TS9013 (private name / expression).
+    
+    export const x: { a: number } = { a: 1 };
+    export function f() { return x; }
+                    ~
+!!! error TS9007: Function must have an explicit return type annotation with --isolatedDeclarations.
+!!! related TS9031 isolatedDeclarationsReturnEntityName.ts:5:17: Add a return type to the function declaration.
+    
+    export class C {
+        x = 1;
+        method() { return this.x; }
+        ~~~~~~
+!!! error TS9008: Method must have an explicit return type annotation with --isolatedDeclarations.
+!!! related TS9034 isolatedDeclarationsReturnEntityName.ts:9:5: Add a return type to the method
+    }
+    

@@ -1,0 +1,28 @@
+//// [tests/cases/compiler/isolatedDeclarationsReturnEntityName.ts] ////
+
+=== isolatedDeclarationsReturnEntityName.ts ===
+// Regression for #65106: value-position entity names in returns must produce
+// TS9007/TS9008 (explicit return type), not TS9039/TS9013 (private name / expression).
+
+export const x: { a: number } = { a: 1 };
+>x : Symbol(x, Decl(isolatedDeclarationsReturnEntityName.ts, 3, 12))
+>a : Symbol(a, Decl(isolatedDeclarationsReturnEntityName.ts, 3, 17))
+>a : Symbol(a, Decl(isolatedDeclarationsReturnEntityName.ts, 3, 33))
+
+export function f() { return x; }
+>f : Symbol(f, Decl(isolatedDeclarationsReturnEntityName.ts, 3, 41))
+>x : Symbol(x, Decl(isolatedDeclarationsReturnEntityName.ts, 3, 12))
+
+export class C {
+>C : Symbol(C, Decl(isolatedDeclarationsReturnEntityName.ts, 4, 33))
+
+    x = 1;
+>x : Symbol(C.x, Decl(isolatedDeclarationsReturnEntityName.ts, 6, 16))
+
+    method() { return this.x; }
+>method : Symbol(C.method, Decl(isolatedDeclarationsReturnEntityName.ts, 7, 10))
+>this.x : Symbol(C.x, Decl(isolatedDeclarationsReturnEntityName.ts, 6, 16))
+>this : Symbol(C, Decl(isolatedDeclarationsReturnEntityName.ts, 4, 33))
+>x : Symbol(C.x, Decl(isolatedDeclarationsReturnEntityName.ts, 6, 16))
+}
+
