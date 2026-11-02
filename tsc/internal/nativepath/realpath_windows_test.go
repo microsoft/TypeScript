@@ -38,6 +38,8 @@ func TestRealpathReservedDeviceName(t *testing.T) {
 }
 
 func TestHasReservedPathComponent(t *testing.T) {
+	t.Parallel()
+
 	tests := []struct {
 		path string
 		want bool
@@ -54,7 +56,9 @@ func TestHasReservedPathComponent(t *testing.T) {
 	for _, test := range tests {
 		assert.Equal(t, hasReservedPathComponent(test.path), test.want)
 	}
+}
 
+func TestHasReservedPathComponentAllocs(t *testing.T) { //nolint:paralleltest // testing.AllocsPerRun cannot run in a parallel test.
 	for _, path := range []string{`C:\src\con\foo.d.ts`, `C:\src\content\foo.d.ts`} {
 		allocs := testing.AllocsPerRun(100, func() {
 			hasReservedPathComponent(path)
