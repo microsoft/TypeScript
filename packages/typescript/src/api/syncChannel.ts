@@ -196,7 +196,6 @@ export class SyncRpcChannel {
             // POSIX: use stdio pipe file descriptors directly.
             this.child = spawn(exe, args, {
                 stdio: ["pipe", "pipe", "inherit"],
-                windowsHide: true,
             });
 
             const stdout = this.child.stdout! as StdoutWithHandle;
