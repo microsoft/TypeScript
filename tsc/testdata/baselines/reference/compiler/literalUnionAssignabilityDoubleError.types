@@ -1,0 +1,40 @@
+//// [tests/cases/compiler/literalUnionAssignabilityDoubleError.ts] ////
+
+=== literalUnionAssignabilityDoubleError.ts ===
+declare const x: "a" | "b";
+>x : "a" | "b"
+
+const y: number = x;
+>y : number
+>x : "a" | "b"
+
+function foo(param: number) {}
+>foo : (param: number) => void
+>param : number
+
+foo(x);
+>foo(x) : void
+>foo : (param: number) => void
+>x : "a" | "b"
+
+function bar(): number {
+>bar : () => number
+
+    return x;
+>x : "a" | "b"
+}
+
+declare const nums: 1 | 2;
+>nums : 1 | 2
+
+const s: string = nums;
+>s : string
+>nums : 1 | 2
+
+declare const bigints: 0n | 1n;
+>bigints : 0n | 1n
+
+const sym: symbol = bigints;
+>sym : symbol
+>bigints : 0n | 1n
+

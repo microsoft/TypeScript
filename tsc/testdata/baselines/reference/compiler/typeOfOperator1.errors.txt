@@ -1,5 +1,4 @@
 typeOfOperator1.ts(3,5): error TS2322: Type 'string' is not assignable to type 'number'.
-  Type 'string' is not assignable to type 'number'.
 
 
 ==== typeOfOperator1.ts (1 errors) ====
@@ -8,4 +7,3 @@ typeOfOperator1.ts(3,5): error TS2322: Type 'string' is not assignable to type '
     var z: number = typeof x;
         ~
 !!! error TS2322: Type 'string' is not assignable to type 'number'.
-!!! error TS2322:   Type 'string' is not assignable to type 'number'.
