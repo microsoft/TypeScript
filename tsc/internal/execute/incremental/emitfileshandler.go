@@ -116,7 +116,7 @@ func (h *emitFilesHandler) emitBuildInfo(options compiler.EmitOptions, result *c
 
 func (h *emitFilesHandler) emitFilesIncremental(options compiler.EmitOptions) []*compiler.EmitResult {
 	// Get all affected files
-	collectAllAffectedFiles(h.ctx, h.program)
+	collectAllAffectedFiles(h.ctx, h.program, false /*collectSemanticDiagnostics*/)
 	if h.ctx.Err() != nil {
 		return nil
 	}

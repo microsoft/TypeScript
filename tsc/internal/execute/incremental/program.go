@@ -275,13 +275,15 @@ func (p *Program) Emit(ctx context.Context, options compiler.EmitOptions) *compi
 func (p *Program) collectSemanticDiagnosticsOfAffectedFiles(ctx context.Context, file *ast.SourceFile) {
 	if p.snapshot.canUseIncrementalState() {
 		// Get all affected files
-		collectAllAffectedFiles(ctx, p)
+		collectAllAffectedFiles(ctx, p, true /*collectSemanticDiagnostics*/)
 		if ctx.Err() != nil {
 			return
 		}
-
 		if p.snapshot.semanticDiagnosticsPerFile.Size() == len(p.program.GetSourceFiles()) {
-			// If we have all the files,
+			if p.snapshot.checkPending && !p.snapshot.options.NoCheck.IsTrue() {
+				p.snapshot.checkPending = false
+				p.snapshot.buildInfoEmitPending.Store(true)
+			}
 			return
 		}
 	}
