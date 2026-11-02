@@ -1385,6 +1385,29 @@ func literalValueToJSON(value any) any {
 	}
 }
 
+// numberLiteralValueFromJSON decodes a request-direction number literal value
+// encoded by the API client, reversing literalValueToJSON's NaN/Infinity string
+// encoding for the number case (JSON itself cannot represent those values).
+func numberLiteralValueFromJSON(value any) (jsnum.Number, error) {
+	switch v := value.(type) {
+	case float64:
+		return jsnum.Number(v), nil
+	case string:
+		switch v {
+		case "+Infinity":
+			return jsnum.Inf(1), nil
+		case "-Infinity":
+			return jsnum.Inf(-1), nil
+		case "NaN":
+			return jsnum.NaN(), nil
+		default:
+			return 0, fmt.Errorf("%w: invalid number literal value %q", ErrInvalidRequest, v)
+		}
+	default:
+		return 0, fmt.Errorf("%w: invalid number literal value %v", ErrInvalidRequest, value)
+	}
+}
+
 type ConstantValueResponse struct {
 	IsNumber bool `json:"isNumber"`
 	Value    any  `json:"value"`
@@ -1697,7 +1720,10 @@ type GetStringLiteralTypeParams struct {
 type GetNumberLiteralTypeParams struct {
 	Snapshot SnapshotID     `json:"snapshot"`
 	Project  project.Handle `json:"project"`
-	Value    float64        `json:"value"`
+	// Value is a JSON number, except JSON cannot represent NaN/Infinity/-Infinity,
+	// so the client encodes those as the strings "NaN"/"+Infinity"/"-Infinity"
+	// (mirroring literalValueToJSON's response-direction encoding).
+	Value any `json:"value"`
 }
 
 // Base10Value is the absolute value in base 10 with no leading zeros (empty for zero).

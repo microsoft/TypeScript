@@ -3769,7 +3769,12 @@ func (s *Session) handleGetNumberLiteralType(ctx context.Context, params *GetNum
 	}
 	defer setup.done()
 
-	t := setup.checker.GetNumberLiteralType(jsnum.Number(params.Value))
+	value, err := numberLiteralValueFromJSON(params.Value)
+	if err != nil {
+		return nil, err
+	}
+
+	t := setup.checker.GetNumberLiteralType(value)
 	return setup.sd.newTypeResponse(setup.projectID, t, setup.checker), nil
 }
 

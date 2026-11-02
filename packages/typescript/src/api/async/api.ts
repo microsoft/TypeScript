@@ -2296,6 +2296,16 @@ function toEmitOutput(response: ProtocolEmitOutputResponse): EmitOutput {
     };
 }
 
+// JSON cannot represent NaN/Infinity/-Infinity (they serialize as null), so encode
+// them as sentinel strings here; the server decodes them back via
+// numberLiteralValueFromJSON, mirroring literalValueToJSON's response-direction encoding.
+function encodeNumberLiteralValue(value: number): number | string {
+    if (value === Infinity) return "+Infinity";
+    if (value === -Infinity) return "-Infinity";
+    if (Number.isNaN(value)) return "NaN";
+    return value;
+}
+
 export class Checker {
     private snapshotId: number;
     private project: Project;
@@ -2792,7 +2802,7 @@ export class Checker {
         const data = await this.client.apiRequest("getNumberLiteralType", {
             snapshot: this.snapshotId,
             project: this.project.handle,
-            value,
+            value: encodeNumberLiteralValue(value),
         });
         return this.objectRegistry.getOrCreateType(data);
     }

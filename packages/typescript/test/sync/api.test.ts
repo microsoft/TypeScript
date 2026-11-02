@@ -4703,6 +4703,20 @@ describe("Checker - literal and nullable type getters", { concurrency }, () => {
         const negType = project.checker.getNumberLiteralType(-1.5);
         assert.ok(negType.flags & TypeFlags.NumberLiteral);
         assert.equal((negType as NumberLiteralType).value, -1.5);
+
+        // NaN/Infinity/-Infinity can't survive a plain JSON round-trip (they
+        // serialize to null), so the API must encode/decode them explicitly.
+        const nanType = project.checker.getNumberLiteralType(NaN);
+        assert.ok(nanType.flags & TypeFlags.NumberLiteral);
+        assert.ok(Number.isNaN((nanType as NumberLiteralType).value));
+
+        const posInfType = project.checker.getNumberLiteralType(Infinity);
+        assert.ok(posInfType.flags & TypeFlags.NumberLiteral);
+        assert.equal((posInfType as NumberLiteralType).value, Infinity);
+
+        const negInfType = project.checker.getNumberLiteralType(-Infinity);
+        assert.ok(negInfType.flags & TypeFlags.NumberLiteral);
+        assert.equal((negInfType as NumberLiteralType).value, -Infinity);
     });
 
     test("getBigIntLiteralType returns a BigIntLiteral type with the given value (positive, negative, zero)", () => {

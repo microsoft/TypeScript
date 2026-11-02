@@ -826,7 +826,12 @@ export interface GetStringLiteralTypeParams {
 export interface GetNumberLiteralTypeParams {
     snapshot: number;
     project: number;
-    value: number;
+    /**
+     * Value is a JSON number, except JSON cannot represent NaN/Infinity/-Infinity,
+     * so the client encodes those as the strings "NaN"/"+Infinity"/"-Infinity"
+     * (mirroring literalValueToJSON's response-direction encoding).
+     */
+    value: unknown;
 }
 
 /** Base10Value is the absolute value in base 10 with no leading zeros (empty for zero). */
