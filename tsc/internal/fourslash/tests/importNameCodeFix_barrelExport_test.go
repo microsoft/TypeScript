@@ -32,3 +32,22 @@ export * from "./a";`
 	f.VerifyImportFixModuleSpecifiers(t, "sibling", []string{"./a", ".", ".."}, nil /*preferences*/)
 	f.VerifyImportFixModuleSpecifiers(t, "parent", []string{"../foo", "../foo/a", ".."}, nil /*preferences*/)
 }
+
+func TestImportNameCodeFix_barrelExportMixedModuleKinds(t *testing.T) {
+	t.Parallel()
+	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
+	const content = `// @module: commonjs
+// @Filename: /node_modules/@types/example/index.d.ts
+declare module "example" { export const A: number; }
+// @Filename: /foo/a.ts
+export const A = 0;
+// @Filename: /foo/index.ts
+export * from "./a";
+export * from "./b";
+// @Filename: /foo/b.ts
+export {};
+A/**/`
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
+	f.VerifyImportFixModuleSpecifiers(t, "", []string{"example", "./a", "."}, nil /*preferences*/)
+}
