@@ -4538,6 +4538,9 @@ func (s *Session) handleIsImplementationOfOverload(ctx context.Context, params *
 		return false, nil
 	}
 
+	if !ast.IsFunctionLike(node) {
+		return false, nil
+	}
 	return setup.checker.NewEmitResolver(printer.NewEmitContext()).IsImplementationOfOverload(node), nil
 }
 
