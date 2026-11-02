@@ -8769,338 +8769,505 @@ func IsJSDocPropertyTag(node *Node) bool {
 func (n *Node) ForEachChild(v Visitor) bool {
 	switch n.Kind {
 	case KindQualifiedName:
+		// SAFETY: This case only matches kinds allocated as a QualifiedName, which embeds its Node header at offset zero.
 		return (*QualifiedName)(unsafe.Pointer(n)).ForEachChild(v)
 	case KindComputedPropertyName:
+		// SAFETY: This case only matches kinds allocated as a ComputedPropertyName, which embeds its Node header at offset zero.
 		return (*ComputedPropertyName)(unsafe.Pointer(n)).ForEachChild(v)
 	case KindDecorator:
+		// SAFETY: This case only matches kinds allocated as a Decorator, which embeds its Node header at offset zero.
 		return (*Decorator)(unsafe.Pointer(n)).ForEachChild(v)
 	case KindIfStatement:
+		// SAFETY: This case only matches kinds allocated as a IfStatement, which embeds its Node header at offset zero.
 		return (*IfStatement)(unsafe.Pointer(n)).ForEachChild(v)
 	case KindDoStatement:
+		// SAFETY: This case only matches kinds allocated as a DoStatement, which embeds its Node header at offset zero.
 		return (*DoStatement)(unsafe.Pointer(n)).ForEachChild(v)
 	case KindWhileStatement:
+		// SAFETY: This case only matches kinds allocated as a WhileStatement, which embeds its Node header at offset zero.
 		return (*WhileStatement)(unsafe.Pointer(n)).ForEachChild(v)
 	case KindForStatement:
+		// SAFETY: This case only matches kinds allocated as a ForStatement, which embeds its Node header at offset zero.
 		return (*ForStatement)(unsafe.Pointer(n)).ForEachChild(v)
 	case KindForInStatement, KindForOfStatement:
+		// SAFETY: This case only matches kinds allocated as a ForInOrOfStatement, which embeds its Node header at offset zero.
 		return (*ForInOrOfStatement)(unsafe.Pointer(n)).ForEachChild(v)
 	case KindBreakStatement:
+		// SAFETY: This case only matches kinds allocated as a BreakStatement, which embeds its Node header at offset zero.
 		return (*BreakStatement)(unsafe.Pointer(n)).ForEachChild(v)
 	case KindContinueStatement:
+		// SAFETY: This case only matches kinds allocated as a ContinueStatement, which embeds its Node header at offset zero.
 		return (*ContinueStatement)(unsafe.Pointer(n)).ForEachChild(v)
 	case KindReturnStatement:
+		// SAFETY: This case only matches kinds allocated as a ReturnStatement, which embeds its Node header at offset zero.
 		return (*ReturnStatement)(unsafe.Pointer(n)).ForEachChild(v)
 	case KindWithStatement:
+		// SAFETY: This case only matches kinds allocated as a WithStatement, which embeds its Node header at offset zero.
 		return (*WithStatement)(unsafe.Pointer(n)).ForEachChild(v)
 	case KindSwitchStatement:
+		// SAFETY: This case only matches kinds allocated as a SwitchStatement, which embeds its Node header at offset zero.
 		return (*SwitchStatement)(unsafe.Pointer(n)).ForEachChild(v)
 	case KindCaseBlock:
+		// SAFETY: This case only matches kinds allocated as a CaseBlock, which embeds its Node header at offset zero.
 		return (*CaseBlock)(unsafe.Pointer(n)).ForEachChild(v)
 	case KindCaseClause, KindDefaultClause:
+		// SAFETY: This case only matches kinds allocated as a CaseOrDefaultClause, which embeds its Node header at offset zero.
 		return (*CaseOrDefaultClause)(unsafe.Pointer(n)).ForEachChild(v)
 	case KindThrowStatement:
+		// SAFETY: This case only matches kinds allocated as a ThrowStatement, which embeds its Node header at offset zero.
 		return (*ThrowStatement)(unsafe.Pointer(n)).ForEachChild(v)
 	case KindTryStatement:
+		// SAFETY: This case only matches kinds allocated as a TryStatement, which embeds its Node header at offset zero.
 		return (*TryStatement)(unsafe.Pointer(n)).ForEachChild(v)
 	case KindCatchClause:
+		// SAFETY: This case only matches kinds allocated as a CatchClause, which embeds its Node header at offset zero.
 		return (*CatchClause)(unsafe.Pointer(n)).ForEachChild(v)
 	case KindLabeledStatement:
+		// SAFETY: This case only matches kinds allocated as a LabeledStatement, which embeds its Node header at offset zero.
 		return (*LabeledStatement)(unsafe.Pointer(n)).ForEachChild(v)
 	case KindExpressionStatement:
+		// SAFETY: This case only matches kinds allocated as a ExpressionStatement, which embeds its Node header at offset zero.
 		return (*ExpressionStatement)(unsafe.Pointer(n)).ForEachChild(v)
 	case KindBlock:
+		// SAFETY: This case only matches kinds allocated as a Block, which embeds its Node header at offset zero.
 		return (*Block)(unsafe.Pointer(n)).ForEachChild(v)
 	case KindVariableStatement:
+		// SAFETY: This case only matches kinds allocated as a VariableStatement, which embeds its Node header at offset zero.
 		return (*VariableStatement)(unsafe.Pointer(n)).ForEachChild(v)
 	case KindVariableDeclaration:
+		// SAFETY: This case only matches kinds allocated as a VariableDeclaration, which embeds its Node header at offset zero.
 		return (*VariableDeclaration)(unsafe.Pointer(n)).ForEachChild(v)
 	case KindVariableDeclarationList:
+		// SAFETY: This case only matches kinds allocated as a VariableDeclarationList, which embeds its Node header at offset zero.
 		return (*VariableDeclarationList)(unsafe.Pointer(n)).ForEachChild(v)
 	case KindObjectBindingPattern, KindArrayBindingPattern:
+		// SAFETY: This case only matches kinds allocated as a BindingPattern, which embeds its Node header at offset zero.
 		return (*BindingPattern)(unsafe.Pointer(n)).ForEachChild(v)
 	case KindParameter:
+		// SAFETY: This case only matches kinds allocated as a ParameterDeclaration, which embeds its Node header at offset zero.
 		return (*ParameterDeclaration)(unsafe.Pointer(n)).ForEachChild(v)
 	case KindBindingElement:
+		// SAFETY: This case only matches kinds allocated as a BindingElement, which embeds its Node header at offset zero.
 		return (*BindingElement)(unsafe.Pointer(n)).ForEachChild(v)
 	case KindMissingDeclaration:
+		// SAFETY: This case only matches kinds allocated as a MissingDeclaration, which embeds its Node header at offset zero.
 		return (*MissingDeclaration)(unsafe.Pointer(n)).ForEachChild(v)
 	case KindFunctionDeclaration:
+		// SAFETY: This case only matches kinds allocated as a FunctionDeclaration, which embeds its Node header at offset zero.
 		return (*FunctionDeclaration)(unsafe.Pointer(n)).ForEachChild(v)
 	case KindClassDeclaration:
+		// SAFETY: This case only matches kinds allocated as a ClassDeclaration, which embeds its Node header at offset zero.
 		return (*ClassDeclaration)(unsafe.Pointer(n)).ForEachChild(v)
 	case KindClassExpression:
+		// SAFETY: This case only matches kinds allocated as a ClassExpression, which embeds its Node header at offset zero.
 		return (*ClassExpression)(unsafe.Pointer(n)).ForEachChild(v)
 	case KindHeritageClause:
+		// SAFETY: This case only matches kinds allocated as a HeritageClause, which embeds its Node header at offset zero.
 		return (*HeritageClause)(unsafe.Pointer(n)).ForEachChild(v)
 	case KindInterfaceDeclaration:
+		// SAFETY: This case only matches kinds allocated as a InterfaceDeclaration, which embeds its Node header at offset zero.
 		return (*InterfaceDeclaration)(unsafe.Pointer(n)).ForEachChild(v)
 	case KindTypeAliasDeclaration, KindJSTypeAliasDeclaration:
+		// SAFETY: This case only matches kinds allocated as a TypeAliasDeclaration, which embeds its Node header at offset zero.
 		return (*TypeAliasDeclaration)(unsafe.Pointer(n)).ForEachChild(v)
 	case KindEnumMember:
+		// SAFETY: This case only matches kinds allocated as a EnumMember, which embeds its Node header at offset zero.
 		return (*EnumMember)(unsafe.Pointer(n)).ForEachChild(v)
 	case KindEnumDeclaration:
+		// SAFETY: This case only matches kinds allocated as a EnumDeclaration, which embeds its Node header at offset zero.
 		return (*EnumDeclaration)(unsafe.Pointer(n)).ForEachChild(v)
 	case KindModuleBlock:
+		// SAFETY: This case only matches kinds allocated as a ModuleBlock, which embeds its Node header at offset zero.
 		return (*ModuleBlock)(unsafe.Pointer(n)).ForEachChild(v)
 	case KindImportDeclaration, KindJSImportDeclaration:
+		// SAFETY: This case only matches kinds allocated as a ImportDeclaration, which embeds its Node header at offset zero.
 		return (*ImportDeclaration)(unsafe.Pointer(n)).ForEachChild(v)
 	case KindExternalModuleReference:
+		// SAFETY: This case only matches kinds allocated as a ExternalModuleReference, which embeds its Node header at offset zero.
 		return (*ExternalModuleReference)(unsafe.Pointer(n)).ForEachChild(v)
 	case KindNamespaceImport:
+		// SAFETY: This case only matches kinds allocated as a NamespaceImport, which embeds its Node header at offset zero.
 		return (*NamespaceImport)(unsafe.Pointer(n)).ForEachChild(v)
 	case KindNamedImports:
+		// SAFETY: This case only matches kinds allocated as a NamedImports, which embeds its Node header at offset zero.
 		return (*NamedImports)(unsafe.Pointer(n)).ForEachChild(v)
 	case KindExportAssignment:
+		// SAFETY: This case only matches kinds allocated as a ExportAssignment, which embeds its Node header at offset zero.
 		return (*ExportAssignment)(unsafe.Pointer(n)).ForEachChild(v)
 	case KindNamespaceExportDeclaration:
+		// SAFETY: This case only matches kinds allocated as a NamespaceExportDeclaration, which embeds its Node header at offset zero.
 		return (*NamespaceExportDeclaration)(unsafe.Pointer(n)).ForEachChild(v)
 	case KindNamespaceExport:
+		// SAFETY: This case only matches kinds allocated as a NamespaceExport, which embeds its Node header at offset zero.
 		return (*NamespaceExport)(unsafe.Pointer(n)).ForEachChild(v)
 	case KindNamedExports:
+		// SAFETY: This case only matches kinds allocated as a NamedExports, which embeds its Node header at offset zero.
 		return (*NamedExports)(unsafe.Pointer(n)).ForEachChild(v)
 	case KindExportSpecifier:
+		// SAFETY: This case only matches kinds allocated as a ExportSpecifier, which embeds its Node header at offset zero.
 		return (*ExportSpecifier)(unsafe.Pointer(n)).ForEachChild(v)
 	case KindCallSignature:
+		// SAFETY: This case only matches kinds allocated as a CallSignatureDeclaration, which embeds its Node header at offset zero.
 		return (*CallSignatureDeclaration)(unsafe.Pointer(n)).ForEachChild(v)
 	case KindConstructSignature:
+		// SAFETY: This case only matches kinds allocated as a ConstructSignatureDeclaration, which embeds its Node header at offset zero.
 		return (*ConstructSignatureDeclaration)(unsafe.Pointer(n)).ForEachChild(v)
 	case KindConstructor:
+		// SAFETY: This case only matches kinds allocated as a ConstructorDeclaration, which embeds its Node header at offset zero.
 		return (*ConstructorDeclaration)(unsafe.Pointer(n)).ForEachChild(v)
 	case KindGetAccessor:
+		// SAFETY: This case only matches kinds allocated as a GetAccessorDeclaration, which embeds its Node header at offset zero.
 		return (*GetAccessorDeclaration)(unsafe.Pointer(n)).ForEachChild(v)
 	case KindSetAccessor:
+		// SAFETY: This case only matches kinds allocated as a SetAccessorDeclaration, which embeds its Node header at offset zero.
 		return (*SetAccessorDeclaration)(unsafe.Pointer(n)).ForEachChild(v)
 	case KindIndexSignature:
+		// SAFETY: This case only matches kinds allocated as a IndexSignatureDeclaration, which embeds its Node header at offset zero.
 		return (*IndexSignatureDeclaration)(unsafe.Pointer(n)).ForEachChild(v)
 	case KindMethodSignature:
+		// SAFETY: This case only matches kinds allocated as a MethodSignatureDeclaration, which embeds its Node header at offset zero.
 		return (*MethodSignatureDeclaration)(unsafe.Pointer(n)).ForEachChild(v)
 	case KindMethodDeclaration:
+		// SAFETY: This case only matches kinds allocated as a MethodDeclaration, which embeds its Node header at offset zero.
 		return (*MethodDeclaration)(unsafe.Pointer(n)).ForEachChild(v)
 	case KindPropertySignature:
+		// SAFETY: This case only matches kinds allocated as a PropertySignatureDeclaration, which embeds its Node header at offset zero.
 		return (*PropertySignatureDeclaration)(unsafe.Pointer(n)).ForEachChild(v)
 	case KindPropertyDeclaration:
+		// SAFETY: This case only matches kinds allocated as a PropertyDeclaration, which embeds its Node header at offset zero.
 		return (*PropertyDeclaration)(unsafe.Pointer(n)).ForEachChild(v)
 	case KindClassStaticBlockDeclaration:
+		// SAFETY: This case only matches kinds allocated as a ClassStaticBlockDeclaration, which embeds its Node header at offset zero.
 		return (*ClassStaticBlockDeclaration)(unsafe.Pointer(n)).ForEachChild(v)
 	case KindBinaryExpression:
+		// SAFETY: This case only matches kinds allocated as a BinaryExpression, which embeds its Node header at offset zero.
 		return (*BinaryExpression)(unsafe.Pointer(n)).ForEachChild(v)
 	case KindPrefixUnaryExpression:
+		// SAFETY: This case only matches kinds allocated as a PrefixUnaryExpression, which embeds its Node header at offset zero.
 		return (*PrefixUnaryExpression)(unsafe.Pointer(n)).ForEachChild(v)
 	case KindPostfixUnaryExpression:
+		// SAFETY: This case only matches kinds allocated as a PostfixUnaryExpression, which embeds its Node header at offset zero.
 		return (*PostfixUnaryExpression)(unsafe.Pointer(n)).ForEachChild(v)
 	case KindYieldExpression:
+		// SAFETY: This case only matches kinds allocated as a YieldExpression, which embeds its Node header at offset zero.
 		return (*YieldExpression)(unsafe.Pointer(n)).ForEachChild(v)
 	case KindArrowFunction:
+		// SAFETY: This case only matches kinds allocated as a ArrowFunction, which embeds its Node header at offset zero.
 		return (*ArrowFunction)(unsafe.Pointer(n)).ForEachChild(v)
 	case KindFunctionExpression:
+		// SAFETY: This case only matches kinds allocated as a FunctionExpression, which embeds its Node header at offset zero.
 		return (*FunctionExpression)(unsafe.Pointer(n)).ForEachChild(v)
 	case KindAsExpression:
+		// SAFETY: This case only matches kinds allocated as a AsExpression, which embeds its Node header at offset zero.
 		return (*AsExpression)(unsafe.Pointer(n)).ForEachChild(v)
 	case KindSatisfiesExpression:
+		// SAFETY: This case only matches kinds allocated as a SatisfiesExpression, which embeds its Node header at offset zero.
 		return (*SatisfiesExpression)(unsafe.Pointer(n)).ForEachChild(v)
 	case KindConditionalExpression:
+		// SAFETY: This case only matches kinds allocated as a ConditionalExpression, which embeds its Node header at offset zero.
 		return (*ConditionalExpression)(unsafe.Pointer(n)).ForEachChild(v)
 	case KindPropertyAccessExpression:
+		// SAFETY: This case only matches kinds allocated as a PropertyAccessExpression, which embeds its Node header at offset zero.
 		return (*PropertyAccessExpression)(unsafe.Pointer(n)).ForEachChild(v)
 	case KindElementAccessExpression:
+		// SAFETY: This case only matches kinds allocated as a ElementAccessExpression, which embeds its Node header at offset zero.
 		return (*ElementAccessExpression)(unsafe.Pointer(n)).ForEachChild(v)
 	case KindCallExpression:
+		// SAFETY: This case only matches kinds allocated as a CallExpression, which embeds its Node header at offset zero.
 		return (*CallExpression)(unsafe.Pointer(n)).ForEachChild(v)
 	case KindNewExpression:
+		// SAFETY: This case only matches kinds allocated as a NewExpression, which embeds its Node header at offset zero.
 		return (*NewExpression)(unsafe.Pointer(n)).ForEachChild(v)
 	case KindMetaProperty:
+		// SAFETY: This case only matches kinds allocated as a MetaProperty, which embeds its Node header at offset zero.
 		return (*MetaProperty)(unsafe.Pointer(n)).ForEachChild(v)
 	case KindNonNullExpression:
+		// SAFETY: This case only matches kinds allocated as a NonNullExpression, which embeds its Node header at offset zero.
 		return (*NonNullExpression)(unsafe.Pointer(n)).ForEachChild(v)
 	case KindSpreadElement:
+		// SAFETY: This case only matches kinds allocated as a SpreadElement, which embeds its Node header at offset zero.
 		return (*SpreadElement)(unsafe.Pointer(n)).ForEachChild(v)
 	case KindTemplateExpression:
+		// SAFETY: This case only matches kinds allocated as a TemplateExpression, which embeds its Node header at offset zero.
 		return (*TemplateExpression)(unsafe.Pointer(n)).ForEachChild(v)
 	case KindTemplateSpan:
+		// SAFETY: This case only matches kinds allocated as a TemplateSpan, which embeds its Node header at offset zero.
 		return (*TemplateSpan)(unsafe.Pointer(n)).ForEachChild(v)
 	case KindTaggedTemplateExpression:
+		// SAFETY: This case only matches kinds allocated as a TaggedTemplateExpression, which embeds its Node header at offset zero.
 		return (*TaggedTemplateExpression)(unsafe.Pointer(n)).ForEachChild(v)
 	case KindParenthesizedExpression:
+		// SAFETY: This case only matches kinds allocated as a ParenthesizedExpression, which embeds its Node header at offset zero.
 		return (*ParenthesizedExpression)(unsafe.Pointer(n)).ForEachChild(v)
 	case KindArrayLiteralExpression:
+		// SAFETY: This case only matches kinds allocated as a ArrayLiteralExpression, which embeds its Node header at offset zero.
 		return (*ArrayLiteralExpression)(unsafe.Pointer(n)).ForEachChild(v)
 	case KindObjectLiteralExpression:
+		// SAFETY: This case only matches kinds allocated as a ObjectLiteralExpression, which embeds its Node header at offset zero.
 		return (*ObjectLiteralExpression)(unsafe.Pointer(n)).ForEachChild(v)
 	case KindSpreadAssignment:
+		// SAFETY: This case only matches kinds allocated as a SpreadAssignment, which embeds its Node header at offset zero.
 		return (*SpreadAssignment)(unsafe.Pointer(n)).ForEachChild(v)
 	case KindPropertyAssignment:
+		// SAFETY: This case only matches kinds allocated as a PropertyAssignment, which embeds its Node header at offset zero.
 		return (*PropertyAssignment)(unsafe.Pointer(n)).ForEachChild(v)
 	case KindShorthandPropertyAssignment:
+		// SAFETY: This case only matches kinds allocated as a ShorthandPropertyAssignment, which embeds its Node header at offset zero.
 		return (*ShorthandPropertyAssignment)(unsafe.Pointer(n)).ForEachChild(v)
 	case KindDeleteExpression:
+		// SAFETY: This case only matches kinds allocated as a DeleteExpression, which embeds its Node header at offset zero.
 		return (*DeleteExpression)(unsafe.Pointer(n)).ForEachChild(v)
 	case KindTypeOfExpression:
+		// SAFETY: This case only matches kinds allocated as a TypeOfExpression, which embeds its Node header at offset zero.
 		return (*TypeOfExpression)(unsafe.Pointer(n)).ForEachChild(v)
 	case KindVoidExpression:
+		// SAFETY: This case only matches kinds allocated as a VoidExpression, which embeds its Node header at offset zero.
 		return (*VoidExpression)(unsafe.Pointer(n)).ForEachChild(v)
 	case KindAwaitExpression:
+		// SAFETY: This case only matches kinds allocated as a AwaitExpression, which embeds its Node header at offset zero.
 		return (*AwaitExpression)(unsafe.Pointer(n)).ForEachChild(v)
 	case KindTypeAssertionExpression:
+		// SAFETY: This case only matches kinds allocated as a TypeAssertion, which embeds its Node header at offset zero.
 		return (*TypeAssertion)(unsafe.Pointer(n)).ForEachChild(v)
 	case KindUnionType:
+		// SAFETY: This case only matches kinds allocated as a UnionTypeNode, which embeds its Node header at offset zero.
 		return (*UnionTypeNode)(unsafe.Pointer(n)).ForEachChild(v)
 	case KindIntersectionType:
+		// SAFETY: This case only matches kinds allocated as a IntersectionTypeNode, which embeds its Node header at offset zero.
 		return (*IntersectionTypeNode)(unsafe.Pointer(n)).ForEachChild(v)
 	case KindConditionalType:
+		// SAFETY: This case only matches kinds allocated as a ConditionalTypeNode, which embeds its Node header at offset zero.
 		return (*ConditionalTypeNode)(unsafe.Pointer(n)).ForEachChild(v)
 	case KindTypeOperator:
+		// SAFETY: This case only matches kinds allocated as a TypeOperatorNode, which embeds its Node header at offset zero.
 		return (*TypeOperatorNode)(unsafe.Pointer(n)).ForEachChild(v)
 	case KindInferType:
+		// SAFETY: This case only matches kinds allocated as a InferTypeNode, which embeds its Node header at offset zero.
 		return (*InferTypeNode)(unsafe.Pointer(n)).ForEachChild(v)
 	case KindArrayType:
+		// SAFETY: This case only matches kinds allocated as a ArrayTypeNode, which embeds its Node header at offset zero.
 		return (*ArrayTypeNode)(unsafe.Pointer(n)).ForEachChild(v)
 	case KindIndexedAccessType:
+		// SAFETY: This case only matches kinds allocated as a IndexedAccessTypeNode, which embeds its Node header at offset zero.
 		return (*IndexedAccessTypeNode)(unsafe.Pointer(n)).ForEachChild(v)
 	case KindTypeReference:
+		// SAFETY: This case only matches kinds allocated as a TypeReferenceNode, which embeds its Node header at offset zero.
 		return (*TypeReferenceNode)(unsafe.Pointer(n)).ForEachChild(v)
 	case KindExpressionWithTypeArguments:
+		// SAFETY: This case only matches kinds allocated as a ExpressionWithTypeArguments, which embeds its Node header at offset zero.
 		return (*ExpressionWithTypeArguments)(unsafe.Pointer(n)).ForEachChild(v)
 	case KindLiteralType:
+		// SAFETY: This case only matches kinds allocated as a LiteralTypeNode, which embeds its Node header at offset zero.
 		return (*LiteralTypeNode)(unsafe.Pointer(n)).ForEachChild(v)
 	case KindTypePredicate:
+		// SAFETY: This case only matches kinds allocated as a TypePredicateNode, which embeds its Node header at offset zero.
 		return (*TypePredicateNode)(unsafe.Pointer(n)).ForEachChild(v)
 	case KindImportAttribute:
+		// SAFETY: This case only matches kinds allocated as a ImportAttribute, which embeds its Node header at offset zero.
 		return (*ImportAttribute)(unsafe.Pointer(n)).ForEachChild(v)
 	case KindImportAttributes:
+		// SAFETY: This case only matches kinds allocated as a ImportAttributes, which embeds its Node header at offset zero.
 		return (*ImportAttributes)(unsafe.Pointer(n)).ForEachChild(v)
 	case KindTypeQuery:
+		// SAFETY: This case only matches kinds allocated as a TypeQueryNode, which embeds its Node header at offset zero.
 		return (*TypeQueryNode)(unsafe.Pointer(n)).ForEachChild(v)
 	case KindMappedType:
+		// SAFETY: This case only matches kinds allocated as a MappedTypeNode, which embeds its Node header at offset zero.
 		return (*MappedTypeNode)(unsafe.Pointer(n)).ForEachChild(v)
 	case KindTypeLiteral:
+		// SAFETY: This case only matches kinds allocated as a TypeLiteralNode, which embeds its Node header at offset zero.
 		return (*TypeLiteralNode)(unsafe.Pointer(n)).ForEachChild(v)
 	case KindTupleType:
+		// SAFETY: This case only matches kinds allocated as a TupleTypeNode, which embeds its Node header at offset zero.
 		return (*TupleTypeNode)(unsafe.Pointer(n)).ForEachChild(v)
 	case KindNamedTupleMember:
+		// SAFETY: This case only matches kinds allocated as a NamedTupleMember, which embeds its Node header at offset zero.
 		return (*NamedTupleMember)(unsafe.Pointer(n)).ForEachChild(v)
 	case KindOptionalType:
+		// SAFETY: This case only matches kinds allocated as a OptionalTypeNode, which embeds its Node header at offset zero.
 		return (*OptionalTypeNode)(unsafe.Pointer(n)).ForEachChild(v)
 	case KindRestType:
+		// SAFETY: This case only matches kinds allocated as a RestTypeNode, which embeds its Node header at offset zero.
 		return (*RestTypeNode)(unsafe.Pointer(n)).ForEachChild(v)
 	case KindParenthesizedType:
+		// SAFETY: This case only matches kinds allocated as a ParenthesizedTypeNode, which embeds its Node header at offset zero.
 		return (*ParenthesizedTypeNode)(unsafe.Pointer(n)).ForEachChild(v)
 	case KindFunctionType:
+		// SAFETY: This case only matches kinds allocated as a FunctionTypeNode, which embeds its Node header at offset zero.
 		return (*FunctionTypeNode)(unsafe.Pointer(n)).ForEachChild(v)
 	case KindConstructorType:
+		// SAFETY: This case only matches kinds allocated as a ConstructorTypeNode, which embeds its Node header at offset zero.
 		return (*ConstructorTypeNode)(unsafe.Pointer(n)).ForEachChild(v)
 	case KindTemplateLiteralType:
+		// SAFETY: This case only matches kinds allocated as a TemplateLiteralTypeNode, which embeds its Node header at offset zero.
 		return (*TemplateLiteralTypeNode)(unsafe.Pointer(n)).ForEachChild(v)
 	case KindTemplateLiteralTypeSpan:
+		// SAFETY: This case only matches kinds allocated as a TemplateLiteralTypeSpan, which embeds its Node header at offset zero.
 		return (*TemplateLiteralTypeSpan)(unsafe.Pointer(n)).ForEachChild(v)
 	case KindSyntheticExpression:
+		// SAFETY: This case only matches kinds allocated as a SyntheticExpression, which embeds its Node header at offset zero.
 		return (*SyntheticExpression)(unsafe.Pointer(n)).ForEachChild(v)
 	case KindPartiallyEmittedExpression:
+		// SAFETY: This case only matches kinds allocated as a PartiallyEmittedExpression, which embeds its Node header at offset zero.
 		return (*PartiallyEmittedExpression)(unsafe.Pointer(n)).ForEachChild(v)
 	case KindJsxElement:
+		// SAFETY: This case only matches kinds allocated as a JsxElement, which embeds its Node header at offset zero.
 		return (*JsxElement)(unsafe.Pointer(n)).ForEachChild(v)
 	case KindJsxAttributes:
+		// SAFETY: This case only matches kinds allocated as a JsxAttributes, which embeds its Node header at offset zero.
 		return (*JsxAttributes)(unsafe.Pointer(n)).ForEachChild(v)
 	case KindJsxNamespacedName:
+		// SAFETY: This case only matches kinds allocated as a JsxNamespacedName, which embeds its Node header at offset zero.
 		return (*JsxNamespacedName)(unsafe.Pointer(n)).ForEachChild(v)
 	case KindJsxOpeningElement:
+		// SAFETY: This case only matches kinds allocated as a JsxOpeningElement, which embeds its Node header at offset zero.
 		return (*JsxOpeningElement)(unsafe.Pointer(n)).ForEachChild(v)
 	case KindJsxSelfClosingElement:
+		// SAFETY: This case only matches kinds allocated as a JsxSelfClosingElement, which embeds its Node header at offset zero.
 		return (*JsxSelfClosingElement)(unsafe.Pointer(n)).ForEachChild(v)
 	case KindJsxFragment:
+		// SAFETY: This case only matches kinds allocated as a JsxFragment, which embeds its Node header at offset zero.
 		return (*JsxFragment)(unsafe.Pointer(n)).ForEachChild(v)
 	case KindJsxAttribute:
+		// SAFETY: This case only matches kinds allocated as a JsxAttribute, which embeds its Node header at offset zero.
 		return (*JsxAttribute)(unsafe.Pointer(n)).ForEachChild(v)
 	case KindJsxSpreadAttribute:
+		// SAFETY: This case only matches kinds allocated as a JsxSpreadAttribute, which embeds its Node header at offset zero.
 		return (*JsxSpreadAttribute)(unsafe.Pointer(n)).ForEachChild(v)
 	case KindJsxClosingElement:
+		// SAFETY: This case only matches kinds allocated as a JsxClosingElement, which embeds its Node header at offset zero.
 		return (*JsxClosingElement)(unsafe.Pointer(n)).ForEachChild(v)
 	case KindJsxExpression:
+		// SAFETY: This case only matches kinds allocated as a JsxExpression, which embeds its Node header at offset zero.
 		return (*JsxExpression)(unsafe.Pointer(n)).ForEachChild(v)
 	case KindSyntaxList:
+		// SAFETY: This case only matches kinds allocated as a SyntaxList, which embeds its Node header at offset zero.
 		return (*SyntaxList)(unsafe.Pointer(n)).ForEachChild(v)
 	case KindJSDoc:
+		// SAFETY: This case only matches kinds allocated as a JSDoc, which embeds its Node header at offset zero.
 		return (*JSDoc)(unsafe.Pointer(n)).ForEachChild(v)
 	case KindJSDocTypeExpression:
+		// SAFETY: This case only matches kinds allocated as a JSDocTypeExpression, which embeds its Node header at offset zero.
 		return (*JSDocTypeExpression)(unsafe.Pointer(n)).ForEachChild(v)
 	case KindJSDocNonNullableType:
+		// SAFETY: This case only matches kinds allocated as a JSDocNonNullableType, which embeds its Node header at offset zero.
 		return (*JSDocNonNullableType)(unsafe.Pointer(n)).ForEachChild(v)
 	case KindJSDocNullableType:
+		// SAFETY: This case only matches kinds allocated as a JSDocNullableType, which embeds its Node header at offset zero.
 		return (*JSDocNullableType)(unsafe.Pointer(n)).ForEachChild(v)
 	case KindJSDocVariadicType:
+		// SAFETY: This case only matches kinds allocated as a JSDocVariadicType, which embeds its Node header at offset zero.
 		return (*JSDocVariadicType)(unsafe.Pointer(n)).ForEachChild(v)
 	case KindJSDocOptionalType:
+		// SAFETY: This case only matches kinds allocated as a JSDocOptionalType, which embeds its Node header at offset zero.
 		return (*JSDocOptionalType)(unsafe.Pointer(n)).ForEachChild(v)
 	case KindJSDocTypeTag:
+		// SAFETY: This case only matches kinds allocated as a JSDocTypeTag, which embeds its Node header at offset zero.
 		return (*JSDocTypeTag)(unsafe.Pointer(n)).ForEachChild(v)
 	case KindJSDocUnknownTag:
+		// SAFETY: This case only matches kinds allocated as a JSDocUnknownTag, which embeds its Node header at offset zero.
 		return (*JSDocUnknownTag)(unsafe.Pointer(n)).ForEachChild(v)
 	case KindJSDocTemplateTag:
+		// SAFETY: This case only matches kinds allocated as a JSDocTemplateTag, which embeds its Node header at offset zero.
 		return (*JSDocTemplateTag)(unsafe.Pointer(n)).ForEachChild(v)
 	case KindJSDocReturnTag:
+		// SAFETY: This case only matches kinds allocated as a JSDocReturnTag, which embeds its Node header at offset zero.
 		return (*JSDocReturnTag)(unsafe.Pointer(n)).ForEachChild(v)
 	case KindJSDocPublicTag:
+		// SAFETY: This case only matches kinds allocated as a JSDocPublicTag, which embeds its Node header at offset zero.
 		return (*JSDocPublicTag)(unsafe.Pointer(n)).ForEachChild(v)
 	case KindJSDocPrivateTag:
+		// SAFETY: This case only matches kinds allocated as a JSDocPrivateTag, which embeds its Node header at offset zero.
 		return (*JSDocPrivateTag)(unsafe.Pointer(n)).ForEachChild(v)
 	case KindJSDocProtectedTag:
+		// SAFETY: This case only matches kinds allocated as a JSDocProtectedTag, which embeds its Node header at offset zero.
 		return (*JSDocProtectedTag)(unsafe.Pointer(n)).ForEachChild(v)
 	case KindJSDocReadonlyTag:
+		// SAFETY: This case only matches kinds allocated as a JSDocReadonlyTag, which embeds its Node header at offset zero.
 		return (*JSDocReadonlyTag)(unsafe.Pointer(n)).ForEachChild(v)
 	case KindJSDocOverrideTag:
+		// SAFETY: This case only matches kinds allocated as a JSDocOverrideTag, which embeds its Node header at offset zero.
 		return (*JSDocOverrideTag)(unsafe.Pointer(n)).ForEachChild(v)
 	case KindJSDocDeprecatedTag:
+		// SAFETY: This case only matches kinds allocated as a JSDocDeprecatedTag, which embeds its Node header at offset zero.
 		return (*JSDocDeprecatedTag)(unsafe.Pointer(n)).ForEachChild(v)
 	case KindJSDocSeeTag:
+		// SAFETY: This case only matches kinds allocated as a JSDocSeeTag, which embeds its Node header at offset zero.
 		return (*JSDocSeeTag)(unsafe.Pointer(n)).ForEachChild(v)
 	case KindJSDocImplementsTag:
+		// SAFETY: This case only matches kinds allocated as a JSDocImplementsTag, which embeds its Node header at offset zero.
 		return (*JSDocImplementsTag)(unsafe.Pointer(n)).ForEachChild(v)
 	case KindJSDocAugmentsTag:
+		// SAFETY: This case only matches kinds allocated as a JSDocAugmentsTag, which embeds its Node header at offset zero.
 		return (*JSDocAugmentsTag)(unsafe.Pointer(n)).ForEachChild(v)
 	case KindJSDocSatisfiesTag:
+		// SAFETY: This case only matches kinds allocated as a JSDocSatisfiesTag, which embeds its Node header at offset zero.
 		return (*JSDocSatisfiesTag)(unsafe.Pointer(n)).ForEachChild(v)
 	case KindJSDocThrowsTag:
+		// SAFETY: This case only matches kinds allocated as a JSDocThrowsTag, which embeds its Node header at offset zero.
 		return (*JSDocThrowsTag)(unsafe.Pointer(n)).ForEachChild(v)
 	case KindJSDocThisTag:
+		// SAFETY: This case only matches kinds allocated as a JSDocThisTag, which embeds its Node header at offset zero.
 		return (*JSDocThisTag)(unsafe.Pointer(n)).ForEachChild(v)
 	case KindJSDocImportTag:
+		// SAFETY: This case only matches kinds allocated as a JSDocImportTag, which embeds its Node header at offset zero.
 		return (*JSDocImportTag)(unsafe.Pointer(n)).ForEachChild(v)
 	case KindJSDocCallbackTag:
+		// SAFETY: This case only matches kinds allocated as a JSDocCallbackTag, which embeds its Node header at offset zero.
 		return (*JSDocCallbackTag)(unsafe.Pointer(n)).ForEachChild(v)
 	case KindJSDocOverloadTag:
+		// SAFETY: This case only matches kinds allocated as a JSDocOverloadTag, which embeds its Node header at offset zero.
 		return (*JSDocOverloadTag)(unsafe.Pointer(n)).ForEachChild(v)
 	case KindJSDocTypedefTag:
+		// SAFETY: This case only matches kinds allocated as a JSDocTypedefTag, which embeds its Node header at offset zero.
 		return (*JSDocTypedefTag)(unsafe.Pointer(n)).ForEachChild(v)
 	case KindJSDocSignature:
+		// SAFETY: This case only matches kinds allocated as a JSDocSignature, which embeds its Node header at offset zero.
 		return (*JSDocSignature)(unsafe.Pointer(n)).ForEachChild(v)
 	case KindJSDocNameReference:
+		// SAFETY: This case only matches kinds allocated as a JSDocNameReference, which embeds its Node header at offset zero.
 		return (*JSDocNameReference)(unsafe.Pointer(n)).ForEachChild(v)
 	case KindSourceFile:
+		// SAFETY: This case only matches kinds allocated as a SourceFile, which embeds its Node header at offset zero.
 		return (*SourceFile)(unsafe.Pointer(n)).ForEachChild(v)
 	case KindModuleDeclaration:
+		// SAFETY: This case only matches kinds allocated as a ModuleDeclaration, which embeds its Node header at offset zero.
 		return (*ModuleDeclaration)(unsafe.Pointer(n)).ForEachChild(v)
 	case KindImportEqualsDeclaration:
+		// SAFETY: This case only matches kinds allocated as a ImportEqualsDeclaration, which embeds its Node header at offset zero.
 		return (*ImportEqualsDeclaration)(unsafe.Pointer(n)).ForEachChild(v)
 	case KindExportDeclaration:
+		// SAFETY: This case only matches kinds allocated as a ExportDeclaration, which embeds its Node header at offset zero.
 		return (*ExportDeclaration)(unsafe.Pointer(n)).ForEachChild(v)
 	case KindImportType:
+		// SAFETY: This case only matches kinds allocated as a ImportTypeNode, which embeds its Node header at offset zero.
 		return (*ImportTypeNode)(unsafe.Pointer(n)).ForEachChild(v)
 	case KindImportClause:
+		// SAFETY: This case only matches kinds allocated as a ImportClause, which embeds its Node header at offset zero.
 		return (*ImportClause)(unsafe.Pointer(n)).ForEachChild(v)
 	case KindImportSpecifier:
+		// SAFETY: This case only matches kinds allocated as a ImportSpecifier, which embeds its Node header at offset zero.
 		return (*ImportSpecifier)(unsafe.Pointer(n)).ForEachChild(v)
 	case KindJSDocLink:
+		// SAFETY: This case only matches kinds allocated as a JSDocLink, which embeds its Node header at offset zero.
 		return (*JSDocLink)(unsafe.Pointer(n)).ForEachChild(v)
 	case KindJSDocLinkPlain:
+		// SAFETY: This case only matches kinds allocated as a JSDocLinkPlain, which embeds its Node header at offset zero.
 		return (*JSDocLinkPlain)(unsafe.Pointer(n)).ForEachChild(v)
 	case KindJSDocLinkCode:
+		// SAFETY: This case only matches kinds allocated as a JSDocLinkCode, which embeds its Node header at offset zero.
 		return (*JSDocLinkCode)(unsafe.Pointer(n)).ForEachChild(v)
 	case KindTypeParameter:
+		// SAFETY: This case only matches kinds allocated as a TypeParameterDeclaration, which embeds its Node header at offset zero.
 		return (*TypeParameterDeclaration)(unsafe.Pointer(n)).ForEachChild(v)
 	case KindSyntheticReferenceExpression:
+		// SAFETY: This case only matches kinds allocated as a SyntheticReferenceExpression, which embeds its Node header at offset zero.
 		return (*SyntheticReferenceExpression)(unsafe.Pointer(n)).ForEachChild(v)
 	case KindJSDocTypeLiteral:
+		// SAFETY: This case only matches kinds allocated as a JSDocTypeLiteral, which embeds its Node header at offset zero.
 		return (*JSDocTypeLiteral)(unsafe.Pointer(n)).ForEachChild(v)
 	case KindJSDocParameterTag, KindJSDocPropertyTag:
+		// SAFETY: This case only matches kinds allocated as a JSDocParameterOrPropertyTag, which embeds its Node header at offset zero.
 		return (*JSDocParameterOrPropertyTag)(unsafe.Pointer(n)).ForEachChild(v)
 	default:
 		return false
@@ -9114,338 +9281,505 @@ func (n *Node) ForEachChild(v Visitor) bool {
 func (n *Node) VisitEachChild(v *NodeVisitor) *Node {
 	switch n.Kind {
 	case KindQualifiedName:
+		// SAFETY: This case only matches kinds allocated as a QualifiedName, which embeds its Node header at offset zero.
 		return (*QualifiedName)(unsafe.Pointer(n)).VisitEachChild(v)
 	case KindComputedPropertyName:
+		// SAFETY: This case only matches kinds allocated as a ComputedPropertyName, which embeds its Node header at offset zero.
 		return (*ComputedPropertyName)(unsafe.Pointer(n)).VisitEachChild(v)
 	case KindDecorator:
+		// SAFETY: This case only matches kinds allocated as a Decorator, which embeds its Node header at offset zero.
 		return (*Decorator)(unsafe.Pointer(n)).VisitEachChild(v)
 	case KindIfStatement:
+		// SAFETY: This case only matches kinds allocated as a IfStatement, which embeds its Node header at offset zero.
 		return (*IfStatement)(unsafe.Pointer(n)).VisitEachChild(v)
 	case KindDoStatement:
+		// SAFETY: This case only matches kinds allocated as a DoStatement, which embeds its Node header at offset zero.
 		return (*DoStatement)(unsafe.Pointer(n)).VisitEachChild(v)
 	case KindWhileStatement:
+		// SAFETY: This case only matches kinds allocated as a WhileStatement, which embeds its Node header at offset zero.
 		return (*WhileStatement)(unsafe.Pointer(n)).VisitEachChild(v)
 	case KindForStatement:
+		// SAFETY: This case only matches kinds allocated as a ForStatement, which embeds its Node header at offset zero.
 		return (*ForStatement)(unsafe.Pointer(n)).VisitEachChild(v)
 	case KindForInStatement, KindForOfStatement:
+		// SAFETY: This case only matches kinds allocated as a ForInOrOfStatement, which embeds its Node header at offset zero.
 		return (*ForInOrOfStatement)(unsafe.Pointer(n)).VisitEachChild(v)
 	case KindBreakStatement:
+		// SAFETY: This case only matches kinds allocated as a BreakStatement, which embeds its Node header at offset zero.
 		return (*BreakStatement)(unsafe.Pointer(n)).VisitEachChild(v)
 	case KindContinueStatement:
+		// SAFETY: This case only matches kinds allocated as a ContinueStatement, which embeds its Node header at offset zero.
 		return (*ContinueStatement)(unsafe.Pointer(n)).VisitEachChild(v)
 	case KindReturnStatement:
+		// SAFETY: This case only matches kinds allocated as a ReturnStatement, which embeds its Node header at offset zero.
 		return (*ReturnStatement)(unsafe.Pointer(n)).VisitEachChild(v)
 	case KindWithStatement:
+		// SAFETY: This case only matches kinds allocated as a WithStatement, which embeds its Node header at offset zero.
 		return (*WithStatement)(unsafe.Pointer(n)).VisitEachChild(v)
 	case KindSwitchStatement:
+		// SAFETY: This case only matches kinds allocated as a SwitchStatement, which embeds its Node header at offset zero.
 		return (*SwitchStatement)(unsafe.Pointer(n)).VisitEachChild(v)
 	case KindCaseBlock:
+		// SAFETY: This case only matches kinds allocated as a CaseBlock, which embeds its Node header at offset zero.
 		return (*CaseBlock)(unsafe.Pointer(n)).VisitEachChild(v)
 	case KindCaseClause, KindDefaultClause:
+		// SAFETY: This case only matches kinds allocated as a CaseOrDefaultClause, which embeds its Node header at offset zero.
 		return (*CaseOrDefaultClause)(unsafe.Pointer(n)).VisitEachChild(v)
 	case KindThrowStatement:
+		// SAFETY: This case only matches kinds allocated as a ThrowStatement, which embeds its Node header at offset zero.
 		return (*ThrowStatement)(unsafe.Pointer(n)).VisitEachChild(v)
 	case KindTryStatement:
+		// SAFETY: This case only matches kinds allocated as a TryStatement, which embeds its Node header at offset zero.
 		return (*TryStatement)(unsafe.Pointer(n)).VisitEachChild(v)
 	case KindCatchClause:
+		// SAFETY: This case only matches kinds allocated as a CatchClause, which embeds its Node header at offset zero.
 		return (*CatchClause)(unsafe.Pointer(n)).VisitEachChild(v)
 	case KindLabeledStatement:
+		// SAFETY: This case only matches kinds allocated as a LabeledStatement, which embeds its Node header at offset zero.
 		return (*LabeledStatement)(unsafe.Pointer(n)).VisitEachChild(v)
 	case KindExpressionStatement:
+		// SAFETY: This case only matches kinds allocated as a ExpressionStatement, which embeds its Node header at offset zero.
 		return (*ExpressionStatement)(unsafe.Pointer(n)).VisitEachChild(v)
 	case KindBlock:
+		// SAFETY: This case only matches kinds allocated as a Block, which embeds its Node header at offset zero.
 		return (*Block)(unsafe.Pointer(n)).VisitEachChild(v)
 	case KindVariableStatement:
+		// SAFETY: This case only matches kinds allocated as a VariableStatement, which embeds its Node header at offset zero.
 		return (*VariableStatement)(unsafe.Pointer(n)).VisitEachChild(v)
 	case KindVariableDeclaration:
+		// SAFETY: This case only matches kinds allocated as a VariableDeclaration, which embeds its Node header at offset zero.
 		return (*VariableDeclaration)(unsafe.Pointer(n)).VisitEachChild(v)
 	case KindVariableDeclarationList:
+		// SAFETY: This case only matches kinds allocated as a VariableDeclarationList, which embeds its Node header at offset zero.
 		return (*VariableDeclarationList)(unsafe.Pointer(n)).VisitEachChild(v)
 	case KindObjectBindingPattern, KindArrayBindingPattern:
+		// SAFETY: This case only matches kinds allocated as a BindingPattern, which embeds its Node header at offset zero.
 		return (*BindingPattern)(unsafe.Pointer(n)).VisitEachChild(v)
 	case KindParameter:
+		// SAFETY: This case only matches kinds allocated as a ParameterDeclaration, which embeds its Node header at offset zero.
 		return (*ParameterDeclaration)(unsafe.Pointer(n)).VisitEachChild(v)
 	case KindBindingElement:
+		// SAFETY: This case only matches kinds allocated as a BindingElement, which embeds its Node header at offset zero.
 		return (*BindingElement)(unsafe.Pointer(n)).VisitEachChild(v)
 	case KindMissingDeclaration:
+		// SAFETY: This case only matches kinds allocated as a MissingDeclaration, which embeds its Node header at offset zero.
 		return (*MissingDeclaration)(unsafe.Pointer(n)).VisitEachChild(v)
 	case KindFunctionDeclaration:
+		// SAFETY: This case only matches kinds allocated as a FunctionDeclaration, which embeds its Node header at offset zero.
 		return (*FunctionDeclaration)(unsafe.Pointer(n)).VisitEachChild(v)
 	case KindClassDeclaration:
+		// SAFETY: This case only matches kinds allocated as a ClassDeclaration, which embeds its Node header at offset zero.
 		return (*ClassDeclaration)(unsafe.Pointer(n)).VisitEachChild(v)
 	case KindClassExpression:
+		// SAFETY: This case only matches kinds allocated as a ClassExpression, which embeds its Node header at offset zero.
 		return (*ClassExpression)(unsafe.Pointer(n)).VisitEachChild(v)
 	case KindHeritageClause:
+		// SAFETY: This case only matches kinds allocated as a HeritageClause, which embeds its Node header at offset zero.
 		return (*HeritageClause)(unsafe.Pointer(n)).VisitEachChild(v)
 	case KindInterfaceDeclaration:
+		// SAFETY: This case only matches kinds allocated as a InterfaceDeclaration, which embeds its Node header at offset zero.
 		return (*InterfaceDeclaration)(unsafe.Pointer(n)).VisitEachChild(v)
 	case KindTypeAliasDeclaration, KindJSTypeAliasDeclaration:
+		// SAFETY: This case only matches kinds allocated as a TypeAliasDeclaration, which embeds its Node header at offset zero.
 		return (*TypeAliasDeclaration)(unsafe.Pointer(n)).VisitEachChild(v)
 	case KindEnumMember:
+		// SAFETY: This case only matches kinds allocated as a EnumMember, which embeds its Node header at offset zero.
 		return (*EnumMember)(unsafe.Pointer(n)).VisitEachChild(v)
 	case KindEnumDeclaration:
+		// SAFETY: This case only matches kinds allocated as a EnumDeclaration, which embeds its Node header at offset zero.
 		return (*EnumDeclaration)(unsafe.Pointer(n)).VisitEachChild(v)
 	case KindModuleBlock:
+		// SAFETY: This case only matches kinds allocated as a ModuleBlock, which embeds its Node header at offset zero.
 		return (*ModuleBlock)(unsafe.Pointer(n)).VisitEachChild(v)
 	case KindImportDeclaration, KindJSImportDeclaration:
+		// SAFETY: This case only matches kinds allocated as a ImportDeclaration, which embeds its Node header at offset zero.
 		return (*ImportDeclaration)(unsafe.Pointer(n)).VisitEachChild(v)
 	case KindExternalModuleReference:
+		// SAFETY: This case only matches kinds allocated as a ExternalModuleReference, which embeds its Node header at offset zero.
 		return (*ExternalModuleReference)(unsafe.Pointer(n)).VisitEachChild(v)
 	case KindNamespaceImport:
+		// SAFETY: This case only matches kinds allocated as a NamespaceImport, which embeds its Node header at offset zero.
 		return (*NamespaceImport)(unsafe.Pointer(n)).VisitEachChild(v)
 	case KindNamedImports:
+		// SAFETY: This case only matches kinds allocated as a NamedImports, which embeds its Node header at offset zero.
 		return (*NamedImports)(unsafe.Pointer(n)).VisitEachChild(v)
 	case KindExportAssignment:
+		// SAFETY: This case only matches kinds allocated as a ExportAssignment, which embeds its Node header at offset zero.
 		return (*ExportAssignment)(unsafe.Pointer(n)).VisitEachChild(v)
 	case KindNamespaceExportDeclaration:
+		// SAFETY: This case only matches kinds allocated as a NamespaceExportDeclaration, which embeds its Node header at offset zero.
 		return (*NamespaceExportDeclaration)(unsafe.Pointer(n)).VisitEachChild(v)
 	case KindNamespaceExport:
+		// SAFETY: This case only matches kinds allocated as a NamespaceExport, which embeds its Node header at offset zero.
 		return (*NamespaceExport)(unsafe.Pointer(n)).VisitEachChild(v)
 	case KindNamedExports:
+		// SAFETY: This case only matches kinds allocated as a NamedExports, which embeds its Node header at offset zero.
 		return (*NamedExports)(unsafe.Pointer(n)).VisitEachChild(v)
 	case KindExportSpecifier:
+		// SAFETY: This case only matches kinds allocated as a ExportSpecifier, which embeds its Node header at offset zero.
 		return (*ExportSpecifier)(unsafe.Pointer(n)).VisitEachChild(v)
 	case KindCallSignature:
+		// SAFETY: This case only matches kinds allocated as a CallSignatureDeclaration, which embeds its Node header at offset zero.
 		return (*CallSignatureDeclaration)(unsafe.Pointer(n)).VisitEachChild(v)
 	case KindConstructSignature:
+		// SAFETY: This case only matches kinds allocated as a ConstructSignatureDeclaration, which embeds its Node header at offset zero.
 		return (*ConstructSignatureDeclaration)(unsafe.Pointer(n)).VisitEachChild(v)
 	case KindConstructor:
+		// SAFETY: This case only matches kinds allocated as a ConstructorDeclaration, which embeds its Node header at offset zero.
 		return (*ConstructorDeclaration)(unsafe.Pointer(n)).VisitEachChild(v)
 	case KindGetAccessor:
+		// SAFETY: This case only matches kinds allocated as a GetAccessorDeclaration, which embeds its Node header at offset zero.
 		return (*GetAccessorDeclaration)(unsafe.Pointer(n)).VisitEachChild(v)
 	case KindSetAccessor:
+		// SAFETY: This case only matches kinds allocated as a SetAccessorDeclaration, which embeds its Node header at offset zero.
 		return (*SetAccessorDeclaration)(unsafe.Pointer(n)).VisitEachChild(v)
 	case KindIndexSignature:
+		// SAFETY: This case only matches kinds allocated as a IndexSignatureDeclaration, which embeds its Node header at offset zero.
 		return (*IndexSignatureDeclaration)(unsafe.Pointer(n)).VisitEachChild(v)
 	case KindMethodSignature:
+		// SAFETY: This case only matches kinds allocated as a MethodSignatureDeclaration, which embeds its Node header at offset zero.
 		return (*MethodSignatureDeclaration)(unsafe.Pointer(n)).VisitEachChild(v)
 	case KindMethodDeclaration:
+		// SAFETY: This case only matches kinds allocated as a MethodDeclaration, which embeds its Node header at offset zero.
 		return (*MethodDeclaration)(unsafe.Pointer(n)).VisitEachChild(v)
 	case KindPropertySignature:
+		// SAFETY: This case only matches kinds allocated as a PropertySignatureDeclaration, which embeds its Node header at offset zero.
 		return (*PropertySignatureDeclaration)(unsafe.Pointer(n)).VisitEachChild(v)
 	case KindPropertyDeclaration:
+		// SAFETY: This case only matches kinds allocated as a PropertyDeclaration, which embeds its Node header at offset zero.
 		return (*PropertyDeclaration)(unsafe.Pointer(n)).VisitEachChild(v)
 	case KindClassStaticBlockDeclaration:
+		// SAFETY: This case only matches kinds allocated as a ClassStaticBlockDeclaration, which embeds its Node header at offset zero.
 		return (*ClassStaticBlockDeclaration)(unsafe.Pointer(n)).VisitEachChild(v)
 	case KindBinaryExpression:
+		// SAFETY: This case only matches kinds allocated as a BinaryExpression, which embeds its Node header at offset zero.
 		return (*BinaryExpression)(unsafe.Pointer(n)).VisitEachChild(v)
 	case KindPrefixUnaryExpression:
+		// SAFETY: This case only matches kinds allocated as a PrefixUnaryExpression, which embeds its Node header at offset zero.
 		return (*PrefixUnaryExpression)(unsafe.Pointer(n)).VisitEachChild(v)
 	case KindPostfixUnaryExpression:
+		// SAFETY: This case only matches kinds allocated as a PostfixUnaryExpression, which embeds its Node header at offset zero.
 		return (*PostfixUnaryExpression)(unsafe.Pointer(n)).VisitEachChild(v)
 	case KindYieldExpression:
+		// SAFETY: This case only matches kinds allocated as a YieldExpression, which embeds its Node header at offset zero.
 		return (*YieldExpression)(unsafe.Pointer(n)).VisitEachChild(v)
 	case KindArrowFunction:
+		// SAFETY: This case only matches kinds allocated as a ArrowFunction, which embeds its Node header at offset zero.
 		return (*ArrowFunction)(unsafe.Pointer(n)).VisitEachChild(v)
 	case KindFunctionExpression:
+		// SAFETY: This case only matches kinds allocated as a FunctionExpression, which embeds its Node header at offset zero.
 		return (*FunctionExpression)(unsafe.Pointer(n)).VisitEachChild(v)
 	case KindAsExpression:
+		// SAFETY: This case only matches kinds allocated as a AsExpression, which embeds its Node header at offset zero.
 		return (*AsExpression)(unsafe.Pointer(n)).VisitEachChild(v)
 	case KindSatisfiesExpression:
+		// SAFETY: This case only matches kinds allocated as a SatisfiesExpression, which embeds its Node header at offset zero.
 		return (*SatisfiesExpression)(unsafe.Pointer(n)).VisitEachChild(v)
 	case KindConditionalExpression:
+		// SAFETY: This case only matches kinds allocated as a ConditionalExpression, which embeds its Node header at offset zero.
 		return (*ConditionalExpression)(unsafe.Pointer(n)).VisitEachChild(v)
 	case KindPropertyAccessExpression:
+		// SAFETY: This case only matches kinds allocated as a PropertyAccessExpression, which embeds its Node header at offset zero.
 		return (*PropertyAccessExpression)(unsafe.Pointer(n)).VisitEachChild(v)
 	case KindElementAccessExpression:
+		// SAFETY: This case only matches kinds allocated as a ElementAccessExpression, which embeds its Node header at offset zero.
 		return (*ElementAccessExpression)(unsafe.Pointer(n)).VisitEachChild(v)
 	case KindCallExpression:
+		// SAFETY: This case only matches kinds allocated as a CallExpression, which embeds its Node header at offset zero.
 		return (*CallExpression)(unsafe.Pointer(n)).VisitEachChild(v)
 	case KindNewExpression:
+		// SAFETY: This case only matches kinds allocated as a NewExpression, which embeds its Node header at offset zero.
 		return (*NewExpression)(unsafe.Pointer(n)).VisitEachChild(v)
 	case KindMetaProperty:
+		// SAFETY: This case only matches kinds allocated as a MetaProperty, which embeds its Node header at offset zero.
 		return (*MetaProperty)(unsafe.Pointer(n)).VisitEachChild(v)
 	case KindNonNullExpression:
+		// SAFETY: This case only matches kinds allocated as a NonNullExpression, which embeds its Node header at offset zero.
 		return (*NonNullExpression)(unsafe.Pointer(n)).VisitEachChild(v)
 	case KindSpreadElement:
+		// SAFETY: This case only matches kinds allocated as a SpreadElement, which embeds its Node header at offset zero.
 		return (*SpreadElement)(unsafe.Pointer(n)).VisitEachChild(v)
 	case KindTemplateExpression:
+		// SAFETY: This case only matches kinds allocated as a TemplateExpression, which embeds its Node header at offset zero.
 		return (*TemplateExpression)(unsafe.Pointer(n)).VisitEachChild(v)
 	case KindTemplateSpan:
+		// SAFETY: This case only matches kinds allocated as a TemplateSpan, which embeds its Node header at offset zero.
 		return (*TemplateSpan)(unsafe.Pointer(n)).VisitEachChild(v)
 	case KindTaggedTemplateExpression:
+		// SAFETY: This case only matches kinds allocated as a TaggedTemplateExpression, which embeds its Node header at offset zero.
 		return (*TaggedTemplateExpression)(unsafe.Pointer(n)).VisitEachChild(v)
 	case KindParenthesizedExpression:
+		// SAFETY: This case only matches kinds allocated as a ParenthesizedExpression, which embeds its Node header at offset zero.
 		return (*ParenthesizedExpression)(unsafe.Pointer(n)).VisitEachChild(v)
 	case KindArrayLiteralExpression:
+		// SAFETY: This case only matches kinds allocated as a ArrayLiteralExpression, which embeds its Node header at offset zero.
 		return (*ArrayLiteralExpression)(unsafe.Pointer(n)).VisitEachChild(v)
 	case KindObjectLiteralExpression:
+		// SAFETY: This case only matches kinds allocated as a ObjectLiteralExpression, which embeds its Node header at offset zero.
 		return (*ObjectLiteralExpression)(unsafe.Pointer(n)).VisitEachChild(v)
 	case KindSpreadAssignment:
+		// SAFETY: This case only matches kinds allocated as a SpreadAssignment, which embeds its Node header at offset zero.
 		return (*SpreadAssignment)(unsafe.Pointer(n)).VisitEachChild(v)
 	case KindPropertyAssignment:
+		// SAFETY: This case only matches kinds allocated as a PropertyAssignment, which embeds its Node header at offset zero.
 		return (*PropertyAssignment)(unsafe.Pointer(n)).VisitEachChild(v)
 	case KindShorthandPropertyAssignment:
+		// SAFETY: This case only matches kinds allocated as a ShorthandPropertyAssignment, which embeds its Node header at offset zero.
 		return (*ShorthandPropertyAssignment)(unsafe.Pointer(n)).VisitEachChild(v)
 	case KindDeleteExpression:
+		// SAFETY: This case only matches kinds allocated as a DeleteExpression, which embeds its Node header at offset zero.
 		return (*DeleteExpression)(unsafe.Pointer(n)).VisitEachChild(v)
 	case KindTypeOfExpression:
+		// SAFETY: This case only matches kinds allocated as a TypeOfExpression, which embeds its Node header at offset zero.
 		return (*TypeOfExpression)(unsafe.Pointer(n)).VisitEachChild(v)
 	case KindVoidExpression:
+		// SAFETY: This case only matches kinds allocated as a VoidExpression, which embeds its Node header at offset zero.
 		return (*VoidExpression)(unsafe.Pointer(n)).VisitEachChild(v)
 	case KindAwaitExpression:
+		// SAFETY: This case only matches kinds allocated as a AwaitExpression, which embeds its Node header at offset zero.
 		return (*AwaitExpression)(unsafe.Pointer(n)).VisitEachChild(v)
 	case KindTypeAssertionExpression:
+		// SAFETY: This case only matches kinds allocated as a TypeAssertion, which embeds its Node header at offset zero.
 		return (*TypeAssertion)(unsafe.Pointer(n)).VisitEachChild(v)
 	case KindUnionType:
+		// SAFETY: This case only matches kinds allocated as a UnionTypeNode, which embeds its Node header at offset zero.
 		return (*UnionTypeNode)(unsafe.Pointer(n)).VisitEachChild(v)
 	case KindIntersectionType:
+		// SAFETY: This case only matches kinds allocated as a IntersectionTypeNode, which embeds its Node header at offset zero.
 		return (*IntersectionTypeNode)(unsafe.Pointer(n)).VisitEachChild(v)
 	case KindConditionalType:
+		// SAFETY: This case only matches kinds allocated as a ConditionalTypeNode, which embeds its Node header at offset zero.
 		return (*ConditionalTypeNode)(unsafe.Pointer(n)).VisitEachChild(v)
 	case KindTypeOperator:
+		// SAFETY: This case only matches kinds allocated as a TypeOperatorNode, which embeds its Node header at offset zero.
 		return (*TypeOperatorNode)(unsafe.Pointer(n)).VisitEachChild(v)
 	case KindInferType:
+		// SAFETY: This case only matches kinds allocated as a InferTypeNode, which embeds its Node header at offset zero.
 		return (*InferTypeNode)(unsafe.Pointer(n)).VisitEachChild(v)
 	case KindArrayType:
+		// SAFETY: This case only matches kinds allocated as a ArrayTypeNode, which embeds its Node header at offset zero.
 		return (*ArrayTypeNode)(unsafe.Pointer(n)).VisitEachChild(v)
 	case KindIndexedAccessType:
+		// SAFETY: This case only matches kinds allocated as a IndexedAccessTypeNode, which embeds its Node header at offset zero.
 		return (*IndexedAccessTypeNode)(unsafe.Pointer(n)).VisitEachChild(v)
 	case KindTypeReference:
+		// SAFETY: This case only matches kinds allocated as a TypeReferenceNode, which embeds its Node header at offset zero.
 		return (*TypeReferenceNode)(unsafe.Pointer(n)).VisitEachChild(v)
 	case KindExpressionWithTypeArguments:
+		// SAFETY: This case only matches kinds allocated as a ExpressionWithTypeArguments, which embeds its Node header at offset zero.
 		return (*ExpressionWithTypeArguments)(unsafe.Pointer(n)).VisitEachChild(v)
 	case KindLiteralType:
+		// SAFETY: This case only matches kinds allocated as a LiteralTypeNode, which embeds its Node header at offset zero.
 		return (*LiteralTypeNode)(unsafe.Pointer(n)).VisitEachChild(v)
 	case KindTypePredicate:
+		// SAFETY: This case only matches kinds allocated as a TypePredicateNode, which embeds its Node header at offset zero.
 		return (*TypePredicateNode)(unsafe.Pointer(n)).VisitEachChild(v)
 	case KindImportAttribute:
+		// SAFETY: This case only matches kinds allocated as a ImportAttribute, which embeds its Node header at offset zero.
 		return (*ImportAttribute)(unsafe.Pointer(n)).VisitEachChild(v)
 	case KindImportAttributes:
+		// SAFETY: This case only matches kinds allocated as a ImportAttributes, which embeds its Node header at offset zero.
 		return (*ImportAttributes)(unsafe.Pointer(n)).VisitEachChild(v)
 	case KindTypeQuery:
+		// SAFETY: This case only matches kinds allocated as a TypeQueryNode, which embeds its Node header at offset zero.
 		return (*TypeQueryNode)(unsafe.Pointer(n)).VisitEachChild(v)
 	case KindMappedType:
+		// SAFETY: This case only matches kinds allocated as a MappedTypeNode, which embeds its Node header at offset zero.
 		return (*MappedTypeNode)(unsafe.Pointer(n)).VisitEachChild(v)
 	case KindTypeLiteral:
+		// SAFETY: This case only matches kinds allocated as a TypeLiteralNode, which embeds its Node header at offset zero.
 		return (*TypeLiteralNode)(unsafe.Pointer(n)).VisitEachChild(v)
 	case KindTupleType:
+		// SAFETY: This case only matches kinds allocated as a TupleTypeNode, which embeds its Node header at offset zero.
 		return (*TupleTypeNode)(unsafe.Pointer(n)).VisitEachChild(v)
 	case KindNamedTupleMember:
+		// SAFETY: This case only matches kinds allocated as a NamedTupleMember, which embeds its Node header at offset zero.
 		return (*NamedTupleMember)(unsafe.Pointer(n)).VisitEachChild(v)
 	case KindOptionalType:
+		// SAFETY: This case only matches kinds allocated as a OptionalTypeNode, which embeds its Node header at offset zero.
 		return (*OptionalTypeNode)(unsafe.Pointer(n)).VisitEachChild(v)
 	case KindRestType:
+		// SAFETY: This case only matches kinds allocated as a RestTypeNode, which embeds its Node header at offset zero.
 		return (*RestTypeNode)(unsafe.Pointer(n)).VisitEachChild(v)
 	case KindParenthesizedType:
+		// SAFETY: This case only matches kinds allocated as a ParenthesizedTypeNode, which embeds its Node header at offset zero.
 		return (*ParenthesizedTypeNode)(unsafe.Pointer(n)).VisitEachChild(v)
 	case KindFunctionType:
+		// SAFETY: This case only matches kinds allocated as a FunctionTypeNode, which embeds its Node header at offset zero.
 		return (*FunctionTypeNode)(unsafe.Pointer(n)).VisitEachChild(v)
 	case KindConstructorType:
+		// SAFETY: This case only matches kinds allocated as a ConstructorTypeNode, which embeds its Node header at offset zero.
 		return (*ConstructorTypeNode)(unsafe.Pointer(n)).VisitEachChild(v)
 	case KindTemplateLiteralType:
+		// SAFETY: This case only matches kinds allocated as a TemplateLiteralTypeNode, which embeds its Node header at offset zero.
 		return (*TemplateLiteralTypeNode)(unsafe.Pointer(n)).VisitEachChild(v)
 	case KindTemplateLiteralTypeSpan:
+		// SAFETY: This case only matches kinds allocated as a TemplateLiteralTypeSpan, which embeds its Node header at offset zero.
 		return (*TemplateLiteralTypeSpan)(unsafe.Pointer(n)).VisitEachChild(v)
 	case KindSyntheticExpression:
+		// SAFETY: This case only matches kinds allocated as a SyntheticExpression, which embeds its Node header at offset zero.
 		return (*SyntheticExpression)(unsafe.Pointer(n)).VisitEachChild(v)
 	case KindPartiallyEmittedExpression:
+		// SAFETY: This case only matches kinds allocated as a PartiallyEmittedExpression, which embeds its Node header at offset zero.
 		return (*PartiallyEmittedExpression)(unsafe.Pointer(n)).VisitEachChild(v)
 	case KindJsxElement:
+		// SAFETY: This case only matches kinds allocated as a JsxElement, which embeds its Node header at offset zero.
 		return (*JsxElement)(unsafe.Pointer(n)).VisitEachChild(v)
 	case KindJsxAttributes:
+		// SAFETY: This case only matches kinds allocated as a JsxAttributes, which embeds its Node header at offset zero.
 		return (*JsxAttributes)(unsafe.Pointer(n)).VisitEachChild(v)
 	case KindJsxNamespacedName:
+		// SAFETY: This case only matches kinds allocated as a JsxNamespacedName, which embeds its Node header at offset zero.
 		return (*JsxNamespacedName)(unsafe.Pointer(n)).VisitEachChild(v)
 	case KindJsxOpeningElement:
+		// SAFETY: This case only matches kinds allocated as a JsxOpeningElement, which embeds its Node header at offset zero.
 		return (*JsxOpeningElement)(unsafe.Pointer(n)).VisitEachChild(v)
 	case KindJsxSelfClosingElement:
+		// SAFETY: This case only matches kinds allocated as a JsxSelfClosingElement, which embeds its Node header at offset zero.
 		return (*JsxSelfClosingElement)(unsafe.Pointer(n)).VisitEachChild(v)
 	case KindJsxFragment:
+		// SAFETY: This case only matches kinds allocated as a JsxFragment, which embeds its Node header at offset zero.
 		return (*JsxFragment)(unsafe.Pointer(n)).VisitEachChild(v)
 	case KindJsxAttribute:
+		// SAFETY: This case only matches kinds allocated as a JsxAttribute, which embeds its Node header at offset zero.
 		return (*JsxAttribute)(unsafe.Pointer(n)).VisitEachChild(v)
 	case KindJsxSpreadAttribute:
+		// SAFETY: This case only matches kinds allocated as a JsxSpreadAttribute, which embeds its Node header at offset zero.
 		return (*JsxSpreadAttribute)(unsafe.Pointer(n)).VisitEachChild(v)
 	case KindJsxClosingElement:
+		// SAFETY: This case only matches kinds allocated as a JsxClosingElement, which embeds its Node header at offset zero.
 		return (*JsxClosingElement)(unsafe.Pointer(n)).VisitEachChild(v)
 	case KindJsxExpression:
+		// SAFETY: This case only matches kinds allocated as a JsxExpression, which embeds its Node header at offset zero.
 		return (*JsxExpression)(unsafe.Pointer(n)).VisitEachChild(v)
 	case KindSyntaxList:
+		// SAFETY: This case only matches kinds allocated as a SyntaxList, which embeds its Node header at offset zero.
 		return (*SyntaxList)(unsafe.Pointer(n)).VisitEachChild(v)
 	case KindJSDoc:
+		// SAFETY: This case only matches kinds allocated as a JSDoc, which embeds its Node header at offset zero.
 		return (*JSDoc)(unsafe.Pointer(n)).VisitEachChild(v)
 	case KindJSDocTypeExpression:
+		// SAFETY: This case only matches kinds allocated as a JSDocTypeExpression, which embeds its Node header at offset zero.
 		return (*JSDocTypeExpression)(unsafe.Pointer(n)).VisitEachChild(v)
 	case KindJSDocNonNullableType:
+		// SAFETY: This case only matches kinds allocated as a JSDocNonNullableType, which embeds its Node header at offset zero.
 		return (*JSDocNonNullableType)(unsafe.Pointer(n)).VisitEachChild(v)
 	case KindJSDocNullableType:
+		// SAFETY: This case only matches kinds allocated as a JSDocNullableType, which embeds its Node header at offset zero.
 		return (*JSDocNullableType)(unsafe.Pointer(n)).VisitEachChild(v)
 	case KindJSDocVariadicType:
+		// SAFETY: This case only matches kinds allocated as a JSDocVariadicType, which embeds its Node header at offset zero.
 		return (*JSDocVariadicType)(unsafe.Pointer(n)).VisitEachChild(v)
 	case KindJSDocOptionalType:
+		// SAFETY: This case only matches kinds allocated as a JSDocOptionalType, which embeds its Node header at offset zero.
 		return (*JSDocOptionalType)(unsafe.Pointer(n)).VisitEachChild(v)
 	case KindJSDocTypeTag:
+		// SAFETY: This case only matches kinds allocated as a JSDocTypeTag, which embeds its Node header at offset zero.
 		return (*JSDocTypeTag)(unsafe.Pointer(n)).VisitEachChild(v)
 	case KindJSDocUnknownTag:
+		// SAFETY: This case only matches kinds allocated as a JSDocUnknownTag, which embeds its Node header at offset zero.
 		return (*JSDocUnknownTag)(unsafe.Pointer(n)).VisitEachChild(v)
 	case KindJSDocTemplateTag:
+		// SAFETY: This case only matches kinds allocated as a JSDocTemplateTag, which embeds its Node header at offset zero.
 		return (*JSDocTemplateTag)(unsafe.Pointer(n)).VisitEachChild(v)
 	case KindJSDocReturnTag:
+		// SAFETY: This case only matches kinds allocated as a JSDocReturnTag, which embeds its Node header at offset zero.
 		return (*JSDocReturnTag)(unsafe.Pointer(n)).VisitEachChild(v)
 	case KindJSDocPublicTag:
+		// SAFETY: This case only matches kinds allocated as a JSDocPublicTag, which embeds its Node header at offset zero.
 		return (*JSDocPublicTag)(unsafe.Pointer(n)).VisitEachChild(v)
 	case KindJSDocPrivateTag:
+		// SAFETY: This case only matches kinds allocated as a JSDocPrivateTag, which embeds its Node header at offset zero.
 		return (*JSDocPrivateTag)(unsafe.Pointer(n)).VisitEachChild(v)
 	case KindJSDocProtectedTag:
+		// SAFETY: This case only matches kinds allocated as a JSDocProtectedTag, which embeds its Node header at offset zero.
 		return (*JSDocProtectedTag)(unsafe.Pointer(n)).VisitEachChild(v)
 	case KindJSDocReadonlyTag:
+		// SAFETY: This case only matches kinds allocated as a JSDocReadonlyTag, which embeds its Node header at offset zero.
 		return (*JSDocReadonlyTag)(unsafe.Pointer(n)).VisitEachChild(v)
 	case KindJSDocOverrideTag:
+		// SAFETY: This case only matches kinds allocated as a JSDocOverrideTag, which embeds its Node header at offset zero.
 		return (*JSDocOverrideTag)(unsafe.Pointer(n)).VisitEachChild(v)
 	case KindJSDocDeprecatedTag:
+		// SAFETY: This case only matches kinds allocated as a JSDocDeprecatedTag, which embeds its Node header at offset zero.
 		return (*JSDocDeprecatedTag)(unsafe.Pointer(n)).VisitEachChild(v)
 	case KindJSDocSeeTag:
+		// SAFETY: This case only matches kinds allocated as a JSDocSeeTag, which embeds its Node header at offset zero.
 		return (*JSDocSeeTag)(unsafe.Pointer(n)).VisitEachChild(v)
 	case KindJSDocImplementsTag:
+		// SAFETY: This case only matches kinds allocated as a JSDocImplementsTag, which embeds its Node header at offset zero.
 		return (*JSDocImplementsTag)(unsafe.Pointer(n)).VisitEachChild(v)
 	case KindJSDocAugmentsTag:
+		// SAFETY: This case only matches kinds allocated as a JSDocAugmentsTag, which embeds its Node header at offset zero.
 		return (*JSDocAugmentsTag)(unsafe.Pointer(n)).VisitEachChild(v)
 	case KindJSDocSatisfiesTag:
+		// SAFETY: This case only matches kinds allocated as a JSDocSatisfiesTag, which embeds its Node header at offset zero.
 		return (*JSDocSatisfiesTag)(unsafe.Pointer(n)).VisitEachChild(v)
 	case KindJSDocThrowsTag:
+		// SAFETY: This case only matches kinds allocated as a JSDocThrowsTag, which embeds its Node header at offset zero.
 		return (*JSDocThrowsTag)(unsafe.Pointer(n)).VisitEachChild(v)
 	case KindJSDocThisTag:
+		// SAFETY: This case only matches kinds allocated as a JSDocThisTag, which embeds its Node header at offset zero.
 		return (*JSDocThisTag)(unsafe.Pointer(n)).VisitEachChild(v)
 	case KindJSDocImportTag:
+		// SAFETY: This case only matches kinds allocated as a JSDocImportTag, which embeds its Node header at offset zero.
 		return (*JSDocImportTag)(unsafe.Pointer(n)).VisitEachChild(v)
 	case KindJSDocCallbackTag:
+		// SAFETY: This case only matches kinds allocated as a JSDocCallbackTag, which embeds its Node header at offset zero.
 		return (*JSDocCallbackTag)(unsafe.Pointer(n)).VisitEachChild(v)
 	case KindJSDocOverloadTag:
+		// SAFETY: This case only matches kinds allocated as a JSDocOverloadTag, which embeds its Node header at offset zero.
 		return (*JSDocOverloadTag)(unsafe.Pointer(n)).VisitEachChild(v)
 	case KindJSDocTypedefTag:
+		// SAFETY: This case only matches kinds allocated as a JSDocTypedefTag, which embeds its Node header at offset zero.
 		return (*JSDocTypedefTag)(unsafe.Pointer(n)).VisitEachChild(v)
 	case KindJSDocSignature:
+		// SAFETY: This case only matches kinds allocated as a JSDocSignature, which embeds its Node header at offset zero.
 		return (*JSDocSignature)(unsafe.Pointer(n)).VisitEachChild(v)
 	case KindJSDocNameReference:
+		// SAFETY: This case only matches kinds allocated as a JSDocNameReference, which embeds its Node header at offset zero.
 		return (*JSDocNameReference)(unsafe.Pointer(n)).VisitEachChild(v)
 	case KindSourceFile:
+		// SAFETY: This case only matches kinds allocated as a SourceFile, which embeds its Node header at offset zero.
 		return (*SourceFile)(unsafe.Pointer(n)).VisitEachChild(v)
 	case KindModuleDeclaration:
+		// SAFETY: This case only matches kinds allocated as a ModuleDeclaration, which embeds its Node header at offset zero.
 		return (*ModuleDeclaration)(unsafe.Pointer(n)).VisitEachChild(v)
 	case KindImportEqualsDeclaration:
+		// SAFETY: This case only matches kinds allocated as a ImportEqualsDeclaration, which embeds its Node header at offset zero.
 		return (*ImportEqualsDeclaration)(unsafe.Pointer(n)).VisitEachChild(v)
 	case KindExportDeclaration:
+		// SAFETY: This case only matches kinds allocated as a ExportDeclaration, which embeds its Node header at offset zero.
 		return (*ExportDeclaration)(unsafe.Pointer(n)).VisitEachChild(v)
 	case KindImportType:
+		// SAFETY: This case only matches kinds allocated as a ImportTypeNode, which embeds its Node header at offset zero.
 		return (*ImportTypeNode)(unsafe.Pointer(n)).VisitEachChild(v)
 	case KindImportClause:
+		// SAFETY: This case only matches kinds allocated as a ImportClause, which embeds its Node header at offset zero.
 		return (*ImportClause)(unsafe.Pointer(n)).VisitEachChild(v)
 	case KindImportSpecifier:
+		// SAFETY: This case only matches kinds allocated as a ImportSpecifier, which embeds its Node header at offset zero.
 		return (*ImportSpecifier)(unsafe.Pointer(n)).VisitEachChild(v)
 	case KindJSDocLink:
+		// SAFETY: This case only matches kinds allocated as a JSDocLink, which embeds its Node header at offset zero.
 		return (*JSDocLink)(unsafe.Pointer(n)).VisitEachChild(v)
 	case KindJSDocLinkPlain:
+		// SAFETY: This case only matches kinds allocated as a JSDocLinkPlain, which embeds its Node header at offset zero.
 		return (*JSDocLinkPlain)(unsafe.Pointer(n)).VisitEachChild(v)
 	case KindJSDocLinkCode:
+		// SAFETY: This case only matches kinds allocated as a JSDocLinkCode, which embeds its Node header at offset zero.
 		return (*JSDocLinkCode)(unsafe.Pointer(n)).VisitEachChild(v)
 	case KindTypeParameter:
+		// SAFETY: This case only matches kinds allocated as a TypeParameterDeclaration, which embeds its Node header at offset zero.
 		return (*TypeParameterDeclaration)(unsafe.Pointer(n)).VisitEachChild(v)
 	case KindSyntheticReferenceExpression:
+		// SAFETY: This case only matches kinds allocated as a SyntheticReferenceExpression, which embeds its Node header at offset zero.
 		return (*SyntheticReferenceExpression)(unsafe.Pointer(n)).VisitEachChild(v)
 	case KindJSDocTypeLiteral:
+		// SAFETY: This case only matches kinds allocated as a JSDocTypeLiteral, which embeds its Node header at offset zero.
 		return (*JSDocTypeLiteral)(unsafe.Pointer(n)).VisitEachChild(v)
 	case KindJSDocParameterTag, KindJSDocPropertyTag:
+		// SAFETY: This case only matches kinds allocated as a JSDocParameterOrPropertyTag, which embeds its Node header at offset zero.
 		return (*JSDocParameterOrPropertyTag)(unsafe.Pointer(n)).VisitEachChild(v)
 	default:
 		return n
@@ -9461,388 +9795,580 @@ func (n *Node) Clone(f NodeFactoryCoercible) *Node {
 	case kindFlowSwitchClauseData, kindFlowReduceLabelData:
 		return nil
 	case KindUnknown, KindEndOfFile, KindSingleLineCommentTrivia, KindMultiLineCommentTrivia, KindNewLineTrivia, KindWhitespaceTrivia, KindConflictMarkerTrivia, KindNonTextFileMarkerTrivia, KindJsxTextAllWhiteSpaces, KindOpenBraceToken, KindCloseBraceToken, KindOpenParenToken, KindCloseParenToken, KindOpenBracketToken, KindCloseBracketToken, KindDotToken, KindDotDotDotToken, KindSemicolonToken, KindCommaToken, KindQuestionDotToken, KindLessThanToken, KindLessThanSlashToken, KindGreaterThanToken, KindLessThanEqualsToken, KindGreaterThanEqualsToken, KindEqualsEqualsToken, KindExclamationEqualsToken, KindEqualsEqualsEqualsToken, KindExclamationEqualsEqualsToken, KindEqualsGreaterThanToken, KindPlusToken, KindMinusToken, KindAsteriskToken, KindAsteriskAsteriskToken, KindSlashToken, KindPercentToken, KindPlusPlusToken, KindMinusMinusToken, KindLessThanLessThanToken, KindGreaterThanGreaterThanToken, KindGreaterThanGreaterThanGreaterThanToken, KindAmpersandToken, KindBarToken, KindCaretToken, KindExclamationToken, KindTildeToken, KindAmpersandAmpersandToken, KindBarBarToken, KindQuestionToken, KindColonToken, KindAtToken, KindQuestionQuestionToken, KindBacktickToken, KindHashToken, KindEqualsToken, KindPlusEqualsToken, KindMinusEqualsToken, KindAsteriskEqualsToken, KindAsteriskAsteriskEqualsToken, KindSlashEqualsToken, KindPercentEqualsToken, KindLessThanLessThanEqualsToken, KindGreaterThanGreaterThanEqualsToken, KindGreaterThanGreaterThanGreaterThanEqualsToken, KindAmpersandEqualsToken, KindBarEqualsToken, KindBarBarEqualsToken, KindAmpersandAmpersandEqualsToken, KindQuestionQuestionEqualsToken, KindCaretEqualsToken, KindJSDocCommentTextToken, KindBreakKeyword, KindCaseKeyword, KindCatchKeyword, KindClassKeyword, KindConstKeyword, KindContinueKeyword, KindDebuggerKeyword, KindDefaultKeyword, KindDeleteKeyword, KindDoKeyword, KindElseKeyword, KindEnumKeyword, KindExportKeyword, KindExtendsKeyword, KindFinallyKeyword, KindForKeyword, KindFunctionKeyword, KindIfKeyword, KindInKeyword, KindInstanceOfKeyword, KindNewKeyword, KindReturnKeyword, KindSwitchKeyword, KindThrowKeyword, KindTryKeyword, KindTypeOfKeyword, KindVarKeyword, KindWhileKeyword, KindWithKeyword, KindImplementsKeyword, KindInterfaceKeyword, KindLetKeyword, KindPackageKeyword, KindPrivateKeyword, KindProtectedKeyword, KindPublicKeyword, KindStaticKeyword, KindYieldKeyword, KindAbstractKeyword, KindAccessorKeyword, KindAsKeyword, KindAssertsKeyword, KindAssertKeyword, KindAsyncKeyword, KindAwaitKeyword, KindConstructorKeyword, KindDeclareKeyword, KindGetKeyword, KindImmediateKeyword, KindInferKeyword, KindIsKeyword, KindKeyOfKeyword, KindModuleKeyword, KindNamespaceKeyword, KindOutKeyword, KindReadonlyKeyword, KindRequireKeyword, KindSatisfiesKeyword, KindSetKeyword, KindTypeKeyword, KindUniqueKeyword, KindUsingKeyword, KindFromKeyword, KindGlobalKeyword, KindOverrideKeyword, KindOfKeyword, KindDeferKeyword, KindSourceKeyword:
+		// SAFETY: This case only matches kinds allocated as a Token, which embeds its Node header at offset zero.
 		return (*Token)(unsafe.Pointer(n)).Clone(f)
 	case KindNumericLiteral:
+		// SAFETY: This case only matches kinds allocated as a NumericLiteral, which embeds its Node header at offset zero.
 		return (*NumericLiteral)(unsafe.Pointer(n)).Clone(f)
 	case KindBigIntLiteral:
+		// SAFETY: This case only matches kinds allocated as a BigIntLiteral, which embeds its Node header at offset zero.
 		return (*BigIntLiteral)(unsafe.Pointer(n)).Clone(f)
 	case KindStringLiteral:
+		// SAFETY: This case only matches kinds allocated as a StringLiteral, which embeds its Node header at offset zero.
 		return (*StringLiteral)(unsafe.Pointer(n)).Clone(f)
 	case KindJsxText:
+		// SAFETY: This case only matches kinds allocated as a JsxText, which embeds its Node header at offset zero.
 		return (*JsxText)(unsafe.Pointer(n)).Clone(f)
 	case KindRegularExpressionLiteral:
+		// SAFETY: This case only matches kinds allocated as a RegularExpressionLiteral, which embeds its Node header at offset zero.
 		return (*RegularExpressionLiteral)(unsafe.Pointer(n)).Clone(f)
 	case KindNoSubstitutionTemplateLiteral:
+		// SAFETY: This case only matches kinds allocated as a NoSubstitutionTemplateLiteral, which embeds its Node header at offset zero.
 		return (*NoSubstitutionTemplateLiteral)(unsafe.Pointer(n)).Clone(f)
 	case KindTemplateHead:
+		// SAFETY: This case only matches kinds allocated as a TemplateHead, which embeds its Node header at offset zero.
 		return (*TemplateHead)(unsafe.Pointer(n)).Clone(f)
 	case KindTemplateMiddle:
+		// SAFETY: This case only matches kinds allocated as a TemplateMiddle, which embeds its Node header at offset zero.
 		return (*TemplateMiddle)(unsafe.Pointer(n)).Clone(f)
 	case KindTemplateTail:
+		// SAFETY: This case only matches kinds allocated as a TemplateTail, which embeds its Node header at offset zero.
 		return (*TemplateTail)(unsafe.Pointer(n)).Clone(f)
 	case KindIdentifier:
+		// SAFETY: This case only matches kinds allocated as a Identifier, which embeds its Node header at offset zero.
 		return (*Identifier)(unsafe.Pointer(n)).Clone(f)
 	case KindPrivateIdentifier:
+		// SAFETY: This case only matches kinds allocated as a PrivateIdentifier, which embeds its Node header at offset zero.
 		return (*PrivateIdentifier)(unsafe.Pointer(n)).Clone(f)
 	case KindFalseKeyword, KindImportKeyword, KindNullKeyword, KindSuperKeyword, KindThisKeyword, KindTrueKeyword:
+		// SAFETY: This case only matches kinds allocated as a KeywordExpression, which embeds its Node header at offset zero.
 		return (*KeywordExpression)(unsafe.Pointer(n)).Clone(f)
 	case KindVoidKeyword, KindAnyKeyword, KindBooleanKeyword, KindIntrinsicKeyword, KindNeverKeyword, KindNumberKeyword, KindObjectKeyword, KindStringKeyword, KindSymbolKeyword, KindUndefinedKeyword, KindUnknownKeyword, KindBigIntKeyword:
+		// SAFETY: This case only matches kinds allocated as a KeywordTypeNode, which embeds its Node header at offset zero.
 		return (*KeywordTypeNode)(unsafe.Pointer(n)).Clone(f)
 	case KindQualifiedName:
+		// SAFETY: This case only matches kinds allocated as a QualifiedName, which embeds its Node header at offset zero.
 		return (*QualifiedName)(unsafe.Pointer(n)).Clone(f)
 	case KindComputedPropertyName:
+		// SAFETY: This case only matches kinds allocated as a ComputedPropertyName, which embeds its Node header at offset zero.
 		return (*ComputedPropertyName)(unsafe.Pointer(n)).Clone(f)
 	case KindDecorator:
+		// SAFETY: This case only matches kinds allocated as a Decorator, which embeds its Node header at offset zero.
 		return (*Decorator)(unsafe.Pointer(n)).Clone(f)
 	case KindEmptyStatement:
+		// SAFETY: This case only matches kinds allocated as a EmptyStatement, which embeds its Node header at offset zero.
 		return (*EmptyStatement)(unsafe.Pointer(n)).Clone(f)
 	case KindIfStatement:
+		// SAFETY: This case only matches kinds allocated as a IfStatement, which embeds its Node header at offset zero.
 		return (*IfStatement)(unsafe.Pointer(n)).Clone(f)
 	case KindDoStatement:
+		// SAFETY: This case only matches kinds allocated as a DoStatement, which embeds its Node header at offset zero.
 		return (*DoStatement)(unsafe.Pointer(n)).Clone(f)
 	case KindWhileStatement:
+		// SAFETY: This case only matches kinds allocated as a WhileStatement, which embeds its Node header at offset zero.
 		return (*WhileStatement)(unsafe.Pointer(n)).Clone(f)
 	case KindForStatement:
+		// SAFETY: This case only matches kinds allocated as a ForStatement, which embeds its Node header at offset zero.
 		return (*ForStatement)(unsafe.Pointer(n)).Clone(f)
 	case KindForInStatement, KindForOfStatement:
+		// SAFETY: This case only matches kinds allocated as a ForInOrOfStatement, which embeds its Node header at offset zero.
 		return (*ForInOrOfStatement)(unsafe.Pointer(n)).Clone(f)
 	case KindBreakStatement:
+		// SAFETY: This case only matches kinds allocated as a BreakStatement, which embeds its Node header at offset zero.
 		return (*BreakStatement)(unsafe.Pointer(n)).Clone(f)
 	case KindContinueStatement:
+		// SAFETY: This case only matches kinds allocated as a ContinueStatement, which embeds its Node header at offset zero.
 		return (*ContinueStatement)(unsafe.Pointer(n)).Clone(f)
 	case KindReturnStatement:
+		// SAFETY: This case only matches kinds allocated as a ReturnStatement, which embeds its Node header at offset zero.
 		return (*ReturnStatement)(unsafe.Pointer(n)).Clone(f)
 	case KindWithStatement:
+		// SAFETY: This case only matches kinds allocated as a WithStatement, which embeds its Node header at offset zero.
 		return (*WithStatement)(unsafe.Pointer(n)).Clone(f)
 	case KindSwitchStatement:
+		// SAFETY: This case only matches kinds allocated as a SwitchStatement, which embeds its Node header at offset zero.
 		return (*SwitchStatement)(unsafe.Pointer(n)).Clone(f)
 	case KindCaseBlock:
+		// SAFETY: This case only matches kinds allocated as a CaseBlock, which embeds its Node header at offset zero.
 		return (*CaseBlock)(unsafe.Pointer(n)).Clone(f)
 	case KindCaseClause, KindDefaultClause:
+		// SAFETY: This case only matches kinds allocated as a CaseOrDefaultClause, which embeds its Node header at offset zero.
 		return (*CaseOrDefaultClause)(unsafe.Pointer(n)).Clone(f)
 	case KindThrowStatement:
+		// SAFETY: This case only matches kinds allocated as a ThrowStatement, which embeds its Node header at offset zero.
 		return (*ThrowStatement)(unsafe.Pointer(n)).Clone(f)
 	case KindTryStatement:
+		// SAFETY: This case only matches kinds allocated as a TryStatement, which embeds its Node header at offset zero.
 		return (*TryStatement)(unsafe.Pointer(n)).Clone(f)
 	case KindCatchClause:
+		// SAFETY: This case only matches kinds allocated as a CatchClause, which embeds its Node header at offset zero.
 		return (*CatchClause)(unsafe.Pointer(n)).Clone(f)
 	case KindDebuggerStatement:
+		// SAFETY: This case only matches kinds allocated as a DebuggerStatement, which embeds its Node header at offset zero.
 		return (*DebuggerStatement)(unsafe.Pointer(n)).Clone(f)
 	case KindLabeledStatement:
+		// SAFETY: This case only matches kinds allocated as a LabeledStatement, which embeds its Node header at offset zero.
 		return (*LabeledStatement)(unsafe.Pointer(n)).Clone(f)
 	case KindExpressionStatement:
+		// SAFETY: This case only matches kinds allocated as a ExpressionStatement, which embeds its Node header at offset zero.
 		return (*ExpressionStatement)(unsafe.Pointer(n)).Clone(f)
 	case KindBlock:
+		// SAFETY: This case only matches kinds allocated as a Block, which embeds its Node header at offset zero.
 		return (*Block)(unsafe.Pointer(n)).Clone(f)
 	case KindVariableStatement:
+		// SAFETY: This case only matches kinds allocated as a VariableStatement, which embeds its Node header at offset zero.
 		return (*VariableStatement)(unsafe.Pointer(n)).Clone(f)
 	case KindVariableDeclaration:
+		// SAFETY: This case only matches kinds allocated as a VariableDeclaration, which embeds its Node header at offset zero.
 		return (*VariableDeclaration)(unsafe.Pointer(n)).Clone(f)
 	case KindVariableDeclarationList:
+		// SAFETY: This case only matches kinds allocated as a VariableDeclarationList, which embeds its Node header at offset zero.
 		return (*VariableDeclarationList)(unsafe.Pointer(n)).Clone(f)
 	case KindObjectBindingPattern, KindArrayBindingPattern:
+		// SAFETY: This case only matches kinds allocated as a BindingPattern, which embeds its Node header at offset zero.
 		return (*BindingPattern)(unsafe.Pointer(n)).Clone(f)
 	case KindParameter:
+		// SAFETY: This case only matches kinds allocated as a ParameterDeclaration, which embeds its Node header at offset zero.
 		return (*ParameterDeclaration)(unsafe.Pointer(n)).Clone(f)
 	case KindBindingElement:
+		// SAFETY: This case only matches kinds allocated as a BindingElement, which embeds its Node header at offset zero.
 		return (*BindingElement)(unsafe.Pointer(n)).Clone(f)
 	case KindMissingDeclaration:
+		// SAFETY: This case only matches kinds allocated as a MissingDeclaration, which embeds its Node header at offset zero.
 		return (*MissingDeclaration)(unsafe.Pointer(n)).Clone(f)
 	case KindFunctionDeclaration:
+		// SAFETY: This case only matches kinds allocated as a FunctionDeclaration, which embeds its Node header at offset zero.
 		return (*FunctionDeclaration)(unsafe.Pointer(n)).Clone(f)
 	case KindClassDeclaration:
+		// SAFETY: This case only matches kinds allocated as a ClassDeclaration, which embeds its Node header at offset zero.
 		return (*ClassDeclaration)(unsafe.Pointer(n)).Clone(f)
 	case KindClassExpression:
+		// SAFETY: This case only matches kinds allocated as a ClassExpression, which embeds its Node header at offset zero.
 		return (*ClassExpression)(unsafe.Pointer(n)).Clone(f)
 	case KindHeritageClause:
+		// SAFETY: This case only matches kinds allocated as a HeritageClause, which embeds its Node header at offset zero.
 		return (*HeritageClause)(unsafe.Pointer(n)).Clone(f)
 	case KindInterfaceDeclaration:
+		// SAFETY: This case only matches kinds allocated as a InterfaceDeclaration, which embeds its Node header at offset zero.
 		return (*InterfaceDeclaration)(unsafe.Pointer(n)).Clone(f)
 	case KindTypeAliasDeclaration, KindJSTypeAliasDeclaration:
+		// SAFETY: This case only matches kinds allocated as a TypeAliasDeclaration, which embeds its Node header at offset zero.
 		return (*TypeAliasDeclaration)(unsafe.Pointer(n)).Clone(f)
 	case KindEnumMember:
+		// SAFETY: This case only matches kinds allocated as a EnumMember, which embeds its Node header at offset zero.
 		return (*EnumMember)(unsafe.Pointer(n)).Clone(f)
 	case KindEnumDeclaration:
+		// SAFETY: This case only matches kinds allocated as a EnumDeclaration, which embeds its Node header at offset zero.
 		return (*EnumDeclaration)(unsafe.Pointer(n)).Clone(f)
 	case KindModuleBlock:
+		// SAFETY: This case only matches kinds allocated as a ModuleBlock, which embeds its Node header at offset zero.
 		return (*ModuleBlock)(unsafe.Pointer(n)).Clone(f)
 	case KindNotEmittedStatement:
+		// SAFETY: This case only matches kinds allocated as a NotEmittedStatement, which embeds its Node header at offset zero.
 		return (*NotEmittedStatement)(unsafe.Pointer(n)).Clone(f)
 	case KindNotEmittedTypeElement:
+		// SAFETY: This case only matches kinds allocated as a NotEmittedTypeElement, which embeds its Node header at offset zero.
 		return (*NotEmittedTypeElement)(unsafe.Pointer(n)).Clone(f)
 	case KindImportDeclaration, KindJSImportDeclaration:
+		// SAFETY: This case only matches kinds allocated as a ImportDeclaration, which embeds its Node header at offset zero.
 		return (*ImportDeclaration)(unsafe.Pointer(n)).Clone(f)
 	case KindExternalModuleReference:
+		// SAFETY: This case only matches kinds allocated as a ExternalModuleReference, which embeds its Node header at offset zero.
 		return (*ExternalModuleReference)(unsafe.Pointer(n)).Clone(f)
 	case KindNamespaceImport:
+		// SAFETY: This case only matches kinds allocated as a NamespaceImport, which embeds its Node header at offset zero.
 		return (*NamespaceImport)(unsafe.Pointer(n)).Clone(f)
 	case KindNamedImports:
+		// SAFETY: This case only matches kinds allocated as a NamedImports, which embeds its Node header at offset zero.
 		return (*NamedImports)(unsafe.Pointer(n)).Clone(f)
 	case KindExportAssignment:
+		// SAFETY: This case only matches kinds allocated as a ExportAssignment, which embeds its Node header at offset zero.
 		return (*ExportAssignment)(unsafe.Pointer(n)).Clone(f)
 	case KindNamespaceExportDeclaration:
+		// SAFETY: This case only matches kinds allocated as a NamespaceExportDeclaration, which embeds its Node header at offset zero.
 		return (*NamespaceExportDeclaration)(unsafe.Pointer(n)).Clone(f)
 	case KindNamespaceExport:
+		// SAFETY: This case only matches kinds allocated as a NamespaceExport, which embeds its Node header at offset zero.
 		return (*NamespaceExport)(unsafe.Pointer(n)).Clone(f)
 	case KindNamedExports:
+		// SAFETY: This case only matches kinds allocated as a NamedExports, which embeds its Node header at offset zero.
 		return (*NamedExports)(unsafe.Pointer(n)).Clone(f)
 	case KindExportSpecifier:
+		// SAFETY: This case only matches kinds allocated as a ExportSpecifier, which embeds its Node header at offset zero.
 		return (*ExportSpecifier)(unsafe.Pointer(n)).Clone(f)
 	case KindCallSignature:
+		// SAFETY: This case only matches kinds allocated as a CallSignatureDeclaration, which embeds its Node header at offset zero.
 		return (*CallSignatureDeclaration)(unsafe.Pointer(n)).Clone(f)
 	case KindConstructSignature:
+		// SAFETY: This case only matches kinds allocated as a ConstructSignatureDeclaration, which embeds its Node header at offset zero.
 		return (*ConstructSignatureDeclaration)(unsafe.Pointer(n)).Clone(f)
 	case KindConstructor:
+		// SAFETY: This case only matches kinds allocated as a ConstructorDeclaration, which embeds its Node header at offset zero.
 		return (*ConstructorDeclaration)(unsafe.Pointer(n)).Clone(f)
 	case KindGetAccessor:
+		// SAFETY: This case only matches kinds allocated as a GetAccessorDeclaration, which embeds its Node header at offset zero.
 		return (*GetAccessorDeclaration)(unsafe.Pointer(n)).Clone(f)
 	case KindSetAccessor:
+		// SAFETY: This case only matches kinds allocated as a SetAccessorDeclaration, which embeds its Node header at offset zero.
 		return (*SetAccessorDeclaration)(unsafe.Pointer(n)).Clone(f)
 	case KindIndexSignature:
+		// SAFETY: This case only matches kinds allocated as a IndexSignatureDeclaration, which embeds its Node header at offset zero.
 		return (*IndexSignatureDeclaration)(unsafe.Pointer(n)).Clone(f)
 	case KindMethodSignature:
+		// SAFETY: This case only matches kinds allocated as a MethodSignatureDeclaration, which embeds its Node header at offset zero.
 		return (*MethodSignatureDeclaration)(unsafe.Pointer(n)).Clone(f)
 	case KindMethodDeclaration:
+		// SAFETY: This case only matches kinds allocated as a MethodDeclaration, which embeds its Node header at offset zero.
 		return (*MethodDeclaration)(unsafe.Pointer(n)).Clone(f)
 	case KindPropertySignature:
+		// SAFETY: This case only matches kinds allocated as a PropertySignatureDeclaration, which embeds its Node header at offset zero.
 		return (*PropertySignatureDeclaration)(unsafe.Pointer(n)).Clone(f)
 	case KindPropertyDeclaration:
+		// SAFETY: This case only matches kinds allocated as a PropertyDeclaration, which embeds its Node header at offset zero.
 		return (*PropertyDeclaration)(unsafe.Pointer(n)).Clone(f)
 	case KindSemicolonClassElement:
+		// SAFETY: This case only matches kinds allocated as a SemicolonClassElement, which embeds its Node header at offset zero.
 		return (*SemicolonClassElement)(unsafe.Pointer(n)).Clone(f)
 	case KindClassStaticBlockDeclaration:
+		// SAFETY: This case only matches kinds allocated as a ClassStaticBlockDeclaration, which embeds its Node header at offset zero.
 		return (*ClassStaticBlockDeclaration)(unsafe.Pointer(n)).Clone(f)
 	case KindOmittedExpression:
+		// SAFETY: This case only matches kinds allocated as a OmittedExpression, which embeds its Node header at offset zero.
 		return (*OmittedExpression)(unsafe.Pointer(n)).Clone(f)
 	case KindBinaryExpression:
+		// SAFETY: This case only matches kinds allocated as a BinaryExpression, which embeds its Node header at offset zero.
 		return (*BinaryExpression)(unsafe.Pointer(n)).Clone(f)
 	case KindPrefixUnaryExpression:
+		// SAFETY: This case only matches kinds allocated as a PrefixUnaryExpression, which embeds its Node header at offset zero.
 		return (*PrefixUnaryExpression)(unsafe.Pointer(n)).Clone(f)
 	case KindPostfixUnaryExpression:
+		// SAFETY: This case only matches kinds allocated as a PostfixUnaryExpression, which embeds its Node header at offset zero.
 		return (*PostfixUnaryExpression)(unsafe.Pointer(n)).Clone(f)
 	case KindYieldExpression:
+		// SAFETY: This case only matches kinds allocated as a YieldExpression, which embeds its Node header at offset zero.
 		return (*YieldExpression)(unsafe.Pointer(n)).Clone(f)
 	case KindArrowFunction:
+		// SAFETY: This case only matches kinds allocated as a ArrowFunction, which embeds its Node header at offset zero.
 		return (*ArrowFunction)(unsafe.Pointer(n)).Clone(f)
 	case KindFunctionExpression:
+		// SAFETY: This case only matches kinds allocated as a FunctionExpression, which embeds its Node header at offset zero.
 		return (*FunctionExpression)(unsafe.Pointer(n)).Clone(f)
 	case KindAsExpression:
+		// SAFETY: This case only matches kinds allocated as a AsExpression, which embeds its Node header at offset zero.
 		return (*AsExpression)(unsafe.Pointer(n)).Clone(f)
 	case KindSatisfiesExpression:
+		// SAFETY: This case only matches kinds allocated as a SatisfiesExpression, which embeds its Node header at offset zero.
 		return (*SatisfiesExpression)(unsafe.Pointer(n)).Clone(f)
 	case KindConditionalExpression:
+		// SAFETY: This case only matches kinds allocated as a ConditionalExpression, which embeds its Node header at offset zero.
 		return (*ConditionalExpression)(unsafe.Pointer(n)).Clone(f)
 	case KindPropertyAccessExpression:
+		// SAFETY: This case only matches kinds allocated as a PropertyAccessExpression, which embeds its Node header at offset zero.
 		return (*PropertyAccessExpression)(unsafe.Pointer(n)).Clone(f)
 	case KindElementAccessExpression:
+		// SAFETY: This case only matches kinds allocated as a ElementAccessExpression, which embeds its Node header at offset zero.
 		return (*ElementAccessExpression)(unsafe.Pointer(n)).Clone(f)
 	case KindCallExpression:
+		// SAFETY: This case only matches kinds allocated as a CallExpression, which embeds its Node header at offset zero.
 		return (*CallExpression)(unsafe.Pointer(n)).Clone(f)
 	case KindNewExpression:
+		// SAFETY: This case only matches kinds allocated as a NewExpression, which embeds its Node header at offset zero.
 		return (*NewExpression)(unsafe.Pointer(n)).Clone(f)
 	case KindMetaProperty:
+		// SAFETY: This case only matches kinds allocated as a MetaProperty, which embeds its Node header at offset zero.
 		return (*MetaProperty)(unsafe.Pointer(n)).Clone(f)
 	case KindNonNullExpression:
+		// SAFETY: This case only matches kinds allocated as a NonNullExpression, which embeds its Node header at offset zero.
 		return (*NonNullExpression)(unsafe.Pointer(n)).Clone(f)
 	case KindSpreadElement:
+		// SAFETY: This case only matches kinds allocated as a SpreadElement, which embeds its Node header at offset zero.
 		return (*SpreadElement)(unsafe.Pointer(n)).Clone(f)
 	case KindTemplateExpression:
+		// SAFETY: This case only matches kinds allocated as a TemplateExpression, which embeds its Node header at offset zero.
 		return (*TemplateExpression)(unsafe.Pointer(n)).Clone(f)
 	case KindTemplateSpan:
+		// SAFETY: This case only matches kinds allocated as a TemplateSpan, which embeds its Node header at offset zero.
 		return (*TemplateSpan)(unsafe.Pointer(n)).Clone(f)
 	case KindTaggedTemplateExpression:
+		// SAFETY: This case only matches kinds allocated as a TaggedTemplateExpression, which embeds its Node header at offset zero.
 		return (*TaggedTemplateExpression)(unsafe.Pointer(n)).Clone(f)
 	case KindParenthesizedExpression:
+		// SAFETY: This case only matches kinds allocated as a ParenthesizedExpression, which embeds its Node header at offset zero.
 		return (*ParenthesizedExpression)(unsafe.Pointer(n)).Clone(f)
 	case KindArrayLiteralExpression:
+		// SAFETY: This case only matches kinds allocated as a ArrayLiteralExpression, which embeds its Node header at offset zero.
 		return (*ArrayLiteralExpression)(unsafe.Pointer(n)).Clone(f)
 	case KindObjectLiteralExpression:
+		// SAFETY: This case only matches kinds allocated as a ObjectLiteralExpression, which embeds its Node header at offset zero.
 		return (*ObjectLiteralExpression)(unsafe.Pointer(n)).Clone(f)
 	case KindSpreadAssignment:
+		// SAFETY: This case only matches kinds allocated as a SpreadAssignment, which embeds its Node header at offset zero.
 		return (*SpreadAssignment)(unsafe.Pointer(n)).Clone(f)
 	case KindPropertyAssignment:
+		// SAFETY: This case only matches kinds allocated as a PropertyAssignment, which embeds its Node header at offset zero.
 		return (*PropertyAssignment)(unsafe.Pointer(n)).Clone(f)
 	case KindShorthandPropertyAssignment:
+		// SAFETY: This case only matches kinds allocated as a ShorthandPropertyAssignment, which embeds its Node header at offset zero.
 		return (*ShorthandPropertyAssignment)(unsafe.Pointer(n)).Clone(f)
 	case KindDeleteExpression:
+		// SAFETY: This case only matches kinds allocated as a DeleteExpression, which embeds its Node header at offset zero.
 		return (*DeleteExpression)(unsafe.Pointer(n)).Clone(f)
 	case KindTypeOfExpression:
+		// SAFETY: This case only matches kinds allocated as a TypeOfExpression, which embeds its Node header at offset zero.
 		return (*TypeOfExpression)(unsafe.Pointer(n)).Clone(f)
 	case KindVoidExpression:
+		// SAFETY: This case only matches kinds allocated as a VoidExpression, which embeds its Node header at offset zero.
 		return (*VoidExpression)(unsafe.Pointer(n)).Clone(f)
 	case KindAwaitExpression:
+		// SAFETY: This case only matches kinds allocated as a AwaitExpression, which embeds its Node header at offset zero.
 		return (*AwaitExpression)(unsafe.Pointer(n)).Clone(f)
 	case KindTypeAssertionExpression:
+		// SAFETY: This case only matches kinds allocated as a TypeAssertion, which embeds its Node header at offset zero.
 		return (*TypeAssertion)(unsafe.Pointer(n)).Clone(f)
 	case KindUnionType:
+		// SAFETY: This case only matches kinds allocated as a UnionTypeNode, which embeds its Node header at offset zero.
 		return (*UnionTypeNode)(unsafe.Pointer(n)).Clone(f)
 	case KindIntersectionType:
+		// SAFETY: This case only matches kinds allocated as a IntersectionTypeNode, which embeds its Node header at offset zero.
 		return (*IntersectionTypeNode)(unsafe.Pointer(n)).Clone(f)
 	case KindConditionalType:
+		// SAFETY: This case only matches kinds allocated as a ConditionalTypeNode, which embeds its Node header at offset zero.
 		return (*ConditionalTypeNode)(unsafe.Pointer(n)).Clone(f)
 	case KindTypeOperator:
+		// SAFETY: This case only matches kinds allocated as a TypeOperatorNode, which embeds its Node header at offset zero.
 		return (*TypeOperatorNode)(unsafe.Pointer(n)).Clone(f)
 	case KindInferType:
+		// SAFETY: This case only matches kinds allocated as a InferTypeNode, which embeds its Node header at offset zero.
 		return (*InferTypeNode)(unsafe.Pointer(n)).Clone(f)
 	case KindArrayType:
+		// SAFETY: This case only matches kinds allocated as a ArrayTypeNode, which embeds its Node header at offset zero.
 		return (*ArrayTypeNode)(unsafe.Pointer(n)).Clone(f)
 	case KindIndexedAccessType:
+		// SAFETY: This case only matches kinds allocated as a IndexedAccessTypeNode, which embeds its Node header at offset zero.
 		return (*IndexedAccessTypeNode)(unsafe.Pointer(n)).Clone(f)
 	case KindTypeReference:
+		// SAFETY: This case only matches kinds allocated as a TypeReferenceNode, which embeds its Node header at offset zero.
 		return (*TypeReferenceNode)(unsafe.Pointer(n)).Clone(f)
 	case KindExpressionWithTypeArguments:
+		// SAFETY: This case only matches kinds allocated as a ExpressionWithTypeArguments, which embeds its Node header at offset zero.
 		return (*ExpressionWithTypeArguments)(unsafe.Pointer(n)).Clone(f)
 	case KindLiteralType:
+		// SAFETY: This case only matches kinds allocated as a LiteralTypeNode, which embeds its Node header at offset zero.
 		return (*LiteralTypeNode)(unsafe.Pointer(n)).Clone(f)
 	case KindThisType:
+		// SAFETY: This case only matches kinds allocated as a ThisTypeNode, which embeds its Node header at offset zero.
 		return (*ThisTypeNode)(unsafe.Pointer(n)).Clone(f)
 	case KindTypePredicate:
+		// SAFETY: This case only matches kinds allocated as a TypePredicateNode, which embeds its Node header at offset zero.
 		return (*TypePredicateNode)(unsafe.Pointer(n)).Clone(f)
 	case KindImportAttribute:
+		// SAFETY: This case only matches kinds allocated as a ImportAttribute, which embeds its Node header at offset zero.
 		return (*ImportAttribute)(unsafe.Pointer(n)).Clone(f)
 	case KindImportAttributes:
+		// SAFETY: This case only matches kinds allocated as a ImportAttributes, which embeds its Node header at offset zero.
 		return (*ImportAttributes)(unsafe.Pointer(n)).Clone(f)
 	case KindTypeQuery:
+		// SAFETY: This case only matches kinds allocated as a TypeQueryNode, which embeds its Node header at offset zero.
 		return (*TypeQueryNode)(unsafe.Pointer(n)).Clone(f)
 	case KindMappedType:
+		// SAFETY: This case only matches kinds allocated as a MappedTypeNode, which embeds its Node header at offset zero.
 		return (*MappedTypeNode)(unsafe.Pointer(n)).Clone(f)
 	case KindTypeLiteral:
+		// SAFETY: This case only matches kinds allocated as a TypeLiteralNode, which embeds its Node header at offset zero.
 		return (*TypeLiteralNode)(unsafe.Pointer(n)).Clone(f)
 	case KindTupleType:
+		// SAFETY: This case only matches kinds allocated as a TupleTypeNode, which embeds its Node header at offset zero.
 		return (*TupleTypeNode)(unsafe.Pointer(n)).Clone(f)
 	case KindNamedTupleMember:
+		// SAFETY: This case only matches kinds allocated as a NamedTupleMember, which embeds its Node header at offset zero.
 		return (*NamedTupleMember)(unsafe.Pointer(n)).Clone(f)
 	case KindOptionalType:
+		// SAFETY: This case only matches kinds allocated as a OptionalTypeNode, which embeds its Node header at offset zero.
 		return (*OptionalTypeNode)(unsafe.Pointer(n)).Clone(f)
 	case KindRestType:
+		// SAFETY: This case only matches kinds allocated as a RestTypeNode, which embeds its Node header at offset zero.
 		return (*RestTypeNode)(unsafe.Pointer(n)).Clone(f)
 	case KindParenthesizedType:
+		// SAFETY: This case only matches kinds allocated as a ParenthesizedTypeNode, which embeds its Node header at offset zero.
 		return (*ParenthesizedTypeNode)(unsafe.Pointer(n)).Clone(f)
 	case KindFunctionType:
+		// SAFETY: This case only matches kinds allocated as a FunctionTypeNode, which embeds its Node header at offset zero.
 		return (*FunctionTypeNode)(unsafe.Pointer(n)).Clone(f)
 	case KindConstructorType:
+		// SAFETY: This case only matches kinds allocated as a ConstructorTypeNode, which embeds its Node header at offset zero.
 		return (*ConstructorTypeNode)(unsafe.Pointer(n)).Clone(f)
 	case KindTemplateLiteralType:
+		// SAFETY: This case only matches kinds allocated as a TemplateLiteralTypeNode, which embeds its Node header at offset zero.
 		return (*TemplateLiteralTypeNode)(unsafe.Pointer(n)).Clone(f)
 	case KindTemplateLiteralTypeSpan:
+		// SAFETY: This case only matches kinds allocated as a TemplateLiteralTypeSpan, which embeds its Node header at offset zero.
 		return (*TemplateLiteralTypeSpan)(unsafe.Pointer(n)).Clone(f)
 	case KindSyntheticExpression:
+		// SAFETY: This case only matches kinds allocated as a SyntheticExpression, which embeds its Node header at offset zero.
 		return (*SyntheticExpression)(unsafe.Pointer(n)).Clone(f)
 	case KindPartiallyEmittedExpression:
+		// SAFETY: This case only matches kinds allocated as a PartiallyEmittedExpression, which embeds its Node header at offset zero.
 		return (*PartiallyEmittedExpression)(unsafe.Pointer(n)).Clone(f)
 	case KindJsxElement:
+		// SAFETY: This case only matches kinds allocated as a JsxElement, which embeds its Node header at offset zero.
 		return (*JsxElement)(unsafe.Pointer(n)).Clone(f)
 	case KindJsxAttributes:
+		// SAFETY: This case only matches kinds allocated as a JsxAttributes, which embeds its Node header at offset zero.
 		return (*JsxAttributes)(unsafe.Pointer(n)).Clone(f)
 	case KindJsxNamespacedName:
+		// SAFETY: This case only matches kinds allocated as a JsxNamespacedName, which embeds its Node header at offset zero.
 		return (*JsxNamespacedName)(unsafe.Pointer(n)).Clone(f)
 	case KindJsxOpeningElement:
+		// SAFETY: This case only matches kinds allocated as a JsxOpeningElement, which embeds its Node header at offset zero.
 		return (*JsxOpeningElement)(unsafe.Pointer(n)).Clone(f)
 	case KindJsxSelfClosingElement:
+		// SAFETY: This case only matches kinds allocated as a JsxSelfClosingElement, which embeds its Node header at offset zero.
 		return (*JsxSelfClosingElement)(unsafe.Pointer(n)).Clone(f)
 	case KindJsxFragment:
+		// SAFETY: This case only matches kinds allocated as a JsxFragment, which embeds its Node header at offset zero.
 		return (*JsxFragment)(unsafe.Pointer(n)).Clone(f)
 	case KindJsxOpeningFragment:
+		// SAFETY: This case only matches kinds allocated as a JsxOpeningFragment, which embeds its Node header at offset zero.
 		return (*JsxOpeningFragment)(unsafe.Pointer(n)).Clone(f)
 	case KindJsxClosingFragment:
+		// SAFETY: This case only matches kinds allocated as a JsxClosingFragment, which embeds its Node header at offset zero.
 		return (*JsxClosingFragment)(unsafe.Pointer(n)).Clone(f)
 	case KindJsxAttribute:
+		// SAFETY: This case only matches kinds allocated as a JsxAttribute, which embeds its Node header at offset zero.
 		return (*JsxAttribute)(unsafe.Pointer(n)).Clone(f)
 	case KindJsxSpreadAttribute:
+		// SAFETY: This case only matches kinds allocated as a JsxSpreadAttribute, which embeds its Node header at offset zero.
 		return (*JsxSpreadAttribute)(unsafe.Pointer(n)).Clone(f)
 	case KindJsxClosingElement:
+		// SAFETY: This case only matches kinds allocated as a JsxClosingElement, which embeds its Node header at offset zero.
 		return (*JsxClosingElement)(unsafe.Pointer(n)).Clone(f)
 	case KindJsxExpression:
+		// SAFETY: This case only matches kinds allocated as a JsxExpression, which embeds its Node header at offset zero.
 		return (*JsxExpression)(unsafe.Pointer(n)).Clone(f)
 	case KindSyntaxList:
+		// SAFETY: This case only matches kinds allocated as a SyntaxList, which embeds its Node header at offset zero.
 		return (*SyntaxList)(unsafe.Pointer(n)).Clone(f)
 	case KindJSDoc:
+		// SAFETY: This case only matches kinds allocated as a JSDoc, which embeds its Node header at offset zero.
 		return (*JSDoc)(unsafe.Pointer(n)).Clone(f)
 	case KindJSDocTypeExpression:
+		// SAFETY: This case only matches kinds allocated as a JSDocTypeExpression, which embeds its Node header at offset zero.
 		return (*JSDocTypeExpression)(unsafe.Pointer(n)).Clone(f)
 	case KindJSDocNonNullableType:
+		// SAFETY: This case only matches kinds allocated as a JSDocNonNullableType, which embeds its Node header at offset zero.
 		return (*JSDocNonNullableType)(unsafe.Pointer(n)).Clone(f)
 	case KindJSDocNullableType:
+		// SAFETY: This case only matches kinds allocated as a JSDocNullableType, which embeds its Node header at offset zero.
 		return (*JSDocNullableType)(unsafe.Pointer(n)).Clone(f)
 	case KindJSDocAllType:
+		// SAFETY: This case only matches kinds allocated as a JSDocAllType, which embeds its Node header at offset zero.
 		return (*JSDocAllType)(unsafe.Pointer(n)).Clone(f)
 	case KindJSDocVariadicType:
+		// SAFETY: This case only matches kinds allocated as a JSDocVariadicType, which embeds its Node header at offset zero.
 		return (*JSDocVariadicType)(unsafe.Pointer(n)).Clone(f)
 	case KindJSDocOptionalType:
+		// SAFETY: This case only matches kinds allocated as a JSDocOptionalType, which embeds its Node header at offset zero.
 		return (*JSDocOptionalType)(unsafe.Pointer(n)).Clone(f)
 	case KindJSDocTypeTag:
+		// SAFETY: This case only matches kinds allocated as a JSDocTypeTag, which embeds its Node header at offset zero.
 		return (*JSDocTypeTag)(unsafe.Pointer(n)).Clone(f)
 	case KindJSDocUnknownTag:
+		// SAFETY: This case only matches kinds allocated as a JSDocUnknownTag, which embeds its Node header at offset zero.
 		return (*JSDocUnknownTag)(unsafe.Pointer(n)).Clone(f)
 	case KindJSDocTemplateTag:
+		// SAFETY: This case only matches kinds allocated as a JSDocTemplateTag, which embeds its Node header at offset zero.
 		return (*JSDocTemplateTag)(unsafe.Pointer(n)).Clone(f)
 	case KindJSDocReturnTag:
+		// SAFETY: This case only matches kinds allocated as a JSDocReturnTag, which embeds its Node header at offset zero.
 		return (*JSDocReturnTag)(unsafe.Pointer(n)).Clone(f)
 	case KindJSDocPublicTag:
+		// SAFETY: This case only matches kinds allocated as a JSDocPublicTag, which embeds its Node header at offset zero.
 		return (*JSDocPublicTag)(unsafe.Pointer(n)).Clone(f)
 	case KindJSDocPrivateTag:
+		// SAFETY: This case only matches kinds allocated as a JSDocPrivateTag, which embeds its Node header at offset zero.
 		return (*JSDocPrivateTag)(unsafe.Pointer(n)).Clone(f)
 	case KindJSDocProtectedTag:
+		// SAFETY: This case only matches kinds allocated as a JSDocProtectedTag, which embeds its Node header at offset zero.
 		return (*JSDocProtectedTag)(unsafe.Pointer(n)).Clone(f)
 	case KindJSDocReadonlyTag:
+		// SAFETY: This case only matches kinds allocated as a JSDocReadonlyTag, which embeds its Node header at offset zero.
 		return (*JSDocReadonlyTag)(unsafe.Pointer(n)).Clone(f)
 	case KindJSDocOverrideTag:
+		// SAFETY: This case only matches kinds allocated as a JSDocOverrideTag, which embeds its Node header at offset zero.
 		return (*JSDocOverrideTag)(unsafe.Pointer(n)).Clone(f)
 	case KindJSDocDeprecatedTag:
+		// SAFETY: This case only matches kinds allocated as a JSDocDeprecatedTag, which embeds its Node header at offset zero.
 		return (*JSDocDeprecatedTag)(unsafe.Pointer(n)).Clone(f)
 	case KindJSDocSeeTag:
+		// SAFETY: This case only matches kinds allocated as a JSDocSeeTag, which embeds its Node header at offset zero.
 		return (*JSDocSeeTag)(unsafe.Pointer(n)).Clone(f)
 	case KindJSDocImplementsTag:
+		// SAFETY: This case only matches kinds allocated as a JSDocImplementsTag, which embeds its Node header at offset zero.
 		return (*JSDocImplementsTag)(unsafe.Pointer(n)).Clone(f)
 	case KindJSDocAugmentsTag:
+		// SAFETY: This case only matches kinds allocated as a JSDocAugmentsTag, which embeds its Node header at offset zero.
 		return (*JSDocAugmentsTag)(unsafe.Pointer(n)).Clone(f)
 	case KindJSDocSatisfiesTag:
+		// SAFETY: This case only matches kinds allocated as a JSDocSatisfiesTag, which embeds its Node header at offset zero.
 		return (*JSDocSatisfiesTag)(unsafe.Pointer(n)).Clone(f)
 	case KindJSDocThrowsTag:
+		// SAFETY: This case only matches kinds allocated as a JSDocThrowsTag, which embeds its Node header at offset zero.
 		return (*JSDocThrowsTag)(unsafe.Pointer(n)).Clone(f)
 	case KindJSDocThisTag:
+		// SAFETY: This case only matches kinds allocated as a JSDocThisTag, which embeds its Node header at offset zero.
 		return (*JSDocThisTag)(unsafe.Pointer(n)).Clone(f)
 	case KindJSDocImportTag:
+		// SAFETY: This case only matches kinds allocated as a JSDocImportTag, which embeds its Node header at offset zero.
 		return (*JSDocImportTag)(unsafe.Pointer(n)).Clone(f)
 	case KindJSDocCallbackTag:
+		// SAFETY: This case only matches kinds allocated as a JSDocCallbackTag, which embeds its Node header at offset zero.
 		return (*JSDocCallbackTag)(unsafe.Pointer(n)).Clone(f)
 	case KindJSDocOverloadTag:
+		// SAFETY: This case only matches kinds allocated as a JSDocOverloadTag, which embeds its Node header at offset zero.
 		return (*JSDocOverloadTag)(unsafe.Pointer(n)).Clone(f)
 	case KindJSDocTypedefTag:
+		// SAFETY: This case only matches kinds allocated as a JSDocTypedefTag, which embeds its Node header at offset zero.
 		return (*JSDocTypedefTag)(unsafe.Pointer(n)).Clone(f)
 	case KindJSDocSignature:
+		// SAFETY: This case only matches kinds allocated as a JSDocSignature, which embeds its Node header at offset zero.
 		return (*JSDocSignature)(unsafe.Pointer(n)).Clone(f)
 	case KindJSDocNameReference:
+		// SAFETY: This case only matches kinds allocated as a JSDocNameReference, which embeds its Node header at offset zero.
 		return (*JSDocNameReference)(unsafe.Pointer(n)).Clone(f)
 	case KindSourceFile:
+		// SAFETY: This case only matches kinds allocated as a SourceFile, which embeds its Node header at offset zero.
 		return (*SourceFile)(unsafe.Pointer(n)).Clone(f)
 	case KindModuleDeclaration:
+		// SAFETY: This case only matches kinds allocated as a ModuleDeclaration, which embeds its Node header at offset zero.
 		return (*ModuleDeclaration)(unsafe.Pointer(n)).Clone(f)
 	case KindImportEqualsDeclaration:
+		// SAFETY: This case only matches kinds allocated as a ImportEqualsDeclaration, which embeds its Node header at offset zero.
 		return (*ImportEqualsDeclaration)(unsafe.Pointer(n)).Clone(f)
 	case KindExportDeclaration:
+		// SAFETY: This case only matches kinds allocated as a ExportDeclaration, which embeds its Node header at offset zero.
 		return (*ExportDeclaration)(unsafe.Pointer(n)).Clone(f)
 	case KindImportType:
+		// SAFETY: This case only matches kinds allocated as a ImportTypeNode, which embeds its Node header at offset zero.
 		return (*ImportTypeNode)(unsafe.Pointer(n)).Clone(f)
 	case KindImportClause:
+		// SAFETY: This case only matches kinds allocated as a ImportClause, which embeds its Node header at offset zero.
 		return (*ImportClause)(unsafe.Pointer(n)).Clone(f)
 	case KindImportSpecifier:
+		// SAFETY: This case only matches kinds allocated as a ImportSpecifier, which embeds its Node header at offset zero.
 		return (*ImportSpecifier)(unsafe.Pointer(n)).Clone(f)
 	case KindJSDocText:
+		// SAFETY: This case only matches kinds allocated as a JSDocText, which embeds its Node header at offset zero.
 		return (*JSDocText)(unsafe.Pointer(n)).Clone(f)
 	case KindJSDocLink:
+		// SAFETY: This case only matches kinds allocated as a JSDocLink, which embeds its Node header at offset zero.
 		return (*JSDocLink)(unsafe.Pointer(n)).Clone(f)
 	case KindJSDocLinkPlain:
+		// SAFETY: This case only matches kinds allocated as a JSDocLinkPlain, which embeds its Node header at offset zero.
 		return (*JSDocLinkPlain)(unsafe.Pointer(n)).Clone(f)
 	case KindJSDocLinkCode:
+		// SAFETY: This case only matches kinds allocated as a JSDocLinkCode, which embeds its Node header at offset zero.
 		return (*JSDocLinkCode)(unsafe.Pointer(n)).Clone(f)
 	case KindTypeParameter:
+		// SAFETY: This case only matches kinds allocated as a TypeParameterDeclaration, which embeds its Node header at offset zero.
 		return (*TypeParameterDeclaration)(unsafe.Pointer(n)).Clone(f)
 	case KindSyntheticReferenceExpression:
+		// SAFETY: This case only matches kinds allocated as a SyntheticReferenceExpression, which embeds its Node header at offset zero.
 		return (*SyntheticReferenceExpression)(unsafe.Pointer(n)).Clone(f)
 	case KindJSDocTypeLiteral:
+		// SAFETY: This case only matches kinds allocated as a JSDocTypeLiteral, which embeds its Node header at offset zero.
 		return (*JSDocTypeLiteral)(unsafe.Pointer(n)).Clone(f)
 	case KindJSDocParameterTag, KindJSDocPropertyTag:
+		// SAFETY: This case only matches kinds allocated as a JSDocParameterOrPropertyTag, which embeds its Node header at offset zero.
 		return (*JSDocParameterOrPropertyTag)(unsafe.Pointer(n)).Clone(f)
 	default:
 		return nil
@@ -9886,42 +10412,58 @@ func (n *Node) SubtreeFacts() SubtreeFacts {
 	case KindVoidKeyword, KindAnyKeyword, KindBooleanKeyword, KindIntrinsicKeyword, KindNeverKeyword, KindNumberKeyword, KindObjectKeyword, KindStringKeyword, KindSymbolKeyword, KindUndefinedKeyword, KindUnknownKeyword, KindBigIntKeyword:
 		return n.computeSubtreeFacts()
 	case KindQualifiedName:
+		// SAFETY: This case only matches kinds allocated as a QualifiedName, which embeds its Node header at offset zero.
 		return (*QualifiedName)(unsafe.Pointer(n)).subtreeFactsWorker(n)
 	case KindComputedPropertyName:
+		// SAFETY: This case only matches kinds allocated as a ComputedPropertyName, which embeds its Node header at offset zero.
 		return (*ComputedPropertyName)(unsafe.Pointer(n)).subtreeFactsWorker(n)
 	case KindDecorator:
+		// SAFETY: This case only matches kinds allocated as a Decorator, which embeds its Node header at offset zero.
 		return (*Decorator)(unsafe.Pointer(n)).subtreeFactsWorker(n)
 	case KindEmptyStatement:
 		return n.computeSubtreeFacts()
 	case KindIfStatement:
+		// SAFETY: This case only matches kinds allocated as a IfStatement, which embeds its Node header at offset zero.
 		return (*IfStatement)(unsafe.Pointer(n)).subtreeFactsWorker(n)
 	case KindDoStatement:
+		// SAFETY: This case only matches kinds allocated as a DoStatement, which embeds its Node header at offset zero.
 		return (*DoStatement)(unsafe.Pointer(n)).subtreeFactsWorker(n)
 	case KindWhileStatement:
+		// SAFETY: This case only matches kinds allocated as a WhileStatement, which embeds its Node header at offset zero.
 		return (*WhileStatement)(unsafe.Pointer(n)).subtreeFactsWorker(n)
 	case KindForStatement:
+		// SAFETY: This case only matches kinds allocated as a ForStatement, which embeds its Node header at offset zero.
 		return (*ForStatement)(unsafe.Pointer(n)).subtreeFactsWorker(n)
 	case KindForInStatement, KindForOfStatement:
+		// SAFETY: This case only matches kinds allocated as a ForInOrOfStatement, which embeds its Node header at offset zero.
 		return (*ForInOrOfStatement)(unsafe.Pointer(n)).subtreeFactsWorker(n)
 	case KindBreakStatement:
 		return n.computeSubtreeFacts()
 	case KindContinueStatement:
 		return n.computeSubtreeFacts()
 	case KindReturnStatement:
+		// SAFETY: This case only matches kinds allocated as a ReturnStatement, which embeds its Node header at offset zero.
 		return (*ReturnStatement)(unsafe.Pointer(n)).subtreeFactsWorker(n)
 	case KindWithStatement:
+		// SAFETY: This case only matches kinds allocated as a WithStatement, which embeds its Node header at offset zero.
 		return (*WithStatement)(unsafe.Pointer(n)).subtreeFactsWorker(n)
 	case KindSwitchStatement:
+		// SAFETY: This case only matches kinds allocated as a SwitchStatement, which embeds its Node header at offset zero.
 		return (*SwitchStatement)(unsafe.Pointer(n)).subtreeFactsWorker(n)
 	case KindCaseBlock:
+		// SAFETY: This case only matches kinds allocated as a CaseBlock, which embeds its Node header at offset zero.
 		return (*CaseBlock)(unsafe.Pointer(n)).subtreeFactsWorker(n)
 	case KindCaseClause, KindDefaultClause:
+		// SAFETY: This case only matches kinds allocated as a CaseOrDefaultClause, which embeds its Node header at offset zero.
 		return (*CaseOrDefaultClause)(unsafe.Pointer(n)).subtreeFactsWorker(n)
 	case KindThrowStatement:
+		// SAFETY: This case only matches kinds allocated as a ThrowStatement, which embeds its Node header at offset zero.
 		return (*ThrowStatement)(unsafe.Pointer(n)).subtreeFactsWorker(n)
 	case KindTryStatement:
+		// SAFETY: This case only matches kinds allocated as a TryStatement, which embeds its Node header at offset zero.
 		return (*TryStatement)(unsafe.Pointer(n)).subtreeFactsWorker(n)
 	case KindCatchClause:
+		// SAFETY: This case only matches kinds allocated as a CatchClause, which embeds its Node header at offset zero.
 		return (*CatchClause)(unsafe.Pointer(n)).subtreeFactsWorker(n)
 	case KindDebuggerStatement:
 		return n.computeSubtreeFacts()
@@ -9930,88 +10472,114 @@ func (n *Node) SubtreeFacts() SubtreeFacts {
 	case KindExpressionStatement:
 		return n.computeSubtreeFacts()
 	case KindBlock:
+		// SAFETY: This case only matches kinds allocated as a Block, which embeds its Node header at offset zero.
 		return (*Block)(unsafe.Pointer(n)).subtreeFactsWorker(n)
 	case KindVariableStatement:
+		// SAFETY: This case only matches kinds allocated as a VariableStatement, which embeds its Node header at offset zero.
 		return (*VariableStatement)(unsafe.Pointer(n)).subtreeFactsWorker(n)
 	case KindVariableDeclaration:
+		// SAFETY: This case only matches kinds allocated as a VariableDeclaration, which embeds its Node header at offset zero.
 		return (*VariableDeclaration)(unsafe.Pointer(n)).subtreeFactsWorker(n)
 	case KindVariableDeclarationList:
+		// SAFETY: This case only matches kinds allocated as a VariableDeclarationList, which embeds its Node header at offset zero.
 		return (*VariableDeclarationList)(unsafe.Pointer(n)).subtreeFactsWorker(n)
 	case KindObjectBindingPattern, KindArrayBindingPattern:
+		// SAFETY: This case only matches kinds allocated as a BindingPattern, which embeds its Node header at offset zero.
 		return (*BindingPattern)(unsafe.Pointer(n)).subtreeFactsWorker(n)
 	case KindParameter:
+		// SAFETY: This case only matches kinds allocated as a ParameterDeclaration, which embeds its Node header at offset zero.
 		return (*ParameterDeclaration)(unsafe.Pointer(n)).subtreeFactsWorker(n)
 	case KindBindingElement:
+		// SAFETY: This case only matches kinds allocated as a BindingElement, which embeds its Node header at offset zero.
 		return (*BindingElement)(unsafe.Pointer(n)).subtreeFactsWorker(n)
 	case KindMissingDeclaration:
 		return n.computeSubtreeFacts()
 	case KindFunctionDeclaration:
+		// SAFETY: This case only matches kinds allocated as a FunctionDeclaration, which embeds its Node header at offset zero.
 		return (*FunctionDeclaration)(unsafe.Pointer(n)).subtreeFactsWorker(n)
 	case KindClassDeclaration:
+		// SAFETY: This case only matches kinds allocated as a ClassDeclaration, which embeds its Node header at offset zero.
 		return (*ClassDeclaration)(unsafe.Pointer(n)).subtreeFactsWorker(n)
 	case KindClassExpression:
+		// SAFETY: This case only matches kinds allocated as a ClassExpression, which embeds its Node header at offset zero.
 		return (*ClassExpression)(unsafe.Pointer(n)).subtreeFactsWorker(n)
 	case KindHeritageClause:
+		// SAFETY: This case only matches kinds allocated as a HeritageClause, which embeds its Node header at offset zero.
 		return (*HeritageClause)(unsafe.Pointer(n)).subtreeFactsWorker(n)
 	case KindInterfaceDeclaration:
 		return n.computeSubtreeFacts()
 	case KindTypeAliasDeclaration, KindJSTypeAliasDeclaration:
 		return n.computeSubtreeFacts()
 	case KindEnumMember:
+		// SAFETY: This case only matches kinds allocated as a EnumMember, which embeds its Node header at offset zero.
 		return (*EnumMember)(unsafe.Pointer(n)).subtreeFactsWorker(n)
 	case KindEnumDeclaration:
+		// SAFETY: This case only matches kinds allocated as a EnumDeclaration, which embeds its Node header at offset zero.
 		return (*EnumDeclaration)(unsafe.Pointer(n)).subtreeFactsWorker(n)
 	case KindModuleBlock:
+		// SAFETY: This case only matches kinds allocated as a ModuleBlock, which embeds its Node header at offset zero.
 		return (*ModuleBlock)(unsafe.Pointer(n)).subtreeFactsWorker(n)
 	case KindNotEmittedStatement:
 		return n.computeSubtreeFacts()
 	case KindNotEmittedTypeElement:
 		return n.computeSubtreeFacts()
 	case KindImportDeclaration, KindJSImportDeclaration:
+		// SAFETY: This case only matches kinds allocated as a ImportDeclaration, which embeds its Node header at offset zero.
 		return (*ImportDeclaration)(unsafe.Pointer(n)).subtreeFactsWorker(n)
 	case KindExternalModuleReference:
 		return n.computeSubtreeFacts()
 	case KindNamespaceImport:
 		return n.computeSubtreeFacts()
 	case KindNamedImports:
+		// SAFETY: This case only matches kinds allocated as a NamedImports, which embeds its Node header at offset zero.
 		return (*NamedImports)(unsafe.Pointer(n)).subtreeFactsWorker(n)
 	case KindExportAssignment:
+		// SAFETY: This case only matches kinds allocated as a ExportAssignment, which embeds its Node header at offset zero.
 		return (*ExportAssignment)(unsafe.Pointer(n)).subtreeFactsWorker(n)
 	case KindNamespaceExportDeclaration:
 		return n.computeSubtreeFacts()
 	case KindNamespaceExport:
 		return n.computeSubtreeFacts()
 	case KindNamedExports:
+		// SAFETY: This case only matches kinds allocated as a NamedExports, which embeds its Node header at offset zero.
 		return (*NamedExports)(unsafe.Pointer(n)).subtreeFactsWorker(n)
 	case KindExportSpecifier:
+		// SAFETY: This case only matches kinds allocated as a ExportSpecifier, which embeds its Node header at offset zero.
 		return (*ExportSpecifier)(unsafe.Pointer(n)).subtreeFactsWorker(n)
 	case KindCallSignature:
 		return n.computeSubtreeFacts()
 	case KindConstructSignature:
 		return n.computeSubtreeFacts()
 	case KindConstructor:
+		// SAFETY: This case only matches kinds allocated as a ConstructorDeclaration, which embeds its Node header at offset zero.
 		return (*ConstructorDeclaration)(unsafe.Pointer(n)).subtreeFactsWorker(n)
 	case KindGetAccessor:
+		// SAFETY: This case only matches kinds allocated as a GetAccessorDeclaration, which embeds its Node header at offset zero.
 		return (*GetAccessorDeclaration)(unsafe.Pointer(n)).subtreeFactsWorker(n)
 	case KindSetAccessor:
+		// SAFETY: This case only matches kinds allocated as a SetAccessorDeclaration, which embeds its Node header at offset zero.
 		return (*SetAccessorDeclaration)(unsafe.Pointer(n)).subtreeFactsWorker(n)
 	case KindIndexSignature:
 		return n.computeSubtreeFacts()
 	case KindMethodSignature:
 		return n.computeSubtreeFacts()
 	case KindMethodDeclaration:
+		// SAFETY: This case only matches kinds allocated as a MethodDeclaration, which embeds its Node header at offset zero.
 		return (*MethodDeclaration)(unsafe.Pointer(n)).subtreeFactsWorker(n)
 	case KindPropertySignature:
 		return n.computeSubtreeFacts()
 	case KindPropertyDeclaration:
+		// SAFETY: This case only matches kinds allocated as a PropertyDeclaration, which embeds its Node header at offset zero.
 		return (*PropertyDeclaration)(unsafe.Pointer(n)).subtreeFactsWorker(n)
 	case KindSemicolonClassElement:
 		return n.computeSubtreeFacts()
 	case KindClassStaticBlockDeclaration:
+		// SAFETY: This case only matches kinds allocated as a ClassStaticBlockDeclaration, which embeds its Node header at offset zero.
 		return (*ClassStaticBlockDeclaration)(unsafe.Pointer(n)).subtreeFactsWorker(n)
 	case KindOmittedExpression:
 		return n.computeSubtreeFacts()
 	case KindBinaryExpression:
+		// SAFETY: This case only matches kinds allocated as a BinaryExpression, which embeds its Node header at offset zero.
 		return (*BinaryExpression)(unsafe.Pointer(n)).subtreeFactsWorker(n)
 	case KindPrefixUnaryExpression:
 		return n.computeSubtreeFacts()
@@ -10020,46 +10588,60 @@ func (n *Node) SubtreeFacts() SubtreeFacts {
 	case KindYieldExpression:
 		return n.computeSubtreeFacts()
 	case KindArrowFunction:
+		// SAFETY: This case only matches kinds allocated as a ArrowFunction, which embeds its Node header at offset zero.
 		return (*ArrowFunction)(unsafe.Pointer(n)).subtreeFactsWorker(n)
 	case KindFunctionExpression:
+		// SAFETY: This case only matches kinds allocated as a FunctionExpression, which embeds its Node header at offset zero.
 		return (*FunctionExpression)(unsafe.Pointer(n)).subtreeFactsWorker(n)
 	case KindAsExpression:
 		return n.computeSubtreeFacts()
 	case KindSatisfiesExpression:
 		return n.computeSubtreeFacts()
 	case KindConditionalExpression:
+		// SAFETY: This case only matches kinds allocated as a ConditionalExpression, which embeds its Node header at offset zero.
 		return (*ConditionalExpression)(unsafe.Pointer(n)).subtreeFactsWorker(n)
 	case KindPropertyAccessExpression:
+		// SAFETY: This case only matches kinds allocated as a PropertyAccessExpression, which embeds its Node header at offset zero.
 		return (*PropertyAccessExpression)(unsafe.Pointer(n)).subtreeFactsWorker(n)
 	case KindElementAccessExpression:
+		// SAFETY: This case only matches kinds allocated as a ElementAccessExpression, which embeds its Node header at offset zero.
 		return (*ElementAccessExpression)(unsafe.Pointer(n)).subtreeFactsWorker(n)
 	case KindCallExpression:
+		// SAFETY: This case only matches kinds allocated as a CallExpression, which embeds its Node header at offset zero.
 		return (*CallExpression)(unsafe.Pointer(n)).subtreeFactsWorker(n)
 	case KindNewExpression:
+		// SAFETY: This case only matches kinds allocated as a NewExpression, which embeds its Node header at offset zero.
 		return (*NewExpression)(unsafe.Pointer(n)).subtreeFactsWorker(n)
 	case KindMetaProperty:
+		// SAFETY: This case only matches kinds allocated as a MetaProperty, which embeds its Node header at offset zero.
 		return (*MetaProperty)(unsafe.Pointer(n)).subtreeFactsWorker(n)
 	case KindNonNullExpression:
 		return n.computeSubtreeFacts()
 	case KindSpreadElement:
 		return n.computeSubtreeFacts()
 	case KindTemplateExpression:
+		// SAFETY: This case only matches kinds allocated as a TemplateExpression, which embeds its Node header at offset zero.
 		return (*TemplateExpression)(unsafe.Pointer(n)).subtreeFactsWorker(n)
 	case KindTemplateSpan:
 		return n.computeSubtreeFacts()
 	case KindTaggedTemplateExpression:
+		// SAFETY: This case only matches kinds allocated as a TaggedTemplateExpression, which embeds its Node header at offset zero.
 		return (*TaggedTemplateExpression)(unsafe.Pointer(n)).subtreeFactsWorker(n)
 	case KindParenthesizedExpression:
 		return n.computeSubtreeFacts()
 	case KindArrayLiteralExpression:
+		// SAFETY: This case only matches kinds allocated as a ArrayLiteralExpression, which embeds its Node header at offset zero.
 		return (*ArrayLiteralExpression)(unsafe.Pointer(n)).subtreeFactsWorker(n)
 	case KindObjectLiteralExpression:
+		// SAFETY: This case only matches kinds allocated as a ObjectLiteralExpression, which embeds its Node header at offset zero.
 		return (*ObjectLiteralExpression)(unsafe.Pointer(n)).subtreeFactsWorker(n)
 	case KindSpreadAssignment:
 		return n.computeSubtreeFacts()
 	case KindPropertyAssignment:
+		// SAFETY: This case only matches kinds allocated as a PropertyAssignment, which embeds its Node header at offset zero.
 		return (*PropertyAssignment)(unsafe.Pointer(n)).subtreeFactsWorker(n)
 	case KindShorthandPropertyAssignment:
+		// SAFETY: This case only matches kinds allocated as a ShorthandPropertyAssignment, which embeds its Node header at offset zero.
 		return (*ShorthandPropertyAssignment)(unsafe.Pointer(n)).subtreeFactsWorker(n)
 	case KindDeleteExpression:
 		return n.computeSubtreeFacts()
@@ -10088,6 +10670,7 @@ func (n *Node) SubtreeFacts() SubtreeFacts {
 	case KindTypeReference:
 		return n.computeSubtreeFacts()
 	case KindExpressionWithTypeArguments:
+		// SAFETY: This case only matches kinds allocated as a ExpressionWithTypeArguments, which embeds its Node header at offset zero.
 		return (*ExpressionWithTypeArguments)(unsafe.Pointer(n)).subtreeFactsWorker(n)
 	case KindLiteralType:
 		return n.computeSubtreeFacts()
@@ -10096,8 +10679,10 @@ func (n *Node) SubtreeFacts() SubtreeFacts {
 	case KindTypePredicate:
 		return n.computeSubtreeFacts()
 	case KindImportAttribute:
+		// SAFETY: This case only matches kinds allocated as a ImportAttribute, which embeds its Node header at offset zero.
 		return (*ImportAttribute)(unsafe.Pointer(n)).subtreeFactsWorker(n)
 	case KindImportAttributes:
+		// SAFETY: This case only matches kinds allocated as a ImportAttributes, which embeds its Node header at offset zero.
 		return (*ImportAttributes)(unsafe.Pointer(n)).subtreeFactsWorker(n)
 	case KindTypeQuery:
 		return n.computeSubtreeFacts()
@@ -10128,22 +10713,29 @@ func (n *Node) SubtreeFacts() SubtreeFacts {
 	case KindPartiallyEmittedExpression:
 		return n.computeSubtreeFacts()
 	case KindJsxElement:
+		// SAFETY: This case only matches kinds allocated as a JsxElement, which embeds its Node header at offset zero.
 		return (*JsxElement)(unsafe.Pointer(n)).subtreeFactsWorker(n)
 	case KindJsxAttributes:
+		// SAFETY: This case only matches kinds allocated as a JsxAttributes, which embeds its Node header at offset zero.
 		return (*JsxAttributes)(unsafe.Pointer(n)).subtreeFactsWorker(n)
 	case KindJsxNamespacedName:
+		// SAFETY: This case only matches kinds allocated as a JsxNamespacedName, which embeds its Node header at offset zero.
 		return (*JsxNamespacedName)(unsafe.Pointer(n)).subtreeFactsWorker(n)
 	case KindJsxOpeningElement:
+		// SAFETY: This case only matches kinds allocated as a JsxOpeningElement, which embeds its Node header at offset zero.
 		return (*JsxOpeningElement)(unsafe.Pointer(n)).subtreeFactsWorker(n)
 	case KindJsxSelfClosingElement:
+		// SAFETY: This case only matches kinds allocated as a JsxSelfClosingElement, which embeds its Node header at offset zero.
 		return (*JsxSelfClosingElement)(unsafe.Pointer(n)).subtreeFactsWorker(n)
 	case KindJsxFragment:
+		// SAFETY: This case only matches kinds allocated as a JsxFragment, which embeds its Node header at offset zero.
 		return (*JsxFragment)(unsafe.Pointer(n)).subtreeFactsWorker(n)
 	case KindJsxOpeningFragment:
 		return n.computeSubtreeFacts()
 	case KindJsxClosingFragment:
 		return n.computeSubtreeFacts()
 	case KindJsxAttribute:
+		// SAFETY: This case only matches kinds allocated as a JsxAttribute, which embeds its Node header at offset zero.
 		return (*JsxAttribute)(unsafe.Pointer(n)).subtreeFactsWorker(n)
 	case KindJsxSpreadAttribute:
 		return n.computeSubtreeFacts()
@@ -10212,18 +10804,24 @@ func (n *Node) SubtreeFacts() SubtreeFacts {
 	case KindJSDocNameReference:
 		return n.computeSubtreeFacts()
 	case KindSourceFile:
+		// SAFETY: This case only matches kinds allocated as a SourceFile, which embeds its Node header at offset zero.
 		return (*SourceFile)(unsafe.Pointer(n)).subtreeFactsWorker(n)
 	case KindModuleDeclaration:
+		// SAFETY: This case only matches kinds allocated as a ModuleDeclaration, which embeds its Node header at offset zero.
 		return (*ModuleDeclaration)(unsafe.Pointer(n)).subtreeFactsWorker(n)
 	case KindImportEqualsDeclaration:
+		// SAFETY: This case only matches kinds allocated as a ImportEqualsDeclaration, which embeds its Node header at offset zero.
 		return (*ImportEqualsDeclaration)(unsafe.Pointer(n)).subtreeFactsWorker(n)
 	case KindExportDeclaration:
+		// SAFETY: This case only matches kinds allocated as a ExportDeclaration, which embeds its Node header at offset zero.
 		return (*ExportDeclaration)(unsafe.Pointer(n)).subtreeFactsWorker(n)
 	case KindImportType:
 		return n.computeSubtreeFacts()
 	case KindImportClause:
+		// SAFETY: This case only matches kinds allocated as a ImportClause, which embeds its Node header at offset zero.
 		return (*ImportClause)(unsafe.Pointer(n)).subtreeFactsWorker(n)
 	case KindImportSpecifier:
+		// SAFETY: This case only matches kinds allocated as a ImportSpecifier, which embeds its Node header at offset zero.
 		return (*ImportSpecifier)(unsafe.Pointer(n)).subtreeFactsWorker(n)
 	case KindJSDocText:
 		return n.computeSubtreeFacts()
@@ -10249,388 +10847,580 @@ func (n *Node) SubtreeFacts() SubtreeFacts {
 func (n *Node) computeSubtreeFacts() SubtreeFacts {
 	switch n.Kind {
 	case KindUnknown, KindEndOfFile, KindSingleLineCommentTrivia, KindMultiLineCommentTrivia, KindNewLineTrivia, KindWhitespaceTrivia, KindConflictMarkerTrivia, KindNonTextFileMarkerTrivia, KindJsxTextAllWhiteSpaces, KindOpenBraceToken, KindCloseBraceToken, KindOpenParenToken, KindCloseParenToken, KindOpenBracketToken, KindCloseBracketToken, KindDotToken, KindDotDotDotToken, KindSemicolonToken, KindCommaToken, KindQuestionDotToken, KindLessThanToken, KindLessThanSlashToken, KindGreaterThanToken, KindLessThanEqualsToken, KindGreaterThanEqualsToken, KindEqualsEqualsToken, KindExclamationEqualsToken, KindEqualsEqualsEqualsToken, KindExclamationEqualsEqualsToken, KindEqualsGreaterThanToken, KindPlusToken, KindMinusToken, KindAsteriskToken, KindAsteriskAsteriskToken, KindSlashToken, KindPercentToken, KindPlusPlusToken, KindMinusMinusToken, KindLessThanLessThanToken, KindGreaterThanGreaterThanToken, KindGreaterThanGreaterThanGreaterThanToken, KindAmpersandToken, KindBarToken, KindCaretToken, KindExclamationToken, KindTildeToken, KindAmpersandAmpersandToken, KindBarBarToken, KindQuestionToken, KindColonToken, KindAtToken, KindQuestionQuestionToken, KindBacktickToken, KindHashToken, KindEqualsToken, KindPlusEqualsToken, KindMinusEqualsToken, KindAsteriskEqualsToken, KindAsteriskAsteriskEqualsToken, KindSlashEqualsToken, KindPercentEqualsToken, KindLessThanLessThanEqualsToken, KindGreaterThanGreaterThanEqualsToken, KindGreaterThanGreaterThanGreaterThanEqualsToken, KindAmpersandEqualsToken, KindBarEqualsToken, KindBarBarEqualsToken, KindAmpersandAmpersandEqualsToken, KindQuestionQuestionEqualsToken, KindCaretEqualsToken, KindJSDocCommentTextToken, KindBreakKeyword, KindCaseKeyword, KindCatchKeyword, KindClassKeyword, KindConstKeyword, KindContinueKeyword, KindDebuggerKeyword, KindDefaultKeyword, KindDeleteKeyword, KindDoKeyword, KindElseKeyword, KindEnumKeyword, KindExportKeyword, KindExtendsKeyword, KindFinallyKeyword, KindForKeyword, KindFunctionKeyword, KindIfKeyword, KindInKeyword, KindInstanceOfKeyword, KindNewKeyword, KindReturnKeyword, KindSwitchKeyword, KindThrowKeyword, KindTryKeyword, KindTypeOfKeyword, KindVarKeyword, KindWhileKeyword, KindWithKeyword, KindImplementsKeyword, KindInterfaceKeyword, KindLetKeyword, KindPackageKeyword, KindPrivateKeyword, KindProtectedKeyword, KindPublicKeyword, KindStaticKeyword, KindYieldKeyword, KindAbstractKeyword, KindAccessorKeyword, KindAsKeyword, KindAssertsKeyword, KindAssertKeyword, KindAsyncKeyword, KindAwaitKeyword, KindConstructorKeyword, KindDeclareKeyword, KindGetKeyword, KindImmediateKeyword, KindInferKeyword, KindIsKeyword, KindKeyOfKeyword, KindModuleKeyword, KindNamespaceKeyword, KindOutKeyword, KindReadonlyKeyword, KindRequireKeyword, KindSatisfiesKeyword, KindSetKeyword, KindTypeKeyword, KindUniqueKeyword, KindUsingKeyword, KindFromKeyword, KindGlobalKeyword, KindOverrideKeyword, KindOfKeyword, KindDeferKeyword, KindSourceKeyword:
+		// SAFETY: This case only matches kinds allocated as a Token, which embeds its Node header at offset zero.
 		return (*Token)(unsafe.Pointer(n)).computeSubtreeFacts()
 	case KindNumericLiteral:
+		// SAFETY: This case only matches kinds allocated as a NumericLiteral, which embeds its Node header at offset zero.
 		return (*NumericLiteral)(unsafe.Pointer(n)).computeSubtreeFacts()
 	case KindBigIntLiteral:
+		// SAFETY: This case only matches kinds allocated as a BigIntLiteral, which embeds its Node header at offset zero.
 		return (*BigIntLiteral)(unsafe.Pointer(n)).computeSubtreeFacts()
 	case KindStringLiteral:
+		// SAFETY: This case only matches kinds allocated as a StringLiteral, which embeds its Node header at offset zero.
 		return (*StringLiteral)(unsafe.Pointer(n)).computeSubtreeFacts()
 	case KindJsxText:
+		// SAFETY: This case only matches kinds allocated as a JsxText, which embeds its Node header at offset zero.
 		return (*JsxText)(unsafe.Pointer(n)).computeSubtreeFacts()
 	case KindRegularExpressionLiteral:
+		// SAFETY: This case only matches kinds allocated as a RegularExpressionLiteral, which embeds its Node header at offset zero.
 		return (*RegularExpressionLiteral)(unsafe.Pointer(n)).computeSubtreeFacts()
 	case KindNoSubstitutionTemplateLiteral:
+		// SAFETY: This case only matches kinds allocated as a NoSubstitutionTemplateLiteral, which embeds its Node header at offset zero.
 		return (*NoSubstitutionTemplateLiteral)(unsafe.Pointer(n)).computeSubtreeFacts()
 	case KindTemplateHead:
+		// SAFETY: This case only matches kinds allocated as a TemplateHead, which embeds its Node header at offset zero.
 		return (*TemplateHead)(unsafe.Pointer(n)).computeSubtreeFacts()
 	case KindTemplateMiddle:
+		// SAFETY: This case only matches kinds allocated as a TemplateMiddle, which embeds its Node header at offset zero.
 		return (*TemplateMiddle)(unsafe.Pointer(n)).computeSubtreeFacts()
 	case KindTemplateTail:
+		// SAFETY: This case only matches kinds allocated as a TemplateTail, which embeds its Node header at offset zero.
 		return (*TemplateTail)(unsafe.Pointer(n)).computeSubtreeFacts()
 	case KindIdentifier:
+		// SAFETY: This case only matches kinds allocated as a Identifier, which embeds its Node header at offset zero.
 		return (*Identifier)(unsafe.Pointer(n)).computeSubtreeFacts()
 	case KindPrivateIdentifier:
+		// SAFETY: This case only matches kinds allocated as a PrivateIdentifier, which embeds its Node header at offset zero.
 		return (*PrivateIdentifier)(unsafe.Pointer(n)).computeSubtreeFacts()
 	case KindFalseKeyword, KindImportKeyword, KindNullKeyword, KindSuperKeyword, KindThisKeyword, KindTrueKeyword:
+		// SAFETY: This case only matches kinds allocated as a KeywordExpression, which embeds its Node header at offset zero.
 		return (*KeywordExpression)(unsafe.Pointer(n)).computeSubtreeFacts()
 	case KindVoidKeyword, KindAnyKeyword, KindBooleanKeyword, KindIntrinsicKeyword, KindNeverKeyword, KindNumberKeyword, KindObjectKeyword, KindStringKeyword, KindSymbolKeyword, KindUndefinedKeyword, KindUnknownKeyword, KindBigIntKeyword:
+		// SAFETY: This case only matches kinds allocated as a KeywordTypeNode, which embeds its Node header at offset zero.
 		return (*KeywordTypeNode)(unsafe.Pointer(n)).computeSubtreeFacts()
 	case KindQualifiedName:
+		// SAFETY: This case only matches kinds allocated as a QualifiedName, which embeds its Node header at offset zero.
 		return (*QualifiedName)(unsafe.Pointer(n)).computeSubtreeFacts()
 	case KindComputedPropertyName:
+		// SAFETY: This case only matches kinds allocated as a ComputedPropertyName, which embeds its Node header at offset zero.
 		return (*ComputedPropertyName)(unsafe.Pointer(n)).computeSubtreeFacts()
 	case KindDecorator:
+		// SAFETY: This case only matches kinds allocated as a Decorator, which embeds its Node header at offset zero.
 		return (*Decorator)(unsafe.Pointer(n)).computeSubtreeFacts()
 	case KindEmptyStatement:
+		// SAFETY: This case only matches kinds allocated as a EmptyStatement, which embeds its Node header at offset zero.
 		return (*EmptyStatement)(unsafe.Pointer(n)).computeSubtreeFacts()
 	case KindIfStatement:
+		// SAFETY: This case only matches kinds allocated as a IfStatement, which embeds its Node header at offset zero.
 		return (*IfStatement)(unsafe.Pointer(n)).computeSubtreeFacts()
 	case KindDoStatement:
+		// SAFETY: This case only matches kinds allocated as a DoStatement, which embeds its Node header at offset zero.
 		return (*DoStatement)(unsafe.Pointer(n)).computeSubtreeFacts()
 	case KindWhileStatement:
+		// SAFETY: This case only matches kinds allocated as a WhileStatement, which embeds its Node header at offset zero.
 		return (*WhileStatement)(unsafe.Pointer(n)).computeSubtreeFacts()
 	case KindForStatement:
+		// SAFETY: This case only matches kinds allocated as a ForStatement, which embeds its Node header at offset zero.
 		return (*ForStatement)(unsafe.Pointer(n)).computeSubtreeFacts()
 	case KindForInStatement, KindForOfStatement:
+		// SAFETY: This case only matches kinds allocated as a ForInOrOfStatement, which embeds its Node header at offset zero.
 		return (*ForInOrOfStatement)(unsafe.Pointer(n)).computeSubtreeFacts()
 	case KindBreakStatement:
+		// SAFETY: This case only matches kinds allocated as a BreakStatement, which embeds its Node header at offset zero.
 		return (*BreakStatement)(unsafe.Pointer(n)).computeSubtreeFacts()
 	case KindContinueStatement:
+		// SAFETY: This case only matches kinds allocated as a ContinueStatement, which embeds its Node header at offset zero.
 		return (*ContinueStatement)(unsafe.Pointer(n)).computeSubtreeFacts()
 	case KindReturnStatement:
+		// SAFETY: This case only matches kinds allocated as a ReturnStatement, which embeds its Node header at offset zero.
 		return (*ReturnStatement)(unsafe.Pointer(n)).computeSubtreeFacts()
 	case KindWithStatement:
+		// SAFETY: This case only matches kinds allocated as a WithStatement, which embeds its Node header at offset zero.
 		return (*WithStatement)(unsafe.Pointer(n)).computeSubtreeFacts()
 	case KindSwitchStatement:
+		// SAFETY: This case only matches kinds allocated as a SwitchStatement, which embeds its Node header at offset zero.
 		return (*SwitchStatement)(unsafe.Pointer(n)).computeSubtreeFacts()
 	case KindCaseBlock:
+		// SAFETY: This case only matches kinds allocated as a CaseBlock, which embeds its Node header at offset zero.
 		return (*CaseBlock)(unsafe.Pointer(n)).computeSubtreeFacts()
 	case KindCaseClause, KindDefaultClause:
+		// SAFETY: This case only matches kinds allocated as a CaseOrDefaultClause, which embeds its Node header at offset zero.
 		return (*CaseOrDefaultClause)(unsafe.Pointer(n)).computeSubtreeFacts()
 	case KindThrowStatement:
+		// SAFETY: This case only matches kinds allocated as a ThrowStatement, which embeds its Node header at offset zero.
 		return (*ThrowStatement)(unsafe.Pointer(n)).computeSubtreeFacts()
 	case KindTryStatement:
+		// SAFETY: This case only matches kinds allocated as a TryStatement, which embeds its Node header at offset zero.
 		return (*TryStatement)(unsafe.Pointer(n)).computeSubtreeFacts()
 	case KindCatchClause:
+		// SAFETY: This case only matches kinds allocated as a CatchClause, which embeds its Node header at offset zero.
 		return (*CatchClause)(unsafe.Pointer(n)).computeSubtreeFacts()
 	case KindDebuggerStatement:
+		// SAFETY: This case only matches kinds allocated as a DebuggerStatement, which embeds its Node header at offset zero.
 		return (*DebuggerStatement)(unsafe.Pointer(n)).computeSubtreeFacts()
 	case KindLabeledStatement:
+		// SAFETY: This case only matches kinds allocated as a LabeledStatement, which embeds its Node header at offset zero.
 		return (*LabeledStatement)(unsafe.Pointer(n)).computeSubtreeFacts()
 	case KindExpressionStatement:
+		// SAFETY: This case only matches kinds allocated as a ExpressionStatement, which embeds its Node header at offset zero.
 		return (*ExpressionStatement)(unsafe.Pointer(n)).computeSubtreeFacts()
 	case KindBlock:
+		// SAFETY: This case only matches kinds allocated as a Block, which embeds its Node header at offset zero.
 		return (*Block)(unsafe.Pointer(n)).computeSubtreeFacts()
 	case KindVariableStatement:
+		// SAFETY: This case only matches kinds allocated as a VariableStatement, which embeds its Node header at offset zero.
 		return (*VariableStatement)(unsafe.Pointer(n)).computeSubtreeFacts()
 	case KindVariableDeclaration:
+		// SAFETY: This case only matches kinds allocated as a VariableDeclaration, which embeds its Node header at offset zero.
 		return (*VariableDeclaration)(unsafe.Pointer(n)).computeSubtreeFacts()
 	case KindVariableDeclarationList:
+		// SAFETY: This case only matches kinds allocated as a VariableDeclarationList, which embeds its Node header at offset zero.
 		return (*VariableDeclarationList)(unsafe.Pointer(n)).computeSubtreeFacts()
 	case KindObjectBindingPattern, KindArrayBindingPattern:
+		// SAFETY: This case only matches kinds allocated as a BindingPattern, which embeds its Node header at offset zero.
 		return (*BindingPattern)(unsafe.Pointer(n)).computeSubtreeFacts()
 	case KindParameter:
+		// SAFETY: This case only matches kinds allocated as a ParameterDeclaration, which embeds its Node header at offset zero.
 		return (*ParameterDeclaration)(unsafe.Pointer(n)).computeSubtreeFacts()
 	case KindBindingElement:
+		// SAFETY: This case only matches kinds allocated as a BindingElement, which embeds its Node header at offset zero.
 		return (*BindingElement)(unsafe.Pointer(n)).computeSubtreeFacts()
 	case KindMissingDeclaration:
+		// SAFETY: This case only matches kinds allocated as a MissingDeclaration, which embeds its Node header at offset zero.
 		return (*MissingDeclaration)(unsafe.Pointer(n)).computeSubtreeFacts()
 	case KindFunctionDeclaration:
+		// SAFETY: This case only matches kinds allocated as a FunctionDeclaration, which embeds its Node header at offset zero.
 		return (*FunctionDeclaration)(unsafe.Pointer(n)).computeSubtreeFacts()
 	case KindClassDeclaration:
+		// SAFETY: This case only matches kinds allocated as a ClassDeclaration, which embeds its Node header at offset zero.
 		return (*ClassDeclaration)(unsafe.Pointer(n)).computeSubtreeFacts()
 	case KindClassExpression:
+		// SAFETY: This case only matches kinds allocated as a ClassExpression, which embeds its Node header at offset zero.
 		return (*ClassExpression)(unsafe.Pointer(n)).computeSubtreeFacts()
 	case KindHeritageClause:
+		// SAFETY: This case only matches kinds allocated as a HeritageClause, which embeds its Node header at offset zero.
 		return (*HeritageClause)(unsafe.Pointer(n)).computeSubtreeFacts()
 	case KindInterfaceDeclaration:
+		// SAFETY: This case only matches kinds allocated as a InterfaceDeclaration, which embeds its Node header at offset zero.
 		return (*InterfaceDeclaration)(unsafe.Pointer(n)).computeSubtreeFacts()
 	case KindTypeAliasDeclaration, KindJSTypeAliasDeclaration:
+		// SAFETY: This case only matches kinds allocated as a TypeAliasDeclaration, which embeds its Node header at offset zero.
 		return (*TypeAliasDeclaration)(unsafe.Pointer(n)).computeSubtreeFacts()
 	case KindEnumMember:
+		// SAFETY: This case only matches kinds allocated as a EnumMember, which embeds its Node header at offset zero.
 		return (*EnumMember)(unsafe.Pointer(n)).computeSubtreeFacts()
 	case KindEnumDeclaration:
+		// SAFETY: This case only matches kinds allocated as a EnumDeclaration, which embeds its Node header at offset zero.
 		return (*EnumDeclaration)(unsafe.Pointer(n)).computeSubtreeFacts()
 	case KindModuleBlock:
+		// SAFETY: This case only matches kinds allocated as a ModuleBlock, which embeds its Node header at offset zero.
 		return (*ModuleBlock)(unsafe.Pointer(n)).computeSubtreeFacts()
 	case KindNotEmittedStatement:
+		// SAFETY: This case only matches kinds allocated as a NotEmittedStatement, which embeds its Node header at offset zero.
 		return (*NotEmittedStatement)(unsafe.Pointer(n)).computeSubtreeFacts()
 	case KindNotEmittedTypeElement:
+		// SAFETY: This case only matches kinds allocated as a NotEmittedTypeElement, which embeds its Node header at offset zero.
 		return (*NotEmittedTypeElement)(unsafe.Pointer(n)).computeSubtreeFacts()
 	case KindImportDeclaration, KindJSImportDeclaration:
+		// SAFETY: This case only matches kinds allocated as a ImportDeclaration, which embeds its Node header at offset zero.
 		return (*ImportDeclaration)(unsafe.Pointer(n)).computeSubtreeFacts()
 	case KindExternalModuleReference:
+		// SAFETY: This case only matches kinds allocated as a ExternalModuleReference, which embeds its Node header at offset zero.
 		return (*ExternalModuleReference)(unsafe.Pointer(n)).computeSubtreeFacts()
 	case KindNamespaceImport:
+		// SAFETY: This case only matches kinds allocated as a NamespaceImport, which embeds its Node header at offset zero.
 		return (*NamespaceImport)(unsafe.Pointer(n)).computeSubtreeFacts()
 	case KindNamedImports:
+		// SAFETY: This case only matches kinds allocated as a NamedImports, which embeds its Node header at offset zero.
 		return (*NamedImports)(unsafe.Pointer(n)).computeSubtreeFacts()
 	case KindExportAssignment:
+		// SAFETY: This case only matches kinds allocated as a ExportAssignment, which embeds its Node header at offset zero.
 		return (*ExportAssignment)(unsafe.Pointer(n)).computeSubtreeFacts()
 	case KindNamespaceExportDeclaration:
+		// SAFETY: This case only matches kinds allocated as a NamespaceExportDeclaration, which embeds its Node header at offset zero.
 		return (*NamespaceExportDeclaration)(unsafe.Pointer(n)).computeSubtreeFacts()
 	case KindNamespaceExport:
+		// SAFETY: This case only matches kinds allocated as a NamespaceExport, which embeds its Node header at offset zero.
 		return (*NamespaceExport)(unsafe.Pointer(n)).computeSubtreeFacts()
 	case KindNamedExports:
+		// SAFETY: This case only matches kinds allocated as a NamedExports, which embeds its Node header at offset zero.
 		return (*NamedExports)(unsafe.Pointer(n)).computeSubtreeFacts()
 	case KindExportSpecifier:
+		// SAFETY: This case only matches kinds allocated as a ExportSpecifier, which embeds its Node header at offset zero.
 		return (*ExportSpecifier)(unsafe.Pointer(n)).computeSubtreeFacts()
 	case KindCallSignature:
+		// SAFETY: This case only matches kinds allocated as a CallSignatureDeclaration, which embeds its Node header at offset zero.
 		return (*CallSignatureDeclaration)(unsafe.Pointer(n)).computeSubtreeFacts()
 	case KindConstructSignature:
+		// SAFETY: This case only matches kinds allocated as a ConstructSignatureDeclaration, which embeds its Node header at offset zero.
 		return (*ConstructSignatureDeclaration)(unsafe.Pointer(n)).computeSubtreeFacts()
 	case KindConstructor:
+		// SAFETY: This case only matches kinds allocated as a ConstructorDeclaration, which embeds its Node header at offset zero.
 		return (*ConstructorDeclaration)(unsafe.Pointer(n)).computeSubtreeFacts()
 	case KindGetAccessor:
+		// SAFETY: This case only matches kinds allocated as a GetAccessorDeclaration, which embeds its Node header at offset zero.
 		return (*GetAccessorDeclaration)(unsafe.Pointer(n)).computeSubtreeFacts()
 	case KindSetAccessor:
+		// SAFETY: This case only matches kinds allocated as a SetAccessorDeclaration, which embeds its Node header at offset zero.
 		return (*SetAccessorDeclaration)(unsafe.Pointer(n)).computeSubtreeFacts()
 	case KindIndexSignature:
+		// SAFETY: This case only matches kinds allocated as a IndexSignatureDeclaration, which embeds its Node header at offset zero.
 		return (*IndexSignatureDeclaration)(unsafe.Pointer(n)).computeSubtreeFacts()
 	case KindMethodSignature:
+		// SAFETY: This case only matches kinds allocated as a MethodSignatureDeclaration, which embeds its Node header at offset zero.
 		return (*MethodSignatureDeclaration)(unsafe.Pointer(n)).computeSubtreeFacts()
 	case KindMethodDeclaration:
+		// SAFETY: This case only matches kinds allocated as a MethodDeclaration, which embeds its Node header at offset zero.
 		return (*MethodDeclaration)(unsafe.Pointer(n)).computeSubtreeFacts()
 	case KindPropertySignature:
+		// SAFETY: This case only matches kinds allocated as a PropertySignatureDeclaration, which embeds its Node header at offset zero.
 		return (*PropertySignatureDeclaration)(unsafe.Pointer(n)).computeSubtreeFacts()
 	case KindPropertyDeclaration:
+		// SAFETY: This case only matches kinds allocated as a PropertyDeclaration, which embeds its Node header at offset zero.
 		return (*PropertyDeclaration)(unsafe.Pointer(n)).computeSubtreeFacts()
 	case KindSemicolonClassElement:
+		// SAFETY: This case only matches kinds allocated as a SemicolonClassElement, which embeds its Node header at offset zero.
 		return (*SemicolonClassElement)(unsafe.Pointer(n)).computeSubtreeFacts()
 	case KindClassStaticBlockDeclaration:
+		// SAFETY: This case only matches kinds allocated as a ClassStaticBlockDeclaration, which embeds its Node header at offset zero.
 		return (*ClassStaticBlockDeclaration)(unsafe.Pointer(n)).computeSubtreeFacts()
 	case KindOmittedExpression:
+		// SAFETY: This case only matches kinds allocated as a OmittedExpression, which embeds its Node header at offset zero.
 		return (*OmittedExpression)(unsafe.Pointer(n)).computeSubtreeFacts()
 	case KindBinaryExpression:
+		// SAFETY: This case only matches kinds allocated as a BinaryExpression, which embeds its Node header at offset zero.
 		return (*BinaryExpression)(unsafe.Pointer(n)).computeSubtreeFacts()
 	case KindPrefixUnaryExpression:
+		// SAFETY: This case only matches kinds allocated as a PrefixUnaryExpression, which embeds its Node header at offset zero.
 		return (*PrefixUnaryExpression)(unsafe.Pointer(n)).computeSubtreeFacts()
 	case KindPostfixUnaryExpression:
+		// SAFETY: This case only matches kinds allocated as a PostfixUnaryExpression, which embeds its Node header at offset zero.
 		return (*PostfixUnaryExpression)(unsafe.Pointer(n)).computeSubtreeFacts()
 	case KindYieldExpression:
+		// SAFETY: This case only matches kinds allocated as a YieldExpression, which embeds its Node header at offset zero.
 		return (*YieldExpression)(unsafe.Pointer(n)).computeSubtreeFacts()
 	case KindArrowFunction:
+		// SAFETY: This case only matches kinds allocated as a ArrowFunction, which embeds its Node header at offset zero.
 		return (*ArrowFunction)(unsafe.Pointer(n)).computeSubtreeFacts()
 	case KindFunctionExpression:
+		// SAFETY: This case only matches kinds allocated as a FunctionExpression, which embeds its Node header at offset zero.
 		return (*FunctionExpression)(unsafe.Pointer(n)).computeSubtreeFacts()
 	case KindAsExpression:
+		// SAFETY: This case only matches kinds allocated as a AsExpression, which embeds its Node header at offset zero.
 		return (*AsExpression)(unsafe.Pointer(n)).computeSubtreeFacts()
 	case KindSatisfiesExpression:
+		// SAFETY: This case only matches kinds allocated as a SatisfiesExpression, which embeds its Node header at offset zero.
 		return (*SatisfiesExpression)(unsafe.Pointer(n)).computeSubtreeFacts()
 	case KindConditionalExpression:
+		// SAFETY: This case only matches kinds allocated as a ConditionalExpression, which embeds its Node header at offset zero.
 		return (*ConditionalExpression)(unsafe.Pointer(n)).computeSubtreeFacts()
 	case KindPropertyAccessExpression:
+		// SAFETY: This case only matches kinds allocated as a PropertyAccessExpression, which embeds its Node header at offset zero.
 		return (*PropertyAccessExpression)(unsafe.Pointer(n)).computeSubtreeFacts()
 	case KindElementAccessExpression:
+		// SAFETY: This case only matches kinds allocated as a ElementAccessExpression, which embeds its Node header at offset zero.
 		return (*ElementAccessExpression)(unsafe.Pointer(n)).computeSubtreeFacts()
 	case KindCallExpression:
+		// SAFETY: This case only matches kinds allocated as a CallExpression, which embeds its Node header at offset zero.
 		return (*CallExpression)(unsafe.Pointer(n)).computeSubtreeFacts()
 	case KindNewExpression:
+		// SAFETY: This case only matches kinds allocated as a NewExpression, which embeds its Node header at offset zero.
 		return (*NewExpression)(unsafe.Pointer(n)).computeSubtreeFacts()
 	case KindMetaProperty:
+		// SAFETY: This case only matches kinds allocated as a MetaProperty, which embeds its Node header at offset zero.
 		return (*MetaProperty)(unsafe.Pointer(n)).computeSubtreeFacts()
 	case KindNonNullExpression:
+		// SAFETY: This case only matches kinds allocated as a NonNullExpression, which embeds its Node header at offset zero.
 		return (*NonNullExpression)(unsafe.Pointer(n)).computeSubtreeFacts()
 	case KindSpreadElement:
+		// SAFETY: This case only matches kinds allocated as a SpreadElement, which embeds its Node header at offset zero.
 		return (*SpreadElement)(unsafe.Pointer(n)).computeSubtreeFacts()
 	case KindTemplateExpression:
+		// SAFETY: This case only matches kinds allocated as a TemplateExpression, which embeds its Node header at offset zero.
 		return (*TemplateExpression)(unsafe.Pointer(n)).computeSubtreeFacts()
 	case KindTemplateSpan:
+		// SAFETY: This case only matches kinds allocated as a TemplateSpan, which embeds its Node header at offset zero.
 		return (*TemplateSpan)(unsafe.Pointer(n)).computeSubtreeFacts()
 	case KindTaggedTemplateExpression:
+		// SAFETY: This case only matches kinds allocated as a TaggedTemplateExpression, which embeds its Node header at offset zero.
 		return (*TaggedTemplateExpression)(unsafe.Pointer(n)).computeSubtreeFacts()
 	case KindParenthesizedExpression:
+		// SAFETY: This case only matches kinds allocated as a ParenthesizedExpression, which embeds its Node header at offset zero.
 		return (*ParenthesizedExpression)(unsafe.Pointer(n)).computeSubtreeFacts()
 	case KindArrayLiteralExpression:
+		// SAFETY: This case only matches kinds allocated as a ArrayLiteralExpression, which embeds its Node header at offset zero.
 		return (*ArrayLiteralExpression)(unsafe.Pointer(n)).computeSubtreeFacts()
 	case KindObjectLiteralExpression:
+		// SAFETY: This case only matches kinds allocated as a ObjectLiteralExpression, which embeds its Node header at offset zero.
 		return (*ObjectLiteralExpression)(unsafe.Pointer(n)).computeSubtreeFacts()
 	case KindSpreadAssignment:
+		// SAFETY: This case only matches kinds allocated as a SpreadAssignment, which embeds its Node header at offset zero.
 		return (*SpreadAssignment)(unsafe.Pointer(n)).computeSubtreeFacts()
 	case KindPropertyAssignment:
+		// SAFETY: This case only matches kinds allocated as a PropertyAssignment, which embeds its Node header at offset zero.
 		return (*PropertyAssignment)(unsafe.Pointer(n)).computeSubtreeFacts()
 	case KindShorthandPropertyAssignment:
+		// SAFETY: This case only matches kinds allocated as a ShorthandPropertyAssignment, which embeds its Node header at offset zero.
 		return (*ShorthandPropertyAssignment)(unsafe.Pointer(n)).computeSubtreeFacts()
 	case KindDeleteExpression:
+		// SAFETY: This case only matches kinds allocated as a DeleteExpression, which embeds its Node header at offset zero.
 		return (*DeleteExpression)(unsafe.Pointer(n)).computeSubtreeFacts()
 	case KindTypeOfExpression:
+		// SAFETY: This case only matches kinds allocated as a TypeOfExpression, which embeds its Node header at offset zero.
 		return (*TypeOfExpression)(unsafe.Pointer(n)).computeSubtreeFacts()
 	case KindVoidExpression:
+		// SAFETY: This case only matches kinds allocated as a VoidExpression, which embeds its Node header at offset zero.
 		return (*VoidExpression)(unsafe.Pointer(n)).computeSubtreeFacts()
 	case KindAwaitExpression:
+		// SAFETY: This case only matches kinds allocated as a AwaitExpression, which embeds its Node header at offset zero.
 		return (*AwaitExpression)(unsafe.Pointer(n)).computeSubtreeFacts()
 	case KindTypeAssertionExpression:
+		// SAFETY: This case only matches kinds allocated as a TypeAssertion, which embeds its Node header at offset zero.
 		return (*TypeAssertion)(unsafe.Pointer(n)).computeSubtreeFacts()
 	case KindUnionType:
+		// SAFETY: This case only matches kinds allocated as a UnionTypeNode, which embeds its Node header at offset zero.
 		return (*UnionTypeNode)(unsafe.Pointer(n)).computeSubtreeFacts()
 	case KindIntersectionType:
+		// SAFETY: This case only matches kinds allocated as a IntersectionTypeNode, which embeds its Node header at offset zero.
 		return (*IntersectionTypeNode)(unsafe.Pointer(n)).computeSubtreeFacts()
 	case KindConditionalType:
+		// SAFETY: This case only matches kinds allocated as a ConditionalTypeNode, which embeds its Node header at offset zero.
 		return (*ConditionalTypeNode)(unsafe.Pointer(n)).computeSubtreeFacts()
 	case KindTypeOperator:
+		// SAFETY: This case only matches kinds allocated as a TypeOperatorNode, which embeds its Node header at offset zero.
 		return (*TypeOperatorNode)(unsafe.Pointer(n)).computeSubtreeFacts()
 	case KindInferType:
+		// SAFETY: This case only matches kinds allocated as a InferTypeNode, which embeds its Node header at offset zero.
 		return (*InferTypeNode)(unsafe.Pointer(n)).computeSubtreeFacts()
 	case KindArrayType:
+		// SAFETY: This case only matches kinds allocated as a ArrayTypeNode, which embeds its Node header at offset zero.
 		return (*ArrayTypeNode)(unsafe.Pointer(n)).computeSubtreeFacts()
 	case KindIndexedAccessType:
+		// SAFETY: This case only matches kinds allocated as a IndexedAccessTypeNode, which embeds its Node header at offset zero.
 		return (*IndexedAccessTypeNode)(unsafe.Pointer(n)).computeSubtreeFacts()
 	case KindTypeReference:
+		// SAFETY: This case only matches kinds allocated as a TypeReferenceNode, which embeds its Node header at offset zero.
 		return (*TypeReferenceNode)(unsafe.Pointer(n)).computeSubtreeFacts()
 	case KindExpressionWithTypeArguments:
+		// SAFETY: This case only matches kinds allocated as a ExpressionWithTypeArguments, which embeds its Node header at offset zero.
 		return (*ExpressionWithTypeArguments)(unsafe.Pointer(n)).computeSubtreeFacts()
 	case KindLiteralType:
+		// SAFETY: This case only matches kinds allocated as a LiteralTypeNode, which embeds its Node header at offset zero.
 		return (*LiteralTypeNode)(unsafe.Pointer(n)).computeSubtreeFacts()
 	case KindThisType:
+		// SAFETY: This case only matches kinds allocated as a ThisTypeNode, which embeds its Node header at offset zero.
 		return (*ThisTypeNode)(unsafe.Pointer(n)).computeSubtreeFacts()
 	case KindTypePredicate:
+		// SAFETY: This case only matches kinds allocated as a TypePredicateNode, which embeds its Node header at offset zero.
 		return (*TypePredicateNode)(unsafe.Pointer(n)).computeSubtreeFacts()
 	case KindImportAttribute:
+		// SAFETY: This case only matches kinds allocated as a ImportAttribute, which embeds its Node header at offset zero.
 		return (*ImportAttribute)(unsafe.Pointer(n)).computeSubtreeFacts()
 	case KindImportAttributes:
+		// SAFETY: This case only matches kinds allocated as a ImportAttributes, which embeds its Node header at offset zero.
 		return (*ImportAttributes)(unsafe.Pointer(n)).computeSubtreeFacts()
 	case KindTypeQuery:
+		// SAFETY: This case only matches kinds allocated as a TypeQueryNode, which embeds its Node header at offset zero.
 		return (*TypeQueryNode)(unsafe.Pointer(n)).computeSubtreeFacts()
 	case KindMappedType:
+		// SAFETY: This case only matches kinds allocated as a MappedTypeNode, which embeds its Node header at offset zero.
 		return (*MappedTypeNode)(unsafe.Pointer(n)).computeSubtreeFacts()
 	case KindTypeLiteral:
+		// SAFETY: This case only matches kinds allocated as a TypeLiteralNode, which embeds its Node header at offset zero.
 		return (*TypeLiteralNode)(unsafe.Pointer(n)).computeSubtreeFacts()
 	case KindTupleType:
+		// SAFETY: This case only matches kinds allocated as a TupleTypeNode, which embeds its Node header at offset zero.
 		return (*TupleTypeNode)(unsafe.Pointer(n)).computeSubtreeFacts()
 	case KindNamedTupleMember:
+		// SAFETY: This case only matches kinds allocated as a NamedTupleMember, which embeds its Node header at offset zero.
 		return (*NamedTupleMember)(unsafe.Pointer(n)).computeSubtreeFacts()
 	case KindOptionalType:
+		// SAFETY: This case only matches kinds allocated as a OptionalTypeNode, which embeds its Node header at offset zero.
 		return (*OptionalTypeNode)(unsafe.Pointer(n)).computeSubtreeFacts()
 	case KindRestType:
+		// SAFETY: This case only matches kinds allocated as a RestTypeNode, which embeds its Node header at offset zero.
 		return (*RestTypeNode)(unsafe.Pointer(n)).computeSubtreeFacts()
 	case KindParenthesizedType:
+		// SAFETY: This case only matches kinds allocated as a ParenthesizedTypeNode, which embeds its Node header at offset zero.
 		return (*ParenthesizedTypeNode)(unsafe.Pointer(n)).computeSubtreeFacts()
 	case KindFunctionType:
+		// SAFETY: This case only matches kinds allocated as a FunctionTypeNode, which embeds its Node header at offset zero.
 		return (*FunctionTypeNode)(unsafe.Pointer(n)).computeSubtreeFacts()
 	case KindConstructorType:
+		// SAFETY: This case only matches kinds allocated as a ConstructorTypeNode, which embeds its Node header at offset zero.
 		return (*ConstructorTypeNode)(unsafe.Pointer(n)).computeSubtreeFacts()
 	case KindTemplateLiteralType:
+		// SAFETY: This case only matches kinds allocated as a TemplateLiteralTypeNode, which embeds its Node header at offset zero.
 		return (*TemplateLiteralTypeNode)(unsafe.Pointer(n)).computeSubtreeFacts()
 	case KindTemplateLiteralTypeSpan:
+		// SAFETY: This case only matches kinds allocated as a TemplateLiteralTypeSpan, which embeds its Node header at offset zero.
 		return (*TemplateLiteralTypeSpan)(unsafe.Pointer(n)).computeSubtreeFacts()
 	case KindSyntheticExpression:
+		// SAFETY: This case only matches kinds allocated as a SyntheticExpression, which embeds its Node header at offset zero.
 		return (*SyntheticExpression)(unsafe.Pointer(n)).computeSubtreeFacts()
 	case KindPartiallyEmittedExpression:
+		// SAFETY: This case only matches kinds allocated as a PartiallyEmittedExpression, which embeds its Node header at offset zero.
 		return (*PartiallyEmittedExpression)(unsafe.Pointer(n)).computeSubtreeFacts()
 	case KindJsxElement:
+		// SAFETY: This case only matches kinds allocated as a JsxElement, which embeds its Node header at offset zero.
 		return (*JsxElement)(unsafe.Pointer(n)).computeSubtreeFacts()
 	case KindJsxAttributes:
+		// SAFETY: This case only matches kinds allocated as a JsxAttributes, which embeds its Node header at offset zero.
 		return (*JsxAttributes)(unsafe.Pointer(n)).computeSubtreeFacts()
 	case KindJsxNamespacedName:
+		// SAFETY: This case only matches kinds allocated as a JsxNamespacedName, which embeds its Node header at offset zero.
 		return (*JsxNamespacedName)(unsafe.Pointer(n)).computeSubtreeFacts()
 	case KindJsxOpeningElement:
+		// SAFETY: This case only matches kinds allocated as a JsxOpeningElement, which embeds its Node header at offset zero.
 		return (*JsxOpeningElement)(unsafe.Pointer(n)).computeSubtreeFacts()
 	case KindJsxSelfClosingElement:
+		// SAFETY: This case only matches kinds allocated as a JsxSelfClosingElement, which embeds its Node header at offset zero.
 		return (*JsxSelfClosingElement)(unsafe.Pointer(n)).computeSubtreeFacts()
 	case KindJsxFragment:
+		// SAFETY: This case only matches kinds allocated as a JsxFragment, which embeds its Node header at offset zero.
 		return (*JsxFragment)(unsafe.Pointer(n)).computeSubtreeFacts()
 	case KindJsxOpeningFragment:
+		// SAFETY: This case only matches kinds allocated as a JsxOpeningFragment, which embeds its Node header at offset zero.
 		return (*JsxOpeningFragment)(unsafe.Pointer(n)).computeSubtreeFacts()
 	case KindJsxClosingFragment:
+		// SAFETY: This case only matches kinds allocated as a JsxClosingFragment, which embeds its Node header at offset zero.
 		return (*JsxClosingFragment)(unsafe.Pointer(n)).computeSubtreeFacts()
 	case KindJsxAttribute:
+		// SAFETY: This case only matches kinds allocated as a JsxAttribute, which embeds its Node header at offset zero.
 		return (*JsxAttribute)(unsafe.Pointer(n)).computeSubtreeFacts()
 	case KindJsxSpreadAttribute:
+		// SAFETY: This case only matches kinds allocated as a JsxSpreadAttribute, which embeds its Node header at offset zero.
 		return (*JsxSpreadAttribute)(unsafe.Pointer(n)).computeSubtreeFacts()
 	case KindJsxClosingElement:
+		// SAFETY: This case only matches kinds allocated as a JsxClosingElement, which embeds its Node header at offset zero.
 		return (*JsxClosingElement)(unsafe.Pointer(n)).computeSubtreeFacts()
 	case KindJsxExpression:
+		// SAFETY: This case only matches kinds allocated as a JsxExpression, which embeds its Node header at offset zero.
 		return (*JsxExpression)(unsafe.Pointer(n)).computeSubtreeFacts()
 	case KindSyntaxList:
+		// SAFETY: This case only matches kinds allocated as a SyntaxList, which embeds its Node header at offset zero.
 		return (*SyntaxList)(unsafe.Pointer(n)).computeSubtreeFacts()
 	case KindJSDoc:
+		// SAFETY: This case only matches kinds allocated as a JSDoc, which embeds its Node header at offset zero.
 		return (*JSDoc)(unsafe.Pointer(n)).computeSubtreeFacts()
 	case KindJSDocTypeExpression:
+		// SAFETY: This case only matches kinds allocated as a JSDocTypeExpression, which embeds its Node header at offset zero.
 		return (*JSDocTypeExpression)(unsafe.Pointer(n)).computeSubtreeFacts()
 	case KindJSDocNonNullableType:
+		// SAFETY: This case only matches kinds allocated as a JSDocNonNullableType, which embeds its Node header at offset zero.
 		return (*JSDocNonNullableType)(unsafe.Pointer(n)).computeSubtreeFacts()
 	case KindJSDocNullableType:
+		// SAFETY: This case only matches kinds allocated as a JSDocNullableType, which embeds its Node header at offset zero.
 		return (*JSDocNullableType)(unsafe.Pointer(n)).computeSubtreeFacts()
 	case KindJSDocAllType:
+		// SAFETY: This case only matches kinds allocated as a JSDocAllType, which embeds its Node header at offset zero.
 		return (*JSDocAllType)(unsafe.Pointer(n)).computeSubtreeFacts()
 	case KindJSDocVariadicType:
+		// SAFETY: This case only matches kinds allocated as a JSDocVariadicType, which embeds its Node header at offset zero.
 		return (*JSDocVariadicType)(unsafe.Pointer(n)).computeSubtreeFacts()
 	case KindJSDocOptionalType:
+		// SAFETY: This case only matches kinds allocated as a JSDocOptionalType, which embeds its Node header at offset zero.
 		return (*JSDocOptionalType)(unsafe.Pointer(n)).computeSubtreeFacts()
 	case KindJSDocTypeTag:
+		// SAFETY: This case only matches kinds allocated as a JSDocTypeTag, which embeds its Node header at offset zero.
 		return (*JSDocTypeTag)(unsafe.Pointer(n)).computeSubtreeFacts()
 	case KindJSDocUnknownTag:
+		// SAFETY: This case only matches kinds allocated as a JSDocUnknownTag, which embeds its Node header at offset zero.
 		return (*JSDocUnknownTag)(unsafe.Pointer(n)).computeSubtreeFacts()
 	case KindJSDocTemplateTag:
+		// SAFETY: This case only matches kinds allocated as a JSDocTemplateTag, which embeds its Node header at offset zero.
 		return (*JSDocTemplateTag)(unsafe.Pointer(n)).computeSubtreeFacts()
 	case KindJSDocReturnTag:
+		// SAFETY: This case only matches kinds allocated as a JSDocReturnTag, which embeds its Node header at offset zero.
 		return (*JSDocReturnTag)(unsafe.Pointer(n)).computeSubtreeFacts()
 	case KindJSDocPublicTag:
+		// SAFETY: This case only matches kinds allocated as a JSDocPublicTag, which embeds its Node header at offset zero.
 		return (*JSDocPublicTag)(unsafe.Pointer(n)).computeSubtreeFacts()
 	case KindJSDocPrivateTag:
+		// SAFETY: This case only matches kinds allocated as a JSDocPrivateTag, which embeds its Node header at offset zero.
 		return (*JSDocPrivateTag)(unsafe.Pointer(n)).computeSubtreeFacts()
 	case KindJSDocProtectedTag:
+		// SAFETY: This case only matches kinds allocated as a JSDocProtectedTag, which embeds its Node header at offset zero.
 		return (*JSDocProtectedTag)(unsafe.Pointer(n)).computeSubtreeFacts()
 	case KindJSDocReadonlyTag:
+		// SAFETY: This case only matches kinds allocated as a JSDocReadonlyTag, which embeds its Node header at offset zero.
 		return (*JSDocReadonlyTag)(unsafe.Pointer(n)).computeSubtreeFacts()
 	case KindJSDocOverrideTag:
+		// SAFETY: This case only matches kinds allocated as a JSDocOverrideTag, which embeds its Node header at offset zero.
 		return (*JSDocOverrideTag)(unsafe.Pointer(n)).computeSubtreeFacts()
 	case KindJSDocDeprecatedTag:
+		// SAFETY: This case only matches kinds allocated as a JSDocDeprecatedTag, which embeds its Node header at offset zero.
 		return (*JSDocDeprecatedTag)(unsafe.Pointer(n)).computeSubtreeFacts()
 	case KindJSDocSeeTag:
+		// SAFETY: This case only matches kinds allocated as a JSDocSeeTag, which embeds its Node header at offset zero.
 		return (*JSDocSeeTag)(unsafe.Pointer(n)).computeSubtreeFacts()
 	case KindJSDocImplementsTag:
+		// SAFETY: This case only matches kinds allocated as a JSDocImplementsTag, which embeds its Node header at offset zero.
 		return (*JSDocImplementsTag)(unsafe.Pointer(n)).computeSubtreeFacts()
 	case KindJSDocAugmentsTag:
+		// SAFETY: This case only matches kinds allocated as a JSDocAugmentsTag, which embeds its Node header at offset zero.
 		return (*JSDocAugmentsTag)(unsafe.Pointer(n)).computeSubtreeFacts()
 	case KindJSDocSatisfiesTag:
+		// SAFETY: This case only matches kinds allocated as a JSDocSatisfiesTag, which embeds its Node header at offset zero.
 		return (*JSDocSatisfiesTag)(unsafe.Pointer(n)).computeSubtreeFacts()
 	case KindJSDocThrowsTag:
+		// SAFETY: This case only matches kinds allocated as a JSDocThrowsTag, which embeds its Node header at offset zero.
 		return (*JSDocThrowsTag)(unsafe.Pointer(n)).computeSubtreeFacts()
 	case KindJSDocThisTag:
+		// SAFETY: This case only matches kinds allocated as a JSDocThisTag, which embeds its Node header at offset zero.
 		return (*JSDocThisTag)(unsafe.Pointer(n)).computeSubtreeFacts()
 	case KindJSDocImportTag:
+		// SAFETY: This case only matches kinds allocated as a JSDocImportTag, which embeds its Node header at offset zero.
 		return (*JSDocImportTag)(unsafe.Pointer(n)).computeSubtreeFacts()
 	case KindJSDocCallbackTag:
+		// SAFETY: This case only matches kinds allocated as a JSDocCallbackTag, which embeds its Node header at offset zero.
 		return (*JSDocCallbackTag)(unsafe.Pointer(n)).computeSubtreeFacts()
 	case KindJSDocOverloadTag:
+		// SAFETY: This case only matches kinds allocated as a JSDocOverloadTag, which embeds its Node header at offset zero.
 		return (*JSDocOverloadTag)(unsafe.Pointer(n)).computeSubtreeFacts()
 	case KindJSDocTypedefTag:
+		// SAFETY: This case only matches kinds allocated as a JSDocTypedefTag, which embeds its Node header at offset zero.
 		return (*JSDocTypedefTag)(unsafe.Pointer(n)).computeSubtreeFacts()
 	case KindJSDocSignature:
+		// SAFETY: This case only matches kinds allocated as a JSDocSignature, which embeds its Node header at offset zero.
 		return (*JSDocSignature)(unsafe.Pointer(n)).computeSubtreeFacts()
 	case KindJSDocNameReference:
+		// SAFETY: This case only matches kinds allocated as a JSDocNameReference, which embeds its Node header at offset zero.
 		return (*JSDocNameReference)(unsafe.Pointer(n)).computeSubtreeFacts()
 	case KindSourceFile:
+		// SAFETY: This case only matches kinds allocated as a SourceFile, which embeds its Node header at offset zero.
 		return (*SourceFile)(unsafe.Pointer(n)).computeSubtreeFacts()
 	case KindModuleDeclaration:
+		// SAFETY: This case only matches kinds allocated as a ModuleDeclaration, which embeds its Node header at offset zero.
 		return (*ModuleDeclaration)(unsafe.Pointer(n)).computeSubtreeFacts()
 	case KindImportEqualsDeclaration:
+		// SAFETY: This case only matches kinds allocated as a ImportEqualsDeclaration, which embeds its Node header at offset zero.
 		return (*ImportEqualsDeclaration)(unsafe.Pointer(n)).computeSubtreeFacts()
 	case KindExportDeclaration:
+		// SAFETY: This case only matches kinds allocated as a ExportDeclaration, which embeds its Node header at offset zero.
 		return (*ExportDeclaration)(unsafe.Pointer(n)).computeSubtreeFacts()
 	case KindImportType:
+		// SAFETY: This case only matches kinds allocated as a ImportTypeNode, which embeds its Node header at offset zero.
 		return (*ImportTypeNode)(unsafe.Pointer(n)).computeSubtreeFacts()
 	case KindImportClause:
+		// SAFETY: This case only matches kinds allocated as a ImportClause, which embeds its Node header at offset zero.
 		return (*ImportClause)(unsafe.Pointer(n)).computeSubtreeFacts()
 	case KindImportSpecifier:
+		// SAFETY: This case only matches kinds allocated as a ImportSpecifier, which embeds its Node header at offset zero.
 		return (*ImportSpecifier)(unsafe.Pointer(n)).computeSubtreeFacts()
 	case KindJSDocText:
+		// SAFETY: This case only matches kinds allocated as a JSDocText, which embeds its Node header at offset zero.
 		return (*JSDocText)(unsafe.Pointer(n)).computeSubtreeFacts()
 	case KindJSDocLink:
+		// SAFETY: This case only matches kinds allocated as a JSDocLink, which embeds its Node header at offset zero.
 		return (*JSDocLink)(unsafe.Pointer(n)).computeSubtreeFacts()
 	case KindJSDocLinkPlain:
+		// SAFETY: This case only matches kinds allocated as a JSDocLinkPlain, which embeds its Node header at offset zero.
 		return (*JSDocLinkPlain)(unsafe.Pointer(n)).computeSubtreeFacts()
 	case KindJSDocLinkCode:
+		// SAFETY: This case only matches kinds allocated as a JSDocLinkCode, which embeds its Node header at offset zero.
 		return (*JSDocLinkCode)(unsafe.Pointer(n)).computeSubtreeFacts()
 	case KindTypeParameter:
+		// SAFETY: This case only matches kinds allocated as a TypeParameterDeclaration, which embeds its Node header at offset zero.
 		return (*TypeParameterDeclaration)(unsafe.Pointer(n)).computeSubtreeFacts()
 	case KindSyntheticReferenceExpression:
+		// SAFETY: This case only matches kinds allocated as a SyntheticReferenceExpression, which embeds its Node header at offset zero.
 		return (*SyntheticReferenceExpression)(unsafe.Pointer(n)).computeSubtreeFacts()
 	case KindJSDocTypeLiteral:
+		// SAFETY: This case only matches kinds allocated as a JSDocTypeLiteral, which embeds its Node header at offset zero.
 		return (*JSDocTypeLiteral)(unsafe.Pointer(n)).computeSubtreeFacts()
 	case KindJSDocParameterTag, KindJSDocPropertyTag:
+		// SAFETY: This case only matches kinds allocated as a JSDocParameterOrPropertyTag, which embeds its Node header at offset zero.
 		return (*JSDocParameterOrPropertyTag)(unsafe.Pointer(n)).computeSubtreeFacts()
 	default:
 		return SubtreeFactsNone
@@ -10640,388 +11430,580 @@ func (n *Node) computeSubtreeFacts() SubtreeFacts {
 func (n *Node) propagateSubtreeFacts() SubtreeFacts {
 	switch n.Kind {
 	case KindUnknown, KindEndOfFile, KindSingleLineCommentTrivia, KindMultiLineCommentTrivia, KindNewLineTrivia, KindWhitespaceTrivia, KindConflictMarkerTrivia, KindNonTextFileMarkerTrivia, KindJsxTextAllWhiteSpaces, KindOpenBraceToken, KindCloseBraceToken, KindOpenParenToken, KindCloseParenToken, KindOpenBracketToken, KindCloseBracketToken, KindDotToken, KindDotDotDotToken, KindSemicolonToken, KindCommaToken, KindQuestionDotToken, KindLessThanToken, KindLessThanSlashToken, KindGreaterThanToken, KindLessThanEqualsToken, KindGreaterThanEqualsToken, KindEqualsEqualsToken, KindExclamationEqualsToken, KindEqualsEqualsEqualsToken, KindExclamationEqualsEqualsToken, KindEqualsGreaterThanToken, KindPlusToken, KindMinusToken, KindAsteriskToken, KindAsteriskAsteriskToken, KindSlashToken, KindPercentToken, KindPlusPlusToken, KindMinusMinusToken, KindLessThanLessThanToken, KindGreaterThanGreaterThanToken, KindGreaterThanGreaterThanGreaterThanToken, KindAmpersandToken, KindBarToken, KindCaretToken, KindExclamationToken, KindTildeToken, KindAmpersandAmpersandToken, KindBarBarToken, KindQuestionToken, KindColonToken, KindAtToken, KindQuestionQuestionToken, KindBacktickToken, KindHashToken, KindEqualsToken, KindPlusEqualsToken, KindMinusEqualsToken, KindAsteriskEqualsToken, KindAsteriskAsteriskEqualsToken, KindSlashEqualsToken, KindPercentEqualsToken, KindLessThanLessThanEqualsToken, KindGreaterThanGreaterThanEqualsToken, KindGreaterThanGreaterThanGreaterThanEqualsToken, KindAmpersandEqualsToken, KindBarEqualsToken, KindBarBarEqualsToken, KindAmpersandAmpersandEqualsToken, KindQuestionQuestionEqualsToken, KindCaretEqualsToken, KindJSDocCommentTextToken, KindBreakKeyword, KindCaseKeyword, KindCatchKeyword, KindClassKeyword, KindConstKeyword, KindContinueKeyword, KindDebuggerKeyword, KindDefaultKeyword, KindDeleteKeyword, KindDoKeyword, KindElseKeyword, KindEnumKeyword, KindExportKeyword, KindExtendsKeyword, KindFinallyKeyword, KindForKeyword, KindFunctionKeyword, KindIfKeyword, KindInKeyword, KindInstanceOfKeyword, KindNewKeyword, KindReturnKeyword, KindSwitchKeyword, KindThrowKeyword, KindTryKeyword, KindTypeOfKeyword, KindVarKeyword, KindWhileKeyword, KindWithKeyword, KindImplementsKeyword, KindInterfaceKeyword, KindLetKeyword, KindPackageKeyword, KindPrivateKeyword, KindProtectedKeyword, KindPublicKeyword, KindStaticKeyword, KindYieldKeyword, KindAbstractKeyword, KindAccessorKeyword, KindAsKeyword, KindAssertsKeyword, KindAssertKeyword, KindAsyncKeyword, KindAwaitKeyword, KindConstructorKeyword, KindDeclareKeyword, KindGetKeyword, KindImmediateKeyword, KindInferKeyword, KindIsKeyword, KindKeyOfKeyword, KindModuleKeyword, KindNamespaceKeyword, KindOutKeyword, KindReadonlyKeyword, KindRequireKeyword, KindSatisfiesKeyword, KindSetKeyword, KindTypeKeyword, KindUniqueKeyword, KindUsingKeyword, KindFromKeyword, KindGlobalKeyword, KindOverrideKeyword, KindOfKeyword, KindDeferKeyword, KindSourceKeyword:
+		// SAFETY: This case only matches kinds allocated as a Token, which embeds its Node header at offset zero.
 		return (*Token)(unsafe.Pointer(n)).propagateSubtreeFacts()
 	case KindNumericLiteral:
+		// SAFETY: This case only matches kinds allocated as a NumericLiteral, which embeds its Node header at offset zero.
 		return (*NumericLiteral)(unsafe.Pointer(n)).propagateSubtreeFacts()
 	case KindBigIntLiteral:
+		// SAFETY: This case only matches kinds allocated as a BigIntLiteral, which embeds its Node header at offset zero.
 		return (*BigIntLiteral)(unsafe.Pointer(n)).propagateSubtreeFacts()
 	case KindStringLiteral:
+		// SAFETY: This case only matches kinds allocated as a StringLiteral, which embeds its Node header at offset zero.
 		return (*StringLiteral)(unsafe.Pointer(n)).propagateSubtreeFacts()
 	case KindJsxText:
+		// SAFETY: This case only matches kinds allocated as a JsxText, which embeds its Node header at offset zero.
 		return (*JsxText)(unsafe.Pointer(n)).propagateSubtreeFacts()
 	case KindRegularExpressionLiteral:
+		// SAFETY: This case only matches kinds allocated as a RegularExpressionLiteral, which embeds its Node header at offset zero.
 		return (*RegularExpressionLiteral)(unsafe.Pointer(n)).propagateSubtreeFacts()
 	case KindNoSubstitutionTemplateLiteral:
+		// SAFETY: This case only matches kinds allocated as a NoSubstitutionTemplateLiteral, which embeds its Node header at offset zero.
 		return (*NoSubstitutionTemplateLiteral)(unsafe.Pointer(n)).propagateSubtreeFacts()
 	case KindTemplateHead:
+		// SAFETY: This case only matches kinds allocated as a TemplateHead, which embeds its Node header at offset zero.
 		return (*TemplateHead)(unsafe.Pointer(n)).propagateSubtreeFacts()
 	case KindTemplateMiddle:
+		// SAFETY: This case only matches kinds allocated as a TemplateMiddle, which embeds its Node header at offset zero.
 		return (*TemplateMiddle)(unsafe.Pointer(n)).propagateSubtreeFacts()
 	case KindTemplateTail:
+		// SAFETY: This case only matches kinds allocated as a TemplateTail, which embeds its Node header at offset zero.
 		return (*TemplateTail)(unsafe.Pointer(n)).propagateSubtreeFacts()
 	case KindIdentifier:
+		// SAFETY: This case only matches kinds allocated as a Identifier, which embeds its Node header at offset zero.
 		return (*Identifier)(unsafe.Pointer(n)).propagateSubtreeFacts()
 	case KindPrivateIdentifier:
+		// SAFETY: This case only matches kinds allocated as a PrivateIdentifier, which embeds its Node header at offset zero.
 		return (*PrivateIdentifier)(unsafe.Pointer(n)).propagateSubtreeFacts()
 	case KindFalseKeyword, KindImportKeyword, KindNullKeyword, KindSuperKeyword, KindThisKeyword, KindTrueKeyword:
+		// SAFETY: This case only matches kinds allocated as a KeywordExpression, which embeds its Node header at offset zero.
 		return (*KeywordExpression)(unsafe.Pointer(n)).propagateSubtreeFacts()
 	case KindVoidKeyword, KindAnyKeyword, KindBooleanKeyword, KindIntrinsicKeyword, KindNeverKeyword, KindNumberKeyword, KindObjectKeyword, KindStringKeyword, KindSymbolKeyword, KindUndefinedKeyword, KindUnknownKeyword, KindBigIntKeyword:
+		// SAFETY: This case only matches kinds allocated as a KeywordTypeNode, which embeds its Node header at offset zero.
 		return (*KeywordTypeNode)(unsafe.Pointer(n)).propagateSubtreeFacts()
 	case KindQualifiedName:
+		// SAFETY: This case only matches kinds allocated as a QualifiedName, which embeds its Node header at offset zero.
 		return (*QualifiedName)(unsafe.Pointer(n)).propagateSubtreeFacts()
 	case KindComputedPropertyName:
+		// SAFETY: This case only matches kinds allocated as a ComputedPropertyName, which embeds its Node header at offset zero.
 		return (*ComputedPropertyName)(unsafe.Pointer(n)).propagateSubtreeFacts()
 	case KindDecorator:
+		// SAFETY: This case only matches kinds allocated as a Decorator, which embeds its Node header at offset zero.
 		return (*Decorator)(unsafe.Pointer(n)).propagateSubtreeFacts()
 	case KindEmptyStatement:
+		// SAFETY: This case only matches kinds allocated as a EmptyStatement, which embeds its Node header at offset zero.
 		return (*EmptyStatement)(unsafe.Pointer(n)).propagateSubtreeFacts()
 	case KindIfStatement:
+		// SAFETY: This case only matches kinds allocated as a IfStatement, which embeds its Node header at offset zero.
 		return (*IfStatement)(unsafe.Pointer(n)).propagateSubtreeFacts()
 	case KindDoStatement:
+		// SAFETY: This case only matches kinds allocated as a DoStatement, which embeds its Node header at offset zero.
 		return (*DoStatement)(unsafe.Pointer(n)).propagateSubtreeFacts()
 	case KindWhileStatement:
+		// SAFETY: This case only matches kinds allocated as a WhileStatement, which embeds its Node header at offset zero.
 		return (*WhileStatement)(unsafe.Pointer(n)).propagateSubtreeFacts()
 	case KindForStatement:
+		// SAFETY: This case only matches kinds allocated as a ForStatement, which embeds its Node header at offset zero.
 		return (*ForStatement)(unsafe.Pointer(n)).propagateSubtreeFacts()
 	case KindForInStatement, KindForOfStatement:
+		// SAFETY: This case only matches kinds allocated as a ForInOrOfStatement, which embeds its Node header at offset zero.
 		return (*ForInOrOfStatement)(unsafe.Pointer(n)).propagateSubtreeFacts()
 	case KindBreakStatement:
+		// SAFETY: This case only matches kinds allocated as a BreakStatement, which embeds its Node header at offset zero.
 		return (*BreakStatement)(unsafe.Pointer(n)).propagateSubtreeFacts()
 	case KindContinueStatement:
+		// SAFETY: This case only matches kinds allocated as a ContinueStatement, which embeds its Node header at offset zero.
 		return (*ContinueStatement)(unsafe.Pointer(n)).propagateSubtreeFacts()
 	case KindReturnStatement:
+		// SAFETY: This case only matches kinds allocated as a ReturnStatement, which embeds its Node header at offset zero.
 		return (*ReturnStatement)(unsafe.Pointer(n)).propagateSubtreeFacts()
 	case KindWithStatement:
+		// SAFETY: This case only matches kinds allocated as a WithStatement, which embeds its Node header at offset zero.
 		return (*WithStatement)(unsafe.Pointer(n)).propagateSubtreeFacts()
 	case KindSwitchStatement:
+		// SAFETY: This case only matches kinds allocated as a SwitchStatement, which embeds its Node header at offset zero.
 		return (*SwitchStatement)(unsafe.Pointer(n)).propagateSubtreeFacts()
 	case KindCaseBlock:
+		// SAFETY: This case only matches kinds allocated as a CaseBlock, which embeds its Node header at offset zero.
 		return (*CaseBlock)(unsafe.Pointer(n)).propagateSubtreeFacts()
 	case KindCaseClause, KindDefaultClause:
+		// SAFETY: This case only matches kinds allocated as a CaseOrDefaultClause, which embeds its Node header at offset zero.
 		return (*CaseOrDefaultClause)(unsafe.Pointer(n)).propagateSubtreeFacts()
 	case KindThrowStatement:
+		// SAFETY: This case only matches kinds allocated as a ThrowStatement, which embeds its Node header at offset zero.
 		return (*ThrowStatement)(unsafe.Pointer(n)).propagateSubtreeFacts()
 	case KindTryStatement:
+		// SAFETY: This case only matches kinds allocated as a TryStatement, which embeds its Node header at offset zero.
 		return (*TryStatement)(unsafe.Pointer(n)).propagateSubtreeFacts()
 	case KindCatchClause:
+		// SAFETY: This case only matches kinds allocated as a CatchClause, which embeds its Node header at offset zero.
 		return (*CatchClause)(unsafe.Pointer(n)).propagateSubtreeFacts()
 	case KindDebuggerStatement:
+		// SAFETY: This case only matches kinds allocated as a DebuggerStatement, which embeds its Node header at offset zero.
 		return (*DebuggerStatement)(unsafe.Pointer(n)).propagateSubtreeFacts()
 	case KindLabeledStatement:
+		// SAFETY: This case only matches kinds allocated as a LabeledStatement, which embeds its Node header at offset zero.
 		return (*LabeledStatement)(unsafe.Pointer(n)).propagateSubtreeFacts()
 	case KindExpressionStatement:
+		// SAFETY: This case only matches kinds allocated as a ExpressionStatement, which embeds its Node header at offset zero.
 		return (*ExpressionStatement)(unsafe.Pointer(n)).propagateSubtreeFacts()
 	case KindBlock:
+		// SAFETY: This case only matches kinds allocated as a Block, which embeds its Node header at offset zero.
 		return (*Block)(unsafe.Pointer(n)).propagateSubtreeFacts()
 	case KindVariableStatement:
+		// SAFETY: This case only matches kinds allocated as a VariableStatement, which embeds its Node header at offset zero.
 		return (*VariableStatement)(unsafe.Pointer(n)).propagateSubtreeFacts()
 	case KindVariableDeclaration:
+		// SAFETY: This case only matches kinds allocated as a VariableDeclaration, which embeds its Node header at offset zero.
 		return (*VariableDeclaration)(unsafe.Pointer(n)).propagateSubtreeFacts()
 	case KindVariableDeclarationList:
+		// SAFETY: This case only matches kinds allocated as a VariableDeclarationList, which embeds its Node header at offset zero.
 		return (*VariableDeclarationList)(unsafe.Pointer(n)).propagateSubtreeFacts()
 	case KindObjectBindingPattern, KindArrayBindingPattern:
+		// SAFETY: This case only matches kinds allocated as a BindingPattern, which embeds its Node header at offset zero.
 		return (*BindingPattern)(unsafe.Pointer(n)).propagateSubtreeFacts()
 	case KindParameter:
+		// SAFETY: This case only matches kinds allocated as a ParameterDeclaration, which embeds its Node header at offset zero.
 		return (*ParameterDeclaration)(unsafe.Pointer(n)).propagateSubtreeFacts()
 	case KindBindingElement:
+		// SAFETY: This case only matches kinds allocated as a BindingElement, which embeds its Node header at offset zero.
 		return (*BindingElement)(unsafe.Pointer(n)).propagateSubtreeFacts()
 	case KindMissingDeclaration:
+		// SAFETY: This case only matches kinds allocated as a MissingDeclaration, which embeds its Node header at offset zero.
 		return (*MissingDeclaration)(unsafe.Pointer(n)).propagateSubtreeFacts()
 	case KindFunctionDeclaration:
+		// SAFETY: This case only matches kinds allocated as a FunctionDeclaration, which embeds its Node header at offset zero.
 		return (*FunctionDeclaration)(unsafe.Pointer(n)).propagateSubtreeFacts()
 	case KindClassDeclaration:
+		// SAFETY: This case only matches kinds allocated as a ClassDeclaration, which embeds its Node header at offset zero.
 		return (*ClassDeclaration)(unsafe.Pointer(n)).propagateSubtreeFacts()
 	case KindClassExpression:
+		// SAFETY: This case only matches kinds allocated as a ClassExpression, which embeds its Node header at offset zero.
 		return (*ClassExpression)(unsafe.Pointer(n)).propagateSubtreeFacts()
 	case KindHeritageClause:
+		// SAFETY: This case only matches kinds allocated as a HeritageClause, which embeds its Node header at offset zero.
 		return (*HeritageClause)(unsafe.Pointer(n)).propagateSubtreeFacts()
 	case KindInterfaceDeclaration:
+		// SAFETY: This case only matches kinds allocated as a InterfaceDeclaration, which embeds its Node header at offset zero.
 		return (*InterfaceDeclaration)(unsafe.Pointer(n)).propagateSubtreeFacts()
 	case KindTypeAliasDeclaration, KindJSTypeAliasDeclaration:
+		// SAFETY: This case only matches kinds allocated as a TypeAliasDeclaration, which embeds its Node header at offset zero.
 		return (*TypeAliasDeclaration)(unsafe.Pointer(n)).propagateSubtreeFacts()
 	case KindEnumMember:
+		// SAFETY: This case only matches kinds allocated as a EnumMember, which embeds its Node header at offset zero.
 		return (*EnumMember)(unsafe.Pointer(n)).propagateSubtreeFacts()
 	case KindEnumDeclaration:
+		// SAFETY: This case only matches kinds allocated as a EnumDeclaration, which embeds its Node header at offset zero.
 		return (*EnumDeclaration)(unsafe.Pointer(n)).propagateSubtreeFacts()
 	case KindModuleBlock:
+		// SAFETY: This case only matches kinds allocated as a ModuleBlock, which embeds its Node header at offset zero.
 		return (*ModuleBlock)(unsafe.Pointer(n)).propagateSubtreeFacts()
 	case KindNotEmittedStatement:
+		// SAFETY: This case only matches kinds allocated as a NotEmittedStatement, which embeds its Node header at offset zero.
 		return (*NotEmittedStatement)(unsafe.Pointer(n)).propagateSubtreeFacts()
 	case KindNotEmittedTypeElement:
+		// SAFETY: This case only matches kinds allocated as a NotEmittedTypeElement, which embeds its Node header at offset zero.
 		return (*NotEmittedTypeElement)(unsafe.Pointer(n)).propagateSubtreeFacts()
 	case KindImportDeclaration, KindJSImportDeclaration:
+		// SAFETY: This case only matches kinds allocated as a ImportDeclaration, which embeds its Node header at offset zero.
 		return (*ImportDeclaration)(unsafe.Pointer(n)).propagateSubtreeFacts()
 	case KindExternalModuleReference:
+		// SAFETY: This case only matches kinds allocated as a ExternalModuleReference, which embeds its Node header at offset zero.
 		return (*ExternalModuleReference)(unsafe.Pointer(n)).propagateSubtreeFacts()
 	case KindNamespaceImport:
+		// SAFETY: This case only matches kinds allocated as a NamespaceImport, which embeds its Node header at offset zero.
 		return (*NamespaceImport)(unsafe.Pointer(n)).propagateSubtreeFacts()
 	case KindNamedImports:
+		// SAFETY: This case only matches kinds allocated as a NamedImports, which embeds its Node header at offset zero.
 		return (*NamedImports)(unsafe.Pointer(n)).propagateSubtreeFacts()
 	case KindExportAssignment:
+		// SAFETY: This case only matches kinds allocated as a ExportAssignment, which embeds its Node header at offset zero.
 		return (*ExportAssignment)(unsafe.Pointer(n)).propagateSubtreeFacts()
 	case KindNamespaceExportDeclaration:
+		// SAFETY: This case only matches kinds allocated as a NamespaceExportDeclaration, which embeds its Node header at offset zero.
 		return (*NamespaceExportDeclaration)(unsafe.Pointer(n)).propagateSubtreeFacts()
 	case KindNamespaceExport:
+		// SAFETY: This case only matches kinds allocated as a NamespaceExport, which embeds its Node header at offset zero.
 		return (*NamespaceExport)(unsafe.Pointer(n)).propagateSubtreeFacts()
 	case KindNamedExports:
+		// SAFETY: This case only matches kinds allocated as a NamedExports, which embeds its Node header at offset zero.
 		return (*NamedExports)(unsafe.Pointer(n)).propagateSubtreeFacts()
 	case KindExportSpecifier:
+		// SAFETY: This case only matches kinds allocated as a ExportSpecifier, which embeds its Node header at offset zero.
 		return (*ExportSpecifier)(unsafe.Pointer(n)).propagateSubtreeFacts()
 	case KindCallSignature:
+		// SAFETY: This case only matches kinds allocated as a CallSignatureDeclaration, which embeds its Node header at offset zero.
 		return (*CallSignatureDeclaration)(unsafe.Pointer(n)).propagateSubtreeFacts()
 	case KindConstructSignature:
+		// SAFETY: This case only matches kinds allocated as a ConstructSignatureDeclaration, which embeds its Node header at offset zero.
 		return (*ConstructSignatureDeclaration)(unsafe.Pointer(n)).propagateSubtreeFacts()
 	case KindConstructor:
+		// SAFETY: This case only matches kinds allocated as a ConstructorDeclaration, which embeds its Node header at offset zero.
 		return (*ConstructorDeclaration)(unsafe.Pointer(n)).propagateSubtreeFacts()
 	case KindGetAccessor:
+		// SAFETY: This case only matches kinds allocated as a GetAccessorDeclaration, which embeds its Node header at offset zero.
 		return (*GetAccessorDeclaration)(unsafe.Pointer(n)).propagateSubtreeFacts()
 	case KindSetAccessor:
+		// SAFETY: This case only matches kinds allocated as a SetAccessorDeclaration, which embeds its Node header at offset zero.
 		return (*SetAccessorDeclaration)(unsafe.Pointer(n)).propagateSubtreeFacts()
 	case KindIndexSignature:
+		// SAFETY: This case only matches kinds allocated as a IndexSignatureDeclaration, which embeds its Node header at offset zero.
 		return (*IndexSignatureDeclaration)(unsafe.Pointer(n)).propagateSubtreeFacts()
 	case KindMethodSignature:
+		// SAFETY: This case only matches kinds allocated as a MethodSignatureDeclaration, which embeds its Node header at offset zero.
 		return (*MethodSignatureDeclaration)(unsafe.Pointer(n)).propagateSubtreeFacts()
 	case KindMethodDeclaration:
+		// SAFETY: This case only matches kinds allocated as a MethodDeclaration, which embeds its Node header at offset zero.
 		return (*MethodDeclaration)(unsafe.Pointer(n)).propagateSubtreeFacts()
 	case KindPropertySignature:
+		// SAFETY: This case only matches kinds allocated as a PropertySignatureDeclaration, which embeds its Node header at offset zero.
 		return (*PropertySignatureDeclaration)(unsafe.Pointer(n)).propagateSubtreeFacts()
 	case KindPropertyDeclaration:
+		// SAFETY: This case only matches kinds allocated as a PropertyDeclaration, which embeds its Node header at offset zero.
 		return (*PropertyDeclaration)(unsafe.Pointer(n)).propagateSubtreeFacts()
 	case KindSemicolonClassElement:
+		// SAFETY: This case only matches kinds allocated as a SemicolonClassElement, which embeds its Node header at offset zero.
 		return (*SemicolonClassElement)(unsafe.Pointer(n)).propagateSubtreeFacts()
 	case KindClassStaticBlockDeclaration:
+		// SAFETY: This case only matches kinds allocated as a ClassStaticBlockDeclaration, which embeds its Node header at offset zero.
 		return (*ClassStaticBlockDeclaration)(unsafe.Pointer(n)).propagateSubtreeFacts()
 	case KindOmittedExpression:
+		// SAFETY: This case only matches kinds allocated as a OmittedExpression, which embeds its Node header at offset zero.
 		return (*OmittedExpression)(unsafe.Pointer(n)).propagateSubtreeFacts()
 	case KindBinaryExpression:
+		// SAFETY: This case only matches kinds allocated as a BinaryExpression, which embeds its Node header at offset zero.
 		return (*BinaryExpression)(unsafe.Pointer(n)).propagateSubtreeFacts()
 	case KindPrefixUnaryExpression:
+		// SAFETY: This case only matches kinds allocated as a PrefixUnaryExpression, which embeds its Node header at offset zero.
 		return (*PrefixUnaryExpression)(unsafe.Pointer(n)).propagateSubtreeFacts()
 	case KindPostfixUnaryExpression:
+		// SAFETY: This case only matches kinds allocated as a PostfixUnaryExpression, which embeds its Node header at offset zero.
 		return (*PostfixUnaryExpression)(unsafe.Pointer(n)).propagateSubtreeFacts()
 	case KindYieldExpression:
+		// SAFETY: This case only matches kinds allocated as a YieldExpression, which embeds its Node header at offset zero.
 		return (*YieldExpression)(unsafe.Pointer(n)).propagateSubtreeFacts()
 	case KindArrowFunction:
+		// SAFETY: This case only matches kinds allocated as a ArrowFunction, which embeds its Node header at offset zero.
 		return (*ArrowFunction)(unsafe.Pointer(n)).propagateSubtreeFacts()
 	case KindFunctionExpression:
+		// SAFETY: This case only matches kinds allocated as a FunctionExpression, which embeds its Node header at offset zero.
 		return (*FunctionExpression)(unsafe.Pointer(n)).propagateSubtreeFacts()
 	case KindAsExpression:
+		// SAFETY: This case only matches kinds allocated as a AsExpression, which embeds its Node header at offset zero.
 		return (*AsExpression)(unsafe.Pointer(n)).propagateSubtreeFacts()
 	case KindSatisfiesExpression:
+		// SAFETY: This case only matches kinds allocated as a SatisfiesExpression, which embeds its Node header at offset zero.
 		return (*SatisfiesExpression)(unsafe.Pointer(n)).propagateSubtreeFacts()
 	case KindConditionalExpression:
+		// SAFETY: This case only matches kinds allocated as a ConditionalExpression, which embeds its Node header at offset zero.
 		return (*ConditionalExpression)(unsafe.Pointer(n)).propagateSubtreeFacts()
 	case KindPropertyAccessExpression:
+		// SAFETY: This case only matches kinds allocated as a PropertyAccessExpression, which embeds its Node header at offset zero.
 		return (*PropertyAccessExpression)(unsafe.Pointer(n)).propagateSubtreeFacts()
 	case KindElementAccessExpression:
+		// SAFETY: This case only matches kinds allocated as a ElementAccessExpression, which embeds its Node header at offset zero.
 		return (*ElementAccessExpression)(unsafe.Pointer(n)).propagateSubtreeFacts()
 	case KindCallExpression:
+		// SAFETY: This case only matches kinds allocated as a CallExpression, which embeds its Node header at offset zero.
 		return (*CallExpression)(unsafe.Pointer(n)).propagateSubtreeFacts()
 	case KindNewExpression:
+		// SAFETY: This case only matches kinds allocated as a NewExpression, which embeds its Node header at offset zero.
 		return (*NewExpression)(unsafe.Pointer(n)).propagateSubtreeFacts()
 	case KindMetaProperty:
+		// SAFETY: This case only matches kinds allocated as a MetaProperty, which embeds its Node header at offset zero.
 		return (*MetaProperty)(unsafe.Pointer(n)).propagateSubtreeFacts()
 	case KindNonNullExpression:
+		// SAFETY: This case only matches kinds allocated as a NonNullExpression, which embeds its Node header at offset zero.
 		return (*NonNullExpression)(unsafe.Pointer(n)).propagateSubtreeFacts()
 	case KindSpreadElement:
+		// SAFETY: This case only matches kinds allocated as a SpreadElement, which embeds its Node header at offset zero.
 		return (*SpreadElement)(unsafe.Pointer(n)).propagateSubtreeFacts()
 	case KindTemplateExpression:
+		// SAFETY: This case only matches kinds allocated as a TemplateExpression, which embeds its Node header at offset zero.
 		return (*TemplateExpression)(unsafe.Pointer(n)).propagateSubtreeFacts()
 	case KindTemplateSpan:
+		// SAFETY: This case only matches kinds allocated as a TemplateSpan, which embeds its Node header at offset zero.
 		return (*TemplateSpan)(unsafe.Pointer(n)).propagateSubtreeFacts()
 	case KindTaggedTemplateExpression:
+		// SAFETY: This case only matches kinds allocated as a TaggedTemplateExpression, which embeds its Node header at offset zero.
 		return (*TaggedTemplateExpression)(unsafe.Pointer(n)).propagateSubtreeFacts()
 	case KindParenthesizedExpression:
+		// SAFETY: This case only matches kinds allocated as a ParenthesizedExpression, which embeds its Node header at offset zero.
 		return (*ParenthesizedExpression)(unsafe.Pointer(n)).propagateSubtreeFacts()
 	case KindArrayLiteralExpression:
+		// SAFETY: This case only matches kinds allocated as a ArrayLiteralExpression, which embeds its Node header at offset zero.
 		return (*ArrayLiteralExpression)(unsafe.Pointer(n)).propagateSubtreeFacts()
 	case KindObjectLiteralExpression:
+		// SAFETY: This case only matches kinds allocated as a ObjectLiteralExpression, which embeds its Node header at offset zero.
 		return (*ObjectLiteralExpression)(unsafe.Pointer(n)).propagateSubtreeFacts()
 	case KindSpreadAssignment:
+		// SAFETY: This case only matches kinds allocated as a SpreadAssignment, which embeds its Node header at offset zero.
 		return (*SpreadAssignment)(unsafe.Pointer(n)).propagateSubtreeFacts()
 	case KindPropertyAssignment:
+		// SAFETY: This case only matches kinds allocated as a PropertyAssignment, which embeds its Node header at offset zero.
 		return (*PropertyAssignment)(unsafe.Pointer(n)).propagateSubtreeFacts()
 	case KindShorthandPropertyAssignment:
+		// SAFETY: This case only matches kinds allocated as a ShorthandPropertyAssignment, which embeds its Node header at offset zero.
 		return (*ShorthandPropertyAssignment)(unsafe.Pointer(n)).propagateSubtreeFacts()
 	case KindDeleteExpression:
+		// SAFETY: This case only matches kinds allocated as a DeleteExpression, which embeds its Node header at offset zero.
 		return (*DeleteExpression)(unsafe.Pointer(n)).propagateSubtreeFacts()
 	case KindTypeOfExpression:
+		// SAFETY: This case only matches kinds allocated as a TypeOfExpression, which embeds its Node header at offset zero.
 		return (*TypeOfExpression)(unsafe.Pointer(n)).propagateSubtreeFacts()
 	case KindVoidExpression:
+		// SAFETY: This case only matches kinds allocated as a VoidExpression, which embeds its Node header at offset zero.
 		return (*VoidExpression)(unsafe.Pointer(n)).propagateSubtreeFacts()
 	case KindAwaitExpression:
+		// SAFETY: This case only matches kinds allocated as a AwaitExpression, which embeds its Node header at offset zero.
 		return (*AwaitExpression)(unsafe.Pointer(n)).propagateSubtreeFacts()
 	case KindTypeAssertionExpression:
+		// SAFETY: This case only matches kinds allocated as a TypeAssertion, which embeds its Node header at offset zero.
 		return (*TypeAssertion)(unsafe.Pointer(n)).propagateSubtreeFacts()
 	case KindUnionType:
+		// SAFETY: This case only matches kinds allocated as a UnionTypeNode, which embeds its Node header at offset zero.
 		return (*UnionTypeNode)(unsafe.Pointer(n)).propagateSubtreeFacts()
 	case KindIntersectionType:
+		// SAFETY: This case only matches kinds allocated as a IntersectionTypeNode, which embeds its Node header at offset zero.
 		return (*IntersectionTypeNode)(unsafe.Pointer(n)).propagateSubtreeFacts()
 	case KindConditionalType:
+		// SAFETY: This case only matches kinds allocated as a ConditionalTypeNode, which embeds its Node header at offset zero.
 		return (*ConditionalTypeNode)(unsafe.Pointer(n)).propagateSubtreeFacts()
 	case KindTypeOperator:
+		// SAFETY: This case only matches kinds allocated as a TypeOperatorNode, which embeds its Node header at offset zero.
 		return (*TypeOperatorNode)(unsafe.Pointer(n)).propagateSubtreeFacts()
 	case KindInferType:
+		// SAFETY: This case only matches kinds allocated as a InferTypeNode, which embeds its Node header at offset zero.
 		return (*InferTypeNode)(unsafe.Pointer(n)).propagateSubtreeFacts()
 	case KindArrayType:
+		// SAFETY: This case only matches kinds allocated as a ArrayTypeNode, which embeds its Node header at offset zero.
 		return (*ArrayTypeNode)(unsafe.Pointer(n)).propagateSubtreeFacts()
 	case KindIndexedAccessType:
+		// SAFETY: This case only matches kinds allocated as a IndexedAccessTypeNode, which embeds its Node header at offset zero.
 		return (*IndexedAccessTypeNode)(unsafe.Pointer(n)).propagateSubtreeFacts()
 	case KindTypeReference:
+		// SAFETY: This case only matches kinds allocated as a TypeReferenceNode, which embeds its Node header at offset zero.
 		return (*TypeReferenceNode)(unsafe.Pointer(n)).propagateSubtreeFacts()
 	case KindExpressionWithTypeArguments:
+		// SAFETY: This case only matches kinds allocated as a ExpressionWithTypeArguments, which embeds its Node header at offset zero.
 		return (*ExpressionWithTypeArguments)(unsafe.Pointer(n)).propagateSubtreeFacts()
 	case KindLiteralType:
+		// SAFETY: This case only matches kinds allocated as a LiteralTypeNode, which embeds its Node header at offset zero.
 		return (*LiteralTypeNode)(unsafe.Pointer(n)).propagateSubtreeFacts()
 	case KindThisType:
+		// SAFETY: This case only matches kinds allocated as a ThisTypeNode, which embeds its Node header at offset zero.
 		return (*ThisTypeNode)(unsafe.Pointer(n)).propagateSubtreeFacts()
 	case KindTypePredicate:
+		// SAFETY: This case only matches kinds allocated as a TypePredicateNode, which embeds its Node header at offset zero.
 		return (*TypePredicateNode)(unsafe.Pointer(n)).propagateSubtreeFacts()
 	case KindImportAttribute:
+		// SAFETY: This case only matches kinds allocated as a ImportAttribute, which embeds its Node header at offset zero.
 		return (*ImportAttribute)(unsafe.Pointer(n)).propagateSubtreeFacts()
 	case KindImportAttributes:
+		// SAFETY: This case only matches kinds allocated as a ImportAttributes, which embeds its Node header at offset zero.
 		return (*ImportAttributes)(unsafe.Pointer(n)).propagateSubtreeFacts()
 	case KindTypeQuery:
+		// SAFETY: This case only matches kinds allocated as a TypeQueryNode, which embeds its Node header at offset zero.
 		return (*TypeQueryNode)(unsafe.Pointer(n)).propagateSubtreeFacts()
 	case KindMappedType:
+		// SAFETY: This case only matches kinds allocated as a MappedTypeNode, which embeds its Node header at offset zero.
 		return (*MappedTypeNode)(unsafe.Pointer(n)).propagateSubtreeFacts()
 	case KindTypeLiteral:
+		// SAFETY: This case only matches kinds allocated as a TypeLiteralNode, which embeds its Node header at offset zero.
 		return (*TypeLiteralNode)(unsafe.Pointer(n)).propagateSubtreeFacts()
 	case KindTupleType:
+		// SAFETY: This case only matches kinds allocated as a TupleTypeNode, which embeds its Node header at offset zero.
 		return (*TupleTypeNode)(unsafe.Pointer(n)).propagateSubtreeFacts()
 	case KindNamedTupleMember:
+		// SAFETY: This case only matches kinds allocated as a NamedTupleMember, which embeds its Node header at offset zero.
 		return (*NamedTupleMember)(unsafe.Pointer(n)).propagateSubtreeFacts()
 	case KindOptionalType:
+		// SAFETY: This case only matches kinds allocated as a OptionalTypeNode, which embeds its Node header at offset zero.
 		return (*OptionalTypeNode)(unsafe.Pointer(n)).propagateSubtreeFacts()
 	case KindRestType:
+		// SAFETY: This case only matches kinds allocated as a RestTypeNode, which embeds its Node header at offset zero.
 		return (*RestTypeNode)(unsafe.Pointer(n)).propagateSubtreeFacts()
 	case KindParenthesizedType:
+		// SAFETY: This case only matches kinds allocated as a ParenthesizedTypeNode, which embeds its Node header at offset zero.
 		return (*ParenthesizedTypeNode)(unsafe.Pointer(n)).propagateSubtreeFacts()
 	case KindFunctionType:
+		// SAFETY: This case only matches kinds allocated as a FunctionTypeNode, which embeds its Node header at offset zero.
 		return (*FunctionTypeNode)(unsafe.Pointer(n)).propagateSubtreeFacts()
 	case KindConstructorType:
+		// SAFETY: This case only matches kinds allocated as a ConstructorTypeNode, which embeds its Node header at offset zero.
 		return (*ConstructorTypeNode)(unsafe.Pointer(n)).propagateSubtreeFacts()
 	case KindTemplateLiteralType:
+		// SAFETY: This case only matches kinds allocated as a TemplateLiteralTypeNode, which embeds its Node header at offset zero.
 		return (*TemplateLiteralTypeNode)(unsafe.Pointer(n)).propagateSubtreeFacts()
 	case KindTemplateLiteralTypeSpan:
+		// SAFETY: This case only matches kinds allocated as a TemplateLiteralTypeSpan, which embeds its Node header at offset zero.
 		return (*TemplateLiteralTypeSpan)(unsafe.Pointer(n)).propagateSubtreeFacts()
 	case KindSyntheticExpression:
+		// SAFETY: This case only matches kinds allocated as a SyntheticExpression, which embeds its Node header at offset zero.
 		return (*SyntheticExpression)(unsafe.Pointer(n)).propagateSubtreeFacts()
 	case KindPartiallyEmittedExpression:
+		// SAFETY: This case only matches kinds allocated as a PartiallyEmittedExpression, which embeds its Node header at offset zero.
 		return (*PartiallyEmittedExpression)(unsafe.Pointer(n)).propagateSubtreeFacts()
 	case KindJsxElement:
+		// SAFETY: This case only matches kinds allocated as a JsxElement, which embeds its Node header at offset zero.
 		return (*JsxElement)(unsafe.Pointer(n)).propagateSubtreeFacts()
 	case KindJsxAttributes:
+		// SAFETY: This case only matches kinds allocated as a JsxAttributes, which embeds its Node header at offset zero.
 		return (*JsxAttributes)(unsafe.Pointer(n)).propagateSubtreeFacts()
 	case KindJsxNamespacedName:
+		// SAFETY: This case only matches kinds allocated as a JsxNamespacedName, which embeds its Node header at offset zero.
 		return (*JsxNamespacedName)(unsafe.Pointer(n)).propagateSubtreeFacts()
 	case KindJsxOpeningElement:
+		// SAFETY: This case only matches kinds allocated as a JsxOpeningElement, which embeds its Node header at offset zero.
 		return (*JsxOpeningElement)(unsafe.Pointer(n)).propagateSubtreeFacts()
 	case KindJsxSelfClosingElement:
+		// SAFETY: This case only matches kinds allocated as a JsxSelfClosingElement, which embeds its Node header at offset zero.
 		return (*JsxSelfClosingElement)(unsafe.Pointer(n)).propagateSubtreeFacts()
 	case KindJsxFragment:
+		// SAFETY: This case only matches kinds allocated as a JsxFragment, which embeds its Node header at offset zero.
 		return (*JsxFragment)(unsafe.Pointer(n)).propagateSubtreeFacts()
 	case KindJsxOpeningFragment:
+		// SAFETY: This case only matches kinds allocated as a JsxOpeningFragment, which embeds its Node header at offset zero.
 		return (*JsxOpeningFragment)(unsafe.Pointer(n)).propagateSubtreeFacts()
 	case KindJsxClosingFragment:
+		// SAFETY: This case only matches kinds allocated as a JsxClosingFragment, which embeds its Node header at offset zero.
 		return (*JsxClosingFragment)(unsafe.Pointer(n)).propagateSubtreeFacts()
 	case KindJsxAttribute:
+		// SAFETY: This case only matches kinds allocated as a JsxAttribute, which embeds its Node header at offset zero.
 		return (*JsxAttribute)(unsafe.Pointer(n)).propagateSubtreeFacts()
 	case KindJsxSpreadAttribute:
+		// SAFETY: This case only matches kinds allocated as a JsxSpreadAttribute, which embeds its Node header at offset zero.
 		return (*JsxSpreadAttribute)(unsafe.Pointer(n)).propagateSubtreeFacts()
 	case KindJsxClosingElement:
+		// SAFETY: This case only matches kinds allocated as a JsxClosingElement, which embeds its Node header at offset zero.
 		return (*JsxClosingElement)(unsafe.Pointer(n)).propagateSubtreeFacts()
 	case KindJsxExpression:
+		// SAFETY: This case only matches kinds allocated as a JsxExpression, which embeds its Node header at offset zero.
 		return (*JsxExpression)(unsafe.Pointer(n)).propagateSubtreeFacts()
 	case KindSyntaxList:
+		// SAFETY: This case only matches kinds allocated as a SyntaxList, which embeds its Node header at offset zero.
 		return (*SyntaxList)(unsafe.Pointer(n)).propagateSubtreeFacts()
 	case KindJSDoc:
+		// SAFETY: This case only matches kinds allocated as a JSDoc, which embeds its Node header at offset zero.
 		return (*JSDoc)(unsafe.Pointer(n)).propagateSubtreeFacts()
 	case KindJSDocTypeExpression:
+		// SAFETY: This case only matches kinds allocated as a JSDocTypeExpression, which embeds its Node header at offset zero.
 		return (*JSDocTypeExpression)(unsafe.Pointer(n)).propagateSubtreeFacts()
 	case KindJSDocNonNullableType:
+		// SAFETY: This case only matches kinds allocated as a JSDocNonNullableType, which embeds its Node header at offset zero.
 		return (*JSDocNonNullableType)(unsafe.Pointer(n)).propagateSubtreeFacts()
 	case KindJSDocNullableType:
+		// SAFETY: This case only matches kinds allocated as a JSDocNullableType, which embeds its Node header at offset zero.
 		return (*JSDocNullableType)(unsafe.Pointer(n)).propagateSubtreeFacts()
 	case KindJSDocAllType:
+		// SAFETY: This case only matches kinds allocated as a JSDocAllType, which embeds its Node header at offset zero.
 		return (*JSDocAllType)(unsafe.Pointer(n)).propagateSubtreeFacts()
 	case KindJSDocVariadicType:
+		// SAFETY: This case only matches kinds allocated as a JSDocVariadicType, which embeds its Node header at offset zero.
 		return (*JSDocVariadicType)(unsafe.Pointer(n)).propagateSubtreeFacts()
 	case KindJSDocOptionalType:
+		// SAFETY: This case only matches kinds allocated as a JSDocOptionalType, which embeds its Node header at offset zero.
 		return (*JSDocOptionalType)(unsafe.Pointer(n)).propagateSubtreeFacts()
 	case KindJSDocTypeTag:
+		// SAFETY: This case only matches kinds allocated as a JSDocTypeTag, which embeds its Node header at offset zero.
 		return (*JSDocTypeTag)(unsafe.Pointer(n)).propagateSubtreeFacts()
 	case KindJSDocUnknownTag:
+		// SAFETY: This case only matches kinds allocated as a JSDocUnknownTag, which embeds its Node header at offset zero.
 		return (*JSDocUnknownTag)(unsafe.Pointer(n)).propagateSubtreeFacts()
 	case KindJSDocTemplateTag:
+		// SAFETY: This case only matches kinds allocated as a JSDocTemplateTag, which embeds its Node header at offset zero.
 		return (*JSDocTemplateTag)(unsafe.Pointer(n)).propagateSubtreeFacts()
 	case KindJSDocReturnTag:
+		// SAFETY: This case only matches kinds allocated as a JSDocReturnTag, which embeds its Node header at offset zero.
 		return (*JSDocReturnTag)(unsafe.Pointer(n)).propagateSubtreeFacts()
 	case KindJSDocPublicTag:
+		// SAFETY: This case only matches kinds allocated as a JSDocPublicTag, which embeds its Node header at offset zero.
 		return (*JSDocPublicTag)(unsafe.Pointer(n)).propagateSubtreeFacts()
 	case KindJSDocPrivateTag:
+		// SAFETY: This case only matches kinds allocated as a JSDocPrivateTag, which embeds its Node header at offset zero.
 		return (*JSDocPrivateTag)(unsafe.Pointer(n)).propagateSubtreeFacts()
 	case KindJSDocProtectedTag:
+		// SAFETY: This case only matches kinds allocated as a JSDocProtectedTag, which embeds its Node header at offset zero.
 		return (*JSDocProtectedTag)(unsafe.Pointer(n)).propagateSubtreeFacts()
 	case KindJSDocReadonlyTag:
+		// SAFETY: This case only matches kinds allocated as a JSDocReadonlyTag, which embeds its Node header at offset zero.
 		return (*JSDocReadonlyTag)(unsafe.Pointer(n)).propagateSubtreeFacts()
 	case KindJSDocOverrideTag:
+		// SAFETY: This case only matches kinds allocated as a JSDocOverrideTag, which embeds its Node header at offset zero.
 		return (*JSDocOverrideTag)(unsafe.Pointer(n)).propagateSubtreeFacts()
 	case KindJSDocDeprecatedTag:
+		// SAFETY: This case only matches kinds allocated as a JSDocDeprecatedTag, which embeds its Node header at offset zero.
 		return (*JSDocDeprecatedTag)(unsafe.Pointer(n)).propagateSubtreeFacts()
 	case KindJSDocSeeTag:
+		// SAFETY: This case only matches kinds allocated as a JSDocSeeTag, which embeds its Node header at offset zero.
 		return (*JSDocSeeTag)(unsafe.Pointer(n)).propagateSubtreeFacts()
 	case KindJSDocImplementsTag:
+		// SAFETY: This case only matches kinds allocated as a JSDocImplementsTag, which embeds its Node header at offset zero.
 		return (*JSDocImplementsTag)(unsafe.Pointer(n)).propagateSubtreeFacts()
 	case KindJSDocAugmentsTag:
+		// SAFETY: This case only matches kinds allocated as a JSDocAugmentsTag, which embeds its Node header at offset zero.
 		return (*JSDocAugmentsTag)(unsafe.Pointer(n)).propagateSubtreeFacts()
 	case KindJSDocSatisfiesTag:
+		// SAFETY: This case only matches kinds allocated as a JSDocSatisfiesTag, which embeds its Node header at offset zero.
 		return (*JSDocSatisfiesTag)(unsafe.Pointer(n)).propagateSubtreeFacts()
 	case KindJSDocThrowsTag:
+		// SAFETY: This case only matches kinds allocated as a JSDocThrowsTag, which embeds its Node header at offset zero.
 		return (*JSDocThrowsTag)(unsafe.Pointer(n)).propagateSubtreeFacts()
 	case KindJSDocThisTag:
+		// SAFETY: This case only matches kinds allocated as a JSDocThisTag, which embeds its Node header at offset zero.
 		return (*JSDocThisTag)(unsafe.Pointer(n)).propagateSubtreeFacts()
 	case KindJSDocImportTag:
+		// SAFETY: This case only matches kinds allocated as a JSDocImportTag, which embeds its Node header at offset zero.
 		return (*JSDocImportTag)(unsafe.Pointer(n)).propagateSubtreeFacts()
 	case KindJSDocCallbackTag:
+		// SAFETY: This case only matches kinds allocated as a JSDocCallbackTag, which embeds its Node header at offset zero.
 		return (*JSDocCallbackTag)(unsafe.Pointer(n)).propagateSubtreeFacts()
 	case KindJSDocOverloadTag:
+		// SAFETY: This case only matches kinds allocated as a JSDocOverloadTag, which embeds its Node header at offset zero.
 		return (*JSDocOverloadTag)(unsafe.Pointer(n)).propagateSubtreeFacts()
 	case KindJSDocTypedefTag:
+		// SAFETY: This case only matches kinds allocated as a JSDocTypedefTag, which embeds its Node header at offset zero.
 		return (*JSDocTypedefTag)(unsafe.Pointer(n)).propagateSubtreeFacts()
 	case KindJSDocSignature:
+		// SAFETY: This case only matches kinds allocated as a JSDocSignature, which embeds its Node header at offset zero.
 		return (*JSDocSignature)(unsafe.Pointer(n)).propagateSubtreeFacts()
 	case KindJSDocNameReference:
+		// SAFETY: This case only matches kinds allocated as a JSDocNameReference, which embeds its Node header at offset zero.
 		return (*JSDocNameReference)(unsafe.Pointer(n)).propagateSubtreeFacts()
 	case KindSourceFile:
+		// SAFETY: This case only matches kinds allocated as a SourceFile, which embeds its Node header at offset zero.
 		return (*SourceFile)(unsafe.Pointer(n)).propagateSubtreeFacts()
 	case KindModuleDeclaration:
+		// SAFETY: This case only matches kinds allocated as a ModuleDeclaration, which embeds its Node header at offset zero.
 		return (*ModuleDeclaration)(unsafe.Pointer(n)).propagateSubtreeFacts()
 	case KindImportEqualsDeclaration:
+		// SAFETY: This case only matches kinds allocated as a ImportEqualsDeclaration, which embeds its Node header at offset zero.
 		return (*ImportEqualsDeclaration)(unsafe.Pointer(n)).propagateSubtreeFacts()
 	case KindExportDeclaration:
+		// SAFETY: This case only matches kinds allocated as a ExportDeclaration, which embeds its Node header at offset zero.
 		return (*ExportDeclaration)(unsafe.Pointer(n)).propagateSubtreeFacts()
 	case KindImportType:
+		// SAFETY: This case only matches kinds allocated as a ImportTypeNode, which embeds its Node header at offset zero.
 		return (*ImportTypeNode)(unsafe.Pointer(n)).propagateSubtreeFacts()
 	case KindImportClause:
+		// SAFETY: This case only matches kinds allocated as a ImportClause, which embeds its Node header at offset zero.
 		return (*ImportClause)(unsafe.Pointer(n)).propagateSubtreeFacts()
 	case KindImportSpecifier:
+		// SAFETY: This case only matches kinds allocated as a ImportSpecifier, which embeds its Node header at offset zero.
 		return (*ImportSpecifier)(unsafe.Pointer(n)).propagateSubtreeFacts()
 	case KindJSDocText:
+		// SAFETY: This case only matches kinds allocated as a JSDocText, which embeds its Node header at offset zero.
 		return (*JSDocText)(unsafe.Pointer(n)).propagateSubtreeFacts()
 	case KindJSDocLink:
+		// SAFETY: This case only matches kinds allocated as a JSDocLink, which embeds its Node header at offset zero.
 		return (*JSDocLink)(unsafe.Pointer(n)).propagateSubtreeFacts()
 	case KindJSDocLinkPlain:
+		// SAFETY: This case only matches kinds allocated as a JSDocLinkPlain, which embeds its Node header at offset zero.
 		return (*JSDocLinkPlain)(unsafe.Pointer(n)).propagateSubtreeFacts()
 	case KindJSDocLinkCode:
+		// SAFETY: This case only matches kinds allocated as a JSDocLinkCode, which embeds its Node header at offset zero.
 		return (*JSDocLinkCode)(unsafe.Pointer(n)).propagateSubtreeFacts()
 	case KindTypeParameter:
+		// SAFETY: This case only matches kinds allocated as a TypeParameterDeclaration, which embeds its Node header at offset zero.
 		return (*TypeParameterDeclaration)(unsafe.Pointer(n)).propagateSubtreeFacts()
 	case KindSyntheticReferenceExpression:
+		// SAFETY: This case only matches kinds allocated as a SyntheticReferenceExpression, which embeds its Node header at offset zero.
 		return (*SyntheticReferenceExpression)(unsafe.Pointer(n)).propagateSubtreeFacts()
 	case KindJSDocTypeLiteral:
+		// SAFETY: This case only matches kinds allocated as a JSDocTypeLiteral, which embeds its Node header at offset zero.
 		return (*JSDocTypeLiteral)(unsafe.Pointer(n)).propagateSubtreeFacts()
 	case KindJSDocParameterTag, KindJSDocPropertyTag:
+		// SAFETY: This case only matches kinds allocated as a JSDocParameterOrPropertyTag, which embeds its Node header at offset zero.
 		return (*JSDocParameterOrPropertyTag)(unsafe.Pointer(n)).propagateSubtreeFacts()
 	default:
 		return SubtreeFactsNone
@@ -11090,92 +12072,136 @@ var nodeFlowNodeDataDispatch = [kindFlowReduceLabelData + 1]uint8{
 func (n *Node) FlowNodeData() *FlowNodeBase {
 	switch nodeFlowNodeDataDispatch[n.Kind] {
 	case 1:
+		// SAFETY: This case only matches kinds allocated as a Identifier, which embeds its Node header at offset zero.
 		return (*Identifier)(unsafe.Pointer(n)).FlowNodeData()
 	case 2:
+		// SAFETY: This case only matches kinds allocated as a QualifiedName, which embeds its Node header at offset zero.
 		return (*QualifiedName)(unsafe.Pointer(n)).FlowNodeData()
 	case 3:
+		// SAFETY: This case only matches kinds allocated as a EmptyStatement, which embeds its Node header at offset zero.
 		return (*EmptyStatement)(unsafe.Pointer(n)).FlowNodeData()
 	case 4:
+		// SAFETY: This case only matches kinds allocated as a IfStatement, which embeds its Node header at offset zero.
 		return (*IfStatement)(unsafe.Pointer(n)).FlowNodeData()
 	case 5:
+		// SAFETY: This case only matches kinds allocated as a DoStatement, which embeds its Node header at offset zero.
 		return (*DoStatement)(unsafe.Pointer(n)).FlowNodeData()
 	case 6:
+		// SAFETY: This case only matches kinds allocated as a WhileStatement, which embeds its Node header at offset zero.
 		return (*WhileStatement)(unsafe.Pointer(n)).FlowNodeData()
 	case 7:
+		// SAFETY: This case only matches kinds allocated as a ForStatement, which embeds its Node header at offset zero.
 		return (*ForStatement)(unsafe.Pointer(n)).FlowNodeData()
 	case 8:
+		// SAFETY: This case only matches kinds allocated as a ForInOrOfStatement, which embeds its Node header at offset zero.
 		return (*ForInOrOfStatement)(unsafe.Pointer(n)).FlowNodeData()
 	case 9:
+		// SAFETY: This case only matches kinds allocated as a BreakStatement, which embeds its Node header at offset zero.
 		return (*BreakStatement)(unsafe.Pointer(n)).FlowNodeData()
 	case 10:
+		// SAFETY: This case only matches kinds allocated as a ContinueStatement, which embeds its Node header at offset zero.
 		return (*ContinueStatement)(unsafe.Pointer(n)).FlowNodeData()
 	case 11:
+		// SAFETY: This case only matches kinds allocated as a ReturnStatement, which embeds its Node header at offset zero.
 		return (*ReturnStatement)(unsafe.Pointer(n)).FlowNodeData()
 	case 12:
+		// SAFETY: This case only matches kinds allocated as a WithStatement, which embeds its Node header at offset zero.
 		return (*WithStatement)(unsafe.Pointer(n)).FlowNodeData()
 	case 13:
+		// SAFETY: This case only matches kinds allocated as a SwitchStatement, which embeds its Node header at offset zero.
 		return (*SwitchStatement)(unsafe.Pointer(n)).FlowNodeData()
 	case 14:
+		// SAFETY: This case only matches kinds allocated as a ThrowStatement, which embeds its Node header at offset zero.
 		return (*ThrowStatement)(unsafe.Pointer(n)).FlowNodeData()
 	case 15:
+		// SAFETY: This case only matches kinds allocated as a TryStatement, which embeds its Node header at offset zero.
 		return (*TryStatement)(unsafe.Pointer(n)).FlowNodeData()
 	case 16:
+		// SAFETY: This case only matches kinds allocated as a DebuggerStatement, which embeds its Node header at offset zero.
 		return (*DebuggerStatement)(unsafe.Pointer(n)).FlowNodeData()
 	case 17:
+		// SAFETY: This case only matches kinds allocated as a LabeledStatement, which embeds its Node header at offset zero.
 		return (*LabeledStatement)(unsafe.Pointer(n)).FlowNodeData()
 	case 18:
+		// SAFETY: This case only matches kinds allocated as a ExpressionStatement, which embeds its Node header at offset zero.
 		return (*ExpressionStatement)(unsafe.Pointer(n)).FlowNodeData()
 	case 19:
+		// SAFETY: This case only matches kinds allocated as a Block, which embeds its Node header at offset zero.
 		return (*Block)(unsafe.Pointer(n)).FlowNodeData()
 	case 20:
+		// SAFETY: This case only matches kinds allocated as a VariableStatement, which embeds its Node header at offset zero.
 		return (*VariableStatement)(unsafe.Pointer(n)).FlowNodeData()
 	case 21:
+		// SAFETY: This case only matches kinds allocated as a BindingElement, which embeds its Node header at offset zero.
 		return (*BindingElement)(unsafe.Pointer(n)).FlowNodeData()
 	case 22:
+		// SAFETY: This case only matches kinds allocated as a MissingDeclaration, which embeds its Node header at offset zero.
 		return (*MissingDeclaration)(unsafe.Pointer(n)).FlowNodeData()
 	case 23:
+		// SAFETY: This case only matches kinds allocated as a FunctionDeclaration, which embeds its Node header at offset zero.
 		return (*FunctionDeclaration)(unsafe.Pointer(n)).FlowNodeData()
 	case 24:
+		// SAFETY: This case only matches kinds allocated as a ClassDeclaration, which embeds its Node header at offset zero.
 		return (*ClassDeclaration)(unsafe.Pointer(n)).FlowNodeData()
 	case 25:
+		// SAFETY: This case only matches kinds allocated as a InterfaceDeclaration, which embeds its Node header at offset zero.
 		return (*InterfaceDeclaration)(unsafe.Pointer(n)).FlowNodeData()
 	case 26:
+		// SAFETY: This case only matches kinds allocated as a TypeAliasDeclaration, which embeds its Node header at offset zero.
 		return (*TypeAliasDeclaration)(unsafe.Pointer(n)).FlowNodeData()
 	case 27:
+		// SAFETY: This case only matches kinds allocated as a EnumDeclaration, which embeds its Node header at offset zero.
 		return (*EnumDeclaration)(unsafe.Pointer(n)).FlowNodeData()
 	case 28:
+		// SAFETY: This case only matches kinds allocated as a ModuleBlock, which embeds its Node header at offset zero.
 		return (*ModuleBlock)(unsafe.Pointer(n)).FlowNodeData()
 	case 29:
+		// SAFETY: This case only matches kinds allocated as a NotEmittedStatement, which embeds its Node header at offset zero.
 		return (*NotEmittedStatement)(unsafe.Pointer(n)).FlowNodeData()
 	case 30:
+		// SAFETY: This case only matches kinds allocated as a ImportDeclaration, which embeds its Node header at offset zero.
 		return (*ImportDeclaration)(unsafe.Pointer(n)).FlowNodeData()
 	case 31:
+		// SAFETY: This case only matches kinds allocated as a ExportAssignment, which embeds its Node header at offset zero.
 		return (*ExportAssignment)(unsafe.Pointer(n)).FlowNodeData()
 	case 32:
+		// SAFETY: This case only matches kinds allocated as a NamespaceExportDeclaration, which embeds its Node header at offset zero.
 		return (*NamespaceExportDeclaration)(unsafe.Pointer(n)).FlowNodeData()
 	case 33:
+		// SAFETY: This case only matches kinds allocated as a GetAccessorDeclaration, which embeds its Node header at offset zero.
 		return (*GetAccessorDeclaration)(unsafe.Pointer(n)).FlowNodeData()
 	case 34:
+		// SAFETY: This case only matches kinds allocated as a SetAccessorDeclaration, which embeds its Node header at offset zero.
 		return (*SetAccessorDeclaration)(unsafe.Pointer(n)).FlowNodeData()
 	case 35:
+		// SAFETY: This case only matches kinds allocated as a MethodDeclaration, which embeds its Node header at offset zero.
 		return (*MethodDeclaration)(unsafe.Pointer(n)).FlowNodeData()
 	case 36:
+		// SAFETY: This case only matches kinds allocated as a KeywordExpression, which embeds its Node header at offset zero.
 		return (*KeywordExpression)(unsafe.Pointer(n)).FlowNodeData()
 	case 37:
+		// SAFETY: This case only matches kinds allocated as a ArrowFunction, which embeds its Node header at offset zero.
 		return (*ArrowFunction)(unsafe.Pointer(n)).FlowNodeData()
 	case 38:
+		// SAFETY: This case only matches kinds allocated as a FunctionExpression, which embeds its Node header at offset zero.
 		return (*FunctionExpression)(unsafe.Pointer(n)).FlowNodeData()
 	case 39:
+		// SAFETY: This case only matches kinds allocated as a PropertyAccessExpression, which embeds its Node header at offset zero.
 		return (*PropertyAccessExpression)(unsafe.Pointer(n)).FlowNodeData()
 	case 40:
+		// SAFETY: This case only matches kinds allocated as a ElementAccessExpression, which embeds its Node header at offset zero.
 		return (*ElementAccessExpression)(unsafe.Pointer(n)).FlowNodeData()
 	case 41:
+		// SAFETY: This case only matches kinds allocated as a MetaProperty, which embeds its Node header at offset zero.
 		return (*MetaProperty)(unsafe.Pointer(n)).FlowNodeData()
 	case 42:
+		// SAFETY: This case only matches kinds allocated as a ModuleDeclaration, which embeds its Node header at offset zero.
 		return (*ModuleDeclaration)(unsafe.Pointer(n)).FlowNodeData()
 	case 43:
+		// SAFETY: This case only matches kinds allocated as a ImportEqualsDeclaration, which embeds its Node header at offset zero.
 		return (*ImportEqualsDeclaration)(unsafe.Pointer(n)).FlowNodeData()
 	case 44:
+		// SAFETY: This case only matches kinds allocated as a ExportDeclaration, which embeds its Node header at offset zero.
 		return (*ExportDeclaration)(unsafe.Pointer(n)).FlowNodeData()
 	default:
 		return nil
@@ -11246,116 +12272,172 @@ var nodeDeclarationDataDispatch = [kindFlowReduceLabelData + 1]uint8{
 func (n *Node) DeclarationData() *DeclarationBase {
 	switch nodeDeclarationDataDispatch[n.Kind] {
 	case 1:
+		// SAFETY: This case only matches kinds allocated as a VariableDeclaration, which embeds its Node header at offset zero.
 		return (*VariableDeclaration)(unsafe.Pointer(n)).DeclarationData()
 	case 2:
+		// SAFETY: This case only matches kinds allocated as a ParameterDeclaration, which embeds its Node header at offset zero.
 		return (*ParameterDeclaration)(unsafe.Pointer(n)).DeclarationData()
 	case 3:
+		// SAFETY: This case only matches kinds allocated as a BindingElement, which embeds its Node header at offset zero.
 		return (*BindingElement)(unsafe.Pointer(n)).DeclarationData()
 	case 4:
+		// SAFETY: This case only matches kinds allocated as a MissingDeclaration, which embeds its Node header at offset zero.
 		return (*MissingDeclaration)(unsafe.Pointer(n)).DeclarationData()
 	case 5:
+		// SAFETY: This case only matches kinds allocated as a FunctionDeclaration, which embeds its Node header at offset zero.
 		return (*FunctionDeclaration)(unsafe.Pointer(n)).DeclarationData()
 	case 6:
+		// SAFETY: This case only matches kinds allocated as a ClassDeclaration, which embeds its Node header at offset zero.
 		return (*ClassDeclaration)(unsafe.Pointer(n)).DeclarationData()
 	case 7:
+		// SAFETY: This case only matches kinds allocated as a ClassExpression, which embeds its Node header at offset zero.
 		return (*ClassExpression)(unsafe.Pointer(n)).DeclarationData()
 	case 8:
+		// SAFETY: This case only matches kinds allocated as a InterfaceDeclaration, which embeds its Node header at offset zero.
 		return (*InterfaceDeclaration)(unsafe.Pointer(n)).DeclarationData()
 	case 9:
+		// SAFETY: This case only matches kinds allocated as a TypeAliasDeclaration, which embeds its Node header at offset zero.
 		return (*TypeAliasDeclaration)(unsafe.Pointer(n)).DeclarationData()
 	case 10:
+		// SAFETY: This case only matches kinds allocated as a EnumMember, which embeds its Node header at offset zero.
 		return (*EnumMember)(unsafe.Pointer(n)).DeclarationData()
 	case 11:
+		// SAFETY: This case only matches kinds allocated as a EnumDeclaration, which embeds its Node header at offset zero.
 		return (*EnumDeclaration)(unsafe.Pointer(n)).DeclarationData()
 	case 12:
+		// SAFETY: This case only matches kinds allocated as a NotEmittedTypeElement, which embeds its Node header at offset zero.
 		return (*NotEmittedTypeElement)(unsafe.Pointer(n)).DeclarationData()
 	case 13:
+		// SAFETY: This case only matches kinds allocated as a ImportDeclaration, which embeds its Node header at offset zero.
 		return (*ImportDeclaration)(unsafe.Pointer(n)).DeclarationData()
 	case 14:
+		// SAFETY: This case only matches kinds allocated as a NamespaceImport, which embeds its Node header at offset zero.
 		return (*NamespaceImport)(unsafe.Pointer(n)).DeclarationData()
 	case 15:
+		// SAFETY: This case only matches kinds allocated as a ExportAssignment, which embeds its Node header at offset zero.
 		return (*ExportAssignment)(unsafe.Pointer(n)).DeclarationData()
 	case 16:
+		// SAFETY: This case only matches kinds allocated as a NamespaceExportDeclaration, which embeds its Node header at offset zero.
 		return (*NamespaceExportDeclaration)(unsafe.Pointer(n)).DeclarationData()
 	case 17:
+		// SAFETY: This case only matches kinds allocated as a NamespaceExport, which embeds its Node header at offset zero.
 		return (*NamespaceExport)(unsafe.Pointer(n)).DeclarationData()
 	case 18:
+		// SAFETY: This case only matches kinds allocated as a ExportSpecifier, which embeds its Node header at offset zero.
 		return (*ExportSpecifier)(unsafe.Pointer(n)).DeclarationData()
 	case 19:
+		// SAFETY: This case only matches kinds allocated as a CallSignatureDeclaration, which embeds its Node header at offset zero.
 		return (*CallSignatureDeclaration)(unsafe.Pointer(n)).DeclarationData()
 	case 20:
+		// SAFETY: This case only matches kinds allocated as a ConstructSignatureDeclaration, which embeds its Node header at offset zero.
 		return (*ConstructSignatureDeclaration)(unsafe.Pointer(n)).DeclarationData()
 	case 21:
+		// SAFETY: This case only matches kinds allocated as a ConstructorDeclaration, which embeds its Node header at offset zero.
 		return (*ConstructorDeclaration)(unsafe.Pointer(n)).DeclarationData()
 	case 22:
+		// SAFETY: This case only matches kinds allocated as a GetAccessorDeclaration, which embeds its Node header at offset zero.
 		return (*GetAccessorDeclaration)(unsafe.Pointer(n)).DeclarationData()
 	case 23:
+		// SAFETY: This case only matches kinds allocated as a SetAccessorDeclaration, which embeds its Node header at offset zero.
 		return (*SetAccessorDeclaration)(unsafe.Pointer(n)).DeclarationData()
 	case 24:
+		// SAFETY: This case only matches kinds allocated as a IndexSignatureDeclaration, which embeds its Node header at offset zero.
 		return (*IndexSignatureDeclaration)(unsafe.Pointer(n)).DeclarationData()
 	case 25:
+		// SAFETY: This case only matches kinds allocated as a MethodSignatureDeclaration, which embeds its Node header at offset zero.
 		return (*MethodSignatureDeclaration)(unsafe.Pointer(n)).DeclarationData()
 	case 26:
+		// SAFETY: This case only matches kinds allocated as a MethodDeclaration, which embeds its Node header at offset zero.
 		return (*MethodDeclaration)(unsafe.Pointer(n)).DeclarationData()
 	case 27:
+		// SAFETY: This case only matches kinds allocated as a PropertySignatureDeclaration, which embeds its Node header at offset zero.
 		return (*PropertySignatureDeclaration)(unsafe.Pointer(n)).DeclarationData()
 	case 28:
+		// SAFETY: This case only matches kinds allocated as a PropertyDeclaration, which embeds its Node header at offset zero.
 		return (*PropertyDeclaration)(unsafe.Pointer(n)).DeclarationData()
 	case 29:
+		// SAFETY: This case only matches kinds allocated as a SemicolonClassElement, which embeds its Node header at offset zero.
 		return (*SemicolonClassElement)(unsafe.Pointer(n)).DeclarationData()
 	case 30:
+		// SAFETY: This case only matches kinds allocated as a ClassStaticBlockDeclaration, which embeds its Node header at offset zero.
 		return (*ClassStaticBlockDeclaration)(unsafe.Pointer(n)).DeclarationData()
 	case 31:
+		// SAFETY: This case only matches kinds allocated as a NoSubstitutionTemplateLiteral, which embeds its Node header at offset zero.
 		return (*NoSubstitutionTemplateLiteral)(unsafe.Pointer(n)).DeclarationData()
 	case 32:
+		// SAFETY: This case only matches kinds allocated as a BinaryExpression, which embeds its Node header at offset zero.
 		return (*BinaryExpression)(unsafe.Pointer(n)).DeclarationData()
 	case 33:
+		// SAFETY: This case only matches kinds allocated as a ArrowFunction, which embeds its Node header at offset zero.
 		return (*ArrowFunction)(unsafe.Pointer(n)).DeclarationData()
 	case 34:
+		// SAFETY: This case only matches kinds allocated as a FunctionExpression, which embeds its Node header at offset zero.
 		return (*FunctionExpression)(unsafe.Pointer(n)).DeclarationData()
 	case 35:
+		// SAFETY: This case only matches kinds allocated as a CallExpression, which embeds its Node header at offset zero.
 		return (*CallExpression)(unsafe.Pointer(n)).DeclarationData()
 	case 36:
+		// SAFETY: This case only matches kinds allocated as a ObjectLiteralExpression, which embeds its Node header at offset zero.
 		return (*ObjectLiteralExpression)(unsafe.Pointer(n)).DeclarationData()
 	case 37:
+		// SAFETY: This case only matches kinds allocated as a SpreadAssignment, which embeds its Node header at offset zero.
 		return (*SpreadAssignment)(unsafe.Pointer(n)).DeclarationData()
 	case 38:
+		// SAFETY: This case only matches kinds allocated as a PropertyAssignment, which embeds its Node header at offset zero.
 		return (*PropertyAssignment)(unsafe.Pointer(n)).DeclarationData()
 	case 39:
+		// SAFETY: This case only matches kinds allocated as a ShorthandPropertyAssignment, which embeds its Node header at offset zero.
 		return (*ShorthandPropertyAssignment)(unsafe.Pointer(n)).DeclarationData()
 	case 40:
+		// SAFETY: This case only matches kinds allocated as a MappedTypeNode, which embeds its Node header at offset zero.
 		return (*MappedTypeNode)(unsafe.Pointer(n)).DeclarationData()
 	case 41:
+		// SAFETY: This case only matches kinds allocated as a TypeLiteralNode, which embeds its Node header at offset zero.
 		return (*TypeLiteralNode)(unsafe.Pointer(n)).DeclarationData()
 	case 42:
+		// SAFETY: This case only matches kinds allocated as a NamedTupleMember, which embeds its Node header at offset zero.
 		return (*NamedTupleMember)(unsafe.Pointer(n)).DeclarationData()
 	case 43:
+		// SAFETY: This case only matches kinds allocated as a FunctionTypeNode, which embeds its Node header at offset zero.
 		return (*FunctionTypeNode)(unsafe.Pointer(n)).DeclarationData()
 	case 44:
+		// SAFETY: This case only matches kinds allocated as a ConstructorTypeNode, which embeds its Node header at offset zero.
 		return (*ConstructorTypeNode)(unsafe.Pointer(n)).DeclarationData()
 	case 45:
+		// SAFETY: This case only matches kinds allocated as a JsxAttributes, which embeds its Node header at offset zero.
 		return (*JsxAttributes)(unsafe.Pointer(n)).DeclarationData()
 	case 46:
+		// SAFETY: This case only matches kinds allocated as a JsxAttribute, which embeds its Node header at offset zero.
 		return (*JsxAttribute)(unsafe.Pointer(n)).DeclarationData()
 	case 47:
+		// SAFETY: This case only matches kinds allocated as a JsxSpreadAttribute, which embeds its Node header at offset zero.
 		return (*JsxSpreadAttribute)(unsafe.Pointer(n)).DeclarationData()
 	case 48:
+		// SAFETY: This case only matches kinds allocated as a JSDocSignature, which embeds its Node header at offset zero.
 		return (*JSDocSignature)(unsafe.Pointer(n)).DeclarationData()
 	case 49:
+		// SAFETY: This case only matches kinds allocated as a SourceFile, which embeds its Node header at offset zero.
 		return (*SourceFile)(unsafe.Pointer(n)).DeclarationData()
 	case 50:
+		// SAFETY: This case only matches kinds allocated as a ModuleDeclaration, which embeds its Node header at offset zero.
 		return (*ModuleDeclaration)(unsafe.Pointer(n)).DeclarationData()
 	case 51:
+		// SAFETY: This case only matches kinds allocated as a ImportEqualsDeclaration, which embeds its Node header at offset zero.
 		return (*ImportEqualsDeclaration)(unsafe.Pointer(n)).DeclarationData()
 	case 52:
+		// SAFETY: This case only matches kinds allocated as a ExportDeclaration, which embeds its Node header at offset zero.
 		return (*ExportDeclaration)(unsafe.Pointer(n)).DeclarationData()
 	case 53:
+		// SAFETY: This case only matches kinds allocated as a ImportClause, which embeds its Node header at offset zero.
 		return (*ImportClause)(unsafe.Pointer(n)).DeclarationData()
 	case 54:
+		// SAFETY: This case only matches kinds allocated as a ImportSpecifier, which embeds its Node header at offset zero.
 		return (*ImportSpecifier)(unsafe.Pointer(n)).DeclarationData()
 	case 55:
+		// SAFETY: This case only matches kinds allocated as a TypeParameterDeclaration, which embeds its Node header at offset zero.
 		return (*TypeParameterDeclaration)(unsafe.Pointer(n)).DeclarationData()
 	case 56:
+		// SAFETY: This case only matches kinds allocated as a JSDocTypeLiteral, which embeds its Node header at offset zero.
 		return (*JSDocTypeLiteral)(unsafe.Pointer(n)).DeclarationData()
 	default:
 		return nil
@@ -11383,32 +12465,46 @@ var nodeExportableDataDispatch = [kindFlowReduceLabelData + 1]uint8{
 func (n *Node) ExportableData() *ExportableBase {
 	switch nodeExportableDataDispatch[n.Kind] {
 	case 1:
+		// SAFETY: This case only matches kinds allocated as a VariableDeclaration, which embeds its Node header at offset zero.
 		return (*VariableDeclaration)(unsafe.Pointer(n)).ExportableData()
 	case 2:
+		// SAFETY: This case only matches kinds allocated as a BindingElement, which embeds its Node header at offset zero.
 		return (*BindingElement)(unsafe.Pointer(n)).ExportableData()
 	case 3:
+		// SAFETY: This case only matches kinds allocated as a FunctionDeclaration, which embeds its Node header at offset zero.
 		return (*FunctionDeclaration)(unsafe.Pointer(n)).ExportableData()
 	case 4:
+		// SAFETY: This case only matches kinds allocated as a ClassDeclaration, which embeds its Node header at offset zero.
 		return (*ClassDeclaration)(unsafe.Pointer(n)).ExportableData()
 	case 5:
+		// SAFETY: This case only matches kinds allocated as a ClassExpression, which embeds its Node header at offset zero.
 		return (*ClassExpression)(unsafe.Pointer(n)).ExportableData()
 	case 6:
+		// SAFETY: This case only matches kinds allocated as a InterfaceDeclaration, which embeds its Node header at offset zero.
 		return (*InterfaceDeclaration)(unsafe.Pointer(n)).ExportableData()
 	case 7:
+		// SAFETY: This case only matches kinds allocated as a TypeAliasDeclaration, which embeds its Node header at offset zero.
 		return (*TypeAliasDeclaration)(unsafe.Pointer(n)).ExportableData()
 	case 8:
+		// SAFETY: This case only matches kinds allocated as a EnumDeclaration, which embeds its Node header at offset zero.
 		return (*EnumDeclaration)(unsafe.Pointer(n)).ExportableData()
 	case 9:
+		// SAFETY: This case only matches kinds allocated as a NamespaceImport, which embeds its Node header at offset zero.
 		return (*NamespaceImport)(unsafe.Pointer(n)).ExportableData()
 	case 10:
+		// SAFETY: This case only matches kinds allocated as a ExportSpecifier, which embeds its Node header at offset zero.
 		return (*ExportSpecifier)(unsafe.Pointer(n)).ExportableData()
 	case 11:
+		// SAFETY: This case only matches kinds allocated as a ModuleDeclaration, which embeds its Node header at offset zero.
 		return (*ModuleDeclaration)(unsafe.Pointer(n)).ExportableData()
 	case 12:
+		// SAFETY: This case only matches kinds allocated as a ImportEqualsDeclaration, which embeds its Node header at offset zero.
 		return (*ImportEqualsDeclaration)(unsafe.Pointer(n)).ExportableData()
 	case 13:
+		// SAFETY: This case only matches kinds allocated as a ImportClause, which embeds its Node header at offset zero.
 		return (*ImportClause)(unsafe.Pointer(n)).ExportableData()
 	case 14:
+		// SAFETY: This case only matches kinds allocated as a ImportSpecifier, which embeds its Node header at offset zero.
 		return (*ImportSpecifier)(unsafe.Pointer(n)).ExportableData()
 	default:
 		return nil
@@ -11450,58 +12546,85 @@ var nodeLocalsContainerDataDispatch = [kindFlowReduceLabelData + 1]uint8{
 func (n *Node) LocalsContainerData() *LocalsContainerBase {
 	switch nodeLocalsContainerDataDispatch[n.Kind] {
 	case 1:
+		// SAFETY: This case only matches kinds allocated as a ForStatement, which embeds its Node header at offset zero.
 		return (*ForStatement)(unsafe.Pointer(n)).LocalsContainerData()
 	case 2:
+		// SAFETY: This case only matches kinds allocated as a ForInOrOfStatement, which embeds its Node header at offset zero.
 		return (*ForInOrOfStatement)(unsafe.Pointer(n)).LocalsContainerData()
 	case 3:
+		// SAFETY: This case only matches kinds allocated as a CaseBlock, which embeds its Node header at offset zero.
 		return (*CaseBlock)(unsafe.Pointer(n)).LocalsContainerData()
 	case 4:
+		// SAFETY: This case only matches kinds allocated as a CatchClause, which embeds its Node header at offset zero.
 		return (*CatchClause)(unsafe.Pointer(n)).LocalsContainerData()
 	case 5:
+		// SAFETY: This case only matches kinds allocated as a Block, which embeds its Node header at offset zero.
 		return (*Block)(unsafe.Pointer(n)).LocalsContainerData()
 	case 6:
+		// SAFETY: This case only matches kinds allocated as a FunctionDeclaration, which embeds its Node header at offset zero.
 		return (*FunctionDeclaration)(unsafe.Pointer(n)).LocalsContainerData()
 	case 7:
+		// SAFETY: This case only matches kinds allocated as a ClassDeclaration, which embeds its Node header at offset zero.
 		return (*ClassDeclaration)(unsafe.Pointer(n)).LocalsContainerData()
 	case 8:
+		// SAFETY: This case only matches kinds allocated as a ClassExpression, which embeds its Node header at offset zero.
 		return (*ClassExpression)(unsafe.Pointer(n)).LocalsContainerData()
 	case 9:
+		// SAFETY: This case only matches kinds allocated as a TypeAliasDeclaration, which embeds its Node header at offset zero.
 		return (*TypeAliasDeclaration)(unsafe.Pointer(n)).LocalsContainerData()
 	case 10:
+		// SAFETY: This case only matches kinds allocated as a CallSignatureDeclaration, which embeds its Node header at offset zero.
 		return (*CallSignatureDeclaration)(unsafe.Pointer(n)).LocalsContainerData()
 	case 11:
+		// SAFETY: This case only matches kinds allocated as a ConstructSignatureDeclaration, which embeds its Node header at offset zero.
 		return (*ConstructSignatureDeclaration)(unsafe.Pointer(n)).LocalsContainerData()
 	case 12:
+		// SAFETY: This case only matches kinds allocated as a ConstructorDeclaration, which embeds its Node header at offset zero.
 		return (*ConstructorDeclaration)(unsafe.Pointer(n)).LocalsContainerData()
 	case 13:
+		// SAFETY: This case only matches kinds allocated as a GetAccessorDeclaration, which embeds its Node header at offset zero.
 		return (*GetAccessorDeclaration)(unsafe.Pointer(n)).LocalsContainerData()
 	case 14:
+		// SAFETY: This case only matches kinds allocated as a SetAccessorDeclaration, which embeds its Node header at offset zero.
 		return (*SetAccessorDeclaration)(unsafe.Pointer(n)).LocalsContainerData()
 	case 15:
+		// SAFETY: This case only matches kinds allocated as a IndexSignatureDeclaration, which embeds its Node header at offset zero.
 		return (*IndexSignatureDeclaration)(unsafe.Pointer(n)).LocalsContainerData()
 	case 16:
+		// SAFETY: This case only matches kinds allocated as a MethodSignatureDeclaration, which embeds its Node header at offset zero.
 		return (*MethodSignatureDeclaration)(unsafe.Pointer(n)).LocalsContainerData()
 	case 17:
+		// SAFETY: This case only matches kinds allocated as a MethodDeclaration, which embeds its Node header at offset zero.
 		return (*MethodDeclaration)(unsafe.Pointer(n)).LocalsContainerData()
 	case 18:
+		// SAFETY: This case only matches kinds allocated as a ClassStaticBlockDeclaration, which embeds its Node header at offset zero.
 		return (*ClassStaticBlockDeclaration)(unsafe.Pointer(n)).LocalsContainerData()
 	case 19:
+		// SAFETY: This case only matches kinds allocated as a ArrowFunction, which embeds its Node header at offset zero.
 		return (*ArrowFunction)(unsafe.Pointer(n)).LocalsContainerData()
 	case 20:
+		// SAFETY: This case only matches kinds allocated as a FunctionExpression, which embeds its Node header at offset zero.
 		return (*FunctionExpression)(unsafe.Pointer(n)).LocalsContainerData()
 	case 21:
+		// SAFETY: This case only matches kinds allocated as a ConditionalTypeNode, which embeds its Node header at offset zero.
 		return (*ConditionalTypeNode)(unsafe.Pointer(n)).LocalsContainerData()
 	case 22:
+		// SAFETY: This case only matches kinds allocated as a MappedTypeNode, which embeds its Node header at offset zero.
 		return (*MappedTypeNode)(unsafe.Pointer(n)).LocalsContainerData()
 	case 23:
+		// SAFETY: This case only matches kinds allocated as a FunctionTypeNode, which embeds its Node header at offset zero.
 		return (*FunctionTypeNode)(unsafe.Pointer(n)).LocalsContainerData()
 	case 24:
+		// SAFETY: This case only matches kinds allocated as a ConstructorTypeNode, which embeds its Node header at offset zero.
 		return (*ConstructorTypeNode)(unsafe.Pointer(n)).LocalsContainerData()
 	case 25:
+		// SAFETY: This case only matches kinds allocated as a JSDocSignature, which embeds its Node header at offset zero.
 		return (*JSDocSignature)(unsafe.Pointer(n)).LocalsContainerData()
 	case 26:
+		// SAFETY: This case only matches kinds allocated as a SourceFile, which embeds its Node header at offset zero.
 		return (*SourceFile)(unsafe.Pointer(n)).LocalsContainerData()
 	case 27:
+		// SAFETY: This case only matches kinds allocated as a ModuleDeclaration, which embeds its Node header at offset zero.
 		return (*ModuleDeclaration)(unsafe.Pointer(n)).LocalsContainerData()
 	default:
 		return nil
@@ -11528,32 +12651,46 @@ var nodeFunctionLikeDataDispatch = [kindFlowReduceLabelData + 1]uint8{
 func (n *Node) FunctionLikeData() *FunctionLikeBase {
 	switch nodeFunctionLikeDataDispatch[n.Kind] {
 	case 1:
+		// SAFETY: This case only matches kinds allocated as a FunctionDeclaration, which embeds its Node header at offset zero.
 		return (*FunctionDeclaration)(unsafe.Pointer(n)).FunctionLikeData()
 	case 2:
+		// SAFETY: This case only matches kinds allocated as a CallSignatureDeclaration, which embeds its Node header at offset zero.
 		return (*CallSignatureDeclaration)(unsafe.Pointer(n)).FunctionLikeData()
 	case 3:
+		// SAFETY: This case only matches kinds allocated as a ConstructSignatureDeclaration, which embeds its Node header at offset zero.
 		return (*ConstructSignatureDeclaration)(unsafe.Pointer(n)).FunctionLikeData()
 	case 4:
+		// SAFETY: This case only matches kinds allocated as a ConstructorDeclaration, which embeds its Node header at offset zero.
 		return (*ConstructorDeclaration)(unsafe.Pointer(n)).FunctionLikeData()
 	case 5:
+		// SAFETY: This case only matches kinds allocated as a GetAccessorDeclaration, which embeds its Node header at offset zero.
 		return (*GetAccessorDeclaration)(unsafe.Pointer(n)).FunctionLikeData()
 	case 6:
+		// SAFETY: This case only matches kinds allocated as a SetAccessorDeclaration, which embeds its Node header at offset zero.
 		return (*SetAccessorDeclaration)(unsafe.Pointer(n)).FunctionLikeData()
 	case 7:
+		// SAFETY: This case only matches kinds allocated as a IndexSignatureDeclaration, which embeds its Node header at offset zero.
 		return (*IndexSignatureDeclaration)(unsafe.Pointer(n)).FunctionLikeData()
 	case 8:
+		// SAFETY: This case only matches kinds allocated as a MethodSignatureDeclaration, which embeds its Node header at offset zero.
 		return (*MethodSignatureDeclaration)(unsafe.Pointer(n)).FunctionLikeData()
 	case 9:
+		// SAFETY: This case only matches kinds allocated as a MethodDeclaration, which embeds its Node header at offset zero.
 		return (*MethodDeclaration)(unsafe.Pointer(n)).FunctionLikeData()
 	case 10:
+		// SAFETY: This case only matches kinds allocated as a ArrowFunction, which embeds its Node header at offset zero.
 		return (*ArrowFunction)(unsafe.Pointer(n)).FunctionLikeData()
 	case 11:
+		// SAFETY: This case only matches kinds allocated as a FunctionExpression, which embeds its Node header at offset zero.
 		return (*FunctionExpression)(unsafe.Pointer(n)).FunctionLikeData()
 	case 12:
+		// SAFETY: This case only matches kinds allocated as a FunctionTypeNode, which embeds its Node header at offset zero.
 		return (*FunctionTypeNode)(unsafe.Pointer(n)).FunctionLikeData()
 	case 13:
+		// SAFETY: This case only matches kinds allocated as a ConstructorTypeNode, which embeds its Node header at offset zero.
 		return (*ConstructorTypeNode)(unsafe.Pointer(n)).FunctionLikeData()
 	case 14:
+		// SAFETY: This case only matches kinds allocated as a JSDocSignature, which embeds its Node header at offset zero.
 		return (*JSDocSignature)(unsafe.Pointer(n)).FunctionLikeData()
 	default:
 		return nil
@@ -11563,8 +12700,10 @@ func (n *Node) FunctionLikeData() *FunctionLikeBase {
 func (n *Node) ClassLikeData() *ClassLikeBase {
 	switch n.Kind {
 	case KindClassDeclaration:
+		// SAFETY: This case only matches kinds allocated as a ClassDeclaration, which embeds its Node header at offset zero.
 		return (*ClassDeclaration)(unsafe.Pointer(n)).ClassLikeData()
 	case KindClassExpression:
+		// SAFETY: This case only matches kinds allocated as a ClassExpression, which embeds its Node header at offset zero.
 		return (*ClassExpression)(unsafe.Pointer(n)).ClassLikeData()
 	default:
 		return nil
@@ -11585,20 +12724,28 @@ var nodeBodyDataDispatch = [kindFlowReduceLabelData + 1]uint8{
 func (n *Node) BodyData() *BodyBase {
 	switch nodeBodyDataDispatch[n.Kind] {
 	case 1:
+		// SAFETY: This case only matches kinds allocated as a FunctionDeclaration, which embeds its Node header at offset zero.
 		return (*FunctionDeclaration)(unsafe.Pointer(n)).BodyData()
 	case 2:
+		// SAFETY: This case only matches kinds allocated as a ConstructorDeclaration, which embeds its Node header at offset zero.
 		return (*ConstructorDeclaration)(unsafe.Pointer(n)).BodyData()
 	case 3:
+		// SAFETY: This case only matches kinds allocated as a GetAccessorDeclaration, which embeds its Node header at offset zero.
 		return (*GetAccessorDeclaration)(unsafe.Pointer(n)).BodyData()
 	case 4:
+		// SAFETY: This case only matches kinds allocated as a SetAccessorDeclaration, which embeds its Node header at offset zero.
 		return (*SetAccessorDeclaration)(unsafe.Pointer(n)).BodyData()
 	case 5:
+		// SAFETY: This case only matches kinds allocated as a MethodDeclaration, which embeds its Node header at offset zero.
 		return (*MethodDeclaration)(unsafe.Pointer(n)).BodyData()
 	case 6:
+		// SAFETY: This case only matches kinds allocated as a ArrowFunction, which embeds its Node header at offset zero.
 		return (*ArrowFunction)(unsafe.Pointer(n)).BodyData()
 	case 7:
+		// SAFETY: This case only matches kinds allocated as a FunctionExpression, which embeds its Node header at offset zero.
 		return (*FunctionExpression)(unsafe.Pointer(n)).BodyData()
 	case 8:
+		// SAFETY: This case only matches kinds allocated as a ModuleDeclaration, which embeds its Node header at offset zero.
 		return (*ModuleDeclaration)(unsafe.Pointer(n)).BodyData()
 	default:
 		return nil
@@ -11620,22 +12767,31 @@ var nodeLiteralLikeDataDispatch = [kindFlowReduceLabelData + 1]uint8{
 func (n *Node) LiteralLikeData() *LiteralLikeNodeBase {
 	switch nodeLiteralLikeDataDispatch[n.Kind] {
 	case 1:
+		// SAFETY: This case only matches kinds allocated as a StringLiteral, which embeds its Node header at offset zero.
 		return (*StringLiteral)(unsafe.Pointer(n)).LiteralLikeData()
 	case 2:
+		// SAFETY: This case only matches kinds allocated as a NumericLiteral, which embeds its Node header at offset zero.
 		return (*NumericLiteral)(unsafe.Pointer(n)).LiteralLikeData()
 	case 3:
+		// SAFETY: This case only matches kinds allocated as a BigIntLiteral, which embeds its Node header at offset zero.
 		return (*BigIntLiteral)(unsafe.Pointer(n)).LiteralLikeData()
 	case 4:
+		// SAFETY: This case only matches kinds allocated as a RegularExpressionLiteral, which embeds its Node header at offset zero.
 		return (*RegularExpressionLiteral)(unsafe.Pointer(n)).LiteralLikeData()
 	case 5:
+		// SAFETY: This case only matches kinds allocated as a NoSubstitutionTemplateLiteral, which embeds its Node header at offset zero.
 		return (*NoSubstitutionTemplateLiteral)(unsafe.Pointer(n)).LiteralLikeData()
 	case 6:
+		// SAFETY: This case only matches kinds allocated as a TemplateHead, which embeds its Node header at offset zero.
 		return (*TemplateHead)(unsafe.Pointer(n)).LiteralLikeData()
 	case 7:
+		// SAFETY: This case only matches kinds allocated as a TemplateMiddle, which embeds its Node header at offset zero.
 		return (*TemplateMiddle)(unsafe.Pointer(n)).LiteralLikeData()
 	case 8:
+		// SAFETY: This case only matches kinds allocated as a TemplateTail, which embeds its Node header at offset zero.
 		return (*TemplateTail)(unsafe.Pointer(n)).LiteralLikeData()
 	case 9:
+		// SAFETY: This case only matches kinds allocated as a JsxText, which embeds its Node header at offset zero.
 		return (*JsxText)(unsafe.Pointer(n)).LiteralLikeData()
 	default:
 		return nil
@@ -11645,12 +12801,16 @@ func (n *Node) LiteralLikeData() *LiteralLikeNodeBase {
 func (n *Node) TemplateLiteralLikeData() *TemplateLiteralLikeNodeBase {
 	switch n.Kind {
 	case KindNoSubstitutionTemplateLiteral:
+		// SAFETY: This case only matches kinds allocated as a NoSubstitutionTemplateLiteral, which embeds its Node header at offset zero.
 		return (*NoSubstitutionTemplateLiteral)(unsafe.Pointer(n)).TemplateLiteralLikeData()
 	case KindTemplateHead:
+		// SAFETY: This case only matches kinds allocated as a TemplateHead, which embeds its Node header at offset zero.
 		return (*TemplateHead)(unsafe.Pointer(n)).TemplateLiteralLikeData()
 	case KindTemplateMiddle:
+		// SAFETY: This case only matches kinds allocated as a TemplateMiddle, which embeds its Node header at offset zero.
 		return (*TemplateMiddle)(unsafe.Pointer(n)).TemplateLiteralLikeData()
 	case KindTemplateTail:
+		// SAFETY: This case only matches kinds allocated as a TemplateTail, which embeds its Node header at offset zero.
 		return (*TemplateTail)(unsafe.Pointer(n)).TemplateLiteralLikeData()
 	default:
 		return nil
@@ -11710,86 +12870,127 @@ var nodeNameDispatch = [kindFlowReduceLabelData + 1]uint8{
 func (n *Node) Name() *DeclarationName {
 	switch nodeNameDispatch[n.Kind] {
 	case 1:
+		// SAFETY: This case only matches kinds allocated as a VariableDeclaration, which embeds its Node header at offset zero.
 		return (*VariableDeclaration)(unsafe.Pointer(n)).Name()
 	case 2:
+		// SAFETY: This case only matches kinds allocated as a ParameterDeclaration, which embeds its Node header at offset zero.
 		return (*ParameterDeclaration)(unsafe.Pointer(n)).Name()
 	case 3:
+		// SAFETY: This case only matches kinds allocated as a BindingElement, which embeds its Node header at offset zero.
 		return (*BindingElement)(unsafe.Pointer(n)).Name()
 	case 4:
+		// SAFETY: This case only matches kinds allocated as a FunctionDeclaration, which embeds its Node header at offset zero.
 		return (*FunctionDeclaration)(unsafe.Pointer(n)).Name()
 	case 5:
+		// SAFETY: This case only matches kinds allocated as a ClassDeclaration, which embeds its Node header at offset zero.
 		return (*ClassDeclaration)(unsafe.Pointer(n)).Name()
 	case 6:
+		// SAFETY: This case only matches kinds allocated as a ClassExpression, which embeds its Node header at offset zero.
 		return (*ClassExpression)(unsafe.Pointer(n)).Name()
 	case 7:
+		// SAFETY: This case only matches kinds allocated as a InterfaceDeclaration, which embeds its Node header at offset zero.
 		return (*InterfaceDeclaration)(unsafe.Pointer(n)).Name()
 	case 8:
+		// SAFETY: This case only matches kinds allocated as a TypeAliasDeclaration, which embeds its Node header at offset zero.
 		return (*TypeAliasDeclaration)(unsafe.Pointer(n)).Name()
 	case 9:
+		// SAFETY: This case only matches kinds allocated as a EnumMember, which embeds its Node header at offset zero.
 		return (*EnumMember)(unsafe.Pointer(n)).Name()
 	case 10:
+		// SAFETY: This case only matches kinds allocated as a EnumDeclaration, which embeds its Node header at offset zero.
 		return (*EnumDeclaration)(unsafe.Pointer(n)).Name()
 	case 11:
+		// SAFETY: This case only matches kinds allocated as a NamespaceImport, which embeds its Node header at offset zero.
 		return (*NamespaceImport)(unsafe.Pointer(n)).Name()
 	case 12:
+		// SAFETY: This case only matches kinds allocated as a NamespaceExportDeclaration, which embeds its Node header at offset zero.
 		return (*NamespaceExportDeclaration)(unsafe.Pointer(n)).Name()
 	case 13:
+		// SAFETY: This case only matches kinds allocated as a NamespaceExport, which embeds its Node header at offset zero.
 		return (*NamespaceExport)(unsafe.Pointer(n)).Name()
 	case 14:
+		// SAFETY: This case only matches kinds allocated as a ExportSpecifier, which embeds its Node header at offset zero.
 		return (*ExportSpecifier)(unsafe.Pointer(n)).Name()
 	case 15:
+		// SAFETY: This case only matches kinds allocated as a GetAccessorDeclaration, which embeds its Node header at offset zero.
 		return (*GetAccessorDeclaration)(unsafe.Pointer(n)).Name()
 	case 16:
+		// SAFETY: This case only matches kinds allocated as a SetAccessorDeclaration, which embeds its Node header at offset zero.
 		return (*SetAccessorDeclaration)(unsafe.Pointer(n)).Name()
 	case 17:
+		// SAFETY: This case only matches kinds allocated as a MethodSignatureDeclaration, which embeds its Node header at offset zero.
 		return (*MethodSignatureDeclaration)(unsafe.Pointer(n)).Name()
 	case 18:
+		// SAFETY: This case only matches kinds allocated as a MethodDeclaration, which embeds its Node header at offset zero.
 		return (*MethodDeclaration)(unsafe.Pointer(n)).Name()
 	case 19:
+		// SAFETY: This case only matches kinds allocated as a PropertySignatureDeclaration, which embeds its Node header at offset zero.
 		return (*PropertySignatureDeclaration)(unsafe.Pointer(n)).Name()
 	case 20:
+		// SAFETY: This case only matches kinds allocated as a PropertyDeclaration, which embeds its Node header at offset zero.
 		return (*PropertyDeclaration)(unsafe.Pointer(n)).Name()
 	case 21:
+		// SAFETY: This case only matches kinds allocated as a FunctionExpression, which embeds its Node header at offset zero.
 		return (*FunctionExpression)(unsafe.Pointer(n)).Name()
 	case 22:
+		// SAFETY: This case only matches kinds allocated as a PropertyAccessExpression, which embeds its Node header at offset zero.
 		return (*PropertyAccessExpression)(unsafe.Pointer(n)).Name()
 	case 23:
+		// SAFETY: This case only matches kinds allocated as a MetaProperty, which embeds its Node header at offset zero.
 		return (*MetaProperty)(unsafe.Pointer(n)).Name()
 	case 24:
+		// SAFETY: This case only matches kinds allocated as a PropertyAssignment, which embeds its Node header at offset zero.
 		return (*PropertyAssignment)(unsafe.Pointer(n)).Name()
 	case 25:
+		// SAFETY: This case only matches kinds allocated as a ShorthandPropertyAssignment, which embeds its Node header at offset zero.
 		return (*ShorthandPropertyAssignment)(unsafe.Pointer(n)).Name()
 	case 26:
+		// SAFETY: This case only matches kinds allocated as a ImportAttribute, which embeds its Node header at offset zero.
 		return (*ImportAttribute)(unsafe.Pointer(n)).Name()
 	case 27:
+		// SAFETY: This case only matches kinds allocated as a NamedTupleMember, which embeds its Node header at offset zero.
 		return (*NamedTupleMember)(unsafe.Pointer(n)).Name()
 	case 28:
+		// SAFETY: This case only matches kinds allocated as a JsxNamespacedName, which embeds its Node header at offset zero.
 		return (*JsxNamespacedName)(unsafe.Pointer(n)).Name()
 	case 29:
+		// SAFETY: This case only matches kinds allocated as a JsxAttribute, which embeds its Node header at offset zero.
 		return (*JsxAttribute)(unsafe.Pointer(n)).Name()
 	case 30:
+		// SAFETY: This case only matches kinds allocated as a JSDocCallbackTag, which embeds its Node header at offset zero.
 		return (*JSDocCallbackTag)(unsafe.Pointer(n)).Name()
 	case 31:
+		// SAFETY: This case only matches kinds allocated as a JSDocTypedefTag, which embeds its Node header at offset zero.
 		return (*JSDocTypedefTag)(unsafe.Pointer(n)).Name()
 	case 32:
+		// SAFETY: This case only matches kinds allocated as a JSDocNameReference, which embeds its Node header at offset zero.
 		return (*JSDocNameReference)(unsafe.Pointer(n)).Name()
 	case 33:
+		// SAFETY: This case only matches kinds allocated as a ModuleDeclaration, which embeds its Node header at offset zero.
 		return (*ModuleDeclaration)(unsafe.Pointer(n)).Name()
 	case 34:
+		// SAFETY: This case only matches kinds allocated as a ImportEqualsDeclaration, which embeds its Node header at offset zero.
 		return (*ImportEqualsDeclaration)(unsafe.Pointer(n)).Name()
 	case 35:
+		// SAFETY: This case only matches kinds allocated as a ImportClause, which embeds its Node header at offset zero.
 		return (*ImportClause)(unsafe.Pointer(n)).Name()
 	case 36:
+		// SAFETY: This case only matches kinds allocated as a ImportSpecifier, which embeds its Node header at offset zero.
 		return (*ImportSpecifier)(unsafe.Pointer(n)).Name()
 	case 37:
+		// SAFETY: This case only matches kinds allocated as a JSDocLink, which embeds its Node header at offset zero.
 		return (*JSDocLink)(unsafe.Pointer(n)).Name()
 	case 38:
+		// SAFETY: This case only matches kinds allocated as a JSDocLinkPlain, which embeds its Node header at offset zero.
 		return (*JSDocLinkPlain)(unsafe.Pointer(n)).Name()
 	case 39:
+		// SAFETY: This case only matches kinds allocated as a JSDocLinkCode, which embeds its Node header at offset zero.
 		return (*JSDocLinkCode)(unsafe.Pointer(n)).Name()
 	case 40:
+		// SAFETY: This case only matches kinds allocated as a TypeParameterDeclaration, which embeds its Node header at offset zero.
 		return (*TypeParameterDeclaration)(unsafe.Pointer(n)).Name()
 	case 41:
+		// SAFETY: This case only matches kinds allocated as a JSDocParameterOrPropertyTag, which embeds its Node header at offset zero.
 		return (*JSDocParameterOrPropertyTag)(unsafe.Pointer(n)).Name()
 	default:
 		return nil
@@ -11835,66 +13036,97 @@ var nodeModifiersDispatch = [kindFlowReduceLabelData + 1]uint8{
 func (n *Node) Modifiers() *ModifierList {
 	switch nodeModifiersDispatch[n.Kind] {
 	case 1:
+		// SAFETY: This case only matches kinds allocated as a VariableStatement, which embeds its Node header at offset zero.
 		return (*VariableStatement)(unsafe.Pointer(n)).Modifiers()
 	case 2:
+		// SAFETY: This case only matches kinds allocated as a ParameterDeclaration, which embeds its Node header at offset zero.
 		return (*ParameterDeclaration)(unsafe.Pointer(n)).Modifiers()
 	case 3:
+		// SAFETY: This case only matches kinds allocated as a MissingDeclaration, which embeds its Node header at offset zero.
 		return (*MissingDeclaration)(unsafe.Pointer(n)).Modifiers()
 	case 4:
+		// SAFETY: This case only matches kinds allocated as a FunctionDeclaration, which embeds its Node header at offset zero.
 		return (*FunctionDeclaration)(unsafe.Pointer(n)).Modifiers()
 	case 5:
+		// SAFETY: This case only matches kinds allocated as a ClassDeclaration, which embeds its Node header at offset zero.
 		return (*ClassDeclaration)(unsafe.Pointer(n)).Modifiers()
 	case 6:
+		// SAFETY: This case only matches kinds allocated as a ClassExpression, which embeds its Node header at offset zero.
 		return (*ClassExpression)(unsafe.Pointer(n)).Modifiers()
 	case 7:
+		// SAFETY: This case only matches kinds allocated as a InterfaceDeclaration, which embeds its Node header at offset zero.
 		return (*InterfaceDeclaration)(unsafe.Pointer(n)).Modifiers()
 	case 8:
+		// SAFETY: This case only matches kinds allocated as a TypeAliasDeclaration, which embeds its Node header at offset zero.
 		return (*TypeAliasDeclaration)(unsafe.Pointer(n)).Modifiers()
 	case 9:
+		// SAFETY: This case only matches kinds allocated as a EnumDeclaration, which embeds its Node header at offset zero.
 		return (*EnumDeclaration)(unsafe.Pointer(n)).Modifiers()
 	case 10:
+		// SAFETY: This case only matches kinds allocated as a ImportDeclaration, which embeds its Node header at offset zero.
 		return (*ImportDeclaration)(unsafe.Pointer(n)).Modifiers()
 	case 11:
+		// SAFETY: This case only matches kinds allocated as a ExportAssignment, which embeds its Node header at offset zero.
 		return (*ExportAssignment)(unsafe.Pointer(n)).Modifiers()
 	case 12:
+		// SAFETY: This case only matches kinds allocated as a NamespaceExportDeclaration, which embeds its Node header at offset zero.
 		return (*NamespaceExportDeclaration)(unsafe.Pointer(n)).Modifiers()
 	case 13:
+		// SAFETY: This case only matches kinds allocated as a ConstructorDeclaration, which embeds its Node header at offset zero.
 		return (*ConstructorDeclaration)(unsafe.Pointer(n)).Modifiers()
 	case 14:
+		// SAFETY: This case only matches kinds allocated as a GetAccessorDeclaration, which embeds its Node header at offset zero.
 		return (*GetAccessorDeclaration)(unsafe.Pointer(n)).Modifiers()
 	case 15:
+		// SAFETY: This case only matches kinds allocated as a SetAccessorDeclaration, which embeds its Node header at offset zero.
 		return (*SetAccessorDeclaration)(unsafe.Pointer(n)).Modifiers()
 	case 16:
+		// SAFETY: This case only matches kinds allocated as a IndexSignatureDeclaration, which embeds its Node header at offset zero.
 		return (*IndexSignatureDeclaration)(unsafe.Pointer(n)).Modifiers()
 	case 17:
+		// SAFETY: This case only matches kinds allocated as a MethodSignatureDeclaration, which embeds its Node header at offset zero.
 		return (*MethodSignatureDeclaration)(unsafe.Pointer(n)).Modifiers()
 	case 18:
+		// SAFETY: This case only matches kinds allocated as a MethodDeclaration, which embeds its Node header at offset zero.
 		return (*MethodDeclaration)(unsafe.Pointer(n)).Modifiers()
 	case 19:
+		// SAFETY: This case only matches kinds allocated as a PropertySignatureDeclaration, which embeds its Node header at offset zero.
 		return (*PropertySignatureDeclaration)(unsafe.Pointer(n)).Modifiers()
 	case 20:
+		// SAFETY: This case only matches kinds allocated as a PropertyDeclaration, which embeds its Node header at offset zero.
 		return (*PropertyDeclaration)(unsafe.Pointer(n)).Modifiers()
 	case 21:
+		// SAFETY: This case only matches kinds allocated as a ClassStaticBlockDeclaration, which embeds its Node header at offset zero.
 		return (*ClassStaticBlockDeclaration)(unsafe.Pointer(n)).Modifiers()
 	case 22:
+		// SAFETY: This case only matches kinds allocated as a BinaryExpression, which embeds its Node header at offset zero.
 		return (*BinaryExpression)(unsafe.Pointer(n)).Modifiers()
 	case 23:
+		// SAFETY: This case only matches kinds allocated as a ArrowFunction, which embeds its Node header at offset zero.
 		return (*ArrowFunction)(unsafe.Pointer(n)).Modifiers()
 	case 24:
+		// SAFETY: This case only matches kinds allocated as a FunctionExpression, which embeds its Node header at offset zero.
 		return (*FunctionExpression)(unsafe.Pointer(n)).Modifiers()
 	case 25:
+		// SAFETY: This case only matches kinds allocated as a PropertyAssignment, which embeds its Node header at offset zero.
 		return (*PropertyAssignment)(unsafe.Pointer(n)).Modifiers()
 	case 26:
+		// SAFETY: This case only matches kinds allocated as a ShorthandPropertyAssignment, which embeds its Node header at offset zero.
 		return (*ShorthandPropertyAssignment)(unsafe.Pointer(n)).Modifiers()
 	case 27:
+		// SAFETY: This case only matches kinds allocated as a ConstructorTypeNode, which embeds its Node header at offset zero.
 		return (*ConstructorTypeNode)(unsafe.Pointer(n)).Modifiers()
 	case 28:
+		// SAFETY: This case only matches kinds allocated as a ModuleDeclaration, which embeds its Node header at offset zero.
 		return (*ModuleDeclaration)(unsafe.Pointer(n)).Modifiers()
 	case 29:
+		// SAFETY: This case only matches kinds allocated as a ImportEqualsDeclaration, which embeds its Node header at offset zero.
 		return (*ImportEqualsDeclaration)(unsafe.Pointer(n)).Modifiers()
 	case 30:
+		// SAFETY: This case only matches kinds allocated as a ExportDeclaration, which embeds its Node header at offset zero.
 		return (*ExportDeclaration)(unsafe.Pointer(n)).Modifiers()
 	case 31:
+		// SAFETY: This case only matches kinds allocated as a TypeParameterDeclaration, which embeds its Node header at offset zero.
 		return (*TypeParameterDeclaration)(unsafe.Pointer(n)).Modifiers()
 	default:
 		return nil
@@ -11904,66 +13136,97 @@ func (n *Node) Modifiers() *ModifierList {
 func (n *MutableNode) SetModifiers(modifiers *ModifierList) {
 	switch n.Kind {
 	case KindVariableStatement:
+		// SAFETY: This case only matches kinds allocated as a VariableStatement, which embeds its Node header at offset zero.
 		(*VariableStatement)(unsafe.Pointer(n)).setModifiers(modifiers)
 	case KindParameter:
+		// SAFETY: This case only matches kinds allocated as a ParameterDeclaration, which embeds its Node header at offset zero.
 		(*ParameterDeclaration)(unsafe.Pointer(n)).setModifiers(modifiers)
 	case KindMissingDeclaration:
+		// SAFETY: This case only matches kinds allocated as a MissingDeclaration, which embeds its Node header at offset zero.
 		(*MissingDeclaration)(unsafe.Pointer(n)).setModifiers(modifiers)
 	case KindFunctionDeclaration:
+		// SAFETY: This case only matches kinds allocated as a FunctionDeclaration, which embeds its Node header at offset zero.
 		(*FunctionDeclaration)(unsafe.Pointer(n)).setModifiers(modifiers)
 	case KindClassDeclaration:
+		// SAFETY: This case only matches kinds allocated as a ClassDeclaration, which embeds its Node header at offset zero.
 		(*ClassDeclaration)(unsafe.Pointer(n)).setModifiers(modifiers)
 	case KindClassExpression:
+		// SAFETY: This case only matches kinds allocated as a ClassExpression, which embeds its Node header at offset zero.
 		(*ClassExpression)(unsafe.Pointer(n)).setModifiers(modifiers)
 	case KindInterfaceDeclaration:
+		// SAFETY: This case only matches kinds allocated as a InterfaceDeclaration, which embeds its Node header at offset zero.
 		(*InterfaceDeclaration)(unsafe.Pointer(n)).setModifiers(modifiers)
 	case KindTypeAliasDeclaration, KindJSTypeAliasDeclaration:
+		// SAFETY: This case only matches kinds allocated as a TypeAliasDeclaration, which embeds its Node header at offset zero.
 		(*TypeAliasDeclaration)(unsafe.Pointer(n)).setModifiers(modifiers)
 	case KindEnumDeclaration:
+		// SAFETY: This case only matches kinds allocated as a EnumDeclaration, which embeds its Node header at offset zero.
 		(*EnumDeclaration)(unsafe.Pointer(n)).setModifiers(modifiers)
 	case KindImportDeclaration, KindJSImportDeclaration:
+		// SAFETY: This case only matches kinds allocated as a ImportDeclaration, which embeds its Node header at offset zero.
 		(*ImportDeclaration)(unsafe.Pointer(n)).setModifiers(modifiers)
 	case KindExportAssignment:
+		// SAFETY: This case only matches kinds allocated as a ExportAssignment, which embeds its Node header at offset zero.
 		(*ExportAssignment)(unsafe.Pointer(n)).setModifiers(modifiers)
 	case KindNamespaceExportDeclaration:
+		// SAFETY: This case only matches kinds allocated as a NamespaceExportDeclaration, which embeds its Node header at offset zero.
 		(*NamespaceExportDeclaration)(unsafe.Pointer(n)).setModifiers(modifiers)
 	case KindConstructor:
+		// SAFETY: This case only matches kinds allocated as a ConstructorDeclaration, which embeds its Node header at offset zero.
 		(*ConstructorDeclaration)(unsafe.Pointer(n)).setModifiers(modifiers)
 	case KindGetAccessor:
+		// SAFETY: This case only matches kinds allocated as a GetAccessorDeclaration, which embeds its Node header at offset zero.
 		(*GetAccessorDeclaration)(unsafe.Pointer(n)).setModifiers(modifiers)
 	case KindSetAccessor:
+		// SAFETY: This case only matches kinds allocated as a SetAccessorDeclaration, which embeds its Node header at offset zero.
 		(*SetAccessorDeclaration)(unsafe.Pointer(n)).setModifiers(modifiers)
 	case KindIndexSignature:
+		// SAFETY: This case only matches kinds allocated as a IndexSignatureDeclaration, which embeds its Node header at offset zero.
 		(*IndexSignatureDeclaration)(unsafe.Pointer(n)).setModifiers(modifiers)
 	case KindMethodSignature:
+		// SAFETY: This case only matches kinds allocated as a MethodSignatureDeclaration, which embeds its Node header at offset zero.
 		(*MethodSignatureDeclaration)(unsafe.Pointer(n)).setModifiers(modifiers)
 	case KindMethodDeclaration:
+		// SAFETY: This case only matches kinds allocated as a MethodDeclaration, which embeds its Node header at offset zero.
 		(*MethodDeclaration)(unsafe.Pointer(n)).setModifiers(modifiers)
 	case KindPropertySignature:
+		// SAFETY: This case only matches kinds allocated as a PropertySignatureDeclaration, which embeds its Node header at offset zero.
 		(*PropertySignatureDeclaration)(unsafe.Pointer(n)).setModifiers(modifiers)
 	case KindPropertyDeclaration:
+		// SAFETY: This case only matches kinds allocated as a PropertyDeclaration, which embeds its Node header at offset zero.
 		(*PropertyDeclaration)(unsafe.Pointer(n)).setModifiers(modifiers)
 	case KindClassStaticBlockDeclaration:
+		// SAFETY: This case only matches kinds allocated as a ClassStaticBlockDeclaration, which embeds its Node header at offset zero.
 		(*ClassStaticBlockDeclaration)(unsafe.Pointer(n)).setModifiers(modifiers)
 	case KindBinaryExpression:
+		// SAFETY: This case only matches kinds allocated as a BinaryExpression, which embeds its Node header at offset zero.
 		(*BinaryExpression)(unsafe.Pointer(n)).setModifiers(modifiers)
 	case KindArrowFunction:
+		// SAFETY: This case only matches kinds allocated as a ArrowFunction, which embeds its Node header at offset zero.
 		(*ArrowFunction)(unsafe.Pointer(n)).setModifiers(modifiers)
 	case KindFunctionExpression:
+		// SAFETY: This case only matches kinds allocated as a FunctionExpression, which embeds its Node header at offset zero.
 		(*FunctionExpression)(unsafe.Pointer(n)).setModifiers(modifiers)
 	case KindPropertyAssignment:
+		// SAFETY: This case only matches kinds allocated as a PropertyAssignment, which embeds its Node header at offset zero.
 		(*PropertyAssignment)(unsafe.Pointer(n)).setModifiers(modifiers)
 	case KindShorthandPropertyAssignment:
+		// SAFETY: This case only matches kinds allocated as a ShorthandPropertyAssignment, which embeds its Node header at offset zero.
 		(*ShorthandPropertyAssignment)(unsafe.Pointer(n)).setModifiers(modifiers)
 	case KindConstructorType:
+		// SAFETY: This case only matches kinds allocated as a ConstructorTypeNode, which embeds its Node header at offset zero.
 		(*ConstructorTypeNode)(unsafe.Pointer(n)).setModifiers(modifiers)
 	case KindModuleDeclaration:
+		// SAFETY: This case only matches kinds allocated as a ModuleDeclaration, which embeds its Node header at offset zero.
 		(*ModuleDeclaration)(unsafe.Pointer(n)).setModifiers(modifiers)
 	case KindImportEqualsDeclaration:
+		// SAFETY: This case only matches kinds allocated as a ImportEqualsDeclaration, which embeds its Node header at offset zero.
 		(*ImportEqualsDeclaration)(unsafe.Pointer(n)).setModifiers(modifiers)
 	case KindExportDeclaration:
+		// SAFETY: This case only matches kinds allocated as a ExportDeclaration, which embeds its Node header at offset zero.
 		(*ExportDeclaration)(unsafe.Pointer(n)).setModifiers(modifiers)
 	case KindTypeParameter:
+		// SAFETY: This case only matches kinds allocated as a TypeParameterDeclaration, which embeds its Node header at offset zero.
 		(*TypeParameterDeclaration)(unsafe.Pointer(n)).setModifiers(modifiers)
 	}
 }
@@ -12174,6 +13437,7 @@ func (n *Node) AsToken() *Token {
 	default:
 		panic("Invalid node cast to Token")
 	}
+	// SAFETY: The kind check guarantees n was allocated as a Token, which embeds its Node header at offset zero.
 	return (*Token)(unsafe.Pointer(n))
 }
 
@@ -12181,6 +13445,7 @@ func (n *Node) AsIdentifier() *Identifier {
 	if n.Kind != KindIdentifier {
 		panic("Invalid node cast to Identifier")
 	}
+	// SAFETY: The kind check guarantees n was allocated as a Identifier, which embeds its Node header at offset zero.
 	return (*Identifier)(unsafe.Pointer(n))
 }
 
@@ -12188,6 +13453,7 @@ func (n *Node) AsPrivateIdentifier() *PrivateIdentifier {
 	if n.Kind != KindPrivateIdentifier {
 		panic("Invalid node cast to PrivateIdentifier")
 	}
+	// SAFETY: The kind check guarantees n was allocated as a PrivateIdentifier, which embeds its Node header at offset zero.
 	return (*PrivateIdentifier)(unsafe.Pointer(n))
 }
 
@@ -12195,6 +13461,7 @@ func (n *Node) AsQualifiedName() *QualifiedName {
 	if n.Kind != KindQualifiedName {
 		panic("Invalid node cast to QualifiedName")
 	}
+	// SAFETY: The kind check guarantees n was allocated as a QualifiedName, which embeds its Node header at offset zero.
 	return (*QualifiedName)(unsafe.Pointer(n))
 }
 
@@ -12202,6 +13469,7 @@ func (n *Node) AsComputedPropertyName() *ComputedPropertyName {
 	if n.Kind != KindComputedPropertyName {
 		panic("Invalid node cast to ComputedPropertyName")
 	}
+	// SAFETY: The kind check guarantees n was allocated as a ComputedPropertyName, which embeds its Node header at offset zero.
 	return (*ComputedPropertyName)(unsafe.Pointer(n))
 }
 
@@ -12209,6 +13477,7 @@ func (n *Node) AsDecorator() *Decorator {
 	if n.Kind != KindDecorator {
 		panic("Invalid node cast to Decorator")
 	}
+	// SAFETY: The kind check guarantees n was allocated as a Decorator, which embeds its Node header at offset zero.
 	return (*Decorator)(unsafe.Pointer(n))
 }
 
@@ -12216,6 +13485,7 @@ func (n *Node) AsEmptyStatement() *EmptyStatement {
 	if n.Kind != KindEmptyStatement {
 		panic("Invalid node cast to EmptyStatement")
 	}
+	// SAFETY: The kind check guarantees n was allocated as a EmptyStatement, which embeds its Node header at offset zero.
 	return (*EmptyStatement)(unsafe.Pointer(n))
 }
 
@@ -12223,6 +13493,7 @@ func (n *Node) AsIfStatement() *IfStatement {
 	if n.Kind != KindIfStatement {
 		panic("Invalid node cast to IfStatement")
 	}
+	// SAFETY: The kind check guarantees n was allocated as a IfStatement, which embeds its Node header at offset zero.
 	return (*IfStatement)(unsafe.Pointer(n))
 }
 
@@ -12230,6 +13501,7 @@ func (n *Node) AsDoStatement() *DoStatement {
 	if n.Kind != KindDoStatement {
 		panic("Invalid node cast to DoStatement")
 	}
+	// SAFETY: The kind check guarantees n was allocated as a DoStatement, which embeds its Node header at offset zero.
 	return (*DoStatement)(unsafe.Pointer(n))
 }
 
@@ -12237,6 +13509,7 @@ func (n *Node) AsWhileStatement() *WhileStatement {
 	if n.Kind != KindWhileStatement {
 		panic("Invalid node cast to WhileStatement")
 	}
+	// SAFETY: The kind check guarantees n was allocated as a WhileStatement, which embeds its Node header at offset zero.
 	return (*WhileStatement)(unsafe.Pointer(n))
 }
 
@@ -12244,6 +13517,7 @@ func (n *Node) AsForStatement() *ForStatement {
 	if n.Kind != KindForStatement {
 		panic("Invalid node cast to ForStatement")
 	}
+	// SAFETY: The kind check guarantees n was allocated as a ForStatement, which embeds its Node header at offset zero.
 	return (*ForStatement)(unsafe.Pointer(n))
 }
 
@@ -12253,6 +13527,7 @@ func (n *Node) AsForInOrOfStatement() *ForInOrOfStatement {
 	default:
 		panic("Invalid node cast to ForInOrOfStatement")
 	}
+	// SAFETY: The kind check guarantees n was allocated as a ForInOrOfStatement, which embeds its Node header at offset zero.
 	return (*ForInOrOfStatement)(unsafe.Pointer(n))
 }
 
@@ -12260,6 +13535,7 @@ func (n *Node) AsBreakStatement() *BreakStatement {
 	if n.Kind != KindBreakStatement {
 		panic("Invalid node cast to BreakStatement")
 	}
+	// SAFETY: The kind check guarantees n was allocated as a BreakStatement, which embeds its Node header at offset zero.
 	return (*BreakStatement)(unsafe.Pointer(n))
 }
 
@@ -12267,6 +13543,7 @@ func (n *Node) AsContinueStatement() *ContinueStatement {
 	if n.Kind != KindContinueStatement {
 		panic("Invalid node cast to ContinueStatement")
 	}
+	// SAFETY: The kind check guarantees n was allocated as a ContinueStatement, which embeds its Node header at offset zero.
 	return (*ContinueStatement)(unsafe.Pointer(n))
 }
 
@@ -12274,6 +13551,7 @@ func (n *Node) AsReturnStatement() *ReturnStatement {
 	if n.Kind != KindReturnStatement {
 		panic("Invalid node cast to ReturnStatement")
 	}
+	// SAFETY: The kind check guarantees n was allocated as a ReturnStatement, which embeds its Node header at offset zero.
 	return (*ReturnStatement)(unsafe.Pointer(n))
 }
 
@@ -12281,6 +13559,7 @@ func (n *Node) AsWithStatement() *WithStatement {
 	if n.Kind != KindWithStatement {
 		panic("Invalid node cast to WithStatement")
 	}
+	// SAFETY: The kind check guarantees n was allocated as a WithStatement, which embeds its Node header at offset zero.
 	return (*WithStatement)(unsafe.Pointer(n))
 }
 
@@ -12288,6 +13567,7 @@ func (n *Node) AsSwitchStatement() *SwitchStatement {
 	if n.Kind != KindSwitchStatement {
 		panic("Invalid node cast to SwitchStatement")
 	}
+	// SAFETY: The kind check guarantees n was allocated as a SwitchStatement, which embeds its Node header at offset zero.
 	return (*SwitchStatement)(unsafe.Pointer(n))
 }
 
@@ -12295,6 +13575,7 @@ func (n *Node) AsCaseBlock() *CaseBlock {
 	if n.Kind != KindCaseBlock {
 		panic("Invalid node cast to CaseBlock")
 	}
+	// SAFETY: The kind check guarantees n was allocated as a CaseBlock, which embeds its Node header at offset zero.
 	return (*CaseBlock)(unsafe.Pointer(n))
 }
 
@@ -12304,6 +13585,7 @@ func (n *Node) AsCaseOrDefaultClause() *CaseOrDefaultClause {
 	default:
 		panic("Invalid node cast to CaseOrDefaultClause")
 	}
+	// SAFETY: The kind check guarantees n was allocated as a CaseOrDefaultClause, which embeds its Node header at offset zero.
 	return (*CaseOrDefaultClause)(unsafe.Pointer(n))
 }
 
@@ -12311,6 +13593,7 @@ func (n *Node) AsThrowStatement() *ThrowStatement {
 	if n.Kind != KindThrowStatement {
 		panic("Invalid node cast to ThrowStatement")
 	}
+	// SAFETY: The kind check guarantees n was allocated as a ThrowStatement, which embeds its Node header at offset zero.
 	return (*ThrowStatement)(unsafe.Pointer(n))
 }
 
@@ -12318,6 +13601,7 @@ func (n *Node) AsTryStatement() *TryStatement {
 	if n.Kind != KindTryStatement {
 		panic("Invalid node cast to TryStatement")
 	}
+	// SAFETY: The kind check guarantees n was allocated as a TryStatement, which embeds its Node header at offset zero.
 	return (*TryStatement)(unsafe.Pointer(n))
 }
 
@@ -12325,6 +13609,7 @@ func (n *Node) AsCatchClause() *CatchClause {
 	if n.Kind != KindCatchClause {
 		panic("Invalid node cast to CatchClause")
 	}
+	// SAFETY: The kind check guarantees n was allocated as a CatchClause, which embeds its Node header at offset zero.
 	return (*CatchClause)(unsafe.Pointer(n))
 }
 
@@ -12332,6 +13617,7 @@ func (n *Node) AsDebuggerStatement() *DebuggerStatement {
 	if n.Kind != KindDebuggerStatement {
 		panic("Invalid node cast to DebuggerStatement")
 	}
+	// SAFETY: The kind check guarantees n was allocated as a DebuggerStatement, which embeds its Node header at offset zero.
 	return (*DebuggerStatement)(unsafe.Pointer(n))
 }
 
@@ -12339,6 +13625,7 @@ func (n *Node) AsLabeledStatement() *LabeledStatement {
 	if n.Kind != KindLabeledStatement {
 		panic("Invalid node cast to LabeledStatement")
 	}
+	// SAFETY: The kind check guarantees n was allocated as a LabeledStatement, which embeds its Node header at offset zero.
 	return (*LabeledStatement)(unsafe.Pointer(n))
 }
 
@@ -12346,6 +13633,7 @@ func (n *Node) AsExpressionStatement() *ExpressionStatement {
 	if n.Kind != KindExpressionStatement {
 		panic("Invalid node cast to ExpressionStatement")
 	}
+	// SAFETY: The kind check guarantees n was allocated as a ExpressionStatement, which embeds its Node header at offset zero.
 	return (*ExpressionStatement)(unsafe.Pointer(n))
 }
 
@@ -12353,6 +13641,7 @@ func (n *Node) AsBlock() *Block {
 	if n.Kind != KindBlock {
 		panic("Invalid node cast to Block")
 	}
+	// SAFETY: The kind check guarantees n was allocated as a Block, which embeds its Node header at offset zero.
 	return (*Block)(unsafe.Pointer(n))
 }
 
@@ -12360,6 +13649,7 @@ func (n *Node) AsVariableStatement() *VariableStatement {
 	if n.Kind != KindVariableStatement {
 		panic("Invalid node cast to VariableStatement")
 	}
+	// SAFETY: The kind check guarantees n was allocated as a VariableStatement, which embeds its Node header at offset zero.
 	return (*VariableStatement)(unsafe.Pointer(n))
 }
 
@@ -12367,6 +13657,7 @@ func (n *Node) AsVariableDeclaration() *VariableDeclaration {
 	if n.Kind != KindVariableDeclaration {
 		panic("Invalid node cast to VariableDeclaration")
 	}
+	// SAFETY: The kind check guarantees n was allocated as a VariableDeclaration, which embeds its Node header at offset zero.
 	return (*VariableDeclaration)(unsafe.Pointer(n))
 }
 
@@ -12374,6 +13665,7 @@ func (n *Node) AsVariableDeclarationList() *VariableDeclarationList {
 	if n.Kind != KindVariableDeclarationList {
 		panic("Invalid node cast to VariableDeclarationList")
 	}
+	// SAFETY: The kind check guarantees n was allocated as a VariableDeclarationList, which embeds its Node header at offset zero.
 	return (*VariableDeclarationList)(unsafe.Pointer(n))
 }
 
@@ -12383,6 +13675,7 @@ func (n *Node) AsBindingPattern() *BindingPattern {
 	default:
 		panic("Invalid node cast to BindingPattern")
 	}
+	// SAFETY: The kind check guarantees n was allocated as a BindingPattern, which embeds its Node header at offset zero.
 	return (*BindingPattern)(unsafe.Pointer(n))
 }
 
@@ -12390,6 +13683,7 @@ func (n *Node) AsParameterDeclaration() *ParameterDeclaration {
 	if n.Kind != KindParameter {
 		panic("Invalid node cast to ParameterDeclaration")
 	}
+	// SAFETY: The kind check guarantees n was allocated as a ParameterDeclaration, which embeds its Node header at offset zero.
 	return (*ParameterDeclaration)(unsafe.Pointer(n))
 }
 
@@ -12397,6 +13691,7 @@ func (n *Node) AsBindingElement() *BindingElement {
 	if n.Kind != KindBindingElement {
 		panic("Invalid node cast to BindingElement")
 	}
+	// SAFETY: The kind check guarantees n was allocated as a BindingElement, which embeds its Node header at offset zero.
 	return (*BindingElement)(unsafe.Pointer(n))
 }
 
@@ -12404,6 +13699,7 @@ func (n *Node) AsMissingDeclaration() *MissingDeclaration {
 	if n.Kind != KindMissingDeclaration {
 		panic("Invalid node cast to MissingDeclaration")
 	}
+	// SAFETY: The kind check guarantees n was allocated as a MissingDeclaration, which embeds its Node header at offset zero.
 	return (*MissingDeclaration)(unsafe.Pointer(n))
 }
 
@@ -12411,6 +13707,7 @@ func (n *Node) AsFunctionDeclaration() *FunctionDeclaration {
 	if n.Kind != KindFunctionDeclaration {
 		panic("Invalid node cast to FunctionDeclaration")
 	}
+	// SAFETY: The kind check guarantees n was allocated as a FunctionDeclaration, which embeds its Node header at offset zero.
 	return (*FunctionDeclaration)(unsafe.Pointer(n))
 }
 
@@ -12418,6 +13715,7 @@ func (n *Node) AsClassDeclaration() *ClassDeclaration {
 	if n.Kind != KindClassDeclaration {
 		panic("Invalid node cast to ClassDeclaration")
 	}
+	// SAFETY: The kind check guarantees n was allocated as a ClassDeclaration, which embeds its Node header at offset zero.
 	return (*ClassDeclaration)(unsafe.Pointer(n))
 }
 
@@ -12425,6 +13723,7 @@ func (n *Node) AsClassExpression() *ClassExpression {
 	if n.Kind != KindClassExpression {
 		panic("Invalid node cast to ClassExpression")
 	}
+	// SAFETY: The kind check guarantees n was allocated as a ClassExpression, which embeds its Node header at offset zero.
 	return (*ClassExpression)(unsafe.Pointer(n))
 }
 
@@ -12432,6 +13731,7 @@ func (n *Node) AsHeritageClause() *HeritageClause {
 	if n.Kind != KindHeritageClause {
 		panic("Invalid node cast to HeritageClause")
 	}
+	// SAFETY: The kind check guarantees n was allocated as a HeritageClause, which embeds its Node header at offset zero.
 	return (*HeritageClause)(unsafe.Pointer(n))
 }
 
@@ -12439,6 +13739,7 @@ func (n *Node) AsInterfaceDeclaration() *InterfaceDeclaration {
 	if n.Kind != KindInterfaceDeclaration {
 		panic("Invalid node cast to InterfaceDeclaration")
 	}
+	// SAFETY: The kind check guarantees n was allocated as a InterfaceDeclaration, which embeds its Node header at offset zero.
 	return (*InterfaceDeclaration)(unsafe.Pointer(n))
 }
 
@@ -12448,6 +13749,7 @@ func (n *Node) AsTypeAliasDeclaration() *TypeAliasDeclaration {
 	default:
 		panic("Invalid node cast to TypeAliasDeclaration")
 	}
+	// SAFETY: The kind check guarantees n was allocated as a TypeAliasDeclaration, which embeds its Node header at offset zero.
 	return (*TypeAliasDeclaration)(unsafe.Pointer(n))
 }
 
@@ -12455,6 +13757,7 @@ func (n *Node) AsEnumMember() *EnumMember {
 	if n.Kind != KindEnumMember {
 		panic("Invalid node cast to EnumMember")
 	}
+	// SAFETY: The kind check guarantees n was allocated as a EnumMember, which embeds its Node header at offset zero.
 	return (*EnumMember)(unsafe.Pointer(n))
 }
 
@@ -12462,6 +13765,7 @@ func (n *Node) AsEnumDeclaration() *EnumDeclaration {
 	if n.Kind != KindEnumDeclaration {
 		panic("Invalid node cast to EnumDeclaration")
 	}
+	// SAFETY: The kind check guarantees n was allocated as a EnumDeclaration, which embeds its Node header at offset zero.
 	return (*EnumDeclaration)(unsafe.Pointer(n))
 }
 
@@ -12469,6 +13773,7 @@ func (n *Node) AsModuleBlock() *ModuleBlock {
 	if n.Kind != KindModuleBlock {
 		panic("Invalid node cast to ModuleBlock")
 	}
+	// SAFETY: The kind check guarantees n was allocated as a ModuleBlock, which embeds its Node header at offset zero.
 	return (*ModuleBlock)(unsafe.Pointer(n))
 }
 
@@ -12476,6 +13781,7 @@ func (n *Node) AsNotEmittedStatement() *NotEmittedStatement {
 	if n.Kind != KindNotEmittedStatement {
 		panic("Invalid node cast to NotEmittedStatement")
 	}
+	// SAFETY: The kind check guarantees n was allocated as a NotEmittedStatement, which embeds its Node header at offset zero.
 	return (*NotEmittedStatement)(unsafe.Pointer(n))
 }
 
@@ -12483,6 +13789,7 @@ func (n *Node) AsNotEmittedTypeElement() *NotEmittedTypeElement {
 	if n.Kind != KindNotEmittedTypeElement {
 		panic("Invalid node cast to NotEmittedTypeElement")
 	}
+	// SAFETY: The kind check guarantees n was allocated as a NotEmittedTypeElement, which embeds its Node header at offset zero.
 	return (*NotEmittedTypeElement)(unsafe.Pointer(n))
 }
 
@@ -12492,6 +13799,7 @@ func (n *Node) AsImportDeclaration() *ImportDeclaration {
 	default:
 		panic("Invalid node cast to ImportDeclaration")
 	}
+	// SAFETY: The kind check guarantees n was allocated as a ImportDeclaration, which embeds its Node header at offset zero.
 	return (*ImportDeclaration)(unsafe.Pointer(n))
 }
 
@@ -12499,6 +13807,7 @@ func (n *Node) AsExternalModuleReference() *ExternalModuleReference {
 	if n.Kind != KindExternalModuleReference {
 		panic("Invalid node cast to ExternalModuleReference")
 	}
+	// SAFETY: The kind check guarantees n was allocated as a ExternalModuleReference, which embeds its Node header at offset zero.
 	return (*ExternalModuleReference)(unsafe.Pointer(n))
 }
 
@@ -12506,6 +13815,7 @@ func (n *Node) AsNamespaceImport() *NamespaceImport {
 	if n.Kind != KindNamespaceImport {
 		panic("Invalid node cast to NamespaceImport")
 	}
+	// SAFETY: The kind check guarantees n was allocated as a NamespaceImport, which embeds its Node header at offset zero.
 	return (*NamespaceImport)(unsafe.Pointer(n))
 }
 
@@ -12513,6 +13823,7 @@ func (n *Node) AsNamedImports() *NamedImports {
 	if n.Kind != KindNamedImports {
 		panic("Invalid node cast to NamedImports")
 	}
+	// SAFETY: The kind check guarantees n was allocated as a NamedImports, which embeds its Node header at offset zero.
 	return (*NamedImports)(unsafe.Pointer(n))
 }
 
@@ -12520,6 +13831,7 @@ func (n *Node) AsExportAssignment() *ExportAssignment {
 	if n.Kind != KindExportAssignment {
 		panic("Invalid node cast to ExportAssignment")
 	}
+	// SAFETY: The kind check guarantees n was allocated as a ExportAssignment, which embeds its Node header at offset zero.
 	return (*ExportAssignment)(unsafe.Pointer(n))
 }
 
@@ -12527,6 +13839,7 @@ func (n *Node) AsNamespaceExportDeclaration() *NamespaceExportDeclaration {
 	if n.Kind != KindNamespaceExportDeclaration {
 		panic("Invalid node cast to NamespaceExportDeclaration")
 	}
+	// SAFETY: The kind check guarantees n was allocated as a NamespaceExportDeclaration, which embeds its Node header at offset zero.
 	return (*NamespaceExportDeclaration)(unsafe.Pointer(n))
 }
 
@@ -12534,6 +13847,7 @@ func (n *Node) AsNamespaceExport() *NamespaceExport {
 	if n.Kind != KindNamespaceExport {
 		panic("Invalid node cast to NamespaceExport")
 	}
+	// SAFETY: The kind check guarantees n was allocated as a NamespaceExport, which embeds its Node header at offset zero.
 	return (*NamespaceExport)(unsafe.Pointer(n))
 }
 
@@ -12541,6 +13855,7 @@ func (n *Node) AsNamedExports() *NamedExports {
 	if n.Kind != KindNamedExports {
 		panic("Invalid node cast to NamedExports")
 	}
+	// SAFETY: The kind check guarantees n was allocated as a NamedExports, which embeds its Node header at offset zero.
 	return (*NamedExports)(unsafe.Pointer(n))
 }
 
@@ -12548,6 +13863,7 @@ func (n *Node) AsExportSpecifier() *ExportSpecifier {
 	if n.Kind != KindExportSpecifier {
 		panic("Invalid node cast to ExportSpecifier")
 	}
+	// SAFETY: The kind check guarantees n was allocated as a ExportSpecifier, which embeds its Node header at offset zero.
 	return (*ExportSpecifier)(unsafe.Pointer(n))
 }
 
@@ -12555,6 +13871,7 @@ func (n *Node) AsCallSignatureDeclaration() *CallSignatureDeclaration {
 	if n.Kind != KindCallSignature {
 		panic("Invalid node cast to CallSignatureDeclaration")
 	}
+	// SAFETY: The kind check guarantees n was allocated as a CallSignatureDeclaration, which embeds its Node header at offset zero.
 	return (*CallSignatureDeclaration)(unsafe.Pointer(n))
 }
 
@@ -12562,6 +13879,7 @@ func (n *Node) AsConstructSignatureDeclaration() *ConstructSignatureDeclaration 
 	if n.Kind != KindConstructSignature {
 		panic("Invalid node cast to ConstructSignatureDeclaration")
 	}
+	// SAFETY: The kind check guarantees n was allocated as a ConstructSignatureDeclaration, which embeds its Node header at offset zero.
 	return (*ConstructSignatureDeclaration)(unsafe.Pointer(n))
 }
 
@@ -12569,6 +13887,7 @@ func (n *Node) AsConstructorDeclaration() *ConstructorDeclaration {
 	if n.Kind != KindConstructor {
 		panic("Invalid node cast to ConstructorDeclaration")
 	}
+	// SAFETY: The kind check guarantees n was allocated as a ConstructorDeclaration, which embeds its Node header at offset zero.
 	return (*ConstructorDeclaration)(unsafe.Pointer(n))
 }
 
@@ -12576,6 +13895,7 @@ func (n *Node) AsGetAccessorDeclaration() *GetAccessorDeclaration {
 	if n.Kind != KindGetAccessor {
 		panic("Invalid node cast to GetAccessorDeclaration")
 	}
+	// SAFETY: The kind check guarantees n was allocated as a GetAccessorDeclaration, which embeds its Node header at offset zero.
 	return (*GetAccessorDeclaration)(unsafe.Pointer(n))
 }
 
@@ -12583,6 +13903,7 @@ func (n *Node) AsSetAccessorDeclaration() *SetAccessorDeclaration {
 	if n.Kind != KindSetAccessor {
 		panic("Invalid node cast to SetAccessorDeclaration")
 	}
+	// SAFETY: The kind check guarantees n was allocated as a SetAccessorDeclaration, which embeds its Node header at offset zero.
 	return (*SetAccessorDeclaration)(unsafe.Pointer(n))
 }
 
@@ -12590,6 +13911,7 @@ func (n *Node) AsIndexSignatureDeclaration() *IndexSignatureDeclaration {
 	if n.Kind != KindIndexSignature {
 		panic("Invalid node cast to IndexSignatureDeclaration")
 	}
+	// SAFETY: The kind check guarantees n was allocated as a IndexSignatureDeclaration, which embeds its Node header at offset zero.
 	return (*IndexSignatureDeclaration)(unsafe.Pointer(n))
 }
 
@@ -12597,6 +13919,7 @@ func (n *Node) AsMethodSignatureDeclaration() *MethodSignatureDeclaration {
 	if n.Kind != KindMethodSignature {
 		panic("Invalid node cast to MethodSignatureDeclaration")
 	}
+	// SAFETY: The kind check guarantees n was allocated as a MethodSignatureDeclaration, which embeds its Node header at offset zero.
 	return (*MethodSignatureDeclaration)(unsafe.Pointer(n))
 }
 
@@ -12604,6 +13927,7 @@ func (n *Node) AsMethodDeclaration() *MethodDeclaration {
 	if n.Kind != KindMethodDeclaration {
 		panic("Invalid node cast to MethodDeclaration")
 	}
+	// SAFETY: The kind check guarantees n was allocated as a MethodDeclaration, which embeds its Node header at offset zero.
 	return (*MethodDeclaration)(unsafe.Pointer(n))
 }
 
@@ -12611,6 +13935,7 @@ func (n *Node) AsPropertySignatureDeclaration() *PropertySignatureDeclaration {
 	if n.Kind != KindPropertySignature {
 		panic("Invalid node cast to PropertySignatureDeclaration")
 	}
+	// SAFETY: The kind check guarantees n was allocated as a PropertySignatureDeclaration, which embeds its Node header at offset zero.
 	return (*PropertySignatureDeclaration)(unsafe.Pointer(n))
 }
 
@@ -12618,6 +13943,7 @@ func (n *Node) AsPropertyDeclaration() *PropertyDeclaration {
 	if n.Kind != KindPropertyDeclaration {
 		panic("Invalid node cast to PropertyDeclaration")
 	}
+	// SAFETY: The kind check guarantees n was allocated as a PropertyDeclaration, which embeds its Node header at offset zero.
 	return (*PropertyDeclaration)(unsafe.Pointer(n))
 }
 
@@ -12625,6 +13951,7 @@ func (n *Node) AsSemicolonClassElement() *SemicolonClassElement {
 	if n.Kind != KindSemicolonClassElement {
 		panic("Invalid node cast to SemicolonClassElement")
 	}
+	// SAFETY: The kind check guarantees n was allocated as a SemicolonClassElement, which embeds its Node header at offset zero.
 	return (*SemicolonClassElement)(unsafe.Pointer(n))
 }
 
@@ -12632,6 +13959,7 @@ func (n *Node) AsClassStaticBlockDeclaration() *ClassStaticBlockDeclaration {
 	if n.Kind != KindClassStaticBlockDeclaration {
 		panic("Invalid node cast to ClassStaticBlockDeclaration")
 	}
+	// SAFETY: The kind check guarantees n was allocated as a ClassStaticBlockDeclaration, which embeds its Node header at offset zero.
 	return (*ClassStaticBlockDeclaration)(unsafe.Pointer(n))
 }
 
@@ -12639,6 +13967,7 @@ func (n *Node) AsOmittedExpression() *OmittedExpression {
 	if n.Kind != KindOmittedExpression {
 		panic("Invalid node cast to OmittedExpression")
 	}
+	// SAFETY: The kind check guarantees n was allocated as a OmittedExpression, which embeds its Node header at offset zero.
 	return (*OmittedExpression)(unsafe.Pointer(n))
 }
 
@@ -12648,6 +13977,7 @@ func (n *Node) AsKeywordExpression() *KeywordExpression {
 	default:
 		panic("Invalid node cast to KeywordExpression")
 	}
+	// SAFETY: The kind check guarantees n was allocated as a KeywordExpression, which embeds its Node header at offset zero.
 	return (*KeywordExpression)(unsafe.Pointer(n))
 }
 
@@ -12655,6 +13985,7 @@ func (n *Node) AsStringLiteral() *StringLiteral {
 	if n.Kind != KindStringLiteral {
 		panic("Invalid node cast to StringLiteral")
 	}
+	// SAFETY: The kind check guarantees n was allocated as a StringLiteral, which embeds its Node header at offset zero.
 	return (*StringLiteral)(unsafe.Pointer(n))
 }
 
@@ -12662,6 +13993,7 @@ func (n *Node) AsNumericLiteral() *NumericLiteral {
 	if n.Kind != KindNumericLiteral {
 		panic("Invalid node cast to NumericLiteral")
 	}
+	// SAFETY: The kind check guarantees n was allocated as a NumericLiteral, which embeds its Node header at offset zero.
 	return (*NumericLiteral)(unsafe.Pointer(n))
 }
 
@@ -12669,6 +14001,7 @@ func (n *Node) AsBigIntLiteral() *BigIntLiteral {
 	if n.Kind != KindBigIntLiteral {
 		panic("Invalid node cast to BigIntLiteral")
 	}
+	// SAFETY: The kind check guarantees n was allocated as a BigIntLiteral, which embeds its Node header at offset zero.
 	return (*BigIntLiteral)(unsafe.Pointer(n))
 }
 
@@ -12676,6 +14009,7 @@ func (n *Node) AsRegularExpressionLiteral() *RegularExpressionLiteral {
 	if n.Kind != KindRegularExpressionLiteral {
 		panic("Invalid node cast to RegularExpressionLiteral")
 	}
+	// SAFETY: The kind check guarantees n was allocated as a RegularExpressionLiteral, which embeds its Node header at offset zero.
 	return (*RegularExpressionLiteral)(unsafe.Pointer(n))
 }
 
@@ -12683,6 +14017,7 @@ func (n *Node) AsNoSubstitutionTemplateLiteral() *NoSubstitutionTemplateLiteral 
 	if n.Kind != KindNoSubstitutionTemplateLiteral {
 		panic("Invalid node cast to NoSubstitutionTemplateLiteral")
 	}
+	// SAFETY: The kind check guarantees n was allocated as a NoSubstitutionTemplateLiteral, which embeds its Node header at offset zero.
 	return (*NoSubstitutionTemplateLiteral)(unsafe.Pointer(n))
 }
 
@@ -12690,6 +14025,7 @@ func (n *Node) AsBinaryExpression() *BinaryExpression {
 	if n.Kind != KindBinaryExpression {
 		panic("Invalid node cast to BinaryExpression")
 	}
+	// SAFETY: The kind check guarantees n was allocated as a BinaryExpression, which embeds its Node header at offset zero.
 	return (*BinaryExpression)(unsafe.Pointer(n))
 }
 
@@ -12697,6 +14033,7 @@ func (n *Node) AsPrefixUnaryExpression() *PrefixUnaryExpression {
 	if n.Kind != KindPrefixUnaryExpression {
 		panic("Invalid node cast to PrefixUnaryExpression")
 	}
+	// SAFETY: The kind check guarantees n was allocated as a PrefixUnaryExpression, which embeds its Node header at offset zero.
 	return (*PrefixUnaryExpression)(unsafe.Pointer(n))
 }
 
@@ -12704,6 +14041,7 @@ func (n *Node) AsPostfixUnaryExpression() *PostfixUnaryExpression {
 	if n.Kind != KindPostfixUnaryExpression {
 		panic("Invalid node cast to PostfixUnaryExpression")
 	}
+	// SAFETY: The kind check guarantees n was allocated as a PostfixUnaryExpression, which embeds its Node header at offset zero.
 	return (*PostfixUnaryExpression)(unsafe.Pointer(n))
 }
 
@@ -12711,6 +14049,7 @@ func (n *Node) AsYieldExpression() *YieldExpression {
 	if n.Kind != KindYieldExpression {
 		panic("Invalid node cast to YieldExpression")
 	}
+	// SAFETY: The kind check guarantees n was allocated as a YieldExpression, which embeds its Node header at offset zero.
 	return (*YieldExpression)(unsafe.Pointer(n))
 }
 
@@ -12718,6 +14057,7 @@ func (n *Node) AsArrowFunction() *ArrowFunction {
 	if n.Kind != KindArrowFunction {
 		panic("Invalid node cast to ArrowFunction")
 	}
+	// SAFETY: The kind check guarantees n was allocated as a ArrowFunction, which embeds its Node header at offset zero.
 	return (*ArrowFunction)(unsafe.Pointer(n))
 }
 
@@ -12725,6 +14065,7 @@ func (n *Node) AsFunctionExpression() *FunctionExpression {
 	if n.Kind != KindFunctionExpression {
 		panic("Invalid node cast to FunctionExpression")
 	}
+	// SAFETY: The kind check guarantees n was allocated as a FunctionExpression, which embeds its Node header at offset zero.
 	return (*FunctionExpression)(unsafe.Pointer(n))
 }
 
@@ -12732,6 +14073,7 @@ func (n *Node) AsAsExpression() *AsExpression {
 	if n.Kind != KindAsExpression {
 		panic("Invalid node cast to AsExpression")
 	}
+	// SAFETY: The kind check guarantees n was allocated as a AsExpression, which embeds its Node header at offset zero.
 	return (*AsExpression)(unsafe.Pointer(n))
 }
 
@@ -12739,6 +14081,7 @@ func (n *Node) AsSatisfiesExpression() *SatisfiesExpression {
 	if n.Kind != KindSatisfiesExpression {
 		panic("Invalid node cast to SatisfiesExpression")
 	}
+	// SAFETY: The kind check guarantees n was allocated as a SatisfiesExpression, which embeds its Node header at offset zero.
 	return (*SatisfiesExpression)(unsafe.Pointer(n))
 }
 
@@ -12746,6 +14089,7 @@ func (n *Node) AsConditionalExpression() *ConditionalExpression {
 	if n.Kind != KindConditionalExpression {
 		panic("Invalid node cast to ConditionalExpression")
 	}
+	// SAFETY: The kind check guarantees n was allocated as a ConditionalExpression, which embeds its Node header at offset zero.
 	return (*ConditionalExpression)(unsafe.Pointer(n))
 }
 
@@ -12753,6 +14097,7 @@ func (n *Node) AsPropertyAccessExpression() *PropertyAccessExpression {
 	if n.Kind != KindPropertyAccessExpression {
 		panic("Invalid node cast to PropertyAccessExpression")
 	}
+	// SAFETY: The kind check guarantees n was allocated as a PropertyAccessExpression, which embeds its Node header at offset zero.
 	return (*PropertyAccessExpression)(unsafe.Pointer(n))
 }
 
@@ -12760,6 +14105,7 @@ func (n *Node) AsElementAccessExpression() *ElementAccessExpression {
 	if n.Kind != KindElementAccessExpression {
 		panic("Invalid node cast to ElementAccessExpression")
 	}
+	// SAFETY: The kind check guarantees n was allocated as a ElementAccessExpression, which embeds its Node header at offset zero.
 	return (*ElementAccessExpression)(unsafe.Pointer(n))
 }
 
@@ -12767,6 +14113,7 @@ func (n *Node) AsCallExpression() *CallExpression {
 	if n.Kind != KindCallExpression {
 		panic("Invalid node cast to CallExpression")
 	}
+	// SAFETY: The kind check guarantees n was allocated as a CallExpression, which embeds its Node header at offset zero.
 	return (*CallExpression)(unsafe.Pointer(n))
 }
 
@@ -12774,6 +14121,7 @@ func (n *Node) AsNewExpression() *NewExpression {
 	if n.Kind != KindNewExpression {
 		panic("Invalid node cast to NewExpression")
 	}
+	// SAFETY: The kind check guarantees n was allocated as a NewExpression, which embeds its Node header at offset zero.
 	return (*NewExpression)(unsafe.Pointer(n))
 }
 
@@ -12781,6 +14129,7 @@ func (n *Node) AsMetaProperty() *MetaProperty {
 	if n.Kind != KindMetaProperty {
 		panic("Invalid node cast to MetaProperty")
 	}
+	// SAFETY: The kind check guarantees n was allocated as a MetaProperty, which embeds its Node header at offset zero.
 	return (*MetaProperty)(unsafe.Pointer(n))
 }
 
@@ -12788,6 +14137,7 @@ func (n *Node) AsNonNullExpression() *NonNullExpression {
 	if n.Kind != KindNonNullExpression {
 		panic("Invalid node cast to NonNullExpression")
 	}
+	// SAFETY: The kind check guarantees n was allocated as a NonNullExpression, which embeds its Node header at offset zero.
 	return (*NonNullExpression)(unsafe.Pointer(n))
 }
 
@@ -12795,6 +14145,7 @@ func (n *Node) AsSpreadElement() *SpreadElement {
 	if n.Kind != KindSpreadElement {
 		panic("Invalid node cast to SpreadElement")
 	}
+	// SAFETY: The kind check guarantees n was allocated as a SpreadElement, which embeds its Node header at offset zero.
 	return (*SpreadElement)(unsafe.Pointer(n))
 }
 
@@ -12802,6 +14153,7 @@ func (n *Node) AsTemplateExpression() *TemplateExpression {
 	if n.Kind != KindTemplateExpression {
 		panic("Invalid node cast to TemplateExpression")
 	}
+	// SAFETY: The kind check guarantees n was allocated as a TemplateExpression, which embeds its Node header at offset zero.
 	return (*TemplateExpression)(unsafe.Pointer(n))
 }
 
@@ -12809,6 +14161,7 @@ func (n *Node) AsTemplateSpan() *TemplateSpan {
 	if n.Kind != KindTemplateSpan {
 		panic("Invalid node cast to TemplateSpan")
 	}
+	// SAFETY: The kind check guarantees n was allocated as a TemplateSpan, which embeds its Node header at offset zero.
 	return (*TemplateSpan)(unsafe.Pointer(n))
 }
 
@@ -12816,6 +14169,7 @@ func (n *Node) AsTaggedTemplateExpression() *TaggedTemplateExpression {
 	if n.Kind != KindTaggedTemplateExpression {
 		panic("Invalid node cast to TaggedTemplateExpression")
 	}
+	// SAFETY: The kind check guarantees n was allocated as a TaggedTemplateExpression, which embeds its Node header at offset zero.
 	return (*TaggedTemplateExpression)(unsafe.Pointer(n))
 }
 
@@ -12823,6 +14177,7 @@ func (n *Node) AsParenthesizedExpression() *ParenthesizedExpression {
 	if n.Kind != KindParenthesizedExpression {
 		panic("Invalid node cast to ParenthesizedExpression")
 	}
+	// SAFETY: The kind check guarantees n was allocated as a ParenthesizedExpression, which embeds its Node header at offset zero.
 	return (*ParenthesizedExpression)(unsafe.Pointer(n))
 }
 
@@ -12830,6 +14185,7 @@ func (n *Node) AsArrayLiteralExpression() *ArrayLiteralExpression {
 	if n.Kind != KindArrayLiteralExpression {
 		panic("Invalid node cast to ArrayLiteralExpression")
 	}
+	// SAFETY: The kind check guarantees n was allocated as a ArrayLiteralExpression, which embeds its Node header at offset zero.
 	return (*ArrayLiteralExpression)(unsafe.Pointer(n))
 }
 
@@ -12837,6 +14193,7 @@ func (n *Node) AsObjectLiteralExpression() *ObjectLiteralExpression {
 	if n.Kind != KindObjectLiteralExpression {
 		panic("Invalid node cast to ObjectLiteralExpression")
 	}
+	// SAFETY: The kind check guarantees n was allocated as a ObjectLiteralExpression, which embeds its Node header at offset zero.
 	return (*ObjectLiteralExpression)(unsafe.Pointer(n))
 }
 
@@ -12844,6 +14201,7 @@ func (n *Node) AsSpreadAssignment() *SpreadAssignment {
 	if n.Kind != KindSpreadAssignment {
 		panic("Invalid node cast to SpreadAssignment")
 	}
+	// SAFETY: The kind check guarantees n was allocated as a SpreadAssignment, which embeds its Node header at offset zero.
 	return (*SpreadAssignment)(unsafe.Pointer(n))
 }
 
@@ -12851,6 +14209,7 @@ func (n *Node) AsPropertyAssignment() *PropertyAssignment {
 	if n.Kind != KindPropertyAssignment {
 		panic("Invalid node cast to PropertyAssignment")
 	}
+	// SAFETY: The kind check guarantees n was allocated as a PropertyAssignment, which embeds its Node header at offset zero.
 	return (*PropertyAssignment)(unsafe.Pointer(n))
 }
 
@@ -12858,6 +14217,7 @@ func (n *Node) AsShorthandPropertyAssignment() *ShorthandPropertyAssignment {
 	if n.Kind != KindShorthandPropertyAssignment {
 		panic("Invalid node cast to ShorthandPropertyAssignment")
 	}
+	// SAFETY: The kind check guarantees n was allocated as a ShorthandPropertyAssignment, which embeds its Node header at offset zero.
 	return (*ShorthandPropertyAssignment)(unsafe.Pointer(n))
 }
 
@@ -12865,6 +14225,7 @@ func (n *Node) AsDeleteExpression() *DeleteExpression {
 	if n.Kind != KindDeleteExpression {
 		panic("Invalid node cast to DeleteExpression")
 	}
+	// SAFETY: The kind check guarantees n was allocated as a DeleteExpression, which embeds its Node header at offset zero.
 	return (*DeleteExpression)(unsafe.Pointer(n))
 }
 
@@ -12872,6 +14233,7 @@ func (n *Node) AsTypeOfExpression() *TypeOfExpression {
 	if n.Kind != KindTypeOfExpression {
 		panic("Invalid node cast to TypeOfExpression")
 	}
+	// SAFETY: The kind check guarantees n was allocated as a TypeOfExpression, which embeds its Node header at offset zero.
 	return (*TypeOfExpression)(unsafe.Pointer(n))
 }
 
@@ -12879,6 +14241,7 @@ func (n *Node) AsVoidExpression() *VoidExpression {
 	if n.Kind != KindVoidExpression {
 		panic("Invalid node cast to VoidExpression")
 	}
+	// SAFETY: The kind check guarantees n was allocated as a VoidExpression, which embeds its Node header at offset zero.
 	return (*VoidExpression)(unsafe.Pointer(n))
 }
 
@@ -12886,6 +14249,7 @@ func (n *Node) AsAwaitExpression() *AwaitExpression {
 	if n.Kind != KindAwaitExpression {
 		panic("Invalid node cast to AwaitExpression")
 	}
+	// SAFETY: The kind check guarantees n was allocated as a AwaitExpression, which embeds its Node header at offset zero.
 	return (*AwaitExpression)(unsafe.Pointer(n))
 }
 
@@ -12893,6 +14257,7 @@ func (n *Node) AsTypeAssertion() *TypeAssertion {
 	if n.Kind != KindTypeAssertionExpression {
 		panic("Invalid node cast to TypeAssertion")
 	}
+	// SAFETY: The kind check guarantees n was allocated as a TypeAssertion, which embeds its Node header at offset zero.
 	return (*TypeAssertion)(unsafe.Pointer(n))
 }
 
@@ -12902,6 +14267,7 @@ func (n *Node) AsKeywordTypeNode() *KeywordTypeNode {
 	default:
 		panic("Invalid node cast to KeywordTypeNode")
 	}
+	// SAFETY: The kind check guarantees n was allocated as a KeywordTypeNode, which embeds its Node header at offset zero.
 	return (*KeywordTypeNode)(unsafe.Pointer(n))
 }
 
@@ -12909,6 +14275,7 @@ func (n *Node) AsUnionTypeNode() *UnionTypeNode {
 	if n.Kind != KindUnionType {
 		panic("Invalid node cast to UnionTypeNode")
 	}
+	// SAFETY: The kind check guarantees n was allocated as a UnionTypeNode, which embeds its Node header at offset zero.
 	return (*UnionTypeNode)(unsafe.Pointer(n))
 }
 
@@ -12916,6 +14283,7 @@ func (n *Node) AsIntersectionTypeNode() *IntersectionTypeNode {
 	if n.Kind != KindIntersectionType {
 		panic("Invalid node cast to IntersectionTypeNode")
 	}
+	// SAFETY: The kind check guarantees n was allocated as a IntersectionTypeNode, which embeds its Node header at offset zero.
 	return (*IntersectionTypeNode)(unsafe.Pointer(n))
 }
 
@@ -12923,6 +14291,7 @@ func (n *Node) AsConditionalTypeNode() *ConditionalTypeNode {
 	if n.Kind != KindConditionalType {
 		panic("Invalid node cast to ConditionalTypeNode")
 	}
+	// SAFETY: The kind check guarantees n was allocated as a ConditionalTypeNode, which embeds its Node header at offset zero.
 	return (*ConditionalTypeNode)(unsafe.Pointer(n))
 }
 
@@ -12930,6 +14299,7 @@ func (n *Node) AsTypeOperatorNode() *TypeOperatorNode {
 	if n.Kind != KindTypeOperator {
 		panic("Invalid node cast to TypeOperatorNode")
 	}
+	// SAFETY: The kind check guarantees n was allocated as a TypeOperatorNode, which embeds its Node header at offset zero.
 	return (*TypeOperatorNode)(unsafe.Pointer(n))
 }
 
@@ -12937,6 +14307,7 @@ func (n *Node) AsInferTypeNode() *InferTypeNode {
 	if n.Kind != KindInferType {
 		panic("Invalid node cast to InferTypeNode")
 	}
+	// SAFETY: The kind check guarantees n was allocated as a InferTypeNode, which embeds its Node header at offset zero.
 	return (*InferTypeNode)(unsafe.Pointer(n))
 }
 
@@ -12944,6 +14315,7 @@ func (n *Node) AsArrayTypeNode() *ArrayTypeNode {
 	if n.Kind != KindArrayType {
 		panic("Invalid node cast to ArrayTypeNode")
 	}
+	// SAFETY: The kind check guarantees n was allocated as a ArrayTypeNode, which embeds its Node header at offset zero.
 	return (*ArrayTypeNode)(unsafe.Pointer(n))
 }
 
@@ -12951,6 +14323,7 @@ func (n *Node) AsIndexedAccessTypeNode() *IndexedAccessTypeNode {
 	if n.Kind != KindIndexedAccessType {
 		panic("Invalid node cast to IndexedAccessTypeNode")
 	}
+	// SAFETY: The kind check guarantees n was allocated as a IndexedAccessTypeNode, which embeds its Node header at offset zero.
 	return (*IndexedAccessTypeNode)(unsafe.Pointer(n))
 }
 
@@ -12958,6 +14331,7 @@ func (n *Node) AsTypeReferenceNode() *TypeReferenceNode {
 	if n.Kind != KindTypeReference {
 		panic("Invalid node cast to TypeReferenceNode")
 	}
+	// SAFETY: The kind check guarantees n was allocated as a TypeReferenceNode, which embeds its Node header at offset zero.
 	return (*TypeReferenceNode)(unsafe.Pointer(n))
 }
 
@@ -12965,6 +14339,7 @@ func (n *Node) AsExpressionWithTypeArguments() *ExpressionWithTypeArguments {
 	if n.Kind != KindExpressionWithTypeArguments {
 		panic("Invalid node cast to ExpressionWithTypeArguments")
 	}
+	// SAFETY: The kind check guarantees n was allocated as a ExpressionWithTypeArguments, which embeds its Node header at offset zero.
 	return (*ExpressionWithTypeArguments)(unsafe.Pointer(n))
 }
 
@@ -12972,6 +14347,7 @@ func (n *Node) AsLiteralTypeNode() *LiteralTypeNode {
 	if n.Kind != KindLiteralType {
 		panic("Invalid node cast to LiteralTypeNode")
 	}
+	// SAFETY: The kind check guarantees n was allocated as a LiteralTypeNode, which embeds its Node header at offset zero.
 	return (*LiteralTypeNode)(unsafe.Pointer(n))
 }
 
@@ -12979,6 +14355,7 @@ func (n *Node) AsThisTypeNode() *ThisTypeNode {
 	if n.Kind != KindThisType {
 		panic("Invalid node cast to ThisTypeNode")
 	}
+	// SAFETY: The kind check guarantees n was allocated as a ThisTypeNode, which embeds its Node header at offset zero.
 	return (*ThisTypeNode)(unsafe.Pointer(n))
 }
 
@@ -12986,6 +14363,7 @@ func (n *Node) AsTypePredicateNode() *TypePredicateNode {
 	if n.Kind != KindTypePredicate {
 		panic("Invalid node cast to TypePredicateNode")
 	}
+	// SAFETY: The kind check guarantees n was allocated as a TypePredicateNode, which embeds its Node header at offset zero.
 	return (*TypePredicateNode)(unsafe.Pointer(n))
 }
 
@@ -12993,6 +14371,7 @@ func (n *Node) AsImportAttribute() *ImportAttribute {
 	if n.Kind != KindImportAttribute {
 		panic("Invalid node cast to ImportAttribute")
 	}
+	// SAFETY: The kind check guarantees n was allocated as a ImportAttribute, which embeds its Node header at offset zero.
 	return (*ImportAttribute)(unsafe.Pointer(n))
 }
 
@@ -13000,6 +14379,7 @@ func (n *Node) AsImportAttributes() *ImportAttributes {
 	if n.Kind != KindImportAttributes {
 		panic("Invalid node cast to ImportAttributes")
 	}
+	// SAFETY: The kind check guarantees n was allocated as a ImportAttributes, which embeds its Node header at offset zero.
 	return (*ImportAttributes)(unsafe.Pointer(n))
 }
 
@@ -13007,6 +14387,7 @@ func (n *Node) AsTypeQueryNode() *TypeQueryNode {
 	if n.Kind != KindTypeQuery {
 		panic("Invalid node cast to TypeQueryNode")
 	}
+	// SAFETY: The kind check guarantees n was allocated as a TypeQueryNode, which embeds its Node header at offset zero.
 	return (*TypeQueryNode)(unsafe.Pointer(n))
 }
 
@@ -13014,6 +14395,7 @@ func (n *Node) AsMappedTypeNode() *MappedTypeNode {
 	if n.Kind != KindMappedType {
 		panic("Invalid node cast to MappedTypeNode")
 	}
+	// SAFETY: The kind check guarantees n was allocated as a MappedTypeNode, which embeds its Node header at offset zero.
 	return (*MappedTypeNode)(unsafe.Pointer(n))
 }
 
@@ -13021,6 +14403,7 @@ func (n *Node) AsTypeLiteralNode() *TypeLiteralNode {
 	if n.Kind != KindTypeLiteral {
 		panic("Invalid node cast to TypeLiteralNode")
 	}
+	// SAFETY: The kind check guarantees n was allocated as a TypeLiteralNode, which embeds its Node header at offset zero.
 	return (*TypeLiteralNode)(unsafe.Pointer(n))
 }
 
@@ -13028,6 +14411,7 @@ func (n *Node) AsTupleTypeNode() *TupleTypeNode {
 	if n.Kind != KindTupleType {
 		panic("Invalid node cast to TupleTypeNode")
 	}
+	// SAFETY: The kind check guarantees n was allocated as a TupleTypeNode, which embeds its Node header at offset zero.
 	return (*TupleTypeNode)(unsafe.Pointer(n))
 }
 
@@ -13035,6 +14419,7 @@ func (n *Node) AsNamedTupleMember() *NamedTupleMember {
 	if n.Kind != KindNamedTupleMember {
 		panic("Invalid node cast to NamedTupleMember")
 	}
+	// SAFETY: The kind check guarantees n was allocated as a NamedTupleMember, which embeds its Node header at offset zero.
 	return (*NamedTupleMember)(unsafe.Pointer(n))
 }
 
@@ -13042,6 +14427,7 @@ func (n *Node) AsOptionalTypeNode() *OptionalTypeNode {
 	if n.Kind != KindOptionalType {
 		panic("Invalid node cast to OptionalTypeNode")
 	}
+	// SAFETY: The kind check guarantees n was allocated as a OptionalTypeNode, which embeds its Node header at offset zero.
 	return (*OptionalTypeNode)(unsafe.Pointer(n))
 }
 
@@ -13049,6 +14435,7 @@ func (n *Node) AsRestTypeNode() *RestTypeNode {
 	if n.Kind != KindRestType {
 		panic("Invalid node cast to RestTypeNode")
 	}
+	// SAFETY: The kind check guarantees n was allocated as a RestTypeNode, which embeds its Node header at offset zero.
 	return (*RestTypeNode)(unsafe.Pointer(n))
 }
 
@@ -13056,6 +14443,7 @@ func (n *Node) AsParenthesizedTypeNode() *ParenthesizedTypeNode {
 	if n.Kind != KindParenthesizedType {
 		panic("Invalid node cast to ParenthesizedTypeNode")
 	}
+	// SAFETY: The kind check guarantees n was allocated as a ParenthesizedTypeNode, which embeds its Node header at offset zero.
 	return (*ParenthesizedTypeNode)(unsafe.Pointer(n))
 }
 
@@ -13063,6 +14451,7 @@ func (n *Node) AsFunctionTypeNode() *FunctionTypeNode {
 	if n.Kind != KindFunctionType {
 		panic("Invalid node cast to FunctionTypeNode")
 	}
+	// SAFETY: The kind check guarantees n was allocated as a FunctionTypeNode, which embeds its Node header at offset zero.
 	return (*FunctionTypeNode)(unsafe.Pointer(n))
 }
 
@@ -13070,6 +14459,7 @@ func (n *Node) AsConstructorTypeNode() *ConstructorTypeNode {
 	if n.Kind != KindConstructorType {
 		panic("Invalid node cast to ConstructorTypeNode")
 	}
+	// SAFETY: The kind check guarantees n was allocated as a ConstructorTypeNode, which embeds its Node header at offset zero.
 	return (*ConstructorTypeNode)(unsafe.Pointer(n))
 }
 
@@ -13077,6 +14467,7 @@ func (n *Node) AsTemplateHead() *TemplateHead {
 	if n.Kind != KindTemplateHead {
 		panic("Invalid node cast to TemplateHead")
 	}
+	// SAFETY: The kind check guarantees n was allocated as a TemplateHead, which embeds its Node header at offset zero.
 	return (*TemplateHead)(unsafe.Pointer(n))
 }
 
@@ -13084,6 +14475,7 @@ func (n *Node) AsTemplateMiddle() *TemplateMiddle {
 	if n.Kind != KindTemplateMiddle {
 		panic("Invalid node cast to TemplateMiddle")
 	}
+	// SAFETY: The kind check guarantees n was allocated as a TemplateMiddle, which embeds its Node header at offset zero.
 	return (*TemplateMiddle)(unsafe.Pointer(n))
 }
 
@@ -13091,6 +14483,7 @@ func (n *Node) AsTemplateTail() *TemplateTail {
 	if n.Kind != KindTemplateTail {
 		panic("Invalid node cast to TemplateTail")
 	}
+	// SAFETY: The kind check guarantees n was allocated as a TemplateTail, which embeds its Node header at offset zero.
 	return (*TemplateTail)(unsafe.Pointer(n))
 }
 
@@ -13098,6 +14491,7 @@ func (n *Node) AsTemplateLiteralTypeNode() *TemplateLiteralTypeNode {
 	if n.Kind != KindTemplateLiteralType {
 		panic("Invalid node cast to TemplateLiteralTypeNode")
 	}
+	// SAFETY: The kind check guarantees n was allocated as a TemplateLiteralTypeNode, which embeds its Node header at offset zero.
 	return (*TemplateLiteralTypeNode)(unsafe.Pointer(n))
 }
 
@@ -13105,6 +14499,7 @@ func (n *Node) AsTemplateLiteralTypeSpan() *TemplateLiteralTypeSpan {
 	if n.Kind != KindTemplateLiteralTypeSpan {
 		panic("Invalid node cast to TemplateLiteralTypeSpan")
 	}
+	// SAFETY: The kind check guarantees n was allocated as a TemplateLiteralTypeSpan, which embeds its Node header at offset zero.
 	return (*TemplateLiteralTypeSpan)(unsafe.Pointer(n))
 }
 
@@ -13112,6 +14507,7 @@ func (n *Node) AsSyntheticExpression() *SyntheticExpression {
 	if n.Kind != KindSyntheticExpression {
 		panic("Invalid node cast to SyntheticExpression")
 	}
+	// SAFETY: The kind check guarantees n was allocated as a SyntheticExpression, which embeds its Node header at offset zero.
 	return (*SyntheticExpression)(unsafe.Pointer(n))
 }
 
@@ -13119,6 +14515,7 @@ func (n *Node) AsPartiallyEmittedExpression() *PartiallyEmittedExpression {
 	if n.Kind != KindPartiallyEmittedExpression {
 		panic("Invalid node cast to PartiallyEmittedExpression")
 	}
+	// SAFETY: The kind check guarantees n was allocated as a PartiallyEmittedExpression, which embeds its Node header at offset zero.
 	return (*PartiallyEmittedExpression)(unsafe.Pointer(n))
 }
 
@@ -13126,6 +14523,7 @@ func (n *Node) AsJsxElement() *JsxElement {
 	if n.Kind != KindJsxElement {
 		panic("Invalid node cast to JsxElement")
 	}
+	// SAFETY: The kind check guarantees n was allocated as a JsxElement, which embeds its Node header at offset zero.
 	return (*JsxElement)(unsafe.Pointer(n))
 }
 
@@ -13133,6 +14531,7 @@ func (n *Node) AsJsxAttributes() *JsxAttributes {
 	if n.Kind != KindJsxAttributes {
 		panic("Invalid node cast to JsxAttributes")
 	}
+	// SAFETY: The kind check guarantees n was allocated as a JsxAttributes, which embeds its Node header at offset zero.
 	return (*JsxAttributes)(unsafe.Pointer(n))
 }
 
@@ -13140,6 +14539,7 @@ func (n *Node) AsJsxNamespacedName() *JsxNamespacedName {
 	if n.Kind != KindJsxNamespacedName {
 		panic("Invalid node cast to JsxNamespacedName")
 	}
+	// SAFETY: The kind check guarantees n was allocated as a JsxNamespacedName, which embeds its Node header at offset zero.
 	return (*JsxNamespacedName)(unsafe.Pointer(n))
 }
 
@@ -13147,6 +14547,7 @@ func (n *Node) AsJsxOpeningElement() *JsxOpeningElement {
 	if n.Kind != KindJsxOpeningElement {
 		panic("Invalid node cast to JsxOpeningElement")
 	}
+	// SAFETY: The kind check guarantees n was allocated as a JsxOpeningElement, which embeds its Node header at offset zero.
 	return (*JsxOpeningElement)(unsafe.Pointer(n))
 }
 
@@ -13154,6 +14555,7 @@ func (n *Node) AsJsxSelfClosingElement() *JsxSelfClosingElement {
 	if n.Kind != KindJsxSelfClosingElement {
 		panic("Invalid node cast to JsxSelfClosingElement")
 	}
+	// SAFETY: The kind check guarantees n was allocated as a JsxSelfClosingElement, which embeds its Node header at offset zero.
 	return (*JsxSelfClosingElement)(unsafe.Pointer(n))
 }
 
@@ -13161,6 +14563,7 @@ func (n *Node) AsJsxFragment() *JsxFragment {
 	if n.Kind != KindJsxFragment {
 		panic("Invalid node cast to JsxFragment")
 	}
+	// SAFETY: The kind check guarantees n was allocated as a JsxFragment, which embeds its Node header at offset zero.
 	return (*JsxFragment)(unsafe.Pointer(n))
 }
 
@@ -13168,6 +14571,7 @@ func (n *Node) AsJsxOpeningFragment() *JsxOpeningFragment {
 	if n.Kind != KindJsxOpeningFragment {
 		panic("Invalid node cast to JsxOpeningFragment")
 	}
+	// SAFETY: The kind check guarantees n was allocated as a JsxOpeningFragment, which embeds its Node header at offset zero.
 	return (*JsxOpeningFragment)(unsafe.Pointer(n))
 }
 
@@ -13175,6 +14579,7 @@ func (n *Node) AsJsxClosingFragment() *JsxClosingFragment {
 	if n.Kind != KindJsxClosingFragment {
 		panic("Invalid node cast to JsxClosingFragment")
 	}
+	// SAFETY: The kind check guarantees n was allocated as a JsxClosingFragment, which embeds its Node header at offset zero.
 	return (*JsxClosingFragment)(unsafe.Pointer(n))
 }
 
@@ -13182,6 +14587,7 @@ func (n *Node) AsJsxAttribute() *JsxAttribute {
 	if n.Kind != KindJsxAttribute {
 		panic("Invalid node cast to JsxAttribute")
 	}
+	// SAFETY: The kind check guarantees n was allocated as a JsxAttribute, which embeds its Node header at offset zero.
 	return (*JsxAttribute)(unsafe.Pointer(n))
 }
 
@@ -13189,6 +14595,7 @@ func (n *Node) AsJsxSpreadAttribute() *JsxSpreadAttribute {
 	if n.Kind != KindJsxSpreadAttribute {
 		panic("Invalid node cast to JsxSpreadAttribute")
 	}
+	// SAFETY: The kind check guarantees n was allocated as a JsxSpreadAttribute, which embeds its Node header at offset zero.
 	return (*JsxSpreadAttribute)(unsafe.Pointer(n))
 }
 
@@ -13196,6 +14603,7 @@ func (n *Node) AsJsxClosingElement() *JsxClosingElement {
 	if n.Kind != KindJsxClosingElement {
 		panic("Invalid node cast to JsxClosingElement")
 	}
+	// SAFETY: The kind check guarantees n was allocated as a JsxClosingElement, which embeds its Node header at offset zero.
 	return (*JsxClosingElement)(unsafe.Pointer(n))
 }
 
@@ -13203,6 +14611,7 @@ func (n *Node) AsJsxExpression() *JsxExpression {
 	if n.Kind != KindJsxExpression {
 		panic("Invalid node cast to JsxExpression")
 	}
+	// SAFETY: The kind check guarantees n was allocated as a JsxExpression, which embeds its Node header at offset zero.
 	return (*JsxExpression)(unsafe.Pointer(n))
 }
 
@@ -13210,6 +14619,7 @@ func (n *Node) AsJsxText() *JsxText {
 	if n.Kind != KindJsxText {
 		panic("Invalid node cast to JsxText")
 	}
+	// SAFETY: The kind check guarantees n was allocated as a JsxText, which embeds its Node header at offset zero.
 	return (*JsxText)(unsafe.Pointer(n))
 }
 
@@ -13217,6 +14627,7 @@ func (n *Node) AsSyntaxList() *SyntaxList {
 	if n.Kind != KindSyntaxList {
 		panic("Invalid node cast to SyntaxList")
 	}
+	// SAFETY: The kind check guarantees n was allocated as a SyntaxList, which embeds its Node header at offset zero.
 	return (*SyntaxList)(unsafe.Pointer(n))
 }
 
@@ -13224,6 +14635,7 @@ func (n *Node) AsJSDoc() *JSDoc {
 	if n.Kind != KindJSDoc {
 		panic("Invalid node cast to JSDoc")
 	}
+	// SAFETY: The kind check guarantees n was allocated as a JSDoc, which embeds its Node header at offset zero.
 	return (*JSDoc)(unsafe.Pointer(n))
 }
 
@@ -13231,6 +14643,7 @@ func (n *Node) AsJSDocTypeExpression() *JSDocTypeExpression {
 	if n.Kind != KindJSDocTypeExpression {
 		panic("Invalid node cast to JSDocTypeExpression")
 	}
+	// SAFETY: The kind check guarantees n was allocated as a JSDocTypeExpression, which embeds its Node header at offset zero.
 	return (*JSDocTypeExpression)(unsafe.Pointer(n))
 }
 
@@ -13238,6 +14651,7 @@ func (n *Node) AsJSDocNonNullableType() *JSDocNonNullableType {
 	if n.Kind != KindJSDocNonNullableType {
 		panic("Invalid node cast to JSDocNonNullableType")
 	}
+	// SAFETY: The kind check guarantees n was allocated as a JSDocNonNullableType, which embeds its Node header at offset zero.
 	return (*JSDocNonNullableType)(unsafe.Pointer(n))
 }
 
@@ -13245,6 +14659,7 @@ func (n *Node) AsJSDocNullableType() *JSDocNullableType {
 	if n.Kind != KindJSDocNullableType {
 		panic("Invalid node cast to JSDocNullableType")
 	}
+	// SAFETY: The kind check guarantees n was allocated as a JSDocNullableType, which embeds its Node header at offset zero.
 	return (*JSDocNullableType)(unsafe.Pointer(n))
 }
 
@@ -13252,6 +14667,7 @@ func (n *Node) AsJSDocAllType() *JSDocAllType {
 	if n.Kind != KindJSDocAllType {
 		panic("Invalid node cast to JSDocAllType")
 	}
+	// SAFETY: The kind check guarantees n was allocated as a JSDocAllType, which embeds its Node header at offset zero.
 	return (*JSDocAllType)(unsafe.Pointer(n))
 }
 
@@ -13259,6 +14675,7 @@ func (n *Node) AsJSDocVariadicType() *JSDocVariadicType {
 	if n.Kind != KindJSDocVariadicType {
 		panic("Invalid node cast to JSDocVariadicType")
 	}
+	// SAFETY: The kind check guarantees n was allocated as a JSDocVariadicType, which embeds its Node header at offset zero.
 	return (*JSDocVariadicType)(unsafe.Pointer(n))
 }
 
@@ -13266,6 +14683,7 @@ func (n *Node) AsJSDocOptionalType() *JSDocOptionalType {
 	if n.Kind != KindJSDocOptionalType {
 		panic("Invalid node cast to JSDocOptionalType")
 	}
+	// SAFETY: The kind check guarantees n was allocated as a JSDocOptionalType, which embeds its Node header at offset zero.
 	return (*JSDocOptionalType)(unsafe.Pointer(n))
 }
 
@@ -13273,6 +14691,7 @@ func (n *Node) AsJSDocTypeTag() *JSDocTypeTag {
 	if n.Kind != KindJSDocTypeTag {
 		panic("Invalid node cast to JSDocTypeTag")
 	}
+	// SAFETY: The kind check guarantees n was allocated as a JSDocTypeTag, which embeds its Node header at offset zero.
 	return (*JSDocTypeTag)(unsafe.Pointer(n))
 }
 
@@ -13280,6 +14699,7 @@ func (n *Node) AsJSDocUnknownTag() *JSDocUnknownTag {
 	if n.Kind != KindJSDocUnknownTag {
 		panic("Invalid node cast to JSDocUnknownTag")
 	}
+	// SAFETY: The kind check guarantees n was allocated as a JSDocUnknownTag, which embeds its Node header at offset zero.
 	return (*JSDocUnknownTag)(unsafe.Pointer(n))
 }
 
@@ -13287,6 +14707,7 @@ func (n *Node) AsJSDocTemplateTag() *JSDocTemplateTag {
 	if n.Kind != KindJSDocTemplateTag {
 		panic("Invalid node cast to JSDocTemplateTag")
 	}
+	// SAFETY: The kind check guarantees n was allocated as a JSDocTemplateTag, which embeds its Node header at offset zero.
 	return (*JSDocTemplateTag)(unsafe.Pointer(n))
 }
 
@@ -13294,6 +14715,7 @@ func (n *Node) AsJSDocReturnTag() *JSDocReturnTag {
 	if n.Kind != KindJSDocReturnTag {
 		panic("Invalid node cast to JSDocReturnTag")
 	}
+	// SAFETY: The kind check guarantees n was allocated as a JSDocReturnTag, which embeds its Node header at offset zero.
 	return (*JSDocReturnTag)(unsafe.Pointer(n))
 }
 
@@ -13301,6 +14723,7 @@ func (n *Node) AsJSDocPublicTag() *JSDocPublicTag {
 	if n.Kind != KindJSDocPublicTag {
 		panic("Invalid node cast to JSDocPublicTag")
 	}
+	// SAFETY: The kind check guarantees n was allocated as a JSDocPublicTag, which embeds its Node header at offset zero.
 	return (*JSDocPublicTag)(unsafe.Pointer(n))
 }
 
@@ -13308,6 +14731,7 @@ func (n *Node) AsJSDocPrivateTag() *JSDocPrivateTag {
 	if n.Kind != KindJSDocPrivateTag {
 		panic("Invalid node cast to JSDocPrivateTag")
 	}
+	// SAFETY: The kind check guarantees n was allocated as a JSDocPrivateTag, which embeds its Node header at offset zero.
 	return (*JSDocPrivateTag)(unsafe.Pointer(n))
 }
 
@@ -13315,6 +14739,7 @@ func (n *Node) AsJSDocProtectedTag() *JSDocProtectedTag {
 	if n.Kind != KindJSDocProtectedTag {
 		panic("Invalid node cast to JSDocProtectedTag")
 	}
+	// SAFETY: The kind check guarantees n was allocated as a JSDocProtectedTag, which embeds its Node header at offset zero.
 	return (*JSDocProtectedTag)(unsafe.Pointer(n))
 }
 
@@ -13322,6 +14747,7 @@ func (n *Node) AsJSDocReadonlyTag() *JSDocReadonlyTag {
 	if n.Kind != KindJSDocReadonlyTag {
 		panic("Invalid node cast to JSDocReadonlyTag")
 	}
+	// SAFETY: The kind check guarantees n was allocated as a JSDocReadonlyTag, which embeds its Node header at offset zero.
 	return (*JSDocReadonlyTag)(unsafe.Pointer(n))
 }
 
@@ -13329,6 +14755,7 @@ func (n *Node) AsJSDocOverrideTag() *JSDocOverrideTag {
 	if n.Kind != KindJSDocOverrideTag {
 		panic("Invalid node cast to JSDocOverrideTag")
 	}
+	// SAFETY: The kind check guarantees n was allocated as a JSDocOverrideTag, which embeds its Node header at offset zero.
 	return (*JSDocOverrideTag)(unsafe.Pointer(n))
 }
 
@@ -13336,6 +14763,7 @@ func (n *Node) AsJSDocDeprecatedTag() *JSDocDeprecatedTag {
 	if n.Kind != KindJSDocDeprecatedTag {
 		panic("Invalid node cast to JSDocDeprecatedTag")
 	}
+	// SAFETY: The kind check guarantees n was allocated as a JSDocDeprecatedTag, which embeds its Node header at offset zero.
 	return (*JSDocDeprecatedTag)(unsafe.Pointer(n))
 }
 
@@ -13343,6 +14771,7 @@ func (n *Node) AsJSDocSeeTag() *JSDocSeeTag {
 	if n.Kind != KindJSDocSeeTag {
 		panic("Invalid node cast to JSDocSeeTag")
 	}
+	// SAFETY: The kind check guarantees n was allocated as a JSDocSeeTag, which embeds its Node header at offset zero.
 	return (*JSDocSeeTag)(unsafe.Pointer(n))
 }
 
@@ -13350,6 +14779,7 @@ func (n *Node) AsJSDocImplementsTag() *JSDocImplementsTag {
 	if n.Kind != KindJSDocImplementsTag {
 		panic("Invalid node cast to JSDocImplementsTag")
 	}
+	// SAFETY: The kind check guarantees n was allocated as a JSDocImplementsTag, which embeds its Node header at offset zero.
 	return (*JSDocImplementsTag)(unsafe.Pointer(n))
 }
 
@@ -13357,6 +14787,7 @@ func (n *Node) AsJSDocAugmentsTag() *JSDocAugmentsTag {
 	if n.Kind != KindJSDocAugmentsTag {
 		panic("Invalid node cast to JSDocAugmentsTag")
 	}
+	// SAFETY: The kind check guarantees n was allocated as a JSDocAugmentsTag, which embeds its Node header at offset zero.
 	return (*JSDocAugmentsTag)(unsafe.Pointer(n))
 }
 
@@ -13364,6 +14795,7 @@ func (n *Node) AsJSDocSatisfiesTag() *JSDocSatisfiesTag {
 	if n.Kind != KindJSDocSatisfiesTag {
 		panic("Invalid node cast to JSDocSatisfiesTag")
 	}
+	// SAFETY: The kind check guarantees n was allocated as a JSDocSatisfiesTag, which embeds its Node header at offset zero.
 	return (*JSDocSatisfiesTag)(unsafe.Pointer(n))
 }
 
@@ -13371,6 +14803,7 @@ func (n *Node) AsJSDocThrowsTag() *JSDocThrowsTag {
 	if n.Kind != KindJSDocThrowsTag {
 		panic("Invalid node cast to JSDocThrowsTag")
 	}
+	// SAFETY: The kind check guarantees n was allocated as a JSDocThrowsTag, which embeds its Node header at offset zero.
 	return (*JSDocThrowsTag)(unsafe.Pointer(n))
 }
 
@@ -13378,6 +14811,7 @@ func (n *Node) AsJSDocThisTag() *JSDocThisTag {
 	if n.Kind != KindJSDocThisTag {
 		panic("Invalid node cast to JSDocThisTag")
 	}
+	// SAFETY: The kind check guarantees n was allocated as a JSDocThisTag, which embeds its Node header at offset zero.
 	return (*JSDocThisTag)(unsafe.Pointer(n))
 }
 
@@ -13385,6 +14819,7 @@ func (n *Node) AsJSDocImportTag() *JSDocImportTag {
 	if n.Kind != KindJSDocImportTag {
 		panic("Invalid node cast to JSDocImportTag")
 	}
+	// SAFETY: The kind check guarantees n was allocated as a JSDocImportTag, which embeds its Node header at offset zero.
 	return (*JSDocImportTag)(unsafe.Pointer(n))
 }
 
@@ -13392,6 +14827,7 @@ func (n *Node) AsJSDocCallbackTag() *JSDocCallbackTag {
 	if n.Kind != KindJSDocCallbackTag {
 		panic("Invalid node cast to JSDocCallbackTag")
 	}
+	// SAFETY: The kind check guarantees n was allocated as a JSDocCallbackTag, which embeds its Node header at offset zero.
 	return (*JSDocCallbackTag)(unsafe.Pointer(n))
 }
 
@@ -13399,6 +14835,7 @@ func (n *Node) AsJSDocOverloadTag() *JSDocOverloadTag {
 	if n.Kind != KindJSDocOverloadTag {
 		panic("Invalid node cast to JSDocOverloadTag")
 	}
+	// SAFETY: The kind check guarantees n was allocated as a JSDocOverloadTag, which embeds its Node header at offset zero.
 	return (*JSDocOverloadTag)(unsafe.Pointer(n))
 }
 
@@ -13406,6 +14843,7 @@ func (n *Node) AsJSDocTypedefTag() *JSDocTypedefTag {
 	if n.Kind != KindJSDocTypedefTag {
 		panic("Invalid node cast to JSDocTypedefTag")
 	}
+	// SAFETY: The kind check guarantees n was allocated as a JSDocTypedefTag, which embeds its Node header at offset zero.
 	return (*JSDocTypedefTag)(unsafe.Pointer(n))
 }
 
@@ -13413,6 +14851,7 @@ func (n *Node) AsJSDocSignature() *JSDocSignature {
 	if n.Kind != KindJSDocSignature {
 		panic("Invalid node cast to JSDocSignature")
 	}
+	// SAFETY: The kind check guarantees n was allocated as a JSDocSignature, which embeds its Node header at offset zero.
 	return (*JSDocSignature)(unsafe.Pointer(n))
 }
 
@@ -13420,6 +14859,7 @@ func (n *Node) AsJSDocNameReference() *JSDocNameReference {
 	if n.Kind != KindJSDocNameReference {
 		panic("Invalid node cast to JSDocNameReference")
 	}
+	// SAFETY: The kind check guarantees n was allocated as a JSDocNameReference, which embeds its Node header at offset zero.
 	return (*JSDocNameReference)(unsafe.Pointer(n))
 }
 
@@ -13427,6 +14867,7 @@ func (n *Node) AsSourceFile() *SourceFile {
 	if n.Kind != KindSourceFile {
 		panic("Invalid node cast to SourceFile")
 	}
+	// SAFETY: The kind check guarantees n was allocated as a SourceFile, which embeds its Node header at offset zero.
 	return (*SourceFile)(unsafe.Pointer(n))
 }
 
@@ -13434,6 +14875,7 @@ func (n *Node) AsModuleDeclaration() *ModuleDeclaration {
 	if n.Kind != KindModuleDeclaration {
 		panic("Invalid node cast to ModuleDeclaration")
 	}
+	// SAFETY: The kind check guarantees n was allocated as a ModuleDeclaration, which embeds its Node header at offset zero.
 	return (*ModuleDeclaration)(unsafe.Pointer(n))
 }
 
@@ -13441,6 +14883,7 @@ func (n *Node) AsImportEqualsDeclaration() *ImportEqualsDeclaration {
 	if n.Kind != KindImportEqualsDeclaration {
 		panic("Invalid node cast to ImportEqualsDeclaration")
 	}
+	// SAFETY: The kind check guarantees n was allocated as a ImportEqualsDeclaration, which embeds its Node header at offset zero.
 	return (*ImportEqualsDeclaration)(unsafe.Pointer(n))
 }
 
@@ -13448,6 +14891,7 @@ func (n *Node) AsExportDeclaration() *ExportDeclaration {
 	if n.Kind != KindExportDeclaration {
 		panic("Invalid node cast to ExportDeclaration")
 	}
+	// SAFETY: The kind check guarantees n was allocated as a ExportDeclaration, which embeds its Node header at offset zero.
 	return (*ExportDeclaration)(unsafe.Pointer(n))
 }
 
@@ -13455,6 +14899,7 @@ func (n *Node) AsImportTypeNode() *ImportTypeNode {
 	if n.Kind != KindImportType {
 		panic("Invalid node cast to ImportTypeNode")
 	}
+	// SAFETY: The kind check guarantees n was allocated as a ImportTypeNode, which embeds its Node header at offset zero.
 	return (*ImportTypeNode)(unsafe.Pointer(n))
 }
 
@@ -13462,6 +14907,7 @@ func (n *Node) AsImportClause() *ImportClause {
 	if n.Kind != KindImportClause {
 		panic("Invalid node cast to ImportClause")
 	}
+	// SAFETY: The kind check guarantees n was allocated as a ImportClause, which embeds its Node header at offset zero.
 	return (*ImportClause)(unsafe.Pointer(n))
 }
 
@@ -13469,6 +14915,7 @@ func (n *Node) AsImportSpecifier() *ImportSpecifier {
 	if n.Kind != KindImportSpecifier {
 		panic("Invalid node cast to ImportSpecifier")
 	}
+	// SAFETY: The kind check guarantees n was allocated as a ImportSpecifier, which embeds its Node header at offset zero.
 	return (*ImportSpecifier)(unsafe.Pointer(n))
 }
 
@@ -13476,6 +14923,7 @@ func (n *Node) AsJSDocText() *JSDocText {
 	if n.Kind != KindJSDocText {
 		panic("Invalid node cast to JSDocText")
 	}
+	// SAFETY: The kind check guarantees n was allocated as a JSDocText, which embeds its Node header at offset zero.
 	return (*JSDocText)(unsafe.Pointer(n))
 }
 
@@ -13483,6 +14931,7 @@ func (n *Node) AsJSDocLink() *JSDocLink {
 	if n.Kind != KindJSDocLink {
 		panic("Invalid node cast to JSDocLink")
 	}
+	// SAFETY: The kind check guarantees n was allocated as a JSDocLink, which embeds its Node header at offset zero.
 	return (*JSDocLink)(unsafe.Pointer(n))
 }
 
@@ -13490,6 +14939,7 @@ func (n *Node) AsJSDocLinkPlain() *JSDocLinkPlain {
 	if n.Kind != KindJSDocLinkPlain {
 		panic("Invalid node cast to JSDocLinkPlain")
 	}
+	// SAFETY: The kind check guarantees n was allocated as a JSDocLinkPlain, which embeds its Node header at offset zero.
 	return (*JSDocLinkPlain)(unsafe.Pointer(n))
 }
 
@@ -13497,6 +14947,7 @@ func (n *Node) AsJSDocLinkCode() *JSDocLinkCode {
 	if n.Kind != KindJSDocLinkCode {
 		panic("Invalid node cast to JSDocLinkCode")
 	}
+	// SAFETY: The kind check guarantees n was allocated as a JSDocLinkCode, which embeds its Node header at offset zero.
 	return (*JSDocLinkCode)(unsafe.Pointer(n))
 }
 
@@ -13504,6 +14955,7 @@ func (n *Node) AsTypeParameterDeclaration() *TypeParameterDeclaration {
 	if n.Kind != KindTypeParameter {
 		panic("Invalid node cast to TypeParameterDeclaration")
 	}
+	// SAFETY: The kind check guarantees n was allocated as a TypeParameterDeclaration, which embeds its Node header at offset zero.
 	return (*TypeParameterDeclaration)(unsafe.Pointer(n))
 }
 
@@ -13511,6 +14963,7 @@ func (n *Node) AsSyntheticReferenceExpression() *SyntheticReferenceExpression {
 	if n.Kind != KindSyntheticReferenceExpression {
 		panic("Invalid node cast to SyntheticReferenceExpression")
 	}
+	// SAFETY: The kind check guarantees n was allocated as a SyntheticReferenceExpression, which embeds its Node header at offset zero.
 	return (*SyntheticReferenceExpression)(unsafe.Pointer(n))
 }
 
@@ -13518,6 +14971,7 @@ func (n *Node) AsJSDocTypeLiteral() *JSDocTypeLiteral {
 	if n.Kind != KindJSDocTypeLiteral {
 		panic("Invalid node cast to JSDocTypeLiteral")
 	}
+	// SAFETY: The kind check guarantees n was allocated as a JSDocTypeLiteral, which embeds its Node header at offset zero.
 	return (*JSDocTypeLiteral)(unsafe.Pointer(n))
 }
 
@@ -13527,6 +14981,7 @@ func (n *Node) AsJSDocParameterOrPropertyTag() *JSDocParameterOrPropertyTag {
 	default:
 		panic("Invalid node cast to JSDocParameterOrPropertyTag")
 	}
+	// SAFETY: The kind check guarantees n was allocated as a JSDocParameterOrPropertyTag, which embeds its Node header at offset zero.
 	return (*JSDocParameterOrPropertyTag)(unsafe.Pointer(n))
 }
 

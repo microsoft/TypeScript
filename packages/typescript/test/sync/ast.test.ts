@@ -67,7 +67,6 @@ import {
     visitNodes,
 } from "@typescript/typescript/ast/visitor";
 import {
-    API,
     Checker,
     isRemoteNode,
     TypeFlags,
@@ -82,6 +81,7 @@ import {
     areTestsFiltered,
     createVirtualFileSystem,
 } from "../testUtils.ts";
+import { API } from "./api.testUtils.ts";
 import { runBenchmarks } from "./ast.bench.ts";
 
 const concurrency = areTestsFiltered();

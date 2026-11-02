@@ -157,7 +157,9 @@ export declare const w: {
 {"pid":1,"tid":1,"ph":"B","cat":"emit","ts":24,"name":"emitDeclarationFileOrBundle","args":{"declarationFilePath":"/home/src/workspaces/project/out/main.d.ts"}},
 {"pid":1,"tid":1,"ph":"E","cat":"emit","ts":25,"name":"emitDeclarationFileOrBundle","args":{"declarationFilePath":"/home/src/workspaces/project/out/main.d.ts"}},
 {"pid":1,"tid":100209852,"ph":"E","cat":"emit","ts":26,"name":"emit","args":{"path":"/home/src/workspaces/project/main.ts"}},
-{"pid":1,"tid":1,"ph":"E","cat":"emit","ts":27,"name":"emit"}
+{"pid":1,"tid":100209852,"ph":"B","cat":"emit","ts":27,"name":"emitPrint","args":{"path":"/home/src/workspaces/project/main.ts"}},
+{"pid":1,"tid":100209852,"ph":"E","cat":"emit","ts":28,"name":"emitPrint","args":{"path":"/home/src/workspaces/project/main.ts"}},
+{"pid":1,"tid":1,"ph":"E","cat":"emit","ts":29,"name":"emit"}
 ]
 
 //// [/home/src/workspaces/project/trace/types_0.json] *new* 

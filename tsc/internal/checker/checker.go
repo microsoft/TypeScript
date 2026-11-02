@@ -552,6 +552,13 @@ type VarianceStackEntry struct {
 	typeParameters []*Type
 }
 
+type ResolvingObjectType struct {
+	t               *Type           // Type being resolved
+	mapper          *TypeMapper     // Instantiation mapper
+	baseTypes       []*Type         // Instantiated base types
+	resolvedMembers ast.SymbolTable // Members resolved by getDeclaredPropertyOfResolvingType
+}
+
 const maxSerializationLevel = 2
 
 type Program interface {
@@ -697,7 +704,7 @@ type Checker struct {
 	layoutMemberInfos                           map[string]MemberInfo
 	freeTypeSets                                *temporaryTypeSet
 	freePropertyCounts                          *temporaryPropertyCounts
-	mergedSymbols                               map[*ast.Symbol]*ast.Symbol
+	mergedSymbols                               symbolLinkStore[*ast.Symbol]
 	mergedExportsChecked                        collections.Set[*ast.Symbol]
 	factory                                     ast.NodeFactory
 	nodeLinks                                   core.LinkStore[*ast.Node, NodeLinks]
@@ -850,6 +857,7 @@ type Checker struct {
 	awaitedTypeStack                            []*Type
 	reverseMappedSourceStack                    []*Type
 	reverseMappedTargetStack                    []*Type
+	resolvingObjectTypeStack                    []ResolvingObjectType
 	reverseExpandingFlags                       ExpandingFlags
 	freeRelater                                 *Relater
 	subtypeRelation                             *Relation
@@ -925,7 +933,7 @@ type Checker struct {
 	ctx                                         context.Context
 	packagesMap                                 map[string]bool
 	activeMappers                               []*TypeMapper
-	activeTypeMappersCaches                     []map[CacheHashKey]*Type
+	activeTypeMappersCaches                     []clearableMap[*Type]
 	ambientModulesOnce                          sync.Once
 	ambientModules                              []*ast.Symbol
 	withinUnreachableCode                       bool
@@ -1008,7 +1016,6 @@ func NewChecker(program Program, tracer *Tracer) (*Checker, *sync.Mutex) {
 	c.unionOfUnionTypes = make(map[UnionOfUnionKey]*Type)
 	c.intersectionTypes = make(map[CacheHashKey]*Type)
 	c.propertiesTypes = make(map[PropertiesTypesKey]*Type)
-	c.mergedSymbols = make(map[*ast.Symbol]*ast.Symbol)
 	c.patternForType = make(map[*Type]*ast.Node)
 	c.contextFreeTypes = make(map[*ast.Node]*Type)
 	c.anyType = c.newIntrinsicType(TypeFlagsAny, "any")
@@ -4342,6 +4349,9 @@ func (c *Checker) checkClassDeclaration(node *ast.Node) {
 	}
 	if node.Name() == nil && !ast.HasSyntacticModifier(node, ast.ModifierFlagsDefault) {
 		c.grammarErrorOnFirstToken(node, diagnostics.A_class_declaration_without_the_default_modifier_must_have_a_name)
+	}
+	if !c.containerAllowsBlockScopedVariable(node.Parent) {
+		c.grammarErrorOnNode(node, diagnostics.X_0_declarations_can_only_be_declared_inside_a_block, "class")
 	}
 	c.checkClassLikeDeclaration(node)
 	c.checkSourceElements(node.Members())
@@ -14632,9 +14642,8 @@ func (c *Checker) cloneSymbol(symbol *ast.Symbol) *ast.Symbol {
 
 func (c *Checker) getMergedSymbol(symbol *ast.Symbol) *ast.Symbol {
 	if symbol != nil {
-		merged := c.mergedSymbols[symbol]
-		if merged != nil {
-			return merged
+		if merged := c.mergedSymbols.TryGet(symbol); merged != nil && *merged != nil {
+			return *merged
 		}
 	}
 	return symbol
@@ -14648,7 +14657,7 @@ func (c *Checker) getParentOfSymbol(symbol *ast.Symbol) *ast.Symbol {
 }
 
 func (c *Checker) recordMergedSymbol(target *ast.Symbol, source *ast.Symbol) {
-	c.mergedSymbols[source] = target
+	*c.mergedSymbols.Get(source) = target
 }
 
 func (c *Checker) getResolvedTarget(symbol *ast.Symbol) *ast.Symbol {
@@ -19162,12 +19171,12 @@ func (c *Checker) getEffectivePropertyNameForPropertyNameNode(node *ast.Property
 	case ast.IsComputedPropertyName(node):
 		// This is cached so `getTypeOfExpression` isn't constantly reinvoked for every property name lookup
 		links := c.computedNameLinks.Get(node)
-		if links != nil && links.hasName != nil {
-			return links.name, *links.hasName
+		if links != nil && !links.hasName.IsUnknown() {
+			return links.name, links.hasName.IsTrue()
 		}
 		name, exists := c.tryGetNameFromType(c.getTypeOfExpression(node.Expression()))
 		links.name = name
-		links.hasName = &exists
+		links.hasName = core.BoolToTristate(exists)
 		return name, exists
 	}
 	return "", false
@@ -19381,6 +19390,11 @@ func (c *Checker) getPropertyOfTypeEx(t *Type, name string, skipObjectFunctionPr
 	t = c.getReducedApparentType(t)
 	switch {
 	case t.flags&TypeFlagsObject != 0:
+		if t.objectFlags&ObjectFlagsMembersResolved == 0 && len(c.resolvingObjectTypeStack) != 0 {
+			if symbol := c.getDeclaredPropertyOfResolvingType(t, name); symbol != nil {
+				return symbol
+			}
+		}
 		resolved := c.resolveStructuredTypeMembers(t)
 		symbol := resolved.getMember(name)
 		if symbol != nil {
@@ -19424,6 +19438,38 @@ func (c *Checker) getPropertyOfTypeEx(t *Type, name string, skipObjectFunctionPr
 		return nil
 	case t.flags&TypeFlagsUnion != 0:
 		return c.getPropertyOfUnionOrIntersectionType(t, name, skipObjectFunctionPropertyAugment)
+	}
+	return nil
+}
+
+// We allow accessing declared members of a class or interface while building its member layout. This
+// means that base classes of a class or interface can access members declared in the class or interface
+// during its resolution without causing a circularity error. Members resolved by this function are
+// eventually propagated into the resolved members of the class or interface.
+func (c *Checker) getDeclaredPropertyOfResolvingType(t *Type, name string) *ast.Symbol {
+	for i := len(c.resolvingObjectTypeStack) - 1; i >= 0; i-- {
+		if c.resolvingObjectTypeStack[i].t == t {
+			resolved := c.resolvingObjectTypeStack[i].resolvedMembers.Get(name)
+			if resolved == nil {
+				if symbol := c.resolveDeclaredMembers(getTargetType(t)).declaredMembers.Get(name); symbol != nil && c.isNamedMember(symbol, name) {
+					resolved = c.instantiateSymbol(symbol, c.resolvingObjectTypeStack[i].mapper)
+				} else {
+					for _, baseType := range c.resolvingObjectTypeStack[i].baseTypes {
+						if symbol := c.getPropertyOfTypeEx(baseType, name, true, false); symbol != nil && !isStaticPrivateIdentifierProperty(symbol) {
+							resolved = symbol
+							break
+						}
+					}
+				}
+				if resolved != nil {
+					if c.resolvingObjectTypeStack[i].resolvedMembers == nil {
+						c.resolvingObjectTypeStack[i].resolvedMembers = ast.NewSymbolTableWithCapacity(1)
+					}
+					c.resolvingObjectTypeStack[i].resolvedMembers.Set(name, resolved)
+				}
+			}
+			return resolved
+		}
 	}
 	return nil
 }
@@ -19574,7 +19620,6 @@ func (c *Checker) resolveObjectTypeMembers(t *Type) {
 	var mapper *TypeMapper
 	var typeParameters []*Type
 	var typeArguments []*Type
-	var members ast.SymbolTable
 	var callSignatures []*Signature
 	var constructSignatures []*Signature
 	var indexInfos []*IndexInfo
@@ -19606,6 +19651,7 @@ func (c *Checker) resolveObjectTypeMembers(t *Type) {
 			instantiatedBaseTypes[i] = c.getTypeWithThisArgument(c.instantiateType(baseType, mapper), thisArgument, false /*needsApparentType*/)
 		}
 	}
+	c.resolvingObjectTypeStack = append(c.resolvingObjectTypeStack, ResolvingObjectType{t: t, mapper: mapper, baseTypes: instantiatedBaseTypes})
 	// Member layout must be computed before inherited signatures, which may circularly depend on it
 	layout := c.getMemberLayout(t, instantiatedBaseTypes)
 	for _, instantiatedBaseType := range instantiatedBaseTypes {
@@ -19621,12 +19667,29 @@ func (c *Checker) resolveObjectTypeMembers(t *Type) {
 			return findIndexInfo(indexInfos, info.keyType) == nil
 		}))
 	}
-	c.setStructuredTypeMembers(t, members, callSignatures, constructSignatures, indexInfos)
+	c.setStructuredTypeMembers(t, nil, callSignatures, constructSignatures, indexInfos)
 	lazyState := c.lazyStateArena.New()
 	lazyState.layout = layout
 	lazyState.mapper = mapper
 	lazyState.baseTypes = instantiatedBaseTypes
 	t.AsTypeReference().lazy = lazyState
+	c.propagateResolvedDeclaredMembers()
+	c.resolvingObjectTypeStack = c.resolvingObjectTypeStack[:len(c.resolvingObjectTypeStack)-1]
+}
+
+// Propagate members resolved by getDeclaredPropertyOfResolvingType
+func (c *Checker) propagateResolvedDeclaredMembers() {
+	r := &c.resolvingObjectTypeStack[len(c.resolvingObjectTypeStack)-1]
+	s := r.t.AsTypeReference()
+	for symbol := range r.resolvedMembers.Values() {
+		if memberInfo := s.lazy.layout.memberInfoMap[symbol.Name()]; memberInfo != nil {
+			if s.properties == nil {
+				s.properties = make([]*ast.Symbol, len(s.lazy.layout.memberInfos))
+			}
+			s.properties[memberInfo.slotIndex] = symbol
+		}
+	}
+	r.resolvedMembers = nil
 }
 
 func (c *Checker) getMemberLayout(t *Type, baseTypes []*Type) *MemberLayout {
@@ -20124,14 +20187,22 @@ func (c *Checker) isValidBaseType(t *Type) bool {
 
 // TODO: GH#18217 If `checkBase` is undefined, we should not call this because this will always return false.
 func (c *Checker) hasBaseType(t *Type, checkBase *Type) bool {
+	// Paths through base types only branch at types with several base types and at
+	// intersections. Searching each of those once keeps shared base types from making
+	// the search exponential, and single inheritance allocates nothing.
+	var visited collections.Set[*Type]
 	var check func(*Type) bool
 	check = func(t *Type) bool {
 		if t.objectFlags&(ObjectFlagsClassOrInterface|ObjectFlagsReference) != 0 {
 			target := getTargetType(t)
-			return target == checkBase || core.Some(c.getBaseTypes(target), check)
+			if target == checkBase {
+				return true
+			}
+			baseTypes := c.getBaseTypes(target)
+			return (len(baseTypes) < 2 || visited.AddIfAbsent(target)) && core.Some(baseTypes, check)
 		}
 		if t.flags&TypeFlagsIntersection != 0 {
-			return core.Some(t.Types(), check)
+			return visited.AddIfAbsent(t) && core.Some(t.Types(), check)
 		}
 		return false
 	}
@@ -22006,24 +22077,27 @@ func (c *Checker) getPropertyOfUnionOrIntersectionType(t *Type, name string, ski
 // these partial properties when identifying discriminant properties, but otherwise they are filtered out
 // and do not appear to be present in the union type.
 func (c *Checker) getUnionOrIntersectionProperty(t *Type, name string, skipObjectFunctionPropertyAugment bool) *ast.Symbol {
-	var cache ast.SymbolTable
+	data := t.AsUnionOrIntersectionType()
 	if skipObjectFunctionPropertyAugment {
-		cache = ast.GetSymbolTable(&t.AsUnionOrIntersectionType().propertyCacheWithoutFunctionPropertyAugment)
+		if prop := data.propertyCacheWithoutFunctionPropertyAugment.Get(name); prop != nil {
+			return prop
+		}
 	} else {
-		cache = ast.GetSymbolTable(&t.AsUnionOrIntersectionType().propertyCache)
-	}
-	if prop := cache.Get(name); prop != nil {
-		return prop
+		if prop := data.propertyCache.Get(name); prop != nil {
+			return prop
+		}
+		// Complete non-augmented properties are also valid for augmented
+		// lookup. Share the entry instead of retaining it in both tables.
+		if prop := data.propertyCacheWithoutFunctionPropertyAugment.Get(name); prop != nil && prop.CheckFlags()&ast.CheckFlagsPartial == 0 {
+			return prop
+		}
 	}
 	prop := c.createUnionOrIntersectionProperty(t, name, skipObjectFunctionPropertyAugment)
 	if prop != nil {
-		cache.Set(name, prop)
-		// Propagate an entry from the non-augmented cache to the augmented cache unless the property is partial.
-		if skipObjectFunctionPropertyAugment && prop.CheckFlags()&ast.CheckFlagsPartial == 0 {
-			augmentedCache := ast.GetSymbolTable(&t.AsUnionOrIntersectionType().propertyCache)
-			if augmentedCache.Get(name) == nil {
-				augmentedCache.Set(name, prop)
-			}
+		if skipObjectFunctionPropertyAugment {
+			ast.GetSymbolTable(&data.propertyCacheWithoutFunctionPropertyAugment).Set(name, prop)
+		} else {
+			ast.GetSymbolTable(&data.propertyCache).Set(name, prop)
 		}
 	}
 	return prop
@@ -22773,16 +22847,15 @@ func (c *Checker) instantiateTypeWithAlias(t *Type, m *TypeMapper, alias *TypeAl
 		return c.errorType
 	}
 	index := c.findActiveMapper(m)
+	var key CacheHashKey
 	if index == -1 {
+		// A newly pushed mapper has an empty cache, and the result is not cached below.
 		c.pushActiveMapper(m)
-	}
-	var b keyBuilder
-	b.writeType(t)
-	b.writeAlias(alias)
-	key := b.hash()
-	cache := c.activeTypeMappersCaches[core.IfElse(index != -1, index, len(c.activeTypeMappersCaches)-1)]
-	if cachedType, ok := cache[key]; ok {
-		return cachedType
+	} else {
+		key = getActiveMapperCacheKey(t, alias)
+		if cachedType, ok := c.activeTypeMappersCaches[index].get(key); ok {
+			return cachedType
+		}
 	}
 	c.TotalInstantiationCount++
 	c.instantiationCount++
@@ -22791,11 +22864,23 @@ func (c *Checker) instantiateTypeWithAlias(t *Type, m *TypeMapper, alias *TypeAl
 	if index == -1 {
 		c.popActiveMapper()
 	} else {
-		cache[key] = result
+		c.activeTypeMappersCaches[index].set(key, result)
 	}
 	c.instantiationStack[len(c.instantiationStack)-1] = nil
 	c.instantiationStack = c.instantiationStack[:len(c.instantiationStack)-1]
 	return result
+}
+
+// Without an alias the key is just the type ID, which avoids hashing. Hashed keys have
+// a nonzero high half with overwhelming probability, so the two kinds do not collide.
+func getActiveMapperCacheKey(t *Type, alias *TypeAlias) CacheHashKey {
+	if alias == nil {
+		return CacheHashKey{Lo: uint64(t.id)}
+	}
+	var b keyBuilder
+	b.writeType(t)
+	b.writeAlias(alias)
+	return b.hash()
 }
 
 func (c *Checker) getCircularTypeNames() []string {
@@ -22823,13 +22908,10 @@ func (c *Checker) pushActiveMapper(mapper *TypeMapper) {
 
 	lastIndex := len(c.activeTypeMappersCaches)
 	if cap(c.activeTypeMappersCaches) > lastIndex {
-		// The cap may contain an empty map from popActiveMapper; reuse it.
+		// The cap may contain an empty cache from popActiveMapper; reuse it.
 		c.activeTypeMappersCaches = c.activeTypeMappersCaches[:lastIndex+1]
-		if c.activeTypeMappersCaches[lastIndex] == nil {
-			c.activeTypeMappersCaches[lastIndex] = make(map[CacheHashKey]*Type, 1)
-		}
 	} else {
-		c.activeTypeMappersCaches = append(c.activeTypeMappersCaches, make(map[CacheHashKey]*Type, 1))
+		c.activeTypeMappersCaches = append(c.activeTypeMappersCaches, clearableMap[*Type]{})
 	}
 }
 
@@ -22837,9 +22919,9 @@ func (c *Checker) popActiveMapper() {
 	c.activeMappers[len(c.activeMappers)-1] = nil
 	c.activeMappers = c.activeMappers[:len(c.activeMappers)-1]
 
-	// Clear the map, but leave it in the list for later reuse.
+	// Clear the cache, but leave it in the list for later reuse.
 	lastIndex := len(c.activeTypeMappersCaches) - 1
-	clear(c.activeTypeMappersCaches[lastIndex])
+	c.activeTypeMappersCaches[lastIndex].clear()
 	c.activeTypeMappersCaches = c.activeTypeMappersCaches[:lastIndex]
 }
 
@@ -22848,8 +22930,8 @@ func (c *Checker) findActiveMapper(mapper *TypeMapper) int {
 }
 
 func (c *Checker) clearActiveMapperCaches() {
-	for _, cache := range c.activeTypeMappersCaches {
-		clear(cache)
+	for i := range c.activeTypeMappersCaches {
+		c.activeTypeMappersCaches[i].clear()
 	}
 }
 
@@ -25726,7 +25808,7 @@ func (c *Checker) newType(flags TypeFlags, objectFlags ObjectFlags, t *Type, kin
 	t.flags = flags
 	t.objectFlags = objectFlags &^ (ObjectFlagsCouldContainTypeVariablesComputed | ObjectFlagsCouldContainTypeVariables | ObjectFlagsMembersResolved)
 	t.id = TypeId(c.TypeCount)
-	t.kind = kind
+	t.kind = kind //nolint:customlint
 	t.checker = c
 	if c.tracer != nil {
 		c.tracer.RecordType(t)
@@ -28115,7 +28197,7 @@ func (c *Checker) getPropertyNameFromIndex(indexType *Type, accessNode *ast.Node
 }
 
 func (c *Checker) isStringIndexSignatureOnlyTypeWorker(t *Type) bool {
-	return t.flags&TypeFlagsObject != 0 && !c.isGenericMappedType(t) && len(c.getLayoutPropertiesOfType(t)) == 0 && len(c.getIndexInfosOfType(t)) == 1 && c.getIndexInfoOfType(t, c.stringType) != nil ||
+	return t.flags&TypeFlagsObject != 0 && t.objectFlags&(ObjectFlagsClassOrInterface|ObjectFlagsReference) == 0 && !c.isGenericMappedType(t) && len(c.getLayoutPropertiesOfType(t)) == 0 && len(c.getIndexInfosOfType(t)) == 1 && c.getIndexInfoOfType(t, c.stringType) != nil ||
 		t.flags&TypeFlagsUnionOrIntersection != 0 && core.Every(t.Types(), c.isStringIndexSignatureOnlyType)
 }
 
