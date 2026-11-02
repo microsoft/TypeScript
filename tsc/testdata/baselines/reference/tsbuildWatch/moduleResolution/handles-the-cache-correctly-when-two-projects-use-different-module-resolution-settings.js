@@ -437,10 +437,6 @@ Directory watches::
   /user/username/projects/myproject/project2/node_modules/file
 project1/tsconfig.json::
 SemanticDiagnostics::
-*refresh*    /home/src/tslibs/TS/Lib/lib.es2026.full.d.ts
-*refresh*    /user/username/projects/myproject/project1/node_modules/file/index.d.ts
 *refresh*    /user/username/projects/myproject/project1/index.ts
-*refresh*    /user/username/projects/myproject/node_modules/@types/foo/index.d.ts
-*refresh*    /user/username/projects/myproject/node_modules/@types/bar/index.d.ts
 Signatures::
 (computed .d.ts) /user/username/projects/myproject/project1/index.ts
