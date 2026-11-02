@@ -462,6 +462,41 @@ func TestContentMapperExtensionRewritesPreserveLongestExtension(t *testing.T) {
 	})
 }
 
+func TestContentMapperExtensionRewriteRuntimeFlags(t *testing.T) {
+	t.Parallel()
+	for _, test := range []struct {
+		name        string
+		include     []string
+		fallback    bool
+		wantRuntime []bool
+	}{
+		{name: "unfiltered", wantRuntime: []bool{true}},
+		{name: "filtered", include: []string{"src"}, wantRuntime: []bool{false}},
+		{name: "empty include", include: []string{}, wantRuntime: []bool{false}},
+		{name: "unfiltered fallback", include: []string{"src"}, fallback: true, wantRuntime: []bool{false, true}},
+	} {
+		t.Run(test.name, func(t *testing.T) {
+			t.Parallel()
+			commandLine := NewParsedCommandLine(&core.CompilerOptions{}, nil, nil, "/", tspath.CaseSensitive)
+			commandLine.ParsedConfig.ContentMappers = []*contentmapper.Mapper{{
+				Extensions: []string{".toml"}, Include: test.include, OutputExtensions: map[string]string{".toml": ".js"},
+			}}
+			if test.fallback {
+				commandLine.ParsedConfig.ContentMappers = append(commandLine.ParsedConfig.ContentMappers, &contentmapper.Mapper{
+					Extensions: []string{".toml"}, OutputExtensions: map[string]string{".toml": ".js"},
+				})
+			}
+			rewrites := commandLine.ContentMapperExtensionRewrites()
+			assert.Equal(t, len(rewrites), len(test.wantRuntime))
+			for i, rewrite := range rewrites {
+				assert.Equal(t, rewrite.Source, ".toml")
+				assert.Equal(t, rewrite.Target, ".js")
+				assert.Equal(t, rewrite.Runtime, test.wantRuntime[i])
+			}
+		})
+	}
+}
+
 func TestContentMapperExtensionRewritesAreCached(t *testing.T) { //nolint:paralleltest,tparallel // AllocsPerRun cannot run in parallel tests.
 	mapper := &contentmapper.Mapper{
 		Extensions:       []string{".astro", ".y.z"},

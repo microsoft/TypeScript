@@ -4,6 +4,7 @@ import (
 	"context"
 	"errors"
 	"slices"
+	"strings"
 	"testing"
 
 	"github.com/microsoft/TypeScript/tsc/internal/ast"
@@ -175,6 +176,63 @@ func TestContentMapperRelativeSymlinkedDirectory(t *testing.T) {
 			assert.Equal(t, program.GetContentMapper(file), config.ContentMappers()[0])
 			assert.Equal(t, len(program.GetSemanticDiagnostics(t.Context(), program.GetSourceFile("/project/src/main.ts"))), 0)
 		})
+	}
+}
+
+func TestContentMapperRuntimeRewrites(t *testing.T) {
+	t.Parallel()
+	for _, moduleKind := range []core.ModuleKind{core.ModuleKindPreserve, core.ModuleKindESNext, core.ModuleKindCommonJS} {
+		for _, fallback := range []bool{false, true} {
+			t.Run(moduleKind.String()+core.IfElse(fallback, "/fallback", "/filtered"), func(t *testing.T) {
+				t.Parallel()
+				fs := vfstest.FromMap(map[string]string{
+					"/project/main.ts": `
+							export { value } from "./claimed.toml";
+							export { other } from "./unclaimed.toml";
+							export const load = (path: string) => import(path);
+							export const loadClaimed = () => import("./claimed.toml");
+						`,
+					"/project/claimed.toml":        "export const value = 1;",
+					"/project/unclaimed.toml":      "export const other = 2;",
+					"/project/unclaimed.d.toml.ts": "export declare const other: 2;",
+				}, tspath.CaseSensitive)
+				config := tsoptions.NewParsedCommandLine(&core.CompilerOptions{
+					NoLib: core.TSTrue, Declaration: core.TSTrue, RewriteRelativeImportExtensions: core.TSTrue,
+					Module: moduleKind, ModuleResolution: core.ModuleResolutionKindBundler, OutDir: "/dist",
+					AllowArbitraryExtensions: core.TSTrue,
+				}, []tspath.RootedFilePath{"/project/main.ts"}, nil, "/project", fs.CaseSensitivity())
+				config.ParsedConfig.ContentMappers = []*contentmapper.Mapper{{
+					Package: "filtered", Name: "filtered", Extensions: []string{".toml"},
+					Include: []string{"claimed.toml"}, OutputExtensions: map[string]string{".toml": ".js"},
+				}}
+				if fallback {
+					config.ParsedConfig.ContentMappers = append(config.ParsedConfig.ContentMappers, &contentmapper.Mapper{
+						Package: "fallback", Name: "fallback", Extensions: []string{".toml"},
+						OutputExtensions: map[string]string{".toml": ".js"},
+					})
+				}
+				program := compiler.NewProgram(compiler.ProgramOptions{
+					Config: config,
+					Host: compiler.NewCompilerHost(fs, "/", nil, nil, fakeContentMapperHost{
+						transform: func(fileName, content string) (contentmapper.Result, error) {
+							return contentmapper.Result{Text: content, VirtualExtension: ".ts", Mappings: spanmap.New(nil)}, nil
+						},
+					}),
+					SingleThreaded: core.TSTrue,
+				})
+				program.Emit(context.Background(), compiler.EmitOptions{})
+				js, ok := fs.ReadFile("/dist/main.js")
+				assert.Assert(t, ok)
+				assert.Assert(t, strings.Contains(js, `"./claimed.js"`))
+				assert.Assert(t, strings.Contains(js, core.IfElse(fallback, `"./unclaimed.js"`, `"./unclaimed.toml"`)))
+				assert.Assert(t, strings.Contains(js, "__rewriteRelativeImportExtension(path"))
+				assert.Equal(t, strings.Contains(js, `".toml"`), fallback)
+				dts, ok := fs.ReadFile("/dist/main.d.ts")
+				assert.Assert(t, ok)
+				assert.Assert(t, strings.Contains(dts, `"./claimed.js"`))
+				assert.Assert(t, fs.FileExists("/dist/claimed.d.ts"))
+			})
+		}
 	}
 }
 
