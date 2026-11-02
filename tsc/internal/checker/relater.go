@@ -1220,6 +1220,12 @@ func (c *Checker) getKeyPropertyCandidateName(types []*Type) string {
 // instantiating the type of an instantiated or mapped property when the type it is instantiated from already rules
 // out a unit type.
 func (c *Checker) isPropertyOfUnitType(prop *ast.Symbol) bool {
+	return c.couldBePropertyOfLiteralType(prop) && isUnitType(c.getTypeOfSymbol(prop))
+}
+
+// Reports whether a property could have a literal type (a unit type or a union of unit types). It reports false only
+// when that is ruled out without resolving the type of the property.
+func (c *Checker) couldBePropertyOfLiteralType(prop *ast.Symbol) bool {
 	// A method is typed as a function type only when none of the flags getTypeOfSymbol checks before it are set
 	if prop.Flags()&(ast.SymbolFlagsMethod|ast.SymbolFlagsAccessor|ast.SymbolFlagsVariable|ast.SymbolFlagsProperty) == ast.SymbolFlagsMethod {
 		return false
@@ -1234,19 +1240,17 @@ func (c *Checker) isPropertyOfUnitType(prop *ast.Symbol) bool {
 				mappedType := links.getContainingType()
 				uninstantiated = c.getTemplateTypeFromMappedType(core.OrElse(mappedType.AsMappedType().target, mappedType))
 			}
-			// An object type other than a mapped type or a generic tuple type never instantiates to a unit type or to never,
+			// An object type other than a mapped type or a generic tuple type never instantiates to a literal type or to never,
 			// so neither does a union containing one. A homomorphic mapped type instantiated for a primitive is that
 			// primitive. A generic tuple type has a variadic element, like [string, ...T, number], and it normalizes to never
 			// when that element is instantiated to never. The tuple then drops out of a union, so with T = never the union
 			// [string, ...T, number] | K is just K, which can be a unit type.
-			if core.Some(uninstantiated.Distributed(), func(t *Type) bool {
+			return !core.Some(uninstantiated.Distributed(), func(t *Type) bool {
 				return t.flags&TypeFlagsObject != 0 && t.objectFlags&ObjectFlagsMapped == 0 && !isGenericTupleType(t)
-			}) {
-				return false
-			}
+			})
 		}
 	}
-	return isUnitType(c.getTypeOfSymbol(prop))
+	return true
 }
 
 // Given a set of constituent types and a property name, create and return a map keyed by the literal

@@ -485,7 +485,7 @@ func (c *Checker) getInferenceDiscriminatedTypes(union *Type, object *Type, reve
 		return match.Distributed()
 	}
 	literalProps := core.Filter(c.getPropertiesOfType(object), func(prop *ast.Symbol) bool {
-		return isLiteralType(c.getNonMissingTypeOfSymbol(prop))
+		return c.couldBePropertyOfLiteralType(prop) && isLiteralType(c.getNonMissingTypeOfSymbol(prop))
 	})
 	discriminants := c.findDiscriminantProperties(literalProps, union)
 	if len(discriminants) == 0 {
