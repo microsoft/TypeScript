@@ -9478,11 +9478,12 @@ func (c *Checker) checkTypeArguments(signature *Signature, typeArgumentNodes []*
 				errorNode = typeArgumentNodes[i]
 			}
 			var diags []*ast.Diagnostic
-			if !c.checkTypeAssignableToEx(typeArgument, c.getTypeWithThisArgument(c.instantiateType(constraint, mapper), typeArgument, false), errorNode, typeArgumentHeadMessage, &diags) {
+			instantiatedConstraint := c.getTypeWithThisArgument(c.instantiateType(constraint, mapper), typeArgument, false)
+			if !c.checkTypeAssignableToEx(typeArgument, instantiatedConstraint, errorNode, typeArgumentHeadMessage, &diags) {
 				if len(diags) != 0 {
 					diagnostic := diags[0]
 					if headMessage != nil {
-						diagnostic = ast.NewDiagnosticChain(diagnostic, diagnostics.Type_0_does_not_satisfy_the_constraint_1)
+						diagnostic = ast.NewDiagnosticChain(diagnostic, diagnostics.Type_0_does_not_satisfy_the_constraint_1, c.typeToString(typeArgument, nil), c.typeToString(instantiatedConstraint, nil))
 					}
 					c.addDiagnostic(diagnostic)
 				}

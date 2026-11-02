@@ -1,0 +1,26 @@
+//// [tests/cases/compiler/typeArgumentConstraintDiagnostic.ts] ////
+
+=== typeArgumentConstraintDiagnostic.ts ===
+declare function constrained<T extends string>(): void;
+>constrained : <T extends string>() => void
+
+constrained<number>();
+>constrained<number>() : void
+>constrained : <T extends string>() => void
+
+declare function dependent<T extends U, U>(): void;
+>dependent : <T extends U, U>() => void
+
+dependent<number, string>();
+>dependent<number, string>() : void
+>dependent : <T extends U, U>() => void
+
+declare function dependentObject<T extends U, U>(): void;
+>dependentObject : <T extends U, U>() => void
+
+dependentObject<{ value: number }, { value: string }>();
+>dependentObject<{ value: number }, { value: string }>() : void
+>dependentObject : <T extends U, U>() => void
+>value : number
+>value : string
+
