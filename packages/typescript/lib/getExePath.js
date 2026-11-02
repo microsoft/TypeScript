@@ -1,11 +1,11 @@
-import fs from "node:fs";
-import module from "node:module";
-import path from "node:path";
-import { fileURLToPath } from "node:url";
+// Node modules are passed in rather than imported so that this file can be
+// loaded in any environment; callers choose how to obtain them.
+/** @typedef {import("./getExePath.d.ts").NodeModules} NodeModules */
 
 // NOTE: Keep VS Code extension's resolveTsdkPathToExe in sync with this function.
-export default function getExePath() {
-    const __dirname = path.dirname(fileURLToPath(import.meta.url));
+/** @param {NodeModules} modules */
+export default function getExePath({ fs, module, path, url }) {
+    const __dirname = path.dirname(url.fileURLToPath(import.meta.url));
     const normalizedDirname = __dirname.replace(/\\/g, "/");
 
     const pkg = JSON.parse(fs.readFileSync(path.join(__dirname, "..", "package.json"), "utf8"));
@@ -45,7 +45,7 @@ export default function getExePath() {
             else {
                 // v20.6.0, v18.19.0
                 const packageJson = import.meta.resolve(platformPackageName + "/package.json");
-                const packageJsonPath = fileURLToPath(packageJson);
+                const packageJsonPath = url.fileURLToPath(packageJson);
                 exeDir = path.join(path.dirname(packageJsonPath), "lib");
             }
         }

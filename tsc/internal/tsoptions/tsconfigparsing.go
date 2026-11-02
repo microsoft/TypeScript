@@ -1012,7 +1012,7 @@ func parseConfig(
 	var errors []*ast.Diagnostic
 	if slices.Contains(resolutionStack, resolvedPath) {
 		var result *parsedTsconfig
-		errors = append(errors, ast.NewCompilerDiagnostic(diagnostics.Circularity_detected_while_resolving_configuration_Colon_0))
+		errors = append(errors, ast.NewCompilerDiagnostic(diagnostics.Circularity_detected_while_resolving_configuration_Colon_0, strings.Join(append(core.Map(resolutionStack[slices.Index(resolutionStack, resolvedPath):], tspath.PathKey.AsString), resolvedPath.AsString()), " -> ")))
 		if json.Size() == 0 {
 			result = &parsedTsconfig{raw: json}
 		} else {

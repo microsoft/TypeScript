@@ -20,12 +20,12 @@ import {
     createIdentifier,
     createIfStatement,
 } from "@typescript/typescript/ast/factory";
-import { API } from "@typescript/typescript/sync";
 import assert from "node:assert/strict";
 import { fileURLToPath } from "node:url";
 import { parseArgs } from "node:util";
 import { Bench } from "tinybench";
 import { createVirtualFileSystem } from "../testUtils.ts";
+import { API } from "./api.testUtils.ts";
 
 const treeDepth = 5;
 const expressionsPerBlock = 6;

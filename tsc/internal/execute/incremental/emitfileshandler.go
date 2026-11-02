@@ -208,15 +208,13 @@ func (h *emitFilesHandler) getEmitOptions(options compiler.EmitOptions) compiler
 				if canUseIncrementalState {
 					var emitSignature string
 					info, _ := h.program.snapshot.fileInfos.Load(data.SourceFile.PathKey())
-					if info.signature == info.version {
-						signature := h.program.snapshot.computeSignatureWithDiagnostics(data.SourceFile, text, data)
-						// With d.ts diagnostics they are also part of the signature so emitSignature will be different from it since its just hash of d.ts
-						if len(data.Diagnostics) == 0 {
-							emitSignature = signature
-						}
-						if signature != info.version { // Update it
-							h.signatures.Store(data.SourceFile.PathKey(), signature)
-						}
+					signature := h.program.snapshot.computeSignatureWithDiagnostics(data.SourceFile, text, data)
+					// With d.ts diagnostics they are also part of the signature so emitSignature will be different from it since its just hash of d.ts
+					if len(data.Diagnostics) == 0 {
+						emitSignature = signature
+					}
+					if signature != info.signature {
+						h.signatures.Store(data.SourceFile.PathKey(), signature)
 					}
 
 					// Store d.ts emit hash so later can be compared to check if d.ts has changed.
