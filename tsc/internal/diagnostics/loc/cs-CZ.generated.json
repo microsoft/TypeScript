@@ -496,7 +496,6 @@
   "Containing_file_is_not_specified_and_root_directory_cannot_be_determined_skipping_lookup_in_node_mod_6126": "Není zadaný obsažený soubor a nedá se určit kořenový adresář – přeskakuje se vyhledávání ve složce node_modules.",
   "Containing_function_is_not_an_arrow_function_95128": "Obsahující funkce není funkcí šipky.",
   "Content_mapper_extension_0_must_not_contain_path_separators_18123": "Přípona mapování obsahu „{0}“ nesmí obsahovat oddělovače cest.",
-  "Content_mapper_file_extension_0_is_a_built_in_extension_and_cannot_be_registered_by_a_content_mapper_18066": "Přípona souboru mapovače obsahu '{0}' je integrovaná přípona a mapovač obsahu ji nemůže zaregistrovat.",
   "Content_mapper_file_extension_0_is_registered_by_more_than_one_content_mapper_18067": "Přípona souboru mapovače obsahu '{0}' je registrována více mapovači obsahu.",
   "Content_mapper_file_extension_0_must_begin_with_a_18065": "Přípona {0} pro mapování obsahu musí začínat tečkou (.).",
   "Content_mapper_output_extension_0_must_be_non_empty_and_begin_with_a_18118": "Výstupní přípona mapování obsahu „{0}“ nesmí být prázdná a musí začínat znakem „.“.",

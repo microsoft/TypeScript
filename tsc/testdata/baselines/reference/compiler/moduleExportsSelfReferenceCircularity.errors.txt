@@ -1,0 +1,23 @@
+a.js(1,1): error TS7022: 'exports' implicitly has type 'any' because it does not have a type annotation and is referenced directly or indirectly in its own initializer.
+a.js(1,1): error TS2309: An export assignment cannot be used in a module with other exported elements.
+a.js(1,1): error TS7022: 'export=' implicitly has type 'any' because it does not have a type annotation and is referenced directly or indirectly in its own initializer.
+
+
+==== b.js (0 errors) ====
+    const a = require("./a");
+    exports.q = a.x;
+    exports.r = module.exports.q;
+    
+==== a.js (3 errors) ====
+    module.exports = { x: module.exports.y, y: 1 };
+    ~~~~~~
+!!! error TS7022: 'exports' implicitly has type 'any' because it does not have a type annotation and is referenced directly or indirectly in its own initializer.
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2309: An export assignment cannot be used in a module with other exported elements.
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS7022: 'export=' implicitly has type 'any' because it does not have a type annotation and is referenced directly or indirectly in its own initializer.
+    exports.z = exports.x;
+    const self = require("./a");
+    module.exports.w = self.y;
+    module.exports.v = module.exports;
+    
