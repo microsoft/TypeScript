@@ -20,11 +20,18 @@ var (
 
 type NodeFactory struct {
 	hooks                              NodeFactoryHooks
+	arrayLiteralExpressionArena        core.Arena[ArrayLiteralExpression]
 	arrayTypeNodeArena                 core.Arena[ArrayTypeNode]
+	arrowFunctionArena                 core.Arena[ArrowFunction]
+	asExpressionArena                  core.Arena[AsExpression]
+	awaitExpressionArena               core.Arena[AwaitExpression]
 	binaryExpressionArena              core.Arena[BinaryExpression]
+	bindingElementArena                core.Arena[BindingElement]
+	bindingPatternArena                core.Arena[BindingPattern]
 	blockArena                         core.Arena[Block]
 	callExpressionArena                core.Arena[CallExpression]
 	conditionalExpressionArena         core.Arena[ConditionalExpression]
+	conditionalTypeNodeArena           core.Arena[ConditionalTypeNode]
 	constructSignatureDeclarationArena core.Arena[ConstructSignatureDeclaration]
 	elementAccessExpressionArena       core.Arena[ElementAccessExpression]
 	expressionStatementArena           core.Arena[ExpressionStatement]
@@ -34,8 +41,12 @@ type NodeFactory struct {
 	heritageClauseArena                core.Arena[HeritageClause]
 	identifierArena                    core.Arena[Identifier]
 	ifStatementArena                   core.Arena[IfStatement]
+	importClauseArena                  core.Arena[ImportClause]
+	importDeclarationArena             core.Arena[ImportDeclaration]
 	importSpecifierArena               core.Arena[ImportSpecifier]
+	importTypeNodeArena                core.Arena[ImportTypeNode]
 	indexedAccessTypeNodeArena         core.Arena[IndexedAccessTypeNode]
+	inferTypeNodeArena                 core.Arena[InferTypeNode]
 	interfaceDeclarationArena          core.Arena[InterfaceDeclaration]
 	intersectionTypeNodeArena          core.Arena[IntersectionTypeNode]
 	jsdocArena                         core.Arena[JSDoc]
@@ -45,24 +56,41 @@ type NodeFactory struct {
 	keywordExpressionArena             core.Arena[KeywordExpression]
 	keywordTypeNodeArena               core.Arena[KeywordTypeNode]
 	literalTypeNodeArena               core.Arena[LiteralTypeNode]
+	methodDeclarationArena             core.Arena[MethodDeclaration]
 	methodSignatureDeclarationArena    core.Arena[MethodSignatureDeclaration]
 	modifierListArena                  core.Arena[ModifierList]
+	namedImportsArena                  core.Arena[NamedImports]
 	nodeListArena                      core.Arena[NodeList]
 	numericLiteralArena                core.Arena[NumericLiteral]
+	objectLiteralExpressionArena       core.Arena[ObjectLiteralExpression]
 	parameterDeclarationArena          core.Arena[ParameterDeclaration]
 	parenthesizedExpressionArena       core.Arena[ParenthesizedExpression]
 	parenthesizedTypeNodeArena         core.Arena[ParenthesizedTypeNode]
 	prefixUnaryExpressionArena         core.Arena[PrefixUnaryExpression]
 	propertyAccessExpressionArena      core.Arena[PropertyAccessExpression]
 	propertyAssignmentArena            core.Arena[PropertyAssignment]
+	propertyDeclarationArena           core.Arena[PropertyDeclaration]
 	propertySignatureDeclarationArena  core.Arena[PropertySignatureDeclaration]
+	restTypeNodeArena                  core.Arena[RestTypeNode]
 	returnStatementArena               core.Arena[ReturnStatement]
+	shorthandPropertyAssignmentArena   core.Arena[ShorthandPropertyAssignment]
 	stringLiteralArena                 core.Arena[StringLiteral]
+	templateExpressionArena            core.Arena[TemplateExpression]
+	templateHeadArena                  core.Arena[TemplateHead]
+	templateLiteralTypeNodeArena       core.Arena[TemplateLiteralTypeNode]
+	templateLiteralTypeSpanArena       core.Arena[TemplateLiteralTypeSpan]
+	templateMiddleArena                core.Arena[TemplateMiddle]
+	templateSpanArena                  core.Arena[TemplateSpan]
+	templateTailArena                  core.Arena[TemplateTail]
+	thisTypeNodeArena                  core.Arena[ThisTypeNode]
 	tokenArena                         core.Arena[Token]
+	tupleTypeNodeArena                 core.Arena[TupleTypeNode]
 	typeAliasDeclarationArena          core.Arena[TypeAliasDeclaration]
 	typeLiteralNodeArena               core.Arena[TypeLiteralNode]
+	typeOfExpressionArena              core.Arena[TypeOfExpression]
 	typeOperatorNodeArena              core.Arena[TypeOperatorNode]
 	typeParameterDeclarationArena      core.Arena[TypeParameterDeclaration]
+	typeQueryNodeArena                 core.Arena[TypeQueryNode]
 	typeReferenceNodeArena             core.Arena[TypeReferenceNode]
 	unionTypeNodeArena                 core.Arena[UnionTypeNode]
 	variableDeclarationArena           core.Arena[VariableDeclaration]
@@ -622,13 +650,13 @@ func (f *NodeFactory) NewToken(kind TokenSyntaxKind) *Node {
 		data := &NoSubstitutionTemplateLiteral{}
 		return f.newNode(kind, data.AsNode())
 	case KindTemplateHead:
-		data := &TemplateHead{}
+		data := f.templateHeadArena.New()
 		return f.newNode(kind, data.AsNode())
 	case KindTemplateMiddle:
-		data := &TemplateMiddle{}
+		data := f.templateMiddleArena.New()
 		return f.newNode(kind, data.AsNode())
 	case KindTemplateTail:
-		data := &TemplateTail{}
+		data := f.templateTailArena.New()
 		return f.newNode(kind, data.AsNode())
 	case KindIdentifier:
 		data := f.identifierArena.New()
@@ -1858,7 +1886,7 @@ func (f *NodeFactory) NewBindingPattern(kind Kind, elements *BindingElementList)
 	default:
 		panic("Invalid node kind for BindingPattern")
 	}
-	data := &BindingPattern{}
+	data := f.bindingPatternArena.New()
 	data.Elements = elements
 	return f.newNode(kind, data.AsNode())
 }
@@ -1966,7 +1994,7 @@ type BindingElement struct {
 }
 
 func (f *NodeFactory) NewBindingElement(dotDotDotToken *DotDotDotToken, propertyName *PropertyName, name *BindingName, initializer *Expression) *Node {
-	data := &BindingElement{}
+	data := f.bindingElementArena.New()
 	data.DotDotDotToken = dotDotDotToken
 	data.PropertyName = propertyName
 	data.name = name
@@ -2584,7 +2612,7 @@ type ImportDeclaration struct {
 }
 
 func (f *NodeFactory) NewImportDeclaration(modifiers *ModifierList, importClause *ImportClauseNode, moduleSpecifier *Expression, attributes *ImportAttributesNode) *Node {
-	data := &ImportDeclaration{}
+	data := f.importDeclarationArena.New()
 	data.modifiers = modifiers
 	data.ImportClause = importClause
 	data.ModuleSpecifier = moduleSpecifier
@@ -2593,7 +2621,7 @@ func (f *NodeFactory) NewImportDeclaration(modifiers *ModifierList, importClause
 }
 
 func (f *NodeFactory) NewJSImportDeclaration(modifiers *ModifierList, importClause *ImportClauseNode, moduleSpecifier *Expression, attributes *ImportAttributesNode) *Node {
-	data := &ImportDeclaration{}
+	data := f.importDeclarationArena.New()
 	data.modifiers = modifiers
 	data.ImportClause = importClause
 	data.ModuleSpecifier = moduleSpecifier
@@ -2753,7 +2781,7 @@ type NamedImports struct {
 }
 
 func (f *NodeFactory) NewNamedImports(elements *ImportSpecifierList) *Node {
-	data := &NamedImports{}
+	data := f.namedImportsArena.New()
 	data.Elements = elements
 	return f.newNode(KindNamedImports, data.AsNode())
 }
@@ -3378,7 +3406,7 @@ type MethodDeclaration struct {
 }
 
 func (f *NodeFactory) NewMethodDeclaration(modifiers *ModifierList, asteriskToken *AsteriskToken, name *PropertyName, postfixToken *TokenNode, typeParameters *TypeParameterList, parameters *ParameterList, typeNode *TypeNode, fullSignature *TypeNode, body *FunctionBody) *Node {
-	data := &MethodDeclaration{}
+	data := f.methodDeclarationArena.New()
 	data.modifiers = modifiers
 	data.AsteriskToken = asteriskToken
 	data.name = name
@@ -3496,7 +3524,7 @@ type PropertyDeclaration struct {
 }
 
 func (f *NodeFactory) NewPropertyDeclaration(modifiers *ModifierList, name *PropertyName, postfixToken *TokenNode, typeNode *TypeNode, initializer *Expression) *Node {
-	data := &PropertyDeclaration{}
+	data := f.propertyDeclarationArena.New()
 	data.modifiers = modifiers
 	data.name = name
 	data.PostfixToken = postfixToken
@@ -3973,7 +4001,7 @@ type ArrowFunction struct {
 }
 
 func (f *NodeFactory) NewArrowFunction(modifiers *ModifierList, typeParameters *TypeParameterList, parameters *ParameterList, typeNode *TypeNode, fullSignature *TypeNode, equalsGreaterThanToken *EqualsGreaterThanToken, body *ConciseBody) *Node {
-	data := &ArrowFunction{}
+	data := f.arrowFunctionArena.New()
 	data.modifiers = modifiers
 	data.TypeParameters = typeParameters
 	data.Parameters = parameters
@@ -4086,7 +4114,7 @@ type AsExpression struct {
 }
 
 func (f *NodeFactory) NewAsExpression(expression *Expression, typeNode *TypeNode) *Node {
-	data := &AsExpression{}
+	data := f.asExpressionArena.New()
 	data.Expression = expression
 	data.Type = typeNode
 	return f.newNode(KindAsExpression, data.AsNode())
@@ -4546,7 +4574,7 @@ type TemplateExpression struct {
 }
 
 func (f *NodeFactory) NewTemplateExpression(head *TemplateHeadNode, templateSpans *TemplateSpanList) *Node {
-	data := &TemplateExpression{}
+	data := f.templateExpressionArena.New()
 	data.Head = head
 	data.TemplateSpans = templateSpans
 	return f.newNode(KindTemplateExpression, data.AsNode())
@@ -4591,7 +4619,7 @@ type TemplateSpan struct {
 }
 
 func (f *NodeFactory) NewTemplateSpan(expression *Expression, literal *TemplateMiddleOrTail) *Node {
-	data := &TemplateSpan{}
+	data := f.templateSpanArena.New()
 	data.Expression = expression
 	data.Literal = literal
 	return f.newNode(KindTemplateSpan, data.AsNode())
@@ -4729,7 +4757,7 @@ type ArrayLiteralExpression struct {
 }
 
 func (f *NodeFactory) NewArrayLiteralExpression(elements *ElementList, multiLine bool) *Node {
-	data := &ArrayLiteralExpression{}
+	data := f.arrayLiteralExpressionArena.New()
 	data.Elements = elements
 	data.MultiLine = multiLine
 	return f.newNode(KindArrayLiteralExpression, data.AsNode())
@@ -4775,7 +4803,7 @@ type ObjectLiteralExpression struct {
 }
 
 func (f *NodeFactory) NewObjectLiteralExpression(properties *NodeList, multiLine bool) *Node {
-	data := &ObjectLiteralExpression{}
+	data := f.objectLiteralExpressionArena.New()
 	data.Properties = properties
 	data.MultiLine = multiLine
 	return f.newNode(KindObjectLiteralExpression, data.AsNode())
@@ -4919,7 +4947,7 @@ type ShorthandPropertyAssignment struct {
 }
 
 func (f *NodeFactory) NewShorthandPropertyAssignment(modifiers *ModifierList, name *PropertyName, postfixToken *TokenNode, typeNode *TypeNode, equalsToken *EqualsToken, objectAssignmentInitializer *Expression) *Node {
-	data := &ShorthandPropertyAssignment{}
+	data := f.shorthandPropertyAssignmentArena.New()
 	data.modifiers = modifiers
 	data.name = name
 	data.PostfixToken = postfixToken
@@ -5013,7 +5041,7 @@ type TypeOfExpression struct {
 }
 
 func (f *NodeFactory) NewTypeOfExpression(expression *Expression) *Node {
-	data := &TypeOfExpression{}
+	data := f.typeOfExpressionArena.New()
 	data.Expression = expression
 	return f.newNode(KindTypeOfExpression, data.AsNode())
 }
@@ -5097,7 +5125,7 @@ type AwaitExpression struct {
 }
 
 func (f *NodeFactory) NewAwaitExpression(expression *Expression) *Node {
-	data := &AwaitExpression{}
+	data := f.awaitExpressionArena.New()
 	data.Expression = expression
 	return f.newNode(KindAwaitExpression, data.AsNode())
 }
@@ -5283,7 +5311,7 @@ type ConditionalTypeNode struct {
 }
 
 func (f *NodeFactory) NewConditionalTypeNode(checkType *TypeNode, extendsType *TypeNode, trueType *TypeNode, falseType *TypeNode) *Node {
-	data := &ConditionalTypeNode{}
+	data := f.conditionalTypeNodeArena.New()
 	data.CheckType = checkType
 	data.ExtendsType = extendsType
 	data.TrueType = trueType
@@ -5367,7 +5395,7 @@ type InferTypeNode struct {
 }
 
 func (f *NodeFactory) NewInferTypeNode(typeParameter *TypeParameterDeclarationNode) *Node {
-	data := &InferTypeNode{}
+	data := f.inferTypeNodeArena.New()
 	data.TypeParameter = typeParameter
 	return f.newNode(KindInferType, data.AsNode())
 }
@@ -5600,7 +5628,7 @@ type ThisTypeNode struct {
 }
 
 func (f *NodeFactory) NewThisTypeNode() *Node {
-	data := &ThisTypeNode{}
+	data := f.thisTypeNodeArena.New()
 	return f.newNode(KindThisType, data.AsNode())
 }
 
@@ -5761,7 +5789,7 @@ type TypeQueryNode struct {
 }
 
 func (f *NodeFactory) NewTypeQueryNode(exprName *EntityName, typeArguments *TypeList) *Node {
-	data := &TypeQueryNode{}
+	data := f.typeQueryNodeArena.New()
 	data.ExprName = exprName
 	data.TypeArguments = typeArguments
 	return f.newNode(KindTypeQuery, data.AsNode())
@@ -5894,7 +5922,7 @@ type TupleTypeNode struct {
 }
 
 func (f *NodeFactory) NewTupleTypeNode(elements *TypeList) *Node {
-	data := &TupleTypeNode{}
+	data := f.tupleTypeNodeArena.New()
 	data.Elements = elements
 	return f.newNode(KindTupleType, data.AsNode())
 }
@@ -6022,7 +6050,7 @@ type RestTypeNode struct {
 }
 
 func (f *NodeFactory) NewRestTypeNode(typeNode *TypeNode) *Node {
-	data := &RestTypeNode{}
+	data := f.restTypeNodeArena.New()
 	data.Type = typeNode
 	return f.newNode(KindRestType, data.AsNode())
 }
@@ -6180,7 +6208,7 @@ type TemplateHead struct {
 }
 
 func (f *NodeFactory) NewTemplateHead(text string, rawText string, templateFlags TokenFlags) *Node {
-	data := &TemplateHead{}
+	data := f.templateHeadArena.New()
 	data.Text = text
 	data.RawText = rawText
 	data.TemplateFlags = templateFlags & TokenFlagsTemplateLiteralLikeFlags
@@ -6206,7 +6234,7 @@ type TemplateMiddle struct {
 }
 
 func (f *NodeFactory) NewTemplateMiddle(text string, rawText string, templateFlags TokenFlags) *Node {
-	data := &TemplateMiddle{}
+	data := f.templateMiddleArena.New()
 	data.Text = text
 	data.RawText = rawText
 	data.TemplateFlags = templateFlags & TokenFlagsTemplateLiteralLikeFlags
@@ -6232,7 +6260,7 @@ type TemplateTail struct {
 }
 
 func (f *NodeFactory) NewTemplateTail(text string, rawText string, templateFlags TokenFlags) *Node {
-	data := &TemplateTail{}
+	data := f.templateTailArena.New()
 	data.Text = text
 	data.RawText = rawText
 	data.TemplateFlags = templateFlags & TokenFlagsTemplateLiteralLikeFlags
@@ -6259,7 +6287,7 @@ type TemplateLiteralTypeNode struct {
 }
 
 func (f *NodeFactory) NewTemplateLiteralTypeNode(head *TemplateHeadNode, templateSpans *TemplateLiteralTypeSpanList) *Node {
-	data := &TemplateLiteralTypeNode{}
+	data := f.templateLiteralTypeNodeArena.New()
 	data.Head = head
 	data.TemplateSpans = templateSpans
 	return f.newNode(KindTemplateLiteralType, data.AsNode())
@@ -6299,7 +6327,7 @@ type TemplateLiteralTypeSpan struct {
 }
 
 func (f *NodeFactory) NewTemplateLiteralTypeSpan(typeNode *TypeNode, literal *TemplateMiddleOrTail) *Node {
-	data := &TemplateLiteralTypeSpan{}
+	data := f.templateLiteralTypeSpanArena.New()
 	data.Type = typeNode
 	data.Literal = literal
 	return f.newNode(KindTemplateLiteralTypeSpan, data.AsNode())
@@ -8272,7 +8300,7 @@ type ImportTypeNode struct {
 }
 
 func (f *NodeFactory) NewImportTypeNode(isTypeOf bool, argument *TypeNode, attributes *ImportAttributesNode, qualifier *EntityName, typeArguments *TypeList) *Node {
-	data := &ImportTypeNode{}
+	data := f.importTypeNodeArena.New()
 	data.IsTypeOf = isTypeOf
 	data.Argument = argument
 	data.Attributes = attributes
@@ -8322,7 +8350,7 @@ type ImportClause struct {
 }
 
 func (f *NodeFactory) NewImportClause(phaseModifier ImportPhaseModifierSyntaxKind, name *IdentifierNode, namedBindings *NamedImportBindings) *Node {
-	data := &ImportClause{}
+	data := f.importClauseArena.New()
 	data.PhaseModifier = phaseModifier
 	data.name = name
 	data.NamedBindings = namedBindings
