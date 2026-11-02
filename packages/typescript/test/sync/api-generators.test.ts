@@ -142,7 +142,7 @@ export const missingValue = absent;
 };
 
 type GeneratorMethod<Args extends readonly unknown[], Result> = ((...args: Args) => Result) & {
-    gen(...args: Args): Generator<APIRequest, Result, APIResponse["result"]>;
+    gen(...args: Args): APIRequestGenerator<Result>;
 };
 
 type EquivalenceAssertion<Result> = (actual: Result, expected: Result, message?: string) => void;
@@ -150,7 +150,7 @@ type EquivalenceAssertion<Result> = (actual: Result, expected: Result, message?:
 interface ParityCase {
     readonly ownerName: string;
     readonly methodName: string;
-    readonly runGenerator: () => Generator<APIRequest, void, APIResponse["result"]>;
+    readonly runGenerator: () => APIRequestGenerator<void>;
     readonly assertEquivalent: (message?: string) => void;
 }
 
@@ -485,6 +485,68 @@ describe("API - generator batching", { concurrency: areTestsFiltered() }, () => 
             ["createSourceFile", "createSourceFileFromFile"],
             ["retainSourceFile"],
         ]);
+    });
+
+    test("concurrent resolved project reference generators reuse the first cached graph", () => {
+        using api = spawnAPI({
+            "/tsconfig.json": JSON.stringify({ files: [], references: [{ path: "./a" }, { path: "./b" }, { path: "./a" }] }),
+            "/a/tsconfig.json": JSON.stringify({ compilerOptions: { composite: true }, files: ["index.ts"], references: [{ path: "../b" }] }),
+            "/a/index.ts": "export const a = 1;",
+            "/b/tsconfig.json": JSON.stringify({ compilerOptions: { composite: true }, files: ["index.ts"], references: [{ path: "../a", circular: true }] }),
+            "/b/index.ts": "export const b = 1;",
+        });
+        using snapshot = api.createSnapshot({ openProjects: ["/tsconfig.json"] });
+        const program = snapshot.getConfiguredProject("/tsconfig.json")!.program;
+        const [first, second] = api.batch(program.getResolvedProjectReferences.gen(), program.getResolvedProjectReferences.gen());
+        assert.ok(first);
+        assert.equal(first.length, 3);
+        assert.ok(second === first, "Concurrent calls must return the same reference graph");
+        assert.strictEqual(first[2], first[0]);
+        assert.strictEqual(first[0]!.references![0], first[1]);
+        assert.strictEqual(first[1]!.references![0], first[0]);
+        assert.strictEqual(api.batch(program.getResolvedProjectReferences.gen())[0], first);
+        assert.strictEqual(program.getResolvedProjectReferences(), first);
+    });
+
+    test("batches file-list lookups while preserving order and cached results", context => {
+        using api = spawnAPI({
+            "/tsconfig.json": JSON.stringify({ compilerOptions: { noLib: true, moduleResolution: "node10" }, files: ["src/main.ts"] }),
+            "/src/main.ts": `import { value } from "my-lib"; import { local } from "./local"; export const result = value + local;`,
+            "/src/local.ts": "export const local = 1;",
+            "/node_modules/my-lib/package.json": JSON.stringify({ types: "./index.d.ts" }),
+            "/node_modules/my-lib/index.d.ts": "export declare const value: number;",
+        });
+        using snapshot = api.createSnapshot({ openProjects: ["/tsconfig.json"] });
+        const project = snapshot.getConfiguredProject("/tsconfig.json")!;
+        const program = project.program;
+        const requestBatches: string[][] = [];
+        observeRequestBatches(api, requestBatches, context);
+
+        const [names] = api.batch(project.getFileNames.gen(true));
+        assert.deepEqual(names, ["/src/local.ts", "/src/main.ts", "/tsconfig.json"]);
+        assert.deepEqual(requestBatches, [
+            ["getSourceFileNames"],
+            ["getSourceFileMetadata", "getSourceFileMetadata", "getSourceFileMetadata"],
+            ["getConfigFileNames"],
+        ]);
+        requestBatches.length = 0;
+        assert.deepEqual(api.batch(project.getFileNames.gen(true))[0], names);
+        assert.deepEqual(requestBatches, [["getSourceFileNames"], ["getConfigFileNames"]]);
+
+        const local = program.getSourceFile("/src/local.ts");
+        assert.ok(local);
+        requestBatches.length = 0;
+        const [files] = api.batch(program.getSourceFiles.gen());
+        assert.deepEqual(files.map(file => file.fileName), ["/node_modules/my-lib/index.d.ts", "/src/local.ts", "/src/main.ts"]);
+        assert.strictEqual(files[1], local);
+        assert.deepEqual(requestBatches, [["getSourceFileNames"], ["getSourceFile", "getSourceFile"]]);
+
+        requestBatches.length = 0;
+        const [cached] = api.batch(program.getSourceFiles.gen());
+        for (let i = 0; i < files.length; i++) {
+            assert.strictEqual(cached[i], files[i]);
+        }
+        assert.deepEqual(requestBatches, [["getSourceFileNames"]]);
     });
 
     test("all and defer yield discriminated host messages without starting children", () => {

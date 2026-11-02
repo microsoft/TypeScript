@@ -1567,6 +1567,43 @@ describe("API - automatic batching", { concurrency }, () => {
         assert.equal(parseCommandLine.options.strict, true);
         assert.deepStrictEqual(readConfigFile.config, {});
     });
+
+    test("batches file-list lookups while preserving order and cached results", async () => {
+        await using api = spawnAPI({
+            "/tsconfig.json": JSON.stringify({ compilerOptions: { noLib: true, moduleResolution: "node10" }, files: ["src/main.ts"] }),
+            "/src/main.ts": `import { value } from "my-lib"; import { local } from "./local"; export const result = value + local;`,
+            "/src/local.ts": "export const local = 1;",
+            "/node_modules/my-lib/package.json": JSON.stringify({ types: "./index.d.ts" }),
+            "/node_modules/my-lib/index.d.ts": "export declare const value: number;",
+        }, { collectTiming: true });
+        const snapshot = await api.createSnapshot({ openProjects: ["/tsconfig.json"] });
+        const project = snapshot.getConfiguredProject("/tsconfig.json")!;
+        const program = project.program;
+        const expected = ["/src/local.ts", "/src/main.ts", "/tsconfig.json"];
+
+        await api.resetTimingInfo();
+        assert.deepEqual(await project.getFileNames(true), expected);
+        assert.equal((await api.getTimingInfo()).totals.requestCount, 3);
+
+        await api.resetTimingInfo();
+        assert.deepEqual(await project.getFileNames(true), expected);
+        assert.equal((await api.getTimingInfo()).totals.requestCount, 2);
+
+        const local = await program.getSourceFile("/src/local.ts");
+        assert.ok(local);
+        await api.resetTimingInfo();
+        const files = await program.getSourceFiles();
+        assert.deepEqual(files.map(file => file.fileName), ["/node_modules/my-lib/index.d.ts", "/src/local.ts", "/src/main.ts"]);
+        assert.strictEqual(files[1], local);
+        assert.equal((await api.getTimingInfo()).totals.requestCount, 2);
+
+        await api.resetTimingInfo();
+        const cached = await program.getSourceFiles();
+        for (let i = 0; i < files.length; i++) {
+            assert.strictEqual(cached[i], files[i]);
+        }
+        assert.equal((await api.getTimingInfo()).totals.requestCount, 1);
+    });
 });
 
 describe("API - batchContext", { concurrency }, () => {

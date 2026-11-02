@@ -11,7 +11,9 @@ import type {
     APIResponse as ProtocolResponse,
 } from "../proto.ts";
 import {
+    all,
     apiRequest,
+    type APIRequestGenerator,
     cacheGeneratorMethod,
 } from "./generatorSupport.ts";
 
@@ -2658,7 +2660,7 @@ export class Project<Id extends ProjectId = ProjectId> {
 
     get getFileNames(): {
         (excludeFilesFromExternalLibraries?: boolean, excludeConfigFiles?: boolean): readonly RootedFilePath[];
-        gen(excludeFilesFromExternalLibraries?: boolean, excludeConfigFiles?: boolean): Generator<ProtocolRequest, readonly RootedFilePath[], ProtocolResponse["result"]>;
+        gen(excludeFilesFromExternalLibraries?: boolean, excludeConfigFiles?: boolean): APIRequestGenerator<readonly RootedFilePath[]>;
     } {
         const owner = this;
         return cacheGeneratorMethod(
@@ -2667,13 +2669,17 @@ export class Project<Id extends ProjectId = ProjectId> {
             function (excludeFilesFromExternalLibraries?: boolean, excludeConfigFiles?: boolean): readonly RootedFilePath[] {
                 const files = owner.program.getSourceFileNames();
                 const result: RootedFilePath[] = [];
-                for (const file of files) {
-                    if (excludeFilesFromExternalLibraries) {
-                        const metadata = owner.program.getSourceFileMetadata(file);
-                        if (!metadata) {
+                const metadata = excludeFilesFromExternalLibraries
+                    ? files.map(file => owner.program.getSourceFileMetadata(file))
+                    : undefined;
+                for (let i = 0; i < files.length; i++) {
+                    const file = files[i];
+                    if (metadata) {
+                        const fileMetadata = metadata[i];
+                        if (!fileMetadata) {
                             throw new Error(`Program source file '${file}' has no metadata`);
                         }
-                        if (metadata.isFromExternalLibrary) continue;
+                        if (fileMetadata.isFromExternalLibrary) continue;
                     }
                     result.push(file);
                 }
@@ -2682,16 +2688,20 @@ export class Project<Id extends ProjectId = ProjectId> {
                 }
                 return result;
             },
-            function* (excludeFilesFromExternalLibraries?: boolean, excludeConfigFiles?: boolean): Generator<ProtocolRequest, readonly RootedFilePath[], ProtocolResponse["result"]> {
+            function* (excludeFilesFromExternalLibraries?: boolean, excludeConfigFiles?: boolean): APIRequestGenerator<readonly RootedFilePath[]> {
                 const files = yield* owner.program.getSourceFileNames.gen();
                 const result: RootedFilePath[] = [];
-                for (const file of files) {
-                    if (excludeFilesFromExternalLibraries) {
-                        const metadata = yield* owner.program.getSourceFileMetadata.gen(file);
-                        if (!metadata) {
+                const metadata = excludeFilesFromExternalLibraries
+                    ? (yield* all(...files.map(file => owner.program.getSourceFileMetadata.gen(file))))
+                    : undefined;
+                for (let i = 0; i < files.length; i++) {
+                    const file = files[i];
+                    if (metadata) {
+                        const fileMetadata = metadata[i];
+                        if (!fileMetadata) {
                             throw new Error(`Program source file '${file}' has no metadata`);
                         }
-                        if (metadata.isFromExternalLibrary) continue;
+                        if (fileMetadata.isFromExternalLibrary) continue;
                     }
                     result.push(file);
                 }
@@ -3244,29 +3254,33 @@ export class Program<Id extends ProjectId = ProjectId> implements FormatDiagnost
 
     get getSourceFiles(): {
         (): readonly SourceFile[];
-        gen(): Generator<ProtocolRequest, readonly SourceFile[], ProtocolResponse["result"]>;
+        gen(): APIRequestGenerator<readonly SourceFile[]>;
     } {
         const owner = this;
         return cacheGeneratorMethod(
             owner,
             "getSourceFiles",
             function (): readonly SourceFile[] {
+                const fileNames = owner.getSourceFileNames();
+                const sourceFiles = fileNames.map(fileName => owner.getSourceFile(fileName));
                 const files: SourceFile[] = [];
-                for (const fileName of owner.getSourceFileNames()) {
-                    const file = owner.getSourceFile(fileName);
+                for (let i = 0; i < fileNames.length; i++) {
+                    const file = sourceFiles[i];
                     if (!file) {
-                        throw new Error(`Program source file '${fileName}' could not be loaded`);
+                        throw new Error(`Program source file '${fileNames[i]}' could not be loaded`);
                     }
                     files.push(file);
                 }
                 return files;
             },
-            function* (): Generator<ProtocolRequest, readonly SourceFile[], ProtocolResponse["result"]> {
+            function* (): APIRequestGenerator<readonly SourceFile[]> {
+                const fileNames = yield* owner.getSourceFileNames.gen();
+                const sourceFiles = yield* all(...fileNames.map(fileName => owner.getSourceFile.gen(fileName)));
                 const files: SourceFile[] = [];
-                for (const fileName of (yield* owner.getSourceFileNames.gen())) {
-                    const file = yield* owner.getSourceFile.gen(fileName);
+                for (let i = 0; i < fileNames.length; i++) {
+                    const file = sourceFiles[i];
                     if (!file) {
-                        throw new Error(`Program source file '${fileName}' could not be loaded`);
+                        throw new Error(`Program source file '${fileNames[i]}' could not be loaded`);
                     }
                     files.push(file);
                 }
@@ -3412,7 +3426,9 @@ export class Program<Id extends ProjectId = ProjectId> implements FormatDiagnost
                 return owner.resolvedProjectReferences ??= owner.fetchResolvedProjectReferences();
             },
             function* (): Generator<ProtocolRequest, readonly (ResolvedProjectReference | undefined)[] | undefined, ProtocolResponse["result"]> {
-                return owner.resolvedProjectReferences ??= yield* owner.fetchResolvedProjectReferences.gen();
+                if (owner.resolvedProjectReferences !== undefined) return owner.resolvedProjectReferences;
+                const references = yield* owner.fetchResolvedProjectReferences.gen();
+                return owner.resolvedProjectReferences ??= references;
             },
         );
     }

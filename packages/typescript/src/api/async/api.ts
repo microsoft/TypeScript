@@ -1610,13 +1610,17 @@ export class Project<Id extends ProjectId = ProjectId> {
     async getFileNames(excludeFilesFromExternalLibraries?: boolean, excludeConfigFiles?: boolean): Promise<readonly RootedFilePath[]> {
         const files = await this.program.getSourceFileNames();
         const result: RootedFilePath[] = [];
-        for (const file of files) {
-            if (excludeFilesFromExternalLibraries) {
-                const metadata = await this.program.getSourceFileMetadata(file);
-                if (!metadata) {
+        const metadata = excludeFilesFromExternalLibraries
+            ? await Promise.all(files.map(file => this.program.getSourceFileMetadata(file)))
+            : undefined;
+        for (let i = 0; i < files.length; i++) {
+            const file = files[i];
+            if (metadata) {
+                const fileMetadata = metadata[i];
+                if (!fileMetadata) {
                     throw new Error(`Program source file '${file}' has no metadata`);
                 }
-                if (metadata.isFromExternalLibrary) continue;
+                if (fileMetadata.isFromExternalLibrary) continue;
             }
             result.push(file);
         }
@@ -1869,11 +1873,13 @@ export class Program<Id extends ProjectId = ProjectId> implements FormatDiagnost
     }
 
     async getSourceFiles(): Promise<readonly SourceFile[]> {
+        const fileNames = await this.getSourceFileNames();
+        const sourceFiles = await Promise.all(fileNames.map(fileName => this.getSourceFile(fileName)));
         const files: SourceFile[] = [];
-        for (const fileName of await this.getSourceFileNames()) {
-            const file = await this.getSourceFile(fileName);
+        for (let i = 0; i < fileNames.length; i++) {
+            const file = sourceFiles[i];
             if (!file) {
-                throw new Error(`Program source file '${fileName}' could not be loaded`);
+                throw new Error(`Program source file '${fileNames[i]}' could not be loaded`);
             }
             files.push(file);
         }
@@ -1912,7 +1918,9 @@ export class Program<Id extends ProjectId = ProjectId> implements FormatDiagnost
     }
 
     getResolvedProjectReferences(): Promise<readonly (ResolvedProjectReference | undefined)[] | undefined> {
-        return this.resolvedProjectReferences ??= this.fetchResolvedProjectReferences();
+        // @generators: if (owner.resolvedProjectReferences !== undefined) return owner.resolvedProjectReferences;
+        // @generators: const references = yield* owner.fetchResolvedProjectReferences.gen();
+        return this.resolvedProjectReferences ??= this.fetchResolvedProjectReferences(); // @generators: return owner.resolvedProjectReferences ??= references;
     }
 
     private async fetchResolvedProjectReferences(): Promise<readonly (ResolvedProjectReference | undefined)[] | undefined> {
