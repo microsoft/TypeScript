@@ -20,7 +20,7 @@ if (process.platform !== "win32" && typeof process.execve === "function") {
 }
 
 try {
-    execFileSync(exe, process.argv.slice(2), { stdio: "inherit" });
+    execFileSync(exe, process.argv.slice(2), { stdio: "inherit", windowsHide: true });
 }
 catch (e) {
     if (e.status) {
