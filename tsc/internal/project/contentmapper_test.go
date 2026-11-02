@@ -743,6 +743,64 @@ func TestDynamicContentMapperInProject(t *testing.T) {
 	assert.Assert(t, !mappedFile.IsContentMapperFailureStub())
 }
 
+func TestDynamicContentMapperRefreshWhenOpenWatchedFileIsSaved(t *testing.T) {
+	// Regression for #65084: saving an open watchedFiles path must re-run openProject.
+	// Editors flush didChange (and pull diagnostics) before didSave + didChangeWatchedFiles,
+	// so the save-time watch event arrives while an overlay still exists.
+	t.Parallel()
+	files := map[string]any{
+		"/home/project/tsconfig.json":                    `{ "contentMappers": [{ "package": "mapper", "extensions": [".box"] }] }`,
+		"/home/project/node_modules/mapper/package.json": contentmappertest.PackageJSON(contentmappertest.DynamicVerbatimMapper),
+		"/home/project/mapper.config.json":               `{ "version": 1 }`,
+		"/home/project/app.box":                          "export const value = 1;\n",
+		"/home/project/main.ts":                          `import { value } from "./app.box"; value;`,
+	}
+	init, utils := projecttestutil.GetSessionInitOptions(files, &project.SessionOptions{
+		CurrentDirectory:   "/home/project",
+		DefaultLibraryPath: bundled.LibPath(),
+		TypingsLocation:    projecttestutil.TestTypingsLocation,
+		PositionEncoding:   lsproto.PositionEncodingKindUTF8,
+		RunExternalCode:    true,
+	}, nil)
+	lifecycle := &contentmappertest.ProjectLifecycle{}
+	init.Spawner = contentmappertest.NewSpawnerWithProjectLifecycle(lifecycle)
+	session := project.NewSession(init)
+	defer session.Close()
+
+	ctx := context.Background()
+	mainURI := lsproto.DocumentUri("file:///home/project/main.ts")
+	configURI := lsproto.DocumentUri("file:///home/project/mapper.config.json")
+	session.DidOpenFile(ctx, mainURI, 1, files["/home/project/main.ts"].(string), lsproto.LanguageKindTypeScript)
+	session.DidOpenFile(ctx, configURI, 1, files["/home/project/mapper.config.json"].(string), lsproto.LanguageKindJSON)
+	_, err := session.GetLanguageService(ctx, mainURI)
+	assert.NilError(t, err)
+	session.WaitForBackgroundTasks()
+
+	// Edit the open watched file and pull diagnostics, matching an editor's post-edit request.
+	// This flushes the didChange while disk still has the old content.
+	session.DidChangeFile(ctx, configURI, 2, []lsproto.TextDocumentContentChangePartialOrWholeDocument{{
+		WholeDocument: &lsproto.TextDocumentContentChangeWholeDocument{Text: `{ "version": 2 }`},
+	}})
+	_, err = session.GetLanguageService(ctx, mainURI)
+	assert.NilError(t, err)
+	opensAfterEdit := lifecycle.Opens.Load()
+	closesAfterEdit := lifecycle.Closes.Load()
+
+	// Save to disk, then send didSave + watch change while the overlay remains open.
+	assert.NilError(t, utils.FS().WriteFile("/home/project/mapper.config.json", `{ "version": 2 }`))
+	session.DidSaveFile(ctx, configURI)
+	session.DidChangeWatchedFiles(ctx, []*lsproto.FileEvent{{
+		Uri:  configURI,
+		Type: lsproto.FileChangeTypeChanged,
+	}})
+	session.WaitForBackgroundTasks()
+	_, err = session.GetLanguageService(ctx, mainURI)
+	assert.NilError(t, err)
+
+	assert.Assert(t, lifecycle.Closes.Load() > closesAfterEdit, "saving an open watchedFiles path must close the stale mapper project")
+	assert.Assert(t, lifecycle.Opens.Load() > opensAfterEdit, "saving an open watchedFiles path must re-run openProject")
+}
+
 func TestDynamicContentMapperRefreshesForMixedWatchBatches(t *testing.T) {
 	t.Parallel()
 	for _, test := range []struct {

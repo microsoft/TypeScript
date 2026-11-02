@@ -531,8 +531,14 @@ func (fs *overlayFS) processChanges(changes []FileChange) (FileChangeSummary, ma
 			o = nil
 		}
 
-		if events.watchChanged && o == nil {
-			result.Changed.Add(uri)
+		if events.watchChanged {
+			if o == nil {
+				result.Changed.Add(uri)
+			} else {
+				// Overlay remains the source of truth for TypeScript, but content mappers
+				// read watchedFiles from disk and need to see this change (#65084).
+				result.DiskChangedWhileOpen.Add(uri)
+			}
 		}
 
 		if len(events.changes) > 0 && o != nil {

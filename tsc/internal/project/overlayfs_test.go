@@ -131,6 +131,37 @@ func TestProcessChanges(t *testing.T) {
 		assert.Equal(t, result.Changed.Len(), 1)
 	})
 
+	t.Run("watch change of open file records DiskChangedWhileOpen not Changed", func(t *testing.T) {
+		t.Parallel()
+		fs := createOverlayFS()
+
+		fs.processChanges([]FileChange{
+			{
+				Kind:         FileChangeKindOpen,
+				URI:          testURI1,
+				Version:      1,
+				Content:      "export default [\"A\", \"B\"];",
+				LanguageKind: lsproto.LanguageKindTypeScript,
+			},
+		})
+
+		// Simulate the editor save path from #65084: didChange already flushed, then
+		// didSave + didChangeWatchedFiles arrive while the overlay is still open.
+		result, _ := fs.processChanges([]FileChange{
+			{
+				Kind: FileChangeKindSave,
+				URI:  testURI1,
+			},
+			{
+				Kind: FileChangeKindWatchChange,
+				URI:  testURI1,
+			},
+		})
+
+		assert.Equal(t, result.Changed.Len(), 0, "open overlay must remain TypeScript's source of truth")
+		assert.Assert(t, result.DiskChangedWhileOpen.Has(testURI1), "content mappers need the disk change")
+	})
+
 	t.Run("save marks overlay as matching disk", func(t *testing.T) {
 		t.Parallel()
 		fs := createOverlayFS()

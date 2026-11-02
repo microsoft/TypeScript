@@ -43,6 +43,11 @@ type FileChangeSummary struct {
 	Reopened lsproto.DocumentUri
 	Closed   collections.Set[lsproto.DocumentUri]
 	Changed  collections.Set[lsproto.DocumentUri]
+	// DiskChangedWhileOpen records watch changes for files that currently have an overlay.
+	// TypeScript itself still treats the overlay as authoritative for those files, so they are
+	// not added to Changed. Content mappers, however, read watchedFiles from disk and must
+	// refresh when such a path changes on disk (see #65084).
+	DiskChangedWhileOpen collections.Set[lsproto.DocumentUri]
 	// Only set when file watching is enabled
 	Created collections.Set[lsproto.DocumentUri]
 	// Only set when file watching is enabled
@@ -58,13 +63,14 @@ type FileChangeSummary struct {
 func (f FileChangeSummary) Clone() FileChangeSummary {
 	f.Closed = *f.Closed.Clone()
 	f.Changed = *f.Changed.Clone()
+	f.DiskChangedWhileOpen = *f.DiskChangedWhileOpen.Clone()
 	f.Created = *f.Created.Clone()
 	f.Deleted = *f.Deleted.Clone()
 	return f
 }
 
 func (f FileChangeSummary) IsEmpty() bool {
-	return !f.InvalidateAll && f.Opened == "" && f.Reopened == "" && f.Closed.Len() == 0 && f.Changed.Len() == 0 && f.Created.Len() == 0 && f.Deleted.Len() == 0
+	return !f.InvalidateAll && f.Opened == "" && f.Reopened == "" && f.Closed.Len() == 0 && f.Changed.Len() == 0 && f.DiskChangedWhileOpen.Len() == 0 && f.Created.Len() == 0 && f.Deleted.Len() == 0
 }
 
 func (f FileChangeSummary) HasExcessiveWatchEvents() bool {
@@ -85,6 +91,9 @@ func mergeFileChangeSummary(dst *FileChangeSummary, src FileChangeSummary) {
 	}
 	for uri := range src.Changed.Keys() {
 		dst.Changed.Add(uri)
+	}
+	for uri := range src.DiskChangedWhileOpen.Keys() {
+		dst.DiskChangedWhileOpen.Add(uri)
 	}
 	for uri := range src.Created.Keys() {
 		dst.Created.Add(uri)

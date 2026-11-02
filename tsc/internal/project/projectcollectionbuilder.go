@@ -407,8 +407,11 @@ func (b *ProjectCollectionBuilder) DidChangeFiles(summary FileChangeSummary, log
 	changedFiles := toPaths(summary.Changed)
 	deletedFiles := toPaths(summary.Deleted)
 	createdFiles := toPaths(summary.Created)
+	diskChangedWhileOpen := toPaths(summary.DiskChangedWhileOpen)
 	if b.contentMapperHost != nil {
-		allWatchChanges := slices.Concat(changedFiles, deletedFiles, createdFiles)
+		// Include DiskChangedWhileOpen so saving an open watchedFiles path re-runs openProject
+		// even though the overlay kept the file out of Changed (#65084).
+		allWatchChanges := slices.Concat(changedFiles, deletedFiles, createdFiles, diskChangedWhileOpen)
 		b.forEachProject(func(entry dirty.Value[*Project]) bool {
 			b.refreshContentMapperProjectForChanges(entry, allWatchChanges, summary.HasExcessiveNonCreateWatchEvents(), logger)
 			return true
