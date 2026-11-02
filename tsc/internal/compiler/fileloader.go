@@ -80,6 +80,12 @@ type fileLoader struct {
 	contentMapperDiagnostics  []*ast.Diagnostic
 	moduleResolutionErrorOnce sync.Once
 	moduleResolutionError     error
+
+	// patternAmbientMu guards parse-time pattern ambient modules collected from
+	// loaded source files. Used to skip loading resolved files for imports whose
+	// attributes already match a pattern ambient module (see #65098).
+	patternAmbientMu      sync.Mutex
+	parsedPatternAmbients []*ast.ParsedPatternAmbientModule
 }
 
 type redirectsFile struct {
@@ -231,6 +237,9 @@ func processAllProgramFiles(
 		loader.addAutomaticTypeDirectiveTasks()
 	}
 
+	// Pre-parse root declaration files so their pattern ambient modules are
+	// registered before other roots resolve attributed imports in parallel.
+	loader.preParseRootDeclarationFiles()
 	loader.filesParser.parse(&loader, loader.rootTasks)
 
 	return loader.filesParser.getProcessedFiles(&loader), loader.resolver.GetResolutionData(), loader.moduleResolutionError
@@ -238,6 +247,49 @@ func processAllProgramFiles(
 
 func (p *fileLoader) toPath(file tspath.RootedPath) tspath.PathKey {
 	return p.caseSensitivity.PathKey(file)
+}
+
+func (p *fileLoader) registerParsedPatternAmbients(file *ast.SourceFile) {
+	if len(file.ParsedPatternAmbientModules) == 0 {
+		return
+	}
+	p.patternAmbientMu.Lock()
+	defer p.patternAmbientMu.Unlock()
+	p.parsedPatternAmbients = append(p.parsedPatternAmbients, file.ParsedPatternAmbientModules...)
+}
+
+func (p *fileLoader) preParseRootDeclarationFiles() {
+	for _, t := range p.rootTasks {
+		if t.failedLookup || t.isForAutomaticTypeDirective || t.file != nil {
+			continue
+		}
+		if !t.normalizedFilePath.IsDeclarationFile() {
+			continue
+		}
+		file := p.parseSourceFile(t)
+		if file == nil {
+			continue
+		}
+		t.file = file
+		p.registerParsedPatternAmbients(file)
+	}
+}
+
+// matchesParsedPatternAmbient reports whether moduleName with the given import
+// attributes is covered by a parse-time pattern ambient module. When true, the
+// resolved file should not be added to the program — typing comes from the ambient.
+func (p *fileLoader) matchesParsedPatternAmbient(moduleName string, importAttrs map[string]string) bool {
+	if importAttrs == nil {
+		return false
+	}
+	p.patternAmbientMu.Lock()
+	defer p.patternAmbientMu.Unlock()
+	for _, ambient := range p.parsedPatternAmbients {
+		if ambient.Pattern.Matches(moduleName) && parser.ImportAttributesAssignableTo(importAttrs, ambient.Attributes) {
+			return true
+		}
+	}
+	return false
 }
 
 func (p *fileLoader) addRootTask(fileName tspath.RootedFilePath, libFile *LibFile, includeReason *FileIncludeReason) {
@@ -932,6 +984,19 @@ func (p *fileLoader) resolveImportsAndModuleAugmentations(t *parseTask) {
 				!optionsForFile.NoResolve.IsTrue() &&
 				!(isJsFile && !optionsForFile.GetAllowJS()) &&
 				(importIndex < 0 || (importIndex < len(file.Imports()) && (ast.IsInJSFile(file.Imports()[importIndex]) || file.Imports()[importIndex].Flags&ast.NodeFlagsJSDoc == 0)))
+
+			// When an import has attributes that match a pattern ambient module,
+			// typing comes from the ambient declaration; do not pull the resolved
+			// file into the program (avoids parsing large JSON/assets; see #65098).
+			if shouldAddFile && importIndex >= 0 && importIndex < len(file.Imports()) {
+				if parent := file.Imports()[importIndex].Parent; ast.HasImportAttributes(parent) {
+					if attrs := ast.GetImportAttributes(parent); attrs != nil {
+						if importAttrs := parser.GetStringLiteralAttributesFromImportAttributes(attrs); p.matchesParsedPatternAmbient(moduleName, importAttrs) {
+							shouldAddFile = false
+						}
+					}
+				}
+			}
 
 			if shouldAddFile {
 				var synthetic syntheticImportKind

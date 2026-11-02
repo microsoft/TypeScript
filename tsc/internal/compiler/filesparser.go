@@ -125,6 +125,7 @@ func (t *parseTask) load(loader *fileLoader) {
 	}
 
 	t.file = file
+	loader.registerParsedPatternAmbients(file)
 	if virtualFileName := file.VirtualFileName(); virtualFileName != "" {
 		t.metadata.ImpliedNodeFormat = ast.GetImpliedNodeFormatForFile(virtualFileName, t.metadata.PackageJsonType)
 	}

@@ -2290,6 +2290,15 @@ type PatternAmbientModule struct {
 	Symbol  *Symbol
 }
 
+// ParsedPatternAmbientModule is the parse-time form of a pattern ambient module,
+// used during program construction before binding has produced symbols.
+// Attributes maps property names to required string-literal values; a nil map
+// means the declaration has no attributes type (equivalent to with {}).
+type ParsedPatternAmbientModule struct {
+	Pattern    core.Pattern
+	Attributes map[string]string
+}
+
 type CommentDirectiveKind int32
 
 const (
@@ -2403,6 +2412,10 @@ type SourceFile struct {
 	imports                     []*LiteralLikeNode // []LiteralLikeNode
 	ModuleAugmentations         []*ModuleName      // []ModuleName
 	AmbientModuleNames          []string
+	// ParsedPatternAmbientModules are pattern ambient modules discovered during
+	// parse (before bind). Used by the file loader to avoid pulling resolved
+	// files into the program when an import with attributes matches a pattern.
+	ParsedPatternAmbientModules []*ParsedPatternAmbientModule
 	CommentDirectives           []CommentDirective
 	jsdocCache                  map[*Node][]*Node
 	jsdocMu                     sync.RWMutex

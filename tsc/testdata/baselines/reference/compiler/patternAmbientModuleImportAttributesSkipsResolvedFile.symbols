@@ -1,0 +1,44 @@
+//// [tests/cases/compiler/patternAmbientModuleImportAttributesSkipsResolvedFile.ts] ////
+
+=== /types.d.ts ===
+declare module "*.json" with { type: "text" } {
+>"*.json" : Symbol("*.json", Decl(types.d.ts, 0, 0))
+>type : Symbol(type, Decl(types.d.ts, 0, 30))
+
+    const content: string;
+>content : Symbol(content, Decl(types.d.ts, 1, 9))
+
+    export default content;
+>content : Symbol(content, Decl(types.d.ts, 1, 9))
+}
+
+=== /main.ts ===
+// Regression for #65098: an import with attributes that matches a pattern
+// ambient module must not pull the resolved file into the program.
+import text from "./data.json" with { type: "text" };
+>text : Symbol(text, Decl(main.ts, 2, 6))
+
+const content: string = text;
+>content : Symbol(content, Decl(main.ts, 3, 5))
+>text : Symbol(text, Decl(main.ts, 2, 6))
+
+export const length = content.length;
+>length : Symbol(length, Decl(main.ts, 4, 12))
+>content.length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
+>content : Symbol(content, Decl(main.ts, 3, 5))
+>length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
+
+// Control: without matching attributes, resolveJsonModule still loads JSON.
+import data from "./ok.json";
+>data : Symbol(data, Decl(main.ts, 7, 6))
+
+const n: number = data.n;
+>n : Symbol(n, Decl(main.ts, 8, 5))
+>data.n : Symbol("n", Decl(ok.json, 0, 1))
+>data : Symbol(data, Decl(main.ts, 7, 6))
+>n : Symbol("n", Decl(ok.json, 0, 1))
+
+=== /ok.json ===
+{ "n": 1 }
+>"n" : Symbol("n", Decl(ok.json, 0, 1))
+

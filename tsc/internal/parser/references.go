@@ -21,6 +21,72 @@ func collectExternalModuleReferences(file *ast.SourceFile) {
 	}
 }
 
+// getStringLiteralAttributesFromTypeLiteral extracts name -> string-literal value
+// pairs from an ambient module's import-attributes type. Returns nil when there
+// are no attributes (treated like with {}). Invalid shapes yield nil so the
+// declaration still participates as an empty attributes match.
+func getStringLiteralAttributesFromTypeLiteral(attributes *ast.Node) map[string]string {
+	if attributes == nil || !ast.IsTypeLiteralNode(attributes) {
+		return nil
+	}
+	members := attributes.AsTypeLiteralNode().Members
+	if members == nil || len(members.Nodes) == 0 {
+		return nil
+	}
+	result := make(map[string]string, len(members.Nodes))
+	for _, member := range members.Nodes {
+		if !ast.IsPropertySignatureDeclaration(member) {
+			return nil
+		}
+		prop := member.AsPropertySignatureDeclaration()
+		name := prop.Name()
+		if name == nil || !(ast.IsIdentifier(name) || ast.IsStringLiteralLike(name)) {
+			return nil
+		}
+		typeNode := prop.Type
+		if typeNode == nil || !ast.IsLiteralTypeNode(typeNode) || !ast.IsStringLiteral(typeNode.AsLiteralTypeNode().Literal) {
+			return nil
+		}
+		result[name.Text()] = typeNode.AsLiteralTypeNode().Literal.Text()
+	}
+	return result
+}
+
+// GetStringLiteralAttributesFromImportAttributes extracts name -> string-literal
+// value pairs from an import/export's import attributes expression.
+func GetStringLiteralAttributesFromImportAttributes(attributes *ast.Node) map[string]string {
+	if attributes == nil || !ast.IsImportAttributes(attributes) {
+		return nil
+	}
+	list := attributes.AsImportAttributes().Attributes
+	if list == nil || len(list.Nodes) == 0 {
+		return nil
+	}
+	result := make(map[string]string, len(list.Nodes))
+	for _, attr := range list.Nodes {
+		name := attr.Name()
+		value := attr.AsImportAttribute().Value
+		if name == nil || value == nil || !ast.IsStringLiteral(value) {
+			return nil
+		}
+		result[name.Text()] = value.Text()
+	}
+	return result
+}
+
+// ImportAttributesAssignableTo reports whether importAttrs is structurally
+// assignable to ambientAttrs for the restricted string-literal attribute types
+// used by pattern ambient modules (import may have additional properties).
+func ImportAttributesAssignableTo(importAttrs map[string]string, ambientAttrs map[string]string) bool {
+	for name, want := range ambientAttrs {
+		got, ok := importAttrs[name]
+		if !ok || got != want {
+			return false
+		}
+	}
+	return true
+}
+
 func collectModuleReferences(file *ast.SourceFile, node *ast.Statement, inAmbientModule bool) {
 	if ast.IsAnyImportOrReExport(node) {
 		moduleNameExpr := ast.GetExternalModuleName(node)
@@ -56,6 +122,12 @@ func collectModuleReferences(file *ast.SourceFile, node *ast.Statement, inAmbien
 			file.ModuleAugmentations = append(file.ModuleAugmentations, node.AsModuleDeclaration().Name())
 		} else if !inAmbientModule {
 			file.AmbientModuleNames = append(file.AmbientModuleNames, nameText)
+			if pattern := core.TryParsePattern(nameText); pattern.IsValid() && pattern.StarIndex >= 0 {
+				file.ParsedPatternAmbientModules = append(file.ParsedPatternAmbientModules, &ast.ParsedPatternAmbientModule{
+					Pattern:    pattern,
+					Attributes: getStringLiteralAttributesFromTypeLiteral(node.AsModuleDeclaration().Attributes),
+				})
+			}
 			// An AmbientExternalModuleDeclaration declares an external module.
 			// This type of declaration is permitted only in the global module.
 			// The StringLiteral must specify a top - level external module name.

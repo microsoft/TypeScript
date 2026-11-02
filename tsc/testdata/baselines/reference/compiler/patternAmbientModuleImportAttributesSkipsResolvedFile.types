@@ -1,0 +1,47 @@
+//// [tests/cases/compiler/patternAmbientModuleImportAttributesSkipsResolvedFile.ts] ////
+
+=== /types.d.ts ===
+declare module "*.json" with { type: "text" } {
+>"*.json" : typeof import("*.json", { with: { type: "text" } })
+>type : "text"
+
+    const content: string;
+>content : string
+
+    export default content;
+>content : string
+}
+
+=== /main.ts ===
+// Regression for #65098: an import with attributes that matches a pattern
+// ambient module must not pull the resolved file into the program.
+import text from "./data.json" with { type: "text" };
+>text : string
+>type : error
+
+const content: string = text;
+>content : string
+>text : string
+
+export const length = content.length;
+>length : number
+>content.length : number
+>content : string
+>length : number
+
+// Control: without matching attributes, resolveJsonModule still loads JSON.
+import data from "./ok.json";
+>data : { n: number; }
+
+const n: number = data.n;
+>n : number
+>data.n : number
+>data : { n: number; }
+>n : number
+
+=== /ok.json ===
+{ "n": 1 }
+>{ "n": 1 } : { n: number; }
+>"n" : number
+>1 : 1
+
