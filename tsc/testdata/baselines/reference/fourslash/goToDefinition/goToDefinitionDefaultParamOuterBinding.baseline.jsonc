@@ -1,12 +1,11 @@
 // === goToDefinition ===
 // === /goToDefinitionDefaultParamOuterBinding.ts ===
-// const styles = { root: "outer" };
+// <|const [|styles|] = { root: "outer" };|>
 // export function read(value = /*GOTO DEF*/styles.root) {
-//   <|function [|styles|]() {}|>
+//   function styles() {}
 //   styles();
 //   return value;
-// }
-// --- (line: 7) skipped ---
+// --- (line: 6) skipped ---
 
 
 

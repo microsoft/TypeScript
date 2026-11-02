@@ -74,11 +74,14 @@ loop:
 								lastLocation.Kind == ast.KindJSDocReturnTag ||
 								lastLocation.Kind == ast.KindTypeParameter)
 					}
-					if meaning&result.Flags()&ast.SymbolFlagsVariable != 0 {
-						// expression inside parameter will lookup as normal variable scope when targeting es2015+
-						if r.useOuterVariableScopeInParameter(result, location, lastLocation) {
-							useResult = false
-						} else if result.Flags()&ast.SymbolFlagsFunctionScopedVariable != 0 {
+					// Default-parameter / binding initializers are evaluated in the outer scope, not the
+					// function body. When a body binding (var/function/class/enum/...) would otherwise be
+					// selected from function.locals, prefer the outer scope for ES2015+ (unless downlevel
+					// emit would move the initializer into the body).
+					if meaning&result.Flags()&ast.SymbolFlagsValue != 0 && r.useOuterVariableScopeInParameter(result, location, lastLocation) {
+						useResult = false
+					} else if meaning&result.Flags()&ast.SymbolFlagsVariable != 0 {
+						if result.Flags()&ast.SymbolFlagsFunctionScopedVariable != 0 {
 							// parameters are visible only inside function body, parameter list and return type
 							// technically for parameter list case here we might mix parameters and variables declared in function,
 							// however it is detected separately when checking initializers of parameters
