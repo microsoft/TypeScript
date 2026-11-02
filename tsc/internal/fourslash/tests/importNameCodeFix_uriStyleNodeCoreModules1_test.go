@@ -32,18 +32,24 @@ declare module "path" {}
 declare module "node:path" {}
 declare module "fs" { export function writeFile(): void }
 declare module "node:fs" { export function writeFile(): void }
+
 // @Filename: /node_modules/lodash/package.json
 { "name": "lodash", "types": "index.d.ts" }
+
 // @Filename: /node_modules/lodash/index.d.ts
 export declare function writeFile(): void;
+
 // @Filename: /package.json
 { "dependencies": { "lodash": "*" } }
+
 // @Filename: /prefix.ts
 import "node:path";
 writeFile/*prefix*/
+
 // @Filename: /noPrefix.ts
 import "path";
 writeFile/*noPrefix*/
+
 // @Filename: /unknown.ts
 writeFile/*unknown*/`
 	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)

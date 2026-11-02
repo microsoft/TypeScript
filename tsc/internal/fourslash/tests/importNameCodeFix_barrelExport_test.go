@@ -39,11 +39,14 @@ func TestImportNameCodeFix_barrelExportMixedModuleKinds(t *testing.T) {
 	const content = `// @module: commonjs
 // @Filename: /node_modules/@types/example/index.d.ts
 declare module "example" { export const A: number; }
+
 // @Filename: /foo/a.ts
 export const A = 0;
+
 // @Filename: /foo/index.ts
 export * from "./a";
 export * from "./b";
+
 // @Filename: /foo/b.ts
 export {};
 A/**/`
