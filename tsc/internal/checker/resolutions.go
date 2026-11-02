@@ -54,6 +54,7 @@ type resolution struct {
 	typeResolution     TypeResolution
 	isTypeResolution   bool
 	prevTypeResolution int32 // Checker.typeResolutionTop on entry
+	prevObservedHead   int32 // Checker.observedHead on entry
 }
 
 // A memoStateSource creates the memo state of a computation in progress on
