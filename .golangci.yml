@@ -93,6 +93,11 @@ linters:
 
   exclusions:
     rules:
+      # Tracked separately in #65091; keep the circularity fix out of the lint rule change.
+      - path: 'internal/tsoptions/tsconfigparsing\.go$'
+        linters:
+          - customlint
+        text: '^diagnosticargs: diagnostic Circularity_detected_while_resolving_configuration_Colon_0 expects 1 formatting arguments, got 0$'
       - path: internal/fourslash/tests/
         linters:
           - misspell
