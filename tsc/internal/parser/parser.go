@@ -6742,7 +6742,14 @@ func (p *Parser) parseResolutionMode(mode string, pos int, end int) (resolutionK
 }
 
 func (p *Parser) jsErrorAtRange(loc core.TextRange, message *diagnostics.Message, args ...any) {
-	p.jsDiagnostics = append(p.jsDiagnostics, ast.NewDiagnostic(nil, core.NewTextRange(scanner.SkipTrivia(p.sourceText, loc.Pos()), loc.End()), message, args...))
+	// Match Strada getErrorSpanForNode: do not skip trivia for missing (empty)
+	// locations. Skipping the following whitespace would move start past end
+	// and invert the diagnostic span (see #65078).
+	rangeLoc := loc
+	if loc.Pos() != loc.End() {
+		rangeLoc = p.skipRangeTrivia(loc)
+	}
+	p.jsDiagnostics = append(p.jsDiagnostics, ast.NewDiagnostic(nil, rangeLoc, message, args...))
 }
 
 func (p *Parser) checkJSDecoratorSyntax(node *ast.Node) {
@@ -6782,12 +6789,12 @@ func (p *Parser) checkJSDecoratorSyntax(node *ast.Node) {
 						if trailingDecoratorIndex >= 0 {
 							diag := ast.NewDiagnostic(
 								nil,
-								core.NewTextRange(scanner.SkipTrivia(p.sourceText, modifiers[trailingDecoratorIndex].Loc.Pos()), modifiers[trailingDecoratorIndex].Loc.End()),
+								p.skipRangeTrivia(modifiers[trailingDecoratorIndex].Loc),
 								diagnostics.Decorators_may_not_appear_after_export_or_export_default_if_they_also_appear_before_export,
 							)
 							diag.AddRelatedInfo(ast.NewDiagnostic(
 								nil,
-								core.NewTextRange(scanner.SkipTrivia(p.sourceText, modifiers[decoratorIndex].Loc.Pos()), modifiers[decoratorIndex].Loc.End()),
+								p.skipRangeTrivia(modifiers[decoratorIndex].Loc),
 								diagnostics.Decorator_used_before_export_here,
 							))
 							p.jsDiagnostics = append(p.jsDiagnostics, diag)

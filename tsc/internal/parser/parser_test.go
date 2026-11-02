@@ -571,3 +571,29 @@ namespace N {
 	assert.Equal(t, positionMap.UTF8ToUTF16(afterBoxDrawingCharacter), afterBoxDrawingCharacter-2)
 	assert.Equal(t, positionMap.UTF8ToUTF16(len(sourceText)), len(sourceText)-2)
 }
+
+// https://github.com/microsoft/TypeScript/issues/65078
+// jsErrorAtRange must not skip trivia for a missing (empty) type annotation;
+// doing so inverted the TS8010 span (start past end), which crashed --pretty
+// and reported the wrong column.
+func TestJSErrorAtMissingTypeAnnotationKeepsEmptySpan(t *testing.T) {
+	t.Parallel()
+	sourceText := "var R: ;"
+	opts := ast.SourceFileParseOptions{
+		FileName: "/a.js",
+		PathKey:  "/a.js",
+	}
+	file := parser.ParseSourceFile(opts, sourceText, core.ScriptKindJS)
+
+	var found *ast.Diagnostic
+	for _, d := range file.JSDiagnostics() {
+		if d.Code() == diagnostics.Type_annotations_can_only_be_used_in_TypeScript_files.Code() {
+			found = d
+			break
+		}
+	}
+	assert.Assert(t, found != nil, "expected TS8010")
+	// "var R:" ends at index 6; the missing type occupies [6,6].
+	assert.Equal(t, found.Pos(), 6)
+	assert.Equal(t, found.Len(), 0)
+}
