@@ -38,7 +38,7 @@ tsgo
 ExitStatus:: Success
 Output::
 //// [/home/src/workspaces/project/tsconfig.tsbuildinfo] *new* 
-{"version":"FakeTSVersion","root":[[2,4]],"fileNames":["lib.es5.d.ts","./consumer.ts","./global.d.ts","./module.d.ts"],"fileInfos":[{"version":"f12cf4d0d7d3a1898ca4427fc3e56470-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ninterface SymbolConstructor {\n    (desc?: string | number): symbol;\n    for(name: string): symbol;\n    readonly toStringTag: symbol;\n}\ndeclare var Symbol: SymbolConstructor;\ninterface Symbol {\n    readonly [Symbol.toStringTag]: string;\n}\ndeclare const console: { log(msg: any): void; };\ninterface LibraryConsumer { property: RemovedGlobal; }","affectsGlobalScope":true,"impliedNodeFormat":1},"b8ccc95b7f8a123c2fed61f2394c7e72-export const unchanged = 1;",{"version":"8fcf42c417de40bbb198049bfd5804b7-interface RemovedGlobal {}","affectsGlobalScope":true,"impliedNodeFormat":1},"6c520878a353927f50be384ce898a985-export interface Unrelated {}"],"affectedFilesPendingEmit":[2]}
+{"version":"FakeTSVersion","root":[[2,4]],"fileNames":["lib.es5.d.ts","./consumer.ts","./global.d.ts","./module.d.ts"],"fileInfos":[{"version":"f12cf4d0d7d3a1898ca4427fc3e56470-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ninterface SymbolConstructor {\n    (desc?: string | number): symbol;\n    for(name: string): symbol;\n    readonly toStringTag: symbol;\n}\ndeclare var Symbol: SymbolConstructor;\ninterface Symbol {\n    readonly [Symbol.toStringTag]: string;\n}\ndeclare const console: { log(msg: any): void; };\ninterface LibraryConsumer { property: RemovedGlobal; }","affectsGlobalScope":true,"impliedNodeFormat":1},"b8ccc95b7f8a123c2fed61f2394c7e72-export const unchanged = 1;",{"version":"8fcf42c417de40bbb198049bfd5804b7-interface RemovedGlobal {}","affectsGlobalScope":true,"impliedNodeFormat":1},"6c520878a353927f50be384ce898a985-export interface Unrelated {}"],"options":{"types":[]},"affectedFilesPendingEmit":[2]}
 //// [/home/src/workspaces/project/tsconfig.tsbuildinfo.readable.baseline.txt] *new* 
 {
   "version": "FakeTSVersion",
@@ -99,6 +99,9 @@ Output::
       "impliedNodeFormat": "CommonJS"
     }
   ],
+  "options": {
+    "types": []
+  },
   "affectedFilesPendingEmit": [
     [
       "./consumer.ts",
@@ -106,7 +109,7 @@ Output::
       2
     ]
   ],
-  "size": 1240
+  "size": 1263
 }
 
 tsconfig.json::
@@ -134,7 +137,7 @@ Output::
 Found 1 error in ../../tslibs/TS/Lib/lib.es5.d.ts[90m:23[0m
 
 //// [/home/src/workspaces/project/tsconfig.tsbuildinfo] *modified* 
-{"version":"FakeTSVersion","root":[2],"fileNames":["lib.es5.d.ts","./consumer.ts"],"fileInfos":[{"version":"f12cf4d0d7d3a1898ca4427fc3e56470-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ninterface SymbolConstructor {\n    (desc?: string | number): symbol;\n    for(name: string): symbol;\n    readonly toStringTag: symbol;\n}\ndeclare var Symbol: SymbolConstructor;\ninterface Symbol {\n    readonly [Symbol.toStringTag]: string;\n}\ndeclare const console: { log(msg: any): void; };\ninterface LibraryConsumer { property: RemovedGlobal; }","affectsGlobalScope":true,"impliedNodeFormat":1},{"version":"b8ccc95b7f8a123c2fed61f2394c7e72-export const unchanged = 1;","signature":"93ca091d3ab68cd75a241c9cc24ea4cc-export declare const unchanged = 1;\n","impliedNodeFormat":1}],"semanticDiagnosticsPerFile":[[1,[{"pos":690,"end":703,"code":2304,"category":1,"messageKey":"Cannot_find_name_0_2304","messageArgs":["RemovedGlobal"]}]]],"affectedFilesPendingEmit":[2]}
+{"version":"FakeTSVersion","root":[2],"fileNames":["lib.es5.d.ts","./consumer.ts"],"fileInfos":[{"version":"f12cf4d0d7d3a1898ca4427fc3e56470-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ninterface SymbolConstructor {\n    (desc?: string | number): symbol;\n    for(name: string): symbol;\n    readonly toStringTag: symbol;\n}\ndeclare var Symbol: SymbolConstructor;\ninterface Symbol {\n    readonly [Symbol.toStringTag]: string;\n}\ndeclare const console: { log(msg: any): void; };\ninterface LibraryConsumer { property: RemovedGlobal; }","affectsGlobalScope":true,"impliedNodeFormat":1},{"version":"b8ccc95b7f8a123c2fed61f2394c7e72-export const unchanged = 1;","signature":"93ca091d3ab68cd75a241c9cc24ea4cc-export declare const unchanged = 1;\n","impliedNodeFormat":1}],"options":{"types":[]},"semanticDiagnosticsPerFile":[[1,[{"pos":690,"end":703,"code":2304,"category":1,"messageKey":"Cannot_find_name_0_2304","messageArgs":["RemovedGlobal"]}]]],"affectedFilesPendingEmit":[2]}
 //// [/home/src/workspaces/project/tsconfig.tsbuildinfo.readable.baseline.txt] *modified* 
 {
   "version": "FakeTSVersion",
@@ -175,6 +178,9 @@ Found 1 error in ../../tslibs/TS/Lib/lib.es5.d.ts[90m:23[0m
       }
     }
   ],
+  "options": {
+    "types": []
+  },
   "semanticDiagnosticsPerFile": [
     [
       "lib.es5.d.ts",
@@ -199,7 +205,7 @@ Found 1 error in ../../tslibs/TS/Lib/lib.es5.d.ts[90m:23[0m
       2
     ]
   ],
-  "size": 1291
+  "size": 1314
 }
 
 tsconfig.json::
@@ -237,7 +243,7 @@ tsgo
 ExitStatus:: Success
 Output::
 //// [/home/src/workspaces/project/tsconfig.tsbuildinfo] *modified* 
-{"version":"FakeTSVersion","root":[[2,3]],"fileNames":["lib.es5.d.ts","./consumer.ts","./global.d.ts"],"fileInfos":[{"version":"f12cf4d0d7d3a1898ca4427fc3e56470-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ninterface SymbolConstructor {\n    (desc?: string | number): symbol;\n    for(name: string): symbol;\n    readonly toStringTag: symbol;\n}\ndeclare var Symbol: SymbolConstructor;\ninterface Symbol {\n    readonly [Symbol.toStringTag]: string;\n}\ndeclare const console: { log(msg: any): void; };\ninterface LibraryConsumer { property: RemovedGlobal; }","affectsGlobalScope":true,"impliedNodeFormat":1},{"version":"b8ccc95b7f8a123c2fed61f2394c7e72-export const unchanged = 1;","signature":"93ca091d3ab68cd75a241c9cc24ea4cc-export declare const unchanged = 1;\n","impliedNodeFormat":1},{"version":"8fcf42c417de40bbb198049bfd5804b7-interface RemovedGlobal {}","affectsGlobalScope":true,"impliedNodeFormat":1}],"affectedFilesPendingEmit":[2]}
+{"version":"FakeTSVersion","root":[[2,3]],"fileNames":["lib.es5.d.ts","./consumer.ts","./global.d.ts"],"fileInfos":[{"version":"f12cf4d0d7d3a1898ca4427fc3e56470-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ninterface SymbolConstructor {\n    (desc?: string | number): symbol;\n    for(name: string): symbol;\n    readonly toStringTag: symbol;\n}\ndeclare var Symbol: SymbolConstructor;\ninterface Symbol {\n    readonly [Symbol.toStringTag]: string;\n}\ndeclare const console: { log(msg: any): void; };\ninterface LibraryConsumer { property: RemovedGlobal; }","affectsGlobalScope":true,"impliedNodeFormat":1},{"version":"b8ccc95b7f8a123c2fed61f2394c7e72-export const unchanged = 1;","signature":"93ca091d3ab68cd75a241c9cc24ea4cc-export declare const unchanged = 1;\n","impliedNodeFormat":1},{"version":"8fcf42c417de40bbb198049bfd5804b7-interface RemovedGlobal {}","affectsGlobalScope":true,"impliedNodeFormat":1}],"options":{"types":[]},"affectedFilesPendingEmit":[2]}
 //// [/home/src/workspaces/project/tsconfig.tsbuildinfo.readable.baseline.txt] *modified* 
 {
   "version": "FakeTSVersion",
@@ -295,6 +301,9 @@ Output::
       }
     }
   ],
+  "options": {
+    "types": []
+  },
   "affectedFilesPendingEmit": [
     [
       "./consumer.ts",
@@ -302,7 +311,7 @@ Output::
       2
     ]
   ],
-  "size": 1278
+  "size": 1301
 }
 
 tsconfig.json::

@@ -1,7 +1,6 @@
 package checker
 
 import (
-	"maps"
 	"slices"
 
 	"github.com/microsoft/TypeScript/tsc/internal/ast"
@@ -235,6 +234,10 @@ func IsTupleType(t *Type) bool {
 	return isTupleType(t)
 }
 
+func GetEndElementCount(t *TupleType, flags ElementFlags) int {
+	return getEndElementCount(t, flags)
+}
+
 func IsTupleTypeTarget(t *Type) bool {
 	return isTupleType(t) && t.Target() == t
 }
@@ -365,8 +368,7 @@ func (c *Checker) GetIndexInfosOfType(t *Type) []*IndexInfo {
 func (c *Checker) GetIndexInfosOfIndexSymbol(symbol *ast.Symbol) []*IndexInfo {
 	var siblingSymbols []*ast.Symbol
 	if symbol.Parent() != nil {
-		siblingSymbols = slices.Collect(maps.Values(c.getMembersOfSymbol(symbol.Parent())))
-		c.sortSymbols(siblingSymbols)
+		siblingSymbols = slices.Collect(c.getMembersOfSymbol(symbol.Parent()).Values())
 	}
 	return c.getIndexInfosOfIndexSymbol(symbol, siblingSymbols)
 }

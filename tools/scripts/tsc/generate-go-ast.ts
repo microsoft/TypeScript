@@ -198,9 +198,6 @@ function verifyNodeBaseAtOffsetZero(): void {
     }
 }
 
-verifyNoDuplicateBases();
-verifyNodeBaseAtOffsetZero();
-
 // A base generated without fields or embeddings is a struct{} marker. Go pads a struct whose last field is
 // zero-size (so the field's address stays in bounds), so markers are embedded first, never last; being
 // zero-size, they don't move NodeBase off offset zero.
@@ -394,11 +391,16 @@ function generateKindCheck(w: CodeWriter, node: NodeType, expression: string, me
     }
 }
 
+function writeNodeCastSafety(w: CodeWriter, node: NodeType) {
+    w.write(`// SAFETY: This case only matches kinds allocated as a ${node.name}, which embeds its Node header at offset zero.`);
+}
+
 function generateAsCast(w: CodeWriter, node: NodeType) {
     const structName = node.name;
     w.write(`func (n *Node) As${structName}() *${structName} {`);
     w.push();
     generateKindCheck(w, node, "n.Kind", `Invalid node cast to ${structName}`);
+    w.write(`// SAFETY: The kind check guarantees n was allocated as a ${structName}, which embeds its Node header at offset zero.`);
     w.write(`return (*${structName})(unsafe.Pointer(n))`);
     w.pop();
     w.write("}");
@@ -704,6 +706,7 @@ function generateForEachChildDispatch(w: CodeWriter) {
         if (kinds.length === 0) continue;
         w.write(`case ${kinds.join(", ")}:`);
         w.push();
+        writeNodeCastSafety(w, node);
         w.write(`return (*${node.name})(unsafe.Pointer(n)).ForEachChild(v)`);
         w.pop();
     }
@@ -727,6 +730,7 @@ function generateVisitEachChildDispatch(w: CodeWriter) {
         if (kinds.length === 0) continue;
         w.write(`case ${kinds.join(", ")}:`);
         w.push();
+        writeNodeCastSafety(w, node);
         w.write(`return (*${node.name})(unsafe.Pointer(n)).VisitEachChild(v)`);
         w.pop();
     }
@@ -751,6 +755,7 @@ function generateCloneDispatch(w: CodeWriter) {
     for (const [node, kinds] of canonicalNodesByKind()) {
         w.write(`case ${kinds.join(", ")}:`);
         w.push();
+        writeNodeCastSafety(w, node);
         w.write(`return (*${node.name})(unsafe.Pointer(n)).Clone(f)`);
         w.pop();
     }
@@ -776,6 +781,7 @@ function generateSubtreeFactsDispatch(w: CodeWriter) {
         w.write(`case ${kinds.join(", ")}:`);
         w.push();
         if (transitiveBaseKeys(node).has("CompositeBase")) {
+            writeNodeCastSafety(w, node);
             w.write(`return (*${node.name})(unsafe.Pointer(n)).subtreeFactsWorker(n)`);
         }
         else {
@@ -800,6 +806,7 @@ function generateComputeSubtreeFactsDispatch(w: CodeWriter) {
     for (const [node, kinds] of canonicalNodesByKind()) {
         w.write(`case ${kinds.join(", ")}:`);
         w.push();
+        writeNodeCastSafety(w, node);
         w.write(`return (*${node.name})(unsafe.Pointer(n)).computeSubtreeFacts()`);
         w.pop();
     }
@@ -820,6 +827,7 @@ function generatePropagateSubtreeFactsDispatch(w: CodeWriter) {
     for (const [node, kinds] of canonicalNodesByKind()) {
         w.write(`case ${kinds.join(", ")}:`);
         w.push();
+        writeNodeCastSafety(w, node);
         w.write(`return (*${node.name})(unsafe.Pointer(n)).propagateSubtreeFacts()`);
         w.pop();
     }
@@ -898,6 +906,7 @@ function generateNodeAccessorDispatch(w: CodeWriter, method: string, ret: string
     for (const [index, { node, kinds }] of cases.entries()) {
         w.write(`case ${useDispatchTable ? index + 1 : kinds.join(", ")}:`);
         w.push();
+        writeNodeCastSafety(w, node);
         w.write(`return (*${node.name})(unsafe.Pointer(n)).${method}()`);
         w.pop();
     }
@@ -939,6 +948,7 @@ function generateSetModifiersDispatch(w: CodeWriter) {
         if (kinds.length === 0) continue;
         w.write(`case ${kinds.join(", ")}:`);
         w.push();
+        writeNodeCastSafety(w, node);
         w.write(`(*${node.name})(unsafe.Pointer(n)).setModifiers(modifiers)`);
         w.pop();
     }
@@ -1483,13 +1493,16 @@ function writeAndFormat(filePath: string, generateContent: () => string, force: 
     console.log(`Wrote ${filePath}`);
 }
 
-export default function main(force = false) {
-    console.log("Generating Go AST code...");
+export const outputs = ["tsc/internal/ast/ast_generated.go", "tsc/internal/ast/kind_generated.go"] as const;
 
-    const outPath = path.join(ROOT, "tsc/internal/ast/ast_generated.go");
+export default function main(force = false) {
+    verifyNoDuplicateBases();
+    verifyNodeBaseAtOffsetZero();
+
+    const outPath = path.join(ROOT, outputs[0]);
     writeAndFormat(outPath, () => generate() + "\n", force);
 
-    const kindOutPath = path.join(ROOT, "tsc/internal/ast/kind_generated.go");
+    const kindOutPath = path.join(ROOT, outputs[1]);
     writeAndFormat(kindOutPath, () => generateKind() + "\n", force);
 }
 

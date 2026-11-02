@@ -75,7 +75,7 @@ func NewNodeFactory(hooks NodeFactoryHooks) *NodeFactory {
 
 func newNode(kind Kind, n *Node, hooks NodeFactoryHooks) *Node {
 	n.Loc = core.UndefinedTextRange()
-	n.Kind = kind
+	n.Kind = kind //nolint:customlint
 	if hooks.OnCreate != nil {
 		hooks.OnCreate(n)
 	}
@@ -174,9 +174,10 @@ func (list *ModifierList) Clone(f *NodeFactory) *ModifierList {
 
 // Every concrete AST node embeds Node at offset zero. Kind identifies the
 // enclosing allocation, which generated accessors recover without a data pointer.
+// Kind is set only by newNode; the protectedfield lint rejects other writes.
 
 type Node struct {
-	Kind   Kind
+	Kind   Kind `customlint:"protected"`
 	Flags  NodeFlags
 	Loc    core.TextRange
 	id     atomic.Uint64
@@ -1149,6 +1150,8 @@ func (n *Node) AsFlowSwitchClauseData() *FlowSwitchClauseData {
 	if n.Kind != kindFlowSwitchClauseData {
 		panic("Invalid node cast to FlowSwitchClauseData")
 	}
+	// SAFETY: Only NewFlowSwitchClauseData assigns this kind, to the Node header embedded at
+	// offset zero of a FlowSwitchClauseData.
 	return (*FlowSwitchClauseData)(unsafe.Pointer(n))
 }
 
@@ -1156,6 +1159,8 @@ func (n *Node) AsFlowReduceLabelData() *FlowReduceLabelData {
 	if n.Kind != kindFlowReduceLabelData {
 		panic("Invalid node cast to FlowReduceLabelData")
 	}
+	// SAFETY: Only NewFlowReduceLabelData assigns this kind, to the Node header embedded at
+	// offset zero of a FlowReduceLabelData.
 	return (*FlowReduceLabelData)(unsafe.Pointer(n))
 }
 

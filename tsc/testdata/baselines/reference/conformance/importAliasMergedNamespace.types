@@ -1,0 +1,104 @@
+//// [tests/cases/conformance/internalModules/importDeclarations/importAliasMergedNamespace.ts] ////
+
+=== importAliasMergedNamespace.ts ===
+namespace N {
+>N : typeof N
+
+    export namespace M {
+>M : typeof M
+
+        export class C {}
+>C : C
+    }
+
+    import Local = M.C;
+>Local : typeof Local
+>M : typeof M
+>C : Local
+
+    new Local();
+>new Local() : Local
+>Local : typeof Local
+}
+
+namespace N {
+>N : typeof N
+
+    import A = M.C;
+>A : typeof A
+>M : typeof B
+>C : A
+
+    new A();
+>new A() : A
+>A : typeof A
+
+    import B = M;
+>B : typeof B
+>M : typeof B
+
+    new B.C();
+>new B.C() : A
+>B.C : typeof A
+>B : typeof B
+>C : typeof A
+
+    export import D = M.C;
+>D : typeof A
+>M : typeof B
+>C : A
+
+    new D();
+>new D() : A
+>D : typeof A
+
+    export import E = M;
+>E : typeof B
+>M : typeof B
+
+    new E.C();
+>new E.C() : A
+>E.C : typeof A
+>E : typeof B
+>C : typeof A
+
+    import Explicit = N.M.C;
+>Explicit : typeof A
+>N : typeof N
+>M : typeof B
+>C : A
+
+    new Explicit();
+>new Explicit() : A
+>Explicit : typeof A
+}
+
+namespace Outer {
+>Outer : typeof Outer
+
+    export namespace Inner {
+>Inner : typeof Inner
+
+        export namespace M {
+>M : typeof M
+
+            export class C {}
+>C : C
+        }
+    }
+}
+
+namespace Outer.Inner {
+>Outer : typeof Outer
+>Inner : typeof Inner
+
+    import A = M.C;
+>A : typeof A
+>M : typeof M
+>C : A
+
+    new A();
+>new A() : A
+>A : typeof A
+}
+

@@ -1,0 +1,126 @@
+/main.ts(17,11): error TS2304: Cannot find name 'zz'.
+/main.ts(18,7): error TS2322: Type '{ pb: 0; readonly mb: 1; v: 0; }' is not assignable to type 'never'.
+/main.ts(19,7): error TS2322: Type '{ v: 0; }' is not assignable to type 'never'.
+
+
+==== /main.ts (3 errors) ====
+    /// <reference path="./ambient.d.ts" />
+    /// <reference path="./ua.d.ts" />
+    /// <reference path="./ub.d.ts" />
+    /// <reference path="./uf1.d.ts" />
+    /// <reference path="./uf2.d.ts" />
+    /// <reference path="./uf3.d.ts" />
+    /// <reference path="./uf4.d.ts" />
+    /// <reference path="./uf5.d.ts" />
+    /// <reference path="./uf6.d.ts" />
+    /// <reference path="./uf7.d.ts" />
+    /// <reference path="./uf8.d.ts" />
+    /// <reference path="./uf9.d.ts" />
+    /// <reference path="./uf10.d.ts" />
+    declare const oxa: typeof import("xa");
+    declare const oxb: typeof import("xb");
+    declare function expand<X>(): { [K in keyof X]: X[K] };
+    const q = zz;
+              ~~
+!!! error TS2304: Cannot find name 'zz'.
+    const obsA: never = expand<typeof oxa>();
+          ~~~~
+!!! error TS2322: Type '{ pb: 0; readonly mb: 1; v: 0; }' is not assignable to type 'never'.
+    const obsB: never = expand<typeof oxb>();
+          ~~~~
+!!! error TS2322: Type '{ v: 0; }' is not assignable to type 'never'.
+    
+==== /ambient.d.ts (0 errors) ====
+    declare module "ma" {
+        export { v as pa } from "xa";
+        export const ma: 1;
+    }
+    declare module "mb" {
+        export { v as pb } from "xb";
+        export const mb: 1;
+    }
+    declare module "xa" {
+        type T = typeof import("mb");
+        interface O extends T { v: 0 }
+        const o: O;
+        export = o;
+    }
+    declare module "xb" {
+        type T = typeof import("ma");
+        interface O extends T { v: 0 }
+        const o: O;
+        export = o;
+    }
+    declare module "ia" {
+        type T = typeof import("ma");
+        interface O extends T { v: 0 }
+        const o: O;
+        export = o;
+    }
+    declare module "ib" {
+        type T = typeof import("mb");
+        interface O extends T { v: 0 }
+        const o: O;
+        export = o;
+    }
+    
+==== /ua.d.ts (0 errors) ====
+    import { v } from "ia";
+    export = v;
+    export as namespace UA;
+    
+==== /ub.d.ts (0 errors) ====
+    import { v } from "ib";
+    export = v;
+    export as namespace UB;
+    
+==== /uf1.d.ts (0 errors) ====
+    declare const x: 1;
+    export = x;
+    export as namespace UF1;
+    
+==== /uf2.d.ts (0 errors) ====
+    declare const x: 2;
+    export = x;
+    export as namespace UF2;
+    
+==== /uf3.d.ts (0 errors) ====
+    declare const x: 3;
+    export = x;
+    export as namespace UF3;
+    
+==== /uf4.d.ts (0 errors) ====
+    declare const x: 4;
+    export = x;
+    export as namespace UF4;
+    
+==== /uf5.d.ts (0 errors) ====
+    declare const x: 5;
+    export = x;
+    export as namespace UF5;
+    
+==== /uf6.d.ts (0 errors) ====
+    declare const x: 6;
+    export = x;
+    export as namespace UF6;
+    
+==== /uf7.d.ts (0 errors) ====
+    declare const x: 7;
+    export = x;
+    export as namespace UF7;
+    
+==== /uf8.d.ts (0 errors) ====
+    declare const x: 8;
+    export = x;
+    export as namespace UF8;
+    
+==== /uf9.d.ts (0 errors) ====
+    declare const x: 9;
+    export = x;
+    export as namespace UF9;
+    
+==== /uf10.d.ts (0 errors) ====
+    declare const x: 10;
+    export = x;
+    export as namespace UF10;
+    
