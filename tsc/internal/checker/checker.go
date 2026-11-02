@@ -21205,7 +21205,6 @@ func (c *Checker) instantiateIndexInfo(info *IndexInfo, m *TypeMapper) *IndexInf
 func (c *Checker) resolveAnonymousTypeMembers(t *Type) {
 	d := t.AsObjectType()
 	if d.target != nil {
-		c.setStructuredTypeMembers(t, nil, nil, nil, nil)
 		members := c.createInstantiatedSymbolTable(c.getPropertiesOfObjectType(d.target), d.mapper)
 		callSignatures := c.instantiateSignatures(c.getSignaturesOfType(d.target, SignatureKindCall), d.mapper)
 		constructSignatures := c.instantiateSignatures(c.getSignaturesOfType(d.target, SignatureKindConstruct), d.mapper)
@@ -21215,7 +21214,6 @@ func (c *Checker) resolveAnonymousTypeMembers(t *Type) {
 	}
 	symbol := c.getMergedSymbol(t.symbol)
 	if symbol.Flags()&ast.SymbolFlagsTypeLiteral != 0 {
-		c.setStructuredTypeMembers(t, nil, nil, nil, nil)
 		members := c.getMembersOfSymbol(symbol)
 		callSignatures := c.getSignaturesOfSymbol(members.Get(ast.InternalSymbolNameCall))
 		constructSignatures := c.getSignaturesOfSymbol(members.Get(ast.InternalSymbolNameNew))
@@ -21225,7 +21223,6 @@ func (c *Checker) resolveAnonymousTypeMembers(t *Type) {
 	}
 	// Combinations of function, class, enum and module
 	members := c.getExportsOfSymbol(symbol)
-	var indexInfos []*IndexInfo
 	if symbol == c.globalThisSymbol {
 		varsOnly := ast.NewSymbolTable()
 		for _, p := range members.All() {
@@ -21236,20 +21233,19 @@ func (c *Checker) resolveAnonymousTypeMembers(t *Type) {
 		members = varsOnly
 	}
 	var baseConstructorIndexInfo *IndexInfo
-	c.setStructuredTypeMembers(t, members, nil, nil, nil)
 	if symbol.Flags()&ast.SymbolFlagsClass != 0 {
 		classType := c.getDeclaredTypeOfClassOrInterface(symbol)
 		baseConstructorType := c.getBaseConstructorTypeOfClass(classType)
 		if baseConstructorType.flags&(TypeFlagsObject|TypeFlagsIntersection|TypeFlagsTypeVariable) != 0 {
 			members = members.Clone()
 			c.addInheritedMembers(members, c.getPropertiesOfType(baseConstructorType))
-			c.setStructuredTypeMembers(t, members, nil, nil, nil)
 		} else if baseConstructorType == c.anyType {
 			baseConstructorIndexInfo = c.anyBaseTypeIndexInfo
 		}
 	}
-	indexSymbol := members.Get(ast.InternalSymbolNameIndex)
-	if indexSymbol != nil {
+	c.setStructuredTypeMembers(t, members, nil, nil, nil)
+	var indexInfos []*IndexInfo
+	if indexSymbol := members.Get(ast.InternalSymbolNameIndex); indexSymbol != nil {
 		indexInfos = c.getIndexInfosOfIndexSymbol(indexSymbol, slices.Collect(members.Values()))
 	} else {
 		if baseConstructorIndexInfo != nil {
@@ -21261,7 +21257,7 @@ func (c *Checker) resolveAnonymousTypeMembers(t *Type) {
 			indexInfos = append(indexInfos, c.enumNumberIndexInfo)
 		}
 	}
-	if indexInfos != nil || d.extra != nil {
+	if len(indexInfos) != 0 {
 		d.ensureExtra().indexInfos = indexInfos
 	}
 	// We resolve the members before computing the signatures because a signature may use
@@ -21270,7 +21266,7 @@ func (c *Checker) resolveAnonymousTypeMembers(t *Type) {
 	// will never be observed because a qualified name can't reference signatures.
 	if symbol.Flags()&(ast.SymbolFlagsFunction|ast.SymbolFlagsMethod) != 0 {
 		signatures := c.getSignaturesOfSymbol(symbol)
-		if signatures != nil || d.extra != nil {
+		if len(signatures) != 0 {
 			extra := d.ensureExtra()
 			extra.signatures = signatures
 			extra.callSignatureCount = len(signatures)
