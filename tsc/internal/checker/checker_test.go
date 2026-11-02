@@ -11,6 +11,7 @@ import (
 	"github.com/microsoft/TypeScript/tsc/internal/checker"
 	"github.com/microsoft/TypeScript/tsc/internal/compiler"
 	"github.com/microsoft/TypeScript/tsc/internal/core"
+	"github.com/microsoft/TypeScript/tsc/internal/diagnostics"
 	"github.com/microsoft/TypeScript/tsc/internal/repo"
 	"github.com/microsoft/TypeScript/tsc/internal/tsoptions"
 	"github.com/microsoft/TypeScript/tsc/internal/tspath"
@@ -60,6 +61,32 @@ foo.bar;`
 			t.Fatalf("Expected symbol to be non-nil")
 		}
 	}
+}
+
+func TestTypeArgumentConstraintDiagnosticWithHeadMessage(t *testing.T) {
+	t.Parallel()
+
+	fs := bundled.WrapFS(vfstest.FromMap(map[string]string{
+		"/foo.ts": `declare function f<T extends U, U>(): void;
+f<number, string>();`,
+		"/tsconfig.json": `{"files":["foo.ts"]}`,
+	}, tspath.CaseInsensitive))
+	host := compiler.NewCompilerHost(fs, bundled.LibPath(), nil, nil, nil)
+	parsed, errors := tsoptions.GetParsedCommandLineOfConfigFile("/tsconfig.json", &core.CompilerOptions{}, nil, tsoptions.NewDefaultParseConfigHost(fs), nil)
+	assert.Equal(t, len(errors), 0)
+	p := compiler.NewProgram(compiler.ProgramOptions{Config: parsed, Host: host})
+	c, done := p.GetTypeChecker(t.Context())
+	defer done()
+	file := p.GetSourceFile("/foo.ts")
+	call := file.Statements.Nodes[1].Expression()
+	signature := c.GetSignaturesOfType(c.GetTypeAtLocation(call.Expression()), checker.SignatureKindCall)[0]
+	diags := c.CheckTypeArgumentsForTest(signature, call.TypeArguments(), diagnostics.Unable_to_resolve_signature_of_class_decorator_when_called_as_an_expression)
+	assert.Equal(t, len(diags), 1)
+	assert.Equal(t, diags[0].Code(), diagnostics.Type_0_does_not_satisfy_the_constraint_1.Code())
+	assert.DeepEqual(t, diags[0].MessageArgs(), []string{"number", "string"})
+	assert.Assert(t, strings.Contains(diags[0].String(), "Type 'number' does not satisfy the constraint 'string'."))
+	assert.Equal(t, len(diags[0].MessageChain()), 1)
+	assert.Equal(t, diags[0].MessageChain()[0].Code(), diagnostics.Unable_to_resolve_signature_of_class_decorator_when_called_as_an_expression.Code())
 }
 
 func TestGetTypeAtLocationOfTypeOnlyImportClause(t *testing.T) {
