@@ -1,0 +1,181 @@
+//// [tests/cases/compiler/checkJsMethodAssignmentContextualParameterTypes.ts] ////
+
+=== checkJsMethodAssignmentContextualParameterTypes.js ===
+// Regression for #65086: contextual typing of lambda parameters when assigning
+// to object/class methods must work at top level, not only inside a function body.
+
+let lookup = (/** @type {number} */ id) => "name";
+>lookup : (id: number) => string
+>(/** @type {number} */ id) => "name" : (id: number) => string
+>id : number
+>"name" : "name"
+
+lookup = (id) => {
+>lookup = (id) => {    id.toFixed();    return "John Doe";} : (id: number) => string
+>lookup : (id: number) => string
+>(id) => {    id.toFixed();    return "John Doe";} : (id: number) => string
+>id : number
+
+    id.toFixed();
+>id.toFixed() : string
+>id.toFixed : (fractionDigits?: number) => string
+>id : number
+>toFixed : (fractionDigits?: number) => string
+
+    return "John Doe";
+>"John Doe" : "John Doe"
+
+};
+
+let businessLogic = {
+>businessLogic : { getEmployee(id: number): string; }
+>{    getEmployee(/** @type {number} */ id) {        return "name";    }} : { getEmployee(id: number): string; }
+
+    getEmployee(/** @type {number} */ id) {
+>getEmployee : (id: number) => string
+>id : number
+
+        return "name";
+>"name" : "name"
+    }
+};
+businessLogic.getEmployee = (id) => {
+>businessLogic.getEmployee = (id) => {    id.toFixed();    return "John Doe";} : (id: number) => string
+>businessLogic.getEmployee : (id: number) => string
+>businessLogic : { getEmployee(id: number): string; }
+>getEmployee : (id: number) => string
+>(id) => {    id.toFixed();    return "John Doe";} : (id: number) => string
+>id : number
+
+    id.toFixed();
+>id.toFixed() : string
+>id.toFixed : (fractionDigits?: number) => string
+>id : number
+>toFixed : (fractionDigits?: number) => string
+
+    return "John Doe";
+>"John Doe" : "John Doe"
+
+};
+// Prove id is number (not any): assigning to string must error.
+businessLogic.getEmployee = (id) => {
+>businessLogic.getEmployee = (id) => {    /** @type {string} */    const s = id;    return s;} : (id: number) => string
+>businessLogic.getEmployee : (id: number) => string
+>businessLogic : { getEmployee(id: number): string; }
+>getEmployee : (id: number) => string
+>(id) => {    /** @type {string} */    const s = id;    return s;} : (id: number) => string
+>id : number
+
+    /** @type {string} */
+    const s = id;
+>s : string
+>id : number
+
+    return s;
+>s : string
+
+};
+
+(() => {
+>(() => {    businessLogic.getEmployee = (id) => {        id.toFixed();        return "John Doe";    };})() : void
+>(() => {    businessLogic.getEmployee = (id) => {        id.toFixed();        return "John Doe";    };}) : () => void
+>() => {    businessLogic.getEmployee = (id) => {        id.toFixed();        return "John Doe";    };} : () => void
+
+    businessLogic.getEmployee = (id) => {
+>businessLogic.getEmployee = (id) => {        id.toFixed();        return "John Doe";    } : (id: number) => string
+>businessLogic.getEmployee : (id: number) => string
+>businessLogic : { getEmployee(id: number): string; }
+>getEmployee : (id: number) => string
+>(id) => {        id.toFixed();        return "John Doe";    } : (id: number) => string
+>id : number
+
+        id.toFixed();
+>id.toFixed() : string
+>id.toFixed : (fractionDigits?: number) => string
+>id : number
+>toFixed : (fractionDigits?: number) => string
+
+        return "John Doe";
+>"John Doe" : "John Doe"
+
+    };
+})();
+
+class BusinessLogic {
+>BusinessLogic : BusinessLogic
+
+    getEmployee(/** @type {number} */ id) {
+>getEmployee : (id: number) => string
+>id : number
+
+        return "name";
+>"name" : "name"
+    }
+}
+
+let bl = new BusinessLogic();
+>bl : BusinessLogic
+>new BusinessLogic() : BusinessLogic
+>BusinessLogic : typeof BusinessLogic
+
+bl.getEmployee = (id) => {
+>bl.getEmployee = (id) => {    id.toFixed();    return "John Doe";} : (id: number) => string
+>bl.getEmployee : (id: number) => string
+>bl : BusinessLogic
+>getEmployee : (id: number) => string
+>(id) => {    id.toFixed();    return "John Doe";} : (id: number) => string
+>id : number
+
+    id.toFixed();
+>id.toFixed() : string
+>id.toFixed : (fractionDigits?: number) => string
+>id : number
+>toFixed : (fractionDigits?: number) => string
+
+    return "John Doe";
+>"John Doe" : "John Doe"
+
+};
+bl.getEmployee = (id) => {
+>bl.getEmployee = (id) => {    /** @type {string} */    const s = id;    return s;} : (id: number) => string
+>bl.getEmployee : (id: number) => string
+>bl : BusinessLogic
+>getEmployee : (id: number) => string
+>(id) => {    /** @type {string} */    const s = id;    return s;} : (id: number) => string
+>id : number
+
+    /** @type {string} */
+    const s = id;
+>s : string
+>id : number
+
+    return s;
+>s : string
+
+};
+
+(() => {
+>(() => {    bl.getEmployee = (id) => {        id.toFixed();        return "John Doe";    };})() : void
+>(() => {    bl.getEmployee = (id) => {        id.toFixed();        return "John Doe";    };}) : () => void
+>() => {    bl.getEmployee = (id) => {        id.toFixed();        return "John Doe";    };} : () => void
+
+    bl.getEmployee = (id) => {
+>bl.getEmployee = (id) => {        id.toFixed();        return "John Doe";    } : (id: number) => string
+>bl.getEmployee : (id: number) => string
+>bl : BusinessLogic
+>getEmployee : (id: number) => string
+>(id) => {        id.toFixed();        return "John Doe";    } : (id: number) => string
+>id : number
+
+        id.toFixed();
+>id.toFixed() : string
+>id.toFixed : (fractionDigits?: number) => string
+>id : number
+>toFixed : (fractionDigits?: number) => string
+
+        return "John Doe";
+>"John Doe" : "John Doe"
+
+    };
+})();
+

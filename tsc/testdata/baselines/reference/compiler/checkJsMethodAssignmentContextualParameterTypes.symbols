@@ -1,0 +1,138 @@
+//// [tests/cases/compiler/checkJsMethodAssignmentContextualParameterTypes.ts] ////
+
+=== checkJsMethodAssignmentContextualParameterTypes.js ===
+// Regression for #65086: contextual typing of lambda parameters when assigning
+// to object/class methods must work at top level, not only inside a function body.
+
+let lookup = (/** @type {number} */ id) => "name";
+>lookup : Symbol(lookup, Decl(checkJsMethodAssignmentContextualParameterTypes.js, 3, 3))
+>id : Symbol(id, Decl(checkJsMethodAssignmentContextualParameterTypes.js, 3, 14))
+
+lookup = (id) => {
+>lookup : Symbol(lookup, Decl(checkJsMethodAssignmentContextualParameterTypes.js, 3, 3))
+>id : Symbol(id, Decl(checkJsMethodAssignmentContextualParameterTypes.js, 4, 10))
+
+    id.toFixed();
+>id.toFixed : Symbol(Number.toFixed, Decl(lib.es5.d.ts, --, --))
+>id : Symbol(id, Decl(checkJsMethodAssignmentContextualParameterTypes.js, 4, 10))
+>toFixed : Symbol(Number.toFixed, Decl(lib.es5.d.ts, --, --))
+
+    return "John Doe";
+};
+
+let businessLogic = {
+>businessLogic : Symbol(businessLogic, Decl(checkJsMethodAssignmentContextualParameterTypes.js, 9, 3))
+
+    getEmployee(/** @type {number} */ id) {
+>getEmployee : Symbol(getEmployee, Decl(checkJsMethodAssignmentContextualParameterTypes.js, 9, 21))
+>id : Symbol(id, Decl(checkJsMethodAssignmentContextualParameterTypes.js, 10, 16))
+
+        return "name";
+    }
+};
+businessLogic.getEmployee = (id) => {
+>businessLogic.getEmployee : Symbol(getEmployee, Decl(checkJsMethodAssignmentContextualParameterTypes.js, 9, 21))
+>businessLogic : Symbol(businessLogic, Decl(checkJsMethodAssignmentContextualParameterTypes.js, 9, 3))
+>getEmployee : Symbol(getEmployee, Decl(checkJsMethodAssignmentContextualParameterTypes.js, 9, 21))
+>id : Symbol(id, Decl(checkJsMethodAssignmentContextualParameterTypes.js, 14, 29))
+
+    id.toFixed();
+>id.toFixed : Symbol(Number.toFixed, Decl(lib.es5.d.ts, --, --))
+>id : Symbol(id, Decl(checkJsMethodAssignmentContextualParameterTypes.js, 14, 29))
+>toFixed : Symbol(Number.toFixed, Decl(lib.es5.d.ts, --, --))
+
+    return "John Doe";
+};
+// Prove id is number (not any): assigning to string must error.
+businessLogic.getEmployee = (id) => {
+>businessLogic.getEmployee : Symbol(getEmployee, Decl(checkJsMethodAssignmentContextualParameterTypes.js, 9, 21))
+>businessLogic : Symbol(businessLogic, Decl(checkJsMethodAssignmentContextualParameterTypes.js, 9, 3))
+>getEmployee : Symbol(getEmployee, Decl(checkJsMethodAssignmentContextualParameterTypes.js, 9, 21))
+>id : Symbol(id, Decl(checkJsMethodAssignmentContextualParameterTypes.js, 19, 29))
+
+    /** @type {string} */
+    const s = id;
+>s : Symbol(s, Decl(checkJsMethodAssignmentContextualParameterTypes.js, 21, 9))
+>id : Symbol(id, Decl(checkJsMethodAssignmentContextualParameterTypes.js, 19, 29))
+
+    return s;
+>s : Symbol(s, Decl(checkJsMethodAssignmentContextualParameterTypes.js, 21, 9))
+
+};
+
+(() => {
+    businessLogic.getEmployee = (id) => {
+>businessLogic.getEmployee : Symbol(getEmployee, Decl(checkJsMethodAssignmentContextualParameterTypes.js, 9, 21))
+>businessLogic : Symbol(businessLogic, Decl(checkJsMethodAssignmentContextualParameterTypes.js, 9, 3))
+>getEmployee : Symbol(getEmployee, Decl(checkJsMethodAssignmentContextualParameterTypes.js, 9, 21))
+>id : Symbol(id, Decl(checkJsMethodAssignmentContextualParameterTypes.js, 26, 33))
+
+        id.toFixed();
+>id.toFixed : Symbol(Number.toFixed, Decl(lib.es5.d.ts, --, --))
+>id : Symbol(id, Decl(checkJsMethodAssignmentContextualParameterTypes.js, 26, 33))
+>toFixed : Symbol(Number.toFixed, Decl(lib.es5.d.ts, --, --))
+
+        return "John Doe";
+    };
+})();
+
+class BusinessLogic {
+>BusinessLogic : Symbol(BusinessLogic, Decl(checkJsMethodAssignmentContextualParameterTypes.js, 30, 5))
+
+    getEmployee(/** @type {number} */ id) {
+>getEmployee : Symbol(BusinessLogic.getEmployee, Decl(checkJsMethodAssignmentContextualParameterTypes.js, 32, 21))
+>id : Symbol(id, Decl(checkJsMethodAssignmentContextualParameterTypes.js, 33, 16))
+
+        return "name";
+    }
+}
+
+let bl = new BusinessLogic();
+>bl : Symbol(bl, Decl(checkJsMethodAssignmentContextualParameterTypes.js, 38, 3))
+>BusinessLogic : Symbol(BusinessLogic, Decl(checkJsMethodAssignmentContextualParameterTypes.js, 30, 5))
+
+bl.getEmployee = (id) => {
+>bl.getEmployee : Symbol(BusinessLogic.getEmployee, Decl(checkJsMethodAssignmentContextualParameterTypes.js, 32, 21))
+>bl : Symbol(bl, Decl(checkJsMethodAssignmentContextualParameterTypes.js, 38, 3))
+>getEmployee : Symbol(BusinessLogic.getEmployee, Decl(checkJsMethodAssignmentContextualParameterTypes.js, 32, 21))
+>id : Symbol(id, Decl(checkJsMethodAssignmentContextualParameterTypes.js, 39, 18))
+
+    id.toFixed();
+>id.toFixed : Symbol(Number.toFixed, Decl(lib.es5.d.ts, --, --))
+>id : Symbol(id, Decl(checkJsMethodAssignmentContextualParameterTypes.js, 39, 18))
+>toFixed : Symbol(Number.toFixed, Decl(lib.es5.d.ts, --, --))
+
+    return "John Doe";
+};
+bl.getEmployee = (id) => {
+>bl.getEmployee : Symbol(BusinessLogic.getEmployee, Decl(checkJsMethodAssignmentContextualParameterTypes.js, 32, 21))
+>bl : Symbol(bl, Decl(checkJsMethodAssignmentContextualParameterTypes.js, 38, 3))
+>getEmployee : Symbol(BusinessLogic.getEmployee, Decl(checkJsMethodAssignmentContextualParameterTypes.js, 32, 21))
+>id : Symbol(id, Decl(checkJsMethodAssignmentContextualParameterTypes.js, 43, 18))
+
+    /** @type {string} */
+    const s = id;
+>s : Symbol(s, Decl(checkJsMethodAssignmentContextualParameterTypes.js, 45, 9))
+>id : Symbol(id, Decl(checkJsMethodAssignmentContextualParameterTypes.js, 43, 18))
+
+    return s;
+>s : Symbol(s, Decl(checkJsMethodAssignmentContextualParameterTypes.js, 45, 9))
+
+};
+
+(() => {
+    bl.getEmployee = (id) => {
+>bl.getEmployee : Symbol(BusinessLogic.getEmployee, Decl(checkJsMethodAssignmentContextualParameterTypes.js, 32, 21))
+>bl : Symbol(bl, Decl(checkJsMethodAssignmentContextualParameterTypes.js, 38, 3))
+>getEmployee : Symbol(BusinessLogic.getEmployee, Decl(checkJsMethodAssignmentContextualParameterTypes.js, 32, 21))
+>id : Symbol(id, Decl(checkJsMethodAssignmentContextualParameterTypes.js, 50, 22))
+
+        id.toFixed();
+>id.toFixed : Symbol(Number.toFixed, Decl(lib.es5.d.ts, --, --))
+>id : Symbol(id, Decl(checkJsMethodAssignmentContextualParameterTypes.js, 50, 22))
+>toFixed : Symbol(Number.toFixed, Decl(lib.es5.d.ts, --, --))
+
+        return "John Doe";
+    };
+})();
+

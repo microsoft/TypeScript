@@ -1,0 +1,65 @@
+checkJsMethodAssignmentContextualParameterTypes.js(22,11): error TS2322: Type 'number' is not assignable to type 'string'.
+checkJsMethodAssignmentContextualParameterTypes.js(46,11): error TS2322: Type 'number' is not assignable to type 'string'.
+
+
+==== checkJsMethodAssignmentContextualParameterTypes.js (2 errors) ====
+    // Regression for #65086: contextual typing of lambda parameters when assigning
+    // to object/class methods must work at top level, not only inside a function body.
+    
+    let lookup = (/** @type {number} */ id) => "name";
+    lookup = (id) => {
+        id.toFixed();
+        return "John Doe";
+    };
+    
+    let businessLogic = {
+        getEmployee(/** @type {number} */ id) {
+            return "name";
+        }
+    };
+    businessLogic.getEmployee = (id) => {
+        id.toFixed();
+        return "John Doe";
+    };
+    // Prove id is number (not any): assigning to string must error.
+    businessLogic.getEmployee = (id) => {
+        /** @type {string} */
+        const s = id;
+              ~
+!!! error TS2322: Type 'number' is not assignable to type 'string'.
+        return s;
+    };
+    
+    (() => {
+        businessLogic.getEmployee = (id) => {
+            id.toFixed();
+            return "John Doe";
+        };
+    })();
+    
+    class BusinessLogic {
+        getEmployee(/** @type {number} */ id) {
+            return "name";
+        }
+    }
+    
+    let bl = new BusinessLogic();
+    bl.getEmployee = (id) => {
+        id.toFixed();
+        return "John Doe";
+    };
+    bl.getEmployee = (id) => {
+        /** @type {string} */
+        const s = id;
+              ~
+!!! error TS2322: Type 'number' is not assignable to type 'string'.
+        return s;
+    };
+    
+    (() => {
+        bl.getEmployee = (id) => {
+            id.toFixed();
+            return "John Doe";
+        };
+    })();
+    
