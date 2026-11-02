@@ -535,12 +535,16 @@ func (r *DefaultResolver) resolveModuleName(moduleName string, containingFile ts
 }
 
 func (r *DefaultResolver) ResolvePackageDirectory(moduleName string, containingFile tspath.RootedFilePath, resolutionMode core.ResolutionMode, redirectedReference ResolvedProjectReference) *ResolvedModule {
-	if tspath.IsExternalModuleNameRelative(moduleName) {
-		return nil
-	}
 	compilerOptions := GetCompilerOptionsWithRedirect(r.compilerOptions, redirectedReference)
 	containingDirectory := containingFile.Directory()
 	state := newResolutionState(moduleName, containingDirectory, false /*isTypeReferenceDirective*/, resolutionMode, compilerOptions, redirectedReference, r, nil)
+	if tspath.IsExternalModuleNameRelative(moduleName) {
+		packageDirectory := containingDirectory.ResolveDirectory(moduleName)
+		if r.fs.DirectoryExists(packageDirectory) {
+			return state.createResolvedModuleHandlingSymlink(&resolved{path: tspath.RootedFilePathFromPath(packageDirectory.AsPath())})
+		}
+		return nil
+	}
 	state.resolvePackageDirectoryOnly = true
 	if result := state.loadModuleFromNearestNodeModulesDirectory(false /*typesScopeOnly*/); result != nil && result.path != "" {
 		return state.createResolvedModuleHandlingSymlink(result)
