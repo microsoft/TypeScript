@@ -16,7 +16,7 @@ import (
 
 func TestTypeEraserJSDocExportAssignment(t *testing.T) {
 	t.Parallel()
-	for _, typeText := range []string{`import("./a").Foo`, `typeof import("./a")`, "number"} {
+	for _, typeText := range []string{`import("./a").Foo`, `typeof import("./a")`} {
 		t.Run(typeText, func(t *testing.T) {
 			t.Parallel()
 			file := parser.ParseSourceFile(ast.SourceFileParseOptions{

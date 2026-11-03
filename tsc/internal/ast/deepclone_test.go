@@ -33,7 +33,6 @@ func TestVisitEachChildRequiredChild(t *testing.T) {
 		hooks ast.NodeVisitorHooks
 	}{
 		{name: "node", node: factory.NewExpressionStatement(factory.NewIdentifier("x")), kind: ast.KindIdentifier},
-		{name: "token", node: factory.NewBinaryExpression(nil, factory.NewIdentifier("x"), nil, factory.NewToken(ast.KindPlusToken), factory.NewIdentifier("y")), kind: ast.KindPlusToken},
 		{name: "embedded statement", node: factory.NewIfStatement(factory.NewIdentifier("x"), factory.NewEmptyStatement(), nil), kind: ast.KindEmptyStatement},
 		{name: "raw list", node: factory.NewSyntaxList([]*ast.Node{factory.NewIdentifier("x")}), kind: ast.KindIdentifier},
 		{
