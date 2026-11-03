@@ -3335,7 +3335,7 @@ func (node *IndexSignatureDeclaration) ForEachChild(v Visitor) bool {
 }
 
 func (node *IndexSignatureDeclaration) VisitEachChild(v *NodeVisitor) *Node {
-	return v.Factory.UpdateIndexSignatureDeclaration(node, v.visitModifiers(node.modifiers), requiredChild(node.Parameters, v.visitNodes(node.Parameters)), requiredChild(node.Type, v.visitNode(node.Type)))
+	return v.Factory.UpdateIndexSignatureDeclaration(node, v.visitModifiers(node.modifiers), requiredChild(node.Parameters, v.visitNodes(node.Parameters)), v.visitNode(node.Type))
 }
 
 func (node *IndexSignatureDeclaration) Clone(f NodeFactoryCoercible) *Node {
