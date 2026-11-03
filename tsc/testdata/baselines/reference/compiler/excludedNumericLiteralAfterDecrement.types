@@ -16,7 +16,7 @@ function decrement(count: number) {
 
     if (count === 0) return;
 >count === 0 : boolean
->count : number
+>count : number & not 0
 >0 : 0
 }
 

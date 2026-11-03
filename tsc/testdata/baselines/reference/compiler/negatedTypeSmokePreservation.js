@@ -210,9 +210,9 @@ export declare function permission(input: {
 export declare function release(input: {
     asset: unknown;
 }): boolean;
-export declare function notString(value: unknown): boolean;
+export declare function notString(value: unknown): value is not string;
 export declare function inferredContainer(value: unknown): {
-    value: unknown;
-    values: unknown[];
+    value: not string;
+    values: (not string)[];
 } | undefined;
 export declare function matchingLiteral(value: unknown): "read" | "write";

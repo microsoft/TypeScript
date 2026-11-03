@@ -119,7 +119,7 @@ export function sequential(value: unknown) {
 >value : (not false & not true & not string & not bigint & not number) | null
 >"function" : "function"
 >value() : any
->value : Function
+>value : not false & not true & not string & not bigint & not number & Function
 
     return undefined;
 >undefined : undefined

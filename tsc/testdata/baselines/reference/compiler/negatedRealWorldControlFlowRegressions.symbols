@@ -127,9 +127,7 @@ const options = typeof rawOptions === "boolean" ? { enabled: rawOptions } : rawO
 >rawOptions : Symbol(rawOptions, Decl(negatedRealWorldControlFlowRegressions.ts, 50, 13))
 
 options.threshold;
->options.threshold : Symbol(Options.threshold, Decl(negatedRealWorldControlFlowRegressions.ts, 46, 22))
 >options : Symbol(options, Decl(negatedRealWorldControlFlowRegressions.ts, 51, 5))
->threshold : Symbol(Options.threshold, Decl(negatedRealWorldControlFlowRegressions.ts, 46, 22))
 
 declare const input: unknown;
 >input : Symbol(input, Decl(negatedRealWorldControlFlowRegressions.ts, 54, 13))

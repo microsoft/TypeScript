@@ -1,5 +1,14 @@
+negatedCompoundAssignmentFlow.ts(3,9): error TS2322: Type 'number' is not assignable to type 'number & not 0'.
+  Type 'number' is not assignable to type 'not 0'.
+negatedCompoundAssignmentFlow.ts(5,13): error TS2367: This comparison appears to be unintentional because the types 'number & not 0' and '0' have no overlap.
 negatedCompoundAssignmentFlow.ts(22,5): error TS2322: Type 'number' is not assignable to type 'number & not 0'.
   Type 'number' is not assignable to type 'not 0'.
+negatedCompoundAssignmentFlow.ts(28,9): error TS2322: Type 'number' is not assignable to type 'number & not 0'.
+  Type 'number' is not assignable to type 'not 0'.
+negatedCompoundAssignmentFlow.ts(29,9): error TS2322: Type 'number' is not assignable to type 'number & not 0'.
+  Type 'number' is not assignable to type 'not 0'.
+negatedCompoundAssignmentFlow.ts(35,9): error TS2322: Type 'string' is not assignable to type 'string & not ""'.
+  Type 'string' is not assignable to type 'not ""'.
 negatedCompoundAssignmentFlow.ts(48,5): error TS2322: Type 'number' is not assignable to type 'number & not 0'.
   Type 'number' is not assignable to type 'not 0'.
 negatedCompoundAssignmentFlow.ts(49,5): error TS2322: Type 'number' is not assignable to type 'number & not 0'.
@@ -10,12 +19,17 @@ negatedCompoundAssignmentFlow.ts(62,5): error TS2322: Type 'number' is not assig
   Type 'number' is not assignable to type 'not 0'.
 
 
-==== negatedCompoundAssignmentFlow.ts (5 errors) ====
+==== negatedCompoundAssignmentFlow.ts (10 errors) ====
     function compoundFlow(value: number | string) {
         if (typeof value === "number" && value !== 0) {
             value -= 1;
+            ~~~~~
+!!! error TS2322: Type 'number' is not assignable to type 'number & not 0'.
+!!! error TS2322:   Type 'number' is not assignable to type 'not 0'.
             value;
             if (value === 0) {
+                ~~~~~~~~~~~
+!!! error TS2367: This comparison appears to be unintentional because the types 'number & not 0' and '0' have no overlap.
                 value;
             }
         }
@@ -42,13 +56,22 @@ negatedCompoundAssignmentFlow.ts(62,5): error TS2322: Type 'number' is not assig
     function parenthesizedCompound(value: number | undefined) {
         if (value !== undefined && value !== 0) {
             (value) -= 1;
+            ~~~~~~~
+!!! error TS2322: Type 'number' is not assignable to type 'number & not 0'.
+!!! error TS2322:   Type 'number' is not assignable to type 'not 0'.
             value! *= 2;
+            ~~~~~~
+!!! error TS2322: Type 'number' is not assignable to type 'number & not 0'.
+!!! error TS2322:   Type 'number' is not assignable to type 'not 0'.
         }
     }
     
     function stringCompound(value: string, holder: { value: string }) {
         if (value !== "") {
             value += "suffix";
+            ~~~~~
+!!! error TS2322: Type 'string' is not assignable to type 'string & not ""'.
+!!! error TS2322:   Type 'string' is not assignable to type 'not ""'.
         }
         if (holder.value !== "") {
             holder.value += "suffix";

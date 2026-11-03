@@ -8,10 +8,10 @@ import (
 )
 
 // newNegatedType creates a new negated type 'not baseType'.
-func (c *Checker) newNegatedType(baseType *Type, flags ObjectFlags) *Type {
+func (c *Checker) newNegatedType(baseType *Type) *Type {
 	data := &NegatedType{}
 	data.baseType = baseType
-	return c.newType(TypeFlagsNegated, flags, data.AsType(), typeKindNegated)
+	return c.newType(TypeFlagsNegated, ObjectFlagsNone, data.AsType(), typeKindNegated)
 }
 
 // getNegatedType constructs the type 'not T', applying the negation identities:
@@ -39,53 +39,13 @@ func (c *Checker) getNegatedType(t *Type) *Type {
 	if cached := c.negatedTypes[t.id]; cached != nil {
 		return cached
 	}
-	result := c.newNegatedType(t, ObjectFlagsNone)
-	result.AsNegatedType().regularType = result
-	result.AsNegatedType().freshType = c.newNegatedType(t, ObjectFlagsFreshNegated)
-	result.AsNegatedType().freshType.AsNegatedType().regularType = result
-	result.AsNegatedType().freshType.AsNegatedType().freshType = result.AsNegatedType().freshType
+	result := c.newNegatedType(t)
 	c.negatedTypes[t.id] = result
 	return result
 }
 
-// getFreshNegatedType is like getNegatedType, but the leaf negated types it constructs are marked
-// fresh (ObjectFlagsFreshNegated). Fresh negated types are those introduced by control flow
-// narrowing (as opposed to written explicitly by the user); they are widened away by getWidenedType
-// when a narrowed type escapes into an inferred declaration, so they never leak into emitted
-// declaration files.
-func (c *Checker) getFreshNegatedType(t *Type) *Type {
-	if t.flags&TypeFlagsUnion != 0 {
-		return c.getIntersectionType(core.Map(t.Types(), c.getFreshNegatedType))
-	}
-	negated := c.getNegatedType(t)
-	if negated.flags&TypeFlagsNegated == 0 {
-		return negated
-	}
-	return negated.AsNegatedType().freshType
-}
-
-// isFreshNegatedType reports whether t is a fresh negated type introduced by control flow narrowing.
-func isFreshNegatedType(t *Type) bool {
-	return t.flags&TypeFlagsNegated != 0 && t.objectFlags&ObjectFlagsFreshNegated != 0
-}
-
-// containsFreshNegatedType reports whether t is a fresh negated type or (transitively) contains one
-// within a union or intersection. ObjectFlagsFreshNegated is a TypeFlagsNegated-only flag (its bit
-// is reused for other meanings on unions and intersections), so it must never be read directly on a
-// container type; this helper recurses instead.
-func containsFreshNegatedType(t *Type) bool {
-	if isFreshNegatedType(t) {
-		return true
-	}
-	if t.flags&TypeFlagsUnionOrIntersection != 0 {
-		return core.Some(t.Types(), containsFreshNegatedType)
-	}
-	return false
-}
-
 // containsNegatedType reports whether t is a negated type or (transitively) contains one within a
-// union or intersection. It is used to decide whether a location wants a negation (and should
-// therefore preserve a fresh control-flow negation rather than widening it away).
+// union or intersection.
 func containsNegatedType(t *Type) bool {
 	if t == nil {
 		return false
@@ -97,47 +57,6 @@ func containsNegatedType(t *Type) bool {
 		return core.Some(t.Types(), containsNegatedType)
 	}
 	return false
-}
-
-// removeFreshNegatedTypes strips fresh negated types (introduced by control flow narrowing) from t.
-// It is used at inference barriers that do not go through getWidenedType (such as inferred type
-// predicates) so that a CFA-introduced 'not X' never leaks into an inferred declaration.
-func (c *Checker) removeFreshNegatedTypes(t *Type) *Type {
-	if !containsFreshNegatedType(t) {
-		return t
-	}
-	if isFreshNegatedType(t) {
-		return c.unknownType
-	}
-	if t.flags&TypeFlagsUnion != 0 {
-		return c.getUnionType(core.Map(t.Types(), c.removeFreshNegatedTypes))
-	}
-	if t.flags&TypeFlagsIntersection != 0 {
-		return c.getIntersectionType(core.Map(t.Types(), c.removeFreshNegatedTypes))
-	}
-	return t
-}
-
-func (c *Checker) getRegularNegatedTypes(t *Type) *Type {
-	if !containsFreshNegatedType(t) {
-		return t
-	}
-	return c.mapType(t, func(t *Type) *Type {
-		if t.flags&TypeFlagsNegated != 0 {
-			return t.AsNegatedType().regularType
-		}
-		if t.flags&TypeFlagsIntersection != 0 {
-			return c.getIntersectionType(core.Map(t.Types(), c.getRegularNegatedTypes))
-		}
-		return t
-	})
-}
-
-func (c *Checker) removeOrRegularizeNegatedTypes(t *Type, remove bool) *Type {
-	if remove {
-		return c.removeFreshNegatedTypes(t)
-	}
-	return c.getRegularNegatedTypes(t)
 }
 
 // removeComplementaryNegatedTypes replaces 'Base & not C' with 'Base' when another branch covers
@@ -258,7 +177,7 @@ func (c *Checker) removeNegatedSubtypes(types []*Type) []*Type {
 			continue
 		}
 		negatedBase := types[i].AsNegatedType().baseType
-		if isFreshNegatedType(types[i]) && c.typesAreInDisjointDomainsIncludingObjects(nonNegativePart, negatedBase) || c.objectTypesAreDisjointByProperties(nonNegativePart, negatedBase, false /*sourceIsClosed*/) || c.isTypeSubtypeOf(nonNegativePart, types[i]) {
+		if c.objectTypesAreDisjointByProperties(nonNegativePart, negatedBase, false /*sourceIsClosed*/) || c.isTypeSubtypeOf(nonNegativePart, types[i]) {
 			types = slices.Delete(types, i, i+1)
 		}
 	}
@@ -331,41 +250,6 @@ func typesAreInDisjointDomains(a *Type, b *Type) bool {
 	aDomains := a.flags & TypeFlagsDisjointDomains
 	bDomains := b.flags & TypeFlagsDisjointDomains
 	return aDomains != 0 && bDomains != 0 && aDomains&bDomains == 0
-}
-
-func (c *Checker) typesAreInDisjointDomainsIncludingObjects(a *Type, b *Type) bool {
-	aDomains := c.getTypeDomains(a)
-	bDomains := c.getTypeDomains(b)
-	return aDomains != 0 && bDomains != 0 && aDomains&bDomains == 0
-}
-
-func (c *Checker) getTypeDomains(t *Type) TypeFlags {
-	var domains TypeFlags
-	if t.flags&TypeFlagsStringLike != 0 {
-		domains |= TypeFlagsString
-	}
-	if t.flags&TypeFlagsNumberLike != 0 {
-		domains |= TypeFlagsNumber
-	}
-	if t.flags&TypeFlagsBigIntLike != 0 {
-		domains |= TypeFlagsBigInt
-	}
-	if t.flags&TypeFlagsBooleanLike != 0 {
-		domains |= TypeFlagsBoolean
-	}
-	if t.flags&TypeFlagsESSymbolLike != 0 {
-		domains |= TypeFlagsESSymbol
-	}
-	if t.flags&TypeFlagsVoidLike != 0 {
-		domains |= TypeFlagsVoid
-	}
-	if t.flags&TypeFlagsNull != 0 {
-		domains |= TypeFlagsNull
-	}
-	if t.flags&(TypeFlagsObject|TypeFlagsNonPrimitive) != 0 && !c.IsEmptyAnonymousObjectType(t) {
-		domains |= TypeFlagsNonPrimitive
-	}
-	return domains
 }
 
 func isRequiredProperty(prop *ast.Symbol) bool {

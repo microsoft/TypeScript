@@ -67,7 +67,7 @@ export function explicitNegation(value) {
 
 
 //// [negatedTypeSmokeInference.d.ts]
-export declare function nonString(value: unknown): unknown;
-export declare function excludedLiteral(value: unknown): unknown;
+export declare function nonString(value: unknown): not string | undefined;
+export declare function excludedLiteral(value: unknown): not "missing" | undefined;
 export declare function operatorToken(char: string, prefix: string): string;
 export declare function explicitNegation(value: not string): not string;

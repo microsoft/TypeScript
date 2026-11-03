@@ -40,7 +40,7 @@ const f = (arg: LiteralsOrWeakTypes) => {
     }
     else {
         return arg;
->arg : "B" | { optional?: true; } | { toLowerCase?(): string; } | { toUpperCase?(): string; otherOptionalProp?: number; }
+>arg : ("B" | WeakTypes) & not "A"
     }
 }
 
@@ -59,7 +59,7 @@ const g = (arg: WeakTypes) => {
     }
     else {
         return arg;
->arg : { optional?: true; } | { toLowerCase?(): string; } | { toUpperCase?(): string; otherOptionalProp?: number; }
+>arg : WeakTypes & not "A"
     }
 }
 

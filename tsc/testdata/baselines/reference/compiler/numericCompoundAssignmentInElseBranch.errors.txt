@@ -1,0 +1,16 @@
+numericCompoundAssignmentInElseBranch.ts(5,9): error TS2322: Type 'number' is not assignable to type 'number & not 0'.
+  Type 'number' is not assignable to type 'not 0'.
+
+
+==== numericCompoundAssignmentInElseBranch.ts (1 errors) ====
+    function accumulate(total: number, width: number, kernedWidth: number) {
+        if (total === 0) {
+            total += width;
+        } else {
+            total += kernedWidth;
+            ~~~~~
+!!! error TS2322: Type 'number' is not assignable to type 'number & not 0'.
+!!! error TS2322:   Type 'number' is not assignable to type 'not 0'.
+        }
+    }
+    

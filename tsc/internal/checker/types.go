@@ -733,8 +733,6 @@ const (
 	ObjectFlagsIsNeverIntersectionComputed = 1 << 25 // IsNeverLike flag has been computed
 	ObjectFlagsIsNeverIntersection         = 1 << 26 // Intersection reduces to never
 	ObjectFlagsIsConstrainedTypeVariable   = 1 << 27 // T & C, where T's constraint and C are primitives, object, or {}
-	// Flags that require TypeFlags.Negated
-	ObjectFlagsFreshNegated ObjectFlags = 1 << 25 // Negated type introduced by control flow narrowing; widened away when it escapes into an inferred declaration
 )
 
 // TypeAlias
@@ -1577,9 +1575,7 @@ func (t *SubstitutionType) SubstConstraint() *Type { return t.constraint }
 
 type NegatedType struct {
 	ConstrainedType
-	baseType    *Type // The negated type T in 'not T'
-	freshType   *Type // Fresh version of type
-	regularType *Type // Regular version of type
+	baseType *Type // The negated type T in 'not T'
 }
 
 func (t *NegatedType) BaseType() *Type { return t.baseType }

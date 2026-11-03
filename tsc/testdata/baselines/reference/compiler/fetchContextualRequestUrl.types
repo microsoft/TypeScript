@@ -17,13 +17,13 @@ const fetchUsingRequestUrl: typeof fetch = async input => {
 >input : string
 >input instanceof URL ? input.href : input.url : string
 >input instanceof URL : boolean
->input : Request | URL
+>input : (Request | URL) & not string
 >URL : { new (url: string | URL, base?: string | URL): URL; prototype: URL; canParse(url: string | URL, base?: string | URL): boolean; createObjectURL(obj: Blob | MediaSource): string; parse(url: string | URL, base?: string | URL): URL | null; revokeObjectURL(url: string): void; }
 >input.href : string
->input : URL
+>input : URL & not string
 >href : string
 >input.url : string
->input : Request
+>input : Request & not string
 >url : string
 
     return new Response(url);

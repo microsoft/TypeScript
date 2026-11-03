@@ -84,7 +84,6 @@ inDoesNotOperateOnPrimitiveTypes.ts(64,12): error TS2322: Type 'T & (0 | 1 | 2)'
         "key" in thing; // Ok (because further narrowing is impossible)
                  ~~~~~
 !!! error TS2322: Type 'T & not string & not number' is not assignable to type 'object'.
-!!! related TS2208 inDoesNotOperateOnPrimitiveTypes.ts:33:17: This type parameter might need an `extends object` constraint.
       }
     }
     

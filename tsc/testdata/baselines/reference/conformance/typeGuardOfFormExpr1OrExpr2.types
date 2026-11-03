@@ -70,11 +70,11 @@ if (typeof strOrNumOrBoolOrC === "string" || typeof strOrNumOrBoolOrC === "numbe
 >"string" : "string"
 >typeof strOrNumOrBoolOrC === "number" : boolean
 >typeof strOrNumOrBoolOrC : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
->strOrNumOrBoolOrC : number | boolean | C
+>strOrNumOrBoolOrC : number | boolean | (C & not string)
 >"number" : "number"
 >typeof strOrNumOrBoolOrC === "boolean" : boolean
 >typeof strOrNumOrBoolOrC : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
->strOrNumOrBoolOrC : boolean | C
+>strOrNumOrBoolOrC : boolean | (C & not string & not number)
 >"boolean" : "boolean"
 
     strOrNumOrBool = strOrNumOrBoolOrC; // string | number | boolean
@@ -84,9 +84,9 @@ if (typeof strOrNumOrBoolOrC === "string" || typeof strOrNumOrBoolOrC === "numbe
 }
 else {
     c = strOrNumOrBoolOrC; // C
->c = strOrNumOrBoolOrC : C
+>c = strOrNumOrBoolOrC : C & not string & not number & not false & not true
 >c : C
->strOrNumOrBoolOrC : C
+>strOrNumOrBoolOrC : C & not string & not number & not false & not true
 }
 // (typeguard1 || typeguard2 || typeguard11(onAnotherType))
 if (typeof strOrNumOrBoolOrC === "string" || typeof strOrNumOrBoolOrC === "number" || typeof strOrNumOrBool !== "boolean") {
@@ -98,7 +98,7 @@ if (typeof strOrNumOrBoolOrC === "string" || typeof strOrNumOrBoolOrC === "numbe
 >"string" : "string"
 >typeof strOrNumOrBoolOrC === "number" : boolean
 >typeof strOrNumOrBoolOrC : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
->strOrNumOrBoolOrC : number | boolean | C
+>strOrNumOrBoolOrC : number | boolean | (C & not string)
 >"number" : "number"
 >typeof strOrNumOrBool !== "boolean" : boolean
 >typeof strOrNumOrBool : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
@@ -115,9 +115,9 @@ if (typeof strOrNumOrBoolOrC === "string" || typeof strOrNumOrBoolOrC === "numbe
 }
 else {
     cOrBool = strOrNumOrBoolOrC; // C | boolean
->cOrBool = strOrNumOrBoolOrC : boolean | C
+>cOrBool = strOrNumOrBoolOrC : boolean | (C & not string & not number)
 >cOrBool : boolean | C
->strOrNumOrBoolOrC : boolean | C
+>strOrNumOrBoolOrC : boolean | (C & not string & not number)
 
     bool = strOrNumOrBool; // boolean
 >bool = strOrNumOrBool : boolean

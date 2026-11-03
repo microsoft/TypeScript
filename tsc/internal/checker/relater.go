@@ -4959,13 +4959,12 @@ func (r *Relater) reportErrorResults(originalSource *Type, originalTarget *Type,
 		}
 	}
 	r.reportRelationError(headMessage, source, target)
-	filteredSource := r.c.removeFreshNegatedTypes(source) // strip fresh negated types from the source for the next related info span
-	if filteredSource.flags&TypeFlagsTypeParameter != 0 && filteredSource.symbol != nil && len(filteredSource.symbol.Declarations()) != 0 && r.c.getConstraintOfType(filteredSource) == nil {
-		syntheticParam := r.c.cloneTypeParameter(filteredSource)
-		syntheticParam.AsTypeParameter().constraint = r.c.instantiateType(target, newSimpleTypeMapper(filteredSource, syntheticParam))
+	if source.flags&TypeFlagsTypeParameter != 0 && source.symbol != nil && len(source.symbol.Declarations()) != 0 && r.c.getConstraintOfType(source) == nil {
+		syntheticParam := r.c.cloneTypeParameter(source)
+		syntheticParam.AsTypeParameter().constraint = r.c.instantiateType(target, newSimpleTypeMapper(source, syntheticParam))
 		if r.c.hasNonCircularBaseConstraint(syntheticParam) {
 			targetConstraintString := r.c.TypeToString(target)
-			r.relatedInfo = append(r.relatedInfo, NewDiagnosticForNode(filteredSource.symbol.Declarations()[0], diagnostics.This_type_parameter_might_need_an_extends_0_constraint, targetConstraintString))
+			r.relatedInfo = append(r.relatedInfo, NewDiagnosticForNode(source.symbol.Declarations()[0], diagnostics.This_type_parameter_might_need_an_extends_0_constraint, targetConstraintString))
 		}
 	}
 }

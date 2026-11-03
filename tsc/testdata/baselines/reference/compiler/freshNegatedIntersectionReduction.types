@@ -67,7 +67,7 @@ export function explicitNull<Value>(value: Value & not null) {
 }
 
 export function freshOnly<Value>(value: Value) {
->freshOnly : <Value>(value: Value) => Value
+>freshOnly : <Value>(value: Value) => Value & not string
 >value : Value
 
     if (typeof value !== "string") {
@@ -77,11 +77,11 @@ export function freshOnly<Value>(value: Value) {
 >"string" : "string"
 
         const widened = value;
->widened : Value
+>widened : Value & not string
 >value : Value & not string
 
         return widened;
->widened : Value
+>widened : Value & not string
     }
     throw new Error();
 >new Error() : Error

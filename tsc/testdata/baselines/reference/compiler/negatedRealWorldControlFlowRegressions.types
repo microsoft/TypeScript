@@ -40,16 +40,16 @@ if (typeof handler !== "string" && handler !== undefined && typeof handler === "
 >handler : string | HandlerOptions | ((value: number) => void) | undefined
 >"string" : "string"
 >handler !== undefined : boolean
->handler : HandlerOptions | ((value: number) => void) | undefined
+>handler : (HandlerOptions | ((value: number) => void) | undefined) & not string
 >undefined : undefined
 >typeof handler === "function" : boolean
 >typeof handler : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
->handler : HandlerOptions | ((value: number) => void)
+>handler : (HandlerOptions & not string) | (((value: number) => void) & not string)
 >"function" : "function"
 
     handler(0);
 >handler(0) : void
->handler : (value: number) => void
+>handler : ((value: number) => void) & not string & Function
 >0 : 0
 }
 
@@ -69,11 +69,11 @@ if (count !== 0) {
 
     if (count === 0) {
 >count === 0 : boolean
->count : number
+>count : number & not 0
 >0 : 0
 
         count;
->count : 0
+>count : never
     }
 }
 
@@ -158,8 +158,8 @@ declare const rawOptions: boolean | Options;
 >rawOptions : boolean | Options
 
 const options = typeof rawOptions === "boolean" ? { enabled: rawOptions } : rawOptions;
->options : Options
->typeof rawOptions === "boolean" ? { enabled: rawOptions } : rawOptions : Options
+>options : { enabled: boolean; } | (Options & not false & not true)
+>typeof rawOptions === "boolean" ? { enabled: rawOptions } : rawOptions : { enabled: boolean; } | (Options & not false & not true)
 >typeof rawOptions === "boolean" : boolean
 >typeof rawOptions : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
 >rawOptions : boolean | Options
@@ -167,18 +167,18 @@ const options = typeof rawOptions === "boolean" ? { enabled: rawOptions } : rawO
 >{ enabled: rawOptions } : { enabled: boolean; }
 >enabled : boolean
 >rawOptions : boolean
->rawOptions : Options
+>rawOptions : Options & not false & not true
 
 options.threshold;
->options.threshold : number | undefined
->options : Options
->threshold : number | undefined
+>options.threshold : any
+>options : { enabled: boolean; } | (Options & not false & not true)
+>threshold : any
 
 declare const input: unknown;
 >input : unknown
 
 const normalized = typeof input === "bigint" ? Number(input) : input;
->normalized : unknown
+>normalized : number | not bigint
 >typeof input === "bigint" ? Number(input) : input : number | not bigint
 >typeof input === "bigint" : boolean
 >typeof input : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
@@ -190,5 +190,5 @@ const normalized = typeof input === "bigint" ? Number(input) : input;
 >input : not bigint
 
 normalized;
->normalized : unknown
+>normalized : number | not bigint
 

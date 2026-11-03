@@ -1,5 +1,7 @@
-negatedTypeSmokeInference.ts(13,24): error TS2322: Type 'unknown' is not assignable to type 'string | number'.
-negatedTypeSmokeInference.ts(15,11): error TS2322: Type 'unknown' is not assignable to type 'string'.
+negatedTypeSmokeInference.ts(13,24): error TS2322: Type 'not "missing"' is not assignable to type 'string | number'.
+  Type 'unknown' is not assignable to type 'string | number'.
+negatedTypeSmokeInference.ts(15,11): error TS2322: Type 'not "missing"' is not assignable to type 'string'.
+  Type 'unknown' is not assignable to type 'string'.
 
 
 ==== negatedTypeSmokeInference.ts (2 errors) ====
@@ -17,12 +19,14 @@ negatedTypeSmokeInference.ts(15,11): error TS2322: Type 'unknown' is not assigna
         if (value === "missing") return undefined;
         consumePrimitive({ value });
                            ~~~~~
-!!! error TS2322: Type 'unknown' is not assignable to type 'string | number'.
+!!! error TS2322: Type 'not "missing"' is not assignable to type 'string | number'.
+!!! error TS2322:   Type 'unknown' is not assignable to type 'string | number'.
 !!! related TS6500 negatedTypeSmokeInference.ts:2:44: The expected type comes from property 'value' which is declared here on type '{ value: string | number; }'
         const copy = value;
         const invalid: string = copy;
               ~~~~~~~
-!!! error TS2322: Type 'unknown' is not assignable to type 'string'.
+!!! error TS2322: Type 'not "missing"' is not assignable to type 'string'.
+!!! error TS2322:   Type 'unknown' is not assignable to type 'string'.
         return copy;
     }
     

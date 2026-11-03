@@ -227,15 +227,6 @@ func getBranchLabelAntecedents(flow *ast.FlowNode, reduceLabels []*ast.FlowReduc
 	return flow.Antecedents
 }
 
-// Compound assignments, updates, and compound-like assignments can change the value, so
-// their flow types must generalize literal types and discard fresh negations describing
-// the old value (e.g. 'number & not 0' before a decrement). This approximates the type
-// after the operation without checking its expression here; regular negated constraints
-// are preserved.
-func (c *Checker) getTypeForCompoundAssignment(typeToGeneralize *Type) *Type {
-	return c.getBaseTypeOfLiteralType(c.removeFreshNegatedTypes(typeToGeneralize))
-}
-
 func (c *Checker) getTypeAtFlowAssignment(f *FlowState, flow *ast.FlowNode) FlowType {
 	node := flow.Node
 	// Assignments only narrow the computed type if the declared type is a union type. Thus, we
@@ -246,7 +237,7 @@ func (c *Checker) getTypeAtFlowAssignment(f *FlowState, flow *ast.FlowNode) Flow
 		}
 		if getAssignmentTargetKind(node) == AssignmentKindCompound {
 			flowType := c.getTypeAtFlowNode(f, flow.Antecedent)
-			return c.newFlowType(c.getTypeForCompoundAssignment(flowType.t), flowType.incomplete)
+			return c.newFlowType(c.getBaseTypeOfLiteralType(flowType.t), flowType.incomplete)
 		}
 		if f.declaredType == c.autoType || f.declaredType == c.autoArrayType {
 			if c.isEmptyArrayAssignment(node) {
@@ -260,7 +251,7 @@ func (c *Checker) getTypeAtFlowAssignment(f *FlowState, flow *ast.FlowNode) Flow
 		}
 		t := f.declaredType
 		if isInCompoundLikeAssignment(node) {
-			t = c.getTypeForCompoundAssignment(t)
+			t = c.getBaseTypeOfLiteralType(t)
 		}
 		if t.flags&TypeFlagsUnion != 0 {
 			return FlowType{t: c.getAssignmentReducedType(t, c.getInitialOrAssignedType(f, flow))}
@@ -650,7 +641,7 @@ func (c *Checker) narrowTypeByEquality(t *Type, operator ast.Kind, value *ast.No
 		filtered := c.filterType(t, func(t *Type) bool {
 			return !(c.isUnitLikeType(t) && c.areTypesComparable(t, valueType))
 		})
-		// In the false branch of a strict literal comparison, introduce a fresh negation so that a base
+		// In the false branch of a strict literal comparison, introduce a negation so that a base
 		// type that overlaps the compared value records the exclusion. For example, the else branch of
 		// 'n === 0' where 'n: number' produces 'number & not 0'. The negation reduces away for
 		// constituents already disjoint from the value (e.g. 'string & not 0' -> 'string'). We restrict
@@ -762,12 +753,9 @@ func (c *Checker) narrowTypeByTypeName(t *Type, typeName string) *Type {
 
 func (c *Checker) narrowTypeByTypeFacts(t *Type, impliedType *Type, facts TypeFacts) *Type {
 	return c.mapType(t, func(t *Type) *Type {
-		if t.flags&TypeFlagsIntersection != 0 && containsFreshNegatedType(t) {
+		if t.flags&TypeFlagsIntersection != 0 && containsNegatedType(t) {
 			return c.getIntersectionType(append(core.Map(t.Types(), func(t *Type) *Type {
-				if isFreshNegatedType(t) {
-					if c.typesAreInDisjointDomainsIncludingObjects(impliedType, t.AsNegatedType().baseType) {
-						return c.unknownType
-					}
+				if isNegatedType(t) {
 					return t
 				}
 				return c.narrowTypeByTypeFacts(t, impliedType, facts)
@@ -960,7 +948,7 @@ func (c *Checker) introduceNegationIntoNarrowedType(t *Type, candidate *Type) *T
 	if t.flags&TypeFlagsNever != 0 || candidate.flags&TypeFlagsNever != 0 {
 		return t
 	}
-	return c.getIntersectionType([]*Type{t, c.getFreshNegatedType(candidate)})
+	return c.getIntersectionType([]*Type{t, c.getNegatedType(candidate)})
 }
 
 func (c *Checker) getNarrowedTypeWorker(t *Type, candidate *Type, assumeTrue bool, checkDerived bool) *Type {
@@ -2031,7 +2019,7 @@ func (c *Checker) replacePrimitivesWithLiterals(typeWithPrimitives *Type, typeWi
 		c.maybeTypeOfKind(typeWithLiterals, TypeFlagsStringLiteral|TypeFlagsTemplateLiteral|TypeFlagsStringMapping|TypeFlagsNumberLiteral|TypeFlagsBigIntLiteral) {
 		return c.mapType(typeWithPrimitives, func(t *Type) *Type {
 			switch {
-			case t.flags&TypeFlagsIntersection != 0 && containsFreshNegatedType(t):
+			case t.flags&TypeFlagsIntersection != 0 && containsNegatedType(t):
 				result := c.getIntersectionType(core.Map(t.Types(), func(t *Type) *Type {
 					return c.replacePrimitivesWithLiterals(t, typeWithLiterals)
 				}))

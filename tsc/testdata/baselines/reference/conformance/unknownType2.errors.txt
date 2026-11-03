@@ -1,8 +1,10 @@
+unknownType2.ts(33,21): error TS2344: Type 'false' does not satisfy the constraint 'true'.
+unknownType2.ts(37,21): error TS2344: Type 'false' does not satisfy the constraint 'true'.
 unknownType2.ts(216,13): error TS2322: Type '"maybe" | "no" | "yes"' is not assignable to type 'SomeResponse'.
   Type '"maybe"' is not assignable to type 'SomeResponse'.
 
 
-==== unknownType2.ts (1 errors) ====
+==== unknownType2.ts (3 errors) ====
     type isUnknown<T> = unknown extends T ? true : false;
     type isTrue<T extends true> = T;
     
@@ -36,10 +38,14 @@ unknownType2.ts(216,13): error TS2322: Type '"maybe" | "no" | "yes"' is not assi
     
     if (!(u === 42)) {
         type A = isTrue<isUnknown<typeof u>>
+                        ~~~~~~~~~~~~~~~~~~~
+!!! error TS2344: Type 'false' does not satisfy the constraint 'true'.
     }
     
     if (u !== 42) {
         type B = isTrue<isUnknown<typeof u>>
+                        ~~~~~~~~~~~~~~~~~~~
+!!! error TS2344: Type 'false' does not satisfy the constraint 'true'.
     }
     
     if (u == 42) {

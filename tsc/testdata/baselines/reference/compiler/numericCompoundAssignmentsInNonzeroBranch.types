@@ -19,7 +19,7 @@ function scale(value: number, factor: number) {
 
         value *= factor;
 >value *= factor : number
->value : number
+>value : number & not 0
 >factor : number
     }
 }

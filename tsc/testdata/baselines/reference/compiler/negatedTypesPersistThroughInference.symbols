@@ -1,0 +1,185 @@
+//// [tests/cases/compiler/negatedTypesPersistThroughInference.ts] ////
+
+=== negatedTypesPersistThroughInference.ts ===
+declare function identity<T>(value: T): T;
+>identity : Symbol(identity, Decl(negatedTypesPersistThroughInference.ts, 0, 0))
+>T : Symbol(T, Decl(negatedTypesPersistThroughInference.ts, 0, 26))
+>value : Symbol(value, Decl(negatedTypesPersistThroughInference.ts, 0, 29))
+>T : Symbol(T, Decl(negatedTypesPersistThroughInference.ts, 0, 26))
+>T : Symbol(T, Decl(negatedTypesPersistThroughInference.ts, 0, 26))
+
+declare function contextualIdentity<T>(callback: () => T): T;
+>contextualIdentity : Symbol(contextualIdentity, Decl(negatedTypesPersistThroughInference.ts, 0, 42))
+>T : Symbol(T, Decl(negatedTypesPersistThroughInference.ts, 1, 36))
+>callback : Symbol(callback, Decl(negatedTypesPersistThroughInference.ts, 1, 39))
+>T : Symbol(T, Decl(negatedTypesPersistThroughInference.ts, 1, 36))
+>T : Symbol(T, Decl(negatedTypesPersistThroughInference.ts, 1, 36))
+
+export function nonString(value: unknown) {
+>nonString : Symbol(nonString, Decl(negatedTypesPersistThroughInference.ts, 1, 61))
+>value : Symbol(value, Decl(negatedTypesPersistThroughInference.ts, 3, 26))
+
+    if (typeof value === "string") throw new Error();
+>value : Symbol(value, Decl(negatedTypesPersistThroughInference.ts, 3, 26))
+>Error : Symbol(Error, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2022.error.d.ts, --, --))
+
+    const constant = value;
+>constant : Symbol(constant, Decl(negatedTypesPersistThroughInference.ts, 5, 9))
+>value : Symbol(value, Decl(negatedTypesPersistThroughInference.ts, 3, 26))
+
+    let variable = value;
+>variable : Symbol(variable, Decl(negatedTypesPersistThroughInference.ts, 6, 7))
+>value : Symbol(value, Decl(negatedTypesPersistThroughInference.ts, 3, 26))
+
+    const inferred: not string = identity(value);
+>inferred : Symbol(inferred, Decl(negatedTypesPersistThroughInference.ts, 7, 9))
+>identity : Symbol(identity, Decl(negatedTypesPersistThroughInference.ts, 0, 0))
+>value : Symbol(value, Decl(negatedTypesPersistThroughInference.ts, 3, 26))
+
+    const contextual: not string = contextualIdentity(() => value);
+>contextual : Symbol(contextual, Decl(negatedTypesPersistThroughInference.ts, 8, 9))
+>contextualIdentity : Symbol(contextualIdentity, Decl(negatedTypesPersistThroughInference.ts, 0, 42))
+>value : Symbol(value, Decl(negatedTypesPersistThroughInference.ts, 3, 26))
+
+    return { constant, variable, inferred, contextual, values: [value] };
+>constant : Symbol(constant, Decl(negatedTypesPersistThroughInference.ts, 9, 12))
+>variable : Symbol(variable, Decl(negatedTypesPersistThroughInference.ts, 9, 22))
+>inferred : Symbol(inferred, Decl(negatedTypesPersistThroughInference.ts, 9, 32))
+>contextual : Symbol(contextual, Decl(negatedTypesPersistThroughInference.ts, 9, 42))
+>values : Symbol(values, Decl(negatedTypesPersistThroughInference.ts, 9, 54))
+>value : Symbol(value, Decl(negatedTypesPersistThroughInference.ts, 3, 26))
+}
+
+export function nonZero(value: number) {
+>nonZero : Symbol(nonZero, Decl(negatedTypesPersistThroughInference.ts, 10, 1))
+>value : Symbol(value, Decl(negatedTypesPersistThroughInference.ts, 12, 24))
+
+    if (value === 0) throw new Error();
+>value : Symbol(value, Decl(negatedTypesPersistThroughInference.ts, 12, 24))
+>Error : Symbol(Error, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2022.error.d.ts, --, --))
+
+    const constant = value;
+>constant : Symbol(constant, Decl(negatedTypesPersistThroughInference.ts, 14, 9))
+>value : Symbol(value, Decl(negatedTypesPersistThroughInference.ts, 12, 24))
+
+    let variable = value;
+>variable : Symbol(variable, Decl(negatedTypesPersistThroughInference.ts, 15, 7))
+>value : Symbol(value, Decl(negatedTypesPersistThroughInference.ts, 12, 24))
+
+    const inferred: number & not 0 = identity(value);
+>inferred : Symbol(inferred, Decl(negatedTypesPersistThroughInference.ts, 16, 9))
+>identity : Symbol(identity, Decl(negatedTypesPersistThroughInference.ts, 0, 0))
+>value : Symbol(value, Decl(negatedTypesPersistThroughInference.ts, 12, 24))
+
+    const contextual: number & not 0 = contextualIdentity(() => value);
+>contextual : Symbol(contextual, Decl(negatedTypesPersistThroughInference.ts, 17, 9))
+>contextualIdentity : Symbol(contextualIdentity, Decl(negatedTypesPersistThroughInference.ts, 0, 42))
+>value : Symbol(value, Decl(negatedTypesPersistThroughInference.ts, 12, 24))
+
+    return { constant, variable, inferred, contextual, values: [value] };
+>constant : Symbol(constant, Decl(negatedTypesPersistThroughInference.ts, 18, 12))
+>variable : Symbol(variable, Decl(negatedTypesPersistThroughInference.ts, 18, 22))
+>inferred : Symbol(inferred, Decl(negatedTypesPersistThroughInference.ts, 18, 32))
+>contextual : Symbol(contextual, Decl(negatedTypesPersistThroughInference.ts, 18, 42))
+>values : Symbol(values, Decl(negatedTypesPersistThroughInference.ts, 18, 54))
+>value : Symbol(value, Decl(negatedTypesPersistThroughInference.ts, 12, 24))
+}
+
+export function generic<T>(value: T) {
+>generic : Symbol(generic, Decl(negatedTypesPersistThroughInference.ts, 19, 1))
+>T : Symbol(T, Decl(negatedTypesPersistThroughInference.ts, 21, 24))
+>value : Symbol(value, Decl(negatedTypesPersistThroughInference.ts, 21, 27))
+>T : Symbol(T, Decl(negatedTypesPersistThroughInference.ts, 21, 24))
+
+    if (typeof value === "string") throw new Error();
+>value : Symbol(value, Decl(negatedTypesPersistThroughInference.ts, 21, 27))
+>Error : Symbol(Error, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2022.error.d.ts, --, --))
+
+    return identity(value);
+>identity : Symbol(identity, Decl(negatedTypesPersistThroughInference.ts, 0, 0))
+>value : Symbol(value, Decl(negatedTypesPersistThroughInference.ts, 21, 27))
+}
+
+export function notString(value: unknown) {
+>notString : Symbol(notString, Decl(negatedTypesPersistThroughInference.ts, 24, 1))
+>value : Symbol(value, Decl(negatedTypesPersistThroughInference.ts, 26, 26))
+
+    return typeof value !== "string";
+>value : Symbol(value, Decl(negatedTypesPersistThroughInference.ts, 26, 26))
+}
+
+export function notZero(value: number) {
+>notZero : Symbol(notZero, Decl(negatedTypesPersistThroughInference.ts, 28, 1))
+>value : Symbol(value, Decl(negatedTypesPersistThroughInference.ts, 30, 24))
+
+    return value !== 0;
+>value : Symbol(value, Decl(negatedTypesPersistThroughInference.ts, 30, 24))
+}
+
+export async function asyncNonString(value: unknown) {
+>asyncNonString : Symbol(asyncNonString, Decl(negatedTypesPersistThroughInference.ts, 32, 1))
+>value : Symbol(value, Decl(negatedTypesPersistThroughInference.ts, 34, 37))
+
+    if (typeof value === "string") throw new Error();
+>value : Symbol(value, Decl(negatedTypesPersistThroughInference.ts, 34, 37))
+>Error : Symbol(Error, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2022.error.d.ts, --, --))
+
+    return value;
+>value : Symbol(value, Decl(negatedTypesPersistThroughInference.ts, 34, 37))
+}
+
+export function* generatorNonString(value: unknown) {
+>generatorNonString : Symbol(generatorNonString, Decl(negatedTypesPersistThroughInference.ts, 37, 1))
+>value : Symbol(value, Decl(negatedTypesPersistThroughInference.ts, 39, 36))
+
+    if (typeof value === "string") throw new Error();
+>value : Symbol(value, Decl(negatedTypesPersistThroughInference.ts, 39, 36))
+>Error : Symbol(Error, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2022.error.d.ts, --, --))
+
+    yield value;
+>value : Symbol(value, Decl(negatedTypesPersistThroughInference.ts, 39, 36))
+
+    return value;
+>value : Symbol(value, Decl(negatedTypesPersistThroughInference.ts, 39, 36))
+}
+
+export function explicitAndInferred(value: unknown, explicit: not string, condition: boolean) {
+>explicitAndInferred : Symbol(explicitAndInferred, Decl(negatedTypesPersistThroughInference.ts, 43, 1))
+>value : Symbol(value, Decl(negatedTypesPersistThroughInference.ts, 45, 36))
+>explicit : Symbol(explicit, Decl(negatedTypesPersistThroughInference.ts, 45, 51))
+>condition : Symbol(condition, Decl(negatedTypesPersistThroughInference.ts, 45, 73))
+
+    if (typeof value === "string") throw new Error();
+>value : Symbol(value, Decl(negatedTypesPersistThroughInference.ts, 45, 36))
+>Error : Symbol(Error, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2022.error.d.ts, --, --))
+
+    return condition ? value : explicit;
+>condition : Symbol(condition, Decl(negatedTypesPersistThroughInference.ts, 45, 73))
+>value : Symbol(value, Decl(negatedTypesPersistThroughInference.ts, 45, 36))
+>explicit : Symbol(explicit, Decl(negatedTypesPersistThroughInference.ts, 45, 51))
+}
+
+export function inferredProperty(value: unknown) {
+>inferredProperty : Symbol(inferredProperty, Decl(negatedTypesPersistThroughInference.ts, 48, 1))
+>value : Symbol(value, Decl(negatedTypesPersistThroughInference.ts, 50, 33))
+
+    if (typeof value === "string") throw new Error();
+>value : Symbol(value, Decl(negatedTypesPersistThroughInference.ts, 50, 33))
+>Error : Symbol(Error, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2022.error.d.ts, --, --))
+
+    const narrowed = value;
+>narrowed : Symbol(narrowed, Decl(negatedTypesPersistThroughInference.ts, 52, 9))
+>value : Symbol(value, Decl(negatedTypesPersistThroughInference.ts, 50, 33))
+
+    return new class {
+        property = narrowed;
+>property : Symbol((Anonymous class).property, Decl(negatedTypesPersistThroughInference.ts, 53, 22))
+>narrowed : Symbol(narrowed, Decl(negatedTypesPersistThroughInference.ts, 52, 9))
+
+        constructor(public parameter = narrowed) {}
+>parameter : Symbol((Anonymous class).parameter, Decl(negatedTypesPersistThroughInference.ts, 55, 20))
+>narrowed : Symbol(narrowed, Decl(negatedTypesPersistThroughInference.ts, 52, 9))
+
+    }();
+}
+

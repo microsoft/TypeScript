@@ -30,7 +30,7 @@ class D {
 >data : string
 >data.join(" ") : string
 >data.join : (separator?: string) => string
->data : string[]
+>data : string[] & not string
 >join : (separator?: string) => string
 >" " : " "
     }
@@ -51,9 +51,9 @@ class D {
 >data : string
 >this.data.join(" ") : string
 >this.data.join : (separator?: string) => string
->this.data : string[]
+>this.data : string[] & not string
 >this : this
->data : string[]
+>data : string[] & not string
 >join : (separator?: string) => string
 >" " : " "
     }
