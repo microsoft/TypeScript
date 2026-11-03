@@ -24170,7 +24170,7 @@ func (n *TupleNormalizer) normalize(c *Checker, elementTypes []*Type, elementInf
 			} else if isTupleType(t) {
 				spreadTypes := c.getElementTypes(t)
 				if len(spreadTypes)+len(n.types) >= 10_000 {
-					message := core.IfElse(ast.IsPartOfTypeNode(c.currentNode),
+					message := core.IfElse(c.currentNode != nil && ast.IsPartOfTypeNode(c.currentNode),
 						diagnostics.Type_produces_a_tuple_type_that_is_too_large_to_represent,
 						diagnostics.Expression_produces_a_tuple_type_that_is_too_large_to_represent)
 					c.error(c.currentNode, message)
