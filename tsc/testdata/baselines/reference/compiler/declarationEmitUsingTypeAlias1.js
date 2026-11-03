@@ -91,3 +91,21 @@ exports.generic = void 0;
 const deep_types_1 = require("deep-types");
 const generic = (value) => (0, deep_types_1.mapped)(value);
 exports.generic = generic;
+
+
+//// [mapped.d.ts]
+import type { PublicMapped } from "deep-types";
+export declare const recursive: {
+    readonly value: string;
+    readonly children: readonly (typeof recursive)[];
+};
+export declare const finite: {
+    readonly value: string;
+};
+export declare const inlined: {
+    readonly value: string;
+    readonly children: readonly (typeof inlined)[];
+};
+export declare const named: PublicMapped<{
+    value: string;
+}>;

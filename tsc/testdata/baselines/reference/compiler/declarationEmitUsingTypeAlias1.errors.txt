@@ -1,8 +1,6 @@
 src/genericMapped.ts(3,14): error TS2883: The inferred type of 'generic' cannot be named without a reference to '_HelperObjectDeep' from '../node_modules/deep-types/source'. This is likely not portable. A type annotation is necessary.
 src/index.ts(3,14): error TS2883: The inferred type of 'foo' cannot be named without a reference to 'SomeType' from '../node_modules/some-dep/dist/inner'. This is likely not portable. A type annotation is necessary.
 src/index.ts(7,14): error TS2883: The inferred type of 'bar' cannot be named without a reference to 'Other' from '../node_modules/some-dep/dist/inner'. This is likely not portable. A type annotation is necessary.
-src/mapped.ts(8,14): error TS2883: The inferred type of 'recursive' cannot be named without a reference to '_HelperObjectDeep' from '../node_modules/deep-types/source'. This is likely not portable. A type annotation is necessary.
-src/mapped.ts(9,14): error TS2883: The inferred type of 'finite' cannot be named without a reference to '_HelperObjectDeep' from '../node_modules/deep-types/source'. This is likely not portable. A type annotation is necessary.
 
 
 ==== node_modules/some-dep/dist/inner.d.ts (0 errors) ====
@@ -55,7 +53,7 @@ src/mapped.ts(9,14): error TS2883: The inferred type of 'finite' cannot be named
     export type PublicMapped<T> = { readonly [K in keyof T]: T[K] };
     export declare function mapped<T>(value: T): _HelperObjectDeep<T>;
     
-==== src/mapped.ts (2 errors) ====
+==== src/mapped.ts (0 errors) ====
     import type { HelperDeep, InlineDeep, PublicMapped } from "deep-types";
     
     type Tree = { value: string; children: Tree[] };
@@ -64,11 +62,7 @@ src/mapped.ts(9,14): error TS2883: The inferred type of 'finite' cannot be named
     declare function publicMapped<T>(value: T): PublicMapped<T>;
     
     export const recursive = helper({} as Tree);
-                 ~~~~~~~~~
-!!! error TS2883: The inferred type of 'recursive' cannot be named without a reference to '_HelperObjectDeep' from '../node_modules/deep-types/source'. This is likely not portable. A type annotation is necessary.
     export const finite = helper({ value: "text" });
-                 ~~~~~~
-!!! error TS2883: The inferred type of 'finite' cannot be named without a reference to '_HelperObjectDeep' from '../node_modules/deep-types/source'. This is likely not portable. A type annotation is necessary.
     export const inlined = inline({} as Tree);
     export const named = publicMapped({ value: "text" });
     
