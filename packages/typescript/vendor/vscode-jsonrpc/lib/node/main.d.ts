@@ -46,12 +46,26 @@ export declare class StreamMessageWriter extends WriteableStreamMessageWriter {
 export declare function generateRandomPipeName(): string;
 export interface PipeTransport {
     onConnected(): Promise<[MessageReader, MessageWriter]>;
+    /**
+     * Closes the underlying server if a client hasn't connected yet. Callers
+     * should invoke this if they abandon the transport before `onConnected`
+     * resolves (for example because the server process failed to start) to
+     * avoid leaking the listening pipe.
+     */
+    close(): void;
 }
 export declare function createClientPipeTransport(pipeName: string, encoding?: RAL.MessageBufferEncoding): Promise<PipeTransport>;
 export declare function createServerPipeTransport(pipeName: string, encoding?: RAL.MessageBufferEncoding): [MessageReader, MessageWriter];
 export interface SocketTransport {
     port(): number;
     onConnected(): Promise<[MessageReader, MessageWriter]>;
+    /**
+     * Closes the underlying server if a client hasn't connected yet. Callers
+     * should invoke this if they abandon the transport before `onConnected`
+     * resolves (for example because the server process failed to start) to
+     * avoid leaking the listening socket.
+     */
+    close(): void;
 }
 export declare function createClientSocketTransport(port: number, encoding?: RAL.MessageBufferEncoding): Promise<SocketTransport>;
 export declare function createServerSocketTransport(port: number, encoding?: RAL.MessageBufferEncoding): [MessageReader, MessageWriter];

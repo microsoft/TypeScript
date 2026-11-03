@@ -6,6 +6,11 @@
 
 This npm module implements the base messaging protocol spoken between a VSCode language server and a VSCode language client.
 
+The Node.js entry point requires Node.js 14.17.0 or newer. The runtime abstraction layer exposes
+`RAL().crypto.randomUUID()` for cryptographically generated v4 UUIDs. The browser implementation
+uses native `crypto.randomUUID()` when available and falls back to `crypto.getRandomValues()`,
+including in non-secure contexts. Custom RAL implementations must provide this capability.
+
 The npm module can also be used standalone to establish a [JSON-RPC](http://www.jsonrpc.org/) channel between
 a client and a server. Below an example how to setup a JSON-RPC connection. First the client side.
 

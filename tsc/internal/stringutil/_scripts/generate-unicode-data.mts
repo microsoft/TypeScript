@@ -42,17 +42,17 @@ type SpecialCasingEntry = {
 };
 
 async function loadCodePoints(property: string): Promise<number[]> {
-    const module = await import(`${PACKAGE}/${property}/code-points.js`);
+    const module = await import(`${PACKAGE}/${property}/code-points.mjs`);
     return module.default as number[];
 }
 
 async function loadMapping(property: string): Promise<Map<number, number[]>> {
-    const module = await import(`${PACKAGE}/${property}/code-points.js`);
+    const module = await import(`${PACKAGE}/${property}/code-points.mjs`);
     return module.default as Map<number, number[]>;
 }
 
 async function loadSimpleMapping(property: string): Promise<Map<number, number>> {
-    const module = await import(`${PACKAGE}/${property}/code-points.js`);
+    const module = await import(`${PACKAGE}/${property}/code-points.mjs`);
     return module.default as Map<number, number>;
 }
 

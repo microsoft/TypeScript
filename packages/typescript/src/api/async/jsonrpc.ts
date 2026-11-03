@@ -62,6 +62,9 @@ function installRuntime(): void {
     if (installed) return;
     installed = true;
     RAL.install({
+        crypto: {
+            randomUUID: () => globalThis.crypto.randomUUID(),
+        },
         messageBuffer: {
             create: encoding => new MessageBuffer(encoding),
         },

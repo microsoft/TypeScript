@@ -84,7 +84,7 @@ class IPCMessageWriter extends api_1.AbstractMessageWriter {
         this.errorCount = 0;
         const eventEmitter = this.process;
         eventEmitter.on('error', (error) => this.fireError(error));
-        eventEmitter.on('close', () => this.fireClose);
+        eventEmitter.on('close', () => this.fireClose());
     }
     write(msg) {
         try {
@@ -119,7 +119,7 @@ class PortMessageReader extends api_1.AbstractMessageReader {
     constructor(port) {
         super();
         this.onData = new api_1.Emitter;
-        port.on('close', () => this.fireClose);
+        port.on('close', () => this.fireClose());
         port.on('error', (error) => this.fireError(error));
         port.on('message', (message) => {
             this.onData.fire(message);
@@ -227,7 +227,8 @@ function createClientPipeTransport(pipeName, encoding = 'utf-8') {
         server.listen(pipeName, () => {
             server.removeListener('error', reject);
             resolve({
-                onConnected: () => { return connected; }
+                onConnected: () => { return connected; },
+                close: () => { server.close(); }
             });
         });
     });
@@ -263,7 +264,8 @@ function createClientSocketTransport(port, encoding = 'utf-8') {
             const boundPort = address.port;
             resolve({
                 port: () => boundPort,
-                onConnected: () => { return connected; }
+                onConnected: () => { return connected; },
+                close: () => { server.close(); }
             });
         });
     });

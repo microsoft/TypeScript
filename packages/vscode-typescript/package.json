@@ -411,7 +411,7 @@
     },
     "dependencies": {
         "@vscode/extension-telemetry": "^1.5.2",
-        "vscode-languageclient": "^10.1.2",
+        "vscode-languageclient": "^11.0.0",
         "vscode-tas-client": "^0.3.3"
     },
     "devDependencies": {
