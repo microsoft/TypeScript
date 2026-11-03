@@ -8,6 +8,7 @@ import (
 
 	"github.com/microsoft/TypeScript/tsc/internal/ast"
 	"github.com/microsoft/TypeScript/tsc/internal/collections"
+	"github.com/microsoft/TypeScript/tsc/internal/contentmapper"
 	"github.com/microsoft/TypeScript/tsc/internal/core"
 	"github.com/microsoft/TypeScript/tsc/internal/debug"
 	"github.com/microsoft/TypeScript/tsc/internal/jsnum"
@@ -1342,14 +1343,19 @@ func (b *NodeBuilderImpl) moduleSpecifierResultForSymbol(result moduleSpecifierR
 	if importAttributesType != nil && b.moduleSpecifierResolvesToSymbol(result.specifier, importAttributesType, symbol) {
 		result.importAttributesType = importAttributesType
 	}
-	result.specifier = b.rewriteContentMappedModuleSpecifier(result.specifier)
+	result.specifier = b.rewriteContentMappedModuleSpecifier(result.specifier, ast.GetSourceFileOfModule(symbol))
 	return result
 }
 
-func (b *NodeBuilderImpl) rewriteContentMappedModuleSpecifier(specifier tspath.ModuleSpecifier) tspath.ModuleSpecifier {
+func (b *NodeBuilderImpl) rewriteContentMappedModuleSpecifier(specifier tspath.ModuleSpecifier, targetFile *ast.SourceFile) tspath.ModuleSpecifier {
 	if b.ctx.internalFlags&nodebuilder.InternalFlagsRewriteModuleSpecifiers != 0 && b.ch.compilerOptions.RewriteRelativeImportExtensions.IsTrue() {
 		rewrites := b.ctx.host.ContentMapperExtensionRewrites()
 		caseSensitivity := b.ctx.host.CaseSensitivity()
+		extension := ""
+		if targetFile != nil {
+			extension = b.ctx.host.ContentMapperExtensionForFileName(targetFile.FileName())
+		}
+		rewrites = contentmapper.RewritesForImport(rewrites, specifier, extension, caseSensitivity)
 		if specifier.ShouldRewriteExtension(rewrites, caseSensitivity) {
 			rewritten, _ := specifier.RewriteExtension(rewrites, caseSensitivity)
 			return rewritten

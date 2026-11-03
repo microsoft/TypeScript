@@ -4,6 +4,7 @@ import (
 	"context"
 	"errors"
 	"slices"
+	"strings"
 	"testing"
 
 	"github.com/microsoft/TypeScript/tsc/internal/ast"
@@ -64,6 +65,228 @@ func newContentMapperProgramWithOptions(t *testing.T, contentMapperProject conte
 		// Load files on the calling goroutine for deterministic diagnostics ordering.
 		SingleThreaded: core.TSTrue,
 	})
+}
+
+func TestContentMapperSymlinkedPackage(t *testing.T) {
+	t.Parallel()
+	for _, test := range []struct {
+		name             string
+		include          []string
+		wantFiltered     bool
+		preserveSymlinks bool
+	}{
+		{name: "logical include", include: []string{"node_modules/@scope/lib"}},
+		{name: "unchanged association"},
+		{name: "realpath mapper", include: []string{"packages/lib"}, wantFiltered: true},
+		{name: "logical then real include", include: []string{"node_modules/@scope/lib", "packages/lib"}, wantFiltered: true},
+		{name: "real then logical include", include: []string{"packages/lib", "node_modules/@scope/lib"}, wantFiltered: true},
+		{name: "preserved logical include", include: []string{"node_modules/@scope/lib"}, wantFiltered: true, preserveSymlinks: true},
+		{name: "preserved real include", include: []string{"packages/lib"}, preserveSymlinks: true},
+	} {
+		t.Run(test.name, func(t *testing.T) {
+			t.Parallel()
+			// A root and both package and relative imports must share the same loaded path.
+			dataPath := tspath.RootedFilePath("/project/packages/lib/data.vue")
+			directImport := "./packages/lib/data.vue"
+			if test.preserveSymlinks {
+				dataPath = "/project/node_modules/@scope/lib/data.vue"
+				directImport = "./node_modules/@scope/lib/data.vue"
+			}
+			fs := vfstest.FromMap(map[string]any{
+				"/project/main.ts":                   `import { value } from "@scope/lib/data.vue"; import { value as direct } from "` + directImport + `"; export { value, direct };`,
+				"/project/node_modules/@scope/lib":   vfstest.Symlink("/project/packages/lib"),
+				"/project/packages/lib/package.json": `{"name": "@scope/lib", "version": "1.0.0"}`,
+				"/project/packages/lib/data.vue":     "<template />",
+			}, tspath.CaseSensitive)
+			config := tsoptions.NewParsedCommandLine(&core.CompilerOptions{
+				NoLib: core.TSTrue, Module: core.ModuleKindPreserve, ModuleResolution: core.ModuleResolutionKindBundler,
+				PreserveSymlinks: core.BoolToTristate(test.preserveSymlinks),
+			}, []tspath.RootedFilePath{"/project/main.ts", dataPath}, nil, "/project", fs.CaseSensitivity())
+			fallback := &contentmapper.Mapper{Package: "fallback", Extensions: []string{".vue"}, Name: "fallback"}
+			config.ParsedConfig.ContentMappers = []*contentmapper.Mapper{fallback}
+			expectedMapper := fallback
+			if test.include != nil {
+				filtered := &contentmapper.Mapper{Package: "filtered", Extensions: []string{".vue"}, Include: test.include, Name: "filtered"}
+				config.ParsedConfig.ContentMappers = append(config.ParsedConfig.ContentMappers, filtered)
+				if test.wantFiltered {
+					expectedMapper = filtered
+				}
+			}
+			program := compiler.NewProgram(compiler.ProgramOptions{
+				Config: config,
+				Host: compiler.NewCompilerHost(fs, "/", nil, nil, fakeContentMapperHost{
+					transform: func(fileName, content string) (contentmapper.Result, error) {
+						return contentmapper.Result{Text: "export const value = 1;", VirtualExtension: ".ts", Mappings: spanmap.New(nil)}, nil
+					},
+				}),
+				SingleThreaded: core.TSTrue,
+			})
+			assert.Equal(t, len(program.SourceFiles()), 2)
+			assert.Equal(t, len(program.DuplicateSourceFiles()), 0)
+			file := program.GetSourceFile(dataPath)
+			assert.Assert(t, file != nil)
+			assert.Equal(t, file.Text(), "export const value = 1;")
+			assert.Equal(t, program.GetContentMapper(file), expectedMapper)
+			assert.Equal(t, program.ContentMapperExtensionForFileName(file.FileName()), ".vue")
+			assert.Equal(t, len(program.GetSemanticDiagnostics(context.Background(), program.GetSourceFile("/project/main.ts"))), 0)
+		})
+	}
+}
+
+func TestContentMapperRelativeSymlinkedDirectory(t *testing.T) {
+	t.Parallel()
+	// Root discovery and the relative import must both retain src/linked rather than its realpath.
+	for _, filtered := range []bool{false, true} {
+		t.Run(core.IfElse(filtered, "filtered", "extension only"), func(t *testing.T) {
+			t.Parallel()
+			fs := vfstest.FromMap(map[string]any{
+				"/project/tsconfig.json": `{
+					"compilerOptions": {"noLib": true, "module": "preserve", "moduleResolution": "bundler"},
+					"include": ["src"],
+					"contentMappers": [{"package": "mapper", "extensions": [".vue"]` + core.IfElse(filtered, `, "include": ["src"]`, "") + `}]
+				}`,
+				"/project/node_modules/mapper/package.json": `{
+					"name": "mapper", "typescript": {"contentMapper": {"exec": ["run"]}}
+				}`,
+				"/project/src/main.ts":     `import { value } from "./linked/data.vue"; export { value };`,
+				"/project/src/linked":      vfstest.Symlink("/project/shared"),
+				"/project/shared/data.vue": "<template />",
+			}, tspath.CaseSensitive)
+			config, errors := tsoptions.GetParsedCommandLineOfConfigFile(
+				"/project/tsconfig.json", &core.CompilerOptions{RunExternalCode: core.TSTrue}, nil, tsoptions.NewDefaultParseConfigHost(fs), nil,
+			)
+			assert.Equal(t, len(errors), 0)
+			assert.Equal(t, len(config.Errors), 0)
+			assert.Assert(t, slices.Contains(config.FileNames(), "/project/src/linked/data.vue"))
+			program := compiler.NewProgram(compiler.ProgramOptions{
+				Config: config,
+				Host: compiler.NewCompilerHost(fs, "/", nil, nil, fakeContentMapperHost{
+					transform: func(fileName, content string) (contentmapper.Result, error) {
+						return contentmapper.Result{Text: "export const value = 1;", VirtualExtension: ".ts", Mappings: spanmap.New(nil)}, nil
+					},
+				}),
+				SingleThreaded: core.TSTrue,
+			})
+			assert.Equal(t, len(program.SourceFiles()), 2)
+			assert.Equal(t, len(program.DuplicateSourceFiles()), 0)
+			assert.Assert(t, program.GetSourceFile("/project/shared/data.vue") == nil)
+			file := program.GetSourceFile("/project/src/linked/data.vue")
+			assert.Assert(t, file != nil)
+			assert.Equal(t, file.Text(), "export const value = 1;")
+			assert.Equal(t, program.GetContentMapper(file), config.ContentMappers()[0])
+			assert.Equal(t, len(program.GetSemanticDiagnostics(t.Context(), program.GetSourceFile("/project/src/main.ts"))), 0)
+		})
+	}
+}
+
+func TestContentMapperRuntimeRewrites(t *testing.T) {
+	t.Parallel()
+	for _, moduleKind := range []core.ModuleKind{core.ModuleKindPreserve, core.ModuleKindESNext, core.ModuleKindCommonJS} {
+		for _, fallback := range []bool{false, true} {
+			t.Run(moduleKind.String()+core.IfElse(fallback, "/fallback", "/filtered"), func(t *testing.T) {
+				t.Parallel()
+				fs := vfstest.FromMap(map[string]string{
+					"/project/main.ts": `
+							export { value } from "./claimed.toml";
+							export { other } from "./unclaimed.toml";
+							export const load = (path: string) => import(path);
+							export const loadClaimed = () => import("./claimed.toml");
+						`,
+					"/project/claimed.toml":        "export const value = 1;",
+					"/project/unclaimed.toml":      "export const other = 2;",
+					"/project/unclaimed.d.toml.ts": "export declare const other: 2;",
+				}, tspath.CaseSensitive)
+				config := tsoptions.NewParsedCommandLine(&core.CompilerOptions{
+					NoLib: core.TSTrue, Declaration: core.TSTrue, RewriteRelativeImportExtensions: core.TSTrue,
+					Module: moduleKind, ModuleResolution: core.ModuleResolutionKindBundler, OutDir: "/dist",
+					AllowArbitraryExtensions: core.TSTrue,
+				}, []tspath.RootedFilePath{"/project/main.ts"}, nil, "/project", fs.CaseSensitivity())
+				config.ParsedConfig.ContentMappers = []*contentmapper.Mapper{{
+					Package: "filtered", Name: "filtered", Extensions: []string{".toml"},
+					Include: []string{"claimed.toml"}, OutputExtensions: map[string]string{".toml": ".js"},
+				}}
+				if fallback {
+					config.ParsedConfig.ContentMappers = append(config.ParsedConfig.ContentMappers, &contentmapper.Mapper{
+						Package: "fallback", Name: "fallback", Extensions: []string{".toml"},
+						OutputExtensions: map[string]string{".toml": ".js"},
+					})
+				}
+				program := compiler.NewProgram(compiler.ProgramOptions{
+					Config: config,
+					Host: compiler.NewCompilerHost(fs, "/", nil, nil, fakeContentMapperHost{
+						transform: func(fileName, content string) (contentmapper.Result, error) {
+							return contentmapper.Result{Text: content, VirtualExtension: ".ts", Mappings: spanmap.New(nil)}, nil
+						},
+					}),
+					SingleThreaded: core.TSTrue,
+				})
+				program.Emit(context.Background(), compiler.EmitOptions{})
+				js, ok := fs.ReadFile("/dist/main.js")
+				assert.Assert(t, ok)
+				assert.Assert(t, strings.Contains(js, `"./claimed.js"`))
+				assert.Assert(t, strings.Contains(js, core.IfElse(fallback, `"./unclaimed.js"`, `"./unclaimed.toml"`)))
+				assert.Assert(t, strings.Contains(js, "__rewriteRelativeImportExtension(path"))
+				assert.Equal(t, strings.Contains(js, `".toml"`), fallback)
+				dts, ok := fs.ReadFile("/dist/main.d.ts")
+				assert.Assert(t, ok)
+				assert.Assert(t, strings.Contains(dts, `"./claimed.js"`))
+				assert.Assert(t, fs.FileExists("/dist/claimed.d.ts"))
+			})
+		}
+	}
+}
+
+func TestContentMapperResolvedTargetRewrites(t *testing.T) {
+	t.Parallel()
+	for _, test := range []struct {
+		name, target, include string
+		rootDirs              []tspath.RootedDirectoryPath
+		moduleSuffixes        []string
+	}{
+		{"rootDirs", "/project/generated/blob.toml", "generated", []tspath.RootedDirectoryPath{"/project/src", "/project/generated"}, nil},
+		{"moduleSuffixes", "/project/src/blob.native.toml", "**/*.native.toml", nil, []string{".native", ""}},
+	} {
+		for _, moduleKind := range []core.ModuleKind{core.ModuleKindPreserve, core.ModuleKindESNext, core.ModuleKindCommonJS} {
+			t.Run(test.name+"/"+moduleKind.String(), func(t *testing.T) {
+				t.Parallel()
+				fs := vfstest.FromMap(map[string]string{
+					"/project/src/main.ts": `
+						import { make } from "./blob.toml";
+						export { value } from "./blob.toml";
+						export const box = make();
+						export type BoxType = import("./blob.toml").Box;
+					`,
+					test.target: "export const value = 1; export class Box {} export function make() { return new Box(); }",
+				}, tspath.CaseSensitive)
+				config := tsoptions.NewParsedCommandLine(&core.CompilerOptions{
+					NoLib: core.TSTrue, Declaration: core.TSTrue, RewriteRelativeImportExtensions: core.TSTrue,
+					Module: moduleKind, ModuleResolution: core.ModuleResolutionKindBundler, OutDir: "/dist", RootDir: "/project",
+					RootDirs: test.rootDirs, ModuleSuffixes: test.moduleSuffixes,
+				}, []tspath.RootedFilePath{"/project/src/main.ts"}, nil, "/project", fs.CaseSensitivity())
+				config.ParsedConfig.ContentMappers = []*contentmapper.Mapper{{
+					Package: "mapper", Name: "mapper", Extensions: []string{".toml"}, Include: []string{test.include},
+					OutputExtensions: map[string]string{".toml": ".js"},
+				}}
+				program := compiler.NewProgram(compiler.ProgramOptions{
+					Config: config,
+					Host: compiler.NewCompilerHost(fs, "/", nil, nil, fakeContentMapperHost{
+						transform: func(fileName, content string) (contentmapper.Result, error) {
+							return contentmapper.Result{Text: content, VirtualExtension: ".ts", Mappings: spanmap.New(nil)}, nil
+						},
+					}),
+					SingleThreaded: core.TSTrue,
+				})
+				assert.Equal(t, len(program.GetSemanticDiagnostics(t.Context(), program.GetSourceFile("/project/src/main.ts"))), 0)
+				program.Emit(t.Context(), compiler.EmitOptions{})
+				for _, output := range []tspath.RootedFilePath{"/dist/src/main.js", "/dist/src/main.d.ts"} {
+					text, ok := fs.ReadFile(output)
+					assert.Assert(t, ok)
+					assert.Assert(t, strings.Contains(text, `"./blob.js"`), text)
+					assert.Assert(t, !strings.Contains(text, `"./blob.toml"`), text)
+				}
+			})
+		}
+	}
 }
 
 func TestContentMapperVirtualExtensionSetsImpliedNodeFormat(t *testing.T) {

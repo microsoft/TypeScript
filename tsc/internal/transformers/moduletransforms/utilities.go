@@ -2,6 +2,7 @@ package moduletransforms
 
 import (
 	"github.com/microsoft/TypeScript/tsc/internal/ast"
+	"github.com/microsoft/TypeScript/tsc/internal/contentmapper"
 	"github.com/microsoft/TypeScript/tsc/internal/core"
 	"github.com/microsoft/TypeScript/tsc/internal/outputpaths"
 	"github.com/microsoft/TypeScript/tsc/internal/printer"
@@ -19,11 +20,14 @@ func isDeclarationNameOfEnumOrNamespace(emitContext *printer.EmitContext, node *
 	return false
 }
 
-func rewriteModuleSpecifier(emitContext *printer.EmitContext, node *ast.Expression, compilerOptions *core.CompilerOptions, rewrites []tspath.ExtensionRewrite, caseSensitivity tspath.CaseSensitivity) *ast.Expression {
+func rewriteModuleSpecifier(emitContext *printer.EmitContext, node *ast.Expression, compilerOptions *core.CompilerOptions, rewrites []tspath.ExtensionRewrite, caseSensitivity tspath.CaseSensitivity, sourceFile *ast.SourceFile, getMapperExtension func(*ast.SourceFile, *ast.StringLiteralLike) string) *ast.Expression {
 	if node == nil || !ast.IsStringLiteral(node) || !compilerOptions.RewriteRelativeImportExtensions.IsTrue() {
 		return node
 	}
 	specifier := tspath.ToModuleSpecifier(node.Text())
+	if getMapperExtension != nil && specifier.IsRelative() && len(rewrites) > 0 {
+		rewrites = contentmapper.RewritesForImport(rewrites, specifier, getMapperExtension(sourceFile, node), caseSensitivity)
+	}
 	if !specifier.ShouldRewriteExtension(rewrites, caseSensitivity) {
 		return node
 	}
@@ -58,7 +62,8 @@ func createEmptyImports(factory *printer.NodeFactory) *ast.Statement {
 //     3- The containing SourceFile has an entry in renamedDependencies for the import as requested by some module loaders (e.g. System).
 //
 // Otherwise, a new StringLiteral node representing the module name will be returned.
-func getExternalModuleNameLiteral(factory *printer.NodeFactory, importNode *ast.Node /*ImportDeclaration | ExportDeclaration | ImportEqualsDeclaration | ImportCall*/, sourceFile *ast.SourceFile, host any /*EmitHost*/, resolver printer.EmitResolver, compilerOptions *core.CompilerOptions) *ast.StringLiteralNode {
+func getExternalModuleNameLiteral(emitContext *printer.EmitContext, importNode *ast.Node /*ImportDeclaration | ExportDeclaration | ImportEqualsDeclaration | ImportCall*/, sourceFile *ast.SourceFile, host any /*EmitHost*/, resolver printer.EmitResolver, compilerOptions *core.CompilerOptions) *ast.StringLiteralNode {
+	factory := emitContext.Factory
 	moduleName := ast.GetExternalModuleName(importNode)
 	if moduleName != nil && ast.IsStringLiteral(moduleName) {
 		name := tryGetModuleNameFromDeclaration(importNode, host, factory, resolver, compilerOptions)
@@ -68,6 +73,7 @@ func getExternalModuleNameLiteral(factory *printer.NodeFactory, importNode *ast.
 		if name == nil { // !!! propagate token flags (will produce new diffs)
 			name = factory.NewStringLiteral(moduleName.Text(), ast.TokenFlagsNone)
 		}
+		emitContext.SetOriginal(name, moduleName)
 		return name
 	}
 	return nil

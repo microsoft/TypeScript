@@ -9,6 +9,7 @@ import (
 
 	"github.com/microsoft/TypeScript/tsc/internal/ast"
 	"github.com/microsoft/TypeScript/tsc/internal/collections"
+	"github.com/microsoft/TypeScript/tsc/internal/contentmapper"
 	"github.com/microsoft/TypeScript/tsc/internal/core"
 	"github.com/microsoft/TypeScript/tsc/internal/packagejson"
 	"github.com/microsoft/TypeScript/tsc/internal/testutil"
@@ -33,6 +34,85 @@ func (i *resolutionTestInputs) GetCurrentDirectory() tspath.RootedDirectoryPath 
 
 type caseInsensitiveViewFS struct {
 	vfs.FS
+}
+
+func TestContentMapperFileMatching(t *testing.T) {
+	t.Parallel()
+	for _, sensitivity := range []tspath.CaseSensitivity{tspath.CaseSensitive, tspath.CaseInsensitive} {
+		t.Run(sensitivity.String(), func(t *testing.T) {
+			t.Parallel()
+			fs := vfstest.FromMap(map[string]string{
+				"/project/blob.toml":            "",
+				"/project/other.toml":           "",
+				"/project/other.d.toml.ts":      "",
+				"/project/not-mapped.toml":      "",
+				"/project/other.part.d.toml.ts": "",
+			}, sensitivity)
+			matcher := contentmapper.NewFileMatcher([]*contentmapper.Mapper{
+				{Extensions: []string{".toml"}, Include: []string{"blob.toml"}},
+				{Extensions: []string{".part.toml"}, Include: []string{"blob.part.toml"}},
+			}, "/project", sensitivity)
+			host := &resolutionTestInputs{fs: fs, cwd: "/project"}
+			resolver := NewResolver(ResolverOptions{
+				Host:            host,
+				CompilerOptions: &core.CompilerOptions{ModuleResolution: core.ModuleResolutionKindBundler},
+				ExtraExtensions: []string{".toml", ".part.toml"}, ContentMapperFileMatcher: matcher,
+			})
+			for _, rebound := range []*DefaultResolver{resolver, resolver.GetResolutionData().Clone().NewResolver(host)} {
+				mapped, _, err := rebound.ResolveModuleName("./blob.toml", "/project/main.ts", core.ModuleKindESNext, nil)
+				assert.NilError(t, err)
+				assert.Equal(t, mapped.ResolvedFileName, tspath.RootedFilePath("/project/blob.toml"))
+				assert.Assert(t, mapped.ResolvedUsingExtraExtensions)
+				declaration, _, err := rebound.ResolveModuleName("./other.toml", "/project/main.ts", core.ModuleKindESNext, nil)
+				assert.NilError(t, err)
+				assert.Equal(t, declaration.ResolvedFileName, tspath.RootedFilePath("/project/other.d.toml.ts"))
+				assert.Assert(t, !declaration.ResolvedUsingExtraExtensions)
+				composite, _, err := rebound.ResolveModuleName("./other.part.toml", "/project/main.ts", core.ModuleKindESNext, nil)
+				assert.NilError(t, err)
+				assert.Equal(t, composite.ResolvedFileName, tspath.RootedFilePath("/project/other.part.d.toml.ts"))
+				assert.Assert(t, !composite.ResolvedUsingExtraExtensions)
+				missing, _, err := rebound.ResolveModuleName("./not-mapped.toml", "/project/main.ts", core.ModuleKindESNext, nil)
+				assert.NilError(t, err)
+				assert.Assert(t, !missing.IsResolved())
+			}
+		})
+	}
+}
+
+func TestContentMapperModuleSuffixes(t *testing.T) {
+	t.Parallel()
+	for _, test := range []struct {
+		name, include, target string
+		mapped                bool
+	}{
+		{"suffixed claim", "**/*.native.toml", "/project/blob.native.toml", true},
+		{"unsuffixed claim", "**/blob.toml", "/project/blob.toml", true},
+		{"declaration fallback", "elsewhere", "/project/blob.d.toml.native.ts", false},
+	} {
+		t.Run(test.name, func(t *testing.T) {
+			t.Parallel()
+			fs := vfstest.FromMap(map[string]string{
+				"/project/blob.native.toml":      "",
+				"/project/blob.toml":             "",
+				"/project/blob.d.toml.native.ts": "",
+			}, tspath.CaseSensitive)
+			resolver := NewResolver(ResolverOptions{
+				Host: &resolutionTestInputs{fs: fs, cwd: "/project"},
+				CompilerOptions: &core.CompilerOptions{
+					ModuleResolution: core.ModuleResolutionKindBundler,
+					ModuleSuffixes:   []string{".native", ""},
+				},
+				ExtraExtensions: []string{".toml"},
+				ContentMapperFileMatcher: contentmapper.NewFileMatcher([]*contentmapper.Mapper{
+					{Extensions: []string{".toml"}, Include: []string{test.include}},
+				}, "/project", fs.CaseSensitivity()),
+			})
+			result, _, err := resolver.ResolveModuleName("./blob.toml", "/project/main.ts", core.ModuleKindESNext, nil)
+			assert.NilError(t, err)
+			assert.Equal(t, result.ResolvedFileName, tspath.RootedFilePathFromAbsolute(test.target))
+			assert.Equal(t, result.ResolvedUsingExtraExtensions, test.mapped)
+		})
+	}
 }
 
 func (caseInsensitiveViewFS) CaseSensitivity() tspath.CaseSensitivity {

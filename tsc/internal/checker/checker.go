@@ -16,6 +16,7 @@ import (
 	"github.com/microsoft/TypeScript/tsc/internal/ast"
 	"github.com/microsoft/TypeScript/tsc/internal/binder"
 	"github.com/microsoft/TypeScript/tsc/internal/collections"
+	"github.com/microsoft/TypeScript/tsc/internal/contentmapper"
 	"github.com/microsoft/TypeScript/tsc/internal/core"
 	"github.com/microsoft/TypeScript/tsc/internal/debug"
 	"github.com/microsoft/TypeScript/tsc/internal/diagnostics"
@@ -15611,6 +15612,7 @@ func (c *Checker) resolveExternalModule(
 				!tspath.IsDeclarationFileName(moduleReference) &&
 				(!ast.IsLiteralImportTypeNode(location) && !ast.IsPartOfTypeOnlyImportOrExportDeclaration(location) ||
 					checkDeclarationRewrite) {
+				rewrites = contentmapper.RewritesForImport(rewrites, specifier, c.program.ContentMapperExtensionForFileName(sourceFile.FileName()), caseSensitivity)
 				shouldRewrite := specifier.ShouldRewriteExtension(rewrites, caseSensitivity)
 				mappedSource := false
 				if sourceFile.ContentMapper() != "" {

@@ -152,7 +152,17 @@ func getScriptTransformers(emitResolver printer.EmitResolver, host printer.EmitH
 		EmitResolver:                   emitResolver,
 		GetEmitModuleFormatOfFile:      host.GetEmitModuleFormatOfFile,
 		ContentMapperExtensionRewrites: host.ContentMapperExtensionRewrites(),
-		CaseSensitivity:                host.CaseSensitivity(),
+		ContentMapperExtensionForImport: func(file *ast.SourceFile, specifier *ast.StringLiteralLike) string {
+			specifier = emitContext.ParseNode(specifier)
+			if specifier == nil {
+				return ""
+			}
+			if resolved := host.GetResolvedModuleFromModuleSpecifier(file, specifier); resolved != nil {
+				return host.ContentMapperExtensionForFileName(resolved.ResolvedFileName)
+			}
+			return ""
+		},
+		CaseSensitivity: host.CaseSensitivity(),
 	}
 
 	// transform TypeScript syntax
