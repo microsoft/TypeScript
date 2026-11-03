@@ -194,8 +194,8 @@ function f5<T, K extends keyof T>(obj: T | undefined, key: K) {
 >obj : T | undefined
 
         obj[key];
->obj[key] : NonNullable<T>[K]
->obj : NonNullable<T>
+>obj[key] : (T & {} & not "" & not 0 & not 0n & not false)[K]
+>obj : T & {} & not "" & not 0 & not 0n & not false
 >key : K
     }
 }

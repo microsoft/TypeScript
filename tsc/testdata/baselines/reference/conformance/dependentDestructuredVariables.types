@@ -198,7 +198,7 @@ function f20({ kind, payload }: Action2) {
             payload.toFixed();
 >payload.toFixed() : string
 >payload.toFixed : (fractionDigits?: number) => string
->payload : number
+>payload : number & not 0
 >toFixed : (fractionDigits?: number) => string
         }
         if (kind === 'B') {
@@ -209,7 +209,7 @@ function f20({ kind, payload }: Action2) {
             payload.toUpperCase();
 >payload.toUpperCase() : string
 >payload.toUpperCase : () => string
->payload : string
+>payload : string & not ""
 >toUpperCase : () => string
         }
     }
@@ -235,7 +235,7 @@ function f21(action: Action2) {
             payload.toFixed();
 >payload.toFixed() : string
 >payload.toFixed : (fractionDigits?: number) => string
->payload : number
+>payload : number & not 0
 >toFixed : (fractionDigits?: number) => string
         }
         if (kind === 'B') {
@@ -246,7 +246,7 @@ function f21(action: Action2) {
             payload.toUpperCase();
 >payload.toUpperCase() : string
 >payload.toUpperCase : () => string
->payload : string
+>payload : string & not ""
 >toUpperCase : () => string
         }
     }
@@ -274,7 +274,7 @@ function f22(action: Action2) {
             payload.toFixed();
 >payload.toFixed() : string
 >payload.toFixed : (fractionDigits?: number) => string
->payload : number
+>payload : number & not 0
 >toFixed : (fractionDigits?: number) => string
         }
         if (kind === 'B') {
@@ -285,7 +285,7 @@ function f22(action: Action2) {
             payload.toUpperCase();
 >payload.toUpperCase() : string
 >payload.toUpperCase : () => string
->payload : string
+>payload : string & not ""
 >toUpperCase : () => string
         }
     }
@@ -308,7 +308,7 @@ function f23({ kind, payload }: Action2) {
                 payload.toFixed();
 >payload.toFixed() : string
 >payload.toFixed : (fractionDigits?: number) => string
->payload : number
+>payload : number & not 0
 >toFixed : (fractionDigits?: number) => string
 
                 break;
@@ -318,7 +318,7 @@ function f23({ kind, payload }: Action2) {
                 payload.toUpperCase();
 >payload.toUpperCase() : string
 >payload.toUpperCase : () => string
->payload : string
+>payload : string & not ""
 >toUpperCase : () => string
 
                 break;

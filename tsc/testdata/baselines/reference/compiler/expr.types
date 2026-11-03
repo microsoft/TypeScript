@@ -60,7 +60,7 @@ function f() {
     n&&n;
 >n&&n : number
 >n : number
->n : number
+>n : number & not 0
 
     n&&e;
 >n&&e : 0 | E
@@ -90,7 +90,7 @@ function f() {
     s&&s;
 >s&&s : string
 >s : string
->s : string
+>s : string & not ""
 
     s&&e;
 >s&&e : "" | E
@@ -210,7 +210,7 @@ function f() {
     n||n;
 >n||n : number
 >n : number
->n : number
+>n : 0
 
     n||e;
 >n||e : number
@@ -240,7 +240,7 @@ function f() {
     s||s;
 >s||s : string
 >s : string
->s : string
+>s : ""
 
     s||e;
 >s||e : string | E

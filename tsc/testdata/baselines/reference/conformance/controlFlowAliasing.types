@@ -835,9 +835,9 @@ function f40(obj: { kind: 'foo', foo?: string } | { kind: 'bar', bar?: number })
 
         let t: string = obj.foo;
 >t : string
->obj.foo : string
+>obj.foo : string & not ""
 >obj : { kind: 'foo'; foo?: string; }
->foo : string
+>foo : string & not ""
     }
 }
 

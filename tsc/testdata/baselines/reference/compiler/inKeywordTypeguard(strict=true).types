@@ -473,7 +473,7 @@ function f1(x: unknown) {
 >x : unknown
 >"a" in x : boolean
 >"a" : "a"
->x : {}
+>x : {} & not "" & not 0 & not 0n & not false
 
         x.a;
 >x.a : unknown
@@ -486,7 +486,7 @@ function f1(x: unknown) {
 >x : unknown
 >typeof x === "object" : boolean
 >typeof x : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
->x : {}
+>x : {} & not "" & not 0 & not 0n & not false
 >"object" : "object"
 >"a" in x : boolean
 >"a" : "a"
@@ -505,7 +505,7 @@ function f1(x: unknown) {
 >x : unknown
 >typeof x === "object" : boolean
 >typeof x : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
->x : {}
+>x : {} & not "" & not 0 & not 0n & not false
 >"object" : "object"
 >"a" in x : boolean
 >"a" : "a"
@@ -597,20 +597,20 @@ function f3<T>(x: T) {
 >x : T
 >"a" in x : boolean
 >"a" : "a"
->x : NonNullable<T>
+>x : T & {} & not "" & not 0 & not 0n & not false
 
         x.a;
 >x.a : unknown
->x : T & Record<"a", unknown>
+>x : T & not "" & not 0 & not 0n & not false & Record<"a", unknown>
 >a : unknown
     }
     if (x && typeof x === "object" && "a" in x) {
 >x && typeof x === "object" && "a" in x : boolean
 >x && typeof x === "object" : boolean
->x : T
+>x : (T & undefined) | (T & null) | (T & {})
 >typeof x === "object" : boolean
 >typeof x : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
->x : NonNullable<T>
+>x : T & {} & not "" & not 0 & not 0n & not false
 >"object" : "object"
 >"a" in x : boolean
 >"a" : "a"
@@ -626,10 +626,10 @@ function f3<T>(x: T) {
 >x && typeof x === "object" && "a" in x && "b" in x : boolean
 >x && typeof x === "object" && "a" in x : boolean
 >x && typeof x === "object" : boolean
->x : T
+>x : (T & undefined) | (T & null) | (T & {})
 >typeof x === "object" : boolean
 >typeof x : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
->x : NonNullable<T>
+>x : T & {} & not "" & not 0 & not 0n & not false
 >"object" : "object"
 >"a" in x : boolean
 >"a" : "a"
@@ -1030,7 +1030,7 @@ function foo<A>(value: A) {
 >value : A
 >"object" : "object"
 >value !== null : boolean
->value : (A & null) | (A & object)
+>value : A & (object | null)
 >"prop" in value : boolean
 >"prop" : "prop"
 >value : A & object
@@ -1070,7 +1070,7 @@ function isHTMLTable<T extends object | null>(table: T): boolean {
 >table : T
 >'html' in table : boolean
 >'html' : "html"
->table : NonNullable<T>
+>table : T & {}
 }
 
 // Repro from #51549

@@ -552,7 +552,7 @@ const main = () => {
 
             hoge.length;
 >hoge.length : number
->hoge : string
+>hoge : string & not ""
 >length : number
         }
         return;

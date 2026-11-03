@@ -22,9 +22,9 @@ inKeywordTypeguard.ts(82,39): error TS2339: Property 'b' does not exist on type 
 inKeywordTypeguard.ts(84,39): error TS2339: Property 'a' does not exist on type 'B'.
 inKeywordTypeguard.ts(94,26): error TS2339: Property 'a' does not exist on type 'never'.
 inKeywordTypeguard.ts(155,16): error TS2322: Type 'unknown' is not assignable to type 'object'.
-inKeywordTypeguard.ts(158,21): error TS2322: Type 'unknown' is not assignable to type 'object'.
+inKeywordTypeguard.ts(158,21): error TS2322: Type 'not "" & not 0 & not 0n & not false' is not assignable to type 'object'.
 inKeywordTypeguard.ts(183,16): error TS2322: Type 'T' is not assignable to type 'object'.
-inKeywordTypeguard.ts(186,21): error TS2322: Type 'T' is not assignable to type 'object'.
+inKeywordTypeguard.ts(186,21): error TS2322: Type 'T & not "" & not 0 & not 0n & not false' is not assignable to type 'object'.
 
 
 ==== inKeywordTypeguard.ts (21 errors) ====
@@ -229,7 +229,7 @@ inKeywordTypeguard.ts(186,21): error TS2322: Type 'T' is not assignable to type 
         }
         if (x && "a" in x) {
                         ~
-!!! error TS2322: Type 'unknown' is not assignable to type 'object'.
+!!! error TS2322: Type 'not "" & not 0 & not 0n & not false' is not assignable to type 'object'.
             x.a;
         }
         if (x && typeof x === "object" && "a" in x) {
@@ -262,7 +262,7 @@ inKeywordTypeguard.ts(186,21): error TS2322: Type 'T' is not assignable to type 
         }
         if (x && "a" in x) {
                         ~
-!!! error TS2322: Type 'T' is not assignable to type 'object'.
+!!! error TS2322: Type 'T & not "" & not 0 & not 0n & not false' is not assignable to type 'object'.
 !!! related TS2208 inKeywordTypeguard.ts:182:13: This type parameter might need an `extends object` constraint.
             x.a;
         }

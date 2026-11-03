@@ -311,7 +311,7 @@ function testUnionExplicitDefault(x: Basic) {
         default: a1(x); return;
 >a1(x) : string | object | undefined
 >a1 : (x: string | object | undefined) => string | object | undefined
->x : string | object | undefined
+>x : string | (object & not Function) | undefined
     }
 }
 
@@ -350,7 +350,7 @@ function testUnionImplicitDefault(x: Basic) {
     return a1(x);
 >a1(x) : string | object | undefined
 >a1 : (x: string | object | undefined) => string | object | undefined
->x : string | object | undefined
+>x : string | (object & not Function) | undefined
 }
 
 function testExtendsExplicitDefault<T extends Basic>(x: T) {
@@ -388,7 +388,7 @@ function testExtendsExplicitDefault<T extends Basic>(x: T) {
         default: assertAll(x); return;
 >assertAll(x) : Basic
 >assertAll : (x: Basic) => Basic
->x : string | object | undefined
+>x : string | (object & not Function) | undefined
 
     }
 }
@@ -428,7 +428,7 @@ function testExtendsImplicitDefault<T extends Basic>(x: T) {
     return assertAll(x);
 >assertAll(x) : Basic
 >assertAll : (x: Basic) => Basic
->x : string | object | undefined
+>x : string | (object & not Function) | undefined
 }
 
 type L = (x: number) => string;
@@ -866,7 +866,7 @@ function narrowingNarrows(x: {} | undefined) {
 
         default: const _y: {} = x; return;
 >_y : {}
->x : {} & not number & not false & not true & not symbol & not string
+>x : {} & not number & not false & not true & not Function & not symbol & not string
     }
 }
 

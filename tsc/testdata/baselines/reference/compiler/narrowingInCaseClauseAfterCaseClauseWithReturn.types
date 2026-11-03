@@ -20,7 +20,7 @@ function test1(arg: string | undefined) {
 >arg.toUpperCase() === "A" : boolean
 >arg.toUpperCase() : string
 >arg.toUpperCase : () => string
->arg : string
+>arg : string & not ""
 >toUpperCase : () => string
 >"A" : "A"
 
@@ -31,7 +31,7 @@ function test1(arg: string | undefined) {
 >arg.toUpperCase() === "B" : boolean
 >arg.toUpperCase() : string
 >arg.toUpperCase : () => string
->arg : string
+>arg : string & not ""
 >toUpperCase : () => string
 >"B" : "B"
 
@@ -39,7 +39,7 @@ function test1(arg: string | undefined) {
 >arg.toUpperCase() === "C" : boolean
 >arg.toUpperCase() : string
 >arg.toUpperCase : () => string
->arg : string
+>arg : string & not ""
 >toUpperCase : () => string
 >"C" : "C"
 
@@ -47,7 +47,7 @@ function test1(arg: string | undefined) {
 >arg.toUpperCase() === "D" : boolean
 >arg.toUpperCase() : string
 >arg.toUpperCase : () => string
->arg : string
+>arg : string & not ""
 >toUpperCase : () => string
 >"D" : "D"
 
@@ -76,7 +76,7 @@ function test2(arg: string | undefined) {
 >arg.toUpperCase() === "A" : boolean
 >arg.toUpperCase() : string
 >arg.toUpperCase : () => string
->arg : string
+>arg : string & not ""
 >toUpperCase : () => string
 >"A" : "A"
 
@@ -84,7 +84,7 @@ function test2(arg: string | undefined) {
 >arg.toUpperCase() === "B" : boolean
 >arg.toUpperCase() : string
 >arg.toUpperCase : () => string
->arg : string
+>arg : string & not ""
 >toUpperCase : () => string
 >"B" : "B"
 
@@ -92,7 +92,7 @@ function test2(arg: string | undefined) {
 >arg.toUpperCase() === "C" : boolean
 >arg.toUpperCase() : string
 >arg.toUpperCase : () => string
->arg : string
+>arg : string & not ""
 >toUpperCase : () => string
 >"C" : "C"
 
@@ -103,7 +103,7 @@ function test2(arg: string | undefined) {
 >arg.toUpperCase() === "D" : boolean
 >arg.toUpperCase() : string
 >arg.toUpperCase : () => string
->arg : string
+>arg : string & not ""
 >toUpperCase : () => string
 >"D" : "D"
 

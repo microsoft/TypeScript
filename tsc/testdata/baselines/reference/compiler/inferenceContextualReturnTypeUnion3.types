@@ -42,7 +42,7 @@ const soonFrozenObjectDeprecation = <T extends object>(
 >note && `\n${note}` : string
 >note : string
 >`\n${note}` : string
->note : string
+>note : string & not ""
 
   }`;
   return new Proxy(obj, {

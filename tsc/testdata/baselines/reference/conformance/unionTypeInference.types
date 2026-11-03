@@ -233,7 +233,7 @@ async function fun<T>(deepPromised: DeepPromised<T>) {
 >await fun(awaitedValue) : void
 >fun(awaitedValue) : Promise<void>
 >fun : <T>(deepPromised: DeepPromised<T>) => Promise<void>
->awaitedValue : {} | ({ [containsPromises]?: true; } & {})
+>awaitedValue : ({} | ({ [containsPromises]?: true; } & {})) & not undefined & not null & not "" & not 0 & not 0n & not false
     }
 }
 

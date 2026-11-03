@@ -41,7 +41,7 @@ function f2<T>(x: (T & F) | T & string) {
     }
     else {
         x;
->x : T & string
+>x : T & string & not Function
     }
 }
 

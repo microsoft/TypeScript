@@ -1704,9 +1704,9 @@ function f30(o: Thing | undefined) {
 >foo : string | number | undefined
 
         o.foo;
->o.foo : string | number
+>o.foo : (string & not "") | (number & not 0)
 >o : Thing
->foo : string | number
+>foo : (string & not "") | (number & not 0)
     }
     if (!!true) {
 >!!true : true

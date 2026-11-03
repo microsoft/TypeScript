@@ -27,7 +27,7 @@ func (ft *FlowType) isNil() bool {
 
 func (c *Checker) getReducedFlowType(t *Type) *Type {
 	if t.flags&TypeFlagsUnion != 0 {
-		return c.getReducedType(t)
+		return c.recombineUnknownType(c.getReducedType(t))
 	}
 	return t
 }
@@ -117,7 +117,7 @@ func (c *Checker) getFlowTypeOfReferenceEx(reference *ast.Node, declaredType *Ty
 	} else {
 		resultType = c.finalizeEvolvingArrayType(evolvedType)
 	}
-	if resultType == c.unreachableNeverType || reference.Parent != nil && ast.IsNonNullExpression(reference.Parent) && resultType.flags&TypeFlagsNever == 0 && c.getTypeWithFacts(resultType, TypeFactsNEUndefinedOrNull).flags&TypeFlagsNever != 0 {
+	if resultType == c.unreachableNeverType || reference.Parent != nil && ast.IsNonNullExpression(reference.Parent) && resultType.flags&TypeFlagsNever == 0 && c.getNonNullableType(resultType).flags&TypeFlagsNever != 0 {
 		return declaredType
 	}
 	return resultType
@@ -340,8 +340,8 @@ func (c *Checker) narrowTypeByTypePredicate(f *FlowState, t *Type, predicate *Ty
 			if c.isMatchingReference(f.reference, predicateArgument) {
 				return c.getNarrowedType(t, predicate.t, assumeTrue, false /*checkDerived*/)
 			}
-			if c.strictNullChecks && c.optionalChainContainsReference(predicateArgument, f.reference) && (assumeTrue && !c.hasTypeFacts(predicate.t, TypeFactsEQUndefined) || !assumeTrue && everyType(predicate.t, c.IsNullableType)) {
-				t = c.getAdjustedTypeWithFacts(t, TypeFactsNEUndefinedOrNull)
+			if c.strictNullChecks && c.optionalChainContainsReference(predicateArgument, f.reference) && (assumeTrue && c.isIntersectionEmpty(predicate.t, c.undefinedType) || !assumeTrue && everyType(predicate.t, c.IsNullableType)) {
+				t = c.getNonNullableType(t)
 			}
 			access := c.getDiscriminantPropertyAccess(f, predicateArgument, t)
 			if access != nil {
@@ -434,12 +434,12 @@ func (c *Checker) narrowType(f *FlowState, t *Type, expr *ast.Node, assumeTrue b
 
 func (c *Checker) narrowTypeByOptionality(f *FlowState, t *Type, expr *ast.Node, assumePresent bool) *Type {
 	if c.isMatchingReference(f.reference, expr) {
-		return c.getAdjustedTypeWithFacts(t, core.IfElse(assumePresent, TypeFactsNEUndefinedOrNull, TypeFactsEQUndefinedOrNull))
+		return c.narrowTypeByNullish(t, assumePresent)
 	}
 	access := c.getDiscriminantPropertyAccess(f, expr, t)
 	if access != nil {
 		return c.narrowTypeByDiscriminant(t, access, func(t *Type) *Type {
-			return c.getTypeWithFacts(t, core.IfElse(assumePresent, TypeFactsNEUndefinedOrNull, TypeFactsEQUndefinedOrNull))
+			return c.narrowTypeByNullish(t, assumePresent)
 		})
 	}
 	return t
@@ -447,15 +447,15 @@ func (c *Checker) narrowTypeByOptionality(f *FlowState, t *Type, expr *ast.Node,
 
 func (c *Checker) narrowTypeByTruthiness(f *FlowState, t *Type, expr *ast.Node, assumeTrue bool) *Type {
 	if c.isMatchingReference(f.reference, expr) {
-		return c.getAdjustedTypeWithFacts(t, core.IfElse(assumeTrue, TypeFactsTruthy, TypeFactsFalsy))
+		return c.narrowTypeByTruthValue(t, assumeTrue)
 	}
 	if c.strictNullChecks && assumeTrue && c.optionalChainContainsReference(expr, f.reference) {
-		t = c.getAdjustedTypeWithFacts(t, TypeFactsNEUndefinedOrNull)
+		t = c.getNonNullableType(t)
 	}
 	access := c.getDiscriminantPropertyAccess(f, expr, t)
 	if access != nil {
 		return c.narrowTypeByDiscriminant(t, access, func(t *Type) *Type {
-			return c.getTypeWithFacts(t, core.IfElse(assumeTrue, TypeFactsTruthy, TypeFactsFalsy))
+			return c.narrowTypeByTruthValue(t, assumeTrue)
 		})
 	}
 	return t
@@ -479,7 +479,7 @@ func (c *Checker) narrowTypeByCallExpression(f *FlowState, t *Type, callExpressi
 		if c.isMatchingReference(f.reference.Expression(), c.getReferenceCandidate(callAccess.Expression())) && ast.IsIdentifier(callAccess.Name()) && callAccess.Name().Text() == "hasOwnProperty" && len(callExpression.Arguments()) == 1 {
 			argument := callExpression.Arguments()[0]
 			if accessedName, ok := c.getAccessedPropertyName(f.reference); ok && ast.IsStringLiteralLike(argument) && accessedName == argument.Text() {
-				return c.getTypeWithFacts(t, core.IfElse(assumeTrue, TypeFactsNEUndefined, TypeFactsEQUndefined))
+				return c.narrowTypeByTypeofName(t, "undefined", !assumeTrue)
 			}
 		}
 	}
@@ -544,7 +544,7 @@ func (c *Checker) narrowTypeByBinaryExpression(f *FlowState, t *Type, expr *ast.
 			leftType := c.getTypeOfExpression(expr.Left)
 			if isTypeUsableAsPropertyName(leftType) {
 				if accessedName, ok := c.getAccessedPropertyName(f.reference); ok && accessedName == getPropertyNameFromType(leftType) {
-					return c.getTypeWithFacts(t, core.IfElse(assumeTrue, TypeFactsNEUndefined, TypeFactsEQUndefined))
+					return c.narrowTypeByTypeofName(t, "undefined", !assumeTrue)
 				}
 			}
 		}
@@ -609,16 +609,16 @@ func (c *Checker) narrowTypeByEquality(t *Type, operator ast.Kind, value *ast.No
 		if !c.strictNullChecks {
 			return t
 		}
-		var facts TypeFacts
-		switch {
-		case doubleEquals:
-			facts = core.IfElse(assumeTrue, TypeFactsEQUndefinedOrNull, TypeFactsNEUndefinedOrNull)
-		case valueType.flags&TypeFlagsNull != 0:
-			facts = core.IfElse(assumeTrue, TypeFactsEQNull, TypeFactsNENull)
-		default:
-			facts = core.IfElse(assumeTrue, TypeFactsEQUndefined, TypeFactsNEUndefined)
+		if doubleEquals {
+			return c.narrowTypeByNullish(t, !assumeTrue)
 		}
-		return c.getAdjustedTypeWithFacts(t, facts)
+		if assumeTrue {
+			return c.getIntersectionType([]*Type{t, valueType})
+		}
+		if valueType.flags&TypeFlagsUndefined != 0 {
+			return c.getTypeWithoutUndefined(t)
+		}
+		return c.getTypeWithoutNullable(t, c.nullType)
 	}
 	if assumeTrue {
 		if !doubleEquals && c.typeIsTopInclusive(t) {
@@ -672,7 +672,7 @@ func (c *Checker) narrowTypeByTypeof(f *FlowState, t *Type, typeOfExpr *ast.Type
 	target := c.getReferenceCandidate(typeOfExpr.Expression)
 	if !c.isMatchingReference(f.reference, target) {
 		if c.strictNullChecks && c.optionalChainContainsReference(target, f.reference) && assumeTrue == (literal.Text() != "undefined") {
-			t = c.getAdjustedTypeWithFacts(t, TypeFactsNEUndefinedOrNull)
+			t = c.getNonNullableType(t)
 		}
 		propertyAccess := c.getDiscriminantPropertyAccess(f, target, t)
 		if propertyAccess != nil {
@@ -685,107 +685,8 @@ func (c *Checker) narrowTypeByTypeof(f *FlowState, t *Type, typeOfExpr *ast.Type
 	return c.narrowTypeByLiteralExpression(t, literal, assumeTrue)
 }
 
-var typeofNEFacts = map[string]TypeFacts{
-	"string":    TypeFactsTypeofNEString,
-	"number":    TypeFactsTypeofNENumber,
-	"bigint":    TypeFactsTypeofNEBigInt,
-	"boolean":   TypeFactsTypeofNEBoolean,
-	"symbol":    TypeFactsTypeofNESymbol,
-	"undefined": TypeFactsNEUndefined,
-	"object":    TypeFactsTypeofNEObject,
-	"function":  TypeFactsTypeofNEFunction,
-}
-
 func (c *Checker) narrowTypeByLiteralExpression(t *Type, literal *ast.LiteralExpression, assumeTrue bool) *Type {
-	if assumeTrue {
-		return c.narrowTypeByTypeName(t, literal.Text())
-	}
-	facts, ok := typeofNEFacts[literal.Text()]
-	if !ok {
-		facts = TypeFactsTypeofNEHostObject
-	}
-	result := c.getAdjustedTypeWithFacts(t, facts)
-	if impliedType := c.getImpliedTypeForTypeofNegation(literal.Text()); impliedType != nil {
-		result = c.introduceNegationIntoNarrowedType(result, impliedType)
-	}
-	return result
-}
-
-// getImpliedTypeForTypeofNegation returns the primitive type that a value is known *not* to be in the
-// false branch of a 'typeof x === "..."' check, or nil for typeof names whose negation isn't a simple
-// primitive. It is used to introduce negated types (e.g. 'not string') during control flow narrowing.
-func (c *Checker) getImpliedTypeForTypeofNegation(typeName string) *Type {
-	switch typeName {
-	case "string":
-		return c.stringType
-	case "number":
-		return c.numberType
-	case "bigint":
-		return c.bigintType
-	case "boolean":
-		return c.booleanType
-	case "symbol":
-		return c.esSymbolType
-	case "undefined":
-		return c.undefinedType
-	}
-	return nil
-}
-
-func (c *Checker) narrowTypeByTypeName(t *Type, typeName string) *Type {
-	switch typeName {
-	case "string":
-		return c.narrowTypeByTypeFacts(t, c.stringType, TypeFactsTypeofEQString)
-	case "number":
-		return c.narrowTypeByTypeFacts(t, c.numberType, TypeFactsTypeofEQNumber)
-	case "bigint":
-		return c.narrowTypeByTypeFacts(t, c.bigintType, TypeFactsTypeofEQBigInt)
-	case "boolean":
-		return c.narrowTypeByTypeFacts(t, c.booleanType, TypeFactsTypeofEQBoolean)
-	case "symbol":
-		return c.narrowTypeByTypeFacts(t, c.esSymbolType, TypeFactsTypeofEQSymbol)
-	case "object":
-		if t.flags&TypeFlagsAny != 0 {
-			return t
-		}
-		return c.getUnionType([]*Type{c.narrowTypeByTypeFacts(t, c.nonPrimitiveType, TypeFactsTypeofEQObject), c.narrowTypeByTypeFacts(t, c.nullType, TypeFactsEQNull)})
-	case "function":
-		if t.flags&TypeFlagsAny != 0 {
-			return t
-		}
-		return c.narrowTypeByTypeFacts(t, c.globalFunctionType, TypeFactsTypeofEQFunction)
-	case "undefined":
-		return c.narrowTypeByTypeFacts(t, c.undefinedType, TypeFactsEQUndefined)
-	}
-	return c.narrowTypeByTypeFacts(t, c.nonPrimitiveType, TypeFactsTypeofEQHostObject)
-}
-
-func (c *Checker) narrowTypeByTypeFacts(t *Type, impliedType *Type, facts TypeFacts) *Type {
-	return c.mapType(t, func(t *Type) *Type {
-		if t.flags&TypeFlagsIntersection != 0 && containsFreshNegatedType(t) {
-			return c.getIntersectionType(append(core.Map(t.Types(), func(t *Type) *Type {
-				if isFreshNegatedType(t) {
-					if c.typesAreInDisjointDomainsIncludingObjects(impliedType, t.AsNegatedType().baseType) {
-						return c.unknownType
-					}
-					return t
-				}
-				return c.narrowTypeByTypeFacts(t, impliedType, facts)
-			}), impliedType))
-		}
-		switch {
-		case c.isTypeRelatedTo(t, impliedType, c.strictSubtypeRelation):
-			if c.hasTypeFacts(t, facts) {
-				return t
-			}
-			return c.neverType
-		case c.isTypeSubtypeOf(impliedType, t):
-			return impliedType
-		case c.hasTypeFacts(t, facts):
-			return c.getIntersectionType([]*Type{t, impliedType})
-		}
-		return c.neverType
-	})
+	return c.narrowTypeByTypeofName(t, literal.Text(), assumeTrue)
 }
 
 func (c *Checker) narrowTypeByDiscriminantProperty(t *Type, access *ast.Node, operator ast.Kind, value *ast.Node, assumeTrue bool) *Type {
@@ -825,7 +726,7 @@ func (c *Checker) narrowTypeByDiscriminant(t *Type, access *ast.Node, narrowType
 	removeNullable := c.strictNullChecks && (optionalChain || isNonNullAccess(access)) && c.maybeTypeOfKind(t, TypeFlagsNullable)
 	nonNullType := t
 	if removeNullable {
-		nonNullType = c.getTypeWithFacts(t, TypeFactsNEUndefinedOrNull)
+		nonNullType = c.getNonNullableType(t)
 	}
 	propType := c.getTypeOfPropertyOfType(nonNullType, propName)
 	if propType == nil {
@@ -906,7 +807,7 @@ func (c *Checker) narrowTypeByInstanceof(f *FlowState, t *Type, expr *ast.Binary
 	left := c.getReferenceCandidate(expr.Left)
 	if !c.isMatchingReference(f.reference, left) {
 		if assumeTrue && c.strictNullChecks && c.optionalChainContainsReference(left, f.reference) {
-			return c.getAdjustedTypeWithFacts(t, TypeFactsNEUndefinedOrNull)
+			return c.getNonNullableType(t)
 		}
 		return t
 	}
@@ -1162,7 +1063,7 @@ func (c *Checker) narrowTypeByOptionalChainContainment(f *FlowState, t *Type, op
 	removeNullable := equalsOperator != assumeTrue && everyType(valueType, func(t *Type) bool { return t.flags&nullableFlags != 0 }) ||
 		equalsOperator == assumeTrue && everyType(valueType, func(t *Type) bool { return t.flags&(TypeFlagsAnyOrUnknown|nullableFlags) == 0 })
 	if removeNullable {
-		return c.getAdjustedTypeWithFacts(t, TypeFactsNEUndefinedOrNull)
+		return c.getNonNullableType(t)
 	}
 	return t
 }
@@ -1279,22 +1180,7 @@ func (c *Checker) narrowTypeBySwitchOnTypeOf(t *Type, data *ast.FlowSwitchClause
 	clauseEnd := int(data.ClauseEnd)
 	hasDefaultClause := clauseStart == clauseEnd || (defaultIndex >= clauseStart && defaultIndex < clauseEnd)
 	if hasDefaultClause {
-		// In the default clause we filter constituents down to those that are not-equal to all handled cases.
-		notEqualFacts := c.getNotEqualFactsFromTypeofSwitch(clauseStart, clauseEnd, witnesses)
-		filtered := c.filterType(t, func(t *Type) bool {
-			return c.getTypeFacts(t, notEqualFacts) == notEqualFacts
-		})
-		// Mirror the false branch of `if (typeof x === "...")`: introduce a fresh `not <primitive>`
-		// for each handled case whose negation is a simple primitive, so that a base type overlapping
-		// those primitives (such as `{}` or a type parameter) records the exclusion.
-		for i, witness := range witnesses {
-			if (i < clauseStart || i >= clauseEnd) && witness != "" {
-				if impliedType := c.getImpliedTypeForTypeofNegation(witness); impliedType != nil {
-					filtered = c.introduceNegationIntoNarrowedType(filtered, impliedType)
-				}
-			}
-		}
-		return filtered
+		return c.getTypeOutsideTypeofSwitch(t, clauseStart, clauseEnd, witnesses)
 	}
 	// In the non-default cause we create a union of the type narrowed by each of the listed cases.
 	clauseWitnesses := witnesses[clauseStart:clauseEnd]
@@ -1345,7 +1231,7 @@ func (c *Checker) narrowTypeBySwitchOnTrue(f *FlowState, t *Type, data *ast.Flow
 func (c *Checker) narrowTypeBySwitchOptionalChainContainment(t *Type, data *ast.FlowSwitchClauseData, clauseCheck func(t *Type) bool) *Type {
 	everyClauseChecks := data.ClauseStart != data.ClauseEnd && core.Every(c.getSwitchClauseTypes(data.SwitchStatement)[data.ClauseStart:data.ClauseEnd], clauseCheck)
 	if everyClauseChecks {
-		return c.getTypeWithFacts(t, TypeFactsNEUndefinedOrNull)
+		return c.getNonNullableType(t)
 	}
 	return t
 }
@@ -2087,16 +1973,10 @@ func (c *Checker) computeExhaustiveSwitchStatement(node *ast.Node) bool {
 			return false
 		}
 		operandConstraint := c.getBaseConstraintOrType(c.checkExpressionCached(node.Expression().Expression()))
-		// Get the not-equal flags for all handled cases.
-		notEqualFacts := c.getNotEqualFactsFromTypeofSwitch(0, 0, witnesses)
 		if operandConstraint.flags&TypeFlagsAnyOrUnknown != 0 {
-			// We special case the top types to be exhaustive when all cases are handled.
-			return TypeFactsAllTypeofNE&notEqualFacts == TypeFactsAllTypeofNE
+			return core.Every(typeofNames, func(name string) bool { return slices.Contains(witnesses, name) })
 		}
-		// A missing not-equal flag indicates that the type wasn't handled by some case.
-		return !someType(operandConstraint, func(t *Type) bool {
-			return c.getTypeFacts(t, notEqualFacts) == notEqualFacts
-		})
+		return c.getTypeOutsideTypeofSwitch(operandConstraint, 0, 0, witnesses).flags&TypeFlagsNever != 0
 	}
 	t := c.getBaseConstraintOrType(c.checkExpressionCached(node.Expression()))
 	if !isLiteralType(t) {
@@ -2140,21 +2020,6 @@ func (c *Checker) getSwitchClauseTypeOfWitnesses(node *ast.Node) []string {
 		links.witnessesComputed = true
 	}
 	return links.witnesses
-}
-
-// Return the combined not-equal type facts for all cases except those between the start and end indices.
-func (c *Checker) getNotEqualFactsFromTypeofSwitch(start int, end int, witnesses []string) TypeFacts {
-	var facts TypeFacts = TypeFactsNone
-	for i, witness := range witnesses {
-		if (i < start || i >= end) && witness != "" {
-			f, ok := typeofNEFacts[witness]
-			if !ok {
-				f = TypeFactsTypeofNEHostObject
-			}
-			facts |= f
-		}
-	}
-	return facts
 }
 
 func (c *Checker) getSwitchClauseTypes(node *ast.Node) []*Type {

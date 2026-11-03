@@ -7,16 +7,16 @@ function fn1<T, U>(t: T, u: U) {
 >u : U
 
     var r1 = t || t;
->r1 : T
->t || t : T
+>r1 : NonNullable<T> | (T & undefined) | (T & null)
+>t || t : NonNullable<T> | (T & undefined) | (T & null)
 >t : T
->t : T
+>t : T & ("" | 0 | 0n | false | null | undefined)
 
     var r2: T = t || t;
 >r2 : T
->t || t : T
+>t || t : NonNullable<T> | (T & undefined) | (T & null)
 >t : T
->t : T
+>t : T & ("" | 0 | 0n | false | null | undefined)
 
     var r3 = t || u;
 >r3 : U | NonNullable<T>
@@ -45,16 +45,16 @@ function fn2<T, U/* extends T*/, V/* extends T*/>(t: T, u: U, v: V) {
 
     //var r2: T = t || u;
     var r3 = u || u;
->r3 : U
->u || u : U
+>r3 : NonNullable<U> | (U & undefined) | (U & null)
+>u || u : NonNullable<U> | (U & undefined) | (U & null)
 >u : U
->u : U
+>u : U & ("" | 0 | 0n | false | null | undefined)
 
     var r4: U = u || u;
 >r4 : U
->u || u : U
+>u || u : NonNullable<U> | (U & undefined) | (U & null)
 >u : U
->u : U
+>u : U & ("" | 0 | 0n | false | null | undefined)
 
     var r5 = u || v;
 >r5 : V | NonNullable<U>

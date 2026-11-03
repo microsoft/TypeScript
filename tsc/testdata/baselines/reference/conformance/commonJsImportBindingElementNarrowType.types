@@ -13,7 +13,7 @@ if (a) {
   var x = a + 1;
 >x : number
 >a + 1 : number
->a : number
+>a : number & not 0
 >1 : 1
 }
 === /foo.d.ts ===

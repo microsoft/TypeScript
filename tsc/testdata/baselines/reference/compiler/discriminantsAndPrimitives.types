@@ -80,7 +80,7 @@ function f3(x: Foo | Bar | string | null) {
 >x : string | Bar | Foo | null
 >typeof x !== "string" : boolean
 >typeof x : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
->x : string | Bar | Foo
+>x : Bar | Foo | (string & not "")
 >"string" : "string"
 
         switch(x.kind) {
@@ -108,7 +108,7 @@ function f4(x: Foo | Bar | string | number | null) {
 >x : string | number | Bar | Foo | null
 >typeof x === "object" : boolean
 >typeof x : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
->x : string | number | Bar | Foo
+>x : Bar | Foo | (string & not "") | (number & not 0)
 >"object" : "object"
 
         switch(x.kind) {

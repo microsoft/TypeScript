@@ -30,18 +30,18 @@ function f2(fetcherParams: object | (() => object)) {
 >fetcherParams : object | (() => object)
 
     const data = typeof fetcherParams === 'function'
->data : error
->typeof fetcherParams === 'function'        ? fetcherParams()        : fetcherParams : error
+>data : object
+>typeof fetcherParams === 'function'        ? fetcherParams()        : fetcherParams : object
 >typeof fetcherParams === 'function' : boolean
 >typeof fetcherParams : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
 >fetcherParams : object | (() => object)
 >'function' : "function"
 
         ? fetcherParams()
->fetcherParams() : error
->fetcherParams : Function | (() => object)
+>fetcherParams() : object
+>fetcherParams : () => object
 
         : fetcherParams
->fetcherParams : object
+>fetcherParams : object & not Function
 }
 

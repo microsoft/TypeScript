@@ -154,7 +154,7 @@ function f4<K extends string>(obj: Record<K, string | undefined>, key: K) {
         obj[key].toUpperCase();
 >obj[key].toUpperCase() : string
 >obj[key].toUpperCase : () => string
->obj[key] : string
+>obj[key] : string & not ""
 >obj : Record<K, string | undefined>
 >key : K
 >toUpperCase : () => string

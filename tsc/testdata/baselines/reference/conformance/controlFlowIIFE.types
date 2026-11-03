@@ -147,7 +147,7 @@ if (!test) {
     test.slice(1); // No error
 >test.slice(1) : string
 >test.slice : (start?: number, end?: number) => string
->test : string
+>test : string & not ""
 >slice : (start?: number, end?: number) => string
 >1 : 1
 

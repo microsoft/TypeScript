@@ -15,7 +15,7 @@ function createConsumer(count: number) {
 
         count -= 1;
 >count -= 1 : number
->count : number & not 0
+>count : number
 >1 : 1
 
     };

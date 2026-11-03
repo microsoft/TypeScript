@@ -104,7 +104,7 @@ function d() {
 >length : number
 
     x; // number
->x : number
+>x : 0
 }
 function e() {
 >e : () => void

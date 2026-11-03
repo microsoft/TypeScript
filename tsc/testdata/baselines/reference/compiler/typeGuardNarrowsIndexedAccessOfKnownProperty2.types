@@ -17,13 +17,13 @@ if (foo[key]) {
 >key : "key"
 
     foo[key]; // number
->foo[key] : number
+>foo[key] : number & not 0
 >foo : { key?: number; }
 >key : "key"
 
     foo.key;  // number
->foo.key : number
+>foo.key : number & not 0
 >foo : { key?: number; }
->key : number
+>key : number & not 0
 }
 

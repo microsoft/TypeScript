@@ -16,11 +16,11 @@ function f1() {
 >x : string | undefined
 
         x; // string
->x : string
+>x : string & not ""
     }
     else {
         x; // string | undefined
->x : string | undefined
+>x : "" | undefined
     }
 }
 
@@ -40,11 +40,11 @@ function f2() {
 >x : string | undefined
 
         x; // string
->x : string
+>x : string & not ""
     }
     else {
         x; // string | undefined
->x : string | undefined
+>x : "" | undefined
     }
 }
 
@@ -61,11 +61,11 @@ function f3() {
 >foo : () => string | undefined
 
         x; // string
->x : string
+>x : string & not ""
     }
     else {
         x; // string | undefined
->x : string | undefined
+>x : "" | undefined
     }
 }
 
@@ -84,11 +84,11 @@ function f4() {
 >foo : () => string | undefined
 
         x; // string | undefined
->x : string | undefined
+>x : "" | undefined
     }
     else {
         x; // string
->x : string
+>x : string & not ""
     }
 }
 
@@ -110,17 +110,17 @@ function f5() {
 >foo : () => string | undefined
 
         x; // string
->x : string
+>x : string & not ""
 
         y; // string | undefined
->y : string
+>y : string & not ""
     }
     else {
         x; // string | undefined
->x : string | undefined
+>x : "" | undefined
 
         y; // string | undefined
->y : string | undefined
+>y : "" | undefined
     }
 }
 
@@ -148,14 +148,14 @@ function f6() {
 >x : string | undefined
 
         y; // string
->y : string
+>y : string & not ""
     }
     else {
         x; // string | undefined
 >x : string | undefined
 
         y; // string | undefined
->y : string | undefined
+>y : "" | undefined
     }
 }
 
@@ -167,11 +167,11 @@ function f7(x: {}) {
 >x : {}
 
         x; // {}
->x : {}
+>x : {} & not "" & not 0 & not 0n & not false
     }
     else {
         x; // {}
->x : {}
+>x : "" | 0 | 0n | false
     }
 }
 
@@ -183,11 +183,11 @@ function f8<T>(x: T) {
 >x : T
 
         x; // {}
->x : NonNullable<T>
+>x : T & {} & not "" & not 0 & not 0n & not false
     }
     else {
         x; // {}
->x : T
+>x : T & ("" | 0 | 0n | false | null | undefined)
     }
 }
 

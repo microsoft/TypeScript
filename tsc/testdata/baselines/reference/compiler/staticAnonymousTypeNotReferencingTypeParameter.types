@@ -103,7 +103,7 @@ namespace tessst {
 >result : U
 
                     return result;
->result : NonNullable<U>
+>result : U & {} & not "" & not 0 & not 0n & not false
                 }
             }
         }

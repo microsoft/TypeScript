@@ -500,7 +500,7 @@ func (b *NodeBuilderImpl) typeNodeIsEquivalentToType(annotatedDeclaration *ast.N
 	// !!!
 	// used to be hasEffectiveQuestionToken for JSDoc
 	if isOptionalDeclaration(annotatedDeclaration) {
-		return b.ch.getTypeWithFacts(t, TypeFactsNEUndefined) == typeFromTypeNode
+		return b.ch.removeType(t, b.ch.undefinedType) == typeFromTypeNode
 	}
 	return false
 }

@@ -216,13 +216,13 @@ function init2(foo: DeepOptional) {
 
                         type C = typeof foo.a.b.c;
 >C : string
->foo.a.b.c : string
+>foo.a.b.c : string & not ""
 >foo.a.b : { c?: string; }
 >foo.a : { b?: { c?: string; }; }
 >foo : DeepOptional
 >a : { b?: { c?: string; }; }
 >b : { c?: string; }
->c : string
+>c : string & not ""
 
                         for(const _ of [1]) {
 >_ : number
@@ -245,13 +245,13 @@ function init2(foo: DeepOptional) {
 
                             type C = typeof foo.a.b.c;
 >C : string
->foo.a.b.c : string
+>foo.a.b.c : string & not ""
 >foo.a.b : { c?: string; }
 >foo.a : { b?: { c?: string; }; }
 >foo : DeepOptional
 >a : { b?: { c?: string; }; }
 >b : { c?: string; }
->c : string
+>c : string & not ""
                         }
                     }
                 }

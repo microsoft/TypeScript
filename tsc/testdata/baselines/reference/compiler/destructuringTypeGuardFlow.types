@@ -57,9 +57,9 @@ if (aFoo.bar && aFoo.nested.b) {
 
   const right: number = aFoo.bar;
 >right : number
->aFoo.bar : number
+>aFoo.bar : number & not 0
 >aFoo : foo
->bar : number
+>bar : number & not 0
 
   const wrong: number = bar;
 >wrong : number
@@ -129,11 +129,11 @@ if (bBar.elem2 && bBar.elem2.bar && bBar.elem2.nested.b) {
 
   const right: number = bBar.elem2.bar;
 >right : number
->bBar.elem2.bar : number
+>bBar.elem2.bar : number & not 0
 >bBar.elem2 : foo
 >bBar : { elem1: number; elem2: foo; }
 >elem2 : foo
->bar : number
+>bar : number & not 0
 
   const wrong: number = bar;
 >wrong : number

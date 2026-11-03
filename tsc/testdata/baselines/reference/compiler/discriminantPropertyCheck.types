@@ -355,12 +355,12 @@ u.a && u.b && f(u.a, u.b);
 >b : string | undefined
 >f(u.a, u.b) : void
 >f : (_a: string, _b: string) => void
->u.a : string
+>u.a : string & not ""
 >u : U
->a : string
->u.b : string
+>a : string & not ""
+>u.b : string & not ""
 >u : U
->b : string
+>b : string & not ""
 
 u.b && u.a && f(u.a, u.b);
 >u.b && u.a && f(u.a, u.b) : void | "" | undefined
@@ -373,12 +373,12 @@ u.b && u.a && f(u.a, u.b);
 >a : string | undefined
 >f(u.a, u.b) : void
 >f : (_a: string, _b: string) => void
->u.a : string
+>u.a : string & not ""
 >u : U
->a : string
->u.b : string
+>a : string & not ""
+>u.b : string & not ""
 >u : U
->b : string
+>b : string & not ""
 
 // Repro from #29012
 

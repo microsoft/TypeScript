@@ -166,9 +166,9 @@ var rc2 = a2 && a3;
 
 var rc3 = a3 && a3;
 >rc3 : number
->a3 && a3 : number
+>a3 && a3 : number & not 0
 >a3 : number
->a3 : number
+>a3 : number & not 0
 
 var rc4 = a4 && a3;
 >rc4 : number
@@ -231,9 +231,9 @@ var rd3 = a3 && a4;
 
 var rd4 = a4 && a4;
 >rd4 : string
->a4 && a4 : string
+>a4 && a4 : string & not ""
 >a4 : string
->a4 : string
+>a4 : string & not ""
 
 var rd5 = a5 && a4;
 >rd5 : void
@@ -426,9 +426,9 @@ var rg6 = a6 && a7;
 
 var rg7 = a7 && a7;
 >rg7 : {}
->a7 && a7 : {}
+>a7 && a7 : {} & not "" & not 0 & not 0n & not false
 >a7 : {}
->a7 : {}
+>a7 : {} & not "" & not 0 & not 0n & not false
 
 var rg8 = a8 && a7;
 >rg8 : {}

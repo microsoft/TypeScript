@@ -405,103 +405,6 @@ const (
 	ReferenceHintDecorator
 )
 
-type TypeFacts uint32
-
-const (
-	TypeFactsNone               TypeFacts = 0
-	TypeFactsTypeofEQString     TypeFacts = 1 << 0
-	TypeFactsTypeofEQNumber     TypeFacts = 1 << 1
-	TypeFactsTypeofEQBigInt     TypeFacts = 1 << 2
-	TypeFactsTypeofEQBoolean    TypeFacts = 1 << 3
-	TypeFactsTypeofEQSymbol     TypeFacts = 1 << 4
-	TypeFactsTypeofEQObject     TypeFacts = 1 << 5
-	TypeFactsTypeofEQFunction   TypeFacts = 1 << 6
-	TypeFactsTypeofEQHostObject TypeFacts = 1 << 7
-	TypeFactsTypeofNEString     TypeFacts = 1 << 8
-	TypeFactsTypeofNENumber     TypeFacts = 1 << 9
-	TypeFactsTypeofNEBigInt     TypeFacts = 1 << 10
-	TypeFactsTypeofNEBoolean    TypeFacts = 1 << 11
-	TypeFactsTypeofNESymbol     TypeFacts = 1 << 12
-	TypeFactsTypeofNEObject     TypeFacts = 1 << 13
-	TypeFactsTypeofNEFunction   TypeFacts = 1 << 14
-	TypeFactsTypeofNEHostObject TypeFacts = 1 << 15
-	TypeFactsEQUndefined        TypeFacts = 1 << 16
-	TypeFactsEQNull             TypeFacts = 1 << 17
-	TypeFactsEQUndefinedOrNull  TypeFacts = 1 << 18
-	TypeFactsNEUndefined        TypeFacts = 1 << 19
-	TypeFactsNENull             TypeFacts = 1 << 20
-	TypeFactsNEUndefinedOrNull  TypeFacts = 1 << 21
-	TypeFactsTruthy             TypeFacts = 1 << 22
-	TypeFactsFalsy              TypeFacts = 1 << 23
-	TypeFactsIsUndefined        TypeFacts = 1 << 24
-	TypeFactsIsNull             TypeFacts = 1 << 25
-	// The following facts record whether a type could be a particular *falsy* value. Unlike the Falsy
-	// fact (which is a single "could be falsy at all" bit), these are per-value so that a negated type
-	// such as `not ""` can surgically exclude a single falsy possibility. They are AND-combined in
-	// getIntersectionTypeFacts (a value is in an intersection only if it is in every constituent), which
-	// lets an intersection of negations exclude every falsy value.
-	TypeFactsCouldBeEmptyString TypeFacts = 1 << 26
-	TypeFactsCouldBeZeroNumber  TypeFacts = 1 << 27
-	TypeFactsCouldBeZeroBigInt  TypeFacts = 1 << 28
-	TypeFactsCouldBeFalse       TypeFacts = 1 << 29
-	TypeFactsIsUndefinedOrNull  TypeFacts = TypeFactsIsUndefined | TypeFactsIsNull
-	TypeFactsAll                TypeFacts = (1 << 30) - 1
-	// The following members encode facts about particular kinds of types for use in the getTypeFacts function.
-	// The presence of a particular fact means that the given test is true for some (and possibly all) values
-	// of that kind of type.
-	TypeFactsBaseStringStrictFacts     TypeFacts = TypeFactsTypeofEQString | TypeFactsTypeofNENumber | TypeFactsTypeofNEBigInt | TypeFactsTypeofNEBoolean | TypeFactsTypeofNESymbol | TypeFactsTypeofNEObject | TypeFactsTypeofNEFunction | TypeFactsTypeofNEHostObject | TypeFactsNEUndefined | TypeFactsNENull | TypeFactsNEUndefinedOrNull
-	TypeFactsBaseStringFacts           TypeFacts = TypeFactsBaseStringStrictFacts | TypeFactsEQUndefined | TypeFactsEQNull | TypeFactsEQUndefinedOrNull | TypeFactsFalsy
-	TypeFactsStringStrictFacts         TypeFacts = TypeFactsBaseStringStrictFacts | TypeFactsTruthy | TypeFactsFalsy | TypeFactsCouldBeEmptyString
-	TypeFactsStringFacts               TypeFacts = TypeFactsBaseStringFacts | TypeFactsTruthy | TypeFactsCouldBeEmptyString
-	TypeFactsEmptyStringStrictFacts    TypeFacts = TypeFactsBaseStringStrictFacts | TypeFactsFalsy | TypeFactsCouldBeEmptyString
-	TypeFactsEmptyStringFacts          TypeFacts = TypeFactsBaseStringFacts | TypeFactsCouldBeEmptyString
-	TypeFactsNonEmptyStringStrictFacts TypeFacts = TypeFactsBaseStringStrictFacts | TypeFactsTruthy
-	TypeFactsNonEmptyStringFacts       TypeFacts = TypeFactsBaseStringFacts | TypeFactsTruthy
-	TypeFactsBaseNumberStrictFacts     TypeFacts = TypeFactsTypeofEQNumber | TypeFactsTypeofNEString | TypeFactsTypeofNEBigInt | TypeFactsTypeofNEBoolean | TypeFactsTypeofNESymbol | TypeFactsTypeofNEObject | TypeFactsTypeofNEFunction | TypeFactsTypeofNEHostObject | TypeFactsNEUndefined | TypeFactsNENull | TypeFactsNEUndefinedOrNull
-	TypeFactsBaseNumberFacts           TypeFacts = TypeFactsBaseNumberStrictFacts | TypeFactsEQUndefined | TypeFactsEQNull | TypeFactsEQUndefinedOrNull | TypeFactsFalsy
-	TypeFactsNumberStrictFacts         TypeFacts = TypeFactsBaseNumberStrictFacts | TypeFactsTruthy | TypeFactsFalsy | TypeFactsCouldBeZeroNumber
-	TypeFactsNumberFacts               TypeFacts = TypeFactsBaseNumberFacts | TypeFactsTruthy | TypeFactsCouldBeZeroNumber
-	TypeFactsZeroNumberStrictFacts     TypeFacts = TypeFactsBaseNumberStrictFacts | TypeFactsFalsy | TypeFactsCouldBeZeroNumber
-	TypeFactsZeroNumberFacts           TypeFacts = TypeFactsBaseNumberFacts | TypeFactsCouldBeZeroNumber
-	TypeFactsNonZeroNumberStrictFacts  TypeFacts = TypeFactsBaseNumberStrictFacts | TypeFactsTruthy
-	TypeFactsNonZeroNumberFacts        TypeFacts = TypeFactsBaseNumberFacts | TypeFactsTruthy
-	TypeFactsBaseBigIntStrictFacts     TypeFacts = TypeFactsTypeofEQBigInt | TypeFactsTypeofNEString | TypeFactsTypeofNENumber | TypeFactsTypeofNEBoolean | TypeFactsTypeofNESymbol | TypeFactsTypeofNEObject | TypeFactsTypeofNEFunction | TypeFactsTypeofNEHostObject | TypeFactsNEUndefined | TypeFactsNENull | TypeFactsNEUndefinedOrNull
-	TypeFactsBaseBigIntFacts           TypeFacts = TypeFactsBaseBigIntStrictFacts | TypeFactsEQUndefined | TypeFactsEQNull | TypeFactsEQUndefinedOrNull | TypeFactsFalsy
-	TypeFactsBigIntStrictFacts         TypeFacts = TypeFactsBaseBigIntStrictFacts | TypeFactsTruthy | TypeFactsFalsy | TypeFactsCouldBeZeroBigInt
-	TypeFactsBigIntFacts               TypeFacts = TypeFactsBaseBigIntFacts | TypeFactsTruthy | TypeFactsCouldBeZeroBigInt
-	TypeFactsZeroBigIntStrictFacts     TypeFacts = TypeFactsBaseBigIntStrictFacts | TypeFactsFalsy | TypeFactsCouldBeZeroBigInt
-	TypeFactsZeroBigIntFacts           TypeFacts = TypeFactsBaseBigIntFacts | TypeFactsCouldBeZeroBigInt
-	TypeFactsNonZeroBigIntStrictFacts  TypeFacts = TypeFactsBaseBigIntStrictFacts | TypeFactsTruthy
-	TypeFactsNonZeroBigIntFacts        TypeFacts = TypeFactsBaseBigIntFacts | TypeFactsTruthy
-	TypeFactsBaseBooleanStrictFacts    TypeFacts = TypeFactsTypeofEQBoolean | TypeFactsTypeofNEString | TypeFactsTypeofNENumber | TypeFactsTypeofNEBigInt | TypeFactsTypeofNESymbol | TypeFactsTypeofNEObject | TypeFactsTypeofNEFunction | TypeFactsTypeofNEHostObject | TypeFactsNEUndefined | TypeFactsNENull | TypeFactsNEUndefinedOrNull
-	TypeFactsBaseBooleanFacts          TypeFacts = TypeFactsBaseBooleanStrictFacts | TypeFactsEQUndefined | TypeFactsEQNull | TypeFactsEQUndefinedOrNull | TypeFactsFalsy
-	TypeFactsBooleanStrictFacts        TypeFacts = TypeFactsBaseBooleanStrictFacts | TypeFactsTruthy | TypeFactsFalsy | TypeFactsCouldBeFalse
-	TypeFactsBooleanFacts              TypeFacts = TypeFactsBaseBooleanFacts | TypeFactsTruthy | TypeFactsCouldBeFalse
-	TypeFactsFalseStrictFacts          TypeFacts = TypeFactsBaseBooleanStrictFacts | TypeFactsFalsy | TypeFactsCouldBeFalse
-	TypeFactsFalseFacts                TypeFacts = TypeFactsBaseBooleanFacts | TypeFactsCouldBeFalse
-	TypeFactsTrueStrictFacts           TypeFacts = TypeFactsBaseBooleanStrictFacts | TypeFactsTruthy
-	TypeFactsTrueFacts                 TypeFacts = TypeFactsBaseBooleanFacts | TypeFactsTruthy
-	TypeFactsSymbolStrictFacts         TypeFacts = TypeFactsTypeofEQSymbol | TypeFactsTypeofNEString | TypeFactsTypeofNENumber | TypeFactsTypeofNEBigInt | TypeFactsTypeofNEBoolean | TypeFactsTypeofNEObject | TypeFactsTypeofNEFunction | TypeFactsTypeofNEHostObject | TypeFactsNEUndefined | TypeFactsNENull | TypeFactsNEUndefinedOrNull | TypeFactsTruthy
-	TypeFactsSymbolFacts               TypeFacts = TypeFactsSymbolStrictFacts | TypeFactsEQUndefined | TypeFactsEQNull | TypeFactsEQUndefinedOrNull | TypeFactsFalsy
-	TypeFactsObjectStrictFacts         TypeFacts = TypeFactsTypeofEQObject | TypeFactsTypeofEQHostObject | TypeFactsTypeofNEString | TypeFactsTypeofNENumber | TypeFactsTypeofNEBigInt | TypeFactsTypeofNEBoolean | TypeFactsTypeofNESymbol | TypeFactsTypeofNEFunction | TypeFactsNEUndefined | TypeFactsNENull | TypeFactsNEUndefinedOrNull | TypeFactsTruthy
-	TypeFactsObjectFacts               TypeFacts = TypeFactsObjectStrictFacts | TypeFactsEQUndefined | TypeFactsEQNull | TypeFactsEQUndefinedOrNull | TypeFactsFalsy
-	TypeFactsFunctionStrictFacts       TypeFacts = TypeFactsTypeofEQFunction | TypeFactsTypeofEQHostObject | TypeFactsTypeofNEString | TypeFactsTypeofNENumber | TypeFactsTypeofNEBigInt | TypeFactsTypeofNEBoolean | TypeFactsTypeofNESymbol | TypeFactsTypeofNEObject | TypeFactsNEUndefined | TypeFactsNENull | TypeFactsNEUndefinedOrNull | TypeFactsTruthy
-	TypeFactsFunctionFacts             TypeFacts = TypeFactsFunctionStrictFacts | TypeFactsEQUndefined | TypeFactsEQNull | TypeFactsEQUndefinedOrNull | TypeFactsFalsy
-	TypeFactsVoidFacts                 TypeFacts = TypeFactsTypeofNEString | TypeFactsTypeofNENumber | TypeFactsTypeofNEBigInt | TypeFactsTypeofNEBoolean | TypeFactsTypeofNESymbol | TypeFactsTypeofNEObject | TypeFactsTypeofNEFunction | TypeFactsTypeofNEHostObject | TypeFactsEQUndefined | TypeFactsEQUndefinedOrNull | TypeFactsNENull | TypeFactsFalsy
-	TypeFactsUndefinedFacts            TypeFacts = TypeFactsTypeofNEString | TypeFactsTypeofNENumber | TypeFactsTypeofNEBigInt | TypeFactsTypeofNEBoolean | TypeFactsTypeofNESymbol | TypeFactsTypeofNEObject | TypeFactsTypeofNEFunction | TypeFactsTypeofNEHostObject | TypeFactsEQUndefined | TypeFactsEQUndefinedOrNull | TypeFactsNENull | TypeFactsFalsy | TypeFactsIsUndefined
-	TypeFactsNullFacts                 TypeFacts = TypeFactsTypeofEQObject | TypeFactsTypeofNEString | TypeFactsTypeofNENumber | TypeFactsTypeofNEBigInt | TypeFactsTypeofNEBoolean | TypeFactsTypeofNESymbol | TypeFactsTypeofNEFunction | TypeFactsTypeofNEHostObject | TypeFactsEQNull | TypeFactsEQUndefinedOrNull | TypeFactsNEUndefined | TypeFactsFalsy | TypeFactsIsNull
-	TypeFactsEmptyObjectStrictFacts    TypeFacts = TypeFactsAll & ^(TypeFactsEQUndefined | TypeFactsEQNull | TypeFactsEQUndefinedOrNull | TypeFactsIsUndefinedOrNull)
-	TypeFactsEmptyObjectFacts          TypeFacts = TypeFactsAll & ^TypeFactsIsUndefinedOrNull
-	TypeFactsUnknownFacts              TypeFacts = TypeFactsAll & ^TypeFactsIsUndefinedOrNull
-	TypeFactsAllTypeofNE               TypeFacts = TypeFactsTypeofNEString | TypeFactsTypeofNENumber | TypeFactsTypeofNEBigInt | TypeFactsTypeofNEBoolean | TypeFactsTypeofNESymbol | TypeFactsTypeofNEObject | TypeFactsTypeofNEFunction | TypeFactsNEUndefined
-	// The set of facts that indicate a type could be some falsy value. A type whose intersection facts
-	// retain none of these can never be falsy, so its Falsy fact is spurious and gets cleared.
-	TypeFactsAllCouldBeFalsy TypeFacts = TypeFactsCouldBeEmptyString | TypeFactsCouldBeZeroNumber | TypeFactsCouldBeZeroBigInt | TypeFactsCouldBeFalse | TypeFactsEQUndefined | TypeFactsEQNull | TypeFactsEQUndefinedOrNull
-	// Masks
-	TypeFactsOrFactsMask  TypeFacts = TypeFactsTypeofEQFunction | TypeFactsTypeofNEObject
-	TypeFactsAndFactsMask TypeFacts = TypeFactsAll & ^TypeFactsOrFactsMask
-)
-
 type IterationUse uint32
 
 const (
@@ -841,6 +744,8 @@ type Checker struct {
 	emptyStringType                             *Type
 	zeroType                                    *Type
 	zeroBigIntType                              *Type
+	nullishType                                 *Type
+	falsyType                                   *Type
 	typeofType                                  *Type
 	typeResolutions                             []TypeResolution
 	resolutionStart                             int
@@ -1110,7 +1015,9 @@ func NewChecker(program Program, tracer *Tracer) (*Checker, *sync.Mutex) {
 	c.emptyStringType = c.getStringLiteralType("")
 	c.zeroType = c.getNumberLiteralType(0)
 	c.zeroBigIntType = c.getBigIntLiteralType(jsnum.PseudoBigInt{})
-	c.typeofType = c.getUnionType(core.Map(slices.Sorted(maps.Keys(typeofNEFacts)), c.getStringLiteralType))
+	c.nullishType = c.getUnionType([]*Type{c.undefinedType, c.nullType})
+	c.falsyType = c.getUnionType([]*Type{c.emptyStringType, c.zeroType, c.zeroBigIntType, c.regularFalseType, c.undefinedType, c.nullType})
+	c.typeofType = c.getUnionType(core.Map(typeofNames, c.getStringLiteralType))
 	c.flowLoopCache = make(map[FlowLoopKey]*Type)
 	c.flowNodeReachable = make(map[*ast.FlowNode]bool)
 	c.flowNodePostSuper = make(map[*ast.FlowNode]bool)
@@ -3929,7 +3836,7 @@ func (c *Checker) checkTestingKnownTruthyType(condExpr *ast.Node, condType *Type
 		return
 	}
 	isPropertyExpressionCast := ast.IsPropertyAccessExpression(location) && isTypeAssertion(location.Expression())
-	if !c.hasTypeFacts(t, TypeFactsTruthy) || isPropertyExpressionCast {
+	if c.getTruthyType(t).flags&TypeFlagsNever != 0 || isPropertyExpressionCast {
 		return
 	}
 	// While it technically should be invalid for any known-truthy value
@@ -6776,7 +6683,7 @@ func (c *Checker) getIterationTypesOfMethod(t *Type, resolver *IterationTypesRes
 		if methodName == "next" {
 			methodType = c.getTypeOfSymbol(method)
 		} else {
-			methodType = c.getTypeWithFacts(c.getTypeOfSymbol(method), TypeFactsNEUndefinedOrNull)
+			methodType = c.getNonNullableType(c.getTypeOfSymbol(method))
 		}
 	}
 	if IsTypeAny(methodType) {
@@ -7638,7 +7545,7 @@ func (c *Checker) checkNonNullType(t *Type, node *ast.Node) *Type {
 	return c.checkNonNullTypeWithReporter(t, node, (*Checker).reportObjectPossiblyNullOrUndefinedError)
 }
 
-func (c *Checker) checkNonNullTypeWithReporter(t *Type, node *ast.Node, reportError func(c *Checker, node *ast.Node, facts TypeFacts)) *Type {
+func (c *Checker) checkNonNullTypeWithReporter(t *Type, node *ast.Node, reportError func(c *Checker, node *ast.Node, nullableFlags TypeFlags)) *Type {
 	if c.strictNullChecks && t.flags&TypeFlagsUnknown != 0 {
 		if ast.IsEntityNameExpression(node) {
 			nodeText := entityNameToString(node)
@@ -7650,9 +7557,9 @@ func (c *Checker) checkNonNullTypeWithReporter(t *Type, node *ast.Node, reportEr
 		c.error(node, diagnostics.Object_is_of_type_unknown)
 		return c.errorType
 	}
-	facts := c.getTypeFacts(t, TypeFactsIsUndefinedOrNull)
-	if facts&TypeFactsIsUndefinedOrNull != 0 {
-		reportError(c, node, facts)
+	nullableFlags := c.getNullableTypeFlags(t)
+	if nullableFlags != 0 {
+		reportError(c, node, nullableFlags)
 		nonNullable := c.GetNonNullableType(t)
 		if nonNullable.flags&(TypeFlagsNullable|TypeFlagsNever) != 0 {
 			return c.errorType
@@ -7681,7 +7588,7 @@ func (c *Checker) checkNonNullNonVoidType(t *Type, node *ast.Node) *Type {
 	return nonNullType
 }
 
-func (c *Checker) reportObjectPossiblyNullOrUndefinedError(node *ast.Node, facts TypeFacts) {
+func (c *Checker) reportObjectPossiblyNullOrUndefinedError(node *ast.Node, nullableFlags TypeFlags) {
 	var nodeText string
 	if ast.IsEntityNameExpression(node) {
 		nodeText = entityNameToString(node)
@@ -7695,14 +7602,14 @@ func (c *Checker) reportObjectPossiblyNullOrUndefinedError(node *ast.Node, facts
 			c.error(node, diagnostics.The_value_0_cannot_be_used_here, "undefined")
 			return
 		}
-		c.error(node, core.IfElse(facts&TypeFactsIsUndefined != 0,
-			core.IfElse(facts&TypeFactsIsNull != 0,
+		c.error(node, core.IfElse(nullableFlags&TypeFlagsUndefined != 0,
+			core.IfElse(nullableFlags&TypeFlagsNull != 0,
 				diagnostics.X_0_is_possibly_null_or_undefined,
 				diagnostics.X_0_is_possibly_undefined),
 			diagnostics.X_0_is_possibly_null), nodeText)
 	} else {
-		c.error(node, core.IfElse(facts&TypeFactsIsUndefined != 0,
-			core.IfElse(facts&TypeFactsIsNull != 0,
+		c.error(node, core.IfElse(nullableFlags&TypeFlagsUndefined != 0,
+			core.IfElse(nullableFlags&TypeFlagsNull != 0,
 				diagnostics.Object_is_possibly_null_or_undefined,
 				diagnostics.Object_is_possibly_undefined),
 			diagnostics.Object_is_possibly_null))
@@ -10143,9 +10050,9 @@ func (c *Checker) getTypeArgumentArityError(node *ast.Node, signatures []*Signat
 	return diagnostic
 }
 
-func (c *Checker) reportCannotInvokePossiblyNullOrUndefinedError(node *ast.Node, facts TypeFacts) {
-	c.error(node, core.IfElse(facts&TypeFactsIsUndefined != 0,
-		core.IfElse(facts&TypeFactsIsNull != 0,
+func (c *Checker) reportCannotInvokePossiblyNullOrUndefinedError(node *ast.Node, nullableFlags TypeFlags) {
+	c.error(node, core.IfElse(nullableFlags&TypeFlagsUndefined != 0,
+		core.IfElse(nullableFlags&TypeFlagsNull != 0,
 			diagnostics.Cannot_invoke_an_object_which_is_possibly_null_or_undefined,
 			diagnostics.Cannot_invoke_an_object_which_is_possibly_undefined),
 		diagnostics.Cannot_invoke_an_object_which_is_possibly_null))
@@ -11092,7 +10999,7 @@ func (c *Checker) checkDeleteExpressionMustBeOptional(expr *ast.Node, symbol *as
 		if c.exactOptionalPropertyTypes {
 			isOptional = symbol.Flags()&ast.SymbolFlagsOptional != 0
 		} else {
-			isOptional = c.hasTypeFacts(t, TypeFactsIsUndefined)
+			isOptional = c.getNullableTypeFlags(t)&TypeFlagsUndefined != 0
 		}
 		if !isOptional {
 			c.error(expr, diagnostics.The_operand_of_a_delete_operator_must_be_optional)
@@ -11149,11 +11056,10 @@ func (c *Checker) checkPrefixUnaryExpression(node *ast.Node) *Type {
 		return c.getUnaryResultType(operandType)
 	case ast.KindExclamationToken:
 		c.checkTruthinessOfType(operandType, expr.Operand)
-		facts := c.getTypeFacts(operandType, TypeFactsTruthy|TypeFactsFalsy)
 		switch {
-		case facts == TypeFactsTruthy:
+		case c.getFalsyType(operandType).flags&TypeFlagsNever != 0 && c.getTruthyType(operandType).flags&TypeFlagsNever == 0:
 			return c.falseType
-		case facts == TypeFactsFalsy:
+		case c.getTruthyType(operandType).flags&TypeFlagsNever != 0 && c.getFalsyType(operandType).flags&TypeFlagsNever == 0:
 			return c.trueType
 		default:
 			return c.booleanType
@@ -11457,7 +11363,7 @@ func (c *Checker) checkIdentifier(node *ast.Node, checkMode CheckMode) *Type {
 	}
 	if assignmentKind != AssignmentKindNone {
 		// Identifier is target of a compound assignment
-		return c.getBaseTypeOfLiteralType(flowType)
+		return c.getTypeForCompoundAssignment(flowType)
 	}
 	return flowType
 }
@@ -11472,9 +11378,9 @@ func (c *Checker) isSameScopedBindingElement(node *ast.Node, declaration *ast.No
 
 // Remove undefined from the annotated type of a parameter when there is an initializer (that doesn't include undefined)
 func (c *Checker) removeOptionalityFromDeclaredType(declaredType *Type, declaration *ast.Node) *Type {
-	removeUndefined := c.strictNullChecks && ast.IsParameterDeclaration(declaration) && declaration.Initializer() != nil && c.hasTypeFacts(declaredType, TypeFactsIsUndefined) && !c.parameterInitializerContainsUndefined(declaration)
+	removeUndefined := c.strictNullChecks && ast.IsParameterDeclaration(declaration) && declaration.Initializer() != nil && c.getNullableTypeFlags(declaredType)&TypeFlagsUndefined != 0 && !c.parameterInitializerContainsUndefined(declaration)
 	if removeUndefined {
-		return c.getTypeWithFacts(declaredType, TypeFactsNEUndefined)
+		return c.getTypeWithoutUndefined(declaredType)
 	}
 	return declaredType
 }
@@ -11486,7 +11392,7 @@ func (c *Checker) parameterInitializerContainsUndefined(declaration *ast.Node) b
 			c.reportCircularityError(declaration.Symbol())
 			return true
 		}
-		containsUndefined := c.hasTypeFacts(c.checkDeclarationInitializer(declaration, CheckModeNormal, nil), TypeFactsIsUndefined)
+		containsUndefined := c.getNullableTypeFlags(c.checkDeclarationInitializer(declaration, CheckModeNormal, nil))&TypeFlagsUndefined != 0
 		if !c.popTypeResolution() {
 			c.reportCircularityError(declaration.Symbol())
 			return true
@@ -11694,7 +11600,7 @@ func (c *Checker) getFlowTypeOfAccessExpression(node *ast.Node, prop *ast.Symbol
 		return propType
 	}
 	if assignmentKind != AssignmentKindNone {
-		return c.getBaseTypeOfLiteralType(flowType)
+		return c.getTypeForCompoundAssignment(flowType)
 	}
 	return flowType
 }
@@ -12766,7 +12672,7 @@ func (c *Checker) checkBinaryLikeExpression(left *ast.Node, operatorToken *ast.N
 		return c.checkInExpression(left, right, leftType, rightType)
 	case ast.KindAmpersandAmpersandToken, ast.KindAmpersandAmpersandEqualsToken:
 		resultType := leftType
-		if c.hasTypeFacts(leftType, TypeFactsTruthy) {
+		if c.getTruthyType(leftType).flags&TypeFlagsNever == 0 {
 			t := leftType
 			if !c.strictNullChecks {
 				t = c.getBaseTypeOfLiteralType(rightType)
@@ -12779,7 +12685,7 @@ func (c *Checker) checkBinaryLikeExpression(left *ast.Node, operatorToken *ast.N
 		return resultType
 	case ast.KindBarBarToken, ast.KindBarBarEqualsToken:
 		resultType := leftType
-		if c.hasTypeFacts(leftType, TypeFactsFalsy) {
+		if c.getFalsyType(leftType).flags&TypeFlagsNever == 0 {
 			resultType = c.getUnionTypeEx([]*Type{c.GetNonNullableType(c.removeDefinitelyFalsyTypes(leftType)), rightType}, UnionReductionSubtype, nil, nil)
 		}
 		if operator == ast.KindBarBarEqualsToken {
@@ -12791,7 +12697,7 @@ func (c *Checker) checkBinaryLikeExpression(left *ast.Node, operatorToken *ast.N
 			c.checkNullishCoalesceOperands(left, right)
 		}
 		resultType := leftType
-		if c.hasTypeFacts(leftType, TypeFactsEQUndefinedOrNull) {
+		if leftType.flags&TypeFlagsNever == 0 && (!c.strictNullChecks || !c.isIntersectionEmpty(leftType, c.nullishType)) {
 			resultType = c.getUnionTypeEx([]*Type{c.GetNonNullableType(leftType), rightType}, UnionReductionSubtype, nil, nil)
 		}
 		if operator == ast.KindQuestionQuestionEqualsToken {
@@ -12827,8 +12733,8 @@ func (c *Checker) checkDestructuringAssignment(node *ast.Node, sourceType *Type,
 		if initializer != nil {
 			// In strict null checking mode, if a default value of a non-undefined type is specified, remove
 			// undefined from the final type.
-			if c.strictNullChecks && !c.hasTypeFacts(c.checkExpression(initializer), TypeFactsIsUndefined) {
-				sourceType = c.getTypeWithFacts(sourceType, TypeFactsNEUndefined)
+			if c.strictNullChecks && c.getNullableTypeFlags(c.checkExpression(initializer))&TypeFlagsUndefined == 0 {
+				sourceType = c.getTypeWithoutUndefined(sourceType)
 			}
 			c.checkBinaryLikeExpression(node.Name(), node.AsShorthandPropertyAssignment().EqualsToken, initializer, checkMode, nil)
 		}
@@ -12841,7 +12747,7 @@ func (c *Checker) checkDestructuringAssignment(node *ast.Node, sourceType *Type,
 		target = target.AsBinaryExpression().Left
 		// A default value is specified, so remove undefined from the final type.
 		if c.strictNullChecks {
-			sourceType = c.getTypeWithFacts(sourceType, TypeFactsNEUndefined)
+			sourceType = c.getTypeWithoutUndefined(sourceType)
 		}
 	}
 	if ast.IsObjectLiteralExpression(target) {
@@ -12949,7 +12855,7 @@ func (c *Checker) checkArrayLiteralDestructuringElementAssignment(node *ast.Node
 				elementType := core.OrElse(c.getIndexedAccessTypeOrUndefined(sourceType, indexType, accessFlags, c.createSyntheticExpression(element, indexType, false, nil), nil), c.errorType)
 				assignedType := elementType
 				if c.hasDefaultValue(element) {
-					assignedType = c.getTypeWithFacts(elementType, TypeFactsNEUndefined)
+					assignedType = c.getTypeWithoutUndefined(elementType)
 				}
 				t := c.getFlowTypeOfDestructuring(element, assignedType)
 				return c.checkDestructuringAssignment(element, t, checkMode, false)
@@ -18196,8 +18102,8 @@ func (c *Checker) getBindingElementTypeFromParentType(declaration *ast.Node, par
 	// Relax null check on ambient destructuring parameters, since the parameters have no implementation and are just documentation
 	if c.strictNullChecks && declaration.Flags&ast.NodeFlagsAmbient != 0 && ast.IsPartOfParameterDeclaration(declaration) {
 		parentType = c.GetNonNullableType(parentType)
-	} else if c.strictNullChecks && pattern.Parent.Initializer() != nil && !c.hasTypeFacts(c.getTypeOfInitializer(pattern.Parent.Initializer()), TypeFactsEQUndefined) {
-		parentType = c.getTypeWithFacts(parentType, TypeFactsNEUndefined)
+	} else if c.strictNullChecks && pattern.Parent.Initializer() != nil && c.isIntersectionEmpty(c.getTypeOfInitializer(pattern.Parent.Initializer()), c.undefinedType) {
+		parentType = c.getTypeWithoutUndefined(parentType)
 	}
 	accessFlags := AccessFlagsExpressionPosition | core.IfElse(noTupleBoundsCheck || c.hasDefaultValue(declaration), AccessFlagsAllowMissing, 0)
 	var t *Type
@@ -18264,7 +18170,7 @@ func (c *Checker) getBindingElementTypeFromParentType(declaration *ast.Node, par
 	if ast.WalkUpBindingElementsAndPatterns(declaration).Type() != nil {
 		// In strict null checking mode, if a default value of a non-undefined type is specified, remove
 		// undefined from the final type.
-		if c.strictNullChecks && !c.hasTypeFacts(c.checkDeclarationInitializer(declaration, CheckModeNormal, nil), TypeFactsIsUndefined) {
+		if c.strictNullChecks && c.getNullableTypeFlags(c.checkDeclarationInitializer(declaration, CheckModeNormal, nil))&TypeFlagsUndefined == 0 {
 			return c.getNonUndefinedType(t)
 		}
 		return t
@@ -19152,13 +19058,13 @@ func (c *Checker) getNullableType(t *Type, flags TypeFlags) *Type {
 
 func (c *Checker) GetNonNullableType(t *Type) *Type {
 	if c.strictNullChecks {
-		return c.getAdjustedTypeWithFacts(t, TypeFactsNEUndefinedOrNull)
+		return c.getNonNullableType(t)
 	}
 	return t
 }
 
 func (c *Checker) IsNullableType(t *Type) bool {
-	return c.hasTypeFacts(t, TypeFactsIsUndefinedOrNull)
+	return c.getNullableTypeFlags(t)&TypeFlagsNullable != 0
 }
 
 func (c *Checker) getNonNullableTypeIfNeeded(t *Type) *Type {
@@ -29863,7 +29769,7 @@ func (c *Checker) getPromisedTypeOfPromiseEx(t *Type, errorNode *ast.Node, thisT
 		}
 		return nil
 	}
-	onfulfilledParameterType := c.getTypeWithFacts(c.getUnionType(core.Map(candidates, c.getTypeOfFirstParameterOfSignature)), TypeFactsNEUndefinedOrNull)
+	onfulfilledParameterType := c.getNonNullableType(c.getUnionType(core.Map(candidates, c.getTypeOfFirstParameterOfSignature)))
 	if IsTypeAny(onfulfilledParameterType) {
 		return nil
 	}
@@ -29981,11 +29887,11 @@ func (c *Checker) removeMissingOrUndefinedType(t *Type) *Type {
 	if c.exactOptionalPropertyTypes {
 		return c.removeType(t, c.missingType)
 	}
-	return c.getTypeWithFacts(t, TypeFactsNEUndefined)
+	return c.getTypeWithoutUndefined(t)
 }
 
 func (c *Checker) removeDefinitelyFalsyTypes(t *Type) *Type {
-	return c.filterType(t, func(t *Type) bool { return c.hasTypeFacts(t, TypeFactsTruthy) })
+	return c.filterType(t, func(t *Type) bool { return c.getTruthyType(t).flags&TypeFlagsNever == 0 })
 }
 
 func (c *Checker) extractDefinitelyFalsyTypes(t *Type) *Type {
@@ -31875,234 +31781,6 @@ func (c *Checker) getInferenceContext(node *ast.Node) *InferenceContext {
 	return nil
 }
 
-func (c *Checker) getTypeFacts(t *Type, mask TypeFacts) TypeFacts {
-	return c.getTypeFactsWorker(t, mask) & mask
-}
-
-func (c *Checker) hasTypeFacts(t *Type, mask TypeFacts) bool {
-	return c.getTypeFacts(t, mask) != 0
-}
-
-func (c *Checker) getNegatedTypeFactsWorker(t *Type) TypeFacts {
-	// The facts of `not T` are the facts of "every value other than the values in T". Removing values
-	// from the universe can only remove facts that are unique to those values; all other facts remain
-	// possible. We therefore start from the broad `unknown` fact set and subtract only the facts implied
-	// solely by `t`. Note we do *not* reduce `t` to its base constraint, as a generic is *more specific*
-	// than the base type, meaning the set of values in the negated set is *larger* (and unknowable).
-	flags := t.flags
-	switch {
-	case flags&TypeFlagsNull != 0:
-		return TypeFactsUnknownFacts & ^(TypeFactsEQNull | TypeFactsEQUndefinedOrNull)
-	case flags&TypeFlagsUndefined != 0:
-		return TypeFactsUnknownFacts & ^(TypeFactsEQUndefined | TypeFactsEQUndefinedOrNull)
-	case flags&TypeFlagsString != 0:
-		return TypeFactsUnknownFacts & ^(TypeFactsTypeofEQString | TypeFactsCouldBeEmptyString)
-	case flags&TypeFlagsNumber != 0:
-		return TypeFactsUnknownFacts & ^(TypeFactsTypeofEQNumber | TypeFactsCouldBeZeroNumber)
-	case flags&TypeFlagsBigInt != 0:
-		return TypeFactsUnknownFacts & ^(TypeFactsTypeofEQBigInt | TypeFactsCouldBeZeroBigInt)
-	case flags&TypeFlagsBoolean != 0:
-		return TypeFactsUnknownFacts & ^(TypeFactsTypeofEQBoolean | TypeFactsCouldBeFalse)
-	case flags&TypeFlagsESSymbolLike != 0:
-		return TypeFactsUnknownFacts & ^TypeFactsTypeofEQSymbol
-	case flags&TypeFlagsStringLiteral != 0:
-		// `not ""` can still be any (non-empty) string, so it keeps all string facts and merely loses the
-		// ability to be the falsy empty string. Enum members are more specific than their literal value, so
-		// their negation does not imply the associated fact.
-		if flags&TypeFlagsEnumLiteral == 0 && getStringLiteralValue(t) == "" {
-			return TypeFactsUnknownFacts & ^TypeFactsCouldBeEmptyString
-		}
-	case flags&TypeFlagsNumberLiteral != 0:
-		if flags&TypeFlagsEnumLiteral == 0 && getNumberLiteralValue(t) == 0 {
-			return TypeFactsUnknownFacts & ^TypeFactsCouldBeZeroNumber
-		}
-	case flags&TypeFlagsBigIntLiteral != 0:
-		if isZeroBigInt(t) {
-			return TypeFactsUnknownFacts & ^TypeFactsCouldBeZeroBigInt
-		}
-	case flags&TypeFlagsBooleanLiteral != 0:
-		if t == c.falseType || t == c.regularFalseType {
-			return TypeFactsUnknownFacts & ^TypeFactsCouldBeFalse
-		}
-	}
-	// For every other type (non-empty string literals, non-zero numeric/bigint literals, `true`, objects,
-	// symbols, enum members, etc.) removing it from the universe removes no fact, since other values share
-	// all of its facts. Unions and intersections are hoisted out of the negation during construction.
-	return TypeFactsUnknownFacts
-}
-
-func (c *Checker) getTypeFactsWorker(t *Type, callerOnlyNeeds TypeFacts) TypeFacts {
-	if t.flags&TypeFlagsNegated != 0 {
-		return c.getNegatedTypeFactsWorker(t.AsNegatedType().baseType)
-	}
-	if t.flags&TypeFlagsIntersection != 0 && core.Some(t.Types(), isNegatedType) {
-		// An intersection that mentions a negated type must not be reduced to its base constraint below,
-		// since that discards the negated constituents (whose base constraint is `unknown`). Compute the
-		// facts from the constituents directly so the negations can refine the result.
-		return c.getIntersectionTypeFacts(t, callerOnlyNeeds)
-	}
-	if t.flags&(TypeFlagsIntersection|TypeFlagsInstantiable) != 0 {
-		t = c.getBaseConstraintOfType(t)
-		if t == nil {
-			t = c.unknownType
-		}
-	}
-	flags := t.flags
-	switch {
-	case flags&(TypeFlagsString|TypeFlagsStringMapping) != 0:
-		if c.strictNullChecks {
-			return TypeFactsStringStrictFacts
-		}
-		return TypeFactsStringFacts
-	case flags&(TypeFlagsStringLiteral|TypeFlagsTemplateLiteral) != 0:
-		isEmpty := flags&TypeFlagsStringLiteral != 0 && getStringLiteralValue(t) == ""
-		if c.strictNullChecks {
-			if isEmpty {
-				return TypeFactsEmptyStringStrictFacts
-			}
-			return TypeFactsNonEmptyStringStrictFacts
-		}
-		if isEmpty {
-			return TypeFactsEmptyStringFacts
-		}
-		return TypeFactsNonEmptyStringFacts
-	case flags&(TypeFlagsNumber|TypeFlagsEnum) != 0:
-		if c.strictNullChecks {
-			return TypeFactsNumberStrictFacts
-		}
-		return TypeFactsNumberFacts
-	case flags&TypeFlagsNumberLiteral != 0:
-		isZero := getNumberLiteralValue(t) == 0
-		if c.strictNullChecks {
-			if isZero {
-				return TypeFactsZeroNumberStrictFacts
-			}
-			return TypeFactsNonZeroNumberStrictFacts
-		}
-		if isZero {
-			return TypeFactsZeroNumberFacts
-		}
-		return TypeFactsNonZeroNumberFacts
-	case flags&TypeFlagsBigInt != 0:
-		if c.strictNullChecks {
-			return TypeFactsBigIntStrictFacts
-		}
-		return TypeFactsBigIntFacts
-	case flags&TypeFlagsBigIntLiteral != 0:
-		isZero := isZeroBigInt(t)
-		if c.strictNullChecks {
-			if isZero {
-				return TypeFactsZeroBigIntStrictFacts
-			}
-			return TypeFactsNonZeroBigIntStrictFacts
-		}
-		if isZero {
-			return TypeFactsZeroBigIntFacts
-		}
-		return TypeFactsNonZeroBigIntFacts
-	case flags&TypeFlagsBoolean != 0:
-		if c.strictNullChecks {
-			return TypeFactsBooleanStrictFacts
-		}
-		return TypeFactsBooleanFacts
-	case flags&TypeFlagsBooleanLike != 0:
-		isFalse := t == c.falseType || t == c.regularFalseType
-		if c.strictNullChecks {
-			if isFalse {
-				return TypeFactsFalseStrictFacts
-			}
-			return TypeFactsTrueStrictFacts
-		}
-		if isFalse {
-			return TypeFactsFalseFacts
-		}
-		return TypeFactsTrueFacts
-	case flags&TypeFlagsObject != 0:
-		var possibleFacts TypeFacts
-		if c.strictNullChecks {
-			possibleFacts = TypeFactsEmptyObjectStrictFacts | TypeFactsFunctionStrictFacts | TypeFactsObjectStrictFacts
-		} else {
-			possibleFacts = TypeFactsEmptyObjectFacts | TypeFactsFunctionFacts | TypeFactsObjectFacts
-		}
-		if (callerOnlyNeeds & possibleFacts) == 0 {
-			// If the caller doesn't care about any of the facts that we could possibly produce,
-			// return zero so we can skip resolving members.
-			return TypeFactsNone
-		}
-		switch {
-		case t.objectFlags&ObjectFlagsAnonymous != 0 && c.isEmptyObjectType(t):
-			if c.strictNullChecks {
-				return TypeFactsEmptyObjectStrictFacts
-			}
-			return TypeFactsEmptyObjectFacts
-		case c.isFunctionObjectType(t):
-			if c.strictNullChecks {
-				return TypeFactsFunctionStrictFacts
-			}
-			return TypeFactsFunctionFacts
-		case c.strictNullChecks:
-			return TypeFactsObjectStrictFacts
-		}
-		return TypeFactsObjectFacts
-	case flags&TypeFlagsVoid != 0:
-		return TypeFactsVoidFacts
-	case flags&TypeFlagsUndefined != 0:
-		return TypeFactsUndefinedFacts
-	case flags&TypeFlagsNull != 0:
-		return TypeFactsNullFacts
-	case flags&TypeFlagsESSymbolLike != 0:
-		if c.strictNullChecks {
-			return TypeFactsSymbolStrictFacts
-		} else {
-			return TypeFactsSymbolFacts
-		}
-	case flags&TypeFlagsNonPrimitive != 0:
-		if c.strictNullChecks {
-			return TypeFactsObjectStrictFacts
-		} else {
-			return TypeFactsObjectFacts
-		}
-	case flags&TypeFlagsNever != 0:
-		return TypeFactsNone
-	case flags&TypeFlagsUnion != 0:
-		var facts TypeFacts
-		for _, t := range t.Types() {
-			facts |= c.getTypeFactsWorker(t, callerOnlyNeeds)
-		}
-		return facts
-	case flags&TypeFlagsIntersection != 0:
-		return c.getIntersectionTypeFacts(t, callerOnlyNeeds)
-	}
-	return TypeFactsUnknownFacts
-}
-
-func (c *Checker) getIntersectionTypeFacts(t *Type, callerOnlyNeeds TypeFacts) TypeFacts {
-	// When an intersection contains a primitive type we ignore object type constituents as they are
-	// presumably type tags. For example, in string & { __kind__: "name" } we ignore the object type.
-	ignoreObjects := c.maybeTypeOfKind(t, TypeFlagsPrimitive)
-	// When computing the type facts of an intersection type, certain type facts are computed as `and`
-	// and others are computed as `or`.
-	oredFacts := TypeFactsNone
-	andedFacts := TypeFactsAll
-	for _, t := range t.Types() {
-		if !(ignoreObjects && t.flags&TypeFlagsObject != 0) {
-			f := c.getTypeFactsWorker(t, callerOnlyNeeds)
-			oredFacts |= f
-			andedFacts &= f
-		}
-	}
-	result := oredFacts&TypeFactsOrFactsMask | andedFacts&TypeFactsAndFactsMask
-	// The per-falsy-value "could be" facts are AND-combined above (a value is in the intersection only if
-	// it is in every constituent). If none survive then no value in the intersection is falsy, so a Falsy
-	// fact that lingered only because each constituent was independently falsy-capable is spurious and gets
-	// removed. This is what lets `not "" & not 0 & not 0n & not null & not undefined & not false` be seen
-	// as purely truthy, and `string & not ""` reduce to the non-empty string facts.
-	if result&TypeFactsFalsy != 0 && result&TypeFactsAllCouldBeFalsy == 0 {
-		result &^= TypeFactsFalsy
-	}
-	return result
-}
-
 func isZeroBigInt(t *Type) bool {
 	return getBigIntLiteralValue(t) == jsnum.PseudoBigInt{}
 }
@@ -32115,73 +31793,6 @@ func (c *Checker) isFunctionObjectType(t *Type) bool {
 	// check. This gives us a quicker out in the common case where an object type is not a function.
 	resolved := c.resolveStructuredTypeMembers(t)
 	return len(resolved.getSignatures()) != 0 || resolved.getMember("bind") != nil && c.isTypeSubtypeOf(t, c.globalFunctionType)
-}
-
-func (c *Checker) getTypeWithFacts(t *Type, include TypeFacts) *Type {
-	return c.filterType(t, func(t *Type) bool {
-		return c.hasTypeFacts(t, include)
-	})
-}
-
-// This function is similar to getTypeWithFacts, except that in strictNullChecks mode it replaces type
-// unknown with the union {} | null | undefined (and reduces that accordingly), and it intersects remaining
-// instantiable types with {}, {} | null, or {} | undefined in order to remove null and/or undefined.
-func (c *Checker) getAdjustedTypeWithFacts(t *Type, facts TypeFacts) *Type {
-	reduced := c.recombineUnknownType(c.getTypeWithFacts(core.IfElse(c.strictNullChecks && t.flags&TypeFlagsUnknown != 0, c.unknownUnionType, t), facts))
-	if c.strictNullChecks {
-		switch facts {
-		case TypeFactsEQUndefined, TypeFactsEQNull, TypeFactsEQUndefinedOrNull:
-			return c.mapType(reduced, func(t *Type) *Type {
-				if containsNegatedType(t) {
-					var nullableType *Type
-					switch facts {
-					case TypeFactsEQUndefined:
-						nullableType = c.undefinedType
-					case TypeFactsEQNull:
-						nullableType = c.nullType
-					default:
-						nullableType = c.getUnionType([]*Type{c.undefinedType, c.nullType})
-					}
-					return c.getIntersectionType([]*Type{t, nullableType})
-				}
-				return t
-			})
-		case TypeFactsNEUndefined:
-			return c.removeNullableByIntersection(reduced, TypeFactsEQUndefined, TypeFactsEQNull, TypeFactsIsNull, c.nullType)
-		case TypeFactsNENull:
-			return c.removeNullableByIntersection(reduced, TypeFactsEQNull, TypeFactsEQUndefined, TypeFactsIsUndefined, c.undefinedType)
-		case TypeFactsNEUndefinedOrNull, TypeFactsTruthy:
-			return c.mapType(reduced, func(t *Type) *Type {
-				if c.hasTypeFacts(t, TypeFactsEQUndefinedOrNull) {
-					return c.getGlobalNonNullableTypeInstantiation(t)
-				}
-				return t
-			})
-		}
-	}
-	return reduced
-}
-
-func (c *Checker) removeNullableByIntersection(t *Type, targetFacts TypeFacts, otherFacts TypeFacts, otherIncludesFacts TypeFacts, otherType *Type) *Type {
-	facts := c.getTypeFacts(t, TypeFactsEQUndefined|TypeFactsEQNull|TypeFactsIsUndefined|TypeFactsIsNull)
-	// Simply return the type if it never compares equal to the target nullable.
-	if facts&targetFacts == 0 {
-		return t
-	}
-	// By default we intersect with a union of {} and the opposite nullable.
-	emptyAndOtherUnion := c.getUnionType([]*Type{c.emptyObjectType, otherType})
-	// For each constituent type that can compare equal to the target nullable, intersect with the above union
-	// if the type doesn't already include the opposite nullable and the constituent can compare equal to the
-	// opposite nullable; otherwise, just intersect with {}.
-	return c.mapType(t, func(t *Type) *Type {
-		if c.hasTypeFacts(t, targetFacts) {
-			if facts&otherIncludesFacts == 0 && c.hasTypeFacts(t, otherFacts) {
-				return c.getIntersectionType([]*Type{t, emptyAndOtherUnion})
-			}
-			return c.getIntersectionType([]*Type{t, c.emptyObjectType})
-		}
-		return t
-	})
 }
 
 func (c *Checker) recombineUnknownType(t *Type) *Type {
@@ -32438,7 +32049,7 @@ func (c *Checker) isThenableType(t *Type) bool {
 		return false
 	}
 	thenFunction := c.getTypeOfPropertyOfType(t, "then")
-	return thenFunction != nil && len(c.getSignaturesOfType(c.getTypeWithFacts(thenFunction, TypeFactsNEUndefinedOrNull), SignatureKindCall)) != 0
+	return thenFunction != nil && len(c.getSignaturesOfType(c.getNonNullableType(thenFunction), SignatureKindCall)) != 0
 }
 
 func (c *Checker) getAwaitedTypeOfPromise(t *Type) *Type {
@@ -32541,7 +32152,7 @@ func (c *Checker) getNonUndefinedType(t *Type) *Type {
 			return t
 		})
 	}
-	return c.getTypeWithFacts(typeOrConstraint, TypeFactsNEUndefined)
+	return c.getTypeWithoutUndefined(typeOrConstraint)
 }
 
 func (c *Checker) isGenericTypeWithUndefinedConstraint(t *Type) bool {

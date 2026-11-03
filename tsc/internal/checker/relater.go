@@ -1599,7 +1599,7 @@ func (c *Checker) compareSignaturesRelated(source *Signature, target *Signature,
 				targetSig = c.getSingleCallSignature(c.GetNonNullableType(targetType))
 			}
 			callbacks := sourceSig != nil && targetSig != nil && c.getTypePredicateOfSignature(sourceSig) == nil && c.getTypePredicateOfSignature(targetSig) == nil &&
-				c.getTypeFacts(sourceType, TypeFactsIsUndefinedOrNull) == c.getTypeFacts(targetType, TypeFactsIsUndefinedOrNull)
+				c.getNullableTypeFlags(sourceType) == c.getNullableTypeFlags(targetType)
 			var related Ternary
 			if callbacks {
 				related = c.compareSignaturesRelated(targetSig, sourceSig, checkMode&SignatureCheckModeStrictArity|core.IfElse(strictVariance, SignatureCheckModeStrictCallback, SignatureCheckModeBivariantCallback), reportErrors, errorReporter, compareTypes, reportUnreliableMarkers)
@@ -4872,7 +4872,7 @@ func (r *Relater) membersRelatedToIndexInfo(source *Type, targetInfo *IndexInfo,
 			if r.c.exactOptionalPropertyTypes || propType.flags&TypeFlagsUndefined != 0 || keyType == r.c.numberType || prop.Flags()&ast.SymbolFlagsOptional == 0 {
 				t = propType
 			} else {
-				t = r.c.getTypeWithFacts(propType, TypeFactsNEUndefined)
+				t = r.c.getTypeWithoutUndefined(propType)
 			}
 			related := r.isRelatedToEx(t, targetInfo.valueType, RecursionFlagsBoth, reportErrors, nil /*headMessage*/, intersectionState)
 			if related == TernaryFalse {

@@ -704,7 +704,7 @@ namespace TypeScript {
 >i : number
 >name.length - 6 : number
 >name.length : number
->name : string
+>name : string & not ""
 >length : number
 >6 : 6
 
@@ -714,14 +714,14 @@ namespace TypeScript {
 >name.charAt(i) == '\\' : boolean
 >name.charAt(i) : string
 >name.charAt : (pos: number) => string
->name : string
+>name : string & not ""
 >charAt : (pos: number) => string
 >i : number
 >'\\' : "\\"
 >name.charAt(i+1) == 'u' : boolean
 >name.charAt(i+1) : string
 >name.charAt : (pos: number) => string
->name : string
+>name : string & not ""
 >charAt : (pos: number) => string
 >i+1 : number
 >i : number
@@ -734,7 +734,7 @@ namespace TypeScript {
 >parseInt : (string: string, radix?: number) => number
 >name.substr(i + 2, 4) : string
 >name.substr : (from: number, length?: number) => string
->name : string
+>name : string & not ""
 >substr : (from: number, length?: number) => string
 >i + 2 : number
 >i : number
@@ -747,7 +747,7 @@ namespace TypeScript {
 >resolved : string
 >name.substr(start, i - start) : string
 >name.substr : (from: number, length?: number) => string
->name : string
+>name : string & not ""
 >substr : (from: number, length?: number) => string
 >start : number
 >i - start : number
@@ -785,7 +785,7 @@ namespace TypeScript {
 >resolved : string
 >name.substring(start) : string
 >name.substring : (start: number, end?: number) => string
->name : string
+>name : string & not ""
 >substring : (start: number, end?: number) => string
 >start : number
 
@@ -1207,9 +1207,9 @@ namespace TypeScript {
                 return "id: " + this.actualText;
 >"id: " + this.actualText : string
 >"id: " : "id: "
->this.actualText : string
+>this.actualText : string & not ""
 >this : this
->actualText : string
+>actualText : string & not ""
             }
             else {
                 return "name node";
@@ -4433,7 +4433,7 @@ namespace TypeScript {
 >internalNameCache : string
 >"_internal_" + extName : string
 >"_internal_" : "_internal_"
->extName : string
+>extName : string & not ""
                 }
                 else {
                     this.internalNameCache = "_internal_" + internalId++;
@@ -8723,7 +8723,7 @@ namespace TypeScript {
                 condBlock.addSuccessor(afterLoop);
 >condBlock.addSuccessor(afterLoop) : any
 >condBlock.addSuccessor : any
->condBlock : BasicBlock
+>condBlock : any
 >addSuccessor : any
 >afterLoop : any
 

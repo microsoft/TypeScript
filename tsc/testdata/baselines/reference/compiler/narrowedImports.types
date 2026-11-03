@@ -18,33 +18,33 @@ let x: number;
 
 if (a0) x = a0;
 >a0 : number | undefined
->x = a0 : number
+>x = a0 : number & not 0
 >x : number
->a0 : number
+>a0 : number & not 0
 
 if (a1) x = a1;
 >a1 : number | undefined
->x = a1 : number
+>x = a1 : number & not 0
 >x : number
->a1 : number
+>a1 : number & not 0
 
 if (a2) x = a2;
 >a2 : number | undefined
->x = a2 : number
+>x = a2 : number & not 0
 >x : number
->a2 : number
+>a2 : number & not 0
 
 if (b0) x = b0;
 >b0 : number | undefined
->x = b0 : number
+>x = b0 : number & not 0
 >x : number
->b0 : number
+>b0 : number & not 0
 
 if (b1) x = b1;
 >b1 : number | undefined
->x = b1 : number
+>x = b1 : number & not 0
 >x : number
->b1 : number
+>b1 : number & not 0
 
 === /a.d.ts ===
 declare const a0: number | undefined;

@@ -1,4 +1,4 @@
-inKeywordAndUnknown.ts(12,18): error TS2638: Type '{}' may represent a primitive value, which is not permitted as the right operand of the 'in' operator.
+inKeywordAndUnknown.ts(12,18): error TS2638: Type '{} & not "" & not 0 & not 0n & not false' may represent a primitive value, which is not permitted as the right operand of the 'in' operator.
 
 
 ==== inKeywordAndUnknown.ts (1 errors) ====
@@ -15,7 +15,7 @@ inKeywordAndUnknown.ts(12,18): error TS2638: Type '{}' may represent a primitive
         y;  // {}
         if (!("a" in y)) {
                      ~
-!!! error TS2638: Type '{}' may represent a primitive value, which is not permitted as the right operand of the 'in' operator.
+!!! error TS2638: Type '{} & not "" & not 0 & not 0n & not false' may represent a primitive value, which is not permitted as the right operand of the 'in' operator.
             return;
         }
         y;  // {}

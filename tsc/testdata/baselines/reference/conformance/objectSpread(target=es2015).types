@@ -269,7 +269,7 @@ function conditionalSpreadNumber(nt: number): { x: number, y: number } {
 >nt : number
 >{ x: nt } : { x: number; }
 >x : number
->nt : number
+>nt : number & not 0
     }
     let o2 = { ...nt && { x: nt }}
 >o2 : { x?: number | undefined; }
@@ -278,7 +278,7 @@ function conditionalSpreadNumber(nt: number): { x: number, y: number } {
 >nt : number
 >{ x: nt } : { x: number; }
 >x : number
->nt : number
+>nt : number & not 0
 
     return o;
 >o : { x: number; y: number; }
@@ -310,7 +310,7 @@ function conditionalSpreadString(st: string): { x: string, y: number } {
 >st : string
 >{ x: st } : { x: string; }
 >x : string
->st : string
+>st : string & not ""
     }
     let o2 = { ...st && { x: st }}
 >o2 : { x?: string | undefined; }
@@ -319,7 +319,7 @@ function conditionalSpreadString(st: string): { x: string, y: number } {
 >st : string
 >{ x: st } : { x: string; }
 >x : string
->st : string
+>st : string & not ""
 
     return o;
 >o : { x: string; y: number; }

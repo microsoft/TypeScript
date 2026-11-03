@@ -70,13 +70,13 @@ function f2(obj: [number, string] | null[]) {
 
         let c0 = obj[0];  // number
 >c0 : number
->obj[0] : number
+>obj[0] : number & not 0
 >obj : null[] | [number, string]
 >0 : 0
 
         let c1 = obj[1];  // string
 >c1 : string
->obj[1] : string
+>obj[1] : string & not ""
 >obj : null[] | [number, string]
 >1 : 1
 

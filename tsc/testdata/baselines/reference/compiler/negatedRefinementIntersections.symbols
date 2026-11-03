@@ -1,0 +1,557 @@
+//// [tests/cases/compiler/negatedRefinementIntersections.ts] ////
+
+=== negatedRefinementIntersections.ts ===
+type Falsy = "" | 0 | 0n | false | null | undefined;
+>Falsy : Symbol(Falsy, Decl(negatedRefinementIntersections.ts, 0, 0))
+
+export function truthy<T>(value: T) {
+>truthy : Symbol(truthy, Decl(negatedRefinementIntersections.ts, 0, 52))
+>T : Symbol(T, Decl(negatedRefinementIntersections.ts, 2, 23))
+>value : Symbol(value, Decl(negatedRefinementIntersections.ts, 2, 26))
+>T : Symbol(T, Decl(negatedRefinementIntersections.ts, 2, 23))
+
+    if (value) {
+>value : Symbol(value, Decl(negatedRefinementIntersections.ts, 2, 26))
+
+        const refined: T & not Falsy = value;
+>refined : Symbol(refined, Decl(negatedRefinementIntersections.ts, 4, 13))
+>T : Symbol(T, Decl(negatedRefinementIntersections.ts, 2, 23))
+>Falsy : Symbol(Falsy, Decl(negatedRefinementIntersections.ts, 0, 0))
+>value : Symbol(value, Decl(negatedRefinementIntersections.ts, 2, 26))
+
+        return refined;
+>refined : Symbol(refined, Decl(negatedRefinementIntersections.ts, 4, 13))
+    }
+    return undefined;
+>undefined : Symbol(undefined)
+}
+
+export function falsy<T>(value: T) {
+>falsy : Symbol(falsy, Decl(negatedRefinementIntersections.ts, 8, 1))
+>T : Symbol(T, Decl(negatedRefinementIntersections.ts, 10, 22))
+>value : Symbol(value, Decl(negatedRefinementIntersections.ts, 10, 25))
+>T : Symbol(T, Decl(negatedRefinementIntersections.ts, 10, 22))
+
+    if (!value) {
+>value : Symbol(value, Decl(negatedRefinementIntersections.ts, 10, 25))
+
+        const refined: T & Falsy = value;
+>refined : Symbol(refined, Decl(negatedRefinementIntersections.ts, 12, 13))
+>T : Symbol(T, Decl(negatedRefinementIntersections.ts, 10, 22))
+>Falsy : Symbol(Falsy, Decl(negatedRefinementIntersections.ts, 0, 0))
+>value : Symbol(value, Decl(negatedRefinementIntersections.ts, 10, 25))
+
+        return refined;
+>refined : Symbol(refined, Decl(negatedRefinementIntersections.ts, 12, 13))
+    }
+    return undefined;
+>undefined : Symbol(undefined)
+}
+
+export function nullable<T>(value: T) {
+>nullable : Symbol(nullable, Decl(negatedRefinementIntersections.ts, 16, 1))
+>T : Symbol(T, Decl(negatedRefinementIntersections.ts, 18, 25))
+>value : Symbol(value, Decl(negatedRefinementIntersections.ts, 18, 28))
+>T : Symbol(T, Decl(negatedRefinementIntersections.ts, 18, 25))
+
+    if (value === undefined) {
+>value : Symbol(value, Decl(negatedRefinementIntersections.ts, 18, 28))
+>undefined : Symbol(undefined)
+
+        const refined: T & undefined = value;
+>refined : Symbol(refined, Decl(negatedRefinementIntersections.ts, 20, 13))
+>T : Symbol(T, Decl(negatedRefinementIntersections.ts, 18, 25))
+>value : Symbol(value, Decl(negatedRefinementIntersections.ts, 18, 28))
+
+        return refined;
+>refined : Symbol(refined, Decl(negatedRefinementIntersections.ts, 20, 13))
+    }
+    if (value === null) {
+>value : Symbol(value, Decl(negatedRefinementIntersections.ts, 18, 28))
+
+        const refined: T & null = value;
+>refined : Symbol(refined, Decl(negatedRefinementIntersections.ts, 24, 13))
+>T : Symbol(T, Decl(negatedRefinementIntersections.ts, 18, 25))
+>value : Symbol(value, Decl(negatedRefinementIntersections.ts, 18, 28))
+
+        return refined;
+>refined : Symbol(refined, Decl(negatedRefinementIntersections.ts, 24, 13))
+    }
+    const refined: T & not null & not undefined = value;
+>refined : Symbol(refined, Decl(negatedRefinementIntersections.ts, 27, 9))
+>T : Symbol(T, Decl(negatedRefinementIntersections.ts, 18, 25))
+>value : Symbol(value, Decl(negatedRefinementIntersections.ts, 18, 28))
+
+    return refined;
+>refined : Symbol(refined, Decl(negatedRefinementIntersections.ts, 27, 9))
+}
+
+export function nullish<T>(value: T) {
+>nullish : Symbol(nullish, Decl(negatedRefinementIntersections.ts, 29, 1))
+>T : Symbol(T, Decl(negatedRefinementIntersections.ts, 31, 24))
+>value : Symbol(value, Decl(negatedRefinementIntersections.ts, 31, 27))
+>T : Symbol(T, Decl(negatedRefinementIntersections.ts, 31, 24))
+
+    if (value == null) {
+>value : Symbol(value, Decl(negatedRefinementIntersections.ts, 31, 27))
+
+        const refined: T & (null | undefined) = value;
+>refined : Symbol(refined, Decl(negatedRefinementIntersections.ts, 33, 13))
+>T : Symbol(T, Decl(negatedRefinementIntersections.ts, 31, 24))
+>value : Symbol(value, Decl(negatedRefinementIntersections.ts, 31, 27))
+
+        return refined;
+>refined : Symbol(refined, Decl(negatedRefinementIntersections.ts, 33, 13))
+    }
+    const refined: T & {} = value;
+>refined : Symbol(refined, Decl(negatedRefinementIntersections.ts, 36, 9))
+>T : Symbol(T, Decl(negatedRefinementIntersections.ts, 31, 24))
+>value : Symbol(value, Decl(negatedRefinementIntersections.ts, 31, 27))
+
+    return refined;
+>refined : Symbol(refined, Decl(negatedRefinementIntersections.ts, 36, 9))
+}
+
+export function primitive<T>(value: T) {
+>primitive : Symbol(primitive, Decl(negatedRefinementIntersections.ts, 38, 1))
+>T : Symbol(T, Decl(negatedRefinementIntersections.ts, 40, 26))
+>value : Symbol(value, Decl(negatedRefinementIntersections.ts, 40, 29))
+>T : Symbol(T, Decl(negatedRefinementIntersections.ts, 40, 26))
+
+    if (typeof value === "string") {
+>value : Symbol(value, Decl(negatedRefinementIntersections.ts, 40, 29))
+
+        const refined: T & string = value;
+>refined : Symbol(refined, Decl(negatedRefinementIntersections.ts, 42, 13))
+>T : Symbol(T, Decl(negatedRefinementIntersections.ts, 40, 26))
+>value : Symbol(value, Decl(negatedRefinementIntersections.ts, 40, 29))
+
+        return refined;
+>refined : Symbol(refined, Decl(negatedRefinementIntersections.ts, 42, 13))
+    }
+    const refined: T & not string = value;
+>refined : Symbol(refined, Decl(negatedRefinementIntersections.ts, 45, 9))
+>T : Symbol(T, Decl(negatedRefinementIntersections.ts, 40, 26))
+>value : Symbol(value, Decl(negatedRefinementIntersections.ts, 40, 29))
+
+    return refined;
+>refined : Symbol(refined, Decl(negatedRefinementIntersections.ts, 45, 9))
+}
+
+export function exhaustive(value: unknown): number {
+>exhaustive : Symbol(exhaustive, Decl(negatedRefinementIntersections.ts, 47, 1))
+>value : Symbol(value, Decl(negatedRefinementIntersections.ts, 49, 27))
+
+    switch (typeof value) {
+>value : Symbol(value, Decl(negatedRefinementIntersections.ts, 49, 27))
+
+        case "string": return 1;
+        case "number": return 2;
+        case "bigint": return 3;
+        case "boolean": return 4;
+        case "symbol": return 5;
+        case "undefined": return 6;
+        case "object": return 7;
+        case "function": return 8;
+    }
+}
+
+export function excludedFalsy(value: not Falsy) {
+>excludedFalsy : Symbol(excludedFalsy, Decl(negatedRefinementIntersections.ts, 60, 1))
+>value : Symbol(value, Decl(negatedRefinementIntersections.ts, 62, 30))
+>Falsy : Symbol(Falsy, Decl(negatedRefinementIntersections.ts, 0, 0))
+
+    const negated: false = !value;
+>negated : Symbol(negated, Decl(negatedRefinementIntersections.ts, 63, 9))
+>value : Symbol(value, Decl(negatedRefinementIntersections.ts, 62, 30))
+
+    const fallback: not Falsy = value || "fallback";
+>fallback : Symbol(fallback, Decl(negatedRefinementIntersections.ts, 64, 9))
+>Falsy : Symbol(Falsy, Decl(negatedRefinementIntersections.ts, 0, 0))
+>value : Symbol(value, Decl(negatedRefinementIntersections.ts, 62, 30))
+
+    return { negated, fallback };
+>negated : Symbol(negated, Decl(negatedRefinementIntersections.ts, 65, 12))
+>fallback : Symbol(fallback, Decl(negatedRefinementIntersections.ts, 65, 21))
+}
+
+export function stringBranches(value: string) {
+>stringBranches : Symbol(stringBranches, Decl(negatedRefinementIntersections.ts, 66, 1))
+>value : Symbol(value, Decl(negatedRefinementIntersections.ts, 68, 31))
+
+    if (value) {
+>value : Symbol(value, Decl(negatedRefinementIntersections.ts, 68, 31))
+
+        const refined: string & not "" = value;
+>refined : Symbol(refined, Decl(negatedRefinementIntersections.ts, 70, 13))
+>value : Symbol(value, Decl(negatedRefinementIntersections.ts, 68, 31))
+
+        return refined;
+>refined : Symbol(refined, Decl(negatedRefinementIntersections.ts, 70, 13))
+
+    } else {
+        const refined: "" = value;
+>refined : Symbol(refined, Decl(negatedRefinementIntersections.ts, 73, 13))
+>value : Symbol(value, Decl(negatedRefinementIntersections.ts, 68, 31))
+
+        return refined;
+>refined : Symbol(refined, Decl(negatedRefinementIntersections.ts, 73, 13))
+    }
+}
+
+export function primitiveBranches(value: number | bigint | boolean | undefined) {
+>primitiveBranches : Symbol(primitiveBranches, Decl(negatedRefinementIntersections.ts, 76, 1))
+>value : Symbol(value, Decl(negatedRefinementIntersections.ts, 78, 34))
+
+    if (value) {
+>value : Symbol(value, Decl(negatedRefinementIntersections.ts, 78, 34))
+
+        const refined: (number | bigint | boolean) & not (0 | 0n | false) = value;
+>refined : Symbol(refined, Decl(negatedRefinementIntersections.ts, 80, 13))
+>value : Symbol(value, Decl(negatedRefinementIntersections.ts, 78, 34))
+
+        return refined;
+>refined : Symbol(refined, Decl(negatedRefinementIntersections.ts, 80, 13))
+    }
+    const refined: 0 | 0n | false | undefined = value;
+>refined : Symbol(refined, Decl(negatedRefinementIntersections.ts, 83, 9))
+>value : Symbol(value, Decl(negatedRefinementIntersections.ts, 78, 34))
+
+    return refined;
+>refined : Symbol(refined, Decl(negatedRefinementIntersections.ts, 83, 9))
+}
+
+export function taggedString(value: string & { readonly tag: unique symbol }) {
+>taggedString : Symbol(taggedString, Decl(negatedRefinementIntersections.ts, 85, 1))
+>value : Symbol(value, Decl(negatedRefinementIntersections.ts, 87, 29))
+>tag : Symbol(tag, Decl(negatedRefinementIntersections.ts, 87, 46))
+
+    if (!value) {
+>value : Symbol(value, Decl(negatedRefinementIntersections.ts, 87, 29))
+
+        const refined: "" = value;
+>refined : Symbol(refined, Decl(negatedRefinementIntersections.ts, 89, 13))
+>value : Symbol(value, Decl(negatedRefinementIntersections.ts, 87, 29))
+
+        return refined;
+>refined : Symbol(refined, Decl(negatedRefinementIntersections.ts, 89, 13))
+    }
+    const refined: string & not "" = value;
+>refined : Symbol(refined, Decl(negatedRefinementIntersections.ts, 92, 9))
+>value : Symbol(value, Decl(negatedRefinementIntersections.ts, 87, 29))
+
+    return refined;
+>refined : Symbol(refined, Decl(negatedRefinementIntersections.ts, 92, 9))
+}
+
+export function optionalDiscriminant(value: { error: Error; result?: never } | { error?: never; result: string }) {
+>optionalDiscriminant : Symbol(optionalDiscriminant, Decl(negatedRefinementIntersections.ts, 94, 1))
+>value : Symbol(value, Decl(negatedRefinementIntersections.ts, 96, 37))
+>error : Symbol(error, Decl(negatedRefinementIntersections.ts, 96, 45))
+>Error : Symbol(Error, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2022.error.d.ts, --, --))
+>result : Symbol(result, Decl(negatedRefinementIntersections.ts, 96, 59))
+>error : Symbol(error, Decl(negatedRefinementIntersections.ts, 96, 80))
+>result : Symbol(result, Decl(negatedRefinementIntersections.ts, 96, 95))
+
+    if (value.error) throw value.error;
+>value.error : Symbol(error, Decl(negatedRefinementIntersections.ts, 96, 45), Decl(negatedRefinementIntersections.ts, 96, 80))
+>value : Symbol(value, Decl(negatedRefinementIntersections.ts, 96, 37))
+>error : Symbol(error, Decl(negatedRefinementIntersections.ts, 96, 45), Decl(negatedRefinementIntersections.ts, 96, 80))
+>value.error : Symbol(error, Decl(negatedRefinementIntersections.ts, 96, 45))
+>value : Symbol(value, Decl(negatedRefinementIntersections.ts, 96, 37))
+>error : Symbol(error, Decl(negatedRefinementIntersections.ts, 96, 45))
+
+    return value.result.toUpperCase();
+>value.result.toUpperCase : Symbol(String.toUpperCase, Decl(lib.es5.d.ts, --, --))
+>value.result : Symbol(result, Decl(negatedRefinementIntersections.ts, 96, 95))
+>value : Symbol(value, Decl(negatedRefinementIntersections.ts, 96, 37))
+>result : Symbol(result, Decl(negatedRefinementIntersections.ts, 96, 95))
+>toUpperCase : Symbol(String.toUpperCase, Decl(lib.es5.d.ts, --, --))
+}
+
+export function callable<T extends (() => void) | number, U extends { value: string } | number>(value: T | U) {
+>callable : Symbol(callable, Decl(negatedRefinementIntersections.ts, 99, 1))
+>T : Symbol(T, Decl(negatedRefinementIntersections.ts, 101, 25))
+>U : Symbol(U, Decl(negatedRefinementIntersections.ts, 101, 57))
+>value : Symbol(value, Decl(negatedRefinementIntersections.ts, 101, 69))
+>value : Symbol(value, Decl(negatedRefinementIntersections.ts, 101, 96))
+>T : Symbol(T, Decl(negatedRefinementIntersections.ts, 101, 25))
+>U : Symbol(U, Decl(negatedRefinementIntersections.ts, 101, 57))
+
+    if (typeof value === "function") {
+>value : Symbol(value, Decl(negatedRefinementIntersections.ts, 101, 96))
+
+        const refined: T = value;
+>refined : Symbol(refined, Decl(negatedRefinementIntersections.ts, 103, 13))
+>T : Symbol(T, Decl(negatedRefinementIntersections.ts, 101, 25))
+>value : Symbol(value, Decl(negatedRefinementIntersections.ts, 101, 96))
+
+        value();
+>value : Symbol(value, Decl(negatedRefinementIntersections.ts, 101, 96))
+
+    } else if (typeof value === "object") {
+>value : Symbol(value, Decl(negatedRefinementIntersections.ts, 101, 96))
+
+        const refined: U = value;
+>refined : Symbol(refined, Decl(negatedRefinementIntersections.ts, 106, 13))
+>U : Symbol(U, Decl(negatedRefinementIntersections.ts, 101, 57))
+>value : Symbol(value, Decl(negatedRefinementIntersections.ts, 101, 96))
+
+        return value.value;
+>value.value : Symbol(value, Decl(negatedRefinementIntersections.ts, 101, 69))
+>value : Symbol(value, Decl(negatedRefinementIntersections.ts, 101, 96))
+>value : Symbol(value, Decl(negatedRefinementIntersections.ts, 101, 69))
+    }
+    return value;
+>value : Symbol(value, Decl(negatedRefinementIntersections.ts, 101, 96))
+}
+
+export function optionalArray<T extends unknown[] | undefined>(value: T) {
+>optionalArray : Symbol(optionalArray, Decl(negatedRefinementIntersections.ts, 110, 1))
+>T : Symbol(T, Decl(negatedRefinementIntersections.ts, 112, 30))
+>value : Symbol(value, Decl(negatedRefinementIntersections.ts, 112, 63))
+>T : Symbol(T, Decl(negatedRefinementIntersections.ts, 112, 30))
+
+    if (typeof value === "undefined") return;
+>value : Symbol(value, Decl(negatedRefinementIntersections.ts, 112, 63))
+
+    for (const element of value) {}
+>element : Symbol(element, Decl(negatedRefinementIntersections.ts, 114, 14))
+>value : Symbol(value, Decl(negatedRefinementIntersections.ts, 112, 63))
+
+    return [...value];
+>value : Symbol(value, Decl(negatedRefinementIntersections.ts, 112, 63))
+}
+
+export function logicalOperators<T>(value: T) {
+>logicalOperators : Symbol(logicalOperators, Decl(negatedRefinementIntersections.ts, 116, 1))
+>T : Symbol(T, Decl(negatedRefinementIntersections.ts, 118, 33))
+>value : Symbol(value, Decl(negatedRefinementIntersections.ts, 118, 36))
+>T : Symbol(T, Decl(negatedRefinementIntersections.ts, 118, 33))
+
+    if (value) {
+>value : Symbol(value, Decl(negatedRefinementIntersections.ts, 118, 36))
+
+        const and: number = value && 1;
+>and : Symbol(and, Decl(negatedRefinementIntersections.ts, 120, 13))
+>value : Symbol(value, Decl(negatedRefinementIntersections.ts, 118, 36))
+
+        const or: T & not Falsy = value || 1;
+>or : Symbol(or, Decl(negatedRefinementIntersections.ts, 121, 13))
+>T : Symbol(T, Decl(negatedRefinementIntersections.ts, 118, 33))
+>Falsy : Symbol(Falsy, Decl(negatedRefinementIntersections.ts, 0, 0))
+>value : Symbol(value, Decl(negatedRefinementIntersections.ts, 118, 36))
+
+        return { and, or };
+>and : Symbol(and, Decl(negatedRefinementIntersections.ts, 122, 16))
+>or : Symbol(or, Decl(negatedRefinementIntersections.ts, 122, 21))
+    }
+    return undefined;
+>undefined : Symbol(undefined)
+}
+
+export function compoundAssignments(value: number, holder: { value?: number }) {
+>compoundAssignments : Symbol(compoundAssignments, Decl(negatedRefinementIntersections.ts, 125, 1))
+>value : Symbol(value, Decl(negatedRefinementIntersections.ts, 127, 36))
+>holder : Symbol(holder, Decl(negatedRefinementIntersections.ts, 127, 50))
+>value : Symbol(value, Decl(negatedRefinementIntersections.ts, 127, 60))
+
+    if (value) value -= 1;
+>value : Symbol(value, Decl(negatedRefinementIntersections.ts, 127, 36))
+>value : Symbol(value, Decl(negatedRefinementIntersections.ts, 127, 36))
+
+    if (holder.value) holder.value += 1;
+>holder.value : Symbol(value, Decl(negatedRefinementIntersections.ts, 127, 60))
+>holder : Symbol(holder, Decl(negatedRefinementIntersections.ts, 127, 50))
+>value : Symbol(value, Decl(negatedRefinementIntersections.ts, 127, 60))
+>holder.value : Symbol(value, Decl(negatedRefinementIntersections.ts, 127, 60))
+>holder : Symbol(holder, Decl(negatedRefinementIntersections.ts, 127, 50))
+>value : Symbol(value, Decl(negatedRefinementIntersections.ts, 127, 60))
+
+    if (holder["value"]) holder["value"] *= 2;
+>holder : Symbol(holder, Decl(negatedRefinementIntersections.ts, 127, 50))
+>"value" : Symbol(value, Decl(negatedRefinementIntersections.ts, 127, 60))
+>holder : Symbol(holder, Decl(negatedRefinementIntersections.ts, 127, 50))
+>"value" : Symbol(value, Decl(negatedRefinementIntersections.ts, 127, 60))
+
+    return holder.value;
+>holder.value : Symbol(value, Decl(negatedRefinementIntersections.ts, 127, 60))
+>holder : Symbol(holder, Decl(negatedRefinementIntersections.ts, 127, 50))
+>value : Symbol(value, Decl(negatedRefinementIntersections.ts, 127, 60))
+}
+
+export function rejoinedUnknown(value: unknown) {
+>rejoinedUnknown : Symbol(rejoinedUnknown, Decl(negatedRefinementIntersections.ts, 132, 1))
+>value : Symbol(value, Decl(negatedRefinementIntersections.ts, 134, 32))
+
+    if (value === undefined) {}
+>value : Symbol(value, Decl(negatedRefinementIntersections.ts, 134, 32))
+>undefined : Symbol(undefined)
+
+    if (value === null) {}
+>value : Symbol(value, Decl(negatedRefinementIntersections.ts, 134, 32))
+
+    type IsUnknown = unknown extends typeof value ? true : false;
+>IsUnknown : Symbol(IsUnknown, Decl(negatedRefinementIntersections.ts, 136, 26))
+>value : Symbol(value, Decl(negatedRefinementIntersections.ts, 134, 32))
+
+    const unchanged: IsUnknown = true;
+>unchanged : Symbol(unchanged, Decl(negatedRefinementIntersections.ts, 138, 9))
+>IsUnknown : Symbol(IsUnknown, Decl(negatedRefinementIntersections.ts, 136, 26))
+
+    return unchanged;
+>unchanged : Symbol(unchanged, Decl(negatedRefinementIntersections.ts, 138, 9))
+}
+
+export function rejoinedTypeofTruthiness(value: unknown, condition: boolean) {
+>rejoinedTypeofTruthiness : Symbol(rejoinedTypeofTruthiness, Decl(negatedRefinementIntersections.ts, 140, 1))
+>value : Symbol(value, Decl(negatedRefinementIntersections.ts, 142, 41))
+>condition : Symbol(condition, Decl(negatedRefinementIntersections.ts, 142, 56))
+
+    if (typeof value === "object") {}
+>value : Symbol(value, Decl(negatedRefinementIntersections.ts, 142, 41))
+
+    if (typeof value === "object" && value) {}
+>value : Symbol(value, Decl(negatedRefinementIntersections.ts, 142, 41))
+>value : Symbol(value, Decl(negatedRefinementIntersections.ts, 142, 41))
+
+    if (value && typeof value === "object") {}
+>value : Symbol(value, Decl(negatedRefinementIntersections.ts, 142, 41))
+>value : Symbol(value, Decl(negatedRefinementIntersections.ts, 142, 41))
+
+    if (condition && value && typeof value === "object") {}
+>condition : Symbol(condition, Decl(negatedRefinementIntersections.ts, 142, 56))
+>value : Symbol(value, Decl(negatedRefinementIntersections.ts, 142, 41))
+>value : Symbol(value, Decl(negatedRefinementIntersections.ts, 142, 41))
+
+    type IsUnknown = unknown extends typeof value ? true : false;
+>IsUnknown : Symbol(IsUnknown, Decl(negatedRefinementIntersections.ts, 146, 59))
+>value : Symbol(value, Decl(negatedRefinementIntersections.ts, 142, 41))
+
+    const unchanged: IsUnknown = true;
+>unchanged : Symbol(unchanged, Decl(negatedRefinementIntersections.ts, 148, 9))
+>IsUnknown : Symbol(IsUnknown, Decl(negatedRefinementIntersections.ts, 146, 59))
+
+    return unchanged;
+>unchanged : Symbol(unchanged, Decl(negatedRefinementIntersections.ts, 148, 9))
+}
+
+export function nonCallable<T>(value: T) {
+>nonCallable : Symbol(nonCallable, Decl(negatedRefinementIntersections.ts, 150, 1))
+>T : Symbol(T, Decl(negatedRefinementIntersections.ts, 152, 28))
+>value : Symbol(value, Decl(negatedRefinementIntersections.ts, 152, 31))
+>T : Symbol(T, Decl(negatedRefinementIntersections.ts, 152, 28))
+
+    if (typeof value !== "function") {
+>value : Symbol(value, Decl(negatedRefinementIntersections.ts, 152, 31))
+
+        const refined: T & not Function = value;
+>refined : Symbol(refined, Decl(negatedRefinementIntersections.ts, 154, 13))
+>T : Symbol(T, Decl(negatedRefinementIntersections.ts, 152, 28))
+>Function : Symbol(Function, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.esnext.decorators.d.ts, --, --))
+>value : Symbol(value, Decl(negatedRefinementIntersections.ts, 152, 31))
+
+        return refined;
+>refined : Symbol(refined, Decl(negatedRefinementIntersections.ts, 154, 13))
+    }
+    return undefined;
+>undefined : Symbol(undefined)
+}
+
+export function typeofDefault<T>(value: T) {
+>typeofDefault : Symbol(typeofDefault, Decl(negatedRefinementIntersections.ts, 158, 1))
+>T : Symbol(T, Decl(negatedRefinementIntersections.ts, 160, 30))
+>value : Symbol(value, Decl(negatedRefinementIntersections.ts, 160, 33))
+>T : Symbol(T, Decl(negatedRefinementIntersections.ts, 160, 30))
+
+    switch (typeof value) {
+>value : Symbol(value, Decl(negatedRefinementIntersections.ts, 160, 33))
+
+        case "string":
+        case "number":
+            return undefined;
+>undefined : Symbol(undefined)
+
+        default: {
+            const refined: T & not string & not number = value;
+>refined : Symbol(refined, Decl(negatedRefinementIntersections.ts, 166, 17))
+>T : Symbol(T, Decl(negatedRefinementIntersections.ts, 160, 30))
+>value : Symbol(value, Decl(negatedRefinementIntersections.ts, 160, 33))
+
+            return refined;
+>refined : Symbol(refined, Decl(negatedRefinementIntersections.ts, 166, 17))
+        }
+    }
+}
+
+enum NumberChoice { Empty = 0, First = 1, Second = 2 }
+>NumberChoice : Symbol(NumberChoice, Decl(negatedRefinementIntersections.ts, 170, 1))
+>Empty : Symbol(NumberChoice.Empty, Decl(negatedRefinementIntersections.ts, 172, 19))
+>First : Symbol(NumberChoice.First, Decl(negatedRefinementIntersections.ts, 172, 30))
+>Second : Symbol(NumberChoice.Second, Decl(negatedRefinementIntersections.ts, 172, 41))
+
+enum StringChoice { Empty = "", Present = "present" }
+>StringChoice : Symbol(StringChoice, Decl(negatedRefinementIntersections.ts, 172, 54))
+>Empty : Symbol(StringChoice.Empty, Decl(negatedRefinementIntersections.ts, 173, 19))
+>Present : Symbol(StringChoice.Present, Decl(negatedRefinementIntersections.ts, 173, 31))
+
+export function enumTruthiness(value: NumberChoice, text: StringChoice) {
+>enumTruthiness : Symbol(enumTruthiness, Decl(negatedRefinementIntersections.ts, 173, 53))
+>value : Symbol(value, Decl(negatedRefinementIntersections.ts, 175, 31))
+>NumberChoice : Symbol(NumberChoice, Decl(negatedRefinementIntersections.ts, 170, 1))
+>text : Symbol(text, Decl(negatedRefinementIntersections.ts, 175, 51))
+>StringChoice : Symbol(StringChoice, Decl(negatedRefinementIntersections.ts, 172, 54))
+
+    if (value) {
+>value : Symbol(value, Decl(negatedRefinementIntersections.ts, 175, 31))
+
+        const refined: NumberChoice.First | NumberChoice.Second = value;
+>refined : Symbol(refined, Decl(negatedRefinementIntersections.ts, 177, 13))
+>NumberChoice : Symbol(NumberChoice, Decl(negatedRefinementIntersections.ts, 170, 1))
+>First : Symbol(NumberChoice.First, Decl(negatedRefinementIntersections.ts, 172, 30))
+>NumberChoice : Symbol(NumberChoice, Decl(negatedRefinementIntersections.ts, 170, 1))
+>Second : Symbol(NumberChoice.Second, Decl(negatedRefinementIntersections.ts, 172, 41))
+>value : Symbol(value, Decl(negatedRefinementIntersections.ts, 175, 31))
+
+    } else {
+        const refined: NumberChoice.Empty = value;
+>refined : Symbol(refined, Decl(negatedRefinementIntersections.ts, 179, 13))
+>NumberChoice : Symbol(NumberChoice, Decl(negatedRefinementIntersections.ts, 170, 1))
+>Empty : Symbol(NumberChoice.Empty, Decl(negatedRefinementIntersections.ts, 172, 19))
+>value : Symbol(value, Decl(negatedRefinementIntersections.ts, 175, 31))
+    }
+    if (text) {
+>text : Symbol(text, Decl(negatedRefinementIntersections.ts, 175, 51))
+
+        const refined: StringChoice.Present = text;
+>refined : Symbol(refined, Decl(negatedRefinementIntersections.ts, 182, 13))
+>StringChoice : Symbol(StringChoice, Decl(negatedRefinementIntersections.ts, 172, 54))
+>Present : Symbol(StringChoice.Present, Decl(negatedRefinementIntersections.ts, 173, 31))
+>text : Symbol(text, Decl(negatedRefinementIntersections.ts, 175, 51))
+
+    } else {
+        const refined: StringChoice.Empty = text;
+>refined : Symbol(refined, Decl(negatedRefinementIntersections.ts, 184, 13))
+>StringChoice : Symbol(StringChoice, Decl(negatedRefinementIntersections.ts, 172, 54))
+>Empty : Symbol(StringChoice.Empty, Decl(negatedRefinementIntersections.ts, 173, 19))
+>text : Symbol(text, Decl(negatedRefinementIntersections.ts, 175, 51))
+    }
+    return [value || "fallback", text || "fallback"];
+>value : Symbol(value, Decl(negatedRefinementIntersections.ts, 175, 31))
+>text : Symbol(text, Decl(negatedRefinementIntersections.ts, 175, 51))
+}
+
+export function brandedPrimitiveTypeof(value: number & { brand: "number" }) {
+>brandedPrimitiveTypeof : Symbol(brandedPrimitiveTypeof, Decl(negatedRefinementIntersections.ts, 187, 1))
+>value : Symbol(value, Decl(negatedRefinementIntersections.ts, 189, 39))
+>brand : Symbol(brand, Decl(negatedRefinementIntersections.ts, 189, 56))
+
+    if (typeof value === "function") {
+>value : Symbol(value, Decl(negatedRefinementIntersections.ts, 189, 39))
+
+        const impossible: never = value;
+>impossible : Symbol(impossible, Decl(negatedRefinementIntersections.ts, 191, 13))
+>value : Symbol(value, Decl(negatedRefinementIntersections.ts, 189, 39))
+    }
+}
+
