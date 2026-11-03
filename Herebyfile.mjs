@@ -35,6 +35,9 @@ import { outputs as goASTOutputs } from "./tools/scripts/tsc/generate-go-ast.ts"
 import { outputs as tsASTOutputs } from "./tools/scripts/tsc/generate-ts-ast.ts";
 import generateUnicodeData, { outputs as unicodeOutputs } from "./tsc/internal/stringutil/_scripts/generate-unicode-data.mts";
 
+// Set GOEXPERIMENT=nosimd to opt out of SIMD for any task.
+process.env.GOEXPERIMENT ||= "simd";
+
 enableFileFingerprintCache();
 
 if (process.platform === "win32") {

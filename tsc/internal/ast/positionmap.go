@@ -43,7 +43,7 @@ func ComputePositionMap(text string) *PositionMap {
 	for i := 0; i < len(text); {
 		b := text[i]
 		if b < utf8.RuneSelf {
-			i++
+			i += stringutil.ASCIIPrefixLen(text[i:])
 			continue
 		}
 		r, size := stringutil.DecodeJSStringRune(text[i:])

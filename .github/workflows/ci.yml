@@ -11,6 +11,9 @@ on:
 permissions:
   contents: read
 
+env:
+  GOEXPERIMENT: simd
+
 defaults:
   run:
     shell: bash
@@ -129,6 +132,11 @@ jobs:
             noembed: true
           - runner: ubuntu-latest
             os: linux
+            name: 'nosimd'
+            nosimd: true
+            skip: ${{ github.event_name == 'merge_group' }}
+          - runner: ubuntu-latest
+            os: linux
             name: 'concurrent test programs'
             concurrent-test-programs: true
             coverage: true
@@ -143,6 +151,7 @@ jobs:
       id-token: write
       contents: read
     env:
+      GOEXPERIMENT: ${{ (matrix.config.nosimd && 'nosimd') || 'simd' }}
       TSGO_HEREBY_RACE: ${{ (matrix.config.race && 'true') || 'false' }}
       TSGO_HEREBY_NOEMBED: ${{ (matrix.config.noembed && 'true') || 'false' }}
       TSGO_HEREBY_CONCURRENT_TEST_PROGRAMS: ${{ (matrix.config.concurrent-test-programs && 'true') || 'false' }}
