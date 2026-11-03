@@ -34,6 +34,32 @@ func TestTypeEraserJSDocExportAssignment(t *testing.T) {
 	}
 }
 
+func TestTypeEraserJSDocWrappedTypes(t *testing.T) {
+	t.Parallel()
+	for _, test := range []struct {
+		name  string
+		input string
+	}{
+		{name: "nullable property", input: "const obj = {\n    /** @type {?number} */\n    p: null\n};"},
+		{name: "non-nullable shorthand", input: "const p = 1;\nconst obj = {\n    /** @type {!number} */\n    p\n};"},
+		{name: "optional assignment", input: "const obj = {};\n/** @type {number=} */\nobj.p = null;"},
+		{name: "variadic property", input: "const obj = {\n    /** @type {...number} */\n    p: []\n};"},
+	} {
+		t.Run(test.name, func(t *testing.T) {
+			t.Parallel()
+			file := parser.ParseSourceFile(ast.SourceFileParseOptions{
+				FileName: "/main.js",
+			}, test.input, core.ScriptKindJS)
+			parsetestutil.CheckDiagnostics(t, file)
+			transformed := tstransforms.NewTypeEraserTransformer(&transformers.TransformOptions{
+				CompilerOptions: &core.CompilerOptions{},
+				Context:         printer.NewEmitContext(),
+			}).TransformSourceFile(file)
+			emittestutil.CheckEmit(t, nil, transformed, test.input)
+		})
+	}
+}
+
 func TestTypeEraser(t *testing.T) {
 	t.Parallel()
 	data := []struct {

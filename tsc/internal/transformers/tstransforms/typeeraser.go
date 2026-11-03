@@ -93,6 +93,10 @@ func (tx *TypeEraserTransformer) visit(node *ast.Node) *ast.Node {
 		ast.KindMappedType,
 		ast.KindLiteralType,
 		ast.KindImportType,
+		ast.KindJSDocNullableType,
+		ast.KindJSDocNonNullableType,
+		ast.KindJSDocOptionalType,
+		ast.KindJSDocVariadicType,
 		// TypeScript index signatures are elided.
 		ast.KindIndexSignature:
 		return nil
