@@ -398,7 +398,7 @@ func (r *EmitResolver) IsReferencedAliasDeclaration(node *ast.Node) bool {
 			if aliasLinks.referenced {
 				return true
 			}
-			target := aliasLinks.aliasTarget
+			target := aliasLinks.aliasTarget.get(c)
 			if target != nil && node.ModifierFlags()&ast.ModifierFlagsExport != 0 &&
 				c.getSymbolFlags(target)&ast.SymbolFlagsValue != 0 &&
 				(c.compilerOptions.ShouldPreserveConstEnums() || !isConstEnumOrConstEnumOnlyModule(target)) {
@@ -502,6 +502,12 @@ func (r *EmitResolver) MarkLinkedReferencesRecursively(file *ast.SourceFile) {
 	defer r.checkerMu.Unlock()
 
 	if file != nil {
+		r.checker.withReferenceMarks(func() { r.markLinkedReferencesRecursively(file) })
+	}
+}
+
+func (r *EmitResolver) markLinkedReferencesRecursively(file *ast.SourceFile) {
+	{
 		var visit ast.Visitor
 		visit = func(n *ast.Node) bool {
 			if ast.IsImportEqualsDeclaration(n) && n.ModifierFlags()&ast.ModifierFlagsExport == 0 {

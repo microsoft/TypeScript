@@ -36,11 +36,9 @@ class Bar<T> {
 
     Value = pick(new Foo(this)).foo;
 >Value : Symbol(Bar.Value, Decl(varianceCycleDiscardedDiagnostics.ts, 12, 10))
->pick(new Foo(this)).foo : Symbol(B.foo, Decl(varianceCycleDiscardedDiagnostics.ts, 7, 13))
 >pick : Symbol(pick, Decl(varianceCycleDiscardedDiagnostics.ts, 7, 27), Decl(varianceCycleDiscardedDiagnostics.ts, 8, 41))
 >Foo : Symbol(Foo, Decl(varianceCycleDiscardedDiagnostics.ts, 14, 1))
 >this : Symbol(Bar, Decl(varianceCycleDiscardedDiagnostics.ts, 9, 36))
->foo : Symbol(B.foo, Decl(varianceCycleDiscardedDiagnostics.ts, 7, 13))
 }
 
 class Foo<T> {

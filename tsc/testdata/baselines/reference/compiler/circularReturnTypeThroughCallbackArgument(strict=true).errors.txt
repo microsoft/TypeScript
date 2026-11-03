@@ -1,31 +1,21 @@
-circularReturnTypeThroughCallbackArgument.ts(3,17): error TS7023: 'a' implicitly has return type 'any' because it does not have a return type annotation and is referenced directly or indirectly in one of its return expressions.
-circularReturnTypeThroughCallbackArgument.ts(4,16): error TS7024: Function implicitly has return type 'any' because it does not have a return type annotation and is referenced directly or indirectly in one of its return expressions.
-circularReturnTypeThroughCallbackArgument.ts(9,23): error TS7023: 'b' implicitly has return type 'any' because it does not have a return type annotation and is referenced directly or indirectly in one of its return expressions.
-circularReturnTypeThroughCallbackArgument.ts(11,23): error TS7024: Function implicitly has return type 'any' because it does not have a return type annotation and is referenced directly or indirectly in one of its return expressions.
-circularReturnTypeThroughCallbackArgument.ts(21,23): error TS7023: 'c' implicitly has return type 'any' because it does not have a return type annotation and is referenced directly or indirectly in one of its return expressions.
-circularReturnTypeThroughCallbackArgument.ts(23,19): error TS7024: Function implicitly has return type 'any' because it does not have a return type annotation and is referenced directly or indirectly in one of its return expressions.
+circularReturnTypeThroughCallbackArgument.ts(23,25): error TS2322: Type 'Promise<Other | Result>' is not assignable to type 'Promise<Result>'.
+  Type 'Other | Result' is not assignable to type 'Result'.
+    Type 'Other' is not assignable to type 'Result'.
+      Index signature for type 'string' is missing in type 'Other'.
 
 
-==== circularReturnTypeThroughCallbackArgument.ts (6 errors) ====
+==== circularReturnTypeThroughCallbackArgument.ts (1 errors) ====
     declare function fan(g: () => number): number;
     
     export function a(n: number) {
-                    ~
-!!! error TS7023: 'a' implicitly has return type 'any' because it does not have a return type annotation and is referenced directly or indirectly in one of its return expressions.
         return fan(() => a(n));
-                   ~~~~~~~~~~
-!!! error TS7024: Function implicitly has return type 'any' because it does not have a return type annotation and is referenced directly or indirectly in one of its return expressions.
     }
     
     declare function fanAll(g: () => Promise<{ ok: boolean }>): Promise<{ ok: boolean }>;
     
     export async function b(n: number) {
-                          ~
-!!! error TS7023: 'b' implicitly has return type 'any' because it does not have a return type annotation and is referenced directly or indirectly in one of its return expressions.
         if (n > 0) {
             return fanAll(() => b(n - 1));
-                          ~~~~~~~~~~~~~~
-!!! error TS7024: Function implicitly has return type 'any' because it does not have a return type annotation and is referenced directly or indirectly in one of its return expressions.
         }
         return { ok: true };
     }
@@ -36,11 +26,13 @@ circularReturnTypeThroughCallbackArgument.ts(23,19): error TS7024: Function impl
     declare const other: Other;
     
     export async function c(n: number) {
-                          ~
-!!! error TS7023: 'c' implicitly has return type 'any' because it does not have a return type annotation and is referenced directly or indirectly in one of its return expressions.
         if (n) return other;
         return fanOut(() => c(n - 1));
-                      ~~~~~~~~~~~~~~
-!!! error TS7024: Function implicitly has return type 'any' because it does not have a return type annotation and is referenced directly or indirectly in one of its return expressions.
+                            ~~~~~~~~
+!!! error TS2322: Type 'Promise<Other | Result>' is not assignable to type 'Promise<Result>'.
+!!! error TS2322:   Type 'Other | Result' is not assignable to type 'Result'.
+!!! error TS2322:     Type 'Other' is not assignable to type 'Result'.
+!!! error TS2322:       Index signature for type 'string' is missing in type 'Other'.
+!!! related TS6502 circularReturnTypeThroughCallbackArgument.ts:18:38: The expected type comes from the return type of this signature.
     }
     

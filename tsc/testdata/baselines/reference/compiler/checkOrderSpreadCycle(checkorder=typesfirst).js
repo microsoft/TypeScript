@@ -57,7 +57,10 @@ module.exports = { v: { ...M } };
 
 //// [xb.d.ts]
 declare const _exports: {
-    v: {};
+    v: {
+        pa: {};
+        ma: 1;
+    };
 };
 export = _exports;
 //// [mb.d.ts]
@@ -65,10 +68,7 @@ export { v as pb } from "./xb";
 export declare const mb = 1;
 //// [xa.d.ts]
 declare const _exports: {
-    v: {
-        pb: {};
-        mb: 1;
-    };
+    v: {};
 };
 export = _exports;
 //// [ma.d.ts]
@@ -77,10 +77,7 @@ export declare const ma = 1;
 //// [ia.d.ts]
 declare const _exports: {
     v: {
-        pa: {
-            pb: {};
-            mb: 1;
-        };
+        pa: {};
         ma: 1;
     };
 };

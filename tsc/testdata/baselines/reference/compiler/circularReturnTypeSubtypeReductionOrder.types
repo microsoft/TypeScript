@@ -20,7 +20,7 @@ const A: new () => A = class {
 >class {    rebuild() {        return flag ? this : new A();    }    b() {        return this.rebuild();    }    c() {        return this.rebuild;    }} : typeof A
 
     rebuild() {
->rebuild : () => this | A
+>rebuild : () => any
 
         return flag ? this : new A();
 >flag ? this : new A() : this | A
@@ -30,21 +30,21 @@ const A: new () => A = class {
 >A : new () => A
     }
     b() {
->b : () => this | A
+>b : () => any
 
         return this.rebuild();
->this.rebuild() : this | A
->this.rebuild : () => this | A
+>this.rebuild() : any
+>this.rebuild : () => any
 >this : this
->rebuild : () => this | A
+>rebuild : () => any
     }
     c() {
->c : () => () => this | A
+>c : () => () => any
 
         return this.rebuild;
->this.rebuild : () => this | A
+>this.rebuild : () => any
 >this : this
->rebuild : () => this | A
+>rebuild : () => any
     }
 };
 export {};
@@ -61,23 +61,23 @@ class K {
 >K : K
 
     rebuild() {
->rebuild : () => this | B
+>rebuild : () => B
 
         return flag ? this : new B();
->flag ? this : new B() : this | B
+>flag ? this : new B() : B
 >flag : boolean
 >this : this
 >new B() : B
 >B : new () => B
     }
     b() {
->b : () => this | B
+>b : () => B
 
         return this.rebuild();
->this.rebuild() : this | B
->this.rebuild : () => this | B
+>this.rebuild() : B
+>this.rebuild : () => B
 >this : this
->rebuild : () => this | B
+>rebuild : () => B
     }
 }
 const B: new () => B = K;

@@ -29,13 +29,13 @@ class Bar<T> {
 
     Value = pick(new Foo(this)).foo;
 >Value : any
->pick(new Foo(this)).foo : string
->pick(new Foo(this)) : B
+>pick(new Foo(this)).foo : any
+>pick(new Foo(this)) : A
 >pick : { (x: Foo<number>): A; (x: object): B; }
 >new Foo(this) : Foo<T>
 >Foo : typeof Foo
 >this : this
->foo : string
+>foo : any
 }
 
 class Foo<T> {

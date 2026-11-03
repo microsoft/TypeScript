@@ -44,6 +44,7 @@ type FlowState struct {
 	flowContainer   *ast.Node
 	refKey          CacheHashKey
 	depth           int
+	limitHits       int
 	sharedFlowStart int
 	reduceLabels    []*ast.FlowReduceLabelData
 	next            *FlowState
@@ -93,6 +94,11 @@ func (c *Checker) getFlowTypeOfReferenceEx(reference *ast.Node, declaredType *Ty
 	f.sharedFlowStart = len(c.sharedFlows)
 	c.flowInvocationCount++
 	evolvedType := c.getTypeAtFlowNode(f, flowNode).t
+	if f.limitHits != 0 {
+		// Give up on the whole reference, so its type does not depend on how
+		// deep the walk got before giving up.
+		evolvedType = c.errorType
+	}
 	c.sharedFlows = c.sharedFlows[:f.sharedFlowStart]
 	c.putFlowState(f)
 	// When the reference is 'x' in an 'x.length', 'x.push(value)', 'x.unshift(value)' or x[n] = value' operation,
@@ -111,14 +117,86 @@ func (c *Checker) getFlowTypeOfReferenceEx(reference *ast.Node, declaredType *Ty
 	return resultType
 }
 
+const maxFlowDepth = 2000
+
 func (c *Checker) getTypeAtFlowNode(f *FlowState, flow *ast.FlowNode) FlowType {
-	if f.depth == 2000 {
+	// A walk that is too deep from a node is also too deep from it with less
+	// depth left, so remember the failure to avoid repeating it for every
+	// reference after the first. Loops being analyzed and reduce labels make
+	// walks depend on more than the node and reference, so such walks are not
+	// remembered.
+	if len(c.flowDepthFailures) != 0 && c.isRememberedFlowDepthFailure(f, flow) {
+		return FlowType{t: c.errorType}
+	}
+	hits := f.limitHits
+	t := c.getTypeAtFlowNodeWorker(f, flow)
+	if f.limitHits != hits {
+		c.rememberFlowDepthFailure(f, flow)
+	}
+	return t
+}
+
+// isRememberedFlowDepthFailure reports whether a walk from flow is known to
+// be too deep for the depth left, reporting the failure if so.
+//
+//go:noinline
+func (c *Checker) isRememberedFlowDepthFailure(f *FlowState, flow *ast.FlowNode) bool {
+	if len(c.flowLoopStack) != 0 || len(f.reduceLabels) != 0 || !c.hasFlowReferenceKey(f) {
+		return false
+	}
+	if b, ok := c.flowDepthFailures[FlowLoopKey{flowNode: flow, refKey: f.refKey}]; ok && maxFlowDepth-f.depth <= b {
+		f.limitHits++
+		c.reportFlowControlError(f.reference)
+		return true
+	}
+	return false
+}
+
+// rememberFlowDepthFailure remembers that a walk from flow was too deep for
+// the depth left.
+//
+//go:noinline
+func (c *Checker) rememberFlowDepthFailure(f *FlowState, flow *ast.FlowNode) {
+	if len(c.flowLoopStack) != 0 || len(f.reduceLabels) != 0 || !c.hasFlowReferenceKey(f) {
+		return
+	}
+	budget := maxFlowDepth - f.depth
+	key := FlowLoopKey{flowNode: flow, refKey: f.refKey}
+	if b, ok := c.flowDepthFailures[key]; !ok || b < budget {
+		if c.flowDepthFailures == nil {
+			c.flowDepthFailures = make(map[FlowLoopKey]int)
+		}
+		if c.logResults() {
+			// The walk may have depended on results a cycle in progress
+			// discards.
+			c.logRestore(func() {
+				if ok {
+					c.flowDepthFailures[key] = b
+				} else {
+					delete(c.flowDepthFailures, key)
+				}
+			})
+		}
+		c.flowDepthFailures[key] = budget
+	}
+}
+
+func (c *Checker) hasFlowReferenceKey(f *FlowState) bool {
+	if f.refKey.IsZero() {
+		f.refKey = c.getFlowReferenceKey(f)
+	}
+	return f.refKey != nonDottedNameCacheKey
+}
+
+func (c *Checker) getTypeAtFlowNodeWorker(f *FlowState, flow *ast.FlowNode) FlowType {
+	if f.depth == maxFlowDepth {
 		// We have made 2000 recursive invocations. To avoid overflowing the call stack we report an error
 		// and give up on this reference. Each reference hits the limit on its own, so its type does not depend
-		// on which other references were analyzed first.
+		// on which other references were analyzed first; see getTypeAtFlowNode.
 		if tr := c.tracer; tr != nil {
 			tr.Instant(tracing.PhaseCheckTypes, "getTypeAtFlowNode_DepthLimit", map[string]any{"depth": f.depth})
 		}
+		f.limitHits++
 		c.reportFlowControlError(f.reference)
 		return FlowType{t: c.errorType}
 	}
@@ -380,14 +458,14 @@ func (c *Checker) narrowType(f *FlowState, t *Type, expr *ast.Node, assumeTrue b
 	case ast.KindIdentifier:
 		// When narrowing a reference to a const variable, non-assigned parameter, or readonly property, we inline
 		// up to five levels of aliased conditional expressions that are themselves declared as const variables.
-		if !c.isMatchingReference(f.reference, expr) && c.inlineLevel < 5 {
+		if !c.isMatchingReference(f.reference, expr) {
 			symbol := c.getResolvedSymbol(expr)
 			if c.isConstantVariable(symbol) {
 				declaration := symbol.ValueDeclaration()
-				if declaration != nil && ast.IsVariableDeclaration(declaration) && declaration.Type() == nil && declaration.Initializer() != nil && c.isConstantReference(f.reference) {
-					c.inlineLevel++
+				if declaration != nil && ast.IsVariableDeclaration(declaration) && declaration.Type() == nil && declaration.Initializer() != nil && c.isConstantReference(f.reference) && !c.depthLimitReached(&c.inlineLevel, 5) {
+					c.enterDepthLimit(&c.inlineLevel)
 					result := c.narrowType(f, t, declaration.Initializer(), assumeTrue)
-					c.inlineLevel--
+					c.exitDepthLimit(&c.inlineLevel)
 					return result
 				}
 			}
@@ -845,11 +923,13 @@ func (c *Checker) getNarrowedType(t *Type, candidate *Type, assumeTrue bool, che
 		return c.getNarrowedTypeWorker(t, candidate, assumeTrue, checkDerived)
 	}
 	key := NarrowedTypeKey{t, candidate, assumeTrue, checkDerived}
-	if narrowedType, ok := c.narrowedTypes[key]; ok {
+	if narrowedType, ok := c.narrowedTypes.get(c, key); ok {
 		return narrowedType
 	}
+	c.narrowedTypes.begin(c, key)
 	narrowedType := c.getNarrowedTypeWorker(t, candidate, assumeTrue, checkDerived)
-	c.narrowedTypes[key] = narrowedType
+	c.narrowedTypes.set(c, key, narrowedType)
+	c.endMemo()
 	return narrowedType
 }
 
@@ -1328,11 +1408,24 @@ func (c *Checker) getTypeAtFlowLoopLabel(f *FlowState, flow *ast.FlowNode) FlowT
 		return FlowType{t: f.declaredType}
 	}
 	key := FlowLoopKey{flowNode: flow, refKey: f.refKey}
+	entry, _ := c.flowLoopCache.get(key)
+	if entry == nil {
+		entry = &flowLoopCacheEntry{}
+		c.flowLoopCache.intern(key, entry)
+	}
 	// If we have previously computed the control flow type for the reference at
 	// this flow loop junction, return the cached type.
-	if cached := c.flowLoopCache[key]; cached != nil {
-		return FlowType{t: cached}
+	if entry.t != nil {
+		c.observeFlagMemo(memoKeyOf(entry, memoFlowLoopType))
+		return FlowType{t: entry.t}
 	}
+	c.beginMemo(memoKeyOf(entry, memoFlowLoopType))
+	result := c.getTypeAtFlowLoopLabelUncached(f, flow, key, entry)
+	c.endMemo()
+	return result
+}
+
+func (c *Checker) getTypeAtFlowLoopLabelUncached(f *FlowState, flow *ast.FlowNode, key FlowLoopKey, entry *flowLoopCacheEntry) FlowType {
 	// If this flow loop junction and reference are already being processed, return
 	// the union of the types computed for each branch so far, marked as incomplete.
 	// It is possible to see an empty array in cases where loops are nested and the
@@ -1377,8 +1470,8 @@ func (c *Checker) getTypeAtFlowLoopLabel(f *FlowState, flow *ast.FlowNode) FlowT
 			// If we see a value appear in the cache it is a sign that control flow analysis
 			// was restarted and completed by checkExpressionCached. We can simply pick up
 			// the resulting type and bail out.
-			if cached := c.flowLoopCache[key]; cached != nil {
-				return FlowType{t: cached}
+			if entry.t != nil {
+				return FlowType{t: entry.t}
 			}
 		}
 		antecedentTypes = core.AppendIfUnique(antecedentTypes, flowType.t)
@@ -1401,7 +1494,10 @@ func (c *Checker) getTypeAtFlowLoopLabel(f *FlowState, flow *ast.FlowNode) FlowT
 	if firstAntecedentType.incomplete {
 		return c.newFlowType(result, true /*incomplete*/)
 	}
-	c.flowLoopCache[key] = result
+	// Kept even if a cycle in progress discards what it computed: analyzing
+	// the loop again after the cycle starts from wherever the next reference
+	// is, and may then reach a different fixed point.
+	entry.t = result
 	return FlowType{t: result}
 }
 
@@ -1512,11 +1608,11 @@ func getCandidateVariableDeclarationInitializer(node *ast.Node) *ast.Node {
 // and never escape the getFlowTypeOfReference function.
 func (c *Checker) getEvolvingArrayType(elementType *Type) *Type {
 	key := CachedTypeKey{kind: CachedTypeKindEvolvingArrayType, typeId: elementType.id}
-	result := c.cachedTypes[key]
+	result, _ := c.cachedTypes.get(c, key)
 	if result == nil {
 		result = c.newObjectType(ObjectFlagsEvolvingArray, nil)
 		result.AsEvolvingArrayType().elementType = elementType
-		c.cachedTypes[key] = result
+		c.cachedTypes.intern(key, result)
 	}
 	return result
 }
@@ -1575,10 +1671,7 @@ func (c *Checker) finalizeEvolvingArrayType(t *Type) *Type {
 }
 
 func (c *Checker) getFinalArrayType(t *EvolvingArrayType) *Type {
-	if t.finalArrayType == nil {
-		t.finalArrayType = c.createFinalArrayType(t.elementType)
-	}
-	return t.finalArrayType
+	return c.memoCompute(&t.finalArrayType, func() *Type { return c.createFinalArrayType(t.elementType) })
 }
 
 func (c *Checker) createFinalArrayType(elementType *Type) *Type {
@@ -1948,18 +2041,21 @@ func isCoercibleUnderDoubleEquals(source *Type, target *Type) bool {
 
 func (c *Checker) isExhaustiveSwitchStatement(node *ast.Node) bool {
 	links := c.switchStatementLinks.Get(node)
-	if links.exhaustiveState == ExhaustiveStateUnknown {
+	switch links.exhaustiveState.get(c) {
+	case ExhaustiveStateUnknown:
+		links.exhaustiveState.begin(c)
 		// Indicate resolution is in process
-		links.exhaustiveState = ExhaustiveStateComputing
+		links.exhaustiveState.set(c, ExhaustiveStateComputing)
 		isExhaustive := c.computeExhaustiveSwitchStatement(node)
-		if links.exhaustiveState == ExhaustiveStateComputing {
-			links.exhaustiveState = core.IfElse(isExhaustive, ExhaustiveStateTrue, ExhaustiveStateFalse)
+		if links.exhaustiveState.get(c) == ExhaustiveStateComputing {
+			links.exhaustiveState.set(c, core.IfElse(isExhaustive, ExhaustiveStateTrue, ExhaustiveStateFalse))
 		}
-	} else if links.exhaustiveState == ExhaustiveStateComputing {
+		c.endMemo()
+	case ExhaustiveStateComputing:
 		// Resolve circularity to false
-		links.exhaustiveState = ExhaustiveStateFalse
+		links.exhaustiveState.set(c, ExhaustiveStateFalse)
 	}
-	return links.exhaustiveState == ExhaustiveStateTrue
+	return links.exhaustiveState.get(c) == ExhaustiveStateTrue
 }
 
 func (c *Checker) computeExhaustiveSwitchStatement(node *ast.Node) bool {
@@ -2041,16 +2137,17 @@ func (c *Checker) getNotEqualFactsFromTypeofSwitch(start int, end int, witnesses
 
 func (c *Checker) getSwitchClauseTypes(node *ast.Node) []*Type {
 	links := c.switchStatementLinks.Get(node)
-	if !links.switchTypesComputed {
+	if links.switchTypes.get(c) == nil {
+		links.switchTypes.begin(c)
 		clauses := node.AsSwitchStatement().CaseBlock.AsCaseBlock().Clauses.Nodes
 		types := make([]*Type, len(clauses))
 		for i, clause := range clauses {
 			types[i] = c.getTypeOfSwitchClause(clause)
 		}
-		links.switchTypes = types
-		links.switchTypesComputed = true
+		links.switchTypes.set(c, types)
+		c.endMemo()
 	}
-	return links.switchTypes
+	return links.switchTypes.get(c)
 }
 
 func (c *Checker) getTypeOfSwitchClause(clause *ast.Node) *Type {
@@ -2062,8 +2159,9 @@ func (c *Checker) getTypeOfSwitchClause(clause *ast.Node) *Type {
 
 func (c *Checker) getEffectsSignature(node *ast.Node) *Signature {
 	links := c.signatureLinks.Get(node)
-	signature := links.effectsSignature
+	signature := links.effectsSignature.get(c)
 	if signature == nil {
+		links.effectsSignature.begin(c)
 		// A call expression parented by an expression statement is a potential assertion. Other call
 		// expressions are potential type predicate function calls. In order to avoid triggering
 		// circularities in control flow analysis, we use getTypeOfDottedName when resolving the call
@@ -2095,7 +2193,8 @@ func (c *Checker) getEffectsSignature(node *ast.Node) *Signature {
 		if !(signature != nil && c.hasTypePredicateOrNeverReturnType(signature)) {
 			signature = c.unknownSignature
 		}
-		links.effectsSignature = signature
+		links.effectsSignature.set(c, signature)
+		c.endMemo()
 	}
 	if signature == c.unknownSignature {
 		return nil
@@ -2170,10 +2269,11 @@ func (c *Checker) getTypeOfDottedName(node *ast.Node, diagnostic *ast.Diagnostic
 
 func (c *Checker) getExplicitTypeOfSymbol(symbol *ast.Symbol, diagnostic *ast.Diagnostic) *Type {
 	symbol = c.resolveSymbol(symbol)
-	if !c.resolvingExplicitTypeOfSymbol.AddIfAbsent(symbol) {
+	if c.isResolvingAnywhere(symbol, TypeSystemPropertyNameExplicitType) {
 		return nil
 	}
-	defer c.resolvingExplicitTypeOfSymbol.Delete(symbol)
+	c.beginTypeResolution(symbol, TypeSystemPropertyNameExplicitType, nil)
+	defer c.popTypeResolution()
 	if symbol.Flags()&(ast.SymbolFlagsFunction|ast.SymbolFlagsMethod|ast.SymbolFlagsClass|ast.SymbolFlagsValueModule) != 0 {
 		return c.getTypeOfSymbol(symbol)
 	}
@@ -2278,7 +2378,7 @@ func (c *Checker) getTypeOfInitializer(node *ast.Node) *Type {
 	// from its initializer, we'll already have cached the type. Otherwise we compute it now
 	// without caching such that transient types are reflected.
 	if c.typeNodeLinks.Has(node) {
-		t := c.typeNodeLinks.Get(node).resolvedType
+		t := c.typeNodeLinks.Get(node).resolvedType.get(c)
 		if t != nil {
 			return t
 		}
@@ -2420,10 +2520,12 @@ func (c *Checker) getAssignmentReducedType(declaredType *Type, assignedType *Typ
 		return assignedType
 	}
 	key := AssignmentReducedKey{id1: declaredType.id, id2: assignedType.id}
-	result := c.assignmentReducedTypes[key]
+	result, _ := c.assignmentReducedTypes.get(c, key)
 	if result == nil {
+		c.assignmentReducedTypes.begin(c, key)
 		result = c.getAssignmentReducedTypeWorker(declaredType, assignedType)
-		c.assignmentReducedTypes[key] = result
+		c.assignmentReducedTypes.set(c, key, result)
+		c.endMemo()
 	}
 	return result
 }
@@ -2530,24 +2632,30 @@ func (c *Checker) isReachableFlowNode(flow *ast.FlowNode) bool {
 	f := c.getFlowState()
 	result := c.isReachableFlowNodeWorker(f, flow, false /*noCacheCheck*/)
 	c.putFlowState(f)
-	c.lastFlowNode = flow
-	c.lastFlowNodeReachable = result
+	// The last result is reused without accounting for reading it, so it is
+	// only kept where nothing computed since could be discarded.
+	if !c.logResults() {
+		c.lastFlowNode = flow
+		c.lastFlowNodeReachable = result
+	}
 	return result
 }
 
 func (c *Checker) isReachableFlowNodeWorker(f *FlowState, flow *ast.FlowNode, noCacheCheck bool) bool {
 	for {
-		if flow == c.lastFlowNode {
+		if flow == c.lastFlowNode && !c.observing() {
 			return c.lastFlowNodeReachable
 		}
 		flags := flow.Flags
 		if flags&ast.FlowFlagsShared != 0 {
 			if !noCacheCheck && len(f.reduceLabels) == 0 {
-				if reachable, ok := c.flowNodeReachable[flow]; ok {
+				if reachable, ok := c.flowNodeReachable.get(c, flow); ok {
 					return reachable
 				}
+				c.flowNodeReachable.begin(c, flow)
 				reachable := c.isReachableFlowNodeWorker(f, flow, true /*noCacheCheck*/)
-				c.flowNodeReachable[flow] = reachable
+				c.flowNodeReachable.set(c, flow, reachable)
+				c.endMemo()
 				return reachable
 			}
 			noCacheCheck = false
@@ -2629,11 +2737,13 @@ func (c *Checker) isPostSuperFlowNodeWorker(f *FlowState, flow *ast.FlowNode, no
 		flags := flow.Flags
 		if flags&ast.FlowFlagsShared != 0 {
 			if !noCacheCheck {
-				if postSuper, ok := c.flowNodePostSuper[flow]; ok {
+				if postSuper, ok := c.flowNodePostSuper.get(c, flow); ok {
 					return postSuper
 				}
+				c.flowNodePostSuper.begin(c, flow)
 				postSuper := c.isPostSuperFlowNodeWorker(f, flow, true /*noCacheCheck*/)
-				c.flowNodePostSuper[flow] = postSuper
+				c.flowNodePostSuper.set(c, flow, postSuper)
+				c.endMemo()
 			}
 			noCacheCheck = false
 		}
@@ -2692,18 +2802,16 @@ func (c *Checker) ensureAssignmentsMarked(symbol *ast.Symbol) {
 	if parent == nil {
 		return
 	}
-	links := c.nodeLinks.Get(parent)
-	if links.flags&NodeCheckFlagsAssignmentsMarked == 0 {
-		links.flags |= NodeCheckFlagsAssignmentsMarked
+	c.assignmentsMarked.once(c, parent, func() {
 		if !c.hasParentWithAssignmentsMarked(parent) {
 			c.markNodeAssignments(parent)
 		}
-	}
+	})
 }
 
 func (c *Checker) hasParentWithAssignmentsMarked(node *ast.Node) bool {
 	return ast.FindAncestor(node.Parent, func(node *ast.Node) bool {
-		return ast.IsFunctionOrSourceFile(node) && c.nodeLinks.Get(node).flags&NodeCheckFlagsAssignmentsMarked != 0
+		return ast.IsFunctionOrSourceFile(node) && c.assignmentsMarked.has(c, node)
 	}) != nil
 }
 

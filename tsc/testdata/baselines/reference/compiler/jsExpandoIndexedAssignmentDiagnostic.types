@@ -1,0 +1,42 @@
+//// [tests/cases/compiler/jsExpandoIndexedAssignmentDiagnostic.ts] ////
+
+=== file.js ===
+/** @param {any} axis @param {any} value */
+function updateElements(axis, value) {
+>updateElements : (axis: any, value: any) => void
+>axis : any
+>value : any
+
+    const properties = {};
+>properties : { skip: any; }
+>{} : { skip: any; }
+
+    const pixel = properties[axis] = value;
+>pixel : any
+>properties[axis] = value : any
+>properties[axis] : any
+>properties : { skip: any; }
+>axis : any
+>value : any
+
+    const otherPixel = properties[axis] = value;
+>otherPixel : any
+>properties[axis] = value : any
+>properties[axis] : any
+>properties : { skip: any; }
+>axis : any
+>value : any
+
+    properties.skip = isNaN(pixel) || isNaN(otherPixel);
+>properties.skip = isNaN(pixel) || isNaN(otherPixel) : boolean
+>properties.skip : any
+>properties : { skip: any; }
+>skip : any
+>isNaN(pixel) || isNaN(otherPixel) : boolean
+>isNaN(pixel) : boolean
+>isNaN : (number: number) => boolean
+>pixel : any
+>isNaN(otherPixel) : boolean
+>isNaN : (number: number) => boolean
+>otherPixel : any
+}

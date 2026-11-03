@@ -188,23 +188,23 @@ type SymbolReferenceLinks struct {
 // Links for value symbols
 
 type ValueSymbolLinks struct {
-	resolvedType *Type // Type of value symbol
+	resolvedType memo[*Type] // Type of value symbol
 	target       *ast.Symbol
 	mapper       *TypeMapper
 	extra        *valueSymbolExtra
 }
 
 type valueSymbolExtra struct {
-	writeType      *Type
+	writeType      memo[*Type]
 	nameType       *Type
 	containingType *Type // Mapped type for mapped type property, containing union or intersection type for synthetic property
 }
 
-func (links *ValueSymbolLinks) getWriteType() *Type {
+func (links *ValueSymbolLinks) getWriteType(c *Checker) *Type {
 	if links.extra == nil {
 		return nil
 	}
-	return links.extra.writeType
+	return links.extra.writeType.get(c)
 }
 
 func (links *ValueSymbolLinks) getNameType() *Type {
@@ -228,7 +228,19 @@ func (links *ValueSymbolLinks) setWriteType(c *Checker, typ *Type) {
 		}
 		links.extra = c.valueSymbolExtraArena.New()
 	}
-	links.extra.writeType = typ
+	links.extra.writeType.set(c, typ)
+}
+
+// setNewWriteType sets the write type of a symbol being created; see
+// memo.setIdentity.
+func (links *ValueSymbolLinks) setNewWriteType(c *Checker, typ *Type) {
+	if links.extra == nil {
+		if typ == nil {
+			return
+		}
+		links.extra = c.valueSymbolExtraArena.New()
+	}
+	links.extra.writeType.setIdentity(c, typ)
 }
 
 func (links *ValueSymbolLinks) setNameType(c *Checker, typ *Type) {
@@ -269,10 +281,11 @@ type DeferredSymbolLinks struct {
 // Links for alias symbols
 
 type AliasSymbolLinks struct {
-	immediateTarget     *ast.Symbol // Immediate target of an alias. May be another alias. Do not access directly, use `checker.getImmediateAliasedSymbol` instead.
-	aliasTarget         *ast.Symbol // Resolved (non-alias) target of an alias
-	referenced          bool        // True if alias symbol has been referenced as a value that can be emitted
-	typeOnlyDeclaration *ast.Node   // First resolved alias declaration that makes the symbol only usable in type constructs
+	immediateTarget     memo[*ast.Symbol] // Immediate target of an alias. May be another alias. Do not access directly, use `checker.getImmediateAliasedSymbol` instead.
+	aliasTarget         memo[*ast.Symbol] // Resolved (non-alias) target of an alias
+	referenced          bool              // True if alias symbol has been referenced as a value that can be emitted
+	referenceChecked    bool              // True if checking has followed the reference; see referenceAliasSymbol
+	typeOnlyDeclaration *ast.Node         // First resolved alias declaration that makes the symbol only usable in type constructs
 }
 
 // Links for module symbols
@@ -280,7 +293,6 @@ type AliasSymbolLinks struct {
 type ModuleSymbolLinks struct {
 	resolvedExports       ast.SymbolTable      // Resolved exports of module or combined early- and late-bound static members of a class.
 	typeOnlyExportStarMap map[string]*ast.Node // Set on a module symbol when some of its exports were resolved through a 'export type * from "mod"' declaration
-	exportsChecked        bool
 }
 
 type ReverseMappedSymbolLinks struct {
@@ -305,20 +317,15 @@ type ExportTypeLinks struct {
 // Links for type aliases
 
 type TypeAliasLinks struct {
-	declaredType                  *Type
-	typeParameters                []*Type                // Type parameters of type alias (undefined if non-generic)
-	instantiations                map[CacheHashKey]*Type // Instantiations of generic type alias (undefined if non-generic)
-	isConstructorDeclaredProperty bool
+	declaredType   memoReported[*Type]
+	typeParameters []*Type                      // Type parameters of type alias (undefined if non-generic)
+	instantiations memoMap[CacheHashKey, *Type] // Instantiations of generic type alias (undefined if non-generic)
 }
 
 // Links for declared types (type parameters, class types, interface types, enums)
 
 type DeclaredTypeLinks struct {
-	declaredType           *Type
-	interfaceChecked       bool
-	indexSignaturesChecked bool
-	typeParametersChecked  bool
-	enumChecked            bool
+	declaredType memo[*Type]
 }
 
 // Links for switch clauses
@@ -333,11 +340,10 @@ const (
 )
 
 type SwitchStatementLinks struct {
-	exhaustiveState     ExhaustiveState // Switch statement exhaustiveness
-	switchTypesComputed bool
-	witnessesComputed   bool
-	switchTypes         []*Type
-	witnesses           []string
+	exhaustiveState   memo[ExhaustiveState] // Switch statement exhaustiveness
+	witnessesComputed bool
+	switchTypes       memo[[]*Type]
+	witnesses         []string // Syntactic, so needs no memo
 }
 
 type ArrayLiteralLinks struct {
@@ -367,7 +373,7 @@ type SpreadLinks struct {
 // Links for variances of type aliases and interface types
 
 type VarianceLinks struct {
-	variances []VarianceFlags
+	variances memo[[]VarianceFlags]
 }
 
 type VarianceFlags uint32
@@ -390,15 +396,10 @@ type MarkedAssignmentSymbolLinks struct {
 }
 
 type accessibleChainCacheKey struct {
+	symbol                  *ast.Symbol
 	useOnlyExternalAliasing bool
 	location                *ast.Node
 	meaning                 ast.SymbolFlags
-}
-
-type ContainingSymbolLinks struct {
-	extendedContainersByFile map[ast.NodeId][]*ast.Symbol // Symbols of nodes which which logically contain this one, cached by file the request is made within
-	extendedContainers       *[]*ast.Symbol               // Containers (other than the parent) which this symbol is aliased in
-	accessibleChainCache     map[accessibleChainCacheKey][]*ast.Symbol
 }
 
 type AccessFlags uint32
@@ -421,14 +422,11 @@ type NodeCheckFlags uint32
 
 const (
 	NodeCheckFlagsNone                                     NodeCheckFlags = 0
-	NodeCheckFlagsTypeChecked                              NodeCheckFlags = 1 << 0  // Node has been type checked
 	NodeCheckFlagsContextChecked                           NodeCheckFlags = 1 << 6  // Contextual types have been assigned
 	NodeCheckFlagsSignatureContextChecked                  NodeCheckFlags = 1 << 7  // Signature of a contextually typed function has been checked
 	NodeCheckFlagsEnumValuesComputed                       NodeCheckFlags = 1 << 10 // Values for enum members have been computed, and any errors have been reported for them.
-	NodeCheckFlagsAssignmentsMarked                        NodeCheckFlags = 1 << 17 // Parameter assignments have been marked
 	NodeCheckFlagsContainsClassWithPrivateIdentifiers      NodeCheckFlags = 1 << 20 // Marked on all block-scoped containers containing a class with private identifiers.
 	NodeCheckFlagsContainsSuperPropertyInStaticInitializer NodeCheckFlags = 1 << 21 // Marked on all block-scoped containers containing a static initializer with 'super.x' or 'super[x]'.
-	NodeCheckFlagsInCheckIdentifier                        NodeCheckFlags = 1 << 22
 	NodeCheckFlagsInitializerIsUndefined                   NodeCheckFlags = 1 << 24
 	NodeCheckFlagsInitializerIsUndefinedComputed           NodeCheckFlags = 1 << 25
 )
@@ -438,39 +436,42 @@ const (
 type NodeLinks struct {
 	flags                                NodeCheckFlags // Set of flags specific to Node
 	declarationRequiresScopeChange       core.Tristate  // Set by `useOuterVariableScopeInParameter` in checker when downlevel emit would change the name resolution scope inside of a parameter.
-	hasReportedStatementInAmbientContext bool           // Cache boolean if we report statements in ambient context
+	hasReportedStatementInAmbientContext memo[bool]     // Cache boolean if we report statements in ambient context
 }
 
 type SymbolNodeLinks struct {
-	resolvedSymbol *ast.Symbol // Resolved symbol associated with node
+	resolvedSymbol memo[*ast.Symbol] // Resolved symbol associated with node
 }
 
 type TypeNodeLinks struct {
-	resolvedType        *Type    // Resolved type associated with node
-	outerTypeParameters *[]*Type // Outer type parameters of anonymous object type
+	resolvedType        memo[*Type]    // Resolved type associated with node
+	outerTypeParameters memo[*[]*Type] // Outer type parameters of anonymous object type
 }
 
-func (links *TypeNodeLinks) getOuterTypeParameters() []*Type {
-	if links.outerTypeParameters == nil {
-		return nil
+func (links *TypeNodeLinks) getOuterTypeParameters(c *Checker) []*Type {
+	if p := links.outerTypeParameters.get(c); p != nil {
+		return *p
 	}
-	return *links.outerTypeParameters
+	return nil
 }
 
 func (links *TypeNodeLinks) setOuterTypeParameters(c *Checker, types []*Type) {
 	if types == nil {
-		links.outerTypeParameters = nil
+		links.outerTypeParameters.set(c, nil)
 		return
 	}
-	if links.outerTypeParameters == nil {
-		links.outerTypeParameters = c.outerTypeParameterListArena.New()
-	}
-	*links.outerTypeParameters = types
+	p := c.outerTypeParameterListArena.New()
+	*p = types
+	links.outerTypeParameters.set(c, p)
 }
 
 type ComputedNameNodeLinks struct {
-	hasName core.Tristate // If the node has a computable name
-	name    string        // Resolved name associated with the type of the node
+	name memo[computedName] // Resolved name associated with the type of the node
+}
+
+type computedName struct {
+	name   string
+	exists core.Tristate // If the node has a computable name; unknown until computed
 }
 
 // Links for enum members
@@ -485,6 +486,7 @@ type SourceFileLinks struct {
 	typeChecked                  bool
 	unusedChecked                bool
 	externalHelpersModule        *ast.Symbol
+	externalHelperRequests       []externalHelperRequest
 	requestedExternalEmitHelpers ExternalEmitHelpers
 	deferredNodes                collections.OrderedSet[*ast.Node]
 	identifierCheckNodes         []*ast.Node
@@ -492,15 +494,15 @@ type SourceFileLinks struct {
 	localJsxFragmentNamespace    string
 	localJsxFactory              *ast.EntityName
 	localJsxFragmentFactory      *ast.EntityName
-	jsxFragmentType              *Type
+	jsxFragmentType              memo[*Type]
 }
 
 // Signature specific links
 
 type SignatureLinks struct {
-	resolvedSignature  *Signature // Cached signature of signature node or call expression
-	effectsSignature   *Signature // Signature with possible control flow effects
-	decoratorSignature *Signature // Signature for decorator as if invoked by the runtime
+	resolvedSignature  memo[*Signature] // Cached signature of signature node or call expression
+	effectsSignature   memo[*Signature] // Signature with possible control flow effects
+	decoratorSignature memo[*Signature] // Signature for decorator as if invoked by the runtime
 }
 
 type TypeFlags uint32
@@ -714,9 +716,8 @@ const (
 	ObjectFlagsSingleSignatureType         = 1 << 25 // A single signature type extracted from a potentially broader type
 	ObjectFlagsIsClassInstanceClone        = 1 << 26 // Type is a clone of a class instance type
 	// Flags that require TypeFlags.Object and ObjectFlags.Reference
-	ObjectFlagsIdenticalBaseTypeCalculated = 1 << 27 // has had `getSingleBaseForNonAugmentingSubtype` invoked on it already
-	ObjectFlagsIdenticalBaseTypeExists     = 1 << 28 // has a defined cachedEquivalentBaseType member
-	ObjectFlagsFromTypeNode                = 1 << 29 // Originates in resolution of AST type node
+	ObjectFlagsIdenticalBaseTypeExists = 1 << 28 // has a defined cachedEquivalentBaseType member
+	ObjectFlagsFromTypeNode            = 1 << 29 // Originates in resolution of AST type node
 	// Flags that require TypeFlags.UnionOrIntersection or TypeFlags.Substitution
 	ObjectFlagsIsGenericTypeComputed = 1 << 22 // IsGenericObjectType flag has been computed
 	ObjectFlagsIsGenericObjectType   = 1 << 23 // Union or intersection contains generic object type
@@ -905,6 +906,14 @@ func (t *Type) AsStructuredType() *StructuredType {
 		return (*StructuredType)(unsafe.Pointer(t))
 	}
 	return nil
+}
+
+// asResolvedStructuredType is AsStructuredType for a type known to be
+// structured, such as one with resolved members, without checking.
+func (t *Type) asResolvedStructuredType() *StructuredType {
+	// SAFETY: Callers only pass types of the kinds AsStructuredType accepts,
+	// which embed StructuredType at offset zero.
+	return (*StructuredType)(unsafe.Pointer(t))
 }
 
 func (t *Type) AsObjectType() *ObjectType {
@@ -1116,7 +1125,7 @@ type UniqueESSymbolType struct {
 
 type ConstrainedType struct {
 	TypeBase
-	resolvedBaseConstraint *Type
+	resolvedBaseConstraint memo[*Type]
 }
 
 func (t *ConstrainedType) AsConstrainedType() *ConstrainedType { return t }
@@ -1154,7 +1163,7 @@ func (t *StructuredType) ConstructSignatures() []*Signature {
 	return slices.Clip(t.extra.signatures[t.extra.callSignatureCount:])
 }
 
-func (t *StructuredType) getMember(name string) *ast.Symbol {
+func (t *StructuredType) getMember(c *Checker, name string) *ast.Symbol {
 	if t.members != nil {
 		return t.members.Get(name)
 	}
@@ -1166,12 +1175,12 @@ func (t *StructuredType) getMember(name string) *ast.Symbol {
 	if index < 0 {
 		return nil
 	}
-	return t.getPropertyAt(index)
+	return t.getPropertyAt(c, index)
 }
 
-func (t *StructuredType) getMembers() ast.SymbolTable {
+func (t *StructuredType) getMembers(c *Checker) ast.SymbolTable {
 	if t.members == nil {
-		if properties := t.getProperties(); len(properties) != 0 {
+		if properties := t.getProperties(c); len(properties) != 0 {
 			t.members = ast.NewSymbolTableWithCapacity(len(properties))
 			for _, member := range properties {
 				t.members.Set(member.Name(), member)
@@ -1181,7 +1190,7 @@ func (t *StructuredType) getMembers() ast.SymbolTable {
 	return t.members
 }
 
-func (t *StructuredType) getPropertyAt(index int) *ast.Symbol {
+func (t *StructuredType) getPropertyAt(c *Checker, index int) *ast.Symbol {
 	lazy := t.getLazyState()
 	if lazy == nil {
 		return t.properties[index]
@@ -1194,19 +1203,22 @@ func (t *StructuredType) getPropertyAt(index int) *ast.Symbol {
 		symbol := lazy.layout.members.SymbolAt(index)
 		baseIndex := lazy.layout.baseIndices[index]
 		if baseIndex < 0 {
-			member = t.checker.instantiateSymbol(symbol, lazy.mapper)
+			member = c.instantiateSymbol(symbol, lazy.mapper)
 		} else {
-			member = t.checker.getPropertyOfType(lazy.baseTypes[baseIndex], symbol.Name())
+			member = c.getPropertyOfType(lazy.baseTypes[baseIndex], symbol.Name())
 		}
 		t.properties[index] = member
+		if c.logResults() {
+			c.logPropertySlotDiscard(t, lazy, index)
+		}
 	}
 	return member
 }
 
-func (t *StructuredType) getProperties() []*ast.Symbol {
+func (t *StructuredType) getProperties(c *Checker) []*ast.Symbol {
 	if lazy := t.getLazyState(); lazy != nil && !lazy.propertiesResolved {
 		for i := range lazy.layout.members.Len() {
-			t.getPropertyAt(i)
+			t.getPropertyAt(c, i)
 		}
 		lazy.propertiesResolved = true
 	}
@@ -1253,7 +1265,7 @@ func (t *StructuredType) ensureExtra() *structuredTypeExtra {
 }
 
 func (t *StructuredType) Properties() []*ast.Symbol {
-	return t.getProperties()
+	return t.getProperties(t.checker)
 }
 
 // Except for tuple type references and reverse mapped types, all object types have an associated symbol.
@@ -1291,9 +1303,9 @@ func (t *StructuredType) Properties() []*ast.Symbol {
 
 type ObjectType struct {
 	StructuredType
-	target         *Type                  // Target of instantiated type
-	mapper         *TypeMapper            // Type mapper for instantiated type
-	instantiations map[CacheHashKey]*Type // Map of type instantiations
+	target         *Type                        // Target of instantiated type
+	mapper         *TypeMapper                  // Type mapper for instantiated type
+	instantiations memoMap[CacheHashKey, *Type] // Map of type instantiations
 }
 
 func (t *ObjectType) AsObjectType() *ObjectType { return t }
@@ -1303,7 +1315,7 @@ func (t *ObjectType) AsObjectType() *ObjectType { return t }
 type TypeReference struct {
 	ObjectType
 	node                  *ast.Node // TypeReferenceNode | ArrayTypeNode | TupleTypeNode when deferred, else nil
-	resolvedTypeArguments []*Type
+	resolvedTypeArguments memo[[]*Type]
 	lazy                  *LazyState // Resolved member layout and instantiation state
 }
 
@@ -1332,8 +1344,8 @@ type InterfaceType struct {
 	thisType                    *Type   // The "this" type (nil if none)
 	baseTypesResolved           bool
 	declaredMembersResolved     bool
-	resolvedBaseConstructorType *Type
-	resolvedBaseTypes           []*Type
+	resolvedBaseConstructorType memo[*Type]
+	resolvedBaseTypes           memo[[]*Type]
 	declaredMembers             ast.SymbolTable // Declared members
 	declaredCallSignatures      []*Signature    // Declared call signatures
 	declaredConstructSignatures []*Signature    // Declared construct signatures
@@ -1423,19 +1435,19 @@ type InstantiationExpressionType struct {
 type MappedType struct {
 	ObjectType
 	declaration          *ast.MappedTypeNode
-	typeParameter        *Type
-	constraintType       *Type
-	nameType             *Type
-	templateType         *Type
-	modifiersType        *Type
-	resolvedApparentType *Type
-	containsError        bool
+	typeParameter        memo[*Type]
+	constraintType       memo[*Type]
+	nameType             memo[*Type]
+	templateType         memo[*Type]
+	modifiersType        memo[*Type]
+	resolvedApparentType memo[*Type]
+	containsError        memo[bool]
 }
 
-func (t *MappedType) TypeParameter() *Type  { return t.typeParameter }
-func (t *MappedType) ConstraintType() *Type { return t.constraintType }
-func (t *MappedType) NameType() *Type       { return t.nameType }
-func (t *MappedType) TemplateType() *Type   { return t.templateType }
+func (t *MappedType) TypeParameter() *Type  { return t.typeParameter.peek() }
+func (t *MappedType) ConstraintType() *Type { return t.constraintType.peek() }
+func (t *MappedType) NameType() *Type       { return t.nameType.peek() }
+func (t *MappedType) TemplateType() *Type   { return t.templateType.peek() }
 func (t *MappedType) ResolveComponents(c *Checker, typ *Type) {
 	c.getTypeParameterFromMappedType(typ)
 	c.getConstraintTypeFromMappedType(typ)
@@ -1457,7 +1469,7 @@ type ReverseMappedType struct {
 type EvolvingArrayType struct {
 	ObjectType
 	elementType    *Type
-	finalArrayType *Type
+	finalArrayType memo[*Type]
 }
 
 // UnionOrIntersectionTypeData
@@ -1465,9 +1477,9 @@ type EvolvingArrayType struct {
 type UnionOrIntersectionType struct {
 	StructuredType
 	types                                       []*Type
-	propertyCache                               ast.SymbolTable // Augmented entries, except complete ones already in the non-augmented cache.
-	propertyCacheWithoutFunctionPropertyAugment ast.SymbolTable
-	resolvedProperties                          []*ast.Symbol
+	propertyCache                               memoMap[string, *ast.Symbol] // Augmented entries, except complete ones already in the non-augmented cache.
+	propertyCacheWithoutFunctionPropertyAugment memoMap[string, *ast.Symbol]
+	resolvedProperties                          memo[[]*ast.Symbol]
 }
 
 func (t *UnionOrIntersectionType) AsUnionOrIntersectionType() *UnionOrIntersectionType { return t }
@@ -1480,10 +1492,10 @@ func (t *UnionOrIntersectionType) Types() []*Type {
 
 type UnionType struct {
 	UnionOrIntersectionType
-	resolvedReducedType *Type
+	resolvedReducedType memo[*Type]
 	regularType         *Type
 	origin              *Type           // Denormalized union, intersection, or index type in which union originates
-	keyPropertyName     string          // Property with unique unit type that exists in every object/intersection in union type
+	keyPropertyName     memo[string]    // Property with unique unit type that exists in every object/intersection in union type
 	constituentMap      map[*Type]*Type // Constituents keyed by unit type discriminants
 }
 
@@ -1491,21 +1503,21 @@ type UnionType struct {
 
 type IntersectionType struct {
 	UnionOrIntersectionType
-	resolvedApparentType             *Type
-	uniqueLiteralFilledInstantiation *Type // Instantiation with type parameters mapped to never type
+	resolvedApparentType             memo[*Type]
+	uniqueLiteralFilledInstantiation memo[*Type] // Instantiation with type parameters mapped to never type
 }
 
 // TypeParameter
 
 type TypeParameter struct {
 	ConstrainedType
-	constraint          *Type
+	constraint          memo[*Type]
 	target              *Type
 	mapper              *TypeMapper
 	isThisType          bool
 	isDistributed       bool
-	resolvedDefaultType *Type
-	distributedType     *Type
+	resolvedDefaultType memo[*Type]
+	distributedType     *Type // The distributed counterpart, or for a distributed type parameter, its original
 	origin              *Type // The type parameter a restrictive type parameter was made from, or the tuple target of a tuple element type parameter
 }
 
@@ -1576,7 +1588,7 @@ type ConditionalRoot struct {
 	isDistributive      bool
 	inferTypeParameters []*Type
 	outerTypeParameters []*Type
-	instantiations      map[CacheHashKey]*Type
+	instantiations      memoMap[CacheHashKey, *Type]
 	alias               *TypeAlias
 }
 
@@ -1585,11 +1597,11 @@ type ConditionalType struct {
 	root                             *ConditionalRoot
 	checkType                        *Type
 	extendsType                      *Type
-	resolvedTrueType                 *Type
-	resolvedFalseType                *Type
-	resolvedInferredTrueType         *Type // The `trueType` instantiated with the `combinedMapper`, if present
-	resolvedDefaultConstraint        *Type
-	resolvedConstraintOfDistributive *Type
+	resolvedTrueType                 memo[*Type]
+	resolvedFalseType                memo[*Type]
+	resolvedInferredTrueType         memo[*Type] // The `trueType` instantiated with the `combinedMapper`, if present
+	resolvedDefaultConstraint        memo[*Type]
+	resolvedConstraintOfDistributive memo[*Type]
 	mapper                           *TypeMapper
 	combinedMapper                   *TypeMapper
 }
@@ -1628,10 +1640,10 @@ type Signature struct {
 	id                       SignatureId
 	flags                    SignatureFlags
 	minArgumentCount         int32
-	resolvedMinArgumentCount int32
+	resolvedMinArgumentCount memo[int32]
 	declaration              *ast.Node
 	parameters               []*ast.Symbol
-	resolvedReturnType       *Type
+	resolvedReturnType       memo[*Type]
 	target                   *Signature
 	mapper                   *TypeMapper
 	extra                    *signatureExtra
@@ -1674,7 +1686,20 @@ func (s *Signature) getResolvedTypePredicate(c *Checker) *TypePredicate {
 	return s.extra.resolvedTypePredicate
 }
 
+// setResolvedTypePredicate caches the type predicate of the signature, a flag
+// memo; see initResolvedTypePredicate.
 func (s *Signature) setResolvedTypePredicate(c *Checker, predicate *TypePredicate) {
+	if c.logResults() {
+		old := s.getResolvedTypePredicate(c)
+		c.logMemoDiscard(nil, memoKeyOf(s, memoTypePredicate), func() { s.initResolvedTypePredicate(c, old) })
+	}
+	s.initResolvedTypePredicate(c, predicate)
+	c.setFlagMemo(memoKeyOf(s, memoTypePredicate))
+}
+
+// initResolvedTypePredicate sets the type predicate of a signature being
+// created.
+func (s *Signature) initResolvedTypePredicate(c *Checker, predicate *TypePredicate) {
 	s.flags &^= signatureFlagsNoTypePredicate
 	if predicate != nil && predicate == c.noTypePredicate {
 		s.flags |= signatureFlagsNoTypePredicate
