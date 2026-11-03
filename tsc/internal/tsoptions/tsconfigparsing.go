@@ -25,13 +25,14 @@ import (
 )
 
 type extendsResult struct {
-	options             *parsedCompilerOptions
-	include             []any
-	exclude             []any
-	files               []any
-	contentMappers      []any
-	compileOnSave       bool
-	extendedSourceFiles collections.Set[tspath.RootedFilePath]
+	options                  *parsedCompilerOptions
+	include                  []any
+	exclude                  []any
+	files                    []any
+	contentMappers           []any
+	contentMappersConfigFile tspath.RootedFilePath
+	compileOnSave            bool
+	extendedSourceFiles      collections.Set[tspath.RootedFilePath]
 }
 
 type configFileSpecs struct {
@@ -85,10 +86,11 @@ func (e *ExtendedConfigCacheEntry) ExtendedFileNames() []tspath.RootedFilePath {
 }
 
 type parsedTsconfig struct {
-	raw                 any
-	options             *parsedCompilerOptions
-	typeAcquisition     *core.TypeAcquisition
-	extendedConfigPaths []tspath.RootedFilePath
+	raw                      any
+	options                  *parsedCompilerOptions
+	typeAcquisition          *core.TypeAcquisition
+	extendedConfigPaths      []tspath.RootedFilePath
+	contentMappersConfigFile tspath.RootedFilePath
 }
 
 type parsedCompilerOptions struct {
@@ -199,10 +201,11 @@ func parseOwnConfigOfJsonSourceFile(
 		))
 	}
 	return &parsedTsconfig{
-		raw:                 json,
-		options:             compilerOptions,
-		typeAcquisition:     typeAcquisition,
-		extendedConfigPaths: extendedConfigPaths,
+		raw:                      json,
+		options:                  compilerOptions,
+		typeAcquisition:          typeAcquisition,
+		extendedConfigPaths:      extendedConfigPaths,
+		contentMappersConfigFile: configFileName,
 	}, errors
 }
 
@@ -901,10 +904,11 @@ func parseOwnConfigOfJson(
 		errors = append(errors, err...)
 	}
 	parsedConfig := &parsedTsconfig{
-		raw:                 json,
-		options:             options,
-		typeAcquisition:     typeAcquisition,
-		extendedConfigPaths: extendedConfigPaths,
+		raw:                      json,
+		options:                  options,
+		typeAcquisition:          typeAcquisition,
+		extendedConfigPaths:      extendedConfigPaths,
+		contentMappersConfigFile: configFileName,
 	}
 	return parsedConfig, errors
 }
@@ -1086,25 +1090,8 @@ func parseConfig(
 			setPropertyValue("exclude")
 			setPropertyValue("files")
 			if extendedRawMap, ok := extendsRaw.(*collections.OrderedMap[string, any]); ok && extendedRawMap.Has("contentMappers") {
-				if contentMappers, ok := extendedRawMap.GetOrZero("contentMappers").([]any); ok {
-					result.contentMappers = core.Map(contentMappers, func(value any) any {
-						mapper, isMapperObject := value.(*collections.OrderedMap[string, any])
-						if !isMapperObject {
-							return value
-						}
-						packageName, hasPackage := mapper.Get("package")
-						if !hasPackage {
-							return value
-						}
-						packagePath, isPackagePath := packageName.(string)
-						if !isPackagePath || !tspath.IsExternalModuleNameRelative(packagePath) || tspath.IsRootedDiskPath(packagePath) {
-							return value
-						}
-						rebasedMapper := mapper.Clone()
-						rebasedMapper.Set("package", tspath.ToRootedFilePath(packagePath, extendedConfigPath.Directory()).AsString())
-						return rebasedMapper
-					})
-				}
+				result.contentMappers, _ = extendedRawMap.GetOrZero("contentMappers").([]any)
+				result.contentMappersConfigFile = extendedConfig.contentMappersConfigFile
 			}
 			if extendedRawMap, ok := extendsRaw.(*collections.OrderedMap[string, any]); ok && extendedRawMap.Has("compileOnSave") {
 				if compileOnSave, ok := extendedRawMap.GetOrZero("compileOnSave").(bool); ok {
@@ -1138,6 +1125,7 @@ func parseConfig(
 		}
 		if result.contentMappers != nil && !ownConfig.raw.(*collections.OrderedMap[string, any]).Has("contentMappers") {
 			ownConfig.raw.(*collections.OrderedMap[string, any]).Set("contentMappers", result.contentMappers)
+			ownConfig.contentMappersConfigFile = result.contentMappersConfigFile
 		}
 		if result.compileOnSave && !ownConfig.raw.(*collections.OrderedMap[string, any]).Has("compileOnSave") {
 			ownConfig.raw.(*collections.OrderedMap[string, any]).Set("compileOnSave", result.compileOnSave)
@@ -1416,9 +1404,12 @@ func parseJsonConfigFileContentWorker(
 	} else if len(contentMappers) > 0 {
 		// Resolve each mapper's package.json now so its name, version, and run command are available to
 		// everything downstream (diagnostics, build-info staleness) without executing anything.
-		containingFile := configFileName
+		containingFile := parsedConfig.contentMappersConfigFile
 		if containingFile == "" {
-			containingFile = basePathForFileNames.ResolveFile("tsconfig.json")
+			containingFile = configFileName
+			if containingFile == "" {
+				containingFile = basePathForFileNames.ResolveFile("tsconfig.json")
+			}
 		}
 		resolvedContentMappers := make([]*contentmapper.Mapper, 0, len(contentMappers))
 		for j, mapper := range contentMappers {
