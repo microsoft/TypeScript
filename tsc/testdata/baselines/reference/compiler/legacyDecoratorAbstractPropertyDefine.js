@@ -26,7 +26,6 @@ function dec(target, key) {
     Object.defineProperty(target, key, { get: () => 'from prototype', configurable: true });
 }
 class Base {
-    data;
 }
 __decorate([
     dec
