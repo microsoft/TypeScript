@@ -36,15 +36,23 @@ func (ch *exponentiationTransformer) visitExponentiationAssignmentExpression(nod
 	var value *ast.Node
 	left := ast.SkipOuterExpressions(ch.Visitor().VisitNode(node.Left), ast.OEKParentheses|ast.OEKPartiallyEmittedExpressions)
 	right := ch.Visitor().VisitNode(node.Right)
+	var expressionTemp *ast.Node
+	var objExpr *ast.Node
+	if ast.IsAccessExpression(left) {
+		expressionTemp = left.Expression()
+		objExpr = expressionTemp
+		if expressionTemp.Kind != ast.KindSuperKeyword {
+			expressionTemp = ch.Factory().NewTempVariable()
+			ch.EmitContext().AddVariableDeclaration(expressionTemp)
+			objExpr = ch.Factory().NewAssignmentExpression(expressionTemp, left.Expression())
+			objExpr.Loc = left.Expression().Loc
+		}
+	}
 	if ast.IsElementAccessExpression(left) {
 		// Transforms `a[x] **= b` into `(_a = a)[_x = x] = Math.pow(_a[_x], b)`
-		expressionTemp := ch.Factory().NewTempVariable()
-		ch.EmitContext().AddVariableDeclaration(expressionTemp)
 		argumentExpressionTemp := ch.Factory().NewTempVariable()
 		ch.EmitContext().AddVariableDeclaration(argumentExpressionTemp)
 
-		objExpr := ch.Factory().NewAssignmentExpression(expressionTemp, left.Expression())
-		objExpr.Loc = left.Expression().Loc
 		accessExpr := ch.Factory().NewAssignmentExpression(argumentExpressionTemp, left.AsElementAccessExpression().ArgumentExpression)
 		accessExpr.Loc = left.AsElementAccessExpression().ArgumentExpression.Loc
 
@@ -54,11 +62,7 @@ func (ch *exponentiationTransformer) visitExponentiationAssignmentExpression(nod
 		value.Loc = left.Loc
 	} else if ast.IsPropertyAccessExpression(left) {
 		// Transforms `a.x **= b` into `(_a = a).x = Math.pow(_a.x, b)`
-		expressionTemp := ch.Factory().NewTempVariable()
-		ch.EmitContext().AddVariableDeclaration(expressionTemp)
-		assignment := ch.Factory().NewAssignmentExpression(expressionTemp, left.Expression())
-		assignment.Loc = left.Expression().Loc
-		target = ch.Factory().NewPropertyAccessExpression(assignment, nil, left.Name(), ast.NodeFlagsNone)
+		target = ch.Factory().NewPropertyAccessExpression(objExpr, nil, left.Name(), ast.NodeFlagsNone)
 		target.Loc = left.Loc
 
 		value = ch.Factory().NewPropertyAccessExpression(expressionTemp, nil, left.Name(), ast.NodeFlagsNone)

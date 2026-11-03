@@ -135,17 +135,14 @@ value;
 // super
 class Derived extends C {
     constructor() {
-        var _a;
         super();
-        (_a = super). = Math.pow(_a., value);
+        super. = Math.pow(super., value);
     }
     foo() {
-        var _a;
-        (_a = super). = Math.pow(_a., value);
+        super. = Math.pow(super., value);
     }
     static sfoo() {
-        var _a;
-        (_a = super). = Math.pow(_a., value);
+        super. = Math.pow(super., value);
     }
 }
 // function expression

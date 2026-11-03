@@ -68,6 +68,40 @@ function exponentiationAssignment() {
     (getObject().x) **= 2;
 }
 
+declare function getKey(): "x";
+
+class Base {
+    get x() { return 2; }
+    set x(value: number) {}
+}
+
+class Derived extends Base {
+    logicalAssignment() {
+        super.x! ||= 1;
+        (super.x as number) &&= 1;
+        (super.x satisfies number) ??= 1;
+        (<number>super[getKey()]) ||= 1;
+        super[getKey()]! &&= 1;
+        (super[getKey()] as number) ??= 1;
+    }
+
+    exponentiationAssignment() {
+        super.x! **= 2;
+        (super.x as number) **= 2;
+        (super.x satisfies number) **= 2;
+        (<number>super.x) **= 2;
+        ((super.x) as number)! **= 2;
+        (super.x) **= 2;
+
+        super[getKey()]! **= 2;
+        (super[getKey()] as number) **= 2;
+        (super[getKey()] satisfies number) **= 2;
+        (<number>super[getKey()]) **= 2;
+        ((super[getKey()]) as number)! **= 2;
+        (super[getKey()]) **= 2;
+    }
+}
+
 
 //// [compoundAssignmentWithTypeOnlyExpressions.js]
 "use strict";
@@ -127,4 +161,32 @@ function exponentiationAssignment() {
     getObject().x **= 2;
     (getObject().x) **= 2;
     (getObject().x) **= 2;
+}
+class Base {
+    get x() { return 2; }
+    set x(value) { }
+}
+class Derived extends Base {
+    logicalAssignment() {
+        super.x ||= 1;
+        super.x &&= 1;
+        super.x ??= 1;
+        super[getKey()] ||= 1;
+        super[getKey()] &&= 1;
+        super[getKey()] ??= 1;
+    }
+    exponentiationAssignment() {
+        super.x **= 2;
+        super.x **= 2;
+        super.x **= 2;
+        super.x **= 2;
+        (super.x) **= 2;
+        (super.x) **= 2;
+        super[getKey()] **= 2;
+        super[getKey()] **= 2;
+        super[getKey()] **= 2;
+        super[getKey()] **= 2;
+        (super[getKey()]) **= 2;
+        (super[getKey()]) **= 2;
+    }
 }

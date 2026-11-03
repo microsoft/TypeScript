@@ -68,6 +68,40 @@ function exponentiationAssignment() {
     (getObject().x) **= 2;
 }
 
+declare function getKey(): "x";
+
+class Base {
+    get x() { return 2; }
+    set x(value: number) {}
+}
+
+class Derived extends Base {
+    logicalAssignment() {
+        super.x! ||= 1;
+        (super.x as number) &&= 1;
+        (super.x satisfies number) ??= 1;
+        (<number>super[getKey()]) ||= 1;
+        super[getKey()]! &&= 1;
+        (super[getKey()] as number) ??= 1;
+    }
+
+    exponentiationAssignment() {
+        super.x! **= 2;
+        (super.x as number) **= 2;
+        (super.x satisfies number) **= 2;
+        (<number>super.x) **= 2;
+        ((super.x) as number)! **= 2;
+        (super.x) **= 2;
+
+        super[getKey()]! **= 2;
+        (super[getKey()] as number) **= 2;
+        (super[getKey()] satisfies number) **= 2;
+        (<number>super[getKey()]) **= 2;
+        ((super[getKey()]) as number)! **= 2;
+        (super[getKey()]) **= 2;
+    }
+}
+
 
 //// [compoundAssignmentWithTypeOnlyExpressions.js]
 "use strict";
@@ -132,4 +166,35 @@ function exponentiationAssignment() {
     (_r = getObject()).x = Math.pow(_r.x, 2);
     (_s = getObject()).x = Math.pow(_s.x, 2);
     (_t = getObject()).x = Math.pow(_t.x, 2);
+}
+class Base {
+    get x() { return 2; }
+    set x(value) { }
+}
+class Derived extends Base {
+    logicalAssignment() {
+        var _a, _b;
+        var _c, _d, _e;
+        super.x || (super.x = 1);
+        super.x && (super.x = 1);
+        (_a = super.x) !== null && _a !== void 0 ? _a : (super.x = 1);
+        super[_c = getKey()] || (super[_c] = 1);
+        super[_d = getKey()] && (super[_d] = 1);
+        (_b = super[_e = getKey()]) !== null && _b !== void 0 ? _b : (super[_e] = 1);
+    }
+    exponentiationAssignment() {
+        var _a, _b, _c, _d, _e, _f;
+        super.x = Math.pow(super.x, 2);
+        super.x = Math.pow(super.x, 2);
+        super.x = Math.pow(super.x, 2);
+        super.x = Math.pow(super.x, 2);
+        super.x = Math.pow(super.x, 2);
+        super.x = Math.pow(super.x, 2);
+        super[_a = getKey()] = Math.pow(super[_a], 2);
+        super[_b = getKey()] = Math.pow(super[_b], 2);
+        super[_c = getKey()] = Math.pow(super[_c], 2);
+        super[_d = getKey()] = Math.pow(super[_d], 2);
+        super[_e = getKey()] = Math.pow(super[_e], 2);
+        super[_f = getKey()] = Math.pow(super[_f], 2);
+    }
 }
