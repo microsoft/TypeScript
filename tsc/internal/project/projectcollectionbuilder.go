@@ -745,7 +745,7 @@ func (b *ProjectCollectionBuilder) DidRequestProjectTrees(projectTreeRequest *Pr
 	})
 
 	var seenProjects collections.SyncSet[ConfiguredProjectID]
-	wg := core.NewWorkGroup(false)
+	wg := core.NewWorkGroup(0)
 	for _, projectId := range currentProjects {
 		wg.Queue(func() {
 			if entry, ok := b.configuredProjects.Load(projectId); ok {
