@@ -329,10 +329,7 @@ func (m *SymbolMap) insertIndex(key string, i int) {
 
 func (m *SymbolMap) buildIndex() {
 	indexLen := indexSizeFor(len(m.entries))
-	if cap(m.index) >= indexLen {
-		m.index = m.index[:indexLen]
-		clear(m.index)
-	} else {
+	if len(m.index) < indexLen {
 		m.index = make([]int32, indexLen)
 	}
 	for i := range m.entries {
@@ -346,8 +343,8 @@ func (m *SymbolMap) Delete(key string) {
 		return
 	}
 	m.entries = slices.Delete(m.entries, d, d+1)
-	m.index = nil
-	if len(m.entries) > symbolTableLinearMax {
+	if len(m.index) != 0 {
+		clear(m.index)
 		m.buildIndex()
 	}
 }
@@ -401,20 +398,17 @@ func (m *SymbolMap) Clone() SymbolTable {
 	}
 	clone := &SymbolMap{}
 	clone.entries = slices.Clone(m.entries)
-	if len(m.index) != 0 {
-		if len(m.index) > indexSizeFor(len(m.entries)) {
-			clone.buildIndex()
-		} else {
-			clone.index = slices.Clone(m.index)
-		}
+	if len(m.entries) > symbolTableLinearMax {
+		clone.buildIndex()
 	}
 	return clone
 }
 
 func (m *SymbolMap) Clear() {
 	if m != nil {
+		clear(m.entries)
+		clear(m.index)
 		m.entries = m.entries[:0]
-		m.index = m.index[:0]
 	}
 }
 
