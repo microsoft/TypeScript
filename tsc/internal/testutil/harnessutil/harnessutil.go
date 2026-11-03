@@ -1107,6 +1107,10 @@ func getTestBuildInfoReader(host compiler.CompilerHost) *testBuildInfoReader {
 }
 
 func createProgram(host compiler.CompilerHost, config *tsoptions.ParsedCommandLine) compiler.ProgramLike {
+	return createProgramWithCheckers(host, config, nil)
+}
+
+func createProgramWithCheckers(host compiler.CompilerHost, config *tsoptions.ParsedCommandLine, assignCheckers func([]*ast.SourceFile) []int) compiler.ProgramLike {
 	var singleThreaded core.Tristate
 	if testutil.TestProgramIsSingleThreaded() {
 		singleThreaded = core.TSTrue
@@ -1116,6 +1120,7 @@ func createProgram(host compiler.CompilerHost, config *tsoptions.ParsedCommandLi
 		Config:         config,
 		Host:           host,
 		SingleThreaded: singleThreaded,
+		AssignCheckers: assignCheckers,
 	}
 	program := compiler.NewProgram(programOptions)
 	if config.CompilerOptions().Incremental.IsTrue() {
