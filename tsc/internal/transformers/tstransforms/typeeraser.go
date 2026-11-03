@@ -92,6 +92,7 @@ func (tx *TypeEraserTransformer) visit(node *ast.Node) *ast.Node {
 		ast.KindIndexedAccessType,
 		ast.KindMappedType,
 		ast.KindLiteralType,
+		ast.KindImportType,
 		// TypeScript index signatures are elided.
 		ast.KindIndexSignature:
 		return nil
@@ -387,6 +388,10 @@ func (tx *TypeEraserTransformer) visit(node *ast.Node) *ast.Node {
 			return nil
 		}
 		return node
+
+	case ast.KindExportAssignment:
+		n := node.AsExportAssignment()
+		return tx.Factory().UpdateExportAssignment(n, tx.Visitor().VisitModifiers(n.Modifiers()), n.IsExportEquals, nil, tx.Visitor().VisitNode(n.Expression))
 
 	case ast.KindEnumDeclaration:
 		if ast.IsEnumConst(node) {
