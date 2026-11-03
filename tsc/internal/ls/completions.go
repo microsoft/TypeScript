@@ -1408,9 +1408,9 @@ func (l *LanguageService) getCompletionData(
 		if localSymbol != nil {
 			localExports = localSymbol.Exports()
 		}
-		for name, symbol := range localsContainer.Locals() {
+		for name, symbol := range localsContainer.Locals().All() {
 			symbols = append(symbols, symbol)
-			if _, ok := localExports[name]; ok {
+			if _, ok := localExports.Lookup(name); ok {
 				symbolId := ast.GetSymbolId(symbol)
 				symbolToSortTextMap[symbolId] = SortTextOptionalMember
 			}
@@ -3557,7 +3557,7 @@ func getContextualType(previousToken *ast.Node, position int, file *ast.SourceFi
 	}
 }
 
-func getSwitchedType(caseClause *ast.CaseOrDefaultClauseNode, typeChecker *checker.Checker) *checker.Type {
+func getSwitchedType(caseClause *ast.CaseOrDefaultClause, typeChecker *checker.Checker) *checker.Type {
 	return typeChecker.GetTypeAtLocation(caseClause.Parent.Parent.Expression())
 }
 
@@ -6680,8 +6680,8 @@ func (l *LanguageService) getExhaustiveCaseSnippets(
 			return nil, nil
 		}
 
-		newClauses := core.Map(elements, func(element *ast.Node) *ast.CaseOrDefaultClauseNode {
-			return factory.NewCaseOrDefaultClause(ast.KindCaseClause, element, factory.NewNodeList(nil))
+		newClauses := core.Map(elements, func(element *ast.Node) *ast.CaseOrDefaultClause {
+			return factory.NewCaseClause(element, factory.NewNodeList(nil))
 		})
 		newLineChar := l.FormatOptions().NewLineCharacter
 		printer := createSnippetPrinter(printer.PrinterOptions{

@@ -118,7 +118,7 @@ loop:
 			if ast.IsSourceFile(location) || (ast.IsModuleDeclaration(location) && location.Flags&ast.NodeFlagsAmbient != 0 && !ast.IsGlobalScopeAugmentation(location)) {
 				// It's an external module. First see if the module has an export default and if the local
 				// name of that export default matches.
-				result = moduleExports[ast.InternalSymbolNameDefault]
+				result = moduleExports.Get(ast.InternalSymbolNameDefault)
 				if result != nil {
 					localSymbol := GetLocalSymbolForExportDefault(result)
 					if localSymbol != nil && result.Flags()&meaning != 0 && localSymbol.Name() == name {
@@ -137,7 +137,7 @@ loop:
 				//     2. We check === SymbolFlags.Alias in order to check that the symbol is *purely*
 				//        an alias. If we used &, we'd be throwing out symbols that have non alias aspects,
 				//        which is not the desired behavior.
-				moduleExport := moduleExports[name]
+				moduleExport := moduleExports.Get(name)
 				if moduleExport != nil && moduleExport.Flags() == ast.SymbolFlagsAlias && (ast.GetDeclarationOfKind(moduleExport, ast.KindExportSpecifier) != nil || ast.GetDeclarationOfKind(moduleExport, ast.KindNamespaceExport) != nil) {
 					break
 				}
@@ -429,7 +429,7 @@ func (r *NameResolver) lookup(symbols ast.SymbolTable, name string, meaning ast.
 	}
 	// Default implementation does not support following aliases or merged symbols
 	if meaning != 0 {
-		symbol := symbols[name]
+		symbol := symbols.Get(name)
 		if symbol != nil {
 			if symbol.Flags()&meaning != 0 {
 				return symbol

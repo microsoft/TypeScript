@@ -38,8 +38,18 @@ type FileIncludeReason struct {
 type referencedFileData struct {
 	file      tspath.PathKey
 	index     int
-	synthetic *ast.Node
+	synthetic syntheticImportKind
 }
+
+// syntheticImportKind identifies a synthetic import by kind rather than by node, so that include reasons stay
+// valid in programs that reuse them with a replaced file.
+type syntheticImportKind uint8
+
+const (
+	syntheticImportNone syntheticImportKind = iota
+	syntheticImportHelpers
+	syntheticImportJSXRuntime
+)
 
 type referenceFileLocation struct {
 	file        *ast.SourceFile
@@ -100,13 +110,15 @@ func (r *FileIncludeReason) getReferencedLocation(program *Program) *referenceFi
 	switch r.kind {
 	case fileIncludeKindImport:
 		var specifier *ast.Node
-		var isSynthetic bool
-		if ref.synthetic != nil {
-			specifier = ref.synthetic
-			isSynthetic = true
-		} else if ref.index < len(file.Imports()) {
+		isSynthetic := ref.synthetic != syntheticImportNone
+		switch {
+		case ref.synthetic == syntheticImportHelpers:
+			specifier = program.importHelpersImportSpecifiers[ref.file]
+		case ref.synthetic == syntheticImportJSXRuntime:
+			specifier = program.jsxRuntimeImportSpecifiers[ref.file].specifier
+		case ref.index < len(file.Imports()):
 			specifier = file.Imports()[ref.index]
-		} else {
+		default:
 			augIndex := len(file.Imports())
 			for _, imp := range file.ModuleAugmentations {
 				if imp.Kind == ast.KindStringLiteral {
@@ -227,7 +239,7 @@ func (r *FileIncludeReason) computeReferenceFileDiagnostic(program *Program, toF
 			} else {
 				return ast.NewCompilerDiagnostic(diagnostics.Imported_via_0_from_file_1, referenceText, toFileName(referenceLocation.file.FileName()))
 			}
-		} else if specifier, ok := program.importHelpersImportSpecifiers[referenceLocation.file.PathKey()]; ok && specifier == referenceLocation.node {
+		} else if r.referencedFile.synthetic == syntheticImportHelpers {
 			if referenceLocation.packageId.Name != "" {
 				return ast.NewCompilerDiagnostic(diagnostics.Imported_via_0_from_file_1_with_packageId_2_to_import_importHelpers_as_specified_in_compilerOptions, referenceText, toFileName(referenceLocation.file.FileName()), referenceLocation.packageId.String())
 			} else {

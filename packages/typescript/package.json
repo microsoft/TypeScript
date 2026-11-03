@@ -50,9 +50,17 @@
             "@typescript/source": "./src/api/sync/api.ts",
             "default": "./dist/api/sync/api.js"
         },
+        "./sync/transport": {
+            "@typescript/source": "./src/api/sync/transport.ts",
+            "default": "./dist/api/sync/transport.js"
+        },
         "./async": {
             "@typescript/source": "./src/api/async/api.ts",
             "default": "./dist/api/async/api.js"
+        },
+        "./async/transport": {
+            "@typescript/source": "./src/api/async/transport.ts",
+            "default": "./dist/api/async/transport.js"
         },
         "./fs": {
             "@typescript/source": "./src/api/fs.ts",
@@ -65,6 +73,10 @@
         "./proto": {
             "@typescript/source": "./src/api/proto.ts",
             "default": "./dist/api/proto.js"
+        },
+        "./wasm": {
+            "@typescript/source": "./src/wasm/index.ts",
+            "default": "./dist/wasm/index.js"
         },
         "./ast": {
             "@typescript/source": "./src/ast/index.ts",
@@ -103,11 +115,13 @@
         "generate:sync": "npm run node -- scripts/generateSync.ts",
         "build": "tsc -b",
         "build:test": "tsc -b test",
-        "test:only": "npm run node -- --test './test/**/*.test.ts'",
+        "test:only": "npm run node -- --test './test/*.test.ts' './test/async/**/*.test.ts' './test/sync/**/*.test.ts'",
+        "test:browser-smoke:only": "npm run node -- --test './test/browser/**/*.test.ts'",
         "test": "npm run test:only"
     },
     "devDependencies": {
         "@types/node": "^22.20.1",
+        "playwright": "^1.62.1",
         "tinybench": "^6.1.6",
         "vscode-jsonrpc": "^9.0.2"
     }

@@ -1,6 +1,6 @@
 import * as vscode from "vscode";
 
-import type { ConfigurationMiddleware } from "vscode-languageclient/node";
+import type { ConfigurationMiddleware } from "vscode-languageclient";
 import type { MessageSignature } from "vscode-languageserver-protocol";
 
 /**

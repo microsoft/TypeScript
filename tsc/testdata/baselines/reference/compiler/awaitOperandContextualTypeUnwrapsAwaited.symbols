@@ -1,0 +1,34 @@
+//// [tests/cases/compiler/awaitOperandContextualTypeUnwrapsAwaited.ts] ////
+
+=== awaitOperandContextualTypeUnwrapsAwaited.ts ===
+declare function make<U>(): PromiseLike<U>;
+>make : Symbol(make, Decl(awaitOperandContextualTypeUnwrapsAwaited.ts, 0, 0))
+>U : Symbol(U, Decl(awaitOperandContextualTypeUnwrapsAwaited.ts, 0, 22))
+>PromiseLike : Symbol(PromiseLike, Decl(lib.es5.d.ts, --, --))
+>U : Symbol(U, Decl(awaitOperandContextualTypeUnwrapsAwaited.ts, 0, 22))
+
+async function f<T extends number>(): Promise<Awaited<T>> {
+>f : Symbol(f, Decl(awaitOperandContextualTypeUnwrapsAwaited.ts, 0, 43))
+>T : Symbol(T, Decl(awaitOperandContextualTypeUnwrapsAwaited.ts, 2, 17))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>Awaited : Symbol(Awaited, Decl(lib.es5.d.ts, --, --))
+>T : Symbol(T, Decl(awaitOperandContextualTypeUnwrapsAwaited.ts, 2, 17))
+
+    return await make();
+>make : Symbol(make, Decl(awaitOperandContextualTypeUnwrapsAwaited.ts, 0, 0))
+}
+
+async function g<T extends number>() {
+>g : Symbol(g, Decl(awaitOperandContextualTypeUnwrapsAwaited.ts, 4, 1))
+>T : Symbol(T, Decl(awaitOperandContextualTypeUnwrapsAwaited.ts, 6, 17))
+
+    const x: Awaited<T> = await make();
+>x : Symbol(x, Decl(awaitOperandContextualTypeUnwrapsAwaited.ts, 7, 9))
+>Awaited : Symbol(Awaited, Decl(lib.es5.d.ts, --, --))
+>T : Symbol(T, Decl(awaitOperandContextualTypeUnwrapsAwaited.ts, 6, 17))
+>make : Symbol(make, Decl(awaitOperandContextualTypeUnwrapsAwaited.ts, 0, 0))
+
+    return x;
+>x : Symbol(x, Decl(awaitOperandContextualTypeUnwrapsAwaited.ts, 7, 9))
+}
+

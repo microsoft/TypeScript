@@ -1067,6 +1067,40 @@ func TestParseJsonSourceFileConfigFileContentReportsInvalidExtendedConfig(t *tes
 	}
 }
 
+func TestParseJsonSourceFileConfigFileContentReportsCircularExtendsChain(t *testing.T) {
+	t.Parallel()
+	files := map[string]string{
+		"/project/tsconfig.json": `{ "extends": "./a.json" }`,
+		"/project/a.json":        `{ "extends": "./b.json" }`,
+		"/project/b.json":        `{ "extends": "./a.json" }`,
+		"/project/main.ts":       "export const x = 1;",
+	}
+	fs := tsoptionstest.NewVFS(files, tspath.CaseSensitive /*caseSensitivity*/)
+	configFileName := tspath.RootedFilePath("/project/tsconfig.json")
+	configFile := tsoptions.NewTsconfigSourceFileFromFilePath(
+		configFileName,
+		fs.CaseSensitivity().PathKey(tspath.RootedPath(configFileName)),
+		files[configFileName.AsString()],
+	)
+
+	parsed := tsoptions.ParseJsonSourceFileConfigFileContent(
+		configFile,
+		tsoptions.NewDefaultParseConfigHost(fs),
+		"/project",
+		nil,
+		nil,
+		nil,
+		nil,
+	)
+
+	circularity := core.Filter(parsed.Errors, func(diagnostic *ast.Diagnostic) bool {
+		return diagnostic.Code() == diagnostics.Circularity_detected_while_resolving_configuration_Colon_0.Code()
+	})
+	assert.DeepEqual(t, core.Map(circularity, (*ast.Diagnostic).MessageArgs), [][]string{
+		{"/project/a.json -> /project/b.json -> /project/a.json"},
+	})
+}
+
 // Extending an empty config file used to panic on nil Statements (#4265).
 func TestParseJsonSourceFileConfigFileContentWithEmptyExtendedConfig(t *testing.T) {
 	t.Parallel()
@@ -1458,7 +1492,7 @@ func TestContentMappersValidation(t *testing.T) {
 		{
 			name:           "built-in extension",
 			contentMappers: `[{ "package": "x", "extensions": [".ts"] }]`,
-			expectedCode:   diagnostics.Content_mapper_file_extension_0_is_a_built_in_extension_and_cannot_be_registered_by_a_content_mapper.Code(),
+			expectedCode:   diagnostics.Content_mapper_file_extension_0_cannot_be_registered_because_it_ends_in_a_built_in_extension.Code(),
 		},
 		{
 			name:           "missing extensions",
@@ -1562,7 +1596,7 @@ func TestContentMapperExtensionValidationUsesHostCaseSensitivity(t *testing.T) {
 			name:            "built-in extension on case-insensitive host",
 			caseSensitivity: tspath.CaseInsensitive,
 			contentMappers:  `[{ "package": "mapper", "extensions": [".TS"] }]`,
-			expectedCode:    diagnostics.Content_mapper_file_extension_0_is_a_built_in_extension_and_cannot_be_registered_by_a_content_mapper.Code(),
+			expectedCode:    diagnostics.Content_mapper_file_extension_0_cannot_be_registered_because_it_ends_in_a_built_in_extension.Code(),
 		},
 		{
 			name:            "duplicate extension on case-insensitive host",
@@ -1574,7 +1608,7 @@ func TestContentMapperExtensionValidationUsesHostCaseSensitivity(t *testing.T) {
 			name:            "built-in extension on case-sensitive host",
 			caseSensitivity: tspath.CaseSensitive,
 			contentMappers:  `[{ "package": "mapper", "extensions": [".TS"] }]`,
-			expectedCode:    diagnostics.Content_mapper_file_extension_0_is_a_built_in_extension_and_cannot_be_registered_by_a_content_mapper.Code(),
+			expectedCode:    diagnostics.Content_mapper_file_extension_0_cannot_be_registered_because_it_ends_in_a_built_in_extension.Code(),
 		},
 		{
 			name:            "mapper extension casing is distinct on case-sensitive host",
@@ -1643,7 +1677,7 @@ func TestContentMapperCompoundExtensionValidation(t *testing.T) {
 					assert.DeepEqual(t, parsed.ContentMapperExtensions(), []string{extension})
 				} else {
 					assert.Equal(t, len(parsed.Errors), 1)
-					assert.Equal(t, parsed.Errors[0].Code(), diagnostics.Content_mapper_file_extension_0_is_a_built_in_extension_and_cannot_be_registered_by_a_content_mapper.Code())
+					assert.Equal(t, parsed.Errors[0].Code(), diagnostics.Content_mapper_file_extension_0_cannot_be_registered_because_it_ends_in_a_built_in_extension.Code())
 					assert.Equal(t, len(parsed.ContentMapperExtensions()), 0)
 				}
 			})

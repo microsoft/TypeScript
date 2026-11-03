@@ -93,6 +93,7 @@ tsc/testdata/baselines/tmp
 /TEST-results.xml
 /*v8.log
 /lib/
+/packages/typescript-wasip1-wasm/lib/
 /internal/
 /scripts/eslint/built/
 /scripts/debug.bat
