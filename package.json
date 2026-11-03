@@ -24,15 +24,15 @@
         "setup-hooks": "node tools/scripts/link-hooks.mjs"
     },
     "devDependencies": {
-        "@dprint/json": "^0.23.0",
+        "@dprint/json": "^0.25.2",
         "@dprint/typescript": "^0.96.1",
-        "@jakebailey/dprint-plugin-gofumpt": "^0.0.18",
-        "@types/node": "^22.20.1",
+        "@jakebailey/dprint-plugin-gofumpt": "^0.0.20",
+        "@types/node": "^22.20.5",
         "@unicode/unicode-15.1.0": "^1.6.17",
         "adm-zip": "^0.6.1",
         "binaryen": "^132.0.0",
         "chokidar": "^5.0.0",
-        "dprint": "^0.57.4",
+        "dprint": "^0.64.3",
         "dprint-plugin-yaml": "^0.6.0",
         "hereby": "^1.15.2",
         "tar": "^7.5.22",
@@ -44,7 +44,7 @@
         "@microsoft/1ds-core-js": "4.3.11",
         "@microsoft/1ds-post-js": "4.3.11"
     },
-    "packageManager": "npm@11.19.1+sha512.cedb312b1b7f92421a02cfb68b4194e88f8346651dacd6acc5364a25ef5309d4a32b19616a1ff8aff865e7280c0fa5c0835a99f5cd93368991e2a80ec9da75d2",
+    "packageManager": "npm@11.21.1+sha512.613ccbe90044257c87713bb426251ced128ca7e9b3949b65eeb18b98445a5d441e14720c73d6ad76be86f4cf42f2f0d66efe347a9a13400ccd2f6fcfb5954385",
     "volta": {
         "node": "24.20.0",
         "npm": "11.19.1"
