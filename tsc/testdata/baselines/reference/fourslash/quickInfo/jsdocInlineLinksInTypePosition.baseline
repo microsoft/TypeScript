@@ -5,12 +5,18 @@
 //  * @throws {@link C}
 //                   ^
 // | ----------------------------------------------------------------------
-// | No quickinfo at /*throwsLink*/.
+// | ```typescript
+// | class C
+// | ```
+// | 
 // | ----------------------------------------------------------------------
 //  * @returns {@linkcode C}
 //                        ^
 // | ----------------------------------------------------------------------
-// | No quickinfo at /*returnsLink*/.
+// | ```typescript
+// | class C
+// | ```
+// | 
 // | ----------------------------------------------------------------------
 //  * @param value {@linkplain C}
 //                             ^
@@ -29,13 +35,9 @@
 // | ```
 // | 
 // | 
-// | *@throws* — {
+// | *@throws* — [C](file:///jsdocInlineLinksInTypePosition.ts#1,7-1,8)
 // | 
-// | *@link* — C}
-// | 
-// | *@returns*
-// | 
-// | *@linkcode* — C}
+// | *@returns* — [`C`](file:///jsdocInlineLinksInTypePosition.ts#1,7-1,8)
 // | 
 // | *@param* `value` — [C](file:///jsdocInlineLinksInTypePosition.ts#1,7-1,8)
 // | ----------------------------------------------------------------------
@@ -91,7 +93,23 @@
       "Name": "throwsLink",
       "Data": {}
     },
-    "item": null
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```typescript\nclass C\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 2,
+          "character": 18
+        },
+        "end": {
+          "line": 2,
+          "character": 19
+        }
+      },
+      "canIncreaseVerbosity": true
+    }
   },
   {
     "marker": {
@@ -103,7 +121,23 @@
       "Name": "returnsLink",
       "Data": {}
     },
-    "item": null
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```typescript\nclass C\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 3,
+          "character": 23
+        },
+        "end": {
+          "line": 3,
+          "character": 24
+        }
+      },
+      "canIncreaseVerbosity": true
+    }
   },
   {
     "marker": {
@@ -146,7 +180,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```typescript\nfunction f(value: C): void\n```\n\n\n*@throws* — {\n\n*@link* — C}\n\n*@returns*\n\n*@linkcode* — C}\n\n*@param* `value` — [C](file:///jsdocInlineLinksInTypePosition.ts#1,7-1,8)"
+        "value": "```typescript\nfunction f(value: C): void\n```\n\n\n*@throws* — [C](file:///jsdocInlineLinksInTypePosition.ts#1,7-1,8)\n\n*@returns* — [`C`](file:///jsdocInlineLinksInTypePosition.ts#1,7-1,8)\n\n*@param* `value` — [C](file:///jsdocInlineLinksInTypePosition.ts#1,7-1,8)"
       },
       "range": {
         "start": {

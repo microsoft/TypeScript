@@ -1,6 +1,6 @@
 // === goToDefinition ===
 // === /jsdocInlineLinksInTypePosition.ts ===
-// class C {}
+// <|class [|C|] {}|>
 // /**
 //  * @throws {@link /*GOTO DEF*/C}
 //  * @returns {@linkcode C}
@@ -12,7 +12,7 @@
 
 // === goToDefinition ===
 // === /jsdocInlineLinksInTypePosition.ts ===
-// class C {}
+// <|class [|C|] {}|>
 // /**
 //  * @throws {@link C}
 //  * @returns {@linkcode /*GOTO DEF*/C}
