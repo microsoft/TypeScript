@@ -15602,7 +15602,7 @@ func (c *Checker) resolveExternalModule(
 				!tspath.IsDeclarationFileName(moduleReference) &&
 				(!ast.IsLiteralImportTypeNode(location) && !ast.IsPartOfTypeOnlyImportOrExportDeclaration(location) ||
 					checkDeclarationRewrite) {
-				rewrites = contentmapper.RewritesForImport(rewrites, importingSourceFile.FileName(), specifier, c.program.ContentMapperExtensionForFileName, caseSensitivity)
+				rewrites = contentmapper.RewritesForImport(rewrites, specifier, c.program.ContentMapperExtensionForFileName(sourceFile.FileName()), caseSensitivity)
 				shouldRewrite := specifier.ShouldRewriteExtension(rewrites, caseSensitivity)
 				mappedSource := false
 				if sourceFile.ContentMapper() != "" {

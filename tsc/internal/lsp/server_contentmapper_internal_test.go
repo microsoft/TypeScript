@@ -24,14 +24,20 @@ func TestContentMapperDocumentPattern(t *testing.T) {
 		{"/project", "file:///project", "file.toml"},
 		{"/", "file:///", "**/*.toml"},
 	} {
-		got := contentMapperDocumentPattern(project.ContentMapperSelector{Base: test.base, Pattern: test.pattern})
+		selector := project.ContentMapperSelector{Base: test.base, Pattern: test.pattern}
+		got := contentMapperDocumentPattern(selector, true)
 		assert.Assert(t, got.Pattern == nil)
 		assert.Equal(t, string(*got.RelativePattern.BaseUri.URI), test.baseURI)
 		assert.Equal(t, got.RelativePattern.Pattern, test.pattern)
+		got = contentMapperDocumentPattern(selector, false)
+		assert.Assert(t, got.RelativePattern == nil)
+		assert.Equal(t, *got.Pattern, tspath.CombinePaths(test.base.AsString(), test.pattern))
 	}
-	got := contentMapperDocumentPattern(project.ContentMapperSelector{Pattern: "**/*.toml"})
-	assert.Equal(t, *got.Pattern, "**/*.toml")
-	assert.Assert(t, got.RelativePattern == nil)
+	for _, supported := range []bool{false, true} {
+		got := contentMapperDocumentPattern(project.ContentMapperSelector{Pattern: "**/*.toml"}, supported)
+		assert.Equal(t, *got.Pattern, "**/*.toml")
+		assert.Assert(t, got.RelativePattern == nil)
+	}
 }
 
 func TestContentMapperLoggerRequiresTrace(t *testing.T) {

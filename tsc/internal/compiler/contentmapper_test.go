@@ -236,6 +236,59 @@ func TestContentMapperRuntimeRewrites(t *testing.T) {
 	}
 }
 
+func TestContentMapperResolvedTargetRewrites(t *testing.T) {
+	t.Parallel()
+	for _, test := range []struct {
+		name, target, include string
+		rootDirs              []tspath.RootedDirectoryPath
+		moduleSuffixes        []string
+	}{
+		{"rootDirs", "/project/generated/blob.toml", "generated", []tspath.RootedDirectoryPath{"/project/src", "/project/generated"}, nil},
+		{"moduleSuffixes", "/project/src/blob.native.toml", "**/*.native.toml", nil, []string{".native", ""}},
+	} {
+		for _, moduleKind := range []core.ModuleKind{core.ModuleKindPreserve, core.ModuleKindESNext, core.ModuleKindCommonJS} {
+			t.Run(test.name+"/"+moduleKind.String(), func(t *testing.T) {
+				t.Parallel()
+				fs := vfstest.FromMap(map[string]string{
+					"/project/src/main.ts": `
+						import { make } from "./blob.toml";
+						export { value } from "./blob.toml";
+						export const box = make();
+						export type BoxType = import("./blob.toml").Box;
+					`,
+					test.target: "export const value = 1; export class Box {} export function make() { return new Box(); }",
+				}, tspath.CaseSensitive)
+				config := tsoptions.NewParsedCommandLine(&core.CompilerOptions{
+					NoLib: core.TSTrue, Declaration: core.TSTrue, RewriteRelativeImportExtensions: core.TSTrue,
+					Module: moduleKind, ModuleResolution: core.ModuleResolutionKindBundler, OutDir: "/dist", RootDir: "/project",
+					RootDirs: test.rootDirs, ModuleSuffixes: test.moduleSuffixes,
+				}, []tspath.RootedFilePath{"/project/src/main.ts"}, nil, "/project", fs.CaseSensitivity())
+				config.ParsedConfig.ContentMappers = []*contentmapper.Mapper{{
+					Package: "mapper", Name: "mapper", Extensions: []string{".toml"}, Include: []string{test.include},
+					OutputExtensions: map[string]string{".toml": ".js"},
+				}}
+				program := compiler.NewProgram(compiler.ProgramOptions{
+					Config: config,
+					Host: compiler.NewCompilerHost(fs, "/", nil, nil, fakeContentMapperHost{
+						transform: func(fileName, content string) (contentmapper.Result, error) {
+							return contentmapper.Result{Text: content, VirtualExtension: ".ts", Mappings: spanmap.New(nil)}, nil
+						},
+					}),
+					SingleThreaded: core.TSTrue,
+				})
+				assert.Equal(t, len(program.GetSemanticDiagnostics(t.Context(), program.GetSourceFile("/project/src/main.ts"))), 0)
+				program.Emit(t.Context(), compiler.EmitOptions{})
+				for _, output := range []tspath.RootedFilePath{"/dist/src/main.js", "/dist/src/main.d.ts"} {
+					text, ok := fs.ReadFile(output)
+					assert.Assert(t, ok)
+					assert.Assert(t, strings.Contains(text, `"./blob.js"`), text)
+					assert.Assert(t, !strings.Contains(text, `"./blob.toml"`), text)
+				}
+			})
+		}
+	}
+}
+
 func TestContentMapperVirtualExtensionSetsImpliedNodeFormat(t *testing.T) {
 	t.Parallel()
 	program := newContentMapperProgramWithOptions(

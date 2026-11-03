@@ -85,6 +85,7 @@ export const title = "Profile";
 			},
 		},
 		TextDocument: &lsproto.TextDocumentClientCapabilities{
+			Filters:         &lsproto.TextDocumentFilterClientCapabilities{RelativePatternSupport: new(true)},
 			Synchronization: &lsproto.TextDocumentSyncClientCapabilities{DynamicRegistration: new(true)},
 			DocumentSymbol:  &lsproto.DocumentSymbolClientCapabilities{DynamicRegistration: new(true)},
 			FoldingRange:    &lsproto.FoldingRangeClientCapabilities{DynamicRegistration: new(true)},

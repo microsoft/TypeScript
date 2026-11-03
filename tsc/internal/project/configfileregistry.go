@@ -35,8 +35,9 @@ type configuredContentMappers struct {
 func contentMapperSelectorPattern(include, extension string) (string, bool) {
 	pattern := tspath.NormalizeSlashes(include)
 	if vfsmatch.IsImplicitGlob(tspath.GetBaseFileName(pattern)) {
-		pattern += "/**/*"
+		pattern = tspath.CombinePaths(pattern, "**/*")
 	}
+	pattern = strings.NewReplacer("[", "?", "]", "?", "{", "?", "}", "?").Replace(pattern)
 	lowerPattern := strings.ToLower(pattern)
 	lowerExtension := strings.ToLower(extension)
 	if strings.HasSuffix(lowerPattern, lowerExtension) {
@@ -46,10 +47,10 @@ func contentMapperSelectorPattern(include, extension string) (string, bool) {
 		return "", false
 	}
 	if strings.HasSuffix(pattern, "*") {
-		// Appending can miss matches for extension-like patterns such as "*.v*".
+		// Append only after a literal prefix and one terminal wildcard.
 		// Broader selectors are safe because the server rechecks claims.
 		last := tspath.GetBaseFileName(pattern)
-		if !strings.Contains(last[:len(last)-1], ".") {
+		if !strings.ContainsAny(last[:len(last)-1], ".*?") {
 			return pattern + extension, true
 		}
 	}
@@ -81,6 +82,7 @@ func collectConfiguredContentMappers(commandLines []*tsoptions.ParsedCommandLine
 				}
 			}
 			for _, include := range mapper.Definition.Include {
+				include = tspath.GetNormalizedAbsolutePath(include, commandLine.BaseDirectory())
 				for _, extension := range mapper.Definition.Extensions {
 					if pattern, ok := contentMapperSelectorPattern(include, extension); ok {
 						selectors = append(selectors, contentMapperSelector(commandLine.BaseDirectory(), pattern, extension))

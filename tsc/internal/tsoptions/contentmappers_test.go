@@ -169,6 +169,12 @@ func TestContentMapperOutputExtensionConsistency(t *testing.T) {
 				{"package": "mapper", "outputExtensions": {".vue": ".js"}}
 			]`,
 		},
+		{
+			name: "filtered overlap within one registration",
+			definitions: `[
+				{"package": "mapper", "extensions": [".vue", ".part.vue"], "include": ["src"], "outputExtensions": {".vue": ".js", ".part.vue": ".mjs"}}
+			]`,
+		},
 	} {
 		t.Run(test.name, func(t *testing.T) {
 			t.Parallel()
