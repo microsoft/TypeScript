@@ -79,6 +79,8 @@ type Binder struct {
 	flowListArena           core.Arena[ast.FlowList]
 	singleDeclarationsArena core.Arena[*ast.Node]
 	expandoAssignments      []ExpandoAssignmentInfo
+
+	seenCommonJSModuleIndicator bool
 }
 
 type ActiveLabel struct {
@@ -758,7 +760,7 @@ func (b *Binder) bindPropertyWorker(node *ast.Node) {
 
 func (b *Binder) bindSourceFileIfExternalModule() {
 	b.setExportContextFlag(b.file.AsNode())
-	if ast.IsExternalOrCommonJSModule(b.file) {
+	if b.isExternalOrCommonJSModule() {
 		b.bindSourceFileAsExternalModule()
 	} else if ast.IsJsonSourceFile(b.file) {
 		b.bindSourceFileAsExternalModule()
@@ -927,22 +929,32 @@ func (b *Binder) bindFunctionExpression(node *ast.Node) {
 func (b *Binder) bindCallExpression(node *ast.Node) {
 	// We're only inspecting call expressions to detect CommonJS modules, so we can skip
 	// this check if we've already seen the module indicator
-	if b.file.CommonJSModuleIndicator == nil && ast.IsRequireCall(node, false /*requireStringLiteralLikeArgument*/) {
+	if !b.seenCommonJSModuleIndicator && ast.IsRequireCall(node, false /*requireStringLiteralLikeArgument*/) {
 		b.setCommonJSModuleIndicator(node)
 	}
 }
 
+// setCommonJSModuleIndicator reports whether node's file is a CommonJS module, which the
+// parser has already determined. The file symbol is created at the first CommonJS construct
+// in the walk, rather than up front, to preserve symbol creation order.
 func (b *Binder) setCommonJSModuleIndicator(node *ast.Node) bool {
-	if b.file.ExternalModuleIndicator != nil && b.file.ExternalModuleIndicator != b.file.AsNode() {
+	if b.file.CommonJSModuleIndicator == nil {
+		debug.Assert(b.file.ExternalModuleIndicator != nil && b.file.ExternalModuleIndicator != b.file.AsNode(), "parser missed a CommonJS module indicator")
 		return false
 	}
-	if b.file.CommonJSModuleIndicator == nil {
-		b.file.CommonJSModuleIndicator = node
+	if !b.seenCommonJSModuleIndicator {
+		b.seenCommonJSModuleIndicator = true
 		if b.file.ExternalModuleIndicator == nil {
 			b.bindSourceFileAsExternalModule()
 		}
 	}
 	return true
+}
+
+// isExternalOrCommonJSModule is like ast.IsExternalOrCommonJSModule, but a CommonJS file only
+// counts as a module once the walk has reached its first CommonJS construct.
+func (b *Binder) isExternalOrCommonJSModule() bool {
+	return b.file.ExternalModuleIndicator != nil || b.seenCommonJSModuleIndicator
 }
 
 func (b *Binder) bindClassLikeDeclaration(node *ast.Node) {
@@ -1248,7 +1260,7 @@ func (b *Binder) bindBlockScopedDeclaration(node *ast.Node, symbolFlags ast.Symb
 	case ast.KindModuleDeclaration:
 		b.declareModuleMember(node, symbolFlags, symbolExcludes)
 	case ast.KindSourceFile:
-		if ast.IsExternalOrCommonJSModule(b.container.AsSourceFile()) {
+		if b.isExternalOrCommonJSModule() {
 			b.declareModuleMember(node, symbolFlags, symbolExcludes)
 			break
 		}
@@ -1612,12 +1624,13 @@ func (b *Binder) bindContainer(node *ast.Node, containerFlags ContainerFlags) {
 				b.bindBlockScopedDeclaration(statement, ast.SymbolFlagsTypeAlias, ast.SymbolFlagsTypeAliasExcludes)
 			}
 		}
-		if b.file.CommonJSModuleIndicator != nil {
+		debug.Assert(b.seenCommonJSModuleIndicator == (b.file.CommonJSModuleIndicator != nil), "binder missed a CommonJS module indicator")
+		if b.seenCommonJSModuleIndicator {
 			b.declareCommonJSVariable("module")
 			b.declareCommonJSVariable("exports")
 		}
 	}
-	if ast.IsSourceFile(node) && ast.IsExternalOrCommonJSModule(node.AsSourceFile()) || ast.IsAmbientModule(node) {
+	if ast.IsSourceFile(node) && b.isExternalOrCommonJSModule() || ast.IsAmbientModule(node) {
 		b.bindCommonJSTypeExports(node.Symbol())
 	}
 	b.container = saveContainer
@@ -2140,17 +2153,17 @@ func (b *Binder) bindCaseBlock(node *ast.Node) {
 		b.bind(clause)
 		fallthroughFlow = b.currentFlow
 		if b.currentFlow.Flags&ast.FlowFlagsUnreachable == 0 && i != len(clauses)-1 {
-			clause.AsCaseOrDefaultClause().FallthroughFlowNode = b.currentFlow
+			clause.CaseOrDefaultClauseData().FallthroughFlowNode = b.currentFlow
 		}
 	}
 }
 
 func (b *Binder) bindCaseOrDefaultClause(node *ast.Node) {
-	clause := node.AsCaseOrDefaultClause()
-	if clause.Expression != nil {
+	clause := node.CaseOrDefaultClauseData()
+	if node.Kind == ast.KindCaseClause {
 		saveCurrentFlow := b.currentFlow
 		b.currentFlow = b.preSwitchCaseFlow
-		b.bind(clause.Expression)
+		b.bind(node.Expression())
 		b.currentFlow = saveCurrentFlow
 	}
 	b.bindEach(clause.Statements.Nodes)
