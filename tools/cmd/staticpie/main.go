@@ -103,6 +103,11 @@ func convert(data []byte) error {
 			dynamic = p
 		case elf.PT_PHDR:
 			hasPhdr = true
+		case elf.PT_NULL, elf.PT_LOAD, elf.PT_NOTE, elf.PT_TLS, elf.PT_GNU_STACK, elf.PT_GNU_RELRO:
+		default:
+			// Unknown headers (e.g. PT_GNU_PROPERTY) may ask the loader
+			// for something the entry function does not do.
+			return fmt.Errorf("unsupported program header %v", p.Type)
 		}
 	}
 	if interp < 0 {
@@ -160,12 +165,24 @@ loop:
 				return nil, fmt.Errorf("unexpected DT_RELAENT %d", val)
 			}
 		case elf.DT_FLAGS:
+			if flags := elf.DynFlag(val); flags&^elf.DF_BIND_NOW != 0 {
+				return nil, fmt.Errorf("unsupported DT_FLAGS %v", flags)
+			}
 			bindNow = bindNow || elf.DynFlag(val)&elf.DF_BIND_NOW != 0
 		case elf.DT_FLAGS_1:
+			if flags := elf.DynFlag1(val); flags&^(elf.DF_1_NOW|elf.DF_1_PIE) != 0 {
+				return nil, fmt.Errorf("unsupported DT_FLAGS_1 %v", flags)
+			}
 			bindNow = bindNow || elf.DynFlag1(val)&elf.DF_1_NOW != 0
-		case elf.DT_NEEDED, elf.DT_REL, elf.DynTag(36) /* DT_RELR */, elf.DT_JMPREL, elf.DT_TEXTREL,
-			elf.DT_INIT, elf.DT_INIT_ARRAY, elf.DT_PREINIT_ARRAY:
-			return nil, fmt.Errorf("has %v, which requires a dynamic loader", tag)
+		case elf.DT_HASH, elf.DT_STRTAB, elf.DT_STRSZ, elf.DT_SYMTAB, elf.DT_SYMENT, elf.DT_DEBUG:
+			// The symbol tables are for debuggers; DT_DEBUG is filled in
+			// by a loader, if present.
+		case elf.DT_PLTGOT, elf.DT_PPC64_OPT:
+			// Without DT_JMPREL there are no PLT entries for a loader to
+			// resolve, and DT_PPC64_OPT only enables loader optimizations.
+		default:
+			// Anything else may need a loader to act on it.
+			return nil, fmt.Errorf("unsupported dynamic tag %v", tag)
 		}
 	}
 	// The entry function applies all relocations up front, so the binary
