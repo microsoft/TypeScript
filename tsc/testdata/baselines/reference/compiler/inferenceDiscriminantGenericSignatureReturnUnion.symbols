@@ -1,0 +1,51 @@
+//// [tests/cases/compiler/inferenceDiscriminantGenericSignatureReturnUnion.ts] ////
+
+=== inferenceDiscriminantGenericSignatureReturnUnion.ts ===
+// https://github.com/microsoft/TypeScript/issues/63019
+
+type ReadA = <R>() => [false, R] | [true, R | undefined];
+>ReadA : Symbol(ReadA, Decl(inferenceDiscriminantGenericSignatureReturnUnion.ts, 0, 0))
+>R : Symbol(R, Decl(inferenceDiscriminantGenericSignatureReturnUnion.ts, 2, 14))
+>R : Symbol(R, Decl(inferenceDiscriminantGenericSignatureReturnUnion.ts, 2, 14))
+>R : Symbol(R, Decl(inferenceDiscriminantGenericSignatureReturnUnion.ts, 2, 14))
+
+type ReadB = <R>() => [false, R] | [true, R | undefined];
+>ReadB : Symbol(ReadB, Decl(inferenceDiscriminantGenericSignatureReturnUnion.ts, 2, 57))
+>R : Symbol(R, Decl(inferenceDiscriminantGenericSignatureReturnUnion.ts, 3, 14))
+>R : Symbol(R, Decl(inferenceDiscriminantGenericSignatureReturnUnion.ts, 3, 14))
+>R : Symbol(R, Decl(inferenceDiscriminantGenericSignatureReturnUnion.ts, 3, 14))
+
+const test = (_: ReadA): ReadB => _;
+>test : Symbol(test, Decl(inferenceDiscriminantGenericSignatureReturnUnion.ts, 5, 5))
+>_ : Symbol(_, Decl(inferenceDiscriminantGenericSignatureReturnUnion.ts, 5, 14))
+>ReadA : Symbol(ReadA, Decl(inferenceDiscriminantGenericSignatureReturnUnion.ts, 0, 0))
+>ReadB : Symbol(ReadB, Decl(inferenceDiscriminantGenericSignatureReturnUnion.ts, 2, 57))
+>_ : Symbol(_, Decl(inferenceDiscriminantGenericSignatureReturnUnion.ts, 5, 14))
+
+type ReadObjA = <R>() => { done: false; value: R } | { done: true; value: R | undefined };
+>ReadObjA : Symbol(ReadObjA, Decl(inferenceDiscriminantGenericSignatureReturnUnion.ts, 5, 36))
+>R : Symbol(R, Decl(inferenceDiscriminantGenericSignatureReturnUnion.ts, 7, 17))
+>done : Symbol(done, Decl(inferenceDiscriminantGenericSignatureReturnUnion.ts, 7, 26))
+>value : Symbol(value, Decl(inferenceDiscriminantGenericSignatureReturnUnion.ts, 7, 39))
+>R : Symbol(R, Decl(inferenceDiscriminantGenericSignatureReturnUnion.ts, 7, 17))
+>done : Symbol(done, Decl(inferenceDiscriminantGenericSignatureReturnUnion.ts, 7, 54))
+>value : Symbol(value, Decl(inferenceDiscriminantGenericSignatureReturnUnion.ts, 7, 66))
+>R : Symbol(R, Decl(inferenceDiscriminantGenericSignatureReturnUnion.ts, 7, 17))
+
+type ReadObjB = <R>() => { done: false; value: R } | { done: true; value: R | undefined };
+>ReadObjB : Symbol(ReadObjB, Decl(inferenceDiscriminantGenericSignatureReturnUnion.ts, 7, 90))
+>R : Symbol(R, Decl(inferenceDiscriminantGenericSignatureReturnUnion.ts, 8, 17))
+>done : Symbol(done, Decl(inferenceDiscriminantGenericSignatureReturnUnion.ts, 8, 26))
+>value : Symbol(value, Decl(inferenceDiscriminantGenericSignatureReturnUnion.ts, 8, 39))
+>R : Symbol(R, Decl(inferenceDiscriminantGenericSignatureReturnUnion.ts, 8, 17))
+>done : Symbol(done, Decl(inferenceDiscriminantGenericSignatureReturnUnion.ts, 8, 54))
+>value : Symbol(value, Decl(inferenceDiscriminantGenericSignatureReturnUnion.ts, 8, 66))
+>R : Symbol(R, Decl(inferenceDiscriminantGenericSignatureReturnUnion.ts, 8, 17))
+
+const testObj = (_: ReadObjA): ReadObjB => _;
+>testObj : Symbol(testObj, Decl(inferenceDiscriminantGenericSignatureReturnUnion.ts, 10, 5))
+>_ : Symbol(_, Decl(inferenceDiscriminantGenericSignatureReturnUnion.ts, 10, 17))
+>ReadObjA : Symbol(ReadObjA, Decl(inferenceDiscriminantGenericSignatureReturnUnion.ts, 5, 36))
+>ReadObjB : Symbol(ReadObjB, Decl(inferenceDiscriminantGenericSignatureReturnUnion.ts, 7, 90))
+>_ : Symbol(_, Decl(inferenceDiscriminantGenericSignatureReturnUnion.ts, 10, 17))
+
