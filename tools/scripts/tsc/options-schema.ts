@@ -110,7 +110,11 @@ function valueSchema(declaration: Declaration): JSONSchema {
                     type: "object",
                     properties: {
                         package: { type: "string", minLength: 1 },
-                        extensions: { type: "array", items: { type: "string" } },
+                        extensions: {
+                            type: "array",
+                            description: "Source extensions beginning with a dot and containing no other dots or path separators.",
+                            items: { type: "string", pattern: "^\\.[^./\\\\]+$" },
+                        },
                         options: { type: "object" },
                     },
                     required: ["package", "extensions"],

@@ -35,13 +35,13 @@ func TestContentMapperOutputExtensionCaseInsensitivePaths(t *testing.T) {
 	t.Parallel()
 	host := outputPathsHost{
 		commonSourceDirectory:          "/src",
-		contentMapperExtensions:        []string{".y.z"},
-		contentMapperExtensionRewrites: []tspath.ExtensionRewrite{{Source: ".y.z", Target: ".mjs"}},
+		contentMapperExtensions:        []string{".vue"},
+		contentMapperExtensionRewrites: []tspath.ExtensionRewrite{{Source: ".vue", Target: ".part.mjs"}},
 	}
 	options := &core.CompilerOptions{OutDir: "/dist"}
-	fileName := tspath.RootedFilePath("/src/Widget.Y.Z")
-	assert.Equal(t, outputpaths.GetExternalOutputFileName(fileName, options, host), tspath.RootedFilePath("/dist/Widget.mjs"))
-	assert.Equal(t, outputpaths.GetOutputDeclarationFileNameWorker(fileName, options, host), tspath.RootedFilePath("/dist/Widget.d.mts"))
+	fileName := tspath.RootedFilePath("/src/Widget.part.VUE")
+	assert.Equal(t, outputpaths.GetExternalOutputFileName(fileName, options, host), tspath.RootedFilePath("/dist/Widget.part.part.mjs"))
+	assert.Equal(t, outputpaths.GetOutputDeclarationFileNameWorker(fileName, options, host), tspath.RootedFilePath("/dist/Widget.part.part.d.mts"))
 }
 
 func TestGetSourceFileNameInNewDirSourceMatchesCommonDirectory(t *testing.T) {
@@ -179,6 +179,7 @@ func TestGetOutputFileNameAcrossRoots(t *testing.T) {
 	}
 
 	assert.Equal(t, outputpaths.GetOutputJSFileNameWorker(input, options, host), tspath.RootedFilePath("d:/shared.js"))
+	assert.Equal(t, outputpaths.GetOutputJSFileName(input, options, host), tspath.RootedFilePath("d:/shared.js"))
 	assert.Equal(t, outputpaths.GetOutputDeclarationFileNameWorker(input, options, host), tspath.RootedFilePath("d:/shared.d.ts"))
 }
 

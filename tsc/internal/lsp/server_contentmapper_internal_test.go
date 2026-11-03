@@ -109,25 +109,35 @@ func TestParseContentMapperContributionsDefaultsOptionsToObject(t *testing.T) {
 	assert.Equal(t, string(contributions.Mappers[0].Definition.Options), `{}`)
 }
 
-func TestParseContentMapperContributionsCompoundExtensions(t *testing.T) {
+func TestParseContentMapperContributionsSourceExtensions(t *testing.T) {
 	t.Parallel()
-	for _, extension := range []string{".y.z", ".component.tsx.vue"} {
+	for _, extension := range []string{".toml", ".vue"} {
+		outputExtensions := map[string]string{extension: ".part.js"}
 		contributions, err := parseContentMapperContributions([]*lsproto.ContentMapperContribution{{
 			ContributorId: "mapper",
 			Extensions:    []string{extension},
 			InferredProjectContribution: &lsproto.InferredProjectContentMapperContribution{
-				Manifest: &lsproto.ContentMapperManifest{Name: "mapper", Exec: []string{"mapper"}},
+				Manifest: &lsproto.ContentMapperManifest{Name: "mapper", Exec: []string{"mapper"}, OutputExtensions: &outputExtensions},
 			},
 		}})
 		assert.NilError(t, err)
 		assert.DeepEqual(t, contributions.Extensions, []string{extension})
+		assert.DeepEqual(t, contributions.Mappers[0].Definition.OutputExtensions, outputExtensions)
 	}
-	for _, nativeExtension := range core.Flatten(tspath.AllSupportedExtensionsWithJson) {
-		for _, extension := range []string{".component" + nativeExtension, ".component" + strings.ToUpper(nativeExtension)} {
-			_, err := parseContentMapperContributions([]*lsproto.ContentMapperContribution{{
-				ContributorId: "mapper", Extensions: []string{extension},
+	for _, extension := range append(core.Flatten(tspath.AllSupportedExtensionsWithJson), ".part.toml", ".y.z") {
+		_, err := parseContentMapperContributions([]*lsproto.ContentMapperContribution{{
+			ContributorId: "mapper", Extensions: []string{extension},
+		}})
+		assert.ErrorContains(t, err, "invalid extension")
+		outputExtensions := map[string]string{extension: ".js"}
+		if extension == ".part.toml" || extension == ".y.z" {
+			_, err = parseContentMapperContributions([]*lsproto.ContentMapperContribution{{
+				ContributorId: "mapper", Extensions: []string{".toml"},
+				InferredProjectContribution: &lsproto.InferredProjectContentMapperContribution{
+					Manifest: &lsproto.ContentMapperManifest{Name: "mapper", Exec: []string{"mapper"}, OutputExtensions: &outputExtensions},
+				},
 			}})
-			assert.ErrorContains(t, err, "invalid extension")
+			assert.ErrorContains(t, err, "invalid output extension mapping")
 		}
 	}
 }

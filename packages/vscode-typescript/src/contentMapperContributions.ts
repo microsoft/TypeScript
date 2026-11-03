@@ -53,7 +53,10 @@ export function validateContentMapperRegistration(contributorId: string, contrib
         if (contribution.extensions.length === 0 || contribution.extensions.some(extension => !isExtension(extension))) {
             throw new TypeError("Content mapper contributions require non-empty extensions beginning with '.' and containing no path separators.");
         }
-        if (contribution.extensions.some(extension => /\.(?:[cm]?[jt]s|[jt]sx|json)$/i.test(extension))) {
+        if (contribution.extensions.some(extension => !isSourceExtension(extension))) {
+            throw new TypeError("Content mapper source extensions must contain only one dot.");
+        }
+        if (contribution.extensions.some(extension => /^\.(?:[cm]?[jt]s|[jt]sx|json)$/i.test(extension))) {
             throw new TypeError("Content mapper extensions must not end in a built-in extension.");
         }
         const inferredProjectContribution = contribution.inferredProjectContribution;
@@ -69,11 +72,18 @@ export function validateContentMapperRegistration(contributorId: string, contrib
         if (inferredProjectContribution?.manifest.outputExtensions && Object.entries(inferredProjectContribution.manifest.outputExtensions).some(([source, output]) => !isExtension(source) || !isExtension(output))) {
             throw new TypeError("Content mapper output extensions must be non-empty, begin with '.', and contain no path separators.");
         }
+        if (inferredProjectContribution?.manifest.outputExtensions && Object.keys(inferredProjectContribution.manifest.outputExtensions).some(source => !isSourceExtension(source))) {
+            throw new TypeError("Content mapper source extensions must contain only one dot.");
+        }
     }
 }
 
 function isExtension(value: string): boolean {
     return value.length > 1 && value.startsWith(".") && !/[\\/]/.test(value);
+}
+
+function isSourceExtension(value: string): boolean {
+    return isExtension(value) && !value.slice(1).includes(".");
 }
 
 export function documentMatchesContentMapperContributions(

@@ -7,7 +7,7 @@
     "typescript": {
         "contentMapper": {
             "exec": ["compiler-test-mapper"],
-            "outputExtensions": { ".astro": ".js", ".y.z": ".mjs" }
+            "outputExtensions": { ".astro": ".js", ".vue": ".mjs" }
         }
     }
 }
@@ -17,7 +17,7 @@ const __VERSION = "1.0.0";
 export interface CardProps { title: string }
 export declare const Card: (props: CardProps) => string;
 
-//// [Widget.y.z]
+//// [Widget.part.vue]
 const __VERSION = "1.0.0";
 export declare const Widget: () => string;
 
@@ -28,13 +28,13 @@ export const annotated: import("./Card.astro").CardProps = { title: "" };
 import { annotated } from "./typed";
 export { Card } from "./Card.astro";
 export type { CardProps } from "./Card.astro";
-export { Widget } from "./Widget.y.z";
+export { Widget } from "./Widget.part.vue";
 
 const path = "./Card.astro";
 void import(path);
 
 export async function load() { return import("./Card.astro"); }
-export const inferred = import("./Widget.y.z");
+export const inferred = import("./Widget.part.vue");
 export const nested = { load: () => import("./Card.astro") };
 export const copied = [annotated];
 
@@ -48,8 +48,7 @@ var __rewriteRelativeImportExtension = (this && this.__rewriteRelativeImportExte
             for (var extension in extraExtensions) {
                 var suffix = path.slice(-extension.length);
                 if (suffix === extension || ignoreCase && suffix.toLowerCase() === extension.toLowerCase()) {
-                    var output = extraExtensions[extension];
-                    return output === extension ? path : path.slice(0, -extension.length) + output;
+                    return path.slice(0, -extension.length) + extraExtensions[extension];
                 }
             }
         }
@@ -61,11 +60,11 @@ var __rewriteRelativeImportExtension = (this && this.__rewriteRelativeImportExte
 };
 import { annotated } from "./typed";
 export { Card } from "./Card.js";
-export { Widget } from "./Widget.mjs";
+export { Widget } from "./Widget.part.mjs";
 const path = "./Card.astro";
-void import(__rewriteRelativeImportExtension(path, false, { ".astro": ".js", ".y.z": ".mjs" }));
+void import(__rewriteRelativeImportExtension(path, false, { ".astro": ".js", ".vue": ".mjs" }));
 export async function load() { return import("./Card.js"); }
-export const inferred = import("./Widget.mjs");
+export const inferred = import("./Widget.part.mjs");
 export const nested = { load: () => import("./Card.js") };
 export const copied = [annotated];
 
@@ -75,16 +74,16 @@ export interface CardProps {
     title: string;
 }
 export declare const Card: (props: CardProps) => string;
-//# sourceMappingURL=Card.d.ts.map//// [Widget.d.mts]
+//# sourceMappingURL=Card.d.ts.map//// [Widget.part.d.mts]
 export declare const Widget: () => string;
-//# sourceMappingURL=Widget.d.mts.map//// [typed.d.ts]
+//# sourceMappingURL=Widget.part.d.mts.map//// [typed.d.ts]
 export declare const annotated: import("./Card.js").CardProps;
 //# sourceMappingURL=typed.d.ts.map//// [main.d.ts]
 export { Card } from "./Card.js";
 export type { CardProps } from "./Card.js";
-export { Widget } from "./Widget.mjs";
+export { Widget } from "./Widget.part.mjs";
 export declare function load(): Promise<typeof import("./Card.js")>;
-export declare const inferred: Promise<typeof import("./Widget.mjs")>;
+export declare const inferred: Promise<typeof import("./Widget.part.mjs")>;
 export declare const nested: {
     load: () => Promise<typeof import("./Card.js")>;
 };

@@ -1,0 +1,30 @@
+//// [tests/cases/compiler/contentMapperSingleDotExtensions.ts] ////
+
+=== /Widget.part.toml ===
+const __VERSION = "1.0.0";
+>__VERSION : Symbol(__VERSION, Decl(Widget.part.toml, 0, 5))
+
+export const config = 1;
+>config : Symbol(config, Decl(Widget.part.toml, 1, 12))
+
+=== /Widget.part.vue ===
+const __VERSION = "1.0.0";
+>__VERSION : Symbol(__VERSION, Decl(Widget.part.vue, 0, 5))
+
+export const component = 2;
+>component : Symbol(component, Decl(Widget.part.vue, 1, 12))
+
+=== /main.ts ===
+export { config } from "./Widget.part.toml";
+>config : Symbol(config, Decl(main.ts, 0, 8))
+
+export { component } from "./Widget.part.vue";
+>component : Symbol(component, Decl(main.ts, 1, 8))
+
+export { blob } from "./blob.toml";
+>blob : Symbol(blob, Decl(main.ts, 2, 8))
+
+=== /blob.d.toml.ts ===
+export declare const blob: number;
+>blob : Symbol(blob, Decl(blob.d.toml.ts, 0, 20))
+

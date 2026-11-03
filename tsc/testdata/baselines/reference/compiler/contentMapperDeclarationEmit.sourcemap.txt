@@ -1,12 +1,12 @@
 ===================================================================
-JsFile: component.d.y.z.ts
-mapUrl: component.d.y.z.ts.map
+JsFile: component.part.d.toml.ts
+mapUrl: component.part.d.toml.ts.map
 sourceRoot: 
-sources: component.y.z
+sources: component.part.toml
 ===================================================================
 -------------------------------------------------------------------
-emittedFile:/component.d.y.z.ts
-sourceFile:component.y.z
+emittedFile:/component.part.d.toml.ts
+sourceFile:component.part.toml
 -------------------------------------------------------------------
 >>>export interface ComponentProps {
 1 >
@@ -103,7 +103,7 @@ sourceFile:component.y.z
 4 >                     ^^^^^^^^^^^^^
 5 >                                  ^^^^
 6 >                                      ^
-7 >                                       ^^^->
+7 >                                       ^^^^^^^^^->
 1 >
   >
 2 >export 
@@ -120,7 +120,7 @@ sourceFile:component.y.z
 5 >Emitted(6, 39)
 6 >Emitted(6, 40) Source(3, 40) + SourceIndex(0)
 ---
->>>//# sourceMappingURL=component.d.y.z.ts.map===================================================================
+>>>//# sourceMappingURL=component.part.d.toml.ts.map===================================================================
 JsFile: main.d.ts
 mapUrl: main.d.ts.map
 sourceRoot: 
@@ -130,30 +130,30 @@ sources: main.ts
 emittedFile:/main.d.ts
 sourceFile:main.ts
 -------------------------------------------------------------------
->>>export { component } from "./component.y.z";
+>>>export { component } from "./component.part.toml";
 1 >
 2 >^^^^^^^
 3 >       ^^
 4 >         ^^^^^^^^^
 5 >                  ^^
 6 >                    ^^^^^^
-7 >                          ^^^^^^^^^^^^^^^^^
-8 >                                           ^
+7 >                          ^^^^^^^^^^^^^^^^^^^^^^^
+8 >                                                 ^
 1 >
 2 >export 
 3 >       { 
 4 >         component
 5 >                   }
 6 >                     from 
-7 >                          "./component.y.z"
-8 >                                           ;
+7 >                          "./component.part.toml"
+8 >                                                 ;
 1 >Emitted(1, 1) Source(1, 1) + SourceIndex(0)
 2 >Emitted(1, 8) Source(1, 8) + SourceIndex(0)
 3 >Emitted(1, 10) Source(1, 10) + SourceIndex(0)
 4 >Emitted(1, 19) Source(1, 19) + SourceIndex(0)
 5 >Emitted(1, 21) Source(1, 21) + SourceIndex(0)
 6 >Emitted(1, 27) Source(1, 27) + SourceIndex(0)
-7 >Emitted(1, 44) Source(1, 44) + SourceIndex(0)
-8 >Emitted(1, 45) Source(1, 45) + SourceIndex(0)
+7 >Emitted(1, 50) Source(1, 50) + SourceIndex(0)
+8 >Emitted(1, 51) Source(1, 51) + SourceIndex(0)
 ---
 >>>//# sourceMappingURL=main.d.ts.map

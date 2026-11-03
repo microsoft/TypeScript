@@ -6,30 +6,21 @@ type ExtensionRewrite struct {
 }
 
 func getExtensionRewrite(path string, rewrites []ExtensionRewrite, caseSensitivity CaseSensitivity) (ExtensionRewrite, bool) {
-	var best ExtensionRewrite
 	equal := caseSensitivity.getEqualityComparer()
 	for _, rewrite := range rewrites {
-		if len(rewrite.Source) <= len(best.Source) || len(path) <= len(rewrite.Source) {
+		if len(path) <= len(rewrite.Source) {
 			continue
 		}
 		if equal(path[len(path)-len(rewrite.Source):], rewrite.Source) {
-			best = rewrite
+			return rewrite, true
 		}
 	}
-	return best, best.Source != ""
-}
-
-func (r ExtensionRewrite) isIdentity(caseSensitivity CaseSensitivity) bool {
-	return caseSensitivity.getEqualityComparer()(r.Source, r.Target)
-}
-
-func (f RootedFilePath) GetExtensionRewrite(rewrites []ExtensionRewrite, caseSensitivity CaseSensitivity) (ExtensionRewrite, bool) {
-	return getExtensionRewrite(f.AsString(), rewrites, caseSensitivity)
+	return ExtensionRewrite{}, false
 }
 
 func (f RootedFilePath) RewriteExtension(rewrites []ExtensionRewrite, caseSensitivity CaseSensitivity) (RootedFilePath, bool) {
-	rewrite, ok := f.GetExtensionRewrite(rewrites, caseSensitivity)
-	if !ok || rewrite.isIdentity(caseSensitivity) {
+	rewrite, ok := getExtensionRewrite(f.AsString(), rewrites, caseSensitivity)
+	if !ok {
 		return f, false
 	}
 	suffix := f.AsString()[len(f.AsString())-len(rewrite.Source):]
@@ -38,7 +29,7 @@ func (f RootedFilePath) RewriteExtension(rewrites []ExtensionRewrite, caseSensit
 
 func (s ModuleSpecifier) RewriteExtension(rewrites []ExtensionRewrite, caseSensitivity CaseSensitivity) (ModuleSpecifier, bool) {
 	rewrite, ok := getExtensionRewrite(s.AsString(), rewrites, caseSensitivity)
-	if !ok || rewrite.isIdentity(caseSensitivity) {
+	if !ok {
 		return s, false
 	}
 	return ToModuleSpecifier(s.AsString()[:len(s.AsString())-len(rewrite.Source)] + rewrite.Target), true
@@ -48,8 +39,6 @@ func (s ModuleSpecifier) ShouldRewriteExtension(rewrites []ExtensionRewrite, cas
 	if !s.IsRelative() || IsDeclarationFileName(s.AsString()) {
 		return false
 	}
-	if rewrite, ok := getExtensionRewrite(s.AsString(), rewrites, caseSensitivity); ok {
-		return !rewrite.isIdentity(caseSensitivity)
-	}
-	return HasTSFileExtension(s.AsString())
+	_, ok := getExtensionRewrite(s.AsString(), rewrites, caseSensitivity)
+	return ok || HasTSFileExtension(s.AsString())
 }

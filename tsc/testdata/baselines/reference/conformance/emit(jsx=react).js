@@ -62,8 +62,7 @@ var __rewriteRelativeImportExtension = (this && this.__rewriteRelativeImportExte
             for (var extension in extraExtensions) {
                 var suffix = path.slice(-extension.length);
                 if (suffix === extension || ignoreCase && suffix.toLowerCase() === extension.toLowerCase()) {
-                    var output = extraExtensions[extension];
-                    return output === extension ? path : path.slice(0, -extension.length) + output;
+                    return path.slice(0, -extension.length) + extraExtensions[extension];
                 }
             }
         }
@@ -95,8 +94,7 @@ var __rewriteRelativeImportExtension = (this && this.__rewriteRelativeImportExte
             for (var extension in extraExtensions) {
                 var suffix = path.slice(-extension.length);
                 if (suffix === extension || ignoreCase && suffix.toLowerCase() === extension.toLowerCase()) {
-                    var output = extraExtensions[extension];
-                    return output === extension ? path : path.slice(0, -extension.length) + output;
+                    return path.slice(0, -extension.length) + extraExtensions[extension];
                 }
             }
         }

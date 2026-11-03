@@ -94,14 +94,14 @@ sourceFile:../Card.astro
 15>Emitted(4, 57) Source(2, 57) + SourceIndex(0)
 ---
 >>>//# sourceMappingURL=Card.d.ts.map===================================================================
-JsFile: Widget.d.mts
-mapUrl: Widget.d.mts.map
+JsFile: Widget.part.d.mts
+mapUrl: Widget.part.d.mts.map
 sourceRoot: 
-sources: ../Widget.y.z
+sources: ../Widget.part.vue
 ===================================================================
 -------------------------------------------------------------------
-emittedFile:/dist/Widget.d.mts
-sourceFile:../Widget.y.z
+emittedFile:/dist/Widget.part.d.mts
+sourceFile:../Widget.part.vue
 -------------------------------------------------------------------
 >>>export declare const Widget: () => string;
 1 >
@@ -138,7 +138,7 @@ sourceFile:../Widget.y.z
 10>Emitted(1, 42) Source(1, 42) + SourceIndex(0)
 11>Emitted(1, 43) Source(1, 43) + SourceIndex(0)
 ---
->>>//# sourceMappingURL=Widget.d.mts.map===================================================================
+>>>//# sourceMappingURL=Widget.part.d.mts.map===================================================================
 JsFile: typed.d.ts
 mapUrl: typed.d.ts.map
 sourceRoot: 
@@ -227,6 +227,7 @@ sourceFile:../main.ts
 6 >                         ^^^^^^
 7 >                               ^^^^^^^^^^^
 8 >                                          ^
+9 >                                           ^->
 1->
   >
 2 >export type 
@@ -245,40 +246,40 @@ sourceFile:../main.ts
 7 >Emitted(2, 43) Source(3, 46) + SourceIndex(0)
 8 >Emitted(2, 44) Source(3, 47) + SourceIndex(0)
 ---
->>>export { Widget } from "./Widget.mjs";
-1 >
+>>>export { Widget } from "./Widget.part.mjs";
+1->
 2 >^^^^^^^
 3 >       ^^
 4 >         ^^^^^^
 5 >               ^^
 6 >                 ^^^^^^
-7 >                       ^^^^^^^^^^^^^^
-8 >                                     ^
-9 >                                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
-1 >
+7 >                       ^^^^^^^^^^^^^^^^^^^
+8 >                                          ^
+9 >                                           ^^^^^^^^^^^^^^^^^^^^^^^^^^->
+1->
   >
 2 >export 
 3 >       { 
 4 >         Widget
 5 >                }
 6 >                  from 
-7 >                       "./Widget.y.z"
-8 >                                     ;
-1 >Emitted(3, 1) Source(4, 1) + SourceIndex(0)
+7 >                       "./Widget.part.vue"
+8 >                                          ;
+1->Emitted(3, 1) Source(4, 1) + SourceIndex(0)
 2 >Emitted(3, 8) Source(4, 8) + SourceIndex(0)
 3 >Emitted(3, 10) Source(4, 10) + SourceIndex(0)
 4 >Emitted(3, 16) Source(4, 16) + SourceIndex(0)
 5 >Emitted(3, 18) Source(4, 18) + SourceIndex(0)
 6 >Emitted(3, 24) Source(4, 24) + SourceIndex(0)
-7 >Emitted(3, 38) Source(4, 38) + SourceIndex(0)
-8 >Emitted(3, 39) Source(4, 39) + SourceIndex(0)
+7 >Emitted(3, 43) Source(4, 43) + SourceIndex(0)
+8 >Emitted(3, 44) Source(4, 44) + SourceIndex(0)
 ---
 >>>export declare function load(): Promise<typeof import("./Card.js")>;
 1->
 2 >^^^^^^^^^^^^^^^^^^^^^^^^
 3 >                        ^^^^
 4 >                            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-5 >                                                                    ^^^->
+5 >                                                                    ^^^^^^^^->
 1->
   >
   >const path = "./Card.astro";
@@ -293,26 +294,26 @@ sourceFile:../main.ts
 3 >Emitted(4, 29) Source(9, 27) + SourceIndex(0)
 4 >Emitted(4, 69) Source(9, 64) + SourceIndex(0)
 ---
->>>export declare const inferred: Promise<typeof import("./Widget.mjs")>;
+>>>export declare const inferred: Promise<typeof import("./Widget.part.mjs")>;
 1->
 2 >^^^^^^^^^^^^^^^
 3 >               ^^^^^^
 4 >                     ^^^^^^^^
-5 >                             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-6 >                                                                     ^
+5 >                             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+6 >                                                                          ^
 1->
   >
 2 >export 
 3 >               const 
 4 >                     inferred
-5 >                              = import("./Widget.y.z")
-6 >                                                                     ;
+5 >                              = import("./Widget.part.vue")
+6 >                                                                          ;
 1->Emitted(5, 1) Source(10, 1) + SourceIndex(0)
 2 >Emitted(5, 16) Source(10, 8) + SourceIndex(0)
 3 >Emitted(5, 22) Source(10, 14) + SourceIndex(0)
 4 >Emitted(5, 30) Source(10, 22) + SourceIndex(0)
-5 >Emitted(5, 70) Source(10, 47) + SourceIndex(0)
-6 >Emitted(5, 71) Source(10, 48) + SourceIndex(0)
+5 >Emitted(5, 75) Source(10, 52) + SourceIndex(0)
+6 >Emitted(5, 76) Source(10, 53) + SourceIndex(0)
 ---
 >>>export declare const nested: {
 1 >

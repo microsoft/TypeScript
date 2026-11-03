@@ -205,16 +205,12 @@ func (c resolutionCandidate) RelativeToDirectory(directory tspath.RootedDirector
 	return relative
 }
 
-func (c resolutionCandidate) SplitExtension(extraExtensions []string) (tspath.FileNameStem, string) {
+func (c resolutionCandidate) SplitExtension() (tspath.FileNameStem, string) {
 	fileName := tspath.RootedFilePathFromPath(c.path)
 	extension := fileName.Extension()
 	extensionless := c.RemoveFileExtension()
 	if extensionless.AsString() == c.path.AsString() {
-		extension = fileName.LongestExtension(extraExtensions, tspath.CaseSensitive)
-		if extension == "" {
-			path := c.path.AsString()
-			extension = path[strings.LastIndex(path, "."):]
-		}
+		extension = fileName.AnyExtension(nil, tspath.CaseSensitive)
 		extensionless = c.RemoveExtension(extension)
 	}
 	return extensionless, extension
@@ -1642,7 +1638,7 @@ func (r *resolutionState) loadModuleFromFileNoImplicitExtensions(extensions exte
 	if !strings.Contains(base, ".") {
 		return continueSearching() // extensionless import, no lookups performed, since we don't support extensionless files
 	}
-	extensionless, extension := candidate.SplitExtension(r.resolver.extraExtensions)
+	extensionless, extension := candidate.SplitExtension()
 	if r.tracer != nil {
 		r.tracer.write(diagnostics.File_name_0_has_a_1_extension_stripping_it, candidate, extension)
 	}

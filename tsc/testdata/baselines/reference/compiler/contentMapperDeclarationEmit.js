@@ -7,26 +7,26 @@
     "typescript": { "contentMapper": { "exec": ["compiler-test-mapper"] } }
 }
 
-//// [component.y.z]
+//// [component.part.toml]
 const __VERSION = "1.0.0";
 export interface ComponentProps { emoji: "😀"; label: string; }
 export declare const component: ComponentProps;
 export const emittedTarget = 7;
 
 //// [main.ts]
-export { component } from "./component.y.z";
+export { component } from "./component.part.toml";
 
 //// [main.js]
-export { component } from "./component.y.z";
+export { component } from "./component.part.toml";
 
 
-//// [component.d.y.z.ts]
+//// [component.part.d.toml.ts]
 export interface ComponentProps {
     emoji: "😀";
     label: string;
 }
 export declare const component: ComponentProps;
 export declare const emittedTarget = 7;
-//# sourceMappingURL=component.d.y.z.ts.map//// [main.d.ts]
-export { component } from "./component.y.z";
+//# sourceMappingURL=component.part.d.toml.ts.map//// [main.d.ts]
+export { component } from "./component.part.toml";
 //# sourceMappingURL=main.d.ts.map

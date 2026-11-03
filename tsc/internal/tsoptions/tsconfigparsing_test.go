@@ -1455,6 +1455,16 @@ func TestContentMappersValidation(t *testing.T) {
 		expectedCode   int32
 	}{
 		{
+			name:           "compound source extension",
+			contentMappers: `[{ "package": "x", "extensions": [".part.toml", ".y.z"] }]`,
+			expectedCode:   diagnostics.Content_mapper_source_extension_0_must_contain_only_one_dot.Code(),
+		},
+		{
+			name:           "compound output extension source",
+			contentMappers: `[{ "package": "x", "extensions": [".toml"], "outputExtensions": {".part.toml": ".js"} }]`,
+			expectedCode:   diagnostics.Content_mapper_source_extension_0_must_contain_only_one_dot.Code(),
+		},
+		{
 			name:           "extension without leading dot",
 			contentMappers: `[{ "package": "vue-mapper", "extensions": ["vue"] }]`,
 			expectedCode:   diagnostics.Content_mapper_file_extension_0_must_begin_with_a.Code(),
@@ -1645,43 +1655,6 @@ func TestContentMapperExtensionValidationUsesHostCaseSensitivity(t *testing.T) {
 				assert.Assert(t, found, "expected diagnostic %d, got errors: %v", test.expectedCode, parsed.Errors)
 			}
 		})
-	}
-}
-
-func TestContentMapperCompoundExtensionValidation(t *testing.T) {
-	t.Parallel()
-	for _, caseSensitivity := range []tspath.CaseSensitivity{tspath.CaseInsensitive, tspath.CaseSensitive} {
-		extensions := []string{".y.z", ".component.tsx.vue"}
-		for _, extension := range core.Flatten(tspath.AllSupportedExtensionsWithJson) {
-			extensions = append(extensions, ".component"+extension, ".component"+strings.ToUpper(extension))
-		}
-		for _, extension := range extensions {
-			t.Run(fmt.Sprintf("%s/caseSensitive=%t", extension, caseSensitivity.IsCaseSensitive()), func(t *testing.T) {
-				t.Parallel()
-				files := map[string]string{
-					"/tsconfig.json": fmt.Sprintf(`{ "contentMappers": [{ "package": "mapper", "extensions": [%q] }] }`, extension),
-					"/app.ts":        "export {};",
-					"/node_modules/mapper/package.json": `{
-						"name": "mapper",
-						"typescript": { "contentMapper": { "exec": ["mapper"] } }
-					}`,
-				}
-				fs := tsoptionstest.NewVFS(files, caseSensitivity)
-				config := testConfig{
-					jsonText: files["/tsconfig.json"], configFileName: "tsconfig.json", basePath: "/",
-					allFileList: files, existingOptions: &core.CompilerOptions{RunExternalCode: core.TSTrue},
-				}
-				parsed := getParsedWithJsonSourceFileApi(config, fs, config.basePath)
-				if extension == ".y.z" || extension == ".component.tsx.vue" {
-					assert.Equal(t, len(parsed.Errors), 0)
-					assert.DeepEqual(t, parsed.ContentMapperExtensions(), []string{extension})
-				} else {
-					assert.Equal(t, len(parsed.Errors), 1)
-					assert.Equal(t, parsed.Errors[0].Code(), diagnostics.Content_mapper_file_extension_0_cannot_be_registered_because_it_ends_in_a_built_in_extension.Code())
-					assert.Equal(t, len(parsed.ContentMapperExtensions()), 0)
-				}
-			})
-		}
 	}
 }
 

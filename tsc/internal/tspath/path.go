@@ -927,20 +927,6 @@ func getAnyExtensionFromNormalizedPath(path string) string {
 	return ""
 }
 
-func GetLongestExtensionFromPath(path string, extensions []string, caseSensitivity CaseSensitivity) string {
-	path = RemoveTrailingDirectorySeparator(path)
-	comparer := caseSensitivity.getEqualityComparer()
-	longest := ""
-	for _, extension := range extensions {
-		if len(extension) > len(longest) {
-			if matched := tryGetExtensionFromPath(path, extension, comparer); matched != "" {
-				longest = matched
-			}
-		}
-	}
-	return longest
-}
-
 func getAnyExtensionFromPathWorker(path string, extensions []string, stringEqualityComparer func(a, b string) bool) string {
 	for _, extension := range extensions {
 		result := tryGetExtensionFromPath(path, extension, stringEqualityComparer)

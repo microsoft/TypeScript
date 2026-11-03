@@ -11,44 +11,37 @@ func TestRewriteExtension(t *testing.T) {
 	t.Parallel()
 	rewrites := []tspath.ExtensionRewrite{
 		{Source: ".z", Target: ".js"},
-		{Source: ".y.z", Target: ".mjs"},
+		{Source: ".vue", Target: ".part.mjs"},
 	}
 
-	rewritten, ok := tspath.ToModuleSpecifier("./Widget.y.z").RewriteExtension(rewrites, tspath.CaseSensitive)
+	rewritten, ok := tspath.ToModuleSpecifier("./Widget.part.vue").RewriteExtension(rewrites, tspath.CaseSensitive)
 	assert.Assert(t, ok)
-	assert.Equal(t, rewritten, tspath.ToModuleSpecifier("./Widget.mjs"))
+	assert.Equal(t, rewritten, tspath.ToModuleSpecifier("./Widget.part.part.mjs"))
 
-	rewritten, ok = tspath.ToModuleSpecifier("./Widget.Y.Z").RewriteExtension(rewrites, tspath.CaseInsensitive)
+	rewritten, ok = tspath.ToModuleSpecifier("./Widget.part.VUE").RewriteExtension(rewrites, tspath.CaseInsensitive)
 	assert.Assert(t, ok)
-	assert.Equal(t, rewritten, tspath.ToModuleSpecifier("./Widget.mjs"))
+	assert.Equal(t, rewritten, tspath.ToModuleSpecifier("./Widget.part.part.mjs"))
 
 	rewritten, ok = tspath.ToModuleSpecifier(".y").RewriteExtension(rewrites, tspath.CaseSensitive)
 	assert.Assert(t, !ok)
 	assert.Equal(t, rewritten, tspath.ToModuleSpecifier(".y"))
-
-	rewrites = append(rewrites, tspath.ExtensionRewrite{Source: ".identity.y.z", Target: ".identity.y.z"})
-	rewritten, ok = tspath.ToModuleSpecifier("./Widget.IDENTITY.Y.Z").RewriteExtension(rewrites, tspath.CaseInsensitive)
-	assert.Assert(t, !ok)
-	assert.Equal(t, rewritten, tspath.ToModuleSpecifier("./Widget.IDENTITY.Y.Z"))
-	assert.Assert(t, !tspath.ToModuleSpecifier("./Widget.identity.y.z").ShouldRewriteExtension(rewrites, tspath.CaseSensitive))
 }
 
 func TestRootedFilePathRewriteExtension(t *testing.T) {
 	t.Parallel()
 	rewrites := []tspath.ExtensionRewrite{
 		{Source: ".z", Target: ".js"},
-		{Source: ".y.z", Target: ".mjs"},
-		{Source: ".identity.y.z", Target: ".identity.y.z"},
+		{Source: ".vue", Target: ".mjs"},
 	}
 	for _, test := range []struct {
 		path, expected  string
 		caseSensitivity tspath.CaseSensitivity
 		changed         bool
 	}{
-		{"/src/Widget.y.z", "/src/Widget.mjs", tspath.CaseSensitive, true},
-		{"/src/Widget.Y.Z", "/src/Widget.mjs", tspath.CaseInsensitive, true},
-		{"/src/Widget.Y.Z", "/src/Widget.Y.Z", tspath.CaseSensitive, false},
-		{"/src/Widget.IDENTITY.Y.Z", "/src/Widget.IDENTITY.Y.Z", tspath.CaseInsensitive, false},
+		{"/src/Widget.part.vue", "/src/Widget.part.mjs", tspath.CaseSensitive, true},
+		{"/src/Widget.part.VUE", "/src/Widget.part.mjs", tspath.CaseInsensitive, true},
+		{"/src/Widget.part.VUE", "/src/Widget.part.VUE", tspath.CaseSensitive, false},
+		{"/src/Widget.part.IDENTITY", "/src/Widget.part.IDENTITY", tspath.CaseInsensitive, false},
 		{"/src/Widget.txt", "/src/Widget.txt", tspath.CaseSensitive, false},
 	} {
 		file := tspath.RootedFilePathFromNormalized(test.path)
