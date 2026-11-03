@@ -13,8 +13,13 @@
  *   // @sync: <code>                  — replace this line with <code> (preserving indent)
  *
  * AST-based transforms (applied after directives using the TypeScript compiler API):
- *   - Generate synchronous implementations from async methods
- *   - Attach generator implementations as each synchronous method's `.gen` property
+ *   - Generate synchronous and generator implementations of each async method
+ *     as private methods (`#name` and `#nameGen`)
+ *   - Expose each as a prototype getter returning a callable bound to the
+ *     instance, with the generator variant as its `.gen` property. Bound
+ *     callables are cached in a per-instance slot array, so instances never
+ *     gain per-method own properties.
+ *   - Call private implementations directly for `this.method()` calls
  *   - Unwrap `Promise<T>` → `T` in synchronous type references
  *
  * Usage:
@@ -206,6 +211,9 @@ function applyEdits(source: string, edits: Edit[]): string {
 
 type TransformMode = "sync" | "generator";
 
+const generatorMethodCacheField = "#generatorMethods";
+const staticGeneratorMethodCacheField = "#staticGeneratorMethods";
+
 function transformAsyncSource(source: string, fileName: string, attachGenerators: boolean): string {
     const sourceFile = ts.createSourceFile(fileName, source, ts.ScriptTarget.Latest, true);
     const edits: Edit[] = [];
@@ -220,24 +228,45 @@ function transformAsyncSource(source: string, fileName: string, attachGenerators
         }
     }
 
+    // Slot indices of each class's generated methods, keyed by `getMethodKey`.
+    let currentClassSlots: Map<string, number> | undefined;
+    let currentClass: ts.ClassDeclaration | undefined;
+
     visit(sourceFile);
     return applyEdits(source, edits);
 
     function visit(node: ts.Node): void {
         if (attachGenerators && ts.isClassDeclaration(node)) {
             const replacedMethods = new Set<ts.MethodDeclaration>();
-            for (const group of getMethodGroups(node).values()) {
-                if (!isGeneratorMethod(group.implementation)) continue;
+            const generatedGroups = [...getMethodGroups(node).values()].filter(group => isGeneratorMethod(group.implementation));
+            const slots = new Map<string, number>();
+            let instanceSlotCount = 0;
+            let staticSlotCount = 0;
+            for (const group of generatedGroups) {
+                slots.set(getMethodKey(group.implementation), isStaticMethod(group.implementation) ? staticSlotCount++ : instanceSlotCount++);
+            }
+            currentClassSlots = slots;
+            currentClass = node;
+            for (const group of generatedGroups) {
                 for (const declaration of group.declarations) replacedMethods.add(declaration);
                 edits.push({
                     start: group.declarations[0].getStart(sourceFile),
                     end: group.implementation.end,
-                    newText: createCombinedMethodFromAsync(group, source, sourceFile),
+                    newText: createCombinedMethodFromAsync(group, node, source, sourceFile),
                 });
+            }
+            if (generatedGroups.length) {
+                const cacheFields = [
+                    instanceSlotCount ? `${generatorMethodCacheField}: GeneratorMethodCache | undefined;` : undefined,
+                    staticSlotCount ? `static ${staticGeneratorMethodCacheField}: GeneratorMethodCache | undefined;` : undefined,
+                ].filter(field => field !== undefined);
+                edits.push({ start: node.members.pos, end: node.members.pos, newText: `\n${cacheFields.join("\n")}` });
             }
             for (const member of node.members) {
                 if (!ts.isMethodDeclaration(member) || !replacedMethods.has(member)) visit(member);
             }
+            currentClassSlots = undefined;
+            currentClass = undefined;
             return;
         }
 
@@ -262,12 +291,15 @@ function transformAsyncSource(source: string, fileName: string, attachGenerators
         }
 
         addSyncEdit(node, source, sourceFile, edits);
+        addPrivateImplementationCallEdit(node, edits, 0);
         ts.forEachChild(node, visit);
     }
 
-    function createCombinedMethodFromAsync(group: MethodGroup, source: string, sourceFile: ts.SourceFile): string {
+    function createCombinedMethodFromAsync(group: MethodGroup, classDeclaration: ts.ClassDeclaration, source: string, sourceFile: ts.SourceFile): string {
         const method = group.implementation;
         const name = (method.name as ts.Identifier).text;
+        const isStatic = isStaticMethod(method);
+        const staticPrefix = isStatic ? "static " : "";
         const indent = getIndent(source, group.declarations[0].getStart(sourceFile));
         const modifiers = method.modifiers
             ?.filter(modifier => modifier.kind !== ts.SyntaxKind.AsyncKeyword)
@@ -276,35 +308,28 @@ function transformAsyncSource(source: string, fileName: string, attachGenerators
         const declarations = getPublicDeclarations(group);
         const syncSignatures = declarations.map(declaration => `${indent}    ${createAsyncCallSignature(declaration, "sync")}`).join("\n");
         const generatorSignatures = declarations.map(declaration => `${indent}    gen${createAsyncCallSignature(declaration, "generator")}`).join("\n");
-        const body = declarations.length > 1
-            ? createAsyncOverloadedGetterBody(name, group, indent)
-            : `{\n${indent}    const owner = this;\n${indent}    return cacheGeneratorMethod(\n${indent}        owner,\n${indent}        "${name}",\n${indent}        ${createAsyncFunction(method, "sync", false)},\n${indent}        ${createAsyncFunction(method, "generator", true)},\n${indent}    );\n${indent}}`;
-        return `${modifiers ? `${modifiers} ` : ""}get ${name}(): {\n${syncSignatures}\n${generatorSignatures}\n${indent}} ${body}`;
-    }
-
-    function createAsyncOverloadedGetterBody(name: string, group: MethodGroup, indent: string): string {
-        const declarations = getPublicDeclarations(group);
-        const syncOverloads = declarations.map(declaration => `function ${name}${createAsyncCallSignature(declaration, "sync")}`).join("\n");
-        const generatorOverloads = declarations.map(declaration => `function gen${createAsyncCallSignature(declaration, "generator")}`).join("\n");
-        const syncImplementation = createAsyncNamedFunction(name, group.implementation, "sync", false);
-        const generatorImplementation = createAsyncNamedFunction("gen", group.implementation, "generator", true);
-        return `{\n${indent}    const owner = this;\n${indent}${indentLines(syncOverloads, `${indent}    `)}\n${indent}${indentLines(syncImplementation, `${indent}    `)}\n${indent}${indentLines(generatorOverloads, `${indent}    `)}\n${indent}${indentLines(generatorImplementation, `${indent}    `)}\n${indent}    return cacheGeneratorMethod(owner, "${name}", ${name}, gen);\n${indent}}`;
+        const slot = currentClassSlots!.get(getMethodKey(method))!;
+        const cacheOwner = isStatic ? classDeclaration.name!.text : "this";
+        const slotCount = [...currentClassSlots!.keys()].filter(key => key.startsWith("static:") === isStatic).length;
+        const getter = `${modifiers ? `${modifiers} ` : ""}get ${name}(): {\n${syncSignatures}\n${generatorSignatures}\n${indent}} {\n` +
+            `${indent}    return getGeneratorMethod(this, ${cacheOwner}.${isStatic ? staticGeneratorMethodCacheField : generatorMethodCacheField} ??= createGeneratorMethodCache(${slotCount}), ${slot}, this.#${name}, this.#${name}Gen);\n` +
+            `${indent}}`;
+        const hasOverloads = group.declarations.some(declaration => !declaration.body);
+        const syncOverloads = hasOverloads ? declarations.map(declaration => `${staticPrefix}#${name}${createAsyncCallSignature(declaration, "sync")}\n${indent}`).join("") : "";
+        const generatorOverloads = hasOverloads ? declarations.map(declaration => `${staticPrefix}#${name}Gen${createAsyncCallSignature(declaration, "generator")}\n${indent}`).join("") : "";
+        const syncImplementation = `${staticPrefix}${createAsyncImplementation(`#${name}`, method, "sync")}`;
+        const generatorImplementation = `${staticPrefix}*${createAsyncImplementation(`#${name}Gen`, method, "generator")}`;
+        return `${getter}\n\n${indent}${syncOverloads}${syncImplementation}\n\n${indent}${generatorOverloads}${generatorImplementation}`;
     }
 
     function createAsyncCallSignature(node: ts.SignatureDeclarationBase, mode: TransformMode): string {
         return `${getTypeParametersText(node, source, sourceFile)}(${getAsyncSignatureParameters(node, mode)}): ${getAsyncReturnType(node, mode)};`;
     }
 
-    function createAsyncFunction(node: ts.MethodDeclaration, mode: TransformMode, generator: boolean): string {
-        const parameters = node.parameters.map(parameter => transformNodeText(parameter, mode, true)).join(", ");
+    function createAsyncImplementation(name: string, node: ts.MethodDeclaration, mode: TransformMode): string {
+        const parameters = node.parameters.map(parameter => transformNodeText(parameter, mode, false)).join(", ");
         const body = transformNodeText(node.body!, mode, true);
-        return `function${generator ? "*" : ""} ${getTypeParametersText(node, source, sourceFile)}(${parameters}): ${getAsyncReturnType(node, mode)} ${body}`;
-    }
-
-    function createAsyncNamedFunction(name: string, node: ts.MethodDeclaration, mode: TransformMode, generator: boolean): string {
-        const parameters = node.parameters.map(parameter => transformNodeText(parameter, mode, true)).join(", ");
-        const body = transformNodeText(node.body!, mode, true);
-        return `function${generator ? "*" : ""} ${name}${getTypeParametersText(node, source, sourceFile)}(${parameters}): ${getAsyncReturnType(node, mode)} ${body}`;
+        return `${name}${getTypeParametersText(node, source, sourceFile)}(${parameters}): ${getAsyncReturnType(node, mode)} ${body}`;
     }
 
     function getAsyncSignatureParameters(node: ts.SignatureDeclarationBase, mode: TransformMode): string {
@@ -326,16 +351,12 @@ function transformAsyncSource(source: string, fileName: string, attachGenerators
         return transformNodeText(node.type, mode, false);
     }
 
-    function transformNodeText(node: ts.Node, mode: TransformMode, replaceThis: boolean): string {
+    function transformNodeText(node: ts.Node, mode: TransformMode, isBody: boolean): string {
         const start = node.getStart(sourceFile);
         const localEdits: Edit[] = [];
 
         function visitNode(current: ts.Node): void {
-            if (replaceThis && current.kind === ts.SyntaxKind.ThisKeyword) {
-                localEdits.push({ start: current.getStart(sourceFile) - start, end: current.end - start, newText: "owner" });
-                return;
-            }
-            if (replaceThis && ts.isBlock(node) && current !== node && ts.isFunctionLike(current) && !ts.isArrowFunction(current)) return;
+            if (isBody && ts.isBlock(node) && current !== node && ts.isFunctionLike(current) && !ts.isArrowFunction(current)) return;
 
             if (mode === "sync") {
                 if (addSyncEdit(current, source, sourceFile, localEdits, start)) return;
@@ -343,11 +364,36 @@ function transformAsyncSource(source: string, fileName: string, attachGenerators
             else if (addGeneratorEdit(current, start, localEdits)) {
                 return;
             }
+            addPrivateImplementationCallEdit(current, localEdits, start);
             ts.forEachChild(current, visitNode);
         }
 
         visitNode(node);
         return applyEdits(source.slice(start, node.end), localEdits);
+    }
+
+    /**
+     * Returns the private implementation name for a call like `this.method()`
+     * when `method` is a generated method of the class `this` refers to.
+     */
+    function getPrivateImplementationName(call: ts.CallExpression): string | undefined {
+        if (!currentClassSlots) return undefined;
+        const callee = call.expression;
+        if (!ts.isPropertyAccessExpression(callee) || callee.expression.kind !== ts.SyntaxKind.ThisKeyword || !ts.isIdentifier(callee.name)) return undefined;
+        let container: ts.Node = callee.parent;
+        while (!ts.isClassStaticBlockDeclaration(container) && !ts.isPropertyDeclaration(container) && !(ts.isFunctionLike(container) && !ts.isArrowFunction(container))) {
+            container = container.parent;
+        }
+        if (container.parent !== currentClass) return undefined;
+        const isStatic = ts.isClassStaticBlockDeclaration(container) || (ts.canHaveModifiers(container) && !!ts.getModifiers(container)?.some(modifier => modifier.kind === ts.SyntaxKind.StaticKeyword));
+        const name = callee.name.text;
+        return currentClassSlots.has(`${isStatic ? "static:" : ""}${name}`) ? `#${name}` : undefined;
+    }
+
+    function addPrivateImplementationCallEdit(node: ts.Node, targetEdits: Edit[], offset: number): void {
+        if (!ts.isCallExpression(node) || !getPrivateImplementationName(node)) return;
+        const name = (node.expression as ts.PropertyAccessExpression).name;
+        targetEdits.push({ start: name.getStart(sourceFile) - offset, end: name.end - offset, newText: `#${name.text}` });
     }
 
     function addGeneratorEdit(node: ts.Node, offset: number, targetEdits: Edit[]): boolean {
@@ -390,7 +436,7 @@ function transformAsyncSource(source: string, fileName: string, attachGenerators
         if (isAPIRequestCall(node.expression)) {
             const receiver = node.expression.expression.expression;
             if (ts.isPropertyAccessExpression(receiver) && receiver.name.text === "client") return getRequestYieldText(node.expression);
-            return `yield ${getTextWithOwner(node.expression)}`;
+            return `yield ${getNodeText(node.expression)}`;
         }
         if (
             ts.isCallExpression(node.expression) &&
@@ -398,21 +444,21 @@ function transformAsyncSource(source: string, fileName: string, attachGenerators
             ts.isPropertyAccessExpression(node.expression.expression.expression) &&
             node.expression.expression.expression.name.text === "client"
         ) {
-            return getTextWithOwner(node.expression);
+            return getNodeText(node.expression);
         }
         if (ts.isCallExpression(node.expression) && ts.isIdentifier(node.expression.expression) && node.expression.expression.text === "cb") {
-            return `yield* (${getTextWithOwner(node.expression)} ?? [])`;
+            return `yield* (${getNodeText(node.expression)} ?? [])`;
         }
         const expression = ts.isCallExpression(node.expression) && ts.isPropertyAccessExpression(node.expression.expression)
             ? getGeneratorCallText(node.expression)
-            : getTextWithOwner(node.expression);
+            : getNodeText(node.expression);
         return `(yield* ${expression})`;
     }
 
     function getRequestYieldText(call: ts.CallExpression): string {
         const [method, params] = call.arguments;
-        const methodText = getTextWithOwner(method);
-        const paramsText = params ? getTextWithOwner(params) : "undefined";
+        const methodText = getNodeText(method);
+        const paramsText = params ? getNodeText(params) : "undefined";
         const request = `yield* apiRequest(${methodText}, ${paramsText})`;
         return ts.isPropertyAccessExpression(call.expression) && call.expression.name.text === "apiRequestBinary"
             ? `sourceFileResponseToUint8Array((${request}))`
@@ -420,26 +466,15 @@ function transformAsyncSource(source: string, fileName: string, attachGenerators
     }
 
     function getGeneratorCallText(call: ts.CallExpression): string {
-        const expression = getTextWithOwner(call.expression);
-        const callText = getTextWithOwner(call);
+        const expression = getNodeText(call.expression);
+        const callText = getNodeText(call);
+        const privateName = getPrivateImplementationName(call);
+        if (privateName) return `this.${privateName}Gen${callText.slice(expression.length)}`;
         return `${expression}.gen${callText.slice(expression.length)}`;
     }
 
-    function getTextWithOwner(node: ts.Node): string {
-        const start = node.getStart(sourceFile);
-        const ownerEdits: Edit[] = [];
-
-        function visitNode(current: ts.Node): void {
-            if (current.kind === ts.SyntaxKind.ThisKeyword) {
-                ownerEdits.push({ start: current.getStart(sourceFile) - start, end: current.end - start, newText: "owner" });
-                return;
-            }
-            if (current !== node && ts.isFunctionLike(current) && !ts.isArrowFunction(current)) return;
-            ts.forEachChild(current, visitNode);
-        }
-
-        visitNode(node);
-        return applyEdits(source.slice(start, node.end), ownerEdits);
+    function getNodeText(node: ts.Node): string {
+        return source.slice(node.getStart(sourceFile), node.end);
     }
 
     function isGeneratorCall(node: ts.Expression): boolean {
@@ -603,7 +638,11 @@ function getSignatureGroups(node: ts.InterfaceDeclaration): Map<string, readonly
 }
 
 function getMethodKey(node: ts.MethodDeclaration): string {
-    return `${node.modifiers?.some(modifier => modifier.kind === ts.SyntaxKind.StaticKeyword) ? "static:" : ""}${(node.name as ts.Identifier).text}`;
+    return `${isStaticMethod(node) ? "static:" : ""}${(node.name as ts.Identifier).text}`;
+}
+
+function isStaticMethod(node: ts.MethodDeclaration): boolean {
+    return !!node.modifiers?.some(modifier => modifier.kind === ts.SyntaxKind.StaticKeyword);
 }
 
 function getPublicDeclarations(group: MethodGroup): readonly ts.MethodDeclaration[] {
@@ -641,7 +680,7 @@ export function generateSync(force = false): void {
                 ? (source, fileName) =>
                     [
                         'import type { APIRequest as ProtocolRequest, APIResponse as ProtocolResponse } from "../proto.ts";',
-                        'import { apiRequest, cacheGeneratorMethod } from "./generatorSupport.ts";',
+                        'import { apiRequest, createGeneratorMethodCache, getGeneratorMethod, type GeneratorMethodCache } from "./generatorSupport.ts";',
                         "",
                         transformAsyncSource(source, fileName, true),
                     ].join("\n")

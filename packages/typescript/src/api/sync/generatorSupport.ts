@@ -4,15 +4,43 @@ import type {
     APIResponse,
 } from "../proto.ts";
 
-export function cacheGeneratorMethod<Sync extends (...args: any[]) => any, Gen extends (...args: any[]) => AnyAPIRequestGenerator>(
+type GeneratorMethodImplementation = (...args: any[]) => unknown;
+
+interface BoundGeneratorMethod {
+    (...args: unknown[]): unknown;
+    gen: GeneratorMethodImplementation;
+}
+
+/**
+ * Per-instance storage for bound generator methods, indexed by a slot number
+ * assigned to each method of a class. Storing them here rather than as own
+ * properties keeps every instance of a class on the same hidden class.
+ */
+export type GeneratorMethodCache = (BoundGeneratorMethod | undefined)[];
+
+export function createGeneratorMethodCache(size: number): GeneratorMethodCache {
+    return new Array(size);
+}
+
+/**
+ * Returns `sync` bound to `owner`, with `gen` bound to `owner` as its `.gen`
+ * property. The implementations are shared across instances; only the bound
+ * functions are allocated, once per instance and method.
+ */
+export function getGeneratorMethod<T>(
     owner: object,
-    name: PropertyKey,
-    sync: Sync,
-    gen: Gen,
-): Sync & { readonly gen: Gen; } {
-    const method = Object.assign(sync, { gen });
-    Object.defineProperty(owner, name, { configurable: true, value: method });
-    return method;
+    cache: GeneratorMethodCache,
+    slot: number,
+    sync: GeneratorMethodImplementation,
+    gen: GeneratorMethodImplementation,
+): T {
+    let method = cache[slot];
+    if (method === undefined) {
+        method = sync.bind(owner) as BoundGeneratorMethod;
+        method.gen = gen.bind(owner);
+        cache[slot] = method;
+    }
+    return method as T;
 }
 
 export function apiRequest<Method extends keyof APIMethodInfo>(
