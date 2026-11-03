@@ -267,14 +267,42 @@ export const lib = task({
 /**
  * Gets the release build flags for stripping debug info.
  * @param {string} [versionOverride] Optional version to embed in the binary.
+ * @param {object} [opts]
+ * @param {boolean} [opts.staticPie] Build a PIE to be converted by {@link convertToStaticPie}.
  * @returns {string[]}
  */
-function getReleaseBuildFlags(versionOverride) {
+function getReleaseBuildFlags(versionOverride, opts) {
     let ldflags = "-ldflags=-s -w";
+    if (opts?.staticPie) {
+        ldflags += " -bindnow";
+    }
     if (versionOverride) {
         ldflags += ` -X github.com/microsoft/TypeScript/tsc/internal/core.version=${versionOverride}`;
     }
-    return ["-trimpath", ldflags];
+    return ["-trimpath", ...(opts?.staticPie ? ["-buildmode=pie"] : []), ldflags];
+}
+
+// Linux targets where Go's internal linker can produce a PIE without cgo.
+// Go's PIEs require the glibc loader, so these are converted to static-PIEs
+// which also run on musl (Alpine), distroless, and NixOS. Other Linux targets
+// would need an external linker for PIE, so they stay non-PIE. Windows,
+// macOS, and Android are already PIE by default.
+const staticPieGoarches = new Set(["amd64", "arm64", "loong64", "ppc64le", "s390x"]);
+
+/**
+ * @param {string} goos
+ * @param {string} goarch
+ */
+function supportsStaticPie(goos, goarch) {
+    return goos === "linux" && staticPieGoarches.has(goarch);
+}
+
+/**
+ * Removes the ELF interpreter from a Go-linked PIE so it starts via tsc/internal/staticpie.
+ * @param {string} exe
+ */
+async function convertToStaticPie(exe) {
+    await run("go", ["-C", "./tools", "run", "./cmd/staticpie", path.resolve(exe)]);
 }
 
 /**
@@ -2740,6 +2768,7 @@ async function buildNativePreviewPlatform({ npmDir, npmPackageName, nodeOs, node
     await generateLibs(out);
 
     const exeName = nativePreviewExeName(nodeOs);
+    const staticPie = !options.respectGoEnv && supportsStaticPie(goos, goarch);
     await buildTsc({
         out: publishAsTypescript ? path.join(out, exeName) : out,
         env: {
@@ -2749,8 +2778,12 @@ async function buildNativePreviewPlatform({ npmDir, npmPackageName, nodeOs, node
         },
         extraFlags: options.respectGoEnv
             ? []
-            : getReleaseBuildFlags(options.setPrerelease || nativePreviewReleaseVersion ? getVersion() : undefined),
+            : getReleaseBuildFlags(options.setPrerelease || nativePreviewReleaseVersion ? getVersion() : undefined, { staticPie }),
     });
+    if (staticPie) {
+        // Without -o naming a file, go build names the binary after ./cmd/tsc.
+        await convertToStaticPie(publishAsTypescript ? path.join(out, exeName) : path.join(out, "tsc"));
+    }
 }
 
 async function createNativePreviewInputPackageJson() {
