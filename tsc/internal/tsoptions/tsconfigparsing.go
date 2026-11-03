@@ -1088,16 +1088,16 @@ func parseConfig(
 			if extendedRawMap, ok := extendsRaw.(*collections.OrderedMap[string, any]); ok && extendedRawMap.Has("contentMappers") {
 				if contentMappers, ok := extendedRawMap.GetOrZero("contentMappers").([]any); ok {
 					result.contentMappers = core.Map(contentMappers, func(value any) any {
-						mapper, ok := value.(*collections.OrderedMap[string, any])
-						if !ok {
+						mapper, isMapperObject := value.(*collections.OrderedMap[string, any])
+						if !isMapperObject {
 							return value
 						}
-						packageName, ok := mapper.Get("package")
-						if !ok {
+						packageName, hasPackage := mapper.Get("package")
+						if !hasPackage {
 							return value
 						}
-						packagePath, ok := packageName.(string)
-						if !ok || !tspath.IsExternalModuleNameRelative(packagePath) || tspath.IsRootedDiskPath(packagePath) {
+						packagePath, isPackagePath := packageName.(string)
+						if !isPackagePath || !tspath.IsExternalModuleNameRelative(packagePath) || tspath.IsRootedDiskPath(packagePath) {
 							return value
 						}
 						rebasedMapper := mapper.Clone()
