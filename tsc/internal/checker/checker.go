@@ -6492,18 +6492,18 @@ func (c *Checker) getIterationTypesOfIterable(t *Type, use IterationUse, errorNo
 		}
 		noCache = true
 	}
-	result := c.getIterationTypesOfIterableWorker(t, use, errorNode, noCache)
+	result := c.getIterationTypesOfIterableWorker(t, use, errorNode)
 	if !noCache {
 		c.iterationTypesCache[key] = result
 	}
 	return result
 }
 
-func (c *Checker) getIterationTypesOfIterableWorker(t *Type, use IterationUse, errorNode *ast.Node, noCache bool) IterationTypes {
+func (c *Checker) getIterationTypesOfIterableWorker(t *Type, use IterationUse, errorNode *ast.Node) IterationTypes {
 	if t.flags&TypeFlagsUnion != 0 {
 		allIterationTypes := make([]IterationTypes, 0, len(t.Types()))
 		for _, constituent := range t.Types() {
-			iterationTypes := c.getIterationTypesOfIterableWorker(constituent, use, nil, noCache)
+			iterationTypes := c.getIterationTypesOfIterableWorker(constituent, use, nil)
 			if !iterationTypes.hasTypes() {
 				if errorNode != nil {
 					c.addDeferredDiagnostic(func() {
