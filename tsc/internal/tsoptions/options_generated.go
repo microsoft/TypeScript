@@ -498,6 +498,9 @@ func CompilerOptionsAffectSemanticDiagnostics(oldOptions *core.CompilerOptions, 
 	if oldOptions.ResolvePackageJsonImports != newOptions.ResolvePackageJsonImports {
 		return true
 	}
+	if oldOptions.DisableDynamicImportExtensionRewriting != newOptions.DisableDynamicImportExtensionRewriting {
+		return true
+	}
 	if oldOptions.RewriteRelativeImportExtensions != newOptions.RewriteRelativeImportExtensions {
 		return true
 	}
