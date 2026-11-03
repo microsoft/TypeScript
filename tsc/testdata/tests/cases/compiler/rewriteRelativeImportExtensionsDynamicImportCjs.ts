@@ -8,6 +8,7 @@
 import { getSpecifier } from "./specifier.cjs";
 
 import(getSpecifier());
+import(`./target.ts`);
 
 // @filename: specifier.cts
 export function getSpecifier() {

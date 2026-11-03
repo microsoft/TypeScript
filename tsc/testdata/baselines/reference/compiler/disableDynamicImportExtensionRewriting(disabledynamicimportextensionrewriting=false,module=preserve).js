@@ -50,7 +50,7 @@ var __rewriteRelativeImportExtension = (this && this.__rewriteRelativeImportExte
 import { path } from "./target.js";
 export { path } from "./target.js";
 import("./target.js");
-import(`./target.ts`);
+import(`./target.js`);
 import(__rewriteRelativeImportExtension(path));
 import(__rewriteRelativeImportExtension(`./${path}`));
 import(__rewriteRelativeImportExtension(import("./target.ts")));
@@ -75,7 +75,7 @@ var __rewriteRelativeImportExtension = (this && this.__rewriteRelativeImportExte
 };
 export {};
 require("./target.js");
-require(`./target.ts`);
+require(`./target.js`);
 require(__rewriteRelativeImportExtension("./" + "target.ts"));
 require(__rewriteRelativeImportExtension(require("./target.ts").path));
 import("./target.js");

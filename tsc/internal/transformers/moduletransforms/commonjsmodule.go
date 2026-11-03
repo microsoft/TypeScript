@@ -1809,7 +1809,7 @@ func (tx *CommonJSModuleTransformer) visitCallExpression(node *ast.CallExpressio
 	needsRewrite := false
 	if tx.compilerOptions.RewriteRelativeImportExtensions.IsTrue() &&
 		(!tx.compilerOptions.DisableDynamicImportExtensionRewriting.IsTrue() ||
-			len(node.Arguments.Nodes) > 0 && ast.IsStringLiteral(node.Arguments.Nodes[0])) {
+			len(node.Arguments.Nodes) > 0 && ast.IsStringLiteralLike(node.Arguments.Nodes[0])) {
 		if ast.IsImportCall(node.AsNode()) && len(node.Arguments.Nodes) > 0 ||
 			ast.IsInJSFile(node.AsNode()) && ast.IsRequireCall(node.AsNode(), false /*requireStringLiteralLikeArgument*/) {
 			needsRewrite = true
@@ -1864,7 +1864,7 @@ func (tx *CommonJSModuleTransformer) visitImportCallExpression(node *ast.CallExp
 	if externalModuleName != nil && (firstArgument == nil || !ast.IsStringLiteral(firstArgument) || firstArgument.Text() != externalModuleName.Text()) {
 		argument = externalModuleName
 	} else if firstArgument != nil && rewriteOrShim {
-		if ast.IsStringLiteral(firstArgument) {
+		if ast.IsStringLiteralLike(firstArgument) {
 			argument = rewriteModuleSpecifier(tx.EmitContext(), firstArgument, tx.compilerOptions, tx.contentMapperExtensionRewrites, tx.caseSensitivity)
 		} else {
 			argument = tx.Factory().NewRewriteRelativeImportExtensionsHelper(firstArgument, tx.compilerOptions.Jsx == core.JsxEmitPreserve, tx.contentMapperExtensionRewrites, tx.caseSensitivity)

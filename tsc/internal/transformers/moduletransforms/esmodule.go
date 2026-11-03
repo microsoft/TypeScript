@@ -251,7 +251,7 @@ func (tx *ESModuleTransformer) visitExportDeclaration(node *ast.ExportDeclaratio
 func (tx *ESModuleTransformer) visitCallExpression(node *ast.CallExpression) *ast.Node {
 	if tx.compilerOptions.RewriteRelativeImportExtensions.IsTrue() &&
 		(!tx.compilerOptions.DisableDynamicImportExtensionRewriting.IsTrue() ||
-			len(node.Arguments.Nodes) > 0 && ast.IsStringLiteral(node.Arguments.Nodes[0])) {
+			len(node.Arguments.Nodes) > 0 && ast.IsStringLiteralLike(node.Arguments.Nodes[0])) {
 		if ast.IsImportCall(node.AsNode()) && len(node.Arguments.Nodes) > 0 ||
 			ast.IsInJSFile(node.AsNode()) && ast.IsRequireCall(node.AsNode(), false /*requireStringLiteralLikeArgument*/) {
 			return tx.visitImportOrRequireCall(node)

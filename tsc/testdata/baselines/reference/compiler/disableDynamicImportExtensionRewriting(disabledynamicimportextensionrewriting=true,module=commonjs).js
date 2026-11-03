@@ -73,7 +73,7 @@ const target_ts_1 = require("./target.js");
 var target_ts_2 = require("./target.js");
 Object.defineProperty(exports, "path", { enumerable: true, get: function () { return target_ts_2.path; } });
 Promise.resolve().then(() => __importStar(require("./target.js")));
-Promise.resolve().then(() => __importStar(require(`./target.ts`)));
+Promise.resolve().then(() => __importStar(require(`./target.js`)));
 Promise.resolve(`${target_ts_1.path}`).then(s => __importStar(require(s)));
 Promise.resolve(`${`./${target_ts_1.path}`}`).then(s => __importStar(require(s)));
 Promise.resolve(`${Promise.resolve().then(() => __importStar(require("./target.js")))}`).then(s => __importStar(require(s)));
@@ -115,7 +115,7 @@ var __importStar = (this && this.__importStar) || (function () {
 })();
 Object.defineProperty(exports, "__esModule", { value: true });
 require("./target.js");
-require(`./target.ts`);
+require(`./target.js`);
 require("./" + "target.ts");
 require(require("./target.js").path);
 Promise.resolve().then(() => __importStar(require("./target.js")));

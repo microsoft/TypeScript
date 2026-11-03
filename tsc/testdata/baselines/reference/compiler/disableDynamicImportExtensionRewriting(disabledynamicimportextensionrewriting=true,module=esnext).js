@@ -33,7 +33,7 @@ export const path = "./target.ts";
 import { path } from "./target.js";
 export { path } from "./target.js";
 import("./target.js");
-import(`./target.ts`);
+import(`./target.js`);
 import(path);
 import(`./${path}`);
 import(import("./target.js"));
@@ -41,7 +41,7 @@ require(path);
 //// [requires.js]
 export {};
 require("./target.js");
-require(`./target.ts`);
+require(`./target.js`);
 require("./" + "target.ts");
 require(require("./target.js").path);
 import("./target.js");

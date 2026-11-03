@@ -90,7 +90,7 @@ const target_ts_1 = require("./target.js");
 var target_ts_2 = require("./target.js");
 Object.defineProperty(exports, "path", { enumerable: true, get: function () { return target_ts_2.path; } });
 Promise.resolve().then(() => __importStar(require("./target.js")));
-Promise.resolve(`${__rewriteRelativeImportExtension(`./target.ts`)}`).then(s => __importStar(require(s)));
+Promise.resolve().then(() => __importStar(require(`./target.js`)));
 Promise.resolve(`${__rewriteRelativeImportExtension(target_ts_1.path)}`).then(s => __importStar(require(s)));
 Promise.resolve(`${__rewriteRelativeImportExtension(`./${target_ts_1.path}`)}`).then(s => __importStar(require(s)));
 Promise.resolve(`${__rewriteRelativeImportExtension(Promise.resolve().then(() => __importStar(require("./target.js"))))}`).then(s => __importStar(require(s)));
@@ -149,7 +149,7 @@ var __rewriteRelativeImportExtension = (this && this.__rewriteRelativeImportExte
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 require("./target.js");
-require(`./target.ts`);
+require(`./target.js`);
 require(__rewriteRelativeImportExtension("./" + "target.ts"));
 require(__rewriteRelativeImportExtension(require("./target.js").path));
 Promise.resolve().then(() => __importStar(require("./target.js")));
