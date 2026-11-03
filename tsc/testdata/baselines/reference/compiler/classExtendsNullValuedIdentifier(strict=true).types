@@ -1,0 +1,26 @@
+//// [tests/cases/compiler/classExtendsNullValuedIdentifier.ts] ////
+
+=== classExtendsNullValuedIdentifier.ts ===
+const N = null;
+>N : null
+
+class A extends N { constructor() { } }
+>A : A
+>N : null
+
+class B extends (null) { constructor() { } }
+>B : B
+>(null) : null
+
+class C extends null { constructor() { super(); } }
+>C : C
+>super() : void
+>super : any
+
+let n = null;
+>n : any
+
+class D extends n { constructor() { } }
+>D : D
+>n : null
+

@@ -1,0 +1,58 @@
+//// [tests/cases/compiler/moduleExportsSelfReferenceCircularity.ts] ////
+
+=== b.js ===
+const a = require("./a");
+>a : Symbol(a, Decl(b.js, 0, 5))
+>require : Symbol(require)
+>"./a" : Symbol("./a", Decl(a.js, 0, 0))
+
+exports.q = a.x;
+>exports.q : Symbol(q, Decl(b.js, 0, 25))
+>exports : Symbol(exports, Decl(b.js, 0, 0))
+>q : Symbol(q, Decl(b.js, 0, 25))
+>a : Symbol(a, Decl(b.js, 0, 5))
+
+exports.r = module.exports.q;
+>exports.r : Symbol(r, Decl(b.js, 1, 16))
+>exports : Symbol(exports, Decl(b.js, 0, 0))
+>r : Symbol(r, Decl(b.js, 1, 16))
+>module.exports.q : Symbol(q, Decl(b.js, 0, 25))
+>module.exports : Symbol(exports, Decl(b.js, 0, 0))
+>module : Symbol(module, Decl(b.js, 0, 0))
+>exports : Symbol(exports, Decl(b.js, 0, 0))
+>q : Symbol(q, Decl(b.js, 0, 25))
+
+=== a.js ===
+module.exports = { x: module.exports.y, y: 1 };
+>module.exports : Symbol(v, Decl(a.js, 0, 0))
+>module : Symbol(module, Decl(a.js, 0, 0))
+>exports : Symbol(v, Decl(a.js, 0, 0))
+>x : Symbol(x, Decl(a.js, 0, 18))
+>module.exports : Symbol(v, Decl(a.js, 0, 0))
+>module : Symbol(module, Decl(a.js, 0, 0))
+>exports : Symbol(v, Decl(a.js, 0, 0))
+>y : Symbol(y, Decl(a.js, 0, 39))
+
+exports.z = exports.x;
+>exports : Symbol(exports, Decl(a.js, 0, 0))
+>exports : Symbol(exports, Decl(a.js, 0, 0))
+
+const self = require("./a");
+>self : Symbol(self, Decl(a.js, 2, 5))
+>require : Symbol(require)
+>"./a" : Symbol("./a", Decl(a.js, 0, 0))
+
+module.exports.w = self.y;
+>module.exports : Symbol(v, Decl(a.js, 0, 0))
+>module : Symbol(module, Decl(a.js, 0, 0))
+>exports : Symbol(v, Decl(a.js, 0, 0))
+>self : Symbol(self, Decl(a.js, 2, 5))
+
+module.exports.v = module.exports;
+>module.exports : Symbol(v, Decl(a.js, 0, 0))
+>module : Symbol(module, Decl(a.js, 0, 0))
+>exports : Symbol(v, Decl(a.js, 0, 0))
+>module.exports : Symbol(v, Decl(a.js, 0, 0))
+>module : Symbol(module, Decl(a.js, 0, 0))
+>exports : Symbol(v, Decl(a.js, 0, 0))
+

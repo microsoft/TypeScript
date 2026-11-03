@@ -1,0 +1,77 @@
+//// [tests/cases/compiler/narrowingNoInfer2.ts] ////
+
+=== narrowingNoInfer2.ts ===
+type U1 = NoInfer<{ kind: "a"; a: number } | { kind: "b"; b: number }> | { kind: "c" };
+>U1 : Symbol(U1, Decl(narrowingNoInfer2.ts, 0, 0))
+>NoInfer : Symbol(NoInfer, Decl(lib.es5.d.ts, --, --))
+>kind : Symbol(kind, Decl(narrowingNoInfer2.ts, 0, 19))
+>a : Symbol(a, Decl(narrowingNoInfer2.ts, 0, 30))
+>kind : Symbol(kind, Decl(narrowingNoInfer2.ts, 0, 46))
+>b : Symbol(b, Decl(narrowingNoInfer2.ts, 0, 57))
+>kind : Symbol(kind, Decl(narrowingNoInfer2.ts, 0, 74))
+
+function f1(u: U1) {
+>f1 : Symbol(f1, Decl(narrowingNoInfer2.ts, 0, 87))
+>u : Symbol(u, Decl(narrowingNoInfer2.ts, 2, 12))
+>U1 : Symbol(U1, Decl(narrowingNoInfer2.ts, 0, 0))
+
+    if (u.kind === "a") {
+>u.kind : Symbol(kind, Decl(narrowingNoInfer2.ts, 0, 19), Decl(narrowingNoInfer2.ts, 0, 46), Decl(narrowingNoInfer2.ts, 0, 74))
+>u : Symbol(u, Decl(narrowingNoInfer2.ts, 2, 12))
+>kind : Symbol(kind, Decl(narrowingNoInfer2.ts, 0, 19), Decl(narrowingNoInfer2.ts, 0, 46), Decl(narrowingNoInfer2.ts, 0, 74))
+
+        u.a;
+>u.a : Symbol(a, Decl(narrowingNoInfer2.ts, 0, 30))
+>u : Symbol(u, Decl(narrowingNoInfer2.ts, 2, 12))
+>a : Symbol(a, Decl(narrowingNoInfer2.ts, 0, 30))
+    }
+}
+
+type U2 = NoInfer<{ kind: "a"; a: number } | { kind: "b"; b: number }> | { kind: "c" };
+>U2 : Symbol(U2, Decl(narrowingNoInfer2.ts, 6, 1))
+>NoInfer : Symbol(NoInfer, Decl(lib.es5.d.ts, --, --))
+>kind : Symbol(kind, Decl(narrowingNoInfer2.ts, 8, 19))
+>a : Symbol(a, Decl(narrowingNoInfer2.ts, 8, 30))
+>kind : Symbol(kind, Decl(narrowingNoInfer2.ts, 8, 46))
+>b : Symbol(b, Decl(narrowingNoInfer2.ts, 8, 57))
+>kind : Symbol(kind, Decl(narrowingNoInfer2.ts, 8, 74))
+
+interface Box<T> {
+>Box : Symbol(Box, Decl(narrowingNoInfer2.ts, 8, 87))
+>T : Symbol(T, Decl(narrowingNoInfer2.ts, 10, 14))
+
+    u: U2;
+>u : Symbol(Box.u, Decl(narrowingNoInfer2.ts, 10, 18))
+>U2 : Symbol(U2, Decl(narrowingNoInfer2.ts, 6, 1))
+
+    t: T;
+>t : Symbol(Box.t, Decl(narrowingNoInfer2.ts, 11, 10))
+>T : Symbol(T, Decl(narrowingNoInfer2.ts, 10, 14))
+}
+
+declare const box: Box<string>;
+>box : Symbol(box, Decl(narrowingNoInfer2.ts, 15, 13))
+>Box : Symbol(Box, Decl(narrowingNoInfer2.ts, 8, 87))
+
+box.u;
+>box.u : Symbol(Box.u, Decl(narrowingNoInfer2.ts, 10, 18))
+>box : Symbol(box, Decl(narrowingNoInfer2.ts, 15, 13))
+>u : Symbol(Box.u, Decl(narrowingNoInfer2.ts, 10, 18))
+
+function f2(u: U2) {
+>f2 : Symbol(f2, Decl(narrowingNoInfer2.ts, 16, 6))
+>u : Symbol(u, Decl(narrowingNoInfer2.ts, 18, 12))
+>U2 : Symbol(U2, Decl(narrowingNoInfer2.ts, 6, 1))
+
+    if (u.kind === "a") {
+>u.kind : Symbol(kind, Decl(narrowingNoInfer2.ts, 8, 19), Decl(narrowingNoInfer2.ts, 8, 46), Decl(narrowingNoInfer2.ts, 8, 74))
+>u : Symbol(u, Decl(narrowingNoInfer2.ts, 18, 12))
+>kind : Symbol(kind, Decl(narrowingNoInfer2.ts, 8, 19), Decl(narrowingNoInfer2.ts, 8, 46), Decl(narrowingNoInfer2.ts, 8, 74))
+
+        u.a;
+>u.a : Symbol(a, Decl(narrowingNoInfer2.ts, 8, 30))
+>u : Symbol(u, Decl(narrowingNoInfer2.ts, 18, 12))
+>a : Symbol(a, Decl(narrowingNoInfer2.ts, 8, 30))
+    }
+}
+

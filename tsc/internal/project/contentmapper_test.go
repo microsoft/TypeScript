@@ -13,6 +13,7 @@ import (
 	"github.com/microsoft/TypeScript/tsc/internal/ast"
 	"github.com/microsoft/TypeScript/tsc/internal/bundled"
 	"github.com/microsoft/TypeScript/tsc/internal/contentmapper"
+	"github.com/microsoft/TypeScript/tsc/internal/core"
 	"github.com/microsoft/TypeScript/tsc/internal/diagnostics"
 	"github.com/microsoft/TypeScript/tsc/internal/locale"
 	"github.com/microsoft/TypeScript/tsc/internal/ls"
@@ -600,6 +601,51 @@ func TestContentMapperModuleExtensionClonedOnUnrelatedEdit(t *testing.T) {
 	configuredProject := session.Snapshot().GetDefaultProject(mainURI)
 	assert.Equal(t, configuredProject.ProgramUpdateKind, project.ProgramUpdateKindCloned)
 	assert.Assert(t, languageService.GetProgram().GetSourceFile("/home/project/app.box") == mappedFile)
+}
+
+func TestContentMapperModuleFormatChangeRebuilds(t *testing.T) {
+	t.Parallel()
+	files := map[string]any{
+		"/home/project/tsconfig.json":                    `{ "compilerOptions": { "module": "nodenext", "importHelpers": true, "noEmit": true }, "contentMappers": [{ "package": "mapper", "extensions": [".box"] }] }`,
+		"/home/project/package.json":                     `{ "name": "project" }`,
+		"/home/project/node_modules/mapper/package.json": contentmappertest.PackageJSON(contentmappertest.FormatVerbatimMapper),
+		"/home/project/node_modules/tslib/package.json":  `{ "name": "tslib", "version": "1.0.0", "exports": { ".": { "import": "./tslib.d.mts", "require": "./tslib.d.ts" } } }`,
+		"/home/project/node_modules/tslib/tslib.d.mts":   "export {};\n",
+		"/home/project/node_modules/tslib/tslib.d.ts":    "export {};\n",
+		"/home/project/app.box":                          "// cjs\nexport const value = 1;\n",
+		"/home/project/main.ts":                          "export {};\n",
+	}
+	init, utils := projecttestutil.GetSessionInitOptions(files, &project.SessionOptions{
+		CurrentDirectory:   "/home/project",
+		DefaultLibraryPath: bundled.LibPath(),
+		TypingsLocation:    projecttestutil.TestTypingsLocation,
+		PositionEncoding:   lsproto.PositionEncodingKindUTF8,
+		RunExternalCode:    true,
+	}, nil)
+	init.Spawner = contentmappertest.NewSpawner()
+	session := project.NewSession(init)
+	defer session.Close()
+
+	ctx := context.Background()
+	mainURI := lsproto.DocumentUri("file:///home/project/main.ts")
+	session.DidOpenFile(ctx, mainURI, 1, files["/home/project/main.ts"].(string), lsproto.LanguageKindTypeScript)
+	_, err := session.GetLanguageService(ctx, mainURI)
+	assert.NilError(t, err)
+
+	assert.NilError(t, utils.FS().WriteFile("/home/project/app.box", "// esm\nexport const value = 1;\n"))
+	session.DidChangeWatchedFiles(ctx, []*lsproto.FileEvent{{
+		Uri:  "file:///home/project/app.box",
+		Type: lsproto.FileChangeTypeChanged,
+	}})
+	languageService, err := session.GetLanguageService(ctx, mainURI)
+	assert.NilError(t, err)
+	assert.Assert(t, session.Snapshot().GetDefaultProject(mainURI).ProgramUpdateKind != project.ProgramUpdateKindCloned)
+	program := languageService.GetProgram()
+	mappedFile := program.GetSourceFile("/home/project/app.box")
+	assert.Equal(t, mappedFile.VirtualFileName().AsString(), "/home/project/app.box.mts")
+	assert.Equal(t, program.GetSourceFileMetaData(mappedFile.PathKey()).ImpliedNodeFormat, core.ModuleKindESNext)
+	tslib := program.GetResolvedModuleFromModuleSpecifier(mappedFile, program.GetImportHelpersImportSpecifier(mappedFile.PathKey()))
+	assert.Equal(t, tslib.ResolvedFileName.AsString(), "/home/project/node_modules/tslib/tslib.d.mts")
 }
 
 func TestContentMapperLocaleChange(t *testing.T) {
