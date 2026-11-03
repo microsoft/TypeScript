@@ -73,49 +73,49 @@ function exponentiationAssignment() {
 "use strict";
 let key = 0;
 function logicalOrAssignment() {
-    var _a, _b, _c;
-    getObject()[++key] || (getObject()[++key] = 1);
-    getObject()[++key] || (getObject()[++key] = 1);
-    getObject()[++key] || (getObject()[++key] = 1);
-    getObject()[++key] || (getObject()[++key] = 1);
-    (getObject()[++key]) || ((getObject()[++key]) = 1);
+    var _a, _b, _c, _d, _e, _f, _g, _h, _j, _k, _l, _m, _o, _p, _q, _r, _s, _t;
     (_a = getObject())[_b = ++key] || (_a[_b] = 1);
-    getObject().x || (getObject().x = 1);
-    getObject().x || (getObject().x = 1);
-    getObject().x || (getObject().x = 1);
-    getObject().x || (getObject().x = 1);
-    (getObject().x) || ((getObject().x) = 1);
-    (_c = getObject()).x || (_c.x = 1);
+    (_c = getObject())[_d = ++key] || (_c[_d] = 1);
+    (_e = getObject())[_f = ++key] || (_e[_f] = 1);
+    (_g = getObject())[_h = ++key] || (_g[_h] = 1);
+    (_j = getObject())[_k = ++key] || (_j[_k] = 1);
+    (_l = getObject())[_m = ++key] || (_l[_m] = 1);
+    (_o = getObject()).x || (_o.x = 1);
+    (_p = getObject()).x || (_p.x = 1);
+    (_q = getObject()).x || (_q.x = 1);
+    (_r = getObject()).x || (_r.x = 1);
+    (_s = getObject()).x || (_s.x = 1);
+    (_t = getObject()).x || (_t.x = 1);
 }
 function logicalAndAssignment() {
-    var _a, _b, _c;
-    getObject()[++key] && (getObject()[++key] = 1);
-    getObject()[++key] && (getObject()[++key] = 1);
-    getObject()[++key] && (getObject()[++key] = 1);
-    getObject()[++key] && (getObject()[++key] = 1);
-    (getObject()[++key]) && ((getObject()[++key]) = 1);
+    var _a, _b, _c, _d, _e, _f, _g, _h, _j, _k, _l, _m, _o, _p, _q, _r, _s, _t;
     (_a = getObject())[_b = ++key] && (_a[_b] = 1);
-    getObject().x && (getObject().x = 1);
-    getObject().x && (getObject().x = 1);
-    getObject().x && (getObject().x = 1);
-    getObject().x && (getObject().x = 1);
-    (getObject().x) && ((getObject().x) = 1);
-    (_c = getObject()).x && (_c.x = 1);
+    (_c = getObject())[_d = ++key] && (_c[_d] = 1);
+    (_e = getObject())[_f = ++key] && (_e[_f] = 1);
+    (_g = getObject())[_h = ++key] && (_g[_h] = 1);
+    (_j = getObject())[_k = ++key] && (_j[_k] = 1);
+    (_l = getObject())[_m = ++key] && (_l[_m] = 1);
+    (_o = getObject()).x && (_o.x = 1);
+    (_p = getObject()).x && (_p.x = 1);
+    (_q = getObject()).x && (_q.x = 1);
+    (_r = getObject()).x && (_r.x = 1);
+    (_s = getObject()).x && (_s.x = 1);
+    (_t = getObject()).x && (_t.x = 1);
 }
 function nullishAssignment() {
-    var _a, _b, _c;
-    getObject()[++key] ?? (getObject()[++key] = 1);
-    getObject()[++key] ?? (getObject()[++key] = 1);
-    getObject()[++key] ?? (getObject()[++key] = 1);
-    getObject()[++key] ?? (getObject()[++key] = 1);
-    (getObject()[++key]) ?? ((getObject()[++key]) = 1);
+    var _a, _b, _c, _d, _e, _f, _g, _h, _j, _k, _l, _m, _o, _p, _q, _r, _s, _t;
     (_a = getObject())[_b = ++key] ?? (_a[_b] = 1);
-    getObject().x ?? (getObject().x = 1);
-    getObject().x ?? (getObject().x = 1);
-    getObject().x ?? (getObject().x = 1);
-    getObject().x ?? (getObject().x = 1);
-    (getObject().x) ?? ((getObject().x) = 1);
-    (_c = getObject()).x ?? (_c.x = 1);
+    (_c = getObject())[_d = ++key] ?? (_c[_d] = 1);
+    (_e = getObject())[_f = ++key] ?? (_e[_f] = 1);
+    (_g = getObject())[_h = ++key] ?? (_g[_h] = 1);
+    (_j = getObject())[_k = ++key] ?? (_j[_k] = 1);
+    (_l = getObject())[_m = ++key] ?? (_l[_m] = 1);
+    (_o = getObject()).x ?? (_o.x = 1);
+    (_p = getObject()).x ?? (_p.x = 1);
+    (_q = getObject()).x ?? (_q.x = 1);
+    (_r = getObject()).x ?? (_r.x = 1);
+    (_s = getObject()).x ?? (_s.x = 1);
+    (_t = getObject()).x ?? (_t.x = 1);
 }
 function exponentiationAssignment() {
     getObject()[++key] **= 2;

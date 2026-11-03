@@ -34,7 +34,7 @@ func (ch *exponentiationTransformer) visitBinaryExpression(node *ast.BinaryExpre
 func (ch *exponentiationTransformer) visitExponentiationAssignmentExpression(node *ast.BinaryExpression) *ast.Node {
 	var target *ast.Node
 	var value *ast.Node
-	left := ch.Visitor().VisitNode(node.Left)
+	left := ast.SkipOuterExpressions(ch.Visitor().VisitNode(node.Left), ast.OEKParentheses|ast.OEKPartiallyEmittedExpressions)
 	right := ch.Visitor().VisitNode(node.Right)
 	if ast.IsElementAccessExpression(left) {
 		// Transforms `a[x] **= b` into `(_a = a)[_x = x] = Math.pow(_a[_x], b)`
