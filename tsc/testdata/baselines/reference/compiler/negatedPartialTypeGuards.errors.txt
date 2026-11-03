@@ -1,7 +1,9 @@
-negatedPartialTypeGuards.ts(17,25): error TS2345: Argument of type 'object' is not assignable to parameter of type 'not Reference'.
+negatedPartialTypeGuards.ts(20,15): error TS2339: Property 'target' does not exist on type 'never'.
+negatedPartialTypeGuards.ts(26,25): error TS2339: Property 'target' does not exist on type 'never'.
+negatedPartialTypeGuards.ts(33,15): error TS2339: Property 'toFixed' does not exist on type 'never'.
 
 
-==== negatedPartialTypeGuards.ts (1 errors) ====
+==== negatedPartialTypeGuards.ts (3 errors) ====
     interface Reference {
         target: object;
     }
@@ -14,21 +16,24 @@ negatedPartialTypeGuards.ts(17,25): error TS2345: Argument of type 'object' is n
     declare function isTupleReference(value: object): value is TupleReference;
     declare function acceptsNotReference(value: not Reference): void;
     
+    // Partial predicates are treated as invertible, so their false branches exclude subtypes too.
     function checkReference(value: object) {
         if (isArrayReference(value)) {
             return;
         }
         acceptsNotReference(value);
-                            ~~~~~
-!!! error TS2345: Argument of type 'object' is not assignable to parameter of type 'not Reference'.
         if (isTupleReference(value)) {
             value.target.elements;
+                  ~~~~~~
+!!! error TS2339: Property 'target' does not exist on type 'never'.
         }
     }
     
     function checkProperty(container: { value: object }) {
         if (!isArrayReference(container.value) && isTupleReference(container.value)) {
             container.value.target.elements;
+                            ~~~~~~
+!!! error TS2339: Property 'target' does not exist on type 'never'.
         }
     }
     
@@ -36,5 +41,23 @@ negatedPartialTypeGuards.ts(17,25): error TS2345: Argument of type 'object' is n
     function checkUnknown(value: unknown) {
         if (!isSmallNumber(value) && typeof value === "number") {
             value.toFixed();
+                  ~~~~~~~
+!!! error TS2339: Property 'toFixed' does not exist on type 'never'.
+        }
+    }
+    
+    // Check the more specific predicate first to avoid excluding tuple references with the array check.
+    function checkTupleBeforeArray(value: object) {
+        if (isTupleReference(value)) {
+            return value.target.elements;
+        }
+        if (isArrayReference(value)) {
+            return value.target;
+        }
+    }
+    
+    function checkTupleBeforeArrayInCondition(value: object) {
+        if (isTupleReference(value) && value.target.elements.length || isArrayReference(value)) {
+            return value.target;
         }
     }

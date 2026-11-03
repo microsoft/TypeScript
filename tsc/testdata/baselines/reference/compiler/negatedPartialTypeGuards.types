@@ -24,6 +24,7 @@ declare function acceptsNotReference(value: not Reference): void;
 >acceptsNotReference : (value: not Reference) => void
 >value : not Reference
 
+// Partial predicates are treated as invertible, so their false branches exclude subtypes too.
 function checkReference(value: object) {
 >checkReference : (value: object) => void
 >value : object
@@ -38,19 +39,19 @@ function checkReference(value: object) {
     acceptsNotReference(value);
 >acceptsNotReference(value) : void
 >acceptsNotReference : (value: not Reference) => void
->value : object
+>value : object & not Reference
 
     if (isTupleReference(value)) {
 >isTupleReference(value) : boolean
 >isTupleReference : (value: object) => value is TupleReference
->value : object
+>value : object & not Reference
 
         value.target.elements;
->value.target.elements : number[]
->value.target : { elements: number[]; }
->value : TupleReference
->target : { elements: number[]; }
->elements : number[]
+>value.target.elements : any
+>value.target : any
+>value : never
+>target : any
+>elements : any
     }
 }
 
@@ -69,18 +70,18 @@ function checkProperty(container: { value: object }) {
 >value : object
 >isTupleReference(container.value) : boolean
 >isTupleReference : (value: object) => value is TupleReference
->container.value : object
+>container.value : object & not Reference
 >container : { value: object; }
->value : object
+>value : object & not Reference
 
         container.value.target.elements;
->container.value.target.elements : number[]
->container.value.target : { elements: number[]; }
->container.value : TupleReference
+>container.value.target.elements : any
+>container.value.target : any
+>container.value : never
 >container : { value: object; }
->value : TupleReference
->target : { elements: number[]; }
->elements : number[]
+>value : never
+>target : any
+>elements : any
     }
 }
 
@@ -100,13 +101,70 @@ function checkUnknown(value: unknown) {
 >value : unknown
 >typeof value === "number" : boolean
 >typeof value : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
->value : unknown
+>value : not number
 >"number" : "number"
 
         value.toFixed();
->value.toFixed() : string
->value.toFixed : (fractionDigits?: number) => string
->value : number
->toFixed : (fractionDigits?: number) => string
+>value.toFixed() : any
+>value.toFixed : any
+>value : never
+>toFixed : any
+    }
+}
+
+// Check the more specific predicate first to avoid excluding tuple references with the array check.
+function checkTupleBeforeArray(value: object) {
+>checkTupleBeforeArray : (value: object) => object | undefined
+>value : object
+
+    if (isTupleReference(value)) {
+>isTupleReference(value) : boolean
+>isTupleReference : (value: object) => value is TupleReference
+>value : object
+
+        return value.target.elements;
+>value.target.elements : number[]
+>value.target : { elements: number[]; }
+>value : TupleReference
+>target : { elements: number[]; }
+>elements : number[]
+    }
+    if (isArrayReference(value)) {
+>isArrayReference(value) : boolean
+>isArrayReference : (value: object) => value is Reference
+>value : object & not TupleReference
+
+        return value.target;
+>value.target : object
+>value : object & not TupleReference & Reference
+>target : object
+    }
+}
+
+function checkTupleBeforeArrayInCondition(value: object) {
+>checkTupleBeforeArrayInCondition : (value: object) => object | undefined
+>value : object
+
+    if (isTupleReference(value) && value.target.elements.length || isArrayReference(value)) {
+>isTupleReference(value) && value.target.elements.length || isArrayReference(value) : number | boolean
+>isTupleReference(value) && value.target.elements.length : number | false
+>isTupleReference(value) : boolean
+>isTupleReference : (value: object) => value is TupleReference
+>value : object
+>value.target.elements.length : number
+>value.target.elements : number[]
+>value.target : { elements: number[]; }
+>value : TupleReference
+>target : { elements: number[]; }
+>elements : number[]
+>length : number
+>isArrayReference(value) : boolean
+>isArrayReference : (value: object) => value is Reference
+>value : object
+
+        return value.target;
+>value.target : object
+>value : Reference
+>target : object
     }
 }

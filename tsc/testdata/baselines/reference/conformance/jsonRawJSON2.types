@@ -150,7 +150,7 @@ if (JSON.isRawJSON(g)) {
     const s: string = g.rawJSON;
 >s : string
 >g.rawJSON : string
->g : { rawJSON: string; }
+>g : { rawJSON: string; } & not RawJSON
 >rawJSON : string
 }
 

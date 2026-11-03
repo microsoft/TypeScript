@@ -34,76 +34,118 @@ declare function acceptsNotReference(value: not Reference): void;
 >value : Symbol(value, Decl(negatedPartialTypeGuards.ts, 10, 37))
 >Reference : Symbol(Reference, Decl(negatedPartialTypeGuards.ts, 0, 0))
 
+// Partial predicates are treated as invertible, so their false branches exclude subtypes too.
 function checkReference(value: object) {
 >checkReference : Symbol(checkReference, Decl(negatedPartialTypeGuards.ts, 10, 65))
->value : Symbol(value, Decl(negatedPartialTypeGuards.ts, 12, 24))
+>value : Symbol(value, Decl(negatedPartialTypeGuards.ts, 13, 24))
 
     if (isArrayReference(value)) {
 >isArrayReference : Symbol(isArrayReference, Decl(negatedPartialTypeGuards.ts, 6, 1))
->value : Symbol(value, Decl(negatedPartialTypeGuards.ts, 12, 24))
+>value : Symbol(value, Decl(negatedPartialTypeGuards.ts, 13, 24))
 
         return;
     }
     acceptsNotReference(value);
 >acceptsNotReference : Symbol(acceptsNotReference, Decl(negatedPartialTypeGuards.ts, 9, 74))
->value : Symbol(value, Decl(negatedPartialTypeGuards.ts, 12, 24))
+>value : Symbol(value, Decl(negatedPartialTypeGuards.ts, 13, 24))
 
     if (isTupleReference(value)) {
 >isTupleReference : Symbol(isTupleReference, Decl(negatedPartialTypeGuards.ts, 8, 69))
->value : Symbol(value, Decl(negatedPartialTypeGuards.ts, 12, 24))
+>value : Symbol(value, Decl(negatedPartialTypeGuards.ts, 13, 24))
 
         value.target.elements;
->value.target.elements : Symbol(elements, Decl(negatedPartialTypeGuards.ts, 5, 13))
->value.target : Symbol(TupleReference.target, Decl(negatedPartialTypeGuards.ts, 4, 44))
->value : Symbol(value, Decl(negatedPartialTypeGuards.ts, 12, 24))
->target : Symbol(TupleReference.target, Decl(negatedPartialTypeGuards.ts, 4, 44))
->elements : Symbol(elements, Decl(negatedPartialTypeGuards.ts, 5, 13))
+>value : Symbol(value, Decl(negatedPartialTypeGuards.ts, 13, 24))
     }
 }
 
 function checkProperty(container: { value: object }) {
->checkProperty : Symbol(checkProperty, Decl(negatedPartialTypeGuards.ts, 20, 1))
->container : Symbol(container, Decl(negatedPartialTypeGuards.ts, 22, 23))
->value : Symbol(value, Decl(negatedPartialTypeGuards.ts, 22, 35))
+>checkProperty : Symbol(checkProperty, Decl(negatedPartialTypeGuards.ts, 21, 1))
+>container : Symbol(container, Decl(negatedPartialTypeGuards.ts, 23, 23))
+>value : Symbol(value, Decl(negatedPartialTypeGuards.ts, 23, 35))
 
     if (!isArrayReference(container.value) && isTupleReference(container.value)) {
 >isArrayReference : Symbol(isArrayReference, Decl(negatedPartialTypeGuards.ts, 6, 1))
->container.value : Symbol(value, Decl(negatedPartialTypeGuards.ts, 22, 35))
->container : Symbol(container, Decl(negatedPartialTypeGuards.ts, 22, 23))
->value : Symbol(value, Decl(negatedPartialTypeGuards.ts, 22, 35))
+>container.value : Symbol(value, Decl(negatedPartialTypeGuards.ts, 23, 35))
+>container : Symbol(container, Decl(negatedPartialTypeGuards.ts, 23, 23))
+>value : Symbol(value, Decl(negatedPartialTypeGuards.ts, 23, 35))
 >isTupleReference : Symbol(isTupleReference, Decl(negatedPartialTypeGuards.ts, 8, 69))
->container.value : Symbol(value, Decl(negatedPartialTypeGuards.ts, 22, 35))
->container : Symbol(container, Decl(negatedPartialTypeGuards.ts, 22, 23))
->value : Symbol(value, Decl(negatedPartialTypeGuards.ts, 22, 35))
+>container.value : Symbol(value, Decl(negatedPartialTypeGuards.ts, 23, 35))
+>container : Symbol(container, Decl(negatedPartialTypeGuards.ts, 23, 23))
+>value : Symbol(value, Decl(negatedPartialTypeGuards.ts, 23, 35))
 
         container.value.target.elements;
->container.value.target.elements : Symbol(elements, Decl(negatedPartialTypeGuards.ts, 5, 13))
->container.value.target : Symbol(TupleReference.target, Decl(negatedPartialTypeGuards.ts, 4, 44))
->container.value : Symbol(value, Decl(negatedPartialTypeGuards.ts, 22, 35))
->container : Symbol(container, Decl(negatedPartialTypeGuards.ts, 22, 23))
->value : Symbol(value, Decl(negatedPartialTypeGuards.ts, 22, 35))
->target : Symbol(TupleReference.target, Decl(negatedPartialTypeGuards.ts, 4, 44))
->elements : Symbol(elements, Decl(negatedPartialTypeGuards.ts, 5, 13))
+>container.value : Symbol(value, Decl(negatedPartialTypeGuards.ts, 23, 35))
+>container : Symbol(container, Decl(negatedPartialTypeGuards.ts, 23, 23))
+>value : Symbol(value, Decl(negatedPartialTypeGuards.ts, 23, 35))
     }
 }
 
 declare function isSmallNumber(value: unknown): value is number;
->isSmallNumber : Symbol(isSmallNumber, Decl(negatedPartialTypeGuards.ts, 26, 1))
->value : Symbol(value, Decl(negatedPartialTypeGuards.ts, 28, 31))
->value : Symbol(value, Decl(negatedPartialTypeGuards.ts, 28, 31))
+>isSmallNumber : Symbol(isSmallNumber, Decl(negatedPartialTypeGuards.ts, 27, 1))
+>value : Symbol(value, Decl(negatedPartialTypeGuards.ts, 29, 31))
+>value : Symbol(value, Decl(negatedPartialTypeGuards.ts, 29, 31))
 
 function checkUnknown(value: unknown) {
->checkUnknown : Symbol(checkUnknown, Decl(negatedPartialTypeGuards.ts, 28, 64))
->value : Symbol(value, Decl(negatedPartialTypeGuards.ts, 29, 22))
+>checkUnknown : Symbol(checkUnknown, Decl(negatedPartialTypeGuards.ts, 29, 64))
+>value : Symbol(value, Decl(negatedPartialTypeGuards.ts, 30, 22))
 
     if (!isSmallNumber(value) && typeof value === "number") {
->isSmallNumber : Symbol(isSmallNumber, Decl(negatedPartialTypeGuards.ts, 26, 1))
->value : Symbol(value, Decl(negatedPartialTypeGuards.ts, 29, 22))
->value : Symbol(value, Decl(negatedPartialTypeGuards.ts, 29, 22))
+>isSmallNumber : Symbol(isSmallNumber, Decl(negatedPartialTypeGuards.ts, 27, 1))
+>value : Symbol(value, Decl(negatedPartialTypeGuards.ts, 30, 22))
+>value : Symbol(value, Decl(negatedPartialTypeGuards.ts, 30, 22))
 
         value.toFixed();
->value.toFixed : Symbol(Number.toFixed, Decl(lib.es5.d.ts, --, --))
->value : Symbol(value, Decl(negatedPartialTypeGuards.ts, 29, 22))
->toFixed : Symbol(Number.toFixed, Decl(lib.es5.d.ts, --, --))
+>value : Symbol(value, Decl(negatedPartialTypeGuards.ts, 30, 22))
+    }
+}
+
+// Check the more specific predicate first to avoid excluding tuple references with the array check.
+function checkTupleBeforeArray(value: object) {
+>checkTupleBeforeArray : Symbol(checkTupleBeforeArray, Decl(negatedPartialTypeGuards.ts, 34, 1))
+>value : Symbol(value, Decl(negatedPartialTypeGuards.ts, 37, 31))
+
+    if (isTupleReference(value)) {
+>isTupleReference : Symbol(isTupleReference, Decl(negatedPartialTypeGuards.ts, 8, 69))
+>value : Symbol(value, Decl(negatedPartialTypeGuards.ts, 37, 31))
+
+        return value.target.elements;
+>value.target.elements : Symbol(elements, Decl(negatedPartialTypeGuards.ts, 5, 13))
+>value.target : Symbol(TupleReference.target, Decl(negatedPartialTypeGuards.ts, 4, 44))
+>value : Symbol(value, Decl(negatedPartialTypeGuards.ts, 37, 31))
+>target : Symbol(TupleReference.target, Decl(negatedPartialTypeGuards.ts, 4, 44))
+>elements : Symbol(elements, Decl(negatedPartialTypeGuards.ts, 5, 13))
+    }
+    if (isArrayReference(value)) {
+>isArrayReference : Symbol(isArrayReference, Decl(negatedPartialTypeGuards.ts, 6, 1))
+>value : Symbol(value, Decl(negatedPartialTypeGuards.ts, 37, 31))
+
+        return value.target;
+>value.target : Symbol(Reference.target, Decl(negatedPartialTypeGuards.ts, 0, 21))
+>value : Symbol(value, Decl(negatedPartialTypeGuards.ts, 37, 31))
+>target : Symbol(Reference.target, Decl(negatedPartialTypeGuards.ts, 0, 21))
+    }
+}
+
+function checkTupleBeforeArrayInCondition(value: object) {
+>checkTupleBeforeArrayInCondition : Symbol(checkTupleBeforeArrayInCondition, Decl(negatedPartialTypeGuards.ts, 44, 1))
+>value : Symbol(value, Decl(negatedPartialTypeGuards.ts, 46, 42))
+
+    if (isTupleReference(value) && value.target.elements.length || isArrayReference(value)) {
+>isTupleReference : Symbol(isTupleReference, Decl(negatedPartialTypeGuards.ts, 8, 69))
+>value : Symbol(value, Decl(negatedPartialTypeGuards.ts, 46, 42))
+>value.target.elements.length : Symbol(Array.length, Decl(lib.es5.d.ts, --, --))
+>value.target.elements : Symbol(elements, Decl(negatedPartialTypeGuards.ts, 5, 13))
+>value.target : Symbol(TupleReference.target, Decl(negatedPartialTypeGuards.ts, 4, 44))
+>value : Symbol(value, Decl(negatedPartialTypeGuards.ts, 46, 42))
+>target : Symbol(TupleReference.target, Decl(negatedPartialTypeGuards.ts, 4, 44))
+>elements : Symbol(elements, Decl(negatedPartialTypeGuards.ts, 5, 13))
+>length : Symbol(Array.length, Decl(lib.es5.d.ts, --, --))
+>isArrayReference : Symbol(isArrayReference, Decl(negatedPartialTypeGuards.ts, 6, 1))
+>value : Symbol(value, Decl(negatedPartialTypeGuards.ts, 46, 42))
+
+        return value.target;
+>value.target : Symbol(Reference.target, Decl(negatedPartialTypeGuards.ts, 0, 21))
+>value : Symbol(value, Decl(negatedPartialTypeGuards.ts, 46, 42))
+>target : Symbol(Reference.target, Decl(negatedPartialTypeGuards.ts, 0, 21))
     }
 }

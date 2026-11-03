@@ -981,9 +981,11 @@ func (c *Checker) getNarrowedTypeWorker(t *Type, candidate *Type, assumeTrue boo
 			t = c.unknownUnionType
 		}
 		trueType := c.getNarrowedType(t, candidate, true /*assumeTrue*/, false /*checkDerived*/)
-		return c.recombineUnknownType(c.filterType(t, func(t *Type) bool {
+		filtered := c.recombineUnknownType(c.filterType(t, func(t *Type) bool {
 			return !c.isTypeSubsetOf(t, trueType)
 		}))
+		// Treat type predicates as invertible, even if they only recognize a subset of the candidate.
+		return c.introduceNegationIntoNarrowedType(filtered, c.getReducedType(candidate))
 	}
 	if t.flags&TypeFlagsAnyOrUnknown != 0 {
 		return candidate

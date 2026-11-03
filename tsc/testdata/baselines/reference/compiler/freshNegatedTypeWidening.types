@@ -27,7 +27,7 @@ function assertWrappedNode(node: BaseNode) {
 
         return node as WrappedNode;
 >node as WrappedNode : WrappedNode
->node : BaseNode
+>node : BaseNode & not WrappedNode
     }
     return node;
 >node : WrappedNode
@@ -65,7 +65,7 @@ function skipWrappers(node: BaseNode) {
 >expression : BaseNode
     }
     return node;
->node : BaseNode
+>node : BaseNode & not WrappedNode
 }
 
 interface NamedNode extends BaseNode {
@@ -102,7 +102,7 @@ function skipSpecialNodes(node: BaseNode) {
 >0 : 0
     }
     return node;
->node : BaseNode
+>node : BaseNode & not NamedNode & not WrappedNode
 }
 
 function isOrdinaryNode(node: BaseNode) {

@@ -30,7 +30,7 @@ function needsToNarrowTheType<First extends { foo: string }, Second extends { ba
 >console : Console
 >log : (...data: any[]) => void
 >thing.bar : string
->thing : Second
+>thing : Second & not First
 >bar : string
     }
 

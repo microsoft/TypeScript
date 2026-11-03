@@ -1,8 +1,8 @@
 // @strict: true
 // @noEmit: true
 
-// User-defined guards do not introduce negations in the false branch because they may
-// only recognize a subset of the declared predicate type.
+// User-defined guards introduce fresh negations in the false branch. This deliberately treats
+// predicates as invertible, even though a guard may only recognize a subset of its predicate type.
 
 interface Cat {
     meow(): void;
@@ -16,7 +16,7 @@ declare const a: {};
 if (isCat(a)) {
     a; // {} & Cat
 } else {
-    a; // {}
+    a; // {} & not Cat
     wantsNotCat(a);
 }
 
@@ -25,7 +25,7 @@ function generic<T>(x: T) {
     if (isCat(x)) {
         x; // T & Cat
     } else {
-        x; // T
+        x; // T & not Cat
     }
 }
 
@@ -48,5 +48,5 @@ if (isNotCat(c)) {
     c; // {} & not Cat
     wantsNotCat(c);
 } else {
-    c; // {}
+    c; // Cat
 }

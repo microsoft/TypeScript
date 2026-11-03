@@ -1,0 +1,262 @@
+//// [tests/cases/compiler/negatedTypePredicateFalseBranches.ts] ////
+
+=== negatedTypePredicateFalseBranches.ts ===
+interface Cat {
+>Cat : Symbol(Cat, Decl(negatedTypePredicateFalseBranches.ts, 0, 0))
+
+    meow(): void;
+>meow : Symbol(Cat.meow, Decl(negatedTypePredicateFalseBranches.ts, 0, 15))
+}
+
+declare function isCat(value: unknown): value is Cat;
+>isCat : Symbol(isCat, Decl(negatedTypePredicateFalseBranches.ts, 2, 1))
+>value : Symbol(value, Decl(negatedTypePredicateFalseBranches.ts, 4, 23))
+>value : Symbol(value, Decl(negatedTypePredicateFalseBranches.ts, 4, 23))
+>Cat : Symbol(Cat, Decl(negatedTypePredicateFalseBranches.ts, 0, 0))
+
+declare function isNotCat(value: unknown): value is not Cat;
+>isNotCat : Symbol(isNotCat, Decl(negatedTypePredicateFalseBranches.ts, 4, 53))
+>value : Symbol(value, Decl(negatedTypePredicateFalseBranches.ts, 5, 26))
+>value : Symbol(value, Decl(negatedTypePredicateFalseBranches.ts, 5, 26))
+>Cat : Symbol(Cat, Decl(negatedTypePredicateFalseBranches.ts, 0, 0))
+
+declare function isString(value: unknown): value is string;
+>isString : Symbol(isString, Decl(negatedTypePredicateFalseBranches.ts, 5, 60))
+>value : Symbol(value, Decl(negatedTypePredicateFalseBranches.ts, 6, 26))
+>value : Symbol(value, Decl(negatedTypePredicateFalseBranches.ts, 6, 26))
+
+declare function acceptsNotCat(value: not Cat): void;
+>acceptsNotCat : Symbol(acceptsNotCat, Decl(negatedTypePredicateFalseBranches.ts, 6, 59))
+>value : Symbol(value, Decl(negatedTypePredicateFalseBranches.ts, 7, 31))
+>Cat : Symbol(Cat, Decl(negatedTypePredicateFalseBranches.ts, 0, 0))
+
+declare function acceptsCat(value: Cat): void;
+>acceptsCat : Symbol(acceptsCat, Decl(negatedTypePredicateFalseBranches.ts, 7, 53))
+>value : Symbol(value, Decl(negatedTypePredicateFalseBranches.ts, 8, 28))
+>Cat : Symbol(Cat, Decl(negatedTypePredicateFalseBranches.ts, 0, 0))
+
+declare function acceptsNever(value: never): void;
+>acceptsNever : Symbol(acceptsNever, Decl(negatedTypePredicateFalseBranches.ts, 8, 46))
+>value : Symbol(value, Decl(negatedTypePredicateFalseBranches.ts, 9, 30))
+
+function checkObject(value: object) {
+>checkObject : Symbol(checkObject, Decl(negatedTypePredicateFalseBranches.ts, 9, 50))
+>value : Symbol(value, Decl(negatedTypePredicateFalseBranches.ts, 11, 21))
+
+    if (isCat(value)) {
+>isCat : Symbol(isCat, Decl(negatedTypePredicateFalseBranches.ts, 2, 1))
+>value : Symbol(value, Decl(negatedTypePredicateFalseBranches.ts, 11, 21))
+
+        acceptsCat(value);
+>acceptsCat : Symbol(acceptsCat, Decl(negatedTypePredicateFalseBranches.ts, 7, 53))
+>value : Symbol(value, Decl(negatedTypePredicateFalseBranches.ts, 11, 21))
+
+    } else {
+        acceptsNotCat(value);
+>acceptsNotCat : Symbol(acceptsNotCat, Decl(negatedTypePredicateFalseBranches.ts, 6, 59))
+>value : Symbol(value, Decl(negatedTypePredicateFalseBranches.ts, 11, 21))
+    }
+}
+
+function checkEmptyObject(value: {}) {
+>checkEmptyObject : Symbol(checkEmptyObject, Decl(negatedTypePredicateFalseBranches.ts, 17, 1))
+>value : Symbol(value, Decl(negatedTypePredicateFalseBranches.ts, 19, 26))
+
+    if (!isCat(value)) {
+>isCat : Symbol(isCat, Decl(negatedTypePredicateFalseBranches.ts, 2, 1))
+>value : Symbol(value, Decl(negatedTypePredicateFalseBranches.ts, 19, 26))
+
+        acceptsNotCat(value);
+>acceptsNotCat : Symbol(acceptsNotCat, Decl(negatedTypePredicateFalseBranches.ts, 6, 59))
+>value : Symbol(value, Decl(negatedTypePredicateFalseBranches.ts, 19, 26))
+    }
+}
+
+function checkUnknown(value: unknown) {
+>checkUnknown : Symbol(checkUnknown, Decl(negatedTypePredicateFalseBranches.ts, 23, 1))
+>value : Symbol(value, Decl(negatedTypePredicateFalseBranches.ts, 25, 22))
+
+    if (isCat(value)) {
+>isCat : Symbol(isCat, Decl(negatedTypePredicateFalseBranches.ts, 2, 1))
+>value : Symbol(value, Decl(negatedTypePredicateFalseBranches.ts, 25, 22))
+
+        acceptsCat(value);
+>acceptsCat : Symbol(acceptsCat, Decl(negatedTypePredicateFalseBranches.ts, 7, 53))
+>value : Symbol(value, Decl(negatedTypePredicateFalseBranches.ts, 25, 22))
+
+    } else {
+        acceptsNotCat(value);
+>acceptsNotCat : Symbol(acceptsNotCat, Decl(negatedTypePredicateFalseBranches.ts, 6, 59))
+>value : Symbol(value, Decl(negatedTypePredicateFalseBranches.ts, 25, 22))
+    }
+}
+
+function checkGeneric<T>(value: T) {
+>checkGeneric : Symbol(checkGeneric, Decl(negatedTypePredicateFalseBranches.ts, 31, 1))
+>T : Symbol(T, Decl(negatedTypePredicateFalseBranches.ts, 33, 22))
+>value : Symbol(value, Decl(negatedTypePredicateFalseBranches.ts, 33, 25))
+>T : Symbol(T, Decl(negatedTypePredicateFalseBranches.ts, 33, 22))
+
+    if (isCat(value)) {
+>isCat : Symbol(isCat, Decl(negatedTypePredicateFalseBranches.ts, 2, 1))
+>value : Symbol(value, Decl(negatedTypePredicateFalseBranches.ts, 33, 25))
+
+        acceptsCat(value);
+>acceptsCat : Symbol(acceptsCat, Decl(negatedTypePredicateFalseBranches.ts, 7, 53))
+>value : Symbol(value, Decl(negatedTypePredicateFalseBranches.ts, 33, 25))
+
+    } else {
+        acceptsNotCat(value);
+>acceptsNotCat : Symbol(acceptsNotCat, Decl(negatedTypePredicateFalseBranches.ts, 6, 59))
+>value : Symbol(value, Decl(negatedTypePredicateFalseBranches.ts, 33, 25))
+    }
+}
+
+function checkProperty(container: { value: object }) {
+>checkProperty : Symbol(checkProperty, Decl(negatedTypePredicateFalseBranches.ts, 39, 1))
+>container : Symbol(container, Decl(negatedTypePredicateFalseBranches.ts, 41, 23))
+>value : Symbol(value, Decl(negatedTypePredicateFalseBranches.ts, 41, 35))
+
+    if (isCat(container.value)) {
+>isCat : Symbol(isCat, Decl(negatedTypePredicateFalseBranches.ts, 2, 1))
+>container.value : Symbol(value, Decl(negatedTypePredicateFalseBranches.ts, 41, 35))
+>container : Symbol(container, Decl(negatedTypePredicateFalseBranches.ts, 41, 23))
+>value : Symbol(value, Decl(negatedTypePredicateFalseBranches.ts, 41, 35))
+
+        acceptsCat(container.value);
+>acceptsCat : Symbol(acceptsCat, Decl(negatedTypePredicateFalseBranches.ts, 7, 53))
+>container.value : Symbol(value, Decl(negatedTypePredicateFalseBranches.ts, 41, 35))
+>container : Symbol(container, Decl(negatedTypePredicateFalseBranches.ts, 41, 23))
+>value : Symbol(value, Decl(negatedTypePredicateFalseBranches.ts, 41, 35))
+
+    } else {
+        acceptsNotCat(container.value);
+>acceptsNotCat : Symbol(acceptsNotCat, Decl(negatedTypePredicateFalseBranches.ts, 6, 59))
+>container.value : Symbol(value, Decl(negatedTypePredicateFalseBranches.ts, 41, 35))
+>container : Symbol(container, Decl(negatedTypePredicateFalseBranches.ts, 41, 23))
+>value : Symbol(value, Decl(negatedTypePredicateFalseBranches.ts, 41, 35))
+    }
+}
+
+interface Animal {
+>Animal : Symbol(Animal, Decl(negatedTypePredicateFalseBranches.ts, 47, 1))
+
+    isCat(): this is Cat & Animal;
+>isCat : Symbol(Animal.isCat, Decl(negatedTypePredicateFalseBranches.ts, 49, 18))
+>Cat : Symbol(Cat, Decl(negatedTypePredicateFalseBranches.ts, 0, 0))
+>Animal : Symbol(Animal, Decl(negatedTypePredicateFalseBranches.ts, 47, 1))
+}
+
+function checkReceiver(value: Animal) {
+>checkReceiver : Symbol(checkReceiver, Decl(negatedTypePredicateFalseBranches.ts, 51, 1))
+>value : Symbol(value, Decl(negatedTypePredicateFalseBranches.ts, 53, 23))
+>Animal : Symbol(Animal, Decl(negatedTypePredicateFalseBranches.ts, 47, 1))
+
+    if (value.isCat()) {
+>value.isCat : Symbol(Animal.isCat, Decl(negatedTypePredicateFalseBranches.ts, 49, 18))
+>value : Symbol(value, Decl(negatedTypePredicateFalseBranches.ts, 53, 23))
+>isCat : Symbol(Animal.isCat, Decl(negatedTypePredicateFalseBranches.ts, 49, 18))
+
+        acceptsCat(value);
+>acceptsCat : Symbol(acceptsCat, Decl(negatedTypePredicateFalseBranches.ts, 7, 53))
+>value : Symbol(value, Decl(negatedTypePredicateFalseBranches.ts, 53, 23))
+
+    } else {
+        const notCat: not (Cat & Animal) = value;
+>notCat : Symbol(notCat, Decl(negatedTypePredicateFalseBranches.ts, 57, 13))
+>Cat : Symbol(Cat, Decl(negatedTypePredicateFalseBranches.ts, 0, 0))
+>Animal : Symbol(Animal, Decl(negatedTypePredicateFalseBranches.ts, 47, 1))
+>value : Symbol(value, Decl(negatedTypePredicateFalseBranches.ts, 53, 23))
+    }
+}
+
+function checkNegatedPredicate(value: unknown) {
+>checkNegatedPredicate : Symbol(checkNegatedPredicate, Decl(negatedTypePredicateFalseBranches.ts, 59, 1))
+>value : Symbol(value, Decl(negatedTypePredicateFalseBranches.ts, 61, 31))
+
+    if (!isNotCat(value)) {
+>isNotCat : Symbol(isNotCat, Decl(negatedTypePredicateFalseBranches.ts, 4, 53))
+>value : Symbol(value, Decl(negatedTypePredicateFalseBranches.ts, 61, 31))
+
+        acceptsCat(value);
+>acceptsCat : Symbol(acceptsCat, Decl(negatedTypePredicateFalseBranches.ts, 7, 53))
+>value : Symbol(value, Decl(negatedTypePredicateFalseBranches.ts, 61, 31))
+    }
+}
+
+function checkDisjointUnion(value: string | number) {
+>checkDisjointUnion : Symbol(checkDisjointUnion, Decl(negatedTypePredicateFalseBranches.ts, 65, 1))
+>value : Symbol(value, Decl(negatedTypePredicateFalseBranches.ts, 67, 28))
+
+    if (!isString(value)) {
+>isString : Symbol(isString, Decl(negatedTypePredicateFalseBranches.ts, 5, 60))
+>value : Symbol(value, Decl(negatedTypePredicateFalseBranches.ts, 67, 28))
+
+        const number: number = value;
+>number : Symbol(number, Decl(negatedTypePredicateFalseBranches.ts, 69, 13))
+>value : Symbol(value, Decl(negatedTypePredicateFalseBranches.ts, 67, 28))
+    }
+}
+
+function checkRepeatedPredicate(value: unknown) {
+>checkRepeatedPredicate : Symbol(checkRepeatedPredicate, Decl(negatedTypePredicateFalseBranches.ts, 71, 1))
+>value : Symbol(value, Decl(negatedTypePredicateFalseBranches.ts, 73, 32))
+
+    if (!isCat(value) && isCat(value)) {
+>isCat : Symbol(isCat, Decl(negatedTypePredicateFalseBranches.ts, 2, 1))
+>value : Symbol(value, Decl(negatedTypePredicateFalseBranches.ts, 73, 32))
+>isCat : Symbol(isCat, Decl(negatedTypePredicateFalseBranches.ts, 2, 1))
+>value : Symbol(value, Decl(negatedTypePredicateFalseBranches.ts, 73, 32))
+
+        acceptsNever(value);
+>acceptsNever : Symbol(acceptsNever, Decl(negatedTypePredicateFalseBranches.ts, 8, 46))
+>value : Symbol(value, Decl(negatedTypePredicateFalseBranches.ts, 73, 32))
+    }
+}
+
+type Membership = { premium: false } | { premium: true };
+>Membership : Symbol(Membership, Decl(negatedTypePredicateFalseBranches.ts, 77, 1))
+>premium : Symbol(premium, Decl(negatedTypePredicateFalseBranches.ts, 79, 19))
+>premium : Symbol(premium, Decl(negatedTypePredicateFalseBranches.ts, 79, 40))
+
+declare function isPremium(value: Membership): value is Membership & { premium: true };
+>isPremium : Symbol(isPremium, Decl(negatedTypePredicateFalseBranches.ts, 79, 57))
+>value : Symbol(value, Decl(negatedTypePredicateFalseBranches.ts, 80, 27))
+>Membership : Symbol(Membership, Decl(negatedTypePredicateFalseBranches.ts, 77, 1))
+>value : Symbol(value, Decl(negatedTypePredicateFalseBranches.ts, 80, 27))
+>Membership : Symbol(Membership, Decl(negatedTypePredicateFalseBranches.ts, 77, 1))
+>premium : Symbol(premium, Decl(negatedTypePredicateFalseBranches.ts, 80, 70))
+
+function checkReducedPredicate(value: Membership) {
+>checkReducedPredicate : Symbol(checkReducedPredicate, Decl(negatedTypePredicateFalseBranches.ts, 80, 87))
+>value : Symbol(value, Decl(negatedTypePredicateFalseBranches.ts, 82, 31))
+>Membership : Symbol(Membership, Decl(negatedTypePredicateFalseBranches.ts, 77, 1))
+
+    if (!isPremium(value)) {
+>isPremium : Symbol(isPremium, Decl(negatedTypePredicateFalseBranches.ts, 79, 57))
+>value : Symbol(value, Decl(negatedTypePredicateFalseBranches.ts, 82, 31))
+
+        const free: { premium: false } = value;
+>free : Symbol(free, Decl(negatedTypePredicateFalseBranches.ts, 84, 13))
+>premium : Symbol(premium, Decl(negatedTypePredicateFalseBranches.ts, 84, 21))
+>value : Symbol(value, Decl(negatedTypePredicateFalseBranches.ts, 82, 31))
+    }
+}
+
+function checkNegationDoesNotEscape(value: object) {
+>checkNegationDoesNotEscape : Symbol(checkNegationDoesNotEscape, Decl(negatedTypePredicateFalseBranches.ts, 86, 1))
+>value : Symbol(value, Decl(negatedTypePredicateFalseBranches.ts, 88, 36))
+
+    if (!isCat(value)) {
+>isCat : Symbol(isCat, Decl(negatedTypePredicateFalseBranches.ts, 2, 1))
+>value : Symbol(value, Decl(negatedTypePredicateFalseBranches.ts, 88, 36))
+
+        acceptsNotCat(value);
+>acceptsNotCat : Symbol(acceptsNotCat, Decl(negatedTypePredicateFalseBranches.ts, 6, 59))
+>value : Symbol(value, Decl(negatedTypePredicateFalseBranches.ts, 88, 36))
+    }
+    acceptsNotCat(value); // Error: the false-branch exclusion does not survive the merge.
+>acceptsNotCat : Symbol(acceptsNotCat, Decl(negatedTypePredicateFalseBranches.ts, 6, 59))
+>value : Symbol(value, Decl(negatedTypePredicateFalseBranches.ts, 88, 36))
+}
+
