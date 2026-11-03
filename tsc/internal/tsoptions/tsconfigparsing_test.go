@@ -1158,6 +1158,76 @@ func TestParseJsonSourceFileConfigFileContentDoesNotDuplicateUnquotedKeyDiagnost
 	}
 }
 
+// Regression for #65079: malformed JSON can recover an empty "files" array without
+// a usable property node. Reporting TS18002 must not panic and should fall back to
+// an unlocated compiler diagnostic while preserving parse errors.
+func TestParseJsonSourceFileConfigFileContentEmptyFilesMissingNode(t *testing.T) {
+	t.Parallel()
+
+	parseEmptyFilesConfig := func(t *testing.T, jsonText string) *tsoptions.ParsedCommandLine {
+		t.Helper()
+		files := map[string]string{
+			"/apath/tsconfig.json": jsonText,
+			"/apath/a.ts":          "",
+		}
+		fs := tsoptionstest.NewVFS(files, tspath.CaseSensitive /*caseSensitivity*/)
+		configFileName := tspath.RootedFilePath("/apath/tsconfig.json")
+		configFile := tsoptions.NewTsconfigSourceFileFromFilePath(
+			configFileName,
+			fs.CaseSensitivity().PathKey(tspath.RootedPath(configFileName)),
+			jsonText,
+		)
+		return tsoptions.ParseJsonSourceFileConfigFileContent(
+			configFile,
+			tsoptions.NewDefaultParseConfigHost(fs),
+			"/apath",
+			nil,
+			nil,
+			nil,
+			nil,
+		)
+	}
+
+	findEmptyFilesDiagnostic := func(errors []*ast.Diagnostic) *ast.Diagnostic {
+		return core.Find(errors, func(d *ast.Diagnostic) bool {
+			return d.Code() == diagnostics.The_files_list_in_config_file_0_is_empty.Code()
+		})
+	}
+
+	t.Run("valid empty files list is located", func(t *testing.T) {
+		t.Parallel()
+		parsed := parseEmptyFilesConfig(t, `{"files":[]}`)
+		emptyFiles := findEmptyFilesDiagnostic(parsed.GetConfigFileParsingDiagnostics())
+		assert.Assert(t, emptyFiles != nil, "expected TS18002, got: %v", parsed.GetConfigFileParsingDiagnostics())
+		assert.Assert(t, emptyFiles.File() != nil, "valid empty files should produce a located diagnostic")
+		assert.Assert(t, emptyFiles.Len() > 0)
+	})
+
+	for _, tc := range []struct {
+		name string
+		json string
+	}{
+		{name: "extra closing bracket", json: `{"files":[]}]}`},
+		{name: "issue repro missing bracket", json: `{"files":[}]}`},
+	} {
+		t.Run(tc.name, func(t *testing.T) {
+			t.Parallel()
+			// Completing without panic is the primary regression signal for #65079.
+			parsed := parseEmptyFilesConfig(t, tc.json)
+
+			allDiagnostics := parsed.GetConfigFileParsingDiagnostics()
+			emptyFiles := findEmptyFilesDiagnostic(allDiagnostics)
+			assert.Assert(t, emptyFiles != nil, "expected TS18002, got: %v", allDiagnostics)
+			assert.Assert(t, emptyFiles.File() == nil, "missing files property node should yield an unlocated TS18002")
+
+			parseErrors := core.Filter(allDiagnostics, func(d *ast.Diagnostic) bool {
+				return d.Code() != diagnostics.The_files_list_in_config_file_0_is_empty.Code()
+			})
+			assert.Assert(t, len(parseErrors) > 0, "expected parse diagnostics to be preserved for malformed JSON, got only: %v", allDiagnostics)
+		})
+	}
+}
+
 func TestParseJsonSourceFileConfigFileContentReportsQuestionTokenDiagnostics(t *testing.T) {
 	t.Parallel()
 	parsed := tsoptionstest.GetParsedCommandLine(t, `{
