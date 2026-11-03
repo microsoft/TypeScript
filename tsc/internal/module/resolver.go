@@ -541,7 +541,8 @@ func (r *DefaultResolver) ResolvePackageDirectory(moduleName string, containingF
 	if tspath.IsExternalModuleNameRelative(moduleName) {
 		packageDirectory := containingDirectory.ResolveDirectory(moduleName)
 		if r.fs.DirectoryExists(packageDirectory) {
-			return state.createResolvedModuleHandlingSymlink(&resolved{path: tspath.RootedFilePathFromPath(packageDirectory.AsPath())})
+			originalPath, resolvedPath := state.getOriginalAndResolvedFileName(tspath.RootedFilePathFromPath(packageDirectory.AsPath()))
+			return state.createResolvedModuleHandlingSymlink(&resolved{path: resolvedPath, originalPath: originalPath})
 		}
 		return nil
 	}
