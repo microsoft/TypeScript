@@ -86,7 +86,7 @@ func fuzzCheckOrder(t *testing.T, host compiler.CompilerHost, config *tsoptions.
 	fuzzConfig.Errors = config.Errors
 
 	ctx := context.Background()
-	expected := fuzzRun(t, ctx, host, fuzzConfig, nil)
+	expected := fuzzRun(t, ctx, host, fuzzConfig, nil, nil)
 	seeds := make([]uint64, n)
 	for i := range seeds {
 		seeds[i] = uint64(i)
@@ -102,21 +102,40 @@ func fuzzCheckOrder(t *testing.T, host compiler.CompilerHost, config *tsoptions.
 	h.Write([]byte(t.Name()))
 	stream := h.Sum64()
 	for _, seed := range seeds {
-		queries := fuzzQueries(createProgram(t, host, fuzzConfig), rand.New(rand.NewPCG(seed, stream)))
+		rng := rand.New(rand.NewPCG(seed, stream))
+		queries := fuzzQueries(createProgram(t, host, fuzzConfig), rng)
+		assign := fuzzAssignCheckers(rng)
 		diverges := func(queries []fuzzQuery) bool {
-			return fuzzDiff(expected, fuzzRun(t, ctx, host, fuzzConfig, queries)) != ""
+			return fuzzDiff(expected, fuzzRun(t, ctx, host, fuzzConfig, assign, queries)) != ""
 		}
 		if !diverges(queries) {
 			continue
 		}
-		queries = fuzzMinimize(queries, diverges)
 		var b strings.Builder
-		fmt.Fprintf(&b, "check order fuzzing with TS_CHECK_ORDER_FUZZ_SEED=%d changed results after querying:\n", seed)
-		for _, q := range queries {
-			fmt.Fprintf(&b, "    %s\n", q)
+		fmt.Fprintf(&b, "check order fuzzing with TS_CHECK_ORDER_FUZZ_SEED=%d changed results", seed)
+		if assign != nil {
+			b.WriteString(" with files checked by checkers:\n")
+			program := createProgram(t, host, fuzzConfig).Program()
+			files := program.GetSourceFiles()
+			for i, c := range assign(files) {
+				if !program.IsSourceFileDefaultLibrary(files[i].PathKey()) {
+					fmt.Fprintf(&b, "    %s: %d\n", files[i].FileName(), c)
+				}
+			}
+		} else {
+			b.WriteString("\n")
+		}
+		if diverges(nil) {
+			queries = nil
+		} else {
+			queries = fuzzMinimize(queries, diverges)
+			b.WriteString("after querying:\n")
+			for _, q := range queries {
+				fmt.Fprintf(&b, "    %s\n", q)
+			}
 		}
 		b.WriteString("results in program order (-) and after the queries (+):\n")
-		b.WriteString(fuzzDiff(expected, fuzzRun(t, ctx, host, fuzzConfig, queries)))
+		b.WriteString(fuzzDiff(expected, fuzzRun(t, ctx, host, fuzzConfig, assign, queries)))
 		t.Error(b.String())
 	}
 }
@@ -248,10 +267,29 @@ func fuzzQueryResultWithIDs(c *checker.Checker, node *ast.Node, kind fuzzQueryKi
 	return ""
 }
 
+// fuzzAssignCheckers returns, for half of the seeds, a random assignment of
+// files to up to four checkers, so that results cannot depend on which
+// files share a checker.
+func fuzzAssignCheckers(rng *rand.Rand) func([]*ast.SourceFile) []int {
+	if rng.IntN(2) == 0 {
+		return nil
+	}
+	count := 2 + rng.IntN(3)
+	seed := rng.Uint64()
+	return func(files []*ast.SourceFile) []int {
+		r := rand.New(rand.NewPCG(seed, 0))
+		associations := make([]int, len(files))
+		for i := range associations {
+			associations[i] = r.IntN(count)
+		}
+		return associations
+	}
+}
+
 // fuzzRun answers queries, given in the files of the program that
 // fuzzQueries was given, in a fresh program, then returns its results.
-func fuzzRun(t *testing.T, ctx context.Context, host compiler.CompilerHost, config *tsoptions.ParsedCommandLine, queries []fuzzQuery) fuzzResult {
-	program := createProgram(t, host, config)
+func fuzzRun(t *testing.T, ctx context.Context, host compiler.CompilerHost, config *tsoptions.ParsedCommandLine, assign func([]*ast.SourceFile) []int, queries []fuzzQuery) fuzzResult {
+	program := createProgramWithCheckers(t, host, config, assign)
 	files := fuzzCheckedFiles(program)
 	// Queries name nodes of another program over the same files, so find
 	// the same nodes here by their index.
