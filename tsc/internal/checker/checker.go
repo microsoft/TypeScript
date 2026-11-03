@@ -19681,11 +19681,11 @@ func (c *Checker) propagateResolvedDeclaredMembers() {
 	r := &c.resolvingObjectTypeStack[len(c.resolvingObjectTypeStack)-1]
 	s := r.t.AsTypeReference()
 	for symbol := range r.resolvedMembers.Values() {
-		if memberInfo := s.lazy.layout.memberInfoMap[symbol.Name()]; memberInfo != nil {
+		if index := s.lazy.layout.members.Find(symbol.Name()); index >= 0 {
 			if s.properties == nil {
-				s.properties = make([]*ast.Symbol, len(s.lazy.layout.memberInfos))
+				s.properties = make([]*ast.Symbol, s.lazy.layout.members.Len())
 			}
-			s.properties[memberInfo.slotIndex] = symbol
+			s.properties[index] = symbol
 		}
 	}
 	r.resolvedMembers = nil
