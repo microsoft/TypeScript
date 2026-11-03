@@ -1,4 +1,4 @@
-//// [/component.y.z] (ScriptKind: ScriptKindTS, ContentMapper: [.y.z])
+//// [/component.part.toml] (ScriptKind: ScriptKindTS, ContentMapper: [.toml])
 --- Original ---
 export interface ComponentProps { emoji: "😀"; label: string; }
 export declare const component: ComponentProps;

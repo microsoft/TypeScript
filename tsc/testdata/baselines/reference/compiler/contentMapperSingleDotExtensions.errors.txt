@@ -1,0 +1,44 @@
+/tsconfig.json(11,41): error TS18125: Content mapper source extension '.part.toml' must contain only one dot.
+/tsconfig.json(11,55): error TS18125: Content mapper source extension '.y.z' must contain only one dot.
+/tsconfig.json(12,29): error TS18119: Content mapper output extension mapping source '.y.z' is not registered by this content mapper.
+/tsconfig.json(12,29): error TS18125: Content mapper source extension '.y.z' must contain only one dot.
+
+
+==== /tsconfig.json (4 errors) ====
+    {
+        "compilerOptions": {
+            "module": "preserve",
+            "declaration": true,
+            "rewriteRelativeImportExtensions": true,
+            "allowArbitraryExtensions": true,
+            "outDir": "/dist"
+        },
+        "contentMappers": [{
+            "package": "mapper",
+            "extensions": [".toml", ".vue", ".part.toml", ".y.z"],
+                                            ~~~~~~~~~~~~
+!!! error TS18125: Content mapper source extension '.part.toml' must contain only one dot.
+                                                          ~~~~~~
+!!! error TS18125: Content mapper source extension '.y.z' must contain only one dot.
+            "outputExtensions": { ".vue": ".part.js", ".y.z": ".js" }
+                                ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS18119: Content mapper output extension mapping source '.y.z' is not registered by this content mapper.
+                                ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS18125: Content mapper source extension '.y.z' must contain only one dot.
+        }]
+    }
+    
+==== /main.ts (0 errors) ====
+    export { config } from "./Widget.part.toml";
+    export { component } from "./Widget.part.vue";
+    export { blob } from "./blob.toml";
+    
+==== /blob.d.toml.ts (0 errors) ====
+    export declare const blob: number;
+    
+==== /node_modules/mapper/package.json (0 errors) ====
+    {
+        "name": "mapper",
+        "typescript": { "contentMapper": { "exec": ["compiler-test-mapper"] } }
+    }
+    

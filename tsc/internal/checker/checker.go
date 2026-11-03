@@ -15635,8 +15635,7 @@ func (c *Checker) resolveExternalModule(
 				} else if resolvedUsingRewritableExtension && !shouldRewrite && (mappedSource || c.program.SourceFileMayBeEmitted(sourceFile, false)) {
 					extension := tspath.GetAnyExtensionFromPath(moduleReference, nil, tspath.CaseSensitive)
 					if mappedSource {
-						rewrite, _ := sourceFile.FileName().GetExtensionRewrite(rewrites, caseSensitivity)
-						extension = rewrite.Source
+						extension = sourceFile.FileName().AnyExtension(nil, caseSensitivity)
 					}
 					c.error(
 						errorNode,

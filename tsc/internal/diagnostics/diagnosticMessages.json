@@ -8955,5 +8955,9 @@
     "Content mapper extension '{0}' must not contain path separators.": {
         "category": "Error",
         "code": 18123
+    },
+    "Content mapper source extension '{0}' must contain only one dot.": {
+        "category": "Error",
+        "code": 18125
     }
 }

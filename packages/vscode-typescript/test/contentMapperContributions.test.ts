@@ -38,17 +38,33 @@ describe("content mapper contributions", { concurrency: true }, () => {
         }
     });
 
-    test("accepts compound extensions with non-reserved suffixes", () => {
+    test("accepts single-dot sources and compound output suffixes", () => {
         assert.doesNotThrow(() =>
             validateContentMapperRegistration("mapper", [{
-                extensions: [".y.z", ".component.tsx.vue"],
+                extensions: [".toml", ".vue"],
+                inferredProjectContribution: {
+                    manifest: { ...documentedContribution.inferredProjectContribution.manifest, outputExtensions: { ".toml": ".part.js" } },
+                },
             }])
         );
     });
 
-    test("rejects builtin extensions and compound extensions ending in them", () => {
-        for (const extension of [".ts", ".tsx", ".mts", ".cts", ".js", ".jsx", ".mjs", ".cjs", ".json", ".d.ts", ".d.mts", ".d.cts"]) {
-            for (const source of [extension, extension.toUpperCase(), `.component${extension}`, `.component${extension.toUpperCase()}`]) {
+    test("rejects compound source extensions and output mapping keys", () => {
+        for (const extension of [".part.toml", ".y.z", ".d.ts", ".d.mts", ".d.cts"]) {
+            assert.throws(() => validateContentMapperRegistration("mapper", [{ extensions: [extension] }]), /only one dot/);
+            assert.throws(() =>
+                validateContentMapperRegistration("mapper", [{
+                    ...documentedContribution,
+                    inferredProjectContribution: {
+                        manifest: { ...documentedContribution.inferredProjectContribution.manifest, outputExtensions: { [extension]: ".js" } },
+                    },
+                }]), /only one dot/);
+        }
+    });
+
+    test("rejects builtin extensions", () => {
+        for (const extension of [".ts", ".tsx", ".mts", ".cts", ".js", ".jsx", ".mjs", ".cjs", ".json"]) {
+            for (const source of [extension, extension.toUpperCase()]) {
                 assert.throws(() =>
                     validateContentMapperRegistration("mapper", [{
                         extensions: [source],
@@ -62,7 +78,7 @@ describe("content mapper contributions", { concurrency: true }, () => {
             "publisher.extension",
             [{ extensions: [".vue"] }],
         ]]);
-        const document = { uri: { path: "/workspace/Component.VUE" } };
+        const document = { uri: { path: "/workspace/Component.part.VUE" } };
 
         assert.equal(documentMatchesContentMapperContributions(document, registrations), true);
     });

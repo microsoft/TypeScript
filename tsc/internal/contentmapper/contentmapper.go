@@ -73,11 +73,14 @@ func IsValidExtension(extension string) bool {
 	return len(extension) > 1 && extension[0] == '.' && !strings.ContainsAny(extension, "/\\")
 }
 
+func IsValidSourceExtension(extension string) bool {
+	return IsValidExtension(extension) && !strings.Contains(extension[1:], ".")
+}
+
 func HasReservedSourceExtension(extension string) bool {
 	for _, extensions := range tspath.AllSupportedExtensionsWithJson {
 		for _, nativeExtension := range extensions {
-			if len(extension) >= len(nativeExtension) &&
-				strings.EqualFold(extension[len(extension)-len(nativeExtension):], nativeExtension) {
+			if strings.EqualFold(extension, nativeExtension) {
 				return true
 			}
 		}

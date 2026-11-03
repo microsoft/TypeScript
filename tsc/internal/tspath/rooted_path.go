@@ -359,10 +359,6 @@ func (f RootedFilePath) AnyExtension(extensions []string, caseSensitivity CaseSe
 	return GetAnyExtensionFromPath(string(f), extensions, caseSensitivity)
 }
 
-func (f RootedFilePath) LongestExtension(extensions []string, caseSensitivity CaseSensitivity) string {
-	return GetLongestExtensionFromPath(string(f), extensions, caseSensitivity)
-}
-
 func (f RootedFilePath) HasExtension() bool {
 	return strings.Contains(getBaseFileNameFromNormalized(string(f)), ".")
 }

@@ -116,7 +116,8 @@ func GetOutputJSFileName(inputFileName tspath.RootedFilePath, options *core.Comp
 }
 
 func isContentMappedFileName(fileName tspath.RootedFilePath, host OutputPathsHost) bool {
-	return fileName.LongestExtension(host.ContentMapperExtensions(), host.CaseSensitivity()) != ""
+	extensions := host.ContentMapperExtensions()
+	return len(extensions) > 0 && fileName.AnyExtension(extensions, host.CaseSensitivity()) != ""
 }
 
 func GetOutputJSFileNameWorker(inputFileName tspath.RootedFilePath, options *core.CompilerOptions, host OutputPathsHost) tspath.RootedFilePath {
@@ -185,15 +186,8 @@ func getDeclarationEmitOutputFilePathForFileName(file tspath.RootedFilePath, opt
 
 func ChangeToDeclarationExtension(path tspath.RootedFilePath, host OutputPathsHost) tspath.RootedFilePath {
 	if rewritten, ok := path.RewriteExtension(host.ContentMapperExtensionRewrites(), host.CaseSensitivity()); ok {
-		return changeToDeclarationExtension(rewritten)
+		path = rewritten
 	}
-	if extension := path.LongestExtension(host.ContentMapperExtensions(), tspath.CaseSensitive); extension != "" {
-		return path.RemoveExtension(extension).AppendSuffix(".d" + extension + ".ts")
-	}
-	return changeToDeclarationExtension(path)
-}
-
-func changeToDeclarationExtension(path tspath.RootedFilePath) tspath.RootedFilePath {
 	pathWithoutExtension := path.RemoveFileExtension()
 	if pathWithoutExtension.AsString() == path.AsString() {
 		if extension := path.AnyExtension(nil, tspath.CaseSensitive); extension != "" {

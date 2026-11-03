@@ -408,28 +408,17 @@ func (p *ParsedCommandLine) ContentMapperExtensionRewrites() []tspath.ExtensionR
 
 func (p *ParsedCommandLine) computeContentMapperExtensionRewrites() []tspath.ExtensionRewrite {
 	var result []tspath.ExtensionRewrite
-	hasNonIdentityMapping := false
 	ignoreCase := p.CaseSensitivity().IsCaseInsensitive()
 	for _, mapper := range p.ContentMappers() {
 		outputExtensions := mapper.Definition.OutputExtensions
 		for _, source := range mapper.Definition.Extensions {
 			target, ok := getContentMapperOutputExtension(outputExtensions, source, ignoreCase)
 			if !ok || target == source || ignoreCase && strings.EqualFold(target, source) {
-				target = source
-			} else {
-				hasNonIdentityMapping = true
+				continue
 			}
 			result = append(result, tspath.ExtensionRewrite{Source: source, Target: target})
 		}
 	}
-	if !hasNonIdentityMapping {
-		return nil
-	}
-	// Identity entries prevent shorter mappings from claiming a longer registered extension.
-	// The runtime helper uses the first match, so emit the longest extensions first.
-	slices.SortStableFunc(result, func(a, b tspath.ExtensionRewrite) int {
-		return len(b.Source) - len(a.Source)
-	})
 	return result
 }
 
@@ -451,7 +440,7 @@ func getContentMapperOutputExtension(outputExtensions map[string]string, sourceE
 // or nil if no content mapper is registered for the file's extension.
 func (p *ParsedCommandLine) GetContentMapperForFileName(fileName tspath.RootedFilePath) *contentmapper.Mapper {
 	caseSensitivity := p.CaseSensitivity()
-	extension := fileName.LongestExtension(p.ContentMapperExtensions(), caseSensitivity)
+	extension := fileName.AnyExtension(nil, caseSensitivity)
 	for _, mapper := range p.ContentMappers() {
 		if slices.ContainsFunc(mapper.Definition.Extensions, func(mapperExtension string) bool {
 			return extension == mapperExtension || caseSensitivity.IsCaseInsensitive() && strings.EqualFold(extension, mapperExtension)

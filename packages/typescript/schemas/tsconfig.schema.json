@@ -83,8 +83,10 @@
                             },
                             "extensions": {
                                 "type": "array",
+                                "description": "Source extensions beginning with a dot and containing no other dots or path separators.",
                                 "items": {
-                                    "type": "string"
+                                    "type": "string",
+                                    "pattern": "^\\.[^./\\\\]+$"
                                 }
                             },
                             "options": {

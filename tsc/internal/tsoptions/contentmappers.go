@@ -104,6 +104,12 @@ func resolveContentMapperManifest(host ParseConfigHost, containingFile tspath.Ro
 				output,
 			)
 		}
+		if !contentmapper.IsValidSourceExtension(source) {
+			return contentmapper.Manifest{}, packageDirectory, ast.NewCompilerDiagnostic(
+				diagnostics.Content_mapper_source_extension_0_must_contain_only_one_dot,
+				source,
+			)
+		}
 	}
 	return contentmapper.Manifest{Name: name, Version: version, Exec: exec, CompilerOptions: compilerOptions, DynamicConfig: dynamicConfig, DefaultOutputExtensions: outputExtensions}, packageDirectory, nil
 }

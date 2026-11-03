@@ -1356,6 +1356,8 @@ func parseJsonConfigFileContentWorker(
 				errors = append(errors, setContentMapperDiagnosticLocation(ast.NewCompilerDiagnostic(diagnostics.Content_mapper_file_extension_0_must_begin_with_a, ext), contentMapperSourceFile, extNode))
 			case strings.ContainsAny(ext, "/\\"):
 				errors = append(errors, setContentMapperDiagnosticLocation(ast.NewCompilerDiagnostic(diagnostics.Content_mapper_extension_0_must_not_contain_path_separators, ext), contentMapperSourceFile, extNode))
+			case strings.Contains(ext[1:], "."):
+				errors = append(errors, setContentMapperDiagnosticLocation(ast.NewCompilerDiagnostic(diagnostics.Content_mapper_source_extension_0_must_contain_only_one_dot, ext), contentMapperSourceFile, extNode))
 			case contentmapper.HasReservedSourceExtension(ext):
 				errors = append(errors, setContentMapperDiagnosticLocation(ast.NewCompilerDiagnostic(diagnostics.Content_mapper_file_extension_0_cannot_be_registered_because_it_ends_in_a_built_in_extension, ext), contentMapperSourceFile, extNode))
 			default:
@@ -1376,6 +1378,8 @@ func parseJsonConfigFileContentWorker(
 				errors = append(errors, setContentMapperDiagnosticLocation(ast.NewCompilerDiagnostic(diagnostics.Content_mapper_extension_0_must_not_contain_path_separators, sourceExtension), contentMapperSourceFile, outputExtensionsNode))
 			} else if !contentmapper.IsValidExtension(sourceExtension) {
 				errors = append(errors, setContentMapperDiagnosticLocation(ast.NewCompilerDiagnostic(diagnostics.Content_mapper_output_extension_0_must_be_non_empty_and_begin_with_a, sourceExtension), contentMapperSourceFile, outputExtensionsNode))
+			} else if !contentmapper.IsValidSourceExtension(sourceExtension) {
+				errors = append(errors, setContentMapperDiagnosticLocation(ast.NewCompilerDiagnostic(diagnostics.Content_mapper_source_extension_0_must_contain_only_one_dot, sourceExtension), contentMapperSourceFile, outputExtensionsNode))
 			}
 			if strings.ContainsAny(outputExtension, "/\\") {
 				errors = append(errors, setContentMapperDiagnosticLocation(ast.NewCompilerDiagnostic(diagnostics.Content_mapper_extension_0_must_not_contain_path_separators, outputExtension), contentMapperSourceFile, outputExtensionsNode))

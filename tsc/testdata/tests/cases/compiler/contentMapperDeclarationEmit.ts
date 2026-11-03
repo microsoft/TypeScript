@@ -10,7 +10,7 @@
         "declarationMap": true
     },
     "contentMappers": [
-        { "package": "mapper", "extensions": [".y.z"] }
+        { "package": "mapper", "extensions": [".toml"] }
     ]
 }
 
@@ -21,10 +21,10 @@
     "typescript": { "contentMapper": { "exec": ["compiler-test-mapper"] } }
 }
 
-// @Filename: /component.y.z
+// @Filename: /component.part.toml
 export interface ComponentProps { emoji: "😀"; label: string; }
 export declare const component: ComponentProps;
 export const emittedTarget = #{target};
 
 // @Filename: /main.ts
-export { component } from "./component.y.z";
+export { component } from "./component.part.toml";

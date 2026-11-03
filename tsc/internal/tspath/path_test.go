@@ -168,15 +168,6 @@ func TestGetDirectoryPath(t *testing.T) {
 	assert.Equal(t, GetDirectoryPath("http://server/path/"), "http://server/")
 }
 
-func TestGetLongestExtensionFromPath(t *testing.T) {
-	t.Parallel()
-	extensions := []string{".z", ".y.z", ".other"}
-	assert.Equal(t, GetLongestExtensionFromPath("/src/Component.y.z", extensions, CaseSensitive), ".y.z")
-	assert.Equal(t, GetLongestExtensionFromPath("/src/Component.z", extensions, CaseSensitive), ".z")
-	assert.Equal(t, GetLongestExtensionFromPath("/src/Component.y.Z", extensions, CaseSensitive), "")
-	assert.Equal(t, GetLongestExtensionFromPath("/src/Component.y.Z", extensions, CaseInsensitive), ".y.Z")
-}
-
 func TestRemoveAnyFileExtension(t *testing.T) {
 	t.Parallel()
 	assert.Equal(t, RemoveAnyFileExtension("/src/Component.vue"), "/src/Component")

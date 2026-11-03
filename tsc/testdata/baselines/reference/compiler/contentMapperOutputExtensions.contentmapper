@@ -1,4 +1,4 @@
-//// [/Card.astro] (ScriptKind: ScriptKindTS, ContentMapper: [.astro .y.z])
+//// [/Card.astro] (ScriptKind: ScriptKindTS, ContentMapper: [.astro .vue])
 --- Original ---
 export interface CardProps { title: string }
 export declare const Card: (props: CardProps) => string;
@@ -7,7 +7,7 @@ const __VERSION = "1.0.0";
 export interface CardProps { title: string }
 export declare const Card: (props: CardProps) => string;
 
-//// [/Widget.y.z] (ScriptKind: ScriptKindTS, ContentMapper: [.astro .y.z])
+//// [/Widget.part.vue] (ScriptKind: ScriptKindTS, ContentMapper: [.astro .vue])
 --- Original ---
 export declare const Widget: () => string;
 --- Transformed ---
