@@ -1,6 +1,7 @@
 // @target: esnext
 // @module: nodenext
 // @rewriteRelativeImportExtensions: true
+// @disableDynamicImportExtensionRewriting: true, false
 // @noTypesAndSymbols: true
 
 // @filename: index.cts

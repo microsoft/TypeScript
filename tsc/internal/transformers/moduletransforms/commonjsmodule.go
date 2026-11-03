@@ -1807,7 +1807,9 @@ func (tx *CommonJSModuleTransformer) visitPostfixUnaryExpression(node *ast.Postf
 // be an `import()` or `require()` call that may need to be rewritten.
 func (tx *CommonJSModuleTransformer) visitCallExpression(node *ast.CallExpression) *ast.Node {
 	needsRewrite := false
-	if tx.compilerOptions.RewriteRelativeImportExtensions.IsTrue() {
+	if tx.compilerOptions.RewriteRelativeImportExtensions.IsTrue() &&
+		(!tx.compilerOptions.DisableDynamicImportExtensionRewriting.IsTrue() ||
+			len(node.Arguments.Nodes) > 0 && ast.IsStringLiteral(node.Arguments.Nodes[0])) {
 		if ast.IsImportCall(node.AsNode()) && len(node.Arguments.Nodes) > 0 ||
 			ast.IsInJSFile(node.AsNode()) && ast.IsRequireCall(node.AsNode(), false /*requireStringLiteralLikeArgument*/) {
 			needsRewrite = true

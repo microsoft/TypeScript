@@ -995,6 +995,18 @@ export const options: OptionsModel = {
             },
         },
         {
+            name: "disableDynamicImportExtensionRewriting",
+            type: "Tristate",
+            declaration: {
+                group: "optionsForCompiler",
+                affectsEmit: true,
+                affectsBuildInfo: true,
+                category: diagnostic("Modules"),
+                description: diagnostic("Disable runtime rewriting of file extensions in non-literal 'import()' and 'require()' calls when 'rewriteRelativeImportExtensions' is enabled."),
+                defaultValueDescription: false,
+            },
+        },
+        {
             name: "rewriteRelativeImportExtensions",
             type: "Tristate",
             declaration: {
@@ -1780,6 +1792,7 @@ export const options: OptionsModel = {
             "moduleSuffixes",
             "allowImportingTsExtensions",
             "rewriteRelativeImportExtensions",
+            "disableDynamicImportExtensionRewriting",
             "resolvePackageJsonExports",
             "resolvePackageJsonImports",
             "customConditions",
