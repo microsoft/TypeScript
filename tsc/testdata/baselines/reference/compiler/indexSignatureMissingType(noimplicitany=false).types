@@ -1,0 +1,136 @@
+//// [tests/cases/compiler/indexSignatureMissingType.ts] ////
+
+=== indexSignatureMissingType.ts ===
+export interface I {
+    [key: string];
+>key : string
+}
+
+export class C {
+>C : C
+
+    readonly [key: number];
+>key : number
+}
+
+export type T = {
+>T : T
+
+    [key: string]
+>key : string
+
+    property: number;
+>property : number
+
+};
+
+export interface NumberIndex { [key: number]; }
+>key : number
+
+export interface SymbolIndex { [key: symbol]; }
+>key : symbol
+
+export interface TemplateIndex { [key: `prefix-${string}`]; }
+>key : `prefix-${string}`
+
+export interface ExplicitAny { [key: string]: any; }
+>key : string
+
+export interface ExplicitUnknown { [key: string]: unknown; }
+>key : string
+
+declare const value: I;
+>value : I
+
+export const asNumber: number = value.anyKey;
+>asNumber : number
+>value.anyKey : any
+>value : I
+>anyKey : any
+
+export const asString: string = value.anyKey;
+>asString : string
+>value.anyKey : any
+>value : I
+>anyKey : any
+
+export const indexedValue = value.anyKey;
+>indexedValue : any
+>value.anyKey : any
+>value : I
+>anyKey : any
+
+declare const instance: C;
+>instance : C
+
+declare const numbers: NumberIndex;
+>numbers : NumberIndex
+
+declare const symbols: SymbolIndex;
+>symbols : SymbolIndex
+
+declare const templates: TemplateIndex;
+>templates : TemplateIndex
+
+export const classValue = instance[0];
+>classValue : any
+>instance[0] : any
+>instance : C
+>0 : 0
+
+export const numberValue = numbers[0];
+>numberValue : any
+>numbers[0] : any
+>numbers : NumberIndex
+>0 : 0
+
+export const symbolValue = symbols[Symbol.iterator];
+>symbolValue : any
+>symbols[Symbol.iterator] : any
+>symbols : SymbolIndex
+>Symbol.iterator : unique symbol
+>Symbol : SymbolConstructor
+>iterator : unique symbol
+
+export const templateValue = templates["prefix-foo"];
+>templateValue : any
+>templates["prefix-foo"] : any
+>templates : TemplateIndex
+>"prefix-foo" : "prefix-foo"
+
+instance[0] = 1;
+>instance[0] = 1 : 1
+>instance[0] : any
+>instance : C
+>0 : 0
+>1 : 1
+
+interface OptionalParameter {
+    [key?: string];
+>key : string | undefined
+}
+
+interface RestParameter {
+    [...key: string[]];
+>key : string[]
+}
+
+interface MultipleParameters {
+    [key: string, other: number];
+>key : string
+>other : number
+}
+
+interface InvalidKey {
+    [key: boolean];
+>key : boolean
+}
+
+// @ts-ignore
+interface Ignored { [key: string]; }
+>key : string
+
+// @ts-expect-error
+interface Expected { [key: boolean]; }
+>key : boolean
+

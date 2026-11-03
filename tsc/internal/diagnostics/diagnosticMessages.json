@@ -67,10 +67,6 @@
         "category": "Error",
         "code": 1020
     },
-    "An index signature must have a type annotation.": {
-        "category": "Error",
-        "code": 1021
-    },
     "An index signature parameter must have a type annotation.": {
         "category": "Error",
         "code": 1022
@@ -7041,6 +7037,10 @@
     "A mapped type may not declare properties or methods.": {
         "category": "Error",
         "code": 7061
+    },
+    "Index signature, which lacks type annotation, implicitly has an 'any' type.": {
+        "category": "Error",
+        "code": 7062
     },
     "Declaration emit elides private members, but '{0}' refers to a private member. Write an explicit type here.": {
         "category": "Error",

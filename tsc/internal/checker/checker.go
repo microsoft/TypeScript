@@ -2834,6 +2834,8 @@ func (c *Checker) checkSignatureDeclaration(node *ast.Node) {
 			c.error(node, diagnostics.Construct_signature_which_lacks_return_type_annotation_implicitly_has_an_any_return_type)
 		case ast.KindCallSignature:
 			c.error(node, diagnostics.Call_signature_which_lacks_return_type_annotation_implicitly_has_an_any_return_type)
+		case ast.KindIndexSignature:
+			c.error(node, diagnostics.Index_signature_which_lacks_type_annotation_implicitly_has_an_any_type)
 		}
 	}
 	if returnTypeNode != nil {
