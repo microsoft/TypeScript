@@ -36,8 +36,6 @@ var An_index_signature_parameter_cannot_have_a_question_mark = &Message{code: 10
 
 var An_index_signature_parameter_cannot_have_an_initializer = &Message{code: 1020, category: CategoryError, key: "An_index_signature_parameter_cannot_have_an_initializer_1020", text: "An index signature parameter cannot have an initializer."}
 
-var An_index_signature_must_have_a_type_annotation = &Message{code: 1021, category: CategoryError, key: "An_index_signature_must_have_a_type_annotation_1021", text: "An index signature must have a type annotation."}
-
 var An_index_signature_parameter_must_have_a_type_annotation = &Message{code: 1022, category: CategoryError, key: "An_index_signature_parameter_must_have_a_type_annotation_1022", text: "An index signature parameter must have a type annotation."}
 
 var X_readonly_modifier_can_only_appear_on_a_property_declaration_or_index_signature = &Message{code: 1024, category: CategoryError, key: "readonly_modifier_can_only_appear_on_a_property_declaration_or_index_signature_1024", text: "'readonly' modifier can only appear on a property declaration or index signature."}
@@ -3506,6 +3504,8 @@ var This_syntax_is_reserved_in_files_with_the_mts_or_cts_extension_Add_a_trailin
 
 var A_mapped_type_may_not_declare_properties_or_methods = &Message{code: 7061, category: CategoryError, key: "A_mapped_type_may_not_declare_properties_or_methods_7061", text: "A mapped type may not declare properties or methods."}
 
+var Index_signature_which_lacks_type_annotation_implicitly_has_an_any_type = &Message{code: 7062, category: CategoryError, key: "Index_signature_which_lacks_type_annotation_implicitly_has_an_any_type_7062", text: "Index signature, which lacks type annotation, implicitly has an 'any' type."}
+
 var Declaration_emit_elides_private_members_but_0_refers_to_a_private_member_Write_an_explicit_type_here = &Message{code: 7080, category: CategoryError, key: "Declaration_emit_elides_private_members_but_0_refers_to_a_private_member_Write_an_explicit_type_here_7080", text: "Declaration emit elides private members, but '{0}' refers to a private member. Write an explicit type here."}
 
 var You_cannot_rename_this_element = &Message{code: 8000, category: CategoryError, key: "You_cannot_rename_this_element_8000", text: "You cannot rename this element."}
@@ -4480,7 +4480,6 @@ var allMessages = [...]**Message{
 	&An_index_signature_parameter_cannot_have_an_accessibility_modifier,
 	&An_index_signature_parameter_cannot_have_a_question_mark,
 	&An_index_signature_parameter_cannot_have_an_initializer,
-	&An_index_signature_must_have_a_type_annotation,
 	&An_index_signature_parameter_must_have_a_type_annotation,
 	&X_readonly_modifier_can_only_appear_on_a_property_declaration_or_index_signature,
 	&An_index_signature_cannot_have_a_trailing_comma,
@@ -6215,6 +6214,7 @@ var allMessages = [...]**Message{
 	&This_syntax_is_reserved_in_files_with_the_mts_or_cts_extension_Use_an_as_expression_instead,
 	&This_syntax_is_reserved_in_files_with_the_mts_or_cts_extension_Add_a_trailing_comma_or_explicit_constraint,
 	&A_mapped_type_may_not_declare_properties_or_methods,
+	&Index_signature_which_lacks_type_annotation_implicitly_has_an_any_type,
 	&Declaration_emit_elides_private_members_but_0_refers_to_a_private_member_Write_an_explicit_type_here,
 	&You_cannot_rename_this_element,
 	&You_cannot_rename_elements_that_are_defined_in_the_standard_TypeScript_library,

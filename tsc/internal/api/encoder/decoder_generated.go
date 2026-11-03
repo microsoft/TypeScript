@@ -10,7 +10,10 @@ import (
 
 func (d *astDecoder) createStringNode(kind ast.Kind, data uint32, commonData uint8) (*ast.Node, error) {
 	strIdx := data & NodeDataStringIndexMask
-	text := d.getString(strIdx)
+	text, err := d.getString(strIdx)
+	if err != nil {
+		return nil, err
+	}
 
 	switch kind {
 	case ast.KindIdentifier:
