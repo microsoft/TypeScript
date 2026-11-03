@@ -447,6 +447,59 @@ test("a close rejects pending requests after an invalid header followed by anoth
     await rejected;
 });
 
+for (
+    const [description, header] of [
+        ["invalid length", "Content-Length: invalid\r\n\r\n"],
+        ["missing length", "Content-Type: application/json\r\n\r\n"],
+        ["missing separator", "Content-Length 40\r\n\r\n"],
+    ] as const
+) {
+    for (const buffered of [false, true]) {
+        test(`a close drains a recovered response after ${description} (${buffered ? "buffered" : "separate"})`, { timeout: 10000 }, async t => {
+            const { connection, input, received } = createWirePeer(t);
+            const request = once(received, "request");
+            const pending = connection.sendRequest(new RequestType<unknown, unknown, void>("probe"), {});
+            const [message] = await request;
+            const frame = responseFrame(message.id, "received");
+            if (buffered) {
+                input.write(Buffer.concat([Buffer.from(header), frame]));
+                // Even an empty data event resumes the reader's buffered input.
+                input.emit("data", Buffer.alloc(0));
+            }
+            else {
+                input.write(header);
+                input.write(frame);
+            }
+            // Close synchronously, before the recovered frame is decoded or dispatched.
+            input.emit("close");
+            assert.equal(await pending, "received");
+        });
+    }
+}
+
+test("a close drains a fragmented response buffered after an invalid header", { timeout: 10000 }, async t => {
+    const { connection, input, received } = createWirePeer(t);
+    const request = once(received, "request");
+    const pending = connection.sendRequest(new RequestType<unknown, unknown, void>("probe"), {});
+    const [message] = await request;
+    const frame = responseFrame(message.id, "received");
+    input.write(Buffer.concat([Buffer.from("Content-Length: invalid\r\n\r\n"), frame.subarray(0, 10)]));
+    input.write(frame.subarray(10));
+    input.emit("close");
+    assert.equal(await pending, "received");
+});
+
+test("a close rejects a response buffered behind an invalid header without another data event", { timeout: 10000 }, async t => {
+    const { connection, input, received } = createWirePeer(t);
+    const request = once(received, "request");
+    const pending = connection.sendRequest(new RequestType<unknown, unknown, void>("probe"), {});
+    const [message] = await request;
+    const rejected = assertRejectsPromptly(pending);
+    input.write(Buffer.concat([Buffer.from("Content-Length: invalid\r\n\r\n"), responseFrame(message.id, "received")]));
+    input.emit("close");
+    await rejected;
+});
+
 for (const invalidLength of ["invalid", "-1"]) {
     test(`a response followed by Content-Length ${invalidLength} does not prevent close`, { timeout: 10000 }, async t => {
         const { connection, input, received } = createWirePeer(t);

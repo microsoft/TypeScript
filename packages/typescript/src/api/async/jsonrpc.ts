@@ -213,15 +213,20 @@ function responseKey(message: Message): string | undefined {
         : undefined;
 }
 
-/** Counts complete Content-Length frames without retaining or copying their bodies. */
+/** Counts complete Content-Length frames, retaining only bytes deferred after malformed headers. */
 class IncomingFrames {
     private header = "";
     private remaining: number | undefined;
+    private deferred: Uint8Array | undefined;
     private valid = true;
     pending = 0;
 
     append(data: Uint8Array): void {
         if (!this.valid) return;
+        if (this.deferred) {
+            data = Buffer.concat([this.deferred, data]);
+            this.deferred = undefined;
+        }
         let offset = 0;
         while (offset < data.length) {
             if (this.remaining !== undefined) {
@@ -236,29 +241,34 @@ class IncomingFrames {
             }
             this.header += String.fromCharCode(data[offset++] & 0x7f);
             if (!this.header.endsWith("\r\n\r\n")) continue;
+            const header = this.header;
+            this.header = "";
+            // The reader consumes malformed headers, then retries the remaining
+            // buffered bytes on the next data event, including an empty event.
             let contentLength: string | undefined;
-            for (const line of this.header.slice(0, -4).split("\r\n")) {
+            for (const line of header.slice(0, -4).split("\r\n")) {
                 const separator = line.indexOf(":");
                 if (separator < 0) {
-                    this.valid = false;
+                    this.deferred = offset < data.length ? data.subarray(offset) : undefined;
                     return;
                 }
                 if (line.slice(0, separator).toLowerCase() === "content-length") contentLength = line.slice(separator + 1).trim();
             }
             const length = contentLength ? parseInt(contentLength) : NaN;
+            if (Number.isNaN(length)) {
+                this.deferred = offset < data.length ? data.subarray(offset) : undefined;
+                return;
+            }
             if (!Number.isSafeInteger(length) || length < 0) {
                 this.valid = false;
                 return;
             }
-            this.header = "";
             if (length === 0) this.pending++;
             else this.remaining = length;
         }
     }
 
     finish(): void {
-        // After an invalid header, the reader may recover on a later data event
-        // even though frame tracking has stopped.
         if (this.pending > 0) this.pending--;
     }
 }
