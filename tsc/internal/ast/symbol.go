@@ -405,7 +405,7 @@ func (m *SymbolMap) Clone() SymbolTable {
 }
 
 func (m *SymbolMap) Clear() {
-	if m != nil {
+	if m != nil && len(m.entries) != 0 {
 		clear(m.entries)
 		clear(m.index)
 		m.entries = m.entries[:0]

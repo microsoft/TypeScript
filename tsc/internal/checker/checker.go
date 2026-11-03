@@ -21277,6 +21277,7 @@ func (c *Checker) instantiateIndexInfo(info *IndexInfo, m *TypeMapper) *IndexInf
 func (c *Checker) resolveAnonymousTypeMembers(t *Type) {
 	d := t.AsObjectType()
 	if d.target != nil {
+		c.setStructuredTypeMembers(t, nil, nil, nil, nil)
 		members := c.createInstantiatedSymbolTable(c.getPropertiesOfObjectType(d.target), d.mapper)
 		callSignatures := c.instantiateSignatures(c.getSignaturesOfType(d.target, SignatureKindCall), d.mapper)
 		constructSignatures := c.instantiateSignatures(c.getSignaturesOfType(d.target, SignatureKindConstruct), d.mapper)
@@ -21286,6 +21287,7 @@ func (c *Checker) resolveAnonymousTypeMembers(t *Type) {
 	}
 	symbol := c.getMergedSymbol(t.symbol)
 	if symbol.Flags()&ast.SymbolFlagsTypeLiteral != 0 {
+		c.setStructuredTypeMembers(t, nil, nil, nil, nil)
 		members := c.getMembersOfSymbol(symbol)
 		callSignatures := c.getSignaturesOfSymbol(members.Get(ast.InternalSymbolNameCall))
 		constructSignatures := c.getSignaturesOfSymbol(members.Get(ast.InternalSymbolNameNew))
