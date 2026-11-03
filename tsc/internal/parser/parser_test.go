@@ -365,6 +365,58 @@ func TestParseEscapedDynamicImportPhase(t *testing.T) {
 	}
 }
 
+func TestJSDocInlineLinksInOptionalTypePositions(t *testing.T) {
+	t.Parallel()
+	for _, tag := range []string{"throws", "returns", "param value"} {
+		for _, link := range []struct {
+			name string
+			kind ast.Kind
+		}{
+			{"link", ast.KindJSDocLink},
+			{"linkcode", ast.KindJSDocLinkCode},
+			{"linkplain", ast.KindJSDocLinkPlain},
+		} {
+			t.Run(tag+"/"+link.name, func(t *testing.T) {
+				t.Parallel()
+				file := parser.ParseSourceFile(ast.SourceFileParseOptions{
+					FileName: "/index.ts",
+					PathKey:  "/index.ts",
+				}, "/** @"+tag+" {@"+link.name+" C} */\nfunction f(value) {}", core.ScriptKindTS)
+				jsDocs := file.Statements.Nodes[0].JSDoc(file)
+				assert.Equal(t, len(jsDocs), 1)
+				tags := jsDocs[0].AsJSDoc().Tags.Nodes
+				assert.Equal(t, len(tags), 1)
+				assert.Assert(t, tags[0].TypeExpression() == nil)
+				comments := tags[0].CommentList()
+				assert.Assert(t, comments != nil)
+				links := core.Filter(comments.Nodes, ast.IsJSDocLinkLike)
+				assert.Equal(t, len(links), 1)
+				assert.Equal(t, links[0].Kind, link.kind)
+			})
+		}
+	}
+}
+
+func TestJSDocTypesInOptionalTypePositions(t *testing.T) {
+	t.Parallel()
+	for _, tag := range []string{"throws", "returns", "param value"} {
+		t.Run(tag, func(t *testing.T) {
+			t.Parallel()
+			file := parser.ParseSourceFile(ast.SourceFileParseOptions{
+				FileName: "/index.ts",
+				PathKey:  "/index.ts",
+			}, "/** @"+tag+" {C} description */\nfunction f(value) {}", core.ScriptKindTS)
+			jsDocs := file.Statements.Nodes[0].JSDoc(file)
+			assert.Equal(t, len(jsDocs), 1)
+			tags := jsDocs[0].AsJSDoc().Tags.Nodes
+			assert.Equal(t, len(tags), 1)
+			typeExpression := tags[0].TypeExpression()
+			assert.Assert(t, typeExpression != nil)
+			assert.Equal(t, scanner.GetTextOfNode(typeExpression.Type()), "C")
+		})
+	}
+}
+
 func TestJSDocImportTypeParentChain(t *testing.T) {
 	t.Parallel()
 	sourceText := `test("", async function () {
