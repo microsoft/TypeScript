@@ -330,6 +330,18 @@ func TestCompilerOptionInvalidationPathsBasePath(t *testing.T) {
 	}
 }
 
+func TestDisableDynamicImportExtensionRewritingInvalidation(t *testing.T) {
+	t.Parallel()
+	before := &core.CompilerOptions{DisableDynamicImportExtensionRewriting: core.TSFalse}
+	after := &core.CompilerOptions{DisableDynamicImportExtensionRewriting: core.TSTrue}
+	if !CompilerOptionsAffectSemanticDiagnostics(before, after) {
+		t.Fatal("Changing dynamic import extension rewriting must invalidate cached diagnostics")
+	}
+	if CompilerOptionsAffectSemanticDiagnostics(after, after.Clone()) {
+		t.Fatal("Unchanged dynamic import extension rewriting must not invalidate cached diagnostics")
+	}
+}
+
 func TestCompilerOptionInvalidationStrictDefaults(t *testing.T) {
 	t.Parallel()
 	a := &core.CompilerOptions{}

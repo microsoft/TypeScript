@@ -3316,6 +3316,8 @@ var Enable_lib_replacement = &Message{code: 6808, category: CategoryMessage, key
 
 var Ensure_types_are_ordered_stably_and_deterministically_across_compilations = &Message{code: 6809, category: CategoryMessage, key: "Ensure_types_are_ordered_stably_and_deterministically_across_compilations_6809", text: "Ensure types are ordered stably and deterministically across compilations."}
 
+var Disable_runtime_rewriting_of_file_extensions_in_non_literal_import_and_require_calls_when_rewriteRelativeImportExtensions_is_enabled = &Message{code: 6810, category: CategoryMessage, key: "Disable_runtime_rewriting_of_file_extensions_in_non_literal_import_and_require_calls_when_rewriteRel_6810", text: "Disable runtime rewriting of file extensions in non-literal 'import()' and 'require()' calls when 'rewriteRelativeImportExtensions' is enabled."}
+
 var X_one_of_Colon = &Message{code: 6900, category: CategoryMessage, key: "one_of_Colon_6900", text: "one of:"}
 
 var X_one_or_more_Colon = &Message{code: 6901, category: CategoryMessage, key: "one_or_more_Colon_6901", text: "one or more:"}
@@ -6120,6 +6122,7 @@ var allMessages = [...]**Message{
 	&This_operation_can_be_simplified_This_shift_is_identical_to_0_1_2,
 	&Enable_lib_replacement,
 	&Ensure_types_are_ordered_stably_and_deterministically_across_compilations,
+	&Disable_runtime_rewriting_of_file_extensions_in_non_literal_import_and_require_calls_when_rewriteRelativeImportExtensions_is_enabled,
 	&X_one_of_Colon,
 	&X_one_or_more_Colon,
 	&X_type_Colon,

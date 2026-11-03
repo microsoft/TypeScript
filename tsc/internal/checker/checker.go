@@ -8485,7 +8485,9 @@ func (c *Checker) checkImportCallExpression(node *ast.Node) *Type {
 		return c.createPromiseReturnType(node, c.anyType) //nolint:customlint // no arguments to check
 	}
 	specifier := args[0]
-	if c.compilerOptions.RewriteRelativeImportExtensions.IsTrue() && !ast.IsStringLiteralLike(specifier) {
+	if c.compilerOptions.RewriteRelativeImportExtensions.IsTrue() &&
+		!c.compilerOptions.DisableDynamicImportExtensionRewriting.IsTrue() &&
+		!ast.IsStringLiteralLike(specifier) {
 		c.checkExternalEmitHelpers(node, ExternalEmitHelpersRewriteRelativeImportExtension)
 	}
 	specifierType := c.checkExpressionCached(specifier)
@@ -8541,6 +8543,7 @@ func (c *Checker) checkImportCallExpression(node *ast.Node) *Type {
  */
 func (c *Checker) checkCallExpression(node *ast.Node, checkMode CheckMode) *Type {
 	if c.compilerOptions.RewriteRelativeImportExtensions.IsTrue() &&
+		!c.compilerOptions.DisableDynamicImportExtensionRewriting.IsTrue() &&
 		ast.IsInJSFile(node) && ast.IsRequireCall(node, false /*requireStringLiteralLikeArgument*/) &&
 		!ast.IsStringLiteralLike(node.Arguments()[0]) {
 		c.checkExternalEmitHelpers(node, ExternalEmitHelpersRewriteRelativeImportExtension)

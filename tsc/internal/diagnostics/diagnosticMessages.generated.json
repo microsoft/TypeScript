@@ -1656,6 +1656,7 @@
     "This_operation_can_be_simplified_This_shift_is_identical_to_0_1_2_6807": "This operation can be simplified. This shift is identical to `{0} {1} {2}`.",
     "Enable_lib_replacement_6808": "Enable lib replacement.",
     "Ensure_types_are_ordered_stably_and_deterministically_across_compilations_6809": "Ensure types are ordered stably and deterministically across compilations.",
+    "Disable_runtime_rewriting_of_file_extensions_in_non_literal_import_and_require_calls_when_rewriteRel_6810": "Disable runtime rewriting of file extensions in non-literal 'import()' and 'require()' calls when 'rewriteRelativeImportExtensions' is enabled.",
     "one_of_Colon_6900": "one of:",
     "one_or_more_Colon_6901": "one or more:",
     "type_Colon_6902": "type:",
