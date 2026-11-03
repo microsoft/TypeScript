@@ -1,0 +1,20 @@
+embeddedNumericCompoundAssignmentAfterExcludedLiterals.ts(3,5): error TS2322: Type 'number' is not assignable to type 'number & not 0'.
+  Type 'number' is not assignable to type 'not 0'.
+embeddedNumericCompoundAssignmentAfterExcludedLiterals.ts(5,31): error TS2322: Type 'number' is not assignable to type 'number & not 0 & not 2'.
+  Type 'number' is not assignable to type 'not 0'.
+
+
+==== embeddedNumericCompoundAssignmentAfterExcludedLiterals.ts (2 errors) ====
+    function ease(value: number, divisor: number) {
+        if (value === 0) return 0;
+        value /= divisor;
+        ~~~~~
+!!! error TS2322: Type 'number' is not assignable to type 'number & not 0'.
+!!! error TS2322:   Type 'number' is not assignable to type 'not 0'.
+        if (value === 2) return 2;
+        return Math.pow(2, -10 * (value -= 1));
+                                  ~~~~~
+!!! error TS2322: Type 'number' is not assignable to type 'number & not 0 & not 2'.
+!!! error TS2322:   Type 'number' is not assignable to type 'not 0'.
+    }
+    

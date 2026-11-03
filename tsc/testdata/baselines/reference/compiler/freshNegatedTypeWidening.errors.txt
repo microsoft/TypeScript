@@ -1,9 +1,11 @@
 freshNegatedTypeWidening.ts(19,1): error TS2352: Conversion of type 'BaseNode & not WrappedNode' to type 'WrappedNode' may be a mistake because neither type sufficiently overlaps with the other. If this was intentional, convert the expression to 'unknown' first.
   Property 'expression' is missing in type 'BaseNode' but required in type 'WrappedNode'.
+freshNegatedTypeWidening.ts(56,16): error TS2352: Conversion of type '{} & not string' to type 'string' may be a mistake because neither type sufficiently overlaps with the other. If this was intentional, convert the expression to 'unknown' first.
 freshNegatedTypeWidening.ts(62,1): error TS2352: Conversion of type '{} & not string' to type 'string' may be a mistake because neither type sufficiently overlaps with the other. If this was intentional, convert the expression to 'unknown' first.
+freshNegatedTypeWidening.ts(64,10): error TS2394: This overload signature is not compatible with its implementation signature.
 
 
-==== freshNegatedTypeWidening.ts (2 errors) ====
+==== freshNegatedTypeWidening.ts (4 errors) ====
     interface BaseNode {
         kind: number;
     }
@@ -64,6 +66,8 @@ freshNegatedTypeWidening.ts(62,1): error TS2352: Conversion of type '{} & not st
     function assertString(value: {}) {
         if (typeof value !== "string") {
             return value as string;
+                   ~~~~~~~~~~~~~~~
+!!! error TS2352: Conversion of type '{} & not string' to type 'string' may be a mistake because neither type sufficiently overlaps with the other. If this was intentional, convert the expression to 'unknown' first.
         }
         return value;
     }
@@ -74,6 +78,9 @@ freshNegatedTypeWidening.ts(62,1): error TS2352: Conversion of type '{} & not st
 !!! error TS2352: Conversion of type '{} & not string' to type 'string' may be a mistake because neither type sufficiently overlaps with the other. If this was intentional, convert the expression to 'unknown' first.
     
     function skipStrings(value: string): string;
+             ~~~~~~~~~~~
+!!! error TS2394: This overload signature is not compatible with its implementation signature.
+!!! related TS2750 freshNegatedTypeWidening.ts:66:10: The implementation signature is declared here.
     function skipStrings(value: {}): {};
     function skipStrings(value: {}) {
         while (typeof value === "string") {

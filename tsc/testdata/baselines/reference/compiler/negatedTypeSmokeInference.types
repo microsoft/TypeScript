@@ -11,7 +11,7 @@ declare function consumePrimitive(value: { value: string | number }): void;
 >value : string | number
 
 export function nonString(value: unknown) {
->nonString : (value: unknown) => unknown
+>nonString : (value: unknown) => not string | undefined
 >value : unknown
 
     if (typeof value === "string") return undefined;
@@ -38,13 +38,13 @@ export function nonString(value: unknown) {
 >value : not string
 
     return identity(value);
->identity(value) : unknown
+>identity(value) : not string
 >identity : <Value>(value: Value) => Value
 >value : not string
 }
 
 export function excludedLiteral(value: unknown) {
->excludedLiteral : (value: unknown) => unknown
+>excludedLiteral : (value: unknown) => not "missing" | undefined
 >value : unknown
 
     if (value === "missing") return undefined;
@@ -56,19 +56,19 @@ export function excludedLiteral(value: unknown) {
     consumePrimitive({ value });
 >consumePrimitive({ value }) : void
 >consumePrimitive : (value: { value: string | number; }) => void
->{ value } : { value: unknown; }
->value : unknown
+>{ value } : { value: not "missing"; }
+>value : not "missing"
 
     const copy = value;
->copy : unknown
+>copy : not "missing"
 >value : not "missing"
 
     const invalid: string = copy;
 >invalid : string
->copy : unknown
+>copy : not "missing"
 
     return copy;
->copy : unknown
+>copy : not "missing"
 }
 
 export function operatorToken(char: string, prefix: string) {

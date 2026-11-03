@@ -19,7 +19,7 @@ function ease(value: number, divisor: number) {
 
     if (value === 2) return 2;
 >value === 2 : boolean
->value : number
+>value : number & not 0
 >2 : 2
 >2 : 2
 
@@ -34,7 +34,7 @@ function ease(value: number, divisor: number) {
 >10 : 10
 >(value -= 1) : number
 >value -= 1 : number
->value : number & not 2
+>value : number & not 0 & not 2
 >1 : 1
 }
 

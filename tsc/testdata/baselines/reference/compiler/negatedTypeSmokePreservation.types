@@ -308,7 +308,7 @@ export function release(input: { asset: unknown }) {
 }
 
 export function notString(value: unknown) {
->notString : (value: unknown) => boolean
+>notString : (value: unknown) => value is not string
 >value : unknown
 
     return typeof value !== "string";
@@ -319,7 +319,7 @@ export function notString(value: unknown) {
 }
 
 export function inferredContainer(value: unknown) {
->inferredContainer : (value: unknown) => { value: unknown; values: unknown[]; } | undefined
+>inferredContainer : (value: unknown) => { value: not string; values: (not string)[]; } | undefined
 >value : unknown
 
     if (typeof value === "string") return undefined;
@@ -330,10 +330,10 @@ export function inferredContainer(value: unknown) {
 >undefined : undefined
 
     return { value, values: [value] };
->{ value, values: [value] } : { value: unknown; values: unknown[]; }
->value : unknown
->values : unknown[]
->[value] : unknown[]
+>{ value, values: [value] } : { value: not string; values: (not string)[]; }
+>value : not string
+>values : (not string)[]
+>[value] : (not string)[]
 >value : not string
 }
 

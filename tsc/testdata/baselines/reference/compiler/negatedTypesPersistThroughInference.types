@@ -1,0 +1,225 @@
+//// [tests/cases/compiler/negatedTypesPersistThroughInference.ts] ////
+
+=== negatedTypesPersistThroughInference.ts ===
+declare function identity<T>(value: T): T;
+>identity : <T>(value: T) => T
+>value : T
+
+declare function contextualIdentity<T>(callback: () => T): T;
+>contextualIdentity : <T>(callback: () => T) => T
+>callback : () => T
+
+export function nonString(value: unknown) {
+>nonString : (value: unknown) => { constant: not string; variable: not string; inferred: not string; contextual: not string; values: (not string)[]; }
+>value : unknown
+
+    if (typeof value === "string") throw new Error();
+>typeof value === "string" : boolean
+>typeof value : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
+>value : unknown
+>"string" : "string"
+>new Error() : Error
+>Error : ErrorConstructor
+
+    const constant = value;
+>constant : not string
+>value : not string
+
+    let variable = value;
+>variable : not string
+>value : not string
+
+    const inferred: not string = identity(value);
+>inferred : not string
+>identity(value) : not string
+>identity : <T>(value: T) => T
+>value : not string
+
+    const contextual: not string = contextualIdentity(() => value);
+>contextual : not string
+>contextualIdentity(() => value) : not string
+>contextualIdentity : <T>(callback: () => T) => T
+>() => value : () => not string
+>value : not string
+
+    return { constant, variable, inferred, contextual, values: [value] };
+>{ constant, variable, inferred, contextual, values: [value] } : { constant: not string; variable: not string; inferred: not string; contextual: not string; values: (not string)[]; }
+>constant : not string
+>variable : not string
+>inferred : not string
+>contextual : not string
+>values : (not string)[]
+>[value] : (not string)[]
+>value : not string
+}
+
+export function nonZero(value: number) {
+>nonZero : (value: number) => { constant: number & not 0; variable: number & not 0; inferred: number & not 0; contextual: number & not 0; values: (number & not 0)[]; }
+>value : number
+
+    if (value === 0) throw new Error();
+>value === 0 : boolean
+>value : number
+>0 : 0
+>new Error() : Error
+>Error : ErrorConstructor
+
+    const constant = value;
+>constant : number & not 0
+>value : number & not 0
+
+    let variable = value;
+>variable : number & not 0
+>value : number & not 0
+
+    const inferred: number & not 0 = identity(value);
+>inferred : number & not 0
+>identity(value) : number & not 0
+>identity : <T>(value: T) => T
+>value : number & not 0
+
+    const contextual: number & not 0 = contextualIdentity(() => value);
+>contextual : number & not 0
+>contextualIdentity(() => value) : number & not 0
+>contextualIdentity : <T>(callback: () => T) => T
+>() => value : () => number & not 0
+>value : number & not 0
+
+    return { constant, variable, inferred, contextual, values: [value] };
+>{ constant, variable, inferred, contextual, values: [value] } : { constant: number & not 0; variable: number & not 0; inferred: number & not 0; contextual: number & not 0; values: (number & not 0)[]; }
+>constant : number & not 0
+>variable : number & not 0
+>inferred : number & not 0
+>contextual : number & not 0
+>values : (number & not 0)[]
+>[value] : (number & not 0)[]
+>value : number & not 0
+}
+
+export function generic<T>(value: T) {
+>generic : <T>(value: T) => T & not string
+>value : T
+
+    if (typeof value === "string") throw new Error();
+>typeof value === "string" : boolean
+>typeof value : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
+>value : T
+>"string" : "string"
+>new Error() : Error
+>Error : ErrorConstructor
+
+    return identity(value);
+>identity(value) : T & not string
+>identity : <T_1>(value: T_1) => T_1
+>value : T & not string
+}
+
+export function notString(value: unknown) {
+>notString : (value: unknown) => value is not string
+>value : unknown
+
+    return typeof value !== "string";
+>typeof value !== "string" : boolean
+>typeof value : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
+>value : unknown
+>"string" : "string"
+}
+
+export function notZero(value: number) {
+>notZero : (value: number) => value is number & not 0
+>value : number
+
+    return value !== 0;
+>value !== 0 : boolean
+>value : number
+>0 : 0
+}
+
+export async function asyncNonString(value: unknown) {
+>asyncNonString : (value: unknown) => Promise<not string>
+>value : unknown
+
+    if (typeof value === "string") throw new Error();
+>typeof value === "string" : boolean
+>typeof value : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
+>value : unknown
+>"string" : "string"
+>new Error() : Error
+>Error : ErrorConstructor
+
+    return value;
+>value : not string
+}
+
+export function* generatorNonString(value: unknown) {
+>generatorNonString : (value: unknown) => Generator<not string, not string, unknown>
+>value : unknown
+
+    if (typeof value === "string") throw new Error();
+>typeof value === "string" : boolean
+>typeof value : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
+>value : unknown
+>"string" : "string"
+>new Error() : Error
+>Error : ErrorConstructor
+
+    yield value;
+>yield value : any
+>value : not string
+
+    return value;
+>value : not string
+}
+
+export function explicitAndInferred(value: unknown, explicit: not string, condition: boolean) {
+>explicitAndInferred : (value: unknown, explicit: not string, condition: boolean) => not string
+>value : unknown
+>explicit : not string
+>condition : boolean
+
+    if (typeof value === "string") throw new Error();
+>typeof value === "string" : boolean
+>typeof value : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
+>value : unknown
+>"string" : "string"
+>new Error() : Error
+>Error : ErrorConstructor
+
+    return condition ? value : explicit;
+>condition ? value : explicit : not string
+>condition : boolean
+>value : not string
+>explicit : not string
+}
+
+export function inferredProperty(value: unknown) {
+>inferredProperty : (value: unknown) => (Anonymous class)
+>value : unknown
+
+    if (typeof value === "string") throw new Error();
+>typeof value === "string" : boolean
+>typeof value : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
+>value : unknown
+>"string" : "string"
+>new Error() : Error
+>Error : ErrorConstructor
+
+    const narrowed = value;
+>narrowed : not string
+>value : not string
+
+    return new class {
+>new class {        property = narrowed;        constructor(public parameter = narrowed) {}    }() : (Anonymous class)
+>class {        property = narrowed;        constructor(public parameter = narrowed) {}    } : typeof (Anonymous class)
+
+        property = narrowed;
+>property : not string
+>narrowed : not string
+
+        constructor(public parameter = narrowed) {}
+>parameter : not string
+>narrowed : not string
+
+    }();
+}
+

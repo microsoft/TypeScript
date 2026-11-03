@@ -184,7 +184,7 @@ function skipStrings(value: {}) {
 }
 
 function isNotString(value: {}) {
->isNotString : (value: {}) => boolean
+>isNotString : (value: {}) => value is {} & not string
 >value : {}
 
     return typeof value !== "string";
@@ -200,7 +200,7 @@ declare const nonNullValue: {};
 if (!isNotString(nonNullValue)) {
 >!isNotString(nonNullValue) : boolean
 >isNotString(nonNullValue) : boolean
->isNotString : (value: {}) => boolean
+>isNotString : (value: {}) => value is {} & not string
 >nonNullValue : {}
 
     nonNullValue.toString();

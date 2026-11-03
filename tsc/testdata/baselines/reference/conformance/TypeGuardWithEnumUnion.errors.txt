@@ -1,0 +1,47 @@
+TypeGuardWithEnumUnion.ts(25,13): error TS2403: Subsequent variable declarations must have the same type.  Variable 'w' must be of type 'string | (string[] & not number)', but here has type 'string | string[]'.
+TypeGuardWithEnumUnion.ts(33,13): error TS2403: Subsequent variable declarations must have the same type.  Variable 'b' must be of type '(Color | (string[] & not number)) & not string', but here has type 'string[] | Color'.
+
+
+==== TypeGuardWithEnumUnion.ts (2 errors) ====
+    enum Color { R, G, B }
+    
+    function f1(x: Color | string) {
+        if (typeof x === "number") {
+            var y = x;
+            var y: Color;
+        }
+        else {
+            var z = x;
+            var z: string;
+        }
+    }
+    
+    function f2(x: Color | string | string[]) {
+        if (typeof x === "object") {
+            var y = x;
+            var y: string[];
+        }
+        if (typeof x === "number") {
+            var z = x;
+            var z: Color;
+        }
+        else {
+            var w = x;
+            var w: string | string[];
+                ~
+!!! error TS2403: Subsequent variable declarations must have the same type.  Variable 'w' must be of type 'string | (string[] & not number)', but here has type 'string | string[]'.
+!!! related TS6203 TypeGuardWithEnumUnion.ts:24:13: 'w' was also declared here.
+        }
+        if (typeof x === "string") {
+            var a = x;
+            var a: string;
+        }
+        else {
+            var b = x;
+            var b: Color | string[];
+                ~
+!!! error TS2403: Subsequent variable declarations must have the same type.  Variable 'b' must be of type '(Color | (string[] & not number)) & not string', but here has type 'string[] | Color'.
+!!! related TS6203 TypeGuardWithEnumUnion.ts:32:13: 'b' was also declared here.
+        }
+    }
+    

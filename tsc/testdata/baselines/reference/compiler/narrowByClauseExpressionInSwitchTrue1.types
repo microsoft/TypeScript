@@ -140,7 +140,7 @@ function processInput(input: string | RegExp | SomeType) {
 >RegExp : RegExpConstructor
 
       input;
->input : RegExp
+>input : RegExp & not string
 
       break;
     case isSomeType(input):
@@ -149,7 +149,7 @@ function processInput(input: string | RegExp | SomeType) {
 >input : string | RegExp | SomeType
 
       input;
->input : SomeType
+>input : SomeType & not string
 
       break;
   }

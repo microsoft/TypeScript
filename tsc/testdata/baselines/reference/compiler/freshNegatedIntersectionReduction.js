@@ -113,7 +113,7 @@ export function unionRegularFirst(value, regular, choose) {
 export declare function narrowedArray<Value extends unknown[] | undefined>(value: Value): (Value & {})[number][];
 export declare function explicitUndefined<Value>(value: Value & not undefined): Value & not undefined;
 export declare function explicitNull<Value>(value: Value & not null): Value & not null;
-export declare function freshOnly<Value>(value: Value): Value;
+export declare function freshOnly<Value>(value: Value): Value & not string;
 export declare function explicitString<Value>(value: Value & not string): Value & not string;
 export declare function unionFreshFirst(value: unknown, regular: not string, choose: boolean): not string;
 export declare function unionRegularFirst(value: unknown, regular: not string, choose: boolean): not string;

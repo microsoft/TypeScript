@@ -18812,9 +18812,7 @@ func (c *Checker) widenTypeForVariableLikeDeclaration(t *Type, declaration *ast.
 		if t.flags&TypeFlagsUniqueESSymbol != 0 && (ast.IsBindingElement(declaration) || declaration.Type() == nil) && t.symbol != c.getSymbolOfDeclaration(declaration) {
 			t = c.esSymbolType
 		}
-		// Drop any fresh negated types introduced by control flow narrowing so a CFA-introduced
-		// 'not X' does not leak into an inferred variable, parameter, or property declaration.
-		return c.removeOrRegularizeNegatedTypes(c.getWidenedType(t), true /*removeNegatedTypes*/)
+		return c.getWidenedType(t)
 	}
 	// Rest parameters default to type any[], other parameters default to type any
 	if ast.IsParameterDeclaration(declaration) && declaration.AsParameterDeclaration().DotDotDotToken != nil {
@@ -18920,7 +18918,6 @@ func (c *Checker) getWidenedType(t *Type) *Type {
 }
 
 func (c *Checker) getWidenedTypeWithContext(t *Type, context *WideningContext) *Type {
-	t = c.removeFreshNegatedTypes(t)
 	if t.objectFlags&ObjectFlagsRequiresWidening != 0 {
 		if context == nil {
 			if cached := c.cachedTypes[CachedTypeKey{kind: CachedTypeKindWidened, typeId: t.id}]; cached != nil {
@@ -21192,7 +21189,7 @@ func (c *Checker) unwrapReturnType(returnType *Type, functionFlags ast.FunctionF
 }
 
 func needsContextualWidening(t *Type) bool {
-	return t != nil && (isUnitType(t) || containsFreshNegatedType(t))
+	return t != nil && isUnitType(t)
 }
 
 func (c *Checker) getWidenedLiteralLikeTypeForContextualReturnTypeIfNeeded(t *Type, contextualSignatureReturnType *Type, isAsync bool) *Type {
@@ -21382,7 +21379,7 @@ func (c *Checker) checkIfExpressionRefinesParameter(fn *ast.Node, expr *ast.Node
 		antecedent = &ast.FlowNode{Flags: ast.FlowFlagsStart}
 	}
 	trueCondition := &ast.FlowNode{Flags: ast.FlowFlagsTrueCondition, Node: expr, Antecedent: antecedent}
-	trueType := c.removeFreshNegatedTypes(c.getFlowTypeOfReferenceEx(param.Name(), initType, initType, fn, trueCondition))
+	trueType := c.getFlowTypeOfReferenceEx(param.Name(), initType, initType, fn, trueCondition)
 	if trueType == initType {
 		return nil
 	}
@@ -26536,11 +26533,7 @@ func (c *Checker) getWidenedLiteralLikeTypeForContextualType(t *Type, contextual
 	if !c.isLiteralOfContextualType(t, contextualType) {
 		t = c.getWidenedUniqueESSymbolType(c.getWidenedLiteralType(t))
 	}
-	// Fresh negated types introduced by control flow narrowing are widened away (dropped) when a
-	// narrowed value escapes into a location that does not itself want a negation, so that 'not X'
-	// does not leak into an inferred declaration. When the contextual type does mention a negation
-	// (e.g. a 'not string' parameter or property), the fresh negation is preserved.
-	return c.getRegularTypeOfLiteralType(c.removeOrRegularizeNegatedTypes(t, containsFreshNegatedType(t) && !containsNegatedType(contextualType)))
+	return c.getRegularTypeOfLiteralType(t)
 }
 
 func (c *Checker) isLiteralOfContextualType(candidateType *Type, contextualType *Type) bool {
@@ -26852,7 +26845,7 @@ func (c *Checker) addTypesToUnion(sourceTypes []*Type, types []*Type) ([]*Type, 
 		slices.SortStableFunc(types, CompareTypes)
 		unique := 1
 		for _, t := range types[1:] {
-			if t != types[unique-1] && !(isFreshNegatedType(t) && containsType(types, t.AsNegatedType().regularType)) {
+			if t != types[unique-1] {
 				types[unique] = t
 				unique++
 			}
@@ -27314,15 +27307,6 @@ func (c *Checker) addTypeToIntersection(typeSet *orderedSet[*Type], includes Typ
 	flags := t.flags
 	if flags&TypeFlagsIntersection != 0 {
 		return c.addTypesToIntersection(typeSet, includes, t.Types())
-	}
-	if flags&TypeFlagsNegated != 0 {
-		if isFreshNegatedType(t) {
-			if typeSet.contains(t.AsNegatedType().regularType) {
-				return includes
-			}
-		} else if typeSet.replace(t.AsNegatedType().freshType, t) {
-			return includes
-		}
 	}
 	if c.IsEmptyAnonymousObjectType(t) {
 		if includes&TypeFlagsIncludesEmptyObject == 0 {

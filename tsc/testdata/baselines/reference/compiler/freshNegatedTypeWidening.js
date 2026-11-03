@@ -154,5 +154,5 @@ declare function assertString(value: {}): string;
 declare const explicitlyNotString: {} & not string;
 declare function skipStrings(value: string): string;
 declare function skipStrings(value: {}): {};
-declare function isNotString(value: {}): boolean;
+declare function isNotString(value: {}): value is {} & not string;
 declare const nonNullValue: {};
