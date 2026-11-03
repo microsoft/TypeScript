@@ -303,6 +303,7 @@ func TestContentMapperPackageMustBeInWorkspace(t *testing.T) {
 		name             string
 		projectDirectory string
 		workspaceRoots   []string
+		mapperPackage    string
 		mapperPath       string
 		mapperTarget     string
 		allowed          bool
@@ -313,6 +314,21 @@ func TestContentMapperPackageMustBeInWorkspace(t *testing.T) {
 			workspaceRoots:   []string{"/home/trusted"},
 			mapperPath:       "/home/trusted/node_modules/mapper/package.json",
 			allowed:          true,
+		},
+		{
+			name:             "directory mapper in workspace",
+			projectDirectory: "/home/trusted",
+			workspaceRoots:   []string{"/home/trusted"},
+			mapperPackage:    "./mapper",
+			mapperPath:       "/home/trusted/mapper/package.json",
+			allowed:          true,
+		},
+		{
+			name:             "directory mapper outside workspace",
+			projectDirectory: "/home/untrusted",
+			workspaceRoots:   []string{"/home/trusted"},
+			mapperPackage:    "./mapper",
+			mapperPath:       "/home/untrusted/mapper/package.json",
 		},
 		{
 			name:             "loose file outside workspace",
@@ -357,10 +373,14 @@ func TestContentMapperPackageMustBeInWorkspace(t *testing.T) {
 			configPath := test.projectDirectory + "/tsconfig.json"
 			mainPath := test.projectDirectory + "/main.ts"
 			boxPath := test.projectDirectory + "/app.box"
+			mapperPackage := test.mapperPackage
+			if mapperPackage == "" {
+				mapperPackage = "mapper"
+			}
 			files := map[string]any{
 				configPath: `{
 					"compilerOptions": { "target": "es2020", "module": "esnext", "moduleResolution": "bundler" },
-					"contentMappers": [ { "package": "mapper", "extensions": [".box"] } ]
+					"contentMappers": [ { "package": "` + mapperPackage + `", "extensions": [".box"] } ]
 				}`,
 				mainPath: "import { version } from \"./app.box\";\nexport { version };\n",
 				boxPath:  "export const version = #{target};\n",
