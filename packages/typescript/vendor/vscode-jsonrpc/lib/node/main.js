@@ -255,7 +255,14 @@ function createClientSocketTransport(port, encoding = 'utf-8') {
         server.on('error', reject);
         server.listen(port, '127.0.0.1', () => {
             server.removeListener('error', reject);
+            const address = server.address();
+            if (address === null || typeof address === 'string') {
+                reject(new Error(`Unexpected server address: ${address}`));
+                return;
+            }
+            const boundPort = address.port;
             resolve({
+                port: () => boundPort,
                 onConnected: () => { return connected; }
             });
         });

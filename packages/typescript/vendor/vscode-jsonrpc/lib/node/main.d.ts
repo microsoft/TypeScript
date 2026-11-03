@@ -50,6 +50,7 @@ export interface PipeTransport {
 export declare function createClientPipeTransport(pipeName: string, encoding?: RAL.MessageBufferEncoding): Promise<PipeTransport>;
 export declare function createServerPipeTransport(pipeName: string, encoding?: RAL.MessageBufferEncoding): [MessageReader, MessageWriter];
 export interface SocketTransport {
+    port(): number;
     onConnected(): Promise<[MessageReader, MessageWriter]>;
 }
 export declare function createClientSocketTransport(port: number, encoding?: RAL.MessageBufferEncoding): Promise<SocketTransport>;

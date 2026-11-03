@@ -1,7 +1,7 @@
 {
 	"name": "vscode-jsonrpc",
 	"description": "A json rpc implementation over streams",
-	"version": "9.0.2",
+	"version": "9.0.3",
 	"author": "Microsoft Corporation",
 	"license": "MIT",
 	"repository": {
@@ -34,7 +34,7 @@
 		"msgpack-lite": "^0.1.26"
 	},
 	"scripts": {
-		"prepublishOnly": "echo \"⛔ Can only publish from a secure pipeline ⛔\" && node ../build/npm/fail",
+		"prepublishOnly": "npm run all:publish",
 		"prepack": "npm run all:publish",
 		"preversion": "npm test",
 		"compile": "tsc -b ./tsconfig.json",
