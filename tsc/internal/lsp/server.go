@@ -452,9 +452,12 @@ func (s *Server) supportsContentMapperRegistration(id string) bool {
 	}
 }
 
-func contentMapperDocumentPattern(selector project.ContentMapperSelector) lsproto.PatternOrRelativePattern {
+func contentMapperDocumentPattern(selector project.ContentMapperSelector, relativePatternSupport bool) lsproto.PatternOrRelativePattern {
 	if selector.Base == "" {
 		return lsproto.PatternOrRelativePattern{Pattern: new(selector.Pattern)}
+	}
+	if !relativePatternSupport {
+		return lsproto.PatternOrRelativePattern{Pattern: new(tspath.CombinePaths(selector.Base.AsString(), selector.Pattern))}
 	}
 	baseURI := lsproto.URI(lsconv.FileNameToDocumentURI(tspath.RootedFilePathFromPath(selector.Base.AsPath())))
 	return lsproto.PatternOrRelativePattern{
@@ -522,7 +525,7 @@ func (s *Server) RegisterContentMapperSelectors(ctx context.Context, selectors [
 	for _, selector := range selectors {
 		filters = append(filters, lsproto.TextDocumentFilterLanguageOrSchemeOrPattern{
 			Pattern: &lsproto.TextDocumentFilterPattern{
-				Pattern: contentMapperDocumentPattern(selector),
+				Pattern: contentMapperDocumentPattern(selector, s.clientCapabilities.TextDocument.Filters.RelativePatternSupport),
 			},
 		})
 	}

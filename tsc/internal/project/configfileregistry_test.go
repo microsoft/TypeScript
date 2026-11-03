@@ -19,6 +19,10 @@ func TestContentMapperSelectorPatternIntersection(t *testing.T) {
 		{"**/*.v*", "**/*.v*"},
 		{"**/fo?", "**/fo?"},
 		{"**/*oml", "**/*oml"},
+		{"*v*", "*v*"},
+		{"**/[page].vue", "**/?page?.vue"},
+		{"**/{page}.vue", "**/?page?.vue"},
+		{"[page]", "?page?/**/*.vue"},
 	} {
 		got, ok := contentMapperSelectorPattern(test.include, ".vue")
 		assert.Assert(t, ok)
@@ -38,6 +42,9 @@ func TestContentMapperSelectorIncludes(t *testing.T) {
 		{name: "without source file", directory: "/project", include: "src", withoutSourceFile: true, base: "/project/src"},
 		{name: "Windows", directory: "c:/project", include: "../shared/src", base: "c:/shared/src"},
 		{name: "Windows separators", directory: "c:/project", include: `c:\\shared\\src`, base: "c:/shared/src"},
+		{name: "current directory", directory: "/project", include: ".", base: "/project"},
+		{name: "trailing current directory", directory: "/project", include: "src/.", base: "/project/src"},
+		{name: "filesystem root", directory: "/project", include: "/", base: "/"},
 	} {
 		t.Run(test.name, func(t *testing.T) {
 			t.Parallel()

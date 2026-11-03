@@ -1488,7 +1488,7 @@ func (r *resolutionState) tryLoadModuleUsingPaths(extensions extensions, moduleN
 			// A path mapping may have an extension
 			extensionFromSubst := tspath.TryGetExtensionFromPath(subst)
 			if extensionFromSubst != "" {
-				if path, ok := r.tryFile(candidate); ok {
+				if path, ok := r.tryFile(candidate, extensionFromSubst); ok {
 					return &resolved{
 						path:      path,
 						extension: extensionFromSubst,
@@ -1653,7 +1653,7 @@ func (r *resolutionState) loadModuleFromFileNoImplicitExtensions(extensions exte
 		return continueSearching() // extensionless import, no lookups performed, since we don't support extensionless files
 	}
 	extraExtensions := r.resolver.extraExtensions
-	if matcher := r.resolver.contentMapperFileMatcher; matcher != nil {
+	if r.resolver.contentMapperFileMatcher != nil && len(r.compilerOptions.ModuleSuffixes) == 0 {
 		extraExtensions = nil
 		if extension := r.contentMapperExtensionForFileName(tspath.RootedFilePathFromPath(candidate.path)); extension != "" {
 			extraExtensions = []string{extension}
@@ -1786,11 +1786,7 @@ func (r *resolutionState) tryAddingExtensions(extensionless tspath.FileNameStem,
 		}
 		return continueSearching()
 	default:
-		fileName := extensionless.AppendSuffix(originalExtension)
 		isExtraExtension := slices.Contains(r.resolver.extraExtensions, originalExtension)
-		if matcher := r.resolver.contentMapperFileMatcher; matcher != nil {
-			isExtraExtension = r.contentMapperExtensionForFileName(fileName) == originalExtension
-		}
 		if isExtraExtension {
 			// A fully specified import of an extraExtension resolves directly to the file.
 			if resolved := r.tryExtension(originalExtension, extensionless, false); !resolved.shouldContinueSearching() {
@@ -1809,7 +1805,10 @@ func (r *resolutionState) tryAddingExtensions(extensionless tspath.FileNameStem,
 
 func (r *resolutionState) tryExtension(extension string, extensionless tspath.FileNameStem, resolvedUsingTsExtension bool) *resolved {
 	fileName := resolutionCandidateFromFileName(extensionless.AppendSuffix(extension))
-	if path, ok := r.tryFile(fileName); ok {
+	if path, ok := r.tryFile(fileName, extension); ok {
+		if r.resolver.contentMapperFileMatcher != nil && slices.Contains(r.resolver.extraExtensions, extension) {
+			extension = r.contentMapperExtensionForFileName(path)
+		}
 		return &resolved{
 			path:                     path,
 			extension:                extension,
@@ -1819,23 +1818,33 @@ func (r *resolutionState) tryExtension(extension string, extensionless tspath.Fi
 	return continueSearching()
 }
 
-func (r *resolutionState) tryFile(fileName resolutionCandidate) (tspath.RootedFilePath, bool) {
+func (r *resolutionState) tryFile(fileName resolutionCandidate, extension string) (tspath.RootedFilePath, bool) {
 	if fileName.directoryOnly {
 		return "", false
 	}
+	isExtraExtension := slices.Contains(r.resolver.extraExtensions, extension)
+	if !isExtraExtension {
+		extension = tspath.RootedFilePathFromPath(fileName.path).Extension()
+	}
+	tryCandidate := func(path tspath.RootedFilePath) bool {
+		if r.resolver.contentMapperFileMatcher != nil && isExtraExtension &&
+			r.contentMapperExtensionForFileName(path) == "" {
+			return false
+		}
+		return r.tryFileLookup(path)
+	}
 	if len(r.compilerOptions.ModuleSuffixes) == 0 {
 		candidate := tspath.RootedFilePathFromPath(fileName.path)
-		if r.tryFileLookup(candidate) {
+		if tryCandidate(candidate) {
 			return candidate, true
 		}
 		return "", false
 	}
 
-	ext := tspath.RootedFilePathFromPath(fileName.path).Extension()
-	fileNameNoExtension := fileName.RemoveExtension(ext)
+	fileNameNoExtension := fileName.RemoveExtension(extension)
 	for _, suffix := range r.compilerOptions.ModuleSuffixes {
-		path := fileNameNoExtension.AppendSuffix(suffix + ext)
-		if r.tryFileLookup(path) {
+		path := fileNameNoExtension.AppendSuffix(suffix + extension)
+		if tryCandidate(path) {
 			return path, true
 		}
 	}
@@ -1966,7 +1975,7 @@ func (r *resolutionState) loadFileNameFromPackageJSONField(extensions extensions
 	}
 	fileName := tspath.RootedFilePathFromPath(candidate.path)
 	if extensions&extensionsTypeScript != 0 && fileName.HasImplementationTSFileExtension() || extensions&extensionsDeclaration != 0 && fileName.IsDeclarationFile() {
-		if path, ok := r.tryFile(candidate); ok {
+		if path, ok := r.tryFile(candidate, fileName.Extension()); ok {
 			extension := path.TryExtractTSExtension()
 			// resolvedUsingTsExtension should be true when the pattern ends with * and the
 			// candidate file ends in a TS extension. This means the * matched a TS extension
@@ -1985,7 +1994,7 @@ func (r *resolutionState) loadFileNameFromPackageJSONField(extensions extensions
 	}
 
 	if r.isConfigLookup && extensions&extensionsJson != 0 && fileName.ExtensionIs(tspath.ExtensionJson) {
-		if path, ok := r.tryFile(candidate); ok {
+		if path, ok := r.tryFile(candidate, tspath.ExtensionJson); ok {
 			return &resolved{
 				path:      path,
 				extension: tspath.ExtensionJson,

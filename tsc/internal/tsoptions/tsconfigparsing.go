@@ -1503,6 +1503,9 @@ func parseJsonConfigFileContentWorker(
 	}
 	for i, extension := range extensionOutputs {
 		for _, other := range extensionOutputs[i+1:] {
+			if extension.mapper == other.mapper {
+				continue
+			}
 			longer, shorter := extension, other
 			if len(longer.extension) < len(shorter.extension) {
 				longer, shorter = shorter, longer
