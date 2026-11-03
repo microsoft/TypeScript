@@ -1,0 +1,290 @@
+//// [tests/cases/compiler/compoundAssignmentUsesDeclaredTargetType.ts] ////
+
+=== compoundAssignmentUsesDeclaredTargetType.ts ===
+function numeric(value: number | string) {
+>numeric : Symbol(numeric, Decl(compoundAssignmentUsesDeclaredTargetType.ts, 0, 0))
+>value : Symbol(value, Decl(compoundAssignmentUsesDeclaredTargetType.ts, 0, 17))
+
+    if (typeof value === "number" && value !== 0) {
+>value : Symbol(value, Decl(compoundAssignmentUsesDeclaredTargetType.ts, 0, 17))
+>value : Symbol(value, Decl(compoundAssignmentUsesDeclaredTargetType.ts, 0, 17))
+
+        const result: number = value -= 1;
+>result : Symbol(result, Decl(compoundAssignmentUsesDeclaredTargetType.ts, 2, 13))
+>value : Symbol(value, Decl(compoundAssignmentUsesDeclaredTargetType.ts, 0, 17))
+    }
+}
+
+function concatenate(value: number | string) {
+>concatenate : Symbol(concatenate, Decl(compoundAssignmentUsesDeclaredTargetType.ts, 4, 1))
+>value : Symbol(value, Decl(compoundAssignmentUsesDeclaredTargetType.ts, 6, 21))
+
+    if (typeof value === "number" && value !== 0) {
+>value : Symbol(value, Decl(compoundAssignmentUsesDeclaredTargetType.ts, 6, 21))
+>value : Symbol(value, Decl(compoundAssignmentUsesDeclaredTargetType.ts, 6, 21))
+
+        const result: string = value += "suffix";
+>result : Symbol(result, Decl(compoundAssignmentUsesDeclaredTargetType.ts, 8, 13))
+>value : Symbol(value, Decl(compoundAssignmentUsesDeclaredTargetType.ts, 6, 21))
+    }
+}
+
+function text(value: string) {
+>text : Symbol(text, Decl(compoundAssignmentUsesDeclaredTargetType.ts, 10, 1))
+>value : Symbol(value, Decl(compoundAssignmentUsesDeclaredTargetType.ts, 12, 14))
+
+    if (value !== "") {
+>value : Symbol(value, Decl(compoundAssignmentUsesDeclaredTargetType.ts, 12, 14))
+
+        const result: string = value += "suffix";
+>result : Symbol(result, Decl(compoundAssignmentUsesDeclaredTargetType.ts, 14, 13))
+>value : Symbol(value, Decl(compoundAssignmentUsesDeclaredTargetType.ts, 12, 14))
+    }
+}
+
+function bigint(value: bigint) {
+>bigint : Symbol(bigint, Decl(compoundAssignmentUsesDeclaredTargetType.ts, 16, 1))
+>value : Symbol(value, Decl(compoundAssignmentUsesDeclaredTargetType.ts, 18, 16))
+
+    if (value !== 0n) {
+>value : Symbol(value, Decl(compoundAssignmentUsesDeclaredTargetType.ts, 18, 16))
+
+        const result: bigint = value *= 2n;
+>result : Symbol(result, Decl(compoundAssignmentUsesDeclaredTargetType.ts, 20, 13))
+>value : Symbol(value, Decl(compoundAssignmentUsesDeclaredTargetType.ts, 18, 16))
+    }
+}
+
+function wrapped(value: number | undefined) {
+>wrapped : Symbol(wrapped, Decl(compoundAssignmentUsesDeclaredTargetType.ts, 22, 1))
+>value : Symbol(value, Decl(compoundAssignmentUsesDeclaredTargetType.ts, 24, 17))
+
+    if (value !== undefined && value !== 0) {
+>value : Symbol(value, Decl(compoundAssignmentUsesDeclaredTargetType.ts, 24, 17))
+>undefined : Symbol(undefined)
+>value : Symbol(value, Decl(compoundAssignmentUsesDeclaredTargetType.ts, 24, 17))
+
+        (value) -= 1;
+>value : Symbol(value, Decl(compoundAssignmentUsesDeclaredTargetType.ts, 24, 17))
+
+        value! *= 2;
+>value : Symbol(value, Decl(compoundAssignmentUsesDeclaredTargetType.ts, 24, 17))
+
+        ((value)!) += 1;
+>value : Symbol(value, Decl(compoundAssignmentUsesDeclaredTargetType.ts, 24, 17))
+    }
+}
+
+function satisfies(value: number) {
+>satisfies : Symbol(satisfies, Decl(compoundAssignmentUsesDeclaredTargetType.ts, 30, 1))
+>value : Symbol(value, Decl(compoundAssignmentUsesDeclaredTargetType.ts, 32, 19))
+
+    if (value !== 0) {
+>value : Symbol(value, Decl(compoundAssignmentUsesDeclaredTargetType.ts, 32, 19))
+
+        (value satisfies number) -= 1;
+>value : Symbol(value, Decl(compoundAssignmentUsesDeclaredTargetType.ts, 32, 19))
+    }
+}
+
+function properties(holder: { value: number | string }, key: "value") {
+>properties : Symbol(properties, Decl(compoundAssignmentUsesDeclaredTargetType.ts, 36, 1))
+>holder : Symbol(holder, Decl(compoundAssignmentUsesDeclaredTargetType.ts, 38, 20))
+>value : Symbol(value, Decl(compoundAssignmentUsesDeclaredTargetType.ts, 38, 29))
+>key : Symbol(key, Decl(compoundAssignmentUsesDeclaredTargetType.ts, 38, 55))
+
+    if (typeof holder.value === "number" && holder.value !== 0) {
+>holder.value : Symbol(value, Decl(compoundAssignmentUsesDeclaredTargetType.ts, 38, 29))
+>holder : Symbol(holder, Decl(compoundAssignmentUsesDeclaredTargetType.ts, 38, 20))
+>value : Symbol(value, Decl(compoundAssignmentUsesDeclaredTargetType.ts, 38, 29))
+>holder.value : Symbol(value, Decl(compoundAssignmentUsesDeclaredTargetType.ts, 38, 29))
+>holder : Symbol(holder, Decl(compoundAssignmentUsesDeclaredTargetType.ts, 38, 20))
+>value : Symbol(value, Decl(compoundAssignmentUsesDeclaredTargetType.ts, 38, 29))
+
+        holder.value -= 1;
+>holder.value : Symbol(value, Decl(compoundAssignmentUsesDeclaredTargetType.ts, 38, 29))
+>holder : Symbol(holder, Decl(compoundAssignmentUsesDeclaredTargetType.ts, 38, 20))
+>value : Symbol(value, Decl(compoundAssignmentUsesDeclaredTargetType.ts, 38, 29))
+    }
+    if (typeof holder["value"] === "number" && holder["value"] !== 0) {
+>holder : Symbol(holder, Decl(compoundAssignmentUsesDeclaredTargetType.ts, 38, 20))
+>"value" : Symbol(value, Decl(compoundAssignmentUsesDeclaredTargetType.ts, 38, 29))
+>holder : Symbol(holder, Decl(compoundAssignmentUsesDeclaredTargetType.ts, 38, 20))
+>"value" : Symbol(value, Decl(compoundAssignmentUsesDeclaredTargetType.ts, 38, 29))
+
+        holder["value"] -= 1;
+>holder : Symbol(holder, Decl(compoundAssignmentUsesDeclaredTargetType.ts, 38, 20))
+>"value" : Symbol(value, Decl(compoundAssignmentUsesDeclaredTargetType.ts, 38, 29))
+    }
+    if (typeof holder[key] === "number" && holder[key] !== 0) {
+>holder : Symbol(holder, Decl(compoundAssignmentUsesDeclaredTargetType.ts, 38, 20))
+>key : Symbol(key, Decl(compoundAssignmentUsesDeclaredTargetType.ts, 38, 55))
+>holder : Symbol(holder, Decl(compoundAssignmentUsesDeclaredTargetType.ts, 38, 20))
+>key : Symbol(key, Decl(compoundAssignmentUsesDeclaredTargetType.ts, 38, 55))
+
+        holder[key] -= 1;
+>holder : Symbol(holder, Decl(compoundAssignmentUsesDeclaredTargetType.ts, 38, 20))
+>key : Symbol(key, Decl(compoundAssignmentUsesDeclaredTargetType.ts, 38, 55))
+    }
+}
+
+function accessors(holder: { get value(): number; set value(value: number | string) }) {
+>accessors : Symbol(accessors, Decl(compoundAssignmentUsesDeclaredTargetType.ts, 48, 1))
+>holder : Symbol(holder, Decl(compoundAssignmentUsesDeclaredTargetType.ts, 50, 19))
+>value : Symbol(value, Decl(compoundAssignmentUsesDeclaredTargetType.ts, 50, 28), Decl(compoundAssignmentUsesDeclaredTargetType.ts, 50, 49))
+>value : Symbol(value, Decl(compoundAssignmentUsesDeclaredTargetType.ts, 50, 28), Decl(compoundAssignmentUsesDeclaredTargetType.ts, 50, 49))
+>value : Symbol(value, Decl(compoundAssignmentUsesDeclaredTargetType.ts, 50, 60))
+
+    holder.value -= 1;
+>holder.value : Symbol(value, Decl(compoundAssignmentUsesDeclaredTargetType.ts, 50, 28), Decl(compoundAssignmentUsesDeclaredTargetType.ts, 50, 49))
+>holder : Symbol(holder, Decl(compoundAssignmentUsesDeclaredTargetType.ts, 50, 19))
+>value : Symbol(value, Decl(compoundAssignmentUsesDeclaredTargetType.ts, 50, 28), Decl(compoundAssignmentUsesDeclaredTargetType.ts, 50, 49))
+
+    holder["value"] -= 1;
+>holder : Symbol(holder, Decl(compoundAssignmentUsesDeclaredTargetType.ts, 50, 19))
+>"value" : Symbol(value, Decl(compoundAssignmentUsesDeclaredTargetType.ts, 50, 28), Decl(compoundAssignmentUsesDeclaredTargetType.ts, 50, 49))
+
+    (holder.value) -= 1;
+>holder.value : Symbol(value, Decl(compoundAssignmentUsesDeclaredTargetType.ts, 50, 28), Decl(compoundAssignmentUsesDeclaredTargetType.ts, 50, 49))
+>holder : Symbol(holder, Decl(compoundAssignmentUsesDeclaredTargetType.ts, 50, 19))
+>value : Symbol(value, Decl(compoundAssignmentUsesDeclaredTargetType.ts, 50, 28), Decl(compoundAssignmentUsesDeclaredTargetType.ts, 50, 49))
+
+    (holder["value"]) -= 1;
+>holder : Symbol(holder, Decl(compoundAssignmentUsesDeclaredTargetType.ts, 50, 19))
+>"value" : Symbol(value, Decl(compoundAssignmentUsesDeclaredTargetType.ts, 50, 28), Decl(compoundAssignmentUsesDeclaredTargetType.ts, 50, 49))
+
+    holder.value += "suffix";
+>holder.value : Symbol(value, Decl(compoundAssignmentUsesDeclaredTargetType.ts, 50, 28), Decl(compoundAssignmentUsesDeclaredTargetType.ts, 50, 49))
+>holder : Symbol(holder, Decl(compoundAssignmentUsesDeclaredTargetType.ts, 50, 19))
+>value : Symbol(value, Decl(compoundAssignmentUsesDeclaredTargetType.ts, 50, 28), Decl(compoundAssignmentUsesDeclaredTargetType.ts, 50, 49))
+
+    holder["value"] += "suffix";
+>holder : Symbol(holder, Decl(compoundAssignmentUsesDeclaredTargetType.ts, 50, 19))
+>"value" : Symbol(value, Decl(compoundAssignmentUsesDeclaredTargetType.ts, 50, 28), Decl(compoundAssignmentUsesDeclaredTargetType.ts, 50, 49))
+}
+
+function constrained(value: number & not 0, holder: { value: number & not 0 }) {
+>constrained : Symbol(constrained, Decl(compoundAssignmentUsesDeclaredTargetType.ts, 57, 1))
+>value : Symbol(value, Decl(compoundAssignmentUsesDeclaredTargetType.ts, 59, 21))
+>holder : Symbol(holder, Decl(compoundAssignmentUsesDeclaredTargetType.ts, 59, 43))
+>value : Symbol(value, Decl(compoundAssignmentUsesDeclaredTargetType.ts, 59, 53))
+
+    value -= 1;
+>value : Symbol(value, Decl(compoundAssignmentUsesDeclaredTargetType.ts, 59, 21))
+
+    (value) -= 1;
+>value : Symbol(value, Decl(compoundAssignmentUsesDeclaredTargetType.ts, 59, 21))
+
+    holder.value -= 1;
+>holder.value : Symbol(value, Decl(compoundAssignmentUsesDeclaredTargetType.ts, 59, 53))
+>holder : Symbol(holder, Decl(compoundAssignmentUsesDeclaredTargetType.ts, 59, 43))
+>value : Symbol(value, Decl(compoundAssignmentUsesDeclaredTargetType.ts, 59, 53))
+
+    holder["value"] -= 1;
+>holder : Symbol(holder, Decl(compoundAssignmentUsesDeclaredTargetType.ts, 59, 43))
+>"value" : Symbol(value, Decl(compoundAssignmentUsesDeclaredTargetType.ts, 59, 53))
+
+    (holder.value) -= 1;
+>holder.value : Symbol(value, Decl(compoundAssignmentUsesDeclaredTargetType.ts, 59, 53))
+>holder : Symbol(holder, Decl(compoundAssignmentUsesDeclaredTargetType.ts, 59, 43))
+>value : Symbol(value, Decl(compoundAssignmentUsesDeclaredTargetType.ts, 59, 53))
+
+    (holder["value"]) -= 1;
+>holder : Symbol(holder, Decl(compoundAssignmentUsesDeclaredTargetType.ts, 59, 43))
+>"value" : Symbol(value, Decl(compoundAssignmentUsesDeclaredTargetType.ts, 59, 53))
+}
+
+function constrainedSetter(holder: { get value(): number; set value(value: number & not 0) }) {
+>constrainedSetter : Symbol(constrainedSetter, Decl(compoundAssignmentUsesDeclaredTargetType.ts, 66, 1))
+>holder : Symbol(holder, Decl(compoundAssignmentUsesDeclaredTargetType.ts, 68, 27))
+>value : Symbol(value, Decl(compoundAssignmentUsesDeclaredTargetType.ts, 68, 36), Decl(compoundAssignmentUsesDeclaredTargetType.ts, 68, 57))
+>value : Symbol(value, Decl(compoundAssignmentUsesDeclaredTargetType.ts, 68, 36), Decl(compoundAssignmentUsesDeclaredTargetType.ts, 68, 57))
+>value : Symbol(value, Decl(compoundAssignmentUsesDeclaredTargetType.ts, 68, 68))
+
+    holder.value -= 1;
+>holder.value : Symbol(value, Decl(compoundAssignmentUsesDeclaredTargetType.ts, 68, 36), Decl(compoundAssignmentUsesDeclaredTargetType.ts, 68, 57))
+>holder : Symbol(holder, Decl(compoundAssignmentUsesDeclaredTargetType.ts, 68, 27))
+>value : Symbol(value, Decl(compoundAssignmentUsesDeclaredTargetType.ts, 68, 36), Decl(compoundAssignmentUsesDeclaredTargetType.ts, 68, 57))
+
+    holder["value"] -= 1;
+>holder : Symbol(holder, Decl(compoundAssignmentUsesDeclaredTargetType.ts, 68, 27))
+>"value" : Symbol(value, Decl(compoundAssignmentUsesDeclaredTargetType.ts, 68, 36), Decl(compoundAssignmentUsesDeclaredTargetType.ts, 68, 57))
+
+    (holder.value) -= 1;
+>holder.value : Symbol(value, Decl(compoundAssignmentUsesDeclaredTargetType.ts, 68, 36), Decl(compoundAssignmentUsesDeclaredTargetType.ts, 68, 57))
+>holder : Symbol(holder, Decl(compoundAssignmentUsesDeclaredTargetType.ts, 68, 27))
+>value : Symbol(value, Decl(compoundAssignmentUsesDeclaredTargetType.ts, 68, 36), Decl(compoundAssignmentUsesDeclaredTargetType.ts, 68, 57))
+
+    (holder["value"]) -= 1;
+>holder : Symbol(holder, Decl(compoundAssignmentUsesDeclaredTargetType.ts, 68, 27))
+>"value" : Symbol(value, Decl(compoundAssignmentUsesDeclaredTargetType.ts, 68, 36), Decl(compoundAssignmentUsesDeclaredTargetType.ts, 68, 57))
+}
+
+function generic<T extends number>(value: T) {
+>generic : Symbol(generic, Decl(compoundAssignmentUsesDeclaredTargetType.ts, 73, 1))
+>T : Symbol(T, Decl(compoundAssignmentUsesDeclaredTargetType.ts, 75, 17))
+>value : Symbol(value, Decl(compoundAssignmentUsesDeclaredTargetType.ts, 75, 35))
+>T : Symbol(T, Decl(compoundAssignmentUsesDeclaredTargetType.ts, 75, 17))
+
+    if (value !== 0) {
+>value : Symbol(value, Decl(compoundAssignmentUsesDeclaredTargetType.ts, 75, 35))
+
+        value -= 1;
+>value : Symbol(value, Decl(compoundAssignmentUsesDeclaredTargetType.ts, 75, 35))
+    }
+}
+
+function unionKey(holder: { a: number & not 0; b: number }, key: "a" | "b") {
+>unionKey : Symbol(unionKey, Decl(compoundAssignmentUsesDeclaredTargetType.ts, 79, 1))
+>holder : Symbol(holder, Decl(compoundAssignmentUsesDeclaredTargetType.ts, 81, 18))
+>a : Symbol(a, Decl(compoundAssignmentUsesDeclaredTargetType.ts, 81, 27))
+>b : Symbol(b, Decl(compoundAssignmentUsesDeclaredTargetType.ts, 81, 46))
+>key : Symbol(key, Decl(compoundAssignmentUsesDeclaredTargetType.ts, 81, 59))
+
+    holder[key] -= 1;
+>holder : Symbol(holder, Decl(compoundAssignmentUsesDeclaredTargetType.ts, 81, 18))
+>key : Symbol(key, Decl(compoundAssignmentUsesDeclaredTargetType.ts, 81, 59))
+}
+
+function asserted(value: number) {
+>asserted : Symbol(asserted, Decl(compoundAssignmentUsesDeclaredTargetType.ts, 83, 1))
+>value : Symbol(value, Decl(compoundAssignmentUsesDeclaredTargetType.ts, 85, 18))
+
+    (value as number & not 0) -= 1;
+>value : Symbol(value, Decl(compoundAssignmentUsesDeclaredTargetType.ts, 85, 18))
+}
+
+function invalidOperands(value: number | string) {
+>invalidOperands : Symbol(invalidOperands, Decl(compoundAssignmentUsesDeclaredTargetType.ts, 87, 1))
+>value : Symbol(value, Decl(compoundAssignmentUsesDeclaredTargetType.ts, 89, 25))
+
+    if (typeof value === "string" && value !== "") {
+>value : Symbol(value, Decl(compoundAssignmentUsesDeclaredTargetType.ts, 89, 25))
+>value : Symbol(value, Decl(compoundAssignmentUsesDeclaredTargetType.ts, 89, 25))
+
+        value -= 1;
+>value : Symbol(value, Decl(compoundAssignmentUsesDeclaredTargetType.ts, 89, 25))
+    }
+}
+
+function readonlyTargets(holder: { readonly value: number }) {
+>readonlyTargets : Symbol(readonlyTargets, Decl(compoundAssignmentUsesDeclaredTargetType.ts, 93, 1))
+>holder : Symbol(holder, Decl(compoundAssignmentUsesDeclaredTargetType.ts, 95, 25))
+>value : Symbol(value, Decl(compoundAssignmentUsesDeclaredTargetType.ts, 95, 34))
+
+    const value = 1;
+>value : Symbol(value, Decl(compoundAssignmentUsesDeclaredTargetType.ts, 96, 9))
+
+    value -= 1;
+>value : Symbol(value, Decl(compoundAssignmentUsesDeclaredTargetType.ts, 96, 9))
+
+    holder.value -= 1;
+>holder.value : Symbol(value, Decl(compoundAssignmentUsesDeclaredTargetType.ts, 95, 34))
+>holder : Symbol(holder, Decl(compoundAssignmentUsesDeclaredTargetType.ts, 95, 25))
+>value : Symbol(value, Decl(compoundAssignmentUsesDeclaredTargetType.ts, 95, 34))
+
+    holder["value"] -= 1;
+>holder : Symbol(holder, Decl(compoundAssignmentUsesDeclaredTargetType.ts, 95, 25))
+>"value" : Symbol(value, Decl(compoundAssignmentUsesDeclaredTargetType.ts, 95, 34))
+}
+

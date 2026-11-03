@@ -1,12 +1,11 @@
 compoundExponentiationAssignmentLHSIsReference.ts(5,1): error TS2454: Variable 'x1' is used before being assigned.
 compoundExponentiationAssignmentLHSIsReference.ts(13,1): error TS2454: Variable 'x3' is used before being assigned.
 compoundExponentiationAssignmentLHSIsReference.ts(15,1): error TS2454: Variable 'x3' is used before being assigned.
-compoundExponentiationAssignmentLHSIsReference.ts(18,2): error TS2454: Variable 'x1' is used before being assigned.
 compoundExponentiationAssignmentLHSIsReference.ts(24,2): error TS2454: Variable 'x3' is used before being assigned.
 compoundExponentiationAssignmentLHSIsReference.ts(26,2): error TS2454: Variable 'x3' is used before being assigned.
 
 
-==== compoundExponentiationAssignmentLHSIsReference.ts (6 errors) ====
+==== compoundExponentiationAssignmentLHSIsReference.ts (5 errors) ====
     var value: any;
     
     // identifiers: variable and parameter
@@ -31,8 +30,6 @@ compoundExponentiationAssignmentLHSIsReference.ts(26,2): error TS2454: Variable 
     
     // parentheses, the contained expression is reference
     (x1) **= value;
-     ~~
-!!! error TS2454: Variable 'x1' is used before being assigned.
     
     function fn2(x4: number) {
         (x4) **= value;

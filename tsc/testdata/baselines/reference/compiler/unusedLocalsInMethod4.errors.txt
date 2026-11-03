@@ -10,12 +10,10 @@ unusedLocalsInMethod4.ts(58,9): error TS2454: Variable 'x' is used before being 
 unusedLocalsInMethod4.ts(67,20): error TS2454: Variable 'x' is used before being assigned.
 unusedLocalsInMethod4.ts(103,11): error TS1155: 'const' declarations must be initialized.
 unusedLocalsInMethod4.ts(113,9): error TS2454: Variable 'i' is used before being assigned.
-unusedLocalsInMethod4.ts(114,21): error TS2454: Variable 'i' is used before being assigned.
 unusedLocalsInMethod4.ts(139,9): error TS2454: Variable 'enabledSubstitutions' is used before being assigned.
-unusedLocalsInMethod4.ts(141,9): error TS2454: Variable 'enabledSubstitutions' is used before being assigned.
 
 
-==== unusedLocalsInMethod4.ts (15 errors) ====
+==== unusedLocalsInMethod4.ts (13 errors) ====
     function f<T, NonNull extends {}>() {
         let x1: number[]; // should error
         let x2: number[] | null; // should error
@@ -154,8 +152,6 @@ unusedLocalsInMethod4.ts(141,9): error TS2454: Variable 'enabledSubstitutions' i
             ~
 !!! error TS2454: Variable 'i' is used before being assigned.
             console.log(i); // NaN
-                        ~
-!!! error TS2454: Variable 'i' is used before being assigned.
         }
         inside();
     }
@@ -185,7 +181,5 @@ unusedLocalsInMethod4.ts(141,9): error TS2454: Variable 'enabledSubstitutions' i
 !!! error TS2454: Variable 'enabledSubstitutions' is used before being assigned.
     
             enabledSubstitutions.toString();
-            ~~~~~~~~~~~~~~~~~~~~
-!!! error TS2454: Variable 'enabledSubstitutions' is used before being assigned.
         }
     }

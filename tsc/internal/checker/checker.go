@@ -8362,16 +8362,16 @@ func (c *Checker) checkIndexedAccess(node *ast.Node, checkMode CheckMode) *Type 
 	if node.Flags&ast.NodeFlagsOptionalChain != 0 {
 		return c.checkElementAccessChain(node, checkMode)
 	}
-	return c.checkElementAccessExpression(node, c.checkNonNullExpression(node.Expression()), checkMode)
+	return c.checkElementAccessExpression(node, c.checkNonNullExpression(node.Expression()), checkMode, false /*writeOnly*/)
 }
 
 func (c *Checker) checkElementAccessChain(node *ast.Node, checkMode CheckMode) *Type {
 	exprType := c.checkExpression(node.Expression())
 	nonOptionalType := c.getOptionalExpressionType(exprType, node.Expression())
-	return c.propagateOptionalTypeMarker(c.checkElementAccessExpression(node, c.checkNonNullType(nonOptionalType, node.Expression()), checkMode), node, nonOptionalType != exprType)
+	return c.propagateOptionalTypeMarker(c.checkElementAccessExpression(node, c.checkNonNullType(nonOptionalType, node.Expression()), checkMode, false /*writeOnly*/), node, nonOptionalType != exprType)
 }
 
-func (c *Checker) checkElementAccessExpression(node *ast.Node, exprType *Type, checkMode CheckMode) *Type {
+func (c *Checker) checkElementAccessExpression(node *ast.Node, exprType *Type, checkMode CheckMode, writeOnly bool) *Type {
 	objectType := exprType
 	if getAssignmentTargetKind(node) != AssignmentKindNone || c.isMethodAccessForCall(node) {
 		objectType = c.getWidenedType(objectType)
@@ -8391,15 +8391,17 @@ func (c *Checker) checkElementAccessExpression(node *ast.Node, exprType *Type, c
 	}
 	assignmentTargetKind := getAssignmentTargetKind(node)
 	var accessFlags AccessFlags
-	if assignmentTargetKind == AssignmentKindNone {
+	if assignmentTargetKind == AssignmentKindNone || assignmentTargetKind == AssignmentKindCompound && !writeOnly {
 		accessFlags = AccessFlagsExpressionPosition
 	} else {
 		accessFlags = AccessFlagsWriting |
-			core.IfElse(assignmentTargetKind == AssignmentKindCompound, AccessFlagsExpressionPosition, 0) |
 			core.IfElse(c.isGenericObjectType(objectType) && !isThisTypeParameter(objectType), AccessFlagsNoIndexSignatures, 0)
 	}
 	indexedAccessType := core.OrElse(c.getIndexedAccessTypeOrUndefined(objectType, effectiveIndexType, accessFlags, node, nil), c.errorType)
-	return c.checkIndexedAccessIndexType(c.getFlowTypeOfAccessExpression(node, c.getResolvedSymbolOrNil(node), indexedAccessType, indexExpression, checkMode), node)
+	if !writeOnly {
+		indexedAccessType = c.getFlowTypeOfAccessExpression(node, c.getResolvedSymbolOrNil(node), indexedAccessType, indexExpression, checkMode)
+	}
+	return c.checkIndexedAccessIndexType(indexedAccessType, node)
 }
 
 // Return true if given node is an expression consisting of an identifier (possibly parenthesized)
@@ -11649,6 +11651,9 @@ func (c *Checker) checkPropertyAccessExpressionOrQualifiedName(node *ast.Node, l
 			propType = c.getTypeOfSymbol(prop)
 		}
 	}
+	if writeOnly {
+		return c.removeMissingType(propType, prop != nil && prop.Flags()&ast.SymbolFlagsOptional != 0)
+	}
 	return c.getFlowTypeOfAccessExpression(node, prop, propType, right, checkMode)
 }
 
@@ -13030,6 +13035,26 @@ func (c *Checker) getBaseTypesIfUnrelated(leftType *Type, rightType *Type, isRel
 	return effectiveLeft, effectiveRight
 }
 
+func (c *Checker) getAssignmentTargetType(node *ast.Node, t *Type) *Type {
+	if c.isErrorType(t) || isTypeAssertion(node) {
+		return t
+	}
+	switch node.Kind {
+	case ast.KindParenthesizedExpression, ast.KindSatisfiesExpression:
+		return c.getAssignmentTargetType(node.Expression(), t)
+	case ast.KindNonNullExpression:
+		return c.GetNonNullableType(c.getAssignmentTargetType(node.Expression(), t))
+	case ast.KindIdentifier:
+		return c.getTypeOfSymbol(c.getExportSymbolOfValueSymbolIfExported(c.getResolvedSymbol(node)))
+	case ast.KindPropertyAccessExpression:
+		return c.checkPropertyAccessExpression(node, CheckModeNormal, true /*writeOnly*/)
+	case ast.KindElementAccessExpression:
+		return c.checkElementAccessExpression(node, c.checkNonNullExpression(node.Expression()), CheckModeNormal, true /*writeOnly*/)
+	default:
+		panic("Unhandled assignment target")
+	}
+}
+
 func (c *Checker) checkAssignmentOperator(left *ast.Node, operator ast.Kind, right *ast.Node, leftType *Type, rightType *Type) {
 	if ast.IsAssignmentOperator(operator) {
 		// We ignore assignments of undefined to CommonJS exports when there are multiple assignment declarations
@@ -13038,11 +13063,11 @@ func (c *Checker) checkAssignmentOperator(left *ast.Node, operator ast.Kind, rig
 				return
 			}
 		}
-		// getters can be a subtype of setters, so to check for assignability we use the setter's type instead
-		if ast.IsCompoundAssignment(operator) && ast.IsPropertyAccessExpression(left) {
-			leftType = c.checkPropertyAccessExpression(left, CheckModeNormal, true /*writeOnly*/)
-		}
 		if c.checkReferenceExpression(left, diagnostics.The_left_hand_side_of_an_assignment_expression_must_be_a_variable_or_a_property_access, diagnostics.The_left_hand_side_of_an_assignment_expression_may_not_be_an_optional_property_access) {
+			// A compound assignment reads the narrowed type but writes to the declared variable or setter type.
+			if ast.IsCompoundAssignment(operator) {
+				leftType = c.getAssignmentTargetType(left, leftType)
+			}
 			var headMessage *diagnostics.Message
 			if c.exactOptionalPropertyTypes && ast.IsPropertyAccessExpression(left) && c.maybeTypeOfKind(rightType, TypeFlagsUndefined) {
 				target := c.getTypeOfPropertyOfType(c.getTypeOfExpression(left.Expression()), left.Name().Text())
@@ -27894,7 +27919,8 @@ func (c *Checker) getPropertyTypeForIndexType(originalObjectType *Type, objectTy
 				propType = c.getTypeOfSymbol(prop)
 			}
 			switch {
-			case accessExpression != nil && getAssignmentTargetKind(accessExpression) != AssignmentKindDefinite:
+			case accessExpression != nil && getAssignmentTargetKind(accessExpression) != AssignmentKindDefinite &&
+				(accessFlags&AccessFlagsWriting == 0 || accessFlags&AccessFlagsExpressionPosition != 0):
 				return c.getFlowTypeOfReference(accessExpression, propType)
 			case accessNode != nil && ast.IsIndexedAccessTypeNode(accessNode) && c.containsMissingType(propType):
 				return c.getUnionType([]*Type{propType, c.undefinedType})

@@ -21,15 +21,15 @@ function compoundFlow(value: number | string) {
 >1 : 1
 
         value;
->value : number & not 0
+>value : string | number
 
         if (value === 0) {
 >value === 0 : boolean
->value : number & not 0
+>value : string | number
 >0 : 0
 
             value;
->value : never
+>value : 0
         }
     }
 }
@@ -105,8 +105,8 @@ function parenthesizedCompound(value: number | undefined) {
 
         value! *= 2;
 >value! *= 2 : number
->value! : number & not 0
->value : number & not 0
+>value! : number
+>value : number | undefined
 >2 : 2
     }
 }

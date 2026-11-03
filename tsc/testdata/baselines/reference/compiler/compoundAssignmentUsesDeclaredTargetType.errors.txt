@@ -1,0 +1,182 @@
+compoundAssignmentUsesDeclaredTargetType.ts(61,5): error TS2322: Type 'number' is not assignable to type 'number & not 0'.
+  Type 'number' is not assignable to type 'not 0'.
+compoundAssignmentUsesDeclaredTargetType.ts(62,5): error TS2322: Type 'number' is not assignable to type 'number & not 0'.
+  Type 'number' is not assignable to type 'not 0'.
+compoundAssignmentUsesDeclaredTargetType.ts(63,5): error TS2322: Type 'number' is not assignable to type 'number & not 0'.
+  Type 'number' is not assignable to type 'not 0'.
+compoundAssignmentUsesDeclaredTargetType.ts(64,5): error TS2322: Type 'number' is not assignable to type 'number & not 0'.
+  Type 'number' is not assignable to type 'not 0'.
+compoundAssignmentUsesDeclaredTargetType.ts(65,5): error TS2322: Type 'number' is not assignable to type 'number & not 0'.
+  Type 'number' is not assignable to type 'not 0'.
+compoundAssignmentUsesDeclaredTargetType.ts(66,5): error TS2322: Type 'number' is not assignable to type 'number & not 0'.
+  Type 'number' is not assignable to type 'not 0'.
+compoundAssignmentUsesDeclaredTargetType.ts(70,5): error TS2322: Type 'number' is not assignable to type 'number & not 0'.
+  Type 'number' is not assignable to type 'not 0'.
+compoundAssignmentUsesDeclaredTargetType.ts(71,5): error TS2322: Type 'number' is not assignable to type 'number & not 0'.
+  Type 'number' is not assignable to type 'not 0'.
+compoundAssignmentUsesDeclaredTargetType.ts(72,5): error TS2322: Type 'number' is not assignable to type 'number & not 0'.
+  Type 'number' is not assignable to type 'not 0'.
+compoundAssignmentUsesDeclaredTargetType.ts(73,5): error TS2322: Type 'number' is not assignable to type 'number & not 0'.
+  Type 'number' is not assignable to type 'not 0'.
+compoundAssignmentUsesDeclaredTargetType.ts(78,9): error TS2322: Type 'number' is not assignable to type 'T'.
+  'number' is assignable to the constraint of type 'T', but 'T' could be instantiated with a different subtype of constraint 'number'.
+compoundAssignmentUsesDeclaredTargetType.ts(83,5): error TS2322: Type 'number' is not assignable to type 'number & not 0'.
+  Type 'number' is not assignable to type 'not 0'.
+compoundAssignmentUsesDeclaredTargetType.ts(87,5): error TS2322: Type 'number' is not assignable to type 'number & not 0'.
+  Type 'number' is not assignable to type 'not 0'.
+compoundAssignmentUsesDeclaredTargetType.ts(92,9): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+compoundAssignmentUsesDeclaredTargetType.ts(98,5): error TS2588: Cannot assign to 'value' because it is a constant.
+compoundAssignmentUsesDeclaredTargetType.ts(99,12): error TS2540: Cannot assign to 'value' because it is a read-only property.
+compoundAssignmentUsesDeclaredTargetType.ts(100,12): error TS2540: Cannot assign to 'value' because it is a read-only property.
+
+
+==== compoundAssignmentUsesDeclaredTargetType.ts (17 errors) ====
+    function numeric(value: number | string) {
+        if (typeof value === "number" && value !== 0) {
+            const result: number = value -= 1;
+        }
+    }
+    
+    function concatenate(value: number | string) {
+        if (typeof value === "number" && value !== 0) {
+            const result: string = value += "suffix";
+        }
+    }
+    
+    function text(value: string) {
+        if (value !== "") {
+            const result: string = value += "suffix";
+        }
+    }
+    
+    function bigint(value: bigint) {
+        if (value !== 0n) {
+            const result: bigint = value *= 2n;
+        }
+    }
+    
+    function wrapped(value: number | undefined) {
+        if (value !== undefined && value !== 0) {
+            (value) -= 1;
+            value! *= 2;
+            ((value)!) += 1;
+        }
+    }
+    
+    function satisfies(value: number) {
+        if (value !== 0) {
+            (value satisfies number) -= 1;
+        }
+    }
+    
+    function properties(holder: { value: number | string }, key: "value") {
+        if (typeof holder.value === "number" && holder.value !== 0) {
+            holder.value -= 1;
+        }
+        if (typeof holder["value"] === "number" && holder["value"] !== 0) {
+            holder["value"] -= 1;
+        }
+        if (typeof holder[key] === "number" && holder[key] !== 0) {
+            holder[key] -= 1;
+        }
+    }
+    
+    function accessors(holder: { get value(): number; set value(value: number | string) }) {
+        holder.value -= 1;
+        holder["value"] -= 1;
+        (holder.value) -= 1;
+        (holder["value"]) -= 1;
+        holder.value += "suffix";
+        holder["value"] += "suffix";
+    }
+    
+    function constrained(value: number & not 0, holder: { value: number & not 0 }) {
+        value -= 1;
+        ~~~~~
+!!! error TS2322: Type 'number' is not assignable to type 'number & not 0'.
+!!! error TS2322:   Type 'number' is not assignable to type 'not 0'.
+        (value) -= 1;
+        ~~~~~~~
+!!! error TS2322: Type 'number' is not assignable to type 'number & not 0'.
+!!! error TS2322:   Type 'number' is not assignable to type 'not 0'.
+        holder.value -= 1;
+        ~~~~~~~~~~~~
+!!! error TS2322: Type 'number' is not assignable to type 'number & not 0'.
+!!! error TS2322:   Type 'number' is not assignable to type 'not 0'.
+        holder["value"] -= 1;
+        ~~~~~~~~~~~~~~~
+!!! error TS2322: Type 'number' is not assignable to type 'number & not 0'.
+!!! error TS2322:   Type 'number' is not assignable to type 'not 0'.
+        (holder.value) -= 1;
+        ~~~~~~~~~~~~~~
+!!! error TS2322: Type 'number' is not assignable to type 'number & not 0'.
+!!! error TS2322:   Type 'number' is not assignable to type 'not 0'.
+        (holder["value"]) -= 1;
+        ~~~~~~~~~~~~~~~~~
+!!! error TS2322: Type 'number' is not assignable to type 'number & not 0'.
+!!! error TS2322:   Type 'number' is not assignable to type 'not 0'.
+    }
+    
+    function constrainedSetter(holder: { get value(): number; set value(value: number & not 0) }) {
+        holder.value -= 1;
+        ~~~~~~~~~~~~
+!!! error TS2322: Type 'number' is not assignable to type 'number & not 0'.
+!!! error TS2322:   Type 'number' is not assignable to type 'not 0'.
+        holder["value"] -= 1;
+        ~~~~~~~~~~~~~~~
+!!! error TS2322: Type 'number' is not assignable to type 'number & not 0'.
+!!! error TS2322:   Type 'number' is not assignable to type 'not 0'.
+        (holder.value) -= 1;
+        ~~~~~~~~~~~~~~
+!!! error TS2322: Type 'number' is not assignable to type 'number & not 0'.
+!!! error TS2322:   Type 'number' is not assignable to type 'not 0'.
+        (holder["value"]) -= 1;
+        ~~~~~~~~~~~~~~~~~
+!!! error TS2322: Type 'number' is not assignable to type 'number & not 0'.
+!!! error TS2322:   Type 'number' is not assignable to type 'not 0'.
+    }
+    
+    function generic<T extends number>(value: T) {
+        if (value !== 0) {
+            value -= 1;
+            ~~~~~
+!!! error TS2322: Type 'number' is not assignable to type 'T'.
+!!! error TS2322:   'number' is assignable to the constraint of type 'T', but 'T' could be instantiated with a different subtype of constraint 'number'.
+        }
+    }
+    
+    function unionKey(holder: { a: number & not 0; b: number }, key: "a" | "b") {
+        holder[key] -= 1;
+        ~~~~~~~~~~~
+!!! error TS2322: Type 'number' is not assignable to type 'number & not 0'.
+!!! error TS2322:   Type 'number' is not assignable to type 'not 0'.
+    }
+    
+    function asserted(value: number) {
+        (value as number & not 0) -= 1;
+        ~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2322: Type 'number' is not assignable to type 'number & not 0'.
+!!! error TS2322:   Type 'number' is not assignable to type 'not 0'.
+    }
+    
+    function invalidOperands(value: number | string) {
+        if (typeof value === "string" && value !== "") {
+            value -= 1;
+            ~~~~~
+!!! error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+        }
+    }
+    
+    function readonlyTargets(holder: { readonly value: number }) {
+        const value = 1;
+        value -= 1;
+        ~~~~~
+!!! error TS2588: Cannot assign to 'value' because it is a constant.
+        holder.value -= 1;
+               ~~~~~
+!!! error TS2540: Cannot assign to 'value' because it is a read-only property.
+        holder["value"] -= 1;
+               ~~~~~~~
+!!! error TS2540: Cannot assign to 'value' because it is a read-only property.
+    }
+    

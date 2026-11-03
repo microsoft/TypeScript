@@ -236,8 +236,11 @@ func (c *Checker) getTypeAtFlowAssignment(f *FlowState, flow *ast.FlowNode) Flow
 			return FlowType{t: c.unreachableNeverType}
 		}
 		if getAssignmentTargetKind(node) == AssignmentKindCompound {
-			flowType := c.getTypeAtFlowNode(f, flow.Antecedent)
-			return c.newFlowType(c.getBaseTypeOfLiteralType(flowType.t), flowType.incomplete)
+			if f.declaredType == c.autoType || f.declaredType == c.autoArrayType {
+				flowType := c.getTypeAtFlowNode(f, flow.Antecedent)
+				return c.newFlowType(c.getBaseTypeOfLiteralType(flowType.t), flowType.incomplete)
+			}
+			return FlowType{t: f.declaredType}
 		}
 		if f.declaredType == c.autoType || f.declaredType == c.autoArrayType {
 			if c.isEmptyArrayAssignment(node) {

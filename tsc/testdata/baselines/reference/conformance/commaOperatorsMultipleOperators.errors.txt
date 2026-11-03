@@ -24,11 +24,10 @@ commaOperatorsMultipleOperators.ts(19,32): error TS2454: Variable 'STRING' is us
 commaOperatorsMultipleOperators.ts(19,40): error TS2454: Variable 'OBJECT' is used before being assigned.
 commaOperatorsMultipleOperators.ts(23,3): error TS2454: Variable 'NUMBER' is used before being assigned.
 commaOperatorsMultipleOperators.ts(23,11): error TS2454: Variable 'STRING' is used before being assigned.
-commaOperatorsMultipleOperators.ts(26,26): error TS2454: Variable 'NUMBER' is used before being assigned.
 commaOperatorsMultipleOperators.ts(26,34): error TS2454: Variable 'STRING' is used before being assigned.
 
 
-==== commaOperatorsMultipleOperators.ts (28 errors) ====
+==== commaOperatorsMultipleOperators.ts (27 errors) ====
     var ANY: any;
     var BOOLEAN: boolean;
     var NUMBER: number;
@@ -107,7 +106,5 @@ commaOperatorsMultipleOperators.ts(26,34): error TS2454: Variable 'STRING' is us
     
     var resultIsNumber2 = (null, true, 1);
     var resultIsObject2 = (++NUMBER, STRING.charAt(0), new Object());
-                             ~~~~~~
-!!! error TS2454: Variable 'NUMBER' is used before being assigned.
                                      ~~~~~~
 !!! error TS2454: Variable 'STRING' is used before being assigned.

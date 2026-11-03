@@ -1,0 +1,348 @@
+//// [tests/cases/compiler/compoundAssignmentResetsFlowType.ts] ////
+
+=== compoundAssignmentResetsFlowType.ts ===
+export function numeric(value: number) {
+>numeric : (value: number) => number
+>value : number
+
+    if (value !== 0) {
+>value !== 0 : boolean
+>value : number
+>0 : 0
+
+        value -= 1;
+>value -= 1 : number
+>value : number & not 0
+>1 : 1
+
+        value;
+>value : number
+
+        if (value === 0) {
+>value === 0 : boolean
+>value : number
+>0 : 0
+
+            const zero: 0 = value;
+>zero : 0
+>value : 0
+        }
+    }
+    return value;
+>value : number
+}
+
+export function updates(value: number) {
+>updates : (value: number) => number
+>value : number
+
+    if (value !== 0) {
+>value !== 0 : boolean
+>value : number
+>0 : 0
+
+        value++;
+>value++ : number
+>value : number & not 0
+
+        value;
+>value : number
+    }
+    if (value !== 0) {
+>value !== 0 : boolean
+>value : number
+>0 : 0
+
+        --value;
+>--value : number
+>value : number & not 0
+
+        value;
+>value : number
+    }
+    if (value !== 0) {
+>value !== 0 : boolean
+>value : number
+>0 : 0
+
+        ++value;
+>++value : number
+>value : number & not 0
+
+        value;
+>value : number
+    }
+    if (value !== 0) {
+>value !== 0 : boolean
+>value : number
+>0 : 0
+
+        value--;
+>value-- : number
+>value : number & not 0
+
+        value;
+>value : number
+    }
+    return value;
+>value : number
+}
+
+export function changeKind(value: number | string) {
+>changeKind : (value: number | string) => string | number
+>value : string | number
+
+    if (typeof value === "number") {
+>typeof value === "number" : boolean
+>typeof value : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
+>value : string | number
+>"number" : "number"
+
+        value += "suffix";
+>value += "suffix" : string
+>value : number
+>"suffix" : "suffix"
+
+        return value;
+>value : string | number
+    }
+    throw new Error();
+>new Error() : Error
+>Error : ErrorConstructor
+}
+
+export function properties(holder: { value: number }) {
+>properties : (holder: { value: number; }) => number
+>holder : { value: number; }
+>value : number
+
+    if (holder.value !== 0) {
+>holder.value !== 0 : boolean
+>holder.value : number
+>holder : { value: number; }
+>value : number
+>0 : 0
+
+        holder.value -= 1;
+>holder.value -= 1 : number
+>holder.value : number
+>holder : { value: number; }
+>value : number
+>1 : 1
+
+        holder.value;
+>holder.value : number
+>holder : { value: number; }
+>value : number
+    }
+    if (holder["value"] !== 0) {
+>holder["value"] !== 0 : boolean
+>holder["value"] : number
+>holder : { value: number; }
+>"value" : "value"
+>0 : 0
+
+        holder["value"]--;
+>holder["value"]-- : number
+>holder["value"] : number
+>holder : { value: number; }
+>"value" : "value"
+
+        holder["value"];
+>holder["value"] : number
+>holder : { value: number; }
+>"value" : "value"
+    }
+    return holder.value;
+>holder.value : number
+>holder : { value: number; }
+>value : number
+}
+
+export function loop(value: number) {
+>loop : (value: number) => number
+>value : number
+
+    while (value !== 0) {
+>value !== 0 : boolean
+>value : number
+>0 : 0
+
+        value -= 1;
+>value -= 1 : number
+>value : number & not 0
+>1 : 1
+    }
+    const zero: 0 = value;
+>zero : 0
+>value : 0
+
+    return value;
+>value : 0
+}
+
+export function inferredNumber() {
+>inferredNumber : () => number
+
+    let value;
+>value : any
+
+    value = 2;
+>value = 2 : 2
+>value : any
+>2 : 2
+
+    if (value !== 0) {
+>value !== 0 : boolean
+>value : number
+>0 : 0
+
+        value -= 1;
+>value -= 1 : number
+>value : number & not 0
+>1 : 1
+
+        value;
+>value : number & not 0
+    }
+    return value;
+>value : number
+}
+
+export function inferredString() {
+>inferredString : () => string
+
+    let value;
+>value : any
+
+    value = "text";
+>value = "text" : "text"
+>value : any
+>"text" : "text"
+
+    value += [];
+>value += [] : string
+>value : string
+>[] : never[]
+
+    value += 1;
+>value += 1 : string
+>value : string
+>1 : 1
+
+    return value;
+>value : string
+}
+
+export function inferredBigInt() {
+>inferredBigInt : () => bigint
+
+    let value;
+>value : any
+
+    value = 1n;
+>value = 1n : 1n
+>value : any
+>1n : 1n
+
+    value++;
+>value++ : bigint
+>value : bigint
+
+    return value;
+>value : bigint
+}
+
+export function inferredLoop() {
+>inferredLoop : () => number
+
+    let value;
+>value : any
+
+    value = 2;
+>value = 2 : 2
+>value : any
+>2 : 2
+
+    while (value !== 0) {
+>value !== 0 : boolean
+>value : number
+>0 : 0
+
+        value -= 1;
+>value -= 1 : number
+>value : number & not 0
+>1 : 1
+    }
+    return value;
+>value : 0
+}
+
+export function defaultOr(value: 0 | 1 | undefined) {
+>defaultOr : (value: 0 | 1 | undefined) => 1
+>value : 0 | 1 | undefined
+
+    value ||= 1;
+>value ||= 1 : 1
+>value : 0 | 1 | undefined
+>1 : 1
+
+    const result: 1 = value;
+>result : 1
+>value : 1
+
+    return value;
+>value : 1
+}
+
+export function defaultNullish(value: 0 | 1 | undefined) {
+>defaultNullish : (value: 0 | 1 | undefined) => 0 | 1
+>value : 0 | 1 | undefined
+
+    value ??= 1;
+>value ??= 1 : 0 | 1
+>value : 0 | 1 | undefined
+>1 : 1
+
+    const result: 0 | 1 = value;
+>result : 0 | 1
+>value : 0 | 1
+
+    return value;
+>value : 0 | 1
+}
+
+export function conditionalAnd(value: 0 | 1 | undefined) {
+>conditionalAnd : (value: 0 | 1 | undefined) => 0 | undefined
+>value : 0 | 1 | undefined
+
+    value &&= 0;
+>value &&= 0 : 0 | undefined
+>value : 0 | 1 | undefined
+>0 : 0
+
+    const result: 0 | undefined = value;
+>result : 0 | undefined
+>value : 0 | undefined
+
+    return value;
+>value : 0 | undefined
+}
+
+export function declaredConstraint(value: number & not 0) {
+>declaredConstraint : (value: number & not 0) => number & not 0
+>value : number & not 0
+
+    value -= 1;
+>value -= 1 : number
+>value : number & not 0
+>1 : 1
+
+    const retained: number & not 0 = value;
+>retained : number & not 0
+>value : number & not 0
+
+    return value;
+>value : number & not 0
+}
+

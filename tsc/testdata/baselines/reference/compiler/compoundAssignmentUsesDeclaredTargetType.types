@@ -1,0 +1,436 @@
+//// [tests/cases/compiler/compoundAssignmentUsesDeclaredTargetType.ts] ////
+
+=== compoundAssignmentUsesDeclaredTargetType.ts ===
+function numeric(value: number | string) {
+>numeric : (value: number | string) => void
+>value : string | number
+
+    if (typeof value === "number" && value !== 0) {
+>typeof value === "number" && value !== 0 : boolean
+>typeof value === "number" : boolean
+>typeof value : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
+>value : string | number
+>"number" : "number"
+>value !== 0 : boolean
+>value : number
+>0 : 0
+
+        const result: number = value -= 1;
+>result : number
+>value -= 1 : number
+>value : number & not 0
+>1 : 1
+    }
+}
+
+function concatenate(value: number | string) {
+>concatenate : (value: number | string) => void
+>value : string | number
+
+    if (typeof value === "number" && value !== 0) {
+>typeof value === "number" && value !== 0 : boolean
+>typeof value === "number" : boolean
+>typeof value : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
+>value : string | number
+>"number" : "number"
+>value !== 0 : boolean
+>value : number
+>0 : 0
+
+        const result: string = value += "suffix";
+>result : string
+>value += "suffix" : string
+>value : number & not 0
+>"suffix" : "suffix"
+    }
+}
+
+function text(value: string) {
+>text : (value: string) => void
+>value : string
+
+    if (value !== "") {
+>value !== "" : boolean
+>value : string
+>"" : ""
+
+        const result: string = value += "suffix";
+>result : string
+>value += "suffix" : string
+>value : string & not ""
+>"suffix" : "suffix"
+    }
+}
+
+function bigint(value: bigint) {
+>bigint : (value: bigint) => void
+>value : bigint
+
+    if (value !== 0n) {
+>value !== 0n : boolean
+>value : bigint
+>0n : 0n
+
+        const result: bigint = value *= 2n;
+>result : bigint
+>value *= 2n : bigint
+>value : bigint & not 0n
+>2n : 2n
+    }
+}
+
+function wrapped(value: number | undefined) {
+>wrapped : (value: number | undefined) => void
+>value : number | undefined
+
+    if (value !== undefined && value !== 0) {
+>value !== undefined && value !== 0 : boolean
+>value !== undefined : boolean
+>value : number | undefined
+>undefined : undefined
+>value !== 0 : boolean
+>value : number
+>0 : 0
+
+        (value) -= 1;
+>(value) -= 1 : number
+>(value) : number & not 0
+>value : number & not 0
+>1 : 1
+
+        value! *= 2;
+>value! *= 2 : number
+>value! : number
+>value : number | undefined
+>2 : 2
+
+        ((value)!) += 1;
+>((value)!) += 1 : number
+>((value)!) : number
+>(value)! : number
+>(value) : number | undefined
+>value : number | undefined
+>1 : 1
+    }
+}
+
+function satisfies(value: number) {
+>satisfies : (value: number) => void
+>value : number
+
+    if (value !== 0) {
+>value !== 0 : boolean
+>value : number
+>0 : 0
+
+        (value satisfies number) -= 1;
+>(value satisfies number) -= 1 : number
+>(value satisfies number) : number & not 0
+>value satisfies number : number & not 0
+>value : number & not 0
+>1 : 1
+    }
+}
+
+function properties(holder: { value: number | string }, key: "value") {
+>properties : (holder: { value: number | string; }, key: "value") => void
+>holder : { value: number | string; }
+>value : string | number
+>key : "value"
+
+    if (typeof holder.value === "number" && holder.value !== 0) {
+>typeof holder.value === "number" && holder.value !== 0 : boolean
+>typeof holder.value === "number" : boolean
+>typeof holder.value : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
+>holder.value : string | number
+>holder : { value: number | string; }
+>value : string | number
+>"number" : "number"
+>holder.value !== 0 : boolean
+>holder.value : number
+>holder : { value: number | string; }
+>value : number
+>0 : 0
+
+        holder.value -= 1;
+>holder.value -= 1 : number
+>holder.value : number
+>holder : { value: number | string; }
+>value : number
+>1 : 1
+    }
+    if (typeof holder["value"] === "number" && holder["value"] !== 0) {
+>typeof holder["value"] === "number" && holder["value"] !== 0 : boolean
+>typeof holder["value"] === "number" : boolean
+>typeof holder["value"] : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
+>holder["value"] : string | number
+>holder : { value: number | string; }
+>"value" : "value"
+>"number" : "number"
+>holder["value"] !== 0 : boolean
+>holder["value"] : number
+>holder : { value: number | string; }
+>"value" : "value"
+>0 : 0
+
+        holder["value"] -= 1;
+>holder["value"] -= 1 : number
+>holder["value"] : number
+>holder : { value: number | string; }
+>"value" : "value"
+>1 : 1
+    }
+    if (typeof holder[key] === "number" && holder[key] !== 0) {
+>typeof holder[key] === "number" && holder[key] !== 0 : boolean
+>typeof holder[key] === "number" : boolean
+>typeof holder[key] : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
+>holder[key] : string | number
+>holder : { value: number | string; }
+>key : "value"
+>"number" : "number"
+>holder[key] !== 0 : boolean
+>holder[key] : number
+>holder : { value: number | string; }
+>key : "value"
+>0 : 0
+
+        holder[key] -= 1;
+>holder[key] -= 1 : number
+>holder[key] : number
+>holder : { value: number | string; }
+>key : "value"
+>1 : 1
+    }
+}
+
+function accessors(holder: { get value(): number; set value(value: number | string) }) {
+>accessors : (holder: { get value(): number; set value(value: number | string); }) => void
+>holder : { get value(): number; set value(value: number | string); }
+>value : number
+>value : number
+>value : string | number
+
+    holder.value -= 1;
+>holder.value -= 1 : number
+>holder.value : number
+>holder : { get value(): number; set value(value: number | string); }
+>value : number
+>1 : 1
+
+    holder["value"] -= 1;
+>holder["value"] -= 1 : number
+>holder["value"] : number
+>holder : { get value(): number; set value(value: number | string); }
+>"value" : "value"
+>1 : 1
+
+    (holder.value) -= 1;
+>(holder.value) -= 1 : number
+>(holder.value) : number
+>holder.value : number
+>holder : { get value(): number; set value(value: number | string); }
+>value : number
+>1 : 1
+
+    (holder["value"]) -= 1;
+>(holder["value"]) -= 1 : number
+>(holder["value"]) : number
+>holder["value"] : number
+>holder : { get value(): number; set value(value: number | string); }
+>"value" : "value"
+>1 : 1
+
+    holder.value += "suffix";
+>holder.value += "suffix" : string
+>holder.value : number
+>holder : { get value(): number; set value(value: number | string); }
+>value : number
+>"suffix" : "suffix"
+
+    holder["value"] += "suffix";
+>holder["value"] += "suffix" : string
+>holder["value"] : number
+>holder : { get value(): number; set value(value: number | string); }
+>"value" : "value"
+>"suffix" : "suffix"
+}
+
+function constrained(value: number & not 0, holder: { value: number & not 0 }) {
+>constrained : (value: number & not 0, holder: { value: number & not 0; }) => void
+>value : number & not 0
+>holder : { value: number & not 0; }
+>value : number & not 0
+
+    value -= 1;
+>value -= 1 : number
+>value : number & not 0
+>1 : 1
+
+    (value) -= 1;
+>(value) -= 1 : number
+>(value) : number & not 0
+>value : number & not 0
+>1 : 1
+
+    holder.value -= 1;
+>holder.value -= 1 : number
+>holder.value : number & not 0
+>holder : { value: number & not 0; }
+>value : number & not 0
+>1 : 1
+
+    holder["value"] -= 1;
+>holder["value"] -= 1 : number
+>holder["value"] : number & not 0
+>holder : { value: number & not 0; }
+>"value" : "value"
+>1 : 1
+
+    (holder.value) -= 1;
+>(holder.value) -= 1 : number
+>(holder.value) : number & not 0
+>holder.value : number & not 0
+>holder : { value: number & not 0; }
+>value : number & not 0
+>1 : 1
+
+    (holder["value"]) -= 1;
+>(holder["value"]) -= 1 : number
+>(holder["value"]) : number & not 0
+>holder["value"] : number & not 0
+>holder : { value: number & not 0; }
+>"value" : "value"
+>1 : 1
+}
+
+function constrainedSetter(holder: { get value(): number; set value(value: number & not 0) }) {
+>constrainedSetter : (holder: { get value(): number; set value(value: number & not 0); }) => void
+>holder : { get value(): number; set value(value: number & not 0); }
+>value : number
+>value : number
+>value : number & not 0
+
+    holder.value -= 1;
+>holder.value -= 1 : number
+>holder.value : number
+>holder : { get value(): number; set value(value: number & not 0); }
+>value : number
+>1 : 1
+
+    holder["value"] -= 1;
+>holder["value"] -= 1 : number
+>holder["value"] : number
+>holder : { get value(): number; set value(value: number & not 0); }
+>"value" : "value"
+>1 : 1
+
+    (holder.value) -= 1;
+>(holder.value) -= 1 : number
+>(holder.value) : number
+>holder.value : number
+>holder : { get value(): number; set value(value: number & not 0); }
+>value : number
+>1 : 1
+
+    (holder["value"]) -= 1;
+>(holder["value"]) -= 1 : number
+>(holder["value"]) : number
+>holder["value"] : number
+>holder : { get value(): number; set value(value: number & not 0); }
+>"value" : "value"
+>1 : 1
+}
+
+function generic<T extends number>(value: T) {
+>generic : <T extends number>(value: T) => void
+>value : T
+
+    if (value !== 0) {
+>value !== 0 : boolean
+>value : T
+>0 : 0
+
+        value -= 1;
+>value -= 1 : number
+>value : T & not 0
+>1 : 1
+    }
+}
+
+function unionKey(holder: { a: number & not 0; b: number }, key: "a" | "b") {
+>unionKey : (holder: { a: number & not 0; b: number; }, key: "a" | "b") => void
+>holder : { a: number & not 0; b: number; }
+>a : number & not 0
+>b : number
+>key : "a" | "b"
+
+    holder[key] -= 1;
+>holder[key] -= 1 : number
+>holder[key] : number
+>holder : { a: number & not 0; b: number; }
+>key : "a" | "b"
+>1 : 1
+}
+
+function asserted(value: number) {
+>asserted : (value: number) => void
+>value : number
+
+    (value as number & not 0) -= 1;
+>(value as number & not 0) -= 1 : number
+>(value as number & not 0) : number & not 0
+>value as number & not 0 : number & not 0
+>value : number
+>1 : 1
+}
+
+function invalidOperands(value: number | string) {
+>invalidOperands : (value: number | string) => void
+>value : string | number
+
+    if (typeof value === "string" && value !== "") {
+>typeof value === "string" && value !== "" : boolean
+>typeof value === "string" : boolean
+>typeof value : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
+>value : string | number
+>"string" : "string"
+>value !== "" : boolean
+>value : string
+>"" : ""
+
+        value -= 1;
+>value -= 1 : number
+>value : string & not ""
+>1 : 1
+    }
+}
+
+function readonlyTargets(holder: { readonly value: number }) {
+>readonlyTargets : (holder: { readonly value: number; }) => void
+>holder : { readonly value: number; }
+>value : number
+
+    const value = 1;
+>value : 1
+>1 : 1
+
+    value -= 1;
+>value -= 1 : number
+>value : any
+>1 : 1
+
+    holder.value -= 1;
+>holder.value -= 1 : number
+>holder.value : any
+>holder : { readonly value: number; }
+>value : any
+>1 : 1
+
+    holder["value"] -= 1;
+>holder["value"] -= 1 : number
+>holder["value"] : any
+>holder : { readonly value: number; }
+>"value" : "value"
+>1 : 1
+}
+
