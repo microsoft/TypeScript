@@ -44,3 +44,126 @@ export const bar = (thing: SomeType) => {
 >arg : Symbol(arg, Decl(inner.d.ts, 1, 32))
 
 };
+
+=== node_modules/deep-types/index.d.ts ===
+export type { HelperDeep, InlineDeep, PublicMapped } from "./source.js";
+>HelperDeep : Symbol(HelperDeep, Decl(index.d.ts, 0, 13))
+>InlineDeep : Symbol(InlineDeep, Decl(index.d.ts, 0, 25))
+>PublicMapped : Symbol(PublicMapped, Decl(index.d.ts, 0, 37))
+
+export { mapped } from "./source.js";
+>mapped : Symbol(mapped, Decl(index.d.ts, 1, 8))
+
+=== node_modules/deep-types/source.d.ts ===
+export type HelperDeep<T> = T extends object ? _HelperObjectDeep<T> : T;
+>HelperDeep : Symbol(HelperDeep, Decl(source.d.ts, 0, 0))
+>T : Symbol(T, Decl(source.d.ts, 0, 23))
+>T : Symbol(T, Decl(source.d.ts, 0, 23))
+>_HelperObjectDeep : Symbol(_HelperObjectDeep, Decl(source.d.ts, 0, 72))
+>T : Symbol(T, Decl(source.d.ts, 0, 23))
+>T : Symbol(T, Decl(source.d.ts, 0, 23))
+
+export type _HelperObjectDeep<T> = { readonly [K in keyof T]: HelperDeep<T[K]> };
+>_HelperObjectDeep : Symbol(_HelperObjectDeep, Decl(source.d.ts, 0, 72))
+>T : Symbol(T, Decl(source.d.ts, 1, 30))
+>K : Symbol(K, Decl(source.d.ts, 1, 47))
+>T : Symbol(T, Decl(source.d.ts, 1, 30))
+>HelperDeep : Symbol(HelperDeep, Decl(source.d.ts, 0, 0))
+>T : Symbol(T, Decl(source.d.ts, 1, 30))
+>K : Symbol(K, Decl(source.d.ts, 1, 47))
+
+export type InlineDeep<T> = T extends object ? { readonly [K in keyof T]: InlineDeep<T[K]> } : T;
+>InlineDeep : Symbol(InlineDeep, Decl(source.d.ts, 1, 81))
+>T : Symbol(T, Decl(source.d.ts, 2, 23))
+>T : Symbol(T, Decl(source.d.ts, 2, 23))
+>K : Symbol(K, Decl(source.d.ts, 2, 59))
+>T : Symbol(T, Decl(source.d.ts, 2, 23))
+>InlineDeep : Symbol(InlineDeep, Decl(source.d.ts, 1, 81))
+>T : Symbol(T, Decl(source.d.ts, 2, 23))
+>K : Symbol(K, Decl(source.d.ts, 2, 59))
+>T : Symbol(T, Decl(source.d.ts, 2, 23))
+
+export type PublicMapped<T> = { readonly [K in keyof T]: T[K] };
+>PublicMapped : Symbol(PublicMapped, Decl(source.d.ts, 2, 97))
+>T : Symbol(T, Decl(source.d.ts, 3, 25))
+>K : Symbol(K, Decl(source.d.ts, 3, 42))
+>T : Symbol(T, Decl(source.d.ts, 3, 25))
+>T : Symbol(T, Decl(source.d.ts, 3, 25))
+>K : Symbol(K, Decl(source.d.ts, 3, 42))
+
+export declare function mapped<T>(value: T): _HelperObjectDeep<T>;
+>mapped : Symbol(mapped, Decl(source.d.ts, 3, 64))
+>T : Symbol(T, Decl(source.d.ts, 4, 31))
+>value : Symbol(value, Decl(source.d.ts, 4, 34))
+>T : Symbol(T, Decl(source.d.ts, 4, 31))
+>_HelperObjectDeep : Symbol(_HelperObjectDeep, Decl(source.d.ts, 0, 72))
+>T : Symbol(T, Decl(source.d.ts, 4, 31))
+
+=== src/mapped.ts ===
+import type { HelperDeep, InlineDeep, PublicMapped } from "deep-types";
+>HelperDeep : Symbol(HelperDeep, Decl(mapped.ts, 0, 13))
+>InlineDeep : Symbol(InlineDeep, Decl(mapped.ts, 0, 25))
+>PublicMapped : Symbol(PublicMapped, Decl(mapped.ts, 0, 37))
+
+type Tree = { value: string; children: Tree[] };
+>Tree : Symbol(Tree, Decl(mapped.ts, 0, 71))
+>value : Symbol(value, Decl(mapped.ts, 2, 13))
+>children : Symbol(children, Decl(mapped.ts, 2, 28))
+>Tree : Symbol(Tree, Decl(mapped.ts, 0, 71))
+
+declare function helper<T>(value: T): HelperDeep<T>;
+>helper : Symbol(helper, Decl(mapped.ts, 2, 48))
+>T : Symbol(T, Decl(mapped.ts, 3, 24))
+>value : Symbol(value, Decl(mapped.ts, 3, 27))
+>T : Symbol(T, Decl(mapped.ts, 3, 24))
+>HelperDeep : Symbol(HelperDeep, Decl(mapped.ts, 0, 13))
+>T : Symbol(T, Decl(mapped.ts, 3, 24))
+
+declare function inline<T>(value: T): InlineDeep<T>;
+>inline : Symbol(inline, Decl(mapped.ts, 3, 52))
+>T : Symbol(T, Decl(mapped.ts, 4, 24))
+>value : Symbol(value, Decl(mapped.ts, 4, 27))
+>T : Symbol(T, Decl(mapped.ts, 4, 24))
+>InlineDeep : Symbol(InlineDeep, Decl(mapped.ts, 0, 25))
+>T : Symbol(T, Decl(mapped.ts, 4, 24))
+
+declare function publicMapped<T>(value: T): PublicMapped<T>;
+>publicMapped : Symbol(publicMapped, Decl(mapped.ts, 4, 52))
+>T : Symbol(T, Decl(mapped.ts, 5, 30))
+>value : Symbol(value, Decl(mapped.ts, 5, 33))
+>T : Symbol(T, Decl(mapped.ts, 5, 30))
+>PublicMapped : Symbol(PublicMapped, Decl(mapped.ts, 0, 37))
+>T : Symbol(T, Decl(mapped.ts, 5, 30))
+
+export const recursive = helper({} as Tree);
+>recursive : Symbol(recursive, Decl(mapped.ts, 7, 12))
+>helper : Symbol(helper, Decl(mapped.ts, 2, 48))
+>Tree : Symbol(Tree, Decl(mapped.ts, 0, 71))
+
+export const finite = helper({ value: "text" });
+>finite : Symbol(finite, Decl(mapped.ts, 8, 12))
+>helper : Symbol(helper, Decl(mapped.ts, 2, 48))
+>value : Symbol(value, Decl(mapped.ts, 8, 30))
+
+export const inlined = inline({} as Tree);
+>inlined : Symbol(inlined, Decl(mapped.ts, 9, 12))
+>inline : Symbol(inline, Decl(mapped.ts, 3, 52))
+>Tree : Symbol(Tree, Decl(mapped.ts, 0, 71))
+
+export const named = publicMapped({ value: "text" });
+>named : Symbol(named, Decl(mapped.ts, 10, 12))
+>publicMapped : Symbol(publicMapped, Decl(mapped.ts, 4, 52))
+>value : Symbol(value, Decl(mapped.ts, 10, 35))
+
+=== src/genericMapped.ts ===
+import { mapped } from "deep-types";
+>mapped : Symbol(mapped, Decl(genericMapped.ts, 0, 8))
+
+export const generic = <T>(value: T) => mapped(value);
+>generic : Symbol(generic, Decl(genericMapped.ts, 2, 12))
+>T : Symbol(T, Decl(genericMapped.ts, 2, 24))
+>value : Symbol(value, Decl(genericMapped.ts, 2, 27))
+>T : Symbol(T, Decl(genericMapped.ts, 2, 24))
+>mapped : Symbol(mapped, Decl(genericMapped.ts, 0, 8))
+>value : Symbol(value, Decl(genericMapped.ts, 2, 27))
+

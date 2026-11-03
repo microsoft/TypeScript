@@ -29,3 +29,40 @@ export const foo = (thing: SomeType) => {
 export const bar = (thing: SomeType) => {
   return thing.arg;
 };
+
+// @filename: node_modules/deep-types/package.json
+{
+  "name": "deep-types",
+  "exports": {
+    ".": { "types": "./index.d.ts" }
+  }
+}
+
+// @filename: node_modules/deep-types/index.d.ts
+export type { HelperDeep, InlineDeep, PublicMapped } from "./source.js";
+export { mapped } from "./source.js";
+
+// @filename: node_modules/deep-types/source.d.ts
+export type HelperDeep<T> = T extends object ? _HelperObjectDeep<T> : T;
+export type _HelperObjectDeep<T> = { readonly [K in keyof T]: HelperDeep<T[K]> };
+export type InlineDeep<T> = T extends object ? { readonly [K in keyof T]: InlineDeep<T[K]> } : T;
+export type PublicMapped<T> = { readonly [K in keyof T]: T[K] };
+export declare function mapped<T>(value: T): _HelperObjectDeep<T>;
+
+// @filename: src/mapped.ts
+import type { HelperDeep, InlineDeep, PublicMapped } from "deep-types";
+
+type Tree = { value: string; children: Tree[] };
+declare function helper<T>(value: T): HelperDeep<T>;
+declare function inline<T>(value: T): InlineDeep<T>;
+declare function publicMapped<T>(value: T): PublicMapped<T>;
+
+export const recursive = helper({} as Tree);
+export const finite = helper({ value: "text" });
+export const inlined = inline({} as Tree);
+export const named = publicMapped({ value: "text" });
+
+// @filename: src/genericMapped.ts
+import { mapped } from "deep-types";
+
+export const generic = <T>(value: T) => mapped(value);
