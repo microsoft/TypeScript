@@ -1086,7 +1086,25 @@ func parseConfig(
 			setPropertyValue("exclude")
 			setPropertyValue("files")
 			if extendedRawMap, ok := extendsRaw.(*collections.OrderedMap[string, any]); ok && extendedRawMap.Has("contentMappers") {
-				result.contentMappers, _ = extendedRawMap.GetOrZero("contentMappers").([]any)
+				if contentMappers, ok := extendedRawMap.GetOrZero("contentMappers").([]any); ok {
+					result.contentMappers = core.Map(contentMappers, func(value any) any {
+						mapper, ok := value.(*collections.OrderedMap[string, any])
+						if !ok {
+							return value
+						}
+						packageName, ok := mapper.Get("package")
+						if !ok {
+							return value
+						}
+						packagePath, ok := packageName.(string)
+						if !ok || !tspath.IsExternalModuleNameRelative(packagePath) || tspath.IsRootedDiskPath(packagePath) {
+							return value
+						}
+						rebasedMapper := mapper.Clone()
+						rebasedMapper.Set("package", tspath.ToRootedFilePath(packagePath, extendedConfigPath.Directory()).AsString())
+						return rebasedMapper
+					})
+				}
 			}
 			if extendedRawMap, ok := extendsRaw.(*collections.OrderedMap[string, any]); ok && extendedRawMap.Has("compileOnSave") {
 				if compileOnSave, ok := extendedRawMap.GetOrZero("compileOnSave").(bool); ok {
