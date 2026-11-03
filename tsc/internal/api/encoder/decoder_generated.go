@@ -272,11 +272,13 @@ func (d *astDecoder) createChildrenNode(kind ast.Kind, data uint32, childIndices
 		return d.factory.NewSwitchStatement(expression, caseBlock), nil
 	case ast.KindCaseBlock:
 		return d.factory.NewCaseBlock(d.singleNodeListChild(childIndices)), nil
-	case ast.KindCaseClause, ast.KindDefaultClause:
+	case ast.KindCaseClause:
 		it := newChildIter(childIndices)
 		expression := d.nodeAt(it.nextIf(mask, 0))
 		statements := d.nodeListAt(it.nextIf(mask, 1))
-		return d.factory.NewCaseOrDefaultClause(kind, expression, statements), nil
+		return d.factory.NewCaseClause(expression, statements), nil
+	case ast.KindDefaultClause:
+		return d.factory.NewDefaultClause(d.singleNodeListChild(childIndices)), nil
 	case ast.KindThrowStatement:
 		return d.factory.NewThrowStatement(d.singleChild(childIndices)), nil
 	case ast.KindTryStatement:

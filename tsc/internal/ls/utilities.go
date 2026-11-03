@@ -1070,7 +1070,7 @@ func (c *caseClauseTrackerState) hasValue(value trackerHasValue) bool {
 	}
 }
 
-func newCaseClauseTracker(typeChecker *checker.Checker, clauses []*ast.CaseOrDefaultClauseNode) caseClauseTracker {
+func newCaseClauseTracker(typeChecker *checker.Checker, clauses []*ast.CaseOrDefaultClause) caseClauseTracker {
 	c := &caseClauseTrackerState{
 		existingStrings: collections.Set[string]{},
 		existingNumbers: collections.Set[jsnum.Number]{},

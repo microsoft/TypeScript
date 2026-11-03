@@ -2140,17 +2140,17 @@ func (b *Binder) bindCaseBlock(node *ast.Node) {
 		b.bind(clause)
 		fallthroughFlow = b.currentFlow
 		if b.currentFlow.Flags&ast.FlowFlagsUnreachable == 0 && i != len(clauses)-1 {
-			clause.AsCaseOrDefaultClause().FallthroughFlowNode = b.currentFlow
+			clause.CaseOrDefaultClauseData().FallthroughFlowNode = b.currentFlow
 		}
 	}
 }
 
 func (b *Binder) bindCaseOrDefaultClause(node *ast.Node) {
-	clause := node.AsCaseOrDefaultClause()
-	if clause.Expression != nil {
+	clause := node.CaseOrDefaultClauseData()
+	if node.Kind == ast.KindCaseClause {
 		saveCurrentFlow := b.currentFlow
 		b.currentFlow = b.preSwitchCaseFlow
-		b.bind(clause.Expression)
+		b.bind(node.Expression())
 		b.currentFlow = saveCurrentFlow
 	}
 	b.bindEach(clause.Statements.Nodes)

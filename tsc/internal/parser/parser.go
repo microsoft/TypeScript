@@ -1398,7 +1398,7 @@ func (p *Parser) parseCaseClause() *ast.Node {
 	expression := p.parseExpressionAllowIn()
 	p.parseExpected(ast.KindColonToken)
 	statements := p.parseList(PCSwitchClauseStatements, (*Parser).parseStatement)
-	result := p.finishNode(p.factory.NewCaseOrDefaultClause(ast.KindCaseClause, expression, statements), pos)
+	result := p.finishNode(p.factory.NewCaseClause(expression, statements), pos)
 	p.withJSDoc(result, jsdoc)
 	return result
 }
@@ -1409,7 +1409,7 @@ func (p *Parser) parseDefaultClause() *ast.Node {
 	p.parseExpected(ast.KindDefaultKeyword)
 	p.parseExpected(ast.KindColonToken)
 	statements := p.parseList(PCSwitchClauseStatements, (*Parser).parseStatement)
-	result := p.finishNode(p.factory.NewCaseOrDefaultClause(ast.KindDefaultClause, nil /*expression*/, statements), pos)
+	result := p.finishNode(p.factory.NewDefaultClause(statements), pos)
 	p.withJSDoc(result, jsdoc)
 	return result
 }
