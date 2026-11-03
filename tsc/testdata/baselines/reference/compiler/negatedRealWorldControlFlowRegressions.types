@@ -69,11 +69,11 @@ if (count !== 0) {
 
     if (count === 0) {
 >count === 0 : boolean
->count : number & not 0
+>count : number
 >0 : 0
 
         count;
->count : never
+>count : 0
     }
 }
 

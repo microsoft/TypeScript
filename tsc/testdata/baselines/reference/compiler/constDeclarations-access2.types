@@ -92,7 +92,7 @@ x--;
 var a = x + 1;
 >a : number
 >x + 1 : number
->x : number
+>x : 0
 >1 : 1
 
 function f(v: number) { }
@@ -102,29 +102,29 @@ function f(v: number) { }
 f(x);
 >f(x) : void
 >f : (v: number) => void
->x : number
+>x : 0
 
 if (x) { }
->x : number
+>x : 0
 
 x;
->x : number
+>x : 0
 
 (x);
->(x) : number
->x : number
+>(x) : 0
+>x : 0
 
 -x;
 >-x : number
->x : number
+>x : 0
 
 +x;
 >+x : number
->x : number
+>x : 0
 
 x.toString();
 >x.toString() : string
 >x.toString : (radix?: number) => string
->x : number
+>x : 0
 >toString : (radix?: number) => string
 

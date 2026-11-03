@@ -1,13 +1,10 @@
-negatedRealWorldControlFlowRegressions.ts(20,9): error TS2367: This comparison appears to be unintentional because the types 'number & not 0' and '0' have no overlap.
-negatedRealWorldControlFlowRegressions.ts(32,5): error TS2322: Type 'number' is not assignable to type 'number & not 0'.
-  Type 'number' is not assignable to type 'not 0'.
 negatedRealWorldControlFlowRegressions.ts(36,1): error TS2322: Type 'number' is not assignable to type 'number & not 0'.
   Type 'number' is not assignable to type 'not 0'.
 negatedRealWorldControlFlowRegressions.ts(53,9): error TS2339: Property 'threshold' does not exist on type '{ enabled: boolean; } | (Options & not false & not true)'.
   Property 'threshold' does not exist on type '{ enabled: boolean; }'.
 
 
-==== negatedRealWorldControlFlowRegressions.ts (4 errors) ====
+==== negatedRealWorldControlFlowRegressions.ts (2 errors) ====
     function parseCommand(command: string): "start" | "stop" {
         if (command !== "start" && command !== "stop") {
             throw new Error("Invalid command");
@@ -28,8 +25,6 @@ negatedRealWorldControlFlowRegressions.ts(53,9): error TS2339: Property 'thresho
     if (count !== 0) {
         count--;
         if (count === 0) {
-            ~~~~~~~~~~~
-!!! error TS2367: This comparison appears to be unintentional because the types 'number & not 0' and '0' have no overlap.
             count;
         }
     }
@@ -42,9 +37,6 @@ negatedRealWorldControlFlowRegressions.ts(53,9): error TS2339: Property 'thresho
     let total = 1 as number;
     if (total !== 0) {
         total -= 1;
-        ~~~~~
-!!! error TS2322: Type 'number' is not assignable to type 'number & not 0'.
-!!! error TS2322:   Type 'number' is not assignable to type 'not 0'.
     }
     
     declare let constrainedTotal: number & not 0;

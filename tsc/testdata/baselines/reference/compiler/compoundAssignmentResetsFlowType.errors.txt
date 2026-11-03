@@ -1,0 +1,125 @@
+compoundAssignmentResetsFlowType.ts(113,5): error TS2322: Type 'number' is not assignable to type 'number & not 0'.
+  Type 'number' is not assignable to type 'not 0'.
+
+
+==== compoundAssignmentResetsFlowType.ts (1 errors) ====
+    export function numeric(value: number) {
+        if (value !== 0) {
+            value -= 1;
+            value;
+            if (value === 0) {
+                const zero: 0 = value;
+            }
+        }
+        return value;
+    }
+    
+    export function updates(value: number) {
+        if (value !== 0) {
+            value++;
+            value;
+        }
+        if (value !== 0) {
+            --value;
+            value;
+        }
+        if (value !== 0) {
+            ++value;
+            value;
+        }
+        if (value !== 0) {
+            value--;
+            value;
+        }
+        return value;
+    }
+    
+    export function changeKind(value: number | string) {
+        if (typeof value === "number") {
+            value += "suffix";
+            return value;
+        }
+        throw new Error();
+    }
+    
+    export function properties(holder: { value: number }) {
+        if (holder.value !== 0) {
+            holder.value -= 1;
+            holder.value;
+        }
+        if (holder["value"] !== 0) {
+            holder["value"]--;
+            holder["value"];
+        }
+        return holder.value;
+    }
+    
+    export function loop(value: number) {
+        while (value !== 0) {
+            value -= 1;
+        }
+        const zero: 0 = value;
+        return value;
+    }
+    
+    export function inferredNumber() {
+        let value;
+        value = 2;
+        if (value !== 0) {
+            value -= 1;
+            value;
+        }
+        return value;
+    }
+    
+    export function inferredString() {
+        let value;
+        value = "text";
+        value += [];
+        value += 1;
+        return value;
+    }
+    
+    export function inferredBigInt() {
+        let value;
+        value = 1n;
+        value++;
+        return value;
+    }
+    
+    export function inferredLoop() {
+        let value;
+        value = 2;
+        while (value !== 0) {
+            value -= 1;
+        }
+        return value;
+    }
+    
+    export function defaultOr(value: 0 | 1 | undefined) {
+        value ||= 1;
+        const result: 1 = value;
+        return value;
+    }
+    
+    export function defaultNullish(value: 0 | 1 | undefined) {
+        value ??= 1;
+        const result: 0 | 1 = value;
+        return value;
+    }
+    
+    export function conditionalAnd(value: 0 | 1 | undefined) {
+        value &&= 0;
+        const result: 0 | undefined = value;
+        return value;
+    }
+    
+    export function declaredConstraint(value: number & not 0) {
+        value -= 1;
+        ~~~~~
+!!! error TS2322: Type 'number' is not assignable to type 'number & not 0'.
+!!! error TS2322:   Type 'number' is not assignable to type 'not 0'.
+        const retained: number & not 0 = value;
+        return value;
+    }
+    

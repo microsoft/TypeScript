@@ -1,0 +1,281 @@
+//// [tests/cases/compiler/compoundAssignmentResetsFlowType.ts] ////
+
+=== compoundAssignmentResetsFlowType.ts ===
+export function numeric(value: number) {
+>numeric : Symbol(numeric, Decl(compoundAssignmentResetsFlowType.ts, 0, 0))
+>value : Symbol(value, Decl(compoundAssignmentResetsFlowType.ts, 0, 24))
+
+    if (value !== 0) {
+>value : Symbol(value, Decl(compoundAssignmentResetsFlowType.ts, 0, 24))
+
+        value -= 1;
+>value : Symbol(value, Decl(compoundAssignmentResetsFlowType.ts, 0, 24))
+
+        value;
+>value : Symbol(value, Decl(compoundAssignmentResetsFlowType.ts, 0, 24))
+
+        if (value === 0) {
+>value : Symbol(value, Decl(compoundAssignmentResetsFlowType.ts, 0, 24))
+
+            const zero: 0 = value;
+>zero : Symbol(zero, Decl(compoundAssignmentResetsFlowType.ts, 5, 17))
+>value : Symbol(value, Decl(compoundAssignmentResetsFlowType.ts, 0, 24))
+        }
+    }
+    return value;
+>value : Symbol(value, Decl(compoundAssignmentResetsFlowType.ts, 0, 24))
+}
+
+export function updates(value: number) {
+>updates : Symbol(updates, Decl(compoundAssignmentResetsFlowType.ts, 9, 1))
+>value : Symbol(value, Decl(compoundAssignmentResetsFlowType.ts, 11, 24))
+
+    if (value !== 0) {
+>value : Symbol(value, Decl(compoundAssignmentResetsFlowType.ts, 11, 24))
+
+        value++;
+>value : Symbol(value, Decl(compoundAssignmentResetsFlowType.ts, 11, 24))
+
+        value;
+>value : Symbol(value, Decl(compoundAssignmentResetsFlowType.ts, 11, 24))
+    }
+    if (value !== 0) {
+>value : Symbol(value, Decl(compoundAssignmentResetsFlowType.ts, 11, 24))
+
+        --value;
+>value : Symbol(value, Decl(compoundAssignmentResetsFlowType.ts, 11, 24))
+
+        value;
+>value : Symbol(value, Decl(compoundAssignmentResetsFlowType.ts, 11, 24))
+    }
+    if (value !== 0) {
+>value : Symbol(value, Decl(compoundAssignmentResetsFlowType.ts, 11, 24))
+
+        ++value;
+>value : Symbol(value, Decl(compoundAssignmentResetsFlowType.ts, 11, 24))
+
+        value;
+>value : Symbol(value, Decl(compoundAssignmentResetsFlowType.ts, 11, 24))
+    }
+    if (value !== 0) {
+>value : Symbol(value, Decl(compoundAssignmentResetsFlowType.ts, 11, 24))
+
+        value--;
+>value : Symbol(value, Decl(compoundAssignmentResetsFlowType.ts, 11, 24))
+
+        value;
+>value : Symbol(value, Decl(compoundAssignmentResetsFlowType.ts, 11, 24))
+    }
+    return value;
+>value : Symbol(value, Decl(compoundAssignmentResetsFlowType.ts, 11, 24))
+}
+
+export function changeKind(value: number | string) {
+>changeKind : Symbol(changeKind, Decl(compoundAssignmentResetsFlowType.ts, 29, 1))
+>value : Symbol(value, Decl(compoundAssignmentResetsFlowType.ts, 31, 27))
+
+    if (typeof value === "number") {
+>value : Symbol(value, Decl(compoundAssignmentResetsFlowType.ts, 31, 27))
+
+        value += "suffix";
+>value : Symbol(value, Decl(compoundAssignmentResetsFlowType.ts, 31, 27))
+
+        return value;
+>value : Symbol(value, Decl(compoundAssignmentResetsFlowType.ts, 31, 27))
+    }
+    throw new Error();
+>Error : Symbol(Error, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2022.error.d.ts, --, --))
+}
+
+export function properties(holder: { value: number }) {
+>properties : Symbol(properties, Decl(compoundAssignmentResetsFlowType.ts, 37, 1))
+>holder : Symbol(holder, Decl(compoundAssignmentResetsFlowType.ts, 39, 27))
+>value : Symbol(value, Decl(compoundAssignmentResetsFlowType.ts, 39, 36))
+
+    if (holder.value !== 0) {
+>holder.value : Symbol(value, Decl(compoundAssignmentResetsFlowType.ts, 39, 36))
+>holder : Symbol(holder, Decl(compoundAssignmentResetsFlowType.ts, 39, 27))
+>value : Symbol(value, Decl(compoundAssignmentResetsFlowType.ts, 39, 36))
+
+        holder.value -= 1;
+>holder.value : Symbol(value, Decl(compoundAssignmentResetsFlowType.ts, 39, 36))
+>holder : Symbol(holder, Decl(compoundAssignmentResetsFlowType.ts, 39, 27))
+>value : Symbol(value, Decl(compoundAssignmentResetsFlowType.ts, 39, 36))
+
+        holder.value;
+>holder.value : Symbol(value, Decl(compoundAssignmentResetsFlowType.ts, 39, 36))
+>holder : Symbol(holder, Decl(compoundAssignmentResetsFlowType.ts, 39, 27))
+>value : Symbol(value, Decl(compoundAssignmentResetsFlowType.ts, 39, 36))
+    }
+    if (holder["value"] !== 0) {
+>holder : Symbol(holder, Decl(compoundAssignmentResetsFlowType.ts, 39, 27))
+>"value" : Symbol(value, Decl(compoundAssignmentResetsFlowType.ts, 39, 36))
+
+        holder["value"]--;
+>holder : Symbol(holder, Decl(compoundAssignmentResetsFlowType.ts, 39, 27))
+>"value" : Symbol(value, Decl(compoundAssignmentResetsFlowType.ts, 39, 36))
+
+        holder["value"];
+>holder : Symbol(holder, Decl(compoundAssignmentResetsFlowType.ts, 39, 27))
+>"value" : Symbol(value, Decl(compoundAssignmentResetsFlowType.ts, 39, 36))
+    }
+    return holder.value;
+>holder.value : Symbol(value, Decl(compoundAssignmentResetsFlowType.ts, 39, 36))
+>holder : Symbol(holder, Decl(compoundAssignmentResetsFlowType.ts, 39, 27))
+>value : Symbol(value, Decl(compoundAssignmentResetsFlowType.ts, 39, 36))
+}
+
+export function loop(value: number) {
+>loop : Symbol(loop, Decl(compoundAssignmentResetsFlowType.ts, 49, 1))
+>value : Symbol(value, Decl(compoundAssignmentResetsFlowType.ts, 51, 21))
+
+    while (value !== 0) {
+>value : Symbol(value, Decl(compoundAssignmentResetsFlowType.ts, 51, 21))
+
+        value -= 1;
+>value : Symbol(value, Decl(compoundAssignmentResetsFlowType.ts, 51, 21))
+    }
+    const zero: 0 = value;
+>zero : Symbol(zero, Decl(compoundAssignmentResetsFlowType.ts, 55, 9))
+>value : Symbol(value, Decl(compoundAssignmentResetsFlowType.ts, 51, 21))
+
+    return value;
+>value : Symbol(value, Decl(compoundAssignmentResetsFlowType.ts, 51, 21))
+}
+
+export function inferredNumber() {
+>inferredNumber : Symbol(inferredNumber, Decl(compoundAssignmentResetsFlowType.ts, 57, 1))
+
+    let value;
+>value : Symbol(value, Decl(compoundAssignmentResetsFlowType.ts, 60, 7))
+
+    value = 2;
+>value : Symbol(value, Decl(compoundAssignmentResetsFlowType.ts, 60, 7))
+
+    if (value !== 0) {
+>value : Symbol(value, Decl(compoundAssignmentResetsFlowType.ts, 60, 7))
+
+        value -= 1;
+>value : Symbol(value, Decl(compoundAssignmentResetsFlowType.ts, 60, 7))
+
+        value;
+>value : Symbol(value, Decl(compoundAssignmentResetsFlowType.ts, 60, 7))
+    }
+    return value;
+>value : Symbol(value, Decl(compoundAssignmentResetsFlowType.ts, 60, 7))
+}
+
+export function inferredString() {
+>inferredString : Symbol(inferredString, Decl(compoundAssignmentResetsFlowType.ts, 67, 1))
+
+    let value;
+>value : Symbol(value, Decl(compoundAssignmentResetsFlowType.ts, 70, 7))
+
+    value = "text";
+>value : Symbol(value, Decl(compoundAssignmentResetsFlowType.ts, 70, 7))
+
+    value += [];
+>value : Symbol(value, Decl(compoundAssignmentResetsFlowType.ts, 70, 7))
+
+    value += 1;
+>value : Symbol(value, Decl(compoundAssignmentResetsFlowType.ts, 70, 7))
+
+    return value;
+>value : Symbol(value, Decl(compoundAssignmentResetsFlowType.ts, 70, 7))
+}
+
+export function inferredBigInt() {
+>inferredBigInt : Symbol(inferredBigInt, Decl(compoundAssignmentResetsFlowType.ts, 75, 1))
+
+    let value;
+>value : Symbol(value, Decl(compoundAssignmentResetsFlowType.ts, 78, 7))
+
+    value = 1n;
+>value : Symbol(value, Decl(compoundAssignmentResetsFlowType.ts, 78, 7))
+
+    value++;
+>value : Symbol(value, Decl(compoundAssignmentResetsFlowType.ts, 78, 7))
+
+    return value;
+>value : Symbol(value, Decl(compoundAssignmentResetsFlowType.ts, 78, 7))
+}
+
+export function inferredLoop() {
+>inferredLoop : Symbol(inferredLoop, Decl(compoundAssignmentResetsFlowType.ts, 82, 1))
+
+    let value;
+>value : Symbol(value, Decl(compoundAssignmentResetsFlowType.ts, 85, 7))
+
+    value = 2;
+>value : Symbol(value, Decl(compoundAssignmentResetsFlowType.ts, 85, 7))
+
+    while (value !== 0) {
+>value : Symbol(value, Decl(compoundAssignmentResetsFlowType.ts, 85, 7))
+
+        value -= 1;
+>value : Symbol(value, Decl(compoundAssignmentResetsFlowType.ts, 85, 7))
+    }
+    return value;
+>value : Symbol(value, Decl(compoundAssignmentResetsFlowType.ts, 85, 7))
+}
+
+export function defaultOr(value: 0 | 1 | undefined) {
+>defaultOr : Symbol(defaultOr, Decl(compoundAssignmentResetsFlowType.ts, 91, 1))
+>value : Symbol(value, Decl(compoundAssignmentResetsFlowType.ts, 93, 26))
+
+    value ||= 1;
+>value : Symbol(value, Decl(compoundAssignmentResetsFlowType.ts, 93, 26))
+
+    const result: 1 = value;
+>result : Symbol(result, Decl(compoundAssignmentResetsFlowType.ts, 95, 9))
+>value : Symbol(value, Decl(compoundAssignmentResetsFlowType.ts, 93, 26))
+
+    return value;
+>value : Symbol(value, Decl(compoundAssignmentResetsFlowType.ts, 93, 26))
+}
+
+export function defaultNullish(value: 0 | 1 | undefined) {
+>defaultNullish : Symbol(defaultNullish, Decl(compoundAssignmentResetsFlowType.ts, 97, 1))
+>value : Symbol(value, Decl(compoundAssignmentResetsFlowType.ts, 99, 31))
+
+    value ??= 1;
+>value : Symbol(value, Decl(compoundAssignmentResetsFlowType.ts, 99, 31))
+
+    const result: 0 | 1 = value;
+>result : Symbol(result, Decl(compoundAssignmentResetsFlowType.ts, 101, 9))
+>value : Symbol(value, Decl(compoundAssignmentResetsFlowType.ts, 99, 31))
+
+    return value;
+>value : Symbol(value, Decl(compoundAssignmentResetsFlowType.ts, 99, 31))
+}
+
+export function conditionalAnd(value: 0 | 1 | undefined) {
+>conditionalAnd : Symbol(conditionalAnd, Decl(compoundAssignmentResetsFlowType.ts, 103, 1))
+>value : Symbol(value, Decl(compoundAssignmentResetsFlowType.ts, 105, 31))
+
+    value &&= 0;
+>value : Symbol(value, Decl(compoundAssignmentResetsFlowType.ts, 105, 31))
+
+    const result: 0 | undefined = value;
+>result : Symbol(result, Decl(compoundAssignmentResetsFlowType.ts, 107, 9))
+>value : Symbol(value, Decl(compoundAssignmentResetsFlowType.ts, 105, 31))
+
+    return value;
+>value : Symbol(value, Decl(compoundAssignmentResetsFlowType.ts, 105, 31))
+}
+
+export function declaredConstraint(value: number & not 0) {
+>declaredConstraint : Symbol(declaredConstraint, Decl(compoundAssignmentResetsFlowType.ts, 109, 1))
+>value : Symbol(value, Decl(compoundAssignmentResetsFlowType.ts, 111, 35))
+
+    value -= 1;
+>value : Symbol(value, Decl(compoundAssignmentResetsFlowType.ts, 111, 35))
+
+    const retained: number & not 0 = value;
+>retained : Symbol(retained, Decl(compoundAssignmentResetsFlowType.ts, 113, 9))
+>value : Symbol(value, Decl(compoundAssignmentResetsFlowType.ts, 111, 35))
+
+    return value;
+>value : Symbol(value, Decl(compoundAssignmentResetsFlowType.ts, 111, 35))
+}
+

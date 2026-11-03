@@ -56,13 +56,13 @@ let g = --abcOrXyzOrNumber;
 let h = abcOrXyzOrNumber ^ 10;
 >h : number
 >abcOrXyzOrNumber ^ 10 : number
->abcOrXyzOrNumber : string | number
+>abcOrXyzOrNumber : number | "ABC" | "XYZ"
 >10 : 10
 
 let i = abcOrXyzOrNumber | 10;
 >i : number
 >abcOrXyzOrNumber | 10 : number
->abcOrXyzOrNumber : string | number
+>abcOrXyzOrNumber : number | "ABC" | "XYZ"
 >10 : 10
 
 let j = abc < xyz;
