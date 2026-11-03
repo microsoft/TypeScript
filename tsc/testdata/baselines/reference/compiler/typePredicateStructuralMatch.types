@@ -61,7 +61,7 @@ function getResults1(value: Results | { data: Results }): Results {
 >value.data : Results
 >value : { data: Results; }
 >data : Results
->value : Results
+>value : Results & not { data: Results; }
 }
 
 function isPlainResponse<T>(value: T | { data: T}): value is T {
@@ -90,6 +90,6 @@ function getResults2(value: Results | { data: Results }): Results {
 >value : Results | { data: Results; }
 >value : Results
 >value.data : Results
->value : { data: Results; }
+>value : { data: Results; } & not Results
 >data : Results
 }

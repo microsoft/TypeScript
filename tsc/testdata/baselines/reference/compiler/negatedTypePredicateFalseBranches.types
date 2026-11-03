@@ -1,0 +1,277 @@
+//// [tests/cases/compiler/negatedTypePredicateFalseBranches.ts] ////
+
+=== negatedTypePredicateFalseBranches.ts ===
+interface Cat {
+    meow(): void;
+>meow : () => void
+}
+
+declare function isCat(value: unknown): value is Cat;
+>isCat : (value: unknown) => value is Cat
+>value : unknown
+
+declare function isNotCat(value: unknown): value is not Cat;
+>isNotCat : (value: unknown) => value is not Cat
+>value : unknown
+
+declare function isString(value: unknown): value is string;
+>isString : (value: unknown) => value is string
+>value : unknown
+
+declare function acceptsNotCat(value: not Cat): void;
+>acceptsNotCat : (value: not Cat) => void
+>value : not Cat
+
+declare function acceptsCat(value: Cat): void;
+>acceptsCat : (value: Cat) => void
+>value : Cat
+
+declare function acceptsNever(value: never): void;
+>acceptsNever : (value: never) => void
+>value : never
+
+function checkObject(value: object) {
+>checkObject : (value: object) => void
+>value : object
+
+    if (isCat(value)) {
+>isCat(value) : boolean
+>isCat : (value: unknown) => value is Cat
+>value : object
+
+        acceptsCat(value);
+>acceptsCat(value) : void
+>acceptsCat : (value: Cat) => void
+>value : Cat
+
+    } else {
+        acceptsNotCat(value);
+>acceptsNotCat(value) : void
+>acceptsNotCat : (value: not Cat) => void
+>value : object & not Cat
+    }
+}
+
+function checkEmptyObject(value: {}) {
+>checkEmptyObject : (value: {}) => void
+>value : {}
+
+    if (!isCat(value)) {
+>!isCat(value) : boolean
+>isCat(value) : boolean
+>isCat : (value: unknown) => value is Cat
+>value : {}
+
+        acceptsNotCat(value);
+>acceptsNotCat(value) : void
+>acceptsNotCat : (value: not Cat) => void
+>value : {} & not Cat
+    }
+}
+
+function checkUnknown(value: unknown) {
+>checkUnknown : (value: unknown) => void
+>value : unknown
+
+    if (isCat(value)) {
+>isCat(value) : boolean
+>isCat : (value: unknown) => value is Cat
+>value : unknown
+
+        acceptsCat(value);
+>acceptsCat(value) : void
+>acceptsCat : (value: Cat) => void
+>value : Cat
+
+    } else {
+        acceptsNotCat(value);
+>acceptsNotCat(value) : void
+>acceptsNotCat : (value: not Cat) => void
+>value : not Cat
+    }
+}
+
+function checkGeneric<T>(value: T) {
+>checkGeneric : <T>(value: T) => void
+>value : T
+
+    if (isCat(value)) {
+>isCat(value) : boolean
+>isCat : (value: unknown) => value is Cat
+>value : T
+
+        acceptsCat(value);
+>acceptsCat(value) : void
+>acceptsCat : (value: Cat) => void
+>value : T & Cat
+
+    } else {
+        acceptsNotCat(value);
+>acceptsNotCat(value) : void
+>acceptsNotCat : (value: not Cat) => void
+>value : T & not Cat
+    }
+}
+
+function checkProperty(container: { value: object }) {
+>checkProperty : (container: { value: object; }) => void
+>container : { value: object; }
+>value : object
+
+    if (isCat(container.value)) {
+>isCat(container.value) : boolean
+>isCat : (value: unknown) => value is Cat
+>container.value : object
+>container : { value: object; }
+>value : object
+
+        acceptsCat(container.value);
+>acceptsCat(container.value) : void
+>acceptsCat : (value: Cat) => void
+>container.value : Cat
+>container : { value: object; }
+>value : Cat
+
+    } else {
+        acceptsNotCat(container.value);
+>acceptsNotCat(container.value) : void
+>acceptsNotCat : (value: not Cat) => void
+>container.value : object & not Cat
+>container : { value: object; }
+>value : object & not Cat
+    }
+}
+
+interface Animal {
+    isCat(): this is Cat & Animal;
+>isCat : () => this is Cat & Animal
+}
+
+function checkReceiver(value: Animal) {
+>checkReceiver : (value: Animal) => void
+>value : Animal
+
+    if (value.isCat()) {
+>value.isCat() : boolean
+>value.isCat : () => this is Cat & Animal
+>value : Animal
+>isCat : () => this is Cat & Animal
+
+        acceptsCat(value);
+>acceptsCat(value) : void
+>acceptsCat : (value: Cat) => void
+>value : Cat & Animal
+
+    } else {
+        const notCat: not (Cat & Animal) = value;
+>notCat : not (Cat & Animal)
+>value : Animal & not (Cat & Animal)
+    }
+}
+
+function checkNegatedPredicate(value: unknown) {
+>checkNegatedPredicate : (value: unknown) => void
+>value : unknown
+
+    if (!isNotCat(value)) {
+>!isNotCat(value) : boolean
+>isNotCat(value) : boolean
+>isNotCat : (value: unknown) => value is not Cat
+>value : unknown
+
+        acceptsCat(value);
+>acceptsCat(value) : void
+>acceptsCat : (value: Cat) => void
+>value : Cat
+    }
+}
+
+function checkDisjointUnion(value: string | number) {
+>checkDisjointUnion : (value: string | number) => void
+>value : string | number
+
+    if (!isString(value)) {
+>!isString(value) : boolean
+>isString(value) : boolean
+>isString : (value: unknown) => value is string
+>value : string | number
+
+        const number: number = value;
+>number : number
+>value : number
+    }
+}
+
+function checkRepeatedPredicate(value: unknown) {
+>checkRepeatedPredicate : (value: unknown) => void
+>value : unknown
+
+    if (!isCat(value) && isCat(value)) {
+>!isCat(value) && isCat(value) : boolean
+>!isCat(value) : boolean
+>isCat(value) : boolean
+>isCat : (value: unknown) => value is Cat
+>value : unknown
+>isCat(value) : boolean
+>isCat : (value: unknown) => value is Cat
+>value : not Cat
+
+        acceptsNever(value);
+>acceptsNever(value) : void
+>acceptsNever : (value: never) => void
+>value : never
+    }
+}
+
+type Membership = { premium: false } | { premium: true };
+>Membership : Membership
+>premium : false
+>false : false
+>premium : true
+>true : true
+
+declare function isPremium(value: Membership): value is Membership & { premium: true };
+>isPremium : (value: Membership) => value is Membership & { premium: true; }
+>value : Membership
+>premium : true
+>true : true
+
+function checkReducedPredicate(value: Membership) {
+>checkReducedPredicate : (value: Membership) => void
+>value : Membership
+
+    if (!isPremium(value)) {
+>!isPremium(value) : boolean
+>isPremium(value) : boolean
+>isPremium : (value: Membership) => value is Membership & { premium: true; }
+>value : Membership
+
+        const free: { premium: false } = value;
+>free : { premium: false; }
+>premium : false
+>false : false
+>value : { premium: false; }
+    }
+}
+
+function checkNegationDoesNotEscape(value: object) {
+>checkNegationDoesNotEscape : (value: object) => void
+>value : object
+
+    if (!isCat(value)) {
+>!isCat(value) : boolean
+>isCat(value) : boolean
+>isCat : (value: unknown) => value is Cat
+>value : object
+
+        acceptsNotCat(value);
+>acceptsNotCat(value) : void
+>acceptsNotCat : (value: not Cat) => void
+>value : object & not Cat
+    }
+    acceptsNotCat(value); // Error: the false-branch exclusion does not survive the merge.
+>acceptsNotCat(value) : void
+>acceptsNotCat : (value: not Cat) => void
+>value : object
+}
+

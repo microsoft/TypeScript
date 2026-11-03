@@ -663,14 +663,14 @@ function deepEquals<T>(a: T, b: T): boolean {
 >Object.keys : { (o: object): string[]; (o: {}): string[]; }
 >Object : ObjectConstructor
 >keys : { (o: object): string[]; (o: {}): string[]; }
->a : T & object
+>a : T & object & not any[]
 >length : number
 >Object.keys(b).length : number
 >Object.keys(b) : string[]
 >Object.keys : { (o: object): string[]; (o: {}): string[]; }
 >Object : ObjectConstructor
 >keys : { (o: object): string[]; (o: {}): string[]; }
->b : T & object
+>b : T & object & not any[]
 >length : number
 
         return false;

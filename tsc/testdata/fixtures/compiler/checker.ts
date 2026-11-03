@@ -26477,13 +26477,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         }
         // For arrays and tuples we infer new arrays and tuples where the reverse mapping has been
         // applied to the element type(s).
-        if (isArrayType(source)) {
-            const elementType = inferReverseMappedType(getTypeArguments(source)[0], target, constraint);
-            if (!elementType) {
-                return undefined;
-            }
-            return createArrayType(elementType, isReadonlyArrayType(source));
-        }
+        // Check tuples first: isArrayType's predicate also structurally includes tuple references.
         if (isTupleType(source)) {
             const elementTypes = map(getElementTypes(source), t => inferReverseMappedType(t, target, constraint));
             if (!every(elementTypes, (t): t is Type => !!t)) {
@@ -26493,6 +26487,13 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 sameMap(source.target.elementFlags, f => f & ElementFlags.Optional ? ElementFlags.Required : f) :
                 source.target.elementFlags;
             return createTupleType(elementTypes, elementFlags, source.target.readonly, source.target.labeledElementDeclarations);
+        }
+        if (isArrayType(source)) {
+            const elementType = inferReverseMappedType(getTypeArguments(source)[0], target, constraint);
+            if (!elementType) {
+                return undefined;
+            }
+            return createArrayType(elementType, isReadonlyArrayType(source));
         }
         // For all other object types we infer a new object type where the reverse mapping has been
         // applied to the type of each property.
@@ -42886,7 +42887,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     error(e, Diagnostics.A_rest_element_type_must_be_an_array_type);
                     break;
                 }
-                if (isArrayType(type) || isTupleType(type) && type.target.combinedFlags & ElementFlags.Rest) {
+                if (isTupleType(type) && type.target.combinedFlags & ElementFlags.Rest || isArrayType(type)) {
                     flags |= ElementFlags.Rest;
                 }
             }

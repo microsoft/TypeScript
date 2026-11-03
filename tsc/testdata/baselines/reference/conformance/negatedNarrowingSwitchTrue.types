@@ -114,6 +114,6 @@ switch (true) {
         break;
     default:
         z; // {} & not Cat
->z : {}
+>z : {} & not Cat
 }
 

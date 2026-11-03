@@ -40,13 +40,13 @@ function f1(obj: Object) {
 >obj : Object
 >isY(obj) : boolean
 >isY : (obj: any) => obj is Y
->obj : Object
+>obj : Object & not X
 >isZ(obj) : boolean
 >isZ : (obj: any) => obj is Z
->obj : Object
+>obj : Object & not X & not Y
 
         obj;
->obj : X | Y | Z
+>obj : X | (Object & Y) | (Object & Z)
     }
     if (isX(obj) && isY(obj) && isZ(obj)) {
 >isX(obj) && isY(obj) && isZ(obj) : boolean
@@ -210,7 +210,7 @@ function identifyBeast(beast: Beast) {
 >log : (s: string) => void
 >`manbearpig - ${beast.legs} legs, no wings` : string
 >beast.legs : number
->beast : Legged
+>beast : Legged & not Winged
 >legs : number
         }
     }
@@ -220,7 +220,7 @@ function identifyBeast(beast: Beast) {
         if (hasWings(beast)) {
 >hasWings(beast) : boolean
 >hasWings : (x: Beast) => x is Winged
->beast : Beast
+>beast : Beast & not Legged
 
             log(`quetzalcoatl - no legs, wings`)
 >log(`quetzalcoatl - no legs, wings`) : void
@@ -254,7 +254,7 @@ function beastFoo(beast: Object) {
     }
     else {
         beast;
->beast : Object
+>beast : (Object & not Winged) | (Winged & not Legged)
     }
 
     if (hasLegs(beast) && hasWings(beast)) {
