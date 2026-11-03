@@ -8,7 +8,9 @@ const styles = { root: "outer" };
 export function read(value = styles.root) {
 >read : Symbol(read, Decl(defaultParameterBodyFunctionScope.ts, 0, 33))
 >value : Symbol(value, Decl(defaultParameterBodyFunctionScope.ts, 2, 21))
->styles : Symbol(styles, Decl(defaultParameterBodyFunctionScope.ts, 2, 43))
+>styles.root : Symbol(root, Decl(defaultParameterBodyFunctionScope.ts, 0, 16))
+>styles : Symbol(styles, Decl(defaultParameterBodyFunctionScope.ts, 0, 5))
+>root : Symbol(root, Decl(defaultParameterBodyFunctionScope.ts, 0, 16))
 
     function styles() {}
 >styles : Symbol(styles, Decl(defaultParameterBodyFunctionScope.ts, 2, 43))
@@ -23,7 +25,9 @@ export function read(value = styles.root) {
 export function readClosure(value = () => styles.root) {
 >readClosure : Symbol(readClosure, Decl(defaultParameterBodyFunctionScope.ts, 6, 1))
 >value : Symbol(value, Decl(defaultParameterBodyFunctionScope.ts, 8, 28))
->styles : Symbol(styles, Decl(defaultParameterBodyFunctionScope.ts, 8, 56))
+>styles.root : Symbol(root, Decl(defaultParameterBodyFunctionScope.ts, 0, 16))
+>styles : Symbol(styles, Decl(defaultParameterBodyFunctionScope.ts, 0, 5))
+>root : Symbol(root, Decl(defaultParameterBodyFunctionScope.ts, 0, 16))
 
     function styles() {}
 >styles : Symbol(styles, Decl(defaultParameterBodyFunctionScope.ts, 8, 56))
@@ -35,7 +39,9 @@ export function readClosure(value = () => styles.root) {
 export function readDestructured({ value = styles.root } = {}) {
 >readDestructured : Symbol(readDestructured, Decl(defaultParameterBodyFunctionScope.ts, 11, 1))
 >value : Symbol(value, Decl(defaultParameterBodyFunctionScope.ts, 13, 34))
->styles : Symbol(styles, Decl(defaultParameterBodyFunctionScope.ts, 13, 64))
+>styles.root : Symbol(root, Decl(defaultParameterBodyFunctionScope.ts, 0, 16))
+>styles : Symbol(styles, Decl(defaultParameterBodyFunctionScope.ts, 0, 5))
+>root : Symbol(root, Decl(defaultParameterBodyFunctionScope.ts, 0, 16))
 
     function styles() {}
 >styles : Symbol(styles, Decl(defaultParameterBodyFunctionScope.ts, 13, 64))
@@ -47,7 +53,6 @@ export function readDestructured({ value = styles.root } = {}) {
 export function readMissing(value = missing) {
 >readMissing : Symbol(readMissing, Decl(defaultParameterBodyFunctionScope.ts, 16, 1))
 >value : Symbol(value, Decl(defaultParameterBodyFunctionScope.ts, 18, 28))
->missing : Symbol(missing, Decl(defaultParameterBodyFunctionScope.ts, 18, 46))
 
     function missing() {}
 >missing : Symbol(missing, Decl(defaultParameterBodyFunctionScope.ts, 18, 46))
