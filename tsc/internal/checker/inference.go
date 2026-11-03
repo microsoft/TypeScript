@@ -108,6 +108,10 @@ func (c *Checker) inferFromTypes(n *InferenceState, source *Type, target *Type) 
 		// the matching types. Types closely match when they are instantiations of the same
 		// object type or instantiations of the same type alias.
 		sources, targets := c.inferFromMatchingTypes(n, tempSources, tempTargets, (*Checker).isTypeCloselyMatchedBy, true /*sort*/)
+		// Next, infer between source and target constituents that are matched by their discriminants and
+		// remove the matching types. For example, when inferring from [false, string] | [true, number] to
+		// [false, T] | [true, U], infer string for T and number for U, but not number for T or string for U.
+		sources, targets = c.inferFromMatchingTypes(n, sources, targets, (*Checker).isTypeMatchedByDiscriminants, true /*sort*/)
 		if len(targets) == 0 {
 			return
 		}
@@ -1239,6 +1243,54 @@ func (c *Checker) isTypeOrBaseIdenticalTo(s *Type, t *Type) bool {
 func (c *Checker) isTypeCloselyMatchedBy(s *Type, t *Type) bool {
 	return s.flags&TypeFlagsObject != 0 && t.flags&TypeFlagsObject != 0 && s.symbol != nil && s.symbol == t.symbol ||
 		s.alias != nil && t.alias != nil && len(s.alias.typeArguments) != 0 && s.alias.symbol == t.alias.symbol
+}
+
+// Two object types are matched by their discriminants when they have at least one property of the same
+// unit type and no properties of different unit types. Two tuple types are compared by their required
+// elements instead of their properties.
+func (c *Checker) isTypeMatchedByDiscriminants(s *Type, t *Type) bool {
+	if s.flags&TypeFlagsObject == 0 || t.flags&TypeFlagsObject == 0 || isTupleType(s) != isTupleType(t) {
+		return false
+	}
+	matched := false
+	if isTupleType(s) {
+		sourceInfos := s.TargetTupleType().elementInfos
+		targetInfos := t.TargetTupleType().elementInfos
+		for i := range min(s.TargetTupleType().fixedLength, t.TargetTupleType().fixedLength) {
+			if sourceInfos[i].flags&ElementFlagsRequired != 0 && targetInfos[i].flags&ElementFlagsRequired != 0 {
+				switch c.compareDiscriminantTypes(c.getTypeArguments(s)[i], c.getTypeArguments(t)[i]) {
+				case TernaryFalse:
+					return false
+				case TernaryTrue:
+					matched = true
+				}
+			}
+		}
+		return matched
+	}
+	for _, targetProp := range c.getPropertiesOfType(t) {
+		if sourceProp := c.getPropertyOfType(s, targetProp.Name()); sourceProp != nil {
+			switch c.compareDiscriminantTypes(c.getTypeOfSymbol(sourceProp), c.getTypeOfSymbol(targetProp)) {
+			case TernaryFalse:
+				return false
+			case TernaryTrue:
+				matched = true
+			}
+		}
+	}
+	return matched
+}
+
+// Return True when the given types are the same unit type, False when they are different unit types, and
+// Maybe when either is not a unit type and so is no discriminant.
+func (c *Checker) compareDiscriminantTypes(s *Type, t *Type) Ternary {
+	if s.flags&TypeFlagsUnit == 0 || t.flags&TypeFlagsUnit == 0 {
+		return TernaryMaybe
+	}
+	if c.getRegularTypeOfLiteralType(s) == c.getRegularTypeOfLiteralType(t) {
+		return TernaryTrue
+	}
+	return TernaryFalse
 }
 
 // Create an object with properties named in the string literal type. Every property has type `any`.

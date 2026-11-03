@@ -1,0 +1,174 @@
+//// [tests/cases/compiler/inferenceFromDiscriminatedUnionConstituents.ts] ////
+
+=== inferenceFromDiscriminatedUnionConstituents.ts ===
+// https://github.com/microsoft/TypeScript/issues/63019
+
+type ReadA = <R>() => [false, R] | [true, R | undefined];
+>ReadA : ReadA
+>false : false
+>true : true
+
+type ReadB = <R>() => [false, R] | [true, R | undefined];
+>ReadB : ReadB
+>false : false
+>true : true
+
+const test = (_: ReadA): ReadB => _;
+>test : (_: ReadA) => ReadB
+>(_: ReadA): ReadB => _ : (_: ReadA) => ReadB
+>_ : ReadA
+>_ : ReadA
+
+type ReadObjA = <R>() => { done: false; value: R } | { done: true; value: R | undefined };
+>ReadObjA : ReadObjA
+>done : false
+>false : false
+>value : R
+>done : true
+>true : true
+>value : R | undefined
+
+type ReadObjB = <R>() => { done: false; value: R } | { done: true; value: R | undefined };
+>ReadObjB : ReadObjB
+>done : false
+>false : false
+>value : R
+>done : true
+>true : true
+>value : R | undefined
+
+const testObj = (_: ReadObjA): ReadObjB => _;
+>testObj : (_: ReadObjA) => ReadObjB
+>(_: ReadObjA): ReadObjB => _ : (_: ReadObjA) => ReadObjB
+>_ : ReadObjA
+>_ : ReadObjA
+
+// Constituents are matched by their discriminants when inferring to a union.
+
+declare function pairs<T, U>(x: [false, T] | [true, U]): [T, U];
+>pairs : <T, U>(x: [false, T] | [true, U]) => [T, U]
+>x : [false, T] | [true, U]
+>false : false
+>true : true
+
+declare const tuples: [false, string] | [true, number];
+>tuples : [false, string] | [true, number]
+>false : false
+>true : true
+
+const fromTuples = pairs(tuples); // [string, number]
+>fromTuples : [string, number]
+>pairs(tuples) : [string, number]
+>pairs : <T, U>(x: [false, T] | [true, U]) => [T, U]
+>tuples : [false, string] | [true, number]
+
+declare function objects<T, U>(x: { kind: "a"; value: T } | { kind: "b"; value: U }): [T, U];
+>objects : <T, U>(x: { kind: "a"; value: T; } | { kind: "b"; value: U; }) => [T, U]
+>x : { kind: "a"; value: T; } | { kind: "b"; value: U; }
+>kind : "a"
+>value : T
+>kind : "b"
+>value : U
+
+declare const objs: { kind: "a"; value: string } | { kind: "b"; value: number };
+>objs : { kind: "a"; value: string; } | { kind: "b"; value: number; }
+>kind : "a"
+>value : string
+>kind : "b"
+>value : number
+
+const fromObjects = objects(objs); // [string, number]
+>fromObjects : [string, number]
+>objects(objs) : [string, number]
+>objects : <T, U>(x: { kind: "a"; value: T; } | { kind: "b"; value: U; }) => [T, U]
+>objs : { kind: "a"; value: string; } | { kind: "b"; value: number; }
+
+declare function enums<T, U>(x: { kind: E.A; value: T } | { kind: E.B; value: U }): [T, U];
+>enums : <T, U>(x: { kind: E.A; value: T; } | { kind: E.B; value: U; }) => [T, U]
+>x : { kind: E.A; value: T; } | { kind: E.B; value: U; }
+>kind : E.A
+>E : any
+>value : T
+>kind : E.B
+>E : any
+>value : U
+
+declare const enumObjs: { kind: E.A; value: string } | { kind: E.B; value: number };
+>enumObjs : { kind: E.A; value: string; } | { kind: E.B; value: number; }
+>kind : E.A
+>E : any
+>value : string
+>kind : E.B
+>E : any
+>value : number
+
+const fromEnums = enums(enumObjs); // [string, number]
+>fromEnums : [string, number]
+>enums(enumObjs) : [string, number]
+>enums : <T, U>(x: { kind: E.A; value: T; } | { kind: E.B; value: U; }) => [T, U]
+>enumObjs : { kind: E.A; value: string; } | { kind: E.B; value: number; }
+
+enum E { A, B }
+>E : E
+>A : E.A
+>B : E.B
+
+// Constituents with conflicting discriminants are not matched, even when another discriminant agrees.
+
+declare function multi<T, U>(x: { a: 1; b: 1; value: T } | { a: 1; b: 2; value: U }): [T, U];
+>multi : <T, U>(x: { a: 1; b: 1; value: T; } | { a: 1; b: 2; value: U; }) => [T, U]
+>x : { a: 1; b: 1; value: T; } | { a: 1; b: 2; value: U; }
+>a : 1
+>b : 1
+>value : T
+>a : 1
+>b : 2
+>value : U
+
+declare const multiObjs: { a: 1; b: 1; value: string } | { a: 1; b: 2; value: number };
+>multiObjs : { a: 1; b: 1; value: string; } | { a: 1; b: 2; value: number; }
+>a : 1
+>b : 1
+>value : string
+>a : 1
+>b : 2
+>value : number
+
+const fromMulti = multi(multiObjs); // [string, number]
+>fromMulti : [string, number]
+>multi(multiObjs) : [string, number]
+>multi : <T, U>(x: { a: 1; b: 1; value: T; } | { a: 1; b: 2; value: U; }) => [T, U]
+>multiObjs : { a: 1; b: 1; value: string; } | { a: 1; b: 2; value: number; }
+
+// Optional tuple elements and non-unit types are not discriminants, so inference is unchanged.
+
+declare function optional<T, U>(x: [false?, T?] | [true?, U?]): [T, U];
+>optional : <T, U>(x: [false?, T?] | [true?, U?]) => [T, U]
+>x : [(false | undefined)?, (T | undefined)?] | [(true | undefined)?, (U | undefined)?]
+>false : false
+>true : true
+
+declare const optionals: [false?, string?] | [true?, number?];
+>optionals : [(false | undefined)?, (string | undefined)?] | [(true | undefined)?, (number | undefined)?]
+>false : false
+>true : true
+
+const fromOptionals = optional(optionals);
+>fromOptionals : [string, string]
+>optional(optionals) : [string, string]
+>optional : <T, U>(x: [false?, T?] | [true?, U?]) => [T, U]
+>optionals : [(false | undefined)?, (string | undefined)?] | [(true | undefined)?, (number | undefined)?]
+
+declare function nonUnit<T, U>(x: [string, T] | [number, U]): [T, U];
+>nonUnit : <T, U>(x: [string, T] | [number, U]) => [T, U]
+>x : [string, T] | [number, U]
+
+declare const nonUnits: [string, boolean] | [number, bigint];
+>nonUnits : [string, boolean] | [number, bigint]
+
+const fromNonUnits = nonUnit(nonUnits);
+>fromNonUnits : [boolean, boolean]
+>nonUnit(nonUnits) : [boolean, boolean]
+>nonUnit : <T, U>(x: [string, T] | [number, U]) => [T, U]
+>nonUnits : [string, boolean] | [number, bigint]
+
