@@ -4357,7 +4357,7 @@ export function createSetAccessorDeclaration(modifiers: readonly ModifierLike[] 
     }) as unknown as SetAccessorDeclaration;
 }
 
-export function createIndexSignatureDeclaration(modifiers: readonly ModifierLike[] | undefined, parameters: readonly ParameterDeclaration[], type?: TypeNode): IndexSignatureDeclaration {
+export function createIndexSignatureDeclaration(modifiers: readonly ModifierLike[] | undefined, parameters: readonly ParameterDeclaration[], type: TypeNode): IndexSignatureDeclaration {
     return new NodeObject(SyntaxKind.IndexSignature, {
         modifiers: modifiers ? createNodeArray(modifiers) : undefined,
         parameters: createNodeArray(parameters),
@@ -5591,7 +5591,7 @@ export function updateSetAccessorDeclaration(node: SetAccessorDeclaration, modif
     return node.modifiers !== modifiers || node.name !== name || node.typeParameters !== typeParameters || node.parameters !== parameters || node.type !== type || node.body !== body ? createSetAccessorDeclaration(modifiers, name, typeParameters, parameters, type, body) : node;
 }
 
-export function updateIndexSignatureDeclaration(node: IndexSignatureDeclaration, modifiers: readonly ModifierLike[] | undefined, parameters: readonly ParameterDeclaration[], type?: TypeNode): IndexSignatureDeclaration {
+export function updateIndexSignatureDeclaration(node: IndexSignatureDeclaration, modifiers: readonly ModifierLike[] | undefined, parameters: readonly ParameterDeclaration[], type: TypeNode): IndexSignatureDeclaration {
     return node.modifiers !== modifiers || node.parameters !== parameters || node.type !== type ? createIndexSignatureDeclaration(modifiers, parameters, type) : node;
 }
 

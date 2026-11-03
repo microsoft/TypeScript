@@ -2496,7 +2496,8 @@
                     },
                     {
                         "name": "Type",
-                        "inherited": true
+                        "inherited": true,
+                        "optional": false
                     }
                 ]
             },

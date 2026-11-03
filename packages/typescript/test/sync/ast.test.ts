@@ -116,7 +116,6 @@ describe("AST property contracts", { concurrency }, () => {
             shorthandType: astModule.ShorthandPropertyAssignment["type"];
             signatureType: astModule.PropertySignatureDeclaration["type"];
             signatureInitializer: astModule.PropertySignatureDeclaration["initializer"];
-            indexType: astModule.IndexSignatureDeclaration["type"];
             questionDotToken: astModule.TaggedTemplateExpression["questionDotToken"];
             constraint: astModule.JSDocTemplateTag["constraint"];
             nameExpression: astModule.JSDocSeeTag["nameExpression"];
@@ -126,7 +125,6 @@ describe("AST property contracts", { concurrency }, () => {
             shorthandType: undefined,
             signatureType: undefined,
             signatureInitializer: undefined,
-            indexType: undefined,
             questionDotToken: undefined,
             constraint: undefined,
             nameExpression: undefined,
@@ -142,7 +140,6 @@ describe("AST property contracts", { concurrency }, () => {
                 seen.signatureType = node.type;
                 seen.signatureInitializer = node.initializer;
             }
-            if (astModule.isIndexSignatureDeclaration(node)) seen.indexType = node.type;
             if (astModule.isTaggedTemplateExpression(node)) seen.questionDotToken = node.questionDotToken;
             if (astModule.isJSDocTemplateTag(node)) seen.constraint = node.constraint;
             if (astModule.isJSDocSeeTag(node)) seen.nameExpression = node.nameExpression;
