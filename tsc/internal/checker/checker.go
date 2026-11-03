@@ -21297,19 +21297,6 @@ func (c *Checker) createInstantiatedSymbolTable(symbols []*ast.Symbol, m *TypeMa
 	return result
 }
 
-func (c *Checker) instantiateSymbolTable(symbols ast.SymbolTable, m *TypeMapper) ast.SymbolTable {
-	if symbols.Len() == 0 {
-		return nil
-	}
-	result := ast.NewSymbolTableWithCapacity(symbols.Len())
-	for id, symbol := range symbols.All() {
-		if c.isNamedMember(symbol, id) {
-			result.Set(id, c.instantiateSymbol(symbol, m))
-		}
-	}
-	return result
-}
-
 func (c *Checker) instantiateSymbol(symbol *ast.Symbol, m *TypeMapper) *ast.Symbol {
 	if symbol == nil || m == nil {
 		return symbol
