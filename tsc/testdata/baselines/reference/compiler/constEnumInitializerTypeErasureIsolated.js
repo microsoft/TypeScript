@@ -13,6 +13,6 @@ export const value = E.A;
 var E;
 (function (E) {
     E[E["A"] = 1] = "A";
-    E[E["B"] = E.A + (1 as number)] = "B";
+    E[E["B"] = E.A + 1] = "B";
 })(E || (E = {}));
 export const value = E.A;

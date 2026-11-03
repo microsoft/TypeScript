@@ -389,10 +389,15 @@ func (tx *TypeEraserTransformer) visit(node *ast.Node) *ast.Node {
 		return node
 
 	case ast.KindEnumDeclaration:
-		if ast.IsEnumConst(node) {
+		if !ast.IsEnumConst(node) {
+			return tx.Visitor().VisitEachChild(node)
+		}
+		if !tx.compilerOptions.ShouldPreserveConstEnums() {
 			return node
 		}
-		return tx.Visitor().VisitEachChild(node)
+		// Preserve the const modifier for the runtime syntax transform.
+		n := node.AsEnumDeclaration()
+		return tx.Factory().UpdateEnumDeclaration(n, n.Modifiers(), n.Name(), tx.Visitor().VisitNodes(n.Members))
 
 	default:
 		return tx.Visitor().VisitEachChild(node)

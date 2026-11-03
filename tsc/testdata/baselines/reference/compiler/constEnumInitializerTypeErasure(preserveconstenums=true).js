@@ -16,9 +16,9 @@ export const end = Token.End;
 var Token;
 (function (Token) {
     Token[Token["End"] = 0] = "End";
-    Token[Token["Word"] = "word" as string] = "Word";
-    Token[Token["Marker"] = <number>2] = "Marker";
-    Token[Token["Flag"] = 3!] = "Flag";
-    Token[Token["Count"] = 4 satisfies number] = "Count";
+    Token[Token["Word"] = "word"] = "Word";
+    Token[Token["Marker"] = 2] = "Marker";
+    Token[Token["Flag"] = 3] = "Flag";
+    Token[Token["Count"] = 4] = "Count";
 })(Token || (Token = {}));
 export const end = 0 /* Token.End */;
