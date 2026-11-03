@@ -49,14 +49,14 @@ func (ch *PseudoChecker) GetTypeOfDeclaration(node *ast.Node) *PseudoType {
 		return ch.typeFromPropertyAssignment(node)
 	case ast.KindCallExpression:
 		switch ast.GetAssignmentDeclarationKind(node) {
-		// TODO: How much of the checker's getTypeFromPropertyDescriptor is worth trying to emulate over ASTs?
+
 		case ast.JSDeclarationKindObjectDefinePropertyValue:
 			{
-				// !!!
+
 			}
 		case ast.JSDeclarationKindObjectDefinePropertyExports:
 			{
-				// !!!
+
 			}
 		}
 		return NewPseudoTypeNoResult(node)
@@ -78,20 +78,18 @@ func (ch *PseudoChecker) typeFromPropertyAssignment(node *ast.Node) *PseudoType 
 			if expr != nil && (expr.Kind != PseudoTypeKindInferred || len(expr.AsPseudoTypeInferred().ErrorNodes) > 0) {
 				return expr
 			}
-			// fallback to NoResult if PseudoTypeKindInferred without error nodes
+
 		}
 	}
 	return NewPseudoTypeNoResult(node)
 }
 
-// This is _not_ redundant with the reparser; see how expandoFunctionSymbolProperty.ts and similar behaves
 func (ch *PseudoChecker) typeFromExpandoProperty(node *ast.Node) *PseudoType {
 	declaredType := node.Type()
 	if declaredType != nil {
 		return NewPseudoTypeDirect(declaredType)
 	}
-	// While `node` is an expression, as an expando, it should also always be a
-	// declaration with a `.Symbol()` which requires declaration fallback handling
+
 	return NewPseudoTypeNoResult(node)
 }
 
@@ -103,19 +101,19 @@ func (ch *PseudoChecker) typeFromProperty(node *ast.Node) *PseudoType {
 	if ast.IsPropertyDeclaration(node) {
 		init := node.Initializer()
 		if init != nil && !isContextuallyTyped(node) {
-			// explicit fail on readonly template literals to allow for literal freshness in the future
+
 			if ast.HasModifier(node, ast.ModifierFlagsReadonly) && ast.IsTemplateExpression(init) {
 				return NewPseudoTypeNoResult(node)
 			}
 			expr := ch.typeFromExpression(init)
 			if expr != nil && (expr.Kind != PseudoTypeKindInferred || len(expr.AsPseudoTypeInferred().ErrorNodes) > 0) {
 				if expr.Kind != PseudoTypeKindDirect && node.AsPropertyDeclaration().PostfixToken != nil && node.AsPropertyDeclaration().PostfixToken.Kind == ast.KindQuestionToken {
-					// type comes from the initializer expression on a property with a `?` - add `| undefined` to the type
+
 					return addUndefinedIfDefinitelyRequired(expr)
 				}
 				return expr
 			}
-			// fallback to NoResult if PseudoTypeKindInferred without error nodes
+
 		}
 	}
 	return NewPseudoTypeNoResult(node)
@@ -128,8 +126,8 @@ func (ch *PseudoChecker) typeFromVariable(declaration *ast.VariableDeclaration) 
 	}
 	init := declaration.Initializer
 	if init != nil && declaration.Symbol != nil && (len(declaration.Symbol.Declarations()) == 1 || core.CountWhere(declaration.Symbol.Declarations(), ast.IsVariableDeclaration) == 1) {
-		if !isContextuallyTyped(declaration.AsNode()) { // TODO: also should bail on expando declarations; reuse syntactic expando check used in declaration emit
-			// TODO: Strada forces an inference fallback on `const` variables with template expression initializers, to leave space for template literal freshness in the future
+		if !isContextuallyTyped(declaration.AsNode()) {
+
 			if ast.IsVarConst(declaration.AsNode()) && ast.IsTemplateExpression(init) {
 				return NewPseudoTypeNoResult(declaration.AsNode())
 			}
@@ -137,7 +135,7 @@ func (ch *PseudoChecker) typeFromVariable(declaration *ast.VariableDeclaration) 
 			if expr != nil && (expr.Kind != PseudoTypeKindInferred || len(expr.AsPseudoTypeInferred().ErrorNodes) > 0) {
 				return expr
 			}
-			// fallback to NoResult if PseudoTypeKindInferred without error nodes
+
 		}
 	}
 	return NewPseudoTypeNoResult(declaration.AsNode())
@@ -156,7 +154,7 @@ func (ch *PseudoChecker) typeFromAccessor(accessor *ast.Node) *PseudoType {
 			if accessorDeclarations.SetAccessor != nil {
 				errorNodes = append(errorNodes, accessorDeclarations.SetAccessor.AsNode())
 			}
-			res = NewPseudoTypeInferredWithErrors(res.AsPseudoTypeInferred().Expression, res.AsPseudoTypeInferred().IsSignatureReturn, errorNodes) // Move error up to the accessor
+			res = NewPseudoTypeInferredWithErrors(res.AsPseudoTypeInferred().Expression, res.AsPseudoTypeInferred().IsSignatureReturn, errorNodes)
 		}
 		return res
 	}
@@ -178,7 +176,7 @@ func (ch *PseudoChecker) getTypeAnnotationFromAccessor(node *ast.Node) *ast.Node
 	if node == nil {
 		return nil
 	}
-	// !!! TODO: support ripping return type off of .FullSignature
+
 	if node.Kind == ast.KindGetAccessor {
 		return node.AsGetAccessorDeclaration().Type
 	}
@@ -197,11 +195,10 @@ func isValueSignatureDeclaration(node *ast.Node) bool {
 	return ast.IsFunctionExpression(node) || ast.IsArrowFunction(node) || ast.IsMethodDeclaration(node) || ast.IsAccessor(node) || ast.IsFunctionDeclaration(node) || ast.IsConstructorDeclaration(node)
 }
 
-// does not return `nil`, returns a `NoResult` pseudotype instead
 func (ch *PseudoChecker) createReturnFromSignature(fn *ast.Node) *PseudoType {
 	if ast.IsFunctionLike(fn) {
 		d := fn.FunctionLikeData()
-		// !!! TODO: support ripping return type off of .FullSignature
+
 		r := d.Type
 		if r != nil {
 			return NewPseudoTypeDirect(r)
@@ -224,7 +221,7 @@ func (ch *PseudoChecker) typeFromSingleReturnExpression(fn *ast.Node) *PseudoTyp
 		body := fn.Body()
 		if ast.IsBlock(body) {
 			ast.ForEachReturnStatement(body, func(stmt *ast.Node) bool {
-				if stmt.Parent != body { // Why bail on nested return statements?
+				if stmt.Parent != body {
 					candidateExpr = nil
 					return true
 				}
@@ -261,17 +258,15 @@ func (ch *PseudoChecker) typeFromSingleReturnExpression(fn *ast.Node) *PseudoTyp
 	return NewPseudoTypeInferred(fn, true)
 }
 
-// This is basically `checkExpression` for pseudotypes
 func (ch *PseudoChecker) typeFromExpression(node *ast.Node) *PseudoType {
 	switch node.Kind {
 	case ast.KindOmittedExpression:
 		return PseudoTypeUndefined
 	case ast.KindParenthesizedExpression:
-		// assertions transformed on reparse, just unwrap
+
 		return ch.typeFromExpression(node.AsParenthesizedExpression().Expression)
 	case ast.KindIdentifier:
-		// !!! TODO: in strada, this uses symbol information to ensure `node` refers to the global `undefined` symbol instead
-		// we should probably import `resolveName` and use it here to check for the same; but we have to setup some barebones pseudoglobals for that to work!
+
 		if node.AsIdentifier().Text == "undefined" {
 			return PseudoTypeUndefined
 		}
@@ -292,9 +287,9 @@ func (ch *PseudoChecker) typeFromExpression(node *ast.Node) *PseudoType {
 	case ast.KindObjectLiteralExpression:
 		return ch.typeFromObjectLiteral(node.AsObjectLiteralExpression())
 	case ast.KindClassExpression:
-		return NewPseudoTypeInferredWithErrors(node, false, []*ast.Node{node}) // No possible annotation/directly mappable syntax
+		return NewPseudoTypeInferredWithErrors(node, false, []*ast.Node{node})
 	case ast.KindTemplateExpression:
-		// templateLitWithHoles as const, not supported
+
 		if IsInConstContext(node) {
 			return NewPseudoTypeInferred(node, false)
 		}
@@ -319,7 +314,7 @@ func (ch *PseudoChecker) typeFromObjectLiteral(node *ast.ObjectLiteralExpression
 	if errorNodes := ch.canGetTypeFromObjectLiteral(node); errorNodes != nil {
 		return NewPseudoTypeInferredWithErrors(node.AsNode(), false, errorNodes)
 	}
-	// we are in a const context producing an object literal type, there are no shorthand or spread assignments
+
 	if node.Properties == nil || len(node.Properties.Nodes) == 0 {
 		return NewPseudoTypeObjectLiteral(nil)
 	}
@@ -362,14 +357,11 @@ func (ch *PseudoChecker) typeFromObjectLiteral(node *ast.ObjectLiteralExpression
 	return NewPseudoTypeObjectLiteral(results)
 }
 
-// roughly analogous to typeFromObjectLiteralAccessor in strada
 func (ch *PseudoChecker) getAccessorMember(accessor *ast.Node, name *ast.Node) *PseudoObjectElement {
-	allAccessors := ast.GetAllAccessorDeclarationsForDeclaration(accessor, accessor.Symbol().Declarations()) // TODO: node preservation for late-bound accessor pairs?
+	allAccessors := ast.GetAllAccessorDeclarationsForDeclaration(accessor, accessor.Symbol().Declarations())
 
-	// TODO: handle pseudo-annotations from get accessor return positions?
 	if allAccessors.GetAccessor != nil && allAccessors.GetAccessor.Type != nil &&
 		allAccessors.SetAccessor != nil && len(allAccessors.SetAccessor.Parameters.Nodes) > 0 && allAccessors.SetAccessor.Parameters.Nodes[0].AsParameterDeclaration().Type != nil {
-		// We have possible types for both accessors, we can't know if they are the same type so we keep both accessors
 
 		if ast.IsGetAccessorDeclaration(accessor) {
 			return NewPseudoGetAccessor(
@@ -389,7 +381,6 @@ func (ch *PseudoChecker) getAccessorMember(accessor *ast.Node, name *ast.Node) *
 	}
 
 	if accessor == allAccessors.FirstAccessor {
-		// only one annotated accessor; output a property - `readonly` for a single `get` accessor
 
 		accessorType := ch.typeFromAccessor(accessor)
 		readonly := ast.IsGetAccessorDeclaration(accessor) && allAccessors.SecondAccessor == nil
@@ -403,12 +394,9 @@ func (ch *PseudoChecker) getAccessorMember(accessor *ast.Node, name *ast.Node) *
 	return nil
 }
 
-// canGetTypeFromObjectLiteral checks whether an object literal can be typed by the pseudochecker.
-// Returns nil if the object can be typed, or a slice of error nodes (shorthand/spread properties,
-// non-literal computed names) that prevent typing.
 func (ch *PseudoChecker) canGetTypeFromObjectLiteral(node *ast.ObjectLiteralExpression) []*ast.Node {
 	if node.Properties == nil || len(node.Properties.Nodes) == 0 {
-		return nil // empty object, ok
+		return nil
 	}
 	var errorNodes []*ast.Node
 	for _, e := range node.Properties.Nodes {
@@ -443,9 +431,9 @@ func (ch *PseudoChecker) typeFromArrayLiteral(node *ast.ArrayLiteralExpression) 
 		return NewPseudoTypeInferredWithErrors(node.AsNode(), false, errorNodes)
 	}
 	if IsInConstContext(node.AsNode()) && isContextuallyTyped(node.AsNode()) {
-		return NewPseudoTypeInferred(node.AsNode(), false) // expr in an as const cast with a contextual type has variable readonly state, bail
+		return NewPseudoTypeInferred(node.AsNode(), false)
 	}
-	// we are in a const context producing a tuple type, there are no spread elements
+
 	results := make([]*PseudoType, 0, len(node.Elements.Nodes))
 	for _, e := range node.Elements.Nodes {
 		results = append(results, ch.typeFromExpression(e))
@@ -453,10 +441,6 @@ func (ch *PseudoChecker) typeFromArrayLiteral(node *ast.ArrayLiteralExpression) 
 	return NewPseudoTypeTuple(results)
 }
 
-// canGetTypeFromArrayLiteral checks whether an array literal can be typed by the pseudochecker.
-// Returns nil if the array can be typed, or a slice of error nodes that prevent typing.
-// For non-const arrays, the error node is the array expression itself.
-// For const arrays with spreads, the error node is the spread element.
 func (ch *PseudoChecker) canGetTypeFromArrayLiteral(node *ast.ArrayLiteralExpression) []*ast.Node {
 	if !IsInConstContext(node.AsNode()) {
 		return []*ast.Node{node.AsNode()}
@@ -469,7 +453,6 @@ func (ch *PseudoChecker) canGetTypeFromArrayLiteral(node *ast.ArrayLiteralExpres
 	return nil
 }
 
-// See `isConstContext` in `checker.go` - this is basically any node kind mentioned in that
 func isConstContextPropagatingKind(kind ast.Kind) bool {
 	switch kind {
 	case ast.KindArrayLiteralExpression, ast.KindObjectLiteralExpression,
@@ -480,14 +463,12 @@ func isConstContextPropagatingKind(kind ast.Kind) bool {
 	return false
 }
 
-// IsInConstContext traverses up the parent chain to determine if the node is within a const context without needing any
-// persistent traversal scope tracking (which could be unreliable in the presence of `typeof` queries anyway!)
 func IsInConstContext(node *ast.Node) bool {
-	// An expression is in a const context if an ancestor is a const type maybeAssertion expression
+
 	maybeAssertion := ast.FindAncestor(
 		node.Parent,
 		func(n *ast.Node) bool {
-			// stop traversing at assertions or anything not an array/object literal, since only those create or transfer const-ness
+
 			return ast.IsAssertionExpression(n) || !isConstContextPropagatingKind(n.Kind)
 		},
 	)
@@ -555,39 +536,37 @@ func typeNodeCouldReferToUndefined(node *ast.Node) bool {
 		node = node.AsParenthesizedTypeNode().Type
 	}
 	switch node.Kind {
-	// these types require symbolic/type resolution to know if they definitely do or do not refer to `undefined`, so might (or definitely do)
+
 	case ast.KindTypeReference, ast.KindIndexedAccessType, ast.KindTypeQuery, ast.KindOptionalType, ast.KindRestType, ast.KindImportType:
 		return true
 	case ast.KindIntersectionType:
-		// TODO: why is this not `core.Every`? strada treated unions and intersections the same, but logically every intersection member needs to contain a possible `undefined`
-		// for the result type to contain `undefined`. Likely a bug persisting from strada.
+
 		return core.Some(node.AsIntersectionTypeNode().Types.Nodes, typeNodeCouldReferToUndefined)
 	case ast.KindUnionType:
 		return core.Some(node.AsUnionTypeNode().Types.Nodes, typeNodeCouldReferToUndefined)
-	case ast.KindConditionalType: // suspect - should be treated as a union of both branches instead, likely a bug persisted from strada
+	case ast.KindConditionalType:
 		return true
-	case ast.KindTypeOperator: // suspect - always refers to a subset of `string | number | symbol` for `keyof` or `symbol` for `unique`
+	case ast.KindTypeOperator:
 		return true
-	case ast.KindTypePredicate: // suspect - always refers to `never` or `boolean`, depending on kind - considered possibly-`undefined` referencing for strada compat
+	case ast.KindTypePredicate:
 		return true
 	case ast.KindUndefinedKeyword:
 		return true
-	default: // all other keywords, literal types, function-y types, array/tuple types, type literals, template types, this types
+	default:
 		return false
 	}
 }
 
-// see this as the inverse of `canAddUndefined` in `expressionToTypeNode` in strada
 func CouldAlreadyReferToUndefinedType(t *PseudoType) bool {
 	if t.Kind == PseudoTypeKindNoResult || t.Kind == PseudoTypeKindInferred || isUndefinedPseudoType(t) {
 		return true
 	}
 	if t.Kind == PseudoTypeKindMaybeConstLocation {
 		mc := t.AsPseudoTypeMaybeConstLocation()
-		return CouldAlreadyReferToUndefinedType(mc.RegularType) // if we're even asking this question, it's not a `const` location
+		return CouldAlreadyReferToUndefinedType(mc.RegularType)
 	}
 	if t.Kind == PseudoTypeKindDirect {
-		// inspect the direct type node
+
 		node := t.AsPseudoTypeDirect().TypeNode
 		return typeNodeCouldReferToUndefined(node)
 	}
@@ -605,11 +584,6 @@ func isOptionalInitializedOrRestParameter(node *ast.ParameterDeclarationNode) bo
 	return false
 }
 
-// lastRequiredParamIndex returns the index just past the last required parameter
-// in the list. A parameter is "required" if it has no question token, no initializer,
-// and no rest token. This is computed in a single reverse pass so callers can
-// determine "has required parameter after index i" with `i+1 < lastRequired`
-// (equivalently, `i < lastRequired-1`) in O(1).
 func lastRequiredParamIndex(params []*ast.Node) int {
 	for i, param := range slices.Backward(params) {
 		if !isOptionalInitializedOrRestParameter(param) {
@@ -620,14 +594,11 @@ func lastRequiredParamIndex(params []*ast.Node) int {
 }
 
 func addUndefinedIfDefinitelyRequired(expr *PseudoType) *PseudoType {
-	// If `expr` doesn't already contain `| undefined` or a direct/inferred type that may contain `undefined`, add `| undefined`
-	// in Strada, this reached into the checker to see if `undefined` was necessary, using `isRequiredOptionalParameter` from the emit resolver,
-	// but that's not required on top of the syntactic checks to get the same behavior. (If we get the type wrong, it'll mismatch later and be discarded
-	// for an inference error since corsa actually validates that pseudotypes semantically match the inferred type the checker produces)
+
 	if CouldAlreadyReferToUndefinedType(expr) {
-		return expr // will just error later, more like than not, unless the `undefined` is explicit in the pseudo
+		return expr
 	}
-	// Explicitly add an `| undefined`
+
 	return NewPseudoTypeUnion([]*PseudoType{expr, PseudoTypeUndefined})
 }
 
@@ -636,7 +607,7 @@ func (ch *PseudoChecker) typeFromParameter(node *ast.ParameterDeclaration) *Pseu
 	if parent.Kind == ast.KindSetAccessor {
 		return ch.GetTypeOfAccessor(parent)
 	}
-	// Fast path: no initializer means we never need parameter position info.
+
 	if node.Initializer == nil {
 		if node.Type != nil {
 			return NewPseudoTypeDirect(node.Type)
@@ -658,9 +629,7 @@ func (ch *PseudoChecker) typeFromParameterWorker(node *ast.ParameterDeclaration,
 	declaredType := node.Type
 	if declaredType != nil {
 		result := NewPseudoTypeDirect(declaredType)
-		// When the parameter has an initializer and strict null checks are enabled,
-		// check if `| undefined` needs to be added because there are required parameters after this one.
-		// This mirrors the checker's getTypeOfParameter which adds optionality for initialized parameters.
+
 		if ch.strictNullChecks && node.Initializer != nil && hasRequiredAfter {
 			return addUndefinedIfDefinitelyRequired(result)
 		}
@@ -669,7 +638,7 @@ func (ch *PseudoChecker) typeFromParameterWorker(node *ast.ParameterDeclaration,
 	if node.Initializer != nil && ast.IsIdentifier(node.Name()) && !isContextuallyTyped(node.AsNode()) {
 		expr := ch.typeFromExpression(node.Initializer)
 		if expr != nil && (expr.Kind == PseudoTypeKindInferred && len(expr.AsPseudoTypeInferred().ErrorNodes) == 0) {
-			expr = NewPseudoTypeInferredWithErrors(expr.AsPseudoTypeInferred().Expression, false, []*ast.Node{node.AsNode()}) // Move error up to the parameter
+			expr = NewPseudoTypeInferredWithErrors(expr.AsPseudoTypeInferred().Expression, false, []*ast.Node{node.AsNode()})
 		}
 		if !ch.strictNullChecks {
 			return expr
@@ -677,13 +646,10 @@ func (ch *PseudoChecker) typeFromParameterWorker(node *ast.ParameterDeclaration,
 		if !hasRequiredAfter {
 			return expr
 		}
-		// if there is a non-optional parameter after this one, a `| undefined` will need to explicitly be emitted on this parameter, if it's not already there
+
 		return addUndefinedIfDefinitelyRequired(expr)
 	}
-	// TODO: In strada, the ID checker doesn't infer a parameter type from binding pattern names, but the real checker _does_!
-	// This means ID won't let you write, say, `({elem}) => false` without an annotation, even though it's trivially of type
-	// `(p0: {elem: any}) => boolean` and error-free under `noImplicitAny: false`!
-	// That limitation is retained here.
+
 	return NewPseudoTypeNoResult(node.AsNode())
 }
 
@@ -700,9 +666,7 @@ func (ch *PseudoChecker) cloneParameters(nodes *ast.NodeList) []*PseudoParameter
 		p := e.AsParameterDeclaration()
 		optional := p.QuestionToken != nil
 		if !optional && p.Initializer != nil {
-			// A parameter with an initializer is optional only if all subsequent
-			// parameters are also optional/have initializers/are rest parameters.
-			// This matches the checker's isOptionalParameter semantics.
+
 			optional = i >= lastRequired-1
 		}
 		result = append(result, NewPseudoParameter(
@@ -717,7 +681,7 @@ func (ch *PseudoChecker) cloneParameters(nodes *ast.NodeList) []*PseudoParameter
 
 func isContextuallyTyped(node *ast.Node) bool {
 	return ast.FindAncestor(node.Parent, func(n *ast.Node) bool {
-		// Functions calls or parent type annotations (but not the return type of a function expression) may impact the inferred type and local inference is unreliable
+
 		if ast.IsCallExpression(n) {
 			return true
 		}

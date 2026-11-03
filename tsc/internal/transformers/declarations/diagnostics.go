@@ -151,12 +151,12 @@ func createGetSymbolAccessibilityDiagnosticForNode(node *ast.Node) GetSymbolAcce
 	} else if ast.IsTypeParameterDeclaration(node) {
 		return wrapSimpleDiagnosticSelector(node, getTypeParameterConstraintVisibilityDiagnosticMessage)
 	} else if ast.IsExpressionWithTypeArguments(node) {
-		// unique node selection behavior, inline closure
+
 		return func(symbolAccessibilityResult printer.SymbolAccessibilityResult) *SymbolAccessibilityDiagnostic {
 			var diagnosticMessage *diagnostics.Message
-			// Heritage clause is written by user so it can always be named
+
 			if ast.IsClassDeclaration(node.Parent.Parent) {
-				// Class or Interface implemented/extended is inaccessible
+
 				if ast.IsHeritageClause(node.Parent) && node.Parent.AsHeritageClause().Token == ast.KindImplementsKeyword {
 					diagnosticMessage = diagnostics.Implements_clause_of_exported_class_0_has_or_is_using_private_name_1
 				} else {
@@ -167,7 +167,7 @@ func createGetSymbolAccessibilityDiagnosticForNode(node *ast.Node) GetSymbolAcce
 					}
 				}
 			} else {
-				// interface is inaccessible
+
 				diagnosticMessage = diagnostics.X_extends_clause_of_exported_interface_0_has_or_is_using_private_name_1
 			}
 
@@ -182,7 +182,7 @@ func createGetSymbolAccessibilityDiagnosticForNode(node *ast.Node) GetSymbolAcce
 			return diagnostics.Import_declaration_0_is_using_private_name_1
 		})
 	} else if ast.IsTypeAliasDeclaration(node) || ast.IsJSTypeAliasDeclaration(node) {
-		// unique node selection behavior, inline closure
+
 		return func(symbolAccessibilityResult printer.SymbolAccessibilityResult) *SymbolAccessibilityDiagnostic {
 			diagnosticMessage := selectDiagnosticBasedOnModuleNameNoNameCheck(
 				symbolAccessibilityResult,
@@ -198,8 +198,7 @@ func createGetSymbolAccessibilityDiagnosticForNode(node *ast.Node) GetSymbolAcce
 			}
 		}
 	} else if ast.IsCallExpression(node) {
-		// JS object.defineProperty call
-		// unique node selection behavior, inline closure
+
 		return func(symbolAccessibilityResult printer.SymbolAccessibilityResult) *SymbolAccessibilityDiagnostic {
 			diagnosticMessage := selectDiagnosticBasedOnModuleName(
 				symbolAccessibilityResult,
@@ -229,11 +228,9 @@ func getVariableDeclarationTypeVisibilityDiagnosticMessage(node *ast.Node, symbo
 			diagnostics.Exported_variable_0_has_or_is_using_private_name_1,
 		)
 
-		// This check is to ensure we don't report error on constructor parameter property as that error would be reported during parameter emit
-		// The only exception here is if the constructor was marked as private. we are not emitting the constructor parameters at all.
 	} else if node.Kind == ast.KindPropertyDeclaration || node.Kind == ast.KindPropertyAccessExpression || node.Kind == ast.KindElementAccessExpression || node.Kind == ast.KindBinaryExpression || node.Kind == ast.KindPropertySignature ||
 		(node.Kind == ast.KindParameter && ast.HasSyntacticModifier(node.Parent, ast.ModifierFlagsPrivate)) {
-		// TODO(jfreeman): Deal with computed properties in error reporting.
+
 		if ast.IsStatic(node) {
 			return selectDiagnosticBasedOnModuleName(
 				symbolAccessibilityResult,
@@ -249,7 +246,7 @@ func getVariableDeclarationTypeVisibilityDiagnosticMessage(node *ast.Node, symbo
 				diagnostics.Public_property_0_of_exported_class_has_or_is_using_private_name_1,
 			)
 		} else {
-			// Interfaces cannot have types that cannot be named
+
 			return selectDiagnosticBasedOnModuleNameNoNameCheck(
 				symbolAccessibilityResult,
 				diagnostics.Property_0_of_exported_interface_has_or_is_using_name_1_from_private_module_2,
@@ -257,13 +254,12 @@ func getVariableDeclarationTypeVisibilityDiagnosticMessage(node *ast.Node, symbo
 			)
 		}
 	}
-	return nil // TODO: Audit behavior - should this panic? potentially silent error state in strada
+	return nil
 }
 
 func getAccessorDeclarationTypeVisibilityDiagnosticMessage(node *ast.Node, symbolAccessibilityResult printer.SymbolAccessibilityResult) *diagnostics.Message {
 	if node.Kind == ast.KindSetAccessor {
-		// Getters can infer the return type from the returned expression, but setters cannot, so the
-		// "_from_external_module_1_but_cannot_be_named" case cannot occur.
+
 		if ast.IsStatic(node) {
 			return selectDiagnosticBasedOnModuleNameNoNameCheck(
 				symbolAccessibilityResult,
@@ -299,21 +295,21 @@ func getAccessorDeclarationTypeVisibilityDiagnosticMessage(node *ast.Node, symbo
 func getReturnTypeVisibilityDiagnosticMessage(node *ast.Node, symbolAccessibilityResult printer.SymbolAccessibilityResult) *diagnostics.Message {
 	switch node.Kind {
 	case ast.KindConstructSignature:
-		// Interfaces cannot have return types that cannot be named
+
 		return selectDiagnosticBasedOnModuleNameNoNameCheck(
 			symbolAccessibilityResult,
 			diagnostics.Return_type_of_constructor_signature_from_exported_interface_has_or_is_using_name_0_from_private_module_1,
 			diagnostics.Return_type_of_constructor_signature_from_exported_interface_has_or_is_using_private_name_0,
 		)
 	case ast.KindCallSignature:
-		// Interfaces cannot have return types that cannot be named
+
 		return selectDiagnosticBasedOnModuleNameNoNameCheck(
 			symbolAccessibilityResult,
 			diagnostics.Return_type_of_call_signature_from_exported_interface_has_or_is_using_name_0_from_private_module_1,
 			diagnostics.Return_type_of_call_signature_from_exported_interface_has_or_is_using_private_name_0,
 		)
 	case ast.KindIndexSignature:
-		// Interfaces cannot have return types that cannot be named
+
 		return selectDiagnosticBasedOnModuleNameNoNameCheck(
 			symbolAccessibilityResult,
 			diagnostics.Return_type_of_index_signature_from_exported_interface_has_or_is_using_name_0_from_private_module_1,
@@ -336,7 +332,7 @@ func getReturnTypeVisibilityDiagnosticMessage(node *ast.Node, symbolAccessibilit
 				diagnostics.Return_type_of_public_method_from_exported_class_has_or_is_using_private_name_0,
 			)
 		} else {
-			// Interfaces cannot have return types that cannot be named
+
 			return selectDiagnosticBasedOnModuleNameNoNameCheck(
 				symbolAccessibilityResult,
 				diagnostics.Return_type_of_method_from_exported_interface_has_or_is_using_name_0_from_private_module_1,
@@ -366,7 +362,7 @@ func getParameterDeclarationTypeVisibilityDiagnosticMessage(node *ast.Node, symb
 		)
 
 	case ast.KindConstructSignature, ast.KindConstructorType:
-		// Interfaces cannot have parameter types that cannot be named
+
 		return selectDiagnosticBasedOnModuleNameNoNameCheck(
 			symbolAccessibilityResult,
 			diagnostics.Parameter_0_of_constructor_signature_from_exported_interface_has_or_is_using_name_1_from_private_module_2,
@@ -374,7 +370,7 @@ func getParameterDeclarationTypeVisibilityDiagnosticMessage(node *ast.Node, symb
 		)
 
 	case ast.KindCallSignature:
-		// Interfaces cannot have parameter types that cannot be named
+
 		return selectDiagnosticBasedOnModuleNameNoNameCheck(
 			symbolAccessibilityResult,
 			diagnostics.Parameter_0_of_call_signature_from_exported_interface_has_or_is_using_name_1_from_private_module_2,
@@ -382,7 +378,7 @@ func getParameterDeclarationTypeVisibilityDiagnosticMessage(node *ast.Node, symb
 		)
 
 	case ast.KindIndexSignature:
-		// Interfaces cannot have parameter types that cannot be named
+
 		return selectDiagnosticBasedOnModuleNameNoNameCheck(
 			symbolAccessibilityResult,
 			diagnostics.Parameter_0_of_index_signature_from_exported_interface_has_or_is_using_name_1_from_private_module_2,
@@ -405,7 +401,7 @@ func getParameterDeclarationTypeVisibilityDiagnosticMessage(node *ast.Node, symb
 				diagnostics.Parameter_0_of_public_method_from_exported_class_has_or_is_using_private_name_1,
 			)
 		} else {
-			// Interfaces cannot have parameter types that cannot be named
+
 			return selectDiagnosticBasedOnModuleNameNoNameCheck(
 				symbolAccessibilityResult,
 				diagnostics.Parameter_0_of_method_from_exported_interface_has_or_is_using_name_1_from_private_module_2,
@@ -434,7 +430,7 @@ func getParameterDeclarationTypeVisibilityDiagnosticMessage(node *ast.Node, symb
 }
 
 func getTypeParameterConstraintVisibilityDiagnosticMessage(node *ast.Node, symbolAccessibilityResult printer.SymbolAccessibilityResult) *diagnostics.Message {
-	// Type parameter constraints are named by user so we should always be able to name it
+
 	switch node.Parent.Kind {
 	case ast.KindClassDeclaration:
 		return diagnostics.Type_parameter_0_of_exported_class_has_or_is_using_private_name_1
@@ -685,7 +681,7 @@ func createGetIsolatedDeclarationErrors(resolver printer.EmitResolver) func(node
 		if ast.IsSetAccessorDeclaration(node.Parent) {
 			return createAccessorTypeError(node.Parent)
 		}
-		addUndefined := resolver.RequiresAddingImplicitUndefinedUnsafe(node, nil, nil) // skip checker lock - node builder will already have one
+		addUndefined := resolver.RequiresAddingImplicitUndefinedUnsafe(node, nil, nil)
 		if !addUndefined && node.Initializer() != nil {
 			return createExpressionError(node.Initializer())
 		}
