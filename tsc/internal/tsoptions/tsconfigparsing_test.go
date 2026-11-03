@@ -1390,6 +1390,58 @@ func TestContentMappersAreInheritedFromExtendedConfig(t *testing.T) {
 	}
 }
 
+func TestInheritedContentMapperPackagePathIsResolvedFromDeclaringConfig(t *testing.T) {
+	t.Parallel()
+	config := testConfig{
+		jsonText:       `{ "extends": "../config/middle.json" }`,
+		configFileName: "tsconfig.json",
+		basePath:       "/repo/app",
+		allFileList: map[string]string{
+			"/repo/config/middle.json": `{ "extends": "./base.json" }`,
+			"/repo/config/base.json": `{ "contentMappers": [
+				{ "package": "./mapper", "extensions": [".vue"] },
+				{ "package": "named-mapper", "extensions": [".view"] }
+			] }`,
+			"/repo/config/mapper/package.json": `{
+				"name": "config-mapper",
+				"typescript": { "contentMapper": { "exec": ["run"] } }
+			}`,
+			"/repo/config/node_modules/named-mapper/package.json": `{
+				"name": "config-named-mapper",
+				"typescript": { "contentMapper": { "exec": ["run"] } }
+			}`,
+			"/repo/app/mapper/package.json": `{
+				"name": "app-mapper",
+				"typescript": { "contentMapper": { "exec": ["run"] } }
+			}`,
+			"/repo/app/node_modules/named-mapper/package.json": `{
+				"name": "app-named-mapper",
+				"typescript": { "contentMapper": { "exec": ["run"] } }
+			}`,
+			"/repo/app/index.ts": "",
+		},
+		existingOptions: &core.CompilerOptions{RunExternalCode: core.TSTrue},
+	}
+
+	for name, getParsed := range map[string]func(testConfig, vfs.FS, tspath.RootedDirectoryPath) *tsoptions.ParsedCommandLine{
+		"json api":           getParsedWithJsonApi,
+		"jsonSourceFile api": getParsedWithJsonSourceFileApi,
+	} {
+		t.Run(name, func(t *testing.T) {
+			t.Parallel()
+			fs := tsoptionstest.NewVFS(config.allFileList, tspath.CaseSensitive /*caseSensitivity*/)
+			parsed := getParsed(config, fs, config.basePath)
+			assert.Equal(t, len(parsed.Errors), 0)
+			assert.Equal(t, len(parsed.ContentMappers()), 2)
+			assert.Equal(t, parsed.ContentMappers()[0].PackageDirectory, tspath.RootedDirectoryPath("/repo/config/mapper"))
+			assert.Equal(t, parsed.ContentMappers()[0].Manifest.Name, "config-mapper")
+			assert.Equal(t, parsed.ContentMappers()[1].Package, "named-mapper")
+			assert.Equal(t, parsed.ContentMappers()[1].PackageDirectory, tspath.RootedDirectoryPath("/repo/config/node_modules/named-mapper"))
+			assert.Equal(t, parsed.ContentMappers()[1].Manifest.Name, "config-named-mapper")
+		})
+	}
+}
+
 func TestContentMappersRequireFlag(t *testing.T) {
 	t.Parallel()
 
