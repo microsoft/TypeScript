@@ -18,7 +18,7 @@ function f(x: ?number, y: Array.<number>) {
 >x ? x + y[1] : y[0] : number
 >x : number | null
 >x + y[1] : number
->x : number
+>x : number & not 0
 >y[1] : number
 >y : number[]
 >1 : 1

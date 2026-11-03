@@ -81,5 +81,5 @@ assertTruthy(d);
 >d : 0 | {} | undefined
 
 d; // {}
->d : {}
+>d : {} & not "" & not 0 & not 0n & not false
 

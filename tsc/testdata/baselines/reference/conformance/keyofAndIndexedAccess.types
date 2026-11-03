@@ -1762,11 +1762,11 @@ function updateIds<T extends Record<K, string>, K extends string>(
 >newId : T[K] | undefined
 
             obj[idField] = newId;
->obj[idField] = newId : T[K]
+>obj[idField] = newId : T[K] & not ""
 >obj[idField] : T[K]
 >obj : T
 >idField : K
->newId : T[K]
+>newId : T[K] & not ""
         }
     }
     return obj;

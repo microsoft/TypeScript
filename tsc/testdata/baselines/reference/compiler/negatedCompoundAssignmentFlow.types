@@ -17,7 +17,7 @@ function compoundFlow(value: number | string) {
 
         value -= 1;
 >value -= 1 : number
->value : number & not 0
+>value : number
 >1 : 1
 
         value;
@@ -99,8 +99,8 @@ function parenthesizedCompound(value: number | undefined) {
 
         (value) -= 1;
 >(value) -= 1 : number
->(value) : number & not 0
->value : number & not 0
+>(value) : number
+>value : number
 >1 : 1
 
         value! *= 2;
@@ -124,7 +124,7 @@ function stringCompound(value: string, holder: { value: string }) {
 
         value += "suffix";
 >value += "suffix" : string
->value : string & not ""
+>value : string
 >"suffix" : "suffix"
     }
     if (holder.value !== "") {

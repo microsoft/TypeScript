@@ -30,7 +30,7 @@ function source(type = "javascript") {
 >sources.get : (key: string) => string | undefined
 >sources : Map<string, string>
 >get : (key: string) => string | undefined
->type : string
+>type : string & not ""
 
             : sources.get("some other thing")
 >sources.get("some other thing") : string | undefined

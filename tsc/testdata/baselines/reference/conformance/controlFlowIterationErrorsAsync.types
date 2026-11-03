@@ -334,7 +334,7 @@ async () => {
 >await foox(bar) : string
 >foox(bar) : Promise<string>
 >foox : (x: string | undefined) => Promise<string>
->bar : string | undefined
+>bar : (string & not "") | undefined
 
     bar = baz
 >bar = baz : string

@@ -25,7 +25,7 @@ const {
 >payload : string | number
 
     extra = kind === "a" ? payload.toFixed() : payload.toUpperCase(),
->extra : unknown
+>extra : {} | null
 >kind === "a" ? payload.toFixed() : payload.toUpperCase() : string
 >kind === "a" : boolean
 >kind : "a" | "b"
@@ -52,7 +52,7 @@ function f({
 >payload : string | number
 
     extra = kind === "a" ? payload.toFixed() : payload.toUpperCase(),
->extra : unknown
+>extra : {} | null
 >kind === "a" ? payload.toFixed() : payload.toUpperCase() : string
 >kind === "a" : boolean
 >kind : "a" | "b"

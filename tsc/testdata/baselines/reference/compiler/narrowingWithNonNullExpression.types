@@ -23,7 +23,7 @@ m?.[0]! && m[0];
 >m?.[0] : string | undefined
 >m : RegExpMatchArray | null
 >0 : 0
->m[0] : string
+>m[0] : string & not ""
 >m : RegExpMatchArray
 >0 : 0
 

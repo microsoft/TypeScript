@@ -18,7 +18,7 @@ if (t) {
 >t : Truthy
 
     t; // Truthy
->t : Truthy
+>t : not "" & not 0 & not 0n & not false & {}
 
 } else {
     t; // never
@@ -63,11 +63,11 @@ if (u) {
 >u : not null
 
     u; // not null
->u : not null
+>u : {} & not "" & not 0 & not 0n & not false
 
 } else {
     u; // not null (still falsy-capable, so not never)
->u : not null
+>u : "" | 0 | 0n | false | undefined
 }
 
 // Omitting `not 0n` leaves 0n as a reachable falsy value, so the falsy branch is not never.
@@ -82,10 +82,10 @@ if (a) {
 >a : AlmostTruthy
 
     a; // AlmostTruthy
->a : AlmostTruthy
+>a : not "" & not 0 & not false & {} & not 0n
 
 } else {
     a; // still falsy-capable via 0n, so not never
->a : AlmostTruthy
+>a : 0n
 }
 

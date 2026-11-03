@@ -11,7 +11,7 @@ function f1<T>(x: T & string | T & undefined) {
 >x : (T & undefined) | (T & string)
 
         x;  // Should narrow to T & string
->x : T & string
+>x : T & string & not ""
     }
 }
 

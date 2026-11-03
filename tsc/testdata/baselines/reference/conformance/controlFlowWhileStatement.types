@@ -97,7 +97,7 @@ function d() {
 >length : number
 
         x; // number
->x : number
+>x : number & not 0
 
         x = "";
 >x = "" : ""

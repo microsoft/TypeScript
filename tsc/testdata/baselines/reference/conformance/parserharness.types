@@ -2432,7 +2432,7 @@ namespace Harness {
 >prop : string
 >": " + prop : string
 >": " : ": "
->prop : string
+>prop : string & not ""
 >'' : ""
 
                     emitLog('testStart', { desc: description });
@@ -4666,7 +4666,7 @@ namespace Harness {
 >results : string
 
                     return results;
->results : string
+>results : string & not ""
                 }
 
                 if (!verifyNoDeclFile) {

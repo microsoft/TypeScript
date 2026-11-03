@@ -11,11 +11,11 @@ if (a) {
 >a : {} | null | undefined
 
     a; // {}
->a : {}
+>a : {} & not "" & not 0 & not 0n & not false
 
 } else {
     a; // undefined | null
->a : {} | null | undefined
+>a : "" | 0 | 0n | false | null | undefined
 }
 
 declare const b: string | 0 | undefined;
@@ -25,11 +25,11 @@ if (b) {
 >b : string | 0 | undefined
 
     b; // string (definitely-falsy 0 and undefined removed; no negation introduced)
->b : string
+>b : string & not ""
 
 } else {
     b; // string | 0 | undefined (no `not` synthesized)
->b : string | 0 | undefined
+>b : "" | 0 | undefined
 }
 
 // Truthiness on a bare `{}` leaves it unchanged on both branches: the empty object type includes
@@ -41,11 +41,11 @@ if (c) {
 >c : {}
 
     c; // {}
->c : {}
+>c : {} & not "" & not 0 & not 0n & not false
 
 } else {
     c; // {}
->c : {}
+>c : "" | 0 | 0n | false
 }
 
 // Negation via `!` flips the branches.
@@ -57,10 +57,10 @@ if (!d) {
 >d : number | undefined
 
     d; // 0 | undefined
->d : number | undefined
+>d : 0 | undefined
 
 } else {
     d; // number
->d : number
+>d : number & not 0
 }
 

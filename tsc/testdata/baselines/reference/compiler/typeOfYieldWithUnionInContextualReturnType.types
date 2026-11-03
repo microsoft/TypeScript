@@ -32,7 +32,7 @@ const syncFactory: SyncSequenceFactory = function* (){
   }
   return `That's the end of the game, ${name}`
 >`That's the end of the game, ${name}` : string
->name : string
+>name : string & not ""
 } 
 
 const asyncFactory: AsyncSequenceFactory = async function* (){
@@ -55,7 +55,7 @@ const asyncFactory: AsyncSequenceFactory = async function* (){
   }
   return `That's the end of the game, ${name}`
 >`That's the end of the game, ${name}` : string
->name : string
+>name : string & not ""
 } 
 
 const looserSyncFactory: SequenceFactory = function* (){
@@ -78,7 +78,7 @@ const looserSyncFactory: SequenceFactory = function* (){
   }
   return `That's the end of the game, ${name}`
 >`That's the end of the game, ${name}` : string
->name : string
+>name : string & not ""
 } 
 
 const looserAsyncFactory: SequenceFactory = async function* (){
@@ -101,6 +101,6 @@ const looserAsyncFactory: SequenceFactory = async function* (){
   }
   return `That's the end of the game, ${name}`
 >`That's the end of the game, ${name}` : string
->name : string
+>name : string & not ""
 } 
 

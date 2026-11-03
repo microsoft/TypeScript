@@ -57,15 +57,15 @@ function copyNonCallableProperties<NodeType extends NodeBase>(node: NodeType, cl
     }
     for (const key in node) {
 >key : Extract<keyof NodeType, string>
->node : NodeType
+>node : NodeType & not Function
 
         clone[key] = node[key];
->clone[key] = node[key] : NodeType[Extract<keyof NodeType, string>]
+>clone[key] = node[key] : (NodeType & not Function)[Extract<keyof NodeType, string>]
 >clone[key] : NodeType[Extract<keyof NodeType, string>]
 >clone : NodeType
 >key : Extract<keyof NodeType, string>
->node[key] : NodeType[Extract<keyof NodeType, string>]
->node : NodeType
+>node[key] : (NodeType & not Function)[Extract<keyof NodeType, string>]
+>node : NodeType & not Function
 >key : Extract<keyof NodeType, string>
     }
 }

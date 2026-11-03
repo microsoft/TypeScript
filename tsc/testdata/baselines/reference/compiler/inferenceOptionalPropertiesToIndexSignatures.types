@@ -64,19 +64,19 @@ const param2 = Math.random() < 0.5 ? 'value2' : null;
 >'value2' : "value2"
 
 const obj = {
->obj : { param1: string; param2?: string | undefined; }
->{    param1: 'value1',    ...(param2 ? {param2} : {})} : { param1: string; param2?: string | undefined; }
+>obj : { param1: string; param2?: "value2" | undefined; }
+>{    param1: 'value1',    ...(param2 ? {param2} : {})} : { param1: string; param2?: "value2" | undefined; }
 
     param1: 'value1',
 >param1 : string
 >'value1' : "value1"
 
     ...(param2 ? {param2} : {})
->(param2 ? {param2} : {}) : { param2: string; } | {}
->param2 ? {param2} : {} : { param2: string; } | {}
+>(param2 ? {param2} : {}) : { param2: "value2"; } | {}
+>param2 ? {param2} : {} : { param2: "value2"; } | {}
 >param2 : "value2" | null
->{param2} : { param2: string; }
->param2 : string
+>{param2} : { param2: "value2"; }
+>param2 : "value2"
 >{} : {}
 
 };
@@ -91,7 +91,7 @@ const query = Object.entries(obj).map(
 >Object.entries : { <T>(o: { [s: string]: T; } | ArrayLike<T>): [string, T][]; (o: {}): [string, any][]; }
 >Object : ObjectConstructor
 >entries : { <T>(o: { [s: string]: T; } | ArrayLike<T>): [string, T][]; (o: {}): [string, any][]; }
->obj : { param1: string; param2?: string | undefined; }
+>obj : { param1: string; param2?: "value2" | undefined; }
 >map : <U>(callbackfn: (value: [string, string], index: number, array: [string, string][]) => U, thisArg?: any) => U[]
 
     ([k, v]) => `${k}=${encodeURIComponent(v)}`

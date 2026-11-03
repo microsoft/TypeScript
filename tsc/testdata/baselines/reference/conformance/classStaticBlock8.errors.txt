@@ -2,9 +2,13 @@ classStaticBlock8.ts(6,21): error TS1107: Jump target cannot cross function boun
 classStaticBlock8.ts(9,21): error TS1107: Jump target cannot cross function boundary.
 classStaticBlock8.ts(12,21): error TS1107: Jump target cannot cross function boundary.
 classStaticBlock8.ts(15,21): error TS1107: Jump target cannot cross function boundary.
+classStaticBlock8.ts(38,21): error TS2367: This comparison appears to be unintentional because the types '5 | 7' and '1' have no overlap.
+classStaticBlock8.ts(39,21): error TS2367: This comparison appears to be unintentional because the types '5 | 7' and '2' have no overlap.
+classStaticBlock8.ts(40,21): error TS2367: This comparison appears to be unintentional because the types '5 | 7' and '3' have no overlap.
+classStaticBlock8.ts(41,21): error TS2367: This comparison appears to be unintentional because the types '5 | 7' and '4' have no overlap.
 
 
-==== classStaticBlock8.ts (4 errors) ====
+==== classStaticBlock8.ts (8 errors) ====
     function foo (v: number) {
         label: while (v) {
             class C {
@@ -51,9 +55,17 @@ classStaticBlock8.ts(15,21): error TS1107: Jump target cannot cross function bou
                 outer: break outer; // valid
                 loop: while (v) {
                     if (v === 1) break loop; // valid
+                        ~~~~~~~
+!!! error TS2367: This comparison appears to be unintentional because the types '5 | 7' and '1' have no overlap.
                     if (v === 2) continue loop; // valid
+                        ~~~~~~~
+!!! error TS2367: This comparison appears to be unintentional because the types '5 | 7' and '2' have no overlap.
                     if (v === 3) break; // valid
+                        ~~~~~~~
+!!! error TS2367: This comparison appears to be unintentional because the types '5 | 7' and '3' have no overlap.
                     if (v === 4) continue; // valid
+                        ~~~~~~~
+!!! error TS2367: This comparison appears to be unintentional because the types '5 | 7' and '4' have no overlap.
                 }
                 switch (v) {
                     default: break; // valid

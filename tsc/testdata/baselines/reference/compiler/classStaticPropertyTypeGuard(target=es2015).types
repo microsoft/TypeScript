@@ -18,9 +18,9 @@ class A {
 >_a : string | undefined
 
             return A._a; // is possibly null or undefined.
->A._a : string
+>A._a : string & not ""
 >A : typeof A
->_a : string
+>_a : string & not ""
         }
         return A._a = 'helloworld';
 >A._a = 'helloworld' : "helloworld"

@@ -383,13 +383,13 @@ namespace TypeScript {
 >instanceType : Type
 
                     signature.returnType.type = instanceType;
->signature.returnType.type = instanceType : Type
+>signature.returnType.type = instanceType : any
 >signature.returnType.type : any
 >signature.returnType : any
 >signature : any
 >returnType : any
 >type : any
->instanceType : Type
+>instanceType : any
                 }
                 else {
                     this.checker.resolveTypeLink(scope, signature.returnType, supplyVar);
@@ -526,7 +526,7 @@ namespace TypeScript {
 >this : this
 >bindType : (scope: SymbolScope, type: Type, instanceType: Type) => void
 >scope : SymbolScope
->instanceType : Type
+>instanceType : any
             }
             if (type.hasMembers()) {
 >type.hasMembers() : any

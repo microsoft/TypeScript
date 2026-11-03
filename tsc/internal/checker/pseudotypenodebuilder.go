@@ -371,7 +371,7 @@ func (b *NodeBuilderImpl) pseudoTypeEquivalentToType(t *pseudochecker.PseudoType
 	}
 	undefinedStripped := type_
 	if isOptionalAnnotated {
-		undefinedStripped = b.ch.getTypeWithFacts(type_, TypeFactsNEUndefined)
+		undefinedStripped = b.ch.removeType(type_, b.ch.undefinedType)
 	}
 	if typeFromPseudo != nil && type_ != nil {
 		if isOptionalAnnotated {

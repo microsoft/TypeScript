@@ -256,7 +256,7 @@ function f30(foo: Foo) {
 >tag : string | boolean
 
         foo;
->foo : { tag: true; x: number; } | { [x: string]: string; }
+>foo : Foo
     }
     else {
         foo;

@@ -70,7 +70,7 @@ function c() {
 >5 : 5
 
         x; // string
->x : string
+>x : string & not ""
     }
 }
 function d() {

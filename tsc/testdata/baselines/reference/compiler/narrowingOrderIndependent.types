@@ -35,9 +35,9 @@ if (a instanceof A && a.stringOrUndefined) {
     new B(a.stringOrUndefined)
 >new B(a.stringOrUndefined) : B
 >B : typeof B
->a.stringOrUndefined : string
+>a.stringOrUndefined : string & not ""
 >a : A
->stringOrUndefined : string
+>stringOrUndefined : string & not ""
 }
 
 if (a.stringOrUndefined && a instanceof A) {
@@ -52,9 +52,9 @@ if (a.stringOrUndefined && a instanceof A) {
     new B(a.stringOrUndefined)
 >new B(a.stringOrUndefined) : B
 >B : typeof B
->a.stringOrUndefined : string
+>a.stringOrUndefined : string & not ""
 >a : A
->stringOrUndefined : string
+>stringOrUndefined : string & not ""
 }
 
 if (a instanceof A) {
@@ -70,9 +70,9 @@ if (a instanceof A) {
         new B(a.stringOrUndefined)
 >new B(a.stringOrUndefined) : B
 >B : typeof B
->a.stringOrUndefined : string
+>a.stringOrUndefined : string & not ""
 >a : A
->stringOrUndefined : string
+>stringOrUndefined : string & not ""
     }
 }
 
@@ -89,9 +89,9 @@ if (a.stringOrUndefined) {
         new B(a.stringOrUndefined)
 >new B(a.stringOrUndefined) : B
 >B : typeof B
->a.stringOrUndefined : string
+>a.stringOrUndefined : string & not ""
 >a : A
->stringOrUndefined : string
+>stringOrUndefined : string & not ""
     }
 }
 

@@ -71,22 +71,22 @@ function f10(x: unknown) {
 >x : unknown
 
         x;  // {}
->x : {}
+>x : {} & not "" & not 0 & not 0n & not false
     }
     else {
         x;  // unknown
->x : unknown
+>x : "" | 0 | 0n | false | null | undefined
     }
     if (!x) {
 >!x : boolean
 >x : unknown
 
         x;  // unknown
->x : unknown
+>x : "" | 0 | 0n | false | null | undefined
     }
     else {
         x;  // {}
->x : {}
+>x : {} & not "" & not 0 & not 0n & not false
     }
 }
 
@@ -98,22 +98,22 @@ function f11<T>(x: T) {
 >x : T
 
         x;  // T & {}
->x : NonNullable<T>
+>x : T & {} & not "" & not 0 & not 0n & not false
     }
     else {
         x;  // T
->x : T
+>x : T & ("" | 0 | 0n | false | null | undefined)
     }
     if (!x) {
 >!x : boolean
->x : T
+>x : (T & undefined) | (T & null) | (T & {})
 
         x;  // T
->x : T
+>x : (T & undefined) | (T & null) | (T & "") | (T & 0) | (T & 0n) | (T & false)
     }
     else {
         x;  // T & {}
->x : NonNullable<T>
+>x : T & {} & not "" & not 0 & not 0n & not false
     }
 }
 
@@ -125,11 +125,11 @@ function f12<T extends {}>(x: T) {
 >x : T
 
         x;  // T
->x : T
+>x : T & not "" & not 0 & not 0n & not false
     }
     else {
         x;  // T
->x : T
+>x : T & ("" | 0 | 0n | false | null | undefined)
     }
 }
 
@@ -214,56 +214,56 @@ function f21<T>(x: T) {
     }
     else {
         x;  // T
->x : T
+>x : T & undefined
     }
     if (x !== null) {
 >x !== null : boolean
->x : T
+>x : (T & ({} | null)) | (T & undefined)
 
         x;  // T & ({} | undefined)
->x : T & ({} | undefined)
+>x : (T & undefined) | (T & {})
     }
     else {
         x;  // T
->x : T
+>x : T & null
     }
     if (x !== undefined && x !== null) {
 >x !== undefined && x !== null : boolean
 >x !== undefined : boolean
->x : T
+>x : (T & undefined) | (T & null) | (T & {})
 >undefined : undefined
 >x !== null : boolean
->x : T & ({} | null)
+>x : (T & null) | (T & {})
 
         x;  // T & {}
 >x : T & {}
     }
     else {
         x;  // T
->x : T
+>x : (T & undefined) | (T & null)
     }
     if (x != undefined) {
 >x != undefined : boolean
->x : T
+>x : (T & undefined) | (T & null) | (T & {})
 >undefined : undefined
 
         x;  // T & {}
->x : NonNullable<T>
+>x : T & {}
     }
     else {
         x;  // T
->x : T
+>x : (T & undefined) | (T & null)
     }
     if (x != null) {
 >x != null : boolean
->x : T
+>x : (T & undefined) | (T & null) | (T & {})
 
         x;  // T & {}
->x : NonNullable<T>
+>x : T & {}
     }
     else {
         x;  // T
->x : T
+>x : (T & undefined) | (T & null)
     }
 }
 
@@ -281,14 +281,14 @@ function f22<T extends {} | undefined>(x: T) {
     }
     else {
         x;  // T
->x : T
+>x : T & undefined
     }
     if (x !== null) {
 >x !== null : boolean
->x : T
+>x : (T & undefined) | (T & {})
 
         x;  // T
->x : T
+>x : (T & undefined) | (T & {})
     }
     else {
         x;  // T
@@ -297,7 +297,7 @@ function f22<T extends {} | undefined>(x: T) {
     if (x !== undefined && x !== null) {
 >x !== undefined && x !== null : boolean
 >x !== undefined : boolean
->x : T
+>x : (T & undefined) | (T & {})
 >undefined : undefined
 >x !== null : boolean
 >x : T & {}
@@ -307,30 +307,30 @@ function f22<T extends {} | undefined>(x: T) {
     }
     else {
         x;  // T
->x : T
+>x : T & undefined
     }
     if (x != undefined) {
 >x != undefined : boolean
->x : T
+>x : (T & undefined) | (T & {})
 >undefined : undefined
 
         x;  // T & {}
->x : NonNullable<T>
+>x : T & {}
     }
     else {
         x;  // T
->x : T
+>x : T & undefined
     }
     if (x != null) {
 >x != null : boolean
->x : T
+>x : (T & undefined) | (T & {})
 
         x;  // T & {}
->x : NonNullable<T>
+>x : T & {}
     }
     else {
         x;  // T
->x : T
+>x : T & undefined
     }
 }
 
@@ -348,25 +348,25 @@ function f23<T>(x: T | undefined | null) {
     }
     if (x !== null) {
 >x !== null : boolean
->x : T | null | undefined
+>x : (T & {}) | null | undefined
 
         x;  // T & {} | undefined
 >x : (T & {}) | undefined
     }
     if (x != undefined) {
 >x != undefined : boolean
->x : T | null | undefined
+>x : (T & {}) | null | undefined
 >undefined : undefined
 
         x;  // T & {}
->x : NonNullable<T>
+>x : T & {}
     }
     if (x != null) {
 >x != null : boolean
->x : T | null | undefined
+>x : (T & {}) | null | undefined
 
         x;  // T & {}
->x : NonNullable<T>
+>x : T & {}
     }
 }
 
@@ -396,14 +396,14 @@ function f31<T>(x: T) {
 >"object" : "object"
 
         x;  // T & object | T & null
->x : (T & null) | (T & object)
+>x : T & (object | null)
     }
     if (x && typeof x === "object") {
 >x && typeof x === "object" : boolean
 >x : T
 >typeof x === "object" : boolean
 >typeof x : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
->x : NonNullable<T>
+>x : T & {} & not "" & not 0 & not 0n & not false
 >"object" : "object"
 
         x;  // T & object
@@ -413,7 +413,7 @@ function f31<T>(x: T) {
 >typeof x === "object" && x : false | (T & null) | (T & object)
 >typeof x === "object" : boolean
 >typeof x : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
->x : T
+>x : (T & undefined) | (T & null) | (T & {})
 >"object" : "object"
 >x : (T & null) | (T & object)
 
@@ -633,9 +633,9 @@ function deepEquals<T>(a: T, b: T): boolean {
 >b : T
 >'object' : "object"
 >!a : boolean
->a : (T & null) | (T & object)
+>a : T & (object | null)
 >!b : boolean
->b : (T & null) | (T & object)
+>b : T & (object | null)
 
         return false;
 >false : false
@@ -957,7 +957,7 @@ function doSomething1<T extends unknown>(value: T): T {
 >undefined : undefined
 
         return value;
->value : T
+>value : T & undefined
     }
     if (value === 42) {
 >value === 42 : boolean

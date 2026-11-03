@@ -31,7 +31,7 @@ export function repro(board: number[][], pos: number | undefined): void {
     const targetR = pos + pattern.target[0];
 >targetR : number
 >pos + pattern.target[0] : number
->pos : number
+>pos : number & not 0
 >pattern.target[0] : number
 >pattern.target : number[]
 >pattern : { target: number[]; intermediate: number[]; }
@@ -41,7 +41,7 @@ export function repro(board: number[][], pos: number | undefined): void {
     const targetC = pos + pattern.target[1];
 >targetC : number
 >pos + pattern.target[1] : number
->pos : number
+>pos : number & not 0
 >pattern.target[1] : number
 >pattern.target : number[]
 >pattern : { target: number[]; intermediate: number[]; }

@@ -473,7 +473,7 @@ function f1(x: unknown) {
 >x : unknown
 >"a" in x : boolean
 >"a" : "a"
->x : unknown
+>x : not "" & not 0 & not 0n & not false
 
         x.a;
 >x.a : unknown
@@ -486,7 +486,7 @@ function f1(x: unknown) {
 >x : unknown
 >typeof x === "object" : boolean
 >typeof x : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
->x : unknown
+>x : not "" & not 0 & not 0n & not false
 >"object" : "object"
 >"a" in x : boolean
 >"a" : "a"
@@ -505,7 +505,7 @@ function f1(x: unknown) {
 >x : unknown
 >typeof x === "object" : boolean
 >typeof x : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
->x : unknown
+>x : not "" & not 0 & not 0n & not false
 >"object" : "object"
 >"a" in x : boolean
 >"a" : "a"
@@ -597,11 +597,11 @@ function f3<T>(x: T) {
 >x : T
 >"a" in x : boolean
 >"a" : "a"
->x : T
+>x : T & not "" & not 0 & not 0n & not false
 
         x.a;
 >x.a : unknown
->x : T & Record<"a", unknown>
+>x : T & not "" & not 0 & not 0n & not false & Record<"a", unknown>
 >a : unknown
     }
     if (x && typeof x === "object" && "a" in x) {
@@ -610,7 +610,7 @@ function f3<T>(x: T) {
 >x : T
 >typeof x === "object" : boolean
 >typeof x : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
->x : T
+>x : T & not "" & not 0 & not 0n & not false
 >"object" : "object"
 >"a" in x : boolean
 >"a" : "a"
@@ -629,7 +629,7 @@ function f3<T>(x: T) {
 >x : T
 >typeof x === "object" : boolean
 >typeof x : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
->x : T
+>x : T & not "" & not 0 & not 0n & not false
 >"object" : "object"
 >"a" in x : boolean
 >"a" : "a"

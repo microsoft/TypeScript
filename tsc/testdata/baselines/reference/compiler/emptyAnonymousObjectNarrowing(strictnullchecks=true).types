@@ -140,7 +140,7 @@ const foo = (value: unknown): string => {
   }
   if (value === 'xyz') {
 >value === 'xyz' : boolean
->value : {}
+>value : {} & not "" & not 0 & not 0n & not false
 >'xyz' : "xyz"
 
       return value; // Type '{}' is not assignable to type 'string'.

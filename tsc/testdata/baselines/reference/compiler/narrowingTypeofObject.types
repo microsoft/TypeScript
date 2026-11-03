@@ -15,7 +15,7 @@ function test(x: number & { _foo: string }) {
 >'object' : "object"
 
         x; 
->x : never
+>x : number & { _foo: string; }
     }
 }
 

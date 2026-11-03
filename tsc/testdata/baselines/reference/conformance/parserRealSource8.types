@@ -1426,7 +1426,7 @@ namespace TypeScript {
 >checker : any
 >createAccessorSymbol : any
 >funcDecl : FuncDecl
->fgSym : TypeSymbol
+>fgSym : any
 >container.getType() : any
 >container.getType : any
 >container : Symbol
@@ -1977,7 +1977,7 @@ namespace TypeScript {
     }
 
     export function preAssignScopes(ast: AST, parent: AST, walker: IAstWalker) {
->preAssignScopes : (ast: AST, parent: AST, walker: IAstWalker) => AST
+>preAssignScopes : (ast: AST, parent: AST, walker: IAstWalker) => any
 >ast : AST
 >parent : AST
 >walker : IAstWalker
@@ -2135,11 +2135,11 @@ namespace TypeScript {
 >go : boolean
 
         return ast;
->ast : AST
+>ast : any
     }
 
     export function postAssignScopes(ast: AST, parent: AST, walker: IAstWalker) {
->postAssignScopes : (ast: AST, parent: AST, walker: IAstWalker) => AST
+>postAssignScopes : (ast: AST, parent: AST, walker: IAstWalker) => any
 >ast : AST
 >parent : AST
 >walker : IAstWalker
@@ -2340,6 +2340,6 @@ namespace TypeScript {
 >go : boolean
 
         return ast;
->ast : AST
+>ast : any
     }
 }

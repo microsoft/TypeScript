@@ -22,11 +22,11 @@ if (a[aIndex] && a[aIndex].x) {
 >x : number | undefined
 
     a[aIndex].x // number
->a[aIndex].x : number
+>a[aIndex].x : number & not 0
 >a[aIndex] : { x?: number; }
 >a : { key?: { x?: number; }; }
 >aIndex : "key"
->x : number
+>x : number & not 0
 }
 
 declare const bIndex: "key";
@@ -48,11 +48,11 @@ if (b[bIndex].x) {
 >x : number | undefined
 
     b[bIndex].x // number
->b[bIndex].x : number
+>b[bIndex].x : number & not 0
 >b[bIndex] : { x?: number; }
 >b : { key: { x?: number; }; }
 >bIndex : "key"
->x : number
+>x : number & not 0
 }
 
 declare const cIndex: 1;
@@ -74,10 +74,10 @@ if (c[cIndex].x) {
 >x : number | undefined
 
     c[cIndex].x // number
->c[cIndex].x : number
+>c[cIndex].x : number & not 0
 >c[cIndex] : Foo
 >c : Foo[]
 >cIndex : 1
->x : number
+>x : number & not 0
 }
 

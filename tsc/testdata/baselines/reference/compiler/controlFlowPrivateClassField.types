@@ -50,7 +50,7 @@ class Example2 {
 >this : this
 
             return this.#test
->this.#test : number
+>this.#test : number & not 0
 >this : this
         }
         return 0;

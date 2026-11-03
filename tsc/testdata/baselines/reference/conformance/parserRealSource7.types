@@ -4003,7 +4003,7 @@ namespace TypeScript {
 >fgSym && !(fgSym.kind() == SymbolKind.Type) && funcDecl.isMethod() && !funcDecl.isAccessor() : any
 >fgSym && !(fgSym.kind() == SymbolKind.Type) && funcDecl.isMethod() : any
 >fgSym && !(fgSym.kind() == SymbolKind.Type) : any
->fgSym : TypeSymbol
+>fgSym : any
 >!(fgSym.kind() == SymbolKind.Type) : boolean
 >(fgSym.kind() == SymbolKind.Type) : boolean
 >fgSym.kind() == SymbolKind.Type : boolean
@@ -4070,7 +4070,7 @@ namespace TypeScript {
 >funcDecl : FuncDecl
 >containerSym : TypeSymbol
 >containerScope : SymbolScope
->fgSym : TypeSymbol
+>fgSym : any
 >!foundSymbol : boolean
 >foundSymbol : boolean
 
@@ -4082,7 +4082,7 @@ namespace TypeScript {
 >(!fgSym || fgSym.declAST.nodeType != NodeType.FuncDecl) : boolean
 >!fgSym || fgSym.declAST.nodeType != NodeType.FuncDecl : boolean
 >!fgSym : boolean
->fgSym : TypeSymbol
+>fgSym : any
 >fgSym.declAST.nodeType != NodeType.FuncDecl : boolean
 >fgSym.declAST.nodeType : any
 >fgSym.declAST : any
@@ -4098,7 +4098,7 @@ namespace TypeScript {
 >isAccessor : any
 >(fgSym && fgSym.isAccessor()) : any
 >fgSym && fgSym.isAccessor() : any
->fgSym : TypeSymbol
+>fgSym : any
 >fgSym.isAccessor() : any
 >fgSym.isAccessor : any
 >fgSym : any
@@ -4116,7 +4116,7 @@ namespace TypeScript {
 >checker : any
 >createAccessorSymbol : any
 >funcDecl : FuncDecl
->fgSym : TypeSymbol
+>fgSym : any
 >containerSym.type : any
 >containerSym : TypeSymbol
 >type : any

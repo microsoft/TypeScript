@@ -1,0 +1,616 @@
+//// [tests/cases/compiler/negatedRefinementIntersections.ts] ////
+
+=== negatedRefinementIntersections.ts ===
+type Falsy = "" | 0 | 0n | false | null | undefined;
+>Falsy : Falsy
+>false : false
+
+export function truthy<T>(value: T) {
+>truthy : <T>(value: T) => (T & not null & not "" & not 0 & not 0n & not false) | undefined
+>value : T
+
+    if (value) {
+>value : T
+
+        const refined: T & not Falsy = value;
+>refined : T & not undefined & not null & not "" & not 0 & not 0n & not false
+>value : T & {} & not "" & not 0 & not 0n & not false
+
+        return refined;
+>refined : T & not undefined & not null & not "" & not 0 & not 0n & not false
+    }
+    return undefined;
+>undefined : undefined
+}
+
+export function falsy<T>(value: T) {
+>falsy : <T>(value: T) => (T & null) | (T & "") | (T & 0) | (T & 0n) | (T & false) | undefined
+>value : T
+
+    if (!value) {
+>!value : boolean
+>value : T
+
+        const refined: T & Falsy = value;
+>refined : T & Falsy
+>value : T & ("" | 0 | 0n | false | null | undefined)
+
+        return refined;
+>refined : T & Falsy
+    }
+    return undefined;
+>undefined : undefined
+}
+
+export function nullable<T>(value: T) {
+>nullable : <T>(value: T) => T
+>value : T
+
+    if (value === undefined) {
+>value === undefined : boolean
+>value : T
+>undefined : undefined
+
+        const refined: T & undefined = value;
+>refined : T & undefined
+>value : T & undefined
+
+        return refined;
+>refined : T & undefined
+    }
+    if (value === null) {
+>value === null : boolean
+>value : T & ({} | null)
+
+        const refined: T & null = value;
+>refined : T & null
+>value : T & null
+
+        return refined;
+>refined : T & null
+    }
+    const refined: T & not null & not undefined = value;
+>refined : T & not null & not undefined
+>value : T & {}
+
+    return refined;
+>refined : T & not null & not undefined
+}
+
+export function nullish<T>(value: T) {
+>nullish : <T>(value: T) => (T & (null | undefined)) | (T & {})
+>value : T
+
+    if (value == null) {
+>value == null : boolean
+>value : T
+
+        const refined: T & (null | undefined) = value;
+>refined : T & (null | undefined)
+>value : T & (null | undefined)
+
+        return refined;
+>refined : T & (null | undefined)
+    }
+    const refined: T & {} = value;
+>refined : T & {}
+>value : NonNullable<T>
+
+    return refined;
+>refined : T & {}
+}
+
+export function primitive<T>(value: T) {
+>primitive : <T>(value: T) => T
+>value : T
+
+    if (typeof value === "string") {
+>typeof value === "string" : boolean
+>typeof value : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
+>value : T
+>"string" : "string"
+
+        const refined: T & string = value;
+>refined : T & string
+>value : T & string
+
+        return refined;
+>refined : T & string
+    }
+    const refined: T & not string = value;
+>refined : T & not string
+>value : T & not string
+
+    return refined;
+>refined : T & not string
+}
+
+export function exhaustive(value: unknown): number {
+>exhaustive : (value: unknown) => number
+>value : unknown
+
+    switch (typeof value) {
+>typeof value : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
+>value : unknown
+
+        case "string": return 1;
+>"string" : "string"
+>1 : 1
+
+        case "number": return 2;
+>"number" : "number"
+>2 : 2
+
+        case "bigint": return 3;
+>"bigint" : "bigint"
+>3 : 3
+
+        case "boolean": return 4;
+>"boolean" : "boolean"
+>4 : 4
+
+        case "symbol": return 5;
+>"symbol" : "symbol"
+>5 : 5
+
+        case "undefined": return 6;
+>"undefined" : "undefined"
+>6 : 6
+
+        case "object": return 7;
+>"object" : "object"
+>7 : 7
+
+        case "function": return 8;
+>"function" : "function"
+>8 : 8
+    }
+}
+
+export function excludedFalsy(value: not Falsy) {
+>excludedFalsy : (value: not Falsy) => { negated: false; fallback: not undefined & not null & not "" & not 0 & not 0n & not false; }
+>value : not undefined & not null & not "" & not 0 & not 0n & not false
+
+    const negated: false = !value;
+>negated : false
+>false : false
+>!value : false
+>value : not undefined & not null & not "" & not 0 & not 0n & not false
+
+    const fallback: not Falsy = value || "fallback";
+>fallback : not undefined & not null & not "" & not 0 & not 0n & not false
+>value || "fallback" : not undefined & not null & not "" & not 0 & not 0n & not false
+>value : not undefined & not null & not "" & not 0 & not 0n & not false
+>"fallback" : "fallback"
+
+    return { negated, fallback };
+>{ negated, fallback } : { negated: false; fallback: not undefined & not null & not "" & not 0 & not 0n & not false; }
+>negated : false
+>fallback : not undefined & not null & not "" & not 0 & not 0n & not false
+}
+
+export function stringBranches(value: string) {
+>stringBranches : (value: string) => string
+>value : string
+
+    if (value) {
+>value : string
+
+        const refined: string & not "" = value;
+>refined : string & not ""
+>value : string & not ""
+
+        return refined;
+>refined : string & not ""
+
+    } else {
+        const refined: "" = value;
+>refined : ""
+>value : ""
+
+        return refined;
+>refined : ""
+    }
+}
+
+export function primitiveBranches(value: number | bigint | boolean | undefined) {
+>primitiveBranches : (value: number | bigint | boolean | undefined) => number | bigint | boolean | undefined
+>value : number | bigint | boolean | undefined
+
+    if (value) {
+>value : number | bigint | boolean | undefined
+
+        const refined: (number | bigint | boolean) & not (0 | 0n | false) = value;
+>refined : true | (number & not 0) | (bigint & not 0n)
+>false : false
+>value : true | (number & not 0) | (bigint & not 0n)
+
+        return refined;
+>refined : true | (number & not 0) | (bigint & not 0n)
+    }
+    const refined: 0 | 0n | false | undefined = value;
+>refined : 0 | 0n | false | undefined
+>false : false
+>value : 0 | 0n | false | undefined
+
+    return refined;
+>refined : 0 | 0n | false | undefined
+}
+
+export function taggedString(value: string & { readonly tag: unique symbol }) {
+>taggedString : (value: string & { readonly tag: unique symbol; }) => string
+>value : string & { readonly tag: unique symbol; }
+>tag : unique symbol
+
+    if (!value) {
+>!value : boolean
+>value : string & { readonly tag: unique symbol; }
+
+        const refined: "" = value;
+>refined : ""
+>value : { readonly tag: unique symbol; } & ""
+
+        return refined;
+>refined : ""
+    }
+    const refined: string & not "" = value;
+>refined : string & not ""
+>value : string & { readonly tag: unique symbol; } & not ""
+
+    return refined;
+>refined : string & not ""
+}
+
+export function optionalDiscriminant(value: { error: Error; result?: never } | { error?: never; result: string }) {
+>optionalDiscriminant : (value: { error: Error; result?: never; } | { error?: never; result: string; }) => string
+>value : { error: Error; result?: never; } | { error?: never; result: string; }
+>error : Error
+>result : undefined
+>error : undefined
+>result : string
+
+    if (value.error) throw value.error;
+>value.error : Error | undefined
+>value : { error: Error; result?: never; } | { error?: never; result: string; }
+>error : Error | undefined
+>value.error : Error
+>value : { error: Error; result?: never; }
+>error : Error
+
+    return value.result.toUpperCase();
+>value.result.toUpperCase() : string
+>value.result.toUpperCase : () => string
+>value.result : string
+>value : { error?: never; result: string; }
+>result : string
+>toUpperCase : () => string
+}
+
+export function callable<T extends (() => void) | number, U extends { value: string } | number>(value: T | U) {
+>callable : <T extends (() => void) | number, U extends { value: string; } | number>(value: T | U) => string | T | U
+>value : string
+>value : T | U
+
+    if (typeof value === "function") {
+>typeof value === "function" : boolean
+>typeof value : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
+>value : T | U
+>"function" : "function"
+
+        const refined: T = value;
+>refined : T
+>value : T & Function
+
+        value();
+>value() : void
+>value : () => void
+
+    } else if (typeof value === "object") {
+>typeof value === "object" : boolean
+>typeof value : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
+>value : (T | U) & not Function
+>"object" : "object"
+
+        const refined: U = value;
+>refined : U
+>value : U & not Function & object
+
+        return value.value;
+>value.value : string
+>value : { value: string; } & not Function
+>value : string
+    }
+    return value;
+>value : T | (U & not Function)
+}
+
+export function optionalArray<T extends unknown[] | undefined>(value: T) {
+>optionalArray : <T extends unknown[] | undefined>(value: T) => (T & {})[number][] | undefined
+>value : T
+
+    if (typeof value === "undefined") return;
+>typeof value === "undefined" : boolean
+>typeof value : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
+>value : T
+>"undefined" : "undefined"
+
+    for (const element of value) {}
+>element : unknown
+>value : T & {}
+
+    return [...value];
+>[...value] : (T & {})[number][]
+>...value : unknown
+>value : T & {}
+}
+
+export function logicalOperators<T>(value: T) {
+>logicalOperators : <T>(value: T) => { and: number; or: T & not undefined & not null & not "" & not 0 & not 0n & not false; } | undefined
+>value : T
+
+    if (value) {
+>value : T
+
+        const and: number = value && 1;
+>and : number
+>value && 1 : 1
+>value : T & {} & not "" & not 0 & not 0n & not false
+>1 : 1
+
+        const or: T & not Falsy = value || 1;
+>or : T & not undefined & not null & not "" & not 0 & not 0n & not false
+>value || 1 : T & {} & not "" & not 0 & not 0n & not false
+>value : T & {} & not "" & not 0 & not 0n & not false
+>1 : 1
+
+        return { and, or };
+>{ and, or } : { and: number; or: T & not undefined & not null & not "" & not 0 & not 0n & not false; }
+>and : number
+>or : T & not undefined & not null & not "" & not 0 & not 0n & not false
+    }
+    return undefined;
+>undefined : undefined
+}
+
+export function compoundAssignments(value: number, holder: { value?: number }) {
+>compoundAssignments : (value: number, holder: { value?: number; }) => number | undefined
+>value : number
+>holder : { value?: number; }
+>value : number | undefined
+
+    if (value) value -= 1;
+>value : number
+>value -= 1 : number
+>value : number
+>1 : 1
+
+    if (holder.value) holder.value += 1;
+>holder.value : number | undefined
+>holder : { value?: number; }
+>value : number | undefined
+>holder.value += 1 : number
+>holder.value : number
+>holder : { value?: number; }
+>value : number
+>1 : 1
+
+    if (holder["value"]) holder["value"] *= 2;
+>holder["value"] : number | undefined
+>holder : { value?: number; }
+>"value" : "value"
+>holder["value"] *= 2 : number
+>holder["value"] : number
+>holder : { value?: number; }
+>"value" : "value"
+>2 : 2
+
+    return holder.value;
+>holder.value : number | undefined
+>holder : { value?: number; }
+>value : number | undefined
+}
+
+export function rejoinedUnknown(value: unknown) {
+>rejoinedUnknown : (value: unknown) => true
+>value : unknown
+
+    if (value === undefined) {}
+>value === undefined : boolean
+>value : unknown
+>undefined : undefined
+
+    if (value === null) {}
+>value === null : boolean
+>value : unknown
+
+    type IsUnknown = unknown extends typeof value ? true : false;
+>IsUnknown : true
+>value : unknown
+>true : true
+>false : false
+
+    const unchanged: IsUnknown = true;
+>unchanged : true
+>true : true
+
+    return unchanged;
+>unchanged : true
+}
+
+export function rejoinedTypeofTruthiness(value: unknown, condition: boolean) {
+>rejoinedTypeofTruthiness : (value: unknown, condition: boolean) => true
+>value : unknown
+>condition : boolean
+
+    if (typeof value === "object") {}
+>typeof value === "object" : boolean
+>typeof value : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
+>value : unknown
+>"object" : "object"
+
+    if (typeof value === "object" && value) {}
+>typeof value === "object" && value : false | object | null
+>typeof value === "object" : boolean
+>typeof value : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
+>value : unknown
+>"object" : "object"
+>value : object | null
+
+    if (value && typeof value === "object") {}
+>value && typeof value === "object" : unknown
+>value : unknown
+>typeof value === "object" : boolean
+>typeof value : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
+>value : {} & not "" & not 0 & not 0n & not false
+>"object" : "object"
+
+    if (condition && value && typeof value === "object") {}
+>condition && value && typeof value === "object" : unknown
+>condition && value : unknown
+>condition : boolean
+>value : unknown
+>typeof value === "object" : boolean
+>typeof value : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
+>value : {} & not "" & not 0 & not 0n & not false
+>"object" : "object"
+
+    type IsUnknown = unknown extends typeof value ? true : false;
+>IsUnknown : true
+>value : unknown
+>true : true
+>false : false
+
+    const unchanged: IsUnknown = true;
+>unchanged : true
+>true : true
+
+    return unchanged;
+>unchanged : true
+}
+
+export function nonCallable<T>(value: T) {
+>nonCallable : <T>(value: T) => (T & not Function) | undefined
+>value : T
+
+    if (typeof value !== "function") {
+>typeof value !== "function" : boolean
+>typeof value : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
+>value : T
+>"function" : "function"
+
+        const refined: T & not Function = value;
+>refined : T & not Function
+>value : T & not Function
+
+        return refined;
+>refined : T & not Function
+    }
+    return undefined;
+>undefined : undefined
+}
+
+export function typeofDefault<T>(value: T) {
+>typeofDefault : <T>(value: T) => (T & not string & not number) | undefined
+>value : T
+
+    switch (typeof value) {
+>typeof value : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
+>value : T
+
+        case "string":
+>"string" : "string"
+
+        case "number":
+>"number" : "number"
+
+            return undefined;
+>undefined : undefined
+
+        default: {
+            const refined: T & not string & not number = value;
+>refined : T & not string & not number
+>value : T & not string & not number
+
+            return refined;
+>refined : T & not string & not number
+        }
+    }
+}
+
+enum NumberChoice { Empty = 0, First = 1, Second = 2 }
+>NumberChoice : NumberChoice
+>Empty : NumberChoice.Empty
+>0 : 0
+>First : NumberChoice.First
+>1 : 1
+>Second : NumberChoice.Second
+>2 : 2
+
+enum StringChoice { Empty = "", Present = "present" }
+>StringChoice : StringChoice
+>Empty : StringChoice.Empty
+>"" : ""
+>Present : StringChoice.Present
+>"present" : "present"
+
+export function enumTruthiness(value: NumberChoice, text: StringChoice) {
+>enumTruthiness : (value: NumberChoice, text: StringChoice) => (string | NumberChoice.First | NumberChoice.Second)[]
+>value : NumberChoice
+>text : StringChoice
+
+    if (value) {
+>value : NumberChoice
+
+        const refined: NumberChoice.First | NumberChoice.Second = value;
+>refined : NumberChoice.First | NumberChoice.Second
+>NumberChoice : any
+>NumberChoice : any
+>value : NumberChoice.First | NumberChoice.Second
+
+    } else {
+        const refined: NumberChoice.Empty = value;
+>refined : NumberChoice.Empty
+>NumberChoice : any
+>value : NumberChoice.Empty
+    }
+    if (text) {
+>text : StringChoice
+
+        const refined: StringChoice.Present = text;
+>refined : StringChoice.Present
+>StringChoice : any
+>text : StringChoice.Present
+
+    } else {
+        const refined: StringChoice.Empty = text;
+>refined : StringChoice.Empty
+>StringChoice : any
+>text : StringChoice.Empty
+    }
+    return [value || "fallback", text || "fallback"];
+>[value || "fallback", text || "fallback"] : (string | NumberChoice.First | NumberChoice.Second)[]
+>value || "fallback" : "fallback" | NumberChoice.First | NumberChoice.Second
+>value : NumberChoice
+>"fallback" : "fallback"
+>text || "fallback" : "fallback" | StringChoice.Present
+>text : StringChoice
+>"fallback" : "fallback"
+}
+
+export function brandedPrimitiveTypeof(value: number & { brand: "number" }) {
+>brandedPrimitiveTypeof : (value: number & { brand: "number"; }) => void
+>value : number & { brand: "number"; }
+>brand : "number"
+
+    if (typeof value === "function") {
+>typeof value === "function" : boolean
+>typeof value : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
+>value : number & { brand: "number"; }
+>"function" : "function"
+
+        const impossible: never = value;
+>impossible : never
+>value : never
+    }
+}
+

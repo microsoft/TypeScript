@@ -136,7 +136,7 @@ let p1: Point = {
 >this.z : number
 >this : Point
 >z : number
->dz : number
+>dz : number & not 0
         }
     }
 };
@@ -185,7 +185,7 @@ let p2: Point | null = {
 >this.z : number
 >this : Point
 >z : number
->dz : number
+>dz : number & not 0
         }
     }
 };
@@ -234,7 +234,7 @@ let p3: Point | undefined = {
 >this.z : number
 >this : Point
 >z : number
->dz : number
+>dz : number & not 0
         }
     }
 };
@@ -283,7 +283,7 @@ let p4: Point | null | undefined = {
 >this.z : number
 >this : Point
 >z : number
->dz : number
+>dz : number & not 0
         }
     }
 };
@@ -337,7 +337,7 @@ f1({
 >this.z : number
 >this : Point
 >z : number
->dz : number
+>dz : number & not 0
         }
     }
 });
@@ -391,7 +391,7 @@ f2({
 >this.z : number
 >this : Point
 >z : number
->dz : number
+>dz : number & not 0
         }
     }
 });

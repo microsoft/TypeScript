@@ -12,7 +12,7 @@ function rewind(index: number) {
 
         index -= 1;
 >index -= 1 : number
->index : number & not 0
+>index : number
 >1 : 1
     }
 }

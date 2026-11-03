@@ -194,7 +194,7 @@ function f01(x: unknown) {
 >undefined : undefined
 
         x;  // Unreachable
->x : unknown
+>x : never
     }
 }
 
@@ -214,7 +214,7 @@ function f02(x: string | undefined) {
 
         x.length;
 >x.length : number
->x : string
+>x : string & not ""
 >length : number
     }
     if (!!true) {
@@ -264,7 +264,7 @@ function f03(x: string | undefined, assert: (value: unknown) => asserts value) {
 
     x.length;
 >x.length : number
->x : string
+>x : string & not ""
 >length : number
 }
 
@@ -299,7 +299,7 @@ function f10(x: string | undefined) {
 
         x.length;
 >x.length : number
->x : string
+>x : string & not ""
 >length : number
     }
     if (!!true) {
@@ -726,7 +726,7 @@ class TestPropertyDeclaration2 {
 >x : unknown
 
     x;
->x : {}
+>x : {} & not "" & not 0 & not 0n & not false
   }
 }
 
@@ -753,7 +753,7 @@ class ChildInheritedPropertyDeclaration extends ParentInheritedPropertyDeclarati
 >x : unknown
 
     x;
->x : {}
+>x : {} & not "" & not 0 & not 0n & not false
   }
 }
 
@@ -800,7 +800,7 @@ function testFunctionThisParameter1(
 >x : unknown
 
   x;
->x : {}
+>x : {} & not "" & not 0 & not 0n & not false
 }
 
 interface TestMethodSignature {
@@ -846,6 +846,6 @@ function testFunctionThisParameter2(
 >x : unknown
 
   x;
->x : {}
+>x : {} & not "" & not 0 & not 0n & not false
 }
 

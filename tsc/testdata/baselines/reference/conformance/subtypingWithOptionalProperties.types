@@ -33,8 +33,8 @@ r.s && r.s.toFixed(); // would blow up at runtime
 >s : number | undefined
 >r.s.toFixed() : string
 >r.s.toFixed : (fractionDigits?: number) => string
->r.s : number
+>r.s : number & not 0
 >r : { s?: number; }
->s : number
+>s : number & not 0
 >toFixed : (fractionDigits?: number) => string
 

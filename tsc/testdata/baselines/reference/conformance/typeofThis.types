@@ -325,11 +325,11 @@ class Test10 {
 
                 let b: typeof this.a.b = undefined as any;   // should narrow to string
 >b : string
->this.a.b : string
+>this.a.b : string & not ""
 >this.a : { b?: string; }
 >this : this
 >a : { b?: string; }
->b : string
+>b : string & not ""
 >undefined as any : any
 >undefined : undefined
             }
@@ -371,11 +371,11 @@ class Test11 {
 
             let y: string = o.this.x;   // should narrow to string
 >y : string
->o.this.x : string
+>o.this.x : string & not ""
 >o.this : { x?: string; }
 >o : this
 >this : { x?: string; }
->x : string
+>x : string & not ""
         }
     }
 }
