@@ -1,0 +1,97 @@
+//// [tests/cases/compiler/defaultParameterBodyFunctionScope.ts] ////
+
+=== defaultParameterBodyFunctionScope.ts ===
+const styles = { root: "outer" };
+>styles : { root: string; }
+>{ root: "outer" } : { root: string; }
+>root : string
+>"outer" : "outer"
+
+export function read(value = styles.root) {
+>read : (value?: any) => any
+>value : any
+>styles.root : any
+>styles : () => void
+>root : any
+
+    function styles() {}
+>styles : () => void
+
+    styles();
+>styles() : void
+>styles : () => void
+
+    return value;
+>value : any
+}
+
+export function readClosure(value = () => styles.root) {
+>readClosure : (value?: () => any) => any
+>value : () => any
+>() => styles.root : () => any
+>styles.root : any
+>styles : () => void
+>root : any
+
+    function styles() {}
+>styles : () => void
+
+    return value();
+>value() : any
+>value : () => any
+}
+
+export function readDestructured({ value = styles.root } = {}) {
+>readDestructured : ({ value }?: { value?: any; }) => any
+>value : any
+>styles.root : any
+>styles : () => void
+>root : any
+>{} : {}
+
+    function styles() {}
+>styles : () => void
+
+    return value;
+>value : any
+}
+
+export function readMissing(value = missing) {
+>readMissing : (value?: () => void) => () => void
+>value : () => void
+>missing : () => void
+
+    function missing() {}
+>missing : () => void
+
+    return value;
+>value : () => void
+}
+
+export function readParameter(styles = { root: "parameter" }, value = styles.root) {
+>readParameter : (styles?: { root: string; }, value?: string) => string
+>styles : { root: string; }
+>{ root: "parameter" } : { root: string; }
+>root : string
+>"parameter" : "parameter"
+>value : string
+>styles.root : string
+>styles : { root: string; }
+>root : string
+
+    return value;
+>value : string
+}
+
+export const readNamed = function named(value = named) {
+>readNamed : (value?: typeof readNamed) => typeof readNamed
+>function named(value = named) {    return value;} : (value?: typeof readNamed) => typeof readNamed
+>named : (value?: typeof readNamed) => typeof readNamed
+>value : (value?: typeof readNamed) => typeof readNamed
+>named : (value?: typeof readNamed) => typeof readNamed
+
+    return value;
+>value : (value?: typeof readNamed) => typeof readNamed
+
+};
+

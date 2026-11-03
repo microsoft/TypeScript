@@ -1,0 +1,52 @@
+defaultParameterBodyFunctionScope.ts(3,30): error TS2373: Parameter 'value' cannot reference identifier 'styles' declared after it.
+defaultParameterBodyFunctionScope.ts(3,37): error TS2339: Property 'root' does not exist on type '() => void'.
+defaultParameterBodyFunctionScope.ts(9,50): error TS2339: Property 'root' does not exist on type '() => void'.
+defaultParameterBodyFunctionScope.ts(14,44): error TS2373: Parameter 'value' cannot reference identifier 'styles' declared after it.
+defaultParameterBodyFunctionScope.ts(14,51): error TS2339: Property 'root' does not exist on type '() => void'.
+defaultParameterBodyFunctionScope.ts(19,37): error TS2373: Parameter 'value' cannot reference identifier 'missing' declared after it.
+
+
+==== defaultParameterBodyFunctionScope.ts (6 errors) ====
+    const styles = { root: "outer" };
+    
+    export function read(value = styles.root) {
+                                 ~~~~~~
+!!! error TS2373: Parameter 'value' cannot reference identifier 'styles' declared after it.
+                                        ~~~~
+!!! error TS2339: Property 'root' does not exist on type '() => void'.
+        function styles() {}
+        styles();
+        return value;
+    }
+    
+    export function readClosure(value = () => styles.root) {
+                                                     ~~~~
+!!! error TS2339: Property 'root' does not exist on type '() => void'.
+        function styles() {}
+        return value();
+    }
+    
+    export function readDestructured({ value = styles.root } = {}) {
+                                               ~~~~~~
+!!! error TS2373: Parameter 'value' cannot reference identifier 'styles' declared after it.
+                                                      ~~~~
+!!! error TS2339: Property 'root' does not exist on type '() => void'.
+        function styles() {}
+        return value;
+    }
+    
+    export function readMissing(value = missing) {
+                                        ~~~~~~~
+!!! error TS2373: Parameter 'value' cannot reference identifier 'missing' declared after it.
+        function missing() {}
+        return value;
+    }
+    
+    export function readParameter(styles = { root: "parameter" }, value = styles.root) {
+        return value;
+    }
+    
+    export const readNamed = function named(value = named) {
+        return value;
+    };
+    
