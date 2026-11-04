@@ -56,6 +56,7 @@ export async function runBenchmarks(options?: { filter?: string; singleIteration
     addGeneratorBenchmarks();
     addExecutorBenchmarks();
     addDeferBenchmarks();
+    addLongBatchBenchmarks();
 
     if (filter) {
         const pattern = filter.toLowerCase();
@@ -285,6 +286,62 @@ export async function runBenchmarks(options?: { filter?: string; singleIteration
 
                     function* schedule() {
                         for (const generator of generators) yield* defer(generator);
+                    }
+                }
+            }
+        }
+    }
+
+    function addLongBatchBenchmarks() {
+        // Enough short-lived generators in a single executor run that per-generator bookkeeping dominates
+        const generatorCount = 100_000;
+        const rounds = 100;
+        const generatorsPerRound = generatorCount / rounds;
+        for (const mode of ["direct", "yield* defer"] as const) {
+            bench.add(`executor long batch - ${generatorCount} generators (${mode})`, () => run(false), {
+                async: false,
+                beforeAll: () => {
+                    run(true);
+                },
+            });
+
+            function run(verify: boolean) {
+                let completed = 0;
+                let executedRequests = 0;
+                let executedRounds = 0;
+                const results = executeRequestGenerators(
+                    mode === "direct" ? Array.from({ length: generatorCount }, (_, index) => runRequest(index)) : [schedule()],
+                    requests => {
+                        executedRequests += requests.length;
+                        executedRounds++;
+                        return requests.map(request => ({ result: request.params }));
+                    },
+                );
+                if (verify) {
+                    assert.equal(completed, generatorCount);
+                    if (mode === "direct") {
+                        assert.equal(executedRequests, generatorCount);
+                        assert.equal(executedRounds, 1);
+                        assert.equal(results.length, generatorCount);
+                    }
+                    else {
+                        assert.equal(executedRequests, generatorCount + rounds);
+                        assert.equal(executedRounds, rounds);
+                        assert.deepEqual(results, [undefined]);
+                    }
+                }
+
+                function* runRequest(index: number): APIRequestGenerator<number> {
+                    const result = yield { method: "benchmark", params: index } as unknown as APIRequest;
+                    completed++;
+                    return result;
+                }
+
+                // A long-running scheduler that keeps spawning new generators across many request rounds
+                function* schedule(): APIRequestGenerator {
+                    for (let round = 0; round < rounds; round++) {
+                        for (let lane = 0; lane < generatorsPerRound; lane++) yield* defer(runRequest(round * generatorsPerRound + lane));
+                        yield { method: "benchmark", params: round } as unknown as APIRequest;
                     }
                 }
             }

@@ -2,6 +2,7 @@ package encoder_test
 
 import (
 	"bytes"
+	"encoding/binary"
 	"os"
 	"path/filepath"
 	"testing"
@@ -85,6 +86,76 @@ func TestDecodeSourceFileRejectsInvalidFileName(t *testing.T) {
 	copy(buf[index:index+len(invalidFileName)], invalidFileName)
 	_, err = encoder.DecodeSourceFile(buf)
 	assert.ErrorContains(t, err, `invalid source file name "Test/.ts"`)
+}
+
+func TestDecodeNodesRejectsInvalidStringOffsets(t *testing.T) {
+	t.Parallel()
+	tests := []struct {
+		name       string
+		start, end uint32
+	}{
+		{"reversed", 1, 0},
+		{"past string data", 0, 2},
+		{"past buffer", 0, ^uint32(0)},
+		{"start past buffer", ^uint32(0), ^uint32(0)},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			t.Parallel()
+			factory := ast.NewNodeFactory(ast.NodeFactoryHooks{})
+			buf, _, err := encoder.EncodeNode(factory.NewIdentifier("x"), nil)
+			assert.NilError(t, err)
+			offset := readUint32(buf, encoder.HeaderOffsetStringOffsets)
+			binary.LittleEndian.PutUint32(buf[offset:], tt.start)
+			binary.LittleEndian.PutUint32(buf[offset+4:], tt.end)
+
+			_, err = encoder.DecodeNodes(buf)
+			assert.ErrorContains(t, err, "invalid string offsets")
+		})
+	}
+}
+
+func TestDecodeNodesRejectsInvalidStringIndices(t *testing.T) {
+	t.Parallel()
+	factory := ast.NewNodeFactory(ast.NodeFactoryHooks{})
+	sourceFile := parseSourceFile("")
+	tests := []struct {
+		name    string
+		node    ast.Node
+		strings int
+	}{
+		{"identifier", factory.NewIdentifier("x"), 1},
+		{"string literal", factory.NewStringLiteral("x", 0), 1},
+		{"numeric literal", factory.NewNumericLiteral("1", 0), 1},
+		{"bigint literal", factory.NewBigIntLiteral("1n", 0), 1},
+		{"regexp literal", factory.NewRegularExpressionLiteral("/x/", 0), 1},
+		{"template literal", factory.NewNoSubstitutionTemplateLiteral("x", 0), 1},
+		{"template head", factory.NewTemplateHead("x", "x", 0), 2},
+		{"template middle", factory.NewTemplateMiddle("x", "x", 0), 2},
+		{"template tail", factory.NewTemplateTail("x", "x", 0), 2},
+		{"source file", sourceFile.AsNode(), 3},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			t.Parallel()
+			for i := range tt.strings {
+				buf, _, err := encoder.EncodeNode(tt.node, sourceFile)
+				assert.NilError(t, err)
+				nodes := readUint32(buf, encoder.HeaderOffsetNodes)
+				dataOffset := int(nodes) + encoder.NodeSize + encoder.NodeOffsetData
+				data := readUint32(buf, dataOffset)
+				if data&encoder.NodeDataTypeMask == encoder.NodeDataTypeString {
+					binary.LittleEndian.PutUint32(buf[dataOffset:], data|encoder.NodeDataStringIndexMask)
+				} else {
+					extOffset := readUint32(buf, encoder.HeaderOffsetExtendedData) + data&encoder.NodeDataStringIndexMask
+					binary.LittleEndian.PutUint32(buf[extOffset+uint32(i)*4:], ^uint32(0))
+				}
+
+				_, err = encoder.DecodeNodes(buf)
+				assert.ErrorContains(t, err, "invalid string index")
+			}
+		})
+	}
 }
 
 func TestDecodeSourceFile_Statements(t *testing.T) {

@@ -1,0 +1,20 @@
+//// [tests/cases/compiler/numericCompoundAssignmentAfterBreak.ts] ////
+
+=== numericCompoundAssignmentAfterBreak.ts ===
+function drain(count: number) {
+>drain : (count: number) => void
+>count : number
+
+    for (;;) {
+        if (count === 0) break;
+>count === 0 : boolean
+>count : number
+>0 : 0
+
+        count -= 1;
+>count -= 1 : number
+>count : number
+>1 : 1
+    }
+}
+

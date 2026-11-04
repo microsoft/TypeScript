@@ -27,6 +27,7 @@ func TestRawCompilerOptionsFinalizePaths(t *testing.T) {
 		"allowNonTsExtensions": true,
 		"suppressOutputPathCheck": true,
 		"configFilePath": "",
+		"pathsBasePath": "config",
 		"NoImplicitAny": true
 	}`), &raw))
 
@@ -46,5 +47,6 @@ func TestRawCompilerOptionsFinalizePaths(t *testing.T) {
 	assert.Equal(t, options.AllowNonTsExtensions, core.TSTrue)
 	assert.Equal(t, options.SuppressOutputPathCheck, core.TSTrue)
 	assert.Equal(t, options.ConfigFilePath, tspath.RootedFilePath(""))
+	assert.Equal(t, options.PathsBasePath, tspath.RootedDirectoryPath("/project/config"))
 	assert.Equal(t, options.NoImplicitAny, core.TSUnknown)
 }

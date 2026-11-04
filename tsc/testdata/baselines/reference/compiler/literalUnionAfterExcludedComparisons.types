@@ -1,0 +1,31 @@
+//// [tests/cases/compiler/literalUnionAfterExcludedComparisons.ts] ////
+
+=== literalUnionAfterExcludedComparisons.ts ===
+type Runtime = "node" | "deno" | "bun";
+>Runtime : Runtime
+
+function readRuntime(value: string): Runtime {
+>readRuntime : (value: string) => Runtime
+>value : string
+
+    if (value !== "node" && value !== "deno" && value !== "bun") {
+>value !== "node" && value !== "deno" && value !== "bun" : boolean
+>value !== "node" && value !== "deno" : boolean
+>value !== "node" : boolean
+>value : string
+>"node" : "node"
+>value !== "deno" : boolean
+>value : string
+>"deno" : "deno"
+>value !== "bun" : boolean
+>value : string
+>"bun" : "bun"
+
+        throw new Error();
+>new Error() : Error
+>Error : ErrorConstructor
+    }
+    return value;
+>value : "bun" | "deno" | "node"
+}
+

@@ -355,7 +355,7 @@ func (tx *DeclarationTransformer) transformSourceFile(node *ast.SourceFile) ast.
 	combinedStatements.SetLoc(statements.Loc()) // setTextRange
 	if ast.IsExternalOrCommonJSModule(node) {
 		if ast.IsInJSFile(node.AsNode()) {
-			if exportEquals := node.Symbol().Exports()[ast.InternalSymbolNameExportEquals]; exportEquals != nil && len(exportEquals.Declarations()) > 1 {
+			if exportEquals := node.Symbol().Exports().Get(ast.InternalSymbolNameExportEquals); exportEquals != nil && len(exportEquals.Declarations()) > 1 {
 				for _, node := range exportEquals.Declarations() {
 					tx.state.addDiagnostic(createDiagnosticForNode(node, diagnostics.Multiple_module_exports_assignments_cannot_be_serialized_for_declaration_emit))
 				}
@@ -1738,7 +1738,12 @@ func (tx *DeclarationTransformer) transformTopLevelDeclaration(input ast.Node) a
 	if input.Kind() == ast.KindImportDeclaration || input.Kind() == ast.KindJSImportDeclaration {
 		res := tx.transformImportDeclaration(input.AsImportDeclaration())
 		if !res.IsNil() && res.Kind() != ast.KindImportDeclaration {
-			return res.AsImportDeclaration().CloneAs(tx.Factory(), ast.KindImportDeclaration)
+			decl := res.AsImportDeclaration()
+			replacement := tx.Factory().NewImportDeclaration(decl.Modifiers(), decl.ImportClause(), decl.ModuleSpecifier(), decl.Attributes())
+			replacement.SetFlags(res.Flags())
+			replacement.SetLoc(res.Loc())
+			tx.EmitContext().SetOriginal(replacement, res)
+			return replacement
 		}
 		return res
 	}
@@ -2842,8 +2847,8 @@ func (tx *DeclarationTransformer) transformExpandoAssignment(node ast.BinaryExpr
 	declarationData := synthesizedNamespace.DeclarationData()
 	declarationData.SetSymbol(host)
 	containerData := synthesizedNamespace.LocalsContainerData()
-	containerData.SetLocals(make(ast.SymbolTable, 0))
-	containerData.Locals()[localName.Text()] = symbol
+	containerData.SetLocals(ast.NewSymbolTable())
+	containerData.Locals().Set(localName.Text(), symbol)
 
 	oldEnclosing := tx.enclosingDeclaration
 	tx.enclosingDeclaration = synthesizedNamespace

@@ -108,7 +108,7 @@ func TestCreateSnapshotPreservesWindowsRootDriveLetterCase(t *testing.T) {
 
 	snapshot, err := session.getSnapshotData(response.Snapshot)
 	assert.NilError(t, err)
-	program, err := snapshot.getProgram(response.Projects[0].Id)
+	program, err := snapshot.getProgram(response.Projects[0].Handle)
 	assert.NilError(t, err)
 	assert.Equal(t, program.GetSourceFile(fileName).FileName(), tspath.RootedFilePathFromNormalized(fileName))
 }
@@ -304,7 +304,7 @@ func TestCreateProgramReportsNonCompositeProjectReference(t *testing.T) {
 		}},
 	})
 	assert.NilError(t, err)
-	projectID := (*response.Operation.CreatedPrograms)[0].AsID()
+	projectID := session.snapshots[response.Snapshot].snapshot.ProjectCollection.GetProject((*response.Operation.CreatedPrograms)[0].AsID()).Handle()
 	diagnostics, err := session.handleGetProgramDiagnostics(context.Background(), &GetProjectDiagnosticsParams{
 		Snapshot: response.Snapshot,
 		Project:  projectID,
@@ -315,4 +315,50 @@ func TestCreateProgramReportsNonCompositeProjectReference(t *testing.T) {
 		codes = append(codes, diagnostic.Code)
 	}
 	assert.DeepEqual(t, codes, []int32{6306})
+}
+
+func TestCreateSnapshotResolvesPathsRelativeToParsedConfigDirectory(t *testing.T) {
+	t.Parallel()
+
+	const (
+		mainFile = "/project/main.ts"
+		libFile  = "/project/types/lib.d.ts"
+	)
+	init, _ := projecttestutil.GetSessionInitOptions(map[string]any{
+		mainFile: `import { x } from "lib"; export const y: number = x;`,
+		libFile:  `export declare const x: number;`,
+	}, nil, &projecttestutil.TypingsInstallerOptions{})
+	init.Options.CurrentDirectory = "/somewhere-else"
+	session := NewStandaloneSession(init, nil)
+	defer session.Close()
+
+	var parseParams ParseJsonConfigFileContentParams
+	assert.NilError(t, json.Unmarshal([]byte(`{
+		"json": {
+			"compilerOptions": {
+				"module": "esnext",
+				"moduleResolution": "bundler",
+				"noLib": true,
+				"types": [],
+				"paths": { "lib": ["./types/lib.d.ts"] }
+			}
+		},
+		"configDirectory": "/project"
+	}`), &parseParams))
+	parsed, err := session.handleParseJsonConfigFileContent(context.Background(), &parseParams)
+	assert.NilError(t, err)
+
+	// Round-trip the parsed options through JSON as an API client would.
+	encodedOptions, err := json.Marshal(parsed.Options)
+	assert.NilError(t, err)
+	var createParams CreateSnapshotParams
+	assert.NilError(t, json.Unmarshal([]byte(`{"createPrograms":[{"rootFiles":["`+mainFile+`"],"compilerOptions":`+string(encodedOptions)+`}]}`), &createParams))
+
+	response, err := session.handleCreateSnapshot(context.Background(), &createParams)
+	assert.NilError(t, err)
+	snapshot, err := session.getSnapshotData(response.Snapshot)
+	assert.NilError(t, err)
+	program, err := snapshot.getProgram(response.Projects[0].Handle)
+	assert.NilError(t, err)
+	assert.Assert(t, program.GetSourceFile(libFile) != nil, "expected 'lib' to resolve via paths relative to /project")
 }

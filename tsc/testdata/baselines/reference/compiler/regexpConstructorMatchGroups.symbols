@@ -1,0 +1,19 @@
+//// [tests/cases/compiler/regexpConstructorMatchGroups.ts] ////
+
+=== regexpConstructorMatchGroups.ts ===
+declare const pattern: string;
+>pattern : Symbol(pattern, Decl(regexpConstructorMatchGroups.ts, 0, 13))
+
+const matches = "".match(new RegExp(pattern));
+>matches : Symbol(matches, Decl(regexpConstructorMatchGroups.ts, 1, 5))
+>"".match : Symbol(String.match, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>match : Symbol(String.match, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>RegExp : Symbol(RegExp, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2018.regexp.d.ts, --, --))
+>pattern : Symbol(pattern, Decl(regexpConstructorMatchGroups.ts, 0, 13))
+
+if (matches) matches.groups;
+>matches : Symbol(matches, Decl(regexpConstructorMatchGroups.ts, 1, 5))
+>matches.groups : Symbol(RegExpMatchArray.groups, Decl(lib.es2018.regexp.d.ts, --, --))
+>matches : Symbol(matches, Decl(regexpConstructorMatchGroups.ts, 1, 5))
+>groups : Symbol(RegExpMatchArray.groups, Decl(lib.es2018.regexp.d.ts, --, --))
+

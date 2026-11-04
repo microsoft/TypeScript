@@ -67,10 +67,6 @@
         "category": "Error",
         "code": 1020
     },
-    "An index signature must have a type annotation.": {
-        "category": "Error",
-        "code": 1021
-    },
     "An index signature parameter must have a type annotation.": {
         "category": "Error",
         "code": 1022
@@ -4792,6 +4788,10 @@
         "category": "Error",
         "code": 5115
     },
+    "Network path '{0}' is not supported.": {
+        "category": "Error",
+        "code": 5116
+    },
 
     "Generates a sourcemap for each corresponding '.d.ts' file.": {
         "category": "Message",
@@ -6653,6 +6653,10 @@
         "category": "Message",
         "code": 6809
     },
+    "Disable runtime rewriting of file extensions in non-literal 'import()' and 'require()' calls when 'rewriteRelativeImportExtensions' is enabled.": {
+        "category": "Message",
+        "code": 6810
+    },
 
     "one of:": {
         "category": "Message",
@@ -7037,6 +7041,10 @@
     "A mapped type may not declare properties or methods.": {
         "category": "Error",
         "code": 7061
+    },
+    "Index signature, which lacks type annotation, implicitly has an 'any' type.": {
+        "category": "Error",
+        "code": 7062
     },
     "Declaration emit elides private members, but '{0}' refers to a private member. Write an explicit type here.": {
         "category": "Error",
@@ -8716,7 +8724,7 @@
         "category": "Error",
         "code": 18065
     },
-    "Content mapper file extension '{0}' is a built-in extension and cannot be registered by a content mapper.": {
+    "Content mapper file extension '{0}' cannot be registered because it ends in a built-in extension.": {
         "category": "Error",
         "code": 18066
     },
@@ -8727,6 +8735,10 @@
     "Content mappers require the '--runExternalCode' command line flag to be enabled.": {
         "category": "Error",
         "code": 18068
+    },
+    "The content mapper package '{0}' is outside the open workspace and will not be loaded.": {
+        "category": "Error",
+        "code": 18124
     },
     "The content mapper '{0}' failed to transform this file.": {
         "category": "Error",

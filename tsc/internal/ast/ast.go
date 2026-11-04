@@ -389,7 +389,7 @@ func (m MutableNode) SetExpression(expr Node) {
 	case KindSwitchStatement:
 		n.AsSwitchStatement().SetExpression(expr)
 	case KindCaseClause:
-		n.AsCaseOrDefaultClause().SetExpression(expr)
+		n.AsCaseClause().SetExpression(expr)
 	case KindExpressionStatement:
 		n.AsExpressionStatement().SetExpression(expr)
 	case KindReturnStatement:
@@ -506,7 +506,7 @@ func (n Node) StatementList() NodeList {
 	case KindModuleBlock:
 		return n.AsModuleBlock().Statements()
 	case KindCaseClause, KindDefaultClause:
-		return n.AsCaseOrDefaultClause().Statements()
+		return n.CaseOrDefaultClauseData().Statements()
 	}
 	panic("Unhandled case in Node.StatementList: " + n.Kind().String())
 }
@@ -993,6 +993,7 @@ func (n Node) AsFlowSwitchClauseData() FlowSwitchClauseData {
 	if n.Kind() != kindFlowSwitchClauseData {
 		panic("Invalid node cast to FlowSwitchClauseData")
 	}
+	// SAFETY: Only NewFlowSwitchClauseData assigns this kind to a FlowSwitchClauseData record.
 	return FlowSwitchClauseData{n}
 }
 
@@ -1000,6 +1001,7 @@ func (n Node) AsFlowReduceLabelData() FlowReduceLabelData {
 	if n.Kind() != kindFlowReduceLabelData {
 		panic("Invalid node cast to FlowReduceLabelData")
 	}
+	// SAFETY: Only NewFlowReduceLabelData assigns this kind to a FlowReduceLabelData record.
 	return FlowReduceLabelData{n}
 }
 

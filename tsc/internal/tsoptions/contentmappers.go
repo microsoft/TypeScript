@@ -15,8 +15,8 @@ import (
 	"github.com/microsoft/TypeScript/tsc/internal/vfs"
 )
 
-// resolveContentMapperManifest locates packageName in node_modules (walking up from the directory of
-// containingFile via node module resolution) and reads its package.json to produce the mapper's manifest
+// resolveContentMapperManifest locates packageName as a directory path relative to containingFile or in
+// node_modules (walking up via node module resolution) and reads its package.json to produce the mapper's manifest
 // and package directory. It never executes the package. On failure it returns a diagnostic describing why
 // the mapper could not be resolved; on success the diagnostic is nil.
 type contentMapperResolutionHost struct {
@@ -32,7 +32,8 @@ func (h *contentMapperResolutionHost) GetCurrentDirectory() tspath.RootedDirecto
 	return h.currentDirectory
 }
 
-func resolveContentMapperManifest(fs vfs.FS, containingFile tspath.RootedFilePath, packageName string) (contentmapper.Manifest, tspath.RootedDirectoryPath, *ast.Diagnostic) {
+func resolveContentMapperManifest(host ParseConfigHost, containingFile tspath.RootedFilePath, packageName string) (contentmapper.Manifest, tspath.RootedDirectoryPath, *ast.Diagnostic) {
+	fs := host.FS()
 	resolver := module.NewResolver(module.ResolverOptions{
 		Host:            &contentMapperResolutionHost{fs: fs, currentDirectory: containingFile.Directory()},
 		CompilerOptions: &core.CompilerOptions{ModuleResolution: core.ModuleResolutionKindBundler},
@@ -40,6 +41,14 @@ func resolveContentMapperManifest(fs vfs.FS, containingFile tspath.RootedFilePat
 	resolved := resolver.ResolvePackageDirectory(packageName, containingFile, core.ResolutionModeNone, nil)
 	if resolved == nil || resolved.ResolvedFileName == "" {
 		return contentmapper.Manifest{}, "", ast.NewCompilerDiagnostic(diagnostics.The_content_mapper_package_0_could_not_be_resolved, packageName)
+	}
+	logicalPackageDirectory := resolved.OriginalPath
+	if logicalPackageDirectory == "" {
+		logicalPackageDirectory = resolved.ResolvedFileName
+	}
+	logicalPackageDirectoryPath := tspath.RootedDirectoryPathFromPath(tspath.RootedPath(logicalPackageDirectory))
+	if !host.IsContentMapperPackageAllowed(logicalPackageDirectoryPath) {
+		return contentmapper.Manifest{}, "", ast.NewCompilerDiagnostic(diagnostics.The_content_mapper_package_0_is_outside_the_open_workspace_and_will_not_be_loaded, packageName)
 	}
 	packageDirectory := tspath.RootedDirectoryPathFromPath(tspath.RootedPath(resolved.ResolvedFileName))
 

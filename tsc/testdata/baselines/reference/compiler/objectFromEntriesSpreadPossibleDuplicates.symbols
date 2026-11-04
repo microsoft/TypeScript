@@ -1,0 +1,27 @@
+//// [tests/cases/compiler/objectFromEntriesSpreadPossibleDuplicates.ts] ////
+
+=== objectFromEntriesSpreadPossibleDuplicates.ts ===
+declare const icons: { iconName: "bicycle" | "book" }[];
+>icons : Symbol(icons, Decl(objectFromEntriesSpreadPossibleDuplicates.ts, 0, 13))
+>iconName : Symbol(iconName, Decl(objectFromEntriesSpreadPossibleDuplicates.ts, 0, 22))
+
+export const mapping = {
+>mapping : Symbol(mapping, Decl(objectFromEntriesSpreadPossibleDuplicates.ts, 1, 12))
+
+    bicycle: 0,
+>bicycle : Symbol(bicycle, Decl(objectFromEntriesSpreadPossibleDuplicates.ts, 1, 24))
+
+    ...Object.fromEntries(icons.map(icon => [icon.iconName, 1])),
+>Object.fromEntries : Symbol(ObjectConstructor.fromEntries, Decl(lib.es2019.object.d.ts, --, --), Decl(lib.es2019.object.d.ts, --, --))
+>Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>fromEntries : Symbol(ObjectConstructor.fromEntries, Decl(lib.es2019.object.d.ts, --, --), Decl(lib.es2019.object.d.ts, --, --))
+>icons.map : Symbol(Array.map, Decl(lib.es5.d.ts, --, --))
+>icons : Symbol(icons, Decl(objectFromEntriesSpreadPossibleDuplicates.ts, 0, 13))
+>map : Symbol(Array.map, Decl(lib.es5.d.ts, --, --))
+>icon : Symbol(icon, Decl(objectFromEntriesSpreadPossibleDuplicates.ts, 3, 36))
+>icon.iconName : Symbol(iconName, Decl(objectFromEntriesSpreadPossibleDuplicates.ts, 0, 22))
+>icon : Symbol(icon, Decl(objectFromEntriesSpreadPossibleDuplicates.ts, 3, 36))
+>iconName : Symbol(iconName, Decl(objectFromEntriesSpreadPossibleDuplicates.ts, 0, 22))
+
+};
+

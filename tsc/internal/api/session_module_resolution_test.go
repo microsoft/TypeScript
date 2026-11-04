@@ -172,7 +172,7 @@ func TestCreateProgramUsesStaticModuleResolutions(t *testing.T) {
 		},
 	})
 	assert.NilError(t, err)
-	projectID := (*response.Operation.CreatedPrograms)[0].AsID()
+	projectID := session.snapshots[response.Snapshot].snapshot.ProjectCollection.GetProject((*response.Operation.CreatedPrograms)[0].AsID()).Handle()
 	fileNames, err := session.handleGetSourceFileNames(context.Background(), &GetSourceFileNamesParams{
 		Snapshot: response.Snapshot,
 		Project:  projectID,
@@ -231,7 +231,7 @@ func TestCustomModuleResolutionsSkipUnsafeRewriteDiagnostic(t *testing.T) {
 	assert.NilError(t, err)
 	diagnostics, err := session.handleGetSemanticDiagnostics(t.Context(), &GetDiagnosticsParams{
 		Snapshot: response.Snapshot,
-		Project:  (*response.Operation.CreatedPrograms)[0].AsID(),
+		Project:  session.snapshots[response.Snapshot].snapshot.ProjectCollection.GetProject((*response.Operation.CreatedPrograms)[0].AsID()).Handle(),
 		Files:    []DocumentIdentifier{{FileName: root}},
 	})
 	assert.NilError(t, err)

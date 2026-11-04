@@ -34,7 +34,7 @@ func (ch *logicalAssignmentTransformer) visitBinaryExpression(node ast.BinaryExp
 		return ch.Visitor().VisitEachChild(node.AsNode())
 	}
 
-	left := ast.SkipParentheses(ch.Visitor().VisitNode(node.Left()))
+	left := ast.SkipOuterExpressions(ch.Visitor().VisitNode(node.Left()), ast.OEKParentheses|ast.OEKPartiallyEmittedExpressions)
 	assignmentTarget := left
 	right := ast.SkipParentheses(ch.Visitor().VisitNode(node.Right()))
 

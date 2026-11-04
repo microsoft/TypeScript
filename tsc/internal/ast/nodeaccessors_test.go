@@ -20,7 +20,6 @@ func TestNodeFactoryKinds(t *testing.T) {
 		kinds []ast.Kind
 	}{
 		{"ForInOrOfStatement", []ast.Kind{ast.KindForInStatement, ast.KindForOfStatement}},
-		{"CaseOrDefaultClause", []ast.Kind{ast.KindCaseClause, ast.KindDefaultClause}},
 		{"BindingPattern", []ast.Kind{ast.KindArrayBindingPattern, ast.KindObjectBindingPattern}},
 		{"KeywordExpression", []ast.Kind{ast.KindFalseKeyword, ast.KindImportKeyword, ast.KindNullKeyword, ast.KindSuperKeyword, ast.KindThisKeyword, ast.KindTrueKeyword}},
 		{"KeywordTypeNode", []ast.Kind{ast.KindVoidKeyword, ast.KindAnyKeyword, ast.KindBooleanKeyword, ast.KindIntrinsicKeyword, ast.KindNeverKeyword, ast.KindNumberKeyword, ast.KindObjectKeyword, ast.KindStringKeyword, ast.KindSymbolKeyword, ast.KindUndefinedKeyword, ast.KindUnknownKeyword, ast.KindBigIntKeyword}},
@@ -81,6 +80,56 @@ func TestNodeAccessors(t *testing.T) {
 	literal := factory.NewStringLiteral("text", ast.TokenFlagsNone)
 	assert.Equal(t, literal.LiteralLikeData(), ast.LiteralLikeNodeBase{Node: literal})
 	assert.Equal(t, literal.LiteralLikeData().Text(), "text")
+}
+
+func TestArrowFunctionToken(t *testing.T) {
+	t.Parallel()
+	factory := ast.NewNodeFactory(ast.NodeFactoryHooks{})
+	parameters := factory.NewNodeList(nil)
+	body := factory.NewBlock(factory.NewNodeList(nil), false)
+	arrow := factory.NewArrowFunction(ast.ModifierList{}, ast.TypeParameterList{}, parameters, ast.TypeNode{}, ast.TypeNode{}, ast.EqualsGreaterThanToken{}, body)
+	token := arrow.AsArrowFunction().EqualsGreaterThanToken()
+	assert.Assert(t, !token.IsNil())
+	assert.Equal(t, token.Kind(), ast.KindEqualsGreaterThanToken)
+	assert.Equal(t, arrow.Clone(factory).AsArrowFunction().EqualsGreaterThanToken(), token)
+
+	explicitToken := factory.NewToken(ast.KindEqualsGreaterThanToken)
+	explicit := factory.NewArrowFunction(ast.ModifierList{}, ast.TypeParameterList{}, parameters, ast.TypeNode{}, ast.TypeNode{}, explicitToken, body)
+	assert.Equal(t, explicit.AsArrowFunction().EqualsGreaterThanToken(), explicitToken)
+	updated := factory.UpdateArrowFunction(explicit.AsArrowFunction(), ast.ModifierList{}, ast.TypeParameterList{}, parameters, ast.TypeNode{}, ast.TypeNode{}, ast.EqualsGreaterThanToken{}, body)
+	assert.Assert(t, !updated.AsArrowFunction().EqualsGreaterThanToken().IsNil())
+	assert.Equal(t, updated.AsArrowFunction().EqualsGreaterThanToken().Kind(), ast.KindEqualsGreaterThanToken)
+}
+
+func TestClauseNodeAccessors(t *testing.T) {
+	t.Parallel()
+	factory := ast.NewNodeFactory(ast.NodeFactoryHooks{})
+	expression := factory.NewIdentifier("value")
+	statements := factory.NewNodeList([]ast.Node{factory.NewBreakStatement(ast.Node{})})
+	caseClause := factory.NewCaseClause(expression, statements)
+	defaultClause := factory.NewDefaultClause(statements)
+
+	assert.Equal(t, caseClause.Expression(), expression)
+	for _, clause := range []ast.Node{caseClause, defaultClause} {
+		assert.Equal(t, clause.StatementList(), statements)
+		assert.Equal(t, clause.CaseOrDefaultClauseData().Statements(), statements)
+		var children []ast.Node
+		clause.ForEachChild(func(child ast.Node) bool {
+			children = append(children, child)
+			return false
+		})
+		if clause.Kind() == ast.KindCaseClause {
+			assert.Assert(t, slices.Equal(children, []ast.Node{expression, statements.At(0)}))
+		} else {
+			assert.Assert(t, slices.Equal(children, statements.Slice()))
+		}
+		clone := clause.Clone(factory)
+		assert.Equal(t, clone.Kind(), clause.Kind())
+		if clause.Kind() == ast.KindCaseClause {
+			assert.Equal(t, clone.Expression(), expression)
+		}
+		assert.Equal(t, clone.StatementList(), statements)
+	}
 }
 
 func TestNodeAccessorsSharedKinds(t *testing.T) {

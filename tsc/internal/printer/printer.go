@@ -1,7 +1,7 @@
 // Package printer exports a Printer for pretty-printing TS ASTs and writer interfaces and implementations for using them
 // Intended ultimate usage:
 //
-//	func nodeToInlineStr(node *ast.Node) {
+//	func nodeToInlineStr(node ast.Node) {
 //		// Reuse singleton single-line writer (TODO: thread safety?)
 //		p = printer.NewPrinter(printer.PrinterOptions{ RemoveComments: true }, printer.PrintHandlers{})
 //		p.Write(node, nil /*sourceFile*/, printer.SingleLineTextWriter)
@@ -10,7 +10,7 @@
 //
 // // or
 //
-//	func nodeToStr(node *ast.Node, options CompilerOptions) {
+//	func nodeToStr(node ast.Node, options CompilerOptions) {
 //		// Use own writer
 //		p := printer.NewPrinter(printer.PrinterOptions{ NewLine: options.NewLine}, printer.PrintHandlers{})
 //		return p.Emit(node, nil /*sourceFile*/)
@@ -77,12 +77,12 @@ type PrintHandlers struct {
 	//////   }
 	////// });
 	////// ```
-	////OnEmitNode func(hint EmitHint, node *ast.Node, emitCallback func(hint EmitHint, node *ast.Node))
+	////OnEmitNode func(hint EmitHint, node ast.Node, emitCallback func(hint EmitHint, node ast.Node))
 
 	// !!!
 	////// A hook used to check if an emit notification is required for a node.
 	////// @param node The node to emit.
-	////IsEmitNotificationEnabled func(node *ast.Node) bool
+	////IsEmitNotificationEnabled func(node ast.Node) bool
 
 	// !!!
 	////// A hook used by the Printer to perform just-in-time substitution of a node. This is
@@ -99,11 +99,11 @@ type PrintHandlers struct {
 	//////   }
 	////// });
 	////// ```
-	////SubstituteNode func(hint EmitHint, node *ast.Node) *ast.Node
+	////SubstituteNode func(hint EmitHint, node ast.Node) ast.Node
 
 	// !!!
-	////OnEmitSourceMapOfNode func(hint EmitHint, node *ast.Node, emitCallback func(hint EmitHint, node *ast.Node))
-	////OnEmitSourceMapOfToken func(nodeOpt *ast.Node | undefined, token: ast.Kind, writeKind WriteKind, pos int, emitCallback func(token ast.Kind, writeKind WriteKind, pos int) int) int
+	////OnEmitSourceMapOfNode func(hint EmitHint, node ast.Node, emitCallback func(hint EmitHint, node ast.Node))
+	////OnEmitSourceMapOfToken func(nodeOpt ast.Node | undefined, token: ast.Kind, writeKind WriteKind, pos int, emitCallback func(token ast.Kind, writeKind WriteKind, pos int) int) int
 	////OnEmitSourceMapOfPosition func(pos int)
 
 	OnBeforeEmitNode     func(nodeOpt ast.Node)
@@ -2593,8 +2593,9 @@ func (p *Printer) emitNewExpression(node ast.NewExpression) {
 	state := p.enterNode(node.AsNode())
 	p.emitToken(ast.KindNewKeyword, node.Pos(), WriteKindKeyword, node.AsNode())
 	p.writeSpace()
-	if ast.SkipPartiallyEmittedExpressions(node.Expression()).Kind() == ast.KindCallExpression {
-		// Parenthesize `C()` inside of a NewExpression so it is treated as `new (C())` and not `new C()`
+	if hasUnparenthesizedCallAtStartOfMemberChain(node.Expression()) {
+		// Parenthesize `C()` or `C().D` inside of a NewExpression so it is treated as `new (C())` or `new (C().D)`
+		// and not `new C()` or `new C().D`
 		p.emitExpression(node.Expression(), ast.OperatorPrecedenceParentheses)
 	} else {
 		p.emitExpression(node.Expression(), ast.OperatorPrecedenceMember)
@@ -4451,12 +4452,13 @@ func (p *Printer) emitJsxAttributeValue(node ast.JsxAttributeValue) {
 //
 
 func (p *Printer) emitCaseOrDefaultClauseStatements(node ast.CaseOrDefaultClause, colonPos int) {
-	emitAsSingleStatement := node.Statements().Len() == 1 &&
+	statements := node.StatementList()
+	emitAsSingleStatement := statements.Len() == 1 &&
 		// treat synthesized nodes as located on the same line for emit purposes
 		(p.currentSourceFile == nil ||
-			ast.NodeIsSynthesized(node.AsNode()) ||
-			ast.NodeIsSynthesized(node.Statements().At(0)) ||
-			RangeStartPositionsAreOnSameLine(node.Loc(), node.Statements().At(0).Loc(), p.currentSourceFile))
+			ast.NodeIsSynthesized(node) ||
+			ast.NodeIsSynthesized(statements.At(0)) ||
+			RangeStartPositionsAreOnSameLine(node.Loc(), statements.At(0).Loc(), p.currentSourceFile))
 
 	format := LFCaseOrDefaultClauseStatements
 	if emitAsSingleStatement {
@@ -4466,34 +4468,34 @@ func (p *Printer) emitCaseOrDefaultClauseStatements(node ast.CaseOrDefaultClause
 		p.writeSpace()
 		format &^= LFMultiLine | LFIndented
 	} else {
-		p.emitToken(ast.KindColonToken, colonPos, WriteKindPunctuation, node.AsNode())
+		p.emitToken(ast.KindColonToken, colonPos, WriteKindPunctuation, node)
 	}
 
-	p.emitList((*Printer).emitStatement, node.AsNode(), node.Statements(), format)
+	p.emitList((*Printer).emitStatement, node, statements, format)
 }
 
-func (p *Printer) emitCaseClause(node ast.CaseOrDefaultClause) {
+func (p *Printer) emitCaseClause(node ast.CaseClause) {
 	state := p.enterNode(node.AsNode())
 	p.emitToken(ast.KindCaseKeyword, node.Pos(), WriteKindKeyword, node.AsNode())
 	p.writeSpace()
 	p.emitExpression(node.Expression(), ast.OperatorPrecedenceLowest)
-	p.emitCaseOrDefaultClauseStatements(node, node.Expression().End())
+	p.emitCaseOrDefaultClauseStatements(node.AsNode(), node.Expression().End())
 	p.exitNode(node.AsNode(), state)
 }
 
-func (p *Printer) emitDefaultClause(node ast.CaseOrDefaultClause) {
+func (p *Printer) emitDefaultClause(node ast.DefaultClause) {
 	state := p.enterNode(node.AsNode())
 	pos := p.emitToken(ast.KindDefaultKeyword, node.Pos(), WriteKindKeyword, node.AsNode())
-	p.emitCaseOrDefaultClauseStatements(node, pos)
+	p.emitCaseOrDefaultClauseStatements(node.AsNode(), pos)
 	p.exitNode(node.AsNode(), state)
 }
 
-func (p *Printer) emitCaseOrDefaultClauseNode(node ast.CaseOrDefaultClauseNode) {
+func (p *Printer) emitCaseOrDefaultClauseNode(node ast.CaseOrDefaultClause) {
 	switch node.Kind() {
 	case ast.KindCaseClause:
-		p.emitCaseClause(node.AsCaseOrDefaultClause())
+		p.emitCaseClause(node.AsCaseClause())
 	case ast.KindDefaultClause:
-		p.emitDefaultClause(node.AsCaseOrDefaultClause())
+		p.emitDefaultClause(node.AsDefaultClause())
 	default:
 		panic(fmt.Sprintf("unhandled CaseOrDefaultClause: %v", node.Kind()))
 	}
@@ -5099,7 +5101,7 @@ func (p *Printer) Write(node ast.Node, sourceFile *ast.SourceFile, writer EmitTe
 	}
 	p.writer = writer
 	p.writer.Clear()
-	if sourceFile != nil {
+	if sourceFile != nil && node == sourceFile.AsNode() {
 		if grower, ok := p.writer.(interface{ Grow(n int) }); ok {
 			grower.Grow(len(sourceFile.Text()))
 		}
@@ -5231,9 +5233,9 @@ func (p *Printer) Write(node ast.Node, sourceFile *ast.SourceFile, writer EmitTe
 
 	// Clauses
 	case ast.KindCaseClause:
-		p.emitCaseClause(node.AsCaseOrDefaultClause())
+		p.emitCaseClause(node.AsCaseClause())
 	case ast.KindDefaultClause:
-		p.emitDefaultClause(node.AsCaseOrDefaultClause())
+		p.emitDefaultClause(node.AsDefaultClause())
 	case ast.KindHeritageClause:
 		p.emitHeritageClause(node.AsHeritageClause())
 	case ast.KindCatchClause:

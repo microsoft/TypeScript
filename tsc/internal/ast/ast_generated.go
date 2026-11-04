@@ -53,7 +53,8 @@ const (
 	layoutWithStatement
 	layoutSwitchStatement
 	layoutCaseBlock
-	layoutCaseOrDefaultClause
+	layoutCaseClause
+	layoutDefaultClause
 	layoutThrowStatement
 	layoutTryStatement
 	layoutCatchClause
@@ -417,8 +418,8 @@ var kindLayout = [kindFlowReduceLabelData + 1]nodeLayout{
 	KindWithStatement:                                layoutWithStatement,
 	KindSwitchStatement:                              layoutSwitchStatement,
 	KindCaseBlock:                                    layoutCaseBlock,
-	KindCaseClause:                                   layoutCaseOrDefaultClause,
-	KindDefaultClause:                                layoutCaseOrDefaultClause,
+	KindCaseClause:                                   layoutCaseClause,
+	KindDefaultClause:                                layoutDefaultClause,
 	KindThrowStatement:                               layoutThrowStatement,
 	KindTryStatement:                                 layoutTryStatement,
 	KindCatchClause:                                  layoutCatchClause,
@@ -609,7 +610,8 @@ const (
 	_ = -unsafe.Offsetof(withStatementData{}.nodeBaseData)
 	_ = -unsafe.Offsetof(switchStatementData{}.nodeBaseData)
 	_ = -unsafe.Offsetof(caseBlockData{}.nodeBaseData)
-	_ = -unsafe.Offsetof(caseOrDefaultClauseData{}.nodeBaseData)
+	_ = -unsafe.Offsetof(caseClauseData{}.nodeBaseData)
+	_ = -unsafe.Offsetof(defaultClauseData{}.nodeBaseData)
 	_ = -unsafe.Offsetof(throwStatementData{}.nodeBaseData)
 	_ = -unsafe.Offsetof(tryStatementData{}.nodeBaseData)
 	_ = -unsafe.Offsetof(catchClauseData{}.nodeBaseData)
@@ -826,8 +828,10 @@ func layoutRecord(layout nodeLayout) any {
 		return switchStatementData{}
 	case layoutCaseBlock:
 		return caseBlockData{}
-	case layoutCaseOrDefaultClause:
-		return caseOrDefaultClauseData{}
+	case layoutCaseClause:
+		return caseClauseData{}
+	case layoutDefaultClause:
+		return defaultClauseData{}
 	case layoutThrowStatement:
 		return throwStatementData{}
 	case layoutTryStatement:
@@ -1607,8 +1611,8 @@ var compositeBaseFactsOffsets = [kindFlowReduceLabelData + 1]uint8{
 	KindWithStatement:               uint8(unsafe.Offsetof(withStatementData{}.facts)),
 	KindSwitchStatement:             uint8(unsafe.Offsetof(switchStatementData{}.facts)),
 	KindCaseBlock:                   uint8(unsafe.Offsetof(caseBlockData{}.facts)),
-	KindCaseClause:                  uint8(unsafe.Offsetof(caseOrDefaultClauseData{}.facts)),
-	KindDefaultClause:               uint8(unsafe.Offsetof(caseOrDefaultClauseData{}.facts)),
+	KindCaseClause:                  uint8(unsafe.Offsetof(caseClauseData{}.facts)),
+	KindDefaultClause:               uint8(unsafe.Offsetof(defaultClauseData{}.facts)),
 	KindThrowStatement:              uint8(unsafe.Offsetof(throwStatementData{}.facts)),
 	KindTryStatement:                uint8(unsafe.Offsetof(tryStatementData{}.facts)),
 	KindCatchClause:                 uint8(unsafe.Offsetof(catchClauseData{}.facts)),
@@ -2533,6 +2537,48 @@ func (node JSDocTagBase) SetComment(value NodeList) {
 	node.setListRef(node.jsDocTagBaseComment(), value)
 }
 
+var caseOrDefaultClauseBaseStatementsOffsets = [kindFlowReduceLabelData + 1]uint8{
+	KindCaseClause:    uint8(unsafe.Offsetof(caseClauseData{}.statements)),
+	KindDefaultClause: uint8(unsafe.Offsetof(defaultClauseData{}.statements)),
+}
+
+func (n Node) caseOrDefaultClauseBaseStatements() *listRef {
+	if off := caseOrDefaultClauseBaseStatementsOffsets[n.Kind()]; off != 0 {
+		return (*listRef)(unsafe.Add(n.rec(), off))
+	}
+	return nil
+}
+
+var caseOrDefaultClauseBaseFallthroughFlowNodeOffsets = [kindFlowReduceLabelData + 1]uint8{
+	KindCaseClause:    uint8(unsafe.Offsetof(caseClauseData{}.fallthroughFlowNode)),
+	KindDefaultClause: uint8(unsafe.Offsetof(defaultClauseData{}.fallthroughFlowNode)),
+}
+
+func (n Node) caseOrDefaultClauseBaseFallthroughFlowNode() *flowRef {
+	if off := caseOrDefaultClauseBaseFallthroughFlowNodeOffsets[n.Kind()]; off != 0 {
+		return (*flowRef)(unsafe.Add(n.rec(), off))
+	}
+	return nil
+}
+
+type CaseOrDefaultClauseBase struct{ Node }
+
+func (node CaseOrDefaultClauseBase) Statements() StatementList {
+	return node.derefList(node.caseOrDefaultClauseBaseStatements())
+}
+
+func (node CaseOrDefaultClauseBase) SetStatements(value StatementList) {
+	node.setListRef(node.caseOrDefaultClauseBaseStatements(), value)
+}
+
+func (node CaseOrDefaultClauseBase) FallthroughFlowNode() FlowNode {
+	return node.derefFlow(node.caseOrDefaultClauseBaseFallthroughFlowNode())
+}
+
+func (node CaseOrDefaultClauseBase) SetFallthroughFlowNode(value FlowNode) {
+	node.setFlowRef(node.caseOrDefaultClauseBaseFallthroughFlowNode(), value)
+}
+
 var jsDocCommentBaseTextOffsets = [kindFlowReduceLabelData + 1]uint8{
 	KindJSDocText:      uint8(unsafe.Offsetof(jsDocTextData{}.text)),
 	KindJSDocLink:      uint8(unsafe.Offsetof(jsDocLinkData{}.text)),
@@ -2580,7 +2626,8 @@ type (
 	WithStatementNode                 = Node
 	SwitchStatementNode               = Node
 	CaseBlockNode                     = Node
-	CaseOrDefaultClauseNode           = Node
+	CaseClauseNode                    = Node
+	DefaultClauseNode                 = Node
 	ThrowStatementNode                = Node
 	TryStatementNode                  = Node
 	CatchClauseNode                   = Node
@@ -2853,6 +2900,7 @@ type (
 	JsxAttributeName               = Node // Identifier | JsxNamespacedName
 	JsxAttributeValue              = Node // StringLiteral | JsxExpression | JsxElement | JsxSelfClosingElement | JsxFragment
 	JsxTagNameExpression           = Node // Identifier | ThisExpression | JsxTagNamePropertyAccess | JsxNamespacedName
+	CaseOrDefaultClause            = Node // CaseClause | DefaultClause
 	ClassLikeDeclaration           = Node // ClassDeclaration | ClassExpression
 	AccessorDeclaration            = Node // GetAccessorDeclaration | SetAccessorDeclaration
 	LiteralLikeNode                = Node // StringLiteral | NumericLiteral | BigIntLiteral | RegularExpressionLiteral | TemplateLiteralLikeNode | JsxText
@@ -4011,84 +4059,131 @@ func IsCaseBlock(node Node) bool {
 }
 
 // ──────────────────────────────────────────────────────────────────────
-// CaseOrDefaultClause
+// CaseClause
 // ──────────────────────────────────────────────────────────────────────
 
-type caseOrDefaultClauseData struct {
+type caseClauseData struct {
 	nodeBaseData
-	facts               atomic.Uint32
-	expression          nodeRef // Expression
 	statements          listRef // StatementList
 	fallthroughFlowNode flowRef // FlowNode
+	facts               atomic.Uint32
+	expression          nodeRef // Expression
 }
 
-type CaseOrDefaultClause struct{ Node }
+type CaseClause struct{ Node }
 
-func (node CaseOrDefaultClause) data() *caseOrDefaultClauseData {
-	return (*caseOrDefaultClauseData)(node.rec())
-}
+func (node CaseClause) data() *caseClauseData { return (*caseClauseData)(node.rec()) }
 
-func (node CaseOrDefaultClause) Expression() Expression { return node.deref(&node.data().expression) }
-
-func (node CaseOrDefaultClause) SetExpression(value Expression) {
-	node.setRef(&node.data().expression, value)
-}
-
-func (node CaseOrDefaultClause) Statements() StatementList {
-	return node.derefList(&node.data().statements)
-}
-
-func (node CaseOrDefaultClause) SetStatements(value StatementList) {
+func (node CaseClause) Statements() StatementList { return node.derefList(&node.data().statements) }
+func (node CaseClause) SetStatements(value StatementList) {
 	node.setListRef(&node.data().statements, value)
 }
 
-func (node CaseOrDefaultClause) FallthroughFlowNode() FlowNode {
+func (node CaseClause) FallthroughFlowNode() FlowNode {
 	return node.derefFlow(&node.data().fallthroughFlowNode)
 }
 
-func (node CaseOrDefaultClause) SetFallthroughFlowNode(value FlowNode) {
+func (node CaseClause) SetFallthroughFlowNode(value FlowNode) {
 	node.setFlowRef(&node.data().fallthroughFlowNode, value)
 }
 
-func (f *NodeFactory) NewCaseOrDefaultClause(kind Kind, expression Expression, statements StatementList) Node {
-	switch kind {
-	case KindCaseClause, KindDefaultClause:
-	default:
-		panic("Invalid node kind for CaseOrDefaultClause")
-	}
+func (node CaseClause) Expression() Expression { return node.deref(&node.data().expression) }
+
+func (node CaseClause) SetExpression(value Expression) { node.setRef(&node.data().expression, value) }
+
+func (f *NodeFactory) NewCaseClause(expression Expression, statements StatementList) Node {
 	s := f.nodeStore()
-	data, i := newRecord[caseOrDefaultClauseData](s, layoutCaseOrDefaultClause)
+	data, i := newRecord[caseClauseData](s, layoutCaseClause)
 	setNodeRef(&data.expression, i, expression)
 	setListRefAt(&data.statements, i, statements)
-	return f.newNode(kind, layoutCaseOrDefaultClause, i)
+	return f.newNode(KindCaseClause, layoutCaseClause, i)
 }
 
-func (f *NodeFactory) UpdateCaseOrDefaultClause(node CaseOrDefaultClause, expression Expression, statements StatementList) Node {
+func (f *NodeFactory) UpdateCaseClause(node CaseClause, expression Expression, statements StatementList) Node {
 	if expression != node.Expression() || statements != node.Statements() {
-		return updateNode(f.NewCaseOrDefaultClause(node.Kind(), expression, statements), node.AsNode(), f.hooks)
+		return updateNode(f.NewCaseClause(expression, statements), node.AsNode(), f.hooks)
 	}
 	return node.AsNode()
 }
 
-func (node CaseOrDefaultClause) ForEachChild(v Visitor) bool {
+func (node CaseClause) ForEachChild(v Visitor) bool {
 	return visit(v, node.Expression()) || visitNodeList(v, node.Statements())
 }
 
-func (node CaseOrDefaultClause) VisitEachChild(v *NodeVisitor) Node {
-	return v.Factory.UpdateCaseOrDefaultClause(node, v.visitNode(node.Expression()), v.visitNodes(node.Statements()))
+func (node CaseClause) VisitEachChild(v *NodeVisitor) Node {
+	return v.Factory.UpdateCaseClause(node, v.visitNode(node.Expression()), v.visitNodes(node.Statements()))
 }
 
-func (node CaseOrDefaultClause) Clone(f NodeFactoryCoercible) Node {
-	return cloneNode(f.AsNodeFactory().NewCaseOrDefaultClause(node.Kind(), node.Expression(), node.Statements()), node.AsNode(), f.AsNodeFactory().hooks)
+func (node CaseClause) Clone(f NodeFactoryCoercible) Node {
+	return cloneNode(f.AsNodeFactory().NewCaseClause(node.Expression(), node.Statements()), node.AsNode(), f.AsNodeFactory().hooks)
 }
 
-func (node CaseOrDefaultClause) computeSubtreeFacts() SubtreeFacts {
+func (node CaseClause) computeSubtreeFacts() SubtreeFacts {
 	return propagateSubtreeFacts(node.Expression()) |
 		propagateNodeListSubtreeFacts(node.Statements(), propagateSubtreeFacts)
 }
 
 func IsCaseClause(node Node) bool {
 	return node.Kind() == KindCaseClause
+}
+
+// ──────────────────────────────────────────────────────────────────────
+// DefaultClause
+// ──────────────────────────────────────────────────────────────────────
+
+type defaultClauseData struct {
+	nodeBaseData
+	statements          listRef // StatementList
+	fallthroughFlowNode flowRef // FlowNode
+	facts               atomic.Uint32
+}
+
+type DefaultClause struct{ Node }
+
+func (node DefaultClause) data() *defaultClauseData { return (*defaultClauseData)(node.rec()) }
+
+func (node DefaultClause) Statements() StatementList { return node.derefList(&node.data().statements) }
+
+func (node DefaultClause) SetStatements(value StatementList) {
+	node.setListRef(&node.data().statements, value)
+}
+
+func (node DefaultClause) FallthroughFlowNode() FlowNode {
+	return node.derefFlow(&node.data().fallthroughFlowNode)
+}
+
+func (node DefaultClause) SetFallthroughFlowNode(value FlowNode) {
+	node.setFlowRef(&node.data().fallthroughFlowNode, value)
+}
+
+func (f *NodeFactory) NewDefaultClause(statements StatementList) Node {
+	s := f.nodeStore()
+	data, i := newRecord[defaultClauseData](s, layoutDefaultClause)
+	setListRefAt(&data.statements, i, statements)
+	return f.newNode(KindDefaultClause, layoutDefaultClause, i)
+}
+
+func (f *NodeFactory) UpdateDefaultClause(node DefaultClause, statements StatementList) Node {
+	if statements != node.Statements() {
+		return updateNode(f.NewDefaultClause(statements), node.AsNode(), f.hooks)
+	}
+	return node.AsNode()
+}
+
+func (node DefaultClause) ForEachChild(v Visitor) bool {
+	return visitNodeList(v, node.Statements())
+}
+
+func (node DefaultClause) VisitEachChild(v *NodeVisitor) Node {
+	return v.Factory.UpdateDefaultClause(node, v.visitNodes(node.Statements()))
+}
+
+func (node DefaultClause) Clone(f NodeFactoryCoercible) Node {
+	return cloneNode(f.AsNodeFactory().NewDefaultClause(node.Statements()), node.AsNode(), f.AsNodeFactory().hooks)
+}
+
+func (node DefaultClause) computeSubtreeFacts() SubtreeFacts {
+	return propagateNodeListSubtreeFacts(node.Statements(), propagateSubtreeFacts)
 }
 
 func IsDefaultClause(node Node) bool {
@@ -6410,7 +6505,7 @@ type exportAssignmentData struct {
 	symbol         sideRef // *Symbol
 	modifiers      listRef // ModifierList. Optional
 	facts          atomic.Uint32
-	typeField      nodeRef // TypeNode
+	typeField      nodeRef // TypeNode. Optional
 	expression     nodeRef // Expression
 	isExportEquals bool
 }
@@ -7851,8 +7946,8 @@ type propertySignatureDeclarationData struct {
 	modifiers    listRef // ModifierList. Optional
 	name         nodeRef // PropertyName
 	postfixToken nodeRef // TokenNode. Optional
-	typeField    nodeRef // TypeNode
-	initializer  nodeRef // Expression
+	typeField    nodeRef // TypeNode. Optional
+	initializer  nodeRef // Expression. Optional
 }
 
 type PropertySignatureDeclaration struct{ Node }
@@ -8824,6 +8919,9 @@ func (node ArrowFunction) SetEqualsGreaterThanToken(value EqualsGreaterThanToken
 }
 
 func (f *NodeFactory) NewArrowFunction(modifiers ModifierList, typeParameters TypeParameterList, parameters ParameterList, typeNode TypeNode, fullSignature TypeNode, equalsGreaterThanToken EqualsGreaterThanToken, body ConciseBody) Node {
+	if equalsGreaterThanToken.IsNil() {
+		equalsGreaterThanToken = f.NewToken(KindEqualsGreaterThanToken)
+	}
 	s := f.nodeStore()
 	data, i := newRecord[arrowFunctionData](s, layoutArrowFunction)
 	setModifiersRefAt(&data.modifiers, i, modifiers)
@@ -9835,7 +9933,7 @@ type taggedTemplateExpressionData struct {
 	nodeBaseData
 	facts            atomic.Uint32
 	tag              nodeRef // Expression
-	questionDotToken nodeRef // QuestionDotToken
+	questionDotToken nodeRef // QuestionDotToken. Optional
 	typeArguments    listRef // TypeList. Optional
 	template         nodeRef // TemplateLiteral
 }
@@ -10167,7 +10265,7 @@ type propertyAssignmentData struct {
 	name         nodeRef // PropertyName
 	postfixToken nodeRef // TokenNode. Optional
 	facts        atomic.Uint32
-	typeField    nodeRef // TypeNode
+	typeField    nodeRef // TypeNode. Optional
 	initializer  nodeRef // Expression
 }
 
@@ -10255,7 +10353,7 @@ type shorthandPropertyAssignmentData struct {
 	name                        nodeRef // PropertyName
 	postfixToken                nodeRef // TokenNode. Optional
 	facts                       atomic.Uint32
-	typeField                   nodeRef // TypeNode
+	typeField                   nodeRef // TypeNode. Optional
 	equalsToken                 nodeRef // EqualsToken. Optional
 	objectAssignmentInitializer nodeRef // Expression. Optional
 }
@@ -13708,7 +13806,7 @@ type jsDocTemplateTagData struct {
 	nodeBaseData
 	tagName        nodeRef // IdentifierNode
 	comment        listRef // NodeList. Optional
-	constraint     nodeRef // Node
+	constraint     nodeRef // Node. Optional
 	typeParameters listRef // TypeParameterList
 }
 
@@ -14169,7 +14267,7 @@ type jsDocSeeTagData struct {
 	nodeBaseData
 	tagName        nodeRef // IdentifierNode
 	comment        listRef // NodeList. Optional
-	nameExpression nodeRef // TypeNode
+	nameExpression nodeRef // TypeNode. Optional
 }
 
 type JSDocSeeTag struct{ Node }
@@ -16072,338 +16170,508 @@ func IsJSDocPropertyTag(node Node) bool {
 func (n Node) ForEachChild(v Visitor) bool {
 	switch n.Kind() {
 	case KindQualifiedName:
+		// SAFETY: This case only matches kinds backed by a QualifiedName record.
 		return QualifiedName{n}.ForEachChild(v)
 	case KindComputedPropertyName:
+		// SAFETY: This case only matches kinds backed by a ComputedPropertyName record.
 		return ComputedPropertyName{n}.ForEachChild(v)
 	case KindDecorator:
+		// SAFETY: This case only matches kinds backed by a Decorator record.
 		return Decorator{n}.ForEachChild(v)
 	case KindIfStatement:
+		// SAFETY: This case only matches kinds backed by a IfStatement record.
 		return IfStatement{n}.ForEachChild(v)
 	case KindDoStatement:
+		// SAFETY: This case only matches kinds backed by a DoStatement record.
 		return DoStatement{n}.ForEachChild(v)
 	case KindWhileStatement:
+		// SAFETY: This case only matches kinds backed by a WhileStatement record.
 		return WhileStatement{n}.ForEachChild(v)
 	case KindForStatement:
+		// SAFETY: This case only matches kinds backed by a ForStatement record.
 		return ForStatement{n}.ForEachChild(v)
 	case KindForInStatement, KindForOfStatement:
+		// SAFETY: This case only matches kinds backed by a ForInOrOfStatement record.
 		return ForInOrOfStatement{n}.ForEachChild(v)
 	case KindBreakStatement:
+		// SAFETY: This case only matches kinds backed by a BreakStatement record.
 		return BreakStatement{n}.ForEachChild(v)
 	case KindContinueStatement:
+		// SAFETY: This case only matches kinds backed by a ContinueStatement record.
 		return ContinueStatement{n}.ForEachChild(v)
 	case KindReturnStatement:
+		// SAFETY: This case only matches kinds backed by a ReturnStatement record.
 		return ReturnStatement{n}.ForEachChild(v)
 	case KindWithStatement:
+		// SAFETY: This case only matches kinds backed by a WithStatement record.
 		return WithStatement{n}.ForEachChild(v)
 	case KindSwitchStatement:
+		// SAFETY: This case only matches kinds backed by a SwitchStatement record.
 		return SwitchStatement{n}.ForEachChild(v)
 	case KindCaseBlock:
+		// SAFETY: This case only matches kinds backed by a CaseBlock record.
 		return CaseBlock{n}.ForEachChild(v)
-	case KindCaseClause, KindDefaultClause:
-		return CaseOrDefaultClause{n}.ForEachChild(v)
+	case KindCaseClause:
+		// SAFETY: This case only matches kinds backed by a CaseClause record.
+		return CaseClause{n}.ForEachChild(v)
+	case KindDefaultClause:
+		// SAFETY: This case only matches kinds backed by a DefaultClause record.
+		return DefaultClause{n}.ForEachChild(v)
 	case KindThrowStatement:
+		// SAFETY: This case only matches kinds backed by a ThrowStatement record.
 		return ThrowStatement{n}.ForEachChild(v)
 	case KindTryStatement:
+		// SAFETY: This case only matches kinds backed by a TryStatement record.
 		return TryStatement{n}.ForEachChild(v)
 	case KindCatchClause:
+		// SAFETY: This case only matches kinds backed by a CatchClause record.
 		return CatchClause{n}.ForEachChild(v)
 	case KindLabeledStatement:
+		// SAFETY: This case only matches kinds backed by a LabeledStatement record.
 		return LabeledStatement{n}.ForEachChild(v)
 	case KindExpressionStatement:
+		// SAFETY: This case only matches kinds backed by a ExpressionStatement record.
 		return ExpressionStatement{n}.ForEachChild(v)
 	case KindBlock:
+		// SAFETY: This case only matches kinds backed by a Block record.
 		return Block{n}.ForEachChild(v)
 	case KindVariableStatement:
+		// SAFETY: This case only matches kinds backed by a VariableStatement record.
 		return VariableStatement{n}.ForEachChild(v)
 	case KindVariableDeclaration:
+		// SAFETY: This case only matches kinds backed by a VariableDeclaration record.
 		return VariableDeclaration{n}.ForEachChild(v)
 	case KindVariableDeclarationList:
+		// SAFETY: This case only matches kinds backed by a VariableDeclarationList record.
 		return VariableDeclarationList{n}.ForEachChild(v)
 	case KindObjectBindingPattern, KindArrayBindingPattern:
+		// SAFETY: This case only matches kinds backed by a BindingPattern record.
 		return BindingPattern{n}.ForEachChild(v)
 	case KindParameter:
+		// SAFETY: This case only matches kinds backed by a ParameterDeclaration record.
 		return ParameterDeclaration{n}.ForEachChild(v)
 	case KindBindingElement:
+		// SAFETY: This case only matches kinds backed by a BindingElement record.
 		return BindingElement{n}.ForEachChild(v)
 	case KindMissingDeclaration:
+		// SAFETY: This case only matches kinds backed by a MissingDeclaration record.
 		return MissingDeclaration{n}.ForEachChild(v)
 	case KindFunctionDeclaration:
+		// SAFETY: This case only matches kinds backed by a FunctionDeclaration record.
 		return FunctionDeclaration{n}.ForEachChild(v)
 	case KindClassDeclaration:
+		// SAFETY: This case only matches kinds backed by a ClassDeclaration record.
 		return ClassDeclaration{n}.ForEachChild(v)
 	case KindClassExpression:
+		// SAFETY: This case only matches kinds backed by a ClassExpression record.
 		return ClassExpression{n}.ForEachChild(v)
 	case KindHeritageClause:
+		// SAFETY: This case only matches kinds backed by a HeritageClause record.
 		return HeritageClause{n}.ForEachChild(v)
 	case KindInterfaceDeclaration:
+		// SAFETY: This case only matches kinds backed by a InterfaceDeclaration record.
 		return InterfaceDeclaration{n}.ForEachChild(v)
 	case KindTypeAliasDeclaration, KindJSTypeAliasDeclaration:
+		// SAFETY: This case only matches kinds backed by a TypeAliasDeclaration record.
 		return TypeAliasDeclaration{n}.ForEachChild(v)
 	case KindEnumMember:
+		// SAFETY: This case only matches kinds backed by a EnumMember record.
 		return EnumMember{n}.ForEachChild(v)
 	case KindEnumDeclaration:
+		// SAFETY: This case only matches kinds backed by a EnumDeclaration record.
 		return EnumDeclaration{n}.ForEachChild(v)
 	case KindModuleBlock:
+		// SAFETY: This case only matches kinds backed by a ModuleBlock record.
 		return ModuleBlock{n}.ForEachChild(v)
 	case KindImportDeclaration, KindJSImportDeclaration:
+		// SAFETY: This case only matches kinds backed by a ImportDeclaration record.
 		return ImportDeclaration{n}.ForEachChild(v)
 	case KindExternalModuleReference:
+		// SAFETY: This case only matches kinds backed by a ExternalModuleReference record.
 		return ExternalModuleReference{n}.ForEachChild(v)
 	case KindNamespaceImport:
+		// SAFETY: This case only matches kinds backed by a NamespaceImport record.
 		return NamespaceImport{n}.ForEachChild(v)
 	case KindNamedImports:
+		// SAFETY: This case only matches kinds backed by a NamedImports record.
 		return NamedImports{n}.ForEachChild(v)
 	case KindExportAssignment:
+		// SAFETY: This case only matches kinds backed by a ExportAssignment record.
 		return ExportAssignment{n}.ForEachChild(v)
 	case KindNamespaceExportDeclaration:
+		// SAFETY: This case only matches kinds backed by a NamespaceExportDeclaration record.
 		return NamespaceExportDeclaration{n}.ForEachChild(v)
 	case KindNamespaceExport:
+		// SAFETY: This case only matches kinds backed by a NamespaceExport record.
 		return NamespaceExport{n}.ForEachChild(v)
 	case KindNamedExports:
+		// SAFETY: This case only matches kinds backed by a NamedExports record.
 		return NamedExports{n}.ForEachChild(v)
 	case KindExportSpecifier:
+		// SAFETY: This case only matches kinds backed by a ExportSpecifier record.
 		return ExportSpecifier{n}.ForEachChild(v)
 	case KindCallSignature:
+		// SAFETY: This case only matches kinds backed by a CallSignatureDeclaration record.
 		return CallSignatureDeclaration{n}.ForEachChild(v)
 	case KindConstructSignature:
+		// SAFETY: This case only matches kinds backed by a ConstructSignatureDeclaration record.
 		return ConstructSignatureDeclaration{n}.ForEachChild(v)
 	case KindConstructor:
+		// SAFETY: This case only matches kinds backed by a ConstructorDeclaration record.
 		return ConstructorDeclaration{n}.ForEachChild(v)
 	case KindGetAccessor:
+		// SAFETY: This case only matches kinds backed by a GetAccessorDeclaration record.
 		return GetAccessorDeclaration{n}.ForEachChild(v)
 	case KindSetAccessor:
+		// SAFETY: This case only matches kinds backed by a SetAccessorDeclaration record.
 		return SetAccessorDeclaration{n}.ForEachChild(v)
 	case KindIndexSignature:
+		// SAFETY: This case only matches kinds backed by a IndexSignatureDeclaration record.
 		return IndexSignatureDeclaration{n}.ForEachChild(v)
 	case KindMethodSignature:
+		// SAFETY: This case only matches kinds backed by a MethodSignatureDeclaration record.
 		return MethodSignatureDeclaration{n}.ForEachChild(v)
 	case KindMethodDeclaration:
+		// SAFETY: This case only matches kinds backed by a MethodDeclaration record.
 		return MethodDeclaration{n}.ForEachChild(v)
 	case KindPropertySignature:
+		// SAFETY: This case only matches kinds backed by a PropertySignatureDeclaration record.
 		return PropertySignatureDeclaration{n}.ForEachChild(v)
 	case KindPropertyDeclaration:
+		// SAFETY: This case only matches kinds backed by a PropertyDeclaration record.
 		return PropertyDeclaration{n}.ForEachChild(v)
 	case KindClassStaticBlockDeclaration:
+		// SAFETY: This case only matches kinds backed by a ClassStaticBlockDeclaration record.
 		return ClassStaticBlockDeclaration{n}.ForEachChild(v)
 	case KindBinaryExpression:
+		// SAFETY: This case only matches kinds backed by a BinaryExpression record.
 		return BinaryExpression{n}.ForEachChild(v)
 	case KindPrefixUnaryExpression:
+		// SAFETY: This case only matches kinds backed by a PrefixUnaryExpression record.
 		return PrefixUnaryExpression{n}.ForEachChild(v)
 	case KindPostfixUnaryExpression:
+		// SAFETY: This case only matches kinds backed by a PostfixUnaryExpression record.
 		return PostfixUnaryExpression{n}.ForEachChild(v)
 	case KindYieldExpression:
+		// SAFETY: This case only matches kinds backed by a YieldExpression record.
 		return YieldExpression{n}.ForEachChild(v)
 	case KindArrowFunction:
+		// SAFETY: This case only matches kinds backed by a ArrowFunction record.
 		return ArrowFunction{n}.ForEachChild(v)
 	case KindFunctionExpression:
+		// SAFETY: This case only matches kinds backed by a FunctionExpression record.
 		return FunctionExpression{n}.ForEachChild(v)
 	case KindAsExpression:
+		// SAFETY: This case only matches kinds backed by a AsExpression record.
 		return AsExpression{n}.ForEachChild(v)
 	case KindSatisfiesExpression:
+		// SAFETY: This case only matches kinds backed by a SatisfiesExpression record.
 		return SatisfiesExpression{n}.ForEachChild(v)
 	case KindConditionalExpression:
+		// SAFETY: This case only matches kinds backed by a ConditionalExpression record.
 		return ConditionalExpression{n}.ForEachChild(v)
 	case KindPropertyAccessExpression:
+		// SAFETY: This case only matches kinds backed by a PropertyAccessExpression record.
 		return PropertyAccessExpression{n}.ForEachChild(v)
 	case KindElementAccessExpression:
+		// SAFETY: This case only matches kinds backed by a ElementAccessExpression record.
 		return ElementAccessExpression{n}.ForEachChild(v)
 	case KindCallExpression:
+		// SAFETY: This case only matches kinds backed by a CallExpression record.
 		return CallExpression{n}.ForEachChild(v)
 	case KindNewExpression:
+		// SAFETY: This case only matches kinds backed by a NewExpression record.
 		return NewExpression{n}.ForEachChild(v)
 	case KindMetaProperty:
+		// SAFETY: This case only matches kinds backed by a MetaProperty record.
 		return MetaProperty{n}.ForEachChild(v)
 	case KindNonNullExpression:
+		// SAFETY: This case only matches kinds backed by a NonNullExpression record.
 		return NonNullExpression{n}.ForEachChild(v)
 	case KindSpreadElement:
+		// SAFETY: This case only matches kinds backed by a SpreadElement record.
 		return SpreadElement{n}.ForEachChild(v)
 	case KindTemplateExpression:
+		// SAFETY: This case only matches kinds backed by a TemplateExpression record.
 		return TemplateExpression{n}.ForEachChild(v)
 	case KindTemplateSpan:
+		// SAFETY: This case only matches kinds backed by a TemplateSpan record.
 		return TemplateSpan{n}.ForEachChild(v)
 	case KindTaggedTemplateExpression:
+		// SAFETY: This case only matches kinds backed by a TaggedTemplateExpression record.
 		return TaggedTemplateExpression{n}.ForEachChild(v)
 	case KindParenthesizedExpression:
+		// SAFETY: This case only matches kinds backed by a ParenthesizedExpression record.
 		return ParenthesizedExpression{n}.ForEachChild(v)
 	case KindArrayLiteralExpression:
+		// SAFETY: This case only matches kinds backed by a ArrayLiteralExpression record.
 		return ArrayLiteralExpression{n}.ForEachChild(v)
 	case KindObjectLiteralExpression:
+		// SAFETY: This case only matches kinds backed by a ObjectLiteralExpression record.
 		return ObjectLiteralExpression{n}.ForEachChild(v)
 	case KindSpreadAssignment:
+		// SAFETY: This case only matches kinds backed by a SpreadAssignment record.
 		return SpreadAssignment{n}.ForEachChild(v)
 	case KindPropertyAssignment:
+		// SAFETY: This case only matches kinds backed by a PropertyAssignment record.
 		return PropertyAssignment{n}.ForEachChild(v)
 	case KindShorthandPropertyAssignment:
+		// SAFETY: This case only matches kinds backed by a ShorthandPropertyAssignment record.
 		return ShorthandPropertyAssignment{n}.ForEachChild(v)
 	case KindDeleteExpression:
+		// SAFETY: This case only matches kinds backed by a DeleteExpression record.
 		return DeleteExpression{n}.ForEachChild(v)
 	case KindTypeOfExpression:
+		// SAFETY: This case only matches kinds backed by a TypeOfExpression record.
 		return TypeOfExpression{n}.ForEachChild(v)
 	case KindVoidExpression:
+		// SAFETY: This case only matches kinds backed by a VoidExpression record.
 		return VoidExpression{n}.ForEachChild(v)
 	case KindAwaitExpression:
+		// SAFETY: This case only matches kinds backed by a AwaitExpression record.
 		return AwaitExpression{n}.ForEachChild(v)
 	case KindTypeAssertionExpression:
+		// SAFETY: This case only matches kinds backed by a TypeAssertion record.
 		return TypeAssertion{n}.ForEachChild(v)
 	case KindUnionType:
+		// SAFETY: This case only matches kinds backed by a UnionTypeNode record.
 		return UnionTypeNode{n}.ForEachChild(v)
 	case KindIntersectionType:
+		// SAFETY: This case only matches kinds backed by a IntersectionTypeNode record.
 		return IntersectionTypeNode{n}.ForEachChild(v)
 	case KindConditionalType:
+		// SAFETY: This case only matches kinds backed by a ConditionalTypeNode record.
 		return ConditionalTypeNode{n}.ForEachChild(v)
 	case KindTypeOperator:
+		// SAFETY: This case only matches kinds backed by a TypeOperatorNode record.
 		return TypeOperatorNode{n}.ForEachChild(v)
 	case KindInferType:
+		// SAFETY: This case only matches kinds backed by a InferTypeNode record.
 		return InferTypeNode{n}.ForEachChild(v)
 	case KindArrayType:
+		// SAFETY: This case only matches kinds backed by a ArrayTypeNode record.
 		return ArrayTypeNode{n}.ForEachChild(v)
 	case KindIndexedAccessType:
+		// SAFETY: This case only matches kinds backed by a IndexedAccessTypeNode record.
 		return IndexedAccessTypeNode{n}.ForEachChild(v)
 	case KindTypeReference:
+		// SAFETY: This case only matches kinds backed by a TypeReferenceNode record.
 		return TypeReferenceNode{n}.ForEachChild(v)
 	case KindExpressionWithTypeArguments:
+		// SAFETY: This case only matches kinds backed by a ExpressionWithTypeArguments record.
 		return ExpressionWithTypeArguments{n}.ForEachChild(v)
 	case KindLiteralType:
+		// SAFETY: This case only matches kinds backed by a LiteralTypeNode record.
 		return LiteralTypeNode{n}.ForEachChild(v)
 	case KindTypePredicate:
+		// SAFETY: This case only matches kinds backed by a TypePredicateNode record.
 		return TypePredicateNode{n}.ForEachChild(v)
 	case KindImportAttribute:
+		// SAFETY: This case only matches kinds backed by a ImportAttribute record.
 		return ImportAttribute{n}.ForEachChild(v)
 	case KindImportAttributes:
+		// SAFETY: This case only matches kinds backed by a ImportAttributes record.
 		return ImportAttributes{n}.ForEachChild(v)
 	case KindTypeQuery:
+		// SAFETY: This case only matches kinds backed by a TypeQueryNode record.
 		return TypeQueryNode{n}.ForEachChild(v)
 	case KindMappedType:
+		// SAFETY: This case only matches kinds backed by a MappedTypeNode record.
 		return MappedTypeNode{n}.ForEachChild(v)
 	case KindTypeLiteral:
+		// SAFETY: This case only matches kinds backed by a TypeLiteralNode record.
 		return TypeLiteralNode{n}.ForEachChild(v)
 	case KindTupleType:
+		// SAFETY: This case only matches kinds backed by a TupleTypeNode record.
 		return TupleTypeNode{n}.ForEachChild(v)
 	case KindNamedTupleMember:
+		// SAFETY: This case only matches kinds backed by a NamedTupleMember record.
 		return NamedTupleMember{n}.ForEachChild(v)
 	case KindOptionalType:
+		// SAFETY: This case only matches kinds backed by a OptionalTypeNode record.
 		return OptionalTypeNode{n}.ForEachChild(v)
 	case KindRestType:
+		// SAFETY: This case only matches kinds backed by a RestTypeNode record.
 		return RestTypeNode{n}.ForEachChild(v)
 	case KindParenthesizedType:
+		// SAFETY: This case only matches kinds backed by a ParenthesizedTypeNode record.
 		return ParenthesizedTypeNode{n}.ForEachChild(v)
 	case KindFunctionType:
+		// SAFETY: This case only matches kinds backed by a FunctionTypeNode record.
 		return FunctionTypeNode{n}.ForEachChild(v)
 	case KindConstructorType:
+		// SAFETY: This case only matches kinds backed by a ConstructorTypeNode record.
 		return ConstructorTypeNode{n}.ForEachChild(v)
 	case KindTemplateLiteralType:
+		// SAFETY: This case only matches kinds backed by a TemplateLiteralTypeNode record.
 		return TemplateLiteralTypeNode{n}.ForEachChild(v)
 	case KindTemplateLiteralTypeSpan:
+		// SAFETY: This case only matches kinds backed by a TemplateLiteralTypeSpan record.
 		return TemplateLiteralTypeSpan{n}.ForEachChild(v)
 	case KindSyntheticExpression:
+		// SAFETY: This case only matches kinds backed by a SyntheticExpression record.
 		return SyntheticExpression{n}.ForEachChild(v)
 	case KindPartiallyEmittedExpression:
+		// SAFETY: This case only matches kinds backed by a PartiallyEmittedExpression record.
 		return PartiallyEmittedExpression{n}.ForEachChild(v)
 	case KindJsxElement:
+		// SAFETY: This case only matches kinds backed by a JsxElement record.
 		return JsxElement{n}.ForEachChild(v)
 	case KindJsxAttributes:
+		// SAFETY: This case only matches kinds backed by a JsxAttributes record.
 		return JsxAttributes{n}.ForEachChild(v)
 	case KindJsxNamespacedName:
+		// SAFETY: This case only matches kinds backed by a JsxNamespacedName record.
 		return JsxNamespacedName{n}.ForEachChild(v)
 	case KindJsxOpeningElement:
+		// SAFETY: This case only matches kinds backed by a JsxOpeningElement record.
 		return JsxOpeningElement{n}.ForEachChild(v)
 	case KindJsxSelfClosingElement:
+		// SAFETY: This case only matches kinds backed by a JsxSelfClosingElement record.
 		return JsxSelfClosingElement{n}.ForEachChild(v)
 	case KindJsxFragment:
+		// SAFETY: This case only matches kinds backed by a JsxFragment record.
 		return JsxFragment{n}.ForEachChild(v)
 	case KindJsxAttribute:
+		// SAFETY: This case only matches kinds backed by a JsxAttribute record.
 		return JsxAttribute{n}.ForEachChild(v)
 	case KindJsxSpreadAttribute:
+		// SAFETY: This case only matches kinds backed by a JsxSpreadAttribute record.
 		return JsxSpreadAttribute{n}.ForEachChild(v)
 	case KindJsxClosingElement:
+		// SAFETY: This case only matches kinds backed by a JsxClosingElement record.
 		return JsxClosingElement{n}.ForEachChild(v)
 	case KindJsxExpression:
+		// SAFETY: This case only matches kinds backed by a JsxExpression record.
 		return JsxExpression{n}.ForEachChild(v)
 	case KindSyntaxList:
+		// SAFETY: This case only matches kinds backed by a SyntaxList record.
 		return SyntaxList{n}.ForEachChild(v)
 	case KindJSDoc:
+		// SAFETY: This case only matches kinds backed by a JSDoc record.
 		return JSDoc{n}.ForEachChild(v)
 	case KindJSDocTypeExpression:
+		// SAFETY: This case only matches kinds backed by a JSDocTypeExpression record.
 		return JSDocTypeExpression{n}.ForEachChild(v)
 	case KindJSDocNonNullableType:
+		// SAFETY: This case only matches kinds backed by a JSDocNonNullableType record.
 		return JSDocNonNullableType{n}.ForEachChild(v)
 	case KindJSDocNullableType:
+		// SAFETY: This case only matches kinds backed by a JSDocNullableType record.
 		return JSDocNullableType{n}.ForEachChild(v)
 	case KindJSDocVariadicType:
+		// SAFETY: This case only matches kinds backed by a JSDocVariadicType record.
 		return JSDocVariadicType{n}.ForEachChild(v)
 	case KindJSDocOptionalType:
+		// SAFETY: This case only matches kinds backed by a JSDocOptionalType record.
 		return JSDocOptionalType{n}.ForEachChild(v)
 	case KindJSDocTypeTag:
+		// SAFETY: This case only matches kinds backed by a JSDocTypeTag record.
 		return JSDocTypeTag{n}.ForEachChild(v)
 	case KindJSDocUnknownTag:
+		// SAFETY: This case only matches kinds backed by a JSDocUnknownTag record.
 		return JSDocUnknownTag{n}.ForEachChild(v)
 	case KindJSDocTemplateTag:
+		// SAFETY: This case only matches kinds backed by a JSDocTemplateTag record.
 		return JSDocTemplateTag{n}.ForEachChild(v)
 	case KindJSDocReturnTag:
+		// SAFETY: This case only matches kinds backed by a JSDocReturnTag record.
 		return JSDocReturnTag{n}.ForEachChild(v)
 	case KindJSDocPublicTag:
+		// SAFETY: This case only matches kinds backed by a JSDocPublicTag record.
 		return JSDocPublicTag{n}.ForEachChild(v)
 	case KindJSDocPrivateTag:
+		// SAFETY: This case only matches kinds backed by a JSDocPrivateTag record.
 		return JSDocPrivateTag{n}.ForEachChild(v)
 	case KindJSDocProtectedTag:
+		// SAFETY: This case only matches kinds backed by a JSDocProtectedTag record.
 		return JSDocProtectedTag{n}.ForEachChild(v)
 	case KindJSDocReadonlyTag:
+		// SAFETY: This case only matches kinds backed by a JSDocReadonlyTag record.
 		return JSDocReadonlyTag{n}.ForEachChild(v)
 	case KindJSDocOverrideTag:
+		// SAFETY: This case only matches kinds backed by a JSDocOverrideTag record.
 		return JSDocOverrideTag{n}.ForEachChild(v)
 	case KindJSDocDeprecatedTag:
+		// SAFETY: This case only matches kinds backed by a JSDocDeprecatedTag record.
 		return JSDocDeprecatedTag{n}.ForEachChild(v)
 	case KindJSDocSeeTag:
+		// SAFETY: This case only matches kinds backed by a JSDocSeeTag record.
 		return JSDocSeeTag{n}.ForEachChild(v)
 	case KindJSDocImplementsTag:
+		// SAFETY: This case only matches kinds backed by a JSDocImplementsTag record.
 		return JSDocImplementsTag{n}.ForEachChild(v)
 	case KindJSDocAugmentsTag:
+		// SAFETY: This case only matches kinds backed by a JSDocAugmentsTag record.
 		return JSDocAugmentsTag{n}.ForEachChild(v)
 	case KindJSDocSatisfiesTag:
+		// SAFETY: This case only matches kinds backed by a JSDocSatisfiesTag record.
 		return JSDocSatisfiesTag{n}.ForEachChild(v)
 	case KindJSDocThrowsTag:
+		// SAFETY: This case only matches kinds backed by a JSDocThrowsTag record.
 		return JSDocThrowsTag{n}.ForEachChild(v)
 	case KindJSDocThisTag:
+		// SAFETY: This case only matches kinds backed by a JSDocThisTag record.
 		return JSDocThisTag{n}.ForEachChild(v)
 	case KindJSDocImportTag:
+		// SAFETY: This case only matches kinds backed by a JSDocImportTag record.
 		return JSDocImportTag{n}.ForEachChild(v)
 	case KindJSDocCallbackTag:
+		// SAFETY: This case only matches kinds backed by a JSDocCallbackTag record.
 		return JSDocCallbackTag{n}.ForEachChild(v)
 	case KindJSDocOverloadTag:
+		// SAFETY: This case only matches kinds backed by a JSDocOverloadTag record.
 		return JSDocOverloadTag{n}.ForEachChild(v)
 	case KindJSDocTypedefTag:
+		// SAFETY: This case only matches kinds backed by a JSDocTypedefTag record.
 		return JSDocTypedefTag{n}.ForEachChild(v)
 	case KindJSDocSignature:
+		// SAFETY: This case only matches kinds backed by a JSDocSignature record.
 		return JSDocSignature{n}.ForEachChild(v)
 	case KindJSDocNameReference:
+		// SAFETY: This case only matches kinds backed by a JSDocNameReference record.
 		return JSDocNameReference{n}.ForEachChild(v)
 	case KindSourceFile:
+		// SAFETY: This case only matches kinds backed by a SourceFile record.
 		return n.asSourceFile().ForEachChild(v)
 	case KindModuleDeclaration:
+		// SAFETY: This case only matches kinds backed by a ModuleDeclaration record.
 		return ModuleDeclaration{n}.ForEachChild(v)
 	case KindImportEqualsDeclaration:
+		// SAFETY: This case only matches kinds backed by a ImportEqualsDeclaration record.
 		return ImportEqualsDeclaration{n}.ForEachChild(v)
 	case KindExportDeclaration:
+		// SAFETY: This case only matches kinds backed by a ExportDeclaration record.
 		return ExportDeclaration{n}.ForEachChild(v)
 	case KindImportType:
+		// SAFETY: This case only matches kinds backed by a ImportTypeNode record.
 		return ImportTypeNode{n}.ForEachChild(v)
 	case KindImportClause:
+		// SAFETY: This case only matches kinds backed by a ImportClause record.
 		return ImportClause{n}.ForEachChild(v)
 	case KindImportSpecifier:
+		// SAFETY: This case only matches kinds backed by a ImportSpecifier record.
 		return ImportSpecifier{n}.ForEachChild(v)
 	case KindJSDocLink:
+		// SAFETY: This case only matches kinds backed by a JSDocLink record.
 		return JSDocLink{n}.ForEachChild(v)
 	case KindJSDocLinkPlain:
+		// SAFETY: This case only matches kinds backed by a JSDocLinkPlain record.
 		return JSDocLinkPlain{n}.ForEachChild(v)
 	case KindJSDocLinkCode:
+		// SAFETY: This case only matches kinds backed by a JSDocLinkCode record.
 		return JSDocLinkCode{n}.ForEachChild(v)
 	case KindTypeParameter:
+		// SAFETY: This case only matches kinds backed by a TypeParameterDeclaration record.
 		return TypeParameterDeclaration{n}.ForEachChild(v)
 	case KindSyntheticReferenceExpression:
+		// SAFETY: This case only matches kinds backed by a SyntheticReferenceExpression record.
 		return SyntheticReferenceExpression{n}.ForEachChild(v)
 	case KindJSDocTypeLiteral:
+		// SAFETY: This case only matches kinds backed by a JSDocTypeLiteral record.
 		return JSDocTypeLiteral{n}.ForEachChild(v)
 	case KindJSDocParameterTag, KindJSDocPropertyTag:
+		// SAFETY: This case only matches kinds backed by a JSDocParameterOrPropertyTag record.
 		return JSDocParameterOrPropertyTag{n}.ForEachChild(v)
 	default:
 		return false
@@ -16417,338 +16685,508 @@ func (n Node) ForEachChild(v Visitor) bool {
 func (n Node) VisitEachChild(v *NodeVisitor) Node {
 	switch n.Kind() {
 	case KindQualifiedName:
+		// SAFETY: This case only matches kinds backed by a QualifiedName record.
 		return QualifiedName{n}.VisitEachChild(v)
 	case KindComputedPropertyName:
+		// SAFETY: This case only matches kinds backed by a ComputedPropertyName record.
 		return ComputedPropertyName{n}.VisitEachChild(v)
 	case KindDecorator:
+		// SAFETY: This case only matches kinds backed by a Decorator record.
 		return Decorator{n}.VisitEachChild(v)
 	case KindIfStatement:
+		// SAFETY: This case only matches kinds backed by a IfStatement record.
 		return IfStatement{n}.VisitEachChild(v)
 	case KindDoStatement:
+		// SAFETY: This case only matches kinds backed by a DoStatement record.
 		return DoStatement{n}.VisitEachChild(v)
 	case KindWhileStatement:
+		// SAFETY: This case only matches kinds backed by a WhileStatement record.
 		return WhileStatement{n}.VisitEachChild(v)
 	case KindForStatement:
+		// SAFETY: This case only matches kinds backed by a ForStatement record.
 		return ForStatement{n}.VisitEachChild(v)
 	case KindForInStatement, KindForOfStatement:
+		// SAFETY: This case only matches kinds backed by a ForInOrOfStatement record.
 		return ForInOrOfStatement{n}.VisitEachChild(v)
 	case KindBreakStatement:
+		// SAFETY: This case only matches kinds backed by a BreakStatement record.
 		return BreakStatement{n}.VisitEachChild(v)
 	case KindContinueStatement:
+		// SAFETY: This case only matches kinds backed by a ContinueStatement record.
 		return ContinueStatement{n}.VisitEachChild(v)
 	case KindReturnStatement:
+		// SAFETY: This case only matches kinds backed by a ReturnStatement record.
 		return ReturnStatement{n}.VisitEachChild(v)
 	case KindWithStatement:
+		// SAFETY: This case only matches kinds backed by a WithStatement record.
 		return WithStatement{n}.VisitEachChild(v)
 	case KindSwitchStatement:
+		// SAFETY: This case only matches kinds backed by a SwitchStatement record.
 		return SwitchStatement{n}.VisitEachChild(v)
 	case KindCaseBlock:
+		// SAFETY: This case only matches kinds backed by a CaseBlock record.
 		return CaseBlock{n}.VisitEachChild(v)
-	case KindCaseClause, KindDefaultClause:
-		return CaseOrDefaultClause{n}.VisitEachChild(v)
+	case KindCaseClause:
+		// SAFETY: This case only matches kinds backed by a CaseClause record.
+		return CaseClause{n}.VisitEachChild(v)
+	case KindDefaultClause:
+		// SAFETY: This case only matches kinds backed by a DefaultClause record.
+		return DefaultClause{n}.VisitEachChild(v)
 	case KindThrowStatement:
+		// SAFETY: This case only matches kinds backed by a ThrowStatement record.
 		return ThrowStatement{n}.VisitEachChild(v)
 	case KindTryStatement:
+		// SAFETY: This case only matches kinds backed by a TryStatement record.
 		return TryStatement{n}.VisitEachChild(v)
 	case KindCatchClause:
+		// SAFETY: This case only matches kinds backed by a CatchClause record.
 		return CatchClause{n}.VisitEachChild(v)
 	case KindLabeledStatement:
+		// SAFETY: This case only matches kinds backed by a LabeledStatement record.
 		return LabeledStatement{n}.VisitEachChild(v)
 	case KindExpressionStatement:
+		// SAFETY: This case only matches kinds backed by a ExpressionStatement record.
 		return ExpressionStatement{n}.VisitEachChild(v)
 	case KindBlock:
+		// SAFETY: This case only matches kinds backed by a Block record.
 		return Block{n}.VisitEachChild(v)
 	case KindVariableStatement:
+		// SAFETY: This case only matches kinds backed by a VariableStatement record.
 		return VariableStatement{n}.VisitEachChild(v)
 	case KindVariableDeclaration:
+		// SAFETY: This case only matches kinds backed by a VariableDeclaration record.
 		return VariableDeclaration{n}.VisitEachChild(v)
 	case KindVariableDeclarationList:
+		// SAFETY: This case only matches kinds backed by a VariableDeclarationList record.
 		return VariableDeclarationList{n}.VisitEachChild(v)
 	case KindObjectBindingPattern, KindArrayBindingPattern:
+		// SAFETY: This case only matches kinds backed by a BindingPattern record.
 		return BindingPattern{n}.VisitEachChild(v)
 	case KindParameter:
+		// SAFETY: This case only matches kinds backed by a ParameterDeclaration record.
 		return ParameterDeclaration{n}.VisitEachChild(v)
 	case KindBindingElement:
+		// SAFETY: This case only matches kinds backed by a BindingElement record.
 		return BindingElement{n}.VisitEachChild(v)
 	case KindMissingDeclaration:
+		// SAFETY: This case only matches kinds backed by a MissingDeclaration record.
 		return MissingDeclaration{n}.VisitEachChild(v)
 	case KindFunctionDeclaration:
+		// SAFETY: This case only matches kinds backed by a FunctionDeclaration record.
 		return FunctionDeclaration{n}.VisitEachChild(v)
 	case KindClassDeclaration:
+		// SAFETY: This case only matches kinds backed by a ClassDeclaration record.
 		return ClassDeclaration{n}.VisitEachChild(v)
 	case KindClassExpression:
+		// SAFETY: This case only matches kinds backed by a ClassExpression record.
 		return ClassExpression{n}.VisitEachChild(v)
 	case KindHeritageClause:
+		// SAFETY: This case only matches kinds backed by a HeritageClause record.
 		return HeritageClause{n}.VisitEachChild(v)
 	case KindInterfaceDeclaration:
+		// SAFETY: This case only matches kinds backed by a InterfaceDeclaration record.
 		return InterfaceDeclaration{n}.VisitEachChild(v)
 	case KindTypeAliasDeclaration, KindJSTypeAliasDeclaration:
+		// SAFETY: This case only matches kinds backed by a TypeAliasDeclaration record.
 		return TypeAliasDeclaration{n}.VisitEachChild(v)
 	case KindEnumMember:
+		// SAFETY: This case only matches kinds backed by a EnumMember record.
 		return EnumMember{n}.VisitEachChild(v)
 	case KindEnumDeclaration:
+		// SAFETY: This case only matches kinds backed by a EnumDeclaration record.
 		return EnumDeclaration{n}.VisitEachChild(v)
 	case KindModuleBlock:
+		// SAFETY: This case only matches kinds backed by a ModuleBlock record.
 		return ModuleBlock{n}.VisitEachChild(v)
 	case KindImportDeclaration, KindJSImportDeclaration:
+		// SAFETY: This case only matches kinds backed by a ImportDeclaration record.
 		return ImportDeclaration{n}.VisitEachChild(v)
 	case KindExternalModuleReference:
+		// SAFETY: This case only matches kinds backed by a ExternalModuleReference record.
 		return ExternalModuleReference{n}.VisitEachChild(v)
 	case KindNamespaceImport:
+		// SAFETY: This case only matches kinds backed by a NamespaceImport record.
 		return NamespaceImport{n}.VisitEachChild(v)
 	case KindNamedImports:
+		// SAFETY: This case only matches kinds backed by a NamedImports record.
 		return NamedImports{n}.VisitEachChild(v)
 	case KindExportAssignment:
+		// SAFETY: This case only matches kinds backed by a ExportAssignment record.
 		return ExportAssignment{n}.VisitEachChild(v)
 	case KindNamespaceExportDeclaration:
+		// SAFETY: This case only matches kinds backed by a NamespaceExportDeclaration record.
 		return NamespaceExportDeclaration{n}.VisitEachChild(v)
 	case KindNamespaceExport:
+		// SAFETY: This case only matches kinds backed by a NamespaceExport record.
 		return NamespaceExport{n}.VisitEachChild(v)
 	case KindNamedExports:
+		// SAFETY: This case only matches kinds backed by a NamedExports record.
 		return NamedExports{n}.VisitEachChild(v)
 	case KindExportSpecifier:
+		// SAFETY: This case only matches kinds backed by a ExportSpecifier record.
 		return ExportSpecifier{n}.VisitEachChild(v)
 	case KindCallSignature:
+		// SAFETY: This case only matches kinds backed by a CallSignatureDeclaration record.
 		return CallSignatureDeclaration{n}.VisitEachChild(v)
 	case KindConstructSignature:
+		// SAFETY: This case only matches kinds backed by a ConstructSignatureDeclaration record.
 		return ConstructSignatureDeclaration{n}.VisitEachChild(v)
 	case KindConstructor:
+		// SAFETY: This case only matches kinds backed by a ConstructorDeclaration record.
 		return ConstructorDeclaration{n}.VisitEachChild(v)
 	case KindGetAccessor:
+		// SAFETY: This case only matches kinds backed by a GetAccessorDeclaration record.
 		return GetAccessorDeclaration{n}.VisitEachChild(v)
 	case KindSetAccessor:
+		// SAFETY: This case only matches kinds backed by a SetAccessorDeclaration record.
 		return SetAccessorDeclaration{n}.VisitEachChild(v)
 	case KindIndexSignature:
+		// SAFETY: This case only matches kinds backed by a IndexSignatureDeclaration record.
 		return IndexSignatureDeclaration{n}.VisitEachChild(v)
 	case KindMethodSignature:
+		// SAFETY: This case only matches kinds backed by a MethodSignatureDeclaration record.
 		return MethodSignatureDeclaration{n}.VisitEachChild(v)
 	case KindMethodDeclaration:
+		// SAFETY: This case only matches kinds backed by a MethodDeclaration record.
 		return MethodDeclaration{n}.VisitEachChild(v)
 	case KindPropertySignature:
+		// SAFETY: This case only matches kinds backed by a PropertySignatureDeclaration record.
 		return PropertySignatureDeclaration{n}.VisitEachChild(v)
 	case KindPropertyDeclaration:
+		// SAFETY: This case only matches kinds backed by a PropertyDeclaration record.
 		return PropertyDeclaration{n}.VisitEachChild(v)
 	case KindClassStaticBlockDeclaration:
+		// SAFETY: This case only matches kinds backed by a ClassStaticBlockDeclaration record.
 		return ClassStaticBlockDeclaration{n}.VisitEachChild(v)
 	case KindBinaryExpression:
+		// SAFETY: This case only matches kinds backed by a BinaryExpression record.
 		return BinaryExpression{n}.VisitEachChild(v)
 	case KindPrefixUnaryExpression:
+		// SAFETY: This case only matches kinds backed by a PrefixUnaryExpression record.
 		return PrefixUnaryExpression{n}.VisitEachChild(v)
 	case KindPostfixUnaryExpression:
+		// SAFETY: This case only matches kinds backed by a PostfixUnaryExpression record.
 		return PostfixUnaryExpression{n}.VisitEachChild(v)
 	case KindYieldExpression:
+		// SAFETY: This case only matches kinds backed by a YieldExpression record.
 		return YieldExpression{n}.VisitEachChild(v)
 	case KindArrowFunction:
+		// SAFETY: This case only matches kinds backed by a ArrowFunction record.
 		return ArrowFunction{n}.VisitEachChild(v)
 	case KindFunctionExpression:
+		// SAFETY: This case only matches kinds backed by a FunctionExpression record.
 		return FunctionExpression{n}.VisitEachChild(v)
 	case KindAsExpression:
+		// SAFETY: This case only matches kinds backed by a AsExpression record.
 		return AsExpression{n}.VisitEachChild(v)
 	case KindSatisfiesExpression:
+		// SAFETY: This case only matches kinds backed by a SatisfiesExpression record.
 		return SatisfiesExpression{n}.VisitEachChild(v)
 	case KindConditionalExpression:
+		// SAFETY: This case only matches kinds backed by a ConditionalExpression record.
 		return ConditionalExpression{n}.VisitEachChild(v)
 	case KindPropertyAccessExpression:
+		// SAFETY: This case only matches kinds backed by a PropertyAccessExpression record.
 		return PropertyAccessExpression{n}.VisitEachChild(v)
 	case KindElementAccessExpression:
+		// SAFETY: This case only matches kinds backed by a ElementAccessExpression record.
 		return ElementAccessExpression{n}.VisitEachChild(v)
 	case KindCallExpression:
+		// SAFETY: This case only matches kinds backed by a CallExpression record.
 		return CallExpression{n}.VisitEachChild(v)
 	case KindNewExpression:
+		// SAFETY: This case only matches kinds backed by a NewExpression record.
 		return NewExpression{n}.VisitEachChild(v)
 	case KindMetaProperty:
+		// SAFETY: This case only matches kinds backed by a MetaProperty record.
 		return MetaProperty{n}.VisitEachChild(v)
 	case KindNonNullExpression:
+		// SAFETY: This case only matches kinds backed by a NonNullExpression record.
 		return NonNullExpression{n}.VisitEachChild(v)
 	case KindSpreadElement:
+		// SAFETY: This case only matches kinds backed by a SpreadElement record.
 		return SpreadElement{n}.VisitEachChild(v)
 	case KindTemplateExpression:
+		// SAFETY: This case only matches kinds backed by a TemplateExpression record.
 		return TemplateExpression{n}.VisitEachChild(v)
 	case KindTemplateSpan:
+		// SAFETY: This case only matches kinds backed by a TemplateSpan record.
 		return TemplateSpan{n}.VisitEachChild(v)
 	case KindTaggedTemplateExpression:
+		// SAFETY: This case only matches kinds backed by a TaggedTemplateExpression record.
 		return TaggedTemplateExpression{n}.VisitEachChild(v)
 	case KindParenthesizedExpression:
+		// SAFETY: This case only matches kinds backed by a ParenthesizedExpression record.
 		return ParenthesizedExpression{n}.VisitEachChild(v)
 	case KindArrayLiteralExpression:
+		// SAFETY: This case only matches kinds backed by a ArrayLiteralExpression record.
 		return ArrayLiteralExpression{n}.VisitEachChild(v)
 	case KindObjectLiteralExpression:
+		// SAFETY: This case only matches kinds backed by a ObjectLiteralExpression record.
 		return ObjectLiteralExpression{n}.VisitEachChild(v)
 	case KindSpreadAssignment:
+		// SAFETY: This case only matches kinds backed by a SpreadAssignment record.
 		return SpreadAssignment{n}.VisitEachChild(v)
 	case KindPropertyAssignment:
+		// SAFETY: This case only matches kinds backed by a PropertyAssignment record.
 		return PropertyAssignment{n}.VisitEachChild(v)
 	case KindShorthandPropertyAssignment:
+		// SAFETY: This case only matches kinds backed by a ShorthandPropertyAssignment record.
 		return ShorthandPropertyAssignment{n}.VisitEachChild(v)
 	case KindDeleteExpression:
+		// SAFETY: This case only matches kinds backed by a DeleteExpression record.
 		return DeleteExpression{n}.VisitEachChild(v)
 	case KindTypeOfExpression:
+		// SAFETY: This case only matches kinds backed by a TypeOfExpression record.
 		return TypeOfExpression{n}.VisitEachChild(v)
 	case KindVoidExpression:
+		// SAFETY: This case only matches kinds backed by a VoidExpression record.
 		return VoidExpression{n}.VisitEachChild(v)
 	case KindAwaitExpression:
+		// SAFETY: This case only matches kinds backed by a AwaitExpression record.
 		return AwaitExpression{n}.VisitEachChild(v)
 	case KindTypeAssertionExpression:
+		// SAFETY: This case only matches kinds backed by a TypeAssertion record.
 		return TypeAssertion{n}.VisitEachChild(v)
 	case KindUnionType:
+		// SAFETY: This case only matches kinds backed by a UnionTypeNode record.
 		return UnionTypeNode{n}.VisitEachChild(v)
 	case KindIntersectionType:
+		// SAFETY: This case only matches kinds backed by a IntersectionTypeNode record.
 		return IntersectionTypeNode{n}.VisitEachChild(v)
 	case KindConditionalType:
+		// SAFETY: This case only matches kinds backed by a ConditionalTypeNode record.
 		return ConditionalTypeNode{n}.VisitEachChild(v)
 	case KindTypeOperator:
+		// SAFETY: This case only matches kinds backed by a TypeOperatorNode record.
 		return TypeOperatorNode{n}.VisitEachChild(v)
 	case KindInferType:
+		// SAFETY: This case only matches kinds backed by a InferTypeNode record.
 		return InferTypeNode{n}.VisitEachChild(v)
 	case KindArrayType:
+		// SAFETY: This case only matches kinds backed by a ArrayTypeNode record.
 		return ArrayTypeNode{n}.VisitEachChild(v)
 	case KindIndexedAccessType:
+		// SAFETY: This case only matches kinds backed by a IndexedAccessTypeNode record.
 		return IndexedAccessTypeNode{n}.VisitEachChild(v)
 	case KindTypeReference:
+		// SAFETY: This case only matches kinds backed by a TypeReferenceNode record.
 		return TypeReferenceNode{n}.VisitEachChild(v)
 	case KindExpressionWithTypeArguments:
+		// SAFETY: This case only matches kinds backed by a ExpressionWithTypeArguments record.
 		return ExpressionWithTypeArguments{n}.VisitEachChild(v)
 	case KindLiteralType:
+		// SAFETY: This case only matches kinds backed by a LiteralTypeNode record.
 		return LiteralTypeNode{n}.VisitEachChild(v)
 	case KindTypePredicate:
+		// SAFETY: This case only matches kinds backed by a TypePredicateNode record.
 		return TypePredicateNode{n}.VisitEachChild(v)
 	case KindImportAttribute:
+		// SAFETY: This case only matches kinds backed by a ImportAttribute record.
 		return ImportAttribute{n}.VisitEachChild(v)
 	case KindImportAttributes:
+		// SAFETY: This case only matches kinds backed by a ImportAttributes record.
 		return ImportAttributes{n}.VisitEachChild(v)
 	case KindTypeQuery:
+		// SAFETY: This case only matches kinds backed by a TypeQueryNode record.
 		return TypeQueryNode{n}.VisitEachChild(v)
 	case KindMappedType:
+		// SAFETY: This case only matches kinds backed by a MappedTypeNode record.
 		return MappedTypeNode{n}.VisitEachChild(v)
 	case KindTypeLiteral:
+		// SAFETY: This case only matches kinds backed by a TypeLiteralNode record.
 		return TypeLiteralNode{n}.VisitEachChild(v)
 	case KindTupleType:
+		// SAFETY: This case only matches kinds backed by a TupleTypeNode record.
 		return TupleTypeNode{n}.VisitEachChild(v)
 	case KindNamedTupleMember:
+		// SAFETY: This case only matches kinds backed by a NamedTupleMember record.
 		return NamedTupleMember{n}.VisitEachChild(v)
 	case KindOptionalType:
+		// SAFETY: This case only matches kinds backed by a OptionalTypeNode record.
 		return OptionalTypeNode{n}.VisitEachChild(v)
 	case KindRestType:
+		// SAFETY: This case only matches kinds backed by a RestTypeNode record.
 		return RestTypeNode{n}.VisitEachChild(v)
 	case KindParenthesizedType:
+		// SAFETY: This case only matches kinds backed by a ParenthesizedTypeNode record.
 		return ParenthesizedTypeNode{n}.VisitEachChild(v)
 	case KindFunctionType:
+		// SAFETY: This case only matches kinds backed by a FunctionTypeNode record.
 		return FunctionTypeNode{n}.VisitEachChild(v)
 	case KindConstructorType:
+		// SAFETY: This case only matches kinds backed by a ConstructorTypeNode record.
 		return ConstructorTypeNode{n}.VisitEachChild(v)
 	case KindTemplateLiteralType:
+		// SAFETY: This case only matches kinds backed by a TemplateLiteralTypeNode record.
 		return TemplateLiteralTypeNode{n}.VisitEachChild(v)
 	case KindTemplateLiteralTypeSpan:
+		// SAFETY: This case only matches kinds backed by a TemplateLiteralTypeSpan record.
 		return TemplateLiteralTypeSpan{n}.VisitEachChild(v)
 	case KindSyntheticExpression:
+		// SAFETY: This case only matches kinds backed by a SyntheticExpression record.
 		return SyntheticExpression{n}.VisitEachChild(v)
 	case KindPartiallyEmittedExpression:
+		// SAFETY: This case only matches kinds backed by a PartiallyEmittedExpression record.
 		return PartiallyEmittedExpression{n}.VisitEachChild(v)
 	case KindJsxElement:
+		// SAFETY: This case only matches kinds backed by a JsxElement record.
 		return JsxElement{n}.VisitEachChild(v)
 	case KindJsxAttributes:
+		// SAFETY: This case only matches kinds backed by a JsxAttributes record.
 		return JsxAttributes{n}.VisitEachChild(v)
 	case KindJsxNamespacedName:
+		// SAFETY: This case only matches kinds backed by a JsxNamespacedName record.
 		return JsxNamespacedName{n}.VisitEachChild(v)
 	case KindJsxOpeningElement:
+		// SAFETY: This case only matches kinds backed by a JsxOpeningElement record.
 		return JsxOpeningElement{n}.VisitEachChild(v)
 	case KindJsxSelfClosingElement:
+		// SAFETY: This case only matches kinds backed by a JsxSelfClosingElement record.
 		return JsxSelfClosingElement{n}.VisitEachChild(v)
 	case KindJsxFragment:
+		// SAFETY: This case only matches kinds backed by a JsxFragment record.
 		return JsxFragment{n}.VisitEachChild(v)
 	case KindJsxAttribute:
+		// SAFETY: This case only matches kinds backed by a JsxAttribute record.
 		return JsxAttribute{n}.VisitEachChild(v)
 	case KindJsxSpreadAttribute:
+		// SAFETY: This case only matches kinds backed by a JsxSpreadAttribute record.
 		return JsxSpreadAttribute{n}.VisitEachChild(v)
 	case KindJsxClosingElement:
+		// SAFETY: This case only matches kinds backed by a JsxClosingElement record.
 		return JsxClosingElement{n}.VisitEachChild(v)
 	case KindJsxExpression:
+		// SAFETY: This case only matches kinds backed by a JsxExpression record.
 		return JsxExpression{n}.VisitEachChild(v)
 	case KindSyntaxList:
+		// SAFETY: This case only matches kinds backed by a SyntaxList record.
 		return SyntaxList{n}.VisitEachChild(v)
 	case KindJSDoc:
+		// SAFETY: This case only matches kinds backed by a JSDoc record.
 		return JSDoc{n}.VisitEachChild(v)
 	case KindJSDocTypeExpression:
+		// SAFETY: This case only matches kinds backed by a JSDocTypeExpression record.
 		return JSDocTypeExpression{n}.VisitEachChild(v)
 	case KindJSDocNonNullableType:
+		// SAFETY: This case only matches kinds backed by a JSDocNonNullableType record.
 		return JSDocNonNullableType{n}.VisitEachChild(v)
 	case KindJSDocNullableType:
+		// SAFETY: This case only matches kinds backed by a JSDocNullableType record.
 		return JSDocNullableType{n}.VisitEachChild(v)
 	case KindJSDocVariadicType:
+		// SAFETY: This case only matches kinds backed by a JSDocVariadicType record.
 		return JSDocVariadicType{n}.VisitEachChild(v)
 	case KindJSDocOptionalType:
+		// SAFETY: This case only matches kinds backed by a JSDocOptionalType record.
 		return JSDocOptionalType{n}.VisitEachChild(v)
 	case KindJSDocTypeTag:
+		// SAFETY: This case only matches kinds backed by a JSDocTypeTag record.
 		return JSDocTypeTag{n}.VisitEachChild(v)
 	case KindJSDocUnknownTag:
+		// SAFETY: This case only matches kinds backed by a JSDocUnknownTag record.
 		return JSDocUnknownTag{n}.VisitEachChild(v)
 	case KindJSDocTemplateTag:
+		// SAFETY: This case only matches kinds backed by a JSDocTemplateTag record.
 		return JSDocTemplateTag{n}.VisitEachChild(v)
 	case KindJSDocReturnTag:
+		// SAFETY: This case only matches kinds backed by a JSDocReturnTag record.
 		return JSDocReturnTag{n}.VisitEachChild(v)
 	case KindJSDocPublicTag:
+		// SAFETY: This case only matches kinds backed by a JSDocPublicTag record.
 		return JSDocPublicTag{n}.VisitEachChild(v)
 	case KindJSDocPrivateTag:
+		// SAFETY: This case only matches kinds backed by a JSDocPrivateTag record.
 		return JSDocPrivateTag{n}.VisitEachChild(v)
 	case KindJSDocProtectedTag:
+		// SAFETY: This case only matches kinds backed by a JSDocProtectedTag record.
 		return JSDocProtectedTag{n}.VisitEachChild(v)
 	case KindJSDocReadonlyTag:
+		// SAFETY: This case only matches kinds backed by a JSDocReadonlyTag record.
 		return JSDocReadonlyTag{n}.VisitEachChild(v)
 	case KindJSDocOverrideTag:
+		// SAFETY: This case only matches kinds backed by a JSDocOverrideTag record.
 		return JSDocOverrideTag{n}.VisitEachChild(v)
 	case KindJSDocDeprecatedTag:
+		// SAFETY: This case only matches kinds backed by a JSDocDeprecatedTag record.
 		return JSDocDeprecatedTag{n}.VisitEachChild(v)
 	case KindJSDocSeeTag:
+		// SAFETY: This case only matches kinds backed by a JSDocSeeTag record.
 		return JSDocSeeTag{n}.VisitEachChild(v)
 	case KindJSDocImplementsTag:
+		// SAFETY: This case only matches kinds backed by a JSDocImplementsTag record.
 		return JSDocImplementsTag{n}.VisitEachChild(v)
 	case KindJSDocAugmentsTag:
+		// SAFETY: This case only matches kinds backed by a JSDocAugmentsTag record.
 		return JSDocAugmentsTag{n}.VisitEachChild(v)
 	case KindJSDocSatisfiesTag:
+		// SAFETY: This case only matches kinds backed by a JSDocSatisfiesTag record.
 		return JSDocSatisfiesTag{n}.VisitEachChild(v)
 	case KindJSDocThrowsTag:
+		// SAFETY: This case only matches kinds backed by a JSDocThrowsTag record.
 		return JSDocThrowsTag{n}.VisitEachChild(v)
 	case KindJSDocThisTag:
+		// SAFETY: This case only matches kinds backed by a JSDocThisTag record.
 		return JSDocThisTag{n}.VisitEachChild(v)
 	case KindJSDocImportTag:
+		// SAFETY: This case only matches kinds backed by a JSDocImportTag record.
 		return JSDocImportTag{n}.VisitEachChild(v)
 	case KindJSDocCallbackTag:
+		// SAFETY: This case only matches kinds backed by a JSDocCallbackTag record.
 		return JSDocCallbackTag{n}.VisitEachChild(v)
 	case KindJSDocOverloadTag:
+		// SAFETY: This case only matches kinds backed by a JSDocOverloadTag record.
 		return JSDocOverloadTag{n}.VisitEachChild(v)
 	case KindJSDocTypedefTag:
+		// SAFETY: This case only matches kinds backed by a JSDocTypedefTag record.
 		return JSDocTypedefTag{n}.VisitEachChild(v)
 	case KindJSDocSignature:
+		// SAFETY: This case only matches kinds backed by a JSDocSignature record.
 		return JSDocSignature{n}.VisitEachChild(v)
 	case KindJSDocNameReference:
+		// SAFETY: This case only matches kinds backed by a JSDocNameReference record.
 		return JSDocNameReference{n}.VisitEachChild(v)
 	case KindSourceFile:
+		// SAFETY: This case only matches kinds backed by a SourceFile record.
 		return n.asSourceFile().VisitEachChild(v)
 	case KindModuleDeclaration:
+		// SAFETY: This case only matches kinds backed by a ModuleDeclaration record.
 		return ModuleDeclaration{n}.VisitEachChild(v)
 	case KindImportEqualsDeclaration:
+		// SAFETY: This case only matches kinds backed by a ImportEqualsDeclaration record.
 		return ImportEqualsDeclaration{n}.VisitEachChild(v)
 	case KindExportDeclaration:
+		// SAFETY: This case only matches kinds backed by a ExportDeclaration record.
 		return ExportDeclaration{n}.VisitEachChild(v)
 	case KindImportType:
+		// SAFETY: This case only matches kinds backed by a ImportTypeNode record.
 		return ImportTypeNode{n}.VisitEachChild(v)
 	case KindImportClause:
+		// SAFETY: This case only matches kinds backed by a ImportClause record.
 		return ImportClause{n}.VisitEachChild(v)
 	case KindImportSpecifier:
+		// SAFETY: This case only matches kinds backed by a ImportSpecifier record.
 		return ImportSpecifier{n}.VisitEachChild(v)
 	case KindJSDocLink:
+		// SAFETY: This case only matches kinds backed by a JSDocLink record.
 		return JSDocLink{n}.VisitEachChild(v)
 	case KindJSDocLinkPlain:
+		// SAFETY: This case only matches kinds backed by a JSDocLinkPlain record.
 		return JSDocLinkPlain{n}.VisitEachChild(v)
 	case KindJSDocLinkCode:
+		// SAFETY: This case only matches kinds backed by a JSDocLinkCode record.
 		return JSDocLinkCode{n}.VisitEachChild(v)
 	case KindTypeParameter:
+		// SAFETY: This case only matches kinds backed by a TypeParameterDeclaration record.
 		return TypeParameterDeclaration{n}.VisitEachChild(v)
 	case KindSyntheticReferenceExpression:
+		// SAFETY: This case only matches kinds backed by a SyntheticReferenceExpression record.
 		return SyntheticReferenceExpression{n}.VisitEachChild(v)
 	case KindJSDocTypeLiteral:
+		// SAFETY: This case only matches kinds backed by a JSDocTypeLiteral record.
 		return JSDocTypeLiteral{n}.VisitEachChild(v)
 	case KindJSDocParameterTag, KindJSDocPropertyTag:
+		// SAFETY: This case only matches kinds backed by a JSDocParameterOrPropertyTag record.
 		return JSDocParameterOrPropertyTag{n}.VisitEachChild(v)
 	default:
 		return n
@@ -16764,388 +17202,583 @@ func (n Node) Clone(f NodeFactoryCoercible) Node {
 	case kindFlowSwitchClauseData, kindFlowReduceLabelData:
 		return Node{}
 	case KindUnknown, KindEndOfFile, KindSingleLineCommentTrivia, KindMultiLineCommentTrivia, KindNewLineTrivia, KindWhitespaceTrivia, KindConflictMarkerTrivia, KindNonTextFileMarkerTrivia, KindJsxTextAllWhiteSpaces, KindOpenBraceToken, KindCloseBraceToken, KindOpenParenToken, KindCloseParenToken, KindOpenBracketToken, KindCloseBracketToken, KindDotToken, KindDotDotDotToken, KindSemicolonToken, KindCommaToken, KindQuestionDotToken, KindLessThanToken, KindLessThanSlashToken, KindGreaterThanToken, KindLessThanEqualsToken, KindGreaterThanEqualsToken, KindEqualsEqualsToken, KindExclamationEqualsToken, KindEqualsEqualsEqualsToken, KindExclamationEqualsEqualsToken, KindEqualsGreaterThanToken, KindPlusToken, KindMinusToken, KindAsteriskToken, KindAsteriskAsteriskToken, KindSlashToken, KindPercentToken, KindPlusPlusToken, KindMinusMinusToken, KindLessThanLessThanToken, KindGreaterThanGreaterThanToken, KindGreaterThanGreaterThanGreaterThanToken, KindAmpersandToken, KindBarToken, KindCaretToken, KindExclamationToken, KindTildeToken, KindAmpersandAmpersandToken, KindBarBarToken, KindQuestionToken, KindColonToken, KindAtToken, KindQuestionQuestionToken, KindBacktickToken, KindHashToken, KindEqualsToken, KindPlusEqualsToken, KindMinusEqualsToken, KindAsteriskEqualsToken, KindAsteriskAsteriskEqualsToken, KindSlashEqualsToken, KindPercentEqualsToken, KindLessThanLessThanEqualsToken, KindGreaterThanGreaterThanEqualsToken, KindGreaterThanGreaterThanGreaterThanEqualsToken, KindAmpersandEqualsToken, KindBarEqualsToken, KindBarBarEqualsToken, KindAmpersandAmpersandEqualsToken, KindQuestionQuestionEqualsToken, KindCaretEqualsToken, KindJSDocCommentTextToken, KindBreakKeyword, KindCaseKeyword, KindCatchKeyword, KindClassKeyword, KindConstKeyword, KindContinueKeyword, KindDebuggerKeyword, KindDefaultKeyword, KindDeleteKeyword, KindDoKeyword, KindElseKeyword, KindEnumKeyword, KindExportKeyword, KindExtendsKeyword, KindFinallyKeyword, KindForKeyword, KindFunctionKeyword, KindIfKeyword, KindInKeyword, KindInstanceOfKeyword, KindNewKeyword, KindReturnKeyword, KindSwitchKeyword, KindThrowKeyword, KindTryKeyword, KindTypeOfKeyword, KindVarKeyword, KindWhileKeyword, KindWithKeyword, KindImplementsKeyword, KindInterfaceKeyword, KindLetKeyword, KindPackageKeyword, KindPrivateKeyword, KindProtectedKeyword, KindPublicKeyword, KindStaticKeyword, KindYieldKeyword, KindAbstractKeyword, KindAccessorKeyword, KindAsKeyword, KindAssertsKeyword, KindAssertKeyword, KindAsyncKeyword, KindAwaitKeyword, KindConstructorKeyword, KindDeclareKeyword, KindGetKeyword, KindImmediateKeyword, KindInferKeyword, KindIsKeyword, KindKeyOfKeyword, KindModuleKeyword, KindNamespaceKeyword, KindOutKeyword, KindReadonlyKeyword, KindRequireKeyword, KindSatisfiesKeyword, KindSetKeyword, KindTypeKeyword, KindUniqueKeyword, KindUsingKeyword, KindFromKeyword, KindGlobalKeyword, KindOverrideKeyword, KindOfKeyword, KindDeferKeyword, KindSourceKeyword:
+		// SAFETY: This case only matches kinds backed by a Token record.
 		return Token{n}.Clone(f)
 	case KindNumericLiteral:
+		// SAFETY: This case only matches kinds backed by a NumericLiteral record.
 		return NumericLiteral{n}.Clone(f)
 	case KindBigIntLiteral:
+		// SAFETY: This case only matches kinds backed by a BigIntLiteral record.
 		return BigIntLiteral{n}.Clone(f)
 	case KindStringLiteral:
+		// SAFETY: This case only matches kinds backed by a StringLiteral record.
 		return StringLiteral{n}.Clone(f)
 	case KindJsxText:
+		// SAFETY: This case only matches kinds backed by a JsxText record.
 		return JsxText{n}.Clone(f)
 	case KindRegularExpressionLiteral:
+		// SAFETY: This case only matches kinds backed by a RegularExpressionLiteral record.
 		return RegularExpressionLiteral{n}.Clone(f)
 	case KindNoSubstitutionTemplateLiteral:
+		// SAFETY: This case only matches kinds backed by a NoSubstitutionTemplateLiteral record.
 		return NoSubstitutionTemplateLiteral{n}.Clone(f)
 	case KindTemplateHead:
+		// SAFETY: This case only matches kinds backed by a TemplateHead record.
 		return TemplateHead{n}.Clone(f)
 	case KindTemplateMiddle:
+		// SAFETY: This case only matches kinds backed by a TemplateMiddle record.
 		return TemplateMiddle{n}.Clone(f)
 	case KindTemplateTail:
+		// SAFETY: This case only matches kinds backed by a TemplateTail record.
 		return TemplateTail{n}.Clone(f)
 	case KindIdentifier:
+		// SAFETY: This case only matches kinds backed by a Identifier record.
 		return Identifier{n}.Clone(f)
 	case KindPrivateIdentifier:
+		// SAFETY: This case only matches kinds backed by a PrivateIdentifier record.
 		return PrivateIdentifier{n}.Clone(f)
 	case KindFalseKeyword, KindImportKeyword, KindNullKeyword, KindSuperKeyword, KindThisKeyword, KindTrueKeyword:
+		// SAFETY: This case only matches kinds backed by a KeywordExpression record.
 		return KeywordExpression{n}.Clone(f)
 	case KindVoidKeyword, KindAnyKeyword, KindBooleanKeyword, KindIntrinsicKeyword, KindNeverKeyword, KindNumberKeyword, KindObjectKeyword, KindStringKeyword, KindSymbolKeyword, KindUndefinedKeyword, KindUnknownKeyword, KindBigIntKeyword:
+		// SAFETY: This case only matches kinds backed by a KeywordTypeNode record.
 		return KeywordTypeNode{n}.Clone(f)
 	case KindQualifiedName:
+		// SAFETY: This case only matches kinds backed by a QualifiedName record.
 		return QualifiedName{n}.Clone(f)
 	case KindComputedPropertyName:
+		// SAFETY: This case only matches kinds backed by a ComputedPropertyName record.
 		return ComputedPropertyName{n}.Clone(f)
 	case KindDecorator:
+		// SAFETY: This case only matches kinds backed by a Decorator record.
 		return Decorator{n}.Clone(f)
 	case KindEmptyStatement:
+		// SAFETY: This case only matches kinds backed by a EmptyStatement record.
 		return EmptyStatement{n}.Clone(f)
 	case KindIfStatement:
+		// SAFETY: This case only matches kinds backed by a IfStatement record.
 		return IfStatement{n}.Clone(f)
 	case KindDoStatement:
+		// SAFETY: This case only matches kinds backed by a DoStatement record.
 		return DoStatement{n}.Clone(f)
 	case KindWhileStatement:
+		// SAFETY: This case only matches kinds backed by a WhileStatement record.
 		return WhileStatement{n}.Clone(f)
 	case KindForStatement:
+		// SAFETY: This case only matches kinds backed by a ForStatement record.
 		return ForStatement{n}.Clone(f)
 	case KindForInStatement, KindForOfStatement:
+		// SAFETY: This case only matches kinds backed by a ForInOrOfStatement record.
 		return ForInOrOfStatement{n}.Clone(f)
 	case KindBreakStatement:
+		// SAFETY: This case only matches kinds backed by a BreakStatement record.
 		return BreakStatement{n}.Clone(f)
 	case KindContinueStatement:
+		// SAFETY: This case only matches kinds backed by a ContinueStatement record.
 		return ContinueStatement{n}.Clone(f)
 	case KindReturnStatement:
+		// SAFETY: This case only matches kinds backed by a ReturnStatement record.
 		return ReturnStatement{n}.Clone(f)
 	case KindWithStatement:
+		// SAFETY: This case only matches kinds backed by a WithStatement record.
 		return WithStatement{n}.Clone(f)
 	case KindSwitchStatement:
+		// SAFETY: This case only matches kinds backed by a SwitchStatement record.
 		return SwitchStatement{n}.Clone(f)
 	case KindCaseBlock:
+		// SAFETY: This case only matches kinds backed by a CaseBlock record.
 		return CaseBlock{n}.Clone(f)
-	case KindCaseClause, KindDefaultClause:
-		return CaseOrDefaultClause{n}.Clone(f)
+	case KindCaseClause:
+		// SAFETY: This case only matches kinds backed by a CaseClause record.
+		return CaseClause{n}.Clone(f)
+	case KindDefaultClause:
+		// SAFETY: This case only matches kinds backed by a DefaultClause record.
+		return DefaultClause{n}.Clone(f)
 	case KindThrowStatement:
+		// SAFETY: This case only matches kinds backed by a ThrowStatement record.
 		return ThrowStatement{n}.Clone(f)
 	case KindTryStatement:
+		// SAFETY: This case only matches kinds backed by a TryStatement record.
 		return TryStatement{n}.Clone(f)
 	case KindCatchClause:
+		// SAFETY: This case only matches kinds backed by a CatchClause record.
 		return CatchClause{n}.Clone(f)
 	case KindDebuggerStatement:
+		// SAFETY: This case only matches kinds backed by a DebuggerStatement record.
 		return DebuggerStatement{n}.Clone(f)
 	case KindLabeledStatement:
+		// SAFETY: This case only matches kinds backed by a LabeledStatement record.
 		return LabeledStatement{n}.Clone(f)
 	case KindExpressionStatement:
+		// SAFETY: This case only matches kinds backed by a ExpressionStatement record.
 		return ExpressionStatement{n}.Clone(f)
 	case KindBlock:
+		// SAFETY: This case only matches kinds backed by a Block record.
 		return Block{n}.Clone(f)
 	case KindVariableStatement:
+		// SAFETY: This case only matches kinds backed by a VariableStatement record.
 		return VariableStatement{n}.Clone(f)
 	case KindVariableDeclaration:
+		// SAFETY: This case only matches kinds backed by a VariableDeclaration record.
 		return VariableDeclaration{n}.Clone(f)
 	case KindVariableDeclarationList:
+		// SAFETY: This case only matches kinds backed by a VariableDeclarationList record.
 		return VariableDeclarationList{n}.Clone(f)
 	case KindObjectBindingPattern, KindArrayBindingPattern:
+		// SAFETY: This case only matches kinds backed by a BindingPattern record.
 		return BindingPattern{n}.Clone(f)
 	case KindParameter:
+		// SAFETY: This case only matches kinds backed by a ParameterDeclaration record.
 		return ParameterDeclaration{n}.Clone(f)
 	case KindBindingElement:
+		// SAFETY: This case only matches kinds backed by a BindingElement record.
 		return BindingElement{n}.Clone(f)
 	case KindMissingDeclaration:
+		// SAFETY: This case only matches kinds backed by a MissingDeclaration record.
 		return MissingDeclaration{n}.Clone(f)
 	case KindFunctionDeclaration:
+		// SAFETY: This case only matches kinds backed by a FunctionDeclaration record.
 		return FunctionDeclaration{n}.Clone(f)
 	case KindClassDeclaration:
+		// SAFETY: This case only matches kinds backed by a ClassDeclaration record.
 		return ClassDeclaration{n}.Clone(f)
 	case KindClassExpression:
+		// SAFETY: This case only matches kinds backed by a ClassExpression record.
 		return ClassExpression{n}.Clone(f)
 	case KindHeritageClause:
+		// SAFETY: This case only matches kinds backed by a HeritageClause record.
 		return HeritageClause{n}.Clone(f)
 	case KindInterfaceDeclaration:
+		// SAFETY: This case only matches kinds backed by a InterfaceDeclaration record.
 		return InterfaceDeclaration{n}.Clone(f)
 	case KindTypeAliasDeclaration, KindJSTypeAliasDeclaration:
+		// SAFETY: This case only matches kinds backed by a TypeAliasDeclaration record.
 		return TypeAliasDeclaration{n}.Clone(f)
 	case KindEnumMember:
+		// SAFETY: This case only matches kinds backed by a EnumMember record.
 		return EnumMember{n}.Clone(f)
 	case KindEnumDeclaration:
+		// SAFETY: This case only matches kinds backed by a EnumDeclaration record.
 		return EnumDeclaration{n}.Clone(f)
 	case KindModuleBlock:
+		// SAFETY: This case only matches kinds backed by a ModuleBlock record.
 		return ModuleBlock{n}.Clone(f)
 	case KindNotEmittedStatement:
+		// SAFETY: This case only matches kinds backed by a NotEmittedStatement record.
 		return NotEmittedStatement{n}.Clone(f)
 	case KindNotEmittedTypeElement:
+		// SAFETY: This case only matches kinds backed by a NotEmittedTypeElement record.
 		return NotEmittedTypeElement{n}.Clone(f)
 	case KindImportDeclaration, KindJSImportDeclaration:
+		// SAFETY: This case only matches kinds backed by a ImportDeclaration record.
 		return ImportDeclaration{n}.Clone(f)
 	case KindExternalModuleReference:
+		// SAFETY: This case only matches kinds backed by a ExternalModuleReference record.
 		return ExternalModuleReference{n}.Clone(f)
 	case KindNamespaceImport:
+		// SAFETY: This case only matches kinds backed by a NamespaceImport record.
 		return NamespaceImport{n}.Clone(f)
 	case KindNamedImports:
+		// SAFETY: This case only matches kinds backed by a NamedImports record.
 		return NamedImports{n}.Clone(f)
 	case KindExportAssignment:
+		// SAFETY: This case only matches kinds backed by a ExportAssignment record.
 		return ExportAssignment{n}.Clone(f)
 	case KindNamespaceExportDeclaration:
+		// SAFETY: This case only matches kinds backed by a NamespaceExportDeclaration record.
 		return NamespaceExportDeclaration{n}.Clone(f)
 	case KindNamespaceExport:
+		// SAFETY: This case only matches kinds backed by a NamespaceExport record.
 		return NamespaceExport{n}.Clone(f)
 	case KindNamedExports:
+		// SAFETY: This case only matches kinds backed by a NamedExports record.
 		return NamedExports{n}.Clone(f)
 	case KindExportSpecifier:
+		// SAFETY: This case only matches kinds backed by a ExportSpecifier record.
 		return ExportSpecifier{n}.Clone(f)
 	case KindCallSignature:
+		// SAFETY: This case only matches kinds backed by a CallSignatureDeclaration record.
 		return CallSignatureDeclaration{n}.Clone(f)
 	case KindConstructSignature:
+		// SAFETY: This case only matches kinds backed by a ConstructSignatureDeclaration record.
 		return ConstructSignatureDeclaration{n}.Clone(f)
 	case KindConstructor:
+		// SAFETY: This case only matches kinds backed by a ConstructorDeclaration record.
 		return ConstructorDeclaration{n}.Clone(f)
 	case KindGetAccessor:
+		// SAFETY: This case only matches kinds backed by a GetAccessorDeclaration record.
 		return GetAccessorDeclaration{n}.Clone(f)
 	case KindSetAccessor:
+		// SAFETY: This case only matches kinds backed by a SetAccessorDeclaration record.
 		return SetAccessorDeclaration{n}.Clone(f)
 	case KindIndexSignature:
+		// SAFETY: This case only matches kinds backed by a IndexSignatureDeclaration record.
 		return IndexSignatureDeclaration{n}.Clone(f)
 	case KindMethodSignature:
+		// SAFETY: This case only matches kinds backed by a MethodSignatureDeclaration record.
 		return MethodSignatureDeclaration{n}.Clone(f)
 	case KindMethodDeclaration:
+		// SAFETY: This case only matches kinds backed by a MethodDeclaration record.
 		return MethodDeclaration{n}.Clone(f)
 	case KindPropertySignature:
+		// SAFETY: This case only matches kinds backed by a PropertySignatureDeclaration record.
 		return PropertySignatureDeclaration{n}.Clone(f)
 	case KindPropertyDeclaration:
+		// SAFETY: This case only matches kinds backed by a PropertyDeclaration record.
 		return PropertyDeclaration{n}.Clone(f)
 	case KindSemicolonClassElement:
+		// SAFETY: This case only matches kinds backed by a SemicolonClassElement record.
 		return SemicolonClassElement{n}.Clone(f)
 	case KindClassStaticBlockDeclaration:
+		// SAFETY: This case only matches kinds backed by a ClassStaticBlockDeclaration record.
 		return ClassStaticBlockDeclaration{n}.Clone(f)
 	case KindOmittedExpression:
+		// SAFETY: This case only matches kinds backed by a OmittedExpression record.
 		return OmittedExpression{n}.Clone(f)
 	case KindBinaryExpression:
+		// SAFETY: This case only matches kinds backed by a BinaryExpression record.
 		return BinaryExpression{n}.Clone(f)
 	case KindPrefixUnaryExpression:
+		// SAFETY: This case only matches kinds backed by a PrefixUnaryExpression record.
 		return PrefixUnaryExpression{n}.Clone(f)
 	case KindPostfixUnaryExpression:
+		// SAFETY: This case only matches kinds backed by a PostfixUnaryExpression record.
 		return PostfixUnaryExpression{n}.Clone(f)
 	case KindYieldExpression:
+		// SAFETY: This case only matches kinds backed by a YieldExpression record.
 		return YieldExpression{n}.Clone(f)
 	case KindArrowFunction:
+		// SAFETY: This case only matches kinds backed by a ArrowFunction record.
 		return ArrowFunction{n}.Clone(f)
 	case KindFunctionExpression:
+		// SAFETY: This case only matches kinds backed by a FunctionExpression record.
 		return FunctionExpression{n}.Clone(f)
 	case KindAsExpression:
+		// SAFETY: This case only matches kinds backed by a AsExpression record.
 		return AsExpression{n}.Clone(f)
 	case KindSatisfiesExpression:
+		// SAFETY: This case only matches kinds backed by a SatisfiesExpression record.
 		return SatisfiesExpression{n}.Clone(f)
 	case KindConditionalExpression:
+		// SAFETY: This case only matches kinds backed by a ConditionalExpression record.
 		return ConditionalExpression{n}.Clone(f)
 	case KindPropertyAccessExpression:
+		// SAFETY: This case only matches kinds backed by a PropertyAccessExpression record.
 		return PropertyAccessExpression{n}.Clone(f)
 	case KindElementAccessExpression:
+		// SAFETY: This case only matches kinds backed by a ElementAccessExpression record.
 		return ElementAccessExpression{n}.Clone(f)
 	case KindCallExpression:
+		// SAFETY: This case only matches kinds backed by a CallExpression record.
 		return CallExpression{n}.Clone(f)
 	case KindNewExpression:
+		// SAFETY: This case only matches kinds backed by a NewExpression record.
 		return NewExpression{n}.Clone(f)
 	case KindMetaProperty:
+		// SAFETY: This case only matches kinds backed by a MetaProperty record.
 		return MetaProperty{n}.Clone(f)
 	case KindNonNullExpression:
+		// SAFETY: This case only matches kinds backed by a NonNullExpression record.
 		return NonNullExpression{n}.Clone(f)
 	case KindSpreadElement:
+		// SAFETY: This case only matches kinds backed by a SpreadElement record.
 		return SpreadElement{n}.Clone(f)
 	case KindTemplateExpression:
+		// SAFETY: This case only matches kinds backed by a TemplateExpression record.
 		return TemplateExpression{n}.Clone(f)
 	case KindTemplateSpan:
+		// SAFETY: This case only matches kinds backed by a TemplateSpan record.
 		return TemplateSpan{n}.Clone(f)
 	case KindTaggedTemplateExpression:
+		// SAFETY: This case only matches kinds backed by a TaggedTemplateExpression record.
 		return TaggedTemplateExpression{n}.Clone(f)
 	case KindParenthesizedExpression:
+		// SAFETY: This case only matches kinds backed by a ParenthesizedExpression record.
 		return ParenthesizedExpression{n}.Clone(f)
 	case KindArrayLiteralExpression:
+		// SAFETY: This case only matches kinds backed by a ArrayLiteralExpression record.
 		return ArrayLiteralExpression{n}.Clone(f)
 	case KindObjectLiteralExpression:
+		// SAFETY: This case only matches kinds backed by a ObjectLiteralExpression record.
 		return ObjectLiteralExpression{n}.Clone(f)
 	case KindSpreadAssignment:
+		// SAFETY: This case only matches kinds backed by a SpreadAssignment record.
 		return SpreadAssignment{n}.Clone(f)
 	case KindPropertyAssignment:
+		// SAFETY: This case only matches kinds backed by a PropertyAssignment record.
 		return PropertyAssignment{n}.Clone(f)
 	case KindShorthandPropertyAssignment:
+		// SAFETY: This case only matches kinds backed by a ShorthandPropertyAssignment record.
 		return ShorthandPropertyAssignment{n}.Clone(f)
 	case KindDeleteExpression:
+		// SAFETY: This case only matches kinds backed by a DeleteExpression record.
 		return DeleteExpression{n}.Clone(f)
 	case KindTypeOfExpression:
+		// SAFETY: This case only matches kinds backed by a TypeOfExpression record.
 		return TypeOfExpression{n}.Clone(f)
 	case KindVoidExpression:
+		// SAFETY: This case only matches kinds backed by a VoidExpression record.
 		return VoidExpression{n}.Clone(f)
 	case KindAwaitExpression:
+		// SAFETY: This case only matches kinds backed by a AwaitExpression record.
 		return AwaitExpression{n}.Clone(f)
 	case KindTypeAssertionExpression:
+		// SAFETY: This case only matches kinds backed by a TypeAssertion record.
 		return TypeAssertion{n}.Clone(f)
 	case KindUnionType:
+		// SAFETY: This case only matches kinds backed by a UnionTypeNode record.
 		return UnionTypeNode{n}.Clone(f)
 	case KindIntersectionType:
+		// SAFETY: This case only matches kinds backed by a IntersectionTypeNode record.
 		return IntersectionTypeNode{n}.Clone(f)
 	case KindConditionalType:
+		// SAFETY: This case only matches kinds backed by a ConditionalTypeNode record.
 		return ConditionalTypeNode{n}.Clone(f)
 	case KindTypeOperator:
+		// SAFETY: This case only matches kinds backed by a TypeOperatorNode record.
 		return TypeOperatorNode{n}.Clone(f)
 	case KindInferType:
+		// SAFETY: This case only matches kinds backed by a InferTypeNode record.
 		return InferTypeNode{n}.Clone(f)
 	case KindArrayType:
+		// SAFETY: This case only matches kinds backed by a ArrayTypeNode record.
 		return ArrayTypeNode{n}.Clone(f)
 	case KindIndexedAccessType:
+		// SAFETY: This case only matches kinds backed by a IndexedAccessTypeNode record.
 		return IndexedAccessTypeNode{n}.Clone(f)
 	case KindTypeReference:
+		// SAFETY: This case only matches kinds backed by a TypeReferenceNode record.
 		return TypeReferenceNode{n}.Clone(f)
 	case KindExpressionWithTypeArguments:
+		// SAFETY: This case only matches kinds backed by a ExpressionWithTypeArguments record.
 		return ExpressionWithTypeArguments{n}.Clone(f)
 	case KindLiteralType:
+		// SAFETY: This case only matches kinds backed by a LiteralTypeNode record.
 		return LiteralTypeNode{n}.Clone(f)
 	case KindThisType:
+		// SAFETY: This case only matches kinds backed by a ThisTypeNode record.
 		return ThisTypeNode{n}.Clone(f)
 	case KindTypePredicate:
+		// SAFETY: This case only matches kinds backed by a TypePredicateNode record.
 		return TypePredicateNode{n}.Clone(f)
 	case KindImportAttribute:
+		// SAFETY: This case only matches kinds backed by a ImportAttribute record.
 		return ImportAttribute{n}.Clone(f)
 	case KindImportAttributes:
+		// SAFETY: This case only matches kinds backed by a ImportAttributes record.
 		return ImportAttributes{n}.Clone(f)
 	case KindTypeQuery:
+		// SAFETY: This case only matches kinds backed by a TypeQueryNode record.
 		return TypeQueryNode{n}.Clone(f)
 	case KindMappedType:
+		// SAFETY: This case only matches kinds backed by a MappedTypeNode record.
 		return MappedTypeNode{n}.Clone(f)
 	case KindTypeLiteral:
+		// SAFETY: This case only matches kinds backed by a TypeLiteralNode record.
 		return TypeLiteralNode{n}.Clone(f)
 	case KindTupleType:
+		// SAFETY: This case only matches kinds backed by a TupleTypeNode record.
 		return TupleTypeNode{n}.Clone(f)
 	case KindNamedTupleMember:
+		// SAFETY: This case only matches kinds backed by a NamedTupleMember record.
 		return NamedTupleMember{n}.Clone(f)
 	case KindOptionalType:
+		// SAFETY: This case only matches kinds backed by a OptionalTypeNode record.
 		return OptionalTypeNode{n}.Clone(f)
 	case KindRestType:
+		// SAFETY: This case only matches kinds backed by a RestTypeNode record.
 		return RestTypeNode{n}.Clone(f)
 	case KindParenthesizedType:
+		// SAFETY: This case only matches kinds backed by a ParenthesizedTypeNode record.
 		return ParenthesizedTypeNode{n}.Clone(f)
 	case KindFunctionType:
+		// SAFETY: This case only matches kinds backed by a FunctionTypeNode record.
 		return FunctionTypeNode{n}.Clone(f)
 	case KindConstructorType:
+		// SAFETY: This case only matches kinds backed by a ConstructorTypeNode record.
 		return ConstructorTypeNode{n}.Clone(f)
 	case KindTemplateLiteralType:
+		// SAFETY: This case only matches kinds backed by a TemplateLiteralTypeNode record.
 		return TemplateLiteralTypeNode{n}.Clone(f)
 	case KindTemplateLiteralTypeSpan:
+		// SAFETY: This case only matches kinds backed by a TemplateLiteralTypeSpan record.
 		return TemplateLiteralTypeSpan{n}.Clone(f)
 	case KindSyntheticExpression:
+		// SAFETY: This case only matches kinds backed by a SyntheticExpression record.
 		return SyntheticExpression{n}.Clone(f)
 	case KindPartiallyEmittedExpression:
+		// SAFETY: This case only matches kinds backed by a PartiallyEmittedExpression record.
 		return PartiallyEmittedExpression{n}.Clone(f)
 	case KindJsxElement:
+		// SAFETY: This case only matches kinds backed by a JsxElement record.
 		return JsxElement{n}.Clone(f)
 	case KindJsxAttributes:
+		// SAFETY: This case only matches kinds backed by a JsxAttributes record.
 		return JsxAttributes{n}.Clone(f)
 	case KindJsxNamespacedName:
+		// SAFETY: This case only matches kinds backed by a JsxNamespacedName record.
 		return JsxNamespacedName{n}.Clone(f)
 	case KindJsxOpeningElement:
+		// SAFETY: This case only matches kinds backed by a JsxOpeningElement record.
 		return JsxOpeningElement{n}.Clone(f)
 	case KindJsxSelfClosingElement:
+		// SAFETY: This case only matches kinds backed by a JsxSelfClosingElement record.
 		return JsxSelfClosingElement{n}.Clone(f)
 	case KindJsxFragment:
+		// SAFETY: This case only matches kinds backed by a JsxFragment record.
 		return JsxFragment{n}.Clone(f)
 	case KindJsxOpeningFragment:
+		// SAFETY: This case only matches kinds backed by a JsxOpeningFragment record.
 		return JsxOpeningFragment{n}.Clone(f)
 	case KindJsxClosingFragment:
+		// SAFETY: This case only matches kinds backed by a JsxClosingFragment record.
 		return JsxClosingFragment{n}.Clone(f)
 	case KindJsxAttribute:
+		// SAFETY: This case only matches kinds backed by a JsxAttribute record.
 		return JsxAttribute{n}.Clone(f)
 	case KindJsxSpreadAttribute:
+		// SAFETY: This case only matches kinds backed by a JsxSpreadAttribute record.
 		return JsxSpreadAttribute{n}.Clone(f)
 	case KindJsxClosingElement:
+		// SAFETY: This case only matches kinds backed by a JsxClosingElement record.
 		return JsxClosingElement{n}.Clone(f)
 	case KindJsxExpression:
+		// SAFETY: This case only matches kinds backed by a JsxExpression record.
 		return JsxExpression{n}.Clone(f)
 	case KindSyntaxList:
+		// SAFETY: This case only matches kinds backed by a SyntaxList record.
 		return SyntaxList{n}.Clone(f)
 	case KindJSDoc:
+		// SAFETY: This case only matches kinds backed by a JSDoc record.
 		return JSDoc{n}.Clone(f)
 	case KindJSDocTypeExpression:
+		// SAFETY: This case only matches kinds backed by a JSDocTypeExpression record.
 		return JSDocTypeExpression{n}.Clone(f)
 	case KindJSDocNonNullableType:
+		// SAFETY: This case only matches kinds backed by a JSDocNonNullableType record.
 		return JSDocNonNullableType{n}.Clone(f)
 	case KindJSDocNullableType:
+		// SAFETY: This case only matches kinds backed by a JSDocNullableType record.
 		return JSDocNullableType{n}.Clone(f)
 	case KindJSDocAllType:
+		// SAFETY: This case only matches kinds backed by a JSDocAllType record.
 		return JSDocAllType{n}.Clone(f)
 	case KindJSDocVariadicType:
+		// SAFETY: This case only matches kinds backed by a JSDocVariadicType record.
 		return JSDocVariadicType{n}.Clone(f)
 	case KindJSDocOptionalType:
+		// SAFETY: This case only matches kinds backed by a JSDocOptionalType record.
 		return JSDocOptionalType{n}.Clone(f)
 	case KindJSDocTypeTag:
+		// SAFETY: This case only matches kinds backed by a JSDocTypeTag record.
 		return JSDocTypeTag{n}.Clone(f)
 	case KindJSDocUnknownTag:
+		// SAFETY: This case only matches kinds backed by a JSDocUnknownTag record.
 		return JSDocUnknownTag{n}.Clone(f)
 	case KindJSDocTemplateTag:
+		// SAFETY: This case only matches kinds backed by a JSDocTemplateTag record.
 		return JSDocTemplateTag{n}.Clone(f)
 	case KindJSDocReturnTag:
+		// SAFETY: This case only matches kinds backed by a JSDocReturnTag record.
 		return JSDocReturnTag{n}.Clone(f)
 	case KindJSDocPublicTag:
+		// SAFETY: This case only matches kinds backed by a JSDocPublicTag record.
 		return JSDocPublicTag{n}.Clone(f)
 	case KindJSDocPrivateTag:
+		// SAFETY: This case only matches kinds backed by a JSDocPrivateTag record.
 		return JSDocPrivateTag{n}.Clone(f)
 	case KindJSDocProtectedTag:
+		// SAFETY: This case only matches kinds backed by a JSDocProtectedTag record.
 		return JSDocProtectedTag{n}.Clone(f)
 	case KindJSDocReadonlyTag:
+		// SAFETY: This case only matches kinds backed by a JSDocReadonlyTag record.
 		return JSDocReadonlyTag{n}.Clone(f)
 	case KindJSDocOverrideTag:
+		// SAFETY: This case only matches kinds backed by a JSDocOverrideTag record.
 		return JSDocOverrideTag{n}.Clone(f)
 	case KindJSDocDeprecatedTag:
+		// SAFETY: This case only matches kinds backed by a JSDocDeprecatedTag record.
 		return JSDocDeprecatedTag{n}.Clone(f)
 	case KindJSDocSeeTag:
+		// SAFETY: This case only matches kinds backed by a JSDocSeeTag record.
 		return JSDocSeeTag{n}.Clone(f)
 	case KindJSDocImplementsTag:
+		// SAFETY: This case only matches kinds backed by a JSDocImplementsTag record.
 		return JSDocImplementsTag{n}.Clone(f)
 	case KindJSDocAugmentsTag:
+		// SAFETY: This case only matches kinds backed by a JSDocAugmentsTag record.
 		return JSDocAugmentsTag{n}.Clone(f)
 	case KindJSDocSatisfiesTag:
+		// SAFETY: This case only matches kinds backed by a JSDocSatisfiesTag record.
 		return JSDocSatisfiesTag{n}.Clone(f)
 	case KindJSDocThrowsTag:
+		// SAFETY: This case only matches kinds backed by a JSDocThrowsTag record.
 		return JSDocThrowsTag{n}.Clone(f)
 	case KindJSDocThisTag:
+		// SAFETY: This case only matches kinds backed by a JSDocThisTag record.
 		return JSDocThisTag{n}.Clone(f)
 	case KindJSDocImportTag:
+		// SAFETY: This case only matches kinds backed by a JSDocImportTag record.
 		return JSDocImportTag{n}.Clone(f)
 	case KindJSDocCallbackTag:
+		// SAFETY: This case only matches kinds backed by a JSDocCallbackTag record.
 		return JSDocCallbackTag{n}.Clone(f)
 	case KindJSDocOverloadTag:
+		// SAFETY: This case only matches kinds backed by a JSDocOverloadTag record.
 		return JSDocOverloadTag{n}.Clone(f)
 	case KindJSDocTypedefTag:
+		// SAFETY: This case only matches kinds backed by a JSDocTypedefTag record.
 		return JSDocTypedefTag{n}.Clone(f)
 	case KindJSDocSignature:
+		// SAFETY: This case only matches kinds backed by a JSDocSignature record.
 		return JSDocSignature{n}.Clone(f)
 	case KindJSDocNameReference:
+		// SAFETY: This case only matches kinds backed by a JSDocNameReference record.
 		return JSDocNameReference{n}.Clone(f)
 	case KindSourceFile:
+		// SAFETY: This case only matches kinds backed by a SourceFile record.
 		return n.asSourceFile().Clone(f)
 	case KindModuleDeclaration:
+		// SAFETY: This case only matches kinds backed by a ModuleDeclaration record.
 		return ModuleDeclaration{n}.Clone(f)
 	case KindImportEqualsDeclaration:
+		// SAFETY: This case only matches kinds backed by a ImportEqualsDeclaration record.
 		return ImportEqualsDeclaration{n}.Clone(f)
 	case KindExportDeclaration:
+		// SAFETY: This case only matches kinds backed by a ExportDeclaration record.
 		return ExportDeclaration{n}.Clone(f)
 	case KindImportType:
+		// SAFETY: This case only matches kinds backed by a ImportTypeNode record.
 		return ImportTypeNode{n}.Clone(f)
 	case KindImportClause:
+		// SAFETY: This case only matches kinds backed by a ImportClause record.
 		return ImportClause{n}.Clone(f)
 	case KindImportSpecifier:
+		// SAFETY: This case only matches kinds backed by a ImportSpecifier record.
 		return ImportSpecifier{n}.Clone(f)
 	case KindJSDocText:
+		// SAFETY: This case only matches kinds backed by a JSDocText record.
 		return JSDocText{n}.Clone(f)
 	case KindJSDocLink:
+		// SAFETY: This case only matches kinds backed by a JSDocLink record.
 		return JSDocLink{n}.Clone(f)
 	case KindJSDocLinkPlain:
+		// SAFETY: This case only matches kinds backed by a JSDocLinkPlain record.
 		return JSDocLinkPlain{n}.Clone(f)
 	case KindJSDocLinkCode:
+		// SAFETY: This case only matches kinds backed by a JSDocLinkCode record.
 		return JSDocLinkCode{n}.Clone(f)
 	case KindTypeParameter:
+		// SAFETY: This case only matches kinds backed by a TypeParameterDeclaration record.
 		return TypeParameterDeclaration{n}.Clone(f)
 	case KindSyntheticReferenceExpression:
+		// SAFETY: This case only matches kinds backed by a SyntheticReferenceExpression record.
 		return SyntheticReferenceExpression{n}.Clone(f)
 	case KindJSDocTypeLiteral:
+		// SAFETY: This case only matches kinds backed by a JSDocTypeLiteral record.
 		return JSDocTypeLiteral{n}.Clone(f)
 	case KindJSDocParameterTag, KindJSDocPropertyTag:
+		// SAFETY: This case only matches kinds backed by a JSDocParameterOrPropertyTag record.
 		return JSDocParameterOrPropertyTag{n}.Clone(f)
 	default:
 		return Node{}
@@ -17189,42 +17822,61 @@ func (n Node) SubtreeFacts() SubtreeFacts {
 	case KindVoidKeyword, KindAnyKeyword, KindBooleanKeyword, KindIntrinsicKeyword, KindNeverKeyword, KindNumberKeyword, KindObjectKeyword, KindStringKeyword, KindSymbolKeyword, KindUndefinedKeyword, KindUnknownKeyword, KindBigIntKeyword:
 		return n.computeSubtreeFacts()
 	case KindQualifiedName:
+		// SAFETY: This case only matches kinds backed by a QualifiedName record.
 		return subtreeFactsWorker(&(*qualifiedNameData)(n.rec()).facts, n)
 	case KindComputedPropertyName:
+		// SAFETY: This case only matches kinds backed by a ComputedPropertyName record.
 		return subtreeFactsWorker(&(*computedPropertyNameData)(n.rec()).facts, n)
 	case KindDecorator:
+		// SAFETY: This case only matches kinds backed by a Decorator record.
 		return subtreeFactsWorker(&(*decoratorData)(n.rec()).facts, n)
 	case KindEmptyStatement:
 		return n.computeSubtreeFacts()
 	case KindIfStatement:
+		// SAFETY: This case only matches kinds backed by a IfStatement record.
 		return subtreeFactsWorker(&(*ifStatementData)(n.rec()).facts, n)
 	case KindDoStatement:
+		// SAFETY: This case only matches kinds backed by a DoStatement record.
 		return subtreeFactsWorker(&(*doStatementData)(n.rec()).facts, n)
 	case KindWhileStatement:
+		// SAFETY: This case only matches kinds backed by a WhileStatement record.
 		return subtreeFactsWorker(&(*whileStatementData)(n.rec()).facts, n)
 	case KindForStatement:
+		// SAFETY: This case only matches kinds backed by a ForStatement record.
 		return subtreeFactsWorker(&(*forStatementData)(n.rec()).facts, n)
 	case KindForInStatement, KindForOfStatement:
+		// SAFETY: This case only matches kinds backed by a ForInOrOfStatement record.
 		return subtreeFactsWorker(&(*forInOrOfStatementData)(n.rec()).facts, n)
 	case KindBreakStatement:
 		return n.computeSubtreeFacts()
 	case KindContinueStatement:
 		return n.computeSubtreeFacts()
 	case KindReturnStatement:
+		// SAFETY: This case only matches kinds backed by a ReturnStatement record.
 		return subtreeFactsWorker(&(*returnStatementData)(n.rec()).facts, n)
 	case KindWithStatement:
+		// SAFETY: This case only matches kinds backed by a WithStatement record.
 		return subtreeFactsWorker(&(*withStatementData)(n.rec()).facts, n)
 	case KindSwitchStatement:
+		// SAFETY: This case only matches kinds backed by a SwitchStatement record.
 		return subtreeFactsWorker(&(*switchStatementData)(n.rec()).facts, n)
 	case KindCaseBlock:
+		// SAFETY: This case only matches kinds backed by a CaseBlock record.
 		return subtreeFactsWorker(&(*caseBlockData)(n.rec()).facts, n)
-	case KindCaseClause, KindDefaultClause:
-		return subtreeFactsWorker(&(*caseOrDefaultClauseData)(n.rec()).facts, n)
+	case KindCaseClause:
+		// SAFETY: This case only matches kinds backed by a CaseClause record.
+		return subtreeFactsWorker(&(*caseClauseData)(n.rec()).facts, n)
+	case KindDefaultClause:
+		// SAFETY: This case only matches kinds backed by a DefaultClause record.
+		return subtreeFactsWorker(&(*defaultClauseData)(n.rec()).facts, n)
 	case KindThrowStatement:
+		// SAFETY: This case only matches kinds backed by a ThrowStatement record.
 		return subtreeFactsWorker(&(*throwStatementData)(n.rec()).facts, n)
 	case KindTryStatement:
+		// SAFETY: This case only matches kinds backed by a TryStatement record.
 		return subtreeFactsWorker(&(*tryStatementData)(n.rec()).facts, n)
 	case KindCatchClause:
+		// SAFETY: This case only matches kinds backed by a CatchClause record.
 		return subtreeFactsWorker(&(*catchClauseData)(n.rec()).facts, n)
 	case KindDebuggerStatement:
 		return n.computeSubtreeFacts()
@@ -17233,88 +17885,114 @@ func (n Node) SubtreeFacts() SubtreeFacts {
 	case KindExpressionStatement:
 		return n.computeSubtreeFacts()
 	case KindBlock:
+		// SAFETY: This case only matches kinds backed by a Block record.
 		return subtreeFactsWorker(&(*blockData)(n.rec()).facts, n)
 	case KindVariableStatement:
+		// SAFETY: This case only matches kinds backed by a VariableStatement record.
 		return subtreeFactsWorker(&(*variableStatementData)(n.rec()).facts, n)
 	case KindVariableDeclaration:
+		// SAFETY: This case only matches kinds backed by a VariableDeclaration record.
 		return subtreeFactsWorker(&(*variableDeclarationData)(n.rec()).facts, n)
 	case KindVariableDeclarationList:
+		// SAFETY: This case only matches kinds backed by a VariableDeclarationList record.
 		return subtreeFactsWorker(&(*variableDeclarationListData)(n.rec()).facts, n)
 	case KindObjectBindingPattern, KindArrayBindingPattern:
+		// SAFETY: This case only matches kinds backed by a BindingPattern record.
 		return subtreeFactsWorker(&(*bindingPatternData)(n.rec()).facts, n)
 	case KindParameter:
+		// SAFETY: This case only matches kinds backed by a ParameterDeclaration record.
 		return subtreeFactsWorker(&(*parameterDeclarationData)(n.rec()).facts, n)
 	case KindBindingElement:
+		// SAFETY: This case only matches kinds backed by a BindingElement record.
 		return subtreeFactsWorker(&(*bindingElementData)(n.rec()).facts, n)
 	case KindMissingDeclaration:
 		return n.computeSubtreeFacts()
 	case KindFunctionDeclaration:
+		// SAFETY: This case only matches kinds backed by a FunctionDeclaration record.
 		return subtreeFactsWorker(&(*functionDeclarationData)(n.rec()).facts, n)
 	case KindClassDeclaration:
+		// SAFETY: This case only matches kinds backed by a ClassDeclaration record.
 		return subtreeFactsWorker(&(*classDeclarationData)(n.rec()).facts, n)
 	case KindClassExpression:
+		// SAFETY: This case only matches kinds backed by a ClassExpression record.
 		return subtreeFactsWorker(&(*classExpressionData)(n.rec()).facts, n)
 	case KindHeritageClause:
+		// SAFETY: This case only matches kinds backed by a HeritageClause record.
 		return subtreeFactsWorker(&(*heritageClauseData)(n.rec()).facts, n)
 	case KindInterfaceDeclaration:
 		return n.computeSubtreeFacts()
 	case KindTypeAliasDeclaration, KindJSTypeAliasDeclaration:
 		return n.computeSubtreeFacts()
 	case KindEnumMember:
+		// SAFETY: This case only matches kinds backed by a EnumMember record.
 		return subtreeFactsWorker(&(*enumMemberData)(n.rec()).facts, n)
 	case KindEnumDeclaration:
+		// SAFETY: This case only matches kinds backed by a EnumDeclaration record.
 		return subtreeFactsWorker(&(*enumDeclarationData)(n.rec()).facts, n)
 	case KindModuleBlock:
+		// SAFETY: This case only matches kinds backed by a ModuleBlock record.
 		return subtreeFactsWorker(&(*moduleBlockData)(n.rec()).facts, n)
 	case KindNotEmittedStatement:
 		return n.computeSubtreeFacts()
 	case KindNotEmittedTypeElement:
 		return n.computeSubtreeFacts()
 	case KindImportDeclaration, KindJSImportDeclaration:
+		// SAFETY: This case only matches kinds backed by a ImportDeclaration record.
 		return subtreeFactsWorker(&(*importDeclarationData)(n.rec()).facts, n)
 	case KindExternalModuleReference:
 		return n.computeSubtreeFacts()
 	case KindNamespaceImport:
 		return n.computeSubtreeFacts()
 	case KindNamedImports:
+		// SAFETY: This case only matches kinds backed by a NamedImports record.
 		return subtreeFactsWorker(&(*namedImportsData)(n.rec()).facts, n)
 	case KindExportAssignment:
+		// SAFETY: This case only matches kinds backed by a ExportAssignment record.
 		return subtreeFactsWorker(&(*exportAssignmentData)(n.rec()).facts, n)
 	case KindNamespaceExportDeclaration:
 		return n.computeSubtreeFacts()
 	case KindNamespaceExport:
 		return n.computeSubtreeFacts()
 	case KindNamedExports:
+		// SAFETY: This case only matches kinds backed by a NamedExports record.
 		return subtreeFactsWorker(&(*namedExportsData)(n.rec()).facts, n)
 	case KindExportSpecifier:
+		// SAFETY: This case only matches kinds backed by a ExportSpecifier record.
 		return subtreeFactsWorker(&(*exportSpecifierData)(n.rec()).facts, n)
 	case KindCallSignature:
 		return n.computeSubtreeFacts()
 	case KindConstructSignature:
 		return n.computeSubtreeFacts()
 	case KindConstructor:
+		// SAFETY: This case only matches kinds backed by a ConstructorDeclaration record.
 		return subtreeFactsWorker(&(*constructorDeclarationData)(n.rec()).facts, n)
 	case KindGetAccessor:
+		// SAFETY: This case only matches kinds backed by a GetAccessorDeclaration record.
 		return subtreeFactsWorker(&(*getAccessorDeclarationData)(n.rec()).facts, n)
 	case KindSetAccessor:
+		// SAFETY: This case only matches kinds backed by a SetAccessorDeclaration record.
 		return subtreeFactsWorker(&(*setAccessorDeclarationData)(n.rec()).facts, n)
 	case KindIndexSignature:
 		return n.computeSubtreeFacts()
 	case KindMethodSignature:
 		return n.computeSubtreeFacts()
 	case KindMethodDeclaration:
+		// SAFETY: This case only matches kinds backed by a MethodDeclaration record.
 		return subtreeFactsWorker(&(*methodDeclarationData)(n.rec()).facts, n)
 	case KindPropertySignature:
 		return n.computeSubtreeFacts()
 	case KindPropertyDeclaration:
+		// SAFETY: This case only matches kinds backed by a PropertyDeclaration record.
 		return subtreeFactsWorker(&(*propertyDeclarationData)(n.rec()).facts, n)
 	case KindSemicolonClassElement:
 		return n.computeSubtreeFacts()
 	case KindClassStaticBlockDeclaration:
+		// SAFETY: This case only matches kinds backed by a ClassStaticBlockDeclaration record.
 		return subtreeFactsWorker(&(*classStaticBlockDeclarationData)(n.rec()).facts, n)
 	case KindOmittedExpression:
 		return n.computeSubtreeFacts()
 	case KindBinaryExpression:
+		// SAFETY: This case only matches kinds backed by a BinaryExpression record.
 		return subtreeFactsWorker(&(*binaryExpressionData)(n.rec()).facts, n)
 	case KindPrefixUnaryExpression:
 		return n.computeSubtreeFacts()
@@ -17323,46 +18001,60 @@ func (n Node) SubtreeFacts() SubtreeFacts {
 	case KindYieldExpression:
 		return n.computeSubtreeFacts()
 	case KindArrowFunction:
+		// SAFETY: This case only matches kinds backed by a ArrowFunction record.
 		return subtreeFactsWorker(&(*arrowFunctionData)(n.rec()).facts, n)
 	case KindFunctionExpression:
+		// SAFETY: This case only matches kinds backed by a FunctionExpression record.
 		return subtreeFactsWorker(&(*functionExpressionData)(n.rec()).facts, n)
 	case KindAsExpression:
 		return n.computeSubtreeFacts()
 	case KindSatisfiesExpression:
 		return n.computeSubtreeFacts()
 	case KindConditionalExpression:
+		// SAFETY: This case only matches kinds backed by a ConditionalExpression record.
 		return subtreeFactsWorker(&(*conditionalExpressionData)(n.rec()).facts, n)
 	case KindPropertyAccessExpression:
+		// SAFETY: This case only matches kinds backed by a PropertyAccessExpression record.
 		return subtreeFactsWorker(&(*propertyAccessExpressionData)(n.rec()).facts, n)
 	case KindElementAccessExpression:
+		// SAFETY: This case only matches kinds backed by a ElementAccessExpression record.
 		return subtreeFactsWorker(&(*elementAccessExpressionData)(n.rec()).facts, n)
 	case KindCallExpression:
+		// SAFETY: This case only matches kinds backed by a CallExpression record.
 		return subtreeFactsWorker(&(*callExpressionData)(n.rec()).facts, n)
 	case KindNewExpression:
+		// SAFETY: This case only matches kinds backed by a NewExpression record.
 		return subtreeFactsWorker(&(*newExpressionData)(n.rec()).facts, n)
 	case KindMetaProperty:
+		// SAFETY: This case only matches kinds backed by a MetaProperty record.
 		return subtreeFactsWorker(&(*metaPropertyData)(n.rec()).facts, n)
 	case KindNonNullExpression:
 		return n.computeSubtreeFacts()
 	case KindSpreadElement:
 		return n.computeSubtreeFacts()
 	case KindTemplateExpression:
+		// SAFETY: This case only matches kinds backed by a TemplateExpression record.
 		return subtreeFactsWorker(&(*templateExpressionData)(n.rec()).facts, n)
 	case KindTemplateSpan:
 		return n.computeSubtreeFacts()
 	case KindTaggedTemplateExpression:
+		// SAFETY: This case only matches kinds backed by a TaggedTemplateExpression record.
 		return subtreeFactsWorker(&(*taggedTemplateExpressionData)(n.rec()).facts, n)
 	case KindParenthesizedExpression:
 		return n.computeSubtreeFacts()
 	case KindArrayLiteralExpression:
+		// SAFETY: This case only matches kinds backed by a ArrayLiteralExpression record.
 		return subtreeFactsWorker(&(*arrayLiteralExpressionData)(n.rec()).facts, n)
 	case KindObjectLiteralExpression:
+		// SAFETY: This case only matches kinds backed by a ObjectLiteralExpression record.
 		return subtreeFactsWorker(&(*objectLiteralExpressionData)(n.rec()).facts, n)
 	case KindSpreadAssignment:
 		return n.computeSubtreeFacts()
 	case KindPropertyAssignment:
+		// SAFETY: This case only matches kinds backed by a PropertyAssignment record.
 		return subtreeFactsWorker(&(*propertyAssignmentData)(n.rec()).facts, n)
 	case KindShorthandPropertyAssignment:
+		// SAFETY: This case only matches kinds backed by a ShorthandPropertyAssignment record.
 		return subtreeFactsWorker(&(*shorthandPropertyAssignmentData)(n.rec()).facts, n)
 	case KindDeleteExpression:
 		return n.computeSubtreeFacts()
@@ -17391,6 +18083,7 @@ func (n Node) SubtreeFacts() SubtreeFacts {
 	case KindTypeReference:
 		return n.computeSubtreeFacts()
 	case KindExpressionWithTypeArguments:
+		// SAFETY: This case only matches kinds backed by a ExpressionWithTypeArguments record.
 		return subtreeFactsWorker(&(*expressionWithTypeArgumentsData)(n.rec()).facts, n)
 	case KindLiteralType:
 		return n.computeSubtreeFacts()
@@ -17399,8 +18092,10 @@ func (n Node) SubtreeFacts() SubtreeFacts {
 	case KindTypePredicate:
 		return n.computeSubtreeFacts()
 	case KindImportAttribute:
+		// SAFETY: This case only matches kinds backed by a ImportAttribute record.
 		return subtreeFactsWorker(&(*importAttributeData)(n.rec()).facts, n)
 	case KindImportAttributes:
+		// SAFETY: This case only matches kinds backed by a ImportAttributes record.
 		return subtreeFactsWorker(&(*importAttributesData)(n.rec()).facts, n)
 	case KindTypeQuery:
 		return n.computeSubtreeFacts()
@@ -17431,22 +18126,29 @@ func (n Node) SubtreeFacts() SubtreeFacts {
 	case KindPartiallyEmittedExpression:
 		return n.computeSubtreeFacts()
 	case KindJsxElement:
+		// SAFETY: This case only matches kinds backed by a JsxElement record.
 		return subtreeFactsWorker(&(*jsxElementData)(n.rec()).facts, n)
 	case KindJsxAttributes:
+		// SAFETY: This case only matches kinds backed by a JsxAttributes record.
 		return subtreeFactsWorker(&(*jsxAttributesData)(n.rec()).facts, n)
 	case KindJsxNamespacedName:
+		// SAFETY: This case only matches kinds backed by a JsxNamespacedName record.
 		return subtreeFactsWorker(&(*jsxNamespacedNameData)(n.rec()).facts, n)
 	case KindJsxOpeningElement:
+		// SAFETY: This case only matches kinds backed by a JsxOpeningElement record.
 		return subtreeFactsWorker(&(*jsxOpeningElementData)(n.rec()).facts, n)
 	case KindJsxSelfClosingElement:
+		// SAFETY: This case only matches kinds backed by a JsxSelfClosingElement record.
 		return subtreeFactsWorker(&(*jsxSelfClosingElementData)(n.rec()).facts, n)
 	case KindJsxFragment:
+		// SAFETY: This case only matches kinds backed by a JsxFragment record.
 		return subtreeFactsWorker(&(*jsxFragmentData)(n.rec()).facts, n)
 	case KindJsxOpeningFragment:
 		return n.computeSubtreeFacts()
 	case KindJsxClosingFragment:
 		return n.computeSubtreeFacts()
 	case KindJsxAttribute:
+		// SAFETY: This case only matches kinds backed by a JsxAttribute record.
 		return subtreeFactsWorker(&(*jsxAttributeData)(n.rec()).facts, n)
 	case KindJsxSpreadAttribute:
 		return n.computeSubtreeFacts()
@@ -17515,18 +18217,24 @@ func (n Node) SubtreeFacts() SubtreeFacts {
 	case KindJSDocNameReference:
 		return n.computeSubtreeFacts()
 	case KindSourceFile:
+		// SAFETY: This case only matches kinds backed by a SourceFile record.
 		return subtreeFactsWorker(&(*sourceFileData)(n.rec()).facts, n)
 	case KindModuleDeclaration:
+		// SAFETY: This case only matches kinds backed by a ModuleDeclaration record.
 		return subtreeFactsWorker(&(*moduleDeclarationData)(n.rec()).facts, n)
 	case KindImportEqualsDeclaration:
+		// SAFETY: This case only matches kinds backed by a ImportEqualsDeclaration record.
 		return subtreeFactsWorker(&(*importEqualsDeclarationData)(n.rec()).facts, n)
 	case KindExportDeclaration:
+		// SAFETY: This case only matches kinds backed by a ExportDeclaration record.
 		return subtreeFactsWorker(&(*exportDeclarationData)(n.rec()).facts, n)
 	case KindImportType:
 		return n.computeSubtreeFacts()
 	case KindImportClause:
+		// SAFETY: This case only matches kinds backed by a ImportClause record.
 		return subtreeFactsWorker(&(*importClauseData)(n.rec()).facts, n)
 	case KindImportSpecifier:
+		// SAFETY: This case only matches kinds backed by a ImportSpecifier record.
 		return subtreeFactsWorker(&(*importSpecifierData)(n.rec()).facts, n)
 	case KindJSDocText:
 		return n.computeSubtreeFacts()
@@ -17552,308 +18260,463 @@ func (n Node) SubtreeFacts() SubtreeFacts {
 func (n Node) computeSubtreeFacts() SubtreeFacts {
 	switch n.Kind() {
 	case KindUnknown, KindEndOfFile, KindSingleLineCommentTrivia, KindMultiLineCommentTrivia, KindNewLineTrivia, KindWhitespaceTrivia, KindConflictMarkerTrivia, KindNonTextFileMarkerTrivia, KindJsxTextAllWhiteSpaces, KindOpenBraceToken, KindCloseBraceToken, KindOpenParenToken, KindCloseParenToken, KindOpenBracketToken, KindCloseBracketToken, KindDotToken, KindDotDotDotToken, KindSemicolonToken, KindCommaToken, KindQuestionDotToken, KindLessThanToken, KindLessThanSlashToken, KindGreaterThanToken, KindLessThanEqualsToken, KindGreaterThanEqualsToken, KindEqualsEqualsToken, KindExclamationEqualsToken, KindEqualsEqualsEqualsToken, KindExclamationEqualsEqualsToken, KindEqualsGreaterThanToken, KindPlusToken, KindMinusToken, KindAsteriskToken, KindAsteriskAsteriskToken, KindSlashToken, KindPercentToken, KindPlusPlusToken, KindMinusMinusToken, KindLessThanLessThanToken, KindGreaterThanGreaterThanToken, KindGreaterThanGreaterThanGreaterThanToken, KindAmpersandToken, KindBarToken, KindCaretToken, KindExclamationToken, KindTildeToken, KindAmpersandAmpersandToken, KindBarBarToken, KindQuestionToken, KindColonToken, KindAtToken, KindQuestionQuestionToken, KindBacktickToken, KindHashToken, KindEqualsToken, KindPlusEqualsToken, KindMinusEqualsToken, KindAsteriskEqualsToken, KindAsteriskAsteriskEqualsToken, KindSlashEqualsToken, KindPercentEqualsToken, KindLessThanLessThanEqualsToken, KindGreaterThanGreaterThanEqualsToken, KindGreaterThanGreaterThanGreaterThanEqualsToken, KindAmpersandEqualsToken, KindBarEqualsToken, KindBarBarEqualsToken, KindAmpersandAmpersandEqualsToken, KindQuestionQuestionEqualsToken, KindCaretEqualsToken, KindJSDocCommentTextToken, KindBreakKeyword, KindCaseKeyword, KindCatchKeyword, KindClassKeyword, KindConstKeyword, KindContinueKeyword, KindDebuggerKeyword, KindDefaultKeyword, KindDeleteKeyword, KindDoKeyword, KindElseKeyword, KindEnumKeyword, KindExportKeyword, KindExtendsKeyword, KindFinallyKeyword, KindForKeyword, KindFunctionKeyword, KindIfKeyword, KindInKeyword, KindInstanceOfKeyword, KindNewKeyword, KindReturnKeyword, KindSwitchKeyword, KindThrowKeyword, KindTryKeyword, KindTypeOfKeyword, KindVarKeyword, KindWhileKeyword, KindWithKeyword, KindImplementsKeyword, KindInterfaceKeyword, KindLetKeyword, KindPackageKeyword, KindPrivateKeyword, KindProtectedKeyword, KindPublicKeyword, KindStaticKeyword, KindYieldKeyword, KindAbstractKeyword, KindAccessorKeyword, KindAsKeyword, KindAssertsKeyword, KindAssertKeyword, KindAsyncKeyword, KindAwaitKeyword, KindConstructorKeyword, KindDeclareKeyword, KindGetKeyword, KindImmediateKeyword, KindInferKeyword, KindIsKeyword, KindKeyOfKeyword, KindModuleKeyword, KindNamespaceKeyword, KindOutKeyword, KindReadonlyKeyword, KindRequireKeyword, KindSatisfiesKeyword, KindSetKeyword, KindTypeKeyword, KindUniqueKeyword, KindUsingKeyword, KindFromKeyword, KindGlobalKeyword, KindOverrideKeyword, KindOfKeyword, KindDeferKeyword, KindSourceKeyword:
+		// SAFETY: This case only matches kinds backed by a Token record.
 		return Token{n}.computeSubtreeFacts()
 	case KindBigIntLiteral:
+		// SAFETY: This case only matches kinds backed by a BigIntLiteral record.
 		return BigIntLiteral{n}.computeSubtreeFacts()
 	case KindJsxText:
+		// SAFETY: This case only matches kinds backed by a JsxText record.
 		return JsxText{n}.computeSubtreeFacts()
 	case KindNoSubstitutionTemplateLiteral:
+		// SAFETY: This case only matches kinds backed by a NoSubstitutionTemplateLiteral record.
 		return NoSubstitutionTemplateLiteral{n}.computeSubtreeFacts()
 	case KindTemplateHead:
+		// SAFETY: This case only matches kinds backed by a TemplateHead record.
 		return TemplateHead{n}.computeSubtreeFacts()
 	case KindTemplateMiddle:
+		// SAFETY: This case only matches kinds backed by a TemplateMiddle record.
 		return TemplateMiddle{n}.computeSubtreeFacts()
 	case KindTemplateTail:
+		// SAFETY: This case only matches kinds backed by a TemplateTail record.
 		return TemplateTail{n}.computeSubtreeFacts()
 	case KindIdentifier:
+		// SAFETY: This case only matches kinds backed by a Identifier record.
 		return Identifier{n}.computeSubtreeFacts()
 	case KindPrivateIdentifier:
+		// SAFETY: This case only matches kinds backed by a PrivateIdentifier record.
 		return PrivateIdentifier{n}.computeSubtreeFacts()
 	case KindFalseKeyword, KindImportKeyword, KindNullKeyword, KindSuperKeyword, KindThisKeyword, KindTrueKeyword:
+		// SAFETY: This case only matches kinds backed by a KeywordExpression record.
 		return KeywordExpression{n}.computeSubtreeFacts()
 	case KindVoidKeyword, KindAnyKeyword, KindBooleanKeyword, KindIntrinsicKeyword, KindNeverKeyword, KindNumberKeyword, KindObjectKeyword, KindStringKeyword, KindSymbolKeyword, KindUndefinedKeyword, KindUnknownKeyword, KindBigIntKeyword:
+		// SAFETY: This case only matches kinds backed by a KeywordTypeNode record.
 		return TypeSyntaxBase{n}.computeSubtreeFacts()
 	case KindQualifiedName:
+		// SAFETY: This case only matches kinds backed by a QualifiedName record.
 		return QualifiedName{n}.computeSubtreeFacts()
 	case KindComputedPropertyName:
+		// SAFETY: This case only matches kinds backed by a ComputedPropertyName record.
 		return ComputedPropertyName{n}.computeSubtreeFacts()
 	case KindDecorator:
+		// SAFETY: This case only matches kinds backed by a Decorator record.
 		return Decorator{n}.computeSubtreeFacts()
 	case KindIfStatement:
+		// SAFETY: This case only matches kinds backed by a IfStatement record.
 		return IfStatement{n}.computeSubtreeFacts()
 	case KindDoStatement:
+		// SAFETY: This case only matches kinds backed by a DoStatement record.
 		return DoStatement{n}.computeSubtreeFacts()
 	case KindWhileStatement:
+		// SAFETY: This case only matches kinds backed by a WhileStatement record.
 		return WhileStatement{n}.computeSubtreeFacts()
 	case KindForStatement:
+		// SAFETY: This case only matches kinds backed by a ForStatement record.
 		return ForStatement{n}.computeSubtreeFacts()
 	case KindForInStatement, KindForOfStatement:
+		// SAFETY: This case only matches kinds backed by a ForInOrOfStatement record.
 		return ForInOrOfStatement{n}.computeSubtreeFacts()
 	case KindReturnStatement:
+		// SAFETY: This case only matches kinds backed by a ReturnStatement record.
 		return ReturnStatement{n}.computeSubtreeFacts()
 	case KindWithStatement:
+		// SAFETY: This case only matches kinds backed by a WithStatement record.
 		return WithStatement{n}.computeSubtreeFacts()
 	case KindSwitchStatement:
+		// SAFETY: This case only matches kinds backed by a SwitchStatement record.
 		return SwitchStatement{n}.computeSubtreeFacts()
 	case KindCaseBlock:
+		// SAFETY: This case only matches kinds backed by a CaseBlock record.
 		return CaseBlock{n}.computeSubtreeFacts()
-	case KindCaseClause, KindDefaultClause:
-		return CaseOrDefaultClause{n}.computeSubtreeFacts()
+	case KindCaseClause:
+		// SAFETY: This case only matches kinds backed by a CaseClause record.
+		return CaseClause{n}.computeSubtreeFacts()
+	case KindDefaultClause:
+		// SAFETY: This case only matches kinds backed by a DefaultClause record.
+		return DefaultClause{n}.computeSubtreeFacts()
 	case KindThrowStatement:
+		// SAFETY: This case only matches kinds backed by a ThrowStatement record.
 		return ThrowStatement{n}.computeSubtreeFacts()
 	case KindTryStatement:
+		// SAFETY: This case only matches kinds backed by a TryStatement record.
 		return TryStatement{n}.computeSubtreeFacts()
 	case KindCatchClause:
+		// SAFETY: This case only matches kinds backed by a CatchClause record.
 		return CatchClause{n}.computeSubtreeFacts()
 	case KindLabeledStatement:
+		// SAFETY: This case only matches kinds backed by a LabeledStatement record.
 		return LabeledStatement{n}.computeSubtreeFacts()
 	case KindExpressionStatement:
+		// SAFETY: This case only matches kinds backed by a ExpressionStatement record.
 		return ExpressionStatement{n}.computeSubtreeFacts()
 	case KindBlock:
+		// SAFETY: This case only matches kinds backed by a Block record.
 		return Block{n}.computeSubtreeFacts()
 	case KindVariableStatement:
+		// SAFETY: This case only matches kinds backed by a VariableStatement record.
 		return VariableStatement{n}.computeSubtreeFacts()
 	case KindVariableDeclaration:
+		// SAFETY: This case only matches kinds backed by a VariableDeclaration record.
 		return VariableDeclaration{n}.computeSubtreeFacts()
 	case KindVariableDeclarationList:
+		// SAFETY: This case only matches kinds backed by a VariableDeclarationList record.
 		return VariableDeclarationList{n}.computeSubtreeFacts()
 	case KindObjectBindingPattern, KindArrayBindingPattern:
+		// SAFETY: This case only matches kinds backed by a BindingPattern record.
 		return BindingPattern{n}.computeSubtreeFacts()
 	case KindParameter:
+		// SAFETY: This case only matches kinds backed by a ParameterDeclaration record.
 		return ParameterDeclaration{n}.computeSubtreeFacts()
 	case KindBindingElement:
+		// SAFETY: This case only matches kinds backed by a BindingElement record.
 		return BindingElement{n}.computeSubtreeFacts()
 	case KindFunctionDeclaration:
+		// SAFETY: This case only matches kinds backed by a FunctionDeclaration record.
 		return FunctionDeclaration{n}.computeSubtreeFacts()
 	case KindClassDeclaration:
+		// SAFETY: This case only matches kinds backed by a ClassDeclaration record.
 		return ClassLikeBase{n}.computeSubtreeFacts()
 	case KindClassExpression:
+		// SAFETY: This case only matches kinds backed by a ClassExpression record.
 		return ClassLikeBase{n}.computeSubtreeFacts()
 	case KindHeritageClause:
+		// SAFETY: This case only matches kinds backed by a HeritageClause record.
 		return HeritageClause{n}.computeSubtreeFacts()
 	case KindInterfaceDeclaration:
+		// SAFETY: This case only matches kinds backed by a InterfaceDeclaration record.
 		return TypeSyntaxBase{n}.computeSubtreeFacts()
 	case KindTypeAliasDeclaration, KindJSTypeAliasDeclaration:
+		// SAFETY: This case only matches kinds backed by a TypeAliasDeclaration record.
 		return TypeSyntaxBase{n}.computeSubtreeFacts()
 	case KindEnumMember:
+		// SAFETY: This case only matches kinds backed by a EnumMember record.
 		return EnumMember{n}.computeSubtreeFacts()
 	case KindEnumDeclaration:
+		// SAFETY: This case only matches kinds backed by a EnumDeclaration record.
 		return EnumDeclaration{n}.computeSubtreeFacts()
 	case KindModuleBlock:
+		// SAFETY: This case only matches kinds backed by a ModuleBlock record.
 		return ModuleBlock{n}.computeSubtreeFacts()
 	case KindImportDeclaration, KindJSImportDeclaration:
+		// SAFETY: This case only matches kinds backed by a ImportDeclaration record.
 		return ImportDeclaration{n}.computeSubtreeFacts()
 	case KindExternalModuleReference:
+		// SAFETY: This case only matches kinds backed by a ExternalModuleReference record.
 		return ExternalModuleReference{n}.computeSubtreeFacts()
 	case KindNamespaceImport:
+		// SAFETY: This case only matches kinds backed by a NamespaceImport record.
 		return NamespaceImport{n}.computeSubtreeFacts()
 	case KindNamedImports:
+		// SAFETY: This case only matches kinds backed by a NamedImports record.
 		return NamedImports{n}.computeSubtreeFacts()
 	case KindExportAssignment:
+		// SAFETY: This case only matches kinds backed by a ExportAssignment record.
 		return ExportAssignment{n}.computeSubtreeFacts()
 	case KindNamespaceExportDeclaration:
+		// SAFETY: This case only matches kinds backed by a NamespaceExportDeclaration record.
 		return TypeSyntaxBase{n}.computeSubtreeFacts()
 	case KindNamespaceExport:
+		// SAFETY: This case only matches kinds backed by a NamespaceExport record.
 		return NamespaceExport{n}.computeSubtreeFacts()
 	case KindNamedExports:
+		// SAFETY: This case only matches kinds backed by a NamedExports record.
 		return NamedExports{n}.computeSubtreeFacts()
 	case KindExportSpecifier:
+		// SAFETY: This case only matches kinds backed by a ExportSpecifier record.
 		return ExportSpecifier{n}.computeSubtreeFacts()
 	case KindCallSignature:
+		// SAFETY: This case only matches kinds backed by a CallSignatureDeclaration record.
 		return TypeSyntaxBase{n}.computeSubtreeFacts()
 	case KindConstructSignature:
+		// SAFETY: This case only matches kinds backed by a ConstructSignatureDeclaration record.
 		return TypeSyntaxBase{n}.computeSubtreeFacts()
 	case KindConstructor:
+		// SAFETY: This case only matches kinds backed by a ConstructorDeclaration record.
 		return ConstructorDeclaration{n}.computeSubtreeFacts()
 	case KindGetAccessor:
+		// SAFETY: This case only matches kinds backed by a GetAccessorDeclaration record.
 		return AccessorDeclarationBase{n}.computeSubtreeFacts()
 	case KindSetAccessor:
+		// SAFETY: This case only matches kinds backed by a SetAccessorDeclaration record.
 		return AccessorDeclarationBase{n}.computeSubtreeFacts()
 	case KindIndexSignature:
+		// SAFETY: This case only matches kinds backed by a IndexSignatureDeclaration record.
 		return TypeSyntaxBase{n}.computeSubtreeFacts()
 	case KindMethodSignature:
+		// SAFETY: This case only matches kinds backed by a MethodSignatureDeclaration record.
 		return TypeSyntaxBase{n}.computeSubtreeFacts()
 	case KindMethodDeclaration:
+		// SAFETY: This case only matches kinds backed by a MethodDeclaration record.
 		return MethodDeclaration{n}.computeSubtreeFacts()
 	case KindPropertySignature:
+		// SAFETY: This case only matches kinds backed by a PropertySignatureDeclaration record.
 		return TypeSyntaxBase{n}.computeSubtreeFacts()
 	case KindPropertyDeclaration:
+		// SAFETY: This case only matches kinds backed by a PropertyDeclaration record.
 		return PropertyDeclaration{n}.computeSubtreeFacts()
 	case KindClassStaticBlockDeclaration:
+		// SAFETY: This case only matches kinds backed by a ClassStaticBlockDeclaration record.
 		return ClassStaticBlockDeclaration{n}.computeSubtreeFacts()
 	case KindBinaryExpression:
+		// SAFETY: This case only matches kinds backed by a BinaryExpression record.
 		return BinaryExpression{n}.computeSubtreeFacts()
 	case KindPrefixUnaryExpression:
+		// SAFETY: This case only matches kinds backed by a PrefixUnaryExpression record.
 		return PrefixUnaryExpression{n}.computeSubtreeFacts()
 	case KindPostfixUnaryExpression:
+		// SAFETY: This case only matches kinds backed by a PostfixUnaryExpression record.
 		return PostfixUnaryExpression{n}.computeSubtreeFacts()
 	case KindYieldExpression:
+		// SAFETY: This case only matches kinds backed by a YieldExpression record.
 		return YieldExpression{n}.computeSubtreeFacts()
 	case KindArrowFunction:
+		// SAFETY: This case only matches kinds backed by a ArrowFunction record.
 		return ArrowFunction{n}.computeSubtreeFacts()
 	case KindFunctionExpression:
+		// SAFETY: This case only matches kinds backed by a FunctionExpression record.
 		return FunctionExpression{n}.computeSubtreeFacts()
 	case KindAsExpression:
+		// SAFETY: This case only matches kinds backed by a AsExpression record.
 		return AsExpression{n}.computeSubtreeFacts()
 	case KindSatisfiesExpression:
+		// SAFETY: This case only matches kinds backed by a SatisfiesExpression record.
 		return SatisfiesExpression{n}.computeSubtreeFacts()
 	case KindConditionalExpression:
+		// SAFETY: This case only matches kinds backed by a ConditionalExpression record.
 		return ConditionalExpression{n}.computeSubtreeFacts()
 	case KindPropertyAccessExpression:
+		// SAFETY: This case only matches kinds backed by a PropertyAccessExpression record.
 		return PropertyAccessExpression{n}.computeSubtreeFacts()
 	case KindElementAccessExpression:
+		// SAFETY: This case only matches kinds backed by a ElementAccessExpression record.
 		return ElementAccessExpression{n}.computeSubtreeFacts()
 	case KindCallExpression:
+		// SAFETY: This case only matches kinds backed by a CallExpression record.
 		return CallExpression{n}.computeSubtreeFacts()
 	case KindNewExpression:
+		// SAFETY: This case only matches kinds backed by a NewExpression record.
 		return NewExpression{n}.computeSubtreeFacts()
 	case KindMetaProperty:
+		// SAFETY: This case only matches kinds backed by a MetaProperty record.
 		return MetaProperty{n}.computeSubtreeFacts()
 	case KindNonNullExpression:
+		// SAFETY: This case only matches kinds backed by a NonNullExpression record.
 		return NonNullExpression{n}.computeSubtreeFacts()
 	case KindSpreadElement:
+		// SAFETY: This case only matches kinds backed by a SpreadElement record.
 		return SpreadElement{n}.computeSubtreeFacts()
 	case KindTemplateExpression:
+		// SAFETY: This case only matches kinds backed by a TemplateExpression record.
 		return TemplateExpression{n}.computeSubtreeFacts()
 	case KindTemplateSpan:
+		// SAFETY: This case only matches kinds backed by a TemplateSpan record.
 		return TemplateSpan{n}.computeSubtreeFacts()
 	case KindTaggedTemplateExpression:
+		// SAFETY: This case only matches kinds backed by a TaggedTemplateExpression record.
 		return TaggedTemplateExpression{n}.computeSubtreeFacts()
 	case KindParenthesizedExpression:
+		// SAFETY: This case only matches kinds backed by a ParenthesizedExpression record.
 		return ParenthesizedExpression{n}.computeSubtreeFacts()
 	case KindArrayLiteralExpression:
+		// SAFETY: This case only matches kinds backed by a ArrayLiteralExpression record.
 		return ArrayLiteralExpression{n}.computeSubtreeFacts()
 	case KindObjectLiteralExpression:
+		// SAFETY: This case only matches kinds backed by a ObjectLiteralExpression record.
 		return ObjectLiteralExpression{n}.computeSubtreeFacts()
 	case KindSpreadAssignment:
+		// SAFETY: This case only matches kinds backed by a SpreadAssignment record.
 		return SpreadAssignment{n}.computeSubtreeFacts()
 	case KindPropertyAssignment:
+		// SAFETY: This case only matches kinds backed by a PropertyAssignment record.
 		return PropertyAssignment{n}.computeSubtreeFacts()
 	case KindShorthandPropertyAssignment:
+		// SAFETY: This case only matches kinds backed by a ShorthandPropertyAssignment record.
 		return ShorthandPropertyAssignment{n}.computeSubtreeFacts()
 	case KindDeleteExpression:
+		// SAFETY: This case only matches kinds backed by a DeleteExpression record.
 		return DeleteExpression{n}.computeSubtreeFacts()
 	case KindTypeOfExpression:
+		// SAFETY: This case only matches kinds backed by a TypeOfExpression record.
 		return TypeOfExpression{n}.computeSubtreeFacts()
 	case KindVoidExpression:
+		// SAFETY: This case only matches kinds backed by a VoidExpression record.
 		return VoidExpression{n}.computeSubtreeFacts()
 	case KindAwaitExpression:
+		// SAFETY: This case only matches kinds backed by a AwaitExpression record.
 		return AwaitExpression{n}.computeSubtreeFacts()
 	case KindTypeAssertionExpression:
+		// SAFETY: This case only matches kinds backed by a TypeAssertion record.
 		return TypeAssertion{n}.computeSubtreeFacts()
 	case KindUnionType:
+		// SAFETY: This case only matches kinds backed by a UnionTypeNode record.
 		return TypeSyntaxBase{n}.computeSubtreeFacts()
 	case KindIntersectionType:
+		// SAFETY: This case only matches kinds backed by a IntersectionTypeNode record.
 		return TypeSyntaxBase{n}.computeSubtreeFacts()
 	case KindConditionalType:
+		// SAFETY: This case only matches kinds backed by a ConditionalTypeNode record.
 		return TypeSyntaxBase{n}.computeSubtreeFacts()
 	case KindTypeOperator:
+		// SAFETY: This case only matches kinds backed by a TypeOperatorNode record.
 		return TypeSyntaxBase{n}.computeSubtreeFacts()
 	case KindInferType:
+		// SAFETY: This case only matches kinds backed by a InferTypeNode record.
 		return TypeSyntaxBase{n}.computeSubtreeFacts()
 	case KindArrayType:
+		// SAFETY: This case only matches kinds backed by a ArrayTypeNode record.
 		return TypeSyntaxBase{n}.computeSubtreeFacts()
 	case KindIndexedAccessType:
+		// SAFETY: This case only matches kinds backed by a IndexedAccessTypeNode record.
 		return TypeSyntaxBase{n}.computeSubtreeFacts()
 	case KindTypeReference:
+		// SAFETY: This case only matches kinds backed by a TypeReferenceNode record.
 		return TypeSyntaxBase{n}.computeSubtreeFacts()
 	case KindExpressionWithTypeArguments:
+		// SAFETY: This case only matches kinds backed by a ExpressionWithTypeArguments record.
 		return ExpressionWithTypeArguments{n}.computeSubtreeFacts()
 	case KindLiteralType:
+		// SAFETY: This case only matches kinds backed by a LiteralTypeNode record.
 		return TypeSyntaxBase{n}.computeSubtreeFacts()
 	case KindThisType:
+		// SAFETY: This case only matches kinds backed by a ThisTypeNode record.
 		return TypeSyntaxBase{n}.computeSubtreeFacts()
 	case KindTypePredicate:
+		// SAFETY: This case only matches kinds backed by a TypePredicateNode record.
 		return TypeSyntaxBase{n}.computeSubtreeFacts()
 	case KindImportAttribute:
+		// SAFETY: This case only matches kinds backed by a ImportAttribute record.
 		return ImportAttribute{n}.computeSubtreeFacts()
 	case KindImportAttributes:
+		// SAFETY: This case only matches kinds backed by a ImportAttributes record.
 		return ImportAttributes{n}.computeSubtreeFacts()
 	case KindTypeQuery:
+		// SAFETY: This case only matches kinds backed by a TypeQueryNode record.
 		return TypeSyntaxBase{n}.computeSubtreeFacts()
 	case KindMappedType:
+		// SAFETY: This case only matches kinds backed by a MappedTypeNode record.
 		return TypeSyntaxBase{n}.computeSubtreeFacts()
 	case KindTypeLiteral:
+		// SAFETY: This case only matches kinds backed by a TypeLiteralNode record.
 		return TypeSyntaxBase{n}.computeSubtreeFacts()
 	case KindTupleType:
+		// SAFETY: This case only matches kinds backed by a TupleTypeNode record.
 		return TypeSyntaxBase{n}.computeSubtreeFacts()
 	case KindNamedTupleMember:
+		// SAFETY: This case only matches kinds backed by a NamedTupleMember record.
 		return TypeSyntaxBase{n}.computeSubtreeFacts()
 	case KindOptionalType:
+		// SAFETY: This case only matches kinds backed by a OptionalTypeNode record.
 		return TypeSyntaxBase{n}.computeSubtreeFacts()
 	case KindRestType:
+		// SAFETY: This case only matches kinds backed by a RestTypeNode record.
 		return TypeSyntaxBase{n}.computeSubtreeFacts()
 	case KindParenthesizedType:
+		// SAFETY: This case only matches kinds backed by a ParenthesizedTypeNode record.
 		return TypeSyntaxBase{n}.computeSubtreeFacts()
 	case KindFunctionType:
+		// SAFETY: This case only matches kinds backed by a FunctionTypeNode record.
 		return TypeSyntaxBase{n}.computeSubtreeFacts()
 	case KindConstructorType:
+		// SAFETY: This case only matches kinds backed by a ConstructorTypeNode record.
 		return TypeSyntaxBase{n}.computeSubtreeFacts()
 	case KindTemplateLiteralType:
+		// SAFETY: This case only matches kinds backed by a TemplateLiteralTypeNode record.
 		return TypeSyntaxBase{n}.computeSubtreeFacts()
 	case KindTemplateLiteralTypeSpan:
+		// SAFETY: This case only matches kinds backed by a TemplateLiteralTypeSpan record.
 		return TypeSyntaxBase{n}.computeSubtreeFacts()
 	case KindPartiallyEmittedExpression:
+		// SAFETY: This case only matches kinds backed by a PartiallyEmittedExpression record.
 		return PartiallyEmittedExpression{n}.computeSubtreeFacts()
 	case KindJsxElement:
+		// SAFETY: This case only matches kinds backed by a JsxElement record.
 		return JsxElement{n}.computeSubtreeFacts()
 	case KindJsxAttributes:
+		// SAFETY: This case only matches kinds backed by a JsxAttributes record.
 		return JsxAttributes{n}.computeSubtreeFacts()
 	case KindJsxNamespacedName:
+		// SAFETY: This case only matches kinds backed by a JsxNamespacedName record.
 		return JsxNamespacedName{n}.computeSubtreeFacts()
 	case KindJsxOpeningElement:
+		// SAFETY: This case only matches kinds backed by a JsxOpeningElement record.
 		return JsxOpeningElement{n}.computeSubtreeFacts()
 	case KindJsxSelfClosingElement:
+		// SAFETY: This case only matches kinds backed by a JsxSelfClosingElement record.
 		return JsxSelfClosingElement{n}.computeSubtreeFacts()
 	case KindJsxFragment:
+		// SAFETY: This case only matches kinds backed by a JsxFragment record.
 		return JsxFragment{n}.computeSubtreeFacts()
 	case KindJsxOpeningFragment:
+		// SAFETY: This case only matches kinds backed by a JsxOpeningFragment record.
 		return JsxOpeningFragment{n}.computeSubtreeFacts()
 	case KindJsxClosingFragment:
+		// SAFETY: This case only matches kinds backed by a JsxClosingFragment record.
 		return JsxClosingFragment{n}.computeSubtreeFacts()
 	case KindJsxAttribute:
+		// SAFETY: This case only matches kinds backed by a JsxAttribute record.
 		return JsxAttribute{n}.computeSubtreeFacts()
 	case KindJsxSpreadAttribute:
+		// SAFETY: This case only matches kinds backed by a JsxSpreadAttribute record.
 		return JsxSpreadAttribute{n}.computeSubtreeFacts()
 	case KindJsxClosingElement:
+		// SAFETY: This case only matches kinds backed by a JsxClosingElement record.
 		return JsxClosingElement{n}.computeSubtreeFacts()
 	case KindJsxExpression:
+		// SAFETY: This case only matches kinds backed by a JsxExpression record.
 		return JsxExpression{n}.computeSubtreeFacts()
 	case KindJSDocTypeExpression:
+		// SAFETY: This case only matches kinds backed by a JSDocTypeExpression record.
 		return TypeSyntaxBase{n}.computeSubtreeFacts()
 	case KindJSDocNonNullableType:
+		// SAFETY: This case only matches kinds backed by a JSDocNonNullableType record.
 		return TypeSyntaxBase{n}.computeSubtreeFacts()
 	case KindJSDocNullableType:
+		// SAFETY: This case only matches kinds backed by a JSDocNullableType record.
 		return TypeSyntaxBase{n}.computeSubtreeFacts()
 	case KindJSDocAllType:
+		// SAFETY: This case only matches kinds backed by a JSDocAllType record.
 		return TypeSyntaxBase{n}.computeSubtreeFacts()
 	case KindJSDocVariadicType:
+		// SAFETY: This case only matches kinds backed by a JSDocVariadicType record.
 		return TypeSyntaxBase{n}.computeSubtreeFacts()
 	case KindJSDocOptionalType:
+		// SAFETY: This case only matches kinds backed by a JSDocOptionalType record.
 		return TypeSyntaxBase{n}.computeSubtreeFacts()
 	case KindJSDocSignature:
+		// SAFETY: This case only matches kinds backed by a JSDocSignature record.
 		return TypeSyntaxBase{n}.computeSubtreeFacts()
 	case KindJSDocNameReference:
+		// SAFETY: This case only matches kinds backed by a JSDocNameReference record.
 		return TypeSyntaxBase{n}.computeSubtreeFacts()
 	case KindSourceFile:
+		// SAFETY: This case only matches kinds backed by a SourceFile record.
 		return n.asSourceFile().computeSubtreeFacts()
 	case KindModuleDeclaration:
+		// SAFETY: This case only matches kinds backed by a ModuleDeclaration record.
 		return ModuleDeclaration{n}.computeSubtreeFacts()
 	case KindImportEqualsDeclaration:
+		// SAFETY: This case only matches kinds backed by a ImportEqualsDeclaration record.
 		return ImportEqualsDeclaration{n}.computeSubtreeFacts()
 	case KindExportDeclaration:
+		// SAFETY: This case only matches kinds backed by a ExportDeclaration record.
 		return ExportDeclaration{n}.computeSubtreeFacts()
 	case KindImportType:
+		// SAFETY: This case only matches kinds backed by a ImportTypeNode record.
 		return TypeSyntaxBase{n}.computeSubtreeFacts()
 	case KindImportClause:
+		// SAFETY: This case only matches kinds backed by a ImportClause record.
 		return ImportClause{n}.computeSubtreeFacts()
 	case KindImportSpecifier:
+		// SAFETY: This case only matches kinds backed by a ImportSpecifier record.
 		return ImportSpecifier{n}.computeSubtreeFacts()
 	case KindTypeParameter:
+		// SAFETY: This case only matches kinds backed by a TypeParameterDeclaration record.
 		return TypeSyntaxBase{n}.computeSubtreeFacts()
 	case KindSyntheticReferenceExpression:
+		// SAFETY: This case only matches kinds backed by a SyntheticReferenceExpression record.
 		return SyntheticReferenceExpression{n}.computeSubtreeFacts()
 	case KindJSDocTypeLiteral:
+		// SAFETY: This case only matches kinds backed by a JSDocTypeLiteral record.
 		return TypeSyntaxBase{n}.computeSubtreeFacts()
 	default:
 		return SubtreeFactsNone
@@ -17863,138 +18726,205 @@ func (n Node) computeSubtreeFacts() SubtreeFacts {
 func (n Node) propagateSubtreeFacts() SubtreeFacts {
 	switch n.Kind() {
 	case KindVoidKeyword, KindAnyKeyword, KindBooleanKeyword, KindIntrinsicKeyword, KindNeverKeyword, KindNumberKeyword, KindObjectKeyword, KindStringKeyword, KindSymbolKeyword, KindUndefinedKeyword, KindUnknownKeyword, KindBigIntKeyword:
+		// SAFETY: This case only matches kinds backed by a KeywordTypeNode record.
 		return TypeSyntaxBase{n}.propagateSubtreeFacts()
 	case KindCatchClause:
+		// SAFETY: This case only matches kinds backed by a CatchClause record.
 		return CatchClause{n}.propagateSubtreeFacts()
 	case KindVariableDeclarationList:
+		// SAFETY: This case only matches kinds backed by a VariableDeclarationList record.
 		return VariableDeclarationList{n}.propagateSubtreeFacts()
 	case KindObjectBindingPattern, KindArrayBindingPattern:
+		// SAFETY: This case only matches kinds backed by a BindingPattern record.
 		return BindingPattern{n}.propagateSubtreeFacts()
 	case KindParameter:
+		// SAFETY: This case only matches kinds backed by a ParameterDeclaration record.
 		return ParameterDeclaration{n}.propagateSubtreeFacts()
 	case KindFunctionDeclaration:
+		// SAFETY: This case only matches kinds backed by a FunctionDeclaration record.
 		return FunctionDeclaration{n}.propagateSubtreeFacts()
 	case KindClassDeclaration:
+		// SAFETY: This case only matches kinds backed by a ClassDeclaration record.
 		return ClassDeclaration{n}.propagateSubtreeFacts()
 	case KindClassExpression:
+		// SAFETY: This case only matches kinds backed by a ClassExpression record.
 		return ClassExpression{n}.propagateSubtreeFacts()
 	case KindInterfaceDeclaration:
+		// SAFETY: This case only matches kinds backed by a InterfaceDeclaration record.
 		return TypeSyntaxBase{n}.propagateSubtreeFacts()
 	case KindTypeAliasDeclaration, KindJSTypeAliasDeclaration:
+		// SAFETY: This case only matches kinds backed by a TypeAliasDeclaration record.
 		return TypeSyntaxBase{n}.propagateSubtreeFacts()
 	case KindNamespaceExportDeclaration:
+		// SAFETY: This case only matches kinds backed by a NamespaceExportDeclaration record.
 		return TypeSyntaxBase{n}.propagateSubtreeFacts()
 	case KindCallSignature:
+		// SAFETY: This case only matches kinds backed by a CallSignatureDeclaration record.
 		return TypeSyntaxBase{n}.propagateSubtreeFacts()
 	case KindConstructSignature:
+		// SAFETY: This case only matches kinds backed by a ConstructSignatureDeclaration record.
 		return TypeSyntaxBase{n}.propagateSubtreeFacts()
 	case KindConstructor:
+		// SAFETY: This case only matches kinds backed by a ConstructorDeclaration record.
 		return ConstructorDeclaration{n}.propagateSubtreeFacts()
 	case KindGetAccessor:
+		// SAFETY: This case only matches kinds backed by a GetAccessorDeclaration record.
 		return AccessorDeclarationBase{n}.propagateSubtreeFacts()
 	case KindSetAccessor:
+		// SAFETY: This case only matches kinds backed by a SetAccessorDeclaration record.
 		return AccessorDeclarationBase{n}.propagateSubtreeFacts()
 	case KindIndexSignature:
+		// SAFETY: This case only matches kinds backed by a IndexSignatureDeclaration record.
 		return TypeSyntaxBase{n}.propagateSubtreeFacts()
 	case KindMethodSignature:
+		// SAFETY: This case only matches kinds backed by a MethodSignatureDeclaration record.
 		return TypeSyntaxBase{n}.propagateSubtreeFacts()
 	case KindMethodDeclaration:
+		// SAFETY: This case only matches kinds backed by a MethodDeclaration record.
 		return MethodDeclaration{n}.propagateSubtreeFacts()
 	case KindPropertySignature:
+		// SAFETY: This case only matches kinds backed by a PropertySignatureDeclaration record.
 		return TypeSyntaxBase{n}.propagateSubtreeFacts()
 	case KindPropertyDeclaration:
+		// SAFETY: This case only matches kinds backed by a PropertyDeclaration record.
 		return PropertyDeclaration{n}.propagateSubtreeFacts()
 	case KindArrowFunction:
+		// SAFETY: This case only matches kinds backed by a ArrowFunction record.
 		return ArrowFunction{n}.propagateSubtreeFacts()
 	case KindFunctionExpression:
+		// SAFETY: This case only matches kinds backed by a FunctionExpression record.
 		return FunctionExpression{n}.propagateSubtreeFacts()
 	case KindAsExpression:
+		// SAFETY: This case only matches kinds backed by a AsExpression record.
 		return AsExpression{n}.propagateSubtreeFacts()
 	case KindSatisfiesExpression:
+		// SAFETY: This case only matches kinds backed by a SatisfiesExpression record.
 		return SatisfiesExpression{n}.propagateSubtreeFacts()
 	case KindPropertyAccessExpression:
+		// SAFETY: This case only matches kinds backed by a PropertyAccessExpression record.
 		return PropertyAccessExpression{n}.propagateSubtreeFacts()
 	case KindElementAccessExpression:
+		// SAFETY: This case only matches kinds backed by a ElementAccessExpression record.
 		return ElementAccessExpression{n}.propagateSubtreeFacts()
 	case KindCallExpression:
+		// SAFETY: This case only matches kinds backed by a CallExpression record.
 		return CallExpression{n}.propagateSubtreeFacts()
 	case KindNewExpression:
+		// SAFETY: This case only matches kinds backed by a NewExpression record.
 		return NewExpression{n}.propagateSubtreeFacts()
 	case KindArrayLiteralExpression:
+		// SAFETY: This case only matches kinds backed by a ArrayLiteralExpression record.
 		return ArrayLiteralExpression{n}.propagateSubtreeFacts()
 	case KindObjectLiteralExpression:
+		// SAFETY: This case only matches kinds backed by a ObjectLiteralExpression record.
 		return ObjectLiteralExpression{n}.propagateSubtreeFacts()
 	case KindTypeAssertionExpression:
+		// SAFETY: This case only matches kinds backed by a TypeAssertion record.
 		return TypeAssertion{n}.propagateSubtreeFacts()
 	case KindUnionType:
+		// SAFETY: This case only matches kinds backed by a UnionTypeNode record.
 		return TypeSyntaxBase{n}.propagateSubtreeFacts()
 	case KindIntersectionType:
+		// SAFETY: This case only matches kinds backed by a IntersectionTypeNode record.
 		return TypeSyntaxBase{n}.propagateSubtreeFacts()
 	case KindConditionalType:
+		// SAFETY: This case only matches kinds backed by a ConditionalTypeNode record.
 		return TypeSyntaxBase{n}.propagateSubtreeFacts()
 	case KindTypeOperator:
+		// SAFETY: This case only matches kinds backed by a TypeOperatorNode record.
 		return TypeSyntaxBase{n}.propagateSubtreeFacts()
 	case KindInferType:
+		// SAFETY: This case only matches kinds backed by a InferTypeNode record.
 		return TypeSyntaxBase{n}.propagateSubtreeFacts()
 	case KindArrayType:
+		// SAFETY: This case only matches kinds backed by a ArrayTypeNode record.
 		return TypeSyntaxBase{n}.propagateSubtreeFacts()
 	case KindIndexedAccessType:
+		// SAFETY: This case only matches kinds backed by a IndexedAccessTypeNode record.
 		return TypeSyntaxBase{n}.propagateSubtreeFacts()
 	case KindTypeReference:
+		// SAFETY: This case only matches kinds backed by a TypeReferenceNode record.
 		return TypeSyntaxBase{n}.propagateSubtreeFacts()
 	case KindLiteralType:
+		// SAFETY: This case only matches kinds backed by a LiteralTypeNode record.
 		return TypeSyntaxBase{n}.propagateSubtreeFacts()
 	case KindThisType:
+		// SAFETY: This case only matches kinds backed by a ThisTypeNode record.
 		return TypeSyntaxBase{n}.propagateSubtreeFacts()
 	case KindTypePredicate:
+		// SAFETY: This case only matches kinds backed by a TypePredicateNode record.
 		return TypeSyntaxBase{n}.propagateSubtreeFacts()
 	case KindTypeQuery:
+		// SAFETY: This case only matches kinds backed by a TypeQueryNode record.
 		return TypeSyntaxBase{n}.propagateSubtreeFacts()
 	case KindMappedType:
+		// SAFETY: This case only matches kinds backed by a MappedTypeNode record.
 		return TypeSyntaxBase{n}.propagateSubtreeFacts()
 	case KindTypeLiteral:
+		// SAFETY: This case only matches kinds backed by a TypeLiteralNode record.
 		return TypeSyntaxBase{n}.propagateSubtreeFacts()
 	case KindTupleType:
+		// SAFETY: This case only matches kinds backed by a TupleTypeNode record.
 		return TypeSyntaxBase{n}.propagateSubtreeFacts()
 	case KindNamedTupleMember:
+		// SAFETY: This case only matches kinds backed by a NamedTupleMember record.
 		return TypeSyntaxBase{n}.propagateSubtreeFacts()
 	case KindOptionalType:
+		// SAFETY: This case only matches kinds backed by a OptionalTypeNode record.
 		return TypeSyntaxBase{n}.propagateSubtreeFacts()
 	case KindRestType:
+		// SAFETY: This case only matches kinds backed by a RestTypeNode record.
 		return TypeSyntaxBase{n}.propagateSubtreeFacts()
 	case KindParenthesizedType:
+		// SAFETY: This case only matches kinds backed by a ParenthesizedTypeNode record.
 		return TypeSyntaxBase{n}.propagateSubtreeFacts()
 	case KindFunctionType:
+		// SAFETY: This case only matches kinds backed by a FunctionTypeNode record.
 		return TypeSyntaxBase{n}.propagateSubtreeFacts()
 	case KindConstructorType:
+		// SAFETY: This case only matches kinds backed by a ConstructorTypeNode record.
 		return TypeSyntaxBase{n}.propagateSubtreeFacts()
 	case KindTemplateLiteralType:
+		// SAFETY: This case only matches kinds backed by a TemplateLiteralTypeNode record.
 		return TypeSyntaxBase{n}.propagateSubtreeFacts()
 	case KindTemplateLiteralTypeSpan:
+		// SAFETY: This case only matches kinds backed by a TemplateLiteralTypeSpan record.
 		return TypeSyntaxBase{n}.propagateSubtreeFacts()
 	case KindJSDocTypeExpression:
+		// SAFETY: This case only matches kinds backed by a JSDocTypeExpression record.
 		return TypeSyntaxBase{n}.propagateSubtreeFacts()
 	case KindJSDocNonNullableType:
+		// SAFETY: This case only matches kinds backed by a JSDocNonNullableType record.
 		return TypeSyntaxBase{n}.propagateSubtreeFacts()
 	case KindJSDocNullableType:
+		// SAFETY: This case only matches kinds backed by a JSDocNullableType record.
 		return TypeSyntaxBase{n}.propagateSubtreeFacts()
 	case KindJSDocAllType:
+		// SAFETY: This case only matches kinds backed by a JSDocAllType record.
 		return TypeSyntaxBase{n}.propagateSubtreeFacts()
 	case KindJSDocVariadicType:
+		// SAFETY: This case only matches kinds backed by a JSDocVariadicType record.
 		return TypeSyntaxBase{n}.propagateSubtreeFacts()
 	case KindJSDocOptionalType:
+		// SAFETY: This case only matches kinds backed by a JSDocOptionalType record.
 		return TypeSyntaxBase{n}.propagateSubtreeFacts()
 	case KindJSDocSignature:
+		// SAFETY: This case only matches kinds backed by a JSDocSignature record.
 		return TypeSyntaxBase{n}.propagateSubtreeFacts()
 	case KindJSDocNameReference:
+		// SAFETY: This case only matches kinds backed by a JSDocNameReference record.
 		return TypeSyntaxBase{n}.propagateSubtreeFacts()
 	case KindModuleDeclaration:
+		// SAFETY: This case only matches kinds backed by a ModuleDeclaration record.
 		return ModuleDeclaration{n}.propagateSubtreeFacts()
 	case KindImportType:
+		// SAFETY: This case only matches kinds backed by a ImportTypeNode record.
 		return TypeSyntaxBase{n}.propagateSubtreeFacts()
 	case KindTypeParameter:
+		// SAFETY: This case only matches kinds backed by a TypeParameterDeclaration record.
 		return TypeSyntaxBase{n}.propagateSubtreeFacts()
 	case KindJSDocTypeLiteral:
+		// SAFETY: This case only matches kinds backed by a JSDocTypeLiteral record.
 		return TypeSyntaxBase{n}.propagateSubtreeFacts()
 	default:
 		return n.SubtreeFacts() &^ SubtreeExclusionsNode
@@ -18004,6 +18934,18 @@ func (n Node) propagateSubtreeFacts() SubtreeFacts {
 // ──────────────────────────────────────────────────────────────────────
 // Node accessor dispatch
 // ──────────────────────────────────────────────────────────────────────
+
+var kindHasCaseOrDefaultClauseBase = [kindFlowReduceLabelData + 1]bool{
+	KindCaseClause:    true,
+	KindDefaultClause: true,
+}
+
+func (n Node) CaseOrDefaultClauseData() CaseOrDefaultClauseBase {
+	if kindHasCaseOrDefaultClauseBase[n.Kind()] {
+		return CaseOrDefaultClauseBase{n}
+	}
+	return CaseOrDefaultClauseBase{}
+}
 
 var kindHasFlowNodeBase = [kindFlowReduceLabelData + 1]bool{
 	KindIdentifier:                 true,
@@ -18399,8 +19341,7 @@ var nodeExpressionOffsets = [kindFlowReduceLabelData + 1]uint8{
 	KindReturnStatement:              uint8(unsafe.Offsetof(returnStatementData{}.expression)),
 	KindWithStatement:                uint8(unsafe.Offsetof(withStatementData{}.expression)),
 	KindSwitchStatement:              uint8(unsafe.Offsetof(switchStatementData{}.expression)),
-	KindCaseClause:                   uint8(unsafe.Offsetof(caseOrDefaultClauseData{}.expression)),
-	KindDefaultClause:                uint8(unsafe.Offsetof(caseOrDefaultClauseData{}.expression)),
+	KindCaseClause:                   uint8(unsafe.Offsetof(caseClauseData{}.expression)),
 	KindThrowStatement:               uint8(unsafe.Offsetof(throwStatementData{}.expression)),
 	KindExpressionStatement:          uint8(unsafe.Offsetof(expressionStatementData{}.expression)),
 	KindExternalModuleReference:      uint8(unsafe.Offsetof(externalModuleReferenceData{}.expression)),
@@ -18651,66 +19592,97 @@ var nodeLocalsOffsets = [kindFlowReduceLabelData + 1]uint8{
 func (n MutableNode) SetModifiers(modifiers ModifierList) {
 	switch n.Kind() {
 	case KindVariableStatement:
+		// SAFETY: This case only matches kinds backed by a VariableStatement record.
 		VariableStatement{n.Node}.setModifiers(modifiers)
 	case KindParameter:
+		// SAFETY: This case only matches kinds backed by a ParameterDeclaration record.
 		ParameterDeclaration{n.Node}.setModifiers(modifiers)
 	case KindMissingDeclaration:
+		// SAFETY: This case only matches kinds backed by a MissingDeclaration record.
 		MissingDeclaration{n.Node}.setModifiers(modifiers)
 	case KindFunctionDeclaration:
+		// SAFETY: This case only matches kinds backed by a FunctionDeclaration record.
 		FunctionDeclaration{n.Node}.setModifiers(modifiers)
 	case KindClassDeclaration:
+		// SAFETY: This case only matches kinds backed by a ClassDeclaration record.
 		ClassDeclaration{n.Node}.setModifiers(modifiers)
 	case KindClassExpression:
+		// SAFETY: This case only matches kinds backed by a ClassExpression record.
 		ClassExpression{n.Node}.setModifiers(modifiers)
 	case KindInterfaceDeclaration:
+		// SAFETY: This case only matches kinds backed by a InterfaceDeclaration record.
 		InterfaceDeclaration{n.Node}.setModifiers(modifiers)
 	case KindTypeAliasDeclaration, KindJSTypeAliasDeclaration:
+		// SAFETY: This case only matches kinds backed by a TypeAliasDeclaration record.
 		TypeAliasDeclaration{n.Node}.setModifiers(modifiers)
 	case KindEnumDeclaration:
+		// SAFETY: This case only matches kinds backed by a EnumDeclaration record.
 		EnumDeclaration{n.Node}.setModifiers(modifiers)
 	case KindImportDeclaration, KindJSImportDeclaration:
+		// SAFETY: This case only matches kinds backed by a ImportDeclaration record.
 		ImportDeclaration{n.Node}.setModifiers(modifiers)
 	case KindExportAssignment:
+		// SAFETY: This case only matches kinds backed by a ExportAssignment record.
 		ExportAssignment{n.Node}.setModifiers(modifiers)
 	case KindNamespaceExportDeclaration:
+		// SAFETY: This case only matches kinds backed by a NamespaceExportDeclaration record.
 		NamespaceExportDeclaration{n.Node}.setModifiers(modifiers)
 	case KindConstructor:
+		// SAFETY: This case only matches kinds backed by a ConstructorDeclaration record.
 		ConstructorDeclaration{n.Node}.setModifiers(modifiers)
 	case KindGetAccessor:
+		// SAFETY: This case only matches kinds backed by a GetAccessorDeclaration record.
 		GetAccessorDeclaration{n.Node}.setModifiers(modifiers)
 	case KindSetAccessor:
+		// SAFETY: This case only matches kinds backed by a SetAccessorDeclaration record.
 		SetAccessorDeclaration{n.Node}.setModifiers(modifiers)
 	case KindIndexSignature:
+		// SAFETY: This case only matches kinds backed by a IndexSignatureDeclaration record.
 		IndexSignatureDeclaration{n.Node}.setModifiers(modifiers)
 	case KindMethodSignature:
+		// SAFETY: This case only matches kinds backed by a MethodSignatureDeclaration record.
 		MethodSignatureDeclaration{n.Node}.setModifiers(modifiers)
 	case KindMethodDeclaration:
+		// SAFETY: This case only matches kinds backed by a MethodDeclaration record.
 		MethodDeclaration{n.Node}.setModifiers(modifiers)
 	case KindPropertySignature:
+		// SAFETY: This case only matches kinds backed by a PropertySignatureDeclaration record.
 		PropertySignatureDeclaration{n.Node}.setModifiers(modifiers)
 	case KindPropertyDeclaration:
+		// SAFETY: This case only matches kinds backed by a PropertyDeclaration record.
 		PropertyDeclaration{n.Node}.setModifiers(modifiers)
 	case KindClassStaticBlockDeclaration:
+		// SAFETY: This case only matches kinds backed by a ClassStaticBlockDeclaration record.
 		ClassStaticBlockDeclaration{n.Node}.setModifiers(modifiers)
 	case KindBinaryExpression:
+		// SAFETY: This case only matches kinds backed by a BinaryExpression record.
 		BinaryExpression{n.Node}.setModifiers(modifiers)
 	case KindArrowFunction:
+		// SAFETY: This case only matches kinds backed by a ArrowFunction record.
 		ArrowFunction{n.Node}.setModifiers(modifiers)
 	case KindFunctionExpression:
+		// SAFETY: This case only matches kinds backed by a FunctionExpression record.
 		FunctionExpression{n.Node}.setModifiers(modifiers)
 	case KindPropertyAssignment:
+		// SAFETY: This case only matches kinds backed by a PropertyAssignment record.
 		PropertyAssignment{n.Node}.setModifiers(modifiers)
 	case KindShorthandPropertyAssignment:
+		// SAFETY: This case only matches kinds backed by a ShorthandPropertyAssignment record.
 		ShorthandPropertyAssignment{n.Node}.setModifiers(modifiers)
 	case KindConstructorType:
+		// SAFETY: This case only matches kinds backed by a ConstructorTypeNode record.
 		ConstructorTypeNode{n.Node}.setModifiers(modifiers)
 	case KindModuleDeclaration:
+		// SAFETY: This case only matches kinds backed by a ModuleDeclaration record.
 		ModuleDeclaration{n.Node}.setModifiers(modifiers)
 	case KindImportEqualsDeclaration:
+		// SAFETY: This case only matches kinds backed by a ImportEqualsDeclaration record.
 		ImportEqualsDeclaration{n.Node}.setModifiers(modifiers)
 	case KindExportDeclaration:
+		// SAFETY: This case only matches kinds backed by a ExportDeclaration record.
 		ExportDeclaration{n.Node}.setModifiers(modifiers)
 	case KindTypeParameter:
+		// SAFETY: This case only matches kinds backed by a TypeParameterDeclaration record.
 		TypeParameterDeclaration{n.Node}.setModifiers(modifiers)
 	}
 }
@@ -18725,6 +19697,7 @@ func (n Node) AsToken() Token {
 	default:
 		panic("Invalid node cast to Token")
 	}
+	// SAFETY: The kind check guarantees n is backed by a Token record.
 	return Token{n}
 }
 
@@ -18732,6 +19705,7 @@ func (n Node) AsIdentifier() Identifier {
 	if n.Kind() != KindIdentifier {
 		panic("Invalid node cast to Identifier")
 	}
+	// SAFETY: The kind check guarantees n is backed by a Identifier record.
 	return Identifier{n}
 }
 
@@ -18739,6 +19713,7 @@ func (n Node) AsPrivateIdentifier() PrivateIdentifier {
 	if n.Kind() != KindPrivateIdentifier {
 		panic("Invalid node cast to PrivateIdentifier")
 	}
+	// SAFETY: The kind check guarantees n is backed by a PrivateIdentifier record.
 	return PrivateIdentifier{n}
 }
 
@@ -18746,6 +19721,7 @@ func (n Node) AsQualifiedName() QualifiedName {
 	if n.Kind() != KindQualifiedName {
 		panic("Invalid node cast to QualifiedName")
 	}
+	// SAFETY: The kind check guarantees n is backed by a QualifiedName record.
 	return QualifiedName{n}
 }
 
@@ -18753,6 +19729,7 @@ func (n Node) AsComputedPropertyName() ComputedPropertyName {
 	if n.Kind() != KindComputedPropertyName {
 		panic("Invalid node cast to ComputedPropertyName")
 	}
+	// SAFETY: The kind check guarantees n is backed by a ComputedPropertyName record.
 	return ComputedPropertyName{n}
 }
 
@@ -18760,6 +19737,7 @@ func (n Node) AsDecorator() Decorator {
 	if n.Kind() != KindDecorator {
 		panic("Invalid node cast to Decorator")
 	}
+	// SAFETY: The kind check guarantees n is backed by a Decorator record.
 	return Decorator{n}
 }
 
@@ -18767,6 +19745,7 @@ func (n Node) AsEmptyStatement() EmptyStatement {
 	if n.Kind() != KindEmptyStatement {
 		panic("Invalid node cast to EmptyStatement")
 	}
+	// SAFETY: The kind check guarantees n is backed by a EmptyStatement record.
 	return EmptyStatement{n}
 }
 
@@ -18774,6 +19753,7 @@ func (n Node) AsIfStatement() IfStatement {
 	if n.Kind() != KindIfStatement {
 		panic("Invalid node cast to IfStatement")
 	}
+	// SAFETY: The kind check guarantees n is backed by a IfStatement record.
 	return IfStatement{n}
 }
 
@@ -18781,6 +19761,7 @@ func (n Node) AsDoStatement() DoStatement {
 	if n.Kind() != KindDoStatement {
 		panic("Invalid node cast to DoStatement")
 	}
+	// SAFETY: The kind check guarantees n is backed by a DoStatement record.
 	return DoStatement{n}
 }
 
@@ -18788,6 +19769,7 @@ func (n Node) AsWhileStatement() WhileStatement {
 	if n.Kind() != KindWhileStatement {
 		panic("Invalid node cast to WhileStatement")
 	}
+	// SAFETY: The kind check guarantees n is backed by a WhileStatement record.
 	return WhileStatement{n}
 }
 
@@ -18795,6 +19777,7 @@ func (n Node) AsForStatement() ForStatement {
 	if n.Kind() != KindForStatement {
 		panic("Invalid node cast to ForStatement")
 	}
+	// SAFETY: The kind check guarantees n is backed by a ForStatement record.
 	return ForStatement{n}
 }
 
@@ -18804,6 +19787,7 @@ func (n Node) AsForInOrOfStatement() ForInOrOfStatement {
 	default:
 		panic("Invalid node cast to ForInOrOfStatement")
 	}
+	// SAFETY: The kind check guarantees n is backed by a ForInOrOfStatement record.
 	return ForInOrOfStatement{n}
 }
 
@@ -18811,6 +19795,7 @@ func (n Node) AsBreakStatement() BreakStatement {
 	if n.Kind() != KindBreakStatement {
 		panic("Invalid node cast to BreakStatement")
 	}
+	// SAFETY: The kind check guarantees n is backed by a BreakStatement record.
 	return BreakStatement{n}
 }
 
@@ -18818,6 +19803,7 @@ func (n Node) AsContinueStatement() ContinueStatement {
 	if n.Kind() != KindContinueStatement {
 		panic("Invalid node cast to ContinueStatement")
 	}
+	// SAFETY: The kind check guarantees n is backed by a ContinueStatement record.
 	return ContinueStatement{n}
 }
 
@@ -18825,6 +19811,7 @@ func (n Node) AsReturnStatement() ReturnStatement {
 	if n.Kind() != KindReturnStatement {
 		panic("Invalid node cast to ReturnStatement")
 	}
+	// SAFETY: The kind check guarantees n is backed by a ReturnStatement record.
 	return ReturnStatement{n}
 }
 
@@ -18832,6 +19819,7 @@ func (n Node) AsWithStatement() WithStatement {
 	if n.Kind() != KindWithStatement {
 		panic("Invalid node cast to WithStatement")
 	}
+	// SAFETY: The kind check guarantees n is backed by a WithStatement record.
 	return WithStatement{n}
 }
 
@@ -18839,6 +19827,7 @@ func (n Node) AsSwitchStatement() SwitchStatement {
 	if n.Kind() != KindSwitchStatement {
 		panic("Invalid node cast to SwitchStatement")
 	}
+	// SAFETY: The kind check guarantees n is backed by a SwitchStatement record.
 	return SwitchStatement{n}
 }
 
@@ -18846,22 +19835,31 @@ func (n Node) AsCaseBlock() CaseBlock {
 	if n.Kind() != KindCaseBlock {
 		panic("Invalid node cast to CaseBlock")
 	}
+	// SAFETY: The kind check guarantees n is backed by a CaseBlock record.
 	return CaseBlock{n}
 }
 
-func (n Node) AsCaseOrDefaultClause() CaseOrDefaultClause {
-	switch n.Kind() {
-	case KindCaseClause, KindDefaultClause:
-	default:
-		panic("Invalid node cast to CaseOrDefaultClause")
+func (n Node) AsCaseClause() CaseClause {
+	if n.Kind() != KindCaseClause {
+		panic("Invalid node cast to CaseClause")
 	}
-	return CaseOrDefaultClause{n}
+	// SAFETY: The kind check guarantees n is backed by a CaseClause record.
+	return CaseClause{n}
+}
+
+func (n Node) AsDefaultClause() DefaultClause {
+	if n.Kind() != KindDefaultClause {
+		panic("Invalid node cast to DefaultClause")
+	}
+	// SAFETY: The kind check guarantees n is backed by a DefaultClause record.
+	return DefaultClause{n}
 }
 
 func (n Node) AsThrowStatement() ThrowStatement {
 	if n.Kind() != KindThrowStatement {
 		panic("Invalid node cast to ThrowStatement")
 	}
+	// SAFETY: The kind check guarantees n is backed by a ThrowStatement record.
 	return ThrowStatement{n}
 }
 
@@ -18869,6 +19867,7 @@ func (n Node) AsTryStatement() TryStatement {
 	if n.Kind() != KindTryStatement {
 		panic("Invalid node cast to TryStatement")
 	}
+	// SAFETY: The kind check guarantees n is backed by a TryStatement record.
 	return TryStatement{n}
 }
 
@@ -18876,6 +19875,7 @@ func (n Node) AsCatchClause() CatchClause {
 	if n.Kind() != KindCatchClause {
 		panic("Invalid node cast to CatchClause")
 	}
+	// SAFETY: The kind check guarantees n is backed by a CatchClause record.
 	return CatchClause{n}
 }
 
@@ -18883,6 +19883,7 @@ func (n Node) AsDebuggerStatement() DebuggerStatement {
 	if n.Kind() != KindDebuggerStatement {
 		panic("Invalid node cast to DebuggerStatement")
 	}
+	// SAFETY: The kind check guarantees n is backed by a DebuggerStatement record.
 	return DebuggerStatement{n}
 }
 
@@ -18890,6 +19891,7 @@ func (n Node) AsLabeledStatement() LabeledStatement {
 	if n.Kind() != KindLabeledStatement {
 		panic("Invalid node cast to LabeledStatement")
 	}
+	// SAFETY: The kind check guarantees n is backed by a LabeledStatement record.
 	return LabeledStatement{n}
 }
 
@@ -18897,6 +19899,7 @@ func (n Node) AsExpressionStatement() ExpressionStatement {
 	if n.Kind() != KindExpressionStatement {
 		panic("Invalid node cast to ExpressionStatement")
 	}
+	// SAFETY: The kind check guarantees n is backed by a ExpressionStatement record.
 	return ExpressionStatement{n}
 }
 
@@ -18904,6 +19907,7 @@ func (n Node) AsBlock() Block {
 	if n.Kind() != KindBlock {
 		panic("Invalid node cast to Block")
 	}
+	// SAFETY: The kind check guarantees n is backed by a Block record.
 	return Block{n}
 }
 
@@ -18911,6 +19915,7 @@ func (n Node) AsVariableStatement() VariableStatement {
 	if n.Kind() != KindVariableStatement {
 		panic("Invalid node cast to VariableStatement")
 	}
+	// SAFETY: The kind check guarantees n is backed by a VariableStatement record.
 	return VariableStatement{n}
 }
 
@@ -18918,6 +19923,7 @@ func (n Node) AsVariableDeclaration() VariableDeclaration {
 	if n.Kind() != KindVariableDeclaration {
 		panic("Invalid node cast to VariableDeclaration")
 	}
+	// SAFETY: The kind check guarantees n is backed by a VariableDeclaration record.
 	return VariableDeclaration{n}
 }
 
@@ -18925,6 +19931,7 @@ func (n Node) AsVariableDeclarationList() VariableDeclarationList {
 	if n.Kind() != KindVariableDeclarationList {
 		panic("Invalid node cast to VariableDeclarationList")
 	}
+	// SAFETY: The kind check guarantees n is backed by a VariableDeclarationList record.
 	return VariableDeclarationList{n}
 }
 
@@ -18934,6 +19941,7 @@ func (n Node) AsBindingPattern() BindingPattern {
 	default:
 		panic("Invalid node cast to BindingPattern")
 	}
+	// SAFETY: The kind check guarantees n is backed by a BindingPattern record.
 	return BindingPattern{n}
 }
 
@@ -18941,6 +19949,7 @@ func (n Node) AsParameterDeclaration() ParameterDeclaration {
 	if n.Kind() != KindParameter {
 		panic("Invalid node cast to ParameterDeclaration")
 	}
+	// SAFETY: The kind check guarantees n is backed by a ParameterDeclaration record.
 	return ParameterDeclaration{n}
 }
 
@@ -18948,6 +19957,7 @@ func (n Node) AsBindingElement() BindingElement {
 	if n.Kind() != KindBindingElement {
 		panic("Invalid node cast to BindingElement")
 	}
+	// SAFETY: The kind check guarantees n is backed by a BindingElement record.
 	return BindingElement{n}
 }
 
@@ -18955,6 +19965,7 @@ func (n Node) AsMissingDeclaration() MissingDeclaration {
 	if n.Kind() != KindMissingDeclaration {
 		panic("Invalid node cast to MissingDeclaration")
 	}
+	// SAFETY: The kind check guarantees n is backed by a MissingDeclaration record.
 	return MissingDeclaration{n}
 }
 
@@ -18962,6 +19973,7 @@ func (n Node) AsFunctionDeclaration() FunctionDeclaration {
 	if n.Kind() != KindFunctionDeclaration {
 		panic("Invalid node cast to FunctionDeclaration")
 	}
+	// SAFETY: The kind check guarantees n is backed by a FunctionDeclaration record.
 	return FunctionDeclaration{n}
 }
 
@@ -18969,6 +19981,7 @@ func (n Node) AsClassDeclaration() ClassDeclaration {
 	if n.Kind() != KindClassDeclaration {
 		panic("Invalid node cast to ClassDeclaration")
 	}
+	// SAFETY: The kind check guarantees n is backed by a ClassDeclaration record.
 	return ClassDeclaration{n}
 }
 
@@ -18976,6 +19989,7 @@ func (n Node) AsClassExpression() ClassExpression {
 	if n.Kind() != KindClassExpression {
 		panic("Invalid node cast to ClassExpression")
 	}
+	// SAFETY: The kind check guarantees n is backed by a ClassExpression record.
 	return ClassExpression{n}
 }
 
@@ -18983,6 +19997,7 @@ func (n Node) AsHeritageClause() HeritageClause {
 	if n.Kind() != KindHeritageClause {
 		panic("Invalid node cast to HeritageClause")
 	}
+	// SAFETY: The kind check guarantees n is backed by a HeritageClause record.
 	return HeritageClause{n}
 }
 
@@ -18990,6 +20005,7 @@ func (n Node) AsInterfaceDeclaration() InterfaceDeclaration {
 	if n.Kind() != KindInterfaceDeclaration {
 		panic("Invalid node cast to InterfaceDeclaration")
 	}
+	// SAFETY: The kind check guarantees n is backed by a InterfaceDeclaration record.
 	return InterfaceDeclaration{n}
 }
 
@@ -18999,6 +20015,7 @@ func (n Node) AsTypeAliasDeclaration() TypeAliasDeclaration {
 	default:
 		panic("Invalid node cast to TypeAliasDeclaration")
 	}
+	// SAFETY: The kind check guarantees n is backed by a TypeAliasDeclaration record.
 	return TypeAliasDeclaration{n}
 }
 
@@ -19006,6 +20023,7 @@ func (n Node) AsEnumMember() EnumMember {
 	if n.Kind() != KindEnumMember {
 		panic("Invalid node cast to EnumMember")
 	}
+	// SAFETY: The kind check guarantees n is backed by a EnumMember record.
 	return EnumMember{n}
 }
 
@@ -19013,6 +20031,7 @@ func (n Node) AsEnumDeclaration() EnumDeclaration {
 	if n.Kind() != KindEnumDeclaration {
 		panic("Invalid node cast to EnumDeclaration")
 	}
+	// SAFETY: The kind check guarantees n is backed by a EnumDeclaration record.
 	return EnumDeclaration{n}
 }
 
@@ -19020,6 +20039,7 @@ func (n Node) AsModuleBlock() ModuleBlock {
 	if n.Kind() != KindModuleBlock {
 		panic("Invalid node cast to ModuleBlock")
 	}
+	// SAFETY: The kind check guarantees n is backed by a ModuleBlock record.
 	return ModuleBlock{n}
 }
 
@@ -19027,6 +20047,7 @@ func (n Node) AsNotEmittedStatement() NotEmittedStatement {
 	if n.Kind() != KindNotEmittedStatement {
 		panic("Invalid node cast to NotEmittedStatement")
 	}
+	// SAFETY: The kind check guarantees n is backed by a NotEmittedStatement record.
 	return NotEmittedStatement{n}
 }
 
@@ -19034,6 +20055,7 @@ func (n Node) AsNotEmittedTypeElement() NotEmittedTypeElement {
 	if n.Kind() != KindNotEmittedTypeElement {
 		panic("Invalid node cast to NotEmittedTypeElement")
 	}
+	// SAFETY: The kind check guarantees n is backed by a NotEmittedTypeElement record.
 	return NotEmittedTypeElement{n}
 }
 
@@ -19043,6 +20065,7 @@ func (n Node) AsImportDeclaration() ImportDeclaration {
 	default:
 		panic("Invalid node cast to ImportDeclaration")
 	}
+	// SAFETY: The kind check guarantees n is backed by a ImportDeclaration record.
 	return ImportDeclaration{n}
 }
 
@@ -19050,6 +20073,7 @@ func (n Node) AsExternalModuleReference() ExternalModuleReference {
 	if n.Kind() != KindExternalModuleReference {
 		panic("Invalid node cast to ExternalModuleReference")
 	}
+	// SAFETY: The kind check guarantees n is backed by a ExternalModuleReference record.
 	return ExternalModuleReference{n}
 }
 
@@ -19057,6 +20081,7 @@ func (n Node) AsNamespaceImport() NamespaceImport {
 	if n.Kind() != KindNamespaceImport {
 		panic("Invalid node cast to NamespaceImport")
 	}
+	// SAFETY: The kind check guarantees n is backed by a NamespaceImport record.
 	return NamespaceImport{n}
 }
 
@@ -19064,6 +20089,7 @@ func (n Node) AsNamedImports() NamedImports {
 	if n.Kind() != KindNamedImports {
 		panic("Invalid node cast to NamedImports")
 	}
+	// SAFETY: The kind check guarantees n is backed by a NamedImports record.
 	return NamedImports{n}
 }
 
@@ -19071,6 +20097,7 @@ func (n Node) AsExportAssignment() ExportAssignment {
 	if n.Kind() != KindExportAssignment {
 		panic("Invalid node cast to ExportAssignment")
 	}
+	// SAFETY: The kind check guarantees n is backed by a ExportAssignment record.
 	return ExportAssignment{n}
 }
 
@@ -19078,6 +20105,7 @@ func (n Node) AsNamespaceExportDeclaration() NamespaceExportDeclaration {
 	if n.Kind() != KindNamespaceExportDeclaration {
 		panic("Invalid node cast to NamespaceExportDeclaration")
 	}
+	// SAFETY: The kind check guarantees n is backed by a NamespaceExportDeclaration record.
 	return NamespaceExportDeclaration{n}
 }
 
@@ -19085,6 +20113,7 @@ func (n Node) AsNamespaceExport() NamespaceExport {
 	if n.Kind() != KindNamespaceExport {
 		panic("Invalid node cast to NamespaceExport")
 	}
+	// SAFETY: The kind check guarantees n is backed by a NamespaceExport record.
 	return NamespaceExport{n}
 }
 
@@ -19092,6 +20121,7 @@ func (n Node) AsNamedExports() NamedExports {
 	if n.Kind() != KindNamedExports {
 		panic("Invalid node cast to NamedExports")
 	}
+	// SAFETY: The kind check guarantees n is backed by a NamedExports record.
 	return NamedExports{n}
 }
 
@@ -19099,6 +20129,7 @@ func (n Node) AsExportSpecifier() ExportSpecifier {
 	if n.Kind() != KindExportSpecifier {
 		panic("Invalid node cast to ExportSpecifier")
 	}
+	// SAFETY: The kind check guarantees n is backed by a ExportSpecifier record.
 	return ExportSpecifier{n}
 }
 
@@ -19106,6 +20137,7 @@ func (n Node) AsCallSignatureDeclaration() CallSignatureDeclaration {
 	if n.Kind() != KindCallSignature {
 		panic("Invalid node cast to CallSignatureDeclaration")
 	}
+	// SAFETY: The kind check guarantees n is backed by a CallSignatureDeclaration record.
 	return CallSignatureDeclaration{n}
 }
 
@@ -19113,6 +20145,7 @@ func (n Node) AsConstructSignatureDeclaration() ConstructSignatureDeclaration {
 	if n.Kind() != KindConstructSignature {
 		panic("Invalid node cast to ConstructSignatureDeclaration")
 	}
+	// SAFETY: The kind check guarantees n is backed by a ConstructSignatureDeclaration record.
 	return ConstructSignatureDeclaration{n}
 }
 
@@ -19120,6 +20153,7 @@ func (n Node) AsConstructorDeclaration() ConstructorDeclaration {
 	if n.Kind() != KindConstructor {
 		panic("Invalid node cast to ConstructorDeclaration")
 	}
+	// SAFETY: The kind check guarantees n is backed by a ConstructorDeclaration record.
 	return ConstructorDeclaration{n}
 }
 
@@ -19127,6 +20161,7 @@ func (n Node) AsGetAccessorDeclaration() GetAccessorDeclaration {
 	if n.Kind() != KindGetAccessor {
 		panic("Invalid node cast to GetAccessorDeclaration")
 	}
+	// SAFETY: The kind check guarantees n is backed by a GetAccessorDeclaration record.
 	return GetAccessorDeclaration{n}
 }
 
@@ -19134,6 +20169,7 @@ func (n Node) AsSetAccessorDeclaration() SetAccessorDeclaration {
 	if n.Kind() != KindSetAccessor {
 		panic("Invalid node cast to SetAccessorDeclaration")
 	}
+	// SAFETY: The kind check guarantees n is backed by a SetAccessorDeclaration record.
 	return SetAccessorDeclaration{n}
 }
 
@@ -19141,6 +20177,7 @@ func (n Node) AsIndexSignatureDeclaration() IndexSignatureDeclaration {
 	if n.Kind() != KindIndexSignature {
 		panic("Invalid node cast to IndexSignatureDeclaration")
 	}
+	// SAFETY: The kind check guarantees n is backed by a IndexSignatureDeclaration record.
 	return IndexSignatureDeclaration{n}
 }
 
@@ -19148,6 +20185,7 @@ func (n Node) AsMethodSignatureDeclaration() MethodSignatureDeclaration {
 	if n.Kind() != KindMethodSignature {
 		panic("Invalid node cast to MethodSignatureDeclaration")
 	}
+	// SAFETY: The kind check guarantees n is backed by a MethodSignatureDeclaration record.
 	return MethodSignatureDeclaration{n}
 }
 
@@ -19155,6 +20193,7 @@ func (n Node) AsMethodDeclaration() MethodDeclaration {
 	if n.Kind() != KindMethodDeclaration {
 		panic("Invalid node cast to MethodDeclaration")
 	}
+	// SAFETY: The kind check guarantees n is backed by a MethodDeclaration record.
 	return MethodDeclaration{n}
 }
 
@@ -19162,6 +20201,7 @@ func (n Node) AsPropertySignatureDeclaration() PropertySignatureDeclaration {
 	if n.Kind() != KindPropertySignature {
 		panic("Invalid node cast to PropertySignatureDeclaration")
 	}
+	// SAFETY: The kind check guarantees n is backed by a PropertySignatureDeclaration record.
 	return PropertySignatureDeclaration{n}
 }
 
@@ -19169,6 +20209,7 @@ func (n Node) AsPropertyDeclaration() PropertyDeclaration {
 	if n.Kind() != KindPropertyDeclaration {
 		panic("Invalid node cast to PropertyDeclaration")
 	}
+	// SAFETY: The kind check guarantees n is backed by a PropertyDeclaration record.
 	return PropertyDeclaration{n}
 }
 
@@ -19176,6 +20217,7 @@ func (n Node) AsSemicolonClassElement() SemicolonClassElement {
 	if n.Kind() != KindSemicolonClassElement {
 		panic("Invalid node cast to SemicolonClassElement")
 	}
+	// SAFETY: The kind check guarantees n is backed by a SemicolonClassElement record.
 	return SemicolonClassElement{n}
 }
 
@@ -19183,6 +20225,7 @@ func (n Node) AsClassStaticBlockDeclaration() ClassStaticBlockDeclaration {
 	if n.Kind() != KindClassStaticBlockDeclaration {
 		panic("Invalid node cast to ClassStaticBlockDeclaration")
 	}
+	// SAFETY: The kind check guarantees n is backed by a ClassStaticBlockDeclaration record.
 	return ClassStaticBlockDeclaration{n}
 }
 
@@ -19190,6 +20233,7 @@ func (n Node) AsOmittedExpression() OmittedExpression {
 	if n.Kind() != KindOmittedExpression {
 		panic("Invalid node cast to OmittedExpression")
 	}
+	// SAFETY: The kind check guarantees n is backed by a OmittedExpression record.
 	return OmittedExpression{n}
 }
 
@@ -19199,6 +20243,7 @@ func (n Node) AsKeywordExpression() KeywordExpression {
 	default:
 		panic("Invalid node cast to KeywordExpression")
 	}
+	// SAFETY: The kind check guarantees n is backed by a KeywordExpression record.
 	return KeywordExpression{n}
 }
 
@@ -19206,6 +20251,7 @@ func (n Node) AsStringLiteral() StringLiteral {
 	if n.Kind() != KindStringLiteral {
 		panic("Invalid node cast to StringLiteral")
 	}
+	// SAFETY: The kind check guarantees n is backed by a StringLiteral record.
 	return StringLiteral{n}
 }
 
@@ -19213,6 +20259,7 @@ func (n Node) AsNumericLiteral() NumericLiteral {
 	if n.Kind() != KindNumericLiteral {
 		panic("Invalid node cast to NumericLiteral")
 	}
+	// SAFETY: The kind check guarantees n is backed by a NumericLiteral record.
 	return NumericLiteral{n}
 }
 
@@ -19220,6 +20267,7 @@ func (n Node) AsBigIntLiteral() BigIntLiteral {
 	if n.Kind() != KindBigIntLiteral {
 		panic("Invalid node cast to BigIntLiteral")
 	}
+	// SAFETY: The kind check guarantees n is backed by a BigIntLiteral record.
 	return BigIntLiteral{n}
 }
 
@@ -19227,6 +20275,7 @@ func (n Node) AsRegularExpressionLiteral() RegularExpressionLiteral {
 	if n.Kind() != KindRegularExpressionLiteral {
 		panic("Invalid node cast to RegularExpressionLiteral")
 	}
+	// SAFETY: The kind check guarantees n is backed by a RegularExpressionLiteral record.
 	return RegularExpressionLiteral{n}
 }
 
@@ -19234,6 +20283,7 @@ func (n Node) AsNoSubstitutionTemplateLiteral() NoSubstitutionTemplateLiteral {
 	if n.Kind() != KindNoSubstitutionTemplateLiteral {
 		panic("Invalid node cast to NoSubstitutionTemplateLiteral")
 	}
+	// SAFETY: The kind check guarantees n is backed by a NoSubstitutionTemplateLiteral record.
 	return NoSubstitutionTemplateLiteral{n}
 }
 
@@ -19241,6 +20291,7 @@ func (n Node) AsBinaryExpression() BinaryExpression {
 	if n.Kind() != KindBinaryExpression {
 		panic("Invalid node cast to BinaryExpression")
 	}
+	// SAFETY: The kind check guarantees n is backed by a BinaryExpression record.
 	return BinaryExpression{n}
 }
 
@@ -19248,6 +20299,7 @@ func (n Node) AsPrefixUnaryExpression() PrefixUnaryExpression {
 	if n.Kind() != KindPrefixUnaryExpression {
 		panic("Invalid node cast to PrefixUnaryExpression")
 	}
+	// SAFETY: The kind check guarantees n is backed by a PrefixUnaryExpression record.
 	return PrefixUnaryExpression{n}
 }
 
@@ -19255,6 +20307,7 @@ func (n Node) AsPostfixUnaryExpression() PostfixUnaryExpression {
 	if n.Kind() != KindPostfixUnaryExpression {
 		panic("Invalid node cast to PostfixUnaryExpression")
 	}
+	// SAFETY: The kind check guarantees n is backed by a PostfixUnaryExpression record.
 	return PostfixUnaryExpression{n}
 }
 
@@ -19262,6 +20315,7 @@ func (n Node) AsYieldExpression() YieldExpression {
 	if n.Kind() != KindYieldExpression {
 		panic("Invalid node cast to YieldExpression")
 	}
+	// SAFETY: The kind check guarantees n is backed by a YieldExpression record.
 	return YieldExpression{n}
 }
 
@@ -19269,6 +20323,7 @@ func (n Node) AsArrowFunction() ArrowFunction {
 	if n.Kind() != KindArrowFunction {
 		panic("Invalid node cast to ArrowFunction")
 	}
+	// SAFETY: The kind check guarantees n is backed by a ArrowFunction record.
 	return ArrowFunction{n}
 }
 
@@ -19276,6 +20331,7 @@ func (n Node) AsFunctionExpression() FunctionExpression {
 	if n.Kind() != KindFunctionExpression {
 		panic("Invalid node cast to FunctionExpression")
 	}
+	// SAFETY: The kind check guarantees n is backed by a FunctionExpression record.
 	return FunctionExpression{n}
 }
 
@@ -19283,6 +20339,7 @@ func (n Node) AsAsExpression() AsExpression {
 	if n.Kind() != KindAsExpression {
 		panic("Invalid node cast to AsExpression")
 	}
+	// SAFETY: The kind check guarantees n is backed by a AsExpression record.
 	return AsExpression{n}
 }
 
@@ -19290,6 +20347,7 @@ func (n Node) AsSatisfiesExpression() SatisfiesExpression {
 	if n.Kind() != KindSatisfiesExpression {
 		panic("Invalid node cast to SatisfiesExpression")
 	}
+	// SAFETY: The kind check guarantees n is backed by a SatisfiesExpression record.
 	return SatisfiesExpression{n}
 }
 
@@ -19297,6 +20355,7 @@ func (n Node) AsConditionalExpression() ConditionalExpression {
 	if n.Kind() != KindConditionalExpression {
 		panic("Invalid node cast to ConditionalExpression")
 	}
+	// SAFETY: The kind check guarantees n is backed by a ConditionalExpression record.
 	return ConditionalExpression{n}
 }
 
@@ -19304,6 +20363,7 @@ func (n Node) AsPropertyAccessExpression() PropertyAccessExpression {
 	if n.Kind() != KindPropertyAccessExpression {
 		panic("Invalid node cast to PropertyAccessExpression")
 	}
+	// SAFETY: The kind check guarantees n is backed by a PropertyAccessExpression record.
 	return PropertyAccessExpression{n}
 }
 
@@ -19311,6 +20371,7 @@ func (n Node) AsElementAccessExpression() ElementAccessExpression {
 	if n.Kind() != KindElementAccessExpression {
 		panic("Invalid node cast to ElementAccessExpression")
 	}
+	// SAFETY: The kind check guarantees n is backed by a ElementAccessExpression record.
 	return ElementAccessExpression{n}
 }
 
@@ -19318,6 +20379,7 @@ func (n Node) AsCallExpression() CallExpression {
 	if n.Kind() != KindCallExpression {
 		panic("Invalid node cast to CallExpression")
 	}
+	// SAFETY: The kind check guarantees n is backed by a CallExpression record.
 	return CallExpression{n}
 }
 
@@ -19325,6 +20387,7 @@ func (n Node) AsNewExpression() NewExpression {
 	if n.Kind() != KindNewExpression {
 		panic("Invalid node cast to NewExpression")
 	}
+	// SAFETY: The kind check guarantees n is backed by a NewExpression record.
 	return NewExpression{n}
 }
 
@@ -19332,6 +20395,7 @@ func (n Node) AsMetaProperty() MetaProperty {
 	if n.Kind() != KindMetaProperty {
 		panic("Invalid node cast to MetaProperty")
 	}
+	// SAFETY: The kind check guarantees n is backed by a MetaProperty record.
 	return MetaProperty{n}
 }
 
@@ -19339,6 +20403,7 @@ func (n Node) AsNonNullExpression() NonNullExpression {
 	if n.Kind() != KindNonNullExpression {
 		panic("Invalid node cast to NonNullExpression")
 	}
+	// SAFETY: The kind check guarantees n is backed by a NonNullExpression record.
 	return NonNullExpression{n}
 }
 
@@ -19346,6 +20411,7 @@ func (n Node) AsSpreadElement() SpreadElement {
 	if n.Kind() != KindSpreadElement {
 		panic("Invalid node cast to SpreadElement")
 	}
+	// SAFETY: The kind check guarantees n is backed by a SpreadElement record.
 	return SpreadElement{n}
 }
 
@@ -19353,6 +20419,7 @@ func (n Node) AsTemplateExpression() TemplateExpression {
 	if n.Kind() != KindTemplateExpression {
 		panic("Invalid node cast to TemplateExpression")
 	}
+	// SAFETY: The kind check guarantees n is backed by a TemplateExpression record.
 	return TemplateExpression{n}
 }
 
@@ -19360,6 +20427,7 @@ func (n Node) AsTemplateSpan() TemplateSpan {
 	if n.Kind() != KindTemplateSpan {
 		panic("Invalid node cast to TemplateSpan")
 	}
+	// SAFETY: The kind check guarantees n is backed by a TemplateSpan record.
 	return TemplateSpan{n}
 }
 
@@ -19367,6 +20435,7 @@ func (n Node) AsTaggedTemplateExpression() TaggedTemplateExpression {
 	if n.Kind() != KindTaggedTemplateExpression {
 		panic("Invalid node cast to TaggedTemplateExpression")
 	}
+	// SAFETY: The kind check guarantees n is backed by a TaggedTemplateExpression record.
 	return TaggedTemplateExpression{n}
 }
 
@@ -19374,6 +20443,7 @@ func (n Node) AsParenthesizedExpression() ParenthesizedExpression {
 	if n.Kind() != KindParenthesizedExpression {
 		panic("Invalid node cast to ParenthesizedExpression")
 	}
+	// SAFETY: The kind check guarantees n is backed by a ParenthesizedExpression record.
 	return ParenthesizedExpression{n}
 }
 
@@ -19381,6 +20451,7 @@ func (n Node) AsArrayLiteralExpression() ArrayLiteralExpression {
 	if n.Kind() != KindArrayLiteralExpression {
 		panic("Invalid node cast to ArrayLiteralExpression")
 	}
+	// SAFETY: The kind check guarantees n is backed by a ArrayLiteralExpression record.
 	return ArrayLiteralExpression{n}
 }
 
@@ -19388,6 +20459,7 @@ func (n Node) AsObjectLiteralExpression() ObjectLiteralExpression {
 	if n.Kind() != KindObjectLiteralExpression {
 		panic("Invalid node cast to ObjectLiteralExpression")
 	}
+	// SAFETY: The kind check guarantees n is backed by a ObjectLiteralExpression record.
 	return ObjectLiteralExpression{n}
 }
 
@@ -19395,6 +20467,7 @@ func (n Node) AsSpreadAssignment() SpreadAssignment {
 	if n.Kind() != KindSpreadAssignment {
 		panic("Invalid node cast to SpreadAssignment")
 	}
+	// SAFETY: The kind check guarantees n is backed by a SpreadAssignment record.
 	return SpreadAssignment{n}
 }
 
@@ -19402,6 +20475,7 @@ func (n Node) AsPropertyAssignment() PropertyAssignment {
 	if n.Kind() != KindPropertyAssignment {
 		panic("Invalid node cast to PropertyAssignment")
 	}
+	// SAFETY: The kind check guarantees n is backed by a PropertyAssignment record.
 	return PropertyAssignment{n}
 }
 
@@ -19409,6 +20483,7 @@ func (n Node) AsShorthandPropertyAssignment() ShorthandPropertyAssignment {
 	if n.Kind() != KindShorthandPropertyAssignment {
 		panic("Invalid node cast to ShorthandPropertyAssignment")
 	}
+	// SAFETY: The kind check guarantees n is backed by a ShorthandPropertyAssignment record.
 	return ShorthandPropertyAssignment{n}
 }
 
@@ -19416,6 +20491,7 @@ func (n Node) AsDeleteExpression() DeleteExpression {
 	if n.Kind() != KindDeleteExpression {
 		panic("Invalid node cast to DeleteExpression")
 	}
+	// SAFETY: The kind check guarantees n is backed by a DeleteExpression record.
 	return DeleteExpression{n}
 }
 
@@ -19423,6 +20499,7 @@ func (n Node) AsTypeOfExpression() TypeOfExpression {
 	if n.Kind() != KindTypeOfExpression {
 		panic("Invalid node cast to TypeOfExpression")
 	}
+	// SAFETY: The kind check guarantees n is backed by a TypeOfExpression record.
 	return TypeOfExpression{n}
 }
 
@@ -19430,6 +20507,7 @@ func (n Node) AsVoidExpression() VoidExpression {
 	if n.Kind() != KindVoidExpression {
 		panic("Invalid node cast to VoidExpression")
 	}
+	// SAFETY: The kind check guarantees n is backed by a VoidExpression record.
 	return VoidExpression{n}
 }
 
@@ -19437,6 +20515,7 @@ func (n Node) AsAwaitExpression() AwaitExpression {
 	if n.Kind() != KindAwaitExpression {
 		panic("Invalid node cast to AwaitExpression")
 	}
+	// SAFETY: The kind check guarantees n is backed by a AwaitExpression record.
 	return AwaitExpression{n}
 }
 
@@ -19444,6 +20523,7 @@ func (n Node) AsTypeAssertion() TypeAssertion {
 	if n.Kind() != KindTypeAssertionExpression {
 		panic("Invalid node cast to TypeAssertion")
 	}
+	// SAFETY: The kind check guarantees n is backed by a TypeAssertion record.
 	return TypeAssertion{n}
 }
 
@@ -19453,6 +20533,7 @@ func (n Node) AsKeywordTypeNode() KeywordTypeNode {
 	default:
 		panic("Invalid node cast to KeywordTypeNode")
 	}
+	// SAFETY: The kind check guarantees n is backed by a KeywordTypeNode record.
 	return KeywordTypeNode{n}
 }
 
@@ -19460,6 +20541,7 @@ func (n Node) AsUnionTypeNode() UnionTypeNode {
 	if n.Kind() != KindUnionType {
 		panic("Invalid node cast to UnionTypeNode")
 	}
+	// SAFETY: The kind check guarantees n is backed by a UnionTypeNode record.
 	return UnionTypeNode{n}
 }
 
@@ -19467,6 +20549,7 @@ func (n Node) AsIntersectionTypeNode() IntersectionTypeNode {
 	if n.Kind() != KindIntersectionType {
 		panic("Invalid node cast to IntersectionTypeNode")
 	}
+	// SAFETY: The kind check guarantees n is backed by a IntersectionTypeNode record.
 	return IntersectionTypeNode{n}
 }
 
@@ -19474,6 +20557,7 @@ func (n Node) AsConditionalTypeNode() ConditionalTypeNode {
 	if n.Kind() != KindConditionalType {
 		panic("Invalid node cast to ConditionalTypeNode")
 	}
+	// SAFETY: The kind check guarantees n is backed by a ConditionalTypeNode record.
 	return ConditionalTypeNode{n}
 }
 
@@ -19481,6 +20565,7 @@ func (n Node) AsTypeOperatorNode() TypeOperatorNode {
 	if n.Kind() != KindTypeOperator {
 		panic("Invalid node cast to TypeOperatorNode")
 	}
+	// SAFETY: The kind check guarantees n is backed by a TypeOperatorNode record.
 	return TypeOperatorNode{n}
 }
 
@@ -19488,6 +20573,7 @@ func (n Node) AsInferTypeNode() InferTypeNode {
 	if n.Kind() != KindInferType {
 		panic("Invalid node cast to InferTypeNode")
 	}
+	// SAFETY: The kind check guarantees n is backed by a InferTypeNode record.
 	return InferTypeNode{n}
 }
 
@@ -19495,6 +20581,7 @@ func (n Node) AsArrayTypeNode() ArrayTypeNode {
 	if n.Kind() != KindArrayType {
 		panic("Invalid node cast to ArrayTypeNode")
 	}
+	// SAFETY: The kind check guarantees n is backed by a ArrayTypeNode record.
 	return ArrayTypeNode{n}
 }
 
@@ -19502,6 +20589,7 @@ func (n Node) AsIndexedAccessTypeNode() IndexedAccessTypeNode {
 	if n.Kind() != KindIndexedAccessType {
 		panic("Invalid node cast to IndexedAccessTypeNode")
 	}
+	// SAFETY: The kind check guarantees n is backed by a IndexedAccessTypeNode record.
 	return IndexedAccessTypeNode{n}
 }
 
@@ -19509,6 +20597,7 @@ func (n Node) AsTypeReferenceNode() TypeReferenceNode {
 	if n.Kind() != KindTypeReference {
 		panic("Invalid node cast to TypeReferenceNode")
 	}
+	// SAFETY: The kind check guarantees n is backed by a TypeReferenceNode record.
 	return TypeReferenceNode{n}
 }
 
@@ -19516,6 +20605,7 @@ func (n Node) AsExpressionWithTypeArguments() ExpressionWithTypeArguments {
 	if n.Kind() != KindExpressionWithTypeArguments {
 		panic("Invalid node cast to ExpressionWithTypeArguments")
 	}
+	// SAFETY: The kind check guarantees n is backed by a ExpressionWithTypeArguments record.
 	return ExpressionWithTypeArguments{n}
 }
 
@@ -19523,6 +20613,7 @@ func (n Node) AsLiteralTypeNode() LiteralTypeNode {
 	if n.Kind() != KindLiteralType {
 		panic("Invalid node cast to LiteralTypeNode")
 	}
+	// SAFETY: The kind check guarantees n is backed by a LiteralTypeNode record.
 	return LiteralTypeNode{n}
 }
 
@@ -19530,6 +20621,7 @@ func (n Node) AsThisTypeNode() ThisTypeNode {
 	if n.Kind() != KindThisType {
 		panic("Invalid node cast to ThisTypeNode")
 	}
+	// SAFETY: The kind check guarantees n is backed by a ThisTypeNode record.
 	return ThisTypeNode{n}
 }
 
@@ -19537,6 +20629,7 @@ func (n Node) AsTypePredicateNode() TypePredicateNode {
 	if n.Kind() != KindTypePredicate {
 		panic("Invalid node cast to TypePredicateNode")
 	}
+	// SAFETY: The kind check guarantees n is backed by a TypePredicateNode record.
 	return TypePredicateNode{n}
 }
 
@@ -19544,6 +20637,7 @@ func (n Node) AsImportAttribute() ImportAttribute {
 	if n.Kind() != KindImportAttribute {
 		panic("Invalid node cast to ImportAttribute")
 	}
+	// SAFETY: The kind check guarantees n is backed by a ImportAttribute record.
 	return ImportAttribute{n}
 }
 
@@ -19551,6 +20645,7 @@ func (n Node) AsImportAttributes() ImportAttributes {
 	if n.Kind() != KindImportAttributes {
 		panic("Invalid node cast to ImportAttributes")
 	}
+	// SAFETY: The kind check guarantees n is backed by a ImportAttributes record.
 	return ImportAttributes{n}
 }
 
@@ -19558,6 +20653,7 @@ func (n Node) AsTypeQueryNode() TypeQueryNode {
 	if n.Kind() != KindTypeQuery {
 		panic("Invalid node cast to TypeQueryNode")
 	}
+	// SAFETY: The kind check guarantees n is backed by a TypeQueryNode record.
 	return TypeQueryNode{n}
 }
 
@@ -19565,6 +20661,7 @@ func (n Node) AsMappedTypeNode() MappedTypeNode {
 	if n.Kind() != KindMappedType {
 		panic("Invalid node cast to MappedTypeNode")
 	}
+	// SAFETY: The kind check guarantees n is backed by a MappedTypeNode record.
 	return MappedTypeNode{n}
 }
 
@@ -19572,6 +20669,7 @@ func (n Node) AsTypeLiteralNode() TypeLiteralNode {
 	if n.Kind() != KindTypeLiteral {
 		panic("Invalid node cast to TypeLiteralNode")
 	}
+	// SAFETY: The kind check guarantees n is backed by a TypeLiteralNode record.
 	return TypeLiteralNode{n}
 }
 
@@ -19579,6 +20677,7 @@ func (n Node) AsTupleTypeNode() TupleTypeNode {
 	if n.Kind() != KindTupleType {
 		panic("Invalid node cast to TupleTypeNode")
 	}
+	// SAFETY: The kind check guarantees n is backed by a TupleTypeNode record.
 	return TupleTypeNode{n}
 }
 
@@ -19586,6 +20685,7 @@ func (n Node) AsNamedTupleMember() NamedTupleMember {
 	if n.Kind() != KindNamedTupleMember {
 		panic("Invalid node cast to NamedTupleMember")
 	}
+	// SAFETY: The kind check guarantees n is backed by a NamedTupleMember record.
 	return NamedTupleMember{n}
 }
 
@@ -19593,6 +20693,7 @@ func (n Node) AsOptionalTypeNode() OptionalTypeNode {
 	if n.Kind() != KindOptionalType {
 		panic("Invalid node cast to OptionalTypeNode")
 	}
+	// SAFETY: The kind check guarantees n is backed by a OptionalTypeNode record.
 	return OptionalTypeNode{n}
 }
 
@@ -19600,6 +20701,7 @@ func (n Node) AsRestTypeNode() RestTypeNode {
 	if n.Kind() != KindRestType {
 		panic("Invalid node cast to RestTypeNode")
 	}
+	// SAFETY: The kind check guarantees n is backed by a RestTypeNode record.
 	return RestTypeNode{n}
 }
 
@@ -19607,6 +20709,7 @@ func (n Node) AsParenthesizedTypeNode() ParenthesizedTypeNode {
 	if n.Kind() != KindParenthesizedType {
 		panic("Invalid node cast to ParenthesizedTypeNode")
 	}
+	// SAFETY: The kind check guarantees n is backed by a ParenthesizedTypeNode record.
 	return ParenthesizedTypeNode{n}
 }
 
@@ -19614,6 +20717,7 @@ func (n Node) AsFunctionTypeNode() FunctionTypeNode {
 	if n.Kind() != KindFunctionType {
 		panic("Invalid node cast to FunctionTypeNode")
 	}
+	// SAFETY: The kind check guarantees n is backed by a FunctionTypeNode record.
 	return FunctionTypeNode{n}
 }
 
@@ -19621,6 +20725,7 @@ func (n Node) AsConstructorTypeNode() ConstructorTypeNode {
 	if n.Kind() != KindConstructorType {
 		panic("Invalid node cast to ConstructorTypeNode")
 	}
+	// SAFETY: The kind check guarantees n is backed by a ConstructorTypeNode record.
 	return ConstructorTypeNode{n}
 }
 
@@ -19628,6 +20733,7 @@ func (n Node) AsTemplateHead() TemplateHead {
 	if n.Kind() != KindTemplateHead {
 		panic("Invalid node cast to TemplateHead")
 	}
+	// SAFETY: The kind check guarantees n is backed by a TemplateHead record.
 	return TemplateHead{n}
 }
 
@@ -19635,6 +20741,7 @@ func (n Node) AsTemplateMiddle() TemplateMiddle {
 	if n.Kind() != KindTemplateMiddle {
 		panic("Invalid node cast to TemplateMiddle")
 	}
+	// SAFETY: The kind check guarantees n is backed by a TemplateMiddle record.
 	return TemplateMiddle{n}
 }
 
@@ -19642,6 +20749,7 @@ func (n Node) AsTemplateTail() TemplateTail {
 	if n.Kind() != KindTemplateTail {
 		panic("Invalid node cast to TemplateTail")
 	}
+	// SAFETY: The kind check guarantees n is backed by a TemplateTail record.
 	return TemplateTail{n}
 }
 
@@ -19649,6 +20757,7 @@ func (n Node) AsTemplateLiteralTypeNode() TemplateLiteralTypeNode {
 	if n.Kind() != KindTemplateLiteralType {
 		panic("Invalid node cast to TemplateLiteralTypeNode")
 	}
+	// SAFETY: The kind check guarantees n is backed by a TemplateLiteralTypeNode record.
 	return TemplateLiteralTypeNode{n}
 }
 
@@ -19656,6 +20765,7 @@ func (n Node) AsTemplateLiteralTypeSpan() TemplateLiteralTypeSpan {
 	if n.Kind() != KindTemplateLiteralTypeSpan {
 		panic("Invalid node cast to TemplateLiteralTypeSpan")
 	}
+	// SAFETY: The kind check guarantees n is backed by a TemplateLiteralTypeSpan record.
 	return TemplateLiteralTypeSpan{n}
 }
 
@@ -19663,6 +20773,7 @@ func (n Node) AsSyntheticExpression() SyntheticExpression {
 	if n.Kind() != KindSyntheticExpression {
 		panic("Invalid node cast to SyntheticExpression")
 	}
+	// SAFETY: The kind check guarantees n is backed by a SyntheticExpression record.
 	return SyntheticExpression{n}
 }
 
@@ -19670,6 +20781,7 @@ func (n Node) AsPartiallyEmittedExpression() PartiallyEmittedExpression {
 	if n.Kind() != KindPartiallyEmittedExpression {
 		panic("Invalid node cast to PartiallyEmittedExpression")
 	}
+	// SAFETY: The kind check guarantees n is backed by a PartiallyEmittedExpression record.
 	return PartiallyEmittedExpression{n}
 }
 
@@ -19677,6 +20789,7 @@ func (n Node) AsJsxElement() JsxElement {
 	if n.Kind() != KindJsxElement {
 		panic("Invalid node cast to JsxElement")
 	}
+	// SAFETY: The kind check guarantees n is backed by a JsxElement record.
 	return JsxElement{n}
 }
 
@@ -19684,6 +20797,7 @@ func (n Node) AsJsxAttributes() JsxAttributes {
 	if n.Kind() != KindJsxAttributes {
 		panic("Invalid node cast to JsxAttributes")
 	}
+	// SAFETY: The kind check guarantees n is backed by a JsxAttributes record.
 	return JsxAttributes{n}
 }
 
@@ -19691,6 +20805,7 @@ func (n Node) AsJsxNamespacedName() JsxNamespacedName {
 	if n.Kind() != KindJsxNamespacedName {
 		panic("Invalid node cast to JsxNamespacedName")
 	}
+	// SAFETY: The kind check guarantees n is backed by a JsxNamespacedName record.
 	return JsxNamespacedName{n}
 }
 
@@ -19698,6 +20813,7 @@ func (n Node) AsJsxOpeningElement() JsxOpeningElement {
 	if n.Kind() != KindJsxOpeningElement {
 		panic("Invalid node cast to JsxOpeningElement")
 	}
+	// SAFETY: The kind check guarantees n is backed by a JsxOpeningElement record.
 	return JsxOpeningElement{n}
 }
 
@@ -19705,6 +20821,7 @@ func (n Node) AsJsxSelfClosingElement() JsxSelfClosingElement {
 	if n.Kind() != KindJsxSelfClosingElement {
 		panic("Invalid node cast to JsxSelfClosingElement")
 	}
+	// SAFETY: The kind check guarantees n is backed by a JsxSelfClosingElement record.
 	return JsxSelfClosingElement{n}
 }
 
@@ -19712,6 +20829,7 @@ func (n Node) AsJsxFragment() JsxFragment {
 	if n.Kind() != KindJsxFragment {
 		panic("Invalid node cast to JsxFragment")
 	}
+	// SAFETY: The kind check guarantees n is backed by a JsxFragment record.
 	return JsxFragment{n}
 }
 
@@ -19719,6 +20837,7 @@ func (n Node) AsJsxOpeningFragment() JsxOpeningFragment {
 	if n.Kind() != KindJsxOpeningFragment {
 		panic("Invalid node cast to JsxOpeningFragment")
 	}
+	// SAFETY: The kind check guarantees n is backed by a JsxOpeningFragment record.
 	return JsxOpeningFragment{n}
 }
 
@@ -19726,6 +20845,7 @@ func (n Node) AsJsxClosingFragment() JsxClosingFragment {
 	if n.Kind() != KindJsxClosingFragment {
 		panic("Invalid node cast to JsxClosingFragment")
 	}
+	// SAFETY: The kind check guarantees n is backed by a JsxClosingFragment record.
 	return JsxClosingFragment{n}
 }
 
@@ -19733,6 +20853,7 @@ func (n Node) AsJsxAttribute() JsxAttribute {
 	if n.Kind() != KindJsxAttribute {
 		panic("Invalid node cast to JsxAttribute")
 	}
+	// SAFETY: The kind check guarantees n is backed by a JsxAttribute record.
 	return JsxAttribute{n}
 }
 
@@ -19740,6 +20861,7 @@ func (n Node) AsJsxSpreadAttribute() JsxSpreadAttribute {
 	if n.Kind() != KindJsxSpreadAttribute {
 		panic("Invalid node cast to JsxSpreadAttribute")
 	}
+	// SAFETY: The kind check guarantees n is backed by a JsxSpreadAttribute record.
 	return JsxSpreadAttribute{n}
 }
 
@@ -19747,6 +20869,7 @@ func (n Node) AsJsxClosingElement() JsxClosingElement {
 	if n.Kind() != KindJsxClosingElement {
 		panic("Invalid node cast to JsxClosingElement")
 	}
+	// SAFETY: The kind check guarantees n is backed by a JsxClosingElement record.
 	return JsxClosingElement{n}
 }
 
@@ -19754,6 +20877,7 @@ func (n Node) AsJsxExpression() JsxExpression {
 	if n.Kind() != KindJsxExpression {
 		panic("Invalid node cast to JsxExpression")
 	}
+	// SAFETY: The kind check guarantees n is backed by a JsxExpression record.
 	return JsxExpression{n}
 }
 
@@ -19761,6 +20885,7 @@ func (n Node) AsJsxText() JsxText {
 	if n.Kind() != KindJsxText {
 		panic("Invalid node cast to JsxText")
 	}
+	// SAFETY: The kind check guarantees n is backed by a JsxText record.
 	return JsxText{n}
 }
 
@@ -19768,6 +20893,7 @@ func (n Node) AsSyntaxList() SyntaxList {
 	if n.Kind() != KindSyntaxList {
 		panic("Invalid node cast to SyntaxList")
 	}
+	// SAFETY: The kind check guarantees n is backed by a SyntaxList record.
 	return SyntaxList{n}
 }
 
@@ -19775,6 +20901,7 @@ func (n Node) AsJSDoc() JSDoc {
 	if n.Kind() != KindJSDoc {
 		panic("Invalid node cast to JSDoc")
 	}
+	// SAFETY: The kind check guarantees n is backed by a JSDoc record.
 	return JSDoc{n}
 }
 
@@ -19782,6 +20909,7 @@ func (n Node) AsJSDocTypeExpression() JSDocTypeExpression {
 	if n.Kind() != KindJSDocTypeExpression {
 		panic("Invalid node cast to JSDocTypeExpression")
 	}
+	// SAFETY: The kind check guarantees n is backed by a JSDocTypeExpression record.
 	return JSDocTypeExpression{n}
 }
 
@@ -19789,6 +20917,7 @@ func (n Node) AsJSDocNonNullableType() JSDocNonNullableType {
 	if n.Kind() != KindJSDocNonNullableType {
 		panic("Invalid node cast to JSDocNonNullableType")
 	}
+	// SAFETY: The kind check guarantees n is backed by a JSDocNonNullableType record.
 	return JSDocNonNullableType{n}
 }
 
@@ -19796,6 +20925,7 @@ func (n Node) AsJSDocNullableType() JSDocNullableType {
 	if n.Kind() != KindJSDocNullableType {
 		panic("Invalid node cast to JSDocNullableType")
 	}
+	// SAFETY: The kind check guarantees n is backed by a JSDocNullableType record.
 	return JSDocNullableType{n}
 }
 
@@ -19803,6 +20933,7 @@ func (n Node) AsJSDocAllType() JSDocAllType {
 	if n.Kind() != KindJSDocAllType {
 		panic("Invalid node cast to JSDocAllType")
 	}
+	// SAFETY: The kind check guarantees n is backed by a JSDocAllType record.
 	return JSDocAllType{n}
 }
 
@@ -19810,6 +20941,7 @@ func (n Node) AsJSDocVariadicType() JSDocVariadicType {
 	if n.Kind() != KindJSDocVariadicType {
 		panic("Invalid node cast to JSDocVariadicType")
 	}
+	// SAFETY: The kind check guarantees n is backed by a JSDocVariadicType record.
 	return JSDocVariadicType{n}
 }
 
@@ -19817,6 +20949,7 @@ func (n Node) AsJSDocOptionalType() JSDocOptionalType {
 	if n.Kind() != KindJSDocOptionalType {
 		panic("Invalid node cast to JSDocOptionalType")
 	}
+	// SAFETY: The kind check guarantees n is backed by a JSDocOptionalType record.
 	return JSDocOptionalType{n}
 }
 
@@ -19824,6 +20957,7 @@ func (n Node) AsJSDocTypeTag() JSDocTypeTag {
 	if n.Kind() != KindJSDocTypeTag {
 		panic("Invalid node cast to JSDocTypeTag")
 	}
+	// SAFETY: The kind check guarantees n is backed by a JSDocTypeTag record.
 	return JSDocTypeTag{n}
 }
 
@@ -19831,6 +20965,7 @@ func (n Node) AsJSDocUnknownTag() JSDocUnknownTag {
 	if n.Kind() != KindJSDocUnknownTag {
 		panic("Invalid node cast to JSDocUnknownTag")
 	}
+	// SAFETY: The kind check guarantees n is backed by a JSDocUnknownTag record.
 	return JSDocUnknownTag{n}
 }
 
@@ -19838,6 +20973,7 @@ func (n Node) AsJSDocTemplateTag() JSDocTemplateTag {
 	if n.Kind() != KindJSDocTemplateTag {
 		panic("Invalid node cast to JSDocTemplateTag")
 	}
+	// SAFETY: The kind check guarantees n is backed by a JSDocTemplateTag record.
 	return JSDocTemplateTag{n}
 }
 
@@ -19845,6 +20981,7 @@ func (n Node) AsJSDocReturnTag() JSDocReturnTag {
 	if n.Kind() != KindJSDocReturnTag {
 		panic("Invalid node cast to JSDocReturnTag")
 	}
+	// SAFETY: The kind check guarantees n is backed by a JSDocReturnTag record.
 	return JSDocReturnTag{n}
 }
 
@@ -19852,6 +20989,7 @@ func (n Node) AsJSDocPublicTag() JSDocPublicTag {
 	if n.Kind() != KindJSDocPublicTag {
 		panic("Invalid node cast to JSDocPublicTag")
 	}
+	// SAFETY: The kind check guarantees n is backed by a JSDocPublicTag record.
 	return JSDocPublicTag{n}
 }
 
@@ -19859,6 +20997,7 @@ func (n Node) AsJSDocPrivateTag() JSDocPrivateTag {
 	if n.Kind() != KindJSDocPrivateTag {
 		panic("Invalid node cast to JSDocPrivateTag")
 	}
+	// SAFETY: The kind check guarantees n is backed by a JSDocPrivateTag record.
 	return JSDocPrivateTag{n}
 }
 
@@ -19866,6 +21005,7 @@ func (n Node) AsJSDocProtectedTag() JSDocProtectedTag {
 	if n.Kind() != KindJSDocProtectedTag {
 		panic("Invalid node cast to JSDocProtectedTag")
 	}
+	// SAFETY: The kind check guarantees n is backed by a JSDocProtectedTag record.
 	return JSDocProtectedTag{n}
 }
 
@@ -19873,6 +21013,7 @@ func (n Node) AsJSDocReadonlyTag() JSDocReadonlyTag {
 	if n.Kind() != KindJSDocReadonlyTag {
 		panic("Invalid node cast to JSDocReadonlyTag")
 	}
+	// SAFETY: The kind check guarantees n is backed by a JSDocReadonlyTag record.
 	return JSDocReadonlyTag{n}
 }
 
@@ -19880,6 +21021,7 @@ func (n Node) AsJSDocOverrideTag() JSDocOverrideTag {
 	if n.Kind() != KindJSDocOverrideTag {
 		panic("Invalid node cast to JSDocOverrideTag")
 	}
+	// SAFETY: The kind check guarantees n is backed by a JSDocOverrideTag record.
 	return JSDocOverrideTag{n}
 }
 
@@ -19887,6 +21029,7 @@ func (n Node) AsJSDocDeprecatedTag() JSDocDeprecatedTag {
 	if n.Kind() != KindJSDocDeprecatedTag {
 		panic("Invalid node cast to JSDocDeprecatedTag")
 	}
+	// SAFETY: The kind check guarantees n is backed by a JSDocDeprecatedTag record.
 	return JSDocDeprecatedTag{n}
 }
 
@@ -19894,6 +21037,7 @@ func (n Node) AsJSDocSeeTag() JSDocSeeTag {
 	if n.Kind() != KindJSDocSeeTag {
 		panic("Invalid node cast to JSDocSeeTag")
 	}
+	// SAFETY: The kind check guarantees n is backed by a JSDocSeeTag record.
 	return JSDocSeeTag{n}
 }
 
@@ -19901,6 +21045,7 @@ func (n Node) AsJSDocImplementsTag() JSDocImplementsTag {
 	if n.Kind() != KindJSDocImplementsTag {
 		panic("Invalid node cast to JSDocImplementsTag")
 	}
+	// SAFETY: The kind check guarantees n is backed by a JSDocImplementsTag record.
 	return JSDocImplementsTag{n}
 }
 
@@ -19908,6 +21053,7 @@ func (n Node) AsJSDocAugmentsTag() JSDocAugmentsTag {
 	if n.Kind() != KindJSDocAugmentsTag {
 		panic("Invalid node cast to JSDocAugmentsTag")
 	}
+	// SAFETY: The kind check guarantees n is backed by a JSDocAugmentsTag record.
 	return JSDocAugmentsTag{n}
 }
 
@@ -19915,6 +21061,7 @@ func (n Node) AsJSDocSatisfiesTag() JSDocSatisfiesTag {
 	if n.Kind() != KindJSDocSatisfiesTag {
 		panic("Invalid node cast to JSDocSatisfiesTag")
 	}
+	// SAFETY: The kind check guarantees n is backed by a JSDocSatisfiesTag record.
 	return JSDocSatisfiesTag{n}
 }
 
@@ -19922,6 +21069,7 @@ func (n Node) AsJSDocThrowsTag() JSDocThrowsTag {
 	if n.Kind() != KindJSDocThrowsTag {
 		panic("Invalid node cast to JSDocThrowsTag")
 	}
+	// SAFETY: The kind check guarantees n is backed by a JSDocThrowsTag record.
 	return JSDocThrowsTag{n}
 }
 
@@ -19929,6 +21077,7 @@ func (n Node) AsJSDocThisTag() JSDocThisTag {
 	if n.Kind() != KindJSDocThisTag {
 		panic("Invalid node cast to JSDocThisTag")
 	}
+	// SAFETY: The kind check guarantees n is backed by a JSDocThisTag record.
 	return JSDocThisTag{n}
 }
 
@@ -19936,6 +21085,7 @@ func (n Node) AsJSDocImportTag() JSDocImportTag {
 	if n.Kind() != KindJSDocImportTag {
 		panic("Invalid node cast to JSDocImportTag")
 	}
+	// SAFETY: The kind check guarantees n is backed by a JSDocImportTag record.
 	return JSDocImportTag{n}
 }
 
@@ -19943,6 +21093,7 @@ func (n Node) AsJSDocCallbackTag() JSDocCallbackTag {
 	if n.Kind() != KindJSDocCallbackTag {
 		panic("Invalid node cast to JSDocCallbackTag")
 	}
+	// SAFETY: The kind check guarantees n is backed by a JSDocCallbackTag record.
 	return JSDocCallbackTag{n}
 }
 
@@ -19950,6 +21101,7 @@ func (n Node) AsJSDocOverloadTag() JSDocOverloadTag {
 	if n.Kind() != KindJSDocOverloadTag {
 		panic("Invalid node cast to JSDocOverloadTag")
 	}
+	// SAFETY: The kind check guarantees n is backed by a JSDocOverloadTag record.
 	return JSDocOverloadTag{n}
 }
 
@@ -19957,6 +21109,7 @@ func (n Node) AsJSDocTypedefTag() JSDocTypedefTag {
 	if n.Kind() != KindJSDocTypedefTag {
 		panic("Invalid node cast to JSDocTypedefTag")
 	}
+	// SAFETY: The kind check guarantees n is backed by a JSDocTypedefTag record.
 	return JSDocTypedefTag{n}
 }
 
@@ -19964,6 +21117,7 @@ func (n Node) AsJSDocSignature() JSDocSignature {
 	if n.Kind() != KindJSDocSignature {
 		panic("Invalid node cast to JSDocSignature")
 	}
+	// SAFETY: The kind check guarantees n is backed by a JSDocSignature record.
 	return JSDocSignature{n}
 }
 
@@ -19971,6 +21125,7 @@ func (n Node) AsJSDocNameReference() JSDocNameReference {
 	if n.Kind() != KindJSDocNameReference {
 		panic("Invalid node cast to JSDocNameReference")
 	}
+	// SAFETY: The kind check guarantees n is backed by a JSDocNameReference record.
 	return JSDocNameReference{n}
 }
 
@@ -19978,6 +21133,7 @@ func (n Node) AsSourceFile() *SourceFile {
 	if n.Kind() != KindSourceFile {
 		panic("Invalid node cast to SourceFile")
 	}
+	// SAFETY: The kind check guarantees n is backed by a SourceFile record.
 	return n.asSourceFile()
 }
 
@@ -19985,6 +21141,7 @@ func (n Node) AsModuleDeclaration() ModuleDeclaration {
 	if n.Kind() != KindModuleDeclaration {
 		panic("Invalid node cast to ModuleDeclaration")
 	}
+	// SAFETY: The kind check guarantees n is backed by a ModuleDeclaration record.
 	return ModuleDeclaration{n}
 }
 
@@ -19992,6 +21149,7 @@ func (n Node) AsImportEqualsDeclaration() ImportEqualsDeclaration {
 	if n.Kind() != KindImportEqualsDeclaration {
 		panic("Invalid node cast to ImportEqualsDeclaration")
 	}
+	// SAFETY: The kind check guarantees n is backed by a ImportEqualsDeclaration record.
 	return ImportEqualsDeclaration{n}
 }
 
@@ -19999,6 +21157,7 @@ func (n Node) AsExportDeclaration() ExportDeclaration {
 	if n.Kind() != KindExportDeclaration {
 		panic("Invalid node cast to ExportDeclaration")
 	}
+	// SAFETY: The kind check guarantees n is backed by a ExportDeclaration record.
 	return ExportDeclaration{n}
 }
 
@@ -20006,6 +21165,7 @@ func (n Node) AsImportTypeNode() ImportTypeNode {
 	if n.Kind() != KindImportType {
 		panic("Invalid node cast to ImportTypeNode")
 	}
+	// SAFETY: The kind check guarantees n is backed by a ImportTypeNode record.
 	return ImportTypeNode{n}
 }
 
@@ -20013,6 +21173,7 @@ func (n Node) AsImportClause() ImportClause {
 	if n.Kind() != KindImportClause {
 		panic("Invalid node cast to ImportClause")
 	}
+	// SAFETY: The kind check guarantees n is backed by a ImportClause record.
 	return ImportClause{n}
 }
 
@@ -20020,6 +21181,7 @@ func (n Node) AsImportSpecifier() ImportSpecifier {
 	if n.Kind() != KindImportSpecifier {
 		panic("Invalid node cast to ImportSpecifier")
 	}
+	// SAFETY: The kind check guarantees n is backed by a ImportSpecifier record.
 	return ImportSpecifier{n}
 }
 
@@ -20027,6 +21189,7 @@ func (n Node) AsJSDocText() JSDocText {
 	if n.Kind() != KindJSDocText {
 		panic("Invalid node cast to JSDocText")
 	}
+	// SAFETY: The kind check guarantees n is backed by a JSDocText record.
 	return JSDocText{n}
 }
 
@@ -20034,6 +21197,7 @@ func (n Node) AsJSDocLink() JSDocLink {
 	if n.Kind() != KindJSDocLink {
 		panic("Invalid node cast to JSDocLink")
 	}
+	// SAFETY: The kind check guarantees n is backed by a JSDocLink record.
 	return JSDocLink{n}
 }
 
@@ -20041,6 +21205,7 @@ func (n Node) AsJSDocLinkPlain() JSDocLinkPlain {
 	if n.Kind() != KindJSDocLinkPlain {
 		panic("Invalid node cast to JSDocLinkPlain")
 	}
+	// SAFETY: The kind check guarantees n is backed by a JSDocLinkPlain record.
 	return JSDocLinkPlain{n}
 }
 
@@ -20048,6 +21213,7 @@ func (n Node) AsJSDocLinkCode() JSDocLinkCode {
 	if n.Kind() != KindJSDocLinkCode {
 		panic("Invalid node cast to JSDocLinkCode")
 	}
+	// SAFETY: The kind check guarantees n is backed by a JSDocLinkCode record.
 	return JSDocLinkCode{n}
 }
 
@@ -20055,6 +21221,7 @@ func (n Node) AsTypeParameterDeclaration() TypeParameterDeclaration {
 	if n.Kind() != KindTypeParameter {
 		panic("Invalid node cast to TypeParameterDeclaration")
 	}
+	// SAFETY: The kind check guarantees n is backed by a TypeParameterDeclaration record.
 	return TypeParameterDeclaration{n}
 }
 
@@ -20062,6 +21229,7 @@ func (n Node) AsSyntheticReferenceExpression() SyntheticReferenceExpression {
 	if n.Kind() != KindSyntheticReferenceExpression {
 		panic("Invalid node cast to SyntheticReferenceExpression")
 	}
+	// SAFETY: The kind check guarantees n is backed by a SyntheticReferenceExpression record.
 	return SyntheticReferenceExpression{n}
 }
 
@@ -20069,6 +21237,7 @@ func (n Node) AsJSDocTypeLiteral() JSDocTypeLiteral {
 	if n.Kind() != KindJSDocTypeLiteral {
 		panic("Invalid node cast to JSDocTypeLiteral")
 	}
+	// SAFETY: The kind check guarantees n is backed by a JSDocTypeLiteral record.
 	return JSDocTypeLiteral{n}
 }
 
@@ -20078,6 +21247,7 @@ func (n Node) AsJSDocParameterOrPropertyTag() JSDocParameterOrPropertyTag {
 	default:
 		panic("Invalid node cast to JSDocParameterOrPropertyTag")
 	}
+	// SAFETY: The kind check guarantees n is backed by a JSDocParameterOrPropertyTag record.
 	return JSDocParameterOrPropertyTag{n}
 }
 

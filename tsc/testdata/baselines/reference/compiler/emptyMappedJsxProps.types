@@ -1,0 +1,27 @@
+//// [tests/cases/compiler/emptyMappedJsxProps.tsx] ////
+
+=== emptyMappedJsxProps.tsx ===
+declare namespace JSX {
+    interface Element {}
+    interface ElementAttributesProperty { props: {}; }
+>props : {}
+
+    interface ElementChildrenAttribute { children: {}; }
+>children : {}
+
+    interface IntrinsicAttributes { key?: string; }
+>key : string | undefined
+}
+
+class Component {
+>Component : Component
+
+    props: Readonly<{}> = {};
+>props : Readonly<{}>
+>{} : {}
+}
+<Component>content</Component>;
+><Component>content</Component> : JSX.Element
+>Component : typeof Component
+>Component : typeof Component
+

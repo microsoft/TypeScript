@@ -1,0 +1,109 @@
+//// [tests/cases/compiler/lazyInheritedMemberLookup.ts] ////
+
+=== lazyInheritedMemberLookup.ts ===
+// Inherited members are looked up individually before the members of each type are enumerated.
+
+interface Grand<T> {
+    grand: T;
+>grand : T
+
+    shared: T;
+>shared : T
+}
+type Mixin<T> = { mixin: T };
+>Mixin : Mixin<T>
+>mixin : T
+
+type Fixed = { fixed: string };
+>Fixed : Fixed
+>fixed : string
+
+interface Base<T> extends Grand<T[]> {
+    base: T;
+>base : T
+}
+interface Derived<T> extends Base<T>, Mixin<T>, Fixed {
+    shared: T[];
+>shared : T[]
+
+    derived: T;
+>derived : T
+}
+class C<T> {
+>C : C<T>
+
+    declared!: T;
+>declared : T
+}
+class D<T> extends C<T[]> implements Derived<T> {
+>D : D<T>
+>C : C<T[]>
+
+    grand!: T[];
+>grand : T[]
+
+    shared!: T[];
+>shared : T[]
+
+    mixin!: T;
+>mixin : T
+
+    fixed!: string;
+>fixed : string
+
+    base!: T;
+>base : T
+
+    derived!: T;
+>derived : T
+}
+
+declare const d: Derived<number>;
+>d : Derived<number>
+
+const grand = d.grand;
+>grand : number[]
+>d.grand : number[]
+>d : Derived<number>
+>grand : number[]
+
+const mixin = d.mixin;
+>mixin : number
+>d.mixin : number
+>d : Derived<number>
+>mixin : number
+
+const fixed = d.fixed;
+>fixed : string
+>d.fixed : string
+>d : Derived<number>
+>fixed : string
+
+const shared = d.shared;
+>shared : number[]
+>d.shared : number[]
+>d : Derived<number>
+>shared : number[]
+
+const all = { ...d };
+>all : { grand: number[]; mixin: number; fixed: string; base: number; shared: number[]; derived: number; }
+>{ ...d } : { grand: number[]; mixin: number; fixed: string; base: number; shared: number[]; derived: number; }
+>d : Derived<number>
+
+declare const keys: { [K in keyof Derived<boolean>]: K };
+>keys : { grand: "grand"; mixin: "mixin"; fixed: "fixed"; base: "base"; shared: "shared"; derived: "derived"; }
+
+declare const e: D<string>;
+>e : D<string>
+
+const declared = e.declared;
+>declared : string[]
+>e.declared : string[]
+>e : D<string>
+>declared : string[]
+
+const allE = { ...e };
+>allE : { declared: string[]; grand: string[]; shared: string[]; mixin: string; fixed: string; base: string; derived: string; }
+>{ ...e } : { declared: string[]; grand: string[]; shared: string[]; mixin: string; fixed: string; base: string; derived: string; }
+>e : D<string>
+

@@ -95,7 +95,7 @@ func (a *SymbolIdGenerator) GetSymbolId(symbol *Symbol) SymbolId {
 
 func GetSymbolTable(data *SymbolTable) SymbolTable {
 	if *data == nil {
-		*data = make(SymbolTable)
+		*data = NewSymbolTable()
 	}
 	return *data
 }
@@ -112,7 +112,7 @@ func GetLocals(container Node) SymbolTable {
 	data := container.LocalsContainerData()
 	locals := data.Locals()
 	if locals == nil {
-		locals = make(SymbolTable)
+		locals = NewSymbolTable()
 		data.SetLocals(locals)
 	}
 	return locals

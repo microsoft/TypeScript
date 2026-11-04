@@ -1,0 +1,23 @@
+//// [tests/cases/compiler/numericCompoundAssignmentInElseBranch.ts] ////
+
+=== numericCompoundAssignmentInElseBranch.ts ===
+function accumulate(total: number, width: number, kernedWidth: number) {
+>accumulate : Symbol(accumulate, Decl(numericCompoundAssignmentInElseBranch.ts, 0, 0))
+>total : Symbol(total, Decl(numericCompoundAssignmentInElseBranch.ts, 0, 20))
+>width : Symbol(width, Decl(numericCompoundAssignmentInElseBranch.ts, 0, 34))
+>kernedWidth : Symbol(kernedWidth, Decl(numericCompoundAssignmentInElseBranch.ts, 0, 49))
+
+    if (total === 0) {
+>total : Symbol(total, Decl(numericCompoundAssignmentInElseBranch.ts, 0, 20))
+
+        total += width;
+>total : Symbol(total, Decl(numericCompoundAssignmentInElseBranch.ts, 0, 20))
+>width : Symbol(width, Decl(numericCompoundAssignmentInElseBranch.ts, 0, 34))
+
+    } else {
+        total += kernedWidth;
+>total : Symbol(total, Decl(numericCompoundAssignmentInElseBranch.ts, 0, 20))
+>kernedWidth : Symbol(kernedWidth, Decl(numericCompoundAssignmentInElseBranch.ts, 0, 49))
+    }
+}
+

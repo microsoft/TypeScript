@@ -1,0 +1,27 @@
+//// [tests/cases/compiler/numericPropertyCompoundAssignmentAfterDisjunction.ts] ////
+
+=== numericPropertyCompoundAssignmentAfterDisjunction.ts ===
+class Decoder {
+>Decoder : Symbol(Decoder, Decl(numericPropertyCompoundAssignmentAfterDisjunction.ts, 0, 0))
+
+    remaining = 0;
+>remaining : Symbol(Decoder.remaining, Decl(numericPropertyCompoundAssignmentAfterDisjunction.ts, 0, 15))
+
+    consume(size: number) {
+>consume : Symbol(Decoder.consume, Decl(numericPropertyCompoundAssignmentAfterDisjunction.ts, 1, 18))
+>size : Symbol(size, Decl(numericPropertyCompoundAssignmentAfterDisjunction.ts, 2, 12))
+
+        if (this.remaining === 0 || size === 0) return;
+>this.remaining : Symbol(Decoder.remaining, Decl(numericPropertyCompoundAssignmentAfterDisjunction.ts, 0, 15))
+>this : Symbol(Decoder, Decl(numericPropertyCompoundAssignmentAfterDisjunction.ts, 0, 0))
+>remaining : Symbol(Decoder.remaining, Decl(numericPropertyCompoundAssignmentAfterDisjunction.ts, 0, 15))
+>size : Symbol(size, Decl(numericPropertyCompoundAssignmentAfterDisjunction.ts, 2, 12))
+
+        this.remaining -= size;
+>this.remaining : Symbol(Decoder.remaining, Decl(numericPropertyCompoundAssignmentAfterDisjunction.ts, 0, 15))
+>this : Symbol(Decoder, Decl(numericPropertyCompoundAssignmentAfterDisjunction.ts, 0, 0))
+>remaining : Symbol(Decoder.remaining, Decl(numericPropertyCompoundAssignmentAfterDisjunction.ts, 0, 15))
+>size : Symbol(size, Decl(numericPropertyCompoundAssignmentAfterDisjunction.ts, 2, 12))
+    }
+}
+
