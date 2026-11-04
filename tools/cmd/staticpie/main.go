@@ -56,8 +56,8 @@ func run(path string) error {
 	if err != nil {
 		return err
 	}
-	if err := convert(data); err != nil {
-		return err
+	if convertErr := convert(data); convertErr != nil {
+		return convertErr
 	}
 	info, err := os.Stat(path)
 	if err != nil {
@@ -104,6 +104,7 @@ func convert(data []byte) error {
 		case elf.PT_PHDR:
 			hasPhdr = true
 		case elf.PT_NULL, elf.PT_LOAD, elf.PT_NOTE, elf.PT_TLS, elf.PT_GNU_STACK, elf.PT_GNU_RELRO:
+			continue
 		default:
 			// Unknown headers (e.g. PT_GNU_PROPERTY) may ask the loader
 			// for something the entry function does not do.
@@ -117,13 +118,13 @@ func convert(data []byte) error {
 		return errors.New("missing PT_DYNAMIC or PT_PHDR")
 	}
 
-	rela, err := checkDynamic(f, dynamic)
+	relocations, err := checkDynamic(f, dynamic)
 	if err != nil {
 		return err
 	}
-	for off := 0; off < len(rela); off += relaSize {
+	for off := 0; off < len(relocations); off += relaSize {
 		// Comparing all of r_info also checks that the symbol index is zero.
-		if info := bo.Uint64(rela[off+8:]); info != relative {
+		if info := bo.Uint64(relocations[off+8:]); info != relative {
 			return fmt.Errorf("unsupported relocation with r_info %#x", info)
 		}
 	}
@@ -196,13 +197,13 @@ loop:
 	if relaSz == 0 {
 		return nil, nil
 	}
-	rela := make([]byte, relaSz)
+	relocations := make([]byte, relaSz)
 	for _, p := range f.Progs {
 		if p.Type == elf.PT_LOAD && p.Vaddr <= relaAddr && relaAddr+relaSz <= p.Vaddr+p.Filesz {
-			if _, err := p.ReadAt(rela, int64(relaAddr-p.Vaddr)); err != nil {
+			if _, err := p.ReadAt(relocations, int64(relaAddr-p.Vaddr)); err != nil {
 				return nil, err
 			}
-			return rela, nil
+			return relocations, nil
 		}
 	}
 	return nil, errors.New("DT_RELA is not within a loaded segment")

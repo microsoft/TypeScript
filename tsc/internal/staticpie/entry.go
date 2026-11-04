@@ -9,7 +9,7 @@ package staticpie
 //
 //  1. finds the auxiliary vector above argv and envp on the initial stack;
 //  2. uses AT_PHDR and the PT_PHDR program header to compute the load bias;
-//  3. applies every DT_RELA relocation, failing on anything other than
+//  3. applies every dynamic relocation, failing on anything other than
 //     R_*_RELATIVE;
 //  4. makes the page-aligned part of PT_GNU_RELRO read-only, as ld.so does;
 //  5. jumps to the runtime's _rt0_<arch>_linux with the stack untouched.
