@@ -24012,10 +24012,15 @@ func (c *Checker) mayResolveTypeAlias(node *ast.Node) bool {
 		return true
 	case ast.KindTypeOperator:
 		return node.AsTypeOperatorNode().Operator != ast.KindUniqueKeyword && c.mayResolveTypeAlias(node.Type())
-	case ast.KindParenthesizedType, ast.KindOptionalType, ast.KindNamedTupleMember:
+	case ast.KindParenthesizedType, ast.KindOptionalType:
+		return c.mayResolveTypeAlias(node.Type())
+	case ast.KindNamedTupleMember:
+		if node.AsNamedTupleMember().DotDotDotToken != nil {
+			return c.mayResolveRestElementTypeAlias(node.Type())
+		}
 		return c.mayResolveTypeAlias(node.Type())
 	case ast.KindRestType:
-		return node.Type().Kind != ast.KindArrayType || c.mayResolveTypeAlias(node.Type().AsArrayTypeNode().ElementType)
+		return c.mayResolveRestElementTypeAlias(node.Type())
 	case ast.KindUnionType:
 		return core.Some(node.AsUnionTypeNode().Types.Nodes, c.mayResolveTypeAlias)
 	case ast.KindIntersectionType:
@@ -24027,6 +24032,12 @@ func (c *Checker) mayResolveTypeAlias(node *ast.Node) bool {
 			c.mayResolveTypeAlias(node.AsConditionalTypeNode().TrueType) || c.mayResolveTypeAlias(node.AsConditionalTypeNode().FalseType)
 	}
 	return false
+}
+
+// mayResolveRestElementTypeAlias checks the type of a rest element, labeled or not. A rest element '...T[]'
+// contributes T itself to the tuple's element types, so the check looks through the array type.
+func (c *Checker) mayResolveRestElementTypeAlias(node *ast.Node) bool {
+	return node.Kind != ast.KindArrayType || c.mayResolveTypeAlias(node.AsArrayTypeNode().ElementType)
 }
 
 func (c *Checker) createNormalizedTypeReference(target *Type, typeArguments []*Type) *Type {
