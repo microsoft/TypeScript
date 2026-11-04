@@ -281,6 +281,9 @@ func (fs *overlayFS) processChanges(changes []FileChange) (FileChangeSummary, ma
 		case FileChangeKindSave:
 			events.saved = true
 		case FileChangeKindWatchCreate:
+			// Like a watch change, a create that arrives after a save (e.g. a formatter
+			// atomically replacing the file) means disk may no longer match the saved overlay.
+			events.saved = false
 			if events.deleted {
 				// Delete followed by create becomes a change
 				events.deleted = false

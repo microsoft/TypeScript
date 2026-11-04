@@ -281,6 +281,88 @@ func TestProcessChanges(t *testing.T) {
 		assert.Assert(t, !fs.getFile(testURI1.FileName()).MatchesDiskText())
 	})
 
+	t.Run("save followed by watch create in one batch compares against disk", func(t *testing.T) {
+		t.Parallel()
+
+		t.Run("disk differs from overlay", func(t *testing.T) {
+			t.Parallel()
+			fs := createOverlayFS()
+
+			fs.processChanges([]FileChange{
+				{
+					Kind:    FileChangeKindOpen,
+					URI:     testURI1,
+					Content: "overlay content",
+				},
+			})
+
+			// A save followed by an atomic overwrite (e.g. a formatter) must not
+			// leave the overlay marked as matching disk.
+			fs.processChanges([]FileChange{
+				{
+					Kind: FileChangeKindSave,
+					URI:  testURI1,
+				},
+				{
+					Kind: FileChangeKindWatchCreate,
+					URI:  testURI1,
+				},
+			})
+			assert.Assert(t, !fs.getFile(testURI1.FileName()).MatchesDiskText())
+		})
+
+		t.Run("disk matches overlay", func(t *testing.T) {
+			t.Parallel()
+			fs := createOverlayFS()
+
+			fs.processChanges([]FileChange{
+				{
+					Kind:    FileChangeKindOpen,
+					URI:     testURI1,
+					Content: "// existing content",
+				},
+			})
+
+			fs.processChanges([]FileChange{
+				{
+					Kind: FileChangeKindSave,
+					URI:  testURI1,
+				},
+				{
+					Kind: FileChangeKindWatchCreate,
+					URI:  testURI1,
+				},
+			})
+			assert.Assert(t, fs.getFile(testURI1.FileName()).MatchesDiskText())
+		})
+	})
+
+	t.Run("watch create followed by save in one batch marks overlay as matching disk", func(t *testing.T) {
+		t.Parallel()
+		fs := createOverlayFS()
+
+		fs.processChanges([]FileChange{
+			{
+				Kind:    FileChangeKindOpen,
+				URI:     testURI1,
+				Content: "overlay content",
+			},
+		})
+
+		// The save comes last, so the overlay is what is on disk.
+		fs.processChanges([]FileChange{
+			{
+				Kind: FileChangeKindWatchCreate,
+				URI:  testURI1,
+			},
+			{
+				Kind: FileChangeKindSave,
+				URI:  testURI1,
+			},
+		})
+		assert.Assert(t, fs.getFile(testURI1.FileName()).MatchesDiskText())
+	})
+
 	t.Run("save without overlay should not panic", func(t *testing.T) {
 		t.Parallel()
 		fs := createOverlayFS()
