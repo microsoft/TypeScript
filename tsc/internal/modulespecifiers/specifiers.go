@@ -1306,11 +1306,12 @@ func tryGetModuleNameFromExportsOrImports(
 			if len(result) > 0 {
 				return result
 			}
-			// Node's algorithm commits to the first array element that captures resolution
-			// (a valid target string, null, or a nested object/array with an active branch),
-			// whether or not the file it names exists. Stop here so we don't fall through
-			// to a later element that would never be reached at runtime.
-			if targetCapturesResolution(e, conditions, isImports) {
+			// Node's algorithm commits to the first array element that resolves (a valid target
+			// string, null, or a nested object/array with an active branch), whether or not the
+			// file it names exists. Stop here so we don't fall through to a later element that
+			// would never be reached at runtime. An invalid element doesn't stop the search: Node
+			// skips it and only reports it if no later element resolves.
+			if runtimeTargetOutcome(e, conditions, isImports) == runtimeTargetResolved {
 				break
 			}
 		}
@@ -1360,39 +1361,71 @@ func isRuntimeCondition(key string) bool {
 	return key != "types" && !module.IsApplicableVersionedTypesKey(key)
 }
 
-// targetCapturesResolution reports whether a runtime resolver that reached `target` would commit to it
-// rather than continue on to the next condition or array element. Any syntactically valid target string
-// captures resolution, whether or not the file it names exists, and so does a `null` target, which
-// blocks the specifier outright; only invalid target strings, empty arrays, and objects with no usable
-// condition let the search continue.
+// runtimeOutcome is the result of a runtime resolver's package target resolution for a target.
+type runtimeOutcome int
+
+const (
+	// runtimeTargetFallsThrough means the target yields nothing, so resolution moves on to the next
+	// condition or array element.
+	runtimeTargetFallsThrough runtimeOutcome = iota
+	// runtimeTargetResolved means the target resolves, whether or not the file it names exists, or is
+	// null, which blocks the specifier outright.
+	runtimeTargetResolved
+	// runtimeTargetInvalid means the target is invalid, so resolution throws. An array skips an invalid
+	// element but still fails if no later element resolves; a conditions object fails immediately.
+	runtimeTargetInvalid
+)
+
+// targetCapturesResolution reports whether a runtime resolver that reached `target` in a conditions
+// object would commit to it rather than continue on to the next condition. Any target string captures
+// resolution: a valid one resolves whether or not the file it names exists, and an invalid one makes
+// resolution fail. So does a `null` target, which blocks the specifier outright. Only empty arrays and
+// objects with no usable condition let the search continue.
 func targetCapturesResolution(target packagejson.ExportsOrImports, conditions []string, isImports bool) bool {
+	return runtimeTargetOutcome(target, conditions, isImports) != runtimeTargetFallsThrough
+}
+
+// runtimeTargetOutcome mirrors Node's PACKAGE_TARGET_RESOLVE for the purpose of deciding which targets
+// a runtime resolver can reach.
+func runtimeTargetOutcome(target packagejson.ExportsOrImports, conditions []string, isImports bool) runtimeOutcome {
 	switch target.Type {
 	case packagejson.JSONValueTypeString:
 		str, _ := target.Value.(string)
-		return isValidRuntimeTarget(str, isImports)
+		if isValidRuntimeTarget(str, isImports) {
+			return runtimeTargetResolved
+		}
+		return runtimeTargetInvalid
 	case packagejson.JSONValueTypeNull:
-		return true
+		return runtimeTargetResolved
 	case packagejson.JSONValueTypeArray:
-		return core.Some(target.AsArray(), func(elem packagejson.ExportsOrImports) bool {
-			return targetCapturesResolution(elem, conditions, isImports)
-		})
-	case packagejson.JSONValueTypeObject:
-		for key, value := range target.AsObject().Entries() {
-			if isRuntimeCondition(key) && conditionMatches(key, conditions) && targetCapturesResolution(value, conditions, isImports) {
-				return true
+		outcome := runtimeTargetFallsThrough
+		for _, elem := range target.AsArray() {
+			switch runtimeTargetOutcome(elem, conditions, isImports) {
+			case runtimeTargetResolved:
+				return runtimeTargetResolved
+			case runtimeTargetInvalid:
+				outcome = runtimeTargetInvalid
 			}
 		}
+		return outcome
+	case packagejson.JSONValueTypeObject:
+		for key, value := range target.AsObject().Entries() {
+			if isRuntimeCondition(key) && conditionMatches(key, conditions) {
+				if outcome := runtimeTargetOutcome(value, conditions, isImports); outcome != runtimeTargetFallsThrough {
+					return outcome
+				}
+			}
+		}
+		return runtimeTargetFallsThrough
 	}
-	return false
+	return runtimeTargetInvalid
 }
 
-// isValidRuntimeTarget mirrors the target validation in the resolver: an invalid target is skipped
-// rather than committed to, so it can't shadow a later condition.
+// isValidRuntimeTarget mirrors Node's target validation. A runtime resolver throws on an invalid target
+// instead of moving on to the next condition.
 func isValidRuntimeTarget(target string, isImports bool) bool {
 	if strings.HasPrefix(target, "./") {
-		// The resolver rejects targets whose components after the first equal "..", ".", or
-		// "node_modules" (resolver.go:789). Such strings are skipped rather than committed
-		// to, so they must NOT be treated as capturing resolution.
+		// Node rejects targets whose components after the first equal "..", ".", or "node_modules".
 		parts := tspath.GetPathComponents(target, "")[1:]
 		if len(parts) > 1 {
 			partsAfterFirst := parts[1:]

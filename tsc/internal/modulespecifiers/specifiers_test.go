@@ -358,22 +358,26 @@ func TestTargetCapturesResolution(t *testing.T) {
 	}{
 		{name: "relative string", target: `"./dist/index.js"`, want: true},
 		{name: "null blocks the specifier", target: `null`, want: true},
-		{name: "bare specifier is invalid in exports", target: `"other-pkg"`, want: false},
+		// An invalid target makes runtime resolution fail rather than move on to the next condition,
+		// so it captures resolution too.
+		{name: "bare specifier is invalid in exports", target: `"other-pkg"`, want: true},
 		{name: "bare specifier is valid in imports", target: `"other-pkg"`, isImports: true, want: true},
-		{name: "parent-relative path is invalid in imports", target: `"../other.js"`, isImports: true, want: false},
+		{name: "parent-relative path is invalid in imports", target: `"../other.js"`, isImports: true, want: true},
 		{name: "empty array", target: `[]`, want: false},
 		{name: "array with a usable element", target: `["other-pkg", "./a.js"]`, want: true},
-		{name: "array with only invalid elements", target: `["other-pkg"]`, want: false},
+		{name: "array with only invalid elements", target: `["other-pkg"]`, want: true},
 		{name: "object with an active runtime condition", target: `{"node": "./a.js"}`, want: true},
 		{name: "object with default", target: `{"browser": "./a.js", "default": "./b.js"}`, want: true},
 		{name: "object with only inactive conditions", target: `{"require": "./a.js", "browser": "./b.js"}`, want: false},
 		{name: "object with only a types condition", target: `{"types": "./a.d.ts"}`, want: false},
 		{name: "nested object with an active branch", target: `{"node": {"import": "./a.mjs"}}`, want: true},
 		{name: "nested object without an active branch", target: `{"node": {"require": "./a.cjs"}}`, want: false},
-		// Forbidden path segments: the resolver rejects these, so they must NOT capture resolution.
-		{name: "dotdot segment in ./ target", target: `"./dist/../other.js"`, want: false},
-		{name: "dot segment in ./ target", target: `"./dist/./other.js"`, want: false},
-		{name: "node_modules segment in ./ target", target: `"./node_modules/pkg/index.js"`, want: false},
+		// Forbidden path segments make the target invalid, which also captures resolution.
+		{name: "dotdot segment in ./ target", target: `"./dist/../other.js"`, want: true},
+		{name: "dot segment in ./ target", target: `"./dist/./other.js"`, want: true},
+		{name: "node_modules segment in ./ target", target: `"./node_modules/pkg/index.js"`, want: true},
+		{name: "object with an invalid target under an active condition", target: `{"node": "../other.js"}`, want: true},
+		{name: "object with an invalid target under an inactive condition", target: `{"require": "../other.js"}`, want: false},
 		// A null element inside an array still captures resolution (stops further search).
 		{name: "array where first element is null", target: `[null, "./src/index.js"]`, want: true},
 	}
@@ -394,17 +398,18 @@ func TestTargetCapturesResolution(t *testing.T) {
 }
 
 // TestArrayEarlyExitOnCapture verifies that tryGetModuleNameFromExportsOrImports stops
-// traversing an array once an element captures resolution, even if a later element
-// would have matched the target file. This mirrors Node's algorithm where the first
-// capturing element commits resolution.
+// traversing an array once an element resolves, and a conditions object once a condition
+// captures resolution, even if a later element or condition would have matched the target
+// file. This mirrors Node's algorithm, which commits to the first element that resolves
+// and the first condition that doesn't fall through.
 func TestArrayEarlyExitOnCapture(t *testing.T) {
 	t.Parallel()
 
 	tests := []struct {
 		name           string
-		exports        string // JSON for the array target
+		exports        string // JSON for the target
 		targetFilePath string
-		wantEmpty      bool   // true = no specifier should be produced
+		wantEmpty      bool // true = no specifier should be produced
 	}{
 		{
 			// null first element captures resolution; "./src/index.ts" must NOT be returned.
@@ -426,6 +431,33 @@ func TestArrayEarlyExitOnCapture(t *testing.T) {
 			exports:        `["../outside.js", "./src/index.js"]`,
 			targetFilePath: "/pkg/src/index.ts",
 			wantEmpty:      false,
+		},
+		{
+			// An element that throws on an invalid target is skipped like an invalid string.
+			name:           "nested invalid target before valid matching target allows fallthrough",
+			exports:        `[{"node": "../outside.js"}, "./src/index.js"]`,
+			targetFilePath: "/pkg/src/index.ts",
+			wantEmpty:      false,
+		},
+		{
+			// Outside an array, an invalid target under an active condition makes resolution fail,
+			// so "default" is never consulted.
+			name:           "invalid target under active condition blocks default",
+			exports:        `{"node": "../outside.js", "default": "./src/index.js"}`,
+			targetFilePath: "/pkg/src/index.ts",
+			wantEmpty:      true,
+		},
+		{
+			name:           "invalid target under inactive condition does not block default",
+			exports:        `{"require": "../outside.js", "default": "./src/index.js"}`,
+			targetFilePath: "/pkg/src/index.ts",
+			wantEmpty:      false,
+		},
+		{
+			name:           "array of only invalid targets under active condition blocks default",
+			exports:        `{"node": ["../outside.js"], "default": "./src/index.js"}`,
+			targetFilePath: "/pkg/src/index.ts",
+			wantEmpty:      true,
 		},
 	}
 
