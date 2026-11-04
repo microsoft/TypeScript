@@ -1,16 +1,11 @@
-negatedTypeSmokePreservation.ts(3,9): error TS2367: This comparison appears to be unintentional because the types 'string & not "first"' and '"first"' have no overlap.
 negatedTypeSmokePreservation.ts(9,59): error TS2339: Property 'trim' does not exist on type 'never'.
-negatedTypeSmokePreservation.ts(16,14): error TS2678: Type 'number' is not comparable to type 'number & not 25'.
-  Type 'number' is not comparable to type 'not 25'.
 negatedTypeSmokePreservation.ts(43,5): error TS2322: Type '"fourth"' is not assignable to type '"second" | "third"'.
 
 
-==== negatedTypeSmokePreservation.ts (4 errors) ====
+==== negatedTypeSmokePreservation.ts (2 errors) ====
     export function repeatedComparison(value: string) {
         if (value === "first") return 1;
         if (value === "first") return 2;
-            ~~~~~~~~~~~~~~~~~
-!!! error TS2367: This comparison appears to be unintentional because the types 'string & not "first"' and '"first"' have no overlap.
         return 3;
     }
     
@@ -26,9 +21,6 @@ negatedTypeSmokePreservation.ts(43,5): error TS2322: Type '"fourth"' is not assi
         if (value === 25) return;
         switch (value) {
             case 25: return;
-                 ~~
-!!! error TS2678: Type 'number' is not comparable to type 'number & not 25'.
-!!! error TS2678:   Type 'number' is not comparable to type 'not 25'.
         }
     }
     

@@ -13041,7 +13041,10 @@ func (c *Checker) isGlobalNaN(expr *ast.Expression) bool {
 }
 
 func (c *Checker) isTypeEqualityComparableTo(source *Type, target *Type) bool {
-	return (target.flags&TypeFlagsNullable) != 0 || c.isTypeComparableTo(source, target)
+	// Fresh control-flow exclusions must not make previously valid equality checks illegal.
+	// Written negations still constrain comparability, and flow narrowing uses the unmodified types.
+	return target.flags&TypeFlagsNullable != 0 ||
+		c.isTypeComparableTo(c.removeFreshNegatedTypes(source), c.removeFreshNegatedTypes(target))
 }
 
 func (c *Checker) checkTruthinessOfType(t *Type, node *ast.Node) *Type {

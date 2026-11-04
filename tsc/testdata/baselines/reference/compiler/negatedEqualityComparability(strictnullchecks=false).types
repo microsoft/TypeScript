@@ -1,0 +1,181 @@
+//// [tests/cases/compiler/negatedEqualityComparability.ts] ////
+
+=== negatedEqualityComparability.ts ===
+function truthyComparisons(text: string | undefined, number: number | undefined, bigint: bigint | undefined) {
+>truthyComparisons : (text: string | undefined, number: number | undefined, bigint: bigint | undefined) => void
+>text : string
+>number : number
+>bigint : bigint
+
+    if (text) {
+>text : string
+
+        text !== "";
+>text !== "" : boolean
+>text : string & not ""
+>"" : ""
+
+        "" !== text;
+>"" !== text : boolean
+>"" : ""
+>text : string & not ""
+
+        text === "";
+>text === "" : boolean
+>text : string & not ""
+>"" : ""
+
+        "" === text;
+>"" === text : boolean
+>"" : ""
+>text : string & not ""
+
+        text != "";
+>text != "" : boolean
+>text : string & not ""
+>"" : ""
+
+        "" == text;
+>"" == text : boolean
+>"" : ""
+>text : string & not ""
+
+        const refined: string & not "" = text;
+>refined : string & not ""
+>text : string & not ""
+
+        switch (text) {
+>text : string & not ""
+
+            case "": break;
+>"" : ""
+        }
+    }
+    if (number) {
+>number : number
+
+        number !== 0;
+>number !== 0 : boolean
+>number : number & not 0
+>0 : 0
+
+        0 === number;
+>0 === number : boolean
+>0 : 0
+>number : number & not 0
+
+        const refined: number & not 0 = number;
+>refined : number & not 0
+>number : number & not 0
+    }
+    if (bigint) {
+>bigint : bigint
+
+        bigint !== 0n;
+>bigint !== 0n : boolean
+>bigint : bigint & not 0n
+>0n : 0n
+
+        0n === bigint;
+>0n === bigint : boolean
+>0n : 0n
+>bigint : bigint & not 0n
+
+        const refined: bigint & not 0n = bigint;
+>refined : bigint & not 0n
+>bigint : bigint & not 0n
+    }
+}
+
+function excludedComparison(text: string) {
+>excludedComparison : (text: string) => void
+>text : string
+
+    if (text !== "excluded") {
+>text !== "excluded" : boolean
+>text : string
+>"excluded" : "excluded"
+
+        text === "excluded";
+>text === "excluded" : boolean
+>text : string & not "excluded"
+>"excluded" : "excluded"
+
+        "excluded" !== text;
+>"excluded" !== text : boolean
+>"excluded" : "excluded"
+>text : string & not "excluded"
+
+        const refined: string & not "excluded" = text;
+>refined : string & not "excluded"
+>text : string & not "excluded"
+    }
+}
+
+function explicitExclusion(text: string & not "", number: number & not 0) {
+>explicitExclusion : (text: string & not "", number: number & not 0) => void
+>text : string & not ""
+>number : number & not 0
+
+    text === ""; // Error: an explicit exclusion remains disjoint.
+>text === "" : boolean
+>text : string & not ""
+>"" : ""
+
+    "" !== text; // Error
+>"" !== text : boolean
+>"" : ""
+>text : string & not ""
+
+    number !== 0; // Error
+>number !== 0 : boolean
+>number : number & not 0
+>0 : 0
+
+    0 === number; // Error
+>0 === number : boolean
+>0 : 0
+>number : number & not 0
+
+    if (text) {
+>text : string & not ""
+
+        text === ""; // Error: truthiness must not erase the declared exclusion.
+>text === "" : boolean
+>text : string & not ""
+>"" : ""
+    }
+    switch (text) {
+>text : string & not ""
+
+        case "": break; // Error
+>"" : ""
+    }
+}
+
+function disjointLiterals(text: "present", number: 1) {
+>disjointLiterals : (text: "present", number: 1) => void
+>text : "present"
+>number : 1
+
+    text === ""; // Error
+>text === "" : boolean
+>text : "present"
+>"" : ""
+
+    "" !== text; // Error
+>"" !== text : boolean
+>"" : ""
+>text : "present"
+
+    number !== 0; // Error
+>number !== 0 : boolean
+>number : 1
+>0 : 0
+
+    0 === number; // Error
+>0 === number : boolean
+>0 : 0
+>number : 1
+}
+
