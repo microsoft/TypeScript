@@ -41,6 +41,7 @@ const (
 	IntersectionStateNone   IntersectionState = 0
 	IntersectionStateSource IntersectionState = 1 << 0 // Source type is a constituent of an outer intersection
 	IntersectionStateTarget IntersectionState = 1 << 1 // Target type is a constituent of an outer intersection
+	IntersectionStateAll                      = IntersectionStateSource | IntersectionStateTarget
 )
 
 type RecursionFlags uint32
@@ -97,7 +98,9 @@ func asRecursionId[T *ast.Node | *ast.Symbol | *Type](value T) RecursionId {
 
 type Relation struct {
 	genericResults map[CacheHashKey]RelationComparisonResult
-	simpleResults  [4]map[uint64]RelationComparisonResult
+	// Ordinary relationships, keyed by type ID pair, with one map per
+	// intersection state.
+	simpleResults [IntersectionStateAll + 1]map[uint64]RelationComparisonResult
 }
 
 type relationKey struct {
