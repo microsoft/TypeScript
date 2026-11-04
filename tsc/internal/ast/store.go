@@ -205,7 +205,7 @@ func near[F any](f *F, p unsafe.Pointer) uint32 {
 }
 
 func farSlot(i int) uint32 {
-	if i >= 1<<31 {
+	if uint64(i) >= 1<<31 {
 		panic("node store far ref overflow")
 	}
 	return uint32(i) << 1
@@ -232,7 +232,7 @@ func (s *nodeStore) anchor(v Node) nodeAnchor {
 		return nodeAnchor((c.index+1)<<anchorChunkShift | w)
 	}
 	s.far = append(s.far, v)
-	if len(s.far) > anchorFar {
+	if uint64(len(s.far)) > anchorFar {
 		panic("node store far ref overflow")
 	}
 	return nodeAnchor(len(s.far)-1) | anchorFar
@@ -465,12 +465,12 @@ func (t *textStore) setSource(text string) {
 	if t.arenaSize != 0 || t.source != "" {
 		panic("node store source set after text was stored")
 	}
-	if len(text) > (textPieces-1)*textPieceSize {
+	if uint64(len(text)) > (textPieces-1)*textPieceSize {
 		panic("node store source too large")
 	}
 	t.source = text
 	p := unsafe.Pointer(unsafe.StringData(text))
-	for k := 0; k*textPieceSize < len(text); k++ {
+	for k := 0; uint64(k)*textPieceSize < uint64(len(text)); k++ {
 		t.pieces[k] = unsafe.Add(p, k*textPieceSize)
 	}
 }
@@ -504,7 +504,7 @@ func (t *textStore) alloc(v string) uint32 {
 			t.arena++
 		} else {
 			// The arena starts after the source's pieces.
-			t.arena = uint32((len(t.source) + textPieceMask) >> textPieceShift)
+			t.arena = uint32((uint64(len(t.source)) + textPieceMask) >> textPieceShift)
 		}
 		if t.arena >= textPieces {
 			panic("node text arena overflow")

@@ -5,6 +5,7 @@ import (
 	"strconv"
 	"testing"
 
+	"github.com/microsoft/TypeScript/tsc/internal/testutil"
 	"gotest.tools/v3/assert"
 )
 
@@ -92,6 +93,15 @@ func TestNodeStoreCrossStoreRefs(t *testing.T) {
 	assert.Equal(t, len(a.store.far), 2, "rewriting a far ref should reuse its slot")
 	first.AsExpressionStatement().SetExpression(Node{})
 	assert.Assert(t, first.Expression().IsNil())
+}
+
+func TestFarSlotBounds(t *testing.T) {
+	t.Parallel()
+	assert.Equal(t, farSlot(1<<31-1), uint32(0xfffffffe))
+	if strconv.IntSize == 64 {
+		overflow := uint64(1 << 31)
+		testutil.AssertPanics(t, func() { farSlot(int(overflow)) }, "node store far ref overflow")
+	}
 }
 
 func TestNodeSideTableZeroValues(t *testing.T) {

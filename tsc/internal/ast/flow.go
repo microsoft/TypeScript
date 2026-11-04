@@ -91,7 +91,7 @@ func (s *nodeStore) setFlowRef(f *flowRef, v FlowNode) {
 	case *f&flowReused != 0:
 		s.reusedFlows[*f&^flowReused] = v
 	default:
-		if len(s.reusedFlows) >= flowReused {
+		if uint64(len(s.reusedFlows)) >= flowReused {
 			panic("node store reused flow node overflow")
 		}
 		*f = flowRef(len(s.reusedFlows)) | flowReused
