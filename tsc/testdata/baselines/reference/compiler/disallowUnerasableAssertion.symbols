@@ -178,3 +178,117 @@ export const y27 = 2 ** 3 satisfies number ** 2;  // Error
 export const y28 = 2 ** 3 satisfies any satisfies number ** 2;  // Error
 >y28 : Symbol(y28, Decl(disallowUnerasableAssertion.ts, 79, 12))
 
+// https://github.com/microsoft/TypeScript/issues/65170
+
+// Erasing an assertion must not expose an invalid left operand of '**' either.
+// A unary, await, or type assertion expression in that position is an error,
+// just as it is without the assertion.
+
+declare const num: number;
+>num : Symbol(num, Decl(disallowUnerasableAssertion.ts, 87, 13))
+
+declare const promised: Promise<number>;
+>promised : Symbol(promised, Decl(disallowUnerasableAssertion.ts, 88, 13))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2018.promise.d.ts, --, --))
+
+declare const obj: { y?: number };
+>obj : Symbol(obj, Decl(disallowUnerasableAssertion.ts, 89, 13))
+>y : Symbol(y, Decl(disallowUnerasableAssertion.ts, 89, 20))
+
+declare let mutableNum: number;
+>mutableNum : Symbol(mutableNum, Decl(disallowUnerasableAssertion.ts, 90, 11))
+
+export const z01 = -num as number ** 2;  // Error
+>z01 : Symbol(z01, Decl(disallowUnerasableAssertion.ts, 92, 12))
+>num : Symbol(num, Decl(disallowUnerasableAssertion.ts, 87, 13))
+
+export const z02 = -num satisfies number ** 2;  // Error
+>z02 : Symbol(z02, Decl(disallowUnerasableAssertion.ts, 93, 12))
+>num : Symbol(num, Decl(disallowUnerasableAssertion.ts, 87, 13))
+
+export const z03 = -num as any as number ** 2;  // Error
+>z03 : Symbol(z03, Decl(disallowUnerasableAssertion.ts, 94, 12))
+>num : Symbol(num, Decl(disallowUnerasableAssertion.ts, 87, 13))
+
+export const z04 = +num as number ** 2;  // Error
+>z04 : Symbol(z04, Decl(disallowUnerasableAssertion.ts, 95, 12))
+>num : Symbol(num, Decl(disallowUnerasableAssertion.ts, 87, 13))
+
+export const z05 = ~num as number ** 2;  // Error
+>z05 : Symbol(z05, Decl(disallowUnerasableAssertion.ts, 96, 12))
+>num : Symbol(num, Decl(disallowUnerasableAssertion.ts, 87, 13))
+
+export const z06 = !num as any ** 2;  // Error
+>z06 : Symbol(z06, Decl(disallowUnerasableAssertion.ts, 97, 12))
+>num : Symbol(num, Decl(disallowUnerasableAssertion.ts, 87, 13))
+
+export const z07 = typeof num as any ** 2;  // Error
+>z07 : Symbol(z07, Decl(disallowUnerasableAssertion.ts, 98, 12))
+>num : Symbol(num, Decl(disallowUnerasableAssertion.ts, 87, 13))
+
+export const z08 = void num as any ** 2;  // Error
+>z08 : Symbol(z08, Decl(disallowUnerasableAssertion.ts, 99, 12))
+>num : Symbol(num, Decl(disallowUnerasableAssertion.ts, 87, 13))
+
+export const z09 = delete obj.y as any ** 2;  // Error
+>z09 : Symbol(z09, Decl(disallowUnerasableAssertion.ts, 100, 12))
+>obj.y : Symbol(y, Decl(disallowUnerasableAssertion.ts, 89, 20))
+>obj : Symbol(obj, Decl(disallowUnerasableAssertion.ts, 89, 13))
+>y : Symbol(y, Decl(disallowUnerasableAssertion.ts, 89, 20))
+
+export async function z10() { return await promised as number ** 2; }  // Error
+>z10 : Symbol(z10, Decl(disallowUnerasableAssertion.ts, 100, 44))
+>promised : Symbol(promised, Decl(disallowUnerasableAssertion.ts, 88, 13))
+
+export const z11 = <number>-num as any ** 2;  // Error
+>z11 : Symbol(z11, Decl(disallowUnerasableAssertion.ts, 102, 12))
+>num : Symbol(num, Decl(disallowUnerasableAssertion.ts, 87, 13))
+
+export const z12 = -(num) as number ** 2;  // Error
+>z12 : Symbol(z12, Decl(disallowUnerasableAssertion.ts, 103, 12))
+>num : Symbol(num, Decl(disallowUnerasableAssertion.ts, 87, 13))
+
+export const z13 = -num! as number ** 2;  // Error
+>z13 : Symbol(z13, Decl(disallowUnerasableAssertion.ts, 104, 12))
+>num : Symbol(num, Decl(disallowUnerasableAssertion.ts, 87, 13))
+
+export const z14 = -num as number satisfies number ** 2;  // Error
+>z14 : Symbol(z14, Decl(disallowUnerasableAssertion.ts, 105, 12))
+>num : Symbol(num, Decl(disallowUnerasableAssertion.ts, 87, 13))
+
+export const z15 = (-num) as number ** 2;
+>z15 : Symbol(z15, Decl(disallowUnerasableAssertion.ts, 107, 12))
+>num : Symbol(num, Decl(disallowUnerasableAssertion.ts, 87, 13))
+
+export async function z16() { return (await promised) as number ** 2; }
+>z16 : Symbol(z16, Decl(disallowUnerasableAssertion.ts, 107, 41))
+>promised : Symbol(promised, Decl(disallowUnerasableAssertion.ts, 88, 13))
+
+export const z17 = num as number ** 2;
+>z17 : Symbol(z17, Decl(disallowUnerasableAssertion.ts, 109, 12))
+>num : Symbol(num, Decl(disallowUnerasableAssertion.ts, 87, 13))
+
+export const z18 = -num as number * 2;
+>z18 : Symbol(z18, Decl(disallowUnerasableAssertion.ts, 110, 12))
+>num : Symbol(num, Decl(disallowUnerasableAssertion.ts, 87, 13))
+
+export const z19 = num! as number ** 2;
+>z19 : Symbol(z19, Decl(disallowUnerasableAssertion.ts, 111, 12))
+>num : Symbol(num, Decl(disallowUnerasableAssertion.ts, 87, 13))
+
+export const z20 = (-num)! as number ** 2;
+>z20 : Symbol(z20, Decl(disallowUnerasableAssertion.ts, 112, 12))
+>num : Symbol(num, Decl(disallowUnerasableAssertion.ts, 87, 13))
+
+export const z21 = (-num as number) as any ** 2;
+>z21 : Symbol(z21, Decl(disallowUnerasableAssertion.ts, 113, 12))
+>num : Symbol(num, Decl(disallowUnerasableAssertion.ts, 87, 13))
+
+export const z22 = ++mutableNum as number ** 2;
+>z22 : Symbol(z22, Decl(disallowUnerasableAssertion.ts, 114, 12))
+>mutableNum : Symbol(mutableNum, Decl(disallowUnerasableAssertion.ts, 90, 11))
+
+export const z23 = 2 ** -num as number;
+>z23 : Symbol(z23, Decl(disallowUnerasableAssertion.ts, 115, 12))
+>num : Symbol(num, Decl(disallowUnerasableAssertion.ts, 87, 13))
+

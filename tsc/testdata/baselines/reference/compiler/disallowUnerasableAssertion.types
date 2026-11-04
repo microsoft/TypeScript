@@ -550,3 +550,218 @@ export const y28 = 2 ** 3 satisfies any satisfies number ** 2;  // Error
 > : any
 >2 : 2
 
+// https://github.com/microsoft/TypeScript/issues/65170
+
+// Erasing an assertion must not expose an invalid left operand of '**' either.
+// A unary, await, or type assertion expression in that position is an error,
+// just as it is without the assertion.
+
+declare const num: number;
+>num : number
+
+declare const promised: Promise<number>;
+>promised : Promise<number>
+
+declare const obj: { y?: number };
+>obj : { y?: number; }
+>y : number | undefined
+
+declare let mutableNum: number;
+>mutableNum : number
+
+export const z01 = -num as number ** 2;  // Error
+>z01 : number
+>-num as number ** 2 : number
+>-num as number : number
+>-num : number
+>num : number
+>2 : 2
+
+export const z02 = -num satisfies number ** 2;  // Error
+>z02 : number
+>-num satisfies number ** 2 : number
+>-num satisfies number : number
+>-num : number
+>num : number
+>2 : 2
+
+export const z03 = -num as any as number ** 2;  // Error
+>z03 : number
+>-num as any as number ** 2 : number
+>-num as any as number : number
+>-num as any : any
+>-num : number
+>num : number
+>2 : 2
+
+export const z04 = +num as number ** 2;  // Error
+>z04 : number
+>+num as number ** 2 : number
+>+num as number : number
+>+num : number
+>num : number
+>2 : 2
+
+export const z05 = ~num as number ** 2;  // Error
+>z05 : number
+>~num as number ** 2 : number
+>~num as number : number
+>~num : number
+>num : number
+>2 : 2
+
+export const z06 = !num as any ** 2;  // Error
+>z06 : number
+>!num as any ** 2 : number
+>!num as any : any
+>!num : boolean
+>num : number
+>2 : 2
+
+export const z07 = typeof num as any ** 2;  // Error
+>z07 : number
+>typeof num as any ** 2 : number
+>typeof num as any : any
+>typeof num : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
+>num : number
+>2 : 2
+
+export const z08 = void num as any ** 2;  // Error
+>z08 : number
+>void num as any ** 2 : number
+>void num as any : any
+>void num : undefined
+>num : number
+>2 : 2
+
+export const z09 = delete obj.y as any ** 2;  // Error
+>z09 : number
+>delete obj.y as any ** 2 : number
+>delete obj.y as any : any
+>delete obj.y : boolean
+>obj.y : number | undefined
+>obj : { y?: number; }
+>y : number | undefined
+>2 : 2
+
+export async function z10() { return await promised as number ** 2; }  // Error
+>z10 : () => Promise<number>
+>await promised as number ** 2 : number
+>await promised as number : number
+>await promised : number
+>promised : Promise<number>
+>2 : 2
+
+export const z11 = <number>-num as any ** 2;  // Error
+>z11 : number
+><number>-num as any ** 2 : number
+><number>-num as any : any
+><number>-num : number
+>-num : number
+>num : number
+>2 : 2
+
+export const z12 = -(num) as number ** 2;  // Error
+>z12 : number
+>-(num) as number ** 2 : number
+>-(num) as number : number
+>-(num) : number
+>(num) : number
+>num : number
+>2 : 2
+
+export const z13 = -num! as number ** 2;  // Error
+>z13 : number
+>-num! as number ** 2 : number
+>-num! as number : number
+>-num! : number
+>num! : number
+>num : number
+>2 : 2
+
+export const z14 = -num as number satisfies number ** 2;  // Error
+>z14 : number
+>-num as number satisfies number ** 2 : number
+>-num as number satisfies number : number
+>-num as number : number
+>-num : number
+>num : number
+>2 : 2
+
+export const z15 = (-num) as number ** 2;
+>z15 : number
+>(-num) as number ** 2 : number
+>(-num) as number : number
+>(-num) : number
+>-num : number
+>num : number
+>2 : 2
+
+export async function z16() { return (await promised) as number ** 2; }
+>z16 : () => Promise<number>
+>(await promised) as number ** 2 : number
+>(await promised) as number : number
+>(await promised) : number
+>await promised : number
+>promised : Promise<number>
+>2 : 2
+
+export const z17 = num as number ** 2;
+>z17 : number
+>num as number ** 2 : number
+>num as number : number
+>num : number
+>2 : 2
+
+export const z18 = -num as number * 2;
+>z18 : number
+>-num as number * 2 : number
+>-num as number : number
+>-num : number
+>num : number
+>2 : 2
+
+export const z19 = num! as number ** 2;
+>z19 : number
+>num! as number ** 2 : number
+>num! as number : number
+>num! : number
+>num : number
+>2 : 2
+
+export const z20 = (-num)! as number ** 2;
+>z20 : number
+>(-num)! as number ** 2 : number
+>(-num)! as number : number
+>(-num)! : number
+>(-num) : number
+>-num : number
+>num : number
+>2 : 2
+
+export const z21 = (-num as number) as any ** 2;
+>z21 : number
+>(-num as number) as any ** 2 : number
+>(-num as number) as any : any
+>(-num as number) : number
+>-num as number : number
+>-num : number
+>num : number
+>2 : 2
+
+export const z22 = ++mutableNum as number ** 2;
+>z22 : number
+>++mutableNum as number ** 2 : number
+>++mutableNum as number : number
+>++mutableNum : number
+>mutableNum : number
+>2 : 2
+
+export const z23 = 2 ** -num as number;
+>z23 : number
+>2 ** -num as number : number
+>2 ** -num : number
+>2 : 2
+>-num : number
+>num : number
+

@@ -82,6 +82,42 @@ export const y26 = 2 * 3 satisfies any satisfies number * 2;
 export const y27 = 2 ** 3 satisfies number ** 2;  // Error
 export const y28 = 2 ** 3 satisfies any satisfies number ** 2;  // Error
 
+// https://github.com/microsoft/TypeScript/issues/65170
+
+// Erasing an assertion must not expose an invalid left operand of '**' either.
+// A unary, await, or type assertion expression in that position is an error,
+// just as it is without the assertion.
+
+declare const num: number;
+declare const promised: Promise<number>;
+declare const obj: { y?: number };
+declare let mutableNum: number;
+
+export const z01 = -num as number ** 2;  // Error
+export const z02 = -num satisfies number ** 2;  // Error
+export const z03 = -num as any as number ** 2;  // Error
+export const z04 = +num as number ** 2;  // Error
+export const z05 = ~num as number ** 2;  // Error
+export const z06 = !num as any ** 2;  // Error
+export const z07 = typeof num as any ** 2;  // Error
+export const z08 = void num as any ** 2;  // Error
+export const z09 = delete obj.y as any ** 2;  // Error
+export async function z10() { return await promised as number ** 2; }  // Error
+export const z11 = <number>-num as any ** 2;  // Error
+export const z12 = -(num) as number ** 2;  // Error
+export const z13 = -num! as number ** 2;  // Error
+export const z14 = -num as number satisfies number ** 2;  // Error
+
+export const z15 = (-num) as number ** 2;
+export async function z16() { return (await promised) as number ** 2; }
+export const z17 = num as number ** 2;
+export const z18 = -num as number * 2;
+export const z19 = num! as number ** 2;
+export const z20 = (-num)! as number ** 2;
+export const z21 = (-num as number) as any ** 2;
+export const z22 = ++mutableNum as number ** 2;
+export const z23 = 2 ** -num as number;
+
 
 //// [disallowUnerasableAssertion.js]
 // https://github.com/microsoft/TypeScript/issues/63527
@@ -159,3 +195,26 @@ export const y27 = 2 ** 3;
  ** 2; // Error
 export const y28 = 2 ** 3;
  ** 2; // Error
+export const z01 = (-num) ** 2; // Error
+export const z02 = (-num) ** 2; // Error
+export const z03 = (-num) ** 2; // Error
+export const z04 = (+num) ** 2; // Error
+export const z05 = (~num) ** 2; // Error
+export const z06 = (!num) ** 2; // Error
+export const z07 = (typeof num) ** 2; // Error
+export const z08 = (void num) ** 2; // Error
+export const z09 = (delete obj.y) ** 2; // Error
+export async function z10() { return (await promised) ** 2; } // Error
+export const z11 = (-num) ** 2; // Error
+export const z12 = (-(num)) ** 2; // Error
+export const z13 = (-num) ** 2; // Error
+export const z14 = (-num) ** 2; // Error
+export const z15 = (-num) ** 2;
+export async function z16() { return (await promised) ** 2; }
+export const z17 = num ** 2;
+export const z18 = -num * 2;
+export const z19 = num ** 2;
+export const z20 = (-num) ** 2;
+export const z21 = (-num) ** 2;
+export const z22 = (++mutableNum) ** 2;
+export const z23 = 2 ** -num;

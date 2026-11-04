@@ -4784,11 +4784,51 @@ func (p *Parser) parseBinaryExpressionRest(precedence ast.OperatorPrecedence, le
 				}
 			}
 		} else {
+			if operator == ast.KindAsteriskAsteriskToken {
+				p.checkExponentiationLeftOperand(leftOperand)
+			}
 			leftOperand = p.makeBinaryExpression(leftOperand, p.parseTokenNode(), p.parseBinaryExpressionOrHigher(newPrecedence), pos)
 			lastOperand = leftOperand
 		}
 	}
 	return leftOperand
+}
+
+// checkExponentiationLeftOperand reports an error when the left operand of an
+// exponentiation expression is an 'as' or 'satisfies' expression whose operand could
+// not appear in that position once the assertion is erased, mirroring the errors
+// reported for the unasserted forms in parseUnaryExpressionOrHigher. For example,
+// '-x as number ** 2' erases to '-x ** 2', which is not valid JavaScript.
+// See https://github.com/microsoft/TypeScript/issues/65170.
+func (p *Parser) checkExponentiationLeftOperand(leftOperand *ast.Expression) {
+	expression := leftOperand
+	for expression.Kind == ast.KindAsExpression || expression.Kind == ast.KindSatisfiesExpression {
+		expression = expression.Expression()
+	}
+	if expression == leftOperand {
+		return
+	}
+	pos := scanner.SkipTrivia(p.sourceText, leftOperand.Pos())
+	end := leftOperand.End()
+	switch expression.Kind {
+	case ast.KindPrefixUnaryExpression:
+		// Prefix '++' and '--' form update expressions, which are valid left
+		// operands of an exponentiation expression even after erasure.
+		switch operator := expression.AsPrefixUnaryExpression().Operator; operator {
+		case ast.KindPlusToken, ast.KindMinusToken, ast.KindTildeToken, ast.KindExclamationToken:
+			p.parseErrorAt(pos, end, diagnostics.An_unary_expression_with_the_0_operator_is_not_allowed_in_the_left_hand_side_of_an_exponentiation_expression_Consider_enclosing_the_expression_in_parentheses, scanner.TokenToString(operator))
+		}
+	case ast.KindDeleteExpression:
+		p.parseErrorAt(pos, end, diagnostics.An_unary_expression_with_the_0_operator_is_not_allowed_in_the_left_hand_side_of_an_exponentiation_expression_Consider_enclosing_the_expression_in_parentheses, scanner.TokenToString(ast.KindDeleteKeyword))
+	case ast.KindTypeOfExpression:
+		p.parseErrorAt(pos, end, diagnostics.An_unary_expression_with_the_0_operator_is_not_allowed_in_the_left_hand_side_of_an_exponentiation_expression_Consider_enclosing_the_expression_in_parentheses, scanner.TokenToString(ast.KindTypeOfKeyword))
+	case ast.KindVoidExpression:
+		p.parseErrorAt(pos, end, diagnostics.An_unary_expression_with_the_0_operator_is_not_allowed_in_the_left_hand_side_of_an_exponentiation_expression_Consider_enclosing_the_expression_in_parentheses, scanner.TokenToString(ast.KindVoidKeyword))
+	case ast.KindAwaitExpression:
+		p.parseErrorAt(pos, end, diagnostics.An_unary_expression_with_the_0_operator_is_not_allowed_in_the_left_hand_side_of_an_exponentiation_expression_Consider_enclosing_the_expression_in_parentheses, scanner.TokenToString(ast.KindAwaitKeyword))
+	case ast.KindTypeAssertionExpression:
+		p.parseErrorAt(pos, end, diagnostics.A_type_assertion_expression_is_not_allowed_in_the_left_hand_side_of_an_exponentiation_expression_Consider_enclosing_the_expression_in_parentheses)
+	}
 }
 
 func (p *Parser) makeSatisfiesExpression(expression *ast.Expression, typeNode *ast.TypeNode) *ast.Node {
