@@ -13,7 +13,6 @@ See the Apache Version 2.0 License for specific language governing permissions
 and limitations under the License.
 ***************************************************************************** */
 
-
 interface RegExpConstructor {
     /**
      * Escapes any RegExp syntax characters in the input string, returning a
