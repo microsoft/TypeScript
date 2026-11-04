@@ -28,15 +28,21 @@ type SyncConn struct {
 	// This ensures that concurrent calls from handler goroutines (e.g., project code
 	// spawning goroutines that invoke filesystem callbacks) don't corrupt the stream.
 	mu sync.Mutex
+
+	calls   int
+	reading bool
+	turn    sync.Cond
 }
 
 // NewSyncConn creates a new sync connection with the given transport and handler.
 func NewSyncConn(rwc io.ReadWriteCloser, protocol Protocol, handler Handler) *SyncConn {
-	return &SyncConn{
+	c := &SyncConn{
 		rwc:      rwc,
 		protocol: protocol,
 		handler:  handler,
 	}
+	c.turn.L = &c.mu
+	return c
 }
 
 // SetCollectTiming enables or disables per-request server processing-time
@@ -70,7 +76,7 @@ func (c *SyncConn) Run(ctx context.Context) error {
 		}
 
 		if msg.IsRequest() {
-			if err := c.handleRequest(ctx, msg); err != nil {
+			if err := c.handleRequest(ctx, msg, 0); err != nil {
 				return err
 			}
 		} else if msg.IsNotification() {
@@ -82,13 +88,21 @@ func (c *SyncConn) Run(ctx context.Context) error {
 	}
 }
 
+func (c *SyncConn) lockTurn(depth int) {
+	c.mu.Lock()
+	for c.calls != depth {
+		c.turn.Wait()
+	}
+	c.reading = depth > 0
+}
+
 // handleRequest processes an incoming request.
-func (c *SyncConn) handleRequest(ctx context.Context, msg *Message) (retErr error) {
+func (c *SyncConn) handleRequest(ctx context.Context, msg *Message, depth int) (retErr error) {
 	// Intercept the meta-requests for collected server timing before dispatching
 	// to the handler, so they are answered directly and not themselves recorded.
 	switch msg.Method {
 	case string(MethodGetServerTiming):
-		c.mu.Lock()
+		c.lockTurn(depth)
 		writeErr := c.protocol.WriteResponse(msg.ID, serverTimingSnapshot(c.timing))
 		c.mu.Unlock()
 		if writeErr != nil {
@@ -99,7 +113,7 @@ func (c *SyncConn) handleRequest(ctx context.Context, msg *Message) (retErr erro
 		if c.timing != nil {
 			c.timing.reset()
 		}
-		c.mu.Lock()
+		c.lockTurn(depth)
 		writeErr := c.protocol.WriteResponse(msg.ID, nil)
 		c.mu.Unlock()
 		if writeErr != nil {
@@ -122,7 +136,7 @@ func (c *SyncConn) handleRequest(ctx context.Context, msg *Message) (retErr erro
 			stack := string(debug.Stack())
 			err = fmt.Errorf("panic: %v\n%s", r, stack)
 
-			c.mu.Lock()
+			c.lockTurn(depth)
 			writeErr := c.protocol.WriteError(msg.ID, &jsonrpc.ResponseError{
 				Code:    jsonrpc.CodeInternalError,
 				Message: err.Error(),
@@ -141,7 +155,7 @@ func (c *SyncConn) handleRequest(ctx context.Context, msg *Message) (retErr erro
 		c.timing.record(msg.Method, time.Since(start))
 	}
 
-	c.mu.Lock()
+	c.lockTurn(depth)
 	defer c.mu.Unlock()
 
 	var writeErr error
@@ -175,6 +189,17 @@ func (c *SyncConn) Call(ctx context.Context, method string, params any) (json.Va
 	// 3. We need to ensure write/read pairs are atomic
 	c.mu.Lock()
 	defer c.mu.Unlock()
+	for c.reading {
+		c.turn.Wait()
+	}
+	c.calls++
+	c.reading = true
+	depth := c.calls
+	defer func() {
+		c.calls--
+		c.reading = false
+		c.turn.Broadcast()
+	}()
 
 	id := jsonrpc.NewIDString(method)
 
@@ -186,21 +211,42 @@ func (c *SyncConn) Call(ctx context.Context, method string, params any) (json.Va
 		return nil, ctx.Err()
 	}
 
-	// Read the response inline.
-	msg, err := c.protocol.ReadMessage()
-	if err != nil {
-		return nil, err
-	}
-
-	if msg.IsResponse() && msg.ID != nil && msg.ID.String() == method {
-		if msg.Error != nil {
-			return nil, fmt.Errorf("ipc: remote error [%d]: %s", msg.Error.Code, msg.Error.Message)
+	for {
+		// Read the response inline.
+		msg, err := c.protocol.ReadMessage()
+		if err != nil {
+			return nil, err
 		}
-		return msg.Result, nil
-	}
 
-	// Unexpected message while waiting for response
-	return nil, fmt.Errorf("ipc: unexpected message while waiting for %q response", method)
+		if msg.IsResponse() && msg.ID != nil && msg.ID.String() == method {
+			if msg.Error != nil {
+				return nil, fmt.Errorf("ipc: remote error [%d]: %s", msg.Error.Code, msg.Error.Message)
+			}
+			return msg.Result, nil
+		}
+		if msg.IsRequest() {
+			// A synchronous client callback may make a nested API request. Release
+			// the protocol lock while handling it so nested callbacks can proceed.
+			c.reading = false
+			c.turn.Broadcast()
+			c.mu.Unlock()
+			err := c.handleRequest(ctx, msg, depth)
+			c.mu.Lock()
+			if err != nil {
+				return nil, err
+			}
+			continue
+		}
+		if msg.IsNotification() {
+			c.reading = false
+			c.turn.Broadcast()
+			c.mu.Unlock()
+			c.handleNotification(ctx, msg)
+			c.lockTurn(depth)
+			continue
+		}
+		return nil, fmt.Errorf("ipc: unexpected message while waiting for %q response", method)
+	}
 }
 
 // Notify sends a notification to the client (no response expected).

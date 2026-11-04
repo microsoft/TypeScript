@@ -1,0 +1,42 @@
+// === findAllReferences ===
+// === /a.js ===
+// export default function /*FIND ALL REFS*/[|f|]() {}
+// 
+
+// === /b.ts ===
+// import [|f|] from "./a.js";
+// [|f|]();
+// 
+
+
+
+// === findAllReferences ===
+// === /a.js ===
+// export default function [|f|]() {}
+// 
+
+// === /b.ts ===
+// import /*FIND ALL REFS*/[|f|] from "./a.js";
+// [|f|]();
+// 
+
+
+
+// === findAllReferences ===
+// === /c.ts ===
+// import source /*FIND ALL REFS*/[|f|] from "./a.js";
+// [|f|];
+// import.source("./a.js");
+
+
+
+// === findAllReferences ===
+// === /b.ts ===
+// import f from "[|./a.js|]";
+// f();
+// 
+
+// === /c.ts ===
+// import source f from "/*FIND ALL REFS*/[|./a.js|]";
+// f;
+// import.source("[|./a.js|]");

@@ -2593,8 +2593,9 @@ func (p *Printer) emitNewExpression(node *ast.NewExpression) {
 	state := p.enterNode(node.AsNode())
 	p.emitToken(ast.KindNewKeyword, node.Pos(), WriteKindKeyword, node.AsNode())
 	p.writeSpace()
-	if ast.SkipPartiallyEmittedExpressions(node.Expression).Kind == ast.KindCallExpression {
-		// Parenthesize `C()` inside of a NewExpression so it is treated as `new (C())` and not `new C()`
+	if hasUnparenthesizedCallAtStartOfMemberChain(node.Expression) {
+		// Parenthesize `C()` or `C().D` inside of a NewExpression so it is treated as `new (C())` or `new (C().D)`
+		// and not `new C()` or `new C().D`
 		p.emitExpression(node.Expression, ast.OperatorPrecedenceParentheses)
 	} else {
 		p.emitExpression(node.Expression, ast.OperatorPrecedenceMember)
@@ -2812,7 +2813,6 @@ func (p *Printer) getBinaryExpressionPrecedence(node *ast.BinaryExpression) (lef
 		// No need to parenthesize the right operand when the binary operator and
 		// operand are both ,:
 		//  x,(a,b)     => x,a,b
-		break
 	case ast.OperatorPrecedenceAssignment:
 		// assignment is right-associative
 		leftPrec = ast.OperatorPrecedenceConditional
@@ -2825,17 +2825,14 @@ func (p *Printer) getBinaryExpressionPrecedence(node *ast.BinaryExpression) (lef
 		// No need to parenthesize the right operand when the binary operator and
 		// operand are both | due to the associative property of mathematics:
 		//  x|(a|b)     => x|a|b
-		break
 	case ast.OperatorPrecedenceBitwiseXOR:
 		// No need to parenthesize the right operand when the binary operator and
 		// operand are both ^ due to the associative property of mathematics:
 		//  x^(a^b)     => x^a^b
-		break
 	case ast.OperatorPrecedenceBitwiseAND:
 		// No need to parenthesize the right operand when the binary operator and
 		// operand are both & due to the associative property of mathematics:
 		//  x&(a&b)     => x&a&b
-		break
 	case ast.OperatorPrecedenceEquality:
 		rightPrec = ast.OperatorPrecedenceRelational
 	case ast.OperatorPrecedenceRelational:
@@ -3018,8 +3015,8 @@ func (p *Printer) emitNonNullExpression(node *ast.NonNullExpression) {
 
 func (p *Printer) emitMetaProperty(node *ast.MetaProperty) {
 	state := p.enterNode(node.AsNode())
-	p.emitToken(node.KeywordToken, node.Pos(), WriteKindPunctuation, node.AsNode())
-	p.writePunctuation(".")
+	pos := p.emitToken(node.KeywordToken, node.Pos(), WriteKindPunctuation, node.AsNode())
+	p.emitToken(ast.KindDotToken, pos, WriteKindPunctuation, node.AsNode())
 	p.emitIdentifierName(node.Name().AsIdentifier())
 	p.exitNode(node.AsNode(), state)
 }
@@ -3316,7 +3313,7 @@ func (p *Printer) emitExpression(node *ast.Expression, precedence ast.OperatorPr
 	case ast.KindSyntheticExpression:
 		panic("SyntheticExpression should never be printed.")
 	case ast.KindMissingDeclaration:
-		break
+		// Missing declarations do not emit an expression.
 
 	// JSX
 	case ast.KindJsxElement:
@@ -4219,7 +4216,7 @@ func (p *Printer) emitStatement(node *ast.Statement) {
 	case ast.KindModuleDeclaration:
 		p.emitModuleDeclaration(node.AsModuleDeclaration())
 	case ast.KindMissingDeclaration:
-		break
+		// Missing declarations do not emit a statement.
 
 	// Import/Export Statements
 	case ast.KindNamespaceExportDeclaration:
@@ -4451,12 +4448,13 @@ func (p *Printer) emitJsxAttributeValue(node *ast.JsxAttributeValue) {
 //
 
 func (p *Printer) emitCaseOrDefaultClauseStatements(node *ast.CaseOrDefaultClause, colonPos int) {
-	emitAsSingleStatement := len(node.Statements.Nodes) == 1 &&
+	statements := node.StatementList()
+	emitAsSingleStatement := len(statements.Nodes) == 1 &&
 		// treat synthesized nodes as located on the same line for emit purposes
 		(p.currentSourceFile == nil ||
-			ast.NodeIsSynthesized(node.AsNode()) ||
-			ast.NodeIsSynthesized(node.Statements.Nodes[0]) ||
-			RangeStartPositionsAreOnSameLine(node.Loc, node.Statements.Nodes[0].Loc, p.currentSourceFile))
+			ast.NodeIsSynthesized(node) ||
+			ast.NodeIsSynthesized(statements.Nodes[0]) ||
+			RangeStartPositionsAreOnSameLine(node.Loc, statements.Nodes[0].Loc, p.currentSourceFile))
 
 	format := LFCaseOrDefaultClauseStatements
 	if emitAsSingleStatement {
@@ -4466,34 +4464,34 @@ func (p *Printer) emitCaseOrDefaultClauseStatements(node *ast.CaseOrDefaultClaus
 		p.writeSpace()
 		format &^= LFMultiLine | LFIndented
 	} else {
-		p.emitToken(ast.KindColonToken, colonPos, WriteKindPunctuation, node.AsNode())
+		p.emitToken(ast.KindColonToken, colonPos, WriteKindPunctuation, node)
 	}
 
-	p.emitList((*Printer).emitStatement, node.AsNode(), node.Statements, format)
+	p.emitList((*Printer).emitStatement, node, statements, format)
 }
 
-func (p *Printer) emitCaseClause(node *ast.CaseOrDefaultClause) {
+func (p *Printer) emitCaseClause(node *ast.CaseClause) {
 	state := p.enterNode(node.AsNode())
 	p.emitToken(ast.KindCaseKeyword, node.Pos(), WriteKindKeyword, node.AsNode())
 	p.writeSpace()
 	p.emitExpression(node.Expression, ast.OperatorPrecedenceLowest)
-	p.emitCaseOrDefaultClauseStatements(node, node.Expression.End())
+	p.emitCaseOrDefaultClauseStatements(node.AsNode(), node.Expression.End())
 	p.exitNode(node.AsNode(), state)
 }
 
-func (p *Printer) emitDefaultClause(node *ast.CaseOrDefaultClause) {
+func (p *Printer) emitDefaultClause(node *ast.DefaultClause) {
 	state := p.enterNode(node.AsNode())
 	pos := p.emitToken(ast.KindDefaultKeyword, node.Pos(), WriteKindKeyword, node.AsNode())
-	p.emitCaseOrDefaultClauseStatements(node, pos)
+	p.emitCaseOrDefaultClauseStatements(node.AsNode(), pos)
 	p.exitNode(node.AsNode(), state)
 }
 
-func (p *Printer) emitCaseOrDefaultClauseNode(node *ast.CaseOrDefaultClauseNode) {
+func (p *Printer) emitCaseOrDefaultClauseNode(node *ast.CaseOrDefaultClause) {
 	switch node.Kind {
 	case ast.KindCaseClause:
-		p.emitCaseClause(node.AsCaseOrDefaultClause())
+		p.emitCaseClause(node.AsCaseClause())
 	case ast.KindDefaultClause:
-		p.emitDefaultClause(node.AsCaseOrDefaultClause())
+		p.emitDefaultClause(node.AsDefaultClause())
 	default:
 		panic(fmt.Sprintf("unhandled CaseOrDefaultClause: %v", node.Kind))
 	}
@@ -4879,7 +4877,7 @@ func (p *Printer) hasTrailingComma(parentNode *ast.Node, children *ast.NodeList)
 func (p *Printer) writeDelimiter(format ListFormat) {
 	switch format & LFDelimitersMask {
 	case LFNone:
-		break
+		// no delimiter for this format
 	case LFCommaDelimited:
 		p.writePunctuation(",")
 	case LFBarDelimited:
@@ -5099,7 +5097,7 @@ func (p *Printer) Write(node *ast.Node, sourceFile *ast.SourceFile, writer EmitT
 	}
 	p.writer = writer
 	p.writer.Clear()
-	if sourceFile != nil {
+	if sourceFile != nil && node == sourceFile.AsNode() {
 		if grower, ok := p.writer.(interface{ Grow(n int) }); ok {
 			grower.Grow(len(sourceFile.Text()))
 		}
@@ -5231,9 +5229,9 @@ func (p *Printer) Write(node *ast.Node, sourceFile *ast.SourceFile, writer EmitT
 
 	// Clauses
 	case ast.KindCaseClause:
-		p.emitCaseClause(node.AsCaseOrDefaultClause())
+		p.emitCaseClause(node.AsCaseClause())
 	case ast.KindDefaultClause:
-		p.emitDefaultClause(node.AsCaseOrDefaultClause())
+		p.emitDefaultClause(node.AsDefaultClause())
 	case ast.KindHeritageClause:
 		p.emitHeritageClause(node.AsHeritageClause())
 	case ast.KindCatchClause:
@@ -5825,7 +5823,7 @@ func (p *Printer) setSourceMapSource(source sourcemap.Source) {
 		return
 	}
 
-	p.sourceMapSourceIsJson = tspath.FileExtensionIs(source.FileName(), tspath.ExtensionJson)
+	p.sourceMapSourceIsJson = source.FileName().ExtensionIs(tspath.ExtensionJson)
 	if p.sourceMapSourceIsJson {
 		return
 	}

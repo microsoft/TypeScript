@@ -1,0 +1,70 @@
+//// [tests/cases/compiler/strictSupertypeInjection.ts] ////
+
+=== strictSupertypeInjection.ts ===
+interface Reference<Value> {
+>Reference : Symbol(Reference, Decl(strictSupertypeInjection.ts, 0, 0))
+>Value : Symbol(Value, Decl(strictSupertypeInjection.ts, 0, 20))
+
+    get value(): Value;
+>value : Symbol(Reference.value, Decl(strictSupertypeInjection.ts, 0, 28), Decl(strictSupertypeInjection.ts, 1, 23))
+>Value : Symbol(Value, Decl(strictSupertypeInjection.ts, 0, 20))
+
+    set value(value: Value);
+>value : Symbol(Reference.value, Decl(strictSupertypeInjection.ts, 0, 28), Decl(strictSupertypeInjection.ts, 1, 23))
+>value : Symbol(value, Decl(strictSupertypeInjection.ts, 2, 14))
+>Value : Symbol(Value, Decl(strictSupertypeInjection.ts, 0, 20))
+}
+interface ComputedReference<Value> extends Reference<Value> {
+>ComputedReference : Symbol(ComputedReference, Decl(strictSupertypeInjection.ts, 3, 1))
+>Value : Symbol(Value, Decl(strictSupertypeInjection.ts, 4, 28))
+>Reference : Symbol(Reference, Decl(strictSupertypeInjection.ts, 0, 0))
+>Value : Symbol(Value, Decl(strictSupertypeInjection.ts, 4, 28))
+
+    readonly value: Value;
+>value : Symbol(ComputedReference.value, Decl(strictSupertypeInjection.ts, 4, 61))
+>Value : Symbol(Value, Decl(strictSupertypeInjection.ts, 4, 28))
+
+    effect: unknown;
+>effect : Symbol(ComputedReference.effect, Decl(strictSupertypeInjection.ts, 5, 26))
+}
+interface InjectionConstraint<Value> {}
+>InjectionConstraint : Symbol(InjectionConstraint, Decl(strictSupertypeInjection.ts, 7, 1))
+>Value : Symbol(Value, Decl(strictSupertypeInjection.ts, 8, 30))
+
+type InjectionKey<Value> = symbol & InjectionConstraint<Value>;
+>InjectionKey : Symbol(InjectionKey, Decl(strictSupertypeInjection.ts, 8, 39))
+>Value : Symbol(Value, Decl(strictSupertypeInjection.ts, 9, 18))
+>InjectionConstraint : Symbol(InjectionConstraint, Decl(strictSupertypeInjection.ts, 7, 1))
+>Value : Symbol(Value, Decl(strictSupertypeInjection.ts, 9, 18))
+
+declare function inject<Value>(key: InjectionKey<Value> | string, fallback: Value): Value;
+>inject : Symbol(inject, Decl(strictSupertypeInjection.ts, 9, 63))
+>Value : Symbol(Value, Decl(strictSupertypeInjection.ts, 11, 24))
+>key : Symbol(key, Decl(strictSupertypeInjection.ts, 11, 31))
+>InjectionKey : Symbol(InjectionKey, Decl(strictSupertypeInjection.ts, 8, 39))
+>Value : Symbol(Value, Decl(strictSupertypeInjection.ts, 11, 24))
+>fallback : Symbol(fallback, Decl(strictSupertypeInjection.ts, 11, 65))
+>Value : Symbol(Value, Decl(strictSupertypeInjection.ts, 11, 24))
+>Value : Symbol(Value, Decl(strictSupertypeInjection.ts, 11, 24))
+
+declare function ref<Value = any>(): Reference<Value | undefined>;
+>ref : Symbol(ref, Decl(strictSupertypeInjection.ts, 11, 90))
+>Value : Symbol(Value, Decl(strictSupertypeInjection.ts, 12, 21))
+>Reference : Symbol(Reference, Decl(strictSupertypeInjection.ts, 0, 0))
+>Value : Symbol(Value, Decl(strictSupertypeInjection.ts, 12, 21))
+
+declare const key: InjectionKey<{ visibleIds: ComputedReference<unknown> }>;
+>key : Symbol(key, Decl(strictSupertypeInjection.ts, 13, 13))
+>InjectionKey : Symbol(InjectionKey, Decl(strictSupertypeInjection.ts, 8, 39))
+>visibleIds : Symbol(visibleIds, Decl(strictSupertypeInjection.ts, 13, 33))
+>ComputedReference : Symbol(ComputedReference, Decl(strictSupertypeInjection.ts, 3, 1))
+
+const visibleIds = inject(key, { visibleIds: ref() }).visibleIds;
+>visibleIds : Symbol(visibleIds, Decl(strictSupertypeInjection.ts, 15, 5))
+>inject(key, { visibleIds: ref() }).visibleIds : Symbol(visibleIds, Decl(strictSupertypeInjection.ts, 15, 32))
+>inject : Symbol(inject, Decl(strictSupertypeInjection.ts, 9, 63))
+>key : Symbol(key, Decl(strictSupertypeInjection.ts, 13, 13))
+>visibleIds : Symbol(visibleIds, Decl(strictSupertypeInjection.ts, 15, 32))
+>ref : Symbol(ref, Decl(strictSupertypeInjection.ts, 11, 90))
+>visibleIds : Symbol(visibleIds, Decl(strictSupertypeInjection.ts, 15, 32))
+

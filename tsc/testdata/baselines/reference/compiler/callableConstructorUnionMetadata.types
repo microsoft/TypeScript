@@ -1,0 +1,20 @@
+//// [tests/cases/compiler/callableConstructorUnionMetadata.ts] ////
+
+=== callableConstructorUnionMetadata.ts ===
+type Component<Props> = ((props: Props) => number) | (new (props: Props) => object);
+>Component : Component<Props>
+>props : Props
+>props : Props
+
+type Field<Props> = Component<Props> & { testIds?: {} };
+>Field : Field<Props>
+>testIds : {} | undefined
+
+declare const component: <Props>(props: Props) => number;
+>component : <Props>(props: Props) => number
+>props : Props
+
+const field: Field<string> = component;
+>field : Field<string>
+>component : <Props>(props: Props) => number
+

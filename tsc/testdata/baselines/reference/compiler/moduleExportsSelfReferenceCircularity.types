@@ -1,0 +1,82 @@
+//// [tests/cases/compiler/moduleExportsSelfReferenceCircularity.ts] ////
+
+=== b.js ===
+const a = require("./a");
+>a : any
+>require("./a") : any
+>require : any
+>"./a" : "./a"
+
+exports.q = a.x;
+>exports.q = a.x : any
+>exports.q : any
+>exports : typeof import("./b")
+>q : any
+>a.x : any
+>a : any
+>x : any
+
+exports.r = module.exports.q;
+>exports.r = module.exports.q : any
+>exports.r : any
+>exports : typeof import("./b")
+>r : any
+>module.exports.q : any
+>module.exports : typeof import("./b")
+>module : { exports: typeof import("./b"); }
+>exports : typeof import("./b")
+>q : any
+
+=== a.js ===
+module.exports = { x: module.exports.y, y: 1 };
+>module.exports = { x: module.exports.y, y: 1 } : { x: any; y: number; }
+>module.exports : any
+>module : { exports: any; }
+>exports : any
+>{ x: module.exports.y, y: 1 } : { x: any; y: number; }
+>x : any
+>module.exports.y : any
+>module.exports : any
+>module : { exports: any; }
+>exports : any
+>y : any
+>y : number
+>1 : 1
+
+exports.z = exports.x;
+>exports.z = exports.x : any
+>exports.z : any
+>exports : any
+>z : any
+>exports.x : any
+>exports : any
+>x : any
+
+const self = require("./a");
+>self : any
+>require("./a") : any
+>require : any
+>"./a" : "./a"
+
+module.exports.w = self.y;
+>module.exports.w = self.y : any
+>module.exports.w : any
+>module.exports : any
+>module : { exports: any; }
+>exports : any
+>w : any
+>self.y : any
+>self : any
+>y : any
+
+module.exports.v = module.exports;
+>module.exports.v = module.exports : any
+>module.exports.v : any
+>module.exports : any
+>module : { exports: any; }
+>exports : any
+>v : any
+>module.exports : any
+>module : { exports: any; }
+>exports : any
+

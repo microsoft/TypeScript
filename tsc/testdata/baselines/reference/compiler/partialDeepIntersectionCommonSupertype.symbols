@@ -1,0 +1,57 @@
+//// [tests/cases/compiler/partialDeepIntersectionCommonSupertype.ts] ////
+
+=== partialDeepIntersectionCommonSupertype.ts ===
+type PartialDeep<T> = T extends object ? { [K in keyof T]?: PartialDeep<T[K]> } : T;
+>PartialDeep : Symbol(PartialDeep, Decl(partialDeepIntersectionCommonSupertype.ts, 0, 0))
+>T : Symbol(T, Decl(partialDeepIntersectionCommonSupertype.ts, 0, 17))
+>T : Symbol(T, Decl(partialDeepIntersectionCommonSupertype.ts, 0, 17))
+>K : Symbol(K, Decl(partialDeepIntersectionCommonSupertype.ts, 0, 44))
+>T : Symbol(T, Decl(partialDeepIntersectionCommonSupertype.ts, 0, 17))
+>PartialDeep : Symbol(PartialDeep, Decl(partialDeepIntersectionCommonSupertype.ts, 0, 0))
+>T : Symbol(T, Decl(partialDeepIntersectionCommonSupertype.ts, 0, 17))
+>K : Symbol(K, Decl(partialDeepIntersectionCommonSupertype.ts, 0, 44))
+>T : Symbol(T, Decl(partialDeepIntersectionCommonSupertype.ts, 0, 17))
+
+type Theme<T extends object> = T & { style: { message: (text: string) => string } };
+>Theme : Symbol(Theme, Decl(partialDeepIntersectionCommonSupertype.ts, 0, 84))
+>T : Symbol(T, Decl(partialDeepIntersectionCommonSupertype.ts, 1, 11))
+>T : Symbol(T, Decl(partialDeepIntersectionCommonSupertype.ts, 1, 11))
+>style : Symbol(style, Decl(partialDeepIntersectionCommonSupertype.ts, 1, 36))
+>message : Symbol(message, Decl(partialDeepIntersectionCommonSupertype.ts, 1, 45))
+>text : Symbol(text, Decl(partialDeepIntersectionCommonSupertype.ts, 1, 56))
+
+declare function makeTheme<T extends object>(...themes: PartialDeep<Theme<T>>[]): Theme<T>;
+>makeTheme : Symbol(makeTheme, Decl(partialDeepIntersectionCommonSupertype.ts, 1, 84))
+>T : Symbol(T, Decl(partialDeepIntersectionCommonSupertype.ts, 2, 27))
+>themes : Symbol(themes, Decl(partialDeepIntersectionCommonSupertype.ts, 2, 45))
+>PartialDeep : Symbol(PartialDeep, Decl(partialDeepIntersectionCommonSupertype.ts, 0, 0))
+>Theme : Symbol(Theme, Decl(partialDeepIntersectionCommonSupertype.ts, 0, 84))
+>T : Symbol(T, Decl(partialDeepIntersectionCommonSupertype.ts, 2, 27))
+>Theme : Symbol(Theme, Decl(partialDeepIntersectionCommonSupertype.ts, 0, 84))
+>T : Symbol(T, Decl(partialDeepIntersectionCommonSupertype.ts, 2, 27))
+
+declare const theme: { style: { description: (text: string) => string } };
+>theme : Symbol(theme, Decl(partialDeepIntersectionCommonSupertype.ts, 3, 13))
+>style : Symbol(style, Decl(partialDeepIntersectionCommonSupertype.ts, 3, 22))
+>description : Symbol(description, Decl(partialDeepIntersectionCommonSupertype.ts, 3, 31))
+>text : Symbol(text, Decl(partialDeepIntersectionCommonSupertype.ts, 3, 46))
+
+declare const customization: PartialDeep<Theme<typeof theme>>;
+>customization : Symbol(customization, Decl(partialDeepIntersectionCommonSupertype.ts, 4, 13))
+>PartialDeep : Symbol(PartialDeep, Decl(partialDeepIntersectionCommonSupertype.ts, 0, 0))
+>Theme : Symbol(Theme, Decl(partialDeepIntersectionCommonSupertype.ts, 0, 84))
+>theme : Symbol(theme, Decl(partialDeepIntersectionCommonSupertype.ts, 3, 13))
+
+const merged = makeTheme(theme, customization);
+>merged : Symbol(merged, Decl(partialDeepIntersectionCommonSupertype.ts, 5, 5))
+>makeTheme : Symbol(makeTheme, Decl(partialDeepIntersectionCommonSupertype.ts, 1, 84))
+>theme : Symbol(theme, Decl(partialDeepIntersectionCommonSupertype.ts, 3, 13))
+>customization : Symbol(customization, Decl(partialDeepIntersectionCommonSupertype.ts, 4, 13))
+
+merged.style.description("");
+>merged.style.description : Symbol(description, Decl(partialDeepIntersectionCommonSupertype.ts, 3, 31))
+>merged.style : Symbol(style, Decl(partialDeepIntersectionCommonSupertype.ts, 3, 22), Decl(partialDeepIntersectionCommonSupertype.ts, 1, 36))
+>merged : Symbol(merged, Decl(partialDeepIntersectionCommonSupertype.ts, 5, 5))
+>style : Symbol(style, Decl(partialDeepIntersectionCommonSupertype.ts, 3, 22), Decl(partialDeepIntersectionCommonSupertype.ts, 1, 36))
+>description : Symbol(description, Decl(partialDeepIntersectionCommonSupertype.ts, 3, 31))
+

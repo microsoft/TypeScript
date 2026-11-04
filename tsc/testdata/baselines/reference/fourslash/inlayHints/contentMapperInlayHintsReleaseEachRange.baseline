@@ -1,0 +1,28 @@
+// === Inlay Hints ===
+const value = () => 1;
+           ^
+{
+  "position": {
+    "line": 1,
+    "character": 11
+  },
+  "label": [
+    {
+      "value": ": "
+    },
+    {
+      "value": "("
+    },
+    {
+      "value": ")"
+    },
+    {
+      "value": " => "
+    },
+    {
+      "value": "number"
+    }
+  ],
+  "kind": 1,
+  "paddingLeft": true
+}

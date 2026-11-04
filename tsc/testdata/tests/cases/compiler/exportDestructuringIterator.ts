@@ -10,3 +10,6 @@ export const [c, ...d] = foo();
 export const [, e, , f] = foo();
 export const [[g, h], { i, j: k }] = foo();
 export const { m: [n, o], p: { q } } = foo();
+export const [...[r, s]] = foo();
+export const [...{ length: t }] = foo();
+export const [...[u = 1, , ...[v]]] = foo();

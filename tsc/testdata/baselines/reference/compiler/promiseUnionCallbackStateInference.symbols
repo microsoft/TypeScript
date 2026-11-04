@@ -1,0 +1,57 @@
+//// [tests/cases/compiler/promiseUnionCallbackStateInference.ts] ////
+
+=== promiseUnionCallbackStateInference.ts ===
+declare function createAction<State>(
+>createAction : Symbol(createAction, Decl(promiseUnionCallbackStateInference.ts, 0, 0), Decl(promiseUnionCallbackStateInference.ts, 3, 14))
+>State : Symbol(State, Decl(promiseUnionCallbackStateInference.ts, 0, 30))
+
+    action: (state: State) => State | Promise<State>,
+>action : Symbol(action, Decl(promiseUnionCallbackStateInference.ts, 0, 37))
+>state : Symbol(state, Decl(promiseUnionCallbackStateInference.ts, 1, 13))
+>State : Symbol(State, Decl(promiseUnionCallbackStateInference.ts, 0, 30))
+>State : Symbol(State, Decl(promiseUnionCallbackStateInference.ts, 0, 30))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>State : Symbol(State, Decl(promiseUnionCallbackStateInference.ts, 0, 30))
+
+    initialState: State,
+>initialState : Symbol(initialState, Decl(promiseUnionCallbackStateInference.ts, 1, 53))
+>State : Symbol(State, Decl(promiseUnionCallbackStateInference.ts, 0, 30))
+
+): () => void;
+declare function createAction<State>(
+>createAction : Symbol(createAction, Decl(promiseUnionCallbackStateInference.ts, 0, 0), Decl(promiseUnionCallbackStateInference.ts, 3, 14))
+>State : Symbol(State, Decl(promiseUnionCallbackStateInference.ts, 4, 30))
+
+    action: (state: State, payload: string) => State | Promise<State>,
+>action : Symbol(action, Decl(promiseUnionCallbackStateInference.ts, 4, 37))
+>state : Symbol(state, Decl(promiseUnionCallbackStateInference.ts, 5, 13))
+>State : Symbol(State, Decl(promiseUnionCallbackStateInference.ts, 4, 30))
+>payload : Symbol(payload, Decl(promiseUnionCallbackStateInference.ts, 5, 26))
+>State : Symbol(State, Decl(promiseUnionCallbackStateInference.ts, 4, 30))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>State : Symbol(State, Decl(promiseUnionCallbackStateInference.ts, 4, 30))
+
+    initialState: State,
+>initialState : Symbol(initialState, Decl(promiseUnionCallbackStateInference.ts, 5, 70))
+>State : Symbol(State, Decl(promiseUnionCallbackStateInference.ts, 4, 30))
+
+): (payload: string) => void;
+>payload : Symbol(payload, Decl(promiseUnionCallbackStateInference.ts, 7, 4))
+
+declare const action: (previous: unknown, value: string) => Promise<string>;
+>action : Symbol(action, Decl(promiseUnionCallbackStateInference.ts, 9, 13))
+>previous : Symbol(previous, Decl(promiseUnionCallbackStateInference.ts, 9, 23))
+>value : Symbol(value, Decl(promiseUnionCallbackStateInference.ts, 9, 41))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+
+const dispatch = createAction(action, null);
+>dispatch : Symbol(dispatch, Decl(promiseUnionCallbackStateInference.ts, 10, 5))
+>createAction : Symbol(createAction, Decl(promiseUnionCallbackStateInference.ts, 0, 0), Decl(promiseUnionCallbackStateInference.ts, 3, 14))
+>action : Symbol(action, Decl(promiseUnionCallbackStateInference.ts, 9, 13))
+
+const bound = dispatch.bind(null, "value");
+>bound : Symbol(bound, Decl(promiseUnionCallbackStateInference.ts, 11, 5))
+>dispatch.bind : Symbol(CallableFunction.bind, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>dispatch : Symbol(dispatch, Decl(promiseUnionCallbackStateInference.ts, 10, 5))
+>bind : Symbol(CallableFunction.bind, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+

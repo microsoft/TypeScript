@@ -22,12 +22,8 @@ func (h *compilerHost) FS() vfs.FS {
 	return h.host.FS()
 }
 
-func (h *compilerHost) DefaultLibraryPath() string {
+func (h *compilerHost) DefaultLibraryPath() tspath.RootedDirectoryPath {
 	return h.host.DefaultLibraryPath()
-}
-
-func (h *compilerHost) GetCurrentDirectory() string {
-	return h.host.GetCurrentDirectory()
 }
 
 func (h *compilerHost) Trace(msg *diagnostics.Message, args ...any) {
@@ -57,6 +53,6 @@ func (h *compilerHost) ContentMapperProject() contentmapper.Project {
 	return h.contentMapperProject
 }
 
-func (h *compilerHost) GetResolvedProjectReference(fileName string, path tspath.Path) *tsoptions.ParsedCommandLine {
+func (h *compilerHost) GetResolvedProjectReference(fileName tspath.RootedFilePath, path tspath.PathKey) *tsoptions.ParsedCommandLine {
 	return h.host.GetResolvedProjectReference(fileName, path)
 }

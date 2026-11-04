@@ -32,10 +32,8 @@ const f5 = function() {};
 			f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
 			defer done()
 			f.VerifyBaselineCodeLens(t, &lsutil.UserPreferences{
-				CodeLens: lsutil.CodeLensUserPreferences{
-					ReferencesCodeLensEnabled:            core.TSTrue,
-					ReferencesCodeLensShowOnAllFunctions: value,
-				},
+				ReferencesCodeLensEnabled:            core.TSTrue,
+				ReferencesCodeLensShowOnAllFunctions: value,
 			})
 		})
 	}

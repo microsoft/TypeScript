@@ -1,0 +1,13 @@
+noFlakyDiagnosticsBindingPatternInFunctionType1.ts(2,40): error TS2842: 'boolean' is an unused renaming of 'a'. Did you intend to use it as a type annotation?
+noFlakyDiagnosticsBindingPatternInFunctionType1.ts(2,40): error TS7031: Binding element 'boolean' implicitly has an 'any' type.
+
+
+==== noFlakyDiagnosticsBindingPatternInFunctionType1.ts (2 errors) ====
+    class Base<T> {}
+    export class C extends Base<{ e: ({ a: boolean }) => void }> {}
+                                           ~~~~~~~
+!!! error TS2842: 'boolean' is an unused renaming of 'a'. Did you intend to use it as a type annotation?
+!!! related TS2843 noFlakyDiagnosticsBindingPatternInFunctionType1.ts:2:49: We can only write a type for 'a' by adding a type for the entire parameter here.
+                                           ~~~~~~~
+!!! error TS7031: Binding element 'boolean' implicitly has an 'any' type.
+    

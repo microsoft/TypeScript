@@ -1,0 +1,37 @@
+//// [tests/cases/compiler/usingAsyncDisposable.ts] ////
+
+=== usingAsyncDisposable.ts ===
+declare const asyncDisposable: AsyncDisposable;
+>asyncDisposable : AsyncDisposable
+
+declare const optionalAsyncDisposable: AsyncDisposable | null | undefined;
+>optionalAsyncDisposable : AsyncDisposable | null | undefined
+
+declare const disposable: Disposable;
+>disposable : Disposable
+
+declare const both: AsyncDisposable & Disposable;
+>both : AsyncDisposable & Disposable
+
+using asyncResource = asyncDisposable;
+>asyncResource : AsyncDisposable
+>asyncDisposable : AsyncDisposable
+
+using optionalAsyncResource = optionalAsyncDisposable;
+>optionalAsyncResource : AsyncDisposable | null | undefined
+>optionalAsyncDisposable : AsyncDisposable | null | undefined
+
+using syncResource = disposable;
+>syncResource : Disposable
+>disposable : Disposable
+
+using eitherResource = both;
+>eitherResource : AsyncDisposable & Disposable
+>both : AsyncDisposable & Disposable
+
+await using awaitedAsyncResource = asyncDisposable;
+>awaitedAsyncResource : AsyncDisposable
+>asyncDisposable : AsyncDisposable
+
+export {};
+

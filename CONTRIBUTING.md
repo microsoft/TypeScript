@@ -75,7 +75,7 @@ In general, things we find useful when reviewing suggestions are:
 
 ## Prerequisites
 
-- Go 1.26
+- Go 1.27
 - Node.js 24
 - npm (the version declared by `packageManager` in `package.json`)
 - Git
@@ -102,12 +102,29 @@ The repository uses a Go workspace with modules in `tsc/` and `tools/`.
 npx hereby build         # Build the native compiler into built/local/tsc
 npx hereby test          # Run compiler and language-service Go tests
 npx hereby test:all      # Also run benchmarks, tools, and API tests
+npx hereby test:codegen  # Run codegen tests without regenerating source outputs
 npx hereby lint          # Run custom golangci-lint for both Go modules
-npx hereby generate      # Regenerate compiler sources and bundled assets
+npx hereby generate:go   # Run the generators also exposed through go generate
+npx hereby generate      # Regenerate all sources, assets, localization, and vendored files
 npx hereby format        # Format Go, TypeScript, JSON, and YAML
 npx hereby check:format  # Check formatting without changing files
 npx hereby tidy          # Tidy both modules and synchronize go.work
 ```
+
+Generation is owned by `Herebyfile.mjs`; Go directives forward to the same
+`generate:*` tasks for compatibility. Use a subtask such as
+`npx hereby generate:diagnostics` to run one generator group, and pass `--force`
+to bypass incremental caches. `generate` includes every generator and fetches
+the pinned LSP model when its local cache is missing or stale. Use
+`generate:go` for the narrower scope of `go generate ./...` in the `tsc` module.
+Up-to-date generators emit no status messages.
+
+`npx hereby build` runs `generate` before compiling; a separate generation step
+is not needed. The API and package build tasks share this prerequisite, and
+`build:watch` runs the full incremental generation suite before every rebuild.
+Each watch pass clears cached input fingerprints and runs generation in-process.
+Restart the watcher after editing generator implementations. Generator-owned outputs are
+excluded from watch events to avoid regeneration loops.
 
 Package-specific commands:
 
@@ -134,19 +151,8 @@ go -C ./tsc test -run='TestLocal/<test name>' ./internal/testrunner
 Run:
 
 ```bash
-npx hereby generate
-npx hereby build
-npx hereby test
-npx hereby test:all
-npx hereby lint
-npx hereby format
-npx hereby check:format
-npm run -w @typescript/typescript build
-npm run -w @typescript/typescript test
-npm run -w native-preview build
-go -C ./tsc mod tidy -diff
-go -C ./tools mod tidy -diff
-go work sync
+npx hereby validate --all
+npx hereby tidy
 git diff --exit-code
 ```
 

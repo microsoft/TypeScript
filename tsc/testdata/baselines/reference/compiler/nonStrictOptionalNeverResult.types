@@ -1,0 +1,33 @@
+//// [tests/cases/compiler/nonStrictOptionalNeverResult.ts] ////
+
+=== nonStrictOptionalNeverResult.ts ===
+type Result = { error: string; details?: never } | { details: { link: string }; error?: never };
+>Result : Result
+>error : string
+>details : never
+>details : { link: string; }
+>link : string
+>error : never
+
+function read(result: Result) {
+>read : (result: Result) => string
+>result : Result
+
+    if (result.error || !result.details) return;
+>result.error || !result.details : string | boolean
+>result.error : string
+>result : Result
+>error : string
+>!result.details : boolean
+>result.details : { link: string; }
+>result : Result
+>details : { link: string; }
+
+    return result.details.link;
+>result.details.link : string
+>result.details : { link: string; }
+>result : Result
+>details : { link: string; }
+>link : string
+}
+

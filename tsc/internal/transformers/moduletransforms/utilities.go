@@ -19,13 +19,26 @@ func isDeclarationNameOfEnumOrNamespace(emitContext *printer.EmitContext, node *
 	return false
 }
 
-func rewriteModuleSpecifier(emitContext *printer.EmitContext, node *ast.Expression, compilerOptions *core.CompilerOptions) *ast.Expression {
-	if node == nil || !ast.IsStringLiteral(node) || !core.ShouldRewriteModuleSpecifier(node.Text(), compilerOptions) {
+func rewriteModuleSpecifier(emitContext *printer.EmitContext, node *ast.Expression, compilerOptions *core.CompilerOptions, rewrites []tspath.ExtensionRewrite, caseSensitivity tspath.CaseSensitivity) *ast.Expression {
+	if node == nil || !ast.IsStringLiteralLike(node) || !compilerOptions.RewriteRelativeImportExtensions.IsTrue() {
 		return node
 	}
-	updatedText := tspath.ChangeExtension(node.Text(), outputpaths.GetOutputExtension(node.Text(), compilerOptions.Jsx))
+	specifier := tspath.ToModuleSpecifier(node.Text())
+	if !specifier.ShouldRewriteExtension(rewrites, caseSensitivity) {
+		return node
+	}
+	updatedSpecifier, rewritten := specifier.RewriteExtension(rewrites, caseSensitivity)
+	updatedText := updatedSpecifier.AsString()
+	if !rewritten {
+		updatedText = tspath.ChangeExtension(node.Text(), outputpaths.GetOutputExtension(node.Text(), compilerOptions.Jsx))
+	}
 	if updatedText != node.Text() {
-		updated := emitContext.Factory.NewStringLiteral(updatedText, node.AsStringLiteral().TokenFlags)
+		var updated *ast.Expression
+		if ast.IsStringLiteral(node) {
+			updated = emitContext.Factory.NewStringLiteral(updatedText, node.AsStringLiteral().TokenFlags)
+		} else {
+			updated = emitContext.Factory.NewNoSubstitutionTemplateLiteral(updatedText, node.AsNoSubstitutionTemplateLiteral().TemplateFlags)
+		}
 		emitContext.SetOriginal(updated, node)
 		emitContext.AssignCommentAndSourceMapRanges(updated, node)
 		return updated

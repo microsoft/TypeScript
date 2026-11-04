@@ -30,8 +30,8 @@ func (supplementalGlobalsHandler) HandleRequest(ctx context.Context, method stri
 			return nil, fmt.Errorf("contentmappertest: unexpected supplemental global input %q", p.FileName)
 		}
 		return contentmapper.TransformResult{
-			MappedOutput: contentmapper.MappedOutput{Text: "export default shared.value;", Extension: ".ts"},
-			Supplemental: []contentmapper.SupplementalOutput{{MappedOutput: contentmapper.MappedOutput{Text: supplemental, Extension: ".ts"}}},
+			Text: "export default shared.value;", Extension: ".ts",
+			Supplemental: []contentmapper.SupplementalOutput{{Text: supplemental, Extension: ".ts"}},
 		}, nil
 	default:
 		return nil, fmt.Errorf("contentmappertest: unexpected method %q", method)

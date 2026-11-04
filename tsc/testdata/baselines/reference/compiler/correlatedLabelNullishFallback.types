@@ -1,0 +1,27 @@
+//// [tests/cases/compiler/correlatedLabelNullishFallback.ts] ////
+
+=== correlatedLabelNullishFallback.ts ===
+function label(options: { label: string; alias: string } | { label: object; alias?: string }) {
+>label : (options: { label: string; alias: string; } | { label: object; alias?: string; }) => string | undefined
+>options : { label: string; alias: string; } | { label: object; alias?: string; }
+>label : string
+>alias : string
+>label : object
+>alias : string | undefined
+
+    if (typeof options.label === "string") return options.alias ?? options.label;
+>typeof options.label === "string" : boolean
+>typeof options.label : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
+>options.label : string | object
+>options : { label: string; alias: string; } | { label: object; alias?: string; }
+>label : string | object
+>"string" : "string"
+>options.alias ?? options.label : string
+>options.alias : string | undefined
+>options : { label: string; alias: string; } | { label: object; alias?: string; }
+>alias : string | undefined
+>options.label : string
+>options : { label: string; alias: string; } | { label: object; alias?: string; }
+>label : string
+}
+

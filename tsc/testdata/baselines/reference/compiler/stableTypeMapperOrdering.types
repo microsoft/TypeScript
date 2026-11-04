@@ -1,0 +1,68 @@
+//// [tests/cases/compiler/stableTypeMapperOrdering.ts] ////
+
+=== stableTypeMapperOrdering.ts ===
+// https://github.com/microsoft/TypeScript/issues/64589
+
+interface Endpoint<Name, Params, Middleware, Services> {
+  readonly name: Name;
+>name : Name
+
+  readonly params: Params;
+>params : Params
+
+  readonly middleware: Middleware;
+>middleware : Middleware
+
+  readonly services: Services;
+>services : Services
+}
+
+type Same<A, R> = R;
+>Same : R
+
+type AddMiddleware<E, I> =
+>AddMiddleware : AddMiddleware<E, I>
+
+  E extends Endpoint<infer N, infer P, infer M, infer S>
+    ? Endpoint<N, P, M | I, Same<I, S>>
+    : never;
+
+interface Group<Endpoints> {
+  add<N extends string, P = never>(
+>add : <N extends string, P = never>(name: N, params?: P) => Group<Endpoints | Endpoint<N, P, never, never>>
+
+    name: N,
+>name : N
+
+    params?: P,
+>params : P | undefined
+
+  ): Group<Endpoints | Endpoint<N, P, never, never>>;
+  middleware<I>(id: I): Group<AddMiddleware<Endpoints, I>>;
+>middleware : <I>(id: I) => Group<AddMiddleware<Endpoints, I>>
+>id : I
+}
+
+declare const group: Group<never>;
+>group : Group<never>
+
+export const result = group.add("a", { id: "" }).add("c").middleware("m" as const);
+>result : Group<Endpoint<"a", { id: string; }, "m", never> | Endpoint<"c", never, "m", never>>
+>group.add("a", { id: "" }).add("c").middleware("m" as const) : Group<Endpoint<"a", { id: string; }, "m", never> | Endpoint<"c", never, "m", never>>
+>group.add("a", { id: "" }).add("c").middleware : <I>(id: I) => Group<Endpoint<"a", { id: string; }, I, never> | Endpoint<"c", never, I, never>>
+>group.add("a", { id: "" }).add("c") : Group<Endpoint<"a", { id: string; }, never, never> | Endpoint<"c", never, never, never>>
+>group.add("a", { id: "" }).add : <N extends string, P = never>(name: N, params?: P | undefined) => Group<Endpoint<"a", { id: string; }, never, never> | Endpoint<N, P, never, never>>
+>group.add("a", { id: "" }) : Group<Endpoint<"a", { id: string; }, never, never>>
+>group.add : <N extends string, P = never>(name: N, params?: P | undefined) => Group<Endpoint<N, P, never, never>>
+>group : Group<never>
+>add : <N extends string, P = never>(name: N, params?: P | undefined) => Group<Endpoint<N, P, never, never>>
+>"a" : "a"
+>{ id: "" } : { id: string; }
+>id : string
+>"" : ""
+>add : <N extends string, P = never>(name: N, params?: P | undefined) => Group<Endpoint<"a", { id: string; }, never, never> | Endpoint<N, P, never, never>>
+>"c" : "c"
+>middleware : <I>(id: I) => Group<Endpoint<"a", { id: string; }, I, never> | Endpoint<"c", never, I, never>>
+>"m" as const : "m"
+>"m" : "m"
+

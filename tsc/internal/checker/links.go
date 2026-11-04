@@ -5,46 +5,62 @@ import (
 	"github.com/microsoft/TypeScript/tsc/internal/core"
 )
 
-// nodeLinkStore is a links store keyed by node references. Values are stored directly
-// in the pages of the store which is suitable for values where sizeof(V) is small.
+// When possible, nodeLinkStore and symbolLinkStore store Node and Symbol links in an efficient and densely
+// packed paged array store. When a Node or Symbol has not yet been assigned an ID, the store provides one
+// from a generator that produces sequences of IDs in a reserved range of the ID space. The generator grabs
+// chunks of 256 IDs from a central atomic counter, ensuring that each block of 256 IDs is consecutive and
+// causing Node or Symbol links to be densely packed within a single page.
+
+const maxPageLinkCount = 0x100_0000 // 16M
+
 type nodeLinkStore[V any] struct {
-	store core.PagedLinkStore[V]
+	gen   ast.NodeIdGenerator
+	links core.LinkStore[uint64, V]
+	pages core.PagedLinkStore[V]
 }
 
 func (s *nodeLinkStore[V]) Get(node *ast.Node) *V {
-	return s.store.Get(uint64(ast.GetNodeId(node)))
+	id := uint64(s.gen.GetNodeId(node))
+	if id >= ast.BlockIdOffset && id < ast.BlockIdOffset+maxPageLinkCount {
+		return s.pages.Get(id - ast.BlockIdOffset)
+	}
+	return s.links.Get(id)
 }
 
 func (s *nodeLinkStore[V]) Has(node *ast.Node) bool {
-	return s.store.Has(uint64(ast.GetNodeId(node)))
+	return s.TryGet(node) != nil
 }
 
 func (s *nodeLinkStore[V]) TryGet(node *ast.Node) *V {
-	return s.store.TryGet(uint64(ast.GetNodeId(node)))
-}
-
-// symbolArenaLinkStore is a links store keyed by symbol references. Values are stored
-// indirectly in an arena which is suitable for values where sizeof(V) is larger.
-type symbolArenaLinkStore[V any] struct {
-	store core.PagedLinkStore[*V]
-	arena core.Arena[V]
-}
-
-func (s *symbolArenaLinkStore[V]) Get(symbol *ast.Symbol) *V {
-	link := s.store.Get(uint64(ast.GetSymbolId(symbol)))
-	if *link == nil {
-		*link = s.arena.New()
+	id := uint64(s.gen.GetNodeId(node))
+	if id >= ast.BlockIdOffset && id < ast.BlockIdOffset+maxPageLinkCount {
+		return s.pages.TryGet(id - ast.BlockIdOffset)
 	}
-	return *link
+	return s.links.TryGet(id)
 }
 
-func (s *symbolArenaLinkStore[V]) Has(symbol *ast.Symbol) bool {
+type symbolLinkStore[V any] struct {
+	gen   ast.SymbolIdGenerator
+	links core.LinkStore[uint64, V]
+	pages core.PagedLinkStore[V]
+}
+
+func (s *symbolLinkStore[V]) Get(symbol *ast.Symbol) *V {
+	id := uint64(s.gen.GetSymbolId(symbol))
+	if id >= ast.BlockIdOffset && id < ast.BlockIdOffset+maxPageLinkCount {
+		return s.pages.Get(id - ast.BlockIdOffset)
+	}
+	return s.links.Get(id)
+}
+
+func (s *symbolLinkStore[V]) Has(symbol *ast.Symbol) bool {
 	return s.TryGet(symbol) != nil
 }
 
-func (s *symbolArenaLinkStore[V]) TryGet(symbol *ast.Symbol) *V {
-	if link := s.store.TryGet(uint64(ast.GetSymbolId(symbol))); link != nil {
-		return *link
+func (s *symbolLinkStore[V]) TryGet(symbol *ast.Symbol) *V {
+	id := uint64(s.gen.GetSymbolId(symbol))
+	if id >= ast.BlockIdOffset && id < ast.BlockIdOffset+maxPageLinkCount {
+		return s.pages.TryGet(id - ast.BlockIdOffset)
 	}
-	return nil
+	return s.links.TryGet(id)
 }

@@ -13,9 +13,7 @@ import (
 	"golang.org/x/text/language"
 )
 
-//go:generate go run generate.go -diagnostics ./diagnostics_generated.go -loc ./loc_generated.go -locdir ./loc
-//go:generate go tool golang.org/x/tools/cmd/stringer -type=Category -output=stringer_generated.go
-//go:generate npx dprint fmt diagnostics_generated.go loc_generated.go stringer_generated.go
+//go:generate npx hereby generate:diagnostics
 
 type Category int32
 
@@ -66,6 +64,20 @@ func (m *Message) String() string {
 
 func (m *Message) Localize(locale locale.Locale, args ...any) string {
 	return Localize(locale, m, "", StringifyArgs(args)...)
+}
+
+// Most diagnostics carry a message pointer, so only build the lookup when a key is used.
+var messagesByKey = sync.OnceValue(func() map[Key]*Message {
+	messages := make(map[Key]*Message, len(allMessages))
+	for _, p := range allMessages {
+		message := *p
+		messages[message.key] = message
+	}
+	return messages
+})
+
+func keyToMessage(key Key) *Message {
+	return messagesByKey()[key]
 }
 
 func Localize(locale locale.Locale, message *Message, key Key, args ...string) string {

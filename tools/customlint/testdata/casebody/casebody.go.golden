@@ -1,0 +1,217 @@
+	package casebody
+	
+	var X int
+	
+	func Switch() {
+		switch X {
+		case 1:
+		~~~~~~~
+!!! casebody: this case block is empty and will do nothing
+		case 2:
+		~~~~~~~
+!!! casebody: this case block is empty and will do nothing
+		case 3:
+		~~~~~~~
+!!! casebody: this case block is empty and will do nothing
+		case 4:
+			println(`oops`)
+		}
+	}
+	
+	func SwitchCommented() {
+		switch X {
+		case 1:
+			// do nothing
+		case 2:
+		~~~~~~~
+!!! casebody: this case block is empty and will do nothing
+		case 3:
+		~~~~~~~
+!!! casebody: this case block is empty and will do nothing
+		case 4:
+			println(`oops`)
+		}
+	}
+	
+	func SwitchSingleCase() {
+		switch X {
+		case 1:
+		~~~~~~~
+!!! casebody: this case block is empty and will do nothing
+		}
+	}
+	
+	func SwitchDefaultCase() {
+		switch X {
+		case 1:
+		~~~~~~~
+!!! casebody: this case block is empty and will do nothing
+		default:
+		~~~~~~~~
+!!! casebody: this case block is empty and will do nothing
+		}
+	}
+	
+	func SwitchBreak() {
+		switch X {
+		case 1:
+			break
+			~~~~~
+!!! casebody: this top-level break statement is redundant
+		case 2:
+			// intentionally empty
+			break
+			~~~~~
+!!! casebody: this top-level break statement is redundant
+		case 3:
+			println(`oops`)
+			break
+			~~~~~
+!!! casebody: this top-level break statement is redundant
+		case 4:
+			for {
+				break
+			}
+		case 5:
+			break
+			~~~~~
+!!! casebody: this top-level break statement is redundant
+			println(`unreachable`)
+			~~~~~~~~~~~~~~~~~~~~~~
+!!! casebody: statements after a break are not allowed in the same case body
+			break
+			~~~~~
+!!! casebody: this top-level break statement is redundant
+		case 6:
+			if X != 0 {
+				goto afterBreak
+			}
+			break
+			~~~~~
+!!! casebody: this top-level break statement is redundant
+		afterBreak:
+		~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! casebody: statements after a break are not allowed in the same case body
+			println(`reachable via goto`)
+	~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+		}
+	}
+	
+	func SwitchLabeledBreak() {
+	outer:
+		for {
+			switch X {
+			case 1:
+				break outer
+			}
+		}
+	}
+	
+	func SwitchCodeAfterLabeledBreak() {
+	outer:
+		for {
+			switch X {
+			case 1:
+				break outer
+				println(`unreachable`)
+				~~~~~~~~~~~~~~~~~~~~~~
+!!! casebody: statements after a break are not allowed in the same case body
+			}
+		}
+	}
+	
+	func TypeSwitch(x any) {
+		switch x.(type) {
+		case int:
+		~~~~~~~~~
+!!! casebody: this case block is empty and will do nothing
+		case string:
+			// intentionally empty
+		case bool:
+			break
+			~~~~~
+!!! casebody: this top-level break statement is redundant
+		case float64:
+			println(`oops`)
+			break
+			~~~~~
+!!! casebody: this top-level break statement is redundant
+		case complex64:
+			break
+			~~~~~
+!!! casebody: this top-level break statement is redundant
+			println(`unreachable`)
+			~~~~~~~~~~~~~~~~~~~~~~
+!!! casebody: statements after a break are not allowed in the same case body
+		}
+	}
+	
+	func SelectBreak() {
+		select {
+		case <-ch:
+			break
+			~~~~~
+!!! casebody: this top-level break statement is redundant
+		default:
+			println(`oops`)
+			break
+			~~~~~
+!!! casebody: this top-level break statement is redundant
+		case <-ch2:
+			break
+			~~~~~
+!!! casebody: this top-level break statement is redundant
+			println(`unreachable`)
+			~~~~~~~~~~~~~~~~~~~~~~
+!!! casebody: statements after a break are not allowed in the same case body
+		}
+	}
+	
+	var (
+		ch  = make(chan int)
+		ch2 = make(chan int)
+		ch3 = make(chan int)
+		ch4 = make(chan int)
+	)
+	
+	func Select() {
+		select {
+		case <-ch:
+		~~~~~~~~~~
+!!! casebody: this case block is empty and will do nothing
+		case <-ch2:
+		~~~~~~~~~~~
+!!! casebody: this case block is empty and will do nothing
+		case <-ch3:
+		~~~~~~~~~~~
+!!! casebody: this case block is empty and will do nothing
+		case <-ch4:
+			println(`oops`)
+		}
+	}
+	
+	func SelectCommented() {
+		select {
+		case <-ch:
+			// do nothing
+		}
+	}
+	
+	func SelectSingleCase() {
+		select {
+		case <-ch:
+		~~~~~~~~~~
+!!! casebody: this case block is empty and will do nothing
+		}
+	}
+	
+	func SelectDefaultCase() {
+		select {
+		case x := <-ch:
+			println(x)
+		default:
+		~~~~~~~~
+!!! casebody: this case block is empty and will do nothing
+		}
+	}
+	

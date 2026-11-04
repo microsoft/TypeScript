@@ -1,0 +1,22 @@
+//// [tests/cases/compiler/regexpConstructorMatchGroups.ts] ////
+
+=== regexpConstructorMatchGroups.ts ===
+declare const pattern: string;
+>pattern : string
+
+const matches = "".match(new RegExp(pattern));
+>matches : RegExpMatchArray | null
+>"".match(new RegExp(pattern)) : RegExpMatchArray | null
+>"".match : { (regexp: string | RegExp): RegExpMatchArray | null; (matcher: { [Symbol.match](string: string): RegExpMatchArray | null; }): RegExpMatchArray | null; }
+>"" : ""
+>match : { (regexp: string | RegExp): RegExpMatchArray | null; (matcher: { [Symbol.match](string: string): RegExpMatchArray | null; }): RegExpMatchArray | null; }
+>new RegExp(pattern) : RegExp
+>RegExp : RegExpConstructor
+>pattern : string
+
+if (matches) matches.groups;
+>matches : RegExpMatchArray | null
+>matches.groups : { [key: string]: string; } | undefined
+>matches : RegExpMatchArray
+>groups : { [key: string]: string; } | undefined
+

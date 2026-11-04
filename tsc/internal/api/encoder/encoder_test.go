@@ -19,9 +19,11 @@ import (
 
 func TestEncodeSourceFile(t *testing.T) {
 	t.Parallel()
+	assert.Equal(t, encoder.HeaderSize, 64)
+	assert.Equal(t, encoder.NodeSize, 28)
 	sourceFile := parser.ParseSourceFile(ast.SourceFileParseOptions{
 		FileName: "/test.ts",
-		Path:     "/test.ts",
+		PathKey:  "/test.ts",
 	}, "import { bar } from \"bar\";\nexport function foo<T, U>(a: string, b: string): any {}\nfoo();", core.ScriptKindTS)
 	t.Run("baseline", func(t *testing.T) {
 		t.Parallel()
@@ -37,12 +39,12 @@ func TestEncodeSourceFile(t *testing.T) {
 
 func TestEncodeContentMapperSourceFileMetadata(t *testing.T) {
 	t.Parallel()
-	if encoder.ProtocolVersion != 8 {
-		t.Fatalf("protocol version = %d, want 8", encoder.ProtocolVersion)
+	if encoder.ProtocolVersion != 9 {
+		t.Fatalf("protocol version = %d, want 9", encoder.ProtocolVersion)
 	}
 	sourceFile := parser.ParseSourceFile(ast.SourceFileParseOptions{
 		FileName: "/component.vue",
-		Path:     "/component.vue",
+		PathKey:  "/component.vue",
 	}, "😀virtual", core.ScriptKindTS)
 	sourceFile.SetContentMapperInfo(ast.ContentMapperSourceFileInfo{
 		OriginalText:    "😀original",
@@ -95,7 +97,7 @@ func TestEncodeSourceFileWithUnicodeEscapes(t *testing.T) {
 	t.Parallel()
 	sourceFile := parser.ParseSourceFile(ast.SourceFileParseOptions{
 		FileName: "/test.ts",
-		Path:     "/test.ts",
+		PathKey:  "/test.ts",
 	}, `let a = "😃"; let b = "\ud83d\ude03"; let c = "\udc00\ud83d\ude03"; let d = "\ud83d\ud83d\ude03"`, core.ScriptKindTS)
 	t.Run("baseline", func(t *testing.T) {
 		t.Parallel()
@@ -113,7 +115,7 @@ func TestBuildNodeIndexTableMatchesEncode(t *testing.T) {
 	t.Parallel()
 	sourceFile := parser.ParseSourceFile(ast.SourceFileParseOptions{
 		FileName: "/test.ts",
-		Path:     "/test.ts",
+		PathKey:  "/test.ts",
 	}, "import { bar } from \"bar\";\nexport function foo<T, U>(a: string, b: string): any {}\nfoo();", core.ScriptKindTS)
 
 	_, encodeTable, err := encoder.EncodeSourceFile(sourceFile)
@@ -147,7 +149,7 @@ func BenchmarkEncodeSourceFile(b *testing.B) {
 	assert.NilError(b, err)
 	sourceFile := parser.ParseSourceFile(ast.SourceFileParseOptions{
 		FileName: "/checker.ts",
-		Path:     "/checker.ts",
+		PathKey:  "/checker.ts",
 	}, string(fileContent), core.ScriptKindTS)
 
 	for b.Loop() {
@@ -162,7 +164,7 @@ func BenchmarkBuildNodeIndexTable(b *testing.B) {
 	assert.NilError(b, err)
 	sourceFile := parser.ParseSourceFile(ast.SourceFileParseOptions{
 		FileName: "/checker.ts",
-		Path:     "/checker.ts",
+		PathKey:  "/checker.ts",
 	}, string(fileContent), core.ScriptKindTS)
 
 	for b.Loop() {

@@ -23,7 +23,7 @@ import (
 )
 
 type Converters struct {
-	getLineMap       func(fileName string) *LSPLineMap
+	getLineMap       func(fileName tspath.RootedFilePath) *LSPLineMap
 	positionEncoding lsproto.PositionEncodingKind
 }
 
@@ -42,8 +42,8 @@ type MappedPosition[T Script] struct {
 // (OriginalText()); virtual ranges are then automatically converted to original coordinates (see
 // ToLSPRange). For an ordinary file SpanMap() is nil and OriginalText() equals Text().
 type Script interface {
-	FileName() string
-	OriginalFileName() string
+	FileName() tspath.RootedFilePath
+	OriginalFileName() tspath.RootedFilePath
 	Text() string
 	SpanMap() *spanmap.SpanMap
 	OriginalText() string
@@ -51,7 +51,7 @@ type Script interface {
 
 func NewConverters(
 	positionEncoding lsproto.PositionEncodingKind,
-	getLineMap func(fileName string) *LSPLineMap,
+	getLineMap func(fileName tspath.RootedFilePath) *LSPLineMap,
 ) *Converters {
 	return &Converters{
 		getLineMap:       getLineMap,
@@ -124,16 +124,16 @@ func (c *Converters) ToLSPLocationForFeature(script Script, rng core.TextRange, 
 // FromLSPRange converts an lsproto.Range to offsets in one Script. For a content-mapped script, results
 // include each virtual projection covered by segments that participate in feature; it returns no
 // results when no projection qualifies. Normal scripts return one exact span.
-func FromLSPRange[T Script](c *Converters, script T, textRange lsproto.Range, feature spanmap.Feature) []MappedSpan[T] {
-	return lspRangeToVirtual(c, []T{script}, textRange, feature)
+func (c *Converters) FromLSPRange[T Script](script T, textRange lsproto.Range, feature spanmap.Feature) []MappedSpan[T] {
+	return c.lspRangeToVirtualForScripts([]T{script}, textRange, feature)
 }
 
 // FromLSPRangeForSourceFile converts an lsproto.Range to offsets in a SourceFile. When the file has
 // supplemental content-mapper outputs, results include every qualifying virtual projection across the
 // canonical and supplemental files. Projections not participating in feature are omitted.
-func FromLSPRangeForSourceFile(c *Converters, file *ast.SourceFile, textRange lsproto.Range, feature spanmap.Feature) []MappedSpan[*ast.SourceFile] {
+func (c *Converters) FromLSPRangeForSourceFile(file *ast.SourceFile, textRange lsproto.Range, feature spanmap.Feature) []MappedSpan[*ast.SourceFile] {
 	files := sourceFileProjections(file)
-	return lspRangeToVirtual(c, files, textRange, feature)
+	return c.lspRangeToVirtualForScripts(files, textRange, feature)
 }
 
 // FromLSPRangeIntersectingForSourceFile projects every feature-enabled intersection with textRange
@@ -146,7 +146,7 @@ func FromLSPRangeForSourceFile(c *Converters, file *ast.SourceFile, textRange ls
 //	                                          [----------) mapped script
 //
 // The result contains the script intersection even though both viewport endpoints are outside it.
-func FromLSPRangeIntersectingForSourceFile(c *Converters, file *ast.SourceFile, textRange lsproto.Range, feature spanmap.Feature) []MappedSpan[*ast.SourceFile] {
+func (c *Converters) FromLSPRangeIntersectingForSourceFile(file *ast.SourceFile, textRange lsproto.Range, feature spanmap.Feature) []MappedSpan[*ast.SourceFile] {
 	files := sourceFileProjections(file)
 	result := make([]MappedSpan[*ast.SourceFile], 0, len(files))
 	for _, script := range files {
@@ -154,13 +154,11 @@ func FromLSPRangeIntersectingForSourceFile(c *Converters, file *ast.SourceFile, 
 		if spans == nil {
 			result = append(result, MappedSpan[*ast.SourceFile]{
 				Script: script,
-				MappedSpan: spanmap.MappedSpan{
-					Span: core.NewTextRange(
-						int(c.lineAndCharacterToPosition(script, textRange.Start)),
-						int(c.lineAndCharacterToPosition(script, textRange.End)),
-					),
-					Fidelity: spanmap.FidelityExact,
-				},
+				Span: core.NewTextRange(
+					int(c.lineAndCharacterToPosition(script, textRange.Start)),
+					int(c.lineAndCharacterToPosition(script, textRange.End)),
+				),
+				Fidelity: spanmap.FidelityExact,
 			})
 			continue
 		}
@@ -176,7 +174,7 @@ func FromLSPRangeIntersectingForSourceFile(c *Converters, file *ast.SourceFile, 
 	return result
 }
 
-func lspRangeToVirtual[T Script](c *Converters, scripts []T, textRange lsproto.Range, feature spanmap.Feature) []MappedSpan[T] {
+func (c *Converters) lspRangeToVirtualForScripts[T Script](scripts []T, textRange lsproto.Range, feature spanmap.Feature) []MappedSpan[T] {
 	result := make([]MappedSpan[T], 0, len(scripts))
 	for _, script := range scripts {
 		for _, mapped := range c.lspRangeToVirtual(script, textRange, feature) {
@@ -210,20 +208,20 @@ func (c *Converters) lspRangeToVirtual(script Script, textRange lsproto.Range, f
 // FromLSPPosition converts an lsproto.Position to offsets in one Script. For a content-mapped script,
 // results include each virtual projection whose segment participates in feature; it returns no results
 // when no projection qualifies. Normal scripts return one exact position.
-func FromLSPPosition[T Script](c *Converters, script T, position lsproto.Position, feature spanmap.Feature) []MappedPosition[T] {
-	return lspPositionToVirtual(c, []T{script}, position, feature)
+func (c *Converters) FromLSPPosition[T Script](script T, position lsproto.Position, feature spanmap.Feature) []MappedPosition[T] {
+	return c.lspPositionToVirtualForScripts([]T{script}, position, feature)
 }
 
 // FromLSPPositionForSourceFile converts an lsproto.Position to offsets in a SourceFile. When the file has
 // supplemental content-mapper outputs, results include every qualifying virtual projection across the
 // canonical and supplemental files. Projections not participating in feature are omitted.
-func FromLSPPositionForSourceFile(c *Converters, file *ast.SourceFile, position lsproto.Position, feature spanmap.Feature) []MappedPosition[*ast.SourceFile] {
+func (c *Converters) FromLSPPositionForSourceFile(file *ast.SourceFile, position lsproto.Position, feature spanmap.Feature) []MappedPosition[*ast.SourceFile] {
 	files := sourceFileProjections(file)
-	return lspPositionToVirtual(c, files, position, feature)
+	return c.lspPositionToVirtualForScripts(files, position, feature)
 }
 
 // FromLSPRangeToOriginal converts an LSP range in a content-mapped document directly to original-text offsets.
-func FromLSPRangeToOriginal(c *Converters, script Script, textRange lsproto.Range) core.TextRange {
+func (c *Converters) FromLSPRangeToOriginal(script Script, textRange lsproto.Range) core.TextRange {
 	original := originalTextScript{fileName: script.OriginalFileName(), text: script.OriginalText()}
 	return core.NewTextRange(
 		int(c.lineAndCharacterToPosition(original, textRange.Start)),
@@ -238,7 +236,7 @@ func sourceFileProjections(file *ast.SourceFile) []*ast.SourceFile {
 	return append(files, supplemental...)
 }
 
-func lspPositionToVirtual[T Script](c *Converters, scripts []T, position lsproto.Position, feature spanmap.Feature) []MappedPosition[T] {
+func (c *Converters) lspPositionToVirtualForScripts[T Script](scripts []T, position lsproto.Position, feature spanmap.Feature) []MappedPosition[T] {
 	result := make([]MappedPosition[T], 0, len(scripts))
 	for _, script := range scripts {
 		for _, mapped := range c.lspPositionToVirtual(script, position, feature) {
@@ -331,33 +329,27 @@ var extraEscapeReplacer = strings.NewReplacer(
 	" ", "%20",
 )
 
-func FileNameToDocumentURI(fileName string) lsproto.DocumentUri {
-	if bundled.IsBundled(fileName) {
-		return lsproto.DocumentUri(fileName)
+func FileNameToDocumentURI(fileName tspath.RootedFilePath) lsproto.DocumentUri {
+	return PathToDocumentURI(fileName.AsPath())
+}
+
+func PathToDocumentURI(rootedPath tspath.RootedPath) lsproto.DocumentUri {
+	path := rootedPath.AsString()
+	if bundled.IsBundled(path) {
+		return lsproto.DocumentUri(path)
 	}
-	if tspath.IsDynamicFileName(fileName) {
-		scheme, rest, ok := strings.Cut(fileName[2:], "/")
-		if !ok {
-			panic("invalid file name: " + fileName)
-		}
-		authority, path, ok := strings.Cut(rest, "/")
-		if !ok {
-			panic("invalid file name: " + fileName)
-		}
-		if authority == "ts-nul-authority" {
-			return lsproto.DocumentUri(scheme + ":" + path)
-		}
-		return lsproto.DocumentUri(scheme + "://" + authority + "/" + path)
+	if rootedPath.IsDynamic() {
+		return lsproto.DynamicFileNameToDocumentUri(rootedPath)
 	}
 
-	volume, fileName, _ := tspath.SplitVolumePath(fileName)
+	volume, path, _ := tspath.SplitVolumePath(path)
 	if volume != "" {
 		volume = "/" + extraEscapeReplacer.Replace(volume)
 	}
 
-	fileName = strings.TrimPrefix(fileName, "//")
+	path = strings.TrimPrefix(path, "//")
 
-	parts := strings.Split(fileName, "/")
+	parts := strings.Split(path, "/")
 	for i, part := range parts {
 		parts[i] = extraEscapeReplacer.Replace(url.PathEscape(part))
 	}
@@ -596,15 +588,15 @@ func diagnosticScriptAndRange(file *ast.SourceFile, loc core.TextRange, source s
 // originalTextScript presents a content-mapped file's original (untransformed) text as a Script, so that
 // ranges already mapped into that text convert to the correct line/character positions.
 type originalTextScript struct {
-	fileName string
+	fileName tspath.RootedFilePath
 	text     string
 }
 
-func (s originalTextScript) FileName() string         { return s.fileName }
-func (s originalTextScript) OriginalFileName() string { return s.fileName }
-func (s originalTextScript) Text() string             { return s.text }
-func (s originalTextScript) OriginalText() string     { return s.text }
-func (originalTextScript) SpanMap() *spanmap.SpanMap  { return nil }
+func (s originalTextScript) FileName() tspath.RootedFilePath         { return s.fileName }
+func (s originalTextScript) OriginalFileName() tspath.RootedFilePath { return s.fileName }
+func (s originalTextScript) Text() string                            { return s.text }
+func (s originalTextScript) OriginalText() string                    { return s.text }
+func (originalTextScript) SpanMap() *spanmap.SpanMap                 { return nil }
 
 // diagnosticSeverity maps a diagnostic category to its LSP severity.
 func diagnosticSeverity(category diagnostics.Category) lsproto.DiagnosticSeverity {

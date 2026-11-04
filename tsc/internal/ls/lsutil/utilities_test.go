@@ -12,7 +12,7 @@ func parseTS(t *testing.T, text string) *ast.SourceFile {
 	t.Helper()
 	return parser.ParseSourceFile(ast.SourceFileParseOptions{
 		FileName: "/test.ts",
-		Path:     "/test.ts",
+		PathKey:  "/test.ts",
 	}, text, core.ScriptKindTS)
 }
 

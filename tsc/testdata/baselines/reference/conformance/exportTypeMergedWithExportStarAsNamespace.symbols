@@ -7,14 +7,14 @@ import { Something } from "./prelude"
 export const myValue: Something<string> = Something.of("abc")
 >myValue : Symbol(myValue, Decl(usage.ts, 1, 12))
 >Something : Symbol(Something, Decl(usage.ts, 0, 8))
->Something.of : Symbol(of, Decl(Something.ts, 1, 37))
+>Something.of : Symbol(Something.of, Decl(Something.ts, 1, 37))
 >Something : Symbol(Something, Decl(usage.ts, 0, 8))
->of : Symbol(of, Decl(Something.ts, 1, 37))
+>of : Symbol(Something.of, Decl(Something.ts, 1, 37))
 
 export type MyType = Something.SubType<string>
 >MyType : Symbol(MyType, Decl(usage.ts, 1, 61))
 >Something : Symbol(Something, Decl(usage.ts, 0, 8))
->SubType : Symbol(SubType, Decl(Something.ts, 0, 39))
+>SubType : Symbol(Something.SubType, Decl(Something.ts, 0, 39))
 
 === Something.ts ===
 export type Something<A> = { value: A }

@@ -28,9 +28,9 @@ func TestParseResultSupplementalFileExtensions(t *testing.T) {
 		},
 	}
 	files, err := contentmapper.ParseResult(
-		ast.SourceFileParseOptions{FileName: "/component.astro", Path: "/component.astro"},
+		ast.SourceFileParseOptions{FileName: "/component.astro", PathKey: "/component.astro"},
 		"",
-		&contentmapper.Mapper{Definition: contentmapper.Definition{Extensions: []string{".astro"}}, Manifest: contentmapper.Manifest{Name: "mapper"}},
+		&contentmapper.Mapper{Extensions: []string{".astro"}, Name: "mapper"},
 		"transform-identity",
 		result,
 	)
@@ -53,8 +53,8 @@ func TestParseResultSupplementalFileExtensions(t *testing.T) {
 	}
 	assert.Equal(t, len(files.Supplemental), len(expected))
 	for i, expected := range expected {
-		assert.Equal(t, files.Supplemental[i].FileName(), expected.fileName)
-		assert.Equal(t, files.Supplemental[i].Path(), tspath.Path(expected.fileName))
+		assert.Equal(t, files.Supplemental[i].FileName().AsString(), expected.fileName)
+		assert.Equal(t, files.Supplemental[i].PathKey(), tspath.PathKeyFromCanonical(expected.fileName))
 		assert.Equal(t, files.Supplemental[i].ScriptKind, expected.scriptKind)
 		assert.Equal(t, files.Supplemental[i].ContentMapperTransformIdentity(), "transform-identity")
 		assert.Assert(t, canonicalSupplementals[i] == files.Supplemental[i])
@@ -66,9 +66,9 @@ func TestParseResultAllowsSupplementalModules(t *testing.T) {
 	t.Parallel()
 	mappings := spanmap.New(nil)
 	files, err := contentmapper.ParseResult(
-		ast.SourceFileParseOptions{FileName: "/component.astro", Path: "/component.astro"},
+		ast.SourceFileParseOptions{FileName: "/component.astro", PathKey: "/component.astro"},
 		"",
-		&contentmapper.Mapper{Definition: contentmapper.Definition{Extensions: []string{".astro"}}, Manifest: contentmapper.Manifest{Name: "mapper"}},
+		&contentmapper.Mapper{Extensions: []string{".astro"}, Name: "mapper"},
 		"",
 		contentmapper.Result{
 			Text:             "export {};",
@@ -89,9 +89,9 @@ func TestParseResultDoesNotLeakCanonicalModuleForcingToSupplementals(t *testing.
 	t.Parallel()
 	mappings := spanmap.New(nil)
 	files, err := contentmapper.ParseResult(
-		ast.SourceFileParseOptions{FileName: "/component.astro", Path: "/component.astro"},
+		ast.SourceFileParseOptions{FileName: "/component.astro", PathKey: "/component.astro"},
 		"",
-		&contentmapper.Mapper{Manifest: contentmapper.Manifest{Name: "mapper"}},
+		&contentmapper.Mapper{Name: "mapper"},
 		"",
 		contentmapper.Result{
 			Text:             "const canonical = 1;",

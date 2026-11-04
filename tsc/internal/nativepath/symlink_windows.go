@@ -16,6 +16,7 @@ func IsSymlinkOrReparsePoint(path string) bool {
 	}
 
 	var data syscall.Win32FileAttributeData
+	// SAFETY: GetFileExInfoStandard writes a Win32FileAttributeData, which data is.
 	err = syscall.GetFileAttributesEx(
 		pathUTF16,
 		syscall.GetFileExInfoStandard,

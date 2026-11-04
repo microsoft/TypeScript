@@ -1,0 +1,54 @@
+growing.ts(1,17): error TS7056: The inferred type of this node exceeds the maximum length the compiler will serialize. An explicit type annotation is needed.
+local.ts(1,17): error TS5088: The inferred type of 'localArrow' references a type with a cyclic structure which cannot be trivially serialized. A type annotation is necessary.
+local.ts(5,17): error TS5088: The inferred type of 'localDeclaration' references a type with a cyclic structure which cannot be trivially serialized. A type annotation is necessary.
+local.ts(9,17): error TS5088: The inferred type of 'localInstantiation' references a type with a cyclic structure which cannot be trivially serialized. A type annotation is necessary.
+local.ts(13,14): error TS5088: The inferred type of 'object' references a type with a cyclic structure which cannot be trivially serialized. A type annotation is necessary.
+
+
+==== local.ts (4 errors) ====
+    export function localArrow() {
+                    ~~~~~~~~~~
+!!! error TS5088: The inferred type of 'localArrow' references a type with a cyclic structure which cannot be trivially serialized. A type annotation is necessary.
+        const inner = () => inner;
+        return inner;
+    }
+    export function localDeclaration() {
+                    ~~~~~~~~~~~~~~~~
+!!! error TS5088: The inferred type of 'localDeclaration' references a type with a cyclic structure which cannot be trivially serialized. A type annotation is necessary.
+        function inner() { return inner; }
+        return inner;
+    }
+    export function localInstantiation() {
+                    ~~~~~~~~~~~~~~~~~~
+!!! error TS5088: The inferred type of 'localInstantiation' references a type with a cyclic structure which cannot be trivially serialized. A type annotation is necessary.
+        function inner<T>(): typeof inner<T> { return inner<T>; }
+        return inner<number>;
+    }
+    export const object = {
+                 ~~~~~~
+!!! error TS5088: The inferred type of 'object' references a type with a cyclic structure which cannot be trivially serialized. A type annotation is necessary.
+        self() { return object; }
+    };
+    export const annotatedObject: { self(): typeof annotatedObject } = {
+        self() { return annotatedObject; }
+    };
+    
+==== growing.ts (1 errors) ====
+    export function grow<T extends object>(value: T) {
+                    ~~~~
+!!! error TS7056: The inferred type of this node exceeds the maximum length the compiler will serialize. An explicit type annotation is needed.
+        return {
+            value,
+            deeper: <U extends object>(next: U) => grow<T & U>({ ...value, ...next }),
+        };
+    }
+    
+==== annotatedLocal.ts (0 errors) ====
+    interface Recursive {
+        (): Recursive;
+    }
+    export function local(): Recursive {
+        const inner = () => inner;
+        return inner;
+    }
+    

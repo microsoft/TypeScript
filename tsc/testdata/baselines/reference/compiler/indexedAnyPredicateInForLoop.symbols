@@ -1,0 +1,37 @@
+//// [tests/cases/compiler/indexedAnyPredicateInForLoop.ts] ////
+
+=== indexedAnyPredicateInForLoop.ts ===
+declare function isPrimitive(value: any): value is string | number;
+>isPrimitive : Symbol(isPrimitive, Decl(indexedAnyPredicateInForLoop.ts, 0, 0))
+>value : Symbol(value, Decl(indexedAnyPredicateInForLoop.ts, 0, 29))
+>value : Symbol(value, Decl(indexedAnyPredicateInForLoop.ts, 0, 29))
+
+declare function createText(text: string | undefined): object;
+>createText : Symbol(createText, Decl(indexedAnyPredicateInForLoop.ts, 0, 67))
+>text : Symbol(text, Decl(indexedAnyPredicateInForLoop.ts, 1, 28))
+
+function normalize(children: any) {
+>normalize : Symbol(normalize, Decl(indexedAnyPredicateInForLoop.ts, 1, 62))
+>children : Symbol(children, Decl(indexedAnyPredicateInForLoop.ts, 2, 19))
+
+    for (let index = 0; index < children.length; ++index) {
+>index : Symbol(index, Decl(indexedAnyPredicateInForLoop.ts, 3, 12))
+>index : Symbol(index, Decl(indexedAnyPredicateInForLoop.ts, 3, 12))
+>children : Symbol(children, Decl(indexedAnyPredicateInForLoop.ts, 2, 19))
+>index : Symbol(index, Decl(indexedAnyPredicateInForLoop.ts, 3, 12))
+
+        if (isPrimitive(children[index])) {
+>isPrimitive : Symbol(isPrimitive, Decl(indexedAnyPredicateInForLoop.ts, 0, 0))
+>children : Symbol(children, Decl(indexedAnyPredicateInForLoop.ts, 2, 19))
+>index : Symbol(index, Decl(indexedAnyPredicateInForLoop.ts, 3, 12))
+
+            children[index] = createText(children[index]);
+>children : Symbol(children, Decl(indexedAnyPredicateInForLoop.ts, 2, 19))
+>index : Symbol(index, Decl(indexedAnyPredicateInForLoop.ts, 3, 12))
+>createText : Symbol(createText, Decl(indexedAnyPredicateInForLoop.ts, 0, 67))
+>children : Symbol(children, Decl(indexedAnyPredicateInForLoop.ts, 2, 19))
+>index : Symbol(index, Decl(indexedAnyPredicateInForLoop.ts, 3, 12))
+        }
+    }
+}
+

@@ -241,7 +241,7 @@ type projectEntry struct {
 	projectHandle     string
 	opened            bool
 	configIdentity    string
-	watchedFiles      []string
+	watchedFiles      []tspath.RootedFilePath
 	optionDiagnostics []OptionDiagnostic
 }
 
@@ -505,7 +505,7 @@ func NewHostWithOptions(ctx context.Context, spawner Spawner, diagnosticLocale l
 			stderrLog = &stderrLogger{mapperName: diagnosticName, logger: logger}
 			stderr = stderrLog
 		}
-		rwc, err := spawner.Spawn(mapper.Exec, mapper.PackageDirectory, stderr)
+		rwc, err := spawner.Spawn(mapper.Exec, mapper.PackageDirectory.AsString(), stderr)
 		mapperTiming.spawn.record(spawnStart)
 		if err != nil {
 			return nil, nil, "", "", &InitializeError{Kind: InitializeErrorKindProcessStart, MapperName: diagnosticName, Command: mapper.Exec[0], Detail: err.Error()}
@@ -662,7 +662,7 @@ func (h *host) openProjectLocked(ctx context.Context, entry *projectEntry) error
 	mapperTiming := h.timing.mapper(entry.mapper.Identity())
 	start := mapperTiming.startRequest()
 	raw, err := conn.Call(ctx, MethodOpenProject, OpenProjectParams{
-		ConfigFileName:  entry.spec.ConfigFileName,
+		ConfigFileName:  entry.spec.ConfigFileName.AsString(),
 		ProjectHandle:   entry.projectHandle,
 		Options:         entry.mapper.Options,
 		CompilerOptions: compilerOptions,
@@ -685,12 +685,14 @@ func (h *host) openProjectLocked(ctx context.Context, entry *projectEntry) error
 		return &ProjectError{Kind: ProjectErrorKindUnexpectedWatchedFiles}
 	}
 	entry.configIdentity = result.ConfigIdentity
-	for _, fileName := range result.WatchedFiles {
-		if !tspath.PathIsAbsolute(fileName) {
+	entry.watchedFiles = make([]tspath.RootedFilePath, len(result.WatchedFiles))
+	for i, fileName := range result.WatchedFiles {
+		typedFileName, ok := tspath.TryRootedFilePathFromAbsolute(fileName)
+		if !ok {
 			return &ProjectError{Kind: ProjectErrorKindNonAbsoluteWatchedFile}
 		}
+		entry.watchedFiles[i] = typedFileName
 	}
-	entry.watchedFiles = slices.Clone(result.WatchedFiles)
 	entry.optionDiagnostics = make([]OptionDiagnostic, len(result.OptionDiagnostics))
 	for i, diagnostic := range result.OptionDiagnostics {
 		path := make([]OptionPathSegment, len(diagnostic.Path))
@@ -778,7 +780,7 @@ func (h *host) transformLocked(mapper *Mapper, request Request, projectHandle st
 	mapperTiming := h.timing.mapper(mapper.Identity())
 	start := mapperTiming.startRequest()
 	raw, err := conn.Call(h.ctx, MethodTransform, TransformParams{
-		FileName:      request.FileName,
+		FileName:      request.FileName.AsString(),
 		Content:       request.Content,
 		ProjectHandle: projectHandle,
 	})
@@ -950,7 +952,7 @@ func (p *projectLease) Identity(mapper *Mapper) (string, error) {
 	return mapper.Identity() + ":" + hex.EncodeToString(hash[:]), nil
 }
 
-func (p *projectLease) WatchedFiles() ([]string, error) {
+func (p *projectLease) WatchedFiles() ([]tspath.RootedFilePath, error) {
 	p.host.lifecycleMu.RLock()
 	defer p.host.lifecycleMu.RUnlock()
 	p.host.mu.Lock()
@@ -958,7 +960,7 @@ func (p *projectLease) WatchedFiles() ([]string, error) {
 	if p.host.projects == nil {
 		return nil, nil
 	}
-	var files []string
+	var files []tspath.RootedFilePath
 	for _, key := range p.entries {
 		entry := p.host.projects[key]
 		if entry == nil {

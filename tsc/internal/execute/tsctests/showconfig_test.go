@@ -1,6 +1,7 @@
 package tsctests
 
 import (
+	"fmt"
 	"testing"
 
 	"github.com/microsoft/TypeScript/tsc/internal/testutil/stringtestutil"
@@ -211,6 +212,38 @@ func TestShowConfig(t *testing.T) {
 			},
 			commandLineArgs: []string{"-p", "tsconfig.json", "--showConfig"},
 		},
+	}
+
+	for _, value := range []string{"true", "false"} {
+		testCases = append(testCases,
+			&tscInput{
+				subScenario: "Show TSConfig with command line file listing flags " + value,
+				files: FileMap{
+					"/home/src/workspaces/project/src/index.ts":  `export const a = 1;`,
+					"/home/src/workspaces/project/tsconfig.json": `{"files": ["src/index.ts"]}`,
+				},
+				commandLineArgs: []string{
+					"--showConfig", "--listFiles", value, "--listEmittedFiles", value,
+					"--listFilesOnly", value, "--explainFiles", value,
+				},
+			},
+			&tscInput{
+				subScenario: "Show TSConfig with configured file listing flags " + value,
+				files: FileMap{
+					"/home/src/workspaces/project/src/index.ts": `export const a = 1;`,
+					"/home/src/workspaces/project/tsconfig.json": fmt.Sprintf(stringtestutil.Dedent(`
+					{
+						"compilerOptions": {
+							"listFiles": %[1]s,
+							"listEmittedFiles": %[1]s,
+							"explainFiles": %[1]s
+						},
+						"files": ["src/index.ts"]
+					}`), value),
+				},
+				commandLineArgs: []string{"--showConfig"},
+			},
+		)
 	}
 
 	for _, test := range testCases {

@@ -1,6 +1,6 @@
 {
     "compilerOptions": {
-        "rootDir": "./src",
+        "rootDir": "src",
         "outDir": "./dist",
         "noEmit": true,
 
@@ -12,5 +12,8 @@
         "strict": true,
         "noImplicitOverride": true
     },
-    "include": ["./src/**/*"]
+    "include": ["./src/**/*"],
+    "references": [
+        { "path": "../typescript" }
+    ]
 }

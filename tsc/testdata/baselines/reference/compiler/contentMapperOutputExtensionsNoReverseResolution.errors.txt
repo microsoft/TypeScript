@@ -1,0 +1,32 @@
+/main.ts(1,22): error TS2307: Cannot find module './Card.js' or its corresponding type declarations.
+
+
+==== /tsconfig.json (0 errors) ====
+    {
+        "compilerOptions": {
+            "module": "preserve",
+            "moduleResolution": "bundler",
+            "rewriteRelativeImportExtensions": true
+        },
+        "contentMappers": [
+            { "package": "mapper", "extensions": [".astro"] }
+        ]
+    }
+    
+==== /main.ts (1 errors) ====
+    import { Card } from "./Card.js";
+                         ~~~~~~~~~~~
+!!! error TS2307: Cannot find module './Card.js' or its corresponding type declarations.
+    
+==== /node_modules/mapper/package.json (0 errors) ====
+    {
+        "name": "mapper",
+        "version": "1.0.0",
+        "typescript": {
+            "contentMapper": {
+                "exec": ["compiler-test-mapper"],
+                "outputExtensions": { ".astro": ".js" }
+            }
+        }
+    }
+    

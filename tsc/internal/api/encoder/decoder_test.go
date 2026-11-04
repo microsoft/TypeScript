@@ -1,6 +1,8 @@
 package encoder_test
 
 import (
+	"bytes"
+	"encoding/binary"
 	"os"
 	"path/filepath"
 	"testing"
@@ -10,13 +12,14 @@ import (
 	"github.com/microsoft/TypeScript/tsc/internal/core"
 	"github.com/microsoft/TypeScript/tsc/internal/parser"
 	"github.com/microsoft/TypeScript/tsc/internal/repo"
+	"github.com/microsoft/TypeScript/tsc/internal/tspath"
 	"gotest.tools/v3/assert"
 )
 
 func parseSourceFile(code string) *ast.SourceFile {
 	return parser.ParseSourceFile(ast.SourceFileParseOptions{
 		FileName: "/test.ts",
-		Path:     "/test.ts",
+		PathKey:  "/test.ts",
 	}, code, core.ScriptKindTS)
 }
 
@@ -29,10 +32,130 @@ func TestDecodeSourceFile_Basic(t *testing.T) {
 	decoded, err := encoder.DecodeSourceFile(buf)
 	assert.NilError(t, err)
 	assert.Equal(t, decoded.AsNode().Kind, ast.KindSourceFile)
-	assert.Equal(t, decoded.FileName(), "/test.ts")
+	assert.Equal(t, decoded.FileName().AsString(), "/test.ts")
 	assert.Equal(t, decoded.Text(), "let x = 1;")
 	assert.Assert(t, decoded.Statements != nil)
 	assert.Assert(t, decoded.EndOfFileToken != nil)
+}
+
+func TestDecodeSourceFile_Metadata(t *testing.T) {
+	t.Parallel()
+
+	tests := []struct {
+		name       string
+		fileName   tspath.RootedFilePath
+		scriptKind core.ScriptKind
+		code       string
+	}{
+		{"JSON", tspath.RootedFilePathFromNormalized("/test.json"), core.ScriptKindJSON, `{"x": 1}`},
+		{"JSX", tspath.RootedFilePathFromNormalized("/test.jsx"), core.ScriptKindJSX, `const x = <div />;`},
+		{"declaration", tspath.RootedFilePathFromNormalized("/test.d.ts"), core.ScriptKindTS, `declare const x: number;`},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			t.Parallel()
+			sourceFile := parser.ParseSourceFile(ast.SourceFileParseOptions{
+				FileName: tt.fileName,
+				PathKey:  tspath.CaseSensitive.PathKey(tt.fileName.AsPath()),
+			}, tt.code, tt.scriptKind)
+			buf, _, err := encoder.EncodeSourceFile(sourceFile)
+			assert.NilError(t, err)
+
+			decoded, err := encoder.DecodeSourceFile(buf)
+			assert.NilError(t, err)
+			assert.Equal(t, decoded.ScriptKind, sourceFile.ScriptKind)
+			assert.Equal(t, decoded.LanguageVariant, sourceFile.LanguageVariant)
+			assert.Equal(t, decoded.IsDeclarationFile, sourceFile.IsDeclarationFile)
+		})
+	}
+}
+
+func TestDecodeSourceFileRejectsInvalidFileName(t *testing.T) {
+	t.Parallel()
+	sf := parser.ParseSourceFile(ast.SourceFileParseOptions{
+		FileName: "/Test.ts",
+		PathKey:  "/test.ts",
+	}, "", core.ScriptKindTS)
+	buf, _, err := encoder.EncodeSourceFile(sf)
+	assert.NilError(t, err)
+
+	invalidFileName := []byte("Test/.ts")
+	index := bytes.Index(buf, []byte("/Test.ts"))
+	assert.Assert(t, index >= 0)
+	copy(buf[index:index+len(invalidFileName)], invalidFileName)
+	_, err = encoder.DecodeSourceFile(buf)
+	assert.ErrorContains(t, err, `invalid source file name "Test/.ts"`)
+}
+
+func TestDecodeNodesRejectsInvalidStringOffsets(t *testing.T) {
+	t.Parallel()
+	tests := []struct {
+		name       string
+		start, end uint32
+	}{
+		{"reversed", 1, 0},
+		{"past string data", 0, 2},
+		{"past buffer", 0, ^uint32(0)},
+		{"start past buffer", ^uint32(0), ^uint32(0)},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			t.Parallel()
+			factory := ast.NewNodeFactory(ast.NodeFactoryHooks{})
+			buf, _, err := encoder.EncodeNode(factory.NewIdentifier("x"), nil)
+			assert.NilError(t, err)
+			offset := readUint32(buf, encoder.HeaderOffsetStringOffsets)
+			binary.LittleEndian.PutUint32(buf[offset:], tt.start)
+			binary.LittleEndian.PutUint32(buf[offset+4:], tt.end)
+
+			_, err = encoder.DecodeNodes(buf)
+			assert.ErrorContains(t, err, "invalid string offsets")
+		})
+	}
+}
+
+func TestDecodeNodesRejectsInvalidStringIndices(t *testing.T) {
+	t.Parallel()
+	factory := ast.NewNodeFactory(ast.NodeFactoryHooks{})
+	sourceFile := parseSourceFile("")
+	tests := []struct {
+		name    string
+		node    *ast.Node
+		strings int
+	}{
+		{"identifier", factory.NewIdentifier("x"), 1},
+		{"string literal", factory.NewStringLiteral("x", 0), 1},
+		{"numeric literal", factory.NewNumericLiteral("1", 0), 1},
+		{"bigint literal", factory.NewBigIntLiteral("1n", 0), 1},
+		{"regexp literal", factory.NewRegularExpressionLiteral("/x/", 0), 1},
+		{"template literal", factory.NewNoSubstitutionTemplateLiteral("x", 0), 1},
+		{"template head", factory.NewTemplateHead("x", "x", 0), 2},
+		{"template middle", factory.NewTemplateMiddle("x", "x", 0), 2},
+		{"template tail", factory.NewTemplateTail("x", "x", 0), 2},
+		{"source file", sourceFile.AsNode(), 3},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			t.Parallel()
+			for i := range tt.strings {
+				buf, _, err := encoder.EncodeNode(tt.node, sourceFile)
+				assert.NilError(t, err)
+				nodes := readUint32(buf, encoder.HeaderOffsetNodes)
+				dataOffset := int(nodes) + encoder.NodeSize + encoder.NodeOffsetData
+				data := readUint32(buf, dataOffset)
+				if data&encoder.NodeDataTypeMask == encoder.NodeDataTypeString {
+					binary.LittleEndian.PutUint32(buf[dataOffset:], data|encoder.NodeDataStringIndexMask)
+				} else {
+					extOffset := readUint32(buf, encoder.HeaderOffsetExtendedData) + data&encoder.NodeDataStringIndexMask
+					binary.LittleEndian.PutUint32(buf[extOffset+uint32(i)*4:], ^uint32(0))
+				}
+
+				_, err = encoder.DecodeNodes(buf)
+				assert.ErrorContains(t, err, "invalid string index")
+			}
+		})
+	}
 }
 
 func TestDecodeSourceFile_Statements(t *testing.T) {
@@ -145,6 +268,20 @@ func TestDecodeSourceFile_ImportDeclaration(t *testing.T) {
 	assert.Equal(t, len(namedImports.Elements.Nodes), 1)
 	spec := namedImports.Elements.Nodes[0].AsImportSpecifier()
 	assert.Equal(t, spec.Name().AsIdentifier().Text, "bar")
+}
+
+func TestDecodeSourceFile_SourcePhaseImport(t *testing.T) {
+	t.Parallel()
+	sf := parseSourceFile(`import source a from "./a.wasm";`)
+	buf, _, err := encoder.EncodeSourceFile(sf)
+	assert.NilError(t, err)
+
+	decoded, err := encoder.DecodeSourceFile(buf)
+	assert.NilError(t, err)
+
+	clause := decoded.Statements.Nodes[0].AsImportDeclaration().ImportClause.AsImportClause()
+	assert.Equal(t, clause.PhaseModifier, ast.KindSourceKeyword)
+	assert.Equal(t, clause.Name().Text(), "a")
 }
 
 func TestDecodeSourceFile_IfStatement(t *testing.T) {
@@ -425,7 +562,7 @@ func BenchmarkDecodeSourceFile(b *testing.B) {
 	code := string(fileContent)
 	sourceFile := parser.ParseSourceFile(ast.SourceFileParseOptions{
 		FileName: "/checker.ts",
-		Path:     "/checker.ts",
+		PathKey:  "/checker.ts",
 	}, code, core.ScriptKindTS)
 
 	buf, _, err := encoder.EncodeSourceFile(sourceFile)
@@ -435,7 +572,7 @@ func BenchmarkDecodeSourceFile(b *testing.B) {
 		for b.Loop() {
 			parser.ParseSourceFile(ast.SourceFileParseOptions{
 				FileName: "/checker.ts",
-				Path:     "/checker.ts",
+				PathKey:  "/checker.ts",
 			}, code, core.ScriptKindTS)
 		}
 	})

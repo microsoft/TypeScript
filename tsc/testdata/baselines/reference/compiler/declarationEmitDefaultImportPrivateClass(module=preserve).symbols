@@ -1,0 +1,23 @@
+//// [tests/cases/compiler/declarationEmitDefaultImportPrivateClass.ts] ////
+
+=== route.d.ts ===
+export type Schema = unknown;
+>Schema : Symbol(Schema, Decl(route.d.ts, 0, 0))
+
+declare class Route {
+>Route : Symbol(Route, Decl(route.d.ts, 0, 29))
+
+    private parts;
+>parts : Symbol(Route.parts, Decl(route.d.ts, 1, 21))
+}
+export = Route;
+>Route : Symbol(Route, Decl(route.d.ts, 0, 29))
+
+=== index.ts ===
+import Route from "./route";
+>Route : Symbol(Route, Decl(index.ts, 0, 6))
+
+export const route = new Route();
+>route : Symbol(route, Decl(index.ts, 1, 12))
+>Route : Symbol(Route, Decl(index.ts, 0, 6))
+

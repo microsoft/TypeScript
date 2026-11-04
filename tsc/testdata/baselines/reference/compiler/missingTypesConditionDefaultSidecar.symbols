@@ -1,0 +1,16 @@
+//// [tests/cases/compiler/missingTypesConditionDefaultSidecar.ts] ////
+
+=== node_modules/font/sans.d.ts ===
+export const font: { className: string };
+>font : Symbol(font, Decl(sans.d.ts, 0, 12))
+>className : Symbol(className, Decl(sans.d.ts, 0, 20))
+
+=== main.ts ===
+import { font } from "font/sans";
+>font : Symbol(font, Decl(main.ts, 0, 8))
+
+font.className;
+>font.className : Symbol(className, Decl(sans.d.ts, 0, 20))
+>font : Symbol(font, Decl(main.ts, 0, 8))
+>className : Symbol(className, Decl(sans.d.ts, 0, 20))
+

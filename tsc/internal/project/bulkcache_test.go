@@ -116,6 +116,43 @@ func TestBulkCacheInvalidation(t *testing.T) {
 		})
 	})
 
+	t.Run("large all-created batch reloads cached file", func(t *testing.T) {
+		t.Parallel()
+		for _, test := range []struct {
+			name       string
+			eventCount int
+			eventURI   lsproto.DocumentUri
+		}{
+			{name: "single parent directory", eventURI: "file:///project/src"},
+			{name: "excessive exact file", eventCount: 1001, eventURI: "file:///project/src/helper.ts"},
+			{name: "excessive parent directory", eventCount: 1001, eventURI: "file:///project/src"},
+		} {
+			t.Run(test.name, func(t *testing.T) {
+				t.Parallel()
+				session, utils := projecttestutil.Setup(baseFiles)
+
+				session.DidOpenFile(context.Background(), "file:///project/src/index.ts", 1, baseFiles["/project/src/index.ts"].(string), lsproto.LanguageKindTypeScript)
+				ls, err := session.GetLanguageService(context.Background(), "file:///project/src/index.ts")
+				assert.NilError(t, err)
+				assert.Equal(t, ls.GetProgram().GetSourceFile("/project/src/helper.ts").Text(), `export const helper = "test";`)
+
+				err = utils.FS().WriteFile("/project/src/helper.ts", `export const helper = "updated";`)
+				assert.NilError(t, err)
+
+				fileEvents := generateFileEvents(test.eventCount, "file:///project/generated/file%d.ts", lsproto.FileChangeTypeCreated)
+				fileEvents = append(fileEvents, &lsproto.FileEvent{
+					Uri:  test.eventURI,
+					Type: lsproto.FileChangeTypeCreated,
+				})
+				session.DidChangeWatchedFiles(context.Background(), fileEvents)
+
+				ls, err = session.GetLanguageService(context.Background(), "file:///project/src/index.ts")
+				assert.NilError(t, err)
+				assert.Equal(t, ls.GetProgram().GetSourceFile("/project/src/helper.ts").Text(), `export const helper = "updated";`)
+			})
+		}
+	})
+
 	t.Run("large number of changes outside node_modules", func(t *testing.T) {
 		t.Parallel()
 		test := func(t *testing.T, fileEvents []*lsproto.FileEvent, expectConfigReload bool) {
@@ -183,7 +220,7 @@ func TestBulkCacheInvalidation(t *testing.T) {
 		// Initially, the file should use the root project (strict mode)
 		snapshot := session.Snapshot()
 		initialProject := snapshot.GetDefaultProject("file:///project/src/utils/lib.ts")
-		assert.Equal(t, initialProject.Name(), "/project/tsconfig.json", "Should initially use root tsconfig")
+		assert.Equal(t, initialProject.ConfigFileName().AsString(), "/project/tsconfig.json", "Should initially use root tsconfig")
 
 		// Get language service to verify initial strict mode
 		ls, err := session.GetLanguageService(context.Background(), "file:///project/src/utils/lib.ts")
@@ -213,7 +250,7 @@ func TestBulkCacheInvalidation(t *testing.T) {
 		newProject := snapshot.GetDefaultProject("file:///project/src/utils/lib.ts")
 
 		// The file should now use the nested tsconfig
-		assert.Equal(t, newProject.Name(), "/project/src/utils/tsconfig.json", "Should now use nested tsconfig after bulk invalidation")
+		assert.Equal(t, newProject.ConfigFileName().AsString(), "/project/src/utils/tsconfig.json", "Should now use nested tsconfig after bulk invalidation")
 		assert.Equal(t, ls.GetProgram().Options().Strict, core.TSFalse, "Should now use non-strict mode from nested config")
 		assert.Equal(t, ls.GetProgram().Options().Target, core.ScriptTargetESNext, "Should use esnext target from nested config")
 	})
@@ -256,7 +293,7 @@ func TestBulkCacheInvalidation(t *testing.T) {
 			if expectConfigDiscovery {
 				// Should now use configured project instead of inferred
 				assert.Equal(t, newProject.Kind, project.KindConfigured, "Should now use configured project after cache invalidation")
-				assert.Equal(t, newProject.Name(), "/project/tsconfig.json", "Should use the newly discovered tsconfig")
+				assert.Equal(t, newProject.ConfigFileName().AsString(), "/project/tsconfig.json", "Should use the newly discovered tsconfig")
 			} else {
 				// Should still use inferred project (config file names cache not cleared)
 				assert.Assert(t, newProject == snapshot.ProjectCollection.InferredProject(), "Should still use inferred project after node_modules-only changes")

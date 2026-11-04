@@ -1,0 +1,17 @@
+//// [tests/cases/compiler/logicalNotUndefinedComparison.ts] ////
+
+=== logicalNotUndefinedComparison.ts ===
+function isNode(object: { type?: string }) {
+>isNode : (object: { type?: string; }) => boolean
+>object : { type?: string; }
+>type : string | undefined
+
+    return !object.type !== undefined;
+>!object.type !== undefined : boolean
+>!object.type : boolean
+>object.type : string | undefined
+>object : { type?: string; }
+>type : string | undefined
+>undefined : undefined
+}
+

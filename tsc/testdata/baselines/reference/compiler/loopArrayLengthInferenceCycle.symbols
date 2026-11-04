@@ -1,0 +1,54 @@
+//// [tests/cases/compiler/loopArrayLengthInferenceCycle.ts] ////
+
+=== loopArrayLengthInferenceCycle.ts ===
+function tokenize() {
+>tokenize : Symbol(tokenize, Decl(loopArrayLengthInferenceCycle.ts, 0, 0))
+
+    let state: { matches: string[]; groups: string[][] } | null = null;
+>state : Symbol(state, Decl(loopArrayLengthInferenceCycle.ts, 1, 7))
+>matches : Symbol(matches, Decl(loopArrayLengthInferenceCycle.ts, 1, 16))
+>groups : Symbol(groups, Decl(loopArrayLengthInferenceCycle.ts, 1, 35))
+
+    while (true) {
+        let matches: string[] | null = null;
+>matches : Symbol(matches, Decl(loopArrayLengthInferenceCycle.ts, 3, 11))
+
+        let action: string[] | null = null;
+>action : Symbol(action, Decl(loopArrayLengthInferenceCycle.ts, 4, 11))
+
+        if (state) {
+>state : Symbol(state, Decl(loopArrayLengthInferenceCycle.ts, 1, 7))
+
+            const groupEntry = state.groups[0];
+>groupEntry : Symbol(groupEntry, Decl(loopArrayLengthInferenceCycle.ts, 6, 17))
+>state.groups : Symbol(groups, Decl(loopArrayLengthInferenceCycle.ts, 1, 35))
+>state : Symbol(state, Decl(loopArrayLengthInferenceCycle.ts, 1, 7))
+>groups : Symbol(groups, Decl(loopArrayLengthInferenceCycle.ts, 1, 35))
+
+            action = groupEntry;
+>action : Symbol(action, Decl(loopArrayLengthInferenceCycle.ts, 4, 11))
+>groupEntry : Symbol(groupEntry, Decl(loopArrayLengthInferenceCycle.ts, 6, 17))
+        }
+        matches = [];
+>matches : Symbol(matches, Decl(loopArrayLengthInferenceCycle.ts, 3, 11))
+
+        if (action) {
+>action : Symbol(action, Decl(loopArrayLengthInferenceCycle.ts, 4, 11))
+
+            if (matches.length !== action.length) throw new Error();
+>matches.length : Symbol(Array.length, Decl(lib.es5.d.ts, --, --))
+>matches : Symbol(matches, Decl(loopArrayLengthInferenceCycle.ts, 3, 11))
+>length : Symbol(Array.length, Decl(lib.es5.d.ts, --, --))
+>action.length : Symbol(Array.length, Decl(lib.es5.d.ts, --, --))
+>action : Symbol(action, Decl(loopArrayLengthInferenceCycle.ts, 4, 11))
+>length : Symbol(Array.length, Decl(lib.es5.d.ts, --, --))
+>Error : Symbol(Error, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2022.error.d.ts, --, --))
+
+            state = { matches, groups: [] };
+>state : Symbol(state, Decl(loopArrayLengthInferenceCycle.ts, 1, 7))
+>matches : Symbol(matches, Decl(loopArrayLengthInferenceCycle.ts, 12, 21))
+>groups : Symbol(groups, Decl(loopArrayLengthInferenceCycle.ts, 12, 30))
+        }
+    }
+}
+
