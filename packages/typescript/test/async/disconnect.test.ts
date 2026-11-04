@@ -417,6 +417,57 @@ for (
     });
 }
 
+for (
+    const [description, data] of [
+        ["overlapping CRLF", Buffer.from("Content-Length: 2\r\r\n\r\n{}")],
+        ["high-bit CRLF", Buffer.concat([Buffer.from("Content-Length: 1"), Buffer.from([0x8d, 0x8a, 0x8d, 0x8a, 0x7b])])],
+    ] as const
+) {
+    for (const fragmented of [false, true]) {
+        test(`a close rejects a request after ${description} (${fragmented ? "fragmented" : "whole"})`, { timeout: 5000 }, async t => {
+            const { connection, input, received } = createWirePeer(t);
+            const request = once(received, "request");
+            const pending = connection.sendRequest(new RequestType<unknown, unknown, void>("probe"), {});
+            await request;
+            const rejected = assertRejectsPromptly(pending);
+            const chunkSize = fragmented ? 1 : data.length;
+            for (let offset = 0; offset < data.length; offset += chunkSize) input.write(data.subarray(offset, offset + chunkSize));
+            input.emit("close");
+            await rejected;
+        });
+    }
+
+    test(`explicit client close completes after ${description} and disconnect`, { timeout: 5000 }, async t => {
+        const childProcess = process.getBuiltinModule("node:child_process");
+        const child = new EventEmitter() as ChildProcess;
+        const input = new PassThrough();
+        const output = new PassThrough();
+        child.stdin = input;
+        child.stdout = output;
+        t.mock.method(childProcess, "spawn", () => {
+            process.nextTick(() => child.emit("spawn"));
+            return child;
+        });
+        const client = createClient({ tsserverPath: process.execPath, useCaseSensitiveFileNames: true });
+        t.after(() => {
+            input.destroy();
+            output.destroy();
+        });
+        if (!("connect" in client)) throw new Error("Expected a process client");
+        await client.connect();
+        const reader = new StreamMessageReader(input);
+        const received = new Promise<void>(resolve => reader.listen(() => resolve()));
+        t.after(() => reader.dispose());
+        const pending = client.apiRequest("parseCommandLine", { commandLine: [] });
+        await received;
+        const rejected = assertRejectsPromptly(pending);
+        output.write(data);
+        output.emit("close");
+        await client.close();
+        await rejected;
+    });
+}
+
 test("writer close rejects pending requests without waiting for later input", { timeout: 10000 }, async t => {
     const { connection, input, output, received } = createWirePeer(t);
     const request = once(received, "request");

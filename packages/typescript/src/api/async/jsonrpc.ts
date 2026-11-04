@@ -216,6 +216,7 @@ function responseKey(message: Message): string | undefined {
 /** Counts complete Content-Length frames, retaining only bytes deferred after malformed headers. */
 class IncomingFrames {
     private header = "";
+    private headerState = 0;
     private remaining: number | undefined;
     private deferred: Uint8Array | undefined;
     private valid = true;
@@ -239,8 +240,22 @@ class IncomingFrames {
                 }
                 continue;
             }
-            this.header += String.fromCharCode(data[offset++] & 0x7f);
-            if (!this.header.endsWith("\r\n\r\n")) continue;
+            const value = data[offset++];
+            this.header += String.fromCharCode(value & 0x7f);
+            // Match AbstractMessageBuffer.tryReadHeaders on raw bytes, before
+            // ASCII decoding, including its reset on overlapping CR sequences.
+            switch (value) {
+                case 13:
+                    this.headerState = this.headerState === 0 ? 1 : this.headerState === 2 ? 3 : 0;
+                    break;
+                case 10:
+                    this.headerState = this.headerState === 1 ? 2 : this.headerState === 3 ? 4 : 0;
+                    break;
+                default:
+                    this.headerState = 0;
+            }
+            if (this.headerState !== 4) continue;
+            this.headerState = 0;
             const header = this.header;
             this.header = "";
             // The reader consumes malformed headers, then retries the remaining
