@@ -2821,15 +2821,6 @@ export class Checker {
         return this.objectRegistry.getOrCreateType(data);
     }
 
-    /**
-     * Get the augmented properties of a type: its properties, plus (when the type has call or
-     * construct signatures) the properties of the global `CallableFunction`/`NewableFunction`
-     * interfaces not already present.
-     */
-    async getAugmentedPropertiesOfType(type: Type): Promise<readonly Symbol[]> {
-        return type.getApparentProperties();
-    }
-
     async getJsxIntrinsicTagNamesAt(location: Node): Promise<readonly Symbol[]> {
         const data = await this.client.apiRequest("getJsxIntrinsicTagNamesAt", {
             snapshot: this.snapshotId,

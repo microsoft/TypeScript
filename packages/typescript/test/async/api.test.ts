@@ -5227,29 +5227,6 @@ export const obj = { name };
     });
 });
 
-describe("Checker - getAugmentedPropertiesOfType", { concurrency }, () => {
-    test("includes CallableFunction members for a function type", async () => {
-        await using api = spawnAPI({
-            "/tsconfig.json": "{}",
-            "/src/main.ts": `export function foo(x: number): number { return x; }`,
-        });
-
-        const snapshot = await api.createSnapshot({ openProjects: ["/tsconfig.json"] });
-        const project = snapshot.getConfiguredProject("/tsconfig.json")!;
-        const pos = (await project.program.getSourceFile("/src/main.ts"))!.text.indexOf("foo");
-        const symbol = await project.checker.getSymbolAtPosition("/src/main.ts", pos);
-        assert.ok(symbol);
-        const type = await project.checker.getTypeOfSymbol(symbol);
-        assert.ok(type);
-
-        const props = await project.checker.getAugmentedPropertiesOfType(type);
-        const names = props.map(p => p.name);
-        assert.ok(names.includes("call"), `Expected augmented properties to include "call", got: ${names}`);
-        assert.ok(names.includes("apply"), `Expected augmented properties to include "apply", got: ${names}`);
-        assert.ok(names.includes("bind"), `Expected augmented properties to include "bind", got: ${names}`);
-    });
-});
-
 describe("Checker - getJsxIntrinsicTagNamesAt", { concurrency }, () => {
     test("returns the properties of the JSX.IntrinsicElements interface", async () => {
         const src = `export const el = <div />;\n`;

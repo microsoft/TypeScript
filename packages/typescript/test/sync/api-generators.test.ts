@@ -1734,7 +1734,6 @@ describe("API - generator batching", { concurrency: areTestsFiltered() }, () => 
                 parityCase("Checker", "getBigIntLiteralType", checker.getBigIntLiteralType, assertTypesEquivalent, 123n),
                 parityCase("Checker", "getFalseType", checker.getFalseType, assertTypesEquivalent),
                 parityCase("Checker", "getTrueType", checker.getTrueType, assertTypesEquivalent),
-                parityCase("Checker", "getAugmentedPropertiesOfType", checker.getAugmentedPropertiesOfType, assertSymbolArraysEquivalent, interfaceType),
                 parityCase("Checker", "getJsxIntrinsicTagNamesAt", checker.getJsxIntrinsicTagNamesAt, assertSymbolArraysEquivalent, combineDeclaration),
                 parityCase("Checker", "getPrivateIdentifierPropertyOfType", checker.getPrivateIdentifierPropertyOfType, assertOptionalSymbolsEquivalent, interfaceType, "#missing", combineDeclaration),
                 parityCase("Checker", "isImplementationOfOverload", checker.isImplementationOfOverload, assertDeepEquivalent, combineDeclaration),

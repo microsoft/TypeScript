@@ -5545,28 +5545,6 @@ export class Checker {
         );
     }
 
-    /**
-     * Get the augmented properties of a type: its properties, plus (when the type has call or
-     * construct signatures) the properties of the global `CallableFunction`/`NewableFunction`
-     * interfaces not already present.
-     */
-    get getAugmentedPropertiesOfType(): {
-        (type: Type): readonly Symbol[];
-        gen(type: Type): Generator<ProtocolRequest, readonly Symbol[], ProtocolResponse["result"]>;
-    } {
-        const owner = this;
-        return cacheGeneratorMethod(
-            owner,
-            "getAugmentedPropertiesOfType",
-            function (type: Type): readonly Symbol[] {
-                return type.getApparentProperties();
-            },
-            function* (type: Type): Generator<ProtocolRequest, readonly Symbol[], ProtocolResponse["result"]> {
-                return yield* type.getApparentProperties.gen();
-            },
-        );
-    }
-
     get getJsxIntrinsicTagNamesAt(): {
         (location: Node): readonly Symbol[];
         gen(location: Node): Generator<ProtocolRequest, readonly Symbol[], ProtocolResponse["result"]>;
