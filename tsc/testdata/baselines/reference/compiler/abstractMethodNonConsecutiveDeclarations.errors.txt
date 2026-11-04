@@ -1,0 +1,29 @@
+abstractMethodNonConsecutiveDeclarations.ts(6,5): error TS2389: Function implementation name must be 'func1'.
+abstractMethodNonConsecutiveDeclarations.ts(14,14): error TS2516: All declarations of an abstract method must be consecutive.
+
+
+==== abstractMethodNonConsecutiveDeclarations.ts (2 errors) ====
+    // https://github.com/microsoft/TypeScript/issues/61783
+    
+    abstract class SeparatedByMethod {
+        abstract func1(): void;
+    
+        func2(): string {
+        ~~~~~
+!!! error TS2389: Function implementation name must be 'func1'.
+            return 'hi';
+        }
+    
+        abstract func1(): void;
+    }
+    
+    abstract class SeparatedByProperty {
+        abstract func1(): void;
+                 ~~~~~
+!!! error TS2516: All declarations of an abstract method must be consecutive.
+    
+        prop: string = 'hi';
+    
+        abstract func1(): void;
+    }
+    
