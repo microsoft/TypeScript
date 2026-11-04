@@ -701,7 +701,8 @@ type Checker struct {
 	structuredTypeExtraArena                    core.Arena[structuredTypeExtra]
 	lazyStateArena                              core.Arena[LazyState]
 	memberLayoutArena                           core.Arena[MemberLayout]
-	layoutMemberInfos                           map[string]MemberInfo
+	layoutMembers                               ast.SymbolTable
+	layoutBaseIndices                           []int32
 	freeTypeSets                                *temporaryTypeSet
 	freePropertyCounts                          *temporaryPropertyCounts
 	mergedSymbols                               symbolLinkStore[*ast.Symbol]
@@ -2833,6 +2834,8 @@ func (c *Checker) checkSignatureDeclaration(node *ast.Node) {
 			c.error(node, diagnostics.Construct_signature_which_lacks_return_type_annotation_implicitly_has_an_any_return_type)
 		case ast.KindCallSignature:
 			c.error(node, diagnostics.Call_signature_which_lacks_return_type_annotation_implicitly_has_an_any_return_type)
+		case ast.KindIndexSignature:
+			c.error(node, diagnostics.Index_signature_which_lacks_type_annotation_implicitly_has_an_any_type)
 		}
 	}
 	if returnTypeNode != nil {
@@ -4259,7 +4262,7 @@ func (c *Checker) checkSwitchStatement(node *ast.Node) {
 		}
 		c.checkSourceElements(clause.Statements())
 		if c.compilerOptions.NoFallthroughCasesInSwitch.IsTrue() {
-			if flowNode := clause.AsCaseOrDefaultClause().FallthroughFlowNode; flowNode != nil && c.isReachableFlowNode(flowNode) {
+			if flowNode := clause.CaseOrDefaultClauseData().FallthroughFlowNode; flowNode != nil && c.isReachableFlowNode(flowNode) {
 				c.error(clause, diagnostics.Fallthrough_case_in_switch)
 			}
 		}
@@ -6492,18 +6495,18 @@ func (c *Checker) getIterationTypesOfIterable(t *Type, use IterationUse, errorNo
 		}
 		noCache = true
 	}
-	result := c.getIterationTypesOfIterableWorker(t, use, errorNode, noCache)
+	result := c.getIterationTypesOfIterableWorker(t, use, errorNode)
 	if !noCache {
 		c.iterationTypesCache[key] = result
 	}
 	return result
 }
 
-func (c *Checker) getIterationTypesOfIterableWorker(t *Type, use IterationUse, errorNode *ast.Node, noCache bool) IterationTypes {
+func (c *Checker) getIterationTypesOfIterableWorker(t *Type, use IterationUse, errorNode *ast.Node) IterationTypes {
 	if t.flags&TypeFlagsUnion != 0 {
 		allIterationTypes := make([]IterationTypes, 0, len(t.Types()))
 		for _, constituent := range t.Types() {
-			iterationTypes := c.getIterationTypesOfIterableWorker(constituent, use, nil, noCache)
+			iterationTypes := c.getIterationTypesOfIterableWorker(constituent, use, nil)
 			if !iterationTypes.hasTypes() {
 				if errorNode != nil {
 					c.addDeferredDiagnostic(func() {
@@ -8482,7 +8485,9 @@ func (c *Checker) checkImportCallExpression(node *ast.Node) *Type {
 		return c.createPromiseReturnType(node, c.anyType) //nolint:customlint // no arguments to check
 	}
 	specifier := args[0]
-	if c.compilerOptions.RewriteRelativeImportExtensions.IsTrue() && !ast.IsStringLiteralLike(specifier) {
+	if c.compilerOptions.RewriteRelativeImportExtensions.IsTrue() &&
+		!c.compilerOptions.DisableDynamicImportExtensionRewriting.IsTrue() &&
+		!ast.IsStringLiteralLike(specifier) {
 		c.checkExternalEmitHelpers(node, ExternalEmitHelpersRewriteRelativeImportExtension)
 	}
 	specifierType := c.checkExpressionCached(specifier)
@@ -8538,6 +8543,7 @@ func (c *Checker) checkImportCallExpression(node *ast.Node) *Type {
  */
 func (c *Checker) checkCallExpression(node *ast.Node, checkMode CheckMode) *Type {
 	if c.compilerOptions.RewriteRelativeImportExtensions.IsTrue() &&
+		!c.compilerOptions.DisableDynamicImportExtensionRewriting.IsTrue() &&
 		ast.IsInJSFile(node) && ast.IsRequireCall(node, false /*requireStringLiteralLikeArgument*/) &&
 		!ast.IsStringLiteralLike(node.Arguments()[0]) {
 		c.checkExternalEmitHelpers(node, ExternalEmitHelpersRewriteRelativeImportExtension)
@@ -19334,10 +19340,7 @@ func (c *Checker) getLayoutPropertiesOfType(t *Type) []*ast.Symbol {
 	}
 	layout := lazy.layout
 	if layout.layoutProperties == nil {
-		layout.layoutProperties = make([]*ast.Symbol, len(layout.memberInfos))
-		for i, memberInfo := range layout.memberInfos {
-			layout.layoutProperties[i] = memberInfo.symbol
-		}
+		layout.layoutProperties = slices.AppendSeq(make([]*ast.Symbol, 0, layout.members.Len()), layout.members.Values())
 	}
 	return layout.layoutProperties
 }
@@ -19683,11 +19686,11 @@ func (c *Checker) propagateResolvedDeclaredMembers() {
 	r := &c.resolvingObjectTypeStack[len(c.resolvingObjectTypeStack)-1]
 	s := r.t.AsTypeReference()
 	for symbol := range r.resolvedMembers.Values() {
-		if memberInfo := s.lazy.layout.memberInfoMap[symbol.Name()]; memberInfo != nil {
+		if index := s.lazy.layout.members.Find(symbol.Name()); index >= 0 {
 			if s.properties == nil {
-				s.properties = make([]*ast.Symbol, len(s.lazy.layout.memberInfos))
+				s.properties = make([]*ast.Symbol, s.lazy.layout.members.Len())
 			}
-			s.properties[memberInfo.slotIndex] = symbol
+			s.properties[index] = symbol
 		}
 	}
 	r.resolvedMembers = nil
@@ -19731,15 +19734,15 @@ func (c *Checker) getMemberLayoutKey(t *Type, baseTypes []*Type) CacheHashKey {
 }
 
 func (c *Checker) createMemberLayout(t *Type, baseTypes []*Type) *MemberLayout {
-	// Reuse c.layoutMemberInfos to avoid repeated allocations
-	layoutMemberInfos := c.layoutMemberInfos
-	c.layoutMemberInfos = nil
+	// Reuse c.layoutMembers and c.layoutBaseIndices to avoid repeated allocations
+	layoutMembers, layoutBaseIndices := c.layoutMembers, c.layoutBaseIndices
+	c.layoutMembers, c.layoutBaseIndices = nil, nil
 	addMember := func(symbol *ast.Symbol, baseIndex int) {
-		if _, ok := layoutMemberInfos[symbol.Name()]; !ok {
-			if layoutMemberInfos == nil {
-				layoutMemberInfos = make(map[string]MemberInfo)
-			}
-			layoutMemberInfos[symbol.Name()] = MemberInfo{symbol: symbol, baseIndex: int32(baseIndex)}
+		if layoutMembers == nil {
+			layoutMembers = ast.NewSymbolTable()
+		}
+		if layoutMembers.AddIfAbsent(symbol.Name(), symbol) {
+			layoutBaseIndices = append(layoutBaseIndices, int32(baseIndex))
 		}
 	}
 	// Add declared members
@@ -19752,9 +19755,9 @@ func (c *Checker) createMemberLayout(t *Type, baseTypes []*Type) *MemberLayout {
 	for baseIndex, baseType := range baseTypes {
 		if baseType.objectFlags&(ObjectFlagsReference|ObjectFlagsClassOrInterface) != 0 {
 			c.resolveStructuredTypeMembers(baseType)
-			for _, info := range baseType.AsTypeReference().lazy.layout.memberInfos {
-				if !isStaticPrivateIdentifierProperty(info.symbol) {
-					addMember(info.symbol, baseIndex)
+			for symbol := range baseType.AsTypeReference().lazy.layout.members.Values() {
+				if !isStaticPrivateIdentifierProperty(symbol) {
+					addMember(symbol, baseIndex)
 				}
 			}
 		} else {
@@ -19765,32 +19768,14 @@ func (c *Checker) createMemberLayout(t *Type, baseTypes []*Type) *MemberLayout {
 			}
 		}
 	}
-	memberInfos := slices.AppendSeq(make([]MemberInfo, 0, len(layoutMemberInfos)), maps.Values(layoutMemberInfos))
-	clear(layoutMemberInfos)
-	c.layoutMemberInfos = layoutMemberInfos
-	// Sort by symbols, but put declared members (baseIndex < 0) first
-	slices.SortFunc(memberInfos, func(a, b MemberInfo) int {
-		if a.baseIndex < 0 && b.baseIndex >= 0 {
-			return -1
-		}
-		if a.baseIndex >= 0 && b.baseIndex < 0 {
-			return 1
-		}
-		return c.CompareSymbols(a.symbol, b.symbol)
-	})
-	// Store slot indices in the sorted memberInfos and build the memberInfoMap. Slot indices are used to
-	// identify slots in the instantiated type's properties list.
-	memberInfoMap := make(map[string]*MemberInfo, len(memberInfos))
-	for i := range memberInfos {
-		memberInfo := &memberInfos[i]
-		memberInfo.slotIndex = int32(i)
-		memberInfoMap[memberInfo.symbol.Name()] = memberInfo
-	}
 	layout := c.memberLayoutArena.New()
 	layout.id = c.memberLayoutCount
-	layout.memberInfoMap = memberInfoMap
-	layout.memberInfos = memberInfos
+	layout.members = layoutMembers.Clone()
+	layout.baseIndices = slices.Clone(layoutBaseIndices)
 	c.memberLayoutCount++
+	layoutMembers.Clear()
+	layoutBaseIndices = layoutBaseIndices[:0]
+	c.layoutMembers, c.layoutBaseIndices = layoutMembers, layoutBaseIndices
 	return layout
 }
 
@@ -21317,7 +21302,6 @@ func (c *Checker) resolveAnonymousTypeMembers(t *Type) {
 	}
 	// Combinations of function, class, enum and module
 	members := c.getExportsOfSymbol(symbol)
-	var indexInfos []*IndexInfo
 	if symbol == c.globalThisSymbol {
 		varsOnly := ast.NewSymbolTable()
 		for _, p := range members.All() {
@@ -21328,20 +21312,19 @@ func (c *Checker) resolveAnonymousTypeMembers(t *Type) {
 		members = varsOnly
 	}
 	var baseConstructorIndexInfo *IndexInfo
-	c.setStructuredTypeMembers(t, members, nil, nil, nil)
 	if symbol.Flags()&ast.SymbolFlagsClass != 0 {
 		classType := c.getDeclaredTypeOfClassOrInterface(symbol)
 		baseConstructorType := c.getBaseConstructorTypeOfClass(classType)
 		if baseConstructorType.flags&(TypeFlagsObject|TypeFlagsIntersection|TypeFlagsTypeVariable) != 0 {
 			members = members.Clone()
 			c.addInheritedMembers(members, c.getPropertiesOfType(baseConstructorType))
-			c.setStructuredTypeMembers(t, members, nil, nil, nil)
 		} else if baseConstructorType == c.anyType {
 			baseConstructorIndexInfo = c.anyBaseTypeIndexInfo
 		}
 	}
-	indexSymbol := members.Get(ast.InternalSymbolNameIndex)
-	if indexSymbol != nil {
+	c.setStructuredTypeMembers(t, members, nil, nil, nil)
+	var indexInfos []*IndexInfo
+	if indexSymbol := members.Get(ast.InternalSymbolNameIndex); indexSymbol != nil {
 		indexInfos = c.getIndexInfosOfIndexSymbol(indexSymbol, slices.Collect(members.Values()))
 	} else {
 		if baseConstructorIndexInfo != nil {
@@ -21353,7 +21336,7 @@ func (c *Checker) resolveAnonymousTypeMembers(t *Type) {
 			indexInfos = append(indexInfos, c.enumNumberIndexInfo)
 		}
 	}
-	if indexInfos != nil || d.extra != nil {
+	if len(indexInfos) != 0 {
 		d.ensureExtra().indexInfos = indexInfos
 	}
 	// We resolve the members before computing the signatures because a signature may use
@@ -21362,7 +21345,7 @@ func (c *Checker) resolveAnonymousTypeMembers(t *Type) {
 	// will never be observed because a qualified name can't reference signatures.
 	if symbol.Flags()&(ast.SymbolFlagsFunction|ast.SymbolFlagsMethod) != 0 {
 		signatures := c.getSignaturesOfSymbol(symbol)
-		if signatures != nil || d.extra != nil {
+		if len(signatures) != 0 {
 			extra := d.ensureExtra()
 			extra.signatures = signatures
 			extra.callSignatureCount = len(signatures)
@@ -21389,19 +21372,6 @@ func (c *Checker) createInstantiatedSymbolTable(symbols []*ast.Symbol, m *TypeMa
 	result := ast.NewSymbolTableWithCapacity(len(symbols))
 	for _, symbol := range symbols {
 		result.Set(symbol.Name(), c.instantiateSymbol(symbol, m))
-	}
-	return result
-}
-
-func (c *Checker) instantiateSymbolTable(symbols ast.SymbolTable, m *TypeMapper) ast.SymbolTable {
-	if symbols.Len() == 0 {
-		return nil
-	}
-	result := ast.NewSymbolTableWithCapacity(symbols.Len())
-	for id, symbol := range symbols.All() {
-		if c.isNamedMember(symbol, id) {
-			result.Set(id, c.instantiateSymbol(symbol, m))
-		}
 	}
 	return result
 }
@@ -22763,46 +22733,18 @@ func (c *Checker) getDefaultOrUnknownFromTypeParameter(t *Type) *Type {
 	return core.IfElse(result != nil, result, c.unknownType)
 }
 
-func (c *Checker) getNamedMembers(members ast.SymbolTable, container *ast.Symbol) []*ast.Symbol {
+func (c *Checker) getNamedMembers(members ast.SymbolTable) []*ast.Symbol {
 	if members.Len() == 0 {
 		return nil
 	}
-	// For classes and interfaces, we store explicitly declared members ahead of inherited members. This ensures we process
-	// explicitly declared members first in type relations, which is beneficial because explicitly declared members are more
-	// likely to contain discriminating differences. See for example https://github.com/microsoft/TypeScript/tsc/issues/1968.
 	result := make([]*ast.Symbol, 0, members.Len())
 	for id, symbol := range members.All() {
 		if c.isNamedMember(symbol, id) {
 			result = append(result, symbol)
 		}
 	}
-	if container == nil || container.Flags()&(ast.SymbolFlagsClass|ast.SymbolFlagsInterface) == 0 {
-		c.sortSymbols(result)
-		return result
-	}
-	// Move the members declared in the container to the front. Both parts are sorted below, so the order the split
-	// leaves them in does not matter.
-	containedCount := 0
-	for i, symbol := range result {
-		if c.isDeclarationContainedBy(symbol, container) {
-			result[containedCount], result[i] = result[i], result[containedCount]
-			containedCount++
-		}
-	}
-	c.sortSymbols(result[:containedCount])
-	c.sortSymbols(result[containedCount:])
+	c.sortSymbols(result)
 	return result
-}
-
-func (c *Checker) isDeclarationContainedBy(symbol *ast.Symbol, container *ast.Symbol) bool {
-	if declaration := symbol.ValueDeclaration(); declaration != nil {
-		for _, d := range container.Declarations() {
-			if declaration.Loc.ContainedBy(d.Loc) {
-				return true
-			}
-		}
-	}
-	return false
 }
 
 func (c *Checker) isNamedMember(symbol *ast.Symbol, id string) bool {
@@ -25958,7 +25900,7 @@ func (c *Checker) setStructuredTypeMembers(t *Type, members ast.SymbolTable, cal
 	t.objectFlags |= ObjectFlagsMembersResolved
 	data := t.AsStructuredType()
 	data.members = members
-	data.properties = c.getNamedMembers(members, t.symbol)
+	data.properties = c.getNamedMembers(members)
 	c.setStructuredTypeSignatures(data, callSignatures, constructSignatures, indexInfos)
 }
 

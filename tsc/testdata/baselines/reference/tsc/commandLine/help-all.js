@@ -85,6 +85,11 @@ Specify the base directory to resolve non-relative module names.
 [94m--customConditions[39m
 Conditions to set in addition to the resolver-specific defaults when resolving imports.
 
+[94m--disableDynamicImportExtensionRewriting[39m
+Disable runtime rewriting of file extensions in non-literal 'import()' and 'require()' calls when 'rewriteRelativeImportExtensions' is enabled.
+type: boolean
+default: false
+
 [94m--module, -m[39m
 Specify what module code is generated.
 one of: commonjs, es6/es2015, es2020, es2022, esnext, node16, node18, node20, nodenext, preserve
