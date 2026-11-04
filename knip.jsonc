@@ -12,7 +12,9 @@
         ".": {
             "entry": [
                 "Herebyfile.mjs",
+                "tools/scripts/lsp/fetchModel.mts",
                 "tools/scripts/tsc/generate.ts",
+                "tools/scripts/wasm/go-wasip1-exec.mts",
                 "tools/scripts/**/*.test.{mts,ts}",
                 "tsc/internal/stringutil/_scripts/*.mts"
             ],
@@ -33,6 +35,7 @@
         },
         "packages/typescript": {
             "entry": [
+                "test/**/*.test.ts",
                 "test/**/*.bench.ts"
             ],
             "paths": {
@@ -43,8 +46,11 @@
                 "src/**/*.ts",
                 "test/**/*.ts"
             ],
-            "ignore": ["src/enums/*.enum.ts"],
-            "ignoreDependencies": ["vscode-jsonrpc"]
+            "ignoreDependencies": [
+                "vscode-jsonrpc",
+                // Browser smoke tests use the extension workspace's build tool.
+                "esbuild"
+            ]
         },
         "packages/vscode-typescript": {
             "project": [

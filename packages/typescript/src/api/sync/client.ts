@@ -17,8 +17,6 @@ import { TimingDump } from "../timingDump.ts";
 import { TransportClient } from "./transportClient.ts";
 
 export type { ClientSocketOptions, ClientSpawnOptions };
-export type { ClientTransportOptions, SyncClientOptions as ClientOptions } from "../options.ts";
-export type { SyncTransport } from "./transport.ts";
 
 export class Client extends TransportClient {
     private readonly channel: SyncRpcChannel | undefined;

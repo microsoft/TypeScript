@@ -87,7 +87,7 @@ function trackChild(process: NodeJS.Process, child: ChildProcess): void {
     liveChildren.add(child);
 }
 
-export function createPipePath(): string {
+function createPipePath(): string {
     const process = nodeProcess();
     return `\\\\.\\pipe\\tsgo-sync-${process.pid}-${process.getBuiltinModule("node:crypto").randomBytes(16).toString("hex")}`;
 }

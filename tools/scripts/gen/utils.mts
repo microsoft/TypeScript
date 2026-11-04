@@ -80,7 +80,7 @@ export interface RunOptions {
     signal?: AbortSignal;
 }
 
-export function formatCommandArg(arg: string) {
+function formatCommandArg(arg: string) {
     return arg && /^[\w@%+=:,./-]+$/.test(arg) ? arg : JSON.stringify(arg);
 }
 
