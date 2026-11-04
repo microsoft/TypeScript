@@ -291,6 +291,8 @@ func (s *nodeStore) alloc(size uintptr) (unsafe.Pointer, uint32) {
 	// SAFETY: The free words belong to a retained chunk and have room for this record.
 	p := unsafe.Pointer(unsafe.SliceData(s.free))
 	s.free = s.free[words:]
+	// SAFETY: p and s.base address the same retained chunk; their integer addresses
+	// are used only to compute a byte offset, never to reconstruct a pointer.
 	return p, uint32(uintptr(p) - uintptr(s.base))
 }
 
