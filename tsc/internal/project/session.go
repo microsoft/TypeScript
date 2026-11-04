@@ -49,6 +49,7 @@ const (
 	UpdateReasonRequestedLanguageServiceProjectDirty
 	UpdateReasonRequestedLoadProjectTree
 	UpdateReasonRequestedLanguageServiceWithAutoImports
+	// Unloads unused configured projects and cleans the file cache.
 	UpdateReasonIdleCleanDiskCache
 	UpdateReasonDidChangeConfigFile
 	UpdateReasonDidChangeContentMapperContributions
@@ -76,9 +77,11 @@ type SessionOptions struct {
 	PushDiagnosticsEnabled bool
 	// RunExternalCode allows configured content mappers to run their (external) processes,
 	// gated on workspace trust by the client. It corresponds to the --runExternalCode CLI flag.
-	RunExternalCode    bool
-	DebounceDelay      time.Duration
-	CheckerPoolOptions CheckerPoolOptions
+	RunExternalCode         bool
+	InitialWorkspaceRoots   []tspath.RootedDirectoryPath
+	InitialWorkspaceFolders []ls.WorkspaceFolder
+	DebounceDelay           time.Duration
+	CheckerPoolOptions      CheckerPoolOptions
 }
 
 type SessionInit struct {
@@ -172,9 +175,9 @@ type Session struct {
 	warmAutoImportCancel context.CancelFunc
 	warmAutoImportMu     sync.Mutex
 
-	// idleCacheCleanTimer is a resettable timer for scheduling idle disk
-	// cache cleans. The timer resets on any file event (open, close,
-	// change, save, watch) and fires after 30 seconds of inactivity.
+	// idleCacheCleanTimer is a resettable timer for unloading unused projects
+	// and cleaning the file cache. The timer resets on any file event (open,
+	// close, change, save, watch) and fires after 30 seconds of inactivity.
 	idleCacheCleanTimer  *time.Timer
 	idleCacheCleanMu     sync.Mutex
 	idleCacheCleanWG     sync.WaitGroup

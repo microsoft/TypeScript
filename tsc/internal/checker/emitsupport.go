@@ -166,7 +166,7 @@ func (c *Checker) isEntityNameVisible(entityName *ast.Node, enclosingDeclaration
 
 	symbol := c.resolveName(enclosingDeclaration, firstIdentifier.Text(), meaning, nil, false, false)
 
-	if symbol != nil && symbol.Flags&ast.SymbolFlagsTypeParameter != 0 && meaning&ast.SymbolFlagsType != 0 {
+	if symbol != nil && symbol.Flags()&ast.SymbolFlagsTypeParameter != 0 && meaning&ast.SymbolFlagsType != 0 {
 		return printer.SymbolAccessibilityResult{Accessibility: printer.SymbolAccessibilityAccessible}
 	}
 
@@ -215,7 +215,7 @@ func (c *Checker) hasVisibleDeclarations(symbol *ast.Symbol, shouldComputeAliasT
 		addVisibleAlias = noopAddVisibleAlias
 	}
 
-	for _, declaration := range symbol.Declarations {
+	for _, declaration := range symbol.Declarations() {
 		if ast.IsIdentifier(declaration) {
 			continue
 		}
@@ -242,7 +242,7 @@ func (c *Checker) hasVisibleDeclarations(symbol *ast.Symbol, shouldComputeAliasT
 				continue
 			}
 			if ast.IsBindingElement(declaration) {
-				if symbol.Flags&ast.SymbolFlagsAlias != 0 && ast.IsInJSFile(declaration) && declaration.Parent != nil && declaration.Parent.Parent != nil && // exported import-like top-level JS require statement
+				if symbol.Flags()&ast.SymbolFlagsAlias != 0 && ast.IsInJSFile(declaration) && declaration.Parent != nil && declaration.Parent.Parent != nil && // exported import-like top-level JS require statement
 					ast.IsVariableDeclaration(declaration.Parent.Parent) &&
 					declaration.Parent.Parent.Parent.Parent != nil && ast.IsVariableStatement(declaration.Parent.Parent.Parent.Parent) &&
 					!ast.HasSyntacticModifier(declaration.Parent.Parent.Parent.Parent, ast.ModifierFlagsExport) &&
@@ -251,7 +251,7 @@ func (c *Checker) hasVisibleDeclarations(symbol *ast.Symbol, shouldComputeAliasT
 					addVisibleAlias(declaration, declaration.Parent.Parent.Parent.Parent)
 					continue
 				}
-				if symbol.Flags&ast.SymbolFlagsBlockScopedVariable != 0 {
+				if symbol.Flags()&ast.SymbolFlagsBlockScopedVariable != 0 {
 					rootDeclaration := ast.WalkUpBindingElementsAndPatterns(declaration)
 					if ast.IsParameterDeclaration(rootDeclaration) {
 						return nil
@@ -293,7 +293,7 @@ func (c *Checker) requiresAddingImplicitUndefined(declaration *ast.Node, symbol 
 		}
 		t := c.getTypeOfSymbol(symbol)
 		c.mappedSymbolLinks.Has(symbol)
-		return (symbol.Flags&ast.SymbolFlagsProperty != 0) && (symbol.Flags&ast.SymbolFlagsOptional != 0) && isOptionalDeclaration(declaration) && c.ReverseMappedSymbolLinks.Has(symbol) && c.ReverseMappedSymbolLinks.Get(symbol).mappedType != nil && containsNonMissingUndefinedType(c, t)
+		return (symbol.Flags()&ast.SymbolFlagsProperty != 0) && (symbol.Flags()&ast.SymbolFlagsOptional != 0) && isOptionalDeclaration(declaration) && c.ReverseMappedSymbolLinks.Has(symbol) && c.ReverseMappedSymbolLinks.Get(symbol).mappedType != nil && containsNonMissingUndefinedType(c, t)
 	case ast.KindParameter, ast.KindJSDocParameterTag:
 		return c.requiresAddingImplicitUndefinedWorker(declaration, enclosingDeclaration)
 	default:

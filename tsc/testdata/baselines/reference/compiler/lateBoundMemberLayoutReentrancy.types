@@ -1,0 +1,86 @@
+//// [tests/cases/compiler/lateBoundMemberLayoutReentrancy.ts] ////
+
+=== lateBoundMemberLayoutReentrancy.ts ===
+declare const rI: RI<"a">;
+>rI : RI<"a">
+
+rI.x
+>rI.x : "a"
+>rI : RI<"a">
+>x : "a"
+
+interface RI<T extends "a" | "b"> {
+    x: T;
+>x : T
+
+    [rI.x]: "b";
+>[rI.x] : "b"
+>rI.x : "a"
+>rI : RI<"a">
+>x : "a"
+}
+declare const rI2: RI<"b">;
+>rI2 : RI<"b">
+
+export const v1 = rI2.a;
+>v1 : "b"
+>rI2.a : "b"
+>rI2 : RI<"b">
+>a : "b"
+
+export const v2 = rI.a;
+>v2 : "b"
+>rI.a : "b"
+>rI : RI<"a">
+>a : "b"
+
+export type K2 = keyof RI<"b">;
+>K2 : keyof RI<"b">
+
+export const k: K2 = "a";
+>k : keyof RI<"b">
+>"a" : "a"
+
+export const o: RI<"b"> = { x: "b", a: "b" };
+>o : RI<"b">
+>{ x: "b", a: "b" } : { x: "b"; a: "b"; }
+>x : "b"
+>"b" : "b"
+>a : "b"
+>"b" : "b"
+
+declare const rC: RC<"a">;
+>rC : RC<"a">
+
+rC.x
+>rC.x : "a"
+>rC : RC<"a">
+>x : "a"
+
+declare class RC<T extends "a" | "b"> {
+>RC : RC<T>
+
+    x: T;
+>x : T
+
+    [rC.x]: "b";
+>[rC.x] : "b"
+>rC.x : "a"
+>rC : RC<"a">
+>x : "a"
+}
+declare const rC2: RC<"b">;
+>rC2 : RC<"b">
+
+export const w1 = rC2.a;
+>w1 : "b"
+>rC2.a : "b"
+>rC2 : RC<"b">
+>a : "b"
+
+export const w2 = rC.a;
+>w2 : "b"
+>rC.a : "b"
+>rC : RC<"a">
+>a : "b"
+

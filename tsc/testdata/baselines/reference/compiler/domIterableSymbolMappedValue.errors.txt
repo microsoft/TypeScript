@@ -1,0 +1,16 @@
+domIterableSymbolMappedValue.ts(3,9): error TS2345: Argument of type 'Partial<Pick<CSSStyleDeclaration, unique symbol>>' is not assignable to parameter of type 'Partial<Record<keyof CSSStyleDeclaration, string>>'.
+  Types of property '[iterator]' are incompatible.
+    Type '(() => ArrayIterator<string>) | undefined' is not assignable to type 'string | undefined'.
+      Type '() => ArrayIterator<string>' is not assignable to type 'string'.
+
+
+==== domIterableSymbolMappedValue.ts (1 errors) ====
+    declare const styles: Partial<Pick<CSSStyleDeclaration, keyof CSSStyleDeclaration & symbol>>;
+    declare function element(styles: Partial<Record<keyof CSSStyleDeclaration, string>>): void;
+    element(styles);
+            ~~~~~~
+!!! error TS2345: Argument of type 'Partial<Pick<CSSStyleDeclaration, unique symbol>>' is not assignable to parameter of type 'Partial<Record<keyof CSSStyleDeclaration, string>>'.
+!!! error TS2345:   Types of property '[iterator]' are incompatible.
+!!! error TS2345:     Type '(() => ArrayIterator<string>) | undefined' is not assignable to type 'string | undefined'.
+!!! error TS2345:       Type '() => ArrayIterator<string>' is not assignable to type 'string'.
+    

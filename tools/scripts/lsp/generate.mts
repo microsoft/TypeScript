@@ -407,7 +407,7 @@ const customStructures: Structure[] = [
                 name: "pipe",
                 type: { kind: "base", name: "string" },
                 optional: true,
-                documentation: "Optional path to use for API communication. If not provided, a unique path will be generated.",
+                documentation: "Optional path to use for API communication. For the asynchronous protocol, this is a named pipe path on Windows; on Unix, the path must not exist and will be created as a private directory containing a socket named 'socket'. For the synchronous protocol, this is a named pipe path on Windows or a FIFO prefix on Unix. If not provided, a unique path will be generated.",
             },
             {
                 name: "synchronous",
@@ -465,6 +465,7 @@ const customStructures: Structure[] = [
             { name: "cwd", type: { kind: "base", name: "string" }, optional: true, documentation: "Absolute working directory for the mapper process." },
             { name: "compilerOptions", type: { kind: "array", element: { kind: "base", name: "string" } }, optional: true, documentation: "Compiler option names forwarded to the mapper." },
             { name: "dynamicConfig", type: { kind: "base", name: "boolean" }, optional: true, documentation: "Whether the mapper uses project-scoped dynamic configuration." },
+            { name: "outputExtensions", type: { kind: "map", key: { kind: "base", name: "string" }, value: { kind: "base", name: "string" } }, optional: true, documentation: "Default source-to-runtime output extension mappings." },
         ],
         documentation: "Inline content mapper manifest supplied by a contributing extension.",
     },

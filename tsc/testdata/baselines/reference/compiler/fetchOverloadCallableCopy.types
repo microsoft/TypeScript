@@ -1,0 +1,22 @@
+//// [tests/cases/compiler/fetchOverloadCallableCopy.ts] ////
+
+=== fetchOverloadCallableCopy.ts ===
+declare function fetch(input: RequestInfo | URL, init?: RequestInit): Promise<Response>;
+>fetch : { (input: RequestInfo | URL, init?: RequestInit): Promise<Response>; (input: RequestInfo | URL, init?: RequestInit): Promise<Response>; }
+>input : URL | RequestInfo
+>init : RequestInit | undefined
+
+type CallableCopy<T extends (...args: never[]) => unknown> = (...args: Parameters<T>) => ReturnType<T>;
+>CallableCopy : CallableCopy<T>
+>args : never[]
+>args : Parameters<T>
+
+declare const copiedFetch: CallableCopy<typeof fetch>;
+>copiedFetch : CallableCopy<{ (input: RequestInfo | URL, init?: RequestInit): Promise<Response>; (input: RequestInfo | URL, init?: RequestInit): Promise<Response>; }>
+>fetch : { (input: RequestInfo | URL, init?: RequestInit): Promise<Response>; (input: RequestInfo | URL, init?: RequestInit): Promise<Response>; }
+
+const replacementFetch: typeof fetch = copiedFetch;
+>replacementFetch : { (input: RequestInfo | URL, init?: RequestInit): Promise<Response>; (input: RequestInfo | URL, init?: RequestInit): Promise<Response>; }
+>fetch : { (input: RequestInfo | URL, init?: RequestInit): Promise<Response>; (input: RequestInfo | URL, init?: RequestInit): Promise<Response>; }
+>copiedFetch : CallableCopy<{ (input: RequestInfo | URL, init?: RequestInit): Promise<Response>; (input: RequestInfo | URL, init?: RequestInit): Promise<Response>; }>
+

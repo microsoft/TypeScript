@@ -1,0 +1,20 @@
+//// [tests/cases/compiler/objectEntriesMapBroadKeyLookup.ts] ////
+
+=== objectEntriesMapBroadKeyLookup.ts ===
+declare const languages: Record<"en" | "fr", string>;
+>languages : Symbol(languages, Decl(objectEntriesMapBroadKeyLookup.ts, 0, 13))
+>Record : Symbol(Record, Decl(lib.es5.d.ts, --, --))
+
+declare const language: string;
+>language : Symbol(language, Decl(objectEntriesMapBroadKeyLookup.ts, 1, 13))
+
+new Map(Object.entries(languages)).get(language);
+>new Map(Object.entries(languages)).get : Symbol(Map.get, Decl(lib.es2015.collection.d.ts, --, --))
+>Map : Symbol(Map, Decl(lib.es2015.collection.d.ts, --, --), Decl(lib.es2015.collection.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>Object.entries : Symbol(ObjectConstructor.entries, Decl(lib.es2017.object.d.ts, --, --), Decl(lib.es2017.object.d.ts, --, --))
+>Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>entries : Symbol(ObjectConstructor.entries, Decl(lib.es2017.object.d.ts, --, --), Decl(lib.es2017.object.d.ts, --, --))
+>languages : Symbol(languages, Decl(objectEntriesMapBroadKeyLookup.ts, 0, 13))
+>get : Symbol(Map.get, Decl(lib.es2015.collection.d.ts, --, --))
+>language : Symbol(language, Decl(objectEntriesMapBroadKeyLookup.ts, 1, 13))
+

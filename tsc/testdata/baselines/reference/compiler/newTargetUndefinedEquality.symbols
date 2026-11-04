@@ -1,0 +1,15 @@
+//// [tests/cases/compiler/newTargetUndefinedEquality.ts] ////
+
+=== newTargetUndefinedEquality.ts ===
+class ConstructorGuard {
+>ConstructorGuard : Symbol(ConstructorGuard, Decl(newTargetUndefinedEquality.ts, 0, 0))
+
+    constructor() {
+        if (new.target === undefined) throw TypeError("Constructor requires new");
+>new.target : Symbol(ConstructorGuard, Decl(newTargetUndefinedEquality.ts, 0, 0))
+>target : Symbol(ConstructorGuard, Decl(newTargetUndefinedEquality.ts, 0, 0))
+>undefined : Symbol(undefined)
+>TypeError : Symbol(TypeError, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+    }
+}
+

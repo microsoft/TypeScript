@@ -82,7 +82,7 @@ class C {
 //// [jsdocAccessibilityTagDeclarations.d.ts]
 declare class Protected {
     /** @protected */
-    c: any;
+    protected c: any;
     /** @protected */
     protected constructor(c: any);
     /** @protected */
@@ -94,7 +94,7 @@ declare class Protected {
 }
 declare class Private {
     /** @private */
-    c;
+    private c;
     /** @private */
     private constructor();
     /** @private */

@@ -2,7 +2,7 @@ import {
     type APIModules,
     createTypeScriptModuleLoader,
     type TypeScriptSDK,
-} from "@typescript/typescript/unstable/vscode";
+} from "@typescript/typescript/vscode";
 import fs from "node:fs";
 import module from "node:module";
 import path from "node:path";

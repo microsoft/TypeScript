@@ -1,18 +1,19 @@
-import type { ExtensionAPI } from "@typescript/typescript/unstable/vscode";
+import type { ExtensionAPI } from "@typescript/typescript/vscode";
 import * as vscode from "vscode";
-export type { ExtensionAPI } from "@typescript/typescript/unstable/vscode";
+export type { ExtensionAPI } from "@typescript/typescript/vscode";
 
 import {
     registerEnablementCommands,
     updateUseTsgoSetting,
 } from "./commands";
 import {
-    aiConnectionString,
     getExplicitConfigTarget,
     getUseTsgo,
     getWinningTsgoConfigKey,
     needsExtHostRestartOnChange,
-} from "./util";
+    shouldStartTsgo,
+} from "./settings";
+import { aiConnectionString } from "./util";
 
 import { TelemetryReporter as VSCodeTelemetryReporter } from "@vscode/extension-telemetry";
 import {
@@ -88,7 +89,7 @@ export async function activate(context: vscode.ExtensionContext): Promise<Extens
                     }
                 }
                 else {
-                    if (await shouldStartTsgo(context)) {
+                    if (shouldStartTsgo(context)) {
                         await sessionManager.restart(context);
                     }
                     else {
@@ -141,14 +142,6 @@ export async function activate(context: vscode.ExtensionContext): Promise<Extens
     else if (useTsgo !== true) {
         output.appendLine(vscode.l10n.t("TypeScript 7 is disabled. Select 'TypeScript: Enable TypeScript 7' in the command palette to enable it."));
         return api;
-    }
-
-    async function shouldStartTsgo(context: vscode.ExtensionContext): Promise<boolean> {
-        const useTsgo = getUseTsgo();
-        if (context.extensionMode === vscode.ExtensionMode.Development && !vscode.extensions.getExtension("vscode.typescript-language-features")) {
-            return useTsgo !== false;
-        }
-        return useTsgo === true;
     }
 
     await startNativeServer();

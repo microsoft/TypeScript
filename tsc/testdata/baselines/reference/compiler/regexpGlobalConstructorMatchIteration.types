@@ -1,0 +1,35 @@
+//// [tests/cases/compiler/regexpGlobalConstructorMatchIteration.ts] ////
+
+=== regexpGlobalConstructorMatchIteration.ts ===
+declare const pattern: string;
+>pattern : string
+
+declare function consume(value: string): void;
+>consume : (value: string) => void
+>value : string
+
+const matches = "".match(new RegExp(pattern, "g"));
+>matches : RegExpMatchArray | null
+>"".match(new RegExp(pattern, "g")) : RegExpMatchArray | null
+>"".match : { (regexp: string | RegExp): RegExpMatchArray | null; (matcher: { [Symbol.match](string: string): RegExpMatchArray | null; }): RegExpMatchArray | null; }
+>"" : ""
+>match : { (regexp: string | RegExp): RegExpMatchArray | null; (matcher: { [Symbol.match](string: string): RegExpMatchArray | null; }): RegExpMatchArray | null; }
+>new RegExp(pattern, "g") : RegExp
+>RegExp : RegExpConstructor
+>pattern : string
+>"g" : "g"
+
+if (matches) {
+>matches : RegExpMatchArray | null
+
+    for (const match of matches) {
+>match : string
+>matches : RegExpMatchArray
+
+        consume(match);
+>consume(match) : void
+>consume : (value: string) => void
+>match : string
+    }
+}
+

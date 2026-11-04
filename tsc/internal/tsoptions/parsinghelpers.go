@@ -27,6 +27,9 @@ func ParseTristate(value any) core.Tristate {
 }
 
 func ParseStringArray(value any) []string {
+	if arr, ok := value.([]string); ok {
+		return arr
+	}
 	if arr, ok := value.([]any); ok {
 		if arr == nil {
 			return nil
@@ -43,6 +46,9 @@ func ParseStringArray(value any) []string {
 }
 
 func parseStringMap(value any) *collections.OrderedMap[string, []string] {
+	if m, ok := value.(*collections.OrderedMap[string, []string]); ok {
+		return m
+	}
 	if m, ok := value.(*collections.OrderedMap[string, any]); ok {
 		result := collections.NewOrderedMapWithSizeHint[string, []string](m.Size())
 		for k, v := range m.Entries() {
@@ -160,6 +166,13 @@ func parseContentMapper(value any) (*contentmapper.Mapper, []*ast.Diagnostic) {
 	} else {
 		errors = append(errors, ast.NewCompilerDiagnostic(diagnostics.Compiler_option_0_requires_a_value_of_type_1, "contentMapper.extensions", "string[]"))
 	}
+	if outputExtensions, ok := v.Get("outputExtensions"); ok && outputExtensions != nil {
+		if values, isStringMap := parseStringStringMapStrict(outputExtensions); isStringMap {
+			mapper.Definition.OutputExtensions = values
+		} else {
+			errors = append(errors, ast.NewCompilerDiagnostic(diagnostics.Compiler_option_0_requires_a_value_of_type_1, "contentMapper.outputExtensions", "object or null"))
+		}
+	}
 	if options, ok := v.Get("options"); ok {
 		if _, isObject := options.(*collections.OrderedMap[string, any]); !isObject {
 			errors = append(errors, ast.NewCompilerDiagnostic(diagnostics.Compiler_option_0_requires_a_value_of_type_1, "contentMapper.options", "object"))
@@ -171,6 +184,22 @@ func parseContentMapper(value any) (*contentmapper.Mapper, []*ast.Diagnostic) {
 		return nil, errors
 	}
 	return mapper, errors
+}
+
+func parseStringStringMapStrict(value any) (map[string]string, bool) {
+	object, ok := value.(*collections.OrderedMap[string, any])
+	if !ok {
+		return nil, false
+	}
+	result := make(map[string]string, object.Size())
+	for key, value := range object.Entries() {
+		str, ok := value.(string)
+		if !ok {
+			return nil, false
+		}
+		result[key] = str
+	}
+	return result, true
 }
 
 // parseStringArrayStrict returns the string slice and true only if value is an array whose

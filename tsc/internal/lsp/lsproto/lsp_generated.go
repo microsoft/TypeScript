@@ -9057,7 +9057,7 @@ func (s *ProfileResult) UnmarshalJSONFrom(dec *json.Decoder) error {
 
 // Parameters for the initializeAPISession request.
 type InitializeAPISessionParams struct {
-	// Optional path to use for API communication. If not provided, a unique path will be generated.
+	// Optional path to use for API communication. For the asynchronous protocol, this is a named pipe path on Windows; on Unix, the path must not exist and will be created as a private directory containing a socket named 'socket'. For the synchronous protocol, this is a named pipe path on Windows or a FIFO prefix on Unix. If not provided, a unique path will be generated.
 	Pipe *string `json:"pipe,omitzero"`
 
 	// Use the synchronous MessagePack API protocol over FIFOs on Unix or a named pipe on Windows.
@@ -9132,6 +9132,9 @@ type ContentMapperManifest struct {
 
 	// Whether the mapper uses project-scoped dynamic configuration.
 	DynamicConfig *bool `json:"dynamicConfig,omitzero"`
+
+	// Default source-to-runtime output extension mappings.
+	OutputExtensions *map[string]string `json:"outputExtensions,omitzero"`
 }
 
 var _ json.UnmarshalerFrom = (*ContentMapperManifest)(nil)

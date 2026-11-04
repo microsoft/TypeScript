@@ -3,6 +3,7 @@ package api
 import (
 	"context"
 	"fmt"
+	"io"
 	"os"
 	"strings"
 
@@ -12,14 +13,19 @@ import (
 	"github.com/microsoft/TypeScript/tsc/internal/lsp/lsproto"
 	"github.com/microsoft/TypeScript/tsc/internal/project"
 	"github.com/microsoft/TypeScript/tsc/internal/tspath"
+	"github.com/microsoft/TypeScript/tsc/internal/vfs"
 	"github.com/microsoft/TypeScript/tsc/internal/vfs/osvfs"
 )
 
 // ServerOptions configures the API server.
 type ServerOptions struct {
+	In                 io.ReadCloser
+	Out                io.WriteCloser
 	Cwd                tspath.RootedDirectoryPath
 	DefaultLibraryPath tspath.RootedDirectoryPath
 	// Transport specifies "stdio", "pipe=<path>", or "sync=<path>".
+	// On Unix, pipe=<path> creates a private directory containing "socket";
+	// the directory must not already exist. sync=<path> uses a FIFO prefix.
 	Transport string
 	// Callbacks specifies which filesystem operations should be delegated
 	// to the client (e.g., "readFile", "fileExists"). Empty means no callbacks.
@@ -38,6 +44,12 @@ type ServerOptions struct {
 	// RunExternalCode allows configured content mappers to execute.
 	RunExternalCode      bool
 	ContentMapperSpawner contentmapper.Spawner
+	// FS replaces the operating-system file system as the server's base file
+	// system, which callbacks fall back to.
+	FS vfs.FS
+	// Tuples, if set, carries synchronous protocol messages directly instead
+	// of using Transport.
+	Tuples TupleTransport
 }
 
 // Server runs an API session using MessagePack or JSON-RPC.
@@ -60,13 +72,25 @@ func NewServer(options *ServerOptions) *Server {
 
 // Run starts the server and blocks until the connection closes.
 func (s *Server) Run(ctx context.Context) error {
-	transport, err := s.createTransport()
-	if err != nil {
-		return fmt.Errorf("failed to create transport: %w", err)
+	var transport ipc.Transport
+	if s.options.Tuples != nil {
+		if s.options.Async {
+			panic("ServerOptions.Tuples requires the synchronous protocol")
+		}
+	} else {
+		t, err := s.createTransport()
+		if err != nil {
+			return fmt.Errorf("failed to create transport: %w", err)
+		}
+		defer t.Close()
+		transport = t
 	}
-	defer transport.Close()
 
-	fs := bundled.WrapFS(osvfs.FS())
+	baseFS := s.options.FS
+	if baseFS == nil {
+		baseFS = osvfs.FS()
+	}
+	fs := bundled.WrapFS(baseFS)
 
 	// Wrap the base FS when callbacks or an explicit case-sensitivity setting are requested.
 	var callbackFS *callbackFS
@@ -94,35 +118,39 @@ func (s *Server) Run(ctx context.Context) error {
 	})
 	defer session.Close()
 
-	// Accept connection from transport
-	rwc, err := transport.Accept(ctx)
-	if err != nil {
-		return fmt.Errorf("failed to accept connection: %w", err)
-	}
-	defer rwc.Close()
-	connectionDone := make(chan struct{})
-	defer close(connectionDone)
-	go func() {
-		select {
-		case <-ctx.Done():
-			_ = rwc.Close()
-		case <-connectionDone:
-			return
-		}
-	}()
-
-	// Create protocol and connection based on async mode
 	var conn ipc.Conn
-	if s.options.Async {
-		protocol := ipc.NewJSONRPCProtocol(rwc)
-		asyncConn := ipc.NewAsyncConnWithProtocol(rwc, protocol, session)
-		asyncConn.SetCollectTiming(s.options.CollectTiming)
-		conn = asyncConn
-	} else {
-		protocol := NewMessagePackProtocol(rwc)
-		syncConn := ipc.NewSyncConn(rwc, protocol, session)
+	if s.options.Tuples != nil {
+		syncConn := ipc.NewSyncConn(nil, NewTupleProtocol(s.options.Tuples), session)
 		syncConn.SetCollectTiming(s.options.CollectTiming)
 		conn = syncConn
+	} else {
+		rwc, err := transport.Accept(ctx)
+		if err != nil {
+			return fmt.Errorf("failed to accept connection: %w", err)
+		}
+		defer rwc.Close()
+		connectionDone := make(chan struct{})
+		defer close(connectionDone)
+		go func() {
+			select {
+			case <-ctx.Done():
+				_ = rwc.Close()
+			case <-connectionDone:
+				return
+			}
+		}()
+
+		if s.options.Async {
+			protocol := ipc.NewJSONRPCProtocol(rwc)
+			asyncConn := ipc.NewAsyncConnWithProtocol(rwc, protocol, session)
+			asyncConn.SetCollectTiming(s.options.CollectTiming)
+			conn = asyncConn
+		} else {
+			protocol := NewMessagePackProtocol(rwc)
+			syncConn := ipc.NewSyncConn(rwc, protocol, session)
+			syncConn.SetCollectTiming(s.options.CollectTiming)
+			conn = syncConn
+		}
 	}
 
 	// If callbacks are enabled, set the connection on the FS
@@ -145,10 +173,14 @@ func (s *Server) createTransport() (ipc.Transport, error) {
 	spec := s.options.Transport
 	switch {
 	case spec == "" || spec == "stdio":
-		return ipc.NewStdioTransport(
-			os.Stdin,  //nolint:forbidigo
-			os.Stdout, //nolint:forbidigo
-		), nil
+		in, out := s.options.In, s.options.Out
+		if in == nil {
+			in = os.Stdin //nolint:forbidigo
+		}
+		if out == nil {
+			out = os.Stdout //nolint:forbidigo
+		}
+		return ipc.NewStdioTransport(in, out), nil
 	case strings.HasPrefix(spec, "pipe="):
 		return ipc.NewPipeTransport(strings.TrimPrefix(spec, "pipe="))
 	case strings.HasPrefix(spec, "sync="):

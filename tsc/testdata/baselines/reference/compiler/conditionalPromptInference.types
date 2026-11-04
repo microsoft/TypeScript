@@ -1,0 +1,50 @@
+//// [tests/cases/compiler/conditionalPromptInference.ts] ////
+
+=== conditionalPromptInference.ts ===
+declare function createPrompt<Value, Config>(
+>createPrompt : <Value, Config>(view: (config: Config, done: (value: Value) => void) => void) => (config: Config) => Value
+
+    view: (config: Config, done: (value: Value) => void) => void,
+>view : (config: Config, done: (value: Value) => void) => void
+>config : Config
+>done : (value: Value) => void
+>value : Value
+
+): (config: Config) => Value;
+>config : Config
+
+const numberPrompt = createPrompt(<Required extends boolean>(
+>numberPrompt : <Required extends boolean>(config: { required?: Required; }) => Required extends true ? number : number | undefined
+>createPrompt(<Required extends boolean>(    config: { required?: Required },    done: (value: Required extends true ? number : number | undefined) => void,) => {}) : <Required extends boolean>(config: { required?: Required; }) => Required extends true ? number : number | undefined
+>createPrompt : <Value, Config>(view: (config: Config, done: (value: Value) => void) => void) => (config: Config) => Value
+><Required extends boolean>(    config: { required?: Required },    done: (value: Required extends true ? number : number | undefined) => void,) => {} : <Required extends boolean>(config: { required?: Required; }, done: (value: Required extends true ? number : number | undefined) => void) => void
+
+    config: { required?: Required },
+>config : { required?: Required; }
+>required : Required | undefined
+
+    done: (value: Required extends true ? number : number | undefined) => void,
+>done : (value: Required extends true ? number : number | undefined) => void
+>value : Required extends true ? number : number | undefined
+>true : true
+
+) => {});
+
+const required: number = numberPrompt<true>({ required: true });
+>required : number
+>numberPrompt<true>({ required: true }) : number
+>numberPrompt : <Required extends boolean>(config: { required?: Required; }) => Required extends true ? number : number | undefined
+>true : true
+>{ required: true } : { required: true; }
+>required : true
+>true : true
+
+const optional: number | undefined = numberPrompt<false>({ required: false });
+>optional : number | undefined
+>numberPrompt<false>({ required: false }) : number | undefined
+>numberPrompt : <Required extends boolean>(config: { required?: Required; }) => Required extends true ? number : number | undefined
+>false : false
+>{ required: false } : { required: false; }
+>required : false
+>false : false
+

@@ -1,0 +1,21 @@
+//// [tests/cases/compiler/dynamicDeclarationDefault.ts] ////
+
+=== profiler.d.ts ===
+declare module "profiler" {
+>"profiler" : Symbol("profiler", Decl(profiler.d.ts, 0, 0))
+
+    export function start(): void;
+>start : Symbol(start, Decl(profiler.d.ts, 0, 27))
+}
+
+=== main.mts ===
+const { default: profiler } = await import("profiler");
+>default : Symbol(default)
+>profiler : Symbol(profiler, Decl(main.mts, 0, 7))
+>"profiler" : Symbol("profiler", Decl(profiler.d.ts, 0, 0))
+
+profiler.start();
+>profiler.start : Symbol(start, Decl(profiler.d.ts, 0, 27))
+>profiler : Symbol(profiler, Decl(main.mts, 0, 7))
+>start : Symbol(start, Decl(profiler.d.ts, 0, 27))
+

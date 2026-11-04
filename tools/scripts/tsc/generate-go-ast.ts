@@ -11,6 +11,7 @@
  *   - VisitEachChild() implementations
  *   - Clone() implementations
  *   - Polymorphic accessor switch statements (Expression(), Type(), etc.)
+ *   - Compact kind-indexed dispatch for shared node accessors
  *   - Is*() type guard functions
  */
 
@@ -129,6 +130,7 @@ function generateHeader(w: CodeWriter) {
     w.write("import (");
     w.push();
     w.write('"sync/atomic"');
+    w.write('"unsafe"');
     w.write("");
     w.write('"github.com/microsoft/TypeScript/tsc/internal/core"');
     w.pop();
@@ -195,9 +197,6 @@ function verifyNodeBaseAtOffsetZero(): void {
         throw new Error(`ast.json does not embed NodeBase at offset zero:\n  ${problems.sort().join("\n  ")}`);
     }
 }
-
-verifyNoDuplicateBases();
-verifyNodeBaseAtOffsetZero();
 
 // A base generated without fields or embeddings is a struct{} marker. Go pads a struct whose last field is
 // zero-size (so the field's address stays in bounds), so markers are embedded first, never last; being
@@ -372,11 +371,37 @@ function generateBaseStructDefs(w: CodeWriter) {
 
 // ── Generate As*() cast methods ────────────────────────────────────────────
 
-function generateAsCast(w: CodeWriter, name: string) {
-    const structName = name;
-    w.write(`func (n *Node) As${name}() *${structName} {`);
+function generateKindCheck(w: CodeWriter, node: NodeType, expression: string, message: string) {
+    const kinds = canonicalNodesByKind().get(node) ?? [];
+    if (kinds.length === 1) {
+        w.write(`if ${expression} != ${kinds[0]} {`);
+        w.push();
+        w.write(`panic("${message}")`);
+        w.pop();
+        w.write("}");
+    }
+    else {
+        w.write(`switch ${expression} {`);
+        w.write(`case ${kinds.join(", ")}:`);
+        w.write("default:");
+        w.push();
+        w.write(`panic("${message}")`);
+        w.pop();
+        w.write("}");
+    }
+}
+
+function writeNodeCastSafety(w: CodeWriter, node: NodeType) {
+    w.write(`// SAFETY: This case only matches kinds allocated as a ${node.name}, which embeds its Node header at offset zero.`);
+}
+
+function generateAsCast(w: CodeWriter, node: NodeType) {
+    const structName = node.name;
+    w.write(`func (n *Node) As${structName}() *${structName} {`);
     w.push();
-    w.write(`return n.data.(*${structName})`);
+    generateKindCheck(w, node, "n.Kind", `Invalid node cast to ${structName}`);
+    w.write(`// SAFETY: The kind check guarantees n was allocated as a ${structName}, which embeds its Node header at offset zero.`);
+    w.write(`return (*${structName})(unsafe.Pointer(n))`);
     w.pop();
     w.write("}");
     w.write("");
@@ -387,6 +412,27 @@ function generateAsCast(w: CodeWriter, name: string) {
 function isNodeFlagsMember(m: MemberInfo): boolean {
     const type = m.type;
     return type.kind === "primitive" && type.name === "NodeFlags";
+}
+
+function canonicalNodesByKind(): Map<NodeType, string[]> {
+    const nodeByKind = new Map<string, NodeType>();
+    for (const node of api.nodes()) {
+        for (const kind of node.allKinds()) {
+            nodeByKind.set(kind.formatGoConstant(), node);
+        }
+    }
+
+    const kindsByNode = new Map<NodeType, string[]>();
+    for (const [kind, node] of nodeByKind) {
+        const kinds = kindsByNode.get(node);
+        if (kinds) {
+            kinds.push(kind);
+        }
+        else {
+            kindsByNode.set(node, [kind]);
+        }
+    }
+    return kindsByNode;
 }
 
 function emitNewFactory(
@@ -403,6 +449,18 @@ function emitNewFactory(
 
     w.write(`func (f *NodeFactory) ${funcName}(${params}) *Node {`);
     w.push();
+
+    if (kindMember) {
+        generateKindCheck(w, node, kindMember.goParamName(), `Invalid node kind for ${structName}`);
+    }
+
+    if (node.name === "ArrowFunction") {
+        w.write("if equalsGreaterThanToken == nil {");
+        w.push();
+        w.write("equalsGreaterThanToken = f.NewToken(KindEqualsGreaterThanToken)");
+        w.pop();
+        w.write("}");
+    }
 
     if (node.arena) {
         w.write(`data := f.${api.uncapitalize(structName)}Arena.New()`);
@@ -425,7 +483,7 @@ function emitNewFactory(
     const kindArg = kindMember ? kindMember.goParamName() : `Kind${kindName}`;
 
     if (nodeFlagsMembers.length > 0) {
-        w.write(`node := f.newNode(${kindArg}, data)`);
+        w.write(`node := f.newNode(${kindArg}, data.AsNode())`);
         for (const m of nodeFlagsMembers) {
             const param = m.goParamName();
             if (m.bitmask) {
@@ -438,7 +496,7 @@ function emitNewFactory(
         w.write("return node");
     }
     else {
-        w.write(`return f.newNode(${kindArg}, data)`);
+        w.write(`return f.newNode(${kindArg}, data.AsNode())`);
     }
 
     w.pop();
@@ -451,7 +509,40 @@ function generateNewFactory(w: CodeWriter, node: NodeType) {
     const members = schemaMembers(node);
     const kindMember = members.find(m => m.isKindParam());
     const nodeFlagsMembers = members.filter(m => isNodeFlagsMember(m));
-    emitNewFactory(w, `New${node.name}`, node.syntaxKindName, structName, node, members, kindMember, nodeFlagsMembers);
+    if (node.name === "Token") {
+        const tokenKinds = new Set(node.allKinds().map(kind => kind.formatGoConstant()));
+        w.write("func (f *NodeFactory) NewToken(kind TokenSyntaxKind) *Node {");
+        w.push();
+        w.write('if !IsTokenKind(kind) { panic("Invalid token kind") }');
+        w.write("switch kind {");
+        for (const [canonicalNode, kinds] of canonicalNodesByKind()) {
+            if (canonicalNode === node) continue;
+            const overlappingKinds = kinds.filter(kind => tokenKinds.has(kind));
+            if (overlappingKinds.length === 0) continue;
+            w.write(`case ${overlappingKinds.join(", ")}:`);
+            w.push();
+            if (canonicalNode.arena) {
+                w.write(`data := f.${api.uncapitalize(canonicalNode.name)}Arena.New()`);
+            }
+            else {
+                w.write(`data := &${canonicalNode.name}{}`);
+            }
+            w.write("return f.newNode(kind, data.AsNode())");
+            w.pop();
+        }
+        w.write("default:");
+        w.push();
+        w.write("data := f.tokenArena.New()");
+        w.write("return f.newNode(kind, data.AsNode())");
+        w.pop();
+        w.write("}");
+        w.pop();
+        w.write("}");
+        w.write("");
+    }
+    else {
+        emitNewFactory(w, `New${node.name}`, node.syntaxKindName, structName, node, members, kindMember, nodeFlagsMembers);
+    }
     for (const alias of node.kindAliases) {
         emitNewFactory(w, `New${alias}`, alias, structName, node, members, kindMember, nodeFlagsMembers);
     }
@@ -604,14 +695,12 @@ function hasForEachChild(node: NodeType): boolean {
 // Generates a (*Node).ForEachChild method that dispatches on node.Kind to the
 // concrete node type's ForEachChild method.
 //
-// This deliberately avoids calling node.data.ForEachChild(v) through the
-// nodeData interface. An interface (or other indirect) call is opaque to escape
-// analysis, which must then assume the visitor `v` escapes; that forces caller
-// closures — and any locals they capture — onto the heap. Dispatching through a
-// Kind switch to a statically-resolved concrete method lets escape analysis
-// prove the visitor does not escape, keeping caller closures on the stack. The
-// integer switch over Kind also compiles to a jump table, making dispatch
-// cheaper than the interface call it replaces.
+// An indirect call is opaque to escape analysis, which must then assume the
+// visitor `v` escapes; that forces caller closures — and any locals they
+// capture — onto the heap. Dispatching through a Kind switch to a
+// statically-resolved concrete method lets escape analysis prove the visitor
+// does not escape, keeping caller closures on the stack. The integer switch
+// over Kind also compiles to a jump table.
 //
 // Kinds whose node has no children fall through to `default` and return false,
 // matching NodeDefault.ForEachChild.
@@ -625,13 +714,253 @@ function generateForEachChildDispatch(w: CodeWriter) {
         if (kinds.length === 0) continue;
         w.write(`case ${kinds.join(", ")}:`);
         w.push();
-        w.write(`return n.data.(*${node.name}).ForEachChild(v)`);
+        writeNodeCastSafety(w, node);
+        w.write(`return (*${node.name})(unsafe.Pointer(n)).ForEachChild(v)`);
         w.pop();
     }
     w.write("default:");
     w.push();
     w.write("return false");
     w.pop();
+    w.write("}");
+    w.pop();
+    w.write("}");
+    w.write("");
+}
+
+function generateVisitEachChildDispatch(w: CodeWriter) {
+    w.write("func (n *Node) VisitEachChild(v *NodeVisitor) *Node {");
+    w.push();
+    w.write("switch n.Kind {");
+    for (const node of api.nodes()) {
+        if (!hasForEachChild(node)) continue;
+        const kinds = node.allKinds().map(kind => kind.formatGoConstant());
+        if (kinds.length === 0) continue;
+        w.write(`case ${kinds.join(", ")}:`);
+        w.push();
+        writeNodeCastSafety(w, node);
+        w.write(`return (*${node.name})(unsafe.Pointer(n)).VisitEachChild(v)`);
+        w.pop();
+    }
+    w.write("default:");
+    w.push();
+    w.write("return n");
+    w.pop();
+    w.write("}");
+    w.pop();
+    w.write("}");
+    w.write("");
+}
+
+function generateCloneDispatch(w: CodeWriter) {
+    w.write("func (n *Node) Clone(f NodeFactoryCoercible) *Node {");
+    w.push();
+    w.write("switch n.Kind {");
+    w.write("case kindFlowSwitchClauseData, kindFlowReduceLabelData:");
+    w.push();
+    w.write("return nil");
+    w.pop();
+    for (const [node, kinds] of canonicalNodesByKind()) {
+        w.write(`case ${kinds.join(", ")}:`);
+        w.push();
+        writeNodeCastSafety(w, node);
+        w.write(`return (*${node.name})(unsafe.Pointer(n)).Clone(f)`);
+        w.pop();
+    }
+    w.write("default:");
+    w.push();
+    w.write("return nil");
+    w.pop();
+    w.write("}");
+    w.pop();
+    w.write("}");
+    w.write("");
+}
+
+function generateSubtreeFactsDispatch(w: CodeWriter) {
+    w.write("func (n *Node) SubtreeFacts() SubtreeFacts {");
+    w.push();
+    w.write("switch n.Kind {");
+    w.write("case kindFlowSwitchClauseData, kindFlowReduceLabelData:");
+    w.push();
+    w.write("return SubtreeFactsNone");
+    w.pop();
+    for (const [node, kinds] of canonicalNodesByKind()) {
+        w.write(`case ${kinds.join(", ")}:`);
+        w.push();
+        if (transitiveBaseKeys(node).has("CompositeBase")) {
+            writeNodeCastSafety(w, node);
+            w.write(`return (*${node.name})(unsafe.Pointer(n)).subtreeFactsWorker(n)`);
+        }
+        else {
+            w.write("return n.computeSubtreeFacts()");
+        }
+        w.pop();
+    }
+    w.write("default:");
+    w.push();
+    w.write("return SubtreeFactsNone");
+    w.pop();
+    w.write("}");
+    w.pop();
+    w.write("}");
+    w.write("");
+}
+
+function generateComputeSubtreeFactsDispatch(w: CodeWriter) {
+    w.write("func (n *Node) computeSubtreeFacts() SubtreeFacts {");
+    w.push();
+    w.write("switch n.Kind {");
+    for (const [node, kinds] of canonicalNodesByKind()) {
+        w.write(`case ${kinds.join(", ")}:`);
+        w.push();
+        writeNodeCastSafety(w, node);
+        w.write(`return (*${node.name})(unsafe.Pointer(n)).computeSubtreeFacts()`);
+        w.pop();
+    }
+    w.write("default:");
+    w.push();
+    w.write("return SubtreeFactsNone");
+    w.pop();
+    w.write("}");
+    w.pop();
+    w.write("}");
+    w.write("");
+}
+
+function generatePropagateSubtreeFactsDispatch(w: CodeWriter) {
+    w.write("func (n *Node) propagateSubtreeFacts() SubtreeFacts {");
+    w.push();
+    w.write("switch n.Kind {");
+    for (const [node, kinds] of canonicalNodesByKind()) {
+        w.write(`case ${kinds.join(", ")}:`);
+        w.push();
+        writeNodeCastSafety(w, node);
+        w.write(`return (*${node.name})(unsafe.Pointer(n)).propagateSubtreeFacts()`);
+        w.pop();
+    }
+    w.write("default:");
+    w.push();
+    w.write("return SubtreeFactsNone");
+    w.pop();
+    w.write("}");
+    w.pop();
+    w.write("}");
+    w.write("");
+}
+
+const NODE_ACCESSORS: { method: string; ret: string; base: string; }[] = [
+    { method: "CaseOrDefaultClauseData", ret: "*CaseOrDefaultClauseBase", base: "CaseOrDefaultClauseBase" },
+    { method: "FlowNodeData", ret: "*FlowNodeBase", base: "FlowNodeBase" },
+    { method: "DeclarationData", ret: "*DeclarationBase", base: "DeclarationBase" },
+    { method: "ExportableData", ret: "*ExportableBase", base: "ExportableBase" },
+    { method: "LocalsContainerData", ret: "*LocalsContainerBase", base: "LocalsContainerBase" },
+    { method: "FunctionLikeData", ret: "*FunctionLikeBase", base: "FunctionLikeBase" },
+    { method: "ClassLikeData", ret: "*ClassLikeBase", base: "ClassLikeBase" },
+    { method: "BodyData", ret: "*BodyBase", base: "BodyBase" },
+    { method: "LiteralLikeData", ret: "*LiteralLikeNodeBase", base: "LiteralLikeNodeBase" },
+    { method: "TemplateLiteralLikeData", ret: "*TemplateLiteralLikeNodeBase", base: "TemplateLiteralLikeNodeBase" },
+];
+
+function transitiveBaseKeys(node: NodeType): Set<string> {
+    const seen = new Set<string>();
+    const visit = (n: NodeType) => {
+        for (const base of n.extends) {
+            if (!seen.has(base.key)) {
+                seen.add(base.key);
+                visit(base);
+            }
+        }
+    };
+    visit(node);
+    return seen;
+}
+
+function generateNodeAccessorDispatch(w: CodeWriter, method: string, ret: string, hasAccessor: (node: NodeType) => boolean) {
+    const cases: { node: NodeType; kinds: string[]; }[] = [];
+    for (const node of api.nodes()) {
+        if (!hasAccessor(node)) continue;
+        const kinds = node.allKinds().map(kind => kind.formatGoConstant());
+        if (kinds.length !== 0) cases.push({ node, kinds });
+    }
+
+    // Large sparse Kind switches become comparison trees. Dense indices let Go
+    // emit jump tables; zero is reserved for kinds without the accessor.
+    const useDispatchTable = cases.length >= 8;
+    const table = `node${method}Dispatch`;
+    if (useDispatchTable) {
+        if (cases.length > 255) {
+            throw new Error(`${method} dispatch exceeds the uint8 index range`);
+        }
+        w.write(`var ${table} = [kindFlowReduceLabelData + 1]uint8{`);
+        w.push();
+        for (const [index, { kinds }] of cases.entries()) {
+            for (const kind of kinds) {
+                w.write(`${kind}: ${index + 1},`);
+            }
+        }
+        w.pop();
+        w.write("}");
+        w.write("");
+    }
+
+    w.write(`func (n *Node) ${method}() ${ret} {`);
+    w.push();
+    if (useDispatchTable) {
+        w.write(`switch ${table}[n.Kind] {`);
+    }
+    else {
+        w.write("switch n.Kind {");
+    }
+    for (const [index, { node, kinds }] of cases.entries()) {
+        w.write(`case ${useDispatchTable ? index + 1 : kinds.join(", ")}:`);
+        w.push();
+        writeNodeCastSafety(w, node);
+        w.write(`return (*${node.name})(unsafe.Pointer(n)).${method}()`);
+        w.pop();
+    }
+    w.write("default:");
+    w.push();
+    w.write("return nil");
+    w.pop();
+    w.write("}");
+    w.pop();
+    w.write("}");
+    w.write("");
+}
+
+function generateNodeAccessors(w: CodeWriter) {
+    for (const { method, ret, base } of NODE_ACCESSORS) {
+        generateNodeAccessorDispatch(w, method, ret, node => transitiveBaseKeys(node).has(base));
+    }
+}
+
+function hasMember(node: NodeType, name: string): boolean {
+    return schemaMembers(node).some(member => member.name === name);
+}
+
+function generateNameDispatch(w: CodeWriter) {
+    generateNodeAccessorDispatch(w, "Name", "*DeclarationName", node => hasMember(node, "name"));
+}
+
+function generateModifiersDispatch(w: CodeWriter) {
+    generateNodeAccessorDispatch(w, "Modifiers", "*ModifierList", node => hasMember(node, "modifiers"));
+}
+
+function generateSetModifiersDispatch(w: CodeWriter) {
+    w.write("func (n *MutableNode) SetModifiers(modifiers *ModifierList) {");
+    w.push();
+    w.write("switch n.Kind {");
+    for (const node of api.nodes()) {
+        if (!hasMember(node, "modifiers")) continue;
+        const kinds = node.allKinds().map(kind => kind.formatGoConstant());
+        if (kinds.length === 0) continue;
+        w.write(`case ${kinds.join(", ")}:`);
+        w.push();
+        writeNodeCastSafety(w, node);
+        w.write(`(*${node.name})(unsafe.Pointer(n)).setModifiers(modifiers)`);
+        w.pop();
+    }
     w.write("}");
     w.pop();
     w.write("}");
@@ -986,13 +1315,61 @@ function generate(): string {
     w.write("");
     generateForEachChildDispatch(w);
 
+    // VisitEachChild dispatch
+    w.write("// ──────────────────────────────────────────────────────────────────────");
+    w.write("// VisitEachChild dispatch");
+    w.write("// ──────────────────────────────────────────────────────────────────────");
+    w.write("");
+    generateVisitEachChildDispatch(w);
+
+    // Clone dispatch
+    w.write("// ──────────────────────────────────────────────────────────────────────");
+    w.write("// Clone dispatch");
+    w.write("// ──────────────────────────────────────────────────────────────────────");
+    w.write("");
+    generateCloneDispatch(w);
+
+    // Subtree facts dispatch
+    w.write("// ──────────────────────────────────────────────────────────────────────");
+    w.write("// Subtree facts dispatch");
+    w.write("// ──────────────────────────────────────────────────────────────────────");
+    w.write("");
+    generateSubtreeFactsDispatch(w);
+    generateComputeSubtreeFactsDispatch(w);
+    generatePropagateSubtreeFactsDispatch(w);
+
+    // Node accessor dispatch
+    w.write("// ──────────────────────────────────────────────────────────────────────");
+    w.write("// Node accessor dispatch");
+    w.write("// ──────────────────────────────────────────────────────────────────────");
+    w.write("");
+    generateNodeAccessors(w);
+
+    // Common node accessor dispatch
+    w.write("// ──────────────────────────────────────────────────────────────────────");
+    w.write("// Common node accessor dispatch");
+    w.write("// ──────────────────────────────────────────────────────────────────────");
+    w.write("");
+    generateNameDispatch(w);
+    generateModifiersDispatch(w);
+    generateSetModifiersDispatch(w);
+
     // As*() casts
     w.write("// ──────────────────────────────────────────────────────────────────────");
     w.write("// As*() cast methods");
     w.write("// ──────────────────────────────────────────────────────────────────────");
     w.write("");
+    w.write("// Every concrete node embeds its header at offset zero.");
+    w.write("var (");
+    w.push();
     for (const node of api.nodes()) {
-        generateAsCast(w, node.name);
+        w.write(`_ [0 - unsafe.Offsetof(${node.name}{}.Node)]byte`);
+    }
+    w.pop();
+    w.write(")");
+    w.write("");
+    for (const node of api.nodes()) {
+        generateAsCast(w, node);
     }
 
     // Kind alias guards
@@ -1125,13 +1502,16 @@ function writeAndFormat(filePath: string, generateContent: () => string, force: 
     console.log(`Wrote ${filePath}`);
 }
 
-export default function main(force = false) {
-    console.log("Generating Go AST code...");
+export const outputs = ["tsc/internal/ast/ast_generated.go", "tsc/internal/ast/kind_generated.go"] as const;
 
-    const outPath = path.join(ROOT, "tsc/internal/ast/ast_generated.go");
+export default function main(force = false) {
+    verifyNoDuplicateBases();
+    verifyNodeBaseAtOffsetZero();
+
+    const outPath = path.join(ROOT, outputs[0]);
     writeAndFormat(outPath, () => generate() + "\n", force);
 
-    const kindOutPath = path.join(ROOT, "tsc/internal/ast/kind_generated.go");
+    const kindOutPath = path.join(ROOT, outputs[1]);
     writeAndFormat(kindOutPath, () => generateKind() + "\n", force);
 }
 

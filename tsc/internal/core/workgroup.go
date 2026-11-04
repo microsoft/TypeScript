@@ -17,16 +17,28 @@ type WorkGroup interface {
 	RunAndWait()
 }
 
-func NewWorkGroup(singleThreaded bool) WorkGroup {
-	if singleThreaded {
+// A concurrency of 1 runs the functions on the goroutine that calls RunAndWait; 0 means no limit.
+func NewWorkGroup(concurrency int) WorkGroup {
+	switch concurrency {
+	case 0:
+		return &parallelWorkGroup{semaphore: UnlimitedSemaphore{}}
+	case 1:
 		return &singleThreadedWorkGroup{}
 	}
-	return &parallelWorkGroup{}
+	return &parallelWorkGroup{semaphore: NewLimitedSemaphore(concurrency)}
+}
+
+func WorkGroupConcurrency(singleThreaded bool) int {
+	if singleThreaded {
+		return 1
+	}
+	return 0
 }
 
 type parallelWorkGroup struct {
-	done atomic.Bool
-	wg   sync.WaitGroup
+	done      atomic.Bool
+	wg        sync.WaitGroup
+	semaphore Semaphore
 }
 
 var _ WorkGroup = (*parallelWorkGroup)(nil)
@@ -37,6 +49,8 @@ func (w *parallelWorkGroup) Queue(fn func()) {
 	}
 
 	w.wg.Go(func() {
+		// Running functions call Queue, so waiting for a slot there would deadlock at the limit.
+		defer w.semaphore.Acquire()()
 		fn()
 	})
 }

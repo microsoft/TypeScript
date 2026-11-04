@@ -127,7 +127,7 @@ func (ch *PseudoChecker) typeFromVariable(declaration *ast.VariableDeclaration) 
 		return NewPseudoTypeDirect(t)
 	}
 	init := declaration.Initializer
-	if init != nil && declaration.Symbol != nil && (len(declaration.Symbol.Declarations) == 1 || core.CountWhere(declaration.Symbol.Declarations, ast.IsVariableDeclaration) == 1) {
+	if init != nil && declaration.Symbol != nil && (len(declaration.Symbol.Declarations()) == 1 || core.CountWhere(declaration.Symbol.Declarations(), ast.IsVariableDeclaration) == 1) {
 		if !isContextuallyTyped(declaration.AsNode()) { // TODO: also should bail on expando declarations; reuse syntactic expando check used in declaration emit
 			// TODO: Strada forces an inference fallback on `const` variables with template expression initializers, to leave space for template literal freshness in the future
 			if ast.IsVarConst(declaration.AsNode()) && ast.IsTemplateExpression(init) {
@@ -144,7 +144,7 @@ func (ch *PseudoChecker) typeFromVariable(declaration *ast.VariableDeclaration) 
 }
 
 func (ch *PseudoChecker) typeFromAccessor(accessor *ast.Node) *PseudoType {
-	accessorDeclarations := ast.GetAllAccessorDeclarationsForDeclaration(accessor, accessor.DeclarationData().Symbol.Declarations)
+	accessorDeclarations := ast.GetAllAccessorDeclarationsForDeclaration(accessor, accessor.DeclarationData().Symbol.Declarations())
 	accessorType := ch.getTypeAnnotationFromAllAccessorDeclarations(accessor, accessorDeclarations)
 	if accessorType != nil && !ast.IsTypePredicateNode(accessorType) {
 		return NewPseudoTypeDirect(accessorType)
@@ -361,7 +361,7 @@ func (ch *PseudoChecker) typeFromObjectLiteral(node *ast.ObjectLiteralExpression
 
 // roughly analogous to typeFromObjectLiteralAccessor in strada
 func (ch *PseudoChecker) getAccessorMember(accessor *ast.Node, name *ast.Node) *PseudoObjectElement {
-	allAccessors := ast.GetAllAccessorDeclarationsForDeclaration(accessor, accessor.Symbol().Declarations) // TODO: node preservation for late-bound accessor pairs?
+	allAccessors := ast.GetAllAccessorDeclarationsForDeclaration(accessor, accessor.Symbol().Declarations()) // TODO: node preservation for late-bound accessor pairs?
 
 	// TODO: handle pseudo-annotations from get accessor return positions?
 	if allAccessors.GetAccessor != nil && allAccessors.GetAccessor.Type != nil &&

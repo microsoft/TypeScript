@@ -1,0 +1,25 @@
+//// [tests/cases/compiler/embeddedNumericCompoundAssignmentAfterExcludedLiterals.ts] ////
+
+=== embeddedNumericCompoundAssignmentAfterExcludedLiterals.ts ===
+function ease(value: number, divisor: number) {
+>ease : Symbol(ease, Decl(embeddedNumericCompoundAssignmentAfterExcludedLiterals.ts, 0, 0))
+>value : Symbol(value, Decl(embeddedNumericCompoundAssignmentAfterExcludedLiterals.ts, 0, 14))
+>divisor : Symbol(divisor, Decl(embeddedNumericCompoundAssignmentAfterExcludedLiterals.ts, 0, 28))
+
+    if (value === 0) return 0;
+>value : Symbol(value, Decl(embeddedNumericCompoundAssignmentAfterExcludedLiterals.ts, 0, 14))
+
+    value /= divisor;
+>value : Symbol(value, Decl(embeddedNumericCompoundAssignmentAfterExcludedLiterals.ts, 0, 14))
+>divisor : Symbol(divisor, Decl(embeddedNumericCompoundAssignmentAfterExcludedLiterals.ts, 0, 28))
+
+    if (value === 2) return 2;
+>value : Symbol(value, Decl(embeddedNumericCompoundAssignmentAfterExcludedLiterals.ts, 0, 14))
+
+    return Math.pow(2, -10 * (value -= 1));
+>Math.pow : Symbol(Math.pow, Decl(lib.es5.d.ts, --, --))
+>Math : Symbol(Math, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2025.float16.d.ts, --, --) ... and 1 more)
+>pow : Symbol(Math.pow, Decl(lib.es5.d.ts, --, --))
+>value : Symbol(value, Decl(embeddedNumericCompoundAssignmentAfterExcludedLiterals.ts, 0, 14))
+}
+

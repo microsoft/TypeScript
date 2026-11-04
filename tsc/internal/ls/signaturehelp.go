@@ -319,7 +319,7 @@ func (l *LanguageService) createSignatureHelpItems(ctx context.Context, candidat
 	// "\xFEtype". There is no meaningful name to show, so render the signature with
 	// no prefix (as we already do when there is no call target symbol) rather than
 	// leaking the internal name.
-	if callTargetSymbol != nil && !strings.HasPrefix(callTargetSymbol.Name, ast.InternalSymbolNamePrefix) {
+	if callTargetSymbol != nil && !strings.HasPrefix(callTargetSymbol.Name(), ast.InternalSymbolNamePrefix) {
 		if useFullPrefix {
 			callTargetDisplayParts.WriteString(c.SymbolToStringEx(callTargetSymbol, sourceFile.AsNode(), ast.SymbolFlagsNone, checker.SymbolFormatFlagsUseAliasDefinedOutsideCurrentScope))
 		} else {
@@ -631,7 +631,7 @@ func (l *LanguageService) itemInfoForParameters(candidateSignature *checker.Sign
 		if len(lists) == 1 {
 			return true
 		}
-		return len(parameterList) != 0 && parameterList[len(parameterList)-1] != nil && (parameterList[len(parameterList)-1].CheckFlags&ast.CheckFlagsRestParameter != 0)
+		return len(parameterList) != 0 && parameterList[len(parameterList)-1] != nil && (parameterList[len(parameterList)-1].CheckFlags()&ast.CheckFlagsRestParameter != 0)
 	}
 
 	result := make([]*signatureHelpItemInfo, len(lists))
@@ -672,11 +672,11 @@ const signatureHelpNodeBuilderFlags = nodebuilder.FlagsOmitParameterModifiers | 
 
 // createSignatureHelpParameterFromLabel creates a signatureHelpParameter from a pre-computed label string.
 func (l *LanguageService) createSignatureHelpParameterFromLabel(parameter *ast.Symbol, label string, c *checker.Checker, docFormat lsproto.MarkupKind) signatureHelpParameter {
-	isOptional := parameter.CheckFlags&ast.CheckFlagsOptionalParameter != 0
-	isRest := parameter.CheckFlags&ast.CheckFlagsRestParameter != 0
+	isOptional := parameter.CheckFlags()&ast.CheckFlagsOptionalParameter != 0
+	isRest := parameter.CheckFlags()&ast.CheckFlagsRestParameter != 0
 	var documentation *lsproto.StringOrMarkupContent
-	if parameter.ValueDeclaration != nil {
-		doc := getDocumentationFromDeclaration(l.documentationLocationMapper(spanmap.FeatureSignatureHelp), c, nil, parameter.ValueDeclaration, nil, docFormat, true /*commentOnly*/)
+	if parameter.ValueDeclaration() != nil {
+		doc := getDocumentationFromDeclaration(l.documentationLocationMapper(spanmap.FeatureSignatureHelp), c, nil, parameter.ValueDeclaration(), nil, docFormat, true /*commentOnly*/)
 		if doc != "" {
 			documentation = &lsproto.StringOrMarkupContent{
 				MarkupContent: &lsproto.MarkupContent{
@@ -1085,21 +1085,17 @@ func getSpreadElementCount(node *ast.SpreadElement, c *checker.Checker) int {
 		if tupleType == nil {
 			return 0
 		}
-		elementFlags := tupleType.ElementFlags()
-		fixedLength := tupleType.FixedLength()
-		if fixedLength == 0 {
-			return 0
-		}
-
-		firstOptionalIndex := core.FindIndex(elementFlags, func(f checker.ElementFlags) bool {
-			return (f&checker.ElementFlagsRequired == 0)
-		})
-		if firstOptionalIndex < 0 {
-			return fixedLength
-		}
-		return firstOptionalIndex
+		return getRequiredTupleElementCount(tupleType)
 	}
 	return 0
+}
+
+func getRequiredTupleElementCount(tupleType *checker.TupleType) int {
+	fixedLength := tupleType.FixedLength()
+	firstOptionalIndex := core.FindIndex(tupleType.ElementInfos()[:fixedLength], func(info checker.TupleElementInfo) bool {
+		return info.TupleElementFlags()&checker.ElementFlagsRequired == 0
+	})
+	return core.IfElse(firstOptionalIndex < 0, fixedLength, firstOptionalIndex)
 }
 
 func getArgumentIndex(node *ast.Node, arguments *ast.NodeList, sourceFile *ast.SourceFile, c *checker.Checker) int {
@@ -1307,8 +1303,8 @@ func tryGetParameterInfo(startingToken *ast.Node, sourceFile *ast.SourceFile, c 
 }
 
 func chooseBetterSymbol(s *ast.Symbol) *ast.Symbol {
-	if s.Name == ast.InternalSymbolNameType {
-		for _, d := range s.Declarations {
+	if s.Name() == ast.InternalSymbolNameType {
+		for _, d := range s.Declarations() {
 			if ast.IsFunctionTypeNode(d) && ast.CanHaveSymbol(d.Parent) {
 				return d.Parent.Symbol()
 			}
