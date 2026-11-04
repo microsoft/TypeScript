@@ -70,11 +70,11 @@ func TestPipeTransportAcceptPreservesReplacement(t *testing.T) {
 		t.Fatal(err)
 	}
 	defer client.Close()
-	if err := <-accepted; err != nil {
-		t.Fatal(err)
+	if acceptErr := <-accepted; acceptErr != nil {
+		t.Fatal(acceptErr)
 	}
-	if _, err := os.Stat(filepath.Dir(socketPath)); !os.IsNotExist(err) {
-		t.Fatalf("socket directory still exists after accept: %v", err)
+	if _, statErr := os.Stat(filepath.Dir(socketPath)); !os.IsNotExist(statErr) {
+		t.Fatalf("socket directory still exists after accept: %v", statErr)
 	}
 
 	replacement, err := NewPipeTransport(filepath.Dir(socketPath))
@@ -82,8 +82,8 @@ func TestPipeTransportAcceptPreservesReplacement(t *testing.T) {
 		t.Fatal(err)
 	}
 	defer replacement.Close()
-	if err := transport.Close(); !errors.Is(err, net.ErrClosed) {
-		t.Fatalf("Close after Accept returned %v, want net.ErrClosed", err)
+	if closeErr := transport.Close(); !errors.Is(closeErr, net.ErrClosed) {
+		t.Fatalf("Close after Accept returned %v, want net.ErrClosed", closeErr)
 	}
 	conn, err := net.DialTimeout("unix", replacement.Path(), time.Second)
 	if err != nil {
