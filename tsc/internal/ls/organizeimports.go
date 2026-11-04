@@ -15,6 +15,7 @@ import (
 	"github.com/microsoft/TypeScript/tsc/internal/printer"
 	"github.com/microsoft/TypeScript/tsc/internal/scanner"
 	"github.com/microsoft/TypeScript/tsc/internal/stringutil"
+	"github.com/microsoft/TypeScript/tsc/internal/tspath"
 )
 
 // OrganizeImports organizes imports by:
@@ -26,7 +27,7 @@ func (l *LanguageService) OrganizeImports(
 	sourceFile *ast.SourceFile,
 	program *compiler.Program,
 	kind lsproto.CodeActionKind,
-) map[string][]*lsproto.TextEdit {
+) map[tspath.RootedFilePath][]*lsproto.TextEdit {
 	changeTracker := change.NewTracker(ctx, program.Options(), l.FormatOptions(), l.converters)
 	shouldSort := kind == lsproto.CodeActionKindSourceSortImportsTs || kind == lsproto.CodeActionKindSourceOrganizeImportsTs
 	shouldCombine := shouldSort
@@ -171,7 +172,7 @@ func organizeImportsWorker(
 		for _, importGroup := range grouped {
 			coalesced := coalesceImportsWorker(importGroup, comparer.moduleSpecifierComparer, specifierComparer, sourceFile, changeTracker)
 			if shouldSort {
-				slices.SortFunc(coalesced, func(a, b *ast.Statement) int {
+				slices.SortStableFunc(coalesced, func(a, b *ast.Statement) int {
 					return lsutil.CompareImportsOrRequireStatements(a, b, comparer.moduleSpecifierComparer)
 				})
 			}
@@ -473,6 +474,21 @@ func coalesceImportsWorker(
 		if categorized.importWithoutClause != nil {
 			coalescedImports = append(coalescedImports, categorized.importWithoutClause)
 		}
+		slices.SortStableFunc(categorized.sourcePhaseImports, func(a, b *ast.Statement) int {
+			a = a.AsImportDeclaration().ImportClause
+			b = b.AsImportDeclaration().ImportClause
+			if a.Name() == nil && b.Name() == nil {
+				return 0
+			}
+			if a.Name() == nil {
+				return 1
+			}
+			if b.Name() == nil {
+				return -1
+			}
+			return specifierComparer(a, b)
+		})
+		coalescedImports = append(coalescedImports, categorized.sourcePhaseImports...)
 
 		factory := ast.NewNodeFactory(ast.NodeFactoryHooks{})
 
@@ -634,6 +650,7 @@ func coalesceImportsWorker(
 
 type categorizedImports struct {
 	importWithoutClause *ast.Statement
+	sourcePhaseImports  []*ast.Statement
 	typeOnlyImports     importGroup
 	regularImports      importGroup
 }
@@ -650,6 +667,7 @@ func (g importGroup) isEmpty() bool {
 
 func getCategorizedImports(importDecls []*ast.Statement) categorizedImports {
 	var importWithoutClause *ast.Statement
+	var sourcePhaseImports []*ast.Statement
 	var typeOnlyImports, regularImports importGroup
 
 	for _, importDecl := range importDecls {
@@ -661,6 +679,10 @@ func getCategorizedImports(importDecls []*ast.Statement) categorizedImports {
 		}
 
 		clause := importDecl.AsImportDeclaration().ImportClause.AsImportClause()
+		if clause.PhaseModifier == ast.KindSourceKeyword {
+			sourcePhaseImports = append(sourcePhaseImports, importDecl)
+			continue
+		}
 		group := &regularImports
 		if clause.IsTypeOnly() {
 			group = &typeOnlyImports
@@ -685,6 +707,7 @@ func getCategorizedImports(importDecls []*ast.Statement) categorizedImports {
 
 	return categorizedImports{
 		importWithoutClause: importWithoutClause,
+		sourcePhaseImports:  sourcePhaseImports,
 		typeOnlyImports:     typeOnlyImports,
 		regularImports:      regularImports,
 	}

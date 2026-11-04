@@ -9,7 +9,6 @@ import (
 )
 
 func TestFormatSpaceAfterTemplateHeadAndMiddle(t *testing.T) {
-	t.Skip("Known failing fourslash test")
 	t.Parallel()
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
 	const content = `const a1 = ` + "`" + `${1}${1}` + "`" + `;

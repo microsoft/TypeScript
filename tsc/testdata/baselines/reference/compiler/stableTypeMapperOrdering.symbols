@@ -1,0 +1,111 @@
+//// [tests/cases/compiler/stableTypeMapperOrdering.ts] ////
+
+=== stableTypeMapperOrdering.ts ===
+// https://github.com/microsoft/TypeScript/issues/64589
+
+interface Endpoint<Name, Params, Middleware, Services> {
+>Endpoint : Symbol(Endpoint, Decl(stableTypeMapperOrdering.ts, 0, 0))
+>Name : Symbol(Name, Decl(stableTypeMapperOrdering.ts, 2, 19))
+>Params : Symbol(Params, Decl(stableTypeMapperOrdering.ts, 2, 24))
+>Middleware : Symbol(Middleware, Decl(stableTypeMapperOrdering.ts, 2, 32))
+>Services : Symbol(Services, Decl(stableTypeMapperOrdering.ts, 2, 44))
+
+  readonly name: Name;
+>name : Symbol(Endpoint.name, Decl(stableTypeMapperOrdering.ts, 2, 56))
+>Name : Symbol(Name, Decl(stableTypeMapperOrdering.ts, 2, 19))
+
+  readonly params: Params;
+>params : Symbol(Endpoint.params, Decl(stableTypeMapperOrdering.ts, 3, 22))
+>Params : Symbol(Params, Decl(stableTypeMapperOrdering.ts, 2, 24))
+
+  readonly middleware: Middleware;
+>middleware : Symbol(Endpoint.middleware, Decl(stableTypeMapperOrdering.ts, 4, 26))
+>Middleware : Symbol(Middleware, Decl(stableTypeMapperOrdering.ts, 2, 32))
+
+  readonly services: Services;
+>services : Symbol(Endpoint.services, Decl(stableTypeMapperOrdering.ts, 5, 34))
+>Services : Symbol(Services, Decl(stableTypeMapperOrdering.ts, 2, 44))
+}
+
+type Same<A, R> = R;
+>Same : Symbol(Same, Decl(stableTypeMapperOrdering.ts, 7, 1))
+>A : Symbol(A, Decl(stableTypeMapperOrdering.ts, 9, 10))
+>R : Symbol(R, Decl(stableTypeMapperOrdering.ts, 9, 12))
+>R : Symbol(R, Decl(stableTypeMapperOrdering.ts, 9, 12))
+
+type AddMiddleware<E, I> =
+>AddMiddleware : Symbol(AddMiddleware, Decl(stableTypeMapperOrdering.ts, 9, 20))
+>E : Symbol(E, Decl(stableTypeMapperOrdering.ts, 11, 19))
+>I : Symbol(I, Decl(stableTypeMapperOrdering.ts, 11, 21))
+
+  E extends Endpoint<infer N, infer P, infer M, infer S>
+>E : Symbol(E, Decl(stableTypeMapperOrdering.ts, 11, 19))
+>Endpoint : Symbol(Endpoint, Decl(stableTypeMapperOrdering.ts, 0, 0))
+>N : Symbol(N, Decl(stableTypeMapperOrdering.ts, 12, 26))
+>P : Symbol(P, Decl(stableTypeMapperOrdering.ts, 12, 35))
+>M : Symbol(M, Decl(stableTypeMapperOrdering.ts, 12, 44))
+>S : Symbol(S, Decl(stableTypeMapperOrdering.ts, 12, 53))
+
+    ? Endpoint<N, P, M | I, Same<I, S>>
+>Endpoint : Symbol(Endpoint, Decl(stableTypeMapperOrdering.ts, 0, 0))
+>N : Symbol(N, Decl(stableTypeMapperOrdering.ts, 12, 26))
+>P : Symbol(P, Decl(stableTypeMapperOrdering.ts, 12, 35))
+>M : Symbol(M, Decl(stableTypeMapperOrdering.ts, 12, 44))
+>I : Symbol(I, Decl(stableTypeMapperOrdering.ts, 11, 21))
+>Same : Symbol(Same, Decl(stableTypeMapperOrdering.ts, 7, 1))
+>I : Symbol(I, Decl(stableTypeMapperOrdering.ts, 11, 21))
+>S : Symbol(S, Decl(stableTypeMapperOrdering.ts, 12, 53))
+
+    : never;
+
+interface Group<Endpoints> {
+>Group : Symbol(Group, Decl(stableTypeMapperOrdering.ts, 14, 12))
+>Endpoints : Symbol(Endpoints, Decl(stableTypeMapperOrdering.ts, 16, 16))
+
+  add<N extends string, P = never>(
+>add : Symbol(Group.add, Decl(stableTypeMapperOrdering.ts, 16, 28))
+>N : Symbol(N, Decl(stableTypeMapperOrdering.ts, 17, 6))
+>P : Symbol(P, Decl(stableTypeMapperOrdering.ts, 17, 23))
+
+    name: N,
+>name : Symbol(name, Decl(stableTypeMapperOrdering.ts, 17, 35))
+>N : Symbol(N, Decl(stableTypeMapperOrdering.ts, 17, 6))
+
+    params?: P,
+>params : Symbol(params, Decl(stableTypeMapperOrdering.ts, 18, 12))
+>P : Symbol(P, Decl(stableTypeMapperOrdering.ts, 17, 23))
+
+  ): Group<Endpoints | Endpoint<N, P, never, never>>;
+>Group : Symbol(Group, Decl(stableTypeMapperOrdering.ts, 14, 12))
+>Endpoints : Symbol(Endpoints, Decl(stableTypeMapperOrdering.ts, 16, 16))
+>Endpoint : Symbol(Endpoint, Decl(stableTypeMapperOrdering.ts, 0, 0))
+>N : Symbol(N, Decl(stableTypeMapperOrdering.ts, 17, 6))
+>P : Symbol(P, Decl(stableTypeMapperOrdering.ts, 17, 23))
+
+  middleware<I>(id: I): Group<AddMiddleware<Endpoints, I>>;
+>middleware : Symbol(Group.middleware, Decl(stableTypeMapperOrdering.ts, 20, 53))
+>I : Symbol(I, Decl(stableTypeMapperOrdering.ts, 21, 13))
+>id : Symbol(id, Decl(stableTypeMapperOrdering.ts, 21, 16))
+>I : Symbol(I, Decl(stableTypeMapperOrdering.ts, 21, 13))
+>Group : Symbol(Group, Decl(stableTypeMapperOrdering.ts, 14, 12))
+>AddMiddleware : Symbol(AddMiddleware, Decl(stableTypeMapperOrdering.ts, 9, 20))
+>Endpoints : Symbol(Endpoints, Decl(stableTypeMapperOrdering.ts, 16, 16))
+>I : Symbol(I, Decl(stableTypeMapperOrdering.ts, 21, 13))
+}
+
+declare const group: Group<never>;
+>group : Symbol(group, Decl(stableTypeMapperOrdering.ts, 24, 13))
+>Group : Symbol(Group, Decl(stableTypeMapperOrdering.ts, 14, 12))
+
+export const result = group.add("a", { id: "" }).add("c").middleware("m" as const);
+>result : Symbol(result, Decl(stableTypeMapperOrdering.ts, 26, 12))
+>group.add("a", { id: "" }).add("c").middleware : Symbol(Group.middleware, Decl(stableTypeMapperOrdering.ts, 20, 53))
+>group.add("a", { id: "" }).add : Symbol(Group.add, Decl(stableTypeMapperOrdering.ts, 16, 28))
+>group.add : Symbol(Group.add, Decl(stableTypeMapperOrdering.ts, 16, 28))
+>group : Symbol(group, Decl(stableTypeMapperOrdering.ts, 24, 13))
+>add : Symbol(Group.add, Decl(stableTypeMapperOrdering.ts, 16, 28))
+>id : Symbol(id, Decl(stableTypeMapperOrdering.ts, 26, 38))
+>add : Symbol(Group.add, Decl(stableTypeMapperOrdering.ts, 16, 28))
+>middleware : Symbol(Group.middleware, Decl(stableTypeMapperOrdering.ts, 20, 53))
+>const : Symbol(const)
+

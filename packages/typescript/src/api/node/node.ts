@@ -5,13 +5,18 @@ import {
     type MappedDiagnosticDirective,
     type Node,
     NodeFlags,
-    type Path,
+    type PathKey,
+    type RootedFilePath,
     SpanMap,
     SpanMapFeature,
     SpanMapKind,
     SyntaxKind,
     TokenFlags,
 } from "../../ast/index.ts";
+import type { API as AsyncAPI } from "../async/api.ts";
+import { tryPathKeyFromCanonical } from "../path.ts";
+import type { CachedSourceFile } from "../sourceFileCache.ts";
+import type { API as SyncAPI } from "../sync/api.ts";
 import type { TimingCollector } from "../timing.ts";
 import { MsgpackReader } from "./msgpack.ts";
 import {
@@ -20,12 +25,16 @@ import {
 } from "./node.generated.ts";
 import {
     NODE_EXTENDED_DATA_MASK,
+    readParseOptionsKey,
+    readSourceFileHash,
+    readSourceFileNodeId,
     type SourceFileInfo,
     type TextDecoder,
 } from "./node.infrastructure.ts";
 import {
     HEADER_OFFSET_EXTENDED_DATA,
     HEADER_OFFSET_NODES,
+    HEADER_OFFSET_SOURCE_FILE_ID,
     HEADER_OFFSET_STRING_TABLE,
     HEADER_OFFSET_STRING_TABLE_OFFSETS,
     HEADER_OFFSET_STRUCTURED_DATA,
@@ -38,7 +47,7 @@ import { Wtf8Decoder } from "./wtf8.ts";
 
 // Re-export everything consumers need from the other two files.
 export { RemoteNode, RemoteNodeList } from "./node.generated.ts";
-export { readParseOptionsKey, readSourceFileHash, RemoteNodeBase } from "./node.infrastructure.ts";
+export { readParseOptionsKey, readSourceFileHash, readSourceFileLease, readSourceFileNodeId, RemoteNodeBase } from "./node.infrastructure.ts";
 
 const sourceFileExtendedDataOffsets = {
     Text: 0,
@@ -75,6 +84,8 @@ for (const [index, offset] of Object.values(sourceFileExtendedDataOffsets).entri
 const NO_STRUCTURED_DATA = 0xFFFFFFFF;
 
 export class RemoteSourceFile extends RemoteNode implements SourceFileInfo {
+    readonly api: AsyncAPI<boolean> | SyncAPI<boolean> | undefined;
+    symbolCache: CachedSourceFile<unknown> | undefined;
     readonly nodes: (RemoteNode | RemoteNodeList)[];
     readonly _offsetNodes: number;
     readonly _offsetStringTableOffsets: number;
@@ -93,11 +104,17 @@ export class RemoteSourceFile extends RemoteNode implements SourceFileInfo {
     private _cachedAmbientModuleNames: readonly string[] | undefined;
     private _cachedSpanMap: SpanMap | undefined;
     private _spanMapRead = false;
-    private _cachedSupplementalSourceFileNames: readonly string[] | undefined;
+    private _cachedSupplementalSourceFileNames: readonly RootedFilePath[] | undefined;
     private _cachedDiagnosticDirectives: readonly MappedDiagnosticDirective[] | undefined;
     private _diagnosticDirectivesRead = false;
+    private _handleFileKey: string | undefined;
 
-    constructor(data: Uint8Array, decoder: TextDecoder, timing?: TimingCollector) {
+    constructor(
+        data: Uint8Array,
+        decoder: TextDecoder,
+        timing?: TimingCollector,
+        api?: AsyncAPI<boolean> | SyncAPI<boolean> | undefined,
+    ) {
         const view = new DataView(data.buffer, data.byteOffset, data.byteLength);
         const offsetNodes = view.getUint32(HEADER_OFFSET_NODES, true);
         super(view, 1, undefined!, undefined!, offsetNodes);
@@ -109,11 +126,43 @@ export class RemoteSourceFile extends RemoteNode implements SourceFileInfo {
         this._offsetStructuredData = view.getUint32(HEADER_OFFSET_STRUCTURED_DATA, true);
         this._decoder = decoder;
         this._timing = timing;
+        this.api = api;
         this.nodes = Array((view.byteLength - offsetNodes) / NODE_LEN);
         this.nodes[1] = this;
         // Every node slot is materializable on demand except the nil sentinel at
         // index 0 and the source-file node at index 1, which is pre-materialized.
         timing?.recordSourceFileFetched(Math.max(0, this.nodes.length - 2));
+    }
+
+    /** @internal */
+    get contentHash(): string {
+        return readSourceFileHash(this.view);
+    }
+
+    /** @internal */
+    get parseOptionsKey(): string {
+        return readParseOptionsKey(this.view);
+    }
+
+    /** @internal */
+    get nodeId(): string {
+        return readSourceFileNodeId(this.view);
+    }
+
+    /**
+     * The file component of node handles sent to the server: `#` followed by the
+     * server's identity for this exact source file.
+     * @internal
+     */
+    get handleFileKey(): string {
+        if (this._handleFileKey === undefined) {
+            const nodeId = this.view.getBigUint64(HEADER_OFFSET_SOURCE_FILE_ID, true);
+            if (nodeId === 0n) {
+                throw new Error("Node has no server source-file identity");
+            }
+            this._handleFileKey = `#${nodeId}`;
+        }
+        return this._handleFileKey;
     }
 
     readFileReferences(structuredDataOffset: number): readonly FileReference[] {
@@ -165,7 +214,6 @@ export class RemoteSourceFile extends RemoteNode implements SourceFileInfo {
         return result;
     }
 
-    /** @internal */
     getOrCreateNodeAtIndex(index: number): Node {
         let node = this.nodes[index];
         if (!node) {
@@ -196,14 +244,26 @@ export class RemoteSourceFile extends RemoteNode implements SourceFileInfo {
         return this._offsetExtendedData + (this.data & NODE_EXTENDED_DATA_MASK);
     }
 
-    get fileName(): string {
-        const stringIndex = this.view.getUint32(this.extendedDataOffset + sourceFileExtendedDataOffsets.FileName, true);
-        return this.getString(stringIndex);
+    private getFileName(stringIndex: number): RootedFilePath {
+        return this.getString(stringIndex) as RootedFilePath;
     }
 
-    get path(): string {
+    private getPathKey(stringIndex: number): PathKey {
+        return this.getString(stringIndex) as PathKey;
+    }
+
+    private readFileNameArray(structuredDataOffset: number): readonly RootedFilePath[] {
+        return this.readStringArray(structuredDataOffset) as readonly RootedFilePath[];
+    }
+
+    get fileName(): RootedFilePath {
+        const stringIndex = this.view.getUint32(this.extendedDataOffset + sourceFileExtendedDataOffsets.FileName, true);
+        return this.getFileName(stringIndex);
+    }
+
+    get path(): PathKey {
         const stringIndex = this.view.getUint32(this.extendedDataOffset + sourceFileExtendedDataOffsets.Path, true);
-        return this.getString(stringIndex);
+        return this.getPathKey(stringIndex);
     }
 
     get languageVariant(): number {
@@ -305,16 +365,16 @@ export class RemoteSourceFile extends RemoteNode implements SourceFileInfo {
         return this._cachedSpanMap = new SpanMap(segments);
     }
 
-    get supplementalSourceFileNames(): readonly string[] | undefined {
+    get supplementalSourceFileNames(): readonly RootedFilePath[] | undefined {
         if (this._cachedSupplementalSourceFileNames !== undefined) return this._cachedSupplementalSourceFileNames;
         const offset = this.view.getUint32(this.extendedDataOffset + sourceFileExtendedDataOffsets.SupplementalSourceFileNames, true);
         if (offset === NO_STRUCTURED_DATA) return undefined;
-        return this._cachedSupplementalSourceFileNames = this.readStringArray(offset);
+        return this._cachedSupplementalSourceFileNames = this.readFileNameArray(offset);
     }
 
-    get canonicalSourceFileName(): string | undefined {
+    get canonicalSourceFileName(): RootedFilePath | undefined {
         const stringIndex = this.view.getUint32(this.extendedDataOffset + sourceFileExtendedDataOffsets.CanonicalSourceFileName, true);
-        return stringIndex === NO_STRUCTURED_DATA ? undefined : this.getString(stringIndex);
+        return stringIndex === NO_STRUCTURED_DATA ? undefined : this.getFileName(stringIndex);
     }
 
     get contentMapper(): string | undefined {
@@ -322,9 +382,9 @@ export class RemoteSourceFile extends RemoteNode implements SourceFileInfo {
         return stringIndex === NO_STRUCTURED_DATA ? undefined : this.getString(stringIndex);
     }
 
-    get virtualFileName(): string | undefined {
+    get virtualFileName(): RootedFilePath | undefined {
         const stringIndex = this.view.getUint32(this.extendedDataOffset + sourceFileExtendedDataOffsets.VirtualFileName, true);
-        return stringIndex === NO_STRUCTURED_DATA ? undefined : this.getString(stringIndex);
+        return stringIndex === NO_STRUCTURED_DATA ? undefined : this.getFileName(stringIndex);
     }
 
     get diagnosticDirectives(): readonly MappedDiagnosticDirective[] | undefined {
@@ -435,14 +495,15 @@ export function findDescendant(root: Node, pos: number, end: number, kind: Synta
 export interface ParsedNodeHandle {
     index: number;
     kind: SyntaxKind;
-    path: Path;
+    sourceFileId: string;
+    path: PathKey;
 }
 
 /**
- * Parse a node handle string into its components.
- * Handle format: "index.kind.path" where path may contain dots.
+ * Parse a compiler-produced node handle into its components.
+ * Handle format: "index.kind.#sourceFileId.path" where path may contain dots.
  */
-export function parseNodeHandle(handle: string): ParsedNodeHandle {
+export function parseNodeHandleFromCompiler(handle: string): ParsedNodeHandle {
     const firstDot = handle.indexOf(".");
     if (firstDot === -1) {
         throw new Error(`Invalid node handle: ${handle}`);
@@ -452,10 +513,36 @@ export function parseNodeHandle(handle: string): ParsedNodeHandle {
         throw new Error(`Invalid node handle: ${handle}`);
     }
 
+    const indexText = handle.slice(0, firstDot);
+    const kindText = handle.slice(firstDot + 1, secondDot);
+    const thirdDot = handle.indexOf(".", secondDot + 1);
+    if (thirdDot === -1) {
+        throw new Error(`Invalid node handle: ${handle}`);
+    }
+    const fileKey = handle.slice(secondDot + 1, thirdDot);
+    const sourceFileId = fileKey.slice(1);
+    const path = handle.slice(thirdDot + 1);
+    const index = Number(indexText);
+    const kind = Number(kindText);
+    const key = tryPathKeyFromCanonical(path);
+    if (
+        !Number.isSafeInteger(index) ||
+        index < 0 ||
+        String(index) !== indexText ||
+        !Number.isSafeInteger(kind) ||
+        kind < 0 ||
+        String(kind) !== kindText ||
+        !/^#[1-9][0-9]*$/.test(fileKey) ||
+        BigInt(sourceFileId) > 0xFFFFFFFFFFFFFFFFn ||
+        key === undefined
+    ) {
+        throw new Error(`Invalid node handle: ${handle}`);
+    }
     return {
-        index: parseInt(handle.slice(0, firstDot), 10),
-        kind: parseInt(handle.slice(firstDot + 1, secondDot), 10) as SyntaxKind,
-        path: handle.slice(secondDot + 1) as Path,
+        index,
+        kind: kind as SyntaxKind,
+        sourceFileId,
+        path: key,
     };
 }
 
@@ -477,5 +564,24 @@ export function getNodeId(node: Node): string {
     if (!(node instanceof RemoteNode)) {
         throw new Error("getNodeId requires a RemoteNode");
     }
-    return node.id;
+    const sourceFile = node["_sourceFile"];
+    if (sourceFile instanceof RemoteSourceFile) {
+        return `${node["index"]}.${node.kind}.${sourceFile.handleFileKey}.${sourceFile.path}`;
+    }
+    throw new Error("Node has no server source-file identity");
+}
+
+/**
+ * Get the compact handle identifying a node in its exact server source-file AST.
+ * @internal
+ */
+export function getNodeRequestHandle(node: Node): string {
+    if (!(node instanceof RemoteNode)) {
+        throw new Error("getNodeRequestHandle requires a RemoteNode");
+    }
+    const sourceFile = node["_sourceFile"];
+    if (sourceFile instanceof RemoteSourceFile) {
+        return `${node["index"]}.${sourceFile.handleFileKey}`;
+    }
+    throw new Error("Node has no server source-file identity");
 }

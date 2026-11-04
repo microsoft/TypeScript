@@ -70,7 +70,7 @@ Output::
 
 [[90mHH:MM:SS AM[0m] Building project 'core/tsconfig.json'...
 
-//// [/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts] *Lib*
+//// [/home/src/tslibs/TS/Lib/lib.es2026.full.d.ts] *Lib*
 /// <reference no-default-lib="true"/>
 interface Boolean {}
 interface Function {}
@@ -97,7 +97,7 @@ declare const console: { log(msg: any): void; };
 export declare const World = "hello";
 //# sourceMappingURL=anotherModule.d.ts.map
 //// [/user/username/projects/sample1/core/anotherModule.d.ts.map] *new* 
-{"version":3,"file":"anotherModule.d.ts","sourceRoot":"","sources":["anotherModule.ts"],"names":[],"mappings":"AAAA,eAAO,MAAM,KAAK,UAAU,CAAC"}
+{"version":3,"file":"anotherModule.d.ts","sources":["anotherModule.ts"],"names":[],"mappings":"AAAA,eAAO,MAAM,KAAK,UAAU,CAAC"}
 //// [/user/username/projects/sample1/core/anotherModule.js] *new* 
 export const World = "hello";
 
@@ -107,7 +107,7 @@ export declare function leftPad(s: string, n: number): string;
 export declare function multiply(a: number, b: number): number;
 //# sourceMappingURL=index.d.ts.map
 //// [/user/username/projects/sample1/core/index.d.ts.map] *new* 
-{"version":3,"file":"index.d.ts","sourceRoot":"","sources":["index.ts"],"names":[],"mappings":"AAAA,eAAO,MAAM,UAAU,EAAE,MAAsB,CAAC;AAChD,wBAAgB,OAAO,CAAC,CAAC,EAAE,MAAM,EAAE,CAAC,EAAE,MAAM,UAAmB;AAC/D,wBAAgB,QAAQ,CAAC,CAAC,EAAE,MAAM,EAAE,CAAC,EAAE,MAAM,UAAmB"}
+{"version":3,"file":"index.d.ts","sources":["index.ts"],"names":[],"mappings":"AAAA,eAAO,MAAM,UAAU,EAAE,MAAsB,CAAC;AAChD,wBAAgB,OAAO,CAAC,CAAC,EAAE,MAAM,EAAE,CAAC,EAAE,MAAM,UAAmB;AAC/D,wBAAgB,QAAQ,CAAC,CAAC,EAAE,MAAM,EAAE,CAAC,EAAE,MAAM,UAAmB"}
 //// [/user/username/projects/sample1/core/index.js] *new* 
 export const someString = "HELLO WORLD";
 export function leftPad(s, n) { return s + n; }
@@ -143,7 +143,7 @@ export function multiply(a, b) { return a * b; }
 
 core/tsconfig.json::
 SemanticDiagnostics::
-*refresh*    /home/src/tslibs/TS/Lib/lib.es2025.full.d.ts
+*refresh*    /home/src/tslibs/TS/Lib/lib.es2026.full.d.ts
 *refresh*    /user/username/projects/sample1/core/anotherModule.ts
 *refresh*    /user/username/projects/sample1/core/index.ts
 *refresh*    /user/username/projects/sample1/core/some_decl.d.ts

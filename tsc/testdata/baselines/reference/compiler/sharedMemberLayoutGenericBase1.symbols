@@ -1,0 +1,67 @@
+//// [tests/cases/compiler/sharedMemberLayoutGenericBase1.ts] ////
+
+=== sharedMemberLayoutGenericBase1.ts ===
+function factory<T extends object>(ctor: new () => T) {
+>factory : Symbol(factory, Decl(sharedMemberLayoutGenericBase1.ts, 0, 0))
+>T : Symbol(T, Decl(sharedMemberLayoutGenericBase1.ts, 0, 17))
+>ctor : Symbol(ctor, Decl(sharedMemberLayoutGenericBase1.ts, 0, 35))
+>T : Symbol(T, Decl(sharedMemberLayoutGenericBase1.ts, 0, 17))
+
+    class Base extends ctor {}
+>Base : Symbol(Base, Decl(sharedMemberLayoutGenericBase1.ts, 0, 55))
+>ctor : Symbol(ctor, Decl(sharedMemberLayoutGenericBase1.ts, 0, 35))
+
+    class Derived extends Base {}
+>Derived : Symbol(Derived, Decl(sharedMemberLayoutGenericBase1.ts, 1, 30))
+>Base : Symbol(Base, Decl(sharedMemberLayoutGenericBase1.ts, 0, 55))
+
+    return Derived;
+>Derived : Symbol(Derived, Decl(sharedMemberLayoutGenericBase1.ts, 1, 30))
+}
+
+class A { a = 1; }
+>A : Symbol(A, Decl(sharedMemberLayoutGenericBase1.ts, 4, 1))
+>a : Symbol(A.a, Decl(sharedMemberLayoutGenericBase1.ts, 6, 9))
+
+class B { b = "b"; }
+>B : Symbol(B, Decl(sharedMemberLayoutGenericBase1.ts, 6, 18))
+>b : Symbol(B.b, Decl(sharedMemberLayoutGenericBase1.ts, 7, 9))
+
+const DA = factory(A);
+>DA : Symbol(DA, Decl(sharedMemberLayoutGenericBase1.ts, 9, 5))
+>factory : Symbol(factory, Decl(sharedMemberLayoutGenericBase1.ts, 0, 0))
+>A : Symbol(A, Decl(sharedMemberLayoutGenericBase1.ts, 4, 1))
+
+const a = new DA();
+>a : Symbol(a, Decl(sharedMemberLayoutGenericBase1.ts, 10, 5))
+>DA : Symbol(DA, Decl(sharedMemberLayoutGenericBase1.ts, 9, 5))
+
+const aValue: number = a.a;
+>aValue : Symbol(aValue, Decl(sharedMemberLayoutGenericBase1.ts, 11, 5))
+>a.a : Symbol(A.a, Decl(sharedMemberLayoutGenericBase1.ts, 6, 9))
+>a : Symbol(a, Decl(sharedMemberLayoutGenericBase1.ts, 10, 5))
+>a : Symbol(A.a, Decl(sharedMemberLayoutGenericBase1.ts, 6, 9))
+
+const aAll = { ...a };
+>aAll : Symbol(aAll, Decl(sharedMemberLayoutGenericBase1.ts, 12, 5))
+>a : Symbol(a, Decl(sharedMemberLayoutGenericBase1.ts, 10, 5))
+
+const DB = factory(B);
+>DB : Symbol(DB, Decl(sharedMemberLayoutGenericBase1.ts, 14, 5))
+>factory : Symbol(factory, Decl(sharedMemberLayoutGenericBase1.ts, 0, 0))
+>B : Symbol(B, Decl(sharedMemberLayoutGenericBase1.ts, 6, 18))
+
+const b = new DB();
+>b : Symbol(b, Decl(sharedMemberLayoutGenericBase1.ts, 15, 5))
+>DB : Symbol(DB, Decl(sharedMemberLayoutGenericBase1.ts, 14, 5))
+
+const bValue: string = b.b;
+>bValue : Symbol(bValue, Decl(sharedMemberLayoutGenericBase1.ts, 16, 5))
+>b.b : Symbol(B.b, Decl(sharedMemberLayoutGenericBase1.ts, 7, 9))
+>b : Symbol(b, Decl(sharedMemberLayoutGenericBase1.ts, 15, 5))
+>b : Symbol(B.b, Decl(sharedMemberLayoutGenericBase1.ts, 7, 9))
+
+const bAll = { ...b };
+>bAll : Symbol(bAll, Decl(sharedMemberLayoutGenericBase1.ts, 17, 5))
+>b : Symbol(b, Decl(sharedMemberLayoutGenericBase1.ts, 15, 5))
+

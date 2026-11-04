@@ -1,0 +1,19 @@
+jsxChildrenExcessPropertySuppression.tsx(9,5): error TS2322: Type '{ depth: number; href: string; children: string; }' is not assignable to type '{ depth: number; }'.
+  Property 'href' does not exist on type '{ depth: number; }'.
+
+
+==== jsxChildrenExcessPropertySuppression.tsx (1 errors) ====
+    declare namespace JSX {
+        interface Element {}
+        interface ElementChildrenAttribute { children: {}; }
+    }
+    declare function Item(props: { depth: number }): JSX.Element;
+    // @ts-ignore
+    <Item
+        depth={0}
+        href=""
+        ~~~~
+!!! error TS2322: Type '{ depth: number; href: string; children: string; }' is not assignable to type '{ depth: number; }'.
+!!! error TS2322:   Property 'href' does not exist on type '{ depth: number; }'.
+    >text</Item>;
+    

@@ -1,0 +1,10 @@
+//// [tests/cases/compiler/noFlakyDiagnosticsUntypedModule2.ts] ////
+
+=== /index.ts ===
+// @ts-expect-error
+import { x } from "./untyped";
+>x : Symbol(x, Decl(index.ts, 1, 8))
+
+x;
+>x : Symbol(x, Decl(index.ts, 1, 8))
+

@@ -24,10 +24,10 @@ const (
 )
 
 type Generator struct {
-	pathOptions               tspath.ComparePathsOptions
+	caseSensitivity           tspath.CaseSensitivity
 	file                      string
 	sourceRoot                string
-	sourcesDirectoryPath      string
+	sourcesDirectoryPath      tspath.RootedDirectoryPath
 	rawSources                []string
 	sources                   []string
 	sourceToSourceIndexMap    map[string]SourceIndex
@@ -56,38 +56,38 @@ type Generator struct {
 type RawSourceMap struct {
 	Version        int       `json:"version"`
 	File           string    `json:"file"`
-	SourceRoot     string    `json:"sourceRoot"`
+	SourceRoot     string    `json:"sourceRoot,omitzero"`
 	Sources        []string  `json:"sources"`
 	Names          []string  `json:"names"`
 	Mappings       string    `json:"mappings"`
 	SourcesContent []*string `json:"sourcesContent,omitzero"`
 }
 
-func NewGenerator(file string, sourceRoot string, sourcesDirectoryPath string, options tspath.ComparePathsOptions) *Generator {
+func NewGenerator(file string, sourceRoot string, sourcesDirectoryPath tspath.RootedDirectoryPath, caseSensitivity tspath.CaseSensitivity) *Generator {
 	return &Generator{
 		file:                 file,
 		sourceRoot:           sourceRoot,
 		sourcesDirectoryPath: sourcesDirectoryPath,
-		pathOptions:          options,
+		caseSensitivity:      caseSensitivity,
 	}
 }
 
 func (gen *Generator) Sources() []string { return gen.rawSources }
 
 // Adds a source to the source map
-func (gen *Generator) AddSource(fileName string) SourceIndex {
+func (gen *Generator) AddSource(fileName tspath.RootedFilePath) SourceIndex {
 	source := tspath.GetRelativePathToDirectoryOrUrl(
-		gen.sourcesDirectoryPath,
-		fileName,
-		true, /*isAbsolutePathAnUrl*/
-		gen.pathOptions,
+		gen.sourcesDirectoryPath.AsString(),
+		fileName.AsString(),
+		true,
+		gen.caseSensitivity,
 	)
 
 	sourceIndex, found := gen.sourceToSourceIndexMap[source]
 	if !found {
 		sourceIndex = SourceIndex(len(gen.sources))
 		gen.sources = append(gen.sources, source)
-		gen.rawSources = append(gen.rawSources, fileName)
+		gen.rawSources = append(gen.rawSources, fileName.AsString())
 		if gen.sourceToSourceIndexMap == nil {
 			gen.sourceToSourceIndexMap = make(map[string]SourceIndex)
 		}

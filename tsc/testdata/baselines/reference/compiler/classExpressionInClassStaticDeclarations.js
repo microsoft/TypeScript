@@ -11,12 +11,3 @@ class C {
 }
 C.D = class extends C {
 };
-
-
-//// [classExpressionInClassStaticDeclarations.d.ts]
-declare class C {
-    static D: {
-        new (): {};
-        D: /*elided*/ any;
-    };
-}

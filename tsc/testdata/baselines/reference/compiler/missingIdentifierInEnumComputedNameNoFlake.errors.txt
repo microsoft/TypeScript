@@ -1,0 +1,13 @@
+missingIdentifierInEnumComputedNameNoFlake.ts(3,5): error TS1164: Computed property names are not allowed in enums.
+missingIdentifierInEnumComputedNameNoFlake.ts(3,6): error TS2304: Cannot find name 'missing'.
+
+
+==== missingIdentifierInEnumComputedNameNoFlake.ts (2 errors) ====
+    // TS2304: Cannot find name 'missing'.
+    export enum Values {
+        [missing.value] = 1,
+        ~~~~~~~~~~~~~~~
+!!! error TS1164: Computed property names are not allowed in enums.
+         ~~~~~~~
+!!! error TS2304: Cannot find name 'missing'.
+    }

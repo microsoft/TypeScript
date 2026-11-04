@@ -1,0 +1,98 @@
+//// [tests/cases/compiler/contextualReturnRecursivePatternArguments.ts] ////
+
+=== contextualReturnRecursivePatternArguments.ts ===
+interface Matcher<Input, Pattern = unknown> {
+>Matcher : Symbol(Matcher, Decl(contextualReturnRecursivePatternArguments.ts, 0, 0))
+>Input : Symbol(Input, Decl(contextualReturnRecursivePatternArguments.ts, 0, 18))
+>Pattern : Symbol(Pattern, Decl(contextualReturnRecursivePatternArguments.ts, 0, 24))
+
+    matcher(): { match(value: Input): boolean; pattern?: Pattern };
+>matcher : Symbol(Matcher.matcher, Decl(contextualReturnRecursivePatternArguments.ts, 0, 45))
+>match : Symbol(match, Decl(contextualReturnRecursivePatternArguments.ts, 1, 16))
+>value : Symbol(value, Decl(contextualReturnRecursivePatternArguments.ts, 1, 23))
+>Input : Symbol(Input, Decl(contextualReturnRecursivePatternArguments.ts, 0, 18))
+>pattern : Symbol(pattern, Decl(contextualReturnRecursivePatternArguments.ts, 1, 46))
+>Pattern : Symbol(Pattern, Decl(contextualReturnRecursivePatternArguments.ts, 0, 24))
+}
+type Pattern<Input> = Input | Matcher<Input> | { [Key in keyof Input]?: Pattern<Input[Key]> };
+>Pattern : Symbol(Pattern, Decl(contextualReturnRecursivePatternArguments.ts, 2, 1))
+>Input : Symbol(Input, Decl(contextualReturnRecursivePatternArguments.ts, 3, 13))
+>Input : Symbol(Input, Decl(contextualReturnRecursivePatternArguments.ts, 3, 13))
+>Matcher : Symbol(Matcher, Decl(contextualReturnRecursivePatternArguments.ts, 0, 0))
+>Input : Symbol(Input, Decl(contextualReturnRecursivePatternArguments.ts, 3, 13))
+>Key : Symbol(Key, Decl(contextualReturnRecursivePatternArguments.ts, 3, 50))
+>Input : Symbol(Input, Decl(contextualReturnRecursivePatternArguments.ts, 3, 13))
+>Pattern : Symbol(Pattern, Decl(contextualReturnRecursivePatternArguments.ts, 2, 1))
+>Input : Symbol(Input, Decl(contextualReturnRecursivePatternArguments.ts, 3, 13))
+>Key : Symbol(Key, Decl(contextualReturnRecursivePatternArguments.ts, 3, 50))
+
+declare function union<Input, Patterns extends readonly [Pattern<Input>, ...Pattern<Input>[]]>(...patterns: Patterns): Matcher<Input, Patterns>;
+>union : Symbol(union, Decl(contextualReturnRecursivePatternArguments.ts, 3, 94))
+>Input : Symbol(Input, Decl(contextualReturnRecursivePatternArguments.ts, 4, 23))
+>Patterns : Symbol(Patterns, Decl(contextualReturnRecursivePatternArguments.ts, 4, 29))
+>Pattern : Symbol(Pattern, Decl(contextualReturnRecursivePatternArguments.ts, 2, 1))
+>Input : Symbol(Input, Decl(contextualReturnRecursivePatternArguments.ts, 4, 23))
+>Pattern : Symbol(Pattern, Decl(contextualReturnRecursivePatternArguments.ts, 2, 1))
+>Input : Symbol(Input, Decl(contextualReturnRecursivePatternArguments.ts, 4, 23))
+>patterns : Symbol(patterns, Decl(contextualReturnRecursivePatternArguments.ts, 4, 95))
+>Patterns : Symbol(Patterns, Decl(contextualReturnRecursivePatternArguments.ts, 4, 29))
+>Matcher : Symbol(Matcher, Decl(contextualReturnRecursivePatternArguments.ts, 0, 0))
+>Input : Symbol(Input, Decl(contextualReturnRecursivePatternArguments.ts, 4, 23))
+>Patterns : Symbol(Patterns, Decl(contextualReturnRecursivePatternArguments.ts, 4, 29))
+
+declare function optional<Input, Value extends unknown extends Input ? unknown : Pattern<Input>>(value: Value): Matcher<Input, Value>;
+>optional : Symbol(optional, Decl(contextualReturnRecursivePatternArguments.ts, 4, 144))
+>Input : Symbol(Input, Decl(contextualReturnRecursivePatternArguments.ts, 5, 26))
+>Value : Symbol(Value, Decl(contextualReturnRecursivePatternArguments.ts, 5, 32))
+>Input : Symbol(Input, Decl(contextualReturnRecursivePatternArguments.ts, 5, 26))
+>Pattern : Symbol(Pattern, Decl(contextualReturnRecursivePatternArguments.ts, 2, 1))
+>Input : Symbol(Input, Decl(contextualReturnRecursivePatternArguments.ts, 5, 26))
+>value : Symbol(value, Decl(contextualReturnRecursivePatternArguments.ts, 5, 97))
+>Value : Symbol(Value, Decl(contextualReturnRecursivePatternArguments.ts, 5, 32))
+>Matcher : Symbol(Matcher, Decl(contextualReturnRecursivePatternArguments.ts, 0, 0))
+>Input : Symbol(Input, Decl(contextualReturnRecursivePatternArguments.ts, 5, 26))
+>Value : Symbol(Value, Decl(contextualReturnRecursivePatternArguments.ts, 5, 32))
+
+declare function intersection<Input, Values extends readonly [Pattern<Input>, ...Pattern<Input>[]]>(...values: Values): Matcher<Input, Values>;
+>intersection : Symbol(intersection, Decl(contextualReturnRecursivePatternArguments.ts, 5, 134))
+>Input : Symbol(Input, Decl(contextualReturnRecursivePatternArguments.ts, 6, 30))
+>Values : Symbol(Values, Decl(contextualReturnRecursivePatternArguments.ts, 6, 36))
+>Pattern : Symbol(Pattern, Decl(contextualReturnRecursivePatternArguments.ts, 2, 1))
+>Input : Symbol(Input, Decl(contextualReturnRecursivePatternArguments.ts, 6, 30))
+>Pattern : Symbol(Pattern, Decl(contextualReturnRecursivePatternArguments.ts, 2, 1))
+>Input : Symbol(Input, Decl(contextualReturnRecursivePatternArguments.ts, 6, 30))
+>values : Symbol(values, Decl(contextualReturnRecursivePatternArguments.ts, 6, 100))
+>Values : Symbol(Values, Decl(contextualReturnRecursivePatternArguments.ts, 6, 36))
+>Matcher : Symbol(Matcher, Decl(contextualReturnRecursivePatternArguments.ts, 0, 0))
+>Input : Symbol(Input, Decl(contextualReturnRecursivePatternArguments.ts, 6, 30))
+>Values : Symbol(Values, Decl(contextualReturnRecursivePatternArguments.ts, 6, 36))
+
+declare function accept<Value extends Pattern<{ type: "a" | "b" }>>(value: Value): void;
+>accept : Symbol(accept, Decl(contextualReturnRecursivePatternArguments.ts, 6, 143))
+>Value : Symbol(Value, Decl(contextualReturnRecursivePatternArguments.ts, 7, 24))
+>Pattern : Symbol(Pattern, Decl(contextualReturnRecursivePatternArguments.ts, 2, 1))
+>type : Symbol(type, Decl(contextualReturnRecursivePatternArguments.ts, 7, 47))
+>value : Symbol(value, Decl(contextualReturnRecursivePatternArguments.ts, 7, 68))
+>Value : Symbol(Value, Decl(contextualReturnRecursivePatternArguments.ts, 7, 24))
+
+accept(optional({
+>accept : Symbol(accept, Decl(contextualReturnRecursivePatternArguments.ts, 6, 143))
+>optional : Symbol(optional, Decl(contextualReturnRecursivePatternArguments.ts, 4, 144))
+
+    // @ts-expect-error
+    type: union("oops"),
+>type : Symbol(type, Decl(contextualReturnRecursivePatternArguments.ts, 9, 17))
+>union : Symbol(union, Decl(contextualReturnRecursivePatternArguments.ts, 3, 94))
+
+}));
+accept(intersection({
+>accept : Symbol(accept, Decl(contextualReturnRecursivePatternArguments.ts, 6, 143))
+>intersection : Symbol(intersection, Decl(contextualReturnRecursivePatternArguments.ts, 5, 134))
+
+    // @ts-expect-error
+    type: union("oops"),
+>type : Symbol(type, Decl(contextualReturnRecursivePatternArguments.ts, 13, 21))
+>union : Symbol(union, Decl(contextualReturnRecursivePatternArguments.ts, 3, 94))
+
+}));
+

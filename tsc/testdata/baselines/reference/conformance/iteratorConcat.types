@@ -1,0 +1,39 @@
+//// [tests/cases/conformance/es2026/iteratorConcat.ts] ////
+
+=== iteratorConcat.ts ===
+const concatenated: IteratorObject<number | string, undefined, unknown> = Iterator.concat(
+>concatenated : IteratorObject<string | number, undefined, unknown>
+>Iterator.concat(    [1, 2],    new Set(["a", "b"]),) : IteratorObject<string | number, undefined, unknown>
+>Iterator.concat : <T extends readonly unknown[] | []>(...iterables: { -readonly [K in keyof T]: Iterable<T[K]> & object; }) => IteratorObject<T[number], undefined, unknown>
+>Iterator : IteratorConstructor
+>concat : <T extends readonly unknown[] | []>(...iterables: { -readonly [K in keyof T]: Iterable<T[K]> & object; }) => IteratorObject<T[number], undefined, unknown>
+
+    [1, 2],
+>[1, 2] : number[]
+>1 : 1
+>2 : 2
+
+    new Set(["a", "b"]),
+>new Set(["a", "b"]) : Set<string>
+>Set : SetConstructor
+>["a", "b"] : string[]
+>"a" : "a"
+>"b" : "b"
+
+);
+
+const empty: IteratorObject<never, undefined, unknown> = Iterator.concat();
+>empty : IteratorObject<never, undefined, unknown>
+>Iterator.concat() : IteratorObject<never, undefined, unknown>
+>Iterator.concat : <T extends readonly unknown[] | []>(...iterables: { -readonly [K in keyof T]: Iterable<T[K]> & object; }) => IteratorObject<T[number], undefined, unknown>
+>Iterator : IteratorConstructor
+>concat : <T extends readonly unknown[] | []>(...iterables: { -readonly [K in keyof T]: Iterable<T[K]> & object; }) => IteratorObject<T[number], undefined, unknown>
+
+// Iterator.concat requires iterable objects; unlike Iterator.from, it does not accept string primitives.
+Iterator.concat("abc");
+>Iterator.concat("abc") : IteratorObject<string, undefined, unknown>
+>Iterator.concat : <T extends readonly unknown[] | []>(...iterables: { -readonly [K in keyof T]: Iterable<T[K]> & object; }) => IteratorObject<T[number], undefined, unknown>
+>Iterator : IteratorConstructor
+>concat : <T extends readonly unknown[] | []>(...iterables: { -readonly [K in keyof T]: Iterable<T[K]> & object; }) => IteratorObject<T[number], undefined, unknown>
+>"abc" : "abc"
+

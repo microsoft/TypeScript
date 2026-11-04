@@ -7,6 +7,7 @@ import (
 
 	"github.com/microsoft/TypeScript/tsc/internal/json"
 	"github.com/microsoft/TypeScript/tsc/internal/tracing"
+	"github.com/microsoft/TypeScript/tsc/internal/tspath"
 	"github.com/microsoft/TypeScript/tsc/internal/vfs/vfstest"
 	"gotest.tools/v3/assert"
 )
@@ -16,7 +17,7 @@ func TestTracerPushPreservesEndArgMutations(t *testing.T) {
 
 	fsys := vfstest.FromMap(fstest.MapFS{
 		"/trace": &fstest.MapFile{Mode: fs.ModeDir},
-	}, true)
+	}, tspath.CaseSensitive)
 
 	tr, err := tracing.StartTracing(fsys, "/trace", "", true /*deterministic*/)
 	assert.NilError(t, err)

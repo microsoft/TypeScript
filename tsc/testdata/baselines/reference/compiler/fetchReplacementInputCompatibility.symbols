@@ -1,0 +1,27 @@
+//// [tests/cases/compiler/fetchReplacementInputCompatibility.ts] ////
+
+=== fetchReplacementInputCompatibility.ts ===
+declare const fetchReplacement: (input: string | URL | Request, init?: RequestInit) => Promise<Response>;
+>fetchReplacement : Symbol(fetchReplacement, Decl(fetchReplacementInputCompatibility.ts, 0, 13))
+>input : Symbol(input, Decl(fetchReplacementInputCompatibility.ts, 0, 33))
+>URL : Symbol(URL, Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --))
+>Request : Symbol(Request, Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --))
+>init : Symbol(init, Decl(fetchReplacementInputCompatibility.ts, 0, 63))
+>RequestInit : Symbol(RequestInit, Decl(lib.dom.d.ts, --, --))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>Response : Symbol(Response, Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --))
+
+const replacement: typeof fetch = fetchReplacement;
+>replacement : Symbol(replacement, Decl(fetchReplacementInputCompatibility.ts, 1, 5))
+>fetch : Symbol(fetch, Decl(lib.dom.d.ts, --, --))
+>fetchReplacement : Symbol(fetchReplacement, Decl(fetchReplacementInputCompatibility.ts, 0, 13))
+
+declare const input: Parameters<typeof fetch>[0];
+>input : Symbol(input, Decl(fetchReplacementInputCompatibility.ts, 3, 13))
+>Parameters : Symbol(Parameters, Decl(lib.es5.d.ts, --, --))
+>fetch : Symbol(fetch, Decl(lib.dom.d.ts, --, --))
+
+fetchReplacement(input);
+>fetchReplacement : Symbol(fetchReplacement, Decl(fetchReplacementInputCompatibility.ts, 0, 13))
+>input : Symbol(input, Decl(fetchReplacementInputCompatibility.ts, 3, 13))
+

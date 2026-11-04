@@ -32,7 +32,7 @@ func getAllDiagnostics(ctx context.Context, program *compiler.Program, file *ast
 func (l *LanguageService) ProvideDiagnostics(ctx context.Context, uri lsproto.DocumentUri) (lsproto.DocumentDiagnosticResponse, error) {
 	program, file := l.getProgramAndFile(uri)
 
-	if l.UserPreferences().EnableValidation.IsFalse() {
+	if l.UserPreferences().ValidateEnabled.IsFalse() {
 		diagnostics := []*lsproto.Diagnostic{}
 		return lsproto.RelatedFullDocumentDiagnosticReportOrUnchangedDocumentDiagnosticReport{
 			FullDocumentDiagnosticReport: &lsproto.RelatedFullDocumentDiagnosticReport{

@@ -1,7 +1,7 @@
 import {
     createScanner,
     SyntaxKind,
-} from "@typescript/typescript/unstable/ast";
+} from "@typescript/typescript/ast";
 import assert from "node:assert";
 import { test } from "node:test";
 

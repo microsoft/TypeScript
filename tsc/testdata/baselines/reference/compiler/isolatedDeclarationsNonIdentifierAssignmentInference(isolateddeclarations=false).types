@@ -1,0 +1,75 @@
+//// [tests/cases/compiler/isolatedDeclarationsNonIdentifierAssignmentInference.ts] ////
+
+=== isolatedDeclarationsNonIdentifierAssignmentInference.ts ===
+declare function foo(): number;
+>foo : () => number
+
+declare function bar(): { x: number };
+>bar : () => { x: number; }
+>x : number
+
+class Base { get y(): number { return 0; } set y(v: number) {} }
+>Base : Base
+>y : number
+>0 : 0
+>y : number
+>v : number
+
+export class C extends Base {
+>C : C
+>Base : Base
+
+    z = 0;
+>z : number
+>0 : 0
+
+    a = { p: (this.z = foo()) };
+>a : { p: number; }
+>{ p: (this.z = foo()) } : { p: number; }
+>p : number
+>(this.z = foo()) : number
+>this.z = foo() : number
+>this.z : number
+>this : this
+>z : number
+>foo() : number
+>foo : () => number
+
+    b = { p: (super.y = foo()) };
+>b : { p: number; }
+>{ p: (super.y = foo()) } : { p: number; }
+>p : number
+>(super.y = foo()) : number
+>super.y = foo() : number
+>super.y : number
+>super : Base
+>y : number
+>foo() : number
+>foo : () => number
+
+    c = { p: (bar().x = foo()) };
+>c : { p: number; }
+>{ p: (bar().x = foo()) } : { p: number; }
+>p : number
+>(bar().x = foo()) : number
+>bar().x = foo() : number
+>bar().x : number
+>bar() : { x: number; }
+>bar : () => { x: number; }
+>x : number
+>foo() : number
+>foo : () => number
+}
+export const d = { p: (bar().x = foo()) };
+>d : { p: number; }
+>{ p: (bar().x = foo()) } : { p: number; }
+>p : number
+>(bar().x = foo()) : number
+>bar().x = foo() : number
+>bar().x : number
+>bar() : { x: number; }
+>bar : () => { x: number; }
+>x : number
+>foo() : number
+>foo : () => number
+

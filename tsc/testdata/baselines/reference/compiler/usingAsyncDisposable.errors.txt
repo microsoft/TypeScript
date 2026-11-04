@@ -1,0 +1,31 @@
+usingAsyncDisposable.ts(6,23): error TS2741: Property '[Symbol.dispose]' is missing in type 'AsyncDisposable' but required in type 'Disposable'.
+  This initializer has a '[Symbol.asyncDispose]()' method. Did you mean to use 'await using'?
+usingAsyncDisposable.ts(7,31): error TS2850: The initializer of a 'using' declaration must be either an object with a '[Symbol.dispose]()' method, or be 'null' or 'undefined'.
+  Property '[Symbol.dispose]' is missing in type 'AsyncDisposable' but required in type 'Disposable'.
+  This initializer has a '[Symbol.asyncDispose]()' method. Did you mean to use 'await using'?
+
+
+==== usingAsyncDisposable.ts (2 errors) ====
+    declare const asyncDisposable: AsyncDisposable;
+    declare const optionalAsyncDisposable: AsyncDisposable | null | undefined;
+    declare const disposable: Disposable;
+    declare const both: AsyncDisposable & Disposable;
+    
+    using asyncResource = asyncDisposable;
+                          ~~~~~~~~~~~~~~~
+!!! error TS2741: Property '[Symbol.dispose]' is missing in type 'AsyncDisposable' but required in type 'Disposable'.
+!!! error TS2741:   This initializer has a '[Symbol.asyncDispose]()' method. Did you mean to use 'await using'?
+!!! related TS2728 lib.esnext.disposable.d.ts:--:--: '[Symbol.dispose]' is declared here.
+    using optionalAsyncResource = optionalAsyncDisposable;
+                                  ~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2850: The initializer of a 'using' declaration must be either an object with a '[Symbol.dispose]()' method, or be 'null' or 'undefined'.
+!!! error TS2850:   Property '[Symbol.dispose]' is missing in type 'AsyncDisposable' but required in type 'Disposable'.
+!!! error TS2850:   This initializer has a '[Symbol.asyncDispose]()' method. Did you mean to use 'await using'?
+!!! related TS2728 lib.esnext.disposable.d.ts:--:--: '[Symbol.dispose]' is declared here.
+    using syncResource = disposable;
+    using eitherResource = both;
+    
+    await using awaitedAsyncResource = asyncDisposable;
+    
+    export {};
+    

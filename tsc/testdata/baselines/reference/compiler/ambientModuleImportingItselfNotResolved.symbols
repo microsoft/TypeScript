@@ -1,0 +1,19 @@
+//// [tests/cases/compiler/ambientModuleImportingItselfNotResolved.ts] ////
+
+=== /a.ts ===
+
+/// <reference path="declarations.d.ts" />
+fooGlobal;
+
+=== /declarations.d.ts ===
+declare module "foo" {
+>"foo" : Symbol(_foo, Decl(declarations.d.ts, 0, 0))
+
+    import _foo from "foo";
+>_foo : Symbol(_foo, Decl(declarations.d.ts, 1, 10))
+
+    export function isFoo(value: unknown): boolean;
+>isFoo : Symbol(isFoo, Decl(declarations.d.ts, 1, 27))
+>value : Symbol(value, Decl(declarations.d.ts, 2, 26))
+}
+

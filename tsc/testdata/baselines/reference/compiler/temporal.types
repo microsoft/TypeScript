@@ -355,8 +355,8 @@
 >ns / 1000n : bigint
 >ns : bigint
 >1000n : 1000n
->((ns % 1000n) < 0n ? -1n : 0n) : 0n | -1n
->(ns % 1000n) < 0n ? -1n : 0n : 0n | -1n
+>((ns % 1000n) < 0n ? -1n : 0n) : -1n | 0n
+>(ns % 1000n) < 0n ? -1n : 0n : -1n | 0n
 >(ns % 1000n) < 0n : boolean
 >(ns % 1000n) : bigint
 >ns % 1000n : bigint
@@ -1310,8 +1310,8 @@
 >ns / 1000n : bigint
 >ns : bigint
 >1000n : 1000n
->((ns % 1000n) < 0n ? -1n : 0n) : 0n | -1n
->(ns % 1000n) < 0n ? -1n : 0n : 0n | -1n
+>((ns % 1000n) < 0n ? -1n : 0n) : -1n | 0n
+>(ns % 1000n) < 0n ? -1n : 0n : -1n | 0n
 >(ns % 1000n) < 0n : boolean
 >(ns % 1000n) : bigint
 >ns % 1000n : bigint

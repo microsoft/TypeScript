@@ -15,6 +15,7 @@ import (
 	"github.com/microsoft/TypeScript/tsc/internal/locale"
 	"github.com/microsoft/TypeScript/tsc/internal/spanmap"
 	"github.com/microsoft/TypeScript/tsc/internal/tsoptions"
+	"github.com/microsoft/TypeScript/tsc/internal/tspath"
 	"github.com/microsoft/TypeScript/tsc/internal/vfs/vfstest"
 	"gotest.tools/v3/assert"
 )
@@ -26,14 +27,14 @@ type fakeContentMapperHost struct {
 func (r fakeContentMapperHost) Refresh() error                                 { return nil }
 func (r fakeContentMapperHost) Identities() ([]string, error)                  { return nil, nil }
 func (r fakeContentMapperHost) Identity(*contentmapper.Mapper) (string, error) { return "test", nil }
-func (r fakeContentMapperHost) WatchedFiles() ([]string, error)                { return nil, nil }
+func (r fakeContentMapperHost) WatchedFiles() ([]tspath.RootedFilePath, error) { return nil, nil }
 func (r fakeContentMapperHost) Diagnostics() []contentmapper.OptionDiagnostic {
 	return nil
 }
 func (r fakeContentMapperHost) Close() error { return nil }
 
 func (r fakeContentMapperHost) Transform(mapper *contentmapper.Mapper, request contentmapper.Request) (contentmapper.Result, error) {
-	return r.transform(request.FileName, request.Content)
+	return r.transform(request.FileName.AsString(), request.Content)
 }
 
 func newContentMapperProgram(t *testing.T, contentMapperProject contentmapper.Project, files map[string]string, rootFiles []string) *compiler.Program {
@@ -49,22 +50,17 @@ func newContentMapperProgramWithOptions(t *testing.T, contentMapperProject conte
 	if !bundled.Embedded {
 		t.Skip("bundled files are not embedded")
 	}
-	fs := vfstest.FromMap[any](nil, false /*useCaseSensitiveFileNames*/)
+	fs := vfstest.FromMap[any](nil, tspath.CaseInsensitive /*caseSensitivity*/)
 	fs = bundled.WrapFS(fs)
 	for name, content := range files {
-		_ = fs.WriteFile(name, content)
+		_ = fs.WriteFile(tspath.RootedFilePathFromNormalized(name), content)
 	}
 
-	config := &tsoptions.ParsedCommandLine{
-		ParsedConfig: &tsoptions.ParsedOptions{
-			FileNames:       rootFiles,
-			CompilerOptions: options,
-			ContentMappers:  []*contentmapper.Mapper{{Definition: contentmapper.Definition{Package: "vue", Extensions: []string{".vue"}}, Manifest: contentmapper.Manifest{Name: "vue-mapper", Version: "1.0.0"}}},
-		},
-	}
+	config := tsoptions.NewParsedCommandLine(options, testFileNames(rootFiles...), nil, "/", fs.CaseSensitivity())
+	config.ParsedConfig.ContentMappers = []*contentmapper.Mapper{{Package: "vue", Extensions: []string{".vue"}, Name: "vue-mapper", Version: "1.0.0"}}
 	return compiler.NewProgram(compiler.ProgramOptions{
 		Config: config,
-		Host:   compiler.NewCompilerHost("/src", fs, bundled.LibPath(), nil, nil, contentMapperProject),
+		Host:   compiler.NewCompilerHost(fs, bundled.LibPath(), nil, nil, contentMapperProject),
 		// Load files on the calling goroutine for deterministic diagnostics ordering.
 		SingleThreaded: core.TSTrue,
 	})
@@ -88,7 +84,129 @@ func TestContentMapperVirtualExtensionSetsImpliedNodeFormat(t *testing.T) {
 
 	file := program.GetSourceFile("/src/Component.vue")
 	assert.Assert(t, file != nil)
-	assert.Equal(t, program.GetSourceFileMetaData(file.Path()).ImpliedNodeFormat, core.ResolutionModeESM)
+	assert.Equal(t, program.GetSourceFileMetaData(file.PathKey()).ImpliedNodeFormat, core.ResolutionModeESM)
+}
+
+func TestContentMapperDirectivesPreserveIncrementalGlobals(t *testing.T) {
+	t.Parallel()
+	for _, policy := range []ast.MappedDiagnosticDirectivePolicy{
+		ast.MappedDiagnosticDirectivePolicyIgnore,
+		ast.MappedDiagnosticDirectivePolicyExpect,
+	} {
+		t.Run(core.IfElse(policy == ast.MappedDiagnosticDirectivePolicyExpect, "expect", "ignore"), func(t *testing.T) {
+			t.Parallel()
+			const text = "export function values() { function* generator() { yield 1; } }"
+			program := newContentMapperProgramWithOptions(t, fakeContentMapperHost{
+				transform: func(fileName string, content string) (contentmapper.Result, error) {
+					// The virtual source is unchanged; the directive covers the entire file, including offset zero.
+					return contentmapper.Result{
+						Text:             content,
+						VirtualExtension: ".ts",
+						Mappings: spanmap.New([]spanmap.Segment{{
+							OriginalEnd: core.TextPos(len(content)),
+							VirtualEnd:  core.TextPos(len(content)),
+							Kind:        spanmap.KindVerbatim,
+							Features:    spanmap.FeatureAll,
+						}}),
+						DiagnosticDirectives: []ast.MappedDiagnosticDirective{{
+							VirtualRange:      core.NewTextRange(0, len(content)),
+							OriginalRange:     core.NewTextRange(0, len(content)),
+							Policy:            policy,
+							Source:            "vue",
+							UnusedCode:        2578,
+							UnusedMessageText: "Unused mapped expect directive.",
+						}},
+					}, nil
+				},
+			}, map[string]string{"/src/Component.vue": text}, []string{"/src/Component.vue"}, &core.CompilerOptions{
+				Lib:              []string{"lib.es5.d.ts"},
+				SkipLibCheck:     core.TSTrue,
+				Module:           core.ModuleKindESNext,
+				ModuleResolution: core.ModuleResolutionKindBundler,
+			})
+			assert.Equal(t, len(program.GetGlobalDiagnostics(t.Context())), 0)
+			file := program.GetSourceFile("/src/Component.vue")
+			diags := program.GetSemanticDiagnosticsForIncremental(t.Context(), []*ast.SourceFile{file})[file]
+			var globals, unused int
+			for _, diag := range diags {
+				if diag.File() == nil {
+					assert.Equal(t, diag.Code(), diagnostics.Cannot_find_global_type_0.Code())
+					assert.Equal(t, diag.MessageArgs()[0], "IterableIterator")
+					globals++
+				} else {
+					assert.Equal(t, diag.File(), file)
+					assert.Equal(t, diag.Source(), "vue")
+					assert.Equal(t, diag.Code(), int32(2578))
+					unused++
+				}
+			}
+			assert.Equal(t, globals, 1)
+			assert.Equal(t, unused, core.IfElse(policy == ast.MappedDiagnosticDirectivePolicyExpect, 1, 0))
+		})
+	}
+}
+
+func TestCompositeProjectContentMapperSupplementalRoots(t *testing.T) {
+	t.Parallel()
+	contentMapperHost := fakeContentMapperHost{transform: func(fileName string, content string) (contentmapper.Result, error) {
+		return contentmapper.Result{
+			Text:             "export {};",
+			VirtualExtension: ".ts",
+			Mappings:         spanmap.New(nil),
+			Supplemental: []contentmapper.MappedResult{{
+				Text:             "export {};",
+				VirtualExtension: ".mts",
+				Mappings:         spanmap.New(nil),
+			}},
+		}, nil
+	}}
+	options := func() *core.CompilerOptions {
+		return &core.CompilerOptions{
+			Composite:        core.TSTrue,
+			SkipLibCheck:     core.TSTrue,
+			Module:           core.ModuleKindESNext,
+			ModuleResolution: core.ModuleResolutionKindBundler,
+		}
+	}
+
+	t.Run("listed canonical root", func(t *testing.T) {
+		t.Parallel()
+		program := newContentMapperProgramWithOptions(
+			t,
+			contentMapperHost,
+			map[string]string{"/src/Component.vue": "<template />"},
+			[]string{"/src/Component.vue"},
+			options(),
+		)
+
+		programDiagnostics := collectContentMapperDiagnostics(program)
+		hasUnlistedFileDiagnostic := slices.ContainsFunc(programDiagnostics, func(diagnostic *ast.Diagnostic) bool {
+			return diagnostic.Code() == diagnostics.File_0_is_not_listed_within_the_file_list_of_project_1_Projects_must_list_all_files_or_use_an_include_pattern.Code()
+		})
+		assert.Assert(t, !hasUnlistedFileDiagnostic, "supplemental output should be covered by its listed canonical root: %v", programDiagnostics)
+	})
+
+	t.Run("imported canonical file", func(t *testing.T) {
+		t.Parallel()
+		program := newContentMapperProgramWithOptions(
+			t,
+			contentMapperHost,
+			map[string]string{
+				"/src/index.ts":      `import "./Component.vue";`,
+				"/src/Component.vue": "<template />",
+			},
+			[]string{"/src/index.ts"},
+			options(),
+		)
+
+		unlistedFileDiagnosticCount := 0
+		for _, diagnostic := range collectContentMapperDiagnostics(program) {
+			if diagnostic.Code() == diagnostics.File_0_is_not_listed_within_the_file_list_of_project_1_Projects_must_list_all_files_or_use_an_include_pattern.Code() {
+				unlistedFileDiagnosticCount++
+			}
+		}
+		assert.Equal(t, unlistedFileDiagnosticCount, 2)
+	})
 }
 
 func collectContentMapperDiagnostics(program *compiler.Program) []*ast.Diagnostic {

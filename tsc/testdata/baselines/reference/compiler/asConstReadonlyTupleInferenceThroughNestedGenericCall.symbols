@@ -1,0 +1,164 @@
+//// [tests/cases/compiler/asConstReadonlyTupleInferenceThroughNestedGenericCall.ts] ////
+
+=== asConstReadonlyTupleInferenceThroughNestedGenericCall.ts ===
+// regression test for https://github.com/microsoft/TypeScript/issues/63666
+
+interface Box<T> {
+>Box : Symbol(Box, Decl(asConstReadonlyTupleInferenceThroughNestedGenericCall.ts, 0, 0))
+>T : Symbol(T, Decl(asConstReadonlyTupleInferenceThroughNestedGenericCall.ts, 2, 14))
+
+    readonly value: T;
+>value : Symbol(Box.value, Decl(asConstReadonlyTupleInferenceThroughNestedGenericCall.ts, 2, 18))
+>T : Symbol(T, Decl(asConstReadonlyTupleInferenceThroughNestedGenericCall.ts, 2, 14))
+}
+type Content<R> = R extends Box<infer U> ? U : never;
+>Content : Symbol(Content, Decl(asConstReadonlyTupleInferenceThroughNestedGenericCall.ts, 4, 1))
+>R : Symbol(R, Decl(asConstReadonlyTupleInferenceThroughNestedGenericCall.ts, 5, 13))
+>R : Symbol(R, Decl(asConstReadonlyTupleInferenceThroughNestedGenericCall.ts, 5, 13))
+>Box : Symbol(Box, Decl(asConstReadonlyTupleInferenceThroughNestedGenericCall.ts, 0, 0))
+>U : Symbol(U, Decl(asConstReadonlyTupleInferenceThroughNestedGenericCall.ts, 5, 37))
+>U : Symbol(U, Decl(asConstReadonlyTupleInferenceThroughNestedGenericCall.ts, 5, 37))
+
+type BoxLike<R> = Box<Content<R>>;
+>BoxLike : Symbol(BoxLike, Decl(asConstReadonlyTupleInferenceThroughNestedGenericCall.ts, 5, 53))
+>R : Symbol(R, Decl(asConstReadonlyTupleInferenceThroughNestedGenericCall.ts, 6, 13))
+>Box : Symbol(Box, Decl(asConstReadonlyTupleInferenceThroughNestedGenericCall.ts, 0, 0))
+>Content : Symbol(Content, Decl(asConstReadonlyTupleInferenceThroughNestedGenericCall.ts, 4, 1))
+>R : Symbol(R, Decl(asConstReadonlyTupleInferenceThroughNestedGenericCall.ts, 6, 13))
+
+declare function box<T>(value: T): Box<T>;
+>box : Symbol(box, Decl(asConstReadonlyTupleInferenceThroughNestedGenericCall.ts, 6, 34))
+>T : Symbol(T, Decl(asConstReadonlyTupleInferenceThroughNestedGenericCall.ts, 8, 21))
+>value : Symbol(value, Decl(asConstReadonlyTupleInferenceThroughNestedGenericCall.ts, 8, 24))
+>T : Symbol(T, Decl(asConstReadonlyTupleInferenceThroughNestedGenericCall.ts, 8, 21))
+>Box : Symbol(Box, Decl(asConstReadonlyTupleInferenceThroughNestedGenericCall.ts, 0, 0))
+>T : Symbol(T, Decl(asConstReadonlyTupleInferenceThroughNestedGenericCall.ts, 8, 21))
+
+declare function f<R extends BoxLike<R>>(v: R): R;
+>f : Symbol(f, Decl(asConstReadonlyTupleInferenceThroughNestedGenericCall.ts, 8, 42))
+>R : Symbol(R, Decl(asConstReadonlyTupleInferenceThroughNestedGenericCall.ts, 9, 19))
+>BoxLike : Symbol(BoxLike, Decl(asConstReadonlyTupleInferenceThroughNestedGenericCall.ts, 5, 53))
+>R : Symbol(R, Decl(asConstReadonlyTupleInferenceThroughNestedGenericCall.ts, 9, 19))
+>v : Symbol(v, Decl(asConstReadonlyTupleInferenceThroughNestedGenericCall.ts, 9, 41))
+>R : Symbol(R, Decl(asConstReadonlyTupleInferenceThroughNestedGenericCall.ts, 9, 19))
+>R : Symbol(R, Decl(asConstReadonlyTupleInferenceThroughNestedGenericCall.ts, 9, 19))
+
+declare function f2<R extends BoxLike<R>>(body: () => R): R;
+>f2 : Symbol(f2, Decl(asConstReadonlyTupleInferenceThroughNestedGenericCall.ts, 9, 50))
+>R : Symbol(R, Decl(asConstReadonlyTupleInferenceThroughNestedGenericCall.ts, 10, 20))
+>BoxLike : Symbol(BoxLike, Decl(asConstReadonlyTupleInferenceThroughNestedGenericCall.ts, 5, 53))
+>R : Symbol(R, Decl(asConstReadonlyTupleInferenceThroughNestedGenericCall.ts, 10, 20))
+>body : Symbol(body, Decl(asConstReadonlyTupleInferenceThroughNestedGenericCall.ts, 10, 42))
+>R : Symbol(R, Decl(asConstReadonlyTupleInferenceThroughNestedGenericCall.ts, 10, 20))
+>R : Symbol(R, Decl(asConstReadonlyTupleInferenceThroughNestedGenericCall.ts, 10, 20))
+
+declare function id<T>(x: T): T;
+>id : Symbol(id, Decl(asConstReadonlyTupleInferenceThroughNestedGenericCall.ts, 10, 60))
+>T : Symbol(T, Decl(asConstReadonlyTupleInferenceThroughNestedGenericCall.ts, 11, 20))
+>x : Symbol(x, Decl(asConstReadonlyTupleInferenceThroughNestedGenericCall.ts, 11, 23))
+>T : Symbol(T, Decl(asConstReadonlyTupleInferenceThroughNestedGenericCall.ts, 11, 20))
+>T : Symbol(T, Decl(asConstReadonlyTupleInferenceThroughNestedGenericCall.ts, 11, 20))
+
+declare const a: { a: number };
+>a : Symbol(a, Decl(asConstReadonlyTupleInferenceThroughNestedGenericCall.ts, 13, 13))
+>a : Symbol(a, Decl(asConstReadonlyTupleInferenceThroughNestedGenericCall.ts, 13, 18))
+
+declare const b: { b: number };
+>b : Symbol(b, Decl(asConstReadonlyTupleInferenceThroughNestedGenericCall.ts, 14, 13))
+>b : Symbol(b, Decl(asConstReadonlyTupleInferenceThroughNestedGenericCall.ts, 14, 18))
+
+declare const neverValue: never;
+>neverValue : Symbol(neverValue, Decl(asConstReadonlyTupleInferenceThroughNestedGenericCall.ts, 15, 13))
+
+// nested generic call under a conditional-type-based F-bounded constraint
+const r1 = f(box([a, b] as const));
+>r1 : Symbol(r1, Decl(asConstReadonlyTupleInferenceThroughNestedGenericCall.ts, 18, 5))
+>f : Symbol(f, Decl(asConstReadonlyTupleInferenceThroughNestedGenericCall.ts, 8, 42))
+>box : Symbol(box, Decl(asConstReadonlyTupleInferenceThroughNestedGenericCall.ts, 6, 34))
+>a : Symbol(a, Decl(asConstReadonlyTupleInferenceThroughNestedGenericCall.ts, 13, 13))
+>b : Symbol(b, Decl(asConstReadonlyTupleInferenceThroughNestedGenericCall.ts, 14, 13))
+>const : Symbol(const)
+
+// @ts-expect-error
+const check1: Box<[{ a: number }, { b: number }]> = r1;
+>check1 : Symbol(check1, Decl(asConstReadonlyTupleInferenceThroughNestedGenericCall.ts, 20, 5))
+>Box : Symbol(Box, Decl(asConstReadonlyTupleInferenceThroughNestedGenericCall.ts, 0, 0))
+>a : Symbol(a, Decl(asConstReadonlyTupleInferenceThroughNestedGenericCall.ts, 20, 20))
+>b : Symbol(b, Decl(asConstReadonlyTupleInferenceThroughNestedGenericCall.ts, 20, 35))
+>r1 : Symbol(r1, Decl(asConstReadonlyTupleInferenceThroughNestedGenericCall.ts, 18, 5))
+
+const ok1: Box<readonly [{ a: number }, { b: number }]> = r1;
+>ok1 : Symbol(ok1, Decl(asConstReadonlyTupleInferenceThroughNestedGenericCall.ts, 21, 5))
+>Box : Symbol(Box, Decl(asConstReadonlyTupleInferenceThroughNestedGenericCall.ts, 0, 0))
+>a : Symbol(a, Decl(asConstReadonlyTupleInferenceThroughNestedGenericCall.ts, 21, 26))
+>b : Symbol(b, Decl(asConstReadonlyTupleInferenceThroughNestedGenericCall.ts, 21, 41))
+>r1 : Symbol(r1, Decl(asConstReadonlyTupleInferenceThroughNestedGenericCall.ts, 18, 5))
+
+// context-sensitive callback
+const r2 = f2(() => box([a, b] as const));
+>r2 : Symbol(r2, Decl(asConstReadonlyTupleInferenceThroughNestedGenericCall.ts, 24, 5))
+>f2 : Symbol(f2, Decl(asConstReadonlyTupleInferenceThroughNestedGenericCall.ts, 9, 50))
+>box : Symbol(box, Decl(asConstReadonlyTupleInferenceThroughNestedGenericCall.ts, 6, 34))
+>a : Symbol(a, Decl(asConstReadonlyTupleInferenceThroughNestedGenericCall.ts, 13, 13))
+>b : Symbol(b, Decl(asConstReadonlyTupleInferenceThroughNestedGenericCall.ts, 14, 13))
+>const : Symbol(const)
+
+const ok2: Box<readonly [{ a: number }, { b: number }]> = r2;
+>ok2 : Symbol(ok2, Decl(asConstReadonlyTupleInferenceThroughNestedGenericCall.ts, 25, 5))
+>Box : Symbol(Box, Decl(asConstReadonlyTupleInferenceThroughNestedGenericCall.ts, 0, 0))
+>a : Symbol(a, Decl(asConstReadonlyTupleInferenceThroughNestedGenericCall.ts, 25, 26))
+>b : Symbol(b, Decl(asConstReadonlyTupleInferenceThroughNestedGenericCall.ts, 25, 41))
+>r2 : Symbol(r2, Decl(asConstReadonlyTupleInferenceThroughNestedGenericCall.ts, 24, 5))
+
+// direct literal and non-circular constraints keep readonly
+const r3 = f({ value: [a, b] as const });
+>r3 : Symbol(r3, Decl(asConstReadonlyTupleInferenceThroughNestedGenericCall.ts, 28, 5))
+>f : Symbol(f, Decl(asConstReadonlyTupleInferenceThroughNestedGenericCall.ts, 8, 42))
+>value : Symbol(value, Decl(asConstReadonlyTupleInferenceThroughNestedGenericCall.ts, 28, 14))
+>a : Symbol(a, Decl(asConstReadonlyTupleInferenceThroughNestedGenericCall.ts, 13, 13))
+>b : Symbol(b, Decl(asConstReadonlyTupleInferenceThroughNestedGenericCall.ts, 14, 13))
+>const : Symbol(const)
+
+declare function g<R extends Box<unknown>>(v: R): R;
+>g : Symbol(g, Decl(asConstReadonlyTupleInferenceThroughNestedGenericCall.ts, 28, 41))
+>R : Symbol(R, Decl(asConstReadonlyTupleInferenceThroughNestedGenericCall.ts, 29, 19))
+>Box : Symbol(Box, Decl(asConstReadonlyTupleInferenceThroughNestedGenericCall.ts, 0, 0))
+>v : Symbol(v, Decl(asConstReadonlyTupleInferenceThroughNestedGenericCall.ts, 29, 43))
+>R : Symbol(R, Decl(asConstReadonlyTupleInferenceThroughNestedGenericCall.ts, 29, 19))
+>R : Symbol(R, Decl(asConstReadonlyTupleInferenceThroughNestedGenericCall.ts, 29, 19))
+
+const r4 = g(box([a, b] as const));
+>r4 : Symbol(r4, Decl(asConstReadonlyTupleInferenceThroughNestedGenericCall.ts, 30, 5))
+>g : Symbol(g, Decl(asConstReadonlyTupleInferenceThroughNestedGenericCall.ts, 28, 41))
+>box : Symbol(box, Decl(asConstReadonlyTupleInferenceThroughNestedGenericCall.ts, 6, 34))
+>a : Symbol(a, Decl(asConstReadonlyTupleInferenceThroughNestedGenericCall.ts, 13, 13))
+>b : Symbol(b, Decl(asConstReadonlyTupleInferenceThroughNestedGenericCall.ts, 14, 13))
+>const : Symbol(const)
+
+declare function h<R extends Box<R["value"]>>(v: R): R;
+>h : Symbol(h, Decl(asConstReadonlyTupleInferenceThroughNestedGenericCall.ts, 30, 35))
+>R : Symbol(R, Decl(asConstReadonlyTupleInferenceThroughNestedGenericCall.ts, 31, 19))
+>Box : Symbol(Box, Decl(asConstReadonlyTupleInferenceThroughNestedGenericCall.ts, 0, 0))
+>R : Symbol(R, Decl(asConstReadonlyTupleInferenceThroughNestedGenericCall.ts, 31, 19))
+>v : Symbol(v, Decl(asConstReadonlyTupleInferenceThroughNestedGenericCall.ts, 31, 46))
+>R : Symbol(R, Decl(asConstReadonlyTupleInferenceThroughNestedGenericCall.ts, 31, 19))
+>R : Symbol(R, Decl(asConstReadonlyTupleInferenceThroughNestedGenericCall.ts, 31, 19))
+
+const r5 = h(box([a, b] as const));
+>r5 : Symbol(r5, Decl(asConstReadonlyTupleInferenceThroughNestedGenericCall.ts, 32, 5))
+>h : Symbol(h, Decl(asConstReadonlyTupleInferenceThroughNestedGenericCall.ts, 30, 35))
+>box : Symbol(box, Decl(asConstReadonlyTupleInferenceThroughNestedGenericCall.ts, 6, 34))
+>a : Symbol(a, Decl(asConstReadonlyTupleInferenceThroughNestedGenericCall.ts, 13, 13))
+>b : Symbol(b, Decl(asConstReadonlyTupleInferenceThroughNestedGenericCall.ts, 14, 13))
+>const : Symbol(const)
+
+// a contextual type of never must not make the const tuple mutable
+// @ts-expect-error
+const z = id<typeof neverValue>([a, b] as const);
+>z : Symbol(z, Decl(asConstReadonlyTupleInferenceThroughNestedGenericCall.ts, 36, 5))
+>id : Symbol(id, Decl(asConstReadonlyTupleInferenceThroughNestedGenericCall.ts, 10, 60))
+>neverValue : Symbol(neverValue, Decl(asConstReadonlyTupleInferenceThroughNestedGenericCall.ts, 15, 13))
+>a : Symbol(a, Decl(asConstReadonlyTupleInferenceThroughNestedGenericCall.ts, 13, 13))
+>b : Symbol(b, Decl(asConstReadonlyTupleInferenceThroughNestedGenericCall.ts, 14, 13))
+>const : Symbol(const)
+

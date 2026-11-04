@@ -43,16 +43,6 @@ func getParseCommandLineWorkerDiagnostics(decls []*CommandLineOption) *ParseComm
 	}
 }
 
-var watchOptionsDidYouMeanDiagnostics = &ParseCommandLineWorkerDiagnostics{
-	didYouMean: DidYouMeanOptionsDiagnostics{
-		// no alternateMode
-		OptionDeclarations:          OptionsForWatch,
-		UnknownOptionDiagnostic:     diagnostics.Unknown_watch_option_0,
-		UnknownDidYouMeanDiagnostic: diagnostics.Unknown_watch_option_0_Did_you_mean_1,
-	},
-	OptionTypeMismatchDiagnostic: diagnostics.Watch_option_0_requires_a_value_of_type_1,
-}
-
 var buildOptionsDidYouMeanDiagnostics = &ParseCommandLineWorkerDiagnostics{
 	didYouMean: DidYouMeanOptionsDiagnostics{
 		alternateMode: &AlternateModeDiagnostics{

@@ -54,3 +54,22 @@ export const { m: [n, o], p: { q } } = foo();
 >foo() : any
 >foo : () => any
 
+export const [...[r, s]] = foo();
+>r : any
+>s : any
+>foo() : any
+>foo : () => any
+
+export const [...{ length: t }] = foo();
+>length : any
+>t : any
+>foo() : any
+>foo : () => any
+
+export const [...[u = 1, , ...[v]]] = foo();
+>u : any
+>1 : 1
+>v : any
+>foo() : any
+>foo : () => any
+

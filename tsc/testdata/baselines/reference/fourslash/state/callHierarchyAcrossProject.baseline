@@ -1,4 +1,4 @@
-UseCaseSensitiveFileNames: true
+CaseSensitivity: true
 //// [/projects/container/compositeExec/index.ts] *new* 
 import { createModelReference } from "../lib";
 function openElementsAtEditor2() {

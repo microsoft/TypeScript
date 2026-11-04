@@ -24,5 +24,5 @@ const d = bar()`
 	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
 	defer done()
 	f.GoToFile(t, "/b.js")
-	f.VerifyBaselineInlayHints(t, nil /*span*/, &lsutil.UserPreferences{InlayHints: lsutil.InlayHintsPreferences{IncludeInlayVariableTypeHints: core.TSTrue, IncludeInlayFunctionLikeReturnTypeHints: core.TSTrue}})
+	f.VerifyBaselineInlayHints(t, nil /*span*/, &lsutil.UserPreferences{IncludeInlayVariableTypeHints: core.TSTrue, IncludeInlayFunctionLikeReturnTypeHints: core.TSTrue})
 }

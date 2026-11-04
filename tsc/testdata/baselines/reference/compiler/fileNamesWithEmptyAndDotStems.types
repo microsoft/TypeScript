@@ -1,0 +1,38 @@
+//// [tests/cases/compiler/fileNamesWithEmptyAndDotStems.ts] ////
+
+=== /src/empty/.ts ===
+export const empty = 1;
+>empty : 1
+>1 : 1
+
+=== /src/dot/..ts ===
+export const dot = 2;
+>dot : 2
+>2 : 2
+
+=== /src/parent/...ts ===
+export const parent = 3;
+>parent : 3
+>3 : 3
+
+=== /src/decl/.d.ts ===
+export declare const declared: number;
+>declared : number
+
+=== /src/main.ts ===
+import { declared } from "./decl/.js";
+>declared : number
+
+export { empty } from "./empty/.js";
+>empty : 1
+
+export { dot } from "./dot/..js";
+>dot : 2
+
+export { parent } from "./parent/...js";
+>parent : 3
+
+export const fromDeclaration = declared;
+>fromDeclaration : number
+>declared : number
+

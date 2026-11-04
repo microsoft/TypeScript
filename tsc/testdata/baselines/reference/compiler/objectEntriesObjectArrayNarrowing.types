@@ -1,0 +1,30 @@
+//// [tests/cases/compiler/objectEntriesObjectArrayNarrowing.ts] ////
+
+=== objectEntriesObjectArrayNarrowing.ts ===
+declare const record: object;
+>record : object
+
+for (const [, value] of Object.entries(record)) {
+>value : any
+>Object.entries(record) : [string, any][]
+>Object.entries : { <T>(o: { [s: string]: T; } | ArrayLike<T>): [string, T][]; (o: {}): [string, any][]; }
+>Object : ObjectConstructor
+>entries : { <T>(o: { [s: string]: T; } | ArrayLike<T>): [string, T][]; (o: {}): [string, any][]; }
+>record : object
+
+    if (Array.isArray(value)) {
+>Array.isArray(value) : boolean
+>Array.isArray : (arg: any) => arg is any[]
+>Array : ArrayConstructor
+>isArray : (arg: any) => arg is any[]
+>value : any
+
+        value.forEach(() => {});
+>value.forEach(() => {}) : void
+>value.forEach : (callbackfn: (value: any, index: number, array: any[]) => void, thisArg?: any) => void
+>value : any[]
+>forEach : (callbackfn: (value: any, index: number, array: any[]) => void, thisArg?: any) => void
+>() => {} : () => void
+    }
+}
+

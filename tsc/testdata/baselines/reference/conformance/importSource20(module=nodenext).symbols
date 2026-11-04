@@ -1,0 +1,32 @@
+//// [tests/cases/conformance/importSource/importSource20.ts] ////
+
+=== index.mts ===
+import source a from "pkg";
+>a : Symbol(a, Decl(index.mts, 0, 6))
+
+import { value } from "pkg";
+>value : Symbol(value, Decl(index.mts, 1, 8))
+
+const b: AbstractModuleSource = a;
+>b : Symbol(b, Decl(index.mts, 2, 5))
+>AbstractModuleSource : Symbol(AbstractModuleSource, Decl(lib.esnext.modulesource.d.ts, --, --))
+>a : Symbol(a, Decl(index.mts, 0, 6))
+
+const c: number = value;
+>c : Symbol(c, Decl(index.mts, 3, 5))
+>value : Symbol(value, Decl(index.mts, 1, 8))
+
+export const d = import.source("pkg");
+>d : Symbol(d, Decl(index.mts, 4, 12))
+
+export const e = import("pkg");
+>e : Symbol(e, Decl(index.mts, 5, 12))
+>"pkg" : Symbol("pkg", Decl(index.d.ts, 0, 0))
+
+export { a };
+>a : Symbol(a, Decl(index.mts, 6, 8))
+
+=== node_modules/pkg/index.d.ts ===
+export const value: number;
+>value : Symbol(value, Decl(index.d.ts, 0, 12))
+

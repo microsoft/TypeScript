@@ -51,13 +51,11 @@ const p: Pointable = {
 	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
 	defer done()
 	f.VerifyBaselineCodeLens(t, &lsutil.UserPreferences{
-		CodeLens: lsutil.CodeLensUserPreferences{
-			ReferencesCodeLensEnabled:            core.TSTrue,
-			ReferencesCodeLensShowOnAllFunctions: core.TSTrue,
+		ReferencesCodeLensEnabled:            core.TSTrue,
+		ReferencesCodeLensShowOnAllFunctions: core.TSTrue,
 
-			ImplementationsCodeLensEnabled:                core.TSTrue,
-			ImplementationsCodeLensShowOnInterfaceMethods: core.TSTrue,
-			ImplementationsCodeLensShowOnAllClassMethods:  core.TSTrue,
-		},
+		ImplementationsCodeLensEnabled:                core.TSTrue,
+		ImplementationsCodeLensShowOnInterfaceMethods: core.TSTrue,
+		ImplementationsCodeLensShowOnAllClassMethods:  core.TSTrue,
 	})
 }

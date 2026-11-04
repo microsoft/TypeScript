@@ -40,15 +40,13 @@ func TestFormat(t *testing.T) {
 	t.Run("format checker.ts", func(t *testing.T) {
 		t.Parallel()
 		ctx := format.WithFormatCodeSettings(t.Context(), lsutil.FormatCodeSettings{
-			EditorSettings: lsutil.EditorSettings{
-				TabSize:                4,
-				IndentSize:             4,
-				BaseIndentSize:         4,
-				NewLineCharacter:       "\n",
-				ConvertTabsToSpaces:    core.TSTrue,
-				IndentStyle:            lsutil.IndentStyleSmart,
-				TrimTrailingWhitespace: core.TSTrue,
-			},
+			TabSize:                         4,
+			IndentSize:                      4,
+			BaseIndentSize:                  4,
+			NewLineCharacter:                "\n",
+			ConvertTabsToSpaces:             core.TSTrue,
+			IndentStyle:                     lsutil.IndentStyleSmart,
+			TrimTrailingWhitespace:          core.TSTrue,
 			InsertSpaceBeforeTypeAnnotation: core.TSTrue,
 		}, "\n")
 		filePath := filepath.Join(repo.TestDataPath(), "fixtures/compiler/checker.ts")
@@ -57,7 +55,7 @@ func TestFormat(t *testing.T) {
 		text := string(fileContent)
 		sourceFile := parser.ParseSourceFile(ast.SourceFileParseOptions{
 			FileName: "/checker.ts",
-			Path:     "/checker.ts",
+			PathKey:  "/checker.ts",
 		}, text, core.ScriptKindTS)
 		edits := format.FormatDocument(ctx, sourceFile)
 		newText := applyBulkEdits(text, edits)
@@ -68,15 +66,13 @@ func TestFormat(t *testing.T) {
 
 func BenchmarkFormat(b *testing.B) {
 	ctx := format.WithFormatCodeSettings(b.Context(), lsutil.FormatCodeSettings{
-		EditorSettings: lsutil.EditorSettings{
-			TabSize:                4,
-			IndentSize:             4,
-			BaseIndentSize:         4,
-			NewLineCharacter:       "\n",
-			ConvertTabsToSpaces:    core.TSTrue,
-			IndentStyle:            lsutil.IndentStyleSmart,
-			TrimTrailingWhitespace: core.TSTrue,
-		},
+		TabSize:                         4,
+		IndentSize:                      4,
+		BaseIndentSize:                  4,
+		NewLineCharacter:                "\n",
+		ConvertTabsToSpaces:             core.TSTrue,
+		IndentStyle:                     lsutil.IndentStyleSmart,
+		TrimTrailingWhitespace:          core.TSTrue,
 		InsertSpaceBeforeTypeAnnotation: core.TSTrue,
 	}, "\n")
 	filePath := filepath.Join(repo.TestDataPath(), "fixtures/compiler/checker.ts")
@@ -85,7 +81,7 @@ func BenchmarkFormat(b *testing.B) {
 	text := string(fileContent)
 	sourceFile := parser.ParseSourceFile(ast.SourceFileParseOptions{
 		FileName: "/checker.ts",
-		Path:     "/checker.ts",
+		PathKey:  "/checker.ts",
 	}, text, core.ScriptKindTS)
 
 	b.Run("format checker.ts", func(b *testing.B) {

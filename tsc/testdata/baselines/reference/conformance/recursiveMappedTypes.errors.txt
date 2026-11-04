@@ -4,7 +4,7 @@ recursiveMappedTypes.ts(7,6): error TS2456: Type alias 'Recurse1' circularly ref
 recursiveMappedTypes.ts(8,11): error TS2313: Type parameter 'K' has a circular constraint.
 recursiveMappedTypes.ts(11,6): error TS2456: Type alias 'Recurse2' circularly references itself.
 recursiveMappedTypes.ts(12,11): error TS2313: Type parameter 'K' has a circular constraint.
-recursiveMappedTypes.ts(20,19): error TS2589: Type instantiation is excessively deep and possibly infinite.
+recursiveMappedTypes.ts(20,19): error TS5114: Instantiations of type 'Circular' appear infinitely circular.
 recursiveMappedTypes.ts(73,5): error TS2502: '"each"' is referenced directly or indirectly in its own type annotation.
 recursiveMappedTypes.ts(79,1): error TS2615: Type of property '"each"' circularly references itself in mapped type '{ [P in keyof ListWidget]: undefined extends ListWidget[P] ? never : P; }'.
 
@@ -44,7 +44,7 @@ recursiveMappedTypes.ts(79,1): error TS2615: Type of property '"each"' circularl
     
     function foo(arg: Circular<tup>): tup {
                       ~~~~~~~~~~~~~
-!!! error TS2589: Type instantiation is excessively deep and possibly infinite.
+!!! error TS5114: Instantiations of type 'Circular' appear infinitely circular.
       return arg;
     }
     

@@ -18,7 +18,7 @@ import (
 func (l *LanguageService) ProvideCodeLenses(ctx context.Context, documentURI lsproto.DocumentUri) (lsproto.CodeLensResponse, error) {
 	_, file := l.getProgramAndFile(documentURI)
 
-	userPrefs := l.UserPreferences().CodeLens
+	userPrefs := l.UserPreferences().CodeLensUserPreferences
 	if !userPrefs.ReferencesCodeLensEnabled.IsTrue() && !userPrefs.ImplementationsCodeLensEnabled.IsTrue() {
 		return lsproto.CodeLensResponse{}, nil
 	}

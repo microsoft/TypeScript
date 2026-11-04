@@ -1,0 +1,140 @@
+//// [tests/cases/compiler/recursiveTypeInferenceReturnTypeConstraint.ts] ////
+
+=== recursiveTypeInferenceReturnTypeConstraint.ts ===
+// A pure return type inference stays filtered by its constraint in a recursive call resolution.
+
+interface Schema<O> { readonly out: O }
+>Schema : Symbol(Schema, Decl(recursiveTypeInferenceReturnTypeConstraint.ts, 0, 0))
+>O : Symbol(O, Decl(recursiveTypeInferenceReturnTypeConstraint.ts, 2, 17))
+>out : Symbol(Schema.out, Decl(recursiveTypeInferenceReturnTypeConstraint.ts, 2, 21))
+>O : Symbol(O, Decl(recursiveTypeInferenceReturnTypeConstraint.ts, 2, 17))
+
+type Shape = Record<string, Schema<any>>;
+>Shape : Symbol(Shape, Decl(recursiveTypeInferenceReturnTypeConstraint.ts, 2, 39))
+>Record : Symbol(Record, Decl(lib.es5.d.ts, --, --))
+>Schema : Symbol(Schema, Decl(recursiveTypeInferenceReturnTypeConstraint.ts, 0, 0))
+
+type Lookup = { x: 1; dflt: 2 };
+>Lookup : Symbol(Lookup, Decl(recursiveTypeInferenceReturnTypeConstraint.ts, 3, 41))
+>x : Symbol(x, Decl(recursiveTypeInferenceReturnTypeConstraint.ts, 4, 15))
+>dflt : Symbol(dflt, Decl(recursiveTypeInferenceReturnTypeConstraint.ts, 4, 21))
+
+declare function object<S extends Shape, P extends keyof Lookup>(shape: S): Schema<{ [K in keyof S]: S[K]["out"] }> & { p: P; q: Lookup[P]; f: (x: P) => void };
+>object : Symbol(object, Decl(recursiveTypeInferenceReturnTypeConstraint.ts, 4, 32))
+>S : Symbol(S, Decl(recursiveTypeInferenceReturnTypeConstraint.ts, 5, 24))
+>Shape : Symbol(Shape, Decl(recursiveTypeInferenceReturnTypeConstraint.ts, 2, 39))
+>P : Symbol(P, Decl(recursiveTypeInferenceReturnTypeConstraint.ts, 5, 40))
+>Lookup : Symbol(Lookup, Decl(recursiveTypeInferenceReturnTypeConstraint.ts, 3, 41))
+>shape : Symbol(shape, Decl(recursiveTypeInferenceReturnTypeConstraint.ts, 5, 65))
+>S : Symbol(S, Decl(recursiveTypeInferenceReturnTypeConstraint.ts, 5, 24))
+>Schema : Symbol(Schema, Decl(recursiveTypeInferenceReturnTypeConstraint.ts, 0, 0))
+>K : Symbol(K, Decl(recursiveTypeInferenceReturnTypeConstraint.ts, 5, 86))
+>S : Symbol(S, Decl(recursiveTypeInferenceReturnTypeConstraint.ts, 5, 24))
+>S : Symbol(S, Decl(recursiveTypeInferenceReturnTypeConstraint.ts, 5, 24))
+>K : Symbol(K, Decl(recursiveTypeInferenceReturnTypeConstraint.ts, 5, 86))
+>p : Symbol(p, Decl(recursiveTypeInferenceReturnTypeConstraint.ts, 5, 119))
+>P : Symbol(P, Decl(recursiveTypeInferenceReturnTypeConstraint.ts, 5, 40))
+>q : Symbol(q, Decl(recursiveTypeInferenceReturnTypeConstraint.ts, 5, 125))
+>Lookup : Symbol(Lookup, Decl(recursiveTypeInferenceReturnTypeConstraint.ts, 3, 41))
+>P : Symbol(P, Decl(recursiveTypeInferenceReturnTypeConstraint.ts, 5, 40))
+>f : Symbol(f, Decl(recursiveTypeInferenceReturnTypeConstraint.ts, 5, 139))
+>x : Symbol(x, Decl(recursiveTypeInferenceReturnTypeConstraint.ts, 5, 144))
+>P : Symbol(P, Decl(recursiveTypeInferenceReturnTypeConstraint.ts, 5, 40))
+
+declare const str: Schema<string>;
+>str : Symbol(str, Decl(recursiveTypeInferenceReturnTypeConstraint.ts, 6, 13))
+>Schema : Symbol(Schema, Decl(recursiveTypeInferenceReturnTypeConstraint.ts, 0, 0))
+
+const u = object({ name: str }) satisfies { p: number | "x" };
+>u : Symbol(u, Decl(recursiveTypeInferenceReturnTypeConstraint.ts, 8, 5))
+>object : Symbol(object, Decl(recursiveTypeInferenceReturnTypeConstraint.ts, 4, 32))
+>name : Symbol(name, Decl(recursiveTypeInferenceReturnTypeConstraint.ts, 8, 18))
+>str : Symbol(str, Decl(recursiveTypeInferenceReturnTypeConstraint.ts, 6, 13))
+>p : Symbol(p, Decl(recursiveTypeInferenceReturnTypeConstraint.ts, 8, 43))
+
+u.f(42); // error
+>u.f : Symbol(f, Decl(recursiveTypeInferenceReturnTypeConstraint.ts, 5, 139))
+>u : Symbol(u, Decl(recursiveTypeInferenceReturnTypeConstraint.ts, 8, 5))
+>f : Symbol(f, Decl(recursiveTypeInferenceReturnTypeConstraint.ts, 5, 139))
+
+const t = object({ name: str, get rec() { return object({ inner: t }); } }) satisfies { p: number | "x" };
+>t : Symbol(t, Decl(recursiveTypeInferenceReturnTypeConstraint.ts, 11, 5))
+>object : Symbol(object, Decl(recursiveTypeInferenceReturnTypeConstraint.ts, 4, 32))
+>name : Symbol(name, Decl(recursiveTypeInferenceReturnTypeConstraint.ts, 11, 18))
+>str : Symbol(str, Decl(recursiveTypeInferenceReturnTypeConstraint.ts, 6, 13))
+>rec : Symbol(rec, Decl(recursiveTypeInferenceReturnTypeConstraint.ts, 11, 29))
+>object : Symbol(object, Decl(recursiveTypeInferenceReturnTypeConstraint.ts, 4, 32))
+>inner : Symbol(inner, Decl(recursiveTypeInferenceReturnTypeConstraint.ts, 11, 57))
+>t : Symbol(t, Decl(recursiveTypeInferenceReturnTypeConstraint.ts, 11, 5))
+>p : Symbol(p, Decl(recursiveTypeInferenceReturnTypeConstraint.ts, 11, 87))
+
+t.f(42); // error
+>t.f : Symbol(f, Decl(recursiveTypeInferenceReturnTypeConstraint.ts, 5, 139))
+>t : Symbol(t, Decl(recursiveTypeInferenceReturnTypeConstraint.ts, 11, 5))
+>f : Symbol(f, Decl(recursiveTypeInferenceReturnTypeConstraint.ts, 5, 139))
+
+const tq: 1 = t.q;
+>tq : Symbol(tq, Decl(recursiveTypeInferenceReturnTypeConstraint.ts, 13, 5))
+>t.q : Symbol(q, Decl(recursiveTypeInferenceReturnTypeConstraint.ts, 5, 125))
+>t : Symbol(t, Decl(recursiveTypeInferenceReturnTypeConstraint.ts, 11, 5))
+>q : Symbol(q, Decl(recursiveTypeInferenceReturnTypeConstraint.ts, 5, 125))
+
+const a = object({ name: str, get r() { return b; } }) satisfies { p: number | "x" };
+>a : Symbol(a, Decl(recursiveTypeInferenceReturnTypeConstraint.ts, 15, 5))
+>object : Symbol(object, Decl(recursiveTypeInferenceReturnTypeConstraint.ts, 4, 32))
+>name : Symbol(name, Decl(recursiveTypeInferenceReturnTypeConstraint.ts, 15, 18))
+>str : Symbol(str, Decl(recursiveTypeInferenceReturnTypeConstraint.ts, 6, 13))
+>r : Symbol(r, Decl(recursiveTypeInferenceReturnTypeConstraint.ts, 15, 29))
+>b : Symbol(b, Decl(recursiveTypeInferenceReturnTypeConstraint.ts, 16, 5))
+>p : Symbol(p, Decl(recursiveTypeInferenceReturnTypeConstraint.ts, 15, 66))
+
+const b = object({ name: str, get r() { return a; } }) satisfies { p: number | "x" };
+>b : Symbol(b, Decl(recursiveTypeInferenceReturnTypeConstraint.ts, 16, 5))
+>object : Symbol(object, Decl(recursiveTypeInferenceReturnTypeConstraint.ts, 4, 32))
+>name : Symbol(name, Decl(recursiveTypeInferenceReturnTypeConstraint.ts, 16, 18))
+>str : Symbol(str, Decl(recursiveTypeInferenceReturnTypeConstraint.ts, 6, 13))
+>r : Symbol(r, Decl(recursiveTypeInferenceReturnTypeConstraint.ts, 16, 29))
+>a : Symbol(a, Decl(recursiveTypeInferenceReturnTypeConstraint.ts, 15, 5))
+>p : Symbol(p, Decl(recursiveTypeInferenceReturnTypeConstraint.ts, 16, 66))
+
+const aq: 1 = a.q;
+>aq : Symbol(aq, Decl(recursiveTypeInferenceReturnTypeConstraint.ts, 17, 5))
+>a.q : Symbol(q, Decl(recursiveTypeInferenceReturnTypeConstraint.ts, 5, 125))
+>a : Symbol(a, Decl(recursiveTypeInferenceReturnTypeConstraint.ts, 15, 5))
+>q : Symbol(q, Decl(recursiveTypeInferenceReturnTypeConstraint.ts, 5, 125))
+
+const bq: 1 = b.q;
+>bq : Symbol(bq, Decl(recursiveTypeInferenceReturnTypeConstraint.ts, 18, 5))
+>b.q : Symbol(q, Decl(recursiveTypeInferenceReturnTypeConstraint.ts, 5, 125))
+>b : Symbol(b, Decl(recursiveTypeInferenceReturnTypeConstraint.ts, 16, 5))
+>q : Symbol(q, Decl(recursiveTypeInferenceReturnTypeConstraint.ts, 5, 125))
+
+declare function pick(x: { p: "x" }): Schema<"picked-x">;
+>pick : Symbol(pick, Decl(recursiveTypeInferenceReturnTypeConstraint.ts, 18, 18), Decl(recursiveTypeInferenceReturnTypeConstraint.ts, 20, 57))
+>x : Symbol(x, Decl(recursiveTypeInferenceReturnTypeConstraint.ts, 20, 22))
+>p : Symbol(p, Decl(recursiveTypeInferenceReturnTypeConstraint.ts, 20, 26))
+>Schema : Symbol(Schema, Decl(recursiveTypeInferenceReturnTypeConstraint.ts, 0, 0))
+
+declare function pick(x: { p: number | "x" }): Schema<"picked-wide">;
+>pick : Symbol(pick, Decl(recursiveTypeInferenceReturnTypeConstraint.ts, 18, 18), Decl(recursiveTypeInferenceReturnTypeConstraint.ts, 20, 57))
+>x : Symbol(x, Decl(recursiveTypeInferenceReturnTypeConstraint.ts, 21, 22))
+>p : Symbol(p, Decl(recursiveTypeInferenceReturnTypeConstraint.ts, 21, 26))
+>Schema : Symbol(Schema, Decl(recursiveTypeInferenceReturnTypeConstraint.ts, 0, 0))
+
+const s = object({ name: str, get rec() { return pick(s); } }) satisfies { p: number | "x" };
+>s : Symbol(s, Decl(recursiveTypeInferenceReturnTypeConstraint.ts, 22, 5))
+>object : Symbol(object, Decl(recursiveTypeInferenceReturnTypeConstraint.ts, 4, 32))
+>name : Symbol(name, Decl(recursiveTypeInferenceReturnTypeConstraint.ts, 22, 18))
+>str : Symbol(str, Decl(recursiveTypeInferenceReturnTypeConstraint.ts, 6, 13))
+>rec : Symbol(rec, Decl(recursiveTypeInferenceReturnTypeConstraint.ts, 22, 29))
+>pick : Symbol(pick, Decl(recursiveTypeInferenceReturnTypeConstraint.ts, 18, 18), Decl(recursiveTypeInferenceReturnTypeConstraint.ts, 20, 57))
+>s : Symbol(s, Decl(recursiveTypeInferenceReturnTypeConstraint.ts, 22, 5))
+>p : Symbol(p, Decl(recursiveTypeInferenceReturnTypeConstraint.ts, 22, 74))
+
+const sk: "picked-x" = pick(s).out;
+>sk : Symbol(sk, Decl(recursiveTypeInferenceReturnTypeConstraint.ts, 23, 5))
+>pick(s).out : Symbol(Schema.out, Decl(recursiveTypeInferenceReturnTypeConstraint.ts, 2, 21))
+>pick : Symbol(pick, Decl(recursiveTypeInferenceReturnTypeConstraint.ts, 18, 18), Decl(recursiveTypeInferenceReturnTypeConstraint.ts, 20, 57))
+>s : Symbol(s, Decl(recursiveTypeInferenceReturnTypeConstraint.ts, 22, 5))
+>out : Symbol(Schema.out, Decl(recursiveTypeInferenceReturnTypeConstraint.ts, 2, 21))
+

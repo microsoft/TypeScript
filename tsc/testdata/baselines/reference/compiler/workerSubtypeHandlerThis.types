@@ -1,0 +1,20 @@
+//// [tests/cases/compiler/workerSubtypeHandlerThis.ts] ////
+
+=== workerSubtypeHandlerThis.ts ===
+interface MockWorker extends Worker {
+    messages: unknown[];
+>messages : unknown[]
+}
+
+declare function forward(worker: Worker): void;
+>forward : (worker: Worker) => void
+>worker : Worker
+
+declare const worker: MockWorker;
+>worker : MockWorker
+
+forward(worker);
+>forward(worker) : void
+>forward : (worker: Worker) => void
+>worker : MockWorker
+

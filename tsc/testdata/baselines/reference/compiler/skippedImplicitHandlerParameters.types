@@ -1,0 +1,31 @@
+//// [tests/cases/compiler/skippedImplicitHandlerParameters.ts] ////
+
+=== handlers.d.ts ===
+interface FilterHandlers {
+    update: (value: object) => void;
+>update : (value: object) => void
+>value : object
+
+    remove: (value: string) => void;
+>remove : (value: string) => void
+>value : string
+}
+interface ServerHandlers {
+    save: (value) => "saved";
+>save : (value: any) => "saved"
+>value : any
+}
+interface Handlers extends ServerHandlers, FilterHandlers {}
+
+=== main.ts ===
+function runHandler<T extends Handlers[keyof Handlers]>(handler: T, value: Parameters<T>[0]) {
+>runHandler : <T extends Handlers[keyof Handlers]>(handler: T, value: Parameters<T>[0]) => void
+>handler : T
+>value : Parameters<T>[0]
+
+    handler(value);
+>handler(value) : void | "saved"
+>handler : ((value: object) => void) | ((value: string) => void) | ((value: any) => "saved")
+>value : Parameters<T>[0]
+}
+

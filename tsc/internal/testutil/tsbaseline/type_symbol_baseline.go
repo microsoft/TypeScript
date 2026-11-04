@@ -290,13 +290,13 @@ type typeWriterResult struct {
 }
 
 func (walker *typeWriterWalker) getTypes(filename string) []*typeWriterResult {
-	sourceFile := walker.program.GetSourceFile(filename)
+	sourceFile := walker.program.GetSourceFile(tspath.ToRootedFilePath(filename, walker.program.Program().BaseDirectory()))
 	walker.currentSourceFile = sourceFile
 	return walker.visitNode(sourceFile.AsNode(), false /*isSymbolWalk*/)
 }
 
 func (walker *typeWriterWalker) getSymbols(filename string) []*typeWriterResult {
-	sourceFile := walker.program.GetSourceFile(filename)
+	sourceFile := walker.program.GetSourceFile(tspath.ToRootedFilePath(filename, walker.program.Program().BaseDirectory()))
 	walker.currentSourceFile = sourceFile
 	return walker.visitNode(sourceFile.AsNode(), true /*isSymbolWalk*/)
 }
@@ -350,8 +350,7 @@ func (walker *typeWriterWalker) writeTypeOrSymbol(node *ast.Node, isSymbolWalk b
 	fileChecker, done := walker.getTypeCheckerForCurrentFile()
 	defer done()
 
-	ctx, putCtx := printer.GetEmitContext()
-	defer putCtx()
+	ctx := printer.NewEmitContext()
 
 	if !isSymbolWalk {
 		// Don't try to get the type of something that's already a type.
@@ -390,7 +389,6 @@ func (walker *typeWriterWalker) writeTypeOrSymbol(node *ast.Node, isSymbolWalk b
 			!isIntrinsicJsxTag(node, walker.currentSourceFile) {
 			typeString = t.AsIntrinsicType().IntrinsicName()
 		} else {
-			ctx.Reset()
 			builder := checker.NewNodeBuilder(fileChecker, ctx)
 			typeFormatFlags := checker.TypeFormatFlagsNoTruncation | checker.TypeFormatFlagsAllowUniqueESSymbolType | checker.TypeFormatFlagsGenerateNamesForShadowedTypeParams
 			typeNode := builder.TypeToTypeNode(t, node.Parent, nodebuilder.Flags(typeFormatFlags&checker.TypeFormatFlagsNodeBuilderFlagsMask)|nodebuilder.FlagsIgnoreErrors, nodebuilder.InternalFlagsAllowUnresolvedNames, nil)
@@ -424,9 +422,9 @@ func (walker *typeWriterWalker) writeTypeOrSymbol(node *ast.Node, isSymbolWalk b
 	symbolString.WriteString("Symbol(")
 	symbolString.WriteString(ast.EscapeAllInternalSymbolNames(fileChecker.SymbolToStringEx(symbol, node.Parent, ast.SymbolFlagsNone, checker.SymbolFormatFlagsAllowAnyNodeKind)))
 	count := 0
-	for _, declaration := range symbol.Declarations {
+	for _, declaration := range symbol.Declarations() {
 		if count >= 5 {
-			fmt.Fprintf(&symbolString, " ... and %d more", len(symbol.Declarations)-count)
+			fmt.Fprintf(&symbolString, " ... and %d more", len(symbol.Declarations())-count)
 			break
 		}
 		count++
@@ -438,7 +436,7 @@ func (walker *typeWriterWalker) writeTypeOrSymbol(node *ast.Node, isSymbolWalk b
 
 		declSourceFile := ast.GetSourceFileOfNode(declaration)
 		declLine, declChar := scanner.GetECMALineAndUTF16CharacterOfPosition(declSourceFile, declaration.Pos())
-		fileName := tspath.GetBaseFileName(declSourceFile.FileName())
+		fileName := declSourceFile.FileName().BaseName()
 		symbolString.WriteString("Decl(")
 		symbolString.WriteString(fileName)
 		symbolString.WriteString(", ")

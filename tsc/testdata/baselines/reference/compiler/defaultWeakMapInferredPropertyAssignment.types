@@ -1,0 +1,16 @@
+//// [tests/cases/compiler/defaultWeakMapInferredPropertyAssignment.ts] ////
+
+=== defaultWeakMapInferredPropertyAssignment.ts ===
+const frameInfo = { frames: new WeakMap() };
+>frameInfo : { frames: WeakMap<WeakKey, any>; }
+>{ frames: new WeakMap() } : { frames: WeakMap<WeakKey, any>; }
+>frames : WeakMap<WeakKey, any>
+>new WeakMap() : WeakMap<WeakKey, any>
+>WeakMap : WeakMapConstructor
+
+const target: { frames: WeakMap<{ id: string }, number> } = frameInfo;
+>target : { frames: WeakMap<{ id: string; }, number>; }
+>frames : WeakMap<{ id: string; }, number>
+>id : string
+>frameInfo : { frames: WeakMap<WeakKey, any>; }
+

@@ -3,14 +3,15 @@ import * as vscode from "vscode";
 export class Condition {
     private _value: boolean;
     private isDisposed = false;
+    private readonly updateListener: vscode.Disposable;
 
     constructor(
         private readonly getValue: () => boolean,
-        onUpdate: (handler: () => void) => void,
+        onUpdate: (handler: () => void) => vscode.Disposable,
     ) {
         this._value = this.getValue();
 
-        onUpdate(() => {
+        this.updateListener = onUpdate(() => {
             const newValue = this.getValue();
             if (newValue !== this._value) {
                 this._value = newValue;
@@ -31,6 +32,7 @@ export class Condition {
             return;
         }
         this.isDisposed = true;
+        this.updateListener.dispose();
         this._onDidChange.dispose();
     }
 }

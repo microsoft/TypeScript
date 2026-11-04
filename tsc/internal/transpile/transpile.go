@@ -3,7 +3,6 @@ package transpile
 
 import (
 	"context"
-	"strings"
 
 	"github.com/microsoft/TypeScript/tsc/internal/ast"
 	"github.com/microsoft/TypeScript/tsc/internal/compiler"
@@ -44,11 +43,11 @@ type Output struct {
 
 // inputDirectory is the synthetic current directory used to root the
 // single input file created for transpilation.
-const inputDirectory = "/"
+var inputDirectory = tspath.RootedDirectoryPathFromNormalized("/")
 
 // libDirectory is the synthetic directory that the barebones default library
 // file is placed in for declaration transpilation. See [barebonesLibContent].
-const libDirectory = "/lib"
+var libDirectory = tspath.RootedDirectoryPathFromNormalized("/lib")
 
 // Declaration emit works without a `lib`, but some local inferences you'd
 // expect to work won't without at least a minimal `lib` available, since the
@@ -123,55 +122,7 @@ func transpileWorker(ctx context.Context, input string, options Options, declara
 		opts = &core.CompilerOptions{}
 	}
 
-	// Clear options that do not apply to single-file transpilation.
-	opts.Incremental = core.TSUnknown
-	opts.Declaration = core.TSUnknown
-	opts.EmitDeclarationOnly = core.TSUnknown
-	opts.NoEmit = core.TSUnknown
-	opts.Lib = nil
-	opts.OutFile = ""
-	opts.Composite = core.TSUnknown
-	opts.TsBuildInfoFile = ""
-	opts.Paths = nil
-	opts.RootDirs = nil
-	opts.Types = nil
-	opts.AllowImportingTsExtensions = core.TSUnknown
-	opts.NoEmitOnError = core.TSUnknown
-	opts.DeclarationDir = ""
-
-	// Do not set `isolatedModules` if `verbatimModuleSyntax` was supplied, since
-	// it would be redundant.
-	if !opts.VerbatimModuleSyntax.IsTrue() {
-		opts.IsolatedModules = core.TSTrue
-	}
-	opts.NoCheck = core.TSTrue
-	opts.NoResolve = core.TSTrue
-
-	// transpileModule/transpileDeclaration do not write anything to disk, so
-	// there's no need to verify there are no conflicts between input and
-	// output paths.
-	opts.SuppressOutputPathCheck = core.TSTrue
-
-	// FileName can be a non-ts file.
-	opts.AllowNonTsExtensions = core.TSTrue
-
-	if declaration {
-		opts.Declaration = core.TSTrue
-		opts.EmitDeclarationOnly = core.TSTrue
-		opts.IsolatedDeclarations = core.TSTrue
-	} else {
-		opts.Declaration = core.TSFalse
-		opts.DeclarationMap = core.TSFalse
-		opts.IsolatedDeclarations = core.TSFalse
-	}
-
-	// When transpiling declarations, we need a lib. GetDefaultLibFileName will
-	// cause the barebones lib below to be used instead of a real lib.
-	if declaration {
-		opts.NoLib = core.TSFalse
-	} else {
-		opts.NoLib = core.TSTrue
-	}
+	setOptionsForTranspile(opts, declaration)
 
 	// If jsx is specified, then treat the file as .tsx.
 	fileName := options.FileName
@@ -182,9 +133,9 @@ func transpileWorker(ctx context.Context, input string, options Options, declara
 			fileName = "module.ts"
 		}
 	}
-	inputFileName := tspath.GetNormalizedAbsolutePath(fileName, inputDirectory)
+	inputFileName := tspath.ToRootedFilePath(fileName, inputDirectory)
 
-	files := map[string]string{
+	files := map[tspath.RootedFilePath]string{
 		inputFileName: input,
 	}
 
@@ -193,18 +144,14 @@ func transpileWorker(ctx context.Context, input string, options Options, declara
 	// The default lib name depends on the configured target.
 	if declaration {
 		libFileName := tsoptions.GetDefaultLibFileName(opts)
-		files[tspath.CombinePaths(libDirectory, libFileName)] = barebonesLibContent
+		files[libDirectory.ResolveFile(libFileName)] = barebonesLibContent
 	}
 
-	host := compiler.NewCompilerHost(inputDirectory, &transpileFS{files: files}, libDirectory, nil, nil, nil)
+	programFS := &transpileFS{files: files}
+	host := compiler.NewCompilerHost(programFS, libDirectory, nil, nil, nil)
 
 	program := compiler.NewProgram(compiler.ProgramOptions{
-		Config: &tsoptions.ParsedCommandLine{
-			ParsedConfig: &tsoptions.ParsedOptions{
-				FileNames:       []string{inputFileName},
-				CompilerOptions: opts,
-			},
-		},
+		Config:               tsoptions.NewParsedCommandLine(opts, []tspath.RootedFilePath{inputFileName}, nil, inputDirectory, programFS.CaseSensitivity()),
 		Host:                 host,
 		SkipModuleResolution: true,
 	})
@@ -227,13 +174,13 @@ func transpileWorker(ctx context.Context, input string, options Options, declara
 	result := program.Emit(ctx, compiler.EmitOptions{
 		EmitOnly:  emitOnly,
 		ForceEmit: declaration,
-		WriteFile: func(fileName string, text string, data *compiler.WriteFileData) error {
-			if strings.HasSuffix(fileName, ".map") {
-				debug.Assert(!hasSourceMapText, "Unexpected multiple source map outputs, file: "+fileName)
+		WriteFile: func(fileName tspath.RootedFilePath, text string, data *compiler.WriteFileData) error {
+			if fileName.ExtensionIs(".map") {
+				debug.Assert(!hasSourceMapText, "Unexpected multiple source map outputs, file: "+fileName.AsString())
 				sourceMapText = text
 				hasSourceMapText = true
 			} else {
-				debug.Assert(!hasOutputText, "Unexpected multiple outputs, file: "+fileName)
+				debug.Assert(!hasOutputText, "Unexpected multiple outputs, file: "+fileName.AsString())
 				outputText = text
 				hasOutputText = true
 			}

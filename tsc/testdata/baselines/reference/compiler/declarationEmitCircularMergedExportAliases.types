@@ -1,0 +1,49 @@
+//// [tests/cases/compiler/declarationEmitCircularMergedExportAliases.ts] ////
+
+=== a.ts ===
+export { B as A } from "./b";
+>B : any
+>A : any
+
+export declare namespace A {
+    export type FromA = number;
+>FromA : number
+}
+export class Route {
+>Route : Route
+
+    private parts = 0;
+>parts : number
+>0 : 0
+}
+export function create() { return new Route(); }
+>create : () => Route
+>new Route() : Route
+>Route : typeof Route
+
+=== b.ts ===
+export { A as B } from "./a";
+>A : any
+>B : any
+
+export declare namespace B {
+    export type FromB = string;
+>FromB : string
+}
+
+=== index.ts ===
+import { A } from "./a";
+>A : any
+
+import { create } from "./a";
+>create : () => import("./a").Route
+
+export type Label = A.FromA;
+>Label : number
+>A : any
+
+export const route = create();
+>route : import("./a").Route
+>create() : import("./a").Route
+>create : () => import("./a").Route
+

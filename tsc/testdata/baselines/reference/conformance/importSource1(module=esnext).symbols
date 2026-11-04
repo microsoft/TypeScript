@@ -1,0 +1,20 @@
+//// [tests/cases/conformance/importSource/importSource1.ts] ////
+
+=== b.ts ===
+import source a from "./a.wasm";
+>a : Symbol(a, Decl(b.ts, 0, 6))
+
+const b: AbstractModuleSource = a;
+>b : Symbol(b, Decl(b.ts, 1, 5))
+>AbstractModuleSource : Symbol(AbstractModuleSource, Decl(lib.esnext.modulesource.d.ts, --, --))
+>a : Symbol(a, Decl(b.ts, 0, 6))
+
+=== c.ts ===
+import source a from "./a.wasm" with { type: "webassembly" };
+>a : Symbol(a, Decl(c.ts, 0, 6))
+
+const b: AbstractModuleSource = a;
+>b : Symbol(b, Decl(c.ts, 1, 5))
+>AbstractModuleSource : Symbol(AbstractModuleSource, Decl(lib.esnext.modulesource.d.ts, --, --))
+>a : Symbol(a, Decl(c.ts, 0, 6))
+

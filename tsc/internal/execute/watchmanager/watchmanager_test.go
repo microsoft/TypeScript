@@ -1,6 +1,8 @@
 package watchmanager
 
 import (
+	"io"
+	"strings"
 	"testing"
 
 	"github.com/microsoft/TypeScript/tsc/internal/tspath"
@@ -8,8 +10,8 @@ import (
 )
 
 var (
-	caseSensitiveOpts   = tspath.ComparePathsOptions{UseCaseSensitiveFileNames: true, CurrentDirectory: "/repo"}
-	caseInsensitiveOpts = tspath.ComparePathsOptions{UseCaseSensitiveFileNames: false, CurrentDirectory: "/repo"}
+	caseSensitiveOpts   = tspath.CaseSensitive
+	caseInsensitiveOpts = tspath.CaseInsensitive
 )
 
 // TestDirWatchSetCoverage checks the core coverage rules: a recursive watch
@@ -24,7 +26,7 @@ func TestDirWatchSetCoverage(t *testing.T) {
 	set.Set("/repo/node_modules/a", false) // non-recursive
 
 	tests := []struct {
-		dir  string
+		dir  tspath.RootedDirectoryPath
 		want bool
 	}{
 		{"/repo/src", true},             // exact recursive
@@ -72,8 +74,9 @@ func TestDirWatchSetCaseInsensitive(t *testing.T) {
 }
 
 // TestDirWatchSetCanonicalDedup verifies that on a case-insensitive filesystem
-// directories that differ only by casing collapse to a single canonical entry,
-// while a case-sensitive filesystem keeps them distinct.
+// directories that differ only by casing collapse to a single entry while
+// retaining the spelling used for the actual watch request. A case-sensitive
+// filesystem keeps them distinct.
 func TestDirWatchSetCanonicalDedup(t *testing.T) {
 	t.Parallel()
 
@@ -83,8 +86,8 @@ func TestDirWatchSetCanonicalDedup(t *testing.T) {
 
 	dirs := insensitive.Dirs()
 	assert.Equal(t, len(dirs), 1, "differently-cased dirs must collapse to one entry")
-	_, canonical := dirs["/repo/node_modules/pkgname"]
-	assert.Assert(t, canonical, "Dirs must be keyed by the canonicalized path")
+	_, retained := dirs["/repo/Node_Modules/PkgName"]
+	assert.Assert(t, retained, "Dirs must retain the first requested spelling")
 
 	sensitive := NewDirWatchSet(caseSensitiveOpts)
 	sensitive.Set("/repo/Node_Modules/PkgName", false)
@@ -134,4 +137,111 @@ func TestDirWatchSetDirs(t *testing.T) {
 	assert.Equal(t, len(dirs), 2)
 	assert.Equal(t, dirs["/repo/a"], false)
 	assert.Equal(t, dirs["/repo/b"], true)
+}
+
+// TestResolveDesiredDirsShallowProject verifies that a directory that exists and was asked for is watched at any
+// depth. A project close to the filesystem root (/app, /srv/app, a Docker WORKDIR) must not be silently ignored.
+func TestResolveDesiredDirsShallowProject(t *testing.T) {
+	t.Parallel()
+
+	existing := map[tspath.RootedDirectoryPath]bool{
+		"/": true, "/app": true, "/app/src": true, "/srv": true, "/srv/app": true,
+		"/home": true, "/home/user": true, "/home/user/project": true,
+	}
+	wm := NewWatchManager(io.Discard, func(dir tspath.RootedDirectoryPath) bool { return existing[dir] }, caseSensitiveOpts)
+
+	resolved := wm.ResolveDesiredDirs(map[tspath.RootedDirectoryPath]bool{
+		"/app":               true,
+		"/app/src":           false,
+		"/srv/app":           true,
+		"/home/user/project": true,
+	})
+
+	assert.DeepEqual(t, resolved, map[tspath.RootedDirectoryPath]bool{
+		"/app":               true,
+		"/app/src":           false,
+		"/srv/app":           true,
+		"/home/user/project": true,
+	})
+}
+
+// TestResolveDesiredDirsAncestorFallback verifies that the depth check still guards the fallback to an ancestor,
+// so a missing directory never turns into a watch on something too generic like /, /home or /home/user.
+func TestResolveDesiredDirsAncestorFallback(t *testing.T) {
+	t.Parallel()
+
+	existing := map[tspath.RootedDirectoryPath]bool{
+		"/": true, "/app": true, "/home": true, "/home/user": true,
+		"/repo": true, "/repo/a": true, "/repo/a/b": true, "/repo/a/b/c": true,
+	}
+	wm := NewWatchManager(io.Discard, func(dir tspath.RootedDirectoryPath) bool { return existing[dir] }, caseSensitiveOpts)
+
+	resolved := wm.ResolveDesiredDirs(map[tspath.RootedDirectoryPath]bool{
+		"/app/missing":             true, // ancestor /app is too shallow
+		"/home/user/missing":       true, // ancestor /home/user is too shallow
+		"/repo/a/b/c/missing/deep": true, // ancestor /repo/a/b/c is deep enough, and is never recursive
+		"/nothing/exists/anywhere": true, // no existing ancestor except /
+	})
+
+	assert.DeepEqual(t, resolved, map[tspath.RootedDirectoryPath]bool{"/repo/a/b/c": false})
+}
+
+// TestResolveDesiredDirsSkipsNonDiskPaths verifies that a directory that is not on disk, such as the embedded libs
+// (bundled:///libs), is never watched, even though the wrapped FS reports that it exists.
+func TestResolveDesiredDirsSkipsNonDiskPaths(t *testing.T) {
+	t.Parallel()
+
+	wm := NewWatchManager(io.Discard, func(dir tspath.RootedDirectoryPath) bool { return true }, caseSensitiveOpts)
+
+	resolved := wm.ResolveDesiredDirs(map[tspath.RootedDirectoryPath]bool{
+		"bundled:///libs": false,
+		"/app":            true,
+	})
+
+	assert.DeepEqual(t, resolved, map[tspath.RootedDirectoryPath]bool{"/app": true})
+}
+
+func TestResolveDesiredDirsDeduplicatesCaseInsensitiveAncestors(t *testing.T) {
+	t.Parallel()
+
+	manager := NewWatchManager(io.Discard, func(dir tspath.RootedDirectoryPath) bool {
+		return strings.EqualFold(dir.AsString(), "/home/repo/project/src")
+	}, caseInsensitiveOpts)
+	resolved := manager.ResolveDesiredDirs(map[tspath.RootedDirectoryPath]bool{
+		"/home/Repo/Project/Src/missing/a": false,
+		"/home/repo/project/src/missing/b": true,
+	})
+
+	assert.Equal(t, len(resolved), 1)
+	for dir, recursive := range resolved {
+		assert.Assert(t, strings.EqualFold(dir.AsString(), "/home/repo/project/src"))
+		assert.Equal(t, recursive, false)
+	}
+}
+
+type recordingWatchBackend struct {
+	requests []WatchDirectoryRequest
+}
+
+func (b *recordingWatchBackend) WatchDirectories(requests []WatchDirectoryRequest) ([]io.Closer, error) {
+	b.requests = append(b.requests, requests...)
+	closers := make([]io.Closer, len(requests))
+	for i := range closers {
+		closers[i] = io.NopCloser(strings.NewReader(""))
+	}
+	return closers, nil
+}
+
+func TestReconcileWatchesIgnoresCaseOnlySpellingChanges(t *testing.T) {
+	t.Parallel()
+
+	manager := NewWatchManager(io.Discard, func(tspath.RootedDirectoryPath) bool { return true }, caseInsensitiveOpts)
+	backend := &recordingWatchBackend{}
+	manager.SetBackend(backend)
+
+	assert.NilError(t, manager.ReconcileWatches(map[tspath.RootedDirectoryPath]bool{"/Repo": false}))
+	assert.NilError(t, manager.ReconcileWatches(map[tspath.RootedDirectoryPath]bool{"/repo": false}))
+
+	assert.Equal(t, len(backend.requests), 1)
+	assert.Equal(t, backend.requests[0].Dir.AsString(), "/Repo")
 }
