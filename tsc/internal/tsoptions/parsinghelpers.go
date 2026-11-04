@@ -27,6 +27,9 @@ func ParseTristate(value any) core.Tristate {
 }
 
 func ParseStringArray(value any) []string {
+	if arr, ok := value.([]string); ok {
+		return arr
+	}
 	if arr, ok := value.([]any); ok {
 		if arr == nil {
 			return nil
@@ -43,6 +46,9 @@ func ParseStringArray(value any) []string {
 }
 
 func parseStringMap(value any) *collections.OrderedMap[string, []string] {
+	if m, ok := value.(*collections.OrderedMap[string, []string]); ok {
+		return m
+	}
 	if m, ok := value.(*collections.OrderedMap[string, any]); ok {
 		result := collections.NewOrderedMapWithSizeHint[string, []string](m.Size())
 		for k, v := range m.Entries() {

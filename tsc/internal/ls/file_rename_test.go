@@ -25,6 +25,10 @@ func (caseInsensitiveHost) GetPreferences(activeFile string) lsutil.UserPreferen
 	panic("not implemented")
 }
 
+func (caseInsensitiveHost) GetWorkspaceFolders() []WorkspaceFolder {
+	panic("not implemented")
+}
+
 func (caseInsensitiveHost) GetECMALineInfo(fileName tspath.RootedFilePath) *sourcemap.ECMALineInfo {
 	panic("not implemented")
 }
@@ -68,4 +72,22 @@ func TestCreatePathUpdaterCaseFoldingShrinksOldPath(t *testing.T) {
 	updated, ok := updater(tspath.RootedFilePath("/a/kkkk/x.ts"))
 	assert.Assert(t, ok)
 	assert.Equal(t, updated, tspath.RootedFilePath("/a/new/x.ts"))
+}
+
+func TestGetContainingWorkspaceFolderCaseFolding(t *testing.T) {
+	t.Parallel()
+
+	workspaceFolders := []WorkspaceFolder{
+		{Path: tspath.RootedDirectoryPath("/repo/KKKK"), Name: "outer"},
+		{Path: tspath.RootedDirectoryPath("/repo/kkkk/sub"), Name: "inner"},
+	}
+
+	folder := getContainingWorkspaceFolder(
+		tspath.RootedDirectoryPath("/repo/kkkk/sub/src"),
+		workspaceFolders,
+		tspath.CaseInsensitive,
+	)
+
+	assert.Assert(t, folder != nil)
+	assert.Equal(t, folder.Name, "inner")
 }

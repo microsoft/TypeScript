@@ -183,7 +183,7 @@ func processAllProgramFiles(
 		defaultLibraryPath: opts.Host.DefaultLibraryPath(),
 		caseSensitivity:    opts.Host.FS().CaseSensitivity(),
 		filesParser: &filesParser{
-			wg:       core.NewWorkGroup(singleThreaded),
+			wg:       core.NewWorkGroup(core.WorkGroupConcurrency(singleThreaded)),
 			maxDepth: maxNodeModuleJsDepth,
 		},
 		rootTasks:           make([]*parseTask, 0, len(rootFiles)+len(compilerOptions.Lib)),
@@ -353,7 +353,7 @@ func (p *fileLoader) addProjectReferenceTasks(singleThreaded bool) {
 
 	parser := &projectReferenceParser{
 		loader: p,
-		wg:     core.NewWorkGroup(singleThreaded),
+		wg:     core.NewWorkGroup(core.WorkGroupConcurrency(singleThreaded)),
 	}
 	rootTasks := createProjectReferenceParseTasks(projectReferences)
 	parser.parse(rootTasks)
@@ -934,6 +934,10 @@ func (p *fileLoader) resolveImportsAndModuleAugmentations(t *parseTask) {
 				(importIndex < 0 || (importIndex < len(file.Imports()) && (ast.IsInJSFile(file.Imports()[importIndex]) || file.Imports()[importIndex].Flags&ast.NodeFlagsJSDoc == 0)))
 
 			if shouldAddFile {
+				var synthetic syntheticImportKind
+				if importIndex < 0 {
+					synthetic = core.IfElse(entry == t.importHelpersImportSpecifier, syntheticImportHelpers, syntheticImportJSXRuntime)
+				}
 				t.addSubTask(resolvedRef{
 					fileName:      resolvedFileName,
 					path:          resolvedModule.ResolvedPath,
@@ -944,7 +948,7 @@ func (p *fileLoader) resolveImportsAndModuleAugmentations(t *parseTask) {
 						referencedFile: &referencedFileData{
 							file:      t.path,
 							index:     importIndex,
-							synthetic: core.IfElse(importIndex < 0, entry, nil),
+							synthetic: synthetic,
 						},
 					},
 					packageId: resolvedModule.PackageId,
@@ -960,11 +964,15 @@ func (p *fileLoader) resolveImportsAndModuleAugmentations(t *parseTask) {
 func (p *fileLoader) createSyntheticImport(text string, file *ast.SourceFile) *ast.StringLiteralNode {
 	p.factoryMu.Lock()
 	defer p.factoryMu.Unlock()
-	externalHelpersModuleReference := p.factory.NewStringLiteral(text, ast.TokenFlagsNone)
-	importDecl := p.factory.NewImportDeclaration(nil, nil, externalHelpersModuleReference, nil)
-	externalHelpersModuleReference.Parent = importDecl
+	return newSyntheticImport(&p.factory, text, file)
+}
+
+func newSyntheticImport(factory *ast.NodeFactory, text string, file *ast.SourceFile) *ast.StringLiteralNode {
+	moduleReference := factory.NewStringLiteral(text, ast.TokenFlagsNone)
+	importDecl := factory.NewImportDeclaration(nil, nil, moduleReference, nil)
+	moduleReference.Parent = importDecl
 	importDecl.Parent = file.AsNode()
-	return externalHelpersModuleReference
+	return moduleReference
 }
 
 func (p *fileLoader) pathForLibFile(name string) *LibFile {
