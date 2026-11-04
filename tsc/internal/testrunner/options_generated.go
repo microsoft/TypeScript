@@ -21,6 +21,7 @@ var compilerVaryBy = collections.NewSetFromItems(
 	"declarationmap",
 	"deduplicatepackages",
 	"diagnostics",
+	"disabledynamicimportextensionrewriting",
 	"disablereferencedprojectload",
 	"disablesizelimit",
 	"disablesolutionsearching",

@@ -799,12 +799,18 @@ func (c *configFileRegistryBuilder) IsContentMapperPackageAllowed(packageDirecto
 	if c.sessionOptions.InitialWorkspaceRoots == nil {
 		return true
 	}
+	caseSensitivity := c.fs.CaseSensitivity()
+	if slices.ContainsFunc(c.sessionOptions.InitialWorkspaceRoots, func(root tspath.RootedDirectoryPath) bool {
+		return caseSensitivity.ContainsPath(root, packageDirectory.AsPath())
+	}) {
+		return true
+	}
 	_, nodeModulesPath, ok := tspath.RootedFilePathFromPath(packageDirectory.AsPath()).SplitAtLastComponent("node_modules")
 	if !ok {
 		return false
 	}
 	return slices.ContainsFunc(c.sessionOptions.InitialWorkspaceRoots, func(root tspath.RootedDirectoryPath) bool {
-		return c.fs.CaseSensitivity().ContainsPath(root, nodeModulesPath.AsPath())
+		return caseSensitivity.ContainsPath(root, nodeModulesPath.AsPath())
 	})
 }
 

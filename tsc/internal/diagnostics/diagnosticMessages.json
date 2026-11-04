@@ -6653,6 +6653,10 @@
         "category": "Message",
         "code": 6809
     },
+    "Disable runtime rewriting of file extensions in non-literal 'import()' and 'require()' calls when 'rewriteRelativeImportExtensions' is enabled.": {
+        "category": "Message",
+        "code": 6810
+    },
 
     "one of:": {
         "category": "Message",
