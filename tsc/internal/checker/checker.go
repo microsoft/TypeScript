@@ -2834,6 +2834,8 @@ func (c *Checker) checkSignatureDeclaration(node *ast.Node) {
 			c.error(node, diagnostics.Construct_signature_which_lacks_return_type_annotation_implicitly_has_an_any_return_type)
 		case ast.KindCallSignature:
 			c.error(node, diagnostics.Call_signature_which_lacks_return_type_annotation_implicitly_has_an_any_return_type)
+		case ast.KindIndexSignature:
+			c.error(node, diagnostics.Index_signature_which_lacks_type_annotation_implicitly_has_an_any_type)
 		}
 	}
 	if returnTypeNode != nil {
@@ -6493,18 +6495,18 @@ func (c *Checker) getIterationTypesOfIterable(t *Type, use IterationUse, errorNo
 		}
 		noCache = true
 	}
-	result := c.getIterationTypesOfIterableWorker(t, use, errorNode, noCache)
+	result := c.getIterationTypesOfIterableWorker(t, use, errorNode)
 	if !noCache {
 		c.iterationTypesCache[key] = result
 	}
 	return result
 }
 
-func (c *Checker) getIterationTypesOfIterableWorker(t *Type, use IterationUse, errorNode *ast.Node, noCache bool) IterationTypes {
+func (c *Checker) getIterationTypesOfIterableWorker(t *Type, use IterationUse, errorNode *ast.Node) IterationTypes {
 	if t.flags&TypeFlagsUnion != 0 {
 		allIterationTypes := make([]IterationTypes, 0, len(t.Types()))
 		for _, constituent := range t.Types() {
-			iterationTypes := c.getIterationTypesOfIterableWorker(constituent, use, nil, noCache)
+			iterationTypes := c.getIterationTypesOfIterableWorker(constituent, use, nil)
 			if !iterationTypes.hasTypes() {
 				if errorNode != nil {
 					c.addDeferredDiagnostic(func() {
@@ -8483,7 +8485,9 @@ func (c *Checker) checkImportCallExpression(node *ast.Node) *Type {
 		return c.createPromiseReturnType(node, c.anyType) //nolint:customlint // no arguments to check
 	}
 	specifier := args[0]
-	if c.compilerOptions.RewriteRelativeImportExtensions.IsTrue() && !ast.IsStringLiteralLike(specifier) {
+	if c.compilerOptions.RewriteRelativeImportExtensions.IsTrue() &&
+		!c.compilerOptions.DisableDynamicImportExtensionRewriting.IsTrue() &&
+		!ast.IsStringLiteralLike(specifier) {
 		c.checkExternalEmitHelpers(node, ExternalEmitHelpersRewriteRelativeImportExtension)
 	}
 	specifierType := c.checkExpressionCached(specifier)
@@ -8539,6 +8543,7 @@ func (c *Checker) checkImportCallExpression(node *ast.Node) *Type {
  */
 func (c *Checker) checkCallExpression(node *ast.Node, checkMode CheckMode) *Type {
 	if c.compilerOptions.RewriteRelativeImportExtensions.IsTrue() &&
+		!c.compilerOptions.DisableDynamicImportExtensionRewriting.IsTrue() &&
 		ast.IsInJSFile(node) && ast.IsRequireCall(node, false /*requireStringLiteralLikeArgument*/) &&
 		!ast.IsStringLiteralLike(node.Arguments()[0]) {
 		c.checkExternalEmitHelpers(node, ExternalEmitHelpersRewriteRelativeImportExtension)

@@ -176,6 +176,8 @@ func parseCompilerOptions(key string, value any, allOptions *core.CompilerOption
 		allOptions.ResolvePackageJsonImports = ParseTristate(value)
 	case "removeComments":
 		allOptions.RemoveComments = ParseTristate(value)
+	case "disableDynamicImportExtensionRewriting":
+		allOptions.DisableDynamicImportExtensionRewriting = ParseTristate(value)
 	case "rewriteRelativeImportExtensions":
 		allOptions.RewriteRelativeImportExtensions = ParseTristate(value)
 	case "reactNamespace":
@@ -496,6 +498,9 @@ func CompilerOptionsAffectSemanticDiagnostics(oldOptions *core.CompilerOptions, 
 	if oldOptions.ResolvePackageJsonImports != newOptions.ResolvePackageJsonImports {
 		return true
 	}
+	if oldOptions.DisableDynamicImportExtensionRewriting != newOptions.DisableDynamicImportExtensionRewriting {
+		return true
+	}
 	if oldOptions.RewriteRelativeImportExtensions != newOptions.RewriteRelativeImportExtensions {
 		return true
 	}
@@ -687,6 +692,9 @@ func CompilerOptionsAffectEmit(oldOptions *core.CompilerOptions, newOptions *cor
 		return true
 	}
 	if oldOptions.RemoveComments != newOptions.RemoveComments {
+		return true
+	}
+	if oldOptions.DisableDynamicImportExtensionRewriting != newOptions.DisableDynamicImportExtensionRewriting {
 		return true
 	}
 	if oldOptions.RewriteRelativeImportExtensions != newOptions.RewriteRelativeImportExtensions {
@@ -918,6 +926,9 @@ func ForEachCompilerOptionAffectingBuildInfo(options *core.CompilerOptions, fn f
 	}
 	if options.RemoveComments != core.TSUnknown {
 		fn(CommandLineCompilerOptionsMap.Get("removeComments"), options.RemoveComments)
+	}
+	if options.DisableDynamicImportExtensionRewriting != core.TSUnknown {
+		fn(CommandLineCompilerOptionsMap.Get("disableDynamicImportExtensionRewriting"), options.DisableDynamicImportExtensionRewriting)
 	}
 	if options.RewriteRelativeImportExtensions != core.TSUnknown {
 		fn(CommandLineCompilerOptionsMap.Get("rewriteRelativeImportExtensions"), options.RewriteRelativeImportExtensions)
@@ -1380,6 +1391,11 @@ func mergeCompilerOptionFields(targetOptions, sourceOptions *core.CompilerOption
 		targetOptions.RemoveComments = core.TSUnknown
 	} else if sourceOptions.RemoveComments != core.TSUnknown {
 		targetOptions.RemoveComments = sourceOptions.RemoveComments
+	}
+	if explicitNullFields.Has("disableDynamicImportExtensionRewriting") {
+		targetOptions.DisableDynamicImportExtensionRewriting = core.TSUnknown
+	} else if sourceOptions.DisableDynamicImportExtensionRewriting != core.TSUnknown {
+		targetOptions.DisableDynamicImportExtensionRewriting = sourceOptions.DisableDynamicImportExtensionRewriting
 	}
 	if explicitNullFields.Has("rewriteRelativeImportExtensions") {
 		targetOptions.RewriteRelativeImportExtensions = core.TSUnknown
@@ -1916,6 +1932,9 @@ func serializeCompilerOptions(options *core.CompilerOptions, configFilePath tspa
 	}
 	if options.RemoveComments == core.TSTrue || options.RemoveComments == core.TSFalse {
 		result.Set("removeComments", options.RemoveComments == core.TSTrue)
+	}
+	if options.DisableDynamicImportExtensionRewriting == core.TSTrue || options.DisableDynamicImportExtensionRewriting == core.TSFalse {
+		result.Set("disableDynamicImportExtensionRewriting", options.DisableDynamicImportExtensionRewriting == core.TSTrue)
 	}
 	if options.RewriteRelativeImportExtensions == core.TSTrue || options.RewriteRelativeImportExtensions == core.TSFalse {
 		result.Set("rewriteRelativeImportExtensions", options.RewriteRelativeImportExtensions == core.TSTrue)

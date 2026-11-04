@@ -20,7 +20,7 @@ func isDeclarationNameOfEnumOrNamespace(emitContext *printer.EmitContext, node *
 }
 
 func rewriteModuleSpecifier(emitContext *printer.EmitContext, node *ast.Expression, compilerOptions *core.CompilerOptions, rewrites []tspath.ExtensionRewrite, caseSensitivity tspath.CaseSensitivity) *ast.Expression {
-	if node == nil || !ast.IsStringLiteral(node) || !compilerOptions.RewriteRelativeImportExtensions.IsTrue() {
+	if node == nil || !ast.IsStringLiteralLike(node) || !compilerOptions.RewriteRelativeImportExtensions.IsTrue() {
 		return node
 	}
 	specifier := tspath.ToModuleSpecifier(node.Text())
@@ -33,7 +33,12 @@ func rewriteModuleSpecifier(emitContext *printer.EmitContext, node *ast.Expressi
 		updatedText = tspath.ChangeExtension(node.Text(), outputpaths.GetOutputExtension(node.Text(), compilerOptions.Jsx))
 	}
 	if updatedText != node.Text() {
-		updated := emitContext.Factory.NewStringLiteral(updatedText, node.AsStringLiteral().TokenFlags)
+		var updated *ast.Expression
+		if ast.IsStringLiteral(node) {
+			updated = emitContext.Factory.NewStringLiteral(updatedText, node.AsStringLiteral().TokenFlags)
+		} else {
+			updated = emitContext.Factory.NewNoSubstitutionTemplateLiteral(updatedText, node.AsNoSubstitutionTemplateLiteral().TemplateFlags)
+		}
 		emitContext.SetOriginal(updated, node)
 		emitContext.AssignCommentAndSourceMapRanges(updated, node)
 		return updated
