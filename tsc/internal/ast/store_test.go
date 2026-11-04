@@ -101,7 +101,7 @@ func TestNodeSideTableZeroValues(t *testing.T) {
 	assert.Assert(t, node.AsBlock().Statements().IsNil())
 	assert.Assert(t, node.AsBlock().Locals() == nil)
 
-	locals := SymbolTable{}
+	locals := NewSymbolTable()
 	node.AsBlock().SetLocals(locals)
 	assert.Assert(t, node.AsBlock().Locals() != nil)
 	node.AsBlock().SetLocals(nil)
