@@ -60,9 +60,13 @@ func newNodeList(s *nodeStore, nodes []Node, aux uint32) NodeList {
 
 func (l NodeList) IsNil() bool { return l.p == nil }
 
-func (l NodeList) hdr() *listHeader { return (*listHeader)(l.p) }
+func (l NodeList) hdr() *listHeader {
+	// SAFETY: Every list record starts with an aligned listHeader.
+	return (*listHeader)(l.p)
+}
 
 func (l NodeList) slot(k int) *nodeRef {
+	// SAFETY: Callers bound k by the list length; newNodeList reserves that many aligned refs after the header.
 	return (*nodeRef)(unsafe.Add(l.p, listHeaderSize+uintptr(k)*unsafe.Sizeof(nodeRef(0))))
 }
 
@@ -107,6 +111,7 @@ func (l NodeList) at(k int) Node {
 	f := l.slot(k)
 	r := *f
 	if r&refNear != 0 {
+		// SAFETY: setRef encodes a near offset only to a node in the list's retained chunk.
 		return Node{unsafe.Add(unsafe.Pointer(f), int(int32(r))-refNear)}
 	}
 	return l.store().far[r>>1]
@@ -220,6 +225,7 @@ func (l ModifierList) Clone(f *NodeFactory) ModifierList {
 func (n Node) derefList(f *listRef) NodeList {
 	r := *f
 	if r&refNear != 0 {
+		// SAFETY: setListRef encodes a near offset only to a list in the same retained chunk.
 		return NodeList{unsafe.Add(unsafe.Pointer(f), int32(r-refNear))}
 	}
 	if r == 0 {
@@ -227,6 +233,7 @@ func (n Node) derefList(f *listRef) NodeList {
 		// reading the absent far slot, which is far from the record.
 		return NodeList{}
 	}
+	// SAFETY: The node header's chunk offset leads back to its containing allocation's header.
 	return (*chunkHeader)(unsafe.Add(n.p, -int((*nodeBaseData)(n.p).chunk))).store.farLists[r>>1]
 }
 
@@ -268,5 +275,6 @@ func setListRef(c *chunkHeader, f *listRef, v NodeList) {
 // listAt returns the list that the field at offset off of n's record
 // refers to.
 func (n Node) listAt(off uint8) NodeList {
+	// SAFETY: The kind's layout table identifies an aligned listRef within this record.
 	return n.derefList((*listRef)(unsafe.Add(n.p, off)))
 }

@@ -56,6 +56,7 @@ type NodeIdGenerator struct {
 }
 
 func (a *NodeIdGenerator) GetNodeId(node Node) NodeId {
+	// SAFETY: Every node record begins with an aligned nodeBaseData header.
 	h := (*nodeBaseData)(node.p)
 	id := h.id.Load()
 	if id == 0 {

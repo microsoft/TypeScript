@@ -133,11 +133,15 @@ const wordSize = unsafe.Sizeof(uint64(0))
 // rec returns the address of n's record.
 func (n Node) rec() unsafe.Pointer { return n.p }
 
-func (n Node) hdr() *nodeBaseData { return (*nodeBaseData)(n.p) }
+func (n Node) hdr() *nodeBaseData {
+	// SAFETY: Every node record starts with an aligned nodeBaseData header.
+	return (*nodeBaseData)(n.p)
+}
 
 // chunkOf returns the header of the chunk holding the record at p, which
 // is chunk bytes from the chunk's start.
 func chunkOf(p unsafe.Pointer, chunk uint32) *chunkHeader {
+	// SAFETY: The record's chunk offset leads back to its containing allocation's header.
 	return (*chunkHeader)(unsafe.Add(p, -int(chunk)))
 }
 
@@ -150,6 +154,7 @@ func (n Node) store() *nodeStore { return n.chunk().store }
 func (n Node) deref(f *nodeRef) Node {
 	r := *f
 	if r&refNear != 0 {
+		// SAFETY: setRef encodes a near offset only between records in the same live chunk.
 		return Node{unsafe.Add(unsafe.Pointer(f), int32(r-refNear))}
 	}
 	if r == 0 {
@@ -159,12 +164,14 @@ func (n Node) deref(f *nodeRef) Node {
 	}
 	// The store is found by hand rather than by n.store() to keep callers
 	// within the inlining budget.
+	// SAFETY: The node starts with nodeBaseData, whose chunk offset addresses its allocation's header.
 	return (*chunkHeader)(unsafe.Add(n.p, -int((*nodeBaseData)(n.p).chunk))).store.far[r>>1]
 }
 
 // refAt returns the node that the field at offset off of n's record refers
 // to.
 func (n Node) refAt(off uint8) Node {
+	// SAFETY: The kind's layout table supplies the offset of an aligned nodeRef within this record.
 	return n.deref((*nodeRef)(unsafe.Add(n.p, off)))
 }
 
@@ -201,6 +208,7 @@ func setRef(c *chunkHeader, f *nodeRef, v Node) {
 // near returns the ref from the field at f to the record at p in the same
 // chunk.
 func near[F any](f *F, p unsafe.Pointer) uint32 {
+	// SAFETY: Callers pass a field and target in the same chunk; only their byte distance is retained.
 	return uint32(int32(uintptr(p)-uintptr(unsafe.Pointer(f)))) | refNear
 }
 
@@ -246,6 +254,7 @@ func (s *nodeStore) fromAnchor(r nodeAnchor) Node {
 		return s.far[r&^anchorFar]
 	}
 	c := s.chunks[r>>anchorChunkShift-1]
+	// SAFETY: anchor encodes a word offset to a record in this retained chunk.
 	return Node{unsafe.Add(c, int(r&(maxChunkWords-1))*int(wordSize))}
 }
 
@@ -261,9 +270,11 @@ func (s *nodeStore) newNode(kind Kind, layout nodeLayout, n Node) Node {
 // its nodeBaseData.
 func newRecord[T any](s *nodeStore, layout nodeLayout) (*T, Node) {
 	p, chunk := s.alloc(unsafe.Sizeof(*new(T)))
+	// SAFETY: alloc returns word-aligned, zeroed storage for T, whose first field is nodeBaseData.
 	h := (*nodeBaseData)(p)
 	h.chunk = chunk
 	h.parent = parentNone
+	// SAFETY: The allocation has T's size and alignment; record types contain no Go pointers.
 	return (*T)(p), Node{p}
 }
 
@@ -277,6 +288,7 @@ func (s *nodeStore) alloc(size uintptr) (unsafe.Pointer, uint32) {
 	if words > len(s.free) {
 		return s.grow(words)
 	}
+	// SAFETY: The free words belong to a retained chunk and have room for this record.
 	p := unsafe.Pointer(unsafe.SliceData(s.free))
 	s.free = s.free[words:]
 	return p, uint32(uintptr(p) - uintptr(s.base))
@@ -292,11 +304,13 @@ func (s *nodeStore) grow(words int) (unsafe.Pointer, uint32) {
 		// A record too large for a normal chunk gets one of its own, and
 		// the current chunk stays in use.
 		base, _ := s.addChunk(words)
+		// SAFETY: addChunk reserves its header followed by at least words record words.
 		return unsafe.Add(base, chunkHeaderSize), chunkHeaderSize
 	}
 	base, all := s.addChunk(n)
 	s.base = base
 	s.free = all[words:]
+	// SAFETY: all is the retained chunk's word-aligned records region.
 	return unsafe.Pointer(unsafe.SliceData(all)), chunkHeaderSize
 }
 
@@ -305,9 +319,11 @@ func (s *nodeStore) grow(words int) (unsafe.Pointer, uint32) {
 func (s *nodeStore) addChunk(n int) (unsafe.Pointer, []uint64) {
 	n = chunkClass(n)
 	base := reflect.New(chunkType(n)).UnsafePointer()
+	// SAFETY: chunkType starts with a chunkHeader, preserving its pointer's GC metadata.
 	*(*chunkHeader)(base) = chunkHeader{store: s, index: uint32(len(s.chunks))}
 	s.chunks = append(s.chunks, base)
 	s.words += n
+	// SAFETY: chunkType places exactly n aligned uint64 words immediately after the header.
 	return base, unsafe.Slice((*uint64)(unsafe.Add(base, chunkHeaderSize)), n)
 }
 
@@ -458,6 +474,8 @@ type textStore struct {
 }
 
 func (t *textStore) get(r textRef) string {
+	// SAFETY: set records a valid source or arena range; retained pieces keep the bytes alive,
+	// and allocated string ranges are never modified after publication. A zero ref is empty.
 	return unsafe.String((*byte)(unsafe.Add(t.pieces[r.off>>textPieceShift], r.off&textPieceMask)), r.len)
 }
 
@@ -469,8 +487,10 @@ func (t *textStore) setSource(text string) {
 		panic("node store source too large")
 	}
 	t.source = text
+	// SAFETY: source retains the immutable string backing these piece pointers.
 	p := unsafe.Pointer(unsafe.StringData(text))
 	for k := 0; uint64(k)*textPieceSize < uint64(len(text)); k++ {
+		// SAFETY: The loop bounds each piece start within the retained source string.
 		t.pieces[k] = unsafe.Add(p, k*textPieceSize)
 	}
 }
@@ -481,7 +501,9 @@ func (t *textStore) set(r *textRef, v string, _ bool) {
 		return
 	}
 	if len(t.source) != 0 {
+		// SAFETY: Only the address is inspected; source retains the backing bytes.
 		start := uintptr(unsafe.Pointer(unsafe.StringData(t.source)))
+		// SAFETY: Only the address is inspected, to recognize a range within the retained source.
 		p := uintptr(unsafe.Pointer(unsafe.StringData(v)))
 		if p >= start && p+uintptr(len(v)) <= start+uintptr(len(t.source)) {
 			*r = textRef{off: uint32(p - start), len: uint32(len(v))}
@@ -510,11 +532,14 @@ func (t *textStore) alloc(v string) uint32 {
 			panic("node text arena overflow")
 		}
 		size = max(size, n)
+		// SAFETY: The piece pointer retains the newly allocated size-byte backing array.
 		t.pieces[t.arena] = unsafe.Pointer(unsafe.SliceData(make([]byte, size)))
 		t.arenaSize = size
 		t.next = 0
 	}
 	off := t.next
+	// SAFETY: The capacity check reserves n bytes at off in this retained piece;
+	// only unused bytes are written, so previously returned strings remain immutable.
 	copy(unsafe.Slice((*byte)(unsafe.Add(t.pieces[t.arena], off)), n), v)
 	t.next += n
 	return t.arena<<textPieceShift | off

@@ -181,6 +181,7 @@ func (n Node) SetParent(parent Node) {
 	case parent.p == nil:
 		h.parent = parentNone
 	case parent.chunk() == n.chunk():
+		// SAFETY: Only the byte distance between records in the same chunk is retained.
 		h.parent = parentRef(int32(uintptr(parent.p) - uintptr(n.p)))
 	case h.parent&1 != 0 && h.parent != parentNone:
 		// Slots are never shared, so the record's own slot can be reused.
@@ -195,11 +196,14 @@ func (n Node) SetParent(parent Node) {
 // Parent is written out so that loops walking up the tree stay small enough
 // to inline.
 func (n Node) Parent() Node {
+	// SAFETY: Every node record begins with an aligned nodeBaseData header.
 	h := (*nodeBaseData)(n.p)
 	r := int(h.parent)
 	if r&1 == 0 {
+		// SAFETY: SetParent encodes an even offset only for a parent in the same retained chunk.
 		return Node{unsafe.Add(n.p, r)}
 	}
+	// SAFETY: The header's chunk offset leads back to this record's allocation header.
 	return (*chunkHeader)(unsafe.Add(n.p, -int(h.chunk))).store.far[uint32(r)>>1]
 }
 
@@ -234,6 +238,7 @@ func (n Node) AsMutable() MutableNode { return MutableNode{n} }
 
 func (n Node) Symbol() *Symbol {
 	if off := nodeSymbolOffsets[n.Kind()]; off != 0 {
+		// SAFETY: The kind's layout table identifies an aligned sideRef field in this record.
 		return n.store().symbols.items[*(*sideRef)(unsafe.Add(n.p, off))]
 	}
 	return nil
@@ -249,6 +254,7 @@ func (n Node) LocalSymbol() *Symbol {
 
 func (n Node) Locals() SymbolTable {
 	if off := nodeLocalsOffsets[n.Kind()]; off != 0 {
+		// SAFETY: The kind's layout table identifies an aligned sideRef field in this record.
 		return n.store().symbolTables.items[*(*sideRef)(unsafe.Add(n.p, off))]
 	}
 	return nil
@@ -265,6 +271,7 @@ func (n Node) Body() Node {
 // and computes the text of the other kinds having it.
 func (n Node) Text() string {
 	if off := nodeTextOffsets[n.Kind()]; off != 0 {
+		// SAFETY: The kind's layout table identifies an aligned textRef field in this record.
 		return n.store().texts.get(*(*textRef)(unsafe.Add(n.p, off)))
 	}
 	return n.computedText()
@@ -2255,6 +2262,7 @@ func (f *NodeFactory) NewSourceFile(opts SourceFileParseOptions, text string, st
 }
 
 func (n Node) asSourceFile() *SourceFile {
+	// SAFETY: AsSourceFile checks the kind; its record has the sourceFileData layout.
 	return n.store().sourceFiles.get((*sourceFileData)(n.rec()).file)
 }
 

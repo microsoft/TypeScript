@@ -214,6 +214,7 @@ type flowSwitchClauseData struct {
 }
 
 func (node FlowSwitchClauseData) data() *flowSwitchClauseData {
+	// SAFETY: This wrapper holds a record allocated with the flowSwitchClauseData layout.
 	return (*flowSwitchClauseData)(node.rec())
 }
 
@@ -255,6 +256,7 @@ type flowReduceLabelData struct {
 }
 
 func (node FlowReduceLabelData) data() *flowReduceLabelData {
+	// SAFETY: This wrapper holds a record allocated with the flowReduceLabelData layout.
 	return (*flowReduceLabelData)(node.rec())
 }
 
