@@ -70,6 +70,7 @@ class RpcClient {
     private timing: TimingCollector | undefined;
     private timingDump: TimingDump | undefined;
     private closing: Promise<void> | undefined;
+    private draining: Promise<void> | undefined;
     private batchedRequests: { method: APIRequest["method"]; params: APIRequest["params"]; resolve: (value: unknown) => void; reject: (reason?: any) => void; }[] = [];
     private nextBatch: NodeJS.Immediate | "manual" | undefined;
 
@@ -130,9 +131,9 @@ class RpcClient {
                 resolve();
             });
 
-            this.connection = this.jsonrpc!.createStreamConnection(this.process.stdout!, this.process.stdin!);
-            this.registerFSCallbacks(this.connection, options.fs, fsConfiguration);
-            this.connection.listen();
+            const connection = this.setConnection(this.jsonrpc!.createStreamConnection(this.process.stdout!, this.process.stdin!));
+            this.registerFSCallbacks(connection, options.fs, fsConfiguration);
+            connection.listen();
         });
     }
 
@@ -141,8 +142,8 @@ class RpcClient {
 
         return new Promise((resolve, reject) => {
             this.socket = createConnection(options.pipe, () => {
-                this.connection = this.jsonrpc!.createStreamConnection(this.socket!, this.socket!);
-                this.connection.listen();
+                const connection = this.setConnection(this.jsonrpc!.createStreamConnection(this.socket!, this.socket!));
+                connection.listen();
                 this.connected = true;
                 resolve();
             });
@@ -151,6 +152,23 @@ class RpcClient {
                 reject(new Error(`Socket error: ${error.message}`));
             });
         });
+    }
+
+    private setConnection({ connection, drain }: ReturnType<typeof JsonRpc.createStreamConnection>): JsonRpc.MessageConnection {
+        this.connection = connection;
+        this.draining = undefined;
+        connection.onClose(() => {
+            // The JSON-RPC connection emits close without rejecting pending requests.
+            this.connectionClosing(connection);
+            const draining = drain().then(() => connection.dispose());
+            if (this.connection === connection) this.draining = draining;
+        });
+        return connection;
+    }
+
+    private connectionClosing(connection: JsonRpc.MessageConnection): void {
+        // A failed spawn may close its streams after a later connection is established.
+        if (this.connected && this.connection === connection) this.rejectQueuedRequests();
     }
 
     private registerFSCallbacks(
@@ -424,7 +442,7 @@ class RpcClient {
         return this.closing ??= this.closeWorker();
     }
 
-    private async closeWorker(): Promise<void> {
+    private rejectQueuedRequests(): void {
         this.closed = true;
         if (this.nextBatch && this.nextBatch !== "manual") {
             clearImmediate(this.nextBatch);
@@ -435,29 +453,28 @@ class RpcClient {
         for (const { reject } of requests) {
             reject(new Error("Client is closed"));
         }
+    }
+
+    private async closeWorker(): Promise<void> {
+        this.rejectQueuedRequests();
         await this.connecting?.catch(() => {}); // if connection is still in-progress, wait for it to finish before closing the connection
         try {
             if (this.timingDump && this.timing) {
-                const local = this.timing.getInfo();
                 let server: ServerTimingInfo | undefined;
                 let serverTimingError: string | undefined;
-                const connection = this.connection;
-                // Closing alone does not reject pending JSON-RPC requests.
-                const onClose = connection?.onClose(() => connection.dispose());
                 try {
                     if (this.connected) server = await this.fetchServerTiming();
                 }
                 catch (error) {
                     serverTimingError = String(error);
                 }
-                finally {
-                    onClose?.dispose();
-                }
-                this.timingDump.write(local, server, serverTimingError);
+                if (this.draining) await this.draining;
+                this.timingDump.write(this.timing.getInfo(), server, serverTimingError);
             }
         }
         finally {
             if (this.connection) {
+                if (this.draining) await this.draining;
                 this.connection.dispose();
                 this.connection = undefined;
             }
