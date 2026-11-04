@@ -665,8 +665,8 @@ export class RemoteNode extends RemoteNodeBase implements Node {
     get checkType(): RemoteNode | undefined {
         return this.getNamedChild("checkType") as RemoteNode;
     }
-    get children(): RemoteNode | RemoteNodeList | undefined {
-        return this.getNamedChild("children") as RemoteNode | RemoteNodeList;
+    get children(): RemoteNodeList | undefined {
+        return this.getNamedChild("children") as RemoteNodeList;
     }
     get className(): RemoteNode | undefined {
         return this.getNamedChild("className") as RemoteNode;
@@ -761,8 +761,8 @@ export class RemoteNode extends RemoteNodeBase implements Node {
     get initializer(): RemoteNode | undefined {
         return this.getNamedChild("initializer") as RemoteNode;
     }
-    get jsdocPropertyTags(): RemoteNode | undefined {
-        return this.getNamedChild("jsdocPropertyTags") as RemoteNode;
+    get jsdocPropertyTags(): RemoteNodeList | undefined {
+        return this.getNamedChild("jsdocPropertyTags") as RemoteNodeList;
     }
     get label(): RemoteNode | undefined {
         return this.getNamedChild("label") as RemoteNode;

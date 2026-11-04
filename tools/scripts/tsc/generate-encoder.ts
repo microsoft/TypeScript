@@ -1298,7 +1298,7 @@ function generateTSNodeGenerated(): string {
         for (const m of info.childProps) {
             const propName = api.uncapitalize(m.name);
             const ct = childType(m);
-            const isListType = ct === "nodeList" || ct === "modifierList";
+            const isListType = ct === "nodeList" || ct === "rawNodeList" || ct === "modifierList";
             const existing = childGetters.get(propName);
             if (!existing) {
                 childGetters.set(propName, isListType ? "nodeList" : "node");
