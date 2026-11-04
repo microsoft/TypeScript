@@ -1,0 +1,29 @@
+//// [tests/cases/compiler/jsxChildrenExcessPropertySuppression.tsx] ////
+
+=== jsxChildrenExcessPropertySuppression.tsx ===
+declare namespace JSX {
+    interface Element {}
+    interface ElementChildrenAttribute { children: {}; }
+>children : {}
+}
+declare function Item(props: { depth: number }): JSX.Element;
+>Item : (props: { depth: number; }) => JSX.Element
+>props : { depth: number; }
+>depth : number
+>JSX : any
+
+// @ts-ignore
+<Item
+><Item    depth={0}    href="">text</Item> : JSX.Element
+>Item : (props: { depth: number; }) => JSX.Element
+
+    depth={0}
+>depth : number
+>0 : 0
+
+    href=""
+>href : string
+
+>text</Item>;
+>Item : (props: { depth: number; }) => JSX.Element
+

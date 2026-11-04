@@ -352,7 +352,7 @@ func getDeclarationsFromLocation(c *checker.Checker, node *ast.Node) []*ast.Node
 	node = getDeclarationNameForKeyword(node)
 	if symbol := c.GetSymbolAtLocation(node); symbol != nil {
 		if symbol.Flags()&ast.SymbolFlagsClass != 0 && symbol.Flags()&(ast.SymbolFlagsFunction|ast.SymbolFlagsVariable) == 0 && node.Kind == ast.KindConstructorKeyword {
-			if constructor := symbol.Members()[ast.InternalSymbolNameConstructor]; constructor != nil {
+			if constructor := symbol.Members().Get(ast.InternalSymbolNameConstructor); constructor != nil {
 				symbol = constructor
 			}
 		}

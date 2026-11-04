@@ -1,9 +1,13 @@
 import {
-    API,
+    API as NativeAPI,
     type APIOptions,
 } from "@typescript/typescript/async";
 import { fileURLToPath } from "node:url";
 import { createVirtualFileSystem } from "../testUtils.ts";
+import { withWasm } from "../wasm.ts";
+
+export const API = process.env.TS_API_TEST_WASM ? withWasm(NativeAPI) : NativeAPI;
+export type API<FromLSP extends boolean = false> = NativeAPI<FromLSP>;
 
 export const defaultFiles = {
     "/tsconfig.json": "{}",

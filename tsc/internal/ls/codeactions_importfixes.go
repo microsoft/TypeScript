@@ -80,6 +80,7 @@ func getImportCodeActions(ctx context.Context, fixContext *CodeFixContext) ([]*C
 			fixContext.LS.FormatOptions(),
 			fixContext.LS.converters,
 			fixContext.LS.UserPreferences(),
+			fixInfo.symbolName != fixInfo.errorIdentifierText,
 		)
 
 		if ok {
@@ -339,9 +340,10 @@ func getFixesInfoForNonUMDImport(fixContext *CodeFixContext, symbolToken *ast.No
 			fixes := view.GetFixes(export, isJSXTagName, isValidTypeOnlyUseSite, &usagePosition)
 			for _, fix := range fixes {
 				allInfo = append(allInfo, &fixInfo{
-					fix:               fix,
-					symbolName:        symbolName,
-					isJsxNamespaceFix: symbolName != symbolToken.Text(),
+					fix:                 fix,
+					symbolName:          symbolName,
+					errorIdentifierText: symbolToken.Text(),
+					isJsxNamespaceFix:   symbolName != symbolToken.Text(),
 				})
 			}
 		}

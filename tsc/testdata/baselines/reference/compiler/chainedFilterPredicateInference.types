@@ -1,0 +1,46 @@
+//// [tests/cases/compiler/chainedFilterPredicateInference.ts] ////
+
+=== chainedFilterPredicateInference.ts ===
+declare const items: { id: number }[];
+>items : { id: number; }[]
+>id : number
+
+declare const registry: { [id: number]: { [frame: number]: unknown } };
+>registry : { [id: number]: { [frame: number]: unknown; }; }
+>id : number
+>frame : number
+
+items
+>items    .filter(item => true)    .filter(item => !registry[item.id])    .forEach(item => item.id) : void
+>items    .filter(item => true)    .filter(item => !registry[item.id])    .forEach : (callbackfn: (value: { id: number; }, index: number, array: { id: number; }[]) => void, thisArg?: any) => void
+>items    .filter(item => true)    .filter(item => !registry[item.id]) : { id: number; }[]
+>items    .filter(item => true)    .filter : { <S extends { id: number; }>(predicate: (value: { id: number; }, index: number, array: { id: number; }[]) => value is S, thisArg?: any): S[]; (predicate: (value: { id: number; }, index: number, array: { id: number; }[]) => unknown, thisArg?: any): { id: number; }[]; }
+>items    .filter(item => true) : { id: number; }[]
+>items    .filter : { <S extends { id: number; }>(predicate: (value: { id: number; }, index: number, array: { id: number; }[]) => value is S, thisArg?: any): S[]; (predicate: (value: { id: number; }, index: number, array: { id: number; }[]) => unknown, thisArg?: any): { id: number; }[]; }
+>items : { id: number; }[]
+
+    .filter(item => true)
+>filter : { <S extends { id: number; }>(predicate: (value: { id: number; }, index: number, array: { id: number; }[]) => value is S, thisArg?: any): S[]; (predicate: (value: { id: number; }, index: number, array: { id: number; }[]) => unknown, thisArg?: any): { id: number; }[]; }
+>item => true : (item: { id: number; }) => true
+>item : { id: number; }
+>true : true
+
+    .filter(item => !registry[item.id])
+>filter : { <S extends { id: number; }>(predicate: (value: { id: number; }, index: number, array: { id: number; }[]) => value is S, thisArg?: any): S[]; (predicate: (value: { id: number; }, index: number, array: { id: number; }[]) => unknown, thisArg?: any): { id: number; }[]; }
+>item => !registry[item.id] : (item: { id: number; }) => false
+>item : { id: number; }
+>!registry[item.id] : false
+>registry[item.id] : { [frame: number]: unknown; }
+>registry : { [id: number]: { [frame: number]: unknown; }; }
+>item.id : number
+>item : { id: number; }
+>id : number
+
+    .forEach(item => item.id);
+>forEach : (callbackfn: (value: { id: number; }, index: number, array: { id: number; }[]) => void, thisArg?: any) => void
+>item => item.id : (item: { id: number; }) => number
+>item : { id: number; }
+>item.id : number
+>item : { id: number; }
+>id : number
+

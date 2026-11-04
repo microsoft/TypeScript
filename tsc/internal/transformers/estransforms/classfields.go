@@ -267,7 +267,7 @@ func (tx *classFieldsTransformer) visitForSubstitution(node *ast.Node) *ast.Node
 		return tx.visitIdentifier(node.AsIdentifier())
 	}
 	if node.Kind == ast.KindPropertyAccessExpression && ast.IsIdentifier(node.AsPropertyAccessExpression().Name()) {
-		return tx.visitPropertyAccessExpressionForSubstitution(node.AsPropertyAccessExpression())
+		return tx.visitPropertyAccessExpressionForSubstitution(node.AsPropertyAccessExpression(), tx.substitutionVisitor)
 	}
 	return tx.substitutionVisitor.VisitEachChild(node)
 }
@@ -1097,7 +1097,7 @@ func (tx *classFieldsTransformer) visitPropertyAccessExpression(node *ast.Proper
 	// Private identifier names are still visited through VisitEachChild so they can be
 	// transformed by visitPrivateIdentifier.
 	if ast.IsIdentifier(node.Name()) {
-		return tx.visitPropertyAccessExpressionForSubstitution(node)
+		return tx.visitPropertyAccessExpressionForSubstitution(node, tx.Visitor())
 	}
 	return tx.Visitor().VisitEachChild(node.AsNode())
 }
@@ -1105,8 +1105,8 @@ func (tx *classFieldsTransformer) visitPropertyAccessExpression(node *ast.Proper
 // visitPropertyAccessExpressionForSubstitution visits only the expression of a PropertyAccessExpression,
 // leaving the name unchanged. This prevents the name from being treated as a standalone identifier
 // reference and incorrectly substituted with a class alias.
-func (tx *classFieldsTransformer) visitPropertyAccessExpressionForSubstitution(node *ast.PropertyAccessExpression) *ast.Node {
-	expression := tx.Visitor().VisitNode(node.Expression)
+func (tx *classFieldsTransformer) visitPropertyAccessExpressionForSubstitution(node *ast.PropertyAccessExpression, visitor *ast.NodeVisitor) *ast.Node {
+	expression := visitor.VisitNode(node.Expression)
 	if expression != node.Expression {
 		return tx.Factory().UpdatePropertyAccessExpression(node, expression, node.QuestionDotToken, node.Name(), node.Flags)
 	}

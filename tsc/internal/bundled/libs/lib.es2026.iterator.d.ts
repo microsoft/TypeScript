@@ -13,7 +13,6 @@ See the Apache Version 2.0 License for specific language governing permissions
 and limitations under the License.
 ***************************************************************************** */
 
-
 /// <reference lib="es2025.iterator" />
 
 interface IteratorConstructor {
@@ -21,5 +20,5 @@ interface IteratorConstructor {
      * Creates an iterator that yields the values of each iterable in sequence.
      * @param iterables Iterable objects to concatenate.
      */
-    concat<T extends readonly unknown[] | []>(...iterables: { -readonly [K in keyof T]: Iterable<T[K]> & object }): IteratorObject<T[number], undefined, unknown>;
+    concat<T extends readonly unknown[] | []>(...iterables: { -readonly [K in keyof T]: Iterable<T[K]> & object; }): IteratorObject<T[number], undefined, unknown>;
 }

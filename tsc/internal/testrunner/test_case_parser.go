@@ -94,7 +94,7 @@ func makeUnitsFromTest(code string, fileName string) testCaseContent {
 			configDir := configFileName.Directory()
 			tsConfig = tsoptions.ParseJsonSourceFileConfigFileContent(
 				tsConfigSourceFile,
-				configFS,
+				tsoptions.NewDefaultParseConfigHost(configFS),
 				configDir,
 				existingOptions,
 				nil, /*existingOptionsRaw*/

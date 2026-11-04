@@ -1610,8 +1610,19 @@ func (c *Checker) isMatchingReference(source *ast.Node, target *ast.Node) bool {
 		if ast.IsThisInTypeQuery(source) {
 			return target.Kind == ast.KindThisKeyword
 		}
-		return ast.IsIdentifier(target) && c.getResolvedSymbol(source) == c.getResolvedSymbol(target) ||
-			(ast.IsVariableDeclaration(target) || ast.IsBindingElement(target)) && c.getExportSymbolOfValueSymbolIfExported(c.getResolvedSymbol(source)) == c.getSymbolOfDeclaration(target)
+		if ast.IsIdentifier(target) {
+			return c.getResolvedSymbol(source) == c.getResolvedSymbol(target)
+		}
+		if ast.IsVariableDeclaration(target) || ast.IsBindingElement(target) {
+			// A declaration's symbol is named by its identifier, so a reference with a
+			// different name cannot resolve to it. Checking names first avoids loading
+			// the symbols of every unrelated declaration seen while walking flow nodes.
+			if name := target.Name(); name != nil && ast.IsIdentifier(name) && name.AsIdentifier().Text != source.Text() {
+				return false
+			}
+			return c.getExportSymbolOfValueSymbolIfExported(c.getResolvedSymbol(source)) == c.getSymbolOfDeclaration(target)
+		}
+		return false
 	case ast.KindThisKeyword:
 		return target.Kind == ast.KindThisKeyword
 	case ast.KindSuperKeyword:
@@ -1619,11 +1630,12 @@ func (c *Checker) isMatchingReference(source *ast.Node, target *ast.Node) bool {
 	case ast.KindNonNullExpression, ast.KindParenthesizedExpression, ast.KindSatisfiesExpression:
 		return c.isMatchingReference(source.Expression(), target)
 	case ast.KindPropertyAccessExpression, ast.KindElementAccessExpression:
+		if !ast.IsAccessExpression(target) {
+			return false
+		}
 		if sourcePropertyName, ok := c.getAccessedPropertyName(source); ok {
-			if ast.IsAccessExpression(target) {
-				if targetPropertyName, ok := c.getAccessedPropertyName(target); ok {
-					return targetPropertyName == sourcePropertyName && c.isMatchingReference(source.Expression(), target.Expression())
-				}
+			if targetPropertyName, ok := c.getAccessedPropertyName(target); ok {
+				return targetPropertyName == sourcePropertyName && c.isMatchingReference(source.Expression(), target.Expression())
 			}
 		}
 		if ast.IsElementAccessExpression(source) && ast.IsElementAccessExpression(target) {
@@ -2071,7 +2083,7 @@ func (c *Checker) getEffectsSignature(node *ast.Node) *Signature {
 		}
 		signatures := c.getSignaturesOfType(core.OrElse(apparentType, c.unknownType), SignatureKindCall)
 		switch {
-		case len(signatures) == 1 && len(signatures[0].typeParameters) == 0:
+		case len(signatures) == 1 && len(signatures[0].TypeParameters()) == 0:
 			signature = signatures[0]
 		case core.Some(signatures, c.hasTypePredicateOrNeverReturnType):
 			signature = c.getResolvedSignature(node, nil, CheckModeNormal)
@@ -2216,8 +2228,8 @@ func (c *Checker) getExplicitThisType(node *ast.Node) *Type {
 	container := ast.GetThisContainer(node, false /*includeArrowFunctions*/, false /*includeClassComputedPropertyName*/)
 	if ast.IsFunctionLike(container) {
 		signature := c.getSignatureFromDeclaration(container)
-		if signature.thisParameter != nil {
-			return c.getExplicitTypeOfSymbol(signature.thisParameter, nil)
+		if signature.ThisParameter() != nil {
+			return c.getExplicitTypeOfSymbol(signature.ThisParameter(), nil)
 		}
 	}
 	if container.Parent != nil && ast.IsClassLike(container.Parent) {

@@ -1,0 +1,27 @@
+//// [tests/cases/compiler/fetchContextualRequestUrl.ts] ////
+
+=== fetchContextualRequestUrl.ts ===
+const fetchUsingRequestUrl: typeof fetch = async input => {
+>fetchUsingRequestUrl : Symbol(fetchUsingRequestUrl, Decl(fetchContextualRequestUrl.ts, 0, 5))
+>fetch : Symbol(fetch, Decl(lib.dom.d.ts, --, --))
+>input : Symbol(input, Decl(fetchContextualRequestUrl.ts, 0, 48))
+
+    const url = typeof input === "string" ? input : input instanceof URL ? input.href : input.url;
+>url : Symbol(url, Decl(fetchContextualRequestUrl.ts, 1, 9))
+>input : Symbol(input, Decl(fetchContextualRequestUrl.ts, 0, 48))
+>input : Symbol(input, Decl(fetchContextualRequestUrl.ts, 0, 48))
+>input : Symbol(input, Decl(fetchContextualRequestUrl.ts, 0, 48))
+>URL : Symbol(URL, Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --))
+>input.href : Symbol(URL.href, Decl(lib.dom.d.ts, --, --))
+>input : Symbol(input, Decl(fetchContextualRequestUrl.ts, 0, 48))
+>href : Symbol(URL.href, Decl(lib.dom.d.ts, --, --))
+>input.url : Symbol(Request.url, Decl(lib.dom.d.ts, --, --))
+>input : Symbol(input, Decl(fetchContextualRequestUrl.ts, 0, 48))
+>url : Symbol(Request.url, Decl(lib.dom.d.ts, --, --))
+
+    return new Response(url);
+>Response : Symbol(Response, Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --))
+>url : Symbol(url, Decl(fetchContextualRequestUrl.ts, 1, 9))
+
+};
+

@@ -1,0 +1,71 @@
+//// [tests/cases/compiler/mappedTypeAsClauseIntersectionConstraintIndexedAccess.ts] ////
+
+=== mappedTypeAsClauseIntersectionConstraintIndexedAccess.ts ===
+type ChildPaths<T> = [PathTuples<T>] extends [never] ? [] : PathTuples<T>;
+>ChildPaths : Symbol(ChildPaths, Decl(mappedTypeAsClauseIntersectionConstraintIndexedAccess.ts, 0, 0))
+>T : Symbol(T, Decl(mappedTypeAsClauseIntersectionConstraintIndexedAccess.ts, 0, 16))
+>PathTuples : Symbol(PathTuples, Decl(mappedTypeAsClauseIntersectionConstraintIndexedAccess.ts, 0, 74))
+>T : Symbol(T, Decl(mappedTypeAsClauseIntersectionConstraintIndexedAccess.ts, 0, 16))
+>PathTuples : Symbol(PathTuples, Decl(mappedTypeAsClauseIntersectionConstraintIndexedAccess.ts, 0, 74))
+>T : Symbol(T, Decl(mappedTypeAsClauseIntersectionConstraintIndexedAccess.ts, 0, 16))
+
+type PathTuples<T> = T extends object
+>PathTuples : Symbol(PathTuples, Decl(mappedTypeAsClauseIntersectionConstraintIndexedAccess.ts, 0, 74))
+>T : Symbol(T, Decl(mappedTypeAsClauseIntersectionConstraintIndexedAccess.ts, 1, 16))
+>T : Symbol(T, Decl(mappedTypeAsClauseIntersectionConstraintIndexedAccess.ts, 1, 16))
+
+  ? {
+      [K in keyof T & string as K extends '_key' ? never : K]: [PathTuples<T[K]>] extends [never]
+>K : Symbol(K, Decl(mappedTypeAsClauseIntersectionConstraintIndexedAccess.ts, 3, 7))
+>T : Symbol(T, Decl(mappedTypeAsClauseIntersectionConstraintIndexedAccess.ts, 1, 16))
+>K : Symbol(K, Decl(mappedTypeAsClauseIntersectionConstraintIndexedAccess.ts, 3, 7))
+>K : Symbol(K, Decl(mappedTypeAsClauseIntersectionConstraintIndexedAccess.ts, 3, 7))
+>PathTuples : Symbol(PathTuples, Decl(mappedTypeAsClauseIntersectionConstraintIndexedAccess.ts, 0, 74))
+>T : Symbol(T, Decl(mappedTypeAsClauseIntersectionConstraintIndexedAccess.ts, 1, 16))
+>K : Symbol(K, Decl(mappedTypeAsClauseIntersectionConstraintIndexedAccess.ts, 3, 7))
+
+        ? never
+        : readonly [K, ...ChildPaths<T[K]>];
+>K : Symbol(K, Decl(mappedTypeAsClauseIntersectionConstraintIndexedAccess.ts, 3, 7))
+>ChildPaths : Symbol(ChildPaths, Decl(mappedTypeAsClauseIntersectionConstraintIndexedAccess.ts, 0, 0))
+>T : Symbol(T, Decl(mappedTypeAsClauseIntersectionConstraintIndexedAccess.ts, 1, 16))
+>K : Symbol(K, Decl(mappedTypeAsClauseIntersectionConstraintIndexedAccess.ts, 3, 7))
+
+    }[Exclude<keyof T & string, '_key'>]
+>Exclude : Symbol(Exclude, Decl(lib.es5.d.ts, --, --))
+>T : Symbol(T, Decl(mappedTypeAsClauseIntersectionConstraintIndexedAccess.ts, 1, 16))
+
+  : [];
+
+type T1 = PathTuples<{ a: string; _key: string; b: { c: number } }>;
+>T1 : Symbol(T1, Decl(mappedTypeAsClauseIntersectionConstraintIndexedAccess.ts, 7, 7))
+>PathTuples : Symbol(PathTuples, Decl(mappedTypeAsClauseIntersectionConstraintIndexedAccess.ts, 0, 74))
+>a : Symbol(a, Decl(mappedTypeAsClauseIntersectionConstraintIndexedAccess.ts, 9, 22))
+>_key : Symbol(_key, Decl(mappedTypeAsClauseIntersectionConstraintIndexedAccess.ts, 9, 33))
+>b : Symbol(b, Decl(mappedTypeAsClauseIntersectionConstraintIndexedAccess.ts, 9, 47))
+>c : Symbol(c, Decl(mappedTypeAsClauseIntersectionConstraintIndexedAccess.ts, 9, 52))
+
+const t1: T1 = ['b', 'c'];
+>t1 : Symbol(t1, Decl(mappedTypeAsClauseIntersectionConstraintIndexedAccess.ts, 10, 5))
+>T1 : Symbol(T1, Decl(mappedTypeAsClauseIntersectionConstraintIndexedAccess.ts, 7, 7))
+
+type S1<T> = { [K in keyof T & string as K extends '_key' ? never : K]: 1 }[Exclude<keyof T & string, '_key'>];
+>S1 : Symbol(S1, Decl(mappedTypeAsClauseIntersectionConstraintIndexedAccess.ts, 10, 26))
+>T : Symbol(T, Decl(mappedTypeAsClauseIntersectionConstraintIndexedAccess.ts, 12, 8))
+>K : Symbol(K, Decl(mappedTypeAsClauseIntersectionConstraintIndexedAccess.ts, 12, 16))
+>T : Symbol(T, Decl(mappedTypeAsClauseIntersectionConstraintIndexedAccess.ts, 12, 8))
+>K : Symbol(K, Decl(mappedTypeAsClauseIntersectionConstraintIndexedAccess.ts, 12, 16))
+>K : Symbol(K, Decl(mappedTypeAsClauseIntersectionConstraintIndexedAccess.ts, 12, 16))
+>Exclude : Symbol(Exclude, Decl(lib.es5.d.ts, --, --))
+>T : Symbol(T, Decl(mappedTypeAsClauseIntersectionConstraintIndexedAccess.ts, 12, 8))
+
+type S2<T> = { [K in string & keyof T as K extends '_key' ? never : K]: 1 }[Exclude<string & keyof T, '_key'>];
+>S2 : Symbol(S2, Decl(mappedTypeAsClauseIntersectionConstraintIndexedAccess.ts, 12, 111))
+>T : Symbol(T, Decl(mappedTypeAsClauseIntersectionConstraintIndexedAccess.ts, 13, 8))
+>K : Symbol(K, Decl(mappedTypeAsClauseIntersectionConstraintIndexedAccess.ts, 13, 16))
+>T : Symbol(T, Decl(mappedTypeAsClauseIntersectionConstraintIndexedAccess.ts, 13, 8))
+>K : Symbol(K, Decl(mappedTypeAsClauseIntersectionConstraintIndexedAccess.ts, 13, 16))
+>K : Symbol(K, Decl(mappedTypeAsClauseIntersectionConstraintIndexedAccess.ts, 13, 16))
+>Exclude : Symbol(Exclude, Decl(lib.es5.d.ts, --, --))
+>T : Symbol(T, Decl(mappedTypeAsClauseIntersectionConstraintIndexedAccess.ts, 13, 8))
+

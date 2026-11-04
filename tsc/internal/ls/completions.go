@@ -92,6 +92,7 @@ func (l *LanguageService) filterContentMappedAutoImports(ctx context.Context, pr
 			l.FormatOptions(),
 			l.converters,
 			l.UserPreferences(),
+			false, /*includeSymbolNameInDescription*/
 		)
 		if !ok {
 			continue
@@ -1407,9 +1408,9 @@ func (l *LanguageService) getCompletionData(
 		if localSymbol != nil {
 			localExports = localSymbol.Exports()
 		}
-		for name, symbol := range localsContainer.Locals() {
+		for name, symbol := range localsContainer.Locals().All() {
 			symbols = append(symbols, symbol)
-			if _, ok := localExports[name]; ok {
+			if _, ok := localExports.Lookup(name); ok {
 				symbolId := ast.GetSymbolId(symbol)
 				symbolToSortTextMap[symbolId] = SortTextOptionalMember
 			}
@@ -1922,7 +1923,6 @@ func (l *LanguageService) completionInfoFromData(
 				caseBlock.AsCaseBlock(),
 				file,
 				position,
-				compilerOptions,
 				l.program,
 				typeChecker,
 			)
@@ -2140,7 +2140,10 @@ func completionNameForLiteral(
 }
 
 func getInsertTextAndReplacementSpanForImportCompletion(fix *autoimport.Fix, importKind lsproto.ImportKind, importStatementCompletion *importStatementCompletionInfo, useSemicolons bool, file *ast.SourceFile, preferences lsutil.UserPreferences, isSnippet bool) (insertText string, replacementSpan *lsproto.Range) {
-	quotedModuleSpecifier := escapeSnippetText(quote(file, preferences, fix.ModuleSpecifier))
+	quotedModuleSpecifier := quote(file, preferences, fix.ModuleSpecifier)
+	if isSnippet {
+		quotedModuleSpecifier = escapeSnippetText(strings.ReplaceAll(quotedModuleSpecifier, `\`, `\\`))
+	}
 	tabStop := core.IfElse(isSnippet, "$1", "")
 	suffix := core.IfElse(useSemicolons, ";", "")
 	topLevelTypeOnlyText := core.IfElse(importStatementCompletion.isTopLevelTypeOnly, " "+scanner.TokenToString(ast.KindTypeKeyword)+" ", " ")
@@ -3553,7 +3556,7 @@ func getContextualType(previousToken *ast.Node, position int, file *ast.SourceFi
 	}
 }
 
-func getSwitchedType(caseClause *ast.CaseOrDefaultClauseNode, typeChecker *checker.Checker) *checker.Type {
+func getSwitchedType(caseClause *ast.CaseOrDefaultClause, typeChecker *checker.Checker) *checker.Type {
 	return typeChecker.GetTypeAtLocation(caseClause.Parent.Parent.Expression())
 }
 
@@ -5544,7 +5547,7 @@ func (l *LanguageService) getCompletionItemDetails(
 		// Auto-imports in content-mapped files are evaluated eagerly so edits outside
 		// of verbatim spans can cause the completion item to be filtered out entirely.
 		// Only real files take this code path, so the final Edits() is guaranteed ok.
-		edits, description, _ := (&autoimport.Fix{AutoImportFix: data.AutoImport}).Edits(ctx, file, program.Options(), l.FormatOptions(), l.converters, l.UserPreferences())
+		edits, description, _ := (&autoimport.Fix{AutoImportFix: data.AutoImport}).Edits(ctx, file, program.Options(), l.FormatOptions(), l.converters, l.UserPreferences(), false /*includeSymbolNameInDescription*/)
 		item.AdditionalTextEdits = &edits
 		item.Detail = strPtrTo(description)
 		return item
@@ -6588,7 +6591,6 @@ func (l *LanguageService) getExhaustiveCaseSnippets(
 	caseBlock *ast.CaseBlock,
 	file *ast.SourceFile,
 	position int,
-	options *core.CompilerOptions,
 	program *compiler.Program,
 	c *checker.Checker,
 ) (*lsproto.CompletionItem, error) {
@@ -6597,7 +6599,6 @@ func (l *LanguageService) getExhaustiveCaseSnippets(
 	if switchType != nil && switchType.IsUnion() && core.Every(switchType.Types(), isLiteral) {
 		// Collect constant values in existing clauses.
 		tracker := newCaseClauseTracker(c, clauses)
-		target := options.GetEmitScriptTarget()
 		quotePreference := lsutil.GetQuotePreference(file, l.UserPreferences())
 		// Tolerate a nil import adder in untitled files.
 		var importAdder autoimport.ImportAdder
@@ -6642,7 +6643,7 @@ func (l *LanguageService) getExhaustiveCaseSnippets(
 				if typeNode == nil {
 					return nil, nil
 				}
-				expr := typeNodeToExpression(typeNode, target, quotePreference, factory)
+				expr := typeNodeToExpression(typeNode, quotePreference, factory)
 				if expr == nil {
 					return nil, nil
 				}
@@ -6676,8 +6677,8 @@ func (l *LanguageService) getExhaustiveCaseSnippets(
 			return nil, nil
 		}
 
-		newClauses := core.Map(elements, func(element *ast.Node) *ast.CaseOrDefaultClauseNode {
-			return factory.NewCaseOrDefaultClause(ast.KindCaseClause, element, factory.NewNodeList(nil))
+		newClauses := core.Map(elements, func(element *ast.Node) *ast.CaseOrDefaultClause {
+			return factory.NewCaseClause(element, factory.NewNodeList(nil))
 		})
 		newLineChar := l.FormatOptions().NewLineCharacter
 		printer := createSnippetPrinter(printer.PrinterOptions{
@@ -6723,24 +6724,21 @@ func (l *LanguageService) getExhaustiveCaseSnippets(
 
 func typeNodeToExpression(
 	typeNode *ast.TypeNode,
-	target core.ScriptTarget,
 	quotePreference lsutil.QuotePreference,
 	factory *ast.NodeFactory,
 ) *ast.Expression {
 	switch typeNode.Kind {
 	case ast.KindTypeReference:
 		typeName := typeNode.AsTypeReferenceNode().TypeName
-		return entityNameToExpression(typeName, target, quotePreference, factory)
+		return entityNameToExpression(typeName, factory)
 	case ast.KindIndexedAccessType:
 		objectExpression := typeNodeToExpression(
 			typeNode.AsIndexedAccessTypeNode().ObjectType,
-			target,
 			quotePreference,
 			factory,
 		)
 		indexExpression := typeNodeToExpression(
 			typeNode.AsIndexedAccessTypeNode().IndexType,
-			target,
 			quotePreference,
 			factory,
 		)
@@ -6763,7 +6761,6 @@ func typeNodeToExpression(
 	case ast.KindParenthesizedType:
 		expr := typeNodeToExpression(
 			typeNode.AsParenthesizedTypeNode().Type,
-			target,
 			quotePreference,
 			factory,
 		)
@@ -6775,7 +6772,7 @@ func typeNodeToExpression(
 		}
 		return factory.NewParenthesizedExpression(expr)
 	case ast.KindTypeQuery:
-		return entityNameToExpression(typeNode.AsTypeQueryNode().ExprName, target, quotePreference, factory)
+		return entityNameToExpression(typeNode.AsTypeQueryNode().ExprName, factory)
 	case ast.KindImportType:
 		debug.Fail(`We should not get an import type after calling 'typeToAutoImportableTypeNode'.`)
 		return nil
@@ -6785,15 +6782,13 @@ func typeNodeToExpression(
 
 func entityNameToExpression(
 	entityName *ast.EntityName,
-	target core.ScriptTarget,
-	quotePreference lsutil.QuotePreference,
 	factory *ast.NodeFactory,
 ) *ast.Expression {
 	if ast.IsIdentifier(entityName) {
 		return entityName
 	}
 	return factory.NewPropertyAccessExpression(
-		entityNameToExpression(entityName.AsQualifiedName().Left, target, quotePreference, factory),
+		entityNameToExpression(entityName.AsQualifiedName().Left, factory),
 		nil, /*questionDotToken*/
 		entityName.AsQualifiedName().Right,
 		ast.NodeFlagsNone,

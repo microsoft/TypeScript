@@ -1,0 +1,73 @@
+//// [tests/cases/compiler/sharedMemberLayoutGenericBase1.ts] ////
+
+=== sharedMemberLayoutGenericBase1.ts ===
+function factory<T extends object>(ctor: new () => T) {
+>factory : <T extends object>(ctor: new () => T) => typeof Derived
+>ctor : new () => T
+
+    class Base extends ctor {}
+>Base : Base
+>ctor : T
+
+    class Derived extends Base {}
+>Derived : Derived
+>Base : Base
+
+    return Derived;
+>Derived : typeof Derived
+}
+
+class A { a = 1; }
+>A : A
+>a : number
+>1 : 1
+
+class B { b = "b"; }
+>B : B
+>b : string
+>"b" : "b"
+
+const DA = factory(A);
+>DA : typeof Derived
+>factory(A) : typeof Derived
+>factory : <T extends object>(ctor: new () => T) => typeof Derived
+>A : typeof A
+
+const a = new DA();
+>a : factory.Derived
+>new DA() : factory.Derived
+>DA : typeof Derived
+
+const aValue: number = a.a;
+>aValue : number
+>a.a : number
+>a : factory.Derived
+>a : number
+
+const aAll = { ...a };
+>aAll : { a: number; }
+>{ ...a } : { a: number; }
+>a : factory.Derived
+
+const DB = factory(B);
+>DB : typeof Derived
+>factory(B) : typeof Derived
+>factory : <T extends object>(ctor: new () => T) => typeof Derived
+>B : typeof B
+
+const b = new DB();
+>b : factory.Derived
+>new DB() : factory.Derived
+>DB : typeof Derived
+
+const bValue: string = b.b;
+>bValue : string
+>b.b : string
+>b : factory.Derived
+>b : string
+
+const bAll = { ...b };
+>bAll : { b: string; }
+>{ ...b } : { b: string; }
+>b : factory.Derived
+

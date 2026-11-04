@@ -54,6 +54,10 @@ func (p *fakeProgram) ContentMapperExtensions() []string {
 	return nil
 }
 
+func (p *fakeProgram) ContentMapperExtensionRewrites() []tspath.ExtensionRewrite {
+	return nil
+}
+
 func (p *fakeProgram) GetResolvedModuleFromModuleSpecifier(file ast.HasFileName, moduleSpecifier *ast.StringLiteralLike) *module.ResolvedModule {
 	panic("unimplemented")
 }
@@ -123,7 +127,7 @@ func (p *fakeProgram) SourceFiles() []*ast.SourceFile {
 }
 
 func (p *fakeProgram) BindSourceFiles() {
-	wg := core.NewWorkGroup(p.singleThreaded)
+	wg := core.NewWorkGroup(core.WorkGroupConcurrency(p.singleThreaded))
 	for _, file := range p.files {
 		if !file.IsBound() {
 			wg.Queue(func() {

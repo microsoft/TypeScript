@@ -1,0 +1,14 @@
+//// [tests/cases/compiler/moduleKeywordInstantiatedNamespace.ts] ////
+
+=== moduleKeywordInstantiatedNamespace.ts ===
+module Runtime {
+>Runtime : Symbol(Runtime, Decl(moduleKeywordInstantiatedNamespace.ts, 0, 0))
+
+    export const value = 0;
+>value : Symbol(value, Decl(moduleKeywordInstantiatedNamespace.ts, 1, 16))
+}
+Runtime.value;
+>Runtime.value : Symbol(Runtime.value, Decl(moduleKeywordInstantiatedNamespace.ts, 1, 16))
+>Runtime : Symbol(Runtime, Decl(moduleKeywordInstantiatedNamespace.ts, 0, 0))
+>value : Symbol(Runtime.value, Decl(moduleKeywordInstantiatedNamespace.ts, 1, 16))
+

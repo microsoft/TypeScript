@@ -1,0 +1,17 @@
+//// [tests/cases/compiler/callableWeakMetadata.ts] ////
+
+=== callableWeakMetadata.ts ===
+type Initializer = (() => number) & { mutators?: [] };
+>Initializer : Initializer
+>mutators : [] | undefined
+
+declare function createStore(initializer: Initializer): void;
+>createStore : (initializer: Initializer) => void
+>initializer : Initializer
+
+createStore(() => 1);
+>createStore(() => 1) : void
+>createStore : (initializer: Initializer) => void
+>() => 1 : () => number
+>1 : 1
+

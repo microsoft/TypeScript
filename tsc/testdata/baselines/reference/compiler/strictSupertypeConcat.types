@@ -1,0 +1,39 @@
+//// [tests/cases/compiler/strictSupertypeConcat.ts] ////
+
+=== strictSupertypeConcat.ts ===
+declare class User {
+>User : User
+
+    get initial(): string;
+>initial : string
+}
+declare class Group {
+>Group : Group
+
+    memberCount: number;
+>memberCount : number
+}
+interface Suggestion {
+    initial?: string;
+>initial : string | undefined
+}
+type Many<Value> = Value | readonly Value[];
+>Many : Many<Value>
+
+declare function concat<Value>(...values: Many<Value>[]): Value[];
+>concat : <Value>(...values: Many<Value>[]) => Value[]
+>values : Many<Value>[]
+
+declare const pending: User[];
+>pending : User[]
+
+declare const suggestions: (Group | Suggestion)[];
+>suggestions : (Group | Suggestion)[]
+
+const items = concat(pending, suggestions);
+>items : (Group | Suggestion)[]
+>concat(pending, suggestions) : (Group | Suggestion)[]
+>concat : <Value>(...values: Many<Value>[]) => Value[]
+>pending : User[]
+>suggestions : (Group | Suggestion)[]
+

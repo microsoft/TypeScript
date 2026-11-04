@@ -1,0 +1,67 @@
+//// [tests/cases/compiler/newExpressionCalleeParenthesesDownlevel.ts] ////
+
+=== newExpressionCalleeParenthesesDownlevel.ts ===
+class Plugins {
+>Plugins : Symbol(Plugins, Decl(newExpressionCalleeParenthesesDownlevel.ts, 0, 0))
+
+    static Linker = class {};
+>Linker : Symbol(Plugins.Linker, Decl(newExpressionCalleeParenthesesDownlevel.ts, 0, 15))
+}
+
+class A {
+>A : Symbol(A, Decl(newExpressionCalleeParenthesesDownlevel.ts, 2, 1))
+
+    #plugins = Plugins;
+>#plugins : Symbol(A.#plugins, Decl(newExpressionCalleeParenthesesDownlevel.ts, 4, 9))
+>Plugins : Symbol(Plugins, Decl(newExpressionCalleeParenthesesDownlevel.ts, 0, 0))
+
+    static #staticPlugins = Plugins;
+>#staticPlugins : Symbol(A.#staticPlugins, Decl(newExpressionCalleeParenthesesDownlevel.ts, 5, 23))
+>Plugins : Symbol(Plugins, Decl(newExpressionCalleeParenthesesDownlevel.ts, 0, 0))
+
+    m() {
+>m : Symbol(A.m, Decl(newExpressionCalleeParenthesesDownlevel.ts, 6, 36))
+
+        new this.#plugins.Linker();
+>this.#plugins.Linker : Symbol(Plugins.Linker, Decl(newExpressionCalleeParenthesesDownlevel.ts, 0, 15))
+>this.#plugins : Symbol(A.#plugins, Decl(newExpressionCalleeParenthesesDownlevel.ts, 4, 9))
+>this : Symbol(A, Decl(newExpressionCalleeParenthesesDownlevel.ts, 2, 1))
+>Linker : Symbol(Plugins.Linker, Decl(newExpressionCalleeParenthesesDownlevel.ts, 0, 15))
+
+        new this.#plugins["Linker"]();
+>this.#plugins : Symbol(A.#plugins, Decl(newExpressionCalleeParenthesesDownlevel.ts, 4, 9))
+>this : Symbol(A, Decl(newExpressionCalleeParenthesesDownlevel.ts, 2, 1))
+>"Linker" : Symbol(Plugins.Linker, Decl(newExpressionCalleeParenthesesDownlevel.ts, 0, 15))
+
+        new A.#staticPlugins.Linker();
+>A.#staticPlugins.Linker : Symbol(Plugins.Linker, Decl(newExpressionCalleeParenthesesDownlevel.ts, 0, 15))
+>A.#staticPlugins : Symbol(A.#staticPlugins, Decl(newExpressionCalleeParenthesesDownlevel.ts, 5, 23))
+>A : Symbol(A, Decl(newExpressionCalleeParenthesesDownlevel.ts, 2, 1))
+>Linker : Symbol(Plugins.Linker, Decl(newExpressionCalleeParenthesesDownlevel.ts, 0, 15))
+    }
+}
+
+class B {
+>B : Symbol(B, Decl(newExpressionCalleeParenthesesDownlevel.ts, 13, 1))
+
+    static Plugins = Plugins;
+>Plugins : Symbol(B.Plugins, Decl(newExpressionCalleeParenthesesDownlevel.ts, 15, 9))
+>Plugins : Symbol(Plugins, Decl(newExpressionCalleeParenthesesDownlevel.ts, 0, 0))
+}
+
+class C extends B {
+>C : Symbol(C, Decl(newExpressionCalleeParenthesesDownlevel.ts, 17, 1))
+>B : Symbol(B, Decl(newExpressionCalleeParenthesesDownlevel.ts, 13, 1))
+
+    static async m(key: "Plugins") {
+>m : Symbol(C.m, Decl(newExpressionCalleeParenthesesDownlevel.ts, 19, 19))
+>key : Symbol(key, Decl(newExpressionCalleeParenthesesDownlevel.ts, 20, 19))
+
+        new super[key].Linker();
+>super[key].Linker : Symbol(Plugins.Linker, Decl(newExpressionCalleeParenthesesDownlevel.ts, 0, 15))
+>super : Symbol(B, Decl(newExpressionCalleeParenthesesDownlevel.ts, 13, 1))
+>key : Symbol(key, Decl(newExpressionCalleeParenthesesDownlevel.ts, 20, 19))
+>Linker : Symbol(Plugins.Linker, Decl(newExpressionCalleeParenthesesDownlevel.ts, 0, 15))
+    }
+}
+

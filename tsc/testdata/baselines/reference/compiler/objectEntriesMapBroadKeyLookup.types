@@ -1,0 +1,22 @@
+//// [tests/cases/compiler/objectEntriesMapBroadKeyLookup.ts] ////
+
+=== objectEntriesMapBroadKeyLookup.ts ===
+declare const languages: Record<"en" | "fr", string>;
+>languages : Record<"en" | "fr", string>
+
+declare const language: string;
+>language : string
+
+new Map(Object.entries(languages)).get(language);
+>new Map(Object.entries(languages)).get(language) : string | undefined
+>new Map(Object.entries(languages)).get : (key: string) => string | undefined
+>new Map(Object.entries(languages)) : Map<string, string>
+>Map : MapConstructor
+>Object.entries(languages) : [string, string][]
+>Object.entries : { <T>(o: { [s: string]: T; } | ArrayLike<T>): [string, T][]; (o: {}): [string, any][]; }
+>Object : ObjectConstructor
+>entries : { <T>(o: { [s: string]: T; } | ArrayLike<T>): [string, T][]; (o: {}): [string, any][]; }
+>languages : Record<"en" | "fr", string>
+>get : (key: string) => string | undefined
+>language : string
+
