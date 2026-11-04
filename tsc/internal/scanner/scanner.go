@@ -337,6 +337,9 @@ func (s *Scanner) TokenValue() string {
 // IdentifierHash returns ast.SymbolNameHash(text) if text is the exact string
 // most recently produced by the identifier fast path.
 func (s *Scanner) IdentifierHash(text string) (uint64, bool) {
+	// SAFETY: StringData is used only for the address of a nonempty string.
+	// The uintptr is compared as an identity key, never converted back to a
+	// pointer or dereferenced, so it need not keep any backing allocation alive.
 	if len(text) != 0 && len(text) == s.identifierHashLen && uintptr(unsafe.Pointer(unsafe.StringData(text))) == s.identifierHashData {
 		return s.identifierHash, true
 	}
@@ -1575,6 +1578,9 @@ func (s *Scanner) scanIdentifier(prefixLength int, variant identifierVariant) bo
 			s.tokenValue = s.text[start:s.pos]
 			if start == identifierStart {
 				s.identifierHash = ast.SymbolNameHashFinish(h)
+				// SAFETY: tokenValue is a nonempty substring of s.text, which
+				// retains its immutable bytes. The address is stored only as an
+				// identity key and is never converted back to a pointer or dereferenced.
 				s.identifierHashData = uintptr(unsafe.Pointer(unsafe.StringData(s.tokenValue)))
 				s.identifierHashLen = len(s.tokenValue)
 			}

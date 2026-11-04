@@ -109,7 +109,13 @@ func (t *symbolNameTable) chunk(index uint32) *symbolNameChunk {
 
 func (t *symbolNameTable) text(id uint32) string {
 	chunk := t.chunk(id >> symbolNameChunkUnitBits)
+	// SAFETY: IDs identify eight-byte-aligned records in heap-allocated chunk
+	// runs retained by the directory; the conversion preserves the pointer.
 	record := unsafe.Pointer(&chunk[(id&(symbolNameChunkUnits-1))*symbolNameUnitBytes])
+	// SAFETY: allocate reserves the header and text within one backing run,
+	// including for multi-chunk records. The four-byte length is aligned and
+	// initialized before the ID is atomically published in a slot. Records are
+	// never modified or reused, and the returned string retains the backing run.
 	return unsafe.String((*byte)(unsafe.Add(record, symbolNameRecordHeader)), *(*uint32)(record))
 }
 
@@ -196,8 +202,16 @@ func (t *symbolNameTable) allocate(arena *symbolNameArena, text string) uint32 {
 		arena.next += units
 	}
 	chunk := t.chunk(id >> symbolNameChunkUnitBits)
+	// SAFETY: The arena reserves disjoint records in heap-allocated chunk runs
+	// retained by the directory. This points to the reserved record's first byte.
 	record := unsafe.Pointer(&chunk[(id&(symbolNameChunkUnits-1))*symbolNameUnitBytes])
+	// SAFETY: The heap-allocated chunk base and eight-byte record offset align
+	// the four-byte header, which fits entirely within the reserved record.
 	*(*uint32)(record) = uint32(len(text))
+	// SAFETY: units includes the header and all text bytes. Large records get
+	// one contiguous backing allocation from newChunks; other records fit in a
+	// single chunk. These bytes are written only here, under the shard lock,
+	// before publishing the ID, and are never modified or reused afterward.
 	copy(unsafe.Slice((*byte)(unsafe.Add(record, symbolNameRecordHeader)), len(text)), text)
 	return id
 }
