@@ -1,0 +1,231 @@
+//// [tests/cases/compiler/negatedInferenceCompatibility.ts] ////
+
+=== negatedInferenceCompatibility.ts ===
+export function formatFlags(value: number, flags: readonly number[]) {
+>formatFlags : Symbol(formatFlags, Decl(negatedInferenceCompatibility.ts, 0, 0))
+>value : Symbol(value, Decl(negatedInferenceCompatibility.ts, 0, 28))
+>flags : Symbol(flags, Decl(negatedInferenceCompatibility.ts, 0, 42))
+
+    if (value === 0) return true;
+>value : Symbol(value, Decl(negatedInferenceCompatibility.ts, 0, 28))
+
+    let remainingFlags = value;
+>remainingFlags : Symbol(remainingFlags, Decl(negatedInferenceCompatibility.ts, 2, 7))
+>value : Symbol(value, Decl(negatedInferenceCompatibility.ts, 0, 28))
+
+    for (const flag of flags) {
+>flag : Symbol(flag, Decl(negatedInferenceCompatibility.ts, 3, 14))
+>flags : Symbol(flags, Decl(negatedInferenceCompatibility.ts, 0, 42))
+
+        remainingFlags &= ~flag;
+>remainingFlags : Symbol(remainingFlags, Decl(negatedInferenceCompatibility.ts, 2, 7))
+>flag : Symbol(flag, Decl(negatedInferenceCompatibility.ts, 3, 14))
+    }
+    return remainingFlags === 0;
+>remainingFlags : Symbol(remainingFlags, Decl(negatedInferenceCompatibility.ts, 2, 7))
+}
+
+export function lookupOptions(options: object, setting: string) {
+>lookupOptions : Symbol(lookupOptions, Decl(negatedInferenceCompatibility.ts, 7, 1))
+>options : Symbol(options, Decl(negatedInferenceCompatibility.ts, 9, 30))
+>setting : Symbol(setting, Decl(negatedInferenceCompatibility.ts, 9, 46))
+
+    const names = Object.keys(options).filter(k => k !== "init" && k !== "help" && k !== "watch");
+>names : Symbol(names, Decl(negatedInferenceCompatibility.ts, 10, 9))
+>Object.keys(options).filter : Symbol(Array.filter, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>Object.keys : Symbol(ObjectConstructor.keys, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
+>Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>keys : Symbol(ObjectConstructor.keys, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
+>options : Symbol(options, Decl(negatedInferenceCompatibility.ts, 9, 30))
+>filter : Symbol(Array.filter, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>k : Symbol(k, Decl(negatedInferenceCompatibility.ts, 10, 46))
+>k : Symbol(k, Decl(negatedInferenceCompatibility.ts, 10, 46))
+>k : Symbol(k, Decl(negatedInferenceCompatibility.ts, 10, 46))
+>k : Symbol(k, Decl(negatedInferenceCompatibility.ts, 10, 46))
+
+    return names.indexOf(setting);
+>names.indexOf : Symbol(Array.indexOf, Decl(lib.es5.d.ts, --, --))
+>names : Symbol(names, Decl(negatedInferenceCompatibility.ts, 10, 9))
+>indexOf : Symbol(Array.indexOf, Decl(lib.es5.d.ts, --, --))
+>setting : Symbol(setting, Decl(negatedInferenceCompatibility.ts, 9, 46))
+}
+
+export function mutableNumber(value: number) {
+>mutableNumber : Symbol(mutableNumber, Decl(negatedInferenceCompatibility.ts, 12, 1))
+>value : Symbol(value, Decl(negatedInferenceCompatibility.ts, 14, 30))
+
+    if (value === 0) throw new Error();
+>value : Symbol(value, Decl(negatedInferenceCompatibility.ts, 14, 30))
+>Error : Symbol(Error, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2022.error.d.ts, --, --))
+
+    let copy = value;
+>copy : Symbol(copy, Decl(negatedInferenceCompatibility.ts, 16, 7))
+>value : Symbol(value, Decl(negatedInferenceCompatibility.ts, 14, 30))
+
+    copy = 0;
+>copy : Symbol(copy, Decl(negatedInferenceCompatibility.ts, 16, 7))
+
+    return copy;
+>copy : Symbol(copy, Decl(negatedInferenceCompatibility.ts, 16, 7))
+}
+
+export function mutableString(value: string) {
+>mutableString : Symbol(mutableString, Decl(negatedInferenceCompatibility.ts, 19, 1))
+>value : Symbol(value, Decl(negatedInferenceCompatibility.ts, 21, 30))
+
+    if (value === "") throw new Error();
+>value : Symbol(value, Decl(negatedInferenceCompatibility.ts, 21, 30))
+>Error : Symbol(Error, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2022.error.d.ts, --, --))
+
+    let copy = value;
+>copy : Symbol(copy, Decl(negatedInferenceCompatibility.ts, 23, 7))
+>value : Symbol(value, Decl(negatedInferenceCompatibility.ts, 21, 30))
+
+    copy += "suffix";
+>copy : Symbol(copy, Decl(negatedInferenceCompatibility.ts, 23, 7))
+
+    copy = "";
+>copy : Symbol(copy, Decl(negatedInferenceCompatibility.ts, 23, 7))
+
+    return copy;
+>copy : Symbol(copy, Decl(negatedInferenceCompatibility.ts, 23, 7))
+}
+
+export function mutableBigInt(value: bigint) {
+>mutableBigInt : Symbol(mutableBigInt, Decl(negatedInferenceCompatibility.ts, 27, 1))
+>value : Symbol(value, Decl(negatedInferenceCompatibility.ts, 29, 30))
+
+    if (value === 0n) throw new Error();
+>value : Symbol(value, Decl(negatedInferenceCompatibility.ts, 29, 30))
+>Error : Symbol(Error, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2022.error.d.ts, --, --))
+
+    let copy = value;
+>copy : Symbol(copy, Decl(negatedInferenceCompatibility.ts, 31, 7))
+>value : Symbol(value, Decl(negatedInferenceCompatibility.ts, 29, 30))
+
+    copy *= 0n;
+>copy : Symbol(copy, Decl(negatedInferenceCompatibility.ts, 31, 7))
+
+    copy = 0n;
+>copy : Symbol(copy, Decl(negatedInferenceCompatibility.ts, 31, 7))
+
+    return copy;
+>copy : Symbol(copy, Decl(negatedInferenceCompatibility.ts, 31, 7))
+}
+
+export function preservedBounds(value: number) {
+>preservedBounds : Symbol(preservedBounds, Decl(negatedInferenceCompatibility.ts, 35, 1))
+>value : Symbol(value, Decl(negatedInferenceCompatibility.ts, 37, 32))
+
+    if (value === 0) throw new Error();
+>value : Symbol(value, Decl(negatedInferenceCompatibility.ts, 37, 32))
+>Error : Symbol(Error, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2022.error.d.ts, --, --))
+
+    const constant = value;
+>constant : Symbol(constant, Decl(negatedInferenceCompatibility.ts, 39, 9))
+>value : Symbol(value, Decl(negatedInferenceCompatibility.ts, 37, 32))
+
+    const retained: number & not 0 = constant;
+>retained : Symbol(retained, Decl(negatedInferenceCompatibility.ts, 40, 9))
+>constant : Symbol(constant, Decl(negatedInferenceCompatibility.ts, 39, 9))
+
+    let annotated: number & not 0 = value;
+>annotated : Symbol(annotated, Decl(negatedInferenceCompatibility.ts, 41, 7))
+>value : Symbol(value, Decl(negatedInferenceCompatibility.ts, 37, 32))
+
+    annotated = 0;
+>annotated : Symbol(annotated, Decl(negatedInferenceCompatibility.ts, 41, 7))
+
+    return retained;
+>retained : Symbol(retained, Decl(negatedInferenceCompatibility.ts, 40, 9))
+}
+
+export function assertedBounds(value: number) {
+>assertedBounds : Symbol(assertedBounds, Decl(negatedInferenceCompatibility.ts, 44, 1))
+>value : Symbol(value, Decl(negatedInferenceCompatibility.ts, 46, 31))
+
+    let asserted = (value as number & not 0);
+>asserted : Symbol(asserted, Decl(negatedInferenceCompatibility.ts, 47, 7))
+>value : Symbol(value, Decl(negatedInferenceCompatibility.ts, 46, 31))
+
+    asserted = 0;
+>asserted : Symbol(asserted, Decl(negatedInferenceCompatibility.ts, 47, 7))
+
+    let nonNull = (value as number & not 0)!;
+>nonNull : Symbol(nonNull, Decl(negatedInferenceCompatibility.ts, 49, 7))
+>value : Symbol(value, Decl(negatedInferenceCompatibility.ts, 46, 31))
+
+    nonNull = 0;
+>nonNull : Symbol(nonNull, Decl(negatedInferenceCompatibility.ts, 49, 7))
+
+    let satisfies = (value as number & not 0) satisfies number;
+>satisfies : Symbol(satisfies, Decl(negatedInferenceCompatibility.ts, 51, 7))
+>value : Symbol(value, Decl(negatedInferenceCompatibility.ts, 46, 31))
+
+    satisfies = 0;
+>satisfies : Symbol(satisfies, Decl(negatedInferenceCompatibility.ts, 51, 7))
+
+    return asserted;
+>asserted : Symbol(asserted, Decl(negatedInferenceCompatibility.ts, 47, 7))
+}
+
+export function nonString(value: unknown) {
+>nonString : Symbol(nonString, Decl(negatedInferenceCompatibility.ts, 54, 1))
+>value : Symbol(value, Decl(negatedInferenceCompatibility.ts, 56, 26))
+
+    if (typeof value === "string") throw new Error();
+>value : Symbol(value, Decl(negatedInferenceCompatibility.ts, 56, 26))
+>Error : Symbol(Error, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2022.error.d.ts, --, --))
+
+    let copy = value;
+>copy : Symbol(copy, Decl(negatedInferenceCompatibility.ts, 58, 7))
+>value : Symbol(value, Decl(negatedInferenceCompatibility.ts, 56, 26))
+
+    const retained: not string = copy;
+>retained : Symbol(retained, Decl(negatedInferenceCompatibility.ts, 59, 9))
+>copy : Symbol(copy, Decl(negatedInferenceCompatibility.ts, 58, 7))
+
+    return retained;
+>retained : Symbol(retained, Decl(negatedInferenceCompatibility.ts, 59, 9))
+}
+
+export const notEmpty = (value: string) => value !== "";
+>notEmpty : Symbol(notEmpty, Decl(negatedInferenceCompatibility.ts, 63, 12))
+>value : Symbol(value, Decl(negatedInferenceCompatibility.ts, 63, 25))
+>value : Symbol(value, Decl(negatedInferenceCompatibility.ts, 63, 25))
+
+export const explicitlyNotEmpty = (value: string): value is string & not "" => value !== "";
+>explicitlyNotEmpty : Symbol(explicitlyNotEmpty, Decl(negatedInferenceCompatibility.ts, 64, 12))
+>value : Symbol(value, Decl(negatedInferenceCompatibility.ts, 64, 35))
+>value : Symbol(value, Decl(negatedInferenceCompatibility.ts, 64, 35))
+>value : Symbol(value, Decl(negatedInferenceCompatibility.ts, 64, 35))
+
+export const notString = (value: unknown) => typeof value !== "string";
+>notString : Symbol(notString, Decl(negatedInferenceCompatibility.ts, 65, 12))
+>value : Symbol(value, Decl(negatedInferenceCompatibility.ts, 65, 26))
+>value : Symbol(value, Decl(negatedInferenceCompatibility.ts, 65, 26))
+
+export function filteredLiterals(values: ("init" | "help" | "other")[]) {
+>filteredLiterals : Symbol(filteredLiterals, Decl(negatedInferenceCompatibility.ts, 65, 71))
+>values : Symbol(values, Decl(negatedInferenceCompatibility.ts, 67, 33))
+
+    return values.filter(value => value !== "init" && value !== "help");
+>values.filter : Symbol(Array.filter, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>values : Symbol(values, Decl(negatedInferenceCompatibility.ts, 67, 33))
+>filter : Symbol(Array.filter, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>value : Symbol(value, Decl(negatedInferenceCompatibility.ts, 68, 25))
+>value : Symbol(value, Decl(negatedInferenceCompatibility.ts, 68, 25))
+>value : Symbol(value, Decl(negatedInferenceCompatibility.ts, 68, 25))
+}
+
+export function explicitlyFiltered(values: string[]) {
+>explicitlyFiltered : Symbol(explicitlyFiltered, Decl(negatedInferenceCompatibility.ts, 69, 1))
+>values : Symbol(values, Decl(negatedInferenceCompatibility.ts, 71, 35))
+
+    return values.filter(explicitlyNotEmpty);
+>values.filter : Symbol(Array.filter, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>values : Symbol(values, Decl(negatedInferenceCompatibility.ts, 71, 35))
+>filter : Symbol(Array.filter, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>explicitlyNotEmpty : Symbol(explicitlyNotEmpty, Decl(negatedInferenceCompatibility.ts, 64, 12))
+}
+

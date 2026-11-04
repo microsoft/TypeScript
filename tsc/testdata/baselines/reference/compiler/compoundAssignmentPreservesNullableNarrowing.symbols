@@ -1,0 +1,331 @@
+//// [tests/cases/compiler/compoundAssignmentPreservesNullableNarrowing.ts] ////
+
+=== compoundAssignmentPreservesNullableNarrowing.ts ===
+enum Flags {
+>Flags : Symbol(Flags, Decl(compoundAssignmentPreservesNullableNarrowing.ts, 0, 0))
+
+    None = 0,
+>None : Symbol(Flags.None, Decl(compoundAssignmentPreservesNullableNarrowing.ts, 0, 12))
+
+    First = 1,
+>First : Symbol(Flags.First, Decl(compoundAssignmentPreservesNullableNarrowing.ts, 1, 13))
+
+    Second = 2,
+>Second : Symbol(Flags.Second, Decl(compoundAssignmentPreservesNullableNarrowing.ts, 2, 14))
+}
+
+export function enumFlags(value: Flags | undefined) {
+>enumFlags : Symbol(enumFlags, Decl(compoundAssignmentPreservesNullableNarrowing.ts, 4, 1))
+>value : Symbol(value, Decl(compoundAssignmentPreservesNullableNarrowing.ts, 6, 26))
+>Flags : Symbol(Flags, Decl(compoundAssignmentPreservesNullableNarrowing.ts, 0, 0))
+
+    if (value === undefined) {
+>value : Symbol(value, Decl(compoundAssignmentPreservesNullableNarrowing.ts, 6, 26))
+>undefined : Symbol(undefined)
+
+        value = Flags.None;
+>value : Symbol(value, Decl(compoundAssignmentPreservesNullableNarrowing.ts, 6, 26))
+>Flags.None : Symbol(Flags.None, Decl(compoundAssignmentPreservesNullableNarrowing.ts, 0, 12))
+>Flags : Symbol(Flags, Decl(compoundAssignmentPreservesNullableNarrowing.ts, 0, 0))
+>None : Symbol(Flags.None, Decl(compoundAssignmentPreservesNullableNarrowing.ts, 0, 12))
+
+        value |= Flags.First;
+>value : Symbol(value, Decl(compoundAssignmentPreservesNullableNarrowing.ts, 6, 26))
+>Flags.First : Symbol(Flags.First, Decl(compoundAssignmentPreservesNullableNarrowing.ts, 1, 13))
+>Flags : Symbol(Flags, Decl(compoundAssignmentPreservesNullableNarrowing.ts, 0, 0))
+>First : Symbol(Flags.First, Decl(compoundAssignmentPreservesNullableNarrowing.ts, 1, 13))
+
+        value |= Flags.Second;
+>value : Symbol(value, Decl(compoundAssignmentPreservesNullableNarrowing.ts, 6, 26))
+>Flags.Second : Symbol(Flags.Second, Decl(compoundAssignmentPreservesNullableNarrowing.ts, 2, 14))
+>Flags : Symbol(Flags, Decl(compoundAssignmentPreservesNullableNarrowing.ts, 0, 0))
+>Second : Symbol(Flags.Second, Decl(compoundAssignmentPreservesNullableNarrowing.ts, 2, 14))
+    }
+    const result: Flags = value;
+>result : Symbol(result, Decl(compoundAssignmentPreservesNullableNarrowing.ts, 12, 9))
+>Flags : Symbol(Flags, Decl(compoundAssignmentPreservesNullableNarrowing.ts, 0, 0))
+>value : Symbol(value, Decl(compoundAssignmentPreservesNullableNarrowing.ts, 6, 26))
+
+    return value;
+>value : Symbol(value, Decl(compoundAssignmentPreservesNullableNarrowing.ts, 6, 26))
+}
+
+export function numeric(value: number | null | undefined) {
+>numeric : Symbol(numeric, Decl(compoundAssignmentPreservesNullableNarrowing.ts, 14, 1))
+>value : Symbol(value, Decl(compoundAssignmentPreservesNullableNarrowing.ts, 16, 24))
+
+    if (value != null) {
+>value : Symbol(value, Decl(compoundAssignmentPreservesNullableNarrowing.ts, 16, 24))
+
+        value -= 1;
+>value : Symbol(value, Decl(compoundAssignmentPreservesNullableNarrowing.ts, 16, 24))
+
+        value += 1;
+>value : Symbol(value, Decl(compoundAssignmentPreservesNullableNarrowing.ts, 16, 24))
+
+        value *= 2;
+>value : Symbol(value, Decl(compoundAssignmentPreservesNullableNarrowing.ts, 16, 24))
+
+        value /= 2;
+>value : Symbol(value, Decl(compoundAssignmentPreservesNullableNarrowing.ts, 16, 24))
+
+        value %= 2;
+>value : Symbol(value, Decl(compoundAssignmentPreservesNullableNarrowing.ts, 16, 24))
+
+        value **= 2;
+>value : Symbol(value, Decl(compoundAssignmentPreservesNullableNarrowing.ts, 16, 24))
+
+        value <<= 1;
+>value : Symbol(value, Decl(compoundAssignmentPreservesNullableNarrowing.ts, 16, 24))
+
+        value >>= 1;
+>value : Symbol(value, Decl(compoundAssignmentPreservesNullableNarrowing.ts, 16, 24))
+
+        value >>>= 1;
+>value : Symbol(value, Decl(compoundAssignmentPreservesNullableNarrowing.ts, 16, 24))
+
+        value |= 1;
+>value : Symbol(value, Decl(compoundAssignmentPreservesNullableNarrowing.ts, 16, 24))
+
+        value &= 1;
+>value : Symbol(value, Decl(compoundAssignmentPreservesNullableNarrowing.ts, 16, 24))
+
+        value ^= 1;
+>value : Symbol(value, Decl(compoundAssignmentPreservesNullableNarrowing.ts, 16, 24))
+
+        const result: number = value;
+>result : Symbol(result, Decl(compoundAssignmentPreservesNullableNarrowing.ts, 30, 13))
+>value : Symbol(value, Decl(compoundAssignmentPreservesNullableNarrowing.ts, 16, 24))
+
+        return value;
+>value : Symbol(value, Decl(compoundAssignmentPreservesNullableNarrowing.ts, 16, 24))
+    }
+    throw new Error();
+>Error : Symbol(Error, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2022.error.d.ts, --, --))
+}
+
+export function updates(value: number | null | undefined) {
+>updates : Symbol(updates, Decl(compoundAssignmentPreservesNullableNarrowing.ts, 34, 1))
+>value : Symbol(value, Decl(compoundAssignmentPreservesNullableNarrowing.ts, 36, 24))
+
+    if (value != null) {
+>value : Symbol(value, Decl(compoundAssignmentPreservesNullableNarrowing.ts, 36, 24))
+
+        value++;
+>value : Symbol(value, Decl(compoundAssignmentPreservesNullableNarrowing.ts, 36, 24))
+
+        ++value;
+>value : Symbol(value, Decl(compoundAssignmentPreservesNullableNarrowing.ts, 36, 24))
+
+        value--;
+>value : Symbol(value, Decl(compoundAssignmentPreservesNullableNarrowing.ts, 36, 24))
+
+        --value;
+>value : Symbol(value, Decl(compoundAssignmentPreservesNullableNarrowing.ts, 36, 24))
+
+        const result: number = value;
+>result : Symbol(result, Decl(compoundAssignmentPreservesNullableNarrowing.ts, 42, 13))
+>value : Symbol(value, Decl(compoundAssignmentPreservesNullableNarrowing.ts, 36, 24))
+
+        return value;
+>value : Symbol(value, Decl(compoundAssignmentPreservesNullableNarrowing.ts, 36, 24))
+    }
+    throw new Error();
+>Error : Symbol(Error, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2022.error.d.ts, --, --))
+}
+
+export function bigint(value: bigint | null | undefined) {
+>bigint : Symbol(bigint, Decl(compoundAssignmentPreservesNullableNarrowing.ts, 46, 1))
+>value : Symbol(value, Decl(compoundAssignmentPreservesNullableNarrowing.ts, 48, 23))
+
+    if (value != null) {
+>value : Symbol(value, Decl(compoundAssignmentPreservesNullableNarrowing.ts, 48, 23))
+
+        value *= 2n;
+>value : Symbol(value, Decl(compoundAssignmentPreservesNullableNarrowing.ts, 48, 23))
+
+        value++;
+>value : Symbol(value, Decl(compoundAssignmentPreservesNullableNarrowing.ts, 48, 23))
+
+        const result: bigint = value;
+>result : Symbol(result, Decl(compoundAssignmentPreservesNullableNarrowing.ts, 52, 13))
+>value : Symbol(value, Decl(compoundAssignmentPreservesNullableNarrowing.ts, 48, 23))
+
+        return value;
+>value : Symbol(value, Decl(compoundAssignmentPreservesNullableNarrowing.ts, 48, 23))
+    }
+    throw new Error();
+>Error : Symbol(Error, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2022.error.d.ts, --, --))
+}
+
+export function text(value: string | null | undefined) {
+>text : Symbol(text, Decl(compoundAssignmentPreservesNullableNarrowing.ts, 56, 1))
+>value : Symbol(value, Decl(compoundAssignmentPreservesNullableNarrowing.ts, 58, 21))
+
+    if (value != null) {
+>value : Symbol(value, Decl(compoundAssignmentPreservesNullableNarrowing.ts, 58, 21))
+
+        value += "suffix";
+>value : Symbol(value, Decl(compoundAssignmentPreservesNullableNarrowing.ts, 58, 21))
+
+        const result: string = value;
+>result : Symbol(result, Decl(compoundAssignmentPreservesNullableNarrowing.ts, 61, 13))
+>value : Symbol(value, Decl(compoundAssignmentPreservesNullableNarrowing.ts, 58, 21))
+
+        return value;
+>value : Symbol(value, Decl(compoundAssignmentPreservesNullableNarrowing.ts, 58, 21))
+    }
+    throw new Error();
+>Error : Symbol(Error, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2022.error.d.ts, --, --))
+}
+
+export function properties(holder: { value?: number | null }) {
+>properties : Symbol(properties, Decl(compoundAssignmentPreservesNullableNarrowing.ts, 65, 1))
+>holder : Symbol(holder, Decl(compoundAssignmentPreservesNullableNarrowing.ts, 67, 27))
+>value : Symbol(value, Decl(compoundAssignmentPreservesNullableNarrowing.ts, 67, 36))
+
+    if (holder.value != null) {
+>holder.value : Symbol(value, Decl(compoundAssignmentPreservesNullableNarrowing.ts, 67, 36))
+>holder : Symbol(holder, Decl(compoundAssignmentPreservesNullableNarrowing.ts, 67, 27))
+>value : Symbol(value, Decl(compoundAssignmentPreservesNullableNarrowing.ts, 67, 36))
+
+        holder.value -= 1;
+>holder.value : Symbol(value, Decl(compoundAssignmentPreservesNullableNarrowing.ts, 67, 36))
+>holder : Symbol(holder, Decl(compoundAssignmentPreservesNullableNarrowing.ts, 67, 27))
+>value : Symbol(value, Decl(compoundAssignmentPreservesNullableNarrowing.ts, 67, 36))
+
+        holder["value"]++;
+>holder : Symbol(holder, Decl(compoundAssignmentPreservesNullableNarrowing.ts, 67, 27))
+>"value" : Symbol(value, Decl(compoundAssignmentPreservesNullableNarrowing.ts, 67, 36))
+
+        const result: number = holder.value;
+>result : Symbol(result, Decl(compoundAssignmentPreservesNullableNarrowing.ts, 71, 13))
+>holder.value : Symbol(value, Decl(compoundAssignmentPreservesNullableNarrowing.ts, 67, 36))
+>holder : Symbol(holder, Decl(compoundAssignmentPreservesNullableNarrowing.ts, 67, 27))
+>value : Symbol(value, Decl(compoundAssignmentPreservesNullableNarrowing.ts, 67, 36))
+
+        return holder["value"];
+>holder : Symbol(holder, Decl(compoundAssignmentPreservesNullableNarrowing.ts, 67, 27))
+>"value" : Symbol(value, Decl(compoundAssignmentPreservesNullableNarrowing.ts, 67, 36))
+    }
+    throw new Error();
+>Error : Symbol(Error, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2022.error.d.ts, --, --))
+}
+
+export function loop(value: number | null | undefined) {
+>loop : Symbol(loop, Decl(compoundAssignmentPreservesNullableNarrowing.ts, 75, 1))
+>value : Symbol(value, Decl(compoundAssignmentPreservesNullableNarrowing.ts, 77, 21))
+
+    if (value != null) {
+>value : Symbol(value, Decl(compoundAssignmentPreservesNullableNarrowing.ts, 77, 21))
+
+        while (value !== 0) {
+>value : Symbol(value, Decl(compoundAssignmentPreservesNullableNarrowing.ts, 77, 21))
+
+            value -= 1;
+>value : Symbol(value, Decl(compoundAssignmentPreservesNullableNarrowing.ts, 77, 21))
+        }
+        const result: 0 = value;
+>result : Symbol(result, Decl(compoundAssignmentPreservesNullableNarrowing.ts, 82, 13))
+>value : Symbol(value, Decl(compoundAssignmentPreservesNullableNarrowing.ts, 77, 21))
+
+        return value;
+>value : Symbol(value, Decl(compoundAssignmentPreservesNullableNarrowing.ts, 77, 21))
+    }
+    throw new Error();
+>Error : Symbol(Error, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2022.error.d.ts, --, --))
+}
+
+export function mutableFlags(value: number, flags: number[]) {
+>mutableFlags : Symbol(mutableFlags, Decl(compoundAssignmentPreservesNullableNarrowing.ts, 86, 1))
+>value : Symbol(value, Decl(compoundAssignmentPreservesNullableNarrowing.ts, 88, 29))
+>flags : Symbol(flags, Decl(compoundAssignmentPreservesNullableNarrowing.ts, 88, 43))
+
+    if (value === 0) return "";
+>value : Symbol(value, Decl(compoundAssignmentPreservesNullableNarrowing.ts, 88, 29))
+
+    let remainingFlags: number = value;
+>remainingFlags : Symbol(remainingFlags, Decl(compoundAssignmentPreservesNullableNarrowing.ts, 90, 7))
+>value : Symbol(value, Decl(compoundAssignmentPreservesNullableNarrowing.ts, 88, 29))
+
+    for (const flag of flags) {
+>flag : Symbol(flag, Decl(compoundAssignmentPreservesNullableNarrowing.ts, 91, 14))
+>flags : Symbol(flags, Decl(compoundAssignmentPreservesNullableNarrowing.ts, 88, 43))
+
+        remainingFlags &= ~flag;
+>remainingFlags : Symbol(remainingFlags, Decl(compoundAssignmentPreservesNullableNarrowing.ts, 90, 7))
+>flag : Symbol(flag, Decl(compoundAssignmentPreservesNullableNarrowing.ts, 91, 14))
+    }
+    return remainingFlags === 0 ? "all" : "some";
+>remainingFlags : Symbol(remainingFlags, Decl(compoundAssignmentPreservesNullableNarrowing.ts, 90, 7))
+}
+
+export function unchecked(value: number | null | undefined) {
+>unchecked : Symbol(unchecked, Decl(compoundAssignmentPreservesNullableNarrowing.ts, 95, 1))
+>value : Symbol(value, Decl(compoundAssignmentPreservesNullableNarrowing.ts, 97, 26))
+
+    value -= 1;
+>value : Symbol(value, Decl(compoundAssignmentPreservesNullableNarrowing.ts, 97, 26))
+
+    value++;
+>value : Symbol(value, Decl(compoundAssignmentPreservesNullableNarrowing.ts, 97, 26))
+
+    const result: number = value;
+>result : Symbol(result, Decl(compoundAssignmentPreservesNullableNarrowing.ts, 100, 9))
+>value : Symbol(value, Decl(compoundAssignmentPreservesNullableNarrowing.ts, 97, 26))
+
+    return value;
+>value : Symbol(value, Decl(compoundAssignmentPreservesNullableNarrowing.ts, 97, 26))
+}
+
+export function checkedOnlyNull(value: number | null | undefined) {
+>checkedOnlyNull : Symbol(checkedOnlyNull, Decl(compoundAssignmentPreservesNullableNarrowing.ts, 102, 1))
+>value : Symbol(value, Decl(compoundAssignmentPreservesNullableNarrowing.ts, 104, 32))
+
+    if (value !== null) {
+>value : Symbol(value, Decl(compoundAssignmentPreservesNullableNarrowing.ts, 104, 32))
+
+        value -= 1;
+>value : Symbol(value, Decl(compoundAssignmentPreservesNullableNarrowing.ts, 104, 32))
+
+        const result: number | undefined = value;
+>result : Symbol(result, Decl(compoundAssignmentPreservesNullableNarrowing.ts, 107, 13))
+>value : Symbol(value, Decl(compoundAssignmentPreservesNullableNarrowing.ts, 104, 32))
+
+        const invalid: number = value;
+>invalid : Symbol(invalid, Decl(compoundAssignmentPreservesNullableNarrowing.ts, 108, 13))
+>value : Symbol(value, Decl(compoundAssignmentPreservesNullableNarrowing.ts, 104, 32))
+
+        return value;
+>value : Symbol(value, Decl(compoundAssignmentPreservesNullableNarrowing.ts, 104, 32))
+    }
+    throw new Error();
+>Error : Symbol(Error, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2022.error.d.ts, --, --))
+}
+
+export function checkedOnlyUndefined(value: number | null | undefined) {
+>checkedOnlyUndefined : Symbol(checkedOnlyUndefined, Decl(compoundAssignmentPreservesNullableNarrowing.ts, 112, 1))
+>value : Symbol(value, Decl(compoundAssignmentPreservesNullableNarrowing.ts, 114, 37))
+
+    if (value !== undefined) {
+>value : Symbol(value, Decl(compoundAssignmentPreservesNullableNarrowing.ts, 114, 37))
+>undefined : Symbol(undefined)
+
+        value -= 1;
+>value : Symbol(value, Decl(compoundAssignmentPreservesNullableNarrowing.ts, 114, 37))
+
+        const result: number | null = value;
+>result : Symbol(result, Decl(compoundAssignmentPreservesNullableNarrowing.ts, 117, 13))
+>value : Symbol(value, Decl(compoundAssignmentPreservesNullableNarrowing.ts, 114, 37))
+
+        const invalid: number = value;
+>invalid : Symbol(invalid, Decl(compoundAssignmentPreservesNullableNarrowing.ts, 118, 13))
+>value : Symbol(value, Decl(compoundAssignmentPreservesNullableNarrowing.ts, 114, 37))
+
+        return value;
+>value : Symbol(value, Decl(compoundAssignmentPreservesNullableNarrowing.ts, 114, 37))
+    }
+    throw new Error();
+>Error : Symbol(Error, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2022.error.d.ts, --, --))
+}
+

@@ -106,7 +106,7 @@ function parenthesizedCompound(value: number | undefined) {
         value! *= 2;
 >value! *= 2 : number
 >value! : number
->value : number | undefined
+>value : number
 >2 : 2
     }
 }

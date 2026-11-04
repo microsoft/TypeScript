@@ -131,14 +131,14 @@ export declare function nonString(value: unknown): {
 };
 export declare function nonZero(value: number): {
     constant: number & not 0;
-    variable: number & not 0;
+    variable: number;
     inferred: number & not 0;
     contextual: number & not 0;
     values: (number & not 0)[];
 };
 export declare function generic<T>(value: T): T & not string;
 export declare function notString(value: unknown): value is not string;
-export declare function notZero(value: number): value is number & not 0;
+export declare function notZero(value: number): boolean;
 export declare function asyncNonString(value: unknown): Promise<not string>;
 export declare function generatorNonString(value: unknown): Generator<not string, not string, unknown>;
 export declare function explicitAndInferred(value: unknown, explicit: not string, condition: boolean): not string;
