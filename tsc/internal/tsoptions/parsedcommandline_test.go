@@ -238,17 +238,20 @@ func TestParsedCommandLine(t *testing.T) {
 	t.Run("CommonSourceDirectory does not mutate errors", func(t *testing.T) {
 		t.Parallel()
 
+		// "other/outside.ts" is not under rootDir, so computing the common source
+		// directory must not append a "not under rootDir" diagnostic to Errors.
 		configFileName := "/dev/tsconfig.json"
 		tsconfigSourceFile := tsoptions.NewTsconfigSourceFileFromFilePath(configFileName, tspath.Path(configFileName), `{
 			"compilerOptions": {
 				"rootDir": "./src"
 			},
-			"files": ["src/index.ts"]
+			"files": ["src/index.ts", "other/outside.ts"]
 		}`)
 		parsedCommandLine := tsoptions.ParseJsonSourceFileConfigFileContent(
 			tsconfigSourceFile,
 			tsoptionstest.NewVFSParseConfigHost(map[string]string{
-				"/dev/src/index.ts": "",
+				"/dev/src/index.ts":     "",
+				"/dev/other/outside.ts": "",
 			}, "/dev", true),
 			"/dev",
 			nil,

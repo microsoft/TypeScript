@@ -172,7 +172,6 @@ func (p *ParsedCommandLine) CommonSourceDirectory() string {
 	return p.commonSourceDirectory
 }
 
-
 func (p *ParsedCommandLine) GetCurrentDirectory() string {
 	return p.comparePathsOptions.CurrentDirectory
 }
