@@ -1,0 +1,50 @@
+/packages/a/index.ts(2,14): error TS2883: The inferred type of 'thing' cannot be named without a reference to 'Thing' from '../s/node_modules/c-pattern/dist/Thing'. This is likely not portable. A type annotation is necessary.
+/packages/a/index.ts(2,14): error TS2883: The inferred type of 'thing' cannot be named without a reference to 'Thing' from '../s/node_modules/c-root/dist/Thing'. This is likely not portable. A type annotation is necessary.
+/packages/a/index.ts(2,14): error TS2883: The inferred type of 'thing' cannot be named without a reference to 'Thing' from '../s/node_modules/c-subpath/dist/Thing'. This is likely not portable. A type annotation is necessary.
+
+
+==== /node_modules/.store/c-root/node_modules/c-root/package.json (0 errors) ====
+    { "name": "c-root", "version": "1.0.0", "type": "module", "exports": { ".": "./dist/Thing.d.ts" } }
+==== /node_modules/.store/c-root/node_modules/c-root/dist/Thing.d.ts (0 errors) ====
+    export interface Thing { readonly x: number; }
+    export declare const create: () => Thing;
+    
+==== /node_modules/.store/c-subpath/node_modules/c-subpath/package.json (0 errors) ====
+    { "name": "c-subpath", "version": "1.0.0", "type": "module", "exports": { "./Thing": { "types": "./dist/Thing.d.ts", "default": "./dist/Thing.js" } } }
+==== /node_modules/.store/c-subpath/node_modules/c-subpath/dist/Thing.d.ts (0 errors) ====
+    export interface Thing { readonly x: number; }
+    export declare const create: () => Thing;
+    
+==== /node_modules/.store/c-pattern/node_modules/c-pattern/package.json (0 errors) ====
+    { "name": "c-pattern", "version": "1.0.0", "type": "module", "exports": { "./*": "./dist/*.d.ts" } }
+==== /node_modules/.store/c-pattern/node_modules/c-pattern/dist/Thing.d.ts (0 errors) ====
+    export interface Thing { readonly x: number; }
+    export declare const create: () => Thing;
+    
+==== /packages/s/package.json (0 errors) ====
+    { "name": "s", "type": "module", "exports": "./index.d.ts" }
+==== /packages/s/index.d.ts (0 errors) ====
+    import { create as createRoot } from "c-root";
+    import { create as createSubpath } from "c-subpath/Thing";
+    import { create as createPattern } from "c-pattern/Thing";
+    export declare const root: ReturnType<typeof createRoot>;
+    export declare const subpath: ReturnType<typeof createSubpath>;
+    export declare const pattern: ReturnType<typeof createPattern>;
+    
+==== /packages/a/package.json (0 errors) ====
+    { "name": "a", "type": "module" }
+==== /packages/a/index.ts (3 errors) ====
+    import { root, subpath, pattern } from "s";
+    export const thing = { root, subpath, pattern };
+                 ~~~~~
+!!! error TS2883: The inferred type of 'thing' cannot be named without a reference to 'Thing' from '../s/node_modules/c-pattern/dist/Thing'. This is likely not portable. A type annotation is necessary.
+                 ~~~~~
+!!! error TS2883: The inferred type of 'thing' cannot be named without a reference to 'Thing' from '../s/node_modules/c-root/dist/Thing'. This is likely not portable. A type annotation is necessary.
+                 ~~~~~
+!!! error TS2883: The inferred type of 'thing' cannot be named without a reference to 'Thing' from '../s/node_modules/c-subpath/dist/Thing'. This is likely not portable. A type annotation is necessary.
+    
+==== /packages/s/reachable.ts (0 errors) ====
+    import { root, subpath, pattern } from "./index.js";
+    export const thing = { root, subpath, pattern };
+    
+    

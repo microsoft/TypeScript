@@ -1,0 +1,19 @@
+//// [tests/cases/compiler/assertedReadonlyParameterPropertyAssignment.ts] ////
+
+=== assertedReadonlyParameterPropertyAssignment.ts ===
+class ReadonlyState {
+>ReadonlyState : Symbol(ReadonlyState, Decl(assertedReadonlyParameterPropertyAssignment.ts, 0, 0))
+
+    constructor(readonly value: object) {}
+>value : Symbol(ReadonlyState.value, Decl(assertedReadonlyParameterPropertyAssignment.ts, 1, 16))
+
+    clear() {
+>clear : Symbol(ReadonlyState.clear, Decl(assertedReadonlyParameterPropertyAssignment.ts, 1, 42))
+
+        (this.value as unknown) = null;
+>this.value : Symbol(ReadonlyState.value, Decl(assertedReadonlyParameterPropertyAssignment.ts, 1, 16))
+>this : Symbol(ReadonlyState, Decl(assertedReadonlyParameterPropertyAssignment.ts, 0, 0))
+>value : Symbol(ReadonlyState.value, Decl(assertedReadonlyParameterPropertyAssignment.ts, 1, 16))
+    }
+}
+

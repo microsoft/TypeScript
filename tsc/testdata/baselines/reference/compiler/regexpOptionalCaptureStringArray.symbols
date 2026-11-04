@@ -1,0 +1,8 @@
+//// [tests/cases/compiler/regexpOptionalCaptureStringArray.ts] ////
+
+=== regexpOptionalCaptureStringArray.ts ===
+const result: string[] | null = /^(a)?$/.exec("");
+>result : Symbol(result, Decl(regexpOptionalCaptureStringArray.ts, 0, 5))
+>/^(a)?$/.exec : Symbol(RegExp.exec, Decl(lib.es5.d.ts, --, --))
+>exec : Symbol(RegExp.exec, Decl(lib.es5.d.ts, --, --))
+

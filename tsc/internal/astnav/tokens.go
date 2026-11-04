@@ -197,8 +197,9 @@ func getTokenAtPosition(
 		return nodeList
 	}
 
+	visitor := getNodeVisitor(visitNode, visitNodeList)
 	for {
-		VisitEachChildAndJSDoc(current, sourceFile, visitNode, visitNodeList)
+		visitEachChildAndJSDoc(current, sourceFile, visitor)
 		// If prevSubtree was set on the last iteration, it ends at the target position.
 		// Check if the rightmost token of prevSubtree should be returned based on the
 		// `includePrecedingTokenAtEndPosition` callback.
@@ -315,7 +316,10 @@ func VisitEachChildAndJSDoc(
 	visitNode func(*ast.Node, *ast.NodeVisitor) *ast.Node,
 	visitNodes func(*ast.NodeList, *ast.NodeVisitor) *ast.NodeList,
 ) {
-	visitor := getNodeVisitor(visitNode, visitNodes)
+	visitEachChildAndJSDoc(node, sourceFile, getNodeVisitor(visitNode, visitNodes))
+}
+
+func visitEachChildAndJSDoc(node *ast.Node, sourceFile *ast.SourceFile, visitor *ast.NodeVisitor) {
 	for _, jsdoc := range node.JSDoc(sourceFile) {
 		if visitor.Hooks.VisitNode != nil {
 			visitor.Hooks.VisitNode(jsdoc, visitor)

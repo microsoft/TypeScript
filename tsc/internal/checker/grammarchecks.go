@@ -246,7 +246,7 @@ func (c *Checker) checkGrammarModifiers(node *ast.Node /*Union[HasModifiers, Has
 					return c.grammarErrorOnFirstToken(node, diagnostics.Decorators_are_not_valid_here)
 				}
 			} else if c.legacyDecorators && (node.Kind == ast.KindGetAccessor || node.Kind == ast.KindSetAccessor) {
-				accessors := ast.GetAllAccessorDeclarationsForDeclaration(node, c.getSymbolOfDeclaration(node).Declarations)
+				accessors := ast.GetAllAccessorDeclarationsForDeclaration(node, c.getSymbolOfDeclaration(node).Declarations())
 				if ast.HasDecorators(accessors.FirstAccessor) && node == accessors.SecondAccessor {
 					return c.grammarErrorOnFirstToken(node, diagnostics.Decorators_cannot_be_applied_to_multiple_get_Slashset_accessors_of_the_same_name)
 				}
@@ -830,9 +830,6 @@ func (c *Checker) checkGrammarIndexSignatureParameters(node *ast.IndexSignatureD
 	}
 	if !everyType(t, c.isValidIndexKeyType) {
 		return c.grammarErrorOnNode(parameter.Name(), diagnostics.An_index_signature_parameter_type_must_be_string_number_symbol_or_a_template_literal_type)
-	}
-	if node.Type == nil {
-		return c.grammarErrorOnNode(node.AsNode(), diagnostics.An_index_signature_must_have_a_type_annotation)
 	}
 	return false
 }
@@ -2110,7 +2107,10 @@ func (c *Checker) checkGrammarImportClause(node *ast.ImportClause) bool {
 		if node.Name() != nil {
 			return c.grammarErrorOnNode(&node.Node, diagnostics.Default_imports_are_not_allowed_in_a_deferred_import)
 		}
-		if node.NamedBindings != nil && node.NamedBindings.Kind == ast.KindNamedImports {
+		if node.NamedBindings == nil {
+			return c.grammarErrorOnNode(&node.Node, diagnostics.A_deferred_import_must_specify_a_namespace_binding)
+		}
+		if node.NamedBindings.Kind == ast.KindNamedImports {
 			return c.grammarErrorOnNode(&node.Node, diagnostics.Named_imports_are_not_allowed_in_a_deferred_import)
 		}
 		if c.moduleKind.SupportsDeferredImports() {

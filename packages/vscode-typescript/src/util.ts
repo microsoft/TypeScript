@@ -1,12 +1,12 @@
 import * as fs from "fs";
 import * as path from "path";
 import * as vscode from "vscode";
+import { nightlyExtensionId } from "./extensionIds";
 import { resolvePackageExecutable } from "./tsdkPackage";
 
 export const aiConnectionString = "0c6ae279ed8443289764825290e4f9e2-1a736e7c-1324-4338-be46-fc2a58ae4d14-7255";
 
 export const languageClientName = "TypeScript Language Server";
-export const nightlyExtensionId = "TypeScriptTeam.vscode-typescript-nightly";
 export const enableContributedNightlyVersion = true;
 
 export const jsTsLanguageModes = [
@@ -42,6 +42,7 @@ export interface ExeInfo {
     path: string;
     version: string;
     isLocal?: boolean;
+    apiPackageJsonPath?: string;
 }
 
 const packagedExeBaseNames = ["tsc", "tsgo"];
@@ -52,11 +53,16 @@ export async function getBuiltinExePath(context: vscode.ExtensionContext): Promi
         const exe = context.asAbsolutePath(path.join("../../", "built", "local", exeName));
         try {
             await vscode.workspace.fs.stat(vscode.Uri.file(exe));
-            return { path: exe, version: "(local)", isLocal: true };
+            return {
+                path: exe,
+                version: "local",
+                isLocal: true,
+                apiPackageJsonPath: context.asAbsolutePath(path.join("../../", "packages", "typescript", "package.json")),
+            };
         }
         catch {}
     }
-    return getPackagedExePath(context.extension.extensionUri, getBundledTypeScriptVersion(context.extension.packageJSON));
+    return getPackagedExePath(context.extension.extensionUri);
 }
 
 export async function getNightlyExePath(): Promise<ExeInfo | undefined> {
@@ -65,7 +71,7 @@ export async function getNightlyExePath(): Promise<ExeInfo | undefined> {
         return undefined;
     }
 
-    return tryGetPackagedExePath(extension.extensionUri, getBundledTypeScriptVersion(extension.packageJSON));
+    return tryGetPackagedExePath(extension.extensionUri);
 }
 
 export async function getDefaultExePath(context: vscode.ExtensionContext): Promise<ExeInfo> {
@@ -78,38 +84,16 @@ export async function getDefaultExePath(context: vscode.ExtensionContext): Promi
     return getBuiltinExePath(context);
 }
 
-async function getPackagedExePath(extensionUri: vscode.Uri, version: unknown): Promise<ExeInfo> {
-    const exe = await tryGetPackagedExePath(extensionUri, version);
+async function getPackagedExePath(extensionUri: vscode.Uri): Promise<ExeInfo> {
+    const exe = await tryGetPackagedExePath(extensionUri);
     if (exe) {
         return exe;
     }
     throw new Error(vscode.l10n.t("Could not find a TypeScript executable in the extension package."));
 }
 
-function getBundledTypeScriptVersion(packageJSON: unknown): string {
-    if (packageJSON && typeof packageJSON === "object" && "bundledTypeScriptVersion" in packageJSON) {
-        const version = packageJSON.bundledTypeScriptVersion;
-        if (typeof version === "string") {
-            return version;
-        }
-    }
-    return "unknown";
-}
-
-async function tryGetPackagedExePath(extensionUri: vscode.Uri, version: unknown): Promise<ExeInfo | undefined> {
-    for (const baseName of packagedExeBaseNames) {
-        const exeName = `${baseName}${process.platform === "win32" ? ".exe" : ""}`;
-        const exePath = vscode.Uri.joinPath(extensionUri, "lib", exeName);
-        try {
-            await vscode.workspace.fs.stat(exePath);
-            return {
-                path: withLongPathPrefix(exePath.fsPath),
-                version: typeof version === "string" ? version : "unknown",
-            };
-        }
-        catch {}
-    }
-    return undefined;
+async function tryGetPackagedExePath(extensionUri: vscode.Uri): Promise<ExeInfo | undefined> {
+    return resolveTsdkPathToExe(vscode.Uri.joinPath(extensionUri, "node_modules", "typescript").fsPath);
 }
 
 /**
@@ -338,7 +322,11 @@ export async function resolveTsdkPathToExe(tsdkPath: string): Promise<ExeInfo | 
             const platformPackage = `${baseName}-${process.platform}-${process.arch}`;
             const exePath = vscode.Uri.file(resolvePackageExecutable(packageJsonPath.fsPath, platformPackage, exeName));
             await vscode.workspace.fs.stat(exePath);
-            return { path: withLongPathPrefix(exePath.fsPath), version: typeof packageJson.version === "string" ? packageJson.version : "unknown" };
+            return {
+                path: withLongPathPrefix(exePath.fsPath),
+                version: typeof packageJson.version === "string" ? packageJson.version : "unknown",
+                apiPackageJsonPath: packageJsonPath.fsPath,
+            };
         }
         catch {}
     }
@@ -346,7 +334,7 @@ export async function resolveTsdkPathToExe(tsdkPath: string): Promise<ExeInfo | 
         try {
             const exePath = vscode.Uri.joinPath(resolved, `${baseName}${process.platform === "win32" ? ".exe" : ""}`);
             await vscode.workspace.fs.stat(exePath);
-            return { path: withLongPathPrefix(exePath.fsPath), version: "(local)", isLocal: true };
+            return { path: withLongPathPrefix(exePath.fsPath), version: "local", isLocal: true };
         }
         catch {}
     }
@@ -389,100 +377,6 @@ export function getLanguageForUri(uri: vscode.Uri): string | undefined {
         default:
             return undefined;
     }
-}
-
-export function needsExtHostRestartOnChange() {
-    const majorVersion = parseInt(vscode.version.split(".")[0]);
-    const minorVersion = parseInt(vscode.version.split(".")[1]);
-    return majorVersion <= 1 && minorVersion < 105;
-}
-
-export async function restartExtHostOnChangeIfNeeded(): Promise<void> {
-    if (needsExtHostRestartOnChange()) {
-        await vscode.commands.executeCommand("workbench.action.restartExtensionHost");
-    }
-}
-
-/**
- * Read the useTsgo setting from both `js/ts.experimental.useTsgo` and
- * `typescript.experimental.useTsgo`, using `inspect()` to only consider
- * explicitly set values (ignoring VS Code defaults).
- *
- * Each setting key is resolved using standard VS Code precedence (workspace
- * folder > workspace > global, with language-specific overrides taking
- * priority within each scope). When both keys are explicitly configured, the
- * value set at the most specific scope wins, and `js/ts` wins over
- * `typescript` at the same scope. Returns `undefined` if neither setting has
- * been explicitly configured.
- */
-export function getUseTsgo(): boolean | undefined {
-    const tsValue = getExplicitUseTsgo("typescript");
-    const jsTsValue = getExplicitUseTsgo("js/ts");
-
-    if (tsValue !== undefined || jsTsValue !== undefined) {
-        const jsTsTarget = getExplicitConfigTarget(vscode.workspace.getConfiguration("js/ts"), "experimental.useTsgo");
-        const tsTarget = getExplicitConfigTarget(vscode.workspace.getConfiguration("typescript"), "experimental.useTsgo");
-        const mostSpecific = Math.max(jsTsTarget ?? vscode.ConfigurationTarget.Global, tsTarget ?? vscode.ConfigurationTarget.Global);
-        return jsTsTarget === mostSpecific ? jsTsValue : tsValue;
-    }
-
-    return undefined;
-}
-
-export function getExplicitConfigTarget(
-    config: vscode.WorkspaceConfiguration,
-    key: string,
-): vscode.ConfigurationTarget | undefined {
-    const inspection = config.inspect(key);
-    if (!inspection) return undefined;
-    if (inspection.workspaceFolderValue !== undefined) return vscode.ConfigurationTarget.WorkspaceFolder;
-    if (inspection.workspaceValue !== undefined) return vscode.ConfigurationTarget.Workspace;
-    if (inspection.globalValue !== undefined) return vscode.ConfigurationTarget.Global;
-    return undefined;
-}
-
-export enum ConfigName {
-    JsTsConfigName = "js/ts.experimental.useTsgo",
-    DeprecatedTypeScriptConfigName = "typescript.experimental.useTsgo",
-}
-
-/**
- * Returns the name of the setting with the appropriate precedence that is explicitly set,
- * preferring `js/ts` over `typescript`.
- * Returns `undefined` if neither is explicitly specified.
- */
-export function getWinningTsgoConfigKey(): ConfigName | undefined {
-    const jsTsValue = getExplicitUseTsgo("js/ts");
-    const tsValue = getExplicitUseTsgo("typescript");
-
-    if (jsTsValue !== undefined || tsValue !== undefined) {
-        const jsTsTarget = getExplicitConfigTarget(vscode.workspace.getConfiguration("js/ts"), "experimental.useTsgo");
-        const tsTarget = getExplicitConfigTarget(vscode.workspace.getConfiguration("typescript"), "experimental.useTsgo");
-        const mostSpecific = Math.max(jsTsTarget ?? vscode.ConfigurationTarget.Global, tsTarget ?? vscode.ConfigurationTarget.Global);
-        return jsTsTarget === mostSpecific ? ConfigName.JsTsConfigName : ConfigName.DeprecatedTypeScriptConfigName;
-    }
-
-    return undefined;
-}
-
-function getExplicitUseTsgo(section: string): boolean | undefined {
-    const config = vscode.workspace.getConfiguration(section);
-    const inspected = config.inspect<boolean>("experimental.useTsgo");
-    if (!inspected) return undefined;
-
-    const explicitValues: (boolean | undefined)[] = [
-        inspected.workspaceFolderLanguageValue,
-        inspected.workspaceLanguageValue,
-        inspected.globalLanguageValue,
-        inspected.workspaceFolderValue,
-        inspected.workspaceValue,
-        inspected.globalValue,
-    ];
-
-    for (const v of explicitValues) {
-        if (v !== undefined) return v;
-    }
-    return undefined;
 }
 
 /**

@@ -15,6 +15,7 @@ import (
 	"github.com/microsoft/TypeScript/tsc/internal/core"
 	"github.com/microsoft/TypeScript/tsc/internal/diagnostics"
 	"github.com/microsoft/TypeScript/tsc/internal/module"
+	"github.com/microsoft/TypeScript/tsc/internal/nativepath"
 	"github.com/microsoft/TypeScript/tsc/internal/parser"
 	"github.com/microsoft/TypeScript/tsc/internal/spanmap"
 	"github.com/microsoft/TypeScript/tsc/internal/tracing"
@@ -182,7 +183,7 @@ func processAllProgramFiles(
 		defaultLibraryPath: opts.Host.DefaultLibraryPath(),
 		caseSensitivity:    opts.Host.FS().CaseSensitivity(),
 		filesParser: &filesParser{
-			wg:       core.NewWorkGroup(singleThreaded),
+			wg:       core.NewWorkGroup(core.WorkGroupConcurrency(singleThreaded)),
 			maxDepth: maxNodeModuleJsDepth,
 		},
 		rootTasks:           make([]*parseTask, 0, len(rootFiles)+len(compilerOptions.Lib)),
@@ -352,14 +353,14 @@ func (p *fileLoader) addProjectReferenceTasks(singleThreaded bool) {
 
 	parser := &projectReferenceParser{
 		loader: p,
-		wg:     core.NewWorkGroup(singleThreaded),
+		wg:     core.NewWorkGroup(core.WorkGroupConcurrency(singleThreaded)),
 	}
 	rootTasks := createProjectReferenceParseTasks(projectReferences)
 	parser.parse(rootTasks)
 }
 
 func (p *fileLoader) sortLibs(libFiles []*ast.SourceFile) {
-	slices.SortFunc(libFiles, func(f1 *ast.SourceFile, f2 *ast.SourceFile) int {
+	slices.SortStableFunc(libFiles, func(f1 *ast.SourceFile, f2 *ast.SourceFile) int {
 		return cmp.Compare(p.getDefaultLibFilePriority(f1), p.getDefaultLibFilePriority(f2))
 	})
 }
@@ -687,6 +688,10 @@ func (p *fileLoader) getSourceFileFromReference(
 	allowNonTsExtensions := options.AllowNonTsExtensions.IsTrue()
 	diagnosticFileName := tspath.NormalizeSlashes(referenceText)
 
+	if nativepath.IsNetworkPath(fileName.AsString()) {
+		return "", "", &sourceFileFromReferenceDiagnostic{message: diagnostics.Network_path_0_is_not_supported, args: []string{diagnosticFileName}}
+	}
+
 	if fileName.HasExtension() {
 		canonicalFileName := p.caseSensitivity.PathKey(tspath.RootedPath(fileName))
 		if !allowNonTsExtensions && !p.isSupportedExtension(canonicalFileName) {
@@ -877,6 +882,18 @@ func (p *fileLoader) resolveImportsAndModuleAugmentations(t *parseTask) {
 			}
 
 			mode := getModeForUsageLocation(file.FileName(), meta, entry, optionsForFile)
+			// We know moduleName resolves to an ambient module provided that moduleName:
+			// - is in the list of ambient modules locally declared in the current source file.
+			if slices.Contains(file.AmbientModuleNames, moduleName) {
+				if optionsForFile.TraceResolution.IsTrue() {
+					resolutionsTrace = append(resolutionsTrace, module.DiagAndArgs{
+						Message: diagnostics.Module_0_was_resolved_as_locally_declared_ambient_module_in_file_1,
+						Args:    []any{moduleName, file.FileName()},
+					})
+				}
+				resolutionsInFile[module.ModeAwareCacheKey{Name: moduleName, Mode: mode}] = &module.ResolvedModule{}
+				continue
+			}
 			var resolvedModule *module.ResolvedModule
 			var trace []module.DiagAndArgs
 			var err error
@@ -917,6 +934,10 @@ func (p *fileLoader) resolveImportsAndModuleAugmentations(t *parseTask) {
 				(importIndex < 0 || (importIndex < len(file.Imports()) && (ast.IsInJSFile(file.Imports()[importIndex]) || file.Imports()[importIndex].Flags&ast.NodeFlagsJSDoc == 0)))
 
 			if shouldAddFile {
+				var synthetic syntheticImportKind
+				if importIndex < 0 {
+					synthetic = core.IfElse(entry == t.importHelpersImportSpecifier, syntheticImportHelpers, syntheticImportJSXRuntime)
+				}
 				t.addSubTask(resolvedRef{
 					fileName:      resolvedFileName,
 					path:          resolvedModule.ResolvedPath,
@@ -927,7 +948,7 @@ func (p *fileLoader) resolveImportsAndModuleAugmentations(t *parseTask) {
 						referencedFile: &referencedFileData{
 							file:      t.path,
 							index:     importIndex,
-							synthetic: core.IfElse(importIndex < 0, entry, nil),
+							synthetic: synthetic,
 						},
 					},
 					packageId: resolvedModule.PackageId,
@@ -943,11 +964,15 @@ func (p *fileLoader) resolveImportsAndModuleAugmentations(t *parseTask) {
 func (p *fileLoader) createSyntheticImport(text string, file *ast.SourceFile) *ast.StringLiteralNode {
 	p.factoryMu.Lock()
 	defer p.factoryMu.Unlock()
-	externalHelpersModuleReference := p.factory.NewStringLiteral(text, ast.TokenFlagsNone)
-	importDecl := p.factory.NewImportDeclaration(nil, nil, externalHelpersModuleReference, nil)
-	externalHelpersModuleReference.Parent = importDecl
+	return newSyntheticImport(&p.factory, text, file)
+}
+
+func newSyntheticImport(factory *ast.NodeFactory, text string, file *ast.SourceFile) *ast.StringLiteralNode {
+	moduleReference := factory.NewStringLiteral(text, ast.TokenFlagsNone)
+	importDecl := factory.NewImportDeclaration(nil, nil, moduleReference, nil)
+	moduleReference.Parent = importDecl
 	importDecl.Parent = file.AsNode()
-	return externalHelpersModuleReference
+	return moduleReference
 }
 
 func (p *fileLoader) pathForLibFile(name string) *LibFile {

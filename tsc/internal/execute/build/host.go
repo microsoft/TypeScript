@@ -73,7 +73,7 @@ func (h *host) GetResolvedProjectReference(fileName tspath.RootedFilePath, path 
 			wrapped.Set("compilerOptions", raw)
 			commandLineRaw = wrapped
 		}
-		commandLine, _ := tsoptions.GetParsedCommandLineOfConfigFilePath(fileName, path, h.orchestrator.opts.Command.CompilerOptions, commandLineRaw, h.FS(), &h.extendedConfigCache)
+		commandLine, _ := tsoptions.GetParsedCommandLineOfConfigFilePath(fileName, path, h.orchestrator.opts.Command.CompilerOptions, commandLineRaw, tsoptions.NewDefaultParseConfigHost(h.FS()), &h.extendedConfigCache)
 		configTime := h.orchestrator.opts.Sys.Now().Sub(configStart)
 		h.configTimes.Store(path, configTime)
 		return commandLine

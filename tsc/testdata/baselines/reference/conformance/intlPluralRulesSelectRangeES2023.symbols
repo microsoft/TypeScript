@@ -1,0 +1,21 @@
+//// [tests/cases/conformance/es2023/intlPluralRulesSelectRangeES2023.ts] ////
+
+=== intlPluralRulesSelectRangeES2023.ts ===
+const pr = new Intl.PluralRules("en-US");
+>pr : Symbol(pr, Decl(intlPluralRulesSelectRangeES2023.ts, 0, 5))
+>Intl.PluralRules : Symbol(Intl.PluralRules, Decl(lib.es2018.intl.d.ts, --, --), Decl(lib.es2018.intl.d.ts, --, --), Decl(lib.es2023.intl.d.ts, --, --))
+>Intl : Symbol(Intl, Decl(lib.es5.d.ts, --, --), Decl(lib.es2016.intl.d.ts, --, --), Decl(lib.es2017.intl.d.ts, --, --), Decl(lib.es2018.intl.d.ts, --, --), Decl(lib.es2019.intl.d.ts, --, --) ... and 5 more)
+>PluralRules : Symbol(Intl.PluralRules, Decl(lib.es2018.intl.d.ts, --, --), Decl(lib.es2018.intl.d.ts, --, --), Decl(lib.es2023.intl.d.ts, --, --))
+
+const category = pr.selectRange(1, 2);
+>category : Symbol(category, Decl(intlPluralRulesSelectRangeES2023.ts, 1, 5))
+>pr.selectRange : Symbol(Intl.PluralRules.selectRange, Decl(lib.es2023.intl.d.ts, --, --))
+>pr : Symbol(pr, Decl(intlPluralRulesSelectRangeES2023.ts, 0, 5))
+>selectRange : Symbol(Intl.PluralRules.selectRange, Decl(lib.es2023.intl.d.ts, --, --))
+
+const exact: Intl.LDMLPluralRule = category;
+>exact : Symbol(exact, Decl(intlPluralRulesSelectRangeES2023.ts, 3, 5))
+>Intl : Symbol(Intl, Decl(lib.es5.d.ts, --, --), Decl(lib.es2016.intl.d.ts, --, --), Decl(lib.es2017.intl.d.ts, --, --), Decl(lib.es2018.intl.d.ts, --, --), Decl(lib.es2019.intl.d.ts, --, --) ... and 5 more)
+>LDMLPluralRule : Symbol(Intl.LDMLPluralRule, Decl(lib.es2018.intl.d.ts, --, --))
+>category : Symbol(category, Decl(intlPluralRulesSelectRangeES2023.ts, 1, 5))
+

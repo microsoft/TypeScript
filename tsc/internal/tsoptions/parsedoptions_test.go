@@ -24,7 +24,7 @@ func TestParsedOptionsEquality(t *testing.T) {
 	check(t, &ParsedOptions{}, nil)
 	check(t, &ParsedOptions{}, &ParsedOptions{})
 	makeOptions := func() *ParsedOptions {
-		return &ParsedOptions{
+		result := &ParsedOptions{
 			CompilerOptions: &core.CompilerOptions{Strict: core.TSTrue},
 			TypeAcquisition: &core.TypeAcquisition{Enable: core.TSTrue, Include: []string{"a"}, Exclude: []string{"b"}},
 			FileNames:       []tspath.RootedFilePath{"/a.ts", "/b.ts"},
@@ -37,6 +37,9 @@ func TestParsedOptionsEquality(t *testing.T) {
 				PackageDirectory: "/node_modules/mapper", ContributionID: "extension",
 			}, nil},
 		}
+		result.ContentMappers[0].Definition.OutputExtensions = map[string]string{".vue": ".mjs"}
+		result.ContentMappers[0].Manifest.DefaultOutputExtensions = map[string]string{".vue": ".js"}
+		return result
 	}
 	check(t, makeOptions(), makeOptions())
 	for _, object := range []func(*ParsedOptions) any{
@@ -85,12 +88,14 @@ func TestParsedOptionsEquality(t *testing.T) {
 		}},
 		{"mapper package", func(p *ParsedOptions) { p.ContentMappers[0].Package = "other" }},
 		{"mapper extension", func(p *ParsedOptions) { p.ContentMappers[0].Extensions[0] = ".other" }},
+		{"mapper output extension", func(p *ParsedOptions) { p.ContentMappers[0].Definition.OutputExtensions[".vue"] = ".js" }},
 		{"mapper options", func(p *ParsedOptions) { p.ContentMappers[0].Options = []byte(`{}`) }},
 		{"mapper name", func(p *ParsedOptions) { p.ContentMappers[0].Name = "other" }},
 		{"mapper version", func(p *ParsedOptions) { p.ContentMappers[0].Version = "2" }},
 		{"mapper exec", func(p *ParsedOptions) { p.ContentMappers[0].Exec[1] = "other.js" }},
 		{"mapper compiler options", func(p *ParsedOptions) { p.ContentMappers[0].CompilerOptions[0] = "jsx" }},
 		{"mapper dynamic config", func(p *ParsedOptions) { p.ContentMappers[0].DynamicConfig = false }},
+		{"manifest output extension", func(p *ParsedOptions) { p.ContentMappers[0].Manifest.DefaultOutputExtensions[".vue"] = ".cjs" }},
 		{"mapper directory", func(p *ParsedOptions) { p.ContentMappers[0].PackageDirectory = "/other" }},
 		{"mapper contribution", func(p *ParsedOptions) { p.ContentMappers[0].ContributionID = "other" }},
 		{"nil mapper", func(p *ParsedOptions) { p.ContentMappers[0] = nil }},

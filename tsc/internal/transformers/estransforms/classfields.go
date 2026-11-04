@@ -267,7 +267,7 @@ func (tx *classFieldsTransformer) visitForSubstitution(node *ast.Node) *ast.Node
 		return tx.visitIdentifier(node.AsIdentifier())
 	}
 	if node.Kind == ast.KindPropertyAccessExpression && ast.IsIdentifier(node.AsPropertyAccessExpression().Name()) {
-		return tx.visitPropertyAccessExpressionForSubstitution(node.AsPropertyAccessExpression())
+		return tx.visitPropertyAccessExpressionForSubstitution(node.AsPropertyAccessExpression(), tx.substitutionVisitor)
 	}
 	return tx.substitutionVisitor.VisitEachChild(node)
 }
@@ -686,9 +686,9 @@ func (tx *classFieldsTransformer) visitMethodOrAccessorDeclaration(node *ast.Nod
 	}
 
 	// leave invalid code untransformed
-	info := tx.accessPrivateIdentifier(node.Name())
+	info, _ := tx.getPrivateIdentifier(tx.getPrivateIdentifierEnvironment(), node.Name())
 	debug.Assert(info != nil, "Undeclared private name for property declaration.")
-	if !info.isValid {
+	if info.kind == printer.PrivateIdentifierKindUntransformed || !info.isValid {
 		return node
 	}
 
@@ -895,11 +895,11 @@ func (tx *classFieldsTransformer) transformAutoAccessor(node *ast.PropertyDeclar
 func (tx *classFieldsTransformer) transformPrivateFieldInitializer(node *ast.PropertyDeclaration) *ast.Node {
 	if tx.shouldTransformClassElementToWeakMap(node.AsNode()) {
 		// If we are transforming private elements into WeakMap/WeakSet, we should elide the node.
-		info := tx.accessPrivateIdentifier(node.Name())
+		info, _ := tx.getPrivateIdentifier(tx.getPrivateIdentifierEnvironment(), node.Name())
 		debug.Assert(info != nil, "Undeclared private name for property declaration.")
 
 		// Leave invalid code untransformed
-		if !info.isValid {
+		if info.kind == printer.PrivateIdentifierKindUntransformed || !info.isValid {
 			return node.AsNode()
 		}
 
@@ -1097,7 +1097,7 @@ func (tx *classFieldsTransformer) visitPropertyAccessExpression(node *ast.Proper
 	// Private identifier names are still visited through VisitEachChild so they can be
 	// transformed by visitPrivateIdentifier.
 	if ast.IsIdentifier(node.Name()) {
-		return tx.visitPropertyAccessExpressionForSubstitution(node)
+		return tx.visitPropertyAccessExpressionForSubstitution(node, tx.Visitor())
 	}
 	return tx.Visitor().VisitEachChild(node.AsNode())
 }
@@ -1105,8 +1105,8 @@ func (tx *classFieldsTransformer) visitPropertyAccessExpression(node *ast.Proper
 // visitPropertyAccessExpressionForSubstitution visits only the expression of a PropertyAccessExpression,
 // leaving the name unchanged. This prevents the name from being treated as a standalone identifier
 // reference and incorrectly substituted with a class alias.
-func (tx *classFieldsTransformer) visitPropertyAccessExpressionForSubstitution(node *ast.PropertyAccessExpression) *ast.Node {
-	expression := tx.Visitor().VisitNode(node.Expression)
+func (tx *classFieldsTransformer) visitPropertyAccessExpressionForSubstitution(node *ast.PropertyAccessExpression, visitor *ast.NodeVisitor) *ast.Node {
+	expression := visitor.VisitNode(node.Expression)
 	if expression != node.Expression {
 		return tx.Factory().UpdatePropertyAccessExpression(node, expression, node.QuestionDotToken, node.Name(), node.Flags)
 	}
@@ -2040,23 +2040,22 @@ func (tx *classFieldsTransformer) visitClassExpressionInNewClassLexicalEnvironme
 	}
 
 	staticPropertiesOrClassStaticBlocks := tx.getStaticPropertiesAndClassStaticBlock(node)
+	hasTransformableStatics := (tx.shouldTransformPrivateElementsOrClassStaticBlocks ||
+		tx.nodeHasTransformPrivateStaticElementsFlag(node)) &&
+		core.Some(staticPropertiesOrClassStaticBlocks, func(n *ast.Node) bool {
+			return ast.IsClassStaticBlockDeclaration(n) ||
+				ast.IsPrivateIdentifierClassElementDeclaration(n) ||
+				(tx.shouldTransformInitializers && ast.IsInitializedProperty(n))
+		})
 
 	// Pre-compute whether the class expression will need a temp variable wrapper.
 	// Strada registers class aliases AFTER transformClassMembers (since onSubstituteNode runs
 	// at emit time), but we must predict this before visiting members since we substitute
 	// eagerly. This requires pre-detecting willHavePrivatePendingExpressions.
 	isClassWithConstructorReference := false
-	hasTransformableStatics := false
 	deferTempDeclaration := false
 	if !isDecoratedClassDeclaration {
 		isClassWithConstructorReference = tx.classContainsConstructorReference(node)
-		hasTransformableStatics = (tx.shouldTransformPrivateElementsOrClassStaticBlocks ||
-			tx.nodeHasTransformPrivateStaticElementsFlag(node)) &&
-			core.Some(staticPropertiesOrClassStaticBlocks, func(n *ast.Node) bool {
-				return ast.IsClassStaticBlockDeclaration(n) ||
-					ast.IsPrivateIdentifierClassElementDeclaration(n) ||
-					(tx.shouldTransformInitializers && ast.IsInitializedProperty(n))
-			})
 
 		// Private instance elements (fields, methods, accessors) transformed to
 		// WeakMap/WeakSet will add initialization expressions to pendingExpressions
@@ -2139,7 +2138,7 @@ func (tx *classFieldsTransformer) visitClassExpressionInNewClassLexicalEnvironme
 		} else {
 			expressions = append(expressions, classExpression)
 		}
-	} else {
+	} else if hasTransformableStatics || len(tx.pendingExpressions) > 0 {
 		// Decorated class declaration path: emit static properties as separate statements
 		// via pendingStatements, matching the class declaration output structure.
 
@@ -2167,6 +2166,8 @@ func (tx *classFieldsTransformer) visitClassExpressionInNewClassLexicalEnvironme
 		} else {
 			expressions = append(expressions, classExpression)
 		}
+	} else {
+		expressions = append(expressions, classExpression)
 	}
 
 	if len(expressions) > 1 {
@@ -3318,7 +3319,7 @@ func (tx *classFieldsTransformer) visitAssignmentRestProperty(node *ast.Node) *a
 }
 
 func (tx *classFieldsTransformer) visitObjectAssignmentElement(node *ast.Node) *ast.Node {
-	debug.Assert(node != nil && ast.IsObjectBindingOrAssignmentElement(node))
+	debug.Assert(node != nil && ast.IsObjectLiteralElement(node))
 	if ast.IsSpreadAssignment(node) {
 		return tx.visitAssignmentRestProperty(node)
 	}

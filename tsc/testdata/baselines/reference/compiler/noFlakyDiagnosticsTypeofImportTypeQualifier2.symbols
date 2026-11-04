@@ -1,0 +1,11 @@
+//// [tests/cases/compiler/noFlakyDiagnosticsTypeofImportTypeQualifier2.ts] ////
+
+=== /b.ts ===
+export const x = 1;
+>x : Symbol(x, Decl(b.ts, 0, 12))
+
+=== /a.ts ===
+export function f(x: typeof import("./b").nope.x) {}
+>f : Symbol(f, Decl(a.ts, 0, 0))
+>x : Symbol(x, Decl(a.ts, 0, 18))
+

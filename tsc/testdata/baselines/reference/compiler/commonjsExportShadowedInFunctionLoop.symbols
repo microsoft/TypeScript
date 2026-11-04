@@ -1,0 +1,89 @@
+//// [tests/cases/compiler/commonjsExportShadowedInFunctionLoop.ts] ////
+
+=== commonjsExportShadowedInFunctionLoop.ts ===
+export function f(xs: number[]) {
+>f : Symbol(f, Decl(commonjsExportShadowedInFunctionLoop.ts, 0, 0))
+>xs : Symbol(xs, Decl(commonjsExportShadowedInFunctionLoop.ts, 0, 18))
+
+    for (const x of xs) {
+>x : Symbol(x, Decl(commonjsExportShadowedInFunctionLoop.ts, 1, 14))
+>xs : Symbol(xs, Decl(commonjsExportShadowedInFunctionLoop.ts, 0, 18))
+
+        const mount = x;
+>mount : Symbol(mount, Decl(commonjsExportShadowedInFunctionLoop.ts, 2, 13))
+>x : Symbol(x, Decl(commonjsExportShadowedInFunctionLoop.ts, 1, 14))
+
+        console.log(mount);
+>console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+>log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>mount : Symbol(mount, Decl(commonjsExportShadowedInFunctionLoop.ts, 2, 13))
+    }
+    for (const x in xs) {
+>x : Symbol(x, Decl(commonjsExportShadowedInFunctionLoop.ts, 5, 14))
+>xs : Symbol(xs, Decl(commonjsExportShadowedInFunctionLoop.ts, 0, 18))
+
+        const mount = x;
+>mount : Symbol(mount, Decl(commonjsExportShadowedInFunctionLoop.ts, 6, 13))
+>x : Symbol(x, Decl(commonjsExportShadowedInFunctionLoop.ts, 5, 14))
+
+        console.log(mount);
+>console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+>log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>mount : Symbol(mount, Decl(commonjsExportShadowedInFunctionLoop.ts, 6, 13))
+    }
+    for (let x = 0; x < xs.length; x++) {
+>x : Symbol(x, Decl(commonjsExportShadowedInFunctionLoop.ts, 9, 12))
+>x : Symbol(x, Decl(commonjsExportShadowedInFunctionLoop.ts, 9, 12))
+>xs.length : Symbol(Array.length, Decl(lib.es5.d.ts, --, --))
+>xs : Symbol(xs, Decl(commonjsExportShadowedInFunctionLoop.ts, 0, 18))
+>length : Symbol(Array.length, Decl(lib.es5.d.ts, --, --))
+>x : Symbol(x, Decl(commonjsExportShadowedInFunctionLoop.ts, 9, 12))
+
+        const mount = xs[x];
+>mount : Symbol(mount, Decl(commonjsExportShadowedInFunctionLoop.ts, 10, 13))
+>xs : Symbol(xs, Decl(commonjsExportShadowedInFunctionLoop.ts, 0, 18))
+>x : Symbol(x, Decl(commonjsExportShadowedInFunctionLoop.ts, 9, 12))
+
+        console.log(mount);
+>console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+>log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>mount : Symbol(mount, Decl(commonjsExportShadowedInFunctionLoop.ts, 10, 13))
+    }
+}
+function mount() {}
+>mount : Symbol(mount, Decl(commonjsExportShadowedInFunctionLoop.ts, 13, 1))
+
+export { mount };
+>mount : Symbol(mount, Decl(commonjsExportShadowedInFunctionLoop.ts, 15, 8))
+
+for (const x of [1]) {
+>x : Symbol(x, Decl(commonjsExportShadowedInFunctionLoop.ts, 17, 10))
+
+    var fromForOf = x;
+>fromForOf : Symbol(fromForOf, Decl(commonjsExportShadowedInFunctionLoop.ts, 18, 7))
+>x : Symbol(x, Decl(commonjsExportShadowedInFunctionLoop.ts, 17, 10))
+}
+for (const x in [1]) {
+>x : Symbol(x, Decl(commonjsExportShadowedInFunctionLoop.ts, 20, 10))
+
+    var fromForIn = x;
+>fromForIn : Symbol(fromForIn, Decl(commonjsExportShadowedInFunctionLoop.ts, 21, 7))
+>x : Symbol(x, Decl(commonjsExportShadowedInFunctionLoop.ts, 20, 10))
+}
+for (let x = 0; x < 1; x++) {
+>x : Symbol(x, Decl(commonjsExportShadowedInFunctionLoop.ts, 23, 8))
+>x : Symbol(x, Decl(commonjsExportShadowedInFunctionLoop.ts, 23, 8))
+>x : Symbol(x, Decl(commonjsExportShadowedInFunctionLoop.ts, 23, 8))
+
+    var fromFor = x;
+>fromFor : Symbol(fromFor, Decl(commonjsExportShadowedInFunctionLoop.ts, 24, 7))
+>x : Symbol(x, Decl(commonjsExportShadowedInFunctionLoop.ts, 23, 8))
+}
+export { fromForOf, fromForIn, fromFor };
+>fromForOf : Symbol(fromForOf, Decl(commonjsExportShadowedInFunctionLoop.ts, 26, 8))
+>fromForIn : Symbol(fromForIn, Decl(commonjsExportShadowedInFunctionLoop.ts, 26, 19))
+>fromFor : Symbol(fromFor, Decl(commonjsExportShadowedInFunctionLoop.ts, 26, 30))
+

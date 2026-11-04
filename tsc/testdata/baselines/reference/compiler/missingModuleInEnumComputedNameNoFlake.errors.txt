@@ -1,0 +1,16 @@
+missingModuleInEnumComputedNameNoFlake.ts(3,5): error TS1164: Computed property names are not allowed in enums.
+missingModuleInEnumComputedNameNoFlake.ts(3,13): error TS2307: Cannot find module 'missing' or its corresponding type declarations.
+missingModuleInEnumComputedNameNoFlake.ts(3,24): error TS2339: Property 'value' does not exist on type 'Promise<any>'.
+
+
+==== missingModuleInEnumComputedNameNoFlake.ts (3 errors) ====
+    // TS2307: Cannot find module 'missing' or its corresponding type declarations.
+    export enum Values {
+        [import("missing").value] = 1,
+        ~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS1164: Computed property names are not allowed in enums.
+                ~~~~~~~~~
+!!! error TS2307: Cannot find module 'missing' or its corresponding type declarations.
+                           ~~~~~
+!!! error TS2339: Property 'value' does not exist on type 'Promise<any>'.
+    }

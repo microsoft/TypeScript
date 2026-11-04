@@ -90,11 +90,16 @@ func importLocalization(sourcePath string, handbackPath string, outputPath strin
 			return fmt.Errorf("%s: unknown localization status %q for %q", handbackPath, message.Target.Status, key)
 		}
 	}
+	for key, text := range existing {
+		if text == english[key] {
+			delete(existing, key)
+		}
+	}
 	data, err := json.Marshal(existing, json.Deterministic(true), jsontext.WithIndent("  "))
 	if err != nil {
 		return fmt.Errorf("encode %s: %w", outputPath, err)
 	}
-	data = bytes.ReplaceAll(data, []byte("\n"), []byte("\r\n"))
+	data = append(data, '\n')
 	if err := os.MkdirAll(filepath.Dir(outputPath), 0o755); err != nil {
 		return err
 	}

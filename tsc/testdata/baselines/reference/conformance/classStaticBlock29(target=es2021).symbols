@@ -1,0 +1,93 @@
+//// [tests/cases/conformance/classes/classStaticBlock/classStaticBlock29.ts] ////
+
+=== classStaticBlock29.ts ===
+// https://github.com/microsoft/TypeScript/issues/64733
+
+// Inside a downleveled `static {}` block, `this` refers to the class and is rewritten
+// to the class alias, but `this` inside a regular function nested in the block refers
+// to the function's own receiver and must be kept.
+class Foo {
+>Foo : Symbol(Foo, Decl(classStaticBlock29.ts, 0, 0))
+
+    declare static count: number;
+>count : Symbol(Foo.count, Decl(classStaticBlock29.ts, 5, 11))
+
+    declare toObject: () => number;
+>toObject : Symbol(Foo.toObject, Decl(classStaticBlock29.ts, 6, 33))
+
+    declare getBar: () => () => number;
+>getBar : Symbol(Foo.getBar, Decl(classStaticBlock29.ts, 7, 35))
+
+    declare getIndexed: () => number;
+>getIndexed : Symbol(Foo.getIndexed, Decl(classStaticBlock29.ts, 8, 39))
+
+    bar() {
+>bar : Symbol(Foo.bar, Decl(classStaticBlock29.ts, 9, 37))
+
+        return 1;
+    }
+
+    static {
+        // Referencing the class by name makes the downleveled block use a class alias.
+        Foo.count = 0;
+>Foo.count : Symbol(Foo.count, Decl(classStaticBlock29.ts, 5, 11))
+>Foo : Symbol(Foo, Decl(classStaticBlock29.ts, 0, 0))
+>count : Symbol(Foo.count, Decl(classStaticBlock29.ts, 5, 11))
+
+        this.count++;
+>this.count : Symbol(Foo.count, Decl(classStaticBlock29.ts, 5, 11))
+>this : Symbol(Foo, Decl(classStaticBlock29.ts, 0, 0))
+>count : Symbol(Foo.count, Decl(classStaticBlock29.ts, 5, 11))
+
+        Foo.prototype.toObject = function (this: Foo) {
+>Foo.prototype.toObject : Symbol(Foo.toObject, Decl(classStaticBlock29.ts, 6, 33))
+>Foo.prototype : Symbol(Foo.prototype)
+>Foo : Symbol(Foo, Decl(classStaticBlock29.ts, 0, 0))
+>prototype : Symbol(Foo.prototype)
+>toObject : Symbol(Foo.toObject, Decl(classStaticBlock29.ts, 6, 33))
+>this : Symbol(this, Decl(classStaticBlock29.ts, 19, 43))
+>Foo : Symbol(Foo, Decl(classStaticBlock29.ts, 0, 0))
+
+            return this.bar();
+>this.bar : Symbol(Foo.bar, Decl(classStaticBlock29.ts, 9, 37))
+>this : Symbol(this, Decl(classStaticBlock29.ts, 19, 43))
+>bar : Symbol(Foo.bar, Decl(classStaticBlock29.ts, 9, 37))
+
+        };
+        Foo.prototype.getBar = function (this: Foo) {
+>Foo.prototype.getBar : Symbol(Foo.getBar, Decl(classStaticBlock29.ts, 7, 35))
+>Foo.prototype : Symbol(Foo.prototype)
+>Foo : Symbol(Foo, Decl(classStaticBlock29.ts, 0, 0))
+>prototype : Symbol(Foo.prototype)
+>getBar : Symbol(Foo.getBar, Decl(classStaticBlock29.ts, 7, 35))
+>this : Symbol(this, Decl(classStaticBlock29.ts, 22, 41))
+>Foo : Symbol(Foo, Decl(classStaticBlock29.ts, 0, 0))
+
+            return () => this.bar();
+>this.bar : Symbol(Foo.bar, Decl(classStaticBlock29.ts, 9, 37))
+>this : Symbol(this, Decl(classStaticBlock29.ts, 22, 41))
+>bar : Symbol(Foo.bar, Decl(classStaticBlock29.ts, 9, 37))
+
+        };
+        this.prototype.getIndexed = function (this: Foo) {
+>this.prototype.getIndexed : Symbol(Foo.getIndexed, Decl(classStaticBlock29.ts, 8, 39))
+>this.prototype : Symbol(Foo.prototype)
+>this : Symbol(Foo, Decl(classStaticBlock29.ts, 0, 0))
+>prototype : Symbol(Foo.prototype)
+>getIndexed : Symbol(Foo.getIndexed, Decl(classStaticBlock29.ts, 8, 39))
+>this : Symbol(this, Decl(classStaticBlock29.ts, 25, 46))
+>Foo : Symbol(Foo, Decl(classStaticBlock29.ts, 0, 0))
+
+            return this["bar"]();
+>this : Symbol(this, Decl(classStaticBlock29.ts, 25, 46))
+>"bar" : Symbol(Foo.bar, Decl(classStaticBlock29.ts, 9, 37))
+
+        };
+    }
+}
+
+new Foo().toObject();
+>new Foo().toObject : Symbol(Foo.toObject, Decl(classStaticBlock29.ts, 6, 33))
+>Foo : Symbol(Foo, Decl(classStaticBlock29.ts, 0, 0))
+>toObject : Symbol(Foo.toObject, Decl(classStaticBlock29.ts, 6, 33))
+

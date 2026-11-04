@@ -1,0 +1,30 @@
+//// [tests/cases/compiler/domObserverArrayCallbacks.ts] ////
+
+=== domObserverArrayCallbacks.ts ===
+new ResizeObserver(entries => entries[0]);
+>ResizeObserver : Symbol(ResizeObserver, Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --))
+>entries : Symbol(entries, Decl(domObserverArrayCallbacks.ts, 0, 19))
+>entries : Symbol(entries, Decl(domObserverArrayCallbacks.ts, 0, 19))
+
+new MutationObserver(records => records.some(record => record.attributeName === "style"));
+>MutationObserver : Symbol(MutationObserver, Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --))
+>records : Symbol(records, Decl(domObserverArrayCallbacks.ts, 1, 21))
+>records.some : Symbol(Array.some, Decl(lib.es5.d.ts, --, --))
+>records : Symbol(records, Decl(domObserverArrayCallbacks.ts, 1, 21))
+>some : Symbol(Array.some, Decl(lib.es5.d.ts, --, --))
+>record : Symbol(record, Decl(domObserverArrayCallbacks.ts, 1, 45))
+>record.attributeName : Symbol(MutationRecord.attributeName, Decl(lib.dom.d.ts, --, --))
+>record : Symbol(record, Decl(domObserverArrayCallbacks.ts, 1, 45))
+>attributeName : Symbol(MutationRecord.attributeName, Decl(lib.dom.d.ts, --, --))
+
+new IntersectionObserver(entries => entries.forEach(entry => entry.isIntersecting));
+>IntersectionObserver : Symbol(IntersectionObserver, Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --))
+>entries : Symbol(entries, Decl(domObserverArrayCallbacks.ts, 2, 25))
+>entries.forEach : Symbol(Array.forEach, Decl(lib.es5.d.ts, --, --))
+>entries : Symbol(entries, Decl(domObserverArrayCallbacks.ts, 2, 25))
+>forEach : Symbol(Array.forEach, Decl(lib.es5.d.ts, --, --))
+>entry : Symbol(entry, Decl(domObserverArrayCallbacks.ts, 2, 52))
+>entry.isIntersecting : Symbol(IntersectionObserverEntry.isIntersecting, Decl(lib.dom.d.ts, --, --))
+>entry : Symbol(entry, Decl(domObserverArrayCallbacks.ts, 2, 52))
+>isIntersecting : Symbol(IntersectionObserverEntry.isIntersecting, Decl(lib.dom.d.ts, --, --))
+

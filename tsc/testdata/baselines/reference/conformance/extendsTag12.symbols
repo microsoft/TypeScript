@@ -1,0 +1,144 @@
+//// [tests/cases/conformance/jsdoc/extendsTag12.ts] ////
+
+=== a.js ===
+/** @template T */
+class A {
+>A : Symbol(A, Decl(a.js, 0, 0))
+
+    /** @param {T} value */
+    constructor(value) {
+>value : Symbol(value, Decl(a.js, 3, 16))
+
+        this.value = value;
+>this.value : Symbol(A.value, Decl(a.js, 3, 24))
+>this : Symbol(A, Decl(a.js, 0, 0))
+>value : Symbol(A.value, Decl(a.js, 3, 24))
+>value : Symbol(value, Decl(a.js, 3, 16))
+    }
+}
+
+/**
+ * @template T
+ * @extends {A<T>}
+ */
+class Sub extends A {
+>Sub : Symbol(Sub, Decl(a.js, 6, 1))
+>A : Symbol(A, Decl(a.js, 0, 0))
+
+    /** @returns {typeof Sub} */
+    static extend() {
+>extend : Symbol(Sub.extend, Decl(a.js, 12, 21))
+
+        return this;
+>this : Symbol(Sub, Decl(a.js, 6, 1))
+    }
+}
+
+/** @template T */
+class Other {
+>Other : Symbol(Other, Decl(a.js, 17, 1))
+
+    /** @param {T} other */
+    constructor(other) {
+>other : Symbol(other, Decl(a.js, 22, 16))
+
+        this.other = other;
+>this.other : Symbol(Other.other, Decl(a.js, 22, 24))
+>this : Symbol(Other, Decl(a.js, 17, 1))
+>other : Symbol(Other.other, Decl(a.js, 22, 24))
+>other : Symbol(other, Decl(a.js, 22, 16))
+    }
+}
+
+/**
+ * @template {new (...args: any[]) => any} C
+ * @param {C} Base
+ */
+function mixin(Base) {
+>mixin : Symbol(mixin, Decl(a.js, 25, 1))
+>Base : Symbol(Base, Decl(a.js, 31, 15))
+
+    return class extends Base {
+>Base : Symbol(Base, Decl(a.js, 31, 15))
+
+        extra = 1;
+>extra : Symbol((Anonymous class).extra, Decl(a.js, 32, 31))
+
+    };
+}
+
+const ns = { A };
+>ns : Symbol(ns, Decl(a.js, 37, 5))
+>A : Symbol(A, Decl(a.js, 37, 12))
+
+/** @type {boolean} */
+let cond = true;
+>cond : Symbol(cond, Decl(a.js, 39, 3))
+
+/** @extends {A<string>} */
+class ViaMixin extends mixin(A) {}
+>ViaMixin : Symbol(ViaMixin, Decl(a.js, 39, 16))
+>mixin : Symbol(mixin, Decl(a.js, 25, 1))
+>A : Symbol(A, Decl(a.js, 0, 0))
+
+/** @type {string} */
+const viaMixin = new ViaMixin("ok").value;
+>viaMixin : Symbol(viaMixin, Decl(a.js, 44, 5))
+>new ViaMixin("ok").value : Symbol(A.value, Decl(a.js, 3, 24))
+>ViaMixin : Symbol(ViaMixin, Decl(a.js, 39, 16))
+>value : Symbol(A.value, Decl(a.js, 3, 24))
+
+/** @type {number} */
+const viaMixinExtra = new ViaMixin("ok").extra;
+>viaMixinExtra : Symbol(viaMixinExtra, Decl(a.js, 46, 5))
+>new ViaMixin("ok").extra : Symbol((Anonymous class).extra, Decl(a.js, 32, 31))
+>ViaMixin : Symbol(ViaMixin, Decl(a.js, 39, 16))
+>extra : Symbol((Anonymous class).extra, Decl(a.js, 32, 31))
+
+/** @extends {Other<string>} */
+class MismatchedMixin extends mixin(A) {}
+>MismatchedMixin : Symbol(MismatchedMixin, Decl(a.js, 46, 47))
+>mixin : Symbol(mixin, Decl(a.js, 25, 1))
+>A : Symbol(A, Decl(a.js, 0, 0))
+
+/** @extends {A<string>} */
+class ViaSubclass extends Sub.extend() {}
+>ViaSubclass : Symbol(ViaSubclass, Decl(a.js, 49, 41))
+>Sub.extend : Symbol(Sub.extend, Decl(a.js, 12, 21))
+>Sub : Symbol(Sub, Decl(a.js, 6, 1))
+>extend : Symbol(Sub.extend, Decl(a.js, 12, 21))
+
+/** @type {string} */
+const viaSubclass = new ViaSubclass("ok").value;
+>viaSubclass : Symbol(viaSubclass, Decl(a.js, 54, 5))
+>new ViaSubclass("ok").value : Symbol(A.value, Decl(a.js, 3, 24))
+>ViaSubclass : Symbol(ViaSubclass, Decl(a.js, 49, 41))
+>value : Symbol(A.value, Decl(a.js, 3, 24))
+
+/** @extends {A<string>} */
+class ViaElementAccess extends ns["A"] {}
+>ViaElementAccess : Symbol(ViaElementAccess, Decl(a.js, 54, 48))
+>ns : Symbol(ns, Decl(a.js, 37, 5))
+>"A" : Symbol(A, Decl(a.js, 37, 12))
+
+/** @type {string} */
+const viaElementAccess = new ViaElementAccess("ok").value;
+>viaElementAccess : Symbol(viaElementAccess, Decl(a.js, 59, 5))
+>new ViaElementAccess("ok").value : Symbol(A.value, Decl(a.js, 3, 24))
+>ViaElementAccess : Symbol(ViaElementAccess, Decl(a.js, 54, 48))
+>value : Symbol(A.value, Decl(a.js, 3, 24))
+
+/** @extends {A<string>} */
+class ViaConditional extends (cond ? A : A) {}
+>ViaConditional : Symbol(ViaConditional, Decl(a.js, 59, 58))
+>cond : Symbol(cond, Decl(a.js, 39, 3))
+>A : Symbol(A, Decl(a.js, 0, 0))
+>A : Symbol(A, Decl(a.js, 0, 0))
+
+/** @type {string} */
+const viaConditional = new ViaConditional("ok").value;
+>viaConditional : Symbol(viaConditional, Decl(a.js, 64, 5))
+>new ViaConditional("ok").value : Symbol(A.value, Decl(a.js, 3, 24))
+>ViaConditional : Symbol(ViaConditional, Decl(a.js, 59, 58))
+>value : Symbol(A.value, Decl(a.js, 3, 24))
+

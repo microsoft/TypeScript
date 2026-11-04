@@ -1,0 +1,9 @@
+//// [tests/cases/compiler/domResizeObserverExplicitArrayCallback.ts] ////
+
+=== domResizeObserverExplicitArrayCallback.ts ===
+new ResizeObserver((entries: ResizeObserverEntry[]) => {});
+>new ResizeObserver((entries: ResizeObserverEntry[]) => {}) : ResizeObserver
+>ResizeObserver : { new (callback: ResizeObserverCallback): ResizeObserver; prototype: ResizeObserver; }
+>(entries: ResizeObserverEntry[]) => {} : (entries: ResizeObserverEntry[]) => void
+>entries : ResizeObserverEntry[]
+

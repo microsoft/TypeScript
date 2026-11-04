@@ -1,0 +1,33 @@
+//// [tests/cases/compiler/fetchOverloadCallableCopy.ts] ////
+
+=== fetchOverloadCallableCopy.ts ===
+declare function fetch(input: RequestInfo | URL, init?: RequestInit): Promise<Response>;
+>fetch : Symbol(fetch, Decl(lib.dom.d.ts, --, --), Decl(fetchOverloadCallableCopy.ts, 0, 0))
+>input : Symbol(input, Decl(fetchOverloadCallableCopy.ts, 0, 23))
+>RequestInfo : Symbol(RequestInfo, Decl(lib.dom.d.ts, --, --))
+>URL : Symbol(URL, Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --))
+>init : Symbol(init, Decl(fetchOverloadCallableCopy.ts, 0, 48))
+>RequestInit : Symbol(RequestInit, Decl(lib.dom.d.ts, --, --))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>Response : Symbol(Response, Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --))
+
+type CallableCopy<T extends (...args: never[]) => unknown> = (...args: Parameters<T>) => ReturnType<T>;
+>CallableCopy : Symbol(CallableCopy, Decl(fetchOverloadCallableCopy.ts, 0, 88))
+>T : Symbol(T, Decl(fetchOverloadCallableCopy.ts, 1, 18))
+>args : Symbol(args, Decl(fetchOverloadCallableCopy.ts, 1, 29))
+>args : Symbol(args, Decl(fetchOverloadCallableCopy.ts, 1, 62))
+>Parameters : Symbol(Parameters, Decl(lib.es5.d.ts, --, --))
+>T : Symbol(T, Decl(fetchOverloadCallableCopy.ts, 1, 18))
+>ReturnType : Symbol(ReturnType, Decl(lib.es5.d.ts, --, --))
+>T : Symbol(T, Decl(fetchOverloadCallableCopy.ts, 1, 18))
+
+declare const copiedFetch: CallableCopy<typeof fetch>;
+>copiedFetch : Symbol(copiedFetch, Decl(fetchOverloadCallableCopy.ts, 2, 13))
+>CallableCopy : Symbol(CallableCopy, Decl(fetchOverloadCallableCopy.ts, 0, 88))
+>fetch : Symbol(fetch, Decl(lib.dom.d.ts, --, --), Decl(fetchOverloadCallableCopy.ts, 0, 0))
+
+const replacementFetch: typeof fetch = copiedFetch;
+>replacementFetch : Symbol(replacementFetch, Decl(fetchOverloadCallableCopy.ts, 3, 5))
+>fetch : Symbol(fetch, Decl(lib.dom.d.ts, --, --), Decl(fetchOverloadCallableCopy.ts, 0, 0))
+>copiedFetch : Symbol(copiedFetch, Decl(fetchOverloadCallableCopy.ts, 2, 13))
+

@@ -261,11 +261,11 @@ func (f *isolatedDeclarationsFixer) createNamespaceForExpandoProperties(expandoF
 
 	var newProperties []*ast.Node
 	for _, symbol := range elements {
-		if !scanner.IsIdentifierText(symbol.Name, core.LanguageVariantStandard) {
+		if !scanner.IsIdentifierText(symbol.Name(), core.LanguageVariantStandard) {
 			continue
 		}
 		// skip symbols that already have a variable declaration
-		if symbol.ValueDeclaration != nil && ast.IsVariableDeclaration(symbol.ValueDeclaration) {
+		if symbol.ValueDeclaration() != nil && ast.IsVariableDeclaration(symbol.ValueDeclaration()) {
 			continue
 		}
 
@@ -275,7 +275,7 @@ func (f *isolatedDeclarationsFixer) createNamespaceForExpandoProperties(expandoF
 			continue
 		}
 
-		varDecl := factory.NewVariableDeclaration(factory.NewIdentifier(symbol.Name), nil, typeNode, nil)
+		varDecl := factory.NewVariableDeclaration(factory.NewIdentifier(symbol.Name()), nil, typeNode, nil)
 		exportToken := factory.NewToken(ast.KindExportKeyword)
 		varDeclList := factory.NewVariableDeclarationList(factory.NewNodeList([]*ast.Node{varDecl}), ast.NodeFlagsNone)
 		varStmt := factory.NewVariableStatement(factory.NewModifierList([]*ast.Node{exportToken}), varDeclList)
@@ -523,7 +523,7 @@ func findExpandoFunction(ch *checker.Checker, node *ast.Node) *ast.Node {
 	properties := ch.GetPropertiesOfType(targetType)
 	found := false
 	for _, p := range properties {
-		if p.ValueDeclaration == expandoDeclaration || p.ValueDeclaration == expandoDeclaration.Parent {
+		if p.ValueDeclaration() == expandoDeclaration || p.ValueDeclaration() == expandoDeclaration.Parent {
 			found = true
 			break
 		}
@@ -533,11 +533,11 @@ func findExpandoFunction(ch *checker.Checker, node *ast.Node) *ast.Node {
 	}
 
 	symbol := targetType.Symbol()
-	if symbol == nil || symbol.ValueDeclaration == nil {
+	if symbol == nil || symbol.ValueDeclaration() == nil {
 		return nil
 	}
 
-	fn := symbol.ValueDeclaration
+	fn := symbol.ValueDeclaration()
 	if (ast.IsFunctionExpression(fn) || ast.IsArrowFunction(fn)) && ast.IsVariableDeclaration(fn.Parent) {
 		return fn.Parent
 	}
@@ -1249,7 +1249,7 @@ func typeParamHasDefault(tp *checker.Type) bool {
 	if sym == nil {
 		return false
 	}
-	for _, decl := range sym.Declarations {
+	for _, decl := range sym.Declarations() {
 		if ast.IsTypeParameterDeclaration(decl) && decl.AsTypeParameterDeclaration().DefaultType != nil {
 			return true
 		}
@@ -1379,13 +1379,13 @@ func getIdentifierNameForNode(node *ast.Node) string {
 // addSymbolToExistingImport finds the existing import declaration for the symbol's module
 // and adds the symbol name to the named imports.
 func (f *isolatedDeclarationsFixer) addSymbolToExistingImport(sym *ast.Symbol) {
-	if sym == nil || sym.Parent == nil {
+	if sym == nil || sym.Parent() == nil {
 		return
 	}
 
 	// Find the module specifier for this symbol
-	moduleSymbol := sym.Parent
-	symbolName := sym.Name
+	moduleSymbol := sym.Parent()
+	symbolName := sym.Name()
 
 	// Walk the source file's import declarations to find the one importing from the same module
 	for _, stmt := range f.sourceFile.Statements.Nodes {

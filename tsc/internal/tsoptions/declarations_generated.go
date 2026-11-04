@@ -685,6 +685,13 @@ var optionsForCompiler = []*CommandLineOption{
 		DefaultValueDescription: false,
 	},
 	{
+		Name:                    "disableDynamicImportExtensionRewriting",
+		Kind:                    CommandLineOptionTypeBoolean,
+		Category:                diagnostics.Modules,
+		Description:             diagnostics.Disable_runtime_rewriting_of_file_extensions_in_non_literal_import_and_require_calls_when_rewriteRelativeImportExtensions_is_enabled,
+		DefaultValueDescription: false,
+	},
+	{
 		Name:                    "resolvePackageJsonExports",
 		Kind:                    CommandLineOptionTypeBoolean,
 		Category:                diagnostics.Modules,
@@ -1274,8 +1281,8 @@ var LibMap = collections.NewOrderedMapFromList([]collections.MapEntry[string, an
 	{Key: "esnext.array", Value: "lib.es2026.array.d.ts"},
 	{Key: "esnext.collection", Value: "lib.es2026.collection.d.ts"},
 	{Key: "esnext.error", Value: "lib.es2026.error.d.ts"},
-	{Key: "esnext.iterator", Value: "lib.es2026.iterator.d.ts"},
 	{Key: "esnext.typedarrays", Value: "lib.es2026.typedarrays.d.ts"},
+	{Key: "esnext.iterator", Value: "lib.esnext.iterator.d.ts"},
 	{Key: "esnext.promise", Value: "lib.esnext.promise.d.ts"},
 	{Key: "esnext.date", Value: "lib.esnext.date.d.ts"},
 	{Key: "esnext.decorators", Value: "lib.esnext.decorators.d.ts"},

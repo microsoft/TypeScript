@@ -1,0 +1,12 @@
+strictModeEvalOrArgumentsInNonStrictScript.ts(1,7): error TS1210: Code contained in a class is evaluated in JavaScript's strict mode which does not allow this use of 'arguments'. For more information, see https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Strict_mode.
+strictModeEvalOrArgumentsInNonStrictScript.ts(2,17): error TS1210: Code contained in a class is evaluated in JavaScript's strict mode which does not allow this use of 'eval'. For more information, see https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Strict_mode.
+
+
+==== strictModeEvalOrArgumentsInNonStrictScript.ts (2 errors) ====
+    class arguments {}
+          ~~~~~~~~~
+!!! error TS1210: Code contained in a class is evaluated in JavaScript's strict mode which does not allow this use of 'arguments'. For more information, see https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Strict_mode.
+    const C = class eval {};
+                    ~~~~
+!!! error TS1210: Code contained in a class is evaluated in JavaScript's strict mode which does not allow this use of 'eval'. For more information, see https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Strict_mode.
+    

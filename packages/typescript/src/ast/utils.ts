@@ -1,9 +1,9 @@
-import { CharacterCodes } from "#enums/characterCodes";
-import { JSDeclarationKind } from "#enums/jsDeclarationKind";
-import { ModifierFlags } from "#enums/modifierFlags";
-import { NodeFlags } from "#enums/nodeFlags";
-import { OuterExpressionKinds } from "#enums/outerExpressionKinds";
-import { SyntaxKind } from "#enums/syntaxKind";
+import { CharacterCodes } from "../../enums/characterCodes.js";
+import { JSDeclarationKind } from "../../enums/jsDeclarationKind.js";
+import { ModifierFlags } from "../../enums/modifierFlags.js";
+import { NodeFlags } from "../../enums/nodeFlags.js";
+import { OuterExpressionKinds } from "../../enums/outerExpressionKinds.js";
+import { SyntaxKind } from "../../enums/syntaxKind.js";
 import type {
     __String,
     AccessExpression,

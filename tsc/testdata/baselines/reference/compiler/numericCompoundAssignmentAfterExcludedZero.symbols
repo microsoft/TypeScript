@@ -1,0 +1,16 @@
+//// [tests/cases/compiler/numericCompoundAssignmentAfterExcludedZero.ts] ////
+
+=== numericCompoundAssignmentAfterExcludedZero.ts ===
+function divide(value: number, divisor: number) {
+>divide : Symbol(divide, Decl(numericCompoundAssignmentAfterExcludedZero.ts, 0, 0))
+>value : Symbol(value, Decl(numericCompoundAssignmentAfterExcludedZero.ts, 0, 16))
+>divisor : Symbol(divisor, Decl(numericCompoundAssignmentAfterExcludedZero.ts, 0, 30))
+
+    if (value === 0) return;
+>value : Symbol(value, Decl(numericCompoundAssignmentAfterExcludedZero.ts, 0, 16))
+
+    value /= divisor;
+>value : Symbol(value, Decl(numericCompoundAssignmentAfterExcludedZero.ts, 0, 16))
+>divisor : Symbol(divisor, Decl(numericCompoundAssignmentAfterExcludedZero.ts, 0, 30))
+}
+

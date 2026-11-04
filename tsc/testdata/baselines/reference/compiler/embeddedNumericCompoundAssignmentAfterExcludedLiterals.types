@@ -1,0 +1,40 @@
+//// [tests/cases/compiler/embeddedNumericCompoundAssignmentAfterExcludedLiterals.ts] ////
+
+=== embeddedNumericCompoundAssignmentAfterExcludedLiterals.ts ===
+function ease(value: number, divisor: number) {
+>ease : (value: number, divisor: number) => number
+>value : number
+>divisor : number
+
+    if (value === 0) return 0;
+>value === 0 : boolean
+>value : number
+>0 : 0
+>0 : 0
+
+    value /= divisor;
+>value /= divisor : number
+>value : number
+>divisor : number
+
+    if (value === 2) return 2;
+>value === 2 : boolean
+>value : number
+>2 : 2
+>2 : 2
+
+    return Math.pow(2, -10 * (value -= 1));
+>Math.pow(2, -10 * (value -= 1)) : number
+>Math.pow : (x: number, y: number) => number
+>Math : Math
+>pow : (x: number, y: number) => number
+>2 : 2
+>-10 * (value -= 1) : number
+>-10 : -10
+>10 : 10
+>(value -= 1) : number
+>value -= 1 : number
+>value : number
+>1 : 1
+}
+

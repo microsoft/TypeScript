@@ -13,7 +13,6 @@ See the Apache Version 2.0 License for specific language governing permissions
 and limitations under the License.
 ***************************************************************************** */
 
-
 /**
  * The decorator context types provided to class element decorators.
  */
@@ -53,16 +52,19 @@ interface ClassDecoratorContext<
      *
      * @example
      * ```ts
-     * function customElement(name: string): ClassDecoratorFunction {
-     *   return (target, context) => {
+     * function customElement(name: string) {
+     *   return <Class extends CustomElementConstructor>(
+     *     target: Class,
+     *     context: ClassDecoratorContext<Class>,
+     *   ) => {
      *     context.addInitializer(function () {
      *       customElements.define(name, this);
      *     });
-     *   }
+     *   };
      * }
      *
      * @customElement("my-element")
-     * class MyElement {}
+     * class MyElement extends HTMLElement {}
      * ```
      */
     addInitializer(initializer: (this: Class) => void): void;
@@ -114,10 +116,14 @@ interface ClassMethodDecoratorContext<
      *
      * @example
      * ```ts
-     * const bound: ClassMethodDecoratorFunction = (value, context) {
+     * function bound<This, Value extends (...args: any) => any>(
+     *   value: Value,
+     *   context: ClassMethodDecoratorContext<This, Value>,
+     * ) {
      *   if (context.private) throw new TypeError("Not supported on private methods.");
-     *   context.addInitializer(function () {
-     *     this[context.name] = this[context.name].bind(this);
+     *   context.addInitializer(function (this: This) {
+     *     const self = this as Record<PropertyKey, any>;
+     *     self[context.name] = self[context.name].bind(this);
      *   });
      * }
      *
