@@ -58,6 +58,16 @@ test("Go AST generator validates bases after schema reloads", async context => {
     }
 });
 
+test("TypeScript AST generation emits LF before formatting", async context => {
+    const writes = context.mock.method(GeneratedFile.prototype, "write");
+    const { default: generate } = await import("../tsc/generate-ts-ast.ts");
+    generate(true);
+    assert.equal(writes.mock.callCount(), 4);
+    for (const call of writes.mock.calls) {
+        assert.equal(call.arguments[0].includes("\r"), false, "unformatted output must use LF");
+    }
+});
+
 test("generator options preserve repeated inputs and force overrides", async () => {
     const { parseGeneratorArgs, resolveForce } = await import("./utils.mts");
     const options = { type: { type: "string" }, input: { type: "string", multiple: true } } as const;
