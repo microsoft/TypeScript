@@ -26,7 +26,7 @@ type InferenceState struct {
 	bivariant         bool
 	expandingFlags    ExpandingFlags
 	propagationType   *Type
-	visited           map[InferenceKey]InferencePriority
+	visited           clearableMap[InferencePriority]
 	sourceStack       []*Type
 	targetStack       []*Type
 	next              *InferenceState
@@ -42,7 +42,7 @@ func (c *Checker) getInferenceState() *InferenceState {
 }
 
 func (c *Checker) putInferenceState(n *InferenceState) {
-	clear(n.visited)
+	n.visited.clear()
 	*n = InferenceState{
 		inferences:  n.inferences[:0],
 		visited:     n.visited,
@@ -344,15 +344,15 @@ func (c *Checker) inferFromContravariantTypesIfStrictFunctionTypes(n *InferenceS
 // such that we would go on inferring forever, even though we would never infer
 // between the same pair of types.
 func (c *Checker) invokeOnce(n *InferenceState, source *Type, target *Type, action func(c *Checker, n *InferenceState, source *Type, target *Type)) {
-	key := InferenceKey{source: source.id, target: target.id, priority: n.priority, contravariant: n.contravariant, bivariant: n.bivariant}
-	if status, ok := n.visited[key]; ok {
+	key := CacheHashKey{
+		Lo: uint64(source.id)<<32 | uint64(target.id),
+		Hi: uint64(uint32(n.priority))<<2 | uint64(core.IfElse(n.contravariant, 2, 0)) | uint64(core.IfElse(n.bivariant, 1, 0)),
+	}
+	if status, ok := n.visited.get(key); ok {
 		n.inferencePriority = min(n.inferencePriority, status)
 		return
 	}
-	if n.visited == nil {
-		n.visited = make(map[InferenceKey]InferencePriority)
-	}
-	n.visited[key] = InferencePriorityCircularity
+	n.visited.set(key, InferencePriorityCircularity)
 	saveInferencePriority := n.inferencePriority
 	n.inferencePriority = InferencePriorityMaxValue
 	// We stop inferring and report a circularity if we encounter duplicate recursion identities on both
@@ -374,7 +374,7 @@ func (c *Checker) invokeOnce(n *InferenceState, source *Type, target *Type, acti
 	n.targetStack = n.targetStack[:len(n.targetStack)-1]
 	n.sourceStack = n.sourceStack[:len(n.sourceStack)-1]
 	n.expandingFlags = saveExpandingFlags
-	n.visited[key] = n.inferencePriority
+	n.visited.set(key, n.inferencePriority)
 	n.inferencePriority = min(n.inferencePriority, saveInferencePriority)
 }
 

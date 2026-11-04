@@ -13,6 +13,7 @@ import (
 	"github.com/microsoft/TypeScript/tsc/internal/ast"
 	"github.com/microsoft/TypeScript/tsc/internal/bundled"
 	"github.com/microsoft/TypeScript/tsc/internal/contentmapper"
+	"github.com/microsoft/TypeScript/tsc/internal/core"
 	"github.com/microsoft/TypeScript/tsc/internal/diagnostics"
 	"github.com/microsoft/TypeScript/tsc/internal/locale"
 	"github.com/microsoft/TypeScript/tsc/internal/ls"
@@ -302,6 +303,7 @@ func TestContentMapperPackageMustBeInWorkspace(t *testing.T) {
 		name             string
 		projectDirectory string
 		workspaceRoots   []string
+		mapperPackage    string
 		mapperPath       string
 		mapperTarget     string
 		allowed          bool
@@ -312,6 +314,30 @@ func TestContentMapperPackageMustBeInWorkspace(t *testing.T) {
 			workspaceRoots:   []string{"/home/trusted"},
 			mapperPath:       "/home/trusted/node_modules/mapper/package.json",
 			allowed:          true,
+		},
+		{
+			name:             "directory mapper in workspace",
+			projectDirectory: "/home/trusted",
+			workspaceRoots:   []string{"/home/trusted"},
+			mapperPackage:    "./mapper",
+			mapperPath:       "/home/trusted/mapper/package.json",
+			allowed:          true,
+		},
+		{
+			name:             "workspace directory mapper symlinked outside",
+			projectDirectory: "/home/trusted",
+			workspaceRoots:   []string{"/home/trusted"},
+			mapperPackage:    "./mapper",
+			mapperPath:       "/home/trusted/mapper",
+			mapperTarget:     "/home/outside/mapper",
+			allowed:          true,
+		},
+		{
+			name:             "directory mapper outside workspace",
+			projectDirectory: "/home/untrusted",
+			workspaceRoots:   []string{"/home/trusted"},
+			mapperPackage:    "./mapper",
+			mapperPath:       "/home/untrusted/mapper/package.json",
 		},
 		{
 			name:             "loose file outside workspace",
@@ -356,10 +382,14 @@ func TestContentMapperPackageMustBeInWorkspace(t *testing.T) {
 			configPath := test.projectDirectory + "/tsconfig.json"
 			mainPath := test.projectDirectory + "/main.ts"
 			boxPath := test.projectDirectory + "/app.box"
+			mapperPackage := test.mapperPackage
+			if mapperPackage == "" {
+				mapperPackage = "mapper"
+			}
 			files := map[string]any{
 				configPath: `{
 					"compilerOptions": { "target": "es2020", "module": "esnext", "moduleResolution": "bundler" },
-					"contentMappers": [ { "package": "mapper", "extensions": [".box"] } ]
+					"contentMappers": [ { "package": "` + mapperPackage + `", "extensions": [".box"] } ]
 				}`,
 				mainPath: "import { version } from \"./app.box\";\nexport { version };\n",
 				boxPath:  "export const version = #{target};\n",
@@ -490,6 +520,65 @@ func TestContentMapperPackageManifestChangeReloadsConfig(t *testing.T) {
 	assert.Assert(t, strings.Contains(boxFile.Text(), "export const version = 7;"), "expected fixed mapper manifest to be reloaded: %q", boxFile.Text())
 }
 
+func TestRelativeSymlinkedContentMapperPackageManifestChangeReloadsConfig(t *testing.T) {
+	t.Parallel()
+	const packageJsonPath = "/home/mapper/package.json"
+	files := map[string]any{
+		"/home/project/tsconfig.json": `{
+			"compilerOptions": { "target": "es2020", "module": "esnext", "moduleResolution": "bundler" },
+			"contentMappers": [{ "package": "./mapper", "extensions": [".box"] }]
+		}`,
+		"/home/project/mapper": vfstest.Symlink("/home/mapper"),
+		packageJsonPath: `{
+			"name": "mapper",
+			"version": "1.0.0",
+			"typescript": { "contentMapper": { "exec": ["compiler-test-mapper"] } }
+		}`,
+		"/home/project/app.box": "export const version = #{target};\n",
+		"/home/project/main.ts": "import { version } from \"./app.box\";\n",
+	}
+	caps := &lsproto.ResolvedClientCapabilities{}
+	caps.Workspace.DidChangeWatchedFiles.RelativePatternSupport = true
+	ctx := lsproto.WithClientCapabilities(context.Background(), caps)
+	init, utils := projecttestutil.GetSessionInitOptions(files, &project.SessionOptions{
+		CurrentDirectory:   "/home/project",
+		DefaultLibraryPath: bundled.LibPath(),
+		TypingsLocation:    projecttestutil.TestTypingsLocation,
+		PositionEncoding:   lsproto.PositionEncodingKindUTF8,
+		RunExternalCode:    true,
+		WatchEnabled:       true,
+	}, nil)
+	init.BackgroundCtx = ctx
+	init.Spawner = contentmappertest.NewSpawner()
+	session := project.NewSession(init)
+	defer session.Close()
+
+	mainURI := lsproto.DocumentUri("file:///home/project/main.ts")
+	session.DidOpenFile(ctx, mainURI, 1, files["/home/project/main.ts"].(string), lsproto.LanguageKindTypeScript)
+	_, err := session.GetLanguageService(ctx, mainURI)
+	assert.NilError(t, err)
+	configuredProject := session.Snapshot().GetDefaultProject(mainURI)
+	assert.Assert(t, configuredProject != nil)
+	mappers := configuredProject.CommandLine.ContentMappers()
+	assert.Equal(t, len(mappers), 1)
+	assert.Equal(t, mappers[0].PackageDirectory, tspath.RootedDirectoryPath("/home/mapper"))
+	session.WaitForBackgroundTasks()
+	assert.Assert(t, utils.WatchesFile(packageJsonPath), "expected the mapper package manifest to be watched")
+
+	fixedManifest := contentmappertest.PackageJSON(contentmappertest.TransformingMapper)
+	assert.NilError(t, utils.FS().WriteFile(packageJsonPath, fixedManifest))
+	session.DidChangeWatchedFiles(ctx, []*lsproto.FileEvent{{
+		Uri:  lsproto.DocumentUri("file://" + packageJsonPath),
+		Type: lsproto.FileChangeTypeChanged,
+	}})
+
+	languageService, err := session.GetLanguageService(ctx, mainURI)
+	assert.NilError(t, err)
+	boxFile := languageService.GetProgram().GetSourceFile("/home/project/app.box")
+	assert.Assert(t, boxFile != nil, "expected app.box in the rebuilt program")
+	assert.Assert(t, strings.Contains(boxFile.Text(), "export const version = 7;"), "expected fixed mapper manifest to be reloaded: %q", boxFile.Text())
+}
+
 func TestContentMapperSupplementalFileClonedOnEdit(t *testing.T) {
 	t.Parallel()
 	files := map[string]any{
@@ -600,6 +689,51 @@ func TestContentMapperModuleExtensionClonedOnUnrelatedEdit(t *testing.T) {
 	configuredProject := session.Snapshot().GetDefaultProject(mainURI)
 	assert.Equal(t, configuredProject.ProgramUpdateKind, project.ProgramUpdateKindCloned)
 	assert.Assert(t, languageService.GetProgram().GetSourceFile("/home/project/app.box") == mappedFile)
+}
+
+func TestContentMapperModuleFormatChangeRebuilds(t *testing.T) {
+	t.Parallel()
+	files := map[string]any{
+		"/home/project/tsconfig.json":                    `{ "compilerOptions": { "module": "nodenext", "importHelpers": true, "noEmit": true }, "contentMappers": [{ "package": "mapper", "extensions": [".box"] }] }`,
+		"/home/project/package.json":                     `{ "name": "project" }`,
+		"/home/project/node_modules/mapper/package.json": contentmappertest.PackageJSON(contentmappertest.FormatVerbatimMapper),
+		"/home/project/node_modules/tslib/package.json":  `{ "name": "tslib", "version": "1.0.0", "exports": { ".": { "import": "./tslib.d.mts", "require": "./tslib.d.ts" } } }`,
+		"/home/project/node_modules/tslib/tslib.d.mts":   "export {};\n",
+		"/home/project/node_modules/tslib/tslib.d.ts":    "export {};\n",
+		"/home/project/app.box":                          "// cjs\nexport const value = 1;\n",
+		"/home/project/main.ts":                          "export {};\n",
+	}
+	init, utils := projecttestutil.GetSessionInitOptions(files, &project.SessionOptions{
+		CurrentDirectory:   "/home/project",
+		DefaultLibraryPath: bundled.LibPath(),
+		TypingsLocation:    projecttestutil.TestTypingsLocation,
+		PositionEncoding:   lsproto.PositionEncodingKindUTF8,
+		RunExternalCode:    true,
+	}, nil)
+	init.Spawner = contentmappertest.NewSpawner()
+	session := project.NewSession(init)
+	defer session.Close()
+
+	ctx := context.Background()
+	mainURI := lsproto.DocumentUri("file:///home/project/main.ts")
+	session.DidOpenFile(ctx, mainURI, 1, files["/home/project/main.ts"].(string), lsproto.LanguageKindTypeScript)
+	_, err := session.GetLanguageService(ctx, mainURI)
+	assert.NilError(t, err)
+
+	assert.NilError(t, utils.FS().WriteFile("/home/project/app.box", "// esm\nexport const value = 1;\n"))
+	session.DidChangeWatchedFiles(ctx, []*lsproto.FileEvent{{
+		Uri:  "file:///home/project/app.box",
+		Type: lsproto.FileChangeTypeChanged,
+	}})
+	languageService, err := session.GetLanguageService(ctx, mainURI)
+	assert.NilError(t, err)
+	assert.Assert(t, session.Snapshot().GetDefaultProject(mainURI).ProgramUpdateKind != project.ProgramUpdateKindCloned)
+	program := languageService.GetProgram()
+	mappedFile := program.GetSourceFile("/home/project/app.box")
+	assert.Equal(t, mappedFile.VirtualFileName().AsString(), "/home/project/app.box.mts")
+	assert.Equal(t, program.GetSourceFileMetaData(mappedFile.PathKey()).ImpliedNodeFormat, core.ModuleKindESNext)
+	tslib := program.GetResolvedModuleFromModuleSpecifier(mappedFile, program.GetImportHelpersImportSpecifier(mappedFile.PathKey()))
+	assert.Equal(t, tslib.ResolvedFileName.AsString(), "/home/project/node_modules/tslib/tslib.d.mts")
 }
 
 func TestContentMapperLocaleChange(t *testing.T) {

@@ -1738,9 +1738,12 @@ func (tx *DeclarationTransformer) transformTopLevelDeclaration(input *ast.Node) 
 	if input.Kind == ast.KindImportDeclaration || input.Kind == ast.KindJSImportDeclaration {
 		res := tx.transformImportDeclaration(input.AsImportDeclaration())
 		if res != nil && res.Kind != ast.KindImportDeclaration {
-			res := res.Clone(tx.Factory())
-			res.Kind = ast.KindImportDeclaration
-			return res
+			decl := res.AsImportDeclaration()
+			replacement := tx.Factory().NewImportDeclaration(decl.Modifiers(), decl.ImportClause, decl.ModuleSpecifier, decl.Attributes)
+			replacement.Flags = res.Flags
+			replacement.Loc = res.Loc
+			tx.EmitContext().SetOriginal(replacement, res)
+			return replacement
 		}
 		return res
 	}

@@ -83,7 +83,6 @@ import {
     toRootedFilePath,
 } from "@typescript/typescript/path";
 import {
-    API,
     type BigIntLiteralType,
     CheckFlags,
     type CompilerOptions,
@@ -156,6 +155,7 @@ import {
     createVirtualFileSystem,
 } from "../testUtils.ts";
 import {
+    API,
     defaultFiles,
     spawnAPI,
 } from "./api.testUtils.ts";
@@ -387,7 +387,7 @@ describe("API", { concurrency }, () => {
         using api = spawnAPI();
 
         const config = api.parseJsonConfigFileContent(null, { configDirectory: "/src" });
-        assert.deepEqual(config.fileNames, ["/src/index.ts", "/src/foo.ts"]);
+        assert.deepEqual([...config.fileNames].sort(), ["/src/foo.ts", "/src/index.ts"]);
         assert.deepEqual(config.errors, []);
     });
 
@@ -1432,7 +1432,7 @@ declare module "augmentation" {}`,
         using api = spawnAPI();
 
         const config = api.parseConfigFile("/tsconfig.json");
-        assert.deepEqual(config.fileNames, ["/src/index.ts", "/src/foo.ts"]);
+        assert.deepEqual([...config.fileNames].sort(), ["/src/foo.ts", "/src/index.ts"]);
         assert.deepEqual(config.options, { configFilePath: "/tsconfig.json" });
         assert.equal(config.compileOnSave, false);
         assert.equal(config.typeAcquisition, undefined);
@@ -2022,7 +2022,7 @@ describe("Snapshot", { concurrency }, () => {
 
         const snapshot = api.createSnapshot({ openProjects: ["/tsconfig.json"] });
         const project = snapshot.getConfiguredProject("/tsconfig.json")!;
-        assert.deepEqual(project.parsedCommandLine.fileNames, ["/src/index.ts", "/src/foo.ts"]);
+        assert.deepEqual([...project.parsedCommandLine.fileNames].sort(), ["/src/foo.ts", "/src/index.ts"]);
         assert.deepEqual(project.parsedCommandLine.options, { configFilePath: "/tsconfig.json" });
         assert.equal(project.parsedCommandLine.compileOnSave, true);
     });
@@ -8126,6 +8126,21 @@ export const obj = { m: 1, s: "hi", b: true };
         const text = api.printer.printNode(typeNode);
         assert.ok(text);
         assert.strictEqual(text, "(name: string) => string");
+    });
+
+    test("typeToTypeNode returns undefined when the type cannot be named", () => {
+        using api = spawnAPI({
+            "/tsconfig.json": "{}",
+            "/main.ts": "export const x = new (class { a = 1; })();\n",
+        });
+
+        const snapshot = api.createSnapshot({ openProjects: ["/tsconfig.json"] });
+        const project = snapshot.getConfiguredProject("/tsconfig.json")!;
+        const { checker } = project;
+        const symbol = checker.getSymbolAtPosition("/main.ts", 13);
+        assert.strictEqual(symbol?.name, "x");
+        const type = checker.getTypeOfSymbol(symbol);
+        assert.strictEqual(checker.typeToTypeNode(type, project.program.getSourceFile("/main.ts")), undefined);
     });
 
     test("visitEachChild on typeToTypeNode result with keyword types", () => {

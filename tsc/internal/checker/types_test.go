@@ -514,6 +514,87 @@ func TestCompactValueSymbolLinksLayout(t *testing.T) {
 	assert.Equal(t, links.getContainingType(), types[2])
 }
 
+func TestUnionIntersectionPropertyCacheSharing(t *testing.T) {
+	t.Parallel()
+	for _, intersection := range []bool{false, true} {
+		for _, augmentedFirst := range []bool{false, true} {
+			t.Run(strconv.FormatBool(intersection)+"/"+strconv.FormatBool(augmentedFirst), func(t *testing.T) {
+				t.Parallel()
+				c, _ := newCompositeTestChecker()
+				members := ast.NewSymbolTable()
+				for i := range 300 {
+					name := ast.MakeSymbolName(strconv.Itoa(i))
+					members.Set(name, c.newSymbol(ast.SymbolFlagsProperty, name))
+				}
+				members.Set(ast.EmptySymbolName, c.newSymbol(ast.SymbolFlagsProperty, ast.EmptySymbolName))
+				object := c.newAnonymousType(nil, members, nil, nil, nil)
+				var typ *Type
+				if intersection {
+					typ = c.newIntersectionType(ObjectFlagsNone, []*Type{object, object})
+				} else {
+					typ = c.newUnionType(ObjectFlagsNone, []*Type{object, object})
+				}
+				data := typ.AsUnionOrIntersectionType()
+				for name, symbol := range members.All() {
+					assert.Equal(t, c.getUnionOrIntersectionProperty(typ, name, !augmentedFirst), symbol)
+					assert.Equal(t, c.getUnionOrIntersectionProperty(typ, name, augmentedFirst), symbol)
+				}
+				assert.Equal(t, data.propertyCacheWithoutFunctionPropertyAugment.Len(), members.Len())
+				if !augmentedFirst {
+					assert.Assert(t, data.propertyCache == nil)
+				}
+				runtime.GC()
+				for name, symbol := range members.All() {
+					assert.Equal(t, c.getUnionOrIntersectionProperty(typ, name, true), symbol)
+					assert.Equal(t, c.getUnionOrIntersectionProperty(typ, name, false), symbol)
+				}
+				runtime.KeepAlive(c)
+			})
+		}
+	}
+}
+
+func TestUnionIntersectionPropertyCacheModes(t *testing.T) {
+	t.Parallel()
+	for _, intersection := range []bool{false, true} {
+		t.Run(strconv.FormatBool(intersection), func(t *testing.T) {
+			t.Parallel()
+			c, _ := newCompositeTestChecker()
+			var typ *Type
+			if intersection {
+				typ = c.newIntersectionType(ObjectFlagsNone, nil)
+			} else {
+				typ = c.newUnionType(ObjectFlagsNone, nil)
+			}
+			data := typ.AsUnionOrIntersectionType()
+			assert.Assert(t, c.getUnionOrIntersectionProperty(typ, ast.MakeSymbolName("missing"), true) == nil)
+			assert.Assert(t, c.getUnionOrIntersectionProperty(typ, ast.MakeSymbolName("missing"), false) == nil)
+			assert.Assert(t, data.propertyCache == nil)
+			assert.Assert(t, data.propertyCacheWithoutFunctionPropertyAugment == nil)
+			data.propertyCacheWithoutFunctionPropertyAugment = ast.NewSymbolTable()
+			data.propertyCache = ast.NewSymbolTable()
+			for _, flags := range []ast.CheckFlags{ast.CheckFlagsReadPartial, ast.CheckFlagsWritePartial} {
+				name := ast.MakeSymbolName(strconv.Itoa(int(flags)))
+				partial := c.newSymbolEx(ast.SymbolFlagsProperty, name, flags)
+				complete := c.newSymbol(ast.SymbolFlagsProperty, name)
+				data.propertyCacheWithoutFunctionPropertyAugment.Set(name, partial)
+				assert.Equal(t, c.getUnionOrIntersectionProperty(typ, name, true), partial)
+				assert.Assert(t, c.getUnionOrIntersectionProperty(typ, name, false) == nil)
+				assert.Equal(t, c.getPropertyOfUnionOrIntersectionType(typ, name, true) == nil, flags&ast.CheckFlagsReadPartial != 0)
+				data.propertyCache.Set(name, complete)
+				assert.Equal(t, c.getUnionOrIntersectionProperty(typ, name, false), complete)
+			}
+			name := ast.MakeSymbolName("different")
+			nonAugmented := c.newSymbol(ast.SymbolFlagsProperty, name)
+			augmented := c.newSymbol(ast.SymbolFlagsProperty, name)
+			data.propertyCacheWithoutFunctionPropertyAugment.Set(name, nonAugmented)
+			data.propertyCache.Set(name, augmented)
+			assert.Equal(t, c.getUnionOrIntersectionProperty(typ, name, true), nonAugmented)
+			assert.Equal(t, c.getUnionOrIntersectionProperty(typ, name, false), augmented)
+		})
+	}
+}
+
 func TestCompactStructuredTypeLayout(t *testing.T) {
 	t.Parallel()
 	assert.Equal(t, unsafe.Sizeof(StructuredType{}), unsafe.Sizeof(ConstrainedType{})+5*unsafe.Sizeof(uintptr(0)))

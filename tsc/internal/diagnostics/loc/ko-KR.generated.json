@@ -496,7 +496,6 @@
   "Containing_file_is_not_specified_and_root_directory_cannot_be_determined_skipping_lookup_in_node_mod_6126": "포함 파일이 지정되지 않았고 루트 디렉터리를 확인할 수 없어 'node_modules' 폴더 조회를 건너뜁니다.",
   "Containing_function_is_not_an_arrow_function_95128": "포함 함수가 화살표 함수가 아닙니다.",
   "Content_mapper_extension_0_must_not_contain_path_separators_18123": "콘텐츠 매퍼 확장 '{0}'에는 경로 구분 기호가 포함되어서는 안됩니다.",
-  "Content_mapper_file_extension_0_is_a_built_in_extension_and_cannot_be_registered_by_a_content_mapper_18066": "콘텐츠 매퍼 파일 확장명 '{0}'은(는) 기본 제공 확장명이므로 콘텐츠 매퍼에 등록할 수 없습니다.",
   "Content_mapper_file_extension_0_is_registered_by_more_than_one_content_mapper_18067": "둘 이상의 콘텐츠 매퍼에서 '{0}' 콘텐츠 매퍼 파일 확장명을 등록했습니다.",
   "Content_mapper_file_extension_0_must_begin_with_a_18065": "콘텐츠 매퍼 파일 확장명 '{0}'는 '.'로 시작해야 합니다.",
   "Content_mapper_output_extension_0_must_be_non_empty_and_begin_with_a_18118": "콘텐츠 매퍼 출력 확장 '{0}'은(는) 비어 있지 않아야 하며 '.'로 시작해야 합니다.",

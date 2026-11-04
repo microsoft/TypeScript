@@ -625,7 +625,12 @@ function generateGoCreateStringNode(w: CodeWriter) {
     w.write("func (d *astDecoder) createStringNode(kind ast.Kind, data uint32, commonData uint8) (*ast.Node, error) {");
     w.push();
     w.write("strIdx := data & NodeDataStringIndexMask");
-    w.write("text := d.getString(strIdx)");
+    w.write("text, err := d.getString(strIdx)");
+    w.write("if err != nil {");
+    w.push();
+    w.write("return nil, err");
+    w.pop();
+    w.write("}");
     w.write("");
     w.write("switch kind {");
 

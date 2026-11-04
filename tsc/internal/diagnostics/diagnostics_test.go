@@ -8,6 +8,7 @@ import (
 	"os"
 	"os/exec"
 	"path/filepath"
+	"runtime"
 	"slices"
 	"strings"
 	"testing"
@@ -191,7 +192,7 @@ func validateLocaleFile(t *testing.T, data []byte, runtimeMessages map[Key]strin
 	}
 	expected, err := json.MarshalIndent(&orderedMessages, "", "  ")
 	assert.NilError(t, err)
-	expected = bytes.ReplaceAll(expected, []byte("\n"), []byte("\r\n"))
+	expected = append(expected, '\n')
 	assert.Equal(t, string(data), string(expected), "handback must use sorted keys and canonical formatting")
 
 	if len(activeMessages) == 0 {
@@ -203,18 +204,21 @@ func validateLocaleFile(t *testing.T, data []byte, runtimeMessages map[Key]strin
 
 func TestLocaleFilesIgnoreStaleDiagnostics(t *testing.T) {
 	t.Parallel()
-	data := []byte("{\r\n" +
-		"  \"Identifier_expected_1003\": \"Known translation.\",\r\n" +
-		"  \"Removed_diagnostic_99999\": \"Stale translation.\"\r\n" +
-		"}")
+	data := []byte("{\n" +
+		"  \"Identifier_expected_1003\": \"Known translation.\",\n" +
+		"  \"Removed_diagnostic_99999\": \"Stale translation.\"\n" +
+		"}\n")
 	validateLocaleFile(t, data, map[Key]string{
 		"Identifier_expected_1003": "Known translation.",
 	})
-	validateLocaleFile(t, []byte("{\r\n  \"Removed_diagnostic_99999\": \"Stale translation.\"\r\n}"), nil)
+	validateLocaleFile(t, []byte("{\n  \"Removed_diagnostic_99999\": \"Stale translation.\"\n}\n"), nil)
 }
 
 func TestGenerateLocalizations(t *testing.T) {
 	t.Parallel()
+	if runtime.GOOS == "wasip1" {
+		t.Skip("wasip1 cannot run subprocesses")
+	}
 
 	dir := t.TempDir()
 	locDir := filepath.Join(dir, "loc")

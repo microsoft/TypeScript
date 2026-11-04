@@ -77,9 +77,12 @@ func getChildrenPropertyMask(node *ast.Node) uint8 {
 	case ast.KindCaseBlock:
 		n := node.AsCaseBlock()
 		return (boolToByte(n.Clauses != nil) << 0)
-	case ast.KindCaseClause, ast.KindDefaultClause:
-		n := node.AsCaseOrDefaultClause()
+	case ast.KindCaseClause:
+		n := node.AsCaseClause()
 		return (boolToByte(n.Expression != nil) << 0) | (boolToByte(n.Statements != nil) << 1)
+	case ast.KindDefaultClause:
+		n := node.AsDefaultClause()
+		return (boolToByte(n.Statements != nil) << 0)
 	case ast.KindThrowStatement:
 		n := node.AsThrowStatement()
 		return (boolToByte(n.Expression != nil) << 0)
