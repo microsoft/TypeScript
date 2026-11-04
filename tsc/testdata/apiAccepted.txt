@@ -1,7 +1,15 @@
 originalType.MethodName|newType.MethodName|reason (will be discarded in parsing)
-If the original 
 
 TypeChecker.tryGetMemberInModuleExports|Checker.getMemberInModuleExports|rename
+TypeChecker.getAugmentedPropertiesOfType|| use `Type.getApparentProperties()` instead
+Program.getTypeChecker|| removed
+Project.containsFile|| same as `Program` method
+Project.getFileNames|| same as `Program` method
+Project.getRootFiles||same as `Program` method
+Project.hasRoots|| same as `Program` method
+Project.isRoot|| same as `Program` method
+Project.hasConfigFile|| same as `Program` method
+Project.getSourceFile|| same as `Program` method
 ts.parseCommandLine|API.parseCommandLine|
 ts.parseJsonConfigFileContent|API.parseJsonConfigFileContent|
 ts.parseConfigFileTextToJson|API.readConfigFile|the same minus error handling

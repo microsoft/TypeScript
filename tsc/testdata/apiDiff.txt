@@ -66,27 +66,15 @@ Types not compared:
 
 
 # TypeChecker (old) methods compared to Checker (new).
-## (60) TypeChecker methods matched in async Checker  ##
+## (72) TypeChecker methods matched in async Checker  ##
 
-## TypeChecker methods missing from async Checker (29) ##
-getAmbientModules
-getAugmentedPropertiesOfType
-getBigIntLiteralType
-getFalseType
-getJsxIntrinsicTagNamesAt
-getNullableType
-getNumberLiteralType
-getPrivateIdentifierPropertyOfType
-getPropertySymbolOfDestructuringAssignment
+## TypeChecker methods missing from async Checker (17) ##
 getRootSymbols
-getStringLiteralType
 getSymbolOfExpando
 getSymbolsOfParameterPropertyDeclaration
-getTrueType
 getTypeArgumentsForResolvedSignature
 getTypeOfAssignmentPattern
 indexInfoToIndexSignatureDeclaration
-isImplementationOfOverload
 isOptionalParameter
 isValidPropertyAccess
 runWithCancellationToken
@@ -111,9 +99,9 @@ getSourceFiles
 
 
 # Program (old) methods compared to Program (new).
-## (11) Program methods matched in async Program  ##
+## (12) Program methods matched in async Program  ##
 
-## Program methods missing from async Program (12) ##
+## Program methods missing from async Program (11) ##
 getIdentifierCount
 getInstantiationCount
 getNodeCount
@@ -124,7 +112,6 @@ getResolvedProjectReferences
 getRootFileNames
 getSourceFiles
 getSymbolCount
-getTypeChecker
 getTypeCount
 
 
@@ -136,13 +123,12 @@ getNextInvalidatedProject
 
 
 # Project (old) methods compared to Project (new).
-## (0) Project methods matched in async Project  ##
+## (7) Project methods matched in async Project  ##
 
-## Project methods missing from async Project (61) ##
+## Project methods missing from async Project (54) ##
 addMissingFileRoot
 addRoot
 close
-containsFile
 containsScriptInfo
 directoryExists
 disableLanguageService
@@ -161,14 +147,12 @@ getDefaultLibFileName
 getDirectories
 getExcludedFiles
 getExternalFiles
-getFileNames
 getGlobalProjectErrors
 getLanguageService
 getNewLine
 getProjectName
 getProjectReferences
 getProjectVersion
-getRootFiles
 getRootScriptInfos
 getScriptFileNames
 getScriptInfo
@@ -177,16 +161,12 @@ getScriptInfos
 getScriptKind
 getScriptSnapshot
 getScriptVersion
-getSourceFile
 getTypeAcquisition
-hasConfigFile
-hasRoots
 installPackage
 isClosed
 isJsOnlyProject
 isKnownTypesPackageName
 isNonTsProject
-isRoot
 log
 readDirectory
 readFile
@@ -455,9 +435,9 @@ updateTemplateLiteralType
 
 
 # ts (old) methods compared to ts, API (new).
-## (278) ts methods matched in async ts, API  ##
+## (279) ts methods matched in async ts, API  ##
 
-## ts methods missing from async ts, API (210) ##
+## ts methods missing from async ts, API (209) ##
 addEmitHelper
 addEmitHelpers
 addSyntheticLeadingComment
@@ -567,7 +547,6 @@ isAutoAccessorPropertyDeclaration
 isBuildCommand
 isBundle
 isCallChain
-isCaseOrDefaultClause
 isClassElement
 isClassLike
 isClassOrTypeElement
@@ -926,7 +905,7 @@ getChildren
 getFirstToken
 getLastToken
 
-## New ts methods in async API (205) ##
+## New ts methods in async API (207) ##
 isRemoteNode
 getSymbol
 isUnionType
@@ -955,6 +934,7 @@ fileNameToDocumentURI
 createFileSystem
 createFileSystemWithLib
 createFileSystemLayer
+createFileSystemFromSnapshot
 validateSymbolOwner
 validateSymbolResponse
 resolveFileName
@@ -965,6 +945,7 @@ getTouchingToken
 findNextToken
 findPrecedingToken
 getTokenPosOfNode
+getPooledScannersForTesting
 getChildren
 getFirstToken
 getLastToken
