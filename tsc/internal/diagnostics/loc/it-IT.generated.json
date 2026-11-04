@@ -496,7 +496,6 @@
   "Containing_file_is_not_specified_and_root_directory_cannot_be_determined_skipping_lookup_in_node_mod_6126": "Il file contenitore non è specificato e non è possibile determinare la directory radice. La ricerca nella cartella 'node_modules' verrà ignorata.",
   "Containing_function_is_not_an_arrow_function_95128": "La funzione contenitore non è una funzione arrow",
   "Content_mapper_extension_0_must_not_contain_path_separators_18123": "L'estensione del mapper di contenuti '{0}' non deve contenere separatori di percorso.",
-  "Content_mapper_file_extension_0_is_a_built_in_extension_and_cannot_be_registered_by_a_content_mapper_18066": "L'estensione di file del mapper di contenuti '{0}' è un'estensione predefinita e non può essere registrata da un mapper di contenuti.",
   "Content_mapper_file_extension_0_is_registered_by_more_than_one_content_mapper_18067": "L'estensione di file del mapper di contenuti '{0}' è registrata da più di un mapper di contenuti.",
   "Content_mapper_file_extension_0_must_begin_with_a_18065": "L'estensione del file di mapping del contenuto '{0}' deve iniziare con '.'.",
   "Content_mapper_output_extension_0_must_be_non_empty_and_begin_with_a_18118": "L'estensione di output del mapper di contenuto '{0}' non deve essere vuota e iniziare con un punto '.'.",

@@ -496,7 +496,6 @@
   "Containing_file_is_not_specified_and_root_directory_cannot_be_determined_skipping_lookup_in_node_mod_6126": "Kapsayıcı dosya belirtilmedi ve kök dizini belirlenemiyor; 'node_modules' klasöründe arama atlanıyor.",
   "Containing_function_is_not_an_arrow_function_95128": "İçeren işlev bir ok işlevi değil",
   "Content_mapper_extension_0_must_not_contain_path_separators_18123": "İçerik eşleyici uzantısı '{0}' yol ayırıcıları içermemelidir.",
-  "Content_mapper_file_extension_0_is_a_built_in_extension_and_cannot_be_registered_by_a_content_mapper_18066": "İçerik eşleyici dosya '{0}' uzantısı, yerleşik bir uzantıdır ve içerik eşleyici tarafından kaydedilemez.",
   "Content_mapper_file_extension_0_is_registered_by_more_than_one_content_mapper_18067": "İçerik eşleyicisi dosya uzantısı '{0}' birden fazla içerik eşleyici tarafından kaydedildi.",
   "Content_mapper_file_extension_0_must_begin_with_a_18065": "İçerik eşleyici dosya '{0}' uzantısı '.' ile başlamalıdır.",
   "Content_mapper_output_extension_0_must_be_non_empty_and_begin_with_a_18118": "İçerik eşleyici çıkış uzantısı '{0}' boş olamaz ve '.' ile başlamalıdır.",

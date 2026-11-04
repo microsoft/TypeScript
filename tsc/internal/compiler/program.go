@@ -400,12 +400,7 @@ func (p *Program) ReuseProgram(
 	if p.moduleResolutionError != nil || !p.canReplaceFileInProgram(oldFile, newFile) {
 		return nil, newFile, false
 	}
-	// Cloning does not recompute synthetic helper or JSX-runtime import bookkeeping. Fall back to a full
-	// build whenever either version requires those imports.
-	if p.importHelpersImportSpecifiers[oldFile.PathKey()] != nil || p.needsImportHelpersImportSpecifier(newFile) {
-		return nil, newFile, false
-	}
-	if p.jsxRuntimeImportSpecifiers[oldFile.PathKey()] != nil || p.jsxRuntimeImportSpecifier(newFile) != "" {
+	if !p.hasSameSyntheticImports(oldFile, newFile) {
 		return nil, newFile, false
 	}
 	if len(oldSupplementalFiles) != len(newSupplementalFiles) {
@@ -417,10 +412,7 @@ func (p *Program) ReuseProgram(
 			!p.canReplaceFileInProgram(oldSupplemental, newSupplemental) {
 			return nil, newFile, false
 		}
-		if p.importHelpersImportSpecifiers[oldSupplemental.PathKey()] != nil || p.needsImportHelpersImportSpecifier(newSupplemental) {
-			return nil, newFile, false
-		}
-		if p.jsxRuntimeImportSpecifiers[oldSupplemental.PathKey()] != nil || p.jsxRuntimeImportSpecifier(newSupplemental) != "" {
+		if !p.hasSameSyntheticImports(oldSupplemental, newSupplemental) {
 			return nil, newFile, false
 		}
 	}
@@ -452,6 +444,7 @@ func (p *Program) ReuseProgram(
 			result.filesByPath[newSupplemental.PathKey()] = newSupplemental
 		}
 	}
+	result.replaceSyntheticImports(newFile, newSupplementalFiles)
 	result.initCheckerPool(createCheckerPool)
 	return result, newFile, true
 }
@@ -478,6 +471,7 @@ func (p *Program) GetCheckerPool() CheckerPool {
 func (p *Program) canReplaceFileInProgram(file1 *ast.SourceFile, file2 *ast.SourceFile) bool {
 	return file2 != nil &&
 		file1.ParseOptions() == file2.ParseOptions() &&
+		file1.VirtualFileName() == file2.VirtualFileName() &&
 		file1.ScriptKind == file2.ScriptKind &&
 		ast.IsExternalOrCommonJSModule(file1) == ast.IsExternalOrCommonJSModule(file2) &&
 		file1.UsesUriStyleNodeCoreModules == file2.UsesUriStyleNodeCoreModules &&
@@ -492,6 +486,48 @@ func (p *Program) canReplaceFileInProgram(file1 *ast.SourceFile, file2 *ast.Sour
 		slices.EqualFunc(file1.TypeReferenceDirectives, file2.TypeReferenceDirectives, equalFileReferences) &&
 		slices.EqualFunc(file1.LibReferenceDirectives, file2.LibReferenceDirectives, equalFileReferences) &&
 		equalCheckJSDirectives(file1.CheckJsDirective, file2.CheckJsDirective)
+}
+
+// hasSameSyntheticImports reports whether newFile needs the same synthetic tslib and JSX runtime imports
+// that oldFile was loaded with. Their resolutions don't depend on file contents, so a program can be reused
+// across the edit when they match.
+func (p *Program) hasSameSyntheticImports(oldFile *ast.SourceFile, newFile *ast.SourceFile) bool {
+	if (p.importHelpersImportSpecifiers[oldFile.PathKey()] != nil) != p.needsImportHelpersImportSpecifier(newFile) {
+		return false
+	}
+	var oldJSXRuntimeImport string
+	if jsxImport := p.jsxRuntimeImportSpecifiers[oldFile.PathKey()]; jsxImport != nil {
+		oldJSXRuntimeImport = jsxImport.moduleReference
+	}
+	return oldJSXRuntimeImport == p.jsxRuntimeImportSpecifier(newFile)
+}
+
+// replaceSyntheticImports recreates the synthetic imports of replaced files, as the existing ones are
+// parented to the old versions of those files.
+func (p *Program) replaceSyntheticImports(newFile *ast.SourceFile, newSupplementalFiles []*ast.SourceFile) {
+	var factory ast.NodeFactory
+	clonedImportHelpers := false
+	clonedJSXRuntime := false
+	for _, file := range core.Concatenate([]*ast.SourceFile{newFile}, newSupplementalFiles) {
+		path := file.PathKey()
+		if p.importHelpersImportSpecifiers[path] != nil {
+			if !clonedImportHelpers {
+				p.importHelpersImportSpecifiers = maps.Clone(p.importHelpersImportSpecifiers)
+				clonedImportHelpers = true
+			}
+			p.importHelpersImportSpecifiers[path] = newSyntheticImport(&factory, externalHelpersModuleNameText, file)
+		}
+		if jsxImport := p.jsxRuntimeImportSpecifiers[path]; jsxImport != nil {
+			if !clonedJSXRuntime {
+				p.jsxRuntimeImportSpecifiers = maps.Clone(p.jsxRuntimeImportSpecifiers)
+				clonedJSXRuntime = true
+			}
+			p.jsxRuntimeImportSpecifiers[path] = &jsxRuntimeImportSpecifier{
+				moduleReference: jsxImport.moduleReference,
+				specifier:       newSyntheticImport(&factory, jsxImport.moduleReference, file),
+			}
+		}
+	}
 }
 
 func (p *Program) needsImportHelpersImportSpecifier(file *ast.SourceFile) bool {
@@ -601,7 +637,7 @@ func (p *Program) SingleThreaded() bool {
 }
 
 func (p *Program) BindSourceFiles() {
-	wg := core.NewWorkGroup(p.SingleThreaded())
+	wg := core.NewWorkGroup(core.WorkGroupConcurrency(p.SingleThreaded()))
 	for _, file := range p.files {
 		if !file.IsBound() {
 			wg.Queue(func() {
@@ -709,7 +745,7 @@ func (p *Program) collectDiagnostics(ctx context.Context, sourceFile *ast.Source
 
 func (p *Program) collectDiagnosticsFromFiles(ctx context.Context, sourceFiles []*ast.SourceFile, concurrent bool, collect func(context.Context, *ast.SourceFile) []*ast.Diagnostic) [][]*ast.Diagnostic {
 	diagnostics := make([][]*ast.Diagnostic, len(sourceFiles))
-	wg := core.NewWorkGroup(!concurrent || p.SingleThreaded())
+	wg := core.NewWorkGroup(core.WorkGroupConcurrency(!concurrent || p.SingleThreaded()))
 	for i, file := range sourceFiles {
 		wg.Queue(func() {
 			diagnostics[i] = collect(ctx, file)
@@ -756,7 +792,7 @@ func (p *Program) collectCheckerDiagnosticsFromFiles(ctx context.Context, source
 			diagnostics[fileIndex] = collect(ctx, c, file)
 		})
 	} else {
-		wg := core.NewWorkGroup(p.SingleThreaded())
+		wg := core.NewWorkGroup(core.WorkGroupConcurrency(p.SingleThreaded()))
 		for i, file := range sourceFiles {
 			if p.SkipTypeChecking(file, false) {
 				continue
@@ -1926,44 +1962,75 @@ func (p *Program) Emit(ctx context.Context, options EmitOptions) *EmitResult {
 			return printer.NewTextWriter(newLine, 0)
 		},
 	}
-	wg := core.NewWorkGroup(p.SingleThreaded())
+	wg := core.NewWorkGroup(core.WorkGroupConcurrency(p.SingleThreaded()))
 	var emitters []*emitter
 	forceDtsEmit := options.EmitOnly == EmitOnlyBuilderSignature || options.ForceEmit && options.EmitOnly == EmitOnlyDts
 	forceJsEmit := options.ForceEmit && options.EmitOnly == EmitOnlyJs
 	sourceFiles := p.getSourceFilesToEmit(options.TargetSourceFiles, forceDtsEmit, forceJsEmit)
 
 	for _, sourceFile := range sourceFiles {
-		emitter := &emitter{
+		emitters = append(emitters, &emitter{
 			writer:     nil,
 			sourceFile: sourceFile,
 			emitOnly:   options.EmitOnly,
 			forceEmit:  options.ForceEmit,
 			writeFile:  options.WriteFile,
 			tr:         p.hosts.Tracing,
-		}
-		emitters = append(emitters, emitter)
-		wg.Queue(func() {
-			host, done := newEmitHost(ctx, p, sourceFile)
-			defer done()
-			emitter.host = host
-
-			// take an unused writer
-			writer := writerPool.Get().(printer.EmitTextWriter)
-			writer.Clear()
-
-			// attach writer and perform emit
-			emitter.writer = writer
-			emitter.paths = outputpaths.GetOutputPathsFor(sourceFile, host.Options(), host, outputpaths.ForceEmitPaths{
-				Dts:            forceDtsEmit,
-				Js:             forceJsEmit,
-				DeclarationMap: options.ForceEmit && options.EmitOnly == EmitOnlyDts,
-			})
-			emitter.emit()
-			emitter.writer = nil
-
-			// put the writer back in the pool
-			writerPool.Put(writer)
 		})
+	}
+	transformFile := func(emitter *emitter) {
+		sourceFile := emitter.sourceFile
+		host, done := newEmitHost(ctx, p, sourceFile)
+		defer done()
+		emitter.host = host
+		emitter.paths = outputpaths.GetOutputPathsFor(sourceFile, host.Options(), host, outputpaths.ForceEmitPaths{
+			Dts:            forceDtsEmit,
+			Js:             forceJsEmit,
+			DeclarationMap: options.ForceEmit && options.EmitOnly == EmitOnlyDts,
+		})
+		emitter.transform()
+	}
+	printFile := func(emitter *emitter) {
+		// take an unused writer
+		writer := writerPool.Get().(printer.EmitTextWriter)
+		writer.Clear()
+
+		// attach writer and print
+		emitter.writer = writer
+		emitter.print()
+		emitter.writer = nil
+
+		// put the writer back in the pool
+		writerPool.Put(writer)
+	}
+	if p.compilerCheckerPool != nil && !p.SingleThreaded() {
+		// Transform the files of each checker in one task. Transforming can create types and resolve symbols, so a
+		// checker shared by concurrent tasks would do that work in an order that depends on scheduling. Files are
+		// transformed in reverse program order, the order in which a single-threaded work group runs per-file tasks,
+		// so that a program with one checker produces the same output whether or not it is single-threaded. Printing
+		// does not use the checker, so it runs in tasks of its own. Single-threaded programs emit file by file instead,
+		// since queued prints would only run after every file is transformed.
+		for _, group := range p.compilerCheckerPool.groupFilesByChecker(sourceFiles) {
+			if len(group) == 0 {
+				continue
+			}
+			wg.Queue(func() {
+				for _, i := range slices.Backward(group) {
+					emitter := emitters[i]
+					transformFile(emitter)
+					wg.Queue(func() {
+						printFile(emitter)
+					})
+				}
+			})
+		}
+	} else {
+		for _, emitter := range emitters {
+			wg.Queue(func() {
+				transformFile(emitter)
+				printFile(emitter)
+			})
+		}
 	}
 
 	// wait for emit to complete

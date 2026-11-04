@@ -561,7 +561,7 @@ type Session struct {
 
 	closeOnce sync.Once
 
-	// This is set to true when using MessagePackProtocol.
+	// This is set to true when using TupleProtocol.
 	useBinaryResponses      bool
 	batchResponsePages      sync.Map
 	nextBatchResponsePageID atomic.Uint64
@@ -3890,6 +3890,9 @@ func (s *Session) handleTypeToTypeNode(ctx context.Context, params *TypeToTypeNo
 
 	typeNode := setup.checker.TypeToTypeNode(t, enclosingDeclaration, nodebuilder.Flags(params.Flags), nil)
 	if typeNode == nil {
+		if s.useBinaryResponses {
+			return RawBinary(nil), nil
+		}
 		return nil, nil
 	}
 
@@ -3930,6 +3933,9 @@ func (s *Session) handleSignatureToSignatureDeclaration(ctx context.Context, par
 
 	node := setup.checker.SignatureToSignatureDeclaration(sig, ast.Kind(params.Kind), enclosingDeclaration, nodebuilder.Flags(params.Flags))
 	if node == nil {
+		if s.useBinaryResponses {
+			return RawBinary(nil), nil
+		}
 		return nil, nil
 	}
 

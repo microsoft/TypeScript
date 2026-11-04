@@ -286,4 +286,38 @@ func TestParsedCommandLine(t *testing.T) {
 			assert.DeepEqual(t, withTypings.FileNames(), []tspath.RootedFilePath{"/dev/index.ts", "/cache/@types/pkg/index.d.ts"})
 		})
 	})
+
+	t.Run("CommonSourceDirectory does not mutate errors", func(t *testing.T) {
+		t.Parallel()
+
+		// "other/outside.ts" is not under rootDir, so computing the common source
+		// directory must not append a "not under rootDir" diagnostic to Errors.
+		fs := tsoptionstest.NewVFS(map[string]string{
+			"/dev/src/index.ts":     "",
+			"/dev/other/outside.ts": "",
+		}, tspath.CaseSensitive)
+		parsedCommandLine := tsoptions.ParseJsonSourceFileConfigFileContent(
+			tsoptions.NewTsconfigSourceFileFromFilePath(
+				tspath.RootedFilePath("/dev/tsconfig.json"),
+				tspath.CaseSensitive.PathKey(tspath.RootedPath("/dev/tsconfig.json")),
+				`{
+					"compilerOptions": {
+						"rootDir": "./src"
+					},
+					"files": ["src/index.ts", "other/outside.ts"]
+				}`,
+			),
+			tsoptions.NewDefaultParseConfigHost(fs),
+			"/dev",
+			nil,
+			nil,
+			nil,
+			nil,
+		)
+
+		initialErrorsLen := len(parsedCommandLine.Errors)
+		commonDir := parsedCommandLine.CommonSourceDirectory()
+		assert.Equal(t, commonDir.AsString(), "/dev/src")
+		assert.Equal(t, len(parsedCommandLine.Errors), initialErrorsLen)
+	})
 }
