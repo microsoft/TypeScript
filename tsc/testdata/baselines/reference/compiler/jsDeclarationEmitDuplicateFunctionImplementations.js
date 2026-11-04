@@ -78,8 +78,14 @@ function overloaded(x) {
 
 
 //// [a.d.ts]
+/** @param {number} x */
+declare function func(x: number): number;
 //// [b.d.ts]
+/** @param {number} x */
+declare function func(x: number): number;
+declare function sameFile(): void;
 declare var separator: number;
+declare function sameFile(): number;
 //// [c.d.ts]
 declare function overloaded(x: string): string;
 declare function overloaded(x: number): number;
