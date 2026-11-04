@@ -1,0 +1,75 @@
+//// [tests/cases/compiler/recursiveTupleTypeLabeledRestElement.ts] ////
+
+=== a.ts ===
+export type Unlabeled = string | ["i", ...Unlabeled[]];
+>Unlabeled : Symbol(Unlabeled, Decl(a.ts, 0, 0))
+>Unlabeled : Symbol(Unlabeled, Decl(a.ts, 0, 0))
+
+export type Labeled = string | ["i", ...rest: Labeled[]];
+>Labeled : Symbol(Labeled, Decl(a.ts, 0, 55))
+>Labeled : Symbol(Labeled, Decl(a.ts, 0, 55))
+
+export type LabeledAfterLabeled = string | ["li", index: number, ...rest: LabeledAfterLabeled[]];
+>LabeledAfterLabeled : Symbol(LabeledAfterLabeled, Decl(a.ts, 1, 57))
+>LabeledAfterLabeled : Symbol(LabeledAfterLabeled, Decl(a.ts, 1, 57))
+
+export type LabeledBeforeLabeled = string | ["a", ...rest: LabeledBeforeLabeled[], last: number];
+>LabeledBeforeLabeled : Symbol(LabeledBeforeLabeled, Decl(a.ts, 3, 97))
+>LabeledBeforeLabeled : Symbol(LabeledBeforeLabeled, Decl(a.ts, 3, 97))
+
+export type LabeledParenthesized = string | ["a", ...rest: (LabeledParenthesized)[]];
+>LabeledParenthesized : Symbol(LabeledParenthesized, Decl(a.ts, 4, 97))
+>LabeledParenthesized : Symbol(LabeledParenthesized, Decl(a.ts, 4, 97))
+
+export type DocNode =
+>DocNode : Symbol(DocNode, Decl(a.ts, 5, 85))
+
+    | string
+    | ["i", ...children: DocNode[]]
+>DocNode : Symbol(DocNode, Decl(a.ts, 5, 85))
+
+    | ["li", index: number, ...children: DocNode[]];
+>DocNode : Symbol(DocNode, Decl(a.ts, 5, 85))
+
+export type Tree<T> = T | [label: string, ...children: Tree<T>[]];
+>Tree : Symbol(Tree, Decl(a.ts, 10, 52))
+>T : Symbol(T, Decl(a.ts, 12, 17))
+>T : Symbol(T, Decl(a.ts, 12, 17))
+>Tree : Symbol(Tree, Decl(a.ts, 10, 52))
+>T : Symbol(T, Decl(a.ts, 12, 17))
+
+export const ok1: Labeled = ["i", "a", ["i", "b"]];
+>ok1 : Symbol(ok1, Decl(a.ts, 14, 12))
+>Labeled : Symbol(Labeled, Decl(a.ts, 0, 55))
+
+export const ok2: DocNode = ["li", 0, "a", ["i"]];
+>ok2 : Symbol(ok2, Decl(a.ts, 15, 12))
+>DocNode : Symbol(DocNode, Decl(a.ts, 5, 85))
+
+export const ok3: Tree<number> = ["root", 1, ["leaf", 2]];
+>ok3 : Symbol(ok3, Decl(a.ts, 16, 12))
+>Tree : Symbol(Tree, Decl(a.ts, 10, 52))
+
+export const bad1: Labeled = ["i", 1];
+>bad1 : Symbol(bad1, Decl(a.ts, 18, 12))
+>Labeled : Symbol(Labeled, Decl(a.ts, 0, 55))
+
+export const bad2: DocNode = ["li", "0"];
+>bad2 : Symbol(bad2, Decl(a.ts, 19, 12))
+>DocNode : Symbol(DocNode, Decl(a.ts, 5, 85))
+
+export const bad3: Tree<number> = ["root", "1"];
+>bad3 : Symbol(bad3, Decl(a.ts, 20, 12))
+>Tree : Symbol(Tree, Decl(a.ts, 10, 52))
+
+=== b.js ===
+/** @typedef {string | ["i", ...rest: JSDocLabeled[]]} JSDocLabeled */
+
+/** @type {JSDocLabeled} */
+export const ok4 = ["i", "a", ["i"]];
+>ok4 : Symbol(ok4, Decl(b.js, 3, 12))
+
+/** @type {JSDocLabeled} */
+export const bad4 = ["i", 1];
+>bad4 : Symbol(bad4, Decl(b.js, 6, 12))
+

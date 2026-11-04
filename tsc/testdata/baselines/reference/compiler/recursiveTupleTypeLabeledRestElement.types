@@ -1,0 +1,92 @@
+//// [tests/cases/compiler/recursiveTupleTypeLabeledRestElement.ts] ////
+
+=== a.ts ===
+export type Unlabeled = string | ["i", ...Unlabeled[]];
+>Unlabeled : Unlabeled
+
+export type Labeled = string | ["i", ...rest: Labeled[]];
+>Labeled : any
+
+export type LabeledAfterLabeled = string | ["li", index: number, ...rest: LabeledAfterLabeled[]];
+>LabeledAfterLabeled : any
+
+export type LabeledBeforeLabeled = string | ["a", ...rest: LabeledBeforeLabeled[], last: number];
+>LabeledBeforeLabeled : any
+
+export type LabeledParenthesized = string | ["a", ...rest: (LabeledParenthesized)[]];
+>LabeledParenthesized : any
+
+export type DocNode =
+>DocNode : any
+
+    | string
+    | ["i", ...children: DocNode[]]
+    | ["li", index: number, ...children: DocNode[]];
+
+export type Tree<T> = T | [label: string, ...children: Tree<T>[]];
+>Tree : any
+
+export const ok1: Labeled = ["i", "a", ["i", "b"]];
+>ok1 : any
+>["i", "a", ["i", "b"]] : (string | string[])[]
+>"i" : "i"
+>"a" : "a"
+>["i", "b"] : string[]
+>"i" : "i"
+>"b" : "b"
+
+export const ok2: DocNode = ["li", 0, "a", ["i"]];
+>ok2 : any
+>["li", 0, "a", ["i"]] : (string | number | string[])[]
+>"li" : "li"
+>0 : 0
+>"a" : "a"
+>["i"] : string[]
+>"i" : "i"
+
+export const ok3: Tree<number> = ["root", 1, ["leaf", 2]];
+>ok3 : any
+>["root", 1, ["leaf", 2]] : (string | number | (string | number)[])[]
+>"root" : "root"
+>1 : 1
+>["leaf", 2] : (string | number)[]
+>"leaf" : "leaf"
+>2 : 2
+
+export const bad1: Labeled = ["i", 1];
+>bad1 : any
+>["i", 1] : (string | number)[]
+>"i" : "i"
+>1 : 1
+
+export const bad2: DocNode = ["li", "0"];
+>bad2 : any
+>["li", "0"] : string[]
+>"li" : "li"
+>"0" : "0"
+
+export const bad3: Tree<number> = ["root", "1"];
+>bad3 : any
+>["root", "1"] : string[]
+>"root" : "root"
+>"1" : "1"
+
+=== b.js ===
+/** @typedef {string | ["i", ...rest: JSDocLabeled[]]} JSDocLabeled */
+
+/** @type {JSDocLabeled} */
+export const ok4 = ["i", "a", ["i"]];
+>ok4 : any
+>["i", "a", ["i"]] : (string | string[])[]
+>"i" : "i"
+>"a" : "a"
+>["i"] : string[]
+>"i" : "i"
+
+/** @type {JSDocLabeled} */
+export const bad4 = ["i", 1];
+>bad4 : any
+>["i", 1] : (string | number)[]
+>"i" : "i"
+>1 : 1
+

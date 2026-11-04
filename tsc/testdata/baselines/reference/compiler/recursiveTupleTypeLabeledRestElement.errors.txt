@@ -1,0 +1,64 @@
+a.ts(2,13): error TS2456: Type alias 'Labeled' circularly references itself.
+a.ts(4,13): error TS2456: Type alias 'LabeledAfterLabeled' circularly references itself.
+a.ts(5,13): error TS2456: Type alias 'LabeledBeforeLabeled' circularly references itself.
+a.ts(6,13): error TS2456: Type alias 'LabeledParenthesized' circularly references itself.
+a.ts(8,13): error TS2456: Type alias 'DocNode' circularly references itself.
+a.ts(13,13): error TS2456: Type alias 'Tree' circularly references itself.
+a.ts(13,56): error TS2315: Type 'Tree' is not generic.
+a.ts(17,19): error TS2315: Type 'Tree' is not generic.
+a.ts(21,20): error TS2315: Type 'Tree' is not generic.
+b.js(1,56): error TS2456: Type alias 'JSDocLabeled' circularly references itself.
+
+
+==== a.ts (9 errors) ====
+    export type Unlabeled = string | ["i", ...Unlabeled[]];
+    export type Labeled = string | ["i", ...rest: Labeled[]];
+                ~~~~~~~
+!!! error TS2456: Type alias 'Labeled' circularly references itself.
+    
+    export type LabeledAfterLabeled = string | ["li", index: number, ...rest: LabeledAfterLabeled[]];
+                ~~~~~~~~~~~~~~~~~~~
+!!! error TS2456: Type alias 'LabeledAfterLabeled' circularly references itself.
+    export type LabeledBeforeLabeled = string | ["a", ...rest: LabeledBeforeLabeled[], last: number];
+                ~~~~~~~~~~~~~~~~~~~~
+!!! error TS2456: Type alias 'LabeledBeforeLabeled' circularly references itself.
+    export type LabeledParenthesized = string | ["a", ...rest: (LabeledParenthesized)[]];
+                ~~~~~~~~~~~~~~~~~~~~
+!!! error TS2456: Type alias 'LabeledParenthesized' circularly references itself.
+    
+    export type DocNode =
+                ~~~~~~~
+!!! error TS2456: Type alias 'DocNode' circularly references itself.
+        | string
+        | ["i", ...children: DocNode[]]
+        | ["li", index: number, ...children: DocNode[]];
+    
+    export type Tree<T> = T | [label: string, ...children: Tree<T>[]];
+                ~~~~
+!!! error TS2456: Type alias 'Tree' circularly references itself.
+                                                           ~~~~~~~
+!!! error TS2315: Type 'Tree' is not generic.
+    
+    export const ok1: Labeled = ["i", "a", ["i", "b"]];
+    export const ok2: DocNode = ["li", 0, "a", ["i"]];
+    export const ok3: Tree<number> = ["root", 1, ["leaf", 2]];
+                      ~~~~~~~~~~~~
+!!! error TS2315: Type 'Tree' is not generic.
+    
+    export const bad1: Labeled = ["i", 1];
+    export const bad2: DocNode = ["li", "0"];
+    export const bad3: Tree<number> = ["root", "1"];
+                       ~~~~~~~~~~~~
+!!! error TS2315: Type 'Tree' is not generic.
+    
+==== b.js (1 errors) ====
+    /** @typedef {string | ["i", ...rest: JSDocLabeled[]]} JSDocLabeled */
+                                                           ~~~~~~~~~~~~
+!!! error TS2456: Type alias 'JSDocLabeled' circularly references itself.
+    
+    /** @type {JSDocLabeled} */
+    export const ok4 = ["i", "a", ["i"]];
+    
+    /** @type {JSDocLabeled} */
+    export const bad4 = ["i", 1];
+    
