@@ -1,10 +1,4 @@
-import getExePath from "#getExePath";
-import {
-    createMessageConnection,
-    StreamMessageReader,
-    StreamMessageWriter,
-} from "#vscode-jsonrpc/node";
-import { API } from "@typescript/typescript/unstable/sync";
+import { API } from "@typescript/typescript/sync";
 import assert from "node:assert";
 import { spawn } from "node:child_process";
 import { randomUUID } from "node:crypto";
@@ -26,7 +20,13 @@ import {
     fileURLToPath,
     pathToFileURL,
 } from "node:url";
+import { getDefaultExePath as getExePath } from "../../src/api/nodeProcess.ts";
 import { SyncRpcChannel } from "../../src/api/syncChannel.ts";
+import {
+    createMessageConnection,
+    StreamMessageReader,
+    StreamMessageWriter,
+} from "../../vendor/vscode-jsonrpc/lib/node/main.js";
 
 async function waitForRemoved(path: string): Promise<void> {
     for (let i = 0; i < 100 && existsSync(path); i++) {
