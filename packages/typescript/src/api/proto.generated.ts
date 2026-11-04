@@ -1925,6 +1925,7 @@ export interface RawCompilerOptions {
     resolvePackageJsonExports?: boolean | undefined;
     resolvePackageJsonImports?: boolean | undefined;
     removeComments?: boolean | undefined;
+    disableDynamicImportExtensionRewriting?: boolean | undefined;
     rewriteRelativeImportExtensions?: boolean | undefined;
     reactNamespace?: string | undefined;
     rootDir?: string | undefined;

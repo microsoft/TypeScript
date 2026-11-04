@@ -74,8 +74,8 @@ loop:
 								lastLocation.Kind == ast.KindJSDocReturnTag ||
 								lastLocation.Kind == ast.KindTypeParameter)
 					}
-					if meaning&result.Flags()&ast.SymbolFlagsVariable != 0 {
-						// expression inside parameter will lookup as normal variable scope when targeting es2015+
+					if meaning&result.Flags()&(ast.SymbolFlagsVariable|ast.SymbolFlagsFunction) != 0 {
+						// Expressions inside parameters use the outer scope for declarations in the function body.
 						if r.useOuterVariableScopeInParameter(result, location, lastLocation) {
 							useResult = false
 						} else if result.Flags()&ast.SymbolFlagsFunctionScopedVariable != 0 {

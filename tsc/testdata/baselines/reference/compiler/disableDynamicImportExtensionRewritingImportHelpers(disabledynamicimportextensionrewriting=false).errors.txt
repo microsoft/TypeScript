@@ -1,0 +1,42 @@
+/missingHelper/imports.ts(2,12): error TS2343: This syntax requires an imported helper named '__rewriteRelativeImportExtension' which does not exist in 'tslib'. Consider upgrading your version of 'tslib'.
+/missingHelper/requires.js(3,12): error TS2343: This syntax requires an imported helper named '__rewriteRelativeImportExtension' which does not exist in 'tslib'. Consider upgrading your version of 'tslib'.
+/missingTslib/imports.ts(2,12): error TS2354: This syntax requires an imported helper but module 'tslib' cannot be found.
+/missingTslib/requires.js(3,12): error TS2354: This syntax requires an imported helper but module 'tslib' cannot be found.
+
+
+==== /globals.d.ts (0 errors) ====
+    declare function require(path: string): unknown;
+    
+==== /missingTslib/imports.ts (1 errors) ====
+    export function dynamicImport(path: string) {
+        return import(path);
+               ~~~~~~~~~~~~
+!!! error TS2354: This syntax requires an imported helper but module 'tslib' cannot be found.
+    }
+    
+==== /missingTslib/requires.js (1 errors) ====
+    /** @param {string} path */
+    export function dynamicRequire(path) {
+        return require(path);
+               ~~~~~~~~~~~~~
+!!! error TS2354: This syntax requires an imported helper but module 'tslib' cannot be found.
+    }
+    
+==== /missingHelper/node_modules/tslib/index.d.ts (0 errors) ====
+    export {};
+    
+==== /missingHelper/requires.js (1 errors) ====
+    /** @param {string} path */
+    export function dynamicRequire(path) {
+        return require(path);
+               ~~~~~~~~~~~~~
+!!! error TS2343: This syntax requires an imported helper named '__rewriteRelativeImportExtension' which does not exist in 'tslib'. Consider upgrading your version of 'tslib'.
+    }
+    
+==== /missingHelper/imports.ts (1 errors) ====
+    export function dynamicImport(path: string) {
+        return import(path);
+               ~~~~~~~~~~~~
+!!! error TS2343: This syntax requires an imported helper named '__rewriteRelativeImportExtension' which does not exist in 'tslib'. Consider upgrading your version of 'tslib'.
+    }
+    
