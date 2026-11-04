@@ -1,0 +1,49 @@
+brandedPrimitiveTruthiness.ts(18,15): error TS2322: Type 'TextRange | BrandedVoid' is not assignable to type 'BrandedVoid'.
+  Type 'TextRange' is not assignable to type 'BrandedVoid'.
+    Type 'TextRange' is not assignable to type 'void'.
+brandedPrimitiveTruthiness.ts(19,15): error TS2322: Type 'TextRange | BrandedVoid' is not assignable to type 'never'.
+  Type 'TextRange' is not assignable to type 'never'.
+
+
+==== brandedPrimitiveTruthiness.ts (2 errors) ====
+    type Brand = { readonly brand: unique symbol };
+    type BrandedVoid = void & Brand;
+    type BrandedString = string & Brand;
+    
+    interface TextRange {
+        pos: number;
+        end: number;
+    }
+    
+    function truthy(value: TextRange | BrandedVoid) {
+        if (value) {
+            const range: TextRange = value;
+        }
+    }
+    
+    function falsy(value: TextRange | BrandedVoid) {
+        if (!value) {
+            const absent: BrandedVoid = value;
+                  ~~~~~~
+!!! error TS2322: Type 'TextRange | BrandedVoid' is not assignable to type 'BrandedVoid'.
+!!! error TS2322:   Type 'TextRange' is not assignable to type 'BrandedVoid'.
+!!! error TS2322:     Type 'TextRange' is not assignable to type 'void'.
+            const present: never = value; // Error: branded void is retained in the falsy branch.
+                  ~~~~~~~
+!!! error TS2322: Type 'TextRange | BrandedVoid' is not assignable to type 'never'.
+!!! error TS2322:   Type 'TextRange' is not assignable to type 'never'.
+        }
+    }
+    
+    function notString(value: TextRange | BrandedString | BrandedVoid) {
+        if (value && typeof value !== "string") {
+            const range: TextRange = value;
+        }
+    }
+    
+    function redundantStringCheck(value: BrandedString | undefined) {
+        if (value && value !== "") {
+            const text: BrandedString & not "" = value;
+        }
+    }
+    

@@ -70,7 +70,7 @@ func (c *Checker) getTypeWithoutNullable(t *Type, nullable *Type) *Type {
 
 func (c *Checker) getTruthyType(t *Type) *Type {
 	t = c.filterType(t, func(t *Type) bool {
-		return t.flags&(TypeFlagsVoid|TypeFlagsNullable) == 0 &&
+		return !c.maybeTypeOfKind(t, TypeFlagsVoid|TypeFlagsNullable) &&
 			(!isUnitType(t) || c.getDefinitelyFalsyPartOfType(t).flags&TypeFlagsNever != 0)
 	})
 	if c.isNonPrimitiveForRefinement(t) {
@@ -88,7 +88,7 @@ func (c *Checker) getFalsyType(t *Type) *Type {
 		return t
 	}
 	return c.mapType(t, func(t *Type) *Type {
-		if t.flags&(TypeFlagsVoid|TypeFlagsNullable) != 0 {
+		if c.maybeTypeOfKind(t, TypeFlagsVoid|TypeFlagsNullable) {
 			return t
 		}
 		if isUnitType(t) {

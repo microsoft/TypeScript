@@ -1,0 +1,135 @@
+//// [tests/cases/compiler/negatedEqualityComparability.ts] ////
+
+=== negatedEqualityComparability.ts ===
+function truthyComparisons(text: string | undefined, number: number | undefined, bigint: bigint | undefined) {
+>truthyComparisons : Symbol(truthyComparisons, Decl(negatedEqualityComparability.ts, 0, 0))
+>text : Symbol(text, Decl(negatedEqualityComparability.ts, 0, 27))
+>number : Symbol(number, Decl(negatedEqualityComparability.ts, 0, 52))
+>bigint : Symbol(bigint, Decl(negatedEqualityComparability.ts, 0, 80))
+
+    if (text) {
+>text : Symbol(text, Decl(negatedEqualityComparability.ts, 0, 27))
+
+        text !== "";
+>text : Symbol(text, Decl(negatedEqualityComparability.ts, 0, 27))
+
+        "" !== text;
+>text : Symbol(text, Decl(negatedEqualityComparability.ts, 0, 27))
+
+        text === "";
+>text : Symbol(text, Decl(negatedEqualityComparability.ts, 0, 27))
+
+        "" === text;
+>text : Symbol(text, Decl(negatedEqualityComparability.ts, 0, 27))
+
+        text != "";
+>text : Symbol(text, Decl(negatedEqualityComparability.ts, 0, 27))
+
+        "" == text;
+>text : Symbol(text, Decl(negatedEqualityComparability.ts, 0, 27))
+
+        const refined: string & not "" = text;
+>refined : Symbol(refined, Decl(negatedEqualityComparability.ts, 8, 13))
+>text : Symbol(text, Decl(negatedEqualityComparability.ts, 0, 27))
+
+        switch (text) {
+>text : Symbol(text, Decl(negatedEqualityComparability.ts, 0, 27))
+
+            case "": break;
+        }
+    }
+    if (number) {
+>number : Symbol(number, Decl(negatedEqualityComparability.ts, 0, 52))
+
+        number !== 0;
+>number : Symbol(number, Decl(negatedEqualityComparability.ts, 0, 52))
+
+        0 === number;
+>number : Symbol(number, Decl(negatedEqualityComparability.ts, 0, 52))
+
+        const refined: number & not 0 = number;
+>refined : Symbol(refined, Decl(negatedEqualityComparability.ts, 16, 13))
+>number : Symbol(number, Decl(negatedEqualityComparability.ts, 0, 52))
+    }
+    if (bigint) {
+>bigint : Symbol(bigint, Decl(negatedEqualityComparability.ts, 0, 80))
+
+        bigint !== 0n;
+>bigint : Symbol(bigint, Decl(negatedEqualityComparability.ts, 0, 80))
+
+        0n === bigint;
+>bigint : Symbol(bigint, Decl(negatedEqualityComparability.ts, 0, 80))
+
+        const refined: bigint & not 0n = bigint;
+>refined : Symbol(refined, Decl(negatedEqualityComparability.ts, 21, 13))
+>bigint : Symbol(bigint, Decl(negatedEqualityComparability.ts, 0, 80))
+    }
+}
+
+function excludedComparison(text: string) {
+>excludedComparison : Symbol(excludedComparison, Decl(negatedEqualityComparability.ts, 23, 1))
+>text : Symbol(text, Decl(negatedEqualityComparability.ts, 25, 28))
+
+    if (text !== "excluded") {
+>text : Symbol(text, Decl(negatedEqualityComparability.ts, 25, 28))
+
+        text === "excluded";
+>text : Symbol(text, Decl(negatedEqualityComparability.ts, 25, 28))
+
+        "excluded" !== text;
+>text : Symbol(text, Decl(negatedEqualityComparability.ts, 25, 28))
+
+        const refined: string & not "excluded" = text;
+>refined : Symbol(refined, Decl(negatedEqualityComparability.ts, 29, 13))
+>text : Symbol(text, Decl(negatedEqualityComparability.ts, 25, 28))
+    }
+}
+
+function explicitExclusion(text: string & not "", number: number & not 0) {
+>explicitExclusion : Symbol(explicitExclusion, Decl(negatedEqualityComparability.ts, 31, 1))
+>text : Symbol(text, Decl(negatedEqualityComparability.ts, 33, 27))
+>number : Symbol(number, Decl(negatedEqualityComparability.ts, 33, 49))
+
+    text === ""; // Error: an explicit exclusion remains disjoint.
+>text : Symbol(text, Decl(negatedEqualityComparability.ts, 33, 27))
+
+    "" !== text; // Error
+>text : Symbol(text, Decl(negatedEqualityComparability.ts, 33, 27))
+
+    number !== 0; // Error
+>number : Symbol(number, Decl(negatedEqualityComparability.ts, 33, 49))
+
+    0 === number; // Error
+>number : Symbol(number, Decl(negatedEqualityComparability.ts, 33, 49))
+
+    if (text) {
+>text : Symbol(text, Decl(negatedEqualityComparability.ts, 33, 27))
+
+        text === ""; // Error: truthiness must not erase the declared exclusion.
+>text : Symbol(text, Decl(negatedEqualityComparability.ts, 33, 27))
+    }
+    switch (text) {
+>text : Symbol(text, Decl(negatedEqualityComparability.ts, 33, 27))
+
+        case "": break; // Error
+    }
+}
+
+function disjointLiterals(text: "present", number: 1) {
+>disjointLiterals : Symbol(disjointLiterals, Decl(negatedEqualityComparability.ts, 44, 1))
+>text : Symbol(text, Decl(negatedEqualityComparability.ts, 46, 26))
+>number : Symbol(number, Decl(negatedEqualityComparability.ts, 46, 42))
+
+    text === ""; // Error
+>text : Symbol(text, Decl(negatedEqualityComparability.ts, 46, 26))
+
+    "" !== text; // Error
+>text : Symbol(text, Decl(negatedEqualityComparability.ts, 46, 26))
+
+    number !== 0; // Error
+>number : Symbol(number, Decl(negatedEqualityComparability.ts, 46, 42))
+
+    0 === number; // Error
+>number : Symbol(number, Decl(negatedEqualityComparability.ts, 46, 42))
+}
+

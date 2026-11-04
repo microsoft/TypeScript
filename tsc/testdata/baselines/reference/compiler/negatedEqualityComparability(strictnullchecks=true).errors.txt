@@ -1,0 +1,88 @@
+negatedEqualityComparability.ts(35,5): error TS2367: This comparison appears to be unintentional because the types 'string & not ""' and '""' have no overlap.
+negatedEqualityComparability.ts(36,5): error TS2367: This comparison appears to be unintentional because the types '""' and 'string & not ""' have no overlap.
+negatedEqualityComparability.ts(37,5): error TS2367: This comparison appears to be unintentional because the types 'number & not 0' and '0' have no overlap.
+negatedEqualityComparability.ts(38,5): error TS2367: This comparison appears to be unintentional because the types '0' and 'number & not 0' have no overlap.
+negatedEqualityComparability.ts(40,9): error TS2367: This comparison appears to be unintentional because the types 'string & not ""' and '""' have no overlap.
+negatedEqualityComparability.ts(43,14): error TS2678: Type 'string' is not comparable to type 'string & not ""'.
+  Type 'string' is not comparable to type 'not ""'.
+negatedEqualityComparability.ts(48,5): error TS2367: This comparison appears to be unintentional because the types '"present"' and '""' have no overlap.
+negatedEqualityComparability.ts(49,5): error TS2367: This comparison appears to be unintentional because the types '""' and '"present"' have no overlap.
+negatedEqualityComparability.ts(50,5): error TS2367: This comparison appears to be unintentional because the types '1' and '0' have no overlap.
+negatedEqualityComparability.ts(51,5): error TS2367: This comparison appears to be unintentional because the types '0' and '1' have no overlap.
+
+
+==== negatedEqualityComparability.ts (10 errors) ====
+    function truthyComparisons(text: string | undefined, number: number | undefined, bigint: bigint | undefined) {
+        if (text) {
+            text !== "";
+            "" !== text;
+            text === "";
+            "" === text;
+            text != "";
+            "" == text;
+            const refined: string & not "" = text;
+            switch (text) {
+                case "": break;
+            }
+        }
+        if (number) {
+            number !== 0;
+            0 === number;
+            const refined: number & not 0 = number;
+        }
+        if (bigint) {
+            bigint !== 0n;
+            0n === bigint;
+            const refined: bigint & not 0n = bigint;
+        }
+    }
+    
+    function excludedComparison(text: string) {
+        if (text !== "excluded") {
+            text === "excluded";
+            "excluded" !== text;
+            const refined: string & not "excluded" = text;
+        }
+    }
+    
+    function explicitExclusion(text: string & not "", number: number & not 0) {
+        text === ""; // Error: an explicit exclusion remains disjoint.
+        ~~~~~~~~~~~
+!!! error TS2367: This comparison appears to be unintentional because the types 'string & not ""' and '""' have no overlap.
+        "" !== text; // Error
+        ~~~~~~~~~~~
+!!! error TS2367: This comparison appears to be unintentional because the types '""' and 'string & not ""' have no overlap.
+        number !== 0; // Error
+        ~~~~~~~~~~~~
+!!! error TS2367: This comparison appears to be unintentional because the types 'number & not 0' and '0' have no overlap.
+        0 === number; // Error
+        ~~~~~~~~~~~~
+!!! error TS2367: This comparison appears to be unintentional because the types '0' and 'number & not 0' have no overlap.
+        if (text) {
+            text === ""; // Error: truthiness must not erase the declared exclusion.
+            ~~~~~~~~~~~
+!!! error TS2367: This comparison appears to be unintentional because the types 'string & not ""' and '""' have no overlap.
+        }
+        switch (text) {
+            case "": break; // Error
+                 ~~
+!!! error TS2678: Type 'string' is not comparable to type 'string & not ""'.
+!!! error TS2678:   Type 'string' is not comparable to type 'not ""'.
+        }
+    }
+    
+    function disjointLiterals(text: "present", number: 1) {
+        text === ""; // Error
+        ~~~~~~~~~~~
+!!! error TS2367: This comparison appears to be unintentional because the types '"present"' and '""' have no overlap.
+        "" !== text; // Error
+        ~~~~~~~~~~~
+!!! error TS2367: This comparison appears to be unintentional because the types '""' and '"present"' have no overlap.
+        number !== 0; // Error
+        ~~~~~~~~~~~~
+!!! error TS2367: This comparison appears to be unintentional because the types '1' and '0' have no overlap.
+        0 === number; // Error
+        ~~~~~~~~~~~~
+!!! error TS2367: This comparison appears to be unintentional because the types '0' and '1' have no overlap.
+    }
+    

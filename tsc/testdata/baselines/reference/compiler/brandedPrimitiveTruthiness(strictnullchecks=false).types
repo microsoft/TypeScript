@@ -1,0 +1,87 @@
+//// [tests/cases/compiler/brandedPrimitiveTruthiness.ts] ////
+
+=== brandedPrimitiveTruthiness.ts ===
+type Brand = { readonly brand: unique symbol };
+>Brand : Brand
+>brand : unique symbol
+
+type BrandedVoid = void & Brand;
+>BrandedVoid : BrandedVoid
+
+type BrandedString = string & Brand;
+>BrandedString : BrandedString
+
+interface TextRange {
+    pos: number;
+>pos : number
+
+    end: number;
+>end : number
+}
+
+function truthy(value: TextRange | BrandedVoid) {
+>truthy : (value: TextRange | BrandedVoid) => void
+>value : TextRange | BrandedVoid
+
+    if (value) {
+>value : TextRange | BrandedVoid
+
+        const range: TextRange = value;
+>range : TextRange
+>value : TextRange
+    }
+}
+
+function falsy(value: TextRange | BrandedVoid) {
+>falsy : (value: TextRange | BrandedVoid) => void
+>value : TextRange | BrandedVoid
+
+    if (!value) {
+>!value : boolean
+>value : TextRange | BrandedVoid
+
+        const absent: BrandedVoid = value;
+>absent : BrandedVoid
+>value : TextRange | BrandedVoid
+
+        const present: never = value; // Error: branded void is retained in the falsy branch.
+>present : never
+>value : TextRange | BrandedVoid
+    }
+}
+
+function notString(value: TextRange | BrandedString | BrandedVoid) {
+>notString : (value: TextRange | BrandedString | BrandedVoid) => void
+>value : TextRange | BrandedString | BrandedVoid
+
+    if (value && typeof value !== "string") {
+>value && typeof value !== "string" : boolean
+>value : TextRange | BrandedString | BrandedVoid
+>typeof value !== "string" : boolean
+>typeof value : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
+>value : TextRange | (string & Brand & not "")
+>"string" : "string"
+
+        const range: TextRange = value;
+>range : TextRange
+>value : TextRange
+    }
+}
+
+function redundantStringCheck(value: BrandedString | undefined) {
+>redundantStringCheck : (value: BrandedString | undefined) => void
+>value : BrandedString
+
+    if (value && value !== "") {
+>value && value !== "" : boolean
+>value : BrandedString
+>value !== "" : boolean
+>value : string & Brand & not ""
+>"" : ""
+
+        const text: BrandedString & not "" = value;
+>text : string & Brand & not ""
+>value : string & Brand & not "" & not ""
+    }
+}
+

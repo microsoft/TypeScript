@@ -1,0 +1,95 @@
+//// [tests/cases/compiler/brandedPrimitiveTruthiness.ts] ////
+
+=== brandedPrimitiveTruthiness.ts ===
+type Brand = { readonly brand: unique symbol };
+>Brand : Symbol(Brand, Decl(brandedPrimitiveTruthiness.ts, 0, 0))
+>brand : Symbol(brand, Decl(brandedPrimitiveTruthiness.ts, 0, 14))
+
+type BrandedVoid = void & Brand;
+>BrandedVoid : Symbol(BrandedVoid, Decl(brandedPrimitiveTruthiness.ts, 0, 47))
+>Brand : Symbol(Brand, Decl(brandedPrimitiveTruthiness.ts, 0, 0))
+
+type BrandedString = string & Brand;
+>BrandedString : Symbol(BrandedString, Decl(brandedPrimitiveTruthiness.ts, 1, 32))
+>Brand : Symbol(Brand, Decl(brandedPrimitiveTruthiness.ts, 0, 0))
+
+interface TextRange {
+>TextRange : Symbol(TextRange, Decl(brandedPrimitiveTruthiness.ts, 2, 36))
+
+    pos: number;
+>pos : Symbol(TextRange.pos, Decl(brandedPrimitiveTruthiness.ts, 4, 21))
+
+    end: number;
+>end : Symbol(TextRange.end, Decl(brandedPrimitiveTruthiness.ts, 5, 16))
+}
+
+function truthy(value: TextRange | BrandedVoid) {
+>truthy : Symbol(truthy, Decl(brandedPrimitiveTruthiness.ts, 7, 1))
+>value : Symbol(value, Decl(brandedPrimitiveTruthiness.ts, 9, 16))
+>TextRange : Symbol(TextRange, Decl(brandedPrimitiveTruthiness.ts, 2, 36))
+>BrandedVoid : Symbol(BrandedVoid, Decl(brandedPrimitiveTruthiness.ts, 0, 47))
+
+    if (value) {
+>value : Symbol(value, Decl(brandedPrimitiveTruthiness.ts, 9, 16))
+
+        const range: TextRange = value;
+>range : Symbol(range, Decl(brandedPrimitiveTruthiness.ts, 11, 13))
+>TextRange : Symbol(TextRange, Decl(brandedPrimitiveTruthiness.ts, 2, 36))
+>value : Symbol(value, Decl(brandedPrimitiveTruthiness.ts, 9, 16))
+    }
+}
+
+function falsy(value: TextRange | BrandedVoid) {
+>falsy : Symbol(falsy, Decl(brandedPrimitiveTruthiness.ts, 13, 1))
+>value : Symbol(value, Decl(brandedPrimitiveTruthiness.ts, 15, 15))
+>TextRange : Symbol(TextRange, Decl(brandedPrimitiveTruthiness.ts, 2, 36))
+>BrandedVoid : Symbol(BrandedVoid, Decl(brandedPrimitiveTruthiness.ts, 0, 47))
+
+    if (!value) {
+>value : Symbol(value, Decl(brandedPrimitiveTruthiness.ts, 15, 15))
+
+        const absent: BrandedVoid = value;
+>absent : Symbol(absent, Decl(brandedPrimitiveTruthiness.ts, 17, 13))
+>BrandedVoid : Symbol(BrandedVoid, Decl(brandedPrimitiveTruthiness.ts, 0, 47))
+>value : Symbol(value, Decl(brandedPrimitiveTruthiness.ts, 15, 15))
+
+        const present: never = value; // Error: branded void is retained in the falsy branch.
+>present : Symbol(present, Decl(brandedPrimitiveTruthiness.ts, 18, 13))
+>value : Symbol(value, Decl(brandedPrimitiveTruthiness.ts, 15, 15))
+    }
+}
+
+function notString(value: TextRange | BrandedString | BrandedVoid) {
+>notString : Symbol(notString, Decl(brandedPrimitiveTruthiness.ts, 20, 1))
+>value : Symbol(value, Decl(brandedPrimitiveTruthiness.ts, 22, 19))
+>TextRange : Symbol(TextRange, Decl(brandedPrimitiveTruthiness.ts, 2, 36))
+>BrandedString : Symbol(BrandedString, Decl(brandedPrimitiveTruthiness.ts, 1, 32))
+>BrandedVoid : Symbol(BrandedVoid, Decl(brandedPrimitiveTruthiness.ts, 0, 47))
+
+    if (value && typeof value !== "string") {
+>value : Symbol(value, Decl(brandedPrimitiveTruthiness.ts, 22, 19))
+>value : Symbol(value, Decl(brandedPrimitiveTruthiness.ts, 22, 19))
+
+        const range: TextRange = value;
+>range : Symbol(range, Decl(brandedPrimitiveTruthiness.ts, 24, 13))
+>TextRange : Symbol(TextRange, Decl(brandedPrimitiveTruthiness.ts, 2, 36))
+>value : Symbol(value, Decl(brandedPrimitiveTruthiness.ts, 22, 19))
+    }
+}
+
+function redundantStringCheck(value: BrandedString | undefined) {
+>redundantStringCheck : Symbol(redundantStringCheck, Decl(brandedPrimitiveTruthiness.ts, 26, 1))
+>value : Symbol(value, Decl(brandedPrimitiveTruthiness.ts, 28, 30))
+>BrandedString : Symbol(BrandedString, Decl(brandedPrimitiveTruthiness.ts, 1, 32))
+
+    if (value && value !== "") {
+>value : Symbol(value, Decl(brandedPrimitiveTruthiness.ts, 28, 30))
+>value : Symbol(value, Decl(brandedPrimitiveTruthiness.ts, 28, 30))
+
+        const text: BrandedString & not "" = value;
+>text : Symbol(text, Decl(brandedPrimitiveTruthiness.ts, 30, 13))
+>BrandedString : Symbol(BrandedString, Decl(brandedPrimitiveTruthiness.ts, 1, 32))
+>value : Symbol(value, Decl(brandedPrimitiveTruthiness.ts, 28, 30))
+    }
+}
+
