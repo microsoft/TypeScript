@@ -4768,8 +4768,16 @@ func (p *Parser) parseBinaryExpressionRest(precedence ast.OperatorPrecedence, le
 				// are binary operators, we want to stop parsing when $$ would bind before ## after erasing the
 				// assertion. See https://github.com/microsoft/TypeScript/issues/63527.
 				lastPrecedence := ast.OperatorPrecedenceHighest
-				if ast.IsBinaryExpression(lastOperand) {
+				// Unary expressions cannot be exposed on the left of '**', but update expressions can.
+				switch lastOperand.Kind {
+				case ast.KindBinaryExpression:
 					lastPrecedence = ast.GetBinaryOperatorPrecedence(lastOperand.AsBinaryExpression().OperatorToken.Kind)
+				case ast.KindPrefixUnaryExpression:
+					if op := lastOperand.AsPrefixUnaryExpression().Operator; op != ast.KindPlusPlusToken && op != ast.KindMinusMinusToken {
+						lastPrecedence = ast.OperatorPrecedenceExponentiation
+					}
+				case ast.KindDeleteExpression, ast.KindTypeOfExpression, ast.KindVoidExpression, ast.KindAwaitExpression, ast.KindTypeAssertionExpression:
+					lastPrecedence = ast.OperatorPrecedenceExponentiation
 				}
 				if operator == ast.KindSatisfiesKeyword {
 					leftOperand = p.makeSatisfiesExpression(leftOperand, p.parseType())
