@@ -37,3 +37,9 @@ export default (class implements I {});
 >(class implements I {}) : typeof (Anonymous class)
 >class implements I {} : typeof (Anonymous class)
 
+=== anonymousClassDeclaration.ts ===
+label: interface I {}
+>label : any
+
+export default class implements I {}
+

@@ -1,3 +1,5 @@
+anonymousClassDeclaration.ts(1,1): error TS1344: A label is not allowed here.
+anonymousClassDeclaration.ts(2,33): error TS4082: Default export of the module has or is using private name 'I'.
 anonymousClassExpression.ts(1,1): error TS1344: A label is not allowed here.
 anonymousClassExpression.ts(2,34): error TS4082: Default export of the module has or is using private name 'I'.
 implements.ts(1,1): error TS1344: A label is not allowed here.
@@ -49,5 +51,13 @@ typeArgument.ts(3,33): error TS4022: 'extends' clause of exported interface 'J' 
 !!! error TS1344: A label is not allowed here.
     export default (class implements I {});
                                      ~
+!!! error TS4082: Default export of the module has or is using private name 'I'.
+    
+==== anonymousClassDeclaration.ts (2 errors) ====
+    label: interface I {}
+    ~~~~~
+!!! error TS1344: A label is not allowed here.
+    export default class implements I {}
+                                    ~
 !!! error TS4082: Default export of the module has or is using private name 'I'.
     

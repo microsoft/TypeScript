@@ -20,3 +20,7 @@ export default (class C implements I {});
 // @filename: anonymousClassExpression.ts
 label: interface I {}
 export default (class implements I {});
+
+// @filename: anonymousClassDeclaration.ts
+label: interface I {}
+export default class implements I {}

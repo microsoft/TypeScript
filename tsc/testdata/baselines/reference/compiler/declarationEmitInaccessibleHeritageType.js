@@ -21,6 +21,10 @@ export default (class C implements I {});
 label: interface I {}
 export default (class implements I {});
 
+//// [anonymousClassDeclaration.ts]
+label: interface I {}
+export default class implements I {}
+
 
 //// [interface.js]
 label: ;
@@ -40,3 +44,7 @@ export default (class C {
 label: ;
 export default (class {
 });
+//// [anonymousClassDeclaration.js]
+label: ;
+export default class {
+}

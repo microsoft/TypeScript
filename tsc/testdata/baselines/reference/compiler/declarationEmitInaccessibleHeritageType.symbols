@@ -44,3 +44,10 @@ label: interface I {}
 export default (class implements I {});
 >I : Symbol(I, Decl(anonymousClassExpression.ts, 0, 6))
 
+=== anonymousClassDeclaration.ts ===
+label: interface I {}
+>I : Symbol(I, Decl(anonymousClassDeclaration.ts, 0, 6))
+
+export default class implements I {}
+>I : Symbol(I, Decl(anonymousClassDeclaration.ts, 0, 6))
+
