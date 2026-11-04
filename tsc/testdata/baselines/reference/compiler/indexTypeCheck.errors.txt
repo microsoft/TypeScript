@@ -1,5 +1,3 @@
-indexTypeCheck.ts(2,2): error TS1021: An index signature must have a type annotation.
-indexTypeCheck.ts(3,2): error TS1021: An index signature must have a type annotation.
 indexTypeCheck.ts(17,2): error TS2413: 'number' index type 'number' is not assignable to 'string' index type 'string'.
 indexTypeCheck.ts(22,2): error TS2413: 'number' index type 'Orange' is not assignable to 'string' index type 'Yellow'.
 indexTypeCheck.ts(27,2): error TS2413: 'number' index type 'number' is not assignable to 'string' index type 'string'.
@@ -8,14 +6,10 @@ indexTypeCheck.ts(36,3): error TS1268: An index signature parameter type must be
 indexTypeCheck.ts(51,8): error TS2538: Type 'Blue' cannot be used as an index type.
 
 
-==== indexTypeCheck.ts (8 errors) ====
+==== indexTypeCheck.ts (6 errors) ====
     interface Red {
     	[n:number]; // ok
-    	~~~~~~~~~~~
-!!! error TS1021: An index signature must have a type annotation.
     	[s:string]; // ok
-    	~~~~~~~~~~~
-!!! error TS1021: An index signature must have a type annotation.
     }
     
     interface Blue {

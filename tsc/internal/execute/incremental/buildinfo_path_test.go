@@ -71,6 +71,54 @@ func TestBuildInfoCompilerOptionsJSONRoundTrip(t *testing.T) {
 	assert.Assert(t, !tsoptions.CompilerOptionsAffectSemanticDiagnostics(options, restoredOptions))
 }
 
+func TestBuildInfoCompilerOptionsCachedRoundTrip(t *testing.T) {
+	t.Parallel()
+	for _, empty := range []bool{false, true} {
+		t.Run(strconv.FormatBool(empty), func(t *testing.T) {
+			t.Parallel()
+			paths := &collections.OrderedMap[string, []string]{}
+			paths.Set("second", []string{"./second", "./fallback"})
+			paths.Set("first", []string{})
+			options := &core.CompilerOptions{
+				Incremental:      core.TSTrue,
+				Paths:            paths,
+				PathsBasePath:    "/project",
+				RootDirs:         []tspath.RootedDirectoryPath{"/project/src", "/generated"},
+				TypeRoots:        []tspath.RootedDirectoryPath{"/project/types"},
+				Types:            []string{"custom"},
+				CustomConditions: []string{"custom"},
+				ModuleSuffixes:   []string{".custom", ""},
+				Lib:              []string{"lib.es5.d.ts"},
+			}
+			if empty {
+				options.Paths = &collections.OrderedMap[string, []string]{}
+				options.RootDirs = []tspath.RootedDirectoryPath{}
+				options.TypeRoots = []tspath.RootedDirectoryPath{}
+				options.Types = []string{}
+				options.CustomConditions = []string{}
+				options.ModuleSuffixes = []string{}
+				options.Lib = []string{}
+			}
+			program := newDeletionTestProgram(map[string]string{
+				"/lib/lib.d.ts":        deletionTestLib,
+				"/project/consumer.ts": "export {};",
+			}, []string{"consumer.ts"}, options, nil)
+			info, err := snapshotToBuildInfo(program.snapshot, program.program, "/project/dist/state.tsbuildinfo")
+			assert.NilError(t, err)
+			data, err := json.Marshal(info)
+			assert.NilError(t, err)
+			var restored BuildInfo
+			assert.NilError(t, json.Unmarshal(data, &restored))
+			cachedOptions := info.GetCompilerOptions("/project/dist")
+			diskOptions := restored.GetCompilerOptions("/project/dist")
+			assert.Assert(t, cachedOptions.Equals(diskOptions))
+			assert.Assert(t, !tsoptions.CompilerOptionsAffectEmit(options, cachedOptions))
+			assert.Assert(t, !tsoptions.CompilerOptionsAffectSemanticDiagnostics(options, cachedOptions))
+			assert.DeepEqual(t, slices.Collect(cachedOptions.Paths.Keys()), slices.Collect(options.Paths.Keys()))
+		})
+	}
+}
+
 const deletionTestLib = `interface Array<T> {}
 interface Boolean {}
 interface CallableFunction {}

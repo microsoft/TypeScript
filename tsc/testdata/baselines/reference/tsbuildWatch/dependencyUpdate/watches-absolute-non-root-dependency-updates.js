@@ -275,7 +275,6 @@ Directory watches::
   D:/work/deps
 tsconfig.json::
 SemanticDiagnostics::
-*refresh*    C:/home/src/tslibs/TS/Lib/lib.es2026.full.d.ts
 *refresh*    D:/work/deps/dep.d.ts
 *refresh*    C:/work/project/src/index.ts
 Signatures::
