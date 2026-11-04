@@ -1,0 +1,29 @@
+//// [tests/cases/compiler/importHelpersMissingMetadataHelper.ts] ////
+
+=== main.ts ===
+declare function dec(...args: any[]): any;
+>dec : Symbol(dec, Decl(main.ts, 0, 0))
+>args : Symbol(args, Decl(main.ts, 0, 21))
+
+@dec
+>dec : Symbol(dec, Decl(main.ts, 0, 0))
+
+export class C {
+>C : Symbol(C, Decl(main.ts, 0, 42))
+
+    constructor(x: number) {}
+>x : Symbol(x, Decl(main.ts, 4, 16))
+
+    @dec
+>dec : Symbol(dec, Decl(main.ts, 0, 0))
+
+    method(y: string) {}
+>method : Symbol(C.method, Decl(main.ts, 4, 29))
+>y : Symbol(y, Decl(main.ts, 7, 11))
+}
+
+=== node_modules/tslib/index.d.ts ===
+export declare function __decorate(...args: any[]): any;
+>__decorate : Symbol(__decorate, Decl(index.d.ts, 0, 0))
+>args : Symbol(args, Decl(index.d.ts, 0, 35))
+

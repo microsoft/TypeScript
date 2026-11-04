@@ -1,0 +1,93 @@
+//// [tests/cases/compiler/classDeclarationInStatementPosition.ts] ////
+
+=== a.ts ===
+declare const cond: boolean;
+>cond : boolean
+
+if (cond) class C1 {}
+>cond : boolean
+>C1 : C1
+
+if (cond) {} else class C2 {}
+>cond : boolean
+>C2 : C2
+
+while (cond) class C3 {}
+>cond : boolean
+>C3 : C3
+
+do class C4 {} while (cond);
+>C4 : C4
+>cond : false
+
+for (;;) class C5 {}
+>C5 : C5
+
+for (const k in {}) class C6 {}
+>k : string
+>{} : {}
+>C6 : C6
+
+for (const v of []) class C7 {}
+>v : never
+>[] : never[]
+>C7 : C7
+
+if (cond) label: class C8 {}
+>cond : boolean
+>label : any
+>C8 : C8
+
+// OK
+if (cond) {
+>cond : boolean
+
+    class C10 {}
+>C10 : C10
+}
+class C11 {}
+>C11 : C11
+
+switch (0) {
+>0 : 0
+
+    case 0:
+>0 : 0
+
+        class C12 {}
+>C12 : C12
+}
+namespace N {
+>N : typeof N
+
+    class C13 {}
+>C13 : C13
+}
+function f() {
+>f : () => typeof C15
+
+    class C14 {}
+>C14 : C14
+
+    return class C15 {};
+>class C15 {} : typeof C15
+>C15 : typeof C15
+}
+let x;
+>x : any
+
+if (cond) x = class C16 {};
+>cond : boolean
+>x = class C16 {} : typeof C16
+>x : any
+>class C16 {} : typeof C16
+>C16 : typeof C16
+
+=== b.js ===
+if (Math.random()) class C17 {}
+>Math.random() : number
+>Math.random : () => number
+>Math : Math
+>random : () => number
+>C17 : C17
+

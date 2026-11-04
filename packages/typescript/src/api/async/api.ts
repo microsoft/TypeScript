@@ -57,7 +57,7 @@ import {
 } from "../node/node.ts";
 import { Wtf8Decoder } from "../node/wtf8.ts";
 import type {
-    APIOptions,
+    APIOptions, // @sync:     SyncAPIOptions as APIOptions,
     LSPConnectionOptions,
 } from "../options.ts";
 import {
@@ -138,9 +138,10 @@ import type {
     TimingInfo,
 } from "../timing.ts";
 import {
-    Client,
+    type Client, // @sync:     Client,
     type ClientSocketOptions,
     type ClientSpawnOptions,
+    createClient, // @sync-skip
 } from "./client.ts";
 import type {
     AssertsIdentifierTypePredicate,
@@ -364,7 +365,7 @@ export class API<FromLSP extends boolean = false> implements FormatDiagnosticsHo
     readonly debug: DebugHandlers;
 
     constructor(options: APIOptions | LSPConnectionOptions = {}) {
-        this.client = new Client(options);
+        this.client = createClient(options); // @sync: this.client = new Client(options);
         this.sourceFileCache = new SourceFileCache<Symbol>();
         this.printer = new Printer(this.client);
         this.debug = new DebugHandlers(this.client, () => this.ensureInitialized()); // @sync: this.debug = new DebugHandlers(this.client, this.ensureInitialized);
@@ -678,6 +679,13 @@ export class API<FromLSP extends boolean = false> implements FormatDiagnosticsHo
 
     private prepareCreateSnapshotParams(params: CreateSnapshotParams | undefined): ProtocolCreateSnapshotParams {
         params ??= {};
+        if (params.fileSystem?.kind === "snapshot") {
+            const sourceId = params.fileSystem.snapshot;
+            const source = sourceId === undefined ? undefined : this.activeSnapshots.get(sourceId);
+            if (!source || source.isDisposed()) {
+                throw new Error("Cannot use an inactive snapshot filesystem");
+            }
+        }
         const prepareOptions = (options: CreateProgramOptions | undefined): ProtocolCreateProgramOptions | undefined => {
             if (!options) return undefined;
             const { moduleResolver, projectReferences, ...rest } = options;
@@ -764,6 +772,15 @@ export class API<FromLSP extends boolean = false> implements FormatDiagnosticsHo
     }
 
     async close(): Promise<void> {
+        // @sync-skip-block-start
+        if (this.initializing && !this.initialized) {
+            const initializing = this.initializing;
+            await this.client.close();
+            await initializing.catch(() => {});
+            this.sourceFileCache.clear();
+            return;
+        }
+        // @sync-skip-block-end
         await this.initializing?.catch(() => {}); // @sync-skip
         try {
             for (const retained of [...this.activeSourceFileLeases.values()]) {
@@ -1109,6 +1126,12 @@ export class Snapshot {
         return this.getProject(projectId)?.program;
     }
 
+    /**
+     * Creates a snapshot using this snapshot's projects and incremental state.
+     * Use `createFileSystemFromSnapshot(source)` from the filesystem API as `fileSystem`
+     * to overlay another snapshot's retained request entries without replaying
+     * intermediate updates. Changes and program reuse are relative to this snapshot.
+     */
     update<
         const CreatePrograms extends CreateSnapshotParams["createPrograms"] = undefined,
         const OpenFiles extends CreateSnapshotParams["openFiles"] = undefined,

@@ -1,8 +1,9 @@
 parserObjectType6.ts(2,7): error TS2304: Cannot find name 'B'.
 parserObjectType6.ts(3,4): error TS1096: An index signature must have exactly one parameter.
+parserObjectType6.ts(3,4): error TS7062: Index signature, which lacks type annotation, implicitly has an 'any' type.
 
 
-==== parserObjectType6.ts (2 errors) ====
+==== parserObjectType6.ts (3 errors) ====
     var v: {
        a: B
           ~
@@ -10,4 +11,6 @@ parserObjectType6.ts(3,4): error TS1096: An index signature must have exactly on
        [];
        ~~~
 !!! error TS1096: An index signature must have exactly one parameter.
+       ~~~
+!!! error TS7062: Index signature, which lacks type annotation, implicitly has an 'any' type.
     };

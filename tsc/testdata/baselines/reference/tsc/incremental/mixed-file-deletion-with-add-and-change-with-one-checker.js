@@ -39,7 +39,7 @@ interface Symbol {
 }
 declare const console: { log(msg: any): void; };
 //// [/home/src/workspaces/project/tsconfig.tsbuildinfo] *new* 
-{"version":"FakeTSVersion","root":[[2,5]],"fileNames":["lib.es2026.full.d.ts","./changed.ts","./consumer.ts","./global.d.ts","./module.d.ts"],"fileInfos":[{"version":"8859c12c614ce56ba9a18e58384a198f-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ninterface SymbolConstructor {\n    (desc?: string | number): symbol;\n    for(name: string): symbol;\n    readonly toStringTag: symbol;\n}\ndeclare var Symbol: SymbolConstructor;\ninterface Symbol {\n    readonly [Symbol.toStringTag]: string;\n}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true,"impliedNodeFormat":1},"9d2a101c0350d55f00e7c4ae056043d2-export const changed = 1;",{"version":"711b440410fa962704b42a5556c4d4e8-declare const value: RemovedGlobal; value.property;","affectsGlobalScope":true,"impliedNodeFormat":1},{"version":"430549e1c6d26f4d8c1c2cd8e816a4f6-interface RemovedGlobal { property: string; }","affectsGlobalScope":true,"impliedNodeFormat":1},"32f3c5c4ba107efb87a0650f87405cd2-export interface ModuleOnly { property: string; }"],"affectedFilesPendingEmit":[2,3]}
+{"version":"FakeTSVersion","root":[[2,5]],"fileNames":["lib.es2026.full.d.ts","./changed.ts","./consumer.ts","./global.d.ts","./module.d.ts"],"fileInfos":[{"version":"8859c12c614ce56ba9a18e58384a198f-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ninterface SymbolConstructor {\n    (desc?: string | number): symbol;\n    for(name: string): symbol;\n    readonly toStringTag: symbol;\n}\ndeclare var Symbol: SymbolConstructor;\ninterface Symbol {\n    readonly [Symbol.toStringTag]: string;\n}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true,"impliedNodeFormat":1},"9d2a101c0350d55f00e7c4ae056043d2-export const changed = 1;",{"version":"711b440410fa962704b42a5556c4d4e8-declare const value: RemovedGlobal; value.property;","affectsGlobalScope":true,"impliedNodeFormat":1},{"version":"430549e1c6d26f4d8c1c2cd8e816a4f6-interface RemovedGlobal { property: string; }","affectsGlobalScope":true,"impliedNodeFormat":1},"32f3c5c4ba107efb87a0650f87405cd2-export interface ModuleOnly { property: string; }"],"options":{"types":[]},"affectedFilesPendingEmit":[2,3]}
 //// [/home/src/workspaces/project/tsconfig.tsbuildinfo.readable.baseline.txt] *new* 
 {
   "version": "FakeTSVersion",
@@ -114,6 +114,9 @@ declare const console: { log(msg: any): void; };
       "impliedNodeFormat": "CommonJS"
     }
   ],
+  "options": {
+    "types": []
+  },
   "affectedFilesPendingEmit": [
     [
       "./changed.ts",
@@ -126,7 +129,7 @@ declare const console: { log(msg: any): void; };
       3
     ]
   ],
-  "size": 1393
+  "size": 1416
 }
 
 tsconfig.json::
@@ -159,7 +162,7 @@ Output::
 Found 1 error in consumer.ts[90m:1[0m
 
 //// [/home/src/workspaces/project/tsconfig.tsbuildinfo] *modified* 
-{"version":"FakeTSVersion","root":[[2,4]],"fileNames":["lib.es2026.full.d.ts","./added.ts","./changed.ts","./consumer.ts"],"fileInfos":[{"version":"8859c12c614ce56ba9a18e58384a198f-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ninterface SymbolConstructor {\n    (desc?: string | number): symbol;\n    for(name: string): symbol;\n    readonly toStringTag: symbol;\n}\ndeclare var Symbol: SymbolConstructor;\ninterface Symbol {\n    readonly [Symbol.toStringTag]: string;\n}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true,"impliedNodeFormat":1},{"version":"a87a44fe8d16410f017e19282f488646-export const added = 1;","signature":"46dd870c2a50187f4e57de30251b5cdf-export declare const added = 1;\n","impliedNodeFormat":1},{"version":"d1d7f56bc999b7e6c4b96679ef1918f0-export const changed = 2;","signature":"d8be01a7b5c5ab639707b97a788c0d7f-export declare const changed = 2;\n","impliedNodeFormat":1},{"version":"711b440410fa962704b42a5556c4d4e8-declare const value: RemovedGlobal; value.property;","signature":"0e27ca6cf86c8ffaf4064d0ead9b1757-declare const value: RemovedGlobal;\n","affectsGlobalScope":true,"impliedNodeFormat":1}],"semanticDiagnosticsPerFile":[[4,[{"pos":21,"end":34,"code":2304,"category":1,"messageKey":"Cannot_find_name_0_2304","messageArgs":["RemovedGlobal"]}]]],"affectedFilesPendingEmit":[2,3,4]}
+{"version":"FakeTSVersion","root":[[2,4]],"fileNames":["lib.es2026.full.d.ts","./added.ts","./changed.ts","./consumer.ts"],"fileInfos":[{"version":"8859c12c614ce56ba9a18e58384a198f-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ninterface SymbolConstructor {\n    (desc?: string | number): symbol;\n    for(name: string): symbol;\n    readonly toStringTag: symbol;\n}\ndeclare var Symbol: SymbolConstructor;\ninterface Symbol {\n    readonly [Symbol.toStringTag]: string;\n}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true,"impliedNodeFormat":1},{"version":"a87a44fe8d16410f017e19282f488646-export const added = 1;","signature":"46dd870c2a50187f4e57de30251b5cdf-export declare const added = 1;\n","impliedNodeFormat":1},{"version":"d1d7f56bc999b7e6c4b96679ef1918f0-export const changed = 2;","signature":"d8be01a7b5c5ab639707b97a788c0d7f-export declare const changed = 2;\n","impliedNodeFormat":1},{"version":"711b440410fa962704b42a5556c4d4e8-declare const value: RemovedGlobal; value.property;","signature":"0e27ca6cf86c8ffaf4064d0ead9b1757-declare const value: RemovedGlobal;\n","affectsGlobalScope":true,"impliedNodeFormat":1}],"options":{"types":[]},"semanticDiagnosticsPerFile":[[4,[{"pos":21,"end":34,"code":2304,"category":1,"messageKey":"Cannot_find_name_0_2304","messageArgs":["RemovedGlobal"]}]]],"affectedFilesPendingEmit":[2,3,4]}
 //// [/home/src/workspaces/project/tsconfig.tsbuildinfo.readable.baseline.txt] *modified* 
 {
   "version": "FakeTSVersion",
@@ -231,6 +234,9 @@ Found 1 error in consumer.ts[90m:1[0m
       }
     }
   ],
+  "options": {
+    "types": []
+  },
   "semanticDiagnosticsPerFile": [
     [
       "./consumer.ts",
@@ -265,7 +271,7 @@ Found 1 error in consumer.ts[90m:1[0m
       4
     ]
   ],
-  "size": 1679
+  "size": 1702
 }
 
 tsconfig.json::
@@ -307,7 +313,7 @@ tsgo --checkers 1
 ExitStatus:: Success
 Output::
 //// [/home/src/workspaces/project/tsconfig.tsbuildinfo] *modified* 
-{"version":"FakeTSVersion","root":[[2,5]],"fileNames":["lib.es2026.full.d.ts","./added.ts","./changed.ts","./consumer.ts","./global.d.ts"],"fileInfos":[{"version":"8859c12c614ce56ba9a18e58384a198f-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ninterface SymbolConstructor {\n    (desc?: string | number): symbol;\n    for(name: string): symbol;\n    readonly toStringTag: symbol;\n}\ndeclare var Symbol: SymbolConstructor;\ninterface Symbol {\n    readonly [Symbol.toStringTag]: string;\n}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true,"impliedNodeFormat":1},{"version":"a87a44fe8d16410f017e19282f488646-export const added = 1;","signature":"46dd870c2a50187f4e57de30251b5cdf-export declare const added = 1;\n","impliedNodeFormat":1},{"version":"d1d7f56bc999b7e6c4b96679ef1918f0-export const changed = 2;","signature":"d8be01a7b5c5ab639707b97a788c0d7f-export declare const changed = 2;\n","impliedNodeFormat":1},{"version":"711b440410fa962704b42a5556c4d4e8-declare const value: RemovedGlobal; value.property;","signature":"0e27ca6cf86c8ffaf4064d0ead9b1757-declare const value: RemovedGlobal;\n","affectsGlobalScope":true,"impliedNodeFormat":1},{"version":"a874d82c83cb35e137677f9db7c6fc25-interface RemovedGlobal { property: number; }","affectsGlobalScope":true,"impliedNodeFormat":1}],"affectedFilesPendingEmit":[2,3,4]}
+{"version":"FakeTSVersion","root":[[2,5]],"fileNames":["lib.es2026.full.d.ts","./added.ts","./changed.ts","./consumer.ts","./global.d.ts"],"fileInfos":[{"version":"8859c12c614ce56ba9a18e58384a198f-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ninterface SymbolConstructor {\n    (desc?: string | number): symbol;\n    for(name: string): symbol;\n    readonly toStringTag: symbol;\n}\ndeclare var Symbol: SymbolConstructor;\ninterface Symbol {\n    readonly [Symbol.toStringTag]: string;\n}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true,"impliedNodeFormat":1},{"version":"a87a44fe8d16410f017e19282f488646-export const added = 1;","signature":"46dd870c2a50187f4e57de30251b5cdf-export declare const added = 1;\n","impliedNodeFormat":1},{"version":"d1d7f56bc999b7e6c4b96679ef1918f0-export const changed = 2;","signature":"d8be01a7b5c5ab639707b97a788c0d7f-export declare const changed = 2;\n","impliedNodeFormat":1},{"version":"711b440410fa962704b42a5556c4d4e8-declare const value: RemovedGlobal; value.property;","signature":"0e27ca6cf86c8ffaf4064d0ead9b1757-declare const value: RemovedGlobal;\n","affectsGlobalScope":true,"impliedNodeFormat":1},{"version":"a874d82c83cb35e137677f9db7c6fc25-interface RemovedGlobal { property: number; }","affectsGlobalScope":true,"impliedNodeFormat":1}],"options":{"types":[]},"affectedFilesPendingEmit":[2,3,4]}
 //// [/home/src/workspaces/project/tsconfig.tsbuildinfo.readable.baseline.txt] *modified* 
 {
   "version": "FakeTSVersion",
@@ -393,6 +399,9 @@ Output::
       }
     }
   ],
+  "options": {
+    "types": []
+  },
   "affectedFilesPendingEmit": [
     [
       "./added.ts",
@@ -410,7 +419,7 @@ Output::
       4
     ]
   ],
-  "size": 1683
+  "size": 1706
 }
 
 tsconfig.json::
@@ -434,7 +443,7 @@ tsgo --checkers 1
 ExitStatus:: Success
 Output::
 //// [/home/src/workspaces/project/tsconfig.tsbuildinfo] *modified* 
-{"version":"FakeTSVersion","root":[[2,4]],"fileNames":["lib.es2026.full.d.ts","./changed.ts","./consumer.ts","./global.d.ts"],"fileInfos":[{"version":"8859c12c614ce56ba9a18e58384a198f-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ninterface SymbolConstructor {\n    (desc?: string | number): symbol;\n    for(name: string): symbol;\n    readonly toStringTag: symbol;\n}\ndeclare var Symbol: SymbolConstructor;\ninterface Symbol {\n    readonly [Symbol.toStringTag]: string;\n}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true,"impliedNodeFormat":1},{"version":"d1d7f56bc999b7e6c4b96679ef1918f0-export const changed = 2;","signature":"d8be01a7b5c5ab639707b97a788c0d7f-export declare const changed = 2;\n","impliedNodeFormat":1},{"version":"711b440410fa962704b42a5556c4d4e8-declare const value: RemovedGlobal; value.property;","signature":"0e27ca6cf86c8ffaf4064d0ead9b1757-declare const value: RemovedGlobal;\n","affectsGlobalScope":true,"impliedNodeFormat":1},{"version":"a874d82c83cb35e137677f9db7c6fc25-interface RemovedGlobal { property: number; }","affectsGlobalScope":true,"impliedNodeFormat":1}],"affectedFilesPendingEmit":[2,3]}
+{"version":"FakeTSVersion","root":[[2,4]],"fileNames":["lib.es2026.full.d.ts","./changed.ts","./consumer.ts","./global.d.ts"],"fileInfos":[{"version":"8859c12c614ce56ba9a18e58384a198f-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ninterface SymbolConstructor {\n    (desc?: string | number): symbol;\n    for(name: string): symbol;\n    readonly toStringTag: symbol;\n}\ndeclare var Symbol: SymbolConstructor;\ninterface Symbol {\n    readonly [Symbol.toStringTag]: string;\n}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true,"impliedNodeFormat":1},{"version":"d1d7f56bc999b7e6c4b96679ef1918f0-export const changed = 2;","signature":"d8be01a7b5c5ab639707b97a788c0d7f-export declare const changed = 2;\n","impliedNodeFormat":1},{"version":"711b440410fa962704b42a5556c4d4e8-declare const value: RemovedGlobal; value.property;","signature":"0e27ca6cf86c8ffaf4064d0ead9b1757-declare const value: RemovedGlobal;\n","affectsGlobalScope":true,"impliedNodeFormat":1},{"version":"a874d82c83cb35e137677f9db7c6fc25-interface RemovedGlobal { property: number; }","affectsGlobalScope":true,"impliedNodeFormat":1}],"options":{"types":[]},"affectedFilesPendingEmit":[2,3]}
 //// [/home/src/workspaces/project/tsconfig.tsbuildinfo.readable.baseline.txt] *modified* 
 {
   "version": "FakeTSVersion",
@@ -507,6 +516,9 @@ Output::
       }
     }
   ],
+  "options": {
+    "types": []
+  },
   "affectedFilesPendingEmit": [
     [
       "./changed.ts",
@@ -519,7 +531,7 @@ Output::
       3
     ]
   ],
-  "size": 1494
+  "size": 1517
 }
 
 tsconfig.json::

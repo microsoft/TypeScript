@@ -74,8 +74,8 @@ import {
 } from "../node/node.ts";
 import { Wtf8Decoder } from "../node/wtf8.ts";
 import type {
-    APIOptions,
     LSPConnectionOptions,
+    SyncAPIOptions as APIOptions,
 } from "../options.ts";
 import {
     canonicalize,
@@ -1052,6 +1052,13 @@ export class API<FromLSP extends boolean = false> implements FormatDiagnosticsHo
 
     private prepareCreateSnapshotParams(params: CreateSnapshotParams | undefined): ProtocolCreateSnapshotParams {
         params ??= {};
+        if (params.fileSystem?.kind === "snapshot") {
+            const sourceId = params.fileSystem.snapshot;
+            const source = sourceId === undefined ? undefined : this.activeSnapshots.get(sourceId);
+            if (!source || source.isDisposed()) {
+                throw new Error("Cannot use an inactive snapshot filesystem");
+            }
+        }
         const prepareOptions = (options: CreateProgramOptions | undefined): ProtocolCreateProgramOptions | undefined => {
             if (!options) return undefined;
             const { moduleResolver, projectReferences, ...rest } = options;
@@ -1737,6 +1744,12 @@ export class Snapshot {
         return this.getProject(projectId)?.program;
     }
 
+    /**
+     * Creates a snapshot using this snapshot's projects and incremental state.
+     * Use `createFileSystemFromSnapshot(source)` from the filesystem API as `fileSystem`
+     * to overlay another snapshot's retained request entries without replaying
+     * intermediate updates. Changes and program reuse are relative to this snapshot.
+     */
     get update(): {
         <const CreatePrograms extends CreateSnapshotParams["createPrograms"] = undefined, const OpenFiles extends CreateSnapshotParams["openFiles"] = undefined>(params: SnapshotOperationParams<CreateSnapshotParams, CreatePrograms, OpenFiles>): SnapshotForOperationResults<CreatePrograms, OpenFiles>;
         (params: CreateSnapshotParams): Snapshot;

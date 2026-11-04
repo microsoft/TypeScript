@@ -5,6 +5,11 @@ export interface Foo {
     a: number;
 >a : number
 }
+export interface Unused {
+    unused: true;
+>unused : true
+>true : true
+}
 
 === /foo.js ===
 /**
@@ -17,4 +22,32 @@ export interface Foo {
 function f(foo) {}
 >f : (foo: Foo) => void
 >foo : Foo
+
+=== /imports.js ===
+/**
+ * @import { Foo, Unused } from "./types"
+ */
+/**
+ * @param {Foo} foo
+ */
+export function filtered(foo) {
+>filtered : (foo: Foo) => Foo
+>foo : Foo
+
+    return foo;
+>foo : Foo
+}
+/**
+ * @import * as types from "./types"
+ */
+/**
+ * @param {types.Foo} foo
+ */
+export function namespace(foo) {
+>namespace : (foo: types.Foo) => Foo
+>foo : Foo
+
+    return foo;
+>foo : Foo
+}
 

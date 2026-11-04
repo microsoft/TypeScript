@@ -1067,6 +1067,40 @@ func TestParseJsonSourceFileConfigFileContentReportsInvalidExtendedConfig(t *tes
 	}
 }
 
+func TestParseJsonSourceFileConfigFileContentReportsCircularExtendsChain(t *testing.T) {
+	t.Parallel()
+	files := map[string]string{
+		"/project/tsconfig.json": `{ "extends": "./a.json" }`,
+		"/project/a.json":        `{ "extends": "./b.json" }`,
+		"/project/b.json":        `{ "extends": "./a.json" }`,
+		"/project/main.ts":       "export const x = 1;",
+	}
+	fs := tsoptionstest.NewVFS(files, tspath.CaseSensitive /*caseSensitivity*/)
+	configFileName := tspath.RootedFilePath("/project/tsconfig.json")
+	configFile := tsoptions.NewTsconfigSourceFileFromFilePath(
+		configFileName,
+		fs.CaseSensitivity().PathKey(tspath.RootedPath(configFileName)),
+		files[configFileName.AsString()],
+	)
+
+	parsed := tsoptions.ParseJsonSourceFileConfigFileContent(
+		configFile,
+		tsoptions.NewDefaultParseConfigHost(fs),
+		"/project",
+		nil,
+		nil,
+		nil,
+		nil,
+	)
+
+	circularity := core.Filter(parsed.Errors, func(diagnostic *ast.Diagnostic) bool {
+		return diagnostic.Code() == diagnostics.Circularity_detected_while_resolving_configuration_Colon_0.Code()
+	})
+	assert.DeepEqual(t, core.Map(circularity, (*ast.Diagnostic).MessageArgs), [][]string{
+		{"/project/a.json -> /project/b.json -> /project/a.json"},
+	})
+}
+
 // Extending an empty config file used to panic on nil Statements (#4265).
 func TestParseJsonSourceFileConfigFileContentWithEmptyExtendedConfig(t *testing.T) {
 	t.Parallel()
@@ -1356,6 +1390,58 @@ func TestContentMappersAreInheritedFromExtendedConfig(t *testing.T) {
 	}
 }
 
+func TestInheritedContentMapperPackagePathIsResolvedFromDeclaringConfig(t *testing.T) {
+	t.Parallel()
+	config := testConfig{
+		jsonText:       `{ "extends": "../config/middle.json" }`,
+		configFileName: "tsconfig.json",
+		basePath:       "/repo/app",
+		allFileList: map[string]string{
+			"/repo/config/middle.json": `{ "extends": "./base.json" }`,
+			"/repo/config/base.json": `{ "contentMappers": [
+				{ "package": "./mapper", "extensions": [".vue"] },
+				{ "package": "named-mapper", "extensions": [".view"] }
+			] }`,
+			"/repo/config/mapper/package.json": `{
+				"name": "config-mapper",
+				"typescript": { "contentMapper": { "exec": ["run"] } }
+			}`,
+			"/repo/config/node_modules/named-mapper/package.json": `{
+				"name": "config-named-mapper",
+				"typescript": { "contentMapper": { "exec": ["run"] } }
+			}`,
+			"/repo/app/mapper/package.json": `{
+				"name": "app-mapper",
+				"typescript": { "contentMapper": { "exec": ["run"] } }
+			}`,
+			"/repo/app/node_modules/named-mapper/package.json": `{
+				"name": "app-named-mapper",
+				"typescript": { "contentMapper": { "exec": ["run"] } }
+			}`,
+			"/repo/app/index.ts": "",
+		},
+		existingOptions: &core.CompilerOptions{RunExternalCode: core.TSTrue},
+	}
+
+	for name, getParsed := range map[string]func(testConfig, vfs.FS, tspath.RootedDirectoryPath) *tsoptions.ParsedCommandLine{
+		"json api":           getParsedWithJsonApi,
+		"jsonSourceFile api": getParsedWithJsonSourceFileApi,
+	} {
+		t.Run(name, func(t *testing.T) {
+			t.Parallel()
+			fs := tsoptionstest.NewVFS(config.allFileList, tspath.CaseSensitive /*caseSensitivity*/)
+			parsed := getParsed(config, fs, config.basePath)
+			assert.Equal(t, len(parsed.Errors), 0)
+			assert.Equal(t, len(parsed.ContentMappers()), 2)
+			assert.Equal(t, parsed.ContentMappers()[0].PackageDirectory, tspath.RootedDirectoryPath("/repo/config/mapper"))
+			assert.Equal(t, parsed.ContentMappers()[0].Manifest.Name, "config-mapper")
+			assert.Equal(t, parsed.ContentMappers()[1].Package, "named-mapper")
+			assert.Equal(t, parsed.ContentMappers()[1].PackageDirectory, tspath.RootedDirectoryPath("/repo/config/node_modules/named-mapper"))
+			assert.Equal(t, parsed.ContentMappers()[1].Manifest.Name, "config-named-mapper")
+		})
+	}
+}
+
 func TestContentMappersRequireFlag(t *testing.T) {
 	t.Parallel()
 
@@ -1458,7 +1544,7 @@ func TestContentMappersValidation(t *testing.T) {
 		{
 			name:           "built-in extension",
 			contentMappers: `[{ "package": "x", "extensions": [".ts"] }]`,
-			expectedCode:   diagnostics.Content_mapper_file_extension_0_is_a_built_in_extension_and_cannot_be_registered_by_a_content_mapper.Code(),
+			expectedCode:   diagnostics.Content_mapper_file_extension_0_cannot_be_registered_because_it_ends_in_a_built_in_extension.Code(),
 		},
 		{
 			name:           "missing extensions",
@@ -1562,7 +1648,7 @@ func TestContentMapperExtensionValidationUsesHostCaseSensitivity(t *testing.T) {
 			name:            "built-in extension on case-insensitive host",
 			caseSensitivity: tspath.CaseInsensitive,
 			contentMappers:  `[{ "package": "mapper", "extensions": [".TS"] }]`,
-			expectedCode:    diagnostics.Content_mapper_file_extension_0_is_a_built_in_extension_and_cannot_be_registered_by_a_content_mapper.Code(),
+			expectedCode:    diagnostics.Content_mapper_file_extension_0_cannot_be_registered_because_it_ends_in_a_built_in_extension.Code(),
 		},
 		{
 			name:            "duplicate extension on case-insensitive host",
@@ -1574,7 +1660,7 @@ func TestContentMapperExtensionValidationUsesHostCaseSensitivity(t *testing.T) {
 			name:            "built-in extension on case-sensitive host",
 			caseSensitivity: tspath.CaseSensitive,
 			contentMappers:  `[{ "package": "mapper", "extensions": [".TS"] }]`,
-			expectedCode:    diagnostics.Content_mapper_file_extension_0_is_a_built_in_extension_and_cannot_be_registered_by_a_content_mapper.Code(),
+			expectedCode:    diagnostics.Content_mapper_file_extension_0_cannot_be_registered_because_it_ends_in_a_built_in_extension.Code(),
 		},
 		{
 			name:            "mapper extension casing is distinct on case-sensitive host",
@@ -1643,7 +1729,7 @@ func TestContentMapperCompoundExtensionValidation(t *testing.T) {
 					assert.DeepEqual(t, parsed.ContentMapperExtensions(), []string{extension})
 				} else {
 					assert.Equal(t, len(parsed.Errors), 1)
-					assert.Equal(t, parsed.Errors[0].Code(), diagnostics.Content_mapper_file_extension_0_is_a_built_in_extension_and_cannot_be_registered_by_a_content_mapper.Code())
+					assert.Equal(t, parsed.Errors[0].Code(), diagnostics.Content_mapper_file_extension_0_cannot_be_registered_because_it_ends_in_a_built_in_extension.Code())
 					assert.Equal(t, len(parsed.ContentMapperExtensions()), 0)
 				}
 			})

@@ -1,0 +1,40 @@
+//// [tests/cases/compiler/inheritedMemberOrder.ts] ////
+
+=== inheritedMemberOrder.ts ===
+// https://github.com/microsoft/TypeScript/issues/65052
+
+export const empty: C<string> = {};
+>empty : C<string>
+>{} : {}
+
+declare const narrowB: B<{ a: string }>;
+>narrowB : B<{ a: string; }>
+>a : string
+
+export const wideB: B<{ a: string; b?: number }> = narrowB;
+>wideB : B<{ a: string; b?: number; }>
+>a : string
+>b : number | undefined
+>narrowB : B<{ a: string; }>
+
+declare const narrowC: C<{ a: string }>;
+>narrowC : C<{ a: string; }>
+>a : string
+
+export const wideC: C<{ a: string; b?: number }> = narrowC;
+>wideC : C<{ a: string; b?: number; }>
+>a : string
+>b : number | undefined
+>narrowC : C<{ a: string; }>
+
+interface A<T> {
+  inherited: () => T;
+>inherited : () => T
+}
+interface B<T> extends A<T> {
+  own: (x: T) => Required<T>;
+>own : (x: T) => Required<T>
+>x : T
+}
+interface C<T> extends B<T> {}
+
