@@ -6,11 +6,11 @@ import "github.com/microsoft/TypeScript/tsc/internal/core"
 func getDeepCloneVisitor(f *NodeFactory, syntheticLocation bool) *NodeVisitor {
 	var visitor *NodeVisitor
 	visitor = NewNodeVisitor(
-		func(node *Node) *Node {
+		func(node Node) Node {
 			visited := visitor.VisitEachChild(node)
 			if visited != node {
 				if syntheticLocation {
-					visited.Loc = core.NewTextRange(-1, -1)
+					visited.SetLoc(core.NewTextRange(-1, -1))
 				}
 				return visited
 			}
@@ -19,46 +19,46 @@ func getDeepCloneVisitor(f *NodeFactory, syntheticLocation bool) *NodeVisitor {
 			// Node.Clone in corsa reliably uses `Update` calls for all nodes and so copies locations by default.
 			// Deep clones are done to copy a node across files, so here, we explicitly make the location range synthetic on all cloned nodes
 			if syntheticLocation {
-				c.Loc = core.NewTextRange(-1, -1)
+				c.SetLoc(core.NewTextRange(-1, -1))
 			}
 			return c
 		},
 		f,
 		NodeVisitorHooks{
-			VisitNodes: func(nodes *NodeList, v *NodeVisitor) *NodeList {
-				if nodes == nil {
-					return nil
+			VisitNodes: func(nodes NodeList, v *NodeVisitor) NodeList {
+				if nodes.IsNil() {
+					return NodeList{}
 				}
 				visited := v.VisitNodes(nodes)
-				var newList *NodeList
+				var newList NodeList
 				if visited != nodes {
 					newList = visited
 				} else {
 					newList = nodes.Clone(v.Factory)
 				}
 				if syntheticLocation {
-					newList.Loc = core.NewTextRange(-1, -1)
+					newList.SetLoc(core.NewTextRange(-1, -1))
 					if nodes.HasTrailingComma() {
-						newList.Nodes[len(newList.Nodes)-1].Loc = core.NewTextRange(-2, -2)
+						newList.At(newList.Len() - 1).SetLoc(core.NewTextRange(-2, -2))
 					}
 				}
 				return newList
 			},
-			VisitModifiers: func(nodes *ModifierList, v *NodeVisitor) *ModifierList {
-				if nodes == nil {
-					return nil
+			VisitModifiers: func(nodes ModifierList, v *NodeVisitor) ModifierList {
+				if nodes.IsNil() {
+					return ModifierList{}
 				}
 				visited := v.VisitModifiers(nodes)
-				var newList *ModifierList
+				var newList ModifierList
 				if visited != nodes {
 					newList = visited
 				} else {
 					newList = nodes.Clone(v.Factory)
 				}
 				if syntheticLocation {
-					newList.Loc = core.NewTextRange(-1, -1)
+					newList.SetLoc(core.NewTextRange(-1, -1))
 					if nodes.HasTrailingComma() {
-						newList.Nodes[len(newList.Nodes)-1].Loc = core.NewTextRange(-2, -2)
+						newList.At(newList.Len() - 1).SetLoc(core.NewTextRange(-2, -2))
 					}
 				}
 				return newList
@@ -68,19 +68,19 @@ func getDeepCloneVisitor(f *NodeFactory, syntheticLocation bool) *NodeVisitor {
 	return visitor
 }
 
-func (f *NodeFactory) DeepCloneNode(node *Node) *Node {
+func (f *NodeFactory) DeepCloneNode(node Node) Node {
 	return getDeepCloneVisitor(f, true /*syntheticLocation*/).VisitNode(node)
 }
 
-func (f *NodeFactory) DeepCloneReparse(node *Node) *Node {
-	if node != nil {
+func (f *NodeFactory) DeepCloneReparse(node Node) Node {
+	if !node.IsNil() {
 		node = getDeepCloneVisitor(f, false /*syntheticLocation*/).VisitNode(node)
 		SetParentInChildren(node)
-		node.Flags |= NodeFlagsReparsed
+		node.SetFlags(node.Flags() | NodeFlagsReparsed)
 	}
 	return node
 }
 
-func (f *NodeFactory) DeepCloneReparseModifiers(modifiers *ModifierList) *ModifierList {
+func (f *NodeFactory) DeepCloneReparseModifiers(modifiers ModifierList) ModifierList {
 	return getDeepCloneVisitor(f, false /*syntheticLocation*/).VisitModifiers(modifiers)
 }

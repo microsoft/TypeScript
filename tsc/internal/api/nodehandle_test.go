@@ -32,7 +32,7 @@ func TestNodeHandlesIdentifyExactSourceFiles(t *testing.T) {
 	program, err := sd.getProgram(response.Projects[0].Handle)
 	assert.NilError(t, err)
 	file := program.GetSourceFiles()[0]
-	node := file.Statements.Nodes[0]
+	node := file.Statements.At(0)
 	var lookups sync.WaitGroup
 	for range 8 {
 		lookups.Go(func() {
@@ -56,12 +56,12 @@ func TestNodeHandlesIdentifyExactSourceFiles(t *testing.T) {
 	assert.NilError(t, err)
 	assert.Equal(t, resolved, file.AsNode())
 	assert.Equal(t, nodeHandleFrom(node), NodeHandle(fmt.Sprintf("%d.%d.#%d.%s",
-		encoder.GetNodeIndexTable(file).GetIndex(node), node.Kind, sourceFileNodeID(file), file.PathKey())))
+		encoder.GetNodeIndexTable(file).GetIndex(node), node.Kind(), sourceFileNodeID(file), file.PathKey())))
 
 	for _, handle := range []NodeHandle{
 		nodeHandleFrom(node),
-		NodeHandle(fmt.Sprintf("1.%d.#%d", node.Kind, sourceFileNodeID(file))),
-		NodeHandle(fmt.Sprintf("1.%d.%s", file.Kind, file.PathKey())),
+		NodeHandle(fmt.Sprintf("1.%d.#%d", node.Kind(), sourceFileNodeID(file))),
+		NodeHandle(fmt.Sprintf("1.%d.%s", file.Kind(), file.PathKey())),
 		"1.#0",
 		"1.#x",
 		"x.#1",

@@ -114,19 +114,19 @@ func parseOwnConfigOfJsonSourceFile(
 	compilerOptions := getDefaultCompilerOptions(configFileName)
 	typeAcquisition := getDefaultTypeAcquisition(configFileName)
 	var extendedConfigPaths []tspath.RootedFilePath
-	var rootCompilerOptions []*ast.PropertyName
+	var rootCompilerOptions []ast.PropertyName
 	var errors []*ast.Diagnostic
 	onPropertySet := func(
 		keyText string,
 		value any,
-		propertyAssignment *ast.PropertyAssignment,
+		propertyAssignment ast.PropertyAssignment,
 		parentOption *CommandLineOption, // TsConfigOnlyOption,
 		option *CommandLineOption,
 	) (any, []*ast.Diagnostic) {
 		// Ensure value is verified except for extends which is handled in its own way for error reporting
 		var propertySetErrors []*ast.Diagnostic
 		if option != nil && option != extendsOptionDeclaration {
-			value, propertySetErrors = convertJsonOption(option, value, basePath, propertyAssignment, propertyAssignment.Initializer, sourceFile)
+			value, propertySetErrors = convertJsonOption(option, value, basePath, propertyAssignment, propertyAssignment.Initializer(), sourceFile)
 		}
 		if parentOption != nil && parentOption.Name != "undefined" && value != nil {
 			if option != nil && option.Name != "" {
@@ -169,7 +169,7 @@ func parseOwnConfigOfJsonSourceFile(
 			}
 		} else if parentOption == tsconfigRootOptionsMap {
 			if option == extendsOptionDeclaration {
-				configPath, err := getExtendsConfigPathOrArray(value, fs, basePath, configFileName, propertyAssignment, propertyAssignment.Initializer, sourceFile)
+				configPath, err := getExtendsConfigPathOrArray(value, fs, basePath, configFileName, propertyAssignment, propertyAssignment.Initializer(), sourceFile)
 				extendedConfigPaths = configPath
 				propertySetErrors = append(propertySetErrors, err...)
 			} else if option == nil {
@@ -234,18 +234,18 @@ func NewTsconfigSourceFileFromFilePath(configFileName tspath.RootedFilePath, con
 
 type jsonConversionNotifier struct {
 	rootOptions   *CommandLineOption
-	onPropertySet func(keyText string, value any, propertyAssignment *ast.PropertyAssignment, parentOption *CommandLineOption, option *CommandLineOption) (any, []*ast.Diagnostic)
+	onPropertySet func(keyText string, value any, propertyAssignment ast.PropertyAssignment, parentOption *CommandLineOption, option *CommandLineOption) (any, []*ast.Diagnostic)
 }
 
 func convertConfigFileToObject(
 	sourceFile *ast.SourceFile,
 	jsonConversionNotifier *jsonConversionNotifier,
 ) (any, []*ast.Diagnostic) {
-	var rootExpression *ast.Expression
-	if len(sourceFile.Statements.Nodes) > 0 {
-		rootExpression = sourceFile.Statements.Nodes[0].Expression()
+	var rootExpression ast.Expression
+	if sourceFile.Statements.Len() > 0 {
+		rootExpression = sourceFile.Statements.At(0).Expression()
 	}
-	if rootExpression != nil && rootExpression.Kind != ast.KindObjectLiteralExpression {
+	if !rootExpression.IsNil() && rootExpression.Kind() != ast.KindObjectLiteralExpression {
 		baseFileName := "tsconfig.json"
 		if sourceFile.FileName().BaseName() == "jsconfig.json" {
 			baseFileName = "jsconfig.json"
@@ -256,7 +256,7 @@ func convertConfigFileToObject(
 		// array is a well-formed configuration object, made into an array element by stray characters.
 		if ast.IsArrayLiteralExpression(rootExpression) {
 			firstObject := core.Find(rootExpression.Elements(), ast.IsObjectLiteralExpression)
-			if firstObject != nil {
+			if !firstObject.IsNil() {
 				return convertToJson(sourceFile, firstObject, true /*returnValue*/, jsonConversionNotifier)
 			}
 		}
@@ -304,7 +304,7 @@ func isCompilerOptionsValue(option *CommandLineOption, value any) bool {
 func validateJsonOptionValue(
 	opt *CommandLineOption,
 	val any,
-	valueExpression *ast.Expression,
+	valueExpression ast.Expression,
 	sourceFile *ast.SourceFile,
 ) (any, []*ast.Diagnostic) {
 	if val == nil {
@@ -330,16 +330,16 @@ func convertJsonOptionOfListType(
 	option *CommandLineOption,
 	values any,
 	basePath tspath.RootedDirectoryPath,
-	propertyAssignment *ast.PropertyAssignment,
-	valueExpression *ast.Node,
+	propertyAssignment ast.PropertyAssignment,
+	valueExpression ast.Node,
 	sourceFile *ast.SourceFile,
 ) ([]any, []*ast.Diagnostic) {
-	var expression *ast.Node
+	var expression ast.Node
 	var errors []*ast.Diagnostic
 	if values, ok := values.([]any); ok {
 		mappedValues := core.MapIndex(values, func(v any, index int) any {
-			if valueExpression != nil {
-				expression = valueExpression.Elements()[index]
+			if !valueExpression.IsNil() {
+				expression = valueExpression.ElementList().At(index)
 			}
 			result, err := convertJsonOption(option.Elements(), v, basePath, propertyAssignment, expression, sourceFile)
 			errors = append(errors, err...)
@@ -388,16 +388,16 @@ func convertJsonOption(
 	opt *CommandLineOption,
 	value any,
 	basePath tspath.RootedDirectoryPath,
-	propertyAssignment *ast.PropertyAssignment,
-	valueExpression *ast.Expression,
+	propertyAssignment ast.PropertyAssignment,
+	valueExpression ast.Expression,
 	sourceFile *ast.SourceFile,
 ) (any, []*ast.Diagnostic) {
 	if opt.IsCommandLineOnly {
-		var nodeValue *ast.Node
-		if propertyAssignment != nil {
+		var nodeValue ast.Node
+		if !propertyAssignment.IsNil() {
 			nodeValue = propertyAssignment.Name()
 		}
-		if sourceFile == nil && nodeValue == nil {
+		if sourceFile == nil && nodeValue.IsNil() {
 			return nil, []*ast.Diagnostic{ast.NewCompilerDiagnostic(diagnostics.Option_0_can_only_be_specified_on_command_line, opt.Name)}
 		} else {
 			return nil, []*ast.Diagnostic{CreateDiagnosticForNodeInSourceFileOrCompilerDiagnostic(sourceFile, nodeValue, diagnostics.Option_0_can_only_be_specified_on_command_line, opt.Name)}
@@ -438,8 +438,8 @@ func getExtendsConfigPathOrArray(
 	fs vfs.FS,
 	basePath tspath.RootedDirectoryPath,
 	configFileName tspath.RootedFilePath,
-	propertyAssignment *ast.PropertyAssignment,
-	valueExpression *ast.Expression,
+	propertyAssignment ast.PropertyAssignment,
+	valueExpression ast.Expression,
 	sourceFile *ast.SourceFile,
 ) ([]tspath.RootedFilePath, []*ast.Diagnostic) {
 	var extendedConfigPathArray []tspath.RootedFilePath
@@ -461,9 +461,9 @@ func getExtendsConfigPathOrArray(
 	var errors []*ast.Diagnostic
 	if reflect.TypeOf(value).Kind() == reflect.Slice {
 		for index, fileName := range value.([]any) {
-			var expression *ast.Expression = nil
-			if valueExpression != nil {
-				expression = valueExpression.Elements()[index]
+			var expression ast.Expression = ast.Node{}
+			if !valueExpression.IsNil() {
+				expression = valueExpression.ElementList().At(index)
 			}
 			if reflect.TypeOf(fileName).Kind() == reflect.String {
 				val, err := getExtendsConfigPath(fileName.(string), fs, newBase, expression, sourceFile)
@@ -486,7 +486,7 @@ func getExtendsConfigPath(
 	extendedConfig string,
 	fs vfs.FS,
 	basePath tspath.RootedDirectoryPath,
-	valueExpression *ast.Expression,
+	valueExpression ast.Expression,
 	sourceFile *ast.SourceFile,
 ) (tspath.RootedFilePath, []*ast.Diagnostic) {
 	extendedConfig = tspath.NormalizeSlashes(extendedConfig)
@@ -580,15 +580,15 @@ func convertOptionsFromJson[O optionParser](optionsNameMap CommandLineOptionName
 		opt := optionsNameMap.Get(key)
 		if opt != nil && opt.Name != key {
 			// Case-insensitive match found but exact case doesn't match - provide "did you mean" suggestion
-			errors = append(errors, CreateDiagnosticForNodeInSourceFileOrCompilerDiagnostic(nil, nil, result.UnknownDidYouMeanDiagnostic(), key, opt.Name))
+			errors = append(errors, CreateDiagnosticForNodeInSourceFileOrCompilerDiagnostic(nil, ast.Node{}, result.UnknownDidYouMeanDiagnostic(), key, opt.Name))
 			continue
 		}
 		if opt == nil {
-			errors = append(errors, createUnknownOptionError(key, result.UnknownOptionDiagnostic(), "", nil, nil, nil, result.UnknownDidYouMeanDiagnostic(), optionsNameMap))
+			errors = append(errors, createUnknownOptionError(key, result.UnknownOptionDiagnostic(), "", ast.Node{}, nil, nil, result.UnknownDidYouMeanDiagnostic(), optionsNameMap))
 			continue
 		}
 
-		convertJson, err := convertJsonOption(opt, value, basePath, nil, nil, nil)
+		convertJson, err := convertJsonOption(opt, value, basePath, ast.PropertyAssignment{}, ast.Node{}, nil)
 		errors = append(errors, err...)
 		result.ParseOption(key, convertJson)
 	}
@@ -597,7 +597,7 @@ func convertOptionsFromJson[O optionParser](optionsNameMap CommandLineOptionName
 
 func convertArrayLiteralExpressionToJson(
 	sourceFile *ast.SourceFile,
-	elements []*ast.Expression,
+	elements []ast.Expression,
 	elementOption *CommandLineOption,
 	returnValue bool,
 ) (any, []*ast.Diagnostic) {
@@ -680,7 +680,7 @@ func ParseJsonSourceFileConfigFileContent(
 func convertObjectLiteralExpressionToJson(
 	sourceFile *ast.SourceFile,
 	returnValue bool,
-	node *ast.ObjectLiteralExpression,
+	node ast.ObjectLiteralExpression,
 	objectOption *CommandLineOption,
 	jsonConversionNotifier *jsonConversionNotifier,
 ) (*collections.OrderedMap[string, any], []*ast.Diagnostic) {
@@ -689,14 +689,14 @@ func convertObjectLiteralExpressionToJson(
 		result = &collections.OrderedMap[string, any]{}
 	}
 	var errors []*ast.Diagnostic
-	for _, element := range node.Properties.Nodes {
-		if element.Kind != ast.KindPropertyAssignment {
-			errors = append(errors, ast.NewDiagnostic(sourceFile, element.Loc, diagnostics.Property_assignment_expected))
+	for _, element := range node.Properties().All() {
+		if element.Kind() != ast.KindPropertyAssignment {
+			errors = append(errors, ast.NewDiagnostic(sourceFile, element.Loc(), diagnostics.Property_assignment_expected))
 			continue
 		}
 
-		if token := element.QuestionToken(); token != nil {
-			errors = append(errors, ast.NewDiagnostic(sourceFile, token.Loc, diagnostics.The_0_modifier_can_only_be_used_in_TypeScript_files, "?"))
+		if token := element.QuestionToken(); !token.IsNil() {
+			errors = append(errors, ast.NewDiagnostic(sourceFile, token.Loc(), diagnostics.The_0_modifier_can_only_be_used_in_TypeScript_files, "?"))
 		}
 		textOfKey := ""
 		if !ast.IsComputedNonLiteralName(element.Name()) {
@@ -710,7 +710,7 @@ func convertObjectLiteralExpressionToJson(
 				option = nil
 			}
 		}
-		value, err := convertPropertyValueToJson(sourceFile, element.AsPropertyAssignment().Initializer, option, returnValue, jsonConversionNotifier)
+		value, err := convertPropertyValueToJson(sourceFile, element.AsPropertyAssignment().Initializer(), option, returnValue, jsonConversionNotifier)
 		errors = append(errors, err...)
 		if keyText != "" {
 			if returnValue {
@@ -731,11 +731,11 @@ func convertObjectLiteralExpressionToJson(
 // Otherwise it just checks the errors and returns undefined
 func convertToJson(
 	sourceFile *ast.SourceFile,
-	rootExpression *ast.Expression,
+	rootExpression ast.Expression,
 	returnValue bool,
 	jsonConversionNotifier *jsonConversionNotifier,
 ) (any, []*ast.Diagnostic) {
-	if rootExpression == nil {
+	if rootExpression.IsNil() {
 		if returnValue {
 			return struct{}{}, nil
 		} else {
@@ -749,12 +749,12 @@ func convertToJson(
 	return convertPropertyValueToJson(sourceFile, rootExpression, rootOptions, returnValue, jsonConversionNotifier)
 }
 
-func isDoubleQuotedString(node *ast.Node) bool {
+func isDoubleQuotedString(node ast.Node) bool {
 	return ast.IsStringLiteral(node)
 }
 
-func convertPropertyValueToJson(sourceFile *ast.SourceFile, valueExpression *ast.Expression, option *CommandLineOption, returnValue bool, jsonConversionNotifier *jsonConversionNotifier) (any, []*ast.Diagnostic) {
-	switch valueExpression.Kind {
+func convertPropertyValueToJson(sourceFile *ast.SourceFile, valueExpression ast.Expression, option *CommandLineOption, returnValue bool, jsonConversionNotifier *jsonConversionNotifier) (any, []*ast.Diagnostic) {
+	switch valueExpression.Kind() {
 	case ast.KindTrueKeyword:
 		return true, nil
 	case ast.KindFalseKeyword:
@@ -764,17 +764,17 @@ func convertPropertyValueToJson(sourceFile *ast.SourceFile, valueExpression *ast
 
 	case ast.KindStringLiteral:
 		if !isDoubleQuotedString(valueExpression) {
-			return valueExpression.Text(), []*ast.Diagnostic{ast.NewDiagnostic(sourceFile, valueExpression.Loc, diagnostics.String_literal_with_double_quotes_expected)}
+			return valueExpression.Text(), []*ast.Diagnostic{ast.NewDiagnostic(sourceFile, valueExpression.Loc(), diagnostics.String_literal_with_double_quotes_expected)}
 		}
 		return valueExpression.Text(), nil
 
 	case ast.KindNumericLiteral:
 		return float64(jsnum.FromString(valueExpression.Text())), nil
 	case ast.KindPrefixUnaryExpression:
-		if valueExpression.AsPrefixUnaryExpression().Operator != ast.KindMinusToken || valueExpression.AsPrefixUnaryExpression().Operand.Kind != ast.KindNumericLiteral {
+		if valueExpression.AsPrefixUnaryExpression().Operator() != ast.KindMinusToken || valueExpression.AsPrefixUnaryExpression().Operand().Kind() != ast.KindNumericLiteral {
 			break // not valid JSON syntax
 		}
-		return float64(-jsnum.FromString(valueExpression.AsPrefixUnaryExpression().Operand.Text())), nil
+		return float64(-jsnum.FromString(valueExpression.AsPrefixUnaryExpression().Operand().Text())), nil
 	case ast.KindObjectLiteralExpression:
 		objectLiteralExpression := valueExpression.AsObjectLiteralExpression()
 		// Currently having element option declaration in the tsconfig with type "object"
@@ -796,9 +796,9 @@ func convertPropertyValueToJson(sourceFile *ast.SourceFile, valueExpression *ast
 	// Not in expected format
 	var errors []*ast.Diagnostic
 	if option != nil {
-		errors = []*ast.Diagnostic{ast.NewDiagnostic(sourceFile, valueExpression.Loc, diagnostics.Compiler_option_0_requires_a_value_of_type_1, option.Name, getCompilerOptionValueTypeString(option))}
+		errors = []*ast.Diagnostic{ast.NewDiagnostic(sourceFile, valueExpression.Loc(), diagnostics.Compiler_option_0_requires_a_value_of_type_1, option.Name, getCompilerOptionValueTypeString(option))}
 	} else {
-		errors = []*ast.Diagnostic{ast.NewDiagnostic(sourceFile, valueExpression.Loc, diagnostics.Property_value_can_only_be_string_literal_numeric_literal_true_false_null_object_literal_or_array_literal)}
+		errors = []*ast.Diagnostic{ast.NewDiagnostic(sourceFile, valueExpression.Loc(), diagnostics.Property_value_can_only_be_string_literal_numeric_literal_true_false_null_object_literal_or_array_literal)}
 	}
 	return nil, errors
 }
@@ -855,9 +855,9 @@ func normalizeJsonValue(value any) any {
 
 // convertToObject converts the json syntax tree into the json value
 func convertToObject(sourceFile *ast.SourceFile) (any, []*ast.Diagnostic) {
-	var rootExpression *ast.Expression
-	if len(sourceFile.Statements.Nodes) != 0 {
-		rootExpression = sourceFile.Statements.Nodes[0].Expression()
+	var rootExpression ast.Expression
+	if sourceFile.Statements.Len() != 0 {
+		rootExpression = sourceFile.Statements.At(0).Expression()
 	}
 	return convertToJson(sourceFile, rootExpression, true /*returnValue*/, nil /*jsonConversionNotifier*/)
 }
@@ -894,13 +894,13 @@ func parseOwnConfigOfJson(
 	typeAcquisition, err2 := convertTypeAcquisitionFromJsonWorker(json.GetOrZero("typeAcquisition"), basePath, configFileName)
 	errors = append(append(errors, err...), err2...)
 	if compileOnSave, ok := json.Get("compileOnSave"); ok {
-		converted, compileOnSaveErrors := convertJsonOption(compileOnSaveCommandLineOption, compileOnSave, basePath, nil, nil, nil)
+		converted, compileOnSaveErrors := convertJsonOption(compileOnSaveCommandLineOption, compileOnSave, basePath, ast.PropertyAssignment{}, ast.Node{}, nil)
 		errors = append(errors, compileOnSaveErrors...)
 		json.Set("compileOnSave", converted)
 	}
 	var extendedConfigPaths []tspath.RootedFilePath
 	if extends := json.GetOrZero("extends"); extends != nil && extends != "" {
-		extendedConfigPaths, err = getExtendsConfigPathOrArray(extends, fs, basePath, configFileName, nil, nil, nil)
+		extendedConfigPaths, err = getExtendsConfigPathOrArray(extends, fs, basePath, configFileName, ast.PropertyAssignment{}, ast.Node{}, nil)
 		errors = append(errors, err...)
 	}
 	parsedConfig := &parsedTsconfig{
@@ -925,7 +925,7 @@ func readJsonConfigFile(fileName tspath.RootedFilePath, path tspath.PathKey, rea
 	} else {
 		factory := &ast.NodeFactory{}
 		file := &TsConfigSourceFile{
-			SourceFile: factory.NewSourceFile(ast.SourceFileParseOptions{FileName: fileName, PathKey: path}, "", factory.NewNodeList([]*ast.Node{}), factory.NewToken(ast.KindEndOfFile)).AsSourceFile(),
+			SourceFile: factory.NewSourceFile(ast.SourceFileParseOptions{FileName: fileName, PathKey: path}, "", factory.NewNodeList([]ast.Node{}), factory.NewToken(ast.KindEndOfFile)).AsSourceFile(),
 		}
 		file.SourceFile.SetDiagnostics(diagnostic)
 		return file, diagnostic
@@ -1225,7 +1225,7 @@ func parseJsonConfigFileContentWorker(
 					fileName = "tsconfig.json"
 				}
 				diagnosticMessage := diagnostics.The_files_list_in_config_file_0_is_empty
-				nodeValue := ForEachTsConfigPropArray(sourceFile.SourceFile, "files", func(property *ast.PropertyAssignment) *ast.Node { return property.Initializer })
+				nodeValue := ForEachTsConfigPropArray(sourceFile.SourceFile, "files", func(property ast.PropertyAssignment) ast.Node { return property.Initializer() })
 				errors = append(errors, CreateDiagnosticForNodeInSourceFile(sourceFile.SourceFile, nodeValue, diagnosticMessage, fileName))
 			} else {
 				errors = append(errors, ast.NewCompilerDiagnostic(diagnostics.The_files_list_in_config_file_0_is_empty, configFileName))
@@ -1534,8 +1534,8 @@ func shouldReportNoInputFiles(fileNames []tspath.RootedFilePath, canJsonReportNo
 
 func createDiagnosticForSpec(jsonSourceFile *ast.SourceFile, specKey string, message *diagnostics.Message, spec string) *ast.Diagnostic {
 	element := GetTsConfigPropArrayElementValue(jsonSourceFile, specKey, spec)
-	var node *ast.Node
-	if element != nil {
+	var node ast.Node
+	if !element.IsNil() {
 		node = element.AsNode()
 	}
 	return CreateDiagnosticForNodeInSourceFileOrCompilerDiagnostic(jsonSourceFile, node, message, spec)
@@ -1605,30 +1605,31 @@ func invalidDotDotAfterRecursiveWildcard(s string) bool {
 	return lastDotIndex > wildcardIndex
 }
 
-func GetTsConfigPropArrayElementValue(tsConfigSourceFile *ast.SourceFile, propKey string, elementValue string) *ast.StringLiteral {
+func GetTsConfigPropArrayElementValue(tsConfigSourceFile *ast.SourceFile, propKey string, elementValue string) ast.StringLiteral {
 	callback := GetCallbackForFindingPropertyAssignmentByValue(elementValue)
-	return ForEachTsConfigPropArray(tsConfigSourceFile, propKey, func(property *ast.PropertyAssignment) *ast.StringLiteral {
-		if value := callback(property); value != nil {
+	return ForEachTsConfigPropArray(tsConfigSourceFile, propKey, func(property ast.PropertyAssignment) ast.StringLiteral {
+		if value := callback(property); !value.IsNil() {
 			return value.AsStringLiteral()
 		}
-		return nil
+		return ast.StringLiteral{}
 	})
 }
 
-func ForEachTsConfigPropArray[T any](tsConfigSourceFile *ast.SourceFile, propKey string, callback func(property *ast.PropertyAssignment) *T) *T {
+func ForEachTsConfigPropArray[T any](tsConfigSourceFile *ast.SourceFile, propKey string, callback func(property ast.PropertyAssignment) T) T {
 	if tsConfigSourceFile != nil {
 		return ForEachPropertyAssignment(getTsConfigObjectLiteralExpression(tsConfigSourceFile), propKey, callback)
 	}
-	return nil
+	var zero T
+	return zero
 }
 
 func CreateDiagnosticAtReferenceSyntax(config *ParsedCommandLine, index int, message *diagnostics.Message, args ...any) *ast.Diagnostic {
 	if config.ConfigFile == nil {
 		return nil
 	}
-	return ForEachTsConfigPropArray(config.ConfigFile.SourceFile, "references", func(property *ast.PropertyAssignment) *ast.Diagnostic {
-		if ast.IsArrayLiteralExpression(property.Initializer) {
-			value := property.Initializer.Elements()
+	return ForEachTsConfigPropArray(config.ConfigFile.SourceFile, "references", func(property ast.PropertyAssignment) *ast.Diagnostic {
+		if ast.IsArrayLiteralExpression(property.Initializer()) {
+			value := property.Initializer().Elements()
 			if len(value) > index {
 				return CreateDiagnosticForNodeInSourceFile(config.ConfigFile.SourceFile, value[index], message, args...)
 			}
@@ -1638,38 +1639,38 @@ func CreateDiagnosticAtReferenceSyntax(config *ParsedCommandLine, index int, mes
 }
 
 func createDiagnosticAtProjectReferenceProperty(sourceFile *TsConfigSourceFile, index int, propertyName string, message *diagnostics.Message, args ...any) *ast.Diagnostic {
-	var node *ast.Node
+	var node ast.Node
 	if sourceFile != nil {
-		node = ForEachTsConfigPropArray(sourceFile.SourceFile, "references", func(property *ast.PropertyAssignment) *ast.Node {
-			if ast.IsArrayLiteralExpression(property.Initializer) {
-				elements := property.Initializer.Elements()
+		node = ForEachTsConfigPropArray(sourceFile.SourceFile, "references", func(property ast.PropertyAssignment) ast.Node {
+			if ast.IsArrayLiteralExpression(property.Initializer()) {
+				elements := property.Initializer().Elements()
 				if len(elements) > index && ast.IsObjectLiteralExpression(elements[index]) {
-					if propertyNode := ForEachPropertyAssignment(elements[index].AsObjectLiteralExpression(), propertyName, func(property *ast.PropertyAssignment) *ast.Node {
-						return property.Initializer
-					}); propertyNode != nil {
+					if propertyNode := ForEachPropertyAssignment(elements[index].AsObjectLiteralExpression(), propertyName, func(property ast.PropertyAssignment) ast.Node {
+						return property.Initializer()
+					}); !propertyNode.IsNil() {
 						return propertyNode
 					}
 					return elements[index]
 				}
 			}
-			return nil
+			return ast.Node{}
 		})
 	}
 	return CreateDiagnosticForNodeInSourceFileOrCompilerDiagnostic(tsconfigToSourceFile(sourceFile), node, message, args...)
 }
 
-func GetCallbackForFindingPropertyAssignmentByValue(value string) func(property *ast.PropertyAssignment) *ast.Node {
-	return func(property *ast.PropertyAssignment) *ast.Node {
-		if ast.IsArrayLiteralExpression(property.Initializer) {
-			return core.Find(property.Initializer.Elements(), func(element *ast.Node) bool {
+func GetCallbackForFindingPropertyAssignmentByValue(value string) func(property ast.PropertyAssignment) ast.Node {
+	return func(property ast.PropertyAssignment) ast.Node {
+		if ast.IsArrayLiteralExpression(property.Initializer()) {
+			return core.Find(property.Initializer().Elements(), func(element ast.Node) bool {
 				return ast.IsStringLiteral(element) && element.Text() == value
 			})
 		}
-		return nil
+		return ast.Node{}
 	}
 }
 
-func GetOptionsSyntaxByArrayElementValue(objectLiteral *ast.ObjectLiteralExpression, propKey string, elementValue string) *ast.Node {
+func GetOptionsSyntaxByArrayElementValue(objectLiteral ast.ObjectLiteralExpression, propKey string, elementValue string) ast.Node {
 	return ForEachPropertyAssignment(objectLiteral, propKey, GetCallbackForFindingPropertyAssignmentByValue(elementValue))
 }
 
@@ -1677,23 +1678,23 @@ func GetOptionsSyntaxByArrayElementValue(objectLiteral *ast.ObjectLiteralExpress
 // mapper at index to: the value of subKey within that mapper's object (when subKey is non-empty),
 // falling back to the mapper element, then to the "contentMappers" array. An index outside the array
 // (e.g. -1) yields the array itself. Returns nil when there is no source file (JSON API).
-func getContentMapperSyntax(sourceFile *ast.SourceFile, index int, subKey string) *ast.Node {
+func getContentMapperSyntax(sourceFile *ast.SourceFile, index int, subKey string) ast.Node {
 	if sourceFile == nil {
-		return nil
+		return ast.Node{}
 	}
-	return ForEachTsConfigPropArray(sourceFile, "contentMappers", func(property *ast.PropertyAssignment) *ast.Node {
-		if !ast.IsArrayLiteralExpression(property.Initializer) {
-			return property.Initializer
+	return ForEachTsConfigPropArray(sourceFile, "contentMappers", func(property ast.PropertyAssignment) ast.Node {
+		if !ast.IsArrayLiteralExpression(property.Initializer()) {
+			return property.Initializer()
 		}
-		elements := property.Initializer.Elements()
+		elements := property.Initializer().Elements()
 		if index < 0 || index >= len(elements) {
-			return property.Initializer
+			return property.Initializer()
 		}
 		element := elements[index]
 		if subKey != "" && ast.IsObjectLiteralExpression(element) {
-			if node := ForEachPropertyAssignment(element.AsObjectLiteralExpression(), subKey, func(property *ast.PropertyAssignment) *ast.Node {
-				return property.Initializer
-			}); node != nil {
+			if node := ForEachPropertyAssignment(element.AsObjectLiteralExpression(), subKey, func(property ast.PropertyAssignment) ast.Node {
+				return property.Initializer()
+			}); !node.IsNil() {
 				return node
 			}
 		}
@@ -1708,11 +1709,11 @@ func GetContentMapperOptionDiagnosticLocation(config *ParsedCommandLine, mapper 
 	index := slices.Index(config.ContentMappers(), mapper)
 	mapperNode := getContentMapperSyntax(config.ConfigFile.SourceFile, index, "")
 	node := getContentMapperSyntax(config.ConfigFile.SourceFile, index, "options")
-	if node == nil {
+	if node.IsNil() {
 		node = mapperNode
 	}
 	for _, segment := range path {
-		var next *ast.Node
+		var next ast.Node
 		switch {
 		case segment.IsIndex && ast.IsArrayLiteralExpression(node):
 			elements := node.Elements()
@@ -1720,16 +1721,16 @@ func GetContentMapperOptionDiagnosticLocation(config *ParsedCommandLine, mapper 
 				next = elements[segment.Index]
 			}
 		case !segment.IsIndex && ast.IsObjectLiteralExpression(node):
-			next = ForEachPropertyAssignment(node.AsObjectLiteralExpression(), segment.Property, func(property *ast.PropertyAssignment) *ast.Node {
-				return property.Initializer
+			next = ForEachPropertyAssignment(node.AsObjectLiteralExpression(), segment.Property, func(property ast.PropertyAssignment) ast.Node {
+				return property.Initializer()
 			})
 		}
-		if next == nil {
+		if next.IsNil() {
 			break
 		}
 		node = next
 	}
-	if node == nil {
+	if node.IsNil() {
 		return nil, core.UndefinedTextRange()
 	}
 	file := config.ConfigFile.SourceFile
@@ -1738,23 +1739,23 @@ func GetContentMapperOptionDiagnosticLocation(config *ParsedCommandLine, mapper 
 
 // getContentMappersKeySyntax returns the "contentMappers" property key node, used to attribute a
 // diagnostic about the setting as a whole rather than a specific mapper.
-func getContentMappersKeySyntax(sourceFile *ast.SourceFile) *ast.Node {
+func getContentMappersKeySyntax(sourceFile *ast.SourceFile) ast.Node {
 	if sourceFile == nil {
-		return nil
+		return ast.Node{}
 	}
-	return ForEachTsConfigPropArray(sourceFile, "contentMappers", func(property *ast.PropertyAssignment) *ast.Node {
+	return ForEachTsConfigPropArray(sourceFile, "contentMappers", func(property ast.PropertyAssignment) ast.Node {
 		return property.Name()
 	})
 }
 
 // getContentMapperExtensionSyntax returns the node for a specific extension string within the content
 // mapper at index, falling back to the "extensions" array or the mapper element.
-func getContentMapperExtensionSyntax(sourceFile *ast.SourceFile, index int, ext string) *ast.Node {
+func getContentMapperExtensionSyntax(sourceFile *ast.SourceFile, index int, ext string) ast.Node {
 	node := getContentMapperSyntax(sourceFile, index, "extensions")
-	if node != nil && ast.IsArrayLiteralExpression(node) {
-		if element := core.Find(node.Elements(), func(element *ast.Node) bool {
+	if !node.IsNil() && ast.IsArrayLiteralExpression(node) {
+		if element := core.Find(node.Elements(), func(element ast.Node) bool {
 			return ast.IsStringLiteral(element) && element.Text() == ext
-		}); element != nil {
+		}); !element.IsNil() {
 			return element
 		}
 	}
@@ -1764,17 +1765,17 @@ func getContentMapperExtensionSyntax(sourceFile *ast.SourceFile, index int, ext 
 // setContentMapperDiagnosticLocation attaches a source location to a content mapper diagnostic when a
 // tsconfig source file and node are available (the jsonSourceFile API), leaving it as a location-less
 // compiler diagnostic otherwise (the JSON API).
-func setContentMapperDiagnosticLocation(diagnostic *ast.Diagnostic, sourceFile *ast.SourceFile, node *ast.Node) *ast.Diagnostic {
-	if sourceFile != nil && node != nil {
+func setContentMapperDiagnosticLocation(diagnostic *ast.Diagnostic, sourceFile *ast.SourceFile, node ast.Node) *ast.Diagnostic {
+	if sourceFile != nil && !node.IsNil() {
 		diagnostic.SetFile(sourceFile)
 		diagnostic.SetLocation(core.NewTextRange(scanner.SkipTrivia(sourceFile.Text(), node.Pos()), node.End()))
 	}
 	return diagnostic
 }
 
-func ForEachPropertyAssignment[T any](objectLiteral *ast.ObjectLiteralExpression, key string, callback func(property *ast.PropertyAssignment) *T, key2 ...string) *T {
-	if objectLiteral != nil {
-		for _, property := range objectLiteral.Properties.Nodes {
+func ForEachPropertyAssignment[T any](objectLiteral ast.ObjectLiteralExpression, key string, callback func(property ast.PropertyAssignment) T, key2 ...string) T {
+	if !objectLiteral.IsNil() {
+		for _, property := range objectLiteral.Properties().All() {
 			if !ast.IsPropertyAssignment(property) {
 				continue
 			}
@@ -1785,17 +1786,18 @@ func ForEachPropertyAssignment[T any](objectLiteral *ast.ObjectLiteralExpression
 			}
 		}
 	}
-	return nil
+	var zero T
+	return zero
 }
 
-func getTsConfigObjectLiteralExpression(tsConfigSourceFile *ast.SourceFile) *ast.ObjectLiteralExpression {
-	if tsConfigSourceFile != nil && tsConfigSourceFile.Statements != nil && len(tsConfigSourceFile.Statements.Nodes) > 0 {
-		expression := tsConfigSourceFile.Statements.Nodes[0].Expression()
+func getTsConfigObjectLiteralExpression(tsConfigSourceFile *ast.SourceFile) ast.ObjectLiteralExpression {
+	if tsConfigSourceFile != nil && !tsConfigSourceFile.Statements.IsNil() && tsConfigSourceFile.Statements.Len() > 0 {
+		expression := tsConfigSourceFile.Statements.At(0).Expression()
 		if ast.IsObjectLiteralExpression(expression) {
 			return expression.AsObjectLiteralExpression()
 		}
 	}
-	return nil
+	return ast.ObjectLiteralExpression{}
 }
 
 func getSubstitutedPathWithConfigDirTemplate(value string, basePath tspath.RootedDirectoryPath) string {

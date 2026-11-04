@@ -553,20 +553,20 @@ func (c *compilerTest) verifyUnionOrdering(t *testing.T) {
 
 func (c *compilerTest) verifyParentPointers(t *testing.T) {
 	t.Run("source file parent pointers", func(t *testing.T) {
-		var parent *ast.Node
-		var verifier func(n *ast.Node) bool
-		verifier = func(n *ast.Node) bool {
-			if n == nil {
+		var parent ast.Node
+		var verifier func(n ast.Node) bool
+		verifier = func(n ast.Node) bool {
+			if n.IsNil() {
 				return false
 			}
-			assert.Assert(t, n.Parent != nil, "parent node does not exist")
+			assert.Assert(t, !n.Parent().IsNil(), "parent node does not exist")
 			elab := ""
 			if !ast.NodeIsSynthesized(n) {
-				elab += ast.GetSourceFileOfNode(n).Text()[n.Loc.Pos():n.Loc.End()]
+				elab += ast.GetSourceFileOfNode(n).Text()[n.Loc().Pos():n.Loc().End()]
 			} else {
 				elab += "!synthetic! no text available"
 			}
-			assert.Assert(t, n.Parent == parent, "parent node does not match traversed parent: "+n.Kind.String()+": "+elab)
+			assert.Assert(t, n.Parent() == parent, "parent node does not match traversed parent: "+n.Kind().String()+": "+elab)
 			oldParent := parent
 			parent = n
 			n.ForEachChild(verifier)

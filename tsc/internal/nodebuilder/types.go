@@ -7,7 +7,7 @@ import (
 
 // TODO: previously all symboltracker methods were optional, but now they're required.
 type SymbolTracker interface {
-	TrackSymbol(symbol *ast.Symbol, enclosingDeclaration *ast.Node, meaning ast.SymbolFlags) bool
+	TrackSymbol(symbol *ast.Symbol, enclosingDeclaration ast.Node, meaning ast.SymbolFlags) bool
 	ReportInaccessibleThisError()
 	ReportPrivateInBaseOfClassExpression(propertyName string)
 	ReportInaccessibleUniqueSymbolError()
@@ -17,8 +17,8 @@ type SymbolTracker interface {
 	ReportNonlocalAugmentation(containingFile *ast.SourceFile, parentSymbol *ast.Symbol, augmentingSymbol *ast.Symbol)
 	ReportNonSerializableProperty(propertyName string)
 
-	ReportInferenceFallback(node *ast.Node)
-	PushErrorFallbackNode(node *ast.Node)
+	ReportInferenceFallback(node ast.Node)
+	PushErrorFallbackNode(node ast.Node)
 	PopErrorFallbackNode()
 }
 

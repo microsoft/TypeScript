@@ -9,11 +9,11 @@ type optionalCatchTransformer struct {
 	transformers.Transformer
 }
 
-func (ch *optionalCatchTransformer) visit(node *ast.Node) *ast.Node {
+func (ch *optionalCatchTransformer) visit(node ast.Node) ast.Node {
 	if node.SubtreeFacts()&ast.SubtreeContainsMissingCatchClauseVariable == 0 {
 		return node
 	}
-	switch node.Kind {
+	switch node.Kind() {
 	case ast.KindCatchClause:
 		return ch.visitCatchClause(node.AsCatchClause())
 	default:
@@ -21,11 +21,11 @@ func (ch *optionalCatchTransformer) visit(node *ast.Node) *ast.Node {
 	}
 }
 
-func (ch *optionalCatchTransformer) visitCatchClause(node *ast.CatchClause) *ast.Node {
-	if node.VariableDeclaration == nil {
+func (ch *optionalCatchTransformer) visitCatchClause(node ast.CatchClause) ast.Node {
+	if node.VariableDeclaration().IsNil() {
 		return ch.Factory().NewCatchClause(
-			ch.Factory().NewVariableDeclaration(ch.Factory().NewTempVariable(), nil, nil, nil),
-			ch.Visitor().Visit(node.Block),
+			ch.Factory().NewVariableDeclaration(ch.Factory().NewTempVariable(), ast.Node{}, ast.Node{}, ast.Node{}),
+			ch.Visitor().Visit(node.Block()),
 		)
 	}
 	return ch.Visitor().VisitEachChild(node.AsNode())

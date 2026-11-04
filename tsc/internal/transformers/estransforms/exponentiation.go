@@ -9,11 +9,11 @@ type exponentiationTransformer struct {
 	transformers.Transformer
 }
 
-func (ch *exponentiationTransformer) visit(node *ast.Node) *ast.Node {
+func (ch *exponentiationTransformer) visit(node ast.Node) ast.Node {
 	if node.SubtreeFacts()&ast.SubtreeContainsExponentiationOperator == 0 {
 		return node
 	}
-	switch node.Kind {
+	switch node.Kind() {
 	case ast.KindBinaryExpression:
 		return ch.visitBinaryExpression(node.AsBinaryExpression())
 	default:
@@ -21,8 +21,8 @@ func (ch *exponentiationTransformer) visit(node *ast.Node) *ast.Node {
 	}
 }
 
-func (ch *exponentiationTransformer) visitBinaryExpression(node *ast.BinaryExpression) *ast.Node {
-	switch node.OperatorToken.Kind {
+func (ch *exponentiationTransformer) visitBinaryExpression(node ast.BinaryExpression) ast.Node {
+	switch node.OperatorToken().Kind() {
 	case ast.KindAsteriskAsteriskEqualsToken:
 		return ch.visitExponentiationAssignmentExpression(node)
 	case ast.KindAsteriskAsteriskToken:
@@ -31,21 +31,21 @@ func (ch *exponentiationTransformer) visitBinaryExpression(node *ast.BinaryExpre
 	return ch.Visitor().VisitEachChild(node.AsNode())
 }
 
-func (ch *exponentiationTransformer) visitExponentiationAssignmentExpression(node *ast.BinaryExpression) *ast.Node {
-	var target *ast.Node
-	var value *ast.Node
-	left := ast.SkipOuterExpressions(ch.Visitor().VisitNode(node.Left), ast.OEKParentheses|ast.OEKPartiallyEmittedExpressions)
-	right := ch.Visitor().VisitNode(node.Right)
-	var expressionTemp *ast.Node
-	var objExpr *ast.Node
+func (ch *exponentiationTransformer) visitExponentiationAssignmentExpression(node ast.BinaryExpression) ast.Node {
+	var target ast.Node
+	var value ast.Node
+	left := ast.SkipOuterExpressions(ch.Visitor().VisitNode(node.Left()), ast.OEKParentheses|ast.OEKPartiallyEmittedExpressions)
+	right := ch.Visitor().VisitNode(node.Right())
+	var expressionTemp ast.Node
+	var objExpr ast.Node
 	if ast.IsAccessExpression(left) {
 		expressionTemp = left.Expression()
 		objExpr = expressionTemp
-		if expressionTemp.Kind != ast.KindSuperKeyword {
+		if expressionTemp.Kind() != ast.KindSuperKeyword {
 			expressionTemp = ch.Factory().NewTempVariable()
 			ch.EmitContext().AddVariableDeclaration(expressionTemp)
 			objExpr = ch.Factory().NewAssignmentExpression(expressionTemp, left.Expression())
-			objExpr.Loc = left.Expression().Loc
+			objExpr.SetLoc(left.Expression().Loc())
 		}
 	}
 	if ast.IsElementAccessExpression(left) {
@@ -53,38 +53,38 @@ func (ch *exponentiationTransformer) visitExponentiationAssignmentExpression(nod
 		argumentExpressionTemp := ch.Factory().NewTempVariable()
 		ch.EmitContext().AddVariableDeclaration(argumentExpressionTemp)
 
-		accessExpr := ch.Factory().NewAssignmentExpression(argumentExpressionTemp, left.AsElementAccessExpression().ArgumentExpression)
-		accessExpr.Loc = left.AsElementAccessExpression().ArgumentExpression.Loc
+		accessExpr := ch.Factory().NewAssignmentExpression(argumentExpressionTemp, left.AsElementAccessExpression().ArgumentExpression())
+		accessExpr.SetLoc(left.AsElementAccessExpression().ArgumentExpression().Loc())
 
-		target = ch.Factory().NewElementAccessExpression(objExpr, nil, accessExpr, ast.NodeFlagsNone)
+		target = ch.Factory().NewElementAccessExpression(objExpr, ast.Node{}, accessExpr, ast.NodeFlagsNone)
 
-		value = ch.Factory().NewElementAccessExpression(expressionTemp, nil, argumentExpressionTemp, ast.NodeFlagsNone)
-		value.Loc = left.Loc
+		value = ch.Factory().NewElementAccessExpression(expressionTemp, ast.Node{}, argumentExpressionTemp, ast.NodeFlagsNone)
+		value.SetLoc(left.Loc())
 	} else if ast.IsPropertyAccessExpression(left) {
 		// Transforms `a.x **= b` into `(_a = a).x = Math.pow(_a.x, b)`
-		target = ch.Factory().NewPropertyAccessExpression(objExpr, nil, left.Name(), ast.NodeFlagsNone)
-		target.Loc = left.Loc
+		target = ch.Factory().NewPropertyAccessExpression(objExpr, ast.QuestionDotToken{}, left.Name(), ast.NodeFlagsNone)
+		target.SetLoc(left.Loc())
 
-		value = ch.Factory().NewPropertyAccessExpression(expressionTemp, nil, left.Name(), ast.NodeFlagsNone)
-		value.Loc = left.Loc
+		value = ch.Factory().NewPropertyAccessExpression(expressionTemp, ast.Node{}, left.Name(), ast.NodeFlagsNone)
+		value.SetLoc(left.Loc())
 	} else {
 		// Transforms `a **= b` into `a = Math.pow(a, b)`
 		target = left
 		value = left
 	}
 
-	rhs := ch.Factory().NewGlobalMethodCall("Math", "pow", []*ast.Node{value, right})
-	rhs.Loc = node.Loc
+	rhs := ch.Factory().NewGlobalMethodCall("Math", "pow", []ast.Node{value, right})
+	rhs.SetLoc(node.Loc())
 	result := ch.Factory().NewAssignmentExpression(target, rhs)
-	result.Loc = node.Loc
+	result.SetLoc(node.Loc())
 	return result
 }
 
-func (ch *exponentiationTransformer) visitExponentiationExpression(node *ast.BinaryExpression) *ast.Node {
-	left := ch.Visitor().VisitNode(node.Left)
-	right := ch.Visitor().VisitNode(node.Right)
-	result := ch.Factory().NewGlobalMethodCall("Math", "pow", []*ast.Node{left, right})
-	result.Loc = node.Loc
+func (ch *exponentiationTransformer) visitExponentiationExpression(node ast.BinaryExpression) ast.Node {
+	left := ch.Visitor().VisitNode(node.Left())
+	right := ch.Visitor().VisitNode(node.Right())
+	result := ch.Factory().NewGlobalMethodCall("Math", "pow", []ast.Node{left, right})
+	result.SetLoc(node.Loc())
 	return result
 }
 

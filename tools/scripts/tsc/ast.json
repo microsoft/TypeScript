@@ -929,7 +929,7 @@
                     "goOnly": true
                 },
                 "NextContainer": {
-                    "type": "*Node",
+                    "type": "Node",
                     "goOnly": true
                 }
             },
@@ -938,7 +938,7 @@
         "FlowNodeBase": {
             "fields": {
                 "FlowNode": {
-                    "type": "*FlowNode",
+                    "type": "FlowNode",
                     "goOnly": true
                 }
             },
@@ -992,7 +992,7 @@
                     "optional": true
                 },
                 "EndFlowNode": {
-                    "type": "*FlowNode",
+                    "type": "FlowNode",
                     "goOnly": true
                 }
             },
@@ -1165,7 +1165,7 @@
                     "list": "NodeList"
                 },
                 "FallthroughFlowNode": {
-                    "type": "*FlowNode",
+                    "type": "FlowNode",
                     "goOnly": true
                 }
             },
@@ -1896,7 +1896,7 @@
                     },
                     {
                         "name": "ReturnFlowNode",
-                        "type": "*FlowNode",
+                        "type": "FlowNode",
                         "goOnly": true
                     }
                 ],
@@ -2387,7 +2387,7 @@
                     },
                     {
                         "name": "ReturnFlowNode",
-                        "type": "*FlowNode",
+                        "type": "FlowNode",
                         "goOnly": true
                     }
                 ]
@@ -2689,7 +2689,7 @@
                     },
                     {
                         "name": "ReturnFlowNode",
-                        "type": "*FlowNode",
+                        "type": "FlowNode",
                         "goOnly": true
                     }
                 ]
@@ -3000,7 +3000,7 @@
                     },
                     {
                         "name": "ReturnFlowNode",
-                        "type": "*FlowNode",
+                        "type": "FlowNode",
                         "goOnly": true
                     }
                 ]

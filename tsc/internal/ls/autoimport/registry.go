@@ -1548,12 +1548,12 @@ func (b *registryBuilder) extractPackage(
 			result.packageFiles[symlink.path] = symlink.fileName
 		}
 
-		hasExports := len(fileExports) > 0 && entrypoint.ExternalModuleIndicator != nil
+		hasExports := len(fileExports) > 0 && !entrypoint.ExternalModuleIndicator.IsNil()
 		if source, ok := result.failedAmbientModuleLookupSources[entrypoint.PathKey()]; !ok {
 			result.exports[entrypoint.PathKey()] = fileExports
 		} else {
 			source.packageName = packageName
-			hasExports = entrypoint.ExternalModuleIndicator != nil
+			hasExports = !entrypoint.ExternalModuleIndicator.IsNil()
 		}
 
 		if !hasExports {

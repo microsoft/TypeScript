@@ -120,7 +120,7 @@ func (l *LanguageService) symbolAndEntriesToRename(ctx context.Context, params *
 
 	for _, entry := range entries {
 		uri := l.getFileNameOfEntry(entry)
-		if l.UserPreferences().AllowRenameOfImportPath != core.TSTrue && entry.node != nil && ast.IsStringLiteralLike(entry.node) && ast.TryGetImportFromModuleSpecifier(entry.node) != nil {
+		if l.UserPreferences().AllowRenameOfImportPath != core.TSTrue && !entry.node.IsNil() && ast.IsStringLiteralLike(entry.node) && !ast.TryGetImportFromModuleSpecifier(entry.node).IsNil() {
 			continue
 		}
 		rng, ok := l.renameEditRange(entry)
@@ -152,7 +152,7 @@ func (l *LanguageService) symbolAndEntriesToRename(ctx context.Context, params *
 // original text.
 func (l *LanguageService) renameEditRange(entry *ReferenceEntry) (lsproto.Range, bool) {
 	l.resolveEntry(entry)
-	if entry.node == nil {
+	if entry.node.IsNil() {
 		location, fidelity := l.sourceFileRangeToLSPLocation(entry.sourceFile, *entry.textRange)
 		return location.Range, fidelity.IsExact()
 	}
@@ -165,7 +165,7 @@ func (l *LanguageService) renameEditRange(entry *ReferenceEntry) (lsproto.Range,
 }
 
 // getRenameInfoForNode performs detailed validation for a rename operation on a specific node.
-func (l *LanguageService) getRenameInfoForNode(ctx context.Context, newName string, node *ast.Node, sourceFile *ast.SourceFile, program *compiler.Program) (RenameInfo, bool) {
+func (l *LanguageService) getRenameInfoForNode(ctx context.Context, newName string, node ast.Node, sourceFile *ast.SourceFile, program *compiler.Program) (RenameInfo, bool) {
 	ch, done := program.GetTypeChecker(ctx)
 	defer done()
 
@@ -196,7 +196,7 @@ func (l *LanguageService) getRenameInfoForNode(ctx context.Context, newName stri
 		return getRenameInfoError(ctx, msg), true
 	}
 
-	if ast.IsStringLiteralLike(node) && ast.TryGetImportFromModuleSpecifier(node) != nil {
+	if ast.IsStringLiteralLike(node) && !ast.TryGetImportFromModuleSpecifier(node).IsNil() {
 		if l.UserPreferences().AllowRenameOfImportPath.IsTrue() {
 			return l.getRenameInfoForModule(ctx, newName, node, sourceFile, symbol)
 		}
@@ -206,11 +206,11 @@ func (l *LanguageService) getRenameInfoForNode(ctx context.Context, newName stri
 	return getRenameInfoSuccess(node, sourceFile, ch.SymbolToString(symbol), l.converters), true
 }
 
-func nodeIsEligibleForRename(node *ast.Node) bool {
-	if node == nil {
+func nodeIsEligibleForRename(node ast.Node) bool {
+	if node.IsNil() {
 		return false
 	}
-	switch node.Kind {
+	switch node.Kind() {
 	case ast.KindIdentifier,
 		ast.KindPrivateIdentifier,
 		ast.KindStringLiteral,
@@ -226,7 +226,7 @@ func nodeIsEligibleForRename(node *ast.Node) bool {
 
 // renameBlockedReason returns a non-nil diagnostic message if the rename should be blocked
 // because the symbol is a library definition, a default keyword, or would cross node_modules boundaries.
-func (l *LanguageService) renameBlockedReason(sourceFile *ast.SourceFile, node *ast.Node, symbol *ast.Symbol, ch *checker.Checker, program *compiler.Program) *diagnostics.Message {
+func (l *LanguageService) renameBlockedReason(sourceFile *ast.SourceFile, node ast.Node, symbol *ast.Symbol, ch *checker.Checker, program *compiler.Program) *diagnostics.Message {
 	for _, declaration := range symbol.Declarations() {
 		if isDefinedInLibraryFile(program, declaration) {
 			return diagnostics.You_cannot_rename_elements_that_are_defined_in_the_standard_TypeScript_library
@@ -246,7 +246,7 @@ func (l *LanguageService) renameBlockedReason(sourceFile *ast.SourceFile, node *
 }
 
 // isDefinedInLibraryFile checks if a declaration is from a default library file (e.g., lib.d.ts).
-func isDefinedInLibraryFile(program *compiler.Program, declaration *ast.Node) bool {
+func isDefinedInLibraryFile(program *compiler.Program, declaration ast.Node) bool {
 	declSourceFile := ast.GetSourceFileOfNode(declaration)
 	return program.IsSourceFileDefaultLibrary(declSourceFile.PathKey()) && declSourceFile.FileName().IsDeclarationFile()
 }
@@ -256,7 +256,7 @@ func wouldRenameInOtherNodeModules(originalFile *ast.SourceFile, symbol *ast.Sym
 	sym := symbol
 	if !preferences.ProvidePrefixAndSuffixTextForRename.IsTrueOrUnknown() && sym.Flags()&ast.SymbolFlagsAlias != 0 {
 		importSpecifier := core.Find(sym.Declarations(), ast.IsImportSpecifier)
-		if importSpecifier != nil && importSpecifier.AsImportSpecifier().PropertyName == nil {
+		if !importSpecifier.IsNil() && importSpecifier.AsImportSpecifier().PropertyName().IsNil() {
 			sym = ch.GetAliasedSymbol(sym)
 		}
 	}
@@ -300,7 +300,7 @@ func ClientSupportsRenameResourceOperations(ctx context.Context) bool {
 }
 
 // getRenameInfoForModule handles rename validation for module specifiers.
-func (l *LanguageService) getRenameInfoForModule(ctx context.Context, newName string, specifier *ast.StringLiteralLike, sourceFile *ast.SourceFile, moduleSymbol *ast.Symbol) (RenameInfo, bool) {
+func (l *LanguageService) getRenameInfoForModule(ctx context.Context, newName string, specifier ast.StringLiteralLike, sourceFile *ast.SourceFile, moduleSymbol *ast.Symbol) (RenameInfo, bool) {
 	if !tspath.IsExternalModuleNameRelative(specifier.Text()) {
 		return getRenameInfoError(ctx, diagnostics.You_cannot_rename_a_module_via_a_global_import), true
 	}
@@ -309,7 +309,7 @@ func (l *LanguageService) getRenameInfoForModule(ctx context.Context, newName st
 	}
 
 	moduleSourceFile := core.Find(moduleSymbol.Declarations(), ast.IsSourceFile)
-	if moduleSourceFile == nil {
+	if moduleSourceFile.IsNil() {
 		return RenameInfo{}, false
 	}
 
@@ -374,15 +374,15 @@ func (l *LanguageService) getNewFileNameForModuleRename(oldPath tspath.RootedPat
 	return newPath.AsPath()
 }
 
-func (l *LanguageService) getTextForRename(originalNode *ast.Node, entry *ReferenceEntry, newText string, ch *checker.Checker, quotePreference lsutil.QuotePreference, useAliasesForRename bool) string {
+func (l *LanguageService) getTextForRename(originalNode ast.Node, entry *ReferenceEntry, newText string, ch *checker.Checker, quotePreference lsutil.QuotePreference, useAliasesForRename bool) string {
 	if useAliasesForRename && entry.kind != entryKindRange && (ast.IsIdentifier(originalNode) || ast.IsStringLiteralLike(originalNode)) {
 		node := ast.GetReparsedNodeForNode(entry.node)
 		kind := entry.kind
-		parent := node.Parent
+		parent := node.Parent()
 		name := originalNode.Text()
 		isShorthandAssignment := ast.IsShorthandPropertyAssignment(parent)
 		switch {
-		case isShorthandAssignment || (isObjectBindingElementWithoutPropertyName(parent) && parent.Name() == node && parent.AsBindingElement().DotDotDotToken == nil):
+		case isShorthandAssignment || (isObjectBindingElementWithoutPropertyName(parent) && parent.Name() == node && parent.AsBindingElement().DotDotDotToken().IsNil()):
 			if kind == entryKindSearchedLocalFoundProperty {
 				return name + ": " + newText
 			}
@@ -392,18 +392,18 @@ func (l *LanguageService) getTextForRename(originalNode *ast.Node, entry *Refere
 			// In `const o = { x }; o.x`, symbolAtLocation at `x` in `{ x }` is the property symbol.
 			// For a binding element `const { x } = o;`, symbolAtLocation at `x` is the property symbol.
 			if isShorthandAssignment {
-				grandParent := parent.Parent
-				if ast.IsObjectLiteralExpression(grandParent) && ast.IsBinaryExpression(grandParent.Parent) && ast.IsModuleExportsAccessExpression(grandParent.Parent.AsBinaryExpression().Left) {
+				grandParent := parent.Parent()
+				if ast.IsObjectLiteralExpression(grandParent) && ast.IsBinaryExpression(grandParent.Parent()) && ast.IsModuleExportsAccessExpression(grandParent.Parent().AsBinaryExpression().Left()) {
 					return name + ": " + newText
 				}
 				return newText + ": " + name
 			}
 			return name + ": " + newText
-		case ast.IsImportSpecifier(parent) && parent.PropertyName() == nil:
+		case ast.IsImportSpecifier(parent) && parent.PropertyName().IsNil():
 			// If the original symbol was using this alias, just rename the alias.
 			var originalSymbol *ast.Symbol
-			if ast.IsExportSpecifier(originalNode.Parent) {
-				originalSymbol = ch.GetExportSpecifierLocalTargetSymbol(originalNode.Parent)
+			if ast.IsExportSpecifier(originalNode.Parent()) {
+				originalSymbol = ch.GetExportSpecifierLocalTargetSymbol(originalNode.Parent())
 			} else {
 				originalSymbol = ch.GetSymbolAtLocation(originalNode)
 			}
@@ -411,7 +411,7 @@ func (l *LanguageService) getTextForRename(originalNode *ast.Node, entry *Refere
 				return name + " as " + newText
 			}
 			return newText
-		case ast.IsExportSpecifier(parent) && parent.PropertyName() == nil:
+		case ast.IsExportSpecifier(parent) && parent.PropertyName().IsNil():
 			// If the symbol for the node is same as declared node symbol use prefix text
 			if originalNode == entry.node || ch.GetSymbolAtLocation(originalNode) == ch.GetSymbolAtLocation(entry.node) {
 				return name + " as " + newText
@@ -421,7 +421,7 @@ func (l *LanguageService) getTextForRename(originalNode *ast.Node, entry *Refere
 	}
 
 	// If the node is a numerical indexing literal, then add quotes around the property access.
-	if entry.kind != entryKindRange && ast.IsNumericLiteral(entry.node) && ast.IsAccessExpression(entry.node.Parent) {
+	if entry.kind != entryKindRange && ast.IsNumericLiteral(entry.node) && ast.IsAccessExpression(entry.node.Parent()) {
 		quote := getQuoteFromPreference(quotePreference)
 		return quote + newText + quote
 	}
@@ -443,7 +443,7 @@ func getRenameInfoError(ctx context.Context, message *diagnostics.Message) Renam
 	}
 }
 
-func getRenameInfoSuccess(node *ast.Node, sourceFile *ast.SourceFile, displayName string, converters *lsconv.Converters) RenameInfo {
+func getRenameInfoSuccess(node ast.Node, sourceFile *ast.SourceFile, displayName string, converters *lsconv.Converters) RenameInfo {
 	start := astnav.GetStartOfNode(node, sourceFile, false /*includeJSDoc*/)
 	end := node.End()
 	if ast.IsStringLiteralLike(node) {

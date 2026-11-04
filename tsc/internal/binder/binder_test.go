@@ -29,7 +29,7 @@ func BenchmarkBind(b *testing.B) {
 
 			sourceFiles := make([]*ast.SourceFile, b.N)
 			for i := range b.N {
-				sourceFiles[i] = parser.ParseSourceFile(parseOptions, sourceText, scriptKind)
+				sourceFiles[i] = parser.ParseSourceFileUnbound(parseOptions, sourceText, scriptKind)
 			}
 
 			// The above parses do a lot of work; ensure GC is finished before we start collecting performance data.

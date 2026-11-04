@@ -86,15 +86,15 @@ const (
 	SubtreeContainsLexicalThisOrSuper = SubtreeContainsLexicalThis | SubtreeContainsLexicalSuper
 )
 
-func propagateEraseableSyntaxListSubtreeFacts(children *TypeArgumentList) SubtreeFacts {
-	return core.IfElse(children != nil, SubtreeContainsTypeScript, SubtreeFactsNone)
+func propagateEraseableSyntaxListSubtreeFacts(children TypeArgumentList) SubtreeFacts {
+	return core.IfElse(!children.IsNil(), SubtreeContainsTypeScript, SubtreeFactsNone)
 }
 
-func propagateEraseableSyntaxSubtreeFacts(child *TypeNode) SubtreeFacts {
-	return core.IfElse(child != nil, SubtreeContainsTypeScript, SubtreeFactsNone)
+func propagateEraseableSyntaxSubtreeFacts(child TypeNode) SubtreeFacts {
+	return core.IfElse(!child.IsNil(), SubtreeContainsTypeScript, SubtreeFactsNone)
 }
 
-func propagateObjectBindingElementSubtreeFacts(child *BindingElementNode) SubtreeFacts {
+func propagateObjectBindingElementSubtreeFacts(child BindingElementNode) SubtreeFacts {
 	facts := propagateSubtreeFacts(child)
 	if facts&SubtreeContainsRestOrSpread != 0 {
 		facts &^= SubtreeContainsRestOrSpread
@@ -103,31 +103,31 @@ func propagateObjectBindingElementSubtreeFacts(child *BindingElementNode) Subtre
 	return facts
 }
 
-func propagateBindingElementSubtreeFacts(child *BindingElementNode) SubtreeFacts {
+func propagateBindingElementSubtreeFacts(child BindingElementNode) SubtreeFacts {
 	return propagateSubtreeFacts(child) & ^SubtreeContainsRestOrSpread
 }
 
-func propagateSubtreeFacts(child *Node) SubtreeFacts {
-	if child == nil {
+func propagateSubtreeFacts(child Node) SubtreeFacts {
+	if child.IsNil() {
 		return SubtreeFactsNone
 	}
 	return child.propagateSubtreeFacts()
 }
 
-func propagateNodeListSubtreeFacts(children *NodeList, propagate func(*Node) SubtreeFacts) SubtreeFacts {
-	if children == nil {
+func propagateNodeListSubtreeFacts(children NodeList, propagate func(Node) SubtreeFacts) SubtreeFacts {
+	if children.IsNil() {
 		return SubtreeFactsNone
 	}
 	facts := SubtreeFactsNone
-	for _, child := range children.Nodes {
+	for _, child := range children.All() {
 		facts |= propagate(child)
 	}
 	return facts
 }
 
-func propagateModifierListSubtreeFacts(children *ModifierList) SubtreeFacts {
-	if children == nil {
+func propagateModifierListSubtreeFacts(children ModifierList) SubtreeFacts {
+	if children.IsNil() {
 		return SubtreeFactsNone
 	}
-	return propagateNodeListSubtreeFacts(&children.NodeList, propagateSubtreeFacts)
+	return propagateNodeListSubtreeFacts(children.NodeList, propagateSubtreeFacts)
 }

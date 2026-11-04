@@ -1,0 +1,548 @@
+package ast
+
+import (
+	"math/bits"
+	"reflect"
+	"slices"
+	"sync"
+	"sync/atomic"
+	"unsafe"
+
+	"github.com/microsoft/TypeScript/tsc/internal/core"
+)
+
+// A nodeStore holds the nodes created by one NodeFactory: for a parsed
+// file, every node of that file. Nodes are records in chunks of words,
+// each beginning with the shared node header (nodeBaseData).
+//
+// Records hold no Go pointers and never move. A chunk is a Go object whose
+// only pointer is its leading chunkHeader, so the garbage collector never
+// scans its records. A Node is just the address of its record; the record
+// header holds its offset from the start of its chunk, whose header leads
+// back to the store. A record refers to another record in the same chunk
+// by its offset from the referring field. Fields holding Go values, and
+// refs to records in other chunks or stores, go through the store's side
+// tables.
+type nodeStore struct {
+	// free is the unused rest of the chunk being allocated from, which
+	// starts at base.
+	free []uint64
+	base unsafe.Pointer
+	// chunks holds the start of every chunk, in allocation order.
+	chunks []unsafe.Pointer
+	// words counts the words of all chunks.
+	words int
+	// hint sizes the first chunk.
+	hint int
+
+	symbols      sideTable[*Symbol]
+	symbolTables sideTable[SymbolTable]
+	texts        textStore
+	stringLists  sideTable[[]string]
+	nodeSlices   sideTable[[]Node]
+	values       sideTable[any]
+	sourceFiles  sideTable[*SourceFile]
+
+	// file is the source file whose tree the store holds, if it holds a
+	// parsed file. Every node of the store that is in that tree is in the
+	// file.
+	file *SourceFile
+
+	// far holds the nodes that records refer to but cannot reach by an
+	// offset: those in other chunks, and those of other stores, such as
+	// original nodes reused by a transformed tree.
+	far []Node
+	// farLists holds the lists that records refer to but cannot reach by
+	// an offset.
+	farLists []NodeList
+
+	flows       []flowNodeData
+	flowLists   []flowListData
+	reusedFlows []FlowNode
+
+	// frozen is set once the records are shared, after which no more may
+	// be allocated.
+	frozen bool
+}
+
+// A chunkHeader begins every chunk, before its records.
+type chunkHeader struct {
+	store *nodeStore
+	index uint32
+	_     uint32
+}
+
+const (
+	chunkHeaderSize  = uint32(unsafe.Sizeof(chunkHeader{}))
+	chunkHeaderWords = chunkHeaderSize / uint32(wordSize)
+)
+
+func newNodeStore() *nodeStore {
+	// The first far slots are the absent node and list, which zero refs
+	// refer to.
+	return &nodeStore{
+		far:          make([]Node, 1),
+		farLists:     make([]NodeList, 1),
+		symbols:      newSideTable[*Symbol](),
+		symbolTables: newSideTable[SymbolTable](),
+		stringLists:  newSideTable[[]string](),
+		nodeSlices:   newSideTable[[]Node](),
+		values:       newSideTable[any](),
+		sourceFiles:  newSideTable[*SourceFile](),
+	}
+}
+
+// nodeBaseData is the header at the start of every node record.
+type nodeBaseData struct {
+	id     atomic.Uint64
+	loc    core.TextRange
+	parent parentRef
+	flags  NodeFlags
+	// chunk is the record's offset in bytes from the start of its chunk.
+	chunk uint32
+	kind  Kind
+}
+
+// Every node has a header, so it must stay small.
+var _ [32 - unsafe.Sizeof(nodeBaseData{})]struct{}
+
+// A nodeRef is a record field referring to a node. With the low bit set,
+// the referenced record is in the same chunk, at the field's address plus
+// the rest of the ref, read as a signed number of bytes; otherwise, the
+// rest is an index into the store's far nodes, whose first is the absent
+// node, so that zero is no node.
+//
+// Records are word aligned and refs are four byte aligned, so the distance
+// from a ref to a record never has the low bit set.
+type nodeRef uint32
+
+const refNear = 1
+
+// A parentRef is a record's parent. It is encoded unlike a nodeRef so that
+// walking up the tree, the hottest way of following a ref, costs a single
+// add: an even ref is the signed distance in bytes from the record to its
+// parent in the same chunk, never zero as no record is its own parent; an
+// odd ref is an index into the store's far nodes, shifted left by one, so
+// that parentNone is no parent. Records start with parentNone.
+type parentRef int32
+
+const parentNone parentRef = 1
+
+const wordSize = unsafe.Sizeof(uint64(0))
+
+// rec returns the address of n's record.
+func (n Node) rec() unsafe.Pointer { return n.p }
+
+func (n Node) hdr() *nodeBaseData {
+	// SAFETY: Every node record starts with an aligned nodeBaseData header.
+	return (*nodeBaseData)(n.p)
+}
+
+// chunkOf returns the header of the chunk holding the record at p, which
+// is chunk bytes from the chunk's start.
+func chunkOf(p unsafe.Pointer, chunk uint32) *chunkHeader {
+	// SAFETY: The record's chunk offset leads back to its containing allocation's header.
+	return (*chunkHeader)(unsafe.Add(p, -int(chunk)))
+}
+
+func (n Node) chunk() *chunkHeader { return chunkOf(n.p, n.hdr().chunk) }
+
+// store returns the store that owns n.
+func (n Node) store() *nodeStore { return n.chunk().store }
+
+// deref returns the node that the field f of n's record refers to.
+func (n Node) deref(f *nodeRef) Node {
+	r := *f
+	if r&refNear != 0 {
+		// SAFETY: setRef encodes a near offset only between records in the same live chunk.
+		return Node{unsafe.Add(unsafe.Pointer(f), int32(r-refNear))}
+	}
+	if r == 0 {
+		// Absent fields are common, and checking for them is cheaper than
+		// reading the absent far slot, which is far from the record.
+		return Node{}
+	}
+	// The store is found by hand rather than by n.store() to keep callers
+	// within the inlining budget.
+	// SAFETY: The node starts with nodeBaseData, whose chunk offset addresses its allocation's header.
+	return (*chunkHeader)(unsafe.Add(n.p, -int((*nodeBaseData)(n.p).chunk))).store.far[r>>1]
+}
+
+// refAt returns the node that the field at offset off of n's record refers
+// to.
+func (n Node) refAt(off uint8) Node {
+	// SAFETY: The kind's layout table supplies the offset of an aligned nodeRef within this record.
+	return n.deref((*nodeRef)(unsafe.Add(n.p, off)))
+}
+
+// setRef makes the field f of n's record refer to v.
+func (n Node) setRef(f *nodeRef, v Node) {
+	setRef(n.chunk(), f, v)
+}
+
+// setNodeRef makes the field f of the record of owner refer to v.
+func setNodeRef(f *nodeRef, owner Node, v Node) {
+	setRef(owner.chunk(), f, v)
+}
+
+// setRef makes the field f of a record in chunk c refer to v.
+func setRef(c *chunkHeader, f *nodeRef, v Node) {
+	if v.p == nil {
+		*f = 0
+		return
+	}
+	if v.chunk() == c {
+		*f = nodeRef(near(f, v.p))
+		return
+	}
+	s := c.store
+	if *f != 0 && *f&refNear == 0 {
+		// Slots are never shared, so the field's own slot can be reused.
+		s.far[*f>>1] = v
+		return
+	}
+	*f = nodeRef(farSlot(len(s.far)))
+	s.far = append(s.far, v)
+}
+
+// near returns the ref from the field at f to the record at p in the same
+// chunk.
+func near[F any](f *F, p unsafe.Pointer) uint32 {
+	// SAFETY: Callers pass a field and target in the same chunk; only their byte distance is retained.
+	return uint32(int32(uintptr(p)-uintptr(unsafe.Pointer(f)))) | refNear
+}
+
+func farSlot(i int) uint32 {
+	if uint64(i) >= 1<<31 {
+		panic("node store far ref overflow")
+	}
+	return uint32(i) << 1
+}
+
+// A nodeAnchor refers to a node of a store from outside its records: the
+// chunk, biased by one, and the record's word offset there. With anchorFar
+// set, the rest is an index into the store's far nodes.
+type nodeAnchor uint32
+
+const (
+	anchorFar        = 1 << 31
+	anchorChunkShift = 23
+	maxAnchorChunks  = 1<<(31-anchorChunkShift) - 1
+	// maxChunkWords bounds chunks so that anchors can address every word.
+	maxChunkWords = 1 << anchorChunkShift
+)
+
+func (s *nodeStore) anchor(v Node) nodeAnchor {
+	if v.p == nil {
+		return 0
+	}
+	if c, w := v.chunk(), v.hdr().chunk/uint32(wordSize); c.store == s && c.index < maxAnchorChunks && w < maxChunkWords {
+		return nodeAnchor((c.index+1)<<anchorChunkShift | w)
+	}
+	s.far = append(s.far, v)
+	if uint64(len(s.far)) > anchorFar {
+		panic("node store far ref overflow")
+	}
+	return nodeAnchor(len(s.far)-1) | anchorFar
+}
+
+func (s *nodeStore) fromAnchor(r nodeAnchor) Node {
+	switch {
+	case r == 0:
+		return Node{}
+	case r&anchorFar != 0:
+		return s.far[r&^anchorFar]
+	}
+	c := s.chunks[r>>anchorChunkShift-1]
+	// SAFETY: anchor encodes a word offset to a record in this retained chunk.
+	return Node{unsafe.Add(c, int(r&(maxChunkWords-1))*int(wordSize))}
+}
+
+func (s *nodeStore) newNode(kind Kind, layout nodeLayout, n Node) Node {
+	if kindLayout[kind] != layout {
+		panic("node kind does not match its record layout")
+	}
+	n.hdr().kind = kind
+	return n
+}
+
+// newRecord allocates a zeroed record of type T, whose first field must be
+// its nodeBaseData.
+func newRecord[T any](s *nodeStore, layout nodeLayout) (*T, Node) {
+	p, chunk := s.alloc(unsafe.Sizeof(*new(T)))
+	// SAFETY: alloc returns word-aligned, zeroed storage for T, whose first field is nodeBaseData.
+	h := (*nodeBaseData)(p)
+	h.chunk = chunk
+	h.parent = parentNone
+	// SAFETY: The allocation has T's size and alignment; record types contain no Go pointers.
+	return (*T)(p), Node{p}
+}
+
+// alloc allocates size zeroed bytes for a record, returning its address and
+// its byte offset in its chunk.
+func (s *nodeStore) alloc(size uintptr) (unsafe.Pointer, uint32) {
+	if s.frozen {
+		panic("node store is frozen")
+	}
+	words := int((size + wordSize - 1) / wordSize)
+	if words > len(s.free) {
+		return s.grow(words)
+	}
+	// SAFETY: The free words belong to a retained chunk and have room for this record.
+	p := unsafe.Pointer(unsafe.SliceData(s.free))
+	s.free = s.free[words:]
+	// SAFETY: p and s.base address the same retained chunk; their integer addresses
+	// are used only to compute a byte offset, never to reconstruct a pointer.
+	return p, uint32(uintptr(p) - uintptr(s.base))
+}
+
+// grow allocates words in a new chunk. A record never spans two chunks.
+func (s *nodeStore) grow(words int) (unsafe.Pointer, uint32) {
+	n := min(max(s.words/storeGrowthDivisor, minStoreWords), maxChunkWords)
+	if len(s.chunks) == 0 {
+		n = min(max(n, s.hint), maxChunkWords)
+	}
+	if words > n || words > maxChunkWords {
+		// A record too large for a normal chunk gets one of its own, and
+		// the current chunk stays in use.
+		base, _ := s.addChunk(words)
+		// SAFETY: addChunk reserves its header followed by at least words record words.
+		return unsafe.Add(base, chunkHeaderSize), chunkHeaderSize
+	}
+	base, all := s.addChunk(n)
+	s.base = base
+	s.free = all[words:]
+	// SAFETY: all is the retained chunk's word-aligned records region.
+	return unsafe.Pointer(unsafe.SliceData(all)), chunkHeaderSize
+}
+
+// addChunk allocates a chunk with room for at least n words of records,
+// returning its start and its records' words.
+func (s *nodeStore) addChunk(n int) (unsafe.Pointer, []uint64) {
+	n = chunkClass(n)
+	base := reflect.New(chunkType(n)).UnsafePointer()
+	// SAFETY: chunkType starts with a chunkHeader, preserving its pointer's GC metadata.
+	*(*chunkHeader)(base) = chunkHeader{store: s, index: uint32(len(s.chunks))}
+	s.chunks = append(s.chunks, base)
+	s.words += n
+	// SAFETY: chunkType places exactly n aligned uint64 words immediately after the header.
+	return base, unsafe.Slice((*uint64)(unsafe.Add(base, chunkHeaderSize)), n)
+}
+
+// chunkClass rounds n up so that a chunk with n words of records is 2^k
+// or 3*2^(k-1) bytes, sizes that the Go allocator has a class for, so the
+// space it would otherwise round up to holds records too.
+func chunkClass(n int) int {
+	bytes := max(n+int(chunkHeaderWords), minStoreWords) * int(wordSize)
+	size := 1 << bits.Len(uint(bytes-1))
+	if three := size / 4 * 3; three >= bytes {
+		size = three
+	}
+	return size/int(wordSize) - int(chunkHeaderWords)
+}
+
+var chunkTypes sync.Map // int -> reflect.Type
+
+// chunkType returns the type of a chunk with n words of records: a
+// chunkHeader followed by an array of n words, so the header is its only
+// pointer.
+func chunkType(n int) reflect.Type {
+	if t, ok := chunkTypes.Load(n); ok {
+		return t.(reflect.Type)
+	}
+	t := reflect.StructOf([]reflect.StructField{
+		{Name: "Header", Type: reflect.TypeFor[chunkHeader]()},
+		{Name: "Words", Type: reflect.ArrayOf(n, reflect.TypeFor[uint64]())},
+	})
+	t2, _ := chunkTypes.LoadOrStore(n, t)
+	return t2.(reflect.Type)
+}
+
+// Stores start small, since many, such as those for lazily parsed JSDoc,
+// are tiny. This is the words of a chunk, including its header.
+const minStoreWords = 64
+
+// Each new chunk adds a fraction of the store's size, which bounds the
+// space left unused at the end of the last one.
+const storeGrowthDivisor = 16
+
+// textBytesPerStoreWord gives a lower estimate of how many words parsing
+// text takes.
+const textBytesPerStoreWord = 4
+
+// sizeForSource sizes the store's first chunk for parsing its source text.
+func (s *nodeStore) sizeForSource() {
+	if len(s.chunks) != 0 {
+		panic("node store already has records")
+	}
+	s.hint = len(s.texts.source) / textBytesPerStoreWord
+}
+
+// finish freezes the records if asked to, and trims the side tables. It
+// must only be called before the store is shared.
+func (s *nodeStore) finish(freeze bool) {
+	s.frozen = freeze
+	if freeze {
+		s.free = nil
+	}
+	s.compactSide()
+}
+
+// compactSide trims the side tables to size. Side values are never
+// addressed, so this is safe whenever the store is not being read
+// concurrently.
+func (s *nodeStore) compactSide() {
+	s.symbols.compact()
+	s.symbolTables.compact()
+	s.stringLists.compact()
+	s.nodeSlices.compact()
+	s.values.compact()
+	s.far = slices.Clip(slices.Clone(s.far))
+	s.farLists = slices.Clip(slices.Clone(s.farLists))
+}
+
+// A sideRef is a record field's slot in a side table. The first slot holds
+// the zero value and is never written, so a zero ref reads as the zero value
+// without a slot of its own.
+type sideRef uint32
+
+// A sideTable is appended to only by its store's owner, before the store
+// is shared.
+type sideTable[T any] struct {
+	items []T
+}
+
+func newSideTable[T any]() sideTable[T] {
+	return sideTable[T]{items: make([]T, 1)}
+}
+
+func (t *sideTable[T]) get(r sideRef) T {
+	return t.items[r]
+}
+
+// set stores v in r's slot, allocating one unless v is the zero value.
+func (t *sideTable[T]) set(r *sideRef, v T, isZero bool) {
+	if *r != 0 {
+		t.items[*r] = v
+		return
+	}
+	if !isZero {
+		*r = sideRef(len(t.items))
+		t.items = append(t.items, v)
+	}
+}
+
+func (t *sideTable[T]) compact() {
+	if len(t.items) != cap(t.items) {
+		t.items = slices.Clip(slices.Clone(t.items))
+	}
+}
+
+// A textRef is a string field: a range of the store's text, located by
+// textStore.get.
+type textRef struct {
+	off uint32
+	len uint32
+}
+
+const (
+	// The text of a store is addressed in pieces of textPieceSize bytes; a
+	// textRef's offset names a piece in its top bits and a position in the
+	// piece in the rest.
+	textPieceShift = 27
+	textPieceSize  = 1 << textPieceShift
+	textPieceMask  = textPieceSize - 1
+	textPieces     = 1 << (32 - textPieceShift)
+	// textArenaMinSize sizes the first piece of a text arena; later pieces
+	// double up to textPieceSize.
+	textArenaMinSize = 1 << 12
+)
+
+// textStore holds the text of a store's string fields. Text found within
+// the source is referenced in place; other text is copied into an arena of
+// pieces that are never moved or modified, so strings may alias them.
+//
+// The first pieces are the source's, so that a position in the source is
+// its own offset; the arena's pieces follow. Every string is then found the
+// same way, from the start of its piece.
+type textStore struct {
+	pieces [textPieces]unsafe.Pointer
+	source string
+	// arena is the piece being filled, if arenaSize is not zero, and next is
+	// where in it the next string goes.
+	arena     uint32
+	arenaSize uint32
+	next      uint32
+}
+
+func (t *textStore) get(r textRef) string {
+	// SAFETY: set records a valid source or arena range; retained pieces keep the bytes alive,
+	// and allocated string ranges are never modified after publication. A zero ref is empty.
+	return unsafe.String((*byte)(unsafe.Add(t.pieces[r.off>>textPieceShift], r.off&textPieceMask)), r.len)
+}
+
+func (t *textStore) setSource(text string) {
+	if t.arenaSize != 0 || t.source != "" {
+		panic("node store source set after text was stored")
+	}
+	if uint64(len(text)) > (textPieces-1)*textPieceSize {
+		panic("node store source too large")
+	}
+	t.source = text
+	// SAFETY: source retains the immutable string backing these piece pointers.
+	p := unsafe.Pointer(unsafe.StringData(text))
+	for k := 0; uint64(k)*textPieceSize < uint64(len(text)); k++ {
+		// SAFETY: The loop bounds each piece start within the retained source string.
+		t.pieces[k] = unsafe.Add(p, k*textPieceSize)
+	}
+}
+
+func (t *textStore) set(r *textRef, v string, _ bool) {
+	if len(v) == 0 {
+		*r = textRef{}
+		return
+	}
+	if len(t.source) != 0 {
+		// SAFETY: Only the address is inspected; source retains the backing bytes.
+		start := uintptr(unsafe.Pointer(unsafe.StringData(t.source)))
+		// SAFETY: Only the address is inspected, to recognize a range within the retained source.
+		p := uintptr(unsafe.Pointer(unsafe.StringData(v)))
+		if p >= start && p+uintptr(len(v)) <= start+uintptr(len(t.source)) {
+			*r = textRef{off: uint32(p - start), len: uint32(len(v))}
+			return
+		}
+	}
+	*r = textRef{off: t.alloc(v), len: uint32(len(v))}
+}
+
+// alloc copies v into the arena, returning its offset.
+func (t *textStore) alloc(v string) uint32 {
+	n := uint32(len(v))
+	if n > textPieceSize {
+		panic("node text too large")
+	}
+	if t.arenaSize == 0 || t.next+n > t.arenaSize {
+		size := uint32(textArenaMinSize)
+		if t.arenaSize != 0 {
+			size = min(t.arenaSize*2, textPieceSize)
+			t.arena++
+		} else {
+			// The arena starts after the source's pieces.
+			t.arena = uint32((uint64(len(t.source)) + textPieceMask) >> textPieceShift)
+		}
+		if t.arena >= textPieces {
+			panic("node text arena overflow")
+		}
+		size = max(size, n)
+		// SAFETY: The piece pointer retains the newly allocated size-byte backing array.
+		t.pieces[t.arena] = unsafe.Pointer(unsafe.SliceData(make([]byte, size)))
+		t.arenaSize = size
+		t.next = 0
+	}
+	off := t.next
+	// SAFETY: The capacity check reserves n bytes at off in this retained piece;
+	// only unused bytes are written, so previously returned strings remain immutable.
+	copy(unsafe.Slice((*byte)(unsafe.Add(t.pieces[t.arena], off)), n), v)
+	t.next += n
+	return t.arena<<textPieceShift | off
+}

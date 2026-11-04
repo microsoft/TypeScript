@@ -171,21 +171,21 @@ class MissingImplements implements B. {}
 		PathKey:  "/index.ts",
 	}, sourceText, core.ScriptKindTS)
 
-	classDecl := file.Statements.Nodes[0].AsClassDeclaration()
-	assert.Equal(t, classDecl.HeritageClauses.Nodes[0].AsHeritageClause().Types.Nodes[0].Kind, ast.KindExpressionWithTypeArguments)
-	assert.Equal(t, classDecl.HeritageClauses.Nodes[1].AsHeritageClause().Types.Nodes[0].Kind, ast.KindTypeReference)
+	classDecl := file.Statements.At(0).AsClassDeclaration()
+	assert.Equal(t, classDecl.HeritageClauses().At(0).AsHeritageClause().Types().At(0).Kind(), ast.KindExpressionWithTypeArguments)
+	assert.Equal(t, classDecl.HeritageClauses().At(1).AsHeritageClause().Types().At(0).Kind(), ast.KindTypeReference)
 
-	interfaceDecl := file.Statements.Nodes[1].AsInterfaceDeclaration()
-	assert.Equal(t, interfaceDecl.HeritageClauses.Nodes[0].AsHeritageClause().Types.Nodes[0].Kind, ast.KindTypeReference)
+	interfaceDecl := file.Statements.At(1).AsInterfaceDeclaration()
+	assert.Equal(t, interfaceDecl.HeritageClauses().At(0).AsHeritageClause().Types().At(0).Kind(), ast.KindTypeReference)
 
-	invalidInterfaceDecl := file.Statements.Nodes[2].AsInterfaceDeclaration()
-	assert.Equal(t, invalidInterfaceDecl.HeritageClauses.Nodes[0].AsHeritageClause().Types.Nodes[0].Kind, ast.KindExpressionWithTypeArguments)
+	invalidInterfaceDecl := file.Statements.At(2).AsInterfaceDeclaration()
+	assert.Equal(t, invalidInterfaceDecl.HeritageClauses().At(0).AsHeritageClause().Types().At(0).Kind(), ast.KindExpressionWithTypeArguments)
 
-	missingExtendsDecl := file.Statements.Nodes[3].AsInterfaceDeclaration()
-	assert.Equal(t, missingExtendsDecl.HeritageClauses.Nodes[0].AsHeritageClause().Types.Nodes[0].Kind, ast.KindExpressionWithTypeArguments)
+	missingExtendsDecl := file.Statements.At(3).AsInterfaceDeclaration()
+	assert.Equal(t, missingExtendsDecl.HeritageClauses().At(0).AsHeritageClause().Types().At(0).Kind(), ast.KindExpressionWithTypeArguments)
 
-	missingImplementsDecl := file.Statements.Nodes[4].AsClassDeclaration()
-	assert.Equal(t, missingImplementsDecl.HeritageClauses.Nodes[0].AsHeritageClause().Types.Nodes[0].Kind, ast.KindExpressionWithTypeArguments)
+	missingImplementsDecl := file.Statements.At(4).AsClassDeclaration()
+	assert.Equal(t, missingImplementsDecl.HeritageClauses().At(0).AsHeritageClause().Types().At(0).Kind(), ast.KindExpressionWithTypeArguments)
 }
 
 func TestParseStaticSourcePhaseImport(t *testing.T) {
@@ -247,19 +247,19 @@ func TestParseStaticSourcePhaseImport(t *testing.T) {
 			t.Parallel()
 			file := parsetestutil.ParseTypeScript(test.source, false)
 			parsetestutil.CheckDiagnostics(t, file)
-			assert.Equal(t, len(file.Statements.Nodes), 1)
+			assert.Equal(t, file.Statements.Len(), 1)
 
-			statement := file.Statements.Nodes[0]
+			statement := file.Statements.At(0)
 			assert.Assert(t, ast.IsImportDeclaration(statement))
 
 			declaration := statement.AsImportDeclaration()
-			assert.Assert(t, declaration.ImportClause != nil)
+			assert.Assert(t, !declaration.ImportClause().IsNil())
 
-			clause := declaration.ImportClause.AsImportClause()
-			assert.Equal(t, clause.PhaseModifier, test.phaseModifier)
-			assert.Assert(t, clause.Name() != nil)
+			clause := declaration.ImportClause().AsImportClause()
+			assert.Equal(t, clause.PhaseModifier(), test.phaseModifier)
+			assert.Assert(t, !clause.Name().IsNil())
 			assert.Equal(t, clause.Name().Text(), test.bindingName)
-			assert.Equal(t, declaration.Attributes != nil, test.hasAttributes)
+			assert.Equal(t, !declaration.Attributes().IsNil(), test.hasAttributes)
 		})
 	}
 }
@@ -268,9 +268,9 @@ func TestParseSourceAsImportEqualsBinding(t *testing.T) {
 	t.Parallel()
 	file := parsetestutil.ParseTypeScript(`import source = require("./module.js");`, false)
 	parsetestutil.CheckDiagnostics(t, file)
-	assert.Equal(t, len(file.Statements.Nodes), 1)
+	assert.Equal(t, file.Statements.Len(), 1)
 
-	statement := file.Statements.Nodes[0]
+	statement := file.Statements.At(0)
 	assert.Assert(t, ast.IsImportEqualsDeclaration(statement))
 
 	assert.Equal(t, statement.Name().Text(), "source")
@@ -292,18 +292,18 @@ func TestParseInvalidStaticSourcePhaseImports(t *testing.T) {
 	for _, test := range tests {
 		file := parsetestutil.ParseTypeScript(test.source, false)
 		parsetestutil.CheckDiagnostics(t, file)
-		assert.Equal(t, len(file.Statements.Nodes), 1)
+		assert.Equal(t, file.Statements.Len(), 1)
 
-		statement := file.Statements.Nodes[0]
+		statement := file.Statements.At(0)
 		assert.Assert(t, ast.IsImportDeclaration(statement))
 
 		declaration := statement.AsImportDeclaration()
-		assert.Assert(t, declaration.ImportClause != nil)
+		assert.Assert(t, !declaration.ImportClause().IsNil())
 
-		clause := declaration.ImportClause.AsImportClause()
-		assert.Equal(t, clause.PhaseModifier, ast.KindSourceKeyword)
-		assert.Equal(t, clause.Name() != nil, test.hasName)
-		assert.Equal(t, clause.NamedBindings != nil, test.hasNamedBindings)
+		clause := declaration.ImportClause().AsImportClause()
+		assert.Equal(t, clause.PhaseModifier(), ast.KindSourceKeyword)
+		assert.Equal(t, !clause.Name().IsNil(), test.hasName)
+		assert.Equal(t, !clause.NamedBindings().IsNil(), test.hasNamedBindings)
 	}
 }
 
@@ -311,24 +311,24 @@ func TestParseDynamicSourcePhaseImport(t *testing.T) {
 	t.Parallel()
 	file := parsetestutil.ParseTypeScript(`import.source("./a.wasm", { with: { type: "webassembly" } });`, false)
 	parsetestutil.CheckDiagnostics(t, file)
-	assert.Equal(t, len(file.Statements.Nodes), 1)
+	assert.Equal(t, file.Statements.Len(), 1)
 
-	statement := file.Statements.Nodes[0]
+	statement := file.Statements.At(0)
 	assert.Assert(t, ast.IsExpressionStatement(statement))
 
-	call := statement.AsExpressionStatement().Expression
+	call := statement.AsExpressionStatement().Expression()
 	assert.Assert(t, ast.IsCallExpression(call))
 	assert.Assert(t, ast.IsImportCall(call))
 	assert.Assert(t, call.SubtreeFacts()&ast.SubtreeContainsDynamicImport != 0)
 
 	metaProperty := call.Expression()
 	assert.Assert(t, ast.IsMetaProperty(metaProperty))
-	assert.Equal(t, metaProperty.AsMetaProperty().KeywordToken, ast.KindImportKeyword)
+	assert.Equal(t, metaProperty.AsMetaProperty().KeywordToken(), ast.KindImportKeyword)
 	assert.Equal(t, metaProperty.Text(), "source")
-	assert.Equal(t, len(call.Arguments()), 2)
-	assert.Equal(t, file.Flags&ast.NodeFlagsPossiblyContainsDynamicImport != 0, true)
-	assert.Equal(t, file.Flags&ast.NodeFlagsPossiblyContainsImportMeta != 0, false)
-	assert.Equal(t, file.ExternalModuleIndicator == nil, true)
+	assert.Equal(t, call.ArgumentList().Len(), 2)
+	assert.Equal(t, file.Flags()&ast.NodeFlagsPossiblyContainsDynamicImport != 0, true)
+	assert.Equal(t, file.Flags()&ast.NodeFlagsPossiblyContainsImportMeta != 0, false)
+	assert.Equal(t, file.ExternalModuleIndicator.IsNil(), true)
 }
 
 func TestParseEscapedDynamicImportPhase(t *testing.T) {
@@ -347,20 +347,20 @@ func TestParseEscapedDynamicImportPhase(t *testing.T) {
 			file := parsetestutil.ParseTypeScript(test.source, false)
 			assert.Equal(t, len(file.Diagnostics()), 1)
 			assert.Equal(t, file.Diagnostics()[0].Code(), diagnostics.Keywords_cannot_contain_escape_characters.Code())
-			assert.Equal(t, len(file.Statements.Nodes), 1)
+			assert.Equal(t, file.Statements.Len(), 1)
 
-			statement := file.Statements.Nodes[0]
+			statement := file.Statements.At(0)
 			assert.Assert(t, ast.IsExpressionStatement(statement))
 
-			call := statement.AsExpressionStatement().Expression
+			call := statement.AsExpressionStatement().Expression()
 			assert.Assert(t, ast.IsCallExpression(call))
 			assert.Assert(t, ast.IsImportCall(call))
 
 			metaProperty := call.Expression()
 			assert.Assert(t, ast.IsMetaProperty(metaProperty))
 			assert.Equal(t, metaProperty.Text(), test.phaseName)
-			assert.Equal(t, file.Flags&ast.NodeFlagsPossiblyContainsDynamicImport != 0, true)
-			assert.Equal(t, file.Flags&ast.NodeFlagsPossiblyContainsImportMeta != 0, false)
+			assert.Equal(t, file.Flags()&ast.NodeFlagsPossiblyContainsDynamicImport != 0, true)
+			assert.Equal(t, file.Flags()&ast.NodeFlagsPossiblyContainsImportMeta != 0, false)
 		})
 	}
 }
@@ -382,16 +382,16 @@ func TestJSDocInlineLinksInOptionalTypePositions(t *testing.T) {
 					FileName: "/index.ts",
 					PathKey:  "/index.ts",
 				}, "/** @"+tag+" {@"+link.name+" C} */\nfunction f(value) {}", core.ScriptKindTS)
-				jsDocs := file.Statements.Nodes[0].JSDoc(file)
+				jsDocs := file.Statements.At(0).JSDoc(file)
 				assert.Equal(t, len(jsDocs), 1)
-				tags := jsDocs[0].AsJSDoc().Tags.Nodes
-				assert.Equal(t, len(tags), 1)
-				assert.Assert(t, tags[0].TypeExpression() == nil)
-				comments := tags[0].CommentList()
-				assert.Assert(t, comments != nil)
-				links := core.Filter(comments.Nodes, ast.IsJSDocLinkLike)
+				tags := jsDocs[0].AsJSDoc().Tags()
+				assert.Equal(t, tags.Len(), 1)
+				assert.Assert(t, tags.At(0).TypeExpression().IsNil())
+				comments := tags.At(0).CommentList()
+				assert.Assert(t, !comments.IsNil())
+				links := core.Filter(comments.Slice(), ast.IsJSDocLinkLike)
 				assert.Equal(t, len(links), 1)
-				assert.Equal(t, links[0].Kind, link.kind)
+				assert.Equal(t, links[0].Kind(), link.kind)
 			})
 		}
 	}
@@ -406,12 +406,12 @@ func TestJSDocTypesInOptionalTypePositions(t *testing.T) {
 				FileName: "/index.ts",
 				PathKey:  "/index.ts",
 			}, "/** @"+tag+" {C} description */\nfunction f(value) {}", core.ScriptKindTS)
-			jsDocs := file.Statements.Nodes[0].JSDoc(file)
+			jsDocs := file.Statements.At(0).JSDoc(file)
 			assert.Equal(t, len(jsDocs), 1)
-			tags := jsDocs[0].AsJSDoc().Tags.Nodes
-			assert.Equal(t, len(tags), 1)
-			typeExpression := tags[0].TypeExpression()
-			assert.Assert(t, typeExpression != nil)
+			tags := jsDocs[0].AsJSDoc().Tags()
+			assert.Equal(t, tags.Len(), 1)
+			typeExpression := tags.At(0).TypeExpression()
+			assert.Assert(t, !typeExpression.IsNil())
 			assert.Equal(t, scanner.GetTextOfNode(typeExpression.Type()), "C")
 		})
 	}
@@ -451,8 +451,8 @@ test("", async function () {
 
 	for i := 1; i < len(file.ReparsedClones); i++ {
 		a, b := file.ReparsedClones[i-1], file.ReparsedClones[i]
-		if a.Pos() == b.Pos() && a.End() == b.End() && a.Kind == b.Kind {
-			t.Errorf("duplicate ReparsedClones at [%d] and [%d]: %s pos=%d end=%d", i-1, i, a.Kind.String(), a.Pos(), a.End())
+		if a.Pos() == b.Pos() && a.End() == b.End() && a.Kind() == b.Kind() {
+			t.Errorf("duplicate ReparsedClones at [%d] and [%d]: %s pos=%d end=%d", i-1, i, a.Kind().String(), a.Pos(), a.End())
 		}
 	}
 
@@ -479,27 +479,27 @@ const value = 0;`
 	}
 
 	file := parser.ParseSourceFile(opts, sourceText, core.ScriptKindJS)
-	var typeAlias *ast.Node
-	for _, statement := range file.Statements.Nodes {
+	var typeAlias ast.Node
+	for _, statement := range file.Statements.All() {
 		if ast.IsJSTypeAliasDeclaration(statement) {
 			typeAlias = statement
 			break
 		}
 	}
-	assert.Assert(t, typeAlias != nil)
+	assert.Assert(t, !typeAlias.IsNil())
 
 	jsDocs := typeAlias.JSDoc(file)
 	assert.Equal(t, len(jsDocs), 1)
-	assert.Assert(t, jsDocs[0].AsJSDoc().Tags != nil)
-	assert.Equal(t, len(jsDocs[0].AsJSDoc().Tags.Nodes), 1)
+	assert.Assert(t, !jsDocs[0].AsJSDoc().Tags().IsNil())
+	assert.Equal(t, jsDocs[0].AsJSDoc().Tags().Len(), 1)
 
-	typeExpression := jsDocs[0].AsJSDoc().Tags.Nodes[0].TypeExpression()
-	assert.Assert(t, typeExpression != nil)
+	typeExpression := jsDocs[0].AsJSDoc().Tags().At(0).TypeExpression()
+	assert.Assert(t, !typeExpression.IsNil())
 
 	expected := strings.Join([]string{"(", `"a" |`, `"b"`, ")[]"}, core.NewLineKindLF.GetNewLineCharacter())
 	tests := []struct {
 		name string
-		node *ast.Node
+		node ast.Node
 	}{
 		{name: "original", node: typeExpression.Type()},
 		{name: "reparsed", node: typeAlias.Type()},
@@ -526,13 +526,13 @@ function foo(options) {}`
 	}
 
 	file := parser.ParseSourceFile(opts, sourceText, core.ScriptKindJS)
-	function := file.Statements.Nodes[0]
+	function := file.Statements.At(0)
 	assert.Assert(t, ast.IsFunctionDeclaration(function))
-	assert.Equal(t, len(function.Parameters()), 1)
+	assert.Equal(t, function.ParameterList().Len(), 1)
 
-	typeNode := function.Parameters()[0].Type()
-	assert.Assert(t, typeNode != nil)
-	assert.Assert(t, typeNode.Flags&ast.NodeFlagsReparsed != 0)
+	typeNode := function.ParameterList().At(0).Type()
+	assert.Assert(t, !typeNode.IsNil())
+	assert.Assert(t, typeNode.Flags()&ast.NodeFlagsReparsed != 0)
 
 	expected := strings.Join([]string{"{", "value: string", "}"}, core.NewLineKindLF.GetNewLineCharacter())
 	assert.Equal(t, scanner.GetTextOfNode(typeNode), expected)
@@ -567,20 +567,20 @@ func TestJSDocAugmentsHeritage(t *testing.T) {
 			}
 			file := parser.ParseSourceFile(opts, sourceText, core.ScriptKindJS)
 			parsetestutil.CheckDiagnostics(t, file)
-			assert.Equal(t, len(file.Statements.Nodes), 1)
-			classB := file.Statements.Nodes[0]
+			assert.Equal(t, file.Statements.Len(), 1)
+			classB := file.Statements.At(0)
 			assert.Assert(t, ast.IsClassDeclaration(classB))
 
 			baseType := ast.GetClassExtendsHeritageElement(classB)
-			assert.Assert(t, baseType != nil)
+			assert.Assert(t, !baseType.IsNil())
 			assert.Equal(t, scanner.GetTextOfNode(baseType.Expression()), test.expression)
 
 			jsDocs := classB.JSDoc(file)
 			assert.Equal(t, len(jsDocs), 1)
-			tags := jsDocs[0].AsJSDoc().Tags
-			assert.Assert(t, tags != nil)
-			assert.Equal(t, len(tags.Nodes), 1)
-			tag := tags.Nodes[0]
+			tags := jsDocs[0].AsJSDoc().Tags()
+			assert.Assert(t, !tags.IsNil())
+			assert.Equal(t, tags.Len(), 1)
+			tag := tags.At(0)
 			assert.Assert(t, ast.IsJSDocAugmentsTag(tag))
 			sourceTypeArguments := tag.ClassName().TypeArguments()
 			assert.Equal(t, len(sourceTypeArguments), 1)
@@ -589,9 +589,9 @@ func TestJSDocAugmentsHeritage(t *testing.T) {
 			if test.augments {
 				assert.Equal(t, len(typeArguments), 1)
 				typeArgument := typeArguments[0]
-				assert.Equal(t, typeArgument.Kind, ast.KindStringKeyword)
-				assert.Assert(t, typeArgument.Flags&ast.NodeFlagsReparsed != 0)
-				assert.Equal(t, typeArgument.Parent, baseType)
+				assert.Equal(t, typeArgument.Kind(), ast.KindStringKeyword)
+				assert.Assert(t, typeArgument.Flags()&ast.NodeFlagsReparsed != 0)
+				assert.Equal(t, typeArgument.Parent(), baseType)
 				assert.Equal(t, scanner.GetTextOfNode(typeArgument), "string")
 				assert.Equal(t, ast.GetReparsedNodeForNode(sourceTypeArguments[0]), typeArgument)
 			} else {
@@ -659,7 +659,7 @@ func TestCommonJSModuleIndicator(t *testing.T) {
 			opts := ast.SourceFileParseOptions{FileName: test.fileName, PathKey: tspath.CaseSensitive.PathKey(test.fileName.AsPath())}
 			opts.ExternalModuleIndicatorOptions.Force = test.fileName.ExtensionIsOneOf([]string{tspath.ExtensionCjs, tspath.ExtensionMjs})
 			file := parser.ParseSourceFile(opts, test.source, core.GetScriptKindFromFileName(test.fileName))
-			assert.Equal(t, file.CommonJSModuleIndicator != nil, test.expected)
+			assert.Equal(t, !file.CommonJSModuleIndicator.IsNil(), test.expected)
 		})
 	}
 }

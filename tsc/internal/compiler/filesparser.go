@@ -38,7 +38,7 @@ type parseTask struct {
 	typeResolutionsTrace         []module.DiagAndArgs
 	resolutionDiagnostics        []*ast.Diagnostic
 	processingDiagnostics        []*processingDiagnostic
-	importHelpersImportSpecifier *ast.StringLiteralNode
+	importHelpersImportSpecifier ast.StringLiteralNode
 	jsxRuntimeImportSpecifier    *jsxRuntimeImportSpecifier
 
 	increaseDepth bool
@@ -362,7 +362,7 @@ func (w *filesParser) getProcessedFiles(loader *fileLoader) processedFiles {
 	typeResolutionsInFile := make(map[tspath.PathKey]module.ModeAwareCache[*module.ResolvedTypeReferenceDirective], totalFileCount)
 	sourceFileMetaDatas := make(map[tspath.PathKey]ast.SourceFileMetaData, totalFileCount)
 	var jsxRuntimeImportSpecifiers map[tspath.PathKey]*jsxRuntimeImportSpecifier
-	var importHelpersImportSpecifiers map[tspath.PathKey]*ast.StringLiteralNode
+	var importHelpersImportSpecifiers map[tspath.PathKey]ast.StringLiteralNode
 	var sourceFilesFoundSearchingNodeModules collections.Set[tspath.PathKey]
 	libFilesMap := make(map[tspath.PathKey]*LibFile, libFileCount)
 
@@ -537,9 +537,9 @@ func (w *filesParser) getProcessedFiles(loader *fileLoader) processedFiles {
 				}
 				jsxRuntimeImportSpecifiers[path] = task.jsxRuntimeImportSpecifier
 			}
-			if task.importHelpersImportSpecifier != nil {
+			if !task.importHelpersImportSpecifier.IsNil() {
 				if importHelpersImportSpecifiers == nil {
-					importHelpersImportSpecifiers = make(map[tspath.PathKey]*ast.StringLiteralNode, totalFileCount)
+					importHelpersImportSpecifiers = make(map[tspath.PathKey]ast.StringLiteralNode, totalFileCount)
 				}
 				importHelpersImportSpecifiers[path] = task.importHelpersImportSpecifier
 			}

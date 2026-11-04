@@ -257,12 +257,12 @@ func (l *LanguageService) getFormattingEditsAfterKeystroke(
 func getRangeOfEnclosingComment(
 	file *ast.SourceFile,
 	position int,
-	precedingToken *ast.Node,
-	tokenAtPosition *ast.Node,
+	precedingToken ast.Node,
+	tokenAtPosition ast.Node,
 ) *ast.CommentRange {
-	jsdoc := ast.FindAncestor(tokenAtPosition, (*ast.Node).IsJSDoc)
-	if jsdoc != nil {
-		tokenAtPosition = jsdoc.Parent
+	jsdoc := ast.FindAncestor(tokenAtPosition, ast.Node.IsJSDoc)
+	if !jsdoc.IsNil() {
+		tokenAtPosition = jsdoc.Parent()
 	}
 	tokenStart := astnav.GetStartOfNode(tokenAtPosition, file, false /*includeJSDoc*/)
 	if tokenStart <= position && position < tokenAtPosition.End() {
@@ -272,7 +272,7 @@ func getRangeOfEnclosingComment(
 	// Between two consecutive tokens, all comments are either trailing on the former
 	// or leading on the latter (and none are in both lists).
 	var trailingRangesOfPreviousToken iter.Seq[ast.CommentRange]
-	if precedingToken != nil {
+	if !precedingToken.IsNil() {
 		trailingRangesOfPreviousToken = scanner.GetTrailingCommentRanges(&ast.NodeFactory{}, file.Text(), precedingToken.End())
 	}
 	leadingRangesOfNextToken := getLeadingCommentRangesOfNode(tokenAtPosition, file)

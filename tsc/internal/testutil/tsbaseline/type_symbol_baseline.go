@@ -264,14 +264,14 @@ type typeWriterWalker struct {
 	program              compiler.ProgramLike
 	hadErrorBaseline     bool
 	currentSourceFile    *ast.SourceFile
-	declarationTextCache map[*ast.Node]string
+	declarationTextCache map[ast.Node]string
 }
 
 func newTypeWriterWalker(program compiler.ProgramLike, hadErrorBaseline bool) *typeWriterWalker {
 	return &typeWriterWalker{
 		program:              program,
 		hadErrorBaseline:     hadErrorBaseline,
-		declarationTextCache: make(map[*ast.Node]string),
+		declarationTextCache: make(map[ast.Node]string),
 	}
 }
 
@@ -301,12 +301,12 @@ func (walker *typeWriterWalker) getSymbols(filename string) []*typeWriterResult 
 	return walker.visitNode(sourceFile.AsNode(), true /*isSymbolWalk*/)
 }
 
-func (walker *typeWriterWalker) visitNode(node *ast.Node, isSymbolWalk bool) []*typeWriterResult {
+func (walker *typeWriterWalker) visitNode(node ast.Node, isSymbolWalk bool) []*typeWriterResult {
 	nodes := forEachASTNode(node)
 	var results []*typeWriterResult
 	for _, n := range nodes {
-		if ast.IsExpressionNode(n) || n.Kind == ast.KindIdentifier || ast.IsDeclarationName(n) ||
-			ast.IsQualifiedName(n) && ast.IsNameOfHeritageClauseTypeReference(n) && (isSymbolWalk || ast.IsQualifiedName(n.Parent)) {
+		if ast.IsExpressionNode(n) || n.Kind() == ast.KindIdentifier || ast.IsDeclarationName(n) ||
+			ast.IsQualifiedName(n) && ast.IsNameOfHeritageClauseTypeReference(n) && (isSymbolWalk || ast.IsQualifiedName(n.Parent())) {
 			result := walker.writeTypeOrSymbol(n, isSymbolWalk)
 			if result != nil {
 				results = append(results, result)
@@ -316,12 +316,12 @@ func (walker *typeWriterWalker) visitNode(node *ast.Node, isSymbolWalk bool) []*
 	return results
 }
 
-func forEachASTNode(node *ast.Node) []*ast.Node {
-	var result []*ast.Node
-	work := []*ast.Node{node}
+func forEachASTNode(node ast.Node) []ast.Node {
+	var result []ast.Node
+	work := []ast.Node{node}
 
-	var resChildren []*ast.Node
-	addChild := func(child *ast.Node) bool {
+	var resChildren []ast.Node
+	addChild := func(child ast.Node) bool {
 		resChildren = append(resChildren, child)
 		return false
 	}
@@ -329,9 +329,9 @@ func forEachASTNode(node *ast.Node) []*ast.Node {
 	for len(work) > 0 {
 		elem := work[len(work)-1]
 		work = work[:len(work)-1]
-		if elem.Flags&ast.NodeFlagsReparsed == 0 || elem.Kind == ast.KindAsExpression || elem.Kind == ast.KindSatisfiesExpression ||
-			((elem.Parent.Kind == ast.KindSatisfiesExpression || elem.Parent.Kind == ast.KindAsExpression) && elem == elem.Parent.Expression()) {
-			if elem.Flags&ast.NodeFlagsReparsed == 0 || elem.Parent.Kind == ast.KindAsExpression || elem.Parent.Kind == ast.KindSatisfiesExpression {
+		if elem.Flags()&ast.NodeFlagsReparsed == 0 || elem.Kind() == ast.KindAsExpression || elem.Kind() == ast.KindSatisfiesExpression ||
+			((elem.Parent().Kind() == ast.KindSatisfiesExpression || elem.Parent().Kind() == ast.KindAsExpression) && elem == elem.Parent().Expression()) {
+			if elem.Flags()&ast.NodeFlagsReparsed == 0 || elem.Parent().Kind() == ast.KindAsExpression || elem.Parent().Kind() == ast.KindSatisfiesExpression {
 				result = append(result, elem)
 			}
 			elem.ForEachChild(addChild)
@@ -343,7 +343,7 @@ func forEachASTNode(node *ast.Node) []*ast.Node {
 	return result
 }
 
-func (walker *typeWriterWalker) writeTypeOrSymbol(node *ast.Node, isSymbolWalk bool) *typeWriterResult {
+func (walker *typeWriterWalker) writeTypeOrSymbol(node ast.Node, isSymbolWalk bool) *typeWriterResult {
 	actualPos := scanner.SkipTrivia(walker.currentSourceFile.Text(), node.Pos())
 	line := scanner.GetECMALineOfPosition(walker.currentSourceFile, actualPos)
 	sourceText := scanner.GetSourceTextOfNodeFromSourceFile(walker.currentSourceFile, node, false /*includeTrivia*/)
@@ -356,10 +356,10 @@ func (walker *typeWriterWalker) writeTypeOrSymbol(node *ast.Node, isSymbolWalk b
 		// Don't try to get the type of something that's already a type.
 		// Exception for `T` in `type T = something` because that may evaluate to some interesting type.
 		if ast.IsPartOfTypeNode(node) ||
-			(node.Kind == ast.KindAsExpression || node.Kind == ast.KindSatisfiesExpression) && node.Type().Flags&ast.NodeFlagsReparsed != 0 ||
+			(node.Kind() == ast.KindAsExpression || node.Kind() == ast.KindSatisfiesExpression) && node.Type().Flags()&ast.NodeFlagsReparsed != 0 ||
 			ast.IsIdentifier(node) &&
-				(ast.GetMeaningFromDeclaration(node.Parent)&ast.SemanticMeaningValue) == 0 &&
-				!(ast.IsTypeOrJSTypeAliasDeclaration(node.Parent) && node == node.Parent.Name()) {
+				(ast.GetMeaningFromDeclaration(node.Parent())&ast.SemanticMeaningValue) == 0 &&
+				!(ast.IsTypeOrJSTypeAliasDeclaration(node.Parent()) && node == node.Parent().Name()) {
 			return nil
 		}
 
@@ -369,8 +369,8 @@ func (walker *typeWriterWalker) writeTypeOrSymbol(node *ast.Node, isSymbolWalk b
 
 		var t *checker.Type
 		// Workaround to ensure we output 'C' instead of 'typeof C' for base class expressions
-		if ast.IsExpressionWithTypeArgumentsInClassExtendsClause(node.Parent) {
-			t = fileChecker.GetTypeAtLocation(node.Parent)
+		if ast.IsExpressionWithTypeArgumentsInClassExtendsClause(node.Parent()) {
+			t = fileChecker.GetTypeAtLocation(node.Parent())
 		}
 		if t == nil || checker.IsTypeAny(t) {
 			t = fileChecker.GetTypeAtLocation(node)
@@ -379,11 +379,11 @@ func (walker *typeWriterWalker) writeTypeOrSymbol(node *ast.Node, isSymbolWalk b
 		// var underline string
 		if !walker.hadErrorBaseline &&
 			checker.IsTypeAny(t) &&
-			!ast.IsBindingElement(node.Parent) &&
-			!ast.IsPropertyAccessOrQualifiedName(node.Parent) &&
+			!ast.IsBindingElement(node.Parent()) &&
+			!ast.IsPropertyAccessOrQualifiedName(node.Parent()) &&
 			!ast.IsLabelName(node) &&
-			!ast.IsGlobalScopeAugmentation(node.Parent) &&
-			!ast.IsMetaProperty(node.Parent) &&
+			!ast.IsGlobalScopeAugmentation(node.Parent()) &&
+			!ast.IsMetaProperty(node.Parent()) &&
 			!isImportStatementName(node) &&
 			!isExportStatementName(node) &&
 			!isIntrinsicJsxTag(node, walker.currentSourceFile) {
@@ -391,11 +391,11 @@ func (walker *typeWriterWalker) writeTypeOrSymbol(node *ast.Node, isSymbolWalk b
 		} else {
 			builder := checker.NewNodeBuilder(fileChecker, ctx)
 			typeFormatFlags := checker.TypeFormatFlagsNoTruncation | checker.TypeFormatFlagsAllowUniqueESSymbolType | checker.TypeFormatFlagsGenerateNamesForShadowedTypeParams
-			typeNode := builder.TypeToTypeNode(t, node.Parent, nodebuilder.Flags(typeFormatFlags&checker.TypeFormatFlagsNodeBuilderFlagsMask)|nodebuilder.FlagsIgnoreErrors, nodebuilder.InternalFlagsAllowUnresolvedNames, nil)
-			if ast.IsIdentifier(node) && ast.IsTypeAliasDeclaration(node.Parent) && node.Parent.Name() == node && ast.IsIdentifier(typeNode) && typeNode.Text() == node.Text() {
+			typeNode := builder.TypeToTypeNode(t, node.Parent(), nodebuilder.Flags(typeFormatFlags&checker.TypeFormatFlagsNodeBuilderFlagsMask)|nodebuilder.FlagsIgnoreErrors, nodebuilder.InternalFlagsAllowUnresolvedNames, nil)
+			if ast.IsIdentifier(node) && ast.IsTypeAliasDeclaration(node.Parent()) && node.Parent().Name() == node && ast.IsIdentifier(typeNode) && typeNode.Text() == node.Text() {
 				// for a complex type alias `type T = ...`, showing "T : T" isn't very helpful for type tests. When the type produced is the same as
 				// the name of the type alias, recreate the type string without reusing the alias name
-				typeNode = builder.TypeToTypeNode(t, node.Parent, nodebuilder.Flags((typeFormatFlags|checker.TypeFormatFlagsInTypeAlias)&checker.TypeFormatFlagsNodeBuilderFlagsMask)|nodebuilder.FlagsIgnoreErrors, nodebuilder.InternalFlagsAllowUnresolvedNames, nil)
+				typeNode = builder.TypeToTypeNode(t, node.Parent(), nodebuilder.Flags((typeFormatFlags|checker.TypeFormatFlagsInTypeAlias)&checker.TypeFormatFlagsNodeBuilderFlagsMask)|nodebuilder.FlagsIgnoreErrors, nodebuilder.InternalFlagsAllowUnresolvedNames, nil)
 			}
 
 			// !!! TODO: port underline printer, memoize
@@ -420,7 +420,7 @@ func (walker *typeWriterWalker) writeTypeOrSymbol(node *ast.Node, isSymbolWalk b
 	var symbolString strings.Builder
 	symbolString.Grow(256)
 	symbolString.WriteString("Symbol(")
-	symbolString.WriteString(ast.EscapeAllInternalSymbolNames(fileChecker.SymbolToStringEx(symbol, node.Parent, ast.SymbolFlagsNone, checker.SymbolFormatFlagsAllowAnyNodeKind)))
+	symbolString.WriteString(ast.EscapeAllInternalSymbolNames(fileChecker.SymbolToStringEx(symbol, node.Parent(), ast.SymbolFlagsNone, checker.SymbolFormatFlagsAllowAnyNodeKind)))
 	count := 0
 	for _, declaration := range symbol.Declarations() {
 		if count >= 5 {
@@ -454,34 +454,34 @@ func (walker *typeWriterWalker) writeTypeOrSymbol(node *ast.Node, isSymbolWalk b
 	}
 }
 
-func isImportStatementName(node *ast.Node) bool {
-	if ast.IsImportSpecifier(node.Parent) && (node == node.Parent.Name() || node == node.Parent.PropertyName()) {
+func isImportStatementName(node ast.Node) bool {
+	if ast.IsImportSpecifier(node.Parent()) && (node == node.Parent().Name() || node == node.Parent().PropertyName()) {
 		return true
 	}
-	if ast.IsImportClause(node.Parent) && node == node.Parent.Name() {
+	if ast.IsImportClause(node.Parent()) && node == node.Parent().Name() {
 		return true
 	}
-	if ast.IsImportEqualsDeclaration(node.Parent) && node == node.Parent.Name() {
-		return true
-	}
-	return false
-}
-
-func isExportStatementName(node *ast.Node) bool {
-	if ast.IsExportAssignment(node.Parent) && node == node.Parent.Expression() {
-		return true
-	}
-	if ast.IsExportSpecifier(node.Parent) && (node == node.Parent.Name() || node == node.Parent.PropertyName()) {
+	if ast.IsImportEqualsDeclaration(node.Parent()) && node == node.Parent().Name() {
 		return true
 	}
 	return false
 }
 
-func isIntrinsicJsxTag(node *ast.Node, sourceFile *ast.SourceFile) bool {
-	if !(ast.IsJsxOpeningElement(node.Parent) || ast.IsJsxClosingElement(node.Parent) || ast.IsJsxSelfClosingElement(node.Parent)) {
+func isExportStatementName(node ast.Node) bool {
+	if ast.IsExportAssignment(node.Parent()) && node == node.Parent().Expression() {
+		return true
+	}
+	if ast.IsExportSpecifier(node.Parent()) && (node == node.Parent().Name() || node == node.Parent().PropertyName()) {
+		return true
+	}
+	return false
+}
+
+func isIntrinsicJsxTag(node ast.Node, sourceFile *ast.SourceFile) bool {
+	if !(ast.IsJsxOpeningElement(node.Parent()) || ast.IsJsxClosingElement(node.Parent()) || ast.IsJsxSelfClosingElement(node.Parent())) {
 		return false
 	}
-	if node.Parent.TagName() != node {
+	if node.Parent().TagName() != node {
 		return false
 	}
 	text := scanner.GetSourceTextOfNodeFromSourceFile(sourceFile, node, false /*includeTrivia*/)
