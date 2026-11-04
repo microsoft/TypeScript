@@ -13,7 +13,6 @@ See the Apache Version 2.0 License for specific language governing permissions
 and limitations under the License.
 ***************************************************************************** */
 
-
 /// <reference lib="es2026" />
 /// <reference lib="esnext.intl" />
 /// <reference lib="esnext.decorators" />
@@ -21,5 +20,6 @@ and limitations under the License.
 /// <reference lib="esnext.sharedmemory" />
 /// <reference lib="esnext.temporal" />
 /// <reference lib="esnext.date" />
+/// <reference lib="esnext.iterator" />
 /// <reference lib="esnext.modulesource" />
 /// <reference lib="esnext.promise" />

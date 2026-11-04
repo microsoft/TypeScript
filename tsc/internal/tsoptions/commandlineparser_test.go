@@ -145,6 +145,18 @@ func TestResponseFileParsing(t *testing.T) {
 		assert.Assert(t, parsed.CompilerOptions().Strict.IsTrue())
 		assert.Equal(t, parsed.CompilerOptions().OutDir, tspath.RootedDirectoryPath("/project/dist"))
 	})
+
+	t.Run("network path", func(t *testing.T) {
+		t.Parallel()
+		fs := tsoptionstest.NewVFS(map[string]string{
+			"/project/args.txt": `--pprofDir \\server\share --outDir dist`,
+		}, tspath.CaseSensitive)
+		parsed := tsoptions.ParseCommandLine([]string{"@args.txt"}, fs, "/project")
+		assert.Equal(t, len(parsed.Errors), 1)
+		assert.Equal(t, parsed.Errors[0].Code(), diagnostics.Network_path_0_is_not_supported.Code())
+		assert.Equal(t, parsed.CompilerOptions().PprofDir, tspath.RootedDirectoryPath(""))
+		assert.Equal(t, parsed.CompilerOptions().OutDir, tspath.RootedDirectoryPath("/project/dist"))
+	})
 }
 
 func TestParseCommandLineTypeRootsRelativePath(t *testing.T) {
@@ -196,7 +208,7 @@ func TestCustomConditionsNullOverride(t *testing.T) {
 		"/project/tsconfig.json",
 		cmdLine.CompilerOptions(),
 		wrappedRaw,
-		fs,
+		tsoptions.NewDefaultParseConfigHost(fs),
 		nil,
 	)
 

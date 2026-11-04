@@ -26,7 +26,7 @@ func TestExtendedConfigCacheExtendsCircularity(t *testing.T) {
 		fs := vfstest.FromMap(files, tspath.CaseInsensitive /*caseSensitivity*/)
 		cache := &tsc.ExtendedConfigCache{}
 
-		cmd, _ := tsoptions.GetParsedCommandLineOfConfigFile("/project/tsconfig.json", nil, nil, fs, cache)
+		cmd, _ := tsoptions.GetParsedCommandLineOfConfigFile("/project/tsconfig.json", nil, nil, tsoptions.NewDefaultParseConfigHost(fs), cache)
 		if cmd == nil {
 			t.Fatal("expected non-nil ParsedCommandLine")
 		}
@@ -46,7 +46,7 @@ func TestExtendedConfigCacheExtendsCircularity(t *testing.T) {
 		fs := vfstest.FromMap(files, tspath.CaseInsensitive /*caseSensitivity*/)
 		cache := &tsc.ExtendedConfigCache{}
 
-		cmd, _ := tsoptions.GetParsedCommandLineOfConfigFile("/project/tsconfig.json", nil, nil, fs, cache)
+		cmd, _ := tsoptions.GetParsedCommandLineOfConfigFile("/project/tsconfig.json", nil, nil, tsoptions.NewDefaultParseConfigHost(fs), cache)
 		if cmd == nil {
 			t.Fatal("expected non-nil ParsedCommandLine")
 		}
@@ -67,7 +67,7 @@ func TestExtendedConfigCacheExtendsCircularity(t *testing.T) {
 		fs := vfstest.FromMap(files, tspath.CaseInsensitive /*caseSensitivity*/)
 		cache := &tsc.ExtendedConfigCache{}
 
-		cmd, _ := tsoptions.GetParsedCommandLineOfConfigFile("/project/tsconfig.json", nil, nil, fs, cache)
+		cmd, _ := tsoptions.GetParsedCommandLineOfConfigFile("/project/tsconfig.json", nil, nil, tsoptions.NewDefaultParseConfigHost(fs), cache)
 		if cmd == nil {
 			t.Fatal("expected non-nil ParsedCommandLine")
 		}
@@ -86,7 +86,7 @@ func TestExtendedConfigCacheNullExtendsDoesNotPanic(t *testing.T) {
 	fs := vfstest.FromMap(files, tspath.CaseInsensitive /*caseSensitivity*/)
 	cache := &tsc.ExtendedConfigCache{}
 
-	cmd, _ := tsoptions.GetParsedCommandLineOfConfigFile("/project/tsconfig.json", nil, nil, fs, cache)
+	cmd, _ := tsoptions.GetParsedCommandLineOfConfigFile("/project/tsconfig.json", nil, nil, tsoptions.NewDefaultParseConfigHost(fs), cache)
 	if cmd == nil {
 		t.Fatal("expected non-nil ParsedCommandLine")
 	}

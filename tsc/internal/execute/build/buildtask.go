@@ -2,7 +2,6 @@ package build
 
 import (
 	"fmt"
-	"iter"
 	"slices"
 	"strconv"
 	"strings"
@@ -491,7 +490,7 @@ func (t *BuildTask) getUpToDateStatus(orchestrator *Orchestrator, configPath tsp
 			if seenRoots.Has(inputPath) || resolvedRoots.Has(inputPath) {
 				continue
 			}
-			if isContentMapperSupplementalBuildInfoPath(inputPath, getBuildInfoRootInfoReader().Roots()) &&
+			if isContentMapperVirtualFilePath(inputPath, getBuildInfoRootInfoReader()) &&
 				!orchestrator.host.FS().FileExists(inputFileName) {
 				continue
 			}
@@ -620,21 +619,25 @@ func (t *BuildTask) getUpToDateStatus(orchestrator *Orchestrator, configPath tsp
 	}
 }
 
-func isContentMapperSupplementalBuildInfoPath(inputPath tspath.PathKey, roots iter.Seq[tspath.PathKey]) bool {
-	for root := range roots {
-		suffix, ok := strings.CutPrefix(string(inputPath), string(root)+".")
-		if !ok {
-			continue
-		}
-		index, extension, ok := strings.Cut(suffix, ".")
-		if !ok || extension == "" {
-			continue
-		}
-		if _, err := strconv.Atoi(index); err == nil && contentmapper.IsSupportedVirtualExtension("."+extension) {
-			return true
-		}
+func isContentMapperVirtualFilePath(inputPath tspath.PathKey, roots *incremental.BuildInfoRootInfoReader) bool {
+	extension := inputPath.Extension()
+	if !contentmapper.IsSupportedVirtualExtension(extension) {
+		return false
 	}
-	return false
+
+	pathWithoutExtension := tspath.RemoveExtension(inputPath.AsString(), extension)
+	rootName, index, ok := strings.CutLast(pathWithoutExtension, ".")
+	if !ok {
+		return false
+	}
+
+	rootPath, ok := tspath.TryPathKeyFromCanonical(rootName)
+	if !ok || !roots.HasRoot(rootPath) {
+		return false
+	}
+
+	_, err := strconv.Atoi(index)
+	return err == nil
 }
 
 func (t *BuildTask) reportUpToDateStatus(orchestrator *Orchestrator) {

@@ -1,5 +1,5 @@
-import { NodeFlags } from "#enums/nodeFlags";
-import { SyntaxKind } from "#enums/syntaxKind";
+import { NodeFlags } from "../../enums/nodeFlags.js";
+import { SyntaxKind } from "../../enums/syntaxKind.js";
 import type { TokenSyntaxKind } from "./ast.generated.ts";
 import type {
     Node,
@@ -94,12 +94,13 @@ export function findNextToken(previousToken: Node, parent: Node, sourceFile: Sou
         // The scanner is initialized at `previousToken.end`, so tokenFullStart === previousToken.end.
         const startPos = previousToken.end;
         if (startPos >= n.pos && startPos < n.end) {
-            const scanner = getScannerForSourceFile(sourceFile, startPos);
-            const token = scanner.getToken();
-            const tokenFullStart = scanner.getTokenFullStart();
-            const tokenEnd = scanner.getTokenEnd();
-            const flags = scanner.getTokenFlags();
-            return getOrCreateToken(sourceFile, token, tokenFullStart, tokenEnd, n, flags);
+            return withScanner(sourceFile, startPos, scanner => {
+                const token = scanner.getToken();
+                const tokenFullStart = scanner.getTokenFullStart();
+                const tokenEnd = scanner.getTokenEnd();
+                const flags = scanner.getTokenFlags();
+                return getOrCreateToken(sourceFile, token, tokenFullStart, tokenEnd, n, flags);
+            });
         }
 
         return undefined;
@@ -270,40 +271,42 @@ function getTokenAtPositionImpl(
                 return current;
             }
             // Use the scanner to find a token not stored in the AST.
-            const scanner = getScannerForSourceFile(sourceFile, state.left);
-            let end = current.end;
+            const containing = current;
+            let end = containing.end;
             const afterLeft = nodeAfterLeft;
             if (afterLeft !== undefined) {
                 end = afterLeft.pos;
             }
-            while (state.left < end) {
-                const token = scanner.getToken();
-                const tokenFullStart = scanner.getTokenFullStart();
-                const tokenStart = allowPositionInLeadingTrivia ? tokenFullStart : scanner.getTokenStart();
-                const tokenEnd = scanner.getTokenEnd();
-                const flags = scanner.getTokenFlags();
-                if (tokenEnd > end) {
-                    break;
-                }
-                if (tokenStart <= position && position < tokenEnd) {
-                    if (token === SyntaxKind.Identifier || !isTokenKind(token)) {
-                        if (isJSDocNodeKind(current.kind)) {
-                            return current;
+            return withScanner(sourceFile, state.left, scanner => {
+                while (state.left < end) {
+                    const token = scanner.getToken();
+                    const tokenFullStart = scanner.getTokenFullStart();
+                    const tokenStart = allowPositionInLeadingTrivia ? tokenFullStart : scanner.getTokenStart();
+                    const tokenEnd = scanner.getTokenEnd();
+                    const flags = scanner.getTokenFlags();
+                    if (tokenEnd > end) {
+                        break;
+                    }
+                    if (tokenStart <= position && position < tokenEnd) {
+                        if (token === SyntaxKind.Identifier || !isTokenKind(token)) {
+                            if (isJSDocNodeKind(containing.kind)) {
+                                return containing;
+                            }
+                            throw new Error(`did not expect ${SyntaxKind[containing.kind]} to have ${SyntaxKind[token]} in its trivia`);
                         }
-                        throw new Error(`did not expect ${SyntaxKind[current.kind]} to have ${SyntaxKind[token]} in its trivia`);
+                        return getOrCreateToken(sourceFile, token, tokenFullStart, tokenEnd, containing, flags);
                     }
-                    return getOrCreateToken(sourceFile, token, tokenFullStart, tokenEnd, current, flags);
-                }
-                if (includePrecedingTokenAtEndPosition !== undefined && tokenEnd === position) {
-                    const prevToken = getOrCreateToken(sourceFile, token, tokenFullStart, tokenEnd, current, flags);
-                    if (includePrecedingTokenAtEndPosition(prevToken)) {
-                        return prevToken;
+                    if (includePrecedingTokenAtEndPosition !== undefined && tokenEnd === position) {
+                        const prevToken = getOrCreateToken(sourceFile, token, tokenFullStart, tokenEnd, containing, flags);
+                        if (includePrecedingTokenAtEndPosition(prevToken)) {
+                            return prevToken;
+                        }
                     }
+                    state.left = tokenEnd;
+                    scanner.scan();
                 }
-                state.left = tokenEnd;
-                scanner.scan();
-            }
-            return current;
+                return containing;
+            });
         }
 
         current = state.next;
@@ -513,20 +516,22 @@ function findRightmostValidToken(sourceFile: SourceFile, endPos: number, contain
             const startPos = rightmostValidNode !== undefined ? rightmostValidNode.end : n.pos;
             const targetEnd = Math.min(endPos, position);
             if (startPos < targetEnd) {
-                const scanner = getScannerForSourceFile(sourceFile, startPos);
-                let pos = startPos;
-                let lastScannedToken: Node | undefined;
-                while (pos < targetEnd) {
-                    const tokenStart = scanner.getTokenStart();
-                    if (tokenStart >= position) break;
-                    const tokenFullStart = scanner.getTokenFullStart();
-                    const tokenEnd = scanner.getTokenEnd();
-                    const token = scanner.getToken();
-                    const flags = scanner.getTokenFlags();
-                    lastScannedToken = getOrCreateToken(sourceFile, token, tokenFullStart, tokenEnd, n, flags);
-                    pos = tokenEnd;
-                    scanner.scan();
-                }
+                const lastScannedToken = withScanner(sourceFile, startPos, scanner => {
+                    let pos = startPos;
+                    let lastToken: Node | undefined;
+                    while (pos < targetEnd) {
+                        const tokenStart = scanner.getTokenStart();
+                        if (tokenStart >= position) break;
+                        const tokenFullStart = scanner.getTokenFullStart();
+                        const tokenEnd = scanner.getTokenEnd();
+                        const token = scanner.getToken();
+                        const flags = scanner.getTokenFlags();
+                        lastToken = getOrCreateToken(sourceFile, token, tokenFullStart, tokenEnd, n, flags);
+                        pos = tokenEnd;
+                        scanner.scan();
+                    }
+                    return lastToken;
+                });
                 if (lastScannedToken !== undefined) {
                     return lastScannedToken;
                 }
@@ -592,12 +597,63 @@ function isJSDocSingleCommentNodeList(nodes: NodeArray<Node>): boolean {
     return nodes.length === 1 && isJSDocCommentChildKind(nodes[0].kind);
 }
 
-function getScannerForSourceFile(sourceFile: SourceFile, pos: number) {
-    const scanner = createScanner(/*skipTrivia*/ true, sourceFile.languageVariant, sourceFile.text);
-    scanner.resetTokenState(pos);
-    scanner.scan();
-    return scanner;
+// Idle scanners available for reuse, keyed by the source file whose text they scan.
+// A scanner is removed from its pool while in use, so nested or reentrant traversals
+// always receive distinct scanners. Pooled scanners retain only the source file's text.
+interface ScannerLease extends Disposable {
+    readonly scanner: Scanner;
 }
+
+const scannerPools = new WeakMap<SourceFile, ScannerLease[]>();
+
+function acquireScanner(sourceFile: SourceFile): ScannerLease {
+    let pool = scannerPools.get(sourceFile);
+    if (pool === undefined) {
+        pool = [];
+        scannerPools.set(sourceFile, pool);
+    }
+    const lease = pool.pop();
+    if (lease === undefined) {
+        return createPooledScanner(sourceFile, pool);
+    }
+    // setText resets the token state (position, token, value, flags) to the start of the text.
+    lease.scanner.setText(sourceFile.text);
+    lease.scanner.setLanguageVariant(sourceFile.languageVariant);
+    return lease;
+}
+
+function createPooledScanner(sourceFile: SourceFile, pool: ScannerLease[]): ScannerLease {
+    return {
+        scanner: createScanner(/*skipTrivia*/ true, sourceFile.languageVariant, sourceFile.text),
+        [Symbol.dispose]() {
+            // Drop per-use state so an idle scanner holds no token values or comment directives.
+            // The JSDoc leading-asterisk depth is never changed by this module, so it stays zero.
+            this.scanner.clearCommentDirectives();
+            this.scanner.resetTokenState(0);
+            pool.push(this);
+        },
+    };
+}
+
+function withScanner<T>(sourceFile: SourceFile, pos: number | undefined, callback: (scanner: Scanner) => T): T {
+    using lease = acquireScanner(sourceFile);
+    const { scanner } = lease;
+    if (pos !== undefined) {
+        scanner.resetTokenState(pos);
+        scanner.scan();
+    }
+    return callback(scanner);
+}
+
+/**
+ * Returns the idle scanners pooled for `sourceFile`. Exposed for tests only.
+ * @internal
+ */
+export function getPooledScannersForTesting(sourceFile: SourceFile): readonly Scanner[] {
+    return scannerPools.get(sourceFile)?.map(lease => lease.scanner) ?? emptyScannerArray;
+}
+
+const emptyScannerArray: readonly Scanner[] = [];
 
 type Mutable<T> = { -readonly [K in keyof T]: T[K]; };
 
@@ -669,7 +725,8 @@ function createChildren(node: Node, sourceFile: SourceFile): readonly Node[] {
     }
 
     // One scanner serves every run of synthetic tokens materialized for this node.
-    const scanner = createScanner(/*skipTrivia*/ true, sourceFile.languageVariant, sourceFile.text);
+    using lease = acquireScanner(sourceFile);
+    const { scanner } = lease;
     let pos = node.pos;
     const processNode = (child: Node): undefined => {
         // Reparsed subtrees (JSDoc types materialized into the AST) have positions inside

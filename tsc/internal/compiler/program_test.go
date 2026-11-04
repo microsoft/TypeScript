@@ -103,7 +103,7 @@ import { value } from "./dep.js"; export const result = value;`,
 	}
 	fs := vfstest.FromMap(files, tspath.CaseSensitive)
 	host := NewCompilerHost(fs, "/", nil, nil, nil)
-	config, diagnostics := tsoptions.GetParsedCommandLineOfConfigFile("/src/tsconfig.json", nil, nil, fs, nil)
+	config, diagnostics := tsoptions.GetParsedCommandLineOfConfigFile("/src/tsconfig.json", nil, nil, tsoptions.NewDefaultParseConfigHost(fs), nil)
 	assert.Equal(t, len(diagnostics), 0)
 	var pools, resolvers int
 	tr := new(tracing.Tracing)
@@ -209,7 +209,7 @@ func TestClonedProgramProjectReferenceResolution(t *testing.T) {
 			host := NewCompilerHost(fs, "/", nil, nil, nil)
 			config, diagnostics := tsoptions.GetParsedCommandLineOfConfigFile("/src/tsconfig.json", &core.CompilerOptions{
 				PreserveSymlinks: core.BoolToTristate(preserveSymlinks),
-			}, nil, fs, nil)
+			}, nil, tsoptions.NewDefaultParseConfigHost(fs), nil)
 			assert.Equal(t, len(diagnostics), 0)
 			p := NewProgram(ProgramOptions{Config: config, Host: host, UseSourceOfProjectReference: true})
 			assert.Assert(t, p.GetSourceFile("/reference/index.ts") != nil)
@@ -333,6 +333,7 @@ var esnextLibs = []string{
 	"lib.es2026.json.d.ts",
 	"lib.es2026.math.d.ts",
 	"lib.es2026.typedarrays.d.ts",
+	"lib.esnext.iterator.d.ts",
 	"lib.esnext.promise.d.ts",
 	"lib.esnext.date.d.ts",
 	"lib.esnext.decorators.d.ts",
@@ -499,7 +500,7 @@ func TestImportSourceProgram(t *testing.T) {
 			}
 			fs := vfstest.FromMap(files, tspath.CaseSensitive)
 			host := NewCompilerHost(fs, "/", nil, nil, nil)
-			config, diagnostics := tsoptions.GetParsedCommandLineOfConfigFile("/src/tsconfig.json", nil, nil, fs, nil)
+			config, diagnostics := tsoptions.GetParsedCommandLineOfConfigFile("/src/tsconfig.json", nil, nil, tsoptions.NewDefaultParseConfigHost(fs), nil)
 			assert.Equal(t, len(diagnostics), 0)
 			program := NewProgram(ProgramOptions{Config: config, Host: host})
 			file := program.GetSourceFile("/src/index.ts")
@@ -608,7 +609,7 @@ func BenchmarkNewProgram(b *testing.B) {
 		rootPath := tspath.RootedDirectoryPathFromAbsolute(filepath.Join(repo.TestDataPath(), "fixtures/compiler"))
 		fs := bundled.WrapFS(osvfs.FS())
 		host := NewCompilerHost(fs, bundled.LibPath(), nil, nil, nil)
-		parsed, errors := tsoptions.GetParsedCommandLineOfConfigFile(rootPath.ResolveFile("tsconfig.json"), nil, nil, fs, nil)
+		parsed, errors := tsoptions.GetParsedCommandLineOfConfigFile(rootPath.ResolveFile("tsconfig.json"), nil, nil, tsoptions.NewDefaultParseConfigHost(fs), nil)
 		assert.Equal(b, len(errors), 0, "Expected no errors in parsed command line")
 		opts := ProgramOptions{
 			Config: parsed,
@@ -619,4 +620,30 @@ func BenchmarkNewProgram(b *testing.B) {
 			NewProgram(opts)
 		}
 	})
+}
+
+func TestUpdateProgramCommonJSFile(t *testing.T) {
+	t.Parallel()
+	files := map[string]any{
+		"/src/tsconfig.json": `{"compilerOptions":{"allowJs":true,"noLib":true},"files":["index.js"]}`,
+		"/src/index.js":      "exports.a = 1;",
+	}
+	fs := vfstest.FromMap(files, tspath.CaseSensitive)
+	config, diagnostics := tsoptions.GetParsedCommandLineOfConfigFile("/src/tsconfig.json", nil, nil, tsoptions.NewDefaultParseConfigHost(fs), nil)
+	assert.Equal(t, len(diagnostics), 0)
+	program := NewProgram(ProgramOptions{Config: config, Host: NewCompilerHost(fs, "/", nil, nil, nil)})
+	program.BindSourceFiles()
+
+	update := func(content string) bool {
+		files["/src/index.js"] = content
+		host := NewCompilerHost(vfstest.FromMap(files, tspath.CaseSensitive), "/", nil, nil, nil)
+		var reused bool
+		program, _, reused = program.UpdateProgram("/src/index.js", host, nil, nil)
+		program.BindSourceFiles()
+		return reused
+	}
+
+	assert.Assert(t, update("exports.a = 2;"), "editing a CommonJS file should reuse the program")
+	assert.Assert(t, update("var a = 2;") == false, "a CommonJS file becoming a script should not reuse the program")
+	assert.Assert(t, update("exports.a = 2;") == false, "a script becoming a CommonJS file should not reuse the program")
 }

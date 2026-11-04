@@ -1,18 +1,19 @@
-import type { ExtensionAPI } from "@typescript/typescript/unstable/vscode";
+import type { ExtensionAPI } from "@typescript/typescript/vscode";
 import * as vscode from "vscode";
-export type { ExtensionAPI } from "@typescript/typescript/unstable/vscode";
+export type { ExtensionAPI } from "@typescript/typescript/vscode";
 
 import {
     registerEnablementCommands,
     updateUseTsgoSetting,
 } from "./commands";
 import {
-    aiConnectionString,
     getExplicitConfigTarget,
     getUseTsgo,
     getWinningTsgoConfigKey,
     needsExtHostRestartOnChange,
-} from "./util";
+    shouldStartTsgo,
+} from "./settings";
+import { aiConnectionString } from "./util";
 
 import { TelemetryReporter as VSCodeTelemetryReporter } from "@vscode/extension-telemetry";
 import {
@@ -42,10 +43,7 @@ export async function activate(context: vscode.ExtensionContext): Promise<Extens
     const output = vscode.window.createOutputChannel("TypeScript 7", { log: true });
     context.subscriptions.push(output);
 
-    const languageServerInitializedEventEmitter = new vscode.EventEmitter<void>();
-    context.subscriptions.push(languageServerInitializedEventEmitter);
-
-    const sessionManager = new SessionManager(context, output, languageServerInitializedEventEmitter, telemetryReporter);
+    const sessionManager = new SessionManager(context, output, telemetryReporter);
     context.subscriptions.push(sessionManager);
     registerEnablementCommands(context, telemetryReporter, () => sessionManager.stop());
 
@@ -57,13 +55,6 @@ export async function activate(context: vscode.ExtensionContext): Promise<Extens
     });
     context.subscriptions.push(onDidChangeExtensions);
 
-    function onLanguageServerInitialized(listener: () => void): vscode.Disposable {
-        if (sessionManager.currentSession?.client.isInitialized) {
-            listener();
-        }
-        return languageServerInitializedEventEmitter.event(listener);
-    }
-
     async function startNativeServer(): Promise<void> {
         await sessionManager.start(context);
         warnAboutTsServerPlugins(context, output);
@@ -73,10 +64,7 @@ export async function activate(context: vscode.ExtensionContext): Promise<Extens
     }
 
     const api: ExtensionAPI = {
-        onLanguageServerInitialized: onLanguageServerInitialized,
-        async initializeAPIConnection(pipe?: string): Promise<string> {
-            return sessionManager.initializeAPIConnection(pipe);
-        },
+        onLanguageServerInitialized: sessionManager.onLanguageServerInitialized,
         registerContentMappers(contributorId, contributions): vscode.Disposable {
             return sessionManager.registerContentMappers(contributorId, contributions);
         },
@@ -101,7 +89,7 @@ export async function activate(context: vscode.ExtensionContext): Promise<Extens
                     }
                 }
                 else {
-                    if (await shouldStartTsgo(context)) {
+                    if (shouldStartTsgo(context)) {
                         await sessionManager.restart(context);
                     }
                     else {
@@ -154,14 +142,6 @@ export async function activate(context: vscode.ExtensionContext): Promise<Extens
     else if (useTsgo !== true) {
         output.appendLine(vscode.l10n.t("TypeScript 7 is disabled. Select 'TypeScript: Enable TypeScript 7' in the command palette to enable it."));
         return api;
-    }
-
-    async function shouldStartTsgo(context: vscode.ExtensionContext): Promise<boolean> {
-        const useTsgo = getUseTsgo();
-        if (context.extensionMode === vscode.ExtensionMode.Development && !vscode.extensions.getExtension("vscode.typescript-language-features")) {
-            return useTsgo !== false;
-        }
-        return useTsgo === true;
     }
 
     await startNativeServer();

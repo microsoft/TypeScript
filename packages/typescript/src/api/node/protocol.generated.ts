@@ -19,7 +19,7 @@ export const childProperties: Readonly<Partial<Record<SyntaxKind, readonly (stri
     [SyntaxKind.SwitchStatement]: ["expression", "caseBlock"],
     [SyntaxKind.CaseBlock]: ["clauses"],
     [SyntaxKind.CaseClause]: ["expression", "statements"],
-    [SyntaxKind.DefaultClause]: ["expression", "statements"],
+    [SyntaxKind.DefaultClause]: ["statements"],
     [SyntaxKind.ThrowStatement]: ["expression"],
     [SyntaxKind.TryStatement]: ["tryBlock", "catchClause", "finallyBlock"],
     [SyntaxKind.CatchClause]: ["variableDeclaration", "block"],

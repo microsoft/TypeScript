@@ -1,4 +1,4 @@
-import { CaseSensitivity } from "#enums/caseSensitivity";
+import { CaseSensitivity } from "../../enums/caseSensitivity.js";
 import type {
     PathKey,
     RootedDirectoryPath,
@@ -6,7 +6,7 @@ import type {
     RootedPath,
 } from "../ast/index.ts";
 
-export { CaseSensitivity } from "#enums/caseSensitivity";
+export { CaseSensitivity } from "../../enums/caseSensitivity.js";
 
 const CharacterCodesSlash = "/".charCodeAt(0);
 const CharacterCodesBackslash = "\\".charCodeAt(0);

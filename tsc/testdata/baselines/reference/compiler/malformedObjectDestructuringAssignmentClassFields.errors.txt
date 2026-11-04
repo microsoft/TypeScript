@@ -1,0 +1,20 @@
+malformedObjectDestructuringAssignmentClassFields.ts(1,3): error TS1136: Property assignment expected.
+malformedObjectDestructuringAssignmentClassFields.ts(1,6): error TS1005: ',' expected.
+malformedObjectDestructuringAssignmentClassFields.ts(1,7): error TS1127: Invalid character.
+malformedObjectDestructuringAssignmentClassFields.ts(1,10): error TS1109: Expression expected.
+malformedObjectDestructuringAssignmentClassFields.ts(2,1): error TS1005: ')' expected.
+
+
+==== malformedObjectDestructuringAssignmentClassFields.ts (5 errors) ====
+    ({x(A.#}=
+      ~
+!!! error TS1136: Property assignment expected.
+         ~
+!!! error TS1005: ',' expected.
+          ~
+!!! error TS1127: Invalid character.
+             
+!!! error TS1109: Expression expected.
+    
+    
+!!! error TS1005: ')' expected.

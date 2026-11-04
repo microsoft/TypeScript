@@ -1,0 +1,15 @@
+//// [tests/cases/compiler/numericCompoundAssignmentInWhileLoopAfterExcludedZero.ts] ////
+
+=== numericCompoundAssignmentInWhileLoopAfterExcludedZero.ts ===
+function rewind(index: number) {
+>rewind : Symbol(rewind, Decl(numericCompoundAssignmentInWhileLoopAfterExcludedZero.ts, 0, 0))
+>index : Symbol(index, Decl(numericCompoundAssignmentInWhileLoopAfterExcludedZero.ts, 0, 16))
+
+    while (index !== 0) {
+>index : Symbol(index, Decl(numericCompoundAssignmentInWhileLoopAfterExcludedZero.ts, 0, 16))
+
+        index -= 1;
+>index : Symbol(index, Decl(numericCompoundAssignmentInWhileLoopAfterExcludedZero.ts, 0, 16))
+    }
+}
+

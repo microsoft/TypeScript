@@ -1,0 +1,24 @@
+//// [tests/cases/compiler/nullishAndLogicalOrRightOperandWithBindingPattern.ts] ////
+
+=== nullishAndLogicalOrRightOperandWithBindingPattern.ts ===
+declare const o: { p: "a" | "b" } | undefined;
+>o : { p: "a" | "b"; } | undefined
+>p : "a" | "b"
+
+const { p } = o ?? { p: "d" };
+>p : "a" | "b" | "d"
+>o ?? { p: "d" } : { p: "a" | "b"; } | { p: "d"; }
+>o : { p: "a" | "b"; } | undefined
+>{ p: "d" } : { p: "d"; }
+>p : "d"
+>"d" : "d"
+
+const { p: q } = o || { p: "d" };
+>p : any
+>q : "a" | "b" | "d"
+>o || { p: "d" } : { p: "a" | "b"; } | { p: "d"; }
+>o : { p: "a" | "b"; } | undefined
+>{ p: "d" } : { p: "d"; }
+>p : "d"
+>"d" : "d"
+

@@ -1,0 +1,14 @@
+//// [tests/cases/compiler/noFlakyDiagnosticsBindingPatternInFunctionType1.ts] ////
+
+=== noFlakyDiagnosticsBindingPatternInFunctionType1.ts ===
+class Base<T> {}
+>Base : Symbol(Base, Decl(noFlakyDiagnosticsBindingPatternInFunctionType1.ts, 0, 0))
+>T : Symbol(T, Decl(noFlakyDiagnosticsBindingPatternInFunctionType1.ts, 0, 11))
+
+export class C extends Base<{ e: ({ a: boolean }) => void }> {}
+>C : Symbol(C, Decl(noFlakyDiagnosticsBindingPatternInFunctionType1.ts, 0, 16))
+>Base : Symbol(Base, Decl(noFlakyDiagnosticsBindingPatternInFunctionType1.ts, 0, 0))
+>e : Symbol(e, Decl(noFlakyDiagnosticsBindingPatternInFunctionType1.ts, 1, 29))
+>a : Symbol(a)
+>boolean : Symbol(boolean, Decl(noFlakyDiagnosticsBindingPatternInFunctionType1.ts, 1, 35))
+

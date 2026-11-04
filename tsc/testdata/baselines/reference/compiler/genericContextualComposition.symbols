@@ -1,0 +1,51 @@
+//// [tests/cases/compiler/genericContextualComposition.ts] ////
+
+=== genericContextualComposition.ts ===
+type Enhancer<Extension extends {} = {}> = <Next extends {}>(next: Next) => Next & Extension;
+>Enhancer : Symbol(Enhancer, Decl(genericContextualComposition.ts, 0, 0))
+>Extension : Symbol(Extension, Decl(genericContextualComposition.ts, 0, 14))
+>Next : Symbol(Next, Decl(genericContextualComposition.ts, 0, 44))
+>next : Symbol(next, Decl(genericContextualComposition.ts, 0, 61))
+>Next : Symbol(Next, Decl(genericContextualComposition.ts, 0, 44))
+>Next : Symbol(Next, Decl(genericContextualComposition.ts, 0, 44))
+>Extension : Symbol(Extension, Decl(genericContextualComposition.ts, 0, 14))
+
+declare function compose<A, Args extends any[], Result>(first: (value: A) => Result, second: (...args: Args) => A): (...args: Args) => Result;
+>compose : Symbol(compose, Decl(genericContextualComposition.ts, 0, 93), Decl(genericContextualComposition.ts, 1, 142))
+>A : Symbol(A, Decl(genericContextualComposition.ts, 1, 25))
+>Args : Symbol(Args, Decl(genericContextualComposition.ts, 1, 27))
+>Result : Symbol(Result, Decl(genericContextualComposition.ts, 1, 47))
+>first : Symbol(first, Decl(genericContextualComposition.ts, 1, 56))
+>value : Symbol(value, Decl(genericContextualComposition.ts, 1, 64))
+>A : Symbol(A, Decl(genericContextualComposition.ts, 1, 25))
+>Result : Symbol(Result, Decl(genericContextualComposition.ts, 1, 47))
+>second : Symbol(second, Decl(genericContextualComposition.ts, 1, 84))
+>args : Symbol(args, Decl(genericContextualComposition.ts, 1, 94))
+>Args : Symbol(Args, Decl(genericContextualComposition.ts, 1, 27))
+>A : Symbol(A, Decl(genericContextualComposition.ts, 1, 25))
+>args : Symbol(args, Decl(genericContextualComposition.ts, 1, 117))
+>Args : Symbol(Args, Decl(genericContextualComposition.ts, 1, 27))
+>Result : Symbol(Result, Decl(genericContextualComposition.ts, 1, 47))
+
+declare function compose<Result>(...functions: Function[]): (...args: any[]) => Result;
+>compose : Symbol(compose, Decl(genericContextualComposition.ts, 0, 93), Decl(genericContextualComposition.ts, 1, 142))
+>Result : Symbol(Result, Decl(genericContextualComposition.ts, 2, 25))
+>functions : Symbol(functions, Decl(genericContextualComposition.ts, 2, 33))
+>Function : Symbol(Function, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>args : Symbol(args, Decl(genericContextualComposition.ts, 2, 61))
+>Result : Symbol(Result, Decl(genericContextualComposition.ts, 2, 25))
+
+declare const instrument: Enhancer<{ extra: unknown }>, persist: Enhancer;
+>instrument : Symbol(instrument, Decl(genericContextualComposition.ts, 3, 13))
+>Enhancer : Symbol(Enhancer, Decl(genericContextualComposition.ts, 0, 0))
+>extra : Symbol(extra, Decl(genericContextualComposition.ts, 3, 36))
+>persist : Symbol(persist, Decl(genericContextualComposition.ts, 3, 55))
+>Enhancer : Symbol(Enhancer, Decl(genericContextualComposition.ts, 0, 0))
+
+const enhancer: Enhancer = compose(instrument, persist);
+>enhancer : Symbol(enhancer, Decl(genericContextualComposition.ts, 4, 5))
+>Enhancer : Symbol(Enhancer, Decl(genericContextualComposition.ts, 0, 0))
+>compose : Symbol(compose, Decl(genericContextualComposition.ts, 0, 93), Decl(genericContextualComposition.ts, 1, 142))
+>instrument : Symbol(instrument, Decl(genericContextualComposition.ts, 3, 13))
+>persist : Symbol(persist, Decl(genericContextualComposition.ts, 3, 55))
+

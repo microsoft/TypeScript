@@ -1,11 +1,11 @@
 import type {
     SourceFile,
     Statement,
-} from "@typescript/typescript/unstable/ast";
+} from "@typescript/typescript/ast";
 import {
     SyntaxKind,
     TokenFlags,
-} from "@typescript/typescript/unstable/ast";
+} from "@typescript/typescript/ast";
 import {
     createArrayLiteralExpression,
     createBlock,
@@ -25,12 +25,12 @@ import {
     createVariableDeclaration,
     createVariableDeclarationList,
     createVariableStatement,
-} from "@typescript/typescript/unstable/ast/factory";
+} from "@typescript/typescript/ast/factory";
 import {
     CaseSensitivity,
     pathKey,
     toRootedFilePath,
-} from "@typescript/typescript/unstable/path";
+} from "@typescript/typescript/path";
 import assert from "node:assert";
 import {
     describe,
@@ -39,6 +39,7 @@ import {
 import {
     encodeNode,
     encodeSourceFile,
+    uint8ArrayToBase64,
 } from "../src/api/node/encoder.ts";
 import {
     RemoteNode,
@@ -74,6 +75,10 @@ function decode(data: Uint8Array): RemoteSourceFile {
 }
 
 describe("Encoder", { concurrency }, () => {
+    test("encodes base64 from a subarray", () => {
+        assert.strictEqual(uint8ArrayToBase64(new Uint8Array([0, 1, 2, 3, 4]).subarray(1, 4)), "AQID");
+    });
+
     test("encodes empty source file", () => {
         const sf = makeSF("", "/test.ts", []);
 

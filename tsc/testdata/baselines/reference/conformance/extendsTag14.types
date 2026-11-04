@@ -1,0 +1,15 @@
+//// [tests/cases/conformance/jsdoc/extendsTag14.ts] ////
+
+=== a.js ===
+/** @template T */
+class A {}
+>A : A<T>
+
+/** @extends {A<string>} */
+class B extends null {}
+>B : B
+
+/** @augments {A<number>} */
+class C extends null {}
+>C : C
+

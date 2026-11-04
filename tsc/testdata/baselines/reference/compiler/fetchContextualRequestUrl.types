@@ -1,0 +1,35 @@
+//// [tests/cases/compiler/fetchContextualRequestUrl.ts] ////
+
+=== fetchContextualRequestUrl.ts ===
+const fetchUsingRequestUrl: typeof fetch = async input => {
+>fetchUsingRequestUrl : (input: RequestInfo | URL, init?: RequestInit) => Promise<Response>
+>fetch : (input: RequestInfo | URL, init?: RequestInit) => Promise<Response>
+>async input => {    const url = typeof input === "string" ? input : input instanceof URL ? input.href : input.url;    return new Response(url);} : (input: URL | RequestInfo) => Promise<Response>
+>input : URL | RequestInfo
+
+    const url = typeof input === "string" ? input : input instanceof URL ? input.href : input.url;
+>url : string
+>typeof input === "string" ? input : input instanceof URL ? input.href : input.url : string
+>typeof input === "string" : boolean
+>typeof input : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
+>input : URL | RequestInfo
+>"string" : "string"
+>input : string
+>input instanceof URL ? input.href : input.url : string
+>input instanceof URL : boolean
+>input : Request | URL
+>URL : { new (url: string | URL, base?: string | URL): URL; prototype: URL; canParse(url: string | URL, base?: string | URL): boolean; createObjectURL(obj: Blob | MediaSource): string; parse(url: string | URL, base?: string | URL): URL | null; revokeObjectURL(url: string): void; }
+>input.href : string
+>input : URL
+>href : string
+>input.url : string
+>input : Request
+>url : string
+
+    return new Response(url);
+>new Response(url) : Response
+>Response : { new (body?: BodyInit | null, init?: ResponseInit): Response; prototype: Response; error(): Response; json(data: any, init?: ResponseInit): Response; redirect(url: string | URL, status?: number): Response; }
+>url : string
+
+};
+

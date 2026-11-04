@@ -1,0 +1,36 @@
+//// [tests/cases/compiler/skippedCircularMatcherBases.ts] ////
+
+=== matchers.d.ts ===
+interface Expect extends Matchers {}
+>Expect : Symbol(Expect, Decl(matchers.d.ts, 0, 0))
+>Matchers : Symbol(Matchers, Decl(matchers.d.ts, 1, 34), Decl(matchers.d.ts, 4, 1))
+
+interface MatcherResult<Result> {}
+>MatcherResult : Symbol(MatcherResult, Decl(matchers.d.ts, 0, 36))
+>Result : Symbol(Result, Decl(matchers.d.ts, 1, 24))
+
+interface Matchers {
+>Matchers : Symbol(Matchers, Decl(matchers.d.ts, 1, 34), Decl(matchers.d.ts, 4, 1))
+
+    containing(value: string): unknown;
+>containing : Symbol(Matchers.containing, Decl(matchers.d.ts, 2, 20))
+>value : Symbol(value, Decl(matchers.d.ts, 3, 15))
+}
+interface Matchers extends MatcherResult<ReturnType<typeof expect.containing>> {}
+>Matchers : Symbol(Matchers, Decl(matchers.d.ts, 1, 34), Decl(matchers.d.ts, 4, 1))
+>MatcherResult : Symbol(MatcherResult, Decl(matchers.d.ts, 0, 36))
+>ReturnType : Symbol(ReturnType, Decl(lib.es5.d.ts, --, --))
+>expect.containing : Symbol(Matchers.containing, Decl(matchers.d.ts, 2, 20))
+>expect : Symbol(expect, Decl(matchers.d.ts, 6, 13))
+>containing : Symbol(Matchers.containing, Decl(matchers.d.ts, 2, 20))
+
+declare const expect: Expect;
+>expect : Symbol(expect, Decl(matchers.d.ts, 6, 13))
+>Expect : Symbol(Expect, Decl(matchers.d.ts, 0, 0))
+
+=== main.ts ===
+expect.containing("value");
+>expect.containing : Symbol(Matchers.containing, Decl(matchers.d.ts, 2, 20))
+>expect : Symbol(expect, Decl(matchers.d.ts, 6, 13))
+>containing : Symbol(Matchers.containing, Decl(matchers.d.ts, 2, 20))
+

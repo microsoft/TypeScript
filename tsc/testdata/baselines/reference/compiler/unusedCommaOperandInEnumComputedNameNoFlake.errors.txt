@@ -1,0 +1,14 @@
+unusedCommaOperandInEnumComputedNameNoFlake.ts(3,5): error TS1164: Computed property names are not allowed in enums.
+unusedCommaOperandInEnumComputedNameNoFlake.ts(3,7): error TS2695: Left side of comma operator is unused and has no side effects.
+
+
+==== unusedCommaOperandInEnumComputedNameNoFlake.ts (2 errors) ====
+    // TS2695: Left side of comma operator is unused and has no side effects.
+    export enum Values {
+        [(1, 2).valueOf] = 1,
+        ~~~~~~~~~~~~~~~~
+!!! error TS1164: Computed property names are not allowed in enums.
+          ~
+!!! error TS2695: Left side of comma operator is unused and has no side effects.
+    }
+    

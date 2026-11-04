@@ -1,0 +1,32 @@
+//// [tests/cases/compiler/numericCompoundAssignmentsAfterConjunction.ts] ////
+
+=== numericCompoundAssignmentsAfterConjunction.ts ===
+function scale(left: number, right: number) {
+>scale : Symbol(scale, Decl(numericCompoundAssignmentsAfterConjunction.ts, 0, 0))
+>left : Symbol(left, Decl(numericCompoundAssignmentsAfterConjunction.ts, 0, 15))
+>right : Symbol(right, Decl(numericCompoundAssignmentsAfterConjunction.ts, 0, 28))
+
+    if (left !== 0 && right !== 0) {
+>left : Symbol(left, Decl(numericCompoundAssignmentsAfterConjunction.ts, 0, 15))
+>right : Symbol(right, Decl(numericCompoundAssignmentsAfterConjunction.ts, 0, 28))
+
+        left *= -1.5;
+>left : Symbol(left, Decl(numericCompoundAssignmentsAfterConjunction.ts, 0, 15))
+
+        right *= -1.5;
+>right : Symbol(right, Decl(numericCompoundAssignmentsAfterConjunction.ts, 0, 28))
+
+    } else if (left !== 0) {
+>left : Symbol(left, Decl(numericCompoundAssignmentsAfterConjunction.ts, 0, 15))
+
+        left *= -2;
+>left : Symbol(left, Decl(numericCompoundAssignmentsAfterConjunction.ts, 0, 15))
+
+    } else if (right !== 0) {
+>right : Symbol(right, Decl(numericCompoundAssignmentsAfterConjunction.ts, 0, 28))
+
+        right *= -2;
+>right : Symbol(right, Decl(numericCompoundAssignmentsAfterConjunction.ts, 0, 28))
+    }
+}
+

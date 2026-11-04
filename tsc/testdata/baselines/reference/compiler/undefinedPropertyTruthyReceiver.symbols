@@ -1,0 +1,17 @@
+//// [tests/cases/compiler/undefinedPropertyTruthyReceiver.ts] ////
+
+=== undefinedPropertyTruthyReceiver.ts ===
+const state = { error: undefined };
+>state : Symbol(state, Decl(undefinedPropertyTruthyReceiver.ts, 0, 5))
+>error : Symbol(error, Decl(undefinedPropertyTruthyReceiver.ts, 0, 15))
+>undefined : Symbol(undefined)
+
+const renderedError = state.error ? state.error : "";
+>renderedError : Symbol(renderedError, Decl(undefinedPropertyTruthyReceiver.ts, 1, 5))
+>state.error : Symbol(error, Decl(undefinedPropertyTruthyReceiver.ts, 0, 15))
+>state : Symbol(state, Decl(undefinedPropertyTruthyReceiver.ts, 0, 5))
+>error : Symbol(error, Decl(undefinedPropertyTruthyReceiver.ts, 0, 15))
+>state.error : Symbol(error, Decl(undefinedPropertyTruthyReceiver.ts, 0, 15))
+>state : Symbol(state, Decl(undefinedPropertyTruthyReceiver.ts, 0, 5))
+>error : Symbol(error, Decl(undefinedPropertyTruthyReceiver.ts, 0, 15))
+

@@ -1,0 +1,8 @@
+noFlakyDiagnosticsTypeofImportTypeQualifier1.ts(1,36): error TS2307: Cannot find module 'foo' or its corresponding type declarations.
+
+
+==== noFlakyDiagnosticsTypeofImportTypeQualifier1.ts (1 errors) ====
+    export function f(x: typeof import("foo").sys.readDirectory) {}
+                                       ~~~~~
+!!! error TS2307: Cannot find module 'foo' or its corresponding type declarations.
+    

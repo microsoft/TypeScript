@@ -26,7 +26,7 @@ type InferenceState struct {
 	bivariant         bool
 	expandingFlags    ExpandingFlags
 	propagationType   *Type
-	visited           map[InferenceKey]InferencePriority
+	visited           clearableMap[InferencePriority]
 	sourceStack       []*Type
 	targetStack       []*Type
 	next              *InferenceState
@@ -42,7 +42,7 @@ func (c *Checker) getInferenceState() *InferenceState {
 }
 
 func (c *Checker) putInferenceState(n *InferenceState) {
-	clear(n.visited)
+	n.visited.clear()
 	*n = InferenceState{
 		inferences:  n.inferences[:0],
 		visited:     n.visited,
@@ -282,7 +282,7 @@ func (c *Checker) inferFromAliasTypeArguments(n *InferenceState, source *Type, t
 	// Simply infer from source type arguments to target type arguments, with defaults applied.
 	params := c.typeAliasLinks.Get(source.alias.symbol).typeParameters
 	minParams := c.getMinTypeArgumentCount(params)
-	nodeIsInJsFile := ast.IsInJSFile(source.alias.symbol.ValueDeclaration)
+	nodeIsInJsFile := ast.IsInJSFile(source.alias.symbol.ValueDeclaration())
 	sourceTypes := c.fillMissingTypeArguments(source.alias.typeArguments, params, minParams, nodeIsInJsFile)
 	targetTypes := c.fillMissingTypeArguments(target.alias.typeArguments, params, minParams, nodeIsInJsFile)
 	c.inferFromTypeArguments(n, sourceTypes, targetTypes, c.getAliasVariances(source.alias.symbol))
@@ -344,15 +344,15 @@ func (c *Checker) inferFromContravariantTypesIfStrictFunctionTypes(n *InferenceS
 // such that we would go on inferring forever, even though we would never infer
 // between the same pair of types.
 func (c *Checker) invokeOnce(n *InferenceState, source *Type, target *Type, action func(c *Checker, n *InferenceState, source *Type, target *Type)) {
-	key := InferenceKey{source: source.id, target: target.id, priority: n.priority, contravariant: n.contravariant, bivariant: n.bivariant}
-	if status, ok := n.visited[key]; ok {
+	key := CacheHashKey{
+		Lo: uint64(source.id)<<32 | uint64(target.id),
+		Hi: uint64(uint32(n.priority))<<2 | uint64(core.IfElse(n.contravariant, 2, 0)) | uint64(core.IfElse(n.bivariant, 1, 0)),
+	}
+	if status, ok := n.visited.get(key); ok {
 		n.inferencePriority = min(n.inferencePriority, status)
 		return
 	}
-	if n.visited == nil {
-		n.visited = make(map[InferenceKey]InferencePriority)
-	}
-	n.visited[key] = InferencePriorityCircularity
+	n.visited.set(key, InferencePriorityCircularity)
 	saveInferencePriority := n.inferencePriority
 	n.inferencePriority = InferencePriorityMaxValue
 	// We stop inferring and report a circularity if we encounter duplicate recursion identities on both
@@ -374,7 +374,7 @@ func (c *Checker) invokeOnce(n *InferenceState, source *Type, target *Type, acti
 	n.targetStack = n.targetStack[:len(n.targetStack)-1]
 	n.sourceStack = n.sourceStack[:len(n.sourceStack)-1]
 	n.expandingFlags = saveExpandingFlags
-	n.visited[key] = n.inferencePriority
+	n.visited.set(key, n.inferencePriority)
 	n.inferencePriority = min(n.inferencePriority, saveInferencePriority)
 }
 
@@ -839,9 +839,9 @@ func (c *Checker) inferFromObjectTypes(n *InferenceState, source *Type, target *
 func (c *Checker) inferFromProperties(n *InferenceState, source *Type, target *Type) {
 	properties := c.getPropertiesOfObjectType(target)
 	for _, targetProp := range properties {
-		sourceProp := c.getPropertyOfType(source, targetProp.Name)
-		if sourceProp != nil && !core.Some(sourceProp.Declarations, c.isSkipDirectInferenceNode) {
-			c.inferFromTypes(n, c.removeMissingType(c.getTypeOfSymbol(sourceProp), sourceProp.Flags&ast.SymbolFlagsOptional != 0), c.removeMissingType(c.getTypeOfSymbol(targetProp), targetProp.Flags&ast.SymbolFlagsOptional != 0))
+		sourceProp := c.getPropertyOfType(source, targetProp.Name())
+		if sourceProp != nil && !core.Some(sourceProp.Declarations(), c.isSkipDirectInferenceNode) {
+			c.inferFromTypes(n, c.removeMissingType(c.getTypeOfSymbol(sourceProp), sourceProp.Flags()&ast.SymbolFlagsOptional != 0), c.removeMissingType(c.getTypeOfSymbol(targetProp), targetProp.Flags()&ast.SymbolFlagsOptional != 0))
 		}
 	}
 }
@@ -932,7 +932,7 @@ func (c *Checker) inferFromIndexTypes(n *InferenceState, source *Type, target *T
 			for _, prop := range c.getPropertiesOfType(source) {
 				if c.isApplicableIndexType(c.getLiteralTypeFromProperty(prop, TypeFlagsStringOrNumberLiteralOrUnique, false), targetInfo.keyType) {
 					propType := c.getTypeOfSymbol(prop)
-					if prop.Flags&ast.SymbolFlagsOptional != 0 {
+					if prop.Flags()&ast.SymbolFlagsOptional != 0 {
 						propType = c.removeMissingOrUndefinedType(propType)
 					}
 					propTypes = append(propTypes, propType)
@@ -1117,9 +1117,14 @@ func (c *Checker) resolveReverseMappedTypeMembers(t *Type) {
 	if indexInfo != nil {
 		indexInfos = []*IndexInfo{c.newIndexInfo(c.stringType, core.OrElse(c.inferReverseMappedType(indexInfo.valueType, r.mappedType, r.constraintType), c.unknownType), readonlyMask && indexInfo.isReadonly, nil, nil)}
 	}
-	members := make(ast.SymbolTable)
+	members := ast.NewSymbolTable()
 	limitedConstraint := c.getLimitedConstraint(t)
 	for _, prop := range c.getPropertiesOfType(r.source) {
+		// Private and protected properties are never produced by keyof, so they have no counterpart in a
+		// reverse mapped type. Copying them would surface them as public properties of the inferred type.
+		if getDeclarationModifierFlagsFromSymbol(prop)&ast.ModifierFlagsNonPublicAccessibilityModifier != 0 {
+			continue
+		}
 		// In case of a reverse mapped type with an intersection constraint, if we were able to
 		// extract the filtering type literals we skip those properties that are not assignable to them,
 		// because the extra properties wouldn't get through the application of the mapped type anyway
@@ -1130,9 +1135,9 @@ func (c *Checker) resolveReverseMappedTypeMembers(t *Type) {
 			}
 		}
 		checkFlags := ast.CheckFlagsReverseMapped | core.IfElse(readonlyMask && c.isReadonlySymbol(prop), ast.CheckFlagsReadonly, 0)
-		inferredProp := c.newSymbolEx(ast.SymbolFlagsProperty|prop.Flags&optionalMask, prop.Name, checkFlags)
-		inferredProp.Declarations = prop.Declarations
-		c.valueSymbolLinks.Get(inferredProp).nameType = c.valueSymbolLinks.Get(prop).nameType
+		inferredProp := c.newSymbolEx(ast.SymbolFlagsProperty|prop.Flags()&optionalMask, prop.Name(), checkFlags)
+		inferredProp.SetDeclarations(prop.Declarations())
+		c.valueSymbolLinks.Get(inferredProp).setNameType(c, c.valueSymbolLinks.Get(prop).getNameType())
 		links := c.ReverseMappedSymbolLinks.Get(inferredProp)
 		links.propertyType = c.getTypeOfSymbol(prop)
 		constraintTarget := r.constraintType.AsIndexType().target
@@ -1148,7 +1153,7 @@ func (c *Checker) resolveReverseMappedTypeMembers(t *Type) {
 			links.mappedType = r.mappedType
 			links.constraintType = r.constraintType
 		}
-		members[prop.Name] = inferredProp
+		members.Set(prop.Name(), inferredProp)
 	}
 	c.setStructuredTypeMembers(t, members, nil, nil, indexInfos)
 }
@@ -1238,7 +1243,7 @@ func (c *Checker) isTypeCloselyMatchedBy(s *Type, t *Type) bool {
 
 // Create an object with properties named in the string literal type. Every property has type `any`.
 func (c *Checker) createEmptyObjectTypeFromStringLiteral(t *Type) *Type {
-	members := make(ast.SymbolTable)
+	members := ast.NewSymbolTable()
 	for _, t := range t.Distributed() {
 		if t.flags&TypeFlagsStringLiteral == 0 {
 			continue
@@ -1247,10 +1252,10 @@ func (c *Checker) createEmptyObjectTypeFromStringLiteral(t *Type) *Type {
 		literalProp := c.newSymbol(ast.SymbolFlagsProperty, name)
 		c.valueSymbolLinks.Get(literalProp).resolvedType = c.anyType
 		if t.symbol != nil {
-			literalProp.Declarations = t.symbol.Declarations
-			literalProp.ValueDeclaration = t.symbol.ValueDeclaration
+			literalProp.SetDeclarations(t.symbol.Declarations())
+			literalProp.SetValueDeclaration(t.symbol.ValueDeclaration())
 		}
-		members[name] = literalProp
+		members.Set(name, literalProp)
 	}
 	var indexInfos []*IndexInfo
 	if t.flags&TypeFlagsString != 0 {
@@ -1288,8 +1293,8 @@ func (c *Checker) newInferenceContextWorker(inferences []*InferenceInfo, signatu
 		flags:        flags,
 		compareTypes: compareTypes,
 	}
-	n.mapper = c.newInferenceTypeMapper(n, true /*fixing*/)
-	n.nonFixingMapper = c.newInferenceTypeMapper(n, false /*fixing*/)
+	n.mapper = c.initInferenceTypeMapper(&n.mapperStorage[0], n, true /*fixing*/)
+	n.nonFixingMapper = c.initInferenceTypeMapper(&n.mapperStorage[1], n, false /*fixing*/)
 	return n
 }
 
@@ -1628,7 +1633,7 @@ func (c *Checker) literalTypesWithSameBaseType(types []*Type) bool {
 }
 
 func (c *Checker) isFromInferenceBlockedSource(t *Type) bool {
-	return t.symbol != nil && core.Some(t.symbol.Declarations, c.isSkipDirectInferenceNode)
+	return t.symbol != nil && core.Some(t.symbol.Declarations(), c.isSkipDirectInferenceNode)
 }
 
 func (c *Checker) isSkipDirectInferenceNode(node *ast.Node) bool {
@@ -1670,7 +1675,7 @@ func hasInferenceCandidatesOrDefault(info *InferenceInfo) bool {
 
 func hasTypeParameterDefault(tp *Type) bool {
 	if tp.symbol != nil {
-		for _, d := range tp.symbol.Declarations {
+		for _, d := range tp.symbol.Declarations() {
 			if ast.IsTypeParameterDeclaration(d) && d.AsTypeParameterDeclaration().DefaultType != nil {
 				return true
 			}

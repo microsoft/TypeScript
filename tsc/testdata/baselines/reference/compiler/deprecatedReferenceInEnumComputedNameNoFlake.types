@@ -1,0 +1,19 @@
+//// [tests/cases/compiler/deprecatedReferenceInEnumComputedNameNoFlake.ts] ////
+
+=== deprecatedReferenceInEnumComputedNameNoFlake.ts ===
+// TS6385: 'oldValue' is deprecated.
+/** @deprecated */
+declare const oldValue: { value: number };
+>oldValue : { value: number; }
+>value : number
+
+export enum Values {
+>Values : Values
+
+    [oldValue.value] = 1,
+>[oldValue.value] : Values
+>oldValue.value : number
+>oldValue : { value: number; }
+>value : number
+>1 : 1
+}

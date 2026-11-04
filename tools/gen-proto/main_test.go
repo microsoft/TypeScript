@@ -62,7 +62,7 @@ func TestGenerate(t *testing.T) {
 		`export interface SourceFileDescriptor {
     fileName: RootedFilePath;
     path: PathKey;`,
-		`import { SymbolOwnerKind } from "#enums/symbolOwnerKind";`,
+		`import { SymbolOwnerKind } from "../../enums/symbolOwnerKind.js";`,
 		`kind: SymbolOwnerKind;`,
 		`/** InitializeResponse is returned by the initialize method. */
 export interface InitializeResponse`,
@@ -122,6 +122,15 @@ export interface RawCompilerOptions`,
 	}
 	if strings.Contains(generated, "projects: readonly ProjectResponse[];") {
 		t.Error("response array fields must remain mutable")
+	}
+	projectResponse := generated[strings.Index(generated, "export interface ProjectResponse"):strings.Index(generated, "export interface GetSymbolAtPositionParams")]
+	for _, deprecated := range []string{
+		"rootFiles:",
+		"compilerOptions:",
+	} {
+		if strings.Contains(projectResponse, deprecated) {
+			t.Errorf("generated ProjectResponse contains deprecated API field %q", deprecated)
+		}
 	}
 	for _, name := range []string{"CompilerOptions", "PluginImport"} {
 		if strings.Contains(generated, "export interface "+name+" {") {

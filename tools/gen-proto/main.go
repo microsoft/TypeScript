@@ -500,7 +500,7 @@ func (r *typeRenderer) namedType(named *types.Named) string {
 	case r.apiPackagePath + ".EnsurePrograms":
 		return "EnsurePrograms"
 	case r.apiPackagePath + ".SymbolOwnerKind":
-		return r.importType("SymbolOwnerKind", "#enums/symbolOwnerKind")
+		return r.importType("SymbolOwnerKind", "../../enums/symbolOwnerKind.js")
 	case "github.com/microsoft/TypeScript/tsc/internal/project.ID":
 		r.importTypeOnly("PathKey", "../ast/index.ts")
 		return "ProjectId"
@@ -523,19 +523,19 @@ func (r *typeRenderer) namedType(named *types.Named) string {
 	case "github.com/microsoft/TypeScript/tsc/internal/ls/lsutil.UserPreferences":
 		return r.importTypeOnly(obj.Name(), "./userPreferences.generated.ts")
 	case "github.com/microsoft/TypeScript/tsc/internal/core.JsxEmit":
-		return r.importType("JsxEmit", "#enums/jsxEmit")
+		return r.importType("JsxEmit", "../../enums/jsxEmit.js")
 	case "github.com/microsoft/TypeScript/tsc/internal/core.ModuleDetectionKind":
-		return r.importType("ModuleDetectionKind", "#enums/moduleDetectionKind")
+		return r.importType("ModuleDetectionKind", "../../enums/moduleDetectionKind.js")
 	case "github.com/microsoft/TypeScript/tsc/internal/core.ModuleKind":
-		return r.importType("ModuleKind", "#enums/moduleKind")
+		return r.importType("ModuleKind", "../../enums/moduleKind.js")
 	case "github.com/microsoft/TypeScript/tsc/internal/core.ModuleResolutionKind":
-		return r.importType("ModuleResolutionKind", "#enums/moduleResolutionKind")
+		return r.importType("ModuleResolutionKind", "../../enums/moduleResolutionKind.js")
 	case "github.com/microsoft/TypeScript/tsc/internal/core.NewLineKind":
-		return r.importType("NewLineKind", "#enums/newLineKind")
+		return r.importType("NewLineKind", "../../enums/newLineKind.js")
 	case "github.com/microsoft/TypeScript/tsc/internal/core.ScriptTarget":
-		return r.importType("ScriptTarget", "#enums/scriptTarget")
+		return r.importType("ScriptTarget", "../../enums/scriptTarget.js")
 	case "github.com/microsoft/TypeScript/tsc/internal/core.ScriptKind":
-		return r.importType("ScriptKind", "#enums/scriptKind")
+		return r.importType("ScriptKind", "../../enums/scriptKind.js")
 	case "github.com/microsoft/TypeScript/tsc/internal/tspath.RootedPath":
 		return r.importTypeOnly("RootedPath", "../ast/index.ts")
 	case "github.com/microsoft/TypeScript/tsc/internal/tspath.RootedFilePath":
@@ -545,7 +545,7 @@ func (r *typeRenderer) namedType(named *types.Named) string {
 	case "github.com/microsoft/TypeScript/tsc/internal/tspath.PathKey":
 		return r.importTypeOnly("PathKey", "../ast/index.ts")
 	case "github.com/microsoft/TypeScript/tsc/internal/tspath.CaseSensitivity":
-		return r.importType("CaseSensitivity", "#enums/caseSensitivity")
+		return r.importType("CaseSensitivity", "../../enums/caseSensitivity.js")
 	case "github.com/microsoft/TypeScript/tsc/internal/tsoptions.RawCompilerOptions":
 		r.rawCompilerOptions = obj
 		compilerOptions := r.packages["github.com/microsoft/TypeScript/tsc/internal/core"].Types.Scope().Lookup("CompilerOptions").(*types.TypeName)

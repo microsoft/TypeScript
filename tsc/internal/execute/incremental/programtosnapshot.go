@@ -21,6 +21,9 @@ func programToSnapshot(program *compiler.Program, oldProgram *Program, hashWithT
 		options:      program.Options(),
 		hashWithText: hashWithText,
 		checkPending: program.Options().NoCheck.IsTrue(),
+		fileOrder: core.Map(program.GetSourceFiles(), func(file *ast.SourceFile) tspath.PathKey {
+			return file.PathKey()
+		}),
 	}
 	to := &toProgramSnapshot{
 		program:    program,
@@ -31,6 +34,7 @@ func programToSnapshot(program *compiler.Program, oldProgram *Program, hashWithT
 	if to.snapshot.canUseIncrementalState() {
 		to.reuseFromOldProgram()
 		to.computeProgramFileChanges()
+		to.handleGlobalFileOrderChange()
 		to.handleFileDelete()
 		to.handleGlobalScopeChange()
 		to.handlePendingEmit()
@@ -51,16 +55,24 @@ func (t *toProgramSnapshot) reuseFromOldProgram() {
 		if t.snapshot.options.Composite.IsTrue() {
 			t.snapshot.latestChangedDtsFile = t.oldProgram.snapshot.latestChangedDtsFile
 		}
+		t.snapshot.buildInfoEmitPending.Store(t.oldProgram.snapshot.buildInfoEmitPending.Load())
 		// Copy old snapshot's changed files set
 		t.oldProgram.snapshot.changedFilesSet.Range(func(key tspath.PathKey) bool {
-			t.snapshot.changedFilesSet.Add(key)
+			if t.program.GetSourceFileByPath(key) != nil {
+				t.snapshot.changedFilesSet.Add(key)
+			} else {
+				t.snapshot.buildInfoEmitPending.Store(true)
+			}
 			return true
 		})
 		t.oldProgram.snapshot.affectedFilesPendingEmit.Range(func(key tspath.PathKey, emitKind FileEmitKind) bool {
-			t.snapshot.affectedFilesPendingEmit.Store(key, emitKind)
+			if t.program.GetSourceFileByPath(key) != nil {
+				t.snapshot.affectedFilesPendingEmit.Store(key, emitKind)
+			} else {
+				t.snapshot.buildInfoEmitPending.Store(true)
+			}
 			return true
 		})
-		t.snapshot.buildInfoEmitPending.Store(t.oldProgram.snapshot.buildInfoEmitPending.Load())
 		t.snapshot.hasErrorsFromOldState = t.oldProgram.snapshot.hasErrors
 		t.snapshot.hasSemanticErrorsFromOldState = t.oldProgram.snapshot.hasSemanticErrors
 		t.snapshot.packageJsonsFromOldState = t.oldProgram.snapshot.packageJsons
@@ -88,7 +100,7 @@ func (t *toProgramSnapshot) computeProgramFileChanges() {
 		t.snapshot.options.SkipDefaultLibCheck.IsTrue() == t.oldProgram.snapshot.options.SkipDefaultLibCheck.IsTrue()
 
 	files := t.program.GetSourceFiles()
-	wg := core.NewWorkGroup(t.program.SingleThreaded())
+	wg := core.NewWorkGroup(core.WorkGroupConcurrency(t.program.SingleThreaded()))
 	for _, file := range files {
 		wg.Queue(func() {
 			versionText := file.Text()
@@ -161,22 +173,75 @@ func (t *toProgramSnapshot) computeProgramFileChanges() {
 
 func (t *toProgramSnapshot) handleFileDelete() {
 	if t.oldProgram != nil {
-		// If the global file is removed, add all files as changed
-		t.oldProgram.snapshot.fileInfos.Range(func(filePath tspath.PathKey, oldInfo *FileInfo) bool {
-			if _, ok := t.snapshot.fileInfos.Load(filePath); !ok {
-				if oldInfo.affectsGlobalScope {
-					for _, file := range t.snapshot.getAllFilesExcludingDefaultLibraryFile(t.program, nil) {
-						t.snapshot.addFileToChangeSet(file.PathKey())
-					}
-					t.globalFileRemoved = true
-				} else {
-					t.snapshot.buildInfoEmitPending.Store(true)
-				}
-				return false
-			}
-			return true
-		})
+		forEachDeletedFile(t.oldProgram.snapshot.fileInfos.Range, &t.snapshot.fileInfos, t.handleDeletedFile)
+		if t.globalFileRemoved {
+			t.invalidateGlobalScope()
+		}
 	}
+}
+
+func forEachDeletedFile(
+	rangeOldFileInfos func(func(tspath.PathKey, *FileInfo) bool),
+	newFileInfos *collections.SyncMap[tspath.PathKey, *FileInfo],
+	onDeletedFile func(tspath.PathKey, *FileInfo),
+) {
+	rangeOldFileInfos(func(filePath tspath.PathKey, oldInfo *FileInfo) bool {
+		if _, retained := newFileInfos.Load(filePath); !retained {
+			onDeletedFile(filePath, oldInfo)
+		}
+		return true
+	})
+}
+
+func (t *toProgramSnapshot) handleDeletedFile(filePath tspath.PathKey, oldInfo *FileInfo) {
+	t.snapshot.buildInfoEmitPending.Store(true)
+	t.snapshot.changedFilesSet.Delete(filePath)
+	t.snapshot.affectedFilesPendingEmit.Delete(filePath)
+	t.globalFileRemoved = t.globalFileRemoved || oldInfo.affectsGlobalScope
+}
+
+func (t *toProgramSnapshot) invalidateGlobalScope() {
+	t.snapshot.buildInfoEmitPending.Store(true)
+	for _, file := range t.program.GetSourceFiles() {
+		if !t.program.IsSourceFileDefaultLibrary(file.PathKey()) {
+			t.snapshot.addFileToChangeSet(file.PathKey())
+		} else if !t.program.SkipTypeChecking(file, true) {
+			t.snapshot.semanticDiagnosticsPerFile.Delete(file.PathKey())
+		}
+	}
+}
+
+func (t *toProgramSnapshot) handleGlobalFileOrderChange() {
+	if t.oldProgram == nil || !globalFileOrderChanged(t.oldProgram.snapshot, t.snapshot) {
+		return
+	}
+	for _, file := range t.program.GetSourceFiles() {
+		t.snapshot.addFileToChangeSet(file.PathKey())
+		t.snapshot.semanticDiagnosticsPerFile.Delete(file.PathKey())
+		t.snapshot.emitDiagnosticsPerFile.Delete(file.PathKey())
+	}
+}
+
+func globalFileOrderChanged(oldSnapshot *snapshot, newSnapshot *snapshot) bool {
+	isSharedGlobal := func(path tspath.PathKey) bool {
+		oldInfo, oldOK := oldSnapshot.fileInfos.Load(path)
+		newInfo, newOK := newSnapshot.fileInfos.Load(path)
+		return oldOK && newOK && oldInfo.affectsGlobalScope && newInfo.affectsGlobalScope
+	}
+	oldIndex := 0
+	for _, path := range newSnapshot.fileOrder {
+		if !isSharedGlobal(path) {
+			continue
+		}
+		for oldIndex < len(oldSnapshot.fileOrder) && !isSharedGlobal(oldSnapshot.fileOrder[oldIndex]) {
+			oldIndex++
+		}
+		if oldIndex == len(oldSnapshot.fileOrder) || oldSnapshot.fileOrder[oldIndex] != path {
+			return true
+		}
+		oldIndex++
+	}
+	return false
 }
 
 func (t *toProgramSnapshot) handleGlobalScopeChange() {
@@ -195,9 +260,7 @@ func (t *toProgramSnapshot) handleGlobalScopeChange() {
 		return true
 	})
 	if globalScopeLost {
-		for _, file := range t.snapshot.getAllFilesExcludingDefaultLibraryFile(t.program, nil) {
-			t.snapshot.addFileToChangeSet(file.PathKey())
-		}
+		t.invalidateGlobalScope()
 	}
 }
 
@@ -261,7 +324,7 @@ func addReferencedFilesFromSymbol(file *ast.SourceFile, referencedFiles *collect
 	if symbol == nil {
 		return
 	}
-	for _, declaration := range symbol.Declarations {
+	for _, declaration := range symbol.Declarations() {
 		fileOfDecl := ast.GetSourceFileOfNode(declaration)
 		if fileOfDecl == nil {
 			continue
