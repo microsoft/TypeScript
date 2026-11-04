@@ -4,6 +4,7 @@
 import { getSpecifier } from "./specifier.cjs";
 
 import(getSpecifier());
+import(`./target.ts`);
 
 //// [specifier.cts]
 export function getSpecifier() {
@@ -21,6 +22,9 @@ exports.getSpecifier = getSpecifier;
 function getSpecifier() {
     return "./target.ts";
 }
+//// [target.js]
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
 //// [index.cjs]
 "use strict";
 var __rewriteRelativeImportExtension = (this && this.__rewriteRelativeImportExtension) || function (path, preserveJsx, extraExtensions, ignoreCase) {
@@ -43,6 +47,4 @@ var __rewriteRelativeImportExtension = (this && this.__rewriteRelativeImportExte
 Object.defineProperty(exports, "__esModule", { value: true });
 const specifier_cjs_1 = require("./specifier.cjs");
 import(__rewriteRelativeImportExtension((0, specifier_cjs_1.getSpecifier)()));
-//// [target.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
+import(`./target.js`);

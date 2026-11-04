@@ -97,6 +97,7 @@ export interface CompilerOptions {
     resolvePackageJsonExports?: boolean | undefined;
     resolvePackageJsonImports?: boolean | undefined;
     removeComments?: boolean | undefined;
+    disableDynamicImportExtensionRewriting?: boolean | undefined;
     rewriteRelativeImportExtensions?: boolean | undefined;
     reactNamespace?: string | undefined;
     rootDir?: RootedDirectoryPath | undefined;
