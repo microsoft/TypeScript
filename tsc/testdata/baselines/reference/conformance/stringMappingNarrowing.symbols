@@ -218,3 +218,76 @@ function testUppercaseUnionAssign2(x: Uppercase<string>) {
     }
 }
 
+// === Narrowing by a union keeps only the literals the mapping contains ===
+
+function testUppercaseNarrowingByUnion(x: Uppercase<string>, y: "BE" | "be") {
+>testUppercaseNarrowingByUnion : Symbol(testUppercaseNarrowingByUnion, Decl(stringMappingNarrowing.ts, 102, 1))
+>x : Symbol(x, Decl(stringMappingNarrowing.ts, 106, 39))
+>Uppercase : Symbol(Uppercase, Decl(lib.es5.d.ts, --, --))
+>y : Symbol(y, Decl(stringMappingNarrowing.ts, 106, 60))
+
+    if (x === y) {
+>x : Symbol(x, Decl(stringMappingNarrowing.ts, 106, 39))
+>y : Symbol(y, Decl(stringMappingNarrowing.ts, 106, 60))
+
+        const r: "BE" = x; // ok — narrowed to "BE", not "BE" | "be"
+>r : Symbol(r, Decl(stringMappingNarrowing.ts, 108, 13))
+>x : Symbol(x, Decl(stringMappingNarrowing.ts, 106, 39))
+    }
+}
+
+function testUppercaseSwitchFallthrough(x: Uppercase<string>) {
+>testUppercaseSwitchFallthrough : Symbol(testUppercaseSwitchFallthrough, Decl(stringMappingNarrowing.ts, 110, 1))
+>x : Symbol(x, Decl(stringMappingNarrowing.ts, 112, 40))
+>Uppercase : Symbol(Uppercase, Decl(lib.es5.d.ts, --, --))
+
+    switch (x) {
+>x : Symbol(x, Decl(stringMappingNarrowing.ts, 112, 40))
+
+        case "BE":
+        case "be": // error — "be" is never Uppercase<string>
+            const r: "BE" = x; // ok — narrowed to "BE"
+>r : Symbol(r, Decl(stringMappingNarrowing.ts, 116, 17))
+>x : Symbol(x, Decl(stringMappingNarrowing.ts, 112, 40))
+    }
+}
+
+// === Generic string mappings ===
+
+function testGenericUppercase<T extends "a" | "b">(x: Uppercase<T>) {
+>testGenericUppercase : Symbol(testGenericUppercase, Decl(stringMappingNarrowing.ts, 118, 1))
+>T : Symbol(T, Decl(stringMappingNarrowing.ts, 122, 30))
+>x : Symbol(x, Decl(stringMappingNarrowing.ts, 122, 51))
+>Uppercase : Symbol(Uppercase, Decl(lib.es5.d.ts, --, --))
+>T : Symbol(T, Decl(stringMappingNarrowing.ts, 122, 30))
+
+    if (x === "A") {
+>x : Symbol(x, Decl(stringMappingNarrowing.ts, 122, 51))
+
+        const r: Uppercase<T> = x; // ok — possible overlap; x keeps its generic type
+>r : Symbol(r, Decl(stringMappingNarrowing.ts, 124, 13))
+>Uppercase : Symbol(Uppercase, Decl(lib.es5.d.ts, --, --))
+>T : Symbol(T, Decl(stringMappingNarrowing.ts, 122, 30))
+>x : Symbol(x, Decl(stringMappingNarrowing.ts, 122, 51))
+    }
+    if (x === "a") {} // error — "a" is never Uppercase<T>
+>x : Symbol(x, Decl(stringMappingNarrowing.ts, 122, 51))
+
+    if (x === "C") {} // error — Uppercase<T> is at most "A" | "B"
+>x : Symbol(x, Decl(stringMappingNarrowing.ts, 122, 51))
+}
+
+function testGenericLowercase<T extends string>(x: Lowercase<T>) {
+>testGenericLowercase : Symbol(testGenericLowercase, Decl(stringMappingNarrowing.ts, 128, 1))
+>T : Symbol(T, Decl(stringMappingNarrowing.ts, 130, 30))
+>x : Symbol(x, Decl(stringMappingNarrowing.ts, 130, 48))
+>Lowercase : Symbol(Lowercase, Decl(lib.es5.d.ts, --, --))
+>T : Symbol(T, Decl(stringMappingNarrowing.ts, 130, 30))
+
+    if (x === "a") {} // ok
+>x : Symbol(x, Decl(stringMappingNarrowing.ts, 130, 48))
+
+    if (x === "A") {} // error — "A" is never Lowercase<T>
+>x : Symbol(x, Decl(stringMappingNarrowing.ts, 130, 48))
+}
+

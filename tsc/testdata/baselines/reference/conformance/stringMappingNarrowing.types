@@ -261,3 +261,81 @@ function testUppercaseUnionAssign2(x: Uppercase<string>) {
     }
 }
 
+// === Narrowing by a union keeps only the literals the mapping contains ===
+
+function testUppercaseNarrowingByUnion(x: Uppercase<string>, y: "BE" | "be") {
+>testUppercaseNarrowingByUnion : (x: Uppercase<string>, y: "BE" | "be") => void
+>x : Uppercase<string>
+>y : "BE" | "be"
+
+    if (x === y) {
+>x === y : boolean
+>x : Uppercase<string>
+>y : "BE" | "be"
+
+        const r: "BE" = x; // ok — narrowed to "BE", not "BE" | "be"
+>r : "BE"
+>x : "BE"
+    }
+}
+
+function testUppercaseSwitchFallthrough(x: Uppercase<string>) {
+>testUppercaseSwitchFallthrough : (x: Uppercase<string>) => void
+>x : Uppercase<string>
+
+    switch (x) {
+>x : Uppercase<string>
+
+        case "BE":
+>"BE" : "BE"
+
+        case "be": // error — "be" is never Uppercase<string>
+>"be" : "be"
+
+            const r: "BE" = x; // ok — narrowed to "BE"
+>r : "BE"
+>x : "BE"
+    }
+}
+
+// === Generic string mappings ===
+
+function testGenericUppercase<T extends "a" | "b">(x: Uppercase<T>) {
+>testGenericUppercase : <T extends "a" | "b">(x: Uppercase<T>) => void
+>x : Uppercase<T>
+
+    if (x === "A") {
+>x === "A" : boolean
+>x : Uppercase<T>
+>"A" : "A"
+
+        const r: Uppercase<T> = x; // ok — possible overlap; x keeps its generic type
+>r : Uppercase<T>
+>x : Uppercase<T>
+    }
+    if (x === "a") {} // error — "a" is never Uppercase<T>
+>x === "a" : boolean
+>x : Uppercase<T>
+>"a" : "a"
+
+    if (x === "C") {} // error — Uppercase<T> is at most "A" | "B"
+>x === "C" : boolean
+>x : Uppercase<T>
+>"C" : "C"
+}
+
+function testGenericLowercase<T extends string>(x: Lowercase<T>) {
+>testGenericLowercase : <T extends string>(x: Lowercase<T>) => void
+>x : Lowercase<T>
+
+    if (x === "a") {} // ok
+>x === "a" : boolean
+>x : Lowercase<T>
+>"a" : "a"
+
+    if (x === "A") {} // error — "A" is never Lowercase<T>
+>x === "A" : boolean
+>x : Lowercase<T>
+>"A" : "A"
+}
+

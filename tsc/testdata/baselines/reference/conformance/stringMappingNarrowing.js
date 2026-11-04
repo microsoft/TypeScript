@@ -105,6 +105,37 @@ function testUppercaseUnionAssign2(x: Uppercase<string>) {
     }
 }
 
+// === Narrowing by a union keeps only the literals the mapping contains ===
+
+function testUppercaseNarrowingByUnion(x: Uppercase<string>, y: "BE" | "be") {
+    if (x === y) {
+        const r: "BE" = x; // ok — narrowed to "BE", not "BE" | "be"
+    }
+}
+
+function testUppercaseSwitchFallthrough(x: Uppercase<string>) {
+    switch (x) {
+        case "BE":
+        case "be": // error — "be" is never Uppercase<string>
+            const r: "BE" = x; // ok — narrowed to "BE"
+    }
+}
+
+// === Generic string mappings ===
+
+function testGenericUppercase<T extends "a" | "b">(x: Uppercase<T>) {
+    if (x === "A") {
+        const r: Uppercase<T> = x; // ok — possible overlap; x keeps its generic type
+    }
+    if (x === "a") {} // error — "a" is never Uppercase<T>
+    if (x === "C") {} // error — Uppercase<T> is at most "A" | "B"
+}
+
+function testGenericLowercase<T extends string>(x: Lowercase<T>) {
+    if (x === "a") {} // ok
+    if (x === "A") {} // error — "A" is never Lowercase<T>
+}
+
 
 //// [stringMappingNarrowing.js]
 "use strict";
@@ -191,4 +222,29 @@ function testUppercaseUnionAssign2(x) {
     if (x === "FOO" || x === "BAR") {
         const r = x; // ok
     }
+}
+// === Narrowing by a union keeps only the literals the mapping contains ===
+function testUppercaseNarrowingByUnion(x, y) {
+    if (x === y) {
+        const r = x; // ok — narrowed to "BE", not "BE" | "be"
+    }
+}
+function testUppercaseSwitchFallthrough(x) {
+    switch (x) {
+        case "BE":
+        case "be": // error — "be" is never Uppercase<string>
+            const r = x; // ok — narrowed to "BE"
+    }
+}
+// === Generic string mappings ===
+function testGenericUppercase(x) {
+    if (x === "A") {
+        const r = x; // ok — possible overlap; x keeps its generic type
+    }
+    if (x === "a") { } // error — "a" is never Uppercase<T>
+    if (x === "C") { } // error — Uppercase<T> is at most "A" | "B"
+}
+function testGenericLowercase(x) {
+    if (x === "a") { } // ok
+    if (x === "A") { } // error — "A" is never Lowercase<T>
 }

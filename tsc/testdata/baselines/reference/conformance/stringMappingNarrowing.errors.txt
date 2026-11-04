@@ -4,9 +4,13 @@ stringMappingNarrowing.ts(60,9): error TS2367: This comparison appears to be uni
 stringMappingNarrowing.ts(71,9): error TS2367: This comparison appears to be unintentional because the types 'Uncapitalize<string>' and '"Hello"' have no overlap.
 stringMappingNarrowing.ts(79,9): error TS2367: This comparison appears to be unintentional because the types 'Uppercase<string>' and '"ba"' have no overlap.
 stringMappingNarrowing.ts(84,9): error TS2367: This comparison appears to be unintentional because the types 'Lowercase<string>' and '"BA"' have no overlap.
+stringMappingNarrowing.ts(116,14): error TS2678: Type 'string' is not comparable to type 'Uppercase<string>'.
+stringMappingNarrowing.ts(127,9): error TS2367: This comparison appears to be unintentional because the types 'Uppercase<T>' and '"a"' have no overlap.
+stringMappingNarrowing.ts(128,9): error TS2367: This comparison appears to be unintentional because the types 'Uppercase<T>' and '"C"' have no overlap.
+stringMappingNarrowing.ts(133,9): error TS2367: This comparison appears to be unintentional because the types 'Lowercase<T>' and '"A"' have no overlap.
 
 
-==== stringMappingNarrowing.ts (6 errors) ====
+==== stringMappingNarrowing.ts (10 errors) ====
     // === Basic narrowing: Uppercase<string> === literal ===
     
     function testUppercaseNarrowing(x: Uppercase<string>) {
@@ -121,5 +125,44 @@ stringMappingNarrowing.ts(84,9): error TS2367: This comparison appears to be uni
         if (x === "FOO" || x === "BAR") {
             const r: "FOO" | "BAR" = x; // ok
         }
+    }
+    
+    // === Narrowing by a union keeps only the literals the mapping contains ===
+    
+    function testUppercaseNarrowingByUnion(x: Uppercase<string>, y: "BE" | "be") {
+        if (x === y) {
+            const r: "BE" = x; // ok — narrowed to "BE", not "BE" | "be"
+        }
+    }
+    
+    function testUppercaseSwitchFallthrough(x: Uppercase<string>) {
+        switch (x) {
+            case "BE":
+            case "be": // error — "be" is never Uppercase<string>
+                 ~~~~
+!!! error TS2678: Type 'string' is not comparable to type 'Uppercase<string>'.
+                const r: "BE" = x; // ok — narrowed to "BE"
+        }
+    }
+    
+    // === Generic string mappings ===
+    
+    function testGenericUppercase<T extends "a" | "b">(x: Uppercase<T>) {
+        if (x === "A") {
+            const r: Uppercase<T> = x; // ok — possible overlap; x keeps its generic type
+        }
+        if (x === "a") {} // error — "a" is never Uppercase<T>
+            ~~~~~~~~~
+!!! error TS2367: This comparison appears to be unintentional because the types 'Uppercase<T>' and '"a"' have no overlap.
+        if (x === "C") {} // error — Uppercase<T> is at most "A" | "B"
+            ~~~~~~~~~
+!!! error TS2367: This comparison appears to be unintentional because the types 'Uppercase<T>' and '"C"' have no overlap.
+    }
+    
+    function testGenericLowercase<T extends string>(x: Lowercase<T>) {
+        if (x === "a") {} // ok
+        if (x === "A") {} // error — "A" is never Lowercase<T>
+            ~~~~~~~~~
+!!! error TS2367: This comparison appears to be unintentional because the types 'Lowercase<T>' and '"A"' have no overlap.
     }
     

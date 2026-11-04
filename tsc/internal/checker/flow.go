@@ -1912,22 +1912,15 @@ func (c *Checker) replacePrimitivesWithLiterals(typeWithPrimitives *Type, typeWi
 			case t.flags&TypeFlagsString != 0:
 				return c.extractTypesOfKind(typeWithLiterals, TypeFlagsString|TypeFlagsStringLiteral|TypeFlagsTemplateLiteral|TypeFlagsStringMapping)
 			case c.isPatternLiteralType(t) && !c.maybeTypeOfKind(typeWithLiterals, TypeFlagsString|TypeFlagsTemplateLiteral|TypeFlagsStringMapping):
+				if t.flags&TypeFlagsStringMapping != 0 {
+					// A string mapping type such as Uppercase<string> is narrowed only to the literals it
+					// contains: "BE", but not "be". Generic mappings such as Uppercase<T> are not pattern
+					// literal types and are left as is, like generic template literal types.
+					return c.filterType(c.extractTypesOfKind(typeWithLiterals, TypeFlagsStringLiteral), func(lit *Type) bool {
+						return c.isTypeAssignableTo(lit, t)
+					})
+				}
 				return c.extractTypesOfKind(typeWithLiterals, TypeFlagsStringLiteral)
-			case t.flags&TypeFlagsStringMapping != 0:
-				// A string-mapping type (Uppercase<string>, Lowercase<string>, etc.) can be narrowed
-				// to a specific string literal when the literal is a member of the mapping — i.e.,
-				// applying the same mapping to the literal leaves it unchanged (e.g. Uppercase("BE") = "BE").
-				// We also allow StringMapping/TemplateLiteral subtypes through; the membership check
-				// covers only StringLiteral constituents.
-				return c.filterType(typeWithLiterals, func(lit *Type) bool {
-					if lit.flags&TypeFlagsStringLiteral != 0 {
-						return c.isMemberOfStringMapping(lit, t)
-					}
-					// Keep non-literal string-like types (template literals, other string mappings)
-					// that are comparable to this mapping; the filterType at the call site already
-					// ensures they were comparable, so let them through.
-					return lit.flags&(TypeFlagsString|TypeFlagsTemplateLiteral|TypeFlagsStringMapping) != 0
-				})
 			case t.flags&TypeFlagsNumber != 0:
 				return c.extractTypesOfKind(typeWithLiterals, TypeFlagsNumber|TypeFlagsNumberLiteral)
 			case t.flags&TypeFlagsBigInt != 0:
@@ -1939,7 +1932,6 @@ func (c *Checker) replacePrimitivesWithLiterals(typeWithPrimitives *Type, typeWi
 	}
 	return typeWithPrimitives
 }
-
 
 func isCoercibleUnderDoubleEquals(source *Type, target *Type) bool {
 	return source.flags&(TypeFlagsNumber|TypeFlagsString|TypeFlagsBooleanLiteral) != 0 &&
