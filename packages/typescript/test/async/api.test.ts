@@ -2746,19 +2746,17 @@ describe("SourceFile", { concurrency }, () => {
         );
     });
 
-    test("Program accessors distinguish root files from source files and reuse the checker", async () => {
+    test("Program accessors distinguish root files from source files", async () => {
         await using api = spawnAPI({
             "/src/main.ts": `import { value } from "./dependency"; export const result = value;`,
             "/src/dependency.ts": `export const value = 1;`,
         });
         await using program = await api.createProgram(["/src/main.ts"], { noLib: true });
+        assert.ok(!("getTypeChecker" in program));
         assert.deepEqual(await program.getRootFileNames(), ["/src/main.ts"]);
         const files = await program.getSourceFiles();
         assert.deepEqual(files.map(file => file.fileName), ["/src/dependency.ts", "/src/main.ts"]);
         assert.strictEqual(files[1], await program.getSourceFile("/src/main.ts"));
-        const checker = await program.getTypeChecker();
-        assert.strictEqual(await program.getTypeChecker(), checker);
-        assert.ok(await checker.getSymbolAtLocation(cast(files[1].statements[1], isVariableStatement).declarationList.declarations[0].name));
         assert.equal(await program.getProjectReferences(), undefined);
         assert.equal(await program.getResolvedProjectReferences(), undefined);
     });
@@ -2769,7 +2767,11 @@ describe("SourceFile", { concurrency }, () => {
 export const box: Box<string> = { value: "hello" };
 export const other: { value: string } = box;`,
         });
-        await using program = await api.createProgram(["/src/main.ts"], { noLib: true });
+        const snapshot = await api.createSnapshot({
+            createPrograms: [{ rootFiles: ["/src/main.ts"], compilerOptions: { noLib: true } }],
+        });
+        const project = snapshot.getProjects()[0];
+        const program = project.program;
         const identifiers = await program.getIdentifierCount();
         const nodes = await program.getNodeCount();
         const symbols = await program.getSymbolCount();
@@ -2784,7 +2786,7 @@ export const other: { value: string } = box;`,
         assert.deepEqual(relations, { assignable: 0, identity: 0, subtype: 0, strictSubtype: 0 });
 
         const file = (await program.getSourceFile("/src/main.ts"))!;
-        const checker = await program.getTypeChecker();
+        const checker = project.checker;
         const declaration = cast(file.statements[1], isVariableStatement).declarationList.declarations[0];
         const type = await checker.getTypeAtLocation(declaration.name);
         await type.getProperties();

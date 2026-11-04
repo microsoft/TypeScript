@@ -82,7 +82,6 @@ export interface APIMethodInfo {
     getSourceFileNames: APIMethod<GetSourceFileNamesParams, RootedFilePath[]>;
     containsProjectFile: APIMethod<ContainsProjectFileParams, boolean>;
     getProjectRootFiles: APIMethod<GetSourceFileNamesParams, RootedFilePath[]>;
-    ensureTypeChecker: APIMethod<GetProjectDiagnosticsParams, boolean>;
     getProgramStatistics: APIMethod<GetProjectDiagnosticsParams, ProgramStatisticsResponse>;
     getResolvedProjectReferences: APIMethod<GetProjectDiagnosticsParams, ResolvedProjectReferencesResponse>;
     getOptionsDiagnostics: APIMethod<GetProjectDiagnosticsParams, DiagnosticResponse[] | null>;
@@ -1194,7 +1193,6 @@ export interface BatchRequest {
         | "disposeBuildOrchestrator"
         | "emit"
         | "emitToString"
-        | "ensureTypeChecker"
         | "formatNodeForInsertion"
         | "getAliasSymbolOfType"
         | "getAliasTypeArgumentsOfType"
@@ -1382,7 +1380,6 @@ export interface BatchResponse {
         | "disposeBuildOrchestrator"
         | "emit"
         | "emitToString"
-        | "ensureTypeChecker"
         | "formatNodeForInsertion"
         | "getAliasSymbolOfType"
         | "getAliasTypeArgumentsOfType"

@@ -1695,7 +1695,6 @@ describe("API - generator batching", { concurrency: areTestsFiltered() }, () => 
                 }),
                 parityCase("Program", "getProjectReferences", program.getProjectReferences, assertDeepEquivalent),
                 parityCase("Program", "getResolvedProjectReferences", program.getResolvedProjectReferences, assertDeepEquivalent),
-                parityCase("Program", "getTypeChecker", program.getTypeChecker, assert.strictEqual),
                 parityCase("Program", "getSourceFileMetadata", program.getSourceFileMetadata, assertDeepEquivalent, "/src/index.ts"),
                 parityCase("Program", "getSourceFileMetadataByPath", program.getSourceFileMetadataByPath, assertDeepEquivalent, indexFile.path),
                 parityCase("Program", "isSourceFileFromExternalLibrary", program.isSourceFileFromExternalLibrary, assertDeepEquivalent, indexFile),

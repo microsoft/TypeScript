@@ -1874,14 +1874,6 @@ export class Program<Id extends ProjectId = ProjectId> implements FormatDiagnost
         return this.project.parsedCommandLine.projectReferences;
     }
 
-    async getTypeChecker(): Promise<Checker> {
-        await this.client.apiRequest("ensureTypeChecker", {
-            snapshot: this.snapshotId,
-            project: this.project.handle,
-        });
-        return this.project.checker;
-    }
-
     async getSourceFiles(): Promise<readonly SourceFile[]> {
         const fileNames = await this.getSourceFileNames();
         const sourceFiles = await Promise.all(fileNames.map(fileName => this.getSourceFile(fileName)));

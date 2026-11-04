@@ -113,7 +113,6 @@ const (
 	MethodGetSourceFileNames                             Method = "getSourceFileNames"
 	MethodContainsProjectFile                            Method = "containsProjectFile"
 	MethodGetProjectRootFiles                            Method = "getProjectRootFiles"
-	MethodEnsureTypeChecker                              Method = "ensureTypeChecker"
 	MethodGetProgramStatistics                           Method = "getProgramStatistics"
 	MethodGetResolvedProjectReferences                   Method = "getResolvedProjectReferences"
 	MethodGetOptionsDiagnostics                          Method = "getOptionsDiagnostics"
@@ -780,7 +779,6 @@ var unmarshalers = map[Method]func([]byte) (any, error){
 	MethodGetSuggestionDiagnostics:          unmarshallerFor[GetDiagnosticsParams],
 	MethodGetDeclarationDiagnostics:         unmarshallerFor[GetDiagnosticsParams],
 	MethodGetProgramDiagnostics:             unmarshallerFor[GetProjectDiagnosticsParams],
-	MethodEnsureTypeChecker:                 unmarshallerFor[GetProjectDiagnosticsParams],
 	MethodGetProgramStatistics:              unmarshallerFor[GetProjectDiagnosticsParams],
 	MethodGetResolvedProjectReferences:      unmarshallerFor[GetProjectDiagnosticsParams],
 	MethodGetOptionsDiagnostics:             unmarshallerFor[GetProjectDiagnosticsParams],

@@ -3227,31 +3227,6 @@ export class Program<Id extends ProjectId = ProjectId> implements FormatDiagnost
         );
     }
 
-    get getTypeChecker(): {
-        (): Checker;
-        gen(): Generator<ProtocolRequest, Checker, ProtocolResponse["result"]>;
-    } {
-        const owner = this;
-        return cacheGeneratorMethod(
-            owner,
-            "getTypeChecker",
-            function (): Checker {
-                owner.client.apiRequest("ensureTypeChecker", {
-                    snapshot: owner.snapshotId,
-                    project: owner.project.handle,
-                });
-                return owner.project.checker;
-            },
-            function* (): Generator<ProtocolRequest, Checker, ProtocolResponse["result"]> {
-                yield* apiRequest("ensureTypeChecker", {
-                    snapshot: owner.snapshotId,
-                    project: owner.project.handle,
-                });
-                return owner.project.checker;
-            },
-        );
-    }
-
     get getSourceFiles(): {
         (): readonly SourceFile[];
         gen(): APIRequestGenerator<readonly SourceFile[]>;

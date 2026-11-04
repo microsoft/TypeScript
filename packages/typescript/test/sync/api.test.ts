@@ -2566,19 +2566,17 @@ describe("SourceFile", { concurrency }, () => {
         );
     });
 
-    test("Program accessors distinguish root files from source files and reuse the checker", () => {
+    test("Program accessors distinguish root files from source files", () => {
         using api = spawnAPI({
             "/src/main.ts": `import { value } from "./dependency"; export const result = value;`,
             "/src/dependency.ts": `export const value = 1;`,
         });
         using program = api.createProgram(["/src/main.ts"], { noLib: true });
+        assert.ok(!("getTypeChecker" in program));
         assert.deepEqual(program.getRootFileNames(), ["/src/main.ts"]);
         const files = program.getSourceFiles();
         assert.deepEqual(files.map(file => file.fileName), ["/src/dependency.ts", "/src/main.ts"]);
         assert.strictEqual(files[1], program.getSourceFile("/src/main.ts"));
-        const checker = program.getTypeChecker();
-        assert.strictEqual(program.getTypeChecker(), checker);
-        assert.ok(checker.getSymbolAtLocation(cast(files[1].statements[1], isVariableStatement).declarationList.declarations[0].name));
         assert.equal(program.getProjectReferences(), undefined);
         assert.equal(program.getResolvedProjectReferences(), undefined);
     });
@@ -2589,7 +2587,11 @@ describe("SourceFile", { concurrency }, () => {
 export const box: Box<string> = { value: "hello" };
 export const other: { value: string } = box;`,
         });
-        using program = api.createProgram(["/src/main.ts"], { noLib: true });
+        const snapshot = api.createSnapshot({
+            createPrograms: [{ rootFiles: ["/src/main.ts"], compilerOptions: { noLib: true } }],
+        });
+        const project = snapshot.getProjects()[0];
+        const program = project.program;
         const identifiers = program.getIdentifierCount();
         const nodes = program.getNodeCount();
         const symbols = program.getSymbolCount();
@@ -2604,7 +2606,7 @@ export const other: { value: string } = box;`,
         assert.deepEqual(relations, { assignable: 0, identity: 0, subtype: 0, strictSubtype: 0 });
 
         const file = (program.getSourceFile("/src/main.ts"))!;
-        const checker = program.getTypeChecker();
+        const checker = project.checker;
         const declaration = cast(file.statements[1], isVariableStatement).declarationList.declarations[0];
         const type = checker.getTypeAtLocation(declaration.name);
         type.getProperties();

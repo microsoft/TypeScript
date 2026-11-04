@@ -955,8 +955,6 @@ func (s *Session) HandleRequest(ctx context.Context, method string, params json.
 		return s.handleContainsProjectFile(ctx, parsed.(*ContainsProjectFileParams))
 	case string(MethodGetProjectRootFiles):
 		return s.handleGetProjectRootFiles(ctx, parsed.(*GetSourceFileNamesParams))
-	case string(MethodEnsureTypeChecker):
-		return s.handleEnsureTypeChecker(ctx, parsed.(*GetProjectDiagnosticsParams))
 	case string(MethodGetProgramStatistics):
 		return s.handleGetProgramStatistics(ctx, parsed.(*GetProjectDiagnosticsParams))
 	case string(MethodGetResolvedProjectReferences):
@@ -2384,15 +2382,6 @@ func transpileOutput(ctx context.Context, input string, options TranspileOptions
 		Diagnostics:   NewDiagnosticResponses(output.Diagnostics),
 		SourceMapText: output.SourceMapText,
 	}, nil
-}
-
-func (s *Session) handleEnsureTypeChecker(ctx context.Context, params *GetProjectDiagnosticsParams) (bool, error) {
-	setup, err := s.setupChecker(ctx, params.Snapshot, params.Project)
-	if err != nil {
-		return false, err
-	}
-	defer setup.done()
-	return true, nil
 }
 
 func (s *Session) handleGetProgramStatistics(ctx context.Context, params *GetProjectDiagnosticsParams) (*ProgramStatisticsResponse, error) {
