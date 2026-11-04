@@ -10,6 +10,14 @@ declare const obj: { p?: number };
 
 // Assertions must not hide an invalid left operand of **.
 -x ** 2;
++x ** 2;
+~x ** 2;
+!x ** 2;
+typeof x ** 2;
+void x ** 2;
+delete obj.p ** 2;
+<number>x ** 2;
+
 -x as any ** 2;
 +x as any ** 2;
 ~x as any ** 2;
@@ -34,6 +42,8 @@ delete obj.p satisfies any ** 2;
 -x! satisfies number ** 2;
 <number>x as number ** 2;
 <number>-x satisfies number ** 2;
+const negated = -x as any ** 2;
+-x as any ** 2 ** 3;
 2 ** -x as number ** 2;
 
 async function invalidAwait() {
