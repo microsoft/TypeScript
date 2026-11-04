@@ -17377,7 +17377,10 @@ func (c *Checker) getWidenedLiteralTypeForInitializer(declaration *ast.Node, t *
 	if c.getCombinedNodeFlagsCached(declaration)&ast.NodeFlagsConstant != 0 || isDeclarationReadonly(declaration) {
 		return t
 	}
-	return c.getWidenedLiteralType(t)
+	if initializer := declaration.Initializer(); initializer != nil && isTypeAssertion(ast.SkipOuterExpressions(initializer, ast.OEKParentheses|ast.OEKNonNullAssertions|ast.OEKSatisfies)) {
+		return c.getWidenedLiteralType(t)
+	}
+	return c.getWidenedNegatedLiteralType(c.getWidenedLiteralType(t))
 }
 
 func (c *Checker) getTypeOfFuncClassEnumModule(symbol *ast.Symbol) *Type {
@@ -21230,7 +21233,7 @@ func (c *Checker) checkIfExpressionRefinesParameter(fn *ast.Node, expr *ast.Node
 		antecedent = &ast.FlowNode{Flags: ast.FlowFlagsStart}
 	}
 	trueCondition := &ast.FlowNode{Flags: ast.FlowFlagsTrueCondition, Node: expr, Antecedent: antecedent}
-	trueType := c.getFlowTypeOfReferenceEx(param.Name(), initType, initType, fn, trueCondition)
+	trueType := c.getWidenedNegatedLiteralType(c.getFlowTypeOfReferenceEx(param.Name(), initType, initType, fn, trueCondition))
 	if trueType == initType {
 		return nil
 	}

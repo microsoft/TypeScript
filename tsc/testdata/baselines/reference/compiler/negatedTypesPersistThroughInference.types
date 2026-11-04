@@ -54,7 +54,7 @@ export function nonString(value: unknown) {
 }
 
 export function nonZero(value: number) {
->nonZero : (value: number) => { constant: number & not 0; variable: number & not 0; inferred: number & not 0; contextual: number & not 0; values: (number & not 0)[]; }
+>nonZero : (value: number) => { constant: number & not 0; variable: number; inferred: number & not 0; contextual: number & not 0; values: (number & not 0)[]; }
 >value : number
 
     if (value === 0) throw new Error();
@@ -69,7 +69,7 @@ export function nonZero(value: number) {
 >value : number & not 0
 
     let variable = value;
->variable : number & not 0
+>variable : number
 >value : number & not 0
 
     const inferred: number & not 0 = identity(value);
@@ -86,9 +86,9 @@ export function nonZero(value: number) {
 >value : number & not 0
 
     return { constant, variable, inferred, contextual, values: [value] };
->{ constant, variable, inferred, contextual, values: [value] } : { constant: number & not 0; variable: number & not 0; inferred: number & not 0; contextual: number & not 0; values: (number & not 0)[]; }
+>{ constant, variable, inferred, contextual, values: [value] } : { constant: number & not 0; variable: number; inferred: number & not 0; contextual: number & not 0; values: (number & not 0)[]; }
 >constant : number & not 0
->variable : number & not 0
+>variable : number
 >inferred : number & not 0
 >contextual : number & not 0
 >values : (number & not 0)[]
@@ -126,7 +126,7 @@ export function notString(value: unknown) {
 }
 
 export function notZero(value: number) {
->notZero : (value: number) => value is number & not 0
+>notZero : (value: number) => boolean
 >value : number
 
     return value !== 0;

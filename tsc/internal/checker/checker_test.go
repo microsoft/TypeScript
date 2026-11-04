@@ -171,7 +171,8 @@ func BenchmarkCheckFreshProgram(b *testing.B) {
 		program.BindSourceFiles()
 		c, _ := checker.NewChecker(program, nil)
 		for _, file := range program.GetSourceFiles() {
-			assert.Equal(b, len(c.GetDiagnostics(ctx, file)), 0)
+			diagnostics := c.GetDiagnostics(ctx, file)
+			assert.Check(b, len(diagnostics) == 0, "%s: %v", file.FileName(), diagnostics)
 		}
 		assert.Equal(b, len(c.GetGlobalDiagnostics()), 0)
 	}

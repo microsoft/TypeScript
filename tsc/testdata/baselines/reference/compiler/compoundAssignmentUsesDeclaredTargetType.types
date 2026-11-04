@@ -101,15 +101,15 @@ function wrapped(value: number | undefined) {
         value! *= 2;
 >value! *= 2 : number
 >value! : number
->value : number | undefined
+>value : number
 >2 : 2
 
         ((value)!) += 1;
 >((value)!) += 1 : number
 >((value)!) : number
 >(value)! : number
->(value) : number | undefined
->value : number | undefined
+>(value) : number
+>value : number
 >1 : 1
     }
 }

@@ -240,6 +240,14 @@ func (c *Checker) getTypeAtFlowAssignment(f *FlowState, flow *ast.FlowNode) Flow
 				flowType := c.getTypeAtFlowNode(f, flow.Antecedent)
 				return c.newFlowType(c.getBaseTypeOfLiteralType(flowType.t), flowType.incomplete)
 			}
+			if c.maybeTypeOfKind(f.declaredType, TypeFlagsNullable) {
+				flowType := c.getTypeAtFlowNode(f, flow.Antecedent)
+				t := c.filterType(f.declaredType, func(t *Type) bool {
+					return t.flags&TypeFlagsNullable == 0 ||
+						c.hasTypeFacts(flowType.t, core.IfElse(t.flags&TypeFlagsUndefined != 0, TypeFactsEQUndefined, TypeFactsEQNull))
+				})
+				return c.newFlowType(t, flowType.incomplete)
+			}
 			return FlowType{t: f.declaredType}
 		}
 		if f.declaredType == c.autoType || f.declaredType == c.autoArrayType {

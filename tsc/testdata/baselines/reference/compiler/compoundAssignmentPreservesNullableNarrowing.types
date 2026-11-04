@@ -1,0 +1,411 @@
+//// [tests/cases/compiler/compoundAssignmentPreservesNullableNarrowing.ts] ////
+
+=== compoundAssignmentPreservesNullableNarrowing.ts ===
+enum Flags {
+>Flags : Flags
+
+    None = 0,
+>None : Flags.None
+>0 : 0
+
+    First = 1,
+>First : Flags.First
+>1 : 1
+
+    Second = 2,
+>Second : Flags.Second
+>2 : 2
+}
+
+export function enumFlags(value: Flags | undefined) {
+>enumFlags : (value: Flags | undefined) => Flags
+>value : Flags | undefined
+
+    if (value === undefined) {
+>value === undefined : boolean
+>value : Flags | undefined
+>undefined : undefined
+
+        value = Flags.None;
+>value = Flags.None : Flags.None
+>value : Flags | undefined
+>Flags.None : Flags.None
+>Flags : typeof Flags
+>None : Flags.None
+
+        value |= Flags.First;
+>value |= Flags.First : number
+>value : Flags
+>Flags.First : Flags.First
+>Flags : typeof Flags
+>First : Flags.First
+
+        value |= Flags.Second;
+>value |= Flags.Second : number
+>value : Flags
+>Flags.Second : Flags.Second
+>Flags : typeof Flags
+>Second : Flags.Second
+    }
+    const result: Flags = value;
+>result : Flags
+>value : Flags
+
+    return value;
+>value : Flags
+}
+
+export function numeric(value: number | null | undefined) {
+>numeric : (value: number | null | undefined) => number
+>value : number | null | undefined
+
+    if (value != null) {
+>value != null : boolean
+>value : number | null | undefined
+
+        value -= 1;
+>value -= 1 : number
+>value : number
+>1 : 1
+
+        value += 1;
+>value += 1 : number
+>value : number
+>1 : 1
+
+        value *= 2;
+>value *= 2 : number
+>value : number
+>2 : 2
+
+        value /= 2;
+>value /= 2 : number
+>value : number
+>2 : 2
+
+        value %= 2;
+>value %= 2 : number
+>value : number
+>2 : 2
+
+        value **= 2;
+>value **= 2 : number
+>value : number
+>2 : 2
+
+        value <<= 1;
+>value <<= 1 : number
+>value : number
+>1 : 1
+
+        value >>= 1;
+>value >>= 1 : number
+>value : number
+>1 : 1
+
+        value >>>= 1;
+>value >>>= 1 : number
+>value : number
+>1 : 1
+
+        value |= 1;
+>value |= 1 : number
+>value : number
+>1 : 1
+
+        value &= 1;
+>value &= 1 : number
+>value : number
+>1 : 1
+
+        value ^= 1;
+>value ^= 1 : number
+>value : number
+>1 : 1
+
+        const result: number = value;
+>result : number
+>value : number
+
+        return value;
+>value : number
+    }
+    throw new Error();
+>new Error() : Error
+>Error : ErrorConstructor
+}
+
+export function updates(value: number | null | undefined) {
+>updates : (value: number | null | undefined) => number
+>value : number | null | undefined
+
+    if (value != null) {
+>value != null : boolean
+>value : number | null | undefined
+
+        value++;
+>value++ : number
+>value : number
+
+        ++value;
+>++value : number
+>value : number
+
+        value--;
+>value-- : number
+>value : number
+
+        --value;
+>--value : number
+>value : number
+
+        const result: number = value;
+>result : number
+>value : number
+
+        return value;
+>value : number
+    }
+    throw new Error();
+>new Error() : Error
+>Error : ErrorConstructor
+}
+
+export function bigint(value: bigint | null | undefined) {
+>bigint : (value: bigint | null | undefined) => bigint
+>value : bigint | null | undefined
+
+    if (value != null) {
+>value != null : boolean
+>value : bigint | null | undefined
+
+        value *= 2n;
+>value *= 2n : bigint
+>value : bigint
+>2n : 2n
+
+        value++;
+>value++ : bigint
+>value : bigint
+
+        const result: bigint = value;
+>result : bigint
+>value : bigint
+
+        return value;
+>value : bigint
+    }
+    throw new Error();
+>new Error() : Error
+>Error : ErrorConstructor
+}
+
+export function text(value: string | null | undefined) {
+>text : (value: string | null | undefined) => string
+>value : string | null | undefined
+
+    if (value != null) {
+>value != null : boolean
+>value : string | null | undefined
+
+        value += "suffix";
+>value += "suffix" : string
+>value : string
+>"suffix" : "suffix"
+
+        const result: string = value;
+>result : string
+>value : string
+
+        return value;
+>value : string
+    }
+    throw new Error();
+>new Error() : Error
+>Error : ErrorConstructor
+}
+
+export function properties(holder: { value?: number | null }) {
+>properties : (holder: { value?: number | null; }) => number
+>holder : { value?: number | null; }
+>value : number | null | undefined
+
+    if (holder.value != null) {
+>holder.value != null : boolean
+>holder.value : number | null | undefined
+>holder : { value?: number | null; }
+>value : number | null | undefined
+
+        holder.value -= 1;
+>holder.value -= 1 : number
+>holder.value : number
+>holder : { value?: number | null; }
+>value : number
+>1 : 1
+
+        holder["value"]++;
+>holder["value"]++ : number
+>holder["value"] : number
+>holder : { value?: number | null; }
+>"value" : "value"
+
+        const result: number = holder.value;
+>result : number
+>holder.value : number
+>holder : { value?: number | null; }
+>value : number
+
+        return holder["value"];
+>holder["value"] : number
+>holder : { value?: number | null; }
+>"value" : "value"
+    }
+    throw new Error();
+>new Error() : Error
+>Error : ErrorConstructor
+}
+
+export function loop(value: number | null | undefined) {
+>loop : (value: number | null | undefined) => number
+>value : number | null | undefined
+
+    if (value != null) {
+>value != null : boolean
+>value : number | null | undefined
+
+        while (value !== 0) {
+>value !== 0 : boolean
+>value : number
+>0 : 0
+
+            value -= 1;
+>value -= 1 : number
+>value : number & not 0
+>1 : 1
+        }
+        const result: 0 = value;
+>result : 0
+>value : 0
+
+        return value;
+>value : 0
+    }
+    throw new Error();
+>new Error() : Error
+>Error : ErrorConstructor
+}
+
+export function mutableFlags(value: number, flags: number[]) {
+>mutableFlags : (value: number, flags: number[]) => "" | "all" | "some"
+>value : number
+>flags : number[]
+
+    if (value === 0) return "";
+>value === 0 : boolean
+>value : number
+>0 : 0
+>"" : ""
+
+    let remainingFlags: number = value;
+>remainingFlags : number
+>value : number & not 0
+
+    for (const flag of flags) {
+>flag : number
+>flags : number[]
+
+        remainingFlags &= ~flag;
+>remainingFlags &= ~flag : number
+>remainingFlags : number
+>~flag : number
+>flag : number
+    }
+    return remainingFlags === 0 ? "all" : "some";
+>remainingFlags === 0 ? "all" : "some" : "all" | "some"
+>remainingFlags === 0 : boolean
+>remainingFlags : number
+>0 : 0
+>"all" : "all"
+>"some" : "some"
+}
+
+export function unchecked(value: number | null | undefined) {
+>unchecked : (value: number | null | undefined) => number | null | undefined
+>value : number | null | undefined
+
+    value -= 1;
+>value -= 1 : number
+>value : number | null | undefined
+>1 : 1
+
+    value++;
+>value++ : number
+>value : number | null | undefined
+
+    const result: number = value;
+>result : number
+>value : number | null | undefined
+
+    return value;
+>value : number | null | undefined
+}
+
+export function checkedOnlyNull(value: number | null | undefined) {
+>checkedOnlyNull : (value: number | null | undefined) => number | undefined
+>value : number | null | undefined
+
+    if (value !== null) {
+>value !== null : boolean
+>value : number | null | undefined
+
+        value -= 1;
+>value -= 1 : number
+>value : number | undefined
+>1 : 1
+
+        const result: number | undefined = value;
+>result : number | undefined
+>value : number | undefined
+
+        const invalid: number = value;
+>invalid : number
+>value : number | undefined
+
+        return value;
+>value : number | undefined
+    }
+    throw new Error();
+>new Error() : Error
+>Error : ErrorConstructor
+}
+
+export function checkedOnlyUndefined(value: number | null | undefined) {
+>checkedOnlyUndefined : (value: number | null | undefined) => number | null
+>value : number | null | undefined
+
+    if (value !== undefined) {
+>value !== undefined : boolean
+>value : number | null | undefined
+>undefined : undefined
+
+        value -= 1;
+>value -= 1 : number
+>value : number | null
+>1 : 1
+
+        const result: number | null = value;
+>result : number | null
+>value : number | null
+
+        const invalid: number = value;
+>invalid : number
+>value : number | null
+
+        return value;
+>value : number | null
+    }
+    throw new Error();
+>new Error() : Error
+>Error : ErrorConstructor
+}
+

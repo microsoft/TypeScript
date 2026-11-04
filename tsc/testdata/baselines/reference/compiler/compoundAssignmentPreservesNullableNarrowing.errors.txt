@@ -1,0 +1,154 @@
+compoundAssignmentPreservesNullableNarrowing.ts(99,5): error TS18049: 'value' is possibly 'null' or 'undefined'.
+compoundAssignmentPreservesNullableNarrowing.ts(100,5): error TS18049: 'value' is possibly 'null' or 'undefined'.
+compoundAssignmentPreservesNullableNarrowing.ts(101,11): error TS2322: Type 'number | null | undefined' is not assignable to type 'number'.
+  Type 'undefined' is not assignable to type 'number'.
+compoundAssignmentPreservesNullableNarrowing.ts(107,9): error TS18048: 'value' is possibly 'undefined'.
+compoundAssignmentPreservesNullableNarrowing.ts(109,15): error TS2322: Type 'number | undefined' is not assignable to type 'number'.
+  Type 'undefined' is not assignable to type 'number'.
+compoundAssignmentPreservesNullableNarrowing.ts(117,9): error TS18047: 'value' is possibly 'null'.
+compoundAssignmentPreservesNullableNarrowing.ts(119,15): error TS2322: Type 'number | null' is not assignable to type 'number'.
+  Type 'null' is not assignable to type 'number'.
+
+
+==== compoundAssignmentPreservesNullableNarrowing.ts (7 errors) ====
+    enum Flags {
+        None = 0,
+        First = 1,
+        Second = 2,
+    }
+    
+    export function enumFlags(value: Flags | undefined) {
+        if (value === undefined) {
+            value = Flags.None;
+            value |= Flags.First;
+            value |= Flags.Second;
+        }
+        const result: Flags = value;
+        return value;
+    }
+    
+    export function numeric(value: number | null | undefined) {
+        if (value != null) {
+            value -= 1;
+            value += 1;
+            value *= 2;
+            value /= 2;
+            value %= 2;
+            value **= 2;
+            value <<= 1;
+            value >>= 1;
+            value >>>= 1;
+            value |= 1;
+            value &= 1;
+            value ^= 1;
+            const result: number = value;
+            return value;
+        }
+        throw new Error();
+    }
+    
+    export function updates(value: number | null | undefined) {
+        if (value != null) {
+            value++;
+            ++value;
+            value--;
+            --value;
+            const result: number = value;
+            return value;
+        }
+        throw new Error();
+    }
+    
+    export function bigint(value: bigint | null | undefined) {
+        if (value != null) {
+            value *= 2n;
+            value++;
+            const result: bigint = value;
+            return value;
+        }
+        throw new Error();
+    }
+    
+    export function text(value: string | null | undefined) {
+        if (value != null) {
+            value += "suffix";
+            const result: string = value;
+            return value;
+        }
+        throw new Error();
+    }
+    
+    export function properties(holder: { value?: number | null }) {
+        if (holder.value != null) {
+            holder.value -= 1;
+            holder["value"]++;
+            const result: number = holder.value;
+            return holder["value"];
+        }
+        throw new Error();
+    }
+    
+    export function loop(value: number | null | undefined) {
+        if (value != null) {
+            while (value !== 0) {
+                value -= 1;
+            }
+            const result: 0 = value;
+            return value;
+        }
+        throw new Error();
+    }
+    
+    export function mutableFlags(value: number, flags: number[]) {
+        if (value === 0) return "";
+        let remainingFlags: number = value;
+        for (const flag of flags) {
+            remainingFlags &= ~flag;
+        }
+        return remainingFlags === 0 ? "all" : "some";
+    }
+    
+    export function unchecked(value: number | null | undefined) {
+        value -= 1;
+        ~~~~~
+!!! error TS18049: 'value' is possibly 'null' or 'undefined'.
+        value++;
+        ~~~~~
+!!! error TS18049: 'value' is possibly 'null' or 'undefined'.
+        const result: number = value;
+              ~~~~~~
+!!! error TS2322: Type 'number | null | undefined' is not assignable to type 'number'.
+!!! error TS2322:   Type 'undefined' is not assignable to type 'number'.
+        return value;
+    }
+    
+    export function checkedOnlyNull(value: number | null | undefined) {
+        if (value !== null) {
+            value -= 1;
+            ~~~~~
+!!! error TS18048: 'value' is possibly 'undefined'.
+            const result: number | undefined = value;
+            const invalid: number = value;
+                  ~~~~~~~
+!!! error TS2322: Type 'number | undefined' is not assignable to type 'number'.
+!!! error TS2322:   Type 'undefined' is not assignable to type 'number'.
+            return value;
+        }
+        throw new Error();
+    }
+    
+    export function checkedOnlyUndefined(value: number | null | undefined) {
+        if (value !== undefined) {
+            value -= 1;
+            ~~~~~
+!!! error TS18047: 'value' is possibly 'null'.
+            const result: number | null = value;
+            const invalid: number = value;
+                  ~~~~~~~
+!!! error TS2322: Type 'number | null' is not assignable to type 'number'.
+!!! error TS2322:   Type 'null' is not assignable to type 'number'.
+            return value;
+        }
+        throw new Error();
+    }
+    

@@ -59,6 +59,24 @@ func containsNegatedType(t *Type) bool {
 	return false
 }
 
+// Literal exclusions must not make inferred mutable locations narrower than their primitive types.
+func (c *Checker) getWidenedNegatedLiteralType(t *Type) *Type {
+	switch {
+	case t.flags&TypeFlagsNegated != 0:
+		if t.AsNegatedType().baseType.flags&TypeFlagsLiteral != 0 {
+			return c.unknownType
+		}
+	case t.flags&TypeFlagsUnion != 0:
+		return c.mapType(t, c.getWidenedNegatedLiteralType)
+	case t.flags&TypeFlagsIntersection != 0:
+		types := core.SameMap(t.Types(), c.getWidenedNegatedLiteralType)
+		if !slices.Equal(types, t.Types()) {
+			return c.getIntersectionType(types)
+		}
+	}
+	return t
+}
+
 // removeComplementaryNegatedTypes replaces 'Base & not C' with 'Base' when another branch covers
 // 'Base & C'. That branch is retained unless it is also contained in Base. Removing one negation
 // at a time preserves shared negative factors and allows successive reductions, for example

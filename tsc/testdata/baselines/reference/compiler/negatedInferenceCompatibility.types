@@ -1,0 +1,309 @@
+//// [tests/cases/compiler/negatedInferenceCompatibility.ts] ////
+
+=== negatedInferenceCompatibility.ts ===
+export function formatFlags(value: number, flags: readonly number[]) {
+>formatFlags : (value: number, flags: readonly number[]) => boolean
+>value : number
+>flags : readonly number[]
+
+    if (value === 0) return true;
+>value === 0 : boolean
+>value : number
+>0 : 0
+>true : true
+
+    let remainingFlags = value;
+>remainingFlags : number
+>value : number & not 0
+
+    for (const flag of flags) {
+>flag : number
+>flags : readonly number[]
+
+        remainingFlags &= ~flag;
+>remainingFlags &= ~flag : number
+>remainingFlags : number
+>~flag : number
+>flag : number
+    }
+    return remainingFlags === 0;
+>remainingFlags === 0 : boolean
+>remainingFlags : number
+>0 : 0
+}
+
+export function lookupOptions(options: object, setting: string) {
+>lookupOptions : (options: object, setting: string) => number
+>options : object
+>setting : string
+
+    const names = Object.keys(options).filter(k => k !== "init" && k !== "help" && k !== "watch");
+>names : string[]
+>Object.keys(options).filter(k => k !== "init" && k !== "help" && k !== "watch") : string[]
+>Object.keys(options).filter : { <S extends string>(predicate: (value: string, index: number, array: string[]) => value is S, thisArg?: any): S[]; (predicate: (value: string, index: number, array: string[]) => unknown, thisArg?: any): string[]; }
+>Object.keys(options) : string[]
+>Object.keys : { (o: object): string[]; (o: {}): string[]; }
+>Object : ObjectConstructor
+>keys : { (o: object): string[]; (o: {}): string[]; }
+>options : object
+>filter : { <S extends string>(predicate: (value: string, index: number, array: string[]) => value is S, thisArg?: any): S[]; (predicate: (value: string, index: number, array: string[]) => unknown, thisArg?: any): string[]; }
+>k => k !== "init" && k !== "help" && k !== "watch" : (k: string) => boolean
+>k : string
+>k !== "init" && k !== "help" && k !== "watch" : boolean
+>k !== "init" && k !== "help" : boolean
+>k !== "init" : boolean
+>k : string
+>"init" : "init"
+>k !== "help" : boolean
+>k : string & not "init"
+>"help" : "help"
+>k !== "watch" : boolean
+>k : string & not "init" & not "help"
+>"watch" : "watch"
+
+    return names.indexOf(setting);
+>names.indexOf(setting) : number
+>names.indexOf : (searchElement: string, fromIndex?: number) => number
+>names : string[]
+>indexOf : (searchElement: string, fromIndex?: number) => number
+>setting : string
+}
+
+export function mutableNumber(value: number) {
+>mutableNumber : (value: number) => number
+>value : number
+
+    if (value === 0) throw new Error();
+>value === 0 : boolean
+>value : number
+>0 : 0
+>new Error() : Error
+>Error : ErrorConstructor
+
+    let copy = value;
+>copy : number
+>value : number & not 0
+
+    copy = 0;
+>copy = 0 : 0
+>copy : number
+>0 : 0
+
+    return copy;
+>copy : number
+}
+
+export function mutableString(value: string) {
+>mutableString : (value: string) => string
+>value : string
+
+    if (value === "") throw new Error();
+>value === "" : boolean
+>value : string
+>"" : ""
+>new Error() : Error
+>Error : ErrorConstructor
+
+    let copy = value;
+>copy : string
+>value : string & not ""
+
+    copy += "suffix";
+>copy += "suffix" : string
+>copy : string
+>"suffix" : "suffix"
+
+    copy = "";
+>copy = "" : ""
+>copy : string
+>"" : ""
+
+    return copy;
+>copy : string
+}
+
+export function mutableBigInt(value: bigint) {
+>mutableBigInt : (value: bigint) => bigint
+>value : bigint
+
+    if (value === 0n) throw new Error();
+>value === 0n : boolean
+>value : bigint
+>0n : 0n
+>new Error() : Error
+>Error : ErrorConstructor
+
+    let copy = value;
+>copy : bigint
+>value : bigint & not 0n
+
+    copy *= 0n;
+>copy *= 0n : bigint
+>copy : bigint
+>0n : 0n
+
+    copy = 0n;
+>copy = 0n : 0n
+>copy : bigint
+>0n : 0n
+
+    return copy;
+>copy : bigint
+}
+
+export function preservedBounds(value: number) {
+>preservedBounds : (value: number) => number & not 0
+>value : number
+
+    if (value === 0) throw new Error();
+>value === 0 : boolean
+>value : number
+>0 : 0
+>new Error() : Error
+>Error : ErrorConstructor
+
+    const constant = value;
+>constant : number & not 0
+>value : number & not 0
+
+    const retained: number & not 0 = constant;
+>retained : number & not 0
+>constant : number & not 0
+
+    let annotated: number & not 0 = value;
+>annotated : number & not 0
+>value : number & not 0
+
+    annotated = 0;
+>annotated = 0 : 0
+>annotated : number & not 0
+>0 : 0
+
+    return retained;
+>retained : number & not 0
+}
+
+export function assertedBounds(value: number) {
+>assertedBounds : (value: number) => number & not 0
+>value : number
+
+    let asserted = (value as number & not 0);
+>asserted : number & not 0
+>(value as number & not 0) : number & not 0
+>value as number & not 0 : number & not 0
+>value : number
+
+    asserted = 0;
+>asserted = 0 : 0
+>asserted : number & not 0
+>0 : 0
+
+    let nonNull = (value as number & not 0)!;
+>nonNull : number & not 0
+>(value as number & not 0)! : number & not 0
+>(value as number & not 0) : number & not 0
+>value as number & not 0 : number & not 0
+>value : number
+
+    nonNull = 0;
+>nonNull = 0 : 0
+>nonNull : number & not 0
+>0 : 0
+
+    let satisfies = (value as number & not 0) satisfies number;
+>satisfies : number & not 0
+>(value as number & not 0) satisfies number : number & not 0
+>(value as number & not 0) : number & not 0
+>value as number & not 0 : number & not 0
+>value : number
+
+    satisfies = 0;
+>satisfies = 0 : 0
+>satisfies : number & not 0
+>0 : 0
+
+    return asserted;
+>asserted : number & not 0
+}
+
+export function nonString(value: unknown) {
+>nonString : (value: unknown) => not string
+>value : unknown
+
+    if (typeof value === "string") throw new Error();
+>typeof value === "string" : boolean
+>typeof value : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
+>value : unknown
+>"string" : "string"
+>new Error() : Error
+>Error : ErrorConstructor
+
+    let copy = value;
+>copy : not string
+>value : not string
+
+    const retained: not string = copy;
+>retained : not string
+>copy : not string
+
+    return retained;
+>retained : not string
+}
+
+export const notEmpty = (value: string) => value !== "";
+>notEmpty : (value: string) => boolean
+>(value: string) => value !== "" : (value: string) => boolean
+>value : string
+>value !== "" : boolean
+>value : string
+>"" : ""
+
+export const explicitlyNotEmpty = (value: string): value is string & not "" => value !== "";
+>explicitlyNotEmpty : (value: string) => value is string & not ""
+>(value: string): value is string & not "" => value !== "" : (value: string) => value is string & not ""
+>value : string
+>value !== "" : boolean
+>value : string
+>"" : ""
+
+export const notString = (value: unknown) => typeof value !== "string";
+>notString : (value: unknown) => value is not string
+>(value: unknown) => typeof value !== "string" : (value: unknown) => value is not string
+>value : unknown
+>typeof value !== "string" : boolean
+>typeof value : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
+>value : unknown
+>"string" : "string"
+
+export function filteredLiterals(values: ("init" | "help" | "other")[]) {
+>filteredLiterals : (values: ("init" | "help" | "other")[]) => "other"[]
+>values : ("help" | "init" | "other")[]
+
+    return values.filter(value => value !== "init" && value !== "help");
+>values.filter(value => value !== "init" && value !== "help") : "other"[]
+>values.filter : { <S extends "help" | "init" | "other">(predicate: (value: "help" | "init" | "other", index: number, array: ("help" | "init" | "other")[]) => value is S, thisArg?: any): S[]; (predicate: (value: "help" | "init" | "other", index: number, array: ("help" | "init" | "other")[]) => unknown, thisArg?: any): ("help" | "init" | "other")[]; }
+>values : ("help" | "init" | "other")[]
+>filter : { <S extends "help" | "init" | "other">(predicate: (value: "help" | "init" | "other", index: number, array: ("help" | "init" | "other")[]) => value is S, thisArg?: any): S[]; (predicate: (value: "help" | "init" | "other", index: number, array: ("help" | "init" | "other")[]) => unknown, thisArg?: any): ("help" | "init" | "other")[]; }
+>value => value !== "init" && value !== "help" : (value: "help" | "init" | "other") => value is "other"
+>value : "help" | "init" | "other"
+>value !== "init" && value !== "help" : boolean
+>value !== "init" : boolean
+>value : "help" | "init" | "other"
+>"init" : "init"
+>value !== "help" : boolean
+>value : "help" | "other"
+>"help" : "help"
+}
+
+export function explicitlyFiltered(values: string[]) {
+>explicitlyFiltered : (values: string[]) => (string & not "")[]
+>values : string[]
+
+    return values.filter(explicitlyNotEmpty);
+>values.filter(explicitlyNotEmpty) : (string & not "")[]
+>values.filter : { <S extends string>(predicate: (value: string, index: number, array: string[]) => value is S, thisArg?: any): S[]; (predicate: (value: string, index: number, array: string[]) => unknown, thisArg?: any): string[]; }
+>values : string[]
+>filter : { <S extends string>(predicate: (value: string, index: number, array: string[]) => value is S, thisArg?: any): S[]; (predicate: (value: string, index: number, array: string[]) => unknown, thisArg?: any): string[]; }
+>explicitlyNotEmpty : (value: string) => value is string & not ""
+}
+
