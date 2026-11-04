@@ -132,7 +132,7 @@ func (l *LanguageService) adjustFoldingEnd(ranges []*lsproto.FoldingRange, sourc
 						} else {
 							nextNonTriviaPos := scanner.SkipTriviaEx(sourceText, int(endOffset), &scanner.SkipTriviaOptions{StopAfterLineBreak: true})
 							// non-trivia after closing bracket on the same line: adjust end line to keep closing bracket visible
-							if nextNonTriviaPos < len(sourceText) && scanner.GetECMALineOfPosition(sourceFile, nextNonTriviaPos) == scanner.GetECMALineOfPosition(sourceFile, int(endOffset)-1) {
+							if nextNonTriviaPos < len(sourceText) && !strings.ContainsAny(sourceText[int(endOffset):nextNonTriviaPos], "\r\n") {
 								r.EndLine--
 							}
 						}
