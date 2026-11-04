@@ -78,8 +78,6 @@ const SPIN_SLOW_WAIT_NS = 1_000_000n;
  * a message already under way are not observed. The budget itself is not the
  * criterion either: a blocked read on a host with deep idle states returns after
  * ~200us even when the reply was written at once, so the threshold is 1 ms.
- *
- * @internal
  */
 export class AdaptiveSpinState {
     spinning = true;
@@ -657,8 +655,6 @@ export class SyncRpcChannel {
     /**
      * Whether reads currently spin before blocking; `undefined` when spinning is
      * off. Exposed for tests.
-     *
-     * @internal
      */
     get spinning(): boolean | undefined {
         if (this.spinNs === 0n) return undefined;
