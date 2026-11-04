@@ -205,6 +205,33 @@ if (Math.random()) {
 	}
 }
 
+func TestFoldingRangeLineFoldingOnlyWithTrailingJSXText(t *testing.T) {
+	t.Parallel()
+	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
+	const content = `// @jsx: preserve
+// @Filename: /a.tsx
+<main>
+    <div>
+        Hello
+    </div> // Keep me visible
+</main>`
+	ptrTrue := true
+	capabilities := &lsproto.ClientCapabilities{
+		TextDocument: &lsproto.TextDocumentClientCapabilities{
+			FoldingRange: &lsproto.FoldingRangeClientCapabilities{
+				LineFoldingOnly: &ptrTrue,
+			},
+		},
+	}
+	f, done := fourslash.NewFourslash(t, capabilities, content)
+	defer done()
+
+	f.VerifyFoldingRangeLines(t, []fourslash.FoldingRangeLineExpected{
+		{StartLine: 0, EndLine: 4},
+		{StartLine: 1, EndLine: 2},
+	})
+}
+
 func TestFoldingRangeLineFoldingOnlyWithUnmappedTrailingMarkup(t *testing.T) {
 	t.Parallel()
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")

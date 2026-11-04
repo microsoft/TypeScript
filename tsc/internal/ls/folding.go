@@ -130,7 +130,14 @@ func (l *LanguageService) adjustFoldingEnd(ranges []*lsproto.FoldingRange, sourc
 								r.EndLine--
 							}
 						} else {
-							nextNonTriviaPos := scanner.SkipTriviaEx(sourceText, int(endOffset), &scanner.SkipTriviaOptions{StopAfterLineBreak: true})
+							tokenAfterFold := astnav.GetTokenAtPosition(sourceFile, int(endOffset))
+							nextNonTriviaPos := scanner.SkipTriviaEx(
+								sourceText,
+								int(endOffset),
+								&scanner.SkipTriviaOptions{
+									StopAfterLineBreak: true,
+									StopAtComments:     ast.IsJsxText(tokenAfterFold),
+								})
 							// non-trivia after closing bracket on the same line: adjust end line to keep closing bracket visible
 							if nextNonTriviaPos < len(sourceText) && !strings.ContainsAny(sourceText[int(endOffset):nextNonTriviaPos], "\r\n") {
 								r.EndLine--
