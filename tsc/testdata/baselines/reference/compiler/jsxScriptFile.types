@@ -1,0 +1,16 @@
+//// [tests/cases/compiler/jsxScriptFile.tsx] ////
+
+=== node_modules/solid-js/jsx-runtime.d.ts ===
+export namespace JSX {
+    interface IntrinsicElements {
+        div: {};
+>div : {}
+    }
+}
+
+=== index.tsx ===
+const x = <div />;
+>x : any
+><div /> : any
+>div : any
+

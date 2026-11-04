@@ -1,0 +1,18 @@
+index.tsx(1,11): error TS2884: This JSX tag cannot be used in a script file. Consider adding an empty 'export {}' statement to make this file a module.
+index.tsx(1,11): error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
+
+
+==== node_modules/solid-js/jsx-runtime.d.ts (0 errors) ====
+    export namespace JSX {
+        interface IntrinsicElements {
+            div: {};
+        }
+    }
+    
+==== index.tsx (2 errors) ====
+    const x = <div />;
+              ~~~~~~~
+!!! error TS2884: This JSX tag cannot be used in a script file. Consider adding an empty 'export {}' statement to make this file a module.
+              ~~~~~~~
+!!! error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
+    
