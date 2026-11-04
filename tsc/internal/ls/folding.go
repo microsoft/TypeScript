@@ -6,6 +6,7 @@ import (
 	"slices"
 	"strings"
 	"unicode"
+	"unicode/utf8"
 
 	"github.com/microsoft/TypeScript/tsc/internal/ast"
 	"github.com/microsoft/TypeScript/tsc/internal/astnav"
@@ -17,6 +18,7 @@ import (
 	"github.com/microsoft/TypeScript/tsc/internal/printer"
 	"github.com/microsoft/TypeScript/tsc/internal/scanner"
 	"github.com/microsoft/TypeScript/tsc/internal/spanmap"
+	"github.com/microsoft/TypeScript/tsc/internal/stringutil"
 )
 
 func (l *LanguageService) ProvideFoldingRange(ctx context.Context, documentURI lsproto.DocumentUri) (lsproto.FoldingRangeResponse, error) {
@@ -104,7 +106,36 @@ func (l *LanguageService) adjustFoldingEnd(ranges []*lsproto.FoldingRange, sourc
 				foldEndChar := sourceText[int(endOffset)-1]
 				if foldEndChar == '}' || foldEndChar == ']' || foldEndChar == ')' || foldEndChar == '`' || foldEndChar == '>' {
 					if r.EndLine > r.StartLine {
-						r.EndLine--
+						if sourceFile.IsContentMapped() {
+							originalText := sourceFile.OriginalText()
+							end := lsproto.Position{Line: r.EndLine, Character: *r.EndCharacter}
+							offset := l.converters.FromLSPRangeToOriginal(
+								sourceFile,
+								lsproto.Range{Start: end, End: end},
+							).End()
+							nextPos := offset
+							var adjustLine bool
+							for nextPos < len(originalText) {
+								char, width := utf8.DecodeRuneInString(originalText[nextPos:])
+								if !stringutil.IsWhiteSpaceLike(char) {
+									adjustLine = true
+									break
+								}
+								if char == '\r' || char == '\n' {
+									break
+								}
+								nextPos += width
+							}
+							if adjustLine {
+								r.EndLine--
+							}
+						} else {
+							nextNonTriviaPos := scanner.SkipTriviaEx(sourceText, int(endOffset), &scanner.SkipTriviaOptions{StopAfterLineBreak: true})
+							// non-trivia after closing bracket on the same line: adjust end line to keep closing bracket visible
+							if nextNonTriviaPos < len(sourceText) && scanner.GetECMALineOfPosition(sourceFile, nextNonTriviaPos) == scanner.GetECMALineOfPosition(sourceFile, int(endOffset)-1) {
+								r.EndLine--
+							}
+						}
 					}
 				}
 			}
