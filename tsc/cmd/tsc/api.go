@@ -11,6 +11,7 @@ import (
 	"github.com/microsoft/TypeScript/tsc/internal/api"
 	"github.com/microsoft/TypeScript/tsc/internal/bundled"
 	"github.com/microsoft/TypeScript/tsc/internal/core"
+	"github.com/microsoft/TypeScript/tsc/internal/ipc"
 	"github.com/microsoft/TypeScript/tsc/internal/tspath"
 	"github.com/microsoft/TypeScript/tsc/internal/vfs/osvfs"
 )
@@ -71,6 +72,18 @@ func runAPI(args []string) int {
 		options.PipePath = flags.pipePath
 	} else {
 		options.In = stdioStdin
+		if !flags.async {
+			// The synchronous client blocks on every reply, so the gap between
+			// its requests is tiny; spin-poll stdin briefly before each blocking
+			// read instead of paying the CPU's deep-idle exit latency per request.
+			// TSGO_SYNC_SPIN_US=0 disables it, TSGO_SYNC_SPIN_ADAPTIVE=0 keeps
+			// spinning even while the client is idle. See ipc.NewSpinReadCloser.
+			options.In = ipc.NewSpinReadCloser(
+				stdioStdin,
+				ipc.ParseSyncSpin(os.Getenv("TSGO_SYNC_SPIN_US")),
+				ipc.ParseSyncSpinAdaptive(os.Getenv("TSGO_SYNC_SPIN_ADAPTIVE")),
+			)
+		}
 		options.Out = os.Stdout
 	}
 

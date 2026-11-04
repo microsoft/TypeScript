@@ -60,16 +60,21 @@ func NewTupleProtocol(t TupleTransport) *TupleProtocol {
 // NewMessagePackProtocol creates a protocol handler that frames tuples as
 // MessagePack arrays on rw.
 func NewMessagePackProtocol(rw io.ReadWriter) *TupleProtocol {
-	return NewTupleProtocol(&messagePackTransport{
+	t := &messagePackTransport{
 		r: bufio.NewReader(rw),
 		w: bufio.NewWriter(rw),
-	})
+	}
+	t.boundary, _ = rw.(ipc.MessageBoundaryReader)
+	return NewTupleProtocol(t)
 }
 
 // messagePackTransport frames tuples as fixed three-element MessagePack arrays.
 type messagePackTransport struct {
 	r *bufio.Reader
 	w *bufio.Writer
+	// boundary, if set, is told when a tuple is about to be read from the
+	// underlying reader (as opposed to from bytes it has already buffered).
+	boundary ipc.MessageBoundaryReader
 }
 
 // ReadMessage implements Protocol.
@@ -113,6 +118,9 @@ func (p *TupleProtocol) ReadMessage() (*ipc.Message, error) {
 }
 
 func (p *messagePackTransport) ReadTuple() (MessageType, string, []byte, error) {
+	if p.boundary != nil && p.r.Buffered() == 0 {
+		p.boundary.BeginMessage()
+	}
 	// Read fixed array marker (0x93 = 3-element array)
 	t, err := p.r.ReadByte()
 	if err != nil {
