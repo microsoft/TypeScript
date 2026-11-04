@@ -1,6 +1,7 @@
 package ipc
 
 import (
+	"io"
 	"strconv"
 	"time"
 )
@@ -44,8 +45,18 @@ const (
 	adaptiveSlowWait = time.Millisecond
 )
 
+// MessageBoundaryReader is implemented by readers that adapt to the cadence of
+// the messages framed on top of them. The framing layer calls BeginMessage
+// before it reads the first byte of a message from the reader; the wait for
+// that byte is what describes the peer's cadence, while the reads that complete
+// a message already under way say nothing about it.
+type MessageBoundaryReader interface {
+	io.Reader
+	BeginMessage()
+}
+
 // spinState decides whether the next read should spin, from the observed wait
-// of each previous read.
+// for the first byte of each previous message.
 type spinState struct {
 	spinning bool
 	// misses counts consecutive slow waits while spinning, hits consecutive
@@ -54,8 +65,8 @@ type spinState struct {
 	hits   int
 }
 
-// observe records that the last read waited for the given duration and
-// updates the mode.
+// observe records that the first byte of a message arrived after the given
+// wait and updates the mode.
 func (s *spinState) observe(waited time.Duration) {
 	if s.spinning {
 		if waited > adaptiveSlowWait {

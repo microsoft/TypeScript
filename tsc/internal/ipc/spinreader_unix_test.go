@@ -106,6 +106,7 @@ func TestSpinReadCloserAdaptsToTheWriterCadence(t *testing.T) {
 			time.Sleep(delay)
 			_, _ = w.WriteString("x")
 		}()
+		rc.BeginMessage()
 		n, err := rc.Read(buf)
 		assert.NilError(t, err)
 		assert.Equal(t, n, 1)
@@ -125,9 +126,58 @@ func TestSpinReadCloserAdaptsToTheWriterCadence(t *testing.T) {
 		assert.Assert(t, !rc.state.spinning)
 		_, err := w.WriteString("y")
 		assert.NilError(t, err)
+		rc.BeginMessage()
 		n, err := rc.Read(buf)
 		assert.NilError(t, err)
 		assert.Equal(t, n, 1)
 	}
 	assert.Assert(t, rc.state.spinning, "spinning must resume after %d fast messages", adaptiveWindow)
+}
+
+func TestSpinReadCloserObservesCadenceOncePerMessage(t *testing.T) {
+	t.Parallel()
+	r, w := newTestPipe(t)
+	rc := NewSpinReadCloser(r, 100*time.Microsecond, true).(*spinReadCloser)
+	buf := make([]byte, 4)
+
+	// Each message arrives long after the previous one (the peer is idle) but
+	// is written in two parts, so the read that completes it finds data quickly.
+	// Only the wait for the first byte of a message says anything about the
+	// peer's cadence; the continuation read must not reset the slow streak.
+	readMessage := func() {
+		t.Helper()
+		go func() {
+			time.Sleep(20 * adaptiveSlowWait)
+			_, _ = w.WriteString("head")
+			time.Sleep(200 * time.Microsecond)
+			_, _ = w.WriteString("tail")
+		}()
+		rc.BeginMessage()
+		for got := 0; got < 8; {
+			n, err := rc.Read(buf)
+			assert.NilError(t, err)
+			got += n
+		}
+	}
+	for range adaptiveWindow {
+		assert.Assert(t, rc.state.spinning)
+		readMessage()
+	}
+	assert.Assert(t, !rc.state.spinning, "spinning must be suspended after %d slow messages even when each is read in several pieces", adaptiveWindow)
+
+	// While blocking, messages that are already waiting resume spinning, and a
+	// continuation read in between does not count as a fast arrival of its own.
+	for range adaptiveWindow {
+		assert.Assert(t, !rc.state.spinning)
+		_, err := w.WriteString("ab")
+		assert.NilError(t, err)
+		rc.BeginMessage()
+		n, err := rc.Read(buf[:1])
+		assert.NilError(t, err)
+		assert.Equal(t, n, 1)
+		n, err = rc.Read(buf[:1])
+		assert.NilError(t, err)
+		assert.Equal(t, n, 1)
+	}
+	assert.Assert(t, rc.state.spinning)
 }

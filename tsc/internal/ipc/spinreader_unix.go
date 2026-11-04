@@ -23,7 +23,12 @@ type spinReadCloser struct {
 	spin     time.Duration
 	adaptive bool
 	state    spinState
+	// observeNext is set by BeginMessage: the next Read waits for the first
+	// byte of a message, and that wait is what the adaptive mode observes.
+	observeNext bool
 }
+
+var _ MessageBoundaryReader = (*spinReadCloser)(nil)
 
 // NewSpinReadCloser wraps r so that reads spin-poll for up to `spin` before
 // blocking. r is returned unchanged when spin <= 0 or when r does not expose a
@@ -45,7 +50,15 @@ func NewSpinReadCloser(r io.ReadCloser, spin time.Duration, adaptive bool) io.Re
 	}
 }
 
+// BeginMessage implements MessageBoundaryReader. Without it the adaptive mode
+// never observes anything and the reader spins with its fixed budget.
+func (r *spinReadCloser) BeginMessage() {
+	r.observeNext = true
+}
+
 func (r *spinReadCloser) Read(p []byte) (int, error) {
+	observe := r.adaptive && r.observeNext
+	r.observeNext = false
 	start := time.Now()
 	if !r.adaptive || r.state.spinning {
 		fds := []unix.PollFd{{Fd: r.fd, Events: unix.POLLIN}}
@@ -58,7 +71,7 @@ func (r *spinReadCloser) Read(p []byte) (int, error) {
 		}
 	}
 	n, err := r.r.Read(p)
-	if r.adaptive {
+	if observe {
 		r.state.observe(time.Since(start))
 	}
 	return n, err

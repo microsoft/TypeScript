@@ -107,6 +107,13 @@ type stdioConn struct {
 	stdout io.WriteCloser
 }
 
+// BeginMessage implements MessageBoundaryReader when stdin does.
+func (c *stdioConn) BeginMessage() {
+	if r, ok := c.stdin.(MessageBoundaryReader); ok {
+		r.BeginMessage()
+	}
+}
+
 func (c *stdioConn) Close() error {
 	err1 := c.stdin.Close()
 	err2 := c.stdout.Close()
