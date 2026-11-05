@@ -1,15 +1,12 @@
 declarationEmitUnknownImport2.ts(1,12): error TS1005: '=' expected.
-declarationEmitUnknownImport2.ts(1,12): error TS2304: Cannot find name 'From'.
 declarationEmitUnknownImport2.ts(1,12): error TS2503: Cannot find namespace 'From'.
 declarationEmitUnknownImport2.ts(1,17): error TS1005: ';' expected.
 
 
-==== declarationEmitUnknownImport2.ts (4 errors) ====
+==== declarationEmitUnknownImport2.ts (3 errors) ====
     import Foo From './Foo'; // Syntax error
                ~~~~
 !!! error TS1005: '=' expected.
-               ~~~~
-!!! error TS2304: Cannot find name 'From'.
                ~~~~
 !!! error TS2503: Cannot find namespace 'From'.
                     ~~~~~~~

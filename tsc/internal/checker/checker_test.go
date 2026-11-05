@@ -661,7 +661,6 @@ var unmemoizedCacheFields = map[string]string{
 	"memoStore.deferredDiagnosticCallbacks":             unmemoizedChecking,
 	"SymbolReferenceLinks.referenceKinds":               unmemoizedChecking,
 	"AliasSymbolLinks.referenced":                       unmemoizedMark,
-	"AliasSymbolLinks.referenceChecked":                 unmemoizedChecking,
 	"SourceFileLinks.typeChecked":                       unmemoizedChecking,
 	"SourceFileLinks.unusedChecked":                     unmemoizedChecking,
 	"SourceFileLinks.deferredNodes":                     unmemoizedChecking,

@@ -147,7 +147,6 @@ type memoEffects struct {
 // kept apart since the effects of every computation in a program can be
 // retained at once.
 type memoEffectsRare struct {
-	marks  []*ast.Symbol  // Aliases marked referenced, also among effects; see withReferenceMarks
 	cycles []memoCycleDep // The cycle heads memoCycle added to deps, from highest to lowest
 }
 
@@ -986,7 +985,20 @@ func (c *Checker) memoAttach(key memoKey) {
 	if f := &c.resolutions[c.memoTop-1]; f.source == nil && f.key == key {
 		return
 	}
+	if c.resolutions[c.memoTop-1].effects == nil && !c.logEffects() {
+		// See attachState; the memo state is created only if needed.
+		c.deferredAttach = append(c.deferredAttach, deferredAttachment{key: key})
+		return
+	}
 	c.attachState(c.memoState(key))
+}
+
+// A deferredAttachment is a result cached by a computation that had no
+// effects yet; see attachState. A result of a memo cell is identified by its
+// key, so that its memo state is created only if needed.
+type deferredAttachment struct {
+	state *memoState
+	key   memoKey
 }
 
 // attachState is memoAttach for the memo state of a result.
@@ -1004,7 +1016,7 @@ func (c *Checker) attachState(state *memoState) {
 		// Until the computation has effects, the result depends on nothing,
 		// and most computations never have any; memoEffectsAt attaches the
 		// result if it gets some.
-		c.deferredAttach = append(c.deferredAttach, state)
+		c.deferredAttach = append(c.deferredAttach, deferredAttachment{state: state})
 		return
 	}
 	c.linkState(state, c.memoEffectsAt(n), c.logResults())
@@ -1387,52 +1399,6 @@ func (c *Checker) recordEffect(effect func(c *Checker)) {
 	}
 }
 
-// recordReferenceMark records marking an alias referenced, an effect that
-// emit applies itself (see withReferenceMarks).
-func (c *Checker) recordReferenceMark(symbol *ast.Symbol) {
-	if f := c.currentMemoEffects(); f != nil {
-		f.effects = append(f.effects, func(c *Checker) { c.markAliasSymbolAsReferenced(symbol) })
-		rare := f.rareFields()
-		rare.marks = append(rare.marks, symbol)
-	}
-}
-
-// withReferenceMarks runs fn as a query, then marks referenced the aliases
-// that everything fn computed would mark, which emit relies on to elide
-// imports. Unlike checking, it reports nothing, so diagnostics do not depend
-// on whether a file was emitted before it was checked. Other effects stay
-// pending for checking to replay.
-func (c *Checker) withReferenceMarks(fn func()) {
-	debug.Assert(!c.checking && c.memoTop == 0, "withReferenceMarks inside a computation")
-	c.beginNodeResolution()
-	c.startEffects(&memoState{})
-	fn()
-	f := c.stopEffects().effects
-	c.endResolution()
-	if f == nil {
-		return
-	}
-	var marks []*ast.Symbol
-	visited := make(map[*memoEffects]struct{})
-	var collect func(f *memoEffects)
-	collect = func(f *memoEffects) {
-		if _, ok := visited[f]; ok {
-			return
-		}
-		visited[f] = struct{}{}
-		if f.rare != nil && !f.dropped {
-			marks = append(marks, f.rare.marks...)
-		}
-		for _, d := range f.deps {
-			collect(d)
-		}
-	}
-	collect(f)
-	for _, symbol := range marks {
-		c.withReferenceMarks(func() { c.referenceAliasSymbol(symbol) })
-	}
-}
-
 // beginCheckedMemo is beginMemo for a computation started in a check. Its
 // effects apply as they happen, and reading cached results accounts for
 // nothing, as every effect only adds to what the store has collected, which
@@ -1663,9 +1629,13 @@ func (c *Checker) attachDeferred(i int, f *memoEffects) {
 		return
 	}
 	for k := start; k < end; k++ {
-		if state := c.deferredAttach[k]; state != nil {
-			c.deferredAttach[k] = nil
-			c.linkState(state, f, c.logResults())
+		d := c.deferredAttach[k]
+		c.deferredAttach[k] = deferredAttachment{}
+		switch {
+		case d.state != nil:
+			c.linkState(d.state, f, false)
+		case d.key != 0:
+			c.linkState(c.memoState(d.key), f, false)
 		}
 	}
 }

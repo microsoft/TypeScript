@@ -284,7 +284,6 @@ type AliasSymbolLinks struct {
 	immediateTarget     memo[*ast.Symbol] // Immediate target of an alias. May be another alias. Do not access directly, use `checker.getImmediateAliasedSymbol` instead.
 	aliasTarget         memo[*ast.Symbol] // Resolved (non-alias) target of an alias
 	referenced          bool              // True if alias symbol has been referenced as a value that can be emitted
-	referenceChecked    bool              // True if checking has followed the reference; see referenceAliasSymbol
 	typeOnlyDeclaration *ast.Node         // First resolved alias declaration that makes the symbol only usable in type constructs
 }
 

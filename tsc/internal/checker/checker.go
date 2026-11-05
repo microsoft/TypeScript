@@ -714,8 +714,8 @@ type Checker struct {
 	varianceProvisional                         []*ast.Symbol // Types measured in a circularity with a measurement in progress; see isGuessedVariance
 	flushBuf                                    []*memoState
 	resumeBuf                                   []int
-	deferredAttach                              []*memoState // See attachState
-	recordingFromCheck                          bool         // A query begun in a check is in progress; see recordFromCheck
+	deferredAttach                              []deferredAttachment // See attachState
+	recordingFromCheck                          bool                 // A query begun in a check is in progress; see recordFromCheck
 	apparentArgumentCount                       *int
 	lastGetCombinedNodeFlagsNode                *ast.Node
 	lastGetCombinedNodeFlagsResult              ast.NodeFlags
@@ -1752,10 +1752,6 @@ func (c *Checker) createNameResolverForSuggestion() *binder.NameResolver {
 }
 
 func (c *Checker) symbolReferenced(symbol *ast.Symbol, meaning ast.SymbolFlags) {
-	if !c.checking {
-		c.recordEffect(func(c *Checker) { c.symbolReferenced(symbol, meaning) })
-		return
-	}
 	c.symbolReferenceLinks.Get(symbol).referenceKinds |= meaning
 }
 
@@ -2776,10 +2772,6 @@ func (c *Checker) isSourceElementUnreachable(node *ast.Node) bool {
 // determining the type of foo would cause foo to be given type any because of the recursive reference.
 // Delaying the type check of the body ensures foo has been assigned a type.
 func (c *Checker) checkNodeDeferred(node *ast.Node) {
-	if !c.checking {
-		c.recordEffect(func(c *Checker) { c.checkNodeDeferred(node) })
-		return
-	}
 	enclosingFile := ast.GetSourceFileOfNode(node)
 	links := c.sourceFileLinks.Get(enclosingFile)
 	if !links.typeChecked {
@@ -6455,6 +6447,13 @@ func (c *Checker) checkDecorators(node *ast.Node) {
 	// skip this check for nodes that cannot have decorators. These should have already had an error reported by
 	// checkGrammarModifiers.
 	if !ast.CanHaveDecorators(node) || !ast.HasDecorators(node) || !ast.NodeCanBeDecorated(c.legacyDecorators, node, node.Parent, node.Parent.Parent) {
+		// The expressions of decorators that are not valid here are still
+		// checked, as they are when anything computes their types.
+		for _, modifier := range node.ModifierNodes() {
+			if ast.IsDecorator(modifier) {
+				c.checkExpression(modifier.Expression())
+			}
+		}
 		return
 	}
 	firstDecorator := core.Find(node.ModifierNodes(), ast.IsDecorator)
@@ -7479,10 +7478,6 @@ func (c *Checker) checkTypeParametersNotReferenced(root *ast.Node, typeParameter
 }
 
 func (c *Checker) registerForUnusedIdentifiersCheck(node *ast.Node) {
-	if !c.checking {
-		c.recordEffect(func(c *Checker) { c.registerForUnusedIdentifiersCheck(node) })
-		return
-	}
 	sourceFile := ast.GetSourceFileOfNode(node)
 	links := c.sourceFileLinks.Get(sourceFile)
 	links.identifierCheckNodes = append(links.identifierCheckNodes, node)
@@ -13403,6 +13398,14 @@ func (c *Checker) checkObjectLiteralDestructuringPropertyAssignment(node *ast.No
 		return c.checkDestructuringAssignment(property.Expression(), t, CheckModeNormal, false)
 	}
 	c.error(property, diagnostics.Property_assignment_expected)
+	// The member is still checked as it would be in an object literal, as
+	// it is when anything computes the type of the literal.
+	switch property.Kind {
+	case ast.KindMethodDeclaration:
+		c.checkObjectLiteralMethod(property, CheckModeNormal)
+	case ast.KindGetAccessor, ast.KindSetAccessor:
+		c.checkNodeDeferred(property)
+	}
 	return nil
 }
 
@@ -17010,20 +17013,23 @@ func (c *Checker) resolveEntityName(name *ast.Node, meaning ast.SymbolFlags, ign
 		if resolveLocation == nil {
 			resolveLocation = name
 		}
+		// As for getResolvedSymbol, so that whatever resolves a name marks
+		// the same uses.
+		isUse := !ast.IsWriteOnlyAccess(name)
 		if meaning == ast.SymbolFlagsNamespace {
-			symbol = c.getMergedSymbol(c.resolveName(resolveLocation, name.Text(), meaning, nil, true /*isUse*/, false /*excludeGlobals*/))
+			symbol = c.getMergedSymbol(c.resolveName(resolveLocation, name.Text(), meaning, nil, isUse, false /*excludeGlobals*/))
 			if symbol == nil {
-				alias := c.getMergedSymbol(c.resolveName(resolveLocation, name.Text(), ast.SymbolFlagsAlias, nil, true /*isUse*/, false /*excludeGlobals*/))
+				alias := c.getMergedSymbol(c.resolveName(resolveLocation, name.Text(), ast.SymbolFlagsAlias, nil, isUse, false /*excludeGlobals*/))
 				if alias != nil && alias.Name() == ast.InternalSymbolNameExportEquals {
 					// resolve typedefs exported from commonjs, stored on the module symbol
 					symbol = alias.Parent()
 				}
 			}
 			if symbol == nil && message != nil {
-				c.resolveName(resolveLocation, name.Text(), meaning, message, true /*isUse*/, false /*excludeGlobals*/)
+				c.resolveName(resolveLocation, name.Text(), meaning, message, isUse, false /*excludeGlobals*/)
 			}
 		} else {
-			symbol = c.getMergedSymbol(c.resolveName(resolveLocation, name.Text(), meaning, message, true /*isUse*/, false /*excludeGlobals*/))
+			symbol = c.getMergedSymbol(c.resolveName(resolveLocation, name.Text(), meaning, message, isUse, false /*excludeGlobals*/))
 		}
 	case ast.KindQualifiedName:
 		qualified := name.AsQualifiedName()
@@ -32031,36 +32037,31 @@ func (c *Checker) markAliasReferenced(symbol *ast.Symbol, location *ast.Node) {
 // we reach a non-alias or an exported entity (which is always considered referenced). We do this by checking the target of
 // the alias as an expression (which recursively takes us back here if the target references another alias).
 func (c *Checker) markAliasSymbolAsReferenced(symbol *ast.Symbol) {
-	if !c.checking {
-		c.recordReferenceMark(symbol)
+	links := c.aliasSymbolLinks.Get(symbol)
+	if links.referenced {
 		return
 	}
-	c.referenceAliasSymbol(symbol)
+	links.referenced = true
+	c.followAliasReference(symbol)
 }
 
-func (c *Checker) referenceAliasSymbol(symbol *ast.Symbol) {
-	links := c.aliasSymbolLinks.Get(symbol)
-	// Emit marks references too (see withReferenceMarks), but reports
-	// nothing, so checking must still follow them once to report errors.
-	followed := links.referenced
-	if c.checking {
-		followed = links.referenceChecked
-		links.referenceChecked = true
+// followAliasReference marks referenced what the referenced alias symbol
+// refers to. We defer checking of the reference of an `import =` until the
+// import itself is referenced, this way a chain of imports can be elided if
+// ultimately the final input is only used in a type position. Following it
+// reports nothing, so that whatever marks the alias first can follow it;
+// checking the declaration reports what is wrong with its reference.
+func (c *Checker) followAliasReference(symbol *ast.Symbol) {
+	node := c.getDeclarationOfAliasSymbol(symbol)
+	if node == nil {
+		panic("Unexpected nil in markAliasSymbolAsReferenced")
 	}
-	if !followed {
-		links.referenced = true
-		node := c.getDeclarationOfAliasSymbol(symbol)
-		if node == nil {
-			panic("Unexpected nil in markAliasSymbolAsReferenced")
-		}
-		// We defer checking of the reference of an `import =` until the import itself is referenced,
-		// This way a chain of imports can be elided if ultimately the final input is only used in a type
-		// position.
-		if ast.IsImportEqualsDeclaration(node) && node.AsImportEqualsDeclaration().ModuleReference.Kind != ast.KindExternalModuleReference {
-			if c.getSymbolFlags(c.resolveSymbol(symbol))&ast.SymbolFlagsValue != 0 {
-				// import foo = <symbol>
-				left := ast.GetFirstIdentifier(node.AsImportEqualsDeclaration().ModuleReference)
-				c.markIdentifierAliasReferenced(left)
+	if ast.IsImportEqualsDeclaration(node) && node.AsImportEqualsDeclaration().ModuleReference.Kind != ast.KindExternalModuleReference {
+		if c.getSymbolFlags(c.resolveSymbol(symbol))&ast.SymbolFlagsValue != 0 {
+			// import foo = <symbol>
+			left := ast.GetFirstIdentifier(node.AsImportEqualsDeclaration().ModuleReference)
+			if target := c.resolveName(left, left.Text(), ast.SymbolFlagsValue|ast.SymbolFlagsExportValue, nil /*nameNotFoundMessage*/, true /*isUse*/, false /*excludeGlobals*/); target != nil {
+				c.markAliasReferenced(target, left)
 			}
 		}
 	}
