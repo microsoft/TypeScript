@@ -150,6 +150,7 @@ func (vfs *Common) ReadFile(path tspath.RootedFilePath) (contents string, ok boo
 		return "", true
 	}
 
+	// SAFETY: b is non-empty and, per the invariant above, never mutated.
 	s := unsafe.String(&b[0], len(b))
 
 	return decodeBytes(s)

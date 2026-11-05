@@ -3,9 +3,11 @@ package api
 import (
 	"context"
 	"errors"
+	"io"
 	"testing"
 	"time"
 
+	"github.com/microsoft/TypeScript/tsc/internal/bundled"
 	"github.com/microsoft/TypeScript/tsc/internal/ipc"
 	"gotest.tools/v3/assert"
 )
@@ -44,6 +46,44 @@ func TestCancellableProtocol(t *testing.T) {
 		assert.ErrorIs(t, err, context.Canceled)
 	case <-time.After(10 * time.Second):
 		t.Fatal("cancellation did not unblock ReadMessage")
+	}
+}
+
+type blockingTupleTransport struct {
+	TupleTransport
+	started chan struct{}
+	release chan struct{}
+}
+
+func (t *blockingTupleTransport) ReadTuple() (MessageType, string, []byte, error) {
+	close(t.started)
+	<-t.release
+	return MessageTypeUnknown, "", nil, io.EOF
+}
+
+func TestTupleServerCancellation(t *testing.T) {
+	t.Parallel()
+	ctx, cancel := context.WithCancel(t.Context())
+	defer cancel()
+	transport := &blockingTupleTransport{
+		started: make(chan struct{}),
+		release: make(chan struct{}),
+	}
+	defer close(transport.release)
+	server := NewStdioServer(&StdioServerOptions{
+		Cwd:                "/",
+		DefaultLibraryPath: bundled.LibPath(),
+		Tuples:             transport,
+	})
+	done := make(chan error, 1)
+	go func() { done <- server.Run(ctx) }()
+	<-transport.started
+	cancel()
+	select {
+	case err := <-done:
+		assert.NilError(t, err)
+	case <-time.After(10 * time.Second):
+		t.Fatal("cancellation did not unblock tuple server")
 	}
 }
 

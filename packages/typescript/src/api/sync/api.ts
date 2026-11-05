@@ -74,8 +74,8 @@ import {
 } from "../node/node.ts";
 import { Wtf8Decoder } from "../node/wtf8.ts";
 import type {
-    APIOptions,
     LSPConnectionOptions,
+    SyncAPIOptions as APIOptions,
 } from "../options.ts";
 import {
     canonicalize,
@@ -684,6 +684,25 @@ export class API<FromLSP extends boolean = false> implements FormatDiagnosticsHo
         );
     }
 
+    get parseConfigFileTextToJson(): {
+        (fileName: string, jsonText: string): ReadConfigFileResponse;
+        gen(fileName: string, jsonText: string): Generator<ProtocolRequest, ReadConfigFileResponse, ProtocolResponse["result"]>;
+    } {
+        const owner = this;
+        return cacheGeneratorMethod(
+            owner,
+            "parseConfigFileTextToJson",
+            function (fileName: string, jsonText: string): ReadConfigFileResponse {
+                owner.ensureInitialized();
+                return owner.client.apiRequest("parseConfigFileTextToJson", { fileName, jsonText });
+            },
+            function* (fileName: string, jsonText: string): Generator<ProtocolRequest, ReadConfigFileResponse, ProtocolResponse["result"]> {
+                yield* owner.ensureInitialized.gen();
+                return yield* apiRequest("parseConfigFileTextToJson", { fileName, jsonText });
+            },
+        );
+    }
+
     get parseJsonConfigFileContent(): {
         (
             json: any,
@@ -1052,6 +1071,13 @@ export class API<FromLSP extends boolean = false> implements FormatDiagnosticsHo
 
     private prepareCreateSnapshotParams(params: CreateSnapshotParams | undefined): ProtocolCreateSnapshotParams {
         params ??= {};
+        if (params.fileSystem?.kind === "snapshot") {
+            const sourceId = params.fileSystem.snapshot;
+            const source = sourceId === undefined ? undefined : this.activeSnapshots.get(sourceId);
+            if (!source || source.isDisposed()) {
+                throw new Error("Cannot use an inactive snapshot filesystem");
+            }
+        }
         const prepareOptions = (options: CreateProgramOptions | undefined): ProtocolCreateProgramOptions | undefined => {
             if (!options) return undefined;
             const { moduleResolver, projectReferences, ...rest } = options;
@@ -1737,6 +1763,12 @@ export class Snapshot {
         return this.getProject(projectId)?.program;
     }
 
+    /**
+     * Creates a snapshot using this snapshot's projects and incremental state.
+     * Use `createFileSystemFromSnapshot(source)` from the filesystem API as `fileSystem`
+     * to overlay another snapshot's retained request entries without replaying
+     * intermediate updates. Changes and program reuse are relative to this snapshot.
+     */
     get update(): {
         <const CreatePrograms extends CreateSnapshotParams["createPrograms"] = undefined, const OpenFiles extends CreateSnapshotParams["openFiles"] = undefined>(params: SnapshotOperationParams<CreateSnapshotParams, CreatePrograms, OpenFiles>): SnapshotForOperationResults<CreatePrograms, OpenFiles>;
         (params: CreateSnapshotParams): Snapshot;
@@ -4135,6 +4167,16 @@ function toEmitOutput(response: ProtocolEmitOutputResponse): EmitOutput {
     };
 }
 
+// JSON cannot represent NaN/Infinity/-Infinity (they serialize as null), so encode
+// them as sentinel strings here; the server decodes them back via
+// numberLiteralValueFromJSON, mirroring literalValueToJSON's response-direction encoding.
+function encodeNumberLiteralValue(value: number): number | string {
+    if (value === Infinity) return "+Infinity";
+    if (value === -Infinity) return "-Infinity";
+    if (Number.isNaN(value)) return "NaN";
+    return value;
+}
+
 export class Checker {
     private snapshotId: number;
     private project: Project;
@@ -4942,6 +4984,39 @@ export class Checker {
     }
 
     /**
+     * Add `undefined` and/or `null` to a type, as indicated by `flags` (a combination of
+     * {@link TypeFlags.Undefined} and {@link TypeFlags.Null}). Always returns a type.
+     */
+    get getNullableType(): {
+        (type: Type, flags: TypeFlags): Type;
+        gen(type: Type, flags: TypeFlags): Generator<ProtocolRequest, Type, ProtocolResponse["result"]>;
+    } {
+        const owner = this;
+        return cacheGeneratorMethod(
+            owner,
+            "getNullableType",
+            function (type: Type, flags: TypeFlags): Type {
+                const data = owner.client.apiRequest("getNullableType", {
+                    snapshot: owner.snapshotId,
+                    project: owner.project.handle,
+                    type: type.id,
+                    flags,
+                });
+                return owner.objectRegistry.getOrCreateType(data);
+            },
+            function* (type: Type, flags: TypeFlags): Generator<ProtocolRequest, Type, ProtocolResponse["result"]> {
+                const data = yield* apiRequest("getNullableType", {
+                    snapshot: owner.snapshotId,
+                    project: owner.project.handle,
+                    type: type.id,
+                    flags,
+                });
+                return owner.objectRegistry.getOrCreateType(data);
+            },
+        );
+    }
+
+    /**
      * Get the type for a type node. Always returns a type; for type nodes whose
      * type cannot be determined the checker yields the error type (use
      * {@link Type.isErrorType} to detect it).
@@ -5364,6 +5439,192 @@ export class Checker {
             },
         );
     }
+    get getFalseType(): {
+        (): Type;
+        gen(): Generator<ProtocolRequest, Type, ProtocolResponse["result"]>;
+    } {
+        const owner = this;
+        return cacheGeneratorMethod(
+            owner,
+            "getFalseType",
+            function (): Type {
+                return owner.getIntrinsicType("getFalseType");
+            },
+            function* (): Generator<ProtocolRequest, Type, ProtocolResponse["result"]> {
+                return yield* owner.getIntrinsicType.gen("getFalseType");
+            },
+        );
+    }
+    get getTrueType(): {
+        (): Type;
+        gen(): Generator<ProtocolRequest, Type, ProtocolResponse["result"]>;
+    } {
+        const owner = this;
+        return cacheGeneratorMethod(
+            owner,
+            "getTrueType",
+            function (): Type {
+                return owner.getIntrinsicType("getTrueType");
+            },
+            function* (): Generator<ProtocolRequest, Type, ProtocolResponse["result"]> {
+                return yield* owner.getIntrinsicType.gen("getTrueType");
+            },
+        );
+    }
+
+    /** Get (or create) the singleton type for a string literal value. Always returns a type. */
+    get getStringLiteralType(): {
+        (value: string): Type;
+        gen(value: string): Generator<ProtocolRequest, Type, ProtocolResponse["result"]>;
+    } {
+        const owner = this;
+        return cacheGeneratorMethod(
+            owner,
+            "getStringLiteralType",
+            function (value: string): Type {
+                const data = owner.client.apiRequest("getStringLiteralType", {
+                    snapshot: owner.snapshotId,
+                    project: owner.project.handle,
+                    value,
+                });
+                return owner.objectRegistry.getOrCreateType(data);
+            },
+            function* (value: string): Generator<ProtocolRequest, Type, ProtocolResponse["result"]> {
+                const data = yield* apiRequest("getStringLiteralType", {
+                    snapshot: owner.snapshotId,
+                    project: owner.project.handle,
+                    value,
+                });
+                return owner.objectRegistry.getOrCreateType(data);
+            },
+        );
+    }
+
+    /** Get (or create) the singleton type for a numeric literal value. Always returns a type. */
+    get getNumberLiteralType(): {
+        (value: number): Type;
+        gen(value: number): Generator<ProtocolRequest, Type, ProtocolResponse["result"]>;
+    } {
+        const owner = this;
+        return cacheGeneratorMethod(
+            owner,
+            "getNumberLiteralType",
+            function (value: number): Type {
+                const data = owner.client.apiRequest("getNumberLiteralType", {
+                    snapshot: owner.snapshotId,
+                    project: owner.project.handle,
+                    value: encodeNumberLiteralValue(value),
+                });
+                return owner.objectRegistry.getOrCreateType(data);
+            },
+            function* (value: number): Generator<ProtocolRequest, Type, ProtocolResponse["result"]> {
+                const data = yield* apiRequest("getNumberLiteralType", {
+                    snapshot: owner.snapshotId,
+                    project: owner.project.handle,
+                    value: encodeNumberLiteralValue(value),
+                });
+                return owner.objectRegistry.getOrCreateType(data);
+            },
+        );
+    }
+
+    /** Get (or create) the singleton type for a bigint literal value. Always returns a type. */
+    get getBigIntLiteralType(): {
+        (value: bigint): Type;
+        gen(value: bigint): Generator<ProtocolRequest, Type, ProtocolResponse["result"]>;
+    } {
+        const owner = this;
+        return cacheGeneratorMethod(
+            owner,
+            "getBigIntLiteralType",
+            function (value: bigint): Type {
+                const negative = value < 0n;
+                const absValue = negative ? -value : value;
+                const base10Value = absValue === 0n ? "" : absValue.toString();
+                const data = owner.client.apiRequest("getBigIntLiteralType", {
+                    snapshot: owner.snapshotId,
+                    project: owner.project.handle,
+                    negative,
+                    base10Value,
+                });
+                return owner.objectRegistry.getOrCreateType(data);
+            },
+            function* (value: bigint): Generator<ProtocolRequest, Type, ProtocolResponse["result"]> {
+                const negative = value < 0n;
+                const absValue = negative ? -value : value;
+                const base10Value = absValue === 0n ? "" : absValue.toString();
+                const data = yield* apiRequest("getBigIntLiteralType", {
+                    snapshot: owner.snapshotId,
+                    project: owner.project.handle,
+                    negative,
+                    base10Value,
+                });
+                return owner.objectRegistry.getOrCreateType(data);
+            },
+        );
+    }
+
+    get getJsxIntrinsicTagNamesAt(): {
+        (location: Node): readonly Symbol[];
+        gen(location: Node): Generator<ProtocolRequest, readonly Symbol[], ProtocolResponse["result"]>;
+    } {
+        const owner = this;
+        return cacheGeneratorMethod(
+            owner,
+            "getJsxIntrinsicTagNamesAt",
+            function (location: Node): readonly Symbol[] {
+                const data = owner.client.apiRequest("getJsxIntrinsicTagNamesAt", {
+                    snapshot: owner.snapshotId,
+                    project: owner.project.handle,
+                    location: getNodeRequestHandle(location),
+                });
+                return data ? data.map(d => owner.objectRegistry.getOrCreateSymbol(d)) : [];
+            },
+            function* (location: Node): Generator<ProtocolRequest, readonly Symbol[], ProtocolResponse["result"]> {
+                const data = yield* apiRequest("getJsxIntrinsicTagNamesAt", {
+                    snapshot: owner.snapshotId,
+                    project: owner.project.handle,
+                    location: getNodeRequestHandle(location),
+                });
+                return data ? data.map(d => owner.objectRegistry.getOrCreateSymbol(d)) : [];
+            },
+        );
+    }
+
+    /**
+     * Look up a private identifier (e.g. `"#foo"`, including the leading `#`) lexically in scope
+     * at `location`, and if found, return the corresponding property of `type`.
+     */
+    get getPrivateIdentifierPropertyOfType(): {
+        (type: Type, name: string, location: Node): Symbol | undefined;
+        gen(type: Type, name: string, location: Node): Generator<ProtocolRequest, Symbol | undefined, ProtocolResponse["result"]>;
+    } {
+        const owner = this;
+        return cacheGeneratorMethod(
+            owner,
+            "getPrivateIdentifierPropertyOfType",
+            function (type: Type, name: string, location: Node): Symbol | undefined {
+                const data = owner.client.apiRequest("getPrivateIdentifierPropertyOfType", {
+                    snapshot: owner.snapshotId,
+                    project: owner.project.handle,
+                    type: type.id,
+                    name,
+                    location: getNodeRequestHandle(location),
+                });
+                return data ? owner.objectRegistry.getOrCreateSymbol(data) : undefined;
+            },
+            function* (type: Type, name: string, location: Node): Generator<ProtocolRequest, Symbol | undefined, ProtocolResponse["result"]> {
+                const data = yield* apiRequest("getPrivateIdentifierPropertyOfType", {
+                    snapshot: owner.snapshotId,
+                    project: owner.project.handle,
+                    type: type.id,
+                    name,
+                    location: getNodeRequestHandle(location),
+                });
+                return data ? owner.objectRegistry.getOrCreateSymbol(data) : undefined;
+            },
+        );
+    }
 
     get typeToTypeNode(): {
         (type: Type, enclosingDeclaration?: Node, flags?: number): TypeNode | undefined;
@@ -5584,6 +5845,93 @@ export class Checker {
                     project: owner.project.handle,
                     symbol: symbol.reference,
                 });
+            },
+        );
+    }
+
+    /**
+     * Returns `true` if the function-like declaration is the implementation
+     * signature of a set of overloads (i.e. it has a body and is not a
+     * get/set accessor).
+     */
+    get isImplementationOfOverload(): {
+        (node: Node): boolean;
+        gen(node: Node): Generator<ProtocolRequest, boolean, ProtocolResponse["result"]>;
+    } {
+        const owner = this;
+        return cacheGeneratorMethod(
+            owner,
+            "isImplementationOfOverload",
+            function (node: Node): boolean {
+                return owner.client.apiRequest("isImplementationOfOverload", {
+                    snapshot: owner.snapshotId,
+                    project: owner.project.handle,
+                    location: getNodeRequestHandle(node),
+                });
+            },
+            function* (node: Node): Generator<ProtocolRequest, boolean, ProtocolResponse["result"]> {
+                return yield* apiRequest("isImplementationOfOverload", {
+                    snapshot: owner.snapshotId,
+                    project: owner.project.handle,
+                    location: getNodeRequestHandle(node),
+                });
+            },
+        );
+    }
+
+    /**
+     * Get the property symbol corresponding to an identifier in a destructuring
+     * assignment or `for..of` statement, e.g. `a` in `({ property1: a } = obj)`.
+     */
+    get getPropertySymbolOfDestructuringAssignment(): {
+        (location: Identifier): Symbol | undefined;
+        gen(location: Identifier): Generator<ProtocolRequest, Symbol | undefined, ProtocolResponse["result"]>;
+    } {
+        const owner = this;
+        return cacheGeneratorMethod(
+            owner,
+            "getPropertySymbolOfDestructuringAssignment",
+            function (location: Identifier): Symbol | undefined {
+                const data = owner.client.apiRequest("getPropertySymbolOfDestructuringAssignment", {
+                    snapshot: owner.snapshotId,
+                    project: owner.project.handle,
+                    location: getNodeRequestHandle(location),
+                });
+                return data ? owner.objectRegistry.getOrCreateSymbol(data) : undefined;
+            },
+            function* (location: Identifier): Generator<ProtocolRequest, Symbol | undefined, ProtocolResponse["result"]> {
+                const data = yield* apiRequest("getPropertySymbolOfDestructuringAssignment", {
+                    snapshot: owner.snapshotId,
+                    project: owner.project.handle,
+                    location: getNodeRequestHandle(location),
+                });
+                return data ? owner.objectRegistry.getOrCreateSymbol(data) : undefined;
+            },
+        );
+    }
+
+    /** Get all ambient modules declared in the program (e.g. `declare module "foo" { ... }`). */
+    get getAmbientModules(): {
+        (): readonly Symbol[];
+        gen(): Generator<ProtocolRequest, readonly Symbol[], ProtocolResponse["result"]>;
+    } {
+        const owner = this;
+        return cacheGeneratorMethod(
+            owner,
+            "getAmbientModules",
+            function (): readonly Symbol[] {
+                const data = owner.client.apiRequest("getAmbientModules", {
+                    snapshot: owner.snapshotId,
+                    project: owner.project.handle,
+                });
+                return data ? data.map(d => owner.objectRegistry.getOrCreateSymbol(d)) : [];
+            },
+            function* (): Generator<ProtocolRequest, readonly Symbol[], ProtocolResponse["result"]> {
+                const data = yield* apiRequest("getAmbientModules", {
+                    snapshot: owner.snapshotId,
+                    project: owner.project.handle,
+                });
+                return data ? data.map(d => owner.objectRegistry.getOrCreateSymbol(d)) : [];
             },
         );
     }

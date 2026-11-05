@@ -3,7 +3,6 @@ package main
 import (
 	"context"
 	"os"
-	"os/signal"
 	"syscall"
 
 	"github.com/microsoft/TypeScript/tsc/internal/core"
@@ -26,8 +25,8 @@ func runWithSignals(run func(context.Context) int) int {
 	ctx, cancel := context.WithCancel(context.Background())
 	defer cancel()
 	signals := make(chan os.Signal, 2)
-	signal.Notify(signals, syscall.SIGINT, syscall.SIGTERM)
-	defer signal.Stop(signals)
+	stopSignals := notifySignals(signals, syscall.SIGINT, syscall.SIGTERM)
+	defer stopSignals()
 
 	done := make(chan int, 1)
 	go func() {
@@ -45,7 +44,7 @@ func runWithSignals(run func(context.Context) int) int {
 			cancel()
 		case status := <-done:
 			cancel()
-			signal.Stop(signals)
+			stopSignals()
 			if interrupted == nil {
 				// Account for a signal queued as the command finished.
 				select {

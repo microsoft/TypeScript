@@ -1,0 +1,245 @@
+invalid.ts(6,1): error TS17006: An unary expression with the '-' operator is not allowed in the left-hand side of an exponentiation expression. Consider enclosing the expression in parentheses.
+invalid.ts(7,1): error TS17006: An unary expression with the '+' operator is not allowed in the left-hand side of an exponentiation expression. Consider enclosing the expression in parentheses.
+invalid.ts(8,1): error TS17006: An unary expression with the '~' operator is not allowed in the left-hand side of an exponentiation expression. Consider enclosing the expression in parentheses.
+invalid.ts(9,1): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+invalid.ts(9,1): error TS17006: An unary expression with the '!' operator is not allowed in the left-hand side of an exponentiation expression. Consider enclosing the expression in parentheses.
+invalid.ts(10,1): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+invalid.ts(10,1): error TS17006: An unary expression with the 'typeof' operator is not allowed in the left-hand side of an exponentiation expression. Consider enclosing the expression in parentheses.
+invalid.ts(11,1): error TS2532: Object is possibly 'undefined'.
+invalid.ts(11,1): error TS17006: An unary expression with the 'void' operator is not allowed in the left-hand side of an exponentiation expression. Consider enclosing the expression in parentheses.
+invalid.ts(12,1): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+invalid.ts(12,1): error TS17006: An unary expression with the 'delete' operator is not allowed in the left-hand side of an exponentiation expression. Consider enclosing the expression in parentheses.
+invalid.ts(13,1): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+invalid.ts(13,1): error TS17007: A type assertion expression is not allowed in the left-hand side of an exponentiation expression. Consider enclosing the expression in parentheses.
+invalid.ts(15,1): error TS17006: An unary expression with the '-' operator is not allowed in the left-hand side of an exponentiation expression. Consider enclosing the expression in parentheses.
+invalid.ts(16,1): error TS17006: An unary expression with the '+' operator is not allowed in the left-hand side of an exponentiation expression. Consider enclosing the expression in parentheses.
+invalid.ts(17,1): error TS17006: An unary expression with the '~' operator is not allowed in the left-hand side of an exponentiation expression. Consider enclosing the expression in parentheses.
+invalid.ts(18,1): error TS17006: An unary expression with the '!' operator is not allowed in the left-hand side of an exponentiation expression. Consider enclosing the expression in parentheses.
+invalid.ts(19,1): error TS17006: An unary expression with the 'typeof' operator is not allowed in the left-hand side of an exponentiation expression. Consider enclosing the expression in parentheses.
+invalid.ts(20,1): error TS17006: An unary expression with the 'void' operator is not allowed in the left-hand side of an exponentiation expression. Consider enclosing the expression in parentheses.
+invalid.ts(21,1): error TS17006: An unary expression with the 'delete' operator is not allowed in the left-hand side of an exponentiation expression. Consider enclosing the expression in parentheses.
+invalid.ts(23,1): error TS17006: An unary expression with the '-' operator is not allowed in the left-hand side of an exponentiation expression. Consider enclosing the expression in parentheses.
+invalid.ts(24,1): error TS17006: An unary expression with the '+' operator is not allowed in the left-hand side of an exponentiation expression. Consider enclosing the expression in parentheses.
+invalid.ts(25,1): error TS17006: An unary expression with the '~' operator is not allowed in the left-hand side of an exponentiation expression. Consider enclosing the expression in parentheses.
+invalid.ts(26,1): error TS17006: An unary expression with the '!' operator is not allowed in the left-hand side of an exponentiation expression. Consider enclosing the expression in parentheses.
+invalid.ts(26,4): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+invalid.ts(27,1): error TS17006: An unary expression with the 'typeof' operator is not allowed in the left-hand side of an exponentiation expression. Consider enclosing the expression in parentheses.
+invalid.ts(27,10): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+invalid.ts(28,1): error TS17006: An unary expression with the 'void' operator is not allowed in the left-hand side of an exponentiation expression. Consider enclosing the expression in parentheses.
+invalid.ts(28,8): error TS2532: Object is possibly 'undefined'.
+invalid.ts(29,1): error TS17006: An unary expression with the 'delete' operator is not allowed in the left-hand side of an exponentiation expression. Consider enclosing the expression in parentheses.
+invalid.ts(29,14): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+invalid.ts(31,1): error TS17006: An unary expression with the '-' operator is not allowed in the left-hand side of an exponentiation expression. Consider enclosing the expression in parentheses.
+invalid.ts(32,1): error TS17006: An unary expression with the '-' operator is not allowed in the left-hand side of an exponentiation expression. Consider enclosing the expression in parentheses.
+invalid.ts(33,1): error TS17006: An unary expression with the '-' operator is not allowed in the left-hand side of an exponentiation expression. Consider enclosing the expression in parentheses.
+invalid.ts(34,1): error TS17006: An unary expression with the '-' operator is not allowed in the left-hand side of an exponentiation expression. Consider enclosing the expression in parentheses.
+invalid.ts(35,1): error TS17006: An unary expression with the '-' operator is not allowed in the left-hand side of an exponentiation expression. Consider enclosing the expression in parentheses.
+invalid.ts(36,1): error TS17006: An unary expression with the '-' operator is not allowed in the left-hand side of an exponentiation expression. Consider enclosing the expression in parentheses.
+invalid.ts(37,1): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+invalid.ts(37,1): error TS17007: A type assertion expression is not allowed in the left-hand side of an exponentiation expression. Consider enclosing the expression in parentheses.
+invalid.ts(38,1): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+invalid.ts(38,1): error TS17007: A type assertion expression is not allowed in the left-hand side of an exponentiation expression. Consider enclosing the expression in parentheses.
+invalid.ts(39,17): error TS17006: An unary expression with the '-' operator is not allowed in the left-hand side of an exponentiation expression. Consider enclosing the expression in parentheses.
+invalid.ts(40,1): error TS17006: An unary expression with the '-' operator is not allowed in the left-hand side of an exponentiation expression. Consider enclosing the expression in parentheses.
+invalid.ts(41,19): error TS1005: ';' expected.
+invalid.ts(44,5): error TS17006: An unary expression with the 'await' operator is not allowed in the left-hand side of an exponentiation expression. Consider enclosing the expression in parentheses.
+invalid.ts(45,5): error TS17006: An unary expression with the 'await' operator is not allowed in the left-hand side of an exponentiation expression. Consider enclosing the expression in parentheses.
+invalid.ts(46,5): error TS17006: An unary expression with the 'await' operator is not allowed in the left-hand side of an exponentiation expression. Consider enclosing the expression in parentheses.
+invalid.ts(47,5): error TS17006: An unary expression with the 'await' operator is not allowed in the left-hand side of an exponentiation expression. Consider enclosing the expression in parentheses.
+invalid.ts(48,5): error TS17006: An unary expression with the 'await' operator is not allowed in the left-hand side of an exponentiation expression. Consider enclosing the expression in parentheses.
+invalid.ts(49,5): error TS17006: An unary expression with the 'await' operator is not allowed in the left-hand side of an exponentiation expression. Consider enclosing the expression in parentheses.
+invalid.ts(50,5): error TS17006: An unary expression with the 'await' operator is not allowed in the left-hand side of an exponentiation expression. Consider enclosing the expression in parentheses.
+
+
+==== invalid.ts (51 errors) ====
+    export {};
+    declare let x: any;
+    declare const obj: { p?: number };
+    
+    // Assertions must not hide an invalid left operand of **.
+    -x ** 2;
+    ~~
+!!! error TS17006: An unary expression with the '-' operator is not allowed in the left-hand side of an exponentiation expression. Consider enclosing the expression in parentheses.
+    +x ** 2;
+    ~~
+!!! error TS17006: An unary expression with the '+' operator is not allowed in the left-hand side of an exponentiation expression. Consider enclosing the expression in parentheses.
+    ~x ** 2;
+    ~~
+!!! error TS17006: An unary expression with the '~' operator is not allowed in the left-hand side of an exponentiation expression. Consider enclosing the expression in parentheses.
+    !x ** 2;
+    ~~
+!!! error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+    ~~
+!!! error TS17006: An unary expression with the '!' operator is not allowed in the left-hand side of an exponentiation expression. Consider enclosing the expression in parentheses.
+    typeof x ** 2;
+    ~~~~~~~~
+!!! error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+    ~~~~~~~~
+!!! error TS17006: An unary expression with the 'typeof' operator is not allowed in the left-hand side of an exponentiation expression. Consider enclosing the expression in parentheses.
+    void x ** 2;
+    ~~~~~~
+!!! error TS2532: Object is possibly 'undefined'.
+    ~~~~~~
+!!! error TS17006: An unary expression with the 'void' operator is not allowed in the left-hand side of an exponentiation expression. Consider enclosing the expression in parentheses.
+    delete obj.p ** 2;
+    ~~~~~~~~~~~~
+!!! error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+    ~~~~~~~~~~~~
+!!! error TS17006: An unary expression with the 'delete' operator is not allowed in the left-hand side of an exponentiation expression. Consider enclosing the expression in parentheses.
+    <number>x ** 2;
+    ~~~~~~~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+    ~~~~~~~~~
+!!! error TS17007: A type assertion expression is not allowed in the left-hand side of an exponentiation expression. Consider enclosing the expression in parentheses.
+    
+    -x as any ** 2;
+    ~~
+!!! error TS17006: An unary expression with the '-' operator is not allowed in the left-hand side of an exponentiation expression. Consider enclosing the expression in parentheses.
+    +x as any ** 2;
+    ~~
+!!! error TS17006: An unary expression with the '+' operator is not allowed in the left-hand side of an exponentiation expression. Consider enclosing the expression in parentheses.
+    ~x as any ** 2;
+    ~~
+!!! error TS17006: An unary expression with the '~' operator is not allowed in the left-hand side of an exponentiation expression. Consider enclosing the expression in parentheses.
+    !x as any ** 2;
+    ~~
+!!! error TS17006: An unary expression with the '!' operator is not allowed in the left-hand side of an exponentiation expression. Consider enclosing the expression in parentheses.
+    typeof x as any ** 2;
+    ~~~~~~~~
+!!! error TS17006: An unary expression with the 'typeof' operator is not allowed in the left-hand side of an exponentiation expression. Consider enclosing the expression in parentheses.
+    void x as any ** 2;
+    ~~~~~~
+!!! error TS17006: An unary expression with the 'void' operator is not allowed in the left-hand side of an exponentiation expression. Consider enclosing the expression in parentheses.
+    delete obj.p as any ** 2;
+    ~~~~~~~~~~~~
+!!! error TS17006: An unary expression with the 'delete' operator is not allowed in the left-hand side of an exponentiation expression. Consider enclosing the expression in parentheses.
+    
+    -x satisfies any ** 2;
+    ~~
+!!! error TS17006: An unary expression with the '-' operator is not allowed in the left-hand side of an exponentiation expression. Consider enclosing the expression in parentheses.
+    +x satisfies any ** 2;
+    ~~
+!!! error TS17006: An unary expression with the '+' operator is not allowed in the left-hand side of an exponentiation expression. Consider enclosing the expression in parentheses.
+    ~x satisfies any ** 2;
+    ~~
+!!! error TS17006: An unary expression with the '~' operator is not allowed in the left-hand side of an exponentiation expression. Consider enclosing the expression in parentheses.
+    !x satisfies any ** 2;
+    ~~
+!!! error TS17006: An unary expression with the '!' operator is not allowed in the left-hand side of an exponentiation expression. Consider enclosing the expression in parentheses.
+       ~~~~~~~~~
+!!! error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+    typeof x satisfies any ** 2;
+    ~~~~~~~~
+!!! error TS17006: An unary expression with the 'typeof' operator is not allowed in the left-hand side of an exponentiation expression. Consider enclosing the expression in parentheses.
+             ~~~~~~~~~
+!!! error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+    void x satisfies any ** 2;
+    ~~~~~~
+!!! error TS17006: An unary expression with the 'void' operator is not allowed in the left-hand side of an exponentiation expression. Consider enclosing the expression in parentheses.
+           ~~~~~~~~~
+!!! error TS2532: Object is possibly 'undefined'.
+    delete obj.p satisfies any ** 2;
+    ~~~~~~~~~~~~
+!!! error TS17006: An unary expression with the 'delete' operator is not allowed in the left-hand side of an exponentiation expression. Consider enclosing the expression in parentheses.
+                 ~~~~~~~~~
+!!! error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+    
+    -x as any as number ** 2;
+    ~~
+!!! error TS17006: An unary expression with the '-' operator is not allowed in the left-hand side of an exponentiation expression. Consider enclosing the expression in parentheses.
+    -x satisfies any satisfies number ** 2;
+    ~~
+!!! error TS17006: An unary expression with the '-' operator is not allowed in the left-hand side of an exponentiation expression. Consider enclosing the expression in parentheses.
+    -x as any satisfies number ** 2;
+    ~~
+!!! error TS17006: An unary expression with the '-' operator is not allowed in the left-hand side of an exponentiation expression. Consider enclosing the expression in parentheses.
+    -x satisfies any as number ** 2;
+    ~~
+!!! error TS17006: An unary expression with the '-' operator is not allowed in the left-hand side of an exponentiation expression. Consider enclosing the expression in parentheses.
+    -(x) as number ** 2;
+    ~~~~
+!!! error TS17006: An unary expression with the '-' operator is not allowed in the left-hand side of an exponentiation expression. Consider enclosing the expression in parentheses.
+    -x! satisfies number ** 2;
+    ~~~
+!!! error TS17006: An unary expression with the '-' operator is not allowed in the left-hand side of an exponentiation expression. Consider enclosing the expression in parentheses.
+    <number>x as number ** 2;
+    ~~~~~~~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+    ~~~~~~~~~
+!!! error TS17007: A type assertion expression is not allowed in the left-hand side of an exponentiation expression. Consider enclosing the expression in parentheses.
+    <number>-x satisfies number ** 2;
+    ~~~~~~~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+    ~~~~~~~~~~
+!!! error TS17007: A type assertion expression is not allowed in the left-hand side of an exponentiation expression. Consider enclosing the expression in parentheses.
+    const negated = -x as any ** 2;
+                    ~~
+!!! error TS17006: An unary expression with the '-' operator is not allowed in the left-hand side of an exponentiation expression. Consider enclosing the expression in parentheses.
+    -x as any ** 2 ** 3;
+    ~~
+!!! error TS17006: An unary expression with the '-' operator is not allowed in the left-hand side of an exponentiation expression. Consider enclosing the expression in parentheses.
+    2 ** -x as number ** 2;
+                      ~~
+!!! error TS1005: ';' expected.
+    
+    async function invalidAwait() {
+        await x ** 2;
+        ~~~~~~~
+!!! error TS17006: An unary expression with the 'await' operator is not allowed in the left-hand side of an exponentiation expression. Consider enclosing the expression in parentheses.
+        await x as number ** 2;
+        ~~~~~~~
+!!! error TS17006: An unary expression with the 'await' operator is not allowed in the left-hand side of an exponentiation expression. Consider enclosing the expression in parentheses.
+        await x satisfies number ** 2;
+        ~~~~~~~
+!!! error TS17006: An unary expression with the 'await' operator is not allowed in the left-hand side of an exponentiation expression. Consider enclosing the expression in parentheses.
+        await x as any as number ** 2;
+        ~~~~~~~
+!!! error TS17006: An unary expression with the 'await' operator is not allowed in the left-hand side of an exponentiation expression. Consider enclosing the expression in parentheses.
+        await x satisfies any satisfies number ** 2;
+        ~~~~~~~
+!!! error TS17006: An unary expression with the 'await' operator is not allowed in the left-hand side of an exponentiation expression. Consider enclosing the expression in parentheses.
+        await x as any satisfies number ** 2;
+        ~~~~~~~
+!!! error TS17006: An unary expression with the 'await' operator is not allowed in the left-hand side of an exponentiation expression. Consider enclosing the expression in parentheses.
+        await x satisfies any as number ** 2;
+        ~~~~~~~
+!!! error TS17006: An unary expression with the 'await' operator is not allowed in the left-hand side of an exponentiation expression. Consider enclosing the expression in parentheses.
+    }
+    
+==== valid.ts (0 errors) ====
+    export {};
+    declare let x: any;
+    declare const obj: { p?: number };
+    
+    // Parentheses, update expressions, and unary right operands remain valid.
+    (-x) as number ** 2;
+    (-x) satisfies number ** 2;
+    (-x as number) ** 2;
+    (-x satisfies number) ** 2;
+    (-x) as any satisfies number ** 2;
+    (+x) as number ** 2;
+    (~x) satisfies number ** 2;
+    (!x) as any ** 2;
+    (typeof x) as any ** 2;
+    (void x) as any ** 2;
+    (delete obj.p) as any ** 2;
+    x as number ** 2;
+    x! satisfies number ** 2;
+    ++x as number ** 2;
+    --x satisfies number ** 2;
+    x++ satisfies number ** 2;
+    x-- as number ** 2;
+    -x as number * 2;
+    2 ** -x as number;
+    2 ** (-x as number);
+    2 ** (-x satisfies number);
+    
+    async function validAwait() {
+        (await x) as number ** 2;
+        (await x) satisfies number ** 2;
+        (await x as number) ** 2;
+        (await x satisfies number) ** 2;
+        (await x) satisfies any as number ** 2;
+        2 ** await x as number;
+    }
+    

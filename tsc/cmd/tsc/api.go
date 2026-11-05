@@ -27,7 +27,7 @@ type apiFlags struct {
 func parseAPIFlags(args []string) (apiFlags, error) {
 	flags := flag.NewFlagSet("api", flag.ContinueOnError)
 	result := apiFlags{}
-	flags.StringVar(&result.cwd, "cwd", core.Must(os.Getwd()), "current working directory")
+	flags.StringVar(&result.cwd, "cwd", core.Must(getCurrentDirectory()), "current working directory")
 	flags.StringVar(&result.pipePath, "pipe", "", "use a named pipe (Windows) or create a private Unix socket at <path>/socket, where <path> must not exist")
 	flags.StringVar(&result.callbacks, "callbacks", "", "comma-separated list of FS callbacks and defaults to enable")
 	flags.BoolVar(&result.caseSensitive, "useCaseSensitiveFileNames", osvfs.FS().CaseSensitivity().IsCaseSensitive(), "treat filesystem paths as case-sensitive")
@@ -69,7 +69,7 @@ func runAPI(ctx context.Context, args []string) int {
 	if flags.pipePath != "" {
 		options.PipePath = flags.pipePath
 	} else {
-		options.In = os.Stdin
+		options.In = stdioStdin
 		options.Out = os.Stdout
 	}
 

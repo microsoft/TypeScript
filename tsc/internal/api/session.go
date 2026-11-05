@@ -70,7 +70,7 @@ func getSourceFileSymbolIndex(sourceFile *ast.SourceFile) map[SymbolID]*ast.Symb
 			addSymbol(symbol.Parent())
 			addSymbol(symbol.ExportSymbol())
 			for _, table := range []ast.SymbolTable{symbol.Members(), symbol.Exports()} {
-				for _, child := range table {
+				for _, child := range table.All() {
 					addSymbol(child)
 				}
 			}
@@ -81,11 +81,11 @@ func getSourceFileSymbolIndex(sourceFile *ast.SourceFile) map[SymbolID]*ast.Symb
 			}
 			addSymbol(node.Symbol())
 			addSymbol(node.LocalSymbol())
-			for _, symbol := range node.Locals() {
+			for _, symbol := range node.Locals().All() {
 				addSymbol(symbol)
 			}
 		}
-		for _, symbol := range file.GlobalExports {
+		for _, symbol := range file.GlobalExports.All() {
 			addSymbol(symbol)
 		}
 		for _, module := range file.PatternAmbientModules {
@@ -561,7 +561,7 @@ type Session struct {
 
 	closeOnce sync.Once
 
-	// This is set to true when using MessagePackProtocol.
+	// This is set to true when using TupleProtocol.
 	useBinaryResponses      bool
 	batchResponsePages      sync.Map
 	nextBatchResponsePageID atomic.Uint64
@@ -917,6 +917,8 @@ func (s *Session) HandleRequest(ctx context.Context, method string, params json.
 		return s.handleParseCommandLine(ctx, parsed.(*ParseCommandLineParams))
 	case string(MethodReadConfigFile):
 		return s.handleReadConfigFile(ctx, parsed.(*ReadConfigFileParams))
+	case string(MethodParseConfigFileTextToJson):
+		return s.handleParseConfigFileTextToJson(ctx, parsed.(*ParseConfigFileTextToJsonParams))
 	case string(MethodParseJsonConfigFile):
 		return s.handleParseJsonConfigFileContent(ctx, parsed.(*ParseJsonConfigFileContentParams))
 	case string(MethodParseConfigFile):
@@ -1077,6 +1079,18 @@ func (s *Session) HandleRequest(ctx context.Context, method string, params json.
 		return s.handleGetBaseTypeOfLiteralType(ctx, parsed.(*GetBaseTypeOfLiteralTypeParams))
 	case string(MethodGetNonNullableType):
 		return s.handleGetNonNullableType(ctx, parsed.(*GetTypePropertyParams))
+	case string(MethodGetNullableType):
+		return s.handleGetNullableType(ctx, parsed.(*GetNullableTypeParams))
+	case string(MethodGetStringLiteralType):
+		return s.handleGetStringLiteralType(ctx, parsed.(*GetStringLiteralTypeParams))
+	case string(MethodGetNumberLiteralType):
+		return s.handleGetNumberLiteralType(ctx, parsed.(*GetNumberLiteralTypeParams))
+	case string(MethodGetBigIntLiteralType):
+		return s.handleGetBigIntLiteralType(ctx, parsed.(*GetBigIntLiteralTypeParams))
+	case string(MethodGetJsxIntrinsicTagNamesAt):
+		return s.handleGetJsxIntrinsicTagNamesAt(ctx, parsed.(*CheckerNodeParams))
+	case string(MethodGetPrivateIdentifierPropertyOfType):
+		return s.handleGetPrivateIdentifierPropertyOfType(ctx, parsed.(*GetPrivateIdentifierPropertyOfTypeParams))
 	case string(MethodGetTypeFromTypeNode):
 		return s.handleGetTypeFromTypeNode(ctx, parsed.(*GetTypeFromTypeNodeParams))
 	case string(MethodGetWidenedType):
@@ -1181,6 +1195,12 @@ func (s *Session) HandleRequest(ctx context.Context, method string, params json.
 		return s.handleIsArrayType(ctx, parsed.(*CheckerTypeParams))
 	case string(MethodIsReadonlySymbol):
 		return s.handleIsReadonlySymbol(ctx, parsed.(*CheckerSymbolParams))
+	case string(MethodIsImplementationOfOverload):
+		return s.handleIsImplementationOfOverload(ctx, parsed.(*CheckerNodeParams))
+	case string(MethodGetPropertySymbolOfDestructuringAssignment):
+		return s.handleGetPropertySymbolOfDestructuringAssignment(ctx, parsed.(*CheckerNodeParams))
+	case string(MethodGetAmbientModules):
+		return s.handleGetAmbientModules(ctx, parsed.(*GetIntrinsicTypeParams))
 	case string(MethodGetAnyType):
 		return s.handleGetIntrinsicType(ctx, parsed.(*GetIntrinsicTypeParams), (*checker.Checker).GetAnyType)
 	case string(MethodGetStringType):
@@ -1205,6 +1225,10 @@ func (s *Session) HandleRequest(ctx context.Context, method string, params json.
 		return s.handleGetIntrinsicType(ctx, parsed.(*GetIntrinsicTypeParams), (*checker.Checker).GetESSymbolType)
 	case string(MethodGetNonPrimitiveType):
 		return s.handleGetIntrinsicType(ctx, parsed.(*GetIntrinsicTypeParams), (*checker.Checker).GetNonPrimitiveType)
+	case string(MethodGetFalseType):
+		return s.handleGetIntrinsicType(ctx, parsed.(*GetIntrinsicTypeParams), (*checker.Checker).GetFalseType)
+	case string(MethodGetTrueType):
+		return s.handleGetIntrinsicType(ctx, parsed.(*GetIntrinsicTypeParams), (*checker.Checker).GetTrueType)
 	case string(MethodGetWellKnownSymbols):
 		return s.handleGetWellKnownSymbols(ctx, parsed.(*GetIntrinsicTypeParams))
 	case string(MethodGetWellKnownSignatures):
@@ -1428,13 +1452,13 @@ func (s *Session) handleCreateSnapshot(ctx context.Context, params *CreateSnapsh
 	fileChanges := s.toFileChangeSummary(params.FileNotifications)
 	var snapshotFileSystem vfs.FS
 	if params.FileSystem != nil {
-		fileSystem, fileSystemErr := requestfilesystem.NewForUpdate(params.FileSystem, s.FS(), s.GetCurrentDirectory(), &fileChanges)
+		fileSystem, fileSystemErr := s.createRequestFileSystem(params.FileSystem, s.FS(), s.FS(), &fileChanges)
 		if fileSystemErr != nil {
 			return nil, fmt.Errorf("%w: %w", ErrClientError, fileSystemErr)
 		}
 		snapshotFileSystem = fileSystem
 		apiRequest.FileSystem = fileSystem
-		apiRequest.ReplaceFileSystem = params.FileSystem.Kind == requestfilesystem.KindFull
+		apiRequest.ReplaceFileSystem = params.FileSystem.ReplacesFileSystem()
 	}
 	root := s.snapshotHost.NewRootSnapshot()
 	snapshot, err := s.snapshotHost.CloneSnapshot(ctx, root, fileChanges, apiRequest)
@@ -1484,7 +1508,7 @@ func (s *Session) handleUpdateSnapshot(ctx context.Context, params *UpdateSnapsh
 		if baseFileSystem == nil {
 			baseFileSystem = s.FS()
 		}
-		fileSystem, fileSystemErr := requestfilesystem.NewForUpdate(changes.FileSystem, baseFileSystem, s.GetCurrentDirectory(), &fileChanges)
+		fileSystem, fileSystemErr := s.createRequestFileSystem(changes.FileSystem, baseFileSystem, baseSD.snapshot.FS(), &fileChanges)
 		if fileSystemErr != nil {
 			return nil, fmt.Errorf("%w: %w", ErrClientError, fileSystemErr)
 		}
@@ -1492,7 +1516,7 @@ func (s *Session) handleUpdateSnapshot(ctx context.Context, params *UpdateSnapsh
 	}
 	if snapshotFileSystem != nil {
 		apiRequest.FileSystem = snapshotFileSystem
-		apiRequest.ReplaceFileSystem = changes.FileSystem != nil && changes.FileSystem.Kind == requestfilesystem.KindFull
+		apiRequest.ReplaceFileSystem = changes.FileSystem.ReplacesFileSystem()
 	}
 	snapshot, err := s.snapshotHost.CloneSnapshot(ctx, baseSD.snapshot, fileChanges, apiRequest)
 	if err != nil {
@@ -1511,6 +1535,32 @@ func (s *Session) handleUpdateSnapshot(ctx context.Context, params *UpdateSnapsh
 	response := s.createSnapshotResponse(snapshot, baseSD.snapshot, &changes.SnapshotRequestChangesParams)
 	s.registerSnapshot(snapshot, openState, snapshotFileSystem)
 	return response, nil
+}
+
+func (s *Session) createRequestFileSystem(params *requestfilesystem.RequestFileSystem, base vfs.FS, baseContents vfs.FS, fileChanges *project.FileChangeSummary) (vfs.FS, error) {
+	if params.Kind == requestfilesystem.KindSnapshot {
+		if len(params.Files) != 0 || len(params.Directories) != 0 || len(params.Symlinks) != 0 || len(params.RemovedPaths) != 0 {
+			return nil, fmt.Errorf("%w: snapshot filesystem entries must be supplied in fileSystem", ErrClientError)
+		}
+		if params.FileSystem != nil && params.FileSystem.Kind != requestfilesystem.KindLayer && params.FileSystem.Kind != requestfilesystem.KindFull {
+			return nil, fmt.Errorf("%w: only a layer or full filesystem can be applied on top of a snapshot filesystem", ErrClientError)
+		}
+		snapshotID := SnapshotID(params.Snapshot)
+		source, err := s.retainSnapshotData(snapshotID)
+		if err != nil {
+			return nil, err
+		}
+		defer func() { _ = s.releaseSnapshot(snapshotID) }()
+		base = requestfilesystem.Rebase(source.fileSystem, base, baseContents, fileChanges)
+		params = params.FileSystem
+		if params == nil {
+			return base, nil
+		}
+	}
+	if params.Snapshot != 0 || params.FileSystem != nil {
+		return nil, fmt.Errorf("%w: snapshot and fileSystem are only valid for a snapshot filesystem", ErrClientError)
+	}
+	return requestfilesystem.NewForUpdate(params, base, s.GetCurrentDirectory(), fileChanges)
 }
 
 func (s *Session) toAPISnapshotRequest(ctx context.Context, changes *SnapshotRequestChangesParams) (*project.APISnapshotRequest, error) {
@@ -2006,6 +2056,21 @@ func (s *Session) handleReadConfigFile(ctx context.Context, params *ReadConfigFi
 		configFileName,
 		s.pathKey(configFileName),
 		configFileContent,
+	)
+	response := &ReadConfigFileResponse{Config: config}
+	if len(parseErrors) > 0 {
+		response.Error = NewDiagnosticResponse(parseErrors[0])
+	}
+	return response, nil
+}
+
+// handleParseConfigFileTextToJson parses a string (contents of a JSON file) into a ParsedCommandLine
+func (s *Session) handleParseConfigFileTextToJson(ctx context.Context, params *ParseConfigFileTextToJsonParams) (*ReadConfigFileResponse, error) {
+	fileName := tspath.ToRootedFilePath(params.FileName, s.currentDirectory())
+	config, parseErrors := tsoptions.ParseConfigFileTextToJson(
+		fileName,
+		s.pathKey(fileName),
+		params.JSONText,
 	)
 	response := &ReadConfigFileResponse{Config: config}
 	if len(parseErrors) > 0 {
@@ -3451,11 +3516,11 @@ func (s *Session) resolveSymbolTablePropertyOfSymbol(ctx context.Context, params
 	defer release()
 
 	symbolTable := getter(symbol)
-	if len(symbolTable) == 0 {
+	if symbolTable.Len() == 0 {
 		return nil, nil
 	}
-	if len(symbolTable) == 1 {
-		for _, sub := range symbolTable {
+	if symbolTable.Len() == 1 {
+		for _, sub := range symbolTable.All() {
 			if sd == nil {
 				return []*SymbolResponse{newFileSymbolResponse(sub)}, nil
 			}
@@ -3463,8 +3528,8 @@ func (s *Session) resolveSymbolTablePropertyOfSymbol(ctx context.Context, params
 		}
 	}
 
-	symbols := make([]*ast.Symbol, 0, len(symbolTable))
-	for _, sub := range symbolTable {
+	symbols := make([]*ast.Symbol, 0, symbolTable.Len())
+	for _, sub := range symbolTable.All() {
 		symbols = append(symbols, sub)
 	}
 	if sd == nil {
@@ -3656,7 +3721,6 @@ func (s *Session) handleGetAwaitedType(ctx context.Context, params *CheckerTypeP
 	return setup.sd.newTypeResponse(setup.projectID, setup.checker.GetAwaitedType(t), setup.checker), nil
 }
 
-// handleGetBaseTypeOfLiteralType returns the base type of a literal type (e.g. number for 42).
 func (s *Session) handleGetBaseTypeOfLiteralType(ctx context.Context, params *GetBaseTypeOfLiteralTypeParams) (*TypeResponse, error) {
 	setup, err := s.setupChecker(ctx, params.Snapshot, params.Project)
 	if err != nil {
@@ -3688,7 +3752,120 @@ func (s *Session) handleGetNonNullableType(ctx context.Context, params *GetTypeP
 	return setup.sd.newTypeResponse(setup.projectID, setup.checker.GetNonNullableType(t), setup.checker), nil
 }
 
-// handleGetTypeFromTypeNode returns the type for a type node.
+func (s *Session) handleGetNullableType(ctx context.Context, params *GetNullableTypeParams) (*TypeResponse, error) {
+	setup, err := s.setupChecker(ctx, params.Snapshot, params.Project)
+	if err != nil {
+		return nil, err
+	}
+	defer setup.done()
+
+	t, err := setup.resolveTypeHandle(params.Type)
+	if err != nil {
+		return nil, err
+	}
+
+	result := setup.checker.GetNullableType(t, checker.TypeFlags(params.Flags))
+	return setup.sd.newTypeResponse(setup.projectID, result, setup.checker), nil
+}
+
+func (s *Session) handleGetStringLiteralType(ctx context.Context, params *GetStringLiteralTypeParams) (*TypeResponse, error) {
+	setup, err := s.setupChecker(ctx, params.Snapshot, params.Project)
+	if err != nil {
+		return nil, err
+	}
+	defer setup.done()
+
+	t := setup.checker.GetStringLiteralType(params.Value)
+	return setup.sd.newTypeResponse(setup.projectID, t, setup.checker), nil
+}
+
+func (s *Session) handleGetNumberLiteralType(ctx context.Context, params *GetNumberLiteralTypeParams) (*TypeResponse, error) {
+	setup, err := s.setupChecker(ctx, params.Snapshot, params.Project)
+	if err != nil {
+		return nil, err
+	}
+	defer setup.done()
+
+	value, err := numberLiteralValueFromJSON(params.Value)
+	if err != nil {
+		return nil, err
+	}
+
+	t := setup.checker.GetNumberLiteralType(value)
+	return setup.sd.newTypeResponse(setup.projectID, t, setup.checker), nil
+}
+
+func (s *Session) handleGetBigIntLiteralType(ctx context.Context, params *GetBigIntLiteralTypeParams) (*TypeResponse, error) {
+	setup, err := s.setupChecker(ctx, params.Snapshot, params.Project)
+	if err != nil {
+		return nil, err
+	}
+	defer setup.done()
+
+	value := jsnum.PseudoBigInt{Negative: params.Negative, Base10Value: params.Base10Value}
+	t := setup.checker.GetBigIntLiteralType(value)
+	return setup.sd.newTypeResponse(setup.projectID, t, setup.checker), nil
+}
+
+// @gen-proto-nullable
+func (s *Session) handleGetJsxIntrinsicTagNamesAt(ctx context.Context, params *CheckerNodeParams) ([]*SymbolResponse, error) {
+	setup, err := s.setupChecker(ctx, params.Snapshot, params.Project)
+	if err != nil {
+		return nil, err
+	}
+	defer setup.done()
+
+	node, err := setup.sd.resolveNodeHandle(setup.program, params.Location)
+	if err != nil {
+		return nil, err
+	}
+	if node == nil {
+		return nil, nil
+	}
+
+	props := setup.checker.GetJsxIntrinsicTagNamesAt(node)
+	if len(props) == 0 {
+		return nil, nil
+	}
+
+	results := make([]*SymbolResponse, len(props))
+	for i, prop := range props {
+		results[i] = setup.newSymbolResponse(prop)
+	}
+	return results, nil
+}
+
+// handleGetPrivateIdentifierPropertyOfType looks up a private identifier (e.g. "#foo") lexically in
+// scope at the given location, and if found, returns the corresponding property of the type.
+// @gen-proto-nullable
+func (s *Session) handleGetPrivateIdentifierPropertyOfType(ctx context.Context, params *GetPrivateIdentifierPropertyOfTypeParams) (*SymbolResponse, error) {
+	setup, err := s.setupChecker(ctx, params.Snapshot, params.Project)
+	if err != nil {
+		return nil, err
+	}
+	defer setup.done()
+
+	t, err := setup.resolveTypeHandle(params.Type)
+	if err != nil {
+		return nil, err
+	}
+
+	node, err := setup.sd.resolveNodeHandle(setup.program, params.Location)
+	if err != nil {
+		return nil, err
+	}
+	if node == nil {
+		return nil, nil
+	}
+
+	symbol := setup.checker.GetPrivateIdentifierPropertyOfType(t, params.Name, node)
+	if symbol == nil {
+		return nil, nil
+	}
+
+	return setup.newSymbolResponse(symbol), nil
+}
+
 func (s *Session) handleGetTypeFromTypeNode(ctx context.Context, params *GetTypeFromTypeNodeParams) (*TypeResponse, error) {
 	setup, err := s.setupChecker(ctx, params.Snapshot, params.Project)
 	if err != nil {
@@ -3704,7 +3881,6 @@ func (s *Session) handleGetTypeFromTypeNode(ctx context.Context, params *GetType
 	return setup.sd.newTypeResponse(setup.projectID, setup.checker.GetTypeFromTypeNode(node), setup.checker), nil
 }
 
-// handleGetWidenedType returns the widened type.
 func (s *Session) handleGetWidenedType(ctx context.Context, params *GetWidenedTypeParams) (*TypeResponse, error) {
 	setup, err := s.setupChecker(ctx, params.Snapshot, params.Project)
 	if err != nil {
@@ -3720,7 +3896,6 @@ func (s *Session) handleGetWidenedType(ctx context.Context, params *GetWidenedTy
 	return setup.sd.newTypeResponse(setup.projectID, setup.checker.GetWidenedType(t), setup.checker), nil
 }
 
-// handleGetParameterType returns the type of a parameter at a given index in a signature.
 func (s *Session) handleGetParameterType(ctx context.Context, params *GetParameterTypeParams) (*TypeResponse, error) {
 	setup, err := s.setupChecker(ctx, params.Snapshot, params.Project)
 	if err != nil {
@@ -3757,7 +3932,6 @@ func (s *Session) handleGetTypeParameterAtPosition(ctx context.Context, params *
 	return setup.sd.newTypeResponse(setup.projectID, setup.checker.GetTypeParameterAtPosition(sig, int(params.Index)), setup.checker), nil
 }
 
-// handleIsArrayLikeType returns whether a type is array-like.
 func (s *Session) handleIsArrayLikeType(ctx context.Context, params *IsArrayLikeTypeParams) (bool, error) {
 	setup, err := s.setupChecker(ctx, params.Snapshot, params.Project)
 	if err != nil {
@@ -3773,7 +3947,6 @@ func (s *Session) handleIsArrayLikeType(ctx context.Context, params *IsArrayLike
 	return setup.checker.IsArrayLikeType(t), nil
 }
 
-// handleIsTypeAssignableTo returns whether source is assignable to target.
 func (s *Session) handleIsTypeAssignableTo(ctx context.Context, params *IsTypeAssignableToParams) (bool, error) {
 	setup, err := s.setupChecker(ctx, params.Snapshot, params.Project)
 	if err != nil {
@@ -3864,6 +4037,9 @@ func (s *Session) handleTypeToTypeNode(ctx context.Context, params *TypeToTypeNo
 
 	typeNode := setup.checker.TypeToTypeNode(t, enclosingDeclaration, nodebuilder.Flags(params.Flags), nil)
 	if typeNode == nil {
+		if s.useBinaryResponses {
+			return RawBinary(nil), nil
+		}
 		return nil, nil
 	}
 
@@ -3904,6 +4080,9 @@ func (s *Session) handleSignatureToSignatureDeclaration(ctx context.Context, par
 
 	node := setup.checker.SignatureToSignatureDeclaration(sig, ast.Kind(params.Kind), enclosingDeclaration, nodebuilder.Flags(params.Flags))
 	if node == nil {
+		if s.useBinaryResponses {
+			return RawBinary(nil), nil
+		}
 		return nil, nil
 	}
 
@@ -4358,6 +4537,75 @@ func (s *Session) handleIsReadonlySymbol(ctx context.Context, params *CheckerSym
 	}
 
 	return setup.checker.IsReadonlySymbol(symbol), nil
+}
+
+// handleIsImplementationOfOverload returns whether a function-like declaration is the implementation signature of a set of overloads.
+func (s *Session) handleIsImplementationOfOverload(ctx context.Context, params *CheckerNodeParams) (bool, error) {
+	setup, err := s.setupChecker(ctx, params.Snapshot, params.Project)
+	if err != nil {
+		return false, err
+	}
+	defer setup.done()
+
+	node, err := setup.sd.resolveNodeHandle(setup.program, params.Location)
+	if err != nil {
+		return false, err
+	}
+	if node == nil {
+		return false, nil
+	}
+
+	if !ast.IsFunctionLike(node) {
+		return false, nil
+	}
+	return setup.checker.NewEmitResolver(printer.NewEmitContext()).IsImplementationOfOverload(node), nil
+}
+
+// @gen-proto-nullable
+func (s *Session) handleGetPropertySymbolOfDestructuringAssignment(ctx context.Context, params *CheckerNodeParams) (*SymbolResponse, error) {
+	setup, err := s.setupChecker(ctx, params.Snapshot, params.Project)
+	if err != nil {
+		return nil, err
+	}
+	defer setup.done()
+
+	node, err := setup.sd.resolveNodeHandle(setup.program, params.Location)
+	if err != nil {
+		return nil, err
+	}
+	if node == nil {
+		return nil, nil
+	}
+
+	symbol := setup.checker.GetPropertySymbolOfDestructuringAssignment(node)
+	if symbol == nil {
+		return nil, nil
+	}
+
+	return setup.newSymbolResponse(symbol), nil
+}
+
+// handleGetAmbientModules returns all ambient modules declared in the program `declare module "foo" { ... }`.
+// @gen-proto-nullable
+func (s *Session) handleGetAmbientModules(ctx context.Context, params *GetIntrinsicTypeParams) ([]*SymbolResponse, error) {
+	setup, err := s.setupChecker(ctx, params.Snapshot, params.Project)
+	if err != nil {
+		return nil, err
+	}
+	defer setup.done()
+
+	modules := setup.checker.GetAmbientModules()
+	if len(modules) == 0 {
+		return nil, nil
+	}
+	slices.SortFunc(modules, setup.checker.CompareSymbols)
+
+	results := make([]*SymbolResponse, len(modules))
+	for i, module := range modules {
+		results[i] = setup.newSymbolResponse(module)
+	}
+
+	return results, nil
 }
 
 // handleGetBaseTypes returns the base types of an interface/class type.
