@@ -66,11 +66,24 @@ func FlowIdentifierHash(name string) uint32 {
 
 // FlowAssignmentTargetHash summarizes which references an assignment flow node
 // can affect, so that flow walks can skip assignments to unrelated names without
-// visiting their syntax. An identifier or declaration target records the hash of
-// its name. An access chain target records the hash of the identifier it is
-// rooted at, with FlowAssignmentTargetAccess set. This mirrors the checker's
-// matching of references against assignment targets, which only matches
-// references rooted at the same identifier.
+// visiting their syntax. For example:
+//
+//	x = 1;              // hash("x")
+//	let x = 1;          // hash("x")
+//	const { x } = obj;  // hash("x") (for the binding element x)
+//	(x) = 1;            // hash("x")
+//	x.y.z = 1;          // hash("x") | FlowAssignmentTargetAccess
+//	x!["y"] = 1;        // hash("x") | FlowAssignmentTargetAccess
+//	this.x = 1;         // FlowAssignmentTargetNotIdentifier
+//	f().x = 1;          // FlowAssignmentTargetNotIdentifier
+//	for (const k in x)  // FlowAssignmentTargetUnknown, since this also narrows x[k]
+//
+// This mirrors the checker's matching of references against assignment targets
+// (see getFlowReferenceRootHash in the checker): an assignment can only affect a
+// reference rooted at the same identifier. Assigning x.y.z does not affect a
+// reference to plain x or to w.y.z; assigning x affects both x and x.y.z.
+// NotIdentifier targets cannot match a reference rooted at an identifier, but are
+// still checked against references with other roots, such as this.x.
 func FlowAssignmentTargetHash(target *Node) uint32 {
 	access := uint32(0)
 	for {

@@ -118,10 +118,24 @@ func (c *Checker) getFlowTypeOfReferenceEx(reference *ast.Node, declaredType *Ty
 }
 
 // getFlowReferenceRootHash returns the FlowIdentifierHash of the identifier a reference
-// is rooted at, and whether the reference is an access chain on it. An identifier is
-// only affected by assignments to that identifier. An access chain is also affected by
-// assignments to access chains rooted at it. Other references return zero and are
-// matched against every assignment.
+// is rooted at, and whether the reference is an access chain on it. For example:
+//
+//	x        // hash("x"), false
+//	x.y.z    // hash("x"), true
+//	(x!)[0]  // hash("x"), true
+//	this.x   // 0, false
+//	f().x    // 0, false
+//
+// The flow walk compares this against each assignment's ast.FlowNode.AssignmentTarget
+// and skips the assignments that cannot affect the reference:
+//
+//	                 reference x    reference x.y.z
+//	x = 1            checked        checked (resets x.y.z to its declared type)
+//	x.w = 1          skipped        checked
+//	other = 1        skipped        skipped
+//	other.y.z = 1    skipped        skipped
+//
+// A zero hash means the root is not an identifier, so every assignment is checked.
 func getFlowReferenceRootHash(reference *ast.Node) (uint32, bool) {
 	isAccess := false
 	for {
