@@ -13,7 +13,6 @@ See the Apache Version 2.0 License for specific language governing permissions
 and limitations under the License.
 ***************************************************************************** */
 
-
 /// <reference lib="es2015.symbol" />
 /// <reference lib="es2015.iterable" />
 /// <reference lib="es2018.asynciterable" />

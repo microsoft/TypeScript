@@ -3650,7 +3650,8 @@ func (c *Checker) checkFunctionOrConstructorSymbolWorker(symbol *ast.Symbol) {
 					}
 					return
 				}
-				if ast.NodeIsPresent(subsequentNode.Body()) {
+				// Abstract methods can't have an implementation in the same class, so the next method can't be a misnamed one.
+				if ast.NodeIsPresent(subsequentNode.Body()) && !ast.HasSyntacticModifier(node, ast.ModifierFlagsAbstract) {
 					c.error(errorNode, diagnostics.Function_implementation_name_must_be_0, scanner.DeclarationNameToString(name))
 					return
 				}

@@ -297,7 +297,7 @@ function visitorEntries(): VisitorEntry[] {
 // ────────────────────────────────────────────────────────────────────────────
 
 function generateAstGenerated(): string {
-    const eol = "\r\n";
+    const eol = "\n";
     const parts: string[] = [];
 
     // ── SyntaxKind union aliases from schema ──
@@ -1317,9 +1317,7 @@ function generateFactory(): string {
     while (out.length > 0 && out[out.length - 1] === "") out.pop();
     out.push("");
 
-    let result = out.join("\n");
-    result = result.replace(/\n/g, "\r\n");
-    return result;
+    return out.join("\n");
 }
 
 // ────────────────────────────────────────────────────────────────────────────
@@ -1631,9 +1629,7 @@ function generateIsGenerated(): string {
     while (out.length > 0 && out[out.length - 1] === "") out.pop();
     out.push("");
 
-    let result = out.join("\n");
-    result = result.replace(/\n/g, "\r\n");
-    return result;
+    return out.join("\n");
 }
 
 // ────────────────────────────────────────────────────────────────────────────
@@ -1813,9 +1809,7 @@ function generateVisitor(): string {
     while (out.length > 0 && out[out.length - 1] === "") out.pop();
     out.push("");
 
-    let result = out.join("\n");
-    result = result.replace(/\n/g, "\r\n");
-    return result;
+    return out.join("\n");
 }
 
 // ────────────────────────────────────────────────────────────────────────────
