@@ -12,6 +12,7 @@ const exe = getExePath({ fs, module, path, url });
 if (process.platform !== "win32" && typeof process.execve === "function") {
     // > v22.15.0
     try {
+        // Pass env explicitly to work around https://github.com/nodejs/node/pull/60029.
         process.execve(exe, [exe, ...process.argv.slice(2)], process.env);
     }
     catch {
