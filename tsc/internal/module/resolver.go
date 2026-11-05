@@ -556,6 +556,9 @@ func (r *DefaultResolver) ResolvePackageDirectory(moduleName string, containingF
 func (r *DefaultResolver) tryResolveFromTypingsLocation(moduleName string, containingDirectory tspath.RootedDirectoryPath, originalResult *ResolvedModule, traceBuilder *tracer) *ResolvedModule {
 	if r.typingsLocation == "" ||
 		tspath.IsExternalModuleNameRelative(moduleName) ||
+		// Like the primary node_modules lookup, skip names that look like absolute URIs
+		// (e.g. "https://esm.sh/pkg?dev"); they can never resolve within the typings cache.
+		strings.Contains(moduleName, ":") ||
 		(originalResult.ResolvedFileName != "" && tspath.ExtensionIsOneOf(originalResult.Extension, tspath.SupportedTSExtensionsWithJsonFlat)) {
 		return originalResult
 	}
