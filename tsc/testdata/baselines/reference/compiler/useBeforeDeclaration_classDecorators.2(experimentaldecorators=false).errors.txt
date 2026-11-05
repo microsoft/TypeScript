@@ -14,8 +14,11 @@ useBeforeDeclaration_classDecorators.2.ts(41,10): error TS2449: Class 'C5' used 
 useBeforeDeclaration_classDecorators.2.ts(42,10): error TS2449: Class 'C5' used before its declaration.
 useBeforeDeclaration_classDecorators.2.ts(43,10): error TS2449: Class 'C5' used before its declaration.
 useBeforeDeclaration_classDecorators.2.ts(46,17): error TS1206: Decorators are not valid here.
+useBeforeDeclaration_classDecorators.2.ts(46,22): error TS2449: Class 'C5' used before its declaration.
 useBeforeDeclaration_classDecorators.2.ts(47,20): error TS1206: Decorators are not valid here.
+useBeforeDeclaration_classDecorators.2.ts(47,25): error TS2449: Class 'C5' used before its declaration.
 useBeforeDeclaration_classDecorators.2.ts(48,13): error TS1206: Decorators are not valid here.
+useBeforeDeclaration_classDecorators.2.ts(48,18): error TS2449: Class 'C5' used before its declaration.
 useBeforeDeclaration_classDecorators.2.ts(53,17): error TS2449: Class 'C6' used before its declaration.
 useBeforeDeclaration_classDecorators.2.ts(54,17): error TS2449: Class 'C6' used before its declaration.
 useBeforeDeclaration_classDecorators.2.ts(55,17): error TS2449: Class 'C6' used before its declaration.
@@ -27,11 +30,14 @@ useBeforeDeclaration_classDecorators.2.ts(61,17): error TS2449: Class 'C6' used 
 useBeforeDeclaration_classDecorators.2.ts(62,17): error TS2449: Class 'C6' used before its declaration.
 useBeforeDeclaration_classDecorators.2.ts(63,17): error TS2449: Class 'C6' used before its declaration.
 useBeforeDeclaration_classDecorators.2.ts(66,17): error TS1206: Decorators are not valid here.
+useBeforeDeclaration_classDecorators.2.ts(66,29): error TS2449: Class 'C6' used before its declaration.
 useBeforeDeclaration_classDecorators.2.ts(67,20): error TS1206: Decorators are not valid here.
+useBeforeDeclaration_classDecorators.2.ts(67,32): error TS2449: Class 'C6' used before its declaration.
 useBeforeDeclaration_classDecorators.2.ts(68,13): error TS1206: Decorators are not valid here.
+useBeforeDeclaration_classDecorators.2.ts(68,25): error TS2449: Class 'C6' used before its declaration.
 
 
-==== useBeforeDeclaration_classDecorators.2.ts (31 errors) ====
+==== useBeforeDeclaration_classDecorators.2.ts (37 errors) ====
     declare const dec: any;
     
     // ok
@@ -122,12 +128,21 @@ useBeforeDeclaration_classDecorators.2.ts(68,13): error TS1206: Decorators are n
         constructor(@dec(C5) a: any) {}
                     ~
 !!! error TS1206: Decorators are not valid here.
+                         ~~
+!!! error TS2449: Class 'C5' used before its declaration.
+!!! related TS2728 useBeforeDeclaration_classDecorators.2.ts:32:7: 'C5' is declared here.
         static method2(@dec(C5) a: any) {}
                        ~
 !!! error TS1206: Decorators are not valid here.
+                            ~~
+!!! error TS2449: Class 'C5' used before its declaration.
+!!! related TS2728 useBeforeDeclaration_classDecorators.2.ts:32:7: 'C5' is declared here.
         method2(@dec(C5) a: any) {}
                 ~
 !!! error TS1206: Decorators are not valid here.
+                     ~~
+!!! error TS2449: Class 'C5' used before its declaration.
+!!! related TS2728 useBeforeDeclaration_classDecorators.2.ts:32:7: 'C5' is declared here.
     }
     
     // error
@@ -178,11 +193,20 @@ useBeforeDeclaration_classDecorators.2.ts(68,13): error TS1206: Decorators are n
         constructor(@dec((() => C6)()) a: any) {}
                     ~
 !!! error TS1206: Decorators are not valid here.
+                                ~~
+!!! error TS2449: Class 'C6' used before its declaration.
+!!! related TS2728 useBeforeDeclaration_classDecorators.2.ts:52:7: 'C6' is declared here.
         static method2(@dec((() => C6)()) a: any) {}
                        ~
 !!! error TS1206: Decorators are not valid here.
+                                   ~~
+!!! error TS2449: Class 'C6' used before its declaration.
+!!! related TS2728 useBeforeDeclaration_classDecorators.2.ts:52:7: 'C6' is declared here.
         method2(@dec((() => C6)()) a: any) {}
                 ~
 !!! error TS1206: Decorators are not valid here.
+                            ~~
+!!! error TS2449: Class 'C6' used before its declaration.
+!!! related TS2728 useBeforeDeclaration_classDecorators.2.ts:52:7: 'C6' is declared here.
     }
     

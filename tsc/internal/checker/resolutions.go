@@ -103,12 +103,6 @@ func (c *Checker) beginResolution(source memoStateSource, index int) {
 	c.appendResolution(0, source, index, int32(len(c.instantiationStack)))
 }
 
-// beginNodeResolution starts a resolution that is not a computation, which
-// continues the depth limit of the enclosing resolution.
-func (c *Checker) beginNodeResolution() {
-	c.appendResolution(0, nil, 0, c.currentResolution().depthStart)
-}
-
 func (c *Checker) appendResolution(key memoKey, source memoStateSource, index int, depthBase int32) {
 	c.resolutionSerials++
 	f := c.pushResolution()
