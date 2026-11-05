@@ -1612,7 +1612,14 @@ func (tx *esDecoratorTransformer) visitPropertyDeclaration(node *ast.Node) *ast.
 		if initializer == nil {
 			initializer = f.NewVoidZeroExpression()
 		}
-		initializer = f.NewRunInitializersHelper(thisArg, result.initializersName, initializer)
+		call := f.NewRunInitializersHelper(thisArg, result.initializersName, initializer)
+		// The call takes the place of the initializer, so it should also take its text range.
+		// Otherwise the printer sees an argument list whose last argument ends before its
+		// parent does and emits the comments that follow the initializer in the source.
+		// When the field has no trailing semicolon, those are the leading comments of the
+		// next class member, which then get emitted twice.
+		call.Loc = initializer.Loc
+		initializer = call
 	}
 
 	if ast.IsStatic(node) && tx.classInfoStack != nil && initializer != nil {
