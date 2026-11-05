@@ -12,7 +12,7 @@ const exe = getExePath({ fs, module, path, url });
 if (process.platform !== "win32" && typeof process.execve === "function") {
     // > v22.15.0
     try {
-        process.execve(exe, [exe, ...process.argv.slice(2)]);
+        process.execve(exe, [exe, ...process.argv.slice(2)], process.env);
     }
     catch {
         // may not be available, ignore the error and fallback
