@@ -3014,43 +3014,6 @@ export class Program<Id extends ProjectId = ProjectId> implements FormatDiagnost
         return this.project.parsedCommandLine.projectReferences;
     }
 
-    get getSourceFiles(): {
-        (): readonly SourceFile[];
-        gen(): APIRequestGenerator<readonly SourceFile[]>;
-    } {
-        const owner = this;
-        return cacheGeneratorMethod(
-            owner,
-            "getSourceFiles",
-            function (): readonly SourceFile[] {
-                const fileNames = owner.getSourceFileNames();
-                const sourceFiles = fileNames.map(fileName => owner.getSourceFile(fileName));
-                const files: SourceFile[] = [];
-                for (let i = 0; i < fileNames.length; i++) {
-                    const file = sourceFiles[i];
-                    if (!file) {
-                        throw new Error(`Program source file '${fileNames[i]}' could not be loaded`);
-                    }
-                    files.push(file);
-                }
-                return files;
-            },
-            function* (): APIRequestGenerator<readonly SourceFile[]> {
-                const fileNames = yield* owner.getSourceFileNames.gen();
-                const sourceFiles = yield* all(...fileNames.map(fileName => owner.getSourceFile.gen(fileName)));
-                const files: SourceFile[] = [];
-                for (let i = 0; i < fileNames.length; i++) {
-                    const file = sourceFiles[i];
-                    if (!file) {
-                        throw new Error(`Program source file '${fileNames[i]}' could not be loaded`);
-                    }
-                    files.push(file);
-                }
-                return files;
-            },
-        );
-    }
-
     private get getStatistics(): {
         (): ProgramStatisticsResponse;
         gen(): Generator<ProtocolRequest, ProgramStatisticsResponse, ProtocolResponse["result"]>;

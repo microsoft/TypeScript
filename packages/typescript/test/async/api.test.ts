@@ -1622,33 +1622,6 @@ describe("API - automatic batching", { concurrency }, () => {
         assert.deepStrictEqual(readConfigFile.config, {});
     });
 
-    test("batches source-file lookups while preserving order and cached results", async () => {
-        await using api = spawnAPI({
-            "/tsconfig.json": JSON.stringify({ compilerOptions: { noLib: true, moduleResolution: "node10" }, files: ["src/main.ts"] }),
-            "/src/main.ts": `import { value } from "my-lib"; import { local } from "./local"; export const result = value + local;`,
-            "/src/local.ts": "export const local = 1;",
-            "/node_modules/my-lib/package.json": JSON.stringify({ types: "./index.d.ts" }),
-            "/node_modules/my-lib/index.d.ts": "export declare const value: number;",
-        }, { collectTiming: true });
-        const snapshot = await api.createSnapshot({ openProjects: ["/tsconfig.json"] });
-        const program = snapshot.getConfiguredProject("/tsconfig.json")!.program;
-
-        const local = await program.getSourceFile("/src/local.ts");
-        assert.ok(local);
-        await api.resetTimingInfo();
-        const files = await program.getSourceFiles();
-        assert.deepEqual(files.map(file => file.fileName), ["/node_modules/my-lib/index.d.ts", "/src/local.ts", "/src/main.ts"]);
-        assert.strictEqual(files[1], local);
-        // The WASM transport sends the two uncached binary source-file requests individually.
-        assert.equal((await api.getTimingInfo()).totals.requestCount, process.env.TS_API_TEST_WASM ? 3 : 2);
-
-        await api.resetTimingInfo();
-        const cached = await program.getSourceFiles();
-        for (let i = 0; i < files.length; i++) {
-            assert.strictEqual(cached[i], files[i]);
-        }
-        assert.equal((await api.getTimingInfo()).totals.requestCount, 1);
-    });
 });
 
 describe("API - batchContext", { concurrency }, () => {
@@ -2798,10 +2771,9 @@ describe("SourceFile", { concurrency }, () => {
         await using program = await api.createProgram(["/src/main.ts"], { noLib: true });
         assert.ok(!("getTypeChecker" in program));
         assert.ok(!("getResolvedProjectReferences" in program));
+        assert.ok(!("getSourceFiles" in program));
         assert.deepEqual(await program.getRootFileNames(), ["/src/main.ts"]);
-        const files = await program.getSourceFiles();
-        assert.deepEqual(files.map(file => file.fileName), ["/src/dependency.ts", "/src/main.ts"]);
-        assert.strictEqual(files[1], await program.getSourceFile("/src/main.ts"));
+        assert.deepEqual(await program.getSourceFileNames(), ["/src/dependency.ts", "/src/main.ts"]);
         assert.equal(await program.getProjectReferences(), undefined);
     });
 
@@ -2848,7 +2820,7 @@ export const other: { value: string } = box;`,
         await using api = spawnAPI({});
         await using empty = await api.createProgram([], { noLib: true });
         assert.deepEqual(await empty.getRootFileNames(), []);
-        assert.deepEqual(await empty.getSourceFiles(), []);
+        assert.deepEqual(await empty.getSourceFileNames(), []);
         assert.equal(await empty.getNodeCount(), 0);
         assert.equal(await empty.getIdentifierCount(), 0);
         assert.equal(await empty.getProjectReferences(), undefined);
@@ -2859,7 +2831,7 @@ export const other: { value: string } = box;`,
 
         await using missing = await api.createProgram(["/missing.ts"], { noLib: true });
         assert.deepEqual(await missing.getRootFileNames(), ["/missing.ts"]);
-        assert.deepEqual(await missing.getSourceFiles(), []);
+        assert.deepEqual(await missing.getSourceFileNames(), []);
         assert.ok((await missing.getProgramDiagnostics()).some(diagnostic => diagnostic.code === 6053));
     });
 

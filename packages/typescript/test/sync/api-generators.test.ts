@@ -487,35 +487,6 @@ describe("API - generator batching", { concurrency: areTestsFiltered() }, () => 
         ]);
     });
 
-    test("batches source-file lookups while preserving order and cached results", context => {
-        using api = spawnAPI({
-            "/tsconfig.json": JSON.stringify({ compilerOptions: { noLib: true, moduleResolution: "node10" }, files: ["src/main.ts"] }),
-            "/src/main.ts": `import { value } from "my-lib"; import { local } from "./local"; export const result = value + local;`,
-            "/src/local.ts": "export const local = 1;",
-            "/node_modules/my-lib/package.json": JSON.stringify({ types: "./index.d.ts" }),
-            "/node_modules/my-lib/index.d.ts": "export declare const value: number;",
-        });
-        using snapshot = api.createSnapshot({ openProjects: ["/tsconfig.json"] });
-        const program = snapshot.getConfiguredProject("/tsconfig.json")!.program;
-        const requestBatches: string[][] = [];
-        observeRequestBatches(api, requestBatches, context);
-
-        const local = program.getSourceFile("/src/local.ts");
-        assert.ok(local);
-        requestBatches.length = 0;
-        const [files] = api.batch(program.getSourceFiles.gen());
-        assert.deepEqual(files.map(file => file.fileName), ["/node_modules/my-lib/index.d.ts", "/src/local.ts", "/src/main.ts"]);
-        assert.strictEqual(files[1], local);
-        assert.deepEqual(requestBatches, [["getSourceFileNames"], ["getSourceFile", "getSourceFile"]]);
-
-        requestBatches.length = 0;
-        const [cached] = api.batch(program.getSourceFiles.gen());
-        for (let i = 0; i < files.length; i++) {
-            assert.strictEqual(cached[i], files[i]);
-        }
-        assert.deepEqual(requestBatches, [["getSourceFileNames"]]);
-    });
-
     test("all and defer yield discriminated host messages without starting children", () => {
         let started = false;
         function* child() {
@@ -1647,9 +1618,6 @@ describe("API - generator batching", { concurrency: areTestsFiltered() }, () => 
                 parityCase("Program", "getResolvedTypeReferenceDirectiveFromTypeReferenceDirective", program.getResolvedTypeReferenceDirectiveFromTypeReferenceDirective, assertDeepEquivalent, typeReferenceDirective, "/src/index.ts"),
                 parityCase("Program", "getSourceFileByPath", program.getSourceFileByPath, assertOptionalSourceFilesEquivalent, indexFile.path),
                 parityCase("Program", "getSourceFileNames", program.getSourceFileNames, assertDeepEquivalent),
-                parityCase("Program", "getSourceFiles", program.getSourceFiles, (actual, expected, message) => {
-                    assertArrayElementsEquivalent(actual, expected, assertSourceFilesEquivalent, message);
-                }),
                 parityCase("Program", "getSourceFileMetadata", program.getSourceFileMetadata, assertDeepEquivalent, "/src/index.ts"),
                 parityCase("Program", "getSourceFileMetadataByPath", program.getSourceFileMetadataByPath, assertDeepEquivalent, indexFile.path),
                 parityCase("Program", "isSourceFileFromExternalLibrary", program.isSourceFileFromExternalLibrary, assertDeepEquivalent, indexFile),

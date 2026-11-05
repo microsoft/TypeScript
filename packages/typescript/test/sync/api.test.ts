@@ -2578,10 +2578,9 @@ describe("SourceFile", { concurrency }, () => {
         using program = api.createProgram(["/src/main.ts"], { noLib: true });
         assert.ok(!("getTypeChecker" in program));
         assert.ok(!("getResolvedProjectReferences" in program));
+        assert.ok(!("getSourceFiles" in program));
         assert.deepEqual(program.getRootFileNames(), ["/src/main.ts"]);
-        const files = program.getSourceFiles();
-        assert.deepEqual(files.map(file => file.fileName), ["/src/dependency.ts", "/src/main.ts"]);
-        assert.strictEqual(files[1], program.getSourceFile("/src/main.ts"));
+        assert.deepEqual(program.getSourceFileNames(), ["/src/dependency.ts", "/src/main.ts"]);
         assert.equal(program.getProjectReferences(), undefined);
     });
 
@@ -2628,7 +2627,7 @@ export const other: { value: string } = box;`,
         using api = spawnAPI({});
         using empty = api.createProgram([], { noLib: true });
         assert.deepEqual(empty.getRootFileNames(), []);
-        assert.deepEqual(empty.getSourceFiles(), []);
+        assert.deepEqual(empty.getSourceFileNames(), []);
         assert.equal(empty.getNodeCount(), 0);
         assert.equal(empty.getIdentifierCount(), 0);
         assert.equal(empty.getProjectReferences(), undefined);
@@ -2639,7 +2638,7 @@ export const other: { value: string } = box;`,
 
         using missing = api.createProgram(["/missing.ts"], { noLib: true });
         assert.deepEqual(missing.getRootFileNames(), ["/missing.ts"]);
-        assert.deepEqual(missing.getSourceFiles(), []);
+        assert.deepEqual(missing.getSourceFileNames(), []);
         assert.ok((missing.getProgramDiagnostics()).some(diagnostic => diagnostic.code === 6053));
     });
 
