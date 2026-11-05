@@ -100,31 +100,31 @@ class C {
         this.value = 0;
     }
     and() {
-        return __classPrivateFieldSet(this, _C_instances, __classPrivateFieldGet(this, _C_instances, "a", _C_f_get) && rhs(), "a", _C_f_set);
+        return __classPrivateFieldGet(this, _C_instances, "a", _C_f_get) && __classPrivateFieldSet(this, _C_instances, rhs(), "a", _C_f_set);
     }
     or() {
-        return __classPrivateFieldSet(this, _C_instances, __classPrivateFieldGet(this, _C_instances, "a", _C_f_get) || rhs(), "a", _C_f_set);
+        return __classPrivateFieldGet(this, _C_instances, "a", _C_f_get) || __classPrivateFieldSet(this, _C_instances, rhs(), "a", _C_f_set);
     }
     coalesce() {
         var _b;
-        return __classPrivateFieldSet(this, _C_instances, (_b = __classPrivateFieldGet(this, _C_instances, "a", _C_f_get)) !== null && _b !== void 0 ? _b : rhs(), "a", _C_f_set);
+        return (_b = __classPrivateFieldGet(this, _C_instances, "a", _C_f_get)) !== null && _b !== void 0 ? _b : __classPrivateFieldSet(this, _C_instances, rhs(), "a", _C_f_set);
     }
     static and(receiver) {
         var _b;
-        return __classPrivateFieldSet(_b = receiver(), _C_instances, __classPrivateFieldGet(_b, _C_instances, "a", _C_f_get) && rhs(), "a", _C_f_set);
+        return __classPrivateFieldGet(_b = receiver(), _C_instances, "a", _C_f_get) && __classPrivateFieldSet(_b, _C_instances, rhs(), "a", _C_f_set);
     }
     static or(receiver) {
         var _b;
-        return __classPrivateFieldSet(_b = receiver(), _C_instances, __classPrivateFieldGet(_b, _C_instances, "a", _C_f_get) || rhs(), "a", _C_f_set);
+        return __classPrivateFieldGet(_b = receiver(), _C_instances, "a", _C_f_get) || __classPrivateFieldSet(_b, _C_instances, rhs(), "a", _C_f_set);
     }
     static coalesce(receiver) {
         var _b;
         var _c;
-        return __classPrivateFieldSet(_c = receiver(), _C_instances, (_b = __classPrivateFieldGet(_c, _C_instances, "a", _C_f_get)) !== null && _b !== void 0 ? _b : rhs(), "a", _C_f_set);
+        return (_b = __classPrivateFieldGet(_c = receiver(), _C_instances, "a", _C_f_get)) !== null && _b !== void 0 ? _b : __classPrivateFieldSet(_c, _C_instances, rhs(), "a", _C_f_set);
     }
     static andIdentifier(receiver) {
         var _b;
-        return __classPrivateFieldSet(_b = receiver, _C_instances, __classPrivateFieldGet(_b, _C_instances, "a", _C_f_get) && rhs(), "a", _C_f_set);
+        return __classPrivateFieldGet(_b = receiver, _C_instances, "a", _C_f_get) && __classPrivateFieldSet(_b, _C_instances, rhs(), "a", _C_f_set);
     }
 }
 _C_instances = new WeakSet(), _C_f_get = function _C_f_get() {
@@ -136,14 +136,14 @@ _C_instances = new WeakSet(), _C_f_get = function _C_f_get() {
 };
 class S {
     static and() {
-        return __classPrivateFieldSet(this, _a, __classPrivateFieldGet(this, _a, "a", _S_f_get) && rhs(), "a", _S_f_set);
+        return __classPrivateFieldGet(this, _a, "a", _S_f_get) && __classPrivateFieldSet(this, _a, rhs(), "a", _S_f_set);
     }
     static or() {
-        return __classPrivateFieldSet(this, _a, __classPrivateFieldGet(this, _a, "a", _S_f_get) || rhs(), "a", _S_f_set);
+        return __classPrivateFieldGet(this, _a, "a", _S_f_get) || __classPrivateFieldSet(this, _a, rhs(), "a", _S_f_set);
     }
     static coalesce() {
         var _b;
-        return __classPrivateFieldSet(this, _a, (_b = __classPrivateFieldGet(this, _a, "a", _S_f_get)) !== null && _b !== void 0 ? _b : rhs(), "a", _S_f_set);
+        return (_b = __classPrivateFieldGet(this, _a, "a", _S_f_get)) !== null && _b !== void 0 ? _b : __classPrivateFieldSet(this, _a, rhs(), "a", _S_f_set);
     }
 }
 _a = S, _S_f_get = function _S_f_get() {
@@ -161,11 +161,11 @@ class ReadOnly {
     run() {
         var _b;
         // @ts-expect-error
-        __classPrivateFieldSet(this, _ReadOnly_instances, __classPrivateFieldGet(this, _ReadOnly_instances, "a", _ReadOnly_f_get) && rhs(), "a");
+        __classPrivateFieldGet(this, _ReadOnly_instances, "a", _ReadOnly_f_get) && __classPrivateFieldSet(this, _ReadOnly_instances, rhs(), "a");
         // @ts-expect-error
-        __classPrivateFieldSet(this, _ReadOnly_instances, __classPrivateFieldGet(this, _ReadOnly_instances, "m", _ReadOnly_m) || rhs(), "m");
+        __classPrivateFieldGet(this, _ReadOnly_instances, "m", _ReadOnly_m) || __classPrivateFieldSet(this, _ReadOnly_instances, rhs(), "m");
         // @ts-expect-error
-        __classPrivateFieldSet(this, _ReadOnly_instances, (_b = __classPrivateFieldGet(this, _ReadOnly_instances, "m", _ReadOnly_m)) !== null && _b !== void 0 ? _b : rhs(), "m");
+        (_b = __classPrivateFieldGet(this, _ReadOnly_instances, "m", _ReadOnly_m)) !== null && _b !== void 0 ? _b : __classPrivateFieldSet(this, _ReadOnly_instances, rhs(), "m");
     }
 }
 _ReadOnly_instances = new WeakSet(), _ReadOnly_f_get = function _ReadOnly_f_get() { return 0; }, _ReadOnly_m = function _ReadOnly_m() { };

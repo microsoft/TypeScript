@@ -1626,6 +1626,19 @@ func (tx *classFieldsTransformer) visitParenthesizedExpression(node *ast.Parenth
 
 func (tx *classFieldsTransformer) createPrivateIdentifierAssignment(info *privateIdentifierInfo, receiver *ast.Expression, right *ast.Expression, operator ast.Kind) *ast.Expression {
 	receiver = tx.Visitor().VisitNode(receiver)
+	if ast.IsLogicalOrCoalescingAssignmentOperator(operator) {
+		readExpression, initializeExpression := tx.createCopiableReceiverExpr(receiver)
+		if initializeExpression == nil {
+			initializeExpression = readExpression
+		}
+		return tx.Factory().NewBinaryExpression(
+			nil,
+			tx.createPrivateIdentifierAccessHelper(info, initializeExpression),
+			nil,
+			tx.Factory().NewToken(transformers.GetNonAssignmentOperatorForCompoundAssignment(operator)),
+			tx.createPrivateIdentifierAssignment(info, readExpression, right, ast.KindEqualsToken),
+		)
+	}
 	right = tx.Visitor().VisitNode(right)
 
 	if ast.IsCompoundAssignment(operator) {
