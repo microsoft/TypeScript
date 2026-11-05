@@ -626,12 +626,19 @@ func isNewExpressionWithoutArguments(node *ast.Node) bool {
 // start of its member chain, such as `C()` in `C().D`. Such an expression must be parenthesized when used as the
 // expression of a NewExpression, since `new C().D()` would be parsed as `(new C()).D()` rather than `new (C().D)()`.
 func hasUnparenthesizedCallAtStartOfMemberChain(node *ast.Expression) bool {
-	for {
+	for step := 0; ; step++ {
 		node = ast.SkipPartiallyEmittedExpressions(node)
 		if ast.GetExpressionPrecedence(node) < ast.OperatorPrecedenceMember {
 			// Each expression in the member chain is emitted with member precedence, so this expression will already
 			// be parenthesized, which ends the member chain.
-			return false
+			//
+			// An optional chain also reports a precedence below `Member`, but it must not simply end the walk: an
+			// optional chain starting deeper in the member chain (e.g. the `C?.()` in `C?.().D`) still requires the
+			// whole chain to be parenthesized as the callee of `new`, since transforms can build such a chain
+			// without propagating the optional-chain flags to the outer accesses, and printing an unparenthesized
+			// optional chain there is a SyntaxError. When the optional chain is the whole expression, emitExpression
+			// already parenthesizes it by precedence, so the walk can simply stop.
+			return step > 0 && ast.IsOptionalChain(node)
 		}
 		switch node.Kind {
 		case ast.KindCallExpression:
