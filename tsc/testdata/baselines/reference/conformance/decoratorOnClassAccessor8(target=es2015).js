@@ -135,7 +135,7 @@ class G {
 }
 __decorate([
     dec,
-    __metadata("design:type", Object),
+    __metadata("design:type", String),
     __metadata("design:paramtypes", [Object])
 ], G.prototype, "x", null);
 class H {
@@ -144,7 +144,7 @@ class H {
 }
 __decorate([
     dec,
-    __metadata("design:type", Object),
+    __metadata("design:type", String),
     __metadata("design:paramtypes", [Object])
 ], H.prototype, "x", null);
 class I {
@@ -153,7 +153,7 @@ class I {
 }
 __decorate([
     dec,
-    __metadata("design:type", Object),
+    __metadata("design:type", String),
     __metadata("design:paramtypes", [Object])
 ], I.prototype, "x", null);
 class J {
@@ -162,7 +162,7 @@ class J {
 }
 __decorate([
     dec,
-    __metadata("design:type", Object),
+    __metadata("design:type", String),
     __metadata("design:paramtypes", [Object])
 ], J.prototype, "x", null);
 class K {
@@ -188,6 +188,6 @@ class M {
 }
 __decorate([
     dec,
-    __metadata("design:type", Object),
+    __metadata("design:type", Number),
     __metadata("design:paramtypes", [Object])
 ], M, "x", null);
