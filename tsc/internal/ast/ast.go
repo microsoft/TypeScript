@@ -245,10 +245,19 @@ func (n *Node) Body() *Node {
 	return nil
 }
 
+// TextSymbolName returns Text() as a SymbolName. Identifiers are interned when
+// created, so this avoids reinterning their text.
+func (n *Node) TextSymbolName() SymbolName {
+	if n.Kind == KindIdentifier {
+		return n.AsIdentifier().Text
+	}
+	return MakeSymbolName(n.Text())
+}
+
 func (n *Node) Text() string {
 	switch n.Kind {
 	case KindIdentifier:
-		return n.AsIdentifier().Text
+		return n.AsIdentifier().Text.String()
 	case KindPrivateIdentifier:
 		return n.AsPrivateIdentifier().Text
 	case KindStringLiteral:

@@ -267,7 +267,7 @@ func (s *metadataSerializer) serializeUnionOrIntersectionConstituents(types []*a
 		}
 
 		serializedConstituent := s.serializeTypeNode(typeNode)
-		if ast.IsIdentifier(serializedConstituent) && serializedConstituent.AsIdentifier().Text == "Object" {
+		if ast.IsIdentifier(serializedConstituent) && serializedConstituent.AsIdentifier().Text == ast.SymbolNameObject {
 			// One of the individual is global object, return immediately
 			return serializedConstituent
 		}

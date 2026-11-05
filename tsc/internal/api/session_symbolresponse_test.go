@@ -62,7 +62,7 @@ func TestTransientSymbolWithFileDeclarationIsSnapshotOwned(t *testing.T) {
 	class := sourceFile.Statements.Nodes[0]
 	symbol := ast.NewSymbol()
 	symbol.SetFlags(ast.SymbolFlagsClass | ast.SymbolFlagsTransient)
-	symbol.SetName("C")
+	symbol.SetName(ast.MakeSymbolName("C"))
 	symbol.SetDeclarations([]*ast.Node{class})
 	sd := newTestSnapshotData()
 
@@ -86,7 +86,7 @@ func TestSymbolReferencesIdentifyOwnerWithoutDescriptor(t *testing.T) {
 	assert.Assert(t, !strings.Contains(string(encoded), "contentHash"))
 
 	// A file-owned symbol's relationships are references into the same file.
-	member := class.Members().Get("property")
+	member := class.Members().Get(ast.MakeSymbolName("property"))
 	response := newFileSymbolResponse(member)
 	assert.DeepEqual(t, response.Parent, reference)
 }
@@ -110,6 +110,6 @@ func TestContentMappedSymbolsAreSnapshotOwned(t *testing.T) {
 	assert.NilError(t, err)
 	assert.Equal(t, resolved, class)
 
-	reference := newSymbolReference(class.Members().Get("property"))
+	reference := newSymbolReference(class.Members().Get(ast.MakeSymbolName("property")))
 	assert.Equal(t, reference.File, "")
 }

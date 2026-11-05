@@ -381,7 +381,7 @@ func (c *Checker) compareSymbolsWorker(s1, s2 *ast.Symbol) int {
 	} else if len(s2.Declarations()) != 0 {
 		return 1
 	}
-	if r := strings.Compare(s1.Name(), s2.Name()); r != 0 {
+	if r := strings.Compare(s1.Name().String(), s2.Name().String()); r != 0 {
 		return r
 	}
 	// Fall back to symbol IDs. This is a last resort that should happen only when symbols have
@@ -644,7 +644,7 @@ func compareTypeNames(t1, t2 *Type) int {
 	if s2 == nil {
 		return -1
 	}
-	if c := strings.Compare(s1.Name(), s2.Name()); c != 0 {
+	if c := strings.Compare(s1.Name().String(), s2.Name().String()); c != 0 {
 		return c
 	}
 	// Keep distinct same-named declarations together before comparing alias arguments or structure.
@@ -935,16 +935,16 @@ func (c *Checker) releaseTemporaryTypeSet(set *temporaryTypeSet) {
 // temporaryPropertyCounts counts property names in first-occurrence order.
 type temporaryPropertyCounts struct {
 	entries []propertyCount
-	indices map[string]int32
+	indices map[ast.SymbolName]int32
 	next    *temporaryPropertyCounts
 }
 
 type propertyCount struct {
-	name  string
+	name  ast.SymbolName
 	count int32
 }
 
-func (p *temporaryPropertyCounts) Add(name string) {
+func (p *temporaryPropertyCounts) Add(name ast.SymbolName) {
 	if i, ok := p.indices[name]; ok {
 		p.entries[i].count++
 		return
@@ -953,15 +953,15 @@ func (p *temporaryPropertyCounts) Add(name string) {
 }
 
 // AddNew adds a name known not to have been added yet, skipping the lookup.
-func (p *temporaryPropertyCounts) AddNew(name string) {
+func (p *temporaryPropertyCounts) AddNew(name ast.SymbolName) {
 	if p.indices == nil {
-		p.indices = make(map[string]int32)
+		p.indices = make(map[ast.SymbolName]int32)
 	}
 	p.indices[name] = int32(len(p.entries))
 	p.entries = append(p.entries, propertyCount{name: name, count: 1})
 }
 
-func (p *temporaryPropertyCounts) Count(name string) int {
+func (p *temporaryPropertyCounts) Count(name ast.SymbolName) int {
 	if i, ok := p.indices[name]; ok {
 		return int(p.entries[i].count)
 	}
@@ -1045,12 +1045,12 @@ func isTypeUsableAsPropertyName(t *Type) bool {
 /**
  * Gets the symbolic name for a member from its type.
  */
-func getPropertyNameFromType(t *Type) string {
+func getPropertyNameFromType(t *Type) ast.SymbolName {
 	switch {
 	case t.flags&TypeFlagsStringLiteral != 0:
-		return t.AsLiteralType().value.(string)
+		return ast.MakeSymbolName(t.AsLiteralType().value.(string))
 	case t.flags&TypeFlagsNumberLiteral != 0:
-		return t.AsLiteralType().value.(jsnum.Number).String()
+		return ast.MakeSymbolName(t.AsLiteralType().value.(jsnum.Number).String())
 	case t.flags&TypeFlagsUniqueESSymbol != 0:
 		return t.AsUniqueESSymbolType().name
 	}
@@ -1135,18 +1135,14 @@ func isVariableDeclarationInVariableStatement(node *ast.Node) bool {
 }
 
 func IsKnownSymbol(symbol *ast.Symbol) bool {
-	return isLateBoundName(symbol.Name())
+	return symbol.Name().IsLateBoundName()
 }
 
 func IsPrivateIdentifierSymbol(symbol *ast.Symbol) bool {
 	if symbol == nil {
 		return false
 	}
-	return strings.HasPrefix(symbol.Name(), ast.InternalSymbolNamePrefix+"#")
-}
-
-func isLateBoundName(name string) bool {
-	return len(name) >= 2 && name[0] == '\xfe' && name[1] == '@'
+	return symbol.Name().IsPrivateName()
 }
 
 func isObjectOrArrayLiteralType(t *Type) bool {
@@ -1452,31 +1448,31 @@ type FeatureMapEntry struct {
 	props []string
 }
 
-var getFeatureMap = sync.OnceValue(func() map[string][]FeatureMapEntry {
-	return map[string][]FeatureMapEntry{
-		"Array": {
+var getFeatureMap = sync.OnceValue(func() map[ast.SymbolName][]FeatureMapEntry {
+	return map[ast.SymbolName][]FeatureMapEntry{
+		ast.SymbolNameArray: {
 			{lib: "es2015", props: []string{"find", "findIndex", "fill", "copyWithin", "entries", "keys", "values"}},
 			{lib: "es2016", props: []string{"includes"}},
 			{lib: "es2019", props: []string{"flat", "flatMap"}},
 			{lib: "es2022", props: []string{"at"}},
 			{lib: "es2023", props: []string{"findLastIndex", "findLast", "toReversed", "toSorted", "toSpliced", "with"}},
 		},
-		"Iterator": {
+		ast.SymbolNameIterator: {
 			{lib: "es2015", props: []string{}},
 		},
-		"IteratorConstructor": {
+		ast.SymbolNameIteratorConstructor: {
 			{lib: "es2026", props: []string{"concat"}},
 		},
-		"RawJSON": {
+		ast.SymbolNameRawJSON: {
 			{lib: "es2026", props: []string{}},
 		},
-		"JSON": {
+		ast.SymbolNameJSON: {
 			{lib: "es2026", props: []string{"isRawJSON", "rawJSON"}},
 		},
-		"AsyncIterator": {
+		ast.SymbolNameAsyncIterator: {
 			{lib: "es2015", props: []string{}},
 		},
-		"ArrayBuffer": {
+		ast.SymbolNameArrayBuffer: {
 			{lib: "es2024", props: []string{
 				"maxByteLength",
 				"resizable",
@@ -1486,7 +1482,7 @@ var getFeatureMap = sync.OnceValue(func() map[string][]FeatureMapEntry {
 				"transferToFixedLength",
 			}},
 		},
-		"Atomics": {
+		ast.SymbolNameAtomics: {
 			{lib: "es2017", props: []string{
 				"add",
 				"and",
@@ -1505,7 +1501,7 @@ var getFeatureMap = sync.OnceValue(func() map[string][]FeatureMapEntry {
 				"waitAsync",
 			}},
 		},
-		"SharedArrayBuffer": {
+		ast.SymbolNameSharedArrayBuffer: {
 			{lib: "es2017", props: []string{
 				"byteLength",
 				"slice",
@@ -1516,59 +1512,59 @@ var getFeatureMap = sync.OnceValue(func() map[string][]FeatureMapEntry {
 				"grow",
 			}},
 		},
-		"AsyncIterable": {
+		ast.SymbolNameAsyncIterable: {
 			{lib: "es2018", props: []string{}},
 		},
-		"AsyncIterableIterator": {
+		ast.SymbolNameAsyncIterableIterator: {
 			{lib: "es2018", props: []string{}},
 		},
-		"AsyncGenerator": {
+		ast.SymbolNameAsyncGenerator: {
 			{lib: "es2018", props: []string{}},
 		},
-		"AsyncGeneratorFunction": {
+		ast.SymbolNameAsyncGeneratorFunction: {
 			{lib: "es2018", props: []string{}},
 		},
-		"RegExp": {
+		ast.SymbolNameRegExp: {
 			{lib: "es2015", props: []string{"flags", "sticky", "unicode"}},
 			{lib: "es2018", props: []string{"dotAll"}},
 			{lib: "es2024", props: []string{"unicodeSets"}},
 		},
-		"RegExpConstructor": {
+		ast.SymbolNameRegExpConstructor: {
 			{lib: "es2025", props: []string{"escape"}},
 		},
-		"Reflect": {
+		ast.SymbolNameReflect: {
 			{lib: "es2015", props: []string{"apply", "construct", "defineProperty", "deleteProperty", "get", "getOwnPropertyDescriptor", "getPrototypeOf", "has", "isExtensible", "ownKeys", "preventExtensions", "set", "setPrototypeOf"}},
 		},
-		"ArrayConstructor": {
+		ast.SymbolNameArrayConstructor: {
 			{lib: "es2015", props: []string{"from", "of"}},
 			{lib: "es2026", props: []string{"fromAsync"}},
 		},
-		"ObjectConstructor": {
+		ast.SymbolNameObjectConstructor: {
 			{lib: "es2015", props: []string{"assign", "getOwnPropertySymbols", "keys", "is", "setPrototypeOf"}},
 			{lib: "es2017", props: []string{"values", "entries", "getOwnPropertyDescriptors"}},
 			{lib: "es2019", props: []string{"fromEntries"}},
 			{lib: "es2022", props: []string{"hasOwn"}},
 			{lib: "es2024", props: []string{"groupBy"}},
 		},
-		"NumberConstructor": {
+		ast.SymbolNameNumberConstructor: {
 			{lib: "es2015", props: []string{"isFinite", "isInteger", "isNaN", "isSafeInteger", "parseFloat", "parseInt"}},
 		},
-		"Math": {
+		ast.SymbolNameMath: {
 			{lib: "es2015", props: []string{"clz32", "imul", "sign", "log10", "log2", "log1p", "expm1", "cosh", "sinh", "tanh", "acosh", "asinh", "atanh", "hypot", "trunc", "fround", "cbrt"}},
 			{lib: "es2025", props: []string{"f16round"}},
 			{lib: "es2026", props: []string{"sumPrecise"}},
 		},
-		"Map": {
+		ast.SymbolNameMap: {
 			{lib: "es2015", props: []string{"entries", "keys", "values"}},
 			{lib: "es2026", props: []string{
 				"getOrInsert",
 				"getOrInsertComputed",
 			}},
 		},
-		"MapConstructor": {
+		ast.SymbolNameMapConstructor: {
 			{lib: "es2024", props: []string{"groupBy"}},
 		},
-		"Set": {
+		ast.SymbolNameSet: {
 			{lib: "es2015", props: []string{"entries", "keys", "values"}},
 			{lib: "es2025", props: []string{
 				"union",
@@ -1580,28 +1576,28 @@ var getFeatureMap = sync.OnceValue(func() map[string][]FeatureMapEntry {
 				"isDisjointFrom",
 			}},
 		},
-		"PromiseConstructor": {
+		ast.SymbolNamePromiseConstructor: {
 			{lib: "es2015", props: []string{"all", "race", "reject", "resolve"}},
 			{lib: "es2020", props: []string{"allSettled"}},
 			{lib: "es2021", props: []string{"any"}},
 			{lib: "es2024", props: []string{"withResolvers"}},
 			{lib: "es2025", props: []string{"try"}},
 		},
-		"Symbol": {
+		ast.SymbolNameSymbol: {
 			{lib: "es2015", props: []string{"for", "keyFor"}},
 			{lib: "es2019", props: []string{"description"}},
 		},
-		"WeakMap": {
+		ast.SymbolNameWeakMap: {
 			{lib: "es2015", props: []string{}},
 			{lib: "es2026", props: []string{
 				"getOrInsert",
 				"getOrInsertComputed",
 			}},
 		},
-		"WeakSet": {
+		ast.SymbolNameWeakSet: {
 			{lib: "es2015", props: []string{}},
 		},
-		"String": {
+		ast.SymbolNameString: {
 			{lib: "es2015", props: []string{"codePointAt", "includes", "endsWith", "normalize", "repeat", "startsWith", "anchor", "big", "blink", "bold", "fixed", "fontcolor", "fontsize", "italics", "link", "small", "strike", "sub", "sup"}},
 			{lib: "es2017", props: []string{"padStart", "padEnd"}},
 			{lib: "es2019", props: []string{"trimStart", "trimEnd", "trimLeft", "trimRight"}},
@@ -1610,33 +1606,33 @@ var getFeatureMap = sync.OnceValue(func() map[string][]FeatureMapEntry {
 			{lib: "es2022", props: []string{"at"}},
 			{lib: "es2024", props: []string{"isWellFormed", "toWellFormed"}},
 		},
-		"StringConstructor": {
+		ast.SymbolNameStringConstructor: {
 			{lib: "es2015", props: []string{"fromCodePoint", "raw"}},
 		},
-		"DateTimeFormat": {
+		ast.SymbolNameDateTimeFormat: {
 			{lib: "es2017", props: []string{"formatToParts"}},
 		},
-		"Promise": {
+		ast.SymbolNamePromise: {
 			{lib: "es2015", props: []string{}},
 			{lib: "es2018", props: []string{"finally"}},
 		},
-		"RegExpMatchArray": {
+		ast.SymbolNameRegExpMatchArray: {
 			{lib: "es2018", props: []string{"groups"}},
 		},
-		"RegExpExecArray": {
+		ast.SymbolNameRegExpExecArray: {
 			{lib: "es2018", props: []string{"groups"}},
 		},
-		"Intl": {
+		ast.SymbolNameIntl: {
 			{lib: "es2018", props: []string{"PluralRules"}},
 			{lib: "es2020", props: []string{"RelativeTimeFormat", "Locale", "DisplayNames"}},
 			{lib: "es2021", props: []string{"ListFormat", "DateTimeFormat"}},
 			{lib: "es2022", props: []string{"Segmenter"}},
 			{lib: "es2025", props: []string{"DurationFormat"}},
 		},
-		"NumberFormat": {
+		ast.SymbolNameNumberFormat: {
 			{lib: "es2018", props: []string{"formatToParts"}},
 		},
-		"SymbolConstructor": {
+		ast.SymbolNameSymbolConstructor: {
 			{lib: "es2020", props: []string{"matchAll"}},
 			{lib: "esnext", props: []string{
 				"metadata",
@@ -1644,82 +1640,82 @@ var getFeatureMap = sync.OnceValue(func() map[string][]FeatureMapEntry {
 				"asyncDispose",
 			}},
 		},
-		"DataView": {
+		ast.SymbolNameDataView: {
 			{lib: "es2020", props: []string{"setBigInt64", "setBigUint64", "getBigInt64", "getBigUint64"}},
 			{lib: "es2025", props: []string{"setFloat16", "getFloat16"}},
 		},
-		"BigInt": {
+		ast.SymbolNameBigInt: {
 			{lib: "es2020", props: []string{}},
 		},
-		"RelativeTimeFormat": {
+		ast.SymbolNameRelativeTimeFormat: {
 			{lib: "es2020", props: []string{"format", "formatToParts", "resolvedOptions"}},
 		},
-		"Int8Array": {
+		ast.SymbolNameInt8Array: {
 			{lib: "es2022", props: []string{"at"}},
 			{lib: "es2023", props: []string{"findLastIndex", "findLast", "toReversed", "toSorted", "toSpliced", "with"}},
 		},
-		"Uint8Array": {
+		ast.SymbolNameUint8Array: {
 			{lib: "es2022", props: []string{"at"}},
 			{lib: "es2023", props: []string{"findLastIndex", "findLast", "toReversed", "toSorted", "toSpliced", "with"}},
 			{lib: "es2026", props: []string{"toBase64", "setFromBase64", "toHex", "setFromHex"}},
 		},
-		"Uint8ClampedArray": {
+		ast.SymbolNameUint8ClampedArray: {
 			{lib: "es2022", props: []string{"at"}},
 			{lib: "es2023", props: []string{"findLastIndex", "findLast", "toReversed", "toSorted", "toSpliced", "with"}},
 		},
-		"Int16Array": {
+		ast.SymbolNameInt16Array: {
 			{lib: "es2022", props: []string{"at"}},
 			{lib: "es2023", props: []string{"findLastIndex", "findLast", "toReversed", "toSorted", "toSpliced", "with"}},
 		},
-		"Uint16Array": {
+		ast.SymbolNameUint16Array: {
 			{lib: "es2022", props: []string{"at"}},
 			{lib: "es2023", props: []string{"findLastIndex", "findLast", "toReversed", "toSorted", "toSpliced", "with"}},
 		},
-		"Int32Array": {
+		ast.SymbolNameInt32Array: {
 			{lib: "es2022", props: []string{"at"}},
 			{lib: "es2023", props: []string{"findLastIndex", "findLast", "toReversed", "toSorted", "toSpliced", "with"}},
 		},
-		"Uint32Array": {
+		ast.SymbolNameUint32Array: {
 			{lib: "es2022", props: []string{"at"}},
 			{lib: "es2023", props: []string{"findLastIndex", "findLast", "toReversed", "toSorted", "toSpliced", "with"}},
 		},
-		"Float16Array": {
+		ast.SymbolNameFloat16Array: {
 			{lib: "es2025", props: []string{}},
 		},
-		"Float32Array": {
+		ast.SymbolNameFloat32Array: {
 			{lib: "es2022", props: []string{"at"}},
 			{lib: "es2023", props: []string{"findLastIndex", "findLast", "toReversed", "toSorted", "toSpliced", "with"}},
 		},
-		"Float64Array": {
+		ast.SymbolNameFloat64Array: {
 			{lib: "es2022", props: []string{"at"}},
 			{lib: "es2023", props: []string{"findLastIndex", "findLast", "toReversed", "toSorted", "toSpliced", "with"}},
 		},
-		"BigInt64Array": {
+		ast.SymbolNameBigInt64Array: {
 			{lib: "es2020", props: []string{}},
 			{lib: "es2022", props: []string{"at"}},
 			{lib: "es2023", props: []string{"findLastIndex", "findLast", "toReversed", "toSorted", "toSpliced", "with"}},
 		},
-		"BigUint64Array": {
+		ast.SymbolNameBigUint64Array: {
 			{lib: "es2020", props: []string{}},
 			{lib: "es2022", props: []string{"at"}},
 			{lib: "es2023", props: []string{"findLastIndex", "findLast", "toReversed", "toSorted", "toSpliced", "with"}},
 		},
-		"Error": {
+		ast.SymbolNameError: {
 			{lib: "es2022", props: []string{"cause"}},
 		},
-		"ErrorConstructor": {
+		ast.SymbolNameErrorConstructor: {
 			{lib: "es2026", props: []string{"isError"}},
 		},
-		"Uint8ArrayConstructor": {
+		ast.SymbolNameUint8ArrayConstructor: {
 			{lib: "es2026", props: []string{"fromBase64", "fromHex"}},
 		},
-		"DisposableStack": {
+		ast.SymbolNameDisposableStack: {
 			{lib: "esnext", props: []string{}},
 		},
-		"AsyncDisposableStack": {
+		ast.SymbolNameAsyncDisposableStack: {
 			{lib: "esnext", props: []string{}},
 		},
-		"Date": {
+		ast.SymbolNameDate: {
 			{lib: "esnext", props: []string{"toTemporalInstant"}},
 		},
 	}
@@ -1739,7 +1735,7 @@ func tryGetPropertyAccessOrIdentifierToString(expr *ast.Node) string {
 	case ast.IsElementAccessExpression(expr):
 		baseStr := tryGetPropertyAccessOrIdentifierToString(expr.Expression())
 		if baseStr != "" && ast.IsPropertyName(expr.AsElementAccessExpression().ArgumentExpression) {
-			return baseStr + "." + ast.GetPropertyNameForPropertyNameNode(expr.AsElementAccessExpression().ArgumentExpression)
+			return baseStr + "." + ast.GetPropertyNameForPropertyNameNode(expr.AsElementAccessExpression().ArgumentExpression).String()
 		}
 	case ast.IsIdentifier(expr):
 		return expr.Text()
@@ -1790,13 +1786,6 @@ func getAnyImportSyntax(node *ast.Node) *ast.Node {
 	return importNode
 }
 
-// A reserved member name consists of the byte 0xFE (which is an invalid UTF-8 encoding) followed by one or more
-// characters where the first character is not '@' or '#'. The '@' character indicates that the name is denoted by
-// a well known ES Symbol instance and the '#' character indicates that the name is a PrivateIdentifier.
-func isReservedMemberName(name string) bool {
-	return len(name) >= 2 && name[0] == '\xFE' && name[1] != '@' && name[1] != '#'
-}
-
 func introducesArgumentsExoticObject(node *ast.Node) bool {
 	switch node.Kind {
 	case ast.KindMethodDeclaration, ast.KindMethodSignature, ast.KindConstructor, ast.KindGetAccessor,
@@ -1809,7 +1798,7 @@ func introducesArgumentsExoticObject(node *ast.Node) bool {
 func symbolsToArray(symbols ast.SymbolTable) []*ast.Symbol {
 	var result []*ast.Symbol
 	for id, symbol := range symbols.All() {
-		if !isReservedMemberName(id) {
+		if !id.IsReservedMemberName() {
 			result = append(result, symbol)
 		}
 	}

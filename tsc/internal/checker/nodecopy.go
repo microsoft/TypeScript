@@ -548,7 +548,7 @@ func getExistingNodeTreeVisitor(b *NodeBuilderImpl, bound *recoveryBoundary) *as
 		// if node.Kind == ast.KindJSDocFunctionType {} // !!! no longer exists
 		// End JSDoc handling
 
-		if ast.IsTypeReferenceNode(node) && ast.IsIdentifier(node.AsTypeReferenceNode().TypeName) && node.AsTypeReferenceNode().TypeName.AsIdentifier().Text == "" {
+		if ast.IsTypeReferenceNode(node) && ast.IsIdentifier(node.AsTypeReferenceNode().TypeName) && node.AsTypeReferenceNode().TypeName.AsIdentifier().Text == ast.EmptySymbolName {
 			replacement := factory.NewKeywordTypeNode(ast.KindAnyKeyword)
 			b.e.SetOriginal(replacement, node)
 			return replacement
