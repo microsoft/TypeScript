@@ -953,8 +953,6 @@ func (s *Session) HandleRequest(ctx context.Context, method string, params json.
 		return s.handleGetSourceFileNames(ctx, parsed.(*GetSourceFileNamesParams))
 	case string(MethodGetProgramStatistics):
 		return s.handleGetProgramStatistics(ctx, parsed.(*GetProjectDiagnosticsParams))
-	case string(MethodGetOptionsDiagnostics):
-		return s.handleGetOptionsDiagnostics(ctx, parsed.(*GetProjectDiagnosticsParams))
 	case string(MethodGetSourceFileMetadata):
 		return s.handleGetSourceFileMetadata(ctx, parsed.(*GetSourceFileParams))
 	case string(MethodGetModeForUsageLocation):
@@ -2418,19 +2416,6 @@ func (s *Session) handleGetProgramStatistics(ctx context.Context, params *GetPro
 		result.SymbolCount += file.SymbolCount
 	}
 	return result, nil
-}
-
-// @gen-proto-nullable
-func (s *Session) handleGetOptionsDiagnostics(ctx context.Context, params *GetProjectDiagnosticsParams) ([]*DiagnosticResponse, error) {
-	sd, err := s.getSnapshotData(params.Snapshot)
-	if err != nil {
-		return nil, err
-	}
-	program, err := sd.getProgram(params.Project)
-	if err != nil {
-		return nil, err
-	}
-	return NewDiagnosticResponses(program.GetOptionsDiagnostics()), nil
 }
 
 // handleGetSourceFile returns a source file from a project within a snapshot.

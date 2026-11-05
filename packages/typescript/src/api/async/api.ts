@@ -2167,14 +2167,6 @@ export class Program<Id extends ProjectId = ProjectId> implements FormatDiagnost
         return data ?? [];
     }
 
-    async getOptionsDiagnostics(): Promise<readonly Diagnostic[]> {
-        const data = await this.client.apiRequest("getOptionsDiagnostics", {
-            snapshot: this.snapshotId,
-            project: this.project.handle,
-        });
-        return data ?? [];
-    }
-
     /**
      * Get global (non-file-specific) semantic diagnostics for the project.
      */

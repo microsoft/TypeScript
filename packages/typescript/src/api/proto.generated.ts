@@ -81,7 +81,6 @@ export interface APIMethodInfo {
     getSourceFile: APIMethod<GetSourceFileParams, SourceFileResponse | null>;
     getSourceFileNames: APIMethod<GetSourceFileNamesParams, RootedFilePath[]>;
     getProgramStatistics: APIMethod<GetProjectDiagnosticsParams, ProgramStatisticsResponse>;
-    getOptionsDiagnostics: APIMethod<GetProjectDiagnosticsParams, DiagnosticResponse[] | null>;
     getSourceFileMetadata: APIMethod<GetSourceFileParams, SourceFileMetadata | null>;
     getModeForUsageLocation: APIMethod<GetModeForUsageLocationParams, ModuleKind>;
     getModeForResolutionAtIndex: APIMethod<GetModeForResolutionAtIndexParams, ModuleKind>;
@@ -619,38 +618,6 @@ export interface ProgramStatisticsResponse {
     relationCacheSizes: RelationCacheSizes;
 }
 
-/** DiagnosticResponse is the API response for a single diagnostic. */
-export interface DiagnosticResponse {
-    /** The file name of the file this diagnostic belongs to, if any. */
-    fileName?: RootedFilePath | undefined;
-    /** Pos is the start position of the diagnostic in the source file. */
-    pos: number;
-    /** End is the end position of the diagnostic in the source file. */
-    end: number;
-    /** StartPosition is the zero-based line and UTF-16 character position of Pos. */
-    startPosition?: DiagnosticPositionResponse | undefined;
-    /** EndPosition is the zero-based line and UTF-16 character position of End. */
-    endPosition?: DiagnosticPositionResponse | undefined;
-    /** SourceLines contains the source lines needed to render this diagnostic with context. */
-    sourceLines?: DiagnosticSourceLineResponse[] | undefined;
-    /** Code is the diagnostic error code. */
-    code: number;
-    /** Category is the diagnostic category (error, warning, suggestion, message). */
-    category: number;
-    /** Source is a custom diagnostic-code prefix. An empty value uses the default "TS". */
-    source?: string | undefined;
-    /** Text is the localized diagnostic message text. */
-    text: string;
-    /** ReportsUnnecessary indicates this diagnostic highlights unnecessary code. */
-    reportsUnnecessary?: boolean | undefined;
-    /** ReportsDeprecated indicates this diagnostic highlights deprecated code. */
-    reportsDeprecated?: boolean | undefined;
-    /** MessageChain contains chained diagnostic messages, if any. */
-    messageChain?: DiagnosticResponse[] | undefined;
-    /** RelatedInformation contains related diagnostic information, if any. */
-    relatedInformation?: DiagnosticResponse[] | undefined;
-}
-
 /** SourceFileMetadata carries program-stored metadata about a single source file. */
 export interface SourceFileMetadata {
     isDefaultLibrary: boolean;
@@ -1116,6 +1083,38 @@ export interface GetDiagnosticsParams {
     files?: readonly DocumentIdentifier[] | undefined;
 }
 
+/** DiagnosticResponse is the API response for a single diagnostic. */
+export interface DiagnosticResponse {
+    /** The file name of the file this diagnostic belongs to, if any. */
+    fileName?: RootedFilePath | undefined;
+    /** Pos is the start position of the diagnostic in the source file. */
+    pos: number;
+    /** End is the end position of the diagnostic in the source file. */
+    end: number;
+    /** StartPosition is the zero-based line and UTF-16 character position of Pos. */
+    startPosition?: DiagnosticPositionResponse | undefined;
+    /** EndPosition is the zero-based line and UTF-16 character position of End. */
+    endPosition?: DiagnosticPositionResponse | undefined;
+    /** SourceLines contains the source lines needed to render this diagnostic with context. */
+    sourceLines?: DiagnosticSourceLineResponse[] | undefined;
+    /** Code is the diagnostic error code. */
+    code: number;
+    /** Category is the diagnostic category (error, warning, suggestion, message). */
+    category: number;
+    /** Source is a custom diagnostic-code prefix. An empty value uses the default "TS". */
+    source?: string | undefined;
+    /** Text is the localized diagnostic message text. */
+    text: string;
+    /** ReportsUnnecessary indicates this diagnostic highlights unnecessary code. */
+    reportsUnnecessary?: boolean | undefined;
+    /** ReportsDeprecated indicates this diagnostic highlights deprecated code. */
+    reportsDeprecated?: boolean | undefined;
+    /** MessageChain contains chained diagnostic messages, if any. */
+    messageChain?: DiagnosticResponse[] | undefined;
+    /** RelatedInformation contains related diagnostic information, if any. */
+    relatedInformation?: DiagnosticResponse[] | undefined;
+}
+
 /** PrintNodeParams are the parameters for the printNode method. */
 export interface PrintNodeParams {
     /** base64-encoded binary AST data */
@@ -1294,7 +1293,6 @@ export interface BatchRequest {
         | "getNumberLiteralType"
         | "getNumberType"
         | "getObjectTypeOfType"
-        | "getOptionsDiagnostics"
         | "getOuterTypeParametersOfType"
         | "getParameterType"
         | "getParametersOfSignature"
@@ -1489,7 +1487,6 @@ export interface BatchResponse {
         | "getNumberLiteralType"
         | "getNumberType"
         | "getObjectTypeOfType"
-        | "getOptionsDiagnostics"
         | "getOuterTypeParametersOfType"
         | "getParameterType"
         | "getParametersOfSignature"
@@ -1759,16 +1756,6 @@ export interface RelationCacheSizes {
     strictSubtype: number;
 }
 
-export interface DiagnosticPositionResponse {
-    line: number;
-    character: number;
-}
-
-export interface DiagnosticSourceLineResponse {
-    line: number;
-    text: string;
-}
-
 export interface PackageId {
     name: string;
     subModuleName: string;
@@ -1792,6 +1779,16 @@ export interface CompletionEntryResponse {
     detail?: string | undefined;
     labelDetails?: CompletionEntryLabelDetailsResponse | undefined;
     symbol?: SymbolResponse | undefined;
+}
+
+export interface DiagnosticPositionResponse {
+    line: number;
+    character: number;
+}
+
+export interface DiagnosticSourceLineResponse {
+    line: number;
+    text: string;
 }
 
 export interface EmitOutputFile {

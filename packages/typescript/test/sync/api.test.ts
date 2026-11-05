@@ -2632,7 +2632,7 @@ export const other: { value: string } = box;`,
         assert.equal(empty.getNodeCount(), 0);
         assert.equal(empty.getIdentifierCount(), 0);
         assert.equal(empty.getProjectReferences(), undefined);
-        assert.deepEqual(empty.getOptionsDiagnostics(), []);
+        assert.deepEqual(empty.getProgramDiagnostics(), []);
 
         using noReferences = api.createProgram([], { noLib: true }, { projectReferences: [] });
         assert.deepEqual(noReferences.getProjectReferences(), []);
@@ -2640,25 +2640,7 @@ export const other: { value: string } = box;`,
         using missing = api.createProgram(["/missing.ts"], { noLib: true });
         assert.deepEqual(missing.getRootFileNames(), ["/missing.ts"]);
         assert.deepEqual(missing.getSourceFiles(), []);
-        assert.ok((missing.getOptionsDiagnostics()).some(diagnostic => diagnostic.code === 6053));
-    });
-
-    test("Program options diagnostics exclude source-file and config parsing diagnostics", () => {
-        using api = spawnAPI({
-            "/tsconfig.json": JSON.stringify({
-                compilerOptions: { noLib: true, strictNullChecks: false, exactOptionalPropertyTypes: true, unknownOption: true },
-                files: ["src/main.ts"],
-            }),
-            "/src/main.ts": `/// <reference path="./missing.ts" />
-const value: string = 1;`,
-        });
-        const snapshot = api.createSnapshot({ openProjects: ["/tsconfig.json"] });
-        const program = snapshot.getConfiguredProject("/tsconfig.json")!.program;
-        const diagnostics = program.getOptionsDiagnostics();
-        assert.ok(diagnostics.some(diagnostic => diagnostic.code === 5052));
-        assert.ok(diagnostics.every(diagnostic => !diagnostic.fileName || diagnostic.fileName === "/tsconfig.json"));
-        assert.ok(!(diagnostics.some(diagnostic => diagnostic.code === 5023 || diagnostic.code === 6053 || diagnostic.code === 2322)));
-        assert.ok((program.getConfigFileParsingDiagnostics()).some(diagnostic => diagnostic.code === 5023));
+        assert.ok((missing.getProgramDiagnostics()).some(diagnostic => diagnostic.code === 6053));
     });
 
     test("Program project references are available for configured and synthetic programs", () => {

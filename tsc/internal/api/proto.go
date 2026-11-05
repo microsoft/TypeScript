@@ -112,7 +112,6 @@ const (
 	MethodGetSourceFile                                  Method = "getSourceFile"
 	MethodGetSourceFileNames                             Method = "getSourceFileNames"
 	MethodGetProgramStatistics                           Method = "getProgramStatistics"
-	MethodGetOptionsDiagnostics                          Method = "getOptionsDiagnostics"
 	MethodGetSourceFileMetadata                          Method = "getSourceFileMetadata"
 	MethodGetModeForUsageLocation                        Method = "getModeForUsageLocation"
 	MethodGetModeForResolutionAtIndex                    Method = "getModeForResolutionAtIndex"
@@ -797,7 +796,6 @@ var unmarshalers = map[Method]func([]byte) (any, error){
 	MethodGetDeclarationDiagnostics:                  unmarshallerFor[GetDiagnosticsParams],
 	MethodGetProgramDiagnostics:                      unmarshallerFor[GetProjectDiagnosticsParams],
 	MethodGetProgramStatistics:                       unmarshallerFor[GetProjectDiagnosticsParams],
-	MethodGetOptionsDiagnostics:                      unmarshallerFor[GetProjectDiagnosticsParams],
 	MethodGetGlobalDiagnostics:                       unmarshallerFor[GetProjectDiagnosticsParams],
 	MethodGetConfigFileParsingDiagnostics:            unmarshallerFor[GetProjectDiagnosticsParams],
 	MethodStartCPUProfile:                            unmarshallerFor[ProfileParams],

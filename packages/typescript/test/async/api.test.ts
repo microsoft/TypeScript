@@ -2852,7 +2852,7 @@ export const other: { value: string } = box;`,
         assert.equal(await empty.getNodeCount(), 0);
         assert.equal(await empty.getIdentifierCount(), 0);
         assert.equal(await empty.getProjectReferences(), undefined);
-        assert.deepEqual(await empty.getOptionsDiagnostics(), []);
+        assert.deepEqual(await empty.getProgramDiagnostics(), []);
 
         await using noReferences = await api.createProgram([], { noLib: true }, { projectReferences: [] });
         assert.deepEqual(await noReferences.getProjectReferences(), []);
@@ -2860,25 +2860,7 @@ export const other: { value: string } = box;`,
         await using missing = await api.createProgram(["/missing.ts"], { noLib: true });
         assert.deepEqual(await missing.getRootFileNames(), ["/missing.ts"]);
         assert.deepEqual(await missing.getSourceFiles(), []);
-        assert.ok((await missing.getOptionsDiagnostics()).some(diagnostic => diagnostic.code === 6053));
-    });
-
-    test("Program options diagnostics exclude source-file and config parsing diagnostics", async () => {
-        await using api = spawnAPI({
-            "/tsconfig.json": JSON.stringify({
-                compilerOptions: { noLib: true, strictNullChecks: false, exactOptionalPropertyTypes: true, unknownOption: true },
-                files: ["src/main.ts"],
-            }),
-            "/src/main.ts": `/// <reference path="./missing.ts" />
-const value: string = 1;`,
-        });
-        const snapshot = await api.createSnapshot({ openProjects: ["/tsconfig.json"] });
-        const program = snapshot.getConfiguredProject("/tsconfig.json")!.program;
-        const diagnostics = await program.getOptionsDiagnostics();
-        assert.ok(diagnostics.some(diagnostic => diagnostic.code === 5052));
-        assert.ok(diagnostics.every(diagnostic => !diagnostic.fileName || diagnostic.fileName === "/tsconfig.json"));
-        assert.ok(!(diagnostics.some(diagnostic => diagnostic.code === 5023 || diagnostic.code === 6053 || diagnostic.code === 2322)));
-        assert.ok((await program.getConfigFileParsingDiagnostics()).some(diagnostic => diagnostic.code === 5023));
+        assert.ok((await missing.getProgramDiagnostics()).some(diagnostic => diagnostic.code === 6053));
     });
 
     test("Program project references are available for configured and synthetic programs", async () => {

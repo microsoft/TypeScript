@@ -3915,31 +3915,6 @@ export class Program<Id extends ProjectId = ProjectId> implements FormatDiagnost
         );
     }
 
-    get getOptionsDiagnostics(): {
-        (): readonly Diagnostic[];
-        gen(): Generator<ProtocolRequest, readonly Diagnostic[], ProtocolResponse["result"]>;
-    } {
-        const owner = this;
-        return cacheGeneratorMethod(
-            owner,
-            "getOptionsDiagnostics",
-            function (): readonly Diagnostic[] {
-                const data = owner.client.apiRequest("getOptionsDiagnostics", {
-                    snapshot: owner.snapshotId,
-                    project: owner.project.handle,
-                });
-                return data ?? [];
-            },
-            function* (): Generator<ProtocolRequest, readonly Diagnostic[], ProtocolResponse["result"]> {
-                const data = yield* apiRequest("getOptionsDiagnostics", {
-                    snapshot: owner.snapshotId,
-                    project: owner.project.handle,
-                });
-                return data ?? [];
-            },
-        );
-    }
-
     /**
      * Get global (non-file-specific) semantic diagnostics for the project.
      */

@@ -1666,7 +1666,6 @@ describe("API - generator batching", { concurrency: areTestsFiltered() }, () => 
                 parityCase("Program", "getSuggestionDiagnostics", program.getSuggestionDiagnostics, assertDeepEquivalent, "/src/suggestions.ts"),
                 parityCase("Program", "getDeclarationDiagnostics", program.getDeclarationDiagnostics, assertDeepEquivalent, "/src/index.ts"),
                 parityCase("Program", "getProgramDiagnostics", program.getProgramDiagnostics, assertDeepEquivalent),
-                parityCase("Program", "getOptionsDiagnostics", program.getOptionsDiagnostics, assertDeepEquivalent),
                 parityCase("Program", "getGlobalDiagnostics", program.getGlobalDiagnostics, assertDeepEquivalent),
                 parityCase("Program", "getConfigFileParsingDiagnostics", program.getConfigFileParsingDiagnostics, assertDeepEquivalent),
                 parityCase("Program", "emit", program.emit, assertDeepEquivalent),
