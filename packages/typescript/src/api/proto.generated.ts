@@ -81,7 +81,6 @@ export interface APIMethodInfo {
     getSourceFile: APIMethod<GetSourceFileParams, SourceFileResponse | null>;
     getSourceFileNames: APIMethod<GetSourceFileNamesParams, RootedFilePath[]>;
     getProgramStatistics: APIMethod<GetProjectDiagnosticsParams, ProgramStatisticsResponse>;
-    getResolvedProjectReferences: APIMethod<GetProjectDiagnosticsParams, ResolvedProjectReferencesResponse>;
     getOptionsDiagnostics: APIMethod<GetProjectDiagnosticsParams, DiagnosticResponse[] | null>;
     getSourceFileMetadata: APIMethod<GetSourceFileParams, SourceFileMetadata | null>;
     getModeForUsageLocation: APIMethod<GetModeForUsageLocationParams, ModuleKind>;
@@ -607,12 +606,6 @@ export interface ProgramStatisticsResponse {
     typeCount: number;
     instantiationCount: number;
     relationCacheSizes: RelationCacheSizes;
-}
-
-/** References use one-based indices into Projects; zero denotes an unresolved reference. */
-export interface ResolvedProjectReferencesResponse {
-    references?: number[] | undefined;
-    projects: ResolvedProjectReferenceResponse[];
 }
 
 /** DiagnosticResponse is the API response for a single diagnostic. */
@@ -1265,7 +1258,6 @@ export interface BatchRequest {
         | "getRegularTypeOfType"
         | "getResolvedModule"
         | "getResolvedModuleFromModuleSpecifier"
-        | "getResolvedProjectReferences"
         | "getResolvedSignature"
         | "getResolvedTypeReferenceDirective"
         | "getResolvedTypeReferenceDirectiveFromTypeReferenceDirective"
@@ -1450,7 +1442,6 @@ export interface BatchResponse {
         | "getRegularTypeOfType"
         | "getResolvedModule"
         | "getResolvedModuleFromModuleSpecifier"
-        | "getResolvedProjectReferences"
         | "getResolvedSignature"
         | "getResolvedTypeReferenceDirective"
         | "getResolvedTypeReferenceDirectiveFromTypeReferenceDirective"
@@ -1698,12 +1689,6 @@ export interface RelationCacheSizes {
     identity: number;
     subtype: number;
     strictSubtype: number;
-}
-
-export interface ResolvedProjectReferenceResponse {
-    commandLine: ConfigFileResponse;
-    sourceFile: SourceFileResponse;
-    references?: number[] | undefined;
 }
 
 export interface DiagnosticPositionResponse {

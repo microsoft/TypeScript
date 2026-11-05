@@ -174,7 +174,6 @@ const privateGeneratorGetters = new Set([
     "NodeHandle.resolveInFile",
     "Program.disposeWorker",
     "Program.getStatistics",
-    "Program.fetchResolvedProjectReferences",
     "Program.fetchSourceFileMetadata",
     "Program.fetchStatistics",
     "Program.getSourceFileWorker",
@@ -486,27 +485,6 @@ describe("API - generator batching", { concurrency: areTestsFiltered() }, () => 
             ["createSourceFile", "createSourceFileFromFile"],
             ["retainSourceFile"],
         ]);
-    });
-
-    test("concurrent resolved project reference generators reuse the first cached graph", () => {
-        using api = spawnAPI({
-            "/tsconfig.json": JSON.stringify({ files: [], references: [{ path: "./a" }, { path: "./b" }, { path: "./a" }] }),
-            "/a/tsconfig.json": JSON.stringify({ compilerOptions: { composite: true }, files: ["index.ts"], references: [{ path: "../b" }] }),
-            "/a/index.ts": "export const a = 1;",
-            "/b/tsconfig.json": JSON.stringify({ compilerOptions: { composite: true }, files: ["index.ts"], references: [{ path: "../a", circular: true }] }),
-            "/b/index.ts": "export const b = 1;",
-        });
-        using snapshot = api.createSnapshot({ openProjects: ["/tsconfig.json"] });
-        const program = snapshot.getConfiguredProject("/tsconfig.json")!.program;
-        const [first, second] = api.batch(program.getResolvedProjectReferences.gen(), program.getResolvedProjectReferences.gen());
-        assert.ok(first);
-        assert.equal(first.length, 3);
-        assert.ok(second === first, "Concurrent calls must return the same reference graph");
-        assert.strictEqual(first[2], first[0]);
-        assert.strictEqual(first[0]!.references![0], first[1]);
-        assert.strictEqual(first[1]!.references![0], first[0]);
-        assert.strictEqual(api.batch(program.getResolvedProjectReferences.gen())[0], first);
-        assert.strictEqual(program.getResolvedProjectReferences(), first);
     });
 
     test("batches source-file lookups while preserving order and cached results", context => {
@@ -1672,7 +1650,6 @@ describe("API - generator batching", { concurrency: areTestsFiltered() }, () => 
                 parityCase("Program", "getSourceFiles", program.getSourceFiles, (actual, expected, message) => {
                     assertArrayElementsEquivalent(actual, expected, assertSourceFilesEquivalent, message);
                 }),
-                parityCase("Program", "getResolvedProjectReferences", program.getResolvedProjectReferences, assertDeepEquivalent),
                 parityCase("Program", "getSourceFileMetadata", program.getSourceFileMetadata, assertDeepEquivalent, "/src/index.ts"),
                 parityCase("Program", "getSourceFileMetadataByPath", program.getSourceFileMetadataByPath, assertDeepEquivalent, indexFile.path),
                 parityCase("Program", "isSourceFileFromExternalLibrary", program.isSourceFileFromExternalLibrary, assertDeepEquivalent, indexFile),

@@ -2917,12 +2917,6 @@ export class LanguageService {
     }
 }
 
-export interface ResolvedProjectReference {
-    commandLine: ParsedCommandLine;
-    sourceFile: SourceFile;
-    references?: readonly (ResolvedProjectReference | undefined)[] | undefined;
-}
-
 export class Program<Id extends ProjectId = ProjectId> implements FormatDiagnosticsHost {
     /** @internal */
     readonly snapshotId: number;
@@ -2933,7 +2927,6 @@ export class Program<Id extends ProjectId = ProjectId> implements FormatDiagnost
     private readonly sourceFileMetadataCache = new Map<PathKey, SourceFileMetadata | undefined>();
     private ownedSnapshot: Snapshot | undefined;
     private disposePromise: void | undefined;
-    private resolvedProjectReferences: readonly (ResolvedProjectReference | undefined)[] | undefined | undefined;
 
     private get client(): Client {
         return this.project.api.client;
@@ -3196,66 +3189,6 @@ export class Program<Id extends ProjectId = ProjectId> implements FormatDiagnost
             },
             function* (): Generator<ProtocolRequest, RelationCacheSizes, ProtocolResponse["result"]> {
                 return (yield* owner.getStatistics.gen()).relationCacheSizes;
-            },
-        );
-    }
-
-    get getResolvedProjectReferences(): {
-        (): readonly (ResolvedProjectReference | undefined)[] | undefined;
-        gen(): Generator<ProtocolRequest, readonly (ResolvedProjectReference | undefined)[] | undefined, ProtocolResponse["result"]>;
-    } {
-        const owner = this;
-        return cacheGeneratorMethod(
-            owner,
-            "getResolvedProjectReferences",
-            function (): readonly (ResolvedProjectReference | undefined)[] | undefined {
-                return owner.resolvedProjectReferences ??= owner.fetchResolvedProjectReferences();
-            },
-            function* (): Generator<ProtocolRequest, readonly (ResolvedProjectReference | undefined)[] | undefined, ProtocolResponse["result"]> {
-                if (owner.resolvedProjectReferences !== undefined) return owner.resolvedProjectReferences;
-                const references = yield* owner.fetchResolvedProjectReferences.gen();
-                return owner.resolvedProjectReferences ??= references;
-            },
-        );
-    }
-
-    private get fetchResolvedProjectReferences(): {
-        (): readonly (ResolvedProjectReference | undefined)[] | undefined;
-        gen(): Generator<ProtocolRequest, readonly (ResolvedProjectReference | undefined)[] | undefined, ProtocolResponse["result"]>;
-    } {
-        const owner = this;
-        return cacheGeneratorMethod(
-            owner,
-            "fetchResolvedProjectReferences",
-            function (): readonly (ResolvedProjectReference | undefined)[] | undefined {
-                const data = owner.client.apiRequest("getResolvedProjectReferences", {
-                    snapshot: owner.snapshotId,
-                    project: owner.project.handle,
-                });
-                const projects: ResolvedProjectReference[] = data.projects.map(project => ({
-                    commandLine: project.commandLine,
-                    sourceFile: new RemoteSourceFile(sourceFileResponseToUint8Array(project.sourceFile)!, owner.decoder, undefined, owner.project.api) as unknown as SourceFile,
-                }));
-                const resolve = (indices: readonly number[] | null | undefined): (ResolvedProjectReference | undefined)[] | undefined => indices?.map(index => index === 0 ? undefined : projects[index - 1]);
-                for (let i = 0; i < projects.length; i++) {
-                    projects[i].references = resolve(data.projects[i].references);
-                }
-                return resolve(data.references);
-            },
-            function* (): Generator<ProtocolRequest, readonly (ResolvedProjectReference | undefined)[] | undefined, ProtocolResponse["result"]> {
-                const data = yield* apiRequest("getResolvedProjectReferences", {
-                    snapshot: owner.snapshotId,
-                    project: owner.project.handle,
-                });
-                const projects: ResolvedProjectReference[] = data.projects.map(project => ({
-                    commandLine: project.commandLine,
-                    sourceFile: new RemoteSourceFile(sourceFileResponseToUint8Array(project.sourceFile)!, owner.decoder, undefined, owner.project.api) as unknown as SourceFile,
-                }));
-                const resolve = (indices: readonly number[] | null | undefined): (ResolvedProjectReference | undefined)[] | undefined => indices?.map(index => index === 0 ? undefined : projects[index - 1]);
-                for (let i = 0; i < projects.length; i++) {
-                    projects[i].references = resolve(data.projects[i].references);
-                }
-                return resolve(data.references);
             },
         );
     }

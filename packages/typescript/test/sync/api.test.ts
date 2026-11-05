@@ -2573,12 +2573,12 @@ describe("SourceFile", { concurrency }, () => {
         });
         using program = api.createProgram(["/src/main.ts"], { noLib: true });
         assert.ok(!("getTypeChecker" in program));
+        assert.ok(!("getResolvedProjectReferences" in program));
         assert.deepEqual(program.getRootFileNames(), ["/src/main.ts"]);
         const files = program.getSourceFiles();
         assert.deepEqual(files.map(file => file.fileName), ["/src/dependency.ts", "/src/main.ts"]);
         assert.strictEqual(files[1], program.getSourceFile("/src/main.ts"));
         assert.equal(program.getProjectReferences(), undefined);
-        assert.equal(program.getResolvedProjectReferences(), undefined);
     });
 
     test("Program counters reflect work on its type checker without forcing diagnostics", () => {
@@ -2628,12 +2628,10 @@ export const other: { value: string } = box;`,
         assert.equal(empty.getNodeCount(), 0);
         assert.equal(empty.getIdentifierCount(), 0);
         assert.equal(empty.getProjectReferences(), undefined);
-        assert.equal(empty.getResolvedProjectReferences(), undefined);
         assert.deepEqual(empty.getOptionsDiagnostics(), []);
 
         using noReferences = api.createProgram([], { noLib: true }, { projectReferences: [] });
         assert.deepEqual(noReferences.getProjectReferences(), []);
-        assert.deepEqual(noReferences.getResolvedProjectReferences(), []);
 
         using missing = api.createProgram(["/missing.ts"], { noLib: true });
         assert.deepEqual(missing.getRootFileNames(), ["/missing.ts"]);
@@ -2659,7 +2657,7 @@ const value: string = 1;`,
         assert.ok((program.getConfigFileParsingDiagnostics()).some(diagnostic => diagnostic.code === 5023));
     });
 
-    test("Program resolved project references preserve missing, nested, shared, and circular references", () => {
+    test("Program project references are available for configured and synthetic programs", () => {
         using api = spawnAPI({
             "/tsconfig.json": JSON.stringify({ files: [], references: [{ path: "./a" }, { path: "./missing" }, { path: "./b" }, { path: "./a" }] }),
             "/a/tsconfig.json": JSON.stringify({ compilerOptions: { composite: true }, files: ["index.ts"], references: [{ path: "../b" }] }),
@@ -2671,28 +2669,11 @@ const value: string = 1;`,
         const program = snapshot.getConfiguredProject("/tsconfig.json")!.program;
         const references = program.getProjectReferences();
         assert.equal(references?.length, 4);
-        const resolved = program.getResolvedProjectReferences();
-        assert.equal(resolved?.length, 4);
-        assert.equal(resolved![1], undefined);
-        const a = resolved![0]!;
-        const b = resolved![2]!;
-        assert.strictEqual(resolved![3], a);
-        assert.strictEqual(a.references![0], b);
-        assert.strictEqual(b.references![0], a);
-        assert.equal(b.references![1], undefined);
-        assert.equal(a.sourceFile.fileName, "/a/tsconfig.json");
-        assert.equal(a.commandLine.options.composite, true);
-        assert.deepEqual(a.commandLine.fileNames, ["/a/index.ts"]);
-        assert.strictEqual((program.getResolvedProjectReferences())![0], a);
 
         using synthetic = api.createProgram([], { noLib: true }, {
             projectReferences: [{ path: "/a/tsconfig.json" }, { path: "/missing/tsconfig.json" }],
         });
         assert.equal((synthetic.getProjectReferences())!.length, 2);
-        const syntheticResolved = synthetic.getResolvedProjectReferences();
-        assert.equal(syntheticResolved!.length, 2);
-        assert.equal(syntheticResolved![0]!.sourceFile.fileName, "/a/tsconfig.json");
-        assert.equal(syntheticResolved![1], undefined);
     });
 
     test("Project does not expose membership and file-list methods", () => {

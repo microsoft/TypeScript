@@ -953,8 +953,6 @@ func (s *Session) HandleRequest(ctx context.Context, method string, params json.
 		return s.handleGetSourceFileNames(ctx, parsed.(*GetSourceFileNamesParams))
 	case string(MethodGetProgramStatistics):
 		return s.handleGetProgramStatistics(ctx, parsed.(*GetProjectDiagnosticsParams))
-	case string(MethodGetResolvedProjectReferences):
-		return s.handleGetResolvedProjectReferences(ctx, parsed.(*GetProjectDiagnosticsParams))
 	case string(MethodGetOptionsDiagnostics):
 		return s.handleGetOptionsDiagnostics(ctx, parsed.(*GetProjectDiagnosticsParams))
 	case string(MethodGetSourceFileMetadata):
@@ -2396,66 +2394,6 @@ func (s *Session) handleGetProgramStatistics(ctx context.Context, params *GetPro
 		result.NodeCount += file.NodeCount
 		result.IdentifierCount += file.IdentifierCount
 		result.SymbolCount += file.SymbolCount
-	}
-	return result, nil
-}
-
-func (s *Session) handleGetResolvedProjectReferences(ctx context.Context, params *GetProjectDiagnosticsParams) (*ResolvedProjectReferencesResponse, error) {
-	sd, err := s.getSnapshotData(params.Snapshot)
-	if err != nil {
-		return nil, err
-	}
-	program, err := sd.getProgram(params.Project)
-	if err != nil {
-		return nil, err
-	}
-	result := &ResolvedProjectReferencesResponse{Projects: []*ResolvedProjectReferenceResponse{}}
-	indices := map[*tsoptions.ParsedCommandLine]int{}
-	var visit func(config *tsoptions.ParsedCommandLine) (int, error)
-	visit = func(config *tsoptions.ParsedCommandLine) (int, error) {
-		if config == nil {
-			return 0, nil
-		}
-		if index, ok := indices[config]; ok {
-			return index, nil
-		}
-		if config.ConfigFile == nil || config.ConfigFile.SourceFile == nil {
-			return 0, errors.New("resolved project reference has no config source file")
-		}
-		file := config.ConfigFile.SourceFile
-		data, _, encodeErr := encoder.EncodeSourceFile(file)
-		if encodeErr != nil {
-			return 0, fmt.Errorf("failed to encode project reference config: %w", encodeErr)
-		}
-		encoder.SetSourceFileID(data, sourceFileNodeID(file))
-		response := &ResolvedProjectReferenceResponse{
-			CommandLine: NewConfigFileResponse(config),
-			SourceFile:  &SourceFileResponse{Data: base64.StdEncoding.EncodeToString(data)},
-		}
-		result.Projects = append(result.Projects, response)
-		index := len(result.Projects)
-		indices[config] = index
-		if config.ProjectReferences() != nil {
-			response.References = make([]int, len(config.ProjectReferences()))
-			for i, path := range config.ResolvedProjectReferencePaths() {
-				child, _ := program.GetResolvedProjectReferenceFor(program.PathKeyForFileName(path))
-				response.References[i], err = visit(child)
-				if err != nil {
-					return 0, err
-				}
-			}
-		}
-		return index, nil
-	}
-	if program.CommandLine().ProjectReferences() != nil {
-		references := program.GetResolvedProjectReferences()
-		result.References = make([]int, len(references))
-		for i, config := range references {
-			result.References[i], err = visit(config)
-			if err != nil {
-				return nil, err
-			}
-		}
 	}
 	return result, nil
 }

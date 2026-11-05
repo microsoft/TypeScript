@@ -1738,12 +1738,6 @@ export class LanguageService {
     }
 }
 
-export interface ResolvedProjectReference {
-    commandLine: ParsedCommandLine;
-    sourceFile: SourceFile;
-    references?: readonly (ResolvedProjectReference | undefined)[] | undefined;
-}
-
 export class Program<Id extends ProjectId = ProjectId> implements FormatDiagnosticsHost {
     /** @internal */
     readonly snapshotId: number;
@@ -1754,7 +1748,6 @@ export class Program<Id extends ProjectId = ProjectId> implements FormatDiagnost
     private readonly sourceFileMetadataCache = new Map<PathKey, Promise<SourceFileMetadata | undefined>>();
     private ownedSnapshot: Snapshot | undefined;
     private disposePromise: Promise<void> | undefined;
-    private resolvedProjectReferences: Promise<readonly (ResolvedProjectReference | undefined)[] | undefined> | undefined;
     private pendingStatistics: Promise<ProgramStatisticsResponse> | undefined; // @sync-skip
 
     private get client(): Client {
@@ -1873,28 +1866,6 @@ export class Program<Id extends ProjectId = ProjectId> implements FormatDiagnost
 
     async getRelationCacheSizes(): Promise<RelationCacheSizes> {
         return (await this.getStatistics()).relationCacheSizes;
-    }
-
-    getResolvedProjectReferences(): Promise<readonly (ResolvedProjectReference | undefined)[] | undefined> {
-        // @generators: if (owner.resolvedProjectReferences !== undefined) return owner.resolvedProjectReferences;
-        // @generators: const references = yield* owner.fetchResolvedProjectReferences.gen();
-        return this.resolvedProjectReferences ??= this.fetchResolvedProjectReferences(); // @generators: return owner.resolvedProjectReferences ??= references;
-    }
-
-    private async fetchResolvedProjectReferences(): Promise<readonly (ResolvedProjectReference | undefined)[] | undefined> {
-        const data = await this.client.apiRequest("getResolvedProjectReferences", {
-            snapshot: this.snapshotId,
-            project: this.project.handle,
-        });
-        const projects: ResolvedProjectReference[] = data.projects.map(project => ({
-            commandLine: project.commandLine,
-            sourceFile: new RemoteSourceFile(sourceFileResponseToUint8Array(project.sourceFile)!, this.decoder, undefined, this.project.api) as unknown as SourceFile,
-        }));
-        const resolve = (indices: readonly number[] | null | undefined): (ResolvedProjectReference | undefined)[] | undefined => indices?.map(index => index === 0 ? undefined : projects[index - 1]);
-        for (let i = 0; i < projects.length; i++) {
-            projects[i].references = resolve(data.projects[i].references);
-        }
-        return resolve(data.references);
     }
 
     async getSourceFile(file: DocumentIdentifier): Promise<SourceFile | undefined> {

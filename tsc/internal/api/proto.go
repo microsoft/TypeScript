@@ -112,7 +112,6 @@ const (
 	MethodGetSourceFile                                  Method = "getSourceFile"
 	MethodGetSourceFileNames                             Method = "getSourceFileNames"
 	MethodGetProgramStatistics                           Method = "getProgramStatistics"
-	MethodGetResolvedProjectReferences                   Method = "getResolvedProjectReferences"
 	MethodGetOptionsDiagnostics                          Method = "getOptionsDiagnostics"
 	MethodGetSourceFileMetadata                          Method = "getSourceFileMetadata"
 	MethodGetModeForUsageLocation                        Method = "getModeForUsageLocation"
@@ -776,7 +775,6 @@ var unmarshalers = map[Method]func([]byte) (any, error){
 	MethodGetDeclarationDiagnostics:         unmarshallerFor[GetDiagnosticsParams],
 	MethodGetProgramDiagnostics:             unmarshallerFor[GetProjectDiagnosticsParams],
 	MethodGetProgramStatistics:              unmarshallerFor[GetProjectDiagnosticsParams],
-	MethodGetResolvedProjectReferences:      unmarshallerFor[GetProjectDiagnosticsParams],
 	MethodGetOptionsDiagnostics:             unmarshallerFor[GetProjectDiagnosticsParams],
 	MethodGetGlobalDiagnostics:              unmarshallerFor[GetProjectDiagnosticsParams],
 	MethodGetConfigFileParsingDiagnostics:   unmarshallerFor[GetProjectDiagnosticsParams],
@@ -1036,18 +1034,6 @@ type ProgramStatisticsResponse struct {
 	TypeCount          uint32                     `json:"typeCount"`
 	InstantiationCount uint32                     `json:"instantiationCount"`
 	RelationCacheSizes checker.RelationCacheSizes `json:"relationCacheSizes"`
-}
-
-// References use one-based indices into Projects; zero denotes an unresolved reference.
-type ResolvedProjectReferencesResponse struct {
-	References []int                               `json:"references,omitzero"`
-	Projects   []*ResolvedProjectReferenceResponse `json:"projects" nonnil:"true"`
-}
-
-type ResolvedProjectReferenceResponse struct {
-	CommandLine *ConfigFileResponse `json:"commandLine" nonnil:"true"`
-	SourceFile  *SourceFileResponse `json:"sourceFile" nonnil:"true"`
-	References  []int               `json:"references,omitzero"`
 }
 
 type ReadConfigFileResponse struct {
