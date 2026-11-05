@@ -30,7 +30,7 @@ const typeMappings = new Map<string, string | string[]>([
     ["Signature", "Signature"],
     ["SourceFile", "SourceFile"],
     ["Symbol", "Symbol"],
-    ["Type", "Type"],
+    ["Type", ["Type", "ts"]],
     ["Node", "Node"],
     ["NodeFactory", "ts"],
     ["ts", ["ts", "API"]],

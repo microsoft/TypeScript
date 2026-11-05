@@ -3,6 +3,7 @@ originalType.MethodName|newType.MethodName|reason (will be discarded in parsing)
 TypeChecker.tryGetMemberInModuleExports|Checker.getMemberInModuleExports|rename
 TypeChecker.getAugmentedPropertiesOfType|| use `Type.getApparentProperties()` instead
 Program.getTypeChecker|| removed
+Program.getOptionsDiagnostics|| removed
 Project.containsFile|| same as `Program` method
 Project.getFileNames|| same as `Program` method
 Project.getRootFiles||same as `Program` method

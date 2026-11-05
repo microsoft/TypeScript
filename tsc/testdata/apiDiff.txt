@@ -99,13 +99,12 @@ getSourceFiles
 
 
 # Program (old) methods compared to Program (new).
-## (12) Program methods matched in async Program  ##
+## (13) Program methods matched in async Program  ##
 
-## Program methods missing from async Program (11) ##
+## Program methods missing from async Program (10) ##
 getIdentifierCount
 getInstantiationCount
 getNodeCount
-getOptionsDiagnostics
 getProjectReferences
 getRelationCacheSizes
 getResolvedProjectReferences
@@ -301,10 +300,10 @@ getFlags
 getName
 
 
-# Type (old) methods compared to Type (new).
-## (13) Type methods matched in async Type  ##
+# Type (old) methods compared to Type, ts (new).
+## (14) Type methods matched in async Type, ts  ##
 
-## Type methods missing from async Type (10) ##
+## Type methods missing from async Type, ts (9) ##
 getConstraint
 getDefault
 getFlags
@@ -312,7 +311,6 @@ isClass
 isIntersection
 isLiteral
 isNumberLiteral
-isStringLiteral
 isUnion
 isUnionOrIntersection
 
