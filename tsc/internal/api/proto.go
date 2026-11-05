@@ -90,6 +90,7 @@ const (
 	MethodResolveModuleName                              Method = "resolveModuleName"
 	MethodParseCommandLine                               Method = "parseCommandLine"
 	MethodReadConfigFile                                 Method = "readConfigFile"
+	MethodParseConfigFileTextToJson                      Method = "parseConfigFileTextToJson"
 	MethodParseJsonConfigFile                            Method = "parseJsonConfigFileContent"
 	MethodParseConfigFile                                Method = "parseConfigFile"
 	MethodCreateSourceFile                               Method = "createSourceFile"
@@ -628,6 +629,7 @@ var unmarshalers = map[Method]func([]byte) (any, error){
 	MethodResolveModuleName:                              unmarshallerFor[ResolveModuleNameParams],
 	MethodParseCommandLine:                               unmarshallerFor[ParseCommandLineParams],
 	MethodReadConfigFile:                                 unmarshallerFor[ReadConfigFileParams],
+	MethodParseConfigFileTextToJson:                      unmarshallerFor[ParseConfigFileTextToJsonParams],
 	MethodParseJsonConfigFile:                            unmarshallerFor[ParseJsonConfigFileContentParams],
 	MethodParseConfigFile:                                unmarshallerFor[ParseConfigFileParams],
 	MethodCreateSourceFile:                               unmarshallerFor[CreateSourceFileParams],
@@ -811,6 +813,11 @@ type ParseCommandLineParams struct {
 
 type ReadConfigFileParams struct {
 	File DocumentIdentifier `json:"file"`
+}
+
+type ParseConfigFileTextToJsonParams struct {
+	FileName string `json:"fileName"`
+	JSONText string `json:"jsonText"`
 }
 
 type ParseJsonConfigFileContentParams struct {

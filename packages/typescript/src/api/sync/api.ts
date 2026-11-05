@@ -684,6 +684,25 @@ export class API<FromLSP extends boolean = false> implements FormatDiagnosticsHo
         );
     }
 
+    get parseConfigFileTextToJson(): {
+        (fileName: string, jsonText: string): ReadConfigFileResponse;
+        gen(fileName: string, jsonText: string): Generator<ProtocolRequest, ReadConfigFileResponse, ProtocolResponse["result"]>;
+    } {
+        const owner = this;
+        return cacheGeneratorMethod(
+            owner,
+            "parseConfigFileTextToJson",
+            function (fileName: string, jsonText: string): ReadConfigFileResponse {
+                owner.ensureInitialized();
+                return owner.client.apiRequest("parseConfigFileTextToJson", { fileName, jsonText });
+            },
+            function* (fileName: string, jsonText: string): Generator<ProtocolRequest, ReadConfigFileResponse, ProtocolResponse["result"]> {
+                yield* owner.ensureInitialized.gen();
+                return yield* apiRequest("parseConfigFileTextToJson", { fileName, jsonText });
+            },
+        );
+    }
+
     get parseJsonConfigFileContent(): {
         (
             json: any,

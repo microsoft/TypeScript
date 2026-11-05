@@ -917,6 +917,8 @@ func (s *Session) HandleRequest(ctx context.Context, method string, params json.
 		return s.handleParseCommandLine(ctx, parsed.(*ParseCommandLineParams))
 	case string(MethodReadConfigFile):
 		return s.handleReadConfigFile(ctx, parsed.(*ReadConfigFileParams))
+	case string(MethodParseConfigFileTextToJson):
+		return s.handleParseConfigFileTextToJson(ctx, parsed.(*ParseConfigFileTextToJsonParams))
 	case string(MethodParseJsonConfigFile):
 		return s.handleParseJsonConfigFileContent(ctx, parsed.(*ParseJsonConfigFileContentParams))
 	case string(MethodParseConfigFile):
@@ -2054,6 +2056,22 @@ func (s *Session) handleReadConfigFile(ctx context.Context, params *ReadConfigFi
 		configFileName,
 		s.pathKey(configFileName),
 		configFileContent,
+	)
+	response := &ReadConfigFileResponse{Config: config}
+	if len(parseErrors) > 0 {
+		response.Error = NewDiagnosticResponse(parseErrors[0])
+	}
+	return response, nil
+}
+
+// handleParseConfigFileTextToJson parses the given JSON config file text without reading
+// it from disk, mirroring the old API's parseConfigFileTextToJson.
+func (s *Session) handleParseConfigFileTextToJson(ctx context.Context, params *ParseConfigFileTextToJsonParams) (*ReadConfigFileResponse, error) {
+	fileName := tspath.ToRootedFilePath(params.FileName, s.currentDirectory())
+	config, parseErrors := tsoptions.ParseConfigFileTextToJson(
+		fileName,
+		s.pathKey(fileName),
+		params.JSONText,
 	)
 	response := &ReadConfigFileResponse{Config: config}
 	if len(parseErrors) > 0 {
