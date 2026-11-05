@@ -381,6 +381,32 @@ describe("API", { concurrency }, () => {
         assert.equal(missing.error?.code, 5083);
     });
 
+    test("parseConfigFileTextToJson", async () => {
+        await using api = spawnAPI();
+
+        const result = await api.parseConfigFileTextToJson(
+            "/tsconfig.json",
+            `{
+                // Comments and trailing commas are supported.
+                "compilerOptions": { "strict": true, },
+            }`,
+        );
+        assert.deepEqual(result, {
+            config: { compilerOptions: { strict: true } },
+        });
+    });
+
+    test("parseConfigFileTextToJson reports parse errors", async () => {
+        await using api = spawnAPI();
+
+        const result = await api.parseConfigFileTextToJson(
+            "/tsconfig.json",
+            `{ "compilerOptions": { "strict": true,, } }`,
+        );
+        assert.deepEqual(result.config, { compilerOptions: { strict: true } });
+        assert.ok(result.error);
+    });
+
     test("parseJsonConfigFileContent with configDirectory", async () => {
         await using api = spawnAPI();
 
