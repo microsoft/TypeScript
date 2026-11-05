@@ -517,6 +517,11 @@ export class API<FromLSP extends boolean = false> implements FormatDiagnosticsHo
         return this.client.apiRequest("readConfigFile", { file });
     }
 
+    async parseConfigFileTextToJson(fileName: string, jsonText: string): Promise<ReadConfigFileResponse> {
+        await this.ensureInitialized();
+        return this.client.apiRequest("parseConfigFileTextToJson", { fileName, jsonText });
+    }
+
     async parseJsonConfigFileContent(
         json: any,
         options:

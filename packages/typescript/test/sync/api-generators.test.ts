@@ -1579,6 +1579,7 @@ describe("API - generator batching", { concurrency: areTestsFiltered() }, () => 
                 parityCase("API", "parseConfigFile", api.parseConfigFile, assertDeepEquivalent, "/tsconfig.json"),
                 parityCase("API", "parseCommandLine", api.parseCommandLine, assertDeepEquivalent, ["--strict", "--noEmit"]),
                 parityCase("API", "readConfigFile", api.readConfigFile, assertDeepEquivalent, "/tsconfig.json"),
+                parityCase("API", "parseConfigFileTextToJson", api.parseConfigFileTextToJson, assertDeepEquivalent, "/tsconfig.json", `{ "compilerOptions": { "strict": true } }`),
                 parityCase("API", "parseJsonConfigFileContent", api.parseJsonConfigFileContent, assertDeepEquivalent, { compilerOptions: { strict: true } }, { configDirectory: "/" }),
                 parityCase("API", "parseJsonConfigFileContent", api.parseJsonConfigFileContent, assertDeepEquivalent, { extends: "./base.json" }, { configFileName: "/tsconfig.json" }),
                 parityCase("API", "createSourceFile", api.createSourceFile, assertRetainedSourceFilesEquivalent, "/generated.ts", "export const generated = true;"),

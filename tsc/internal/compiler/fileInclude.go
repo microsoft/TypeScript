@@ -11,7 +11,7 @@ import (
 	"github.com/microsoft/TypeScript/tsc/internal/tspath"
 )
 
-type fileIncludeKind int
+type fileIncludeKind uint8
 
 const (
 	// References from file
@@ -28,8 +28,8 @@ const (
 
 type FileIncludeReason struct {
 	kind                   fileIncludeKind
-	index                  int
 	isDefaultLib           bool
+	index                  int
 	referencedFile         *referencedFileData
 	automaticTypeDirective *automaticTypeDirectiveFileData
 	canonicalSourceFile    tspath.PathKey
@@ -50,6 +50,18 @@ const (
 	syntheticImportHelpers
 	syntheticImportJSXRuntime
 )
+
+func newReferencedFileIncludeReason(kind fileIncludeKind, file tspath.PathKey, index int, synthetic syntheticImportKind) *FileIncludeReason {
+	r := &struct {
+		reason FileIncludeReason
+		data   referencedFileData
+	}{
+		reason: FileIncludeReason{kind: kind},
+		data:   referencedFileData{file: file, index: index, synthetic: synthetic},
+	}
+	r.reason.referencedFile = &r.data
+	return &r.reason
+}
 
 type referenceFileLocation struct {
 	file        *ast.SourceFile
