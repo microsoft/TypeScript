@@ -1866,7 +1866,7 @@ export class Program<Id extends ProjectId = ProjectId> implements FormatDiagnost
         return this.project.parsedCommandLine.options;
     }
 
-    async getRootFileNames(): Promise<readonly RootedFilePath[]> {
+    getRootFileNames(): readonly RootedFilePath[] {
         return this.project.parsedCommandLine.fileNames;
     }
 
