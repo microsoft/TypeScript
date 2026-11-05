@@ -2064,8 +2064,7 @@ func (s *Session) handleReadConfigFile(ctx context.Context, params *ReadConfigFi
 	return response, nil
 }
 
-// handleParseConfigFileTextToJson parses the given JSON config file text without reading
-// it from disk, mirroring the old API's parseConfigFileTextToJson.
+// handleParseConfigFileTextToJson parses a string (contents of a JSON file) into a ParsedCommandLine
 func (s *Session) handleParseConfigFileTextToJson(ctx context.Context, params *ParseConfigFileTextToJsonParams) (*ReadConfigFileResponse, error) {
 	fileName := tspath.ToRootedFilePath(params.FileName, s.currentDirectory())
 	config, parseErrors := tsoptions.ParseConfigFileTextToJson(
