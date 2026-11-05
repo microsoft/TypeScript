@@ -12,7 +12,7 @@ import (
 	"gotest.tools/v3/assert"
 )
 
-func TestProjectContainsSupplementalFile(t *testing.T) {
+func TestProgramSourceFileIncludesSupplementalFile(t *testing.T) {
 	t.Parallel()
 
 	const supplementalFileName = "/home/project/app.box.0.ts"
@@ -34,7 +34,7 @@ func TestProjectContainsSupplementalFile(t *testing.T) {
 	defer session.Close()
 	response, err := session.handleGetCurrentLanguageServerSnapshot(context.Background(), &GetCurrentLanguageServerSnapshotParams{})
 	assert.NilError(t, err)
-	params := &ContainsProjectFileParams{
+	params := &GetSourceFileParams{
 		Snapshot: response.Snapshot,
 		Project:  response.Projects[0].Handle,
 		File:     DocumentIdentifier{FileName: supplementalFileName},
@@ -42,56 +42,9 @@ func TestProjectContainsSupplementalFile(t *testing.T) {
 	sd, err := session.getSnapshotData(response.Snapshot)
 	assert.NilError(t, err)
 	assert.Assert(t, sd.snapshot.GetFile(supplementalFileName) == nil)
-	sourceFile, err := session.handleGetSourceFile(context.Background(), &GetSourceFileParams{
-		Snapshot: params.Snapshot, Project: params.Project, File: params.File,
-	})
+	sourceFile, err := session.handleGetSourceFile(context.Background(), params)
 	assert.NilError(t, err)
 	assert.Assert(t, sourceFile != nil)
-	contains, err := session.handleContainsProjectFile(context.Background(), params)
-	assert.NilError(t, err)
-	assert.Assert(t, contains)
-	params.RequireOpen = true
-	contains, err = session.handleContainsProjectFile(context.Background(), params)
-	assert.NilError(t, err)
-	assert.Assert(t, !contains)
-	params.RequireOpen = false
-	params.File = DocumentIdentifier{FileName: "/home/project/missing.ts"}
-	contains, err = session.handleContainsProjectFile(context.Background(), params)
-	assert.NilError(t, err)
-	assert.Assert(t, !contains)
-}
-
-func TestProjectContainsEditorOpenFile(t *testing.T) {
-	t.Parallel()
-
-	const fileName = "/home/projects/p/index.ts"
-	projectSession, _ := projecttestutil.Setup(map[string]any{
-		"/home/projects/p/tsconfig.json": `{"compilerOptions":{"noLib":true},"files":["index.ts"]}`,
-		fileName:                         "export {};",
-	})
-	defer projectSession.Close()
-	uri := DocumentIdentifier{FileName: fileName}.ToURI(projectSession.GetCurrentDirectory())
-	projectSession.DidOpenFile(context.Background(), uri, 1, "export {};", lsproto.LanguageKindTypeScript)
-	session := NewLSPSession(projectSession, nil)
-	defer session.Close()
-	response, err := session.handleGetCurrentLanguageServerSnapshot(context.Background(), &GetCurrentLanguageServerSnapshotParams{})
-	assert.NilError(t, err)
-	params := &ContainsProjectFileParams{
-		Snapshot:    response.Snapshot,
-		Project:     response.Projects[0].Handle,
-		File:        DocumentIdentifier{FileName: fileName},
-		RequireOpen: true,
-	}
-	contains, err := session.handleContainsProjectFile(context.Background(), params)
-	assert.NilError(t, err)
-	assert.Assert(t, contains)
-	params.Project = project.Handle(999999)
-	_, err = session.handleContainsProjectFile(context.Background(), params)
-	assert.ErrorContains(t, err, "not found")
-	_, err = session.handleGetProjectRootFiles(context.Background(), &GetSourceFileNamesParams{
-		Snapshot: response.Snapshot, Project: params.Project,
-	})
-	assert.ErrorContains(t, err, "not found")
 }
 
 func TestProgramStatisticsUseAPIChecker(t *testing.T) {

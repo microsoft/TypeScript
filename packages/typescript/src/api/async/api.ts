@@ -1588,13 +1588,11 @@ export class Project<Id extends ProjectId = ProjectId> {
     readonly program: Program<Id>;
     readonly checker: Checker;
     readonly languageService: LanguageService;
-    private readonly toPath: (fileName: string, basePath?: string) => PathKey;
 
     constructor(data: ProjectResponse, snapshotId: number, toPath: (fileName: string, basePath?: string) => PathKey, api: API<boolean>, snapshotRegistry: SnapshotObjectRegistry) {
         this.id = data.id as Id;
         this.handle = data.handle;
         this.api = api;
-        this.toPath = toPath;
         this.configFileName = data.configFileName;
         this.currentDirectory = data.currentDirectory;
         this.dirty = data.dirty;
@@ -1606,64 +1604,6 @@ export class Project<Id extends ProjectId = ProjectId> {
         const objectRegistry = new ProjectObjectRegistry(snapshotId, this, snapshotRegistry);
         this.checker = new Checker(snapshotId, this, objectRegistry);
         this.languageService = new LanguageService(snapshotId, this, objectRegistry);
-    }
-
-    async containsFile(file: DocumentIdentifier, requireOpen?: boolean): Promise<boolean> {
-        return this.api.client.apiRequest("containsProjectFile", {
-            snapshot: this.program.snapshotId,
-            project: this.handle,
-            file,
-            requireOpen,
-        });
-    }
-
-    async getFileNames(excludeFilesFromExternalLibraries?: boolean, excludeConfigFiles?: boolean): Promise<readonly RootedFilePath[]> {
-        const files = await this.program.getSourceFileNames();
-        const result: RootedFilePath[] = [];
-        const metadata = excludeFilesFromExternalLibraries
-            ? await Promise.all(files.map(file => this.program.getSourceFileMetadata(file)))
-            : undefined;
-        for (let i = 0; i < files.length; i++) {
-            const file = files[i];
-            if (metadata) {
-                const fileMetadata = metadata[i];
-                if (!fileMetadata) {
-                    throw new Error(`Program source file '${file}' has no metadata`);
-                }
-                if (fileMetadata.isFromExternalLibrary) continue;
-            }
-            result.push(file);
-        }
-        if (!excludeConfigFiles) {
-            result.push(...await this.program.getConfigFileNames());
-        }
-        return result;
-    }
-
-    /** Returns existing root files, excluding missing root declarations. */
-    async getRootFiles(): Promise<readonly RootedFilePath[]> {
-        return this.api.client.apiRequest("getProjectRootFiles", {
-            snapshot: this.program.snapshotId,
-            project: this.handle,
-        });
-    }
-
-    async hasRoots(): Promise<boolean> {
-        return this.parsedCommandLine.fileNames.length > 0;
-    }
-
-    async isRoot(file: DocumentIdentifier): Promise<boolean> {
-        const path = this.toPath(resolveFileName(file), this.currentDirectory);
-        return (await this.getRootFiles()).some(root => this.toPath(root, this.currentDirectory) === path);
-    }
-
-    async hasConfigFile(file: DocumentIdentifier): Promise<boolean> {
-        const path = this.toPath(resolveFileName(file), this.currentDirectory);
-        return (await this.program.getConfigFileNames()).some(config => this.toPath(config, this.currentDirectory) === path);
-    }
-
-    async getSourceFile(file: DocumentIdentifier): Promise<SourceFile | undefined> {
-        return this.program.getSourceFile(file);
     }
 
     dispose(): void {
@@ -1815,6 +1755,7 @@ export class Program<Id extends ProjectId = ProjectId> implements FormatDiagnost
     private ownedSnapshot: Snapshot | undefined;
     private disposePromise: Promise<void> | undefined;
     private resolvedProjectReferences: Promise<readonly (ResolvedProjectReference | undefined)[] | undefined> | undefined;
+    private pendingStatistics: Promise<ProgramStatisticsResponse> | undefined; // @sync-skip
 
     private get client(): Client {
         return this.project.api.client;
@@ -1870,7 +1811,7 @@ export class Program<Id extends ProjectId = ProjectId> implements FormatDiagnost
         return this.project.parsedCommandLine.fileNames;
     }
 
-    async getProjectReferences(): Promise<readonly ProjectReference[] | undefined> {
+    getProjectReferences(): readonly ProjectReference[] | undefined {
         return this.project.parsedCommandLine.projectReferences;
     }
 
@@ -1889,6 +1830,21 @@ export class Program<Id extends ProjectId = ProjectId> implements FormatDiagnost
     }
 
     private async getStatistics(): Promise<ProgramStatisticsResponse> {
+        // @sync-only-start
+        // return this.fetchStatistics();
+        // @sync-only-end
+        // @sync-skip-block-start
+        if (this.pendingStatistics) return this.pendingStatistics;
+        try {
+            return await (this.pendingStatistics = this.fetchStatistics());
+        }
+        finally {
+            this.pendingStatistics = undefined;
+        }
+        // @sync-skip-block-end
+    }
+
+    private async fetchStatistics(): Promise<ProgramStatisticsResponse> {
         return this.client.apiRequest("getProgramStatistics", {
             snapshot: this.snapshotId,
             project: this.project.handle,

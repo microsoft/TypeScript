@@ -80,8 +80,6 @@ export interface APIMethodInfo {
     getNonMissingTypeOfSymbol: APIMethod<GetTypeOfSymbolParams, TypeResponse>;
     getSourceFile: APIMethod<GetSourceFileParams, SourceFileResponse | null>;
     getSourceFileNames: APIMethod<GetSourceFileNamesParams, RootedFilePath[]>;
-    containsProjectFile: APIMethod<ContainsProjectFileParams, boolean>;
-    getProjectRootFiles: APIMethod<GetSourceFileNamesParams, RootedFilePath[]>;
     getProgramStatistics: APIMethod<GetProjectDiagnosticsParams, ProgramStatisticsResponse>;
     getResolvedProjectReferences: APIMethod<GetProjectDiagnosticsParams, ResolvedProjectReferencesResponse>;
     getOptionsDiagnostics: APIMethod<GetProjectDiagnosticsParams, DiagnosticResponse[] | null>;
@@ -594,13 +592,6 @@ export interface GetSourceFileParams {
 export interface GetSourceFileNamesParams {
     snapshot: number;
     project: number;
-}
-
-export interface ContainsProjectFileParams {
-    snapshot: number;
-    project: number;
-    file: DocumentIdentifier;
-    requireOpen?: boolean | undefined;
 }
 
 /** GetProjectDiagnosticsParams are parameters for project-wide diagnostic methods. */
@@ -1184,7 +1175,6 @@ export interface BatchRequest {
         | "buildReferences"
         | "cleanBuild"
         | "cleanReferences"
-        | "containsProjectFile"
         | "createBuildOrchestrator"
         | "createModuleResolver"
         | "createSnapshot"
@@ -1267,7 +1257,6 @@ export interface BatchRequest {
         | "getParentOfSymbolForChecker"
         | "getProgramDiagnostics"
         | "getProgramStatistics"
-        | "getProjectRootFiles"
         | "getPropertiesOfType"
         | "getPropertyOfType"
         | "getReducedType"
@@ -1371,7 +1360,6 @@ export interface BatchResponse {
         | "buildReferences"
         | "cleanBuild"
         | "cleanReferences"
-        | "containsProjectFile"
         | "createBuildOrchestrator"
         | "createModuleResolver"
         | "createSnapshot"
@@ -1454,7 +1442,6 @@ export interface BatchResponse {
         | "getParentOfSymbolForChecker"
         | "getProgramDiagnostics"
         | "getProgramStatistics"
-        | "getProjectRootFiles"
         | "getPropertiesOfType"
         | "getPropertyOfType"
         | "getReducedType"
