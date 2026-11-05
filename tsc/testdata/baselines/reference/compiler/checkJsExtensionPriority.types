@@ -1,0 +1,15 @@
+//// [tests/cases/compiler/checkJsExtensionPriority.ts] ////
+
+=== /a.d.ts ===
+export declare const n: number;
+>n : number
+
+=== /b.d.mts ===
+export declare const n: number;
+>n : number
+
+=== /c.d.cts ===
+export declare const n: number;
+>n : number
+
+
