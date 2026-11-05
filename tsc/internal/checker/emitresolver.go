@@ -511,12 +511,8 @@ func (r *EmitResolver) MarkLinkedReferencesRecursively(file *ast.SourceFile) {
 	defer r.checkerMu.Unlock()
 
 	if file != nil {
-		r.checker.withReferenceMarks(func() { r.markLinkedReferencesRecursively(file) })
-	}
-}
-
-func (r *EmitResolver) markLinkedReferencesRecursively(file *ast.SourceFile) {
-	{
+		r.checker.markingForEmit = true
+		defer func() { r.checker.markingForEmit = false }()
 		var visit ast.Visitor
 		visit = func(n *ast.Node) bool {
 			if ast.IsImportEqualsDeclaration(n) && n.ModifierFlags()&ast.ModifierFlagsExport == 0 {

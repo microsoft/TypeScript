@@ -721,8 +721,8 @@ type Checker struct {
 	varianceProvisional                         []*ast.Symbol // Types measured in a circularity with a measurement in progress; see isGuessedVariance
 	flushBuf                                    []*memoState
 	resumeBuf                                   []int
-	deferredAttach                              []*memoState // See attachState
-	recordingFromCheck                          bool         // A query begun in a check is in progress; see recordFromCheck
+	deferredAttach                              []deferredAttachment // See attachState
+	recordingFromCheck                          bool                 // A query begun in a check is in progress; see recordFromCheck
 	apparentArgumentCount                       *int
 	lastGetCombinedNodeFlagsNode                *ast.Node
 	lastGetCombinedNodeFlagsResult              ast.NodeFlags
@@ -817,6 +817,7 @@ type Checker struct {
 	typeToStringNodebuilder                     *NodeBuilder
 	tracer                                      *Tracer // Optional tracer for trace events and type recording (for --generateTrace)
 	checking                                    bool    // Whether side effects such as diagnostics are applied; see memo.go
+	markingForEmit                              bool    // Whether emit is marking the references of a file; see writesMarks
 	observingMemos                              bool    // See syncObserving
 	instantiationCount                          uint32  // Instantiations since the start of the current statement, expression or outermost computation; see "Instantiation limits"
 	memoTop                                     int     // 1 + index in resolutions of the innermost computation recording effects, or 0; see memo.go
@@ -1760,11 +1761,23 @@ func (c *Checker) createNameResolverForSuggestion() *binder.NameResolver {
 }
 
 func (c *Checker) symbolReferenced(symbol *ast.Symbol, meaning ast.SymbolFlags) {
-	if !c.checking {
-		c.recordEffect(func(c *Checker) { c.symbolReferenced(symbol, meaning) })
+	if !c.writesMarks() {
+		c.recordMark(func(c *Checker) { c.symbolReferenced(symbol, meaning) })
 		return
 	}
 	c.symbolReferenceLinks.Get(symbol).referenceKinds |= meaning
+}
+
+// writesMarks reports whether marks that checking accumulates for later
+// checks and emit to read, such as which symbols are referenced, are written
+// now: when checking, including while a check records what it computes in a
+// cycle, which may discard the results but not that their source was
+// reached, or when emit marks the references of a file itself. Otherwise a
+// computation answering a query records them as an effect, so that they are
+// written only once checking reaches its result, as if checking had computed
+// it, and a query, such as printing a type, writes none of its own.
+func (c *Checker) writesMarks() bool {
+	return c.checking || c.recordingFromCheck || c.markingForEmit
 }
 
 func (c *Checker) getRequiresScopeChangeCache(node *ast.Node) core.Tristate {
@@ -2783,8 +2796,8 @@ func (c *Checker) isSourceElementUnreachable(node *ast.Node) bool {
 // determining the type of foo would cause foo to be given type any because of the recursive reference.
 // Delaying the type check of the body ensures foo has been assigned a type.
 func (c *Checker) checkNodeDeferred(node *ast.Node) {
-	if !c.checking {
-		c.recordEffect(func(c *Checker) { c.checkNodeDeferred(node) })
+	if !c.writesMarks() {
+		c.recordMark(func(c *Checker) { c.checkNodeDeferred(node) })
 		return
 	}
 	enclosingFile := ast.GetSourceFileOfNode(node)
@@ -6462,6 +6475,13 @@ func (c *Checker) checkDecorators(node *ast.Node) {
 	// skip this check for nodes that cannot have decorators. These should have already had an error reported by
 	// checkGrammarModifiers.
 	if !ast.CanHaveDecorators(node) || !ast.HasDecorators(node) || !ast.NodeCanBeDecorated(c.legacyDecorators, node, node.Parent, node.Parent.Parent) {
+		// The expressions of decorators that are not valid here are still
+		// checked, as they are when anything computes their types.
+		for _, modifier := range node.ModifierNodes() {
+			if ast.IsDecorator(modifier) {
+				c.checkExpression(modifier.Expression())
+			}
+		}
 		return
 	}
 	firstDecorator := core.Find(node.ModifierNodes(), ast.IsDecorator)
@@ -7486,8 +7506,8 @@ func (c *Checker) checkTypeParametersNotReferenced(root *ast.Node, typeParameter
 }
 
 func (c *Checker) registerForUnusedIdentifiersCheck(node *ast.Node) {
-	if !c.checking {
-		c.recordEffect(func(c *Checker) { c.registerForUnusedIdentifiersCheck(node) })
+	if !c.writesMarks() {
+		c.recordMark(func(c *Checker) { c.registerForUnusedIdentifiersCheck(node) })
 		return
 	}
 	sourceFile := ast.GetSourceFileOfNode(node)
@@ -13503,6 +13523,14 @@ func (c *Checker) checkObjectLiteralDestructuringPropertyAssignment(node *ast.No
 		return c.checkDestructuringAssignment(property.Expression(), t, CheckModeNormal, false)
 	}
 	c.error(property, diagnostics.Property_assignment_expected)
+	// The member is still checked as it would be in an object literal, as
+	// it is when anything computes the type of the literal.
+	switch property.Kind {
+	case ast.KindMethodDeclaration:
+		c.checkObjectLiteralMethod(property, CheckModeNormal)
+	case ast.KindGetAccessor, ast.KindSetAccessor:
+		c.checkNodeDeferred(property)
+	}
 	return nil
 }
 
@@ -17200,20 +17228,23 @@ func (c *Checker) resolveEntityNameEx(name *ast.Node, meaning ast.SymbolFlags, i
 		if resolveLocation == nil {
 			resolveLocation = name
 		}
+		// As for getResolvedSymbol, so that whatever resolves a name marks
+		// the same uses.
+		isUse := use && !ast.IsWriteOnlyAccess(name)
 		if meaning == ast.SymbolFlagsNamespace {
-			symbol = c.getMergedSymbol(c.resolveName(resolveLocation, name.Text(), meaning, nil, use /*isUse*/, false /*excludeGlobals*/))
+			symbol = c.getMergedSymbol(c.resolveName(resolveLocation, name.Text(), meaning, nil, isUse, false /*excludeGlobals*/))
 			if symbol == nil {
-				alias := c.getMergedSymbol(c.resolveName(resolveLocation, name.Text(), ast.SymbolFlagsAlias, nil, use /*isUse*/, false /*excludeGlobals*/))
+				alias := c.getMergedSymbol(c.resolveName(resolveLocation, name.Text(), ast.SymbolFlagsAlias, nil, isUse, false /*excludeGlobals*/))
 				if alias != nil && alias.Name() == ast.InternalSymbolNameExportEquals {
 					// resolve typedefs exported from commonjs, stored on the module symbol
 					symbol = alias.Parent()
 				}
 			}
 			if symbol == nil && message != nil {
-				c.resolveName(resolveLocation, name.Text(), meaning, message, use /*isUse*/, false /*excludeGlobals*/)
+				c.resolveName(resolveLocation, name.Text(), meaning, message, isUse, false /*excludeGlobals*/)
 			}
 		} else {
-			symbol = c.getMergedSymbol(c.resolveName(resolveLocation, name.Text(), meaning, message, use /*isUse*/, false /*excludeGlobals*/))
+			symbol = c.getMergedSymbol(c.resolveName(resolveLocation, name.Text(), meaning, message, isUse, false /*excludeGlobals*/))
 		}
 	case ast.KindQualifiedName:
 		qualified := name.AsQualifiedName()
@@ -32287,8 +32318,16 @@ func (c *Checker) getEntityNameForDecoratorMetadataFromTypeList(typeNodes []*ast
 }
 
 func (c *Checker) markAliasReferenced(symbol *ast.Symbol, location *ast.Node) {
+	if c.isAliasReferencedAt(symbol, location) {
+		c.markAliasSymbolAsReferenced(symbol)
+	}
+}
+
+// isAliasReferencedAt reports whether a reference to symbol at location
+// references it as an alias, so that the alias cannot be elided.
+func (c *Checker) isAliasReferencedAt(symbol *ast.Symbol, location *ast.Node) bool {
 	if !c.canCollectSymbolAliasAccessibilityData {
-		return
+		return false
 	}
 	if ast.IsNonLocalAlias(symbol, ast.SymbolFlagsValue /*excludes*/) && !IsInTypeQuery(location) {
 		target := c.resolveAlias(symbol)
@@ -32296,52 +32335,57 @@ func (c *Checker) markAliasReferenced(symbol *ast.Symbol, location *ast.Node) {
 			// An alias resolving to a const enum cannot be elided if (1) 'isolatedModules' is enabled
 			// (because the const enum value will not be inlined), or if (2) the alias is an export
 			// of a const enum declaration that will be preserved.
-			if c.compilerOptions.GetIsolatedModules() ||
+			return c.compilerOptions.GetIsolatedModules() ||
 				c.compilerOptions.ShouldPreserveConstEnums() && isExportOrExportExpression(location) ||
-				!isConstEnumOrConstEnumOnlyModule(c.getExportSymbolOfValueSymbolIfExported(target)) {
-				c.markAliasSymbolAsReferenced(symbol)
-			}
+				!isConstEnumOrConstEnumOnlyModule(c.getExportSymbolOfValueSymbolIfExported(target))
 		}
 	}
+	return false
 }
 
 // When an alias symbol is referenced, we need to mark the entity it references as referenced and in turn repeat that until
-// we reach a non-alias or an exported entity (which is always considered referenced). We do this by checking the target of
-// the alias as an expression (which recursively takes us back here if the target references another alias).
+// we reach a non-alias or an exported entity (which is always considered referenced). Following the aliases computes, so
+// they are followed here whether checking or a query reaches this; only marking them waits for checking.
 func (c *Checker) markAliasSymbolAsReferenced(symbol *ast.Symbol) {
-	if !c.checking {
-		c.recordReferenceMark(symbol)
-		return
+	var aliases []*ast.Symbol
+	for symbol != nil && !slices.Contains(aliases, symbol) {
+		aliases = append(aliases, symbol)
+		symbol = c.getAliasReferencedByAlias(symbol)
 	}
-	c.referenceAliasSymbol(symbol)
+	c.markAliasesReferenced(aliases)
 }
 
-func (c *Checker) referenceAliasSymbol(symbol *ast.Symbol) {
-	links := c.aliasSymbolLinks.Get(symbol)
-	// Emit marks references too (see withReferenceMarks), but reports
-	// nothing, so checking must still follow them once to report errors.
-	followed := links.referenced
-	if c.checking {
-		followed = links.referenceChecked
-		links.referenceChecked = true
+func (c *Checker) markAliasesReferenced(aliases []*ast.Symbol) {
+	if !c.writesMarks() {
+		c.recordMark(func(c *Checker) { c.markAliasesReferenced(aliases) })
+		return
 	}
-	if !followed {
-		links.referenced = true
-		node := c.getDeclarationOfAliasSymbol(symbol)
-		if node == nil {
-			panic("Unexpected nil in markAliasSymbolAsReferenced")
-		}
-		// We defer checking of the reference of an `import =` until the import itself is referenced,
-		// This way a chain of imports can be elided if ultimately the final input is only used in a type
-		// position.
-		if ast.IsImportEqualsDeclaration(node) && node.AsImportEqualsDeclaration().ModuleReference.Kind != ast.KindExternalModuleReference {
-			if c.getSymbolFlags(c.resolveSymbol(symbol))&ast.SymbolFlagsValue != 0 {
-				// import foo = <symbol>
-				left := ast.GetFirstIdentifier(node.AsImportEqualsDeclaration().ModuleReference)
-				c.markIdentifierAliasReferenced(left)
+	for _, alias := range aliases {
+		c.aliasSymbolLinks.Get(alias).referenced = true
+	}
+}
+
+// getAliasReferencedByAlias returns the alias that referencing the alias
+// symbol references in turn, if any. We defer checking of the reference of
+// an `import =` until the import itself is referenced, this way a chain of
+// imports can be elided if ultimately the final input is only used in a
+// type position. Following it reports nothing; checking the declaration
+// reports what is wrong with its reference.
+func (c *Checker) getAliasReferencedByAlias(symbol *ast.Symbol) *ast.Symbol {
+	node := c.getDeclarationOfAliasSymbol(symbol)
+	if node == nil {
+		panic("Unexpected nil in markAliasSymbolAsReferenced")
+	}
+	if ast.IsImportEqualsDeclaration(node) && node.AsImportEqualsDeclaration().ModuleReference.Kind != ast.KindExternalModuleReference {
+		if c.getSymbolFlags(c.resolveSymbol(symbol))&ast.SymbolFlagsValue != 0 {
+			// import foo = <symbol>
+			left := ast.GetFirstIdentifier(node.AsImportEqualsDeclaration().ModuleReference)
+			if target := c.resolveName(left, left.Text(), ast.SymbolFlagsValue|ast.SymbolFlagsExportValue, nil /*nameNotFoundMessage*/, true /*isUse*/, false /*excludeGlobals*/); target != nil && c.isAliasReferencedAt(target, left) {
+				return target
 			}
 		}
 	}
+	return nil
 }
 
 func (c *Checker) markExportAsReferenced(node *ast.Node /*ImportEqualsDeclaration | ExportSpecifier*/) {
