@@ -1081,6 +1081,18 @@ func (s *Session) HandleRequest(ctx context.Context, method string, params json.
 		return s.handleGetBaseTypeOfLiteralType(ctx, parsed.(*GetBaseTypeOfLiteralTypeParams))
 	case string(MethodGetNonNullableType):
 		return s.handleGetNonNullableType(ctx, parsed.(*GetTypePropertyParams))
+	case string(MethodGetNullableType):
+		return s.handleGetNullableType(ctx, parsed.(*GetNullableTypeParams))
+	case string(MethodGetStringLiteralType):
+		return s.handleGetStringLiteralType(ctx, parsed.(*GetStringLiteralTypeParams))
+	case string(MethodGetNumberLiteralType):
+		return s.handleGetNumberLiteralType(ctx, parsed.(*GetNumberLiteralTypeParams))
+	case string(MethodGetBigIntLiteralType):
+		return s.handleGetBigIntLiteralType(ctx, parsed.(*GetBigIntLiteralTypeParams))
+	case string(MethodGetJsxIntrinsicTagNamesAt):
+		return s.handleGetJsxIntrinsicTagNamesAt(ctx, parsed.(*CheckerNodeParams))
+	case string(MethodGetPrivateIdentifierPropertyOfType):
+		return s.handleGetPrivateIdentifierPropertyOfType(ctx, parsed.(*GetPrivateIdentifierPropertyOfTypeParams))
 	case string(MethodGetTypeFromTypeNode):
 		return s.handleGetTypeFromTypeNode(ctx, parsed.(*GetTypeFromTypeNodeParams))
 	case string(MethodGetWidenedType):
@@ -1185,6 +1197,12 @@ func (s *Session) HandleRequest(ctx context.Context, method string, params json.
 		return s.handleIsArrayType(ctx, parsed.(*CheckerTypeParams))
 	case string(MethodIsReadonlySymbol):
 		return s.handleIsReadonlySymbol(ctx, parsed.(*CheckerSymbolParams))
+	case string(MethodIsImplementationOfOverload):
+		return s.handleIsImplementationOfOverload(ctx, parsed.(*CheckerNodeParams))
+	case string(MethodGetPropertySymbolOfDestructuringAssignment):
+		return s.handleGetPropertySymbolOfDestructuringAssignment(ctx, parsed.(*CheckerNodeParams))
+	case string(MethodGetAmbientModules):
+		return s.handleGetAmbientModules(ctx, parsed.(*GetIntrinsicTypeParams))
 	case string(MethodGetAnyType):
 		return s.handleGetIntrinsicType(ctx, parsed.(*GetIntrinsicTypeParams), (*checker.Checker).GetAnyType)
 	case string(MethodGetStringType):
@@ -1209,6 +1227,10 @@ func (s *Session) HandleRequest(ctx context.Context, method string, params json.
 		return s.handleGetIntrinsicType(ctx, parsed.(*GetIntrinsicTypeParams), (*checker.Checker).GetESSymbolType)
 	case string(MethodGetNonPrimitiveType):
 		return s.handleGetIntrinsicType(ctx, parsed.(*GetIntrinsicTypeParams), (*checker.Checker).GetNonPrimitiveType)
+	case string(MethodGetFalseType):
+		return s.handleGetIntrinsicType(ctx, parsed.(*GetIntrinsicTypeParams), (*checker.Checker).GetFalseType)
+	case string(MethodGetTrueType):
+		return s.handleGetIntrinsicType(ctx, parsed.(*GetIntrinsicTypeParams), (*checker.Checker).GetTrueType)
 	case string(MethodGetWellKnownSymbols):
 		return s.handleGetWellKnownSymbols(ctx, parsed.(*GetIntrinsicTypeParams))
 	case string(MethodGetWellKnownSignatures):
@@ -3719,7 +3741,6 @@ func (s *Session) handleGetAwaitedType(ctx context.Context, params *CheckerTypeP
 	return setup.sd.newTypeResponse(setup.projectID, setup.checker.GetAwaitedType(t), setup.checker), nil
 }
 
-// handleGetBaseTypeOfLiteralType returns the base type of a literal type (e.g. number for 42).
 func (s *Session) handleGetBaseTypeOfLiteralType(ctx context.Context, params *GetBaseTypeOfLiteralTypeParams) (*TypeResponse, error) {
 	setup, err := s.setupChecker(ctx, params.Snapshot, params.Project)
 	if err != nil {
@@ -3751,7 +3772,120 @@ func (s *Session) handleGetNonNullableType(ctx context.Context, params *GetTypeP
 	return setup.sd.newTypeResponse(setup.projectID, setup.checker.GetNonNullableType(t), setup.checker), nil
 }
 
-// handleGetTypeFromTypeNode returns the type for a type node.
+func (s *Session) handleGetNullableType(ctx context.Context, params *GetNullableTypeParams) (*TypeResponse, error) {
+	setup, err := s.setupChecker(ctx, params.Snapshot, params.Project)
+	if err != nil {
+		return nil, err
+	}
+	defer setup.done()
+
+	t, err := setup.resolveTypeHandle(params.Type)
+	if err != nil {
+		return nil, err
+	}
+
+	result := setup.checker.GetNullableType(t, checker.TypeFlags(params.Flags))
+	return setup.sd.newTypeResponse(setup.projectID, result, setup.checker), nil
+}
+
+func (s *Session) handleGetStringLiteralType(ctx context.Context, params *GetStringLiteralTypeParams) (*TypeResponse, error) {
+	setup, err := s.setupChecker(ctx, params.Snapshot, params.Project)
+	if err != nil {
+		return nil, err
+	}
+	defer setup.done()
+
+	t := setup.checker.GetStringLiteralType(params.Value)
+	return setup.sd.newTypeResponse(setup.projectID, t, setup.checker), nil
+}
+
+func (s *Session) handleGetNumberLiteralType(ctx context.Context, params *GetNumberLiteralTypeParams) (*TypeResponse, error) {
+	setup, err := s.setupChecker(ctx, params.Snapshot, params.Project)
+	if err != nil {
+		return nil, err
+	}
+	defer setup.done()
+
+	value, err := numberLiteralValueFromJSON(params.Value)
+	if err != nil {
+		return nil, err
+	}
+
+	t := setup.checker.GetNumberLiteralType(value)
+	return setup.sd.newTypeResponse(setup.projectID, t, setup.checker), nil
+}
+
+func (s *Session) handleGetBigIntLiteralType(ctx context.Context, params *GetBigIntLiteralTypeParams) (*TypeResponse, error) {
+	setup, err := s.setupChecker(ctx, params.Snapshot, params.Project)
+	if err != nil {
+		return nil, err
+	}
+	defer setup.done()
+
+	value := jsnum.PseudoBigInt{Negative: params.Negative, Base10Value: params.Base10Value}
+	t := setup.checker.GetBigIntLiteralType(value)
+	return setup.sd.newTypeResponse(setup.projectID, t, setup.checker), nil
+}
+
+// @gen-proto-nullable
+func (s *Session) handleGetJsxIntrinsicTagNamesAt(ctx context.Context, params *CheckerNodeParams) ([]*SymbolResponse, error) {
+	setup, err := s.setupChecker(ctx, params.Snapshot, params.Project)
+	if err != nil {
+		return nil, err
+	}
+	defer setup.done()
+
+	node, err := setup.sd.resolveNodeHandle(setup.program, params.Location)
+	if err != nil {
+		return nil, err
+	}
+	if node == nil {
+		return nil, nil
+	}
+
+	props := setup.checker.GetJsxIntrinsicTagNamesAt(node)
+	if len(props) == 0 {
+		return nil, nil
+	}
+
+	results := make([]*SymbolResponse, len(props))
+	for i, prop := range props {
+		results[i] = setup.newSymbolResponse(prop)
+	}
+	return results, nil
+}
+
+// handleGetPrivateIdentifierPropertyOfType looks up a private identifier (e.g. "#foo") lexically in
+// scope at the given location, and if found, returns the corresponding property of the type.
+// @gen-proto-nullable
+func (s *Session) handleGetPrivateIdentifierPropertyOfType(ctx context.Context, params *GetPrivateIdentifierPropertyOfTypeParams) (*SymbolResponse, error) {
+	setup, err := s.setupChecker(ctx, params.Snapshot, params.Project)
+	if err != nil {
+		return nil, err
+	}
+	defer setup.done()
+
+	t, err := setup.resolveTypeHandle(params.Type)
+	if err != nil {
+		return nil, err
+	}
+
+	node, err := setup.sd.resolveNodeHandle(setup.program, params.Location)
+	if err != nil {
+		return nil, err
+	}
+	if node == nil {
+		return nil, nil
+	}
+
+	symbol := setup.checker.GetPrivateIdentifierPropertyOfType(t, params.Name, node)
+	if symbol == nil {
+		return nil, nil
+	}
+
+	return setup.newSymbolResponse(symbol), nil
+}
+
 func (s *Session) handleGetTypeFromTypeNode(ctx context.Context, params *GetTypeFromTypeNodeParams) (*TypeResponse, error) {
 	setup, err := s.setupChecker(ctx, params.Snapshot, params.Project)
 	if err != nil {
@@ -3767,7 +3901,6 @@ func (s *Session) handleGetTypeFromTypeNode(ctx context.Context, params *GetType
 	return setup.sd.newTypeResponse(setup.projectID, setup.checker.GetTypeFromTypeNode(node), setup.checker), nil
 }
 
-// handleGetWidenedType returns the widened type.
 func (s *Session) handleGetWidenedType(ctx context.Context, params *GetWidenedTypeParams) (*TypeResponse, error) {
 	setup, err := s.setupChecker(ctx, params.Snapshot, params.Project)
 	if err != nil {
@@ -3783,7 +3916,6 @@ func (s *Session) handleGetWidenedType(ctx context.Context, params *GetWidenedTy
 	return setup.sd.newTypeResponse(setup.projectID, setup.checker.GetWidenedType(t), setup.checker), nil
 }
 
-// handleGetParameterType returns the type of a parameter at a given index in a signature.
 func (s *Session) handleGetParameterType(ctx context.Context, params *GetParameterTypeParams) (*TypeResponse, error) {
 	setup, err := s.setupChecker(ctx, params.Snapshot, params.Project)
 	if err != nil {
@@ -3820,7 +3952,6 @@ func (s *Session) handleGetTypeParameterAtPosition(ctx context.Context, params *
 	return setup.sd.newTypeResponse(setup.projectID, setup.checker.GetTypeParameterAtPosition(sig, int(params.Index)), setup.checker), nil
 }
 
-// handleIsArrayLikeType returns whether a type is array-like.
 func (s *Session) handleIsArrayLikeType(ctx context.Context, params *IsArrayLikeTypeParams) (bool, error) {
 	setup, err := s.setupChecker(ctx, params.Snapshot, params.Project)
 	if err != nil {
@@ -3836,7 +3967,6 @@ func (s *Session) handleIsArrayLikeType(ctx context.Context, params *IsArrayLike
 	return setup.checker.IsArrayLikeType(t), nil
 }
 
-// handleIsTypeAssignableTo returns whether source is assignable to target.
 func (s *Session) handleIsTypeAssignableTo(ctx context.Context, params *IsTypeAssignableToParams) (bool, error) {
 	setup, err := s.setupChecker(ctx, params.Snapshot, params.Project)
 	if err != nil {
@@ -4427,6 +4557,75 @@ func (s *Session) handleIsReadonlySymbol(ctx context.Context, params *CheckerSym
 	}
 
 	return setup.checker.IsReadonlySymbol(symbol), nil
+}
+
+// handleIsImplementationOfOverload returns whether a function-like declaration is the implementation signature of a set of overloads.
+func (s *Session) handleIsImplementationOfOverload(ctx context.Context, params *CheckerNodeParams) (bool, error) {
+	setup, err := s.setupChecker(ctx, params.Snapshot, params.Project)
+	if err != nil {
+		return false, err
+	}
+	defer setup.done()
+
+	node, err := setup.sd.resolveNodeHandle(setup.program, params.Location)
+	if err != nil {
+		return false, err
+	}
+	if node == nil {
+		return false, nil
+	}
+
+	if !ast.IsFunctionLike(node) {
+		return false, nil
+	}
+	return setup.checker.NewEmitResolver(printer.NewEmitContext()).IsImplementationOfOverload(node), nil
+}
+
+// @gen-proto-nullable
+func (s *Session) handleGetPropertySymbolOfDestructuringAssignment(ctx context.Context, params *CheckerNodeParams) (*SymbolResponse, error) {
+	setup, err := s.setupChecker(ctx, params.Snapshot, params.Project)
+	if err != nil {
+		return nil, err
+	}
+	defer setup.done()
+
+	node, err := setup.sd.resolveNodeHandle(setup.program, params.Location)
+	if err != nil {
+		return nil, err
+	}
+	if node == nil {
+		return nil, nil
+	}
+
+	symbol := setup.checker.GetPropertySymbolOfDestructuringAssignment(node)
+	if symbol == nil {
+		return nil, nil
+	}
+
+	return setup.newSymbolResponse(symbol), nil
+}
+
+// handleGetAmbientModules returns all ambient modules declared in the program `declare module "foo" { ... }`.
+// @gen-proto-nullable
+func (s *Session) handleGetAmbientModules(ctx context.Context, params *GetIntrinsicTypeParams) ([]*SymbolResponse, error) {
+	setup, err := s.setupChecker(ctx, params.Snapshot, params.Project)
+	if err != nil {
+		return nil, err
+	}
+	defer setup.done()
+
+	modules := setup.checker.GetAmbientModules()
+	if len(modules) == 0 {
+		return nil, nil
+	}
+	slices.SortFunc(modules, setup.checker.CompareSymbols)
+
+	results := make([]*SymbolResponse, len(modules))
+	for i, module := range modules {
+		results[i] = setup.newSymbolResponse(module)
+	}
+
+	return results, nil
 }
 
 // handleGetBaseTypes returns the base types of an interface/class type.
