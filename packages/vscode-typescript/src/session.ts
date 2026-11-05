@@ -603,7 +603,7 @@ async function promptSelectVersion(context: vscode.ExtensionContext, client: Cli
     items.push({
         label: (currentExePath === defaultExe.path ? "• " : "") + vscode.l10n.t("Use TypeScript 7"),
         description: defaultExe.version,
-        detail: "",
+        detail: defaultExe.path,
         restart: true,
         run: async () => {
             await context.workspaceState.update(useWorkspaceTsdkStorageKey, false);

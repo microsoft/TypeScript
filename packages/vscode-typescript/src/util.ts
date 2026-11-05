@@ -79,6 +79,12 @@ export async function getNightlyExePath(): Promise<ExeInfo | undefined> {
 }
 
 export async function getDefaultExePath(context: vscode.ExtensionContext): Promise<ExeInfo> {
+    for (const candidate of await getTsdkCandidates({ filter: candidate => candidate.target === vscode.ConfigurationTarget.Global })) {
+        const exe = await resolveTsdkPathToExe(candidate.value);
+        if (exe) {
+            return exe;
+        }
+    }
     if (enableContributedNightlyVersion) {
         const nightlyExe = await getNightlyExePath();
         if (nightlyExe) {
