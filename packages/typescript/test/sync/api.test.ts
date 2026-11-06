@@ -2584,46 +2584,42 @@ describe("SourceFile", { concurrency }, () => {
         assert.equal(program.getProjectReferences(), undefined);
     });
 
-    test("Program counters cache the first statistics without forcing diagnostics", context => {
+    test("Program statistics reflect checker work without forcing diagnostics", () => {
         using api = spawnAPI({
             "/src/main.ts": `type Box<T> = { value: T };
 export const box: Box<string> = { value: "hello" };
 export const other: { value: string } = box;`,
-        });
+        }, { collectTiming: true });
         const snapshot = api.createSnapshot({
             createPrograms: [{ rootFiles: ["/src/main.ts"], compilerOptions: { noLib: true } }],
         });
         const project = snapshot.getProjects()[0];
         const program = project.program;
-        // @ts-ignore -- Internal client requests are exercised by source tests.
-        const request = context.mock.method(api["client"], "apiRequest");
-        const identifiers = program.getIdentifierCount();
-        const nodes = program.getNodeCount();
-        const symbols = program.getSymbolCount();
-        const types = program.getTypeCount();
-        const instantiations = program.getInstantiationCount();
-        const relations = program.getRelationCacheSizes();
-        assert.ok(identifiers > 0);
-        assert.ok(nodes > identifiers);
-        assert.ok(symbols > 0);
-        assert.ok(types > 0);
-        assert.equal(instantiations, 0);
-        assert.deepEqual(relations, { assignable: 0, identity: 0, subtype: 0, strictSubtype: 0 });
+        api.resetTimingInfo();
+        const statistics = program.getStatistics();
+        assert.deepEqual(program.getStatistics(), statistics);
+        assert.equal((api.getTimingInfo()).totals.requestCount, 2);
+        assert.ok(statistics.identifierCount > 0);
+        assert.ok(statistics.nodeCount > statistics.identifierCount);
+        assert.ok(statistics.symbolCount > 0);
+        assert.ok(statistics.typeCount > 0);
+        assert.equal(statistics.instantiationCount, 0);
+        assert.deepEqual(statistics.relationCacheSizes, { assignable: 0, identity: 0, subtype: 0, strictSubtype: 0 });
 
         const file = (program.getSourceFile("/src/main.ts"))!;
         const checker = project.checker;
         const declaration = cast(file.statements[1], isVariableStatement).declarationList.declarations[0];
         const type = checker.getTypeAtLocation(declaration.name);
         type.getProperties();
-        assert.equal(program.getInstantiationCount(), instantiations);
-        assert.equal(program.getTypeCount(), types);
-        assert.equal(program.getSymbolCount(), symbols);
         const other = cast(file.statements[2], isVariableStatement).declarationList.declarations[0];
         checker.isTypeAssignableTo(type, checker.getTypeAtLocation(other.name));
-        assert.deepEqual(program.getRelationCacheSizes(), relations);
-        assert.equal(program.getIdentifierCount(), identifiers);
-        assert.equal(program.getNodeCount(), nodes);
-        assert.equal(request.mock.calls.filter(call => call.arguments[0] === "getProgramStatistics").length, 1);
+        const updated = program.getStatistics();
+        assert.ok(updated.instantiationCount > statistics.instantiationCount);
+        assert.ok(updated.typeCount > statistics.typeCount);
+        assert.ok(updated.symbolCount >= statistics.symbolCount);
+        assert.ok(updated.relationCacheSizes.assignable > statistics.relationCacheSizes.assignable);
+        assert.equal(updated.identifierCount, statistics.identifierCount);
+        assert.equal(updated.nodeCount, statistics.nodeCount);
     });
 
     test("Program accessors handle empty programs and missing root files", () => {
@@ -2631,8 +2627,9 @@ export const other: { value: string } = box;`,
         using empty = api.createProgram([], { noLib: true });
         assert.deepEqual(empty.getRootFileNames(), []);
         assert.deepEqual(empty.getSourceFileNames(), []);
-        assert.equal(empty.getNodeCount(), 0);
-        assert.equal(empty.getIdentifierCount(), 0);
+        const statistics = empty.getStatistics();
+        assert.equal(statistics.nodeCount, 0);
+        assert.equal(statistics.identifierCount, 0);
         assert.equal(empty.getProjectReferences(), undefined);
         assert.deepEqual(empty.getProgramDiagnostics(), []);
 

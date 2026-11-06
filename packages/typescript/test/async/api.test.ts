@@ -1531,7 +1531,7 @@ declare module "augmentation" {}`,
 
 // @sync-skip-block-start
 describe("API - automatic batching", { concurrency }, () => {
-    test("shares pending and settled Program statistics requests", async context => {
+    test("fetches Program statistics for every request", async context => {
         await using api = spawnAPI({ "/src/main.ts": "export const value = 1;" });
         await using program = await api.createProgram(["/src/main.ts"], { noLib: true });
         await using empty = await api.createProgram([], { noLib: true });
@@ -1539,30 +1539,26 @@ describe("API - automatic batching", { concurrency }, () => {
         const client = api["client"];
         const request = context.mock.method(client, "apiRequest");
 
-        const [identifiers, instantiations, nodes, symbols, types, relations, emptyNodes] = await Promise.all([
-            program.getIdentifierCount(),
-            program.getInstantiationCount(),
-            program.getNodeCount(),
-            program.getSymbolCount(),
-            program.getTypeCount(),
-            program.getRelationCacheSizes(),
-            empty.getNodeCount(),
+        const [statistics, repeated, emptyStatistics] = await Promise.all([
+            program.getStatistics(),
+            program.getStatistics(),
+            empty.getStatistics(),
         ]);
-        assert.equal(request.mock.callCount(), 2);
-        assert.ok(identifiers > 0);
-        assert.ok(nodes > identifiers);
-        assert.ok(symbols > 0);
-        assert.ok(types > 0);
-        assert.equal(instantiations, 0);
-        assert.deepEqual(relations, { assignable: 0, identity: 0, subtype: 0, strictSubtype: 0 });
-        assert.equal(emptyNodes, 0);
+        assert.equal(request.mock.callCount(), 3);
+        assert.deepEqual(repeated, statistics);
+        assert.ok(statistics.identifierCount > 0);
+        assert.ok(statistics.nodeCount > statistics.identifierCount);
+        assert.ok(statistics.symbolCount > 0);
+        assert.ok(statistics.typeCount > 0);
+        assert.equal(statistics.instantiationCount, 0);
+        assert.deepEqual(statistics.relationCacheSizes, { assignable: 0, identity: 0, subtype: 0, strictSubtype: 0 });
+        assert.equal(emptyStatistics.nodeCount, 0);
 
-        await program.getTypeCount();
-        await program.getSymbolCount();
-        assert.equal(request.mock.callCount(), 2);
+        assert.deepEqual(await program.getStatistics(), statistics);
+        assert.equal(request.mock.callCount(), 4);
     });
 
-    test("caches rejected Program statistics requests", async context => {
+    test("retries Program statistics requests after failure", async context => {
         await using api = spawnAPI({ "/src/main.ts": "export const value = 1;" });
         await using program = await api.createProgram(["/src/main.ts"], { noLib: true });
         // @ts-ignore -- Internal client requests are exercised by source tests.
@@ -1571,14 +1567,10 @@ describe("API - automatic batching", { concurrency }, () => {
         const error = new Error("Statistics request failed");
         request.mock.mockImplementationOnce(() => Promise.reject(error));
 
-        const results = await Promise.allSettled([program.getNodeCount(), program.getTypeCount()]);
-        assert.deepEqual(results, [
-            { status: "rejected", reason: error },
-            { status: "rejected", reason: error },
-        ]);
+        await assert.rejects(program.getStatistics(), error);
         assert.equal(request.mock.callCount(), 1);
-        await assert.rejects(program.getNodeCount(), error);
-        assert.equal(request.mock.callCount(), 1);
+        assert.ok((await program.getStatistics()).nodeCount > 0);
+        assert.equal(request.mock.callCount(), 2);
     });
 
     test("initializes only once for concurrent first requests", async () => {
@@ -2776,7 +2768,7 @@ describe("SourceFile", { concurrency }, () => {
         assert.equal(await program.getProjectReferences(), undefined);
     });
 
-    test("Program counters cache the first statistics without forcing diagnostics", async () => {
+    test("Program statistics reflect checker work without forcing diagnostics", async () => {
         await using api = spawnAPI({
             "/src/main.ts": `type Box<T> = { value: T };
 export const box: Box<string> = { value: "hello" };
@@ -2788,33 +2780,30 @@ export const other: { value: string } = box;`,
         const project = snapshot.getProjects()[0];
         const program = project.program;
         await api.resetTimingInfo();
-        const identifiers = await program.getIdentifierCount();
-        const nodes = await program.getNodeCount();
-        const symbols = await program.getSymbolCount();
-        const types = await program.getTypeCount();
-        const instantiations = await program.getInstantiationCount();
-        const relations = await program.getRelationCacheSizes();
-        assert.equal((await api.getTimingInfo()).totals.requestCount, 1);
-        assert.ok(identifiers > 0);
-        assert.ok(nodes > identifiers);
-        assert.ok(symbols > 0);
-        assert.ok(types > 0);
-        assert.equal(instantiations, 0);
-        assert.deepEqual(relations, { assignable: 0, identity: 0, subtype: 0, strictSubtype: 0 });
+        const statistics = await program.getStatistics();
+        assert.deepEqual(await program.getStatistics(), statistics);
+        assert.equal((await api.getTimingInfo()).totals.requestCount, 2);
+        assert.ok(statistics.identifierCount > 0);
+        assert.ok(statistics.nodeCount > statistics.identifierCount);
+        assert.ok(statistics.symbolCount > 0);
+        assert.ok(statistics.typeCount > 0);
+        assert.equal(statistics.instantiationCount, 0);
+        assert.deepEqual(statistics.relationCacheSizes, { assignable: 0, identity: 0, subtype: 0, strictSubtype: 0 });
 
         const file = (await program.getSourceFile("/src/main.ts"))!;
         const checker = project.checker;
         const declaration = cast(file.statements[1], isVariableStatement).declarationList.declarations[0];
         const type = await checker.getTypeAtLocation(declaration.name);
         await type.getProperties();
-        assert.equal(await program.getInstantiationCount(), instantiations);
-        assert.equal(await program.getTypeCount(), types);
-        assert.equal(await program.getSymbolCount(), symbols);
         const other = cast(file.statements[2], isVariableStatement).declarationList.declarations[0];
         await checker.isTypeAssignableTo(type, await checker.getTypeAtLocation(other.name));
-        assert.deepEqual(await program.getRelationCacheSizes(), relations);
-        assert.equal(await program.getIdentifierCount(), identifiers);
-        assert.equal(await program.getNodeCount(), nodes);
+        const updated = await program.getStatistics();
+        assert.ok(updated.instantiationCount > statistics.instantiationCount);
+        assert.ok(updated.typeCount > statistics.typeCount);
+        assert.ok(updated.symbolCount >= statistics.symbolCount);
+        assert.ok(updated.relationCacheSizes.assignable > statistics.relationCacheSizes.assignable);
+        assert.equal(updated.identifierCount, statistics.identifierCount);
+        assert.equal(updated.nodeCount, statistics.nodeCount);
     });
 
     test("Program accessors handle empty programs and missing root files", async () => {
@@ -2822,8 +2811,9 @@ export const other: { value: string } = box;`,
         await using empty = await api.createProgram([], { noLib: true });
         assert.deepEqual(await empty.getRootFileNames(), []);
         assert.deepEqual(await empty.getSourceFileNames(), []);
-        assert.equal(await empty.getNodeCount(), 0);
-        assert.equal(await empty.getIdentifierCount(), 0);
+        const statistics = await empty.getStatistics();
+        assert.equal(statistics.nodeCount, 0);
+        assert.equal(statistics.identifierCount, 0);
         assert.equal(await empty.getProjectReferences(), undefined);
         assert.deepEqual(await empty.getProgramDiagnostics(), []);
 

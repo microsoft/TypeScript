@@ -173,7 +173,6 @@ const privateGeneratorGetters = new Set([
     "NodeHandle.fetchOwnerFile",
     "NodeHandle.resolveInFile",
     "Program.disposeWorker",
-    "Program.getStatistics",
     "Program.fetchSourceFileMetadata",
     "Program.getSourceFileWorker",
     "Snapshot.disposeWorker",
@@ -447,29 +446,21 @@ function assertPublicGeneratorCoverage(owners: readonly { readonly name: string;
 }
 
 describe("API - generator batching", { concurrency: areTestsFiltered() }, () => {
-    test("Program statistics share a cache between sync and generator calls", () => {
+    test("Program statistics are fetched for every sync and generator call", () => {
         using api = spawnAPI({ "/src/main.ts": "export const value = 1;" }, { collectTiming: true });
         for (const generatorFirst of [false, true]) {
             using program = api.createProgram(["/src/main.ts"], { noLib: true });
             api.resetTimingInfo();
-            const nodes = generatorFirst ? api.batch(program.getNodeCount.gen())[0] : program.getNodeCount();
-            assert.ok(nodes > 0);
-            const [cachedNodes, types, symbols, instantiations, identifiers, relations] = api.batch(
-                program.getNodeCount.gen(),
-                program.getTypeCount.gen(),
-                program.getSymbolCount.gen(),
-                program.getInstantiationCount.gen(),
-                program.getIdentifierCount.gen(),
-                program.getRelationCacheSizes.gen(),
+            const statistics = generatorFirst ? api.batch(program.getStatistics.gen())[0] : program.getStatistics();
+            assert.ok(statistics.nodeCount > 0);
+            const [next, repeated] = api.batch(
+                program.getStatistics.gen(),
+                program.getStatistics.gen(),
             );
-            assert.equal(cachedNodes, nodes);
-            assert.equal(program.getNodeCount(), nodes);
-            assert.equal(program.getTypeCount(), types);
-            assert.equal(program.getSymbolCount(), symbols);
-            assert.equal(program.getInstantiationCount(), instantiations);
-            assert.equal(program.getIdentifierCount(), identifiers);
-            assert.strictEqual(program.getRelationCacheSizes(), relations);
-            assert.equal(api.getTimingInfo().totals.requestCount, 1);
+            assert.deepEqual(next, statistics);
+            assert.deepEqual(repeated, statistics);
+            assert.deepEqual(program.getStatistics(), statistics);
+            assert.equal(api.getTimingInfo().totals.requestCount, 3);
         }
     });
 
@@ -1828,12 +1819,7 @@ describe("API - generator batching", { concurrency: areTestsFiltered() }, () => 
 
             runParityBatch(api, cases);
             runParityBatch(api, [
-                parityCase("Program", "getIdentifierCount", program.getIdentifierCount, assertDeepEquivalent),
-                parityCase("Program", "getNodeCount", program.getNodeCount, assertDeepEquivalent),
-                parityCase("Program", "getSymbolCount", program.getSymbolCount, assertDeepEquivalent),
-                parityCase("Program", "getTypeCount", program.getTypeCount, assertDeepEquivalent),
-                parityCase("Program", "getInstantiationCount", program.getInstantiationCount, assertDeepEquivalent),
-                parityCase("Program", "getRelationCacheSizes", program.getRelationCacheSizes, assertDeepEquivalent),
+                parityCase("Program", "getStatistics", program.getStatistics, assertDeepEquivalent),
             ]);
             assert.deepEqual(temporaryProjects, ["/tsconfig.json", "/tsconfig.json"]);
 

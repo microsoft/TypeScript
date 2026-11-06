@@ -259,6 +259,7 @@ export type {
     ObjectType,
     PackageId,
     ParsedCommandLine,
+    ProgramStatisticsResponse,
     ProjectId,
     ProjectReference,
     RawCompilerOptions,
@@ -2927,7 +2928,6 @@ export class Program<Id extends ProjectId = ProjectId> implements FormatDiagnost
     private readonly sourceFileMetadataCache = new Map<PathKey, SourceFileMetadata | undefined>();
     private ownedSnapshot: Snapshot | undefined;
     private disposePromise: void | undefined;
-    private statistics: ProgramStatisticsResponse | undefined;
 
     private get client(): Client {
         return this.project.api.client;
@@ -3015,7 +3015,7 @@ export class Program<Id extends ProjectId = ProjectId> implements FormatDiagnost
         return this.project.parsedCommandLine.projectReferences;
     }
 
-    private get getStatistics(): {
+    get getStatistics(): {
         (): ProgramStatisticsResponse;
         gen(): Generator<ProtocolRequest, ProgramStatisticsResponse, ProtocolResponse["result"]>;
     } {
@@ -3024,118 +3024,16 @@ export class Program<Id extends ProjectId = ProjectId> implements FormatDiagnost
             owner,
             "getStatistics",
             function (): ProgramStatisticsResponse {
-                return owner.statistics ??= owner.client.apiRequest("getProgramStatistics", {
+                return owner.client.apiRequest("getProgramStatistics", {
                     snapshot: owner.snapshotId,
                     project: owner.project.handle,
                 });
             },
             function* (): Generator<ProtocolRequest, ProgramStatisticsResponse, ProtocolResponse["result"]> {
-                return owner.statistics ??= yield* apiRequest("getProgramStatistics", {
+                return yield* apiRequest("getProgramStatistics", {
                     snapshot: owner.snapshotId,
                     project: owner.project.handle,
                 });
-            },
-        );
-    }
-
-    get getIdentifierCount(): {
-        (): number;
-        gen(): Generator<ProtocolRequest, number, ProtocolResponse["result"]>;
-    } {
-        const owner = this;
-        return cacheGeneratorMethod(
-            owner,
-            "getIdentifierCount",
-            function (): number {
-                return (owner.getStatistics()).identifierCount;
-            },
-            function* (): Generator<ProtocolRequest, number, ProtocolResponse["result"]> {
-                return (yield* owner.getStatistics.gen()).identifierCount;
-            },
-        );
-    }
-
-    get getInstantiationCount(): {
-        (): number;
-        gen(): Generator<ProtocolRequest, number, ProtocolResponse["result"]>;
-    } {
-        const owner = this;
-        return cacheGeneratorMethod(
-            owner,
-            "getInstantiationCount",
-            function (): number {
-                return (owner.getStatistics()).instantiationCount;
-            },
-            function* (): Generator<ProtocolRequest, number, ProtocolResponse["result"]> {
-                return (yield* owner.getStatistics.gen()).instantiationCount;
-            },
-        );
-    }
-
-    get getNodeCount(): {
-        (): number;
-        gen(): Generator<ProtocolRequest, number, ProtocolResponse["result"]>;
-    } {
-        const owner = this;
-        return cacheGeneratorMethod(
-            owner,
-            "getNodeCount",
-            function (): number {
-                return (owner.getStatistics()).nodeCount;
-            },
-            function* (): Generator<ProtocolRequest, number, ProtocolResponse["result"]> {
-                return (yield* owner.getStatistics.gen()).nodeCount;
-            },
-        );
-    }
-
-    get getSymbolCount(): {
-        (): number;
-        gen(): Generator<ProtocolRequest, number, ProtocolResponse["result"]>;
-    } {
-        const owner = this;
-        return cacheGeneratorMethod(
-            owner,
-            "getSymbolCount",
-            function (): number {
-                return (owner.getStatistics()).symbolCount;
-            },
-            function* (): Generator<ProtocolRequest, number, ProtocolResponse["result"]> {
-                return (yield* owner.getStatistics.gen()).symbolCount;
-            },
-        );
-    }
-
-    get getTypeCount(): {
-        (): number;
-        gen(): Generator<ProtocolRequest, number, ProtocolResponse["result"]>;
-    } {
-        const owner = this;
-        return cacheGeneratorMethod(
-            owner,
-            "getTypeCount",
-            function (): number {
-                return (owner.getStatistics()).typeCount;
-            },
-            function* (): Generator<ProtocolRequest, number, ProtocolResponse["result"]> {
-                return (yield* owner.getStatistics.gen()).typeCount;
-            },
-        );
-    }
-
-    get getRelationCacheSizes(): {
-        (): RelationCacheSizes;
-        gen(): Generator<ProtocolRequest, RelationCacheSizes, ProtocolResponse["result"]>;
-    } {
-        const owner = this;
-        return cacheGeneratorMethod(
-            owner,
-            "getRelationCacheSizes",
-            function (): RelationCacheSizes {
-                return (owner.getStatistics()).relationCacheSizes;
-            },
-            function* (): Generator<ProtocolRequest, RelationCacheSizes, ProtocolResponse["result"]> {
-                return (yield* owner.getStatistics.gen()).relationCacheSizes;
             },
         );
     }

@@ -241,6 +241,7 @@ export type {
     ObjectType,
     PackageId,
     ParsedCommandLine,
+    ProgramStatisticsResponse,
     ProjectId,
     ProjectReference,
     RawCompilerOptions,
@@ -1748,7 +1749,6 @@ export class Program<Id extends ProjectId = ProjectId> implements FormatDiagnost
     private readonly sourceFileMetadataCache = new Map<PathKey, Promise<SourceFileMetadata | undefined>>();
     private ownedSnapshot: Snapshot | undefined;
     private disposePromise: Promise<void> | undefined;
-    private statistics: Promise<ProgramStatisticsResponse> | undefined;
 
     private get client(): Client {
         return this.project.api.client;
@@ -1808,35 +1808,11 @@ export class Program<Id extends ProjectId = ProjectId> implements FormatDiagnost
         return this.project.parsedCommandLine.projectReferences;
     }
 
-    private getStatistics(): Promise<ProgramStatisticsResponse> {
-        return this.statistics ??= this.client.apiRequest("getProgramStatistics", {
+    getStatistics(): Promise<ProgramStatisticsResponse> {
+        return this.client.apiRequest("getProgramStatistics", {
             snapshot: this.snapshotId,
             project: this.project.handle,
         });
-    }
-
-    async getIdentifierCount(): Promise<number> {
-        return (await this.getStatistics()).identifierCount;
-    }
-
-    async getInstantiationCount(): Promise<number> {
-        return (await this.getStatistics()).instantiationCount;
-    }
-
-    async getNodeCount(): Promise<number> {
-        return (await this.getStatistics()).nodeCount;
-    }
-
-    async getSymbolCount(): Promise<number> {
-        return (await this.getStatistics()).symbolCount;
-    }
-
-    async getTypeCount(): Promise<number> {
-        return (await this.getStatistics()).typeCount;
-    }
-
-    async getRelationCacheSizes(): Promise<RelationCacheSizes> {
-        return (await this.getStatistics()).relationCacheSizes;
     }
 
     async getSourceFile(file: DocumentIdentifier): Promise<SourceFile | undefined> {
