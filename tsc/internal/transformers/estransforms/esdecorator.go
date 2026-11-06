@@ -2711,8 +2711,10 @@ func (tx *esDecoratorTransformer) createSymbolMetadata(target *ast.Expression, v
 
 func (tx *esDecoratorTransformer) createSymbolMetadataReference(classSuper *ast.IdentifierNode) *ast.Expression {
 	f := tx.Factory()
+	// _classSuper?.[Symbol.metadata] ?? null
+	// The superclass may be `null` (`class C extends null {}`), in which case the parent metadata is `null`.
 	symbolMetadata := f.NewPropertyAccessExpression(f.NewIdentifier("Symbol"), nil, f.NewIdentifier("metadata"), ast.NodeFlagsNone)
-	elementAccess := f.NewElementAccessExpression(classSuper, nil, symbolMetadata, ast.NodeFlagsNone)
+	elementAccess := f.NewElementAccessExpression(classSuper, f.NewToken(ast.KindQuestionDotToken), symbolMetadata, ast.NodeFlagsOptionalChain)
 	return f.NewBinaryExpression(nil, elementAccess, nil, f.NewToken(ast.KindQuestionQuestionToken), f.NewToken(ast.KindNullKeyword))
 }
 
