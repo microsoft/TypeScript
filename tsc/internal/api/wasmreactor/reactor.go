@@ -85,7 +85,7 @@ func (r *Reactor) Start(callbacks []string) error {
 		return errors.New("the server has already started")
 	}
 	r.started = true
-	server := api.NewStdioServer(&api.StdioServerOptions{
+	server := api.NewServer(&api.ServerOptions{
 		Cwd:                       r.cwd,
 		DefaultLibraryPath:        bundled.LibPath(),
 		Callbacks:                 callbacks,

@@ -1,15 +1,17 @@
 package ipc
 
 import (
+	"context"
 	"errors"
 	"io"
 	"net"
+	"sync"
 )
 
 // Transport is an interface for accepting connections from API clients.
 type Transport interface {
 	// Accept waits for and returns the next connection.
-	Accept() (io.ReadWriteCloser, error)
+	Accept(ctx context.Context) (io.ReadWriteCloser, error)
 	// Close stops the transport from accepting new connections.
 	Close() error
 }
@@ -17,6 +19,8 @@ type Transport interface {
 // PipeTransport accepts connections on a Unix domain socket or Windows named pipe.
 type PipeTransport struct {
 	listener net.Listener
+	once     sync.Once
+	closeErr error
 	cleanup  func() error
 }
 
@@ -47,17 +51,54 @@ func NewPrivatePipeTransport(name string) (*PipeTransport, error) {
 }
 
 // Accept implements Transport.
-func (t *PipeTransport) Accept() (io.ReadWriteCloser, error) {
-	return t.listener.Accept()
+func (t *PipeTransport) Accept(ctx context.Context) (io.ReadWriteCloser, error) {
+	done := make(chan struct{})
+	go func() {
+		select {
+		case <-ctx.Done():
+			_ = t.close()
+		case <-done:
+			return
+		}
+	}()
+	conn, err := t.listener.Accept()
+	close(done)
+	if closeErr := t.close(); err != nil {
+		if ctxErr := ctx.Err(); ctxErr != nil {
+			return nil, ctxErr
+		}
+		return nil, err
+	} else if closeErr != nil {
+		conn.Close()
+		return nil, closeErr
+	} else if ctxErr := ctx.Err(); ctxErr != nil {
+		conn.Close()
+		return nil, ctxErr
+	}
+	return conn, nil
 }
 
 // Close implements Transport.
 func (t *PipeTransport) Close() error {
-	closeErr := t.listener.Close()
-	if t.cleanup == nil || errors.Is(closeErr, net.ErrClosed) {
-		return closeErr
+	closed := true
+	t.once.Do(func() {
+		closed = false
+		closeErr := t.listener.Close()
+		if t.cleanup == nil || errors.Is(closeErr, net.ErrClosed) {
+			t.closeErr = closeErr
+		} else {
+			t.closeErr = errors.Join(closeErr, t.cleanup())
+		}
+	})
+	if closed {
+		return errors.Join(net.ErrClosed, t.closeErr)
 	}
-	return errors.Join(closeErr, t.cleanup())
+	return t.closeErr
+}
+
+func (t *PipeTransport) close() error {
+	_ = t.Close()
+	return t.closeErr
 }
 
 // Path returns the path of the pipe/socket.
@@ -82,7 +123,7 @@ func NewStdioTransport(stdin io.ReadCloser, stdout io.WriteCloser) *StdioTranspo
 }
 
 // Accept implements Transport.
-func (t *StdioTransport) Accept() (io.ReadWriteCloser, error) {
+func (t *StdioTransport) Accept(_ context.Context) (io.ReadWriteCloser, error) {
 	if t.used {
 		return nil, io.EOF
 	}

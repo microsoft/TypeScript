@@ -25,7 +25,7 @@ func TestPipeTransportPermissions(t *testing.T) {
 	done := make(chan struct{})
 	defer close(done)
 	go func() {
-		server, acceptErr := transport.Accept()
+		server, acceptErr := transport.Accept(t.Context())
 		if acceptErr == nil {
 			defer server.Close()
 		}

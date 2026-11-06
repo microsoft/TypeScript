@@ -9057,8 +9057,11 @@ func (s *ProfileResult) UnmarshalJSONFrom(dec *json.Decoder) error {
 
 // Parameters for the initializeAPISession request.
 type InitializeAPISessionParams struct {
-	// Optional named pipe path on Windows. On Unix, the path must not exist and will be created as a private directory containing a socket named 'socket'. If not provided, a unique path will be generated.
+	// Optional path to use for API communication. For the asynchronous protocol, this is a named pipe path on Windows; on Unix, the path must not exist and will be created as a private directory containing a socket named 'socket'. For the synchronous protocol, this is a named pipe path on Windows or a FIFO prefix on Unix. If not provided, a unique path will be generated.
 	Pipe *string `json:"pipe,omitzero"`
+
+	// Use the synchronous MessagePack API protocol over FIFOs on Unix or a named pipe on Windows.
+	Synchronous *bool `json:"synchronous,omitzero"`
 }
 
 var _ json.UnmarshalerFrom = (*InitializeAPISessionParams)(nil)
@@ -9072,7 +9075,7 @@ type InitializeAPISessionResult struct {
 	// The unique identifier for this API session.
 	SessionId string `json:"sessionId" lsp:"required"`
 
-	// The path to the named pipe or Unix domain socket for API communication.
+	// The path to use for API communication.
 	Pipe string `json:"pipe" lsp:"required"`
 }
 
