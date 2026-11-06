@@ -26,6 +26,15 @@ func makeProfileDir(profileDir string) error {
 	return nil
 }
 
+var defaultMemProfileRate = runtime.MemProfileRate
+
+// DisableMemProfiling turns off heap profile sampling, which otherwise
+// costs a stack walk every few hundred kilobytes allocated. It should be
+// called as early as possible; BeginProfiling turns sampling back on.
+func DisableMemProfiling() {
+	runtime.MemProfileRate = 0
+}
+
 type ProfileSession struct {
 	cpuFilePath string
 	memFilePath string
@@ -38,6 +47,8 @@ func BeginProfiling(profileDir string, logWriter io.Writer) *ProfileSession {
 	if err := makeProfileDir(profileDir); err != nil {
 		panic(err)
 	}
+
+	runtime.MemProfileRate = defaultMemProfileRate
 
 	pid := os.Getpid()
 

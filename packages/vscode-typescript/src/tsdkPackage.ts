@@ -15,6 +15,34 @@ const loadedPackageManifests = new Map<string, string>();
 // Server restarts must not hide an in-place upgrade from already-acquired SDKs.
 const acquiredPackageVersions = new Map<string, string>();
 
+export interface DetectedTypeScriptVersion {
+    version: string;
+    tsdkPath: string;
+    exePath: string;
+}
+
+export async function findWorkspaceTypeScriptVersions(
+    configuredPaths: readonly string[],
+    workspaceFolders: readonly string[],
+    resolve: (tsdkPath: string) => Promise<ExeInfo | undefined>,
+): Promise<DetectedTypeScriptVersion[]> {
+    const candidates = [
+        ...configuredPaths,
+        ...workspaceFolders.flatMap(folder => [
+            path.join(folder, "node_modules", "typescript"),
+            path.join(folder, "node_modules", "@typescript", "native"),
+            path.join(folder, "node_modules", "@typescript", "native-preview"),
+        ]),
+    ];
+    const results: DetectedTypeScriptVersion[] = [];
+    for (const tsdkPath of new Set(candidates)) {
+        const exe = await resolve(tsdkPath);
+        if (!exe || results.some(result => result.exePath === exe.path)) continue;
+        results.push({ tsdkPath, exePath: exe.path, version: exe.version });
+    }
+    return results;
+}
+
 export function acquireTypeScriptSDK(sdk: TypeScriptSDK): void {
     if (!sdk.packageJsonPath) return;
     const manifestPath = fs.realpathSync.native(sdk.packageJsonPath);

@@ -4771,8 +4771,25 @@ func (p *Parser) parseBinaryExpressionRest(precedence ast.OperatorPrecedence, le
 				// are binary operators, we want to stop parsing when $$ would bind before ## after erasing the
 				// assertion. See https://github.com/microsoft/TypeScript/issues/63527.
 				lastPrecedence := ast.OperatorPrecedenceHighest
-				if ast.IsBinaryExpression(lastOperand) {
+				unaryOperator := ast.KindUnknown
+				// Unary expressions cannot be exposed on the left of '**', but update expressions can.
+				switch lastOperand.Kind {
+				case ast.KindBinaryExpression:
 					lastPrecedence = ast.GetBinaryOperatorPrecedence(lastOperand.AsBinaryExpression().OperatorToken.Kind)
+				case ast.KindPrefixUnaryExpression:
+					if op := lastOperand.AsPrefixUnaryExpression().Operator; op != ast.KindPlusPlusToken && op != ast.KindMinusMinusToken {
+						unaryOperator = op
+					}
+				case ast.KindDeleteExpression:
+					unaryOperator = ast.KindDeleteKeyword
+				case ast.KindTypeOfExpression:
+					unaryOperator = ast.KindTypeOfKeyword
+				case ast.KindVoidExpression:
+					unaryOperator = ast.KindVoidKeyword
+				case ast.KindAwaitExpression:
+					unaryOperator = ast.KindAwaitKeyword
+				case ast.KindTypeAssertionExpression:
+					unaryOperator = ast.KindLessThanToken
 				}
 				if operator == ast.KindSatisfiesKeyword {
 					leftOperand = p.makeSatisfiesExpression(leftOperand, p.parseType())
@@ -4782,6 +4799,9 @@ func (p *Parser) parseBinaryExpressionRest(precedence ast.OperatorPrecedence, le
 				// Stop if the next operator would bind before the last operator when the assertion is erased.
 				nextOperator := p.reScanGreaterThanToken()
 				nextPrecedence := ast.GetBinaryOperatorPrecedence(nextOperator)
+				if nextOperator == ast.KindAsteriskAsteriskToken && unaryOperator != ast.KindUnknown {
+					p.reportInvalidExponentiationLeftOperand(lastOperand, unaryOperator)
+				}
 				if shouldConsumeBinaryOperator(nextOperator, nextPrecedence, lastPrecedence) {
 					break
 				}
@@ -4833,16 +4853,20 @@ func (p *Parser) parseUnaryExpressionOrHigher() *ast.Expression {
 	unaryOperator := p.token
 	simpleUnaryExpression := p.parseSimpleUnaryExpression()
 	if p.token == ast.KindAsteriskAsteriskToken {
-		pos := scanner.SkipTrivia(p.sourceText, simpleUnaryExpression.Pos())
-		end := simpleUnaryExpression.End()
-		if simpleUnaryExpression.Kind == ast.KindTypeAssertionExpression {
-			p.parseErrorAt(pos, end, diagnostics.A_type_assertion_expression_is_not_allowed_in_the_left_hand_side_of_an_exponentiation_expression_Consider_enclosing_the_expression_in_parentheses)
-		} else {
-			debug.Assert(isKeywordOrPunctuation(unaryOperator))
-			p.parseErrorAt(pos, end, diagnostics.An_unary_expression_with_the_0_operator_is_not_allowed_in_the_left_hand_side_of_an_exponentiation_expression_Consider_enclosing_the_expression_in_parentheses, scanner.TokenToString(unaryOperator))
-		}
+		p.reportInvalidExponentiationLeftOperand(simpleUnaryExpression, unaryOperator)
 	}
 	return simpleUnaryExpression
+}
+
+func (p *Parser) reportInvalidExponentiationLeftOperand(expression *ast.Expression, unaryOperator ast.Kind) {
+	pos := scanner.SkipTrivia(p.sourceText, expression.Pos())
+	end := expression.End()
+	if expression.Kind == ast.KindTypeAssertionExpression {
+		p.parseErrorAt(pos, end, diagnostics.A_type_assertion_expression_is_not_allowed_in_the_left_hand_side_of_an_exponentiation_expression_Consider_enclosing_the_expression_in_parentheses)
+	} else {
+		debug.Assert(isKeywordOrPunctuation(unaryOperator))
+		p.parseErrorAt(pos, end, diagnostics.An_unary_expression_with_the_0_operator_is_not_allowed_in_the_left_hand_side_of_an_exponentiation_expression_Consider_enclosing_the_expression_in_parentheses, scanner.TokenToString(unaryOperator))
+	}
 }
 
 func (p *Parser) isUpdateExpression() bool {
