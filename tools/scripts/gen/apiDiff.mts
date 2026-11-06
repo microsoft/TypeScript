@@ -82,7 +82,7 @@ const comparisons = [...typeMappings].map(([oldType, newTypes]) => {
                 const actualNewType = newApiTypes.get(newType);
                 if (actualNewType) {
                     actualNewType[0].delete(newMethodName);
-                    actualNewType[1].add(method);
+                    actualNewType[1].add(newMethodName);
                 }
             }
             else {

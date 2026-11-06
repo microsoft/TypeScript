@@ -66,9 +66,9 @@ Types not compared:
 
 
 # TypeChecker (old) methods compared to Checker (new).
-## (72) TypeChecker methods matched in async Checker  ##
+## (73) TypeChecker methods matched in async Checker  ##
 
-## TypeChecker methods missing from async Checker (17) ##
+## TypeChecker methods missing from async Checker (16) ##
 getRootSymbols
 getSymbolOfExpando
 getSymbolsOfParameterPropertyDeclaration
@@ -77,7 +77,6 @@ getTypeOfAssignmentPattern
 indexInfoToIndexSignatureDeclaration
 isOptionalParameter
 isValidPropertyAccess
-runWithCancellationToken
 signatureToString
 symbolToEntityName
 symbolToExpression
@@ -89,13 +88,9 @@ typePredicateToString
 
 
 # BuilderProgram (old) methods compared to Program (new).
-## (9) BuilderProgram methods matched in async Program  ##
+## (13) BuilderProgram methods matched in async Program  ##
 
-## BuilderProgram methods missing from async Program (4) ##
-getAllDependencies
-getOptionsDiagnostics
-getProgram
-getSourceFiles
+## BuilderProgram methods missing from async Program (0) ##
 
 
 # Program (old) methods compared to Program (new).
@@ -115,70 +110,17 @@ getTypeCount
 
 
 # SolutionBuilder (old) methods compared to BuildOrchestrator (new).
-## (4) SolutionBuilder methods matched in async BuildOrchestrator  ##
+## (5) SolutionBuilder methods matched in async BuildOrchestrator  ##
 
-## SolutionBuilder methods missing from async BuildOrchestrator (1) ##
-getNextInvalidatedProject
+## SolutionBuilder methods missing from async BuildOrchestrator (0) ##
 
 
 # Project (old) methods compared to Project (new).
-## (7) Project methods matched in async Project  ##
+## (59) Project methods matched in async Project  ##
 
-## Project methods missing from async Project (54) ##
-addMissingFileRoot
-addRoot
-close
-containsScriptInfo
-directoryExists
-disableLanguageService
-emitFile
-enableLanguageService
-error
-fileExists
-filesToString
-getAllProjectErrors
-getCancellationToken
-getCompilationSettings
-getCompileOnSaveAffectedFileList
-getCompilerOptions
-getCurrentDirectory
-getDefaultLibFileName
-getDirectories
-getExcludedFiles
-getExternalFiles
-getGlobalProjectErrors
-getLanguageService
-getNewLine
-getProjectName
-getProjectReferences
-getProjectVersion
-getRootScriptInfos
-getScriptFileNames
-getScriptInfo
-getScriptInfoForNormalizedPath
-getScriptInfos
-getScriptKind
-getScriptSnapshot
-getScriptVersion
+## Project methods missing from async Project (2) ##
 getTypeAcquisition
-installPackage
-isClosed
 isJsOnlyProject
-isKnownTypesPackageName
-isNonTsProject
-log
-readDirectory
-readFile
-refreshDiagnostics
-registerFileUpdate
-removeFile
-resolveModule
-setCompilerOptions
-setProjectErrors
-setTypeAcquisition
-updateGraph
-useCaseSensitiveFileNames
-writeFile
 
 
 # LanguageService (old) methods compared to Project (new).
@@ -252,66 +194,42 @@ uncommentSelection
 
 
 # Scanner (old) methods compared to Scanner (new).
-## (35) Scanner methods matched in async Scanner  ##
+## (43) Scanner methods matched in async Scanner  ##
 
-## Scanner methods missing from async Scanner (8) ##
-getStartPos
-getTextPos
-getTokenPos
-setJSDocParsingMode
-setOnError
-setScriptKind
-setScriptTarget
-setTextPos
+## Scanner methods missing from async Scanner (0) ##
 
 
 # Printer (old) methods compared to Printer (new).
-## (2) Printer methods matched in async Printer  ##
+## (3) Printer methods matched in async Printer  ##
 
-## Printer methods missing from async Printer (2) ##
-printBundle
+## Printer methods missing from async Printer (1) ##
 printList
 
 
 # Signature (old) methods compared to Signature (new).
-## (4) Signature methods matched in async Signature  ##
+## (7) Signature methods matched in async Signature  ##
 
-## Signature methods missing from async Signature (3) ##
-getDeclaration
-getDocumentationComment
-getJsDocTags
+## Signature methods missing from async Signature (0) ##
 
 
 # SourceFile (old) methods compared to SourceFile (new).
-## (3) SourceFile methods matched in async SourceFile  ##
+## (4) SourceFile methods matched in async SourceFile  ##
 
-## SourceFile methods missing from async SourceFile (2) ##
+## SourceFile methods missing from async SourceFile (1) ##
 getLineEndOfPosition
-update
 
 
 # Symbol (old) methods compared to Symbol (new).
-## (2) Symbol methods matched in async Symbol  ##
+## (6) Symbol methods matched in async Symbol  ##
 
-## Symbol methods missing from async Symbol (4) ##
-getDeclarations
-getEscapedName
-getFlags
-getName
+## Symbol methods missing from async Symbol (0) ##
 
 
 # Type (old) methods compared to Type, ts (new).
-## (14) Type methods matched in async Type, ts  ##
+## (21) Type methods matched in async Type, ts  ##
 
-## Type methods missing from async Type, ts (9) ##
-getConstraint
-getDefault
-getFlags
+## Type methods missing from async Type, ts (2) ##
 isClass
-isIntersection
-isLiteral
-isNumberLiteral
-isUnion
 isUnionOrIntersection
 
 
@@ -322,23 +240,17 @@ isUnionOrIntersection
 
 
 # NodeFactory (old) methods compared to ts (new).
-## (342) NodeFactory methods matched in async ts  ##
+## (389) NodeFactory methods matched in async ts  ##
 
-## NodeFactory methods missing from async ts (105) ##
+## NodeFactory methods missing from async ts (58) ##
 createAdd
-createAssertClause
-createAssertEntry
 createAssignment
 createBitwiseAnd
 createBitwiseNot
 createBitwiseOr
 createBitwiseXor
-createBundle
 createCallChain
-createCallSignature
 createComma
-createCommaListExpression
-createConstructSignature
 createDivide
 createElementAccessChain
 createEquality
@@ -350,33 +262,19 @@ createGreaterThan
 createGreaterThanEquals
 createImmediatelyInvokedArrowFunction
 createImmediatelyInvokedFunctionExpression
-createImportTypeAssertionContainer
-createIndexSignature
 createInequality
-createJSDocAuthorTag
-createJSDocClassTag
-createJSDocComment
-createJSDocEnumTag
-createJSDocFunctionType
-createJSDocMemberName
-createJSDocNamepathType
-createJSDocUnknownType
-createJsxJsxClosingFragment
 createLeftShift
 createLessThan
 createLessThanEquals
 createLogicalAnd
 createLogicalNot
 createLogicalOr
-createLoopVariable
-createMethodSignature
 createModifier
 createModifiersFromModifierFlags
 createModulo
 createMultiply
 createNonNullChain
 createNull
-createParenthesizedType
 createPostfixDecrement
 createPostfixIncrement
 createPrefixDecrement
@@ -384,106 +282,45 @@ createPrefixIncrement
 createPrefixMinus
 createPrefixPlus
 createPropertyAccessChain
-createPropertySignature
 createRightShift
 createStrictEquality
 createStrictInequality
-createStringLiteralFromNode
 createSubtract
 createSuper
-createTempVariable
-createTemplateLiteralType
 createThis
 createTrue
-createUniqueName
-createUniquePrivateName
 createUnsignedRightShift
 createVoidZero
-getGeneratedNameForNode
-getGeneratedPrivateNameForNode
 replaceDecoratorsAndModifiers
 replaceModifiers
 replacePropertyName
 restoreOuterExpressions
-updateAssertClause
-updateAssertEntry
-updateBundle
 updateCallChain
-updateCallSignature
-updateCommaListExpression
-updateConstructSignature
 updateElementAccessChain
-updateImportTypeAssertionContainer
-updateIndexSignature
-updateJSDocAuthorTag
-updateJSDocClassTag
-updateJSDocComment
-updateJSDocEnumTag
-updateJSDocFunctionType
-updateJSDocMemberName
-updateJSDocNamepathType
 updateJSDocText
 updateJsxText
-updateMethodSignature
 updateNonNullChain
-updateParenthesizedType
 updatePropertyAccessChain
-updatePropertySignature
-updateTemplateLiteralType
 
 
 # ts (old) methods compared to ts, API (new).
-## (279) ts methods matched in async ts, API  ##
+## (391) ts methods matched in async ts, API  ##
 
-## ts methods missing from async ts, API (209) ##
+## ts methods missing from async ts, API (97) ##
 addEmitHelper
 addEmitHelpers
 addSyntheticLeadingComment
 addSyntheticTrailingComment
-bundlerModuleNameResolver
 canHaveDecorators
 canHaveModifiers
-classicNameResolver
-collapseTextChangeRangesAcrossMultipleVersions
 convertCompilerOptionsFromJson
 convertToObject
 convertTypeAcquisitionFromJson
-createAbstractBuilder
-createBuilderStatusReporter
-createClassifier
-createCompilerHost
-createDocumentRegistry
-createEmitAndSemanticDiagnosticsBuilderProgram
-createIncrementalCompilerHost
-createIncrementalProgram
-createLanguageService
-createLanguageServiceSourceFile
-createModuleResolutionCache
-createPrinter
-createSemanticDiagnosticsBuilderProgram
-createSolutionBuilder
-createSolutionBuilderHost
-createSolutionBuilderWithWatch
-createSolutionBuilderWithWatchHost
-createSourceMapSource
-createTextChangeRange
-createTextSpan
-createTextSpanFromBounds
-createTypeReferenceDirectiveResolutionCache
-createWatchCompilerHost
-createWatchProgram
-decodedTextSpanIntersectsWith
-displayPartsToString
-disposeEmitNodes
 findAncestor
 findConfigFile
 flattenDiagnosticMessageText
-forEachChild
-formatDiagnostic
 getAutomaticTypeDirectiveNames
 getCombinedNodeFlags
-getCommentRange
-getConfigFileParsingDiagnostics
 getConstantValue
 getDecorators
 getDefaultCompilerOptions
@@ -493,12 +330,9 @@ getDefaultLibFilePath
 getEffectiveConstraintOfTypeParameter
 getEffectiveTypeParameterDeclarations
 getEffectiveTypeRoots
-getEmitHelpers
 getImpliedNodeFormatForFile
 getJSDocAugmentsTag
-getJSDocClassTag
 getJSDocDeprecatedTag
-getJSDocEnumTag
 getJSDocImplementsTags
 getJSDocOverrideTagNoCache
 getJSDocParameterTags
@@ -514,41 +348,21 @@ getJSDocThisTag
 getJSDocType
 getJSDocTypeParameterTags
 getJSDocTypeTag
-getLineAndCharacterOfPosition
-getModeForFileReference
 getModeForResolutionAtIndex
 getModeForUsageLocation
 getModifiers
-getNameOfJSDocTypedef
-getOriginalNode
 getOutputFileNames
-getParseTreeNode
-getParsedCommandLineOfConfigFile
-getPositionOfLineAndCharacter
 getPreEmitDiagnostics
-getSourceMapRange
-getSupportedCodeFixes
-getSyntheticLeadingComments
-getSyntheticTrailingComments
-getTokenSourceMapRange
 getTsBuildInfoEmitOutputFilePath
-getTypeParameterOwner
-hasJSDocParameterTags
 hasOnlyExpressionInitializer
 hasRestParameter
 idText
 identifierToKeywordKind
-isAccessor
-isAssertClause
-isAssertEntry
 isAutoAccessorPropertyDeclaration
-isBuildCommand
-isBundle
 isCallChain
 isClassElement
 isClassLike
 isClassOrTypeElement
-isCommaListExpression
 isConstTypeReference
 isDeclarationStatement
 isElementAccessChain
@@ -557,93 +371,38 @@ isEmptyBindingPattern
 isExternalModuleNameRelative
 isFunctionLike
 isFunctionOrConstructorTypeNode
-isGetAccessor
 isImportOrExportSpecifier
-isImportTypeAssertionContainer
 isInternalDeclaration
 isIterationStatement
-isJSDocAuthorTag
-isJSDocClassTag
 isJSDocCommentContainingNode
-isJSDocEnumTag
-isJSDocFunctionType
 isJSDocLinkLike
-isJSDocMemberName
-isJSDocNamepathType
 isJSDocPropertyLikeTag
-isJSDocUnknownType
 isJsxCallLike
-isMethodSignature
 isNonNullChain
 isNullishCoalesce
 isObjectLiteralElement
 isOptionalChain
-isParameter
 isParameterPropertyDeclaration
 isParseTreeNode
 isPartOfTypeNode
 isPartOfTypeOnlyImportOrExportDeclaration
 isPropertyAccessChain
 isPropertyAccessOrQualifiedName
-isPropertySignature
 isRestParameter
-isSetAccessor
 isStringLiteralLike
 isStringLiteralOrJsxExpression
 isStringTextContainingNode
-isTypeAssertionExpression
 isTypeElement
 isTypeOnlyExportDeclaration
 isTypeOnlyImportDeclaration
 isTypeOnlyImportOrExportDeclaration
-moveEmitHelpers
-moveSyntheticComments
-nodeModuleNameResolver
-parseBuildCommand
 parseIsolatedEntityName
 parseJsonText
-preProcessFile
-readBuilderProgram
 readJsonConfigFile
-removeEmitHelper
-resolveModuleName
-resolveModuleNameFromCache
-resolveProjectReferencePath
 resolveTripleslashReference
 resolveTypeReferenceDirective
-setCommentRange
-setConstantValue
-setEmitFlags
-setOriginalNode
-setSourceMapRange
-setSyntheticLeadingComments
-setSyntheticTrailingComments
-setTextRange
-setTokenSourceMapRange
 sortAndDeduplicateDiagnostics
 symbolName
-textChangeRangeIsUnchanged
-textChangeRangeNewSpan
-textSpanContainsPosition
-textSpanContainsTextSpan
-textSpanEnd
-textSpanIntersection
-textSpanIntersectsWith
-textSpanIntersectsWithPosition
-textSpanIntersectsWithTextSpan
-textSpanIsEmpty
-textSpanOverlap
-textSpanOverlapsWith
-toEditorSettings
-transform
-transpile
-updateLanguageServiceSourceFile
-validateLocaleAndSetLanguage
-visitCommaListElements
-visitFunctionBody
-visitIterationBody
-visitLexicalEnvironment
-visitParameterList
 walkUpBindingElementsAndPatterns
 
 
@@ -699,20 +458,16 @@ getTarget
 ## New TupleTypeReference methods in async API (1) ##
 getTarget
 
-## New Type methods in async API (24) ##
+## New Type methods in async API (20) ##
 getApparentType
 getReducedType
 getIndexInfos
 getAliasTypeArguments
 getAliasSymbol
-isUnionType
-isIntersectionType
 isObjectType
 isIntrinsicType
 isErrorType
-isLiteralType
 isStringLiteralType
-isNumberLiteralType
 isBigIntLiteralType
 isBooleanLiteralType
 isTypeReference
@@ -725,9 +480,7 @@ isTemplateLiteralType
 isStringMappingType
 isMappedType
 
-## New TypeParameter methods in async API (2) ##
-getConstraint
-getDefault
+## New TypeParameter methods in async API (0) ##
 
 ## New TypeReference methods in async API (1) ##
 getTarget
@@ -765,18 +518,16 @@ startCPUProfile
 stopCPUProfile
 saveHeapProfile
 
-## New Snapshot methods in async API (8) ##
+## New Snapshot methods in async API (7) ##
 getProjects
 getConfiguredProject
 getProject
 getProgram
-update
 getDefaultProjectForFile
 dispose
 isDisposed
 
-## New ModuleResolver methods in async API (3) ##
-resolveModuleName
+## New ModuleResolver methods in async API (2) ##
 dispose
 ensureNotDisposed
 
@@ -903,7 +654,7 @@ getChildren
 getFirstToken
 getLastToken
 
-## New ts methods in async API (207) ##
+## New ts methods in async API (185) ##
 isRemoteNode
 getSymbol
 isUnionType
@@ -957,12 +708,8 @@ skipOuterExpressions
 isBindingPattern
 isIdentifierOrJSDocNamespaceDeclaration
 isJSDocTypeExpressionOrJSDocTypeLiteral
-isParameterDeclaration
 isNotEmittedTypeElement
-isMethodSignatureDeclaration
-isPropertySignatureDeclaration
 isKeywordExpression
-isTypeAssertion
 isKeywordTypeNode
 isSyntaxList
 isJSDocText
@@ -974,7 +721,6 @@ isJSDocFullName
 isJsxAttributeName
 isJsxAttributeValue
 isClassLikeDeclaration
-isAccessorDeclaration
 isLiteralLikeNode
 isUnionOrIntersectionTypeNode
 isTemplateLiteralLikeNode
@@ -1086,28 +832,11 @@ visitEachChildOfJSDocParameterTag
 visitEachChildOfJSDocPropertyTag
 cloneNode
 createMissingDeclaration
-createCallSignatureDeclaration
-createConstructSignatureDeclaration
-createIndexSignatureDeclaration
-createMethodSignatureDeclaration
-createPropertySignatureDeclaration
 createKeywordExpression
-createParenthesizedTypeNode
-createTemplateLiteralTypeNode
 createSyntheticExpression
-createJsxClosingFragment
 createSyntaxList
-createJSDoc
 createSyntheticReferenceExpression
 updateMissingDeclaration
-updateCallSignatureDeclaration
-updateConstructSignatureDeclaration
-updateIndexSignatureDeclaration
-updateMethodSignatureDeclaration
-updatePropertySignatureDeclaration
-updateParenthesizedTypeNode
-updateTemplateLiteralTypeNode
 updateSyntheticExpression
 updateSyntaxList
-updateJSDoc
 updateSyntheticReferenceExpression
