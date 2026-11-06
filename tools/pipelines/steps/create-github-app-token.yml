@@ -606,7 +606,7 @@ steps:
       PERMISSIONS: ${{ parameters.permissions }}
       OUTPUT: azure-pipelines
       AZURE_TOKEN_VARIABLE: ${{ parameters.tokenVariable }}
-      NODE_USE_ENV_PROXY: "1"
+      NODE_USE_ENV_PROXY: '1'
 
   - ${{ each step in parameters.insertSteps }}:
       - ${{ step }}
@@ -621,4 +621,4 @@ steps:
       script: node "$(Agent.TempDirectory)/create-github-app-token.cjs"
     env:
       REVOKE_TOKEN: $(${{ parameters.tokenVariable }})
-      NODE_USE_ENV_PROXY: "1"
+      NODE_USE_ENV_PROXY: '1'
