@@ -19,7 +19,7 @@ export interface Container<T> {
 }
 export type Nullable<T> = T | null | undefined;
 
-tsgo --generateTrace /home/src/workspaces/project/trace --singleThreaded
+tsc --generateTrace /home/src/workspaces/project/trace --singleThreaded
 ExitStatus:: DiagnosticsPresent_OutputsGenerated
 Output::
 [96mmain.ts[0m:[93m2[0m:[93m74[0m - [91merror[0m[90m TS2322: [0mType '<U>(fn: (x: number) => U) => Container<U>' is not assignable to type '<U>(fn: (x: U) => U) => Container<U>'.

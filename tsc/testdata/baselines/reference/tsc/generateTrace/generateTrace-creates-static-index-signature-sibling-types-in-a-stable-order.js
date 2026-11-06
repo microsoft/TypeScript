@@ -31,7 +31,7 @@ export const w = expand<typeof C>();
     "files": ["main.ts", "ambient.d.ts"]
 }
 
-tsgo --generateTrace /home/src/workspaces/project/trace --singleThreaded
+tsc --generateTrace /home/src/workspaces/project/trace --singleThreaded
 ExitStatus:: Success
 Output::
 //// [/home/src/tslibs/TS/Lib/lib.es2026.full.d.ts] *Lib*

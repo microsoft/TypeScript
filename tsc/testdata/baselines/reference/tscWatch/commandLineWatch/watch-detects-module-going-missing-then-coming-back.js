@@ -8,7 +8,7 @@ import { util } from "./util";
 //// [/home/src/workspaces/project/util.ts] *new* 
 export const util = "v1";
 
-tsgo --watch
+tsc --watch
 ExitStatus:: Success
 Output::
 [2J[3J[H[[90mHH:MM:SS AM[0m] Starting compilation in watch mode...

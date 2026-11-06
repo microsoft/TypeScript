@@ -143,7 +143,7 @@ export declare const zeta: { name: "zeta" };
 import { Gadget } from "./gadget";
 export declare function makeWidget(): Gadget;
 
-tsgo --generateTrace /home/src/workspaces/project/trace --singleThreaded
+tsc --generateTrace /home/src/workspaces/project/trace --singleThreaded
 ExitStatus:: Success
 Output::
 //// [/home/src/tslibs/TS/Lib/lib.es2026.full.d.ts] *Lib*

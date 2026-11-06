@@ -21,7 +21,7 @@ export const forwarded = new Result().value;
 					"files": ["a.ts", "b.ts"]
 				}
 
-tsgo --project . --listEmittedFiles
+tsc --project . --listEmittedFiles
 ExitStatus:: Success
 Output::
 TSFILE: /home/src/workspaces/project/dist/a.d.ts
@@ -158,7 +158,7 @@ Edit [0]:: disable stripInternal without changing source files
 					"files": ["a.ts", "b.ts"]
 				}
 
-tsgo --project . --listEmittedFiles
+tsc --project . --listEmittedFiles
 ExitStatus:: Success
 Output::
 TSFILE: /home/src/workspaces/project/dist/a.d.ts
@@ -257,7 +257,7 @@ Signatures::
 
 Edit [1]:: no change
 
-tsgo --project . --listEmittedFiles
+tsc --project . --listEmittedFiles
 ExitStatus:: Success
 Output::
 
@@ -272,7 +272,7 @@ export class Result {
 }
 
 
-tsgo --project . --listEmittedFiles
+tsc --project . --listEmittedFiles
 ExitStatus:: DiagnosticsPresent_OutputsGenerated
 Output::
 [96mb.ts[0m:[93m2[0m:[93m39[0m - [91merror[0m[90m TS2339: [0mProperty 'value' does not exist on type 'Result'.
@@ -402,7 +402,7 @@ Signatures::
 
 Edit [3]:: no change
 
-tsgo --project . --listEmittedFiles
+tsc --project . --listEmittedFiles
 ExitStatus:: DiagnosticsPresent_OutputsGenerated
 Output::
 [96mb.ts[0m:[93m2[0m:[93m39[0m - [91merror[0m[90m TS2339: [0mProperty 'value' does not exist on type 'Result'.
@@ -421,7 +421,7 @@ Signatures::
 
 Edit [4]:: force rebuild
 
-tsgo --build --verbose --force
+tsc --build --verbose --force
 ExitStatus:: DiagnosticsPresent_OutputsGenerated
 Output::
 [[90mHH:MM:SS AM[0m] Projects in this build: 
@@ -456,7 +456,7 @@ Signatures::
 
 Edit [5]:: no change
 
-tsgo --project . --listEmittedFiles
+tsc --project . --listEmittedFiles
 ExitStatus:: DiagnosticsPresent_OutputsGenerated
 Output::
 [96mb.ts[0m:[93m2[0m:[93m39[0m - [91merror[0m[90m TS2339: [0mProperty 'value' does not exist on type 'Result'.

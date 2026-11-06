@@ -15,7 +15,7 @@ const p: Person = { name: "Alice", age: 30 };
     }
 }
 
-tsgo --generateTrace /home/src/workspaces/project/trace --singleThreaded
+tsc --generateTrace /home/src/workspaces/project/trace --singleThreaded
 ExitStatus:: Success
 Output::
 //// [/home/src/tslibs/TS/Lib/lib.es2026.full.d.ts] *Lib*

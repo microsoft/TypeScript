@@ -34,7 +34,7 @@ export interface Unrelated {}
 //// [/home/src/workspaces/project/tsconfig.json] *new* 
 {"compilerOptions":{"incremental":true,"noEmit":true,"types":[],"lib":["es5"]}}
 
-tsgo --singleThreaded
+tsc --singleThreaded
 ExitStatus:: Success
 Output::
 //// [/home/src/workspaces/project/tsconfig.tsbuildinfo] *new* 
@@ -125,7 +125,7 @@ Edit [0]:: delete global and module declarations
 //// [/home/src/workspaces/project/global.d.ts] *deleted*
 //// [/home/src/workspaces/project/module.d.ts] *deleted*
 
-tsgo --singleThreaded
+tsc --singleThreaded
 ExitStatus:: DiagnosticsPresent_OutputsGenerated
 Output::
 [96m../../tslibs/TS/Lib/lib.es5.d.ts[0m:[93m23[0m:[93m39[0m - [91merror[0m[90m TS2304: [0mCannot find name 'RemovedGlobal'.
@@ -218,7 +218,7 @@ Signatures::
 
 Edit [1]:: no change
 
-tsgo --singleThreaded
+tsc --singleThreaded
 ExitStatus:: DiagnosticsPresent_OutputsGenerated
 Output::
 [96m../../tslibs/TS/Lib/lib.es5.d.ts[0m:[93m23[0m:[93m39[0m - [91merror[0m[90m TS2304: [0mCannot find name 'RemovedGlobal'.
@@ -239,7 +239,7 @@ Edit [2]:: restore global declaration
 //// [/home/src/workspaces/project/global.d.ts] *new* 
 interface RemovedGlobal {}
 
-tsgo --singleThreaded
+tsc --singleThreaded
 ExitStatus:: Success
 Output::
 //// [/home/src/workspaces/project/tsconfig.tsbuildinfo] *modified* 
@@ -326,7 +326,7 @@ Signatures::
 
 Edit [3]:: no change
 
-tsgo --singleThreaded
+tsc --singleThreaded
 ExitStatus:: Success
 Output::
 

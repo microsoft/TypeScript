@@ -9,7 +9,7 @@ export const x = 10;
     "include": ["src/**/*.tsx", "src/**/*.ts"]
 }
 
-tsgo --b project -v --explainFiles
+tsc --b project -v --explainFiles
 ExitStatus:: Success
 Output::
 [[90mHH:MM:SS AM[0m] Projects in this build: 
@@ -77,7 +77,7 @@ Signatures::
 
 Edit [0]:: no change
 
-tsgo --b project -v --explainFiles
+tsc --b project -v --explainFiles
 ExitStatus:: Success
 Output::
 [[90mHH:MM:SS AM[0m] Projects in this build: 
@@ -90,7 +90,7 @@ Output::
 
 Edit [1]:: clean build
 
-tsgo -b project --clean
+tsc -b project --clean
 ExitStatus:: Success
 Output::
 //// [/home/src/workspaces/solution/project/src/main.d.ts] *deleted*
