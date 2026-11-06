@@ -133,18 +133,18 @@ const options = /** @type {Options} */ (rawOptions);
 
 // Release branches can edit this constant to publish a fixed stable version.
 // Main publishes prerelease builds of the TypeScript package.
-const nativePreviewReleaseVersion = /** @type {string | undefined} */ (undefined);
+const typeScriptReleaseVersion = /** @type {string | undefined} */ (undefined);
 const releaseVscodeTypescript = !!options.vscodeTypescriptRelease;
-const produceNativePreviewVsix = releaseVscodeTypescript;
-const produceTypeScriptNightlyVsix = !nativePreviewReleaseVersion && !releaseVscodeTypescript;
+const produceVscodeTypescriptVsix = releaseVscodeTypescript;
+const produceTypeScriptNightlyVsix = !typeScriptReleaseVersion && !releaseVscodeTypescript;
 const usePublishedPlatformPackagesForVsix = releaseVscodeTypescript;
-const produceAnyVsix = produceNativePreviewVsix || produceTypeScriptNightlyVsix;
+const produceAnyVsix = produceVscodeTypescriptVsix || produceTypeScriptNightlyVsix;
 
 if (releaseVscodeTypescript && options.setPrerelease) {
     throw new Error("vscode-typescript releases use the extension's package.json version and do not accept setPrerelease");
 }
-if (!releaseVscodeTypescript && options.forRelease && !options.setPrerelease && (!nativePreviewReleaseVersion || produceAnyVsix)) {
-    throw new Error("forRelease requires setPrerelease unless nativePreviewReleaseVersion is hardcoded and VSIX production is disabled");
+if (!releaseVscodeTypescript && options.forRelease && !options.setPrerelease && (!typeScriptReleaseVersion || produceAnyVsix)) {
+    throw new Error("forRelease requires setPrerelease unless typeScriptReleaseVersion is hardcoded and VSIX production is disabled");
 }
 if (options.respectGoEnv && options.forRelease) {
     throw new Error("respectGoEnv cannot be combined with forRelease");
@@ -823,7 +823,7 @@ export const buildWatch = task({
             abortSignal.throwIfAborted();
             await generateLibs(builtLocal);
             abortSignal.throwIfAborted();
-            console.log("Building tsgo...");
+            console.log("Building tsc...");
             await buildTsc({ abortSignal });
         }, {
             paths: [
@@ -1873,8 +1873,8 @@ export class Debouncer {
 }
 
 const getVersion = memoize(() => {
-    if (nativePreviewReleaseVersion) {
-        return nativePreviewReleaseVersion;
+    if (typeScriptReleaseVersion) {
+        return typeScriptReleaseVersion;
     }
 
     const f = fs.readFileSync("./tsc/internal/core/version.go", "utf8");
@@ -1902,7 +1902,7 @@ function getPublishTag() {
     }
     const match = version.match(/-(dev|beta|rc)(?:[.-]|$)/);
     if (match?.[1]) return match[1] === "dev" ? "next" : match[1];
-    if (version === nativePreviewReleaseVersion && stableThreeComponentVersionPattern.test(version)) return "latest";
+    if (version === typeScriptReleaseVersion && stableThreeComponentVersionPattern.test(version)) return "latest";
     throw new Error(`Refusing to publish 'typescript' with the latest tag from non-release version ${version}.`);
 }
 
@@ -2191,7 +2191,7 @@ function cpWithoutNodeModulesOrTsconfig(src, dest) {
     return cpRecursive(src, dest, p => !p.endsWith("/node_modules") && !p.endsWith("/tsconfig.json"));
 }
 
-const mainNativePreviewPackage = {
+const mainTypeScriptPackage = {
     npmPackageName: "typescript",
     npmDir: path.join(builtNpm, "typescript"),
     npmTarball: path.join(builtNpm, "typescript.tgz"),
@@ -2235,7 +2235,7 @@ void 0;
 
 /** @type {VsixExtensionPackage[]} */
 const vsixExtensionPackages = [
-    ...(produceNativePreviewVsix ? [{ name: "native-preview", sourceDir: extensionDir }] : []),
+    ...(produceVscodeTypescriptVsix ? [{ name: "native-preview", sourceDir: extensionDir }] : []),
     ...(produceTypeScriptNightlyVsix ? [{ name: "vscode-typescript-nightly", sourceDir: nightlyExtensionDir }] : []),
 ];
 
@@ -2514,7 +2514,7 @@ async function runCheckPlatforms() {
     }
 
     if (errors.length) {
-        throw new Error(`native-preview platform list is out of sync with 'go tool dist list':\n${errors.map(e => `  - ${e}`).join("\n")}`);
+        throw new Error(`TypeScript platform list is out of sync with 'go tool dist list':\n${errors.map(e => `  - ${e}`).join("\n")}`);
     }
 }
 
@@ -2553,11 +2553,11 @@ function stripConditionsFromValue(value) {
     return value;
 }
 
-export const buildNativePreviewPackages = task({
+export const buildTypeScriptPackages = task({
     name: "typescript:build",
     description: "Builds TypeScript npm packages for the current platform. Pass --respectGoEnv to preserve caller-provided Go build settings.",
     dependencies: usePublishedPlatformPackagesForVsix ? undefined : [generate],
-    run: runBuildNativePreviewPackages,
+    run: runBuildTypeScriptPackages,
 });
 
 export const writeTypeScriptReleaseInfo = task({
@@ -2572,7 +2572,7 @@ export const writeTypeScriptReleaseInfo = task({
     },
 });
 
-async function runBuildNativePreviewPackages() {
+async function runBuildTypeScriptPackages() {
     if (usePublishedPlatformPackagesForVsix) {
         checkPublishedPlatformPackagesForVsix();
         await rimraf(builtNpm);
@@ -2583,23 +2583,23 @@ async function runBuildNativePreviewPackages() {
     await rimraf(builtNpm);
 
     const platforms = getPlatforms();
-    await buildMainNativePreviewPackage(platforms);
+    await buildMainTypeScriptPackage(platforms);
     await buildWasip1Package();
 
     if (isCI) {
         for (const platform of platforms) {
-            await buildNativePreviewPlatform(platform);
+            await buildTypeScriptPlatform(platform);
             // Build machines have too little space.
             // Clear the Go build cache between platforms.
             await run("go", ["clean", "-cache"]);
         }
     }
     else {
-        await runWithConcurrencyLimit(platforms.map(platform => () => buildNativePreviewPlatform(platform)), os.availableParallelism());
+        await runWithConcurrencyLimit(platforms.map(platform => () => buildTypeScriptPlatform(platform)), os.availableParallelism());
     }
 }
 
-export const buildMainNativePreviewPackageTask = task({
+export const buildMainTypeScriptPackageTask = task({
     name: "typescript:build-main",
     hiddenFromTaskList: true,
     run: async () => {
@@ -2611,11 +2611,11 @@ export const buildMainNativePreviewPackageTask = task({
         }
 
         await rimraf(builtNpm);
-        await buildMainNativePreviewPackage(getPlatforms());
+        await buildMainTypeScriptPackage(getPlatforms());
     },
 });
 
-export const buildNativePreviewPlatformTask = task({
+export const buildTypeScriptPlatformTask = task({
     name: "typescript:build-platform",
     hiddenFromTaskList: true,
     run: async () => {
@@ -2638,11 +2638,11 @@ export const buildNativePreviewPlatformTask = task({
         }
 
         await rimraf(platform.npmDir);
-        await buildNativePreviewPlatform(platform);
+        await buildTypeScriptPlatform(platform);
     },
 });
 
-export const buildNativePreviewPlatformMatrix = task({
+export const buildTypeScriptPlatformMatrix = task({
     name: "typescript:build-platform-matrix",
     hiddenFromTaskList: true,
     run: () => {
@@ -2662,17 +2662,17 @@ export const buildNativePreviewPlatformMatrix = task({
 /**
  * @param {ReturnType<typeof getPlatforms>} platforms
  */
-async function buildMainNativePreviewPackage(platforms) {
+async function buildMainTypeScriptPackage(platforms) {
     const inputDir = "./packages/typescript";
-    const inputPackageJson = await createNativePreviewInputPackageJson();
+    const inputPackageJson = await createTypeScriptInputPackageJson();
 
     const mainPackage = {
         ...inputPackageJson,
-        name: mainNativePreviewPackage.npmPackageName,
+        name: mainTypeScriptPackage.npmPackageName,
         optionalDependencies: Object.fromEntries(platforms.map(p => [p.npmPackageName, getVersion()])),
     };
 
-    const mainPackageDir = mainNativePreviewPackage.npmDir;
+    const mainPackageDir = mainTypeScriptPackage.npmDir;
 
     await fs.promises.mkdir(mainPackageDir, { recursive: true });
 
@@ -2715,11 +2715,11 @@ async function buildMainNativePreviewPackage(platforms) {
 }
 
 async function buildWasip1Package() {
-    const inputPackageJson = await createNativePreviewInputPackageJson();
+    const inputPackageJson = await createTypeScriptInputPackageJson();
     const wasmInputDir = "./packages/typescript-wasip1-wasm";
     const extraFlags = options.respectGoEnv
         ? []
-        : getReleaseBuildFlags(options.setPrerelease || nativePreviewReleaseVersion ? getVersion() : undefined);
+        : getReleaseBuildFlags(options.setPrerelease || typeScriptReleaseVersion ? getVersion() : undefined);
     const wasmPackageJson = JSON.parse(fs.readFileSync(path.join(wasmInputDir, "package.json"), "utf8"));
     wasmPackageJson.version = getVersion();
     wasmPackageJson.gitHead = inputPackageJson.gitHead;
@@ -2745,8 +2745,8 @@ async function buildWasip1Package() {
 /**
  * @param {ReturnType<typeof getPlatforms>[number]} platform
  */
-async function buildNativePreviewPlatform({ npmDir, npmPackageName, nodeOs, nodeArch, goos, goarch }) {
-    const inputPackageJson = await createNativePreviewInputPackageJson();
+async function buildTypeScriptPlatform({ npmDir, npmPackageName, nodeOs, nodeArch, goos, goarch }) {
+    const inputPackageJson = await createTypeScriptInputPackageJson();
 
     const packageJson = {
         ...inputPackageJson,
@@ -2771,14 +2771,14 @@ async function buildNativePreviewPlatform({ npmDir, npmPackageName, nodeOs, node
     const readme = [
         `# \`${npmPackageName}\``,
         "",
-        `This package provides ${nodeOs}-${nodeArch} support for [${mainNativePreviewPackage.npmPackageName}](https://www.npmjs.com/package/${mainNativePreviewPackage.npmPackageName}).`,
+        `This package provides ${nodeOs}-${nodeArch} support for [${mainTypeScriptPackage.npmPackageName}](https://www.npmjs.com/package/${mainTypeScriptPackage.npmPackageName}).`,
     ];
 
     await fs.promises.writeFile(path.join(npmDir, "README.md"), readme.join("\n") + "\n");
 
     await generateLibs(out);
 
-    const exeName = nativePreviewExeName(nodeOs);
+    const exeName = typeScriptExeName(nodeOs);
     await buildTsc({
         out: path.join(out, exeName),
         env: {
@@ -2788,11 +2788,11 @@ async function buildNativePreviewPlatform({ npmDir, npmPackageName, nodeOs, node
         },
         extraFlags: options.respectGoEnv
             ? []
-            : getReleaseBuildFlags(options.setPrerelease || nativePreviewReleaseVersion ? getVersion() : undefined),
+            : getReleaseBuildFlags(options.setPrerelease || typeScriptReleaseVersion ? getVersion() : undefined),
     });
 }
 
-async function createNativePreviewInputPackageJson() {
+async function createTypeScriptInputPackageJson() {
     const inputPackageJson = JSON.parse(fs.readFileSync("./packages/typescript/package.json", "utf8"));
     inputPackageJson.version = getVersion();
     delete inputPackageJson.private;
@@ -2816,20 +2816,20 @@ async function createNativePreviewInputPackageJson() {
 /**
  * @param {ReturnType<typeof getPlatforms>} platforms
  */
-async function testNativePreviewPackage(platforms) {
+async function testTypeScriptPackage(platforms) {
     const hostPlatform = platforms.find(({ nodeOs, nodeArch }) => nodeOs === process.platform && nodeArch === process.arch);
     assert(hostPlatform, `No package was built for the host platform ${process.platform}-${process.arch}`);
 
     const testRoot = path.resolve("built/package-test");
     const nodeModules = path.join(testRoot, "node_modules");
-    const mainPackageDir = path.join(nodeModules, ...mainNativePreviewPackage.npmPackageName.split("/"));
+    const mainPackageDir = path.join(nodeModules, ...mainTypeScriptPackage.npmPackageName.split("/"));
     const platformPackageDir = path.join(nodeModules, ...hostPlatform.npmPackageName.split("/"));
     const wasmPackageDir = path.join(nodeModules, ...wasip1Package.npmPackageName.split("/"));
     const sourceFile = path.join(testRoot, "index.ts");
 
     await rimraf(testRoot);
     try {
-        await cpRecursive(mainNativePreviewPackage.npmDir, mainPackageDir);
+        await cpRecursive(mainTypeScriptPackage.npmDir, mainPackageDir);
         await cpRecursive(hostPlatform.npmDir, platformPackageDir);
         await cpRecursive(wasip1Package.npmDir, wasmPackageDir);
         await fs.promises.writeFile(sourceFile, 'export const value: string = "value";\n');
@@ -2849,7 +2849,7 @@ async function testNativePreviewPackage(platforms) {
                 await fs.promises.readFile(path.join(mainPackageDir, schemaPath)),
                 await fs.promises.readFile(path.join("packages/typescript", schemaPath)),
             );
-            assert.equal(require.resolve(`${mainNativePreviewPackage.npmPackageName}/${schemaPath}`), path.join(mainPackageDir, schemaPath));
+            assert.equal(require.resolve(`${mainTypeScriptPackage.npmPackageName}/${schemaPath}`), path.join(mainPackageDir, schemaPath));
         }
 
         const wasmPackageJson = JSON.parse(await fs.promises.readFile(path.join(wasmPackageDir, "package.json"), "utf8"));
@@ -2887,27 +2887,27 @@ async function testNativePreviewPackage(platforms) {
     }
 }
 
-export const testNativePreviewPackageTask = task({
+export const testTypeScriptPackageTask = task({
     name: "typescript:test-package",
     description: "Tests the TypeScript npm package for the current platform.",
-    dependencies: options.forRelease ? undefined : [buildNativePreviewPackages],
-    run: () => testNativePreviewPackage(getPlatforms()),
+    dependencies: options.forRelease ? undefined : [buildTypeScriptPackages],
+    run: () => testTypeScriptPackage(getPlatforms()),
 });
 
-export const signNativePreviewPackages = task({
+export const signTypeScriptPackages = task({
     name: "typescript:sign",
     hiddenFromTaskList: true,
-    run: runSignNativePreviewPackages,
+    run: runSignTypeScriptPackages,
 });
 
 /**
  * @param {string} nodeOs
  */
-function nativePreviewExeName(nodeOs) {
+function typeScriptExeName(nodeOs) {
     return nodeOs === "win32" ? "tsc.exe" : "tsc";
 }
 
-async function runSignNativePreviewPackages() {
+async function runSignTypeScriptPackages() {
     if (!options.forRelease) {
         throw new Error("This task should not be run in non-release builds.");
     }
@@ -2928,7 +2928,7 @@ async function runSignNativePreviewPackages() {
         }
         certFilelist.push({
             tmpName: npmDirName,
-            path: path.join(npmDir, "lib", nativePreviewExeName(nodeOs)),
+            path: path.join(npmDir, "lib", typeScriptExeName(nodeOs)),
         });
     }
 
@@ -3033,14 +3033,14 @@ async function runSignNativePreviewPackages() {
     }
 }
 
-export const packNativePreviewPackages = task({
+export const packTypeScriptPackages = task({
     name: "typescript:pack",
     hiddenFromTaskList: true,
-    dependencies: options.forRelease ? undefined : [buildNativePreviewPackages, cleanSignTempDirectory],
-    run: runPackNativePreviewPackages,
+    dependencies: options.forRelease ? undefined : [buildTypeScriptPackages, cleanSignTempDirectory],
+    run: runPackTypeScriptPackages,
 });
 
-async function runPackNativePreviewPackages() {
+async function runPackTypeScriptPackages() {
     if (usePublishedPlatformPackagesForVsix) {
         checkPublishedPlatformPackagesForVsix();
         await rimraf(builtNpm);
@@ -3049,7 +3049,7 @@ async function runPackNativePreviewPackages() {
     }
 
     const platforms = getPlatforms();
-    await Promise.all([mainNativePreviewPackage, wasip1Package, ...platforms].map(async ({ npmDir, npmTarball }) => {
+    await Promise.all([mainTypeScriptPackage, wasip1Package, ...platforms].map(async ({ npmDir, npmTarball }) => {
         const { stdout } = await runOutput("npm", ["pack", "--json", npmDir]);
         const filename = JSON.parse(stdout)[0].filename.replace("@", "").replace("/", "-");
         await fs.promises.rename(filename, npmTarball);
@@ -3066,7 +3066,7 @@ async function runPackNativePreviewPackages() {
             })),
             [
                 {
-                    filename: path.basename(mainNativePreviewPackage.npmTarball),
+                    filename: path.basename(mainTypeScriptPackage.npmTarball),
                 },
             ],
         ],
@@ -3079,7 +3079,7 @@ async function runPackNativePreviewPackages() {
 export const packVsixExtensions = task({
     name: "vscode-typescript:pack",
     hiddenFromTaskList: true,
-    dependencies: options.forRelease || usePublishedPlatformPackagesForVsix ? undefined : [packNativePreviewPackages],
+    dependencies: options.forRelease || usePublishedPlatformPackagesForVsix ? undefined : [packTypeScriptPackages],
     run: runPackVsixExtensions,
 });
 
@@ -3293,9 +3293,9 @@ async function runPackVsixExtensions() {
                 await fs.promises.mkdir(embeddedPlatformPackageDir, { recursive: true });
                 await fs.promises.mkdir(embeddedTypeScriptDir, { recursive: true });
                 await tar.x({ file: npmTarball, cwd: embeddedPlatformPackageDir, strip: 1 });
-                await tar.x({ file: mainNativePreviewPackage.npmTarball, cwd: embeddedTypeScriptDir, strip: 1 });
+                await tar.x({ file: mainTypeScriptPackage.npmTarball, cwd: embeddedTypeScriptDir, strip: 1 });
             }
-            await fs.promises.chmod(path.join(embeddedPlatformPackageDir, "lib", nativePreviewExeName(nodeOs)), 0o755);
+            await fs.promises.chmod(path.join(embeddedPlatformPackageDir, "lib", typeScriptExeName(nodeOs)), 0o755);
             const embeddedTypeScriptPackageJson = JSON.parse(await fs.promises.readFile(path.join(embeddedTypeScriptDir, "package.json"), "utf8"));
             packageJsonDependencies = {
                 typescript: embeddedTypeScriptPackageJson.name === "typescript"
@@ -3372,7 +3372,7 @@ async function testVsixPackage(vsixPath, extensionPath, platformPackageName, nod
     try {
         zip.extractAllTo(directory);
         const platformPath = path.join(directory, "extension", "node_modules", ...platformPackageName.split("/"));
-        await fs.promises.chmod(path.join(platformPath, "lib", nativePreviewExeName(nodeOs)), 0o755);
+        await fs.promises.chmod(path.join(platformPath, "lib", typeScriptExeName(nodeOs)), 0o755);
         await fs.promises.writeFile(path.join(directory, "tsconfig.json"), '{"files": []}\n');
         await run(process.execPath, [
             "--input-type=module",
@@ -3489,7 +3489,7 @@ export const vscodeTypescriptRelease = task({
     },
 });
 
-export const nativePreviewRelease = task({
+export const typeScriptRelease = task({
     name: "typescript:release",
     hiddenFromTaskList: true,
     dependencies: [generate],
@@ -3497,22 +3497,22 @@ export const nativePreviewRelease = task({
         if (releaseVscodeTypescript) {
             throw new Error("typescript:release cannot be used with --vscodeTypescriptRelease; use vscode-typescript:release");
         }
-        if (!options.forRelease || !options.setPrerelease && (!nativePreviewReleaseVersion || produceAnyVsix)) {
-            throw new Error("typescript:release requires --forRelease and --setPrerelease flags, unless nativePreviewReleaseVersion is hardcoded and VSIX production is disabled. Example: npx hereby typescript:release --forRelease --setPrerelease=dev.1.0");
+        if (!options.forRelease || !options.setPrerelease && (!typeScriptReleaseVersion || produceAnyVsix)) {
+            throw new Error("typescript:release requires --forRelease and --setPrerelease flags, unless typeScriptReleaseVersion is hardcoded and VSIX production is disabled. Example: npx hereby typescript:release --forRelease --setPrerelease=dev.1.0");
         }
-        await runBuildNativePreviewPackages();
-        await runSignNativePreviewPackages();
-        await runPackNativePreviewPackages();
+        await runBuildTypeScriptPackages();
+        await runSignTypeScriptPackages();
+        await runPackTypeScriptPackages();
         await runPackVsixExtensions();
         await runSignVsixExtensions();
         await runCleanSignTempDirectory();
     },
 });
 
-export const nativePreview = task({
-    name: "native-preview",
+export const pack = task({
+    name: "pack",
     hiddenFromTaskList: true,
-    dependencies: options.forRelease ? undefined : [packNativePreviewPackages, packVsixExtensions],
+    dependencies: options.forRelease ? undefined : [packTypeScriptPackages, packVsixExtensions],
     run: options.forRelease ? async () => {
         throw new Error("This task should not be run in release builds.");
     } : undefined,
