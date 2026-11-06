@@ -215,7 +215,7 @@ const tsdkConfigSources: readonly TsdkConfigSource[] = [
     { section: "typescript.native-preview", key: "tsdk", nativeOnly: false },
 ];
 
-export function readNativePreviewConfig<T>(key: string, defaultValue: T): T {
+export function readConfigWithLegacyFallback<T>(key: string, defaultValue: T): T {
     const explicit = getExplicitConfigValues<T>("js/ts", key)[0];
     if (explicit) {
         return explicit.value;
