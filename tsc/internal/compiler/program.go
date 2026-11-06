@@ -50,6 +50,10 @@ type ProgramConfig struct {
 	// SkipModuleResolution avoids all module and type reference resolution while
 	// still collecting import metadata needed for emit.
 	SkipModuleResolution bool
+	// CheckerProcs is the number of CPUs the checkers of the program may use
+	// when no checker count is given, or 0 for GOMAXPROCS; see
+	// defaultCheckerCount.
+	CheckerProcs int
 }
 
 type ProgramHosts struct {

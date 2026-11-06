@@ -271,8 +271,9 @@ func (t *BuildTask) compileAndEmit(ctx context.Context, orchestrator *Orchestrat
 	compileTimes.BuildInfoReadTime = orchestrator.opts.Sys.Now().Sub(buildInfoReadStart)
 	parseStart := orchestrator.opts.Sys.Now()
 	program, programErr := compiler.NewProgram(ctx, compiler.ProgramOptions{
-		Config: t.resolved,
-		Host:   compilerHost,
+		Config:       t.resolved,
+		CheckerProcs: orchestrator.checkerProcs(),
+		Host:         compilerHost,
 	})
 	if programErr != nil {
 		t.result.exitStatus = tsc.ExitStatusCancelled

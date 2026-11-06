@@ -6807,6 +6807,10 @@
         "category": "Message",
         "code": 6937
     },
+    "Based on the available CPUs and the size of the project, unless --singleThreaded is passed.": {
+        "category": "Message",
+        "code": 6941
+    },
     "Set the number of projects to build concurrently.": {
         "category": "Message",
         "code": 6938

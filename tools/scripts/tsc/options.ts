@@ -1697,7 +1697,7 @@ export const options: OptionsModel = {
                 group: "commonOptionsWithBuild",
                 category: diagnostic("Command-line Options"),
                 description: diagnostic("Set the number of checkers per project."),
-                defaultValueDescription: diagnostic("4, unless --singleThreaded is passed."),
+                defaultValueDescription: diagnostic("Based on the available CPUs and the size of the project, unless --singleThreaded is passed."),
                 minValue: 1,
             },
         },
