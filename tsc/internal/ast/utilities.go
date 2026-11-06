@@ -311,7 +311,8 @@ func IsPropertyNameLiteral(node *Node) bool {
 	case KindIdentifier,
 		KindStringLiteral,
 		KindNoSubstitutionTemplateLiteral,
-		KindNumericLiteral:
+		KindNumericLiteral,
+		KindBigIntLiteral:
 		return true
 	}
 	return false
@@ -331,6 +332,8 @@ func IsPropertyName(node *Node) bool {
 		KindPrivateIdentifier,
 		KindStringLiteral,
 		KindNumericLiteral,
+		KindBigIntLiteral,
+		KindNoSubstitutionTemplateLiteral,
 		KindComputedPropertyName:
 		return true
 	}
