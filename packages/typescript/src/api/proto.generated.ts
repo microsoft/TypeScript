@@ -158,6 +158,7 @@ export interface APIMethodInfo {
     getTypePredicateOfSignature: APIMethod<CheckerSignatureParams, TypePredicateResponse | null>;
     getBaseTypes: APIMethod<CheckerTypeParams, TypeResponse[] | null>;
     getPropertiesOfType: APIMethod<CheckerTypeParams, SymbolResponse[] | null>;
+    getMembersOfType: APIMethod<GetMembersOfTypeParams, MemberResponse[]>;
     getApparentPropertiesOfType: APIMethod<GetTypePropertyParams, SymbolResponse[]>;
     getApparentType: APIMethod<GetTypePropertyParams, TypeResponse>;
     getReducedType: APIMethod<GetTypePropertyParams, TypeResponse>;
@@ -187,6 +188,7 @@ export interface APIMethodInfo {
     getExportsOfModule: APIMethod<CheckerSymbolParams, SymbolResponse[] | null>;
     getMemberInModuleExports: APIMethod<GetMemberInModuleExportsParams, SymbolResponse | null>;
     getJsDocTags: APIMethod<CheckerSymbolParams, JSDocTagInfo[] | null>;
+    getSymbolDocumentations: APIMethod<GetSymbolDocumentationsParams, SymbolDocumentation[]>;
     getDocumentationComment: APIMethod<CheckerSymbolParams, string>;
     isArrayType: APIMethod<CheckerTypeParams, boolean>;
     isReadonlySymbol: APIMethod<CheckerSymbolParams, boolean>;
@@ -953,6 +955,33 @@ export interface TypePredicateResponse {
     type?: TypeResponse | undefined;
 }
 
+/** GetMembersOfTypeParams are parameters for getMembersOfType. */
+export interface GetMembersOfTypeParams {
+    snapshot: number;
+    project: number;
+    type: number;
+    filter: MemberFilter;
+}
+
+/**
+ * MemberResponse is one property of a type with the information a traversal needs to
+ * decide how to render it, in a single round trip.
+ */
+export interface MemberResponse {
+    symbol: SymbolResponse | null;
+    /**
+     * Owner is the symbol of the type declaring the member (see InheritedMemberFilter),
+     * when it could be determined; members without a declaration (tuple elements,
+     * `length`, ...) have none.
+     */
+    owner?: SymbolResponse | undefined;
+    isMethod?: boolean | undefined;
+    isParameterProperty?: boolean | undefined;
+    tags?: JSDocTagInfo[] | undefined;
+    comment?: string | undefined;
+    declaredType?: TypeResponse | undefined;
+}
+
 /** GetPropertyOfTypeParams are parameters for getPropertyOfType (a named property of a type). */
 export interface GetPropertyOfTypeParams {
     snapshot: number;
@@ -1016,6 +1045,25 @@ export interface GetMemberInModuleExportsParams {
 export interface JSDocTagInfo {
     name: string;
     text?: string | undefined;
+}
+
+/**
+ * GetSymbolDocumentationsParams are parameters for getSymbolDocumentations: the JSDoc
+ * tags and documentation comment of many symbols in one request.
+ */
+export interface GetSymbolDocumentationsParams {
+    snapshot: number;
+    project: number;
+    symbols: readonly SymbolReference[] | null;
+}
+
+/**
+ * SymbolDocumentation is one element of a getSymbolDocumentations response; it equals
+ * the results of getJsDocTags and getDocumentationComment for the same symbol.
+ */
+export interface SymbolDocumentation {
+    tags?: JSDocTagInfo[] | undefined;
+    comment?: string | undefined;
 }
 
 /** GetReferencesToSymbolInFileParams are the parameters for the getReferencesToSymbolInFile method. */
@@ -1286,6 +1334,7 @@ export interface BatchRequest {
         | "getLocalTypeParametersOfType"
         | "getMemberInModuleExports"
         | "getMembersOfSymbol"
+        | "getMembersOfType"
         | "getMergedSymbol"
         | "getModeForResolutionAtIndex"
         | "getModeForUsageLocation"
@@ -1334,6 +1383,7 @@ export interface BatchRequest {
         | "getSuggestionDiagnostics"
         | "getSymbolAtLocation"
         | "getSymbolAtPosition"
+        | "getSymbolDocumentations"
         | "getSymbolOfDeclaration"
         | "getSymbolOfDeclarationForChecker"
         | "getSymbolOfNode"
@@ -1481,6 +1531,7 @@ export interface BatchResponse {
         | "getLocalTypeParametersOfType"
         | "getMemberInModuleExports"
         | "getMembersOfSymbol"
+        | "getMembersOfType"
         | "getMergedSymbol"
         | "getModeForResolutionAtIndex"
         | "getModeForUsageLocation"
@@ -1529,6 +1580,7 @@ export interface BatchResponse {
         | "getSuggestionDiagnostics"
         | "getSymbolAtLocation"
         | "getSymbolAtPosition"
+        | "getSymbolDocumentations"
         | "getSymbolOfDeclaration"
         | "getSymbolOfDeclarationForChecker"
         | "getSymbolOfNode"
@@ -1771,6 +1823,42 @@ export interface PackageId {
     peerDependencies: string;
 }
 
+/**
+ * MemberFilter selects which properties of a type getMembersOfType returns. It is a
+ * set of neutral predicates the caller combines (like a WHERE clause) to describe the
+ * members it will render, so that no type is materialized for a member it would skip.
+ * Tool-specific policies (jsii's @internal/underscore convention, TypeDoc's @hidden, ...)
+ * are expressed by the caller, not encoded here.
+ */
+export interface MemberFilter {
+    /**
+     * Visibilities to include ("public", "protected", "private"); empty means all.
+     * ECMAScript private names (#x) count as private.
+     */
+    visibility?: string[] | undefined;
+    /**
+     * Member kinds to include ("property", "accessor", "method", "parameterProperty",
+     * the last being a constructor parameter property); empty means all.
+     */
+    kinds?: string[] | undefined;
+    /** Drop members whose JSDoc carries any of these tags (e.g. "internal", "deprecated"). */
+    excludeJsDocTags?: string[] | undefined;
+    /**
+     * Drop members whose name (in its wire form, as the client sees it) matches this
+     * RE2 pattern, e.g. "^_" or "^(_|prototype$)". Absent means no name filter; a
+     * pattern that is passed is always compiled, so the empty pattern matches every
+     * member.
+     */
+    excludeNamePattern?: string | undefined;
+    /**
+     * Which declaring types to take members from. Nil means all (plain
+     * getPropertiesOfType semantics).
+     */
+    includeInheritedFrom?: InheritedMemberFilter | undefined;
+    /** Include the declared type of each non-method member (getTypeOfSymbol). */
+    includeDeclaredType?: boolean | undefined;
+}
+
 export interface ImportAdderAction {
     kind: "importSymbol";
     symbol?: SymbolReference | undefined;
@@ -1865,6 +1953,18 @@ export interface ModuleResolutionEntry {
     containingDirectory?: DocumentIdentifier | undefined;
     resolutionMode?: ResolutionMode | undefined;
     result: StaticModuleResolution;
+}
+
+/**
+ * InheritedMemberFilter restricts members by the type that declares them: members
+ * declared on the queried type itself are always kept; with All every base
+ * contributes; otherwise only members declared on one of DeclaringTypes (by symbol)
+ * are kept. The declaring type is the type at the declaration's owner node (its
+ * parent, or grandparent for a constructor parameter property).
+ */
+export interface InheritedMemberFilter {
+    all?: boolean | undefined;
+    declaringTypes?: SymbolReference[] | undefined;
 }
 
 /** CompletionEntryLabelDetailsResponse holds additional label display text for a completion entry. */
