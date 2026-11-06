@@ -1,0 +1,58 @@
+doYouNeedToChangeYourTargetLibraryReadonlyES2015.ts(2,7): error TS2550: Property 'find' does not exist on type 'readonly number[]'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2015' or later.
+doYouNeedToChangeYourTargetLibraryReadonlyES2015.ts(3,7): error TS2550: Property 'findIndex' does not exist on type 'readonly number[]'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2015' or later.
+doYouNeedToChangeYourTargetLibraryReadonlyES2015.ts(4,7): error TS2550: Property 'entries' does not exist on type 'readonly number[]'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2015' or later.
+doYouNeedToChangeYourTargetLibraryReadonlyES2015.ts(5,7): error TS2550: Property 'keys' does not exist on type 'readonly number[]'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2015' or later.
+doYouNeedToChangeYourTargetLibraryReadonlyES2015.ts(6,7): error TS2550: Property 'values' does not exist on type 'readonly number[]'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2015' or later.
+doYouNeedToChangeYourTargetLibraryReadonlyES2015.ts(9,5): error TS2550: Property 'entries' does not exist on type 'ReadonlyMap<string, number>'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2015' or later.
+doYouNeedToChangeYourTargetLibraryReadonlyES2015.ts(10,5): error TS2550: Property 'keys' does not exist on type 'ReadonlyMap<string, number>'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2015' or later.
+doYouNeedToChangeYourTargetLibraryReadonlyES2015.ts(11,5): error TS2550: Property 'values' does not exist on type 'ReadonlyMap<string, number>'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2015' or later.
+doYouNeedToChangeYourTargetLibraryReadonlyES2015.ts(14,5): error TS2550: Property 'entries' does not exist on type 'ReadonlySet<number>'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2015' or later.
+doYouNeedToChangeYourTargetLibraryReadonlyES2015.ts(15,5): error TS2550: Property 'keys' does not exist on type 'ReadonlySet<number>'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2015' or later.
+doYouNeedToChangeYourTargetLibraryReadonlyES2015.ts(16,5): error TS2550: Property 'values' does not exist on type 'ReadonlySet<number>'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2015' or later.
+doYouNeedToChangeYourTargetLibraryReadonlyES2015.ts(18,22): error TS2339: Property 'fill' does not exist on type 'readonly [1, 2, 3]'.
+
+
+==== doYouNeedToChangeYourTargetLibraryReadonlyES2015.ts (12 errors) ====
+    declare const array: ReadonlyArray<number>;
+    array.find;
+          ~~~~
+!!! error TS2550: Property 'find' does not exist on type 'readonly number[]'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2015' or later.
+    array.findIndex;
+          ~~~~~~~~~
+!!! error TS2550: Property 'findIndex' does not exist on type 'readonly number[]'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2015' or later.
+    array.entries;
+          ~~~~~~~
+!!! error TS2550: Property 'entries' does not exist on type 'readonly number[]'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2015' or later.
+    array.keys;
+          ~~~~
+!!! error TS2550: Property 'keys' does not exist on type 'readonly number[]'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2015' or later.
+    array.values;
+          ~~~~~~
+!!! error TS2550: Property 'values' does not exist on type 'readonly number[]'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2015' or later.
+    
+    declare const map: ReadonlyMap<string, number>;
+    map.entries;
+        ~~~~~~~
+!!! error TS2550: Property 'entries' does not exist on type 'ReadonlyMap<string, number>'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2015' or later.
+    map.keys;
+        ~~~~
+!!! error TS2550: Property 'keys' does not exist on type 'ReadonlyMap<string, number>'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2015' or later.
+    map.values;
+        ~~~~~~
+!!! error TS2550: Property 'values' does not exist on type 'ReadonlyMap<string, number>'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2015' or later.
+    
+    declare const set: ReadonlySet<number>;
+    set.entries;
+        ~~~~~~~
+!!! error TS2550: Property 'entries' does not exist on type 'ReadonlySet<number>'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2015' or later.
+    set.keys;
+        ~~~~
+!!! error TS2550: Property 'keys' does not exist on type 'ReadonlySet<number>'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2015' or later.
+    set.values;
+        ~~~~~~
+!!! error TS2550: Property 'values' does not exist on type 'ReadonlySet<number>'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2015' or later.
+    
+    ([1, 2, 3] as const).fill;
+                         ~~~~
+!!! error TS2339: Property 'fill' does not exist on type 'readonly [1, 2, 3]'.
+    
