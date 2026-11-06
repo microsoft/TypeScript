@@ -42,7 +42,15 @@ interface _WritableStream {
 }
 interface _DuplexStream extends _ReadableStream, _WritableStream {
 }
+/**
+ * Runtime abstraction implemented by this npm module.
+ * External implementations are not supported. Changes to this interface do not
+ * require a major version bump.
+ */
 interface RAL {
+    readonly crypto: {
+        randomUUID(): string;
+    };
     readonly applicationJson: {
         readonly encoder: ContentTypeEncoder;
         readonly decoder: ContentTypeDecoder;
