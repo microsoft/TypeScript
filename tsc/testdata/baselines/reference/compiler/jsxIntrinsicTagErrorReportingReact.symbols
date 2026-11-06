@@ -35,10 +35,11 @@ export function Component() {
 >components : Symbol(components, Decl(test.tsx, 4, 9))
 >div : Symbol(div, Decl(test.tsx, 4, 24))
 
-            <components.dov></components.dov>
+            <components.dov id="x">child</components.dov>
 >components.dov : Symbol(dov, Decl(test.tsx, 5, 19))
 >components : Symbol(components, Decl(test.tsx, 4, 9))
 >dov : Symbol(dov, Decl(test.tsx, 5, 19))
+>id : Symbol(id, Decl(test.tsx, 15, 27))
 >components.dov : Symbol(dov, Decl(test.tsx, 5, 19))
 >components : Symbol(components, Decl(test.tsx, 4, 9))
 >dov : Symbol(dov, Decl(test.tsx, 5, 19))

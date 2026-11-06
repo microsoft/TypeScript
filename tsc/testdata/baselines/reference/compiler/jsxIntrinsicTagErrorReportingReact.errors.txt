@@ -25,7 +25,7 @@
                  ~~~
 !!! error TS2339: Property 'dav' does not exist on type 'JSX.IntrinsicElements'.
                 <components.div></components.div>
-                <components.dov></components.dov>
+                <components.dov id="x">child</components.dov>
                  ~~~~~~~~~~~~~~
 !!! error TS2339: Property 'dov' does not exist on type 'JSX.IntrinsicElements'.
                 <components.dav></components.dav>

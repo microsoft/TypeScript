@@ -22,7 +22,7 @@ export function Component() {
             <dov></dov>
             <dav></dav>
             <components.div></components.div>
-            <components.dov></components.dov>
+            <components.dov id="x">child</components.dov>
             <components.dav></components.dav>
         </>
     );

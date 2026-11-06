@@ -23,10 +23,10 @@ export function Component() {
     } as const;
 
     return (
->(        <>            <div></div>            <dov></dov>            <dav></dav>            <components.div></components.div>            <components.dov></components.dov>            <components.dav></components.dav>        </>    ) : JSX.Element
+>(        <>            <div></div>            <dov></dov>            <dav></dav>            <components.div></components.div>            <components.dov id="x">child</components.dov>            <components.dav></components.dav>        </>    ) : JSX.Element
 
         <>
-><>            <div></div>            <dov></dov>            <dav></dav>            <components.div></components.div>            <components.dov></components.dov>            <components.dav></components.dav>        </> : JSX.Element
+><>            <div></div>            <dov></dov>            <dav></dav>            <components.div></components.div>            <components.dov id="x">child</components.dov>            <components.dav></components.dav>        </> : JSX.Element
 
             <div></div>
 ><div></div> : JSX.Element
@@ -52,11 +52,12 @@ export function Component() {
 >components : { readonly div: "div"; readonly dov: "dov"; }
 >div : "div"
 
-            <components.dov></components.dov>
-><components.dov></components.dov> : JSX.Element
+            <components.dov id="x">child</components.dov>
+><components.dov id="x">child</components.dov> : JSX.Element
 >components.dov : "dov"
 >components : { readonly div: "div"; readonly dov: "dov"; }
 >dov : "dov"
+>id : string
 >components.dov : "dov"
 >components : { readonly div: "div"; readonly dov: "dov"; }
 >dov : "dov"

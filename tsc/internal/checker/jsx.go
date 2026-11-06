@@ -902,8 +902,12 @@ func (c *Checker) getUninstantiatedJsxSignaturesOfType(elementType *Type, caller
 	if elementType.flags&TypeFlagsStringLiteral != 0 {
 		intrinsicType := c.getIntrinsicAttributesTypeFromStringLiteralType(elementType, caller)
 		if intrinsicType == nil {
-			c.error(caller.TagName(), diagnostics.Property_0_does_not_exist_on_type_1, getStringLiteralValue(elementType), "JSX."+JsxNames.IntrinsicElements)
-			return []*Signature{c.anySignature}
+			errorNode := caller
+			if !ast.IsJsxOpeningFragment(caller) {
+				errorNode = caller.TagName()
+			}
+			c.error(errorNode, diagnostics.Property_0_does_not_exist_on_type_1, getStringLiteralValue(elementType), "JSX."+JsxNames.IntrinsicElements)
+			return []*Signature{c.createSignatureForJSXIntrinsic(caller, c.errorType)}
 		}
 		fakeSignature := c.createSignatureForJSXIntrinsic(caller, intrinsicType)
 		return []*Signature{fakeSignature}
