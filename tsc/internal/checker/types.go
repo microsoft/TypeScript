@@ -14,6 +14,13 @@ import (
 
 //go:generate npx hereby generate:checker
 
+type RelationCacheSizes struct {
+	Assignable    int `json:"assignable"`
+	Identity      int `json:"identity"`
+	Subtype       int `json:"subtype"`
+	StrictSubtype int `json:"strictSubtype"`
+}
+
 // ParseFlags
 
 type ParseFlags uint32
@@ -461,8 +468,8 @@ func (links *TypeNodeLinks) setOuterTypeParameters(c *Checker, types []*Type) {
 }
 
 type ComputedNameNodeLinks struct {
-	hasName *bool  // If the node has a computable name
-	name    string // Resolved name associated with the type of the node
+	hasName core.Tristate // If the node has a computable name
+	name    string        // Resolved name associated with the type of the node
 }
 
 // Links for enum members
@@ -1159,11 +1166,11 @@ func (t *StructuredType) getMember(name string) *ast.Symbol {
 	if lazy == nil {
 		return nil
 	}
-	memberInfo := lazy.layout.memberInfoMap[name]
-	if memberInfo == nil {
+	index := lazy.layout.members.Find(name)
+	if index < 0 {
 		return nil
 	}
-	return t.getPropertyAt(int(memberInfo.slotIndex))
+	return t.getPropertyAt(index)
 }
 
 func (t *StructuredType) getMembers() ast.SymbolTable {
@@ -1184,15 +1191,16 @@ func (t *StructuredType) getPropertyAt(index int) *ast.Symbol {
 		return t.properties[index]
 	}
 	if t.properties == nil {
-		t.properties = make([]*ast.Symbol, len(lazy.layout.memberInfos))
+		t.properties = make([]*ast.Symbol, lazy.layout.members.Len())
 	}
 	member := t.properties[index]
 	if member == nil {
-		memberInfo := lazy.layout.memberInfos[index]
-		if memberInfo.baseIndex < 0 {
-			member = t.checker.instantiateSymbol(memberInfo.symbol, lazy.mapper)
+		symbol := lazy.layout.members.SymbolAt(index)
+		baseIndex := lazy.layout.baseIndices[index]
+		if baseIndex < 0 {
+			member = t.checker.instantiateSymbol(symbol, lazy.mapper)
 		} else {
-			member = t.checker.getPropertyOfType(lazy.baseTypes[memberInfo.baseIndex], memberInfo.symbol.Name())
+			member = t.checker.getPropertyOfType(lazy.baseTypes[baseIndex], symbol.Name())
 		}
 		t.properties[index] = member
 	}
@@ -1201,7 +1209,7 @@ func (t *StructuredType) getPropertyAt(index int) *ast.Symbol {
 
 func (t *StructuredType) getProperties() []*ast.Symbol {
 	if lazy := t.getLazyState(); lazy != nil && !lazy.propertiesResolved {
-		for i := range lazy.layout.memberInfos {
+		for i := range lazy.layout.members.Len() {
 			t.getPropertyAt(i)
 		}
 		lazy.propertiesResolved = true
@@ -1217,7 +1225,7 @@ func (t *StructuredType) hasProperties() bool {
 	if lazy == nil {
 		return false
 	}
-	return len(lazy.layout.memberInfos) != 0
+	return lazy.layout.members.Len() != 0
 }
 
 func (t *StructuredType) getLazyState() *LazyState {
@@ -1311,16 +1319,10 @@ type LazyState struct {
 }
 
 type MemberLayout struct {
-	id               uint32                 // Unique identifier for the member layout
-	memberInfoMap    map[string]*MemberInfo // MemberInfos keyed by property name
-	memberInfos      []MemberInfo           // MemberInfos in sorted order
-	layoutProperties []*ast.Symbol          // Lazily created list of layout properties (symbols corresponding to memberInfos)
-}
-
-type MemberInfo struct {
-	symbol    *ast.Symbol // Uninstantiated symbol
-	baseIndex int32       // Index of base type with symbol, or -1 if locally declared
-	slotIndex int32       // Index of resolved symbol in members array
+	id               uint32          // Unique identifier for the member layout
+	members          ast.SymbolTable // MemberInfos keyed by property name
+	baseIndices      []int32         // Indices of base types for each member (-1 if locally declared)
+	layoutProperties []*ast.Symbol   // Lazily created list of layout properties (the symbols in members)
 }
 
 func (t *TypeReference) AsTypeReference() *TypeReference { return t }

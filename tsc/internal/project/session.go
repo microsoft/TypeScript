@@ -77,10 +77,11 @@ type SessionOptions struct {
 	PushDiagnosticsEnabled bool
 	// RunExternalCode allows configured content mappers to run their (external) processes,
 	// gated on workspace trust by the client. It corresponds to the --runExternalCode CLI flag.
-	RunExternalCode       bool
-	InitialWorkspaceRoots []tspath.RootedDirectoryPath
-	DebounceDelay         time.Duration
-	CheckerPoolOptions    CheckerPoolOptions
+	RunExternalCode         bool
+	InitialWorkspaceRoots   []tspath.RootedDirectoryPath
+	InitialWorkspaceFolders []ls.WorkspaceFolder
+	DebounceDelay           time.Duration
+	CheckerPoolOptions      CheckerPoolOptions
 }
 
 type SessionInit struct {

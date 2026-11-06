@@ -47,6 +47,7 @@ import type {
     CaseBlock,
     CaseClause,
     CaseKeyword,
+    CaseOrDefaultClause,
     CatchClause,
     ClassDeclaration,
     ClassExpression,
@@ -483,6 +484,24 @@ export declare namespace isCaseBlock {
     function Handle<T extends NodeHandleLike<Node>>(node: T): node is SpecializeNodeHandle<T, CaseBlock>;
 }
 isCaseBlock.Handle = isCaseBlock as any;
+
+export function isCaseClause(node: Node): node is CaseClause {
+    return node.kind === SyntaxKind.CaseClause;
+}
+
+export declare namespace isCaseClause {
+    function Handle<T extends NodeHandleLike<Node>>(node: T): node is SpecializeNodeHandle<T, CaseClause>;
+}
+isCaseClause.Handle = isCaseClause as any;
+
+export function isDefaultClause(node: Node): node is DefaultClause {
+    return node.kind === SyntaxKind.DefaultClause;
+}
+
+export declare namespace isDefaultClause {
+    function Handle<T extends NodeHandleLike<Node>>(node: T): node is SpecializeNodeHandle<T, DefaultClause>;
+}
+isDefaultClause.Handle = isDefaultClause as any;
 
 export function isThrowStatement(node: Node): node is ThrowStatement {
     return node.kind === SyntaxKind.ThrowStatement;
@@ -2053,24 +2072,6 @@ export declare namespace isForOfStatement {
 }
 isForOfStatement.Handle = isForOfStatement as any;
 
-export function isCaseClause(node: Node): node is CaseClause {
-    return node.kind === SyntaxKind.CaseClause;
-}
-
-export declare namespace isCaseClause {
-    function Handle<T extends NodeHandleLike<Node>>(node: T): node is SpecializeNodeHandle<T, CaseClause>;
-}
-isCaseClause.Handle = isCaseClause as any;
-
-export function isDefaultClause(node: Node): node is DefaultClause {
-    return node.kind === SyntaxKind.DefaultClause;
-}
-
-export declare namespace isDefaultClause {
-    function Handle<T extends NodeHandleLike<Node>>(node: T): node is SpecializeNodeHandle<T, DefaultClause>;
-}
-isDefaultClause.Handle = isDefaultClause as any;
-
 export function isObjectBindingPattern(node: Node): node is ObjectBindingPattern {
     return node.kind === SyntaxKind.ObjectBindingPattern;
 }
@@ -2301,6 +2302,16 @@ export declare namespace isJsxAttributeValue {
 }
 
 isJsxAttributeValue.Handle = isJsxAttributeValue as any;
+
+export function isCaseOrDefaultClause(node: Node): node is CaseOrDefaultClause {
+    return node.kind === SyntaxKind.CaseClause || node.kind === SyntaxKind.DefaultClause;
+}
+
+export declare namespace isCaseOrDefaultClause {
+    function Handle<T extends NodeHandleLike<Node>>(node: T): node is SpecializeNodeHandle<T, CaseOrDefaultClause>;
+}
+
+isCaseOrDefaultClause.Handle = isCaseOrDefaultClause as any;
 
 export function isClassLikeDeclaration(node: Node): node is ClassLikeDeclaration {
     return node.kind === SyntaxKind.ClassDeclaration || node.kind === SyntaxKind.ClassExpression;
