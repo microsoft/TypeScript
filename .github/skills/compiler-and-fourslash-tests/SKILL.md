@@ -482,10 +482,3 @@ If a test panics without a clear stack trace, run all tests in the package seque
 go -C ./tsc test ./internal/testrunner/ -parallel=1 -v
 ```
 The last test that shows as running before the panic output is the one that caused it.
-
-### 3.3 Go Concurrency Tests
-
-Prefer `testing/synctest` over wall-clock sleeps, polling loops, or `time.After` watchdogs in in-memory concurrency tests.
-Create the test's goroutines, channels, timers, and mocks inside `synctest.Test`, and use `synctest.Wait()` before asserting that work remains blocked.
-Use the bubble's fake clock when testing deadlines or timer behavior; do not rely on elapsed wall time to distinguish slow execution from a deadlock.
-Keep real-time waits where tests depend on external processes, real network I/O, or OS file-watcher events that synctest cannot control.
