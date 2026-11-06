@@ -26749,9 +26749,7 @@ func (c *Checker) removeSubtypes(types []*Type, hasObjectTypes bool) []*Type {
 			var keyProperty *ast.Symbol
 			var keyPropertyType *Type
 			if source.flags&(TypeFlagsObject|TypeFlagsIntersection|TypeFlagsInstantiableNonPrimitive) != 0 {
-				keyProperty = core.Find(c.getPropertiesOfType(source), func(p *ast.Symbol) bool {
-					return isUnitType(c.getTypeOfSymbol(p))
-				})
+				keyProperty = core.Find(c.getPropertiesOfType(source), c.isPropertyOfUnitType)
 			}
 			if keyProperty != nil {
 				keyPropertyType = c.getRegularTypeOfLiteralType(c.getTypeOfSymbol(keyProperty))
@@ -31546,7 +31544,7 @@ func (d *ObjectLiteralDiscriminator) name(index int) string {
 	return d.members[index-len(d.props)].Name()
 }
 
-func (d *ObjectLiteralDiscriminator) matches(index int, t *Type) bool {
+func (d *ObjectLiteralDiscriminator) matches(index int, t *Type, _ bool) bool {
 	var propType *Type
 	if index < len(d.props) {
 		prop := d.props[index]
@@ -31572,6 +31570,9 @@ func (d *ObjectLiteralDiscriminator) matches(index int, t *Type) bool {
 }
 
 func (c *Checker) discriminateContextualTypeByObjectMembers(node *ast.Node, contextualType *Type) *Type {
+	if !isDiscriminableUnion(contextualType) {
+		return c.removeNonDiscriminableConstituents(contextualType)
+	}
 	key := DiscriminatedContextualTypeKey{nodeId: ast.GetNodeId(node), typeId: contextualType.id}
 	if discriminated := c.discriminatedContextualTypes[key]; discriminated != nil {
 		return discriminated
