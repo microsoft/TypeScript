@@ -1,0 +1,43 @@
+jsxIntrinsicTagErrorReporting.tsx(11,8): error TS2339: Property 'dov' does not exist on type 'JSX.IntrinsicElements'.
+jsxIntrinsicTagErrorReporting.tsx(12,8): error TS2339: Property 'dav' does not exist on type 'JSX.IntrinsicElements'.
+jsxIntrinsicTagErrorReporting.tsx(21,24): error TS2339: Property 'dov' does not exist on type '{ readonly div: "div"; }'.
+jsxIntrinsicTagErrorReporting.tsx(24,19): error TS2339: Property 'dov' does not exist on type 'JSX.IntrinsicElements'.
+jsxIntrinsicTagErrorReporting.tsx(24,19): error TS17002: Expected corresponding JSX closing tag for 'div'.
+
+
+==== jsxIntrinsicTagErrorReporting.tsx (5 errors) ====
+    declare namespace JSX {
+      interface Element {}
+      interface IntrinsicElements {
+        div: any;
+      }
+    }
+
+    function Component() {
+      return (
+        <div>
+          <dov></dov>
+           ~~~
+!!! error TS2339: Property 'dov' does not exist on type 'JSX.IntrinsicElements'.
+          <dav></dav>
+           ~~~
+!!! error TS2339: Property 'dav' does not exist on type 'JSX.IntrinsicElements'.
+        </div>
+      );
+    }
+    const components = {
+        div: 'div',
+    } as const;
+
+    function ComponentWithPropertyAccess() {
+        return <components.dov />;
+                           ~~~
+!!! error TS2339: Property 'dov' does not exist on type '{ readonly div: "div"; }'.
+    }
+    function ComponentWithValidOpeningTag() {
+        return <div></dov>;
+                      ~~~
+!!! error TS2339: Property 'dov' does not exist on type 'JSX.IntrinsicElements'.
+                      ~~~
+!!! error TS17002: Expected corresponding JSX closing tag for 'div'.
+    }

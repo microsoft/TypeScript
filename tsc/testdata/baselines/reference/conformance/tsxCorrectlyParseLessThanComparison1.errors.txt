@@ -1,9 +1,8 @@
 tsxCorrectlyParseLessThanComparison1.tsx(14,22): error TS2366: Function lacks ending return statement and return type does not include 'undefined'.
 tsxCorrectlyParseLessThanComparison1.tsx(16,21): error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
-tsxCorrectlyParseLessThanComparison1.tsx(16,26): error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
 
 
-==== tsxCorrectlyParseLessThanComparison1.tsx (3 errors) ====
+==== tsxCorrectlyParseLessThanComparison1.tsx (2 errors) ====
     declare namespace JSX {
         interface Element {
             div: string;
@@ -23,8 +22,6 @@ tsxCorrectlyParseLessThanComparison1.tsx(16,26): error TS7026: JSX element impli
             if (this.props.id < 1) {
                 return (<div></div>);
                         ~~~~~
-!!! error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
-                             ~~~~~~
 !!! error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
             }
         }

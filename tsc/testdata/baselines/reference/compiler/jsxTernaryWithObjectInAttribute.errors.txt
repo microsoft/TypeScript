@@ -1,14 +1,10 @@
 jsxTernaryWithObjectInAttribute.tsx(11,5): error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
 jsxTernaryWithObjectInAttribute.tsx(12,7): error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
-jsxTernaryWithObjectInAttribute.tsx(12,24): error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
 jsxTernaryWithObjectInAttribute.tsx(19,13): error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
-jsxTernaryWithObjectInAttribute.tsx(24,13): error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
 jsxTernaryWithObjectInAttribute.tsx(27,13): error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
-jsxTernaryWithObjectInAttribute.tsx(29,13): error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
-jsxTernaryWithObjectInAttribute.tsx(33,5): error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
 
 
-==== jsxTernaryWithObjectInAttribute.tsx (8 errors) ====
+==== jsxTernaryWithObjectInAttribute.tsx (4 errors) ====
     declare function memo<T>(f: T): T;
     declare const HoverCardText: (p: { label: any; text: any; className?: string }) => null;
     declare const DEFAULT_NULL_VALUE: string;
@@ -25,8 +21,6 @@ jsxTernaryWithObjectInAttribute.tsx(33,5): error TS7026: JSX element implicitly 
           <div>{t('label')}</div>
           ~~~~~
 !!! error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
-                           ~~~~~~
-!!! error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
           {!isLogin ? (
             DEFAULT_NULL_VALUE
           ) : (
@@ -41,8 +35,6 @@ jsxTernaryWithObjectInAttribute.tsx(33,5): error TS7026: JSX element implicitly 
                     s2: nf(2, { precision: 2, rounding: 'down' }),
                   })}
                 </div>
-                ~~~~~~
-!!! error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
               }
               text={
                 <div>
@@ -50,14 +42,10 @@ jsxTernaryWithObjectInAttribute.tsx(33,5): error TS7026: JSX element implicitly 
 !!! error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
                   {nf(0, { precision: 2, rounding: 'down' })} USDT
                 </div>
-                ~~~~~~
-!!! error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
               }
             ></HoverCardText>
           )}
         </div>
-        ~~~~~~
-!!! error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
       );
     });
     

@@ -8,7 +8,6 @@
 10.tsx(1,14): error TS2304: Cannot find name 'c'.
 10.tsx(1,16): error TS1109: Expression expected.
 11.tsx(1,2): error TS2304: Cannot find name 'a'.
-11.tsx(1,8): error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
 11.tsx(1,10): error TS17002: Expected corresponding JSX closing tag for 'a.b.c'.
 12.tsx(1,1): error TS1109: Expression expected.
 12.tsx(1,2): error TS1109: Expression expected.
@@ -41,20 +40,15 @@
 17.tsx(1,10): error TS1005: '</' expected.
 18.tsx(1,30): error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
 18.tsx(1,30): error TS2657: JSX expressions must have one parent element.
-18.tsx(1,38): error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
 18.tsx(1,44): error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
-18.tsx(1,52): error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
 19.tsx(1,9): error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
 19.tsx(1,9): error TS2657: JSX expressions must have one parent element.
-19.tsx(1,17): error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
 19.tsx(1,50): error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
-19.tsx(1,58): error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
 2.tsx(1,1): error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
 2.tsx(1,5): error TS1003: Identifier expected.
 20.tsx(1,1): error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
 20.tsx(1,10): error TS1005: '}' expected.
 20.tsx(1,11): error TS1381: Unexpected token. Did you mean `{'}'}` or `&rbrace;`?
-20.tsx(1,12): error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
 21.tsx(1,1): error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
 21.tsx(1,20): error TS1003: Identifier expected.
 22.tsx(1,1): error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
@@ -64,7 +58,6 @@
 23.tsx(1,7): error TS1005: '...' expected.
 23.tsx(1,7): error TS2304: Cannot find name 'props'.
 24.tsx(1,1): error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
-24.tsx(1,11): error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
 24.tsx(1,17): error TS1005: '>' expected.
 24.tsx(1,18): error TS1128: Declaration or statement expected.
 24.tsx(1,21): error TS2304: Cannot find name 'props'.
@@ -72,7 +65,6 @@
 24.tsx(1,28): error TS1109: Expression expected.
 25.tsx(1,1): error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
 25.tsx(1,10): error TS2304: Cannot find name 'props'.
-25.tsx(1,22): error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
 25.tsx(1,28): error TS1005: '>' expected.
 25.tsx(1,29): error TS1128: Declaration or statement expected.
 25.tsx(1,32): error TS2304: Cannot find name 'props'.
@@ -80,10 +72,8 @@
 25.tsx(1,39): error TS1109: Expression expected.
 26.tsx(1,1): error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
 26.tsx(1,4): error TS1382: Unexpected token. Did you mean `{'>'}` or `&gt;`?
-26.tsx(1,5): error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
 27.tsx(1,1): error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
 27.tsx(1,5): error TS1382: Unexpected token. Did you mean `{'>'}` or `&gt;`?
-27.tsx(1,6): error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
 28.tsx(1,1): error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
 28.tsx(1,2): error TS17008: JSX element 'a' has no corresponding closing tag.
 28.tsx(1,6): error TS1145: '{' or JSX element expected.
@@ -98,7 +88,6 @@
 3.tsx(1,7): error TS1109: Expression expected.
 30.tsx(1,1): error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
 30.tsx(1,4): error TS1381: Unexpected token. Did you mean `{'}'}` or `&rbrace;`?
-30.tsx(1,5): error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
 31.tsx(1,1): error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
 31.tsx(1,4): error TS1003: Identifier expected.
 4.tsx(1,1): error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
@@ -107,16 +96,13 @@
 5.tsx(1,2): error TS17008: JSX element 'a' has no corresponding closing tag.
 5.tsx(1,5): error TS1005: '</' expected.
 6.tsx(1,1): error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
-6.tsx(1,4): error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
 6.tsx(1,6): error TS17002: Expected corresponding JSX closing tag for 'a'.
 7.tsx(1,1): error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
 7.tsx(1,13): error TS1002: Unterminated string literal.
 8.tsx(1,1): error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
-8.tsx(1,6): error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
 8.tsx(1,8): error TS17002: Expected corresponding JSX closing tag for 'a:b'.
 9.tsx(1,1): error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
 9.tsx(1,5): error TS1003: Identifier expected.
-9.tsx(1,8): error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
 9.tsx(1,13): error TS1005: '>' expected.
 9.tsx(1,14): error TS2304: Cannot find name 'c'.
 9.tsx(1,16): error TS1109: Expression expected.
@@ -164,11 +150,9 @@
 !!! error TS17008: JSX element 'a' has no corresponding closing tag.
         
 !!! error TS1005: '</' expected.
-==== 6.tsx (3 errors) ====
+==== 6.tsx (2 errors) ====
     <a></b>;
     ~~~
-!!! error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
-       ~~~~
 !!! error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
          ~
 !!! error TS17002: Expected corresponding JSX closing tag for 'a'.
@@ -178,22 +162,18 @@
 !!! error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
                 
 !!! error TS1002: Unterminated string literal.
-==== 8.tsx (3 errors) ====
+==== 8.tsx (2 errors) ====
     <a:b></b>;
     ~~~~~
 !!! error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
-         ~~~~
-!!! error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
            ~
 !!! error TS17002: Expected corresponding JSX closing tag for 'a:b'.
-==== 9.tsx (6 errors) ====
+==== 9.tsx (5 errors) ====
     <a:b.c></a:b.c>;
     ~~~~~~~
 !!! error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
         ~
 !!! error TS1003: Identifier expected.
-           ~~~~~
-!!! error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
                 ~
 !!! error TS1005: '>' expected.
                  ~
@@ -214,12 +194,10 @@
 !!! error TS2304: Cannot find name 'c'.
                    ~
 !!! error TS1109: Expression expected.
-==== 11.tsx (3 errors) ====
+==== 11.tsx (2 errors) ====
     <a.b.c></a>;
      ~
 !!! error TS2304: Cannot find name 'a'.
-           ~~~~
-!!! error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
              ~
 !!! error TS17002: Expected corresponding JSX closing tag for 'a.b.c'.
 ==== 12.tsx (6 errors) ====
@@ -292,31 +270,23 @@
 !!! error TS17008: JSX element 'a' has no corresponding closing tag.
              
 !!! error TS1005: '</' expected.
-==== 18.tsx (5 errors) ====
+==== 18.tsx (3 errors) ====
     var x = /* Leading trivia */ <div>one</div><div>two</div>;;
                                  ~~~~~
 !!! error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
                                  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 !!! error TS2657: JSX expressions must have one parent element.
-                                         ~~~~~~
-!!! error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
                                                ~~~~~
 !!! error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
-                                                       ~~~~~~
-!!! error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
-==== 19.tsx (5 errors) ====
+==== 19.tsx (3 errors) ====
     var x = <div>one</div> /* intervening comment */ <div>two</div>;;
             ~~~~~
 !!! error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
             ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 !!! error TS2657: JSX expressions must have one parent element.
-                    ~~~~~~
-!!! error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
                                                      ~~~~~
 !!! error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
-                                                             ~~~~~~
-!!! error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
-==== 20.tsx (4 errors) ====
+==== 20.tsx (3 errors) ====
     <a>{"str";}</a>;
     ~~~
 !!! error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
@@ -324,8 +294,6 @@
 !!! error TS1005: '}' expected.
               ~
 !!! error TS1381: Unexpected token. Did you mean `{'}'}` or `&rbrace;`?
-               ~~~~
-!!! error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
 ==== 21.tsx (2 errors) ====
     <span className="a", id="b" />;
     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -349,11 +317,9 @@
           ~~~~~
 !!! error TS2304: Cannot find name 'props'.
     
-==== 24.tsx (7 errors) ====
+==== 24.tsx (6 errors) ====
     <div>stuff</div {...props}>;
     ~~~~~
-!!! error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
-              ~~~~~
 !!! error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
                     ~
 !!! error TS1005: '>' expected.
@@ -366,14 +332,12 @@
                                ~
 !!! error TS1109: Expression expected.
     
-==== 25.tsx (8 errors) ====
+==== 25.tsx (7 errors) ====
     <div {...props}>stuff</div {...props}>;
     ~~~~~~~~~~~~~~~~
 !!! error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
              ~~~~~
 !!! error TS2304: Cannot find name 'props'.
-                         ~~~~~
-!!! error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
                                ~
 !!! error TS1005: '>' expected.
                                 ~~~
@@ -386,23 +350,19 @@
 !!! error TS1109: Expression expected.
     
     
-==== 26.tsx (3 errors) ====
+==== 26.tsx (2 errors) ====
     <a>></a>;
     ~~~
 !!! error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
        ~
 !!! error TS1382: Unexpected token. Did you mean `{'>'}` or `&gt;`?
-        ~~~~
-!!! error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
     
-==== 27.tsx (3 errors) ====
+==== 27.tsx (2 errors) ====
     <a> ></a>;
     ~~~
 !!! error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
         ~
 !!! error TS1382: Unexpected token. Did you mean `{'>'}` or `&gt;`?
-         ~~~~
-!!! error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
     
 ==== 28.tsx (4 errors) ====
     <a b=}>;
@@ -425,14 +385,12 @@
 !!! error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
     
 !!! error TS1005: '</' expected.
-==== 30.tsx (3 errors) ====
+==== 30.tsx (2 errors) ====
     <a>}</a>;
     ~~~
 !!! error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
        ~
 !!! error TS1381: Unexpected token. Did you mean `{'}'}` or `&rbrace;`?
-        ~~~~
-!!! error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
     
 ==== 31.tsx (2 errors) ====
     <a .../*hai*/asdf/>;
