@@ -1,8 +1,7 @@
 jsxInExtendsClause.tsx(9,12): error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
-jsxInExtendsClause.tsx(9,31): error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
 
 
-==== jsxInExtendsClause.tsx (2 errors) ====
+==== jsxInExtendsClause.tsx (1 errors) ====
     // https://github.com/Microsoft/TypeScript/issues/13157
     declare namespace React {
       interface ComponentClass<P> { new (): Component<P, {}>; }
@@ -13,8 +12,6 @@ jsxInExtendsClause.tsx(9,31): error TS7026: JSX element implicitly has type 'any
       render() {
         return <span>Hello, world!</span>;
                ~~~~~~
-!!! error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
-                                  ~~~~~~~
 !!! error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
       }
     }) {}

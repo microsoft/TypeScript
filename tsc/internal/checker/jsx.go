@@ -79,7 +79,9 @@ func (c *Checker) checkJsxElementDeferred(node *ast.Node) {
 	c.checkJsxOpeningLikeElementOrOpeningFragment(jsxElement.OpeningElement)
 	// Perform resolution on the closing tag so that rename/go to definition/etc work
 	if isJsxIntrinsicTagName(jsxElement.ClosingElement.TagName()) {
-		c.getIntrinsicTagSymbol(jsxElement.ClosingElement)
+		openingSymbol := c.getResolvedSymbolOrNil(jsxElement.OpeningElement)
+		reportErrors := openingSymbol != nil && openingSymbol != c.unknownSymbol
+		c.getIntrinsicTagSymbolWithDiagnostics(jsxElement.ClosingElement, reportErrors)
 	} else {
 		c.checkExpression(jsxElement.ClosingElement.TagName())
 	}
@@ -900,8 +902,12 @@ func (c *Checker) getUninstantiatedJsxSignaturesOfType(elementType *Type, caller
 	if elementType.flags&TypeFlagsStringLiteral != 0 {
 		intrinsicType := c.getIntrinsicAttributesTypeFromStringLiteralType(elementType, caller)
 		if intrinsicType == nil {
-			c.error(caller, diagnostics.Property_0_does_not_exist_on_type_1, getStringLiteralValue(elementType), "JSX."+JsxNames.IntrinsicElements)
-			return nil
+			errorNode := caller
+			if !ast.IsJsxOpeningFragment(caller) {
+				errorNode = caller.TagName()
+			}
+			c.error(errorNode, diagnostics.Property_0_does_not_exist_on_type_1, getStringLiteralValue(elementType), "JSX."+JsxNames.IntrinsicElements)
+			return []*Signature{c.createSignatureForJSXIntrinsic(caller, c.errorType)}
 		}
 		fakeSignature := c.createSignatureForJSXIntrinsic(caller, intrinsicType)
 		return []*Signature{fakeSignature}
@@ -1212,6 +1218,10 @@ func (c *Checker) getIntrinsicAttributesTypeFromJsxOpeningLikeElement(node *ast.
 // string index signature (in which case nodeLinks.jsxFlags will be IntrinsicIndexedElement).
 // May also return unknownSymbol if both of these lookups fail.
 func (c *Checker) getIntrinsicTagSymbol(node *ast.Node) *ast.Symbol {
+	return c.getIntrinsicTagSymbolWithDiagnostics(node, true)
+}
+
+func (c *Checker) getIntrinsicTagSymbolWithDiagnostics(node *ast.Node, reportErrors bool) *ast.Symbol {
 	links := c.symbolNodeLinks.Get(node)
 	if links.resolvedSymbol != nil {
 		return links.resolvedSymbol
@@ -1243,11 +1253,13 @@ func (c *Checker) getIntrinsicTagSymbol(node *ast.Node) *ast.Symbol {
 			return links.resolvedSymbol
 		}
 		// Wasn't found
-		c.error(node, diagnostics.Property_0_does_not_exist_on_type_1, tagName.Text(), "JSX."+JsxNames.IntrinsicElements)
+		if reportErrors {
+			c.error(tagName, diagnostics.Property_0_does_not_exist_on_type_1, tagName.Text(), "JSX."+JsxNames.IntrinsicElements)
+		}
 		links.resolvedSymbol = c.unknownSymbol
 		return links.resolvedSymbol
 	}
-	if c.noImplicitAny {
+	if c.noImplicitAny && reportErrors {
 		c.error(node, diagnostics.JSX_element_implicitly_has_type_any_because_no_interface_JSX_0_exists, JsxNames.IntrinsicElements)
 	}
 	links.resolvedSymbol = c.unknownSymbol
