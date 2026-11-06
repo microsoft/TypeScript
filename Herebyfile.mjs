@@ -989,7 +989,7 @@ async function runTests() {
     let cleanupTracking;
 
     if (baselineTrackingEnabled) {
-        const tempTrackingDir = fs.mkdtempSync(path.join(os.tmpdir(), "tsgo-baseline-tracking-"));
+        const tempTrackingDir = fs.mkdtempSync(path.join(os.tmpdir(), "typescript-baseline-tracking-"));
         trackingDir = tempTrackingDir;
         cleanupTracking = () => rimraf(tempTrackingDir);
     }

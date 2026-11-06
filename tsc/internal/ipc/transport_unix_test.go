@@ -19,7 +19,7 @@ const privatePipeHelperEnv = "TS_PRIVATE_PIPE_HELPER"
 func TestPipeTransportClosePreservesReplacement(t *testing.T) {
 	t.Parallel()
 
-	transport, err := NewPrivatePipeTransport("tsgo-api-test")
+	transport, err := NewPrivatePipeTransport("typescript-api-test")
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -62,7 +62,7 @@ func TestPipeTransportPermissions(t *testing.T) {
 func testPipeTransportPermissions(t *testing.T) {
 	syscall.Umask(0o002)
 
-	transport, err := NewPrivatePipeTransport("tsgo-api-test")
+	transport, err := NewPrivatePipeTransport("typescript-api-test")
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -72,7 +72,7 @@ func testPipeTransportPermissions(t *testing.T) {
 	assertMode(t, filepath.Dir(socketPath), 0o700)
 	assertMode(t, socketPath, 0o600)
 
-	explicitDir := filepath.Join(os.TempDir(), fmt.Sprintf("tsgo-api-%d", os.Getpid()))
+	explicitDir := filepath.Join(os.TempDir(), fmt.Sprintf("typescript-api-%d", os.Getpid()))
 	explicitTransport, err := NewPipeTransport(explicitDir)
 	if err != nil {
 		t.Fatal(err)
