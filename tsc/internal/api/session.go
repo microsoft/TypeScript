@@ -7,6 +7,7 @@ import (
 	"errors"
 	"fmt"
 	"io"
+	"regexp"
 	"runtime/debug"
 	"slices"
 	"strconv"
@@ -1135,6 +1136,8 @@ func (s *Session) HandleRequest(ctx context.Context, method string, params json.
 		return s.handleGetBaseTypes(ctx, parsed.(*CheckerTypeParams))
 	case string(MethodGetPropertiesOfType):
 		return s.handleGetPropertiesOfType(ctx, parsed.(*CheckerTypeParams))
+	case string(MethodGetMembersOfType):
+		return s.handleGetMembersOfType(ctx, parsed.(*GetMembersOfTypeParams))
 	case string(MethodGetApparentPropertiesOfType):
 		return s.handleGetApparentPropertiesOfType(ctx, parsed.(*GetTypePropertyParams))
 	case string(MethodGetApparentType):
@@ -1189,6 +1192,8 @@ func (s *Session) HandleRequest(ctx context.Context, method string, params json.
 		return s.handleGetMemberInModuleExports(ctx, parsed.(*GetMemberInModuleExportsParams))
 	case string(MethodGetJSDocTags):
 		return s.handleGetJSDocTags(ctx, parsed.(*CheckerSymbolParams))
+	case string(MethodGetSymbolDocumentations):
+		return s.handleGetSymbolDocumentations(ctx, parsed.(*GetSymbolDocumentationsParams))
 	case string(MethodGetDocumentationComment):
 		return s.handleGetDocumentationComment(ctx, parsed.(*CheckerSymbolParams))
 	case string(MethodIsArrayType):
@@ -5179,6 +5184,197 @@ func (s *Session) handleGetJSDocTags(ctx context.Context, params *CheckerSymbolP
 		results[i] = &JSDocTagInfo{Name: tag.Name, Text: tag.Text}
 	}
 	return results, nil
+}
+
+// symbolDocumentation collects the JSDoc tags and documentation comment of a symbol
+// exactly as getJsDocTags and getDocumentationComment report them.
+func symbolDocumentation(c *checker.Checker, symbol *ast.Symbol) SymbolDocumentation {
+	tags := ls.GetSymbolJSDocTags(symbol)
+	var infos []*JSDocTagInfo
+	if len(tags) > 0 {
+		infos = make([]*JSDocTagInfo, len(tags))
+		for i, tag := range tags {
+			infos[i] = &JSDocTagInfo{Name: tag.Name, Text: tag.Text}
+		}
+	}
+	return SymbolDocumentation{Tags: infos, Comment: ls.GetSymbolDocumentationComment(c, symbol)}
+}
+
+// handleGetSymbolDocumentations returns the JSDoc tags and documentation comment of many
+// symbols in one round trip (element i corresponds to Symbols[i]; a symbol that does not
+// resolve yields an empty element).
+func (s *Session) handleGetSymbolDocumentations(ctx context.Context, params *GetSymbolDocumentationsParams) ([]SymbolDocumentation, error) {
+	setup, err := s.setupChecker(ctx, params.Snapshot, params.Project)
+	if err != nil {
+		return nil, err
+	}
+	defer setup.done()
+
+	results := make([]SymbolDocumentation, len(params.Symbols))
+	for i, ref := range params.Symbols {
+		symbol, err := setup.resolveSymbolHandle(ref)
+		if err != nil {
+			return nil, err
+		}
+		if symbol == nil {
+			continue
+		}
+		results[i] = symbolDocumentation(setup.checker, symbol)
+	}
+	return results, nil
+}
+
+// handleGetMembersOfType returns the properties of a type that pass the filter, each with
+// its documentation, declaring-type symbol and (optionally) declared type, so that a
+// traversal of a type's members costs one round trip instead of several per member.
+func (s *Session) handleGetMembersOfType(ctx context.Context, params *GetMembersOfTypeParams) ([]*MemberResponse, error) {
+	setup, err := s.setupChecker(ctx, params.Snapshot, params.Project)
+	if err != nil {
+		return nil, err
+	}
+	defer setup.done()
+
+	t, err := setup.resolveTypeHandle(params.Type)
+	if err != nil {
+		return nil, err
+	}
+	filter := &params.Filter
+
+	visibilities := make(map[string]struct{}, len(filter.Visibility))
+	for _, v := range filter.Visibility {
+		visibilities[v] = struct{}{}
+	}
+	kinds := make(map[string]struct{}, len(filter.Kinds))
+	for _, k := range filter.Kinds {
+		kinds[k] = struct{}{}
+	}
+	excludedTags := make(map[string]struct{}, len(filter.ExcludeJsDocTags))
+	for _, tag := range filter.ExcludeJsDocTags {
+		excludedTags[tag] = struct{}{}
+	}
+	var excludeName *regexp.Regexp
+	if filter.ExcludeNamePattern != "" {
+		excludeName, err = regexp.Compile(filter.ExcludeNamePattern)
+		if err != nil {
+			return nil, fmt.Errorf("%w: invalid excludeNamePattern: %w", ErrClientError, err)
+		}
+	}
+	var declaringTypes map[*ast.Symbol]struct{}
+	if filter.IncludeInheritedFrom != nil && !filter.IncludeInheritedFrom.All {
+		declaringTypes = make(map[*ast.Symbol]struct{}, len(filter.IncludeInheritedFrom.DeclaringTypes)+1)
+		if own := t.Symbol(); own != nil {
+			declaringTypes[own] = struct{}{}
+		}
+		for _, ref := range filter.IncludeInheritedFrom.DeclaringTypes {
+			declaring, err := setup.resolveSymbolHandle(ref)
+			if err != nil {
+				return nil, err
+			}
+			if declaring != nil {
+				declaringTypes[declaring] = struct{}{}
+			}
+		}
+	}
+
+	var results []*MemberResponse
+	for _, prop := range setup.checker.GetPropertiesOfType(t) {
+		// Names are matched in their wire form, as the client sees them (e.g. an
+		// ECMAScript private field is `__#1@#x`).
+		name := ast.EscapeSymbolName(prop.Name())
+		if excludeName != nil && excludeName.MatchString(name) {
+			continue
+		}
+		decls := prop.Declarations()
+		if len(decls) == 0 {
+			continue
+		}
+		decl := decls[0]
+		if len(visibilities) > 0 {
+			if _, ok := visibilities[memberVisibility(decl)]; !ok {
+				continue
+			}
+		}
+		isParameterProperty := decl.Kind == ast.KindParameter
+		if len(kinds) > 0 {
+			if _, ok := kinds[memberKind(decl, prop)]; !ok {
+				continue
+			}
+		}
+		var docs SymbolDocumentation
+		docsRead := false
+		if len(excludedTags) > 0 {
+			docs = symbolDocumentation(setup.checker, prop)
+			docsRead = true
+			excluded := false
+			for _, tag := range docs.Tags {
+				if _, ok := excludedTags[tag.Name]; ok {
+					excluded = true
+					break
+				}
+			}
+			if excluded {
+				continue
+			}
+		}
+		ownerNode := decl.Parent
+		if isParameterProperty && ownerNode != nil {
+			ownerNode = ownerNode.Parent
+		}
+		var ownerSymbol *ast.Symbol
+		if ownerNode != nil {
+			if ownerType := setup.checker.GetTypeAtLocation(ownerNode); ownerType != nil {
+				ownerSymbol = ownerType.Symbol()
+			}
+		}
+		if declaringTypes != nil {
+			if _, ok := declaringTypes[ownerSymbol]; !ok {
+				continue
+			}
+		}
+		if !docsRead {
+			docs = symbolDocumentation(setup.checker, prop)
+		}
+		member := &MemberResponse{
+			Symbol:              setup.newSymbolResponse(prop),
+			IsMethod:            prop.Flags()&ast.SymbolFlagsMethod != 0,
+			IsParameterProperty: isParameterProperty,
+			Tags:                docs.Tags,
+			Comment:             docs.Comment,
+		}
+		if ownerSymbol != nil {
+			member.Owner = setup.newSymbolResponse(ownerSymbol)
+		}
+		if filter.IncludeDeclaredType && !member.IsMethod {
+			member.DeclaredType = setup.sd.newTypeResponse(setup.projectID, setup.checker.GetTypeOfSymbolAtLocation(prop, decl), setup.checker)
+		}
+		results = append(results, member)
+	}
+	return results, nil
+}
+
+// memberVisibility classifies a member declaration as "public", "protected" or
+// "private" (ECMAScript private names count as private).
+func memberVisibility(decl *ast.Node) string {
+	switch {
+	case ast.HasSyntacticModifier(decl, ast.ModifierFlagsPrivate), ast.IsPrivateIdentifierClassElementDeclaration(decl):
+		return "private"
+	case ast.HasSyntacticModifier(decl, ast.ModifierFlagsProtected):
+		return "protected"
+	}
+	return "public"
+}
+
+// memberKind classifies a member declaration for MemberFilter.Kinds.
+func memberKind(decl *ast.Node, symbol *ast.Symbol) string {
+	switch {
+	case decl.Kind == ast.KindParameter:
+		return "parameterProperty"
+	case ast.IsAccessor(decl):
+		return "accessor"
+	case ast.IsMethodDeclaration(decl), ast.IsMethodSignatureDeclaration(decl), symbol.Flags()&ast.SymbolFlagsMethod != 0:
+		return "method"
+	}
+	return "property"
 }
 
 // handleGetDocumentationComment returns the rendered documentation comment of a symbol as plain text.

@@ -2311,6 +2311,46 @@ function encodeNumberLiteralValue(value: number): number | string {
     return value;
 }
 
+/**
+ * Filter for {@link Checker.getMembersOfType}: neutral predicates the caller combines
+ * to describe the members it will render (see `MemberFilter` for each field).
+ */
+export interface MemberFilterInput {
+    /** Visibilities to include; empty means all. ECMAScript private names count as private. */
+    visibility?: readonly ("public" | "protected" | "private")[];
+    /** Member kinds to include; empty means all. */
+    kinds?: readonly ("property" | "accessor" | "method" | "parameterProperty")[];
+    /** Drop members whose JSDoc carries any of these tags. */
+    excludeJsDocTags?: readonly string[];
+    /** Drop members whose (wire-form) name matches this RE2 pattern. */
+    excludeNamePattern?: string;
+    /**
+     * Which declaring types to take members from: `undefined` means all, `{}` means the
+     * queried type only, `{ declaringTypes }` adds members declared on those types.
+     */
+    includeInheritedFrom?: { all?: boolean; declaringTypes?: readonly Symbol[]; };
+    includeDeclaredType?: boolean;
+}
+
+/** The documentation of one symbol, as returned by {@link Checker.getSymbolDocumentations}. */
+export interface SymbolDocumentation {
+    tags: readonly JSDocTagInfo[];
+    comment: string;
+}
+
+/** One member returned by {@link Checker.getMembersOfType}. */
+export interface TypeMember {
+    symbol: Symbol;
+    /** The symbol of the type declaring this member, when it could be determined. */
+    owner: Symbol | undefined;
+    isMethod: boolean;
+    isParameterProperty: boolean;
+    tags: readonly JSDocTagInfo[];
+    comment: string;
+    /** `getTypeOfSymbolAtLocation(symbol, firstDeclaration)`; only with `includeDeclaredType`. */
+    declaredType: Type | undefined;
+}
+
 export class Checker {
     private snapshotId: number;
     private project: Project;
@@ -3271,6 +3311,67 @@ export class Checker {
             project: this.project.handle,
             symbol: symbol.reference,
         });
+    }
+
+    /**
+     * The JSDoc tags and documentation comment of many symbols in one round trip.
+     * Element i corresponds to `symbols[i]` and equals what `getJsDocTagsOfSymbol`
+     * and `getDocumentationCommentOfSymbol` return for that symbol.
+     */
+    async getSymbolDocumentations(symbols: readonly Symbol[]): Promise<SymbolDocumentation[]> {
+        if (symbols.length === 0) {
+            return [];
+        }
+        const data = await this.client.apiRequest("getSymbolDocumentations", {
+            snapshot: this.snapshotId,
+            project: this.project.handle,
+            symbols: symbols.map(symbol => symbol.reference),
+        });
+        return data.map(d => ({ tags: d.tags ?? [], comment: d.comment ?? "" }));
+    }
+
+    /**
+     * The properties of a type that pass `filter`, each with its documentation, the
+     * symbol of the type declaring it and (when requested) its declared type, in one
+     * round trip. Designed for traversals that render every surviving member: the
+     * filter lets the caller describe exactly which members it will visit so no type
+     * is materialized for a member that would have been skipped.
+     */
+    async getMembersOfType(type: Type, filter: MemberFilterInput = {}): Promise<TypeMember[]> {
+        const data = await this.client.apiRequest("getMembersOfType", {
+            snapshot: this.snapshotId,
+            project: this.project.handle,
+            type: type.id,
+            filter: {
+                visibility: filter.visibility ? [...filter.visibility] : undefined,
+                kinds: filter.kinds ? [...filter.kinds] : undefined,
+                excludeJsDocTags: filter.excludeJsDocTags ? [...filter.excludeJsDocTags] : undefined,
+                excludeNamePattern: filter.excludeNamePattern,
+                includeInheritedFrom: filter.includeInheritedFrom
+                    ? {
+                        all: filter.includeInheritedFrom.all,
+                        declaringTypes: filter.includeInheritedFrom.declaringTypes?.map(symbol => symbol.reference),
+                    }
+                    : undefined,
+                includeDeclaredType: filter.includeDeclaredType,
+            },
+        });
+        const members: TypeMember[] = [];
+        for (const m of data ?? []) {
+            if (!m.symbol) {
+                continue;
+            }
+            members.push({
+                symbol: this.objectRegistry.getOrCreateSymbol(m.symbol),
+                owner: m.owner ? this.objectRegistry.getOrCreateSymbol(m.owner) : undefined,
+                isMethod: m.isMethod ?? false,
+                isParameterProperty: m.isParameterProperty ?? false,
+                tags: m.tags ?? [],
+                comment: m.comment ?? "",
+                declaredType: m.declaredType ? this.objectRegistry.getOrCreateType(m.declaredType) : undefined,
+            });
+        }
+        return members;
     }
 
     /**
