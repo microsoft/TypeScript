@@ -22,6 +22,55 @@ type NameResolver struct {
 	OnSuccessfullyResolvedSymbol     func(location *ast.Node, result *ast.Symbol, meaning ast.SymbolFlags, lastLocation *ast.Node, associatedDeclarationForContainingInitializerOrBindingName *ast.Node, withinDeferredContext bool)
 }
 
+type resolveStep uint8
+
+const (
+	// Nothing in the body of the Resolve loop applies to this kind; just move to the parent.
+	resolveStepSkip resolveStep = iota
+	// The only applicable work is an unrestricted lookup in the node's locals.
+	resolveStepLocalsOnly
+	// The full body of the Resolve loop must run.
+	resolveStepFull
+)
+
+// resolveSteps classifies each node kind by the work Resolve must do when it reaches a node of that kind.
+// Every kind that is a locals container, matched by the switch in Resolve, checked by getIsDeferredContext,
+// or matched by isSelfReferenceLocation must not be resolveStepSkip.
+var resolveSteps = func() (steps [ast.KindCount]resolveStep) {
+	for kind := range ast.KindCount {
+		if ast.IsLocalsContainerKind(kind) {
+			steps[kind] = resolveStepFull
+		}
+	}
+	for _, kind := range []ast.Kind{
+		ast.KindBlock,
+		ast.KindForStatement,
+		ast.KindForInStatement,
+		ast.KindForOfStatement,
+		ast.KindCaseBlock,
+		ast.KindCatchClause,
+		ast.KindMappedType,
+	} {
+		steps[kind] = resolveStepLocalsOnly
+	}
+	for _, kind := range []ast.Kind{
+		ast.KindEnumDeclaration,
+		ast.KindPropertyDeclaration,
+		ast.KindInterfaceDeclaration,
+		ast.KindExpressionWithTypeArguments,
+		ast.KindComputedPropertyName,
+		ast.KindDecorator,
+		ast.KindParameter,
+		ast.KindBindingElement,
+		ast.KindInferType,
+		ast.KindExportSpecifier,
+		ast.KindTypeQuery,
+	} {
+		steps[kind] = resolveStepFull
+	}
+	return steps
+}()
+
 func (r *NameResolver) Resolve(location *ast.Node, name string, meaning ast.SymbolFlags, nameNotFoundMessage *diagnostics.Message, isUse bool, excludeGlobals bool) *ast.Symbol {
 	var result *ast.Symbol
 	var lastLocation *ast.Node
@@ -34,6 +83,28 @@ func (r *NameResolver) Resolve(location *ast.Node, name string, meaning ast.Symb
 	nameIsConst := name == "const"
 loop:
 	for location != nil {
+		// Most ancestors are not scopes and need no work, so climb past them without running the full loop body.
+		// A `const` name must check every ancestor for a const assertion, so it always takes the full path.
+		if !nameIsConst {
+			for {
+				step := resolveSteps[location.Kind]
+				if step == resolveStepFull {
+					break
+				}
+				if step == resolveStepLocalsOnly {
+					if locals := location.Locals(); locals != nil {
+						if result = r.lookup(locals, name, meaning); result != nil {
+							break loop
+						}
+					}
+				}
+				lastLocation = location
+				location = location.Parent
+				if location == nil {
+					break loop
+				}
+			}
+		}
 		if nameIsConst && ast.IsConstAssertion(location) {
 			// `const` in an `as const` has no symbol, but issues no error because there is no *actual* lookup of the type
 			// (it refers to the constant type of the expression instead)
