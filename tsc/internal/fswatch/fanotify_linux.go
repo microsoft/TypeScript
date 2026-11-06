@@ -366,7 +366,7 @@ func (b *fanotifyBackend) markDir(w *dirWatch, path string, markPath string) err
 }
 
 func maybeWrapUnsupportedFilesystem(err error) error {
-	if errors.Is(err, unix.EOPNOTSUPP) || errors.Is(err, unix.ENOTSUP) || errors.Is(err, unix.ENODEV) {
+	if errors.Is(err, unix.EOPNOTSUPP) || errors.Is(err, unix.ENOTSUP) || errors.Is(err, unix.ENODEV) || errors.Is(err, unix.EXDEV) {
 		return fmt.Errorf("%w: %w", err, ErrFilesystemUnsupported)
 	}
 	return err
