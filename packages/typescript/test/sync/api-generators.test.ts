@@ -142,7 +142,7 @@ export const missingValue = absent;
 };
 
 type GeneratorMethod<Args extends readonly unknown[], Result> = ((...args: Args) => Result) & {
-    gen(...args: Args): Generator<APIRequest, Result, APIResponse["result"]>;
+    gen(...args: Args): APIRequestGenerator<Result>;
 };
 
 type EquivalenceAssertion<Result> = (actual: Result, expected: Result, message?: string) => void;
@@ -150,7 +150,7 @@ type EquivalenceAssertion<Result> = (actual: Result, expected: Result, message?:
 interface ParityCase {
     readonly ownerName: string;
     readonly methodName: string;
-    readonly runGenerator: () => Generator<APIRequest, void, APIResponse["result"]>;
+    readonly runGenerator: () => APIRequestGenerator<void>;
     readonly assertEquivalent: (message?: string) => void;
 }
 
@@ -446,6 +446,24 @@ function assertPublicGeneratorCoverage(owners: readonly { readonly name: string;
 }
 
 describe("API - generator batching", { concurrency: areTestsFiltered() }, () => {
+    test("Program statistics are fetched for every sync and generator call", () => {
+        using api = spawnAPI({ "/src/main.ts": "export const value = 1;" }, { collectTiming: true });
+        for (const generatorFirst of [false, true]) {
+            using program = api.createProgram(["/src/main.ts"], { noLib: true });
+            api.resetTimingInfo();
+            const statistics = generatorFirst ? api.batch(program.getStatistics.gen())[0] : program.getStatistics();
+            assert.ok(statistics.nodeCount > 0);
+            const [next, repeated] = api.batch(
+                program.getStatistics.gen(),
+                program.getStatistics.gen(),
+            );
+            assert.deepEqual(next, statistics);
+            assert.deepEqual(repeated, statistics);
+            assert.deepEqual(program.getStatistics(), statistics);
+            assert.equal(api.getTimingInfo().totals.requestCount, 3);
+        }
+    });
+
     test("looks up binder symbols through standalone and API generators", () => {
         using api = spawnAPI();
         using lease = api.createSourceFile("/symbols.ts", "function present() {}");
@@ -1801,6 +1819,9 @@ describe("API - generator batching", { concurrency: areTestsFiltered() }, () => 
             ];
 
             runParityBatch(api, cases);
+            runParityBatch(api, [
+                parityCase("Program", "getStatistics", program.getStatistics, assertDeepEquivalent),
+            ]);
             assert.deepEqual(temporaryProjects, ["/tsconfig.json", "/tsconfig.json"]);
 
             const snapshotFiles = {

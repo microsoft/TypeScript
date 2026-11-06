@@ -953,6 +953,8 @@ func (s *Session) HandleRequest(ctx context.Context, method string, params json.
 		return s.handleGetSourceFile(ctx, parsed.(*GetSourceFileParams))
 	case string(MethodGetSourceFileNames):
 		return s.handleGetSourceFileNames(ctx, parsed.(*GetSourceFileNamesParams))
+	case string(MethodGetProgramStatistics):
+		return s.handleGetProgramStatistics(ctx, parsed.(*GetProjectDiagnosticsParams))
 	case string(MethodGetSourceFileMetadata):
 		return s.handleGetSourceFileMetadata(ctx, parsed.(*GetSourceFileParams))
 	case string(MethodGetModeForUsageLocation):
@@ -2411,6 +2413,26 @@ func transpileOutput(ctx context.Context, input string, options TranspileOptions
 		Diagnostics:   NewDiagnosticResponses(output.Diagnostics),
 		SourceMapText: output.SourceMapText,
 	}, nil
+}
+
+func (s *Session) handleGetProgramStatistics(ctx context.Context, params *GetProjectDiagnosticsParams) (*ProgramStatisticsResponse, error) {
+	setup, err := s.setupChecker(ctx, params.Snapshot, params.Project)
+	if err != nil {
+		return nil, err
+	}
+	defer setup.done()
+	result := &ProgramStatisticsResponse{
+		SymbolCount:        int(setup.checker.SymbolCount),
+		TypeCount:          setup.checker.TypeCount,
+		InstantiationCount: setup.checker.TotalInstantiationCount,
+		RelationCacheSizes: setup.checker.GetRelationCacheSizes(),
+	}
+	for _, file := range setup.program.GetSourceFiles() {
+		result.NodeCount += file.NodeCount
+		result.IdentifierCount += file.IdentifierCount
+		result.SymbolCount += file.SymbolCount
+	}
+	return result, nil
 }
 
 // handleGetSourceFile returns a source file from a project within a snapshot.

@@ -94,16 +94,14 @@ typePredicateToString
 
 
 # Program (old) methods compared to Program (new).
-## (13) Program methods matched in async Program  ##
+## (15) Program methods matched in async Program  ##
 
-## Program methods missing from async Program (10) ##
+## Program methods missing from async Program (8) ##
 getIdentifierCount
 getInstantiationCount
 getNodeCount
-getProjectReferences
 getRelationCacheSizes
 getResolvedProjectReferences
-getRootFileNames
 getSourceFiles
 getSymbolCount
 getTypeCount
@@ -541,11 +539,12 @@ getSignatureUsage
 getCompletionsAtPosition
 formatNodeForInsertion
 
-## New Program methods in async API (21) ##
+## New Program methods in async API (22) ##
 getCanonicalFileName
 getNewLine
 setOwnedSnapshot
 dispose
+getStatistics
 getSourceFileByPath
 getResolvedModule
 getResolvedModuleFromModuleSpecifier
