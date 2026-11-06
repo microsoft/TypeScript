@@ -13,7 +13,6 @@ See the Apache Version 2.0 License for specific language governing permissions
 and limitations under the License.
 ***************************************************************************** */
 
-
 declare namespace Intl {
     // http://cldr.unicode.org/index/cldr-spec/plural-rules#TOC-Determining-Plural-Categories
     type LDMLPluralRule = "zero" | "one" | "two" | "few" | "many" | "other";

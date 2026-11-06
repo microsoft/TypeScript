@@ -7,7 +7,7 @@ import (
 	"github.com/microsoft/TypeScript/tsc/internal/core"
 )
 
-type ScriptElementKind int
+type ScriptElementKind uint8
 
 const (
 	ScriptElementKindUnknown ScriptElementKind = iota
