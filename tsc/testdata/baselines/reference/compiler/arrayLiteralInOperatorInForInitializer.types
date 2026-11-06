@@ -1,0 +1,104 @@
+//// [tests/cases/compiler/arrayLiteralInOperatorInForInitializer.ts] ////
+
+=== arrayLiteralInOperatorInForInitializer.ts ===
+// The `in` operator is allowed in an array literal that appears in the head of
+// a `for` statement: the for head's [~In] parameter does not reach into
+// array literals (ElementList : AssignmentExpression[+In]).
+
+const o = { a: 1 };
+>o : { a: number; }
+>{ a: 1 } : { a: number; }
+>a : number
+>1 : 1
+
+const k = "a";
+>k : "a"
+>"a" : "a"
+
+for (let i = 0, has = [k in o]; i < 1; i++) {
+>i : number
+>0 : 0
+>has : boolean[]
+>[k in o] : boolean[]
+>k in o : boolean
+>k : "a"
+>o : { a: number; }
+>i < 1 : boolean
+>i : number
+>1 : 1
+>i++ : number
+>i : number
+
+    console.log(has);
+>console.log(has) : void
+>console.log : (...data: any[]) => void
+>console : Console
+>log : (...data: any[]) => void
+>has : boolean[]
+}
+
+for (let i = 0, has = [k in o, "b" in o, !(k in o)]; i < 1; i++) {
+>i : number
+>0 : 0
+>has : boolean[]
+>[k in o, "b" in o, !(k in o)] : boolean[]
+>k in o : boolean
+>k : "a"
+>o : { a: number; }
+>"b" in o : boolean
+>"b" : "b"
+>o : { a: number; }
+>!(k in o) : boolean
+>(k in o) : boolean
+>k in o : boolean
+>k : "a"
+>o : { a: number; }
+>i < 1 : boolean
+>i : number
+>1 : 1
+>i++ : number
+>i : number
+
+    console.log(has);
+>console.log(has) : void
+>console.log : (...data: any[]) => void
+>console : Console
+>log : (...data: any[]) => void
+>has : boolean[]
+}
+
+let x: any;
+>x : any
+
+for ([x = "x" in {}] of [[]]) {
+>[x = "x" in {}] : [boolean]
+>x = "x" in {} : boolean
+>x : any
+>"x" in {} : boolean
+>"x" : "x"
+>{} : {}
+>[[]] : undefined[][]
+>[] : undefined[]
+
+    console.log(x);
+>console.log(x) : void
+>console.log : (...data: any[]) => void
+>console : Console
+>log : (...data: any[]) => void
+>x : any
+}
+
+// The initializer of a `for` statement still ends at `in`, so that `for-in`
+// statements keep parsing as before.
+for (const key in o) {
+>key : string
+>o : { a: number; }
+
+    console.log(key);
+>console.log(key) : void
+>console.log : (...data: any[]) => void
+>console : Console
+>log : (...data: any[]) => void
+>key : string
+}
+
