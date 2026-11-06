@@ -17675,6 +17675,9 @@ func (c *Checker) getConstraintFromIndexedAccess(t *Type) *Type {
 		// we substitute an instantiation of E where P is replaced with X.
 		return c.substituteIndexedMappedType(d.objectType, d.indexType)
 	}
+	if constraint := c.getConstraintOfMappedTypeIntersectionIndexedAccess(t); constraint != nil {
+		return constraint
+	}
 	indexConstraint := c.getSimplifiedTypeOrConstraint(d.indexType)
 	if indexConstraint != nil && indexConstraint != d.indexType {
 		indexedAccess := c.getIndexedAccessTypeOrUndefined(d.objectType, indexConstraint, d.accessFlags, nil, nil)
@@ -17687,6 +17690,79 @@ func (c *Checker) getConstraintFromIndexedAccess(t *Type) *Type {
 		return c.getIndexedAccessTypeOrUndefined(objectConstraint, d.indexType, d.accessFlags, nil, nil)
 	}
 	return nil
+}
+
+// For an indexed access (A & B)[X] with a generic index X, a generic mapped type { [P in K]: E } in the intersection only
+// contributes E for keys in K. Resolving X to a non-generic constraint (e.g. string) would make every such mapped type
+// contribute E, giving (Record<K1, T> & Record<K2, U>)[K1] the constraint T & U instead of T, so we first drop the mapped
+// types not known to contain X. Resolving X to a generic constraint C is sound since these rules apply again to
+// (A & B)[C], but we retain E for the mapped types known to contain X and not C, as they would otherwise be dropped.
+// Possibly numeric keys are excluded, as they may select the same properties as differently represented string keys.
+func (c *Checker) getConstraintOfMappedTypeIntersectionIndexedAccess(t *Type) *Type {
+	d := t.AsIndexedAccessType()
+	if d.objectType.flags&TypeFlagsIntersection == 0 || !c.isGenericIndexType(d.indexType) || c.isPossiblyNumericKeyType(d.indexType) {
+		return nil
+	}
+	types := d.objectType.Types()
+	if !core.Some(types, c.isGenericMappedType) || core.Some(types, func(s *Type) bool {
+		return c.isGenericMappedType(s) && c.isPossiblyNumericKeyType(c.getIndexType(s))
+	}) {
+		return nil
+	}
+	indexConstraint := c.getSimplifiedTypeOrConstraint(d.indexType)
+	if indexConstraint == nil || indexConstraint == d.indexType {
+		return nil
+	}
+	if c.isGenericIndexType(indexConstraint) {
+		var retainedTypes []*Type
+		for _, s := range types {
+			if c.isGenericMappedType(s) && c.isKnownKeyOfType(d.indexType, s) && !c.isKnownKeyOfType(indexConstraint, s) {
+				retainedTypes = append(retainedTypes, c.getSimplifiedType(c.getIndexedAccessTypeEx(s, d.indexType, d.accessFlags, nil, nil), false /*writing*/))
+			}
+		}
+		if len(retainedTypes) == 0 {
+			return nil
+		}
+		return c.getIntersectionType(append(retainedTypes, c.getIndexedAccessTypeEx(d.objectType, indexConstraint, d.accessFlags, nil, nil)))
+	}
+	// For a union constraint, we resolve each constituent separately, as different members of the intersection may
+	// contain different constituents. For example, given X extends "a" | "b", only { b: U } contains "b" in
+	// (Record<K | "a", T> & { b: U })[X]. Otherwise, we index the remaining members by X itself.
+	changed := false
+	result := c.mapType(indexConstraint, func(key *Type) *Type {
+		remainingTypes := core.Filter(types, func(s *Type) bool {
+			return !c.isGenericMappedType(s) || c.isKnownKeyOfType(d.indexType, s) || c.isKnownKeyOfType(key, s)
+		})
+		if len(remainingTypes) == 0 || len(remainingTypes) == len(types) {
+			return c.getIndexedAccessTypeEx(d.objectType, key, d.accessFlags, nil, nil)
+		}
+		changed = true
+		return c.getIndexedAccessTypeEx(c.getIntersectionType(remainingTypes), core.IfElse(indexConstraint.flags&TypeFlagsUnion != 0, key, d.indexType), d.accessFlags, nil, nil)
+	})
+	if !changed {
+		return nil
+	}
+	return result
+}
+
+func (c *Checker) isPossiblyNumericKeyType(t *Type) bool {
+	return c.maybeTypeOfKind(c.getBaseConstraintOrType(t), TypeFlagsNumberLike)
+}
+
+// Return true if the given index type is known to be a key of the given type. A string key and its template literal
+// representation (e.g. K and `${K}`) select the same properties, so we also compare those representations.
+func (c *Checker) isKnownKeyOfType(indexType *Type, t *Type) bool {
+	keyType := c.getIndexType(t)
+	return c.isTypeAssignableTo(indexType, keyType) || c.isTypeAssignableTo(c.getTemplateLiteralKeyType(indexType), c.getTemplateLiteralKeyType(keyType))
+}
+
+func (c *Checker) getTemplateLiteralKeyType(t *Type) *Type {
+	return c.mapType(t, func(t *Type) *Type {
+		if c.isTypeAssignableToKind(t, TypeFlagsStringLike) {
+			return c.getTemplateLiteralType([]string{"", ""}, []*Type{t})
+		}
+		return t
+	})
 }
 
 func (c *Checker) getConstraintOfConditionalType(t *Type) *Type {
@@ -28332,6 +28408,9 @@ func (c *Checker) computeBaseConstraint(t *Type, stack []RecursionId) *Type {
 			// For indexed access types of the form { [P in K]: E }[X], where K is non-generic and X is generic,
 			// we substitute an instantiation of E where P is replaced with X.
 			return c.getNextBaseConstraint(c.substituteIndexedMappedType(t.AsIndexedAccessType().objectType, t.AsIndexedAccessType().indexType), stack)
+		}
+		if constraint := c.getConstraintOfMappedTypeIntersectionIndexedAccess(t); constraint != nil {
+			return c.getNextBaseConstraint(constraint, stack)
 		}
 		baseObjectType := c.getNextBaseConstraint(t.AsIndexedAccessType().objectType, stack)
 		baseIndexType := c.getNextBaseConstraint(t.AsIndexedAccessType().indexType, stack)
