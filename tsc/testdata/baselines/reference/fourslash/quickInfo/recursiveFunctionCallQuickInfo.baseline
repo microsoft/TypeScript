@@ -1,0 +1,2696 @@
+// === QuickInfo ===
+=== /recursiveFunctionCallQuickInfo.ts ===
+// const arrow = () => arrow;
+//       ^^^^^
+// | ----------------------------------------------------------------------
+// | ```typescript
+// | const arrow: () => typeof arrow
+// | ```
+// | 
+// | (verbosity level: 2)
+// | ----------------------------------------------------------------------
+//       ^^^^^
+// | ----------------------------------------------------------------------
+// | ```typescript
+// | const arrow: () => typeof arrow
+// | ```
+// | 
+// | (verbosity level: 1)
+// | ----------------------------------------------------------------------
+//       ^^^^^
+// | ----------------------------------------------------------------------
+// | ```typescript
+// | const arrow: () => typeof arrow
+// | ```
+// | 
+// | (verbosity level: 0)
+// | ----------------------------------------------------------------------
+// arrow();
+// ^^^^^
+// | ----------------------------------------------------------------------
+// | ```typescript
+// | const arrow: () => typeof arrow
+// | ```
+// | 
+// | (verbosity level: 2)
+// | ----------------------------------------------------------------------
+// ^^^^^
+// | ----------------------------------------------------------------------
+// | ```typescript
+// | const arrow: () => typeof arrow
+// | ```
+// | 
+// | (verbosity level: 1)
+// | ----------------------------------------------------------------------
+// ^^^^^
+// | ----------------------------------------------------------------------
+// | ```typescript
+// | const arrow: () => typeof arrow
+// | ```
+// | 
+// | (verbosity level: 0)
+// | ----------------------------------------------------------------------
+// const named = function self() { return self; };
+// named();
+// ^^^^^
+// | ----------------------------------------------------------------------
+// | ```typescript
+// | const named: () => typeof named
+// | ```
+// | 
+// | (verbosity level: 2)
+// | ----------------------------------------------------------------------
+// ^^^^^
+// | ----------------------------------------------------------------------
+// | ```typescript
+// | const named: () => typeof named
+// | ```
+// | 
+// | (verbosity level: 1)
+// | ----------------------------------------------------------------------
+// ^^^^^
+// | ----------------------------------------------------------------------
+// | ```typescript
+// | const named: () => typeof named
+// | ```
+// | 
+// | (verbosity level: 0)
+// | ----------------------------------------------------------------------
+// function recur() { return recur; }
+// recur();
+// ^^^^^
+// | ----------------------------------------------------------------------
+// | ```typescript
+// | function recur(): typeof recur
+// | ```
+// | 
+// | (verbosity level: 2)
+// | ----------------------------------------------------------------------
+// ^^^^^
+// | ----------------------------------------------------------------------
+// | ```typescript
+// | function recur(): typeof recur
+// | ```
+// | 
+// | (verbosity level: 1)
+// | ----------------------------------------------------------------------
+// ^^^^^
+// | ----------------------------------------------------------------------
+// | ```typescript
+// | function recur(): typeof recur
+// | ```
+// | 
+// | (verbosity level: 0)
+// | ----------------------------------------------------------------------
+// const generic = <T>(value: T) => generic;
+// generic(1);
+// ^^^^^^^
+// | ----------------------------------------------------------------------
+// | ```typescript
+// | const generic: <number>(value: number) => <T>(value: T) => typeof generic
+// | ```
+// | 
+// | (verbosity level: 0)
+// | ----------------------------------------------------------------------
+// const specialized = generic<string>;
+// specialized("text");
+// ^^^^^^^^^^^
+// | ----------------------------------------------------------------------
+// | ```typescript
+// | const specialized: <string>(value: string) => <T>(value: T) => typeof generic
+// | ```
+// | 
+// | (verbosity level: 0)
+// | ----------------------------------------------------------------------
+// declare let narrowed: typeof arrow | undefined;
+// if (narrowed) narrowed();
+//               ^^^^^^^^
+// | ----------------------------------------------------------------------
+// | ```typescript
+// | let narrowed: () => typeof arrow
+// | ```
+// | 
+// | (verbosity level: 2)
+// | ----------------------------------------------------------------------
+//               ^^^^^^^^
+// | ----------------------------------------------------------------------
+// | ```typescript
+// | let narrowed: () => typeof arrow
+// | ```
+// | 
+// | (verbosity level: 1)
+// | ----------------------------------------------------------------------
+//               ^^^^^^^^
+// | ----------------------------------------------------------------------
+// | ```typescript
+// | let narrowed: () => typeof arrow
+// | ```
+// | 
+// | (verbosity level: 0)
+// | ----------------------------------------------------------------------
+// declare const broad: () => unknown;
+// broad();
+// ^^^^^
+// | ----------------------------------------------------------------------
+// | ```typescript
+// | const broad: () => unknown
+// | ```
+// | 
+// | (verbosity level: 2)
+// | ----------------------------------------------------------------------
+// ^^^^^
+// | ----------------------------------------------------------------------
+// | ```typescript
+// | const broad: () => unknown
+// | ```
+// | 
+// | (verbosity level: 1)
+// | ----------------------------------------------------------------------
+// ^^^^^
+// | ----------------------------------------------------------------------
+// | ```typescript
+// | const broad: () => unknown
+// | ```
+// | 
+// | (verbosity level: 0)
+// | ----------------------------------------------------------------------
+// function overloaded(value: string): string;
+// function overloaded(value: number): typeof overloaded;
+// function overloaded(value: string | number): string | typeof overloaded {
+//     return typeof value === "string" ? value : overloaded;
+// }
+// overloaded("text");
+// ^^^^^^^^^^
+// | ----------------------------------------------------------------------
+// | ```typescript
+// | function overloaded(value: string): string
+// | ```
+// | 
+// | (verbosity level: 2)
+// | ----------------------------------------------------------------------
+// ^^^^^^^^^^
+// | ----------------------------------------------------------------------
+// | ```typescript
+// | function overloaded(value: string): string
+// | ```
+// | 
+// | (verbosity level: 1)
+// | ----------------------------------------------------------------------
+// ^^^^^^^^^^
+// | ----------------------------------------------------------------------
+// | ```typescript
+// | function overloaded(value: string): string
+// | ```
+// | 
+// | (verbosity level: 0)
+// | ----------------------------------------------------------------------
+// overloaded(1);
+// ^^^^^^^^^^
+// | ----------------------------------------------------------------------
+// | ```typescript
+// | function overloaded(value: number): typeof overloaded
+// | ```
+// | 
+// | (verbosity level: 2)
+// | ----------------------------------------------------------------------
+// ^^^^^^^^^^
+// | ----------------------------------------------------------------------
+// | ```typescript
+// | function overloaded(value: number): typeof overloaded
+// | ```
+// | 
+// | (verbosity level: 1)
+// | ----------------------------------------------------------------------
+// ^^^^^^^^^^
+// | ----------------------------------------------------------------------
+// | ```typescript
+// | function overloaded(value: number): typeof overloaded
+// | ```
+// | 
+// | (verbosity level: 0)
+// | ----------------------------------------------------------------------
+// const object = { recur() { return object.recur; } };
+// object.recur();
+//        ^^^^^
+// | ----------------------------------------------------------------------
+// | ```typescript
+// | (method) recur(): (typeof object)["recur"]
+// | ```
+// | 
+// | (verbosity level: 2)
+// | ----------------------------------------------------------------------
+//        ^^^^^
+// | ----------------------------------------------------------------------
+// | ```typescript
+// | (method) recur(): (typeof object)["recur"]
+// | ```
+// | 
+// | (verbosity level: 1)
+// | ----------------------------------------------------------------------
+//        ^^^^^
+// | ----------------------------------------------------------------------
+// | ```typescript
+// | (method) recur(): (typeof object)["recur"]
+// | ```
+// | 
+// | (verbosity level: 0)
+// | ----------------------------------------------------------------------
+// const first = () => second;
+//       ^^^^^
+// | ----------------------------------------------------------------------
+// | ```typescript
+// | const first: () => () => typeof first
+// | ```
+// | 
+// | (verbosity level: 2)
+// | ----------------------------------------------------------------------
+//       ^^^^^
+// | ----------------------------------------------------------------------
+// | ```typescript
+// | const first: () => () => typeof first
+// | ```
+// | 
+// | (verbosity level: 1)
+// | ----------------------------------------------------------------------
+//       ^^^^^
+// | ----------------------------------------------------------------------
+// | ```typescript
+// | const first: () => () => typeof first
+// | ```
+// | 
+// | (verbosity level: 0)
+// | ----------------------------------------------------------------------
+// const second = () => first;
+// first();
+// ^^^^^
+// | ----------------------------------------------------------------------
+// | ```typescript
+// | const first: () => () => typeof first
+// | ```
+// | 
+// | (verbosity level: 2)
+// | ----------------------------------------------------------------------
+// ^^^^^
+// | ----------------------------------------------------------------------
+// | ```typescript
+// | const first: () => () => typeof first
+// | ```
+// | 
+// | (verbosity level: 1)
+// | ----------------------------------------------------------------------
+// ^^^^^
+// | ----------------------------------------------------------------------
+// | ```typescript
+// | const first: () => () => typeof first
+// | ```
+// | 
+// | (verbosity level: 0)
+// | ----------------------------------------------------------------------
+// function genericFunction<T>(value: T) { return genericFunction; }
+// genericFunction(1);
+// ^^^^^^^^^^^^^^^
+// | ----------------------------------------------------------------------
+// | ```typescript
+// | function genericFunction<number>(value: number): <T>(value: T) => typeof genericFunction
+// | ```
+// | 
+// | (verbosity level: 0)
+// | ----------------------------------------------------------------------
+// const callable = () => callable;
+// callable.property = 1;
+// callable();
+// ^^^^^^^^
+// | ----------------------------------------------------------------------
+// | ```typescript
+// | const callable: () => typeof callable
+// | ```
+// | 
+// | (verbosity level: 2)
+// | ----------------------------------------------------------------------
+// ^^^^^^^^
+// | ----------------------------------------------------------------------
+// | ```typescript
+// | const callable: () => typeof callable
+// | ```
+// | 
+// | (verbosity level: 1)
+// | ----------------------------------------------------------------------
+// ^^^^^^^^
+// | ----------------------------------------------------------------------
+// | ```typescript
+// | const callable: () => typeof callable
+// | ```
+// | 
+// | (verbosity level: 0)
+// | ----------------------------------------------------------------------
+// const other = () => 1;
+// const producer = () => other;
+//       ^^^^^^^^
+// | ----------------------------------------------------------------------
+// | ```typescript
+// | const producer: () => () => number
+// | ```
+// | 
+// | (verbosity level: 2)
+// | ----------------------------------------------------------------------
+//       ^^^^^^^^
+// | ----------------------------------------------------------------------
+// | ```typescript
+// | const producer: () => () => number
+// | ```
+// | 
+// | (verbosity level: 1)
+// | ----------------------------------------------------------------------
+//       ^^^^^^^^
+// | ----------------------------------------------------------------------
+// | ```typescript
+// | const producer: () => () => number
+// | ```
+// | 
+// | (verbosity level: 0)
+// | ----------------------------------------------------------------------
+// producer();
+// ^^^^^^^^
+// | ----------------------------------------------------------------------
+// | ```typescript
+// | const producer: () => () => number
+// | ```
+// | 
+// | (verbosity level: 2)
+// | ----------------------------------------------------------------------
+// ^^^^^^^^
+// | ----------------------------------------------------------------------
+// | ```typescript
+// | const producer: () => () => number
+// | ```
+// | 
+// | (verbosity level: 1)
+// | ----------------------------------------------------------------------
+// ^^^^^^^^
+// | ----------------------------------------------------------------------
+// | ```typescript
+// | const producer: () => () => number
+// | ```
+// | 
+// | (verbosity level: 0)
+// | ----------------------------------------------------------------------
+// function make<T>(value: T) {
+//     return { value, next: () => make("text") };
+// }
+// const different = make(1);
+//       ^^^^^^^^^
+// | ----------------------------------------------------------------------
+// | ```typescript
+// | const different: {
+// |     value: number;
+// |     next: () => {
+// |         value: string;
+// |         next: () => ...;
+// |     };
+// | }
+// | ```
+// | 
+// | (verbosity level: 0)
+// | ----------------------------------------------------------------------
+// const scoped = {
+//       ^^^^^^
+// | ----------------------------------------------------------------------
+// | ```typescript
+// | const scoped: {
+// |     first<T>(outer: T): {
+// |         nested<T>(inner: T): {
+// |             outer: T;
+// |             inner: T;
+// |             next: typeof scoped;
+// |         };
+// |         sibling<T>(inner: T): {
+// |             outer: T;
+// |             inner: T;
+// |             next: typeof scoped;
+// |         };
+// |     };
+// |     second<T>(value: T): {
+// |         value: T;
+// |         next: typeof scoped;
+// |     };
+// | }
+// | ```
+// | 
+// | (verbosity level: 0)
+// | ----------------------------------------------------------------------
+//     first<T>(outer: T) {
+//         return {
+//             nested<T>(inner: T) { return { outer, inner, next: scoped }; },
+//             sibling<T>(inner: T) { return { outer, inner, next: scoped }; },
+//         };
+//     },
+//     second<T>(value: T) { return { value, next: scoped }; },
+// };
+// const numberScope = scoped.first(1);
+//                            ^^^^^
+// | ----------------------------------------------------------------------
+// | ```typescript
+// | (method) first<number>(outer: number): {
+// |     nested<T>(inner: T): {
+// |         outer: number;
+// |         inner: T;
+// |         next: {
+// |             first<T>(outer: T): {
+// |                 nested<T>(inner: T): {
+// |                     outer: T;
+// |                     inner: T;
+// |                     next: typeof scoped;
+// |                 };
+// |                 sibling<T>(inner: T): {
+// |                     outer: T;
+// |                     inner: T;
+// |                     next: typeof scoped;
+// |                 };
+// |             };
+// |             second<T>(value: T): {
+// |                 value: T;
+// |                 next: typeof scoped;
+// |             };
+// |         };
+// |     };
+// |     sibling<T>(inner: T): {
+// |         outer: number;
+// |         inner: T;
+// |         next: {
+// |             first<T>(outer: T): {
+// |                 nested<T>(inner: T): {
+// |                     outer: T;
+// |                     inner: T;
+// |                     next: typeof scoped;
+// |                 };
+// |                 sibling<T>(inner: T): {
+// |                     outer: T;
+// |                     inner: T;
+// |                     next: typeof scoped;
+// |                 };
+// |             };
+// |             second<T>(value: T): {
+// |                 value: T;
+// |                 next: typeof scoped;
+// |             };
+// |         };
+// |     };
+// | }
+// | ```
+// | 
+// | (verbosity level: 0)
+// | ----------------------------------------------------------------------
+// numberScope.nested("inner");
+//             ^^^^^^
+// | ----------------------------------------------------------------------
+// | ```typescript
+// | (method) nested<string>(inner: string): {
+// |     outer: number;
+// |     inner: string;
+// |     next: {
+// |         first<T>(outer: T): {
+// |             nested<T>(inner: T): {
+// |                 outer: T;
+// |                 inner: T;
+// |                 next: typeof scoped;
+// |             };
+// |             sibling<T>(inner: T): {
+// |                 outer: T;
+// |                 inner: T;
+// |                 next: typeof scoped;
+// |             };
+// |         };
+// |         second<T>(value: T): {
+// |             value: T;
+// |             next: typeof scoped;
+// |         };
+// |     };
+// | }
+// | ```
+// | 
+// | (verbosity level: 0)
+// | ----------------------------------------------------------------------
+// numberScope.sibling(true);
+//             ^^^^^^^
+// | ----------------------------------------------------------------------
+// | ```typescript
+// | (method) sibling<boolean>(inner: boolean): {
+// |     outer: number;
+// |     inner: boolean;
+// |     next: {
+// |         first<T>(outer: T): {
+// |             nested<T>(inner: T): {
+// |                 outer: T;
+// |                 inner: T;
+// |                 next: typeof scoped;
+// |             };
+// |             sibling<T>(inner: T): {
+// |                 outer: T;
+// |                 inner: T;
+// |                 next: typeof scoped;
+// |             };
+// |         };
+// |         second<T>(value: T): {
+// |             value: T;
+// |             next: typeof scoped;
+// |         };
+// |     };
+// | }
+// | ```
+// | 
+// | (verbosity level: 0)
+// | ----------------------------------------------------------------------
+// scoped.second("text");
+//        ^^^^^^
+// | ----------------------------------------------------------------------
+// | ```typescript
+// | (method) second<string>(value: string): {
+// |     value: string;
+// |     next: {
+// |         first<T>(outer: T): {
+// |             nested<T>(inner: T): {
+// |                 outer: T;
+// |                 inner: T;
+// |                 next: typeof scoped;
+// |             };
+// |             sibling<T>(inner: T): {
+// |                 outer: T;
+// |                 inner: T;
+// |                 next: typeof scoped;
+// |             };
+// |         };
+// |         second<T>(value: T): {
+// |             value: T;
+// |             next: typeof scoped;
+// |         };
+// |     };
+// | }
+// | ```
+// | 
+// | (verbosity level: 0)
+// | ----------------------------------------------------------------------
+// const nestedOwner = {
+//     make<T>(outer: T) {
+//         return {
+//             nested<U>(inner: U) { return { outer, inner, owner: nestedOwner }; },
+//             constrained<U extends T = T>(inner: U) { return { outer, inner, owner: nestedOwner }; },
+//             copied<U>(inner: U): { outer: T; inner: U; owner: typeof nestedOwner } {
+//                 return { outer, inner, owner: nestedOwner };
+//             },
+//             rest<U>(...values: [U]) { return { outer, inner: values[0], owner: nestedOwner }; },
+//         };
+//     },
+// };
+// const nestedNumber = nestedOwner.make(1);
+//       ^^^^^^^^^^^^
+// | ----------------------------------------------------------------------
+// | ```typescript
+// | const nestedNumber: {
+// |     nested<U>(inner: U): {
+// |         outer: number;
+// |         inner: U;
+// |         owner: {
+// |             make<T>(outer: T): {
+// |                 nested<U>(inner: U): {
+// |                     outer: T;
+// |                     inner: U;
+// |                     owner: typeof nestedOwner;
+// |                 };
+// |                 constrained<U extends T = T>(inner: U): {
+// |                     outer: T;
+// |                     inner: U;
+// |                     owner: typeof nestedOwner;
+// |                 };
+// |                 copied<U>(inner: U): {
+// |                     outer: T;
+// |                     inner: U;
+// |                     owner: typeof nestedOwner;
+// |                 };
+// |                 rest<U>(values_0: U): {
+// |                     outer: T;
+// |                     inner: U;
+// |                     owner: typeof nestedOwner;
+// |                 };
+// |             };
+// |         };
+// |     };
+// |     constrained<U extends number = number>(inner: U): {
+// |         outer: number;
+// |         inner: U;
+// |         owner: {
+// |             make<T>(outer: T): {
+// |                 nested<U>(inner: U): {
+// |                     outer: T;
+// |                     inner: U;
+// |                     owner: typeof nestedOwner;
+// |                 };
+// |                 constrained<U extends T = T>(inner: U): ...;
+// |                 copied<U>(inner: U): {
+// |                     outer: T;
+// |                     inner: U;
+// |                     owner: typeof nestedOwner;
+// |                 };
+// |                 rest<U>(values_0: U): ...;
+// |             };
+// |         };
+// |     };
+// |     copied<U>(inner: U): ...;
+// |     rest<U>(values_0: U): ...;
+// | }
+// | ```
+// | 
+// | (verbosity level: 0)
+// | ----------------------------------------------------------------------
+// nestedNumber.nested(true).owner.make("text");
+//              ^^^^^^
+// | ----------------------------------------------------------------------
+// | ```typescript
+// | (method) nested<boolean>(inner: boolean): {
+// |     outer: number;
+// |     inner: boolean;
+// |     owner: {
+// |         make<T>(outer: T): {
+// |             nested<U>(inner: U): {
+// |                 outer: T;
+// |                 inner: U;
+// |                 owner: typeof nestedOwner;
+// |             };
+// |             constrained<U extends T = T>(inner: U): {
+// |                 outer: T;
+// |                 inner: U;
+// |                 owner: typeof nestedOwner;
+// |             };
+// |             copied<U>(inner: U): {
+// |                 outer: T;
+// |                 inner: U;
+// |                 owner: typeof nestedOwner;
+// |             };
+// |             rest<U>(values_0: U): {
+// |                 outer: T;
+// |                 inner: U;
+// |                 owner: typeof nestedOwner;
+// |             };
+// |         };
+// |     };
+// | }
+// | ```
+// | 
+// | (verbosity level: 0)
+// | ----------------------------------------------------------------------
+//                                 ^^^^
+// | ----------------------------------------------------------------------
+// | ```typescript
+// | (method) make<string>(outer: string): {
+// |     nested<U>(inner: U): {
+// |         outer: string;
+// |         inner: U;
+// |         owner: {
+// |             make<T>(outer: T): {
+// |                 nested<U>(inner: U): {
+// |                     outer: T;
+// |                     inner: U;
+// |                     owner: typeof nestedOwner;
+// |                 };
+// |                 constrained<U extends T = T>(inner: U): {
+// |                     outer: T;
+// |                     inner: U;
+// |                     owner: typeof nestedOwner;
+// |                 };
+// |                 copied<U>(inner: U): {
+// |                     outer: T;
+// |                     inner: U;
+// |                     owner: typeof nestedOwner;
+// |                 };
+// |                 rest<U>(values_0: U): {
+// |                     outer: T;
+// |                     inner: U;
+// |                     owner: typeof nestedOwner;
+// |                 };
+// |             };
+// |         };
+// |     };
+// |     constrained<U>(inner: U): {
+// |         outer: string;
+// |         inner: U;
+// |         owner: {
+// |             make<T>(outer: T): {
+// |                 nested<U>(inner: U): {
+// |                     outer: T;
+// |                     inner: U;
+// |                     owner: typeof nestedOwner;
+// |                 };
+// |                 constrained<U extends T = T>(inner: U): ...;
+// |                 copied<U>(inner: U): {
+// |                     outer: T;
+// |                     inner: U;
+// |                     owner: typeof nestedOwner;
+// |                 };
+// |                 rest<U>(values_0: U): ...;
+// |             };
+// |         };
+// |     };
+// |     copied<U>(inner: U): ...;
+// |     rest<U>(values_0: U): ...;
+// | }
+// | ```
+// | 
+// | (verbosity level: 0)
+// | ----------------------------------------------------------------------
+// nestedNumber.constrained(2);
+//              ^^^^^^^^^^^
+// | ----------------------------------------------------------------------
+// | ```typescript
+// | (method) constrained<2>(inner: 2): {
+// |     outer: number;
+// |     inner: 2;
+// |     owner: {
+// |         make<T>(outer: T): {
+// |             nested<U>(inner: U): {
+// |                 outer: T;
+// |                 inner: U;
+// |                 owner: typeof nestedOwner;
+// |             };
+// |             constrained<U extends T = T>(inner: U): {
+// |                 outer: T;
+// |                 inner: U;
+// |                 owner: typeof nestedOwner;
+// |             };
+// |             copied<U>(inner: U): {
+// |                 outer: T;
+// |                 inner: U;
+// |                 owner: typeof nestedOwner;
+// |             };
+// |             rest<U>(values_0: U): {
+// |                 outer: T;
+// |                 inner: U;
+// |                 owner: typeof nestedOwner;
+// |             };
+// |         };
+// |     };
+// | }
+// | ```
+// | 
+// | (verbosity level: 0)
+// | ----------------------------------------------------------------------
+// nestedNumber.copied("inner");
+//              ^^^^^^
+// | ----------------------------------------------------------------------
+// | ```typescript
+// | (method) copied<string>(inner: string): {
+// |     outer: number;
+// |     inner: string;
+// |     owner: typeof nestedOwner;
+// | }
+// | ```
+// | 
+// | (verbosity level: 0)
+// | ----------------------------------------------------------------------
+// nestedNumber.rest(true);
+//              ^^^^
+// | ----------------------------------------------------------------------
+// | ```typescript
+// | (method) rest<boolean>(values_0: boolean): {
+// |     outer: number;
+// |     inner: boolean;
+// |     owner: {
+// |         make<T>(outer: T): {
+// |             nested<U>(inner: U): {
+// |                 outer: T;
+// |                 inner: U;
+// |                 owner: typeof nestedOwner;
+// |             };
+// |             constrained<U extends T = T>(inner: U): {
+// |                 outer: T;
+// |                 inner: U;
+// |                 owner: typeof nestedOwner;
+// |             };
+// |             copied<U>(inner: U): {
+// |                 outer: T;
+// |                 inner: U;
+// |                 owner: typeof nestedOwner;
+// |             };
+// |             rest<U>(values_0: U): {
+// |                 outer: T;
+// |                 inner: U;
+// |                 owner: typeof nestedOwner;
+// |             };
+// |         };
+// |     };
+// | }
+// | ```
+// | 
+// | (verbosity level: 0)
+// | ----------------------------------------------------------------------
+// declare const reused: {
+//     first<T>(...values: [T]): { value: T; next: typeof reused };
+//     second<T>(value: T): { value: T; next: typeof reused };
+//     shadowed<T>(reused: T): { value: T; next: typeof reused };
+// };
+// const copy = reused;
+//       ^^^^
+// | ----------------------------------------------------------------------
+// | ```typescript
+// | const copy: {
+// |     first<T>(values_0: T): {
+// |         value: T;
+// |         next: typeof reused;
+// |     };
+// |     second<T>(value: T): {
+// |         value: T;
+// |         next: typeof reused;
+// |     };
+// |     shadowed<T>(reused: T): {
+// |         value: T;
+// |         next: typeof reused;
+// |     };
+// | }
+// | ```
+// | 
+// | (verbosity level: 0)
+// | ----------------------------------------------------------------------
+// copy.first(1);
+//      ^^^^^
+// | ----------------------------------------------------------------------
+// | ```typescript
+// | (method) first<number>(values_0: number): {
+// |     value: number;
+// |     next: typeof reused;
+// | }
+// | ```
+// | 
+// | (verbosity level: 0)
+// | ----------------------------------------------------------------------
+// copy.shadowed(1);
+//      ^^^^^^^^
+// | ----------------------------------------------------------------------
+// | ```typescript
+// | (method) shadowed<number>(reused: number): {
+// |     value: number;
+// |     next: number;
+// | }
+// | ```
+// | 
+// | (verbosity level: 0)
+// | ----------------------------------------------------------------------
+[
+  {
+    "marker": {
+      "Position": 11,
+      "LSPosition": {
+        "line": 0,
+        "character": 11
+      },
+      "Name": "declaration",
+      "Data": {}
+    },
+    "item": {
+      "hover": {
+        "contents": {
+          "kind": "markdown",
+          "value": "```typescript\nconst arrow: () => typeof arrow\n```\n"
+        },
+        "range": {
+          "start": {
+            "line": 0,
+            "character": 6
+          },
+          "end": {
+            "line": 0,
+            "character": 11
+          }
+        }
+      },
+      "verbosityLevel": 0
+    }
+  },
+  {
+    "marker": {
+      "Position": 11,
+      "LSPosition": {
+        "line": 0,
+        "character": 11
+      },
+      "Name": "declaration",
+      "Data": {}
+    },
+    "item": {
+      "hover": {
+        "contents": {
+          "kind": "markdown",
+          "value": "```typescript\nconst arrow: () => typeof arrow\n```\n"
+        },
+        "range": {
+          "start": {
+            "line": 0,
+            "character": 6
+          },
+          "end": {
+            "line": 0,
+            "character": 11
+          }
+        }
+      },
+      "verbosityLevel": 1
+    }
+  },
+  {
+    "marker": {
+      "Position": 11,
+      "LSPosition": {
+        "line": 0,
+        "character": 11
+      },
+      "Name": "declaration",
+      "Data": {}
+    },
+    "item": {
+      "hover": {
+        "contents": {
+          "kind": "markdown",
+          "value": "```typescript\nconst arrow: () => typeof arrow\n```\n"
+        },
+        "range": {
+          "start": {
+            "line": 0,
+            "character": 6
+          },
+          "end": {
+            "line": 0,
+            "character": 11
+          }
+        }
+      },
+      "verbosityLevel": 2
+    }
+  },
+  {
+    "marker": {
+      "Position": 32,
+      "LSPosition": {
+        "line": 1,
+        "character": 5
+      },
+      "Name": "call",
+      "Data": {}
+    },
+    "item": {
+      "hover": {
+        "contents": {
+          "kind": "markdown",
+          "value": "```typescript\nconst arrow: () => typeof arrow\n```\n"
+        },
+        "range": {
+          "start": {
+            "line": 1,
+            "character": 0
+          },
+          "end": {
+            "line": 1,
+            "character": 5
+          }
+        }
+      },
+      "verbosityLevel": 0
+    }
+  },
+  {
+    "marker": {
+      "Position": 32,
+      "LSPosition": {
+        "line": 1,
+        "character": 5
+      },
+      "Name": "call",
+      "Data": {}
+    },
+    "item": {
+      "hover": {
+        "contents": {
+          "kind": "markdown",
+          "value": "```typescript\nconst arrow: () => typeof arrow\n```\n"
+        },
+        "range": {
+          "start": {
+            "line": 1,
+            "character": 0
+          },
+          "end": {
+            "line": 1,
+            "character": 5
+          }
+        }
+      },
+      "verbosityLevel": 1
+    }
+  },
+  {
+    "marker": {
+      "Position": 32,
+      "LSPosition": {
+        "line": 1,
+        "character": 5
+      },
+      "Name": "call",
+      "Data": {}
+    },
+    "item": {
+      "hover": {
+        "contents": {
+          "kind": "markdown",
+          "value": "```typescript\nconst arrow: () => typeof arrow\n```\n"
+        },
+        "range": {
+          "start": {
+            "line": 1,
+            "character": 0
+          },
+          "end": {
+            "line": 1,
+            "character": 5
+          }
+        }
+      },
+      "verbosityLevel": 2
+    }
+  },
+  {
+    "marker": {
+      "Position": 89,
+      "LSPosition": {
+        "line": 3,
+        "character": 5
+      },
+      "Name": "namedCall",
+      "Data": {}
+    },
+    "item": {
+      "hover": {
+        "contents": {
+          "kind": "markdown",
+          "value": "```typescript\nconst named: () => typeof named\n```\n"
+        },
+        "range": {
+          "start": {
+            "line": 3,
+            "character": 0
+          },
+          "end": {
+            "line": 3,
+            "character": 5
+          }
+        }
+      },
+      "verbosityLevel": 0
+    }
+  },
+  {
+    "marker": {
+      "Position": 89,
+      "LSPosition": {
+        "line": 3,
+        "character": 5
+      },
+      "Name": "namedCall",
+      "Data": {}
+    },
+    "item": {
+      "hover": {
+        "contents": {
+          "kind": "markdown",
+          "value": "```typescript\nconst named: () => typeof named\n```\n"
+        },
+        "range": {
+          "start": {
+            "line": 3,
+            "character": 0
+          },
+          "end": {
+            "line": 3,
+            "character": 5
+          }
+        }
+      },
+      "verbosityLevel": 1
+    }
+  },
+  {
+    "marker": {
+      "Position": 89,
+      "LSPosition": {
+        "line": 3,
+        "character": 5
+      },
+      "Name": "namedCall",
+      "Data": {}
+    },
+    "item": {
+      "hover": {
+        "contents": {
+          "kind": "markdown",
+          "value": "```typescript\nconst named: () => typeof named\n```\n"
+        },
+        "range": {
+          "start": {
+            "line": 3,
+            "character": 0
+          },
+          "end": {
+            "line": 3,
+            "character": 5
+          }
+        }
+      },
+      "verbosityLevel": 2
+    }
+  },
+  {
+    "marker": {
+      "Position": 133,
+      "LSPosition": {
+        "line": 5,
+        "character": 5
+      },
+      "Name": "functionCall",
+      "Data": {}
+    },
+    "item": {
+      "hover": {
+        "contents": {
+          "kind": "markdown",
+          "value": "```typescript\nfunction recur(): typeof recur\n```\n"
+        },
+        "range": {
+          "start": {
+            "line": 5,
+            "character": 0
+          },
+          "end": {
+            "line": 5,
+            "character": 5
+          }
+        }
+      },
+      "verbosityLevel": 0
+    }
+  },
+  {
+    "marker": {
+      "Position": 133,
+      "LSPosition": {
+        "line": 5,
+        "character": 5
+      },
+      "Name": "functionCall",
+      "Data": {}
+    },
+    "item": {
+      "hover": {
+        "contents": {
+          "kind": "markdown",
+          "value": "```typescript\nfunction recur(): typeof recur\n```\n"
+        },
+        "range": {
+          "start": {
+            "line": 5,
+            "character": 0
+          },
+          "end": {
+            "line": 5,
+            "character": 5
+          }
+        }
+      },
+      "verbosityLevel": 1
+    }
+  },
+  {
+    "marker": {
+      "Position": 133,
+      "LSPosition": {
+        "line": 5,
+        "character": 5
+      },
+      "Name": "functionCall",
+      "Data": {}
+    },
+    "item": {
+      "hover": {
+        "contents": {
+          "kind": "markdown",
+          "value": "```typescript\nfunction recur(): typeof recur\n```\n"
+        },
+        "range": {
+          "start": {
+            "line": 5,
+            "character": 0
+          },
+          "end": {
+            "line": 5,
+            "character": 5
+          }
+        }
+      },
+      "verbosityLevel": 2
+    }
+  },
+  {
+    "marker": {
+      "Position": 186,
+      "LSPosition": {
+        "line": 7,
+        "character": 7
+      },
+      "Name": "genericCall",
+      "Data": {}
+    },
+    "item": {
+      "hover": {
+        "contents": {
+          "kind": "markdown",
+          "value": "```typescript\nconst generic: <number>(value: number) => <T>(value: T) => typeof generic\n```\n"
+        },
+        "range": {
+          "start": {
+            "line": 7,
+            "character": 0
+          },
+          "end": {
+            "line": 7,
+            "character": 7
+          }
+        }
+      },
+      "verbosityLevel": 0
+    }
+  },
+  {
+    "marker": {
+      "Position": 239,
+      "LSPosition": {
+        "line": 9,
+        "character": 11
+      },
+      "Name": "specializedCall",
+      "Data": {}
+    },
+    "item": {
+      "hover": {
+        "contents": {
+          "kind": "markdown",
+          "value": "```typescript\nconst specialized: <string>(value: string) => <T>(value: T) => typeof generic\n```\n"
+        },
+        "range": {
+          "start": {
+            "line": 9,
+            "character": 0
+          },
+          "end": {
+            "line": 9,
+            "character": 11
+          }
+        }
+      },
+      "verbosityLevel": 0
+    }
+  },
+  {
+    "marker": {
+      "Position": 319,
+      "LSPosition": {
+        "line": 11,
+        "character": 22
+      },
+      "Name": "narrowedCall",
+      "Data": {}
+    },
+    "item": {
+      "hover": {
+        "contents": {
+          "kind": "markdown",
+          "value": "```typescript\nlet narrowed: () => typeof arrow\n```\n"
+        },
+        "range": {
+          "start": {
+            "line": 11,
+            "character": 14
+          },
+          "end": {
+            "line": 11,
+            "character": 22
+          }
+        }
+      },
+      "verbosityLevel": 0
+    }
+  },
+  {
+    "marker": {
+      "Position": 319,
+      "LSPosition": {
+        "line": 11,
+        "character": 22
+      },
+      "Name": "narrowedCall",
+      "Data": {}
+    },
+    "item": {
+      "hover": {
+        "contents": {
+          "kind": "markdown",
+          "value": "```typescript\nlet narrowed: () => typeof arrow\n```\n"
+        },
+        "range": {
+          "start": {
+            "line": 11,
+            "character": 14
+          },
+          "end": {
+            "line": 11,
+            "character": 22
+          }
+        }
+      },
+      "verbosityLevel": 1
+    }
+  },
+  {
+    "marker": {
+      "Position": 319,
+      "LSPosition": {
+        "line": 11,
+        "character": 22
+      },
+      "Name": "narrowedCall",
+      "Data": {}
+    },
+    "item": {
+      "hover": {
+        "contents": {
+          "kind": "markdown",
+          "value": "```typescript\nlet narrowed: () => typeof arrow\n```\n"
+        },
+        "range": {
+          "start": {
+            "line": 11,
+            "character": 14
+          },
+          "end": {
+            "line": 11,
+            "character": 22
+          }
+        }
+      },
+      "verbosityLevel": 2
+    }
+  },
+  {
+    "marker": {
+      "Position": 364,
+      "LSPosition": {
+        "line": 13,
+        "character": 5
+      },
+      "Name": "broadCall",
+      "Data": {}
+    },
+    "item": {
+      "hover": {
+        "contents": {
+          "kind": "markdown",
+          "value": "```typescript\nconst broad: () => unknown\n```\n"
+        },
+        "range": {
+          "start": {
+            "line": 13,
+            "character": 0
+          },
+          "end": {
+            "line": 13,
+            "character": 5
+          }
+        }
+      },
+      "verbosityLevel": 0
+    }
+  },
+  {
+    "marker": {
+      "Position": 364,
+      "LSPosition": {
+        "line": 13,
+        "character": 5
+      },
+      "Name": "broadCall",
+      "Data": {}
+    },
+    "item": {
+      "hover": {
+        "contents": {
+          "kind": "markdown",
+          "value": "```typescript\nconst broad: () => unknown\n```\n"
+        },
+        "range": {
+          "start": {
+            "line": 13,
+            "character": 0
+          },
+          "end": {
+            "line": 13,
+            "character": 5
+          }
+        }
+      },
+      "verbosityLevel": 1
+    }
+  },
+  {
+    "marker": {
+      "Position": 364,
+      "LSPosition": {
+        "line": 13,
+        "character": 5
+      },
+      "Name": "broadCall",
+      "Data": {}
+    },
+    "item": {
+      "hover": {
+        "contents": {
+          "kind": "markdown",
+          "value": "```typescript\nconst broad: () => unknown\n```\n"
+        },
+        "range": {
+          "start": {
+            "line": 13,
+            "character": 0
+          },
+          "end": {
+            "line": 13,
+            "character": 5
+          }
+        }
+      },
+      "verbosityLevel": 2
+    }
+  },
+  {
+    "marker": {
+      "Position": 612,
+      "LSPosition": {
+        "line": 19,
+        "character": 10
+      },
+      "Name": "stringCall",
+      "Data": {}
+    },
+    "item": {
+      "hover": {
+        "contents": {
+          "kind": "markdown",
+          "value": "```typescript\nfunction overloaded(value: string): string\n```\n"
+        },
+        "range": {
+          "start": {
+            "line": 19,
+            "character": 0
+          },
+          "end": {
+            "line": 19,
+            "character": 10
+          }
+        }
+      },
+      "verbosityLevel": 0
+    }
+  },
+  {
+    "marker": {
+      "Position": 612,
+      "LSPosition": {
+        "line": 19,
+        "character": 10
+      },
+      "Name": "stringCall",
+      "Data": {}
+    },
+    "item": {
+      "hover": {
+        "contents": {
+          "kind": "markdown",
+          "value": "```typescript\nfunction overloaded(value: string): string\n```\n"
+        },
+        "range": {
+          "start": {
+            "line": 19,
+            "character": 0
+          },
+          "end": {
+            "line": 19,
+            "character": 10
+          }
+        }
+      },
+      "verbosityLevel": 1
+    }
+  },
+  {
+    "marker": {
+      "Position": 612,
+      "LSPosition": {
+        "line": 19,
+        "character": 10
+      },
+      "Name": "stringCall",
+      "Data": {}
+    },
+    "item": {
+      "hover": {
+        "contents": {
+          "kind": "markdown",
+          "value": "```typescript\nfunction overloaded(value: string): string\n```\n"
+        },
+        "range": {
+          "start": {
+            "line": 19,
+            "character": 0
+          },
+          "end": {
+            "line": 19,
+            "character": 10
+          }
+        }
+      },
+      "verbosityLevel": 2
+    }
+  },
+  {
+    "marker": {
+      "Position": 632,
+      "LSPosition": {
+        "line": 20,
+        "character": 10
+      },
+      "Name": "numberCall",
+      "Data": {}
+    },
+    "item": {
+      "hover": {
+        "contents": {
+          "kind": "markdown",
+          "value": "```typescript\nfunction overloaded(value: number): typeof overloaded\n```\n"
+        },
+        "range": {
+          "start": {
+            "line": 20,
+            "character": 0
+          },
+          "end": {
+            "line": 20,
+            "character": 10
+          }
+        }
+      },
+      "verbosityLevel": 0
+    }
+  },
+  {
+    "marker": {
+      "Position": 632,
+      "LSPosition": {
+        "line": 20,
+        "character": 10
+      },
+      "Name": "numberCall",
+      "Data": {}
+    },
+    "item": {
+      "hover": {
+        "contents": {
+          "kind": "markdown",
+          "value": "```typescript\nfunction overloaded(value: number): typeof overloaded\n```\n"
+        },
+        "range": {
+          "start": {
+            "line": 20,
+            "character": 0
+          },
+          "end": {
+            "line": 20,
+            "character": 10
+          }
+        }
+      },
+      "verbosityLevel": 1
+    }
+  },
+  {
+    "marker": {
+      "Position": 632,
+      "LSPosition": {
+        "line": 20,
+        "character": 10
+      },
+      "Name": "numberCall",
+      "Data": {}
+    },
+    "item": {
+      "hover": {
+        "contents": {
+          "kind": "markdown",
+          "value": "```typescript\nfunction overloaded(value: number): typeof overloaded\n```\n"
+        },
+        "range": {
+          "start": {
+            "line": 20,
+            "character": 0
+          },
+          "end": {
+            "line": 20,
+            "character": 10
+          }
+        }
+      },
+      "verbosityLevel": 2
+    }
+  },
+  {
+    "marker": {
+      "Position": 702,
+      "LSPosition": {
+        "line": 22,
+        "character": 12
+      },
+      "Name": "methodCall",
+      "Data": {}
+    },
+    "item": {
+      "hover": {
+        "contents": {
+          "kind": "markdown",
+          "value": "```typescript\n(method) recur(): (typeof object)[\"recur\"]\n```\n"
+        },
+        "range": {
+          "start": {
+            "line": 22,
+            "character": 7
+          },
+          "end": {
+            "line": 22,
+            "character": 12
+          }
+        }
+      },
+      "verbosityLevel": 0
+    }
+  },
+  {
+    "marker": {
+      "Position": 702,
+      "LSPosition": {
+        "line": 22,
+        "character": 12
+      },
+      "Name": "methodCall",
+      "Data": {}
+    },
+    "item": {
+      "hover": {
+        "contents": {
+          "kind": "markdown",
+          "value": "```typescript\n(method) recur(): (typeof object)[\"recur\"]\n```\n"
+        },
+        "range": {
+          "start": {
+            "line": 22,
+            "character": 7
+          },
+          "end": {
+            "line": 22,
+            "character": 12
+          }
+        }
+      },
+      "verbosityLevel": 1
+    }
+  },
+  {
+    "marker": {
+      "Position": 702,
+      "LSPosition": {
+        "line": 22,
+        "character": 12
+      },
+      "Name": "methodCall",
+      "Data": {}
+    },
+    "item": {
+      "hover": {
+        "contents": {
+          "kind": "markdown",
+          "value": "```typescript\n(method) recur(): (typeof object)[\"recur\"]\n```\n"
+        },
+        "range": {
+          "start": {
+            "line": 22,
+            "character": 7
+          },
+          "end": {
+            "line": 22,
+            "character": 12
+          }
+        }
+      },
+      "verbosityLevel": 2
+    }
+  },
+  {
+    "marker": {
+      "Position": 717,
+      "LSPosition": {
+        "line": 23,
+        "character": 11
+      },
+      "Name": "firstDeclaration",
+      "Data": {}
+    },
+    "item": {
+      "hover": {
+        "contents": {
+          "kind": "markdown",
+          "value": "```typescript\nconst first: () => () => typeof first\n```\n"
+        },
+        "range": {
+          "start": {
+            "line": 23,
+            "character": 6
+          },
+          "end": {
+            "line": 23,
+            "character": 11
+          }
+        }
+      },
+      "verbosityLevel": 0
+    }
+  },
+  {
+    "marker": {
+      "Position": 717,
+      "LSPosition": {
+        "line": 23,
+        "character": 11
+      },
+      "Name": "firstDeclaration",
+      "Data": {}
+    },
+    "item": {
+      "hover": {
+        "contents": {
+          "kind": "markdown",
+          "value": "```typescript\nconst first: () => () => typeof first\n```\n"
+        },
+        "range": {
+          "start": {
+            "line": 23,
+            "character": 6
+          },
+          "end": {
+            "line": 23,
+            "character": 11
+          }
+        }
+      },
+      "verbosityLevel": 1
+    }
+  },
+  {
+    "marker": {
+      "Position": 717,
+      "LSPosition": {
+        "line": 23,
+        "character": 11
+      },
+      "Name": "firstDeclaration",
+      "Data": {}
+    },
+    "item": {
+      "hover": {
+        "contents": {
+          "kind": "markdown",
+          "value": "```typescript\nconst first: () => () => typeof first\n```\n"
+        },
+        "range": {
+          "start": {
+            "line": 23,
+            "character": 6
+          },
+          "end": {
+            "line": 23,
+            "character": 11
+          }
+        }
+      },
+      "verbosityLevel": 2
+    }
+  },
+  {
+    "marker": {
+      "Position": 767,
+      "LSPosition": {
+        "line": 25,
+        "character": 5
+      },
+      "Name": "firstCall",
+      "Data": {}
+    },
+    "item": {
+      "hover": {
+        "contents": {
+          "kind": "markdown",
+          "value": "```typescript\nconst first: () => () => typeof first\n```\n"
+        },
+        "range": {
+          "start": {
+            "line": 25,
+            "character": 0
+          },
+          "end": {
+            "line": 25,
+            "character": 5
+          }
+        }
+      },
+      "verbosityLevel": 0
+    }
+  },
+  {
+    "marker": {
+      "Position": 767,
+      "LSPosition": {
+        "line": 25,
+        "character": 5
+      },
+      "Name": "firstCall",
+      "Data": {}
+    },
+    "item": {
+      "hover": {
+        "contents": {
+          "kind": "markdown",
+          "value": "```typescript\nconst first: () => () => typeof first\n```\n"
+        },
+        "range": {
+          "start": {
+            "line": 25,
+            "character": 0
+          },
+          "end": {
+            "line": 25,
+            "character": 5
+          }
+        }
+      },
+      "verbosityLevel": 1
+    }
+  },
+  {
+    "marker": {
+      "Position": 767,
+      "LSPosition": {
+        "line": 25,
+        "character": 5
+      },
+      "Name": "firstCall",
+      "Data": {}
+    },
+    "item": {
+      "hover": {
+        "contents": {
+          "kind": "markdown",
+          "value": "```typescript\nconst first: () => () => typeof first\n```\n"
+        },
+        "range": {
+          "start": {
+            "line": 25,
+            "character": 0
+          },
+          "end": {
+            "line": 25,
+            "character": 5
+          }
+        }
+      },
+      "verbosityLevel": 2
+    }
+  },
+  {
+    "marker": {
+      "Position": 852,
+      "LSPosition": {
+        "line": 27,
+        "character": 15
+      },
+      "Name": "genericFunctionCall",
+      "Data": {}
+    },
+    "item": {
+      "hover": {
+        "contents": {
+          "kind": "markdown",
+          "value": "```typescript\nfunction genericFunction<number>(value: number): <T>(value: T) => typeof genericFunction\n```\n"
+        },
+        "range": {
+          "start": {
+            "line": 27,
+            "character": 0
+          },
+          "end": {
+            "line": 27,
+            "character": 15
+          }
+        }
+      },
+      "verbosityLevel": 0
+    }
+  },
+  {
+    "marker": {
+      "Position": 921,
+      "LSPosition": {
+        "line": 30,
+        "character": 8
+      },
+      "Name": "callableCall",
+      "Data": {}
+    },
+    "item": {
+      "hover": {
+        "contents": {
+          "kind": "markdown",
+          "value": "```typescript\nconst callable: () => typeof callable\n```\n"
+        },
+        "range": {
+          "start": {
+            "line": 30,
+            "character": 0
+          },
+          "end": {
+            "line": 30,
+            "character": 8
+          }
+        }
+      },
+      "verbosityLevel": 0
+    }
+  },
+  {
+    "marker": {
+      "Position": 921,
+      "LSPosition": {
+        "line": 30,
+        "character": 8
+      },
+      "Name": "callableCall",
+      "Data": {}
+    },
+    "item": {
+      "hover": {
+        "contents": {
+          "kind": "markdown",
+          "value": "```typescript\nconst callable: () => typeof callable\n```\n"
+        },
+        "range": {
+          "start": {
+            "line": 30,
+            "character": 0
+          },
+          "end": {
+            "line": 30,
+            "character": 8
+          }
+        }
+      },
+      "verbosityLevel": 1
+    }
+  },
+  {
+    "marker": {
+      "Position": 921,
+      "LSPosition": {
+        "line": 30,
+        "character": 8
+      },
+      "Name": "callableCall",
+      "Data": {}
+    },
+    "item": {
+      "hover": {
+        "contents": {
+          "kind": "markdown",
+          "value": "```typescript\nconst callable: () => typeof callable\n```\n"
+        },
+        "range": {
+          "start": {
+            "line": 30,
+            "character": 0
+          },
+          "end": {
+            "line": 30,
+            "character": 8
+          }
+        }
+      },
+      "verbosityLevel": 2
+    }
+  },
+  {
+    "marker": {
+      "Position": 962,
+      "LSPosition": {
+        "line": 32,
+        "character": 14
+      },
+      "Name": "producerDeclaration",
+      "Data": {}
+    },
+    "item": {
+      "hover": {
+        "contents": {
+          "kind": "markdown",
+          "value": "```typescript\nconst producer: () => () => number\n```\n"
+        },
+        "range": {
+          "start": {
+            "line": 32,
+            "character": 6
+          },
+          "end": {
+            "line": 32,
+            "character": 14
+          }
+        }
+      },
+      "verbosityLevel": 0
+    }
+  },
+  {
+    "marker": {
+      "Position": 962,
+      "LSPosition": {
+        "line": 32,
+        "character": 14
+      },
+      "Name": "producerDeclaration",
+      "Data": {}
+    },
+    "item": {
+      "hover": {
+        "contents": {
+          "kind": "markdown",
+          "value": "```typescript\nconst producer: () => () => number\n```\n"
+        },
+        "range": {
+          "start": {
+            "line": 32,
+            "character": 6
+          },
+          "end": {
+            "line": 32,
+            "character": 14
+          }
+        }
+      },
+      "verbosityLevel": 1
+    }
+  },
+  {
+    "marker": {
+      "Position": 962,
+      "LSPosition": {
+        "line": 32,
+        "character": 14
+      },
+      "Name": "producerDeclaration",
+      "Data": {}
+    },
+    "item": {
+      "hover": {
+        "contents": {
+          "kind": "markdown",
+          "value": "```typescript\nconst producer: () => () => number\n```\n"
+        },
+        "range": {
+          "start": {
+            "line": 32,
+            "character": 6
+          },
+          "end": {
+            "line": 32,
+            "character": 14
+          }
+        }
+      },
+      "verbosityLevel": 2
+    }
+  },
+  {
+    "marker": {
+      "Position": 986,
+      "LSPosition": {
+        "line": 33,
+        "character": 8
+      },
+      "Name": "producerCall",
+      "Data": {}
+    },
+    "item": {
+      "hover": {
+        "contents": {
+          "kind": "markdown",
+          "value": "```typescript\nconst producer: () => () => number\n```\n"
+        },
+        "range": {
+          "start": {
+            "line": 33,
+            "character": 0
+          },
+          "end": {
+            "line": 33,
+            "character": 8
+          }
+        }
+      },
+      "verbosityLevel": 0
+    }
+  },
+  {
+    "marker": {
+      "Position": 986,
+      "LSPosition": {
+        "line": 33,
+        "character": 8
+      },
+      "Name": "producerCall",
+      "Data": {}
+    },
+    "item": {
+      "hover": {
+        "contents": {
+          "kind": "markdown",
+          "value": "```typescript\nconst producer: () => () => number\n```\n"
+        },
+        "range": {
+          "start": {
+            "line": 33,
+            "character": 0
+          },
+          "end": {
+            "line": 33,
+            "character": 8
+          }
+        }
+      },
+      "verbosityLevel": 1
+    }
+  },
+  {
+    "marker": {
+      "Position": 986,
+      "LSPosition": {
+        "line": 33,
+        "character": 8
+      },
+      "Name": "producerCall",
+      "Data": {}
+    },
+    "item": {
+      "hover": {
+        "contents": {
+          "kind": "markdown",
+          "value": "```typescript\nconst producer: () => () => number\n```\n"
+        },
+        "range": {
+          "start": {
+            "line": 33,
+            "character": 0
+          },
+          "end": {
+            "line": 33,
+            "character": 8
+          }
+        }
+      },
+      "verbosityLevel": 2
+    }
+  },
+  {
+    "marker": {
+      "Position": 1084,
+      "LSPosition": {
+        "line": 37,
+        "character": 15
+      },
+      "Name": "differentInstantiations",
+      "Data": {}
+    },
+    "item": {
+      "hover": {
+        "contents": {
+          "kind": "markdown",
+          "value": "```typescript\nconst different: {\n    value: number;\n    next: () => {\n        value: string;\n        next: () => ...;\n    };\n}\n```\n"
+        },
+        "range": {
+          "start": {
+            "line": 37,
+            "character": 6
+          },
+          "end": {
+            "line": 37,
+            "character": 15
+          }
+        }
+      },
+      "verbosityLevel": 0
+    }
+  },
+  {
+    "marker": {
+      "Position": 1108,
+      "LSPosition": {
+        "line": 38,
+        "character": 12
+      },
+      "Name": "scopedDeclaration",
+      "Data": {}
+    },
+    "item": {
+      "hover": {
+        "contents": {
+          "kind": "markdown",
+          "value": "```typescript\nconst scoped: {\n    first<T>(outer: T): {\n        nested<T>(inner: T): {\n            outer: T;\n            inner: T;\n            next: typeof scoped;\n        };\n        sibling<T>(inner: T): {\n            outer: T;\n            inner: T;\n            next: typeof scoped;\n        };\n    };\n    second<T>(value: T): {\n        value: T;\n        next: typeof scoped;\n    };\n}\n```\n"
+        },
+        "range": {
+          "start": {
+            "line": 38,
+            "character": 6
+          },
+          "end": {
+            "line": 38,
+            "character": 12
+          }
+        }
+      },
+      "verbosityLevel": 0
+    }
+  },
+  {
+    "marker": {
+      "Position": 1422,
+      "LSPosition": {
+        "line": 47,
+        "character": 32
+      },
+      "Name": "scopedFirst",
+      "Data": {}
+    },
+    "item": {
+      "hover": {
+        "contents": {
+          "kind": "markdown",
+          "value": "```typescript\n(method) first<number>(outer: number): {\n    nested<T>(inner: T): {\n        outer: number;\n        inner: T;\n        next: {\n            first<T>(outer: T): {\n                nested<T>(inner: T): {\n                    outer: T;\n                    inner: T;\n                    next: typeof scoped;\n                };\n                sibling<T>(inner: T): {\n                    outer: T;\n                    inner: T;\n                    next: typeof scoped;\n                };\n            };\n            second<T>(value: T): {\n                value: T;\n                next: typeof scoped;\n            };\n        };\n    };\n    sibling<T>(inner: T): {\n        outer: number;\n        inner: T;\n        next: {\n            first<T>(outer: T): {\n                nested<T>(inner: T): {\n                    outer: T;\n                    inner: T;\n                    next: typeof scoped;\n                };\n                sibling<T>(inner: T): {\n                    outer: T;\n                    inner: T;\n                    next: typeof scoped;\n                };\n            };\n            second<T>(value: T): {\n                value: T;\n                next: typeof scoped;\n            };\n        };\n    };\n}\n```\n"
+        },
+        "range": {
+          "start": {
+            "line": 47,
+            "character": 27
+          },
+          "end": {
+            "line": 47,
+            "character": 32
+          }
+        }
+      },
+      "verbosityLevel": 0
+    }
+  },
+  {
+    "marker": {
+      "Position": 1445,
+      "LSPosition": {
+        "line": 48,
+        "character": 18
+      },
+      "Name": "scopedNested",
+      "Data": {}
+    },
+    "item": {
+      "hover": {
+        "contents": {
+          "kind": "markdown",
+          "value": "```typescript\n(method) nested<string>(inner: string): {\n    outer: number;\n    inner: string;\n    next: {\n        first<T>(outer: T): {\n            nested<T>(inner: T): {\n                outer: T;\n                inner: T;\n                next: typeof scoped;\n            };\n            sibling<T>(inner: T): {\n                outer: T;\n                inner: T;\n                next: typeof scoped;\n            };\n        };\n        second<T>(value: T): {\n            value: T;\n            next: typeof scoped;\n        };\n    };\n}\n```\n"
+        },
+        "range": {
+          "start": {
+            "line": 48,
+            "character": 12
+          },
+          "end": {
+            "line": 48,
+            "character": 18
+          }
+        }
+      },
+      "verbosityLevel": 0
+    }
+  },
+  {
+    "marker": {
+      "Position": 1475,
+      "LSPosition": {
+        "line": 49,
+        "character": 19
+      },
+      "Name": "scopedSibling",
+      "Data": {}
+    },
+    "item": {
+      "hover": {
+        "contents": {
+          "kind": "markdown",
+          "value": "```typescript\n(method) sibling<boolean>(inner: boolean): {\n    outer: number;\n    inner: boolean;\n    next: {\n        first<T>(outer: T): {\n            nested<T>(inner: T): {\n                outer: T;\n                inner: T;\n                next: typeof scoped;\n            };\n            sibling<T>(inner: T): {\n                outer: T;\n                inner: T;\n                next: typeof scoped;\n            };\n        };\n        second<T>(value: T): {\n            value: T;\n            next: typeof scoped;\n        };\n    };\n}\n```\n"
+        },
+        "range": {
+          "start": {
+            "line": 49,
+            "character": 12
+          },
+          "end": {
+            "line": 49,
+            "character": 19
+          }
+        }
+      },
+      "verbosityLevel": 0
+    }
+  },
+  {
+    "marker": {
+      "Position": 1496,
+      "LSPosition": {
+        "line": 50,
+        "character": 13
+      },
+      "Name": "scopedSecond",
+      "Data": {}
+    },
+    "item": {
+      "hover": {
+        "contents": {
+          "kind": "markdown",
+          "value": "```typescript\n(method) second<string>(value: string): {\n    value: string;\n    next: {\n        first<T>(outer: T): {\n            nested<T>(inner: T): {\n                outer: T;\n                inner: T;\n                next: typeof scoped;\n            };\n            sibling<T>(inner: T): {\n                outer: T;\n                inner: T;\n                next: typeof scoped;\n            };\n        };\n        second<T>(value: T): {\n            value: T;\n            next: typeof scoped;\n        };\n    };\n}\n```\n"
+        },
+        "range": {
+          "start": {
+            "line": 50,
+            "character": 7
+          },
+          "end": {
+            "line": 50,
+            "character": 13
+          }
+        }
+      },
+      "verbosityLevel": 0
+    }
+  },
+  {
+    "marker": {
+      "Position": 2049,
+      "LSPosition": {
+        "line": 63,
+        "character": 18
+      },
+      "Name": "nestedNumber",
+      "Data": {}
+    },
+    "item": {
+      "hover": {
+        "contents": {
+          "kind": "markdown",
+          "value": "```typescript\nconst nestedNumber: {\n    nested<U>(inner: U): {\n        outer: number;\n        inner: U;\n        owner: {\n            make<T>(outer: T): {\n                nested<U>(inner: U): {\n                    outer: T;\n                    inner: U;\n                    owner: typeof nestedOwner;\n                };\n                constrained<U extends T = T>(inner: U): {\n                    outer: T;\n                    inner: U;\n                    owner: typeof nestedOwner;\n                };\n                copied<U>(inner: U): {\n                    outer: T;\n                    inner: U;\n                    owner: typeof nestedOwner;\n                };\n                rest<U>(values_0: U): {\n                    outer: T;\n                    inner: U;\n                    owner: typeof nestedOwner;\n                };\n            };\n        };\n    };\n    constrained<U extends number = number>(inner: U): {\n        outer: number;\n        inner: U;\n        owner: {\n            make<T>(outer: T): {\n                nested<U>(inner: U): {\n                    outer: T;\n                    inner: U;\n                    owner: typeof nestedOwner;\n                };\n                constrained<U extends T = T>(inner: U): ...;\n                copied<U>(inner: U): {\n                    outer: T;\n                    inner: U;\n                    owner: typeof nestedOwner;\n                };\n                rest<U>(values_0: U): ...;\n            };\n        };\n    };\n    copied<U>(inner: U): ...;\n    rest<U>(values_0: U): ...;\n}\n```\n"
+        },
+        "range": {
+          "start": {
+            "line": 63,
+            "character": 6
+          },
+          "end": {
+            "line": 63,
+            "character": 18
+          }
+        }
+      },
+      "verbosityLevel": 0
+    }
+  },
+  {
+    "marker": {
+      "Position": 2092,
+      "LSPosition": {
+        "line": 64,
+        "character": 19
+      },
+      "Name": "nestedGeneric",
+      "Data": {}
+    },
+    "item": {
+      "hover": {
+        "contents": {
+          "kind": "markdown",
+          "value": "```typescript\n(method) nested<boolean>(inner: boolean): {\n    outer: number;\n    inner: boolean;\n    owner: {\n        make<T>(outer: T): {\n            nested<U>(inner: U): {\n                outer: T;\n                inner: U;\n                owner: typeof nestedOwner;\n            };\n            constrained<U extends T = T>(inner: U): {\n                outer: T;\n                inner: U;\n                owner: typeof nestedOwner;\n            };\n            copied<U>(inner: U): {\n                outer: T;\n                inner: U;\n                owner: typeof nestedOwner;\n            };\n            rest<U>(values_0: U): {\n                outer: T;\n                inner: U;\n                owner: typeof nestedOwner;\n            };\n        };\n    };\n}\n```\n"
+        },
+        "range": {
+          "start": {
+            "line": 64,
+            "character": 13
+          },
+          "end": {
+            "line": 64,
+            "character": 19
+          }
+        }
+      },
+      "verbosityLevel": 0
+    }
+  },
+  {
+    "marker": {
+      "Position": 2109,
+      "LSPosition": {
+        "line": 64,
+        "character": 36
+      },
+      "Name": "nestedOwnerMake",
+      "Data": {}
+    },
+    "item": {
+      "hover": {
+        "contents": {
+          "kind": "markdown",
+          "value": "```typescript\n(method) make<string>(outer: string): {\n    nested<U>(inner: U): {\n        outer: string;\n        inner: U;\n        owner: {\n            make<T>(outer: T): {\n                nested<U>(inner: U): {\n                    outer: T;\n                    inner: U;\n                    owner: typeof nestedOwner;\n                };\n                constrained<U extends T = T>(inner: U): {\n                    outer: T;\n                    inner: U;\n                    owner: typeof nestedOwner;\n                };\n                copied<U>(inner: U): {\n                    outer: T;\n                    inner: U;\n                    owner: typeof nestedOwner;\n                };\n                rest<U>(values_0: U): {\n                    outer: T;\n                    inner: U;\n                    owner: typeof nestedOwner;\n                };\n            };\n        };\n    };\n    constrained<U>(inner: U): {\n        outer: string;\n        inner: U;\n        owner: {\n            make<T>(outer: T): {\n                nested<U>(inner: U): {\n                    outer: T;\n                    inner: U;\n                    owner: typeof nestedOwner;\n                };\n                constrained<U extends T = T>(inner: U): ...;\n                copied<U>(inner: U): {\n                    outer: T;\n                    inner: U;\n                    owner: typeof nestedOwner;\n                };\n                rest<U>(values_0: U): ...;\n            };\n        };\n    };\n    copied<U>(inner: U): ...;\n    rest<U>(values_0: U): ...;\n}\n```\n"
+        },
+        "range": {
+          "start": {
+            "line": 64,
+            "character": 32
+          },
+          "end": {
+            "line": 64,
+            "character": 36
+          }
+        }
+      },
+      "verbosityLevel": 0
+    }
+  },
+  {
+    "marker": {
+      "Position": 2143,
+      "LSPosition": {
+        "line": 65,
+        "character": 24
+      },
+      "Name": "nestedConstrained",
+      "Data": {}
+    },
+    "item": {
+      "hover": {
+        "contents": {
+          "kind": "markdown",
+          "value": "```typescript\n(method) constrained<2>(inner: 2): {\n    outer: number;\n    inner: 2;\n    owner: {\n        make<T>(outer: T): {\n            nested<U>(inner: U): {\n                outer: T;\n                inner: U;\n                owner: typeof nestedOwner;\n            };\n            constrained<U extends T = T>(inner: U): {\n                outer: T;\n                inner: U;\n                owner: typeof nestedOwner;\n            };\n            copied<U>(inner: U): {\n                outer: T;\n                inner: U;\n                owner: typeof nestedOwner;\n            };\n            rest<U>(values_0: U): {\n                outer: T;\n                inner: U;\n                owner: typeof nestedOwner;\n            };\n        };\n    };\n}\n```\n"
+        },
+        "range": {
+          "start": {
+            "line": 65,
+            "character": 13
+          },
+          "end": {
+            "line": 65,
+            "character": 24
+          }
+        }
+      },
+      "verbosityLevel": 0
+    }
+  },
+  {
+    "marker": {
+      "Position": 2167,
+      "LSPosition": {
+        "line": 66,
+        "character": 19
+      },
+      "Name": "nestedCopied",
+      "Data": {}
+    },
+    "item": {
+      "hover": {
+        "contents": {
+          "kind": "markdown",
+          "value": "```typescript\n(method) copied<string>(inner: string): {\n    outer: number;\n    inner: string;\n    owner: typeof nestedOwner;\n}\n```\n"
+        },
+        "range": {
+          "start": {
+            "line": 66,
+            "character": 13
+          },
+          "end": {
+            "line": 66,
+            "character": 19
+          }
+        }
+      },
+      "verbosityLevel": 0
+    }
+  },
+  {
+    "marker": {
+      "Position": 2195,
+      "LSPosition": {
+        "line": 67,
+        "character": 17
+      },
+      "Name": "nestedRest",
+      "Data": {}
+    },
+    "item": {
+      "hover": {
+        "contents": {
+          "kind": "markdown",
+          "value": "```typescript\n(method) rest<boolean>(values_0: boolean): {\n    outer: number;\n    inner: boolean;\n    owner: {\n        make<T>(outer: T): {\n            nested<U>(inner: U): {\n                outer: T;\n                inner: U;\n                owner: typeof nestedOwner;\n            };\n            constrained<U extends T = T>(inner: U): {\n                outer: T;\n                inner: U;\n                owner: typeof nestedOwner;\n            };\n            copied<U>(inner: U): {\n                outer: T;\n                inner: U;\n                owner: typeof nestedOwner;\n            };\n            rest<U>(values_0: U): {\n                outer: T;\n                inner: U;\n                owner: typeof nestedOwner;\n            };\n        };\n    };\n}\n```\n"
+        },
+        "range": {
+          "start": {
+            "line": 67,
+            "character": 13
+          },
+          "end": {
+            "line": 67,
+            "character": 17
+          }
+        }
+      },
+      "verbosityLevel": 0
+    }
+  },
+  {
+    "marker": {
+      "Position": 2428,
+      "LSPosition": {
+        "line": 73,
+        "character": 10
+      },
+      "Name": "reusedDeclaration",
+      "Data": {}
+    },
+    "item": {
+      "hover": {
+        "contents": {
+          "kind": "markdown",
+          "value": "```typescript\nconst copy: {\n    first<T>(values_0: T): {\n        value: T;\n        next: typeof reused;\n    };\n    second<T>(value: T): {\n        value: T;\n        next: typeof reused;\n    };\n    shadowed<T>(reused: T): {\n        value: T;\n        next: typeof reused;\n    };\n}\n```\n"
+        },
+        "range": {
+          "start": {
+            "line": 73,
+            "character": 6
+          },
+          "end": {
+            "line": 73,
+            "character": 10
+          }
+        }
+      },
+      "verbosityLevel": 0
+    }
+  },
+  {
+    "marker": {
+      "Position": 2449,
+      "LSPosition": {
+        "line": 74,
+        "character": 10
+      },
+      "Name": "reusedFirst",
+      "Data": {}
+    },
+    "item": {
+      "hover": {
+        "contents": {
+          "kind": "markdown",
+          "value": "```typescript\n(method) first<number>(values_0: number): {\n    value: number;\n    next: typeof reused;\n}\n```\n"
+        },
+        "range": {
+          "start": {
+            "line": 74,
+            "character": 5
+          },
+          "end": {
+            "line": 74,
+            "character": 10
+          }
+        }
+      },
+      "verbosityLevel": 0
+    }
+  },
+  {
+    "marker": {
+      "Position": 2467,
+      "LSPosition": {
+        "line": 75,
+        "character": 13
+      },
+      "Name": "reusedShadowed",
+      "Data": {}
+    },
+    "item": {
+      "hover": {
+        "contents": {
+          "kind": "markdown",
+          "value": "```typescript\n(method) shadowed<number>(reused: number): {\n    value: number;\n    next: number;\n}\n```\n"
+        },
+        "range": {
+          "start": {
+            "line": 75,
+            "character": 5
+          },
+          "end": {
+            "line": 75,
+            "character": 13
+          }
+        }
+      },
+      "verbosityLevel": 0
+    }
+  }
+]

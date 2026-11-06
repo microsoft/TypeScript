@@ -5,7 +5,8 @@ Input::
 import ky from 'ky';
 export const api = ky.extend({});
 //// [/home/src/workspaces/project/node_modules/ky/distribution/index.d.ts] *new* 
-type KyInstance = {
+declare class KyInstance {
+    private brand;
     extend(options: Record<string,unknown>): KyInstance;
 }
 declare const ky: KyInstance;
@@ -43,10 +44,14 @@ Output::
 
 [[90mHH:MM:SS AM[0m] Building project 'tsconfig.json'...
 
-[96mindex.ts[0m:[93m2[0m:[93m14[0m - [91merror[0m[90m TS4023: [0mExported variable 'api' has or is using name 'KyInstance' from external module "/home/src/workspaces/project/node_modules/ky/distribution/index" but cannot be named.
+[96mindex.ts[0m:[93m2[0m:[93m14[0m - [91merror[0m[90m TS4094: [0mProperty 'brand' of exported anonymous class type may not be private or protected.
 
 [7m2[0m export const api = ky.extend({});
 [7m [0m [91m             ~~~[0m
+
+  [96mindex.ts[0m:[93m2[0m:[93m14[0m - Add a type annotation to the variable api.
+    [7m2[0m export const api = ky.extend({});
+    [7m [0m [96m             ~~~[0m
 
 TSFILE: /home/src/workspaces/project/index.js
 TSFILE: /home/src/workspaces/project/tsconfig.tsbuildinfo
@@ -134,10 +139,14 @@ Output::
 
 [[90mHH:MM:SS AM[0m] Building project 'tsconfig.json'...
 
-[96mindex.ts[0m:[93m2[0m:[93m14[0m - [91merror[0m[90m TS4023: [0mExported variable 'api' has or is using name 'KyInstance' from external module "/home/src/workspaces/project/node_modules/ky/distribution/index" but cannot be named.
+[96mindex.ts[0m:[93m2[0m:[93m14[0m - [91merror[0m[90m TS4094: [0mProperty 'brand' of exported anonymous class type may not be private or protected.
 
 [7m2[0m export const api = ky.extend({});
 [7m [0m [91m             ~~~[0m
+
+  [96mindex.ts[0m:[93m2[0m:[93m14[0m - Add a type annotation to the variable api.
+    [7m2[0m export const api = ky.extend({});
+    [7m [0m [96m             ~~~[0m
 
 TSFILE: /home/src/workspaces/project/index.js
 TSFILE: /home/src/workspaces/project/tsconfig.tsbuildinfo
