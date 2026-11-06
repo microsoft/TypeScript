@@ -3,9 +3,11 @@ package scanner
 import (
 	"strings"
 	"testing"
+	"unicode/utf8"
 
 	"github.com/microsoft/TypeScript/tsc/internal/ast"
 	"github.com/microsoft/TypeScript/tsc/internal/core"
+	"github.com/microsoft/TypeScript/tsc/internal/diagnostics"
 	"github.com/microsoft/TypeScript/tsc/internal/stringutil"
 	"gotest.tools/v3/assert"
 )
@@ -123,5 +125,51 @@ func TestLookupKeywordMatchesKeywordMap(t *testing.T) {
 	for _, text := range []string{"", "a", "\x00\x00", "élse"} {
 		assert.Equal(t, lookupKeyword(text), ast.KindUnknown, text)
 		assert.Equal(t, GetIdentifierToken(text), ast.KindIdentifier, text)
+	}
+}
+
+// https://github.com/microsoft/TypeScript/issues/65076
+// A literal U+FFFD in a regex character-class range must not be mistaken for
+// utf8.RuneError (which is the same code point, but only signals invalid UTF-8
+// when DecodeRune returns size 1).
+func TestRegExpLiteralReplacementCharacterInClassRange(t *testing.T) {
+	t.Parallel()
+
+	fffd := string(utf8.RuneError) // U+FFFD, encoded as the 3-byte UTF-8 sequence
+	assert.Equal(t, len(fffd), 3)
+
+	tests := []struct {
+		name string
+		text string
+	}{
+		{name: "range ending in literal U+FFFD", text: `export const r = /[\uFFF9-` + fffd + `]/;`},
+		{name: "range ending in literal U+FFFD with u flag", text: `export const r = /[\uFFF9-` + fffd + `]/u;`},
+		{name: "escaped U+FFFD range end", text: `export const r = /[\uFFF9-\uFFFD]/;`},
+		{name: "lone literal U+FFFD", text: `export const r = /` + fffd + `/;`},
+		{name: "range starting with literal U+FFFD", text: `export const r = /[` + fffd + `-\uFFFF]/;`},
+	}
+
+	for _, test := range tests {
+		t.Run(test.name, func(t *testing.T) {
+			t.Parallel()
+			s := NewScanner()
+			var codes []int32
+			s.SetOnError(func(d *diagnostics.Message, start, length int, args ...any) {
+				codes = append(codes, d.Code())
+			})
+			s.SetText(test.text)
+			for {
+				tok := s.Scan()
+				if tok == ast.KindSlashToken || tok == ast.KindSlashEqualsToken {
+					tok = s.ReScanSlashToken(true)
+				}
+				if tok == ast.KindEndOfFile {
+					break
+				}
+			}
+			for _, code := range codes {
+				assert.Assert(t, code != 1516 && code != 1517, "unexpected regex character-class diagnostic %d for %q (got %v)", code, test.text, codes)
+			}
+		})
 	}
 }

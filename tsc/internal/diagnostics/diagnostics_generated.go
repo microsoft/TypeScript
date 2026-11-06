@@ -36,8 +36,6 @@ var An_index_signature_parameter_cannot_have_a_question_mark = &Message{code: 10
 
 var An_index_signature_parameter_cannot_have_an_initializer = &Message{code: 1020, category: CategoryError, key: "An_index_signature_parameter_cannot_have_an_initializer_1020", text: "An index signature parameter cannot have an initializer."}
 
-var An_index_signature_must_have_a_type_annotation = &Message{code: 1021, category: CategoryError, key: "An_index_signature_must_have_a_type_annotation_1021", text: "An index signature must have a type annotation."}
-
 var An_index_signature_parameter_must_have_a_type_annotation = &Message{code: 1022, category: CategoryError, key: "An_index_signature_parameter_must_have_a_type_annotation_1022", text: "An index signature parameter must have a type annotation."}
 
 var X_readonly_modifier_can_only_appear_on_a_property_declaration_or_index_signature = &Message{code: 1024, category: CategoryError, key: "readonly_modifier_can_only_appear_on_a_property_declaration_or_index_signature_1024", text: "'readonly' modifier can only appear on a property declaration or index signature."}
@@ -746,7 +744,7 @@ var X_0_resolves_to_a_type_only_declaration_and_must_be_re_exported_using_a_type
 
 var Preserve_unused_imported_values_in_the_JavaScript_output_that_would_otherwise_be_removed = &Message{code: 1449, category: CategoryMessage, key: "Preserve_unused_imported_values_in_the_JavaScript_output_that_would_otherwise_be_removed_1449", text: "Preserve unused imported values in the JavaScript output that would otherwise be removed."}
 
-var Dynamic_imports_can_only_accept_a_module_specifier_and_an_optional_set_of_attributes_as_arguments = &Message{code: 1450, category: CategoryMessage, key: "Dynamic_imports_can_only_accept_a_module_specifier_and_an_optional_set_of_attributes_as_arguments_1450", text: "Dynamic imports can only accept a module specifier and an optional set of attributes as arguments"}
+var Dynamic_imports_can_only_accept_a_module_specifier_and_an_optional_set_of_attributes_as_arguments = &Message{code: 1450, category: CategoryError, key: "Dynamic_imports_can_only_accept_a_module_specifier_and_an_optional_set_of_attributes_as_arguments_1450", text: "Dynamic imports can only accept a module specifier and an optional set of attributes as arguments"}
 
 var Private_identifiers_are_only_allowed_in_class_bodies_and_may_only_be_used_as_part_of_a_class_member_declaration_property_access_or_on_the_left_hand_side_of_an_in_expression = &Message{code: 1451, category: CategoryError, key: "Private_identifiers_are_only_allowed_in_class_bodies_and_may_only_be_used_as_part_of_a_class_member__1451", text: "Private identifiers are only allowed in class bodies and may only be used as part of a class member declaration, property access, or on the left-hand-side of an 'in' expression"}
 
@@ -3318,6 +3316,8 @@ var Enable_lib_replacement = &Message{code: 6808, category: CategoryMessage, key
 
 var Ensure_types_are_ordered_stably_and_deterministically_across_compilations = &Message{code: 6809, category: CategoryMessage, key: "Ensure_types_are_ordered_stably_and_deterministically_across_compilations_6809", text: "Ensure types are ordered stably and deterministically across compilations."}
 
+var Disable_runtime_rewriting_of_file_extensions_in_non_literal_import_and_require_calls_when_rewriteRelativeImportExtensions_is_enabled = &Message{code: 6810, category: CategoryMessage, key: "Disable_runtime_rewriting_of_file_extensions_in_non_literal_import_and_require_calls_when_rewriteRel_6810", text: "Disable runtime rewriting of file extensions in non-literal 'import()' and 'require()' calls when 'rewriteRelativeImportExtensions' is enabled."}
+
 var X_one_of_Colon = &Message{code: 6900, category: CategoryMessage, key: "one_of_Colon_6900", text: "one of:"}
 
 var X_one_or_more_Colon = &Message{code: 6901, category: CategoryMessage, key: "one_or_more_Colon_6901", text: "one or more:"}
@@ -3505,6 +3505,8 @@ var This_syntax_is_reserved_in_files_with_the_mts_or_cts_extension_Use_an_as_exp
 var This_syntax_is_reserved_in_files_with_the_mts_or_cts_extension_Add_a_trailing_comma_or_explicit_constraint = &Message{code: 7060, category: CategoryError, key: "This_syntax_is_reserved_in_files_with_the_mts_or_cts_extension_Add_a_trailing_comma_or_explicit_cons_7060", text: "This syntax is reserved in files with the .mts or .cts extension. Add a trailing comma or explicit constraint."}
 
 var A_mapped_type_may_not_declare_properties_or_methods = &Message{code: 7061, category: CategoryError, key: "A_mapped_type_may_not_declare_properties_or_methods_7061", text: "A mapped type may not declare properties or methods."}
+
+var Index_signature_which_lacks_type_annotation_implicitly_has_an_any_type = &Message{code: 7062, category: CategoryError, key: "Index_signature_which_lacks_type_annotation_implicitly_has_an_any_type_7062", text: "Index signature, which lacks type annotation, implicitly has an 'any' type."}
 
 var Declaration_emit_elides_private_members_but_0_refers_to_a_private_member_Write_an_explicit_type_here = &Message{code: 7080, category: CategoryError, key: "Declaration_emit_elides_private_members_but_0_refers_to_a_private_member_Write_an_explicit_type_here_7080", text: "Declaration emit elides private members, but '{0}' refers to a private member. Write an explicit type here."}
 
@@ -4480,7 +4482,6 @@ var allMessages = [...]**Message{
 	&An_index_signature_parameter_cannot_have_an_accessibility_modifier,
 	&An_index_signature_parameter_cannot_have_a_question_mark,
 	&An_index_signature_parameter_cannot_have_an_initializer,
-	&An_index_signature_must_have_a_type_annotation,
 	&An_index_signature_parameter_must_have_a_type_annotation,
 	&X_readonly_modifier_can_only_appear_on_a_property_declaration_or_index_signature,
 	&An_index_signature_cannot_have_a_trailing_comma,
@@ -6121,6 +6122,7 @@ var allMessages = [...]**Message{
 	&This_operation_can_be_simplified_This_shift_is_identical_to_0_1_2,
 	&Enable_lib_replacement,
 	&Ensure_types_are_ordered_stably_and_deterministically_across_compilations,
+	&Disable_runtime_rewriting_of_file_extensions_in_non_literal_import_and_require_calls_when_rewriteRelativeImportExtensions_is_enabled,
 	&X_one_of_Colon,
 	&X_one_or_more_Colon,
 	&X_type_Colon,
@@ -6215,6 +6217,7 @@ var allMessages = [...]**Message{
 	&This_syntax_is_reserved_in_files_with_the_mts_or_cts_extension_Use_an_as_expression_instead,
 	&This_syntax_is_reserved_in_files_with_the_mts_or_cts_extension_Add_a_trailing_comma_or_explicit_constraint,
 	&A_mapped_type_may_not_declare_properties_or_methods,
+	&Index_signature_which_lacks_type_annotation_implicitly_has_an_any_type,
 	&Declaration_emit_elides_private_members_but_0_refers_to_a_private_member_Write_an_explicit_type_here,
 	&You_cannot_rename_this_element,
 	&You_cannot_rename_elements_that_are_defined_in_the_standard_TypeScript_library,

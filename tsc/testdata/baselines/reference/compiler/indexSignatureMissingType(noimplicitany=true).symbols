@@ -1,0 +1,147 @@
+//// [tests/cases/compiler/indexSignatureMissingType.ts] ////
+
+=== indexSignatureMissingType.ts ===
+export interface I {
+>I : Symbol(I, Decl(indexSignatureMissingType.ts, 0, 0))
+
+    [key: string];
+>key : Symbol(key, Decl(indexSignatureMissingType.ts, 1, 5))
+}
+
+export class C {
+>C : Symbol(C, Decl(indexSignatureMissingType.ts, 2, 1))
+
+    readonly [key: number];
+>key : Symbol(key, Decl(indexSignatureMissingType.ts, 5, 14))
+}
+
+export type T = {
+>T : Symbol(T, Decl(indexSignatureMissingType.ts, 6, 1))
+
+    [key: string]
+>key : Symbol(key, Decl(indexSignatureMissingType.ts, 9, 5))
+
+    property: number;
+>property : Symbol(property, Decl(indexSignatureMissingType.ts, 9, 17))
+
+};
+
+export interface NumberIndex { [key: number]; }
+>NumberIndex : Symbol(NumberIndex, Decl(indexSignatureMissingType.ts, 11, 2))
+>key : Symbol(key, Decl(indexSignatureMissingType.ts, 13, 32))
+
+export interface SymbolIndex { [key: symbol]; }
+>SymbolIndex : Symbol(SymbolIndex, Decl(indexSignatureMissingType.ts, 13, 47))
+>key : Symbol(key, Decl(indexSignatureMissingType.ts, 14, 32))
+
+export interface TemplateIndex { [key: `prefix-${string}`]; }
+>TemplateIndex : Symbol(TemplateIndex, Decl(indexSignatureMissingType.ts, 14, 47))
+>key : Symbol(key, Decl(indexSignatureMissingType.ts, 15, 34))
+
+export interface ExplicitAny { [key: string]: any; }
+>ExplicitAny : Symbol(ExplicitAny, Decl(indexSignatureMissingType.ts, 15, 61))
+>key : Symbol(key, Decl(indexSignatureMissingType.ts, 16, 32))
+
+export interface ExplicitUnknown { [key: string]: unknown; }
+>ExplicitUnknown : Symbol(ExplicitUnknown, Decl(indexSignatureMissingType.ts, 16, 52))
+>key : Symbol(key, Decl(indexSignatureMissingType.ts, 17, 36))
+
+declare const value: I;
+>value : Symbol(value, Decl(indexSignatureMissingType.ts, 19, 13))
+>I : Symbol(I, Decl(indexSignatureMissingType.ts, 0, 0))
+
+export const asNumber: number = value.anyKey;
+>asNumber : Symbol(asNumber, Decl(indexSignatureMissingType.ts, 20, 12))
+>value.anyKey : Symbol(I.__index, Decl(indexSignatureMissingType.ts, 0, 20))
+>value : Symbol(value, Decl(indexSignatureMissingType.ts, 19, 13))
+>anyKey : Symbol(I.__index, Decl(indexSignatureMissingType.ts, 0, 20))
+
+export const asString: string = value.anyKey;
+>asString : Symbol(asString, Decl(indexSignatureMissingType.ts, 21, 12))
+>value.anyKey : Symbol(I.__index, Decl(indexSignatureMissingType.ts, 0, 20))
+>value : Symbol(value, Decl(indexSignatureMissingType.ts, 19, 13))
+>anyKey : Symbol(I.__index, Decl(indexSignatureMissingType.ts, 0, 20))
+
+export const indexedValue = value.anyKey;
+>indexedValue : Symbol(indexedValue, Decl(indexSignatureMissingType.ts, 22, 12))
+>value.anyKey : Symbol(I.__index, Decl(indexSignatureMissingType.ts, 0, 20))
+>value : Symbol(value, Decl(indexSignatureMissingType.ts, 19, 13))
+>anyKey : Symbol(I.__index, Decl(indexSignatureMissingType.ts, 0, 20))
+
+declare const instance: C;
+>instance : Symbol(instance, Decl(indexSignatureMissingType.ts, 24, 13))
+>C : Symbol(C, Decl(indexSignatureMissingType.ts, 2, 1))
+
+declare const numbers: NumberIndex;
+>numbers : Symbol(numbers, Decl(indexSignatureMissingType.ts, 25, 13))
+>NumberIndex : Symbol(NumberIndex, Decl(indexSignatureMissingType.ts, 11, 2))
+
+declare const symbols: SymbolIndex;
+>symbols : Symbol(symbols, Decl(indexSignatureMissingType.ts, 26, 13))
+>SymbolIndex : Symbol(SymbolIndex, Decl(indexSignatureMissingType.ts, 13, 47))
+
+declare const templates: TemplateIndex;
+>templates : Symbol(templates, Decl(indexSignatureMissingType.ts, 27, 13))
+>TemplateIndex : Symbol(TemplateIndex, Decl(indexSignatureMissingType.ts, 14, 47))
+
+export const classValue = instance[0];
+>classValue : Symbol(classValue, Decl(indexSignatureMissingType.ts, 28, 12))
+>instance : Symbol(instance, Decl(indexSignatureMissingType.ts, 24, 13))
+
+export const numberValue = numbers[0];
+>numberValue : Symbol(numberValue, Decl(indexSignatureMissingType.ts, 29, 12))
+>numbers : Symbol(numbers, Decl(indexSignatureMissingType.ts, 25, 13))
+
+export const symbolValue = symbols[Symbol.iterator];
+>symbolValue : Symbol(symbolValue, Decl(indexSignatureMissingType.ts, 30, 12))
+>symbols : Symbol(symbols, Decl(indexSignatureMissingType.ts, 26, 13))
+>Symbol.iterator : Symbol(SymbolConstructor.iterator, Decl(lib.es2015.iterable.d.ts, --, --))
+>Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2019.symbol.d.ts, --, --))
+>iterator : Symbol(SymbolConstructor.iterator, Decl(lib.es2015.iterable.d.ts, --, --))
+
+export const templateValue = templates["prefix-foo"];
+>templateValue : Symbol(templateValue, Decl(indexSignatureMissingType.ts, 31, 12))
+>templates : Symbol(templates, Decl(indexSignatureMissingType.ts, 27, 13))
+
+instance[0] = 1;
+>instance : Symbol(instance, Decl(indexSignatureMissingType.ts, 24, 13))
+
+interface OptionalParameter {
+>OptionalParameter : Symbol(OptionalParameter, Decl(indexSignatureMissingType.ts, 32, 16))
+
+    [key?: string];
+>key : Symbol(key, Decl(indexSignatureMissingType.ts, 35, 5))
+}
+
+interface RestParameter {
+>RestParameter : Symbol(RestParameter, Decl(indexSignatureMissingType.ts, 36, 1))
+
+    [...key: string[]];
+>key : Symbol(key, Decl(indexSignatureMissingType.ts, 39, 5))
+}
+
+interface MultipleParameters {
+>MultipleParameters : Symbol(MultipleParameters, Decl(indexSignatureMissingType.ts, 40, 1))
+
+    [key: string, other: number];
+>key : Symbol(key, Decl(indexSignatureMissingType.ts, 43, 5))
+>other : Symbol(other, Decl(indexSignatureMissingType.ts, 43, 17))
+}
+
+interface InvalidKey {
+>InvalidKey : Symbol(InvalidKey, Decl(indexSignatureMissingType.ts, 44, 1))
+
+    [key: boolean];
+>key : Symbol(key, Decl(indexSignatureMissingType.ts, 47, 5))
+}
+
+// @ts-ignore
+interface Ignored { [key: string]; }
+>Ignored : Symbol(Ignored, Decl(indexSignatureMissingType.ts, 48, 1))
+>key : Symbol(key, Decl(indexSignatureMissingType.ts, 51, 21))
+
+// @ts-expect-error
+interface Expected { [key: boolean]; }
+>Expected : Symbol(Expected, Decl(indexSignatureMissingType.ts, 51, 36))
+>key : Symbol(key, Decl(indexSignatureMissingType.ts, 54, 22))
+
