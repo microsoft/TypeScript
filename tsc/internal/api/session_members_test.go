@@ -134,7 +134,7 @@ func TestGetMembersOfTypeCombinesPredicatesLikeATraversal(t *testing.T) {
 		Filter: MemberFilter{
 			Visibility:           []string{"public", "protected"},
 			ExcludeJsDocTags:     []string{"internal", "deprecated"},
-			ExcludeNamePattern:   ptr("^_"),
+			ExcludeNamePattern:   new("^_"),
 			IncludeInheritedFrom: &InheritedMemberFilter{},
 			IncludeDeclaredType:  true,
 		},
@@ -194,7 +194,7 @@ func TestGetMembersOfTypeInheritedFromAndKinds(t *testing.T) {
 		Type:     instanceType.Id,
 		Filter: MemberFilter{
 			Visibility:           []string{"public", "protected"},
-			ExcludeNamePattern:   ptr("^_"),
+			ExcludeNamePattern:   new("^_"),
 			IncludeInheritedFrom: &InheritedMemberFilter{DeclaringTypes: []SymbolReference{base.Reference}},
 		},
 	})
@@ -262,7 +262,7 @@ func TestGetMembersOfTypeInheritedFromAndKinds(t *testing.T) {
 		Snapshot: ctx.snapshot,
 		Project:  ctx.project,
 		Type:     instanceType.Id,
-		Filter:   MemberFilter{ExcludeNamePattern: ptr("(")},
+		Filter:   MemberFilter{ExcludeNamePattern: new("(")},
 	})
 	assert.ErrorContains(t, err, "invalid excludeNamePattern")
 }
@@ -305,8 +305,6 @@ func TestGetSymbolDocumentationsMatchesIndividualCalls(t *testing.T) {
 		}
 	}
 }
-
-func ptr[T any](v T) *T { return &v }
 
 // The shapes the review of the first version found missing: members without a
 // declaration, accessor pairs declared setter-first, auto-accessors, and the
@@ -362,7 +360,7 @@ func TestGetMembersOfTypeEmptyNamePatternIsNotAbsent(t *testing.T) {
 	all := ctx.membersOf(t, order, MemberFilter{})
 	assert.DeepEqual(t, memberNames(all), []string{"x", "auto", "plain"})
 	assert.DeepEqual(t, memberNames(ctx.membersOf(t, order, MemberFilter{ExcludeNamePattern: nil})), memberNames(all))
-	assert.Equal(t, len(ctx.membersOf(t, order, MemberFilter{ExcludeNamePattern: ptr("")})), 0, "the empty pattern matches every name")
+	assert.Equal(t, len(ctx.membersOf(t, order, MemberFilter{ExcludeNamePattern: new("")})), 0, "the empty pattern matches every name")
 }
 
 func TestGetMembersOfTypeReadVisibilityOfAccessorPairs(t *testing.T) {
