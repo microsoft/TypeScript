@@ -1,0 +1,34 @@
+//// [tests/cases/compiler/objectLiteralBigIntMethodDeclarationEmit.ts] ////
+
+=== objectLiteralBigIntMethodDeclarationEmit.ts ===
+export const foo = {
+>foo : Symbol(foo, Decl(objectLiteralBigIntMethodDeclarationEmit.ts, 0, 12))
+
+    1n() {
+>1n : Symbol(1n, Decl(objectLiteralBigIntMethodDeclarationEmit.ts, 0, 20))
+
+        return 1;
+    },
+    2() {
+>2 : Symbol(2, Decl(objectLiteralBigIntMethodDeclarationEmit.ts, 3, 6))
+
+        return 2;
+    }
+};
+
+export class Foo {
+>Foo : Symbol(Foo, Decl(objectLiteralBigIntMethodDeclarationEmit.ts, 7, 2))
+
+    1n() {
+>1n : Symbol(Foo[1n], Decl(objectLiteralBigIntMethodDeclarationEmit.ts, 9, 18))
+
+        return 1;
+    }
+    2() {
+>2 : Symbol(Foo[2], Decl(objectLiteralBigIntMethodDeclarationEmit.ts, 12, 5))
+
+        return 2;
+    }
+}
+
+
