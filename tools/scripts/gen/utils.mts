@@ -80,7 +80,7 @@ export interface RunOptions {
     signal?: AbortSignal;
 }
 
-export function formatCommandArg(arg: string) {
+function formatCommandArg(arg: string) {
     return arg && /^[\w@%+=:,./-]+$/.test(arg) ? arg : JSON.stringify(arg);
 }
 
@@ -99,7 +99,7 @@ export async function run(command: string, args: readonly string[] = [], options
     );
 }
 
-export function globInputs(patterns: string[], exclude: string[] = []): string[] {
+function globInputs(patterns: string[], exclude: string[] = []): string[] {
     return fs.globSync(patterns, { cwd: repoRoot, exclude }).map(file => path.join(repoRoot, file));
 }
 

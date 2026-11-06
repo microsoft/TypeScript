@@ -180,14 +180,14 @@ function lastOrUndefined<T>(array: T[]): T | undefined {
 /**
  * Determines whether a path has a trailing separator (`/` or `\\`).
  */
-export function hasTrailingDirectorySeparator(path: string): boolean {
+function hasTrailingDirectorySeparator(path: string): boolean {
     return path.length > 0 && isAnyDirectorySeparator(path.charCodeAt(path.length - 1));
 }
 
 /**
  * Removes a trailing directory separator from a path, if it does not already have one.
  */
-export function removeTrailingDirectorySeparator(path: string): string {
+function removeTrailingDirectorySeparator(path: string): string {
     if (hasTrailingDirectorySeparator(path)) {
         return path.substr(0, path.length - 1);
     }
@@ -197,7 +197,7 @@ export function removeTrailingDirectorySeparator(path: string): string {
 /**
  * Adds a trailing directory separator to a path, if it does not already have one.
  */
-export function ensureTrailingDirectorySeparator(path: string): string {
+function ensureTrailingDirectorySeparator(path: string): string {
     if (!hasTrailingDirectorySeparator(path)) {
         return path + directorySeparator;
     }
@@ -207,7 +207,7 @@ export function ensureTrailingDirectorySeparator(path: string): string {
 /**
  * Normalize path separators, converting `\\` into `/`.
  */
-export function normalizeSlashes(path: string): string {
+function normalizeSlashes(path: string): string {
     return path.includes("\\")
         ? path.replace(backslashRegExp, directorySeparator)
         : path;
@@ -216,7 +216,7 @@ export function normalizeSlashes(path: string): string {
 /**
  * Combines paths. If a path is absolute, it replaces any previous path. Relative paths are not simplified.
  */
-export function combinePaths(path: string, ...paths: (string | undefined)[]): string {
+function combinePaths(path: string, ...paths: (string | undefined)[]): string {
     if (path) path = normalizeSlashes(path);
     for (let relativePath of paths) {
         if (!relativePath) continue;
@@ -253,7 +253,7 @@ function simpleNormalizePath(path: string): string | undefined {
 /**
  * Returns the normalized absolute path, resolving `.` and `..` segments.
  */
-export function getNormalizedAbsolutePath(path: string, currentDirectory: string | undefined): string {
+function getNormalizedAbsolutePath(path: string, currentDirectory: string | undefined): string {
     let rootLength = getRootLength(path);
     if (rootLength === 0 && currentDirectory) {
         path = combinePaths(currentDirectory, path);
@@ -364,7 +364,7 @@ export function normalizePath(path: string): string {
  * Determines whether a path is an absolute disk path (e.g. starts with `/`, or a DOS path
  * like `c:`, `c:\\` or `c:/`).
  */
-export function isRootedDiskPath(path: string): boolean {
+function isRootedDiskPath(path: string): boolean {
     return getEncodedRootLength(path) > 0;
 }
 
@@ -601,7 +601,7 @@ const dynamicURIPathSegmentEscapeRegExp = /(?:^|\/)(?:\.{1,2}(?:\/|$)|~ts-uri-es
 /**
  * Returns true if the path refers to a bundled library file.
  */
-export function isBundled(path: string): boolean {
+function isBundled(path: string): boolean {
     return path.startsWith(bundledScheme);
 }
 
@@ -609,7 +609,7 @@ export function isBundled(path: string): boolean {
  * Returns true if the file name represents a dynamic/virtual file
  * that doesn't exist on disk (e.g., untitled files with paths like "^/untitled/...").
  */
-export function isDynamicFileName(fileName: string): boolean {
+function isDynamicFileName(fileName: string): boolean {
     return fileName.startsWith("^/");
 }
 
@@ -617,7 +617,7 @@ export function isDynamicFileName(fileName: string): boolean {
  * Splits a Windows volume (e.g., "c:") from the rest of the path.
  * Returns [volume, rest, ok] where ok is true if a volume was found.
  */
-export function splitVolumePath(path: string): [volume: string, rest: string, ok: boolean] {
+function splitVolumePath(path: string): [volume: string, rest: string, ok: boolean] {
     if (path.length >= 2 && isVolumeCharacter(path.charCodeAt(0)) && path.charCodeAt(1) === CharacterCodesColon) {
         return [path.substring(0, 2).toLowerCase(), path.substring(2), true];
     }

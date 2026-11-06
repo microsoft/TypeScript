@@ -1,6 +1,6 @@
 import * as vscode from "vscode";
 import type { CancellationToken } from "vscode";
-import type { MessageSignature } from "vscode-languageserver-protocol";
+import type { MessageSignature } from "vscode-languageclient/node";
 import { isSupportedLanguageMode } from "./util";
 
 const supportedSchemes = new Set(["file", "untitled"]);

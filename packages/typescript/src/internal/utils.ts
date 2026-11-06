@@ -24,7 +24,7 @@ export interface MapLike<T> {
  * @param map A map-like.
  * @param key A property key.
  */
-export function hasProperty(map: MapLike<any>, key: string): boolean {
+function hasProperty(map: MapLike<any>, key: string): boolean {
     return hasOwnProperty.call(map, key);
 }
 
@@ -33,7 +33,7 @@ export function assertNever(member: never, message = "Illegal value:", stackCraw
     return fail(`${message} ${detail}`, stackCrawlMark || assertNever);
 }
 
-export function fail(message?: string, stackCrawlMark?: AnyFunction): never {
+function fail(message?: string, stackCrawlMark?: AnyFunction): never {
     // eslint-disable-next-line no-debugger
     debugger;
     const e = new Error(message ? `Debug Failure. ${message}` : "Debug Failure.");

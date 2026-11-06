@@ -476,7 +476,7 @@ function isUnaryExpressionKind(kind: SyntaxKind): boolean {
 }
 
 /** @internal */
-export function isOuterExpression(node: Node, kinds: OuterExpressionKinds = OuterExpressionKinds.All): node is OuterExpression {
+function isOuterExpression(node: Node, kinds: OuterExpressionKinds = OuterExpressionKinds.All): node is OuterExpression {
     switch (node.kind) {
         case SyntaxKind.ParenthesizedExpression:
             if (kinds & OuterExpressionKinds.ExcludeJSDocTypeAssertion && isJSDocTypeAssertion(node as ParenthesizedExpression)) {

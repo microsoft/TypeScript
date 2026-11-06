@@ -13,7 +13,6 @@ export const HEADER_OFFSET_STRUCTURED_DATA = 36;
 export const HEADER_OFFSET_NODES = 40;
 export const HEADER_OFFSET_SOURCE_FILE_ID = 44;
 export const HEADER_OFFSET_SOURCE_FILE_LEASE = 52;
-export const HEADER_OFFSET_BINDER_DATA = 60;
 export const HEADER_SIZE = 64;
 
 export const NODE_LEN = 28;
@@ -32,8 +31,5 @@ export const NODE_DATA_TYPE_CHILDREN = 0x00000000;
 export const NODE_DATA_TYPE_STRING = 0x40000000;
 export const NODE_DATA_TYPE_EXTENDED = 0x80000000;
 
-export const NODE_STRING_INDEX_MASK = 0x00FFFFFF;
-export const NODE_EXTENDED_DATA_MASK = 0x00FFFFFF;
-
 // Re-export generated child properties
-export { childProperties, singleChildNodePropertyNames } from "./protocol.generated.ts";
+export { childProperties } from "./protocol.generated.ts";

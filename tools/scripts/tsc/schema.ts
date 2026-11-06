@@ -783,7 +783,7 @@ export interface Schema {
  * Wraps the parsed ast.json schema and provides common query/resolution
  * methods used by both the Go and TS code generators.
  */
-export class SchemaAPI {
+class SchemaAPI {
     readonly schema: Schema;
     private readonly listAliasNameMap = new Map<string, string>();
     private readonly instantiationAliasMap = new Map<string, string>();

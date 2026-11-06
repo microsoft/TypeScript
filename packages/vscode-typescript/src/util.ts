@@ -11,7 +11,7 @@ import {
 export const aiConnectionString = "0c6ae279ed8443289764825290e4f9e2-1a736e7c-1324-4338-be46-fc2a58ae4d14-7255";
 
 export const languageClientName = "TypeScript Language Server";
-export const enableContributedNightlyVersion = true;
+const enableContributedNightlyVersion = true;
 
 export const jsTsLanguageModes = [
     "typescript",
@@ -20,7 +20,7 @@ export const jsTsLanguageModes = [
     "javascriptreact",
 ];
 
-export const builtinTSExtensionId = "vscode.typescript-language-features";
+const builtinTSExtensionId = "vscode.typescript-language-features";
 
 /**
  * URI schemes for which JS/TS language features should be disabled.
@@ -51,7 +51,7 @@ export interface ExeInfo {
 
 const packagedExeBaseNames = ["tsc", "tsgo"];
 
-export async function getBuiltinExePath(context: vscode.ExtensionContext): Promise<ExeInfo> {
+async function getBuiltinExePath(context: vscode.ExtensionContext): Promise<ExeInfo> {
     if (context.extensionMode === vscode.ExtensionMode.Development) {
         const exeName = `tsc${process.platform === "win32" ? ".exe" : ""}`;
         const exe = context.asAbsolutePath(path.join("../../", "built", "local", exeName));
@@ -69,7 +69,7 @@ export async function getBuiltinExePath(context: vscode.ExtensionContext): Promi
     return getPackagedExePath(context.extension.extensionUri);
 }
 
-export async function getNightlyExePath(): Promise<ExeInfo | undefined> {
+async function getNightlyExePath(): Promise<ExeInfo | undefined> {
     const extension = vscode.extensions.getExtension(nightlyExtensionId);
     if (!extension) {
         return undefined;
@@ -157,32 +157,6 @@ export async function getExe(context: vscode.ExtensionContext): Promise<ExeInfo>
     }
 
     return getDefaultExePath(context);
-}
-
-export async function hasTsdkConfigured(): Promise<boolean> {
-    return (await getTsdkCandidates({ nativeOnly: false })).length > 0;
-}
-
-export async function hasNativeTsdkConfigured(context: vscode.ExtensionContext): Promise<boolean> {
-    return await getTsdkServerKind(context) === "lsp";
-}
-
-export async function getTsdkServerKind(context: vscode.ExtensionContext): Promise<"lsp" | "tsserver" | undefined> {
-    for (const candidate of getTrustedTsdkCandidates(context, await getTsdkCandidates({ nativeOnly: false }))) {
-        const kind = await classifyTsdk(candidate.value);
-        if (kind) {
-            return kind;
-        }
-    }
-}
-
-async function classifyTsdk(tsdkPath: string): Promise<"lsp" | "tsserver" | undefined> {
-    if (await pathHasTsserverJs(tsdkPath)) {
-        return "tsserver";
-    }
-    if (await resolveTsdkPathToExe(tsdkPath)) {
-        return "lsp";
-    }
 }
 
 function getTrustedTsdkCandidates(context: vscode.ExtensionContext, tsdkCandidates: ExplicitConfigValue<string>[]): ExplicitConfigValue<string>[] {
@@ -432,9 +406,4 @@ export function readUnifiedConfig<T>(
 
 export function contentMappersEnabled(): boolean {
     return vscode.workspace.getConfiguration("js/ts").get<boolean>("contentMappers.enabled", true);
-}
-
-export interface PackageInfo {
-    name: string;
-    version: string;
 }

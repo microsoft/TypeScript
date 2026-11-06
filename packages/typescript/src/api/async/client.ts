@@ -44,8 +44,7 @@ import {
     type TransportClient,
 } from "./transportClient.ts";
 
-export type { AsyncClientOptions as ClientOptions, AsyncClientTransportOptions, ClientSocketOptions, ClientSpawnOptions } from "../options.ts";
-export type { AsyncTransport } from "./transport.ts";
+export type { ClientSocketOptions, ClientSpawnOptions } from "../options.ts";
 
 export type Client = TransportClient | RpcClient;
 
