@@ -162,7 +162,7 @@ test("cache commands track inputs, outputs, arguments, and failures", async cont
             inputs: ["input*.txt"],
             exclude: ["input-ignored.txt"],
             outputs: ["output.txt", "extra*.txt"],
-            envInputs: ["TSGO_CACHE_PROBE"],
+            envInputs: ["TS_CACHE_PROBE"],
             env,
             commands: [
                 ["generate"],
@@ -199,7 +199,7 @@ test("cache commands track inputs, outputs, arguments, and failures", async cont
     await assert.rejects(generate(" changed", true, true));
     assert.equal(await generate(" changed"), false);
     assert.equal(await generate(" changed"), true);
-    const environment = { TSGO_CACHE_PROBE: "changed" };
+    const environment = { TS_CACHE_PROBE: "changed" };
     assert.equal(await generate(" changed", false, false, environment), false);
     assert.equal(await generate(" changed", false, false, environment), true);
     assert.equal(await generate("--force"), false);

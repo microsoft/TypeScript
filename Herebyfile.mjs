@@ -76,7 +76,7 @@ function runOutput(command, args, options) {
  * @returns {boolean}
  */
 function parseEnvBoolean(name, defaultValue = false) {
-    name = "TSGO_HEREBY_" + name.toUpperCase();
+    name = "TS_HEREBY_" + name.toUpperCase();
 
     const value = process.env[name];
     if (!value) {
@@ -997,7 +997,7 @@ async function runTests() {
     try {
         const testEnv = {
             ...goTestEnv,
-            ...(trackingDir ? { TSGO_BASELINE_TRACKING_DIR: trackingDir } : {}),
+            ...(trackingDir ? { TS_BASELINE_TRACKING_DIR: trackingDir } : {}),
         };
         await gotestsumTool.run([...gotestsumArgs("tests"), "./...", ...(isCI ? ["--timeout=45m"] : [])], {
             env: testEnv,

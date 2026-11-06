@@ -14,7 +14,7 @@ import (
 	"time"
 )
 
-const privatePipeHelperEnv = "TSGO_PRIVATE_PIPE_HELPER"
+const privatePipeHelperEnv = "TS_PRIVATE_PIPE_HELPER"
 
 func TestPipeTransportClosePreservesReplacement(t *testing.T) {
 	t.Parallel()
