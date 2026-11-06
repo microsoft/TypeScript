@@ -131,16 +131,14 @@ const { values: rawOptions } = parseArgs({
  */
 const options = /** @type {Options} */ (rawOptions);
 
-// Native release branches can edit these constants to publish a fixed stable version.
+// Release branches can edit this constant to publish a fixed stable version.
 // Main publishes prerelease builds of the TypeScript package.
-const nativePreviewReleaseProfile = /** @type {"native-preview" | "typescript"} */ ("typescript");
 const nativePreviewReleaseVersion = /** @type {string | undefined} */ (undefined);
 const releaseVscodeTypescript = !!options.vscodeTypescriptRelease;
 const produceNativePreviewVsix = releaseVscodeTypescript;
 const produceTypeScriptNightlyVsix = !nativePreviewReleaseVersion && !releaseVscodeTypescript;
 const usePublishedPlatformPackagesForVsix = releaseVscodeTypescript;
 const produceAnyVsix = produceNativePreviewVsix || produceTypeScriptNightlyVsix;
-const publishAsTypescript = nativePreviewReleaseProfile === "typescript";
 
 if (releaseVscodeTypescript && options.setPrerelease) {
     throw new Error("vscode-typescript releases use the extension's package.json version and do not accept setPrerelease");
@@ -153,9 +151,6 @@ if (options.respectGoEnv && options.forRelease) {
 }
 if (options.respectGoEnv && options.setPrerelease) {
     throw new Error("respectGoEnv requires the version declared in the source");
-}
-if (releaseVscodeTypescript && !publishAsTypescript) {
-    throw new Error("vscode-typescript releases require nativePreviewReleaseProfile to be 'typescript'");
 }
 
 const defaultGoBuildTags = [
@@ -1901,17 +1896,14 @@ const getVersion = memoize(() => {
 });
 
 function getPublishTag() {
-    if (publishAsTypescript) {
-        const version = getVersion();
-        if (!version) {
-            throw new Error("Publishing as 'typescript' requires a version before selecting an npm tag.");
-        }
-        const match = version.match(/-(dev|beta|rc)(?:[.-]|$)/);
-        if (match?.[1]) return match[1] === "dev" ? "next" : match[1];
-        if (version === nativePreviewReleaseVersion && stableThreeComponentVersionPattern.test(version)) return "latest";
-        throw new Error(`Refusing to publish 'typescript' with the latest tag from non-release version ${version}.`);
+    const version = getVersion();
+    if (!version) {
+        throw new Error("Publishing 'typescript' requires a version before selecting an npm tag.");
     }
-    return "latest";
+    const match = version.match(/-(dev|beta|rc)(?:[.-]|$)/);
+    if (match?.[1]) return match[1] === "dev" ? "next" : match[1];
+    if (version === nativePreviewReleaseVersion && stableThreeComponentVersionPattern.test(version)) return "latest";
+    throw new Error(`Refusing to publish 'typescript' with the latest tag from non-release version ${version}.`);
 }
 
 const extensionDir = path.resolve("./packages/vscode-typescript");
@@ -2200,9 +2192,9 @@ function cpWithoutNodeModulesOrTsconfig(src, dest) {
 }
 
 const mainNativePreviewPackage = {
-    npmPackageName: publishAsTypescript ? "typescript" : "@typescript/typescript",
-    npmDir: path.join(builtNpm, publishAsTypescript ? "typescript" : "native-preview"),
-    npmTarball: path.join(builtNpm, publishAsTypescript ? "typescript.tgz" : "native-preview.tgz"),
+    npmPackageName: "typescript",
+    npmDir: path.join(builtNpm, "typescript"),
+    npmTarball: path.join(builtNpm, "typescript.tgz"),
 };
 
 const wasip1Package = {
@@ -2278,9 +2270,9 @@ function getLocalWebVsixExtensions() {
 }
 
 /**
- * npm package platforms supported by the native release.
- * The native-preview package publishes only the entries with vsix: true;
- * the typescript package publishes the full list.
+ * npm package platforms supported by the release.
+ * Nightly (next) builds and VS Code extension releases use only the entries
+ * with vsix: true; other typescript releases publish the full list.
  * BSD targets that are not in Node's supported-platforms table are best-effort
  * and limited to mainstream 64-bit x64/arm64 architectures.
  * alpine is set only for the subset that also produces Alpine VSIXes.
@@ -2381,7 +2373,7 @@ function nodeToGOARCH(arch, os) {
 
 const getPlatforms = memoize(() => {
     const publishTag = releaseVscodeTypescript ? undefined : getPublishTag();
-    let supportedPlatforms = !releaseVscodeTypescript && publishAsTypescript && publishTag !== "next"
+    let supportedPlatforms = !releaseVscodeTypescript && publishTag !== "next"
         ? platforms
         : platforms.filter(({ vsix }) => vsix);
 
@@ -2391,8 +2383,7 @@ const getPlatforms = memoize(() => {
     }
 
     return supportedPlatforms.map(({ os, arch, cert = "LinuxSign", vsix, alpine }) => {
-        const packageBaseName = publishAsTypescript ? "typescript" : "native-preview";
-        const npmDirName = `${packageBaseName}-${os}-${arch}`;
+        const npmDirName = `typescript-${os}-${arch}`;
         const npmDir = path.join(builtNpm, npmDirName);
         const npmTarball = `${npmDir}.tgz`;
         const npmPackageName = `@typescript/${npmDirName}`;
@@ -2665,7 +2656,6 @@ export const buildNativePreviewPlatformMatrix = task({
             ],
         );
         console.log(`##vso[task.setvariable variable=matrix;isOutput=true]${JSON.stringify(matrix)}`);
-        console.log(`##vso[task.setvariable variable=packageBaseName;isOutput=true]${path.basename(mainNativePreviewPackage.npmDir)}`);
     },
 });
 
@@ -2689,11 +2679,6 @@ async function buildMainNativePreviewPackage(platforms) {
     // Copy package contents excluding node_modules and dist (dist is copied separately after build).
     // The package.json "files" field controls what npm pack actually includes.
     await cpRecursive(inputDir, mainPackageDir, p => !p.endsWith("/node_modules") && !p.includes("/dist"));
-    if (publishAsTypescript) {
-        await fs.promises.writeFile(path.join(mainPackageDir, "bin", "tsc"), '#!/usr/bin/env node\nimport "../lib/tsc.js";\n');
-        await fs.promises.chmod(path.join(mainPackageDir, "bin", "tsc"), 0o755);
-        await fs.promises.copyFile(path.join(inputDir, "typescript-package-readme.md"), path.join(mainPackageDir, "README.md"));
-    }
 
     await fs.promises.writeFile(path.join(mainPackageDir, "package.json"), JSON.stringify(mainPackage, undefined, 4));
     await fs.promises.copyFile("LICENSE.txt", path.join(mainPackageDir, "LICENSE"));
@@ -2795,7 +2780,7 @@ async function buildNativePreviewPlatform({ npmDir, npmPackageName, nodeOs, node
 
     const exeName = nativePreviewExeName(nodeOs);
     await buildTsc({
-        out: publishAsTypescript ? path.join(out, exeName) : out,
+        out: path.join(out, exeName),
         env: {
             GOOS: goos,
             GOARCH: goarch,
@@ -2812,29 +2797,8 @@ async function createNativePreviewInputPackageJson() {
     inputPackageJson.version = getVersion();
     delete inputPackageJson.private;
     inputPackageJson.files = [...new Set([...(inputPackageJson.files ?? []), "NOTICE.txt"])];
-    if (publishAsTypescript) {
-        inputPackageJson.bin = {
-            tsc: "./bin/tsc",
-        };
-        inputPackageJson.description = "TypeScript is a language for application scale JavaScript development";
-        inputPackageJson.homepage = "https://www.typescriptlang.org/";
-        inputPackageJson.keywords = [
-            "TypeScript",
-            "Microsoft",
-            "compiler",
-            "language",
-            "javascript",
-        ];
-        inputPackageJson.bugs = {
-            url: "https://github.com/microsoft/TypeScript/issues",
-        };
-        inputPackageJson.repository = {
-            type: "git",
-            url: "https://github.com/microsoft/TypeScript.git",
-        };
-        delete inputPackageJson.scripts;
-        delete inputPackageJson.devDependencies;
-    }
+    delete inputPackageJson.scripts;
+    delete inputPackageJson.devDependencies;
     stripSourceConditions(inputPackageJson);
 
     if (fs.existsSync(".git")) {
@@ -2904,8 +2868,7 @@ async function testNativePreviewPackage(platforms) {
         assert(wasmFiles.has("dist/index.js"), "WASI artifact package is missing its URL helper");
         assert(wasmFiles.has("lib/libFiles.json"), "WASI artifact package is missing its library file list");
 
-        const binName = publishAsTypescript ? "tsc" : "tsgo";
-        const binPath = path.join(mainPackageDir, "bin", binName);
+        const binPath = path.join(mainPackageDir, "bin", "tsc");
         const { stdout: versionOutput } = await runOutput(process.execPath, [binPath, "--version"]);
         assert.equal(versionOutput.trim(), `Version ${getVersion()}`);
 
@@ -2941,8 +2904,7 @@ export const signNativePreviewPackages = task({
  * @param {string} nodeOs
  */
 function nativePreviewExeName(nodeOs) {
-    const baseName = publishAsTypescript ? "tsc" : "tsgo";
-    return nodeOs === "win32" ? `${baseName}.exe` : baseName;
+    return nodeOs === "win32" ? "tsc.exe" : "tsc";
 }
 
 async function runSignNativePreviewPackages() {

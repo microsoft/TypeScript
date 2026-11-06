@@ -1,26 +1,49 @@
-# TypeScript (Native Preview)
+# TypeScript
 
-This package provides a preview build of [the native port of TypeScript](https://devblogs.microsoft.com/typescript/typescript-native-port/).
-Not all features are implemented yet.
+[![CI](https://github.com/microsoft/TypeScript/actions/workflows/ci.yml/badge.svg)](https://github.com/microsoft/TypeScript/actions/workflows/ci.yml)
+[![npm version](https://badge.fury.io/js/typescript.svg)](https://www.npmjs.com/package/typescript)
+[![Downloads](https://img.shields.io/npm/dm/typescript.svg)](https://www.npmjs.com/package/typescript)
+[![OpenSSF Scorecard](https://api.securityscorecards.dev/projects/github.com/microsoft/TypeScript/badge)](https://securityscorecards.dev/viewer/?uri=github.com/microsoft/TypeScript)
 
-This package is intended for testing and experimentation.
-It will eventually be replaced by the official TypeScript package.
+[TypeScript](https://www.typescriptlang.org/) is a language for application-scale JavaScript. TypeScript adds optional types to JavaScript that support tools for large-scale JavaScript applications for any browser, for any host, on any OS. TypeScript compiles to readable, standards-based JavaScript. Try it out at the [playground](https://www.typescriptlang.org/play/), and stay up to date via [our blog](https://devblogs.microsoft.com/typescript/) and [Bluesky](https://bsky.app/profile/typescriptlang.org).
 
-## Usage
+Find others who are using TypeScript at [our community page](https://www.typescriptlang.org/community/).
 
-For TypeScript 7.0 RC and later, use `tsc` just like for TypeScript 6.0.
+## Installing
 
-For other builds, use the `tsgo` command just like you would use `tsc`:
+For the latest stable version:
 
-```sh
-npx tsgo --help
+```bash
+npm install -D typescript
 ```
 
-The JavaScript API requires Node.js 20.16 or later when it starts the compiler itself. In other environments, provide a transport.
+For our nightly builds:
 
-## Issues and Feedback
+```bash
+npm install -D typescript@next
+```
 
-The native port of TypeScript is still in progress.
-We expect many gaps, but are seeking experimentation and feedback.
-If you have found differences that are not yet known, we encourage you to leave feedback on [the issue tracker](https://github.com/microsoft/TypeScript/tsc/issues).
+## Contribute
 
+There are many ways to [contribute](https://github.com/microsoft/TypeScript/blob/main/CONTRIBUTING.md) to TypeScript.
+
+* [Submit bugs](https://github.com/microsoft/TypeScript/issues) and help us verify fixes as they are checked in.
+* Review the [source code changes](https://github.com/microsoft/TypeScript/pulls).
+* Engage with other TypeScript users and developers on [Stack Overflow](https://stackoverflow.com/questions/tagged/typescript).
+* Help each other in the [TypeScript Community Discord](https://discord.gg/typescript).
+* Join the [#typescript](https://bsky.app/search?q=%23typescript) discussion on Bluesky.
+* [Contribute bug fixes](https://github.com/microsoft/TypeScript/blob/main/CONTRIBUTING.md).
+
+This project has adopted the [Microsoft Open Source Code of Conduct](https://opensource.microsoft.com/codeofconduct/). For more information see
+the [Code of Conduct FAQ](https://opensource.microsoft.com/codeofconduct/faq/) or contact [opencode@microsoft.com](mailto:opencode@microsoft.com)
+with any additional questions or comments.
+
+## Documentation
+
+* [TypeScript in 5 minutes](https://www.typescriptlang.org/docs/handbook/typescript-in-5-minutes.html)
+* [Programming handbook](https://www.typescriptlang.org/docs/handbook/intro.html)
+* [Homepage](https://www.typescriptlang.org/)
+
+## Roadmap
+
+For details on our planned features and future direction, please refer to our [roadmap](https://github.com/microsoft/TypeScript/wiki/Roadmap).

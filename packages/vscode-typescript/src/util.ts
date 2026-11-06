@@ -327,7 +327,8 @@ export async function resolveTsdkPathToExe(tsdkPath: string): Promise<ExeInfo | 
         try {
             const packageJsonPath = vscode.Uri.joinPath(packagePath, "package.json");
             const packageJson = JSON.parse(await vscode.workspace.fs.readFile(packageJsonPath).then(buffer => buffer.toString()));
-            // NOTE: Keep in sync with packages/typescript/lib/getExePath.js.
+            // NOTE: Keep in sync with packages/typescript/lib/getExePath.js, which
+            // doesn't need to handle legacy @typescript/native-preview packages.
             const name: unknown = packageJson.name;
             const bin: unknown = packageJson.bin;
             if (typeof name !== "string" || !bin || typeof bin !== "object") continue;
