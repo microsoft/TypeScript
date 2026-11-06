@@ -19,29 +19,22 @@ const (
 )
 
 // ModuleID uniquely identifies either a file module or an ambient module.
+// For file modules, value is a tspath.PathKey; for ambient modules, a tspath.ModuleSpecifier.
 type ModuleID struct {
-	path      tspath.PathKey
-	specifier tspath.ModuleSpecifier
-	kind      moduleIDKind
+	value string
+	kind  moduleIDKind
 }
 
 func fileModuleID(path tspath.PathKey) ModuleID {
-	return ModuleID{path: path, kind: moduleIDKindFile}
+	return ModuleID{value: string(path), kind: moduleIDKindFile}
 }
 
 func ambientModuleID(specifier string) ModuleID {
-	return ModuleID{specifier: tspath.ToModuleSpecifier(specifier), kind: moduleIDKindAmbient}
+	return ModuleID{value: string(tspath.ToModuleSpecifier(specifier)), kind: moduleIDKindAmbient}
 }
 
 func (m ModuleID) AsString() string {
-	switch m.kind {
-	case moduleIDKindFile:
-		return string(m.path)
-	case moduleIDKindAmbient:
-		return m.specifier.AsString()
-	default:
-		return ""
-	}
+	return m.value
 }
 
 func (m ModuleID) IsAmbient() bool {
@@ -52,14 +45,19 @@ func (m ModuleID) AsPathKey() (tspath.PathKey, bool) {
 	if m.kind != moduleIDKindFile {
 		return "", false
 	}
-	return m.path, true
+	return tspath.PathKeyFromCanonical(m.value), true
+}
+
+// IsFile reports whether m identifies the file module at path.
+func (m ModuleID) IsFile(path tspath.PathKey) bool {
+	return m.kind == moduleIDKindFile && m.value == path.AsString()
 }
 
 func (m ModuleID) AsModuleSpecifier() (tspath.ModuleSpecifier, bool) {
 	if m.kind != moduleIDKindAmbient {
 		return "", false
 	}
-	return m.specifier, true
+	return tspath.ToModuleSpecifier(m.value), true
 }
 
 type ExportID struct {
@@ -67,7 +65,7 @@ type ExportID struct {
 	ExportName string
 }
 
-type ExportSyntax int
+type ExportSyntax uint8
 
 const (
 	ExportSyntaxNone ExportSyntax = iota
@@ -95,8 +93,8 @@ type Export struct {
 	ExportID
 	ModuleFileName            tspath.RootedFilePath
 	UnresolvedModuleSpecifier tspath.ModuleSpecifier
-	Syntax                    ExportSyntax
 	Flags                     ast.SymbolFlags
+	Syntax                    ExportSyntax
 	localName                 string
 	// through is the name of the module symbol's export that this export was found on,
 	// either 'export=', InternalSymbolNameExportStar, or empty string.
@@ -105,9 +103,9 @@ type Export struct {
 	// Checker-set fields
 
 	Target                     ExportID
-	IsTypeOnly                 bool
-	ScriptElementKind          lsutil.ScriptElementKind
 	ScriptElementKindModifiers lsutil.ScriptElementKindModifier
+	ScriptElementKind          lsutil.ScriptElementKind
+	IsTypeOnly                 bool
 
 	// The file where the export was found.
 	Path tspath.PathKey
