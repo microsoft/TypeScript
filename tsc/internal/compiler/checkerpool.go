@@ -6,6 +6,7 @@ import (
 	"slices"
 	"sort"
 	"sync"
+	"sync/atomic"
 
 	"github.com/microsoft/TypeScript/tsc/internal/ast"
 	"github.com/microsoft/TypeScript/tsc/internal/checker"
@@ -32,8 +33,9 @@ type checkerPool struct {
 	createCheckersOnce sync.Once
 	checkers           []*checker.Checker
 	locks              []*sync.Mutex
-	fileAssociations   map[*ast.SourceFile]*checker.Checker
-	associations       []int // from ProgramFactories.AssignCheckers, if set
+	fileIndices        map[*ast.SourceFile]int
+	fileCheckers       []atomic.Int32 // Index in checkers of the checker of each file, by file index
+	associations       []int          // from ProgramFactories.AssignCheckers, if set
 }
 
 var _ CheckerPool = (*checkerPool)(nil)
@@ -361,13 +363,19 @@ func (p *checkerPool) GetChecker(ctx context.Context, file *ast.SourceFile) (*ch
 // e.g. for read-only operations like obtaining an emit resolver.
 func (p *checkerPool) getCheckerForFileNonExclusive(file *ast.SourceFile) (*checker.Checker, func()) {
 	p.createCheckers()
-	return p.fileAssociations[file], noop
+	return p.checkers[p.checkerIndexOf(file)], noop
+}
+
+// checkerIndexOf returns the index in checkers of the checker the file is
+// associated with: the one that checked it, or that will.
+func (p *checkerPool) checkerIndexOf(file *ast.SourceFile) int {
+	return int(p.fileCheckers[p.fileIndices[file]].Load())
 }
 
 func (p *checkerPool) getCheckerForFileExclusive(ctx context.Context, file *ast.SourceFile) (*checker.Checker, func()) {
 	p.createCheckers()
-	c := p.fileAssociations[file]
-	idx := slices.Index(p.checkers, c)
+	idx := p.checkerIndexOf(file)
+	c := p.checkers[idx]
 	p.locks[idx].Lock()
 	return c, sync.OnceFunc(func() {
 		p.locks[idx].Unlock()
@@ -431,9 +439,11 @@ func (p *checkerPool) createCheckers() {
 			fileOrder := getCheckerAssociationOrder(fileWeights, isDeclarationFile, policy.prioritizeSourceFiles)
 			associations = getCheckerAssociationsInOrder(fileWeights, adjacentFiles, fileOrder, checkerCount, policy.balancePenaltyMultiplier)
 		}
-		p.fileAssociations = make(map[*ast.SourceFile]*checker.Checker, len(p.program.files))
+		p.fileIndices = make(map[*ast.SourceFile]int, len(p.program.files))
+		p.fileCheckers = make([]atomic.Int32, len(p.program.files))
 		for i, file := range p.program.files {
-			p.fileAssociations[file] = p.checkers[associations[i]]
+			p.fileIndices[file] = i
+			p.fileCheckers[i].Store(int32(associations[i]))
 		}
 	})
 }
@@ -489,26 +499,103 @@ func (p *checkerPool) GetGlobalDiagnostics() []*ast.Diagnostic {
 	return SortAndDeduplicateDiagnostics(slices.Concat(globalDiagnostics...))
 }
 
-// forEachCheckerGroupDo runs one task per checker in parallel. Each task iterates
-// the provided files, processing only those assigned to its checker. Within each
-// checker's set, files are visited in their original order.
+// forEachCheckerGroupDo runs one task per checker in parallel, each checking
+// first the files associated with it, in their original order. A task that
+// runs out of files takes the last file not yet started from the checker with
+// the most left, and the file is associated with its checker from then on.
+// Which checker checks a file and what it checked before do not change the
+// results, only how much each checker can reuse.
 func (p *checkerPool) forEachCheckerGroupDo(ctx context.Context, files []*ast.SourceFile, singleThreaded bool, cb func(c *checker.Checker, fileIndex int, file *ast.SourceFile)) {
-	p.createCheckers()
-
-	checkerCount := len(p.checkers)
-	wg := core.NewWorkGroup(core.WorkGroupConcurrency(singleThreaded))
-	for checkerIdx := range checkerCount {
+	groups := p.groupFilesByChecker(files)
+	if singleThreaded || len(p.checkers) == 1 {
+		// Tasks run one after another, so the first would take every file.
+		for checkerIdx, group := range groups {
+			c := p.checkers[checkerIdx]
+			p.locks[checkerIdx].Lock()
+			for _, i := range group {
+				cb(c, i, files[i])
+			}
+			p.locks[checkerIdx].Unlock()
+		}
+		return
+	}
+	queues := make([]fileQueue, len(groups))
+	for i, group := range groups {
+		queues[i].files = group
+	}
+	wg := core.NewWorkGroup(core.WorkGroupConcurrency(false))
+	for checkerIdx := range groups {
 		wg.Queue(func() {
+			c := p.checkers[checkerIdx]
 			p.locks[checkerIdx].Lock()
 			defer p.locks[checkerIdx].Unlock()
-			for i, file := range files {
-				if checker := p.checkers[checkerIdx]; checker == p.fileAssociations[file] {
-					cb(checker, i, file)
+			for {
+				i, ok := queues[checkerIdx].popFront()
+				if !ok {
+					i, ok = stealFile(queues)
+					if !ok {
+						return
+					}
+					p.fileCheckers[p.fileIndices[files[i]]].Store(int32(checkerIdx))
 				}
+				cb(c, i, files[i])
 			}
 		})
 	}
 	wg.RunAndWait()
+}
+
+// A fileQueue holds the indices of the files a checker has yet to start.
+type fileQueue struct {
+	mu    sync.Mutex
+	files []int
+}
+
+func (q *fileQueue) popFront() (int, bool) {
+	q.mu.Lock()
+	defer q.mu.Unlock()
+	if len(q.files) == 0 {
+		return 0, false
+	}
+	i := q.files[0]
+	q.files = q.files[1:]
+	return i, true
+}
+
+func (q *fileQueue) popBack() (int, bool) {
+	q.mu.Lock()
+	defer q.mu.Unlock()
+	if len(q.files) == 0 {
+		return 0, false
+	}
+	i := q.files[len(q.files)-1]
+	q.files = q.files[:len(q.files)-1]
+	return i, true
+}
+
+func (q *fileQueue) len() int {
+	q.mu.Lock()
+	defer q.mu.Unlock()
+	return len(q.files)
+}
+
+// stealFile takes the last file of the queue with the most files left, the
+// one its checker would reach last.
+func stealFile(queues []fileQueue) (int, bool) {
+	for {
+		victim, most := -1, 0
+		for i := range queues {
+			if n := queues[i].len(); n > most {
+				victim, most = i, n
+			}
+		}
+		if victim < 0 {
+			return 0, false
+		}
+		if i, ok := queues[victim].popBack(); ok {
+			return i, true
+		}
+	}
 }
 
 // groupFilesByChecker returns the indices of files grouped by the checker each file is associated with. Files keep
@@ -517,8 +604,10 @@ func (p *checkerPool) groupFilesByChecker(files []*ast.SourceFile) [][]int {
 	p.createCheckers()
 	groups := make([][]int, len(p.checkers))
 	for i, file := range files {
-		idx := slices.Index(p.checkers, p.fileAssociations[file])
-		groups[idx] = append(groups[idx], i)
+		if j, ok := p.fileIndices[file]; ok {
+			idx := int(p.fileCheckers[j].Load())
+			groups[idx] = append(groups[idx], i)
+		}
 	}
 	return groups
 }
