@@ -59,6 +59,52 @@ export const checkedArray = ([
 ] = []) => {};
 >[] : []
 
+/** @typedef {{ a?: number }} A */
+/** @typedef {{ f: (b: string, c?: A) => Promise<string[]> }} B */
+/** @returns {B} */
+export function f15() {
+>f15 : () => B
+
+    return {
+>{        async f(b, { a } = {}) {            a?.toFixed();            return [b];        },    } : { f(b: string, { a }?: A | undefined): Promise<string[]>; }
+
+        async f(b, { a } = {}) {
+>f : (b: string, { a }?: A | undefined) => Promise<string[]>
+>b : string
+>a : number | undefined
+>{} : {}
+
+            a?.toFixed();
+>a?.toFixed() : string | undefined
+>a?.toFixed : ((fractionDigits?: number) => string) | undefined
+>a : number | undefined
+>toFixed : ((fractionDigits?: number) => string) | undefined
+
+            return [b];
+>[b] : string[]
+>b : string
+
+        },
+    };
+}
+
+/** @typedef {(b: number, c?: A) => Promise<void>} F */
+export const f16 = /** @type {F} */ (async (b, { a } = {}) => {
+>f16 : F
+>(async (b, { a } = {}) => {    a?.toFixed();}) : F
+>async (b, { a } = {}) => {    a?.toFixed();} : (b: number, { a }?: A | undefined) => Promise<void>
+>b : number
+>a : number | undefined
+>{} : {}
+
+    a?.toFixed();
+>a?.toFixed() : string | undefined
+>a?.toFixed : ((fractionDigits?: number) => string) | undefined
+>a : number | undefined
+>toFixed : ((fractionDigits?: number) => string) | undefined
+
+});
+
 === /main.ts ===
 import { checkedArray, checkedObject } from "./checked";
 >checkedArray : ([required, optional,]?: [any?, (boolean | undefined)?]) => void
@@ -152,4 +198,261 @@ typedArray(["value"]);
 >typedArray : ([required, optional,]?: [any?, (boolean | undefined)?]) => void
 >["value"] : [string]
 >"value" : "value"
+
+type F = (input?: { a?: string; b?: number }) => number;
+>F : F
+>input : { a?: string; b?: number; } | undefined
+>a : string | undefined
+>b : number | undefined
+
+export const f1: F = ({ a, b } = {}) => (a ? 1 : 0) + (b ?? 0);
+>f1 : F
+>({ a, b } = {}) => (a ? 1 : 0) + (b ?? 0) : ({ a, b }?: { a?: string; b?: number; } | undefined) => number
+>a : string | undefined
+>b : number | undefined
+>{} : {}
+>(a ? 1 : 0) + (b ?? 0) : number
+>(a ? 1 : 0) : 0 | 1
+>a ? 1 : 0 : 0 | 1
+>a : string | undefined
+>1 : 1
+>0 : 0
+>(b ?? 0) : number
+>b ?? 0 : number
+>b : number | undefined
+>0 : 0
+
+export const f2: (input: { a?: string; b?: number }) => number = ({ a, b } = {}) => (a ? 1 : 0) + (b ?? 0);
+>f2 : (input: { a?: string; b?: number; }) => number
+>input : { a?: string; b?: number; }
+>a : string | undefined
+>b : number | undefined
+>({ a, b } = {}) => (a ? 1 : 0) + (b ?? 0) : ({ a, b }?: { a?: string; b?: number; }) => number
+>a : string | undefined
+>b : number | undefined
+>{} : {}
+>(a ? 1 : 0) + (b ?? 0) : number
+>(a ? 1 : 0) : 0 | 1
+>a ? 1 : 0 : 0 | 1
+>a : string | undefined
+>1 : 1
+>0 : 0
+>(b ?? 0) : number
+>b ?? 0 : number
+>b : number | undefined
+>0 : 0
+
+declare function f3(callback: F): void;
+>f3 : (callback: F) => void
+>callback : F
+
+f3(({ a, b } = {}) => {
+>f3(({ a, b } = {}) => {    const c: number = a;    const d: string = b;    return 0;}) : void
+>f3 : (callback: F) => void
+>({ a, b } = {}) => {    const c: number = a;    const d: string = b;    return 0;} : ({ a, b }?: { a?: string; b?: number; } | undefined) => number
+>a : string | undefined
+>b : number | undefined
+>{} : {}
+
+    const c: number = a;
+>c : number
+>a : string | undefined
+
+    const d: string = b;
+>d : string
+>b : number | undefined
+
+    return 0;
+>0 : 0
+
+});
+
+export const f4: (input?: { a?: { b?: number } }) => number = ({ a: { b } = {} } = {}) => {
+>f4 : (input?: { a?: { b?: number; }; }) => number
+>input : { a?: { b?: number; }; } | undefined
+>a : { b?: number; } | undefined
+>b : number | undefined
+>({ a: { b } = {} } = {}) => {    const c: string = b;    return b ?? 0;} : ({ a: { b } }?: { a?: { b?: number; }; } | undefined) => number
+>a : any
+>b : number | undefined
+>{} : {}
+>{} : {}
+
+    const c: string = b;
+>c : string
+>b : number | undefined
+
+    return b ?? 0;
+>b ?? 0 : number
+>b : number | undefined
+>0 : 0
+
+};
+
+export function f5({ a: { b } = {} }: { a?: { b?: number } }) {
+>f5 : ({ a: { b } }: { a?: { b?: number; }; }) => number | undefined
+>a : any
+>b : number | undefined
+>{} : {}
+>a : { b?: number; } | undefined
+>b : number | undefined
+
+    const c: string = b;
+>c : string
+>b : number | undefined
+
+    return b;
+>b : number | undefined
+}
+
+export const f6: (input?: { a?: number }) => void = ({ a, b } = {}) => {
+>f6 : (input?: { a?: number; }) => void
+>input : { a?: number; } | undefined
+>a : number | undefined
+>({ a, b } = {}) => {    const c: string = a;} : ({ a, b }?: { a?: number; } | undefined) => void
+>a : number | undefined
+>b : any
+>{} : {}
+
+    const c: string = a;
+>c : string
+>a : number | undefined
+
+};
+
+export const f7: (input?: [{ a?: number }?]) => void = ([{ a } = {}] = []) => {
+>f7 : (input?: [{ a?: number; }?]) => void
+>input : [({ a?: number; } | undefined)?] | undefined
+>a : number | undefined
+>([{ a } = {}] = []) => {    const b: string = a;} : ([{ a }]?: [({ a?: number; } | undefined)?] | undefined) => void
+>a : number | undefined
+>{} : {}
+>[] : []
+
+    const b: string = a;
+>b : string
+>a : number | undefined
+
+};
+
+export const f8: (input?: { [key: string]: number }) => void = ({ a } = {}) => {
+>f8 : (input?: { [key: string]: number; }) => void
+>input : { [key: string]: number; } | undefined
+>key : string
+>({ a } = {}) => {    const b: string = a;} : ({ a }?: { [key: string]: number; } | undefined) => void
+>a : number
+>{} : {}
+
+    const b: string = a;
+>b : string
+>a : number
+
+};
+
+export const f9: (input?: any) => void = ({ a: { b } = {} } = {}) => {
+>f9 : (input?: any) => void
+>input : any
+>({ a: { b } = {} } = {}) => {    b;} : ({ a: { b } }?: any) => void
+>a : any
+>b : any
+>{} : {}
+>{} : {}
+
+    b;
+>b : any
+
+};
+
+declare function f10<T>(value: T, callback: (input?: Partial<T>) => void): void;
+>f10 : <T>(value: T, callback: (input?: Partial<T>) => void) => void
+>value : T
+>callback : (input?: Partial<T>) => void
+>input : Partial<T> | undefined
+
+f10({ a: 1 }, ({ a } = {}) => {
+>f10({ a: 1 }, ({ a } = {}) => {    const b: string = a;}) : void
+>f10 : <T>(value: T, callback: (input?: Partial<T>) => void) => void
+>{ a: 1 } : { a: number; }
+>a : number
+>1 : 1
+>({ a } = {}) => {    const b: string = a;} : ({ a }?: Partial<{ a: number; }> | undefined) => void
+>a : number | undefined
+>{} : {}
+
+    const b: string = a;
+>b : string
+>a : number | undefined
+
+});
+
+export const f11: (input?: { a?: number }[]) => void = ([...[{ a } = {}]] = []) => {
+>f11 : (input?: { a?: number; }[]) => void
+>input : { a?: number; }[] | undefined
+>a : number | undefined
+>([...[{ a } = {}]] = []) => {    const b: string = a;} : ([...[{ a }]]?: { a?: number; }[] | undefined) => void
+>a : number | undefined
+>{} : {}
+>[] : never[]
+
+    const b: string = a;
+>b : string
+>a : number | undefined
+
+};
+
+export const f12: (input: { a: boolean; b?: string }) => string = ({ a, b } = { a: false }) => `${a}${b}`;
+>f12 : (input: { a: boolean; b?: string; }) => string
+>input : { a: boolean; b?: string; }
+>a : boolean
+>b : string | undefined
+>({ a, b } = { a: false }) => `${a}${b}` : ({ a, b }?: { a: boolean; b?: string; }) => string
+>a : boolean
+>b : string | undefined
+>{ a: false } : { a: false; }
+>a : false
+>false : false
+>`${a}${b}` : string
+>a : boolean
+>b : string | undefined
+
+export const f13 = (input: { a?: number; b?: string }[]) => input.map(({ a, b } = {}) => `${a}${b}`);
+>f13 : (input: { a?: number; b?: string; }[]) => string[]
+>(input: { a?: number; b?: string }[]) => input.map(({ a, b } = {}) => `${a}${b}`) : (input: { a?: number; b?: string; }[]) => string[]
+>input : { a?: number; b?: string; }[]
+>a : number | undefined
+>b : string | undefined
+>input.map(({ a, b } = {}) => `${a}${b}`) : string[]
+>input.map : <U>(callbackfn: (value: { a?: number; b?: string; }, index: number, array: { a?: number; b?: string; }[]) => U, thisArg?: any) => U[]
+>input : { a?: number; b?: string; }[]
+>map : <U>(callbackfn: (value: { a?: number; b?: string; }, index: number, array: { a?: number; b?: string; }[]) => U, thisArg?: any) => U[]
+>({ a, b } = {}) => `${a}${b}` : ({ a, b }?: { a?: number; b?: string; }) => string
+>a : number | undefined
+>b : string | undefined
+>{} : {}
+>`${a}${b}` : string
+>a : number | undefined
+>b : string | undefined
+
+export const f14: (args: string[], input?: { a?: string; b?: number }) => void = (args, { a, b = 1 } = {}) => {
+>f14 : (args: string[], input?: { a?: string; b?: number; }) => void
+>args : string[]
+>input : { a?: string; b?: number; } | undefined
+>a : string | undefined
+>b : number | undefined
+>(args, { a, b = 1 } = {}) => {    const c: string | undefined = a;    const d: number = b;} : (args: string[], { a, b }?: { a?: string; b?: number; } | undefined) => void
+>args : string[]
+>a : string | undefined
+>b : number
+>1 : 1
+>{} : {}
+
+    const c: string | undefined = a;
+>c : string | undefined
+>a : string | undefined
+
+    const d: number = b;
+>d : number
+>b : number
+
+};
 
