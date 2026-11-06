@@ -91,3 +91,17 @@ function f19<K1 extends string, T, K2 extends string, U, X extends K1 | "b">(x: 
     const t: T = x[k];
     const tu: T & U = x[k]; // Error
 }
+
+function f20<K1 extends string, K2 extends string, X extends K1 | "b">(x: Record<K1, number> & Record<K2, number> & { b: string }, k: X): number {
+    return x[k]; // Error
+}
+
+function f21<K1 extends string, K2 extends string, X extends K1>(x: Record<K1, { a: string }> & Record<K2, { b: string }>, k: X) {
+    x[k].a;
+    x[k].b; // Error
+}
+
+function f22<K extends string, X extends K, L extends string, T, U>(x: Record<X, T> & Record<L, U>, k: X) {
+    const t: T = x[k];
+    const tu: T & U = x[k]; // Error
+}

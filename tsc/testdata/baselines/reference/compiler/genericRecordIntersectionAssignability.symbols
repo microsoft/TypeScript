@@ -510,3 +510,82 @@ function f19<K1 extends string, T, K2 extends string, U, X extends K1 | "b">(x: 
 >k : Symbol(k, Decl(genericRecordIntersectionAssignability.ts, 86, 121))
 }
 
+function f20<K1 extends string, K2 extends string, X extends K1 | "b">(x: Record<K1, number> & Record<K2, number> & { b: string }, k: X): number {
+>f20 : Symbol(f20, Decl(genericRecordIntersectionAssignability.ts, 89, 1))
+>K1 : Symbol(K1, Decl(genericRecordIntersectionAssignability.ts, 91, 13))
+>K2 : Symbol(K2, Decl(genericRecordIntersectionAssignability.ts, 91, 31))
+>X : Symbol(X, Decl(genericRecordIntersectionAssignability.ts, 91, 50))
+>K1 : Symbol(K1, Decl(genericRecordIntersectionAssignability.ts, 91, 13))
+>x : Symbol(x, Decl(genericRecordIntersectionAssignability.ts, 91, 71))
+>Record : Symbol(Record, Decl(lib.es5.d.ts, --, --))
+>K1 : Symbol(K1, Decl(genericRecordIntersectionAssignability.ts, 91, 13))
+>Record : Symbol(Record, Decl(lib.es5.d.ts, --, --))
+>K2 : Symbol(K2, Decl(genericRecordIntersectionAssignability.ts, 91, 31))
+>b : Symbol(b, Decl(genericRecordIntersectionAssignability.ts, 91, 117))
+>k : Symbol(k, Decl(genericRecordIntersectionAssignability.ts, 91, 130))
+>X : Symbol(X, Decl(genericRecordIntersectionAssignability.ts, 91, 50))
+
+    return x[k]; // Error
+>x : Symbol(x, Decl(genericRecordIntersectionAssignability.ts, 91, 71))
+>k : Symbol(k, Decl(genericRecordIntersectionAssignability.ts, 91, 130))
+}
+
+function f21<K1 extends string, K2 extends string, X extends K1>(x: Record<K1, { a: string }> & Record<K2, { b: string }>, k: X) {
+>f21 : Symbol(f21, Decl(genericRecordIntersectionAssignability.ts, 93, 1))
+>K1 : Symbol(K1, Decl(genericRecordIntersectionAssignability.ts, 95, 13))
+>K2 : Symbol(K2, Decl(genericRecordIntersectionAssignability.ts, 95, 31))
+>X : Symbol(X, Decl(genericRecordIntersectionAssignability.ts, 95, 50))
+>K1 : Symbol(K1, Decl(genericRecordIntersectionAssignability.ts, 95, 13))
+>x : Symbol(x, Decl(genericRecordIntersectionAssignability.ts, 95, 65))
+>Record : Symbol(Record, Decl(lib.es5.d.ts, --, --))
+>K1 : Symbol(K1, Decl(genericRecordIntersectionAssignability.ts, 95, 13))
+>a : Symbol(a, Decl(genericRecordIntersectionAssignability.ts, 95, 80))
+>Record : Symbol(Record, Decl(lib.es5.d.ts, --, --))
+>K2 : Symbol(K2, Decl(genericRecordIntersectionAssignability.ts, 95, 31))
+>b : Symbol(b, Decl(genericRecordIntersectionAssignability.ts, 95, 108))
+>k : Symbol(k, Decl(genericRecordIntersectionAssignability.ts, 95, 122))
+>X : Symbol(X, Decl(genericRecordIntersectionAssignability.ts, 95, 50))
+
+    x[k].a;
+>x[k].a : Symbol(a, Decl(genericRecordIntersectionAssignability.ts, 95, 80))
+>x : Symbol(x, Decl(genericRecordIntersectionAssignability.ts, 95, 65))
+>k : Symbol(k, Decl(genericRecordIntersectionAssignability.ts, 95, 122))
+>a : Symbol(a, Decl(genericRecordIntersectionAssignability.ts, 95, 80))
+
+    x[k].b; // Error
+>x : Symbol(x, Decl(genericRecordIntersectionAssignability.ts, 95, 65))
+>k : Symbol(k, Decl(genericRecordIntersectionAssignability.ts, 95, 122))
+}
+
+function f22<K extends string, X extends K, L extends string, T, U>(x: Record<X, T> & Record<L, U>, k: X) {
+>f22 : Symbol(f22, Decl(genericRecordIntersectionAssignability.ts, 98, 1))
+>K : Symbol(K, Decl(genericRecordIntersectionAssignability.ts, 100, 13))
+>X : Symbol(X, Decl(genericRecordIntersectionAssignability.ts, 100, 30))
+>K : Symbol(K, Decl(genericRecordIntersectionAssignability.ts, 100, 13))
+>L : Symbol(L, Decl(genericRecordIntersectionAssignability.ts, 100, 43))
+>T : Symbol(T, Decl(genericRecordIntersectionAssignability.ts, 100, 61))
+>U : Symbol(U, Decl(genericRecordIntersectionAssignability.ts, 100, 64))
+>x : Symbol(x, Decl(genericRecordIntersectionAssignability.ts, 100, 68))
+>Record : Symbol(Record, Decl(lib.es5.d.ts, --, --))
+>X : Symbol(X, Decl(genericRecordIntersectionAssignability.ts, 100, 30))
+>T : Symbol(T, Decl(genericRecordIntersectionAssignability.ts, 100, 61))
+>Record : Symbol(Record, Decl(lib.es5.d.ts, --, --))
+>L : Symbol(L, Decl(genericRecordIntersectionAssignability.ts, 100, 43))
+>U : Symbol(U, Decl(genericRecordIntersectionAssignability.ts, 100, 64))
+>k : Symbol(k, Decl(genericRecordIntersectionAssignability.ts, 100, 99))
+>X : Symbol(X, Decl(genericRecordIntersectionAssignability.ts, 100, 30))
+
+    const t: T = x[k];
+>t : Symbol(t, Decl(genericRecordIntersectionAssignability.ts, 101, 9))
+>T : Symbol(T, Decl(genericRecordIntersectionAssignability.ts, 100, 61))
+>x : Symbol(x, Decl(genericRecordIntersectionAssignability.ts, 100, 68))
+>k : Symbol(k, Decl(genericRecordIntersectionAssignability.ts, 100, 99))
+
+    const tu: T & U = x[k]; // Error
+>tu : Symbol(tu, Decl(genericRecordIntersectionAssignability.ts, 102, 9))
+>T : Symbol(T, Decl(genericRecordIntersectionAssignability.ts, 100, 61))
+>U : Symbol(U, Decl(genericRecordIntersectionAssignability.ts, 100, 64))
+>x : Symbol(x, Decl(genericRecordIntersectionAssignability.ts, 100, 68))
+>k : Symbol(k, Decl(genericRecordIntersectionAssignability.ts, 100, 99))
+}
+

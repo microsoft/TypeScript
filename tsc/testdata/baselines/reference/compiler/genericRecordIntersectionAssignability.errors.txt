@@ -35,15 +35,20 @@ genericRecordIntersectionAssignability.ts(72,5): error TS2322: Type '({ [P in `$
         Type 'number' is not assignable to type 'X'.
           'number' is assignable to the constraint of type 'X', but 'X' could be instantiated with a different subtype of constraint 'number'.
 genericRecordIntersectionAssignability.ts(89,11): error TS2322: Type '(Record<K1, T> & Record<K2, U> & { b: T; })[X]' is not assignable to type 'T & U'.
-  Type '(Record<K1, T> & Record<K2, U> & { b: T; })[K1] | (T & U)' is not assignable to type 'T & U'.
-    Type '(Record<K1, T> & Record<K2, U> & { b: T; })[K1]' is not assignable to type 'T & U'.
-      Type '(Record<K1, T> & { b: T; })[K1]' is not assignable to type 'T & U'.
-        Type 'T' is not assignable to type 'T & U'.
-          Type 'T' is not assignable to type 'U'.
-            'U' could be instantiated with an arbitrary type which could be unrelated to 'T'.
+  Type 'T | (Record<K1, T> & Record<K2, U> & { b: T; })[K1]' is not assignable to type 'T & U'.
+    Type 'T' is not assignable to type 'T & U'.
+      Type 'T' is not assignable to type 'U'.
+        'U' could be instantiated with an arbitrary type which could be unrelated to 'T'.
+genericRecordIntersectionAssignability.ts(93,5): error TS2322: Type 'string | number' is not assignable to type 'number'.
+  Type 'string' is not assignable to type 'number'.
+genericRecordIntersectionAssignability.ts(98,10): error TS2339: Property 'b' does not exist on type '(Record<K1, { a: string; }> & Record<K2, { b: string; }>)[X]'.
+genericRecordIntersectionAssignability.ts(103,11): error TS2322: Type '(Record<X, T> & Record<L, U>)[X]' is not assignable to type 'T & U'.
+  Type 'T & (Record<X, T> & Record<L, U>)[K]' is not assignable to type 'T & U'.
+    Type 'T & (Record<X, T> & Record<L, U>)[K]' is not assignable to type 'U'.
+      'U' could be instantiated with an arbitrary type which could be unrelated to 'T & (Record<X, T> & Record<L, U>)[K]'.
 
 
-==== genericRecordIntersectionAssignability.ts (11 errors) ====
+==== genericRecordIntersectionAssignability.ts (14 errors) ====
     // https://github.com/microsoft/TypeScript/issues/64495
     
     function f1<K1 extends string, T, K2 extends string, U>(x: Record<K1, T> & Record<K2, U>): Record<K1 | K2, T & U> {
@@ -193,15 +198,35 @@ genericRecordIntersectionAssignability.ts(89,11): error TS2322: Type '(Record<K1
         const tu: T & U = x[k]; // Error
               ~~
 !!! error TS2322: Type '(Record<K1, T> & Record<K2, U> & { b: T; })[X]' is not assignable to type 'T & U'.
-!!! error TS2322:   Type '(Record<K1, T> & Record<K2, U> & { b: T; })[K1] | (T & U)' is not assignable to type 'T & U'.
-!!! error TS2322:     Type '(Record<K1, T> & Record<K2, U> & { b: T; })[K1]' is not assignable to type 'T & U'.
-!!! error TS2322:       Type '(Record<K1, T> & { b: T; })[K1]' is not assignable to type 'T & U'.
-!!! error TS2322:         Type 'T' is not assignable to type 'T & U'.
-!!! error TS2322:           Type 'T' is not assignable to type 'U'.
-!!! error TS2322:             'U' could be instantiated with an arbitrary type which could be unrelated to 'T'.
+!!! error TS2322:   Type 'T | (Record<K1, T> & Record<K2, U> & { b: T; })[K1]' is not assignable to type 'T & U'.
+!!! error TS2322:     Type 'T' is not assignable to type 'T & U'.
+!!! error TS2322:       Type 'T' is not assignable to type 'U'.
+!!! error TS2322:         'U' could be instantiated with an arbitrary type which could be unrelated to 'T'.
 !!! related TS2208 genericRecordIntersectionAssignability.ts:87:33: This type parameter might need an `extends U` constraint.
 !!! related TS2208 genericRecordIntersectionAssignability.ts:87:33: This type parameter might need an `extends U` constraint.
-!!! related TS2208 genericRecordIntersectionAssignability.ts:87:33: This type parameter might need an `extends U` constraint.
-!!! related TS2208 genericRecordIntersectionAssignability.ts:87:33: This type parameter might need an `extends U` constraint.
+    }
+    
+    function f20<K1 extends string, K2 extends string, X extends K1 | "b">(x: Record<K1, number> & Record<K2, number> & { b: string }, k: X): number {
+        return x[k]; // Error
+        ~~~~~~
+!!! error TS2322: Type 'string | number' is not assignable to type 'number'.
+!!! error TS2322:   Type 'string' is not assignable to type 'number'.
+    }
+    
+    function f21<K1 extends string, K2 extends string, X extends K1>(x: Record<K1, { a: string }> & Record<K2, { b: string }>, k: X) {
+        x[k].a;
+        x[k].b; // Error
+             ~
+!!! error TS2339: Property 'b' does not exist on type '(Record<K1, { a: string; }> & Record<K2, { b: string; }>)[X]'.
+    }
+    
+    function f22<K extends string, X extends K, L extends string, T, U>(x: Record<X, T> & Record<L, U>, k: X) {
+        const t: T = x[k];
+        const tu: T & U = x[k]; // Error
+              ~~
+!!! error TS2322: Type '(Record<X, T> & Record<L, U>)[X]' is not assignable to type 'T & U'.
+!!! error TS2322:   Type 'T & (Record<X, T> & Record<L, U>)[K]' is not assignable to type 'T & U'.
+!!! error TS2322:     Type 'T & (Record<X, T> & Record<L, U>)[K]' is not assignable to type 'U'.
+!!! error TS2322:       'U' could be instantiated with an arbitrary type which could be unrelated to 'T & (Record<X, T> & Record<L, U>)[K]'.
     }
     

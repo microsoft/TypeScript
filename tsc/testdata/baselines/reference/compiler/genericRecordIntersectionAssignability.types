@@ -305,3 +305,55 @@ function f19<K1 extends string, T, K2 extends string, U, X extends K1 | "b">(x: 
 >k : X
 }
 
+function f20<K1 extends string, K2 extends string, X extends K1 | "b">(x: Record<K1, number> & Record<K2, number> & { b: string }, k: X): number {
+>f20 : <K1 extends string, K2 extends string, X extends K1 | "b">(x: Record<K1, number> & Record<K2, number> & { b: string; }, k: X) => number
+>x : Record<K1, number> & Record<K2, number> & { b: string; }
+>b : string
+>k : X
+
+    return x[k]; // Error
+>x[k] : string | number
+>x : Record<K1, number> & Record<K2, number> & { b: string; }
+>k : X
+}
+
+function f21<K1 extends string, K2 extends string, X extends K1>(x: Record<K1, { a: string }> & Record<K2, { b: string }>, k: X) {
+>f21 : <K1 extends string, K2 extends string, X extends K1>(x: Record<K1, { a: string; }> & Record<K2, { b: string; }>, k: X) => void
+>x : Record<K1, { a: string; }> & Record<K2, { b: string; }>
+>a : string
+>b : string
+>k : X
+
+    x[k].a;
+>x[k].a : string
+>x[k] : (Record<K1, { a: string; }> & Record<K2, { b: string; }>)[X]
+>x : Record<K1, { a: string; }> & Record<K2, { b: string; }>
+>k : X
+>a : string
+
+    x[k].b; // Error
+>x[k].b : any
+>x[k] : (Record<K1, { a: string; }> & Record<K2, { b: string; }>)[X]
+>x : Record<K1, { a: string; }> & Record<K2, { b: string; }>
+>k : X
+>b : any
+}
+
+function f22<K extends string, X extends K, L extends string, T, U>(x: Record<X, T> & Record<L, U>, k: X) {
+>f22 : <K extends string, X extends K, L extends string, T, U>(x: Record<X, T> & Record<L, U>, k: X) => void
+>x : Record<X, T> & Record<L, U>
+>k : X
+
+    const t: T = x[k];
+>t : T
+>x[k] : (Record<X, T> & Record<L, U>)[X]
+>x : Record<X, T> & Record<L, U>
+>k : X
+
+    const tu: T & U = x[k]; // Error
+>tu : T & U
+>x[k] : (Record<X, T> & Record<L, U>)[X]
+>x : Record<X, T> & Record<L, U>
+>k : X
+}
+

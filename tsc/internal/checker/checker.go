@@ -17713,36 +17713,44 @@ func (c *Checker) getConstraintOfMappedTypeIntersectionIndexedAccess(t *Type) *T
 	if indexConstraint == nil || indexConstraint == d.indexType {
 		return nil
 	}
-	if c.isGenericIndexType(indexConstraint) {
-		var retainedTypes []*Type
+	isGenericConstraint := c.isGenericIndexType(indexConstraint)
+	var retainedTypes []*Type
+	if isGenericConstraint {
 		for _, s := range types {
 			if c.isGenericMappedType(s) && c.isKnownKeyOfType(d.indexType, s) && !c.isKnownKeyOfType(indexConstraint, s) {
 				retainedTypes = append(retainedTypes, c.getSimplifiedType(c.getIndexedAccessTypeEx(s, d.indexType, d.accessFlags, nil, nil), false /*writing*/))
 			}
 		}
-		if len(retainedTypes) == 0 {
-			return nil
-		}
-		return c.getIntersectionType(append(retainedTypes, c.getIndexedAccessTypeEx(d.objectType, indexConstraint, d.accessFlags, nil, nil)))
 	}
-	// For a union constraint, we resolve each constituent separately, as different members of the intersection may
+	// We resolve each non-generic constituent of the constraint separately, as different members of the intersection may
 	// contain different constituents. For example, given X extends "a" | "b", only { b: U } contains "b" in
-	// (Record<K | "a", T> & { b: U })[X]. Otherwise, we index the remaining members by X itself.
+	// (Record<K | "a", T> & { b: U })[X]. When the constraint isn't a union, we index the remaining members by X itself.
+	// When no members remain, X isn't known to be a key of any of them, and the constraint is unknown.
 	changed := false
-	result := c.mapType(indexConstraint, func(key *Type) *Type {
-		remainingTypes := core.Filter(types, func(s *Type) bool {
-			return !c.isGenericMappedType(s) || c.isKnownKeyOfType(d.indexType, s) || c.isKnownKeyOfType(key, s)
-		})
-		if len(remainingTypes) == 0 || len(remainingTypes) == len(types) {
-			return c.getIndexedAccessTypeEx(d.objectType, key, d.accessFlags, nil, nil)
+	widenedType := c.mapType(indexConstraint, func(key *Type) *Type {
+		if !c.isGenericIndexType(key) {
+			remainingTypes := core.Filter(types, func(s *Type) bool {
+				return !c.isGenericMappedType(s) || c.isKnownKeyOfType(d.indexType, s) || c.isKnownKeyOfType(key, s)
+			})
+			if len(remainingTypes) < len(types) {
+				changed = true
+				if len(remainingTypes) == 0 {
+					return c.unknownType
+				}
+				return c.getIndexedAccessTypeEx(c.getIntersectionType(remainingTypes), core.IfElse(indexConstraint.flags&TypeFlagsUnion != 0, key, d.indexType), d.accessFlags, nil, nil)
+			}
 		}
-		changed = true
-		return c.getIndexedAccessTypeEx(c.getIntersectionType(remainingTypes), core.IfElse(indexConstraint.flags&TypeFlagsUnion != 0, key, d.indexType), d.accessFlags, nil, nil)
+		return c.getIndexedAccessTypeEx(d.objectType, key, d.accessFlags, nil, nil)
 	})
 	if !changed {
-		return nil
+		if !isGenericConstraint {
+			return nil
+		}
+		// We return (A & B)[C] even when nothing changed, such that base constraint computation applies these rules to
+		// it instead of resolving X to its base constraint directly.
+		widenedType = c.getIndexedAccessTypeEx(d.objectType, indexConstraint, d.accessFlags, nil, nil)
 	}
-	return result
+	return c.getIntersectionType(append(retainedTypes, widenedType))
 }
 
 func (c *Checker) isPossiblyNumericKeyType(t *Type) bool {
