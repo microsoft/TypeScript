@@ -1633,7 +1633,7 @@ func (c *Checker) literalTypesWithSameBaseType(types []*Type) bool {
 }
 
 func (c *Checker) isFromInferenceBlockedSource(t *Type) bool {
-	return t.symbol != nil && core.Some(t.symbol.Declarations(), c.isSkipDirectInferenceNode)
+	return (t.symbol != nil && core.Some(t.symbol.Declarations(), c.isSkipDirectInferenceNode)) || c.skipDirectInferenceTypes.Has(t)
 }
 
 func (c *Checker) isSkipDirectInferenceNode(node *ast.Node) bool {
