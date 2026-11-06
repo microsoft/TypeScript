@@ -931,6 +931,7 @@ type Checker struct {
 	_jsxNamespace                               string
 	_jsxFactoryEntity                           *ast.Node
 	skipDirectInferenceNodes                    collections.Set[*ast.Node]
+	skipDirectInferenceTypes                    collections.Set[*Type]
 	ctx                                         context.Context
 	packagesMap                                 map[string]bool
 	activeMappers                               []*TypeMapper
@@ -8304,7 +8305,7 @@ func (c *Checker) checkArrayLiteral(node *ast.Node, checkMode CheckMode) *Type {
 		return c.createTupleTypeEx(elementTypes, elementInfos, false)
 	}
 	if checkMode&CheckModeForceTuple != 0 || inConstContext || inTupleContext {
-		return c.createArrayLiteralType(c.createTupleTypeEx(elementTypes, elementInfos, inConstContext && !(contextualType != nil && someType(contextualType, c.isMutableArrayLikeType)) /*readonly*/))
+		return c.createArrayLiteralType(node, c.createTupleTypeEx(elementTypes, elementInfos, inConstContext && !(contextualType != nil && someType(contextualType, c.isMutableArrayLikeType)) /*readonly*/))
 	}
 	var elementType *Type
 	if len(elementTypes) != 0 {
@@ -8317,12 +8318,22 @@ func (c *Checker) checkArrayLiteral(node *ast.Node, checkMode CheckMode) *Type {
 	} else {
 		elementType = core.IfElse(c.strictNullChecks, c.implicitNeverType, c.undefinedWideningType)
 	}
-	return c.createArrayLiteralType(c.createArrayTypeEx(elementType, inConstContext))
+	return c.createArrayLiteralType(node, c.createArrayTypeEx(elementType, inConstContext))
 }
 
-func (c *Checker) createArrayLiteralType(t *Type) *Type {
+func (c *Checker) createArrayLiteralType(node *ast.Node, t *Type) *Type {
 	if t.objectFlags&ObjectFlagsReference == 0 {
 		return t
+	}
+	if c.skipDirectInferenceNodes.Has(node) {
+		// Inference from this array literal is blocked (see runWithInferenceBlockedFromSourceNode). Unlike
+		// object literal types, array literal types have no symbol referring back to their node and are
+		// shared between array literals with identical element types, so we create a distinct type here
+		// that isFromInferenceBlockedSource can recognize.
+		literalType := c.cloneTypeReference(t)
+		literalType.objectFlags |= ObjectFlagsArrayLiteral | ObjectFlagsContainsObjectOrArrayLiteral
+		c.skipDirectInferenceTypes.Add(literalType)
+		return literalType
 	}
 	key := CachedTypeKey{kind: CachedTypeKindArrayLiteralType, typeId: t.id}
 	if cached, ok := c.cachedTypes[key]; ok {
