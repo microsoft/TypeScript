@@ -2610,15 +2610,23 @@ func (c *Checker) getRelater() *Relater {
 }
 
 func (c *Checker) putRelater(r *Relater) {
+	// Reset fields individually; assigning a whole Relater literal builds it
+	// on the stack and copies it in under a bulk write barrier.
+	r.relation = nil
+	r.errorNode = nil
+	r.errorChain = nil
+	r.relatedInfo = nil
+	r.maybeKeys = r.maybeKeys[:0]
 	r.maybeKeysSet.Clear()
-	*r = Relater{
-		c:            c,
-		maybeKeys:    r.maybeKeys[:0],
-		maybeKeysSet: r.maybeKeysSet,
-		sourceStack:  r.sourceStack[:0],
-		targetStack:  r.targetStack[:0],
-		next:         c.freeRelater,
-	}
+	r.sourceStack = r.sourceStack[:0]
+	r.targetStack = r.targetStack[:0]
+	r.maybeCount = 0
+	r.sourceDepth = 0
+	r.targetDepth = 0
+	r.expandingFlags = 0
+	r.overflow = false
+	r.relationCount = 0
+	r.next = c.freeRelater
 	c.freeRelater = r
 }
 
