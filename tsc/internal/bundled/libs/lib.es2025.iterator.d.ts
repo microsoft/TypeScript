@@ -13,7 +13,6 @@ See the Apache Version 2.0 License for specific language governing permissions
 and limitations under the License.
 ***************************************************************************** */
 
-
 /// <reference lib="es2015.iterable" />
 
 // NOTE: This is specified as what is essentially an unreachable module. All actual global declarations can be found

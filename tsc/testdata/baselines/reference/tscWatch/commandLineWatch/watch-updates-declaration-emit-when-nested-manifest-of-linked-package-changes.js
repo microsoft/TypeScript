@@ -130,6 +130,7 @@ Directory watches::
 tsconfig.json::
 SemanticDiagnostics::
 Signatures::
+(stored at emit) /home/src/workspaces/project/a/src/index.ts
 
 
 Edit [1]:: remove nested manifest of c
@@ -197,3 +198,4 @@ Directory watches::
 tsconfig.json::
 SemanticDiagnostics::
 Signatures::
+(stored at emit) /home/src/workspaces/project/a/src/index.ts

@@ -63,7 +63,7 @@ declare const console: { log(msg: any): void; };
 export declare const stage: import("c").Current;
 
 //// [/home/src/workspaces/project/a/tsconfig.tsbuildinfo] *new* 
-{"version":"FakeTSVersion","root":[4],"packageJsons":["./package.json","../b/package.json","../c/package.json"],"fileNames":["lib.es2026.full.d.ts","../c/index.d.ts","../b/index.d.ts","./src/index.ts"],"fileInfos":[{"version":"8859c12c614ce56ba9a18e58384a198f-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ninterface SymbolConstructor {\n    (desc?: string | number): symbol;\n    for(name: string): symbol;\n    readonly toStringTag: symbol;\n}\ndeclare var Symbol: SymbolConstructor;\ninterface Symbol {\n    readonly [Symbol.toStringTag]: string;\n}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true,"impliedNodeFormat":1},{"version":"84e857cae1dadf8646c736e92d69dd7f-export interface Current { readonly stage: string }\nexport declare const current: Current;","impliedNodeFormat":99},{"version":"439fc1840141ec93ccca8462af32e6f0-export declare const currentStage: () => import(\"c\").Current;","impliedNodeFormat":99},{"version":"58d3d85f395f5825bc9d710f0024af35-import { currentStage } from \"b\";\nexport const stage = currentStage();","signature":"620c9be1975f68589ff91cdbbde3297b-export declare const stage: import(\"c\").Current;\n","impliedNodeFormat":99}],"fileIdsList":[[3],[2]],"options":{"emitDeclarationOnly":true,"declaration":true,"module":199,"outDir":"./dist","rootDir":"./src","strict":true},"referencedMap":[[4,1],[3,2]],"linkedPackagesSignature":"54cba0a93d99474d375620ee2a6c342d-../b/node_modules/c -> ../c\n../b/node_modules/c {\"type\":\"module\",\"types\":\"./index.d.ts\"}\nnode_modules/b -> ../b\nnode_modules/b {\"type\":\"module\",\"types\":\"./index.d.ts\"}\nnode_modules/c -> ../c\nnode_modules/c {\"type\":\"module\",\"types\":\"./index.d.ts\"}"}
+{"version":"FakeTSVersion","root":[4],"packageJsons":["./package.json","../b/package.json","../c/package.json"],"fileNames":["lib.es2026.full.d.ts","../c/index.d.ts","../b/index.d.ts","./src/index.ts"],"fileInfos":[{"version":"8859c12c614ce56ba9a18e58384a198f-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ninterface SymbolConstructor {\n    (desc?: string | number): symbol;\n    for(name: string): symbol;\n    readonly toStringTag: symbol;\n}\ndeclare var Symbol: SymbolConstructor;\ninterface Symbol {\n    readonly [Symbol.toStringTag]: string;\n}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true,"impliedNodeFormat":1},{"version":"84e857cae1dadf8646c736e92d69dd7f-export interface Current { readonly stage: string }\nexport declare const current: Current;","impliedNodeFormat":99},{"version":"439fc1840141ec93ccca8462af32e6f0-export declare const currentStage: () => import(\"c\").Current;","impliedNodeFormat":99},{"version":"58d3d85f395f5825bc9d710f0024af35-import { currentStage } from \"b\";\nexport const stage = currentStage();","signature":"620c9be1975f68589ff91cdbbde3297b-export declare const stage: import(\"c\").Current;\n","impliedNodeFormat":99}],"fileIdsList":[[3],[2]],"options":{"emitDeclarationOnly":true,"declaration":true,"module":199,"outDir":"./dist","rootDir":"./src","strict":true,"types":[]},"referencedMap":[[4,1],[3,2]],"linkedPackagesSignature":"54cba0a93d99474d375620ee2a6c342d-../b/node_modules/c -> ../c\n../b/node_modules/c {\"type\":\"module\",\"types\":\"./index.d.ts\"}\nnode_modules/b -> ../b\nnode_modules/b {\"type\":\"module\",\"types\":\"./index.d.ts\"}\nnode_modules/c -> ../c\nnode_modules/c {\"type\":\"module\",\"types\":\"./index.d.ts\"}"}
 //// [/home/src/workspaces/project/a/tsconfig.tsbuildinfo.readable.baseline.txt] *new* 
 {
   "version": "FakeTSVersion",
@@ -145,7 +145,8 @@ export declare const stage: import("c").Current;
     "module": 199,
     "outDir": "./dist",
     "rootDir": "./src",
-    "strict": true
+    "strict": true,
+    "types": []
   },
   "referencedMap": {
     "./src/index.ts": [
@@ -156,7 +157,7 @@ export declare const stage: import("c").Current;
     ]
   },
   "linkedPackagesSignature": "54cba0a93d99474d375620ee2a6c342d-../b/node_modules/c -> ../c\n../b/node_modules/c {\"type\":\"module\",\"types\":\"./index.d.ts\"}\nnode_modules/b -> ../b\nnode_modules/b {\"type\":\"module\",\"types\":\"./index.d.ts\"}\nnode_modules/c -> ../c\nnode_modules/c {\"type\":\"module\",\"types\":\"./index.d.ts\"}",
-  "size": 2038
+  "size": 2049
 }
 
 tsconfig.json::
@@ -186,7 +187,7 @@ Output::
 Found 1 error in src/index.ts[90m:2[0m
 
 //// [/home/src/workspaces/project/a/tsconfig.tsbuildinfo] *modified* 
-{"version":"FakeTSVersion","root":[4],"packageJsons":["./package.json","../b/package.json","../c/package.json"],"fileNames":["lib.es2026.full.d.ts","../c/index.d.ts","../b/index.d.ts","./src/index.ts"],"fileInfos":[{"version":"8859c12c614ce56ba9a18e58384a198f-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ninterface SymbolConstructor {\n    (desc?: string | number): symbol;\n    for(name: string): symbol;\n    readonly toStringTag: symbol;\n}\ndeclare var Symbol: SymbolConstructor;\ninterface Symbol {\n    readonly [Symbol.toStringTag]: string;\n}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true,"impliedNodeFormat":1},{"version":"84e857cae1dadf8646c736e92d69dd7f-export interface Current { readonly stage: string }\nexport declare const current: Current;","impliedNodeFormat":99},{"version":"439fc1840141ec93ccca8462af32e6f0-export declare const currentStage: () => import(\"c\").Current;","impliedNodeFormat":99},{"version":"58d3d85f395f5825bc9d710f0024af35-import { currentStage } from \"b\";\nexport const stage = currentStage();","signature":"620c9be1975f68589ff91cdbbde3297b-export declare const stage: import(\"c\").Current;\n","impliedNodeFormat":99}],"fileIdsList":[[3],[2]],"options":{"emitDeclarationOnly":true,"declaration":true,"module":199,"outDir":"./dist","rootDir":"./src","strict":true},"referencedMap":[[4,1],[3,2]],"emitDiagnosticsPerFile":[[4,[{"pos":47,"end":52,"code":2883,"category":1,"messageKey":"The_inferred_type_of_0_cannot_be_named_without_a_reference_to_2_from_1_This_is_likely_not_portable_A_2883","messageArgs":["stage","../../b/node_modules/c/index.js","Current"]}]]],"linkedPackagesSignature":"85a7c129ec4610ba9cc32bf3c1a41ded-../b/node_modules/c -> ../c\n../b/node_modules/c {\"type\":\"module\",\"types\":\"./index.d.ts\"}\nnode_modules/b -> ../b\nnode_modules/b {\"type\":\"module\",\"types\":\"./index.d.ts\"}"}
+{"version":"FakeTSVersion","root":[4],"packageJsons":["./package.json","../b/package.json","../c/package.json"],"fileNames":["lib.es2026.full.d.ts","../c/index.d.ts","../b/index.d.ts","./src/index.ts"],"fileInfos":[{"version":"8859c12c614ce56ba9a18e58384a198f-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ninterface SymbolConstructor {\n    (desc?: string | number): symbol;\n    for(name: string): symbol;\n    readonly toStringTag: symbol;\n}\ndeclare var Symbol: SymbolConstructor;\ninterface Symbol {\n    readonly [Symbol.toStringTag]: string;\n}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true,"impliedNodeFormat":1},{"version":"84e857cae1dadf8646c736e92d69dd7f-export interface Current { readonly stage: string }\nexport declare const current: Current;","impliedNodeFormat":99},{"version":"439fc1840141ec93ccca8462af32e6f0-export declare const currentStage: () => import(\"c\").Current;","impliedNodeFormat":99},{"version":"58d3d85f395f5825bc9d710f0024af35-import { currentStage } from \"b\";\nexport const stage = currentStage();","signature":"620c9be1975f68589ff91cdbbde3297b-export declare const stage: import(\"c\").Current;\n","impliedNodeFormat":99}],"fileIdsList":[[3],[2]],"options":{"emitDeclarationOnly":true,"declaration":true,"module":199,"outDir":"./dist","rootDir":"./src","strict":true,"types":[]},"referencedMap":[[4,1],[3,2]],"emitDiagnosticsPerFile":[[4,[{"pos":47,"end":52,"code":2883,"category":1,"messageKey":"The_inferred_type_of_0_cannot_be_named_without_a_reference_to_2_from_1_This_is_likely_not_portable_A_2883","messageArgs":["stage","../../b/node_modules/c/index.js","Current"]}]]],"linkedPackagesSignature":"85a7c129ec4610ba9cc32bf3c1a41ded-../b/node_modules/c -> ../c\n../b/node_modules/c {\"type\":\"module\",\"types\":\"./index.d.ts\"}\nnode_modules/b -> ../b\nnode_modules/b {\"type\":\"module\",\"types\":\"./index.d.ts\"}"}
 //// [/home/src/workspaces/project/a/tsconfig.tsbuildinfo.readable.baseline.txt] *modified* 
 {
   "version": "FakeTSVersion",
@@ -268,7 +269,8 @@ Found 1 error in src/index.ts[90m:2[0m
     "module": 199,
     "outDir": "./dist",
     "rootDir": "./src",
-    "strict": true
+    "strict": true,
+    "types": []
   },
   "referencedMap": {
     "./src/index.ts": [
@@ -298,7 +300,7 @@ Found 1 error in src/index.ts[90m:2[0m
     ]
   ],
   "linkedPackagesSignature": "85a7c129ec4610ba9cc32bf3c1a41ded-../b/node_modules/c -> ../c\n../b/node_modules/c {\"type\":\"module\",\"types\":\"./index.d.ts\"}\nnode_modules/b -> ../b\nnode_modules/b {\"type\":\"module\",\"types\":\"./index.d.ts\"}",
-  "size": 2216
+  "size": 2227
 }
 
 tsconfig.json::
@@ -335,7 +337,7 @@ ExitStatus:: Success
 Output::
 //// [/home/src/workspaces/project/a/dist/index.d.ts] *rewrite with same content*
 //// [/home/src/workspaces/project/a/tsconfig.tsbuildinfo] *modified* 
-{"version":"FakeTSVersion","root":[4],"packageJsons":["./package.json","../b/package.json","../c/package.json"],"fileNames":["lib.es2026.full.d.ts","../c/index.d.ts","../b/index.d.ts","./src/index.ts"],"fileInfos":[{"version":"8859c12c614ce56ba9a18e58384a198f-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ninterface SymbolConstructor {\n    (desc?: string | number): symbol;\n    for(name: string): symbol;\n    readonly toStringTag: symbol;\n}\ndeclare var Symbol: SymbolConstructor;\ninterface Symbol {\n    readonly [Symbol.toStringTag]: string;\n}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true,"impliedNodeFormat":1},{"version":"84e857cae1dadf8646c736e92d69dd7f-export interface Current { readonly stage: string }\nexport declare const current: Current;","impliedNodeFormat":99},{"version":"439fc1840141ec93ccca8462af32e6f0-export declare const currentStage: () => import(\"c\").Current;","impliedNodeFormat":99},{"version":"58d3d85f395f5825bc9d710f0024af35-import { currentStage } from \"b\";\nexport const stage = currentStage();","signature":"620c9be1975f68589ff91cdbbde3297b-export declare const stage: import(\"c\").Current;\n","impliedNodeFormat":99}],"fileIdsList":[[3],[2]],"options":{"emitDeclarationOnly":true,"declaration":true,"module":199,"outDir":"./dist","rootDir":"./src","strict":true},"referencedMap":[[4,1],[3,2]],"linkedPackagesSignature":"54cba0a93d99474d375620ee2a6c342d-../b/node_modules/c -> ../c\n../b/node_modules/c {\"type\":\"module\",\"types\":\"./index.d.ts\"}\nnode_modules/b -> ../b\nnode_modules/b {\"type\":\"module\",\"types\":\"./index.d.ts\"}\nnode_modules/c -> ../c\nnode_modules/c {\"type\":\"module\",\"types\":\"./index.d.ts\"}"}
+{"version":"FakeTSVersion","root":[4],"packageJsons":["./package.json","../b/package.json","../c/package.json"],"fileNames":["lib.es2026.full.d.ts","../c/index.d.ts","../b/index.d.ts","./src/index.ts"],"fileInfos":[{"version":"8859c12c614ce56ba9a18e58384a198f-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ninterface SymbolConstructor {\n    (desc?: string | number): symbol;\n    for(name: string): symbol;\n    readonly toStringTag: symbol;\n}\ndeclare var Symbol: SymbolConstructor;\ninterface Symbol {\n    readonly [Symbol.toStringTag]: string;\n}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true,"impliedNodeFormat":1},{"version":"84e857cae1dadf8646c736e92d69dd7f-export interface Current { readonly stage: string }\nexport declare const current: Current;","impliedNodeFormat":99},{"version":"439fc1840141ec93ccca8462af32e6f0-export declare const currentStage: () => import(\"c\").Current;","impliedNodeFormat":99},{"version":"58d3d85f395f5825bc9d710f0024af35-import { currentStage } from \"b\";\nexport const stage = currentStage();","signature":"620c9be1975f68589ff91cdbbde3297b-export declare const stage: import(\"c\").Current;\n","impliedNodeFormat":99}],"fileIdsList":[[3],[2]],"options":{"emitDeclarationOnly":true,"declaration":true,"module":199,"outDir":"./dist","rootDir":"./src","strict":true,"types":[]},"referencedMap":[[4,1],[3,2]],"linkedPackagesSignature":"54cba0a93d99474d375620ee2a6c342d-../b/node_modules/c -> ../c\n../b/node_modules/c {\"type\":\"module\",\"types\":\"./index.d.ts\"}\nnode_modules/b -> ../b\nnode_modules/b {\"type\":\"module\",\"types\":\"./index.d.ts\"}\nnode_modules/c -> ../c\nnode_modules/c {\"type\":\"module\",\"types\":\"./index.d.ts\"}"}
 //// [/home/src/workspaces/project/a/tsconfig.tsbuildinfo.readable.baseline.txt] *modified* 
 {
   "version": "FakeTSVersion",
@@ -417,7 +419,8 @@ Output::
     "module": 199,
     "outDir": "./dist",
     "rootDir": "./src",
-    "strict": true
+    "strict": true,
+    "types": []
   },
   "referencedMap": {
     "./src/index.ts": [
@@ -428,7 +431,7 @@ Output::
     ]
   },
   "linkedPackagesSignature": "54cba0a93d99474d375620ee2a6c342d-../b/node_modules/c -> ../c\n../b/node_modules/c {\"type\":\"module\",\"types\":\"./index.d.ts\"}\nnode_modules/b -> ../b\nnode_modules/b {\"type\":\"module\",\"types\":\"./index.d.ts\"}\nnode_modules/c -> ../c\nnode_modules/c {\"type\":\"module\",\"types\":\"./index.d.ts\"}",
-  "size": 2038
+  "size": 2049
 }
 
 tsconfig.json::

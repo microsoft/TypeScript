@@ -256,6 +256,13 @@ func (b *ProjectCollectionBuilder) HandleAPIRequest(apiRequest *APISnapshotReque
 		}
 	}
 
+	// Projects that are still the default for API-opened files must be retained.
+	for path, file := range b.apiState.openFiles {
+		if entry := b.findDefaultConfiguredProject(file.fileName, path); entry != nil {
+			delete(projectsToClose, entry.Value().configFilePath)
+		}
+	}
+
 	for projectPath := range projectsToClose {
 		if entry, ok := b.configuredProjects.Load(ConfiguredProjectIDFromPathKey(projectPath)); ok {
 			b.deleteProject(entry, logger)
@@ -745,7 +752,7 @@ func (b *ProjectCollectionBuilder) DidRequestProjectTrees(projectTreeRequest *Pr
 	})
 
 	var seenProjects collections.SyncSet[ConfiguredProjectID]
-	wg := core.NewWorkGroup(false)
+	wg := core.NewWorkGroup(0)
 	for _, projectId := range currentProjects {
 		wg.Queue(func() {
 			if entry, ok := b.configuredProjects.Load(projectId); ok {
