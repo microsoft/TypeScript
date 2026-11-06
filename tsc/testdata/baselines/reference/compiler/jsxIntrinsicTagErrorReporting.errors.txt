@@ -12,7 +12,7 @@ jsxIntrinsicTagErrorReporting.tsx(24,19): error TS17002: Expected corresponding 
         div: any;
       }
     }
-
+    
     function Component() {
       return (
         <div>
@@ -28,7 +28,7 @@ jsxIntrinsicTagErrorReporting.tsx(24,19): error TS17002: Expected corresponding 
     const components = {
         div: 'div',
     } as const;
-
+    
     function ComponentWithPropertyAccess() {
         return <components.dov />;
                            ~~~
