@@ -594,6 +594,10 @@ func (s *TestSys) removeNoError(path string) {
 	}
 }
 
+func (s *TestSys) addSymlink(path string, target string) {
+	s.mapFs().AddSymlink(strings.TrimPrefix(path, "/"), strings.TrimPrefix(target, "/"))
+}
+
 func (s *TestSys) readFileNoError(path string) string {
 	content, ok := s.fsFromFileMap().ReadFile(tspath.ToRootedFilePath(path, s.GetCurrentDirectory()))
 	if !ok {
