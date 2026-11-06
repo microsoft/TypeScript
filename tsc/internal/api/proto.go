@@ -1990,13 +1990,14 @@ type MemberFilter struct {
 	// Drop members whose JSDoc carries any of these tags (e.g. "internal", "deprecated").
 	ExcludeJsDocTags []string `json:"excludeJsDocTags,omitempty"`
 	// Drop members whose name (in its wire form, as the client sees it) matches this
-	// RE2 pattern, e.g. "^_" or "^(_|prototype$)".
-	ExcludeNamePattern string `json:"excludeNamePattern,omitempty"`
+	// RE2 pattern, e.g. "^_" or "^(_|prototype$)". Absent means no name filter; a
+	// pattern that is passed is always compiled, so the empty pattern matches every
+	// member.
+	ExcludeNamePattern *string `json:"excludeNamePattern,omitempty"`
 	// Which declaring types to take members from. Nil means all (plain
 	// getPropertiesOfType semantics).
 	IncludeInheritedFrom *InheritedMemberFilter `json:"includeInheritedFrom,omitempty"`
-	// Include the declared type of each non-method member (getTypeOfSymbolAtLocation at
-	// its first declaration).
+	// Include the declared type of each non-method member (getTypeOfSymbol).
 	IncludeDeclaredType bool `json:"includeDeclaredType,omitempty"`
 }
 
@@ -2023,7 +2024,8 @@ type GetMembersOfTypeParams struct {
 type MemberResponse struct {
 	Symbol *SymbolResponse `json:"symbol"`
 	// Owner is the symbol of the type declaring the member (see InheritedMemberFilter),
-	// when it could be determined.
+	// when it could be determined; members without a declaration (tuple elements,
+	// `length`, ...) have none.
 	Owner               *SymbolResponse `json:"owner,omitempty"`
 	IsMethod            bool            `json:"isMethod,omitempty"`
 	IsParameterProperty bool            `json:"isParameterProperty,omitempty"`

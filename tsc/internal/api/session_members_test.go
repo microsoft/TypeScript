@@ -5,6 +5,7 @@ import (
 	"strings"
 	"testing"
 
+	"github.com/microsoft/TypeScript/tsc/internal/ast"
 	"github.com/microsoft/TypeScript/tsc/internal/bundled"
 	"github.com/microsoft/TypeScript/tsc/internal/project"
 	"github.com/microsoft/TypeScript/tsc/internal/testutil/projecttestutil"
@@ -133,7 +134,7 @@ func TestGetMembersOfTypeCombinesPredicatesLikeATraversal(t *testing.T) {
 		Filter: MemberFilter{
 			Visibility:           []string{"public", "protected"},
 			ExcludeJsDocTags:     []string{"internal", "deprecated"},
-			ExcludeNamePattern:   "^_",
+			ExcludeNamePattern:   ptr("^_"),
 			IncludeInheritedFrom: &InheritedMemberFilter{},
 			IncludeDeclaredType:  true,
 		},
@@ -193,7 +194,7 @@ func TestGetMembersOfTypeInheritedFromAndKinds(t *testing.T) {
 		Type:     instanceType.Id,
 		Filter: MemberFilter{
 			Visibility:           []string{"public", "protected"},
-			ExcludeNamePattern:   "^_",
+			ExcludeNamePattern:   ptr("^_"),
 			IncludeInheritedFrom: &InheritedMemberFilter{DeclaringTypes: []SymbolReference{base.Reference}},
 		},
 	})
@@ -261,7 +262,7 @@ func TestGetMembersOfTypeInheritedFromAndKinds(t *testing.T) {
 		Snapshot: ctx.snapshot,
 		Project:  ctx.project,
 		Type:     instanceType.Id,
-		Filter:   MemberFilter{ExcludeNamePattern: "("},
+		Filter:   MemberFilter{ExcludeNamePattern: ptr("(")},
 	})
 	assert.ErrorContains(t, err, "invalid excludeNamePattern")
 }
@@ -303,4 +304,109 @@ func TestGetSymbolDocumentationsMatchesIndividualCalls(t *testing.T) {
 			assert.Equal(t, *docs[i].Tags[j], *tags[j])
 		}
 	}
+}
+
+func ptr[T any](v T) *T { return &v }
+
+// The shapes the review of the first version found missing: members without a
+// declaration, accessor pairs declared setter-first, auto-accessors, and the
+// synthetic member of a union.
+const membersEdgeCaseSource = `export type Pair = [string, number];
+export class Order {
+    private set x(value: number) {}
+    get x(): number { return 0; }
+    accessor auto = 0;
+    plain = "";
+}
+export type Either = { m(): number } | { m(): string };
+`
+
+func TestGetMembersOfTypeKeepsMembersWithoutDeclarations(t *testing.T) {
+	t.Parallel()
+	ctx, cleanup := setupMembersTestWithSource(t, membersEdgeCaseSource)
+	defer cleanup()
+
+	pair := ctx.declaredType(t, ctx.declarationSymbol(t, "export type "))
+	props, err := ctx.session.handleGetPropertiesOfType(t.Context(), &CheckerTypeParams{Snapshot: ctx.snapshot, Project: ctx.project, Type: pair.Id})
+	assert.NilError(t, err)
+	propNames := memberNames2(props)
+	assert.Assert(t, slices.Contains(propNames, "0") && slices.Contains(propNames, "length"), "tuple members: %v", propNames)
+
+	members := ctx.membersOf(t, pair, MemberFilter{IncludeDeclaredType: true})
+	assert.DeepEqual(t, memberNames(members), propNames)
+	for _, m := range members {
+		switch m.Symbol.Name {
+		case "0", "1", "length":
+			assert.Assert(t, len(m.Symbol.Declarations) == 0, "%s has no declaration", m.Symbol.Name)
+			assert.Assert(t, m.Owner == nil, "%s has no owner", m.Symbol.Name)
+			assert.Assert(t, !m.IsMethod && !m.IsParameterProperty)
+			assert.Assert(t, m.DeclaredType != nil, "%s has a declared type", m.Symbol.Name)
+			direct, err := ctx.session.handleGetTypeOfSymbol(t.Context(), &GetTypeOfSymbolParams{Snapshot: ctx.snapshot, Project: ctx.project, Symbol: m.Symbol.Reference})
+			assert.NilError(t, err)
+			assert.Equal(t, m.DeclaredType.Id, direct.Id)
+		}
+	}
+	// Predicates still apply to them: they are public properties, and a filter on
+	// the declaring type keeps what it cannot attribute to another type.
+	public := ctx.membersOf(t, pair, MemberFilter{Visibility: []string{"public"}, Kinds: []string{"property"}, IncludeInheritedFrom: &InheritedMemberFilter{}})
+	assert.Assert(t, slices.Contains(memberNames(public), "0") && slices.Contains(memberNames(public), "length"), "%v", memberNames(public))
+	assert.Assert(t, !slices.Contains(memberNames(public), "push"), "array methods are not properties: %v", memberNames(public))
+}
+
+func TestGetMembersOfTypeEmptyNamePatternIsNotAbsent(t *testing.T) {
+	t.Parallel()
+	ctx, cleanup := setupMembersTestWithSource(t, membersEdgeCaseSource)
+	defer cleanup()
+
+	order := ctx.declaredType(t, ctx.classSymbol(t, "Order"))
+	all := ctx.membersOf(t, order, MemberFilter{})
+	assert.DeepEqual(t, memberNames(all), []string{"x", "auto", "plain"})
+	assert.DeepEqual(t, memberNames(ctx.membersOf(t, order, MemberFilter{ExcludeNamePattern: nil})), memberNames(all))
+	assert.Equal(t, len(ctx.membersOf(t, order, MemberFilter{ExcludeNamePattern: ptr("")})), 0, "the empty pattern matches every name")
+}
+
+func TestGetMembersOfTypeReadVisibilityOfAccessorPairs(t *testing.T) {
+	t.Parallel()
+	ctx, cleanup := setupMembersTestWithSource(t, membersEdgeCaseSource)
+	defer cleanup()
+
+	order := ctx.declaredType(t, ctx.classSymbol(t, "Order"))
+	public := ctx.membersOf(t, order, MemberFilter{Visibility: []string{"public"}})
+	assert.Assert(t, slices.Contains(memberNames(public), "x"), "a private setter declared before a public getter does not hide the member: %v", memberNames(public))
+	private := ctx.membersOf(t, order, MemberFilter{Visibility: []string{"private"}})
+	assert.Equal(t, len(private), 0, "%v", memberNames(private))
+}
+
+func TestGetMembersOfTypeAutoAccessorIsAnAccessor(t *testing.T) {
+	t.Parallel()
+	ctx, cleanup := setupMembersTestWithSource(t, membersEdgeCaseSource)
+	defer cleanup()
+
+	order := ctx.declaredType(t, ctx.classSymbol(t, "Order"))
+	assert.DeepEqual(t, memberNames(ctx.membersOf(t, order, MemberFilter{Kinds: []string{"accessor"}})), []string{"x", "auto"})
+	assert.DeepEqual(t, memberNames(ctx.membersOf(t, order, MemberFilter{Kinds: []string{"property"}})), []string{"plain"})
+}
+
+func TestGetMembersOfTypeUnionMethodIsAMethod(t *testing.T) {
+	t.Parallel()
+	ctx, cleanup := setupMembersTestWithSource(t, membersEdgeCaseSource)
+	defer cleanup()
+
+	either := ctx.declaredType(t, ctx.declarationSymbol(t, "export type Either"))
+	members := ctx.membersOf(t, either, MemberFilter{IncludeDeclaredType: true})
+	assert.DeepEqual(t, memberNames(members), []string{"m"})
+	m := members[0]
+	assert.Assert(t, m.Symbol.Flags&uint32(ast.SymbolFlagsMethod) == 0, "the synthetic union member carries no method flag; the test would be vacuous otherwise")
+	assert.Assert(t, m.IsMethod, "a member whose constituents are methods is a method")
+	assert.Assert(t, m.DeclaredType == nil)
+	assert.DeepEqual(t, memberNames(ctx.membersOf(t, either, MemberFilter{Kinds: []string{"method"}})), []string{"m"})
+	assert.Equal(t, len(ctx.membersOf(t, either, MemberFilter{Kinds: []string{"property"}})), 0)
+}
+
+func memberNames2(symbols []*SymbolResponse) []string {
+	names := make([]string, len(symbols))
+	for i, s := range symbols {
+		names[i] = s.Name
+	}
+	return names
 }

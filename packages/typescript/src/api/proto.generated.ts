@@ -961,7 +961,8 @@ export interface MemberResponse {
     symbol: SymbolResponse | null;
     /**
      * Owner is the symbol of the type declaring the member (see InheritedMemberFilter),
-     * when it could be determined.
+     * when it could be determined; members without a declaration (tuple elements,
+     * `length`, ...) have none.
      */
     owner?: SymbolResponse | undefined;
     isMethod?: boolean | undefined;
@@ -1825,7 +1826,9 @@ export interface MemberFilter {
     excludeJsDocTags?: string[] | undefined;
     /**
      * Drop members whose name (in its wire form, as the client sees it) matches this
-     * RE2 pattern, e.g. "^_" or "^(_|prototype$)".
+     * RE2 pattern, e.g. "^_" or "^(_|prototype$)". Absent means no name filter; a
+     * pattern that is passed is always compiled, so the empty pattern matches every
+     * member.
      */
     excludeNamePattern?: string | undefined;
     /**
@@ -1833,10 +1836,7 @@ export interface MemberFilter {
      * getPropertiesOfType semantics).
      */
     includeInheritedFrom?: InheritedMemberFilter | undefined;
-    /**
-     * Include the declared type of each non-method member (getTypeOfSymbolAtLocation at
-     * its first declaration).
-     */
+    /** Include the declared type of each non-method member (getTypeOfSymbol). */
     includeDeclaredType?: boolean | undefined;
 }
 

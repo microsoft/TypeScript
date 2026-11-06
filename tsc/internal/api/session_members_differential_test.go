@@ -243,7 +243,7 @@ func TestGetMembersOfTypeMatchesTheFineGrainedPath(t *testing.T) {
 		assert.Check(t, slices.Equal(displayNames(got), want), "declaring types up to %s: got %v, want %v", owner, displayNames(got), want)
 	}
 	// The ECMAScript private field is matched on its wire form.
-	got := ctx.membersOf(t, instanceType, MemberFilter{ExcludeNamePattern: "^__#"})
+	got := ctx.membersOf(t, instanceType, MemberFilter{ExcludeNamePattern: ptr("^__#")})
 	assert.DeepEqual(t, displayNames(got), slices.DeleteFunc(slices.Clone(order), func(name string) bool { return name == "#ecmaPrivate" }))
 
 	// 3. The combination a binding generator uses: public and protected members,
@@ -253,7 +253,7 @@ func TestGetMembersOfTypeMatchesTheFineGrainedPath(t *testing.T) {
 	policy := MemberFilter{
 		Visibility:           []string{"public", "protected"},
 		ExcludeJsDocTags:     []string{"internal", "deprecated"},
-		ExcludeNamePattern:   "^_",
+		ExcludeNamePattern:   ptr("^_"),
 		IncludeInheritedFrom: &InheritedMemberFilter{DeclaringTypes: []SymbolReference{base.Reference}},
 		IncludeDeclaredType:  true,
 	}

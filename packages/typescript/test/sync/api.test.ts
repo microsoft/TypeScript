@@ -6503,6 +6503,18 @@ export class Derived extends Base {
         const everything = project.checker.getMembersOfType(type);
         assert.deepEqual(everything.map(m => m.symbol), properties, "no filter means getPropertiesOfType");
         assert.ok(everything.every(m => m.declaredType === undefined), "declared types only on request");
+
+        // Optional filter fields accept an explicit `undefined` under exactOptionalPropertyTypes.
+        const explicit = project.checker.getMembersOfType(type, {
+            visibility: undefined,
+            kinds: undefined,
+            excludeJsDocTags: undefined,
+            excludeNamePattern: undefined,
+            includeInheritedFrom: { all: undefined, declaringTypes: undefined },
+            includeDeclaredType: undefined,
+        });
+        assert.deepEqual(explicit.map(m => m.symbol), ownOnly.map(m => m.symbol), "explicit undefined fields mean the same as absent ones");
+        assert.equal((project.checker.getMembersOfType(type, { excludeNamePattern: "" })).length, 0, "an empty pattern is a pattern, not an absent one");
     });
 
     test("getSymbolDocumentations equals getJsDocTagsOfSymbol and getDocumentationCommentOfSymbol per symbol", () => {

@@ -5253,8 +5253,8 @@ func (s *Session) handleGetMembersOfType(ctx context.Context, params *GetMembers
 		excludedTags[tag] = struct{}{}
 	}
 	var excludeName *regexp.Regexp
-	if filter.ExcludeNamePattern != "" {
-		excludeName, err = regexp.Compile(filter.ExcludeNamePattern)
+	if filter.ExcludeNamePattern != nil {
+		excludeName, err = regexp.Compile(*filter.ExcludeNamePattern)
 		if err != nil {
 			return nil, fmt.Errorf("%w: invalid excludeNamePattern: %w", ErrClientError, err)
 		}
@@ -5284,19 +5284,20 @@ func (s *Session) handleGetMembersOfType(ctx context.Context, params *GetMembers
 		if excludeName != nil && excludeName.MatchString(name) {
 			continue
 		}
-		decls := prop.Declarations()
-		if len(decls) == 0 {
-			continue
+		// A member without a declaration (a tuple element, a tuple's `length`, ...)
+		// is still a member: it is classified from its symbol and has no owner.
+		var decl *ast.Node
+		if decls := prop.Declarations(); len(decls) > 0 {
+			decl = decls[0]
 		}
-		decl := decls[0]
 		if len(visibilities) > 0 {
-			if _, ok := visibilities[memberVisibility(decl)]; !ok {
+			if _, ok := visibilities[memberVisibility(prop)]; !ok {
 				continue
 			}
 		}
-		isParameterProperty := decl.Kind == ast.KindParameter
+		kind := memberKind(decl, prop)
 		if len(kinds) > 0 {
-			if _, ok := kinds[memberKind(decl, prop)]; !ok {
+			if _, ok := kinds[kind]; !ok {
 				continue
 			}
 		}
@@ -5316,17 +5317,21 @@ func (s *Session) handleGetMembersOfType(ctx context.Context, params *GetMembers
 				continue
 			}
 		}
-		ownerNode := decl.Parent
-		if isParameterProperty && ownerNode != nil {
-			ownerNode = ownerNode.Parent
-		}
 		var ownerSymbol *ast.Symbol
-		if ownerNode != nil {
-			if ownerType := setup.checker.GetTypeAtLocation(ownerNode); ownerType != nil {
-				ownerSymbol = ownerType.Symbol()
+		if decl != nil {
+			ownerNode := decl.Parent
+			if kind == "parameterProperty" && ownerNode != nil {
+				ownerNode = ownerNode.Parent
+			}
+			if ownerNode != nil {
+				if ownerType := setup.checker.GetTypeAtLocation(ownerNode); ownerType != nil {
+					ownerSymbol = ownerType.Symbol()
+				}
 			}
 		}
-		if declaringTypes != nil {
+		// A member whose declaring type is unknown is kept: the filter can only
+		// drop what it can attribute to another type.
+		if declaringTypes != nil && ownerSymbol != nil {
 			if _, ok := declaringTypes[ownerSymbol]; !ok {
 				continue
 			}
@@ -5336,8 +5341,8 @@ func (s *Session) handleGetMembersOfType(ctx context.Context, params *GetMembers
 		}
 		member := &MemberResponse{
 			Symbol:              setup.newSymbolResponse(prop),
-			IsMethod:            prop.Flags()&ast.SymbolFlagsMethod != 0,
-			IsParameterProperty: isParameterProperty,
+			IsMethod:            kind == "method",
+			IsParameterProperty: kind == "parameterProperty",
 			Tags:                docs.Tags,
 			Comment:             docs.Comment,
 		}
@@ -5345,33 +5350,40 @@ func (s *Session) handleGetMembersOfType(ctx context.Context, params *GetMembers
 			member.Owner = setup.newSymbolResponse(ownerSymbol)
 		}
 		if filter.IncludeDeclaredType && !member.IsMethod {
-			member.DeclaredType = setup.sd.newTypeResponse(setup.projectID, setup.checker.GetTypeOfSymbolAtLocation(prop, decl), setup.checker)
+			member.DeclaredType = setup.sd.newTypeResponse(setup.projectID, setup.checker.GetTypeOfSymbol(prop), setup.checker)
 		}
 		results = append(results, member)
 	}
 	return results, nil
 }
 
-// memberVisibility classifies a member declaration as "public", "protected" or
-// "private" (ECMAScript private names count as private).
-func memberVisibility(decl *ast.Node) string {
+// memberVisibility classifies a member as "public", "protected" or "private"
+// from the modifiers the checker attributes to the symbol for reads: for a
+// getter/setter pair that is the getter's visibility whatever the declaration
+// order, and for a synthetic union or intersection member the combined one.
+// ECMAScript private names count as private.
+func memberVisibility(symbol *ast.Symbol) string {
+	flags := checker.GetDeclarationModifierFlagsFromSymbol(symbol)
 	switch {
-	case ast.HasSyntacticModifier(decl, ast.ModifierFlagsPrivate), ast.IsPrivateIdentifierClassElementDeclaration(decl):
+	case flags&ast.ModifierFlagsPrivate != 0, core.Some(symbol.Declarations(), ast.IsPrivateIdentifierClassElementDeclaration):
 		return "private"
-	case ast.HasSyntacticModifier(decl, ast.ModifierFlagsProtected):
+	case flags&ast.ModifierFlagsProtected != 0:
 		return "protected"
 	}
 	return "public"
 }
 
-// memberKind classifies a member declaration for MemberFilter.Kinds.
+// memberKind classifies a member for MemberFilter.Kinds and MemberResponse.IsMethod
+// from its first declaration (nil for a member without one) and its symbol flags.
+// Auto-accessors (`accessor x = 0`) are accessors; a synthetic member of a union
+// or intersection is classified from its constituents' declarations.
 func memberKind(decl *ast.Node, symbol *ast.Symbol) string {
 	switch {
-	case decl.Kind == ast.KindParameter:
+	case decl != nil && decl.Kind == ast.KindParameter:
 		return "parameterProperty"
-	case ast.IsAccessor(decl):
+	case decl != nil && (ast.IsAccessor(decl) || ast.IsAutoAccessorPropertyDeclaration(decl)), symbol.Flags()&ast.SymbolFlagsAccessor != 0:
 		return "accessor"
-	case ast.IsMethodDeclaration(decl), ast.IsMethodSignatureDeclaration(decl), symbol.Flags()&ast.SymbolFlagsMethod != 0:
+	case decl != nil && (ast.IsMethodDeclaration(decl) || ast.IsMethodSignatureDeclaration(decl)), symbol.Flags()&ast.SymbolFlagsMethod != 0:
 		return "method"
 	}
 	return "property"

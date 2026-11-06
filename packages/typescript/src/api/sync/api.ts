@@ -4183,19 +4183,23 @@ function encodeNumberLiteralValue(value: number): number | string {
  */
 export interface MemberFilterInput {
     /** Visibilities to include; empty means all. ECMAScript private names count as private. */
-    visibility?: readonly ("public" | "protected" | "private")[];
+    visibility?: readonly ("public" | "protected" | "private")[] | undefined;
     /** Member kinds to include; empty means all. */
-    kinds?: readonly ("property" | "accessor" | "method" | "parameterProperty")[];
+    kinds?: readonly ("property" | "accessor" | "method" | "parameterProperty")[] | undefined;
     /** Drop members whose JSDoc carries any of these tags. */
-    excludeJsDocTags?: readonly string[];
-    /** Drop members whose (wire-form) name matches this RE2 pattern. */
-    excludeNamePattern?: string;
+    excludeJsDocTags?: readonly string[] | undefined;
+    /**
+     * Drop members whose (wire-form) name matches this RE2 pattern. A pattern that is
+     * passed is always applied, so `""` drops every member; `undefined` means no name filter.
+     */
+    excludeNamePattern?: string | undefined;
     /**
      * Which declaring types to take members from: `undefined` means all, `{}` means the
      * queried type only, `{ declaringTypes }` adds members declared on those types.
+     * Members without a declaration (tuple elements, `length`, ...) are always kept.
      */
-    includeInheritedFrom?: { all?: boolean; declaringTypes?: readonly Symbol[]; };
-    includeDeclaredType?: boolean;
+    includeInheritedFrom?: { all?: boolean | undefined; declaringTypes?: readonly Symbol[] | undefined; } | undefined;
+    includeDeclaredType?: boolean | undefined;
 }
 
 /** The documentation of one symbol, as returned by {@link Checker.getSymbolDocumentations}. */
@@ -4207,13 +4211,16 @@ export interface SymbolDocumentation {
 /** One member returned by {@link Checker.getMembersOfType}. */
 export interface TypeMember {
     symbol: Symbol;
-    /** The symbol of the type declaring this member, when it could be determined. */
+    /**
+     * The symbol of the type declaring this member, when it could be determined;
+     * members without a declaration have none.
+     */
     owner: Symbol | undefined;
     isMethod: boolean;
     isParameterProperty: boolean;
     tags: readonly JSDocTagInfo[];
     comment: string;
-    /** `getTypeOfSymbolAtLocation(symbol, firstDeclaration)`; only with `includeDeclaredType`. */
+    /** `getTypeOfSymbol(symbol)` for non-method members; only with `includeDeclaredType`. */
     declaredType: Type | undefined;
 }
 
