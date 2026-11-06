@@ -1,0 +1,9 @@
+esnextSharedMemory.ts(2,15): error TS2554: Expected 0 arguments, but got 1.
+
+
+==== esnextSharedMemory.ts (1 errors) ====
+    Atomics.pause();
+    Atomics.pause(1);
+                  ~
+!!! error TS2554: Expected 0 arguments, but got 1.
+    
