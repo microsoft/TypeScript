@@ -103,7 +103,7 @@ const { values: rawOptions } = parseArgs({
         tests: { type: "string", short: "t" },
         fix: { type: "boolean" },
         force: { type: "boolean", default: parseEnvBoolean("FORCE") },
-        skipGenerate: { type: "boolean" },
+        generate: { type: "boolean", default: !isCI },
         api: { type: "boolean" },
         all: { type: "boolean" },
         debug: { type: "boolean" },
@@ -785,11 +785,11 @@ export const generate = task({
     run: runGenerate,
 });
 
-const generateDependencies = options.skipGenerate ? [] : [generate];
+const generateDependencies = options.generate ? [generate] : [];
 
 export const tscBuild = task({
     name: "tsc:build",
-    description: "Generates sources and builds the tsc binary. Pass --skipGenerate to use existing generated sources.",
+    description: "Builds the tsc binary, generating sources by default outside CI. Pass --generate or --no-generate to override.",
     dependencies: generateDependencies,
     run: async () => {
         await buildTsc({ extraFlags: options.release ? getReleaseBuildFlags() : [] });
@@ -827,7 +827,7 @@ export const buildWatch = task({
         await watchDebounced("build:watch", async (_paths, abortSignal) => {
             abortSignal.throwIfAborted();
             invalidateFileFingerprints();
-            if (!options.skipGenerate) {
+            if (options.generate) {
                 await runGenerate();
             }
             abortSignal.throwIfAborted();
