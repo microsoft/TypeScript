@@ -59,6 +59,7 @@ export interface APIMethodInfo {
     resolveModuleName: APIMethod<ResolveModuleNameParams, ResolveModuleNameResult>;
     parseCommandLine: APIMethod<ParseCommandLineParams, ConfigFileResponse>;
     readConfigFile: APIMethod<ReadConfigFileParams, ReadConfigFileResponse>;
+    parseConfigFileTextToJson: APIMethod<ParseConfigFileTextToJsonParams, ReadConfigFileResponse>;
     parseJsonConfigFileContent: APIMethod<ParseJsonConfigFileContentParams, ConfigFileResponse>;
     parseConfigFile: APIMethod<ParseConfigFileParams, ConfigFileResponse>;
     createSourceFile: APIMethod<CreateSourceFileParams, SourceFileResponse>;
@@ -80,6 +81,7 @@ export interface APIMethodInfo {
     getNonMissingTypeOfSymbol: APIMethod<GetTypeOfSymbolParams, TypeResponse>;
     getSourceFile: APIMethod<GetSourceFileParams, SourceFileResponse | null>;
     getSourceFileNames: APIMethod<GetSourceFileNamesParams, RootedFilePath[]>;
+    getProgramStatistics: APIMethod<GetProjectDiagnosticsParams, ProgramStatisticsResponse>;
     getSourceFileMetadata: APIMethod<GetSourceFileParams, SourceFileMetadata | null>;
     getModeForUsageLocation: APIMethod<GetModeForUsageLocationParams, ModuleKind>;
     getModeForResolutionAtIndex: APIMethod<GetModeForResolutionAtIndexParams, ModuleKind>;
@@ -436,6 +438,11 @@ export interface ReadConfigFileResponse {
     error?: DiagnosticResponse | undefined;
 }
 
+export interface ParseConfigFileTextToJsonParams {
+    fileName: string;
+    jsonText: string;
+}
+
 export interface ParseJsonConfigFileContentParams {
     json: unknown;
     configDirectory?: string | undefined;
@@ -602,6 +609,21 @@ export interface GetSourceFileNamesParams {
     project: number;
 }
 
+/** GetProjectDiagnosticsParams are parameters for project-wide diagnostic methods. */
+export interface GetProjectDiagnosticsParams {
+    snapshot: number;
+    project: number;
+}
+
+export interface ProgramStatisticsResponse {
+    nodeCount: number;
+    identifierCount: number;
+    symbolCount: number;
+    typeCount: number;
+    instantiationCount: number;
+    relationCacheSizes: RelationCacheSizes;
+}
+
 /** SourceFileMetadata carries program-stored metadata about a single source file. */
 export interface SourceFileMetadata {
     isDefaultLibrary: boolean;
@@ -673,12 +695,6 @@ export interface GetResolvedTypeReferenceDirectiveFromReferenceParams {
     sourceFile: DocumentIdentifier;
     typeDirectiveName: string;
     resolutionMode: ModuleKind;
-}
-
-/** GetProjectDiagnosticsParams are parameters for project-wide diagnostic methods. */
-export interface GetProjectDiagnosticsParams {
-    snapshot: number;
-    project: number;
 }
 
 export interface ResolveNameParams {
@@ -1290,6 +1306,7 @@ export interface BatchRequest {
         | "getParentOfSymbolForChecker"
         | "getPrivateIdentifierPropertyOfType"
         | "getProgramDiagnostics"
+        | "getProgramStatistics"
         | "getPropertiesOfType"
         | "getPropertyOfType"
         | "getPropertySymbolOfDestructuringAssignment"
@@ -1366,6 +1383,7 @@ export interface BatchRequest {
         | "isTypeAssignableTo"
         | "parseCommandLine"
         | "parseConfigFile"
+        | "parseConfigFileTextToJson"
         | "parseJsonConfigFileContent"
         | "printNode"
         | "readConfigFile"
@@ -1483,6 +1501,7 @@ export interface BatchResponse {
         | "getParentOfSymbolForChecker"
         | "getPrivateIdentifierPropertyOfType"
         | "getProgramDiagnostics"
+        | "getProgramStatistics"
         | "getPropertiesOfType"
         | "getPropertyOfType"
         | "getPropertySymbolOfDestructuringAssignment"
@@ -1559,6 +1578,7 @@ export interface BatchResponse {
         | "isTypeAssignableTo"
         | "parseCommandLine"
         | "parseConfigFile"
+        | "parseConfigFileTextToJson"
         | "parseJsonConfigFileContent"
         | "printNode"
         | "readConfigFile"
@@ -1735,6 +1755,13 @@ export interface TranspileOptions {
     compilerOptions?: RawCompilerOptions | undefined;
     fileName?: string | undefined;
     reportDiagnostics?: boolean | undefined;
+}
+
+export interface RelationCacheSizes {
+    assignable: number;
+    identity: number;
+    subtype: number;
+    strictSubtype: number;
 }
 
 export interface PackageId {

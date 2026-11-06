@@ -917,6 +917,8 @@ func (s *Session) HandleRequest(ctx context.Context, method string, params json.
 		return s.handleParseCommandLine(ctx, parsed.(*ParseCommandLineParams))
 	case string(MethodReadConfigFile):
 		return s.handleReadConfigFile(ctx, parsed.(*ReadConfigFileParams))
+	case string(MethodParseConfigFileTextToJson):
+		return s.handleParseConfigFileTextToJson(ctx, parsed.(*ParseConfigFileTextToJsonParams))
 	case string(MethodParseJsonConfigFile):
 		return s.handleParseJsonConfigFileContent(ctx, parsed.(*ParseJsonConfigFileContentParams))
 	case string(MethodParseConfigFile):
@@ -951,6 +953,8 @@ func (s *Session) HandleRequest(ctx context.Context, method string, params json.
 		return s.handleGetSourceFile(ctx, parsed.(*GetSourceFileParams))
 	case string(MethodGetSourceFileNames):
 		return s.handleGetSourceFileNames(ctx, parsed.(*GetSourceFileNamesParams))
+	case string(MethodGetProgramStatistics):
+		return s.handleGetProgramStatistics(ctx, parsed.(*GetProjectDiagnosticsParams))
 	case string(MethodGetSourceFileMetadata):
 		return s.handleGetSourceFileMetadata(ctx, parsed.(*GetSourceFileParams))
 	case string(MethodGetModeForUsageLocation):
@@ -2062,6 +2066,21 @@ func (s *Session) handleReadConfigFile(ctx context.Context, params *ReadConfigFi
 	return response, nil
 }
 
+// handleParseConfigFileTextToJson parses a string (contents of a JSON file) into a ParsedCommandLine
+func (s *Session) handleParseConfigFileTextToJson(ctx context.Context, params *ParseConfigFileTextToJsonParams) (*ReadConfigFileResponse, error) {
+	fileName := tspath.ToRootedFilePath(params.FileName, s.currentDirectory())
+	config, parseErrors := tsoptions.ParseConfigFileTextToJson(
+		fileName,
+		s.pathKey(fileName),
+		params.JSONText,
+	)
+	response := &ReadConfigFileResponse{Config: config}
+	if len(parseErrors) > 0 {
+		response.Error = NewDiagnosticResponse(parseErrors[0])
+	}
+	return response, nil
+}
+
 // handleParseJsonConfigFileContent parses an in-memory JSON configuration.
 func (s *Session) handleParseJsonConfigFileContent(ctx context.Context, params *ParseJsonConfigFileContentParams) (*ConfigFileResponse, error) {
 	if (params.ConfigDirectory == nil) == (params.ConfigFileName == nil) {
@@ -2394,6 +2413,26 @@ func transpileOutput(ctx context.Context, input string, options TranspileOptions
 		Diagnostics:   NewDiagnosticResponses(output.Diagnostics),
 		SourceMapText: output.SourceMapText,
 	}, nil
+}
+
+func (s *Session) handleGetProgramStatistics(ctx context.Context, params *GetProjectDiagnosticsParams) (*ProgramStatisticsResponse, error) {
+	setup, err := s.setupChecker(ctx, params.Snapshot, params.Project)
+	if err != nil {
+		return nil, err
+	}
+	defer setup.done()
+	result := &ProgramStatisticsResponse{
+		SymbolCount:        int(setup.checker.SymbolCount),
+		TypeCount:          setup.checker.TypeCount,
+		InstantiationCount: setup.checker.TotalInstantiationCount,
+		RelationCacheSizes: setup.checker.GetRelationCacheSizes(),
+	}
+	for _, file := range setup.program.GetSourceFiles() {
+		result.NodeCount += file.NodeCount
+		result.IdentifierCount += file.IdentifierCount
+		result.SymbolCount += file.SymbolCount
+	}
+	return result, nil
 }
 
 // handleGetSourceFile returns a source file from a project within a snapshot.

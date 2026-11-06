@@ -42,6 +42,7 @@ import {
 import { assertNever } from "../../internal/utils.ts";
 import {
     encodeNode,
+    sourceFileResponseToUint8Array,
     uint8ArrayToBase64,
 } from "../node/encoder.ts";
 import {
@@ -95,6 +96,7 @@ import type {
     ModuleResolutionSpec,
     PackageId,
     ParsedCommandLine,
+    ProgramStatisticsResponse,
     ProjectId,
     ProjectReference,
     ProjectResponse,
@@ -102,6 +104,7 @@ import type {
     RawCompilerOptions,
     ReadConfigFileResponse,
     ReconfigureSnapshotProgramParams as ProtocolReconfigureSnapshotProgramParams,
+    RelationCacheSizes,
     ResolutionMode,
     ResolvedModule,
     ResolvedTypeReferenceDirective,
@@ -238,10 +241,12 @@ export type {
     ObjectType,
     PackageId,
     ParsedCommandLine,
+    ProgramStatisticsResponse,
     ProjectId,
     ProjectReference,
     RawCompilerOptions,
     ReadConfigFileResponse,
+    RelationCacheSizes,
     RequestTiming,
     ResolutionMode,
     ResolvedModule,
@@ -344,7 +349,6 @@ export interface TranspileOutput {
 // @sync-only-start
 // export { all, defer, type APIRequestGenerator, type AnyAPIRequestGenerator, type AllAPIRequestGenerator, type DeferredAPIRequestGenerator, type ExecutedGeneratorsResults } from "./generatorSupport.ts";
 // import {executeRequestGenerators, type ExecutedGeneratorsResults, type AnyAPIRequestGenerator} from "./generatorSupport.ts";
-// import { sourceFileResponseToUint8Array } from "../node/encoder.ts";
 // @sync-only-end
 
 export class API<FromLSP extends boolean = false> implements FormatDiagnosticsHost {
@@ -515,6 +519,11 @@ export class API<FromLSP extends boolean = false> implements FormatDiagnosticsHo
     async readConfigFile(file: DocumentIdentifier): Promise<ReadConfigFileResponse> {
         await this.ensureInitialized();
         return this.client.apiRequest("readConfigFile", { file });
+    }
+
+    async parseConfigFileTextToJson(fileName: string, jsonText: string): Promise<ReadConfigFileResponse> {
+        await this.ensureInitialized();
+        return this.client.apiRequest("parseConfigFileTextToJson", { fileName, jsonText });
     }
 
     async parseJsonConfigFileContent(
@@ -1794,6 +1803,21 @@ export class Program<Id extends ProjectId = ProjectId> implements FormatDiagnost
 
     getCompilerOptions(): CompilerOptions {
         return this.project.parsedCommandLine.options;
+    }
+
+    getRootFileNames(): readonly RootedFilePath[] {
+        return this.project.parsedCommandLine.fileNames;
+    }
+
+    getProjectReferences(): readonly ProjectReference[] | undefined {
+        return this.project.parsedCommandLine.projectReferences;
+    }
+
+    getStatistics(): Promise<ProgramStatisticsResponse> {
+        return this.client.apiRequest("getProgramStatistics", {
+            snapshot: this.snapshotId,
+            project: this.project.handle,
+        });
     }
 
     async getSourceFile(file: DocumentIdentifier): Promise<SourceFile | undefined> {
