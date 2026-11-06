@@ -560,7 +560,7 @@ async function runGenerateExtension() {
         cwd: __dirname,
         inputs: [__filename, "tools/scripts/gen/extensionLocalization.mts", "packages/vscode-typescript/package.json", "packages/vscode-typescript/src/**/*"],
         outputs: extensionOutputs,
-        commands: [["npm", "run", "-w", "native-preview", "generateLocBundle"]],
+        commands: [["npm", "run", "-w", "packages/vscode-typescript", "generateLocBundle"]],
         envInputs: [],
         force: !!options.force,
     });
@@ -579,7 +579,7 @@ async function runGenerateExtensionTest() {
         cwd: __dirname,
         inputs: [__filename, "tools/scripts/gen/extensionLocalization.mts", "packages/vscode-typescript/package.json", "packages/vscode-typescript/l10n/bundle.l10n.json", "packages/vscode-typescript/package.nls.json"],
         outputs: extensionTestOutputs,
-        commands: [["npm", "run", "-w", "native-preview", "generateLocTest"]],
+        commands: [["npm", "run", "-w", "packages/vscode-typescript", "generateLocTest"]],
         envInputs: [],
         force: !!options.force,
     });
@@ -1036,7 +1036,7 @@ async function runTests() {
 }
 
 async function runTestExtension() {
-    await run("npm", ["test", "-w", "native-preview"]);
+    await run("npm", ["test", "-w", "packages/vscode-typescript"]);
 }
 
 export const testTsc = task({
