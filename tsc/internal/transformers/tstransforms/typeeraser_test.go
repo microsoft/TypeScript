@@ -3,13 +3,62 @@ package tstransforms_test
 import (
 	"testing"
 
+	"github.com/microsoft/TypeScript/tsc/internal/ast"
 	"github.com/microsoft/TypeScript/tsc/internal/core"
+	"github.com/microsoft/TypeScript/tsc/internal/parser"
 	"github.com/microsoft/TypeScript/tsc/internal/printer"
 	"github.com/microsoft/TypeScript/tsc/internal/testutil/emittestutil"
 	"github.com/microsoft/TypeScript/tsc/internal/testutil/parsetestutil"
 	"github.com/microsoft/TypeScript/tsc/internal/transformers"
 	"github.com/microsoft/TypeScript/tsc/internal/transformers/tstransforms"
+	"gotest.tools/v3/assert"
 )
+
+func TestTypeEraserJSDocExportAssignment(t *testing.T) {
+	t.Parallel()
+	for _, typeText := range []string{`import("./a").Foo`, `typeof import("./a")`} {
+		t.Run(typeText, func(t *testing.T) {
+			t.Parallel()
+			file := parser.ParseSourceFile(ast.SourceFileParseOptions{
+				FileName: "/main.js",
+			}, "/** @type {"+typeText+"} */\nexport default foo;", core.ScriptKindJS)
+			parsetestutil.CheckDiagnostics(t, file)
+			assert.Assert(t, file.Statements.Nodes[0].AsExportAssignment().Type != nil)
+			transformed := tstransforms.NewTypeEraserTransformer(&transformers.TransformOptions{
+				CompilerOptions: &core.CompilerOptions{},
+				Context:         printer.NewEmitContext(),
+			}).TransformSourceFile(file)
+			assert.Assert(t, transformed.Statements.Nodes[0].AsExportAssignment().Type == nil)
+			emittestutil.CheckEmit(t, nil, transformed, "/** @type {"+typeText+"} */\nexport default foo;")
+		})
+	}
+}
+
+func TestTypeEraserJSDocWrappedTypes(t *testing.T) {
+	t.Parallel()
+	for _, test := range []struct {
+		name  string
+		input string
+	}{
+		{name: "nullable property", input: "const obj = {\n    /** @type {?number} */\n    p: null\n};"},
+		{name: "non-nullable shorthand", input: "const p = 1;\nconst obj = {\n    /** @type {!number} */\n    p\n};"},
+		{name: "optional assignment", input: "const obj = {};\n/** @type {number=} */\nobj.p = null;"},
+		{name: "variadic property", input: "const obj = {\n    /** @type {...number} */\n    p: []\n};"},
+	} {
+		t.Run(test.name, func(t *testing.T) {
+			t.Parallel()
+			file := parser.ParseSourceFile(ast.SourceFileParseOptions{
+				FileName: "/main.js",
+			}, test.input, core.ScriptKindJS)
+			parsetestutil.CheckDiagnostics(t, file)
+			transformed := tstransforms.NewTypeEraserTransformer(&transformers.TransformOptions{
+				CompilerOptions: &core.CompilerOptions{},
+				Context:         printer.NewEmitContext(),
+			}).TransformSourceFile(file)
+			emittestutil.CheckEmit(t, nil, transformed, test.input)
+		})
+	}
+}
 
 func TestTypeEraser(t *testing.T) {
 	t.Parallel()
