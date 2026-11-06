@@ -231,7 +231,7 @@ var commonOptionsWithBuild = []*CommandLineOption{
 		Kind:                    CommandLineOptionTypeNumber,
 		Category:                diagnostics.Command_line_Options,
 		Description:             diagnostics.Set_the_number_of_checkers_per_project,
-		DefaultValueDescription: diagnostics.X_4_unless_singleThreaded_is_passed,
+		DefaultValueDescription: diagnostics.Based_on_the_available_CPUs_and_the_size_of_the_project_unless_singleThreaded_is_passed,
 		minValue:                1,
 	},
 	{

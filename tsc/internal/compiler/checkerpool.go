@@ -3,6 +3,7 @@ package compiler
 import (
 	"context"
 	"math"
+	"runtime"
 	"slices"
 	"sort"
 	"sync"
@@ -305,6 +306,57 @@ func getCheckerAssociationWeights(baseWeights []int, importCounts []int) []int {
 	return fileWeights
 }
 
+/*
+defaultCheckerCount picks the number of checkers when none is given. Which
+checker checks a file does not change the results, and checkers take files
+from each other once out of their own, so the count only trades time for
+memory. Each checker builds much the same library and shared types, so
+every checker adds work and memory of its own, and checking is fastest with
+about one checker per CPU, up to the point where that duplicated work
+dominates:
+
+  - With 4 or 8 CPUs, measured with the process restricted to them, one
+    checker per logical CPU was fastest for nearly every project, and
+    hyperthreads were nearly as good as cores.
+  - With 20 CPUs (10 cores), 8 checkers were fastest for most projects;
+    only very large programs (VS Code) gained up to 12-16.
+  - Programs with few checked files gain nothing from more checkers than a
+    few files each, but even those with a few dozen files gain from the 4
+    checkers that were the default before.
+
+Work is estimated from the files that are checked: those whose checking is
+skipped, such as declaration files under skipLibCheck, count for nothing.
+*/
+func defaultCheckerCount(program *Program) int {
+	procs := program.opts.CheckerProcs
+	if procs <= 0 {
+		procs = runtime.GOMAXPROCS(0)
+	}
+	files, weight := 0, 0
+	for _, file := range program.files {
+		if !program.SkipTypeChecking(file, true /*ignoreNoCheck*/) {
+			files++
+			weight += getCheckerAssociationBaseWeight(file.NodeCount, len(file.Text()))
+		}
+	}
+	limit := min(max(int(defaultCheckerLimit*math.Sqrt(float64(weight)/defaultCheckerLimitWeight)), defaultCheckerLimit), maxDefaultCheckerLimit)
+	return max(min(procs, limit, (files+filesPerChecker-1)/filesPerChecker), min(procs, minDefaultCheckers))
+}
+
+const (
+	// defaultCheckerLimit is the checker count past which more checkers stop
+	// paying for their duplicated work, for programs up to
+	// defaultCheckerLimitWeight of checked work. Larger programs get more, up
+	// to maxDefaultCheckerLimit, with the square root of their size.
+	defaultCheckerLimit       = 8
+	defaultCheckerLimitWeight = 8_000_000
+	maxDefaultCheckerLimit    = 16
+	// filesPerChecker is the number of checked files below which another
+	// checker does not pay for itself, above minDefaultCheckers.
+	filesPerChecker    = 32
+	minDefaultCheckers = 4
+)
+
 func newCheckerPool(program *Program) *checkerPool {
 	return newCheckerPoolWithTracing(program, nil)
 }
@@ -317,7 +369,7 @@ func newCheckerPoolWithTracing(program *Program, tr *tracing.Tracing) *checkerPo
 // of each file given by assign, if set; see ProgramFactories.AssignCheckers.
 func newCheckerPoolWithAssignment(program *Program, tr *tracing.Tracing, assign func([]*ast.SourceFile) []int) *checkerPool {
 	var associations []int
-	checkerCount := 4
+	var checkerCount int
 	if assign != nil {
 		associations = assign(program.files)
 		checkerCount = 1
@@ -329,6 +381,8 @@ func newCheckerPoolWithAssignment(program *Program, tr *tracing.Tracing, assign 
 			checkerCount = 1
 		} else if c := program.Options().Checkers; c != nil {
 			checkerCount = *c
+		} else {
+			checkerCount = defaultCheckerCount(program)
 		}
 		checkerCount = max(min(checkerCount, len(program.files), 256), 1)
 	}

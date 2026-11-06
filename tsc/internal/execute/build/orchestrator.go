@@ -4,6 +4,7 @@ import (
 	"context"
 	"fmt"
 	"io"
+	"runtime"
 	"slices"
 	"strings"
 	"sync/atomic"
@@ -918,13 +919,26 @@ func (o *Orchestrator) rangeTask(f func(path tspath.PathKey, task *BuildTask)) {
 	o.rangeTasks(o.order, f)
 }
 
-func (o *Orchestrator) rangeTasks(order []*BuildTask, f func(path tspath.PathKey, task *BuildTask)) {
-	numRoutines := 4
+// builderCount returns the number of projects built concurrently.
+func (o *Orchestrator) builderCount() int {
 	if o.opts.Command.CompilerOptions.SingleThreaded.IsTrue() {
-		numRoutines = 1
+		return 1
 	} else if builders := o.opts.Command.BuildOptions.Builders; builders != nil {
-		numRoutines = *builders
+		return *builders
 	}
+	return 4
+}
+
+// checkerProcs returns the CPUs the checkers of each project may use: an
+// equal share among the projects built concurrently, but no fewer than the 4
+// checkers of before, since projects that depend on each other are built one
+// at a time, and the share would leave the rest of the CPUs idle.
+func (o *Orchestrator) checkerProcs() int {
+	return max(runtime.GOMAXPROCS(0)/max(o.builderCount(), 1), 4)
+}
+
+func (o *Orchestrator) rangeTasks(order []*BuildTask, f func(path tspath.PathKey, task *BuildTask)) {
+	numRoutines := o.builderCount()
 
 	var currentTaskIndex atomic.Int64
 	getNextTask := func() (tspath.PathKey, *BuildTask, bool) {

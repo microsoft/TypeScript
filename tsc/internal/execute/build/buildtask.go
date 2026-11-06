@@ -249,8 +249,9 @@ func (t *BuildTask) compileAndEmit(orchestrator *Orchestrator, path tspath.PathK
 	compileTimes.BuildInfoReadTime = orchestrator.opts.Sys.Now().Sub(buildInfoReadStart)
 	parseStart := orchestrator.opts.Sys.Now()
 	program := compiler.NewProgram(compiler.ProgramOptions{
-		Config: t.resolved,
-		Host:   compilerHost,
+		Config:       t.resolved,
+		CheckerProcs: orchestrator.checkerProcs(),
+		Host:         compilerHost,
 	})
 	compileTimes.ParseTime = orchestrator.opts.Sys.Now().Sub(parseStart)
 	changesComputeStart := orchestrator.opts.Sys.Now()
