@@ -309,7 +309,7 @@
 // | ```typescript
 // | (parameter) b: string
 // | ```
-// | about b
+// | 
 // | ----------------------------------------------------------------------
 // /**@param opt optional parameter*/
 // function f1(aOrb, opt?) {
@@ -1322,7 +1322,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```typescript\n(parameter) b: string\n```\nabout b"
+        "value": "```typescript\n(parameter) b: string\n```\n"
       },
       "range": {
         "start": {
