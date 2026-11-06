@@ -175,7 +175,6 @@ const privateGeneratorGetters = new Set([
     "Program.disposeWorker",
     "Program.getStatistics",
     "Program.fetchSourceFileMetadata",
-    "Program.fetchStatistics",
     "Program.getSourceFileWorker",
     "Snapshot.disposeWorker",
     "Symbol.fetchSymbol",
@@ -448,6 +447,32 @@ function assertPublicGeneratorCoverage(owners: readonly { readonly name: string;
 }
 
 describe("API - generator batching", { concurrency: areTestsFiltered() }, () => {
+    test("Program statistics share a cache between sync and generator calls", () => {
+        using api = spawnAPI({ "/src/main.ts": "export const value = 1;" }, { collectTiming: true });
+        for (const generatorFirst of [false, true]) {
+            using program = api.createProgram(["/src/main.ts"], { noLib: true });
+            api.resetTimingInfo();
+            const nodes = generatorFirst ? api.batch(program.getNodeCount.gen())[0] : program.getNodeCount();
+            assert.ok(nodes > 0);
+            const [cachedNodes, types, symbols, instantiations, identifiers, relations] = api.batch(
+                program.getNodeCount.gen(),
+                program.getTypeCount.gen(),
+                program.getSymbolCount.gen(),
+                program.getInstantiationCount.gen(),
+                program.getIdentifierCount.gen(),
+                program.getRelationCacheSizes.gen(),
+            );
+            assert.equal(cachedNodes, nodes);
+            assert.equal(program.getNodeCount(), nodes);
+            assert.equal(program.getTypeCount(), types);
+            assert.equal(program.getSymbolCount(), symbols);
+            assert.equal(program.getInstantiationCount(), instantiations);
+            assert.equal(program.getIdentifierCount(), identifiers);
+            assert.strictEqual(program.getRelationCacheSizes(), relations);
+            assert.equal(api.getTimingInfo().totals.requestCount, 1);
+        }
+    });
+
     test("looks up binder symbols through standalone and API generators", () => {
         using api = spawnAPI();
         using lease = api.createSourceFile("/symbols.ts", "function present() {}");

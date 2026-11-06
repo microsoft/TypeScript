@@ -1748,7 +1748,7 @@ export class Program<Id extends ProjectId = ProjectId> implements FormatDiagnost
     private readonly sourceFileMetadataCache = new Map<PathKey, Promise<SourceFileMetadata | undefined>>();
     private ownedSnapshot: Snapshot | undefined;
     private disposePromise: Promise<void> | undefined;
-    private pendingStatistics: Promise<ProgramStatisticsResponse> | undefined; // @sync-skip
+    private statistics: Promise<ProgramStatisticsResponse> | undefined;
 
     private get client(): Client {
         return this.project.api.client;
@@ -1808,23 +1808,8 @@ export class Program<Id extends ProjectId = ProjectId> implements FormatDiagnost
         return this.project.parsedCommandLine.projectReferences;
     }
 
-    private async getStatistics(): Promise<ProgramStatisticsResponse> {
-        // @sync-only-start
-        // return this.fetchStatistics();
-        // @sync-only-end
-        // @sync-skip-block-start
-        if (this.pendingStatistics) return this.pendingStatistics;
-        try {
-            return await (this.pendingStatistics = this.fetchStatistics());
-        }
-        finally {
-            this.pendingStatistics = undefined;
-        }
-        // @sync-skip-block-end
-    }
-
-    private async fetchStatistics(): Promise<ProgramStatisticsResponse> {
-        return this.client.apiRequest("getProgramStatistics", {
+    private getStatistics(): Promise<ProgramStatisticsResponse> {
+        return this.statistics ??= this.client.apiRequest("getProgramStatistics", {
             snapshot: this.snapshotId,
             project: this.project.handle,
         });

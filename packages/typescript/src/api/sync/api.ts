@@ -2927,6 +2927,7 @@ export class Program<Id extends ProjectId = ProjectId> implements FormatDiagnost
     private readonly sourceFileMetadataCache = new Map<PathKey, SourceFileMetadata | undefined>();
     private ownedSnapshot: Snapshot | undefined;
     private disposePromise: void | undefined;
+    private statistics: ProgramStatisticsResponse | undefined;
 
     private get client(): Client {
         return this.project.api.client;
@@ -3023,30 +3024,13 @@ export class Program<Id extends ProjectId = ProjectId> implements FormatDiagnost
             owner,
             "getStatistics",
             function (): ProgramStatisticsResponse {
-                return owner.fetchStatistics();
-            },
-            function* (): Generator<ProtocolRequest, ProgramStatisticsResponse, ProtocolResponse["result"]> {
-                return yield* owner.fetchStatistics.gen();
-            },
-        );
-    }
-
-    private get fetchStatistics(): {
-        (): ProgramStatisticsResponse;
-        gen(): Generator<ProtocolRequest, ProgramStatisticsResponse, ProtocolResponse["result"]>;
-    } {
-        const owner = this;
-        return cacheGeneratorMethod(
-            owner,
-            "fetchStatistics",
-            function (): ProgramStatisticsResponse {
-                return owner.client.apiRequest("getProgramStatistics", {
+                return owner.statistics ??= owner.client.apiRequest("getProgramStatistics", {
                     snapshot: owner.snapshotId,
                     project: owner.project.handle,
                 });
             },
             function* (): Generator<ProtocolRequest, ProgramStatisticsResponse, ProtocolResponse["result"]> {
-                return yield* apiRequest("getProgramStatistics", {
+                return owner.statistics ??= yield* apiRequest("getProgramStatistics", {
                     snapshot: owner.snapshotId,
                     project: owner.project.handle,
                 });

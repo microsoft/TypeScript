@@ -2584,7 +2584,7 @@ describe("SourceFile", { concurrency }, () => {
         assert.equal(program.getProjectReferences(), undefined);
     });
 
-    test("Program counters reflect work on its type checker without forcing diagnostics", () => {
+    test("Program counters cache the first statistics without forcing diagnostics", context => {
         using api = spawnAPI({
             "/src/main.ts": `type Box<T> = { value: T };
 export const box: Box<string> = { value: "hello" };
@@ -2595,6 +2595,8 @@ export const other: { value: string } = box;`,
         });
         const project = snapshot.getProjects()[0];
         const program = project.program;
+        // @ts-ignore -- Internal client requests are exercised by source tests.
+        const request = context.mock.method(api["client"], "apiRequest");
         const identifiers = program.getIdentifierCount();
         const nodes = program.getNodeCount();
         const symbols = program.getSymbolCount();
@@ -2613,14 +2615,15 @@ export const other: { value: string } = box;`,
         const declaration = cast(file.statements[1], isVariableStatement).declarationList.declarations[0];
         const type = checker.getTypeAtLocation(declaration.name);
         type.getProperties();
-        assert.ok(program.getInstantiationCount() > instantiations);
-        assert.ok(program.getTypeCount() > types);
-        assert.ok(program.getSymbolCount() >= symbols);
+        assert.equal(program.getInstantiationCount(), instantiations);
+        assert.equal(program.getTypeCount(), types);
+        assert.equal(program.getSymbolCount(), symbols);
         const other = cast(file.statements[2], isVariableStatement).declarationList.declarations[0];
         checker.isTypeAssignableTo(type, checker.getTypeAtLocation(other.name));
-        assert.ok((program.getRelationCacheSizes()).assignable > relations.assignable);
+        assert.deepEqual(program.getRelationCacheSizes(), relations);
         assert.equal(program.getIdentifierCount(), identifiers);
         assert.equal(program.getNodeCount(), nodes);
+        assert.equal(request.mock.calls.filter(call => call.arguments[0] === "getProgramStatistics").length, 1);
     });
 
     test("Program accessors handle empty programs and missing root files", () => {

@@ -1531,7 +1531,7 @@ declare module "augmentation" {}`,
 
 // @sync-skip-block-start
 describe("API - automatic batching", { concurrency }, () => {
-    test("shares pending Program statistics requests without caching settled results", async context => {
+    test("shares pending and settled Program statistics requests", async context => {
         await using api = spawnAPI({ "/src/main.ts": "export const value = 1;" });
         await using program = await api.createProgram(["/src/main.ts"], { noLib: true });
         await using empty = await api.createProgram([], { noLib: true });
@@ -1559,10 +1559,10 @@ describe("API - automatic batching", { concurrency }, () => {
 
         await program.getTypeCount();
         await program.getSymbolCount();
-        assert.equal(request.mock.callCount(), 4);
+        assert.equal(request.mock.callCount(), 2);
     });
 
-    test("shares rejected Program statistics requests and retries after failure", async context => {
+    test("caches rejected Program statistics requests", async context => {
         await using api = spawnAPI({ "/src/main.ts": "export const value = 1;" });
         await using program = await api.createProgram(["/src/main.ts"], { noLib: true });
         // @ts-ignore -- Internal client requests are exercised by source tests.
@@ -1577,8 +1577,8 @@ describe("API - automatic batching", { concurrency }, () => {
             { status: "rejected", reason: error },
         ]);
         assert.equal(request.mock.callCount(), 1);
-        assert.ok(await program.getNodeCount() > 0);
-        assert.equal(request.mock.callCount(), 2);
+        await assert.rejects(program.getNodeCount(), error);
+        assert.equal(request.mock.callCount(), 1);
     });
 
     test("initializes only once for concurrent first requests", async () => {
@@ -1621,7 +1621,6 @@ describe("API - automatic batching", { concurrency }, () => {
         assert.equal(parseCommandLine.options.strict, true);
         assert.deepStrictEqual(readConfigFile.config, {});
     });
-
 });
 
 describe("API - batchContext", { concurrency }, () => {
@@ -2777,23 +2776,25 @@ describe("SourceFile", { concurrency }, () => {
         assert.equal(await program.getProjectReferences(), undefined);
     });
 
-    test("Program counters reflect work on its type checker without forcing diagnostics", async () => {
+    test("Program counters cache the first statistics without forcing diagnostics", async () => {
         await using api = spawnAPI({
             "/src/main.ts": `type Box<T> = { value: T };
 export const box: Box<string> = { value: "hello" };
 export const other: { value: string } = box;`,
-        });
+        }, { collectTiming: true });
         const snapshot = await api.createSnapshot({
             createPrograms: [{ rootFiles: ["/src/main.ts"], compilerOptions: { noLib: true } }],
         });
         const project = snapshot.getProjects()[0];
         const program = project.program;
+        await api.resetTimingInfo();
         const identifiers = await program.getIdentifierCount();
         const nodes = await program.getNodeCount();
         const symbols = await program.getSymbolCount();
         const types = await program.getTypeCount();
         const instantiations = await program.getInstantiationCount();
         const relations = await program.getRelationCacheSizes();
+        assert.equal((await api.getTimingInfo()).totals.requestCount, 1);
         assert.ok(identifiers > 0);
         assert.ok(nodes > identifiers);
         assert.ok(symbols > 0);
@@ -2806,12 +2807,12 @@ export const other: { value: string } = box;`,
         const declaration = cast(file.statements[1], isVariableStatement).declarationList.declarations[0];
         const type = await checker.getTypeAtLocation(declaration.name);
         await type.getProperties();
-        assert.ok(await program.getInstantiationCount() > instantiations);
-        assert.ok(await program.getTypeCount() > types);
-        assert.ok(await program.getSymbolCount() >= symbols);
+        assert.equal(await program.getInstantiationCount(), instantiations);
+        assert.equal(await program.getTypeCount(), types);
+        assert.equal(await program.getSymbolCount(), symbols);
         const other = cast(file.statements[2], isVariableStatement).declarationList.declarations[0];
         await checker.isTypeAssignableTo(type, await checker.getTypeAtLocation(other.name));
-        assert.ok((await program.getRelationCacheSizes()).assignable > relations.assignable);
+        assert.deepEqual(await program.getRelationCacheSizes(), relations);
         assert.equal(await program.getIdentifierCount(), identifiers);
         assert.equal(await program.getNodeCount(), nodes);
     });
