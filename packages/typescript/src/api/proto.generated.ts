@@ -59,6 +59,7 @@ export interface APIMethodInfo {
     resolveModuleName: APIMethod<ResolveModuleNameParams, ResolveModuleNameResult>;
     parseCommandLine: APIMethod<ParseCommandLineParams, ConfigFileResponse>;
     readConfigFile: APIMethod<ReadConfigFileParams, ReadConfigFileResponse>;
+    parseConfigFileTextToJson: APIMethod<ParseConfigFileTextToJsonParams, ReadConfigFileResponse>;
     parseJsonConfigFileContent: APIMethod<ParseJsonConfigFileContentParams, ConfigFileResponse>;
     parseConfigFile: APIMethod<ParseConfigFileParams, ConfigFileResponse>;
     createSourceFile: APIMethod<CreateSourceFileParams, SourceFileResponse>;
@@ -434,6 +435,11 @@ export interface ReadConfigFileParams {
 export interface ReadConfigFileResponse {
     config: unknown;
     error?: DiagnosticResponse | undefined;
+}
+
+export interface ParseConfigFileTextToJsonParams {
+    fileName: string;
+    jsonText: string;
 }
 
 export interface ParseJsonConfigFileContentParams {
@@ -1366,6 +1372,7 @@ export interface BatchRequest {
         | "isTypeAssignableTo"
         | "parseCommandLine"
         | "parseConfigFile"
+        | "parseConfigFileTextToJson"
         | "parseJsonConfigFileContent"
         | "printNode"
         | "readConfigFile"
@@ -1559,6 +1566,7 @@ export interface BatchResponse {
         | "isTypeAssignableTo"
         | "parseCommandLine"
         | "parseConfigFile"
+        | "parseConfigFileTextToJson"
         | "parseJsonConfigFileContent"
         | "printNode"
         | "readConfigFile"

@@ -2,7 +2,11 @@ import * as fs from "fs";
 import * as path from "path";
 import * as vscode from "vscode";
 import { nightlyExtensionId } from "./extensionIds";
-import { resolvePackageExecutable } from "./tsdkPackage";
+import {
+    type DetectedTypeScriptVersion,
+    findWorkspaceTypeScriptVersions,
+    resolvePackageExecutable,
+} from "./tsdkPackage";
 
 export const aiConnectionString = "0c6ae279ed8443289764825290e4f9e2-1a736e7c-1324-4338-be46-fc2a58ae4d14-7255";
 
@@ -75,6 +79,12 @@ export async function getNightlyExePath(): Promise<ExeInfo | undefined> {
 }
 
 export async function getDefaultExePath(context: vscode.ExtensionContext): Promise<ExeInfo> {
+    for (const candidate of await getTsdkCandidates({ filter: candidate => candidate.target === vscode.ConfigurationTarget.Global })) {
+        const exe = await resolveTsdkPathToExe(candidate.value);
+        if (exe) {
+            return exe;
+        }
+    }
     if (enableContributedNightlyVersion) {
         const nightlyExe = await getNightlyExePath();
         if (nightlyExe) {
@@ -229,6 +239,15 @@ export async function getWorkspaceTsdkForPrompt(): Promise<string | undefined> {
         }
     }
     return undefined;
+}
+
+export async function getWorkspaceTypeScriptVersions(): Promise<DetectedTypeScriptVersion[]> {
+    const candidates = await getTsdkCandidates({ filter: candidate => candidate.target !== vscode.ConfigurationTarget.Global });
+    return findWorkspaceTypeScriptVersions(
+        candidates.map(candidate => resolveTsdkPath(candidate.value)),
+        vscode.workspace.workspaceFolders?.map(folder => folder.uri.fsPath) ?? [],
+        async tsdkPath => await pathHasTsserverJs(tsdkPath) ? undefined : resolveTsdkPathToExe(tsdkPath),
+    );
 }
 
 function getExplicitConfigValues<T>(section: string, key: string): ExplicitConfigValue<T>[] {
