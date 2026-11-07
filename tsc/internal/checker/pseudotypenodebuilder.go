@@ -184,7 +184,15 @@ func (b *NodeBuilderImpl) pseudoTypeToNode(t *pseudochecker.PseudoType) *ast.Nod
 		if len(d.TypeParameters) > 0 {
 			res := make([]*ast.Node, 0, len(d.TypeParameters))
 			for _, tp := range d.TypeParameters {
-				res = append(res, b.reuseNode(tp.AsNode()))
+				node := tp.AsNode()
+				reused := b.reuseNode(node)
+				if reused == nil {
+					// Reuse fails when the constraint references a name inaccessible from the emit target.
+					// A nil here would reach the printer, which dereferences it in NodeList.HasTrailingComma.
+					b.ctx.tracker.ReportInferenceFallback(node)
+					reused = b.typeParameterToDeclaration(b.ch.getDeclaredTypeOfTypeParameter(node.Symbol()))
+				}
+				res = append(res, reused)
 			}
 			typeParams = b.f.NewNodeList(res)
 		}
