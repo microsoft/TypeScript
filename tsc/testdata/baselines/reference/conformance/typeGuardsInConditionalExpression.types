@@ -316,8 +316,8 @@ function foo11(x: number | string | boolean) {
 >x : string
 
         : ((b = x) // x is number | boolean
->((b = x) // x is number | boolean        && typeof x === "number"        && (x = 10) // assignment to x        && x) : number | false
->(b = x) // x is number | boolean        && typeof x === "number"        && (x = 10) // assignment to x        && x : number | false
+>((b = x) // x is number | boolean        && typeof x === "number"        && (x = 10) // assignment to x        && x) : number | false (origin: number | 0 | false)
+>(b = x) // x is number | boolean        && typeof x === "number"        && (x = 10) // assignment to x        && x : number | false (origin: number | 0 | false)
 >(b = x) // x is number | boolean        && typeof x === "number"        && (x = 10) : 0 | 10 | false
 >(b = x) // x is number | boolean        && typeof x === "number" : 0 | boolean
 >(b = x) : number | boolean
@@ -370,8 +370,8 @@ function foo12(x: number | string | boolean) {
 >length : number
 
         : ((b = x) // x is number | boolean
->((b = x) // x is number | boolean        && typeof x === "number"        && x) : number | false
->(b = x) // x is number | boolean        && typeof x === "number"        && x : number | false
+>((b = x) // x is number | boolean        && typeof x === "number"        && x) : number | false (origin: number | 0 | false)
+>(b = x) // x is number | boolean        && typeof x === "number"        && x : number | false (origin: number | 0 | false)
 >(b = x) // x is number | boolean        && typeof x === "number" : 0 | boolean
 >(b = x) : number | boolean
 >b = x : number | boolean

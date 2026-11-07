@@ -35,16 +35,16 @@ let [, skillA = ["noSkill", "noSkill"]] = multiRobotA;
 >multiRobotA : MultiSkilledRobot
 
 let [nameMB = "noName" ] = multiRobotB;
->nameMB : string
+>nameMB : string (origin: string | "noName")
 >"noName" : "noName"
 >multiRobotB : MultiSkilledRobot
 
 let [nameMA = "noName", [primarySkillA = "noSkill", secondarySkillA = "noSkill"] = ["noSkill", "noSkill"]] = multiRobotA;
->nameMA : string
+>nameMA : string (origin: string | "noName")
 >"noName" : "noName"
->primarySkillA : string
+>primarySkillA : string (origin: string | "noSkill")
 >"noSkill" : "noSkill"
->secondarySkillA : string
+>secondarySkillA : string (origin: string | "noSkill")
 >"noSkill" : "noSkill"
 >["noSkill", "noSkill"] : [string, string]
 >"noSkill" : "noSkill"
@@ -52,7 +52,7 @@ let [nameMA = "noName", [primarySkillA = "noSkill", secondarySkillA = "noSkill"]
 >multiRobotA : MultiSkilledRobot
 
 let [nameMC = "noName" ] = ["roomba", ["vacuum", "mopping"]];
->nameMC : string
+>nameMC : string (origin: string | "noName")
 >"noName" : "noName"
 >["roomba", ["vacuum", "mopping"]] : [string, string[]]
 >"roomba" : "roomba"
@@ -61,11 +61,11 @@ let [nameMC = "noName" ] = ["roomba", ["vacuum", "mopping"]];
 >"mopping" : "mopping"
 
 let [nameMC2 = "noName", [primarySkillC = "noSkill", secondarySkillC = "noSkill"] = ["noSkill", "noSkill"]] = ["roomba", ["vacuum", "mopping"]];
->nameMC2 : string
+>nameMC2 : string (origin: string | "noName")
 >"noName" : "noName"
->primarySkillC : string
+>primarySkillC : string (origin: string | "noSkill")
 >"noSkill" : "noSkill"
->secondarySkillC : string
+>secondarySkillC : string (origin: string | "noSkill")
 >"noSkill" : "noSkill"
 >["noSkill", "noSkill"] : [string, string]
 >"noSkill" : "noSkill"
@@ -78,8 +78,8 @@ let [nameMC2 = "noName", [primarySkillC = "noSkill", secondarySkillC = "noSkill"
 
 if (nameMB == nameMA) {
 >nameMB == nameMA : boolean
->nameMB : string
->nameMA : string
+>nameMB : string (origin: string | "noName")
+>nameMA : string (origin: string | "noName")
 
     console.log(skillA[0] + skillA[1]);
 >console.log(skillA[0] + skillA[1]) : void

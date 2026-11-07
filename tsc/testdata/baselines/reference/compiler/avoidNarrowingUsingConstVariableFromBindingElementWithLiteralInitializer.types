@@ -10,7 +10,7 @@ export function test(arg: { index?: number }) {
 >index : number | undefined
 
   const { index = 0 } = arg;
->index : number
+>index : number (origin: number | 0)
 >0 : 0
 >arg : { index?: number; }
 
@@ -18,7 +18,7 @@ export function test(arg: { index?: number }) {
 >foo[index] === "a" : boolean
 >foo[index] : string | number | boolean
 >foo : ["a", string, number] | ["b", string, boolean]
->index : number
+>index : number (origin: number | 0)
 >"a" : "a"
 
     foo;

@@ -43,14 +43,14 @@ class FooClass<P extends Foo = Foo> {
 >foo : () => number
 
         const { foo = 42 } = this.properties;
->foo : number
+>foo : number (origin: number | 42)
 >42 : 42
 >this.properties : Readonly<P>
 >this : this
 >properties : Readonly<P>
 
         return foo;
->foo : number
+>foo : number (origin: number | 42)
     }
 }
 

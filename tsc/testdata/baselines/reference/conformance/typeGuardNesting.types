@@ -21,7 +21,7 @@ if ((typeof strOrBool === 'boolean' && !strOrBool) || typeof strOrBool === 'stri
 
 	let label: string = (typeof strOrBool === 'string') ? strOrBool : "string";
 >label : string
->(typeof strOrBool === 'string') ? strOrBool : "string" : string
+>(typeof strOrBool === 'string') ? strOrBool : "string" : string (origin: string | "string")
 >(typeof strOrBool === 'string') : boolean
 >typeof strOrBool === 'string' : boolean
 >typeof strOrBool : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
@@ -43,7 +43,7 @@ if ((typeof strOrBool === 'boolean' && !strOrBool) || typeof strOrBool === 'stri
 
 	let label2: string = (typeof strOrBool !== 'boolean') ? strOrBool : "string";
 >label2 : string
->(typeof strOrBool !== 'boolean') ? strOrBool : "string" : string
+>(typeof strOrBool !== 'boolean') ? strOrBool : "string" : string (origin: string | "string")
 >(typeof strOrBool !== 'boolean') : boolean
 >typeof strOrBool !== 'boolean' : boolean
 >typeof strOrBool : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
@@ -81,7 +81,7 @@ if ((typeof strOrBool !== 'string' && !strOrBool) || typeof strOrBool !== 'boole
 
 	let label: string = (typeof strOrBool === 'string') ? strOrBool : "string";
 >label : string
->(typeof strOrBool === 'string') ? strOrBool : "string" : string
+>(typeof strOrBool === 'string') ? strOrBool : "string" : string (origin: string | "string")
 >(typeof strOrBool === 'string') : boolean
 >typeof strOrBool === 'string' : boolean
 >typeof strOrBool : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
@@ -103,7 +103,7 @@ if ((typeof strOrBool !== 'string' && !strOrBool) || typeof strOrBool !== 'boole
 
 	let label2: string = (typeof strOrBool !== 'boolean') ? strOrBool : "string";
 >label2 : string
->(typeof strOrBool !== 'boolean') ? strOrBool : "string" : string | boolean
+>(typeof strOrBool !== 'boolean') ? strOrBool : "string" : string | boolean (origin: string | "string" | boolean)
 >(typeof strOrBool !== 'boolean') : boolean
 >typeof strOrBool !== 'boolean' : boolean
 >typeof strOrBool : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"

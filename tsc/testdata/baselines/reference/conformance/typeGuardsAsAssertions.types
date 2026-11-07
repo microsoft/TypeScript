@@ -94,9 +94,9 @@ function foo1() {
 >x : string | number
 
         x = typeof x === "string" ? x.slice() : "abc";
->x = typeof x === "string" ? x.slice() : "abc" : string
+>x = typeof x === "string" ? x.slice() : "abc" : string (origin: string | "abc")
 >x : string | number | boolean
->typeof x === "string" ? x.slice() : "abc" : string
+>typeof x === "string" ? x.slice() : "abc" : string (origin: string | "abc")
 >typeof x === "string" : boolean
 >typeof x : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
 >x : string | number

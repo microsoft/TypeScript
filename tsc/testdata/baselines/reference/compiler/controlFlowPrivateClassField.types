@@ -43,7 +43,7 @@ class Example2 {
     }
 
     get test() {
->test : number
+>test : number (origin: number | 0)
 
         if (this.#test) {
 >this.#test : number | undefined

@@ -28,8 +28,8 @@ const C = class {
 >b + (this.#baz().next().value || 0) + ((await this.#qux().next()).value || 0) : number
 >b + (this.#baz().next().value || 0) : number
 >b : number
->(this.#baz().next().value || 0) : number
->this.#baz().next().value || 0 : number
+>(this.#baz().next().value || 0) : number (origin: number | 0)
+>this.#baz().next().value || 0 : number (origin: number | 0)
 >this.#baz().next().value : void | number
 >this.#baz().next() : IteratorResult<number, void>
 >this.#baz().next : (...[value]: [] | [unknown]) => IteratorResult<number, void>
@@ -39,8 +39,8 @@ const C = class {
 >next : (...[value]: [] | [unknown]) => IteratorResult<number, void>
 >value : void | number
 >0 : 0
->((await this.#qux().next()).value || 0) : number
->(await this.#qux().next()).value || 0 : number
+>((await this.#qux().next()).value || 0) : number (origin: number | 0)
+>(await this.#qux().next()).value || 0 : number (origin: number | 0)
 >(await this.#qux().next()).value : void | number
 >(await this.#qux().next()) : IteratorResult<number, void>
 >await this.#qux().next() : IteratorResult<number, void>

@@ -104,9 +104,9 @@ foo2({
 >this : X2 | Y2
 
         this.value;
->this.value : string
+>this.value : string (origin: string | "done" | "none")
 >this : X2 | Y2
->value : string
+>value : string (origin: string | "done" | "none")
     }
 });
 

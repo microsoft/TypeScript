@@ -85,7 +85,7 @@ function f2(cond: boolean) {
 >c3 : "bar" | "foo"
 
     let v4 = c4;  // string
->v4 : string
+>v4 : string (origin: string | "bar" | "foo")
 >c4 : "bar" | "baz" | "foo"
 
     let v5 = c5;  // "foo" | "bar" | "baz"
@@ -175,7 +175,7 @@ function f4(cond: boolean) {
 >c3 : 123 | 456
 
     let v4 = c4;  // number
->v4 : number
+>v4 : number (origin: number | 123 | 456)
 >c4 : 123 | 456 | 789
 
     let v5 = c5;  // 123 | 456 | 789

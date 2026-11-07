@@ -12,8 +12,8 @@ function f(addUndefined1 = "J", addUndefined2?: number) {
 >addUndefined1.length : number
 >addUndefined1 : string
 >length : number
->(addUndefined2 || 0) : number
->addUndefined2 || 0 : number
+>(addUndefined2 || 0) : number (origin: number | 0)
+>addUndefined2 || 0 : number (origin: number | 0)
 >addUndefined2 : number | undefined
 >0 : 0
 }

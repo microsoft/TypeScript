@@ -327,7 +327,7 @@ type H = G<`test.hoge`>;  // "test" | "hoge"
 >H : "hoge" | "test"
 
 type I = G<`test.${string}`>;  // string ("test" | string reduces to string)
->I : string
+>I : string (origin: string | "test")
 
 type J<T> = T extends `${infer U}.${string}` ? U : never
 >J : J<T>
@@ -599,7 +599,7 @@ function ft1<T extends string>(t: T, u: Uppercase<T>, u1: Uppercase<`1.${T}.3`>,
 // Repro from #52685
 
 type Boom = 'abc' | 'def' | `a${string}` | Lowercase<string>;
->Boom : Boom
+>Boom : Boom (origin: "abc" | "def" | `a${string}` | Lowercase<string>)
 
 // Repro from #56582
 

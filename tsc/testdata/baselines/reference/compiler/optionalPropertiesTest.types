@@ -56,8 +56,8 @@ foo = {id: 1234, print:()=>{}}	   // Ok
 >()=>{} : () => void
 
 var s = foo.name || "default";
->s : string
->foo.name || "default" : string
+>s : string (origin: string | "default")
+>foo.name || "default" : string (origin: string | "default")
 >foo.name : string | undefined
 >foo : IFoo
 >name : string | undefined

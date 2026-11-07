@@ -1,7 +1,8 @@
+specialIntersectionsInMappedTypes.ts(13,1): error TS18048: 'a.left' is possibly 'undefined'.
 specialIntersectionsInMappedTypes.ts(14,1): error TS18048: 'a.other' is possibly 'undefined'.
 
 
-==== specialIntersectionsInMappedTypes.ts (1 errors) ====
+==== specialIntersectionsInMappedTypes.ts (2 errors) ====
     // Repro from #50683
     
     type Alignment = (string & {}) | "left" | "center" | "right";
@@ -15,6 +16,8 @@ specialIntersectionsInMappedTypes.ts(14,1): error TS18048: 'a.other' is possibly
     };
     
     a.left.length;
+    ~~~~~~
+!!! error TS18048: 'a.left' is possibly 'undefined'.
     a.other.length;  // Error expected here
     ~~~~~~~
 !!! error TS18048: 'a.other' is possibly 'undefined'.

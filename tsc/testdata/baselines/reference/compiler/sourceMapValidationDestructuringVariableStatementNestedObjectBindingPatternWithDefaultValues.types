@@ -53,12 +53,12 @@ var {
 
         primary: primaryA = "noSkill",
 >primary : any
->primaryA : string
+>primaryA : string (origin: string | "noSkill")
 >"noSkill" : "noSkill"
 
         secondary: secondaryA = "noSkill"
 >secondary : any
->secondaryA : string
+>secondaryA : string (origin: string | "noSkill")
 >"noSkill" : "noSkill"
 
     } = { primary: "noSkill", secondary: "noSkill" }
@@ -74,7 +74,7 @@ var {
 var {
     name: nameB = "noNameSpecified",
 >name : any
->nameB : string
+>nameB : string (origin: string | "noNameSpecified")
 >"noNameSpecified" : "noNameSpecified"
 
     skills: {
@@ -82,12 +82,12 @@ var {
 
         primary: primaryB = "noSkill",
 >primary : any
->primaryB : string
+>primaryB : string (origin: string | "noSkill")
 >"noSkill" : "noSkill"
 
         secondary: secondaryB = "noSkill"
 >secondary : any
->secondaryB : string
+>secondaryB : string (origin: string | "noSkill")
 >"noSkill" : "noSkill"
 
     } = { primary: "noSkill", secondary: "noSkill" }
@@ -103,7 +103,7 @@ var {
 var {
     name: nameC = "noNameSpecified",
 >name : any
->nameC : string
+>nameC : string (origin: string | "noNameSpecified")
 >"noNameSpecified" : "noNameSpecified"
 
     skills: {
@@ -111,12 +111,12 @@ var {
 
         primary: primaryB = "noSkill",
 >primary : any
->primaryB : string
+>primaryB : string (origin: string | "noSkill")
 >"noSkill" : "noSkill"
 
         secondary: secondaryB = "noSkill"
 >secondary : any
->secondaryB : string
+>secondaryB : string (origin: string | "noSkill")
 >"noSkill" : "noSkill"
 
     } = { primary: "noSkill", secondary: "noSkill" }
@@ -140,15 +140,15 @@ var {
 
 if (nameB == nameB) {
 >nameB == nameB : boolean
->nameB : string
->nameB : string
+>nameB : string (origin: string | "noNameSpecified")
+>nameB : string (origin: string | "noNameSpecified")
 
     console.log(nameC);
 >console.log(nameC) : void
 >console.log : (msg: string) => void
 >console : { log(msg: string): void; }
 >log : (msg: string) => void
->nameC : string
+>nameC : string (origin: string | "noNameSpecified")
 }
 else {
     console.log(nameC);
@@ -156,5 +156,5 @@ else {
 >console.log : (msg: string) => void
 >console : { log(msg: string): void; }
 >log : (msg: string) => void
->nameC : string
+>nameC : string (origin: string | "noNameSpecified")
 }

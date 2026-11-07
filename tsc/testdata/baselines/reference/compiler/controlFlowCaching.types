@@ -475,11 +475,11 @@ function f(dim, offsets, arr, acommon, centerAnchorLimit, g, has, lin) {
 >180 : 180
 
                 labelOffset.y = leftBottom ? 0 : -size;
->labelOffset.y = leftBottom ? 0 : -size : number
+>labelOffset.y = leftBottom ? 0 : -size : number (origin: number | 0)
 >labelOffset.y : any
 >labelOffset : any
 >y : any
->leftBottom ? 0 : -size : number
+>leftBottom ? 0 : -size : number (origin: number | 0)
 >leftBottom : boolean
 >0 : 0
 >-size : number
@@ -494,11 +494,11 @@ function f(dim, offsets, arr, acommon, centerAnchorLimit, g, has, lin) {
 >centerAnchorLimit : any
 
                 labelOffset.y = leftBottom ? 0 : -size;
->labelOffset.y = leftBottom ? 0 : -size : number
+>labelOffset.y = leftBottom ? 0 : -size : number (origin: number | 0)
 >labelOffset.y : any
 >labelOffset : any
 >y : any
->leftBottom ? 0 : -size : number
+>leftBottom ? 0 : -size : number (origin: number | 0)
 >leftBottom : boolean
 >0 : 0
 >-size : number
@@ -513,11 +513,11 @@ function f(dim, offsets, arr, acommon, centerAnchorLimit, g, has, lin) {
 >centerAnchorLimit : any
 
                 labelOffset.y = leftBottom ? size * 0.4 : 0;
->labelOffset.y = leftBottom ? size * 0.4 : 0 : number
+>labelOffset.y = leftBottom ? size * 0.4 : 0 : number (origin: number | 0)
 >labelOffset.y : any
 >labelOffset : any
 >y : any
->leftBottom ? size * 0.4 : 0 : number
+>leftBottom ? size * 0.4 : 0 : number (origin: number | 0)
 >leftBottom : boolean
 >size * 0.4 : number
 >size : any
