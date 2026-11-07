@@ -24,7 +24,6 @@ export class A {
 
 //// [a.d.ts]
 export declare class A {
-    /** @private @type {boolean} */
     private privateProperty;
     /** @protected @type {string} */
     protected protectedProperty: string;
@@ -32,7 +31,6 @@ export declare class A {
     readonly readonlyProperty: number;
     /** @public @type {bigint} */
     publicProperty: bigint;
-    /** @private @type {symbol} */
     private static privateStaticProperty;
     constructor();
     static initialize(): void;
