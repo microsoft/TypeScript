@@ -375,6 +375,15 @@ func (c *Checker) compareSymbolsWorker(s1, s2 *ast.Symbol) int {
 	if r := c.compareSymbolDeclarationsAndNames(s1, s2); r != 0 {
 		return r
 	}
+	// Symbols the checker derives from a declared one, such as the members of
+	// mapped types, share its declaration and name. Symbol IDs are assigned in
+	// the order symbols are first used, so order those by how they were made.
+	if r := cmp.Compare(s1.Flags()&ast.SymbolFlagsTransient, s2.Flags()&ast.SymbolFlagsTransient); r != 0 {
+		return r
+	}
+	if r := cmp.Compare(s1.CheckFlags(), s2.CheckFlags()); r != 0 {
+		return r
+	}
 	// Fall back to symbol IDs. This is a last resort that should happen only when symbols have
 	// no declaration and duplicate names.
 	return cmp.Compare(ast.GetSymbolId(s1), ast.GetSymbolId(s2))
@@ -478,7 +487,7 @@ func CompareTypes(t1, t2 *Type) int {
 			// Here we know we have references to instantiations of the same type because we have matching targets.
 			if r1.node == nil && r2.node == nil {
 				// Non-deferred type references with the same target are sorted by their type argument lists.
-				if c := compareTypeLists(t1.AsTypeReference().resolvedTypeArguments, t2.AsTypeReference().resolvedTypeArguments); c != 0 {
+				if c := compareTypeLists(t1.AsTypeReference().resolvedTypeArguments.peek(), t2.AsTypeReference().resolvedTypeArguments.peek()); c != 0 {
 					return c
 				}
 			} else {
@@ -663,8 +672,8 @@ func CompareTypes(t1, t2 *Type) int {
 	}
 	// Types implied by binding patterns are ordered by their patterns.
 	if t1.flags&TypeFlagsObject != 0 {
-		p1 := t1.checker.patternForType[t1]
-		p2 := t2.checker.patternForType[t2]
+		p1, _ := t1.checker.patternForType.get(t1)
+		p2, _ := t2.checker.patternForType.get(t2)
 		if c := t1.checker.compareNodes(p1, p2); c != 0 {
 			return c
 		}
@@ -822,7 +831,7 @@ func compareObjectMembers(t1, t2 *Type, withTypes bool) int {
 // created.
 func (c *Checker) peekTypeOfObjectLiteralMember(s *ast.Symbol) *Type {
 	if links := c.valueSymbolLinks.TryGet(s); links != nil {
-		return links.resolvedType
+		return links.resolvedType.peek()
 	}
 	return nil
 }
@@ -869,7 +878,7 @@ func compareTypeParameterOrigins(t1, t2 *Type) int {
 		// Tuple this types have no symbol; their constraint is the tuple target,
 		// initialized at creation.
 		if t1.symbol == nil {
-			return CompareTypes(p1.constraint, p2.constraint)
+			return CompareTypes(p1.constraint.peek(), p2.constraint.peek())
 		}
 	case typeParameterOriginDistributed:
 		return CompareTypes(p1.distributedType, p2.distributedType)
