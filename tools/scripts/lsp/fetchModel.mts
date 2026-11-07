@@ -5,15 +5,27 @@
 import fs from "node:fs";
 import path from "node:path";
 import url from "node:url";
+import { GeneratedFile } from "../gen/generatedFile.mts";
 
 const __filename = url.fileURLToPath(new URL(import.meta.url));
 const __dirname = path.dirname(__filename);
 
-const metaModelPath = path.join(__dirname, "metaModel.json");
-const metaModelSchemaPath = path.join(__dirname, "metaModelSchema.mts");
+export const outputs = ["metaModel.json", "metaModelSchema.mts"] as const;
+const metaModelPath = path.join(__dirname, outputs[0]);
+const metaModelSchemaPath = path.join(__dirname, outputs[1]);
+const lockfilePath = path.resolve(__dirname, "../../../package-lock.json");
+
+export async function ensureModel(force = false): Promise<GeneratedFile[]> {
+    const files = outputs.map(output => new GeneratedFile(path.join(__dirname, output), [__filename, lockfilePath]));
+    if (!files.every(file => file.isCurrent(force))) {
+        for (const file of files) file.invalidate();
+        await fetchModel();
+        for (const file of files) file.markCurrent();
+    }
+    return files;
+}
 
 export default async function fetchModel() {
-    const lockfilePath = path.resolve(__dirname, "../../../package-lock.json");
     const lockfile = JSON.parse(fs.readFileSync(lockfilePath, "utf-8"));
     const clientVersion: string = lockfile.packages["node_modules/vscode-languageclient"].version;
 
