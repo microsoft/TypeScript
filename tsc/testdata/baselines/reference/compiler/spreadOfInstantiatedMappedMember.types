@@ -27,8 +27,8 @@ declare const token: ReturnType<typeof wrap> | ReturnType<typeof wrap<"text">>;
 >wrap : <T extends "text" | "other">() => { filter: "text"; }
 
 export const spread = { ...token };
->spread : { filter: "text"; }
->{ ...token } : { filter: "text"; }
+>spread : { filter: "text"; } | { filter: "text"; }
+>{ ...token } : { filter: "text"; } | { filter: "text"; }
 >token : { filter: "text"; } | { filter: "text"; }
 
 // An object rest of a union of two instantiations of `boxed` takes the member
