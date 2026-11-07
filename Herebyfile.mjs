@@ -113,6 +113,7 @@ const { values: rawOptions } = parseArgs({
         forRelease: { type: "boolean" },
         respectGoEnv: { type: "boolean" },
         vscodeTypescriptRelease: { type: "boolean" },
+        prBuild: { type: "boolean" },
         platform: { type: "string" },
 
         race: { type: "boolean", default: parseEnvBoolean("RACE") },
@@ -136,7 +137,13 @@ const options = /** @type {Options} */ (rawOptions);
 const typeScriptReleaseVersion = /** @type {string | undefined} */ (undefined);
 const releaseVscodeTypescript = !!options.vscodeTypescriptRelease;
 const produceVscodeTypescriptVsix = releaseVscodeTypescript;
-const produceTypeScriptNightlyVsix = !typeScriptReleaseVersion && !releaseVscodeTypescript;
+// PR builds are published under a separate package name so that unreviewed
+// code never ends up in the real TypeScript packages.
+const prBuild = !!options.prBuild;
+const prBuildScope = "@typescript-deploys";
+const prBuildBaseName = "pr-build";
+const prBuildPrereleasePattern = /^pr\.[1-9]\d*\.[1-9]\d*$/;
+const produceTypeScriptNightlyVsix = !typeScriptReleaseVersion && !releaseVscodeTypescript && !prBuild;
 const usePublishedPlatformPackagesForVsix = releaseVscodeTypescript;
 const produceAnyVsix = produceVscodeTypescriptVsix || produceTypeScriptNightlyVsix;
 
@@ -151,6 +158,17 @@ if (options.respectGoEnv && options.forRelease) {
 }
 if (options.respectGoEnv && options.setPrerelease) {
     throw new Error("respectGoEnv requires the version declared in the source");
+}
+if (prBuild) {
+    if (releaseVscodeTypescript) {
+        throw new Error("prBuild cannot be combined with vscodeTypescriptRelease");
+    }
+    if (typeof options.setPrerelease !== "string" || !prBuildPrereleasePattern.test(options.setPrerelease)) {
+        throw new Error("prBuild requires --setPrerelease pr.<PR number>.<build number>");
+    }
+}
+else if (typeof options.setPrerelease === "string" && options.setPrerelease.startsWith("pr.")) {
+    throw new Error("pr.* prereleases are only published as PR builds; pass --prBuild");
 }
 
 const defaultGoBuildTags = [
@@ -1874,7 +1892,7 @@ export class Debouncer {
 }
 
 const getVersion = memoize(() => {
-    if (typeScriptReleaseVersion) {
+    if (typeScriptReleaseVersion && !prBuild) {
         return typeScriptReleaseVersion;
     }
 
@@ -1897,6 +1915,9 @@ const getVersion = memoize(() => {
 });
 
 function getPublishTag() {
+    if (prBuild) {
+        return "pr";
+    }
     const version = getVersion();
     if (!version) {
         throw new Error("Publishing 'typescript' requires a version before selecting an npm tag.");
@@ -2193,16 +2214,17 @@ function cpWithoutNodeModulesOrTsconfig(src, dest) {
 }
 
 const mainTypeScriptPackage = {
-    npmPackageName: "typescript",
-    npmDir: path.join(builtNpm, "typescript"),
-    npmTarball: path.join(builtNpm, "typescript.tgz"),
+    npmPackageName: prBuild ? `${prBuildScope}/${prBuildBaseName}` : "typescript",
+    npmDir: path.join(builtNpm, prBuild ? prBuildBaseName : "typescript"),
+    npmTarball: path.join(builtNpm, prBuild ? `${prBuildBaseName}.tgz` : "typescript.tgz"),
 };
 
+const wasip1PackageDirName = prBuild ? `${prBuildBaseName}-wasip1-wasm` : "typescript-wasip1-wasm";
 const wasip1Package = {
-    npmPackageName: "@typescript/typescript-wasip1-wasm",
-    npmDirName: "typescript-wasip1-wasm",
-    npmDir: path.join(builtNpm, "typescript-wasip1-wasm"),
-    npmTarball: path.join(builtNpm, "typescript-wasip1-wasm.tgz"),
+    npmPackageName: `${prBuild ? prBuildScope : "@typescript"}/${wasip1PackageDirName}`,
+    npmDirName: wasip1PackageDirName,
+    npmDir: path.join(builtNpm, wasip1PackageDirName),
+    npmTarball: path.join(builtNpm, `${wasip1PackageDirName}.tgz`),
 };
 
 const typescriptMacEntitlements = [
@@ -2374,7 +2396,7 @@ function nodeToGOARCH(arch, os) {
 
 const getPlatforms = memoize(() => {
     const publishTag = releaseVscodeTypescript ? undefined : getPublishTag();
-    let supportedPlatforms = !releaseVscodeTypescript && publishTag !== "next"
+    let supportedPlatforms = !releaseVscodeTypescript && !prBuild && publishTag !== "next"
         ? platforms
         : platforms.filter(({ vsix }) => vsix);
 
@@ -2384,10 +2406,10 @@ const getPlatforms = memoize(() => {
     }
 
     return supportedPlatforms.map(({ os, arch, cert = "LinuxSign", vsix, alpine }) => {
-        const npmDirName = `typescript-${os}-${arch}`;
+        const npmDirName = `${prBuild ? prBuildBaseName : "typescript"}-${os}-${arch}`;
         const npmDir = path.join(builtNpm, npmDirName);
         const npmTarball = `${npmDir}.tgz`;
-        const npmPackageName = `@typescript/${npmDirName}`;
+        const npmPackageName = `${prBuild ? prBuildScope : "@typescript"}/${npmDirName}`;
 
         /** @type {VsixExtension[]} */
         let extensions = [];
@@ -2657,6 +2679,14 @@ export const buildTypeScriptPlatformMatrix = task({
             ],
         );
         console.log(`##vso[task.setvariable variable=matrix;isOutput=true]${JSON.stringify(matrix)}`);
+        if (process.env.GITHUB_OUTPUT) {
+            const packages = {
+                main: mainTypeScriptPackage.npmPackageName,
+                platforms: getPlatforms().map(p => p.npmPackageName),
+                wasm: wasip1Package.npmPackageName,
+            };
+            fs.appendFileSync(process.env.GITHUB_OUTPUT, `matrix=${JSON.stringify({ include: Object.values(matrix) })}\npackages=${JSON.stringify(packages)}\n`);
+        }
     },
 });
 
@@ -2684,7 +2714,25 @@ async function buildMainTypeScriptPackage(platforms) {
     await fs.promises.writeFile(path.join(mainPackageDir, "package.json"), JSON.stringify(mainPackage, undefined, 4));
     await fs.promises.copyFile("LICENSE.txt", path.join(mainPackageDir, "LICENSE"));
     await fs.promises.copyFile("NOTICE.txt", path.join(mainPackageDir, "NOTICE.txt"));
-    await fs.promises.copyFile("README.md", path.join(mainPackageDir, "README.md"));
+    if (prBuild) {
+        const prNumber = getVersion().match(/-pr\.(\d+)\./)?.[1];
+        const readme = [
+            `# \`${mainTypeScriptPackage.npmPackageName}\``,
+            "",
+            `This package is an unofficial, unsigned build of TypeScript, built from microsoft/TypeScript#${prNumber}.`,
+            "It is published for testing only and must not be used in production.",
+            "",
+            "To try it, install it under the \`typescript\` name:",
+            "",
+            "```sh",
+            `npm install typescript@npm:${mainTypeScriptPackage.npmPackageName}@${getVersion()}`,
+            "```",
+        ];
+        await fs.promises.writeFile(path.join(mainPackageDir, "README.md"), readme.join("\n") + "\n");
+    }
+    else {
+        await fs.promises.copyFile("README.md", path.join(mainPackageDir, "README.md"));
+    }
 
     // Build the JS API and copy dist into the main package.
     await run("npm", ["run", "-w", "@typescript/typescript", "build"]);
@@ -2723,6 +2771,7 @@ async function buildWasip1Package() {
         ? []
         : getReleaseBuildFlags(options.setPrerelease || typeScriptReleaseVersion ? getVersion() : undefined);
     const wasmPackageJson = JSON.parse(fs.readFileSync(path.join(wasmInputDir, "package.json"), "utf8"));
+    wasmPackageJson.name = wasip1Package.npmPackageName;
     wasmPackageJson.version = getVersion();
     wasmPackageJson.gitHead = inputPackageJson.gitHead;
     wasmPackageJson.publishConfig = {
@@ -2912,6 +2961,9 @@ function typeScriptExeName(nodeOs) {
 async function runSignTypeScriptPackages() {
     if (!options.forRelease) {
         throw new Error("This task should not be run in non-release builds.");
+    }
+    if (prBuild) {
+        throw new Error("PR builds contain unreviewed code and must never be signed.");
     }
     if (usePublishedPlatformPackagesForVsix) {
         checkPublishedPlatformPackagesForVsix();

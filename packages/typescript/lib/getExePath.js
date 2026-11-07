@@ -10,7 +10,7 @@ export default function getExePath({ fs, module, path, url }) {
 
     const pkg = JSON.parse(fs.readFileSync(path.join(__dirname, "..", "package.json"), "utf8"));
     const pkgName = pkg.name;
-    const baseName = pkgName.startsWith("@") ? pkgName.split("/")[1] : pkgName;
+    const [scope, baseName] = pkgName.startsWith("@") ? pkgName.split("/") : ["@typescript", pkgName];
     const binNames = pkg.bin && typeof pkg.bin === "object" ? Object.keys(pkg.bin) : [];
     if (binNames.length !== 1 || binNames[0] !== "tsc") {
         throw new Error(`Expected ${pkgName} to declare exactly one bin entry named tsc.`);
@@ -29,7 +29,7 @@ export default function getExePath({ fs, module, path, url }) {
     }
     else {
         // We're actually running from an installed package.
-        const platformPackageName = "@typescript/" + expectedPackage;
+        const platformPackageName = scope + "/" + expectedPackage;
         try {
             if (typeof import.meta.resolve === "undefined") {
                 // v16.20.1

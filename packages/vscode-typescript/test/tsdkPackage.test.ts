@@ -14,7 +14,8 @@ import {
     TypeScriptPackageChangedError,
 } from "../src/tsdkPackage";
 
-const platformPackage = `typescript-${process.platform}-${process.arch}`;
+const platformPackageBaseName = `typescript-${process.platform}-${process.arch}`;
+const platformPackage = `@typescript/${platformPackageBaseName}`;
 const exeSuffix = process.platform === "win32" ? ".exe" : "";
 const exeName = `tsc${exeSuffix}`;
 const nativeExeName = `tsgo${exeSuffix}`;
@@ -133,50 +134,51 @@ function testResolution(name: string, resolutionCase: ResolutionCase): void {
 describe("tsdk package resolution", { concurrency: true }, () => {
     testResolution("resolves the TypeScript 7 package", {
         packagePath: "node_modules/typescript",
-        platformPath: `node_modules/@typescript/${platformPackage}`,
+        platformPath: `node_modules/${platformPackage}`,
     });
 
     testResolution("resolves the TypeScript 7 scoped alias recommended in the 7.0 release post", {
         packagePath: "node_modules/@typescript/native",
-        platformPath: `node_modules/@typescript/${platformPackage}`,
+        platformPath: `node_modules/${platformPackage}`,
     });
 
     testResolution("resolves an unscoped TypeScript 7 alias", {
         packagePath: "node_modules/typescript-next",
-        platformPath: `node_modules/@typescript/${platformPackage}`,
+        platformPath: `node_modules/${platformPackage}`,
     });
 
-    const nativePlatformPackage = `native-preview-${process.platform}-${process.arch}`;
+    const nativePlatformPackageBaseName = `native-preview-${process.platform}-${process.arch}`;
+    const nativePlatformPackage = `@typescript/${nativePlatformPackageBaseName}`;
     testResolution("resolves the native-preview package", {
         packagePath: "node_modules/@typescript/typescript",
-        platformPath: `node_modules/@typescript/${nativePlatformPackage}`,
+        platformPath: `node_modules/${nativePlatformPackage}`,
         platformPackage: nativePlatformPackage,
         exeName: nativeExeName,
     });
 
     testResolution("resolves a non-hoisted platform package", {
         packagePath: "node_modules/@typescript/native",
-        platformPath: `node_modules/@typescript/native/node_modules/@typescript/${platformPackage}`,
+        platformPath: `node_modules/@typescript/native/node_modules/${platformPackage}`,
     });
 
     testResolution("resolves a platform package hoisted above a workspace", {
         packagePath: "packages/app/node_modules/@typescript/native",
-        platformPath: `node_modules/@typescript/${platformPackage}`,
+        platformPath: `node_modules/${platformPackage}`,
     });
 
     const pnpmStore = "node_modules/.pnpm/typescript@7.0.2/node_modules";
     testResolution("resolves a pnpm virtual-store package", {
         packagePath: `${pnpmStore}/typescript`,
-        platformPath: `node_modules/.pnpm/@typescript+${platformPackage}@7.0.2/node_modules/@typescript/${platformPackage}`,
-        dependencyLink: `${pnpmStore}/@typescript/${platformPackage}`,
+        platformPath: `node_modules/.pnpm/@typescript+${platformPackageBaseName}@7.0.2/node_modules/${platformPackage}`,
+        dependencyLink: `${pnpmStore}/${platformPackage}`,
     });
 
     const nativePreviewVersion = "7.0.0-dev.20260707.2";
     const pnpmNativePreviewStore = `node_modules/.pnpm/@typescript+native-preview@${nativePreviewVersion}/node_modules`;
     testResolution("resolves a pnpm native-preview virtual-store package", {
         packagePath: `${pnpmNativePreviewStore}/@typescript/typescript`,
-        platformPath: `node_modules/.pnpm/@typescript+${nativePlatformPackage}@${nativePreviewVersion}/node_modules/@typescript/${nativePlatformPackage}`,
-        dependencyLink: `${pnpmNativePreviewStore}/@typescript/${nativePlatformPackage}`,
+        platformPath: `node_modules/.pnpm/@typescript+${nativePlatformPackageBaseName}@${nativePreviewVersion}/node_modules/${nativePlatformPackage}`,
+        dependencyLink: `${pnpmNativePreviewStore}/${nativePlatformPackage}`,
         platformPackage: nativePlatformPackage,
         exeName: nativeExeName,
     });
@@ -184,8 +186,8 @@ describe("tsdk package resolution", { concurrency: true }, () => {
     const npmStore = "node_modules/.store/typescript@7.0.2-hash/node_modules";
     testResolution("resolves an npm linked-store package", {
         packagePath: `${npmStore}/typescript`,
-        platformPath: `node_modules/.store/@typescript+${platformPackage}@7.0.2-hash/node_modules/@typescript/${platformPackage}`,
-        dependencyLink: `${npmStore}/@typescript/${platformPackage}`,
+        platformPath: `node_modules/.store/@typescript+${platformPackageBaseName}@7.0.2-hash/node_modules/${platformPackage}`,
+        dependencyLink: `${npmStore}/${platformPackage}`,
     });
 
     test("throws when the platform package is missing", t => {
