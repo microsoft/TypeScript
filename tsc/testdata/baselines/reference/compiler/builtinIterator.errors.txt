@@ -29,15 +29,16 @@ builtinIterator.ts(70,29): error TS2345: Argument of type 'Generator<string, num
             Type '[undefined]' is not assignable to type '[] | [boolean]'.
               Type '[undefined]' is not assignable to type '[boolean]'.
                 Type 'undefined' is not assignable to type 'boolean'.
-builtinIterator.ts(73,35): error TS2322: Type 'Generator<string, number, boolean>' is not assignable to type 'Iterable<string, unknown, undefined> | Iterator<string, unknown, undefined>'.
-  Type 'Generator<string, number, boolean>' is not assignable to type 'Iterator<string, unknown, undefined>'.
-    Types of property 'next' are incompatible.
-      Type '(...[value]: [] | [boolean]) => IteratorResult<string, number>' is not assignable to type '(...[value]: [] | [undefined]) => IteratorResult<string, unknown>'.
-        Types of parameters '__0' and '__0' are incompatible.
-          Type '[] | [undefined]' is not assignable to type '[] | [boolean]'.
-            Type '[undefined]' is not assignable to type '[] | [boolean]'.
-              Type '[undefined]' is not assignable to type '[boolean]'.
-                Type 'undefined' is not assignable to type 'boolean'.
+builtinIterator.ts(73,35): error TS2322: Type 'Generator<string, number, boolean>' is not assignable to type '(Iterable<string, unknown, undefined> | Iterator<string, unknown, undefined>) & object'.
+  Type 'Generator<string, number, boolean>' is not assignable to type 'Iterator<string, unknown, undefined> & object'.
+    Type 'Generator<string, number, boolean>' is not assignable to type 'Iterator<string, unknown, undefined>'.
+      Types of property 'next' are incompatible.
+        Type '(...[value]: [] | [boolean]) => IteratorResult<string, number>' is not assignable to type '(...[value]: [] | [undefined]) => IteratorResult<string, unknown>'.
+          Types of parameters '__0' and '__0' are incompatible.
+            Type '[] | [undefined]' is not assignable to type '[] | [boolean]'.
+              Type '[undefined]' is not assignable to type '[] | [boolean]'.
+                Type '[undefined]' is not assignable to type '[boolean]'.
+                  Type 'undefined' is not assignable to type 'boolean'.
 
 
 ==== builtinIterator.ts (7 errors) ====
@@ -152,13 +153,14 @@ builtinIterator.ts(73,35): error TS2322: Type 'Generator<string, number, boolean
     declare const iter2: IteratorObject<string>;
     const iter3 = iter2.flatMap(() => g1);
                                       ~~
-!!! error TS2322: Type 'Generator<string, number, boolean>' is not assignable to type 'Iterable<string, unknown, undefined> | Iterator<string, unknown, undefined>'.
-!!! error TS2322:   Type 'Generator<string, number, boolean>' is not assignable to type 'Iterator<string, unknown, undefined>'.
-!!! error TS2322:     Types of property 'next' are incompatible.
-!!! error TS2322:       Type '(...[value]: [] | [boolean]) => IteratorResult<string, number>' is not assignable to type '(...[value]: [] | [undefined]) => IteratorResult<string, unknown>'.
-!!! error TS2322:         Types of parameters '__0' and '__0' are incompatible.
-!!! error TS2322:           Type '[] | [undefined]' is not assignable to type '[] | [boolean]'.
-!!! error TS2322:             Type '[undefined]' is not assignable to type '[] | [boolean]'.
-!!! error TS2322:               Type '[undefined]' is not assignable to type '[boolean]'.
-!!! error TS2322:                 Type 'undefined' is not assignable to type 'boolean'.
+!!! error TS2322: Type 'Generator<string, number, boolean>' is not assignable to type '(Iterable<string, unknown, undefined> | Iterator<string, unknown, undefined>) & object'.
+!!! error TS2322:   Type 'Generator<string, number, boolean>' is not assignable to type 'Iterator<string, unknown, undefined> & object'.
+!!! error TS2322:     Type 'Generator<string, number, boolean>' is not assignable to type 'Iterator<string, unknown, undefined>'.
+!!! error TS2322:       Types of property 'next' are incompatible.
+!!! error TS2322:         Type '(...[value]: [] | [boolean]) => IteratorResult<string, number>' is not assignable to type '(...[value]: [] | [undefined]) => IteratorResult<string, unknown>'.
+!!! error TS2322:           Types of parameters '__0' and '__0' are incompatible.
+!!! error TS2322:             Type '[] | [undefined]' is not assignable to type '[] | [boolean]'.
+!!! error TS2322:               Type '[undefined]' is not assignable to type '[] | [boolean]'.
+!!! error TS2322:                 Type '[undefined]' is not assignable to type '[boolean]'.
+!!! error TS2322:                   Type 'undefined' is not assignable to type 'boolean'.
 !!! related TS6502 lib.es2025.iterator.d.ts:--:--: The expected type comes from the return type of this signature.

@@ -1,0 +1,13 @@
+iteratorFlatMapRejectsPrimitiveString.ts(5,23): error TS2322: Type 'string' is not assignable to type '(Iterable<string, unknown, undefined> | Iterator<string, unknown, undefined>) & object'.
+
+
+==== iteratorFlatMapRejectsPrimitiveString.ts (1 errors) ====
+    const numbers = Iterator.from([1]);
+    const fromArray: string[] = numbers.flatMap(() => ["ab"]).toArray();
+    const fromIterator: string[] = numbers.flatMap(() => Iterator.from("ab")).toArray();
+    const fromBoxedString: string[] = numbers.flatMap(() => new String("ab")).toArray();
+    numbers.flatMap(() => "ab").toArray();
+                          ~~~~
+!!! error TS2322: Type 'string' is not assignable to type '(Iterable<string, unknown, undefined> | Iterator<string, unknown, undefined>) & object'.
+!!! related TS6502 lib.es2025.iterator.d.ts:--:--: The expected type comes from the return type of this signature.
+    
