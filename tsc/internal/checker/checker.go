@@ -21104,6 +21104,16 @@ func (c *Checker) getReturnTypeOfSignature(sig *Signature) *Type {
 	if sig.resolvedReturnType != nil {
 		return sig.resolvedReturnType
 	}
+	if d := sig.declaration; d != nil && sig.target == nil && ast.IsGetAccessorDeclaration(d) && d.Type() == nil {
+		// The type of the accessor infers the same return type separately, and
+		// is what checking the getter resolves first. Resolved from within
+		// this return type instead, a cycle through the accessor would be
+		// detected at the accessor rather than here.
+		c.getTypeOfSymbol(c.getSymbolOfDeclaration(d))
+		if sig.resolvedReturnType != nil {
+			return sig.resolvedReturnType
+		}
+	}
 	if !c.pushTypeResolution(sig, TypeSystemPropertyNameResolvedReturnType) {
 		return c.errorType
 	}
