@@ -54,6 +54,7 @@ import {
     createFunctionDeclaration,
     createIdentifier,
     createIfStatement,
+    createIndexSignatureDeclaration,
     createMissingDeclaration,
     createNodeArray,
     createNumericLiteral,
@@ -106,6 +107,19 @@ describe("NodeObject + childrenIter", { concurrency }, () => {
         const node = createMissingDeclaration();
         assert.deepStrictEqual([...node.childrenIter()], []);
     });
+});
+
+test("index signatures allow an omitted type", () => {
+    using api = spawnAPI();
+    const source = api.createSourceFile("/repro.ts", "interface I { [key: string]; next: number; }").sourceFile;
+    const declaration = source.statements[0];
+    assert.ok(astModule.isInterfaceDeclaration(declaration));
+    const signature = declaration.members[0];
+    assert.ok(astModule.isIndexSignatureDeclaration(signature));
+    const type: astModule.TypeNode | undefined = signature.type;
+    assert.strictEqual(type, undefined);
+    assert.strictEqual(createIndexSignatureDeclaration(undefined, signature.parameters).type, undefined);
+    assert.strictEqual(declaration.members.length, 2);
 });
 
 describe("AST property contracts", { concurrency }, () => {

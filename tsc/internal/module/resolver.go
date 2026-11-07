@@ -111,6 +111,13 @@ func resolutionCandidateFromDiskLogicalPath(directory tspath.RootedDirectoryPath
 }
 
 func resolutionCandidateFromEncodedPaths(directory tspath.RootedDirectoryPath, filePath string, directoryPath string, directoryOnly bool) resolutionCandidate {
+	if filePath == directoryPath {
+		// File and directory resolution of the same input are identical.
+		return resolutionCandidate{
+			path:          directory.ResolveFile(filePath).AsPath(),
+			directoryOnly: directoryOnly,
+		}
+	}
 	resolvedDirectoryPath := directory.ResolveDirectory(directoryPath)
 	if directoryOnly {
 		return resolutionCandidate{
@@ -538,6 +545,14 @@ func (r *DefaultResolver) ResolvePackageDirectory(moduleName string, containingF
 	compilerOptions := GetCompilerOptionsWithRedirect(r.compilerOptions, redirectedReference)
 	containingDirectory := containingFile.Directory()
 	state := newResolutionState(moduleName, containingDirectory, false /*isTypeReferenceDirective*/, resolutionMode, compilerOptions, redirectedReference, r, nil)
+	if tspath.IsExternalModuleNameRelative(moduleName) {
+		packageDirectory := containingDirectory.ResolveDirectory(moduleName)
+		if r.fs.DirectoryExists(packageDirectory) {
+			originalPath, resolvedPath := state.getOriginalAndResolvedFileName(tspath.RootedFilePathFromPath(packageDirectory.AsPath()))
+			return state.createResolvedModuleHandlingSymlink(&resolved{path: resolvedPath, originalPath: originalPath})
+		}
+		return nil
+	}
 	state.resolvePackageDirectoryOnly = true
 	if result := state.loadModuleFromNearestNodeModulesDirectory(false /*typesScopeOnly*/); result != nil && result.path != "" {
 		return state.createResolvedModuleHandlingSymlink(result)

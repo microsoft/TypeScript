@@ -31,6 +31,41 @@ class F {
     @dec set x(value: number) { }
 }
 
+class G {
+    @dec get x(): string { return ""; }
+    set x(value) { }
+}
+
+class H {
+    get x(): string { return ""; }
+    @dec set x(value) { }
+}
+
+class I {
+    @dec set x(value) { }
+    get x(): string { return ""; }
+}
+
+class J {
+    set x(value) { }
+    @dec get x(): string { return ""; }
+}
+
+class K {
+    @dec get x(): string { return ""; }
+}
+
+class L {
+    @dec get x(): string { return ""; }
+    set x(value: any) { }
+}
+
+class M {
+    @dec static get x(): number { return 0; }
+    static set x(value) { }
+}
+
+
 //// [decoratorOnClassAccessor8.js]
 "use strict";
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
@@ -94,3 +129,65 @@ __decorate([
     __metadata("design:type", Number),
     __metadata("design:paramtypes", [Number])
 ], F.prototype, "x", null);
+class G {
+    get x() { return ""; }
+    set x(value) { }
+}
+__decorate([
+    dec,
+    __metadata("design:type", String),
+    __metadata("design:paramtypes", [Object])
+], G.prototype, "x", null);
+class H {
+    get x() { return ""; }
+    set x(value) { }
+}
+__decorate([
+    dec,
+    __metadata("design:type", String),
+    __metadata("design:paramtypes", [Object])
+], H.prototype, "x", null);
+class I {
+    set x(value) { }
+    get x() { return ""; }
+}
+__decorate([
+    dec,
+    __metadata("design:type", String),
+    __metadata("design:paramtypes", [Object])
+], I.prototype, "x", null);
+class J {
+    set x(value) { }
+    get x() { return ""; }
+}
+__decorate([
+    dec,
+    __metadata("design:type", String),
+    __metadata("design:paramtypes", [Object])
+], J.prototype, "x", null);
+class K {
+    get x() { return ""; }
+}
+__decorate([
+    dec,
+    __metadata("design:type", String),
+    __metadata("design:paramtypes", [])
+], K.prototype, "x", null);
+class L {
+    get x() { return ""; }
+    set x(value) { }
+}
+__decorate([
+    dec,
+    __metadata("design:type", Object),
+    __metadata("design:paramtypes", [Object])
+], L.prototype, "x", null);
+class M {
+    static get x() { return 0; }
+    static set x(value) { }
+}
+__decorate([
+    dec,
+    __metadata("design:type", Number),
+    __metadata("design:paramtypes", [Object])
+], M, "x", null);
