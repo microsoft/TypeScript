@@ -1,0 +1,23 @@
+//// [tests/cases/compiler/circularAliasSignatureHelpCheckOrder.ts] ////
+
+=== circularAliasSignatureHelpCheckOrder.ts ===
+// Signature help for the call resolves the circular aliases inside a request
+// whose effects are discarded. Checking afterwards still reports both
+// circularities (58068).
+
+type A = B;
+>A : Symbol(A, Decl(circularAliasSignatureHelpCheckOrder.ts, 0, 0))
+>B : Symbol(B, Decl(circularAliasSignatureHelpCheckOrder.ts, 4, 11))
+
+type B = A;
+>B : Symbol(B, Decl(circularAliasSignatureHelpCheckOrder.ts, 4, 11))
+>A : Symbol(A, Decl(circularAliasSignatureHelpCheckOrder.ts, 0, 0))
+
+declare function f(x: A): void;
+>f : Symbol(f, Decl(circularAliasSignatureHelpCheckOrder.ts, 5, 11))
+>x : Symbol(x, Decl(circularAliasSignatureHelpCheckOrder.ts, 6, 19))
+>A : Symbol(A, Decl(circularAliasSignatureHelpCheckOrder.ts, 0, 0))
+
+f(1);
+>f : Symbol(f, Decl(circularAliasSignatureHelpCheckOrder.ts, 5, 11))
+

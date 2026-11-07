@@ -666,7 +666,6 @@ type Checker struct {
 	// members of one parent are often looked up together.
 	lastLateBindableParent                      *ast.Symbol
 	lastLateBindableKinds                       uint8
-	isInferencePartiallyBlocked                 bool
 	wasCanceled                                 bool
 	evaluate                                    evaluator.Evaluator
 	resolveName                                 func(location *ast.Node, name string, meaning ast.SymbolFlags, nameNotFoundMessage *diagnostics.Message, isUse bool, excludeGlobals bool) *ast.Symbol
@@ -731,7 +730,7 @@ type Checker struct {
 	resumeBuf                                   []int
 	deferredAttach                              []deferredAttachment // See attachState
 	recordingFromCheck                          bool                 // A query begun in a check is in progress; see recordFromCheck
-	apparentArgumentCount                       *int
+	request                                     *editorRequest       // The editor request being answered, if any; see runEditorRequest
 	lastGetCombinedNodeFlagsNode                *ast.Node
 	lastGetCombinedNodeFlagsResult              ast.NodeFlags
 	lastGetCombinedModifierFlagsNode            *ast.Node
@@ -816,7 +815,6 @@ type Checker struct {
 	isStringIndexSignatureOnlyType              func(*Type) bool
 	markNodeAssignments                         func(*ast.Node) bool
 	compareTypesAssignable                      TypeComparer
-	skipDirectInferenceNodes                    collections.Set[*ast.Node]
 	ctx                                         context.Context
 	activeMappers                               []*TypeMapper
 	activeTypeMappersCaches                     []clearableMap[activeMapperCacheEntry]
@@ -9548,7 +9546,7 @@ func (c *Checker) resolveCall(node *ast.Node, signatures []*Signature, candidate
 	isDecorator := node.Kind == ast.KindDecorator
 	isJsxOpeningOrSelfClosingElement := ast.IsJsxOpeningLikeElement(node)
 	isInstanceof := node.Kind == ast.KindBinaryExpression
-	reportErrors := !c.isInferencePartiallyBlocked && candidatesOutArray == nil
+	reportErrors := (c.request == nil || !c.request.inferencePartiallyBlocked) && candidatesOutArray == nil
 	var s CallState
 	s.node = node
 	if !isDecorator && !isInstanceof && !isSuperCall(node) && !ast.IsJsxOpeningFragment(node) {
@@ -10260,8 +10258,8 @@ func (c *Checker) pickLongestCandidateSignature(node *ast.Node, candidates []*Si
 	//     declare function f<T>(k: keyof T);
 	//     f<Foo>("
 	argCount := len(args)
-	if c.apparentArgumentCount != nil {
-		argCount = *c.apparentArgumentCount
+	if c.request != nil && c.request.argumentCount != nil {
+		argCount = *c.request.argumentCount
 	}
 	bestIndex := c.getLongestCandidateIndex(candidates, argCount)
 	candidate := candidates[bestIndex]
@@ -27518,7 +27516,15 @@ func (c *Checker) getDeclaredTypeOfTypeAlias(symbol *ast.Symbol) *Type {
 		}
 		nodeReports := c.endCurrentNodeErrors(reports)
 		if links.declaredType.peek() == nil {
-			links.declaredType.setReported(c, t, nodeReports)
+			if t == c.errorType && c.request != nil {
+				// An editor request discards the effects of what it computes,
+				// such as the circularity reported above, and a failed
+				// declared type defines no identity, so it is discarded with
+				// them, to be computed again where its error is kept.
+				links.declaredType.set(c, t)
+			} else {
+				links.declaredType.setReported(c, t, nodeReports)
+			}
 		}
 		return links.declaredType.peek()
 	}
