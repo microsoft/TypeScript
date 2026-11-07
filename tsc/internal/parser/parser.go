@@ -4108,11 +4108,13 @@ func (p *Parser) nextTokenCanFollowModifier() bool {
 	case ast.KindDefaultKeyword:
 		return p.nextTokenCanFollowDefaultKeyword()
 	case ast.KindStaticKeyword:
+		hasEscape := p.scanner.HasUnicodeEscape() || p.scanner.HasExtendedUnicodeEscape()
 		p.nextToken()
-		return p.canFollowModifier()
+		return (!hasEscape || !p.hasPrecedingLineBreak()) && p.canFollowModifier()
 	case ast.KindGetKeyword, ast.KindSetKeyword:
+		hasEscape := p.scanner.HasUnicodeEscape() || p.scanner.HasExtendedUnicodeEscape()
 		p.nextToken()
-		return p.canFollowGetOrSetKeyword()
+		return (!hasEscape || !p.hasPrecedingLineBreak()) && p.canFollowGetOrSetKeyword()
 	default:
 		return p.nextTokenIsOnSameLineAndCanFollowModifier()
 	}

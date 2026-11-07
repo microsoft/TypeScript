@@ -1,0 +1,149 @@
+//// [tests/cases/compiler/escapedClassFieldModifiers.ts] ////
+
+=== escapedClassFieldModifiers.ts ===
+class UnicodeEscapes {
+>UnicodeEscapes : Symbol(UnicodeEscapes, Decl(escapedClassFieldModifiers.ts, 0, 0))
+
+    g\u0065t
+>g\u0065t : Symbol(UnicodeEscapes[g\u0065t], Decl(escapedClassFieldModifiers.ts, 0, 22))
+
+    getMethod() {}
+>getMethod : Symbol(UnicodeEscapes.getMethod, Decl(escapedClassFieldModifiers.ts, 1, 12))
+
+    s\u0065t
+>s\u0065t : Symbol(UnicodeEscapes[s\u0065t], Decl(escapedClassFieldModifiers.ts, 2, 18))
+
+    setField = 1;
+>setField : Symbol(UnicodeEscapes.setField, Decl(escapedClassFieldModifiers.ts, 3, 12))
+
+    st\u0061tic
+>st\u0061tic : Symbol(UnicodeEscapes[st\u0061tic], Decl(escapedClassFieldModifiers.ts, 4, 17))
+
+    staticMethod() {}
+>staticMethod : Symbol(UnicodeEscapes.staticMethod, Decl(escapedClassFieldModifiers.ts, 5, 15))
+}
+
+class ExtendedUnicodeEscapes {
+>ExtendedUnicodeEscapes : Symbol(ExtendedUnicodeEscapes, Decl(escapedClassFieldModifiers.ts, 7, 1))
+
+    g\u{65}t
+>g\u{65}t : Symbol(ExtendedUnicodeEscapes[g\u{65}t], Decl(escapedClassFieldModifiers.ts, 9, 30))
+
+    getMethod() {}
+>getMethod : Symbol(ExtendedUnicodeEscapes.getMethod, Decl(escapedClassFieldModifiers.ts, 10, 12))
+
+    s\u{65}t
+>s\u{65}t : Symbol(ExtendedUnicodeEscapes[s\u{65}t], Decl(escapedClassFieldModifiers.ts, 11, 18))
+
+    setField = 1;
+>setField : Symbol(ExtendedUnicodeEscapes.setField, Decl(escapedClassFieldModifiers.ts, 12, 12))
+
+    st\u{61}tic
+>st\u{61}tic : Symbol(ExtendedUnicodeEscapes[st\u{61}tic], Decl(escapedClassFieldModifiers.ts, 13, 17))
+
+    staticMethod() {}
+>staticMethod : Symbol(ExtendedUnicodeEscapes.staticMethod, Decl(escapedClassFieldModifiers.ts, 14, 15))
+}
+
+const unicode = new UnicodeEscapes();
+>unicode : Symbol(unicode, Decl(escapedClassFieldModifiers.ts, 18, 5))
+>UnicodeEscapes : Symbol(UnicodeEscapes, Decl(escapedClassFieldModifiers.ts, 0, 0))
+
+unicode.get;
+>unicode.get : Symbol(UnicodeEscapes[g\u0065t], Decl(escapedClassFieldModifiers.ts, 0, 22))
+>unicode : Symbol(unicode, Decl(escapedClassFieldModifiers.ts, 18, 5))
+>get : Symbol(UnicodeEscapes[g\u0065t], Decl(escapedClassFieldModifiers.ts, 0, 22))
+
+unicode.set;
+>unicode.set : Symbol(UnicodeEscapes[s\u0065t], Decl(escapedClassFieldModifiers.ts, 2, 18))
+>unicode : Symbol(unicode, Decl(escapedClassFieldModifiers.ts, 18, 5))
+>set : Symbol(UnicodeEscapes[s\u0065t], Decl(escapedClassFieldModifiers.ts, 2, 18))
+
+unicode.static;
+>unicode.static : Symbol(UnicodeEscapes[st\u0061tic], Decl(escapedClassFieldModifiers.ts, 4, 17))
+>unicode : Symbol(unicode, Decl(escapedClassFieldModifiers.ts, 18, 5))
+>static : Symbol(UnicodeEscapes[st\u0061tic], Decl(escapedClassFieldModifiers.ts, 4, 17))
+
+unicode.getMethod();
+>unicode.getMethod : Symbol(UnicodeEscapes.getMethod, Decl(escapedClassFieldModifiers.ts, 1, 12))
+>unicode : Symbol(unicode, Decl(escapedClassFieldModifiers.ts, 18, 5))
+>getMethod : Symbol(UnicodeEscapes.getMethod, Decl(escapedClassFieldModifiers.ts, 1, 12))
+
+unicode.staticMethod();
+>unicode.staticMethod : Symbol(UnicodeEscapes.staticMethod, Decl(escapedClassFieldModifiers.ts, 5, 15))
+>unicode : Symbol(unicode, Decl(escapedClassFieldModifiers.ts, 18, 5))
+>staticMethod : Symbol(UnicodeEscapes.staticMethod, Decl(escapedClassFieldModifiers.ts, 5, 15))
+
+const extended = new ExtendedUnicodeEscapes();
+>extended : Symbol(extended, Decl(escapedClassFieldModifiers.ts, 25, 5))
+>ExtendedUnicodeEscapes : Symbol(ExtendedUnicodeEscapes, Decl(escapedClassFieldModifiers.ts, 7, 1))
+
+extended.get;
+>extended.get : Symbol(ExtendedUnicodeEscapes[g\u{65}t], Decl(escapedClassFieldModifiers.ts, 9, 30))
+>extended : Symbol(extended, Decl(escapedClassFieldModifiers.ts, 25, 5))
+>get : Symbol(ExtendedUnicodeEscapes[g\u{65}t], Decl(escapedClassFieldModifiers.ts, 9, 30))
+
+extended.set;
+>extended.set : Symbol(ExtendedUnicodeEscapes[s\u{65}t], Decl(escapedClassFieldModifiers.ts, 11, 18))
+>extended : Symbol(extended, Decl(escapedClassFieldModifiers.ts, 25, 5))
+>set : Symbol(ExtendedUnicodeEscapes[s\u{65}t], Decl(escapedClassFieldModifiers.ts, 11, 18))
+
+extended.static;
+>extended.static : Symbol(ExtendedUnicodeEscapes[st\u{61}tic], Decl(escapedClassFieldModifiers.ts, 13, 17))
+>extended : Symbol(extended, Decl(escapedClassFieldModifiers.ts, 25, 5))
+>static : Symbol(ExtendedUnicodeEscapes[st\u{61}tic], Decl(escapedClassFieldModifiers.ts, 13, 17))
+
+extended.getMethod();
+>extended.getMethod : Symbol(ExtendedUnicodeEscapes.getMethod, Decl(escapedClassFieldModifiers.ts, 10, 12))
+>extended : Symbol(extended, Decl(escapedClassFieldModifiers.ts, 25, 5))
+>getMethod : Symbol(ExtendedUnicodeEscapes.getMethod, Decl(escapedClassFieldModifiers.ts, 10, 12))
+
+extended.staticMethod();
+>extended.staticMethod : Symbol(ExtendedUnicodeEscapes.staticMethod, Decl(escapedClassFieldModifiers.ts, 14, 15))
+>extended : Symbol(extended, Decl(escapedClassFieldModifiers.ts, 25, 5))
+>staticMethod : Symbol(ExtendedUnicodeEscapes.staticMethod, Decl(escapedClassFieldModifiers.ts, 14, 15))
+
+class UnescapedModifiers {
+>UnescapedModifiers : Symbol(UnescapedModifiers, Decl(escapedClassFieldModifiers.ts, 30, 24))
+
+    get
+    value() { return 1; }
+>value : Symbol(UnescapedModifiers.value, Decl(escapedClassFieldModifiers.ts, 32, 26), Decl(escapedClassFieldModifiers.ts, 34, 25))
+
+    set
+    value(v: number) {}
+>value : Symbol(UnescapedModifiers.value, Decl(escapedClassFieldModifiers.ts, 32, 26), Decl(escapedClassFieldModifiers.ts, 34, 25))
+>v : Symbol(v, Decl(escapedClassFieldModifiers.ts, 36, 10))
+
+    static
+    method() {}
+>method : Symbol(UnescapedModifiers.method, Decl(escapedClassFieldModifiers.ts, 36, 23))
+}
+
+class EscapedMemberNames {
+>EscapedMemberNames : Symbol(EscapedMemberNames, Decl(escapedClassFieldModifiers.ts, 39, 1))
+
+    g\u0065t() {}
+>g\u0065t : Symbol(EscapedMemberNames[g\u0065t], Decl(escapedClassFieldModifiers.ts, 41, 26))
+
+    s\u{65}t() {}
+>s\u{65}t : Symbol(EscapedMemberNames[s\u{65}t], Decl(escapedClassFieldModifiers.ts, 42, 17))
+
+    st\u0061tic() {}
+>st\u0061tic : Symbol(EscapedMemberNames[st\u0061tic], Decl(escapedClassFieldModifiers.ts, 43, 17))
+}
+
+class InvalidEscapedModifiers {
+>InvalidEscapedModifiers : Symbol(InvalidEscapedModifiers, Decl(escapedClassFieldModifiers.ts, 45, 1))
+
+    g\u0065t value() { return 1; }
+>value : Symbol(InvalidEscapedModifiers.value, Decl(escapedClassFieldModifiers.ts, 47, 31), Decl(escapedClassFieldModifiers.ts, 48, 34))
+
+    s\u{65}t value(v: number) {}
+>value : Symbol(InvalidEscapedModifiers.value, Decl(escapedClassFieldModifiers.ts, 47, 31), Decl(escapedClassFieldModifiers.ts, 48, 34))
+>v : Symbol(v, Decl(escapedClassFieldModifiers.ts, 49, 19))
+
+    st\u0061tic method() {}
+>method : Symbol(InvalidEscapedModifiers.method, Decl(escapedClassFieldModifiers.ts, 49, 32))
+}
+
