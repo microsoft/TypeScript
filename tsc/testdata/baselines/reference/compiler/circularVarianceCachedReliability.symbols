@@ -1,0 +1,80 @@
+//// [tests/cases/compiler/circularVarianceCachedReliability.ts] ////
+
+=== circularVarianceCachedReliability.ts ===
+// Repro for #64995. When variance measurement restarts because of a circularity, probes for the same
+// marker types are answered from the relation cache. The cached `Unmeasurable` reliability flag must be
+// propagated, otherwise `Lnk` and `Api` are measured as plain invariant (no structural fallback) and the
+// assignment below is wrongly rejected.
+
+declare class Fld<T extends object> { f: T }
+>Fld : Symbol(Fld, Decl(circularVarianceCachedReliability.ts, 0, 0))
+>T : Symbol(T, Decl(circularVarianceCachedReliability.ts, 5, 18))
+>f : Symbol(Fld.f, Decl(circularVarianceCachedReliability.ts, 5, 37))
+>T : Symbol(T, Decl(circularVarianceCachedReliability.ts, 5, 18))
+
+type Sel<T extends object> = T extends { v: 2 } ? Lnk<T> | Fld<T> : T extends { v: 4 } ? Fld<T> : never;
+>Sel : Symbol(Sel, Decl(circularVarianceCachedReliability.ts, 5, 44))
+>T : Symbol(T, Decl(circularVarianceCachedReliability.ts, 6, 9))
+>T : Symbol(T, Decl(circularVarianceCachedReliability.ts, 6, 9))
+>v : Symbol(v, Decl(circularVarianceCachedReliability.ts, 6, 40))
+>Lnk : Symbol(Lnk, Decl(circularVarianceCachedReliability.ts, 11, 58))
+>T : Symbol(T, Decl(circularVarianceCachedReliability.ts, 6, 9))
+>Fld : Symbol(Fld, Decl(circularVarianceCachedReliability.ts, 0, 0))
+>T : Symbol(T, Decl(circularVarianceCachedReliability.ts, 6, 9))
+>T : Symbol(T, Decl(circularVarianceCachedReliability.ts, 6, 9))
+>v : Symbol(v, Decl(circularVarianceCachedReliability.ts, 6, 79))
+>Fld : Symbol(Fld, Decl(circularVarianceCachedReliability.ts, 0, 0))
+>T : Symbol(T, Decl(circularVarianceCachedReliability.ts, 6, 9))
+
+interface Api<T extends object> {
+>Api : Symbol(Api, Decl(circularVarianceCachedReliability.ts, 6, 104))
+>T : Symbol(T, Decl(circularVarianceCachedReliability.ts, 7, 14))
+
+  rb(): Rb<T>;
+>rb : Symbol(Api.rb, Decl(circularVarianceCachedReliability.ts, 7, 33))
+>Rb : Symbol(Rb, Decl(circularVarianceCachedReliability.ts, 10, 1))
+>T : Symbol(T, Decl(circularVarianceCachedReliability.ts, 7, 14))
+
+  builder: { [K in keyof T]-?: (value: T[K]) => void };
+>builder : Symbol(Api.builder, Decl(circularVarianceCachedReliability.ts, 8, 14))
+>K : Symbol(K, Decl(circularVarianceCachedReliability.ts, 9, 14))
+>T : Symbol(T, Decl(circularVarianceCachedReliability.ts, 7, 14))
+>value : Symbol(value, Decl(circularVarianceCachedReliability.ts, 9, 32))
+>T : Symbol(T, Decl(circularVarianceCachedReliability.ts, 7, 14))
+>K : Symbol(K, Decl(circularVarianceCachedReliability.ts, 9, 14))
+}
+interface Rb<T extends object> { select(s: Sel<T>): void }
+>Rb : Symbol(Rb, Decl(circularVarianceCachedReliability.ts, 10, 1))
+>T : Symbol(T, Decl(circularVarianceCachedReliability.ts, 11, 13))
+>select : Symbol(Rb.select, Decl(circularVarianceCachedReliability.ts, 11, 32))
+>s : Symbol(s, Decl(circularVarianceCachedReliability.ts, 11, 40))
+>Sel : Symbol(Sel, Decl(circularVarianceCachedReliability.ts, 5, 44))
+>T : Symbol(T, Decl(circularVarianceCachedReliability.ts, 11, 13))
+
+declare class Lnk<T extends object> {
+>Lnk : Symbol(Lnk, Decl(circularVarianceCachedReliability.ts, 11, 58))
+>T : Symbol(T, Decl(circularVarianceCachedReliability.ts, 12, 18))
+
+  api: Api<T>;
+>api : Symbol(Lnk.api, Decl(circularVarianceCachedReliability.ts, 12, 37))
+>Api : Symbol(Api, Decl(circularVarianceCachedReliability.ts, 6, 104))
+>T : Symbol(T, Decl(circularVarianceCachedReliability.ts, 12, 18))
+
+  sels: Sel<T>[];
+>sels : Symbol(Lnk.sels, Decl(circularVarianceCachedReliability.ts, 13, 14))
+>Sel : Symbol(Sel, Decl(circularVarianceCachedReliability.ts, 5, 44))
+>T : Symbol(T, Decl(circularVarianceCachedReliability.ts, 12, 18))
+}
+
+declare const a: Lnk<{ v: 2; id: string }>;
+>a : Symbol(a, Decl(circularVarianceCachedReliability.ts, 17, 13))
+>Lnk : Symbol(Lnk, Decl(circularVarianceCachedReliability.ts, 11, 58))
+>v : Symbol(v, Decl(circularVarianceCachedReliability.ts, 17, 22))
+>id : Symbol(id, Decl(circularVarianceCachedReliability.ts, 17, 28))
+
+export const b: Lnk<{ v: 2 }> = a;
+>b : Symbol(b, Decl(circularVarianceCachedReliability.ts, 18, 12))
+>Lnk : Symbol(Lnk, Decl(circularVarianceCachedReliability.ts, 11, 58))
+>v : Symbol(v, Decl(circularVarianceCachedReliability.ts, 18, 21))
+>a : Symbol(a, Decl(circularVarianceCachedReliability.ts, 17, 13))
+

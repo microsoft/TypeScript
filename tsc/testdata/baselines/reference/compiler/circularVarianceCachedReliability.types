@@ -1,0 +1,49 @@
+//// [tests/cases/compiler/circularVarianceCachedReliability.ts] ////
+
+=== circularVarianceCachedReliability.ts ===
+// Repro for #64995. When variance measurement restarts because of a circularity, probes for the same
+// marker types are answered from the relation cache. The cached `Unmeasurable` reliability flag must be
+// propagated, otherwise `Lnk` and `Api` are measured as plain invariant (no structural fallback) and the
+// assignment below is wrongly rejected.
+
+declare class Fld<T extends object> { f: T }
+>Fld : Fld<T>
+>f : T
+
+type Sel<T extends object> = T extends { v: 2 } ? Lnk<T> | Fld<T> : T extends { v: 4 } ? Fld<T> : never;
+>Sel : Sel<T>
+>v : 2
+>v : 4
+
+interface Api<T extends object> {
+  rb(): Rb<T>;
+>rb : () => Rb<T>
+
+  builder: { [K in keyof T]-?: (value: T[K]) => void };
+>builder : { [K in keyof T]-?: (value: T[K]) => void; }
+>value : T[K]
+}
+interface Rb<T extends object> { select(s: Sel<T>): void }
+>select : (s: Sel<T>) => void
+>s : Sel<T>
+
+declare class Lnk<T extends object> {
+>Lnk : Lnk<T>
+
+  api: Api<T>;
+>api : Api<T>
+
+  sels: Sel<T>[];
+>sels : Sel<T>[]
+}
+
+declare const a: Lnk<{ v: 2; id: string }>;
+>a : Lnk<{ v: 2; id: string; }>
+>v : 2
+>id : string
+
+export const b: Lnk<{ v: 2 }> = a;
+>b : Lnk<{ v: 2; }>
+>v : 2
+>a : Lnk<{ v: 2; id: string; }>
+
