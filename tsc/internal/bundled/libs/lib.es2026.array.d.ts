@@ -28,8 +28,8 @@ interface ArrayConstructor {
      *      Each return value is awaited before being added to result array.
      * @param thisArg Value of 'this' used when executing mapFn.
      */
-    fromAsync<T, U>(iterableOrArrayLike: AsyncIterable<T>, mapFn: (value: T, index: number) => U, thisArg?: any): Promise<Awaited<U>[]>;
     fromAsync<T, U>(iterableOrArrayLike: (Iterable<T> | ArrayLike<T>) & { [Symbol.asyncIterator]?: null | undefined; }, mapFn: (value: Awaited<T>, index: number) => U, thisArg?: any): Promise<Awaited<U>[]>;
+    fromAsync<T, U>(iterableOrArrayLike: AsyncIterable<T>, mapFn: (value: T, index: number) => U, thisArg?: any): Promise<Awaited<U>[]>;
     fromAsync<TAsync, U, TSync = TAsync>(
         iterableOrArrayLike: AsyncIterable<TAsync> | ((Iterable<TSync> | ArrayLike<TSync>) & { [Symbol.asyncIterator]?: AsyncIterable<TAsync>[typeof Symbol.asyncIterator] | null | undefined; }),
         mapFn: (value: TAsync | Awaited<TSync>, index: number) => U,
