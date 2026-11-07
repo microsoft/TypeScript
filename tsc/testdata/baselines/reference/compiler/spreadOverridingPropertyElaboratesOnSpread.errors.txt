@@ -1,0 +1,33 @@
+spreadOverridingPropertyElaboratesOnSpread.ts(9,8): error TS2322: Type 'string | null' is not assignable to type 'string'.
+  Type 'null' is not assignable to type 'string'.
+spreadOverridingPropertyElaboratesOnSpread.ts(18,5): error TS2322: Type 'null' is not assignable to type 'string'.
+
+
+==== spreadOverridingPropertyElaboratesOnSpread.ts (2 errors) ====
+    type Item = {
+        attribute: string;
+    };
+    
+    declare const result: Partial<Record<"attribute", string | null>>;
+    
+    const item: Item = {
+        attribute: "",
+        ...result,
+           ~~~~~~
+!!! error TS2322: Type 'string | null' is not assignable to type 'string'.
+!!! error TS2322:   Type 'null' is not assignable to type 'string'.
+!!! related TS6500 spreadOverridingPropertyElaboratesOnSpread.ts:2:5: The expected type comes from property 'attribute' which is declared here on type 'Item'
+    };
+    
+    const item2: Item = {
+        ...result,
+        attribute: "",
+    };
+    
+    const item3: Item = {
+        attribute: null,
+        ~~~~~~~~~
+!!! error TS2322: Type 'null' is not assignable to type 'string'.
+!!! related TS6500 spreadOverridingPropertyElaboratesOnSpread.ts:2:5: The expected type comes from property 'attribute' which is declared here on type 'Item'
+    };
+    
