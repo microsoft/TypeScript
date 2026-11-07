@@ -6,9 +6,11 @@ import (
 	"maps"
 	"strings"
 	"testing"
+	"testing/synctest"
 
 	"github.com/microsoft/TypeScript/tsc/internal/bundled"
 	"github.com/microsoft/TypeScript/tsc/internal/core"
+	"github.com/microsoft/TypeScript/tsc/internal/ls/lsconv"
 	"github.com/microsoft/TypeScript/tsc/internal/lsp/lsproto"
 	"github.com/microsoft/TypeScript/tsc/internal/project"
 	"github.com/microsoft/TypeScript/tsc/internal/testutil/projecttestutil"
@@ -22,6 +24,139 @@ func TestProjectCollectionBuilder(t *testing.T) {
 	if !bundled.Embedded {
 		t.Skip("bundled files are not embedded")
 	}
+
+	t.Run("does not rebuild later references after loading the default project", func(t *testing.T) {
+		t.Parallel()
+		synctest.Test(t, func(t *testing.T) {
+			files := map[string]any{
+				"/project/tsconfig.json":       `{"files": [], "references": [{"path": "./tsconfig.app.json"}, {"path": "./tsconfig.node.json"}, {"path": "./tsconfig.tools.json"}]}`,
+				"/project/tsconfig.app.json":   `{"include": ["src"]}`,
+				"/project/tsconfig.node.json":  `{"files": ["vite.config.ts"]}`,
+				"/project/vite.config.ts":      `export default {};`,
+				"/project/tsconfig.tools.json": `{"files": ["tools.ts"]}`,
+				"/project/tools.ts":            `export {};`,
+				"/project/src/a.ts":            `export const a = 1;`,
+				"/project/src/b.ts":            `export const b = 2;`,
+				"/project/src/c.ts":            `export const c = 3;`,
+			}
+			session, utils := projecttestutil.Setup(files)
+			defer session.Close()
+			for i, name := range []string{"a", "b", "c"} {
+				synctest.Wait()
+				logStart := len(utils.Logs())
+				fileName := "/project/src/" + name + ".ts"
+				uri := lsproto.DocumentUri("file://" + fileName)
+				session.DidOpenFile(context.Background(), uri, 1, files[fileName].(string), lsproto.LanguageKindTypeScript)
+				_, err := session.GetLanguageService(context.Background(), uri)
+				assert.NilError(t, err)
+				defaultProject := session.Snapshot().GetDefaultProject(uri)
+				assert.Assert(t, defaultProject != nil)
+				assert.Equal(t, defaultProject.ConfigFileName(), tspath.RootedFilePath("/project/tsconfig.app.json"))
+				synctest.Wait()
+				if i > 0 {
+					assert.Equal(t, strings.Count(utils.Logs()[logStart:], "Program update for /project/tsconfig.node.json completed"), 0)
+					assert.Equal(t, strings.Count(utils.Logs()[logStart:], "Program update for /project/tsconfig.tools.json completed"), 0)
+				}
+				session.DidCloseFile(context.Background(), uri)
+			}
+		})
+	})
+
+	t.Run("preserves reference order and breadth-first project selection", func(t *testing.T) {
+		t.Parallel()
+		for _, test := range []struct {
+			name        string
+			firstConfig string
+			want        tspath.RootedFilePath
+		}{
+			{"first direct match", `{"files": ["src/main.ts"]}`, "/project/first.json"},
+			{"first match through import", `{"files": ["entry.ts"]}`, "/project/first.json"},
+			{"later direct match before deeper reference", `{"files": [], "references": [{"path": "./deep.json"}]}`, "/project/second.json"},
+		} {
+			t.Run(test.name, func(t *testing.T) {
+				t.Parallel()
+				files := map[string]any{
+					"/project/tsconfig.json": `{"files": [], "references": [{"path": "./first.json"}, {"path": "./second.json"}]}`,
+					"/project/first.json":    test.firstConfig,
+					"/project/second.json":   `{"files": ["src/main.ts"]}`,
+					"/project/deep.json":     `{"files": ["src/main.ts"]}`,
+					"/project/entry.ts":      `import "./src/main";`,
+					"/project/src/main.ts":   `export const value = 1;`,
+				}
+				session, _ := projecttestutil.Setup(files)
+				defer session.Close()
+				uri := lsproto.DocumentUri("file:///project/src/main.ts")
+				session.DidOpenFile(context.Background(), uri, 1, files["/project/src/main.ts"].(string), lsproto.LanguageKindTypeScript)
+				defaultProject := session.Snapshot().GetDefaultProject(uri)
+				assert.Assert(t, defaultProject != nil)
+				assert.Equal(t, defaultProject.ConfigFileName(), test.want)
+			})
+		}
+	})
+
+	t.Run("cached matches do not change project selection", func(t *testing.T) {
+		t.Parallel()
+		for _, test := range []struct {
+			name        string
+			firstConfig string
+			warmFile    string
+			changedFile tspath.RootedFilePath
+			newContent  string
+			want        tspath.RootedFilePath
+		}{
+			{
+				name:        "earlier candidate wins over cached later match",
+				firstConfig: `{"files": ["main.ts"]}`,
+				warmFile:    "anchor.ts",
+				want:        "/project/first.json",
+			},
+			{
+				name:        "config change invalidates cached match",
+				firstConfig: `{"files": ["entry.ts", "main.ts"]}`,
+				warmFile:    "entry.ts",
+				changedFile: "/project/first.json",
+				newContent:  `{"files": ["other.ts"]}`,
+				want:        "/project/second.json",
+			},
+			{
+				name:        "source change invalidates cached match",
+				firstConfig: `{"files": ["entry.ts"]}`,
+				warmFile:    "entry.ts",
+				changedFile: "/project/entry.ts",
+				newContent:  `export {};`,
+				want:        "/project/second.json",
+			},
+		} {
+			t.Run(test.name, func(t *testing.T) {
+				t.Parallel()
+				files := map[string]any{
+					"/project/tsconfig.json": `{"files": [], "references": [{"path": "./first.json"}, {"path": "./second.json"}]}`,
+					"/project/first.json":    test.firstConfig,
+					"/project/second.json":   `{"files": ["main.ts", "anchor.ts"]}`,
+					"/project/main.ts":       `export const value = 1;`,
+					"/project/entry.ts":      `import "./main";`,
+					"/project/anchor.ts":     `export {};`,
+					"/project/other.ts":      `export {};`,
+				}
+				session, utils := projecttestutil.Setup(files)
+				defer session.Close()
+				warmURI := lsproto.DocumentUri("file:///project/" + test.warmFile)
+				session.DidOpenFile(context.Background(), warmURI, 1, files["/project/"+test.warmFile].(string), lsproto.LanguageKindTypeScript)
+				session.DidCloseFile(context.Background(), warmURI)
+				if test.changedFile != "" {
+					assert.NilError(t, utils.FS().WriteFile(test.changedFile, test.newContent))
+					session.DidChangeWatchedFiles(context.Background(), []*lsproto.FileEvent{
+						{Type: lsproto.FileChangeTypeChanged, Uri: lsconv.FileNameToDocumentURI(test.changedFile)},
+					})
+				}
+				uri := lsproto.DocumentUri("file:///project/main.ts")
+				session.DidOpenFile(context.Background(), uri, 1, files["/project/main.ts"].(string), lsproto.LanguageKindTypeScript)
+				defaultProject := session.Snapshot().GetDefaultProject(uri)
+				assert.Assert(t, defaultProject != nil)
+				assert.Equal(t, defaultProject.ConfigFileName(), test.want)
+			})
+		}
+	})
 
 	t.Run("when project found is solution referencing default project directly", func(t *testing.T) {
 		t.Parallel()
