@@ -1,0 +1,10 @@
+assertedGenericPartialIndexedAssignment.ts(2,6): error TS2862: Type 'Partial<T>' is generic and can only be indexed for reading.
+
+
+==== assertedGenericPartialIndexedAssignment.ts (1 errors) ====
+    function write<T extends Record<string, unknown>>(values: Partial<T>, key: string) {
+        (values[key] as unknown) = 0;
+         ~~~~~~~~~~~
+!!! error TS2862: Type 'Partial<T>' is generic and can only be indexed for reading.
+    }
+    

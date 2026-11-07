@@ -1,0 +1,155 @@
+//// [tests/cases/compiler/usedBeforeAssignedTypeAssertion.ts] ////
+
+=== usedBeforeAssignedTypeAssertion.ts ===
+function directAssignment() {
+>directAssignment : Symbol(directAssignment, Decl(usedBeforeAssignedTypeAssertion.ts, 0, 0))
+
+    let value: number;
+>value : Symbol(value, Decl(usedBeforeAssignedTypeAssertion.ts, 1, 7))
+
+    value = 1;
+>value : Symbol(value, Decl(usedBeforeAssignedTypeAssertion.ts, 1, 7))
+}
+
+function parenthesizedAssignment() {
+>parenthesizedAssignment : Symbol(parenthesizedAssignment, Decl(usedBeforeAssignedTypeAssertion.ts, 3, 1))
+
+    let value: number;
+>value : Symbol(value, Decl(usedBeforeAssignedTypeAssertion.ts, 6, 7))
+
+    (value) = 1;
+>value : Symbol(value, Decl(usedBeforeAssignedTypeAssertion.ts, 6, 7))
+}
+
+function asAssignment() {
+>asAssignment : Symbol(asAssignment, Decl(usedBeforeAssignedTypeAssertion.ts, 8, 1))
+
+    let value: number;
+>value : Symbol(value, Decl(usedBeforeAssignedTypeAssertion.ts, 11, 7))
+
+    (value as number) = 1;
+>value : Symbol(value, Decl(usedBeforeAssignedTypeAssertion.ts, 11, 7))
+}
+
+function typeAssertionAssignment() {
+>typeAssertionAssignment : Symbol(typeAssertionAssignment, Decl(usedBeforeAssignedTypeAssertion.ts, 13, 1))
+
+    let value: number;
+>value : Symbol(value, Decl(usedBeforeAssignedTypeAssertion.ts, 16, 7))
+
+    (<number>value) = 1;
+>value : Symbol(value, Decl(usedBeforeAssignedTypeAssertion.ts, 16, 7))
+}
+
+function nestedAssertionAssignment() {
+>nestedAssertionAssignment : Symbol(nestedAssertionAssignment, Decl(usedBeforeAssignedTypeAssertion.ts, 18, 1))
+
+    let value: number;
+>value : Symbol(value, Decl(usedBeforeAssignedTypeAssertion.ts, 21, 7))
+
+    ((<number>value) as number) = 1;
+>value : Symbol(value, Decl(usedBeforeAssignedTypeAssertion.ts, 21, 7))
+}
+
+function readBeforeAssignment() {
+>readBeforeAssignment : Symbol(readBeforeAssignment, Decl(usedBeforeAssignedTypeAssertion.ts, 23, 1))
+
+    let value: number;
+>value : Symbol(value, Decl(usedBeforeAssignedTypeAssertion.ts, 26, 7))
+
+    return value as number;
+>value : Symbol(value, Decl(usedBeforeAssignedTypeAssertion.ts, 26, 7))
+}
+
+function compoundAssignmentBeforeInitialization() {
+>compoundAssignmentBeforeInitialization : Symbol(compoundAssignmentBeforeInitialization, Decl(usedBeforeAssignedTypeAssertion.ts, 28, 1))
+
+    let value: number;
+>value : Symbol(value, Decl(usedBeforeAssignedTypeAssertion.ts, 31, 7))
+
+    (value as number) += 1;
+>value : Symbol(value, Decl(usedBeforeAssignedTypeAssertion.ts, 31, 7))
+}
+
+function incrementBeforeInitialization() {
+>incrementBeforeInitialization : Symbol(incrementBeforeInitialization, Decl(usedBeforeAssignedTypeAssertion.ts, 33, 1))
+
+    let value: number;
+>value : Symbol(value, Decl(usedBeforeAssignedTypeAssertion.ts, 36, 7))
+
+    ++(<number>value);
+>value : Symbol(value, Decl(usedBeforeAssignedTypeAssertion.ts, 36, 7))
+}
+
+function decrementBeforeInitialization() {
+>decrementBeforeInitialization : Symbol(decrementBeforeInitialization, Decl(usedBeforeAssignedTypeAssertion.ts, 38, 1))
+
+    let value: number;
+>value : Symbol(value, Decl(usedBeforeAssignedTypeAssertion.ts, 41, 7))
+
+    (value as number)--;
+>value : Symbol(value, Decl(usedBeforeAssignedTypeAssertion.ts, 41, 7))
+}
+
+function initializedCompoundAssignments() {
+>initializedCompoundAssignments : Symbol(initializedCompoundAssignments, Decl(usedBeforeAssignedTypeAssertion.ts, 43, 1))
+
+    let value = 1;
+>value : Symbol(value, Decl(usedBeforeAssignedTypeAssertion.ts, 46, 7))
+
+    (value as number) += 1;
+>value : Symbol(value, Decl(usedBeforeAssignedTypeAssertion.ts, 46, 7))
+
+    ++(<number>value);
+>value : Symbol(value, Decl(usedBeforeAssignedTypeAssertion.ts, 46, 7))
+
+    (value as number)--;
+>value : Symbol(value, Decl(usedBeforeAssignedTypeAssertion.ts, 46, 7))
+}
+
+function constAssignment() {
+>constAssignment : Symbol(constAssignment, Decl(usedBeforeAssignedTypeAssertion.ts, 50, 1))
+
+    const value = 1;
+>value : Symbol(value, Decl(usedBeforeAssignedTypeAssertion.ts, 53, 9))
+
+    (value as any) = 2;
+>value : Symbol(value, Decl(usedBeforeAssignedTypeAssertion.ts, 53, 9))
+
+    (<any>value) = 3;
+>value : Symbol(value, Decl(usedBeforeAssignedTypeAssertion.ts, 53, 9))
+}
+
+function readonlyPropertyAssignment() {
+>readonlyPropertyAssignment : Symbol(readonlyPropertyAssignment, Decl(usedBeforeAssignedTypeAssertion.ts, 56, 1))
+
+    const object: { readonly value: number } = { value: 1 };
+>object : Symbol(object, Decl(usedBeforeAssignedTypeAssertion.ts, 59, 9))
+>value : Symbol(value, Decl(usedBeforeAssignedTypeAssertion.ts, 59, 19))
+>value : Symbol(value, Decl(usedBeforeAssignedTypeAssertion.ts, 59, 48))
+
+    (object.value as number) = 2;
+>object.value : Symbol(value, Decl(usedBeforeAssignedTypeAssertion.ts, 59, 19))
+>object : Symbol(object, Decl(usedBeforeAssignedTypeAssertion.ts, 59, 9))
+>value : Symbol(value, Decl(usedBeforeAssignedTypeAssertion.ts, 59, 19))
+
+    (<number>object["value"]) = 3;
+>object : Symbol(object, Decl(usedBeforeAssignedTypeAssertion.ts, 59, 9))
+>"value" : Symbol(value, Decl(usedBeforeAssignedTypeAssertion.ts, 59, 19))
+}
+
+function mutableObjectAssertion() {
+>mutableObjectAssertion : Symbol(mutableObjectAssertion, Decl(usedBeforeAssignedTypeAssertion.ts, 62, 1))
+
+    const object: { readonly value: number } = { value: 1 };
+>object : Symbol(object, Decl(usedBeforeAssignedTypeAssertion.ts, 65, 9))
+>value : Symbol(value, Decl(usedBeforeAssignedTypeAssertion.ts, 65, 19))
+>value : Symbol(value, Decl(usedBeforeAssignedTypeAssertion.ts, 65, 48))
+
+    (object as { value: number }).value = 2;
+>(object as { value: number }).value : Symbol(value, Decl(usedBeforeAssignedTypeAssertion.ts, 66, 16))
+>object : Symbol(object, Decl(usedBeforeAssignedTypeAssertion.ts, 65, 9))
+>value : Symbol(value, Decl(usedBeforeAssignedTypeAssertion.ts, 66, 16))
+>value : Symbol(value, Decl(usedBeforeAssignedTypeAssertion.ts, 66, 16))
+}
+
