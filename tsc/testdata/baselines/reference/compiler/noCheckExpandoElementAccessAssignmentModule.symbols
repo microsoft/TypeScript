@@ -1,0 +1,13 @@
+//// [tests/cases/compiler/noCheckExpandoElementAccessAssignmentModule.ts] ////
+
+=== noCheckExpandoElementAccessAssignmentModule.ts ===
+const k = "bar";
+>k : Symbol(k, Decl(noCheckExpandoElementAccessAssignmentModule.ts, 0, 5))
+
+export function foo() {}
+>foo : Symbol(foo, Decl(noCheckExpandoElementAccessAssignmentModule.ts, 0, 16))
+
+foo[k] = 1;
+>foo : Symbol(foo, Decl(noCheckExpandoElementAccessAssignmentModule.ts, 0, 16))
+>k : Symbol(k, Decl(noCheckExpandoElementAccessAssignmentModule.ts, 0, 5))
+
