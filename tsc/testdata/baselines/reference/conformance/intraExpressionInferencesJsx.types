@@ -143,10 +143,10 @@ const Component = <T extends Animations>({
 >func : () => { a: true; }
 
         return {
->{          a: true,        } : { a: true; }
+>{          a: true,        } : { a: boolean; }
 
           a: true,
->a : true
+>a : boolean
 >true : true
 
         };
@@ -192,10 +192,10 @@ const Component = <T extends Animations>({
 >() => {        return {          a: true,        };      } : () => { a: true; }
 
         return {
->{          a: true,        } : { a: true; }
+>{          a: true,        } : { a: boolean; }
 
           a: true,
->a : true
+>a : boolean
 >true : true
 
         };
