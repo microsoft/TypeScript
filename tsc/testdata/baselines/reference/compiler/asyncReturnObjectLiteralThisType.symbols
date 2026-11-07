@@ -1,0 +1,202 @@
+//// [tests/cases/compiler/asyncReturnObjectLiteralThisType.ts] ////
+
+=== asyncReturnObjectLiteralThisType.ts ===
+type X = { value: number; method(): void };
+>X : Symbol(X, Decl(asyncReturnObjectLiteralThisType.ts, 0, 0))
+>value : Symbol(value, Decl(asyncReturnObjectLiteralThisType.ts, 0, 10))
+>method : Symbol(method, Decl(asyncReturnObjectLiteralThisType.ts, 0, 25))
+
+declare function foo(cb: () => Promise<X>): void;
+>foo : Symbol(foo, Decl(asyncReturnObjectLiteralThisType.ts, 0, 43))
+>cb : Symbol(cb, Decl(asyncReturnObjectLiteralThisType.ts, 1, 21))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2018.promise.d.ts, --, --))
+>X : Symbol(X, Decl(asyncReturnObjectLiteralThisType.ts, 0, 0))
+
+foo(async () => ({ value: 5, method() { this satisfies X; } }));
+>foo : Symbol(foo, Decl(asyncReturnObjectLiteralThisType.ts, 0, 43))
+>value : Symbol(value, Decl(asyncReturnObjectLiteralThisType.ts, 2, 18))
+>method : Symbol(method, Decl(asyncReturnObjectLiteralThisType.ts, 2, 28))
+>this : Symbol(__type, Decl(asyncReturnObjectLiteralThisType.ts, 0, 8))
+>X : Symbol(X, Decl(asyncReturnObjectLiteralThisType.ts, 0, 0))
+
+foo(async () => { return { value: 5, method() { this satisfies X; } }; });
+>foo : Symbol(foo, Decl(asyncReturnObjectLiteralThisType.ts, 0, 43))
+>value : Symbol(value, Decl(asyncReturnObjectLiteralThisType.ts, 3, 26))
+>method : Symbol(method, Decl(asyncReturnObjectLiteralThisType.ts, 3, 36))
+>this : Symbol(__type, Decl(asyncReturnObjectLiteralThisType.ts, 0, 8))
+>X : Symbol(X, Decl(asyncReturnObjectLiteralThisType.ts, 0, 0))
+
+foo(async function () { return { value: 5, method() { this satisfies X; } }; });
+>foo : Symbol(foo, Decl(asyncReturnObjectLiteralThisType.ts, 0, 43))
+>value : Symbol(value, Decl(asyncReturnObjectLiteralThisType.ts, 4, 32))
+>method : Symbol(method, Decl(asyncReturnObjectLiteralThisType.ts, 4, 42))
+>this : Symbol(__type, Decl(asyncReturnObjectLiteralThisType.ts, 0, 8))
+>X : Symbol(X, Decl(asyncReturnObjectLiteralThisType.ts, 0, 0))
+
+async function f(): Promise<X> { return { value: 1, method() { this satisfies X; } }; }
+>f : Symbol(f, Decl(asyncReturnObjectLiteralThisType.ts, 4, 80))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2018.promise.d.ts, --, --))
+>X : Symbol(X, Decl(asyncReturnObjectLiteralThisType.ts, 0, 0))
+>value : Symbol(value, Decl(asyncReturnObjectLiteralThisType.ts, 5, 41))
+>method : Symbol(method, Decl(asyncReturnObjectLiteralThisType.ts, 5, 51))
+>this : Symbol(__type, Decl(asyncReturnObjectLiteralThisType.ts, 0, 8))
+>X : Symbol(X, Decl(asyncReturnObjectLiteralThisType.ts, 0, 0))
+
+const test2: () => Promise<X> = async () => { return { value: 5, method() { this satisfies X; } }; };
+>test2 : Symbol(test2, Decl(asyncReturnObjectLiteralThisType.ts, 6, 5))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2018.promise.d.ts, --, --))
+>X : Symbol(X, Decl(asyncReturnObjectLiteralThisType.ts, 0, 0))
+>value : Symbol(value, Decl(asyncReturnObjectLiteralThisType.ts, 6, 54))
+>method : Symbol(method, Decl(asyncReturnObjectLiteralThisType.ts, 6, 64))
+>this : Symbol(__type, Decl(asyncReturnObjectLiteralThisType.ts, 0, 8))
+>X : Symbol(X, Decl(asyncReturnObjectLiteralThisType.ts, 0, 0))
+
+// nullable awaited
+const n1: () => Promise<X | null> = async () => ({ value: 1, method() { this satisfies X; } });
+>n1 : Symbol(n1, Decl(asyncReturnObjectLiteralThisType.ts, 8, 5))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2018.promise.d.ts, --, --))
+>X : Symbol(X, Decl(asyncReturnObjectLiteralThisType.ts, 0, 0))
+>value : Symbol(value, Decl(asyncReturnObjectLiteralThisType.ts, 8, 50))
+>method : Symbol(method, Decl(asyncReturnObjectLiteralThisType.ts, 8, 60))
+>this : Symbol(__type, Decl(asyncReturnObjectLiteralThisType.ts, 0, 8))
+>X : Symbol(X, Decl(asyncReturnObjectLiteralThisType.ts, 0, 0))
+
+const n2: () => Promise<X | undefined> = async () => { return { value: 1, method() { this satisfies X; } }; };
+>n2 : Symbol(n2, Decl(asyncReturnObjectLiteralThisType.ts, 9, 5))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2018.promise.d.ts, --, --))
+>X : Symbol(X, Decl(asyncReturnObjectLiteralThisType.ts, 0, 0))
+>value : Symbol(value, Decl(asyncReturnObjectLiteralThisType.ts, 9, 63))
+>method : Symbol(method, Decl(asyncReturnObjectLiteralThisType.ts, 9, 73))
+>this : Symbol(__type, Decl(asyncReturnObjectLiteralThisType.ts, 0, 8))
+>X : Symbol(X, Decl(asyncReturnObjectLiteralThisType.ts, 0, 0))
+
+// thenable must not get this: X
+const t: () => Promise<{ value: number }> = async () => ({
+>t : Symbol(t, Decl(asyncReturnObjectLiteralThisType.ts, 11, 5))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2018.promise.d.ts, --, --))
+>value : Symbol(value, Decl(asyncReturnObjectLiteralThisType.ts, 11, 24))
+
+  then(resolve: any) { this.value.toFixed(); },
+>then : Symbol(then, Decl(asyncReturnObjectLiteralThisType.ts, 11, 58))
+>resolve : Symbol(resolve, Decl(asyncReturnObjectLiteralThisType.ts, 12, 7))
+
+});
+// declared PromiseLike remains
+declare function g(cb: () => X | PromiseLike<X>): void;
+>g : Symbol(g, Decl(asyncReturnObjectLiteralThisType.ts, 13, 3))
+>cb : Symbol(cb, Decl(asyncReturnObjectLiteralThisType.ts, 15, 19))
+>X : Symbol(X, Decl(asyncReturnObjectLiteralThisType.ts, 0, 0))
+>PromiseLike : Symbol(PromiseLike, Decl(lib.es5.d.ts, --, --))
+>X : Symbol(X, Decl(asyncReturnObjectLiteralThisType.ts, 0, 0))
+
+g(async () => ({ value: 1, method() { this satisfies X; } }));
+>g : Symbol(g, Decl(asyncReturnObjectLiteralThisType.ts, 13, 3))
+>value : Symbol(value, Decl(asyncReturnObjectLiteralThisType.ts, 16, 16))
+>method : Symbol(method, Decl(asyncReturnObjectLiteralThisType.ts, 16, 26))
+>this : Symbol(__type, Decl(asyncReturnObjectLiteralThisType.ts, 0, 8))
+>X : Symbol(X, Decl(asyncReturnObjectLiteralThisType.ts, 0, 0))
+
+// non-callable `then` is not a thenable
+type Y = { value: number; then: number; method(): void };
+>Y : Symbol(Y, Decl(asyncReturnObjectLiteralThisType.ts, 16, 62))
+>value : Symbol(value, Decl(asyncReturnObjectLiteralThisType.ts, 19, 10))
+>then : Symbol(then, Decl(asyncReturnObjectLiteralThisType.ts, 19, 25))
+>method : Symbol(method, Decl(asyncReturnObjectLiteralThisType.ts, 19, 39))
+
+const nonCallableThen: () => Promise<Y> = async () => ({ value: 1, then: 0, method() { this.value.toFixed(); } });
+>nonCallableThen : Symbol(nonCallableThen, Decl(asyncReturnObjectLiteralThisType.ts, 20, 5))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2018.promise.d.ts, --, --))
+>Y : Symbol(Y, Decl(asyncReturnObjectLiteralThisType.ts, 16, 62))
+>value : Symbol(value, Decl(asyncReturnObjectLiteralThisType.ts, 20, 56))
+>then : Symbol(then, Decl(asyncReturnObjectLiteralThisType.ts, 20, 66))
+>method : Symbol(method, Decl(asyncReturnObjectLiteralThisType.ts, 20, 75))
+>this.value.toFixed : Symbol(Number.toFixed, Decl(lib.es5.d.ts, --, --))
+>this.value : Symbol(value, Decl(asyncReturnObjectLiteralThisType.ts, 19, 10))
+>this : Symbol(__type, Decl(asyncReturnObjectLiteralThisType.ts, 19, 8))
+>value : Symbol(value, Decl(asyncReturnObjectLiteralThisType.ts, 19, 10))
+>toFixed : Symbol(Number.toFixed, Decl(lib.es5.d.ts, --, --))
+
+// thenables supplied by a computed key or a spread keep the PromiseLike branch
+type V = { value: number };
+>V : Symbol(V, Decl(asyncReturnObjectLiteralThisType.ts, 20, 114))
+>value : Symbol(value, Decl(asyncReturnObjectLiteralThisType.ts, 23, 10))
+
+const key = "then";
+>key : Symbol(key, Decl(asyncReturnObjectLiteralThisType.ts, 24, 5))
+
+declare const thenableSource: { then(resolve: (x: V) => void): void };
+>thenableSource : Symbol(thenableSource, Decl(asyncReturnObjectLiteralThisType.ts, 25, 13))
+>then : Symbol(then, Decl(asyncReturnObjectLiteralThisType.ts, 25, 31))
+>resolve : Symbol(resolve, Decl(asyncReturnObjectLiteralThisType.ts, 25, 37))
+>x : Symbol(x, Decl(asyncReturnObjectLiteralThisType.ts, 25, 47))
+>V : Symbol(V, Decl(asyncReturnObjectLiteralThisType.ts, 20, 114))
+
+const computedThen: () => Promise<V> = async () => ({
+>computedThen : Symbol(computedThen, Decl(asyncReturnObjectLiteralThisType.ts, 26, 5))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2018.promise.d.ts, --, --))
+>V : Symbol(V, Decl(asyncReturnObjectLiteralThisType.ts, 20, 114))
+
+  [key](resolve: (x: V) => void) { this.value.toFixed(); },
+>[key] : Symbol([key], Decl(asyncReturnObjectLiteralThisType.ts, 26, 53))
+>key : Symbol(key, Decl(asyncReturnObjectLiteralThisType.ts, 24, 5))
+>resolve : Symbol(resolve, Decl(asyncReturnObjectLiteralThisType.ts, 27, 8))
+>x : Symbol(x, Decl(asyncReturnObjectLiteralThisType.ts, 27, 18))
+>V : Symbol(V, Decl(asyncReturnObjectLiteralThisType.ts, 20, 114))
+
+});
+const spreadThen: () => Promise<V> = async () => ({
+>spreadThen : Symbol(spreadThen, Decl(asyncReturnObjectLiteralThisType.ts, 29, 5))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2018.promise.d.ts, --, --))
+>V : Symbol(V, Decl(asyncReturnObjectLiteralThisType.ts, 20, 114))
+
+  ...thenableSource,
+>thenableSource : Symbol(thenableSource, Decl(asyncReturnObjectLiteralThisType.ts, 25, 13))
+
+  extra() { this.value.toFixed(); },
+>extra : Symbol(extra, Decl(asyncReturnObjectLiteralThisType.ts, 30, 20))
+
+});
+
+// spreads of object literals and statically known computed keys other than `then` are not thenables
+const valueKey = "value";
+>valueKey : Symbol(valueKey, Decl(asyncReturnObjectLiteralThisType.ts, 35, 5))
+
+foo(async () => ({ ...{ value: 5 }, method() { this satisfies X; } }));
+>foo : Symbol(foo, Decl(asyncReturnObjectLiteralThisType.ts, 0, 43))
+>value : Symbol(value, Decl(asyncReturnObjectLiteralThisType.ts, 36, 23))
+>method : Symbol(method, Decl(asyncReturnObjectLiteralThisType.ts, 36, 35))
+>this : Symbol(__type, Decl(asyncReturnObjectLiteralThisType.ts, 0, 8))
+>X : Symbol(X, Decl(asyncReturnObjectLiteralThisType.ts, 0, 0))
+
+foo(async () => ({ ...({ value: 5 }), method() { this satisfies X; } }));
+>foo : Symbol(foo, Decl(asyncReturnObjectLiteralThisType.ts, 0, 43))
+>value : Symbol(value, Decl(asyncReturnObjectLiteralThisType.ts, 37, 24))
+>method : Symbol(method, Decl(asyncReturnObjectLiteralThisType.ts, 37, 37))
+>this : Symbol(__type, Decl(asyncReturnObjectLiteralThisType.ts, 0, 8))
+>X : Symbol(X, Decl(asyncReturnObjectLiteralThisType.ts, 0, 0))
+
+foo(async () => ({ [valueKey]: 5, method() { this satisfies X; } }));
+>foo : Symbol(foo, Decl(asyncReturnObjectLiteralThisType.ts, 0, 43))
+>[valueKey] : Symbol([valueKey], Decl(asyncReturnObjectLiteralThisType.ts, 38, 18))
+>valueKey : Symbol(valueKey, Decl(asyncReturnObjectLiteralThisType.ts, 35, 5))
+>method : Symbol(method, Decl(asyncReturnObjectLiteralThisType.ts, 38, 33))
+>this : Symbol(__type, Decl(asyncReturnObjectLiteralThisType.ts, 0, 8))
+>X : Symbol(X, Decl(asyncReturnObjectLiteralThisType.ts, 0, 0))
+
+// a spread object literal containing `then` is still a thenable
+const nestedSpreadThen: () => Promise<V> = async () => ({
+>nestedSpreadThen : Symbol(nestedSpreadThen, Decl(asyncReturnObjectLiteralThisType.ts, 40, 5))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2018.promise.d.ts, --, --))
+>V : Symbol(V, Decl(asyncReturnObjectLiteralThisType.ts, 20, 114))
+
+  ...{ then(resolve: (x: V) => void) {} },
+>then : Symbol(then, Decl(asyncReturnObjectLiteralThisType.ts, 41, 6))
+>resolve : Symbol(resolve, Decl(asyncReturnObjectLiteralThisType.ts, 41, 12))
+>x : Symbol(x, Decl(asyncReturnObjectLiteralThisType.ts, 41, 22))
+>V : Symbol(V, Decl(asyncReturnObjectLiteralThisType.ts, 20, 114))
+
+  extra() { this.value.toFixed(); },
+>extra : Symbol(extra, Decl(asyncReturnObjectLiteralThisType.ts, 41, 42))
+
+});
+
