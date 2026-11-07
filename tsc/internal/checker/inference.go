@@ -1648,7 +1648,7 @@ func (c *Checker) isFromInferenceBlockedSource(t *Type) bool {
 }
 
 func (c *Checker) isSkipDirectInferenceNode(node *ast.Node) bool {
-	return c.skipDirectInferenceNodes.Has(node)
+	return c.request != nil && c.request.skipDirectInferenceNodes.Has(node)
 }
 
 func newInferenceInfo(typeParameter *Type) *InferenceInfo {
