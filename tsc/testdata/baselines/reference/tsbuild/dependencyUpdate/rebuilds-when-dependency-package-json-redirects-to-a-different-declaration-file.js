@@ -24,7 +24,7 @@ export const value: string = myValue;
     "include": ["src/**/*"]
 }
 
-tsgo --b --verbose
+tsc --b --verbose
 ExitStatus:: Success
 Output::
 [[90mHH:MM:SS AM[0m] Projects in this build: 
@@ -152,7 +152,7 @@ Edit [0]:: redirect package types to a declaration file with a breaking type cha
     "types": "alt.d.ts"
 }
 
-tsgo --b --verbose
+tsc --b --verbose
 ExitStatus:: DiagnosticsPresent_OutputsGenerated
 Output::
 [[90mHH:MM:SS AM[0m] Projects in this build: 

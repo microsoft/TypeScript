@@ -2,7 +2,7 @@ currentDirectory::/home/src/workspaces/project
 useCaseSensitiveFileNames::true
 Input::
 
-tsgo --init --types jquery,mocha
+tsc --init --types jquery,mocha
 ExitStatus:: Success
 Output::
 

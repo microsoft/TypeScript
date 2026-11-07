@@ -36,7 +36,7 @@ export const z = 10;
     "files": ["index.ts"]
 }
 
-tsgo --b --dry
+tsc --b --dry
 ExitStatus:: DiagnosticsPresent_OutputsSkipped
 Output::
 [[90mHH:MM:SS AM[0m] A non-dry build would build project '/home/src/workspaces/project/utils/tsconfig.json'

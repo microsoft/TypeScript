@@ -31,7 +31,7 @@ export const result = 1;
     ]
 }
 
-tsgo --project producer --listEmittedFiles
+tsc --project producer --listEmittedFiles
 ExitStatus:: DiagnosticsPresent_OutputsGenerated
 Output::
 [96mproducer/tsconfig.json[0m:[93m3[0m:[93m39[0m - [91merror[0m[90m TS5096: [0mOption 'allowImportingTsExtensions' can only be used when one of 'noEmit', 'emitDeclarationOnly', or 'rewriteRelativeImportExtensions' is set.
@@ -179,7 +179,7 @@ Signatures::
 
 Edit [0]:: no change
 
-tsgo --project producer --listEmittedFiles
+tsc --project producer --listEmittedFiles
 ExitStatus:: DiagnosticsPresent_OutputsGenerated
 Output::
 [96mproducer/tsconfig.json[0m:[93m3[0m:[93m39[0m - [91merror[0m[90m TS5096: [0mOption 'allowImportingTsExtensions' can only be used when one of 'noEmit', 'emitDeclarationOnly', or 'rewriteRelativeImportExtensions' is set.
@@ -224,7 +224,7 @@ Edit [1]:: change rewriteRelativeImportExtensions without changing source files
     ]
 }
 
-tsgo --project producer --listEmittedFiles
+tsc --project producer --listEmittedFiles
 ExitStatus:: Success
 Output::
 TSFILE: /home/src/workspaces/project/producer/dist/other.js
@@ -324,7 +324,7 @@ Signatures::
 
 Edit [2]:: no change
 
-tsgo --project producer --listEmittedFiles
+tsc --project producer --listEmittedFiles
 ExitStatus:: Success
 Output::
 
@@ -335,7 +335,7 @@ Signatures::
 
 Edit [3]:: force rebuild with the same compiler options
 
-tsgo --build producer --verbose --force
+tsc --build producer --verbose --force
 ExitStatus:: Success
 Output::
 [[90mHH:MM:SS AM[0m] Projects in this build: 
@@ -363,7 +363,7 @@ Signatures::
 
 Edit [4]:: no change
 
-tsgo --project producer --listEmittedFiles
+tsc --project producer --listEmittedFiles
 ExitStatus:: Success
 Output::
 

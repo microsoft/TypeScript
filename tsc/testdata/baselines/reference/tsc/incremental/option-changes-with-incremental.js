@@ -16,7 +16,7 @@ import { b } from "./b";export const d = b;
     }
 }
 
-tsgo 
+tsc 
 ExitStatus:: Success
 Output::
 //// [/home/src/tslibs/TS/Lib/lib.es2026.full.d.ts] *Lib*
@@ -153,7 +153,7 @@ Signatures::
 
 Edit [0]:: with sourceMap
 
-tsgo --sourceMap
+tsc --sourceMap
 ExitStatus:: Success
 Output::
 //// [/home/src/workspaces/project/a.js] *modified* 
@@ -273,7 +273,7 @@ Signatures::
 
 Edit [1]:: should re-emit only js so they dont contain sourcemap
 
-tsgo 
+tsc 
 ExitStatus:: Success
 Output::
 //// [/home/src/workspaces/project/a.js] *modified* 
@@ -382,7 +382,7 @@ Signatures::
 
 Edit [2]:: with declaration, emit Dts and should not emit js
 
-tsgo --declaration
+tsc --declaration
 ExitStatus:: Success
 Output::
 //// [/home/src/workspaces/project/a.d.ts] *new* 
@@ -514,7 +514,7 @@ Signatures::
 
 Edit [3]:: with declaration and declarationMap
 
-tsgo --declaration --declarationMap
+tsc --declaration --declarationMap
 ExitStatus:: Success
 Output::
 //// [/home/src/workspaces/project/a.d.ts] *modified* 
@@ -651,7 +651,7 @@ Signatures::
 
 Edit [4]:: no change
 
-tsgo 
+tsc 
 ExitStatus:: Success
 Output::
 
@@ -664,7 +664,7 @@ Edit [5]:: local change
 //// [/home/src/workspaces/project/a.ts] *modified* 
 export const a = 10;const aLocal = 100;
 
-tsgo 
+tsc 
 ExitStatus:: Success
 Output::
 //// [/home/src/workspaces/project/a.js] *modified* 
@@ -783,7 +783,7 @@ Signatures::
 
 Edit [6]:: with declaration and declarationMap
 
-tsgo --declaration --declarationMap
+tsc --declaration --declarationMap
 ExitStatus:: Success
 Output::
 //// [/home/src/workspaces/project/a.d.ts] *rewrite with same content*
@@ -908,7 +908,7 @@ Signatures::
 
 Edit [7]:: no change
 
-tsgo 
+tsc 
 ExitStatus:: Success
 Output::
 
@@ -919,7 +919,7 @@ Signatures::
 
 Edit [8]:: with inlineSourceMap
 
-tsgo --inlineSourceMap
+tsc --inlineSourceMap
 ExitStatus:: Success
 Output::
 //// [/home/src/workspaces/project/a.js] *modified* 
@@ -1051,7 +1051,7 @@ Signatures::
 
 Edit [9]:: with sourceMap
 
-tsgo --sourceMap
+tsc --sourceMap
 ExitStatus:: Success
 Output::
 //// [/home/src/workspaces/project/a.js] *modified* 
@@ -1188,7 +1188,7 @@ Signatures::
 
 Edit [10]:: emit js files
 
-tsgo 
+tsc 
 ExitStatus:: Success
 Output::
 //// [/home/src/workspaces/project/a.js] *modified* 
@@ -1317,7 +1317,7 @@ Signatures::
 
 Edit [11]:: with declaration and declarationMap
 
-tsgo --declaration --declarationMap
+tsc --declaration --declarationMap
 ExitStatus:: Success
 Output::
 //// [/home/src/workspaces/project/a.d.ts] *rewrite with same content*
@@ -1442,7 +1442,7 @@ Signatures::
 
 Edit [12]:: with declaration and declarationMap, should not re-emit
 
-tsgo --declaration --declarationMap
+tsc --declaration --declarationMap
 ExitStatus:: Success
 Output::
 

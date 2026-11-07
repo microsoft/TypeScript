@@ -18,7 +18,7 @@ export const enum AWorker {
     ONE = 1
 }
 
-tsgo -i a.ts --tsbuildinfofile a.tsbuildinfo
+tsc -i a.ts --tsbuildinfofile a.tsbuildinfo
 ExitStatus:: Success
 Output::
 //// [/home/src/tslibs/TS/Lib/lib.es2026.full.d.ts] *Lib*
@@ -140,7 +140,7 @@ export const enum AWorker {
 }
 export { AWorker as A };
 
-tsgo -i a.ts --tsbuildinfofile a.tsbuildinfo
+tsc -i a.ts --tsbuildinfofile a.tsbuildinfo
 ExitStatus:: Success
 Output::
 //// [/home/src/workspaces/project/a.js] *modified* 
@@ -251,7 +251,7 @@ export const enum AWorker {
 }
 export { AWorker as A };
 
-tsgo -i a.ts --tsbuildinfofile a.tsbuildinfo
+tsc -i a.ts --tsbuildinfofile a.tsbuildinfo
 ExitStatus:: Success
 Output::
 //// [/home/src/workspaces/project/a.js] *modified* 
@@ -357,7 +357,7 @@ export const enum AWorker {
 }
 export { AWorker as A };export const randomThing = 10;
 
-tsgo -i a.ts --tsbuildinfofile a.tsbuildinfo
+tsc -i a.ts --tsbuildinfofile a.tsbuildinfo
 ExitStatus:: Success
 Output::
 //// [/home/src/workspaces/project/a.js] *rewrite with same content*
@@ -457,7 +457,7 @@ export const enum AWorker {
 }
 export { AWorker as A };export const randomThing = 10;export const randomThing2 = 10;
 
-tsgo -i a.ts --tsbuildinfofile a.tsbuildinfo
+tsc -i a.ts --tsbuildinfofile a.tsbuildinfo
 ExitStatus:: Success
 Output::
 //// [/home/src/workspaces/project/a.js] *rewrite with same content*

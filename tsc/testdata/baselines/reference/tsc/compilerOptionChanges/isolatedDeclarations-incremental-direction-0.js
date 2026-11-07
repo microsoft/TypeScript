@@ -26,7 +26,7 @@ export const result = 1 + 2;
     ]
 }
 
-tsgo --project producer --listEmittedFiles
+tsc --project producer --listEmittedFiles
 ExitStatus:: Success
 Output::
 TSFILE: /home/src/workspaces/project/producer/dist/index.d.ts
@@ -125,7 +125,7 @@ Signatures::
 
 Edit [0]:: no change
 
-tsgo --project producer --listEmittedFiles
+tsc --project producer --listEmittedFiles
 ExitStatus:: Success
 Output::
 
@@ -157,7 +157,7 @@ Edit [1]:: change isolatedDeclarations without changing source files
     ]
 }
 
-tsgo --project producer --listEmittedFiles
+tsc --project producer --listEmittedFiles
 ExitStatus:: DiagnosticsPresent_OutputsSkipped
 Output::
 [96mproducer/index.ts[0m:[93m1[0m:[93m14[0m - [91merror[0m[90m TS9010: [0mVariable must have an explicit type annotation with --isolatedDeclarations.
@@ -266,7 +266,7 @@ Signatures::
 
 Edit [2]:: no change
 
-tsgo --project producer --listEmittedFiles
+tsc --project producer --listEmittedFiles
 ExitStatus:: DiagnosticsPresent_OutputsSkipped
 Output::
 [96mproducer/index.ts[0m:[93m1[0m:[93m14[0m - [91merror[0m[90m TS9010: [0mVariable must have an explicit type annotation with --isolatedDeclarations.
@@ -289,7 +289,7 @@ Signatures::
 
 Edit [3]:: force rebuild with the same compiler options
 
-tsgo --build producer --verbose --force
+tsc --build producer --verbose --force
 ExitStatus:: DiagnosticsPresent_OutputsSkipped
 Output::
 [[90mHH:MM:SS AM[0m] Projects in this build: 
@@ -404,7 +404,7 @@ Signatures::
 
 Edit [4]:: no change
 
-tsgo --project producer --listEmittedFiles
+tsc --project producer --listEmittedFiles
 ExitStatus:: DiagnosticsPresent_OutputsSkipped
 Output::
 [96mproducer/index.ts[0m:[93m1[0m:[93m14[0m - [91merror[0m[90m TS9010: [0mVariable must have an explicit type annotation with --isolatedDeclarations.

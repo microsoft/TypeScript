@@ -2,7 +2,7 @@ currentDirectory::/home/src/workspaces/project
 useCaseSensitiveFileNames::true
 Input::
 
-tsgo --build --help --locale en
+tsc --build --help --locale en
 ExitStatus:: Success
 Output::
 Version FakeTSVersion

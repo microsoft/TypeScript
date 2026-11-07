@@ -112,7 +112,7 @@ extends:
 
               - template: /tools/pipelines/steps/setup-node-npm-ci.yml@self
 
-              - bash: npm test -w native-preview
+              - bash: npm test -w packages/vscode-typescript
                 displayName: Test extension
 
               - bash: npx hereby vscode-typescript:release --forRelease --vscodeTypescriptRelease

@@ -11,7 +11,7 @@ import {
     getUseTsgo,
     getWinningTsgoConfigKey,
     needsExtHostRestartOnChange,
-    shouldStartTsgo,
+    shouldStartNativeServer,
 } from "./settings";
 import { aiConnectionString } from "./util";
 
@@ -89,7 +89,7 @@ export async function activate(context: vscode.ExtensionContext): Promise<Extens
                     }
                 }
                 else {
-                    if (shouldStartTsgo(context)) {
+                    if (shouldStartNativeServer(context)) {
                         await sessionManager.restart(context);
                     }
                     else {
@@ -101,14 +101,14 @@ export async function activate(context: vscode.ExtensionContext): Promise<Extens
     }));
     context.subscriptions.push({ dispose: () => clearTimeout(configChangeTimeout) });
 
-    const hasOnboardedTsgoStateKey = "hasOnboardedTsgo";
-    const shouldOnboardTsgo = !context.globalState.get<boolean>(hasOnboardedTsgoStateKey);
-    if (shouldOnboardTsgo) {
-        await context.globalState.update(hasOnboardedTsgoStateKey, true);
+    const hasOnboardedStateKey = "hasOnboardedTsgo";
+    const shouldOnboard = !context.globalState.get<boolean>(hasOnboardedStateKey);
+    if (shouldOnboard) {
+        await context.globalState.update(hasOnboardedStateKey, true);
     }
 
     const useTsgo = getUseTsgo();
-    if (useTsgo === undefined && shouldOnboardTsgo) {
+    if (useTsgo === undefined && shouldOnboard) {
         updateUseTsgoSetting(true);
         return api;
     }
@@ -191,7 +191,7 @@ export async function activate(context: vscode.ExtensionContext): Promise<Extens
             : vscode.l10n.t(`{0} extensions contribute TypeScript server plugins that will not be loaded because TypeScript 7 is enabled globally: {1}`, uniqueExtensionNames.length, extensionNames);
 
         const ok = vscode.l10n.t("OK");
-        const disableInWorkspace = vscode.l10n.t("Disable Native Preview in Workspace");
+        const disableInWorkspace = vscode.l10n.t("Disable TypeScript 7 in Workspace");
         const dontShowAgain = vscode.l10n.t("Don't Show Again");
 
         const options = [ok];

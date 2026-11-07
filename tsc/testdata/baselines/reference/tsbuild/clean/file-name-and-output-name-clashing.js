@@ -10,7 +10,7 @@ Input::
     "compilerOptions": { "allowJs": true }
 }
 
-tsgo --b --clean
+tsc --b --clean
 ExitStatus:: Success
 Output::
 

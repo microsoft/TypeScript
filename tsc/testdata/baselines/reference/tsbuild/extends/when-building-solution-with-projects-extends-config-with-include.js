@@ -41,7 +41,7 @@ export const b: Unrestricted = 1;
     "references": [{ "path": "../shared/tsconfig.json" }],
 }
 
-tsgo --b --v --listFiles
+tsc --b --v --listFiles
 ExitStatus:: Success
 Output::
 [[90mHH:MM:SS AM[0m] Projects in this build: 
