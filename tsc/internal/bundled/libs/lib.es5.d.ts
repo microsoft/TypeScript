@@ -2127,6 +2127,9 @@ interface Int8ArrayConstructor {
     new <TArrayBuffer extends ArrayBufferLike = ArrayBuffer>(buffer: TArrayBuffer, byteOffset?: number, length?: number): Int8Array<TArrayBuffer>;
     new (buffer: ArrayBuffer, byteOffset?: number, length?: number): Int8Array<ArrayBuffer>;
     new (array: ArrayLike<number> | ArrayBuffer): Int8Array<ArrayBuffer>;
+    new <TArrayBuffer extends ArrayBufferLike = ArrayBuffer>(length: number): Int8Array<TArrayBuffer>;
+    new <TArrayBuffer extends ArrayBufferLike = ArrayBuffer>(array: ArrayLike<number>): Int8Array<TArrayBuffer>;
+    new <TArrayBuffer extends ArrayBufferLike = ArrayBuffer>(array: ArrayLike<number> | ArrayBuffer): Int8Array<TArrayBuffer>;
 
     /**
      * The size in bytes of each element in the array.
@@ -2409,6 +2412,9 @@ interface Uint8ArrayConstructor {
     new <TArrayBuffer extends ArrayBufferLike = ArrayBuffer>(buffer: TArrayBuffer, byteOffset?: number, length?: number): Uint8Array<TArrayBuffer>;
     new (buffer: ArrayBuffer, byteOffset?: number, length?: number): Uint8Array<ArrayBuffer>;
     new (array: ArrayLike<number> | ArrayBuffer): Uint8Array<ArrayBuffer>;
+    new <TArrayBuffer extends ArrayBufferLike = ArrayBuffer>(length: number): Uint8Array<TArrayBuffer>;
+    new <TArrayBuffer extends ArrayBufferLike = ArrayBuffer>(array: ArrayLike<number>): Uint8Array<TArrayBuffer>;
+    new <TArrayBuffer extends ArrayBufferLike = ArrayBuffer>(array: ArrayLike<number> | ArrayBuffer): Uint8Array<TArrayBuffer>;
 
     /**
      * The size in bytes of each element in the array.
@@ -2691,6 +2697,9 @@ interface Uint8ClampedArrayConstructor {
     new <TArrayBuffer extends ArrayBufferLike = ArrayBuffer>(buffer: TArrayBuffer, byteOffset?: number, length?: number): Uint8ClampedArray<TArrayBuffer>;
     new (buffer: ArrayBuffer, byteOffset?: number, length?: number): Uint8ClampedArray<ArrayBuffer>;
     new (array: ArrayLike<number> | ArrayBuffer): Uint8ClampedArray<ArrayBuffer>;
+    new <TArrayBuffer extends ArrayBufferLike = ArrayBuffer>(length: number): Uint8ClampedArray<TArrayBuffer>;
+    new <TArrayBuffer extends ArrayBufferLike = ArrayBuffer>(array: ArrayLike<number>): Uint8ClampedArray<TArrayBuffer>;
+    new <TArrayBuffer extends ArrayBufferLike = ArrayBuffer>(array: ArrayLike<number> | ArrayBuffer): Uint8ClampedArray<TArrayBuffer>;
 
     /**
      * The size in bytes of each element in the array.
@@ -2972,6 +2981,9 @@ interface Int16ArrayConstructor {
     new <TArrayBuffer extends ArrayBufferLike = ArrayBuffer>(buffer: TArrayBuffer, byteOffset?: number, length?: number): Int16Array<TArrayBuffer>;
     new (buffer: ArrayBuffer, byteOffset?: number, length?: number): Int16Array<ArrayBuffer>;
     new (array: ArrayLike<number> | ArrayBuffer): Int16Array<ArrayBuffer>;
+    new <TArrayBuffer extends ArrayBufferLike = ArrayBuffer>(length: number): Int16Array<TArrayBuffer>;
+    new <TArrayBuffer extends ArrayBufferLike = ArrayBuffer>(array: ArrayLike<number>): Int16Array<TArrayBuffer>;
+    new <TArrayBuffer extends ArrayBufferLike = ArrayBuffer>(array: ArrayLike<number> | ArrayBuffer): Int16Array<TArrayBuffer>;
 
     /**
      * The size in bytes of each element in the array.
@@ -3254,6 +3266,9 @@ interface Uint16ArrayConstructor {
     new <TArrayBuffer extends ArrayBufferLike = ArrayBuffer>(buffer: TArrayBuffer, byteOffset?: number, length?: number): Uint16Array<TArrayBuffer>;
     new (buffer: ArrayBuffer, byteOffset?: number, length?: number): Uint16Array<ArrayBuffer>;
     new (array: ArrayLike<number> | ArrayBuffer): Uint16Array<ArrayBuffer>;
+    new <TArrayBuffer extends ArrayBufferLike = ArrayBuffer>(length: number): Uint16Array<TArrayBuffer>;
+    new <TArrayBuffer extends ArrayBufferLike = ArrayBuffer>(array: ArrayLike<number>): Uint16Array<TArrayBuffer>;
+    new <TArrayBuffer extends ArrayBufferLike = ArrayBuffer>(array: ArrayLike<number> | ArrayBuffer): Uint16Array<TArrayBuffer>;
 
     /**
      * The size in bytes of each element in the array.
@@ -3535,6 +3550,9 @@ interface Int32ArrayConstructor {
     new <TArrayBuffer extends ArrayBufferLike = ArrayBuffer>(buffer: TArrayBuffer, byteOffset?: number, length?: number): Int32Array<TArrayBuffer>;
     new (buffer: ArrayBuffer, byteOffset?: number, length?: number): Int32Array<ArrayBuffer>;
     new (array: ArrayLike<number> | ArrayBuffer): Int32Array<ArrayBuffer>;
+    new <TArrayBuffer extends ArrayBufferLike = ArrayBuffer>(length: number): Int32Array<TArrayBuffer>;
+    new <TArrayBuffer extends ArrayBufferLike = ArrayBuffer>(array: ArrayLike<number>): Int32Array<TArrayBuffer>;
+    new <TArrayBuffer extends ArrayBufferLike = ArrayBuffer>(array: ArrayLike<number> | ArrayBuffer): Int32Array<TArrayBuffer>;
 
     /**
      * The size in bytes of each element in the array.
@@ -3816,6 +3834,9 @@ interface Uint32ArrayConstructor {
     new <TArrayBuffer extends ArrayBufferLike = ArrayBuffer>(buffer: TArrayBuffer, byteOffset?: number, length?: number): Uint32Array<TArrayBuffer>;
     new (buffer: ArrayBuffer, byteOffset?: number, length?: number): Uint32Array<ArrayBuffer>;
     new (array: ArrayLike<number> | ArrayBuffer): Uint32Array<ArrayBuffer>;
+    new <TArrayBuffer extends ArrayBufferLike = ArrayBuffer>(length: number): Uint32Array<TArrayBuffer>;
+    new <TArrayBuffer extends ArrayBufferLike = ArrayBuffer>(array: ArrayLike<number>): Uint32Array<TArrayBuffer>;
+    new <TArrayBuffer extends ArrayBufferLike = ArrayBuffer>(array: ArrayLike<number> | ArrayBuffer): Uint32Array<TArrayBuffer>;
 
     /**
      * The size in bytes of each element in the array.
@@ -4098,6 +4119,9 @@ interface Float32ArrayConstructor {
     new <TArrayBuffer extends ArrayBufferLike = ArrayBuffer>(buffer: TArrayBuffer, byteOffset?: number, length?: number): Float32Array<TArrayBuffer>;
     new (buffer: ArrayBuffer, byteOffset?: number, length?: number): Float32Array<ArrayBuffer>;
     new (array: ArrayLike<number> | ArrayBuffer): Float32Array<ArrayBuffer>;
+    new <TArrayBuffer extends ArrayBufferLike = ArrayBuffer>(length: number): Float32Array<TArrayBuffer>;
+    new <TArrayBuffer extends ArrayBufferLike = ArrayBuffer>(array: ArrayLike<number>): Float32Array<TArrayBuffer>;
+    new <TArrayBuffer extends ArrayBufferLike = ArrayBuffer>(array: ArrayLike<number> | ArrayBuffer): Float32Array<TArrayBuffer>;
 
     /**
      * The size in bytes of each element in the array.
@@ -4380,6 +4404,9 @@ interface Float64ArrayConstructor {
     new <TArrayBuffer extends ArrayBufferLike = ArrayBuffer>(buffer: TArrayBuffer, byteOffset?: number, length?: number): Float64Array<TArrayBuffer>;
     new (buffer: ArrayBuffer, byteOffset?: number, length?: number): Float64Array<ArrayBuffer>;
     new (array: ArrayLike<number> | ArrayBuffer): Float64Array<ArrayBuffer>;
+    new <TArrayBuffer extends ArrayBufferLike = ArrayBuffer>(length: number): Float64Array<TArrayBuffer>;
+    new <TArrayBuffer extends ArrayBufferLike = ArrayBuffer>(array: ArrayLike<number>): Float64Array<TArrayBuffer>;
+    new <TArrayBuffer extends ArrayBufferLike = ArrayBuffer>(array: ArrayLike<number> | ArrayBuffer): Float64Array<TArrayBuffer>;
 
     /**
      * The size in bytes of each element in the array.
