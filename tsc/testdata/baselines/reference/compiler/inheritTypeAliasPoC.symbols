@@ -1,0 +1,386 @@
+//// [tests/cases/compiler/inheritTypeAliasPoC.ts] ////
+
+=== inheritTypeAliasPoC.ts ===
+// Proof-of-concept test suite for the `inherit` type alias (issue #36165).
+//
+// `inherit` is a global type alias (defined in lib.es5.d.ts) that, when used with no explicit
+// type arguments, is resolved contextually by the checker to the matching member type of the
+// enclosing class's base class and/or implemented interfaces:
+//
+//   - Instance field          -> Base[Field]
+//   - Getter return / setter param -> Base[Field] (same as a field)
+//   - Method parameter         -> Parameters<Base[Field]>[Index]
+//   - Method rest parameter    -> trailing tuple after `Index` leading params
+//   - Method return value      -> ReturnType<Base[Field]>
+//
+// where Base is the intersection of the extends type and all implemented interfaces.
+//
+// This file is both a demonstration and an executable spec. Cases marked "SHOULD RESOLVE" are the
+// intended behavior; cases marked "SHOULD ERROR" document intentional constraints. Where the
+// current PoC does not yet match the intended behavior (notably `inherit` nested inside a composed
+// type such as `Readonly<inherit>` or `inherit | "x"`), the baseline will reveal the gap.
+
+interface Base {
+>Base : Symbol(Base, Decl(inheritTypeAliasPoC.ts, 0, 0))
+
+    field: "square" | "circle";
+>field : Symbol(Base.field, Decl(inheritTypeAliasPoC.ts, 19, 16))
+
+    foo(a: number, b: string): boolean;
+>foo : Symbol(Base.foo, Decl(inheritTypeAliasPoC.ts, 20, 31))
+>a : Symbol(a, Decl(inheritTypeAliasPoC.ts, 21, 8))
+>b : Symbol(b, Decl(inheritTypeAliasPoC.ts, 21, 18))
+
+    bar(a: number, b: string, c?: any): boolean;
+>bar : Symbol(Base.bar, Decl(inheritTypeAliasPoC.ts, 21, 39))
+>a : Symbol(a, Decl(inheritTypeAliasPoC.ts, 22, 8))
+>b : Symbol(b, Decl(inheritTypeAliasPoC.ts, 22, 18))
+>c : Symbol(c, Decl(inheritTypeAliasPoC.ts, 22, 29))
+}
+
+// ---------------------------------------------------------------------------
+// 1a. implements an interface.
+// ---------------------------------------------------------------------------
+class AllPositions implements Base {
+>AllPositions : Symbol(AllPositions, Decl(inheritTypeAliasPoC.ts, 23, 1))
+>Base : Symbol(Base, Decl(inheritTypeAliasPoC.ts, 0, 0))
+
+    field: inherit = "square";                               // SHOULD RESOLVE: "square" | "circle"
+>field : Symbol(AllPositions.field, Decl(inheritTypeAliasPoC.ts, 28, 36))
+>inherit : Symbol(inherit, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+
+    foo(a: inherit, b: inherit): inherit {                   // SHOULD RESOLVE: a:number, b:string, ret:boolean
+>foo : Symbol(AllPositions.foo, Decl(inheritTypeAliasPoC.ts, 29, 30))
+>a : Symbol(a, Decl(inheritTypeAliasPoC.ts, 30, 8))
+>inherit : Symbol(inherit, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>b : Symbol(b, Decl(inheritTypeAliasPoC.ts, 30, 19))
+>inherit : Symbol(inherit, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>inherit : Symbol(inherit, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+
+        return true;
+    }
+    bar(a: inherit, ...rest: inherit): inherit {             // SHOULD RESOLVE: a:number, rest:[string, any?], ret:boolean
+>bar : Symbol(AllPositions.bar, Decl(inheritTypeAliasPoC.ts, 32, 5))
+>a : Symbol(a, Decl(inheritTypeAliasPoC.ts, 33, 8))
+>inherit : Symbol(inherit, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>rest : Symbol(rest, Decl(inheritTypeAliasPoC.ts, 33, 19))
+>inherit : Symbol(inherit, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>inherit : Symbol(inherit, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+
+        return true;
+    }
+}
+
+
+// ---------------------------------------------------------------------------
+// 1b. extends base class.
+// ---------------------------------------------------------------------------
+class Geometry {
+>Geometry : Symbol(Geometry, Decl(inheritTypeAliasPoC.ts, 36, 1))
+
+    model: "square" | "circle" = "square";
+>model : Symbol(Geometry.model, Decl(inheritTypeAliasPoC.ts, 42, 16))
+
+    render(scale: number): void {}
+>render : Symbol(Geometry.render, Decl(inheritTypeAliasPoC.ts, 43, 42))
+>scale : Symbol(scale, Decl(inheritTypeAliasPoC.ts, 44, 11))
+}
+class Canvas extends Geometry {
+>Canvas : Symbol(Canvas, Decl(inheritTypeAliasPoC.ts, 45, 1))
+>Geometry : Symbol(Geometry, Decl(inheritTypeAliasPoC.ts, 36, 1))
+
+    model: inherit = "square";                               // SHOULD RESOLVE: "square" | "circle"
+>model : Symbol(Canvas.model, Decl(inheritTypeAliasPoC.ts, 46, 31))
+>inherit : Symbol(inherit, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+
+    render(scale: inherit): inherit {}                       // SHOULD RESOLVE: scale:number, ret:void
+>render : Symbol(Canvas.render, Decl(inheritTypeAliasPoC.ts, 47, 30))
+>scale : Symbol(scale, Decl(inheritTypeAliasPoC.ts, 48, 11))
+>inherit : Symbol(inherit, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>inherit : Symbol(inherit, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+}
+
+// ---------------------------------------------------------------------------
+// 2. Multiple bases: extends + implements, intersected as (Base & A & B).
+// ---------------------------------------------------------------------------
+interface A { a: number; shared: string; }
+>A : Symbol(A, Decl(inheritTypeAliasPoC.ts, 49, 1))
+>a : Symbol(A.a, Decl(inheritTypeAliasPoC.ts, 54, 13))
+>shared : Symbol(A.shared, Decl(inheritTypeAliasPoC.ts, 54, 24))
+
+interface B { b: "x" | "y"; shared: string; }
+>B : Symbol(B, Decl(inheritTypeAliasPoC.ts, 54, 42))
+>b : Symbol(B.b, Decl(inheritTypeAliasPoC.ts, 55, 13))
+>shared : Symbol(B.shared, Decl(inheritTypeAliasPoC.ts, 55, 27))
+
+class BaseC { c: boolean = true; }
+>BaseC : Symbol(BaseC, Decl(inheritTypeAliasPoC.ts, 55, 45))
+>c : Symbol(BaseC.c, Decl(inheritTypeAliasPoC.ts, 56, 13))
+
+class Multi extends BaseC implements A, B {
+>Multi : Symbol(Multi, Decl(inheritTypeAliasPoC.ts, 56, 34))
+>BaseC : Symbol(BaseC, Decl(inheritTypeAliasPoC.ts, 55, 45))
+>A : Symbol(A, Decl(inheritTypeAliasPoC.ts, 49, 1))
+>B : Symbol(B, Decl(inheritTypeAliasPoC.ts, 54, 42))
+
+    a: inherit = 1;                                          // SHOULD RESOLVE: number
+>a : Symbol(Multi.a, Decl(inheritTypeAliasPoC.ts, 57, 43))
+>inherit : Symbol(inherit, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+
+    b: inherit = "x";                                        // SHOULD RESOLVE: "x" | "y"
+>b : Symbol(Multi.b, Decl(inheritTypeAliasPoC.ts, 58, 19))
+>inherit : Symbol(inherit, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+
+    c: inherit = false;                                      // SHOULD RESOLVE: boolean (from extends)
+>c : Symbol(Multi.c, Decl(inheritTypeAliasPoC.ts, 59, 21))
+>inherit : Symbol(inherit, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+
+    shared: inherit = "s";                                   // SHOULD RESOLVE: string (A & B agree)
+>shared : Symbol(Multi.shared, Decl(inheritTypeAliasPoC.ts, 60, 23))
+>inherit : Symbol(inherit, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+}
+
+// ---------------------------------------------------------------------------
+// 3. Conflicting member types across interfaces narrow to their intersection.
+//     Foo.shape = "square" | "circle", Bar.shape = "circle" | "triangle"
+//     => (Foo & Bar)["shape"] = "circle"
+// ---------------------------------------------------------------------------
+interface Foo { shape: "square" | "circle"; }
+>Foo : Symbol(Foo, Decl(inheritTypeAliasPoC.ts, 62, 1))
+>shape : Symbol(Foo.shape, Decl(inheritTypeAliasPoC.ts, 69, 15))
+
+interface Bar { shape: "circle" | "triangle"; }
+>Bar : Symbol(Bar, Decl(inheritTypeAliasPoC.ts, 69, 45))
+>shape : Symbol(Bar.shape, Decl(inheritTypeAliasPoC.ts, 70, 15))
+
+class IntersectNarrow implements Foo, Bar {
+>IntersectNarrow : Symbol(IntersectNarrow, Decl(inheritTypeAliasPoC.ts, 70, 47))
+>Foo : Symbol(Foo, Decl(inheritTypeAliasPoC.ts, 62, 1))
+>Bar : Symbol(Bar, Decl(inheritTypeAliasPoC.ts, 69, 45))
+
+    shape: inherit = "circle";                               // SHOULD RESOLVE: "circle" (only common member)
+>shape : Symbol(IntersectNarrow.shape, Decl(inheritTypeAliasPoC.ts, 71, 43))
+>inherit : Symbol(inherit, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+}
+class IntersectNarrowBad implements Foo, Bar {
+>IntersectNarrowBad : Symbol(IntersectNarrowBad, Decl(inheritTypeAliasPoC.ts, 73, 1))
+>Foo : Symbol(Foo, Decl(inheritTypeAliasPoC.ts, 62, 1))
+>Bar : Symbol(Bar, Decl(inheritTypeAliasPoC.ts, 69, 45))
+
+    shape: inherit = "square";                               // SHOULD ERROR: "square" not in the intersection "circle"
+>shape : Symbol(IntersectNarrowBad.shape, Decl(inheritTypeAliasPoC.ts, 74, 46))
+>inherit : Symbol(inherit, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+}
+
+// ---------------------------------------------------------------------------
+// 4. Composition: inherit nested inside other type constructors.
+// ---------------------------------------------------------------------------
+interface Robot {
+>Robot : Symbol(Robot, Decl(inheritTypeAliasPoC.ts, 76, 1))
+
+    sensors: {sight?: boolean, hearing?: boolean, touch?: boolean};
+>sensors : Symbol(Robot.sensors, Decl(inheritTypeAliasPoC.ts, 81, 17))
+>sight : Symbol(sight, Decl(inheritTypeAliasPoC.ts, 82, 14))
+>hearing : Symbol(hearing, Decl(inheritTypeAliasPoC.ts, 82, 30))
+>touch : Symbol(touch, Decl(inheritTypeAliasPoC.ts, 82, 49))
+
+    doAction(action: "walk" | "turn"): void;
+>doAction : Symbol(Robot.doAction, Decl(inheritTypeAliasPoC.ts, 82, 67))
+>action : Symbol(action, Decl(inheritTypeAliasPoC.ts, 83, 13))
+}
+class FlyingRobot implements Robot {
+>FlyingRobot : Symbol(FlyingRobot, Decl(inheritTypeAliasPoC.ts, 84, 1))
+>Robot : Symbol(Robot, Decl(inheritTypeAliasPoC.ts, 76, 1))
+
+    sensors: Required<inherit> = {sight: true, hearing: false, touch: false};  // SHOULD RESOLVE: {sight: boolean, hearing: boolean, touch: boolean};
+>sensors : Symbol(FlyingRobot.sensors, Decl(inheritTypeAliasPoC.ts, 85, 36))
+>Required : Symbol(Required, Decl(lib.es5.d.ts, --, --))
+>inherit : Symbol(inherit, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>sight : Symbol(sight, Decl(inheritTypeAliasPoC.ts, 86, 34))
+>hearing : Symbol(hearing, Decl(inheritTypeAliasPoC.ts, 86, 46))
+>touch : Symbol(touch, Decl(inheritTypeAliasPoC.ts, 86, 62))
+
+    doAction(action: inherit | "fly"): inherit {             // SHOULD RESOLVE: action:"walk"|"turn"|"fly"
+>doAction : Symbol(FlyingRobot.doAction, Decl(inheritTypeAliasPoC.ts, 86, 77))
+>action : Symbol(action, Decl(inheritTypeAliasPoC.ts, 87, 13))
+>inherit : Symbol(inherit, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>inherit : Symbol(inherit, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+    }
+}
+
+// ---------------------------------------------------------------------------
+// 5. Arrow-function field: field-level inherit, params inferred by assignment.
+// ---------------------------------------------------------------------------
+class ArrowField implements Base {
+>ArrowField : Symbol(ArrowField, Decl(inheritTypeAliasPoC.ts, 89, 1))
+>Base : Symbol(Base, Decl(inheritTypeAliasPoC.ts, 0, 0))
+
+    field: inherit = "square";
+>field : Symbol(ArrowField.field, Decl(inheritTypeAliasPoC.ts, 94, 34))
+>inherit : Symbol(inherit, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+
+    foo: inherit = (a, b) => true;                           // SHOULD RESOLVE: foo:(a:number,b:string)=>boolean
+>foo : Symbol(ArrowField.foo, Decl(inheritTypeAliasPoC.ts, 95, 30))
+>inherit : Symbol(inherit, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>a : Symbol(a, Decl(inheritTypeAliasPoC.ts, 96, 20))
+>b : Symbol(b, Decl(inheritTypeAliasPoC.ts, 96, 22))
+
+    bar: inherit = (a, b, c) => true;
+>bar : Symbol(ArrowField.bar, Decl(inheritTypeAliasPoC.ts, 96, 34))
+>inherit : Symbol(inherit, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>a : Symbol(a, Decl(inheritTypeAliasPoC.ts, 97, 20))
+>b : Symbol(b, Decl(inheritTypeAliasPoC.ts, 97, 22))
+>c : Symbol(c, Decl(inheritTypeAliasPoC.ts, 97, 25))
+}
+
+// ---------------------------------------------------------------------------
+// 6. Accessors: a getter's return and a setter's parameter inherit the FIELD type.
+//     (Issue lists "Getter return value" and "Setter parameter" as supported positions.)
+// ---------------------------------------------------------------------------
+abstract class ShapeBase {
+>ShapeBase : Symbol(ShapeBase, Decl(inheritTypeAliasPoC.ts, 98, 1))
+
+    abstract kind: "square" | "circle";
+>kind : Symbol(ShapeBase.kind, Decl(inheritTypeAliasPoC.ts, 104, 26))
+}
+class ShapeImpl extends ShapeBase {
+>ShapeImpl : Symbol(ShapeImpl, Decl(inheritTypeAliasPoC.ts, 106, 1))
+>ShapeBase : Symbol(ShapeBase, Decl(inheritTypeAliasPoC.ts, 98, 1))
+
+    private _kind: "square" | "circle" = "square";
+>_kind : Symbol(ShapeImpl._kind, Decl(inheritTypeAliasPoC.ts, 107, 35))
+
+    get kind(): inherit {                                    // SHOULD RESOLVE: "square" | "circle" (field type)
+>kind : Symbol(ShapeImpl.kind, Decl(inheritTypeAliasPoC.ts, 108, 50), Decl(inheritTypeAliasPoC.ts, 111, 5))
+>inherit : Symbol(inherit, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+
+        return this._kind;
+>this._kind : Symbol(ShapeImpl._kind, Decl(inheritTypeAliasPoC.ts, 107, 35))
+>this : Symbol(ShapeImpl, Decl(inheritTypeAliasPoC.ts, 106, 1))
+>_kind : Symbol(ShapeImpl._kind, Decl(inheritTypeAliasPoC.ts, 107, 35))
+    }
+    set kind(v: inherit) {                                   // SHOULD RESOLVE: "square" | "circle" (field type)
+>kind : Symbol(ShapeImpl.kind, Decl(inheritTypeAliasPoC.ts, 108, 50), Decl(inheritTypeAliasPoC.ts, 111, 5))
+>v : Symbol(v, Decl(inheritTypeAliasPoC.ts, 112, 13))
+>inherit : Symbol(inherit, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+
+        this._kind = v;
+>this._kind : Symbol(ShapeImpl._kind, Decl(inheritTypeAliasPoC.ts, 107, 35))
+>this : Symbol(ShapeImpl, Decl(inheritTypeAliasPoC.ts, 106, 1))
+>_kind : Symbol(ShapeImpl._kind, Decl(inheritTypeAliasPoC.ts, 107, 35))
+>v : Symbol(v, Decl(inheritTypeAliasPoC.ts, 112, 13))
+    }
+}
+class ShapeImplBadGetter extends ShapeBase {
+>ShapeImplBadGetter : Symbol(ShapeImplBadGetter, Decl(inheritTypeAliasPoC.ts, 115, 1))
+>ShapeBase : Symbol(ShapeBase, Decl(inheritTypeAliasPoC.ts, 98, 1))
+
+    get kind(): inherit {
+>kind : Symbol(ShapeImplBadGetter.kind, Decl(inheritTypeAliasPoC.ts, 116, 44), Decl(inheritTypeAliasPoC.ts, 119, 5))
+>inherit : Symbol(inherit, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+
+        return "triangle";                                   // SHOULD ERROR: "triangle" not in "square" | "circle"
+    }
+    set kind(v: inherit) {}
+>kind : Symbol(ShapeImplBadGetter.kind, Decl(inheritTypeAliasPoC.ts, 116, 44), Decl(inheritTypeAliasPoC.ts, 119, 5))
+>v : Symbol(v, Decl(inheritTypeAliasPoC.ts, 120, 13))
+>inherit : Symbol(inherit, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+}
+
+// ---------------------------------------------------------------------------
+// 7. Negative / assignment checks: inherit must produce the NARROW type, not `any`.
+// ---------------------------------------------------------------------------
+class WrongField implements Base {
+>WrongField : Symbol(WrongField, Decl(inheritTypeAliasPoC.ts, 121, 1))
+>Base : Symbol(Base, Decl(inheritTypeAliasPoC.ts, 0, 0))
+
+    field: inherit = "triangle";                             // SHOULD ERROR: not "square" | "circle"
+>field : Symbol(WrongField.field, Decl(inheritTypeAliasPoC.ts, 126, 34))
+>inherit : Symbol(inherit, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+
+    foo(a: inherit, b: inherit): inherit { return true; }
+>foo : Symbol(WrongField.foo, Decl(inheritTypeAliasPoC.ts, 127, 32))
+>a : Symbol(a, Decl(inheritTypeAliasPoC.ts, 128, 8))
+>inherit : Symbol(inherit, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>b : Symbol(b, Decl(inheritTypeAliasPoC.ts, 128, 19))
+>inherit : Symbol(inherit, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>inherit : Symbol(inherit, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+
+    bar(a: inherit, ...rest: inherit): inherit { return true; }
+>bar : Symbol(WrongField.bar, Decl(inheritTypeAliasPoC.ts, 128, 57))
+>a : Symbol(a, Decl(inheritTypeAliasPoC.ts, 129, 8))
+>inherit : Symbol(inherit, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>rest : Symbol(rest, Decl(inheritTypeAliasPoC.ts, 129, 19))
+>inherit : Symbol(inherit, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>inherit : Symbol(inherit, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+}
+class WrongReturn implements Base {
+>WrongReturn : Symbol(WrongReturn, Decl(inheritTypeAliasPoC.ts, 130, 1))
+>Base : Symbol(Base, Decl(inheritTypeAliasPoC.ts, 0, 0))
+
+    field: inherit = "square";
+>field : Symbol(WrongReturn.field, Decl(inheritTypeAliasPoC.ts, 131, 35))
+>inherit : Symbol(inherit, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+
+    foo(a: inherit, b: inherit): inherit { return "nope"; }  // SHOULD ERROR: string not assignable to boolean
+>foo : Symbol(WrongReturn.foo, Decl(inheritTypeAliasPoC.ts, 132, 30))
+>a : Symbol(a, Decl(inheritTypeAliasPoC.ts, 133, 8))
+>inherit : Symbol(inherit, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>b : Symbol(b, Decl(inheritTypeAliasPoC.ts, 133, 19))
+>inherit : Symbol(inherit, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>inherit : Symbol(inherit, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+
+    bar(a: inherit, ...rest: inherit): inherit { return true; }
+>bar : Symbol(WrongReturn.bar, Decl(inheritTypeAliasPoC.ts, 133, 59))
+>a : Symbol(a, Decl(inheritTypeAliasPoC.ts, 134, 8))
+>inherit : Symbol(inherit, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>rest : Symbol(rest, Decl(inheritTypeAliasPoC.ts, 134, 19))
+>inherit : Symbol(inherit, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>inherit : Symbol(inherit, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+}
+class WrongParamUse implements Base {
+>WrongParamUse : Symbol(WrongParamUse, Decl(inheritTypeAliasPoC.ts, 135, 1))
+>Base : Symbol(Base, Decl(inheritTypeAliasPoC.ts, 0, 0))
+
+    field: inherit = "square";
+>field : Symbol(WrongParamUse.field, Decl(inheritTypeAliasPoC.ts, 136, 37))
+>inherit : Symbol(inherit, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+
+    foo(a: inherit, b: inherit): inherit {
+>foo : Symbol(WrongParamUse.foo, Decl(inheritTypeAliasPoC.ts, 137, 30))
+>a : Symbol(a, Decl(inheritTypeAliasPoC.ts, 138, 8))
+>inherit : Symbol(inherit, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>b : Symbol(b, Decl(inheritTypeAliasPoC.ts, 138, 19))
+>inherit : Symbol(inherit, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>inherit : Symbol(inherit, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+
+        const s: string = a;                                 // SHOULD ERROR: number not assignable to string
+>s : Symbol(s, Decl(inheritTypeAliasPoC.ts, 139, 13))
+>a : Symbol(a, Decl(inheritTypeAliasPoC.ts, 138, 8))
+
+        return true;
+    }
+    bar(a: inherit, ...rest: inherit): inherit { return true; }
+>bar : Symbol(WrongParamUse.bar, Decl(inheritTypeAliasPoC.ts, 141, 5))
+>a : Symbol(a, Decl(inheritTypeAliasPoC.ts, 142, 8))
+>inherit : Symbol(inherit, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>rest : Symbol(rest, Decl(inheritTypeAliasPoC.ts, 142, 19))
+>inherit : Symbol(inherit, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>inherit : Symbol(inherit, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+}
+
+// ---------------------------------------------------------------------------
+// 8. Invalid positions / constraints.
+// ---------------------------------------------------------------------------
+class NoBase {
+>NoBase : Symbol(NoBase, Decl(inheritTypeAliasPoC.ts, 143, 1))
+
+    x: inherit = 1;                                          // SHOULD ERROR: class has no base/interfaces
+>x : Symbol(NoBase.x, Decl(inheritTypeAliasPoC.ts, 148, 14))
+>inherit : Symbol(inherit, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+}
+
+type OutsideClass = inherit;                                 // SHOULD ERROR: inherit used outside a class
+>OutsideClass : Symbol(OutsideClass, Decl(inheritTypeAliasPoC.ts, 150, 1))
+>inherit : Symbol(inherit, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+
