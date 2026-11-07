@@ -423,6 +423,7 @@ const (
 	NodeCheckFlagsNone                                     NodeCheckFlags = 0
 	NodeCheckFlagsTypeChecked                              NodeCheckFlags = 1 << 0  // Node has been type checked
 	NodeCheckFlagsContextChecked                           NodeCheckFlags = 1 << 6  // Contextual types have been assigned
+	NodeCheckFlagsSignatureContextChecked                  NodeCheckFlags = 1 << 7  // Signature of a contextually typed function has been checked
 	NodeCheckFlagsEnumValuesComputed                       NodeCheckFlags = 1 << 10 // Values for enum members have been computed, and any errors have been reported for them.
 	NodeCheckFlagsAssignmentsMarked                        NodeCheckFlags = 1 << 17 // Parameter assignments have been marked
 	NodeCheckFlagsContainsClassWithPrivateIdentifiers      NodeCheckFlags = 1 << 20 // Marked on all block-scoped containers containing a class with private identifiers.
@@ -476,12 +477,6 @@ type ComputedNameNodeLinks struct {
 
 type EnumMemberLinks struct {
 	value evaluator.Result // Constant value of enum member
-}
-
-// Links for assertion expressions
-
-type AssertionLinks struct {
-	exprType *Type // Assertion expression type
 }
 
 // SourceFile links
@@ -795,6 +790,7 @@ type Type struct {
 	objectFlags ObjectFlags
 	id          TypeId
 	kind        typeKind `customlint:"protected"`
+	generation  uint16   // see Checker.typeGeneration; zero until computed
 	symbol      *ast.Symbol
 	alias       *TypeAlias
 	checker     *Checker
@@ -1510,6 +1506,7 @@ type TypeParameter struct {
 	isDistributed       bool
 	resolvedDefaultType *Type
 	distributedType     *Type
+	origin              *Type // The type parameter a restrictive type parameter was made from, or the tuple target of a tuple element type parameter
 }
 
 func (t *TypeParameter) IsThisType() bool { return t.isThisType }
