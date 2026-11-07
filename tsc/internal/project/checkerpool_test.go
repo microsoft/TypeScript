@@ -1334,3 +1334,50 @@ func TestCheckerPoolCleanupAfterDiscardIsNoop(t *testing.T) {
 		pool.mu.Unlock()
 	})
 }
+
+func TestCheckerPoolCheckedFileQuery(t *testing.T) {
+	t.Parallel()
+	session, _ := setupCheckerPoolSession(t, CheckerPoolOptions{MaxCheckers: 2, IdleTimeout: 10 * time.Second})
+	ls, err := session.GetLanguageService(context.Background(), "file:///src/index.ts")
+	assert.NilError(t, err)
+	program := ls.GetProgram()
+	file := program.GetSourceFile("/src/index.ts")
+	assert.Assert(t, file != nil)
+
+	synctest.Test(t, func(t *testing.T) {
+		pool := newTestCheckerPool(program, CheckerPoolOptions{MaxCheckers: 2, IdleTimeout: 5 * time.Second})
+		query := func(id string) (*checker.Checker, func()) {
+			ctx := core.WithRequestID(context.Background(), id)
+			return pool.GetChecker(core.WithCheckerLifetime(ctx, core.CheckerLifetimeCheckedFileQuery), file)
+		}
+
+		c, release := query("query-1")
+		assert.Assert(t, c != pool.checkers[0], "unchecked file should use a query checker")
+		release()
+
+		diagCtx, cancelDiag := context.WithCancel(context.Background())
+		diagCtx = core.WithCheckerLifetime(core.WithRequestID(diagCtx, "diag"), core.CheckerLifetimeDiagnostics)
+		diagChecker, releaseDiag := pool.GetChecker(diagCtx, file)
+		diagChecker.GetDiagnostics(diagCtx, file)
+		releaseDiag()
+		diagChecker, releaseDiag = pool.GetChecker(diagCtx, file)
+		diagChecker.GetSuggestionDiagnostics(diagCtx, file)
+		releaseDiag()
+
+		c, release = query("query-2")
+		assert.Assert(t, c != diagChecker, "in-flight diagnostics request should keep the checker")
+		release()
+
+		cancelDiag()
+		synctest.Wait()
+
+		c, release = query("query-3")
+		assert.Assert(t, c == diagChecker, "checked file should reuse the diagnostics checker")
+
+		c2, release2 := query("query-4")
+		assert.Assert(t, c2 != diagChecker)
+		release2()
+		release()
+		synctest.Wait()
+	})
+}
