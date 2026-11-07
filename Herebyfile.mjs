@@ -788,14 +788,15 @@ export const tscBuild = task({
     },
 });
 
-export const tsgo = task({
-    name: "tsgo",
+export const local = task({
+    name: "local",
     dependencies: [lib, tscBuild],
 });
 
-export const local = task({
-    name: "local",
-    dependencies: [tsgo],
+export const tsgo = task({
+    name: "tsgo",
+    description: "Alias for local.",
+    dependencies: [local],
 });
 
 export const build = task({
@@ -1263,7 +1264,7 @@ export const buildAPITests = task({
 export const testAPI = task({
     name: "test:api",
     description: "Runs the @typescript/typescript JS API tests.",
-    dependencies: [tsgo, buildAPITests],
+    dependencies: [local, buildAPITests],
     run: runTestAPI,
 });
 
@@ -1277,7 +1278,7 @@ export const testAPIWasm = task({
 export const testAPIBenchmarks = task({
     name: "test:benchmarks:api",
     description: "Runs async, sync, and generator API benchmarks once; excluded from validate.",
-    dependencies: [tsgo, buildAPITests],
+    dependencies: [local, buildAPITests],
     run: runTestAPIBenchmarks,
 });
 
@@ -1291,7 +1292,7 @@ export const testAPIBrowserSmoke = task({
 export const testAll = task({
     name: "test:all",
     description: "Runs compiler, extension, benchmark, tools, and API tests. Codegen tests are opt-in via test:codegen.",
-    dependencies: [tsgo, buildAPITests],
+    dependencies: [local, buildAPITests],
     run: async () => {
         // Prevent interleaving by running these directly instead of in parallel.
         await runTests();
