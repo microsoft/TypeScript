@@ -22,8 +22,16 @@ type JSXLinks struct {
 
 // Links for declarations
 
+// DeclarationLinks hold whether a declaration is visible. Declaration emit
+// makes the declarations it depends on visible as it goes, so that is kept
+// apart from what the rules of the declaration say, which is all that is
+// cached: a declaration found invisible before emit made it or its container
+// visible is still found visible afterwards.
 type DeclarationLinks struct {
-	isVisible core.Tristate // if declaration is depended upon by exported declarations
+	madeVisible      bool      // Declaration emit depends on the declaration
+	ruleKnown        bool      // Whether ruleVisible and ruleInheritsFrom are known
+	ruleVisible      bool      // Whether the declaration is visible by its own rules
+	ruleInheritsFrom *ast.Node // A declaration it is as visible as, if any
 }
 
 type DeclarationFileLinks struct {
@@ -186,7 +194,7 @@ func (r *EmitResolver) markLinkedAliases(node *ast.Node) {
 
 		var nextSymbol *ast.Symbol
 		for _, declaration := range exportSymbol.Declarations() {
-			r.checker.emitResolverLinks.declarationLinks.Get(declaration).isVisible = core.TSTrue
+			r.checker.emitResolverLinks.declarationLinks.Get(declaration).madeVisible = true
 
 			if ast.IsInternalModuleImportEqualsDeclaration(declaration) {
 				// Add the referenced top container visible
