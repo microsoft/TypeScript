@@ -44,6 +44,11 @@ const (
 	fuzzQuerySignature
 	fuzzQueryDiagnostics
 	fuzzQueryEmit
+	fuzzQueryHover
+	fuzzQueryDefinition
+	fuzzQuerySignatureHelp
+	fuzzQueryCompletion
+	fuzzQueryInlayHints
 )
 
 var fuzzQueryKindNames = [...]string{
@@ -51,6 +56,10 @@ var fuzzQueryKindNames = [...]string{
 	fuzzQuerySymbol:         "symbol",
 	fuzzQueryContextualType: "contextual type",
 	fuzzQuerySignature:      "signature",
+	fuzzQueryHover:          "hover",
+	fuzzQueryDefinition:     "definition",
+	fuzzQuerySignatureHelp:  "signature help",
+	fuzzQueryCompletion:     "completions",
 }
 
 func (q fuzzQuery) String() string {
@@ -59,6 +68,8 @@ func (q fuzzQuery) String() string {
 		return fmt.Sprintf("diagnostics of %s", q.file.FileName())
 	case fuzzQueryEmit:
 		return fmt.Sprintf("emit of %s", q.file.FileName())
+	case fuzzQueryInlayHints:
+		return fmt.Sprintf("inlay hints of %s", q.file.FileName())
 	}
 	kind := fuzzQueryKindNames[q.kind]
 	if ast.PositionIsSynthesized(q.node.Pos()) {
@@ -146,6 +157,9 @@ func fuzzQueries(program compiler.ProgramLike, rng *rand.Rand) []fuzzQuery {
 	var queries []fuzzQuery
 	for _, file := range fuzzCheckedFiles(program) {
 		queries = append(queries, fuzzQuery{file: file, kind: fuzzQueryDiagnostics}, fuzzQuery{file: file, kind: fuzzQueryEmit})
+		if fuzzLS {
+			queries = append(queries, fuzzQuery{file: file, kind: fuzzQueryInlayHints})
+		}
 		for i, node := range fuzzNodes(file) {
 			for _, kind := range fuzzNodeQueryKinds(node) {
 				queries = append(queries, fuzzQuery{file, node, i, kind})
@@ -234,7 +248,7 @@ func fuzzNodeQueryKinds(node *ast.Node) []fuzzQueryKind {
 	if ast.IsCallLikeExpression(node) {
 		kinds = append(kinds, fuzzQuerySignature)
 	}
-	return kinds
+	return fuzzLSNodeQueryKinds(node, kinds)
 }
 
 // fuzzSymbolIDs matches the symbol IDs that the names of unique symbol
@@ -297,6 +311,10 @@ func fuzzRun(t *testing.T, ctx context.Context, host compiler.CompilerHost, conf
 	for _, file := range files {
 		nodesByFile[string(file.FileName())] = fuzzNodes(file)
 	}
+	var lang *fuzzLSService
+	if fuzzLS {
+		lang = fuzzLanguageService(program.Program())
+	}
 	for _, q := range queries {
 		file := program.GetSourceFile(q.file.FileName())
 		switch q.kind {
@@ -306,8 +324,15 @@ func fuzzRun(t *testing.T, ctx context.Context, host compiler.CompilerHost, conf
 		case fuzzQueryEmit:
 			program.Emit(ctx, compiler.EmitOptions{TargetSourceFiles: []*ast.SourceFile{file}, WriteFile: fuzzDiscardOutput})
 			continue
+		case fuzzQueryInlayHints:
+			fuzzLSResult(ctx, lang, file, nil, q.kind)
+			continue
 		}
 		node := nodesByFile[string(file.FileName())][q.index]
+		if fuzzIsLSQuery(q.kind) {
+			fuzzLSResult(ctx, lang, file, node, q.kind)
+			continue
+		}
 		c, done := program.Program().GetTypeCheckerForFile(ctx, file)
 		fuzzQueryResult(c, node, q.kind)
 		done()
@@ -334,12 +359,33 @@ func fuzzRun(t *testing.T, ctx context.Context, host compiler.CompilerHost, conf
 		c, done := program.Program().GetTypeCheckerForFile(ctx, file)
 		for i, node := range nodesByFile[string(file.FileName())] {
 			for _, kind := range fuzzNodeQueryKinds(node) {
+				if fuzzIsLSQuery(kind) {
+					continue
+				}
 				if r := fuzzQueryResult(c, node, kind); r != "" {
 					result = append(result, fmt.Sprintf("%s: %s", fuzzQuery{file, node, i, kind}, r))
 				}
 			}
 		}
 		done()
+	}
+	if lang != nil {
+		// Language service requests take the checker themselves.
+		for _, file := range files {
+			if r := fuzzLSResult(ctx, lang, file, nil, fuzzQueryInlayHints); r != "" {
+				result = append(result, fmt.Sprintf("%s: %s", fuzzQuery{file: file, kind: fuzzQueryInlayHints}, r))
+			}
+			for i, node := range nodesByFile[string(file.FileName())] {
+				for _, kind := range fuzzNodeQueryKinds(node) {
+					if !fuzzIsLSQuery(kind) {
+						continue
+					}
+					if r := fuzzLSResult(ctx, lang, file, node, kind); r != "" {
+						result = append(result, fmt.Sprintf("%s: %s", fuzzQuery{file, node, i, kind}, r))
+					}
+				}
+			}
+		}
 	}
 	return result
 }
