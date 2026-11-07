@@ -38,8 +38,8 @@ const result1 = createStructuredSelector({
 });
 
 const result2 = createStructuredSelector({
->result2 : Selector<unknown, { mySelector: boolean; }>
->createStructuredSelector({  mySelector: (state: State) => true,}) : Selector<unknown, { mySelector: boolean; }>
+>result2 : Selector<State, { mySelector: boolean; }>
+>createStructuredSelector({  mySelector: (state: State) => true,}) : Selector<State, { mySelector: boolean; }>
 >createStructuredSelector : <S, T>(selectors: { [K in keyof T]: Selector<S, T[K]>; }) => Selector<S, T>
 >{  mySelector: (state: State) => true,} : { mySelector: (state: State) => boolean; }
 
@@ -52,7 +52,7 @@ const result2 = createStructuredSelector({
 });
 
 result2;
->result2 : Selector<unknown, { mySelector: boolean; }>
+>result2 : Selector<State, { mySelector: boolean; }>
 
 export {};
 

@@ -26,8 +26,8 @@ declare var a: A, b: B;
 >b : B
 
 var d = f(a, b, x => x, x => x);
->d : [A, A]
->f(a, b, x => x, x => x) : [A, A]
+>d : [A, B]
+>f(a, b, x => x, x => x) : [A, B]
 >f : <T, U>(y: T, y1: U, p: (z: U) => T, p1: (x: T) => U) => [T, U]
 >a : A
 >b : B

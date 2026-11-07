@@ -1527,7 +1527,11 @@ func (c *Checker) getTypeAtFlowLoopLabelUncached(f *FlowState, flow *ast.FlowNod
 	}
 	// Kept even if a cycle in progress discards what it computed: analyzing
 	// the loop again after the cycle starts from wherever the next reference
-	// is, and may then reach a different fixed point.
+	// is, and may then reach a different fixed point. An editor request
+	// computes it in a state of its own, so it is not kept past the request.
+	if c.request != nil {
+		c.request.undo = append(c.request.undo, func() { *entry = flowLoopCacheEntry{} })
+	}
 	entry.t = result
 	return FlowType{t: result}
 }
