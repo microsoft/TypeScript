@@ -1,0 +1,9 @@
+//// [tests/cases/compiler/importEqualsTypeAsNamespaceNoLib.ts] ////
+
+=== importEqualsTypeAsNamespaceNoLib.ts ===
+interface C {}
+import x = C.m;
+>x : any
+>C : any
+>m : any
+
