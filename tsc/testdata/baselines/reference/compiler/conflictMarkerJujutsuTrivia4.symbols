@@ -1,0 +1,21 @@
+//// [tests/cases/compiler/conflictMarkerJujutsuTrivia4.ts] ////
+
+=== conflictMarkerJujutsuTrivia4.ts ===
+function grapefruit() {
+>grapefruit : Symbol(grapefruit, Decl(conflictMarkerJujutsuTrivia4.ts, 0, 0))
+}
+
+function grape() {
+>grape : Symbol(grape, Decl(conflictMarkerJujutsuTrivia4.ts, 1, 1))
+}
+
+<<<<<<< conflict 1 of 1
++++++++ vqysvltp 86ba33d1 "Change call" (no terminating newline)
+grapefruit()
+>grapefruit : Symbol(grapefruit, Decl(conflictMarkerJujutsuTrivia4.ts, 0, 0))
+
+%%%%%%% diff from: zqvxtwpm 339cbb5a "Add file" (no terminating newline)
+\\\\\\\        to: noqwrurv d60e161f "Add newline"
+ grape()
++
+>>>>>>> conflict 1 of 1 ends

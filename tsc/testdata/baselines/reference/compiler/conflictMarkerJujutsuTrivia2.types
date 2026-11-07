@@ -1,0 +1,26 @@
+//// [tests/cases/compiler/conflictMarkerJujutsuTrivia2.ts] ////
+
+=== conflictMarkerJujutsuTrivia2.ts ===
+class C {
+>C : C
+
+  foo() {
+>foo : () => void
+
+<<<<<<< conflict 1 of 1
++++++++ lnqukurm 3504bbcc "call a()"
+     a();
+>a() : any
+>a : any
+
+------- puqzxvrm 9be6077e "call c()"
+     c();
++++++++ uxvuvmmx 392ce8b5 "call b()"
+     b();
+>>>>>>> conflict 1 of 1 ends
+  }
+
+  public bar() { }
+>bar : () => void
+}
+
