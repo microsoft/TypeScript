@@ -1,0 +1,9 @@
+enumMemberListModuleBlock.ts(2,14): error TS18033: Type 'typeof C' is not assignable to type 'number' as required for computed enum member values.
+
+
+==== enumMemberListModuleBlock.ts (1 errors) ====
+    namespace E { export class C {} }
+    enum E { D = E["C"] }
+                 ~~~~~~
+!!! error TS18033: Type 'typeof C' is not assignable to type 'number' as required for computed enum member values.
+    
