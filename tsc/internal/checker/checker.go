@@ -16505,6 +16505,13 @@ func (c *Checker) getTargetOfAliasDeclaration(node *ast.Node, dontRecursivelyRes
  * Resolves a qualified name and any involved aliases.
  */
 func (c *Checker) resolveEntityName(name *ast.Node, meaning ast.SymbolFlags, ignoreErrors bool, dontResolveAlias bool, location *ast.Node) *ast.Symbol {
+	return c.resolveEntityNameEx(name, meaning, ignoreErrors, dontResolveAlias, location, true /*use*/)
+}
+
+// resolveEntityNameEx is resolveEntityName, where a name that is not a use,
+// such as one resolved to print a type, does not mark what it resolves to as
+// referenced.
+func (c *Checker) resolveEntityNameEx(name *ast.Node, meaning ast.SymbolFlags, ignoreErrors bool, dontResolveAlias bool, location *ast.Node, use bool) *ast.Symbol {
 	if ast.NodeIsMissing(name) {
 		return nil
 	}
@@ -16524,26 +16531,26 @@ func (c *Checker) resolveEntityName(name *ast.Node, meaning ast.SymbolFlags, ign
 			resolveLocation = name
 		}
 		if meaning == ast.SymbolFlagsNamespace {
-			symbol = c.getMergedSymbol(c.resolveName(resolveLocation, name.Text(), meaning, nil, true /*isUse*/, false /*excludeGlobals*/))
+			symbol = c.getMergedSymbol(c.resolveName(resolveLocation, name.Text(), meaning, nil, use /*isUse*/, false /*excludeGlobals*/))
 			if symbol == nil {
-				alias := c.getMergedSymbol(c.resolveName(resolveLocation, name.Text(), ast.SymbolFlagsAlias, nil, true /*isUse*/, false /*excludeGlobals*/))
+				alias := c.getMergedSymbol(c.resolveName(resolveLocation, name.Text(), ast.SymbolFlagsAlias, nil, use /*isUse*/, false /*excludeGlobals*/))
 				if alias != nil && alias.Name() == ast.InternalSymbolNameExportEquals {
 					// resolve typedefs exported from commonjs, stored on the module symbol
 					symbol = alias.Parent()
 				}
 			}
 			if symbol == nil && message != nil {
-				c.resolveName(resolveLocation, name.Text(), meaning, message, true /*isUse*/, false /*excludeGlobals*/)
+				c.resolveName(resolveLocation, name.Text(), meaning, message, use /*isUse*/, false /*excludeGlobals*/)
 			}
 		} else {
-			symbol = c.getMergedSymbol(c.resolveName(resolveLocation, name.Text(), meaning, message, true /*isUse*/, false /*excludeGlobals*/))
+			symbol = c.getMergedSymbol(c.resolveName(resolveLocation, name.Text(), meaning, message, use /*isUse*/, false /*excludeGlobals*/))
 		}
 	case ast.KindQualifiedName:
 		qualified := name.AsQualifiedName()
-		symbol = c.resolveQualifiedName(name, qualified.Left, qualified.Right, meaning, ignoreErrors, location)
+		symbol = c.resolveQualifiedName(name, qualified.Left, qualified.Right, meaning, ignoreErrors, location, use)
 	case ast.KindPropertyAccessExpression:
 		access := name.AsPropertyAccessExpression()
-		symbol = c.resolveQualifiedName(name, access.Expression, access.Name(), meaning, ignoreErrors, location)
+		symbol = c.resolveQualifiedName(name, access.Expression, access.Name(), meaning, ignoreErrors, location, use)
 	default:
 		panic("Unknown entity name kind")
 	}
@@ -16560,8 +16567,8 @@ func (c *Checker) resolveEntityName(name *ast.Node, meaning ast.SymbolFlags, ign
 	return symbol
 }
 
-func (c *Checker) resolveQualifiedName(name *ast.Node, left *ast.Node, right *ast.Node, meaning ast.SymbolFlags, ignoreErrors bool, location *ast.Node) *ast.Symbol {
-	namespace := c.resolveEntityName(left, ast.SymbolFlagsNamespace, ignoreErrors, false /*dontResolveAlias*/, location)
+func (c *Checker) resolveQualifiedName(name *ast.Node, left *ast.Node, right *ast.Node, meaning ast.SymbolFlags, ignoreErrors bool, location *ast.Node, use bool) *ast.Symbol {
+	namespace := c.resolveEntityNameEx(left, ast.SymbolFlagsNamespace, ignoreErrors, false /*dontResolveAlias*/, location, use)
 	if namespace == nil || ast.NodeIsMissing(right) {
 		return nil
 	}
