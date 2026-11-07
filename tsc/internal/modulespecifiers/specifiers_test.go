@@ -537,3 +537,69 @@ func TestTryGetModuleNameFromExportsOrImports(t *testing.T) {
 		}
 	})
 }
+
+func TestUserPreferencesEqual(t *testing.T) {
+	t.Parallel()
+	base := UserPreferences{
+		ImportModuleSpecifierPreference:   ImportModuleSpecifierPreferenceShortest,
+		ImportModuleSpecifierEnding:       ImportModuleSpecifierEndingPreferenceMinimal,
+		AutoImportSpecifierExcludeRegexes: []string{"^a", "^b"},
+	}
+	tests := []struct {
+		name     string
+		other    UserPreferences
+		expected bool
+	}{
+		{
+			name:     "same preferences",
+			other:    base,
+			expected: true,
+		},
+		{
+			name: "exclude regexes in a different order",
+			other: UserPreferences{
+				ImportModuleSpecifierPreference:   ImportModuleSpecifierPreferenceShortest,
+				ImportModuleSpecifierEnding:       ImportModuleSpecifierEndingPreferenceMinimal,
+				AutoImportSpecifierExcludeRegexes: []string{"^b", "^a"},
+			},
+			expected: true,
+		},
+		{
+			name: "different import module specifier preference",
+			other: UserPreferences{
+				ImportModuleSpecifierPreference:   ImportModuleSpecifierPreferenceNonRelative,
+				ImportModuleSpecifierEnding:       ImportModuleSpecifierEndingPreferenceMinimal,
+				AutoImportSpecifierExcludeRegexes: []string{"^a", "^b"},
+			},
+			expected: false,
+		},
+		{
+			name: "different import module specifier ending",
+			other: UserPreferences{
+				ImportModuleSpecifierPreference:   ImportModuleSpecifierPreferenceShortest,
+				ImportModuleSpecifierEnding:       ImportModuleSpecifierEndingPreferenceJs,
+				AutoImportSpecifierExcludeRegexes: []string{"^a", "^b"},
+			},
+			expected: false,
+		},
+		{
+			name: "different exclude regexes",
+			other: UserPreferences{
+				ImportModuleSpecifierPreference:   ImportModuleSpecifierPreferenceShortest,
+				ImportModuleSpecifierEnding:       ImportModuleSpecifierEndingPreferenceMinimal,
+				AutoImportSpecifierExcludeRegexes: []string{"^a"},
+			},
+			expected: false,
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			t.Parallel()
+			result := base.Equal(tt.other)
+			if result != tt.expected {
+				t.Errorf("Equal() = %v, expected %v", result, tt.expected)
+			}
+		})
+	}
+}
