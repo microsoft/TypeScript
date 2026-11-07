@@ -2684,6 +2684,7 @@ async function buildMainTypeScriptPackage(platforms) {
     await fs.promises.writeFile(path.join(mainPackageDir, "package.json"), JSON.stringify(mainPackage, undefined, 4));
     await fs.promises.copyFile("LICENSE.txt", path.join(mainPackageDir, "LICENSE"));
     await fs.promises.copyFile("NOTICE.txt", path.join(mainPackageDir, "NOTICE.txt"));
+    await fs.promises.copyFile("README.md", path.join(mainPackageDir, "README.md"));
 
     // Build the JS API and copy dist into the main package.
     await run("npm", ["run", "-w", "@typescript/typescript", "build"]);
