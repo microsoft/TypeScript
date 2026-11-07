@@ -36,7 +36,7 @@ class Cls {
         _Cls_privateProp.set(this, void 0);
     }
     problem() {
-        __classPrivateFieldSet(this, _Cls_privateProp, __classPrivateFieldGet(this, _Cls_privateProp, "f") ?? (false ? neverThis() : 20), "f");
+        __classPrivateFieldGet(this, _Cls_privateProp, "f") ?? __classPrivateFieldSet(this, _Cls_privateProp, false ? neverThis() : 20, "f");
     }
 }
 _Cls_privateProp = new WeakMap();
