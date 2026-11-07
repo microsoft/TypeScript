@@ -778,6 +778,33 @@ func TestPathKeyConstructionMethods(t *testing.T) {
 	})
 }
 
+func TestTryResolveDirectoryRejectsURLQueryOrFragment(t *testing.T) {
+	t.Parallel()
+
+	diskDirectory := RootedDirectoryPathFromNormalized("/project/src")
+	urlDirectory := RootedDirectoryPathFromNormalized("http://server/base")
+	for _, test := range []struct {
+		directory RootedDirectoryPath
+		path      string
+	}{
+		{diskDirectory, "https://example.com/a?b/"},
+		{diskDirectory, "http://localhost/#/routes/"},
+		{diskDirectory, "./foo https://example.com/?x/"},
+		{urlDirectory, "./dir?query/"},
+		{urlDirectory, "dir#fragment/"},
+	} {
+		_, ok := test.directory.TryResolveDirectory(test.path)
+		assert.Assert(t, !ok, "%s + %s", test.directory, test.path)
+	}
+
+	resolved, ok := diskDirectory.TryResolveDirectory("./dir?query/")
+	assert.Assert(t, ok)
+	assert.Equal(t, resolved, RootedDirectoryPath("/project/src/dir?query"))
+	resolved, ok = urlDirectory.TryResolveDirectory("../other/")
+	assert.Assert(t, ok)
+	assert.Equal(t, resolved, RootedDirectoryPath("http://server/other"))
+}
+
 func TestRootedDirectoryPathResolutionMatchesGeneralRooting(t *testing.T) {
 	t.Parallel()
 
