@@ -1,0 +1,62 @@
+//// [tests/cases/compiler/dependentDestructuringBindingElementInitializer.ts] ////
+
+=== dependentDestructuringBindingElementInitializer.ts ===
+type U =
+>U : Symbol(U, Decl(dependentDestructuringBindingElementInitializer.ts, 0, 0))
+
+    | { kind: "a"; payload: number; extra?: unknown }
+>kind : Symbol(kind, Decl(dependentDestructuringBindingElementInitializer.ts, 1, 7))
+>payload : Symbol(payload, Decl(dependentDestructuringBindingElementInitializer.ts, 1, 18))
+>extra : Symbol(extra, Decl(dependentDestructuringBindingElementInitializer.ts, 1, 35))
+
+    | { kind: "b"; payload: string; extra?: unknown };
+>kind : Symbol(kind, Decl(dependentDestructuringBindingElementInitializer.ts, 2, 7))
+>payload : Symbol(payload, Decl(dependentDestructuringBindingElementInitializer.ts, 2, 18))
+>extra : Symbol(extra, Decl(dependentDestructuringBindingElementInitializer.ts, 2, 35))
+
+declare const u: U;
+>u : Symbol(u, Decl(dependentDestructuringBindingElementInitializer.ts, 4, 13))
+>U : Symbol(U, Decl(dependentDestructuringBindingElementInitializer.ts, 0, 0))
+
+const {
+    kind,
+>kind : Symbol(kind, Decl(dependentDestructuringBindingElementInitializer.ts, 6, 7))
+
+    payload,
+>payload : Symbol(payload, Decl(dependentDestructuringBindingElementInitializer.ts, 7, 9))
+
+    extra = kind === "a" ? payload.toFixed() : payload.toUpperCase(),
+>extra : Symbol(extra, Decl(dependentDestructuringBindingElementInitializer.ts, 8, 12))
+>kind : Symbol(kind, Decl(dependentDestructuringBindingElementInitializer.ts, 6, 7))
+>payload.toFixed : Symbol(Number.toFixed, Decl(lib.es5.d.ts, --, --))
+>payload : Symbol(payload, Decl(dependentDestructuringBindingElementInitializer.ts, 7, 9))
+>toFixed : Symbol(Number.toFixed, Decl(lib.es5.d.ts, --, --))
+>payload.toUpperCase : Symbol(String.toUpperCase, Decl(lib.es5.d.ts, --, --))
+>payload : Symbol(payload, Decl(dependentDestructuringBindingElementInitializer.ts, 7, 9))
+>toUpperCase : Symbol(String.toUpperCase, Decl(lib.es5.d.ts, --, --))
+
+} = u;
+>u : Symbol(u, Decl(dependentDestructuringBindingElementInitializer.ts, 4, 13))
+
+function f({
+>f : Symbol(f, Decl(dependentDestructuringBindingElementInitializer.ts, 10, 6))
+
+    kind,
+>kind : Symbol(kind, Decl(dependentDestructuringBindingElementInitializer.ts, 12, 12))
+
+    payload,
+>payload : Symbol(payload, Decl(dependentDestructuringBindingElementInitializer.ts, 13, 9))
+
+    extra = kind === "a" ? payload.toFixed() : payload.toUpperCase(),
+>extra : Symbol(extra, Decl(dependentDestructuringBindingElementInitializer.ts, 14, 12))
+>kind : Symbol(kind, Decl(dependentDestructuringBindingElementInitializer.ts, 12, 12))
+>payload.toFixed : Symbol(Number.toFixed, Decl(lib.es5.d.ts, --, --))
+>payload : Symbol(payload, Decl(dependentDestructuringBindingElementInitializer.ts, 13, 9))
+>toFixed : Symbol(Number.toFixed, Decl(lib.es5.d.ts, --, --))
+>payload.toUpperCase : Symbol(String.toUpperCase, Decl(lib.es5.d.ts, --, --))
+>payload : Symbol(payload, Decl(dependentDestructuringBindingElementInitializer.ts, 13, 9))
+>toUpperCase : Symbol(String.toUpperCase, Decl(lib.es5.d.ts, --, --))
+
+}: U) {}
+>U : Symbol(U, Decl(dependentDestructuringBindingElementInitializer.ts, 0, 0))
+

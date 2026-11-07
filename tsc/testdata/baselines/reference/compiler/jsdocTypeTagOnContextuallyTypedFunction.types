@@ -1,0 +1,45 @@
+//// [tests/cases/compiler/jsdocTypeTagOnContextuallyTypedFunction.ts] ////
+
+=== a.js ===
+/** @type {{ f: (a: string | number, ...rest: unknown[]) => string }} */
+const context = { f: (a) => "" };
+>context : { f: (a: string | number, ...rest: unknown[]) => string; }
+>{ f: (a) => "" } : { f: (a: string | number) => string; }
+>f : (a: string | number) => string
+>(a) => "" : (a: string | number) => string
+>a : string | number
+>"" : ""
+
+context.f =
+>context.f =    /** @type {(content: string, ...rest: [boolean?]) => string} */    (content, ...rest) => content.toUpperCase() + rest.length : (content: string, rest_0?: boolean | undefined) => string
+>context.f : (a: string | number, ...rest: unknown[]) => string
+>context : { f: (a: string | number, ...rest: unknown[]) => string; }
+>f : (a: string | number, ...rest: unknown[]) => string
+
+    /** @type {(content: string, ...rest: [boolean?]) => string} */
+    (content, ...rest) => content.toUpperCase() + rest.length;
+>(content, ...rest) => content.toUpperCase() + rest.length : (content: string, rest_0?: boolean | undefined) => string
+>content : string
+>rest : [(boolean | undefined)?]
+>content.toUpperCase() + rest.length : string
+>content.toUpperCase() : string
+>content.toUpperCase : () => string
+>content : string
+>toUpperCase : () => string
+>rest.length : 0 | 1
+>rest : [(boolean | undefined)?]
+>length : 0 | 1
+
+/** @type {(content: string | number) => string} */
+const g =
+>g : (content: string | number) => string
+
+    /** @type {(content: string) => string} */
+    (content) => content.toUpperCase();
+>(content) => content.toUpperCase() : (content: string) => string
+>content : string
+>content.toUpperCase() : string
+>content.toUpperCase : () => string
+>content : string
+>toUpperCase : () => string
+

@@ -1,0 +1,60 @@
+//// [tests/cases/compiler/contextualReturnArrayPatternCallback.ts] ////
+
+=== contextualReturnArrayPatternCallback.ts ===
+interface Matcher<Input, Value = unknown> {
+    matcher(): { match(value: Input): boolean; value?: Value };
+>matcher : () => { match(value: Input): boolean; value?: Value; }
+>match : (value: Input) => boolean
+>value : Input
+>value : Value | undefined
+}
+type Pattern<Input> = Input | Matcher<Input> | { [Key in keyof Input]?: Pattern<Input[Key]> };
+>Pattern : Pattern<Input>
+
+type ArrayElement<Input> = Input extends readonly (infer Value)[] ? Value : unknown;
+>ArrayElement : ArrayElement<Input>
+
+declare function array<Input, Value extends Pattern<ArrayElement<Input>>>(value: Value): Matcher<Input, Value>;
+>array : <Input, Value extends Pattern<ArrayElement<Input>>>(value: Value) => Matcher<Input, Value>
+>value : Value
+
+declare function when<Input, Callback extends (value: Input) => unknown>(callback: Callback): Matcher<Input>;
+>when : <Input, Callback extends (value: Input) => unknown>(callback: Callback) => Matcher<Input>
+>value : Input
+>callback : Callback
+
+declare function accept<Value extends Pattern<{ list: { prop: string }[] }>>(value: Value): void;
+>accept : <Value extends Pattern<{ list: { prop: string; }[]; }>>(value: Value) => void
+>list : { prop: string; }[]
+>prop : string
+>value : Value
+
+accept({
+>accept({    list: array({        prop: when(value => {            const text: string = value;            return true;        }),    }),}) : void
+>accept : <Value extends Pattern<{ list: { prop: string; }[]; }>>(value: Value) => void
+>{    list: array({        prop: when(value => {            const text: string = value;            return true;        }),    }),} : { list: Matcher<{ prop: string; }[], { prop: Matcher<string, unknown>; }>; }
+
+    list: array({
+>list : Matcher<{ prop: string; }[], { prop: Matcher<string, unknown>; }>
+>array({        prop: when(value => {            const text: string = value;            return true;        }),    }) : Matcher<{ prop: string; }[], { prop: Matcher<string, unknown>; }>
+>array : <Input, Value extends Pattern<ArrayElement<Input>>>(value: Value) => Matcher<Input, Value>
+>{        prop: when(value => {            const text: string = value;            return true;        }),    } : { prop: Matcher<string, unknown>; }
+
+        prop: when(value => {
+>prop : Matcher<string, unknown>
+>when(value => {            const text: string = value;            return true;        }) : Matcher<string, unknown>
+>when : <Input, Callback extends (value: Input) => unknown>(callback: Callback) => Matcher<Input>
+>value => {            const text: string = value;            return true;        } : (value: string) => boolean
+>value : string
+
+            const text: string = value;
+>text : string
+>value : string
+
+            return true;
+>true : true
+
+        }),
+    }),
+});
+

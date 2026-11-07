@@ -1,0 +1,77 @@
+//// [tests/cases/compiler/circularReturnTypeThroughCallbackArgument.ts] ////
+
+=== circularReturnTypeThroughCallbackArgument.ts ===
+declare function fan(g: () => number): number;
+>fan : Symbol(fan, Decl(circularReturnTypeThroughCallbackArgument.ts, 0, 0))
+>g : Symbol(g, Decl(circularReturnTypeThroughCallbackArgument.ts, 0, 21))
+
+export function a(n: number) {
+>a : Symbol(a, Decl(circularReturnTypeThroughCallbackArgument.ts, 0, 46))
+>n : Symbol(n, Decl(circularReturnTypeThroughCallbackArgument.ts, 2, 18))
+
+    return fan(() => a(n));
+>fan : Symbol(fan, Decl(circularReturnTypeThroughCallbackArgument.ts, 0, 0))
+>a : Symbol(a, Decl(circularReturnTypeThroughCallbackArgument.ts, 0, 46))
+>n : Symbol(n, Decl(circularReturnTypeThroughCallbackArgument.ts, 2, 18))
+}
+
+declare function fanAll(g: () => Promise<{ ok: boolean }>): Promise<{ ok: boolean }>;
+>fanAll : Symbol(fanAll, Decl(circularReturnTypeThroughCallbackArgument.ts, 4, 1))
+>g : Symbol(g, Decl(circularReturnTypeThroughCallbackArgument.ts, 6, 24))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2018.promise.d.ts, --, --))
+>ok : Symbol(ok, Decl(circularReturnTypeThroughCallbackArgument.ts, 6, 42))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2018.promise.d.ts, --, --))
+>ok : Symbol(ok, Decl(circularReturnTypeThroughCallbackArgument.ts, 6, 69))
+
+export async function b(n: number) {
+>b : Symbol(b, Decl(circularReturnTypeThroughCallbackArgument.ts, 6, 85))
+>n : Symbol(n, Decl(circularReturnTypeThroughCallbackArgument.ts, 8, 24))
+
+    if (n > 0) {
+>n : Symbol(n, Decl(circularReturnTypeThroughCallbackArgument.ts, 8, 24))
+
+        return fanAll(() => b(n - 1));
+>fanAll : Symbol(fanAll, Decl(circularReturnTypeThroughCallbackArgument.ts, 4, 1))
+>b : Symbol(b, Decl(circularReturnTypeThroughCallbackArgument.ts, 6, 85))
+>n : Symbol(n, Decl(circularReturnTypeThroughCallbackArgument.ts, 8, 24))
+    }
+    return { ok: true };
+>ok : Symbol(ok, Decl(circularReturnTypeThroughCallbackArgument.ts, 12, 12))
+}
+
+type Result = { success: boolean; [key: string]: unknown };
+>Result : Symbol(Result, Decl(circularReturnTypeThroughCallbackArgument.ts, 13, 1))
+>success : Symbol(success, Decl(circularReturnTypeThroughCallbackArgument.ts, 15, 15))
+>key : Symbol(key, Decl(circularReturnTypeThroughCallbackArgument.ts, 15, 35))
+
+interface Other { success: boolean; url: string }
+>Other : Symbol(Other, Decl(circularReturnTypeThroughCallbackArgument.ts, 15, 59))
+>success : Symbol(Other.success, Decl(circularReturnTypeThroughCallbackArgument.ts, 16, 17))
+>url : Symbol(Other.url, Decl(circularReturnTypeThroughCallbackArgument.ts, 16, 35))
+
+declare function fanOut(generateOne: () => Promise<Result>): Promise<Result>;
+>fanOut : Symbol(fanOut, Decl(circularReturnTypeThroughCallbackArgument.ts, 16, 49))
+>generateOne : Symbol(generateOne, Decl(circularReturnTypeThroughCallbackArgument.ts, 17, 24))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2018.promise.d.ts, --, --))
+>Result : Symbol(Result, Decl(circularReturnTypeThroughCallbackArgument.ts, 13, 1))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2018.promise.d.ts, --, --))
+>Result : Symbol(Result, Decl(circularReturnTypeThroughCallbackArgument.ts, 13, 1))
+
+declare const other: Other;
+>other : Symbol(other, Decl(circularReturnTypeThroughCallbackArgument.ts, 18, 13))
+>Other : Symbol(Other, Decl(circularReturnTypeThroughCallbackArgument.ts, 15, 59))
+
+export async function c(n: number) {
+>c : Symbol(c, Decl(circularReturnTypeThroughCallbackArgument.ts, 18, 27))
+>n : Symbol(n, Decl(circularReturnTypeThroughCallbackArgument.ts, 20, 24))
+
+    if (n) return other;
+>n : Symbol(n, Decl(circularReturnTypeThroughCallbackArgument.ts, 20, 24))
+>other : Symbol(other, Decl(circularReturnTypeThroughCallbackArgument.ts, 18, 13))
+
+    return fanOut(() => c(n - 1));
+>fanOut : Symbol(fanOut, Decl(circularReturnTypeThroughCallbackArgument.ts, 16, 49))
+>c : Symbol(c, Decl(circularReturnTypeThroughCallbackArgument.ts, 18, 27))
+>n : Symbol(n, Decl(circularReturnTypeThroughCallbackArgument.ts, 20, 24))
+}
+

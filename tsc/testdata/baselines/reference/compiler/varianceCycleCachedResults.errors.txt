@@ -1,0 +1,25 @@
+first.ts(3,1): error TS2322: Type 'Box<number>' is not assignable to type 'Box<string>'.
+  Type 'number' is not assignable to type 'string'.
+
+
+==== first.ts (1 errors) ====
+    declare let b1: Box<string>;
+    declare let b2: Box<number>;
+    b1 = b2;
+    ~~
+!!! error TS2322: Type 'Box<number>' is not assignable to type 'Box<string>'.
+!!! error TS2322:   Type 'number' is not assignable to type 'string'.
+    
+==== box.ts (0 errors) ====
+    declare let a1: Box<string>;
+    declare let a2: Box<number>;
+    declare const cond: boolean;
+    class Box<T> {
+        value!: T;
+        m() {
+            if (cond) return a1;
+            return a2;
+        }
+    }
+    const r = new Box<boolean>().m();
+    

@@ -1,0 +1,38 @@
+//// [tests/cases/compiler/circularReturnTypeThroughUncontextualCallbackArgument.ts] ////
+
+=== circularReturnTypeThroughUncontextualCallbackArgument.ts ===
+// `getCreds`'s return type depends on resolving `materialize({ next })`, whose
+// argument check needs the return type of the (non-contextually typed) arrow
+// `next`, which calls `getCreds` again. TypeScript never reports this cycle in
+// any order: call resolution hides the resolutions below it, and the relation
+// reads an in-progress return type as `any` without failing it. So no TS7023,
+// and `getCreds` returns `number`. (Reduced from OmniRoute auth.ts
+// getProviderCredentials/selectNextLeaseCandidate.)
+
+const x = getCreds();
+>x : Symbol(x, Decl(circularReturnTypeThroughUncontextualCallbackArgument.ts, 8, 5))
+>getCreds : Symbol(getCreds, Decl(circularReturnTypeThroughUncontextualCallbackArgument.ts, 10, 80))
+
+declare function materialize(extra: { next?: (id: string) => unknown }): number;
+>materialize : Symbol(materialize, Decl(circularReturnTypeThroughUncontextualCallbackArgument.ts, 8, 21))
+>extra : Symbol(extra, Decl(circularReturnTypeThroughUncontextualCallbackArgument.ts, 10, 29))
+>next : Symbol(next, Decl(circularReturnTypeThroughUncontextualCallbackArgument.ts, 10, 37))
+>id : Symbol(id, Decl(circularReturnTypeThroughUncontextualCallbackArgument.ts, 10, 46))
+
+function getCreds() {
+>getCreds : Symbol(getCreds, Decl(circularReturnTypeThroughUncontextualCallbackArgument.ts, 10, 80))
+
+    const next = (id: string) => getCreds();
+>next : Symbol(next, Decl(circularReturnTypeThroughUncontextualCallbackArgument.ts, 13, 9))
+>id : Symbol(id, Decl(circularReturnTypeThroughUncontextualCallbackArgument.ts, 13, 18))
+>getCreds : Symbol(getCreds, Decl(circularReturnTypeThroughUncontextualCallbackArgument.ts, 10, 80))
+
+    return materialize({ next });
+>materialize : Symbol(materialize, Decl(circularReturnTypeThroughUncontextualCallbackArgument.ts, 8, 21))
+>next : Symbol(next, Decl(circularReturnTypeThroughUncontextualCallbackArgument.ts, 14, 24))
+}
+
+const n: number = getCreds();
+>n : Symbol(n, Decl(circularReturnTypeThroughUncontextualCallbackArgument.ts, 17, 5))
+>getCreds : Symbol(getCreds, Decl(circularReturnTypeThroughUncontextualCallbackArgument.ts, 10, 80))
+

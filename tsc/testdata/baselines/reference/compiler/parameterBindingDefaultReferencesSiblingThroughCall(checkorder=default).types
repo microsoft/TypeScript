@@ -1,0 +1,62 @@
+//// [tests/cases/compiler/parameterBindingDefaultReferencesSiblingThroughCall.ts] ////
+
+=== parameterBindingDefaultReferencesSiblingThroughCall.ts ===
+// A default in a destructured parameter that references a sibling element
+// makes the sibling's type depend on itself: the type of 'a' comes from the
+// parameter initializer '{}', which is padded with the types of the defaults,
+// including 'b'. Main reports this cycle (TS7022 on 'a') for 'b = a', but not
+// for 'b = id(a)', where the padding reuses the signature resolved while 'a'
+// was treated as non-inferrable any during contextual typing of '{}', which
+// gives 'b' the type 'unknown' (see tldraw TldrawApp.test.ts).
+
+declare function id<T>(v: T): T;
+>id : <T>(v: T) => T
+>v : T
+
+function direct({ a = 1 as number | undefined, b = a } = {}) {
+>direct : ({ a, b }?: { a?: number | undefined; b?: any; }) => void
+>a : any
+>1 as number | undefined : number | undefined
+>1 : 1
+>b : any
+>a : any
+>{} : {}
+
+    const n: string = b;
+>n : string
+>b : any
+}
+
+function viaCall({ a = 1 as number | undefined, b = id(a) } = {}) {
+>viaCall : ({ a, b }?: { a?: number | undefined; b?: any; }) => void
+>a : any
+>1 as number | undefined : number | undefined
+>1 : 1
+>b : any
+>id(a) : any
+>id : <T>(v: T) => T
+>a : any
+>{} : {}
+
+    const n: string = b;
+>n : string
+>b : any
+}
+
+function viaCallArray({ a = 1 as number | undefined, b = id([a]) } = {}) {
+>viaCallArray : ({ a, b }?: { a?: number | undefined; b?: any[] | undefined; }) => void
+>a : any
+>1 as number | undefined : number | undefined
+>1 : 1
+>b : any[]
+>id([a]) : any[]
+>id : <T>(v: T) => T
+>[a] : any[]
+>a : any
+>{} : {}
+
+    const n: string = b;
+>n : string
+>b : any[]
+}
+

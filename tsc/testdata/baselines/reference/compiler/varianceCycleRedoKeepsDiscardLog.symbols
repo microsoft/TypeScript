@@ -1,0 +1,999 @@
+//// [tests/cases/compiler/varianceCycleRedoKeepsDiscardLog.ts] ////
+
+=== json-logic-js.d.ts ===
+export as namespace jsonFactory;
+>jsonFactory : Symbol(jsonFactory, Decl(json-logic-js.d.ts, 0, 0))
+
+// Disable auto-export
+export {};
+
+type RenameToIn<T> = {
+>RenameToIn : Symbol(RenameToIn, Decl(json-logic-js.d.ts, 3, 10))
+>T : Symbol(T, Decl(json-logic-js.d.ts, 5, 16))
+
+    [K in keyof T as K extends `in${Uppercase<string>}${Lowercase<string>}` ? `in` : K]: T[K];
+>K : Symbol(K, Decl(json-logic-js.d.ts, 6, 5))
+>T : Symbol(T, Decl(json-logic-js.d.ts, 5, 16))
+>K : Symbol(K, Decl(json-logic-js.d.ts, 6, 5))
+>Uppercase : Symbol(Uppercase, Decl(lib.es5.d.ts, --, --))
+>Lowercase : Symbol(Lowercase, Decl(lib.es5.d.ts, --, --))
+>K : Symbol(K, Decl(json-logic-js.d.ts, 6, 5))
+>T : Symbol(T, Decl(json-logic-js.d.ts, 5, 16))
+>K : Symbol(K, Decl(json-logic-js.d.ts, 6, 5))
+
+};
+
+/**
+ * This is a utility type used below for the "if" operation.
+ * Original: https://stackoverflow.com/a/68373774/765987
+ */
+type MAXIMUM_ALLOWED_BOUNDARY = 80;
+>MAXIMUM_ALLOWED_BOUNDARY : Symbol(MAXIMUM_ALLOWED_BOUNDARY, Decl(json-logic-js.d.ts, 7, 2))
+
+type Mapped<
+>Mapped : Symbol(Mapped, Decl(json-logic-js.d.ts, 13, 35))
+
+    Tuple extends unknown[],
+>Tuple : Symbol(Tuple, Decl(json-logic-js.d.ts, 14, 12))
+
+    Result extends unknown[] = [],
+>Result : Symbol(Result, Decl(json-logic-js.d.ts, 15, 28))
+
+    Count extends readonly number[] = [],
+>Count : Symbol(Count, Decl(json-logic-js.d.ts, 16, 34))
+
+> = Count["length"] extends MAXIMUM_ALLOWED_BOUNDARY ? Result
+>Count : Symbol(Count, Decl(json-logic-js.d.ts, 16, 34))
+>MAXIMUM_ALLOWED_BOUNDARY : Symbol(MAXIMUM_ALLOWED_BOUNDARY, Decl(json-logic-js.d.ts, 7, 2))
+>Result : Symbol(Result, Decl(json-logic-js.d.ts, 15, 28))
+
+    : Tuple extends [] ? []
+>Tuple : Symbol(Tuple, Decl(json-logic-js.d.ts, 14, 12))
+
+    : Result extends [] ? Mapped<Tuple, Tuple, [...Count, 1]>
+>Result : Symbol(Result, Decl(json-logic-js.d.ts, 15, 28))
+>Mapped : Symbol(Mapped, Decl(json-logic-js.d.ts, 13, 35))
+>Tuple : Symbol(Tuple, Decl(json-logic-js.d.ts, 14, 12))
+>Tuple : Symbol(Tuple, Decl(json-logic-js.d.ts, 14, 12))
+>Count : Symbol(Count, Decl(json-logic-js.d.ts, 16, 34))
+
+    : Mapped<Tuple, Result | [...Result, ...Tuple], [...Count, 1]>;
+>Mapped : Symbol(Mapped, Decl(json-logic-js.d.ts, 13, 35))
+>Tuple : Symbol(Tuple, Decl(json-logic-js.d.ts, 14, 12))
+>Result : Symbol(Result, Decl(json-logic-js.d.ts, 15, 28))
+>Result : Symbol(Result, Decl(json-logic-js.d.ts, 15, 28))
+>Tuple : Symbol(Tuple, Decl(json-logic-js.d.ts, 14, 12))
+>Count : Symbol(Count, Decl(json-logic-js.d.ts, 16, 34))
+
+/**
+ * Used for the "if" operation, which takes an array of odd length
+ * and a minimum of three (3) elements.
+ */
+type AnyArrayOfOddLengthMin3 = [any, ...Mapped<[any, any]>];
+>AnyArrayOfOddLengthMin3 : Symbol(AnyArrayOfOddLengthMin3, Decl(json-logic-js.d.ts, 21, 67))
+>Mapped : Symbol(Mapped, Decl(json-logic-js.d.ts, 13, 35))
+
+export type ReservedOperations =
+>ReservedOperations : Symbol(ReservedOperations, Decl(json-logic-js.d.ts, 26, 60))
+
+    | "var"
+    | "missing"
+    | "missing_some"
+    | "if"
+    | "=="
+    | "==="
+    | "!="
+    | "!=="
+    | "!"
+    | "!!"
+    | "or"
+    | "and"
+    | ">"
+    | ">="
+    | "<"
+    | "<="
+    | "max"
+    | "min"
+    | "+"
+    | "-"
+    | "*"
+    | "/"
+    | "%"
+    | "map"
+    | "filter"
+    | "reduce"
+    | "all"
+    | "none"
+    | "some"
+    | "merge"
+    | "in"
+    | "cat"
+    | "substr"
+    | "log";
+
+/**
+ * This can be an object with any key except the reserved keys.
+ * TODO: Find a way to limit this type to exactly one (1) key, since
+ * json-logic-js enforces it. See:
+ * https://github.com/jwadhams/json-logic-js/blob/2.0.2/logic.js#L180
+ */
+export type AdditionalOperation = Partial<Record<ReservedOperations, never>> & { [k: string]: any };
+>AdditionalOperation : Symbol(AdditionalOperation, Decl(json-logic-js.d.ts, 62, 12))
+>Partial : Symbol(Partial, Decl(lib.es5.d.ts, --, --))
+>Record : Symbol(Record, Decl(lib.es5.d.ts, --, --))
+>ReservedOperations : Symbol(ReservedOperations, Decl(json-logic-js.d.ts, 26, 60))
+>k : Symbol(k, Decl(json-logic-js.d.ts, 70, 82))
+
+export interface AllReservedOperationsInterface<AddOps extends AdditionalOperation = never> {
+>AllReservedOperationsInterface : Symbol(AllReservedOperationsInterface, Decl(json-logic-js.d.ts, 70, 100))
+>AddOps : Symbol(AddOps, Decl(json-logic-js.d.ts, 72, 48))
+>AdditionalOperation : Symbol(AdditionalOperation, Decl(json-logic-js.d.ts, 62, 12))
+
+    var: RulesLogic<AddOps> | [RulesLogic<AddOps>] | [RulesLogic<AddOps>, any] | [RulesLogic<AddOps>, any];
+>var : Symbol(AllReservedOperationsInterface.var, Decl(json-logic-js.d.ts, 72, 93))
+>RulesLogic : Symbol(RulesLogic, Decl(json-logic-js.d.ts, 226, 2))
+>AddOps : Symbol(AddOps, Decl(json-logic-js.d.ts, 72, 48))
+>RulesLogic : Symbol(RulesLogic, Decl(json-logic-js.d.ts, 226, 2))
+>AddOps : Symbol(AddOps, Decl(json-logic-js.d.ts, 72, 48))
+>RulesLogic : Symbol(RulesLogic, Decl(json-logic-js.d.ts, 226, 2))
+>AddOps : Symbol(AddOps, Decl(json-logic-js.d.ts, 72, 48))
+>RulesLogic : Symbol(RulesLogic, Decl(json-logic-js.d.ts, 226, 2))
+>AddOps : Symbol(AddOps, Decl(json-logic-js.d.ts, 72, 48))
+
+    missing: RulesLogic<AddOps> | any[];
+>missing : Symbol(AllReservedOperationsInterface.missing, Decl(json-logic-js.d.ts, 73, 107))
+>RulesLogic : Symbol(RulesLogic, Decl(json-logic-js.d.ts, 226, 2))
+>AddOps : Symbol(AddOps, Decl(json-logic-js.d.ts, 72, 48))
+
+    missing_some: [RulesLogic<AddOps>, RulesLogic<AddOps> | any[]];
+>missing_some : Symbol(AllReservedOperationsInterface.missing_some, Decl(json-logic-js.d.ts, 74, 40))
+>RulesLogic : Symbol(RulesLogic, Decl(json-logic-js.d.ts, 226, 2))
+>AddOps : Symbol(AddOps, Decl(json-logic-js.d.ts, 72, 48))
+>RulesLogic : Symbol(RulesLogic, Decl(json-logic-js.d.ts, 226, 2))
+>AddOps : Symbol(AddOps, Decl(json-logic-js.d.ts, 72, 48))
+
+    if: AnyArrayOfOddLengthMin3;
+>if : Symbol(AllReservedOperationsInterface.if, Decl(json-logic-js.d.ts, 75, 67))
+>AnyArrayOfOddLengthMin3 : Symbol(AnyArrayOfOddLengthMin3, Decl(json-logic-js.d.ts, 21, 67))
+
+    "==": [any, any];
+>"==" : Symbol(AllReservedOperationsInterface["=="], Decl(json-logic-js.d.ts, 76, 32))
+
+    "===": [any, any];
+>"===" : Symbol(AllReservedOperationsInterface["==="], Decl(json-logic-js.d.ts, 77, 21))
+
+    "!=": [any, any];
+>"!=" : Symbol(AllReservedOperationsInterface["!="], Decl(json-logic-js.d.ts, 78, 22))
+
+    "!==": [any, any];
+>"!==" : Symbol(AllReservedOperationsInterface["!=="], Decl(json-logic-js.d.ts, 79, 21))
+
+    "!": any;
+>"!" : Symbol(AllReservedOperationsInterface["!"], Decl(json-logic-js.d.ts, 80, 22))
+
+    "!!": any;
+>"!!" : Symbol(AllReservedOperationsInterface["!!"], Decl(json-logic-js.d.ts, 81, 13))
+
+    or: Array<RulesLogic<AddOps>>;
+>or : Symbol(AllReservedOperationsInterface.or, Decl(json-logic-js.d.ts, 82, 14))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --) ... and 4 more)
+>RulesLogic : Symbol(RulesLogic, Decl(json-logic-js.d.ts, 226, 2))
+>AddOps : Symbol(AddOps, Decl(json-logic-js.d.ts, 72, 48))
+
+    and: Array<RulesLogic<AddOps>>;
+>and : Symbol(AllReservedOperationsInterface.and, Decl(json-logic-js.d.ts, 83, 34))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --) ... and 4 more)
+>RulesLogic : Symbol(RulesLogic, Decl(json-logic-js.d.ts, 226, 2))
+>AddOps : Symbol(AddOps, Decl(json-logic-js.d.ts, 72, 48))
+
+    ">": [RulesLogic<AddOps>, RulesLogic<AddOps>];
+>">" : Symbol(AllReservedOperationsInterface[">"], Decl(json-logic-js.d.ts, 84, 35))
+>RulesLogic : Symbol(RulesLogic, Decl(json-logic-js.d.ts, 226, 2))
+>AddOps : Symbol(AddOps, Decl(json-logic-js.d.ts, 72, 48))
+>RulesLogic : Symbol(RulesLogic, Decl(json-logic-js.d.ts, 226, 2))
+>AddOps : Symbol(AddOps, Decl(json-logic-js.d.ts, 72, 48))
+
+    ">=": [RulesLogic<AddOps>, RulesLogic<AddOps>];
+>">=" : Symbol(AllReservedOperationsInterface[">="], Decl(json-logic-js.d.ts, 85, 50))
+>RulesLogic : Symbol(RulesLogic, Decl(json-logic-js.d.ts, 226, 2))
+>AddOps : Symbol(AddOps, Decl(json-logic-js.d.ts, 72, 48))
+>RulesLogic : Symbol(RulesLogic, Decl(json-logic-js.d.ts, 226, 2))
+>AddOps : Symbol(AddOps, Decl(json-logic-js.d.ts, 72, 48))
+
+    "<": [RulesLogic<AddOps>, RulesLogic<AddOps>] | [RulesLogic<AddOps>, RulesLogic<AddOps>, RulesLogic<AddOps>];
+>"<" : Symbol(AllReservedOperationsInterface["<"], Decl(json-logic-js.d.ts, 86, 51))
+>RulesLogic : Symbol(RulesLogic, Decl(json-logic-js.d.ts, 226, 2))
+>AddOps : Symbol(AddOps, Decl(json-logic-js.d.ts, 72, 48))
+>RulesLogic : Symbol(RulesLogic, Decl(json-logic-js.d.ts, 226, 2))
+>AddOps : Symbol(AddOps, Decl(json-logic-js.d.ts, 72, 48))
+>RulesLogic : Symbol(RulesLogic, Decl(json-logic-js.d.ts, 226, 2))
+>AddOps : Symbol(AddOps, Decl(json-logic-js.d.ts, 72, 48))
+>RulesLogic : Symbol(RulesLogic, Decl(json-logic-js.d.ts, 226, 2))
+>AddOps : Symbol(AddOps, Decl(json-logic-js.d.ts, 72, 48))
+>RulesLogic : Symbol(RulesLogic, Decl(json-logic-js.d.ts, 226, 2))
+>AddOps : Symbol(AddOps, Decl(json-logic-js.d.ts, 72, 48))
+
+    "<=": [RulesLogic<AddOps>, RulesLogic<AddOps>] | [RulesLogic<AddOps>, RulesLogic<AddOps>, RulesLogic<AddOps>];
+>"<=" : Symbol(AllReservedOperationsInterface["<="], Decl(json-logic-js.d.ts, 87, 113))
+>RulesLogic : Symbol(RulesLogic, Decl(json-logic-js.d.ts, 226, 2))
+>AddOps : Symbol(AddOps, Decl(json-logic-js.d.ts, 72, 48))
+>RulesLogic : Symbol(RulesLogic, Decl(json-logic-js.d.ts, 226, 2))
+>AddOps : Symbol(AddOps, Decl(json-logic-js.d.ts, 72, 48))
+>RulesLogic : Symbol(RulesLogic, Decl(json-logic-js.d.ts, 226, 2))
+>AddOps : Symbol(AddOps, Decl(json-logic-js.d.ts, 72, 48))
+>RulesLogic : Symbol(RulesLogic, Decl(json-logic-js.d.ts, 226, 2))
+>AddOps : Symbol(AddOps, Decl(json-logic-js.d.ts, 72, 48))
+>RulesLogic : Symbol(RulesLogic, Decl(json-logic-js.d.ts, 226, 2))
+>AddOps : Symbol(AddOps, Decl(json-logic-js.d.ts, 72, 48))
+
+    max: Array<RulesLogic<AddOps>>;
+>max : Symbol(AllReservedOperationsInterface.max, Decl(json-logic-js.d.ts, 88, 114))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --) ... and 4 more)
+>RulesLogic : Symbol(RulesLogic, Decl(json-logic-js.d.ts, 226, 2))
+>AddOps : Symbol(AddOps, Decl(json-logic-js.d.ts, 72, 48))
+
+    min: Array<RulesLogic<AddOps>>;
+>min : Symbol(AllReservedOperationsInterface.min, Decl(json-logic-js.d.ts, 89, 35))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --) ... and 4 more)
+>RulesLogic : Symbol(RulesLogic, Decl(json-logic-js.d.ts, 226, 2))
+>AddOps : Symbol(AddOps, Decl(json-logic-js.d.ts, 72, 48))
+
+    "+": Array<RulesLogic<AddOps>> | RulesLogic<AddOps>;
+>"+" : Symbol(AllReservedOperationsInterface["+"], Decl(json-logic-js.d.ts, 90, 35))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --) ... and 4 more)
+>RulesLogic : Symbol(RulesLogic, Decl(json-logic-js.d.ts, 226, 2))
+>AddOps : Symbol(AddOps, Decl(json-logic-js.d.ts, 72, 48))
+>RulesLogic : Symbol(RulesLogic, Decl(json-logic-js.d.ts, 226, 2))
+>AddOps : Symbol(AddOps, Decl(json-logic-js.d.ts, 72, 48))
+
+    "-": Array<RulesLogic<AddOps>> | RulesLogic<AddOps>;
+>"-" : Symbol(AllReservedOperationsInterface["-"], Decl(json-logic-js.d.ts, 91, 56))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --) ... and 4 more)
+>RulesLogic : Symbol(RulesLogic, Decl(json-logic-js.d.ts, 226, 2))
+>AddOps : Symbol(AddOps, Decl(json-logic-js.d.ts, 72, 48))
+>RulesLogic : Symbol(RulesLogic, Decl(json-logic-js.d.ts, 226, 2))
+>AddOps : Symbol(AddOps, Decl(json-logic-js.d.ts, 72, 48))
+
+    "*": Array<RulesLogic<AddOps>> | RulesLogic<AddOps>;
+>"*" : Symbol(AllReservedOperationsInterface["*"], Decl(json-logic-js.d.ts, 92, 56))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --) ... and 4 more)
+>RulesLogic : Symbol(RulesLogic, Decl(json-logic-js.d.ts, 226, 2))
+>AddOps : Symbol(AddOps, Decl(json-logic-js.d.ts, 72, 48))
+>RulesLogic : Symbol(RulesLogic, Decl(json-logic-js.d.ts, 226, 2))
+>AddOps : Symbol(AddOps, Decl(json-logic-js.d.ts, 72, 48))
+
+    "/": Array<RulesLogic<AddOps>> | RulesLogic<AddOps>;
+>"/" : Symbol(AllReservedOperationsInterface["/"], Decl(json-logic-js.d.ts, 93, 56))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --) ... and 4 more)
+>RulesLogic : Symbol(RulesLogic, Decl(json-logic-js.d.ts, 226, 2))
+>AddOps : Symbol(AddOps, Decl(json-logic-js.d.ts, 72, 48))
+>RulesLogic : Symbol(RulesLogic, Decl(json-logic-js.d.ts, 226, 2))
+>AddOps : Symbol(AddOps, Decl(json-logic-js.d.ts, 72, 48))
+
+    "%": [RulesLogic<AddOps>, RulesLogic<AddOps>];
+>"%" : Symbol(AllReservedOperationsInterface["%"], Decl(json-logic-js.d.ts, 94, 56))
+>RulesLogic : Symbol(RulesLogic, Decl(json-logic-js.d.ts, 226, 2))
+>AddOps : Symbol(AddOps, Decl(json-logic-js.d.ts, 72, 48))
+>RulesLogic : Symbol(RulesLogic, Decl(json-logic-js.d.ts, 226, 2))
+>AddOps : Symbol(AddOps, Decl(json-logic-js.d.ts, 72, 48))
+
+    map: [RulesLogic<AddOps>, RulesLogic<AddOps>];
+>map : Symbol(AllReservedOperationsInterface.map, Decl(json-logic-js.d.ts, 95, 50))
+>RulesLogic : Symbol(RulesLogic, Decl(json-logic-js.d.ts, 226, 2))
+>AddOps : Symbol(AddOps, Decl(json-logic-js.d.ts, 72, 48))
+>RulesLogic : Symbol(RulesLogic, Decl(json-logic-js.d.ts, 226, 2))
+>AddOps : Symbol(AddOps, Decl(json-logic-js.d.ts, 72, 48))
+
+    filter: [RulesLogic<AddOps>, RulesLogic<AddOps>];
+>filter : Symbol(AllReservedOperationsInterface.filter, Decl(json-logic-js.d.ts, 96, 50))
+>RulesLogic : Symbol(RulesLogic, Decl(json-logic-js.d.ts, 226, 2))
+>AddOps : Symbol(AddOps, Decl(json-logic-js.d.ts, 72, 48))
+>RulesLogic : Symbol(RulesLogic, Decl(json-logic-js.d.ts, 226, 2))
+>AddOps : Symbol(AddOps, Decl(json-logic-js.d.ts, 72, 48))
+
+    reduce: [RulesLogic<AddOps>, RulesLogic<AddOps>, RulesLogic<AddOps>];
+>reduce : Symbol(AllReservedOperationsInterface.reduce, Decl(json-logic-js.d.ts, 97, 53))
+>RulesLogic : Symbol(RulesLogic, Decl(json-logic-js.d.ts, 226, 2))
+>AddOps : Symbol(AddOps, Decl(json-logic-js.d.ts, 72, 48))
+>RulesLogic : Symbol(RulesLogic, Decl(json-logic-js.d.ts, 226, 2))
+>AddOps : Symbol(AddOps, Decl(json-logic-js.d.ts, 72, 48))
+>RulesLogic : Symbol(RulesLogic, Decl(json-logic-js.d.ts, 226, 2))
+>AddOps : Symbol(AddOps, Decl(json-logic-js.d.ts, 72, 48))
+
+    all: [Array<RulesLogic<AddOps>>, RulesLogic<AddOps>] | [RulesLogic<AddOps>, RulesLogic<AddOps>];
+>all : Symbol(AllReservedOperationsInterface.all, Decl(json-logic-js.d.ts, 98, 73))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --) ... and 4 more)
+>RulesLogic : Symbol(RulesLogic, Decl(json-logic-js.d.ts, 226, 2))
+>AddOps : Symbol(AddOps, Decl(json-logic-js.d.ts, 72, 48))
+>RulesLogic : Symbol(RulesLogic, Decl(json-logic-js.d.ts, 226, 2))
+>AddOps : Symbol(AddOps, Decl(json-logic-js.d.ts, 72, 48))
+>RulesLogic : Symbol(RulesLogic, Decl(json-logic-js.d.ts, 226, 2))
+>AddOps : Symbol(AddOps, Decl(json-logic-js.d.ts, 72, 48))
+>RulesLogic : Symbol(RulesLogic, Decl(json-logic-js.d.ts, 226, 2))
+>AddOps : Symbol(AddOps, Decl(json-logic-js.d.ts, 72, 48))
+
+    none: [Array<RulesLogic<AddOps>>, RulesLogic<AddOps>] | [RulesLogic<AddOps>, RulesLogic<AddOps>];
+>none : Symbol(AllReservedOperationsInterface.none, Decl(json-logic-js.d.ts, 99, 100))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --) ... and 4 more)
+>RulesLogic : Symbol(RulesLogic, Decl(json-logic-js.d.ts, 226, 2))
+>AddOps : Symbol(AddOps, Decl(json-logic-js.d.ts, 72, 48))
+>RulesLogic : Symbol(RulesLogic, Decl(json-logic-js.d.ts, 226, 2))
+>AddOps : Symbol(AddOps, Decl(json-logic-js.d.ts, 72, 48))
+>RulesLogic : Symbol(RulesLogic, Decl(json-logic-js.d.ts, 226, 2))
+>AddOps : Symbol(AddOps, Decl(json-logic-js.d.ts, 72, 48))
+>RulesLogic : Symbol(RulesLogic, Decl(json-logic-js.d.ts, 226, 2))
+>AddOps : Symbol(AddOps, Decl(json-logic-js.d.ts, 72, 48))
+
+    some: [Array<RulesLogic<AddOps>>, RulesLogic<AddOps>] | [RulesLogic<AddOps>, RulesLogic<AddOps>];
+>some : Symbol(AllReservedOperationsInterface.some, Decl(json-logic-js.d.ts, 100, 101))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --) ... and 4 more)
+>RulesLogic : Symbol(RulesLogic, Decl(json-logic-js.d.ts, 226, 2))
+>AddOps : Symbol(AddOps, Decl(json-logic-js.d.ts, 72, 48))
+>RulesLogic : Symbol(RulesLogic, Decl(json-logic-js.d.ts, 226, 2))
+>AddOps : Symbol(AddOps, Decl(json-logic-js.d.ts, 72, 48))
+>RulesLogic : Symbol(RulesLogic, Decl(json-logic-js.d.ts, 226, 2))
+>AddOps : Symbol(AddOps, Decl(json-logic-js.d.ts, 72, 48))
+>RulesLogic : Symbol(RulesLogic, Decl(json-logic-js.d.ts, 226, 2))
+>AddOps : Symbol(AddOps, Decl(json-logic-js.d.ts, 72, 48))
+
+    merge: Array<Array<RulesLogic<AddOps>> | RulesLogic<AddOps>>;
+>merge : Symbol(AllReservedOperationsInterface.merge, Decl(json-logic-js.d.ts, 101, 101))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --) ... and 4 more)
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --) ... and 4 more)
+>RulesLogic : Symbol(RulesLogic, Decl(json-logic-js.d.ts, 226, 2))
+>AddOps : Symbol(AddOps, Decl(json-logic-js.d.ts, 72, 48))
+>RulesLogic : Symbol(RulesLogic, Decl(json-logic-js.d.ts, 226, 2))
+>AddOps : Symbol(AddOps, Decl(json-logic-js.d.ts, 72, 48))
+
+    inArray: [RulesLogic<AddOps>, Array<RulesLogic<AddOps>>];
+>inArray : Symbol(AllReservedOperationsInterface.inArray, Decl(json-logic-js.d.ts, 102, 65))
+>RulesLogic : Symbol(RulesLogic, Decl(json-logic-js.d.ts, 226, 2))
+>AddOps : Symbol(AddOps, Decl(json-logic-js.d.ts, 72, 48))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --) ... and 4 more)
+>RulesLogic : Symbol(RulesLogic, Decl(json-logic-js.d.ts, 226, 2))
+>AddOps : Symbol(AddOps, Decl(json-logic-js.d.ts, 72, 48))
+
+    inString: [RulesLogic<AddOps>, RulesLogic<AddOps>];
+>inString : Symbol(AllReservedOperationsInterface.inString, Decl(json-logic-js.d.ts, 103, 61))
+>RulesLogic : Symbol(RulesLogic, Decl(json-logic-js.d.ts, 226, 2))
+>AddOps : Symbol(AddOps, Decl(json-logic-js.d.ts, 72, 48))
+>RulesLogic : Symbol(RulesLogic, Decl(json-logic-js.d.ts, 226, 2))
+>AddOps : Symbol(AddOps, Decl(json-logic-js.d.ts, 72, 48))
+
+    cat: Array<RulesLogic<AddOps>>;
+>cat : Symbol(AllReservedOperationsInterface.cat, Decl(json-logic-js.d.ts, 104, 55))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --) ... and 4 more)
+>RulesLogic : Symbol(RulesLogic, Decl(json-logic-js.d.ts, 226, 2))
+>AddOps : Symbol(AddOps, Decl(json-logic-js.d.ts, 72, 48))
+
+    substr: [RulesLogic<AddOps>, RulesLogic<AddOps>] | [RulesLogic<AddOps>, RulesLogic<AddOps>, RulesLogic<AddOps>];
+>substr : Symbol(AllReservedOperationsInterface.substr, Decl(json-logic-js.d.ts, 105, 35))
+>RulesLogic : Symbol(RulesLogic, Decl(json-logic-js.d.ts, 226, 2))
+>AddOps : Symbol(AddOps, Decl(json-logic-js.d.ts, 72, 48))
+>RulesLogic : Symbol(RulesLogic, Decl(json-logic-js.d.ts, 226, 2))
+>AddOps : Symbol(AddOps, Decl(json-logic-js.d.ts, 72, 48))
+>RulesLogic : Symbol(RulesLogic, Decl(json-logic-js.d.ts, 226, 2))
+>AddOps : Symbol(AddOps, Decl(json-logic-js.d.ts, 72, 48))
+>RulesLogic : Symbol(RulesLogic, Decl(json-logic-js.d.ts, 226, 2))
+>AddOps : Symbol(AddOps, Decl(json-logic-js.d.ts, 72, 48))
+>RulesLogic : Symbol(RulesLogic, Decl(json-logic-js.d.ts, 226, 2))
+>AddOps : Symbol(AddOps, Decl(json-logic-js.d.ts, 72, 48))
+
+    log: RulesLogic<AddOps>;
+>log : Symbol(AllReservedOperationsInterface.log, Decl(json-logic-js.d.ts, 106, 116))
+>RulesLogic : Symbol(RulesLogic, Decl(json-logic-js.d.ts, 226, 2))
+>AddOps : Symbol(AddOps, Decl(json-logic-js.d.ts, 72, 48))
+}
+
+export type JsonLogicVar<AddOps extends AdditionalOperation = never> = Pick<
+>JsonLogicVar : Symbol(JsonLogicVar, Decl(json-logic-js.d.ts, 108, 1))
+>AddOps : Symbol(AddOps, Decl(json-logic-js.d.ts, 110, 25))
+>AdditionalOperation : Symbol(AdditionalOperation, Decl(json-logic-js.d.ts, 62, 12))
+>Pick : Symbol(Pick, Decl(lib.es5.d.ts, --, --))
+
+    AllReservedOperationsInterface<AddOps>,
+>AllReservedOperationsInterface : Symbol(AllReservedOperationsInterface, Decl(json-logic-js.d.ts, 70, 100))
+>AddOps : Symbol(AddOps, Decl(json-logic-js.d.ts, 110, 25))
+
+    "var"
+>;
+export type JsonLogicMissing<AddOps extends AdditionalOperation = never> = Pick<
+>JsonLogicMissing : Symbol(JsonLogicMissing, Decl(json-logic-js.d.ts, 113, 2))
+>AddOps : Symbol(AddOps, Decl(json-logic-js.d.ts, 114, 29))
+>AdditionalOperation : Symbol(AdditionalOperation, Decl(json-logic-js.d.ts, 62, 12))
+>Pick : Symbol(Pick, Decl(lib.es5.d.ts, --, --))
+
+    AllReservedOperationsInterface<AddOps>,
+>AllReservedOperationsInterface : Symbol(AllReservedOperationsInterface, Decl(json-logic-js.d.ts, 70, 100))
+>AddOps : Symbol(AddOps, Decl(json-logic-js.d.ts, 114, 29))
+
+    "missing"
+>;
+export type JsonLogicMissingSome<AddOps extends AdditionalOperation = never> = Pick<
+>JsonLogicMissingSome : Symbol(JsonLogicMissingSome, Decl(json-logic-js.d.ts, 117, 2))
+>AddOps : Symbol(AddOps, Decl(json-logic-js.d.ts, 118, 33))
+>AdditionalOperation : Symbol(AdditionalOperation, Decl(json-logic-js.d.ts, 62, 12))
+>Pick : Symbol(Pick, Decl(lib.es5.d.ts, --, --))
+
+    AllReservedOperationsInterface<AddOps>,
+>AllReservedOperationsInterface : Symbol(AllReservedOperationsInterface, Decl(json-logic-js.d.ts, 70, 100))
+>AddOps : Symbol(AddOps, Decl(json-logic-js.d.ts, 118, 33))
+
+    "missing_some"
+>;
+export type JsonLogicIf = Pick<AllReservedOperationsInterface, "if">;
+>JsonLogicIf : Symbol(JsonLogicIf, Decl(json-logic-js.d.ts, 121, 2))
+>Pick : Symbol(Pick, Decl(lib.es5.d.ts, --, --))
+>AllReservedOperationsInterface : Symbol(AllReservedOperationsInterface, Decl(json-logic-js.d.ts, 70, 100))
+
+export type JsonLogicEqual = Pick<AllReservedOperationsInterface, "==">;
+>JsonLogicEqual : Symbol(JsonLogicEqual, Decl(json-logic-js.d.ts, 122, 69))
+>Pick : Symbol(Pick, Decl(lib.es5.d.ts, --, --))
+>AllReservedOperationsInterface : Symbol(AllReservedOperationsInterface, Decl(json-logic-js.d.ts, 70, 100))
+
+export type JsonLogicStrictEqual = Pick<AllReservedOperationsInterface, "===">;
+>JsonLogicStrictEqual : Symbol(JsonLogicStrictEqual, Decl(json-logic-js.d.ts, 123, 72))
+>Pick : Symbol(Pick, Decl(lib.es5.d.ts, --, --))
+>AllReservedOperationsInterface : Symbol(AllReservedOperationsInterface, Decl(json-logic-js.d.ts, 70, 100))
+
+export type JsonLogicNotEqual = Pick<AllReservedOperationsInterface, "!=">;
+>JsonLogicNotEqual : Symbol(JsonLogicNotEqual, Decl(json-logic-js.d.ts, 124, 79))
+>Pick : Symbol(Pick, Decl(lib.es5.d.ts, --, --))
+>AllReservedOperationsInterface : Symbol(AllReservedOperationsInterface, Decl(json-logic-js.d.ts, 70, 100))
+
+export type JsonLogicStrictNotEqual = Pick<AllReservedOperationsInterface, "!==">;
+>JsonLogicStrictNotEqual : Symbol(JsonLogicStrictNotEqual, Decl(json-logic-js.d.ts, 125, 75))
+>Pick : Symbol(Pick, Decl(lib.es5.d.ts, --, --))
+>AllReservedOperationsInterface : Symbol(AllReservedOperationsInterface, Decl(json-logic-js.d.ts, 70, 100))
+
+export type JsonLogicNegation = Pick<AllReservedOperationsInterface, "!">;
+>JsonLogicNegation : Symbol(JsonLogicNegation, Decl(json-logic-js.d.ts, 126, 82))
+>Pick : Symbol(Pick, Decl(lib.es5.d.ts, --, --))
+>AllReservedOperationsInterface : Symbol(AllReservedOperationsInterface, Decl(json-logic-js.d.ts, 70, 100))
+
+export type JsonLogicDoubleNegation = Pick<AllReservedOperationsInterface, "!!">;
+>JsonLogicDoubleNegation : Symbol(JsonLogicDoubleNegation, Decl(json-logic-js.d.ts, 127, 74))
+>Pick : Symbol(Pick, Decl(lib.es5.d.ts, --, --))
+>AllReservedOperationsInterface : Symbol(AllReservedOperationsInterface, Decl(json-logic-js.d.ts, 70, 100))
+
+export type JsonLogicOr<AddOps extends AdditionalOperation = never> = Pick<
+>JsonLogicOr : Symbol(JsonLogicOr, Decl(json-logic-js.d.ts, 128, 81))
+>AddOps : Symbol(AddOps, Decl(json-logic-js.d.ts, 129, 24))
+>AdditionalOperation : Symbol(AdditionalOperation, Decl(json-logic-js.d.ts, 62, 12))
+>Pick : Symbol(Pick, Decl(lib.es5.d.ts, --, --))
+
+    AllReservedOperationsInterface<AddOps>,
+>AllReservedOperationsInterface : Symbol(AllReservedOperationsInterface, Decl(json-logic-js.d.ts, 70, 100))
+>AddOps : Symbol(AddOps, Decl(json-logic-js.d.ts, 129, 24))
+
+    "or"
+>;
+export type JsonLogicAnd<AddOps extends AdditionalOperation = never> = Pick<
+>JsonLogicAnd : Symbol(JsonLogicAnd, Decl(json-logic-js.d.ts, 132, 2))
+>AddOps : Symbol(AddOps, Decl(json-logic-js.d.ts, 133, 25))
+>AdditionalOperation : Symbol(AdditionalOperation, Decl(json-logic-js.d.ts, 62, 12))
+>Pick : Symbol(Pick, Decl(lib.es5.d.ts, --, --))
+
+    AllReservedOperationsInterface<AddOps>,
+>AllReservedOperationsInterface : Symbol(AllReservedOperationsInterface, Decl(json-logic-js.d.ts, 70, 100))
+>AddOps : Symbol(AddOps, Decl(json-logic-js.d.ts, 133, 25))
+
+    "and"
+>;
+export type JsonLogicGreaterThan<AddOps extends AdditionalOperation = never> = Pick<
+>JsonLogicGreaterThan : Symbol(JsonLogicGreaterThan, Decl(json-logic-js.d.ts, 136, 2))
+>AddOps : Symbol(AddOps, Decl(json-logic-js.d.ts, 137, 33))
+>AdditionalOperation : Symbol(AdditionalOperation, Decl(json-logic-js.d.ts, 62, 12))
+>Pick : Symbol(Pick, Decl(lib.es5.d.ts, --, --))
+
+    AllReservedOperationsInterface<AddOps>,
+>AllReservedOperationsInterface : Symbol(AllReservedOperationsInterface, Decl(json-logic-js.d.ts, 70, 100))
+>AddOps : Symbol(AddOps, Decl(json-logic-js.d.ts, 137, 33))
+
+    ">"
+>;
+export type JsonLogicGreaterThanOrEqual<AddOps extends AdditionalOperation = never> = Pick<
+>JsonLogicGreaterThanOrEqual : Symbol(JsonLogicGreaterThanOrEqual, Decl(json-logic-js.d.ts, 140, 2))
+>AddOps : Symbol(AddOps, Decl(json-logic-js.d.ts, 141, 40))
+>AdditionalOperation : Symbol(AdditionalOperation, Decl(json-logic-js.d.ts, 62, 12))
+>Pick : Symbol(Pick, Decl(lib.es5.d.ts, --, --))
+
+    AllReservedOperationsInterface<AddOps>,
+>AllReservedOperationsInterface : Symbol(AllReservedOperationsInterface, Decl(json-logic-js.d.ts, 70, 100))
+>AddOps : Symbol(AddOps, Decl(json-logic-js.d.ts, 141, 40))
+
+    ">="
+>;
+export type JsonLogicLessThan<AddOps extends AdditionalOperation = never> = Pick<
+>JsonLogicLessThan : Symbol(JsonLogicLessThan, Decl(json-logic-js.d.ts, 144, 2))
+>AddOps : Symbol(AddOps, Decl(json-logic-js.d.ts, 145, 30))
+>AdditionalOperation : Symbol(AdditionalOperation, Decl(json-logic-js.d.ts, 62, 12))
+>Pick : Symbol(Pick, Decl(lib.es5.d.ts, --, --))
+
+    AllReservedOperationsInterface<AddOps>,
+>AllReservedOperationsInterface : Symbol(AllReservedOperationsInterface, Decl(json-logic-js.d.ts, 70, 100))
+>AddOps : Symbol(AddOps, Decl(json-logic-js.d.ts, 145, 30))
+
+    "<"
+>;
+export type JsonLogicLessThanOrEqual<AddOps extends AdditionalOperation = never> = Pick<
+>JsonLogicLessThanOrEqual : Symbol(JsonLogicLessThanOrEqual, Decl(json-logic-js.d.ts, 148, 2))
+>AddOps : Symbol(AddOps, Decl(json-logic-js.d.ts, 149, 37))
+>AdditionalOperation : Symbol(AdditionalOperation, Decl(json-logic-js.d.ts, 62, 12))
+>Pick : Symbol(Pick, Decl(lib.es5.d.ts, --, --))
+
+    AllReservedOperationsInterface<AddOps>,
+>AllReservedOperationsInterface : Symbol(AllReservedOperationsInterface, Decl(json-logic-js.d.ts, 70, 100))
+>AddOps : Symbol(AddOps, Decl(json-logic-js.d.ts, 149, 37))
+
+    "<="
+>;
+export type JsonLogicMax<AddOps extends AdditionalOperation = never> = Pick<
+>JsonLogicMax : Symbol(JsonLogicMax, Decl(json-logic-js.d.ts, 152, 2))
+>AddOps : Symbol(AddOps, Decl(json-logic-js.d.ts, 153, 25))
+>AdditionalOperation : Symbol(AdditionalOperation, Decl(json-logic-js.d.ts, 62, 12))
+>Pick : Symbol(Pick, Decl(lib.es5.d.ts, --, --))
+
+    AllReservedOperationsInterface<AddOps>,
+>AllReservedOperationsInterface : Symbol(AllReservedOperationsInterface, Decl(json-logic-js.d.ts, 70, 100))
+>AddOps : Symbol(AddOps, Decl(json-logic-js.d.ts, 153, 25))
+
+    "max"
+>;
+export type JsonLogicMin<AddOps extends AdditionalOperation = never> = Pick<
+>JsonLogicMin : Symbol(JsonLogicMin, Decl(json-logic-js.d.ts, 156, 2))
+>AddOps : Symbol(AddOps, Decl(json-logic-js.d.ts, 157, 25))
+>AdditionalOperation : Symbol(AdditionalOperation, Decl(json-logic-js.d.ts, 62, 12))
+>Pick : Symbol(Pick, Decl(lib.es5.d.ts, --, --))
+
+    AllReservedOperationsInterface<AddOps>,
+>AllReservedOperationsInterface : Symbol(AllReservedOperationsInterface, Decl(json-logic-js.d.ts, 70, 100))
+>AddOps : Symbol(AddOps, Decl(json-logic-js.d.ts, 157, 25))
+
+    "min"
+>;
+export type JsonLogicSum<AddOps extends AdditionalOperation = never> = Pick<
+>JsonLogicSum : Symbol(JsonLogicSum, Decl(json-logic-js.d.ts, 160, 2))
+>AddOps : Symbol(AddOps, Decl(json-logic-js.d.ts, 161, 25))
+>AdditionalOperation : Symbol(AdditionalOperation, Decl(json-logic-js.d.ts, 62, 12))
+>Pick : Symbol(Pick, Decl(lib.es5.d.ts, --, --))
+
+    AllReservedOperationsInterface<AddOps>,
+>AllReservedOperationsInterface : Symbol(AllReservedOperationsInterface, Decl(json-logic-js.d.ts, 70, 100))
+>AddOps : Symbol(AddOps, Decl(json-logic-js.d.ts, 161, 25))
+
+    "+"
+>;
+export type JsonLogicDifference<AddOps extends AdditionalOperation = never> = Pick<
+>JsonLogicDifference : Symbol(JsonLogicDifference, Decl(json-logic-js.d.ts, 164, 2))
+>AddOps : Symbol(AddOps, Decl(json-logic-js.d.ts, 165, 32))
+>AdditionalOperation : Symbol(AdditionalOperation, Decl(json-logic-js.d.ts, 62, 12))
+>Pick : Symbol(Pick, Decl(lib.es5.d.ts, --, --))
+
+    AllReservedOperationsInterface<AddOps>,
+>AllReservedOperationsInterface : Symbol(AllReservedOperationsInterface, Decl(json-logic-js.d.ts, 70, 100))
+>AddOps : Symbol(AddOps, Decl(json-logic-js.d.ts, 165, 32))
+
+    "-"
+>;
+export type JsonLogicProduct<AddOps extends AdditionalOperation = never> = Pick<
+>JsonLogicProduct : Symbol(JsonLogicProduct, Decl(json-logic-js.d.ts, 168, 2))
+>AddOps : Symbol(AddOps, Decl(json-logic-js.d.ts, 169, 29))
+>AdditionalOperation : Symbol(AdditionalOperation, Decl(json-logic-js.d.ts, 62, 12))
+>Pick : Symbol(Pick, Decl(lib.es5.d.ts, --, --))
+
+    AllReservedOperationsInterface<AddOps>,
+>AllReservedOperationsInterface : Symbol(AllReservedOperationsInterface, Decl(json-logic-js.d.ts, 70, 100))
+>AddOps : Symbol(AddOps, Decl(json-logic-js.d.ts, 169, 29))
+
+    "*"
+>;
+export type JsonLogicQuotient<AddOps extends AdditionalOperation = never> = Pick<
+>JsonLogicQuotient : Symbol(JsonLogicQuotient, Decl(json-logic-js.d.ts, 172, 2))
+>AddOps : Symbol(AddOps, Decl(json-logic-js.d.ts, 173, 30))
+>AdditionalOperation : Symbol(AdditionalOperation, Decl(json-logic-js.d.ts, 62, 12))
+>Pick : Symbol(Pick, Decl(lib.es5.d.ts, --, --))
+
+    AllReservedOperationsInterface<AddOps>,
+>AllReservedOperationsInterface : Symbol(AllReservedOperationsInterface, Decl(json-logic-js.d.ts, 70, 100))
+>AddOps : Symbol(AddOps, Decl(json-logic-js.d.ts, 173, 30))
+
+    "/"
+>;
+export type JsonLogicRemainder<AddOps extends AdditionalOperation = never> = Pick<
+>JsonLogicRemainder : Symbol(JsonLogicRemainder, Decl(json-logic-js.d.ts, 176, 2))
+>AddOps : Symbol(AddOps, Decl(json-logic-js.d.ts, 177, 31))
+>AdditionalOperation : Symbol(AdditionalOperation, Decl(json-logic-js.d.ts, 62, 12))
+>Pick : Symbol(Pick, Decl(lib.es5.d.ts, --, --))
+
+    AllReservedOperationsInterface<AddOps>,
+>AllReservedOperationsInterface : Symbol(AllReservedOperationsInterface, Decl(json-logic-js.d.ts, 70, 100))
+>AddOps : Symbol(AddOps, Decl(json-logic-js.d.ts, 177, 31))
+
+    "%"
+>;
+export type JsonLogicMap<AddOps extends AdditionalOperation = never> = Pick<
+>JsonLogicMap : Symbol(JsonLogicMap, Decl(json-logic-js.d.ts, 180, 2))
+>AddOps : Symbol(AddOps, Decl(json-logic-js.d.ts, 181, 25))
+>AdditionalOperation : Symbol(AdditionalOperation, Decl(json-logic-js.d.ts, 62, 12))
+>Pick : Symbol(Pick, Decl(lib.es5.d.ts, --, --))
+
+    AllReservedOperationsInterface<AddOps>,
+>AllReservedOperationsInterface : Symbol(AllReservedOperationsInterface, Decl(json-logic-js.d.ts, 70, 100))
+>AddOps : Symbol(AddOps, Decl(json-logic-js.d.ts, 181, 25))
+
+    "map"
+>;
+export type JsonLogicFilter<AddOps extends AdditionalOperation = never> = Pick<
+>JsonLogicFilter : Symbol(JsonLogicFilter, Decl(json-logic-js.d.ts, 184, 2))
+>AddOps : Symbol(AddOps, Decl(json-logic-js.d.ts, 185, 28))
+>AdditionalOperation : Symbol(AdditionalOperation, Decl(json-logic-js.d.ts, 62, 12))
+>Pick : Symbol(Pick, Decl(lib.es5.d.ts, --, --))
+
+    AllReservedOperationsInterface<AddOps>,
+>AllReservedOperationsInterface : Symbol(AllReservedOperationsInterface, Decl(json-logic-js.d.ts, 70, 100))
+>AddOps : Symbol(AddOps, Decl(json-logic-js.d.ts, 185, 28))
+
+    "filter"
+>;
+export type JsonLogicReduce<AddOps extends AdditionalOperation = never> = Pick<
+>JsonLogicReduce : Symbol(JsonLogicReduce, Decl(json-logic-js.d.ts, 188, 2))
+>AddOps : Symbol(AddOps, Decl(json-logic-js.d.ts, 189, 28))
+>AdditionalOperation : Symbol(AdditionalOperation, Decl(json-logic-js.d.ts, 62, 12))
+>Pick : Symbol(Pick, Decl(lib.es5.d.ts, --, --))
+
+    AllReservedOperationsInterface<AddOps>,
+>AllReservedOperationsInterface : Symbol(AllReservedOperationsInterface, Decl(json-logic-js.d.ts, 70, 100))
+>AddOps : Symbol(AddOps, Decl(json-logic-js.d.ts, 189, 28))
+
+    "reduce"
+>;
+export type JsonLogicAll<AddOps extends AdditionalOperation = never> = Pick<
+>JsonLogicAll : Symbol(JsonLogicAll, Decl(json-logic-js.d.ts, 192, 2))
+>AddOps : Symbol(AddOps, Decl(json-logic-js.d.ts, 193, 25))
+>AdditionalOperation : Symbol(AdditionalOperation, Decl(json-logic-js.d.ts, 62, 12))
+>Pick : Symbol(Pick, Decl(lib.es5.d.ts, --, --))
+
+    AllReservedOperationsInterface<AddOps>,
+>AllReservedOperationsInterface : Symbol(AllReservedOperationsInterface, Decl(json-logic-js.d.ts, 70, 100))
+>AddOps : Symbol(AddOps, Decl(json-logic-js.d.ts, 193, 25))
+
+    "all"
+>;
+export type JsonLogicNone<AddOps extends AdditionalOperation = never> = Pick<
+>JsonLogicNone : Symbol(JsonLogicNone, Decl(json-logic-js.d.ts, 196, 2))
+>AddOps : Symbol(AddOps, Decl(json-logic-js.d.ts, 197, 26))
+>AdditionalOperation : Symbol(AdditionalOperation, Decl(json-logic-js.d.ts, 62, 12))
+>Pick : Symbol(Pick, Decl(lib.es5.d.ts, --, --))
+
+    AllReservedOperationsInterface<AddOps>,
+>AllReservedOperationsInterface : Symbol(AllReservedOperationsInterface, Decl(json-logic-js.d.ts, 70, 100))
+>AddOps : Symbol(AddOps, Decl(json-logic-js.d.ts, 197, 26))
+
+    "none"
+>;
+export type JsonLogicSome<AddOps extends AdditionalOperation = never> = Pick<
+>JsonLogicSome : Symbol(JsonLogicSome, Decl(json-logic-js.d.ts, 200, 2))
+>AddOps : Symbol(AddOps, Decl(json-logic-js.d.ts, 201, 26))
+>AdditionalOperation : Symbol(AdditionalOperation, Decl(json-logic-js.d.ts, 62, 12))
+>Pick : Symbol(Pick, Decl(lib.es5.d.ts, --, --))
+
+    AllReservedOperationsInterface<AddOps>,
+>AllReservedOperationsInterface : Symbol(AllReservedOperationsInterface, Decl(json-logic-js.d.ts, 70, 100))
+>AddOps : Symbol(AddOps, Decl(json-logic-js.d.ts, 201, 26))
+
+    "some"
+>;
+export type JsonLogicMerge<AddOps extends AdditionalOperation = never> = Pick<
+>JsonLogicMerge : Symbol(JsonLogicMerge, Decl(json-logic-js.d.ts, 204, 2))
+>AddOps : Symbol(AddOps, Decl(json-logic-js.d.ts, 205, 27))
+>AdditionalOperation : Symbol(AdditionalOperation, Decl(json-logic-js.d.ts, 62, 12))
+>Pick : Symbol(Pick, Decl(lib.es5.d.ts, --, --))
+
+    AllReservedOperationsInterface<AddOps>,
+>AllReservedOperationsInterface : Symbol(AllReservedOperationsInterface, Decl(json-logic-js.d.ts, 70, 100))
+>AddOps : Symbol(AddOps, Decl(json-logic-js.d.ts, 205, 27))
+
+    "merge"
+>;
+export type JsonLogicInArray<AddOps extends AdditionalOperation = never> = RenameToIn<
+>JsonLogicInArray : Symbol(JsonLogicInArray, Decl(json-logic-js.d.ts, 208, 2))
+>AddOps : Symbol(AddOps, Decl(json-logic-js.d.ts, 209, 29))
+>AdditionalOperation : Symbol(AdditionalOperation, Decl(json-logic-js.d.ts, 62, 12))
+>RenameToIn : Symbol(RenameToIn, Decl(json-logic-js.d.ts, 3, 10))
+
+    Pick<AllReservedOperationsInterface<AddOps>, "inArray">
+>Pick : Symbol(Pick, Decl(lib.es5.d.ts, --, --))
+>AllReservedOperationsInterface : Symbol(AllReservedOperationsInterface, Decl(json-logic-js.d.ts, 70, 100))
+>AddOps : Symbol(AddOps, Decl(json-logic-js.d.ts, 209, 29))
+
+>;
+export type JsonLogicInString<AddOps extends AdditionalOperation = never> = RenameToIn<
+>JsonLogicInString : Symbol(JsonLogicInString, Decl(json-logic-js.d.ts, 211, 2))
+>AddOps : Symbol(AddOps, Decl(json-logic-js.d.ts, 212, 30))
+>AdditionalOperation : Symbol(AdditionalOperation, Decl(json-logic-js.d.ts, 62, 12))
+>RenameToIn : Symbol(RenameToIn, Decl(json-logic-js.d.ts, 3, 10))
+
+    Pick<AllReservedOperationsInterface<AddOps>, "inString">
+>Pick : Symbol(Pick, Decl(lib.es5.d.ts, --, --))
+>AllReservedOperationsInterface : Symbol(AllReservedOperationsInterface, Decl(json-logic-js.d.ts, 70, 100))
+>AddOps : Symbol(AddOps, Decl(json-logic-js.d.ts, 212, 30))
+
+>;
+export type JsonLogicCat<AddOps extends AdditionalOperation = never> = Pick<
+>JsonLogicCat : Symbol(JsonLogicCat, Decl(json-logic-js.d.ts, 214, 2))
+>AddOps : Symbol(AddOps, Decl(json-logic-js.d.ts, 215, 25))
+>AdditionalOperation : Symbol(AdditionalOperation, Decl(json-logic-js.d.ts, 62, 12))
+>Pick : Symbol(Pick, Decl(lib.es5.d.ts, --, --))
+
+    AllReservedOperationsInterface<AddOps>,
+>AllReservedOperationsInterface : Symbol(AllReservedOperationsInterface, Decl(json-logic-js.d.ts, 70, 100))
+>AddOps : Symbol(AddOps, Decl(json-logic-js.d.ts, 215, 25))
+
+    "cat"
+>;
+export type JsonLogicSubstr<AddOps extends AdditionalOperation = never> = Pick<
+>JsonLogicSubstr : Symbol(JsonLogicSubstr, Decl(json-logic-js.d.ts, 218, 2))
+>AddOps : Symbol(AddOps, Decl(json-logic-js.d.ts, 219, 28))
+>AdditionalOperation : Symbol(AdditionalOperation, Decl(json-logic-js.d.ts, 62, 12))
+>Pick : Symbol(Pick, Decl(lib.es5.d.ts, --, --))
+
+    AllReservedOperationsInterface<AddOps>,
+>AllReservedOperationsInterface : Symbol(AllReservedOperationsInterface, Decl(json-logic-js.d.ts, 70, 100))
+>AddOps : Symbol(AddOps, Decl(json-logic-js.d.ts, 219, 28))
+
+    "substr"
+>;
+export type JsonLogicLog<AddOps extends AdditionalOperation = never> = Pick<
+>JsonLogicLog : Symbol(JsonLogicLog, Decl(json-logic-js.d.ts, 222, 2))
+>AddOps : Symbol(AddOps, Decl(json-logic-js.d.ts, 223, 25))
+>AdditionalOperation : Symbol(AdditionalOperation, Decl(json-logic-js.d.ts, 62, 12))
+>Pick : Symbol(Pick, Decl(lib.es5.d.ts, --, --))
+
+    AllReservedOperationsInterface<AddOps>,
+>AllReservedOperationsInterface : Symbol(AllReservedOperationsInterface, Decl(json-logic-js.d.ts, 70, 100))
+>AddOps : Symbol(AddOps, Decl(json-logic-js.d.ts, 223, 25))
+
+    "log"
+>;
+
+export type RulesLogic<AddOps extends AdditionalOperation = never> =
+>RulesLogic : Symbol(RulesLogic, Decl(json-logic-js.d.ts, 226, 2))
+>AddOps : Symbol(AddOps, Decl(json-logic-js.d.ts, 228, 23))
+>AdditionalOperation : Symbol(AdditionalOperation, Decl(json-logic-js.d.ts, 62, 12))
+
+    | boolean
+    | string
+    | number
+    | null
+    // Accessing Data - https://jsonlogic.com/operations.html#accessing-data
+    | JsonLogicVar<AddOps>
+>JsonLogicVar : Symbol(JsonLogicVar, Decl(json-logic-js.d.ts, 108, 1))
+>AddOps : Symbol(AddOps, Decl(json-logic-js.d.ts, 228, 23))
+
+    | JsonLogicMissing<AddOps>
+>JsonLogicMissing : Symbol(JsonLogicMissing, Decl(json-logic-js.d.ts, 113, 2))
+>AddOps : Symbol(AddOps, Decl(json-logic-js.d.ts, 228, 23))
+
+    | JsonLogicMissingSome<AddOps>
+>JsonLogicMissingSome : Symbol(JsonLogicMissingSome, Decl(json-logic-js.d.ts, 117, 2))
+>AddOps : Symbol(AddOps, Decl(json-logic-js.d.ts, 228, 23))
+
+    // Logic and Boolean Operations - https://jsonlogic.com/operations.html#logic-and-boolean-operations
+    | JsonLogicIf
+>JsonLogicIf : Symbol(JsonLogicIf, Decl(json-logic-js.d.ts, 121, 2))
+
+    | JsonLogicEqual
+>JsonLogicEqual : Symbol(JsonLogicEqual, Decl(json-logic-js.d.ts, 122, 69))
+
+    | JsonLogicStrictEqual
+>JsonLogicStrictEqual : Symbol(JsonLogicStrictEqual, Decl(json-logic-js.d.ts, 123, 72))
+
+    | JsonLogicNotEqual
+>JsonLogicNotEqual : Symbol(JsonLogicNotEqual, Decl(json-logic-js.d.ts, 124, 79))
+
+    | JsonLogicStrictNotEqual
+>JsonLogicStrictNotEqual : Symbol(JsonLogicStrictNotEqual, Decl(json-logic-js.d.ts, 125, 75))
+
+    | JsonLogicNegation
+>JsonLogicNegation : Symbol(JsonLogicNegation, Decl(json-logic-js.d.ts, 126, 82))
+
+    | JsonLogicDoubleNegation
+>JsonLogicDoubleNegation : Symbol(JsonLogicDoubleNegation, Decl(json-logic-js.d.ts, 127, 74))
+
+    | JsonLogicOr<AddOps>
+>JsonLogicOr : Symbol(JsonLogicOr, Decl(json-logic-js.d.ts, 128, 81))
+>AddOps : Symbol(AddOps, Decl(json-logic-js.d.ts, 228, 23))
+
+    | JsonLogicAnd<AddOps>
+>JsonLogicAnd : Symbol(JsonLogicAnd, Decl(json-logic-js.d.ts, 132, 2))
+>AddOps : Symbol(AddOps, Decl(json-logic-js.d.ts, 228, 23))
+
+    // Numeric Operations - https://jsonlogic.com/operations.html#numeric-operations
+    | JsonLogicGreaterThan<AddOps>
+>JsonLogicGreaterThan : Symbol(JsonLogicGreaterThan, Decl(json-logic-js.d.ts, 136, 2))
+>AddOps : Symbol(AddOps, Decl(json-logic-js.d.ts, 228, 23))
+
+    | JsonLogicGreaterThanOrEqual<AddOps>
+>JsonLogicGreaterThanOrEqual : Symbol(JsonLogicGreaterThanOrEqual, Decl(json-logic-js.d.ts, 140, 2))
+>AddOps : Symbol(AddOps, Decl(json-logic-js.d.ts, 228, 23))
+
+    | JsonLogicLessThan<AddOps>
+>JsonLogicLessThan : Symbol(JsonLogicLessThan, Decl(json-logic-js.d.ts, 144, 2))
+>AddOps : Symbol(AddOps, Decl(json-logic-js.d.ts, 228, 23))
+
+    | JsonLogicLessThanOrEqual<AddOps>
+>JsonLogicLessThanOrEqual : Symbol(JsonLogicLessThanOrEqual, Decl(json-logic-js.d.ts, 148, 2))
+>AddOps : Symbol(AddOps, Decl(json-logic-js.d.ts, 228, 23))
+
+    | JsonLogicMax<AddOps>
+>JsonLogicMax : Symbol(JsonLogicMax, Decl(json-logic-js.d.ts, 152, 2))
+>AddOps : Symbol(AddOps, Decl(json-logic-js.d.ts, 228, 23))
+
+    | JsonLogicMin<AddOps>
+>JsonLogicMin : Symbol(JsonLogicMin, Decl(json-logic-js.d.ts, 156, 2))
+>AddOps : Symbol(AddOps, Decl(json-logic-js.d.ts, 228, 23))
+
+    | JsonLogicSum<AddOps>
+>JsonLogicSum : Symbol(JsonLogicSum, Decl(json-logic-js.d.ts, 160, 2))
+>AddOps : Symbol(AddOps, Decl(json-logic-js.d.ts, 228, 23))
+
+    | JsonLogicDifference<AddOps>
+>JsonLogicDifference : Symbol(JsonLogicDifference, Decl(json-logic-js.d.ts, 164, 2))
+>AddOps : Symbol(AddOps, Decl(json-logic-js.d.ts, 228, 23))
+
+    | JsonLogicProduct<AddOps>
+>JsonLogicProduct : Symbol(JsonLogicProduct, Decl(json-logic-js.d.ts, 168, 2))
+>AddOps : Symbol(AddOps, Decl(json-logic-js.d.ts, 228, 23))
+
+    | JsonLogicQuotient<AddOps>
+>JsonLogicQuotient : Symbol(JsonLogicQuotient, Decl(json-logic-js.d.ts, 172, 2))
+>AddOps : Symbol(AddOps, Decl(json-logic-js.d.ts, 228, 23))
+
+    | JsonLogicRemainder<AddOps>
+>JsonLogicRemainder : Symbol(JsonLogicRemainder, Decl(json-logic-js.d.ts, 176, 2))
+>AddOps : Symbol(AddOps, Decl(json-logic-js.d.ts, 228, 23))
+
+    // Array Operations - https://jsonlogic.com/operations.html#array-operations
+    | JsonLogicMap<AddOps>
+>JsonLogicMap : Symbol(JsonLogicMap, Decl(json-logic-js.d.ts, 180, 2))
+>AddOps : Symbol(AddOps, Decl(json-logic-js.d.ts, 228, 23))
+
+    | JsonLogicFilter<AddOps>
+>JsonLogicFilter : Symbol(JsonLogicFilter, Decl(json-logic-js.d.ts, 184, 2))
+>AddOps : Symbol(AddOps, Decl(json-logic-js.d.ts, 228, 23))
+
+    | JsonLogicReduce<AddOps>
+>JsonLogicReduce : Symbol(JsonLogicReduce, Decl(json-logic-js.d.ts, 188, 2))
+>AddOps : Symbol(AddOps, Decl(json-logic-js.d.ts, 228, 23))
+
+    | JsonLogicAll<AddOps>
+>JsonLogicAll : Symbol(JsonLogicAll, Decl(json-logic-js.d.ts, 192, 2))
+>AddOps : Symbol(AddOps, Decl(json-logic-js.d.ts, 228, 23))
+
+    | JsonLogicNone<AddOps>
+>JsonLogicNone : Symbol(JsonLogicNone, Decl(json-logic-js.d.ts, 196, 2))
+>AddOps : Symbol(AddOps, Decl(json-logic-js.d.ts, 228, 23))
+
+    | JsonLogicSome<AddOps>
+>JsonLogicSome : Symbol(JsonLogicSome, Decl(json-logic-js.d.ts, 200, 2))
+>AddOps : Symbol(AddOps, Decl(json-logic-js.d.ts, 228, 23))
+
+    | JsonLogicMerge<AddOps>
+>JsonLogicMerge : Symbol(JsonLogicMerge, Decl(json-logic-js.d.ts, 204, 2))
+>AddOps : Symbol(AddOps, Decl(json-logic-js.d.ts, 228, 23))
+
+    | JsonLogicInArray<AddOps>
+>JsonLogicInArray : Symbol(JsonLogicInArray, Decl(json-logic-js.d.ts, 208, 2))
+>AddOps : Symbol(AddOps, Decl(json-logic-js.d.ts, 228, 23))
+
+    // String Operations - https://jsonlogic.com/operations.html#string-operations
+    | JsonLogicInString<AddOps>
+>JsonLogicInString : Symbol(JsonLogicInString, Decl(json-logic-js.d.ts, 211, 2))
+>AddOps : Symbol(AddOps, Decl(json-logic-js.d.ts, 228, 23))
+
+    | JsonLogicCat<AddOps>
+>JsonLogicCat : Symbol(JsonLogicCat, Decl(json-logic-js.d.ts, 214, 2))
+>AddOps : Symbol(AddOps, Decl(json-logic-js.d.ts, 228, 23))
+
+    | JsonLogicSubstr<AddOps>
+>JsonLogicSubstr : Symbol(JsonLogicSubstr, Decl(json-logic-js.d.ts, 218, 2))
+>AddOps : Symbol(AddOps, Decl(json-logic-js.d.ts, 228, 23))
+
+    // Miscellaneous - https://jsonlogic.com/operations.html#miscellaneous
+    | JsonLogicLog<AddOps>
+>JsonLogicLog : Symbol(JsonLogicLog, Decl(json-logic-js.d.ts, 222, 2))
+>AddOps : Symbol(AddOps, Decl(json-logic-js.d.ts, 228, 23))
+
+    // Adding Operations (https://jsonlogic.com/add_operation.html)
+    | AddOps;
+>AddOps : Symbol(AddOps, Decl(json-logic-js.d.ts, 228, 23))
+
+export function add_operation(name: string, code: (...args: any[]) => any): void;
+>add_operation : Symbol(add_operation, Decl(json-logic-js.d.ts, 275, 13))
+>name : Symbol(name, Decl(json-logic-js.d.ts, 277, 30))
+>code : Symbol(code, Decl(json-logic-js.d.ts, 277, 43))
+>args : Symbol(args, Decl(json-logic-js.d.ts, 277, 51))
+
+export function apply(logic: RulesLogic<AdditionalOperation>, data?: unknown): any;
+>apply : Symbol(apply, Decl(json-logic-js.d.ts, 277, 81))
+>logic : Symbol(logic, Decl(json-logic-js.d.ts, 278, 22))
+>RulesLogic : Symbol(RulesLogic, Decl(json-logic-js.d.ts, 226, 2))
+>AdditionalOperation : Symbol(AdditionalOperation, Decl(json-logic-js.d.ts, 62, 12))
+>data : Symbol(data, Decl(json-logic-js.d.ts, 278, 61))
+
+export function rm_operation(name: string): void;
+>rm_operation : Symbol(rm_operation, Decl(json-logic-js.d.ts, 278, 83))
+>name : Symbol(name, Decl(json-logic-js.d.ts, 279, 29))
+
+// These functions are undocumented, but are exported by the real package
+// so they're typed here for completeness.
+export function is_logic(logic: any): logic is RulesLogic;
+>is_logic : Symbol(is_logic, Decl(json-logic-js.d.ts, 279, 49))
+>logic : Symbol(logic, Decl(json-logic-js.d.ts, 283, 25))
+>logic : Symbol(logic, Decl(json-logic-js.d.ts, 283, 25))
+>RulesLogic : Symbol(RulesLogic, Decl(json-logic-js.d.ts, 226, 2))
+
+export function truthy(value: any): boolean;
+>truthy : Symbol(truthy, Decl(json-logic-js.d.ts, 283, 58))
+>value : Symbol(value, Decl(json-logic-js.d.ts, 284, 23))
+
+export function get_operator(logic: Record<string, any>): string;
+>get_operator : Symbol(get_operator, Decl(json-logic-js.d.ts, 284, 44))
+>logic : Symbol(logic, Decl(json-logic-js.d.ts, 285, 29))
+>Record : Symbol(Record, Decl(lib.es5.d.ts, --, --))
+
+export function get_values(logic: Record<string, any>): any;
+>get_values : Symbol(get_values, Decl(json-logic-js.d.ts, 285, 65))
+>logic : Symbol(logic, Decl(json-logic-js.d.ts, 286, 27))
+>Record : Symbol(Record, Decl(lib.es5.d.ts, --, --))
+
+export function uses_data(logic: Record<string, any>): any[];
+>uses_data : Symbol(uses_data, Decl(json-logic-js.d.ts, 286, 60))
+>logic : Symbol(logic, Decl(json-logic-js.d.ts, 287, 26))
+>Record : Symbol(Record, Decl(lib.es5.d.ts, --, --))
+
+export function rule_like(rule: any, pattern: any): boolean;
+>rule_like : Symbol(rule_like, Decl(json-logic-js.d.ts, 287, 61))
+>rule : Symbol(rule, Decl(json-logic-js.d.ts, 288, 26))
+>pattern : Symbol(pattern, Decl(json-logic-js.d.ts, 288, 36))
+
+=== main.ts ===
+import * as jsonLogic from "./json-logic-js";
+>jsonLogic : Symbol(jsonLogic, Decl(main.ts, 0, 6))
+
+type StartsWithAndEndsWith =
+>StartsWithAndEndsWith : Symbol(StartsWithAndEndsWith, Decl(main.ts, 0, 45))
+
+    | { startsWith: [JsonLogicWithAdditionalOperations, JsonLogicWithAdditionalOperations] }
+>startsWith : Symbol(startsWith, Decl(main.ts, 3, 7))
+>JsonLogicWithAdditionalOperations : Symbol(JsonLogicWithAdditionalOperations, Decl(main.ts, 4, 91))
+>JsonLogicWithAdditionalOperations : Symbol(JsonLogicWithAdditionalOperations, Decl(main.ts, 4, 91))
+
+    | { endsWith: [JsonLogicWithAdditionalOperations, JsonLogicWithAdditionalOperations] };
+>endsWith : Symbol(endsWith, Decl(main.ts, 4, 7))
+>JsonLogicWithAdditionalOperations : Symbol(JsonLogicWithAdditionalOperations, Decl(main.ts, 4, 91))
+>JsonLogicWithAdditionalOperations : Symbol(JsonLogicWithAdditionalOperations, Decl(main.ts, 4, 91))
+
+type JsonLogicWithAdditionalOperations = jsonLogic.RulesLogic<StartsWithAndEndsWith>;
+>JsonLogicWithAdditionalOperations : Symbol(JsonLogicWithAdditionalOperations, Decl(main.ts, 4, 91))
+>jsonLogic : Symbol(jsonLogic, Decl(main.ts, 0, 6))
+>RulesLogic : Symbol(jsonLogic.RulesLogic, Decl(json-logic-js.d.ts, 226, 2))
+>StartsWithAndEndsWith : Symbol(StartsWithAndEndsWith, Decl(main.ts, 0, 45))
+
+const jsonExtendedLogic: JsonLogicWithAdditionalOperations = {
+>jsonExtendedLogic : Symbol(jsonExtendedLogic, Decl(main.ts, 6, 5))
+>JsonLogicWithAdditionalOperations : Symbol(JsonLogicWithAdditionalOperations, Decl(main.ts, 4, 91))
+
+    and: [{ startsWith: ["Springfield", "Spring"] }, { endsWith: ["Springfield", "field"] }],
+>and : Symbol(and, Decl(main.ts, 6, 62))
+>startsWith : Symbol(startsWith, Decl(main.ts, 7, 11))
+>endsWith : Symbol(endsWith, Decl(main.ts, 7, 54))
+
+};
+jsonLogic.apply(jsonExtendedLogic);
+>jsonLogic.apply : Symbol(jsonLogic.apply, Decl(json-logic-js.d.ts, 277, 81))
+>jsonLogic : Symbol(jsonLogic, Decl(main.ts, 0, 6))
+>apply : Symbol(jsonLogic.apply, Decl(json-logic-js.d.ts, 277, 81))
+>jsonExtendedLogic : Symbol(jsonExtendedLogic, Decl(main.ts, 6, 5))
+
