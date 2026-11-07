@@ -1,0 +1,46 @@
+//// [tests/cases/compiler/objectLiteralRegularAndWidenedCopyOrder.ts] ////
+
+=== objectLiteralRegularAndWidenedCopyOrder.ts ===
+declare const b: boolean;
+>b : boolean
+
+let x;
+>x : any
+
+x = { a: 1 };
+>x = { a: 1 } : { a: number; }
+>x : any
+>{ a: 1 } : { a: number; }
+>a : number
+>1 : 1
+
+let arr = [];
+>arr : any[]
+>[] : never[]
+
+arr.push(x); // regular copy of the literal
+>arr.push(x) : number
+>arr.push : (...items: any[]) => number
+>arr : any[]
+>push : (...items: any[]) => number
+>x : { a: number; }
+
+const y = x; // widened copy of the literal
+>y : { a: number; }
+>x : { a: number; }
+
+const z = b ? (b ? arr[0] : y) : { c: 1 };
+>z : { a: number; c?: undefined; } | { a?: undefined; c: number; }
+>b ? (b ? arr[0] : y) : { c: 1 } : { a: number; } | { c: number; }
+>b : boolean
+>(b ? arr[0] : y) : { a: number; }
+>b ? arr[0] : y : { a: number; }
+>b : true
+>arr[0] : { a: number; }
+>arr : { a: number; }[]
+>0 : 0
+>y : { a: number; }
+>{ c: 1 } : { c: number; }
+>c : number
+>1 : 1
+

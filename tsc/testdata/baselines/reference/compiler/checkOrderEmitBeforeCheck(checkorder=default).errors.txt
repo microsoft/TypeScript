@@ -1,0 +1,25 @@
+checkOrderEmitBeforeCheck.ts(9,5): error TS2502: '"each"' is referenced directly or indirectly in its own type annotation.
+checkOrderEmitBeforeCheck.ts(15,1): error TS2615: Type of property '"each"' circularly references itself in mapped type '{ [P in keyof ListWidget]: undefined extends ListWidget[P] ? never : P; }'.
+
+
+==== checkOrderEmitBeforeCheck.ts (2 errors) ====
+    // The circularity in the mapped type is found by checking the annotation of
+    // "each". Emitting first must not instead report it at the use import
+    // elision visits, nor cache the result without the error.
+    type NonOptionalKeys<T> = { [P in keyof T]: undefined extends T[P] ? never : P }[keyof T];
+    type Child<T> = { [P in NonOptionalKeys<T>]: T[P] }
+    
+    export interface ListWidget {
+        "type": "list",
+        "each": Child<ListWidget>;
+        ~~~~~~
+!!! error TS2502: '"each"' is referenced directly or indirectly in its own type annotation.
+    }
+    
+    type ListChild = Child<ListWidget>
+    
+    declare let x: ListChild;
+    x.type;
+    ~
+!!! error TS2615: Type of property '"each"' circularly references itself in mapped type '{ [P in keyof ListWidget]: undefined extends ListWidget[P] ? never : P; }'.
+    

@@ -1,0 +1,47 @@
+//// [tests/cases/compiler/narrowedNeverAfterLoopWithAndCondition.ts] ////
+
+=== narrowedNeverAfterLoopWithAndCondition.ts ===
+// value_def is never inside the if. With a && condition, main and
+// Strada leak the loop analysis's incomplete never placeholder
+// (silentNever), so the property access is silently allowed and only
+// the assignment errors. With `while (x)` they report the access.
+function f(x: boolean, y: boolean) {
+>f : Symbol(f, Decl(narrowedNeverAfterLoopWithAndCondition.ts, 0, 0))
+>x : Symbol(x, Decl(narrowedNeverAfterLoopWithAndCondition.ts, 4, 11))
+>y : Symbol(y, Decl(narrowedNeverAfterLoopWithAndCondition.ts, 4, 22))
+
+    let value_def: { last_ref: boolean } | null = null;
+>value_def : Symbol(value_def, Decl(narrowedNeverAfterLoopWithAndCondition.ts, 5, 7))
+>last_ref : Symbol(last_ref, Decl(narrowedNeverAfterLoopWithAndCondition.ts, 5, 20))
+
+    if (value_def) {
+>value_def : Symbol(value_def, Decl(narrowedNeverAfterLoopWithAndCondition.ts, 5, 7))
+
+        while (x && y);
+>x : Symbol(x, Decl(narrowedNeverAfterLoopWithAndCondition.ts, 4, 11))
+>y : Symbol(y, Decl(narrowedNeverAfterLoopWithAndCondition.ts, 4, 22))
+
+        value_def.last_ref = false;
+>value_def : Symbol(value_def, Decl(narrowedNeverAfterLoopWithAndCondition.ts, 5, 7))
+    }
+}
+
+function g(x: boolean) {
+>g : Symbol(g, Decl(narrowedNeverAfterLoopWithAndCondition.ts, 10, 1))
+>x : Symbol(x, Decl(narrowedNeverAfterLoopWithAndCondition.ts, 12, 11))
+
+    let value_def: { last_ref: boolean } | null = null;
+>value_def : Symbol(value_def, Decl(narrowedNeverAfterLoopWithAndCondition.ts, 13, 7))
+>last_ref : Symbol(last_ref, Decl(narrowedNeverAfterLoopWithAndCondition.ts, 13, 20))
+
+    if (value_def) {
+>value_def : Symbol(value_def, Decl(narrowedNeverAfterLoopWithAndCondition.ts, 13, 7))
+
+        while (x);
+>x : Symbol(x, Decl(narrowedNeverAfterLoopWithAndCondition.ts, 12, 11))
+
+        value_def.last_ref = false;
+>value_def : Symbol(value_def, Decl(narrowedNeverAfterLoopWithAndCondition.ts, 13, 7))
+    }
+}
+

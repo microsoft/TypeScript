@@ -1,0 +1,22 @@
+// @strict: true
+// @noEmit: true
+// @checkOrder: default,typesfirst
+
+// Query<any> is instantiated with only non-generic arguments, so it (and DeepPartial<Query<any>>)
+// can't contain type variables, and inference from Meta<any> must not structurally recurse into
+// DeepPartial<Query<any>>. That recursion would expand the infinite DeepPartial<Nested> and report
+// TS5114. The carry-forward of the "could contain type variables" flag set at instantiation time
+// must survive even when the instantiation is created inside a circularity that is later discarded.
+
+declare const a: Meta<any>;
+fromMetadata(a);
+type DeepPartial<T> = { [P in keyof T]: DeepPartial<T[P]> };
+type Nested = Nested[];
+interface Prop<T> { owner: Meta<T> }
+interface Meta<T> {
+    prop: Prop<T>;
+    other: any;
+    query: Query<any>;
+}
+type Query<X> = { cond: Nested };
+declare function fromMetadata<T>(meta: Meta<T> | DeepPartial<Meta<T>>): void;

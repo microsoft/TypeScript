@@ -1,0 +1,86 @@
+//// [tests/cases/compiler/circularReturnTypeThroughCallbackArgument.ts] ////
+
+=== circularReturnTypeThroughCallbackArgument.ts ===
+declare function fan(g: () => number): number;
+>fan : (g: () => number) => number
+>g : () => number
+
+export function a(n: number) {
+>a : (n: number) => any
+>n : number
+
+    return fan(() => a(n));
+>fan(() => a(n)) : number
+>fan : (g: () => number) => number
+>() => a(n) : () => any
+>a(n) : any
+>a : (n: number) => any
+>n : number
+}
+
+declare function fanAll(g: () => Promise<{ ok: boolean }>): Promise<{ ok: boolean }>;
+>fanAll : (g: () => Promise<{ ok: boolean; }>) => Promise<{ ok: boolean; }>
+>g : () => Promise<{ ok: boolean; }>
+>ok : boolean
+>ok : boolean
+
+export async function b(n: number) {
+>b : (n: number) => any
+>n : number
+
+    if (n > 0) {
+>n > 0 : boolean
+>n : number
+>0 : 0
+
+        return fanAll(() => b(n - 1));
+>fanAll(() => b(n - 1)) : Promise<{ ok: boolean; }>
+>fanAll : (g: () => Promise<{ ok: boolean; }>) => Promise<{ ok: boolean; }>
+>() => b(n - 1) : () => any
+>b(n - 1) : any
+>b : (n: number) => any
+>n - 1 : number
+>n : number
+>1 : 1
+    }
+    return { ok: true };
+>{ ok: true } : { ok: boolean; }
+>ok : boolean
+>true : true
+}
+
+type Result = { success: boolean; [key: string]: unknown };
+>Result : Result
+>success : boolean
+>key : string
+
+interface Other { success: boolean; url: string }
+>success : boolean
+>url : string
+
+declare function fanOut(generateOne: () => Promise<Result>): Promise<Result>;
+>fanOut : (generateOne: () => Promise<Result>) => Promise<Result>
+>generateOne : () => Promise<Result>
+
+declare const other: Other;
+>other : Other
+
+export async function c(n: number) {
+>c : (n: number) => any
+>n : number
+
+    if (n) return other;
+>n : number
+>other : Other
+
+    return fanOut(() => c(n - 1));
+>fanOut(() => c(n - 1)) : Promise<Result>
+>fanOut : (generateOne: () => Promise<Result>) => Promise<Result>
+>() => c(n - 1) : () => any
+>c(n - 1) : any
+>c : (n: number) => any
+>n - 1 : number
+>n : number
+>1 : 1
+}
+

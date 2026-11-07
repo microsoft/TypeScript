@@ -1,0 +1,56 @@
+//// [tests/cases/compiler/narrowedNeverAfterLoopWithAndCondition.ts] ////
+
+=== narrowedNeverAfterLoopWithAndCondition.ts ===
+// value_def is never inside the if. With a && condition, main and
+// Strada leak the loop analysis's incomplete never placeholder
+// (silentNever), so the property access is silently allowed and only
+// the assignment errors. With `while (x)` they report the access.
+function f(x: boolean, y: boolean) {
+>f : (x: boolean, y: boolean) => void
+>x : boolean
+>y : boolean
+
+    let value_def: { last_ref: boolean } | null = null;
+>value_def : { last_ref: boolean; } | null
+>last_ref : boolean
+
+    if (value_def) {
+>value_def : null
+
+        while (x && y);
+>x && y : boolean
+>x : boolean
+>y : boolean
+
+        value_def.last_ref = false;
+>value_def.last_ref = false : false
+>value_def.last_ref : any
+>value_def : never
+>last_ref : any
+>false : false
+    }
+}
+
+function g(x: boolean) {
+>g : (x: boolean) => void
+>x : boolean
+
+    let value_def: { last_ref: boolean } | null = null;
+>value_def : { last_ref: boolean; } | null
+>last_ref : boolean
+
+    if (value_def) {
+>value_def : null
+
+        while (x);
+>x : boolean
+
+        value_def.last_ref = false;
+>value_def.last_ref = false : false
+>value_def.last_ref : any
+>value_def : never
+>last_ref : any
+>false : false
+    }
+}
+

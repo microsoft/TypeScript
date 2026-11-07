@@ -1,0 +1,50 @@
+//// [tests/cases/compiler/clonedTypeParameterUnionOrder.ts] ////
+
+=== a.ts ===
+interface Pair<A, B> { a: A; b: B }
+>a : A
+>b : B
+
+interface Box<U> { m<T>(x: T): Pair<T, U> }
+>m : <T>(x: T) => Pair<T, U>
+>x : T
+
+declare function call<A, R>(f: (x: A) => R): (x: A) => R;
+>call : <A, R>(f: (x: A) => R) => (x: A) => R
+>f : (x: A) => R
+>x : A
+>x : A
+
+declare const bs: Box<string>;
+>bs : Box<string>
+
+declare const bn: Box<number>;
+>bn : Box<number>
+
+const n = call(bn.m);
+>n : <T>(x: T) => Pair<T, number>
+>call(bn.m) : <T>(x: T) => Pair<T, number>
+>call : <A, R>(f: (x: A) => R) => (x: A) => R
+>bn.m : <T>(x: T) => Pair<T, number>
+>bn : Box<number>
+>m : <T>(x: T) => Pair<T, number>
+
+=== b.ts ===
+declare const c: boolean;
+>c : boolean
+
+const r = c ? call(bs.m) : call(bn.m);
+>r : (<T>(x: T) => Pair<T, number>) | (<T>(x: T) => Pair<T, string>)
+>c ? call(bs.m) : call(bn.m) : (<T>(x: T) => Pair<T, number>) | (<T>(x: T) => Pair<T, string>)
+>c : boolean
+>call(bs.m) : <T>(x: T) => Pair<T, string>
+>call : <A, R>(f: (x: A) => R) => (x: A) => R
+>bs.m : <T>(x: T) => Pair<T, string>
+>bs : Box<string>
+>m : <T>(x: T) => Pair<T, string>
+>call(bn.m) : <T>(x: T) => Pair<T, number>
+>call : <A, R>(f: (x: A) => R) => (x: A) => R
+>bn.m : <T>(x: T) => Pair<T, number>
+>bn : Box<number>
+>m : <T>(x: T) => Pair<T, number>
+

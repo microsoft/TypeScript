@@ -1,0 +1,106 @@
+//// [tests/cases/compiler/circularReturnTypeThroughCallArgumentRelation.ts] ////
+
+=== circularReturnTypeThroughCallArgumentRelation.ts ===
+// Inferring a method's return type resolves a call whose argument check
+// relates the method's own class to an interface containing that method, so
+// the relation compares the method while its return type is in progress.
+// TypeScript reads the in-progress return type as `any` there without failing
+// it, and call resolution hides the resolutions below it, so no TS7023 is
+// reported in any check order and the method gets the call's return type.
+// (Reduced from meta/lexical HeadingNode.$config and effect SchemaAST getParser.)
+
+// Through a callback returning an instance (lexical).
+interface Base { m(): unknown }
+>Base : Symbol(Base, Decl(circularReturnTypeThroughCallArgumentRelation.ts, 0, 0))
+>m : Symbol(Base.m, Decl(circularReturnTypeThroughCallArgumentRelation.ts, 9, 16))
+
+declare function config(config: { f?: () => Base }): void;
+>config : Symbol(config, Decl(circularReturnTypeThroughCallArgumentRelation.ts, 9, 31))
+>config : Symbol(config, Decl(circularReturnTypeThroughCallArgumentRelation.ts, 10, 24))
+>f : Symbol(f, Decl(circularReturnTypeThroughCallArgumentRelation.ts, 10, 33))
+>Base : Symbol(Base, Decl(circularReturnTypeThroughCallArgumentRelation.ts, 0, 0))
+
+declare const h: Heading;
+>h : Symbol(h, Decl(circularReturnTypeThroughCallArgumentRelation.ts, 12, 13))
+>Heading : Symbol(Heading, Decl(circularReturnTypeThroughCallArgumentRelation.ts, 13, 18))
+
+const b: Base = h;
+>b : Symbol(b, Decl(circularReturnTypeThroughCallArgumentRelation.ts, 13, 5))
+>Base : Symbol(Base, Decl(circularReturnTypeThroughCallArgumentRelation.ts, 0, 0))
+>h : Symbol(h, Decl(circularReturnTypeThroughCallArgumentRelation.ts, 12, 13))
+
+class Heading {
+>Heading : Symbol(Heading, Decl(circularReturnTypeThroughCallArgumentRelation.ts, 13, 18))
+
+    m() {
+>m : Symbol(Heading.m, Decl(circularReturnTypeThroughCallArgumentRelation.ts, 15, 15))
+
+        return config({ f: () => create() });
+>config : Symbol(config, Decl(circularReturnTypeThroughCallArgumentRelation.ts, 9, 31))
+>f : Symbol(f, Decl(circularReturnTypeThroughCallArgumentRelation.ts, 17, 23))
+>create : Symbol(create, Decl(circularReturnTypeThroughCallArgumentRelation.ts, 19, 1))
+    }
+}
+
+declare function create(): Heading;
+>create : Symbol(create, Decl(circularReturnTypeThroughCallArgumentRelation.ts, 19, 1))
+>Heading : Symbol(Heading, Decl(circularReturnTypeThroughCallArgumentRelation.ts, 13, 18))
+
+const r: void = new Heading().m();
+>r : Symbol(r, Decl(circularReturnTypeThroughCallArgumentRelation.ts, 23, 5))
+>new Heading().m : Symbol(Heading.m, Decl(circularReturnTypeThroughCallArgumentRelation.ts, 15, 15))
+>Heading : Symbol(Heading, Decl(circularReturnTypeThroughCallArgumentRelation.ts, 13, 18))
+>m : Symbol(Heading.m, Decl(circularReturnTypeThroughCallArgumentRelation.ts, 15, 15))
+
+// Passing `this` directly (effect).
+type Parser = (input: unknown) => unknown;
+>Parser : Symbol(Parser, Decl(circularReturnTypeThroughCallArgumentRelation.ts, 23, 34))
+>input : Symbol(input, Decl(circularReturnTypeThroughCallArgumentRelation.ts, 26, 15))
+
+interface NullNode { readonly _tag: "Null"; getParser(): Parser }
+>NullNode : Symbol(NullNode, Decl(circularReturnTypeThroughCallArgumentRelation.ts, 26, 42), Decl(circularReturnTypeThroughCallArgumentRelation.ts, 32, 5))
+>_tag : Symbol(NullNode._tag, Decl(circularReturnTypeThroughCallArgumentRelation.ts, 27, 20))
+>getParser : Symbol(NullNode.getParser, Decl(circularReturnTypeThroughCallArgumentRelation.ts, 27, 43))
+>Parser : Symbol(Parser, Decl(circularReturnTypeThroughCallArgumentRelation.ts, 23, 34))
+
+interface UndefinedNode { readonly _tag: "Undefined"; getParser(): Parser }
+>UndefinedNode : Symbol(UndefinedNode, Decl(circularReturnTypeThroughCallArgumentRelation.ts, 27, 65))
+>_tag : Symbol(UndefinedNode._tag, Decl(circularReturnTypeThroughCallArgumentRelation.ts, 28, 25))
+>getParser : Symbol(UndefinedNode.getParser, Decl(circularReturnTypeThroughCallArgumentRelation.ts, 28, 53))
+>Parser : Symbol(Parser, Decl(circularReturnTypeThroughCallArgumentRelation.ts, 23, 34))
+
+type AST = NullNode | UndefinedNode;
+>AST : Symbol(AST, Decl(circularReturnTypeThroughCallArgumentRelation.ts, 28, 75))
+>NullNode : Symbol(NullNode, Decl(circularReturnTypeThroughCallArgumentRelation.ts, 26, 42), Decl(circularReturnTypeThroughCallArgumentRelation.ts, 32, 5))
+>UndefinedNode : Symbol(UndefinedNode, Decl(circularReturnTypeThroughCallArgumentRelation.ts, 27, 65))
+
+declare function fromConst(ast: AST, value: unknown): Parser;
+>fromConst : Symbol(fromConst, Decl(circularReturnTypeThroughCallArgumentRelation.ts, 29, 36))
+>ast : Symbol(ast, Decl(circularReturnTypeThroughCallArgumentRelation.ts, 30, 27))
+>AST : Symbol(AST, Decl(circularReturnTypeThroughCallArgumentRelation.ts, 28, 75))
+>value : Symbol(value, Decl(circularReturnTypeThroughCallArgumentRelation.ts, 30, 36))
+>Parser : Symbol(Parser, Decl(circularReturnTypeThroughCallArgumentRelation.ts, 23, 34))
+
+const NullNode: new () => NullNode = class {
+>NullNode : Symbol(NullNode, Decl(circularReturnTypeThroughCallArgumentRelation.ts, 26, 42), Decl(circularReturnTypeThroughCallArgumentRelation.ts, 32, 5))
+>NullNode : Symbol(NullNode, Decl(circularReturnTypeThroughCallArgumentRelation.ts, 26, 42), Decl(circularReturnTypeThroughCallArgumentRelation.ts, 32, 5))
+
+    readonly _tag = "Null";
+>_tag : Symbol(NullNode._tag, Decl(circularReturnTypeThroughCallArgumentRelation.ts, 32, 44))
+
+    getParser() {
+>getParser : Symbol(NullNode.getParser, Decl(circularReturnTypeThroughCallArgumentRelation.ts, 33, 27))
+
+        return fromConst(this, null);
+>fromConst : Symbol(fromConst, Decl(circularReturnTypeThroughCallArgumentRelation.ts, 29, 36))
+>this : Symbol(NullNode, Decl(circularReturnTypeThroughCallArgumentRelation.ts, 32, 36))
+    }
+};
+
+const p: Parser = new NullNode().getParser();
+>p : Symbol(p, Decl(circularReturnTypeThroughCallArgumentRelation.ts, 39, 5))
+>Parser : Symbol(Parser, Decl(circularReturnTypeThroughCallArgumentRelation.ts, 23, 34))
+>new NullNode().getParser : Symbol(NullNode.getParser, Decl(circularReturnTypeThroughCallArgumentRelation.ts, 27, 43))
+>NullNode : Symbol(NullNode, Decl(circularReturnTypeThroughCallArgumentRelation.ts, 26, 42), Decl(circularReturnTypeThroughCallArgumentRelation.ts, 32, 5))
+>getParser : Symbol(NullNode.getParser, Decl(circularReturnTypeThroughCallArgumentRelation.ts, 27, 43))
+

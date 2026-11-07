@@ -1,0 +1,22 @@
+indexedAccessAccessFlagsUnionOrder.ts(3,11): error TS2322: Type 'string | undefined' is not assignable to type 'string'.
+  Type 'undefined' is not assignable to type 'string'.
+indexedAccessAccessFlagsUnionOrder.ts(5,11): error TS2322: Type 'string | undefined' is not assignable to type 'string'.
+  Type 'undefined' is not assignable to type 'string'.
+
+
+==== indexedAccessAccessFlagsUnionOrder.ts (2 errors) ====
+    function f<T extends Record<string, string>, K extends keyof T>(obj: T, k: K, b: boolean) {
+        const x = b ? obj[k] : g<T, K>();
+        const s1: string = x;
+              ~~
+!!! error TS2322: Type 'string | undefined' is not assignable to type 'string'.
+!!! error TS2322:   Type 'undefined' is not assignable to type 'string'.
+        const y = b ? g<T, K>() : obj[k];
+        const s2: string = y;
+              ~~
+!!! error TS2322: Type 'string | undefined' is not assignable to type 'string'.
+!!! error TS2322:   Type 'undefined' is not assignable to type 'string'.
+    }
+    
+    declare function g<T, K extends keyof T>(): T[K];
+    
