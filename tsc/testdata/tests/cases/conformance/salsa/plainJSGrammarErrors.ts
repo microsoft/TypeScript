@@ -210,3 +210,16 @@ const trinaryDynamicImport = import('1', '2', '3')
 const spreadDynamicImport = import(...[])
 
 return
+
+// optional property access in assignment positions
+let optObj = { a: 1, s: "x" };
+optObj?.a = 1;
+optObj.a?.b = 1;
+optObj?.a++;
+({ ...optObj?.a } = {});
+for (optObj?.s in {});
+for (optObj?.a of []);
+/** @type {any} */ let anyObj;
+for (anyObj?.a in {});
+optObj.a = 2;
+optObj?.a;
