@@ -2,6 +2,7 @@ package checker
 
 import (
 	"slices"
+	"strings"
 	"sync"
 
 	"github.com/microsoft/TypeScript/tsc/internal/ast"
@@ -9,6 +10,7 @@ import (
 	"github.com/microsoft/TypeScript/tsc/internal/core"
 	"github.com/microsoft/TypeScript/tsc/internal/evaluator"
 	"github.com/microsoft/TypeScript/tsc/internal/jsnum"
+	"github.com/microsoft/TypeScript/tsc/internal/modulespecifiers"
 	"github.com/microsoft/TypeScript/tsc/internal/nodebuilder"
 	"github.com/microsoft/TypeScript/tsc/internal/printer"
 )
@@ -124,6 +126,96 @@ func (r *EmitResolver) IsDeclarationVisible(node *ast.Node) bool {
 	r.checkerMu.Lock()
 	defer r.checkerMu.Unlock()
 	return r.checker.isDeclarationVisible(node)
+}
+
+func (r *EmitResolver) IsUniqueESSymbol(symbol *ast.Symbol) bool {
+	if r.checker.getTypeOfSymbol(symbol).flags&TypeFlagsUniqueESSymbol != 0 {
+		return true
+	}
+	for _, declaration := range symbol.Declarations() {
+		file := ast.GetSourceFileOfNode(declaration)
+		if file != nil && file.Symbol != nil {
+			if exported := file.Symbol.Exports()[symbol.Name()]; exported != nil && r.checker.getTypeOfSymbol(exported).flags&TypeFlagsUniqueESSymbol != 0 {
+				return true
+			}
+		}
+	}
+	return false
+}
+
+func (r *EmitResolver) IsNameResolvableToSymbol(location *ast.Node, name string, target *ast.Symbol) bool {
+	resolved := r.checker.resolveName(location, name, ast.SymbolFlagsValue|ast.SymbolFlagsType|ast.SymbolFlagsNamespace, nil, false, false)
+	if resolved == nil {
+		return false
+	}
+	if resolved.Flags()&ast.SymbolFlagsAlias != 0 {
+		resolved = r.checker.GetAliasedSymbol(resolved)
+	}
+	for _, declaration := range target.Declarations() {
+		if slices.Contains(resolved.Declarations(), declaration) {
+			return true
+		}
+	}
+	return false
+}
+
+func (r *EmitResolver) GetModuleSpecifierForSymbol(symbol *ast.Symbol, enclosingDeclaration *ast.Node) string {
+	// Symbol tracker calls occur while the checker lock is already held.
+	contextFile := ast.GetSourceFileOfNode(enclosingDeclaration)
+	moduleSymbol := symbol.Parent()
+	if contextFile == nil || moduleSymbol == nil {
+		return ""
+	}
+	resolutionMode := r.checker.program.GetDefaultResolutionModeForFile(contextFile)
+	endingPreference := modulespecifiers.ImportModuleSpecifierEndingPreferenceNone
+	if resolutionMode == core.ResolutionModeESM {
+		endingPreference = modulespecifiers.ImportModuleSpecifierEndingPreferenceJs
+	}
+	result := modulespecifiers.GetModuleSpecifiers(
+		moduleSymbol,
+		r.checker,
+		r.checker.compilerOptions,
+		contextFile,
+		r.checker.program,
+		modulespecifiers.UserPreferences{
+			ImportModuleSpecifierPreference: modulespecifiers.ImportModuleSpecifierPreferenceProjectRelative,
+			ImportModuleSpecifierEnding:     endingPreference,
+		},
+		modulespecifiers.ModuleSpecifierOptions{OverrideImportMode: resolutionMode},
+		false,
+	)
+	if len(result.Specifiers) == 0 {
+		return ""
+	}
+	specifier := result.Specifiers[0].AsString()
+	if (r.checker.compilerOptions.GetModuleResolutionKind() == core.ModuleResolutionKindNode16 || r.checker.compilerOptions.GetModuleResolutionKind() == core.ModuleResolutionKindNodeNext) && strings.Contains(specifier, "/node_modules/") {
+		swappedMode := core.ModuleKindESNext
+		if r.checker.program.GetEmitModuleFormatOfFile(contextFile) == core.ModuleKindESNext {
+			swappedMode = core.ModuleKindCommonJS
+		}
+		endingPreference := modulespecifiers.ImportModuleSpecifierEndingPreferenceNone
+		if swappedMode == core.ModuleKindESNext {
+			endingPreference = modulespecifiers.ImportModuleSpecifierEndingPreferenceJs
+		}
+		alternate := modulespecifiers.GetModuleSpecifiers(
+			moduleSymbol,
+			r.checker,
+			r.checker.compilerOptions,
+			contextFile,
+			r.checker.program,
+			modulespecifiers.UserPreferences{
+				ImportModuleSpecifierPreference: modulespecifiers.ImportModuleSpecifierPreferenceProjectRelative,
+				ImportModuleSpecifierEnding:     endingPreference,
+			},
+			modulespecifiers.ModuleSpecifierOptions{OverrideImportMode: swappedMode},
+			false,
+		)
+		if len(alternate.Specifiers) == 0 || strings.Contains(alternate.Specifiers[0].AsString(), "/node_modules/") {
+			return ""
+		}
+		specifier = alternate.Specifiers[0].AsString()
+	}
+	return specifier
 }
 
 func (r *EmitResolver) PrecalculateDeclarationEmitVisibility(file *ast.SourceFile) {

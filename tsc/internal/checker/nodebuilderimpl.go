@@ -848,7 +848,16 @@ func (b *NodeBuilderImpl) createAccessFromSymbolChain(chain []*ast.Symbol, index
 
 func (b *NodeBuilderImpl) symbolToExpression(symbol *ast.Symbol, mask ast.SymbolFlags) *ast.Expression {
 	b.ctx.tracker.TrackSymbol(symbol, b.ctx.enclosingDeclaration, mask)
+	b.recordRemappedSymbolReference(symbol)
 	return b.symbolToExpressionWorker(symbol, mask)
+}
+
+func (b *NodeBuilderImpl) recordRemappedSymbolReference(symbol *ast.Symbol) {
+	if remapper, ok := b.ctx.tracker.(nodebuilder.SymbolRemapper); ok {
+		if remapped := remapper.GetRemappedSymbol(symbol); remapped != nil {
+			b.ctx.remappedSymbolReferences[ast.GetSymbolId(symbol)] = remapped
+		}
+	}
 }
 
 func (b *NodeBuilderImpl) symbolToExpressionWorker(symbol *ast.Symbol, mask ast.SymbolFlags) *ast.Expression {
@@ -2450,6 +2459,14 @@ func (b *NodeBuilderImpl) trackComputedName(accessExpression *ast.Node, enclosin
 	// get symbol of the first identifier of the entityName
 	firstIdentifier := ast.GetFirstIdentifier(accessExpression)
 	name := b.ch.resolveName(enclosingDeclaration, firstIdentifier.Text(), ast.SymbolFlagsValue|ast.SymbolFlagsExportValue, nil /*nameNotFoundMessage*/, true /*isUse*/, false)
+	sourceSymbol := b.ch.getSymbolOfNameOrPropertyAccessExpression(ast.GetReparsedNodeForNode(firstIdentifier))
+	if sourceSymbol != nil && sourceSymbol != name && b.ch.getTypeOfSymbol(sourceSymbol).flags&TypeFlagsUniqueESSymbol != 0 {
+		// If the destination spelling resolves to a same-named local, track the
+		// symbol from the source declaration so declaration emit can import it
+		// under a collision-free local name.
+		b.ctx.tracker.TrackSymbol(sourceSymbol, enclosingDeclaration, ast.SymbolFlagsValue)
+		return
+	}
 	if name != nil {
 		b.ctx.tracker.TrackSymbol(name, enclosingDeclaration, ast.SymbolFlagsValue)
 	} else {
@@ -2586,7 +2603,9 @@ func (b *NodeBuilderImpl) getPropertyNameNodeForSymbolFromNameType(symbol *ast.S
 	if nameType.flags&TypeFlagsUniqueESSymbol != 0 {
 		// The reference was tracked in the destination scope by trackComputedName.
 		// Reconstructing its spelling in the source scope must not paint that scope's declarations visible.
-		return b.f.NewComputedPropertyName(b.symbolToExpressionWorker(nameType.AsUniqueESSymbolType().symbol, ast.SymbolFlagsValue))
+		symbol := nameType.AsUniqueESSymbolType().symbol
+		b.recordRemappedSymbolReference(symbol)
+		return b.f.NewComputedPropertyName(b.symbolToExpressionWorker(symbol, ast.SymbolFlagsValue))
 	}
 	return nil
 }

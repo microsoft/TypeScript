@@ -97,6 +97,9 @@ type EmitResolver interface {
 	// declaration emit checker functionality projections
 	PrecalculateDeclarationEmitVisibility(file *ast.SourceFile)
 	IsSymbolAccessible(symbol *ast.Symbol, enclosingDeclaration *ast.Node, meaning ast.SymbolFlags, shouldComputeAliasToMarkVisible bool) SymbolAccessibilityResult
+	IsUniqueESSymbol(symbol *ast.Symbol) bool
+	IsNameResolvableToSymbol(location *ast.Node, name string, target *ast.Symbol) bool
+	GetModuleSpecifierForSymbol(symbol *ast.Symbol, enclosingDeclaration *ast.Node) string
 	IsEntityNameVisible(entityName *ast.Node, enclosingDeclaration *ast.Node) SymbolAccessibilityResult // previously SymbolVisibilityResult in strada - ErrorModuleName never set
 	IsExpandoFunctionDeclaration(node *ast.Node) bool
 	IsExpandoFunctionDeclarationUnsafe(node *ast.Node) bool
