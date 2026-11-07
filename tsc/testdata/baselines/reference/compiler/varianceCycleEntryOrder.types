@@ -1,0 +1,82 @@
+//// [tests/cases/compiler/varianceCycleEntryOrder.ts] ////
+
+=== fooFirst.ts ===
+export {};
+
+interface Foo<T> { x: T; b: Bar<Foo<T>> }
+>x : T
+>b : Bar<Foo<T>>
+
+interface Bar<U> { f: (u: U) => void; foo: Foo<Bar<U>> }
+>f : (u: U) => void
+>u : U
+>foo : Foo<Bar<U>>
+
+declare let fs: Foo<string>, fl: Foo<"lit">;
+>fs : Foo<string>
+>fl : Foo<"lit">
+
+declare let bs: Bar<string>, bl: Bar<"lit">;
+>bs : Bar<string>
+>bl : Bar<"lit">
+
+fl = fs; // Error
+>fl = fs : Foo<string>
+>fl : Foo<"lit">
+>fs : Foo<string>
+
+fs = fl; // Error
+>fs = fl : Foo<"lit">
+>fs : Foo<string>
+>fl : Foo<"lit">
+
+bl = bs; // Error
+>bl = bs : Bar<string>
+>bl : Bar<"lit">
+>bs : Bar<string>
+
+bs = bl; // Error
+>bs = bl : Bar<"lit">
+>bs : Bar<string>
+>bl : Bar<"lit">
+
+=== barFirst.ts ===
+export {};
+
+interface Foo<T> { x: T; b: Bar<Foo<T>> }
+>x : T
+>b : Bar<Foo<T>>
+
+interface Bar<U> { f: (u: U) => void; foo: Foo<Bar<U>> }
+>f : (u: U) => void
+>u : U
+>foo : Foo<Bar<U>>
+
+declare let fs: Foo<string>, fl: Foo<"lit">;
+>fs : Foo<string>
+>fl : Foo<"lit">
+
+declare let bs: Bar<string>, bl: Bar<"lit">;
+>bs : Bar<string>
+>bl : Bar<"lit">
+
+bl = bs; // Error
+>bl = bs : Bar<string>
+>bl : Bar<"lit">
+>bs : Bar<string>
+
+bs = bl; // Error
+>bs = bl : Bar<"lit">
+>bs : Bar<string>
+>bl : Bar<"lit">
+
+fl = fs; // Error
+>fl = fs : Foo<string>
+>fl : Foo<"lit">
+>fs : Foo<string>
+
+fs = fl; // Error
+>fs = fl : Foo<"lit">
+>fs : Foo<string>
+>fl : Foo<"lit">
+

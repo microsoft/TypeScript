@@ -1,0 +1,134 @@
+//// [tests/cases/compiler/classCircularityDiagnostics.ts] ////
+
+=== classCircularityDiagnostics.ts ===
+class Direct extends Direct {
+>Direct : Symbol(Direct, Decl(classCircularityDiagnostics.ts, 0, 0))
+>Direct : Symbol(Direct, Decl(classCircularityDiagnostics.ts, 0, 0))
+
+	static value = 1;
+>value : Symbol(Direct.value, Decl(classCircularityDiagnostics.ts, 0, 29))
+
+	value = 2;
+>value : Symbol(Direct.value, Decl(classCircularityDiagnostics.ts, 1, 18))
+}
+
+const staticValue = Direct.value;
+>staticValue : Symbol(staticValue, Decl(classCircularityDiagnostics.ts, 5, 5))
+>Direct.value : Symbol(Direct.value, Decl(classCircularityDiagnostics.ts, 0, 29))
+>Direct : Symbol(Direct, Decl(classCircularityDiagnostics.ts, 0, 0))
+>value : Symbol(Direct.value, Decl(classCircularityDiagnostics.ts, 0, 29))
+
+const instanceValue = new Direct().value;
+>instanceValue : Symbol(instanceValue, Decl(classCircularityDiagnostics.ts, 6, 5))
+>new Direct().value : Symbol(Direct.value, Decl(classCircularityDiagnostics.ts, 1, 18))
+>Direct : Symbol(Direct, Decl(classCircularityDiagnostics.ts, 0, 0))
+>value : Symbol(Direct.value, Decl(classCircularityDiagnostics.ts, 1, 18))
+
+class First extends Second {}
+>First : Symbol(First, Decl(classCircularityDiagnostics.ts, 6, 41))
+>Second : Symbol(Second, Decl(classCircularityDiagnostics.ts, 8, 29))
+
+class Second extends First {}
+>Second : Symbol(Second, Decl(classCircularityDiagnostics.ts, 8, 29))
+>First : Symbol(First, Decl(classCircularityDiagnostics.ts, 6, 41))
+
+const Expression = class Named extends Named {};
+>Expression : Symbol(Expression, Decl(classCircularityDiagnostics.ts, 11, 5))
+>Named : Symbol(Named, Decl(classCircularityDiagnostics.ts, 11, 18))
+>Named : Symbol(Named, Decl(classCircularityDiagnostics.ts, 11, 18))
+
+class NestedBase extends (class {
+>NestedBase : Symbol(NestedBase, Decl(classCircularityDiagnostics.ts, 11, 48))
+
+	static value = 1;
+>value : Symbol((Anonymous class).value, Decl(classCircularityDiagnostics.ts, 13, 33))
+
+	value = 2;
+>value : Symbol((Anonymous class).value, Decl(classCircularityDiagnostics.ts, 14, 18))
+
+}) {}
+
+const nestedStaticValue: number = NestedBase.value;
+>nestedStaticValue : Symbol(nestedStaticValue, Decl(classCircularityDiagnostics.ts, 18, 5))
+>NestedBase.value : Symbol((Anonymous class).value, Decl(classCircularityDiagnostics.ts, 13, 33))
+>NestedBase : Symbol(NestedBase, Decl(classCircularityDiagnostics.ts, 11, 48))
+>value : Symbol((Anonymous class).value, Decl(classCircularityDiagnostics.ts, 13, 33))
+
+const nestedInstanceValue: number = new NestedBase().value;
+>nestedInstanceValue : Symbol(nestedInstanceValue, Decl(classCircularityDiagnostics.ts, 19, 5))
+>new NestedBase().value : Symbol((Anonymous class).value, Decl(classCircularityDiagnostics.ts, 14, 18))
+>NestedBase : Symbol(NestedBase, Decl(classCircularityDiagnostics.ts, 11, 48))
+>value : Symbol((Anonymous class).value, Decl(classCircularityDiagnostics.ts, 14, 18))
+
+const SelfReferencingBase = class extends (class {
+>SelfReferencingBase : Symbol(SelfReferencingBase, Decl(classCircularityDiagnostics.ts, 21, 5))
+
+	static self = SelfReferencingBase;
+>self : Symbol((Anonymous class).self, Decl(classCircularityDiagnostics.ts, 21, 50))
+>SelfReferencingBase : Symbol(SelfReferencingBase, Decl(classCircularityDiagnostics.ts, 21, 5))
+
+}) {};
+
+const selfConstructor = SelfReferencingBase.self;
+>selfConstructor : Symbol(selfConstructor, Decl(classCircularityDiagnostics.ts, 25, 5))
+>SelfReferencingBase.self : Symbol((Anonymous class).self, Decl(classCircularityDiagnostics.ts, 21, 50))
+>SelfReferencingBase : Symbol(SelfReferencingBase, Decl(classCircularityDiagnostics.ts, 21, 5))
+>self : Symbol((Anonymous class).self, Decl(classCircularityDiagnostics.ts, 21, 50))
+
+function mixin<Base extends new (...args: any[]) => {}>(base: Base) {
+>mixin : Symbol(mixin, Decl(classCircularityDiagnostics.ts, 25, 49))
+>Base : Symbol(Base, Decl(classCircularityDiagnostics.ts, 27, 15))
+>args : Symbol(args, Decl(classCircularityDiagnostics.ts, 27, 33))
+>base : Symbol(base, Decl(classCircularityDiagnostics.ts, 27, 56))
+>Base : Symbol(Base, Decl(classCircularityDiagnostics.ts, 27, 15))
+
+	return class extends base {
+>base : Symbol(base, Decl(classCircularityDiagnostics.ts, 27, 56))
+
+		static value = 1;
+>value : Symbol((Anonymous class).value, Decl(classCircularityDiagnostics.ts, 28, 28))
+
+		value = 2;
+>value : Symbol((Anonymous class).value, Decl(classCircularityDiagnostics.ts, 29, 19))
+
+	};
+}
+
+class Mixed extends mixin(NestedBase) {}
+>Mixed : Symbol(Mixed, Decl(classCircularityDiagnostics.ts, 32, 1))
+>mixin : Symbol(mixin, Decl(classCircularityDiagnostics.ts, 25, 49))
+>NestedBase : Symbol(NestedBase, Decl(classCircularityDiagnostics.ts, 11, 48))
+
+const mixedStaticValue: number = Mixed.value;
+>mixedStaticValue : Symbol(mixedStaticValue, Decl(classCircularityDiagnostics.ts, 36, 5))
+>Mixed.value : Symbol(value, Decl(classCircularityDiagnostics.ts, 28, 28), Decl(classCircularityDiagnostics.ts, 13, 33))
+>Mixed : Symbol(Mixed, Decl(classCircularityDiagnostics.ts, 32, 1))
+>value : Symbol(value, Decl(classCircularityDiagnostics.ts, 28, 28), Decl(classCircularityDiagnostics.ts, 13, 33))
+
+const mixedInstanceValue: number = new Mixed().value;
+>mixedInstanceValue : Symbol(mixedInstanceValue, Decl(classCircularityDiagnostics.ts, 37, 5))
+>new Mixed().value : Symbol(value, Decl(classCircularityDiagnostics.ts, 29, 19), Decl(classCircularityDiagnostics.ts, 14, 18))
+>Mixed : Symbol(Mixed, Decl(classCircularityDiagnostics.ts, 32, 1))
+>value : Symbol(value, Decl(classCircularityDiagnostics.ts, 29, 19), Decl(classCircularityDiagnostics.ts, 14, 18))
+
+declare function makeBase(value: number): typeof NestedBase;
+>makeBase : Symbol(makeBase, Decl(classCircularityDiagnostics.ts, 37, 53))
+>value : Symbol(value, Decl(classCircularityDiagnostics.ts, 39, 26))
+>NestedBase : Symbol(NestedBase, Decl(classCircularityDiagnostics.ts, 11, 48))
+
+class InvalidBaseArgument extends makeBase("invalid") {}
+>InvalidBaseArgument : Symbol(InvalidBaseArgument, Decl(classCircularityDiagnostics.ts, 39, 60))
+>makeBase : Symbol(makeBase, Decl(classCircularityDiagnostics.ts, 37, 53))
+
+const InvalidExpressionArgument = class extends makeBase("invalid") {};
+>InvalidExpressionArgument : Symbol(InvalidExpressionArgument, Decl(classCircularityDiagnostics.ts, 41, 5))
+>makeBase : Symbol(makeBase, Decl(classCircularityDiagnostics.ts, 37, 53))
+
+declare function makeInvalidBase(value: number): number;
+>makeInvalidBase : Symbol(makeInvalidBase, Decl(classCircularityDiagnostics.ts, 41, 71))
+>value : Symbol(value, Decl(classCircularityDiagnostics.ts, 43, 33))
+
+class InvalidConstructor extends makeInvalidBase("invalid") {}
+>InvalidConstructor : Symbol(InvalidConstructor, Decl(classCircularityDiagnostics.ts, 43, 56))
+>makeInvalidBase : Symbol(makeInvalidBase, Decl(classCircularityDiagnostics.ts, 41, 71))
+

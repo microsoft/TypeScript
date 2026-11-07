@@ -1,0 +1,146 @@
+//// [tests/cases/compiler/varianceCircularConsistency.ts] ////
+
+=== varianceCircularConsistency.ts ===
+// Variances of these mutually recursive generics must not depend on values
+// measured mid-cycle. Assigning `e` to `EntryPoint<any, any>` must agree with
+// assigning `e.root` to `EntryPoint<any, any>["root"]`.
+
+interface Query {}
+>Query : Symbol(Query, Decl(varianceCircularConsistency.ts, 0, 0))
+
+type Component<P> = P | ((props: P) => void);
+>Component : Symbol(Component, Decl(varianceCircularConsistency.ts, 4, 18))
+>P : Symbol(P, Decl(varianceCircularConsistency.ts, 5, 15))
+>P : Symbol(P, Decl(varianceCircularConsistency.ts, 5, 15))
+>props : Symbol(props, Decl(varianceCircularConsistency.ts, 5, 26))
+>P : Symbol(P, Decl(varianceCircularConsistency.ts, 5, 15))
+
+interface Ref<T> {
+>Ref : Symbol(Ref, Decl(varianceCircularConsistency.ts, 5, 45))
+>T : Symbol(T, Decl(varianceCircularConsistency.ts, 6, 14))
+
+    value: T;
+>value : Symbol(Ref.value, Decl(varianceCircularConsistency.ts, 6, 18))
+>T : Symbol(T, Decl(varianceCircularConsistency.ts, 6, 14))
+}
+interface Rep<Params, Queries extends Record<string, Query>, Nested, Runtime, Extra> extends Readonly<{
+>Rep : Symbol(Rep, Decl(varianceCircularConsistency.ts, 8, 1))
+>Params : Symbol(Params, Decl(varianceCircularConsistency.ts, 9, 14))
+>Queries : Symbol(Queries, Decl(varianceCircularConsistency.ts, 9, 21))
+>Record : Symbol(Record, Decl(lib.es5.d.ts, --, --))
+>Query : Symbol(Query, Decl(varianceCircularConsistency.ts, 0, 0))
+>Nested : Symbol(Nested, Decl(varianceCircularConsistency.ts, 9, 60))
+>Runtime : Symbol(Runtime, Decl(varianceCircularConsistency.ts, 9, 68))
+>Extra : Symbol(Extra, Decl(varianceCircularConsistency.ts, 9, 77))
+>Readonly : Symbol(Readonly, Decl(lib.es5.d.ts, --, --))
+
+    root: Ref<EntryPointComponent<Queries, Nested, Runtime>>;
+>root : Symbol(root, Decl(varianceCircularConsistency.ts, 9, 103))
+>Ref : Symbol(Ref, Decl(varianceCircularConsistency.ts, 5, 45))
+>EntryPointComponent : Symbol(EntryPointComponent, Decl(varianceCircularConsistency.ts, 16, 5))
+>Queries : Symbol(Queries, Decl(varianceCircularConsistency.ts, 9, 21))
+>Nested : Symbol(Nested, Decl(varianceCircularConsistency.ts, 9, 60))
+>Runtime : Symbol(Runtime, Decl(varianceCircularConsistency.ts, 9, 68))
+
+}> {}
+type Preloaded<T> = T extends Record<string, Rep<any, any, any, any, any>> ? { [K in keyof T]: Unwrap<GetComponent<T>> } : never;
+>Preloaded : Symbol(Preloaded, Decl(varianceCircularConsistency.ts, 11, 5))
+>T : Symbol(T, Decl(varianceCircularConsistency.ts, 12, 15))
+>T : Symbol(T, Decl(varianceCircularConsistency.ts, 12, 15))
+>Record : Symbol(Record, Decl(lib.es5.d.ts, --, --))
+>Rep : Symbol(Rep, Decl(varianceCircularConsistency.ts, 8, 1))
+>K : Symbol(K, Decl(varianceCircularConsistency.ts, 12, 80))
+>T : Symbol(T, Decl(varianceCircularConsistency.ts, 12, 15))
+>Unwrap : Symbol(Unwrap, Decl(varianceCircularConsistency.ts, 17, 145))
+>GetComponent : Symbol(GetComponent, Decl(varianceCircularConsistency.ts, 19, 124))
+>T : Symbol(T, Decl(varianceCircularConsistency.ts, 12, 15))
+
+interface Props<Queries, Nested, Runtime, Extra> extends Readonly<{
+>Props : Symbol(Props, Decl(varianceCircularConsistency.ts, 12, 129))
+>Queries : Symbol(Queries, Decl(varianceCircularConsistency.ts, 13, 16))
+>Nested : Symbol(Nested, Decl(varianceCircularConsistency.ts, 13, 24))
+>Runtime : Symbol(Runtime, Decl(varianceCircularConsistency.ts, 13, 32))
+>Extra : Symbol(Extra, Decl(varianceCircularConsistency.ts, 13, 41))
+>Readonly : Symbol(Readonly, Decl(lib.es5.d.ts, --, --))
+
+    nested: Preloaded<Nested>;
+>nested : Symbol(nested, Decl(varianceCircularConsistency.ts, 13, 67))
+>Preloaded : Symbol(Preloaded, Decl(varianceCircularConsistency.ts, 11, 5))
+>Nested : Symbol(Nested, Decl(varianceCircularConsistency.ts, 13, 24))
+
+    queries: Queries;
+>queries : Symbol(queries, Decl(varianceCircularConsistency.ts, 14, 30))
+>Queries : Symbol(Queries, Decl(varianceCircularConsistency.ts, 13, 16))
+
+}> {}
+type EntryPointComponent<Queries extends Record<string, Query>, Nested, Runtime, Extra = {}> = Component<Props<Queries, Nested, Runtime, Extra>>;
+>EntryPointComponent : Symbol(EntryPointComponent, Decl(varianceCircularConsistency.ts, 16, 5))
+>Queries : Symbol(Queries, Decl(varianceCircularConsistency.ts, 17, 25))
+>Record : Symbol(Record, Decl(lib.es5.d.ts, --, --))
+>Query : Symbol(Query, Decl(varianceCircularConsistency.ts, 0, 0))
+>Nested : Symbol(Nested, Decl(varianceCircularConsistency.ts, 17, 63))
+>Runtime : Symbol(Runtime, Decl(varianceCircularConsistency.ts, 17, 71))
+>Extra : Symbol(Extra, Decl(varianceCircularConsistency.ts, 17, 80))
+>Component : Symbol(Component, Decl(varianceCircularConsistency.ts, 4, 18))
+>Props : Symbol(Props, Decl(varianceCircularConsistency.ts, 12, 129))
+>Queries : Symbol(Queries, Decl(varianceCircularConsistency.ts, 17, 25))
+>Nested : Symbol(Nested, Decl(varianceCircularConsistency.ts, 17, 63))
+>Runtime : Symbol(Runtime, Decl(varianceCircularConsistency.ts, 17, 71))
+>Extra : Symbol(Extra, Decl(varianceCircularConsistency.ts, 17, 80))
+
+type Unwrap<C> = C extends EntryPointComponent<infer Q, infer N, infer R> ? Readonly<{}> : {};
+>Unwrap : Symbol(Unwrap, Decl(varianceCircularConsistency.ts, 17, 145))
+>C : Symbol(C, Decl(varianceCircularConsistency.ts, 18, 12))
+>C : Symbol(C, Decl(varianceCircularConsistency.ts, 18, 12))
+>EntryPointComponent : Symbol(EntryPointComponent, Decl(varianceCircularConsistency.ts, 16, 5))
+>Q : Symbol(Q, Decl(varianceCircularConsistency.ts, 18, 52))
+>N : Symbol(N, Decl(varianceCircularConsistency.ts, 18, 61))
+>R : Symbol(R, Decl(varianceCircularConsistency.ts, 18, 70))
+>Readonly : Symbol(Readonly, Decl(lib.es5.d.ts, --, --))
+
+type EntryPoint<C, Params> = Rep<Params, C extends EntryPointComponent<infer Q, any, any> ? Q : never, never, never, never>;
+>EntryPoint : Symbol(EntryPoint, Decl(varianceCircularConsistency.ts, 18, 94))
+>C : Symbol(C, Decl(varianceCircularConsistency.ts, 19, 16))
+>Params : Symbol(Params, Decl(varianceCircularConsistency.ts, 19, 18))
+>Rep : Symbol(Rep, Decl(varianceCircularConsistency.ts, 8, 1))
+>Params : Symbol(Params, Decl(varianceCircularConsistency.ts, 19, 18))
+>C : Symbol(C, Decl(varianceCircularConsistency.ts, 19, 16))
+>EntryPointComponent : Symbol(EntryPointComponent, Decl(varianceCircularConsistency.ts, 16, 5))
+>Q : Symbol(Q, Decl(varianceCircularConsistency.ts, 19, 76))
+>Q : Symbol(Q, Decl(varianceCircularConsistency.ts, 19, 76))
+
+type GetComponent<T> = T extends EntryPoint<infer C, infer P> ? C : never;
+>GetComponent : Symbol(GetComponent, Decl(varianceCircularConsistency.ts, 19, 124))
+>T : Symbol(T, Decl(varianceCircularConsistency.ts, 20, 18))
+>T : Symbol(T, Decl(varianceCircularConsistency.ts, 20, 18))
+>EntryPoint : Symbol(EntryPoint, Decl(varianceCircularConsistency.ts, 18, 94))
+>C : Symbol(C, Decl(varianceCircularConsistency.ts, 20, 49))
+>P : Symbol(P, Decl(varianceCircularConsistency.ts, 20, 58))
+>C : Symbol(C, Decl(varianceCircularConsistency.ts, 20, 49))
+
+declare const c: EntryPointComponent<{ q: { readonly variables: { slug: string } } }, {}, { onClick: () => void }>;
+>c : Symbol(c, Decl(varianceCircularConsistency.ts, 22, 13))
+>EntryPointComponent : Symbol(EntryPointComponent, Decl(varianceCircularConsistency.ts, 16, 5))
+>q : Symbol(q, Decl(varianceCircularConsistency.ts, 22, 38))
+>variables : Symbol(variables, Decl(varianceCircularConsistency.ts, 22, 43))
+>slug : Symbol(slug, Decl(varianceCircularConsistency.ts, 22, 65))
+>onClick : Symbol(onClick, Decl(varianceCircularConsistency.ts, 22, 91))
+
+declare const e: EntryPoint<typeof c, { slug: string }>;
+>e : Symbol(e, Decl(varianceCircularConsistency.ts, 23, 13))
+>EntryPoint : Symbol(EntryPoint, Decl(varianceCircularConsistency.ts, 18, 94))
+>c : Symbol(c, Decl(varianceCircularConsistency.ts, 22, 13))
+>slug : Symbol(slug, Decl(varianceCircularConsistency.ts, 23, 39))
+
+const whole: EntryPoint<any, any> = e;
+>whole : Symbol(whole, Decl(varianceCircularConsistency.ts, 24, 5))
+>EntryPoint : Symbol(EntryPoint, Decl(varianceCircularConsistency.ts, 18, 94))
+>e : Symbol(e, Decl(varianceCircularConsistency.ts, 23, 13))
+
+const root: EntryPoint<any, any>["root"] = e.root;
+>root : Symbol(root, Decl(varianceCircularConsistency.ts, 25, 5))
+>EntryPoint : Symbol(EntryPoint, Decl(varianceCircularConsistency.ts, 18, 94))
+>e.root : Symbol(root, Decl(varianceCircularConsistency.ts, 9, 103))
+>e : Symbol(e, Decl(varianceCircularConsistency.ts, 23, 13))
+>root : Symbol(root, Decl(varianceCircularConsistency.ts, 9, 103))
+

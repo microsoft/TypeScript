@@ -1,0 +1,94 @@
+//// [tests/cases/compiler/varianceCycleStructuralFallback.ts] ////
+
+=== maFirst.ts ===
+export {};
+
+type MA<T> = { x: { [K in keyof T]-?: T[K] }; b: MB<MA<T>> };
+>MA : MA<T>
+>x : { [K in keyof T]-?: T[K]; }
+>b : MB<MA<T>>
+
+type MB<U> = { f: (u: U) => void; a: MA<MB<U>> };
+>MB : MB<U>
+>f : (u: U) => void
+>u : U
+>a : MA<MB<U>>
+
+declare let as: MA<{ p: string }>, al: MA<{ p: "lit" }>;
+>as : MA<{ p: string; }>
+>p : string
+>al : MA<{ p: "lit"; }>
+>p : "lit"
+
+declare let bs: MB<{ p: string }>, bl: MB<{ p: "lit" }>;
+>bs : MB<{ p: string; }>
+>p : string
+>bl : MB<{ p: "lit"; }>
+>p : "lit"
+
+al = as;
+>al = as : MA<{ p: string; }>
+>al : MA<{ p: "lit"; }>
+>as : MA<{ p: string; }>
+
+as = al;
+>as = al : MA<{ p: "lit"; }>
+>as : MA<{ p: string; }>
+>al : MA<{ p: "lit"; }>
+
+bl = bs;
+>bl = bs : MB<{ p: string; }>
+>bl : MB<{ p: "lit"; }>
+>bs : MB<{ p: string; }>
+
+bs = bl;
+>bs = bl : MB<{ p: "lit"; }>
+>bs : MB<{ p: string; }>
+>bl : MB<{ p: "lit"; }>
+
+=== mbFirst.ts ===
+export {};
+
+type MA<T> = { x: { [K in keyof T]-?: T[K] }; b: MB<MA<T>> };
+>MA : MA<T>
+>x : { [K in keyof T]-?: T[K]; }
+>b : MB<MA<T>>
+
+type MB<U> = { f: (u: U) => void; a: MA<MB<U>> };
+>MB : MB<U>
+>f : (u: U) => void
+>u : U
+>a : MA<MB<U>>
+
+declare let as: MA<{ p: string }>, al: MA<{ p: "lit" }>;
+>as : MA<{ p: string; }>
+>p : string
+>al : MA<{ p: "lit"; }>
+>p : "lit"
+
+declare let bs: MB<{ p: string }>, bl: MB<{ p: "lit" }>;
+>bs : MB<{ p: string; }>
+>p : string
+>bl : MB<{ p: "lit"; }>
+>p : "lit"
+
+bl = bs;
+>bl = bs : MB<{ p: string; }>
+>bl : MB<{ p: "lit"; }>
+>bs : MB<{ p: string; }>
+
+bs = bl;
+>bs = bl : MB<{ p: "lit"; }>
+>bs : MB<{ p: string; }>
+>bl : MB<{ p: "lit"; }>
+
+al = as;
+>al = as : MA<{ p: string; }>
+>al : MA<{ p: "lit"; }>
+>as : MA<{ p: string; }>
+
+as = al;
+>as = al : MA<{ p: "lit"; }>
+>as : MA<{ p: string; }>
+>al : MA<{ p: "lit"; }>
+

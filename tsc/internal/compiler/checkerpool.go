@@ -3,9 +3,11 @@ package compiler
 import (
 	"context"
 	"math"
+	"runtime"
 	"slices"
 	"sort"
 	"sync"
+	"sync/atomic"
 
 	"github.com/microsoft/TypeScript/tsc/internal/ast"
 	"github.com/microsoft/TypeScript/tsc/internal/checker"
@@ -32,7 +34,9 @@ type checkerPool struct {
 	createCheckersOnce sync.Once
 	checkers           []*checker.Checker
 	locks              []*sync.Mutex
-	fileAssociations   map[*ast.SourceFile]*checker.Checker
+	fileIndices        map[*ast.SourceFile]int
+	fileCheckers       []atomic.Int32 // Index in checkers of the checker of each file, by file index
+	associations       []int          // from ProgramFactories.AssignCheckers, if set
 }
 
 var _ CheckerPool = (*checkerPool)(nil)
@@ -302,25 +306,93 @@ func getCheckerAssociationWeights(baseWeights []int, importCounts []int) []int {
 	return fileWeights
 }
 
+/*
+defaultCheckerCount picks the number of checkers when none is given. Which
+checker checks a file does not change the results, and checkers take files
+from each other once out of their own, so the count only trades time for
+memory. Each checker builds much the same library and shared types, so
+every checker adds work and memory of its own, and checking is fastest with
+about one checker per CPU, up to the point where that duplicated work
+dominates:
+
+  - With 4 or 8 CPUs, measured with the process restricted to them, one
+    checker per logical CPU was fastest for nearly every project, and
+    hyperthreads were nearly as good as cores.
+  - With 20 CPUs (10 cores), 8 checkers were fastest for most projects;
+    only very large programs (VS Code) gained up to 12-16.
+  - Programs with few checked files gain nothing from more checkers than a
+    few files each, but even those with a few dozen files gain from the 4
+    checkers that were the default before.
+
+Work is estimated from the files that are checked: those whose checking is
+skipped, such as declaration files under skipLibCheck, count for nothing.
+*/
+func defaultCheckerCount(program *Program) int {
+	procs := program.opts.CheckerProcs
+	if procs <= 0 {
+		procs = runtime.GOMAXPROCS(0)
+	}
+	files, weight := 0, 0
+	for _, file := range program.files {
+		if !program.SkipTypeChecking(file, true /*ignoreNoCheck*/) {
+			files++
+			weight += getCheckerAssociationBaseWeight(file.NodeCount, len(file.Text()))
+		}
+	}
+	limit := min(max(int(defaultCheckerLimit*math.Sqrt(float64(weight)/defaultCheckerLimitWeight)), defaultCheckerLimit), maxDefaultCheckerLimit)
+	return max(min(procs, limit, (files+filesPerChecker-1)/filesPerChecker), min(procs, minDefaultCheckers))
+}
+
+const (
+	// defaultCheckerLimit is the checker count past which more checkers stop
+	// paying for their duplicated work, for programs up to
+	// defaultCheckerLimitWeight of checked work. Larger programs get more, up
+	// to maxDefaultCheckerLimit, with the square root of their size.
+	defaultCheckerLimit       = 8
+	defaultCheckerLimitWeight = 8_000_000
+	maxDefaultCheckerLimit    = 16
+	// filesPerChecker is the number of checked files below which another
+	// checker does not pay for itself, above minDefaultCheckers.
+	filesPerChecker    = 32
+	minDefaultCheckers = 4
+)
+
 func newCheckerPool(program *Program) *checkerPool {
 	return newCheckerPoolWithTracing(program, nil)
 }
 
 func newCheckerPoolWithTracing(program *Program, tr *tracing.Tracing) *checkerPool {
-	checkerCount := 4
-	if program.SingleThreaded() {
+	return newCheckerPoolWithAssignment(program, tr, nil)
+}
+
+// newCheckerPoolWithAssignment is newCheckerPoolWithTracing with the checker
+// of each file given by assign, if set; see ProgramFactories.AssignCheckers.
+func newCheckerPoolWithAssignment(program *Program, tr *tracing.Tracing, assign func([]*ast.SourceFile) []int) *checkerPool {
+	var associations []int
+	var checkerCount int
+	if assign != nil {
+		associations = assign(program.files)
 		checkerCount = 1
-	} else if c := program.Options().Checkers; c != nil {
-		checkerCount = *c
+		if len(associations) > 0 {
+			checkerCount = slices.Max(associations) + 1
+		}
+	} else {
+		if program.SingleThreaded() {
+			checkerCount = 1
+		} else if c := program.Options().Checkers; c != nil {
+			checkerCount = *c
+		} else {
+			checkerCount = defaultCheckerCount(program)
+		}
+		checkerCount = max(min(checkerCount, len(program.files), 256), 1)
 	}
 
-	checkerCount = max(min(checkerCount, len(program.files), 256), 1)
-
 	pool := &checkerPool{
-		program:  program,
-		checkers: make([]*checker.Checker, checkerCount),
-		locks:    make([]*sync.Mutex, checkerCount),
-		tracing:  tr,
+		program:      program,
+		checkers:     make([]*checker.Checker, checkerCount),
+		locks:        make([]*sync.Mutex, checkerCount),
+		tracing:      tr,
+		associations: associations,
 	}
 
 	return pool
@@ -345,13 +417,19 @@ func (p *checkerPool) GetChecker(ctx context.Context, file *ast.SourceFile) (*ch
 // e.g. for read-only operations like obtaining an emit resolver.
 func (p *checkerPool) getCheckerForFileNonExclusive(file *ast.SourceFile) (*checker.Checker, func()) {
 	p.createCheckers()
-	return p.fileAssociations[file], noop
+	return p.checkers[p.checkerIndexOf(file)], noop
+}
+
+// checkerIndexOf returns the index in checkers of the checker the file is
+// associated with: the one that checked it, or that will.
+func (p *checkerPool) checkerIndexOf(file *ast.SourceFile) int {
+	return int(p.fileCheckers[p.fileIndices[file]].Load())
 }
 
 func (p *checkerPool) getCheckerForFileExclusive(ctx context.Context, file *ast.SourceFile) (*checker.Checker, func()) {
 	p.createCheckers()
-	c := p.fileAssociations[file]
-	idx := slices.Index(p.checkers, c)
+	idx := p.checkerIndexOf(file)
+	c := p.checkers[idx]
 	p.locks[idx].Lock()
 	return c, sync.OnceFunc(func() {
 		p.locks[idx].Unlock()
@@ -380,8 +458,11 @@ func (p *checkerPool) createCheckers() {
 
 		wg.RunAndWait()
 
-		associations := make([]int, len(p.program.files))
-		if checkerCount > 1 {
+		associations := p.associations
+		if associations == nil {
+			associations = make([]int, len(p.program.files))
+		}
+		if checkerCount > 1 && p.associations == nil {
 			baseWeights := make([]int, len(p.program.files))
 			importCounts := make([]int, len(p.program.files))
 			isDeclarationFile := make([]bool, len(p.program.files))
@@ -412,9 +493,11 @@ func (p *checkerPool) createCheckers() {
 			fileOrder := getCheckerAssociationOrder(fileWeights, isDeclarationFile, policy.prioritizeSourceFiles)
 			associations = getCheckerAssociationsInOrder(fileWeights, adjacentFiles, fileOrder, checkerCount, policy.balancePenaltyMultiplier)
 		}
-		p.fileAssociations = make(map[*ast.SourceFile]*checker.Checker, len(p.program.files))
+		p.fileIndices = make(map[*ast.SourceFile]int, len(p.program.files))
+		p.fileCheckers = make([]atomic.Int32, len(p.program.files))
 		for i, file := range p.program.files {
-			p.fileAssociations[file] = p.checkers[associations[i]]
+			p.fileIndices[file] = i
+			p.fileCheckers[i].Store(int32(associations[i]))
 		}
 	})
 }
@@ -470,26 +553,103 @@ func (p *checkerPool) GetGlobalDiagnostics() []*ast.Diagnostic {
 	return SortAndDeduplicateDiagnostics(slices.Concat(globalDiagnostics...))
 }
 
-// forEachCheckerGroupDo runs one task per checker in parallel. Each task iterates
-// the provided files, processing only those assigned to its checker. Within each
-// checker's set, files are visited in their original order.
+// forEachCheckerGroupDo runs one task per checker in parallel, each checking
+// first the files associated with it, in their original order. A task that
+// runs out of files takes the last file not yet started from the checker with
+// the most left, and the file is associated with its checker from then on.
+// Which checker checks a file and what it checked before do not change the
+// results, only how much each checker can reuse.
 func (p *checkerPool) forEachCheckerGroupDo(ctx context.Context, files []*ast.SourceFile, singleThreaded bool, cb func(c *checker.Checker, fileIndex int, file *ast.SourceFile)) {
-	p.createCheckers()
-
-	checkerCount := len(p.checkers)
-	wg := core.NewWorkGroup(core.WorkGroupConcurrency(singleThreaded))
-	for checkerIdx := range checkerCount {
+	groups := p.groupFilesByChecker(files)
+	if singleThreaded || len(p.checkers) == 1 {
+		// Tasks run one after another, so the first would take every file.
+		for checkerIdx, group := range groups {
+			c := p.checkers[checkerIdx]
+			p.locks[checkerIdx].Lock()
+			for _, i := range group {
+				cb(c, i, files[i])
+			}
+			p.locks[checkerIdx].Unlock()
+		}
+		return
+	}
+	queues := make([]fileQueue, len(groups))
+	for i, group := range groups {
+		queues[i].files = group
+	}
+	wg := core.NewWorkGroup(core.WorkGroupConcurrency(false))
+	for checkerIdx := range groups {
 		wg.Queue(func() {
+			c := p.checkers[checkerIdx]
 			p.locks[checkerIdx].Lock()
 			defer p.locks[checkerIdx].Unlock()
-			for i, file := range files {
-				if checker := p.checkers[checkerIdx]; checker == p.fileAssociations[file] {
-					cb(checker, i, file)
+			for {
+				i, ok := queues[checkerIdx].popFront()
+				if !ok {
+					i, ok = stealFile(queues)
+					if !ok {
+						return
+					}
+					p.fileCheckers[p.fileIndices[files[i]]].Store(int32(checkerIdx))
 				}
+				cb(c, i, files[i])
 			}
 		})
 	}
 	wg.RunAndWait()
+}
+
+// A fileQueue holds the indices of the files a checker has yet to start.
+type fileQueue struct {
+	mu    sync.Mutex
+	files []int
+}
+
+func (q *fileQueue) popFront() (int, bool) {
+	q.mu.Lock()
+	defer q.mu.Unlock()
+	if len(q.files) == 0 {
+		return 0, false
+	}
+	i := q.files[0]
+	q.files = q.files[1:]
+	return i, true
+}
+
+func (q *fileQueue) popBack() (int, bool) {
+	q.mu.Lock()
+	defer q.mu.Unlock()
+	if len(q.files) == 0 {
+		return 0, false
+	}
+	i := q.files[len(q.files)-1]
+	q.files = q.files[:len(q.files)-1]
+	return i, true
+}
+
+func (q *fileQueue) len() int {
+	q.mu.Lock()
+	defer q.mu.Unlock()
+	return len(q.files)
+}
+
+// stealFile takes the last file of the queue with the most files left, the
+// one its checker would reach last.
+func stealFile(queues []fileQueue) (int, bool) {
+	for {
+		victim, most := -1, 0
+		for i := range queues {
+			if n := queues[i].len(); n > most {
+				victim, most = i, n
+			}
+		}
+		if victim < 0 {
+			return 0, false
+		}
+		if i, ok := queues[victim].popBack(); ok {
+			return i, true
+		}
+	}
 }
 
 // groupFilesByChecker returns the indices of files grouped by the checker each file is associated with. Files keep
@@ -498,8 +658,10 @@ func (p *checkerPool) groupFilesByChecker(files []*ast.SourceFile) [][]int {
 	p.createCheckers()
 	groups := make([][]int, len(p.checkers))
 	for i, file := range files {
-		idx := slices.Index(p.checkers, p.fileAssociations[file])
-		groups[idx] = append(groups[idx], i)
+		if j, ok := p.fileIndices[file]; ok {
+			idx := int(p.fileCheckers[j].Load())
+			groups[idx] = append(groups[idx], i)
+		}
 	}
 	return groups
 }

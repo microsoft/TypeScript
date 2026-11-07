@@ -1,0 +1,66 @@
+//// [tests/cases/compiler/clonedTypeParameterUnionOrder.ts] ////
+
+=== a.ts ===
+interface Pair<A, B> { a: A; b: B }
+>Pair : Symbol(Pair, Decl(a.ts, 0, 0))
+>A : Symbol(A, Decl(a.ts, 0, 15))
+>B : Symbol(B, Decl(a.ts, 0, 17))
+>a : Symbol(Pair.a, Decl(a.ts, 0, 22))
+>A : Symbol(A, Decl(a.ts, 0, 15))
+>b : Symbol(Pair.b, Decl(a.ts, 0, 28))
+>B : Symbol(B, Decl(a.ts, 0, 17))
+
+interface Box<U> { m<T>(x: T): Pair<T, U> }
+>Box : Symbol(Box, Decl(a.ts, 0, 35))
+>U : Symbol(U, Decl(a.ts, 1, 14))
+>m : Symbol(Box.m, Decl(a.ts, 1, 18))
+>T : Symbol(T, Decl(a.ts, 1, 21))
+>x : Symbol(x, Decl(a.ts, 1, 24))
+>T : Symbol(T, Decl(a.ts, 1, 21))
+>Pair : Symbol(Pair, Decl(a.ts, 0, 0))
+>T : Symbol(T, Decl(a.ts, 1, 21))
+>U : Symbol(U, Decl(a.ts, 1, 14))
+
+declare function call<A, R>(f: (x: A) => R): (x: A) => R;
+>call : Symbol(call, Decl(a.ts, 1, 43))
+>A : Symbol(A, Decl(a.ts, 2, 22))
+>R : Symbol(R, Decl(a.ts, 2, 24))
+>f : Symbol(f, Decl(a.ts, 2, 28))
+>x : Symbol(x, Decl(a.ts, 2, 32))
+>A : Symbol(A, Decl(a.ts, 2, 22))
+>R : Symbol(R, Decl(a.ts, 2, 24))
+>x : Symbol(x, Decl(a.ts, 2, 46))
+>A : Symbol(A, Decl(a.ts, 2, 22))
+>R : Symbol(R, Decl(a.ts, 2, 24))
+
+declare const bs: Box<string>;
+>bs : Symbol(bs, Decl(a.ts, 3, 13))
+>Box : Symbol(Box, Decl(a.ts, 0, 35))
+
+declare const bn: Box<number>;
+>bn : Symbol(bn, Decl(a.ts, 4, 13))
+>Box : Symbol(Box, Decl(a.ts, 0, 35))
+
+const n = call(bn.m);
+>n : Symbol(n, Decl(a.ts, 5, 5))
+>call : Symbol(call, Decl(a.ts, 1, 43))
+>bn.m : Symbol(Box.m, Decl(a.ts, 1, 18))
+>bn : Symbol(bn, Decl(a.ts, 4, 13))
+>m : Symbol(Box.m, Decl(a.ts, 1, 18))
+
+=== b.ts ===
+declare const c: boolean;
+>c : Symbol(c, Decl(b.ts, 0, 13))
+
+const r = c ? call(bs.m) : call(bn.m);
+>r : Symbol(r, Decl(b.ts, 1, 5))
+>c : Symbol(c, Decl(b.ts, 0, 13))
+>call : Symbol(call, Decl(a.ts, 1, 43))
+>bs.m : Symbol(Box.m, Decl(a.ts, 1, 18))
+>bs : Symbol(bs, Decl(a.ts, 3, 13))
+>m : Symbol(Box.m, Decl(a.ts, 1, 18))
+>call : Symbol(call, Decl(a.ts, 1, 43))
+>bn.m : Symbol(Box.m, Decl(a.ts, 1, 18))
+>bn : Symbol(bn, Decl(a.ts, 4, 13))
+>m : Symbol(Box.m, Decl(a.ts, 1, 18))
+

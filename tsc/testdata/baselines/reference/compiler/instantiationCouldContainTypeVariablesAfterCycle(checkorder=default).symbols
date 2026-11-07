@@ -1,0 +1,69 @@
+//// [tests/cases/compiler/instantiationCouldContainTypeVariablesAfterCycle.ts] ////
+
+=== instantiationCouldContainTypeVariablesAfterCycle.ts ===
+// Query<any> is instantiated with only non-generic arguments, so it (and DeepPartial<Query<any>>)
+// can't contain type variables, and inference from Meta<any> must not structurally recurse into
+// DeepPartial<Query<any>>. That recursion would expand the infinite DeepPartial<Nested> and report
+// TS5114. The carry-forward of the "could contain type variables" flag set at instantiation time
+// must survive even when the instantiation is created inside a circularity that is later discarded.
+
+declare const a: Meta<any>;
+>a : Symbol(a, Decl(instantiationCouldContainTypeVariablesAfterCycle.ts, 6, 13))
+>Meta : Symbol(Meta, Decl(instantiationCouldContainTypeVariablesAfterCycle.ts, 10, 36))
+
+fromMetadata(a);
+>fromMetadata : Symbol(fromMetadata, Decl(instantiationCouldContainTypeVariablesAfterCycle.ts, 16, 33))
+>a : Symbol(a, Decl(instantiationCouldContainTypeVariablesAfterCycle.ts, 6, 13))
+
+type DeepPartial<T> = { [P in keyof T]: DeepPartial<T[P]> };
+>DeepPartial : Symbol(DeepPartial, Decl(instantiationCouldContainTypeVariablesAfterCycle.ts, 7, 16))
+>T : Symbol(T, Decl(instantiationCouldContainTypeVariablesAfterCycle.ts, 8, 17))
+>P : Symbol(P, Decl(instantiationCouldContainTypeVariablesAfterCycle.ts, 8, 25))
+>T : Symbol(T, Decl(instantiationCouldContainTypeVariablesAfterCycle.ts, 8, 17))
+>DeepPartial : Symbol(DeepPartial, Decl(instantiationCouldContainTypeVariablesAfterCycle.ts, 7, 16))
+>T : Symbol(T, Decl(instantiationCouldContainTypeVariablesAfterCycle.ts, 8, 17))
+>P : Symbol(P, Decl(instantiationCouldContainTypeVariablesAfterCycle.ts, 8, 25))
+
+type Nested = Nested[];
+>Nested : Symbol(Nested, Decl(instantiationCouldContainTypeVariablesAfterCycle.ts, 8, 60))
+>Nested : Symbol(Nested, Decl(instantiationCouldContainTypeVariablesAfterCycle.ts, 8, 60))
+
+interface Prop<T> { owner: Meta<T> }
+>Prop : Symbol(Prop, Decl(instantiationCouldContainTypeVariablesAfterCycle.ts, 9, 23))
+>T : Symbol(T, Decl(instantiationCouldContainTypeVariablesAfterCycle.ts, 10, 15))
+>owner : Symbol(Prop.owner, Decl(instantiationCouldContainTypeVariablesAfterCycle.ts, 10, 19))
+>Meta : Symbol(Meta, Decl(instantiationCouldContainTypeVariablesAfterCycle.ts, 10, 36))
+>T : Symbol(T, Decl(instantiationCouldContainTypeVariablesAfterCycle.ts, 10, 15))
+
+interface Meta<T> {
+>Meta : Symbol(Meta, Decl(instantiationCouldContainTypeVariablesAfterCycle.ts, 10, 36))
+>T : Symbol(T, Decl(instantiationCouldContainTypeVariablesAfterCycle.ts, 11, 15))
+
+    prop: Prop<T>;
+>prop : Symbol(Meta.prop, Decl(instantiationCouldContainTypeVariablesAfterCycle.ts, 11, 19))
+>Prop : Symbol(Prop, Decl(instantiationCouldContainTypeVariablesAfterCycle.ts, 9, 23))
+>T : Symbol(T, Decl(instantiationCouldContainTypeVariablesAfterCycle.ts, 11, 15))
+
+    other: any;
+>other : Symbol(Meta.other, Decl(instantiationCouldContainTypeVariablesAfterCycle.ts, 12, 18))
+
+    query: Query<any>;
+>query : Symbol(Meta.query, Decl(instantiationCouldContainTypeVariablesAfterCycle.ts, 13, 15))
+>Query : Symbol(Query, Decl(instantiationCouldContainTypeVariablesAfterCycle.ts, 15, 1))
+}
+type Query<X> = { cond: Nested };
+>Query : Symbol(Query, Decl(instantiationCouldContainTypeVariablesAfterCycle.ts, 15, 1))
+>X : Symbol(X, Decl(instantiationCouldContainTypeVariablesAfterCycle.ts, 16, 11))
+>cond : Symbol(cond, Decl(instantiationCouldContainTypeVariablesAfterCycle.ts, 16, 17))
+>Nested : Symbol(Nested, Decl(instantiationCouldContainTypeVariablesAfterCycle.ts, 8, 60))
+
+declare function fromMetadata<T>(meta: Meta<T> | DeepPartial<Meta<T>>): void;
+>fromMetadata : Symbol(fromMetadata, Decl(instantiationCouldContainTypeVariablesAfterCycle.ts, 16, 33))
+>T : Symbol(T, Decl(instantiationCouldContainTypeVariablesAfterCycle.ts, 17, 30))
+>meta : Symbol(meta, Decl(instantiationCouldContainTypeVariablesAfterCycle.ts, 17, 33))
+>Meta : Symbol(Meta, Decl(instantiationCouldContainTypeVariablesAfterCycle.ts, 10, 36))
+>T : Symbol(T, Decl(instantiationCouldContainTypeVariablesAfterCycle.ts, 17, 30))
+>DeepPartial : Symbol(DeepPartial, Decl(instantiationCouldContainTypeVariablesAfterCycle.ts, 7, 16))
+>Meta : Symbol(Meta, Decl(instantiationCouldContainTypeVariablesAfterCycle.ts, 10, 36))
+>T : Symbol(T, Decl(instantiationCouldContainTypeVariablesAfterCycle.ts, 17, 30))
+
