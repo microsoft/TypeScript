@@ -114,3 +114,120 @@ typedObject({ required: "value" });
 typedArray(["value"]);
 >typedArray : Symbol(typedArray, Decl(main.ts, 8, 12))
 
+// Contextually typed parameters: the contextual signature types the missing elements.
+type Options = (options?: { recursive?: boolean }) => void;
+>Options : Symbol(Options, Decl(main.ts, 25, 22))
+>options : Symbol(options, Decl(main.ts, 28, 16))
+>recursive : Symbol(recursive, Decl(main.ts, 28, 27))
+
+export const contextualFunction: Options = ({ recursive } = {}) => {
+>contextualFunction : Symbol(contextualFunction, Decl(main.ts, 29, 12))
+>Options : Symbol(Options, Decl(main.ts, 25, 22))
+>recursive : Symbol(recursive, Decl(main.ts, 29, 45))
+
+    const flag: string = recursive; // error: boolean | undefined
+>flag : Symbol(flag, Decl(main.ts, 30, 9))
+>recursive : Symbol(recursive, Decl(main.ts, 29, 45))
+
+};
+
+declare function takesCallback(cb: (options?: { deep?: boolean }) => void): void;
+>takesCallback : Symbol(takesCallback, Decl(main.ts, 31, 2))
+>cb : Symbol(cb, Decl(main.ts, 33, 31))
+>options : Symbol(options, Decl(main.ts, 33, 36))
+>deep : Symbol(deep, Decl(main.ts, 33, 47))
+
+takesCallback(({ deep } = {}) => {
+>takesCallback : Symbol(takesCallback, Decl(main.ts, 31, 2))
+>deep : Symbol(deep, Decl(main.ts, 34, 16))
+
+    const flag: string = deep; // error: boolean | undefined
+>flag : Symbol(flag, Decl(main.ts, 35, 9))
+>deep : Symbol(deep, Decl(main.ts, 34, 16))
+
+});
+
+interface Driver {
+>Driver : Symbol(Driver, Decl(main.ts, 36, 3))
+
+    rm(path: string, options?: { recursive?: boolean; force?: boolean }): void;
+>rm : Symbol(Driver.rm, Decl(main.ts, 38, 18))
+>path : Symbol(path, Decl(main.ts, 39, 7))
+>options : Symbol(options, Decl(main.ts, 39, 20))
+>recursive : Symbol(recursive, Decl(main.ts, 39, 32))
+>force : Symbol(force, Decl(main.ts, 39, 53))
+}
+export const driver: Driver = {
+>driver : Symbol(driver, Decl(main.ts, 41, 12))
+>Driver : Symbol(Driver, Decl(main.ts, 36, 3))
+
+    rm: (path, { recursive, force } = {}) => {
+>rm : Symbol(rm, Decl(main.ts, 41, 31))
+>path : Symbol(path, Decl(main.ts, 42, 9))
+>recursive : Symbol(recursive, Decl(main.ts, 42, 16))
+>force : Symbol(force, Decl(main.ts, 42, 27))
+
+        const flags: string[] = [recursive, force]; // error: boolean | undefined
+>flags : Symbol(flags, Decl(main.ts, 43, 13))
+>recursive : Symbol(recursive, Decl(main.ts, 42, 16))
+>force : Symbol(force, Decl(main.ts, 42, 27))
+
+    },
+};
+
+export const contextualNested: (options?: { inner?: { deep?: boolean } }) => void = ({ inner: { deep } = {} } = {}) => {
+>contextualNested : Symbol(contextualNested, Decl(main.ts, 47, 12))
+>options : Symbol(options, Decl(main.ts, 47, 32))
+>inner : Symbol(inner, Decl(main.ts, 47, 43))
+>deep : Symbol(deep, Decl(main.ts, 47, 53))
+>deep : Symbol(deep, Decl(main.ts, 47, 95))
+
+    const flag: string = deep; // error: boolean | undefined
+>flag : Symbol(flag, Decl(main.ts, 48, 9))
+>deep : Symbol(deep, Decl(main.ts, 47, 95))
+
+};
+
+// Only the elements the contextual type has are typed by it; the rest stay implicitly any.
+export const contextualPartial: (options?: { known?: number }) => void = ({ known, unknown } = {}) => {
+>contextualPartial : Symbol(contextualPartial, Decl(main.ts, 52, 12))
+>options : Symbol(options, Decl(main.ts, 52, 33))
+>known : Symbol(known, Decl(main.ts, 52, 44))
+>known : Symbol(known, Decl(main.ts, 52, 75))
+>unknown : Symbol(unknown, Decl(main.ts, 52, 82))
+
+    const value: string = known; // error: number | undefined
+>value : Symbol(value, Decl(main.ts, 53, 9))
+>known : Symbol(known, Decl(main.ts, 52, 75))
+
+};
+
+// Annotated parameters: the annotation types the missing elements of a nested pattern.
+interface Outer {
+>Outer : Symbol(Outer, Decl(main.ts, 54, 2))
+
+    inner?: { b?: number };
+>inner : Symbol(Outer.inner, Decl(main.ts, 57, 17))
+>b : Symbol(b, Decl(main.ts, 58, 13))
+}
+export function annotatedNested({ inner: { b } = {} }: Outer) {
+>annotatedNested : Symbol(annotatedNested, Decl(main.ts, 59, 1))
+>inner : Symbol(Outer.inner, Decl(main.ts, 57, 17))
+>b : Symbol(b, Decl(main.ts, 60, 42))
+>Outer : Symbol(Outer, Decl(main.ts, 54, 2))
+
+    const value: string = b; // error: number | undefined
+>value : Symbol(value, Decl(main.ts, 61, 9))
+>b : Symbol(b, Decl(main.ts, 60, 42))
+}
+export function annotatedNestedWithDefault({ inner: { b } = {} }: Outer = {}) {
+>annotatedNestedWithDefault : Symbol(annotatedNestedWithDefault, Decl(main.ts, 62, 1))
+>inner : Symbol(Outer.inner, Decl(main.ts, 57, 17))
+>b : Symbol(b, Decl(main.ts, 63, 53))
+>Outer : Symbol(Outer, Decl(main.ts, 54, 2))
+
+    const value: string = b; // error: number | undefined
+>value : Symbol(value, Decl(main.ts, 64, 9))
+>b : Symbol(b, Decl(main.ts, 63, 53))
+}
+

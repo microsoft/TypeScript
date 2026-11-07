@@ -153,3 +153,130 @@ typedArray(["value"]);
 >["value"] : [string]
 >"value" : "value"
 
+// Contextually typed parameters: the contextual signature types the missing elements.
+type Options = (options?: { recursive?: boolean }) => void;
+>Options : Options
+>options : { recursive?: boolean; } | undefined
+>recursive : boolean | undefined
+
+export const contextualFunction: Options = ({ recursive } = {}) => {
+>contextualFunction : Options
+>({ recursive } = {}) => {    const flag: string = recursive; // error: boolean | undefined} : ({ recursive }?: { recursive?: boolean; } | undefined) => void
+>recursive : boolean | undefined
+>{} : {}
+
+    const flag: string = recursive; // error: boolean | undefined
+>flag : string
+>recursive : boolean | undefined
+
+};
+
+declare function takesCallback(cb: (options?: { deep?: boolean }) => void): void;
+>takesCallback : (cb: (options?: { deep?: boolean; }) => void) => void
+>cb : (options?: { deep?: boolean; }) => void
+>options : { deep?: boolean; } | undefined
+>deep : boolean | undefined
+
+takesCallback(({ deep } = {}) => {
+>takesCallback(({ deep } = {}) => {    const flag: string = deep; // error: boolean | undefined}) : void
+>takesCallback : (cb: (options?: { deep?: boolean; }) => void) => void
+>({ deep } = {}) => {    const flag: string = deep; // error: boolean | undefined} : ({ deep }?: { deep?: boolean; } | undefined) => void
+>deep : boolean | undefined
+>{} : {}
+
+    const flag: string = deep; // error: boolean | undefined
+>flag : string
+>deep : boolean | undefined
+
+});
+
+interface Driver {
+    rm(path: string, options?: { recursive?: boolean; force?: boolean }): void;
+>rm : (path: string, options?: { recursive?: boolean; force?: boolean; }) => void
+>path : string
+>options : { recursive?: boolean; force?: boolean; } | undefined
+>recursive : boolean | undefined
+>force : boolean | undefined
+}
+export const driver: Driver = {
+>driver : Driver
+>{    rm: (path, { recursive, force } = {}) => {        const flags: string[] = [recursive, force]; // error: boolean | undefined    },} : { rm: (path: string, { recursive, force }?: { recursive?: boolean; force?: boolean; } | undefined) => void; }
+
+    rm: (path, { recursive, force } = {}) => {
+>rm : (path: string, { recursive, force }?: { recursive?: boolean; force?: boolean; } | undefined) => void
+>(path, { recursive, force } = {}) => {        const flags: string[] = [recursive, force]; // error: boolean | undefined    } : (path: string, { recursive, force }?: { recursive?: boolean; force?: boolean; } | undefined) => void
+>path : string
+>recursive : boolean | undefined
+>force : boolean | undefined
+>{} : {}
+
+        const flags: string[] = [recursive, force]; // error: boolean | undefined
+>flags : string[]
+>[recursive, force] : (boolean | undefined)[]
+>recursive : boolean | undefined
+>force : boolean | undefined
+
+    },
+};
+
+export const contextualNested: (options?: { inner?: { deep?: boolean } }) => void = ({ inner: { deep } = {} } = {}) => {
+>contextualNested : (options?: { inner?: { deep?: boolean; }; }) => void
+>options : { inner?: { deep?: boolean; }; } | undefined
+>inner : { deep?: boolean; } | undefined
+>deep : boolean | undefined
+>({ inner: { deep } = {} } = {}) => {    const flag: string = deep; // error: boolean | undefined} : ({ inner: { deep } }?: { inner?: { deep?: boolean; }; } | undefined) => void
+>inner : any
+>deep : boolean | undefined
+>{} : {}
+>{} : {}
+
+    const flag: string = deep; // error: boolean | undefined
+>flag : string
+>deep : boolean | undefined
+
+};
+
+// Only the elements the contextual type has are typed by it; the rest stay implicitly any.
+export const contextualPartial: (options?: { known?: number }) => void = ({ known, unknown } = {}) => {
+>contextualPartial : (options?: { known?: number; }) => void
+>options : { known?: number; } | undefined
+>known : number | undefined
+>({ known, unknown } = {}) => {    const value: string = known; // error: number | undefined} : ({ known, unknown }?: { known?: number; } | undefined) => void
+>known : number | undefined
+>unknown : any
+>{} : {}
+
+    const value: string = known; // error: number | undefined
+>value : string
+>known : number | undefined
+
+};
+
+// Annotated parameters: the annotation types the missing elements of a nested pattern.
+interface Outer {
+    inner?: { b?: number };
+>inner : { b?: number; } | undefined
+>b : number | undefined
+}
+export function annotatedNested({ inner: { b } = {} }: Outer) {
+>annotatedNested : ({ inner: { b } }: Outer) => void
+>inner : any
+>b : number | undefined
+>{} : {}
+
+    const value: string = b; // error: number | undefined
+>value : string
+>b : number | undefined
+}
+export function annotatedNestedWithDefault({ inner: { b } = {} }: Outer = {}) {
+>annotatedNestedWithDefault : ({ inner: { b } }?: Outer) => void
+>inner : any
+>b : number | undefined
+>{} : {}
+>{} : {}
+
+    const value: string = b; // error: number | undefined
+>value : string
+>b : number | undefined
+}
+
