@@ -1,0 +1,93 @@
+//// [tests/cases/compiler/circularMappedTypeConstraint2.ts] ////
+
+=== circularMappedTypeConstraint2.ts ===
+// https://github.com/microsoft/TypeScript/issues/62176
+
+type Test = keyof {
+>Test : Symbol(Test, Decl(circularMappedTypeConstraint2.ts, 0, 0))
+
+    [P in keyof P]: unknown  // Error
+>P : Symbol(P, Decl(circularMappedTypeConstraint2.ts, 3, 5))
+>P : Symbol(P, Decl(circularMappedTypeConstraint2.ts, 3, 5))
+
+};
+
+declare const test: Test;
+>test : Symbol(test, Decl(circularMappedTypeConstraint2.ts, 6, 13))
+>Test : Symbol(Test, Decl(circularMappedTypeConstraint2.ts, 0, 0))
+
+export function getTest() {
+>getTest : Symbol(getTest, Decl(circularMappedTypeConstraint2.ts, 6, 25))
+
+    return test;
+>test : Symbol(test, Decl(circularMappedTypeConstraint2.ts, 6, 13))
+}
+
+type Cond<T> = T extends string ? { a: T } : { b: T };
+>Cond : Symbol(Cond, Decl(circularMappedTypeConstraint2.ts, 10, 1))
+>T : Symbol(T, Decl(circularMappedTypeConstraint2.ts, 12, 10))
+>T : Symbol(T, Decl(circularMappedTypeConstraint2.ts, 12, 10))
+>a : Symbol(a, Decl(circularMappedTypeConstraint2.ts, 12, 35))
+>T : Symbol(T, Decl(circularMappedTypeConstraint2.ts, 12, 10))
+>b : Symbol(b, Decl(circularMappedTypeConstraint2.ts, 12, 46))
+>T : Symbol(T, Decl(circularMappedTypeConstraint2.ts, 12, 10))
+
+type T1 = { [P in keyof P | "x"]: unknown };  // Error
+>T1 : Symbol(T1, Decl(circularMappedTypeConstraint2.ts, 12, 54))
+>P : Symbol(P, Decl(circularMappedTypeConstraint2.ts, 14, 13))
+>P : Symbol(P, Decl(circularMappedTypeConstraint2.ts, 14, 13))
+
+type T2 = { [P in Extract<keyof P, string>]: unknown };  // Error
+>T2 : Symbol(T2, Decl(circularMappedTypeConstraint2.ts, 14, 44))
+>P : Symbol(P, Decl(circularMappedTypeConstraint2.ts, 15, 13))
+>Extract : Symbol(Extract, Decl(lib.es5.d.ts, --, --))
+>P : Symbol(P, Decl(circularMappedTypeConstraint2.ts, 15, 13))
+
+type T3 = { [P in keyof Cond<P>]: unknown };  // Error
+>T3 : Symbol(T3, Decl(circularMappedTypeConstraint2.ts, 15, 55))
+>P : Symbol(P, Decl(circularMappedTypeConstraint2.ts, 16, 13))
+>Cond : Symbol(Cond, Decl(circularMappedTypeConstraint2.ts, 10, 1))
+>P : Symbol(P, Decl(circularMappedTypeConstraint2.ts, 16, 13))
+
+type T4<T> = { [P in keyof P]: T };  // Error
+>T4 : Symbol(T4, Decl(circularMappedTypeConstraint2.ts, 16, 44))
+>T : Symbol(T, Decl(circularMappedTypeConstraint2.ts, 17, 8))
+>P : Symbol(P, Decl(circularMappedTypeConstraint2.ts, 17, 16))
+>P : Symbol(P, Decl(circularMappedTypeConstraint2.ts, 17, 16))
+>T : Symbol(T, Decl(circularMappedTypeConstraint2.ts, 17, 8))
+
+declare const t4: keyof T4<string>;
+>t4 : Symbol(t4, Decl(circularMappedTypeConstraint2.ts, 19, 13))
+>T4 : Symbol(T4, Decl(circularMappedTypeConstraint2.ts, 16, 44))
+
+export function getT4() {
+>getT4 : Symbol(getT4, Decl(circularMappedTypeConstraint2.ts, 19, 35))
+
+    return t4;
+>t4 : Symbol(t4, Decl(circularMappedTypeConstraint2.ts, 19, 13))
+}
+
+// No errors
+
+type T5<T extends keyof T> = T;
+>T5 : Symbol(T5, Decl(circularMappedTypeConstraint2.ts, 23, 1))
+>T : Symbol(T, Decl(circularMappedTypeConstraint2.ts, 27, 8))
+>T : Symbol(T, Decl(circularMappedTypeConstraint2.ts, 27, 8))
+>T : Symbol(T, Decl(circularMappedTypeConstraint2.ts, 27, 8))
+
+type T6 = { [P in keyof { [P in "a" | "b"]: P }]: P };
+>T6 : Symbol(T6, Decl(circularMappedTypeConstraint2.ts, 27, 31))
+>P : Symbol(P, Decl(circularMappedTypeConstraint2.ts, 28, 13))
+>P : Symbol(P, Decl(circularMappedTypeConstraint2.ts, 28, 27))
+>P : Symbol(P, Decl(circularMappedTypeConstraint2.ts, 28, 27))
+>P : Symbol(P, Decl(circularMappedTypeConstraint2.ts, 28, 13))
+
+type T7<T> = { [P in keyof T as `get${P & string}`]: T[P] };
+>T7 : Symbol(T7, Decl(circularMappedTypeConstraint2.ts, 28, 54))
+>T : Symbol(T, Decl(circularMappedTypeConstraint2.ts, 29, 8))
+>P : Symbol(P, Decl(circularMappedTypeConstraint2.ts, 29, 16))
+>T : Symbol(T, Decl(circularMappedTypeConstraint2.ts, 29, 8))
+>P : Symbol(P, Decl(circularMappedTypeConstraint2.ts, 29, 16))
+>T : Symbol(T, Decl(circularMappedTypeConstraint2.ts, 29, 8))
+>P : Symbol(P, Decl(circularMappedTypeConstraint2.ts, 29, 16))
+
