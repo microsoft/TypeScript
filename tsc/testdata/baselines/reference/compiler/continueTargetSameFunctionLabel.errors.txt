@@ -1,0 +1,20 @@
+continueTargetSameFunctionLabel.ts(8,9): error TS1115: A 'continue' statement can only jump to a label of an enclosing iteration statement.
+
+
+==== continueTargetSameFunctionLabel.ts (1 errors) ====
+    // Repro for https://github.com/microsoft/TypeScript/issues/30408
+    // The label is declared in the same function but does not enclose the
+    // continue statement, so the error should say so instead of claiming the
+    // jump target crosses a function boundary.
+    function foo() {
+        for (let i = 0; i < 10; i++) {
+            console.log(`${i}`);
+            continue loopend;
+            ~~~~~~~~~~~~~~~~~
+!!! error TS1115: A 'continue' statement can only jump to a label of an enclosing iteration statement.
+        }
+    
+        loopend:
+        console.log('end of loop');
+    }
+    

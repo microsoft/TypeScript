@@ -1,0 +1,34 @@
+breakTargetSameFunctionLabel.ts(8,9): error TS1116: A 'break' statement can only jump to a label of an enclosing statement.
+breakTargetSameFunctionLabel.ts(18,13): error TS1116: A 'break' statement can only jump to a label of an enclosing statement.
+
+
+==== breakTargetSameFunctionLabel.ts (2 errors) ====
+    // Repro for https://github.com/microsoft/TypeScript/issues/30408
+    // The labels are declared in the same scope but do not enclose the
+    // break statements, so the errors should say so instead of claiming the
+    // jump targets cross a function boundary.
+    function foo() {
+        for (let i = 0; i < 10; i++) {
+            console.log(`${i}`);
+            break loopend;
+            ~~~~~~~~~~~~~~
+!!! error TS1116: A 'break' statement can only jump to a label of an enclosing statement.
+        }
+    
+        loopend:
+        console.log('end of loop');
+    }
+    
+    class C {
+        static {
+            for (let i = 0; i < 10; i++) {
+                break done;
+                ~~~~~~~~~~~
+!!! error TS1116: A 'break' statement can only jump to a label of an enclosing statement.
+            }
+    
+            done:
+            console.log('end');
+        }
+    }
+    

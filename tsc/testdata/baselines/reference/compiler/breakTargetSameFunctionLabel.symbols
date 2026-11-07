@@ -1,0 +1,51 @@
+//// [tests/cases/compiler/breakTargetSameFunctionLabel.ts] ////
+
+=== breakTargetSameFunctionLabel.ts ===
+// Repro for https://github.com/microsoft/TypeScript/issues/30408
+// The labels are declared in the same scope but do not enclose the
+// break statements, so the errors should say so instead of claiming the
+// jump targets cross a function boundary.
+function foo() {
+>foo : Symbol(foo, Decl(breakTargetSameFunctionLabel.ts, 0, 0))
+
+    for (let i = 0; i < 10; i++) {
+>i : Symbol(i, Decl(breakTargetSameFunctionLabel.ts, 5, 12))
+>i : Symbol(i, Decl(breakTargetSameFunctionLabel.ts, 5, 12))
+>i : Symbol(i, Decl(breakTargetSameFunctionLabel.ts, 5, 12))
+
+        console.log(`${i}`);
+>console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+>log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>i : Symbol(i, Decl(breakTargetSameFunctionLabel.ts, 5, 12))
+
+        break loopend;
+    }
+
+    loopend:
+    console.log('end of loop');
+>console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+>log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+}
+
+class C {
+>C : Symbol(C, Decl(breakTargetSameFunctionLabel.ts, 12, 1))
+
+    static {
+        for (let i = 0; i < 10; i++) {
+>i : Symbol(i, Decl(breakTargetSameFunctionLabel.ts, 16, 16))
+>i : Symbol(i, Decl(breakTargetSameFunctionLabel.ts, 16, 16))
+>i : Symbol(i, Decl(breakTargetSameFunctionLabel.ts, 16, 16))
+
+            break done;
+        }
+
+        done:
+        console.log('end');
+>console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+>log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+    }
+}
+
