@@ -1029,18 +1029,14 @@ func (v *View) compareModuleSpecifiersForRanking(a, b *Fix) int {
 	if comparison := compareModuleSpecifierRelativity(a, b, v.preferences); comparison != 0 {
 		return comparison
 	}
-	if a.ModuleSpecifierKind == modulespecifiers.ResultKindAmbient && b.ModuleSpecifierKind == modulespecifiers.ResultKindAmbient {
-		if comparison := v.compareNodeCoreModuleSpecifiers(a.ModuleSpecifier, b.ModuleSpecifier, v.importingFile, v.program); comparison != 0 {
-			return comparison
-		}
+	if comparison := v.compareNodeCoreModuleSpecifiers(a.ModuleSpecifier, b.ModuleSpecifier, v.importingFile, v.program); comparison != 0 {
+		return comparison
 	}
-	if a.ModuleSpecifierKind == modulespecifiers.ResultKindRelative && b.ModuleSpecifierKind == modulespecifiers.ResultKindRelative {
-		if comparison := core.CompareBooleans(
-			isFixPossiblyReExportingImportingFile(a, v.importingFile.FileName(), v.program.CaseSensitivity()),
-			isFixPossiblyReExportingImportingFile(b, v.importingFile.FileName(), v.program.CaseSensitivity()),
-		); comparison != 0 {
-			return comparison
-		}
+	if comparison := core.CompareBooleans(
+		isFixPossiblyReExportingImportingFile(a, v.importingFile.FileName(), v.program.CaseSensitivity()),
+		isFixPossiblyReExportingImportingFile(b, v.importingFile.FileName(), v.program.CaseSensitivity()),
+	); comparison != 0 {
+		return comparison
 	}
 	if comparison := tspath.CompareNumberOfDirectorySeparators(a.ModuleSpecifier, b.ModuleSpecifier); comparison != 0 {
 		return comparison

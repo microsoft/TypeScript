@@ -135,17 +135,14 @@ value;
 // super
 class Derived extends C {
     constructor() {
-        var _a;
         super();
-        (_a = super). = Math.pow(_a., value);
+        super. = Math.pow(super., value);
     }
     foo() {
-        var _a;
-        (_a = super). = Math.pow(_a., value);
+        super. = Math.pow(super., value);
     }
     static sfoo() {
-        var _a;
-        (_a = super). = Math.pow(_a., value);
+        super. = Math.pow(super., value);
     }
 }
 // function expression
@@ -156,17 +153,17 @@ value;
 // function calls
 foo() = Math.pow(foo(), value);
 // parentheses, the containted expression is value
-(this) = Math.pow((this), value);
-(M) = Math.pow((M), value);
-(C) = Math.pow((C), value);
-(E) = Math.pow((E), value);
-(foo) = Math.pow((foo), value);
-(null) = Math.pow((null), value);
-(true) = Math.pow((true), value);
-(0) = Math.pow((0), value);
-('') = Math.pow((''), value);
-(/d+/) = Math.pow((/d+/), value);
-({}) = Math.pow(({}), value);
-([]) = Math.pow(([]), value);
-(function baz1() { }) = Math.pow((function baz1() { }), value);
-(foo()) = Math.pow((foo()), value);
+this = Math.pow(this, value);
+M = Math.pow(M, value);
+C = Math.pow(C, value);
+E = Math.pow(E, value);
+foo = Math.pow(foo, value);
+null = Math.pow(null, value);
+true = Math.pow(true, value);
+0 = Math.pow(0, value);
+'' = Math.pow('', value);
+/d+/ = Math.pow(/d+/, value);
+({} = Math.pow({}, value));
+[] = Math.pow([], value);
+(function baz1() { } = Math.pow(function baz1() { }, value));
+foo() = Math.pow(foo(), value);

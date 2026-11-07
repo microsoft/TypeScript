@@ -45,6 +45,80 @@ func TestBuildInfoPathJSONRoundTrip(t *testing.T) {
 	assert.Equal(t, roundTripped.LatestChangedDtsFile, buildInfo.LatestChangedDtsFile)
 }
 
+func TestBuildInfoCompilerOptionsJSONRoundTrip(t *testing.T) {
+	t.Parallel()
+	const input = `{"options":{"paths":{"second":["b","a"],"first":[]},"rootDirs":["./src","../generated"],"typeRoots":["./types"],"types":[],"customConditions":["custom"],"pathsBasePath":"../configs/first"}}`
+	var info BuildInfo
+	assert.NilError(t, json.Unmarshal([]byte(input), &info))
+	options := info.GetCompilerOptions("/project/dist")
+	assert.DeepEqual(t, slices.Collect(options.Paths.Keys()), []string{"second", "first"})
+	assert.DeepEqual(t, options.Paths.GetOrZero("second"), []string{"b", "a"})
+	assert.DeepEqual(t, options.Paths.GetOrZero("first"), []string{})
+	assert.Assert(t, options.Types != nil)
+	assert.Equal(t, options.RootDirs[0].AsString(), "/project/dist/src")
+	assert.Equal(t, options.RootDirs[1].AsString(), "/project/generated")
+	assert.Equal(t, options.TypeRoots[0].AsString(), "/project/dist/types")
+	assert.Equal(t, options.PathsBasePath.AsString(), "/project/configs/first")
+	assert.Equal(t, info.GetCompilerOptions("").PathsBasePath.AsString(), "")
+	data, err := json.Marshal(&info)
+	assert.NilError(t, err)
+	assert.Equal(t, string(data), input)
+	var restored BuildInfo
+	assert.NilError(t, json.Unmarshal(data, &restored))
+	restoredOptions := restored.GetCompilerOptions("/project/dist")
+	assert.Assert(t, options.Equals(restoredOptions))
+	assert.Assert(t, !tsoptions.CompilerOptionsAffectEmit(options, restoredOptions))
+	assert.Assert(t, !tsoptions.CompilerOptionsAffectSemanticDiagnostics(options, restoredOptions))
+}
+
+func TestBuildInfoCompilerOptionsCachedRoundTrip(t *testing.T) {
+	t.Parallel()
+	for _, empty := range []bool{false, true} {
+		t.Run(strconv.FormatBool(empty), func(t *testing.T) {
+			t.Parallel()
+			paths := &collections.OrderedMap[string, []string]{}
+			paths.Set("second", []string{"./second", "./fallback"})
+			paths.Set("first", []string{})
+			options := &core.CompilerOptions{
+				Incremental:      core.TSTrue,
+				Paths:            paths,
+				PathsBasePath:    "/project",
+				RootDirs:         []tspath.RootedDirectoryPath{"/project/src", "/generated"},
+				TypeRoots:        []tspath.RootedDirectoryPath{"/project/types"},
+				Types:            []string{"custom"},
+				CustomConditions: []string{"custom"},
+				ModuleSuffixes:   []string{".custom", ""},
+				Lib:              []string{"lib.es5.d.ts"},
+			}
+			if empty {
+				options.Paths = &collections.OrderedMap[string, []string]{}
+				options.RootDirs = []tspath.RootedDirectoryPath{}
+				options.TypeRoots = []tspath.RootedDirectoryPath{}
+				options.Types = []string{}
+				options.CustomConditions = []string{}
+				options.ModuleSuffixes = []string{}
+				options.Lib = []string{}
+			}
+			program := newDeletionTestProgram(map[string]string{
+				"/lib/lib.d.ts":        deletionTestLib,
+				"/project/consumer.ts": "export {};",
+			}, []string{"consumer.ts"}, options, nil)
+			info, err := snapshotToBuildInfo(program.snapshot, program.program, "/project/dist/state.tsbuildinfo")
+			assert.NilError(t, err)
+			data, err := json.Marshal(info)
+			assert.NilError(t, err)
+			var restored BuildInfo
+			assert.NilError(t, json.Unmarshal(data, &restored))
+			cachedOptions := info.GetCompilerOptions("/project/dist")
+			diskOptions := restored.GetCompilerOptions("/project/dist")
+			assert.Assert(t, cachedOptions.Equals(diskOptions))
+			assert.Assert(t, !tsoptions.CompilerOptionsAffectEmit(options, cachedOptions))
+			assert.Assert(t, !tsoptions.CompilerOptionsAffectSemanticDiagnostics(options, cachedOptions))
+			assert.DeepEqual(t, slices.Collect(cachedOptions.Paths.Keys()), slices.Collect(options.Paths.Keys()))
+		})
+	}
+}
+
 const deletionTestLib = `interface Array<T> {}
 interface Boolean {}
 interface CallableFunction {}

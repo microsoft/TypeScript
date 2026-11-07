@@ -1,0 +1,41 @@
+inferFromTypeArgumentsNoInfiniteRecursion.ts(34,10): error TS2589: Type instantiation is excessively deep and possibly infinite.
+
+
+==== inferFromTypeArgumentsNoInfiniteRecursion.ts (1 errors) ====
+    // Repro from #64701
+    // Checking `ReturnType<typeof createHandler>` relates the generic signature of
+    // `createHandler` to the signature in the `extends` clause of `ReturnType`, which
+    // instantiates it in the context of that signature. Inferring between the type
+    // arguments of nested instantiations of the same type aliases used to recurse
+    // through inferFromTypes and inferFromTypeArguments without terminating.
+    
+    type IsEqual<A, B> =
+        (<G>() => G extends A & G | G ? 1 : 2) extends
+        (<G>() => G extends B & G | G ? 1 : 2)
+            ? true
+            : false;
+    
+    type Fn = (...args: any) => any;
+    type Next<TFn extends Fn, TStack extends Fn> = (...args: Parameters<TStack & TFn>) => ReturnType<TStack & TFn>;
+    type Wrap<TFn extends Fn> = TFn extends unknown ? TFn : () => void;
+    
+    type Inner<TFn extends Fn, TAcc extends Fn, TStack extends Fn, TPrevious extends Fn, TCurrent extends Fn = Next<TFn, TStack>> =
+        IsEqual<TCurrent, TPrevious> extends true ? TAcc : Inner<TFn, TAcc & Wrap<TCurrent>, TCurrent & TStack, TCurrent>;
+    
+    type OwnProperties<T> = { [K in keyof T]: T[K] };
+    type Unwrap<TFn> = TFn extends Fn ? TFn : TFn;
+    
+    type Tree<T> = T extends Fn
+        ? Unwrap<Inner<T, Wrap<T>, T, T>> & Tree<OwnProperties<T>>
+        : T;
+    
+    interface Client<T> {
+        call: Tree<T>;
+    }
+    
+    declare function createHandler<T extends Fn>(): Client<T>;
+    
+    type R = ReturnType<typeof createHandler>;
+             ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2589: Type instantiation is excessively deep and possibly infinite.
+    

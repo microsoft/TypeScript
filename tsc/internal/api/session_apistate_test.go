@@ -544,3 +544,30 @@ func TestOpenProjectsWithCircularExtendsReportCircularity(t *testing.T) {
 	}
 	assert.DeepEqual(t, codes, []int32{18000})
 }
+
+func TestGetCurrentLanguageServerSnapshotCloseProjectRetainsProjectForOpenFile(t *testing.T) {
+	t.Parallel()
+
+	const configFileName = "/home/projects/p/tsconfig.json"
+	const fileName = "/home/projects/p/index.ts"
+	projectSession, _ := projecttestutil.Setup(map[string]any{
+		configFileName: `{}`,
+		fileName:       `export const value = 1;`,
+	})
+	defer projectSession.Close()
+	ctx := context.Background()
+	session := NewLSPSession(projectSession, nil)
+	defer session.Close()
+	cfg := DocumentIdentifier{FileName: configFileName}
+	_, err := session.handleGetCurrentLanguageServerSnapshot(ctx, &GetCurrentLanguageServerSnapshotParams{Changes: &LanguageServerSnapshotChanges{
+		OpenProjects: []DocumentIdentifier{cfg},
+		OpenFiles:    []DocumentIdentifier{{FileName: fileName}},
+	}})
+	assert.NilError(t, err)
+
+	_, err = session.handleGetCurrentLanguageServerSnapshot(ctx, &GetCurrentLanguageServerSnapshotParams{Changes: &LanguageServerSnapshotChanges{
+		CloseProjects: []DocumentIdentifier{cfg},
+	}})
+	assert.NilError(t, err)
+	assert.Assert(t, projectSession.Snapshot().ProjectCollection.ConfiguredProject(tspath.PathKeyFromCanonical(configFileName)) != nil)
+}

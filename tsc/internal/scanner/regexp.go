@@ -1028,7 +1028,12 @@ func (p *regExpParser) scanSourceCharacter() string {
 			return stringutil.EncodeJSStringRune(low)
 		}
 		ch, size := utf8.DecodeRuneInString(p.text()[p.pos():])
-		if ch == utf8.RuneError || size == 0 {
+		// utf8.RuneError is U+FFFD. A real U+FFFD decodes with size 3; only size 1
+		// means the input byte was not valid UTF-8 (see utf8.DecodeRune).
+		if size == 0 {
+			return ""
+		}
+		if ch == utf8.RuneError && size == 1 {
 			// Not a valid rune; consume one raw byte.
 			p.incPos(1)
 			return string(p.text()[p.pos()-1])
@@ -1047,9 +1052,9 @@ func (p *regExpParser) scanSourceCharacter() string {
 	if size == 0 {
 		return ""
 	}
-	if ch == utf8.RuneError {
+	if ch == utf8.RuneError && size == 1 {
 		// Invalid UTF-8; consume the byte to avoid infinite loops.
-		p.incPos(size)
+		p.incPos(1)
 		return ""
 	}
 	p.incPos(size)

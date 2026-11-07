@@ -5,6 +5,7 @@ import (
 	"io"
 	"os"
 	"path/filepath"
+	"runtime"
 	"strings"
 	"sync"
 	"testing"
@@ -33,6 +34,9 @@ func waitFor(t *testing.T, cond func() bool, msg string) {
 
 func TestWatcher_CreateChangeDelete(t *testing.T) {
 	t.Parallel()
+	if runtime.GOOS == "wasip1" {
+		t.Skip("wasip1 has no file watching")
+	}
 	dir := t.TempDir()
 
 	var (
@@ -366,6 +370,9 @@ func TestWatcher_NonRecursiveGlobIsNotRecursive(t *testing.T) {
 
 func TestWatcher_RealBackend_MissingThenCreate(t *testing.T) {
 	t.Parallel()
+	if runtime.GOOS == "wasip1" {
+		t.Skip("wasip1 has no file watching")
+	}
 	base := t.TempDir()
 	fs := bundled.WrapFS(osvfs.FS())
 

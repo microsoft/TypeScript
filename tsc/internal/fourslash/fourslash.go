@@ -168,6 +168,7 @@ func NewFourslash(t *testing.T, capabilities *lsproto.ClientCapabilities, conten
 
 type FourslashOptions struct {
 	Capabilities         *lsproto.ClientCapabilities
+	InitializeParams     *lsproto.InitializeParams
 	ContentMapperSpawner contentmapper.Spawner
 	RunExternalCode      bool
 	// Makes every textDocument/diagnostic request also emit the program and compare
@@ -385,6 +386,11 @@ func (f *FourslashTest) initialize(t *testing.T, options *FourslashOptions) {
 		InitializationOptions: &lsproto.InitializationOptionsOrNull{
 			InitializationOptions: initializationOptions,
 		},
+	}
+	if options.InitializeParams != nil {
+		params.RootUri = options.InitializeParams.RootUri
+		params.RootPath = options.InitializeParams.RootPath
+		params.WorkspaceFolders = options.InitializeParams.WorkspaceFolders
 	}
 	if options.RunExternalCode {
 		params.RootUri = lsproto.DocumentUriOrNull{DocumentUri: new(lsproto.DocumentUri("file:///"))}

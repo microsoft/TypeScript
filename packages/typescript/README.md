@@ -16,6 +16,8 @@ For other builds, use the `tsgo` command just like you would use `tsc`:
 npx tsgo --help
 ```
 
+The JavaScript API requires Node.js 20.16 or later when it starts the compiler itself. In other environments, provide a transport.
+
 ## Issues and Feedback
 
 The native port of TypeScript is still in progress.
