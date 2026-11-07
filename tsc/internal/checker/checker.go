@@ -9619,7 +9619,7 @@ func (c *Checker) resolveCall(node *ast.Node, signatures []*Signature, candidate
 	// don't hit this issue because they only observe this result after it's had a chance to
 	// be cached, but the error reporting code below executes before getResolvedSignature sets
 	// resolvedSignature.
-	c.signatureLinks.Get(node).resolvedSignature.set(c, result)
+	c.setResolvedSignature(c.signatureLinks.Get(node), result)
 	// No signatures were applicable. Now report errors based on the last applicable signature with
 	// no arguments excluded from assignability checks.
 	// If candidate is undefined, it means that no candidates had a suitable arity. In that case,
