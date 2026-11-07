@@ -1,6 +1,7 @@
 import * as fs from "fs";
 import * as path from "path";
 import * as vscode from "vscode";
+import { getExplicitConfigurationValue } from "./configurationPrecedence";
 import { nightlyExtensionId } from "./extensionIds";
 import {
     type DetectedTypeScriptVersion,
@@ -256,13 +257,14 @@ function getExplicitConfigValues<T>(section: string, key: string): ExplicitConfi
         return [];
     }
 
+    // Every setting read here is window-scoped, so it cannot be set in a
+    // `[language]` block, and this read has no `languageId`. Only the plain
+    // values can be set. Use `getExplicitConfigurationValue` for settings that
+    // can have language-specific values.
     const candidates: Array<{ value: T | undefined; target: vscode.ConfigurationTarget; order: number; }> = [
-        { value: inspection.workspaceFolderLanguageValue, target: vscode.ConfigurationTarget.WorkspaceFolder, order: 0 },
-        { value: inspection.workspaceFolderValue, target: vscode.ConfigurationTarget.WorkspaceFolder, order: 1 },
-        { value: inspection.workspaceLanguageValue, target: vscode.ConfigurationTarget.Workspace, order: 2 },
-        { value: inspection.workspaceValue, target: vscode.ConfigurationTarget.Workspace, order: 3 },
-        { value: inspection.globalLanguageValue, target: vscode.ConfigurationTarget.Global, order: 4 },
-        { value: inspection.globalValue, target: vscode.ConfigurationTarget.Global, order: 5 },
+        { value: inspection.workspaceFolderValue, target: vscode.ConfigurationTarget.WorkspaceFolder, order: 0 },
+        { value: inspection.workspaceValue, target: vscode.ConfigurationTarget.Workspace, order: 1 },
+        { value: inspection.globalValue, target: vscode.ConfigurationTarget.Global, order: 2 },
     ];
 
     const result: ExplicitConfigValue<T>[] = [];
@@ -417,15 +419,7 @@ export function readUnifiedConfig<T>(
     scope: vscode.ConfigurationScope | undefined,
     defaultValue: T,
 ): T {
-    const unified = vscode.workspace.getConfiguration("js/ts", scope).inspect<T>(key);
-    const explicit = unified && (
-        unified.workspaceFolderLanguageValue
-            ?? unified.workspaceFolderValue
-            ?? unified.workspaceLanguageValue
-            ?? unified.workspaceValue
-            ?? unified.globalLanguageValue
-            ?? unified.globalValue
-    );
+    const explicit = getExplicitConfigurationValue(vscode.workspace.getConfiguration("js/ts", scope).inspect<T>(key));
     if (explicit !== undefined) return explicit;
     return vscode.workspace.getConfiguration(fallbackSection, scope).get<T>(fallbackKey, defaultValue);
 }
