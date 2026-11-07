@@ -1,0 +1,17 @@
+new-Map2.ts(6,7): error TS7034: Variable 'a3' implicitly has type 'any[]' in some locations where its type cannot be determined.
+new-Map2.ts(7,20): error TS7005: Variable 'a3' implicitly has an 'any[]' type.
+
+
+==== new-Map2.ts (2 errors) ====
+    const m1 = new Map([]);
+    
+    const a2: any[] = [];
+    const m2 = new Map(a2);
+    
+    const a3 = [];
+          ~~
+!!! error TS7034: Variable 'a3' implicitly has type 'any[]' in some locations where its type cannot be determined.
+    const m3 = new Map(a3);
+                       ~~
+!!! error TS7005: Variable 'a3' implicitly has an 'any[]' type.
+    

@@ -2,11 +2,11 @@
 
 === for-of39.ts ===
 var map = new Map([["", true], ["", 0]]);
->map : Map<string, number>
->new Map([["", true], ["", 0]]) : Map<string, number>
+>map : Map<string, number | boolean>
+>new Map([["", true], ["", 0]]) : Map<string, number | boolean>
 >Map : MapConstructor
->[["", true], ["", 0]] : ([string, number] | [string, boolean])[]
->["", true] : [string, boolean]
+>[["", true], ["", 0]] : ([string, number] | [string, true])[]
+>["", true] : [string, true]
 >"" : ""
 >true : true
 >["", 0] : [string, number]
@@ -15,12 +15,12 @@ var map = new Map([["", true], ["", 0]]);
 
 for (var [k, v] of map) {
 >k : string
->v : number
->map : Map<string, number>
+>v : number | boolean
+>map : Map<string, number | boolean>
 
     k;
 >k : string
 
     v;
->v : number
+>v : number | boolean
 }
