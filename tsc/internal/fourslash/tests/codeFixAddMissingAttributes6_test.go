@@ -3,7 +3,9 @@ package fourslash_test
 import (
 	"testing"
 
+	"github.com/microsoft/TypeScript/tsc/internal/diagnostics"
 	"github.com/microsoft/TypeScript/tsc/internal/fourslash"
+	"github.com/microsoft/TypeScript/tsc/internal/locale"
 	"github.com/microsoft/TypeScript/tsc/internal/testutil"
 )
 
@@ -24,8 +26,9 @@ const A = ({ a, b, c, d }: P) =>
 
 const props = { a: 1, b: "", c: [], d: undefined };
 const Bar = () =>
-    [|<A {...props}></A>|]`
-	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+    <A {...props}></A>`
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content+addMissingAttributesJsxDeclarations)
 	defer done()
-	f.VerifyCodeFixNotAvailable(t, "fixMissingAttributes")
+	f.VerifyNoErrors(t)
+	f.VerifyCodeFixNotAvailable(t, diagnostics.Add_missing_attributes.Localize(locale.Default))
 }

@@ -8,6 +8,7 @@ import (
 
 	"github.com/microsoft/TypeScript/tsc/internal/ast"
 	"github.com/microsoft/TypeScript/tsc/internal/checker"
+	"github.com/microsoft/TypeScript/tsc/internal/collections"
 	"github.com/microsoft/TypeScript/tsc/internal/compiler"
 	"github.com/microsoft/TypeScript/tsc/internal/core"
 	"github.com/microsoft/TypeScript/tsc/internal/debug"
@@ -25,6 +26,7 @@ type ImportAdder interface {
 	HasFixes() bool
 	AddImportFromExportedSymbol(symbol *ast.Symbol, isValidTypeOnlyUseSite bool)
 	AddImportFix(fix *Fix)
+	WriteFixes(tracker *change.Tracker)
 	Edits() []*lsproto.TextEdit
 }
 
@@ -33,6 +35,7 @@ type addToExistingState struct {
 	importClauseOrBindingPattern *ast.ImportClauseOrBindingPattern
 	defaultImport                *newImportBinding
 	namedImports                 map[string]*newImportBinding
+	importsToPromote             collections.Set[*ast.Node]
 }
 
 // importsCollection tracks new imports to be created for a given module specifier
@@ -116,8 +119,14 @@ func (adder *importAdder) AddImportFromExportedSymbol(exportedSymbol *ast.Symbol
 }
 
 func (adder *importAdder) Edits() []*lsproto.TextEdit {
-	// !!! organize imports?
 	tracker := change.NewTracker(adder.ctx, adder.view.program.Options(), adder.formatOptions, adder.converters)
+	adder.WriteFixes(tracker)
+	changes, _ := tracker.GetChanges()
+	return changes[adder.view.importingFile.OriginalFileName()]
+}
+
+func (adder *importAdder) WriteFixes(tracker *change.Tracker) {
+	// !!! organize imports?
 	quotePreference := lsutil.GetQuotePreference(adder.view.importingFile, adder.preferences)
 	for _, fix := range adder.addToNamespace {
 		addNamespaceQualifier(fix, tracker, adder.view.importingFile, locale.Default)
@@ -132,6 +141,8 @@ func (adder *importAdder) Edits() []*lsproto.TextEdit {
 			clauseOrPattern,
 			entry.defaultImport,
 			sortedNamedImports(entry.namedImports),
+			entry.importsToPromote,
+			adder.view.program.Options(),
 			adder.preferences,
 		)
 	}
@@ -168,11 +179,6 @@ func (adder *importAdder) Edits() []*lsproto.TextEdit {
 	if len(newDeclarations) > 0 {
 		insertImports(tracker, adder.view.importingFile, newDeclarations, true /*blankLineBetween*/, adder.preferences)
 	}
-
-	// Unmappable files are dropped by GetChanges, so a content-mapped importing file that cannot be
-	// faithfully rewritten yields no edits rather than a corrupting one.
-	changes, _ := tracker.GetChanges()
-	return changes[adder.view.importingFile.OriginalFileName()]
 }
 
 func sortedNamedImports(m map[string]*newImportBinding) []*newImportBinding {
@@ -197,14 +203,7 @@ func (adder *importAdder) AddImportFix(fix *Fix) {
 		adder.importType = append(adder.importType, fix)
 	case lsproto.AutoImportFixKindAddToExisting:
 		existingFix := getAddToExistingImportFix(adder.view.importingFile, fix)
-		entry := adder.addToExisting[existingFix.importClauseOrBindingPattern]
-		if entry == nil {
-			entry = &addToExistingState{
-				importClauseOrBindingPattern: existingFix.importClauseOrBindingPattern,
-				namedImports:                 make(map[string]*newImportBinding),
-			}
-			adder.addToExisting[existingFix.importClauseOrBindingPattern] = entry
-		}
+		entry := adder.getAddToExistingEntry(existingFix.importClauseOrBindingPattern)
 
 		if fix.ImportKind == lsproto.ImportKindNamed {
 			prevImport := entry.namedImports[symbolName]
@@ -315,10 +314,31 @@ func (adder *importAdder) AddImportFix(fix *Fix) {
 		}
 
 	case lsproto.AutoImportFixKindPromoteTypeOnly:
-		// Excluding from fix-all
+		declaration := fix.TypeOnlyAliasDeclaration
+		clause := declaration
+		switch declaration.Kind {
+		case ast.KindImportSpecifier:
+			clause = declaration.Parent.Parent
+		case ast.KindNamespaceImport:
+			clause = declaration.Parent
+		}
+		entry := adder.getAddToExistingEntry(clause)
+		entry.importsToPromote.Add(declaration)
 	default:
 		debug.Fail(fmt.Sprintf("Unexpected fix kind: %v", fix.Kind))
 	}
+}
+
+func (adder *importAdder) getAddToExistingEntry(clause *ast.Node) *addToExistingState {
+	entry := adder.addToExisting[clause]
+	if entry == nil {
+		entry = &addToExistingState{
+			importClauseOrBindingPattern: clause,
+			namedImports:                 make(map[string]*newImportBinding),
+		}
+		adder.addToExisting[clause] = entry
+	}
+	return entry
 }
 
 // `NotAllowed` overrides `Required` because one addition of a new import might be required to be type-only

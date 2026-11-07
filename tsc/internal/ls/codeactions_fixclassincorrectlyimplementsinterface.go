@@ -12,7 +12,6 @@ import (
 	"github.com/microsoft/TypeScript/tsc/internal/locale"
 	"github.com/microsoft/TypeScript/tsc/internal/ls/autoimport"
 	"github.com/microsoft/TypeScript/tsc/internal/ls/change"
-	"github.com/microsoft/TypeScript/tsc/internal/lsp/lsproto"
 	"github.com/microsoft/TypeScript/tsc/internal/scanner"
 )
 
@@ -45,13 +44,17 @@ func getCodeActionsToFixClassIncorrectlyImplementsInterface(context context.Cont
 	var actions []*CodeAction
 	for _, implementedTypeNode := range implementsTypes {
 		changeTracker := change.NewTracker(context, fixContext.Program.Options(), fixContext.LS.FormatOptions(), fixContext.LS.converters)
-		importAdder, err := createImportAdder(context, fixContext, typeChecker)
+		importAdder, err := fixContext.LS.createImportAdder(context, typeChecker, fixContext.SourceFile)
 		if err != nil {
 			return nil, err
 		}
 
-		addChanges(context, fixContext, changeTracker, importAdder, typeChecker, classDeclaration, implementedTypeNode)
-		changes := getChanges(changeTracker, importAdder, fixContext.SourceFile)
+		fixer := addChanges(context, fixContext, changeTracker, importAdder, typeChecker, classDeclaration, implementedTypeNode)
+		fixer.addImports()
+		if importAdder != nil {
+			importAdder.WriteFixes(changeTracker)
+		}
+		changes := getCodeFixChanges(fixContext.SourceFile, changeTracker)
 		if len(changes) == 0 {
 			continue
 		}
@@ -66,38 +69,36 @@ func getCodeActionsToFixClassIncorrectlyImplementsInterface(context context.Cont
 	return actions, nil
 }
 
-func getAllCodeActionsToFixClassIncorrectlyImplementsInterface(context context.Context, fixContext *CodeFixContext) (*CombinedCodeActions, error) {
-	allDiags := getAllDiagnostics(context, fixContext.Program, fixContext.SourceFile)
-
-	typeChecker, done := fixContext.Program.GetTypeCheckerForFile(context, fixContext.SourceFile)
-	defer done()
-
+func getAllCodeActionsToFixClassIncorrectlyImplementsInterface(context context.Context, fixContext *CodeFixContext, fixAll *CodeFixAll) (*CombinedCodeActions, error) {
 	changeTracker := change.NewTracker(context, fixContext.Program.Options(), fixContext.LS.FormatOptions(), fixContext.LS.converters)
-	importAdder, err := createImportAdder(context, fixContext, typeChecker)
-	if err != nil {
-		return nil, err
-	}
-
 	seenClassDeclarations := collections.Set[*ast.Node]{}
+	var fixers []*missingMemberFixer
 
-	for _, diag := range allDiags {
-		if isFixableDiagnostic(diag, fixClassIncorrectlyImplementsInterfaceErrorCodes) {
+	for _, diag := range fixAll.diagnostics {
+		if diag.File() == fixContext.SourceFile && isFixableDiagnostic(diag, fixClassIncorrectlyImplementsInterfaceErrorCodes) {
 			classDeclaration := getClass(fixContext.SourceFile, core.NewTextRange(diag.Pos(), diag.End()))
 			if classDeclaration == nil {
 				continue
 			}
 			if seenClassDeclarations.AddIfAbsent(classDeclaration) {
+				importAdder, err := fixAll.getImportAdder(context, fixContext)
+				if err != nil {
+					return nil, err
+				}
 				implementsTypes := ast.GetImplementsHeritageClauseElements(classDeclaration)
 				for _, implementedTypeNode := range implementsTypes {
-					addChanges(context, fixContext, changeTracker, importAdder, typeChecker, classDeclaration, implementedTypeNode)
+					fixers = append(fixers, addChanges(context, fixContext, changeTracker, importAdder, fixAll.typeChecker, classDeclaration, implementedTypeNode))
 				}
 			}
 		}
 	}
 
-	changes := getChanges(changeTracker, importAdder, fixContext.SourceFile)
+	changes := getCodeFixChanges(fixContext.SourceFile, changeTracker)
 	if len(changes) == 0 {
 		return nil, nil
+	}
+	for _, fixer := range fixers {
+		fixer.addImports()
 	}
 
 	return &CombinedCodeActions{
@@ -106,7 +107,7 @@ func getAllCodeActionsToFixClassIncorrectlyImplementsInterface(context context.C
 	}, nil
 }
 
-func addChanges(context context.Context, fixContext *CodeFixContext, changeTracker *change.Tracker, importAdder autoimport.ImportAdder, typeChecker *checker.Checker, classDeclaration *ast.Node, implementedTypeNode *ast.HeritageClauseElement) {
+func addChanges(context context.Context, fixContext *CodeFixContext, changeTracker *change.Tracker, importAdder autoimport.ImportAdder, typeChecker *checker.Checker, classDeclaration *ast.Node, implementedTypeNode *ast.HeritageClauseElement) *missingMemberFixer {
 	missingMemberFixer := newMissingMemberFixer(changeTracker, fixContext.Program, typeChecker, fixContext.LS.UserPreferences(), importAdder, locale.FromContext(context))
 	constructor := getConstructor(classDeclaration)
 	implementedType := typeChecker.GetTypeAtLocation(implementedTypeNode)
@@ -133,18 +134,7 @@ func addChanges(context context.Context, fixContext *CodeFixContext, changeTrack
 			insertInterfaceMemberNode(changeTracker, fixContext.SourceFile, classDeclaration, constructor, memberNode)
 		}
 	}
-}
-
-func getChanges(changeTracker *change.Tracker, importAdder autoimport.ImportAdder, sourceFile *ast.SourceFile) []*lsproto.TextEdit {
-	changes, unmappable := changeTracker.GetChanges()
-	if len(unmappable) != 0 {
-		return nil
-	}
-	fileChanges := changes[sourceFile.OriginalFileName()]
-	if importAdder != nil && importAdder.HasFixes() {
-		fileChanges = append(fileChanges, importAdder.Edits()...)
-	}
-	return fileChanges
+	return missingMemberFixer
 }
 
 func insertInterfaceMemberNode(changeTracker *change.Tracker, sourceFile *ast.SourceFile, classDeclaration *ast.Node, constructor *ast.Node, member *ast.Node) {
@@ -228,15 +218,4 @@ func getInheritedMembers(typeChecker *checker.Checker, classDeclaration *ast.Nod
 		}
 	}
 	return inheritedMembers
-}
-
-func createImportAdder(context context.Context, fixContext *CodeFixContext, typeChecker *checker.Checker) (autoimport.ImportAdder, error) {
-	view, err := fixContext.LS.getPreparedAutoImportView(fixContext.SourceFile, typeChecker)
-	if err != nil {
-		return nil, err
-	}
-	if view == nil {
-		return nil, nil
-	}
-	return autoimport.NewImportAdder(context, fixContext.Program, typeChecker, fixContext.SourceFile, view, fixContext.LS.FormatOptions(), fixContext.LS.converters, fixContext.LS.UserPreferences()), nil
 }
