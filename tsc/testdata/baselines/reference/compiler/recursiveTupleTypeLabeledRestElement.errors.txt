@@ -1,0 +1,64 @@
+a.ts(19,14): error TS2322: Type '["i", number]' is not assignable to type 'Labeled'.
+  Type '["i", number]' is not assignable to type '["i", ...rest: Labeled[]]'.
+    Type at position 1 in source is not compatible with type at position 1 in target.
+      Type 'number' is not assignable to type 'Labeled'.
+a.ts(20,14): error TS2322: Type '["li", string]' is not assignable to type 'DocNode'.
+  Type '["li", string]' is not assignable to type '["li", index: number, ...children: DocNode[]]'.
+    Type at position 1 in source is not compatible with type at position 1 in target.
+      Type 'string' is not assignable to type 'number'.
+a.ts(21,44): error TS2322: Type 'string' is not assignable to type 'Tree<number>'.
+b.js(7,14): error TS2322: Type '["i", number]' is not assignable to type 'JSDocLabeled'.
+  Type '["i", number]' is not assignable to type '["i", ...rest: JSDocLabeled[]]'.
+    Type at position 1 in source is not compatible with type at position 1 in target.
+      Type 'number' is not assignable to type 'JSDocLabeled'.
+
+
+==== a.ts (3 errors) ====
+    export type Unlabeled = string | ["i", ...Unlabeled[]];
+    export type Labeled = string | ["i", ...rest: Labeled[]];
+    
+    export type LabeledAfterLabeled = string | ["li", index: number, ...rest: LabeledAfterLabeled[]];
+    export type LabeledBeforeLabeled = string | ["a", ...rest: LabeledBeforeLabeled[], last: number];
+    export type LabeledParenthesized = string | ["a", ...rest: (LabeledParenthesized)[]];
+    
+    export type DocNode =
+        | string
+        | ["i", ...children: DocNode[]]
+        | ["li", index: number, ...children: DocNode[]];
+    
+    export type Tree<T> = T | [label: string, ...children: Tree<T>[]];
+    
+    export const ok1: Labeled = ["i", "a", ["i", "b"]];
+    export const ok2: DocNode = ["li", 0, "a", ["i"]];
+    export const ok3: Tree<number> = ["root", 1, ["leaf", 2]];
+    
+    export const bad1: Labeled = ["i", 1];
+                 ~~~~
+!!! error TS2322: Type '["i", number]' is not assignable to type 'Labeled'.
+!!! error TS2322:   Type '["i", number]' is not assignable to type '["i", ...rest: Labeled[]]'.
+!!! error TS2322:     Type at position 1 in source is not compatible with type at position 1 in target.
+!!! error TS2322:       Type 'number' is not assignable to type 'Labeled'.
+    export const bad2: DocNode = ["li", "0"];
+                 ~~~~
+!!! error TS2322: Type '["li", string]' is not assignable to type 'DocNode'.
+!!! error TS2322:   Type '["li", string]' is not assignable to type '["li", index: number, ...children: DocNode[]]'.
+!!! error TS2322:     Type at position 1 in source is not compatible with type at position 1 in target.
+!!! error TS2322:       Type 'string' is not assignable to type 'number'.
+    export const bad3: Tree<number> = ["root", "1"];
+                                               ~~~
+!!! error TS2322: Type 'string' is not assignable to type 'Tree<number>'.
+    
+==== b.js (1 errors) ====
+    /** @typedef {string | ["i", ...rest: JSDocLabeled[]]} JSDocLabeled */
+    
+    /** @type {JSDocLabeled} */
+    export const ok4 = ["i", "a", ["i"]];
+    
+    /** @type {JSDocLabeled} */
+    export const bad4 = ["i", 1];
+                 ~~~~
+!!! error TS2322: Type '["i", number]' is not assignable to type 'JSDocLabeled'.
+!!! error TS2322:   Type '["i", number]' is not assignable to type '["i", ...rest: JSDocLabeled[]]'.
+!!! error TS2322:     Type at position 1 in source is not compatible with type at position 1 in target.
+!!! error TS2322:       Type 'number' is not assignable to type 'JSDocLabeled'.
+    
