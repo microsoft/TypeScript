@@ -1,0 +1,584 @@
+// === QuickInfo ===
+=== /middleHop.ts ===
+// import {
+//     /** Doc on import alias */
+//     foo
+// } from "./uncommentedReexport.js";
+// foo();
+// ^^^
+// | ----------------------------------------------------------------------
+// | ```typescript
+// | (alias) function foo(): void
+// | ```
+// | Doc on import alias
+// | Doc on impl
+// | ----------------------------------------------------------------------
+// foo;
+// ^^^
+// | ----------------------------------------------------------------------
+// | ```typescript
+// | (alias) function foo(): void
+// | ```
+// | Doc on import alias
+// | Doc on impl
+// | ----------------------------------------------------------------------
+=== /namespaceImport.ts ===
+// import * as m from "./main.js";
+// m.bar();
+//   ^^^
+// | ----------------------------------------------------------------------
+// | ```typescript
+// | (alias) function foo(): void
+// | ```
+// | Doc on export import alias
+// | Doc on impl
+// | ----------------------------------------------------------------------
+// m.bar;
+//   ^^^
+// | ----------------------------------------------------------------------
+// | ```typescript
+// | (alias) function foo(): void
+// | ```
+// | Doc on export import alias
+// | Doc on impl
+// | ----------------------------------------------------------------------
+
+
+=== /namespaces.ts ===
+// declare namespace a {
+//     /** on the declaration */
+//     export function fn(): void;
+//     /** on the declaration */
+//     export interface S {}
+//     /** Same */
+//     export function same(): void;
+//     /** on the declaration */
+//     export function tagged(): void;
+// }
+// declare namespace b {
+//     /** on the alias */
+//     export import fn = a.fn;
+//     export namespace S {}
+//     /** on the alias */
+//     export import S = a.S;
+//     /** Same */
+//     export import same = a.same;
+//     /** @deprecated on the alias */
+//     export import tagged = a.tagged;
+// }
+// b.fn();
+//   ^^
+// | ----------------------------------------------------------------------
+// | ```typescript
+// | (alias) function a.fn(): void
+// | ```
+// | on the alias
+// | on the declaration
+// | ----------------------------------------------------------------------
+// b.fn;
+//   ^^
+// | ----------------------------------------------------------------------
+// | ```typescript
+// | (alias) function a.fn(): void
+// | ```
+// | on the alias
+// | on the declaration
+// | ----------------------------------------------------------------------
+// let s: b.S;
+//          ^
+// | ----------------------------------------------------------------------
+// | ```typescript
+// | (alias) interface a.S
+// | ```
+// | on the alias
+// | on the declaration
+// | ----------------------------------------------------------------------
+// b.same();
+//   ^^^^
+// | ----------------------------------------------------------------------
+// | ```typescript
+// | (alias) function a.same(): void
+// | ```
+// | Same
+// | ----------------------------------------------------------------------
+// b.same;
+//   ^^^^
+// | ----------------------------------------------------------------------
+// | ```typescript
+// | (alias) function a.same(): void
+// | ```
+// | Same
+// | ----------------------------------------------------------------------
+// b.tagged();
+//   ^^^^^^
+// | ----------------------------------------------------------------------
+// | ```typescript
+// | (alias) function a.tagged(): void
+// | ```
+// | on the declaration
+// | 
+// | *@deprecated* — on the alias
+// | ----------------------------------------------------------------------
+// b.tagged;
+//   ^^^^^^
+// | ----------------------------------------------------------------------
+// | ```typescript
+// | (alias) function a.tagged(): void
+// | ```
+// | on the declaration
+// | 
+// | *@deprecated* — on the alias
+// | ----------------------------------------------------------------------
+
+
+=== /useDefault.ts ===
+// /** before import */
+// import d from "./impl.js";
+// d();
+// ^
+// | ----------------------------------------------------------------------
+// | ```typescript
+// | (alias) function d(): void
+// | ```
+// | on impl
+// | ----------------------------------------------------------------------
+// d;
+// ^
+// | ----------------------------------------------------------------------
+// | ```typescript
+// | (alias) function d(): void
+// | ```
+// | on impl
+// | ----------------------------------------------------------------------
+
+
+=== /useReexport.ts ===
+// import { g } from "./reexport.js";
+// g();
+// ^
+// | ----------------------------------------------------------------------
+// | ```typescript
+// | (alias) function f(): void
+// | ```
+// | on re-export
+// | on impl
+// | ----------------------------------------------------------------------
+// g;
+// ^
+// | ----------------------------------------------------------------------
+// | ```typescript
+// | (alias) function f(): void
+// | ```
+// | on re-export
+// | on impl
+// | ----------------------------------------------------------------------
+
+
+[
+  {
+    "marker": {
+      "Position": 34,
+      "LSPosition": {
+        "line": 1,
+        "character": 2
+      },
+      "Name": "namespaceImportCall",
+      "Data": {}
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```typescript\n(alias) function foo(): void\n```\nDoc on export import alias\nDoc on impl"
+      },
+      "range": {
+        "start": {
+          "line": 1,
+          "character": 2
+        },
+        "end": {
+          "line": 1,
+          "character": 5
+        }
+      }
+    }
+  },
+  {
+    "marker": {
+      "Position": 43,
+      "LSPosition": {
+        "line": 2,
+        "character": 2
+      },
+      "Name": "namespaceImport",
+      "Data": {}
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```typescript\n(alias) function foo(): void\n```\nDoc on export import alias\nDoc on impl"
+      },
+      "range": {
+        "start": {
+          "line": 2,
+          "character": 2
+        },
+        "end": {
+          "line": 2,
+          "character": 5
+        }
+      }
+    }
+  },
+  {
+    "marker": {
+      "Position": 83,
+      "LSPosition": {
+        "line": 4,
+        "character": 0
+      },
+      "Name": "middleHopCall",
+      "Data": {}
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```typescript\n(alias) function foo(): void\n```\nDoc on import alias\nDoc on impl"
+      },
+      "range": {
+        "start": {
+          "line": 4,
+          "character": 0
+        },
+        "end": {
+          "line": 4,
+          "character": 3
+        }
+      }
+    }
+  },
+  {
+    "marker": {
+      "Position": 90,
+      "LSPosition": {
+        "line": 5,
+        "character": 0
+      },
+      "Name": "middleHop",
+      "Data": {}
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```typescript\n(alias) function foo(): void\n```\nDoc on import alias\nDoc on impl"
+      },
+      "range": {
+        "start": {
+          "line": 5,
+          "character": 0
+        },
+        "end": {
+          "line": 5,
+          "character": 3
+        }
+      }
+    }
+  },
+  {
+    "marker": {
+      "Position": 35,
+      "LSPosition": {
+        "line": 1,
+        "character": 0
+      },
+      "Name": "reexportCall",
+      "Data": {}
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```typescript\n(alias) function f(): void\n```\non re-export\non impl"
+      },
+      "range": {
+        "start": {
+          "line": 1,
+          "character": 0
+        },
+        "end": {
+          "line": 1,
+          "character": 1
+        }
+      }
+    }
+  },
+  {
+    "marker": {
+      "Position": 40,
+      "LSPosition": {
+        "line": 2,
+        "character": 0
+      },
+      "Name": "reexport",
+      "Data": {}
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```typescript\n(alias) function f(): void\n```\non re-export\non impl"
+      },
+      "range": {
+        "start": {
+          "line": 2,
+          "character": 0
+        },
+        "end": {
+          "line": 2,
+          "character": 1
+        }
+      }
+    }
+  },
+  {
+    "marker": {
+      "Position": 48,
+      "LSPosition": {
+        "line": 2,
+        "character": 0
+      },
+      "Name": "defaultImportCall",
+      "Data": {}
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```typescript\n(alias) function d(): void\n```\non impl"
+      },
+      "range": {
+        "start": {
+          "line": 2,
+          "character": 0
+        },
+        "end": {
+          "line": 2,
+          "character": 1
+        }
+      }
+    }
+  },
+  {
+    "marker": {
+      "Position": 53,
+      "LSPosition": {
+        "line": 3,
+        "character": 0
+      },
+      "Name": "defaultImport",
+      "Data": {}
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```typescript\n(alias) function d(): void\n```\non impl"
+      },
+      "range": {
+        "start": {
+          "line": 3,
+          "character": 0
+        },
+        "end": {
+          "line": 3,
+          "character": 1
+        }
+      }
+    }
+  },
+  {
+    "marker": {
+      "Position": 536,
+      "LSPosition": {
+        "line": 21,
+        "character": 2
+      },
+      "Name": "importEqualsCall",
+      "Data": {}
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```typescript\n(alias) function a.fn(): void\n```\non the alias\non the declaration"
+      },
+      "range": {
+        "start": {
+          "line": 21,
+          "character": 2
+        },
+        "end": {
+          "line": 21,
+          "character": 4
+        }
+      }
+    }
+  },
+  {
+    "marker": {
+      "Position": 544,
+      "LSPosition": {
+        "line": 22,
+        "character": 2
+      },
+      "Name": "importEquals",
+      "Data": {}
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```typescript\n(alias) function a.fn(): void\n```\non the alias\non the declaration"
+      },
+      "range": {
+        "start": {
+          "line": 22,
+          "character": 2
+        },
+        "end": {
+          "line": 22,
+          "character": 4
+        }
+      }
+    }
+  },
+  {
+    "marker": {
+      "Position": 557,
+      "LSPosition": {
+        "line": 23,
+        "character": 9
+      },
+      "Name": "merged",
+      "Data": {}
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```typescript\n(alias) interface a.S\n```\non the alias\non the declaration"
+      },
+      "range": {
+        "start": {
+          "line": 23,
+          "character": 9
+        },
+        "end": {
+          "line": 23,
+          "character": 10
+        }
+      },
+      "canIncreaseVerbosity": true
+    }
+  },
+  {
+    "marker": {
+      "Position": 562,
+      "LSPosition": {
+        "line": 24,
+        "character": 2
+      },
+      "Name": "sameTextCall",
+      "Data": {}
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```typescript\n(alias) function a.same(): void\n```\nSame"
+      },
+      "range": {
+        "start": {
+          "line": 24,
+          "character": 2
+        },
+        "end": {
+          "line": 24,
+          "character": 6
+        }
+      }
+    }
+  },
+  {
+    "marker": {
+      "Position": 572,
+      "LSPosition": {
+        "line": 25,
+        "character": 2
+      },
+      "Name": "sameText",
+      "Data": {}
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```typescript\n(alias) function a.same(): void\n```\nSame"
+      },
+      "range": {
+        "start": {
+          "line": 25,
+          "character": 2
+        },
+        "end": {
+          "line": 25,
+          "character": 6
+        }
+      }
+    }
+  },
+  {
+    "marker": {
+      "Position": 580,
+      "LSPosition": {
+        "line": 26,
+        "character": 2
+      },
+      "Name": "tagOnlyCall",
+      "Data": {}
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```typescript\n(alias) function a.tagged(): void\n```\non the declaration\n\n*@deprecated* — on the alias"
+      },
+      "range": {
+        "start": {
+          "line": 26,
+          "character": 2
+        },
+        "end": {
+          "line": 26,
+          "character": 8
+        }
+      }
+    }
+  },
+  {
+    "marker": {
+      "Position": 592,
+      "LSPosition": {
+        "line": 27,
+        "character": 2
+      },
+      "Name": "tagOnly",
+      "Data": {}
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```typescript\n(alias) function a.tagged(): void\n```\non the declaration\n\n*@deprecated* — on the alias"
+      },
+      "range": {
+        "start": {
+          "line": 27,
+          "character": 2
+        },
+        "end": {
+          "line": 27,
+          "character": 8
+        }
+      }
+    }
+  }
+]
