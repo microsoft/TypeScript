@@ -29525,6 +29525,11 @@ func (c *Checker) markLinkedReferences(location *ast.Node, hint ReferenceHint, p
 		// except for properties (which can be decorated).
 		return
 	}
+	if location.Flags&ast.NodeFlagsJSDoc != 0 {
+		// Neither are names in JSDoc, which only an editor resolves as
+		// expressions, such as the name of a link.
+		return
+	}
 	switch hint {
 	case ReferenceHintIdentifier:
 		c.markIdentifierAliasReferenced(location)
