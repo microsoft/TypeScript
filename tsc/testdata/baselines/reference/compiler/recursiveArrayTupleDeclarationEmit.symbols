@@ -1,0 +1,19 @@
+//// [tests/cases/compiler/recursiveArrayTupleDeclarationEmit.ts] ////
+
+=== recursiveArrayTupleDeclarationEmit.ts ===
+type G<T> = T extends unknown ? (T | G<[T]>)[] : never;
+>G : Symbol(G, Decl(recursiveArrayTupleDeclarationEmit.ts, 0, 0))
+>T : Symbol(T, Decl(recursiveArrayTupleDeclarationEmit.ts, 0, 7))
+>T : Symbol(T, Decl(recursiveArrayTupleDeclarationEmit.ts, 0, 7))
+>T : Symbol(T, Decl(recursiveArrayTupleDeclarationEmit.ts, 0, 7))
+>G : Symbol(G, Decl(recursiveArrayTupleDeclarationEmit.ts, 0, 0))
+>T : Symbol(T, Decl(recursiveArrayTupleDeclarationEmit.ts, 0, 7))
+
+declare const g: G<"x">;
+>g : Symbol(g, Decl(recursiveArrayTupleDeclarationEmit.ts, 1, 13))
+>G : Symbol(G, Decl(recursiveArrayTupleDeclarationEmit.ts, 0, 0))
+
+export const h = g;
+>h : Symbol(h, Decl(recursiveArrayTupleDeclarationEmit.ts, 2, 12))
+>g : Symbol(g, Decl(recursiveArrayTupleDeclarationEmit.ts, 1, 13))
+

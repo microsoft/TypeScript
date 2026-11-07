@@ -1,0 +1,14 @@
+recursiveArrayTupleTypePrinting.ts(3,14): error TS2322: Type '("x" | (((((((((((((((((((any | any)[] | any)[] | any)[] | any)[] | any)[] | any)[] | any)[] | any)[] | any)[] | any)[] | any)[] | any)[] | any)[] | any)[] | any)[] | any)[] | any)[] | any)[] | any)[])[]' is not assignable to type 'number'.
+recursiveArrayTupleTypePrinting.ts(4,14): error TS2322: Type 'string' is not assignable to type 'number'.
+
+
+==== recursiveArrayTupleTypePrinting.ts (2 errors) ====
+    type G<T> = T extends unknown ? (T | G<[T]>)[] : never;
+    declare const g: G<"x">;
+    export const n: number = g;
+                 ~
+!!! error TS2322: Type '("x" | (((((((((((((((((((any | any)[] | any)[] | any)[] | any)[] | any)[] | any)[] | any)[] | any)[] | any)[] | any)[] | any)[] | any)[] | any)[] | any)[] | any)[] | any)[] | any)[] | any)[] | any)[])[]' is not assignable to type 'number'.
+    export const later: number = "oops";
+                 ~~~~~
+!!! error TS2322: Type 'string' is not assignable to type 'number'.
+    
