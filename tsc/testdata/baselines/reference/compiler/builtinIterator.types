@@ -255,9 +255,9 @@ declare const iter2: IteratorObject<string>;
 const iter3 = iter2.flatMap(() => g1);
 >iter3 : IteratorObject<string, undefined, unknown>
 >iter2.flatMap(() => g1) : IteratorObject<string, undefined, unknown>
->iter2.flatMap : <U>(callback: (value: string, index: number) => Iterable<U, unknown, undefined> | Iterator<U, unknown, undefined>) => IteratorObject<U, undefined, unknown>
+>iter2.flatMap : <U>(callback: (value: string, index: number) => (Iterable<U, unknown, undefined> | Iterator<U, unknown, undefined>) & object) => IteratorObject<U, undefined, unknown>
 >iter2 : IteratorObject<string, unknown, unknown>
->flatMap : <U>(callback: (value: string, index: number) => Iterable<U, unknown, undefined> | Iterator<U, unknown, undefined>) => IteratorObject<U, undefined, unknown>
+>flatMap : <U>(callback: (value: string, index: number) => (Iterable<U, unknown, undefined> | Iterator<U, unknown, undefined>) & object) => IteratorObject<U, undefined, unknown>
 >() => g1 : () => Generator<string, number, boolean>
 >g1 : Generator<string, number, boolean>
 
