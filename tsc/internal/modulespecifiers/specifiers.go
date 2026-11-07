@@ -1342,22 +1342,140 @@ func tryGetModuleNameFromExportsOrImports(
 			if len(result) > 0 {
 				return result
 			}
+			// Node's algorithm commits to the first array element that resolves (a valid target
+			// string, null, or a nested object/array with an active branch), whether or not the
+			// file it names exists. Stop here so we don't fall through to a later element that
+			// would never be reached at runtime. An invalid element doesn't stop the search: Node
+			// skips it and only reports it if no later element resolves.
+			if runtimeTargetOutcome(e, conditions, isImports) == runtimeTargetResolved {
+				break
+			}
 		}
 	case packagejson.JSONValueTypeObject:
-		// conditional mapping
+		// Conditional mapping. A runtime resolver walks the keys in order and commits to the first one
+		// whose condition is active: once that key names a usable target, resolution never falls through
+		// to a later condition, even when the file the target names doesn't exist. A specifier produced
+		// from a later runtime condition would therefore only resolve under a condition that can never be
+		// selected, so once a runtime condition has captured resolution, skip the runtime conditions after
+		// it. Type-only conditions ("types", "types@>=x") are invisible to a runtime resolver: they are
+		// never shadowed, and never shadow anything themselves.
 		obj := exports.AsObject()
+		runtimeCaptured := false
 		for key, value := range obj.Entries() {
-			if key == "default" || slices.Contains(conditions, key) || slices.Contains(conditions, "types") && module.IsApplicableVersionedTypesKey(key) {
-				result := tryGetModuleNameFromExportsOrImports(options, host, targetFileName, packageDirectory, packageName, value, conditions, mode, isImports, preferTsExtension)
-				if len(result) > 0 {
-					return result
-				}
+			if !conditionMatches(key, conditions) {
+				continue
+			}
+			isRuntime := isRuntimeCondition(key)
+			if isRuntime && runtimeCaptured {
+				continue
+			}
+			result := tryGetModuleNameFromExportsOrImports(options, host, targetFileName, packageDirectory, packageName, value, conditions, mode, isImports, preferTsExtension)
+			if len(result) > 0 {
+				return result
+			}
+			if isRuntime && targetCapturesResolution(value, conditions, isImports) {
+				runtimeCaptured = true
 			}
 		}
 	case packagejson.JSONValueTypeNull:
 		return ""
 	}
 	return ""
+}
+
+// conditionMatches mirrors the resolver's condition matching: "default" always applies, and versioned
+// "types@..." keys only apply when the "types" condition itself is in play.
+func conditionMatches(key string, conditions []string) bool {
+	return key == "default" ||
+		slices.Contains(conditions, key) ||
+		slices.Contains(conditions, "types") && module.IsApplicableVersionedTypesKey(key)
+}
+
+// isRuntimeCondition reports whether a condition key is one a runtime resolver can see. The "types"
+// conditions are TypeScript-only, so a runtime resolver walks straight past them.
+func isRuntimeCondition(key string) bool {
+	return key != "types" && !module.IsApplicableVersionedTypesKey(key)
+}
+
+// runtimeOutcome is the result of a runtime resolver's package target resolution for a target.
+type runtimeOutcome int
+
+const (
+	// runtimeTargetFallsThrough means the target yields nothing, so resolution moves on to the next
+	// condition or array element.
+	runtimeTargetFallsThrough runtimeOutcome = iota
+	// runtimeTargetResolved means the target resolves, whether or not the file it names exists, or is
+	// null, which blocks the specifier outright.
+	runtimeTargetResolved
+	// runtimeTargetInvalid means the target is invalid, so resolution throws. An array skips an invalid
+	// element but still fails if no later element resolves; a conditions object fails immediately.
+	runtimeTargetInvalid
+)
+
+// targetCapturesResolution reports whether a runtime resolver that reached `target` in a conditions
+// object would commit to it rather than continue on to the next condition. Any target string captures
+// resolution: a valid one resolves whether or not the file it names exists, and an invalid one makes
+// resolution fail. So does a `null` target, which blocks the specifier outright. Only empty arrays and
+// objects with no usable condition let the search continue.
+func targetCapturesResolution(target packagejson.ExportsOrImports, conditions []string, isImports bool) bool {
+	return runtimeTargetOutcome(target, conditions, isImports) != runtimeTargetFallsThrough
+}
+
+// runtimeTargetOutcome mirrors Node's PACKAGE_TARGET_RESOLVE for the purpose of deciding which targets
+// a runtime resolver can reach.
+func runtimeTargetOutcome(target packagejson.ExportsOrImports, conditions []string, isImports bool) runtimeOutcome {
+	switch target.Type {
+	case packagejson.JSONValueTypeString:
+		str, _ := target.Value.(string)
+		if isValidRuntimeTarget(str, isImports) {
+			return runtimeTargetResolved
+		}
+		return runtimeTargetInvalid
+	case packagejson.JSONValueTypeNull:
+		return runtimeTargetResolved
+	case packagejson.JSONValueTypeArray:
+		outcome := runtimeTargetFallsThrough
+		for _, elem := range target.AsArray() {
+			switch runtimeTargetOutcome(elem, conditions, isImports) {
+			case runtimeTargetResolved:
+				return runtimeTargetResolved
+			case runtimeTargetInvalid:
+				outcome = runtimeTargetInvalid
+			}
+		}
+		return outcome
+	case packagejson.JSONValueTypeObject:
+		for key, value := range target.AsObject().Entries() {
+			if isRuntimeCondition(key) && conditionMatches(key, conditions) {
+				if outcome := runtimeTargetOutcome(value, conditions, isImports); outcome != runtimeTargetFallsThrough {
+					return outcome
+				}
+			}
+		}
+		return runtimeTargetFallsThrough
+	}
+	return runtimeTargetInvalid
+}
+
+// isValidRuntimeTarget mirrors Node's target validation. A runtime resolver throws on an invalid target
+// instead of moving on to the next condition.
+func isValidRuntimeTarget(target string, isImports bool) bool {
+	if strings.HasPrefix(target, "./") {
+		// Node rejects targets whose components after the first equal "..", ".", or "node_modules".
+		parts := tspath.GetPathComponents(target)[1:]
+		if len(parts) > 1 {
+			partsAfterFirst := parts[1:]
+			if slices.Contains(partsAfterFirst, "..") || slices.Contains(partsAfterFirst, ".") || slices.Contains(partsAfterFirst, "node_modules") {
+				return false
+			}
+		}
+		return true
+	}
+	// An "imports" target may also be a bare specifier, which resolves like any other module name.
+	return isImports &&
+		!strings.HasPrefix(target, "../") &&
+		!strings.HasPrefix(target, "/") &&
+		!tspath.IsRootedDiskPath(target)
 }
 
 // `importingSourceFile` and `importingSourceFileName`? Why not just use `importingSourceFile.path`?
