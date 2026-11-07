@@ -17276,7 +17276,13 @@ func (c *Checker) getNonMissingTypeOfSymbol(symbol *ast.Symbol) *Type {
 func (c *Checker) getTypeOfInstantiatedSymbol(symbol *ast.Symbol) *Type {
 	links := c.valueSymbolLinks.Get(symbol)
 	if links.resolvedType == nil {
-		links.resolvedType = c.instantiateType(c.getTypeOfSymbol(links.target), links.mapper)
+		var t *Type
+		if from := c.instantiatedFromUnaffected(links); from != nil {
+			t = c.getTypeOfSymbol(from)
+		} else {
+			t = c.instantiateType(c.getTypeOfSymbol(links.target), links.mapper)
+		}
+		links.resolvedType = t
 	}
 	return links.resolvedType
 }
@@ -17284,9 +17290,32 @@ func (c *Checker) getTypeOfInstantiatedSymbol(symbol *ast.Symbol) *Type {
 func (c *Checker) getWriteTypeOfInstantiatedSymbol(symbol *ast.Symbol) *Type {
 	links := c.valueSymbolLinks.Get(symbol)
 	if links.getWriteType() == nil {
-		links.setWriteType(c, c.instantiateType(c.getWriteTypeOfSymbol(links.target), links.mapper))
+		var t *Type
+		if from := c.instantiatedFromUnaffected(links); from != nil {
+			t = c.getWriteTypeOfSymbol(from)
+		} else {
+			t = c.instantiateType(c.getWriteTypeOfSymbol(links.target), links.mapper)
+		}
+		links.setWriteType(c, t)
 	}
 	return links.getWriteType()
+}
+
+// instantiatedFromUnaffected returns the instantiated symbol that the
+// symbol of links instantiates, if its types have no type variables for
+// the further instantiation to affect. The symbol then has the same types.
+// Instantiating its target with the combined mappers instead can give a
+// different type, as when an instantiation turns E['V'][K] into unknown
+// for E := {}, but the combined one turns it into never for K := never.
+func (c *Checker) instantiatedFromUnaffected(links *ValueSymbolLinks) *ast.Symbol {
+	from := links.getInstantiatedFrom()
+	if from == nil || c.couldContainTypeVariables(c.getTypeOfSymbol(from)) {
+		return nil
+	}
+	if from.Flags()&ast.SymbolFlagsSetAccessor != 0 && c.couldContainTypeVariables(c.getWriteTypeOfSymbol(from)) {
+		return nil
+	}
+	return from
 }
 
 func (c *Checker) getTypeOfVariableOrParameterOrProperty(symbol *ast.Symbol) *Type {
@@ -21818,21 +21847,12 @@ func (c *Checker) instantiateSymbol(symbol *ast.Symbol, m *TypeMapper) *ast.Symb
 	if m.MapsThisOnly() && isThisless(symbol) {
 		return symbol
 	}
-	// If the type of the symbol is already resolved, and if that type could not possibly
-	// be affected by instantiation, simply return the symbol itself.
-	if links.resolvedType != nil && !c.couldContainTypeVariables(links.resolvedType) {
-		if symbol.Flags()&ast.SymbolFlagsSetAccessor == 0 {
-			return symbol
-		}
-		// If we're a setter, check writeType.
-		if links.getWriteType() != nil && !c.couldContainTypeVariables(links.getWriteType()) {
-			return symbol
-		}
-	}
+	var instantiatedFrom *ast.Symbol
 	if symbol.CheckFlags()&ast.CheckFlagsInstantiated != 0 {
 		// If symbol being instantiated is itself a instantiation, fetch the original target and combine the
 		// type mappers. This ensures that original type identities are properly preserved and that aliases
 		// always reference a non-aliases.
+		instantiatedFrom = symbol
 		symbol = links.target
 		m = c.combineTypeMappers(links.mapper, m)
 	}
@@ -21843,6 +21863,7 @@ func (c *Checker) instantiateSymbol(symbol *ast.Symbol, m *TypeMapper) *ast.Symb
 	resultLinks.target = symbol
 	resultLinks.mapper = m
 	resultLinks.setNameType(c, links.getNameType())
+	resultLinks.setInstantiatedFrom(c, instantiatedFrom)
 	return result
 }
 

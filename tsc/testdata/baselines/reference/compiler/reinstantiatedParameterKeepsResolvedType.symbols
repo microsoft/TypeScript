@@ -1,0 +1,29 @@
+//// [tests/cases/compiler/reinstantiatedParameterKeepsResolvedType.ts] ////
+
+=== reinstantiatedParameterKeepsResolvedType.ts ===
+// Instantiating E := {} turns the type of v into unknown. Inferring
+// K := never must not then turn it into {}['V'][never], which is never.
+interface I<E extends { V?: object }> {
+>I : Symbol(I, Decl(reinstantiatedParameterKeepsResolvedType.ts, 0, 0))
+>E : Symbol(E, Decl(reinstantiatedParameterKeepsResolvedType.ts, 2, 12))
+>V : Symbol(V, Decl(reinstantiatedParameterKeepsResolvedType.ts, 2, 23))
+
+    f<K extends keyof E['V']>(k: K, v: E['V'][K]): void;
+>f : Symbol(I.f, Decl(reinstantiatedParameterKeepsResolvedType.ts, 2, 39))
+>K : Symbol(K, Decl(reinstantiatedParameterKeepsResolvedType.ts, 3, 6))
+>E : Symbol(E, Decl(reinstantiatedParameterKeepsResolvedType.ts, 2, 12))
+>k : Symbol(k, Decl(reinstantiatedParameterKeepsResolvedType.ts, 3, 30))
+>K : Symbol(K, Decl(reinstantiatedParameterKeepsResolvedType.ts, 3, 6))
+>v : Symbol(v, Decl(reinstantiatedParameterKeepsResolvedType.ts, 3, 35))
+>E : Symbol(E, Decl(reinstantiatedParameterKeepsResolvedType.ts, 2, 12))
+>K : Symbol(K, Decl(reinstantiatedParameterKeepsResolvedType.ts, 3, 6))
+}
+declare const i: I<{}>;
+>i : Symbol(i, Decl(reinstantiatedParameterKeepsResolvedType.ts, 5, 13))
+>I : Symbol(I, Decl(reinstantiatedParameterKeepsResolvedType.ts, 0, 0))
+
+i.f("x" as never, 1);
+>i.f : Symbol(I.f, Decl(reinstantiatedParameterKeepsResolvedType.ts, 2, 39))
+>i : Symbol(i, Decl(reinstantiatedParameterKeepsResolvedType.ts, 5, 13))
+>f : Symbol(I.f, Decl(reinstantiatedParameterKeepsResolvedType.ts, 2, 39))
+

@@ -195,9 +195,10 @@ type ValueSymbolLinks struct {
 }
 
 type valueSymbolExtra struct {
-	writeType      *Type
-	nameType       *Type
-	containingType *Type // Mapped type for mapped type property, containing union or intersection type for synthetic property
+	writeType        *Type
+	nameType         *Type
+	containingType   *Type       // Mapped type for mapped type property, containing union or intersection type for synthetic property
+	instantiatedFrom *ast.Symbol // For an instantiation of an instantiated symbol, the symbol instantiated
 }
 
 func (links *ValueSymbolLinks) getWriteType() *Type {
@@ -239,6 +240,23 @@ func (links *ValueSymbolLinks) setNameType(c *Checker, typ *Type) {
 		links.extra = c.valueSymbolExtraArena.New()
 	}
 	links.extra.nameType = typ
+}
+
+func (links *ValueSymbolLinks) getInstantiatedFrom() *ast.Symbol {
+	if links.extra == nil {
+		return nil
+	}
+	return links.extra.instantiatedFrom
+}
+
+func (links *ValueSymbolLinks) setInstantiatedFrom(c *Checker, symbol *ast.Symbol) {
+	if links.extra == nil {
+		if symbol == nil {
+			return
+		}
+		links.extra = c.valueSymbolExtraArena.New()
+	}
+	links.extra.instantiatedFrom = symbol
 }
 
 func (links *ValueSymbolLinks) setContainingType(c *Checker, typ *Type) {
