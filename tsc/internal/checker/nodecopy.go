@@ -340,7 +340,7 @@ func getExistingNodeTreeVisitor(b *NodeBuilderImpl, bound *recoveryBoundary) *as
 			}
 			return introducesError, attachSymbolToLeftmostIdentifier(leftmost, node, sym), nil
 		}
-		sym = b.ch.resolveEntityName(leftmost, meaning, true, true, nil)
+		sym = b.ch.resolveEntityNameEx(leftmost, meaning, true, true, nil, false /*use*/)
 		if b.ctx.enclosingDeclaration != nil && !(sym != nil && sym.Flags()&ast.SymbolFlagsTypeParameter != 0) {
 			sym = b.ch.getExportSymbolOfValueSymbolIfExported(sym)
 			// Some declarations may be transplanted to a new location.
@@ -348,7 +348,7 @@ func getExistingNodeTreeVisitor(b *NodeBuilderImpl, bound *recoveryBoundary) *as
 			// We also check for the unknownSymbol because when we create a fake scope some parameters may actually not be usable
 			// either because they are the expanded rest parameter,
 			// or because they are the newly added parameters from the tuple, which might have different meanings in the original context
-			symAtLocation := b.ch.resolveEntityName(leftmost, meaning, true, true, b.ctx.enclosingDeclaration)
+			symAtLocation := b.ch.resolveEntityNameEx(leftmost, meaning, true, true, b.ctx.enclosingDeclaration, false /*use*/)
 			if
 			// Check for unusable parameters symbols
 			symAtLocation == b.ch.unknownSymbol ||
