@@ -1,0 +1,17 @@
+//// [tests/cases/compiler/yieldInComputedNameOfContextuallyTypedObjectNoCrash1.ts] ////
+
+=== yieldInComputedNameOfContextuallyTypedObjectNoCrash1.ts ===
+// https://github.com/microsoft/TypeScript/issues/62941
+
+function* g() {
+>g : Symbol(g, Decl(yieldInComputedNameOfContextuallyTypedObjectNoCrash1.ts, 0, 0))
+
+  let x: any = {
+>x : Symbol(x, Decl(yieldInComputedNameOfContextuallyTypedObjectNoCrash1.ts, 3, 5))
+
+    *[yield 0]() {},
+>[yield 0] : Symbol([yield 0], Decl(yieldInComputedNameOfContextuallyTypedObjectNoCrash1.ts, 3, 16))
+
+  };
+}
+
