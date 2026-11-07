@@ -11,15 +11,12 @@ isolatedDeclarationErrorsObjects.ts(40,25): error TS7006: Parameter 'value' impl
 isolatedDeclarationErrorsObjects.ts(40,25): error TS9009: At least one accessor must have an explicit type annotation with --isolatedDeclarations.
 isolatedDeclarationErrorsObjects.ts(64,5): error TS9038: Computed property names on class or object literals cannot be inferred with --isolatedDeclarations.
 isolatedDeclarationErrorsObjects.ts(65,5): error TS9038: Computed property names on class or object literals cannot be inferred with --isolatedDeclarations.
-isolatedDeclarationErrorsObjects.ts(66,5): error TS9038: Computed property names on class or object literals cannot be inferred with --isolatedDeclarations.
-isolatedDeclarationErrorsObjects.ts(67,5): error TS9038: Computed property names on class or object literals cannot be inferred with --isolatedDeclarations.
-isolatedDeclarationErrorsObjects.ts(68,5): error TS9038: Computed property names on class or object literals cannot be inferred with --isolatedDeclarations.
 isolatedDeclarationErrorsObjects.ts(75,5): error TS9015: Objects that contain spread assignments can't be inferred with --isolatedDeclarations.
 isolatedDeclarationErrorsObjects.ts(77,5): error TS9016: Objects that contain shorthand properties can't be inferred with --isolatedDeclarations.
 isolatedDeclarationErrorsObjects.ts(84,9): error TS9015: Objects that contain spread assignments can't be inferred with --isolatedDeclarations.
 
 
-==== isolatedDeclarationErrorsObjects.ts (19 errors) ====
+==== isolatedDeclarationErrorsObjects.ts (16 errors) ====
     export let o = {
         a: 1,
         b: ""
@@ -131,17 +128,8 @@ isolatedDeclarationErrorsObjects.ts(84,9): error TS9015: Objects that contain sp
 !!! error TS9038: Computed property names on class or object literals cannot be inferred with --isolatedDeclarations.
 !!! related TS9027 isolatedDeclarationErrorsObjects.ts:62:14: Add a type annotation to the variable oWithComputedProperties.
         [s]: 1,
-        ~~~
-!!! error TS9038: Computed property names on class or object literals cannot be inferred with --isolatedDeclarations.
-!!! related TS9027 isolatedDeclarationErrorsObjects.ts:62:14: Add a type annotation to the variable oWithComputedProperties.
         [E.V]: 1,
-        ~~~~~
-!!! error TS9038: Computed property names on class or object literals cannot be inferred with --isolatedDeclarations.
-!!! related TS9027 isolatedDeclarationErrorsObjects.ts:62:14: Add a type annotation to the variable oWithComputedProperties.
         [str]: 0,
-        ~~~~~
-!!! error TS9038: Computed property names on class or object literals cannot be inferred with --isolatedDeclarations.
-!!! related TS9027 isolatedDeclarationErrorsObjects.ts:62:14: Add a type annotation to the variable oWithComputedProperties.
     }
     
     const part = { a: 1 };

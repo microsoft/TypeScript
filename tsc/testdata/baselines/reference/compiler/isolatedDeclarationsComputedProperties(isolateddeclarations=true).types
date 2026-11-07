@@ -1,0 +1,201 @@
+//// [tests/cases/compiler/isolatedDeclarationsComputedProperties.ts] ////
+
+=== keys.ts ===
+export const prop: unique symbol = Symbol();
+>prop : unique symbol
+>Symbol() : unique symbol
+>Symbol : SymbolConstructor
+
+export const method: unique symbol = Symbol();
+>method : unique symbol
+>Symbol() : unique symbol
+>Symbol : SymbolConstructor
+
+export const accessor: unique symbol = Symbol();
+>accessor : unique symbol
+>Symbol() : unique symbol
+>Symbol : SymbolConstructor
+
+export const dotted: unique symbol = Symbol();
+>dotted : unique symbol
+>Symbol() : unique symbol
+>Symbol : SymbolConstructor
+
+export const stringKey: string = "key";
+>stringKey : string
+>"key" : "key"
+
+export const numberKey: number = 0;
+>numberKey : number
+>0 : 0
+
+=== main.ts ===
+import { prop, method, accessor, stringKey, numberKey } from "./keys";
+>prop : unique symbol
+>method : unique symbol
+>accessor : unique symbol
+>stringKey : string
+>numberKey : number
+
+import * as keys from "./keys";
+>keys : typeof keys
+
+const localKey: unique symbol = Symbol();
+>localKey : unique symbol
+>Symbol() : unique symbol
+>Symbol : SymbolConstructor
+
+const literalKey = "literal";
+>literalKey : "literal"
+>"literal" : "literal"
+
+export class MyClass {
+>MyClass : MyClass
+
+    static readonly [keys.method] = true;
+>[keys.method] : true
+>keys.method : unique symbol
+>keys : typeof keys
+>method : unique symbol
+>true : true
+
+    [prop] = (): number => Math.random();
+>[prop] : () => number
+>prop : unique symbol
+>(): number => Math.random() : () => number
+>Math.random() : number
+>Math.random : () => number
+>Math : Math
+>random : () => number
+
+    [keys.dotted]: number = 1;
+>[keys.dotted] : number
+>keys.dotted : unique symbol
+>keys : typeof keys
+>dotted : unique symbol
+>1 : 1
+
+    [localKey] = 1;
+>[localKey] : number
+>localKey : unique symbol
+>1 : 1
+
+    [literalKey] = 1;
+>[literalKey] : number
+>literalKey : "literal"
+>1 : 1
+
+    [stringKey]: number = 1;
+>[stringKey] : number
+>stringKey : string
+>1 : 1
+
+    [numberKey]: number = 1;
+>[numberKey] : number
+>numberKey : number
+>1 : 1
+
+    [method](value: number): number { return value; }
+>[method] : (value: number) => number
+>method : unique symbol
+>value : number
+>value : number
+
+    get [accessor](): number { return 1; }
+>[accessor] : number
+>accessor : unique symbol
+>1 : 1
+
+    set [accessor](value: number) {}
+>[accessor] : number
+>accessor : unique symbol
+>value : number
+}
+
+export const object = {
+>object : { [stringKey]: number; [numberKey]: number; [numberKey]: number; [prop]: number; [method](value: number): number; [accessor]: number; [localKey]: boolean; literal: string; }
+>{    [prop]: 1,    [keys.method](value: number): number { return value; },    get [accessor](): number { return 1; },    set [accessor](value: number) {},    [localKey]: true,    [literalKey]: "value",    [stringKey]: 1,    [numberKey]: 1,} : { [stringKey]: number; [numberKey]: number; [numberKey]: number; [prop]: number; [method](value: number): number; [accessor]: number; [localKey]: boolean; literal: string; }
+
+    [prop]: 1,
+>[prop] : number
+>prop : unique symbol
+>1 : 1
+
+    [keys.method](value: number): number { return value; },
+>[keys.method] : (value: number) => number
+>keys.method : unique symbol
+>keys : typeof keys
+>method : unique symbol
+>value : number
+>value : number
+
+    get [accessor](): number { return 1; },
+>[accessor] : number
+>accessor : unique symbol
+>1 : 1
+
+    set [accessor](value: number) {},
+>[accessor] : number
+>accessor : unique symbol
+>value : number
+
+    [localKey]: true,
+>[localKey] : boolean
+>localKey : unique symbol
+>true : true
+
+    [literalKey]: "value",
+>[literalKey] : string
+>literalKey : "literal"
+>"value" : "value"
+
+    [stringKey]: 1,
+>[stringKey] : number
+>stringKey : string
+>1 : 1
+
+    [numberKey]: 1,
+>[numberKey] : number
+>numberKey : number
+>1 : 1
+
+};
+
+export const readonlyObject = {
+>readonlyObject : { readonly [prop]: 1; readonly nested: { readonly [localKey]: true; }; }
+>{    [keys.prop]: 1,    nested: { [localKey]: true },} as const : { readonly [prop]: 1; readonly nested: { readonly [localKey]: true; }; }
+>{    [keys.prop]: 1,    nested: { [localKey]: true },} : { readonly [prop]: 1; readonly nested: { readonly [localKey]: true; }; }
+
+    [keys.prop]: 1,
+>[keys.prop] : 1
+>keys.prop : unique symbol
+>keys : typeof keys
+>prop : unique symbol
+>1 : 1
+
+    nested: { [localKey]: true },
+>nested : { readonly [localKey]: true; }
+>{ [localKey]: true } : { readonly [localKey]: true; }
+>[localKey] : true
+>localKey : unique symbol
+>true : true
+
+} as const;
+
+export function makeObject() {
+>makeObject : () => { [keys.prop]: number; nested: { [localKey]: boolean; }; }
+
+    return { [keys.prop]: 1, nested: { [localKey]: true } };
+>{ [keys.prop]: 1, nested: { [localKey]: true } } : { [prop]: number; nested: { [localKey]: boolean; }; }
+>[keys.prop] : number
+>keys.prop : unique symbol
+>keys : typeof keys
+>prop : unique symbol
+>1 : 1
+>nested : { [localKey]: boolean; }
+>{ [localKey]: true } : { [localKey]: boolean; }
+>[localKey] : boolean
+>localKey : unique symbol
+>true : true
+}
+
