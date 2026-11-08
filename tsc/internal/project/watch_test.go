@@ -30,31 +30,36 @@ func TestResolutionLookupWatcherOmitsMacOSHomeDirectories(t *testing.T) {
 	t.Parallel()
 
 	for _, caseSensitivity := range []tspath.CaseSensitivity{tspath.CaseSensitive, tspath.CaseInsensitive} {
+		usersDirectory := "/Users"
+		if caseSensitivity == tspath.CaseInsensitive {
+			usersDirectory = "/users"
+		}
+
 		var files collections.SyncMap[tspath.PathKey, tspath.RootedFilePath]
 		for _, fileName := range []tspath.RootedFilePath{
-			"/Users/package.json",
-			"/Users/andrew/package.json",
-			"/Users/andrew/project/package.json",
-			"/Users/andrew/other/package.json",
+			tspath.RootedFilePath(usersDirectory + "/package.json"),
+			tspath.RootedFilePath(usersDirectory + "/andrew/package.json"),
+			tspath.RootedFilePath(usersDirectory + "/andrew/project/package.json"),
+			tspath.RootedFilePath(usersDirectory + "/andrew/other/package.json"),
 		} {
 			files.Store(caseSensitivity.PathKey(tspath.RootedPath(fileName)), fileName)
 		}
 
 		result := createResolutionLookupGlobMapper(
-			"/Users/andrew/project",
+			tspath.RootedDirectoryPath(usersDirectory+"/andrew/project"),
 			"/lib",
 			"/dev/null",
 			caseSensitivity,
 		)(&files)
 
-		assert.DeepEqual(t, result.patternsInsideWorkspace, []string{"/Users/andrew/project/**/*"})
-		assert.DeepEqual(t, result.directoriesOutsideWorkspace, []tspath.RootedDirectoryPath{"/Users/andrew/other"})
+		assert.DeepEqual(t, result.patternsInsideWorkspace, []string{usersDirectory + "/andrew/project/**/*"})
+		assert.DeepEqual(t, result.directoriesOutsideWorkspace, []tspath.RootedDirectoryPath{tspath.RootedDirectoryPath(usersDirectory + "/andrew/other")})
 		assert.DeepEqual(t, result.ignored, map[tspath.RootedDirectoryPath]struct{}{
-			"/Users":        {},
-			"/Users/andrew": {},
+			tspath.RootedDirectoryPath(usersDirectory):             {},
+			tspath.RootedDirectoryPath(usersDirectory + "/andrew"): {},
 		})
 		watcher := newRecursiveDirectoryWatcher(result.directoriesOutsideWorkspace[0], lsproto.WatchKindCreate, true)
-		assert.Equal(t, string(*watcher.GlobPattern.RelativePattern.BaseUri.URI), "file:///Users/andrew/other")
+		assert.Equal(t, string(*watcher.GlobPattern.RelativePattern.BaseUri.URI), "file://"+usersDirectory+"/andrew/other")
 	}
 }
 

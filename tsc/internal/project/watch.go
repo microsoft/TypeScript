@@ -450,7 +450,7 @@ func perceivedOsRootLengthForWatching(pathComponents []string) int {
 		}
 		return 1
 	}
-	if pathComponents[1] == "home" || pathComponents[1] == "Users" {
+	if pathComponents[1] == "home" || strings.EqualFold(pathComponents[1], "Users") {
 		// Group /home/username or /Users/username into a single component
 		return min(3, length)
 	}
