@@ -195,6 +195,7 @@ func (c *Checker) isTypeRelatedTo(source *Type, target *Type, relation *Relation
 		id, _ := getRelationKey(source, target, IntersectionStateNone, relation == c.identityRelation, false)
 		related := relation.get(id)
 		if related != RelationComparisonResultNone {
+			c.reliabilityFlags |= related & (RelationComparisonResultReportsUnmeasurable | RelationComparisonResultReportsUnreliable)
 			return related&RelationComparisonResultSucceeded != 0
 		}
 	}
