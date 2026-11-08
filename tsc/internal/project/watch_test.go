@@ -21,6 +21,41 @@ func TestGetPathComponentsForWatching(t *testing.T) {
 	assert.DeepEqual(t, getPathComponentsForWatching(tspath.ToRootedDirectoryPath("C:\\Users\\andrew\\project", "")), []string{"C:/Users/andrew", "project"})
 	assert.DeepEqual(t, getPathComponentsForWatching(tspath.ToRootedDirectoryPath("/home", "")), []string{"/home"})
 	assert.DeepEqual(t, getPathComponentsForWatching(tspath.ToRootedDirectoryPath("/home/andrew/project", "")), []string{"/home/andrew", "project"})
+	assert.DeepEqual(t, getPathComponentsForWatching(tspath.ToRootedDirectoryPath("/Users", "")), []string{"/Users"})
+	assert.DeepEqual(t, getPathComponentsForWatching(tspath.ToRootedDirectoryPath("/Users/andrew", "")), []string{"/Users/andrew"})
+	assert.DeepEqual(t, getPathComponentsForWatching(tspath.ToRootedDirectoryPath("/Users/andrew/project", "")), []string{"/Users/andrew", "project"})
+}
+
+func TestResolutionLookupWatcherOmitsMacOSHomeDirectories(t *testing.T) {
+	t.Parallel()
+
+	for _, caseSensitivity := range []tspath.CaseSensitivity{tspath.CaseSensitive, tspath.CaseInsensitive} {
+		var files collections.SyncMap[tspath.PathKey, tspath.RootedFilePath]
+		for _, fileName := range []tspath.RootedFilePath{
+			"/Users/package.json",
+			"/Users/andrew/package.json",
+			"/Users/andrew/project/package.json",
+			"/Users/andrew/other/package.json",
+		} {
+			files.Store(caseSensitivity.PathKey(tspath.RootedPath(fileName)), fileName)
+		}
+
+		result := createResolutionLookupGlobMapper(
+			"/Users/andrew/project",
+			"/lib",
+			"/dev/null",
+			caseSensitivity,
+		)(&files)
+
+		assert.DeepEqual(t, result.patternsInsideWorkspace, []string{"/Users/andrew/project/**/*"})
+		assert.DeepEqual(t, result.directoriesOutsideWorkspace, []tspath.RootedDirectoryPath{"/Users/andrew/other"})
+		assert.DeepEqual(t, result.ignored, map[tspath.RootedDirectoryPath]struct{}{
+			"/Users":        {},
+			"/Users/andrew": {},
+		})
+		watcher := newRecursiveDirectoryWatcher(result.directoriesOutsideWorkspace[0], lsproto.WatchKindCreate, true)
+		assert.Equal(t, string(*watcher.GlobPattern.RelativePattern.BaseUri.URI), "file:///Users/andrew/other")
+	}
 }
 
 func TestNilWatchedFilesClone(t *testing.T) {
