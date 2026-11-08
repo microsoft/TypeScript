@@ -1105,6 +1105,9 @@ func (c *Checker) inferReverseMappedType(source *Type, target *Type, constraint 
 	}
 	c.reverseMappedSourceStack = c.reverseMappedSourceStack[:len(c.reverseMappedSourceStack)-1]
 	c.reverseMappedTargetStack = c.reverseMappedTargetStack[:len(c.reverseMappedTargetStack)-1]
+	if len(c.reverseMappedSourceStack) == 0 {
+		c.reverseMappedStart = 0
+	}
 	c.reverseExpandingFlags = saveExpandingFlags
 	c.reverseMappedCache.set(c, key, t)
 	c.endMemo()
