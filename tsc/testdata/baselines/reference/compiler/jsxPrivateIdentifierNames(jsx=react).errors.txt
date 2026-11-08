@@ -1,0 +1,59 @@
+jsxPrivateIdentifierNames.tsx(8,12): error TS1003: Identifier expected.
+jsxPrivateIdentifierNames.tsx(8,12): error TS2304: Cannot find name '#a'.
+jsxPrivateIdentifierNames.tsx(8,17): error TS1003: Identifier expected.
+jsxPrivateIdentifierNames.tsx(8,17): error TS2304: Cannot find name '#a'.
+jsxPrivateIdentifierNames.tsx(9,12): error TS1003: Identifier expected.
+jsxPrivateIdentifierNames.tsx(9,12): error TS2304: Cannot find name '#b'.
+jsxPrivateIdentifierNames.tsx(10,16): error TS1003: Identifier expected.
+jsxPrivateIdentifierNames.tsx(11,16): error TS1003: Identifier expected.
+jsxPrivateIdentifierNames.tsx(12,16): error TS1003: Identifier expected.
+jsxPrivateIdentifierNames.tsx(13,18): error TS1003: Identifier expected.
+jsxPrivateIdentifierNames.tsx(14,14): error TS1003: Identifier expected.
+jsxPrivateIdentifierNames.tsx(15,12): error TS1003: Identifier expected.
+jsxPrivateIdentifierNames.tsx(16,16): error TS1003: Identifier expected.
+
+
+==== jsxPrivateIdentifierNames.tsx (13 errors) ====
+    declare const React: any;
+    declare namespace JSX {
+        interface IntrinsicElements {
+            [name: string]: any;
+        }
+    }
+    
+    const a = <#a></#a>;
+               ~~
+!!! error TS1003: Identifier expected.
+               ~~
+!!! error TS2304: Cannot find name '#a'.
+                    ~~
+!!! error TS1003: Identifier expected.
+                    ~~
+!!! error TS2304: Cannot find name '#a'.
+    const b = <#b />;
+               ~~
+!!! error TS1003: Identifier expected.
+               ~~
+!!! error TS2304: Cannot find name '#b'.
+    const c = <div #c />;
+                   ~~
+!!! error TS1003: Identifier expected.
+    const d = <div #d="d" />;
+                   ~~
+!!! error TS1003: Identifier expected.
+    const e = <div #e:f />;
+                   ~~
+!!! error TS1003: Identifier expected.
+    const f = <div f:#g />;
+                     ~~
+!!! error TS1003: Identifier expected.
+    const g = <a:#h />;
+                 ~~
+!!! error TS1003: Identifier expected.
+    const h = <#i:j />;
+               ~~
+!!! error TS1003: Identifier expected.
+    const i = <a.#k />;
+                   
+!!! error TS1003: Identifier expected.
+    

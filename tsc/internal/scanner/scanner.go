@@ -1370,7 +1370,8 @@ func (s *Scanner) ScanJsxTokenEx(allowMultilineJsxText bool) ast.Kind {
 
 // Scans a JSX identifier; these differ from normal identifiers in that they allow dashes
 func (s *Scanner) ScanJsxIdentifier() ast.Kind {
-	if tokenIsIdentifierOrKeyword(s.token) {
+	// Private identifiers are not valid JSX identifiers; leave them for the parser to report.
+	if tokenIsIdentifierOrKeyword(s.token) && s.token != ast.KindPrivateIdentifier {
 		// An identifier or keyword has already been parsed - check for a `-` or a single instance of `:` and then append it and
 		// everything after it to the token
 		// Do note that this means that `scanJsxIdentifier` effectively _mutates_ the visible token without advancing to a new token

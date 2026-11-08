@@ -1,0 +1,53 @@
+//// [tests/cases/compiler/jsxPrivateIdentifierNames.tsx] ////
+
+=== jsxPrivateIdentifierNames.tsx ===
+declare const React: any;
+>React : Symbol(React, Decl(jsxPrivateIdentifierNames.tsx, 0, 13))
+
+declare namespace JSX {
+>JSX : Symbol(JSX, Decl(jsxPrivateIdentifierNames.tsx, 0, 25))
+
+    interface IntrinsicElements {
+>IntrinsicElements : Symbol(IntrinsicElements, Decl(jsxPrivateIdentifierNames.tsx, 1, 23))
+
+        [name: string]: any;
+>name : Symbol(name, Decl(jsxPrivateIdentifierNames.tsx, 3, 9))
+    }
+}
+
+const a = <#a></#a>;
+>a : Symbol(a, Decl(jsxPrivateIdentifierNames.tsx, 7, 5))
+
+const b = <#b />;
+>b : Symbol(b, Decl(jsxPrivateIdentifierNames.tsx, 8, 5))
+
+const c = <div #c />;
+>c : Symbol(c, Decl(jsxPrivateIdentifierNames.tsx, 9, 5))
+>div : Symbol(JSX.IntrinsicElements.__index, Decl(jsxPrivateIdentifierNames.tsx, 2, 33))
+>#c : Symbol(#c, Decl(jsxPrivateIdentifierNames.tsx, 9, 14))
+
+const d = <div #d="d" />;
+>d : Symbol(d, Decl(jsxPrivateIdentifierNames.tsx, 10, 5))
+>div : Symbol(JSX.IntrinsicElements.__index, Decl(jsxPrivateIdentifierNames.tsx, 2, 33))
+>#d : Symbol(#d, Decl(jsxPrivateIdentifierNames.tsx, 10, 14))
+
+const e = <div #e:f />;
+>e : Symbol(e, Decl(jsxPrivateIdentifierNames.tsx, 11, 5))
+>div : Symbol(JSX.IntrinsicElements.__index, Decl(jsxPrivateIdentifierNames.tsx, 2, 33))
+>#e:f : Symbol(#e:f, Decl(jsxPrivateIdentifierNames.tsx, 11, 14))
+
+const f = <div f:#g />;
+>f : Symbol(f, Decl(jsxPrivateIdentifierNames.tsx, 12, 5))
+>div : Symbol(JSX.IntrinsicElements.__index, Decl(jsxPrivateIdentifierNames.tsx, 2, 33))
+>f:#g : Symbol(f:#g, Decl(jsxPrivateIdentifierNames.tsx, 12, 14))
+
+const g = <a:#h />;
+>g : Symbol(g, Decl(jsxPrivateIdentifierNames.tsx, 13, 5))
+
+const h = <#i:j />;
+>h : Symbol(h, Decl(jsxPrivateIdentifierNames.tsx, 14, 5))
+
+const i = <a.#k />;
+>i : Symbol(i, Decl(jsxPrivateIdentifierNames.tsx, 15, 5))
+>a : Symbol(a, Decl(jsxPrivateIdentifierNames.tsx, 7, 5))
+

@@ -5981,6 +5981,10 @@ func (p *Parser) parseIdentifierNameErrorOnUnicodeEscapeSequence() *ast.Node {
 	if p.scanner.HasUnicodeEscape() || p.scanner.HasExtendedUnicodeEscape() {
 		p.parseErrorAtCurrentToken(diagnostics.Unicode_escape_sequence_cannot_appear_here)
 	}
+	if p.token == ast.KindPrivateIdentifier {
+		// tokenIsIdentifierOrKeyword accepts private identifiers, but '#' is not a valid JSX identifier character.
+		return p.createIdentifierWithDiagnostic(false /*isIdentifier*/, nil /*diagnosticMessage*/, diagnostics.Identifier_expected)
+	}
 	return p.createIdentifier(tokenIsIdentifierOrKeyword(p.token))
 }
 

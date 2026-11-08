@@ -1,0 +1,71 @@
+//// [tests/cases/compiler/jsxPrivateIdentifierNames.tsx] ////
+
+=== jsxPrivateIdentifierNames.tsx ===
+declare const React: any;
+>React : any
+
+declare namespace JSX {
+    interface IntrinsicElements {
+        [name: string]: any;
+>name : string
+    }
+}
+
+const a = <#a></#a>;
+>a : any
+><#a></#a> : any
+>#a : any
+>#a : any
+
+const b = <#b />;
+>b : any
+><#b /> : any
+>#b : any
+
+const c = <div #c />;
+>c : any
+><div #c /> : any
+>div : any
+>#c : true
+
+const d = <div #d="d" />;
+>d : any
+><div #d="d" /> : any
+>div : any
+>#d : string
+
+const e = <div #e:f />;
+>e : any
+><div #e:f /> : any
+>div : any
+>#e:f : true
+>#e : any
+>f : any
+
+const f = <div f:#g />;
+>f : any
+><div f:#g /> : any
+>div : any
+>f:#g : true
+>f : any
+>#g : any
+
+const g = <a:#h />;
+>g : any
+><a:#h /> : any
+>a : any
+>#h : any
+
+const h = <#i:j />;
+>h : any
+><#i:j /> : any
+>#i : any
+>j : any
+
+const i = <a.#k />;
+>i : any
+><a.#k /> : any
+>a.#k : any
+>a : any
+> : any
+
