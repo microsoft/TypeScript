@@ -43,6 +43,13 @@ instead. API tests are not run by `npx hereby validate` without `--api`.
 If as part of your change you edit tools, benchmarks, or other ancillary parts of the repository, you should instead run `npx hereby validate --all` to ensure *everything* is working correctly. This will
 most accurately approximate the results of a full CI run.
 
+## Go Concurrency Tests
+
+Prefer `testing/synctest` over wall-clock sleeps, polling loops, or `time.After` watchdogs in in-memory concurrency tests.
+Create the test's goroutines, channels, timers, and mocks inside `synctest.Test`, and use `synctest.Wait()` before asserting that work remains blocked.
+Use the bubble's fake clock when testing deadlines or timer behavior; do not rely on elapsed wall time to distinguish slow execution from a deadlock.
+Keep real-time waits where tests depend on external processes, real network I/O, or OS file-watcher events that synctest cannot control.
+
 ## Compiler Features, Fixes, and Tests
 
 When fixing a bug or implementing a new feature, at least one minimal test case should always be added in advance to verify the fix.
@@ -107,6 +114,9 @@ It is fine to implement more and more of a feature across commits, but be sure t
 - Do not add or change existing dependencies unless asked to.
 - Do not remove any debug assertions or panic calls. Existing assertions are never too strict or incorrect.
 - Do not use the `timeout` command when running tests or other commands, unless specifically debugging a hanging issue. Commands should be run directly without timeout wrappers in normal operation.
+- Do not summarize new changes in any markdown files in the repo. Specifically:
+  - `tsc/CHANGES.md` is a historical artifact for the 6.0 to 7.0 migration, not a live document.
+  - `CONTRIBUTING.md` only documents high-level build tool instructions, not their implementation details.
 
 # PR Template
 

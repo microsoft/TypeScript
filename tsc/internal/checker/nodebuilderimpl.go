@@ -576,7 +576,7 @@ func (b *NodeBuilderImpl) getResolvedTypeWithoutAbstractConstructSignatures(t *S
 		t.extra.objectTypeWithoutAbstractConstructSignatures = t.AsType()
 		return t.AsType()
 	}
-	typeCopy := b.ch.newAnonymousType(t.symbol, t.members, t.CallSignatures(), core.IfElse(len(constructSignatures) > 0, constructSignatures, []*Signature{}), t.getIndexInfos())
+	typeCopy := b.ch.newAnonymousType(t.symbol, t.getMembers(), t.CallSignatures(), core.IfElse(len(constructSignatures) > 0, constructSignatures, []*Signature{}), t.getIndexInfos())
 	t.extra.objectTypeWithoutAbstractConstructSignatures = typeCopy
 	typeCopy.AsStructuredType().ensureExtra().objectTypeWithoutAbstractConstructSignatures = typeCopy
 	return typeCopy
@@ -773,12 +773,12 @@ func (b *NodeBuilderImpl) createAccessFromSymbolChain(chain []*ast.Symbol, index
 			exports := b.ch.getExportsOfSymbol(parent)
 			if exports != nil {
 				// avoid exhaustive iteration in the common case
-				res, ok := exports[symbol.Name()]
+				res, ok := exports.Lookup(symbol.Name())
 				if symbol.Name() != ast.InternalSymbolNameExportEquals && !isLateBoundName(symbol.Name()) && ok && res != nil && b.ch.getSymbolIfSameReference(res, symbol) != nil {
 					symbolName = symbol.Name()
 				} else {
 					results := make(map[*ast.Symbol]string, 1)
-					for name, ex := range exports {
+					for name, ex := range exports.All() {
 						if b.ch.getSymbolIfSameReference(ex, symbol) != nil && !isLateBoundName(name) && name != ast.InternalSymbolNameExportEquals {
 							results[ex] = name
 							// break // must collect all results and sort them - exports are randomly iterated
@@ -817,8 +817,8 @@ func (b *NodeBuilderImpl) createAccessFromSymbolChain(chain []*ast.Symbol, index
 	b.ctx.approximateLength += len(symbolName) + 1
 
 	if (b.ctx.flags&nodebuilder.FlagsForbidIndexedAccessSymbolReferences == 0) && parent != nil &&
-		b.ch.getMembersOfSymbol(parent) != nil && b.ch.getMembersOfSymbol(parent)[symbol.Name()] != nil &&
-		b.ch.getSymbolIfSameReference(b.ch.getMembersOfSymbol(parent)[symbol.Name()], symbol) != nil {
+		b.ch.getMembersOfSymbol(parent) != nil && b.ch.getMembersOfSymbol(parent).Get(symbol.Name()) != nil &&
+		b.ch.getSymbolIfSameReference(b.ch.getMembersOfSymbol(parent).Get(symbol.Name()), symbol) != nil {
 		// Should use an indexed access
 		lhs := b.createAccessFromSymbolChain(chain, index-1, stopper, overrideTypeArguments)
 		if ast.IsIndexedAccessTypeNode(lhs) {
@@ -1112,7 +1112,7 @@ func (b *NodeBuilderImpl) getSymbolChain(symbol *ast.Symbol, meaning ast.SymbolF
 				parentChain := b.getSymbolChain(parent, getQualifiedLeftMeaning(meaning), false, yieldModuleSymbol)
 				if len(parentChain) > 0 {
 					if parent.Exports() != nil {
-						exported, ok := parent.Exports()[ast.InternalSymbolNameExportEquals]
+						exported, ok := parent.Exports().Lookup(ast.InternalSymbolNameExportEquals)
 						if ok && b.ch.getSymbolIfSameReference(exported, symbol) != nil {
 							// parentChain root _is_ symbol - symbol is a module export=, so it kinda looks like it's own parent
 							// No need to lookup an alias for the symbol in itself
@@ -2758,7 +2758,7 @@ func (b *NodeBuilderImpl) createTypeNodesFromResolvedType(resolvedType *Structur
 		typeElements = slices.Concat(typeElements, b.indexInfoToObjectComputedNamesOrSignatureDeclaration(info, typeNode))
 	}
 
-	properties := resolvedType.properties
+	properties := resolvedType.getProperties()
 	if len(properties) == 0 {
 		return b.f.NewNodeList(typeElements)
 	}
@@ -2807,7 +2807,7 @@ func (b *NodeBuilderImpl) createTypeNodeFromObjectType(t *Type) *ast.TypeNode {
 	resolved := b.ch.resolveStructuredTypeMembers(t)
 	callSigs := resolved.CallSignatures()
 	ctorSigs := resolved.ConstructSignatures()
-	if len(resolved.properties) == 0 && len(resolved.getIndexInfos()) == 0 {
+	if len(resolved.getProperties()) == 0 && len(resolved.getIndexInfos()) == 0 {
 		if len(callSigs) == 0 && len(ctorSigs) == 0 {
 			b.ctx.approximateLength += 2
 			result := b.f.NewTypeLiteralNode(b.f.NewNodeList([]*ast.Node{}))
@@ -2836,9 +2836,9 @@ func (b *NodeBuilderImpl) createTypeNodeFromObjectType(t *Type) *ast.TypeNode {
 			return b.ch.getOrCreateTypeFromSignature(s)
 		})
 		// count the number of type elements excluding abstract constructors
-		typeElementCount := len(callSigs) + (len(ctorSigs) - len(abstractSignatures)) + len(resolved.getIndexInfos()) + core.IfElse(b.ctx.flags&nodebuilder.FlagsWriteClassExpressionAsTypeLiteral != 0, core.CountWhere(resolved.properties, func(p *ast.Symbol) bool {
+		typeElementCount := len(callSigs) + (len(ctorSigs) - len(abstractSignatures)) + len(resolved.getIndexInfos()) + core.IfElse(b.ctx.flags&nodebuilder.FlagsWriteClassExpressionAsTypeLiteral != 0, core.CountWhere(resolved.getProperties(), func(p *ast.Symbol) bool {
 			return p.Flags()&ast.SymbolFlagsPrototype == 0
-		}), len(resolved.properties))
+		}), len(resolved.getProperties()))
 		// don't include an empty object literal if there were no other static-side
 		// properties to write, i.e. `abstract class C { }` becomes `abstract new () => {}`
 		// and not `(abstract new () => {}) & {}`

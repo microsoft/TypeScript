@@ -90,6 +90,7 @@ const (
 	MethodResolveModuleName                              Method = "resolveModuleName"
 	MethodParseCommandLine                               Method = "parseCommandLine"
 	MethodReadConfigFile                                 Method = "readConfigFile"
+	MethodParseConfigFileTextToJson                      Method = "parseConfigFileTextToJson"
 	MethodParseJsonConfigFile                            Method = "parseJsonConfigFileContent"
 	MethodParseConfigFile                                Method = "parseConfigFile"
 	MethodCreateSourceFile                               Method = "createSourceFile"
@@ -111,6 +112,7 @@ const (
 	MethodGetNonMissingTypeOfSymbol                      Method = "getNonMissingTypeOfSymbol"
 	MethodGetSourceFile                                  Method = "getSourceFile"
 	MethodGetSourceFileNames                             Method = "getSourceFileNames"
+	MethodGetProgramStatistics                           Method = "getProgramStatistics"
 	MethodGetSourceFileMetadata                          Method = "getSourceFileMetadata"
 	MethodGetModeForUsageLocation                        Method = "getModeForUsageLocation"
 	MethodGetModeForResolutionAtIndex                    Method = "getModeForResolutionAtIndex"
@@ -165,60 +167,71 @@ const (
 	MethodGetTargetOfSignature         Method = "getTargetOfSignature"
 
 	// Checker methods
-	MethodGetContextualType                 Method = "getContextualType"
-	MethodGetContextualTypeForArgument      Method = "getContextualTypeForArgument"
-	MethodGetAwaitedType                    Method = "getAwaitedType"
-	MethodGetBaseTypeOfLiteralType          Method = "getBaseTypeOfLiteralType"
-	MethodGetNonNullableType                Method = "getNonNullableType"
-	MethodGetTypeFromTypeNode               Method = "getTypeFromTypeNode"
-	MethodGetWidenedType                    Method = "getWidenedType"
-	MethodGetParameterType                  Method = "getParameterType"
-	MethodGetTypeParameterAtPosition        Method = "getTypeParameterAtPosition"
-	MethodIsArrayLikeType                   Method = "isArrayLikeType"
-	MethodIsTypeAssignableTo                Method = "isTypeAssignableTo"
-	MethodGetShorthandAssignmentValueSymbol Method = "getShorthandAssignmentValueSymbol"
-	MethodGetTypeOfSymbolAtLocation         Method = "getTypeOfSymbolAtLocation"
-	MethodTypeToTypeNode                    Method = "typeToTypeNode"
-	MethodSignatureToSignatureDeclaration   Method = "signatureToSignatureDeclaration"
-	MethodTypeToString                      Method = "typeToString"
-	MethodIsContextSensitive                Method = "isContextSensitive"
-	MethodGetReturnTypeOfSignature          Method = "getReturnTypeOfSignature"
-	MethodGetRestTypeOfSignature            Method = "getRestTypeOfSignature"
-	MethodGetTypePredicateOfSignature       Method = "getTypePredicateOfSignature"
-	MethodGetBaseTypes                      Method = "getBaseTypes"
-	MethodGetPropertiesOfType               Method = "getPropertiesOfType"
-	MethodGetApparentPropertiesOfType       Method = "getApparentPropertiesOfType"
-	MethodGetApparentType                   Method = "getApparentType"
-	MethodGetReducedType                    Method = "getReducedType"
-	MethodGetPropertyOfType                 Method = "getPropertyOfType"
-	MethodGetTypeOfPropertyOfType           Method = "getTypeOfPropertyOfType"
-	MethodGetIndexInfoOfType                Method = "getIndexInfoOfType"
-	MethodGetIndexInfosOfType               Method = "getIndexInfosOfType"
-	MethodGetConstraintOfTypeParameter      Method = "getConstraintOfTypeParameter"
-	MethodGetDefaultFromTypeParameter       Method = "getDefaultFromTypeParameter"
-	MethodGetBaseConstraintOfType           Method = "getBaseConstraintOfType"
-	MethodGetTypeArguments                  Method = "getTypeArguments"
-	MethodGetImportAdderEdits               Method = "getImportAdderEdits"
-	MethodGetTrueTypeOfConditionalType      Method = "getTrueTypeOfConditionalType"
-	MethodGetFalseTypeOfConditionalType     Method = "getFalseTypeOfConditionalType"
-	MethodGetConstantValue                  Method = "getConstantValue"
-	MethodGetSignatureFromDeclaration       Method = "getSignatureFromDeclaration"
-	MethodGetExportSpecifierLocalTarget     Method = "getExportSpecifierLocalTargetSymbol"
-	MethodGetAliasedSymbol                  Method = "getAliasedSymbol"
-	MethodGetImmediateAliasedSymbol         Method = "getImmediateAliasedSymbol"
-	MethodGetTargetSymbol                   Method = "getTargetSymbol"
-	MethodGetMergedSymbol                   Method = "getMergedSymbol"
-	MethodGetSymbolOfNode                   Method = "getSymbolOfNode"
-	MethodGetSymbolOfDeclarationForChecker  Method = "getSymbolOfDeclarationForChecker"
-	MethodGetParentOfSymbolForChecker       Method = "getParentOfSymbolForChecker"
-	MethodGetExportSymbolOfSymbolForChecker Method = "getExportSymbolOfSymbolForChecker"
-	MethodGetFullyQualifiedName             Method = "getFullyQualifiedName"
-	MethodGetExportsOfModule                Method = "getExportsOfModule"
-	MethodGetMemberInModuleExports          Method = "getMemberInModuleExports"
-	MethodGetJSDocTags                      Method = "getJsDocTags"
-	MethodGetDocumentationComment           Method = "getDocumentationComment"
-	MethodIsArrayType                       Method = "isArrayType"
-	MethodIsReadonlySymbol                  Method = "isReadonlySymbol"
+	MethodGetContextualType                          Method = "getContextualType"
+	MethodGetContextualTypeForArgument               Method = "getContextualTypeForArgument"
+	MethodGetAwaitedType                             Method = "getAwaitedType"
+	MethodGetBaseTypeOfLiteralType                   Method = "getBaseTypeOfLiteralType"
+	MethodGetNonNullableType                         Method = "getNonNullableType"
+	MethodGetNullableType                            Method = "getNullableType"
+	MethodGetStringLiteralType                       Method = "getStringLiteralType"
+	MethodGetNumberLiteralType                       Method = "getNumberLiteralType"
+	MethodGetBigIntLiteralType                       Method = "getBigIntLiteralType"
+	MethodGetFalseType                               Method = "getFalseType"
+	MethodGetTrueType                                Method = "getTrueType"
+	MethodGetJsxIntrinsicTagNamesAt                  Method = "getJsxIntrinsicTagNamesAt"
+	MethodGetPrivateIdentifierPropertyOfType         Method = "getPrivateIdentifierPropertyOfType"
+	MethodGetTypeFromTypeNode                        Method = "getTypeFromTypeNode"
+	MethodGetWidenedType                             Method = "getWidenedType"
+	MethodGetParameterType                           Method = "getParameterType"
+	MethodGetTypeParameterAtPosition                 Method = "getTypeParameterAtPosition"
+	MethodIsArrayLikeType                            Method = "isArrayLikeType"
+	MethodIsTypeAssignableTo                         Method = "isTypeAssignableTo"
+	MethodGetShorthandAssignmentValueSymbol          Method = "getShorthandAssignmentValueSymbol"
+	MethodGetTypeOfSymbolAtLocation                  Method = "getTypeOfSymbolAtLocation"
+	MethodTypeToTypeNode                             Method = "typeToTypeNode"
+	MethodSignatureToSignatureDeclaration            Method = "signatureToSignatureDeclaration"
+	MethodTypeToString                               Method = "typeToString"
+	MethodIsContextSensitive                         Method = "isContextSensitive"
+	MethodGetReturnTypeOfSignature                   Method = "getReturnTypeOfSignature"
+	MethodGetRestTypeOfSignature                     Method = "getRestTypeOfSignature"
+	MethodGetTypePredicateOfSignature                Method = "getTypePredicateOfSignature"
+	MethodGetBaseTypes                               Method = "getBaseTypes"
+	MethodGetPropertiesOfType                        Method = "getPropertiesOfType"
+	MethodGetApparentPropertiesOfType                Method = "getApparentPropertiesOfType"
+	MethodGetApparentType                            Method = "getApparentType"
+	MethodGetReducedType                             Method = "getReducedType"
+	MethodGetPropertyOfType                          Method = "getPropertyOfType"
+	MethodGetTypeOfPropertyOfType                    Method = "getTypeOfPropertyOfType"
+	MethodGetIndexInfoOfType                         Method = "getIndexInfoOfType"
+	MethodGetIndexInfosOfType                        Method = "getIndexInfosOfType"
+	MethodGetConstraintOfTypeParameter               Method = "getConstraintOfTypeParameter"
+	MethodGetDefaultFromTypeParameter                Method = "getDefaultFromTypeParameter"
+	MethodGetBaseConstraintOfType                    Method = "getBaseConstraintOfType"
+	MethodGetTypeArguments                           Method = "getTypeArguments"
+	MethodGetImportAdderEdits                        Method = "getImportAdderEdits"
+	MethodGetTrueTypeOfConditionalType               Method = "getTrueTypeOfConditionalType"
+	MethodGetFalseTypeOfConditionalType              Method = "getFalseTypeOfConditionalType"
+	MethodGetConstantValue                           Method = "getConstantValue"
+	MethodGetSignatureFromDeclaration                Method = "getSignatureFromDeclaration"
+	MethodGetExportSpecifierLocalTarget              Method = "getExportSpecifierLocalTargetSymbol"
+	MethodGetAliasedSymbol                           Method = "getAliasedSymbol"
+	MethodGetImmediateAliasedSymbol                  Method = "getImmediateAliasedSymbol"
+	MethodGetTargetSymbol                            Method = "getTargetSymbol"
+	MethodGetMergedSymbol                            Method = "getMergedSymbol"
+	MethodGetSymbolOfNode                            Method = "getSymbolOfNode"
+	MethodGetSymbolOfDeclarationForChecker           Method = "getSymbolOfDeclarationForChecker"
+	MethodGetParentOfSymbolForChecker                Method = "getParentOfSymbolForChecker"
+	MethodGetExportSymbolOfSymbolForChecker          Method = "getExportSymbolOfSymbolForChecker"
+	MethodGetFullyQualifiedName                      Method = "getFullyQualifiedName"
+	MethodGetExportsOfModule                         Method = "getExportsOfModule"
+	MethodGetMemberInModuleExports                   Method = "getMemberInModuleExports"
+	MethodGetJSDocTags                               Method = "getJsDocTags"
+	MethodGetDocumentationComment                    Method = "getDocumentationComment"
+	MethodIsArrayType                                Method = "isArrayType"
+	MethodIsReadonlySymbol                           Method = "isReadonlySymbol"
+	MethodIsImplementationOfOverload                 Method = "isImplementationOfOverload"
+	MethodGetPropertySymbolOfDestructuringAssignment Method = "getPropertySymbolOfDestructuringAssignment"
+	MethodGetAmbientModules                          Method = "getAmbientModules"
 
 	// Reference methods
 	MethodGetReferencesToSymbolInFile Method = "getReferencesToSymbolInFile"
@@ -449,7 +462,9 @@ type CreateSnapshotParams struct {
 	FileNotifications *FileNotifications `json:"fileNotifications,omitempty"`
 	// FileSystem supplies file contents and directory listings for the new snapshot.
 	// A full filesystem is canonical and total. A filesystem layer is checked
-	// before falling back to the base snapshot or host filesystem.
+	// before falling back to the base snapshot or host filesystem. A snapshot
+	// filesystem overlays retained request entries from another active snapshot,
+	// then applies an optional layer or full filesystem.
 	FileSystem *requestfilesystem.RequestFileSystem `json:"fileSystem,omitempty"`
 }
 
@@ -615,6 +630,7 @@ var unmarshalers = map[Method]func([]byte) (any, error){
 	MethodResolveModuleName:                              unmarshallerFor[ResolveModuleNameParams],
 	MethodParseCommandLine:                               unmarshallerFor[ParseCommandLineParams],
 	MethodReadConfigFile:                                 unmarshallerFor[ReadConfigFileParams],
+	MethodParseConfigFileTextToJson:                      unmarshallerFor[ParseConfigFileTextToJsonParams],
 	MethodParseJsonConfigFile:                            unmarshallerFor[ParseJsonConfigFileContentParams],
 	MethodParseConfigFile:                                unmarshallerFor[ParseConfigFileParams],
 	MethodCreateSourceFile:                               unmarshallerFor[CreateSourceFileParams],
@@ -688,93 +704,105 @@ var unmarshalers = map[Method]func([]byte) (any, error){
 	MethodGetThisParameterOfSignature:  unmarshallerFor[GetSignaturePropertyParams],
 	MethodGetTargetOfSignature:         unmarshallerFor[GetSignaturePropertyParams],
 
-	MethodGetContextualType:                 unmarshallerFor[GetContextualTypeParams],
-	MethodGetContextualTypeForArgument:      unmarshallerFor[GetContextualTypeForArgumentParams],
-	MethodGetAwaitedType:                    unmarshallerFor[CheckerTypeParams],
-	MethodGetBaseTypeOfLiteralType:          unmarshallerFor[GetBaseTypeOfLiteralTypeParams],
-	MethodGetNonNullableType:                unmarshallerFor[GetTypePropertyParams],
-	MethodGetTypeFromTypeNode:               unmarshallerFor[GetTypeFromTypeNodeParams],
-	MethodGetWidenedType:                    unmarshallerFor[GetWidenedTypeParams],
-	MethodGetParameterType:                  unmarshallerFor[GetParameterTypeParams],
-	MethodGetTypeParameterAtPosition:        unmarshallerFor[GetParameterTypeParams],
-	MethodIsArrayLikeType:                   unmarshallerFor[IsArrayLikeTypeParams],
-	MethodIsTypeAssignableTo:                unmarshallerFor[IsTypeAssignableToParams],
-	MethodGetShorthandAssignmentValueSymbol: unmarshallerFor[GetTypeAtLocationParams],
-	MethodGetTypeOfSymbolAtLocation:         unmarshallerFor[GetTypeOfSymbolAtLocationParams],
-	MethodTypeToTypeNode:                    unmarshallerFor[TypeToTypeNodeParams],
-	MethodSignatureToSignatureDeclaration:   unmarshallerFor[SignatureToSignatureDeclarationParams],
-	MethodTypeToString:                      unmarshallerFor[TypeToTypeNodeParams],
-	MethodIsContextSensitive:                unmarshallerFor[GetContextualTypeParams],
-	MethodGetReturnTypeOfSignature:          unmarshallerFor[GetSignaturePropertyParams],
-	MethodGetRestTypeOfSignature:            unmarshallerFor[CheckerSignatureParams],
-	MethodGetTypePredicateOfSignature:       unmarshallerFor[CheckerSignatureParams],
-	MethodGetBaseTypes:                      unmarshallerFor[CheckerTypeParams],
-	MethodGetPropertiesOfType:               unmarshallerFor[CheckerTypeParams],
-	MethodGetApparentPropertiesOfType:       unmarshallerFor[GetTypePropertyParams],
-	MethodGetApparentType:                   unmarshallerFor[GetTypePropertyParams],
-	MethodGetReducedType:                    unmarshallerFor[GetTypePropertyParams],
-	MethodGetPropertyOfType:                 unmarshallerFor[GetPropertyOfTypeParams],
-	MethodGetTypeOfPropertyOfType:           unmarshallerFor[GetPropertyOfTypeParams],
-	MethodGetIndexInfoOfType:                unmarshallerFor[GetIndexInfoOfTypeParams],
-	MethodGetIndexInfosOfType:               unmarshallerFor[CheckerTypeParams],
-	MethodGetConstraintOfTypeParameter:      unmarshallerFor[GetTypePropertyParams],
-	MethodGetBaseConstraintOfType:           unmarshallerFor[CheckerTypeParams],
-	MethodGetDefaultFromTypeParameter:       unmarshallerFor[GetTypePropertyParams],
-	MethodGetTypeArguments:                  unmarshallerFor[CheckerTypeParams],
-	MethodGetImportAdderEdits:               unmarshallerFor[GetImportAdderEditsParams],
-	MethodGetConstantValue:                  unmarshallerFor[CheckerNodeParams],
-	MethodGetSignatureFromDeclaration:       unmarshallerFor[CheckerNodeParams],
-	MethodGetExportSpecifierLocalTarget:     unmarshallerFor[CheckerNodeParams],
-	MethodGetAliasedSymbol:                  unmarshallerFor[CheckerSymbolParams],
-	MethodGetImmediateAliasedSymbol:         unmarshallerFor[CheckerSymbolParams],
-	MethodGetTargetSymbol:                   unmarshallerFor[CheckerSymbolParams],
-	MethodGetMergedSymbol:                   unmarshallerFor[CheckerSymbolParams],
-	MethodGetSymbolOfNode:                   unmarshallerFor[CheckerNodeParams],
-	MethodGetSymbolOfDeclarationForChecker:  unmarshallerFor[CheckerNodeParams],
-	MethodGetParentOfSymbolForChecker:       unmarshallerFor[CheckerSymbolParams],
-	MethodGetExportSymbolOfSymbolForChecker: unmarshallerFor[CheckerSymbolParams],
-	MethodGetFullyQualifiedName:             unmarshallerFor[CheckerSymbolParams],
-	MethodGetExportsOfModule:                unmarshallerFor[CheckerSymbolParams],
-	MethodGetMemberInModuleExports:          unmarshallerFor[GetMemberInModuleExportsParams],
-	MethodGetJSDocTags:                      unmarshallerFor[CheckerSymbolParams],
-	MethodGetDocumentationComment:           unmarshallerFor[CheckerSymbolParams],
-	MethodIsArrayType:                       unmarshallerFor[CheckerTypeParams],
-	MethodIsReadonlySymbol:                  unmarshallerFor[CheckerSymbolParams],
-	MethodGetReferencesToSymbolInFile:       unmarshallerFor[GetReferencesToSymbolInFileParams],
-	MethodGetReferencedSymbolsForNode:       unmarshallerFor[GetReferencedSymbolsForNodeParams],
-	MethodGetSignatureUsages:                unmarshallerFor[GetSignatureUsagesParams],
-	MethodGetCompletionsAtPosition:          unmarshallerFor[GetCompletionsAtPositionParams],
-	MethodFormatNodeForInsertion:            unmarshallerFor[FormatNodeForInsertionParams],
-	MethodPrintNode:                         unmarshallerFor[PrintNodeParams],
-	MethodEmit:                              unmarshallerFor[EmitParams],
-	MethodEmitToString:                      unmarshallerFor[EmitParams],
-	MethodGetJavaScriptEmit:                 unmarshallerFor[SelectedFilesEmitParams],
-	MethodGetDeclarationEmit:                unmarshallerFor[SelectedFilesEmitParams],
-	MethodGetAnyType:                        unmarshallerFor[GetIntrinsicTypeParams],
-	MethodGetStringType:                     unmarshallerFor[GetIntrinsicTypeParams],
-	MethodGetNumberType:                     unmarshallerFor[GetIntrinsicTypeParams],
-	MethodGetBooleanType:                    unmarshallerFor[GetIntrinsicTypeParams],
-	MethodGetVoidType:                       unmarshallerFor[GetIntrinsicTypeParams],
-	MethodGetUndefinedType:                  unmarshallerFor[GetIntrinsicTypeParams],
-	MethodGetNullType:                       unmarshallerFor[GetIntrinsicTypeParams],
-	MethodGetNeverType:                      unmarshallerFor[GetIntrinsicTypeParams],
-	MethodGetUnknownType:                    unmarshallerFor[GetIntrinsicTypeParams],
-	MethodGetBigIntType:                     unmarshallerFor[GetIntrinsicTypeParams],
-	MethodGetESSymbolType:                   unmarshallerFor[GetIntrinsicTypeParams],
-	MethodGetNonPrimitiveType:               unmarshallerFor[GetIntrinsicTypeParams],
-	MethodGetWellKnownSymbols:               unmarshallerFor[GetIntrinsicTypeParams],
-	MethodGetWellKnownSignatures:            unmarshallerFor[GetIntrinsicTypeParams],
-	MethodGetSyntacticDiagnostics:           unmarshallerFor[GetDiagnosticsParams],
-	MethodGetBindDiagnostics:                unmarshallerFor[GetDiagnosticsParams],
-	MethodGetSemanticDiagnostics:            unmarshallerFor[GetDiagnosticsParams],
-	MethodGetSuggestionDiagnostics:          unmarshallerFor[GetDiagnosticsParams],
-	MethodGetDeclarationDiagnostics:         unmarshallerFor[GetDiagnosticsParams],
-	MethodGetProgramDiagnostics:             unmarshallerFor[GetProjectDiagnosticsParams],
-	MethodGetGlobalDiagnostics:              unmarshallerFor[GetProjectDiagnosticsParams],
-	MethodGetConfigFileParsingDiagnostics:   unmarshallerFor[GetProjectDiagnosticsParams],
-	MethodStartCPUProfile:                   unmarshallerFor[ProfileParams],
-	MethodStopCPUProfile:                    noParams,
-	MethodSaveHeapProfile:                   unmarshallerFor[ProfileParams],
+	MethodGetContextualType:                          unmarshallerFor[GetContextualTypeParams],
+	MethodGetContextualTypeForArgument:               unmarshallerFor[GetContextualTypeForArgumentParams],
+	MethodGetAwaitedType:                             unmarshallerFor[CheckerTypeParams],
+	MethodGetBaseTypeOfLiteralType:                   unmarshallerFor[GetBaseTypeOfLiteralTypeParams],
+	MethodGetNonNullableType:                         unmarshallerFor[GetTypePropertyParams],
+	MethodGetNullableType:                            unmarshallerFor[GetNullableTypeParams],
+	MethodGetStringLiteralType:                       unmarshallerFor[GetStringLiteralTypeParams],
+	MethodGetNumberLiteralType:                       unmarshallerFor[GetNumberLiteralTypeParams],
+	MethodGetBigIntLiteralType:                       unmarshallerFor[GetBigIntLiteralTypeParams],
+	MethodGetFalseType:                               unmarshallerFor[GetIntrinsicTypeParams],
+	MethodGetTrueType:                                unmarshallerFor[GetIntrinsicTypeParams],
+	MethodGetJsxIntrinsicTagNamesAt:                  unmarshallerFor[CheckerNodeParams],
+	MethodGetPrivateIdentifierPropertyOfType:         unmarshallerFor[GetPrivateIdentifierPropertyOfTypeParams],
+	MethodGetTypeFromTypeNode:                        unmarshallerFor[GetTypeFromTypeNodeParams],
+	MethodGetWidenedType:                             unmarshallerFor[GetWidenedTypeParams],
+	MethodGetParameterType:                           unmarshallerFor[GetParameterTypeParams],
+	MethodGetTypeParameterAtPosition:                 unmarshallerFor[GetParameterTypeParams],
+	MethodIsArrayLikeType:                            unmarshallerFor[IsArrayLikeTypeParams],
+	MethodIsTypeAssignableTo:                         unmarshallerFor[IsTypeAssignableToParams],
+	MethodGetShorthandAssignmentValueSymbol:          unmarshallerFor[GetTypeAtLocationParams],
+	MethodGetTypeOfSymbolAtLocation:                  unmarshallerFor[GetTypeOfSymbolAtLocationParams],
+	MethodTypeToTypeNode:                             unmarshallerFor[TypeToTypeNodeParams],
+	MethodSignatureToSignatureDeclaration:            unmarshallerFor[SignatureToSignatureDeclarationParams],
+	MethodTypeToString:                               unmarshallerFor[TypeToTypeNodeParams],
+	MethodIsContextSensitive:                         unmarshallerFor[GetContextualTypeParams],
+	MethodGetReturnTypeOfSignature:                   unmarshallerFor[GetSignaturePropertyParams],
+	MethodGetRestTypeOfSignature:                     unmarshallerFor[CheckerSignatureParams],
+	MethodGetTypePredicateOfSignature:                unmarshallerFor[CheckerSignatureParams],
+	MethodGetBaseTypes:                               unmarshallerFor[CheckerTypeParams],
+	MethodGetPropertiesOfType:                        unmarshallerFor[CheckerTypeParams],
+	MethodGetApparentPropertiesOfType:                unmarshallerFor[GetTypePropertyParams],
+	MethodGetApparentType:                            unmarshallerFor[GetTypePropertyParams],
+	MethodGetReducedType:                             unmarshallerFor[GetTypePropertyParams],
+	MethodGetPropertyOfType:                          unmarshallerFor[GetPropertyOfTypeParams],
+	MethodGetTypeOfPropertyOfType:                    unmarshallerFor[GetPropertyOfTypeParams],
+	MethodGetIndexInfoOfType:                         unmarshallerFor[GetIndexInfoOfTypeParams],
+	MethodGetIndexInfosOfType:                        unmarshallerFor[CheckerTypeParams],
+	MethodGetConstraintOfTypeParameter:               unmarshallerFor[GetTypePropertyParams],
+	MethodGetBaseConstraintOfType:                    unmarshallerFor[CheckerTypeParams],
+	MethodGetDefaultFromTypeParameter:                unmarshallerFor[GetTypePropertyParams],
+	MethodGetTypeArguments:                           unmarshallerFor[CheckerTypeParams],
+	MethodGetImportAdderEdits:                        unmarshallerFor[GetImportAdderEditsParams],
+	MethodGetConstantValue:                           unmarshallerFor[CheckerNodeParams],
+	MethodGetSignatureFromDeclaration:                unmarshallerFor[CheckerNodeParams],
+	MethodGetExportSpecifierLocalTarget:              unmarshallerFor[CheckerNodeParams],
+	MethodGetAliasedSymbol:                           unmarshallerFor[CheckerSymbolParams],
+	MethodGetImmediateAliasedSymbol:                  unmarshallerFor[CheckerSymbolParams],
+	MethodGetTargetSymbol:                            unmarshallerFor[CheckerSymbolParams],
+	MethodGetMergedSymbol:                            unmarshallerFor[CheckerSymbolParams],
+	MethodGetSymbolOfNode:                            unmarshallerFor[CheckerNodeParams],
+	MethodGetSymbolOfDeclarationForChecker:           unmarshallerFor[CheckerNodeParams],
+	MethodGetParentOfSymbolForChecker:                unmarshallerFor[CheckerSymbolParams],
+	MethodGetExportSymbolOfSymbolForChecker:          unmarshallerFor[CheckerSymbolParams],
+	MethodGetFullyQualifiedName:                      unmarshallerFor[CheckerSymbolParams],
+	MethodGetExportsOfModule:                         unmarshallerFor[CheckerSymbolParams],
+	MethodGetMemberInModuleExports:                   unmarshallerFor[GetMemberInModuleExportsParams],
+	MethodGetJSDocTags:                               unmarshallerFor[CheckerSymbolParams],
+	MethodGetDocumentationComment:                    unmarshallerFor[CheckerSymbolParams],
+	MethodIsArrayType:                                unmarshallerFor[CheckerTypeParams],
+	MethodIsReadonlySymbol:                           unmarshallerFor[CheckerSymbolParams],
+	MethodIsImplementationOfOverload:                 unmarshallerFor[CheckerNodeParams],
+	MethodGetPropertySymbolOfDestructuringAssignment: unmarshallerFor[CheckerNodeParams],
+	MethodGetAmbientModules:                          unmarshallerFor[GetIntrinsicTypeParams],
+	MethodGetReferencesToSymbolInFile:                unmarshallerFor[GetReferencesToSymbolInFileParams],
+	MethodGetReferencedSymbolsForNode:                unmarshallerFor[GetReferencedSymbolsForNodeParams],
+	MethodGetSignatureUsages:                         unmarshallerFor[GetSignatureUsagesParams],
+	MethodGetCompletionsAtPosition:                   unmarshallerFor[GetCompletionsAtPositionParams],
+	MethodPrintNode:                                  unmarshallerFor[PrintNodeParams],
+	MethodFormatNodeForInsertion:                     unmarshallerFor[FormatNodeForInsertionParams],
+	MethodEmit:                                       unmarshallerFor[EmitParams],
+	MethodEmitToString:                               unmarshallerFor[EmitParams],
+	MethodGetJavaScriptEmit:                          unmarshallerFor[SelectedFilesEmitParams],
+	MethodGetDeclarationEmit:                         unmarshallerFor[SelectedFilesEmitParams],
+	MethodGetAnyType:                                 unmarshallerFor[GetIntrinsicTypeParams],
+	MethodGetStringType:                              unmarshallerFor[GetIntrinsicTypeParams],
+	MethodGetNumberType:                              unmarshallerFor[GetIntrinsicTypeParams],
+	MethodGetBooleanType:                             unmarshallerFor[GetIntrinsicTypeParams],
+	MethodGetVoidType:                                unmarshallerFor[GetIntrinsicTypeParams],
+	MethodGetUndefinedType:                           unmarshallerFor[GetIntrinsicTypeParams],
+	MethodGetNullType:                                unmarshallerFor[GetIntrinsicTypeParams],
+	MethodGetNeverType:                               unmarshallerFor[GetIntrinsicTypeParams],
+	MethodGetUnknownType:                             unmarshallerFor[GetIntrinsicTypeParams],
+	MethodGetBigIntType:                              unmarshallerFor[GetIntrinsicTypeParams],
+	MethodGetESSymbolType:                            unmarshallerFor[GetIntrinsicTypeParams],
+	MethodGetNonPrimitiveType:                        unmarshallerFor[GetIntrinsicTypeParams],
+	MethodGetWellKnownSymbols:                        unmarshallerFor[GetIntrinsicTypeParams],
+	MethodGetWellKnownSignatures:                     unmarshallerFor[GetIntrinsicTypeParams],
+	MethodGetSyntacticDiagnostics:                    unmarshallerFor[GetDiagnosticsParams],
+	MethodGetBindDiagnostics:                         unmarshallerFor[GetDiagnosticsParams],
+	MethodGetSemanticDiagnostics:                     unmarshallerFor[GetDiagnosticsParams],
+	MethodGetSuggestionDiagnostics:                   unmarshallerFor[GetDiagnosticsParams],
+	MethodGetDeclarationDiagnostics:                  unmarshallerFor[GetDiagnosticsParams],
+	MethodGetProgramDiagnostics:                      unmarshallerFor[GetProjectDiagnosticsParams],
+	MethodGetProgramStatistics:                       unmarshallerFor[GetProjectDiagnosticsParams],
+	MethodGetGlobalDiagnostics:                       unmarshallerFor[GetProjectDiagnosticsParams],
+	MethodGetConfigFileParsingDiagnostics:            unmarshallerFor[GetProjectDiagnosticsParams],
+	MethodStartCPUProfile:                            unmarshallerFor[ProfileParams],
+	MethodStopCPUProfile:                             noParams,
+	MethodSaveHeapProfile:                            unmarshallerFor[ProfileParams],
 }
 
 type ParseConfigFileParams struct {
@@ -787,6 +815,11 @@ type ParseCommandLineParams struct {
 
 type ReadConfigFileParams struct {
 	File DocumentIdentifier `json:"file"`
+}
+
+type ParseConfigFileTextToJsonParams struct {
+	FileName string `json:"fileName"`
+	JSONText string `json:"jsonText"`
 }
 
 type ParseJsonConfigFileContentParams struct {
@@ -1014,11 +1047,20 @@ type ConfigFileResponse struct {
 	FileNames         []tspath.RootedFilePath  `json:"fileNames" nonnil:"true"`
 	Options           *core.CompilerOptions    `json:"options" nonnil:"true"`
 	BuildOptions      *core.BuildOptions       `json:"buildOptions,omitempty"`
-	ProjectReferences []*core.ProjectReference `json:"projectReferences,omitempty"`
+	ProjectReferences []*core.ProjectReference `json:"projectReferences,omitzero"`
 	TypeAcquisition   *core.TypeAcquisition    `json:"typeAcquisition,omitempty"`
 	CompileOnSave     *bool                    `json:"compileOnSave,omitempty"`
 	Raw               any                      `json:"raw,omitempty"`
 	Errors            []*DiagnosticResponse    `json:"errors" nonnil:"true"`
+}
+
+type ProgramStatisticsResponse struct {
+	NodeCount          int                        `json:"nodeCount"`
+	IdentifierCount    int                        `json:"identifierCount"`
+	SymbolCount        int                        `json:"symbolCount"`
+	TypeCount          uint32                     `json:"typeCount"`
+	InstantiationCount uint32                     `json:"instantiationCount"`
+	RelationCacheSizes checker.RelationCacheSizes `json:"relationCacheSizes"`
 }
 
 type ReadConfigFileResponse struct {
@@ -1361,6 +1403,29 @@ func literalValueToJSON(value any) any {
 	}
 }
 
+// numberLiteralValueFromJSON decodes a request-direction number literal value
+// encoded by the API client, reversing literalValueToJSON's NaN/Infinity string
+// encoding for the number case (JSON itself cannot represent those values).
+func numberLiteralValueFromJSON(value any) (jsnum.Number, error) {
+	switch v := value.(type) {
+	case float64:
+		return jsnum.Number(v), nil
+	case string:
+		switch v {
+		case "+Infinity":
+			return jsnum.Inf(1), nil
+		case "-Infinity":
+			return jsnum.Inf(-1), nil
+		case "NaN":
+			return jsnum.NaN(), nil
+		default:
+			return 0, fmt.Errorf("%w: invalid number literal value %q", ErrInvalidRequest, v)
+		}
+	default:
+		return 0, fmt.Errorf("%w: invalid number literal value %v", ErrInvalidRequest, value)
+	}
+}
+
 type ConstantValueResponse struct {
 	IsNumber bool `json:"isNumber"`
 	Value    any  `json:"value"`
@@ -1657,21 +1722,56 @@ type GetNonNullableTypeParams struct {
 	Type     TypeID         `json:"type"`
 }
 
-// GetTypeFromTypeNodeParams are the parameters for the getTypeFromTypeNode method.
+type GetNullableTypeParams struct {
+	Snapshot SnapshotID     `json:"snapshot"`
+	Project  project.Handle `json:"project"`
+	Type     TypeID         `json:"type"`
+	Flags    int32          `json:"flags"`
+}
+
+type GetStringLiteralTypeParams struct {
+	Snapshot SnapshotID     `json:"snapshot"`
+	Project  project.Handle `json:"project"`
+	Value    string         `json:"value"`
+}
+
+type GetNumberLiteralTypeParams struct {
+	Snapshot SnapshotID     `json:"snapshot"`
+	Project  project.Handle `json:"project"`
+	// Value is a JSON number, except JSON cannot represent NaN/Infinity/-Infinity,
+	// so the client encodes those as the strings "NaN"/"+Infinity"/"-Infinity"
+	// (mirroring literalValueToJSON's response-direction encoding).
+	Value any `json:"value"`
+}
+
+// Base10Value is the absolute value in base 10 with no leading zeros (empty for zero).
+type GetBigIntLiteralTypeParams struct {
+	Snapshot    SnapshotID     `json:"snapshot"`
+	Project     project.Handle `json:"project"`
+	Negative    bool           `json:"negative,omitempty"`
+	Base10Value string         `json:"base10Value,omitempty"`
+}
+
+type GetPrivateIdentifierPropertyOfTypeParams struct {
+	Snapshot SnapshotID     `json:"snapshot"`
+	Project  project.Handle `json:"project"`
+	Type     TypeID         `json:"type"`
+	Name     string         `json:"name"`
+	Location NodeHandle     `json:"location"`
+}
+
 type GetTypeFromTypeNodeParams struct {
 	Snapshot SnapshotID     `json:"snapshot"`
 	Project  project.Handle `json:"project"`
 	Location NodeHandle     `json:"location"`
 }
 
-// GetWidenedTypeParams are the parameters for the getWidenedType method.
 type GetWidenedTypeParams struct {
 	Snapshot SnapshotID     `json:"snapshot"`
 	Project  project.Handle `json:"project"`
 	Type     TypeID         `json:"type"`
 }
 
-// GetParameterTypeParams are the parameters for the getParameterType method.
 type GetParameterTypeParams struct {
 	Snapshot  SnapshotID     `json:"snapshot"`
 	Project   project.Handle `json:"project"`
@@ -1679,14 +1779,12 @@ type GetParameterTypeParams struct {
 	Index     int32          `json:"index"`
 }
 
-// IsArrayLikeTypeParams checks whether a type is array-like.
 type IsArrayLikeTypeParams struct {
 	Snapshot SnapshotID     `json:"snapshot"`
 	Project  project.Handle `json:"project"`
 	Type     TypeID         `json:"type"`
 }
 
-// IsTypeAssignableToParams checks assignability between two types.
 type IsTypeAssignableToParams struct {
 	Snapshot SnapshotID     `json:"snapshot"`
 	Project  project.Handle `json:"project"`

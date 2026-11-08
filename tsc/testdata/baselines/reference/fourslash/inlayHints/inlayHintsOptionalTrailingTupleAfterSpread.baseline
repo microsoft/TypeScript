@@ -1,0 +1,160 @@
+// === Inlay Hints ===
+    optional<T>(...x, 1);
+                ^
+{
+  "position": {
+    "line": 2,
+    "character": 16
+  },
+  "label": [
+    {
+      "value": "...head",
+      "location": {
+        "uri": "file:///inlayHintsOptionalTrailingTupleAfterSpread.ts",
+        "range": {
+          "start": {
+            "line": 0,
+            "character": 60
+          },
+          "end": {
+            "line": 0,
+            "character": 64
+          }
+        }
+      }
+    },
+    {
+      "value": ":"
+    }
+  ],
+  "kind": 2,
+  "paddingRight": true
+}
+
+    optional<T>(...x, 1);
+                      ^
+{
+  "position": {
+    "line": 2,
+    "character": 22
+  },
+  "label": [
+    {
+      "value": "first",
+      "location": {
+        "uri": "file:///inlayHintsOptionalTrailingTupleAfterSpread.ts",
+        "range": {
+          "start": {
+            "line": 0,
+            "character": 69
+          },
+          "end": {
+            "line": 0,
+            "character": 74
+          }
+        }
+      }
+    },
+    {
+      "value": ":"
+    }
+  ],
+  "kind": 2,
+  "paddingRight": true
+}
+
+    optional<T>(...x, 1, "two");
+                ^
+{
+  "position": {
+    "line": 3,
+    "character": 16
+  },
+  "label": [
+    {
+      "value": "...head",
+      "location": {
+        "uri": "file:///inlayHintsOptionalTrailingTupleAfterSpread.ts",
+        "range": {
+          "start": {
+            "line": 0,
+            "character": 60
+          },
+          "end": {
+            "line": 0,
+            "character": 64
+          }
+        }
+      }
+    },
+    {
+      "value": ":"
+    }
+  ],
+  "kind": 2,
+  "paddingRight": true
+}
+
+    optional<T>(...x, 1, "two");
+                      ^
+{
+  "position": {
+    "line": 3,
+    "character": 22
+  },
+  "label": [
+    {
+      "value": "first",
+      "location": {
+        "uri": "file:///inlayHintsOptionalTrailingTupleAfterSpread.ts",
+        "range": {
+          "start": {
+            "line": 0,
+            "character": 69
+          },
+          "end": {
+            "line": 0,
+            "character": 74
+          }
+        }
+      }
+    },
+    {
+      "value": ":"
+    }
+  ],
+  "kind": 2,
+  "paddingRight": true
+}
+
+    optional<T>(...x, 1, "two");
+                         ^
+{
+  "position": {
+    "line": 3,
+    "character": 25
+  },
+  "label": [
+    {
+      "value": "second",
+      "location": {
+        "uri": "file:///inlayHintsOptionalTrailingTupleAfterSpread.ts",
+        "range": {
+          "start": {
+            "line": 0,
+            "character": 85
+          },
+          "end": {
+            "line": 0,
+            "character": 91
+          }
+        }
+      }
+    },
+    {
+      "value": ":"
+    }
+  ],
+  "kind": 2,
+  "paddingRight": true
+}

@@ -1,0 +1,53 @@
+//// [tests/cases/compiler/reverseMappedTypePrivateMembers.ts] ////
+
+=== reverseMappedTypePrivateMembers.ts ===
+// https://github.com/microsoft/TypeScript/issues/64593
+
+class Entity {
+>Entity : Entity
+
+    private secret = 1;
+>secret : number
+>1 : 1
+
+    protected hidden = 2;
+>hidden : number
+>2 : 2
+
+    markChanged(field: string): void {}
+>markChanged : (field: string) => void
+>field : string
+}
+class Account extends Entity {
+>Account : Account
+>Entity : Entity
+
+    emailAddress = '';
+>emailAddress : string
+>'' : ""
+}
+
+declare function getAccount<T extends object = object>(): Readonly<Account & T>;
+>getAccount : <T extends object = object>() => Readonly<Account & T>
+
+declare function getAccountPlain(): Readonly<Account & object>;
+>getAccountPlain : () => Readonly<Account & object>
+
+export const plain = getAccountPlain() as Account;
+>plain : Account
+>getAccountPlain() as Account : Account
+>getAccountPlain() : Readonly<Account & object>
+>getAccountPlain : () => Readonly<Account & object>
+
+export const explicit = getAccount<object>() as Account;
+>explicit : Account
+>getAccount<object>() as Account : Account
+>getAccount<object>() : Readonly<Account & object>
+>getAccount : <T extends object = object>() => Readonly<Account & T>
+
+export const inferred = getAccount() as Account;
+>inferred : Account
+>getAccount() as Account : Account
+>getAccount() : Readonly<Account & { markChanged: (field: string) => void; emailAddress: string; }>
+>getAccount : <T extends object = object>() => Readonly<Account & T>
+

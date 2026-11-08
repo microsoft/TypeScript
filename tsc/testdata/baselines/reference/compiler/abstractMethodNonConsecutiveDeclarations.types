@@ -1,0 +1,36 @@
+//// [tests/cases/compiler/abstractMethodNonConsecutiveDeclarations.ts] ////
+
+=== abstractMethodNonConsecutiveDeclarations.ts ===
+// https://github.com/microsoft/TypeScript/issues/61783
+
+abstract class SeparatedByMethod {
+>SeparatedByMethod : SeparatedByMethod
+
+    abstract func1(): void;
+>func1 : { (): void; (): void; }
+
+    func2(): string {
+>func2 : () => string
+
+        return 'hi';
+>'hi' : "hi"
+    }
+
+    abstract func1(): void;
+>func1 : { (): void; (): void; }
+}
+
+abstract class SeparatedByProperty {
+>SeparatedByProperty : SeparatedByProperty
+
+    abstract func1(): void;
+>func1 : { (): void; (): void; }
+
+    prop: string = 'hi';
+>prop : string
+>'hi' : "hi"
+
+    abstract func1(): void;
+>func1 : { (): void; (): void; }
+}
+

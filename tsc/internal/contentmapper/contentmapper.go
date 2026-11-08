@@ -61,12 +61,12 @@ type Mapper struct {
 	ContributionID string `json:"-"`
 }
 
-var supportedVirtualExtensions = collections.NewSetFromItems(
-	".js", ".jsx", ".mjs", ".cjs", ".ts", ".tsx", ".mts", ".cts", ".json",
-)
-
 func IsSupportedVirtualExtension(extension string) bool {
-	return supportedVirtualExtensions.Has(extension)
+	switch extension {
+	case ".js", ".jsx", ".mjs", ".cjs", ".ts", ".tsx", ".mts", ".cts", ".json":
+		return true
+	}
+	return false
 }
 
 func IsValidExtension(extension string) bool {

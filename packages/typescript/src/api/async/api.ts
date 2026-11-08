@@ -1,23 +1,23 @@
-import { CheckFlags } from "#enums/checkFlags";
-import { CompletionItemKind } from "#enums/completionItemKind";
-import { DiagnosticCategory } from "#enums/diagnosticCategory";
-import { ElementFlags } from "#enums/elementFlags";
-import { EmitOnly } from "#enums/emitOnly";
-import { IndexKind } from "#enums/indexKind";
-import { JsxEmit } from "#enums/jsxEmit";
-import { ModuleKind } from "#enums/moduleKind";
-import { ModuleResolutionKind } from "#enums/moduleResolutionKind";
-import { NewLineKind } from "#enums/newLineKind";
-import { NodeBuilderFlags } from "#enums/nodeBuilderFlags";
-import { ObjectFlags } from "#enums/objectFlags";
-import { ScriptKind } from "#enums/scriptKind";
-import { SignatureFlags } from "#enums/signatureFlags";
-import { SignatureKind } from "#enums/signatureKind";
-import { SymbolFlags } from "#enums/symbolFlags";
-import { SymbolOwnerKind } from "#enums/symbolOwnerKind";
-import { TypeFlags } from "#enums/typeFlags";
-import { TypeFormatFlags } from "#enums/typeFormatFlags";
-import { TypePredicateKind } from "#enums/typePredicateKind";
+import { CheckFlags } from "../../../enums/checkFlags.js";
+import { CompletionItemKind } from "../../../enums/completionItemKind.js";
+import { DiagnosticCategory } from "../../../enums/diagnosticCategory.js";
+import { ElementFlags } from "../../../enums/elementFlags.js";
+import { EmitOnly } from "../../../enums/emitOnly.js";
+import { IndexKind } from "../../../enums/indexKind.js";
+import { JsxEmit } from "../../../enums/jsxEmit.js";
+import { ModuleKind } from "../../../enums/moduleKind.js";
+import { ModuleResolutionKind } from "../../../enums/moduleResolutionKind.js";
+import { NewLineKind } from "../../../enums/newLineKind.js";
+import { NodeBuilderFlags } from "../../../enums/nodeBuilderFlags.js";
+import { ObjectFlags } from "../../../enums/objectFlags.js";
+import { ScriptKind } from "../../../enums/scriptKind.js";
+import { SignatureFlags } from "../../../enums/signatureFlags.js";
+import { SignatureKind } from "../../../enums/signatureKind.js";
+import { SymbolFlags } from "../../../enums/symbolFlags.js";
+import { SymbolOwnerKind } from "../../../enums/symbolOwnerKind.js";
+import { TypeFlags } from "../../../enums/typeFlags.js";
+import { TypeFormatFlags } from "../../../enums/typeFormatFlags.js";
+import { TypePredicateKind } from "../../../enums/typePredicateKind.js";
 import {
     type __String,
     type CallLikeExpression,
@@ -42,6 +42,7 @@ import {
 import { assertNever } from "../../internal/utils.ts";
 import {
     encodeNode,
+    sourceFileResponseToUint8Array,
     uint8ArrayToBase64,
 } from "../node/encoder.ts";
 import {
@@ -57,7 +58,7 @@ import {
 } from "../node/node.ts";
 import { Wtf8Decoder } from "../node/wtf8.ts";
 import type {
-    APIOptions,
+    APIOptions, // @sync:     SyncAPIOptions as APIOptions,
     LSPConnectionOptions,
 } from "../options.ts";
 import {
@@ -95,6 +96,7 @@ import type {
     ModuleResolutionSpec,
     PackageId,
     ParsedCommandLine,
+    ProgramStatisticsResponse,
     ProjectId,
     ProjectReference,
     ProjectResponse,
@@ -102,6 +104,7 @@ import type {
     RawCompilerOptions,
     ReadConfigFileResponse,
     ReconfigureSnapshotProgramParams as ProtocolReconfigureSnapshotProgramParams,
+    RelationCacheSizes,
     ResolutionMode,
     ResolvedModule,
     ResolvedTypeReferenceDirective,
@@ -138,9 +141,10 @@ import type {
     TimingInfo,
 } from "../timing.ts";
 import {
-    Client,
+    type Client, // @sync:     Client,
     type ClientSocketOptions,
     type ClientSpawnOptions,
+    createClient, // @sync-skip
 } from "./client.ts";
 import type {
     AssertsIdentifierTypePredicate,
@@ -237,10 +241,12 @@ export type {
     ObjectType,
     PackageId,
     ParsedCommandLine,
+    ProgramStatisticsResponse,
     ProjectId,
     ProjectReference,
     RawCompilerOptions,
     ReadConfigFileResponse,
+    RelationCacheSizes,
     RequestTiming,
     ResolutionMode,
     ResolvedModule,
@@ -343,7 +349,6 @@ export interface TranspileOutput {
 // @sync-only-start
 // export { all, defer, type APIRequestGenerator, type AnyAPIRequestGenerator, type AllAPIRequestGenerator, type DeferredAPIRequestGenerator, type ExecutedGeneratorsResults } from "./generatorSupport.ts";
 // import {executeRequestGenerators, type ExecutedGeneratorsResults, type AnyAPIRequestGenerator} from "./generatorSupport.ts";
-// import { sourceFileResponseToUint8Array } from "../node/encoder.ts";
 // @sync-only-end
 
 export class API<FromLSP extends boolean = false> implements FormatDiagnosticsHost {
@@ -364,7 +369,7 @@ export class API<FromLSP extends boolean = false> implements FormatDiagnosticsHo
     readonly debug: DebugHandlers;
 
     constructor(options: APIOptions | LSPConnectionOptions = {}) {
-        this.client = new Client(options);
+        this.client = createClient(options); // @sync: this.client = new Client(options);
         this.sourceFileCache = new SourceFileCache<Symbol>();
         this.printer = new Printer(this.client);
         this.debug = new DebugHandlers(this.client, () => this.ensureInitialized()); // @sync: this.debug = new DebugHandlers(this.client, this.ensureInitialized);
@@ -514,6 +519,11 @@ export class API<FromLSP extends boolean = false> implements FormatDiagnosticsHo
     async readConfigFile(file: DocumentIdentifier): Promise<ReadConfigFileResponse> {
         await this.ensureInitialized();
         return this.client.apiRequest("readConfigFile", { file });
+    }
+
+    async parseConfigFileTextToJson(fileName: string, jsonText: string): Promise<ReadConfigFileResponse> {
+        await this.ensureInitialized();
+        return this.client.apiRequest("parseConfigFileTextToJson", { fileName, jsonText });
     }
 
     async parseJsonConfigFileContent(
@@ -678,6 +688,13 @@ export class API<FromLSP extends boolean = false> implements FormatDiagnosticsHo
 
     private prepareCreateSnapshotParams(params: CreateSnapshotParams | undefined): ProtocolCreateSnapshotParams {
         params ??= {};
+        if (params.fileSystem?.kind === "snapshot") {
+            const sourceId = params.fileSystem.snapshot;
+            const source = sourceId === undefined ? undefined : this.activeSnapshots.get(sourceId);
+            if (!source || source.isDisposed()) {
+                throw new Error("Cannot use an inactive snapshot filesystem");
+            }
+        }
         const prepareOptions = (options: CreateProgramOptions | undefined): ProtocolCreateProgramOptions | undefined => {
             if (!options) return undefined;
             const { moduleResolver, projectReferences, ...rest } = options;
@@ -764,6 +781,15 @@ export class API<FromLSP extends boolean = false> implements FormatDiagnosticsHo
     }
 
     async close(): Promise<void> {
+        // @sync-skip-block-start
+        if (this.initializing && !this.initialized) {
+            const initializing = this.initializing;
+            await this.client.close();
+            await initializing.catch(() => {});
+            this.sourceFileCache.clear();
+            return;
+        }
+        // @sync-skip-block-end
         await this.initializing?.catch(() => {}); // @sync-skip
         try {
             for (const retained of [...this.activeSourceFileLeases.values()]) {
@@ -1109,6 +1135,12 @@ export class Snapshot {
         return this.getProject(projectId)?.program;
     }
 
+    /**
+     * Creates a snapshot using this snapshot's projects and incremental state.
+     * Use `createFileSystemFromSnapshot(source)` from the filesystem API as `fileSystem`
+     * to overlay another snapshot's retained request entries without replaying
+     * intermediate updates. Changes and program reuse are relative to this snapshot.
+     */
     update<
         const CreatePrograms extends CreateSnapshotParams["createPrograms"] = undefined,
         const OpenFiles extends CreateSnapshotParams["openFiles"] = undefined,
@@ -1773,6 +1805,21 @@ export class Program<Id extends ProjectId = ProjectId> implements FormatDiagnost
         return this.project.parsedCommandLine.options;
     }
 
+    getRootFileNames(): readonly RootedFilePath[] {
+        return this.project.parsedCommandLine.fileNames;
+    }
+
+    getProjectReferences(): readonly ProjectReference[] | undefined {
+        return this.project.parsedCommandLine.projectReferences;
+    }
+
+    getStatistics(): Promise<ProgramStatisticsResponse> {
+        return this.client.apiRequest("getProgramStatistics", {
+            snapshot: this.snapshotId,
+            project: this.project.handle,
+        });
+    }
+
     async getSourceFile(file: DocumentIdentifier): Promise<SourceFile | undefined> {
         const fileName = resolveFileName(file);
         const path = this.pathKeyForFileName(fileName);
@@ -2273,6 +2320,16 @@ function toEmitOutput(response: ProtocolEmitOutputResponse): EmitOutput {
     };
 }
 
+// JSON cannot represent NaN/Infinity/-Infinity (they serialize as null), so encode
+// them as sentinel strings here; the server decodes them back via
+// numberLiteralValueFromJSON, mirroring literalValueToJSON's response-direction encoding.
+function encodeNumberLiteralValue(value: number): number | string {
+    if (value === Infinity) return "+Infinity";
+    if (value === -Infinity) return "-Infinity";
+    if (Number.isNaN(value)) return "NaN";
+    return value;
+}
+
 export class Checker {
     private snapshotId: number;
     private project: Project;
@@ -2611,6 +2668,20 @@ export class Checker {
     }
 
     /**
+     * Add `undefined` and/or `null` to a type, as indicated by `flags` (a combination of
+     * {@link TypeFlags.Undefined} and {@link TypeFlags.Null}). Always returns a type.
+     */
+    async getNullableType(type: Type, flags: TypeFlags): Promise<Type> {
+        const data = await this.client.apiRequest("getNullableType", {
+            snapshot: this.snapshotId,
+            project: this.project.handle,
+            type: type.id,
+            flags,
+        });
+        return this.objectRegistry.getOrCreateType(data);
+    }
+
+    /**
      * Get the type for a type node. Always returns a type; for type nodes whose
      * type cannot be determined the checker yields the error type (use
      * {@link Type.isErrorType} to detect it).
@@ -2733,6 +2804,70 @@ export class Checker {
     async getNonPrimitiveType(): Promise<Type> {
         return this.getIntrinsicType("getNonPrimitiveType");
     }
+    async getFalseType(): Promise<Type> {
+        return this.getIntrinsicType("getFalseType");
+    }
+    async getTrueType(): Promise<Type> {
+        return this.getIntrinsicType("getTrueType");
+    }
+
+    /** Get (or create) the singleton type for a string literal value. Always returns a type. */
+    async getStringLiteralType(value: string): Promise<Type> {
+        const data = await this.client.apiRequest("getStringLiteralType", {
+            snapshot: this.snapshotId,
+            project: this.project.handle,
+            value,
+        });
+        return this.objectRegistry.getOrCreateType(data);
+    }
+
+    /** Get (or create) the singleton type for a numeric literal value. Always returns a type. */
+    async getNumberLiteralType(value: number): Promise<Type> {
+        const data = await this.client.apiRequest("getNumberLiteralType", {
+            snapshot: this.snapshotId,
+            project: this.project.handle,
+            value: encodeNumberLiteralValue(value),
+        });
+        return this.objectRegistry.getOrCreateType(data);
+    }
+
+    /** Get (or create) the singleton type for a bigint literal value. Always returns a type. */
+    async getBigIntLiteralType(value: bigint): Promise<Type> {
+        const negative = value < 0n;
+        const absValue = negative ? -value : value;
+        const base10Value = absValue === 0n ? "" : absValue.toString();
+        const data = await this.client.apiRequest("getBigIntLiteralType", {
+            snapshot: this.snapshotId,
+            project: this.project.handle,
+            negative,
+            base10Value,
+        });
+        return this.objectRegistry.getOrCreateType(data);
+    }
+
+    async getJsxIntrinsicTagNamesAt(location: Node): Promise<readonly Symbol[]> {
+        const data = await this.client.apiRequest("getJsxIntrinsicTagNamesAt", {
+            snapshot: this.snapshotId,
+            project: this.project.handle,
+            location: getNodeRequestHandle(location),
+        });
+        return data ? data.map(d => this.objectRegistry.getOrCreateSymbol(d)) : [];
+    }
+
+    /**
+     * Look up a private identifier (e.g. `"#foo"`, including the leading `#`) lexically in scope
+     * at `location`, and if found, return the corresponding property of `type`.
+     */
+    async getPrivateIdentifierPropertyOfType(type: Type, name: string, location: Node): Promise<Symbol | undefined> {
+        const data = await this.client.apiRequest("getPrivateIdentifierPropertyOfType", {
+            snapshot: this.snapshotId,
+            project: this.project.handle,
+            type: type.id,
+            name,
+            location: getNodeRequestHandle(location),
+        });
+        return data ? this.objectRegistry.getOrCreateSymbol(data) : undefined;
+    }
 
     async typeToTypeNode(type: Type, enclosingDeclaration?: Node, flags?: number): Promise<TypeNode | undefined> {
         const binaryData = await this.client.apiRequestBinary("typeToTypeNode", {
@@ -2810,6 +2945,41 @@ export class Checker {
             project: this.project.handle,
             symbol: symbol.reference,
         });
+    }
+
+    /**
+     * Returns `true` if the function-like declaration is the implementation
+     * signature of a set of overloads (i.e. it has a body and is not a
+     * get/set accessor).
+     */
+    async isImplementationOfOverload(node: Node): Promise<boolean> {
+        return this.client.apiRequest("isImplementationOfOverload", {
+            snapshot: this.snapshotId,
+            project: this.project.handle,
+            location: getNodeRequestHandle(node),
+        });
+    }
+
+    /**
+     * Get the property symbol corresponding to an identifier in a destructuring
+     * assignment or `for..of` statement, e.g. `a` in `({ property1: a } = obj)`.
+     */
+    async getPropertySymbolOfDestructuringAssignment(location: Identifier): Promise<Symbol | undefined> {
+        const data = await this.client.apiRequest("getPropertySymbolOfDestructuringAssignment", {
+            snapshot: this.snapshotId,
+            project: this.project.handle,
+            location: getNodeRequestHandle(location),
+        });
+        return data ? this.objectRegistry.getOrCreateSymbol(data) : undefined;
+    }
+
+    /** Get all ambient modules declared in the program (e.g. `declare module "foo" { ... }`). */
+    async getAmbientModules(): Promise<readonly Symbol[]> {
+        const data = await this.client.apiRequest("getAmbientModules", {
+            snapshot: this.snapshotId,
+            project: this.project.handle,
+        });
+        return data ? data.map(d => this.objectRegistry.getOrCreateSymbol(d)) : [];
     }
 
     /** Get the return type of a signature. Always returns a type. */

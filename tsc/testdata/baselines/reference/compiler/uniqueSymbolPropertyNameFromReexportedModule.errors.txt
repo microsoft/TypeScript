@@ -1,0 +1,18 @@
+a.ts(3,1): error TS7053: Element implicitly has an 'any' type because expression of type 'unique symbol' can't be used to index type '{}'.
+  Property '["./b".key]' does not exist on type '{}'.
+
+
+==== b.ts (0 errors) ====
+    export const key: unique symbol = Symbol();
+    
+==== c.ts (0 errors) ====
+    export { key } from "./b";
+    
+==== a.ts (1 errors) ====
+    import { key } from "./c";
+    declare const o: {};
+    o[key];
+    ~~~~~~
+!!! error TS7053: Element implicitly has an 'any' type because expression of type 'unique symbol' can't be used to index type '{}'.
+!!! error TS7053:   Property '["./b".key]' does not exist on type '{}'.
+    

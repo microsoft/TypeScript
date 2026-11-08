@@ -370,7 +370,8 @@ extends:
                             ;;
                         esac
 
-                        existingTagCommit="$(gh api "repos/microsoft/TypeScript/git/ref/tags/$tag" --jq '.object.sha' 2>/dev/null || true)"
+                        existingTagCommit="$(gh api "repos/microsoft/TypeScript/git/matching-refs/tags/$tag" \
+                          --jq ".[] | select(.ref == \"refs/tags/$tag\") | .object.sha")"
                         if [ -n "$existingTagCommit" ]; then
                           if [ "$existingTagCommit" != "$RELEASE_SOURCE_COMMIT" ]; then
                             echo "Tag $tag points to $existingTagCommit, expected $RELEASE_SOURCE_COMMIT." >&2

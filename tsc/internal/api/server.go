@@ -11,6 +11,7 @@ import (
 	"github.com/microsoft/TypeScript/tsc/internal/lsp/lsproto"
 	"github.com/microsoft/TypeScript/tsc/internal/project"
 	"github.com/microsoft/TypeScript/tsc/internal/tspath"
+	"github.com/microsoft/TypeScript/tsc/internal/vfs"
 	"github.com/microsoft/TypeScript/tsc/internal/vfs/osvfs"
 )
 
@@ -41,6 +42,12 @@ type StdioServerOptions struct {
 	// RunExternalCode allows configured content mappers to execute.
 	RunExternalCode      bool
 	ContentMapperSpawner contentmapper.Spawner
+	// FS replaces the operating-system file system as the server's base file
+	// system, which callbacks fall back to.
+	FS vfs.FS
+	// Tuples, if set, carries synchronous protocol messages directly instead
+	// of In, Out, or PipePath.
+	Tuples TupleTransport
 }
 
 // StdioServer runs an API session over STDIO using MessagePack protocol.
@@ -64,7 +71,11 @@ func NewStdioServer(options *StdioServerOptions) *StdioServer {
 // Run starts the server and blocks until the connection closes.
 func (s *StdioServer) Run(ctx context.Context) error {
 	var transport ipc.Transport
-	if s.options.PipePath != "" {
+	if s.options.Tuples != nil {
+		if s.options.Async {
+			panic("StdioServerOptions.Tuples requires the synchronous protocol")
+		}
+	} else if s.options.PipePath != "" {
 		t, err := ipc.NewPipeTransport(s.options.PipePath)
 		if err != nil {
 			return fmt.Errorf("failed to create pipe transport: %w", err)
@@ -77,7 +88,11 @@ func (s *StdioServer) Run(ctx context.Context) error {
 		transport = t
 	}
 
-	fs := bundled.WrapFS(osvfs.FS())
+	baseFS := s.options.FS
+	if baseFS == nil {
+		baseFS = osvfs.FS()
+	}
+	fs := bundled.WrapFS(baseFS)
 
 	// Wrap the base FS when callbacks or an explicit case-sensitivity setting are requested.
 	var callbackFS *callbackFS
@@ -105,15 +120,14 @@ func (s *StdioServer) Run(ctx context.Context) error {
 	})
 	defer session.Close()
 
-	// Accept connection from transport
-	rwc, err := transport.Accept()
-	if err != nil {
-		return fmt.Errorf("failed to accept connection: %w", err)
-	}
-
-	// Create protocol and connection based on async mode
 	var conn ipc.Conn
-	if s.options.Async {
+	if s.options.Tuples != nil {
+		syncConn := ipc.NewSyncConn(nil, NewTupleProtocol(s.options.Tuples), session)
+		syncConn.SetCollectTiming(s.options.CollectTiming)
+		conn = syncConn
+	} else if rwc, err := transport.Accept(); err != nil {
+		return fmt.Errorf("failed to accept connection: %w", err)
+	} else if s.options.Async {
 		protocol := ipc.NewJSONRPCProtocol(rwc)
 		asyncConn := ipc.NewAsyncConnWithProtocol(rwc, protocol, session)
 		asyncConn.SetCollectTiming(s.options.CollectTiming)
