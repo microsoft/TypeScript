@@ -26041,7 +26041,7 @@ func (c *Checker) getRestrictiveInstantiation(t *Type) *Type {
 }
 
 func (c *Checker) getRestrictiveTypeParameter(t *Type) *Type {
-	if t.AsTypeParameter().constraint == nil && c.getConstraintDeclaration(t) == nil || t.AsTypeParameter().constraint == c.noConstraintType {
+	if c.isRestrictivelyUnconstrained(t) {
 		return t
 	}
 	key := CachedTypeKey{kind: CachedTypeKindRestrictiveTypeParameter, typeId: t.id}
@@ -26053,6 +26053,21 @@ func (c *Checker) getRestrictiveTypeParameter(t *Type) *Type {
 	result.AsTypeParameter().origin = t
 	c.cachedTypes[key] = result
 	return result
+}
+
+// isRestrictivelyUnconstrained reports whether t needs no restrictive form.
+// For a declared type parameter, that is decided from its declaration rather
+// than from whether its constraint is computed yet, which an implied
+// constraint of an infer type parameter would make depend on what was asked
+// first. A copy of a type parameter, such as its restrictive form, shares its
+// symbol, and is decided from its own constraint, so that the restrictive form
+// of a restrictive form is itself.
+func (c *Checker) isRestrictivelyUnconstrained(t *Type) bool {
+	tp := t.AsTypeParameter()
+	if tp.origin == nil && !tp.isDistributed && t.symbol != nil && core.Some(t.symbol.Declarations(), ast.IsTypeParameterDeclaration) {
+		return isUnconstrainedTypeParameter(t)
+	}
+	return tp.constraint == nil || tp.constraint == c.noConstraintType
 }
 
 func (c *Checker) restrictiveMapperWorker(t *Type) *Type {
