@@ -1822,6 +1822,15 @@
     Temporal.Now.plainDateTimeISO(); // same as above, but return the DateTime in the ISO-8601 calendar
 }
 
+{
+    // https://github.com/microsoft/TypeScript/issues/64227
+    const zdt = Temporal.Now.zonedDateTimeISO("America/Chicago");
+    zdt.toLocaleString(undefined, { timeZone: "Europe/Berlin" });
+    zdt.toLocaleString("en-US", { timeZone: "Europe/Berlin" });
+    zdt.toLocaleString(undefined, { month: "long" });
+    zdt.toLocaleString("en-US", { month: "numeric", year: "numeric" });
+}
+
 
 //// [temporal.js]
 "use strict";
@@ -3370,4 +3379,12 @@
     Temporal.Now.plainDateISO(); // get the current date in the system time zone and ISO-8601 calendar
     Temporal.Now.plainTimeISO(); // get the current wall-clock time in the system time zone and ISO-8601 calendar
     Temporal.Now.plainDateTimeISO(); // same as above, but return the DateTime in the ISO-8601 calendar
+}
+{
+    // https://github.com/microsoft/TypeScript/issues/64227
+    const zdt = Temporal.Now.zonedDateTimeISO("America/Chicago");
+    zdt.toLocaleString(undefined, { timeZone: "Europe/Berlin" });
+    zdt.toLocaleString("en-US", { timeZone: "Europe/Berlin" });
+    zdt.toLocaleString(undefined, { month: "long" });
+    zdt.toLocaleString("en-US", { month: "numeric", year: "numeric" });
 }

@@ -7029,3 +7029,41 @@
 >plainDateTimeISO : Symbol(Temporal.Now.plainDateTimeISO, Decl(lib.esnext.temporal.d.ts, --, --))
 }
 
+{
+    // https://github.com/microsoft/TypeScript/issues/64227
+    const zdt = Temporal.Now.zonedDateTimeISO("America/Chicago");
+>zdt : Symbol(zdt, Decl(temporal.ts, 1823, 9))
+>Temporal.Now.zonedDateTimeISO : Symbol(Temporal.Now.zonedDateTimeISO, Decl(lib.esnext.temporal.d.ts, --, --))
+>Temporal.Now : Symbol(Temporal.Now, Decl(lib.esnext.temporal.d.ts, --, --))
+>Temporal : Symbol(Temporal, Decl(lib.esnext.temporal.d.ts, --, --))
+>Now : Symbol(Temporal.Now, Decl(lib.esnext.temporal.d.ts, --, --))
+>zonedDateTimeISO : Symbol(Temporal.Now.zonedDateTimeISO, Decl(lib.esnext.temporal.d.ts, --, --))
+
+    zdt.toLocaleString(undefined, { timeZone: "Europe/Berlin" });
+>zdt.toLocaleString : Symbol(Temporal.ZonedDateTime.toLocaleString, Decl(lib.esnext.temporal.d.ts, --, --))
+>zdt : Symbol(zdt, Decl(temporal.ts, 1823, 9))
+>toLocaleString : Symbol(Temporal.ZonedDateTime.toLocaleString, Decl(lib.esnext.temporal.d.ts, --, --))
+>undefined : Symbol(undefined)
+>timeZone : Symbol(timeZone, Decl(temporal.ts, 1824, 35))
+
+    zdt.toLocaleString("en-US", { timeZone: "Europe/Berlin" });
+>zdt.toLocaleString : Symbol(Temporal.ZonedDateTime.toLocaleString, Decl(lib.esnext.temporal.d.ts, --, --))
+>zdt : Symbol(zdt, Decl(temporal.ts, 1823, 9))
+>toLocaleString : Symbol(Temporal.ZonedDateTime.toLocaleString, Decl(lib.esnext.temporal.d.ts, --, --))
+>timeZone : Symbol(timeZone, Decl(temporal.ts, 1825, 33))
+
+    zdt.toLocaleString(undefined, { month: "long" });
+>zdt.toLocaleString : Symbol(Temporal.ZonedDateTime.toLocaleString, Decl(lib.esnext.temporal.d.ts, --, --))
+>zdt : Symbol(zdt, Decl(temporal.ts, 1823, 9))
+>toLocaleString : Symbol(Temporal.ZonedDateTime.toLocaleString, Decl(lib.esnext.temporal.d.ts, --, --))
+>undefined : Symbol(undefined)
+>month : Symbol(month, Decl(temporal.ts, 1826, 35))
+
+    zdt.toLocaleString("en-US", { month: "numeric", year: "numeric" });
+>zdt.toLocaleString : Symbol(Temporal.ZonedDateTime.toLocaleString, Decl(lib.esnext.temporal.d.ts, --, --))
+>zdt : Symbol(zdt, Decl(temporal.ts, 1823, 9))
+>toLocaleString : Symbol(Temporal.ZonedDateTime.toLocaleString, Decl(lib.esnext.temporal.d.ts, --, --))
+>month : Symbol(month, Decl(temporal.ts, 1827, 33))
+>year : Symbol(year, Decl(temporal.ts, 1827, 51))
+}
+
