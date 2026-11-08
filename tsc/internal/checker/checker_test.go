@@ -291,6 +291,8 @@ func TestCachedStateIsMemoized(t *testing.T) {
 	files, err := filepath.Glob("*.go")
 	assert.NilError(t, err)
 	seen := make(map[string]bool)
+	// The state of computations in progress, which Checker.AssertAtRest checks.
+	progress := make(map[string]bool)
 	var parsed []*goast.File
 	// Entries interned by pointer own the results cached in them.
 	interned := make(map[string]bool)
@@ -302,6 +304,11 @@ func TestCachedStateIsMemoized(t *testing.T) {
 		assert.NilError(t, err)
 		parsed = append(parsed, file)
 		goast.Inspect(file, func(n goast.Node) bool {
+			if vs, ok := n.(*goast.ValueSpec); ok && len(vs.Names) == 1 && vs.Names[0].Name == "checkerProgressFields" {
+				for _, elt := range vs.Values[0].(*goast.CompositeLit).Elts {
+					progress[strings.Trim(elt.(*goast.BasicLit).Value, `"`)] = true
+				}
+			}
 			if e, ok := n.(*goast.IndexListExpr); ok {
 				if ident, ok := e.X.(*goast.Ident); ok && ident.Name == "internMap" && len(e.Indices) == 2 {
 					if star, ok := e.Indices[1].(*goast.StarExpr); ok {
@@ -322,17 +329,32 @@ func TestCachedStateIsMemoized(t *testing.T) {
 				return true
 			}
 			st, ok := spec.Type.(*goast.StructType)
-			if !ok || slices.Contains(notCacheOwners, spec.Name.Name) || name != "types.go" && !strings.HasSuffix(spec.Name.Name, "Links") && spec.Name.Name != "memoStore" && !interned[spec.Name.Name] {
+			isChecker := spec.Name.Name == "Checker"
+			if !ok || slices.Contains(notCacheOwners, spec.Name.Name) || name != "types.go" && !strings.HasSuffix(spec.Name.Name, "Links") && spec.Name.Name != "memoStore" && !isChecker && !interned[spec.Name.Name] {
 				return true
 			}
 			for _, field := range st.Fields.List {
 				if isMemoType(field.Type) {
 					continue
 				}
+				if isChecker && isCheckerCreated(field.Type) {
+					continue
+				}
 				for _, fieldName := range field.Names {
 					key := spec.Name.Name + "." + fieldName.Name
+					if isChecker && progress[fieldName.Name] {
+						if _, ok := unmemoizedCheckerFields[key]; ok {
+							t.Errorf("%s: %s is listed both in checkerProgressFields and in unmemoizedCheckerFields", fset.Position(fieldName.Pos()), key)
+						}
+						delete(progress, fieldName.Name)
+						continue
+					}
 					seen[key] = true
-					if _, ok := unmemoizedCacheFields[key]; !ok {
+					if isChecker {
+						if _, ok := unmemoizedCheckerFields[key]; !ok {
+							t.Errorf("%s: %s is not a memo; list it in checkerProgressFields or unmemoizedCheckerFields", fset.Position(fieldName.Pos()), key)
+						}
+					} else if _, ok := unmemoizedCacheFields[key]; !ok {
 						t.Errorf("%s: %s is not a memo; make it one or list it in unmemoizedCacheFields", fset.Position(fieldName.Pos()), key)
 					}
 				}
@@ -345,6 +367,35 @@ func TestCachedStateIsMemoized(t *testing.T) {
 			t.Errorf("unmemoizedCacheFields lists %s, which is not an unmemoized field", key)
 		}
 	}
+	for key := range unmemoizedCheckerFields {
+		if !seen[key] {
+			t.Errorf("unmemoizedCheckerFields lists %s, which is not an unmemoized field", key)
+		}
+	}
+	for name := range progress {
+		t.Errorf("checkerProgressFields lists %s, which is not an unmemoized field of Checker", name)
+	}
+}
+
+// isCheckerCreated reports whether a field of Checker of type expr is
+// created with the checker: a closure, or an allocator for the entities it
+// creates.
+func isCheckerCreated(expr goast.Expr) bool {
+	switch e := expr.(type) {
+	case *goast.IndexExpr:
+		expr = e.X
+	case *goast.IndexListExpr:
+		expr = e.X
+	}
+	switch e := expr.(type) {
+	case *goast.FuncType:
+		return true
+	case *goast.SelectorExpr:
+		return strings.HasSuffix(e.Sel.Name, "Arena")
+	case *goast.Ident:
+		return strings.HasSuffix(e.Name, "Arena")
+	}
+	return false
 }
 
 func isMemoType(expr goast.Expr) bool {
@@ -363,6 +414,8 @@ func isMemoType(expr goast.Expr) bool {
 
 const (
 	unmemoizedImmutable    = "Set when the store is created"
+	unmemoizedCheckerSetup = "Set when the checker is created"
+	unmemoizedScratch      = "Reused buffer or free list, whose contents nothing reads before writing"
 	unmemoizedContainer    = "Holds links, whose fields are checked separately"
 	unmemoizedCounter      = "Allocation counter for IDs and statistics"
 	unmemoizedInterned     = "Interned type whose creation has no effects"
@@ -385,6 +438,47 @@ const (
 // notCacheOwners are the structs declared in types.go that are plain values
 // rather than entities owning cached state.
 var notCacheOwners = []string{"LanguageFeatureMinimumTargetMap", "accessibleChainCacheKey", "computedName", "TupleElementInfo", "MemberInfo", "RelationCacheSizes"}
+
+// unmemoizedCheckerFields lists the fields of Checker, other than those in
+// checkerProgressFields, like unmemoizedCacheFields.
+var unmemoizedCheckerFields = map[string]string{
+	"Checker.awaitedTypeErrors":                  "Counter compared only within one computation",
+	"Checker.flowInvocationCount":                "Counter compared only within one computation",
+	"Checker.resolutionSerials":                  unmemoizedCounter,
+	"Checker.instantiationCount":                 "Counts within a statement or outermost computation, and starts again for each; see \"Instantiation limits\"",
+	"Checker.wasCanceled":                        "Set when a check is canceled, after which the checker is not used",
+	"Checker.evaluate":                           unmemoizedCheckerSetup,
+	"Checker.factory":                            unmemoizedCheckerSetup,
+	"Checker.uniqueLiteralMapper":                unmemoizedCheckerSetup,
+	"Checker.reportUnreliableMapper":             unmemoizedCheckerSetup,
+	"Checker.reportUnmeasurableMapper":           unmemoizedCheckerSetup,
+	"Checker.restrictiveMapper":                  unmemoizedCheckerSetup,
+	"Checker.permissiveMapper":                   unmemoizedCheckerSetup,
+	"Checker.syncIterationTypesResolver":         unmemoizedCheckerSetup,
+	"Checker.asyncIterationTypesResolver":        unmemoizedCheckerSetup,
+	"Checker.compareTypesAssignable":             unmemoizedCheckerSetup,
+	"Checker.tracer":                             unmemoizedCheckerSetup,
+	"Checker.layoutMembers":                      unmemoizedScratch,
+	"Checker.layoutBaseIndices":                  unmemoizedScratch,
+	"Checker.freeTypeSets":                       unmemoizedScratch,
+	"Checker.freePropertyCounts":                 unmemoizedScratch,
+	"Checker.freeinferenceState":                 unmemoizedScratch,
+	"Checker.freeFlowState":                      unmemoizedScratch,
+	"Checker.freeRelater":                        unmemoizedScratch,
+	"Checker.flushBuf":                           unmemoizedScratch,
+	"Checker.resumeBuf":                          unmemoizedScratch,
+	"Checker.regExpScanner":                      unmemoizedScratch,
+	"Checker.typeToStringNodebuilder":            unmemoizedScratch,
+	"Checker.lastGetCombinedNodeFlagsNode":       unmemoizedSyntax,
+	"Checker.lastGetCombinedNodeFlagsResult":     unmemoizedSyntax,
+	"Checker.lastGetCombinedModifierFlagsNode":   unmemoizedSyntax,
+	"Checker.lastGetCombinedModifierFlagsResult": unmemoizedSyntax,
+	"Checker.lastLateBindableParent":             "Derived from syntax and the merges made before checking",
+	"Checker.lastLateBindableKinds":              "Derived from syntax and the merges made before checking",
+	"Checker.lastFlowNode":                       "Reused only when no memo observes the reachability it caches",
+	"Checker.lastFlowNodeReachable":              "Reused only when no memo observes the reachability it caches",
+	"Checker.flowDepthFailures":                  "A walk from a node that fails within a depth budget fails within any smaller one, regardless of earlier walks",
+}
 
 var unmemoizedCacheFields = map[string]string{
 	"valueSymbolExtra.nameType":              unmemoizedCreated,
