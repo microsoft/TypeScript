@@ -37,26 +37,26 @@ func TestResolutionLookupWatcherOmitsMacOSHomeDirectories(t *testing.T) {
 
 		var files collections.SyncMap[tspath.PathKey, tspath.RootedFilePath]
 		for _, fileName := range []tspath.RootedFilePath{
-			tspath.RootedFilePath(usersDirectory + "/package.json"),
-			tspath.RootedFilePath(usersDirectory + "/andrew/package.json"),
-			tspath.RootedFilePath(usersDirectory + "/andrew/project/package.json"),
-			tspath.RootedFilePath(usersDirectory + "/andrew/other/package.json"),
+			tspath.ToRootedFilePath(usersDirectory+"/package.json", ""),
+			tspath.ToRootedFilePath(usersDirectory+"/andrew/package.json", ""),
+			tspath.ToRootedFilePath(usersDirectory+"/andrew/project/package.json", ""),
+			tspath.ToRootedFilePath(usersDirectory+"/andrew/other/package.json", ""),
 		} {
 			files.Store(caseSensitivity.PathKey(tspath.RootedPath(fileName)), fileName)
 		}
 
 		result := createResolutionLookupGlobMapper(
-			tspath.RootedDirectoryPath(usersDirectory+"/andrew/project"),
+			tspath.ToRootedDirectoryPath(usersDirectory+"/andrew/project", ""),
 			"/lib",
 			"/dev/null",
 			caseSensitivity,
 		)(&files)
 
 		assert.DeepEqual(t, result.patternsInsideWorkspace, []string{usersDirectory + "/andrew/project/**/*"})
-		assert.DeepEqual(t, result.directoriesOutsideWorkspace, []tspath.RootedDirectoryPath{tspath.RootedDirectoryPath(usersDirectory + "/andrew/other")})
+		assert.DeepEqual(t, result.directoriesOutsideWorkspace, []tspath.RootedDirectoryPath{tspath.ToRootedDirectoryPath(usersDirectory+"/andrew/other", "")})
 		assert.DeepEqual(t, result.ignored, map[tspath.RootedDirectoryPath]struct{}{
-			tspath.RootedDirectoryPath(usersDirectory):             {},
-			tspath.RootedDirectoryPath(usersDirectory + "/andrew"): {},
+			tspath.ToRootedDirectoryPath(usersDirectory, ""):           {},
+			tspath.ToRootedDirectoryPath(usersDirectory+"/andrew", ""): {},
 		})
 		watcher := newRecursiveDirectoryWatcher(result.directoriesOutsideWorkspace[0], lsproto.WatchKindCreate, true)
 		assert.Equal(t, string(*watcher.GlobPattern.RelativePattern.BaseUri.URI), "file://"+usersDirectory+"/andrew/other")
