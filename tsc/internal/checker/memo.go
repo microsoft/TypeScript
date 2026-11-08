@@ -1866,6 +1866,7 @@ func (c *Checker) setFlagMemoValue[T any](key memoKey, p *T, v T) {
 func (c *Checker) endCircularity() {
 	mark := min(c.circularityMark, len(c.discardLog))
 	c.circularityStart = 0
+	c.circularityMark = 0
 	c.innerCycles = c.innerCycles[:0]
 	c.discardCycle(mark, false)
 	c.cycleParticipants = nil
@@ -1920,7 +1921,9 @@ func (c *Checker) discardCycle(mark int, retain bool) {
 // is incomplete is discarded when it finishes, as for the outermost, rather
 // than read by the rest of the outer cycle.
 func (c *Checker) extendCircularity(head int) {
-	c.observedHead = minObservedHead(c.observedHead, int32(head))
+	if c.typeResolutionTop != 0 {
+		c.observedHead = minObservedHead(c.observedHead, int32(head))
+	}
 	c.recordFromCheck()
 	switch {
 	case c.circularityStart == 0:
