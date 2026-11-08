@@ -1,0 +1,6 @@
+//// [tests/cases/compiler/jsxImportSourceModuleMissing.tsx] ////
+
+=== index.tsx ===
+export const x = <div />;
+>x : Symbol(x, Decl(index.tsx, 0, 12))
+

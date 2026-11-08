@@ -1,0 +1,11 @@
+index.tsx(1,18): error TS2875: This JSX tag requires the module path 'solid-js/jsx-runtime' to exist, but none could be found. Make sure you have types for the appropriate package installed.
+index.tsx(1,18): error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
+
+
+==== index.tsx (2 errors) ====
+    export const x = <div />;
+                     ~~~~~~~
+!!! error TS2875: This JSX tag requires the module path 'solid-js/jsx-runtime' to exist, but none could be found. Make sure you have types for the appropriate package installed.
+                     ~~~~~~~
+!!! error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
+    

@@ -1,0 +1,8 @@
+//// [tests/cases/compiler/jsxScriptFile.tsx] ////
+
+=== index.tsx ===
+const x = <div />;
+>x : any
+><div /> : any
+>div : any
+

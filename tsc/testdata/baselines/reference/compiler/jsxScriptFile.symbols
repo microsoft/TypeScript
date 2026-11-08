@@ -1,0 +1,6 @@
+//// [tests/cases/compiler/jsxScriptFile.tsx] ////
+
+=== index.tsx ===
+const x = <div />;
+>x : Symbol(x, Decl(index.tsx, 0, 5))
+

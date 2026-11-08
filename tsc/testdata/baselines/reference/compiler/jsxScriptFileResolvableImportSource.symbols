@@ -1,0 +1,27 @@
+//// [tests/cases/compiler/jsxScriptFileResolvableImportSource.tsx] ////
+
+=== node_modules/solid-js/jsx-runtime.d.ts ===
+export namespace JSX {
+>JSX : Symbol(JSX, Decl(jsx-runtime.d.ts, 0, 0))
+
+    interface IntrinsicElements {
+>IntrinsicElements : Symbol(IntrinsicElements, Decl(jsx-runtime.d.ts, 0, 22))
+
+        div: {};
+>div : Symbol(IntrinsicElements.div, Decl(jsx-runtime.d.ts, 1, 33))
+    }
+}
+export function jsx(type: any, props: any, key?: any): any;
+>jsx : Symbol(jsx, Decl(jsx-runtime.d.ts, 4, 1))
+>type : Symbol(type, Decl(jsx-runtime.d.ts, 5, 20))
+>props : Symbol(props, Decl(jsx-runtime.d.ts, 5, 30))
+>key : Symbol(key, Decl(jsx-runtime.d.ts, 5, 42))
+
+export const Fragment: unique symbol;
+>Fragment : Symbol(Fragment, Decl(jsx-runtime.d.ts, 6, 12))
+
+=== index.tsx ===
+const x = <div />;
+>x : Symbol(x, Decl(index.tsx, 0, 5))
+>div : Symbol(JSX.IntrinsicElements.div, Decl(jsx-runtime.d.ts, 1, 33))
+

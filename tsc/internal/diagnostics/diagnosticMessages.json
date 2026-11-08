@@ -4050,6 +4050,10 @@
         "category": "Error",
         "code": 2883
     },
+    "This JSX tag requires the module '{0}', which cannot be resolved in a script file. Add an empty 'export {}' statement to make this file a module.": {
+        "category": "Error",
+        "code": 2884
+    },
 
     "Import declaration '{0}' is using private name '{1}'.": {
         "category": "Error",

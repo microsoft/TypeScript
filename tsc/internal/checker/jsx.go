@@ -1473,7 +1473,13 @@ func (c *Checker) getJsxNamespaceContainerForImplicitImport(location *ast.Node) 
 	if moduleReference == "" {
 		return nil
 	}
+	// A script file (non-module) cannot resolve imports, so the implicit JSX runtime import will
+	// not resolve regardless of whether the package is installed. Report that instead of the
+	// generic "module path does not exist" message.
 	errorMessage := diagnostics.This_JSX_tag_requires_the_module_path_0_to_exist_but_none_could_be_found_Make_sure_you_have_types_for_the_appropriate_package_installed
+	if !ast.IsExternalOrCommonJSModule(file) {
+		errorMessage = diagnostics.This_JSX_tag_requires_the_module_0_which_cannot_be_resolved_in_a_script_file_Add_an_empty_export_statement_to_make_this_file_a_module
+	}
 	mod := c.resolveExternalModule(core.OrElse(specifier, canonicalErrorTag), moduleReference, errorMessage, canonicalErrorTag, false, nil /*importAttributesType*/)
 	var result *ast.Symbol
 	if mod != nil && mod != c.unknownSymbol {

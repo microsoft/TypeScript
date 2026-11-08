@@ -1,0 +1,8 @@
+//// [tests/cases/compiler/jsxImportSourceModuleMissing.tsx] ////
+
+=== index.tsx ===
+export const x = <div />;
+>x : any
+><div /> : any
+>div : any
+
