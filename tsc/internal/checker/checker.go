@@ -32261,7 +32261,7 @@ func (c *Checker) popContextualType() {
 }
 
 func (c *Checker) findContextualNode(node *ast.Node, includeCaches bool) int {
-	for i, info := range c.contextualInfos {
+	for i, info := range slices.Backward(c.contextualInfos) {
 		if node == info.node && (includeCaches || !info.isCache) {
 			return i
 		}
