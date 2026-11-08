@@ -21136,7 +21136,9 @@ func minObservedHead(a int32, b int32) int32 {
 // the top of the stack observed the incomplete computation at start, so
 // results cached while it is in progress are discarded when it finishes.
 func (c *Checker) markCircular(start int) {
-	c.currentNodeErrorsCyclic = true
+	if c.currentNodeErrorCollectors != 0 {
+		c.currentNodeErrorsCyclic = true
+	}
 	c.extendCircularity(start + 1)
 }
 
@@ -21172,8 +21174,11 @@ func (c *Checker) enterDepthLimit(l *depthLimit) {
 // does instead.
 func (c *Checker) exitDepthLimit(l *depthLimit) {
 	l.depth--
-	if l.depth == 0 && l.start == 0 {
-		c.endCyclesAt(0)
+	if l.depth == 0 {
+		if l.start == 0 {
+			c.endCyclesAt(0)
+		}
+		l.start = 0
 	}
 }
 
@@ -21187,7 +21192,12 @@ func (c *Checker) popTypeResolution() bool {
 	f := &c.resolutions[n]
 	result := f.typeResolution.result
 	observed := c.observedHead
-	c.observedHead = minObservedHead(f.prevObservedHead, observed)
+	if f.prevTypeResolution != 0 {
+		c.observedHead = minObservedHead(f.prevObservedHead, observed)
+	} else {
+		// Only an enclosing type resolution reads the cycle heads observed.
+		c.observedHead = 0
+	}
 	if r := &f.typeResolution; result && !r.participant && r.memo != nil && c.circularityStart != 0 && c.keepsResultInCycle(n, f, observed) {
 		r.participant = true
 		c.cycleParticipants = append(c.cycleParticipants, r.memo)
