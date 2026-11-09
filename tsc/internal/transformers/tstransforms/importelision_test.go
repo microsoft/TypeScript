@@ -36,6 +36,10 @@ func (p *fakeProgram) GetRedirectForResolution(file ast.HasFileName) *tsoptions.
 }
 
 // SourceFileMayBeEmitted implements checker.Program.
+func (p *fakeProgram) SkipTypeChecking(sourceFile *ast.SourceFile, ignoreNoCheck bool) bool {
+	return false
+}
+
 func (p *fakeProgram) SourceFileMayBeEmitted(sourceFile *ast.SourceFile, forceDtsEmit bool) bool {
 	panic("unimplemented")
 }

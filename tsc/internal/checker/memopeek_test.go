@@ -305,7 +305,8 @@ func TestDeferredEffectsOnlyApply(t *testing.T) {
 			if sel.Sel.Name == "addDeferredDiagnostic" {
 				return false
 			}
-			if appliedCalls[sel.Sel.Name] {
+			// The program computes nothing in the checker.
+			if appliedCalls[sel.Sel.Name] || text(sel.X) == "c.program" {
 				return true
 			}
 			if sel.Sel.Name == owner.Name.Name && text(sel.X) == "c" {

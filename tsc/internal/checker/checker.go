@@ -615,6 +615,7 @@ type Program interface {
 	GetImportHelpersImportSpecifier(path tspath.PathKey) *ast.Node
 	SourceFileMayBeEmitted(sourceFile *ast.SourceFile, forceDtsEmit bool) bool
 	IsSourceFileDefaultLibrary(path tspath.PathKey) bool
+	SkipTypeChecking(sourceFile *ast.SourceFile, ignoreNoCheck bool) bool
 	GetProjectReferenceFromOutputDts(path tspath.PathKey) *tsoptions.SourceOutputAndProjectReference
 	GetRedirectForResolution(file ast.HasFileName) *tsoptions.ParsedCommandLine
 	CommonSourceDirectory() tspath.RootedDirectoryPath
@@ -12333,6 +12334,12 @@ func (c *Checker) checkPrivateIdentifierPropertyAccess(leftType *Type, right *as
 func (c *Checker) reportNonexistentProperty(propNode *ast.Node, containingType *Type, isUncheckedJS bool) {
 	if !c.checking {
 		c.recordEffect(func(c *Checker) { c.reportNonexistentProperty(propNode, containingType, isUncheckedJS) })
+		return
+	}
+	// The diagnostic would never be reported, and building it prints types,
+	// which in unchecked code can infer return types that report more of
+	// them.
+	if c.program.SkipTypeChecking(ast.GetSourceFileOfNode(propNode), false) {
 		return
 	}
 	// Only the first report for a name is made, even if it is reported again

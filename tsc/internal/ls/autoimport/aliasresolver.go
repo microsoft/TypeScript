@@ -65,6 +65,11 @@ func (r *aliasResolver) Options() *core.CompilerOptions {
 	}
 }
 
+// SkipTypeChecking implements checker.Program.
+func (r *aliasResolver) SkipTypeChecking(sourceFile *ast.SourceFile, ignoreNoCheck bool) bool {
+	return !ignoreNoCheck
+}
+
 // BaseDirectory implements checker.Program.
 func (r *aliasResolver) BaseDirectory() tspath.RootedDirectoryPath {
 	return r.moduleResolver.BaseDirectory()
