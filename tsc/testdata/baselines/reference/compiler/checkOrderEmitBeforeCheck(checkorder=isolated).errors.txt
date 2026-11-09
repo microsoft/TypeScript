@@ -1,5 +1,5 @@
 checkOrderEmitBeforeCheck.ts(9,5): error TS2502: '"each"' is referenced directly or indirectly in its own type annotation.
-checkOrderEmitBeforeCheck.ts(9,13): error TS2615: Type of property '"each"' circularly references itself in mapped type '{ [P in keyof ListWidget]: undefined extends ListWidget[P] ? never : P; }'.
+checkOrderEmitBeforeCheck.ts(9,13): error TS2615: Type of property '"each"' circularly references itself in mapped type '{ type: "type"; each: any; }'.
 
 
 ==== checkOrderEmitBeforeCheck.ts (2 errors) ====
@@ -15,7 +15,7 @@ checkOrderEmitBeforeCheck.ts(9,13): error TS2615: Type of property '"each"' circ
         ~~~~~~
 !!! error TS2502: '"each"' is referenced directly or indirectly in its own type annotation.
                 ~~~~~~~~~~~~~~~~~
-!!! error TS2615: Type of property '"each"' circularly references itself in mapped type '{ [P in keyof ListWidget]: undefined extends ListWidget[P] ? never : P; }'.
+!!! error TS2615: Type of property '"each"' circularly references itself in mapped type '{ type: "type"; each: any; }'.
     }
     
     type ListChild = Child<ListWidget>

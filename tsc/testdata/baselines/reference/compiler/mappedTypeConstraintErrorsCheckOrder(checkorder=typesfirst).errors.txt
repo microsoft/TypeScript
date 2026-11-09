@@ -1,8 +1,10 @@
-error TS2589: Type instantiation is excessively deep and possibly infinite.
+mappedTypeConstraintErrorsCheckOrder.ts(12,6): error TS2589: Type instantiation is excessively deep and possibly infinite.
+mappedTypeConstraintErrorsCheckOrder.ts(12,11): error TS2589: Type instantiation is excessively deep and possibly infinite.
+mappedTypeConstraintErrorsCheckOrder.ts(12,11): error TS2589: Type instantiation is excessively deep and possibly infinite.
+mappedTypeConstraintErrorsCheckOrder.ts(12,37): error TS2589: Type instantiation is excessively deep and possibly infinite.
 
 
-!!! error TS2589: Type instantiation is excessively deep and possibly infinite.
-==== mappedTypeConstraintErrorsCheckOrder.ts (0 errors) ====
+==== mappedTypeConstraintErrorsCheckOrder.ts (4 errors) ====
     // A mapped type reports the errors of its constraint, here an instantiation
     // that is too deep, at the mapped type, whichever node first requests it.
     
@@ -15,5 +17,13 @@ error TS2589: Type instantiation is excessively deep and possibly infinite.
     
     type Explode = {
         [P in Recur<5, "a"> & string as `${P}_key`]: any;
+         ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2589: Type instantiation is excessively deep and possibly infinite.
+              ~~~~~~~~~~~~~
+!!! error TS2589: Type instantiation is excessively deep and possibly infinite.
+              ~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2589: Type instantiation is excessively deep and possibly infinite.
+                                        ~~~~~~~~~~
+!!! error TS2589: Type instantiation is excessively deep and possibly infinite.
     };
     

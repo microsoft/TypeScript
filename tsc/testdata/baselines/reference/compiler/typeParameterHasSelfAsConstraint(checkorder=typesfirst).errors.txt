@@ -6,7 +6,6 @@ typeParameterHasSelfAsConstraint.ts(2,5): error TS2322: Type 'T' is not assignab
     function foo<T extends T>(x: T): number {
                            ~
 !!! error TS2313: Type parameter 'T' has a circular constraint.
-!!! related TS2751 typeParameterHasSelfAsConstraint.ts:2:12: Circularity originates in type at this location.
         return x;
         ~~~~~~
 !!! error TS2322: Type 'T' is not assignable to type 'number'.

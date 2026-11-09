@@ -139,5 +139,7 @@ declare const obsA: {
     v: 0;
 };
 declare const obsB: {
+    pa: 0;
+    readonly ma: 1;
     v: 0;
 };

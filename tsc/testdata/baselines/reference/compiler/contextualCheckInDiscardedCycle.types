@@ -1,0 +1,117 @@
+//// [tests/cases/compiler/contextualCheckInDiscardedCycle.ts] ////
+
+=== returnTypeCycle.ts ===
+// Callbacks contextually checked while a cycle is in progress are checked
+// again once it is discarded, with their contextual parameter types.
+
+declare function useCallback<T extends Function>(callback: T): T;
+>useCallback : <T extends Function>(callback: T) => T
+>callback : T
+
+declare function refreshAll<T>(options: { ids: string[]; extra: T }): Promise<T>;
+>refreshAll : <T>(options: { ids: string[]; extra: T; }) => Promise<T>
+>options : { ids: string[]; extra: T; }
+>ids : string[]
+>extra : T
+
+interface View {
+    refresh: (force?: boolean) => Promise<number>;
+>refresh : (force?: boolean) => Promise<number>
+>force : boolean | undefined
+}
+
+declare const items: { id: string }[];
+>items : { id: string; }[]
+>id : string
+
+function useView(): View {
+>useView : () => View
+
+    const refresh = useCallback((force?: boolean) =>
+>refresh : (force?: boolean) => Promise<number>
+>useCallback((force?: boolean) =>        refreshAll({            ids: items.map(({ id }) => id),            extra: 1,        })) : (force?: boolean) => Promise<number>
+>useCallback : <T extends Function>(callback: T) => T
+>(force?: boolean) =>        refreshAll({            ids: items.map(({ id }) => id),            extra: 1,        }) : (force?: boolean) => Promise<number>
+>force : boolean | undefined
+
+        refreshAll({
+>refreshAll({            ids: items.map(({ id }) => id),            extra: 1,        }) : Promise<number>
+>refreshAll : <T>(options: { ids: string[]; extra: T; }) => Promise<T>
+>{            ids: items.map(({ id }) => id),            extra: 1,        } : { ids: string[]; extra: number; }
+
+            ids: items.map(({ id }) => id),
+>ids : string[]
+>items.map(({ id }) => id) : string[]
+>items.map : <U>(callbackfn: (value: { id: string; }, index: number, array: { id: string; }[]) => U, thisArg?: any) => U[]
+>items : { id: string; }[]
+>map : <U>(callbackfn: (value: { id: string; }, index: number, array: { id: string; }[]) => U, thisArg?: any) => U[]
+>({ id }) => id : ({ id }: { id: string; }) => string
+>id : string
+>id : string
+
+            extra: 1,
+>extra : number
+>1 : 1
+
+        }));
+    return { refresh };
+>{ refresh } : { refresh: (force?: boolean) => Promise<number>; }
+>refresh : (force?: boolean) => Promise<number>
+}
+
+=== yieldOperandCycle.ts ===
+interface Eff<A, E> {
+    [Symbol.iterator](): Generator<Eff<A, E>, A, any>;
+>[Symbol.iterator] : () => Generator<Eff<A, E>, A, any>
+>Symbol.iterator : unique symbol
+>Symbol : SymbolConstructor
+>iterator : unique symbol
+
+    pipe<B>(f: (self: Eff<A, E>) => B): B;
+>pipe : <B>(f: (self: Eff<A, E>) => B) => B
+>f : (self: Eff<A, E>) => B
+>self : Eff<A, E>
+}
+declare function mapError<E, E2>(f: (e: E) => E2): <A>(self: Eff<A, E>) => Eff<A, E2>;
+>mapError : <E, E2>(f: (e: E) => E2) => <A>(self: Eff<A, E>) => Eff<A, E2>
+>f : (e: E) => E2
+>e : E
+>self : Eff<A, E>
+
+declare function fn<Y, R>(body: (input: number) => Generator<Y, R, any>): (input: number) => Eff<R, never>;
+>fn : <Y, R>(body: (input: number) => Generator<Y, R, any>) => (input: number) => Eff<R, never>
+>body : (input: number) => Generator<Y, R, any>
+>input : number
+>input : number
+
+declare function make<T extends string>(s: T): T;
+>make : <T extends string>(s: T) => T
+>s : T
+
+declare const uuid: Eff<string, Error>;
+>uuid : Eff<string, Error>
+
+fn(function* (input) {
+>fn(function* (input) {    make(yield* uuid.pipe(mapError((cause) => ({ cause }))));}) : (input: number) => Eff<void, never>
+>fn : <Y, R>(body: (input: number) => Generator<Y, R, any>) => (input: number) => Eff<R, never>
+>function* (input) {    make(yield* uuid.pipe(mapError((cause) => ({ cause }))));} : (input: number) => Generator<Eff<string, { cause: Error; }>, void, any>
+>input : number
+
+    make(yield* uuid.pipe(mapError((cause) => ({ cause }))));
+>make(yield* uuid.pipe(mapError((cause) => ({ cause })))) : string
+>make : <T extends string>(s: T) => T
+>yield* uuid.pipe(mapError((cause) => ({ cause }))) : string
+>uuid.pipe(mapError((cause) => ({ cause }))) : Eff<string, { cause: Error; }>
+>uuid.pipe : <B>(f: (self: Eff<string, Error>) => B) => B
+>uuid : Eff<string, Error>
+>pipe : <B>(f: (self: Eff<string, Error>) => B) => B
+>mapError((cause) => ({ cause })) : <A>(self: Eff<A, Error>) => Eff<A, { cause: Error; }>
+>mapError : <E, E2>(f: (e: E) => E2) => <A>(self: Eff<A, E>) => Eff<A, E2>
+>(cause) => ({ cause }) : (cause: Error) => { cause: Error; }
+>cause : Error
+>({ cause }) : { cause: Error; }
+>{ cause } : { cause: Error; }
+>cause : Error
+
+});
+
