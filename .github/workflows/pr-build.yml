@@ -230,14 +230,22 @@ jobs:
 
           # Trusted publishing needs npm 11.5.1 or later.
           npm install -g npm@11
+          toPublish=()
           for tarball in "${tarballs[@]}"; do
             manifest="$(tar -xzOf "$NPM_DIR/$tarball" package/package.json)"
             name="$(jq -r .name <<< "$manifest")"
             version="$(jq -r .version <<< "$manifest")"
-            if npm view "$name@$version" version > /dev/null 2>&1; then
+            if publishedHead="$(npm view "$name@$version" gitHead 2> /dev/null)" && [[ -n "$publishedHead" ]]; then
+              if [[ "$publishedHead" != "$MERGE_SHA" ]]; then
+                echo "$name@$version was already published from $publishedHead; request a new build." >&2
+                exit 1
+              fi
               echo "$name@$version is already published."
               continue
             fi
+            toPublish+=("$tarball")
+          done
+          for tarball in "${toPublish[@]}"; do
             npm publish "$NPM_DIR/$tarball" --access public --tag pr
           done
           echo "version=$version" >> "$GITHUB_OUTPUT"
