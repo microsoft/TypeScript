@@ -26,6 +26,10 @@ assert(typeof mainName === "string" && typeof wasmName === "string" && Array.isA
 const expectedNames = new Set([mainName, ...platformNames, wasmName]);
 const versionPattern = new RegExp(`^\\d+\\.\\d+\\.\\d+-${prerelease.replaceAll(".", "\\.")}$`);
 
+// npm gives some root files (binding.gyp, npm-shrinkwrap.json, node_modules)
+// install-time meaning, so only allow what the packages actually contain.
+const allowedRootEntries = new Set(["LICENSE", "NOTICE.txt", "README.md", "bin", "dist", "enums", "lib", "package.json", "schemas", "vendor"]);
+
 /** @type {Map<string, { filename: string; version: string; manifest: any }>} */
 const packages = new Map();
 for (const filename of fs.readdirSync(tarballDir)) {
@@ -44,8 +48,7 @@ for (const filename of fs.readdirSync(tarballDir)) {
         assert(line[0] === "-" || line[0] === "d", `${filename}: unexpected entry type: ${line}`);
         assert(segments[0] === "package" && segments.every(s => s !== "" && s !== "." && s !== ".."), `${filename}: unexpected path: ${entryPath}`);
         assert(!entryPaths.has(entryPath), `${filename}: duplicate entry: ${entryPath}`);
-        // npm implicitly runs node-gyp for packages with a root binding.gyp.
-        assert(entryPath !== "package/binding.gyp", `${filename}: must not contain binding.gyp`);
+        assert(segments.length === 1 || allowedRootEntries.has(segments[1]), `${filename}: unexpected root entry: ${entryPath}`);
         entryPaths.add(entryPath);
     }
 
