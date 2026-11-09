@@ -1,0 +1,506 @@
+//// [tests/cases/compiler/controlFlowNullishCoalescingFalsyLeft.ts] ////
+
+=== controlFlowNullishCoalescingFalsyLeft.ts ===
+declare function c(): boolean;
+>c : () => boolean
+
+declare function d(): boolean | undefined;
+>d : () => boolean | undefined
+
+declare function u(x: undefined): boolean;
+>u : (x: undefined) => boolean
+>x : undefined
+
+// https://github.com/microsoft/TypeScript/issues/65402
+
+function f1() {
+>f1 : () => void
+
+    while (c() ?? (c() || true)) {}
+>c() ?? (c() || true) : boolean
+>c() : boolean
+>c : () => boolean
+>(c() || true) : true
+>c() || true : true
+>c() : boolean
+>c : () => boolean
+>true : true
+
+    c(); // Reachable
+>c() : boolean
+>c : () => boolean
+}
+
+function f2(a: "" | undefined, b: boolean) {
+>f2 : (a: "" | undefined, b: boolean) => void
+>a : "" | undefined
+>b : boolean
+
+    if (a ?? b) {} else {
+>a ?? b : "" | boolean
+>a : "" | undefined
+>b : boolean
+
+        const x: undefined = a; // Error
+>x : undefined
+>a : "" | undefined
+    }
+}
+
+// Narrowing of a falsy, non-nullish left operand
+
+function f3(a: boolean | undefined, b: boolean) {
+>f3 : (a: boolean | undefined, b: boolean) => void
+>a : boolean | undefined
+>b : boolean
+
+    if (a ?? b) {
+>a ?? b : boolean
+>a : boolean | undefined
+>b : boolean
+
+        a; // boolean | undefined
+>a : boolean | undefined
+    }
+    else {
+        a; // false | undefined
+>a : false | undefined
+    }
+}
+
+function f4(a: string | number | undefined) {
+>f4 : (a: string | number | undefined) => void
+>a : string | number | undefined
+
+    if (a ?? (c() || true)) {
+>a ?? (c() || true) : string | number | true
+>a : string | number | undefined
+>(c() || true) : true
+>c() || true : true
+>c() : boolean
+>c : () => boolean
+>true : true
+
+        a; // string | number | undefined
+>a : string | number | undefined
+    }
+    else {
+        a; // string | number
+>a : string | number
+    }
+}
+
+function f5(a: object | undefined, b: boolean) {
+>f5 : (a: object | undefined, b: boolean) => void
+>a : object | undefined
+>b : boolean
+
+    if (a ?? b) {}
+>a ?? b : boolean | object
+>a : object | undefined
+>b : boolean
+
+    else {
+        a; // undefined
+>a : undefined
+
+        const r: false = b; // Error, as with `if (a && b)` when `a: object`
+>r : false
+>false : false
+>b : boolean
+    }
+}
+
+function f6(o: { p?: number }, b: boolean) {
+>f6 : (o: { p?: number; }, b: boolean) => void
+>o : { p?: number; }
+>p : number | undefined
+>b : boolean
+
+    if (o.p ?? b) {}
+>o.p ?? b : number | boolean
+>o.p : number | undefined
+>o : { p?: number; }
+>p : number | undefined
+>b : boolean
+
+    else {
+        o.p; // number | undefined
+>o.p : number | undefined
+>o : { p?: number; }
+>p : number | undefined
+    }
+}
+
+function f7(a: "" | boolean | undefined, b: boolean) {
+>f7 : (a: "" | boolean | undefined, b: boolean) => void
+>a : "" | boolean | undefined
+>b : boolean
+
+    if (a ??= b) {
+>a ??= b : "" | boolean
+>a : "" | boolean | undefined
+>b : boolean
+
+        a; // "" | boolean
+>a : "" | boolean
+    }
+    else {
+        a; // "" | false
+>a : "" | false
+    }
+}
+
+// Literal left operands
+
+function f8() {
+>f8 : () => void
+
+    while (true ?? (c() || true)) {}
+>true ?? (c() || true) : true
+>true : true
+>(c() || true) : true
+>c() || true : true
+>c() : boolean
+>c : () => boolean
+>true : true
+
+    c(); // Unreachable
+>c() : boolean
+>c : () => boolean
+}
+
+function f9() {
+>f9 : () => void
+
+    while (false ?? (c() || true)) {}
+>false ?? (c() || true) : false
+>false : false
+>(c() || true) : true
+>c() || true : true
+>c() : boolean
+>c : () => boolean
+>true : true
+
+    c(); // Reachable
+>c() : boolean
+>c : () => boolean
+}
+
+function f10() {
+>f10 : () => void
+
+    while (null ?? (c() || true)) {}
+>null ?? (c() || true) : true
+>(c() || true) : true
+>c() || true : true
+>c() : boolean
+>c : () => boolean
+>true : true
+
+    c(); // Unreachable
+>c() : boolean
+>c : () => boolean
+}
+
+// Logical left operands
+
+function f11() {
+>f11 : () => void
+
+    while ((c() || 0) ?? (c() || true)) {}
+>(c() || 0) ?? (c() || true) : 0 | true
+>(c() || 0) : 0 | true
+>c() || 0 : 0 | true
+>c() : boolean
+>c : () => boolean
+>0 : 0
+>(c() || true) : true
+>c() || true : true
+>c() : boolean
+>c : () => boolean
+>true : true
+
+    c(); // Reachable
+>c() : boolean
+>c : () => boolean
+}
+
+function f12() {
+>f12 : () => void
+
+    while (d() ?? d() ?? (c() || true)) {}
+>d() ?? d() ?? (c() || true) : boolean
+>d() ?? d() : boolean | undefined
+>d() : boolean | undefined
+>d : () => boolean | undefined
+>d() : boolean | undefined
+>d : () => boolean | undefined
+>(c() || true) : true
+>c() || true : true
+>c() : boolean
+>c : () => boolean
+>true : true
+
+    c(); // Reachable
+>c() : boolean
+>c : () => boolean
+}
+
+function f13(a: "" | undefined, b: "" | undefined) {
+>f13 : (a: "" | undefined, b: "" | undefined) => void
+>a : "" | undefined
+>b : "" | undefined
+
+    if (a ?? b ?? u(a)) {
+>a ?? b ?? u(a) : "" | boolean
+>a ?? b : "" | undefined
+>a : "" | undefined
+>b : "" | undefined
+>u(a) : boolean
+>u : (x: undefined) => boolean
+>a : undefined
+
+        a; // "" | undefined
+>a : "" | undefined
+    }
+    else {
+        a; // "" | undefined
+>a : "" | undefined
+
+        b; // "" | undefined
+>b : "" | undefined
+    }
+    const r = a ?? b ?? u(a);
+>r : "" | boolean
+>a ?? b ?? u(a) : "" | boolean
+>a ?? b : "" | undefined
+>a : "" | undefined
+>b : "" | undefined
+>u(a) : boolean
+>u : (x: undefined) => boolean
+>a : undefined
+}
+
+function f14(x: boolean, z: 0 | undefined) {
+>f14 : (x: boolean, z: 0 | undefined) => void
+>x : boolean
+>z : 0 | undefined
+
+    let y: 0 | 1 | undefined;
+>y : 0 | 1 | undefined
+
+    (x || (y = z)) ?? (y = 1);
+>(x || (y = z)) ?? (y = 1) : 0 | 1 | true
+>(x || (y = z)) : 0 | true | undefined
+>x || (y = z) : 0 | true | undefined
+>x : boolean
+>(y = z) : 0 | undefined
+>y = z : 0 | undefined
+>y : 0 | 1 | undefined
+>z : 0 | undefined
+>(y = 1) : 1
+>y = 1 : 1
+>y : 0 | 1 | undefined
+>1 : 1
+
+    y; // 0 | 1 | undefined
+>y : 0 | 1 | undefined
+}
+
+// Nested in logical expressions
+
+function f15(a: "" | undefined, b: true, d: boolean) {
+>f15 : (a: "" | undefined, b: true, d: boolean) => void
+>a : "" | undefined
+>b : true
+>true : true
+>d : boolean
+
+    if ((a ?? b) || d) {}
+>(a ?? b) || d : boolean
+>(a ?? b) : "" | true
+>a ?? b : "" | true
+>a : "" | undefined
+>b : true
+>d : boolean
+
+    else {
+        a; // "" | undefined
+>a : "" | undefined
+    }
+}
+
+// Expressions of optional chains only test for nullishness
+
+function f16(a: "" | undefined) {
+>f16 : (a: "" | undefined) => void
+>a : "" | undefined
+
+    let b: 0 | 1 = 0;
+>b : 0 | 1
+>0 : 0
+
+    if ((a ?? (b = 1, ""))?.[b = 1]) {}
+>(a ?? (b = 1, ""))?.[b = 1] : string
+>(a ?? (b = 1, "")) : ""
+>a ?? (b = 1, "") : ""
+>a : "" | undefined
+>(b = 1, "") : ""
+>b = 1, "" : ""
+>b = 1 : 1
+>b : 0 | 1
+>1 : 1
+>"" : ""
+>b = 1 : 1
+>b : 0 | 1
+>1 : 1
+
+    else {
+        const one: 1 = b;
+>one : 1
+>b : 1
+    }
+}
+
+function f17(a: "" | undefined, b: "" | undefined) {
+>f17 : (a: "" | undefined, b: "" | undefined) => void
+>a : "" | undefined
+>b : "" | undefined
+
+    (a ?? b ?? u(a))?.valueOf();
+>(a ?? b ?? u(a))?.valueOf() : string | boolean
+>(a ?? b ?? u(a))?.valueOf : (() => string) | (() => boolean)
+>(a ?? b ?? u(a)) : "" | boolean
+>a ?? b ?? u(a) : "" | boolean
+>a ?? b : "" | undefined
+>a : "" | undefined
+>b : "" | undefined
+>u(a) : boolean
+>u : (x: undefined) => boolean
+>a : undefined
+>valueOf : (() => string) | (() => boolean)
+}
+
+// Parenthesized literal left operands
+
+function f18() {
+>f18 : () => void
+
+    while (((true)) ?? (c() || true)) {}
+>((true)) ?? (c() || true) : true
+>((true)) : true
+>(true) : true
+>true : true
+>(c() || true) : true
+>c() || true : true
+>c() : boolean
+>c : () => boolean
+>true : true
+
+    c(); // Unreachable
+>c() : boolean
+>c : () => boolean
+}
+
+function f19() {
+>f19 : () => void
+
+    while (((null)) ?? (c() || true)) {}
+>((null)) ?? (c() || true) : true
+>((null)) : null
+>(null) : null
+>(c() || true) : true
+>c() || true : true
+>c() : boolean
+>c : () => boolean
+>true : true
+
+    c(); // Unreachable
+>c() : boolean
+>c : () => boolean
+}
+
+function f20() {
+>f20 : () => void
+
+    while (((false)) ?? (c() || true)) {}
+>((false)) ?? (c() || true) : false
+>((false)) : false
+>(false) : false
+>false : false
+>(c() || true) : true
+>c() || true : true
+>c() : boolean
+>c : () => boolean
+>true : true
+
+    c(); // Reachable
+>c() : boolean
+>c : () => boolean
+}
+
+// Optional-chain side effects still occur when nested in another ??
+
+function f21(a: "" | undefined) {
+>f21 : (a: "" | undefined) => void
+>a : "" | undefined
+
+    let b: 0 | 1 = 0;
+>b : 0 | 1
+>0 : 0
+
+    (a ?? (b = 1, ""))?.[b = 1] ?? false;
+>(a ?? (b = 1, ""))?.[b = 1] ?? false : string
+>(a ?? (b = 1, ""))?.[b = 1] : string
+>(a ?? (b = 1, "")) : ""
+>a ?? (b = 1, "") : ""
+>a : "" | undefined
+>(b = 1, "") : ""
+>b = 1, "" : ""
+>b = 1 : 1
+>b : 0 | 1
+>1 : 1
+>"" : ""
+>b = 1 : 1
+>b : 0 | 1
+>1 : 1
+>false : false
+
+    const one: 1 = b;
+>one : 1
+>b : 0 | 1
+}
+
+function f22(a: "" | undefined) {
+>f22 : (a: "" | undefined) => void
+>a : "" | undefined
+
+    let b: 0 | 1 = 0;
+>b : 0 | 1
+>0 : 0
+
+    (a ?? (b = 1, ""))?.charAt(b = 1) ?? false;
+>(a ?? (b = 1, ""))?.charAt(b = 1) ?? false : string
+>(a ?? (b = 1, ""))?.charAt(b = 1) : string
+>(a ?? (b = 1, ""))?.charAt : (pos: number) => string
+>(a ?? (b = 1, "")) : ""
+>a ?? (b = 1, "") : ""
+>a : "" | undefined
+>(b = 1, "") : ""
+>b = 1, "" : ""
+>b = 1 : 1
+>b : 0 | 1
+>1 : 1
+>"" : ""
+>charAt : (pos: number) => string
+>b = 1 : 1
+>b : 0 | 1
+>1 : 1
+>false : false
+
+    const one: 1 = b;
+>one : 1
+>b : 0 | 1
+}
+

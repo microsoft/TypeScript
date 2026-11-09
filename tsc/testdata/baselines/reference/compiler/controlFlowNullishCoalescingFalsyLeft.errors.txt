@@ -1,0 +1,206 @@
+controlFlowNullishCoalescingFalsyLeft.ts(14,15): error TS2322: Type '"" | undefined' is not assignable to type 'undefined'.
+  Type '""' is not assignable to type 'undefined'.
+controlFlowNullishCoalescingFalsyLeft.ts(42,15): error TS2322: Type 'boolean' is not assignable to type 'false'.
+controlFlowNullishCoalescingFalsyLeft.ts(65,12): error TS2869: Right operand of ?? is unreachable because the left operand is never nullish.
+controlFlowNullishCoalescingFalsyLeft.ts(66,5): error TS7027: Unreachable code detected.
+controlFlowNullishCoalescingFalsyLeft.ts(70,12): error TS2869: Right operand of ?? is unreachable because the left operand is never nullish.
+controlFlowNullishCoalescingFalsyLeft.ts(75,12): error TS2871: This expression is always nullish.
+controlFlowNullishCoalescingFalsyLeft.ts(76,5): error TS7027: Unreachable code detected.
+controlFlowNullishCoalescingFalsyLeft.ts(134,14): error TS2869: Right operand of ?? is unreachable because the left operand is never nullish.
+controlFlowNullishCoalescingFalsyLeft.ts(139,14): error TS2871: This expression is always nullish.
+controlFlowNullishCoalescingFalsyLeft.ts(144,14): error TS2869: Right operand of ?? is unreachable because the left operand is never nullish.
+controlFlowNullishCoalescingFalsyLeft.ts(153,11): error TS2322: Type '0 | 1' is not assignable to type '1'.
+  Type '0' is not assignable to type '1'.
+controlFlowNullishCoalescingFalsyLeft.ts(159,11): error TS2322: Type '0 | 1' is not assignable to type '1'.
+  Type '0' is not assignable to type '1'.
+
+
+==== controlFlowNullishCoalescingFalsyLeft.ts (12 errors) ====
+    declare function c(): boolean;
+    declare function d(): boolean | undefined;
+    declare function u(x: undefined): boolean;
+    
+    // https://github.com/microsoft/TypeScript/issues/65402
+    
+    function f1() {
+        while (c() ?? (c() || true)) {}
+        c(); // Reachable
+    }
+    
+    function f2(a: "" | undefined, b: boolean) {
+        if (a ?? b) {} else {
+            const x: undefined = a; // Error
+                  ~
+!!! error TS2322: Type '"" | undefined' is not assignable to type 'undefined'.
+!!! error TS2322:   Type '""' is not assignable to type 'undefined'.
+        }
+    }
+    
+    // Narrowing of a falsy, non-nullish left operand
+    
+    function f3(a: boolean | undefined, b: boolean) {
+        if (a ?? b) {
+            a; // boolean | undefined
+        }
+        else {
+            a; // false | undefined
+        }
+    }
+    
+    function f4(a: string | number | undefined) {
+        if (a ?? (c() || true)) {
+            a; // string | number | undefined
+        }
+        else {
+            a; // string | number
+        }
+    }
+    
+    function f5(a: object | undefined, b: boolean) {
+        if (a ?? b) {}
+        else {
+            a; // undefined
+            const r: false = b; // Error, as with `if (a && b)` when `a: object`
+                  ~
+!!! error TS2322: Type 'boolean' is not assignable to type 'false'.
+        }
+    }
+    
+    function f6(o: { p?: number }, b: boolean) {
+        if (o.p ?? b) {}
+        else {
+            o.p; // number | undefined
+        }
+    }
+    
+    function f7(a: "" | boolean | undefined, b: boolean) {
+        if (a ??= b) {
+            a; // "" | boolean
+        }
+        else {
+            a; // "" | false
+        }
+    }
+    
+    // Literal left operands
+    
+    function f8() {
+        while (true ?? (c() || true)) {}
+               ~~~~
+!!! error TS2869: Right operand of ?? is unreachable because the left operand is never nullish.
+        c(); // Unreachable
+        ~~~~
+!!! error TS7027: Unreachable code detected.
+    }
+    
+    function f9() {
+        while (false ?? (c() || true)) {}
+               ~~~~~
+!!! error TS2869: Right operand of ?? is unreachable because the left operand is never nullish.
+        c(); // Reachable
+    }
+    
+    function f10() {
+        while (null ?? (c() || true)) {}
+               ~~~~
+!!! error TS2871: This expression is always nullish.
+        c(); // Unreachable
+        ~~~~
+!!! error TS7027: Unreachable code detected.
+    }
+    
+    // Logical left operands
+    
+    function f11() {
+        while ((c() || 0) ?? (c() || true)) {}
+        c(); // Reachable
+    }
+    
+    function f12() {
+        while (d() ?? d() ?? (c() || true)) {}
+        c(); // Reachable
+    }
+    
+    function f13(a: "" | undefined, b: "" | undefined) {
+        if (a ?? b ?? u(a)) {
+            a; // "" | undefined
+        }
+        else {
+            a; // "" | undefined
+            b; // "" | undefined
+        }
+        const r = a ?? b ?? u(a);
+    }
+    
+    function f14(x: boolean, z: 0 | undefined) {
+        let y: 0 | 1 | undefined;
+        (x || (y = z)) ?? (y = 1);
+        y; // 0 | 1 | undefined
+    }
+    
+    // Nested in logical expressions
+    
+    function f15(a: "" | undefined, b: true, d: boolean) {
+        if ((a ?? b) || d) {}
+        else {
+            a; // "" | undefined
+        }
+    }
+    
+    // Expressions of optional chains only test for nullishness
+    
+    function f16(a: "" | undefined) {
+        let b: 0 | 1 = 0;
+        if ((a ?? (b = 1, ""))?.[b = 1]) {}
+        else {
+            const one: 1 = b;
+        }
+    }
+    
+    function f17(a: "" | undefined, b: "" | undefined) {
+        (a ?? b ?? u(a))?.valueOf();
+    }
+    
+    // Parenthesized literal left operands
+    
+    function f18() {
+        while (((true)) ?? (c() || true)) {}
+                 ~~~~
+!!! error TS2869: Right operand of ?? is unreachable because the left operand is never nullish.
+        c(); // Unreachable
+    }
+    
+    function f19() {
+        while (((null)) ?? (c() || true)) {}
+                 ~~~~
+!!! error TS2871: This expression is always nullish.
+        c(); // Unreachable
+    }
+    
+    function f20() {
+        while (((false)) ?? (c() || true)) {}
+                 ~~~~~
+!!! error TS2869: Right operand of ?? is unreachable because the left operand is never nullish.
+        c(); // Reachable
+    }
+    
+    // Optional-chain side effects still occur when nested in another ??
+    
+    function f21(a: "" | undefined) {
+        let b: 0 | 1 = 0;
+        (a ?? (b = 1, ""))?.[b = 1] ?? false;
+        const one: 1 = b;
+              ~~~
+!!! error TS2322: Type '0 | 1' is not assignable to type '1'.
+!!! error TS2322:   Type '0' is not assignable to type '1'.
+    }
+    
+    function f22(a: "" | undefined) {
+        let b: 0 | 1 = 0;
+        (a ?? (b = 1, ""))?.charAt(b = 1) ?? false;
+        const one: 1 = b;
+              ~~~
+!!! error TS2322: Type '0 | 1' is not assignable to type '1'.
+!!! error TS2322:   Type '0' is not assignable to type '1'.
+    }
+    

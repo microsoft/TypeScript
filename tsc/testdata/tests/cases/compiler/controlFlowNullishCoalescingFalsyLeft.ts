@@ -131,3 +131,34 @@ function f16(a: "" | undefined) {
 function f17(a: "" | undefined, b: "" | undefined) {
     (a ?? b ?? u(a))?.valueOf();
 }
+
+// Parenthesized literal left operands
+
+function f18() {
+    while (((true)) ?? (c() || true)) {}
+    c(); // Unreachable
+}
+
+function f19() {
+    while (((null)) ?? (c() || true)) {}
+    c(); // Unreachable
+}
+
+function f20() {
+    while (((false)) ?? (c() || true)) {}
+    c(); // Reachable
+}
+
+// Optional-chain side effects still occur when nested in another ??
+
+function f21(a: "" | undefined) {
+    let b: 0 | 1 = 0;
+    (a ?? (b = 1, ""))?.[b = 1] ?? false;
+    const one: 1 = b;
+}
+
+function f22(a: "" | undefined) {
+    let b: 0 | 1 = 0;
+    (a ?? (b = 1, ""))?.charAt(b = 1) ?? false;
+    const one: 1 = b;
+}
