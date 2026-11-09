@@ -2,11 +2,13 @@ package project
 
 import (
 	"context"
+	"strings"
 	"sync/atomic"
 	"testing"
 	"testing/synctest"
 	"time"
 
+	"github.com/microsoft/TypeScript/tsc/internal/ast"
 	"github.com/microsoft/TypeScript/tsc/internal/bundled"
 	"github.com/microsoft/TypeScript/tsc/internal/checker"
 	"github.com/microsoft/TypeScript/tsc/internal/compiler"
@@ -1337,47 +1339,140 @@ func TestCheckerPoolCleanupAfterDiscardIsNoop(t *testing.T) {
 
 func TestCheckerPoolCheckedFileQuery(t *testing.T) {
 	t.Parallel()
-	session, _ := setupCheckerPoolSession(t, CheckerPoolOptions{MaxCheckers: 2, IdleTimeout: 10 * time.Second})
+	if !bundled.Embedded {
+		t.Skip("bundled files are not embedded")
+	}
+	files := map[string]any{
+		"/src/tsconfig.json": `{ "compilerOptions": { "noLib": true } }`,
+		"/src/index.ts":      "export const x: number = 1;",
+		"/src/other.ts":      "export const y: number = 2;",
+	}
+	session := NewSession(&SessionInit{
+		BackgroundCtx: context.Background(),
+		Options: &SessionOptions{
+			CurrentDirectory:   "/",
+			DefaultLibraryPath: bundled.LibPath(),
+			PositionEncoding:   lsproto.PositionEncodingKindUTF8,
+		},
+		FS:     bundled.WrapFS(vfstest.FromMap(files, tspath.CaseInsensitive)),
+		Logger: logging.NewTestLogger(),
+	})
+	session.DidOpenFile(context.Background(), "file:///src/index.ts", 1, files["/src/index.ts"].(string), lsproto.LanguageKindTypeScript)
 	ls, err := session.GetLanguageService(context.Background(), "file:///src/index.ts")
 	assert.NilError(t, err)
 	program := ls.GetProgram()
-	file := program.GetSourceFile("/src/index.ts")
-	assert.Assert(t, file != nil)
+	index := program.GetSourceFile("/src/index.ts")
+	other := program.GetSourceFile("/src/other.ts")
+	assert.Assert(t, index != nil && other != nil)
 
 	synctest.Test(t, func(t *testing.T) {
 		pool := newTestCheckerPool(program, CheckerPoolOptions{MaxCheckers: 2, IdleTimeout: 5 * time.Second})
-		query := func(id string) (*checker.Checker, func()) {
+		query := func(id string, file *ast.SourceFile) (*checker.Checker, func()) {
 			ctx := core.WithRequestID(context.Background(), id)
 			return pool.GetChecker(core.WithCheckerLifetime(ctx, core.CheckerLifetimeCheckedFileQuery), file)
 		}
 
-		c, release := query("query-1")
+		c, release := query("query-1", other)
 		assert.Assert(t, c != pool.checkers[0], "unchecked file should use a query checker")
 		release()
 
 		diagCtx, cancelDiag := context.WithCancel(context.Background())
 		diagCtx = core.WithCheckerLifetime(core.WithRequestID(diagCtx, "diag"), core.CheckerLifetimeDiagnostics)
-		diagChecker, releaseDiag := pool.GetChecker(diagCtx, file)
-		diagChecker.GetDiagnostics(diagCtx, file)
-		releaseDiag()
-		diagChecker, releaseDiag = pool.GetChecker(diagCtx, file)
-		diagChecker.GetSuggestionDiagnostics(diagCtx, file)
-		releaseDiag()
+		var diagChecker *checker.Checker
+		for _, file := range []*ast.SourceFile{index, other} {
+			dc, releaseDiag := pool.GetChecker(diagCtx, file)
+			dc.GetDiagnostics(diagCtx, file)
+			releaseDiag()
+			dc, releaseDiag = pool.GetChecker(diagCtx, file)
+			dc.GetSuggestionDiagnostics(diagCtx, file)
+			releaseDiag()
+			diagChecker = dc
+		}
 
-		c, release = query("query-2")
-		assert.Assert(t, c != diagChecker, "in-flight diagnostics request should keep the checker")
-		release()
+		for _, file := range []*ast.SourceFile{index, other} {
+			c, release = query("query-2", file)
+			assert.Assert(t, c != diagChecker, "in-flight diagnostics request should keep the checker for %s", file.FileName())
+			release()
+		}
 
 		cancelDiag()
 		synctest.Wait()
 
-		c, release = query("query-3")
+		c, release = query("query-3", other)
 		assert.Assert(t, c == diagChecker, "checked file should reuse the diagnostics checker")
 
-		c2, release2 := query("query-4")
-		assert.Assert(t, c2 != diagChecker)
+		c2, release2 := query("query-4", index)
+		assert.Assert(t, c2 != diagChecker, "lent checker should not be shared")
 		release2()
 		release()
 		synctest.Wait()
 	})
+}
+
+func TestSemanticTokensReuseCheckedDiagnosticsChecker(t *testing.T) {
+	t.Parallel()
+	if !bundled.Embedded {
+		t.Skip("bundled files are not embedded")
+	}
+	content := `const assertExists: <T extends number>(actual: T | null | undefined) => asserts actual is T = () => {};
+
+type Value = { n: number | undefined };
+const callThisFunc = (f: (this: Value) => void): void => {
+    f.call({ n: 42 });
+};
+
+callThisFunc(function() {
+    const maybeN = this.n;
+    assertExists(maybeN);
+});
+`
+	files := map[string]any{
+		"/src/tsconfig.json": `{ "compilerOptions": { "strict": true } }`,
+		"/src/index.ts":      content,
+	}
+	session := NewSession(&SessionInit{
+		BackgroundCtx: context.Background(),
+		Options: &SessionOptions{
+			CurrentDirectory:   "/",
+			DefaultLibraryPath: bundled.LibPath(),
+			PositionEncoding:   lsproto.PositionEncodingKindUTF8,
+		},
+		FS:     bundled.WrapFS(vfstest.FromMap(files, tspath.CaseInsensitive)),
+		Logger: logging.NewTestLogger(),
+	})
+	uri := lsproto.DocumentUri("file:///src/index.ts")
+	session.DidOpenFile(context.Background(), uri, 1, content, lsproto.LanguageKindTypeScript)
+	ls, err := session.GetLanguageService(context.Background(), uri)
+	assert.NilError(t, err)
+	session.WaitForBackgroundTasks()
+	pool := session.Snapshot().ProjectCollection.ConfiguredProject("/src/tsconfig.json").checkerPool
+	var lent atomic.Int32
+	pool.log = func(msg string) {
+		if strings.Contains(msg, "Lending diagnostics checker") {
+			lent.Add(1)
+		}
+	}
+
+	ctx := core.WithRequestID(context.Background(), "request")
+	diagnostics := func() []*lsproto.Diagnostic {
+		report, diagnosticsErr := ls.ProvideDiagnostics(core.WithCheckerLifetime(ctx, core.CheckerLifetimeDiagnostics), uri)
+		assert.NilError(t, diagnosticsErr)
+		return report.FullDocumentDiagnosticReport.Items
+	}
+	semanticTokens := func() []uint32 {
+		tokens, tokensErr := ls.ProvideSemanticTokens(ctx, uri)
+		assert.NilError(t, tokensErr)
+		assert.Assert(t, tokens.SemanticTokens != nil)
+		return tokens.SemanticTokens.Data
+	}
+
+	tokensFromQueryChecker := semanticTokens()
+	assert.Equal(t, lent.Load(), int32(0))
+	diags := diagnostics()
+	assert.Equal(t, len(diags), 0)
+
+	tokensFromDiagnosticsChecker := semanticTokens()
+	assert.Equal(t, lent.Load(), int32(1), "semantic tokens should reuse the diagnostics checker")
+	assert.DeepEqual(t, tokensFromDiagnosticsChecker, tokensFromQueryChecker)
+	assert.DeepEqual(t, diagnostics(), diags)
 }
