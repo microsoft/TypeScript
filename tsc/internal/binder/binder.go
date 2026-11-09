@@ -490,8 +490,11 @@ func (b *Binder) createFlowCondition(flags ast.FlowFlags, antecedent *ast.FlowNo
 		}
 		return b.unreachableFlow
 	}
-	if flags&ast.FlowFlagsNonNullish != 0 && (expression.Kind == ast.KindTrueKeyword || expression.Kind == ast.KindNullKeyword) {
-		return b.unreachableFlow
+	if flags&ast.FlowFlagsNonNullish != 0 {
+		kind := ast.SkipParentheses(expression).Kind
+		if kind == ast.KindTrueKeyword || kind == ast.KindNullKeyword {
+			return b.unreachableFlow
+		}
 	}
 	if (expression.Kind == ast.KindTrueKeyword && flags&ast.FlowFlagsFalseCondition != 0 || expression.Kind == ast.KindFalseKeyword && flags&ast.FlowFlagsTrueCondition != 0) && !ast.IsExpressionOfOptionalChainRoot(expression) && !ast.IsNullishCoalesce(expression.Parent) {
 		return b.unreachableFlow
@@ -2328,12 +2331,12 @@ func (b *Binder) bindLogicalLikeExpression(node *ast.Node, trueTarget *ast.FlowL
 func (b *Binder) bindNullishCoalescingLeft(node *ast.Node, trueTarget *ast.FlowLabel, falseTarget *ast.FlowLabel, preRightLabel *ast.FlowLabel) {
 	left := node.AsBinaryExpression().Left
 	falsyTarget := falseTarget
-	if falseTarget == b.currentNullishTarget {
-		// In (a ?? b) ?? c, a falsy, non-nullish a makes the left operand of the outer ?? falsy and non-nullish
-		falsyTarget = b.currentFalsyTarget
-	} else if parent := ast.WalkUpParenthesizedExpressions(node.Parent); ast.IsOptionalChainRoot(parent) && ast.SkipParentheses(parent.Expression()) == node {
+	if parent := ast.WalkUpParenthesizedExpressions(node.Parent); ast.IsOptionalChainRoot(parent) && ast.SkipParentheses(parent.Expression()) == node {
 		// In (a ?? b)?.c, a falsy, non-nullish a continues the chain
 		falsyTarget = trueTarget
+	} else if falseTarget == b.currentNullishTarget {
+		// In (a ?? b) ?? c, a falsy, non-nullish a makes the left operand of the outer ?? falsy and non-nullish
+		falsyTarget = b.currentFalsyTarget
 	}
 	saveNullishTarget := b.currentNullishTarget
 	saveFalsyTarget := b.currentFalsyTarget

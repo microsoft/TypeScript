@@ -469,7 +469,7 @@ function f21(a: "" | undefined) {
 
     const one: 1 = b;
 >one : 1
->b : 0 | 1
+>b : 1
 }
 
 function f22(a: "" | undefined) {
@@ -501,6 +501,6 @@ function f22(a: "" | undefined) {
 
     const one: 1 = b;
 >one : 1
->b : 0 | 1
+>b : 1
 }
 

@@ -7,12 +7,10 @@ controlFlowNullishCoalescingFalsyLeft.ts(70,12): error TS2869: Right operand of 
 controlFlowNullishCoalescingFalsyLeft.ts(75,12): error TS2871: This expression is always nullish.
 controlFlowNullishCoalescingFalsyLeft.ts(76,5): error TS7027: Unreachable code detected.
 controlFlowNullishCoalescingFalsyLeft.ts(134,14): error TS2869: Right operand of ?? is unreachable because the left operand is never nullish.
+controlFlowNullishCoalescingFalsyLeft.ts(135,5): error TS7027: Unreachable code detected.
 controlFlowNullishCoalescingFalsyLeft.ts(139,14): error TS2871: This expression is always nullish.
+controlFlowNullishCoalescingFalsyLeft.ts(140,5): error TS7027: Unreachable code detected.
 controlFlowNullishCoalescingFalsyLeft.ts(144,14): error TS2869: Right operand of ?? is unreachable because the left operand is never nullish.
-controlFlowNullishCoalescingFalsyLeft.ts(153,11): error TS2322: Type '0 | 1' is not assignable to type '1'.
-  Type '0' is not assignable to type '1'.
-controlFlowNullishCoalescingFalsyLeft.ts(159,11): error TS2322: Type '0 | 1' is not assignable to type '1'.
-  Type '0' is not assignable to type '1'.
 
 
 ==== controlFlowNullishCoalescingFalsyLeft.ts (12 errors) ====
@@ -168,6 +166,8 @@ controlFlowNullishCoalescingFalsyLeft.ts(159,11): error TS2322: Type '0 | 1' is 
                  ~~~~
 !!! error TS2869: Right operand of ?? is unreachable because the left operand is never nullish.
         c(); // Unreachable
+        ~~~~
+!!! error TS7027: Unreachable code detected.
     }
     
     function f19() {
@@ -175,6 +175,8 @@ controlFlowNullishCoalescingFalsyLeft.ts(159,11): error TS2322: Type '0 | 1' is 
                  ~~~~
 !!! error TS2871: This expression is always nullish.
         c(); // Unreachable
+        ~~~~
+!!! error TS7027: Unreachable code detected.
     }
     
     function f20() {
@@ -190,17 +192,11 @@ controlFlowNullishCoalescingFalsyLeft.ts(159,11): error TS2322: Type '0 | 1' is 
         let b: 0 | 1 = 0;
         (a ?? (b = 1, ""))?.[b = 1] ?? false;
         const one: 1 = b;
-              ~~~
-!!! error TS2322: Type '0 | 1' is not assignable to type '1'.
-!!! error TS2322:   Type '0' is not assignable to type '1'.
     }
     
     function f22(a: "" | undefined) {
         let b: 0 | 1 = 0;
         (a ?? (b = 1, ""))?.charAt(b = 1) ?? false;
         const one: 1 = b;
-              ~~~
-!!! error TS2322: Type '0 | 1' is not assignable to type '1'.
-!!! error TS2322:   Type '0' is not assignable to type '1'.
     }
     
