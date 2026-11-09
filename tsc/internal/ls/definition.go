@@ -241,6 +241,15 @@ func (l *LanguageService) createDefinitionLocations(
 
 	for _, decl := range declarations {
 		file := ast.GetSourceFileOfNode(decl)
+		if decl.Kind == ast.KindSourceFile && file.ContentMapper() != "" {
+			if locationRanges.AddIfAbsent(fileRange{file, core.NewTextRange(0, 0)}) {
+				locations = append(locations, &lsproto.LocationLink{
+					OriginSelectionRange: &originSelectionRange,
+					TargetUri:            lsconv.FileNameToDocumentURI(file.OriginalFileName()),
+				})
+			}
+			continue
+		}
 		name := core.OrElse(ast.GetNameOfDeclaration(decl), decl)
 		var nameRange core.TextRange
 		if name.Kind == ast.KindEmptyStatement {

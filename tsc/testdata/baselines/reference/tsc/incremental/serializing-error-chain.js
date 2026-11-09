@@ -25,7 +25,7 @@ declare function Component(props: { children?: number }): any;
     },
 }
 
-tsgo 
+tsc 
 ExitStatus:: DiagnosticsPresent_OutputsGenerated
 Output::
 [96mindex.tsx[0m:[93m10[0m:[93m3[0m - [91merror[0m[90m TS2769: [0mNo overload matches this call.
@@ -203,7 +203,7 @@ Signatures::
 
 Edit [0]:: no change
 
-tsgo 
+tsc 
 ExitStatus:: DiagnosticsPresent_OutputsGenerated
 Output::
 [96mindex.tsx[0m:[93m10[0m:[93m3[0m - [91merror[0m[90m TS2769: [0mNo overload matches this call.

@@ -15,7 +15,7 @@
   "Copy": "Copy",
   "Could not find a TypeScript executable in the extension package.": "Could not find a TypeScript executable in the extension package.",
   "Directory path is required": "Directory path is required",
-  "Disable Native Preview in Workspace": "Disable Native Preview in Workspace",
+  "Disable TypeScript 7 in Workspace": "Disable TypeScript 7 in Workspace",
   "Dismiss": "Dismiss",
   "Don't Show Again": "Don't Show Again",
   "Enable Setting": "Enable Setting",

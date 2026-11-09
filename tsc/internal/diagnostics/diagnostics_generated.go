@@ -744,7 +744,7 @@ var X_0_resolves_to_a_type_only_declaration_and_must_be_re_exported_using_a_type
 
 var Preserve_unused_imported_values_in_the_JavaScript_output_that_would_otherwise_be_removed = &Message{code: 1449, category: CategoryMessage, key: "Preserve_unused_imported_values_in_the_JavaScript_output_that_would_otherwise_be_removed_1449", text: "Preserve unused imported values in the JavaScript output that would otherwise be removed."}
 
-var Dynamic_imports_can_only_accept_a_module_specifier_and_an_optional_set_of_attributes_as_arguments = &Message{code: 1450, category: CategoryMessage, key: "Dynamic_imports_can_only_accept_a_module_specifier_and_an_optional_set_of_attributes_as_arguments_1450", text: "Dynamic imports can only accept a module specifier and an optional set of attributes as arguments"}
+var Dynamic_imports_can_only_accept_a_module_specifier_and_an_optional_set_of_attributes_as_arguments = &Message{code: 1450, category: CategoryError, key: "Dynamic_imports_can_only_accept_a_module_specifier_and_an_optional_set_of_attributes_as_arguments_1450", text: "Dynamic imports can only accept a module specifier and an optional set of attributes as arguments"}
 
 var Private_identifiers_are_only_allowed_in_class_bodies_and_may_only_be_used_as_part_of_a_class_member_declaration_property_access_or_on_the_left_hand_side_of_an_in_expression = &Message{code: 1451, category: CategoryError, key: "Private_identifiers_are_only_allowed_in_class_bodies_and_may_only_be_used_as_part_of_a_class_member__1451", text: "Private identifiers are only allowed in class bodies and may only be used as part of a class member declaration, property access, or on the left-hand-side of an 'in' expression"}
 

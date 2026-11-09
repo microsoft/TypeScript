@@ -5,6 +5,7 @@
  * ------------------------------------------------------------------------------------------ */
 Object.defineProperty(exports, "__esModule", { value: true });
 const util_1 = require("util");
+const crypto_1 = require("crypto");
 const api_1 = require("../common/api");
 class MessageBuffer extends api_1.AbstractMessageBuffer {
     static emptyBuffer = Buffer.allocUnsafe(0);
@@ -30,7 +31,7 @@ class MessageBuffer extends api_1.AbstractMessageBuffer {
             return buffer instanceof Buffer ? buffer : Buffer.from(buffer);
         }
         else {
-            return buffer instanceof Buffer ? buffer.slice(0, length) : Buffer.from(buffer, 0, length);
+            return buffer instanceof Buffer ? buffer.slice(0, length) : Buffer.from(buffer.subarray(0, length));
         }
     }
     allocNative(length) {
@@ -99,6 +100,9 @@ class WritableStreamWrapper {
     }
 }
 const _ril = Object.freeze({
+    crypto: Object.freeze({
+        randomUUID: () => (0, crypto_1.randomUUID)()
+    }),
     messageBuffer: Object.freeze({
         create: (encoding) => new MessageBuffer(encoding)
     }),

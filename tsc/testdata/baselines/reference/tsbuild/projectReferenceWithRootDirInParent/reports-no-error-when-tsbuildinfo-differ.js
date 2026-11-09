@@ -31,7 +31,7 @@ export const Other = 0;
     ],
 }
 
-tsgo --b src/main/tsconfig.main.json --verbose
+tsc --b src/main/tsconfig.main.json --verbose
 ExitStatus:: Success
 Output::
 [[90mHH:MM:SS AM[0m] Projects in this build: 
@@ -232,7 +232,7 @@ Signatures::
 
 Edit [0]:: no change
 
-tsgo --b src/main/tsconfig.main.json --verbose
+tsc --b src/main/tsconfig.main.json --verbose
 ExitStatus:: Success
 Output::
 [[90mHH:MM:SS AM[0m] Projects in this build: 

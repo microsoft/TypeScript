@@ -34,7 +34,7 @@ not TypeScript
 				"contentMappers": [{ "package": "mapper", "include": ["**/blob.toml"] }]
 			}
 
-tsgo --runExternalCode --listFiles
+tsc --runExternalCode --listFiles
 ExitStatus:: DiagnosticsPresent_OutputsGenerated
 Output::
 [96mindex.ts[0m:[93m6[0m:[93m43[0m - [91merror[0m[90m TS18133: [0mNon-literal import paths cannot be rewritten when a content mapper uses both 'include' and an 'outputExtensions' mapping. Set 'disableDynamicImportExtensionRewriting' to disable rewriting of non-literal import paths.

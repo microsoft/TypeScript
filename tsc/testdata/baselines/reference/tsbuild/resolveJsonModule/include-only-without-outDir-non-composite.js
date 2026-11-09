@@ -23,7 +23,7 @@ export default hello.hello
     "include": [ "src/**/*" ],
 }
 
-tsgo --b project --v --explainFiles --listEmittedFiles
+tsc --b project --v --explainFiles --listEmittedFiles
 ExitStatus:: Success
 Output::
 [[90mHH:MM:SS AM[0m] Projects in this build: 

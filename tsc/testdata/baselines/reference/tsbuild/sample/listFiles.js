@@ -60,7 +60,7 @@ export const m = mod;
     },
 }
 
-tsgo --b tests --listFiles
+tsc --b tests --listFiles
 ExitStatus:: Success
 Output::
 /home/src/tslibs/TS/Lib/lib.es2026.full.d.ts
@@ -433,7 +433,7 @@ export function leftPad(s: string, n: number) { return s + n; }
 export function multiply(a: number, b: number) { return a * b; }
 export class someClass { }
 
-tsgo --b tests --listFiles
+tsc --b tests --listFiles
 ExitStatus:: Success
 Output::
 /home/src/tslibs/TS/Lib/lib.es2026.full.d.ts
@@ -749,7 +749,7 @@ export function multiply(a: number, b: number) { return a * b; }
 export class someClass { }
 class someClass2 { }
 
-tsgo --b tests --listFiles
+tsc --b tests --listFiles
 ExitStatus:: Success
 Output::
 /home/src/tslibs/TS/Lib/lib.es2026.full.d.ts
@@ -859,7 +859,7 @@ Signatures::
 
 Edit [2]:: no change
 
-tsgo --b tests --listFiles
+tsc --b tests --listFiles
 ExitStatus:: Success
 Output::
 

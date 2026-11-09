@@ -6,7 +6,7 @@ export function* values() { yield 1; }
 //// [/home/src/workspaces/project/tsconfig.json] *new* 
 {"compilerOptions": {"noEmit": true, "incremental": true}}
 
-tsgo 
+tsc 
 ExitStatus:: DiagnosticsPresent_OutputsGenerated
 Output::
 [91merror[0m[90m TS2318: [0mCannot find global type 'IterableIterator'.
@@ -109,7 +109,7 @@ Signatures::
 
 Edit [0]:: no change
 
-tsgo 
+tsc 
 ExitStatus:: DiagnosticsPresent_OutputsGenerated
 Output::
 [91merror[0m[90m TS2318: [0mCannot find global type 'IterableIterator'.
@@ -190,7 +190,7 @@ export function* values() { yield 1; }
 // comment-only edit
 
 
-tsgo 
+tsc 
 ExitStatus:: Success
 Output::
 //// [/home/src/workspaces/project/tsconfig.tsbuildinfo] *modified* 
@@ -264,7 +264,7 @@ Diff:: Like Strada, signature generation produces the missing-global diagnostic 
 
 Edit [2]:: no change
 
-tsgo 
+tsc 
 ExitStatus:: Success
 Output::
 //// [/home/src/workspaces/project/tsconfig.tsbuildinfo] *modified* 
@@ -336,7 +336,7 @@ Diff:: Like Strada, the cached semantic diagnostics do not include the missing-g
 Edit [3]:: delete build info to restore the semantic diagnostic
 //// [/home/src/workspaces/project/tsconfig.tsbuildinfo] *deleted*
 
-tsgo 
+tsc 
 ExitStatus:: DiagnosticsPresent_OutputsGenerated
 Output::
 [91merror[0m[90m TS2318: [0mCannot find global type 'IterableIterator'.

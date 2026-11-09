@@ -34,7 +34,7 @@ not TypeScript
 				"contentMappers": [{ "package": "mapper", "include": ["**/blob.toml"] }]
 			}
 
-tsgo --runExternalCode --listFiles
+tsc --runExternalCode --listFiles
 ExitStatus:: Success
 Output::
 /home/src/tslibs/TS/Lib/lib.es2026.full.d.ts

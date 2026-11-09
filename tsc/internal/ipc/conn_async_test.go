@@ -8,6 +8,7 @@ import (
 	"strings"
 	"sync"
 	"testing"
+	"testing/synctest"
 	"time"
 
 	"github.com/microsoft/TypeScript/tsc/internal/ipc"
@@ -119,20 +120,13 @@ func TestAsyncConnRunWaitsForHandlers(t *testing.T) {
 
 func TestAsyncConnRunCancelsHandlersOnEOF(t *testing.T) {
 	t.Parallel()
+	synctest.Test(t, func(t *testing.T) {
+		id := jsonrpc.NewIDString("1")
+		protocol := &queuedProtocol{messages: []*ipc.Message{{ID: id, Method: "request"}}}
+		conn := ipc.NewAsyncConnWithProtocol(nil, protocol, contextHandler{})
 
-	id := jsonrpc.NewIDString("1")
-	protocol := &queuedProtocol{messages: []*ipc.Message{{ID: id, Method: "request"}}}
-	conn := ipc.NewAsyncConnWithProtocol(nil, protocol, contextHandler{})
-
-	runDone := make(chan error, 1)
-	go func() { runDone <- conn.Run(t.Context()) }()
-
-	select {
-	case err := <-runDone:
-		assert.NilError(t, err)
-	case <-time.After(time.Second):
-		t.Fatal("Run did not cancel active handlers after EOF")
-	}
+		assert.NilError(t, conn.Run(t.Context()))
+	})
 }
 
 func TestAsyncConnResponseWriteFailureWithNilTransport(t *testing.T) {
@@ -223,25 +217,27 @@ func TestAsyncConnCallReturnsWhenPeerCloses(t *testing.T) {
 
 func TestAsyncConnCallAfterReadLoopFailureReturnsImmediately(t *testing.T) {
 	t.Parallel()
-	client, server := net.Pipe()
-	defer client.Close()
-	defer server.Close()
-	conn := ipc.NewAsyncConn(client, noOpHandler{})
-	runDone := make(chan error, 1)
-	go func() { runDone <- conn.Run(t.Context()) }()
+	synctest.Test(t, func(t *testing.T) {
+		client, server := net.Pipe()
+		defer client.Close()
+		defer server.Close()
+		conn := ipc.NewAsyncConn(client, noOpHandler{})
+		runDone := make(chan error, 1)
+		go func() { runDone <- conn.Run(t.Context()) }()
 
-	_, err := server.Write([]byte("oops\n"))
-	assert.NilError(t, err)
-	assert.ErrorContains(t, <-runDone, "invalid header")
-	go func() { _, _ = io.Copy(io.Discard, server) }()
+		_, err := server.Write([]byte("oops\n"))
+		assert.NilError(t, err)
+		assert.ErrorContains(t, <-runDone, "invalid header")
+		go func() { _, _ = io.Copy(io.Discard, server) }()
 
-	ctx, cancel := context.WithTimeout(t.Context(), time.Second)
-	defer cancel()
-	_, err = conn.Call(ctx, "transform", nil)
-	assert.Assert(t, errors.Is(err, ipc.ErrConnClosed), "expected ErrConnClosed, got %v", err)
-	assert.Assert(t, !errors.Is(err, context.DeadlineExceeded), "call waited for its context deadline: %v", err)
-	err = conn.Notify(ctx, "changed", nil)
-	assert.Assert(t, errors.Is(err, ipc.ErrConnClosed), "expected ErrConnClosed, got %v", err)
+		ctx, cancel := context.WithTimeout(t.Context(), time.Second)
+		defer cancel()
+		_, err = conn.Call(ctx, "transform", nil)
+		assert.Assert(t, errors.Is(err, ipc.ErrConnClosed), "expected ErrConnClosed, got %v", err)
+		assert.Assert(t, !errors.Is(err, context.DeadlineExceeded), "call waited for its context deadline: %v", err)
+		err = conn.Notify(ctx, "changed", nil)
+		assert.Assert(t, errors.Is(err, ipc.ErrConnClosed), "expected ErrConnClosed, got %v", err)
+	})
 }
 
 func TestAsyncConnTerminalErrorIncludesResponseWriteFailure(t *testing.T) {
@@ -263,52 +259,44 @@ func TestAsyncConnTerminalErrorIncludesResponseWriteFailure(t *testing.T) {
 
 func TestAsyncConnRunWaitsForRequestAfterPeerCloses(t *testing.T) {
 	t.Parallel()
-	client, server := net.Pipe()
-	defer server.Close()
-	handler := &blockingHandler{
-		started: make(chan struct{}, 1),
-		release: make(chan struct{}),
-	}
-	defer func() {
+	synctest.Test(t, func(t *testing.T) {
+		client, server := net.Pipe()
+		defer client.Close()
+		defer server.Close()
+		handler := &blockingHandler{
+			started: make(chan struct{}, 1),
+			release: make(chan struct{}),
+		}
+		defer func() {
+			select {
+			case <-handler.release:
+				return
+			default:
+				close(handler.release)
+			}
+		}()
+		conn := ipc.NewAsyncConn(server, handler)
+		runDone := make(chan error, 1)
+		go func() { runDone <- conn.Run(t.Context()) }()
+
+		clientProtocol := ipc.NewJSONRPCProtocol(client)
+		assert.NilError(t, clientProtocol.WriteRequest(jsonrpc.NewIDInt(1), "transform", nil))
+		<-handler.started
+		assert.NilError(t, client.Close())
+
+		synctest.Wait()
 		select {
-		case <-handler.release:
-			return
+		case err := <-runDone:
+			t.Fatalf("connection stopped while request handler was blocked: %v", err)
 		default:
 			close(handler.release)
 		}
-	}()
-	conn := ipc.NewAsyncConn(server, handler)
-	runDone := make(chan error, 1)
-	go func() { runDone <- conn.Run(t.Context()) }()
 
-	clientProtocol := ipc.NewJSONRPCProtocol(client)
-	assert.NilError(t, clientProtocol.WriteRequest(jsonrpc.NewIDInt(1), "transform", nil))
-	select {
-	case <-handler.started:
-		// Request handler started.
-	case <-time.After(time.Second):
-		t.Fatal("request handler did not start")
-	}
-	assert.NilError(t, client.Close())
-
-	handlerBlocked := false
-	select {
-	case err := <-runDone:
-		t.Fatalf("connection stopped while request handler was blocked: %v", err)
-	case <-time.After(100 * time.Millisecond):
-		handlerBlocked = true
-	}
-	assert.Assert(t, handlerBlocked)
-
-	close(handler.release)
-	select {
-	case err := <-runDone:
+		err := <-runDone
 		assert.ErrorContains(t, err, "ipc: failed to write response")
 		_, err = conn.Call(t.Context(), "transform", nil)
 		assert.ErrorContains(t, err, "ipc: failed to write response")
 		err = conn.Notify(t.Context(), "changed", nil)
 		assert.ErrorContains(t, err, "ipc: failed to write response")
-	case <-time.After(time.Second):
-		t.Fatal("connection did not stop after request handler completed")
-	}
+	})
 }
