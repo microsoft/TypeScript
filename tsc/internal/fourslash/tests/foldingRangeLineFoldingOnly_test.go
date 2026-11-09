@@ -186,7 +186,7 @@ if (Math.random()) {
 				{StartLine: 17, EndLine: 19}, // contents on following lines: if block
 				{StartLine: 20, EndLine: 20}, // contents on following lines: block comment
 				{StartLine: 23, EndLine: 24}, // empty statement on same line
-				{StartLine: 27, EndLine: 29}, // comment on same line
+				{StartLine: 27, EndLine: 28}, // comment on same line
 				{StartLine: 31, EndLine: 33}, // statement before closing brace
 				{StartLine: 35, EndLine: 37}, // end-of-file on same line
 			},

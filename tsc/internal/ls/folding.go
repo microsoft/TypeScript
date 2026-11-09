@@ -106,6 +106,8 @@ func (l *LanguageService) adjustFoldingEnd(ranges []*lsproto.FoldingRange, sourc
 				foldEndChar := sourceText[int(endOffset)-1]
 				if foldEndChar == '}' || foldEndChar == ']' || foldEndChar == ')' || foldEndChar == '`' || foldEndChar == '>' {
 					if r.EndLine > r.StartLine {
+						var adjustLine bool
+						// Decide whether to adjust the end line based on the original content following the folding range
 						if sourceFile.IsContentMapped() {
 							originalText := sourceFile.OriginalText()
 							end := lsproto.Position{Line: r.EndLine, Character: *r.EndCharacter}
@@ -114,7 +116,6 @@ func (l *LanguageService) adjustFoldingEnd(ranges []*lsproto.FoldingRange, sourc
 								lsproto.Range{Start: end, End: end},
 							).End()
 							nextPos := offset
-							var adjustLine bool
 							for nextPos < len(originalText) {
 								char, width := utf8.DecodeRuneInString(originalText[nextPos:])
 								if !stringutil.IsWhiteSpaceLike(char) {
@@ -126,22 +127,30 @@ func (l *LanguageService) adjustFoldingEnd(ranges []*lsproto.FoldingRange, sourc
 								}
 								nextPos += width
 							}
-							if adjustLine {
-								r.EndLine--
-							}
-						} else {
+						} else { // Decide based on the TS content
 							tokenAfterFold := astnav.GetTokenAtPosition(sourceFile, int(endOffset))
-							nextNonTriviaPos := scanner.SkipTriviaEx(
-								sourceText,
-								int(endOffset),
-								&scanner.SkipTriviaOptions{
-									StopAfterLineBreak: true,
-									StopAtComments:     ast.IsJsxText(tokenAfterFold),
-								})
-							// non-trivia after closing bracket on the same line: adjust end line to keep closing bracket visible
-							if nextNonTriviaPos < len(sourceText) && !strings.ContainsAny(sourceText[int(endOffset):nextNonTriviaPos], "\r\n") {
-								r.EndLine--
+							isJSXText := ast.IsJsxText(tokenAfterFold)
+							if isJSXText {
+								// Keep jsx text visible
+								adjustLine = true
+							} else {
+								nextPos := int(endOffset)
+								for nextPos < len(sourceText) {
+									char, width := utf8.DecodeRuneInString(sourceText[nextPos:])
+									if !stringutil.IsWhiteSpaceLike(char) {
+										// Non-whitespace after closing bracket on the same line
+										adjustLine = true
+										break
+									}
+									if char == '\r' || char == '\n' {
+										break
+									}
+									nextPos += width
+								}
 							}
+						}
+						if adjustLine {
+							r.EndLine--
 						}
 					}
 				}
