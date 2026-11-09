@@ -36,7 +36,7 @@ import "./g.vue";
     ]
 }
 
-tsgo --runExternalCode --singleThreaded
+tsc --runExternalCode --singleThreaded
 ExitStatus:: DiagnosticsPresent_OutputsGenerated
 Output::
 [91merror[0m[90m TS18070: [0mThe content mapper 'fail' failed 5 times and will not be used.

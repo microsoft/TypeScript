@@ -38,7 +38,7 @@ export interface C {
     },
 }
 
-tsgo --b --verbose
+tsc --b --verbose
 ExitStatus:: DiagnosticsPresent_OutputsGenerated
 Output::
 [[90mHH:MM:SS AM[0m] Projects in this build: 
@@ -238,7 +238,7 @@ export interface A {
     b: B;
 }
 
-tsgo --b --verbose
+tsc --b --verbose
 ExitStatus:: DiagnosticsPresent_OutputsGenerated
 Output::
 [[90mHH:MM:SS AM[0m] Projects in this build: 
@@ -389,7 +389,7 @@ export interface A {
     b: B; foo: any;
 }
 
-tsgo --b --verbose
+tsc --b --verbose
 ExitStatus:: DiagnosticsPresent_OutputsGenerated
 Output::
 [[90mHH:MM:SS AM[0m] Projects in this build: 

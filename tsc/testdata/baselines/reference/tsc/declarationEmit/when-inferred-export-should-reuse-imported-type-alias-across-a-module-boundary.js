@@ -55,7 +55,7 @@ export const obj = makeObj();
     "files": ["./a.ts", "./factory.ts", "./state.ts"],
 }
 
-tsgo --p tsconfig.json
+tsc --p tsconfig.json
 ExitStatus:: Success
 Output::
 //// [/home/src/workspaces/project/a.d.ts] *new* 

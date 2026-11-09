@@ -35,7 +35,7 @@ import {
     getWorkspaceTsdkConfigValue,
     getWorkspaceTsdkForPrompt,
     getWorkspaceTypeScriptVersions,
-    readNativePreviewConfig,
+    readConfigWithLegacyFallback,
     resolveTsdkPath,
     resolveTsdkPathToExe,
     updateWorkspaceTsdkConfig,
@@ -471,7 +471,7 @@ async function showCommands(client: Client): Promise<void> {
         },
     ];
 
-    const showDebugInfo = readNativePreviewConfig("showDebugInfo", false);
+    const showDebugInfo = readConfigWithLegacyFallback("showDebugInfo", false);
     if (showDebugInfo) {
         const exe = client.getCurrentExe();
         const pid = client.serverPid;
@@ -519,7 +519,7 @@ interface VersionQuickPickItem extends vscode.QuickPickItem {
 }
 
 function readStringArrayConfig(key: string): string[] {
-    const value = readNativePreviewConfig<unknown>(key, undefined);
+    const value = readConfigWithLegacyFallback<unknown>(key, undefined);
     return Array.isArray(value) ? value.filter((v): v is string => typeof v === "string") : [];
 }
 
@@ -625,7 +625,7 @@ async function promptSelectVersion(context: vscode.ExtensionContext, client: Cli
                     await context.workspaceState.update(useWorkspaceTsdkStorageKey, true);
                     await updateTsdkConfig(wsVersion);
                     await updateWorkspaceUseTsgoSetting(true);
-                    outputChannel.appendLine(`Switched to workspace tsgo version (${wsVersion.version}).`);
+                    outputChannel.appendLine(`Switched to workspace TypeScript version (${wsVersion.version}).`);
                 },
             });
         }

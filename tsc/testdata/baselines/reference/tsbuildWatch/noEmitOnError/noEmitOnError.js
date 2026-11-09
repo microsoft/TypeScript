@@ -23,7 +23,7 @@ export { }
     },
 }
 
-tsgo -b -w -v
+tsc -b -w -v
 ExitStatus:: DiagnosticsPresent_OutputsSkipped
 Output::
 [2J[3J[H[[90mHH:MM:SS AM[0m] Starting compilation in watch mode...

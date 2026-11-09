@@ -26,7 +26,7 @@ export const marker: string = globalMarker;
     "include": ["src/**/*"]
 }
 
-tsgo --b --verbose
+tsc --b --verbose
 ExitStatus:: Success
 Output::
 [[90mHH:MM:SS AM[0m] Projects in this build: 
@@ -182,7 +182,7 @@ declare global {
 }
 export {};
 
-tsgo --b --verbose
+tsc --b --verbose
 ExitStatus:: DiagnosticsPresent_OutputsGenerated
 Output::
 [[90mHH:MM:SS AM[0m] Projects in this build: 

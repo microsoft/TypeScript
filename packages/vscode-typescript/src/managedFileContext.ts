@@ -7,7 +7,7 @@ import {
 } from "./util";
 
 /**
- * When-clause context set when the current file is managed by tsgo.
+ * When-clause context set when the current file is managed by TypeScript 7.
  */
 export class ManagedFileContextManager implements vscode.Disposable {
     private static readonly contextName = "typescript.isManagedFile";

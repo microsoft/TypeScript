@@ -15,7 +15,7 @@ export const enum AWorker {
     ONE = 1
 }
 
-tsgo -i a.ts --tsbuildinfofile a.tsbuildinfo
+tsc -i a.ts --tsbuildinfofile a.tsbuildinfo
 ExitStatus:: Success
 Output::
 //// [/home/src/tslibs/TS/Lib/lib.es2026.full.d.ts] *Lib*
@@ -150,7 +150,7 @@ export const enum AWorker {
     ONE = 2
 }
 
-tsgo -i a.ts --tsbuildinfofile a.tsbuildinfo
+tsc -i a.ts --tsbuildinfofile a.tsbuildinfo
 ExitStatus:: Success
 Output::
 //// [/home/src/workspaces/project/a.js] *modified* 
@@ -265,7 +265,7 @@ export const enum AWorker {
     ONE = 3
 }
 
-tsgo -i a.ts --tsbuildinfofile a.tsbuildinfo
+tsc -i a.ts --tsbuildinfofile a.tsbuildinfo
 ExitStatus:: Success
 Output::
 //// [/home/src/workspaces/project/a.js] *modified* 
@@ -378,7 +378,7 @@ Edit [2]:: something else changes in b.d.ts
 //// [/home/src/workspaces/project/b.d.ts] *modified* 
 export { AWorker as A } from "./worker";export const randomThing = 10;
 
-tsgo -i a.ts --tsbuildinfofile a.tsbuildinfo
+tsc -i a.ts --tsbuildinfofile a.tsbuildinfo
 ExitStatus:: Success
 Output::
 //// [/home/src/workspaces/project/a.js] *rewrite with same content*
@@ -493,7 +493,7 @@ Edit [3]:: something else changes in b.d.ts again
 //// [/home/src/workspaces/project/b.d.ts] *modified* 
 export { AWorker as A } from "./worker";export const randomThing = 10;export const randomThing2 = 10;
 
-tsgo -i a.ts --tsbuildinfofile a.tsbuildinfo
+tsc -i a.ts --tsbuildinfofile a.tsbuildinfo
 ExitStatus:: Success
 Output::
 //// [/home/src/workspaces/project/a.tsbuildinfo] *modified* 
