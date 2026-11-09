@@ -283,11 +283,11 @@ jobs:
         if: ${{ !cancelled() }}
         with:
           success_comment: |-
-            I've packed ${{ needs.prepare.outputs.head_sha }} into [an installable package](https://www.npmjs.com/package/${{ fromJSON(needs.prepare.outputs.packages).main }}/v/${{ needs.publish.outputs.version }}). You can install it for testing by referencing it in your `package.json` like so:
+            I've packed ${{ needs.prepare.outputs.head_sha }} into [an installable package](https://www.npmjs.com/package/${{ fromJSON(needs.prepare.outputs.packages || '{}').main }}/v/${{ needs.publish.outputs.version }}). You can install it for testing by referencing it in your `package.json` like so:
             ```json
             {
                 "devDependencies": {
-                    "typescript": "npm:${{ fromJSON(needs.prepare.outputs.packages).main }}@${{ needs.publish.outputs.version }}"
+                    "typescript": "npm:${{ fromJSON(needs.prepare.outputs.packages || '{}').main }}@${{ needs.publish.outputs.version }}"
                 }
             }
             ```
