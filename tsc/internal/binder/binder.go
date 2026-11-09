@@ -10,6 +10,7 @@ import (
 	"github.com/microsoft/TypeScript/tsc/internal/core"
 	"github.com/microsoft/TypeScript/tsc/internal/debug"
 	"github.com/microsoft/TypeScript/tsc/internal/diagnostics"
+	"github.com/microsoft/TypeScript/tsc/internal/jsnum"
 	"github.com/microsoft/TypeScript/tsc/internal/scanner"
 )
 
@@ -2304,6 +2305,9 @@ func (b *Binder) bindLogicalLikeExpression(node *ast.Node, trueTarget *ast.FlowL
 	} else {
 		b.bindCondition(expr.Left, trueTarget, preRightLabel)
 	}
+	if (expr.OperatorToken.Kind == ast.KindQuestionQuestionToken || expr.OperatorToken.Kind == ast.KindQuestionQuestionEqualsToken) && canBeFalsyNonNullish(expr.Left) && !ast.IsLogicalExpression(ast.WalkUpParenthesizedExpressions(node.Parent)) {
+		b.addAntecedent(falseTarget, b.createFlowCondition(ast.FlowFlagsCondition, b.currentFlow, expr.Left))
+	}
 	b.currentFlow = b.finishFlowLabel(preRightLabel)
 	b.bind(expr.OperatorToken)
 	if ast.IsLogicalOrCoalescingAssignmentOperator(expr.OperatorToken.Kind) {
@@ -2314,6 +2318,23 @@ func (b *Binder) bindLogicalLikeExpression(node *ast.Node, trueTarget *ast.FlowL
 	} else {
 		b.bindCondition(expr.Right, trueTarget, falseTarget)
 	}
+}
+
+func canBeFalsyNonNullish(node *ast.Node) bool {
+	node = ast.SkipOuterExpressions(node, ast.OEKAll)
+	switch node.Kind {
+	case ast.KindFalseKeyword, ast.KindThisKeyword, ast.KindPropertyAccessExpression, ast.KindElementAccessExpression, ast.KindTaggedTemplateExpression, ast.KindAwaitExpression, ast.KindYieldExpression:
+		return true
+	case ast.KindCallExpression:
+		return !ast.IsImportCall(node)
+	case ast.KindIdentifier:
+		return node.Text() != "undefined"
+	case ast.KindNumericLiteral, ast.KindBigIntLiteral:
+		return jsnum.ParsePseudoBigInt(node.Text()) == "0"
+	case ast.KindStringLiteral, ast.KindNoSubstitutionTemplateLiteral:
+		return node.Text() == ""
+	}
+	return false
 }
 
 func (b *Binder) bindDeleteExpressionFlow(node *ast.Node) {
