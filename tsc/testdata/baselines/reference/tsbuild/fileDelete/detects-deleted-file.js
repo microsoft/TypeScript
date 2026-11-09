@@ -24,7 +24,7 @@ export function main() {
     "references": [{ "path": "../child" }],
 }
 
-tsgo --b main/tsconfig.json -v --traceResolution --explainFiles
+tsc --b main/tsconfig.json -v --traceResolution --explainFiles
 ExitStatus:: Success
 Output::
 [[90mHH:MM:SS AM[0m] Projects in this build: 
@@ -276,7 +276,7 @@ Edit [0]:: delete child2 file
 //// [/home/src/workspaces/solution/child/child2.js] *deleted*
 //// [/home/src/workspaces/solution/child/child2.ts] *deleted*
 
-tsgo --b main/tsconfig.json -v --traceResolution --explainFiles
+tsc --b main/tsconfig.json -v --traceResolution --explainFiles
 ExitStatus:: DiagnosticsPresent_OutputsGenerated
 Output::
 [[90mHH:MM:SS AM[0m] Projects in this build: 

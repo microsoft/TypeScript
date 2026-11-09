@@ -32,7 +32,7 @@ export const value = wrap({ items: [] as readonly Json[] });
 //// [/home/src/workspaces/project/tsconfig.json] *new* 
 {"compilerOptions": {"strict": true, "noEmit": true, "incremental": true}}
 
-tsgo 
+tsc 
 ExitStatus:: Success
 Output::
 //// [/home/src/workspaces/project/tsconfig.tsbuildinfo] *new* 
@@ -101,7 +101,7 @@ export const value = wrap({ items: [] as readonly Json[] });
 // comment-only edit
 
 
-tsgo 
+tsc 
 ExitStatus:: Success
 Output::
 //// [/home/src/workspaces/project/tsconfig.tsbuildinfo] *modified* 
@@ -169,7 +169,7 @@ Signatures::
 
 Edit [1]:: no change
 
-tsgo 
+tsc 
 ExitStatus:: Success
 Output::
 //// [/home/src/workspaces/project/tsconfig.tsbuildinfo] *modified* 
@@ -243,7 +243,7 @@ export const value = wrap({ items: [] as readonly Json[] });
 // another comment
 
 
-tsgo 
+tsc 
 ExitStatus:: Success
 Output::
 //// [/home/src/workspaces/project/tsconfig.tsbuildinfo] *modified* 
@@ -311,7 +311,7 @@ Signatures::
 
 Edit [3]:: no change
 
-tsgo 
+tsc 
 ExitStatus:: Success
 Output::
 //// [/home/src/workspaces/project/tsconfig.tsbuildinfo] *modified* 

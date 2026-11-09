@@ -11,22 +11,17 @@ export default function getExePath({ fs, module, path, url }) {
     const pkg = JSON.parse(fs.readFileSync(path.join(__dirname, "..", "package.json"), "utf8"));
     const pkgName = pkg.name;
     const baseName = pkgName.startsWith("@") ? pkgName.split("/")[1] : pkgName;
-    const expectedBinName = baseName === "typescript" ? "tsc" : "tsgo";
     const binNames = pkg.bin && typeof pkg.bin === "object" ? Object.keys(pkg.bin) : [];
-    if (binNames.length !== 1 || binNames[0] !== expectedBinName) {
-        throw new Error(`Expected ${pkgName} to declare exactly one bin entry named ${expectedBinName}.`);
+    if (binNames.length !== 1 || binNames[0] !== "tsc") {
+        throw new Error(`Expected ${pkgName} to declare exactly one bin entry named tsc.`);
     }
-    let binName = expectedBinName;
     let exeDir;
 
     const expectedPackage = baseName + "-" + process.platform + "-" + process.arch;
 
     if (normalizedDirname.endsWith("/packages/" + baseName + "/lib")) {
         // We're running directly from source in the repo.
-        // The local repo build (`hereby build`) always produces `tsgo`, regardless
-        // of the published `bin` name, so don't use binName here.
         exeDir = path.resolve(__dirname, "..", "..", "..", "built", "local");
-        binName = "tsc";
     }
     else if (normalizedDirname.endsWith("/built/npm/" + baseName + "/lib")) {
         // We're running from the built output.
@@ -54,7 +49,7 @@ export default function getExePath({ fs, module, path, url }) {
         }
     }
 
-    let exe = path.join(exeDir, binName);
+    let exe = path.join(exeDir, "tsc");
     if (process.platform === "win32") {
         exe += ".exe";
         if (exe.length >= 248) {

@@ -15,7 +15,7 @@ import { a } from "../src";
     ]
 }
 
-tsgo -p tsconfig.json --showConfig
+tsc -p tsconfig.json --showConfig
 ExitStatus:: Success
 Output::
 {

@@ -6,7 +6,7 @@ Input::
                     "files": ["./src/doesNotExist.ts"]
                     }
 
-tsgo -p ./tsconfig.json
+tsc -p ./tsconfig.json
 ExitStatus:: DiagnosticsPresent_OutputsGenerated
 Output::
 [91merror[0m[90m TS6053: [0mFile '/home/src/workspaces/project/src/doesNotExist.ts' not found.

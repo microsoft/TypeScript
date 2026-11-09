@@ -31,7 +31,7 @@ export const d = 10;
     "references": [{ "path": "../project3" }]
 }
 
-tsgo --b project4 --verbose --explainFiles
+tsc --b project4 --verbose --explainFiles
 ExitStatus:: Success
 Output::
 [[90mHH:MM:SS AM[0m] Projects in this build: 
@@ -276,7 +276,7 @@ Edit [0]:: modify project3 file
 //// [/home/src/workspaces/solution/project3/src/c.ts] *modified* 
 export const cc = 10;
 
-tsgo --b project4 --verbose --explainFiles
+tsc --b project4 --verbose --explainFiles
 ExitStatus:: Success
 Output::
 [[90mHH:MM:SS AM[0m] Projects in this build: 

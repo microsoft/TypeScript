@@ -54,7 +54,7 @@ export const m = mod;
     },
 }
 
-tsgo --b tests --verbose
+tsc --b tests --verbose
 ExitStatus:: DiagnosticsPresent_OutputsGenerated
 Output::
 [[90mHH:MM:SS AM[0m] Projects in this build: 
