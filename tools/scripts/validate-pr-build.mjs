@@ -34,11 +34,17 @@ for (const filename of fs.readdirSync(tarballDir)) {
 
     // npm extracts everything under package/; reject anything that is not a
     // plain file or directory there.
+    // Paths must be canonical and unique, since GNU tar and npm disagree on
+    // which duplicate wins.
     const listing = execFileSync("tar", ["-tvzf", tarball], { encoding: "utf8" }).split("\n").filter(Boolean);
+    const entryPaths = new Set();
     for (const line of listing) {
-        const entryPath = line.split(/\s+/).slice(5).join(" ");
+        const entryPath = line.split(/\s+/).slice(5).join(" ").replace(/\/$/, "");
+        const segments = entryPath.split("/");
         assert(line[0] === "-" || line[0] === "d", `${filename}: unexpected entry type: ${line}`);
-        assert(entryPath.startsWith("package/") && !entryPath.split("/").includes(".."), `${filename}: unexpected path: ${entryPath}`);
+        assert(segments[0] === "package" && segments.every(s => s !== "" && s !== "." && s !== ".."), `${filename}: unexpected path: ${entryPath}`);
+        assert(!entryPaths.has(entryPath), `${filename}: duplicate entry: ${entryPath}`);
+        entryPaths.add(entryPath);
     }
 
     const manifest = JSON.parse(execFileSync("tar", ["-xzOf", tarball, "package/package.json"], { encoding: "utf8" }));
