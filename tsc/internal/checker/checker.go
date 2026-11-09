@@ -23483,15 +23483,14 @@ func (c *Checker) instantiateTypeWorker(t *Type, m *TypeMapper, alias *TypeAlias
 		newConstraint := c.instantiateType(t.AsSubstitutionType().constraint, m)
 		// A substitution type originates in the true branch of a conditional type and can be resolved
 		// to just the base type in the same cases as the conditional type resolves to its true branch
-		// (because the base type is then known to satisfy the constraint).
-		if newBaseType.flags&TypeFlagsTypeVariable != 0 && c.isGenericType(newConstraint) {
+		// (because the base type is then known to satisfy the constraint). A conditional type whose
+		// check type is a type variable is deferred instead, so a substitution for a type variable is
+		// kept.
+		if newBaseType.flags&TypeFlagsTypeVariable != 0 {
 			return c.getSubstitutionType(newBaseType, newConstraint)
 		}
 		if newConstraint.flags&TypeFlagsAnyOrUnknown != 0 || c.isTypeAssignableTo(c.getRestrictiveInstantiation(newBaseType), c.getRestrictiveInstantiation(newConstraint)) {
 			return newBaseType
-		}
-		if newBaseType.flags&TypeFlagsTypeVariable != 0 {
-			return c.getSubstitutionType(newBaseType, newConstraint)
 		}
 		return c.getIntersectionType([]*Type{newConstraint, newBaseType})
 	}
