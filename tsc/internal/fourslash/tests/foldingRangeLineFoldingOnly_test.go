@@ -214,6 +214,10 @@ func TestFoldingRangeLineFoldingOnlyWithTrailingJSXText(t *testing.T) {
     <div>
         Hello
     </div> // Keep me visible
+	<div>
+		World
+	</div>
+	// Other text
 </main>`
 	ptrTrue := true
 	capabilities := &lsproto.ClientCapabilities{
@@ -227,8 +231,9 @@ func TestFoldingRangeLineFoldingOnlyWithTrailingJSXText(t *testing.T) {
 	defer done()
 
 	f.VerifyFoldingRangeLines(t, []fourslash.FoldingRangeLineExpected{
-		{StartLine: 0, EndLine: 4},
+		{StartLine: 0, EndLine: 8},
 		{StartLine: 1, EndLine: 2},
+		{StartLine: 4, EndLine: 6},
 	})
 }
 
