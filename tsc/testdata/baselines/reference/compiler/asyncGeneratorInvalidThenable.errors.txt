@@ -1,0 +1,66 @@
+asyncGeneratorInvalidThenable.ts(3,11): error TS1321: Type of 'yield' operand in an async generator must either be a valid promise or must not contain a callable 'then' member.
+asyncGeneratorInvalidThenable.ts(9,11): error TS1321: Type of 'yield' operand in an async generator must either be a valid promise or must not contain a callable 'then' member.
+asyncGeneratorInvalidThenable.ts(13,11): error TS1321: Type of 'yield' operand in an async generator must either be a valid promise or must not contain a callable 'then' member.
+asyncGeneratorInvalidThenable.ts(19,11): error TS1321: Type of 'yield' operand in an async generator must either be a valid promise or must not contain a callable 'then' member.
+asyncGeneratorInvalidThenable.ts(20,11): error TS1321: Type of 'yield' operand in an async generator must either be a valid promise or must not contain a callable 'then' member.
+asyncGeneratorInvalidThenable.ts(24,11): error TS1321: Type of 'yield' operand in an async generator must either be a valid promise or must not contain a callable 'then' member.
+asyncGeneratorInvalidThenable.ts(28,33): error TS1321: Type of 'yield' operand in an async generator must either be a valid promise or must not contain a callable 'then' member.
+
+
+==== asyncGeneratorInvalidThenable.ts (7 errors) ====
+    // https://github.com/microsoft/TypeScript/issues/65378
+    async function* invalidThenableBeforeValue() {
+        yield { then() {} };
+              ~~~~~~~~~~~~~
+!!! error TS1321: Type of 'yield' operand in an async generator must either be a valid promise or must not contain a callable 'then' member.
+        yield 1;
+    }
+    
+    async function* invalidThenableAfterValue() {
+        yield 1;
+        yield { then() {} };
+              ~~~~~~~~~~~~~
+!!! error TS1321: Type of 'yield' operand in an async generator must either be a valid promise or must not contain a callable 'then' member.
+    }
+    
+    async function* invalidThenableWithMultipleValues() {
+        yield { then() {} };
+              ~~~~~~~~~~~~~
+!!! error TS1321: Type of 'yield' operand in an async generator must either be a valid promise or must not contain a callable 'then' member.
+        yield 1;
+        yield "text";
+    }
+    
+    async function* onlyInvalidThenables() {
+        yield { then() {} };
+              ~~~~~~~~~~~~~
+!!! error TS1321: Type of 'yield' operand in an async generator must either be a valid promise or must not contain a callable 'then' member.
+        yield { then() {} };
+              ~~~~~~~~~~~~~
+!!! error TS1321: Type of 'yield' operand in an async generator must either be a valid promise or must not contain a callable 'then' member.
+    }
+    
+    async function* singleInvalidThenable() {
+        yield { then() {} };
+              ~~~~~~~~~~~~~
+!!! error TS1321: Type of 'yield' operand in an async generator must either be a valid promise or must not contain a callable 'then' member.
+    }
+    
+    async function* invalidThenableWithNext() {
+        const next: boolean = yield { then() {} };
+                                    ~~~~~~~~~~~~~
+!!! error TS1321: Type of 'yield' operand in an async generator must either be a valid promise or must not contain a callable 'then' member.
+        yield 1;
+        return next;
+    }
+    
+    async function* validYields() {
+        yield Promise.resolve(1);
+        yield "text";
+    }
+    
+    function* synchronousThenable() {
+        yield { then() {} };
+        yield 1;
+    }
+    
