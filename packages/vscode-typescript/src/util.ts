@@ -333,13 +333,13 @@ export async function resolveTsdkPathToExe(tsdkPath: string): Promise<ExeInfo | 
             const bin: unknown = packageJson.bin;
             if (typeof name !== "string" || !bin || typeof bin !== "object") continue;
 
-            const baseName = name.startsWith("@") ? name.split("/")[1] : name;
+            const [scope, baseName] = name.startsWith("@") ? name.split("/") : ["@typescript", name];
             if (!baseName) continue;
-            const expectedBinName = baseName === "typescript" ? "tsc" : "tsgo";
+            const expectedBinName = baseName === "typescript" || baseName === "pr-build" ? "tsc" : "tsgo";
             if (!Object.prototype.hasOwnProperty.call(bin, expectedBinName)) continue;
 
             const exeName = `${expectedBinName}${process.platform === "win32" ? ".exe" : ""}`;
-            const platformPackage = `${baseName}-${process.platform}-${process.arch}`;
+            const platformPackage = `${scope}/${baseName}-${process.platform}-${process.arch}`;
             const exePath = vscode.Uri.file(resolvePackageExecutable(packageJsonPath.fsPath, platformPackage, exeName));
             await vscode.workspace.fs.stat(exePath);
             return {

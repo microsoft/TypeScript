@@ -1,0 +1,302 @@
+name: PR build
+
+on:
+  workflow_dispatch:
+    inputs:
+      pr_number:
+        description: Pull request number
+        required: true
+        type: string
+      expected_head_sha:
+        description: Expected PR head commit (defaults to the current head)
+        required: false
+        default: ''
+        type: string
+
+      # Inputs provided by the bot
+      distinct_id:
+        description: '(bot) A distinct ID'
+        required: false
+        default: ''
+      source_issue:
+        description: '(bot) The issue that triggered this workflow'
+        required: false
+        default: ''
+      requesting_user:
+        description: '(bot) The user who requested this workflow'
+        required: false
+        default: ''
+      status_comment:
+        description: '(bot) The comment to update with the status of this workflow'
+        required: false
+        default: ''
+
+run-name: "${{ github.workflow }} #${{ inputs.pr_number }}${{ inputs.distinct_id && format(' (bot run {0})', inputs.distinct_id) || '' }}"
+
+permissions:
+  contents: read
+
+cache-mode: none
+
+defaults:
+  run:
+    shell: bash
+
+jobs:
+  prepare:
+    if: github.repository == 'microsoft/TypeScript' && github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      pull-requests: read
+    outputs:
+      head_sha: ${{ steps.pr.outputs.head_sha }}
+      merge_sha: ${{ steps.pr.outputs.merge_sha }}
+      prerelease: ${{ steps.pr.outputs.prerelease }}
+      matrix: ${{ steps.matrix.outputs.matrix }}
+      packages: ${{ steps.matrix.outputs.packages }}
+    steps:
+      - name: Resolve pull request
+        id: pr
+        env:
+          GH_TOKEN: ${{ github.token }}
+          PR_NUMBER: ${{ inputs.pr_number }}
+          EXPECTED_HEAD_SHA: ${{ inputs.expected_head_sha }}
+          RUN_NUMBER: ${{ github.run_number }}
+        run: |
+          set -euo pipefail
+          if ! [[ "$PR_NUMBER" =~ ^[1-9][0-9]*$ ]]; then
+            echo "Invalid PR number: $PR_NUMBER" >&2
+            exit 1
+          fi
+
+          for attempt in {1..10}; do
+            pr="$(gh api "repos/$GITHUB_REPOSITORY/pulls/$PR_NUMBER")"
+            mergeable="$(jq -r .mergeable <<< "$pr")"
+            [[ "$mergeable" != "null" ]] && break
+            sleep 5
+          done
+
+          state="$(jq -r .state <<< "$pr")"
+          headSha="$(jq -r .head.sha <<< "$pr")"
+          mergeSha="$(jq -r .merge_commit_sha <<< "$pr")"
+          if [[ "$state" != "open" ]]; then
+            echo "PR is $state." >&2
+            exit 1
+          fi
+          if [[ -n "$EXPECTED_HEAD_SHA" && "$headSha" != "$EXPECTED_HEAD_SHA" ]]; then
+            echo "PR head is $headSha, but $EXPECTED_HEAD_SHA was requested; the PR was updated after the request." >&2
+            exit 1
+          fi
+          if [[ "$mergeable" != "true" ]]; then
+            echo "PR cannot be merged with its base branch; resolve conflicts first." >&2
+            exit 1
+          fi
+          mergeHeadParent="$(gh api "repos/$GITHUB_REPOSITORY/commits/$mergeSha" --jq '.parents[1].sha')"
+          if [[ "$mergeHeadParent" != "$headSha" ]]; then
+            echo "Test merge commit $mergeSha is not based on PR head $headSha; try again." >&2
+            exit 1
+          fi
+
+          echo "head_sha=$headSha" >> "$GITHUB_OUTPUT"
+          echo "merge_sha=$mergeSha" >> "$GITHUB_OUTPUT"
+          echo "prerelease=pr.$PR_NUMBER.$RUN_NUMBER" >> "$GITHUB_OUTPUT"
+
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version: 'lts/*'
+      - run: npm ci
+      - name: Set build matrix
+        id: matrix
+        env:
+          PRERELEASE: ${{ steps.pr.outputs.prerelease }}
+        run: npx hereby typescript:build-platform-matrix --forRelease --prBuild --setPrerelease "$PRERELEASE"
+
+  build-platform:
+    needs: prepare
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    strategy:
+      matrix: ${{ fromJSON(needs.prepare.outputs.matrix) }}
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          ref: ${{ needs.prepare.outputs.merge_sha }}
+          persist-credentials: false
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version: 'lts/*'
+      - uses: ./.github/actions/setup-go
+      - run: npm ci
+      - env:
+          PLATFORM: ${{ matrix.platform }}
+          PRERELEASE: ${{ needs.prepare.outputs.prerelease }}
+        run: npx hereby typescript:build-platform --platform "$PLATFORM" --forRelease --prBuild --setPrerelease "$PRERELEASE"
+      - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: ${{ matrix.npmDirName }}
+          path: built/npm/${{ matrix.npmDirName }}
+          if-no-files-found: error
+          retention-days: 7
+
+  pack:
+    needs: [prepare, build-platform]
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          ref: ${{ needs.prepare.outputs.merge_sha }}
+          persist-credentials: false
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version: 'lts/*'
+      - uses: ./.github/actions/setup-go
+      - run: npm ci
+      - env:
+          PRERELEASE: ${{ needs.prepare.outputs.prerelease }}
+        run: npx hereby typescript:build-main --forRelease --prBuild --setPrerelease "$PRERELEASE"
+      - uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333 # v8.0.2
+        with:
+          path: built/npm
+      - name: Restore executable permissions
+        env:
+          MATRIX: ${{ needs.prepare.outputs.matrix }}
+        run: |
+          set -euo pipefail
+          for npmDirName in $(jq -r '.include[].npmDirName' <<< "$MATRIX"); do
+            packageDir="built/npm/$npmDirName"
+            executable="$(find "$packageDir/lib" -maxdepth 1 -type f \( -name tsc -o -name tsc.exe -o -name tsc.wasm \) -print -quit)"
+            if [[ -z "$executable" ]]; then
+              echo "Missing platform executable in $packageDir." >&2
+              exit 1
+            fi
+            if [[ "$executable" != *.wasm ]]; then
+              chmod +x "$executable"
+            fi
+          done
+      - env:
+          PRERELEASE: ${{ needs.prepare.outputs.prerelease }}
+        run: npx hereby typescript:test-package --forRelease --prBuild --setPrerelease "$PRERELEASE"
+      - env:
+          PRERELEASE: ${{ needs.prepare.outputs.prerelease }}
+        run: npx hereby typescript:pack --forRelease --prBuild --setPrerelease "$PRERELEASE"
+      - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: npm
+          path: built/npm/*.tgz
+          if-no-files-found: error
+          retention-days: 7
+
+  publish:
+    needs: [prepare, pack]
+    runs-on: ubuntu-latest
+    environment:
+      name: npm-pr-build
+      deployment: false
+    permissions:
+      contents: read
+      id-token: write
+    outputs:
+      version: ${{ steps.publish.outputs.version }}
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          sparse-checkout: tools/scripts/validate-pr-build.mjs
+          sparse-checkout-cone-mode: false
+          persist-credentials: false
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version: 'lts/*'
+      - uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333 # v8.0.2
+        with:
+          name: npm
+          path: ${{ runner.temp }}/npm
+      - name: Validate and publish
+        id: publish
+        env:
+          NPM_DIR: ${{ runner.temp }}/npm
+          PRERELEASE: ${{ needs.prepare.outputs.prerelease }}
+          MERGE_SHA: ${{ needs.prepare.outputs.merge_sha }}
+          PACKAGES: ${{ needs.prepare.outputs.packages }}
+        run: |
+          set -euo pipefail
+          mapfile -t tarballs < <(node tools/scripts/validate-pr-build.mjs "$NPM_DIR" "$PRERELEASE" "$MERGE_SHA" "$PACKAGES")
+
+          # Trusted publishing needs npm 11.5.1 or later.
+          npm install -g npm@11
+          toPublish=()
+          for tarball in "${tarballs[@]}"; do
+            manifest="$(tar -xzOf "$NPM_DIR/$tarball" package/package.json)"
+            name="$(jq -r .name <<< "$manifest")"
+            version="$(jq -r .version <<< "$manifest")"
+            if publishedHead="$(npm view "$name@$version" gitHead 2> /dev/null)" && [[ -n "$publishedHead" ]]; then
+              if [[ "$publishedHead" != "$MERGE_SHA" ]]; then
+                echo "$name@$version was already published from $publishedHead; request a new build." >&2
+                exit 1
+              fi
+              echo "$name@$version is already published."
+              continue
+            fi
+            toPublish+=("$tarball")
+          done
+          for tarball in "${toPublish[@]}"; do
+            npm publish "$NPM_DIR/$tarball" --access public --tag pr
+          done
+          echo "version=$version" >> "$GITHUB_OUTPUT"
+
+  report:
+    needs: [prepare, build-platform, pack, publish]
+    if: ${{ !cancelled() && github.repository == 'microsoft/TypeScript' && inputs.distinct_id }}
+    runs-on: ubuntu-latest
+    environment:
+      name: azure
+      deployment: false
+    permissions:
+      contents: read
+      id-token: write
+    steps:
+      - uses: azure/login@a641126d1b8aa4d1fa005f4f92df94a3a4c4c906 # v3.1.0
+        with:
+          client-id: ${{ vars.AZURE_CLIENT_ID }}
+          tenant-id: ${{ vars.AZURE_TENANT_ID }}
+          subscription-id: ${{ vars.AZURE_SUBSCRIPTION_ID }}
+      - name: Create GitHub App token
+        id: app-token
+        uses: microsoft/create-github-app-token-via-key-vault@5ba0d436e9c3cac52feff4d1f2f66f9698ce4a2d # v1
+        with:
+          client-id: ${{ vars.TYPESCRIPT_AUTOMATION_GITHUB_APP_CLIENT_ID }}
+          key-id: ${{ vars.TYPESCRIPT_AUTOMATION_GITHUB_APP_KEY_ID }}
+          owner: microsoft
+          repositories: TypeScript
+          permission-issues: write
+      - name: Check build result
+        env:
+          PUBLISH_RESULT: ${{ needs.publish.result }}
+        run: '[[ "$PUBLISH_RESULT" == "success" ]]'
+      - uses: microsoft/typescript-bot-test-triggerer/.github/actions/post-workflow-result@08bcbbf253fd6bc533dd8b9ab47a58582be57fbe # master
+        if: ${{ !cancelled() }}
+        with:
+          success_comment: |-
+            I've packed ${{ needs.prepare.outputs.head_sha }} into [an installable package](https://www.npmjs.com/package/${{ fromJSON(needs.prepare.outputs.packages || '{}').main }}/v/${{ needs.publish.outputs.version }}). You can install it for testing by referencing it in your `package.json` like so:
+            ```json
+            {
+                "devDependencies": {
+                    "typescript": "npm:${{ fromJSON(needs.prepare.outputs.packages || '{}').main }}@${{ needs.publish.outputs.version }}"
+                }
+            }
+            ```
+            and then running `npm install`.
+
+            There is also a playground [for this build](https://www.typescriptlang.org/play/v2/?ts=${{ needs.publish.outputs.version }}).
+          failure_comment: 'I was unable to build and publish this PR.'
+          github_token: ${{ steps.app-token.outputs.token }}
+          distinct_id: ${{ inputs.distinct_id }}
+          source_issue: ${{ inputs.source_issue }}
+          requesting_user: ${{ inputs.requesting_user }}
+          status_comment: ${{ inputs.status_comment }}
