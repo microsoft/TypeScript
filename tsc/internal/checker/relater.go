@@ -1165,14 +1165,15 @@ func (c *Checker) getKeyPropertyCandidateName(types []*Type) string {
 	return ""
 }
 
-// Reports whether a property has a unit type, without resolving the types of methods, which are function types, or
-// instantiating the type of an instantiated or mapped property when the type it is instantiated from already rules
-// out a unit type.
+// Reports whether a property has a unit type. It skips resolving the type of a method, which is a function type.
+// For an instantiated or mapped property whose type is not resolved yet, it first checks the type
+// the property is instantiated from, and skips the instantiation when that type already rules out a unit type.
 func (c *Checker) isPropertyOfUnitType(prop *ast.Symbol) bool {
 	// A method is typed as a function type only when none of the flags getTypeOfSymbol checks before it are set
 	if prop.Flags()&(ast.SymbolFlagsMethod|ast.SymbolFlagsAccessor|ast.SymbolFlagsVariable|ast.SymbolFlagsProperty) == ast.SymbolFlagsMethod {
 		return false
 	}
+
 	checkFlags := prop.CheckFlags()
 	if checkFlags&(ast.CheckFlagsInstantiated|ast.CheckFlagsMapped) != 0 {
 		if links := c.valueSymbolLinks.Get(prop); links.resolvedType == nil {
@@ -1188,13 +1189,14 @@ func (c *Checker) isPropertyOfUnitType(prop *ast.Symbol) bool {
 			// primitive. A generic tuple type has a variadic element, like [string, ...T, number], and it normalizes to never
 			// when that element is instantiated to never. The tuple then drops out of a union, so with T = never the union
 			// [string, ...T, number] | K is just K, which can be a unit type.
-			if core.Some(uninstantiated.Distributed(), func(t *Type) bool {
+			if someType(uninstantiated, func(t *Type) bool {
 				return t.flags&TypeFlagsObject != 0 && t.objectFlags&ObjectFlagsMapped == 0 && !isGenericTupleType(t)
 			}) {
 				return false
 			}
 		}
 	}
+
 	return isUnitType(c.getTypeOfSymbol(prop))
 }
 
