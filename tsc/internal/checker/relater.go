@@ -1169,8 +1169,8 @@ func (c *Checker) getKeyPropertyCandidateName(types []*Type) string {
 // For an instantiated or mapped property whose type is not resolved yet, it first checks the type
 // the property is instantiated from, and skips the instantiation when that type already rules out a unit type.
 func (c *Checker) isPropertyOfUnitType(prop *ast.Symbol) bool {
-	// A method is typed as a function type only when none of the flags getTypeOfSymbol checks before it are set
-	if prop.Flags()&(ast.SymbolFlagsMethod|ast.SymbolFlagsAccessor|ast.SymbolFlagsVariable|ast.SymbolFlagsProperty) == ast.SymbolFlagsMethod {
+	// A method, including an object literal method, is typed as a function type
+	if prop.Flags()&ast.SymbolFlagsMethod != 0 {
 		return false
 	}
 
