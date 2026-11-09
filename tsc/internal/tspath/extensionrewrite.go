@@ -7,6 +7,15 @@ type ExtensionRewrite struct {
 	Runtime bool
 }
 
+func HasRuntimeExtensionRewrites(rewrites []ExtensionRewrite) bool {
+	for _, rewrite := range rewrites {
+		if rewrite.Runtime && rewrite.Source != rewrite.Target {
+			return true
+		}
+	}
+	return false
+}
+
 func getExtensionRewrite(path string, rewrites []ExtensionRewrite, caseSensitivity CaseSensitivity) (ExtensionRewrite, bool) {
 	var best ExtensionRewrite
 	equal := caseSensitivity.getEqualityComparer()

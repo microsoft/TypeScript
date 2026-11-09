@@ -1610,13 +1610,7 @@ func (tx *DeclarationTransformer) rewriteModuleSpecifier(parent *ast.Node, input
 		specifier := tspath.ToModuleSpecifier(input.Text())
 		rewrites := tx.host.ContentMapperExtensionRewrites()
 		caseSensitivity := tx.host.CaseSensitivity()
-		extension := ""
-		if original := tx.EmitContext().ParseNode(input); original != nil && specifier.IsRelative() && len(rewrites) > 0 {
-			if resolved := tx.host.GetResolvedModuleFromModuleSpecifier(tx.state.currentSourceFile, original); resolved != nil {
-				extension = tx.host.ContentMapperExtensionForFileName(resolved.ResolvedFileName)
-			}
-		}
-		rewrites = contentmapper.RewritesForImport(rewrites, specifier, extension, caseSensitivity)
+		rewrites = contentmapper.RewritesForImport(rewrites, tx.state.currentSourceFile.FileName(), specifier, tx.host.ContentMapperExtensionForFileName, caseSensitivity)
 		if !specifier.ShouldRewriteExtension(rewrites, caseSensitivity) {
 			return input
 		}

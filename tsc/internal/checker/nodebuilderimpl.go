@@ -1343,19 +1343,17 @@ func (b *NodeBuilderImpl) moduleSpecifierResultForSymbol(result moduleSpecifierR
 	if importAttributesType != nil && b.moduleSpecifierResolvesToSymbol(result.specifier, importAttributesType, symbol) {
 		result.importAttributesType = importAttributesType
 	}
-	result.specifier = b.rewriteContentMappedModuleSpecifier(result.specifier, ast.GetSourceFileOfModule(symbol))
+	result.specifier = b.rewriteContentMappedModuleSpecifier(result.specifier)
 	return result
 }
 
-func (b *NodeBuilderImpl) rewriteContentMappedModuleSpecifier(specifier tspath.ModuleSpecifier, targetFile *ast.SourceFile) tspath.ModuleSpecifier {
+func (b *NodeBuilderImpl) rewriteContentMappedModuleSpecifier(specifier tspath.ModuleSpecifier) tspath.ModuleSpecifier {
 	if b.ctx.internalFlags&nodebuilder.InternalFlagsRewriteModuleSpecifiers != 0 && b.ch.compilerOptions.RewriteRelativeImportExtensions.IsTrue() {
 		rewrites := b.ctx.host.ContentMapperExtensionRewrites()
 		caseSensitivity := b.ctx.host.CaseSensitivity()
-		extension := ""
-		if targetFile != nil {
-			extension = b.ctx.host.ContentMapperExtensionForFileName(targetFile.FileName())
+		if b.ctx.enclosingFile != nil {
+			rewrites = contentmapper.RewritesForImport(rewrites, b.ctx.enclosingFile.FileName(), specifier, b.ctx.host.ContentMapperExtensionForFileName, caseSensitivity)
 		}
-		rewrites = contentmapper.RewritesForImport(rewrites, specifier, extension, caseSensitivity)
 		if specifier.ShouldRewriteExtension(rewrites, caseSensitivity) {
 			rewritten, _ := specifier.RewriteExtension(rewrites, caseSensitivity)
 			return rewritten

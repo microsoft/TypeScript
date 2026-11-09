@@ -2,7 +2,6 @@ package printer
 
 import (
 	"fmt"
-	"slices"
 	"strconv"
 	"strings"
 
@@ -1300,9 +1299,7 @@ func (f *NodeFactory) NewAssignmentTargetWrapper(paramName *ast.IdentifierNode, 
 
 // Allocates a new Call expression to the `__rewriteRelativeImportExtension` helper.
 func (f *NodeFactory) NewRewriteRelativeImportExtensionsHelper(firstArgument *ast.Node, preserveJsx bool, extraExtensions []tspath.ExtensionRewrite, caseSensitivity tspath.CaseSensitivity) *ast.Expression {
-	if !slices.ContainsFunc(extraExtensions, func(extension tspath.ExtensionRewrite) bool {
-		return extension.Runtime && extension.Source != extension.Target
-	}) {
+	if !tspath.HasRuntimeExtensionRewrites(extraExtensions) {
 		f.emitContext.RequestEmitHelper(rewriteRelativeImportExtensionsHelper)
 		var arguments []*ast.Expression
 		if preserveJsx {

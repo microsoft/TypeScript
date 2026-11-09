@@ -1793,6 +1793,22 @@ func (r *resolutionState) tryAddingExtensions(extensionless tspath.FileNameStem,
 				resolved.resolvedUsingExtraExtensions = true
 				return resolved
 			}
+			if r.resolver.contentMapperFileMatcher != nil {
+				// The compound extension used to probe suffixed mapper candidates may not apply to declaration fallback.
+				fileName := extensionless.AppendSuffix(originalExtension)
+				var extraExtensions []string
+				suffixes := r.compilerOptions.ModuleSuffixes
+				if len(suffixes) == 0 {
+					suffixes = []string{""}
+				}
+				for _, suffix := range suffixes {
+					if extension := r.contentMapperExtensionForFileName(extensionless.AppendSuffix(suffix + originalExtension)); extension != "" {
+						extraExtensions = []string{extension}
+						break
+					}
+				}
+				extensionless, originalExtension = resolutionCandidateFromFileName(fileName).SplitExtension(extraExtensions)
+			}
 		}
 		if extensions&extensionsDeclaration != 0 && !extensionless.AppendSuffix(originalExtension).IsDeclarationFile() {
 			if resolved := r.tryExtension(".d"+originalExtension+".ts", extensionless, false); !resolved.shouldContinueSearching() {

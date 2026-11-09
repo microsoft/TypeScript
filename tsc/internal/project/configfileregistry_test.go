@@ -59,6 +59,7 @@ func TestContentMapperSelectorIncludes(t *testing.T) {
 			if test.extended {
 				// Inherited includes stay relative to the base config, not the extending project.
 				files["/shared/base.json"] = configText
+				files["/shared/node_modules/mapper/package.json"] = files[test.directory+"/node_modules/mapper/package.json"]
 				files[test.directory+"/tsconfig.json"] = `{"extends": "../shared/base.json"}`
 			}
 			fs := vfstest.FromMap(files, tspath.CaseSensitive)

@@ -8979,5 +8979,37 @@
     "The conflicting mapper registration is declared here. Its 'outputExtensions' setting is inherited from the mapper's package.json.": {
         "category": "Message",
         "code": 18131
+    },
+    "This relative import path is unsafe to rewrite because the content mapper's 'outputExtensions' mapping depends on module resolution.": {
+        "category": "Error",
+        "code": 18132
+    },
+    "Non-literal import paths cannot be rewritten when a content mapper uses both 'include' and an 'outputExtensions' mapping. Set 'disableDynamicImportExtensionRewriting' to disable rewriting of non-literal import paths.": {
+        "category": "Error",
+        "code": 18133
+    },
+    "This relative import path is unsafe to rewrite because it appears to match the content mapper's 'include', but does not after resolution with 'rootDirs'.": {
+        "category": "Error",
+        "code": 18134
+    },
+    "This relative import path is unsafe to rewrite because it appears not to match the content mapper's 'include', but does after resolution with 'rootDirs'.": {
+        "category": "Error",
+        "code": 18135
+    },
+    "This relative import path is unsafe to rewrite because it appears to match the content mapper's 'include', but does not after resolution with 'moduleSuffixes'.": {
+        "category": "Error",
+        "code": 18136
+    },
+    "This relative import path is unsafe to rewrite because it appears not to match the content mapper's 'include', but does after resolution with 'moduleSuffixes'.": {
+        "category": "Error",
+        "code": 18137
+    },
+    "This relative import path is unsafe to rewrite because it appears to match the content mapper's 'include', but does not after resolution with 'rootDirs' and 'moduleSuffixes'.": {
+        "category": "Error",
+        "code": 18138
+    },
+    "This relative import path is unsafe to rewrite because it appears not to match the content mapper's 'include', but does after resolution with 'rootDirs' and 'moduleSuffixes'.": {
+        "category": "Error",
+        "code": 18139
     }
 }

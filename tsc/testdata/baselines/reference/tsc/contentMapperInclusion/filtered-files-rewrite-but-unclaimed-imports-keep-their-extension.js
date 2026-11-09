@@ -35,14 +35,22 @@ not TypeScript
 			}
 
 tsgo --runExternalCode --listFiles
-ExitStatus:: Success
+ExitStatus:: DiagnosticsPresent_OutputsGenerated
 Output::
+[96mindex.ts[0m:[93m6[0m:[93m43[0m - [91merror[0m[90m TS18133: [0mNon-literal import paths cannot be rewritten when a content mapper uses both 'include' and an 'outputExtensions' mapping. Set 'disableDynamicImportExtensionRewriting' to disable rewriting of non-literal import paths.
+
+[7m6[0m     export const load = (path: string) => import(path);
+[7m [0m [91m                                          ~~~~~~~~~~~~[0m
+
 /home/src/tslibs/TS/Lib/lib.es2026.full.d.ts
 /home/src/workspaces/project/ambient.d.ts
 /home/src/workspaces/project/blob.toml
 /home/src/workspaces/project/other.d.toml.ts
 /home/src/workspaces/project/node_modules/pkg/blob.toml
 /home/src/workspaces/project/index.ts
+
+Found 1 error in index.ts[90m:6[0m
+
 //// [/home/src/tslibs/TS/Lib/lib.es2026.full.d.ts] *Lib*
 /// <reference no-default-lib="true"/>
 interface Boolean {}

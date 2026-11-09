@@ -151,8 +151,8 @@ func (m *Mapper) Equals(other *Mapper) bool {
 		m.ContributionID == other.ContributionID
 }
 
-// TransformIdentity fingerprints the mapper's identity, declared compiler options, and runtime output
-// contract so both transformed-file caches and incremental emit are invalidated when these change.
+// TransformIdentity fingerprints the mapper's identity, declared compiler options, include filter, and
+// runtime output contract so both transformed-file caches and incremental emit are invalidated when these change.
 // It is a pure function of the mapper and options and never starts the mapper process.
 func (m *Mapper) TransformIdentity(options *core.CompilerOptions) xxh3.Uint128 {
 	declared, _ := m.MarshalDeclaredOptions(options)
@@ -161,7 +161,11 @@ func (m *Mapper) TransformIdentity(options *core.CompilerOptions) xxh3.Uint128 {
 	if len(m.Definition.OutputExtensions) > 0 {
 		outputExtensionsJSON, _ = json.Marshal(m.Definition.OutputExtensions, json.Deterministic(true))
 	}
-	buf := make([]byte, 0, len(m.Identity())+3+len(m.Options)+len(optionsJSON)+len(outputExtensionsJSON))
+	var includeJSON []byte
+	if m.Include != nil {
+		includeJSON, _ = json.Marshal(m.Include)
+	}
+	buf := make([]byte, 0, len(m.Identity())+4+len(m.Options)+len(optionsJSON)+len(outputExtensionsJSON)+len(includeJSON))
 	buf = append(buf, m.Identity()...)
 	buf = append(buf, 0)
 	buf = append(buf, m.Options...)
@@ -170,6 +174,10 @@ func (m *Mapper) TransformIdentity(options *core.CompilerOptions) xxh3.Uint128 {
 	if len(outputExtensionsJSON) > 0 {
 		buf = append(buf, 0)
 		buf = append(buf, outputExtensionsJSON...)
+	}
+	if len(includeJSON) > 0 {
+		buf = append(buf, 0)
+		buf = append(buf, includeJSON...)
 	}
 	return xxh3.Hash128(buf)
 }

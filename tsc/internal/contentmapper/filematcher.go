@@ -1,8 +1,6 @@
 package contentmapper
 
 import (
-	"strings"
-
 	"github.com/microsoft/TypeScript/tsc/internal/tspath"
 	"github.com/microsoft/TypeScript/tsc/internal/vfs/vfsmatch"
 )
@@ -74,18 +72,12 @@ func (m *FileMatcher) IsUnclaimed(fileName tspath.RootedFilePath) bool {
 	return false
 }
 
-func RewritesForImport(rewrites []tspath.ExtensionRewrite, specifier tspath.ModuleSpecifier, extension string, caseSensitivity tspath.CaseSensitivity) []tspath.ExtensionRewrite {
-	if specifier.IsRelative() {
-		if extension != "" {
-			return FilterExtensionRewrites(rewrites, extension, caseSensitivity)
-		}
-		// Extension-only registrations also apply to declaration and directory resolutions.
-		for i, rewrite := range rewrites {
-			if rewrite.Runtime && strings.HasSuffix(caseSensitivity.Canonicalize(specifier.AsString()), caseSensitivity.Canonicalize(rewrite.Source)) {
-				return rewrites[i : i+1]
-			}
-		}
-		return nil
+// RewritesForImport uses the source-relative spelling of the import, not its resolved target.
+// The checker validates any disagreement with resolution.
+func RewritesForImport(rewrites []tspath.ExtensionRewrite, importingFile tspath.RootedFilePath, specifier tspath.ModuleSpecifier, extensionForFileName func(tspath.RootedFilePath) string, caseSensitivity tspath.CaseSensitivity) []tspath.ExtensionRewrite {
+	if importingFile != "" && extensionForFileName != nil && specifier.IsRelative() {
+		path := importingFile.Directory().ResolveFile(specifier.AsString())
+		return FilterExtensionRewrites(rewrites, extensionForFileName(path), caseSensitivity)
 	}
 	return rewrites
 }

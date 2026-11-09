@@ -1,0 +1,42 @@
+//// [/generated/root.toml] (ScriptKind: ScriptKindTS, ContentMapper: [.toml .identity .part.toml])
+--- Original ---
+export class Root {}
+export interface TypeOnly {}
+export function make() { return new Root(); }
+--- Transformed ---
+const __VERSION = "1.0.0";
+export class Root {}
+export interface TypeOnly {}
+export function make() { return new Root(); }
+
+//// [/src/suffixed.native.toml] (ScriptKind: ScriptKindTS, ContentMapper: [.toml .identity .part.toml])
+--- Original ---
+export const suffixed = 1;
+--- Transformed ---
+const __VERSION = "1.0.0";
+export const suffixed = 1;
+
+//// [/generated/allowed/blob.toml] (ScriptKind: ScriptKindTS, ContentMapper: [.toml .identity .part.toml])
+--- Original ---
+export const allowed = 1;
+--- Transformed ---
+const __VERSION = "1.0.0";
+export const allowed = 1;
+
+//// [/generated/second/blob.part.toml] (ScriptKind: ScriptKindTS, ContentMapper: [.toml .identity .part.toml])
+--- Original ---
+export const second = 1;
+--- Transformed ---
+const __VERSION = "1.0.0";
+export const second = 1;
+
+//// [/generated/blob.identity] (ScriptKind: ScriptKindTS, ContentMapper: [.toml .identity .part.toml])
+--- Original ---
+export const identity = 1;
+--- Transformed ---
+const __VERSION = "1.0.0";
+export const identity = 1;
+
+=== Diagnostics ===
+
+<no content>

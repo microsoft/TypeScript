@@ -52,7 +52,7 @@ func TestContentMapperIncludeInheritance(t *testing.T) {
 			"compilerOptions": {"noLib": true},
 			"include": ["../shared/src", "local", "other"]
 		}`,
-		"/project/node_modules/mapper/package.json": `{
+		"/shared/node_modules/mapper/package.json": `{
 			"name": "mapper", "typescript": {"contentMapper": {"exec": ["run"], "extensions": [".toml"]}}
 		}`,
 		"/shared/src/a.toml":    "",
@@ -272,6 +272,7 @@ func TestContentMapperOutputConflictLocations(t *testing.T) {
 			configPath := tspath.RootedFilePath("/project/tsconfig.json")
 			if test.extended {
 				files["/shared/base.json"] = configText
+				files["/shared/node_modules/mapper/package.json"] = files["/project/node_modules/mapper/package.json"]
 				files[configPath.AsString()] = `{"extends": "../shared/base.json"}`
 				configPath = "/shared/base.json"
 			}

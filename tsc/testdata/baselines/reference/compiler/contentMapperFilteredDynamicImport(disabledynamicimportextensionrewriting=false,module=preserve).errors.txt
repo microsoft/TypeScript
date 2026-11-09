@@ -1,0 +1,66 @@
+/main.ts(2,24): error TS18133: Non-literal import paths cannot be rewritten when a content mapper uses both 'include' and an 'outputExtensions' mapping. Set 'disableDynamicImportExtensionRewriting' to disable rewriting of non-literal import paths.
+/main.ts(3,25): error TS18133: Non-literal import paths cannot be rewritten when a content mapper uses both 'include' and an 'outputExtensions' mapping. Set 'disableDynamicImportExtensionRewriting' to disable rewriting of non-literal import paths.
+/main.ts(4,30): error TS18133: Non-literal import paths cannot be rewritten when a content mapper uses both 'include' and an 'outputExtensions' mapping. Set 'disableDynamicImportExtensionRewriting' to disable rewriting of non-literal import paths.
+/require.js(3,24): error TS18133: Non-literal import paths cannot be rewritten when a content mapper uses both 'include' and an 'outputExtensions' mapping. Set 'disableDynamicImportExtensionRewriting' to disable rewriting of non-literal import paths.
+/require.js(4,25): error TS18133: Non-literal import paths cannot be rewritten when a content mapper uses both 'include' and an 'outputExtensions' mapping. Set 'disableDynamicImportExtensionRewriting' to disable rewriting of non-literal import paths.
+/require.js(5,25): error TS18133: Non-literal import paths cannot be rewritten when a content mapper uses both 'include' and an 'outputExtensions' mapping. Set 'disableDynamicImportExtensionRewriting' to disable rewriting of non-literal import paths.
+
+
+==== /tsconfig.json (0 errors) ====
+    {
+        "compilerOptions": {
+            "target": "esnext",
+            "rewriteRelativeImportExtensions": true,
+            "allowJs": true,
+            "checkJs": true,
+            "outDir": "/dist"
+        },
+        "contentMappers": [{
+            "package": "mapper",
+            "extensions": [".toml"],
+            "include": ["**/*.toml"],
+            "outputExtensions": { ".toml": ".js" }
+        }]
+    }
+    
+==== /main.ts (3 errors) ====
+    declare const path: string;
+    export const dynamic = import(path);
+                           ~~~~~~~~~~~~
+!!! error TS18133: Non-literal import paths cannot be rewritten when a content mapper uses both 'include' and an 'outputExtensions' mapping. Set 'disableDynamicImportExtensionRewriting' to disable rewriting of non-literal import paths.
+    export const template = import(`./${path}.toml`);
+                            ~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS18133: Non-literal import paths cannot be rewritten when a content mapper uses both 'include' and an 'outputExtensions' mapping. Set 'disableDynamicImportExtensionRewriting' to disable rewriting of non-literal import paths.
+    export const parenthesized = import(("./data.toml"));
+                                 ~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS18133: Non-literal import paths cannot be rewritten when a content mapper uses both 'include' and an 'outputExtensions' mapping. Set 'disableDynamicImportExtensionRewriting' to disable rewriting of non-literal import paths.
+    export const literal = import("./data.toml");
+    export const literalTemplate = import(`./data.toml`);
+    declare function require(path: string): unknown;
+    export const tsRequire = require(path);
+    
+==== /require.js (3 errors) ====
+    /** @type {string} */
+    const path = "./data.toml";
+    export const dynamic = import(path);
+                           ~~~~~~~~~~~~
+!!! error TS18133: Non-literal import paths cannot be rewritten when a content mapper uses both 'include' and an 'outputExtensions' mapping. Set 'disableDynamicImportExtensionRewriting' to disable rewriting of non-literal import paths.
+    export const required = require(path);
+                            ~~~~~~~~~~~~~
+!!! error TS18133: Non-literal import paths cannot be rewritten when a content mapper uses both 'include' and an 'outputExtensions' mapping. Set 'disableDynamicImportExtensionRewriting' to disable rewriting of non-literal import paths.
+    export const template = require(`./${path}.toml`);
+                            ~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS18133: Non-literal import paths cannot be rewritten when a content mapper uses both 'include' and an 'outputExtensions' mapping. Set 'disableDynamicImportExtensionRewriting' to disable rewriting of non-literal import paths.
+    export const literal = require("./data.toml");
+    export const literalTemplate = require(`./data.toml`);
+    
+==== /globals.d.ts (0 errors) ====
+    declare function require(path: string): unknown;
+    
+==== /node_modules/mapper/package.json (0 errors) ====
+    {
+        "name": "mapper",
+        "version": "1.0.0",
+        "typescript": { "contentMapper": { "exec": ["compiler-test-mapper"] } }
+    }
+    

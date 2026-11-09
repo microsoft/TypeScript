@@ -31,7 +31,7 @@ type extendsResult struct {
 	files                    []any
 	contentMappers           []any
 	contentMappersConfigFile tspath.RootedFilePath
-	contentMapperSourceFile *ast.SourceFile
+	contentMapperSourceFile  *ast.SourceFile
 	compileOnSave            bool
 	extendedSourceFiles      collections.Set[tspath.RootedFilePath]
 }
@@ -92,7 +92,7 @@ type parsedTsconfig struct {
 	typeAcquisition          *core.TypeAcquisition
 	extendedConfigPaths      []tspath.RootedFilePath
 	contentMappersConfigFile tspath.RootedFilePath
-	contentMapperSourceFile *ast.SourceFile
+	contentMapperSourceFile  *ast.SourceFile
 }
 
 type parsedCompilerOptions struct {

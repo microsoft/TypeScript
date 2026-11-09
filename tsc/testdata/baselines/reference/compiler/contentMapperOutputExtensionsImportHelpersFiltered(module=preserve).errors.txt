@@ -1,0 +1,53 @@
+/main.ts(1,48): error TS18133: Non-literal import paths cannot be rewritten when a content mapper uses both 'include' and an 'outputExtensions' mapping. Set 'disableDynamicImportExtensionRewriting' to disable rewriting of non-literal import paths.
+/require.js(2,47): error TS18133: Non-literal import paths cannot be rewritten when a content mapper uses both 'include' and an 'outputExtensions' mapping. Set 'disableDynamicImportExtensionRewriting' to disable rewriting of non-literal import paths.
+
+
+==== /tsconfig.json (0 errors) ====
+    {
+        "compilerOptions": {
+            "target": "esnext",
+            "rewriteRelativeImportExtensions": true,
+            "importHelpers": true,
+            "allowJs": true,
+            "checkJs": true,
+            "outDir": "/dist"
+        },
+        "contentMappers": [{
+            "package": "mapper",
+            "extensions": [".astro"],
+            "include": ["**/*.astro"],
+            "outputExtensions": { ".astro": ".js" }
+        }, {
+            "package": "mapper",
+            "extensions": [".identity"]
+        }]
+    }
+    
+==== /main.ts (1 errors) ====
+    export function dynamic(path: string) { return import(path); }
+                                                   ~~~~~~~~~~~~
+!!! error TS18133: Non-literal import paths cannot be rewritten when a content mapper uses both 'include' and an 'outputExtensions' mapping. Set 'disableDynamicImportExtensionRewriting' to disable rewriting of non-literal import paths.
+    export function literal() { return import("./Card.astro"); }
+    
+==== /require.js (1 errors) ====
+    /** @param {string} path */
+    export function dynamicRequire(path) { return require(path); }
+                                                  ~~~~~~~~~~~~~
+!!! error TS18133: Non-literal import paths cannot be rewritten when a content mapper uses both 'include' and an 'outputExtensions' mapping. Set 'disableDynamicImportExtensionRewriting' to disable rewriting of non-literal import paths.
+    
+==== /globals.d.ts (0 errors) ====
+    declare function require(path: string): unknown;
+    
+==== /node_modules/mapper/package.json (0 errors) ====
+    {
+        "name": "mapper",
+        "version": "1.0.0",
+        "typescript": { "contentMapper": { "exec": ["compiler-test-mapper"] } }
+    }
+    
+==== /node_modules/tslib/package.json (0 errors) ====
+    { "name": "tslib", "types": "index.d.ts" }
+    
+==== /node_modules/tslib/index.d.ts (0 errors) ====
+    export declare function __rewriteRelativeImportExtension(path: any, preserveJsx?: boolean): any;
+    

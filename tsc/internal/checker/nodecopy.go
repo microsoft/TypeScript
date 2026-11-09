@@ -271,7 +271,7 @@ func (b *NodeBuilderImpl) getModuleSpecifierOverride(parent *ast.Node, lit *ast.
 func (b *NodeBuilderImpl) rewriteModuleSpecifier(parent *ast.Node, lit *ast.Node) *ast.Node {
 	newName := b.getModuleSpecifierOverride(parent, lit)
 	if len(newName) == 0 {
-		newName = b.rewriteContentMappedModuleSpecifier(tspath.ToModuleSpecifier(lit.Text()), b.ch.getExternalModuleFileFromDeclaration(parent)).AsString()
+		newName = b.rewriteContentMappedModuleSpecifier(tspath.ToModuleSpecifier(lit.Text())).AsString()
 		if newName == lit.Text() {
 			return lit
 		}
