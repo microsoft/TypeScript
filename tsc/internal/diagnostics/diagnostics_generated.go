@@ -3950,6 +3950,8 @@ var This_relative_import_path_is_unsafe_to_rewrite_because_it_appears_to_match_t
 
 var This_relative_import_path_is_unsafe_to_rewrite_because_it_appears_not_to_match_the_content_mapper_s_include_but_does_after_resolution_with_rootDirs_and_moduleSuffixes = &Message{code: 18139, category: CategoryError, key: "This_relative_import_path_is_unsafe_to_rewrite_because_it_appears_not_to_match_the_content_mapper_s__18139", text: "This relative import path is unsafe to rewrite because it appears not to match the content mapper's 'include', but does after resolution with 'rootDirs' and 'moduleSuffixes'."}
 
+var File_0_has_a_registered_content_mapper_extension_but_does_not_match_any_content_mapper_s_include = &Message{code: 18140, category: CategoryError, key: "File_0_has_a_registered_content_mapper_extension_but_does_not_match_any_content_mapper_s_include_18140", text: "File '{0}' has a registered content mapper extension but does not match any content mapper's 'include'."}
+
 var X_nodenext_if_module_is_nodenext_node16_if_module_is_node16_or_node18_otherwise_bundler = &Message{code: 69010, category: CategoryMessage, key: "nodenext_if_module_is_nodenext_node16_if_module_is_node16_or_node18_otherwise_bundler_69010", text: "`nodenext` if `module` is `nodenext`; `node16` if `module` is `node16` or `node18`; otherwise, `bundler`."}
 
 var File_is_a_CommonJS_module_it_may_be_converted_to_an_ES_module = &Message{code: 80001, category: CategorySuggestion, key: "File_is_a_CommonJS_module_it_may_be_converted_to_an_ES_module_80001", text: "File is a CommonJS module; it may be converted to an ES module."}
@@ -6465,6 +6467,7 @@ var allMessages = [...]**Message{
 	&This_relative_import_path_is_unsafe_to_rewrite_because_it_appears_not_to_match_the_content_mapper_s_include_but_does_after_resolution_with_moduleSuffixes,
 	&This_relative_import_path_is_unsafe_to_rewrite_because_it_appears_to_match_the_content_mapper_s_include_but_does_not_after_resolution_with_rootDirs_and_moduleSuffixes,
 	&This_relative_import_path_is_unsafe_to_rewrite_because_it_appears_not_to_match_the_content_mapper_s_include_but_does_after_resolution_with_rootDirs_and_moduleSuffixes,
+	&File_0_has_a_registered_content_mapper_extension_but_does_not_match_any_content_mapper_s_include,
 	&X_nodenext_if_module_is_nodenext_node16_if_module_is_node16_or_node18_otherwise_bundler,
 	&File_is_a_CommonJS_module_it_may_be_converted_to_an_ES_module,
 	&This_constructor_function_may_be_converted_to_a_class_declaration,

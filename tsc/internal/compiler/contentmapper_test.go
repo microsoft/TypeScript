@@ -291,6 +291,65 @@ func TestContentMapperRuntimeRewrites(t *testing.T) {
 	}
 }
 
+func TestContentMapperExcludedResolution(t *testing.T) {
+	t.Parallel()
+	for _, test := range []struct {
+		name, target string
+		include      []string
+		rootDirs     []tspath.RootedDirectoryPath
+		suffixes     []string
+	}{
+		{"excluded file blocks declaration fallback", "/project/src/blob.vue", []string{"elsewhere"}, nil, nil},
+		{"empty include", "/project/src/blob.vue", []string{}, nil, nil},
+		{"excluded suffix blocks included file", "/project/src/blob.native.vue", []string{"**/blob.vue"}, nil, []string{".native", ""}},
+		{"excluded root blocks included root", "/project/src/blob.vue", []string{"generated"}, []tspath.RootedDirectoryPath{"/project/src", "/project/generated"}, nil},
+	} {
+		t.Run(test.name, func(t *testing.T) {
+			t.Parallel()
+			files := map[string]string{
+				"/project/src/main.ts":        `import "./blob.vue";`,
+				"/project/src/blob.vue":       "<template />",
+				"/project/src/blob.d.vue.ts":  "export {};",
+				"/project/generated/blob.vue": "<template />",
+				test.target:                   "<template />",
+			}
+			if test.rootDirs != nil {
+				delete(files, "/project/src/blob.d.vue.ts")
+			}
+			fs := vfstest.FromMap(files, tspath.CaseSensitive)
+			config := tsoptions.NewParsedCommandLine(&core.CompilerOptions{
+				NoLib: core.TSTrue, Module: core.ModuleKindPreserve, ModuleResolution: core.ModuleResolutionKindBundler,
+				RootDirs: test.rootDirs, ModuleSuffixes: test.suffixes, OutDir: "/dist",
+			}, []tspath.RootedFilePath{"/project/src/main.ts"}, nil, "/project", fs.CaseSensitivity())
+			config.ParsedConfig.ContentMappers = []*contentmapper.Mapper{{
+				Package: "mapper", Extensions: []string{".vue"}, Include: test.include,
+			}}
+			program := compiler.NewProgram(compiler.ProgramOptions{
+				Config: config,
+				Host: compiler.NewCompilerHost(fs, "/", nil, nil, fakeContentMapperHost{
+					transform: func(fileName, content string) (contentmapper.Result, error) {
+						t.Errorf("unexpected transform of %s", fileName)
+						return contentmapper.Result{}, errors.New("unexpected transform")
+					},
+				}),
+				SingleThreaded: core.TSTrue,
+			})
+			main := program.GetSourceFile("/project/src/main.ts")
+			resolved := program.GetResolvedModuleFromModuleSpecifier(main, main.Imports()[0])
+			assert.Assert(t, resolved != nil)
+			assert.Equal(t, resolved.ResolvedFileName, tspath.RootedFilePathFromAbsolute(test.target))
+			assert.Assert(t, resolved.ResolvedUsingExtraExtensions)
+			diags := program.GetIncludeProcessorDiagnostics(main)
+			assert.Equal(t, len(diags), 1)
+			assert.Equal(t, diags[0].Code(), diagnostics.File_0_has_a_registered_content_mapper_extension_but_does_not_match_any_content_mapper_s_include.Code())
+			assert.Assert(t, program.GetSourceFile(resolved.ResolvedFileName) == nil)
+			assert.Equal(t, len(program.GetSyntacticDiagnostics(t.Context(), nil)), 0)
+			program.Emit(t.Context(), compiler.EmitOptions{})
+			assert.Assert(t, !fs.FileExists("/dist/blob.js"))
+		})
+	}
+}
+
 func TestContentMapperLiteralRewriteValidation(t *testing.T) {
 	t.Parallel()
 	for _, test := range []struct {

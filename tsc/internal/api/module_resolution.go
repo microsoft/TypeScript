@@ -364,7 +364,6 @@ func (s *Session) handleResolveModuleName(ctx context.Context, params *ResolveMo
 		if configPath := data.compilerOptions.ConfigFilePath; configPath != "" {
 			if config := sd.snapshot.ConfigFileRegistry.GetConfig(s.caseSensitivity().PathKey(configPath.AsPath())); config != nil {
 				options.ExtraExtensions = config.ContentMapperExtensions()
-				options.ContentMapperFileMatcher = config.ContentMapperFileMatcher()
 			}
 		}
 		resolver = module.NewResolver(options)

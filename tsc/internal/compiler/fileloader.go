@@ -191,12 +191,11 @@ func processAllProgramFiles(
 	}
 	loader.addProjectReferenceTasks(singleThreaded)
 	resolverOptions := module.ResolverOptions{
-		Host:                     loader.projectReferences.host,
-		CompilerOptions:          compilerOptions,
-		TypingsLocation:          opts.TypingsLocation,
-		ProjectName:              opts.ProjectName,
-		ExtraExtensions:          opts.Config.ContentMapperExtensions(),
-		ContentMapperFileMatcher: opts.Config.ContentMapperFileMatcher(),
+		Host:            loader.projectReferences.host,
+		CompilerOptions: compilerOptions,
+		TypingsLocation: opts.TypingsLocation,
+		ProjectName:     opts.ProjectName,
+		ExtraExtensions: opts.Config.ContentMapperExtensions(),
 	}
 	if opts.CreateModuleResolver != nil {
 		loader.resolver = opts.CreateModuleResolver(resolverOptions)

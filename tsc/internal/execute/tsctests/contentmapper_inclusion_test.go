@@ -24,12 +24,14 @@ func TestTscContentMapperInclusion(t *testing.T) {
 				export { other } from "./other.toml";
 				export { packaged } from "./node_modules/pkg/blob.toml";
 				export { ambient } from "./ambient.toml";
+				export { declarationOnly } from "./declarationOnly.toml";
 				export const load = (path: string) => import(path);
 				`,
-				"/home/src/workspaces/project/blob.toml":       `export const value = 1;`,
-				"/home/src/workspaces/project/other.toml":      `not TypeScript`,
-				"/home/src/workspaces/project/other.d.toml.ts": `export declare const other: "declaration";`,
-				"/home/src/workspaces/project/ambient.toml":    `not TypeScript`,
+				"/home/src/workspaces/project/blob.toml":                 `export const value = 1;`,
+				"/home/src/workspaces/project/other.toml":                `not TypeScript`,
+				"/home/src/workspaces/project/other.d.toml.ts":           `export declare const other: "declaration";`,
+				"/home/src/workspaces/project/declarationOnly.d.toml.ts": `export declare const declarationOnly: "declaration";`,
+				"/home/src/workspaces/project/ambient.toml":              `not TypeScript`,
 				"/home/src/workspaces/project/ambient.d.ts": `interface Promise<T> {}
 declare var Promise: { new <T>(): Promise<T> };
 declare module "*.toml" { export const ambient: string; }`,

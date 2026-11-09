@@ -8,7 +8,6 @@ import (
 
 	"github.com/microsoft/TypeScript/tsc/internal/ast"
 	"github.com/microsoft/TypeScript/tsc/internal/collections"
-	"github.com/microsoft/TypeScript/tsc/internal/contentmapper"
 	"github.com/microsoft/TypeScript/tsc/internal/core"
 	"github.com/microsoft/TypeScript/tsc/internal/diagnostics"
 	"github.com/microsoft/TypeScript/tsc/internal/packagejson"
@@ -356,13 +355,12 @@ type DefaultResolver struct {
 }
 
 type ResolverOptions struct {
-	Host                     ResolutionHost
-	CompilerOptions          *core.CompilerOptions
-	TypingsLocation          tspath.RootedDirectoryPath
-	ProjectName              string
-	ExtraExtensions          []string
-	ContentMapperFileMatcher *contentmapper.FileMatcher
-	PackageJsonCache         *packagejson.InfoCache
+	Host             ResolutionHost
+	CompilerOptions  *core.CompilerOptions
+	TypingsLocation  tspath.RootedDirectoryPath
+	ProjectName      string
+	ExtraExtensions  []string
+	PackageJsonCache *packagejson.InfoCache
 }
 
 func (r *DefaultResolver) BaseDirectory() tspath.RootedDirectoryPath {
@@ -1659,31 +1657,11 @@ func (r *resolutionState) loadModuleFromFileNoImplicitExtensions(extensions exte
 	if !strings.Contains(base, ".") {
 		return continueSearching() // extensionless import, no lookups performed, since we don't support extensionless files
 	}
-	extraExtensions := r.resolver.extraExtensions
-	if r.resolver.contentMapperFileMatcher != nil && len(r.compilerOptions.ModuleSuffixes) == 0 {
-		extraExtensions = nil
-		if extension := r.contentMapperExtensionForFileName(tspath.RootedFilePathFromPath(candidate.path)); extension != "" {
-			extraExtensions = []string{extension}
-		}
-	}
-	extensionless, extension := candidate.SplitExtension(extraExtensions)
+	extensionless, extension := candidate.SplitExtension(r.resolver.extraExtensions)
 	if r.tracer != nil {
 		r.tracer.write(diagnostics.File_name_0_has_a_1_extension_stripping_it, candidate, extension)
 	}
 	return r.tryAddingExtensions(extensionless, candidate.Directory(), extensions, extension)
-}
-
-func (r *resolutionState) contentMapperExtensionForFileName(fileName tspath.RootedFilePath) string {
-	if fileName.LongestExtension(r.resolver.extraExtensions, r.resolver.fs.CaseSensitivity()) == "" {
-		return ""
-	}
-	// Match the path that createResolvedModuleHandlingSymlink will load.
-	if !r.compilerOptions.PreserveSymlinks.IsTrue() &&
-		!tspath.IsExternalModuleNameRelative(r.name) &&
-		fileName.ContainsLowercaseDirectorySequence("/node_modules/") {
-		fileName = r.realPath(fileName)
-	}
-	return r.resolver.contentMapperFileMatcher.ExtensionForFileName(fileName)
 }
 
 func (r *resolutionState) tryAddingExtensions(extensionless tspath.FileNameStem, directory tspath.RootedDirectoryPath, extensions extensions, originalExtension string) *resolved {
@@ -1800,22 +1778,6 @@ func (r *resolutionState) tryAddingExtensions(extensionless tspath.FileNameStem,
 				resolved.resolvedUsingExtraExtensions = true
 				return resolved
 			}
-			if r.resolver.contentMapperFileMatcher != nil {
-				// The compound extension used to probe suffixed mapper candidates may not apply to declaration fallback.
-				fileName := extensionless.AppendSuffix(originalExtension)
-				var extraExtensions []string
-				suffixes := r.compilerOptions.ModuleSuffixes
-				if len(suffixes) == 0 {
-					suffixes = []string{""}
-				}
-				for _, suffix := range suffixes {
-					if extension := r.contentMapperExtensionForFileName(extensionless.AppendSuffix(suffix + originalExtension)); extension != "" {
-						extraExtensions = []string{extension}
-						break
-					}
-				}
-				extensionless, originalExtension = resolutionCandidateFromFileName(fileName).SplitExtension(extraExtensions)
-			}
 		}
 		if extensions&extensionsDeclaration != 0 && !extensionless.AppendSuffix(originalExtension).IsDeclarationFile() {
 			if resolved := r.tryExtension(".d"+originalExtension+".ts", extensionless, false); !resolved.shouldContinueSearching() {
@@ -1829,9 +1791,6 @@ func (r *resolutionState) tryAddingExtensions(extensionless tspath.FileNameStem,
 func (r *resolutionState) tryExtension(extension string, extensionless tspath.FileNameStem, resolvedUsingTsExtension bool) *resolved {
 	fileName := resolutionCandidateFromFileName(extensionless.AppendSuffix(extension))
 	if path, ok := r.tryFile(fileName, extension); ok {
-		if r.resolver.contentMapperFileMatcher != nil && slices.Contains(r.resolver.extraExtensions, extension) {
-			extension = r.contentMapperExtensionForFileName(path)
-		}
 		return &resolved{
 			path:                     path,
 			extension:                extension,
@@ -1849,16 +1808,9 @@ func (r *resolutionState) tryFile(fileName resolutionCandidate, extension string
 	if !isExtraExtension {
 		extension = tspath.RootedFilePathFromPath(fileName.path).Extension()
 	}
-	tryCandidate := func(path tspath.RootedFilePath) bool {
-		if r.resolver.contentMapperFileMatcher != nil && isExtraExtension &&
-			r.contentMapperExtensionForFileName(path) == "" {
-			return false
-		}
-		return r.tryFileLookup(path)
-	}
 	if len(r.compilerOptions.ModuleSuffixes) == 0 {
 		candidate := tspath.RootedFilePathFromPath(fileName.path)
-		if tryCandidate(candidate) {
+		if r.tryFileLookup(candidate) {
 			return candidate, true
 		}
 		return "", false
@@ -1867,7 +1819,7 @@ func (r *resolutionState) tryFile(fileName resolutionCandidate, extension string
 	fileNameNoExtension := fileName.RemoveExtension(extension)
 	for _, suffix := range r.compilerOptions.ModuleSuffixes {
 		path := fileNameNoExtension.AppendSuffix(suffix + extension)
-		if tryCandidate(path) {
+		if r.tryFileLookup(path) {
 			return path, true
 		}
 	}

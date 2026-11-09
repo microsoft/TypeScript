@@ -9,12 +9,15 @@ declare module "*.toml" { export const ambient: string; }
 not TypeScript
 //// [/home/src/workspaces/project/blob.toml] *new* 
 export const value = 1;
+//// [/home/src/workspaces/project/declarationOnly.d.toml.ts] *new* 
+export declare const declarationOnly: "declaration";
 //// [/home/src/workspaces/project/index.ts] *new* 
 
 				export { value } from "./blob.toml";
 				export { other } from "./other.toml";
 				export { packaged } from "./node_modules/pkg/blob.toml";
 				export { ambient } from "./ambient.toml";
+				export { declarationOnly } from "./declarationOnly.toml";
 				export const load = (path: string) => import(path);
 				
 //// [/home/src/workspaces/project/node_modules/mapper/package.json] *new* 
@@ -37,19 +40,35 @@ not TypeScript
 tsc --runExternalCode --listFiles
 ExitStatus:: DiagnosticsPresent_OutputsGenerated
 Output::
-[96mindex.ts[0m:[93m6[0m:[93m43[0m - [91merror[0m[90m TS18133: [0mNon-literal import paths cannot be rewritten when a content mapper uses both 'include' and an 'outputExtensions' mapping. Set 'disableDynamicImportExtensionRewriting' to disable rewriting of non-literal import paths.
+[96mindex.ts[0m:[93m3[0m:[93m14[0m - [91merror[0m[90m TS2305: [0mModule '"*.toml"' has no exported member 'other'.
 
-[7m6[0m     export const load = (path: string) => import(path);
+[7m3[0m     export { other } from "./other.toml";
+[7m [0m [91m             ~~~~~[0m
+
+[96mindex.ts[0m:[93m3[0m:[93m27[0m - [91merror[0m[90m TS18140: [0mFile '/home/src/workspaces/project/other.toml' has a registered content mapper extension but does not match any content mapper's 'include'.
+
+[7m3[0m     export { other } from "./other.toml";
+[7m [0m [91m                          ~~~~~~~~~~~~~~[0m
+
+[96mindex.ts[0m:[93m5[0m:[93m29[0m - [91merror[0m[90m TS18140: [0mFile '/home/src/workspaces/project/ambient.toml' has a registered content mapper extension but does not match any content mapper's 'include'.
+
+[7m5[0m     export { ambient } from "./ambient.toml";
+[7m [0m [91m                            ~~~~~~~~~~~~~~~~[0m
+
+[96mindex.ts[0m:[93m7[0m:[93m43[0m - [91merror[0m[90m TS18133: [0mNon-literal import paths cannot be rewritten when a content mapper uses both 'include' and an 'outputExtensions' mapping. Set 'disableDynamicImportExtensionRewriting' to disable rewriting of non-literal import paths.
+
+[7m7[0m     export const load = (path: string) => import(path);
 [7m [0m [91m                                          ~~~~~~~~~~~~[0m
 
 /home/src/tslibs/TS/Lib/lib.es2026.full.d.ts
 /home/src/workspaces/project/ambient.d.ts
 /home/src/workspaces/project/blob.toml
-/home/src/workspaces/project/other.d.toml.ts
+/home/src/workspaces/project/declarationOnly.d.toml.ts
 /home/src/workspaces/project/node_modules/pkg/blob.toml
 /home/src/workspaces/project/index.ts
+/home/src/workspaces/project/other.d.toml.ts
 
-Found 1 error in index.ts[90m:6[0m
+Found 4 errors in the same file, starting at: index.ts[90m:3[0m
 
 //// [/home/src/tslibs/TS/Lib/lib.es2026.full.d.ts] *Lib*
 /// <reference no-default-lib="true"/>
@@ -82,6 +101,7 @@ export { value } from "./blob.js";
 export { other } from "./other.toml";
 export { packaged } from "./node_modules/pkg/blob.js";
 export { ambient } from "./ambient.toml";
+export { declarationOnly } from "./declarationOnly.toml";
 export declare const load: (path: string) => Promise<any>;
 
 //// [/home/src/workspaces/project/dist/index.js] *new* 
@@ -106,6 +126,7 @@ export { value } from "./blob.js";
 export { other } from "./other.toml";
 export { packaged } from "./node_modules/pkg/blob.js";
 export { ambient } from "./ambient.toml";
+export { declarationOnly } from "./declarationOnly.toml";
 export const load = (path) => import(__rewriteRelativeImportExtension(path));
 
 

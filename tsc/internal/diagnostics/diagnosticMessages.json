@@ -9011,5 +9011,9 @@
     "This relative import path is unsafe to rewrite because it appears not to match the content mapper's 'include', but does after resolution with 'rootDirs' and 'moduleSuffixes'.": {
         "category": "Error",
         "code": 18139
+    },
+    "File '{0}' has a registered content mapper extension but does not match any content mapper's 'include'.": {
+        "category": "Error",
+        "code": 18140
     }
 }
