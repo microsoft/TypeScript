@@ -1,0 +1,45 @@
+======== Resolving module './card.box' from '/main.ts'. ========
+Explicitly specified module resolution kind: 'Bundler'.
+Resolving in CJS mode with conditions 'import', 'types'.
+Loading module as file / folder, candidate module location '/card.box', target file types: TypeScript, JavaScript, Declaration, JSON.
+File name '/card.box' has a '.box' extension - stripping it.
+File '/card.web.box' exists - use it as a name resolution result.
+======== Module name './card.box' was successfully resolved to '/card.web.box'. ========
+======== Resolving module './card.long.box' from '/main.ts'. ========
+Explicitly specified module resolution kind: 'Bundler'.
+Resolving in CJS mode with conditions 'import', 'types'.
+Loading module as file / folder, candidate module location '/card.long.box', target file types: TypeScript, JavaScript, Declaration, JSON.
+File name '/card.long.box' has a '.long.box' extension - stripping it.
+File '/card.web.long.box' exists - use it as a name resolution result.
+======== Module name './card.long.box' was successfully resolved to '/card.web.long.box'. ========
+======== Resolving module './fallback.box' from '/main.ts'. ========
+Explicitly specified module resolution kind: 'Bundler'.
+Resolving in CJS mode with conditions 'import', 'types'.
+Loading module as file / folder, candidate module location '/fallback.box', target file types: TypeScript, JavaScript, Declaration, JSON.
+File name '/fallback.box' has a '.box' extension - stripping it.
+File '/fallback.web.box' does not exist.
+File '/fallback.box' exists - use it as a name resolution result.
+======== Module name './fallback.box' was successfully resolved to '/fallback.box'. ========
+======== Resolving module './target.ts' from '/main.ts'. ========
+Explicitly specified module resolution kind: 'Bundler'.
+Resolving in CJS mode with conditions 'import', 'types'.
+Loading module as file / folder, candidate module location '/target.ts', target file types: TypeScript, JavaScript, Declaration, JSON.
+File name '/target.ts' has a '.ts' extension - stripping it.
+File '/target.web.ts' exists - use it as a name resolution result.
+======== Module name './target.ts' was successfully resolved to '/target.web.ts'. ========
+======== Resolving module './card' from '/main.ts'. ========
+Explicitly specified module resolution kind: 'Bundler'.
+Resolving in CJS mode with conditions 'import', 'types'.
+Loading module as file / folder, candidate module location '/card', target file types: TypeScript, JavaScript, Declaration, JSON.
+File '/card.web.ts' does not exist.
+File '/card.ts' does not exist.
+File '/card.web.tsx' does not exist.
+File '/card.tsx' does not exist.
+File '/card.web.d.ts' does not exist.
+File '/card.d.ts' does not exist.
+File '/card.web.js' does not exist.
+File '/card.js' does not exist.
+File '/card.web.jsx' does not exist.
+File '/card.jsx' does not exist.
+Directory '/card' does not exist, skipping all lookups in it.
+======== Module name './card' was not resolved. ========
