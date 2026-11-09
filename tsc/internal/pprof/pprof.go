@@ -80,6 +80,9 @@ func (p *ProfileSession) Stop() {
 		if err != nil {
 			panic(err)
 		}
+		// The profile reflects the heap as of the last completed collection,
+		// which can be long before the end of the run.
+		runtime.GC()
 		if err := pprof.Lookup("allocs").WriteTo(memFile, 0); err != nil {
 			panic(err)
 		}
@@ -180,6 +183,7 @@ func SaveAllocProfile(profileDir string) (string, error) {
 	}
 	defer allocFile.Close()
 
+	runtime.GC()
 	if err := pprof.Lookup("allocs").WriteTo(allocFile, 0); err != nil {
 		os.Remove(allocProfilePath)
 		return "", fmt.Errorf("failed to write alloc profile: %w", err)
