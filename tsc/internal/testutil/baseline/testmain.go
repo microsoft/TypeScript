@@ -22,7 +22,7 @@ var (
 	// trackingDir is the directory where tracking files should be written.
 	// If non-empty, baseline tracking is enabled.
 	// Set by Herebyfile.mjs when running full test suites with tracking enabled.
-	trackingDir = os.Getenv("TSGO_BASELINE_TRACKING_DIR")
+	trackingDir = os.Getenv("TS_BASELINE_TRACKING_DIR")
 )
 
 // Track sets up baseline tracking and returns a cleanup function that writes the tracking file.

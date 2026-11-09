@@ -1,0 +1,62 @@
+//// [tests/cases/compiler/inferFromTypeArgumentsNoInfiniteRecursion.ts] ////
+
+=== inferFromTypeArgumentsNoInfiniteRecursion.ts ===
+// Repro from #64701
+// Checking `ReturnType<typeof createHandler>` relates the generic signature of
+// `createHandler` to the signature in the `extends` clause of `ReturnType`, which
+// instantiates it in the context of that signature. Inferring between the type
+// arguments of nested instantiations of the same type aliases used to recurse
+// through inferFromTypes and inferFromTypeArguments without terminating.
+
+type IsEqual<A, B> =
+>IsEqual : IsEqual<A, B>
+
+    (<G>() => G extends A & G | G ? 1 : 2) extends
+    (<G>() => G extends B & G | G ? 1 : 2)
+        ? true
+>true : true
+
+        : false;
+>false : false
+
+type Fn = (...args: any) => any;
+>Fn : Fn
+>args : any
+
+type Next<TFn extends Fn, TStack extends Fn> = (...args: Parameters<TStack & TFn>) => ReturnType<TStack & TFn>;
+>Next : Next<TFn, TStack>
+>args : Parameters<TStack & TFn>
+
+type Wrap<TFn extends Fn> = TFn extends unknown ? TFn : () => void;
+>Wrap : Wrap<TFn>
+
+type Inner<TFn extends Fn, TAcc extends Fn, TStack extends Fn, TPrevious extends Fn, TCurrent extends Fn = Next<TFn, TStack>> =
+>Inner : Inner<TFn, TAcc, TStack, TPrevious, TCurrent>
+
+    IsEqual<TCurrent, TPrevious> extends true ? TAcc : Inner<TFn, TAcc & Wrap<TCurrent>, TCurrent & TStack, TCurrent>;
+>true : true
+
+type OwnProperties<T> = { [K in keyof T]: T[K] };
+>OwnProperties : OwnProperties<T>
+
+type Unwrap<TFn> = TFn extends Fn ? TFn : TFn;
+>Unwrap : Unwrap<TFn>
+
+type Tree<T> = T extends Fn
+>Tree : Tree<T>
+
+    ? Unwrap<Inner<T, Wrap<T>, T, T>> & Tree<OwnProperties<T>>
+    : T;
+
+interface Client<T> {
+    call: Tree<T>;
+>call : Tree<T>
+}
+
+declare function createHandler<T extends Fn>(): Client<T>;
+>createHandler : <T extends Fn>() => Client<T>
+
+type R = ReturnType<typeof createHandler>;
+>R : Client<Fn>
+>createHandler : <T extends Fn>() => Client<T>
+

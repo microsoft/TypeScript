@@ -51,7 +51,7 @@ export interface ValueProducerFromTs {
     },
 }
 
-tsgo --b consumer --traceResolution -v
+tsc --b consumer --traceResolution -v
 ExitStatus:: Success
 Output::
 [[90mHH:MM:SS AM[0m] Projects in this build: 

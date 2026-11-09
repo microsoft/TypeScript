@@ -2446,7 +2446,7 @@ func (s *Server) handleInitializeAPISession(ctx context.Context, params *lsproto
 func (s *Server) generateAPIPipeName() string {
 	now := time.Now().UnixNano()
 	rnd := rand.Uint64()
-	return fmt.Sprintf("tsgo-api-%x-%x", now, rnd)
+	return fmt.Sprintf("typescript-api-%x-%x", now, rnd)
 }
 
 func (s *Server) removeAPISession(id string) {

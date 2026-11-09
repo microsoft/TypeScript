@@ -7,6 +7,7 @@ import test, { describe } from "node:test";
 import {
     acquireTypeScriptSDK,
     createTypeScriptSDK,
+    findWorkspaceTypeScriptVersions,
     hasModifiedAcquiredTypeScriptInstallation,
     isSameTypeScriptInstallation,
     resolvePackageExecutable,
@@ -17,6 +18,34 @@ const platformPackage = `typescript-${process.platform}-${process.arch}`;
 const exeSuffix = process.platform === "win32" ? ".exe" : "";
 const exeName = `tsc${exeSuffix}`;
 const nativeExeName = `tsgo${exeSuffix}`;
+
+describe("workspace TypeScript versions", () => {
+    test("includes configured SDKs outside the conventional package locations", async () => {
+        const tsdkPath = path.join("sdk", "custom-typescript");
+        const exe = { path: path.join(tsdkPath, exeName), version: "7.1.0" };
+        assert.deepEqual(
+            await findWorkspaceTypeScriptVersions([tsdkPath], ["/workspace"], async candidate => candidate === tsdkPath ? exe : undefined),
+            [{ tsdkPath, exePath: exe.path, version: exe.version }],
+        );
+    });
+
+    test("detects current packages and legacy native-preview packages across workspace folders", async () => {
+        const tsdkPaths = [
+            path.join("/first", "node_modules", "typescript"),
+            path.join("/second", "node_modules", "@typescript", "native"),
+            path.join("/third", "node_modules", "@typescript", "native-preview"),
+        ];
+        const versions = await findWorkspaceTypeScriptVersions([], ["/first", "/second", "/third"], async candidate => tsdkPaths.includes(candidate) ? { path: path.join(candidate, exeName), version: "7.1.0" } : undefined);
+        assert.deepEqual(versions.map(version => version.tsdkPath), tsdkPaths);
+    });
+
+    test("keeps the configured path when aliases resolve to the same executable", async () => {
+        const configuredPath = "./node_modules/@typescript/native";
+        const exe = { path: "/workspace/node_modules/@typescript/typescript-linux-x64/lib/tsc", version: "7.1.0" };
+        const versions = await findWorkspaceTypeScriptVersions([configuredPath], ["/workspace"], async () => exe);
+        assert.deepEqual(versions, [{ tsdkPath: configuredPath, exePath: exe.path, version: exe.version }]);
+    });
+});
 
 describe("same-client restart eligibility", () => {
     const installation = { path: "/typescript/lib/tsc", version: "7.0.2", apiPackageJsonPath: "/typescript/package.json" };

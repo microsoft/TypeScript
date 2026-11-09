@@ -30,7 +30,7 @@ export const result = make();
 					"files": ["index.ts"]
 				}
 
-tsgo --project producer --listEmittedFiles
+tsc --project producer --listEmittedFiles
 ExitStatus:: DiagnosticsPresent_OutputsGenerated
 Output::
 [96mproducer/factory.ts[0m:[93m1[0m:[93m23[0m - [91merror[0m[90m TS6307: [0mFile '/home/src/workspaces/project/configs/first/thing.ts' is not listed within the file list of project '/home/src/workspaces/project/producer/tsconfig.json'. Projects must list all files or use an 'include' pattern.
@@ -206,7 +206,7 @@ Signatures::
 
 Edit [0]:: no change
 
-tsgo --project producer --listEmittedFiles
+tsc --project producer --listEmittedFiles
 ExitStatus:: DiagnosticsPresent_OutputsGenerated
 Output::
 [96mproducer/factory.ts[0m:[93m1[0m:[93m23[0m - [91merror[0m[90m TS6307: [0mFile '/home/src/workspaces/project/configs/first/thing.ts' is not listed within the file list of project '/home/src/workspaces/project/producer/tsconfig.json'. Projects must list all files or use an 'include' pattern.
@@ -244,7 +244,7 @@ Edit [1]:: change extends without changing paths or source files
 					"files": ["index.ts"]
 				}
 
-tsgo --project producer --listEmittedFiles
+tsc --project producer --listEmittedFiles
 ExitStatus:: DiagnosticsPresent_OutputsGenerated
 Output::
 [96mproducer/factory.ts[0m:[93m1[0m:[93m23[0m - [91merror[0m[90m TS6307: [0mFile '/home/src/workspaces/project/configs/first/thing.ts' is not listed within the file list of project '/home/src/workspaces/project/producer/tsconfig.json'. Projects must list all files or use an 'include' pattern.
@@ -384,7 +384,7 @@ Signatures::
 
 Edit [2]:: no change
 
-tsgo --project producer --listEmittedFiles
+tsc --project producer --listEmittedFiles
 ExitStatus:: DiagnosticsPresent_OutputsGenerated
 Output::
 [96mproducer/factory.ts[0m:[93m1[0m:[93m23[0m - [91merror[0m[90m TS6307: [0mFile '/home/src/workspaces/project/configs/first/thing.ts' is not listed within the file list of project '/home/src/workspaces/project/producer/tsconfig.json'. Projects must list all files or use an 'include' pattern.
@@ -412,7 +412,7 @@ Signatures::
 
 Edit [3]:: force rebuild
 
-tsgo --build producer --verbose --force
+tsc --build producer --verbose --force
 ExitStatus:: DiagnosticsPresent_OutputsGenerated
 Output::
 [[90mHH:MM:SS AM[0m] Projects in this build: 
@@ -459,7 +459,7 @@ Signatures::
 
 Edit [4]:: no change
 
-tsgo --project producer --listEmittedFiles
+tsc --project producer --listEmittedFiles
 ExitStatus:: DiagnosticsPresent_OutputsGenerated
 Output::
 [96mproducer/factory.ts[0m:[93m1[0m:[93m23[0m - [91merror[0m[90m TS6307: [0mFile '/home/src/workspaces/project/configs/first/thing.ts' is not listed within the file list of project '/home/src/workspaces/project/producer/tsconfig.json'. Projects must list all files or use an 'include' pattern.

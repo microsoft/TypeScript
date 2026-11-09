@@ -123,7 +123,7 @@ export const foo2 = 1;
     "files": ["index.mts"],
 }
 
-tsgo 
+tsc 
 ExitStatus:: DiagnosticsPresent_OutputsGenerated
 Output::
 ======== Resolving module 'foo' from '/home/src/projects/project/index.mts'. ========
@@ -505,7 +505,7 @@ Signatures::
 Edit [0]:: delete the alternateResult in @types
 //// [/home/src/projects/project/node_modules/@types/bar/index.d.ts] *deleted*
 
-tsgo 
+tsc 
 ExitStatus:: DiagnosticsPresent_OutputsGenerated
 Output::
 ======== Resolving module 'foo' from '/home/src/projects/project/index.mts'. ========
@@ -717,7 +717,7 @@ Signatures::
 Edit [1]:: delete the node10Result in package/types
 //// [/home/src/projects/project/node_modules/foo/index.d.ts] *deleted*
 
-tsgo 
+tsc 
 ExitStatus:: DiagnosticsPresent_OutputsGenerated
 Output::
 ======== Resolving module 'foo' from '/home/src/projects/project/index.mts'. ========
@@ -941,7 +941,7 @@ Edit [2]:: add the alternateResult in @types
 //// [/home/src/projects/project/node_modules/@types/bar/index.d.ts] *new* 
 export declare const bar: number;
 
-tsgo 
+tsc 
 ExitStatus:: DiagnosticsPresent_OutputsGenerated
 Output::
 ======== Resolving module 'foo' from '/home/src/projects/project/index.mts'. ========
@@ -1154,7 +1154,7 @@ Edit [3]:: add the alternateResult in package/types
 //// [/home/src/projects/project/node_modules/foo/index.d.ts] *new* 
 export declare const foo: number;
 
-tsgo 
+tsc 
 ExitStatus:: DiagnosticsPresent_OutputsGenerated
 Output::
 ======== Resolving module 'foo' from '/home/src/projects/project/index.mts'. ========
@@ -1366,7 +1366,7 @@ Edit [4]:: update package.json from @types so error is fixed
     }
 }
 
-tsgo 
+tsc 
 ExitStatus:: DiagnosticsPresent_OutputsGenerated
 Output::
 ======== Resolving module 'foo' from '/home/src/projects/project/index.mts'. ========
@@ -1668,7 +1668,7 @@ Edit [5]:: update package.json so error is fixed
     }
 }
 
-tsgo 
+tsc 
 ExitStatus:: Success
 Output::
 ======== Resolving module 'foo' from '/home/src/projects/project/index.mts'. ========
@@ -1898,7 +1898,7 @@ Edit [6]:: update package.json from @types so error is introduced
     }
 }
 
-tsgo 
+tsc 
 ExitStatus:: DiagnosticsPresent_OutputsGenerated
 Output::
 ======== Resolving module 'foo' from '/home/src/projects/project/index.mts'. ========
@@ -2207,7 +2207,7 @@ Edit [7]:: update package.json so error is introduced
     }
 }
 
-tsgo 
+tsc 
 ExitStatus:: DiagnosticsPresent_OutputsGenerated
 Output::
 ======== Resolving module 'foo' from '/home/src/projects/project/index.mts'. ========
@@ -2563,7 +2563,7 @@ Signatures::
 Edit [8]:: delete the alternateResult in @types
 //// [/home/src/projects/project/node_modules/@types/bar2/index.d.ts] *deleted*
 
-tsgo 
+tsc 
 ExitStatus:: DiagnosticsPresent_OutputsGenerated
 Output::
 ======== Resolving module 'foo' from '/home/src/projects/project/index.mts'. ========
@@ -2775,7 +2775,7 @@ Signatures::
 Edit [9]:: delete the node10Result in package/types
 //// [/home/src/projects/project/node_modules/foo2/index.d.ts] *deleted*
 
-tsgo 
+tsc 
 ExitStatus:: DiagnosticsPresent_OutputsGenerated
 Output::
 ======== Resolving module 'foo' from '/home/src/projects/project/index.mts'. ========
@@ -2999,7 +2999,7 @@ Edit [10]:: add the alternateResult in @types
 //// [/home/src/projects/project/node_modules/@types/bar2/index.d.ts] *new* 
 export declare const bar2: number;
 
-tsgo 
+tsc 
 ExitStatus:: DiagnosticsPresent_OutputsGenerated
 Output::
 ======== Resolving module 'foo' from '/home/src/projects/project/index.mts'. ========
@@ -3212,7 +3212,7 @@ Edit [11]:: add the ndoe10Result in package/types
 //// [/home/src/projects/project/node_modules/foo2/index.d.ts] *new* 
 export declare const foo2: number;
 
-tsgo 
+tsc 
 ExitStatus:: DiagnosticsPresent_OutputsGenerated
 Output::
 ======== Resolving module 'foo' from '/home/src/projects/project/index.mts'. ========

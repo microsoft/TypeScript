@@ -48,7 +48,7 @@ export const values = [3, 1, 2].toSorted();
 //// [/home/src/workspaces/project/tsconfig.json] *new* 
 {"compilerOptions":{"incremental":true,"noEmit":true,"types":[],"target":"esnext"},"files":["a.ts"]}
 
-tsgo --singleThreaded
+tsc --singleThreaded
 ExitStatus:: Success
 Output::
 //// [/home/src/workspaces/project/tsconfig.tsbuildinfo] *new* 
@@ -143,7 +143,7 @@ Edit [0]:: narrow lib
 //// [/home/src/workspaces/project/tsconfig.json] *modified* 
 {"compilerOptions":{"incremental":true,"noEmit":true,"types":[],"target":"esnext","lib":["es2020"]},"files":["a.ts"]}
 
-tsgo --singleThreaded
+tsc --singleThreaded
 ExitStatus:: DiagnosticsPresent_OutputsGenerated
 Output::
 [96ma.ts[0m:[93m1[0m:[93m33[0m - [91merror[0m[90m TS2550: [0mProperty 'toSorted' does not exist on type 'number[]'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2023' or later.
@@ -248,7 +248,7 @@ Signatures::
 
 Edit [1]:: no change
 
-tsgo --singleThreaded
+tsc --singleThreaded
 ExitStatus:: DiagnosticsPresent_OutputsGenerated
 Output::
 [96ma.ts[0m:[93m1[0m:[93m33[0m - [91merror[0m[90m TS2550: [0mProperty 'toSorted' does not exist on type 'number[]'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2023' or later.
@@ -269,7 +269,7 @@ Edit [2]:: restore lib
 //// [/home/src/workspaces/project/tsconfig.json] *modified* 
 {"compilerOptions":{"incremental":true,"noEmit":true,"types":[],"target":"esnext"},"files":["a.ts"]}
 
-tsgo --singleThreaded
+tsc --singleThreaded
 ExitStatus:: Success
 Output::
 //// [/home/src/workspaces/project/tsconfig.tsbuildinfo] *modified* 
@@ -373,7 +373,7 @@ Edit [3]:: narrow target
 //// [/home/src/workspaces/project/tsconfig.json] *modified* 
 {"compilerOptions":{"incremental":true,"noEmit":true,"types":[],"target":"es2020"},"files":["a.ts"]}
 
-tsgo --singleThreaded
+tsc --singleThreaded
 ExitStatus:: DiagnosticsPresent_OutputsGenerated
 Output::
 [96ma.ts[0m:[93m1[0m:[93m33[0m - [91merror[0m[90m TS2550: [0mProperty 'toSorted' does not exist on type 'number[]'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2023' or later.
@@ -478,7 +478,7 @@ Signatures::
 
 Edit [4]:: no change
 
-tsgo --singleThreaded
+tsc --singleThreaded
 ExitStatus:: DiagnosticsPresent_OutputsGenerated
 Output::
 [96ma.ts[0m:[93m1[0m:[93m33[0m - [91merror[0m[90m TS2550: [0mProperty 'toSorted' does not exist on type 'number[]'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2023' or later.
@@ -499,7 +499,7 @@ Edit [5]:: restore target
 //// [/home/src/workspaces/project/tsconfig.json] *modified* 
 {"compilerOptions":{"incremental":true,"noEmit":true,"types":[],"target":"esnext"},"files":["a.ts"]}
 
-tsgo --singleThreaded
+tsc --singleThreaded
 ExitStatus:: Success
 Output::
 //// [/home/src/workspaces/project/tsconfig.tsbuildinfo] *modified* 
@@ -601,7 +601,7 @@ Signatures::
 
 Edit [6]:: no change
 
-tsgo --singleThreaded
+tsc --singleThreaded
 ExitStatus:: Success
 Output::
 

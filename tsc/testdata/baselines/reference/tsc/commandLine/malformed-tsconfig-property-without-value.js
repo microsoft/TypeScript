@@ -6,7 +6,7 @@ Input::
 //// [/home/src/workspaces/project/tsconfig.json] *new* 
 {"" }
 
-tsgo 
+tsc 
 ExitStatus:: DiagnosticsPresent_OutputsGenerated
 Output::
 [96mtsconfig.json[0m:[93m1[0m:[93m4[0m - [91merror[0m[90m TS1328: [0mProperty value can only be string literal, numeric literal, 'true', 'false', 'null', object literal or array literal.

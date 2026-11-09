@@ -12,7 +12,7 @@ export const y = 20;
     "files": ["c.ts", "d.ts"]
 }
 
-tsgo 
+tsc 
 ExitStatus:: DiagnosticsPresent_OutputsGenerated
 Output::
 [96mc.ts[0m:[93m1[0m:[93m17[0m - [91merror[0m[90m TS1261: [0mAlready included file name '/home/src/workspaces/project/D.ts' differs from file name '/home/src/workspaces/project/d.ts' only in casing.
