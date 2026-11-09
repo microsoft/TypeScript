@@ -1,16 +1,20 @@
-error TS5114: Instantiations of type 'F' appear infinitely circular.
+instantiationStackLimitCheckOrder.ts(6,48): error TS5114: Instantiations of type 'F' appear infinitely circular.
+instantiationStackLimitCheckOrder.ts(7,10): error TS5114: Instantiations of type 'F' appear infinitely circular.
 instantiationStackLimitCheckOrder.ts(14,11): error TS5114: Instantiations of type 'FlatArray' appear infinitely circular.
 
 
-!!! error TS5114: Instantiations of type 'F' appear infinitely circular.
-==== instantiationStackLimitCheckOrder.ts (1 errors) ====
+==== instantiationStackLimitCheckOrder.ts (3 errors) ====
     // F<[]> recurses forever, so instantiating it reaches the limit on the
     // instantiation stack, wherever it is first instantiated. The instantiations
     // in progress then fail as a whole, and none of them may be cached partly
     // built for the other declaration to reuse.
     
     type F<T> = T extends [unknown?, ...infer R] ? [0, ...F<R>] : [];
+                                                   ~~~~~~~~~~~~
+!!! error TS5114: Instantiations of type 'F' appear infinitely circular.
     type X = F<[]>;
+             ~~~~~
+!!! error TS5114: Instantiations of type 'F' appear infinitely circular.
     
     // The element type of A[] is resolved whenever first needed, inside the
     // instantiation of the return type of flat or not. Reaching the limit while

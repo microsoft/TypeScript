@@ -1,0 +1,71 @@
+//// [tests/cases/compiler/lateBoundMutualMemberTables.ts] ////
+
+=== lateBoundMutualMemberTables.ts ===
+declare const a: A<"a">;
+>a : Symbol(a, Decl(lateBoundMutualMemberTables.ts, 0, 13))
+>A : Symbol(A, Decl(lateBoundMutualMemberTables.ts, 1, 24))
+
+declare const b: B<"b">;
+>b : Symbol(b, Decl(lateBoundMutualMemberTables.ts, 1, 13))
+>B : Symbol(B, Decl(lateBoundMutualMemberTables.ts, 6, 1))
+
+declare class A<T> {
+>A : Symbol(A, Decl(lateBoundMutualMemberTables.ts, 1, 24))
+>T : Symbol(T, Decl(lateBoundMutualMemberTables.ts, 2, 16))
+
+    x: T;
+>x : Symbol(A.x, Decl(lateBoundMutualMemberTables.ts, 2, 20))
+>T : Symbol(T, Decl(lateBoundMutualMemberTables.ts, 2, 16))
+
+    [b.y]: "fromB";
+>[b.y] : Symbol(A[b.y], Decl(lateBoundMutualMemberTables.ts, 3, 9))
+>b.y : Symbol(B.y, Decl(lateBoundMutualMemberTables.ts, 7, 20))
+>b : Symbol(b, Decl(lateBoundMutualMemberTables.ts, 1, 13))
+>y : Symbol(B.y, Decl(lateBoundMutualMemberTables.ts, 7, 20))
+
+    [b.by]: "fromB2";
+>[b.by] : Symbol(A[b.by], Decl(lateBoundMutualMemberTables.ts, 4, 19))
+>b : Symbol(b, Decl(lateBoundMutualMemberTables.ts, 1, 13))
+}
+declare class B<T> {
+>B : Symbol(B, Decl(lateBoundMutualMemberTables.ts, 6, 1))
+>T : Symbol(T, Decl(lateBoundMutualMemberTables.ts, 7, 16))
+
+    y: T;
+>y : Symbol(B.y, Decl(lateBoundMutualMemberTables.ts, 7, 20))
+>T : Symbol(T, Decl(lateBoundMutualMemberTables.ts, 7, 16))
+
+    [a.x]: "fromA";
+>[a.x] : Symbol(B[a.x], Decl(lateBoundMutualMemberTables.ts, 8, 9))
+>a.x : Symbol(A.x, Decl(lateBoundMutualMemberTables.ts, 2, 20))
+>a : Symbol(a, Decl(lateBoundMutualMemberTables.ts, 0, 13))
+>x : Symbol(A.x, Decl(lateBoundMutualMemberTables.ts, 2, 20))
+
+    [a.b]: "fromA2";
+>[a.b] : Symbol(B[a.b], Decl(lateBoundMutualMemberTables.ts, 9, 19))
+>a.b : Symbol(A[b.y], Decl(lateBoundMutualMemberTables.ts, 3, 9))
+>a : Symbol(a, Decl(lateBoundMutualMemberTables.ts, 0, 13))
+>b : Symbol(A[b.y], Decl(lateBoundMutualMemberTables.ts, 3, 9))
+}
+export const v1 = a.b;
+>v1 : Symbol(v1, Decl(lateBoundMutualMemberTables.ts, 12, 12))
+>a.b : Symbol(A[b.y], Decl(lateBoundMutualMemberTables.ts, 3, 9))
+>a : Symbol(a, Decl(lateBoundMutualMemberTables.ts, 0, 13))
+>b : Symbol(A[b.y], Decl(lateBoundMutualMemberTables.ts, 3, 9))
+
+export const v2 = b.a;
+>v2 : Symbol(v2, Decl(lateBoundMutualMemberTables.ts, 13, 12))
+>b.a : Symbol(B[a.x], Decl(lateBoundMutualMemberTables.ts, 8, 9))
+>b : Symbol(b, Decl(lateBoundMutualMemberTables.ts, 1, 13))
+>a : Symbol(B[a.x], Decl(lateBoundMutualMemberTables.ts, 8, 9))
+
+export const v3 = a.fromA2;
+>v3 : Symbol(v3, Decl(lateBoundMutualMemberTables.ts, 14, 12))
+>a : Symbol(a, Decl(lateBoundMutualMemberTables.ts, 0, 13))
+
+export const v4 = b.fromB;
+>v4 : Symbol(v4, Decl(lateBoundMutualMemberTables.ts, 15, 12))
+>b.fromB : Symbol(B[a.b], Decl(lateBoundMutualMemberTables.ts, 9, 19))
+>b : Symbol(b, Decl(lateBoundMutualMemberTables.ts, 1, 13))
+>fromB : Symbol(B[a.b], Decl(lateBoundMutualMemberTables.ts, 9, 19))
+

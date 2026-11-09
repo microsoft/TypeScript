@@ -34,7 +34,6 @@ export declare enum ObjectFlags {
     ContainsSpread = 1 << 22,
     ObjectRestType = 1 << 23,
     IsClassInstanceClone = 1 << 26,
-    IdenticalBaseTypeCalculated = 1 << 27,
     IdenticalBaseTypeExists = 1 << 28,
     IsGenericTypeComputed = 1 << 22,
     IsGenericObjectType = 1 << 23,

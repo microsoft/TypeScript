@@ -1,10 +1,12 @@
 expression.ts(10,7): error TS2322: Type 'typeof A' is not assignable to type 'new () => A'.
   Type 'A' is not assignable to type 'A'. Two different types with this name exist, but they are unrelated.
     Types of property 'c' are incompatible.
-      Type '() => () => A | A' is not assignable to type 'A'.
+      Type '() => () => any' is not assignable to type 'A'.
+expression.ts(11,5): error TS7023: 'rebuild' implicitly has return type 'any' because it does not have a return type annotation and is referenced directly or indirectly in one of its return expressions.
+expression.ts(14,5): error TS7023: 'b' implicitly has return type 'any' because it does not have a return type annotation and is referenced directly or indirectly in one of its return expressions.
 
 
-==== expression.ts (1 errors) ====
+==== expression.ts (3 errors) ====
     // Subtype reduction of rebuild's return type relates the class to A,
     // which needs b's return type, which needs rebuild's: a cycle. Both
     // members report it, whichever return type is requested first, as if
@@ -19,11 +21,15 @@ expression.ts(10,7): error TS2322: Type 'typeof A' is not assignable to type 'ne
 !!! error TS2322: Type 'typeof A' is not assignable to type 'new () => A'.
 !!! error TS2322:   Type 'A' is not assignable to type 'A'. Two different types with this name exist, but they are unrelated.
 !!! error TS2322:     Types of property 'c' are incompatible.
-!!! error TS2322:       Type '() => () => A | A' is not assignable to type 'A'.
+!!! error TS2322:       Type '() => () => any' is not assignable to type 'A'.
         rebuild() {
+        ~~~~~~~
+!!! error TS7023: 'rebuild' implicitly has return type 'any' because it does not have a return type annotation and is referenced directly or indirectly in one of its return expressions.
             return flag ? this : new A();
         }
         b() {
+        ~
+!!! error TS7023: 'b' implicitly has return type 'any' because it does not have a return type annotation and is referenced directly or indirectly in one of its return expressions.
             return this.rebuild();
         }
         c() {

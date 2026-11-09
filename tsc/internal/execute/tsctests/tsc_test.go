@@ -2406,12 +2406,10 @@ func TestTscIncremental(t *testing.T) {
 					edit: func(sys *TestSys) {
 						sys.appendFile("/home/src/workspaces/project/repro.ts", "\n// comment-only edit\n")
 					},
-					expectedDiff: "Like Strada, signature generation produces the missing-global diagnostic before semantic checking, so it is excluded from the file's semantic diagnostics.",
 				},
 				{
-					caption:      "no change",
-					edit:         noChange.edit,
-					expectedDiff: "Like Strada, the cached semantic diagnostics do not include the missing-global diagnostic produced during signature generation.",
+					caption: "no change",
+					edit:    noChange.edit,
 				},
 				{
 					caption: "delete build info to restore the semantic diagnostic",

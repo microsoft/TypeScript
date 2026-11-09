@@ -1,8 +1,10 @@
-error TS5114: Instantiations of type 'Deep' appear infinitely circular.
+instantiationDepthSharedCheckOrder.ts(7,15): error TS5114: Instantiations of type 'Deep' appear infinitely circular.
+instantiationDepthSharedCheckOrder.ts(8,15): error TS5114: Instantiations of type 'Deep' appear infinitely circular.
+instantiationDepthSharedCheckOrder.ts(9,15): error TS5114: Instantiations of type 'Deep' appear infinitely circular.
+instantiationDepthSharedCheckOrder.ts(10,16): error TS5114: Instantiations of type 'Deep' appear infinitely circular.
 
 
-!!! error TS5114: Instantiations of type 'Deep' appear infinitely circular.
-==== instantiationDepthSharedCheckOrder.ts (0 errors) ====
+==== instantiationDepthSharedCheckOrder.ts (4 errors) ====
     // Instantiating Deep<[]> fresh nests 100 instantiations of Deep, which is
     // too deep. In program order each declaration finds the rest of the chain
     // already instantiated by the one before it, so none of them nests more
@@ -10,7 +12,15 @@ error TS5114: Instantiations of type 'Deep' appear infinitely circular.
     
     type Deep<N extends 0[]> = N["length"] extends 100 ? never : Deep<[...N, 0]> | N["length"];
     type Deep75 = Deep<[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]>;
+                  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS5114: Instantiations of type 'Deep' appear infinitely circular.
     type Deep50 = Deep<[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]>;
+                  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS5114: Instantiations of type 'Deep' appear infinitely circular.
     type Deep25 = Deep<[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]>;
+                  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS5114: Instantiations of type 'Deep' appear infinitely circular.
     type DeepAll = Deep<[]>;
+                   ~~~~~~~~
+!!! error TS5114: Instantiations of type 'Deep' appear infinitely circular.
     

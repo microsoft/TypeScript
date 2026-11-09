@@ -3355,7 +3355,7 @@ if (isString(w)) {
 >w : any
 
     const narrowed = w;
->narrowed : string
->w : string
+>narrowed : any
+>w : any
 }
 

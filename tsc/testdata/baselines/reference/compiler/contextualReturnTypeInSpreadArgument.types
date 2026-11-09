@@ -1,0 +1,63 @@
+//// [tests/cases/compiler/contextualReturnTypeInSpreadArgument.ts] ////
+
+=== contextualReturnTypeInSpreadArgument.ts ===
+enum Kind { A, B }
+>Kind : Kind
+>A : Kind.A
+>B : Kind.B
+
+interface ItemA { kind: Kind.A; name: string }
+>kind : Kind.A
+>Kind : any
+>name : string
+
+interface ItemB { kind: Kind.B; size: number }
+>kind : Kind.B
+>Kind : any
+>size : number
+
+type Item = ItemA | ItemB;
+>Item : Item
+
+declare function create(options: { items?: () => readonly Item[]; label: string }): void;
+>create : (options: { items?: () => readonly Item[]; label: string; }) => void
+>options : { items?: () => readonly Item[]; label: string; }
+>items : (() => readonly Item[]) | undefined
+>label : string
+
+function test(flag: boolean) {
+>test : (flag: boolean) => void
+>flag : boolean
+
+    create({
+>create({        label: "x",        ...(flag ? {} : {            items: () => [{ kind: Kind.A, name: "a" }],        }),    }) : void
+>create : (options: { items?: () => readonly Item[]; label: string; }) => void
+>{        label: "x",        ...(flag ? {} : {            items: () => [{ kind: Kind.A, name: "a" }],        }),    } : { label: string; items?: (() => { kind: Kind.A; name: string; }[]) | undefined; }
+
+        label: "x",
+>label : string
+>"x" : "x"
+
+        ...(flag ? {} : {
+>(flag ? {} : {            items: () => [{ kind: Kind.A, name: "a" }],        }) : {} | { items: () => { kind: Kind.A; name: string; }[]; }
+>flag ? {} : {            items: () => [{ kind: Kind.A, name: "a" }],        } : {} | { items: () => { kind: Kind.A; name: string; }[]; }
+>flag : boolean
+>{} : {}
+>{            items: () => [{ kind: Kind.A, name: "a" }],        } : { items: () => { kind: Kind.A; name: string; }[]; }
+
+            items: () => [{ kind: Kind.A, name: "a" }],
+>items : () => { kind: Kind.A; name: string; }[]
+>() => [{ kind: Kind.A, name: "a" }] : () => { kind: Kind.A; name: string; }[]
+>[{ kind: Kind.A, name: "a" }] : { kind: Kind.A; name: string; }[]
+>{ kind: Kind.A, name: "a" } : { kind: Kind.A; name: string; }
+>kind : Kind.A
+>Kind.A : Kind.A
+>Kind : typeof Kind
+>A : Kind.A
+>name : string
+>"a" : "a"
+
+        }),
+    });
+}
+
