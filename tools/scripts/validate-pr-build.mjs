@@ -44,6 +44,8 @@ for (const filename of fs.readdirSync(tarballDir)) {
         assert(line[0] === "-" || line[0] === "d", `${filename}: unexpected entry type: ${line}`);
         assert(segments[0] === "package" && segments.every(s => s !== "" && s !== "." && s !== ".."), `${filename}: unexpected path: ${entryPath}`);
         assert(!entryPaths.has(entryPath), `${filename}: duplicate entry: ${entryPath}`);
+        // npm implicitly runs node-gyp for packages with a root binding.gyp.
+        assert(entryPath !== "package/binding.gyp", `${filename}: must not contain binding.gyp`);
         entryPaths.add(entryPath);
     }
 
