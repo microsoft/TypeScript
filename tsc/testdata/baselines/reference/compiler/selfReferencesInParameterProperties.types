@@ -1,0 +1,52 @@
+//// [tests/cases/compiler/selfReferencesInParameterProperties.ts] ////
+
+=== selfReferencesInParameterProperties.ts ===
+class DirectSelfReference {
+>DirectSelfReference : DirectSelfReference
+
+    constructor(private a: number = a) {}
+>a : number
+>a : number
+}
+
+const b = 1;
+>b : 1
+>1 : 1
+
+class ShadowedOuterVariable {
+>ShadowedOuterVariable : ShadowedOuterVariable
+
+    constructor(public b: number = b) {}
+>b : number
+>b : number
+}
+
+class ReferenceToLaterParameter {
+>ReferenceToLaterParameter : ReferenceToLaterParameter
+
+    constructor(readonly c: number = d, readonly d: number = 1) {}
+>c : number
+>d : number
+>d : number
+>1 : 1
+}
+
+class ReferenceToEarlierParameter {
+>ReferenceToEarlierParameter : ReferenceToEarlierParameter
+
+    constructor(private e: number, private f: number = e) {}
+>e : number
+>f : number
+>e : number
+}
+
+class DeferredSelfReference {
+>DeferredSelfReference : DeferredSelfReference
+
+    constructor(private g: () => number = () => g()) {}
+>g : () => number
+>() => g() : () => number
+>g() : number
+>g : () => number
+}
+
