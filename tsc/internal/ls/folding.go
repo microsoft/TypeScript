@@ -131,7 +131,7 @@ func (l *LanguageService) adjustFoldingEnd(ranges []*lsproto.FoldingRange, sourc
 							tokenAfterFold := astnav.GetTokenAtPosition(sourceFile, int(endOffset))
 							isJSXText := ast.IsJsxText(tokenAfterFold)
 							jsxStart := astnav.GetStartOfNode(tokenAfterFold, sourceFile, false /*includeJSDoc*/)
-							isJSXTextSameLine := isJSXText && !strings.ContainsAny(sourceText[int(endOffset):jsxStart], "\r\n")
+							isJSXTextSameLine := isJSXText && jsxStart >= int(endOffset) && !strings.ContainsAny(sourceText[int(endOffset):jsxStart], "\r\n")
 							if isJSXTextSameLine {
 								// Keep JSX text visible on same line
 								adjustLine = true
