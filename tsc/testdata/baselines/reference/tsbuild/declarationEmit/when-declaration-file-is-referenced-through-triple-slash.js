@@ -59,7 +59,7 @@ export function getVar(): keyof typeof variable {
     "include": [],
 }
 
-tsgo --b --verbose
+tsc --b --verbose
 ExitStatus:: Success
 Output::
 [[90mHH:MM:SS AM[0m] Projects in this build: 

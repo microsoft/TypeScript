@@ -34,7 +34,7 @@ export interface Unrelated {}
 //// [/home/src/workspaces/project/tsconfig.json] *new* 
 {"compilerOptions":{"incremental":true,"noEmit":true,"types":[],"lib":["es5"]}}
 
-tsgo --checkers 1
+tsc --checkers 1
 ExitStatus:: DiagnosticsPresent_OutputsGenerated
 Output::
 [96m../../tslibs/TS/Lib/lib.es5.d.ts[0m:[93m23[0m:[93m11[0m - [91merror[0m[90m TS2428: [0mAll declarations of 'Shared' must have identical type parameters.
@@ -174,7 +174,7 @@ Edit [0]:: delete global and module declarations
 //// [/home/src/workspaces/project/global.d.ts] *deleted*
 //// [/home/src/workspaces/project/module.d.ts] *deleted*
 
-tsgo --checkers 1
+tsc --checkers 1
 ExitStatus:: Success
 Output::
 //// [/home/src/workspaces/project/tsconfig.tsbuildinfo] *modified* 
@@ -242,7 +242,7 @@ Signatures::
 
 Edit [1]:: no change
 
-tsgo --checkers 1
+tsc --checkers 1
 ExitStatus:: Success
 Output::
 
@@ -255,7 +255,7 @@ Edit [2]:: restore global declaration
 //// [/home/src/workspaces/project/global.d.ts] *new* 
 interface Shared<T, U> {}
 
-tsgo --checkers 1
+tsc --checkers 1
 ExitStatus:: DiagnosticsPresent_OutputsGenerated
 Output::
 [96m../../tslibs/TS/Lib/lib.es5.d.ts[0m:[93m23[0m:[93m11[0m - [91merror[0m[90m TS2428: [0mAll declarations of 'Shared' must have identical type parameters.
@@ -391,7 +391,7 @@ Signatures::
 
 Edit [3]:: no change
 
-tsgo --checkers 1
+tsc --checkers 1
 ExitStatus:: DiagnosticsPresent_OutputsGenerated
 Output::
 [96m../../tslibs/TS/Lib/lib.es5.d.ts[0m:[93m23[0m:[93m11[0m - [91merror[0m[90m TS2428: [0mAll declarations of 'Shared' must have identical type parameters.

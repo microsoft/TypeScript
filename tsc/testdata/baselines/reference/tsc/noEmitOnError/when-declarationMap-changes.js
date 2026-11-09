@@ -14,7 +14,7 @@ const y = 10;
     },
 }
 
-tsgo 
+tsc 
 ExitStatus:: Success
 Output::
 //// [/home/src/tslibs/TS/Lib/lib.es2026.full.d.ts] *Lib*
@@ -139,7 +139,7 @@ Edit [0]:: error and enable declarationMap
 //// [/home/src/workspaces/project/a.ts] *modified* 
 const x: 20 = 10;
 
-tsgo --declarationMap
+tsc --declarationMap
 ExitStatus:: DiagnosticsPresent_OutputsSkipped
 Output::
 [96ma.ts[0m:[93m1[0m:[93m7[0m - [91merror[0m[90m TS2322: [0mType '10' is not assignable to type '20'.
@@ -287,7 +287,7 @@ Edit [1]:: fix error declarationMap
 //// [/home/src/workspaces/project/a.ts] *modified* 
 const x = 10;
 
-tsgo --declarationMap
+tsc --declarationMap
 ExitStatus:: Success
 Output::
 //// [/home/src/workspaces/project/a.d.ts] *modified* 

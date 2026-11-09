@@ -49,7 +49,7 @@ export { default as bar } from './bar';
     },
 }
 
-tsgo --b --verbose
+tsc --b --verbose
 ExitStatus:: DiagnosticsPresent_OutputsGenerated
 Output::
 [[90mHH:MM:SS AM[0m] Projects in this build: 
@@ -344,7 +344,7 @@ declare function foo<U extends any[] = any[]>(): ActionFactory;
 export default foo()(function foobar(): void {
 });
 
-tsgo --b --verbose
+tsc --b --verbose
 ExitStatus:: DiagnosticsPresent_OutputsGenerated
 Output::
 [[90mHH:MM:SS AM[0m] Projects in this build: 
@@ -538,7 +538,7 @@ declare function foo<U extends any[] = any[]>(): ActionFactory;
 export default foo()(function foobar(param: string): void {
 });
 
-tsgo --b --verbose
+tsc --b --verbose
 ExitStatus:: DiagnosticsPresent_OutputsGenerated
 Output::
 [[90mHH:MM:SS AM[0m] Projects in this build: 

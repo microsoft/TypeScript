@@ -30,7 +30,7 @@ export const result = <div />;
     ]
 }
 
-tsgo --project producer --listEmittedFiles
+tsc --project producer --listEmittedFiles
 ExitStatus:: Success
 Output::
 TSFILE: /home/src/workspaces/project/producer/dist/index.d.ts
@@ -141,7 +141,7 @@ Signatures::
 
 Edit [0]:: no change
 
-tsgo --project producer --listEmittedFiles
+tsc --project producer --listEmittedFiles
 ExitStatus:: Success
 Output::
 
@@ -174,7 +174,7 @@ Edit [1]:: change reactNamespace without changing source files
     ]
 }
 
-tsgo --project producer --listEmittedFiles
+tsc --project producer --listEmittedFiles
 ExitStatus:: DiagnosticsPresent_OutputsGenerated
 Output::
 [96mproducer/index.tsx[0m:[93m5[0m:[93m23[0m - [91merror[0m[90m TS7026: [0mJSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
@@ -291,7 +291,7 @@ Signatures::
 
 Edit [2]:: no change
 
-tsgo --project producer --listEmittedFiles
+tsc --project producer --listEmittedFiles
 ExitStatus:: DiagnosticsPresent_OutputsGenerated
 Output::
 [96mproducer/index.tsx[0m:[93m5[0m:[93m23[0m - [91merror[0m[90m TS7026: [0mJSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
@@ -315,7 +315,7 @@ Signatures::
 
 Edit [3]:: force rebuild with the same compiler options
 
-tsgo --build producer --verbose --force
+tsc --build producer --verbose --force
 ExitStatus:: DiagnosticsPresent_OutputsGenerated
 Output::
 [[90mHH:MM:SS AM[0m] Projects in this build: 
@@ -352,7 +352,7 @@ Signatures::
 
 Edit [4]:: no change
 
-tsgo --project producer --listEmittedFiles
+tsc --project producer --listEmittedFiles
 ExitStatus:: DiagnosticsPresent_OutputsGenerated
 Output::
 [96mproducer/index.tsx[0m:[93m5[0m:[93m23[0m - [91merror[0m[90m TS7026: [0mJSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.

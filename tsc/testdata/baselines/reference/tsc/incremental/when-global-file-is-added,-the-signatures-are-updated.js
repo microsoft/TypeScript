@@ -17,7 +17,7 @@ function main() { }
     "include": ["src/**/*.ts"],
 }
 
-tsgo 
+tsc 
 ExitStatus:: DiagnosticsPresent_OutputsGenerated
 Output::
 [96msrc/anotherFileWithSameReferenes.ts[0m:[93m2[0m:[93m22[0m - [91merror[0m[90m TS6053: [0mFile './fileNotFound.ts' not found.
@@ -201,7 +201,7 @@ Signatures::
 
 Edit [0]:: no change
 
-tsgo 
+tsc 
 ExitStatus:: DiagnosticsPresent_OutputsGenerated
 Output::
 [96msrc/anotherFileWithSameReferenes.ts[0m:[93m2[0m:[93m22[0m - [91merror[0m[90m TS6053: [0mFile './fileNotFound.ts' not found.
@@ -233,7 +233,7 @@ Edit [1]:: Modify main file
 /// <reference path="./fileNotFound.ts"/>
 function main() { }something();
 
-tsgo 
+tsc 
 ExitStatus:: DiagnosticsPresent_OutputsGenerated
 Output::
 [96msrc/anotherFileWithSameReferenes.ts[0m:[93m2[0m:[93m22[0m - [91merror[0m[90m TS6053: [0mFile './fileNotFound.ts' not found.
@@ -375,7 +375,7 @@ Edit [2]:: Modify main file again
 /// <reference path="./fileNotFound.ts"/>
 function main() { }something();something();
 
-tsgo 
+tsc 
 ExitStatus:: DiagnosticsPresent_OutputsGenerated
 Output::
 [96msrc/anotherFileWithSameReferenes.ts[0m:[93m2[0m:[93m22[0m - [91merror[0m[90m TS6053: [0mFile './fileNotFound.ts' not found.
@@ -521,7 +521,7 @@ function main() { }something();something();foo();
 //// [/home/src/workspaces/project/src/newFile.ts] *new* 
 function foo() { return 20; }
 
-tsgo 
+tsc 
 ExitStatus:: DiagnosticsPresent_OutputsGenerated
 Output::
 [96msrc/anotherFileWithSameReferenes.ts[0m:[93m2[0m:[93m22[0m - [91merror[0m[90m TS6053: [0mFile './fileNotFound.ts' not found.
@@ -701,7 +701,7 @@ Edit [4]:: Write file that could not be resolved
 //// [/home/src/workspaces/project/src/fileNotFound.ts] *new* 
 function something2() { return 20; }
 
-tsgo 
+tsc 
 ExitStatus:: Success
 Output::
 //// [/home/src/workspaces/project/src/anotherFileWithSameReferenes.js] *rewrite with same content*
@@ -874,7 +874,7 @@ Edit [5]:: Modify main file
 /// <reference path="./fileNotFound.ts"/>
 function main() { }something();something();foo();something();
 
-tsgo 
+tsc 
 ExitStatus:: Success
 Output::
 //// [/home/src/workspaces/project/src/main.js] *modified* 

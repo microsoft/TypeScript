@@ -10,7 +10,7 @@ const fn = (a: string, b: string) => b;
     },
 }
 
-tsgo -b -w
+tsc -b -w
 ExitStatus:: DiagnosticsPresent_OutputsGenerated
 Output::
 [2J[3J[H[[90mHH:MM:SS AM[0m] Starting compilation in watch mode...

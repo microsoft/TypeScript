@@ -60,7 +60,7 @@ export const m = mod;
     },
 }
 
-tsgo -b -w tests --preserveWatchOutput
+tsc -b -w tests --preserveWatchOutput
 ExitStatus:: Success
 Output::
 [[90mHH:MM:SS AM[0m] Starting compilation in watch mode...
