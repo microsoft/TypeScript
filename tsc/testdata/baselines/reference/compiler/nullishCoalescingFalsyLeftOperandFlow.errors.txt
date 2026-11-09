@@ -36,4 +36,6 @@ nullishCoalescingFalsyLeftOperandFlow.ts(8,112): error TS2322: Type '"" | undefi
 !!! error TS2322: Type '"" | undefined' is not assignable to type 'undefined'.
 !!! error TS2322:   Type '""' is not assignable to type 'undefined'.
     function f7(a: "" | boolean | undefined, b: boolean) { if (a ??= b) {} else { a === ""; } }
+    function f8(a: "" | undefined) { let b: 0 | 1 = 0; if ((a ?? (b = 1, ""))?.[b = 1]) {} else { const one: 1 = b; } }
+    function f9(a: ((x: 1) => boolean) | undefined, d: (x: 1) => boolean) { let b: 0 | 1 = 0; if ((a ?? (b = 1, d))?.(b = 1)) {} else { const one: 1 = b; } }
     

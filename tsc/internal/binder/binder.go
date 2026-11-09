@@ -2305,7 +2305,8 @@ func (b *Binder) bindLogicalLikeExpression(node *ast.Node, trueTarget *ast.FlowL
 	} else {
 		b.bindCondition(expr.Left, trueTarget, preRightLabel)
 	}
-	if (expr.OperatorToken.Kind == ast.KindQuestionQuestionToken || expr.OperatorToken.Kind == ast.KindQuestionQuestionEqualsToken) && canBeFalsyNonNullish(expr.Left) && !ast.IsLogicalExpression(ast.WalkUpParenthesizedExpressions(node.Parent)) {
+	parent := ast.WalkUpParenthesizedExpressions(node.Parent)
+	if (expr.OperatorToken.Kind == ast.KindQuestionQuestionToken || expr.OperatorToken.Kind == ast.KindQuestionQuestionEqualsToken) && canBeFalsyNonNullish(expr.Left) && !ast.IsLogicalExpression(parent) && !(ast.IsOptionalChain(parent) && ast.SkipParentheses(parent.Expression()) == node) {
 		b.addAntecedent(falseTarget, b.createFlowCondition(ast.FlowFlagsCondition, b.currentFlow, expr.Left))
 	}
 	b.currentFlow = b.finishFlowLabel(preRightLabel)
