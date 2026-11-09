@@ -5,14 +5,13 @@
     "license": "Apache-2.0",
     "author": "Microsoft Corp.",
     "homepage": "https://www.typescriptlang.org/",
-    "description": "Preview CLI and JS API for the native TypeScript compiler port",
+    "description": "TypeScript is a language for application scale JavaScript development",
     "keywords": [
         "TypeScript",
         "Microsoft",
         "compiler",
         "language",
-        "javascript",
-        "tsgo"
+        "javascript"
     ],
     "bugs": {
         "url": "https://github.com/microsoft/TypeScript/issues"
@@ -120,9 +119,9 @@
         "test": "npm run test:only"
     },
     "devDependencies": {
-        "@types/node": "^22.20.1",
-        "playwright": "^1.62.1",
-        "tinybench": "^6.1.6",
-        "vscode-jsonrpc": "^9.0.2"
+        "@types/node": "^22.20.5",
+        "playwright": "^1.64.1",
+        "tinybench": "^6.2.2",
+        "vscode-jsonrpc": "^10.0.0"
     }
 }

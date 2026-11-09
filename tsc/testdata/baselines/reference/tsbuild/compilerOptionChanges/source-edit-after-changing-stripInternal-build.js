@@ -21,7 +21,7 @@ export const forwarded = new Result().value;
 					"files": ["a.ts", "b.ts"]
 				}
 
-tsgo --build --verbose
+tsc --build --verbose
 ExitStatus:: Success
 Output::
 [[90mHH:MM:SS AM[0m] Projects in this build: 
@@ -162,7 +162,7 @@ Edit [0]:: disable stripInternal without changing source files
 					"files": ["a.ts", "b.ts"]
 				}
 
-tsgo --build --verbose
+tsc --build --verbose
 ExitStatus:: Success
 Output::
 [[90mHH:MM:SS AM[0m] Projects in this build: 
@@ -266,7 +266,7 @@ Signatures::
 
 Edit [1]:: no change
 
-tsgo --build --verbose
+tsc --build --verbose
 ExitStatus:: Success
 Output::
 [[90mHH:MM:SS AM[0m] Projects in this build: 
@@ -283,7 +283,7 @@ export class Result {
 }
 
 
-tsgo --build --verbose
+tsc --build --verbose
 ExitStatus:: DiagnosticsPresent_OutputsGenerated
 Output::
 [[90mHH:MM:SS AM[0m] Projects in this build: 
@@ -417,7 +417,7 @@ Signatures::
 
 Edit [3]:: no change
 
-tsgo --build --verbose
+tsc --build --verbose
 ExitStatus:: DiagnosticsPresent_OutputsGenerated
 Output::
 [[90mHH:MM:SS AM[0m] Projects in this build: 
@@ -443,7 +443,7 @@ Signatures::
 
 Edit [4]:: force rebuild
 
-tsgo --build --verbose --force
+tsc --build --verbose --force
 ExitStatus:: DiagnosticsPresent_OutputsGenerated
 Output::
 [[90mHH:MM:SS AM[0m] Projects in this build: 
@@ -478,7 +478,7 @@ Signatures::
 
 Edit [5]:: no change
 
-tsgo --build --verbose
+tsc --build --verbose
 ExitStatus:: DiagnosticsPresent_OutputsGenerated
 Output::
 [[90mHH:MM:SS AM[0m] Projects in this build: 

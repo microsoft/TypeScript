@@ -35,7 +35,7 @@ export const result = make<string>();
     "files": ["index.ts"]
 }
 
-tsgo --build consumer --verbose
+tsc --build consumer --verbose
 ExitStatus:: DiagnosticsPresent_OutputsGenerated
 Output::
 [[90mHH:MM:SS AM[0m] Projects in this build: 
@@ -291,7 +291,7 @@ Edit [0]:: toggle exactOptionalPropertyTypes without changing source files
     "files": ["index.ts"]
 }
 
-tsgo --build consumer --verbose
+tsc --build consumer --verbose
 ExitStatus:: Success
 Output::
 [[90mHH:MM:SS AM[0m] Projects in this build: 
@@ -453,7 +453,7 @@ Signatures::
 
 Edit [1]:: no change
 
-tsgo --build consumer --verbose
+tsc --build consumer --verbose
 ExitStatus:: Success
 Output::
 [[90mHH:MM:SS AM[0m] Projects in this build: 
@@ -469,7 +469,7 @@ Output::
 
 Edit [2]:: force rebuild with the same compiler options
 
-tsgo --build consumer --verbose --force
+tsc --build consumer --verbose --force
 ExitStatus:: Success
 Output::
 [[90mHH:MM:SS AM[0m] Projects in this build: 
@@ -509,7 +509,7 @@ Signatures::
 
 Edit [3]:: no change
 
-tsgo --build consumer --verbose
+tsc --build consumer --verbose
 ExitStatus:: Success
 Output::
 [[90mHH:MM:SS AM[0m] Projects in this build: 

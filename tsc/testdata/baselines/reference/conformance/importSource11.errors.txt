@@ -6,8 +6,8 @@ f.js(1,14): error TS1005: '(' expected.
 f.js(2,15): error TS1005: '(' expected.
 f.js(3,23): error TS1005: '(' expected.
 f.js(4,14): error TS1005: '(' expected.
-f.js(6,1): message TS1450: Dynamic imports can only accept a module specifier and an optional set of attributes as arguments
-f.js(7,1): message TS1450: Dynamic imports can only accept a module specifier and an optional set of attributes as arguments
+f.js(6,1): error TS1450: Dynamic imports can only accept a module specifier and an optional set of attributes as arguments
+f.js(7,1): error TS1450: Dynamic imports can only accept a module specifier and an optional set of attributes as arguments
 f.js(8,14): error TS18114: Optional chaining cannot be used with 'import.source'.
 f.js(9,14): error TS1005: '(' expected.
 f.js(10,15): error TS1325: Argument of dynamic import cannot be spread element.
@@ -57,10 +57,10 @@ m.js(1,8): error TS1260: Keywords cannot contain escape characters.
     
     import.source();
     ~~~~~~~~~~~~~~~
-!!! message TS1450: Dynamic imports can only accept a module specifier and an optional set of attributes as arguments
+!!! error TS1450: Dynamic imports can only accept a module specifier and an optional set of attributes as arguments
     import.source("./a.js", {}, {});
     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! message TS1450: Dynamic imports can only accept a module specifier and an optional set of attributes as arguments
+!!! error TS1450: Dynamic imports can only accept a module specifier and an optional set of attributes as arguments
     import.source?.("./a.js");
                  ~~
 !!! error TS18114: Optional chaining cannot be used with 'import.source'.

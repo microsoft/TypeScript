@@ -54,7 +54,7 @@ export const x = 10;
     ]
 }
 
-tsgo --b --v
+tsc --b --v
 ExitStatus:: Success
 Output::
 [[90mHH:MM:SS AM[0m] Projects in this build: 
@@ -286,7 +286,7 @@ Signatures::
 
 Edit [0]:: no change
 
-tsgo --b --v
+tsc --b --v
 ExitStatus:: Success
 Output::
 [[90mHH:MM:SS AM[0m] Projects in this build: 

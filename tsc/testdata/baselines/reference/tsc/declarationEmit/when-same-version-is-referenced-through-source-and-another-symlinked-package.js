@@ -78,7 +78,7 @@ export default actionCreatorFactory;
     "version": "3.0.0-beta-2"
 }
 
-tsgo -p plugin-one --explainFiles
+tsc -p plugin-one --explainFiles
 ExitStatus:: DiagnosticsPresent_OutputsGenerated
 Output::
 ======== Resolving module 'typescript-fsa' from '/user/username/projects/myproject/plugin-one/action.ts'. ========

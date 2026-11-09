@@ -59,7 +59,7 @@ export const m = mod;
     },
 }
 
-tsgo --b tests --verbose --stopBuildOnErrors --watch
+tsc --b tests --verbose --stopBuildOnErrors --watch
 ExitStatus:: DiagnosticsPresent_OutputsGenerated
 Output::
 [2J[3J[H[[90mHH:MM:SS AM[0m] Starting compilation in watch mode...

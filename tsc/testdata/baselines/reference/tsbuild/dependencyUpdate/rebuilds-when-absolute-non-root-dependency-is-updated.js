@@ -19,7 +19,7 @@ export const value: string = myValue;
 //// [D:/work/deps/dep.d.ts] *new* 
 export declare const myValue: string;
 
-tsgo --b --verbose
+tsc --b --verbose
 ExitStatus:: Success
 Output::
 [[90mHH:MM:SS AM[0m] Projects in this build: 
@@ -146,7 +146,7 @@ Edit [0]:: update absolute non-root dependency with breaking type change
 //// [D:/work/deps/dep.d.ts] *modified* 
 export declare const myValue: number;
 
-tsgo --b --verbose
+tsc --b --verbose
 ExitStatus:: DiagnosticsPresent_OutputsGenerated
 Output::
 [[90mHH:MM:SS AM[0m] Projects in this build: 

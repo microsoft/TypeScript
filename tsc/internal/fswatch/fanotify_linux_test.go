@@ -127,13 +127,15 @@ func TestLinuxFanotifyMaybeWrapUnsupportedFilesystem(t *testing.T) {
 	// Errnos that indicate the filesystem cannot support fanotify FID-based
 	// watching are tagged with ErrFilesystemUnsupported so higher layers can
 	// fall back to inotify (issue #63646).
-	for _, errno := range []error{unix.EOPNOTSUPP, unix.ENODEV} {
-		wrapped := maybeWrapUnsupportedFilesystem(fmt.Errorf("name_to_handle_at: %w", errno))
-		if !errors.Is(wrapped, ErrFilesystemUnsupported) {
-			t.Errorf("expected %v to be tagged ErrFilesystemUnsupported", errno)
-		}
-		if !errors.Is(wrapped, errno) {
-			t.Errorf("expected wrapped error to still unwrap to %v", errno)
+	for _, errno := range []error{unix.EOPNOTSUPP, unix.ENODEV, unix.EXDEV} {
+		for _, err := range []error{errno, fmt.Errorf("name_to_handle_at: %w", errno)} {
+			wrapped := maybeWrapUnsupportedFilesystem(err)
+			if !errors.Is(wrapped, ErrFilesystemUnsupported) {
+				t.Errorf("expected %v to be tagged ErrFilesystemUnsupported", err)
+			}
+			if !errors.Is(wrapped, errno) {
+				t.Errorf("expected wrapped error to still unwrap to %v", errno)
+			}
 		}
 	}
 

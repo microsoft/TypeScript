@@ -170,7 +170,7 @@ func StartTracing(fs vfs.FS, traceDir tspath.RootedDirectoryPath, configFilePath
 	// Write metadata events (matching TypeScript's format)
 	metaTs := tr.timestamp()
 	tr.metadataTS = metaTs
-	tr.writeEvent(traceEvent{PID: 1, TID: mainThreadID, PH: "M", Cat: "__metadata", TS: metaTs, Name: "process_name", Args: map[string]any{"name": "tsgo"}})
+	tr.writeEvent(traceEvent{PID: 1, TID: mainThreadID, PH: "M", Cat: "__metadata", TS: metaTs, Name: "process_name", Args: map[string]any{"name": "tsc"}})
 	tr.traceContent.WriteString(",\n")
 	tr.writeEvent(traceEvent{PID: 1, TID: mainThreadID, PH: "M", Cat: "__metadata", TS: metaTs, Name: "thread_name", Args: map[string]any{"name": "Main"}})
 	tr.traceContent.WriteString(",\n")

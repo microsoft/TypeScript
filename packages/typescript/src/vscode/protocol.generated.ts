@@ -1585,6 +1585,11 @@ export interface InlayHintParams {
      */
     workDoneToken?: ProgressToken | undefined;
     /**
+     * An optional token that a server can use to report partial results (e.g. streaming) to
+     * the client.
+     */
+    partialResultToken?: ProgressToken | undefined;
+    /**
      * The text document.
      */
     textDocument: TextDocumentIdentifier;
