@@ -186,7 +186,7 @@ func (c *Checker) resolvingGet(key memoKey) (int32, bool) {
 //go:noinline
 func (c *Checker) resolvingFind(key memoKey) (int32, bool) {
 	for i := range c.resolutions {
-		if f := &c.resolutions[i]; f.resolving && f.key == key && !f.shadowed {
+		if f := &c.resolutions[i]; f.resolving && f.key == key && f.source == nil && !f.shadowed {
 			return int32(i), true
 		}
 	}
