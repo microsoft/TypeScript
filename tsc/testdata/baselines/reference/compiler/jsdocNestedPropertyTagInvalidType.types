@@ -1,0 +1,43 @@
+//// [tests/cases/compiler/jsdocNestedPropertyTagInvalidType.ts] ////
+
+=== /a.js ===
+
+/**
+ * @typedef Sig
+ * @property {object} Args
+ * @property {string} Args.name
+ * @property {function(string)=} Args.onSave
+ * @property {((v: string) => void)=} Args.onCancel
+ */
+
+/**
+ * @typedef Flat
+ * @property {string} name
+ * @property {function(string)=} onSave
+ * @property {((v: string) => void)=} onCancel
+ */
+
+export {};
+
+=== /b.ts ===
+import type { Sig, Flat } from "./a.js";
+>Sig : Sig
+>Flat : Flat
+
+export const nested: Array<keyof Sig["Args"]> = ["name", "onCancel"];
+>nested : ("" | "name" | "onCancel")[]
+>["name", "onCancel"] : ("name" | "onCancel")[]
+>"name" : "name"
+>"onCancel" : "onCancel"
+
+export const flat: Array<keyof Flat> = ["name", "onCancel"];
+>flat : (keyof Flat)[]
+>["name", "onCancel"] : ("name" | "onCancel")[]
+>"name" : "name"
+>"onCancel" : "onCancel"
+
+export const onCancel: Sig["Args"]["onCancel"] = (v: string) => {};
+>onCancel : ((v: string) => void) | undefined
+>(v: string) => {} : (v: string) => void
+>v : string
+
