@@ -275,6 +275,7 @@ jobs:
           owner: microsoft
           repositories: TypeScript
           permission-issues: write
+          permission-pull-requests: write
       - name: Check build result
         env:
           PUBLISH_RESULT: ${{ needs.publish.result }}
