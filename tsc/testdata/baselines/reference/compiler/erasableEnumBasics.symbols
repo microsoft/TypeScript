@@ -1,0 +1,121 @@
+//// [tests/cases/compiler/erasableEnumBasics.ts] ////
+
+=== erasableEnumBasics.ts ===
+const existingValue = "exists";
+>existingValue : Symbol(existingValue, Decl(erasableEnumBasics.ts, 0, 5))
+
+const E: enum = {
+>E : Symbol(E, Decl(erasableEnumBasics.ts, 1, 5))
+
+    Existing: existingValue,
+>Existing : Symbol(E.Existing, Decl(erasableEnumBasics.ts, 1, 17))
+>existingValue : Symbol(existingValue, Decl(erasableEnumBasics.ts, 0, 5))
+
+    Int: 1,
+>Int : Symbol(E.Int, Decl(erasableEnumBasics.ts, 2, 28))
+
+    String: "string",
+>String : Symbol(E.String, Decl(erasableEnumBasics.ts, 3, 11))
+
+    Flag: 8,
+>Flag : Symbol(E.Flag, Decl(erasableEnumBasics.ts, 4, 21))
+
+};
+
+// Members are assignable to their enum type and their own member type.
+let value: E = E.Existing;
+>value : Symbol(value, Decl(erasableEnumBasics.ts, 9, 3))
+>E : Symbol(E, Decl(erasableEnumBasics.ts, 1, 5))
+>E.Existing : Symbol(E.Existing, Decl(erasableEnumBasics.ts, 1, 17))
+>E : Symbol(E, Decl(erasableEnumBasics.ts, 1, 5))
+>Existing : Symbol(E.Existing, Decl(erasableEnumBasics.ts, 1, 17))
+
+value = E.Int;
+>value : Symbol(value, Decl(erasableEnumBasics.ts, 9, 3))
+>E.Int : Symbol(E.Int, Decl(erasableEnumBasics.ts, 2, 28))
+>E : Symbol(E, Decl(erasableEnumBasics.ts, 1, 5))
+>Int : Symbol(E.Int, Decl(erasableEnumBasics.ts, 2, 28))
+
+value = E.String;
+>value : Symbol(value, Decl(erasableEnumBasics.ts, 9, 3))
+>E.String : Symbol(E.String, Decl(erasableEnumBasics.ts, 3, 11))
+>E : Symbol(E, Decl(erasableEnumBasics.ts, 1, 5))
+>String : Symbol(E.String, Decl(erasableEnumBasics.ts, 3, 11))
+
+let intMember: E.Int = E.Int;
+>intMember : Symbol(intMember, Decl(erasableEnumBasics.ts, 12, 3))
+>E : Symbol(E, Decl(erasableEnumBasics.ts, 1, 5))
+>Int : Symbol(E.Int, Decl(erasableEnumBasics.ts, 2, 28))
+>E.Int : Symbol(E.Int, Decl(erasableEnumBasics.ts, 2, 28))
+>E : Symbol(E, Decl(erasableEnumBasics.ts, 1, 5))
+>Int : Symbol(E.Int, Decl(erasableEnumBasics.ts, 2, 28))
+
+intMember = E.Flag; // error: a different known member.
+>intMember : Symbol(intMember, Decl(erasableEnumBasics.ts, 12, 3))
+>E.Flag : Symbol(E.Flag, Decl(erasableEnumBasics.ts, 4, 21))
+>E : Symbol(E, Decl(erasableEnumBasics.ts, 1, 5))
+>Flag : Symbol(E.Flag, Decl(erasableEnumBasics.ts, 4, 21))
+
+// Matching numeric literals are accepted, but other known literals are rejected.
+value = 1;
+>value : Symbol(value, Decl(erasableEnumBasics.ts, 9, 3))
+
+value = 4; // error
+>value : Symbol(value, Decl(erasableEnumBasics.ts, 9, 3))
+
+// String members retain nominal types, including values from constant references.
+value = "exists"; // error
+>value : Symbol(value, Decl(erasableEnumBasics.ts, 9, 3))
+
+value = "string"; // error
+>value : Symbol(value, Decl(erasableEnumBasics.ts, 9, 3))
+
+const Other: enum = { String: "string" };
+>Other : Symbol(Other, Decl(erasableEnumBasics.ts, 22, 5))
+>String : Symbol(Other.String, Decl(erasableEnumBasics.ts, 22, 21))
+
+value = Other.String; // error: members from different enums are incompatible.
+>value : Symbol(value, Decl(erasableEnumBasics.ts, 9, 3))
+>Other.String : Symbol(Other.String, Decl(erasableEnumBasics.ts, 22, 21))
+>Other : Symbol(Other, Decl(erasableEnumBasics.ts, 22, 5))
+>String : Symbol(Other.String, Decl(erasableEnumBasics.ts, 22, 21))
+
+let other: Other = Other.String;
+>other : Symbol(other, Decl(erasableEnumBasics.ts, 24, 3))
+>Other : Symbol(Other, Decl(erasableEnumBasics.ts, 22, 5))
+>Other.String : Symbol(Other.String, Decl(erasableEnumBasics.ts, 22, 21))
+>Other : Symbol(Other, Decl(erasableEnumBasics.ts, 22, 5))
+>String : Symbol(Other.String, Decl(erasableEnumBasics.ts, 22, 21))
+
+other = "string"; // error: a single-member enum is also nominal.
+>other : Symbol(other, Decl(erasableEnumBasics.ts, 24, 3))
+
+other = E.String; // error
+>other : Symbol(other, Decl(erasableEnumBasics.ts, 24, 3))
+>E.String : Symbol(E.String, Decl(erasableEnumBasics.ts, 3, 11))
+>E : Symbol(E, Decl(erasableEnumBasics.ts, 1, 5))
+>String : Symbol(E.String, Decl(erasableEnumBasics.ts, 3, 11))
+
+value = undefined; // error
+>value : Symbol(value, Decl(erasableEnumBasics.ts, 9, 3))
+>undefined : Symbol(undefined)
+
+// Number expressions retain TypeScript's numeric enum compatibility.
+value = E.Int | E.Flag;
+>value : Symbol(value, Decl(erasableEnumBasics.ts, 9, 3))
+>E.Int : Symbol(E.Int, Decl(erasableEnumBasics.ts, 2, 28))
+>E : Symbol(E, Decl(erasableEnumBasics.ts, 1, 5))
+>Int : Symbol(E.Int, Decl(erasableEnumBasics.ts, 2, 28))
+>E.Flag : Symbol(E.Flag, Decl(erasableEnumBasics.ts, 4, 21))
+>E : Symbol(E, Decl(erasableEnumBasics.ts, 1, 5))
+>Flag : Symbol(E.Flag, Decl(erasableEnumBasics.ts, 4, 21))
+
+intMember = E.Int | E.Flag;
+>intMember : Symbol(intMember, Decl(erasableEnumBasics.ts, 12, 3))
+>E.Int : Symbol(E.Int, Decl(erasableEnumBasics.ts, 2, 28))
+>E : Symbol(E, Decl(erasableEnumBasics.ts, 1, 5))
+>Int : Symbol(E.Int, Decl(erasableEnumBasics.ts, 2, 28))
+>E.Flag : Symbol(E.Flag, Decl(erasableEnumBasics.ts, 4, 21))
+>E : Symbol(E, Decl(erasableEnumBasics.ts, 1, 5))
+>Flag : Symbol(E.Flag, Decl(erasableEnumBasics.ts, 4, 21))
+

@@ -112,6 +112,9 @@ func (r *EmitResolver) GetEnumMemberValue(node *ast.Node) evaluator.Result {
 	r.checkerMu.Lock()
 	defer r.checkerMu.Unlock()
 
+	if ast.IsErasableEnumMember(node) {
+		return r.checker.getErasableEnumMemberValue(node)
+	}
 	r.checker.computeEnumMemberValues(node.Parent)
 	if !r.checker.enumMemberLinks.Has(node) {
 		return evaluator.NewResult(nil, false, false, false)

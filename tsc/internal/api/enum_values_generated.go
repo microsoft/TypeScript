@@ -60,6 +60,7 @@ func main() {
 			"ReplaceableByMethod":                 toInt32(ast.SymbolFlagsReplaceableByMethod),
 			"GlobalLookup":                        toInt32(ast.SymbolFlagsGlobalLookup),
 			"NameProxy":                           toInt32(ast.SymbolFlagsNameProxy),
+			"ErasableEnum":                        toInt32(ast.SymbolFlagsErasableEnum),
 			"All":                                 toInt32(ast.SymbolFlagsAll),
 			"Enum":                                toInt32(ast.SymbolFlagsEnum),
 			"Variable":                            toInt32(ast.SymbolFlagsVariable),

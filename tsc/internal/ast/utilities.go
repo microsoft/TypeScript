@@ -2330,12 +2330,19 @@ const (
 func GetMeaningFromDeclaration(node *Node) SemanticMeaning {
 	switch node.Kind {
 	case KindVariableDeclaration:
+		if IsErasableEnumDeclaration(node) {
+			return SemanticMeaningAll
+		}
+		return SemanticMeaningValue
+	case KindPropertyAssignment:
+		if IsErasableEnumMember(node) {
+			return SemanticMeaningValue | SemanticMeaningType
+		}
 		return SemanticMeaningValue
 	case KindParameter,
 		KindBindingElement,
 		KindPropertyDeclaration,
 		KindPropertySignature,
-		KindPropertyAssignment,
 		KindShorthandPropertyAssignment,
 		KindMethodDeclaration,
 		KindMethodSignature,
@@ -4708,4 +4715,54 @@ func IsProtoSetter(node *Node) bool {
 func IsStringLiteralLikeType(node *Node) bool {
 	return node.Kind == KindLiteralType &&
 		IsStringLiteralLike(node.AsLiteralTypeNode().Literal)
+}
+
+// IsEnumTypeAnnotation recognizes the contextual enum annotation on a variable declaration.
+func IsEnumTypeAnnotation(node *Node) bool {
+	return node != nil && IsTypeReferenceNode(node) &&
+		IsIdentifier(node.AsTypeReferenceNode().TypeName) &&
+		node.AsTypeReferenceNode().TypeName.Text() == "enum" && node.AsTypeReferenceNode().TypeArguments == nil
+}
+
+func HasEnumTypeAnnotation(node *Node) bool {
+	return node != nil && IsVariableDeclaration(node) && IsEnumTypeAnnotation(node.Type())
+}
+
+func GetErasableEnumInitializer(node *Node) *Node {
+	if !HasEnumTypeAnnotation(node) || !IsIdentifier(node.Name()) || node.Parent == nil || node.Parent.Parent == nil || !IsVariableStatement(node.Parent.Parent) {
+		return nil
+	}
+	initializer := node.Initializer()
+	if initializer != nil {
+		initializer = SkipParentheses(initializer)
+		if IsObjectLiteralExpression(initializer) {
+			return initializer
+		}
+	}
+	return nil
+}
+
+func IsErasableEnumDeclaration(node *Node) bool { return GetErasableEnumInitializer(node) != nil }
+
+func GetErasableEnumDeclaration(node *Node) *Node {
+	if node == nil || !IsObjectLiteralExpression(node) {
+		return nil
+	}
+	declaration := WalkUpParenthesizedExpressions(node.Parent)
+	if GetErasableEnumInitializer(declaration) == node {
+		return declaration
+	}
+	return nil
+}
+
+func IsErasableEnumInitializer(node *Node) bool {
+	return GetErasableEnumDeclaration(node) != nil
+}
+
+func IsErasableEnumMember(node *Node) bool {
+	return node != nil && IsPropertyAssignment(node) && IsErasableEnumInitializer(node.Parent) && !IsComputedPropertyName(node.Name()) && !IsErasableEnumPrototypeSetter(node)
+}
+
+func IsErasableEnumPrototypeSetter(node *Node) bool {
+	return node != nil && IsPropertyAssignment(node) && IsErasableEnumInitializer(node.Parent) && !IsComputedPropertyName(node.Name()) && GetTextOfPropertyName(node.Name()) == "__proto__"
 }

@@ -1922,6 +1922,10 @@ func (c *Checker) checkGrammarProperty(node *ast.Node /*Union[PropertyDeclaratio
 }
 
 func (c *Checker) checkAmbientInitializer(node *ast.Node) bool {
+	// Erasable enums retain their member values in declaration files.
+	if ast.IsErasableEnumDeclaration(node) {
+		return false
+	}
 	var initializer *ast.Expression
 	var typeNode *ast.TypeNode
 	switch node.Kind {

@@ -712,6 +712,8 @@ type Checker struct {
 	signatureLinks                              nodeLinkStore[SignatureLinks]
 	symbolNodeLinks                             nodeLinkStore[SymbolNodeLinks]
 	typeNodeLinks                               nodeLinkStore[TypeNodeLinks]
+	erasableEnumLinks                           core.LinkStore[*ast.Symbol, ErasableEnumLinks]
+	erasableEnumMemberLinks                     core.LinkStore[*ast.Node, ErasableEnumMemberLinks]
 	enumMemberLinks                             core.LinkStore[*ast.Node, EnumMemberLinks]
 	assertionLinks                              core.LinkStore[*ast.Node, AssertionLinks]
 	arrayLiteralLinks                           core.LinkStore[*ast.Node, ArrayLiteralLinks]
@@ -1280,6 +1282,10 @@ func (c *Checker) getGlobalType(name string, arity int, reportErrors bool) *Type
 func getGlobalTypeDeclaration(symbol *ast.Symbol) *ast.Declaration {
 	for _, declaration := range symbol.Declarations() {
 		switch declaration.Kind {
+		case ast.KindVariableDeclaration:
+			if ast.IsErasableEnumDeclaration(declaration) {
+				return declaration
+			}
 		case ast.KindClassDeclaration, ast.KindInterfaceDeclaration, ast.KindEnumDeclaration, ast.KindTypeAliasDeclaration:
 			return declaration
 		}
@@ -3079,7 +3085,8 @@ func (c *Checker) checkTypeReferenceNode(node *ast.Node) {
 		}
 	}
 	c.checkSourceElements(node.TypeArguments())
-	if !(isConstTypeReference(node) && ast.IsAssertionExpression(node.Parent)) {
+	if !(isConstTypeReference(node) && ast.IsAssertionExpression(node.Parent)) &&
+		!(ast.IsEnumTypeAnnotation(node) && node.Parent != nil && ast.IsVariableDeclaration(node.Parent)) {
 		c.checkTypeReferenceOrImport(node)
 	}
 }
@@ -5985,6 +5992,10 @@ func (c *Checker) checkVariableDeclaration(node *ast.Node) {
 		defer tr.Push(tracing.PhaseCheck, "checkVariableDeclaration", map[string]any{"kind": node.Kind, "pos": node.Pos(), "end": node.End(), "path": ast.GetSourceFileOfNode(node).FileName()}, false)()
 	}
 	c.checkGrammarVariableDeclaration(node.AsVariableDeclaration())
+	if ast.HasEnumTypeAnnotation(node) {
+		c.checkErasableEnumDeclaration(node)
+		return
+	}
 	c.checkVariableLikeDeclaration(node)
 }
 
@@ -7212,6 +7223,9 @@ func (c *Checker) getDeclarationSpaces(node *ast.Declaration) DeclarationSpaces 
 		}
 		return result
 	case ast.KindVariableDeclaration, ast.KindBindingElement, ast.KindFunctionDeclaration, ast.KindImportSpecifier:
+		if ast.IsErasableEnumDeclaration(node) {
+			return DeclarationSpacesExportType | DeclarationSpacesExportValue
+		}
 		return DeclarationSpacesExportValue
 	case ast.KindMethodSignature, ast.KindPropertySignature:
 		return DeclarationSpacesExportType
@@ -7982,6 +7996,9 @@ func (c *Checker) checkExpressionWorker(node *ast.Node, checkMode CheckMode) *Ty
 	case ast.KindArrayLiteralExpression:
 		return c.checkArrayLiteral(node, checkMode)
 	case ast.KindObjectLiteralExpression:
+		if ast.IsErasableEnumInitializer(node) {
+			return c.checkErasableEnumInitializer(node)
+		}
 		return c.checkObjectLiteral(node, checkMode)
 	case ast.KindPropertyAccessExpression:
 		return c.checkPropertyAccessExpression(node, checkMode, false /*writeOnly*/)
@@ -10709,7 +10726,7 @@ func (c *Checker) checkCollisionsForDeclarationName(node *ast.Node, name *ast.No
 		if node.Flags&ast.NodeFlagsAmbient == 0 {
 			c.checkClassNameCollisionWithObject(name)
 		}
-	} else if ast.IsEnumDeclaration(node) {
+	} else if ast.IsEnumDeclaration(node) || ast.IsErasableEnumDeclaration(node) {
 		c.checkTypeNameIsReserved(name, diagnostics.Enum_name_cannot_be_0)
 	}
 }
@@ -13931,7 +13948,7 @@ func (c *Checker) isValidConstAssertionArgument(node *ast.Node) bool {
 		if ast.IsEntityNameExpression(expr) {
 			symbol = c.resolveEntityName(expr, ast.SymbolFlagsValue, true /*ignoreErrors*/, false, nil)
 		}
-		return symbol != nil && symbol.Flags()&ast.SymbolFlagsEnum != 0
+		return symbol != nil && symbol.Flags()&(ast.SymbolFlagsEnum|ast.SymbolFlagsErasableEnum) != 0
 	}
 	return false
 }
@@ -14505,6 +14522,8 @@ func (c *Checker) reportMergeSymbolError(target *ast.Symbol, source *ast.Symbol)
 	isEitherBlockScoped := target.Flags()&ast.SymbolFlagsBlockScopedVariable != 0 || source.Flags()&ast.SymbolFlagsBlockScopedVariable != 0
 	var message *diagnostics.Message
 	switch {
+	case (target.Flags()|source.Flags())&ast.SymbolFlagsErasableEnum != 0:
+		message = diagnostics.Duplicate_identifier_0
 	case isEitherEnum:
 		message = diagnostics.Enum_declarations_can_only_merge_with_namespace_or_other_enum_declarations
 	case isEitherBlockScoped:
@@ -14590,6 +14609,9 @@ func getExcludedSymbolFlags(flags ast.SymbolFlags) ast.SymbolFlags {
 	}
 	if flags&ast.SymbolFlagsProperty != 0 {
 		result |= ast.SymbolFlagsPropertyExcludes
+	}
+	if flags&ast.SymbolFlagsErasableEnum != 0 {
+		result |= ast.SymbolFlagsValue | ast.SymbolFlagsType
 	}
 	if flags&ast.SymbolFlagsEnumMember != 0 {
 		result |= ast.SymbolFlagsEnumMemberExcludes
@@ -17019,6 +17041,9 @@ func (c *Checker) isParameterOfContextSensitiveSignature(symbol *ast.Symbol) boo
 }
 
 func (c *Checker) getTypeOfVariableOrParameterOrPropertyWorker(symbol *ast.Symbol) *Type {
+	if symbol.Flags()&ast.SymbolFlagsErasableEnum != 0 {
+		return c.getErasableEnumValueType(symbol)
+	}
 	// Handle prototype property
 	if symbol.Flags()&ast.SymbolFlagsPrototype != 0 {
 		return c.getTypeOfPrototypeProperty(symbol)
@@ -23709,6 +23734,11 @@ func (c *Checker) getTypeFromTypeReference(node *ast.Node) *Type {
 		// handle LS queries on the `const` in `x as const` by resolving to the type of `x`
 		if isConstTypeReference(node) && ast.IsAssertionExpression(node.Parent) {
 			links.resolvedType = c.checkExpressionCached(node.Parent.Expression())
+		} else if ast.IsEnumTypeAnnotation(node) && ast.HasEnumTypeAnnotation(node.Parent) {
+			links.resolvedType = c.errorType
+			if ast.IsErasableEnumDeclaration(node.Parent) {
+				links.resolvedType = c.getErasableEnumValueType(c.getSymbolOfDeclaration(node.Parent))
+			}
 		} else if t := c.getIntendedTypeFromJSDocTypeReference(node); t != nil {
 			links.resolvedType = t
 		} else {
@@ -24414,6 +24444,8 @@ func (c *Checker) getDeclaredTypeOfSymbol(symbol *ast.Symbol) *Type {
 
 func (c *Checker) tryGetDeclaredTypeOfSymbol(symbol *ast.Symbol) *Type {
 	switch {
+	case symbol.Flags()&ast.SymbolFlagsErasableEnum != 0:
+		return c.getDeclaredTypeOfErasableEnum(symbol)
 	case symbol.Flags()&(ast.SymbolFlagsClass|ast.SymbolFlagsInterface) != 0:
 		return c.getDeclaredTypeOfClassOrInterface(symbol)
 	case symbol.Flags()&ast.SymbolFlagsTypeParameter != 0:
@@ -24674,7 +24706,7 @@ func (c *Checker) createComputedEnumType(symbol *ast.Symbol) *Type {
 func (c *Checker) getDeclaredTypeOfEnumMember(symbol *ast.Symbol) *Type {
 	links := c.declaredTypeLinks.Get(symbol)
 	if !(links.declaredType != nil) {
-		enumType := c.getDeclaredTypeOfEnum(c.getParentOfSymbol(symbol))
+		enumType := c.getDeclaredTypeOfSymbol(c.getParentOfSymbol(symbol))
 		if links.declaredType == nil {
 			links.declaredType = enumType
 		}
@@ -24784,6 +24816,9 @@ func (c *Checker) evaluateEntity(expr *ast.Node, location *ast.Node) evaluator.R
 			}
 		}
 		if symbol.Flags()&ast.SymbolFlagsEnumMember != 0 {
+			if symbol.Parent().Flags()&ast.SymbolFlagsErasableEnum != 0 {
+				return c.evaluateErasableEnumMember(symbol, location)
+			}
 			if location != nil {
 				return c.evaluateEnumMember(expr, symbol, location)
 			}
@@ -24803,12 +24838,19 @@ func (c *Checker) evaluateEntity(expr *ast.Node, location *ast.Node) evaluator.R
 		return evaluator.NewResult(nil, false, false, false)
 	case ast.KindElementAccessExpression:
 		root := expr.Expression()
-		if ast.IsEntityNameExpression(root) && ast.IsStringLiteralLike(expr.AsElementAccessExpression().ArgumentExpression) {
+		argument := ast.SkipParentheses(expr.AsElementAccessExpression().ArgumentExpression)
+		if ast.IsEntityNameExpression(root) && ast.IsStringOrNumericLiteralLike(argument) {
 			rootSymbol := c.resolveEntityName(root, ast.SymbolFlagsValue, true /*ignoreErrors*/, false, nil)
-			if rootSymbol != nil && rootSymbol.Flags()&ast.SymbolFlagsEnum != 0 {
-				name := expr.AsElementAccessExpression().ArgumentExpression.Text()
+			if rootSymbol != nil && rootSymbol.Flags()&(ast.SymbolFlagsEnum|ast.SymbolFlagsErasableEnum) != 0 {
+				if rootSymbol.Flags()&ast.SymbolFlagsErasableEnum == 0 && !ast.IsStringLiteralLike(expr.AsElementAccessExpression().ArgumentExpression) {
+					return evaluator.NewResult(nil, false, false, false)
+				}
+				name := argument.Text()
 				member := rootSymbol.Exports().Get(name)
 				if member != nil {
+					if member.Parent().Flags()&ast.SymbolFlagsErasableEnum != 0 {
+						return c.evaluateErasableEnumMember(member, location)
+					}
 					if location != nil {
 						return c.evaluateEnumMember(expr, member, location)
 					}
@@ -32441,6 +32483,9 @@ func (c *Checker) getSymbolAtLocation(node *ast.Node, ignoreErrors bool) *ast.Sy
 	}
 
 	if ast.IsIdentifier(node) {
+		if ast.IsEnumTypeAnnotation(parent) && ast.HasEnumTypeAnnotation(parent.Parent) {
+			return nil
+		}
 		if isInRightSideOfImportOrExportAssignment(node) {
 			return c.getSymbolOfNameOrPropertyAccessExpression(node)
 		} else if ast.IsBindingElement(parent) && ast.IsObjectBindingPattern(grandParent) && node == parent.PropertyName() {

@@ -1,0 +1,179 @@
+//// [tests/cases/compiler/erasableEnumErasure.ts] ////
+
+=== erasableEnumErasure.ts ===
+const outer = 4;
+>outer : Symbol(outer, Decl(erasableEnumErasure.ts, 0, 5))
+
+const Numeric: enum = (({
+>Numeric : Symbol(Numeric, Decl(erasableEnumErasure.ts, 1, 5))
+
+    // Preserve member comments and ordinary JavaScript expressions.
+    First: /* Preserve initializer comments. */ (1),
+>First : Symbol(Numeric.First, Decl(erasableEnumErasure.ts, 1, 25))
+
+    Second: (outer + 1),
+>Second : Symbol(Numeric.Second, Decl(erasableEnumErasure.ts, 3, 52))
+>outer : Symbol(outer, Decl(erasableEnumErasure.ts, 0, 5))
+
+    Shifted: outer << 1,
+>Shifted : Symbol(Numeric.Shifted, Decl(erasableEnumErasure.ts, 4, 24))
+>outer : Symbol(outer, Decl(erasableEnumErasure.ts, 0, 5))
+
+}));
+const StringValues: enum = {
+>StringValues : Symbol(StringValues, Decl(erasableEnumErasure.ts, 7, 5))
+
+    /** An enum member. */
+    First: "first",
+>First : Symbol(StringValues.First, Decl(erasableEnumErasure.ts, 7, 28))
+
+    Second: "second",
+>Second : Symbol(StringValues.Second, Decl(erasableEnumErasure.ts, 9, 19))
+
+};
+let numeric: Numeric = Numeric.First;
+>numeric : Symbol(numeric, Decl(erasableEnumErasure.ts, 12, 3))
+>Numeric : Symbol(Numeric, Decl(erasableEnumErasure.ts, 1, 5))
+>Numeric.First : Symbol(Numeric.First, Decl(erasableEnumErasure.ts, 1, 25))
+>Numeric : Symbol(Numeric, Decl(erasableEnumErasure.ts, 1, 5))
+>First : Symbol(Numeric.First, Decl(erasableEnumErasure.ts, 1, 25))
+
+let member: Numeric.First = Numeric.First;
+>member : Symbol(member, Decl(erasableEnumErasure.ts, 13, 3))
+>Numeric : Symbol(Numeric, Decl(erasableEnumErasure.ts, 1, 5))
+>First : Symbol(Numeric.First, Decl(erasableEnumErasure.ts, 1, 25))
+>Numeric.First : Symbol(Numeric.First, Decl(erasableEnumErasure.ts, 1, 25))
+>Numeric : Symbol(Numeric, Decl(erasableEnumErasure.ts, 1, 5))
+>First : Symbol(Numeric.First, Decl(erasableEnumErasure.ts, 1, 25))
+
+let text: StringValues = StringValues.Second;
+>text : Symbol(text, Decl(erasableEnumErasure.ts, 14, 3))
+>StringValues : Symbol(StringValues, Decl(erasableEnumErasure.ts, 7, 5))
+>StringValues.Second : Symbol(StringValues.Second, Decl(erasableEnumErasure.ts, 9, 19))
+>StringValues : Symbol(StringValues, Decl(erasableEnumErasure.ts, 7, 5))
+>Second : Symbol(StringValues.Second, Decl(erasableEnumErasure.ts, 9, 19))
+
+const constMember = StringValues.First as const;
+>constMember : Symbol(constMember, Decl(erasableEnumErasure.ts, 15, 5))
+>StringValues.First : Symbol(StringValues.First, Decl(erasableEnumErasure.ts, 7, 28))
+>StringValues : Symbol(StringValues, Decl(erasableEnumErasure.ts, 7, 5))
+>First : Symbol(StringValues.First, Decl(erasableEnumErasure.ts, 7, 28))
+>const : Symbol(const)
+
+const constIndexed = StringValues["First"] as const;
+>constIndexed : Symbol(constIndexed, Decl(erasableEnumErasure.ts, 16, 5))
+>StringValues : Symbol(StringValues, Decl(erasableEnumErasure.ts, 7, 5))
+>"First" : Symbol(StringValues.First, Decl(erasableEnumErasure.ts, 7, 28))
+>const : Symbol(const)
+
+const keys: keyof typeof StringValues = "First";
+>keys : Symbol(keys, Decl(erasableEnumErasure.ts, 17, 5))
+>StringValues : Symbol(StringValues, Decl(erasableEnumErasure.ts, 7, 5))
+
+const object: typeof StringValues = StringValues;
+>object : Symbol(object, Decl(erasableEnumErasure.ts, 18, 5))
+>StringValues : Symbol(StringValues, Decl(erasableEnumErasure.ts, 7, 5))
+>StringValues : Symbol(StringValues, Decl(erasableEnumErasure.ts, 7, 5))
+
+function narrow(value: StringValues) {
+>narrow : Symbol(narrow, Decl(erasableEnumErasure.ts, 18, 49))
+>value : Symbol(value, Decl(erasableEnumErasure.ts, 19, 16))
+>StringValues : Symbol(StringValues, Decl(erasableEnumErasure.ts, 7, 5))
+
+    if (value === StringValues.First) {
+>value : Symbol(value, Decl(erasableEnumErasure.ts, 19, 16))
+>StringValues.First : Symbol(StringValues.First, Decl(erasableEnumErasure.ts, 7, 28))
+>StringValues : Symbol(StringValues, Decl(erasableEnumErasure.ts, 7, 5))
+>First : Symbol(StringValues.First, Decl(erasableEnumErasure.ts, 7, 28))
+
+        const first: StringValues.First = value;
+>first : Symbol(first, Decl(erasableEnumErasure.ts, 21, 13))
+>StringValues : Symbol(StringValues, Decl(erasableEnumErasure.ts, 7, 5))
+>First : Symbol(StringValues.First, Decl(erasableEnumErasure.ts, 7, 28))
+>value : Symbol(value, Decl(erasableEnumErasure.ts, 19, 16))
+
+        return first;
+>first : Symbol(first, Decl(erasableEnumErasure.ts, 21, 13))
+    }
+    const second: StringValues.Second = value;
+>second : Symbol(second, Decl(erasableEnumErasure.ts, 24, 9))
+>StringValues : Symbol(StringValues, Decl(erasableEnumErasure.ts, 7, 5))
+>Second : Symbol(StringValues.Second, Decl(erasableEnumErasure.ts, 9, 19))
+>value : Symbol(value, Decl(erasableEnumErasure.ts, 19, 16))
+
+    return second;
+>second : Symbol(second, Decl(erasableEnumErasure.ts, 24, 9))
+}
+function scoped() {
+>scoped : Symbol(scoped, Decl(erasableEnumErasure.ts, 26, 1))
+
+    const Local: enum = { Value: "local" };
+>Local : Symbol(Local, Decl(erasableEnumErasure.ts, 28, 9))
+>Value : Symbol(Local.Value, Decl(erasableEnumErasure.ts, 28, 25))
+
+    const value: Local.Value = Local.Value;
+>value : Symbol(value, Decl(erasableEnumErasure.ts, 29, 9))
+>Local : Symbol(Local, Decl(erasableEnumErasure.ts, 28, 9))
+>Value : Symbol(Local.Value, Decl(erasableEnumErasure.ts, 28, 25))
+>Local.Value : Symbol(Local.Value, Decl(erasableEnumErasure.ts, 28, 25))
+>Local : Symbol(Local, Decl(erasableEnumErasure.ts, 28, 9))
+>Value : Symbol(Local.Value, Decl(erasableEnumErasure.ts, 28, 25))
+
+    return value as string;
+>value : Symbol(value, Decl(erasableEnumErasure.ts, 29, 9))
+}
+namespace Types {
+>Types : Symbol(Types, Decl(erasableEnumErasure.ts, 31, 1))
+
+    export type Value = StringValues;
+>Value : Symbol(Value, Decl(erasableEnumErasure.ts, 32, 17))
+>StringValues : Symbol(StringValues, Decl(erasableEnumErasure.ts, 7, 5))
+}
+
+var Variable: enum = { Value: 1 };
+>Variable : Symbol(Variable, Decl(erasableEnumErasure.ts, 36, 3))
+>Value : Symbol(Variable.Value, Decl(erasableEnumErasure.ts, 36, 22))
+
+const variable: Variable = Variable.Value;
+>variable : Symbol(variable, Decl(erasableEnumErasure.ts, 37, 5))
+>Variable : Symbol(Variable, Decl(erasableEnumErasure.ts, 36, 3))
+>Variable.Value : Symbol(Variable.Value, Decl(erasableEnumErasure.ts, 36, 22))
+>Variable : Symbol(Variable, Decl(erasableEnumErasure.ts, 36, 3))
+>Value : Symbol(Variable.Value, Decl(erasableEnumErasure.ts, 36, 22))
+
+declare const Ambient: enum = { A: 1, B: (0) };
+>Ambient : Symbol(Ambient, Decl(erasableEnumErasure.ts, 38, 13))
+>A : Symbol(Ambient.A, Decl(erasableEnumErasure.ts, 38, 31))
+>B : Symbol(Ambient.B, Decl(erasableEnumErasure.ts, 38, 37))
+
+const ambient: Ambient = Ambient.B;
+>ambient : Symbol(ambient, Decl(erasableEnumErasure.ts, 39, 5))
+>Ambient : Symbol(Ambient, Decl(erasableEnumErasure.ts, 38, 13))
+>Ambient.B : Symbol(Ambient.B, Decl(erasableEnumErasure.ts, 38, 37))
+>Ambient : Symbol(Ambient, Decl(erasableEnumErasure.ts, 38, 13))
+>B : Symbol(Ambient.B, Decl(erasableEnumErasure.ts, 38, 37))
+
+// Enums without members have the never type, including prototype-only objects.
+const Empty: enum = {};
+>Empty : Symbol(Empty, Decl(erasableEnumErasure.ts, 42, 5))
+
+declare const empty: Empty;
+>empty : Symbol(empty, Decl(erasableEnumErasure.ts, 43, 13))
+>Empty : Symbol(Empty, Decl(erasableEnumErasure.ts, 42, 5))
+
+const emptyValue: never = empty;
+>emptyValue : Symbol(emptyValue, Decl(erasableEnumErasure.ts, 44, 5))
+>empty : Symbol(empty, Decl(erasableEnumErasure.ts, 43, 13))
+
+const PrototypeOnly: enum = { __proto__: null };
+>PrototypeOnly : Symbol(PrototypeOnly, Decl(erasableEnumErasure.ts, 45, 5))
+>__proto__ : Symbol(__proto__, Decl(erasableEnumErasure.ts, 45, 29))
+
+declare const prototypeOnly: PrototypeOnly;
+>prototypeOnly : Symbol(prototypeOnly, Decl(erasableEnumErasure.ts, 46, 13))
+>PrototypeOnly : Symbol(PrototypeOnly, Decl(erasableEnumErasure.ts, 45, 5))
+
+const prototypeOnlyValue: never = prototypeOnly;
+>prototypeOnlyValue : Symbol(prototypeOnlyValue, Decl(erasableEnumErasure.ts, 47, 5))
+>prototypeOnly : Symbol(prototypeOnly, Decl(erasableEnumErasure.ts, 46, 13))
+

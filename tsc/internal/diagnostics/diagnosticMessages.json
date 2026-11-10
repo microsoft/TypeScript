@@ -8959,5 +8959,29 @@
     "Content mapper extension '{0}' must not contain path separators.": {
         "category": "Error",
         "code": 18123
+    },
+    "An erasable enum prototype setter must have the value 'null'.": {
+        "category": "Error",
+        "code": 18125
+    },
+    "Erasable enum member initializers must be constant expressions.": {
+        "category": "Error",
+        "code": 18126
+    },
+    "Spread assignments are not allowed in erasable enums.": {
+        "category": "Error",
+        "code": 18127
+    },
+    "Erasable enums only allow property assignments.": {
+        "category": "Error",
+        "code": 18128
+    },
+    "An 'enum' annotation requires a named variable in a variable statement with an object literal initializer.": {
+        "category": "Error",
+        "code": 18129
+    },
+    "Erasable enum member names must be identifiers or string literals.": {
+        "category": "Error",
+        "code": 18130
     }
 }

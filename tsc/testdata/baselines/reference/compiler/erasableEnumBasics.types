@@ -1,0 +1,145 @@
+//// [tests/cases/compiler/erasableEnumBasics.ts] ////
+
+=== erasableEnumBasics.ts ===
+const existingValue = "exists";
+>existingValue : "exists"
+>"exists" : "exists"
+
+const E: enum = {
+>E : typeof E
+>{    Existing: existingValue,    Int: 1,    String: "string",    Flag: 8,} : typeof E
+
+    Existing: existingValue,
+>Existing : E.Existing
+>existingValue : "exists"
+
+    Int: 1,
+>Int : E.Int
+>1 : 1
+
+    String: "string",
+>String : E.String
+>"string" : "string"
+
+    Flag: 8,
+>Flag : E.Flag
+>8 : 8
+
+};
+
+// Members are assignable to their enum type and their own member type.
+let value: E = E.Existing;
+>value : E
+>E.Existing : E.Existing
+>E : typeof E
+>Existing : E.Existing
+
+value = E.Int;
+>value = E.Int : E.Int
+>value : E
+>E.Int : E.Int
+>E : typeof E
+>Int : E.Int
+
+value = E.String;
+>value = E.String : E.String
+>value : E
+>E.String : E.String
+>E : typeof E
+>String : E.String
+
+let intMember: E.Int = E.Int;
+>intMember : E.Int
+>E : any
+>E.Int : E.Int
+>E : typeof E
+>Int : E.Int
+
+intMember = E.Flag; // error: a different known member.
+>intMember = E.Flag : E.Flag
+>intMember : E.Int
+>E.Flag : E.Flag
+>E : typeof E
+>Flag : E.Flag
+
+// Matching numeric literals are accepted, but other known literals are rejected.
+value = 1;
+>value = 1 : 1
+>value : E
+>1 : 1
+
+value = 4; // error
+>value = 4 : 4
+>value : E
+>4 : 4
+
+// String members retain nominal types, including values from constant references.
+value = "exists"; // error
+>value = "exists" : "exists"
+>value : E
+>"exists" : "exists"
+
+value = "string"; // error
+>value = "string" : "string"
+>value : E
+>"string" : "string"
+
+const Other: enum = { String: "string" };
+>Other : typeof Other
+>{ String: "string" } : typeof Other
+>String : Other
+>"string" : "string"
+
+value = Other.String; // error: members from different enums are incompatible.
+>value = Other.String : Other.String
+>value : E
+>Other.String : Other.String
+>Other : typeof Other
+>String : Other.String
+
+let other: Other = Other.String;
+>other : Other.String
+>Other.String : Other.String
+>Other : typeof Other
+>String : Other.String
+
+other = "string"; // error: a single-member enum is also nominal.
+>other = "string" : "string"
+>other : Other.String
+>"string" : "string"
+
+other = E.String; // error
+>other = E.String : E.String
+>other : Other.String
+>E.String : E.String
+>E : typeof E
+>String : E.String
+
+value = undefined; // error
+>value = undefined : undefined
+>value : E
+>undefined : undefined
+
+// Number expressions retain TypeScript's numeric enum compatibility.
+value = E.Int | E.Flag;
+>value = E.Int | E.Flag : number
+>value : E
+>E.Int | E.Flag : number
+>E.Int : E.Int
+>E : typeof E
+>Int : E.Int
+>E.Flag : E.Flag
+>E : typeof E
+>Flag : E.Flag
+
+intMember = E.Int | E.Flag;
+>intMember = E.Int | E.Flag : number
+>intMember : E.Int
+>E.Int | E.Flag : number
+>E.Int : E.Int
+>E : typeof E
+>Int : E.Int
+>E.Flag : E.Flag
+>E : typeof E
+>Flag : E.Flag
+

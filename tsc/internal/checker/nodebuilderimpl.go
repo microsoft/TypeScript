@@ -187,7 +187,7 @@ func (b *NodeBuilderImpl) isExpandableType(t *Type, isAlias bool) bool {
 		return true
 	}
 	if objectFlags&ObjectFlagsAnonymous != 0 && t.symbol != nil &&
-		t.symbol.Flags()&(ast.SymbolFlagsClass|ast.SymbolFlagsEnum|ast.SymbolFlagsValueModule|ast.SymbolFlagsFunction|ast.SymbolFlagsMethod) != 0 {
+		t.symbol.Flags()&(ast.SymbolFlagsClass|ast.SymbolFlagsEnum|ast.SymbolFlagsErasableEnum|ast.SymbolFlagsValueModule|ast.SymbolFlagsFunction|ast.SymbolFlagsMethod) != 0 {
 		return true
 	}
 	return false
@@ -2915,7 +2915,7 @@ func (b *NodeBuilderImpl) shouldEmitTypeOfSymbol(forceExpansion bool, forceClass
 	if forceExpansion {
 		return false, symbol
 	}
-	nonFunctionResult := symbol.Flags()&ast.SymbolFlagsClass != 0 && !forceClassExpansion && b.ch.getBaseTypeVariableOfClass(symbol) == nil && !(symbol.ValueDeclaration() != nil && ast.IsClassLike(symbol.ValueDeclaration()) && b.ctx.flags&nodebuilder.FlagsWriteClassExpressionAsTypeLiteral != 0 && (!ast.IsClassDeclaration(symbol.ValueDeclaration()) || b.ch.IsSymbolAccessible(symbol, b.ctx.enclosingDeclaration, isInstanceType, false /*shouldComputeAliasesToMakeVisible*/).Accessibility != printer.SymbolAccessibilityAccessible)) || symbol.Flags()&(ast.SymbolFlagsEnum|ast.SymbolFlagsValueModule) != 0
+	nonFunctionResult := symbol.Flags()&ast.SymbolFlagsClass != 0 && !forceClassExpansion && b.ch.getBaseTypeVariableOfClass(symbol) == nil && !(symbol.ValueDeclaration() != nil && ast.IsClassLike(symbol.ValueDeclaration()) && b.ctx.flags&nodebuilder.FlagsWriteClassExpressionAsTypeLiteral != 0 && (!ast.IsClassDeclaration(symbol.ValueDeclaration()) || b.ch.IsSymbolAccessible(symbol, b.ctx.enclosingDeclaration, isInstanceType, false /*shouldComputeAliasesToMakeVisible*/).Accessibility != printer.SymbolAccessibilityAccessible)) || symbol.Flags()&(ast.SymbolFlagsEnum|ast.SymbolFlagsErasableEnum|ast.SymbolFlagsValueModule) != 0
 	if nonFunctionResult {
 		return true, symbol
 	}

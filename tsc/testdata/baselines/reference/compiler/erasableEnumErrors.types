@@ -1,0 +1,408 @@
+//// [tests/cases/compiler/erasableEnumErrors.ts] ////
+
+=== erasableEnumErrors.ts ===
+// Members require explicit property assignments, even for constant bindings.
+const UnboundShorthand: enum = { missing };
+>UnboundShorthand : typeof UnboundShorthand
+>{ missing } : typeof UnboundShorthand
+>missing : any
+
+const shorthandValue = 1;
+>shorthandValue : 1
+>1 : 1
+
+const Shorthand: enum = ({ shorthandValue });
+>Shorthand : typeof Shorthand
+>({ shorthandValue }) : typeof Shorthand
+>{ shorthandValue } : typeof Shorthand
+>shorthandValue : number
+
+// Member values must be compile-time string or number constants.
+declare const symbolValue: unique symbol;
+>symbolValue : unique symbol
+
+const Invalid: enum = {
+>Invalid : typeof Invalid
+>{    True: true,    False: false,    Null: null,    Object: {},    BigInt: 1n,    Symbol: symbolValue,} : typeof Invalid
+
+    True: true,
+>True : any
+>true : true
+
+    False: false,
+>False : any
+>false : false
+
+    Null: null,
+>Null : any
+
+    Object: {},
+>Object : any
+>{} : {}
+
+    BigInt: 1n,
+>BigInt : any
+>1n : 1n
+
+    Symbol: symbolValue,
+>Symbol : any
+>symbolValue : unique symbol
+
+};
+const DynamicCall: enum = { Value: Math.random() };
+>DynamicCall : typeof DynamicCall
+>{ Value: Math.random() } : typeof DynamicCall
+>Value : any
+>Math.random() : number
+>Math.random : () => number
+>Math : Math
+>random : () => number
+
+const dynamicValue: DynamicCall = DynamicCall.Value; // no cascading type errors.
+>dynamicValue : any
+>DynamicCall.Value : any
+>DynamicCall : typeof DynamicCall
+>Value : any
+
+let mutable = 1;
+>mutable : number
+>1 : 1
+
+const MutableValue: enum = { Value: mutable };
+>MutableValue : typeof MutableValue
+>{ Value: mutable } : typeof MutableValue
+>Value : any
+>mutable : number
+
+const dynamic = Math.random();
+>dynamic : number
+>Math.random() : number
+>Math.random : () => number
+>Math : Math
+>random : () => number
+
+const NonconstantBinding: enum = { Value: dynamic };
+>NonconstantBinding : typeof NonconstantBinding
+>{ Value: dynamic } : typeof NonconstantBinding
+>Value : any
+>dynamic : number
+
+declare const broadNumber: number;
+>broadNumber : number
+
+declare const broadString: string;
+>broadString : string
+
+const BroadValues: enum = { Number: broadNumber, String: broadString };
+>BroadValues : typeof BroadValues
+>{ Number: broadNumber, String: broadString } : typeof BroadValues
+>Number : any
+>broadNumber : number
+>String : any
+>broadString : string
+
+// Assertions and satisfies expressions block constant evaluation, including through references.
+const AssertionBoundary: enum = ({ Value: 1 as number, Nested: (1 as number) + 1 });
+>AssertionBoundary : typeof AssertionBoundary
+>({ Value: 1 as number, Nested: (1 as number) + 1 }) : typeof AssertionBoundary
+>{ Value: 1 as number, Nested: (1 as number) + 1 } : typeof AssertionBoundary
+>Value : any
+>1 as number : number
+>1 : 1
+>Nested : any
+>(1 as number) + 1 : number
+>(1 as number) : number
+>1 as number : number
+>1 : 1
+>1 : 1
+
+const SatisfiesBoundary: enum = { Value: "value" satisfies string };
+>SatisfiesBoundary : typeof SatisfiesBoundary
+>{ Value: "value" satisfies string } : typeof SatisfiesBoundary
+>Value : any
+>"value" satisfies string : "value"
+>"value" : "value"
+
+const asserted = 1 as number;
+>asserted : number
+>1 as number : number
+>1 : 1
+
+const checked = "value" satisfies string;
+>checked : "value"
+>"value" satisfies string : "value"
+>"value" : "value"
+
+const ReferencedBoundaries: enum = { Asserted: asserted, Checked: checked };
+>ReferencedBoundaries : typeof ReferencedBoundaries
+>{ Asserted: asserted, Checked: checked } : typeof ReferencedBoundaries
+>Asserted : any
+>asserted : number
+>Checked : any
+>checked : "value"
+
+// Names must be identifiers or strings; computed names are forbidden even when constant.
+const NumericKey: enum = { 1: "one" };
+>NumericKey : typeof NumericKey
+>{ 1: "one" } : typeof NumericKey
+>1 : NumericKey
+>"one" : "one"
+
+const ComputedKey: enum = { ["foo"]: 1 };
+>ComputedKey : typeof ComputedKey
+>{ ["foo"]: 1 } : typeof ComputedKey
+>["foo"] : number
+>"foo" : "foo"
+>1 : 1
+
+const key = "Known";
+>key : "Known"
+>"Known" : "Known"
+
+const ComputedKeyReference: enum = { [key]: 1 };
+>ComputedKeyReference : typeof ComputedKeyReference
+>{ [key]: 1 } : typeof ComputedKeyReference
+>[key] : number
+>key : "Known"
+>1 : 1
+
+const ComputedPrototypeKey: enum = { ["__proto__"]: 1 };
+>ComputedPrototypeKey : typeof ComputedPrototypeKey
+>{ ["__proto__"]: 1 } : typeof ComputedPrototypeKey
+>["__proto__"] : number
+>"__proto__" : "__proto__"
+>1 : 1
+
+const prototypeValue = ComputedPrototypeKey.__proto__;
+>prototypeValue : any
+>ComputedPrototypeKey.__proto__ : any
+>ComputedPrototypeKey : typeof ComputedPrototypeKey
+>__proto__ : any
+
+const Numeric: enum = { First: 1, Second: 2 };
+>Numeric : typeof Numeric
+>{ First: 1, Second: 2 } : typeof Numeric
+>First : Numeric.First
+>1 : 1
+>Second : Numeric.Second
+>2 : 2
+
+// Const assertions on member references still block constant evaluation in initializers.
+const MemberAssertionBoundary: enum = { Value: Numeric.First as const };
+>MemberAssertionBoundary : typeof MemberAssertionBoundary
+>{ Value: Numeric.First as const } : typeof MemberAssertionBoundary
+>Value : any
+>Numeric.First as const : Numeric.First
+>Numeric.First : Numeric.First
+>Numeric : typeof Numeric
+>First : Numeric.First
+
+const Spread: enum = { ...Numeric };
+>Spread : typeof Spread
+>{ ...Numeric } : typeof Spread
+>Numeric : typeof Numeric
+
+const Method: enum = { method() {} };
+>Method : typeof Method
+>{ method() {} } : typeof Method
+>method : () => void
+
+const Getter: enum = { get value() { return 1; } };
+>Getter : typeof Getter
+>{ get value() { return 1; } } : typeof Getter
+>value : number
+>1 : 1
+
+const Setter: enum = { set value(value: number) {} };
+>Setter : typeof Setter
+>{ set value(value: number) {} } : typeof Setter
+>value : number
+>value : number
+
+// Members are readonly and numeric reverse mappings are absent.
+Numeric.First = Numeric.Second;
+>Numeric.First = Numeric.Second : Numeric.Second
+>Numeric.First : any
+>Numeric : typeof Numeric
+>First : any
+>Numeric.Second : Numeric.Second
+>Numeric : typeof Numeric
+>Second : Numeric.Second
+
+const reverse = Numeric[1];
+>reverse : any
+>Numeric[1] : any
+>Numeric : typeof Numeric
+>1 : 1
+
+const unknownKey = Numeric.Unknown;
+>unknownKey : any
+>Numeric.Unknown : any
+>Numeric : typeof Numeric
+>Unknown : any
+
+// Initializers use ordinary lexical bindings, without a scope for enum members.
+const Unqualified: enum = { A: 1, B: A };
+>Unqualified : typeof Unqualified
+>{ A: 1, B: A } : typeof Unqualified
+>A : Unqualified
+>1 : 1
+>B : any
+>A : any
+
+const SelfReference: enum = { A: 1, B: SelfReference.A };
+>SelfReference : typeof SelfReference
+>{ A: 1, B: SelfReference.A } : typeof SelfReference
+>A : SelfReference
+>1 : 1
+>B : any
+>SelfReference.A : SelfReference.A
+>SelfReference : typeof SelfReference
+>A : SelfReference.A
+
+var VarSelfReference: enum = { A: 1, B: VarSelfReference.A };
+>VarSelfReference : typeof VarSelfReference
+>{ A: 1, B: VarSelfReference.A } : typeof VarSelfReference
+>A : VarSelfReference
+>1 : 1
+>B : any
+>VarSelfReference.A : VarSelfReference.A
+>VarSelfReference : typeof VarSelfReference
+>A : VarSelfReference.A
+
+// Deferred callbacks avoid initialization errors; calls are still nonconstant.
+const Deferred: enum = { A: ((f: () => number): number => 1)((): number => Deferred.B), B: 1 };
+>Deferred : typeof Deferred
+>{ A: ((f: () => number): number => 1)((): number => Deferred.B), B: 1 } : typeof Deferred
+>A : any
+>((f: () => number): number => 1)((): number => Deferred.B) : number
+>((f: () => number): number => 1) : (f: () => number) => number
+>(f: () => number): number => 1 : (f: () => number) => number
+>f : () => number
+>1 : 1
+>(): number => Deferred.B : () => number
+>Deferred.B : Deferred.B
+>Deferred : typeof Deferred
+>B : Deferred.B
+>B : Deferred
+>1 : 1
+
+const Immediate: enum = { A: ((): number => Immediate.B)(), B: 1 };
+>Immediate : typeof Immediate
+>{ A: ((): number => Immediate.B)(), B: 1 } : typeof Immediate
+>A : any
+>((): number => Immediate.B)() : number
+>((): number => Immediate.B) : () => number
+>(): number => Immediate.B : () => number
+>Immediate.B : Immediate.B
+>Immediate : typeof Immediate
+>B : Immediate.B
+>B : Immediate
+>1 : 1
+
+const OuterMember = 10;
+>OuterMember : 10
+>10 : 10
+
+const Lexical: enum = { OuterMember: 1, Value: OuterMember };
+>Lexical : typeof Lexical
+>{ OuterMember: 1, Value: OuterMember } : typeof Lexical
+>OuterMember : Lexical.OuterMember
+>1 : 1
+>Value : Lexical.Value
+>OuterMember : 10
+
+const lexicalValue: Lexical.Value = 10; // ok: Value refers to the outer constant.
+>lexicalValue : Lexical.Value
+>Lexical : any
+>10 : 10
+
+// Duplicate keys follow object literal rules; bindings cannot be redeclared.
+const Duplicate: enum = { A: 1, A: 2 };
+>Duplicate : typeof Duplicate
+>{ A: 1, A: 2 } : typeof Duplicate
+>A : Duplicate.A
+>1 : 1
+>A : Duplicate.A
+>2 : 2
+
+const Repeated: enum = { A: 1 };
+>Repeated : typeof Repeated
+>{ A: 1 } : typeof Repeated
+>A : Repeated
+>1 : 1
+
+const Repeated: enum = { B: 2 };
+>Repeated : typeof Repeated
+>{ B: 2 } : typeof Repeated
+>B : Repeated
+>2 : 2
+
+// Only a null prototype setter is allowed, and it does not declare an enum member.
+const PrototypeKey: enum = { __proto__: 1 };
+>PrototypeKey : typeof PrototypeKey
+>{ __proto__: 1 } : typeof PrototypeKey
+>__proto__ : number
+>1 : 1
+
+const QuotedPrototypeKey: enum = { "__proto__": 1 };
+>QuotedPrototypeKey : typeof QuotedPrototypeKey
+>{ "__proto__": 1 } : typeof QuotedPrototypeKey
+>"__proto__" : number
+>1 : 1
+
+const PrototypeObject: enum = { __proto__: {} };
+>PrototypeObject : typeof PrototypeObject
+>{ __proto__: {} } : typeof PrototypeObject
+>__proto__ : {}
+>{} : {}
+
+const AssertedPrototype: enum = { __proto__: null as null };
+>AssertedPrototype : typeof AssertedPrototype
+>{ __proto__: null as null } : typeof AssertedPrototype
+>__proto__ : null
+>null as null : null
+
+const NullPrototype: enum = { __proto__: null, A: 1 };
+>NullPrototype : typeof NullPrototype
+>{ __proto__: null, A: 1 } : typeof NullPrototype
+>__proto__ : null
+>A : NullPrototype
+>1 : 1
+
+const nullPrototypeMember = NullPrototype.__proto__;
+>nullPrototypeMember : any
+>NullPrototype.__proto__ : any
+>NullPrototype : typeof NullPrototype
+>__proto__ : any
+
+const __proto__ = "own";
+>__proto__ : "own"
+>"own" : "own"
+
+const PrototypeShorthand: enum = { __proto__ };
+>PrototypeShorthand : typeof PrototypeShorthand
+>{ __proto__ } : typeof PrototypeShorthand
+>__proto__ : string
+
+// The annotation requires a named variable statement with an object literal initializer.
+let NoInitializer: enum;
+>NoInitializer : any
+
+const NonObject: enum = 1;
+>NonObject : any
+>1 : 1
+
+const { Destructuring }: enum = { Destructuring: 1 };
+>Destructuring : any
+>{ Destructuring: 1 } : { Destructuring: number; }
+>Destructuring : number
+>1 : 1
+
+for (const ForInitializer: enum = { A: 1 }; false; ) {}
+>ForInitializer : any
+>{ A: 1 } : { A: number; }
+>A : number
+>1 : 1
+>false : false
+

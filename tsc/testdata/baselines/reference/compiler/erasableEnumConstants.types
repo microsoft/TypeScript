@@ -1,0 +1,102 @@
+//// [tests/cases/compiler/erasableEnumConstants.ts] ////
+
+=== values.ts ===
+export const text = "hello";
+>text : "hello"
+>"hello" : "hello"
+
+export const count = 2;
+>count : 2
+>2 : 2
+
+// Numeric strings are string keys; indexing follows ordinary object rules.
+export const Source: enum = { A: "source", B: 1, "1": "numeric" };
+>Source : typeof Source
+>{ A: "source", B: 1, "1": "numeric" } : typeof Source
+>A : Source.A
+>"source" : "source"
+>B : Source.B
+>1 : 1
+>"1" : (typeof Source)["1"]
+>"numeric" : "numeric"
+
+=== consumer.ts ===
+import { text, count, Source } from "./values";
+>text : "hello"
+>count : 2
+>Source : typeof Source
+
+const Local: enum = { Value: "local" };
+>Local : typeof Local
+>{ Value: "local" } : typeof Local
+>Value : Local
+>"local" : "local"
+
+// Parentheses are transparent for constant values and member references.
+export const E: enum = {
+>E : typeof E
+>{    __proto__: null,    Text: ((text)),    Count: (count) + 1,    ImportedMember: (Source.A),    ImportedIndex: Source[("B")],    NumericIndex: Source[(1)],    LocalMember: Local.Value,    LocalIndex: Local["Value"],} : typeof E
+
+    __proto__: null,
+>__proto__ : null
+
+    Text: ((text)),
+>Text : E.Text
+>((text)) : "hello"
+>(text) : "hello"
+>text : "hello"
+
+    Count: (count) + 1,
+>Count : E.Count
+>(count) + 1 : number
+>(count) : 2
+>count : 2
+>1 : 1
+
+    ImportedMember: (Source.A),
+>ImportedMember : E.ImportedMember
+>(Source.A) : Source.A
+>Source.A : Source.A
+>Source : typeof Source
+>A : Source.A
+
+    ImportedIndex: Source[("B")],
+>ImportedIndex : E.ImportedIndex
+>Source[("B")] : Source.B
+>Source : typeof Source
+>("B") : "B"
+>"B" : "B"
+
+    NumericIndex: Source[(1)],
+>NumericIndex : E.NumericIndex
+>Source[(1)] : (typeof Source)["1"]
+>Source : typeof Source
+>(1) : 1
+>1 : 1
+
+    LocalMember: Local.Value,
+>LocalMember : E.LocalMember
+>Local.Value : Local.Value
+>Local : typeof Local
+>Value : Local.Value
+
+    LocalIndex: Local["Value"],
+>LocalIndex : E.LocalMember
+>Local["Value"] : Local.Value
+>Local : typeof Local
+>"Value" : "Value"
+
+};
+export let value: E = E.Text;
+>value : E
+>E.Text : E.Text
+>E : typeof E
+>Text : E.Text
+
+export let member: E.ImportedMember = E.ImportedMember;
+>member : E.ImportedMember
+>E : any
+>E.ImportedMember : E.ImportedMember
+>E : typeof E
+>ImportedMember : E.ImportedMember
+

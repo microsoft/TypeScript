@@ -1,0 +1,260 @@
+erasableEnumErrors.ts(2,34): error TS18004: No value exists in scope for the shorthand property 'missing'. Either declare one or provide an initializer.
+erasableEnumErrors.ts(2,34): error TS18128: Erasable enums only allow property assignments.
+erasableEnumErrors.ts(4,28): error TS18128: Erasable enums only allow property assignments.
+erasableEnumErrors.ts(9,11): error TS18126: Erasable enum member initializers must be constant expressions.
+erasableEnumErrors.ts(10,12): error TS18126: Erasable enum member initializers must be constant expressions.
+erasableEnumErrors.ts(11,11): error TS18126: Erasable enum member initializers must be constant expressions.
+erasableEnumErrors.ts(12,13): error TS18126: Erasable enum member initializers must be constant expressions.
+erasableEnumErrors.ts(13,13): error TS18126: Erasable enum member initializers must be constant expressions.
+erasableEnumErrors.ts(14,13): error TS18126: Erasable enum member initializers must be constant expressions.
+erasableEnumErrors.ts(16,36): error TS18126: Erasable enum member initializers must be constant expressions.
+erasableEnumErrors.ts(19,37): error TS18126: Erasable enum member initializers must be constant expressions.
+erasableEnumErrors.ts(21,43): error TS18126: Erasable enum member initializers must be constant expressions.
+erasableEnumErrors.ts(24,37): error TS18126: Erasable enum member initializers must be constant expressions.
+erasableEnumErrors.ts(24,58): error TS18126: Erasable enum member initializers must be constant expressions.
+erasableEnumErrors.ts(27,43): error TS18126: Erasable enum member initializers must be constant expressions.
+erasableEnumErrors.ts(27,64): error TS18126: Erasable enum member initializers must be constant expressions.
+erasableEnumErrors.ts(28,50): error TS18126: Erasable enum member initializers must be constant expressions.
+erasableEnumErrors.ts(31,48): error TS18126: Erasable enum member initializers must be constant expressions.
+erasableEnumErrors.ts(31,67): error TS18126: Erasable enum member initializers must be constant expressions.
+erasableEnumErrors.ts(34,28): error TS18130: Erasable enum member names must be identifiers or string literals.
+erasableEnumErrors.ts(35,29): error TS18130: Erasable enum member names must be identifiers or string literals.
+erasableEnumErrors.ts(37,38): error TS18130: Erasable enum member names must be identifiers or string literals.
+erasableEnumErrors.ts(38,38): error TS18130: Erasable enum member names must be identifiers or string literals.
+erasableEnumErrors.ts(39,45): error TS2339: Property '__proto__' does not exist on type 'typeof ComputedPrototypeKey'.
+erasableEnumErrors.ts(43,48): error TS18126: Erasable enum member initializers must be constant expressions.
+erasableEnumErrors.ts(44,24): error TS18127: Spread assignments are not allowed in erasable enums.
+erasableEnumErrors.ts(45,24): error TS18128: Erasable enums only allow property assignments.
+erasableEnumErrors.ts(46,28): error TS18128: Erasable enums only allow property assignments.
+erasableEnumErrors.ts(47,28): error TS18128: Erasable enums only allow property assignments.
+erasableEnumErrors.ts(50,9): error TS2540: Cannot assign to 'First' because it is a read-only property.
+erasableEnumErrors.ts(51,17): error TS7053: Element implicitly has an 'any' type because expression of type '1' can't be used to index type 'typeof Numeric'.
+  Property '1' does not exist on type 'typeof Numeric'.
+erasableEnumErrors.ts(52,28): error TS2339: Property 'Unknown' does not exist on type 'typeof Numeric'.
+erasableEnumErrors.ts(55,38): error TS2304: Cannot find name 'A'.
+erasableEnumErrors.ts(55,38): error TS18126: Erasable enum member initializers must be constant expressions.
+erasableEnumErrors.ts(56,40): error TS2448: Block-scoped variable 'SelfReference' used before its declaration.
+erasableEnumErrors.ts(56,40): error TS2454: Variable 'SelfReference' is used before being assigned.
+erasableEnumErrors.ts(56,40): error TS18126: Erasable enum member initializers must be constant expressions.
+erasableEnumErrors.ts(57,41): error TS2454: Variable 'VarSelfReference' is used before being assigned.
+erasableEnumErrors.ts(57,41): error TS18126: Erasable enum member initializers must be constant expressions.
+erasableEnumErrors.ts(59,29): error TS18126: Erasable enum member initializers must be constant expressions.
+erasableEnumErrors.ts(60,30): error TS18126: Erasable enum member initializers must be constant expressions.
+erasableEnumErrors.ts(60,45): error TS2448: Block-scoped variable 'Immediate' used before its declaration.
+erasableEnumErrors.ts(60,45): error TS2454: Variable 'Immediate' is used before being assigned.
+erasableEnumErrors.ts(66,33): error TS1117: An object literal cannot have multiple properties with the same name.
+erasableEnumErrors.ts(67,7): error TS2451: Cannot redeclare block-scoped variable 'Repeated'.
+erasableEnumErrors.ts(68,7): error TS2451: Cannot redeclare block-scoped variable 'Repeated'.
+erasableEnumErrors.ts(71,41): error TS18125: An erasable enum prototype setter must have the value 'null'.
+erasableEnumErrors.ts(72,49): error TS18125: An erasable enum prototype setter must have the value 'null'.
+erasableEnumErrors.ts(73,44): error TS18125: An erasable enum prototype setter must have the value 'null'.
+erasableEnumErrors.ts(74,46): error TS18125: An erasable enum prototype setter must have the value 'null'.
+erasableEnumErrors.ts(76,43): error TS2339: Property '__proto__' does not exist on type 'typeof NullPrototype'.
+erasableEnumErrors.ts(78,36): error TS18128: Erasable enums only allow property assignments.
+erasableEnumErrors.ts(81,20): error TS18129: An 'enum' annotation requires a named variable in a variable statement with an object literal initializer.
+erasableEnumErrors.ts(82,18): error TS18129: An 'enum' annotation requires a named variable in a variable statement with an object literal initializer.
+erasableEnumErrors.ts(83,26): error TS18129: An 'enum' annotation requires a named variable in a variable statement with an object literal initializer.
+erasableEnumErrors.ts(84,28): error TS18129: An 'enum' annotation requires a named variable in a variable statement with an object literal initializer.
+
+
+==== erasableEnumErrors.ts (56 errors) ====
+    // Members require explicit property assignments, even for constant bindings.
+    const UnboundShorthand: enum = { missing };
+                                     ~~~~~~~
+!!! error TS18004: No value exists in scope for the shorthand property 'missing'. Either declare one or provide an initializer.
+                                     ~~~~~~~
+!!! error TS18128: Erasable enums only allow property assignments.
+    const shorthandValue = 1;
+    const Shorthand: enum = ({ shorthandValue });
+                               ~~~~~~~~~~~~~~
+!!! error TS18128: Erasable enums only allow property assignments.
+    
+    // Member values must be compile-time string or number constants.
+    declare const symbolValue: unique symbol;
+    const Invalid: enum = {
+        True: true,
+              ~~~~
+!!! error TS18126: Erasable enum member initializers must be constant expressions.
+        False: false,
+               ~~~~~
+!!! error TS18126: Erasable enum member initializers must be constant expressions.
+        Null: null,
+              ~~~~
+!!! error TS18126: Erasable enum member initializers must be constant expressions.
+        Object: {},
+                ~~
+!!! error TS18126: Erasable enum member initializers must be constant expressions.
+        BigInt: 1n,
+                ~~
+!!! error TS18126: Erasable enum member initializers must be constant expressions.
+        Symbol: symbolValue,
+                ~~~~~~~~~~~
+!!! error TS18126: Erasable enum member initializers must be constant expressions.
+    };
+    const DynamicCall: enum = { Value: Math.random() };
+                                       ~~~~~~~~~~~~~
+!!! error TS18126: Erasable enum member initializers must be constant expressions.
+    const dynamicValue: DynamicCall = DynamicCall.Value; // no cascading type errors.
+    let mutable = 1;
+    const MutableValue: enum = { Value: mutable };
+                                        ~~~~~~~
+!!! error TS18126: Erasable enum member initializers must be constant expressions.
+    const dynamic = Math.random();
+    const NonconstantBinding: enum = { Value: dynamic };
+                                              ~~~~~~~
+!!! error TS18126: Erasable enum member initializers must be constant expressions.
+    declare const broadNumber: number;
+    declare const broadString: string;
+    const BroadValues: enum = { Number: broadNumber, String: broadString };
+                                        ~~~~~~~~~~~
+!!! error TS18126: Erasable enum member initializers must be constant expressions.
+                                                             ~~~~~~~~~~~
+!!! error TS18126: Erasable enum member initializers must be constant expressions.
+    
+    // Assertions and satisfies expressions block constant evaluation, including through references.
+    const AssertionBoundary: enum = ({ Value: 1 as number, Nested: (1 as number) + 1 });
+                                              ~~~~~~~~~~~
+!!! error TS18126: Erasable enum member initializers must be constant expressions.
+                                                                   ~~~~~~~~~~~~~~~~~
+!!! error TS18126: Erasable enum member initializers must be constant expressions.
+    const SatisfiesBoundary: enum = { Value: "value" satisfies string };
+                                                     ~~~~~~~~~
+!!! error TS18126: Erasable enum member initializers must be constant expressions.
+    const asserted = 1 as number;
+    const checked = "value" satisfies string;
+    const ReferencedBoundaries: enum = { Asserted: asserted, Checked: checked };
+                                                   ~~~~~~~~
+!!! error TS18126: Erasable enum member initializers must be constant expressions.
+                                                                      ~~~~~~~
+!!! error TS18126: Erasable enum member initializers must be constant expressions.
+    
+    // Names must be identifiers or strings; computed names are forbidden even when constant.
+    const NumericKey: enum = { 1: "one" };
+                               ~
+!!! error TS18130: Erasable enum member names must be identifiers or string literals.
+    const ComputedKey: enum = { ["foo"]: 1 };
+                                ~~~~~~~
+!!! error TS18130: Erasable enum member names must be identifiers or string literals.
+    const key = "Known";
+    const ComputedKeyReference: enum = { [key]: 1 };
+                                         ~~~~~
+!!! error TS18130: Erasable enum member names must be identifiers or string literals.
+    const ComputedPrototypeKey: enum = { ["__proto__"]: 1 };
+                                         ~~~~~~~~~~~~~
+!!! error TS18130: Erasable enum member names must be identifiers or string literals.
+    const prototypeValue = ComputedPrototypeKey.__proto__;
+                                                ~~~~~~~~~
+!!! error TS2339: Property '__proto__' does not exist on type 'typeof ComputedPrototypeKey'.
+    
+    const Numeric: enum = { First: 1, Second: 2 };
+    // Const assertions on member references still block constant evaluation in initializers.
+    const MemberAssertionBoundary: enum = { Value: Numeric.First as const };
+                                                   ~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS18126: Erasable enum member initializers must be constant expressions.
+    const Spread: enum = { ...Numeric };
+                           ~~~~~~~~~~
+!!! error TS18127: Spread assignments are not allowed in erasable enums.
+    const Method: enum = { method() {} };
+                           ~~~~~~
+!!! error TS18128: Erasable enums only allow property assignments.
+    const Getter: enum = { get value() { return 1; } };
+                               ~~~~~
+!!! error TS18128: Erasable enums only allow property assignments.
+    const Setter: enum = { set value(value: number) {} };
+                               ~~~~~
+!!! error TS18128: Erasable enums only allow property assignments.
+    
+    // Members are readonly and numeric reverse mappings are absent.
+    Numeric.First = Numeric.Second;
+            ~~~~~
+!!! error TS2540: Cannot assign to 'First' because it is a read-only property.
+    const reverse = Numeric[1];
+                    ~~~~~~~~~~
+!!! error TS7053: Element implicitly has an 'any' type because expression of type '1' can't be used to index type 'typeof Numeric'.
+!!! error TS7053:   Property '1' does not exist on type 'typeof Numeric'.
+    const unknownKey = Numeric.Unknown;
+                               ~~~~~~~
+!!! error TS2339: Property 'Unknown' does not exist on type 'typeof Numeric'.
+    
+    // Initializers use ordinary lexical bindings, without a scope for enum members.
+    const Unqualified: enum = { A: 1, B: A };
+                                         ~
+!!! error TS2304: Cannot find name 'A'.
+                                         ~
+!!! error TS18126: Erasable enum member initializers must be constant expressions.
+    const SelfReference: enum = { A: 1, B: SelfReference.A };
+                                           ~~~~~~~~~~~~~
+!!! error TS2448: Block-scoped variable 'SelfReference' used before its declaration.
+!!! related TS2728 erasableEnumErrors.ts:56:7: 'SelfReference' is declared here.
+                                           ~~~~~~~~~~~~~
+!!! error TS2454: Variable 'SelfReference' is used before being assigned.
+                                           ~~~~~~~~~~~~~~~
+!!! error TS18126: Erasable enum member initializers must be constant expressions.
+    var VarSelfReference: enum = { A: 1, B: VarSelfReference.A };
+                                            ~~~~~~~~~~~~~~~~
+!!! error TS2454: Variable 'VarSelfReference' is used before being assigned.
+                                            ~~~~~~~~~~~~~~~~~~
+!!! error TS18126: Erasable enum member initializers must be constant expressions.
+    // Deferred callbacks avoid initialization errors; calls are still nonconstant.
+    const Deferred: enum = { A: ((f: () => number): number => 1)((): number => Deferred.B), B: 1 };
+                                ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS18126: Erasable enum member initializers must be constant expressions.
+    const Immediate: enum = { A: ((): number => Immediate.B)(), B: 1 };
+                                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS18126: Erasable enum member initializers must be constant expressions.
+                                                ~~~~~~~~~
+!!! error TS2448: Block-scoped variable 'Immediate' used before its declaration.
+!!! related TS2728 erasableEnumErrors.ts:60:7: 'Immediate' is declared here.
+                                                ~~~~~~~~~
+!!! error TS2454: Variable 'Immediate' is used before being assigned.
+    const OuterMember = 10;
+    const Lexical: enum = { OuterMember: 1, Value: OuterMember };
+    const lexicalValue: Lexical.Value = 10; // ok: Value refers to the outer constant.
+    
+    // Duplicate keys follow object literal rules; bindings cannot be redeclared.
+    const Duplicate: enum = { A: 1, A: 2 };
+                                    ~
+!!! error TS1117: An object literal cannot have multiple properties with the same name.
+    const Repeated: enum = { A: 1 };
+          ~~~~~~~~
+!!! error TS2451: Cannot redeclare block-scoped variable 'Repeated'.
+    const Repeated: enum = { B: 2 };
+          ~~~~~~~~
+!!! error TS2451: Cannot redeclare block-scoped variable 'Repeated'.
+    
+    // Only a null prototype setter is allowed, and it does not declare an enum member.
+    const PrototypeKey: enum = { __proto__: 1 };
+                                            ~
+!!! error TS18125: An erasable enum prototype setter must have the value 'null'.
+    const QuotedPrototypeKey: enum = { "__proto__": 1 };
+                                                    ~
+!!! error TS18125: An erasable enum prototype setter must have the value 'null'.
+    const PrototypeObject: enum = { __proto__: {} };
+                                               ~~
+!!! error TS18125: An erasable enum prototype setter must have the value 'null'.
+    const AssertedPrototype: enum = { __proto__: null as null };
+                                                 ~~~~~~~~~~~~
+!!! error TS18125: An erasable enum prototype setter must have the value 'null'.
+    const NullPrototype: enum = { __proto__: null, A: 1 };
+    const nullPrototypeMember = NullPrototype.__proto__;
+                                              ~~~~~~~~~
+!!! error TS2339: Property '__proto__' does not exist on type 'typeof NullPrototype'.
+    const __proto__ = "own";
+    const PrototypeShorthand: enum = { __proto__ };
+                                       ~~~~~~~~~
+!!! error TS18128: Erasable enums only allow property assignments.
+    
+    // The annotation requires a named variable statement with an object literal initializer.
+    let NoInitializer: enum;
+                       ~~~~
+!!! error TS18129: An 'enum' annotation requires a named variable in a variable statement with an object literal initializer.
+    const NonObject: enum = 1;
+                     ~~~~
+!!! error TS18129: An 'enum' annotation requires a named variable in a variable statement with an object literal initializer.
+    const { Destructuring }: enum = { Destructuring: 1 };
+                             ~~~~
+!!! error TS18129: An 'enum' annotation requires a named variable in a variable statement with an object literal initializer.
+    for (const ForInitializer: enum = { A: 1 }; false; ) {}
+                               ~~~~
+!!! error TS18129: An 'enum' annotation requires a named variable in a variable statement with an object literal initializer.
+    
