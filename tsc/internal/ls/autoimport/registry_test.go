@@ -1426,39 +1426,61 @@ func TestCancelledBuildTracksExtractionDependencies(t *testing.T) {
 		sharedDeclaration:                      "export declare const one: number;\n",
 	}
 
-	init, utils := projecttestutil.GetSessionInitOptions(files, nil, &projecttestutil.TypingsInstallerOptions{})
-	var reads atomic.Int32
-	var cancelOnRead atomic.Pointer[context.CancelFunc]
-	inner := init.FS
-	init.FS = wrapvfs.Wrap(inner, wrapvfs.Replacements{
-		ReadFile: func(fileName tspath.RootedFilePath) (string, bool) {
-			if fileName.AsString() == pkgADeclaration {
-				reads.Add(1)
-				if cancel := cancelOnRead.Swap(nil); cancel != nil {
-					(*cancel)()
-				}
-			}
-			return inner.ReadFile(fileName)
-		},
-	})
-	session := project.NewSession(init)
-	t.Cleanup(session.Close)
-
 	indexURI := lsproto.DocumentUri("file://" + appDir + "/index.ts")
-	session.DidOpenFile(context.Background(), indexURI, 1, "export {};\n", lsproto.LanguageKindTypeScript)
+	setup := func(t *testing.T) (*project.Session, *projecttestutil.SessionUtils, *atomic.Int32) {
+		init, utils := projecttestutil.GetSessionInitOptions(files, nil, &projecttestutil.TypingsInstallerOptions{})
+		var reads atomic.Int32
+		var cancelOnRead atomic.Pointer[context.CancelFunc]
+		inner := init.FS
+		init.FS = wrapvfs.Wrap(inner, wrapvfs.Replacements{
+			ReadFile: func(fileName tspath.RootedFilePath) (string, bool) {
+				if fileName.AsString() == pkgADeclaration {
+					reads.Add(1)
+					if cancel := cancelOnRead.Swap(nil); cancel != nil {
+						(*cancel)()
+					}
+				}
+				return inner.ReadFile(fileName)
+			},
+		})
+		session := project.NewSession(init)
+		t.Cleanup(session.Close)
+		session.DidOpenFile(context.Background(), indexURI, 1, "export {};\n", lsproto.LanguageKindTypeScript)
 
-	ctx, cancel := context.WithCancel(context.Background())
-	defer cancel()
-	cancelOnRead.Store(&cancel)
-	_, _ = session.GetCurrentLanguageServiceWithAutoImports(ctx, indexURI)
-	assert.Equal(t, reads.Load(), int32(1))
+		ctx, cancel := context.WithCancel(context.Background())
+		t.Cleanup(cancel)
+		cancelOnRead.Store(&cancel)
+		_, _ = session.GetCurrentLanguageServiceWithAutoImports(ctx, indexURI)
+		assert.Equal(t, reads.Load(), int32(1))
+		return session, utils, &reads
+	}
 
-	assert.NilError(t, utils.FS().WriteFile(tspath.RootedFilePathFromNormalized(sharedDeclaration), "export declare const one: number;\nexport declare const two: number;\n"))
-	session.DidChangeWatchedFiles(context.Background(), []*lsproto.FileEvent{
-		{Uri: lsproto.DocumentUri("file://" + sharedDeclaration), Type: lsproto.FileChangeTypeChanged},
+	t.Run("changed dependency", func(t *testing.T) {
+		t.Parallel()
+		session, utils, _ := setup(t)
+		assert.NilError(t, utils.FS().WriteFile(tspath.RootedFilePathFromNormalized(sharedDeclaration), "export declare const one: number;\nexport declare const two: number;\n"))
+		session.DidChangeWatchedFiles(context.Background(), []*lsproto.FileEvent{
+			{Uri: lsproto.DocumentUri("file://" + sharedDeclaration), Type: lsproto.FileChangeTypeChanged},
+		})
+
+		_, err := session.GetCurrentLanguageServiceWithAutoImports(context.Background(), indexURI)
+		assert.NilError(t, err)
+		assert.Equal(t, singleBucket(t, autoImportStats(t, session).NodeModulesBuckets).ExportCount, 2)
 	})
 
-	_, err := session.GetCurrentLanguageServiceWithAutoImports(context.Background(), indexURI)
-	assert.NilError(t, err)
-	assert.Equal(t, singleBucket(t, autoImportStats(t, session).NodeModulesBuckets).ExportCount, 2)
+	t.Run("deleted dependency directory", func(t *testing.T) {
+		t.Parallel()
+		session, utils, reads := setup(t)
+		sharedDir := root + "/packages/shared"
+		for _, fileName := range []string{sharedDeclaration, sharedDir + "/package.json", sharedDir} {
+			assert.NilError(t, utils.FS().Remove(tspath.RootedPathFromNormalized(fileName)))
+		}
+		session.DidChangeWatchedFiles(context.Background(), []*lsproto.FileEvent{
+			{Uri: lsproto.DocumentUri("file://" + sharedDir), Type: lsproto.FileChangeTypeDeleted},
+		})
+
+		_, err := session.GetCurrentLanguageServiceWithAutoImports(context.Background(), indexURI)
+		assert.NilError(t, err)
+		assert.Assert(t, reads.Load() > 1, "a should be extracted again after its dependency was deleted")
+	})
 }
