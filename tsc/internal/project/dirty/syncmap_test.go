@@ -278,3 +278,37 @@ func TestSyncMapLoadClean(t *testing.T) {
 	assert.Assert(t, ok)
 	assert.Equal(t, value, base["c"])
 }
+
+func TestSyncMapLoadOrStoreDeletedKey(t *testing.T) {
+	t.Parallel()
+
+	base := map[string]*testValue{"base": {data: "base"}}
+	m := NewSyncMap(base)
+	m.Delete("base")
+	added, _ := m.LoadOrStore("added", &testValue{data: "added"})
+	added.Delete()
+
+	for _, key := range []string{"base", "added"} {
+		entry, loaded := m.LoadOrStore(key, &testValue{data: "ignored"})
+		assert.Assert(t, entry == nil, "LoadOrStore must not store over a deleted key")
+		assert.Assert(t, !loaded)
+
+		entry, loaded = m.LoadOrStoreReplacingDeleted(key, &testValue{data: "new " + key})
+		assert.Assert(t, !loaded)
+		assert.Equal(t, entry.Value().data, "new "+key)
+
+		entry, loaded = m.LoadOrStoreReplacingDeleted(key, &testValue{data: "ignored"})
+		assert.Assert(t, loaded)
+		assert.Equal(t, entry.Value().data, "new "+key)
+		entry, ok := m.Load(key)
+		assert.Assert(t, ok)
+		assert.Equal(t, entry.Value().data, "new "+key)
+	}
+
+	result, changed := m.Finalize()
+	assert.Assert(t, changed)
+	assert.Equal(t, len(result), 2)
+	assert.Equal(t, result["base"].data, "new base")
+	assert.Equal(t, result["added"].data, "new added")
+	assert.Equal(t, base["base"].data, "base")
+}

@@ -234,14 +234,32 @@ func (m *SyncMap[K, V]) LoadClean(key K) (value V, ok bool) {
 	return value, ok
 }
 
+// LoadOrStore returns the existing entry for the key if present. Otherwise, it
+// stores value and returns the new entry. The loaded result is true if the entry
+// was loaded and false if value was stored. If the key has been deleted from the
+// map, LoadOrStore returns nil and false without storing value.
 func (m *SyncMap[K, V]) LoadOrStore(key K, value V) (*SyncMapEntry[K, V], bool) {
+	return m.loadOrStore(key, value, false /*replaceDeleted*/)
+}
+
+// LoadOrStoreReplacingDeleted is like LoadOrStore, but if the key has been deleted
+// from the map, it stores value in place of the deleted entry instead of returning nil.
+func (m *SyncMap[K, V]) LoadOrStoreReplacingDeleted(key K, value V) (*SyncMapEntry[K, V], bool) {
+	return m.loadOrStore(key, value, true /*replaceDeleted*/)
+}
+
+func (m *SyncMap[K, V]) loadOrStore(key K, value V, replaceDeleted bool) (*SyncMapEntry[K, V], bool) {
 	// Check for existence in the base map first so the sync map access is atomic.
 	if baseValue, ok := m.base[key]; ok {
 		if dirty, ok := m.dirty.Load(key); ok {
 			dirty.mu.Lock()
 			defer dirty.mu.Unlock()
 			if dirty.delete {
-				return nil, false
+				if !replaceDeleted {
+					return nil, false
+				}
+				dirty.replaceDeletedLocked(value)
+				return dirty, false
 			}
 			return dirty, true
 		}
@@ -264,10 +282,22 @@ func (m *SyncMap[K, V]) LoadOrStore(key K, value V) (*SyncMapEntry[K, V], bool) 
 		entry.mu.Lock()
 		defer entry.mu.Unlock()
 		if entry.delete {
-			return nil, false
+			if !replaceDeleted {
+				return nil, false
+			}
+			entry.replaceDeletedLocked(value)
+			return entry, false
 		}
 	}
 	return entry, loaded
+}
+
+// replaceDeletedLocked stores a fresh value in a deleted entry of the dirty map,
+// so the entry is finalized with that value instead of being deleted.
+func (e *SyncMapEntry[K, V]) replaceDeletedLocked(value V) {
+	e.value = value
+	e.dirty = true
+	e.delete = false
 }
 
 func (m *SyncMap[K, V]) Delete(key K) {
