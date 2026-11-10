@@ -87,6 +87,88 @@ func TestContentMapperVirtualExtensionSetsImpliedNodeFormat(t *testing.T) {
 	assert.Equal(t, program.GetSourceFileMetaData(file.PathKey()).ImpliedNodeFormat, core.ResolutionModeESM)
 }
 
+func TestContentMapperVirtualExtensionDeterminesModuleFormat(t *testing.T) {
+	t.Parallel()
+	tests := []struct {
+		name               string
+		virtualExtension   string
+		text               string
+		module             core.ModuleKind
+		moduleResolution   core.ModuleResolutionKind
+		expectedFormat     core.ModuleKind
+		expectedDiagnostic int32
+	}{
+		{
+			name:               "cts",
+			virtualExtension:   ".cts",
+			text:               `import type { Foo } from "./dep"; declare const styles: { foo: string }; export = styles;`,
+			module:             core.ModuleKindESNext,
+			moduleResolution:   core.ModuleResolutionKindNode10,
+			expectedFormat:     core.ModuleKindCommonJS,
+			expectedDiagnostic: diagnostics.Export_assignment_cannot_be_used_when_targeting_ECMAScript_modules_Consider_using_export_default_or_another_module_format_instead.Code(),
+		},
+		{
+			name:               "mts",
+			virtualExtension:   ".mts",
+			text:               `import type { Foo } from "./dep"; export const value = 1;`,
+			module:             core.ModuleKindCommonJS,
+			moduleResolution:   core.ModuleResolutionKindNode10,
+			expectedFormat:     core.ModuleKindESNext,
+			expectedDiagnostic: diagnostics.A_top_level_export_modifier_cannot_be_used_on_value_declarations_in_a_CommonJS_module_when_verbatimModuleSyntax_is_enabled.Code(),
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			t.Parallel()
+			physicalFileName := "/src/physical" + tt.virtualExtension
+			program := newContentMapperProgramWithOptions(
+				t,
+				fakeContentMapperHost{transform: func(fileName string, content string) (contentmapper.Result, error) {
+					return contentmapper.Result{Text: content, VirtualExtension: tt.virtualExtension, Mappings: spanmap.New(nil)}, nil
+				}},
+				map[string]string{
+					"/src/Component.vue": tt.text,
+					physicalFileName:     tt.text,
+					"/src/dep.ts":        "export type Foo = {};",
+				},
+				[]string{"/src/Component.vue", physicalFileName},
+				&core.CompilerOptions{
+					SkipLibCheck:              core.TSTrue,
+					Module:                    tt.module,
+					ModuleResolution:          tt.moduleResolution,
+					ResolvePackageJsonExports: core.TSTrue,
+					VerbatimModuleSyntax:      core.TSTrue,
+				},
+			)
+
+			mappedFile := program.GetSourceFile("/src/Component.vue")
+			assert.Assert(t, mappedFile != nil)
+			assert.Equal(t, mappedFile.VirtualFileName(), tspath.RootedFilePathFromNormalized("/src/Component.vue"+tt.virtualExtension))
+			assert.Equal(t, program.GetImpliedNodeFormatForEmit(mappedFile), tt.expectedFormat)
+			assert.Equal(t, program.GetEmitModuleFormatOfFile(mappedFile), tt.expectedFormat)
+			assert.Equal(t, program.GetDefaultResolutionModeForFile(mappedFile), tt.expectedFormat)
+
+			imports := mappedFile.Imports()
+			assert.Equal(t, len(imports), 1)
+			assert.Equal(t, program.GetModeForUsageLocation(mappedFile, imports[0]), tt.expectedFormat)
+			assert.Equal(t, program.GetEmitSyntaxForUsageLocation(mappedFile, imports[0]), tt.expectedFormat)
+
+			mappedDiagnosticCodes := core.Map(program.GetSemanticDiagnostics(t.Context(), mappedFile), func(diagnostic *ast.Diagnostic) int32 {
+				return diagnostic.Code()
+			})
+			assert.Assert(t, !slices.Contains(mappedDiagnosticCodes, tt.expectedDiagnostic), "mapped file has the format diagnostic: %v", mappedDiagnosticCodes)
+
+			physicalFile := program.GetSourceFile(tspath.RootedFilePathFromNormalized(physicalFileName))
+			assert.Assert(t, physicalFile != nil)
+			physicalDiagnosticCodes := core.Map(program.GetSemanticDiagnostics(t.Context(), physicalFile), func(diagnostic *ast.Diagnostic) int32 {
+				return diagnostic.Code()
+			})
+			assert.Assert(t, !slices.Contains(physicalDiagnosticCodes, tt.expectedDiagnostic), "physical file has the format diagnostic: %v", physicalDiagnosticCodes)
+		})
+	}
+}
+
 func TestContentMapperDirectivesPreserveIncrementalGlobals(t *testing.T) {
 	t.Parallel()
 	for _, policy := range []ast.MappedDiagnosticDirectivePolicy{

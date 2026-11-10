@@ -1838,19 +1838,19 @@ func (p *Program) GetSourceFileMetaData(path tspath.PathKey) ast.SourceFileMetaD
 }
 
 func (p *Program) GetEmitModuleFormatOfFile(sourceFile ast.HasFileName) core.ModuleKind {
-	return ast.GetEmitModuleFormatOfFileWorker(sourceFile.FileName(), p.projectReferenceFileMapper.getCompilerOptionsForFile(sourceFile), p.GetSourceFileMetaData(sourceFile.PathKey()))
+	return ast.GetEmitModuleFormatOfFileWorker(getModuleFormatFileName(sourceFile), p.projectReferenceFileMapper.getCompilerOptionsForFile(sourceFile), p.GetSourceFileMetaData(sourceFile.PathKey()))
 }
 
 func (p *Program) GetEmitSyntaxForUsageLocation(sourceFile ast.HasFileName, location *ast.StringLiteralLike) core.ResolutionMode {
-	return getEmitSyntaxForUsageLocationWorker(sourceFile.FileName(), p.sourceFileMetaDatas[sourceFile.PathKey()], location, p.projectReferenceFileMapper.getCompilerOptionsForFile(sourceFile))
+	return getEmitSyntaxForUsageLocationWorker(getModuleFormatFileName(sourceFile), p.sourceFileMetaDatas[sourceFile.PathKey()], location, p.projectReferenceFileMapper.getCompilerOptionsForFile(sourceFile))
 }
 
 func (p *Program) GetImpliedNodeFormatForEmit(sourceFile ast.HasFileName) core.ResolutionMode {
-	return ast.GetImpliedNodeFormatForEmitWorker(sourceFile.FileName(), p.projectReferenceFileMapper.getCompilerOptionsForFile(sourceFile).GetEmitModuleKind(), p.GetSourceFileMetaData(sourceFile.PathKey()))
+	return ast.GetImpliedNodeFormatForEmitWorker(getModuleFormatFileName(sourceFile), p.projectReferenceFileMapper.getCompilerOptionsForFile(sourceFile).GetEmitModuleKind(), p.GetSourceFileMetaData(sourceFile.PathKey()))
 }
 
 func (p *Program) GetModeForUsageLocation(sourceFile ast.HasFileName, location *ast.StringLiteralLike) core.ResolutionMode {
-	return getModeForUsageLocation(sourceFile.FileName(), p.sourceFileMetaDatas[sourceFile.PathKey()], location, p.projectReferenceFileMapper.getCompilerOptionsForFile(sourceFile))
+	return getModeForUsageLocation(getModuleFormatFileName(sourceFile), p.sourceFileMetaDatas[sourceFile.PathKey()], location, p.projectReferenceFileMapper.getCompilerOptionsForFile(sourceFile))
 }
 
 func (p *Program) GetModeForResolutionAtIndex(sourceFile *ast.SourceFile, index int) core.ResolutionMode {
@@ -1871,7 +1871,7 @@ func (p *Program) GetModeForResolutionAtIndex(sourceFile *ast.SourceFile, index 
 }
 
 func (p *Program) GetDefaultResolutionModeForFile(sourceFile ast.HasFileName) core.ResolutionMode {
-	return getDefaultResolutionModeForFile(sourceFile.FileName(), p.sourceFileMetaDatas[sourceFile.PathKey()], p.projectReferenceFileMapper.getCompilerOptionsForFile(sourceFile))
+	return getDefaultResolutionModeForFile(getModuleFormatFileName(sourceFile), p.sourceFileMetaDatas[sourceFile.PathKey()], p.projectReferenceFileMapper.getCompilerOptionsForFile(sourceFile))
 }
 
 func (p *Program) IsSourceFileDefaultLibrary(path tspath.PathKey) bool {
