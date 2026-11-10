@@ -34,6 +34,8 @@ var checkerProgressFields = []string{
 	"effectsMarkDepth",
 	"flowLoopStack",
 	"flowTypeCache",
+	"heldEffects",
+	"heldEffectsFloor",
 	"inferenceContextInfos",
 	"inlineLevel",
 	"innerCycles",
