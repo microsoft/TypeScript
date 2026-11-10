@@ -14,64 +14,57 @@ declare namespace JSX {
 >name : Symbol(name, Decl(jsxNamesStartingWithHash.tsx, 3, 9))
     }
 }
-declare function Comp(props: { x: number }): any;
->Comp : Symbol(Comp, Decl(jsxNamesStartingWithHash.tsx, 5, 1))
->props : Symbol(props, Decl(jsxNamesStartingWithHash.tsx, 6, 22))
->x : Symbol(x, Decl(jsxNamesStartingWithHash.tsx, 6, 30))
 
 const a = <#a></#a>;
->a : Symbol(a, Decl(jsxNamesStartingWithHash.tsx, 8, 5))
+>a : Symbol(a, Decl(jsxNamesStartingWithHash.tsx, 7, 5))
 
 const b = <div #b />;
->b : Symbol(b, Decl(jsxNamesStartingWithHash.tsx, 9, 5))
+>b : Symbol(b, Decl(jsxNamesStartingWithHash.tsx, 8, 5))
 >div : Symbol(JSX.IntrinsicElements.__index, Decl(jsxNamesStartingWithHash.tsx, 2, 33))
->#b : Symbol(#b, Decl(jsxNamesStartingWithHash.tsx, 9, 14))
+>#b : Symbol(#b, Decl(jsxNamesStartingWithHash.tsx, 8, 14))
 
 const c = <div #c="" />;
->c : Symbol(c, Decl(jsxNamesStartingWithHash.tsx, 10, 5))
+>c : Symbol(c, Decl(jsxNamesStartingWithHash.tsx, 9, 5))
 >div : Symbol(JSX.IntrinsicElements.__index, Decl(jsxNamesStartingWithHash.tsx, 2, 33))
->#c : Symbol(#c, Decl(jsxNamesStartingWithHash.tsx, 10, 14))
+>#c : Symbol(#c, Decl(jsxNamesStartingWithHash.tsx, 9, 14))
 
 const d = <div #d:e />;
->d : Symbol(d, Decl(jsxNamesStartingWithHash.tsx, 11, 5))
+>d : Symbol(d, Decl(jsxNamesStartingWithHash.tsx, 10, 5))
 >div : Symbol(JSX.IntrinsicElements.__index, Decl(jsxNamesStartingWithHash.tsx, 2, 33))
->#d:e : Symbol(#d:e, Decl(jsxNamesStartingWithHash.tsx, 11, 14))
+>#d:e : Symbol(#d:e, Decl(jsxNamesStartingWithHash.tsx, 10, 14))
 
 const e = <a:#f />;
->e : Symbol(e, Decl(jsxNamesStartingWithHash.tsx, 12, 5))
+>e : Symbol(e, Decl(jsxNamesStartingWithHash.tsx, 11, 5))
 
 const f = <a.#g />;
->f : Symbol(f, Decl(jsxNamesStartingWithHash.tsx, 13, 5))
->a : Symbol(a, Decl(jsxNamesStartingWithHash.tsx, 8, 5))
+>f : Symbol(f, Decl(jsxNamesStartingWithHash.tsx, 12, 5))
+>a : Symbol(a, Decl(jsxNamesStartingWithHash.tsx, 7, 5))
 
 const g = <#h:i />;
->g : Symbol(g, Decl(jsxNamesStartingWithHash.tsx, 14, 5))
+>g : Symbol(g, Decl(jsxNamesStartingWithHash.tsx, 13, 5))
 
 const h = <div j:#k />;
->h : Symbol(h, Decl(jsxNamesStartingWithHash.tsx, 15, 5))
+>h : Symbol(h, Decl(jsxNamesStartingWithHash.tsx, 14, 5))
 >div : Symbol(JSX.IntrinsicElements.__index, Decl(jsxNamesStartingWithHash.tsx, 2, 33))
->j:#k : Symbol(j:#k, Decl(jsxNamesStartingWithHash.tsx, 15, 14))
+>j:#k : Symbol(j:#k, Decl(jsxNamesStartingWithHash.tsx, 14, 14))
 
 const i = <#l-m></#l-m>;
->i : Symbol(i, Decl(jsxNamesStartingWithHash.tsx, 16, 5))
+>i : Symbol(i, Decl(jsxNamesStartingWithHash.tsx, 15, 5))
 >#l-m : Symbol(JSX.IntrinsicElements.__index, Decl(jsxNamesStartingWithHash.tsx, 2, 33))
 >#l-m : Symbol(JSX.IntrinsicElements.__index, Decl(jsxNamesStartingWithHash.tsx, 2, 33))
 
 const j = <div #n-o={1} />;
->j : Symbol(j, Decl(jsxNamesStartingWithHash.tsx, 17, 5))
+>j : Symbol(j, Decl(jsxNamesStartingWithHash.tsx, 16, 5))
 >div : Symbol(JSX.IntrinsicElements.__index, Decl(jsxNamesStartingWithHash.tsx, 2, 33))
->#n-o : Symbol(#n-o, Decl(jsxNamesStartingWithHash.tsx, 17, 14))
+>#n-o : Symbol(#n-o, Decl(jsxNamesStartingWithHash.tsx, 16, 14))
 
-const k = <Comp #x={1} x={1} />;
->k : Symbol(k, Decl(jsxNamesStartingWithHash.tsx, 18, 5))
->Comp : Symbol(Comp, Decl(jsxNamesStartingWithHash.tsx, 5, 1))
->#x : Symbol(#x, Decl(jsxNamesStartingWithHash.tsx, 18, 15))
->x : Symbol(x, Decl(jsxNamesStartingWithHash.tsx, 18, 22))
-
-const l = <div #p #q="" r="" />;
->l : Symbol(l, Decl(jsxNamesStartingWithHash.tsx, 19, 5))
+const k = <div #p #q="" r="" />;
+>k : Symbol(k, Decl(jsxNamesStartingWithHash.tsx, 17, 5))
 >div : Symbol(JSX.IntrinsicElements.__index, Decl(jsxNamesStartingWithHash.tsx, 2, 33))
->#p : Symbol(#p, Decl(jsxNamesStartingWithHash.tsx, 19, 14))
->#q : Symbol(#q, Decl(jsxNamesStartingWithHash.tsx, 19, 17))
->r : Symbol(r, Decl(jsxNamesStartingWithHash.tsx, 19, 23))
+>#p : Symbol(#p, Decl(jsxNamesStartingWithHash.tsx, 17, 14))
+>#q : Symbol(#q, Decl(jsxNamesStartingWithHash.tsx, 17, 17))
+>r : Symbol(r, Decl(jsxNamesStartingWithHash.tsx, 17, 23))
+
+const l = <# />;
+>l : Symbol(l, Decl(jsxNamesStartingWithHash.tsx, 18, 5))
 

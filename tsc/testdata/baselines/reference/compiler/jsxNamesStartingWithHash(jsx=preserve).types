@@ -10,10 +10,6 @@ declare namespace JSX {
 >name : string
     }
 }
-declare function Comp(props: { x: number }): any;
->Comp : (props: { x: number; }) => any
->props : { x: number; }
->x : number
 
 const a = <#a></#a>;
 >a : any
@@ -81,20 +77,16 @@ const j = <div #n-o={1} />;
 >#n-o : number
 >1 : 1
 
-const k = <Comp #x={1} x={1} />;
+const k = <div #p #q="" r="" />;
 >k : any
-><Comp #x={1} x={1} /> : any
->Comp : (props: { x: number; }) => any
->#x : number
->1 : 1
->x : number
->1 : 1
-
-const l = <div #p #q="" r="" />;
->l : any
 ><div #p #q="" r="" /> : any
 >div : any
 >#p : true
 >#q : string
 >r : string
+
+const l = <# />;
+>l : any
+><# /> : any
+># : any
 

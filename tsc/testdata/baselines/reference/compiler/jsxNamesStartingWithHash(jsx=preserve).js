@@ -7,7 +7,6 @@ declare namespace JSX {
         [name: string]: any;
     }
 }
-declare function Comp(props: { x: number }): any;
 
 const a = <#a></#a>;
 const b = <div #b />;
@@ -19,8 +18,8 @@ const g = <#h:i />;
 const h = <div j:#k />;
 const i = <#l-m></#l-m>;
 const j = <div #n-o={1} />;
-const k = <Comp #x={1} x={1} />;
-const l = <div #p #q="" r="" />;
+const k = <div #p #q="" r="" />;
+const l = <# />;
 
 
 //// [jsxNamesStartingWithHash.jsx]
@@ -35,5 +34,5 @@ const g = <#h:i />;
 const h = <div j:#k/>;
 const i = <#l-m></#l-m>;
 const j = <div #n-o={1}/>;
-const k = <Comp #x={1} x={1}/>;
-const l = <div #p #q="" r=""/>;
+const k = <div #p #q="" r=""/>;
+const l = <# />;
