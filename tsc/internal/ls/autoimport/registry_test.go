@@ -1384,3 +1384,57 @@ func TestCancelledBuildKeepsExtractedPackages(t *testing.T) {
 		assert.Equal(t, singleBucket(t, autoImportStats(t, session).NodeModulesBuckets).ExportCount, 3)
 	})
 }
+
+func TestCancelledBuildTracksExtractionDependencies(t *testing.T) {
+	t.Parallel()
+	const root = "/home/src/ws"
+	appDir := root + "/packages/app"
+	pkgADeclaration := root + "/packages/a/index.d.ts"
+	sharedDeclaration := root + "/packages/shared/index.d.ts"
+	files := map[string]any{
+		appDir + "/tsconfig.json":              `{"compilerOptions":{"module":"esnext","target":"esnext","strict":true}}`,
+		appDir + "/package.json":               `{"dependencies":{"a":"*"}}`,
+		appDir + "/index.ts":                   "export {};\n",
+		appDir + "/node_modules/a":             vfstest.Symlink(root + "/packages/a"),
+		root + "/packages/a/package.json":      `{"name":"a","version":"1.0.0","types":"index.d.ts"}`,
+		pkgADeclaration:                        "export * from \"../shared/index\";\n",
+		root + "/packages/shared/package.json": `{"name":"shared","version":"1.0.0","types":"index.d.ts"}`,
+		sharedDeclaration:                      "export declare const one: number;\n",
+	}
+
+	init, utils := projecttestutil.GetSessionInitOptions(files, nil, &projecttestutil.TypingsInstallerOptions{})
+	var reads atomic.Int32
+	var cancelOnRead atomic.Pointer[context.CancelFunc]
+	inner := init.FS
+	init.FS = wrapvfs.Wrap(inner, wrapvfs.Replacements{
+		ReadFile: func(fileName tspath.RootedFilePath) (string, bool) {
+			if fileName.AsString() == pkgADeclaration {
+				reads.Add(1)
+				if cancel := cancelOnRead.Swap(nil); cancel != nil {
+					(*cancel)()
+				}
+			}
+			return inner.ReadFile(fileName)
+		},
+	})
+	session := project.NewSession(init)
+	t.Cleanup(session.Close)
+
+	indexURI := lsproto.DocumentUri("file://" + appDir + "/index.ts")
+	session.DidOpenFile(context.Background(), indexURI, 1, "export {};\n", lsproto.LanguageKindTypeScript)
+
+	ctx, cancel := context.WithCancel(context.Background())
+	defer cancel()
+	cancelOnRead.Store(&cancel)
+	_, _ = session.GetCurrentLanguageServiceWithAutoImports(ctx, indexURI)
+	assert.Equal(t, reads.Load(), int32(1))
+
+	assert.NilError(t, utils.FS().WriteFile(tspath.RootedFilePathFromNormalized(sharedDeclaration), "export declare const one: number;\nexport declare const two: number;\n"))
+	session.DidChangeWatchedFiles(context.Background(), []*lsproto.FileEvent{
+		{Uri: lsproto.DocumentUri("file://" + sharedDeclaration), Type: lsproto.FileChangeTypeChanged},
+	})
+
+	_, err := session.GetCurrentLanguageServiceWithAutoImports(context.Background(), indexURI)
+	assert.NilError(t, err)
+	assert.Equal(t, singleBucket(t, autoImportStats(t, session).NodeModulesBuckets).ExportCount, 2)
+}
