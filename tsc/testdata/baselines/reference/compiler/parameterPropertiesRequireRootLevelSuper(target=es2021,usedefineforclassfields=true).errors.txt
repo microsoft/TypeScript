@@ -1,0 +1,75 @@
+parameterPropertiesRequireRootLevelSuper.ts(5,20): error TS2401: A 'super' call must be a root-level statement within a constructor of a derived class that contains initialized properties, parameter properties, or private identifiers.
+parameterPropertiesRequireRootLevelSuper.ts(12,31): error TS2401: A 'super' call must be a root-level statement within a constructor of a derived class that contains initialized properties, parameter properties, or private identifiers.
+parameterPropertiesRequireRootLevelSuper.ts(19,13): error TS2401: A 'super' call must be a root-level statement within a constructor of a derived class that contains initialized properties, parameter properties, or private identifiers.
+parameterPropertiesRequireRootLevelSuper.ts(43,24): error TS2401: A 'super' call must be a root-level statement within a constructor of a derived class that contains initialized properties, parameter properties, or private identifiers.
+parameterPropertiesRequireRootLevelSuper.ts(49,5): error TS2376: A 'super' call must be the first statement in the constructor to refer to 'super' or 'this' when a derived class contains initialized properties, parameter properties, or private identifiers.
+parameterPropertiesRequireRootLevelSuper.ts(50,9): error TS17009: 'super' must be called before accessing 'this' in the constructor of a derived class.
+
+
+==== parameterPropertiesRequireRootLevelSuper.ts (6 errors) ====
+    class Base {}
+    
+    class ConditionalParameterProperty extends Base {
+        constructor(public value: number) {
+            if (value) super();
+                       ~~~~~~~
+!!! error TS2401: A 'super' call must be a root-level statement within a constructor of a derived class that contains initialized properties, parameter properties, or private identifiers.
+            else super();
+        }
+    }
+    
+    class ReturnedSuperParameterProperty extends Array<number> {
+        constructor(public value?: number) {
+            return !value ? [] : (super() as any);
+                                  ~~~~~~~
+!!! error TS2401: A 'super' call must be a root-level statement within a constructor of a derived class that contains initialized properties, parameter properties, or private identifiers.
+        }
+    }
+    
+    class BlockParameterProperty extends Base {
+        constructor(readonly value: number) {
+            {
+                super();
+                ~~~~~~~
+!!! error TS2401: A 'super' call must be a root-level statement within a constructor of a derived class that contains initialized properties, parameter properties, or private identifiers.
+            }
+        }
+    }
+    
+    class RootLevelParameterProperty extends Base {
+        constructor(public value: number) {
+            const adjusted = value + 1;
+            super();
+            this.value = adjusted;
+        }
+    }
+    
+    class ConditionalPlainParameter extends Base {
+        constructor(value: number) {
+            if (value) super();
+            else super();
+        }
+    }
+    
+    class ConditionalFieldInitializer extends Base {
+        value = 1;
+    
+        constructor(condition: boolean) {
+            if (condition) super();
+                           ~~~~~~~
+!!! error TS2401: A 'super' call must be a root-level statement within a constructor of a derived class that contains initialized properties, parameter properties, or private identifiers.
+            else super();
+        }
+    }
+    
+    class AccessBeforeSuperParameterProperty extends Base {
+        constructor(public value: number) {
+        ~~~~~~~~~~~
+!!! error TS2376: A 'super' call must be the first statement in the constructor to refer to 'super' or 'this' when a derived class contains initialized properties, parameter properties, or private identifiers.
+            this.value;
+            ~~~~
+!!! error TS17009: 'super' must be called before accessing 'this' in the constructor of a derived class.
+            super();
+        }
+    }
+    

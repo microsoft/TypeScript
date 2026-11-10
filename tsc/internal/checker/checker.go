@@ -2936,15 +2936,15 @@ func (c *Checker) checkConstructorDeclaration(node *ast.Node) {
 		if classExtendsNull {
 			c.error(superCall, diagnostics.A_constructor_cannot_contain_a_super_call_when_its_class_extends_null)
 		}
-		// A super call must be root-level in a constructor if both of the following are true:
-		// - The containing class is a derived class.
-		// - The constructor declares parameter properties
-		//   or the containing class declares instance member variables with initializers.
-		superCallShouldBeRootLevel := !c.emitStandardClassFields &&
-			(core.Some(node.Parent.Members(), isInstancePropertyWithInitializerOrPrivateIdentifierProperty) ||
-				core.Some(node.Parameters(), func(p *ast.Node) bool {
-					return ast.HasSyntacticModifier(p, ast.ModifierFlagsParameterPropertyModifier)
-				}))
+		// A super call must be root-level in a derived constructor if either condition holds:
+		// - The constructor declares parameter properties, which require initialization on this.
+		// - Class fields are downleveled and the class declares instance property initializers
+		//   or private identifiers.
+		superCallShouldBeRootLevel := (!c.emitStandardClassFields &&
+			core.Some(node.Parent.Members(), isInstancePropertyWithInitializerOrPrivateIdentifierProperty)) ||
+			core.Some(node.Parameters(), func(p *ast.Node) bool {
+				return ast.HasSyntacticModifier(p, ast.ModifierFlagsParameterPropertyModifier)
+			})
 		if superCallShouldBeRootLevel {
 			// Until we have better flow analysis, it is an error to place the super call within any kind of block or conditional
 			// See GH #8277
