@@ -715,9 +715,11 @@ type Checker struct {
 	cycleParticipants                           []*memoHeader       // Computations that observed a cycle in progress
 	effectsMarkDepth                            int                 // 1 + resolution index of the innermost effects mark that may be discarded, or 0
 	varianceStack                               []VarianceStackEntry
-	varianceCycleRoot                           int           // 1 + index in varianceStack of the outermost measurement re-entered in progress, or 0; see getRecursiveVariances
-	varianceSuperseded                          bool          // The measurement at the bottom of varianceStack is certain to be discarded; see getRecursiveVariances
-	varianceProvisional                         []*ast.Symbol // Types measured in a circularity with a measurement in progress; see isGuessedVariance
+	varianceCycleRoot                           int                // 1 + index in varianceStack of the outermost measurement re-entered in progress, or 0; see getRecursiveVariances
+	heldEffects                                 []func(c *Checker) // See holdEffect
+	heldEffectsFloor                            int                // Number of held effects kept for measurements hidden by a canonical variance remeasurement; see trimDiscardLog
+	varianceSuperseded                          bool               // The measurement at the bottom of varianceStack is certain to be discarded; see getRecursiveVariances
+	varianceProvisional                         []*ast.Symbol      // Types measured in a circularity with a measurement in progress; see isGuessedVariance
 	flushBuf                                    []*memoState
 	resumeBuf                                   []int
 	deferredAttach                              []deferredAttachment // See attachState
@@ -12372,6 +12374,10 @@ func (c *Checker) reportNonexistentProperty(propNode *ast.Node, containingType *
 		c.recordEffect(func(c *Checker) { c.reportNonexistentProperty(propNode, containingType, isUncheckedJS) })
 		return
 	}
+	if c.holdingEffects() {
+		c.holdEffect(func(c *Checker) { c.reportNonexistentProperty(propNode, containingType, isUncheckedJS) })
+		return
+	}
 	// The diagnostic would never be reported, and building it prints types,
 	// which in unchecked code can infer return types that report more of
 	// them.
@@ -15044,6 +15050,10 @@ func (c *Checker) addDeferredDiagnostic(callback func(c *Checker)) {
 		c.recordEffect(func(c *Checker) { c.addDeferredDiagnostic(callback) })
 		return
 	}
+	if c.holdingEffects() {
+		c.holdEffect(func(c *Checker) { c.addDeferredDiagnostic(callback) })
+		return
+	}
 	c.deferredDiagnosticCallbacks = append(c.deferredDiagnosticCallbacks, callback)
 }
 
@@ -15064,6 +15074,10 @@ func (c *Checker) addDiagnostic(diagnostic *ast.Diagnostic) *ast.Diagnostic {
 			c.recordEffect(func(c *Checker) { c.diagnostics.Add(diagnostic) })
 			return diagnostic
 		}
+		if c.holdingEffects() {
+			c.holdEffect(func(c *Checker) { c.diagnostics.Add(diagnostic) })
+			return diagnostic
+		}
 		return c.diagnostics.Add(diagnostic)
 	}
 	return diagnostic
@@ -15074,6 +15088,10 @@ func (c *Checker) addSuggestionDiagnostic(diagnostic *ast.Diagnostic) *ast.Diagn
 	if !c.depthLimitReached(&c.serializationLevel, maxSerializationLevel) {
 		if !c.checking {
 			c.recordEffect(func(c *Checker) { c.suggestionDiagnostics.Add(diagnostic) })
+			return diagnostic
+		}
+		if c.holdingEffects() {
+			c.holdEffect(func(c *Checker) { c.suggestionDiagnostics.Add(diagnostic) })
 			return diagnostic
 		}
 		return c.suggestionDiagnostics.Add(diagnostic)
@@ -32063,6 +32081,10 @@ func (c *Checker) checkExternalEmitHelpers(location *ast.Node, helpers ExternalE
 	}
 	if !c.checking {
 		c.recordEffect(func(c *Checker) { c.checkExternalEmitHelpers(location, helpers) })
+		return
+	}
+	if c.holdingEffects() {
+		c.holdEffect(func(c *Checker) { c.checkExternalEmitHelpers(location, helpers) })
 		return
 	}
 	links := c.sourceFileLinks.Get(sourceFile)

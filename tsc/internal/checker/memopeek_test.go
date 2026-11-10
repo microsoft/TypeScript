@@ -362,6 +362,7 @@ func TestDeferredEffectsOnlyApply(t *testing.T) {
 // that a query applies later than checking does.
 var deferringCalls = map[string]bool{
 	"recordEffect": true, "recordMark": true, "reportAtCurrentNode": true, "reportAtCurrentNodeOnce": true,
+	"holdEffect": true,
 }
 
 // recordsEffect reports whether stmt is the part of a method recording an

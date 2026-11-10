@@ -1571,12 +1571,12 @@ func (c *Checker) getVariancesWorker(symbol *ast.Symbol, typeParameters []*Type)
 		// entry, as if that type had been measured first, with nothing in
 		// progress visible. That measures this type as it reaches it.
 		c.discardVariancesSince(e)
-		saveVarianceStack, saveCycleRoot, saveProvisional, saveFloor := c.varianceStack, c.varianceCycleRoot, c.varianceProvisional, c.discardLogFloor
-		c.varianceStack, c.varianceCycleRoot, c.varianceProvisional, c.discardLogFloor = nil, 0, nil, len(c.discardLog)
+		saveVarianceStack, saveCycleRoot, saveProvisional, saveFloor, saveHeldFloor := c.varianceStack, c.varianceCycleRoot, c.varianceProvisional, c.discardLogFloor, c.heldEffectsFloor
+		c.varianceStack, c.varianceCycleRoot, c.varianceProvisional, c.discardLogFloor, c.heldEffectsFloor = nil, 0, nil, len(c.discardLog), len(c.heldEffects)
 		c.beginCycleYield(e.min, TypeSystemPropertyNameVariances, -1, len(c.resolutions))
 		c.getVariancesWorker(e.min, e.minTypeParameters)
 		c.endCycleYield()
-		c.varianceStack, c.varianceCycleRoot, c.varianceProvisional, c.discardLogFloor = saveVarianceStack, saveCycleRoot, saveProvisional, saveFloor
+		c.varianceStack, c.varianceCycleRoot, c.varianceProvisional, c.discardLogFloor, c.heldEffectsFloor = saveVarianceStack, saveCycleRoot, saveProvisional, saveFloor, saveHeldFloor
 		variances = links.variances.cached(c)
 		if len(variances) == 0 {
 			c.varianceStack[index].remeasuring = true
@@ -1635,9 +1635,9 @@ func (c *Checker) getRecursiveVariances(stackIndex int) []VarianceFlags {
 	// first from scratch reaches the measurement and computes it again
 	// inside, the same way. What is cached from now on until the
 	// measurement re-entered finishes is logged, so that it can be discarded
-	// if the measurement is.
+	// if the measurement is, and a check holds the effects it applies until
+	// then (see holdEffect).
 	if c.varianceCycleRoot == 0 {
-		c.recordFromCheck()
 		c.varianceCycleRoot = stackIndex + 1
 	} else {
 		c.varianceCycleRoot = min(c.varianceCycleRoot, stackIndex+1)

@@ -628,7 +628,7 @@ func (m *memoMap[K, V]) begin(c *Checker, k K) {
 		side.countAllResolving()
 	}
 	c.beginResolution(m, len(side.resolvingKeys)-1)
-	if c.checking && c.memoPendingCount == 0 && c.memoTop|c.currentNodeResolution != 0 && !c.logEffects() {
+	if c.checking && c.memoPendingCount == 0 && c.memoTop|c.currentNodeResolution != 0 && !c.checkingRecords() {
 		// beginCheckedMemo for the common case, without the calls. The memo
 		// state of the result is looked up only if needed; see
 		// resolutionState.
@@ -835,7 +835,7 @@ func (c *Checker) beginMemo(key memoKey) {
 	n := len(c.resolutions) - 1
 	f := &c.resolutions[n]
 	f.resolving = resolving
-	if c.checking && c.memoPendingCount == 0 && c.memoTop|c.currentNodeResolution != 0 && !c.logEffects() {
+	if c.checking && c.memoPendingCount == 0 && c.memoTop|c.currentNodeResolution != 0 && !c.checkingRecords() {
 		// beginCheckedMemo for the common case, without the calls. The memo
 		// state of the result is looked up only if needed; see
 		// resolutionState.
@@ -1211,6 +1211,9 @@ func (c *Checker) replayCurrentNodeErrors(reports []*currentNodeError) {
 
 func (c *Checker) replayPending(state *memoState) {
 	if state != nil && state.pending != nil {
+		if c.holdingEffects() {
+			c.logPendingDiscard(state)
+		}
 		f := state.pending
 		state.pending = nil
 		c.memoPendingCount--
@@ -1435,9 +1438,53 @@ func (c *Checker) recordMark(mark func(c *Checker)) {
 // so a computation starting while one is in progress records them.
 func (c *Checker) beginCheckedMemo(state *memoState) {
 	c.startEffects(state)
-	if c.logEffects() {
+	if c.checkingRecords() {
 		c.recordFromCheck()
 	}
+}
+
+// checkingRecords reports whether a check records the effects of what it
+// computes rather than applying them, because a cycle or a discard mark in
+// progress may discard it. A variance measurement that may be discarded
+// does not make it record; see holdEffect.
+func (c *Checker) checkingRecords() bool {
+	return c.circularityStart != 0 || c.effectsMarkDepth != 0
+}
+
+// holdingEffects reports whether a check holds the effects it applies; see
+// holdEffect.
+func (c *Checker) holdingEffects() bool {
+	return c.varianceCycleRoot != 0
+}
+
+// holdEffect holds an effect a check applies while a variance measurement in
+// progress may still be discarded (see getRecursiveVariances), to apply it
+// once nothing can discard it, unless what produced it is discarded first.
+// Few measurements are discarded, so a check holds their effects rather
+// than recording them with every result, which costs far more.
+func (c *Checker) holdEffect(effect func(c *Checker)) {
+	n := len(c.heldEffects)
+	c.heldEffects = append(c.heldEffects, effect)
+	c.logRestore(func() {
+		clear(c.heldEffects[n:])
+		c.heldEffects = c.heldEffects[:n]
+	})
+}
+
+// applyHeldEffects applies the effects held by holdEffect above the floor
+// (see trimDiscardLog), as the check that produced them would have.
+func (c *Checker) applyHeldEffects() {
+	effects := slices.Clone(c.heldEffects[c.heldEffectsFloor:])
+	clear(c.heldEffects[c.heldEffectsFloor:])
+	c.heldEffects = c.heldEffects[:c.heldEffectsFloor]
+	saveChecking := c.checking
+	c.checking = true
+	c.syncObserving()
+	for _, e := range effects {
+		e(c)
+	}
+	c.checking = saveChecking
+	c.syncObserving()
 }
 
 // recordFromCheck makes the outermost computation in progress in a check, if
@@ -1483,6 +1530,9 @@ func (c *Checker) endQueryFromCheck() {
 func (c *Checker) replayFlushed(states []*memoState) {
 	for _, state := range states {
 		if state.pending != nil {
+			if c.holdingEffects() {
+				c.logPendingDiscard(state)
+			}
 			f := state.pending
 			state.pending = nil
 			c.memoPendingCount--
@@ -1499,7 +1549,7 @@ func (c *Checker) replayFlushed(states []*memoState) {
 // query recorded applies now, as it would have in the check, including what
 // the computations in progress recorded, which continue as in a check.
 func (c *Checker) resumeChecking() {
-	if c.checking || !c.recordingFromCheck || c.logEffects() || len(c.innerCycles) != 0 || len(c.discardLog) != 0 {
+	if c.checking || !c.recordingFromCheck || c.checkingRecords() || len(c.innerCycles) != 0 || len(c.discardLog) != 0 && !c.holdingEffects() {
 		return
 	}
 	chain := c.resumeBuf[:0]
@@ -1765,7 +1815,8 @@ func (c *Checker) discardLogSince(start int) {
 // While a variance measurement is measured again from the canonical entry of
 // its circularity, the measurements in progress are hidden, but may still be
 // discarded once it finishes, so the part of the log logged for them before
-// it began is kept; see getVariancesWorker.
+// it began is kept, with the effects a check held for them; see
+// getVariancesWorker.
 func (c *Checker) trimDiscardLog() {
 	if !c.logEffects() && len(c.discardLog) > c.discardLogFloor {
 		for i := range c.varianceStack {
@@ -1773,6 +1824,9 @@ func (c *Checker) trimDiscardLog() {
 		}
 		clear(c.discardLog[c.discardLogFloor:])
 		c.discardLog = c.discardLog[:c.discardLogFloor]
+		if len(c.heldEffects) > c.heldEffectsFloor {
+			c.applyHeldEffects()
+		}
 	}
 }
 
