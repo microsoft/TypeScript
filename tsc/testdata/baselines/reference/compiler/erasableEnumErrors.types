@@ -141,7 +141,13 @@ const ReferencedBoundaries: enum = { Asserted: asserted, Checked: checked };
 >Checked : any
 >checked : "value"
 
-// Computed names are forbidden even when their expressions are constant.
+// Names must be identifiers or strings; computed names are forbidden even when constant.
+const NumericKey: enum = { 1: "one" };
+>NumericKey : typeof NumericKey
+>{ 1: "one" } : typeof NumericKey
+>1 : NumericKey
+>"one" : "one"
+
 const ComputedKey: enum = { ["foo"]: 1 };
 >ComputedKey : typeof ComputedKey
 >{ ["foo"]: 1 } : typeof ComputedKey

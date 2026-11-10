@@ -6,8 +6,8 @@
 // @filename: values.ts
 export const text = "hello";
 export const count = 2;
-// Explicit numeric keys are ordinary properties, not reverse mappings.
-export const Source: enum = { A: "source", B: 1, 1: "numeric" };
+// Numeric strings are string keys; indexing follows ordinary object rules.
+export const Source: enum = { A: "source", B: 1, "1": "numeric" };
 // @filename: consumer.ts
 import { text, count, Source } from "./values";
 const Local: enum = { Value: "local" };

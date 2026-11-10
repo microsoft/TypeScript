@@ -33,7 +33,8 @@ const asserted = 1 as number;
 const checked = "value" satisfies string;
 const ReferencedBoundaries: enum = { Asserted: asserted, Checked: checked };
 
-// Computed names are forbidden even when their expressions are constant.
+// Names must be identifiers or strings; computed names are forbidden even when constant.
+const NumericKey: enum = { 1: "one" };
 const ComputedKey: enum = { ["foo"]: 1 };
 const key = "Known";
 const ComputedKeyReference: enum = { [key]: 1 };
@@ -111,7 +112,8 @@ const SatisfiesBoundary = { Value: "value" };
 const asserted = 1;
 const checked = "value";
 const ReferencedBoundaries = { Asserted: asserted, Checked: checked };
-// Computed names are forbidden even when their expressions are constant.
+// Names must be identifiers or strings; computed names are forbidden even when constant.
+const NumericKey = { 1: "one" };
 const ComputedKey = { ["foo"]: 1 };
 const key = "Known";
 const ComputedKeyReference = { [key]: 1 };

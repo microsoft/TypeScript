@@ -13,7 +13,7 @@ import (
 
 func TestEnumAnnotationErasesWithOrdinaryObjectSyntax(t *testing.T) {
 	t.Parallel()
-	input := `const E: enum = { __proto__: {}, ...other, ["foo"]: 1, method() {}, get value() { return 1; }, shorthand, Value: true };`
+	input := `const E: enum = { __proto__: {}, ...other, ["foo"]: 1, 1: "one", method() {}, get value() { return 1; }, shorthand, Value: true };`
 	options := Options{
 		CompilerOptions:   &core.CompilerOptions{Target: core.ScriptTargetESNext, ErasableSyntaxOnly: core.TSTrue},
 		ReportDiagnostics: true,
