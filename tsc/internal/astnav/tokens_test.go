@@ -119,6 +119,7 @@ func TestGetTokenAtPositionJsxNameStartingWithHash(t *testing.T) {
 const b = <div #c-d={1} />;
 const c = <div e:#f-g />;
 const d = <#h-i:j />;
+const e = <#k-l.m.n></#k-l.m.n>;
 `
 	file := parser.ParseSourceFile(ast.SourceFileParseOptions{
 		FileName: "/file.tsx",
@@ -131,7 +132,7 @@ const d = <#h-i:j />;
 		astnav.FindPrecedingToken(file, pos)
 	}
 
-	for _, name := range []string{"#a-b", "#c-d", "#f-g", "#h-i"} {
+	for _, name := range []string{"#a-b", "#c-d", "#f-g", "#h-i", "#k-l"} {
 		for offset := 0; ; {
 			index := strings.Index(fileText[offset:], name)
 			if index < 0 {
