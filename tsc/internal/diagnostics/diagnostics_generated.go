@@ -3934,6 +3934,8 @@ var Erasable_enums_only_allow_property_assignments = &Message{code: 18128, categ
 
 var An_enum_annotation_requires_a_named_variable_in_a_variable_statement_with_an_object_literal_initializer = &Message{code: 18129, category: CategoryError, key: "An_enum_annotation_requires_a_named_variable_in_a_variable_statement_with_an_object_literal_initiali_18129", text: "An 'enum' annotation requires a named variable in a variable statement with an object literal initializer."}
 
+var Erasable_enum_member_names_must_be_identifiers_or_string_literals = &Message{code: 18130, category: CategoryError, key: "Erasable_enum_member_names_must_be_identifiers_or_string_literals_18130", text: "Erasable enum member names must be identifiers or string literals."}
+
 var X_nodenext_if_module_is_nodenext_node16_if_module_is_node16_or_node18_otherwise_bundler = &Message{code: 69010, category: CategoryMessage, key: "nodenext_if_module_is_nodenext_node16_if_module_is_node16_or_node18_otherwise_bundler_69010", text: "`nodenext` if `module` is `nodenext`; `node16` if `module` is `node16` or `node18`; otherwise, `bundler`."}
 
 var File_is_a_CommonJS_module_it_may_be_converted_to_an_ES_module = &Message{code: 80001, category: CategorySuggestion, key: "File_is_a_CommonJS_module_it_may_be_converted_to_an_ES_module_80001", text: "File is a CommonJS module; it may be converted to an ES module."}
@@ -6441,6 +6443,7 @@ var allMessages = [...]**Message{
 	&Spread_assignments_are_not_allowed_in_erasable_enums,
 	&Erasable_enums_only_allow_property_assignments,
 	&An_enum_annotation_requires_a_named_variable_in_a_variable_statement_with_an_object_literal_initializer,
+	&Erasable_enum_member_names_must_be_identifiers_or_string_literals,
 	&X_nodenext_if_module_is_nodenext_node16_if_module_is_node16_or_node18_otherwise_bundler,
 	&File_is_a_CommonJS_module_it_may_be_converted_to_an_ES_module,
 	&This_constructor_function_may_be_converted_to_a_class_declaration,

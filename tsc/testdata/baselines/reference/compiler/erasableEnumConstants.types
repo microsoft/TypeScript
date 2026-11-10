@@ -9,15 +9,15 @@ export const count = 2;
 >count : 2
 >2 : 2
 
-// Explicit numeric keys are ordinary properties, not reverse mappings.
-export const Source: enum = { A: "source", B: 1, 1: "numeric" };
+// Numeric strings are string keys; indexing follows ordinary object rules.
+export const Source: enum = { A: "source", B: 1, "1": "numeric" };
 >Source : typeof Source
->{ A: "source", B: 1, 1: "numeric" } : typeof Source
+>{ A: "source", B: 1, "1": "numeric" } : typeof Source
 >A : Source.A
 >"source" : "source"
 >B : Source.B
 >1 : 1
->1 : (typeof Source)["1"]
+>"1" : (typeof Source)["1"]
 >"numeric" : "numeric"
 
 === consumer.ts ===

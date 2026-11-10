@@ -17,45 +17,46 @@ erasableEnumErrors.ts(27,64): error TS18126: Erasable enum member initializers m
 erasableEnumErrors.ts(28,50): error TS18126: Erasable enum member initializers must be constant expressions.
 erasableEnumErrors.ts(31,48): error TS18126: Erasable enum member initializers must be constant expressions.
 erasableEnumErrors.ts(31,67): error TS18126: Erasable enum member initializers must be constant expressions.
-erasableEnumErrors.ts(34,29): error TS1164: Computed property names are not allowed in enums.
-erasableEnumErrors.ts(36,38): error TS1164: Computed property names are not allowed in enums.
+erasableEnumErrors.ts(34,28): error TS18130: Erasable enum member names must be identifiers or string literals.
+erasableEnumErrors.ts(35,29): error TS1164: Computed property names are not allowed in enums.
 erasableEnumErrors.ts(37,38): error TS1164: Computed property names are not allowed in enums.
-erasableEnumErrors.ts(38,45): error TS2339: Property '__proto__' does not exist on type 'typeof ComputedPrototypeKey'.
-erasableEnumErrors.ts(41,24): error TS18127: Spread assignments are not allowed in erasable enums.
-erasableEnumErrors.ts(42,24): error TS18128: Erasable enums only allow property assignments.
-erasableEnumErrors.ts(43,28): error TS18128: Erasable enums only allow property assignments.
+erasableEnumErrors.ts(38,38): error TS1164: Computed property names are not allowed in enums.
+erasableEnumErrors.ts(39,45): error TS2339: Property '__proto__' does not exist on type 'typeof ComputedPrototypeKey'.
+erasableEnumErrors.ts(42,24): error TS18127: Spread assignments are not allowed in erasable enums.
+erasableEnumErrors.ts(43,24): error TS18128: Erasable enums only allow property assignments.
 erasableEnumErrors.ts(44,28): error TS18128: Erasable enums only allow property assignments.
-erasableEnumErrors.ts(47,9): error TS2540: Cannot assign to 'First' because it is a read-only property.
-erasableEnumErrors.ts(48,17): error TS7053: Element implicitly has an 'any' type because expression of type '1' can't be used to index type 'typeof Numeric'.
+erasableEnumErrors.ts(45,28): error TS18128: Erasable enums only allow property assignments.
+erasableEnumErrors.ts(48,9): error TS2540: Cannot assign to 'First' because it is a read-only property.
+erasableEnumErrors.ts(49,17): error TS7053: Element implicitly has an 'any' type because expression of type '1' can't be used to index type 'typeof Numeric'.
   Property '1' does not exist on type 'typeof Numeric'.
-erasableEnumErrors.ts(49,28): error TS2339: Property 'Unknown' does not exist on type 'typeof Numeric'.
-erasableEnumErrors.ts(52,38): error TS2304: Cannot find name 'A'.
-erasableEnumErrors.ts(52,38): error TS18126: Erasable enum member initializers must be constant expressions.
-erasableEnumErrors.ts(53,40): error TS2448: Block-scoped variable 'SelfReference' used before its declaration.
-erasableEnumErrors.ts(53,40): error TS2454: Variable 'SelfReference' is used before being assigned.
-erasableEnumErrors.ts(53,40): error TS18126: Erasable enum member initializers must be constant expressions.
-erasableEnumErrors.ts(54,41): error TS2454: Variable 'VarSelfReference' is used before being assigned.
-erasableEnumErrors.ts(54,41): error TS18126: Erasable enum member initializers must be constant expressions.
-erasableEnumErrors.ts(56,29): error TS18126: Erasable enum member initializers must be constant expressions.
-erasableEnumErrors.ts(57,30): error TS18126: Erasable enum member initializers must be constant expressions.
-erasableEnumErrors.ts(57,45): error TS2448: Block-scoped variable 'Immediate' used before its declaration.
-erasableEnumErrors.ts(57,45): error TS2454: Variable 'Immediate' is used before being assigned.
-erasableEnumErrors.ts(63,33): error TS1117: An object literal cannot have multiple properties with the same name.
-erasableEnumErrors.ts(64,7): error TS2451: Cannot redeclare block-scoped variable 'Repeated'.
+erasableEnumErrors.ts(50,28): error TS2339: Property 'Unknown' does not exist on type 'typeof Numeric'.
+erasableEnumErrors.ts(53,38): error TS2304: Cannot find name 'A'.
+erasableEnumErrors.ts(53,38): error TS18126: Erasable enum member initializers must be constant expressions.
+erasableEnumErrors.ts(54,40): error TS2448: Block-scoped variable 'SelfReference' used before its declaration.
+erasableEnumErrors.ts(54,40): error TS2454: Variable 'SelfReference' is used before being assigned.
+erasableEnumErrors.ts(54,40): error TS18126: Erasable enum member initializers must be constant expressions.
+erasableEnumErrors.ts(55,41): error TS2454: Variable 'VarSelfReference' is used before being assigned.
+erasableEnumErrors.ts(55,41): error TS18126: Erasable enum member initializers must be constant expressions.
+erasableEnumErrors.ts(57,29): error TS18126: Erasable enum member initializers must be constant expressions.
+erasableEnumErrors.ts(58,30): error TS18126: Erasable enum member initializers must be constant expressions.
+erasableEnumErrors.ts(58,45): error TS2448: Block-scoped variable 'Immediate' used before its declaration.
+erasableEnumErrors.ts(58,45): error TS2454: Variable 'Immediate' is used before being assigned.
+erasableEnumErrors.ts(64,33): error TS1117: An object literal cannot have multiple properties with the same name.
 erasableEnumErrors.ts(65,7): error TS2451: Cannot redeclare block-scoped variable 'Repeated'.
-erasableEnumErrors.ts(68,41): error TS18125: An erasable enum prototype setter must have the value 'null'.
-erasableEnumErrors.ts(69,49): error TS18125: An erasable enum prototype setter must have the value 'null'.
-erasableEnumErrors.ts(70,44): error TS18125: An erasable enum prototype setter must have the value 'null'.
-erasableEnumErrors.ts(71,46): error TS18125: An erasable enum prototype setter must have the value 'null'.
-erasableEnumErrors.ts(73,43): error TS2339: Property '__proto__' does not exist on type 'typeof NullPrototype'.
-erasableEnumErrors.ts(75,36): error TS18128: Erasable enums only allow property assignments.
-erasableEnumErrors.ts(78,20): error TS18129: An 'enum' annotation requires a named variable in a variable statement with an object literal initializer.
-erasableEnumErrors.ts(79,18): error TS18129: An 'enum' annotation requires a named variable in a variable statement with an object literal initializer.
-erasableEnumErrors.ts(80,26): error TS18129: An 'enum' annotation requires a named variable in a variable statement with an object literal initializer.
-erasableEnumErrors.ts(81,28): error TS18129: An 'enum' annotation requires a named variable in a variable statement with an object literal initializer.
+erasableEnumErrors.ts(66,7): error TS2451: Cannot redeclare block-scoped variable 'Repeated'.
+erasableEnumErrors.ts(69,41): error TS18125: An erasable enum prototype setter must have the value 'null'.
+erasableEnumErrors.ts(70,49): error TS18125: An erasable enum prototype setter must have the value 'null'.
+erasableEnumErrors.ts(71,44): error TS18125: An erasable enum prototype setter must have the value 'null'.
+erasableEnumErrors.ts(72,46): error TS18125: An erasable enum prototype setter must have the value 'null'.
+erasableEnumErrors.ts(74,43): error TS2339: Property '__proto__' does not exist on type 'typeof NullPrototype'.
+erasableEnumErrors.ts(76,36): error TS18128: Erasable enums only allow property assignments.
+erasableEnumErrors.ts(79,20): error TS18129: An 'enum' annotation requires a named variable in a variable statement with an object literal initializer.
+erasableEnumErrors.ts(80,18): error TS18129: An 'enum' annotation requires a named variable in a variable statement with an object literal initializer.
+erasableEnumErrors.ts(81,26): error TS18129: An 'enum' annotation requires a named variable in a variable statement with an object literal initializer.
+erasableEnumErrors.ts(82,28): error TS18129: An 'enum' annotation requires a named variable in a variable statement with an object literal initializer.
 
 
-==== erasableEnumErrors.ts (54 errors) ====
+==== erasableEnumErrors.ts (55 errors) ====
     // Members require explicit property assignments, even for constant bindings.
     const UnboundShorthand: enum = { missing };
                                      ~~~~~~~
@@ -126,7 +127,10 @@ erasableEnumErrors.ts(81,28): error TS18129: An 'enum' annotation requires a nam
                                                                       ~~~~~~~
 !!! error TS18126: Erasable enum member initializers must be constant expressions.
     
-    // Computed names are forbidden even when their expressions are constant.
+    // Names must be identifiers or strings; computed names are forbidden even when constant.
+    const NumericKey: enum = { 1: "one" };
+                               ~
+!!! error TS18130: Erasable enum member names must be identifiers or string literals.
     const ComputedKey: enum = { ["foo"]: 1 };
                                 ~~~~~~~
 !!! error TS1164: Computed property names are not allowed in enums.
@@ -176,7 +180,7 @@ erasableEnumErrors.ts(81,28): error TS18129: An 'enum' annotation requires a nam
     const SelfReference: enum = { A: 1, B: SelfReference.A };
                                            ~~~~~~~~~~~~~
 !!! error TS2448: Block-scoped variable 'SelfReference' used before its declaration.
-!!! related TS2728 erasableEnumErrors.ts:53:7: 'SelfReference' is declared here.
+!!! related TS2728 erasableEnumErrors.ts:54:7: 'SelfReference' is declared here.
                                            ~~~~~~~~~~~~~
 !!! error TS2454: Variable 'SelfReference' is used before being assigned.
                                            ~~~~~~~~~~~~~~~
@@ -195,7 +199,7 @@ erasableEnumErrors.ts(81,28): error TS18129: An 'enum' annotation requires a nam
 !!! error TS18126: Erasable enum member initializers must be constant expressions.
                                                 ~~~~~~~~~
 !!! error TS2448: Block-scoped variable 'Immediate' used before its declaration.
-!!! related TS2728 erasableEnumErrors.ts:57:7: 'Immediate' is declared here.
+!!! related TS2728 erasableEnumErrors.ts:58:7: 'Immediate' is declared here.
                                                 ~~~~~~~~~
 !!! error TS2454: Variable 'Immediate' is used before being assigned.
     const OuterMember = 10;

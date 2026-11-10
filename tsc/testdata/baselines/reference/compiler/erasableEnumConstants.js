@@ -3,8 +3,8 @@
 //// [values.ts]
 export const text = "hello";
 export const count = 2;
-// Explicit numeric keys are ordinary properties, not reverse mappings.
-export const Source: enum = { A: "source", B: 1, 1: "numeric" };
+// Numeric strings are string keys; indexing follows ordinary object rules.
+export const Source: enum = { A: "source", B: 1, "1": "numeric" };
 //// [consumer.ts]
 import { text, count, Source } from "./values";
 const Local: enum = { Value: "local" };
@@ -26,8 +26,8 @@ export let member: E.ImportedMember = E.ImportedMember;
 //// [values.js]
 export const text = "hello";
 export const count = 2;
-// Explicit numeric keys are ordinary properties, not reverse mappings.
-export const Source = { A: "source", B: 1, 1: "numeric" };
+// Numeric strings are string keys; indexing follows ordinary object rules.
+export const Source = { A: "source", B: 1, "1": "numeric" };
 //// [consumer.js]
 import { text, count, Source } from "./values";
 const Local = { Value: "local" };
@@ -49,7 +49,7 @@ export let member = E.ImportedMember;
 //// [values.d.ts]
 export declare const text = "hello";
 export declare const count = 2;
-export declare const Source: enum = { A: "source", B: 1, 1: "numeric" };
+export declare const Source: enum = { A: "source", B: 1, "1": "numeric" };
 //// [consumer.d.ts]
 export declare const E: enum = {
     __proto__: null,

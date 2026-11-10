@@ -49,6 +49,8 @@ func (c *Checker) checkErasableEnumInitializer(node *ast.Node) *Type {
 		}
 		if ast.IsComputedPropertyName(property.Name()) {
 			c.error(property.Name(), diagnostics.Computed_property_names_are_not_allowed_in_enums)
+		} else if !ast.IsIdentifier(property.Name()) && !ast.IsStringLiteral(property.Name()) {
+			c.error(property.Name(), diagnostics.Erasable_enum_member_names_must_be_identifiers_or_string_literals)
 		}
 		if ast.IsErasableEnumPrototypeSetter(property) {
 			c.checkExpression(property.Initializer())

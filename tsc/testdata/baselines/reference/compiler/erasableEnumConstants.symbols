@@ -7,12 +7,12 @@ export const text = "hello";
 export const count = 2;
 >count : Symbol(count, Decl(values.ts, 1, 12))
 
-// Explicit numeric keys are ordinary properties, not reverse mappings.
-export const Source: enum = { A: "source", B: 1, 1: "numeric" };
+// Numeric strings are string keys; indexing follows ordinary object rules.
+export const Source: enum = { A: "source", B: 1, "1": "numeric" };
 >Source : Symbol(Source, Decl(values.ts, 3, 12))
 >A : Symbol(Source.A, Decl(values.ts, 3, 29))
 >B : Symbol(Source.B, Decl(values.ts, 3, 42))
->1 : Symbol(Source[1], Decl(values.ts, 3, 48))
+>"1" : Symbol(Source["1"], Decl(values.ts, 3, 48))
 
 === consumer.ts ===
 import { text, count, Source } from "./values";

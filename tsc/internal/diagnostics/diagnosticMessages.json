@@ -8979,5 +8979,9 @@
     "An 'enum' annotation requires a named variable in a variable statement with an object literal initializer.": {
         "category": "Error",
         "code": 18129
+    },
+    "Erasable enum member names must be identifiers or string literals.": {
+        "category": "Error",
+        "code": 18130
     }
 }
