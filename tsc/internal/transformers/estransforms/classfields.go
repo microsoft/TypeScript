@@ -326,7 +326,9 @@ func (tx *classFieldsTransformer) visit(node *ast.Node) *ast.Node {
 		return tx.visitTaggedTemplateExpression(node.AsTaggedTemplateExpression())
 	case ast.KindForStatement:
 		return tx.visitForStatement(node.AsForStatement())
-	case ast.KindForInStatement, ast.KindForOfStatement, ast.KindDoStatement, ast.KindWhileStatement:
+	case ast.KindForInStatement, ast.KindForOfStatement:
+		return tx.setInIterationStatementAnd(true, (*classFieldsTransformer).visitForInOrOfStatement, node)
+	case ast.KindDoStatement, ast.KindWhileStatement:
 		return tx.setInIterationStatementAnd(true, (*classFieldsTransformer).visitEachChildOfNode, node)
 	case ast.KindThisKeyword:
 		return tx.visitThisExpression(node)
@@ -1250,6 +1252,77 @@ func (tx *classFieldsTransformer) visitForStatement(node *ast.ForStatement) *ast
 	body := tx.EmitContext().VisitIterationBody(node.Statement, tx.Visitor())
 	tx.inIterationStatement = saved
 	return tx.Factory().UpdateForStatement(node, initializer, condition, incrementor, body)
+}
+
+func (tx *classFieldsTransformer) visitForInOrOfStatement(node *ast.Node) *ast.Node {
+	statement := node.AsForInOrOfStatement()
+	if statement.Initializer != nil && !ast.IsVariableDeclarationList(statement.Initializer) &&
+		tx.forInOrOfTargetNeedsTransform(statement.Initializer) {
+		// The assignment target of a for-in/for-of statement is evaluated on each
+		// iteration, so a private name cannot be lowered to a helper call in the
+		// initializer. Instead, bind the iteration value to a temporary and perform
+		// the (transformed) assignment at the start of the loop body.
+		f := tx.Factory()
+		temp := f.NewTempVariable()
+		declarationList := f.NewVariableDeclarationList(
+			f.NewNodeList([]*ast.Node{f.NewVariableDeclaration(temp, nil, nil, nil)}),
+			ast.NodeFlagsLet,
+		)
+		declarationList.Loc = statement.Initializer.Loc
+
+		assignmentExpression := f.NewAssignmentExpression(statement.Initializer, temp)
+		assignmentExpression.Loc = statement.Initializer.Loc
+		assignment := f.NewExpressionStatement(assignmentExpression)
+		assignment.Loc = statement.Initializer.Loc
+
+		// Keep the original body block intact so that bindings declared in it
+		// cannot shadow identifiers used by the assignment target.
+		statements := []*ast.Node{assignment}
+		var bodyLocation core.TextRange
+		var statementsLocation core.TextRange
+		if statement.Statement != nil {
+			body := statement.Statement
+			if !ast.IsBlock(body) && ast.IsFunctionDeclaration(body) {
+				bodyStatements := f.NewNodeList([]*ast.Node{body})
+				bodyStatements.Loc = body.Loc
+				bodyBlock := f.NewBlock(bodyStatements, true)
+				bodyBlock.Loc = body.Loc
+				body = bodyBlock
+			}
+			statements = append(statements, body)
+			bodyLocation = statement.Statement.Loc
+			statementsLocation = statement.Statement.Loc
+		}
+
+		statementList := f.NewNodeList(statements)
+		statementList.Loc = statementsLocation
+		block := f.NewBlock(statementList, true)
+		block.Loc = bodyLocation
+
+		return f.UpdateForInOrOfStatement(
+			statement,
+			statement.AwaitModifier,
+			declarationList,
+			tx.Visitor().VisitNode(statement.Expression),
+			tx.EmitContext().VisitIterationBody(block, tx.Visitor()),
+		)
+	}
+	return tx.visitEachChildOfNode(node)
+}
+
+func (tx *classFieldsTransformer) forInOrOfTargetNeedsTransform(node *ast.Node) bool {
+	if node.SubtreeFacts()&ast.SubtreeContainsPrivateIdentifierInExpression == 0 {
+		return false
+	}
+	var find func(*ast.Node) bool
+	find = func(n *ast.Node) bool {
+		if ast.IsPropertyAccessExpression(n) && ast.IsPrivateIdentifier(n.AsPropertyAccessExpression().Name()) &&
+			tx.accessPrivateIdentifier(n.AsPropertyAccessExpression().Name()) != nil {
+			return true
+		}
+		return n.ForEachChild(find)
+	}
+	return find(node)
 }
 
 func (tx *classFieldsTransformer) visitExpressionStatement(node *ast.ExpressionStatement) *ast.Node {
