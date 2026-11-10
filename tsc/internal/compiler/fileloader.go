@@ -870,7 +870,7 @@ func (p *fileLoader) resolveImportsAndModuleAugmentations(t *parseTask) {
 				continue
 			}
 
-			mode := getModeForUsageLocation(file.FileName(), meta, entry, optionsForFile)
+			mode := getModeForUsageLocation(getModuleFormatFileName(file), meta, entry, optionsForFile)
 			// We know moduleName resolves to an ambient module provided that moduleName:
 			// - is in the list of ambient modules locally declared in the current source file.
 			if slices.Contains(file.AmbientModuleNames, moduleName) {
@@ -1029,8 +1029,17 @@ func getModeForTypeReferenceDirectiveInFile(ref *ast.FileReference, file *ast.So
 	if ref.ResolutionMode != core.ResolutionModeNone {
 		return ref.ResolutionMode
 	} else {
-		return getDefaultResolutionModeForFile(file.FileName(), meta, options)
+		return getDefaultResolutionModeForFile(getModuleFormatFileName(file), meta, options)
 	}
+}
+
+func getModuleFormatFileName(file ast.HasFileName) tspath.RootedFilePath {
+	if sourceFile, ok := file.(*ast.SourceFile); ok {
+		if virtualFileName := sourceFile.VirtualFileName(); virtualFileName != "" {
+			return virtualFileName
+		}
+	}
+	return file.FileName()
 }
 
 func getDefaultResolutionModeForFile(fileName tspath.RootedFilePath, meta ast.SourceFileMetaData, options *core.CompilerOptions) core.ResolutionMode {
