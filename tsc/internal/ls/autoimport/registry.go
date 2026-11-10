@@ -446,10 +446,14 @@ func (p *partialExtractions) extract(
 	run func() (*perPackageExtractionResult, *collections.Set[tspath.PathKey]),
 ) *perPackageExtractionResult {
 	for {
+		if ctx.Err() != nil {
+			return nil
+		}
 		p.mu.Lock()
 		pending, ok := set.results[key]
 		if ok && pending.isDone() {
 			if !p.staleLocked(pending, key, generation) {
+				pending.generation = generation
 				p.mu.Unlock()
 				return pending.result
 			}
@@ -474,7 +478,7 @@ func (p *partialExtractions) extract(
 }
 
 func requiresNewPartialExtractions(change RegistryChange, caseSensitivity tspath.CaseSensitivity) bool {
-	if change.Created.Len() > 0 || change.Deleted.Len() > 0 {
+	if change.InvalidateAll || change.Created.Len() > 0 || change.Deleted.Len() > 0 {
 		return true
 	}
 	for uri := range change.Changed.Keys() {
@@ -668,6 +672,7 @@ type RegistryChange struct {
 	//   - false: the program was rebuilt but the set of file names is unchanged
 	RebuiltPrograms map[ProjectID]bool
 	UserPreferences *lsutil.UserPreferences
+	InvalidateAll   bool
 }
 
 type RegistryCloneHost interface {
