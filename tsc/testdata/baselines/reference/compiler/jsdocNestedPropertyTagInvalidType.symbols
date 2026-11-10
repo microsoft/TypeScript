@@ -1,0 +1,41 @@
+//// [tests/cases/compiler/jsdocNestedPropertyTagInvalidType.ts] ////
+
+=== /a.js ===
+
+/**
+ * @typedef Sig
+ * @property {object} Args
+ * @property {string} Args.name
+ * @property {function(string)=} Args.onSave
+ * @property {((v: string) => void)=} Args.onCancel
+ */
+
+/**
+ * @typedef Flat
+ * @property {string} name
+ * @property {function(string)=} onSave
+ * @property {((v: string) => void)=} onCancel
+ */
+
+export {};
+
+=== /b.ts ===
+import type { Sig, Flat } from "./a.js";
+>Sig : Symbol(Sig, Decl(b.ts, 0, 13))
+>Flat : Symbol(Flat, Decl(b.ts, 0, 18))
+
+export const nested: Array<keyof Sig["Args"]> = ["name", "onCancel"];
+>nested : Symbol(nested, Decl(b.ts, 2, 12))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --) ... and 4 more)
+>Sig : Symbol(Sig, Decl(b.ts, 0, 13))
+
+export const flat: Array<keyof Flat> = ["name", "onCancel"];
+>flat : Symbol(flat, Decl(b.ts, 3, 12))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --) ... and 4 more)
+>Flat : Symbol(Flat, Decl(b.ts, 0, 18))
+
+export const onCancel: Sig["Args"]["onCancel"] = (v: string) => {};
+>onCancel : Symbol(onCancel, Decl(b.ts, 4, 12))
+>Sig : Symbol(Sig, Decl(b.ts, 0, 13))
+>v : Symbol(v, Decl(b.ts, 4, 50))
+

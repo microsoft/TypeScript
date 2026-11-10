@@ -22,7 +22,7 @@ console.log(tsconfig);
     "include": ["index.ts", "tsconfig.json"]
 }
 
-tsgo --build
+tsc --build
 ExitStatus:: Success
 Output::
 //// [/home/src/tslibs/TS/Lib/lib.esnext.full.d.ts] *Lib*

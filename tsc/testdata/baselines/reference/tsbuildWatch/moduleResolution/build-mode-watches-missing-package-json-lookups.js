@@ -11,7 +11,7 @@ export const theNum: TheNum = 42;
     },
 }
 
-tsgo -b packages/pkg1 -w --verbose --traceResolution
+tsc -b packages/pkg1 -w --verbose --traceResolution
 ExitStatus:: DiagnosticsPresent_OutputsGenerated
 Output::
 [2J[3J[H[[90mHH:MM:SS AM[0m] Starting compilation in watch mode...

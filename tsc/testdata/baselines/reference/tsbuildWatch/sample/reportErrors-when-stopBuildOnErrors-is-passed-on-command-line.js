@@ -60,7 +60,7 @@ export const m = mod;
     },
 }
 
-tsgo -b -w tests --stopBuildOnErrors
+tsc -b -w tests --stopBuildOnErrors
 ExitStatus:: Success
 Output::
 [2J[3J[H[[90mHH:MM:SS AM[0m] Starting compilation in watch mode...

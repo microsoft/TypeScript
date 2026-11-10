@@ -60,7 +60,7 @@ export const m = mod;
     },
 }
 
-tsgo --b logic2 --clean
+tsc --b logic2 --clean
 ExitStatus:: DiagnosticsPresent_OutputsSkipped
 Output::
 [91merror[0m[90m TS6053: [0mFile '/user/username/projects/sample1/logic2/tsconfig.json' not found.

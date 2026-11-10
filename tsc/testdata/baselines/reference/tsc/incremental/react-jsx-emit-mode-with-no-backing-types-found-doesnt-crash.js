@@ -27,7 +27,7 @@ export const App = () => <div propA={true}></div>;
     } 
 }
 
-tsgo 
+tsc 
 ExitStatus:: DiagnosticsPresent_OutputsGenerated
 Output::
 [96msrc/index.tsx[0m:[93m1[0m:[93m26[0m - [91merror[0m[90m TS7026: [0mJSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.

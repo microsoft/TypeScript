@@ -11,7 +11,7 @@ const a = class { private p = 10; };
     , "noEmit": true }
 }
 
-tsgo -b -verbose -w
+tsc -b -verbose -w
 ExitStatus:: DiagnosticsPresent_OutputsGenerated
 Output::
 [2J[3J[H[[90mHH:MM:SS AM[0m] Starting compilation in watch mode...

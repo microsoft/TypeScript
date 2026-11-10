@@ -58,7 +58,7 @@ export const m = mod;
     },
 }
 
-tsgo --b core --verbose
+tsc --b core --verbose
 ExitStatus:: Success
 Output::
 [[90mHH:MM:SS AM[0m] Projects in this build: 
@@ -193,7 +193,7 @@ Edit [0]:: incremental-declaration-changes
     },
 }
 
-tsgo --b core --verbose
+tsc --b core --verbose
 ExitStatus:: Success
 Output::
 [[90mHH:MM:SS AM[0m] Projects in this build: 

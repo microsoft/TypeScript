@@ -28,7 +28,7 @@ type A = HKT<number>[typeof sym];
     },
 }
 
-tsgo --b --verbose
+tsc --b --verbose
 ExitStatus:: Success
 Output::
 [[90mHH:MM:SS AM[0m] Projects in this build: 
@@ -170,7 +170,7 @@ declare module "./hkt" {
 
 type A = HKT<number>[typeof sym];
 
-tsgo --b --verbose
+tsc --b --verbose
 ExitStatus:: Success
 Output::
 [[90mHH:MM:SS AM[0m] Projects in this build: 
@@ -288,7 +288,7 @@ declare module "./hkt" {
 
 type A = HKT<number>[typeof sym];const x = 10;
 
-tsgo --b --verbose
+tsc --b --verbose
 ExitStatus:: Success
 Output::
 [[90mHH:MM:SS AM[0m] Projects in this build: 

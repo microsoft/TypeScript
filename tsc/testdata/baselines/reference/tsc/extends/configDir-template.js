@@ -36,7 +36,7 @@ import { x } from "@myscope/sometype";
 //// [/home/src/projects/myproject/types/sometype.ts] *new* 
 export const x = 10;
 
-tsgo --explainFiles
+tsc --explainFiles
 ExitStatus:: Success
 Output::
 ======== Resolving module '@myscope/sometype' from '/home/src/projects/myproject/main.ts'. ========
