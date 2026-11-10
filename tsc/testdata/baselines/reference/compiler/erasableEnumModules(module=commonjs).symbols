@@ -73,20 +73,21 @@ import { Color, Numeric, Shade } from "./enums";
 >Numeric : Symbol(Numeric, Decl(consumer.ts, 0, 15))
 >Shade : Symbol(Shade, Decl(consumer.ts, 0, 24))
 
-export const red: Color.Red = Color.Red;
+export const red: Color.Red = Color.Red as const;
 >red : Symbol(red, Decl(consumer.ts, 1, 12))
 >Color : Symbol(Color, Decl(consumer.ts, 0, 8))
 >Red : Symbol(Color.Red, Decl(enums.ts, 1, 40))
 >Color.Red : Symbol(Color.Red, Decl(enums.ts, 1, 40))
 >Color : Symbol(Color, Decl(consumer.ts, 0, 8))
 >Red : Symbol(Color.Red, Decl(enums.ts, 1, 40))
+>const : Symbol(const)
 
-export const shade: Shade = Color.Blue;
+export const shade: Shade = Color["Blue"] as const;
 >shade : Symbol(shade, Decl(consumer.ts, 2, 12))
 >Shade : Symbol(Shade, Decl(consumer.ts, 0, 24))
->Color.Blue : Symbol(Color.Blue, Decl(enums.ts, 2, 15))
 >Color : Symbol(Color, Decl(consumer.ts, 0, 8))
->Blue : Symbol(Color.Blue, Decl(enums.ts, 2, 15))
+>"Blue" : Symbol(Color.Blue, Decl(enums.ts, 2, 15))
+>const : Symbol(const)
 
 export const numeric: Numeric = Numeric.Shifted;
 >numeric : Symbol(numeric, Decl(consumer.ts, 3, 12))

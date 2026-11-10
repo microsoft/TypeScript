@@ -13948,7 +13948,7 @@ func (c *Checker) isValidConstAssertionArgument(node *ast.Node) bool {
 		if ast.IsEntityNameExpression(expr) {
 			symbol = c.resolveEntityName(expr, ast.SymbolFlagsValue, true /*ignoreErrors*/, false, nil)
 		}
-		return symbol != nil && symbol.Flags()&ast.SymbolFlagsEnum != 0
+		return symbol != nil && symbol.Flags()&(ast.SymbolFlagsEnum|ast.SymbolFlagsErasableEnum) != 0
 	}
 	return false
 }

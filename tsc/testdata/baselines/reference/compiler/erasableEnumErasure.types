@@ -64,6 +64,20 @@ let text: StringValues = StringValues.Second;
 >StringValues : typeof StringValues
 >Second : StringValues.Second
 
+const constMember = StringValues.First as const;
+>constMember : StringValues.First
+>StringValues.First as const : StringValues.First
+>StringValues.First : StringValues.First
+>StringValues : typeof StringValues
+>First : StringValues.First
+
+const constIndexed = StringValues["First"] as const;
+>constIndexed : StringValues.First
+>StringValues["First"] as const : StringValues.First
+>StringValues["First"] : StringValues.First
+>StringValues : typeof StringValues
+>"First" : "First"
+
 const keys: keyof typeof StringValues = "First";
 >keys : "First" | "Second"
 >StringValues : typeof StringValues

@@ -18,6 +18,8 @@ const StringValues: enum = {
 let numeric: Numeric = Numeric.First;
 let member: Numeric.First = Numeric.First;
 let text: StringValues = StringValues.Second;
+const constMember = StringValues.First as const;
+const constIndexed = StringValues["First"] as const;
 const keys: keyof typeof StringValues = "First";
 const object: typeof StringValues = StringValues;
 function narrow(value: StringValues) {
