@@ -64,29 +64,16 @@ const h = <div j:#k />;
 >j : any
 > : any
 
-const i = <#l-m></#l-m>;
+const i = <div #l #m="" n="" />;
 >i : any
-><#l-m></#l-m> : any
-> : any
-> : any
+><div #l #m="" n="" /> : any
+>div : any
+> : true
+> : true
+>n : string
 
-const j = <div #n-o={1} />;
+const j = <# />;
 >j : any
-><div #n-o={1} /> : any
->div : any
-> : number
->1 : 1
-
-const k = <div #p #q="" r="" />;
->k : any
-><div #p #q="" r="" /> : any
->div : any
-> : true
-> : true
->r : string
-
-const l = <# />;
->l : any
 ><# /> : any
 > : any
 

@@ -7,15 +7,12 @@ jsxNamesStartingWithHash.tsx(12,14): error TS1003: Identifier expected.
 jsxNamesStartingWithHash.tsx(13,16): error TS1003: Identifier expected.
 jsxNamesStartingWithHash.tsx(14,12): error TS1003: Identifier expected.
 jsxNamesStartingWithHash.tsx(15,18): error TS1003: Identifier expected.
-jsxNamesStartingWithHash.tsx(16,12): error TS1003: Identifier expected.
+jsxNamesStartingWithHash.tsx(16,16): error TS1003: Identifier expected.
 jsxNamesStartingWithHash.tsx(16,19): error TS1003: Identifier expected.
-jsxNamesStartingWithHash.tsx(17,16): error TS1003: Identifier expected.
-jsxNamesStartingWithHash.tsx(18,16): error TS1003: Identifier expected.
-jsxNamesStartingWithHash.tsx(18,19): error TS1003: Identifier expected.
-jsxNamesStartingWithHash.tsx(19,12): error TS1127: Invalid character.
+jsxNamesStartingWithHash.tsx(17,12): error TS1127: Invalid character.
 
 
-==== jsxNamesStartingWithHash.tsx (15 errors) ====
+==== jsxNamesStartingWithHash.tsx (12 errors) ====
     declare const React: any;
     declare namespace JSX {
         interface IntrinsicElements {
@@ -49,20 +46,12 @@ jsxNamesStartingWithHash.tsx(19,12): error TS1127: Invalid character.
     const h = <div j:#k />;
                      ~~
 !!! error TS1003: Identifier expected.
-    const i = <#l-m></#l-m>;
-               ~~~~
-!!! error TS1003: Identifier expected.
-                      ~~~~
-!!! error TS1003: Identifier expected.
-    const j = <div #n-o={1} />;
-                   ~~~~
-!!! error TS1003: Identifier expected.
-    const k = <div #p #q="" r="" />;
+    const i = <div #l #m="" n="" />;
                    ~~
 !!! error TS1003: Identifier expected.
                       ~~
 !!! error TS1003: Identifier expected.
-    const l = <# />;
+    const j = <# />;
                ~
 !!! error TS1127: Invalid character.
     

@@ -16,10 +16,8 @@ const e = <a:#f />;
 const f = <a.#g />;
 const g = <#h:i />;
 const h = <div j:#k />;
-const i = <#l-m></#l-m>;
-const j = <div #n-o={1} />;
-const k = <div #p #q="" r="" />;
-const l = <# />;
+const i = <div #l #m="" n="" />;
+const j = <# />;
 
 
 //// [jsxNamesStartingWithHash.js]
@@ -32,7 +30,5 @@ const e = React.createElement("a:", null);
 const f = React.createElement(a., null);
 const g = React.createElement(":i", null);
 const h = React.createElement("div", { "j:": true });
-const i = React.createElement(, null);
-const j = React.createElement("div", { "": 1 });
-const k = React.createElement("div", { "": true, "": "", r: "" });
-const l = React.createElement(, null);
+const i = React.createElement("div", { "": true, "": "", n: "" });
+const j = React.createElement(, null);

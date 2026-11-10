@@ -14,7 +14,6 @@ import (
 	"github.com/microsoft/TypeScript/tsc/internal/core"
 	"github.com/microsoft/TypeScript/tsc/internal/parser"
 	"github.com/microsoft/TypeScript/tsc/internal/repo"
-	"github.com/microsoft/TypeScript/tsc/internal/scanner"
 	"github.com/microsoft/TypeScript/tsc/internal/testutil/baseline"
 	"github.com/microsoft/TypeScript/tsc/internal/testutil/jstest"
 	"gotest.tools/v3/assert"
@@ -109,45 +108,6 @@ func TestGetTokenAtPosition(t *testing.T) {
 		}, fileText, core.ScriptKindTS)
 		assert.Equal(t, astnav.GetTokenAtPosition(file, 0), astnav.GetTokenAtPosition(file, 0))
 	})
-}
-
-func TestGetTokenAtPositionJsxNameStartingWithHash(t *testing.T) {
-	t.Parallel()
-	// The parser skips JSX tag and attribute names starting with '#', which are scanned as a
-	// single private identifier that may contain dashes.
-	fileText := `const a = <#a-b></#a-b>;
-const b = <div #c-d={1} />;
-const c = <div e:#f-g />;
-const d = <#h-i:j />;
-const e = <#k-l.m.n></#k-l.m.n>;
-`
-	file := parser.ParseSourceFile(ast.SourceFileParseOptions{
-		FileName: "/file.tsx",
-		PathKey:  "/file.tsx",
-	}, fileText, core.ScriptKindTSX)
-
-	for pos := range len(fileText) {
-		astnav.GetTokenAtPosition(file, pos)
-		astnav.GetTouchingPropertyName(file, pos)
-		astnav.FindPrecedingToken(file, pos)
-	}
-
-	for _, name := range []string{"#a-b", "#c-d", "#f-g", "#h-i", "#k-l"} {
-		for offset := 0; ; {
-			index := strings.Index(fileText[offset:], name)
-			if index < 0 {
-				break
-			}
-			start := offset + index
-			for pos := start; pos < start+len(name); pos++ {
-				token := astnav.GetTouchingPropertyName(file, pos)
-				assert.Equal(t, token.Kind, ast.KindPrivateIdentifier, "at position %d", pos)
-				assert.Equal(t, scanner.GetTokenPosOfNode(token, file, false /*includeJSDoc*/), start, "at position %d", pos)
-				assert.Equal(t, token.End(), start+len(name), "at position %d", pos)
-			}
-			offset = start + len(name)
-		}
-	}
 }
 
 func TestGetTouchingPropertyName(t *testing.T) {

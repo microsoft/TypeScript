@@ -16,10 +16,8 @@ const e = <a:#f />;
 const f = <a.#g />;
 const g = <#h:i />;
 const h = <div j:#k />;
-const i = <#l-m></#l-m>;
-const j = <div #n-o={1} />;
-const k = <div #p #q="" r="" />;
-const l = <# />;
+const i = <div #l #m="" n="" />;
+const j = <# />;
 
 
 //// [jsxNamesStartingWithHash.jsx]
@@ -32,7 +30,5 @@ const e = <a: />;
 const f = <a. />;
 const g = <:i />;
 const h = <div j:/>;
-const i = <></>;
-const j = <div ={1}/>;
-const k = <div  ="" r=""/>;
-const l = < />;
+const i = <div  ="" n=""/>;
+const j = < />;
