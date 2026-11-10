@@ -721,11 +721,26 @@ func TestEmitJSDocReviewRegressions(t *testing.T) {
  * @property {number} count
  */
 const options = {};`,
-			output: `/**
+			output: "/**\n * @typedef {{ count: number }} Options\n */",
+		},
+		{
+			name: "DocumentedTypedefProperties",
+			input: `/**
  * @typedef {Object} Options
- * @property {number} count
+ * @property {number} count The item count
+ * @property {string} [label] Display {@link Label}
  */
 const options = {};`,
+			output: "/**\n * @typedef {Object} Options\n * @property {number} count The item count\n * @property {string} [label] Display {@link Label}\n */",
+		},
+		{
+			name: "DocumentedNestedParameterProperties",
+			input: `/**
+ * @param {Object} opts The options
+ * @param {number} opts.count The item count
+ */
+function f(opts) {}`,
+			output: "/**\n * @param opts {Object} The options\n * @param {number} opts.count The item count\n */",
 		},
 		{
 			name: "CallbackSignature",
@@ -735,12 +750,16 @@ const options = {};`,
  * @returns {number} The result
  */
 const handler = () => 0;`,
-			output: `/**
- * @callback Handler
- * @param {string} value The value
- * @returns {number} The result
+			output: "/**\n * @callback Handler\n * @param {string} value The value\n * @returns {number} The result\n */",
+		},
+		{
+			name: "QualifiedCallback",
+			input: `/**
+ * @callback Namespace.Handler
+ * @param {string} value
  */
 const handler = () => 0;`,
+			output: "/**\n * @callback Namespace.Handler\n * @param {string} value\n */",
 		},
 		{
 			name: "TemplateModifiersAndDefaults",
@@ -749,26 +768,17 @@ const handler = () => 0;`,
  * @template [U=string]
  */
 function f() {}`,
-			output: `/**
- * @template const T
- * @template [U=string]
- */
-function f() { }`,
+			output: "/**\n * @template const T\n * @template [U=string]\n */",
 		},
 		{
 			name: "ImportAndQualifiedTypedef",
 			input: `/**
- * @import { Foo } from "pkg"
  * @typedef {Object} Namespace.Foo
  * @see {Foo}
- */
-const value = 0;`,
-			output: `/**
  * @import { Foo } from "pkg"
- * @typedef {Object} Namespace.Foo
- * @see {Foo}
  */
 const value = 0;`,
+			output: "/**\n * @typedef {Object} Namespace.Foo\n * @see {Foo}\n * @import { Foo } from \"pkg\"\n */",
 		},
 	}
 
@@ -776,8 +786,45 @@ const value = 0;`,
 		t.Run(rec.name, func(t *testing.T) {
 			t.Parallel()
 			file := parsetestutil.ParseTypeScript(rec.input, false)
-			emittestutil.CheckEmit(t, nil, file, rec.output)
+			docs := file.Statements.Nodes[0].JSDoc(file)
+			if len(docs) != 1 {
+				t.Fatalf("expected 1 JSDoc node, got %d", len(docs))
+			}
+			actual := printer.NewPrinter(
+				printer.PrinterOptions{NewLine: core.NewLineKindLF},
+				printer.PrintHandlers{},
+				nil,
+			).Emit(docs[0], file)
+			if actual != rec.output {
+				t.Errorf("unexpected JSDoc output:\n got: %q\nwant: %q", actual, rec.output)
+			}
 		})
+	}
+}
+
+func TestEmitJSDocTagCommentWithLeadingNewline(t *testing.T) {
+	t.Parallel()
+
+	var factory ast.NodeFactory
+	node := factory.NewJSDoc(
+		nil,
+		factory.NewNodeList([]*ast.Node{
+			factory.NewJSDocUnknownTag(
+				factory.NewIdentifier("example"),
+				factory.NewNodeList([]*ast.Node{
+					factory.NewJSDocText([]string{"\nconsole.log('example');"}),
+				}),
+			),
+		}),
+	)
+	actual := printer.NewPrinter(
+		printer.PrinterOptions{NewLine: core.NewLineKindLF},
+		printer.PrintHandlers{},
+		nil,
+	).Emit(node, nil)
+	expected := "/**\n * @example\n * console.log('example');\n */"
+	if actual != expected {
+		t.Errorf("unexpected JSDoc output:\n got: %q\nwant: %q", actual, expected)
 	}
 }
 

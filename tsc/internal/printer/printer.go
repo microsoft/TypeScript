@@ -4728,7 +4728,7 @@ func (p *Printer) writeJSDocCommentNode(text *strings.Builder, node *ast.Node) {
 		text.WriteByte(' ')
 		if name != nil {
 			text.WriteString(jsDocEntityNameText(name))
-			if linkText == "" || !strings.HasPrefix(linkText, "://") {
+			if linkText != "" && !strings.HasPrefix(linkText, "://") {
 				text.WriteByte(' ')
 			}
 		}
@@ -4759,7 +4759,12 @@ func (p *Printer) emitJSDocType(node *ast.Node) {
 	}
 	p.writeSpace()
 	p.writePunctuation("{")
-	if node.Kind == ast.KindJSDocTypeExpression {
+	if literal := jsDocDocumentedTypeLiteral(node); literal != nil {
+		p.write("Object")
+		if literal.IsArrayType {
+			p.writePunctuation("[]")
+		}
+	} else if node.Kind == ast.KindJSDocTypeExpression {
 		if typeNode := node.AsJSDocTypeExpression().Type; typeNode != nil {
 			p.emitTypeNode(typeNode, ast.TypePrecedenceJSDoc)
 		}
@@ -4772,6 +4777,7 @@ func (p *Printer) emitJSDocType(node *ast.Node) {
 func (p *Printer) emitJSDocTag(node *ast.Node) {
 	tagName, comment := jsDocTagBase(node)
 	var signature *ast.JSDocSignature
+	var documentedProperties *ast.JSDocTypeLiteral
 	p.write("@")
 	if tagName != nil {
 		p.write(tagName.Text())
@@ -4780,6 +4786,7 @@ func (p *Printer) emitJSDocTag(node *ast.Node) {
 	switch node.Kind {
 	case ast.KindJSDocParameterTag, ast.KindJSDocPropertyTag:
 		tag := node.AsJSDocParameterOrPropertyTag()
+		documentedProperties = jsDocDocumentedTypeLiteral(tag.TypeExpression)
 		if !tag.IsNameFirst {
 			p.emitJSDocType(tag.TypeExpression)
 		}
@@ -4862,6 +4869,7 @@ func (p *Printer) emitJSDocTag(node *ast.Node) {
 		}
 	case ast.KindJSDocTypedefTag:
 		tag := node.AsJSDocTypedefTag()
+		documentedProperties = jsDocDocumentedTypeLiteral(tag.TypeExpression)
 		p.emitJSDocType(tag.TypeExpression)
 		if tag.Name() != nil {
 			p.writeSpace()
@@ -4899,19 +4907,58 @@ func (p *Printer) emitJSDocTag(node *ast.Node) {
 			p.writeJSDocCommentNode(&text, commentNode)
 		}
 		lines := strings.Split(text.String(), "\n")
-		if len(lines) > 0 && lines[0] != "" {
+		if lines[0] != "" {
 			p.writeSpace()
 			p.write(strings.TrimSuffix(lines[0], "\r"))
-			for _, line := range lines[1:] {
-				p.writeLine()
-				p.write(" * ")
-				p.write(strings.TrimSuffix(line, "\r"))
-			}
+		}
+		for _, line := range lines[1:] {
+			p.writeLine()
+			p.write(" * ")
+			p.write(strings.TrimSuffix(line, "\r"))
 		}
 	}
 	if signature != nil {
 		p.emitJSDocSignature(signature)
 	}
+	if documentedProperties != nil {
+		for _, property := range documentedProperties.JSDocPropertyTags {
+			p.writeLine()
+			p.write(" * ")
+			p.emitJSDocTag(property)
+		}
+	}
+}
+
+// jsDocDocumentedTypeLiteral returns the type literal of a tag's type expression if any of
+// its properties (recursively) carry documentation, which an inline `{{ ... }}` type cannot hold.
+func jsDocDocumentedTypeLiteral(typeExpression *ast.Node) *ast.JSDocTypeLiteral {
+	if typeExpression == nil {
+		return nil
+	}
+	if typeExpression.Kind == ast.KindJSDocTypeExpression {
+		typeExpression = typeExpression.AsJSDocTypeExpression().Type
+	}
+	if typeExpression == nil || typeExpression.Kind != ast.KindJSDocTypeLiteral {
+		return nil
+	}
+	literal := typeExpression.AsJSDocTypeLiteral()
+	if jsDocTypeLiteralHasDocumentation(literal) {
+		return literal
+	}
+	return nil
+}
+
+func jsDocTypeLiteralHasDocumentation(literal *ast.JSDocTypeLiteral) bool {
+	for _, property := range literal.JSDocPropertyTags {
+		tag := property.AsJSDocParameterOrPropertyTag()
+		if tag.Comment != nil && len(tag.Comment.Nodes) > 0 {
+			return true
+		}
+		if jsDocDocumentedTypeLiteral(tag.TypeExpression) != nil {
+			return true
+		}
+	}
+	return false
 }
 
 func (p *Printer) emitJSDocTypeLiteral(node *ast.JSDocTypeLiteral) {
@@ -5001,7 +5048,7 @@ func (p *Printer) emitJSDocFullName(node *ast.JSDocFullName) {
 	case ast.KindModuleDeclaration:
 		declaration := node.AsModuleDeclaration()
 		p.emitJSDocFullName(declaration.Name())
-		if declaration.Body != nil && declaration.Body.Kind == ast.KindModuleDeclaration {
+		if declaration.Body != nil {
 			p.writePunctuation(".")
 			p.emitJSDocFullName(declaration.Body)
 		}
