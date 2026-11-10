@@ -1,6 +1,6 @@
 // @runExternalCode: true
 // @noTypesAndSymbols: true
-// @noEmit: true
+// @declaration: true
 
 // @Filename: /tsconfig.json
 {
