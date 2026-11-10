@@ -10849,7 +10849,7 @@ func (c *Checker) contextuallyCheckFunctionExpressionOrObjectLiteralMethod(node 
 	key := memoKeyOf(node, memoContextChecked)
 	// A check in progress below a cycle yield is hidden, so the function is
 	// checked again as if it were not, as computing from scratch would.
-	i, ok := c.resolving.get(key)
+	i, ok := c.resolvingGet(key)
 	hidden := ok && int(i) < c.visibleStart
 	c.beginMemo(key)
 	c.contextuallyCheckFunctionExpressionOrObjectLiteralMethodUncached(node, checkMode, hidden)
@@ -17409,7 +17409,7 @@ func (c *Checker) getResolvedMembersOrExportsOfSymbol(symbol *ast.Symbol, resolu
 // was entered, it returns the index in resolutions of the first declared,
 // the table the cycle canonically enters at; otherwise -1.
 func (c *Checker) findEarlierMembersInCycle(key memoKey, symbol *ast.Symbol) int {
-	i, ok := c.resolving.get(key)
+	i, ok := c.resolvingGet(key)
 	if !ok || int(i) < c.visibleStart || c.isYieldingTo(key, TypeSystemPropertyNameStructuredMembers) {
 		return -1
 	}
@@ -20876,7 +20876,7 @@ func (c *Checker) endCycleYield() {
 	c.reverseMappedSourceStack, c.reverseMappedTargetStack, c.reverseExpandingFlags, c.reverseMappedStart = r.sourceStack, r.targetStack, r.expandingFlags, r.start
 	c.contextualInfos, c.inferenceContextInfos = y.savedContextual, y.savedInference
 	for _, sh := range y.shadowed {
-		c.resolving.set(sh.key, sh.index)
+		c.resolutions[sh.index].shadowed = false
 	}
 	c.cycleYields[len(c.cycleYields)-1] = cycleYield{}
 	c.cycleYields = c.cycleYields[:len(c.cycleYields)-1]
@@ -21601,7 +21601,7 @@ func (c *Checker) resolveStructuredTypeMembersSlow(t *Type) *StructuredType {
 		} else {
 			c.isResolutionInProgress(t, TypeSystemPropertyNameStructuredMembers)
 		}
-		if j, ok := c.resolving.get(key); ok && int(j) < c.visibleStart {
+		if j, ok := c.resolvingGet(key); ok && int(j) < c.visibleStart {
 			// The members are being resolved below the cycle yield in
 			// progress, which then sees whatever part of them that
 			// resolution has published, rather than compute them from
@@ -21736,7 +21736,7 @@ func (c *Checker) resolveModuleTableMembers(t *Type) {
 		}
 		c.clearStructuredMembers(t)
 		key := memoKeyOf(t, memoStructuredMembers)
-		i, _ := c.resolving.get(key)
+		i, _ := c.resolvingGet(key)
 		c.resolutions[i].membersPublished = false
 		if canonical != nil {
 			c.resolveStructuredTypeMembers(canonical.(*Type))

@@ -328,7 +328,7 @@ func (m *memo[T]) logDiscard(c *Checker) {
 // inProgress returns the result of a computation in progress, which a
 // computation re-entering it may have cached before it finishes.
 func (m *memo[T]) inProgress(c *Checker) T {
-	_, ok := c.resolving.get(m.key())
+	_, ok := c.resolvingGet(m.key())
 	debug.Assert(ok, "the computation of the result is not in progress")
 	return m.cached(c)
 }
@@ -820,7 +820,7 @@ func (c *Checker) readsWithoutMemo(key memoKey) bool {
 	if c.observing() {
 		return false
 	}
-	_, resolving := c.resolving.get(key)
+	_, resolving := c.resolvingGet(key)
 	return !resolving
 }
 
@@ -1232,7 +1232,8 @@ func (c *Checker) endMemo() {
 		// calls.
 		c.memoTop = int(f.prevMemo)
 		if f.resolving {
-			c.resolving.delete(f.key)
+			c.resolving.counts[resolvingHome(f.key)]--
+			c.resolving.count--
 		}
 		if int(f.attachStart) != len(c.deferredAttach) {
 			clear(c.deferredAttach[f.attachStart:])
