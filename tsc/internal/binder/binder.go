@@ -659,7 +659,13 @@ func (b *Binder) bind(node *ast.Node) bool {
 	case ast.KindPropertyDeclaration, ast.KindPropertySignature:
 		b.bindPropertyWorker(node)
 	case ast.KindPropertyAssignment, ast.KindShorthandPropertyAssignment:
-		b.bindPropertyOrMethodOrAccessor(node, ast.SymbolFlagsProperty, ast.SymbolFlagsPropertyExcludes)
+		if ast.IsErasableEnumMember(node) {
+			owner := ast.GetErasableEnumDeclaration(node.Parent).Symbol()
+			member := b.declareSymbol(ast.GetExports(owner, &b.symbolExtraArena), owner, node, ast.SymbolFlagsEnumMember, ast.SymbolFlagsPropertyExcludes&^ast.SymbolFlagsEnumMember)
+			ast.GetMembers(node.Parent.Symbol(), &b.symbolExtraArena).Set(member.Name(), member)
+		} else {
+			b.bindPropertyOrMethodOrAccessor(node, ast.SymbolFlagsProperty, ast.SymbolFlagsPropertyExcludes)
+		}
 	case ast.KindEnumMember:
 		b.bindPropertyOrMethodOrAccessor(node, ast.SymbolFlagsEnumMember, ast.SymbolFlagsEnumMemberExcludes)
 	case ast.KindCallSignature, ast.KindConstructSignature, ast.KindIndexSignature:
@@ -1188,6 +1194,14 @@ func (b *Binder) bindVariableDeclarationOrBindingElement(node *ast.Node) {
 	b.checkStrictModeEvalOrArguments(node, node.Name())
 	if name := node.Name(); name != nil && !ast.IsBindingPattern(name) {
 		switch {
+		case ast.IsErasableEnumDeclaration(node):
+			// Erasable enums retain their variable binding and have a separate nominal type.
+			excludes := ast.SymbolFlagsValue | ast.SymbolFlagsType
+			if ast.IsBlockOrCatchScoped(node) {
+				b.bindBlockScopedDeclaration(node, ast.SymbolFlagsBlockScopedVariable|ast.SymbolFlagsErasableEnum, excludes)
+			} else {
+				b.declareSymbolAndAddToSymbolTable(node, ast.SymbolFlagsFunctionScopedVariable|ast.SymbolFlagsErasableEnum, excludes)
+			}
 		case ast.IsVariableDeclarationInitializedToRequire(node):
 			b.declareSymbolAndAddToSymbolTable(node, ast.SymbolFlagsAlias, ast.SymbolFlagsAliasExcludes)
 		case ast.IsBlockOrCatchScoped(node):

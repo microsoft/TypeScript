@@ -2592,7 +2592,7 @@ export class Checker {
             snapshot: this.snapshotId,
             project: this.project.handle,
             name,
-            meaning,
+            meaning: meaning >>> 0,
             location: isNode ? getNodeRequestHandle(location as Node) : undefined,
             file: !isNode && location ? (location as DocumentPosition).document : undefined,
             position: !isNode && location ? (location as DocumentPosition).position : undefined,
@@ -2610,7 +2610,7 @@ export class Checker {
         const data = await this.client.apiRequest("getSymbolsInScope", {
             snapshot: this.snapshotId,
             project: this.project.handle,
-            meaning,
+            meaning: meaning >>> 0,
             location: isNode ? getNodeRequestHandle(location as Node) : undefined,
             file: isNode ? undefined : (location as DocumentPosition).document,
             position: isNode ? undefined : (location as DocumentPosition).position,

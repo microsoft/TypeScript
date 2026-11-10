@@ -3924,6 +3924,16 @@ var Content_mapper_extension_0_must_not_contain_path_separators = &Message{code:
 
 var The_content_mapper_package_0_is_outside_the_open_workspace_and_will_not_be_loaded = &Message{code: 18124, category: CategoryError, key: "The_content_mapper_package_0_is_outside_the_open_workspace_and_will_not_be_loaded_18124", text: "The content mapper package '{0}' is outside the open workspace and will not be loaded."}
 
+var An_erasable_enum_prototype_setter_must_have_the_value_null = &Message{code: 18125, category: CategoryError, key: "An_erasable_enum_prototype_setter_must_have_the_value_null_18125", text: "An erasable enum prototype setter must have the value 'null'."}
+
+var Erasable_enum_member_initializers_must_be_constant_expressions = &Message{code: 18126, category: CategoryError, key: "Erasable_enum_member_initializers_must_be_constant_expressions_18126", text: "Erasable enum member initializers must be constant expressions."}
+
+var Spread_assignments_are_not_allowed_in_erasable_enums = &Message{code: 18127, category: CategoryError, key: "Spread_assignments_are_not_allowed_in_erasable_enums_18127", text: "Spread assignments are not allowed in erasable enums."}
+
+var Erasable_enums_only_allow_property_assignments = &Message{code: 18128, category: CategoryError, key: "Erasable_enums_only_allow_property_assignments_18128", text: "Erasable enums only allow property assignments."}
+
+var An_enum_annotation_requires_a_named_variable_in_a_variable_statement_with_an_object_literal_initializer = &Message{code: 18129, category: CategoryError, key: "An_enum_annotation_requires_a_named_variable_in_a_variable_statement_with_an_object_literal_initiali_18129", text: "An 'enum' annotation requires a named variable in a variable statement with an object literal initializer."}
+
 var X_nodenext_if_module_is_nodenext_node16_if_module_is_node16_or_node18_otherwise_bundler = &Message{code: 69010, category: CategoryMessage, key: "nodenext_if_module_is_nodenext_node16_if_module_is_node16_or_node18_otherwise_bundler_69010", text: "`nodenext` if `module` is `nodenext`; `node16` if `module` is `node16` or `node18`; otherwise, `bundler`."}
 
 var File_is_a_CommonJS_module_it_may_be_converted_to_an_ES_module = &Message{code: 80001, category: CategorySuggestion, key: "File_is_a_CommonJS_module_it_may_be_converted_to_an_ES_module_80001", text: "File is a CommonJS module; it may be converted to an ES module."}
@@ -6426,6 +6436,11 @@ var allMessages = [...]**Message{
 	&The_typescript_contentMapper_outputExtensions_of_the_content_mapper_package_0_must_be_an_object_with_string_values,
 	&Content_mapper_extension_0_must_not_contain_path_separators,
 	&The_content_mapper_package_0_is_outside_the_open_workspace_and_will_not_be_loaded,
+	&An_erasable_enum_prototype_setter_must_have_the_value_null,
+	&Erasable_enum_member_initializers_must_be_constant_expressions,
+	&Spread_assignments_are_not_allowed_in_erasable_enums,
+	&Erasable_enums_only_allow_property_assignments,
+	&An_enum_annotation_requires_a_named_variable_in_a_variable_statement_with_an_object_literal_initializer,
 	&X_nodenext_if_module_is_nodenext_node16_if_module_is_node16_or_node18_otherwise_bundler,
 	&File_is_a_CommonJS_module_it_may_be_converted_to_an_ES_module,
 	&This_constructor_function_may_be_converted_to_a_class_declaration,

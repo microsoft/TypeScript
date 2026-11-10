@@ -834,6 +834,16 @@ func (tx *DeclarationTransformer) transformTypeParameterDeclaration(input *ast.T
 }
 
 func (tx *DeclarationTransformer) transformVariableDeclaration(input *ast.VariableDeclaration) *ast.Node {
+	if ast.IsErasableEnumDeclaration(input.AsNode()) {
+		literal := ast.GetErasableEnumInitializer(input.AsNode()).AsObjectLiteralExpression()
+		return tx.Factory().UpdateVariableDeclaration(
+			input,
+			tx.bindingNameVisitor.VisitNode(input.Name()),
+			nil,
+			input.Type,
+			tx.Factory().UpdateObjectLiteralExpression(literal, tx.transformErasableEnumProperties(literal.Properties), literal.MultiLine),
+		)
+	}
 	if tx.state.currentSourceFile.CommonJSModuleIndicator != nil && ast.IsVariableDeclarationInitializedToRequire(input.AsNode()) {
 		return tx.transformCjsRequireVariableDeclaration(input)
 	}
@@ -2313,36 +2323,66 @@ func (tx *DeclarationTransformer) transformEnumDeclaration(input *ast.EnumDeclar
 				tx.state.addDiagnostic(createDiagnosticForNode(m, diagnostics.Enum_member_initializers_must_be_computable_without_references_to_external_symbols_with_isolatedDeclarations))
 			}
 
-			var newInitializer *ast.Node
-			switch value := enumValue.Value.(type) {
-			case jsnum.Number:
-				if value.IsInf() {
-					if value > 0 {
-						newInitializer = tx.Factory().NewIdentifier("Infinity")
-					} else {
-						newInitializer = tx.Factory().NewPrefixUnaryExpression(ast.KindMinusToken, tx.Factory().NewIdentifier("Infinity"))
-					}
-				} else if value.IsNaN() {
-					newInitializer = tx.Factory().NewIdentifier("NaN")
-				} else if value >= 0 {
-					newInitializer = tx.Factory().NewNumericLiteral(value.String(), ast.TokenFlagsNone)
-				} else {
-					newInitializer = tx.Factory().NewPrefixUnaryExpression(
-						ast.KindMinusToken,
-						tx.Factory().NewNumericLiteral((-value).String(), ast.TokenFlagsNone),
-					)
-				}
-			case string:
-				newInitializer = tx.Factory().NewStringLiteral(value, ast.TokenFlagsNone)
-			default:
-				// nil
-				newInitializer = nil
-			}
+			newInitializer := tx.enumConstantInitializer(enumValue.Value)
 			result := tx.Factory().UpdateEnumMember(m.AsEnumMember(), m.Name(), newInitializer)
 			tx.preserveJsDoc(result, m)
 			return result
 		})),
 	)
+}
+
+func (tx *DeclarationTransformer) transformErasableEnumProperties(properties *ast.NodeList) *ast.NodeList {
+	return tx.Factory().NewNodeList(core.MapNonNil(properties.Nodes, func(property *ast.Node) *ast.Node {
+		if ast.IsErasableEnumPrototypeSetter(property) {
+			return property
+		}
+		if !ast.IsErasableEnumMember(property) || tx.shouldStripInternal(property) {
+			return nil
+		}
+		value := tx.resolver.GetEnumMemberValue(property)
+		if tx.state.isolatedDeclarations && (value.Value == nil || value.HasExternalReferences) {
+			tx.state.addDiagnostic(createDiagnosticForNode(property, diagnostics.Enum_member_initializers_must_be_computable_without_references_to_external_symbols_with_isolatedDeclarations))
+		}
+		initializer := tx.enumConstantInitializer(value.Value)
+		if initializer == nil {
+			return nil
+		}
+		result := tx.Factory().NewPropertyAssignment(nil, property.Name(), nil, nil, initializer)
+		result.Loc = property.Loc
+		tx.EmitContext().SetOriginal(result, property)
+		tx.preserveJsDoc(result, property)
+		return result
+	}))
+}
+
+func (tx *DeclarationTransformer) enumConstantInitializer(input any) *ast.Node {
+	var newInitializer *ast.Node
+	switch value := input.(type) {
+	case jsnum.Number:
+		if value.IsInf() {
+			if value > 0 {
+				newInitializer = tx.Factory().NewIdentifier("Infinity")
+			} else {
+				newInitializer = tx.Factory().NewPrefixUnaryExpression(ast.KindMinusToken, tx.Factory().NewIdentifier("Infinity"))
+			}
+		} else if value.IsNaN() {
+			newInitializer = tx.Factory().NewIdentifier("NaN")
+		} else if value >= 0 {
+			newInitializer = tx.Factory().NewNumericLiteral(value.String(), ast.TokenFlagsNone)
+		} else {
+			newInitializer = tx.Factory().NewPrefixUnaryExpression(
+				ast.KindMinusToken,
+				tx.Factory().NewNumericLiteral((-value).String(), ast.TokenFlagsNone),
+			)
+		}
+	case string:
+		newInitializer = tx.Factory().NewStringLiteral(value, ast.TokenFlagsNone)
+	default:
+		// nil
+		newInitializer = nil
+	}
+
+	return newInitializer
 }
 
 func (tx *DeclarationTransformer) ensureModifiers(node *ast.Node) *ast.ModifierList {

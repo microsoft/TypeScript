@@ -826,7 +826,7 @@ func getMeaningFromLocation(node *ast.Node) ast.SemanticMeaning {
 		}
 		return ast.SemanticMeaningNamespace
 	case ast.IsDeclarationName(node):
-		return getMeaningFromDeclaration(parent)
+		return ast.GetMeaningFromDeclaration(parent)
 	case ast.IsEntityName(node) && ast.IsJSDocNameReferenceContext(node):
 		return ast.SemanticMeaningAll
 	case isTypeReference(node):
@@ -841,41 +841,6 @@ func getMeaningFromLocation(node *ast.Node) ast.SemanticMeaning {
 	default:
 		return ast.SemanticMeaningValue
 	}
-}
-
-func getMeaningFromDeclaration(node *ast.Node) ast.SemanticMeaning {
-	switch node.Kind {
-	case ast.KindVariableDeclaration, ast.KindParameter, ast.KindBindingElement,
-		ast.KindPropertyDeclaration, ast.KindPropertySignature, ast.KindPropertyAssignment, ast.KindShorthandPropertyAssignment,
-		ast.KindMethodDeclaration, ast.KindMethodSignature, ast.KindConstructor, ast.KindGetAccessor, ast.KindSetAccessor,
-		ast.KindFunctionDeclaration, ast.KindFunctionExpression, ast.KindArrowFunction, ast.KindCatchClause, ast.KindJsxAttribute:
-		return ast.SemanticMeaningValue
-
-	case ast.KindTypeParameter, ast.KindInterfaceDeclaration, ast.KindTypeAliasDeclaration, ast.KindJSTypeAliasDeclaration, ast.KindTypeLiteral:
-		return ast.SemanticMeaningType
-
-	case ast.KindEnumMember, ast.KindClassDeclaration:
-		return ast.SemanticMeaningValue | ast.SemanticMeaningType
-
-	case ast.KindModuleDeclaration:
-		if ast.IsAmbientModule(node) {
-			return ast.SemanticMeaningNamespace | ast.SemanticMeaningValue
-		} else if ast.GetModuleInstanceState(node) == ast.ModuleInstanceStateInstantiated {
-			return ast.SemanticMeaningNamespace | ast.SemanticMeaningValue
-		} else {
-			return ast.SemanticMeaningNamespace
-		}
-
-	case ast.KindEnumDeclaration, ast.KindNamedImports, ast.KindImportSpecifier, ast.KindImportEqualsDeclaration, ast.KindImportDeclaration,
-		ast.KindJSImportDeclaration, ast.KindExportAssignment, ast.KindExportDeclaration:
-		return ast.SemanticMeaningAll
-
-	// An external module can be a Value
-	case ast.KindSourceFile:
-		return ast.SemanticMeaningNamespace | ast.SemanticMeaningValue
-	}
-
-	return ast.SemanticMeaningAll
 }
 
 func getIntersectingMeaningFromDeclarations(node *ast.Node, symbol *ast.Symbol, defaultMeaning ast.SemanticMeaning) ast.SemanticMeaning {
@@ -894,7 +859,7 @@ func getIntersectingMeaningFromDeclarations(node *ast.Node, symbol *ast.Symbol, 
 	// !!! TODO check if the port is correct and the for loop is needed
 	iteration := func(m ast.SemanticMeaning) ast.SemanticMeaning {
 		for _, declaration := range declarations {
-			declarationMeaning := getMeaningFromDeclaration(declaration)
+			declarationMeaning := ast.GetMeaningFromDeclaration(declaration)
 
 			if declarationMeaning&m != 0 {
 				m |= declarationMeaning
