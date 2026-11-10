@@ -236,7 +236,7 @@ func TestContentMapperDeclarationModuleFormat(t *testing.T) {
 					if virtualMode != expectedMode {
 						assert.Equal(t, len(fileDiagnostics), 1)
 						assert.Equal(t, fileDiagnostics[0].Code(), diagnostics.The_content_mapper_0_returned_virtual_extension_1_whose_module_format_does_not_match_declaration_output_2.Code())
-						assert.Equal(t, file.Text(), "")
+						assert.Equal(t, file.Text(), "export const value = 1;")
 					} else {
 						assert.Equal(t, len(fileDiagnostics), 0)
 						assert.Equal(t, program.GetSourceFileMetaData(file.PathKey()).ImpliedNodeFormat, expectedMode)
@@ -278,6 +278,63 @@ func TestContentMapperDeclarationModuleFormatWithoutNodeResolution(t *testing.T)
 				} else {
 					assert.Equal(t, len(fileDiagnostics), 0)
 					assert.Equal(t, file.Text(), "export const value = 1;")
+				}
+			})
+		}
+	}
+}
+
+type missingContentMappedCompilerHost struct {
+	compiler.CompilerHost
+}
+
+func (missingContentMappedCompilerHost) GetContentMappedSourceFiles(ast.SourceFileParseOptions, *contentmapper.Mapper) (contentmapper.SourceFiles, error) {
+	return contentmapper.SourceFiles{}, nil
+}
+
+func TestContentMapperMissingSourceFile(t *testing.T) {
+	t.Parallel()
+	fs := vfstest.FromMap(map[string]any{"/src/Component.vue": "export {};"}, tspath.CaseSensitive)
+	config := tsoptions.NewParsedCommandLine(&core.CompilerOptions{NoLib: core.TSTrue}, testFileNames("/src/Component.vue"), nil, "/", fs.CaseSensitivity())
+	config.ParsedConfig.ContentMappers = []*contentmapper.Mapper{{Package: "vue", Extensions: []string{".vue"}, Name: "vue-mapper", Version: "1.0.0"}}
+	program := compiler.NewProgram(compiler.ProgramOptions{
+		Config: config,
+		Host:   missingContentMappedCompilerHost{CompilerHost: compiler.NewCompilerHost(fs, "/", nil, nil, nil)},
+	})
+	assert.Assert(t, program.GetSourceFile("/src/Component.vue") == nil)
+}
+
+func TestContentMapperDeclarationModuleFormatUsesEmitRoot(t *testing.T) {
+	t.Parallel()
+	for _, virtualExtension := range []string{".ts", ".mts"} {
+		for _, outputPackageType := range []string{"module", "commonjs"} {
+			t.Run(virtualExtension+"/"+outputPackageType, func(t *testing.T) {
+				t.Parallel()
+				program := newContentMapperProgramWithOptions(t, fakeContentMapperHost{
+					transform: func(fileName string, content string) (contentmapper.Result, error) {
+						return contentmapper.Result{Text: "export const value = 1;", VirtualExtension: virtualExtension, Mappings: spanmap.New(nil)}, nil
+					},
+				}, map[string]string{
+					"/src/main.ts":              `import "../shared/Component.vue";`,
+					"/shared/Component.vue":     "<template />",
+					"/shared/package.json":      `{"type":"commonjs"}`,
+					"/dist/shared/package.json": `{"type":"` + outputPackageType + `"}`,
+				}, []string{"/src/main.ts"}, &core.CompilerOptions{
+					SkipLibCheck:     core.TSTrue,
+					Module:           core.ModuleKindNodeNext,
+					ModuleResolution: core.ModuleResolutionKindNodeNext,
+					Declaration:      core.TSTrue,
+					OutDir:           "/dist",
+				})
+				file := program.GetSourceFile("/shared/Component.vue")
+				assert.Assert(t, file != nil)
+				paths := outputpaths.GetOutputPathsFor(file, program.Options(), program, outputpaths.ForceEmitPaths{Dts: true})
+				assert.Equal(t, paths.DeclarationFilePath(), tspath.RootedFilePath("/dist/shared/Component.d.vue.ts"))
+				fileDiagnostics := program.GetSyntacticDiagnostics(t.Context(), file)
+				expectMismatch := (virtualExtension == ".mts") != (outputPackageType == "module")
+				assert.Equal(t, len(fileDiagnostics), core.IfElse(expectMismatch, 1, 0))
+				if expectMismatch {
+					assert.Equal(t, fileDiagnostics[0].Code(), diagnostics.The_content_mapper_0_returned_virtual_extension_1_whose_module_format_does_not_match_declaration_output_2.Code())
 				}
 			})
 		}

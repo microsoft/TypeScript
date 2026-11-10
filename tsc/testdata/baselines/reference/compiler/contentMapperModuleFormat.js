@@ -11,17 +11,26 @@
 }
 
 //// [expected-esm.esm]
+const __VERSION = "1.0.0";
+// @box-extension: .cts
+export const value = 1;
 
 //// [expected-cjs.cbox]
+const __VERSION = "1.0.0";
+// @box-extension: .mts
+export const value = 1;
 
 //// [package-inferred.box]
+const __VERSION = "1.0.0";
+// @box-extension: .cts
+export const value = 1;
 
 
 
 
 //// [expected-esm.d.mts]
-export {};
+export declare const value = 1;
 //// [expected-cjs.d.cts]
-export {};
+export declare const value = 1;
 //// [package-inferred.d.box.ts]
-export {};
+export declare const value = 1;

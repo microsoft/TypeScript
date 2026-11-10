@@ -16,7 +16,6 @@ import (
 	"github.com/microsoft/TypeScript/tsc/internal/diagnostics"
 	"github.com/microsoft/TypeScript/tsc/internal/module"
 	"github.com/microsoft/TypeScript/tsc/internal/nativepath"
-	"github.com/microsoft/TypeScript/tsc/internal/outputpaths"
 	"github.com/microsoft/TypeScript/tsc/internal/parser"
 	"github.com/microsoft/TypeScript/tsc/internal/spanmap"
 	"github.com/microsoft/TypeScript/tsc/internal/tracing"
@@ -462,33 +461,7 @@ func (p *fileLoader) parseContentMappedFile(opts ast.SourceFileParseOptions) *as
 		}
 		return sourceFile
 	}
-	config := p.projectReferences.getRedirectParsedCommandLineForResolution(files.Canonical)
-	if config == nil {
-		config = p.opts.Config
-	}
-	declarationPath := outputpaths.GetOutputDeclarationFileNameWorker(opts.FileName, config.CompilerOptions(), config)
-	virtualFileName := files.Canonical.VirtualFileName()
-	if p.getContentMappedFileModuleFormat(virtualFileName) != p.getContentMappedFileModuleFormat(declarationPath) {
-		sourceFile := p.emptyContentMappedFile(opts, mapper.Identity(), transformIdentity)
-		if p.recordContentMapperFailure(mapper, label) {
-			sourceFile.SetDiagnostics([]*ast.Diagnostic{ast.NewDiagnostic(sourceFile, core.NewTextRange(0, 0),
-				diagnostics.The_content_mapper_0_returned_virtual_extension_1_whose_module_format_does_not_match_declaration_output_2,
-				label, virtualFileName.Extension(), declarationPath.BaseName())})
-		}
-		return sourceFile
-	}
 	return files.Canonical
-}
-
-func (p *fileLoader) getContentMappedFileModuleFormat(fileName tspath.RootedFilePath) core.ModuleKind {
-	var packageJsonType string
-	if !p.opts.SkipModuleResolution {
-		scope := p.resolver.GetResolutionData().NewResolver(p.projectReferences.host).GetPackageScopeForPath(fileName.Directory())
-		if scope.Exists() {
-			packageJsonType, _ = scope.Contents.Type.GetValue()
-		}
-	}
-	return ast.GetImpliedNodeFormatForFile(fileName, packageJsonType)
 }
 
 func contentMapperTransformDiagnostic(file *ast.SourceFile, label string, err error) *ast.Diagnostic {

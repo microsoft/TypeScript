@@ -730,7 +730,7 @@ func TestContentMapperModuleFormatChangeRebuilds(t *testing.T) {
 	assert.Assert(t, session.Snapshot().GetDefaultProject(mainURI).ProgramUpdateKind != project.ProgramUpdateKindCloned)
 	program := languageService.GetProgram()
 	mappedFile := program.GetSourceFile("/home/project/app.box")
-	assert.Equal(t, mappedFile.Text(), "")
+	assert.Equal(t, mappedFile.Text(), "// esm\nexport const value = 1;\n")
 	fileDiagnostics := program.GetSyntacticDiagnostics(ctx, mappedFile)
 	assert.Equal(t, len(fileDiagnostics), 1)
 	assert.Equal(t, fileDiagnostics[0].Code(), diagnostics.The_content_mapper_0_returned_virtual_extension_1_whose_module_format_does_not_match_declaration_output_2.Code())
@@ -748,6 +748,70 @@ func TestContentMapperModuleFormatChangeRebuilds(t *testing.T) {
 	assert.Equal(t, program.GetSourceFileMetaData(mappedFile.PathKey()).ImpliedNodeFormat, core.ModuleKindESNext)
 	tslib := program.GetResolvedModuleFromModuleSpecifier(mappedFile, program.GetImportHelpersImportSpecifier(mappedFile.PathKey()))
 	assert.Equal(t, tslib.ResolvedFileName.AsString(), "/home/project/node_modules/tslib/tslib.d.mts")
+}
+
+func TestContentMapperModuleFormatDiagnosticsSurviveEdits(t *testing.T) {
+	t.Parallel()
+	for _, mapper := range []string{contentmappertest.VerbatimMapper, contentmappertest.SupplementalMapper} {
+		t.Run(mapper, func(t *testing.T) {
+			t.Parallel()
+			files := map[string]any{
+				"/home/project/tsconfig.json":                    `{ "compilerOptions": { "module": "nodenext", "moduleDetection": "force", "rewriteRelativeImportExtensions": true }, "contentMappers": [{ "package": "mapper", "extensions": [".box"], "outputExtensions": { ".box": ".mjs" } }] }`,
+				"/home/project/package.json":                     `{"type":"commonjs"}`,
+				"/home/project/node_modules/mapper/package.json": contentmappertest.PackageJSON(mapper),
+				"/home/project/app.box":                          "export const value = 1;",
+				"/home/project/main.ts":                          "export {};",
+			}
+			init, utils := projecttestutil.GetSessionInitOptions(files, &project.SessionOptions{
+				CurrentDirectory:   "/home/project",
+				DefaultLibraryPath: bundled.LibPath(),
+				PositionEncoding:   lsproto.PositionEncodingKindUTF8,
+				RunExternalCode:    true,
+			}, nil)
+			init.Spawner = contentmappertest.NewSpawner()
+			cache := project.NewContentMappedParseCache(project.RefCountCacheOptions{})
+			init.ContentMappedParseCache = cache
+			session := project.NewSession(init)
+			var keys []project.ContentMappedParseCacheKey
+			defer func() {
+				session.Close()
+				for _, key := range keys {
+					assert.Assert(t, !cache.Has(key), "transform bundle remains cached after session disposal")
+				}
+			}()
+
+			ctx := t.Context()
+			mainURI := lsproto.DocumentUri("file:///home/project/main.ts")
+			session.DidOpenFile(ctx, mainURI, 1, files["/home/project/main.ts"].(string), lsproto.LanguageKindTypeScript)
+			for i := range 3 {
+				if i != 0 {
+					assert.NilError(t, utils.FS().WriteFile("/home/project/app.box", fmt.Sprintf("export const value = %d;", i+1)))
+					session.DidChangeWatchedFiles(ctx, []*lsproto.FileEvent{{
+						Uri:  "file:///home/project/app.box",
+						Type: lsproto.FileChangeTypeChanged,
+					}})
+				}
+				languageService, err := session.GetLanguageService(ctx, mainURI)
+				assert.NilError(t, err)
+				program := languageService.GetProgram()
+				file := program.GetSourceFile("/home/project/app.box")
+				assert.Assert(t, file != nil)
+				fileDiagnostics := program.GetSyntacticDiagnostics(ctx, file)
+				assert.Equal(t, len(fileDiagnostics), 1)
+				assert.Equal(t, fileDiagnostics[0].Code(), diagnostics.The_content_mapper_0_returned_virtual_extension_1_whose_module_format_does_not_match_declaration_output_2.Code())
+				if i != 0 {
+					assert.Equal(t, session.Snapshot().GetDefaultProject(mainURI).ProgramUpdateKind, project.ProgramUpdateKindCloned)
+				}
+				keys = append(keys, project.ContentMappedParseCacheKey{SourceFileParseOptions: file.ContentMapperParseOptions(), Hash: file.Hash})
+			}
+			assert.Assert(t, cache.Has(keys[len(keys)-1]), "the program must retain its acquired transform bundle")
+			if mapper == contentmappertest.SupplementalMapper {
+				languageService, err := session.GetLanguageService(ctx, mainURI)
+				assert.NilError(t, err)
+				assert.Equal(t, len(languageService.GetProgram().GetSourceFile("/home/project/app.box").SupplementalSourceFiles()), 1)
+			}
+		})
+	}
 }
 
 func TestContentMapperLocaleChange(t *testing.T) {

@@ -811,6 +811,9 @@ func (p *Program) collectCheckerDiagnosticsFromFiles(ctx context.Context, source
 func (p *Program) GetSyntacticDiagnostics(ctx context.Context, sourceFile *ast.SourceFile) []*ast.Diagnostic {
 	return p.collectDiagnostics(ctx, sourceFile, false /*concurrent*/, func(_ context.Context, file *ast.SourceFile) []*ast.Diagnostic {
 		diags := core.Concatenate(file.Diagnostics(), file.JSDiagnostics())
+		if diagnostic := p.getContentMapperModuleFormatDiagnostic(file); diagnostic != nil {
+			diags = append(diags, diagnostic)
+		}
 		// For JS files that won't be checked by the checker (no checkJs/ts-check), we need
 		// program-level syntactic checks that require compiler options. This mirrors Strada's
 		// getJSSyntacticDiagnosticsForFile in program.ts.
@@ -819,6 +822,42 @@ func (p *Program) GetSyntacticDiagnostics(ctx context.Context, sourceFile *ast.S
 		}
 		return diags
 	})
+}
+
+func (p *Program) getContentMapperModuleFormatDiagnostic(file *ast.SourceFile) *ast.Diagnostic {
+	if file.IsContentMapperFailureStub() || file.IsContentMapperSupplemental() {
+		return nil
+	}
+	mapper := p.GetContentMapper(file)
+	if mapper == nil {
+		return nil
+	}
+	options := p.Options()
+	var host outputpaths.OutputPathsHost = p
+	if config := p.GetRedirectForResolution(file); config != nil {
+		options = config.CompilerOptions()
+		host = config
+	}
+	// Declaration paths depend on the complete source graph, so validate here rather than during loading.
+	declarationPath := outputpaths.GetOutputDeclarationFileNameWorker(file.FileName(), options, host)
+	virtualFileName := file.VirtualFileName()
+	if p.getContentMappedFileModuleFormat(virtualFileName) == p.getContentMappedFileModuleFormat(declarationPath) {
+		return nil
+	}
+	return ast.NewDiagnostic(file, core.NewTextRange(0, 0),
+		diagnostics.The_content_mapper_0_returned_virtual_extension_1_whose_module_format_does_not_match_declaration_output_2,
+		mapper.DiagnosticName(), virtualFileName.Extension(), declarationPath.BaseName())
+}
+
+func (p *Program) getContentMappedFileModuleFormat(fileName tspath.RootedFilePath) core.ModuleKind {
+	var packageJsonType string
+	if !p.opts.SkipModuleResolution {
+		scope := p.newResolver().GetPackageScopeForPath(fileName.Directory())
+		if scope.Exists() {
+			packageJsonType, _ = scope.Contents.Type.GetValue()
+		}
+	}
+	return ast.GetImpliedNodeFormatForFile(fileName, packageJsonType)
 }
 
 // getAdditionalJSSyntacticDiagnostics produces option-dependent syntactic diagnostics for JS files
