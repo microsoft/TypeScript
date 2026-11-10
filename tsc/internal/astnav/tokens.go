@@ -13,10 +13,26 @@ func shouldRescanLessThanLessThanToken(s *scanner.Scanner, containingNode *ast.N
 	return token == ast.KindLessThanLessThanToken && ast.IsJsxChild(containingNode)
 }
 
+// The parser skips private identifiers in JSX tag and attribute names, which are scanned
+// as JSX identifiers and so may contain dashes (e.g. `<#a-b />`).
+func shouldRescanJsxPrivateIdentifier(containingNode *ast.Node, token ast.Kind) bool {
+	if token != ast.KindPrivateIdentifier {
+		return false
+	}
+	switch containingNode.Kind {
+	case ast.KindJsxOpeningElement, ast.KindJsxSelfClosingElement, ast.KindJsxClosingElement, ast.KindJsxAttribute, ast.KindJsxNamespacedName:
+		return true
+	}
+	return false
+}
+
 func scanNavigationToken(s *scanner.Scanner, containingNode *ast.Node) ast.Kind {
 	token := s.Token()
 	if shouldRescanLessThanLessThanToken(s, containingNode, token) {
 		return s.ReScanJsxToken(true /*allowMultilineJsxText*/)
+	}
+	if shouldRescanJsxPrivateIdentifier(containingNode, token) {
+		return s.ScanJsxIdentifier()
 	}
 	return token
 }
