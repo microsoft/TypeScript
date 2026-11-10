@@ -390,10 +390,12 @@ func newPartialExtractions(caseSensitivity tspath.CaseSensitivity) *partialExtra
 	return &partialExtractions{caseSensitivity: caseSensitivity, changes: make(map[uint64]extractionChange)}
 }
 
-func (p *partialExtractions) isEmpty() bool {
+const maxPartialExtractionChanges = 256
+
+func (p *partialExtractions) needsRotation() bool {
 	p.mu.Lock()
 	defer p.mu.Unlock()
-	return p.current == nil || len(p.current.results) == 0
+	return p.current == nil || len(p.current.results) == 0 || len(p.changes) >= maxPartialExtractionChanges
 }
 
 func (p *partialExtractions) setFor(buildPreferences bucketBuildPreferences, projectReferenceOutputs map[tspath.PathKey]tspath.RootedFilePath) *extractionSet {
@@ -443,7 +445,7 @@ func (p *partialExtractions) extract(
 	set *extractionSet,
 	key extractionKey,
 	generation uint64,
-	run func() (*perPackageExtractionResult, *collections.Set[tspath.PathKey]),
+	run func() (*perPackageExtractionResult, *collections.Set[tspath.PathKey], bool),
 ) *perPackageExtractionResult {
 	for {
 		if ctx.Err() != nil {
@@ -463,7 +465,17 @@ func (p *partialExtractions) extract(
 			pending = &pendingExtraction{done: make(chan struct{}), generation: generation}
 			set.results[key] = pending
 			p.mu.Unlock()
-			pending.result, pending.dependencies = run()
+			result, dependencies, completed := run()
+			if !completed {
+				p.mu.Lock()
+				if set.results[key] == pending {
+					delete(set.results, key)
+				}
+				p.mu.Unlock()
+				close(pending.done)
+				return nil
+			}
+			pending.result, pending.dependencies = result, dependencies
 			close(pending.done)
 			return pending.result
 		}
@@ -482,15 +494,28 @@ func requiresNewPartialExtractions(change RegistryChange, caseSensitivity tspath
 		return true
 	}
 	for uri := range change.Changed.Keys() {
-		fileName := uri.FileName()
-		if tspath.GetBaseFileName(fileName.AsString()) == "package.json" {
+		path := caseSensitivity.PathKey(tspath.RootedPath(uri.FileName()))
+		if path.BaseName() == caseSensitivity.PathKey("/package.json").BaseName() {
 			return true
 		}
-		if _, _, ok := caseSensitivity.PathKey(tspath.RootedPath(fileName)).SplitAtCanonicalComponent("node_modules"); ok {
+		if _, _, ok := path.SplitAtCanonicalComponent("node_modules"); ok {
 			return true
 		}
 	}
 	return false
+}
+
+type extractionLifetimeKey struct{}
+
+func WithExtractionLifetime(ctx context.Context) context.Context {
+	return context.WithValue(ctx, extractionLifetimeKey{}, ctx)
+}
+
+func detachedExtractionContext(ctx context.Context) context.Context {
+	if lifetime, ok := ctx.Value(extractionLifetimeKey{}).(context.Context); ok {
+		return lifetime
+	}
+	return context.WithoutCancel(ctx)
 }
 
 type extractionDependencyHost struct {
@@ -570,7 +595,7 @@ func (r *Registry) Clone(ctx context.Context, change RegistryChange, host Regist
 	builder.markBucketsDirty(change, logger)
 	switch {
 	case builder.partialExtractions == nil || requiresNewPartialExtractions(change, r.caseSensitivity),
-		change.Changed.Len() > 0 && builder.partialExtractions.isEmpty():
+		change.Changed.Len() > 0 && builder.partialExtractions.needsRotation():
 		builder.partialExtractions = newPartialExtractions(r.caseSensitivity)
 		builder.extractionGen = 0
 	case change.Changed.Len() > 0:
@@ -1639,9 +1664,11 @@ func (b *registryBuilder) extractPackageOnce(
 	enableDirectorySearch bool,
 ) *perPackageExtractionResult {
 	key := extractionKey{realpath: realpath, packageName: packageName, enableDirectorySearch: enableDirectorySearch}
-	return b.partialExtractions.extract(ctx, extractions, key, b.extractionGen, func() (*perPackageExtractionResult, *collections.Set[tspath.PathKey]) {
+	return b.partialExtractions.extract(ctx, extractions, key, b.extractionGen, func() (*perPackageExtractionResult, *collections.Set[tspath.PathKey], bool) {
+		extractCtx := detachedExtractionContext(ctx)
 		host := &extractionDependencyHost{RegistryCloneHost: b.host}
-		return b.extractPackage(context.WithoutCancel(ctx), host, packageJson, packageName, projectReferenceOutputs, fileExcludePatterns, enableDirectorySearch), &host.files
+		result := b.extractPackage(extractCtx, host, packageJson, packageName, projectReferenceOutputs, fileExcludePatterns, enableDirectorySearch)
+		return result, &host.files, extractCtx.Err() == nil
 	})
 }
 
