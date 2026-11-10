@@ -7969,6 +7969,27 @@ function f() {
 `,
     };
 
+    test("finds erasable enums in value and type scope queries", () => {
+        using api = spawnAPI({
+            ...scopeFiles,
+            "/src/main.ts": `const Local: enum = { A: 1 }; export const E: enum = { A: 1 };`,
+        });
+        const snapshot = api.createSnapshot({ openProjects: ["/tsconfig.json"] });
+        const project = snapshot.getConfiguredProject("/tsconfig.json")!;
+        const sourceFile = project.program.getSourceFile("/src/main.ts");
+        assert.ok(sourceFile);
+        for (const meaning of [SymbolFlags.Value, SymbolFlags.Type, SymbolFlags.ErasableEnum]) {
+            const symbols = project.checker.getSymbolsInScope(sourceFile, meaning);
+            const symbol = symbols.find(symbol => symbol.name === "E");
+            assert.ok(symbol);
+            const local = symbols.find(symbol => symbol.name === "Local");
+            assert.ok(local);
+            assert.notStrictEqual(local.flags & SymbolFlags.ErasableEnum, 0);
+            const resolved = project.checker.resolveName("E", meaning, sourceFile);
+            assert.strictEqual(resolved?.name, "E");
+        }
+    });
+
     test("returns symbols visible at a position", () => {
         using api = spawnAPI(scopeFiles);
 
