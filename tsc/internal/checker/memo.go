@@ -1,6 +1,7 @@
 package checker
 
 import (
+	"hash/maphash"
 	"iter"
 	"maps"
 	"math/bits"
@@ -63,6 +64,7 @@ const (
 	memoUnknownLikeUnion
 	memoNeverIntersection
 	memoDiscriminant
+	memoMapEntry        // An entry of a memoMap; see memoMap.entryKey
 	memoResolvedMembers // followed by one field per MembersOrExportsResolutionKind
 	memoSymbolExports   = memoResolvedMembers + memoField(MembersOrExportsResolutionKindResolvedExports)
 	memoSymbolMembers   = memoResolvedMembers + memoField(MembersOrExportsResolutionKindResolvedMembers)
@@ -432,12 +434,10 @@ type memoMap[K comparable, V any] struct {
 }
 
 type memoMapSide[K comparable] struct {
-	memoStates    map[K]*memoState
-	resolvingKeys []K     // Keys of computations in progress without a memo state yet
-	resolvingAt   []int32 // Index in Checker.resolutions of each
-	// The occurrences of each key in resolvingKeys, kept while there are
-	// many, so that looking one up does not scan them all.
-	resolvingCount map[K]resolvingOccurrences
+	memoStates map[K]*memoState
+	// The keys of the computations of entries in progress, which their
+	// resolutions index, as a resolution cannot hold a key of any type.
+	resolvingKeys []K
 	// If set, keyBits returns well-mixed bits of a key, with which stateKeys
 	// filters the keys that may have a memo state, since few do and looking
 	// up one that does not costs as much as one that does.
@@ -613,21 +613,16 @@ func (m *memoMap[K, V]) compute(c *Checker, k K, fn func() V) V {
 // begin starts the computation of the result for k; see beginMemo.
 func (m *memoMap[K, V]) begin(c *Checker, k K) {
 	side := m.sideTable()
-	outer := 0
-	if len(side.resolvingKeys) != 0 {
-		outer = m.resolvingIndex(c, k)
-	}
+	key := m.entryKey(k)
+	outer := m.resolvingIndexOf(c, k, key)
 	if outer != 0 {
 		c.reenter(outer-1, side.reentry)
 	}
 	side.resolvingKeys = append(side.resolvingKeys, k)
-	side.resolvingAt = append(side.resolvingAt, int32(len(c.resolutions)))
-	if side.resolvingCount != nil {
-		side.countResolving(k, len(side.resolvingKeys)-1)
-	} else if len(side.resolvingKeys) > resolvingCountMin {
-		side.countAllResolving()
-	}
-	c.beginResolution(m, len(side.resolvingKeys)-1)
+	c.resolving.counts[resolvingHome(key)]++
+	c.resolving.count++
+	c.appendResolution(key, m, len(side.resolvingKeys)-1, int32(len(c.instantiationStack)))
+	c.currentResolution().resolving = true
 	if c.checking && c.memoPendingCount == 0 && c.memoTop|c.currentNodeResolution != 0 && !c.checkingRecords() {
 		// beginCheckedMemo for the common case, without the calls. The memo
 		// state of the result is looked up only if needed; see
@@ -653,36 +648,32 @@ func (m *memoMap[K, V]) begin(c *Checker, k K) {
 	c.beginState(state, outer)
 }
 
+// entryKey returns the key under which Checker.resolving counts the
+// computation of the entry for k in progress. Keys of different entries may
+// collide, so a computation is found by its entry; see resolvingIndexOf.
+func (m *memoMap[K, V]) entryKey(k K) memoKey {
+	// SAFETY: Only the address of the map is kept, as an identity; it is
+	// never turned back into a pointer.
+	h := maphash.Comparable(memoMapSeed, k) ^ uint64(uintptr(unsafe.Pointer(m)))*0x9E3779B97F4A7C15
+	return memoKey(h&^0xff | uint64(memoMapEntry))
+}
+
+var memoMapSeed = maphash.MakeSeed()
+
 // resolvingIndex returns 1 + the index in resolutions of the computation of
 // the entry for k in progress, or 0.
 func (m *memoMap[K, V]) resolvingIndex(c *Checker, k K) int {
-	if m.side == nil {
+	return m.resolvingIndexOf(c, k, m.entryKey(k))
+}
+
+func (m *memoMap[K, V]) resolvingIndexOf(c *Checker, k K, key memoKey) int {
+	if c.resolving.counts[resolvingHome(key)] == 0 {
 		return 0
 	}
-	start := 0
-	if m.side.resolvingCount != nil {
-		o, ok := m.side.resolvingCount[k]
-		if !ok {
-			return 0
+	for i := c.visibleStart; i < len(c.resolutions); i++ {
+		if f := &c.resolutions[i]; f.resolving && f.key == key && f.source == memoStateSource(m) && m.side.resolvingKeys[f.index] == k {
+			return i + 1
 		}
-		start = int(o.first)
-		if o.count == 1 {
-			if j := int(m.side.resolvingAt[start]); j >= c.visibleStart {
-				return j + 1
-			}
-			return 0
-		}
-	}
-	for i := start; i < len(m.side.resolvingKeys); i++ {
-		if m.side.resolvingKeys[i] != k {
-			continue
-		}
-		j := int(m.side.resolvingAt[i])
-		debug.Assert(c.resolutions[j].source == memoStateSource(m) && int(c.resolutions[j].index) == i, "entry in progress without a resolution")
-		if j >= c.visibleStart {
-			return j + 1
-		}
-		// Hidden; see yieldCycle.
 	}
 	return 0
 }
@@ -703,50 +694,8 @@ func (m *memoMap[K, V]) peekStateAt(i int) *memoState {
 }
 
 func (m *memoMap[K, V]) popState(i int) {
-	if counts := m.side.resolvingCount; counts != nil {
-		if i < resolvingCountMin/4 {
-			m.side.resolvingCount = nil
-		} else {
-			for _, k := range m.side.resolvingKeys[i:] {
-				// Keys are popped last in first out, so the first
-				// occurrence is popped last.
-				if o := counts[k]; o.count == 1 {
-					delete(counts, k)
-				} else {
-					o.count--
-					counts[k] = o
-				}
-			}
-		}
-	}
 	clear(m.side.resolvingKeys[i:])
 	m.side.resolvingKeys = m.side.resolvingKeys[:i]
-	m.side.resolvingAt = m.side.resolvingAt[:i]
-}
-
-// Number of computations of a memo map in progress above which they are
-// counted by key; see resolvingCount.
-const resolvingCountMin = 64
-
-type resolvingOccurrences struct {
-	first int32 // Index in resolvingKeys of the first
-	count int32
-}
-
-func (side *memoMapSide[K]) countAllResolving() {
-	side.resolvingCount = make(map[K]resolvingOccurrences, 2*len(side.resolvingKeys))
-	for i, k := range side.resolvingKeys {
-		side.countResolving(k, i)
-	}
-}
-
-func (side *memoMapSide[K]) countResolving(k K, i int) {
-	o, ok := side.resolvingCount[k]
-	if !ok {
-		o.first = int32(i)
-	}
-	o.count++
-	side.resolvingCount[k] = o
 }
 
 func (m *memoMap[K, V]) state(k K) *memoState {
