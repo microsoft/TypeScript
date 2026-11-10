@@ -4,6 +4,7 @@ import (
 	"context"
 	"encoding/binary"
 	"fmt"
+	"hash/maphash"
 	"iter"
 	"maps"
 	"math"
@@ -646,6 +647,7 @@ type Checker struct {
 	thisExpandoLocations                        map[*ast.Symbol]*ast.Node
 	subtypeReductionCache                       map[CacheHashKey][]*Type
 	cachedTypes                                 map[CachedTypeKey]*Type
+	missedProperties                            []uint64 // Filter of union and intersection property names looked up and missed; see missedBefore
 	cachedSignatures                            map[CachedSignatureKey]*Signature
 	undefinedProperties                         map[*ast.Symbol]*ast.Symbol
 	narrowedTypes                               map[NarrowedTypeKey]*Type
@@ -22064,6 +22066,13 @@ func (c *Checker) getUnionOrIntersectionProperty(t *Type, name string, skipObjec
 			return prop
 		}
 	}
+	lookup := propertyLookupAugmented
+	if skipObjectFunctionPropertyAugment {
+		lookup = propertyLookupWithoutFunctionPropertyAugment
+	}
+	if data.missingProperties[name]&lookup != 0 {
+		return nil
+	}
 	prop := c.createUnionOrIntersectionProperty(t, name, skipObjectFunctionPropertyAugment)
 	if prop != nil {
 		if skipObjectFunctionPropertyAugment {
@@ -22071,9 +22080,44 @@ func (c *Checker) getUnionOrIntersectionProperty(t *Type, name string, skipObjec
 		} else {
 			ast.GetSymbolTable(&data.propertyCache).Set(name, prop)
 		}
+	} else if c.missedBefore(t, name, skipObjectFunctionPropertyAugment) {
+		// Many lookups of a union's properties are of names it lacks, such
+		// as when narrowing by a discriminant, which would otherwise look
+		// through every constituent each time.
+		if data.missingProperties == nil {
+			data.missingProperties = make(map[string]propertyLookups)
+		}
+		data.missingProperties[name] |= lookup
 	}
 	return prop
 }
+
+// missedBefore reports whether a lookup of name on the union or intersection
+// t found no property before, recording that this one found none. Most names
+// a union lacks are looked up once, so caching every one would keep many
+// entries that are never read; a name is cached once it is missed twice. The
+// misses are recorded in a filter of fixed size, which may report a miss
+// that did not happen, caching the name sooner.
+func (c *Checker) missedBefore(t *Type, name string, skipObjectFunctionPropertyAugment bool) bool {
+	if c.missedProperties == nil {
+		c.missedProperties = make([]uint64, missedPropertiesWords)
+	}
+	h := maphash.String(missedPropertiesSeed, name) ^ uint64(t.id)*0x9E3779B97F4A7C15
+	if skipObjectFunctionPropertyAugment {
+		h = ^h
+	}
+	i := h % (missedPropertiesWords * 64)
+	word, bit := &c.missedProperties[i/64], uint64(1)<<(i%64)
+	if *word&bit != 0 {
+		return true
+	}
+	*word |= bit
+	return false
+}
+
+const missedPropertiesWords = 1 << 17
+
+var missedPropertiesSeed = maphash.MakeSeed()
 
 func (c *Checker) createUnionOrIntersectionProperty(containingType *Type, name string, skipObjectFunctionPropertyAugment bool) *ast.Symbol {
 	propFlags := ast.SymbolFlagsNone

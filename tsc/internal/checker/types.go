@@ -1471,8 +1471,18 @@ type UnionOrIntersectionType struct {
 	types                                       []*Type
 	propertyCache                               ast.SymbolTable // Augmented entries, except complete ones already in the non-augmented cache.
 	propertyCacheWithoutFunctionPropertyAugment ast.SymbolTable
+	missingProperties                           map[string]propertyLookups // Names no property was found for, by the lookups that found none
 	resolvedProperties                          []*ast.Symbol
 }
+
+// propertyLookups are the ways getUnionOrIntersectionProperty looks up a
+// property, with or without the members of Object and Function.
+type propertyLookups uint8
+
+const (
+	propertyLookupAugmented propertyLookups = 1 << iota
+	propertyLookupWithoutFunctionPropertyAugment
+)
 
 func (t *UnionOrIntersectionType) AsUnionOrIntersectionType() *UnionOrIntersectionType { return t }
 
