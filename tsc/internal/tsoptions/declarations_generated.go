@@ -685,6 +685,13 @@ var optionsForCompiler = []*CommandLineOption{
 		DefaultValueDescription: false,
 	},
 	{
+		Name:                    "disableDynamicImportExtensionRewriting",
+		Kind:                    CommandLineOptionTypeBoolean,
+		Category:                diagnostics.Modules,
+		Description:             diagnostics.Disable_runtime_rewriting_of_file_extensions_in_non_literal_import_and_require_calls_when_rewriteRelativeImportExtensions_is_enabled,
+		DefaultValueDescription: false,
+	},
+	{
 		Name:                    "resolvePackageJsonExports",
 		Kind:                    CommandLineOptionTypeBoolean,
 		Category:                diagnostics.Modules,

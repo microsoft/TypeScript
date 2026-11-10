@@ -23,7 +23,7 @@ import * as mod_1 from "../primary/a";
     }]
 }
 
-tsgo --p primary/tsconfig.json
+tsc --p primary/tsconfig.json
 ExitStatus:: Success
 Output::
 //// [/home/src/tslibs/TS/Lib/lib.es2026.full.d.ts] *Lib*

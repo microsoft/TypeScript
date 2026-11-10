@@ -6,7 +6,7 @@ Input::
                     "files": ["./src/doesNotExist"]
                     }
 
-tsgo -p ./tsconfig.json
+tsc -p ./tsconfig.json
 ExitStatus:: DiagnosticsPresent_OutputsGenerated
 Output::
 [91merror[0m[90m TS6231: [0mCould not resolve the path '/home/src/workspaces/project/src/doesNotExist' with the extensions: '.ts', '.tsx', '.d.ts', '.cts', '.d.cts', '.mts', '.d.mts'.

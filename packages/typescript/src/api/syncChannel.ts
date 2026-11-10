@@ -89,7 +89,7 @@ function trackChild(process: NodeJS.Process, child: ChildProcess): void {
 
 export function createPipePath(): string {
     const process = nodeProcess();
-    return `\\\\.\\pipe\\tsgo-sync-${process.pid}-${process.getBuiltinModule("node:crypto").randomBytes(16).toString("hex")}`;
+    return `\\\\.\\pipe\\typescript-sync-${process.pid}-${process.getBuiltinModule("node:crypto").randomBytes(16).toString("hex")}`;
 }
 
 /**
@@ -165,6 +165,7 @@ export class SyncRpcChannel {
             const pipePath = createPipePath();
             this.child = spawn(exe, [...args, "--pipe", pipePath], {
                 stdio: ["ignore", "ignore", "inherit"],
+                windowsHide: true,
             });
 
             // Retry openSync until the child creates the named pipe.

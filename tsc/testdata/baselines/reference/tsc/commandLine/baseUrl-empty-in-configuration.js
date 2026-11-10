@@ -6,7 +6,7 @@ export {};
 //// [/home/src/workspaces/project/tsconfig.json] *new* 
 {"compilerOptions": {"target": "es2015", "baseUrl": ""}}
 
-tsgo --noEmit
+tsc --noEmit
 ExitStatus:: DiagnosticsPresent_OutputsGenerated
 Output::
 [96mtsconfig.json[0m:[93m1[0m:[93m42[0m - [91merror[0m[90m TS5102: [0mOption 'baseUrl' has been removed. Please remove it from your configuration.

@@ -43,7 +43,7 @@ type tscInput struct {
 }
 
 func (test *tscInput) executeCommand(ctx context.Context, sys *TestSys, baselineBuilder *strings.Builder, commandLineArgs []string) tsc.CommandLineResult {
-	fmt.Fprint(baselineBuilder, "tsgo ", strings.Join(commandLineArgs, " "), "\n")
+	fmt.Fprint(baselineBuilder, "tsc ", strings.Join(commandLineArgs, " "), "\n")
 	result := execute.CommandLine(ctx, sys, commandLineArgs, sys)
 	switch result.Status {
 	case tsc.ExitStatusSuccess:
@@ -92,7 +92,7 @@ func (test *tscInput) run(t *testing.T, scenario string) {
 
 		for index, do := range test.edits {
 			sys.clearOutput()
-			wg := core.NewWorkGroup(false)
+			wg := core.NewWorkGroup(0)
 			var nonIncrementalSys *TestSys
 			commandLineArgs := core.IfElse(do.commandLineArgs == nil, test.commandLineArgs, do.commandLineArgs)
 			wg.Queue(func() {

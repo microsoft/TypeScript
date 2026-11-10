@@ -5,7 +5,7 @@ import (
 	"sync"
 	"sync/atomic"
 	"testing"
-	"time"
+	"testing/synctest"
 
 	"github.com/microsoft/TypeScript/tsc/internal/project/background"
 	"gotest.tools/v3/assert"
@@ -92,35 +92,35 @@ func TestQueue(t *testing.T) {
 
 	t.Run("CloseWaitsForActiveTasks", func(t *testing.T) {
 		t.Parallel()
-		q := background.NewQueue()
-		started := make(chan struct{})
-		finish := make(chan struct{})
-		closeStarted := make(chan struct{})
-		closed := make(chan struct{})
+		synctest.Test(t, func(t *testing.T) {
+			q := background.NewQueue()
+			started := make(chan struct{})
+			finish := make(chan struct{})
+			closed := make(chan struct{})
 
-		q.Enqueue(context.Background(), func(ctx context.Context) {
-			close(started)
-			<-finish
+			q.Enqueue(context.Background(), func(ctx context.Context) {
+				close(started)
+				<-finish
+			})
+			<-started
+
+			go func() {
+				q.Close()
+				close(closed)
+			}()
+
+			synctest.Wait()
+			var closeReturned bool
+			select {
+			case <-closed:
+				closeReturned = true
+			default:
+				closeReturned = false
+			}
+			assert.Check(t, !closeReturned, "Close returned before the active task completed")
+
+			close(finish)
+			<-closed
 		})
-		<-started
-
-		go func() {
-			close(closeStarted)
-			q.Close()
-			close(closed)
-		}()
-
-		<-closeStarted
-		var closeReturned bool
-		select {
-		case <-closed:
-			closeReturned = true
-		case <-time.After(100 * time.Millisecond):
-			closeReturned = false
-		}
-		assert.Check(t, !closeReturned, "Close returned before the active task completed")
-
-		close(finish)
-		<-closed
 	})
 }

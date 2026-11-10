@@ -9,7 +9,7 @@ const x = 1;
 	"include": ["index.ts", "src/**/*.ts"]
 }
 
-tsgo --watch
+tsc --watch
 ExitStatus:: Success
 Output::
 [2J[3J[H[[90mHH:MM:SS AM[0m] Starting compilation in watch mode...

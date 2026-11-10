@@ -19,7 +19,7 @@ export interface Container<T> {
 }
 export type Nullable<T> = T | null | undefined;
 
-tsgo --generateTrace /home/src/workspaces/project/trace --singleThreaded
+tsc --generateTrace /home/src/workspaces/project/trace --singleThreaded
 ExitStatus:: DiagnosticsPresent_OutputsGenerated
 Output::
 [96mmain.ts[0m:[93m2[0m:[93m74[0m - [91merror[0m[90m TS2322: [0mType '<U>(fn: (x: number) => U) => Container<U>' is not assignable to type '<U>(fn: (x: U) => U) => Container<U>'.
@@ -72,7 +72,7 @@ declare const console: { log(msg: any): void; };
 ]
 //// [/home/src/workspaces/project/trace/trace.json] *new* 
 [
-{"pid":1,"tid":1,"ph":"M","cat":"__metadata","ts":1,"name":"process_name","args":{"name":"tsgo"}},
+{"pid":1,"tid":1,"ph":"M","cat":"__metadata","ts":1,"name":"process_name","args":{"name":"tsc"}},
 {"pid":1,"tid":1,"ph":"M","cat":"__metadata","ts":1,"name":"thread_name","args":{"name":"Main"}},
 {"pid":1,"tid":1,"ph":"M","cat":"disabled-by-default-devtools.timeline","ts":1,"name":"TracingStartedInBrowser"},
 {"pid":1,"tid":1,"ph":"B","cat":"program","ts":2,"name":"createProgram","args":{"configFilePath":"/home/src/workspaces/project/tsconfig.json"}},

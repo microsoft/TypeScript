@@ -10,7 +10,7 @@ export const x = 10;
     ],
 }
 
-tsgo --p project
+tsc --p project
 ExitStatus:: DiagnosticsPresent_OutputsGenerated
 Output::
 [96mproject/tsconfig.json[0m:[93m3[0m:[93m9[0m - [91merror[0m[90m TS6053: [0mFile '/home/src/workspaces/solution/utils' not found.

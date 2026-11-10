@@ -11,7 +11,7 @@ export class class1 {}
     }
 }
 
-tsgo --noEmit
+tsc --noEmit
 ExitStatus:: Success
 Output::
 //// [/home/src/tslibs/TS/Lib/lib.es2026.full.d.ts] *Lib*
@@ -96,7 +96,7 @@ Signatures::
 
 Edit [0]:: no change
 
-tsgo --noEmit
+tsc --noEmit
 ExitStatus:: Success
 Output::
 
