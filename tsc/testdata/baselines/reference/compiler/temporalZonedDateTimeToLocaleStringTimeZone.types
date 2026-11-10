@@ -10,9 +10,9 @@ declare const zdt: Temporal.ZonedDateTime;
 // Error: ZonedDateTime always formats in its own time zone
 zdt.toLocaleString(undefined, { timeZone: "Europe/Berlin" });
 >zdt.toLocaleString(undefined, { timeZone: "Europe/Berlin" }) : string
->zdt.toLocaleString : (locales?: Intl.LocalesArgument, options?: Intl.DateTimeFormatOptions) => string
+>zdt.toLocaleString : (locales?: Intl.LocalesArgument, options?: Temporal.ZonedDateTimeToLocaleStringOptions) => string
 >zdt : Temporal.ZonedDateTime
->toLocaleString : (locales?: Intl.LocalesArgument, options?: Intl.DateTimeFormatOptions) => string
+>toLocaleString : (locales?: Intl.LocalesArgument, options?: Temporal.ZonedDateTimeToLocaleStringOptions) => string
 >undefined : undefined
 >{ timeZone: "Europe/Berlin" } : { timeZone: string; }
 >timeZone : string
@@ -20,9 +20,9 @@ zdt.toLocaleString(undefined, { timeZone: "Europe/Berlin" });
 
 zdt.toLocaleString("de-DE", { timeZone: "Pacific/Auckland", weekday: "long" });
 >zdt.toLocaleString("de-DE", { timeZone: "Pacific/Auckland", weekday: "long" }) : string
->zdt.toLocaleString : (locales?: Intl.LocalesArgument, options?: Intl.DateTimeFormatOptions) => string
+>zdt.toLocaleString : (locales?: Intl.LocalesArgument, options?: Temporal.ZonedDateTimeToLocaleStringOptions) => string
 >zdt : Temporal.ZonedDateTime
->toLocaleString : (locales?: Intl.LocalesArgument, options?: Intl.DateTimeFormatOptions) => string
+>toLocaleString : (locales?: Intl.LocalesArgument, options?: Temporal.ZonedDateTimeToLocaleStringOptions) => string
 >"de-DE" : "de-DE"
 >{ timeZone: "Pacific/Auckland", weekday: "long" } : { timeZone: string; weekday: "long"; }
 >timeZone : string
@@ -33,15 +33,15 @@ zdt.toLocaleString("de-DE", { timeZone: "Pacific/Auckland", weekday: "long" });
 // OK
 zdt.toLocaleString();
 >zdt.toLocaleString() : string
->zdt.toLocaleString : (locales?: Intl.LocalesArgument, options?: Intl.DateTimeFormatOptions) => string
+>zdt.toLocaleString : (locales?: Intl.LocalesArgument, options?: Temporal.ZonedDateTimeToLocaleStringOptions) => string
 >zdt : Temporal.ZonedDateTime
->toLocaleString : (locales?: Intl.LocalesArgument, options?: Intl.DateTimeFormatOptions) => string
+>toLocaleString : (locales?: Intl.LocalesArgument, options?: Temporal.ZonedDateTimeToLocaleStringOptions) => string
 
 zdt.toLocaleString("en-US", { month: "long", timeZoneName: "short" });
 >zdt.toLocaleString("en-US", { month: "long", timeZoneName: "short" }) : string
->zdt.toLocaleString : (locales?: Intl.LocalesArgument, options?: Intl.DateTimeFormatOptions) => string
+>zdt.toLocaleString : (locales?: Intl.LocalesArgument, options?: Temporal.ZonedDateTimeToLocaleStringOptions) => string
 >zdt : Temporal.ZonedDateTime
->toLocaleString : (locales?: Intl.LocalesArgument, options?: Intl.DateTimeFormatOptions) => string
+>toLocaleString : (locales?: Intl.LocalesArgument, options?: Temporal.ZonedDateTimeToLocaleStringOptions) => string
 >"en-US" : "en-US"
 >{ month: "long", timeZoneName: "short" } : { month: "long"; timeZoneName: "short"; }
 >month : "long"
@@ -51,13 +51,13 @@ zdt.toLocaleString("en-US", { month: "long", timeZoneName: "short" });
 
 zdt.withTimeZone("Europe/Berlin").toLocaleString("de-DE", { dateStyle: "full", timeStyle: "long" });
 >zdt.withTimeZone("Europe/Berlin").toLocaleString("de-DE", { dateStyle: "full", timeStyle: "long" }) : string
->zdt.withTimeZone("Europe/Berlin").toLocaleString : (locales?: Intl.LocalesArgument, options?: Intl.DateTimeFormatOptions) => string
+>zdt.withTimeZone("Europe/Berlin").toLocaleString : (locales?: Intl.LocalesArgument, options?: Temporal.ZonedDateTimeToLocaleStringOptions) => string
 >zdt.withTimeZone("Europe/Berlin") : Temporal.ZonedDateTime
 >zdt.withTimeZone : (timeZone: Temporal.TimeZoneLike) => Temporal.ZonedDateTime
 >zdt : Temporal.ZonedDateTime
 >withTimeZone : (timeZone: Temporal.TimeZoneLike) => Temporal.ZonedDateTime
 >"Europe/Berlin" : "Europe/Berlin"
->toLocaleString : (locales?: Intl.LocalesArgument, options?: Intl.DateTimeFormatOptions) => string
+>toLocaleString : (locales?: Intl.LocalesArgument, options?: Temporal.ZonedDateTimeToLocaleStringOptions) => string
 >"de-DE" : "de-DE"
 >{ dateStyle: "full", timeStyle: "long" } : { dateStyle: "full"; timeStyle: "long"; }
 >dateStyle : "full"
@@ -71,9 +71,9 @@ declare const options: Intl.DateTimeFormatOptions;
 
 zdt.toLocaleString("en-US", options);
 >zdt.toLocaleString("en-US", options) : string
->zdt.toLocaleString : (locales?: Intl.LocalesArgument, options?: Intl.DateTimeFormatOptions) => string
+>zdt.toLocaleString : (locales?: Intl.LocalesArgument, options?: Temporal.ZonedDateTimeToLocaleStringOptions) => string
 >zdt : Temporal.ZonedDateTime
->toLocaleString : (locales?: Intl.LocalesArgument, options?: Intl.DateTimeFormatOptions) => string
+>toLocaleString : (locales?: Intl.LocalesArgument, options?: Temporal.ZonedDateTimeToLocaleStringOptions) => string
 >"en-US" : "en-US"
 >options : Intl.DateTimeFormatOptions
 
