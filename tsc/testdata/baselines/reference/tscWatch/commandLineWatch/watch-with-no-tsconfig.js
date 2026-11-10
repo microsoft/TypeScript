@@ -4,7 +4,7 @@ Input::
 //// [/home/src/workspaces/project/index.ts] *new* 
 
 
-tsgo index.ts --watch
+tsc index.ts --watch
 ExitStatus:: Success
 Output::
 [2J[3J[H[[90mHH:MM:SS AM[0m] Starting compilation in watch mode...

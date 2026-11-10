@@ -30,7 +30,7 @@ export const random = "hello";
     "include": ["file*.ts", "nonconsecutive*.ts", "asArray*.ts", "anotherNonConsecutive.ts"],
 }
 
-tsgo --b -v
+tsc --b -v
 ExitStatus:: Success
 Output::
 [[90mHH:MM:SS AM[0m] Projects in this build: 
@@ -324,7 +324,7 @@ Edit [0]:: delete file1
 //// [/home/src/workspaces/project/file1.js] *deleted*
 //// [/home/src/workspaces/project/file1.ts] *deleted*
 
-tsgo --b -v
+tsc --b -v
 ExitStatus:: Success
 Output::
 [[90mHH:MM:SS AM[0m] Projects in this build: 

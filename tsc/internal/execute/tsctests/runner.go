@@ -43,7 +43,7 @@ type tscInput struct {
 }
 
 func (test *tscInput) executeCommand(ctx context.Context, sys *TestSys, baselineBuilder *strings.Builder, commandLineArgs []string) tsc.CommandLineResult {
-	fmt.Fprint(baselineBuilder, "tsgo ", strings.Join(commandLineArgs, " "), "\n")
+	fmt.Fprint(baselineBuilder, "tsc ", strings.Join(commandLineArgs, " "), "\n")
 	result := execute.CommandLine(ctx, sys, commandLineArgs, sys)
 	switch result.Status {
 	case tsc.ExitStatusSuccess:

@@ -17,7 +17,7 @@ export const b = 2;
     ]
 }
 
-tsgo -p tsconfig.json --showConfig
+tsc -p tsconfig.json --showConfig
 ExitStatus:: Success
 Output::
 {

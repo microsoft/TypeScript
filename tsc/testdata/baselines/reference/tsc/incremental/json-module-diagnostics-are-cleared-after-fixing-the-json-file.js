@@ -21,7 +21,7 @@ export type Check = Covers<typeof data>;
     }
 }
 
-tsgo 
+tsc 
 ExitStatus:: Success
 Output::
 //// [/home/src/tslibs/TS/Lib/lib.es2026.full.d.ts] *Lib*
@@ -130,7 +130,7 @@ Edit [0]:: remove required property
 //// [/home/src/workspaces/project/data.json] *modified* 
 {}
 
-tsgo 
+tsc 
 ExitStatus:: DiagnosticsPresent_OutputsGenerated
 Output::
 [96mcheck.ts[0m:[93m6[0m:[93m28[0m - [91merror[0m[90m TS2741: [0mProperty 'title' is missing in type '{}' but required in type 'Shape'.
@@ -265,7 +265,7 @@ Edit [1]:: restore required property
 //// [/home/src/workspaces/project/data.json] *modified* 
 { "title": "fixed" }
 
-tsgo 
+tsc 
 ExitStatus:: Success
 Output::
 //// [/home/src/workspaces/project/tsconfig.tsbuildinfo] *modified* 

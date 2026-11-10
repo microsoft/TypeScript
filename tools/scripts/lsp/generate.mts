@@ -1105,7 +1105,7 @@ function patchAndPreprocessModel() {
     }
 
     for (const structure of model.structures) {
-        // Patch ServerCapabilities to add custom tsgo capability flags
+        // Patch ServerCapabilities to add custom TypeScript capability flags
         if (structure.name === "ServerCapabilities") {
             structure.properties.push({
                 name: "_vs_onAutoInsertProvider",

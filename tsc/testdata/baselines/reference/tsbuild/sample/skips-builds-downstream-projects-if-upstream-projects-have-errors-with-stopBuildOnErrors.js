@@ -60,7 +60,7 @@ export const m = mod;
     },
 }
 
-tsgo --b tests --verbose --stopBuildOnErrors
+tsc --b tests --verbose --stopBuildOnErrors
 ExitStatus:: DiagnosticsPresent_OutputsGenerated
 Output::
 [[90mHH:MM:SS AM[0m] Projects in this build: 
@@ -261,7 +261,7 @@ Signatures::
 
 Edit [0]:: no change
 
-tsgo --b tests --verbose --stopBuildOnErrors
+tsc --b tests --verbose --stopBuildOnErrors
 ExitStatus:: DiagnosticsPresent_OutputsGenerated
 Output::
 [[90mHH:MM:SS AM[0m] Projects in this build: 
@@ -305,7 +305,7 @@ export const someString: string = "HELLO WORLD";
 export function leftPad(s: string, n: number) { return s + n; }
 export function multiply(a: number, b: number) { return a * b; }
 
-tsgo --b tests --verbose --stopBuildOnErrors
+tsc --b tests --verbose --stopBuildOnErrors
 ExitStatus:: Success
 Output::
 [[90mHH:MM:SS AM[0m] Projects in this build: 

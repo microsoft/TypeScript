@@ -15,7 +15,7 @@ export class myClass { }
     }
 }
 
-tsgo -b -w app
+tsc -b -w app
 ExitStatus:: Success
 Output::
 [2J[3J[H[[90mHH:MM:SS AM[0m] Starting compilation in watch mode...
