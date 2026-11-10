@@ -6,7 +6,7 @@ Input::
 //// [/home/src/workspaces/solution/node_modules/package-c] -> /home/src/workspaces/solution/packages/package-c *new*
 //// [/home/src/workspaces/solution/package.json] *new* 
 {
-    "name": "tsgo-monorepo-issue",
+    "name": "monorepo-issue",
     "private": true,
     "workspaces": ["packages/*"]
 }
@@ -127,7 +127,7 @@ export interface MyType {
     ]
 }
 
-tsgo --b --verbose
+tsc --b --verbose
 ExitStatus:: Success
 Output::
 [[90mHH:MM:SS AM[0m] Projects in this build: 

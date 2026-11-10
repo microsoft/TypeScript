@@ -24,6 +24,7 @@ import { TelemetryReporter } from "./telemetryReporting";
 import {
     acquireTypeScriptSDK,
     createTypeScriptSDK,
+    type DetectedTypeScriptVersion,
     hasModifiedAcquiredTypeScriptInstallation,
     isSameTypeScriptInstallation,
 } from "./tsdkPackage";
@@ -33,7 +34,8 @@ import {
     getExe,
     getWorkspaceTsdkConfigValue,
     getWorkspaceTsdkForPrompt,
-    readNativePreviewConfig,
+    getWorkspaceTypeScriptVersions,
+    readConfigWithLegacyFallback,
     resolveTsdkPath,
     resolveTsdkPathToExe,
     updateWorkspaceTsdkConfig,
@@ -469,7 +471,7 @@ async function showCommands(client: Client): Promise<void> {
         },
     ];
 
-    const showDebugInfo = readNativePreviewConfig("showDebugInfo", false);
+    const showDebugInfo = readConfigWithLegacyFallback("showDebugInfo", false);
     if (showDebugInfo) {
         const exe = client.getCurrentExe();
         const pid = client.serverPid;
@@ -517,15 +519,8 @@ interface VersionQuickPickItem extends vscode.QuickPickItem {
 }
 
 function readStringArrayConfig(key: string): string[] {
-    const value = readNativePreviewConfig<unknown>(key, undefined);
+    const value = readConfigWithLegacyFallback<unknown>(key, undefined);
     return Array.isArray(value) ? value.filter((v): v is string => typeof v === "string") : [];
-}
-
-interface DetectedVersion {
-    folder: vscode.WorkspaceFolder;
-    version: string;
-    tsdkPath: string;
-    exePath: string;
 }
 
 interface StradaVersion {
@@ -555,29 +550,13 @@ async function getStradaExtensionVersion(extensionId: string, pathToTypescript: 
     }
 }
 
-async function findWorkspaceNativePreviewPackages(): Promise<DetectedVersion[]> {
-    const results: DetectedVersion[] = [];
-    for (const folder of vscode.workspace.workspaceFolders ?? []) {
-        const packagePath = vscode.Uri.joinPath(folder.uri, "node_modules", "@typescript", "native-preview");
-        const resolved = await resolveTsdkPathToExe(path.normalize(packagePath.fsPath));
-        if (!resolved) continue;
-        results.push({
-            folder,
-            version: resolved?.version ?? "unknown",
-            tsdkPath: path.normalize(packagePath.fsPath),
-            exePath: resolved?.path ?? "",
-        });
-    }
-    return results;
-}
-
 /**
  * Compute the tsdk path to persist in workspace config. Uses a path relative
  * to the workspace config base directory (the `.code-workspace` file's parent
  * in multi-root, or the lone workspace folder in single-root). Falls back to
  * the absolute path if there is no workspace.
  */
-function tsdkPathForConfig(detected: DetectedVersion): string {
+function tsdkPathForConfig(detected: DetectedTypeScriptVersion): string {
     const base = workspaceConfigBase();
     if (!base) {
         return detected.tsdkPath;
@@ -591,7 +570,7 @@ function tsdkPathForConfig(detected: DetectedVersion): string {
  * unnecessary config churn from formatting differences like absolute vs
  * relative, leading ./, etc.).
  */
-async function updateTsdkConfig(detected: DetectedVersion): Promise<void> {
+async function updateTsdkConfig(detected: DetectedTypeScriptVersion): Promise<void> {
     const currentValue = getWorkspaceTsdkConfigValue();
     const newValue = tsdkPathForConfig(detected);
     if (currentValue !== undefined && resolveTsdkPath(currentValue) === resolveTsdkPath(newValue)) {
@@ -604,7 +583,7 @@ async function promptSelectVersion(context: vscode.ExtensionContext, client: Cli
     const currentExePath = client.getCurrentExe()?.path;
     const defaultExe = await getDefaultExePath(context);
     const stradaVersion = await getStradaVersion();
-    const workspaceVersions = await findWorkspaceNativePreviewPackages();
+    const workspaceVersions = await getWorkspaceTypeScriptVersions();
     const items: VersionQuickPickItem[] = [];
 
     if (stradaVersion) {
@@ -624,7 +603,7 @@ async function promptSelectVersion(context: vscode.ExtensionContext, client: Cli
     items.push({
         label: (currentExePath === defaultExe.path ? "• " : "") + vscode.l10n.t("Use TypeScript 7"),
         description: defaultExe.version,
-        detail: "",
+        detail: defaultExe.path,
         restart: true,
         run: async () => {
             await context.workspaceState.update(useWorkspaceTsdkStorageKey, false);
@@ -646,7 +625,7 @@ async function promptSelectVersion(context: vscode.ExtensionContext, client: Cli
                     await context.workspaceState.update(useWorkspaceTsdkStorageKey, true);
                     await updateTsdkConfig(wsVersion);
                     await updateWorkspaceUseTsgoSetting(true);
-                    outputChannel.appendLine(`Switched to workspace tsgo version (${wsVersion.version}).`);
+                    outputChannel.appendLine(`Switched to workspace TypeScript version (${wsVersion.version}).`);
                 },
             });
         }
@@ -712,7 +691,7 @@ async function promptSelectVersion(context: vscode.ExtensionContext, client: Cli
 
 /**
  * If the workspace has a tsdk setting pending consent, or has
- * `@typescript/typescript` installed in node_modules, prompt the user
+ * TypeScript 7 installed in node_modules, prompt the user
  * to allow using it.
  */
 export async function promptUseWorkspaceVersion(context: vscode.ExtensionContext): Promise<void> {
@@ -751,9 +730,9 @@ export async function promptUseWorkspaceVersion(context: vscode.ExtensionContext
         }
     }
     else {
-        // No workspace tsdk config, but check if native-preview is installed
+        // No workspace tsdk config, but check if TypeScript 7 is installed
         // in the workspace's node_modules.
-        const workspaceVersions = await findWorkspaceNativePreviewPackages();
+        const workspaceVersions = await getWorkspaceTypeScriptVersions();
         if (workspaceVersions.length === 0) return;
 
         const wsVersion = workspaceVersions[0];

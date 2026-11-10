@@ -27,7 +27,7 @@ function someFunc(arguments: boolean, ...rest: any[]) {
     "compilerOptions":  { "incremental": true }
 }
 
-tsgo --noEmit
+tsc --noEmit
 ExitStatus:: DiagnosticsPresent_OutputsGenerated
 Output::
 [96msrc/noChangeFileWithEmitSpecificError.ts[0m:[93m1[0m:[93m19[0m - [91merror[0m[90m TS1100: [0mInvalid use of 'arguments' in strict mode.
@@ -232,7 +232,7 @@ Signatures::
 
 Edit [0]:: No Change run with emit
 
-tsgo 
+tsc 
 ExitStatus:: DiagnosticsPresent_OutputsGenerated
 Output::
 [96msrc/noChangeFileWithEmitSpecificError.ts[0m:[93m1[0m:[93m19[0m - [91merror[0m[90m TS1100: [0mInvalid use of 'arguments' in strict mode.
@@ -407,7 +407,7 @@ export class classC {
     prop1 = 1;
 }
 
-tsgo 
+tsc 
 ExitStatus:: DiagnosticsPresent_OutputsGenerated
 Output::
 [96msrc/directUse.ts[0m:[93m2[0m:[93m28[0m - [91merror[0m[90m TS2551: [0mProperty 'prop' does not exist on type 'classC'. Did you mean 'prop1'?
@@ -673,7 +673,7 @@ export class classC {
     prop = 1;
 }
 
-tsgo --noEmit
+tsc --noEmit
 ExitStatus:: DiagnosticsPresent_OutputsGenerated
 Output::
 [96msrc/noChangeFileWithEmitSpecificError.ts[0m:[93m1[0m:[93m19[0m - [91merror[0m[90m TS1100: [0mInvalid use of 'arguments' in strict mode.
@@ -846,7 +846,7 @@ Signatures::
 
 Edit [3]:: No Change run with emit
 
-tsgo 
+tsc 
 ExitStatus:: DiagnosticsPresent_OutputsGenerated
 Output::
 [96msrc/noChangeFileWithEmitSpecificError.ts[0m:[93m1[0m:[93m19[0m - [91merror[0m[90m TS1100: [0mInvalid use of 'arguments' in strict mode.

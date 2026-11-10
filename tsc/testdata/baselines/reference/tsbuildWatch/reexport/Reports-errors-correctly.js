@@ -39,7 +39,7 @@ export interface Session {
     "references": [{ "path": "./pure" }, { "path": "./main" }],
 }
 
-tsgo -b -w -verbose src
+tsc -b -w -verbose src
 ExitStatus:: Success
 Output::
 [2J[3J[H[[90mHH:MM:SS AM[0m] Starting compilation in watch mode...

@@ -11,7 +11,7 @@ export const a = 1
     }
 }
 
-tsgo -p /home/src/workspaces/project
+tsc -p /home/src/workspaces/project
 ExitStatus:: Success
 Output::
 //// [/home/src/tslibs/TS/Lib/lib.es2026.full.d.ts] *Lib*

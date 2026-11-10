@@ -12,7 +12,7 @@ export { };
     }
 }
 
-tsgo --p primary/tsconfig.json
+tsc --p primary/tsconfig.json
 ExitStatus:: DiagnosticsPresent_OutputsGenerated
 Output::
 [96mprimary/tsconfig.json[0m:[93m5[0m:[93m9[0m - [91merror[0m[90m TS6304: [0mComposite projects may not disable declaration emit.

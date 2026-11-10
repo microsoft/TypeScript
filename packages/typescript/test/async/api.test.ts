@@ -131,8 +131,19 @@ import {
     toRootedFilePath,
 } from "@typescript/typescript/path";
 import assert from "node:assert";
-import { globSync } from "node:fs";
-import { resolve } from "node:path";
+import {
+    existsSync,
+    globSync,
+    mkdirSync,
+    mkdtempSync,
+    rmSync,
+    writeFileSync,
+} from "node:fs";
+import { tmpdir } from "node:os";
+import {
+    join,
+    resolve,
+} from "node:path";
 import {
     describe,
     test,
@@ -379,6 +390,32 @@ describe("API", { concurrency }, () => {
         const missing = await api.readConfigFile("/missing.json");
         assert.deepEqual(missing.config, {});
         assert.equal(missing.error?.code, 5083);
+    });
+
+    test("parseConfigFileTextToJson", async () => {
+        await using api = spawnAPI();
+
+        const result = await api.parseConfigFileTextToJson(
+            "/tsconfig.json",
+            `{
+                // Comments and trailing commas are supported.
+                "compilerOptions": { "strict": true, },
+            }`,
+        );
+        assert.deepEqual(result, {
+            config: { compilerOptions: { strict: true } },
+        });
+    });
+
+    test("parseConfigFileTextToJson reports parse errors", async () => {
+        await using api = spawnAPI();
+
+        const result = await api.parseConfigFileTextToJson(
+            "/tsconfig.json",
+            `{ "compilerOptions": { "strict": true,, } }`,
+        );
+        assert.deepEqual(result.config, { compilerOptions: { strict: true } });
+        assert.ok(result.error);
     });
 
     test("parseJsonConfigFileContent with configDirectory", async () => {
@@ -1520,6 +1557,48 @@ declare module "augmentation" {}`,
 
 // @sync-skip-block-start
 describe("API - automatic batching", { concurrency }, () => {
+    test("fetches Program statistics for every request", async context => {
+        await using api = spawnAPI({ "/src/main.ts": "export const value = 1;" });
+        await using program = await api.createProgram(["/src/main.ts"], { noLib: true });
+        await using empty = await api.createProgram([], { noLib: true });
+        // @ts-ignore -- Internal client requests are exercised by source tests.
+        const client = api["client"];
+        const request = context.mock.method(client, "apiRequest");
+
+        const [statistics, repeated, emptyStatistics] = await Promise.all([
+            program.getStatistics(),
+            program.getStatistics(),
+            empty.getStatistics(),
+        ]);
+        assert.equal(request.mock.callCount(), 3);
+        assert.deepEqual(repeated, statistics);
+        assert.ok(statistics.identifierCount > 0);
+        assert.ok(statistics.nodeCount > statistics.identifierCount);
+        assert.ok(statistics.symbolCount > 0);
+        assert.ok(statistics.typeCount > 0);
+        assert.equal(statistics.instantiationCount, 0);
+        assert.deepEqual(statistics.relationCacheSizes, { assignable: 0, identity: 0, subtype: 0, strictSubtype: 0 });
+        assert.equal(emptyStatistics.nodeCount, 0);
+
+        assert.deepEqual(await program.getStatistics(), statistics);
+        assert.equal(request.mock.callCount(), 4);
+    });
+
+    test("retries Program statistics requests after failure", async context => {
+        await using api = spawnAPI({ "/src/main.ts": "export const value = 1;" });
+        await using program = await api.createProgram(["/src/main.ts"], { noLib: true });
+        // @ts-ignore -- Internal client requests are exercised by source tests.
+        const client = api["client"];
+        const request = context.mock.method(client, "apiRequest");
+        const error = new Error("Statistics request failed");
+        request.mock.mockImplementationOnce(() => Promise.reject(error));
+
+        await assert.rejects(program.getStatistics(), error);
+        assert.equal(request.mock.callCount(), 1);
+        assert.ok((await program.getStatistics()).nodeCount > 0);
+        assert.equal(request.mock.callCount(), 2);
+    });
+
     test("initializes only once for concurrent first requests", async () => {
         await using api = spawnAPI();
         const client = (api as unknown as {
@@ -2699,6 +2778,153 @@ describe("SourceFile", { concurrency }, () => {
                 message: "Expected a string or { uri } for the document, received an object with keys: fileName",
             },
         );
+    });
+
+    test("Program accessors distinguish root files from source files", async () => {
+        await using api = spawnAPI({
+            "/src/main.ts": `import { value } from "./dependency"; export const result = value;`,
+            "/src/dependency.ts": `export const value = 1;`,
+        });
+        await using program = await api.createProgram(["/src/main.ts"], { noLib: true });
+        assert.ok(!("getTypeChecker" in program));
+        assert.ok(!("getResolvedProjectReferences" in program));
+        assert.ok(!("getSourceFiles" in program));
+        assert.deepEqual(await program.getRootFileNames(), ["/src/main.ts"]);
+        assert.deepEqual(await program.getSourceFileNames(), ["/src/dependency.ts", "/src/main.ts"]);
+        assert.equal(await program.getProjectReferences(), undefined);
+    });
+
+    test("Program statistics reflect checker work without forcing diagnostics", async () => {
+        await using api = spawnAPI({
+            "/src/main.ts": `type Box<T> = { value: T };
+export const box: Box<string> = { value: "hello" };
+export const other: { value: string } = box;`,
+        }, { collectTiming: true });
+        const snapshot = await api.createSnapshot({
+            createPrograms: [{ rootFiles: ["/src/main.ts"], compilerOptions: { noLib: true } }],
+        });
+        const project = snapshot.getProjects()[0];
+        const program = project.program;
+        await api.resetTimingInfo();
+        const statistics = await program.getStatistics();
+        assert.deepEqual(await program.getStatistics(), statistics);
+        assert.equal((await api.getTimingInfo()).totals.requestCount, 2);
+        assert.ok(statistics.identifierCount > 0);
+        assert.ok(statistics.nodeCount > statistics.identifierCount);
+        assert.ok(statistics.symbolCount > 0);
+        assert.ok(statistics.typeCount > 0);
+        assert.equal(statistics.instantiationCount, 0);
+        assert.deepEqual(statistics.relationCacheSizes, { assignable: 0, identity: 0, subtype: 0, strictSubtype: 0 });
+
+        const file = (await program.getSourceFile("/src/main.ts"))!;
+        const checker = project.checker;
+        const declaration = cast(file.statements[1], isVariableStatement).declarationList.declarations[0];
+        const type = await checker.getTypeAtLocation(declaration.name);
+        await type.getProperties();
+        const other = cast(file.statements[2], isVariableStatement).declarationList.declarations[0];
+        await checker.isTypeAssignableTo(type, await checker.getTypeAtLocation(other.name));
+        const updated = await program.getStatistics();
+        assert.ok(updated.instantiationCount > statistics.instantiationCount);
+        assert.ok(updated.typeCount > statistics.typeCount);
+        assert.ok(updated.symbolCount >= statistics.symbolCount);
+        assert.ok(updated.relationCacheSizes.assignable > statistics.relationCacheSizes.assignable);
+        assert.equal(updated.identifierCount, statistics.identifierCount);
+        assert.equal(updated.nodeCount, statistics.nodeCount);
+    });
+
+    test("Program accessors handle empty programs and missing root files", async () => {
+        await using api = spawnAPI({});
+        await using empty = await api.createProgram([], { noLib: true });
+        assert.deepEqual(await empty.getRootFileNames(), []);
+        assert.deepEqual(await empty.getSourceFileNames(), []);
+        const statistics = await empty.getStatistics();
+        assert.equal(statistics.nodeCount, 0);
+        assert.equal(statistics.identifierCount, 0);
+        assert.equal(await empty.getProjectReferences(), undefined);
+        assert.deepEqual(await empty.getProgramDiagnostics(), []);
+
+        await using noReferences = await api.createProgram([], { noLib: true }, { projectReferences: [] });
+        assert.deepEqual(await noReferences.getProjectReferences(), []);
+
+        await using missing = await api.createProgram(["/missing.ts"], { noLib: true });
+        assert.deepEqual(await missing.getRootFileNames(), ["/missing.ts"]);
+        assert.deepEqual(await missing.getSourceFileNames(), []);
+        assert.ok((await missing.getProgramDiagnostics()).some(diagnostic => diagnostic.code === 6053));
+    });
+
+    test("Program project references are available for configured and synthetic programs", async () => {
+        await using api = spawnAPI({
+            "/tsconfig.json": JSON.stringify({ files: [], references: [{ path: "./a" }, { path: "./missing" }, { path: "./b" }, { path: "./a" }] }),
+            "/a/tsconfig.json": JSON.stringify({ compilerOptions: { composite: true }, files: ["index.ts"], references: [{ path: "../b" }] }),
+            "/a/index.ts": "export const a = 1;",
+            "/b/tsconfig.json": JSON.stringify({ compilerOptions: { composite: true }, files: ["index.ts"], references: [{ path: "../a", circular: true }, { path: "../missing" }] }),
+            "/b/index.ts": "export const b = 1;",
+        });
+        const snapshot = await api.createSnapshot({ openProjects: ["/tsconfig.json"] });
+        const program = snapshot.getConfiguredProject("/tsconfig.json")!.program;
+        const references = await program.getProjectReferences();
+        assert.equal(references?.length, 4);
+
+        await using synthetic = await api.createProgram([], { noLib: true }, {
+            projectReferences: [{ path: "/a/tsconfig.json" }, { path: "/missing/tsconfig.json" }],
+        });
+        assert.equal((await synthetic.getProjectReferences())!.length, 2);
+    });
+
+    test("Project does not expose membership and file-list methods", async () => {
+        await using api = spawnAPI();
+        const snapshot = await api.createSnapshot({ openProjects: ["/tsconfig.json"] });
+        const project = snapshot.getConfiguredProject("/tsconfig.json")!;
+        for (const method of ["containsFile", "getFileNames", "getRootFiles", "hasRoots", "isRoot", "hasConfigFile", "getSourceFile"]) {
+            assert.ok(!(method in project), `Project should not expose ${method}`);
+        }
+    });
+
+    test("getSourceFile includes supplemental files without physical files", {
+        skip: process.env.TS_API_TEST_WASM ? "WASM cannot spawn external content mapper processes" : false,
+    }, async t => {
+        const directory = mkdtempSync(join(tmpdir(), "ts-project-membership-"));
+        t.after(() => rmSync(directory, { recursive: true, force: true }));
+        const mapperDirectory = join(directory, "node_modules", "mapper");
+        mkdirSync(mapperDirectory, { recursive: true });
+        const mapperScript = `
+            import { createMessageConnection } from ${JSON.stringify(new URL("../../vendor/vscode-jsonrpc/lib/node/main.js", import.meta.url).href)};
+            const connection = createMessageConnection(process.stdin, process.stdout);
+            connection.onRequest("initialize", () => ({ positionEncoding: "utf-8", diagnosticSource: "mapper" }));
+            connection.onRequest("openProject", () => ({}));
+            connection.onRequest("closeProject", () => null);
+            connection.onRequest("transform", ({ content }) => ({
+                text: "export {};",
+                extension: ".ts",
+                supplemental: [{ text: content, extension: ".ts" }],
+            }));
+            connection.listen();
+        `;
+        writeFileSync(
+            join(mapperDirectory, "package.json"),
+            JSON.stringify({
+                name: "mapper",
+                version: "1.0.0",
+                typescript: { contentMapper: { exec: [process.execPath, "--input-type=module", "--eval", mapperScript] } },
+            }),
+        );
+        const configFileName = toRootedFilePath(join(directory, "tsconfig.json"), undefined);
+        writeFileSync(
+            configFileName,
+            JSON.stringify({
+                compilerOptions: { noLib: true },
+                files: ["app.box", "main.ts", "missing.ts"],
+                contentMappers: [{ package: "mapper", extensions: [".box"] }],
+            }),
+        );
+        writeFileSync(join(directory, "app.box"), "declare const supplementalValue: number;");
+        writeFileSync(join(directory, "main.ts"), "const value: number = supplementalValue;");
+        await using api = new API({ cwd: directory, runExternalCode: true });
+        const snapshot = await api.createSnapshot({ openProjects: [configFileName] });
+        const program = snapshot.getConfiguredProject(configFileName)!.program;
+        const supplementalFileName = toRootedFilePath(join(directory, "app.box.0.ts"), undefined);
+        assert.equal(existsSync(supplementalFileName), false);
+        assert.ok(await program.getSourceFile(supplementalFileName));
     });
 
     test("getSourceFileNames returns all program files, not just root files", async () => {

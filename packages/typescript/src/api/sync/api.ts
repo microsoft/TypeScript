@@ -11,7 +11,9 @@ import type {
     APIResponse as ProtocolResponse,
 } from "../proto.ts";
 import {
+    all,
     apiRequest,
+    type APIRequestGenerator,
     cacheGeneratorMethod,
 } from "./generatorSupport.ts";
 
@@ -59,6 +61,7 @@ import {
 import { assertNever } from "../../internal/utils.ts";
 import {
     encodeNode,
+    sourceFileResponseToUint8Array,
     uint8ArrayToBase64,
 } from "../node/encoder.ts";
 import {
@@ -112,6 +115,7 @@ import type {
     ModuleResolutionSpec,
     PackageId,
     ParsedCommandLine,
+    ProgramStatisticsResponse,
     ProjectId,
     ProjectReference,
     ProjectResponse,
@@ -119,6 +123,7 @@ import type {
     RawCompilerOptions,
     ReadConfigFileResponse,
     ReconfigureSnapshotProgramParams as ProtocolReconfigureSnapshotProgramParams,
+    RelationCacheSizes,
     ResolutionMode,
     ResolvedModule,
     ResolvedTypeReferenceDirective,
@@ -254,10 +259,12 @@ export type {
     ObjectType,
     PackageId,
     ParsedCommandLine,
+    ProgramStatisticsResponse,
     ProjectId,
     ProjectReference,
     RawCompilerOptions,
     ReadConfigFileResponse,
+    RelationCacheSizes,
     RequestTiming,
     ResolutionMode,
     ResolvedModule,
@@ -358,7 +365,6 @@ export interface TranspileOutput {
 }
 
 export { all, type AllAPIRequestGenerator, type AnyAPIRequestGenerator, type APIRequestGenerator, defer, type DeferredAPIRequestGenerator, type ExecutedGeneratorsResults } from "./generatorSupport.ts";
-import { sourceFileResponseToUint8Array } from "../node/encoder.ts";
 import {
     type AnyAPIRequestGenerator,
     type ExecutedGeneratorsResults,
@@ -680,6 +686,25 @@ export class API<FromLSP extends boolean = false> implements FormatDiagnosticsHo
             function* (file: DocumentIdentifier): Generator<ProtocolRequest, ReadConfigFileResponse, ProtocolResponse["result"]> {
                 yield* owner.ensureInitialized.gen();
                 return yield* apiRequest("readConfigFile", { file });
+            },
+        );
+    }
+
+    get parseConfigFileTextToJson(): {
+        (fileName: string, jsonText: string): ReadConfigFileResponse;
+        gen(fileName: string, jsonText: string): Generator<ProtocolRequest, ReadConfigFileResponse, ProtocolResponse["result"]>;
+    } {
+        const owner = this;
+        return cacheGeneratorMethod(
+            owner,
+            "parseConfigFileTextToJson",
+            function (fileName: string, jsonText: string): ReadConfigFileResponse {
+                owner.ensureInitialized();
+                return owner.client.apiRequest("parseConfigFileTextToJson", { fileName, jsonText });
+            },
+            function* (fileName: string, jsonText: string): Generator<ProtocolRequest, ReadConfigFileResponse, ProtocolResponse["result"]> {
+                yield* owner.ensureInitialized.gen();
+                return yield* apiRequest("parseConfigFileTextToJson", { fileName, jsonText });
             },
         );
     }
@@ -2999,6 +3024,37 @@ export class Program<Id extends ProjectId = ProjectId> implements FormatDiagnost
 
     getCompilerOptions(): CompilerOptions {
         return this.project.parsedCommandLine.options;
+    }
+
+    getRootFileNames(): readonly RootedFilePath[] {
+        return this.project.parsedCommandLine.fileNames;
+    }
+
+    getProjectReferences(): readonly ProjectReference[] | undefined {
+        return this.project.parsedCommandLine.projectReferences;
+    }
+
+    get getStatistics(): {
+        (): ProgramStatisticsResponse;
+        gen(): Generator<ProtocolRequest, ProgramStatisticsResponse, ProtocolResponse["result"]>;
+    } {
+        const owner = this;
+        return cacheGeneratorMethod(
+            owner,
+            "getStatistics",
+            function (): ProgramStatisticsResponse {
+                return owner.client.apiRequest("getProgramStatistics", {
+                    snapshot: owner.snapshotId,
+                    project: owner.project.handle,
+                });
+            },
+            function* (): Generator<ProtocolRequest, ProgramStatisticsResponse, ProtocolResponse["result"]> {
+                return yield* apiRequest("getProgramStatistics", {
+                    snapshot: owner.snapshotId,
+                    project: owner.project.handle,
+                });
+            },
+        );
     }
 
     get getSourceFile(): {

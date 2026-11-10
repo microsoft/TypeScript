@@ -8,7 +8,7 @@ export const a = 10;
 //// [/home/src/workspaces/project/src/b.ts] *new* 
 export const b = 10;
 
-tsgo src/a.ts --ignoreConfig
+tsc src/a.ts --ignoreConfig
 ExitStatus:: Success
 Output::
 //// [/home/src/tslibs/TS/Lib/lib.es2026.full.d.ts] *Lib*

@@ -48,7 +48,7 @@ export { a } from 'a';
     },
 }
 
-tsgo -b packages/b --verbose --traceResolution --explainFiles
+tsc -b packages/b --verbose --traceResolution --explainFiles
 ExitStatus:: Success
 Output::
 [[90mHH:MM:SS AM[0m] Projects in this build: 
