@@ -8959,5 +8959,9 @@
     "Content mapper extension '{0}' must not contain path separators.": {
         "category": "Error",
         "code": 18123
+    },
+    "The content mapper '{0}' returned virtual extension '{1}', whose module format does not match declaration output '{2}'.": {
+        "category": "Error",
+        "code": 18125
     }
 }

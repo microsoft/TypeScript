@@ -13,6 +13,7 @@ import (
 	"github.com/microsoft/TypeScript/tsc/internal/core"
 	"github.com/microsoft/TypeScript/tsc/internal/diagnostics"
 	"github.com/microsoft/TypeScript/tsc/internal/locale"
+	"github.com/microsoft/TypeScript/tsc/internal/outputpaths"
 	"github.com/microsoft/TypeScript/tsc/internal/spanmap"
 	"github.com/microsoft/TypeScript/tsc/internal/tsoptions"
 	"github.com/microsoft/TypeScript/tsc/internal/tspath"
@@ -47,6 +48,11 @@ func newContentMapperProgram(t *testing.T, contentMapperProject contentmapper.Pr
 
 func newContentMapperProgramWithOptions(t *testing.T, contentMapperProject contentmapper.Project, files map[string]string, rootFiles []string, options *core.CompilerOptions) *compiler.Program {
 	t.Helper()
+	return newContentMapperProgramWithOutputExtensions(t, contentMapperProject, files, rootFiles, options, nil)
+}
+
+func newContentMapperProgramWithOutputExtensions(t *testing.T, contentMapperProject contentmapper.Project, files map[string]string, rootFiles []string, options *core.CompilerOptions, outputExtensions map[string]string) *compiler.Program {
+	t.Helper()
 	if !bundled.Embedded {
 		t.Skip("bundled files are not embedded")
 	}
@@ -57,7 +63,7 @@ func newContentMapperProgramWithOptions(t *testing.T, contentMapperProject conte
 	}
 
 	config := tsoptions.NewParsedCommandLine(options, testFileNames(rootFiles...), nil, "/", fs.CaseSensitivity())
-	config.ParsedConfig.ContentMappers = []*contentmapper.Mapper{{Package: "vue", Extensions: []string{".vue"}, Name: "vue-mapper", Version: "1.0.0"}}
+	config.ParsedConfig.ContentMappers = []*contentmapper.Mapper{{Package: "vue", Extensions: []string{".vue"}, OutputExtensions: outputExtensions, Name: "vue-mapper", Version: "1.0.0"}}
 	return compiler.NewProgram(compiler.ProgramOptions{
 		Config: config,
 		Host:   compiler.NewCompilerHost(fs, bundled.LibPath(), nil, nil, contentMapperProject),
@@ -68,7 +74,7 @@ func newContentMapperProgramWithOptions(t *testing.T, contentMapperProject conte
 
 func TestContentMapperVirtualExtensionSetsImpliedNodeFormat(t *testing.T) {
 	t.Parallel()
-	program := newContentMapperProgramWithOptions(
+	program := newContentMapperProgramWithOutputExtensions(
 		t,
 		fakeContentMapperHost{transform: func(fileName string, content string) (contentmapper.Result, error) {
 			return contentmapper.Result{Text: "export {};", VirtualExtension: ".mts", Mappings: spanmap.New(nil)}, nil
@@ -80,6 +86,7 @@ func TestContentMapperVirtualExtensionSetsImpliedNodeFormat(t *testing.T) {
 			Module:           core.ModuleKindNodeNext,
 			ModuleResolution: core.ModuleResolutionKindNodeNext,
 		},
+		map[string]string{".vue": ".mjs"},
 	)
 
 	file := program.GetSourceFile("/src/Component.vue")
@@ -122,7 +129,7 @@ func TestContentMapperVirtualExtensionDeterminesModuleFormat(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			t.Parallel()
 			physicalFileName := "/src/physical" + tt.virtualExtension
-			program := newContentMapperProgramWithOptions(
+			program := newContentMapperProgramWithOutputExtensions(
 				t,
 				fakeContentMapperHost{transform: func(fileName string, content string) (contentmapper.Result, error) {
 					return contentmapper.Result{Text: content, VirtualExtension: tt.virtualExtension, Mappings: spanmap.New(nil)}, nil
@@ -140,6 +147,7 @@ func TestContentMapperVirtualExtensionDeterminesModuleFormat(t *testing.T) {
 					ResolvePackageJsonExports: core.TSTrue,
 					VerbatimModuleSyntax:      core.TSTrue,
 				},
+				map[string]string{".vue": tt.virtualExtension},
 			)
 
 			mappedFile := program.GetSourceFile("/src/Component.vue")
@@ -166,6 +174,113 @@ func TestContentMapperVirtualExtensionDeterminesModuleFormat(t *testing.T) {
 			})
 			assert.Assert(t, !slices.Contains(physicalDiagnosticCodes, tt.expectedDiagnostic), "physical file has the format diagnostic: %v", physicalDiagnosticCodes)
 		})
+	}
+}
+
+func TestContentMapperDeclarationModuleFormat(t *testing.T) {
+	t.Parallel()
+	for _, test := range []struct {
+		outputExtension       string
+		declarationName       string
+		differentPackageScope bool
+	}{
+		{".cjs", "Component.d.cts", false},
+		{".cts", "Component.d.cts", false},
+		{".mjs", "Component.d.mts", false},
+		{".mts", "Component.d.mts", false},
+		{".custom.mjs", "Component.custom.d.mts", false},
+		{".custom.cts", "Component.custom.d.cts", false},
+		{".js", "Component.d.ts", false},
+		{"", "Component.d.vue.ts", false},
+		{".js", "Component.d.ts", true},
+		{"", "Component.d.vue.ts", true},
+	} {
+		for _, packageType := range []string{"module", "commonjs"} {
+			for _, virtualExtension := range []string{".cts", ".cjs", ".mts", ".mjs", ".ts", ".tsx", ".js", ".jsx"} {
+				name := test.outputExtension + "/" + packageType + "/" + virtualExtension
+				if test.differentPackageScope {
+					name += "/different-output-package"
+				}
+				t.Run(name, func(t *testing.T) {
+					t.Parallel()
+					outputPackageType := packageType
+					if test.differentPackageScope {
+						outputPackageType = core.IfElse(packageType == "module", "commonjs", "module")
+					}
+					outputExtensions := map[string]string{}
+					if test.outputExtension != "" {
+						outputExtensions[".vue"] = test.outputExtension
+					}
+					program := newContentMapperProgramWithOutputExtensions(t, fakeContentMapperHost{
+						transform: func(fileName string, content string) (contentmapper.Result, error) {
+							return contentmapper.Result{Text: "export const value = 1;", VirtualExtension: virtualExtension, Mappings: spanmap.New(nil)}, nil
+						},
+					}, map[string]string{
+						"/src/package.json":  `{"type":"` + packageType + `"}`,
+						"/dist/package.json": `{"type":"` + outputPackageType + `"}`,
+						"/src/Component.vue": "<template />",
+					}, []string{"/src/Component.vue"}, &core.CompilerOptions{
+						SkipLibCheck:                    core.TSTrue,
+						Module:                          core.ModuleKindNodeNext,
+						ModuleResolution:                core.ModuleResolutionKindNodeNext,
+						Declaration:                     core.TSTrue,
+						OutDir:                          "/dist",
+						RewriteRelativeImportExtensions: core.TSTrue,
+					}, outputExtensions)
+					file := program.GetSourceFile("/src/Component.vue")
+					assert.Assert(t, file != nil)
+					declarationPath := tspath.RootedFilePathFromNormalized("/dist/" + test.declarationName)
+					expectedMode := ast.GetImpliedNodeFormatForFile(declarationPath, outputPackageType)
+					virtualMode := ast.GetImpliedNodeFormatForFile(tspath.RootedFilePathFromNormalized("/src/Component.vue"+virtualExtension), packageType)
+					fileDiagnostics := program.GetSyntacticDiagnostics(t.Context(), file)
+					if virtualMode != expectedMode {
+						assert.Equal(t, len(fileDiagnostics), 1)
+						assert.Equal(t, fileDiagnostics[0].Code(), diagnostics.The_content_mapper_0_returned_virtual_extension_1_whose_module_format_does_not_match_declaration_output_2.Code())
+						assert.Equal(t, file.Text(), "")
+					} else {
+						assert.Equal(t, len(fileDiagnostics), 0)
+						assert.Equal(t, program.GetSourceFileMetaData(file.PathKey()).ImpliedNodeFormat, expectedMode)
+						paths := outputpaths.GetOutputPathsFor(file, program.Options(), program, outputpaths.ForceEmitPaths{Dts: true})
+						assert.Equal(t, paths.DeclarationFilePath(), declarationPath)
+						assert.Equal(t, outputpaths.GetOutputDeclarationFileNameWorker(file.FileName(), program.Options(), program), declarationPath)
+					}
+				})
+			}
+		}
+	}
+}
+
+func TestContentMapperDeclarationModuleFormatWithoutNodeResolution(t *testing.T) {
+	t.Parallel()
+	for _, moduleResolution := range []core.ModuleResolutionKind{core.ModuleResolutionKindBundler, core.ModuleResolutionKindNode10} {
+		for _, virtualExtension := range []string{".ts", ".mts", ".cts"} {
+			t.Run(moduleResolution.String()+"/"+virtualExtension, func(t *testing.T) {
+				t.Parallel()
+				program := newContentMapperProgramWithOptions(t, fakeContentMapperHost{
+					transform: func(fileName string, content string) (contentmapper.Result, error) {
+						return contentmapper.Result{Text: "export const value = 1;", VirtualExtension: virtualExtension, Mappings: spanmap.New(nil)}, nil
+					},
+				}, map[string]string{
+					"/src/package.json":  `{"type":"module"}`,
+					"/dist/package.json": `{"type":"module"}`,
+					"/src/Component.vue": "<template />",
+				}, []string{"/src/Component.vue"}, &core.CompilerOptions{
+					Module:           core.ModuleKindESNext,
+					ModuleResolution: moduleResolution,
+					OutDir:           "/dist",
+				})
+				file := program.GetSourceFile("/src/Component.vue")
+				assert.Assert(t, file != nil)
+				fileDiagnostics := program.GetSyntacticDiagnostics(t.Context(), file)
+				if virtualExtension == ".cts" {
+					assert.Equal(t, len(fileDiagnostics), 1)
+					assert.Equal(t, fileDiagnostics[0].Code(), diagnostics.The_content_mapper_0_returned_virtual_extension_1_whose_module_format_does_not_match_declaration_output_2.Code())
+				} else {
+					assert.Equal(t, len(fileDiagnostics), 0)
+					assert.Equal(t, file.Text(), "export const value = 1;")
+				}
+			})
+		}
 	}
 }
 

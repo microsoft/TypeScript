@@ -655,7 +655,7 @@ func TestContentMapperSupplementalFileClonedOnEdit(t *testing.T) {
 func TestContentMapperModuleExtensionClonedOnUnrelatedEdit(t *testing.T) {
 	t.Parallel()
 	files := map[string]any{
-		"/home/project/tsconfig.json":                    `{ "contentMappers": [{ "package": "mapper", "extensions": [".box"] }] }`,
+		"/home/project/tsconfig.json":                    `{ "compilerOptions": { "rewriteRelativeImportExtensions": true }, "contentMappers": [{ "package": "mapper", "extensions": [".box"], "outputExtensions": { ".box": ".mjs" } }] }`,
 		"/home/project/node_modules/mapper/package.json": contentmappertest.PackageJSON(contentmappertest.ModuleVerbatimMapper),
 		"/home/project/app.box":                          "export const value = 1;\n",
 		"/home/project/main.ts":                          `import { value } from "./app.box"; value;`,
@@ -694,7 +694,7 @@ func TestContentMapperModuleExtensionClonedOnUnrelatedEdit(t *testing.T) {
 func TestContentMapperModuleFormatChangeRebuilds(t *testing.T) {
 	t.Parallel()
 	files := map[string]any{
-		"/home/project/tsconfig.json":                    `{ "compilerOptions": { "module": "nodenext", "importHelpers": true, "noEmit": true }, "contentMappers": [{ "package": "mapper", "extensions": [".box"] }] }`,
+		"/home/project/tsconfig.json":                    `{ "compilerOptions": { "module": "nodenext", "importHelpers": true, "noEmit": true, "rewriteRelativeImportExtensions": true }, "contentMappers": [{ "package": "mapper", "extensions": [".box"], "outputExtensions": { ".box": ".cjs" } }] }`,
 		"/home/project/package.json":                     `{ "name": "project" }`,
 		"/home/project/node_modules/mapper/package.json": contentmappertest.PackageJSON(contentmappertest.FormatVerbatimMapper),
 		"/home/project/node_modules/tslib/package.json":  `{ "name": "tslib", "version": "1.0.0", "exports": { ".": { "import": "./tslib.d.mts", "require": "./tslib.d.ts" } } }`,
@@ -730,6 +730,20 @@ func TestContentMapperModuleFormatChangeRebuilds(t *testing.T) {
 	assert.Assert(t, session.Snapshot().GetDefaultProject(mainURI).ProgramUpdateKind != project.ProgramUpdateKindCloned)
 	program := languageService.GetProgram()
 	mappedFile := program.GetSourceFile("/home/project/app.box")
+	assert.Equal(t, mappedFile.Text(), "")
+	fileDiagnostics := program.GetSyntacticDiagnostics(ctx, mappedFile)
+	assert.Equal(t, len(fileDiagnostics), 1)
+	assert.Equal(t, fileDiagnostics[0].Code(), diagnostics.The_content_mapper_0_returned_virtual_extension_1_whose_module_format_does_not_match_declaration_output_2.Code())
+
+	assert.NilError(t, utils.FS().WriteFile("/home/project/tsconfig.json", strings.ReplaceAll(files["/home/project/tsconfig.json"].(string), ".cjs", ".mjs")))
+	session.DidChangeWatchedFiles(ctx, []*lsproto.FileEvent{{
+		Uri:  "file:///home/project/tsconfig.json",
+		Type: lsproto.FileChangeTypeChanged,
+	}})
+	languageService, err = session.GetLanguageService(ctx, mainURI)
+	assert.NilError(t, err)
+	program = languageService.GetProgram()
+	mappedFile = program.GetSourceFile("/home/project/app.box")
 	assert.Equal(t, mappedFile.VirtualFileName().AsString(), "/home/project/app.box.mts")
 	assert.Equal(t, program.GetSourceFileMetaData(mappedFile.PathKey()).ImpliedNodeFormat, core.ModuleKindESNext)
 	tslib := program.GetResolvedModuleFromModuleSpecifier(mappedFile, program.GetImportHelpersImportSpecifier(mappedFile.PathKey()))

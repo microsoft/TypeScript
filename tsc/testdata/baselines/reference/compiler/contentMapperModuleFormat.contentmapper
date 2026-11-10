@@ -1,0 +1,34 @@
+//// [/src/expected-esm.esm] (ScriptKind: ScriptKindTS, ContentMapper: [.esm .cbox .box])
+--- Original ---
+// @box-extension: .cts
+export const value = 1;
+--- Transformed ---
+
+//// [/src/expected-cjs.cbox] (ScriptKind: ScriptKindTS, ContentMapper: [.esm .cbox .box])
+--- Original ---
+// @box-extension: .mts
+export const value = 1;
+--- Transformed ---
+
+//// [/src/package-inferred.box] (ScriptKind: ScriptKindTS, ContentMapper: [.esm .cbox .box])
+--- Original ---
+// @box-extension: .cts
+export const value = 1;
+--- Transformed ---
+
+=== Diagnostics ===
+
+/src/expected-cjs.cbox:1:1 - error TS18125: The content mapper 'mapper' returned virtual extension '.mts', whose module format does not match declaration output 'expected-cjs.d.cts'.
+
+1 
+  ~
+
+/src/expected-esm.esm:1:1 - error TS18125: The content mapper 'mapper' returned virtual extension '.cts', whose module format does not match declaration output 'expected-esm.d.mts'.
+
+1 
+  ~
+
+/src/package-inferred.box:1:1 - error TS18125: The content mapper 'mapper' returned virtual extension '.cts', whose module format does not match declaration output 'package-inferred.d.box.ts'.
+
+1 
+  ~
