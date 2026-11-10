@@ -117,12 +117,17 @@ func TestCompoundExtraExtensionModuleSuffixes(t *testing.T) {
 		name, target string
 		suffixes     []string
 		hasSource    bool
+		onlyShorter  bool
 	}{
-		{"no suffix fallback", "/project/blob.d.part.toml.ts", nil, false},
-		{"empty suffix fallback", "/project/blob.d.part.toml.ts", []string{""}, false},
-		{"native suffix fallback", "/project/blob.d.part.toml.native.ts", []string{".native", ""}, false},
-		{"native-only suffix fallback", "/project/blob.d.part.toml.native.ts", []string{".native"}, false},
-		{"suffixed source", "/project/blob.native.part.toml", []string{".native", ""}, true},
+		{"no suffix fallback", "/project/blob.d.part.toml.ts", nil, false, false},
+		{"empty suffix fallback", "/project/blob.d.part.toml.ts", []string{""}, false, false},
+		{"native suffix fallback", "/project/blob.d.part.toml.native.ts", []string{".native", ""}, false, false},
+		{"native-only suffix fallback", "/project/blob.d.part.toml.native.ts", []string{".native"}, false, false},
+		{"suffixed source", "/project/blob.native.part.toml", []string{".native", ""}, true, false},
+		{"shorter extension fallback", "/project/blob.part.d.toml.ts", nil, false, true},
+		{"shorter empty suffix fallback", "/project/blob.part.d.toml.ts", []string{""}, false, true},
+		{"shorter native suffix fallback", "/project/blob.part.d.toml.native.ts", []string{".native", ""}, false, true},
+		{"shorter native-only suffix fallback", "/project/blob.part.d.toml.native.ts", []string{".native"}, false, true},
 	} {
 		t.Run(test.name, func(t *testing.T) {
 			t.Parallel()
@@ -131,6 +136,10 @@ func TestCompoundExtraExtensionModuleSuffixes(t *testing.T) {
 				"/project/blob.d.part.toml.ts":        "",
 				"/project/blob.part.d.toml.native.ts": "",
 				"/project/blob.d.part.toml.native.ts": "",
+			}
+			if test.onlyShorter {
+				delete(files, "/project/blob.d.part.toml.ts")
+				delete(files, "/project/blob.d.part.toml.native.ts")
 			}
 			if test.hasSource {
 				files["/project/blob.native.part.toml"] = ""

@@ -1779,9 +1779,13 @@ func (r *resolutionState) tryAddingExtensions(extensionless tspath.FileNameStem,
 				return resolved
 			}
 		}
-		if extensions&extensionsDeclaration != 0 && !extensionless.AppendSuffix(originalExtension).IsDeclarationFile() {
-			if resolved := r.tryExtension(".d"+originalExtension+".ts", extensionless, false); !resolved.shouldContinueSearching() {
-				return resolved
+		fileName := extensionless.AppendSuffix(originalExtension)
+		if extensions&extensionsDeclaration != 0 && !fileName.IsDeclarationFile() {
+			// Overlapping registrations can emit declaration names using different extensions.
+			for extension := originalExtension; extension != ""; extension = tspath.GetLongestExtensionFromPath(extension[1:], r.resolver.extraExtensions, tspath.CaseSensitive) {
+				if resolved := r.tryExtension(".d"+extension+".ts", fileName.RemoveExtension(extension), false); !resolved.shouldContinueSearching() {
+					return resolved
+				}
 			}
 		}
 		return continueSearching()

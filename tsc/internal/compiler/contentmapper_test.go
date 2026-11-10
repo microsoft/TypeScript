@@ -291,6 +291,52 @@ func TestContentMapperRuntimeRewrites(t *testing.T) {
 	}
 }
 
+func TestContentMapperOverlappingExtensionDeclarationRoundTrip(t *testing.T) {
+	t.Parallel()
+	fs := vfstest.FromMap(map[string]string{
+		"/project/special/widget.part.toml": "export const special = 1;",
+		"/project/other/widget.part.toml":   "export const other = 2;",
+	}, tspath.CaseSensitive)
+	mappers := []*contentmapper.Mapper{
+		{Package: "compound", Name: "compound", Extensions: []string{".part.toml"}, Include: []string{"special"}},
+		{Package: "fallback", Name: "fallback", Extensions: []string{".toml"}},
+	}
+	config := tsoptions.NewParsedCommandLine(&core.CompilerOptions{
+		NoLib: core.TSTrue, Declaration: core.TSTrue, EmitDeclarationOnly: core.TSTrue,
+		Module: core.ModuleKindPreserve, ModuleResolution: core.ModuleResolutionKindBundler,
+		RootDir: "/project", OutDir: "/dist",
+	}, []tspath.RootedFilePath{"/project/special/widget.part.toml", "/project/other/widget.part.toml"}, nil, "/project", fs.CaseSensitivity())
+	config.ParsedConfig.ContentMappers = mappers
+	host := compiler.NewCompilerHost(fs, "/", nil, nil, fakeContentMapperHost{
+		transform: func(fileName, content string) (contentmapper.Result, error) {
+			return contentmapper.Result{Text: content, VirtualExtension: ".ts", Mappings: spanmap.New(nil)}, nil
+		},
+	})
+	program := compiler.NewProgram(compiler.ProgramOptions{Config: config, Host: host, SingleThreaded: core.TSTrue})
+	program.Emit(t.Context(), compiler.EmitOptions{})
+	assert.Assert(t, fs.FileExists("/dist/special/widget.d.part.toml.ts"))
+	assert.Assert(t, fs.FileExists("/dist/other/widget.part.d.toml.ts"))
+
+	assert.NilError(t, fs.WriteFile("/dist/main.ts", `
+		import { special } from "./special/widget.part.toml";
+		import { other } from "./other/widget.part.toml";
+		export const values = { special, other };
+	`))
+	consumerConfig := tsoptions.NewParsedCommandLine(&core.CompilerOptions{
+		NoLib: core.TSTrue, AllowArbitraryExtensions: core.TSTrue,
+		Module: core.ModuleKindPreserve, ModuleResolution: core.ModuleResolutionKindBundler,
+	}, []tspath.RootedFilePath{"/dist/main.ts"}, nil, "/dist", fs.CaseSensitivity())
+	consumerConfig.ParsedConfig.ContentMappers = mappers
+	consumer := compiler.NewProgram(compiler.ProgramOptions{Config: consumerConfig, Host: host, SingleThreaded: core.TSTrue})
+	main := consumer.GetSourceFile("/dist/main.ts")
+	for i, path := range []tspath.RootedFilePath{"/dist/special/widget.d.part.toml.ts", "/dist/other/widget.part.d.toml.ts"} {
+		resolved := consumer.GetResolvedModuleFromModuleSpecifier(main, main.Imports()[i])
+		assert.Assert(t, resolved != nil)
+		assert.Equal(t, resolved.ResolvedFileName, path)
+	}
+	assert.Equal(t, len(consumer.GetSemanticDiagnostics(t.Context(), main)), 0)
+}
+
 func TestContentMapperExcludedResolution(t *testing.T) {
 	t.Parallel()
 	for _, test := range []struct {
