@@ -342,6 +342,7 @@ type Registry struct {
 	specifierCache map[tspath.PathKey]*collections.SyncMap[tspath.PathKey, tspath.ModuleSpecifier]
 
 	partialExtractions *partialExtractions
+	extractionGen      uint64
 }
 
 type extractionKey struct {
@@ -351,48 +352,154 @@ type extractionKey struct {
 }
 
 type partialExtractions struct {
-	mu                      sync.Mutex
-	initialized             bool
+	caseSensitivity tspath.CaseSensitivity
+	mu              sync.Mutex
+	current         *extractionSet
+	generation      uint64
+	changes         map[uint64]extractionChange
+}
+
+type extractionChange struct {
+	parent uint64
+	files  []tspath.RootedFilePath
+}
+
+type extractionSet struct {
 	buildPreferences        bucketBuildPreferences
 	projectReferenceOutputs map[tspath.PathKey]tspath.RootedFilePath
-	results                 collections.SyncMap[extractionKey, *pendingExtraction]
+	results                 map[extractionKey]*pendingExtraction
 }
 
 type pendingExtraction struct {
-	done   chan struct{}
-	result *perPackageExtractionResult
+	done         chan struct{}
+	generation   uint64
+	result       *perPackageExtractionResult
+	dependencies *collections.Set[tspath.PathKey]
 }
 
-func (p *partialExtractions) usableFor(buildPreferences bucketBuildPreferences, projectReferenceOutputs map[tspath.PathKey]tspath.RootedFilePath) bool {
+func (e *pendingExtraction) isDone() bool {
+	select {
+	case <-e.done:
+		return true
+	default:
+		return false
+	}
+}
+
+func newPartialExtractions(caseSensitivity tspath.CaseSensitivity) *partialExtractions {
+	return &partialExtractions{caseSensitivity: caseSensitivity, changes: make(map[uint64]extractionChange)}
+}
+
+func (p *partialExtractions) isEmpty() bool {
 	p.mu.Lock()
 	defer p.mu.Unlock()
-	if !p.initialized {
-		p.initialized = true
-		p.buildPreferences = buildPreferences.Clone()
-		p.projectReferenceOutputs = projectReferenceOutputs
-		return true
-	}
-	return p.buildPreferences.Equal(buildPreferences) && maps.Equal(p.projectReferenceOutputs, projectReferenceOutputs)
+	return p.current == nil || len(p.current.results) == 0
 }
 
-func (p *partialExtractions) affectedBy(change RegistryChange, caseSensitivity tspath.CaseSensitivity) bool {
-	for _, uris := range []map[lsproto.DocumentUri]struct{}{change.Created.Keys(), change.Deleted.Keys(), change.Changed.Keys()} {
-		for uri := range uris {
-			fileName := uri.FileName()
-			if _, _, ok := caseSensitivity.PathKey(tspath.RootedPath(fileName)).SplitAtCanonicalComponent("node_modules"); ok {
-				return true
-			}
-			affected := false
-			p.results.Range(func(key extractionKey, _ *pendingExtraction) bool {
-				affected = caseSensitivity.ContainsPath(key.realpath, tspath.RootedPath(fileName))
-				return !affected
-			})
-			if affected {
+func (p *partialExtractions) setFor(buildPreferences bucketBuildPreferences, projectReferenceOutputs map[tspath.PathKey]tspath.RootedFilePath) *extractionSet {
+	p.mu.Lock()
+	defer p.mu.Unlock()
+	if p.current == nil || !p.current.buildPreferences.Equal(buildPreferences) || !maps.Equal(p.current.projectReferenceOutputs, projectReferenceOutputs) {
+		p.current = &extractionSet{
+			buildPreferences:        buildPreferences.Clone(),
+			projectReferenceOutputs: projectReferenceOutputs,
+			results:                 make(map[extractionKey]*pendingExtraction),
+		}
+	}
+	return p.current
+}
+
+func (p *partialExtractions) recordChange(parent uint64, changed collections.Set[lsproto.DocumentUri]) uint64 {
+	files := make([]tspath.RootedFilePath, 0, changed.Len())
+	for uri := range changed.Keys() {
+		files = append(files, uri.FileName())
+	}
+	p.mu.Lock()
+	defer p.mu.Unlock()
+	p.generation++
+	p.changes[p.generation] = extractionChange{parent: parent, files: files}
+	return p.generation
+}
+
+func (p *partialExtractions) staleLocked(pending *pendingExtraction, key extractionKey, generation uint64) bool {
+	a, b := pending.generation, generation
+	for a != b {
+		if a < b {
+			a, b = b, a
+		}
+		change := p.changes[a]
+		for _, fileName := range change.files {
+			if pending.dependencies.Has(p.caseSensitivity.PathKey(tspath.RootedPath(fileName))) || p.caseSensitivity.ContainsPath(key.realpath, tspath.RootedPath(fileName)) {
 				return true
 			}
 		}
+		a = change.parent
 	}
 	return false
+}
+
+func (p *partialExtractions) extract(
+	ctx context.Context,
+	set *extractionSet,
+	key extractionKey,
+	generation uint64,
+	run func() (*perPackageExtractionResult, *collections.Set[tspath.PathKey]),
+) *perPackageExtractionResult {
+	for {
+		p.mu.Lock()
+		pending, ok := set.results[key]
+		if ok && pending.isDone() {
+			if !p.staleLocked(pending, key, generation) {
+				p.mu.Unlock()
+				return pending.result
+			}
+			ok = false
+		}
+		if !ok {
+			pending = &pendingExtraction{done: make(chan struct{}), generation: generation}
+			set.results[key] = pending
+			p.mu.Unlock()
+			pending.result, pending.dependencies = run()
+			close(pending.done)
+			return pending.result
+		}
+		p.mu.Unlock()
+		select {
+		case <-pending.done:
+			continue
+		case <-ctx.Done():
+			return nil
+		}
+	}
+}
+
+func requiresNewPartialExtractions(change RegistryChange, caseSensitivity tspath.CaseSensitivity) bool {
+	if change.Created.Len() > 0 || change.Deleted.Len() > 0 {
+		return true
+	}
+	for uri := range change.Changed.Keys() {
+		fileName := uri.FileName()
+		if tspath.GetBaseFileName(fileName.AsString()) == "package.json" {
+			return true
+		}
+		if _, _, ok := caseSensitivity.PathKey(tspath.RootedPath(fileName)).SplitAtCanonicalComponent("node_modules"); ok {
+			return true
+		}
+	}
+	return false
+}
+
+type extractionDependencyHost struct {
+	RegistryCloneHost
+	mu    sync.Mutex
+	files collections.Set[tspath.PathKey]
+}
+
+func (h *extractionDependencyHost) GetSourceFile(fileName tspath.RootedFilePath, path tspath.PathKey) *ast.SourceFile {
+	h.mu.Lock()
+	h.files.Add(path)
+	h.mu.Unlock()
+	return h.RegistryCloneHost.GetSourceFile(fileName, path)
 }
 
 func NewRegistry(caseSensitivity tspath.CaseSensitivity, preferences lsutil.UserPreferences) *Registry {
@@ -400,7 +507,7 @@ func NewRegistry(caseSensitivity tspath.CaseSensitivity, preferences lsutil.User
 		caseSensitivity:    caseSensitivity,
 		userPreferences:    preferences,
 		directories:        make(map[tspath.PathKey]*directory),
-		partialExtractions: &partialExtractions{},
+		partialExtractions: newPartialExtractions(caseSensitivity),
 	}
 }
 
@@ -457,13 +564,19 @@ func (r *Registry) Clone(ctx context.Context, change RegistryChange, host Regist
 	}
 	builder.updateBucketAndDirectoryExistence(change, logger)
 	builder.markBucketsDirty(change, logger)
-	if builder.partialExtractions == nil || builder.partialExtractions.affectedBy(change, r.caseSensitivity) {
-		builder.partialExtractions = &partialExtractions{}
+	switch {
+	case builder.partialExtractions == nil || requiresNewPartialExtractions(change, r.caseSensitivity),
+		change.Changed.Len() > 0 && builder.partialExtractions.isEmpty():
+		builder.partialExtractions = newPartialExtractions(r.caseSensitivity)
+		builder.extractionGen = 0
+	case change.Changed.Len() > 0:
+		builder.extractionGen = builder.partialExtractions.recordChange(builder.extractionGen, change.Changed)
 	}
 	if change.RequestedFile != "" {
 		builder.updateIndexes(ctx, change, logger)
 		if ctx.Err() == nil {
-			builder.partialExtractions = &partialExtractions{}
+			builder.partialExtractions = newPartialExtractions(r.caseSensitivity)
+			builder.extractionGen = 0
 		}
 	}
 	if logger != nil {
@@ -581,6 +694,7 @@ type registryBuilder struct {
 	uniquePackageCount int
 	entrypoints        *dirty.MapBuilder[tspath.PathKey, []*module.ResolvedEntrypoint, []*module.ResolvedEntrypoint]
 	partialExtractions *partialExtractions
+	extractionGen      uint64
 }
 
 func newRegistryBuilder(registry *Registry, host RegistryCloneHost, currentDirectory tspath.RootedDirectoryPath) *registryBuilder {
@@ -597,6 +711,7 @@ func newRegistryBuilder(registry *Registry, host RegistryCloneHost, currentDirec
 		uniquePackageCount: registry.uniquePackageCount,
 		entrypoints:        dirty.NewMapBuilder(registry.entrypoints, core.Identity, core.Identity),
 		partialExtractions: registry.partialExtractions,
+		extractionGen:      registry.extractionGen,
 	}
 }
 
@@ -611,6 +726,7 @@ func (b *registryBuilder) Build() *Registry {
 		uniquePackageCount: b.uniquePackageCount,
 		entrypoints:        b.entrypoints.Build(),
 		partialExtractions: b.partialExtractions,
+		extractionGen:      b.extractionGen,
 	}
 }
 
@@ -980,13 +1096,7 @@ func (b *registryBuilder) updateIndexes(ctx context.Context, change RegistryChan
 	// we fall back to extracting from @types in a second pass. Packages with no main
 	// package extract directly from @types in the primary pass.
 	extractionStart := time.Now()
-	partial := b.partialExtractions
-	buildPreferences := bucketBuildPreferencesFromUserPreferences(b.userPreferences)
-	if !partial.usableFor(buildPreferences, projectReferenceOutputs) {
-		partial = &partialExtractions{}
-		partial.usableFor(buildPreferences, projectReferenceOutputs)
-		b.partialExtractions = partial
-	}
+	extractions := b.partialExtractions.setFor(bucketBuildPreferencesFromUserPreferences(b.userPreferences), projectReferenceOutputs)
 	seen := make(map[tspath.RootedDirectoryPath]bool)
 	extractionCache := make(map[tspath.RootedDirectoryPath]*perPackageExtractionResult)
 	var extractionMu sync.Mutex
@@ -1010,7 +1120,7 @@ func (b *registryBuilder) updateIndexes(ctx context.Context, change RegistryChan
 						if ctx.Err() != nil {
 							return
 						}
-						result := b.extractPackageOnce(ctx, partial, pkg.realpath, pkg.packageJson, pkg.packageName, projectReferenceOutputs, fileExcludePatterns, enableDirSearch)
+						result := b.extractPackageOnce(ctx, extractions, pkg.realpath, pkg.packageJson, pkg.packageName, projectReferenceOutputs, fileExcludePatterns, enableDirSearch)
 						if result != nil {
 							extractionMu.Lock()
 							extractionCache[pkg.realpath] = result
@@ -1032,7 +1142,7 @@ func (b *registryBuilder) updateIndexes(ctx context.Context, change RegistryChan
 						if ctx.Err() != nil {
 							return
 						}
-						result := b.extractPackageOnce(ctx, partial, pkg.typesRealpath, pkg.typesPackageJson, pkg.packageName, projectReferenceOutputs, fileExcludePatterns, true /*enableDirectorySearch*/)
+						result := b.extractPackageOnce(ctx, extractions, pkg.typesRealpath, pkg.typesPackageJson, pkg.packageName, projectReferenceOutputs, fileExcludePatterns, true /*enableDirectorySearch*/)
 						if result != nil {
 							extractionMu.Lock()
 							extractionCache[pkg.typesRealpath] = result
@@ -1062,7 +1172,7 @@ func (b *registryBuilder) updateIndexes(ctx context.Context, change RegistryChan
 			if ctx.Err() != nil {
 				return
 			}
-			result := b.extractPackageOnce(ctx, partial, pkg.typesRealpath, pkg.typesPackageJson, pkg.packageName, projectReferenceOutputs, fileExcludePatterns, true /*enableDirectorySearch*/)
+			result := b.extractPackageOnce(ctx, extractions, pkg.typesRealpath, pkg.typesPackageJson, pkg.packageName, projectReferenceOutputs, fileExcludePatterns, true /*enableDirectorySearch*/)
 			if result != nil {
 				extractionMu.Lock()
 				extractionCache[pkg.typesRealpath] = result
@@ -1513,12 +1623,9 @@ func (b *registryBuilder) discoverBucketPackages(
 	return result
 }
 
-// extractPackage extracts exports from a single package.json.
-// This runs once per unique realpath during the extraction phase.
-// Returns nil if the package has no extractable entrypoints.
 func (b *registryBuilder) extractPackageOnce(
 	ctx context.Context,
-	partial *partialExtractions,
+	extractions *extractionSet,
 	realpath tspath.RootedDirectoryPath,
 	packageJson *packagejson.InfoCacheEntry,
 	packageName string,
@@ -1527,22 +1634,18 @@ func (b *registryBuilder) extractPackageOnce(
 	enableDirectorySearch bool,
 ) *perPackageExtractionResult {
 	key := extractionKey{realpath: realpath, packageName: packageName, enableDirectorySearch: enableDirectorySearch}
-	pending, loaded := partial.results.LoadOrStore(key, &pendingExtraction{done: make(chan struct{})})
-	if loaded {
-		select {
-		case <-pending.done:
-			return pending.result
-		case <-ctx.Done():
-			return nil
-		}
-	}
-	pending.result = b.extractPackage(context.WithoutCancel(ctx), packageJson, packageName, projectReferenceOutputs, fileExcludePatterns, enableDirectorySearch)
-	close(pending.done)
-	return pending.result
+	return b.partialExtractions.extract(ctx, extractions, key, b.extractionGen, func() (*perPackageExtractionResult, *collections.Set[tspath.PathKey]) {
+		host := &extractionDependencyHost{RegistryCloneHost: b.host}
+		return b.extractPackage(context.WithoutCancel(ctx), host, packageJson, packageName, projectReferenceOutputs, fileExcludePatterns, enableDirectorySearch), &host.files
+	})
 }
 
+// extractPackage extracts exports from a single package.json.
+// This runs once per unique realpath during the extraction phase.
+// Returns nil if the package has no extractable entrypoints.
 func (b *registryBuilder) extractPackage(
 	ctx context.Context,
+	host RegistryCloneHost,
 	packageJson *packagejson.InfoCacheEntry,
 	packageName string,
 	projectReferenceOutputs map[tspath.PathKey]tspath.RootedFilePath,
@@ -1552,8 +1655,8 @@ func (b *registryBuilder) extractPackage(
 	if packageJson == nil || !packageJson.DirectoryExists {
 		return nil
 	}
-	toRealpath, toSymlink := getPackageRealpathFuncs(b.host.FS(), packageJson.PackageDirectory.AsDirectoryPath())
-	resolver := getModuleResolver(b.host, b.currentDirectory, toRealpath, b.resolverOptions)
+	toRealpath, toSymlink := getPackageRealpathFuncs(host.FS(), packageJson.PackageDirectory.AsDirectoryPath())
+	resolver := getModuleResolver(host, b.currentDirectory, toRealpath, b.resolverOptions)
 	packageEntrypoints := resolver.GetEntrypointsFromPackageJsonInfo(packageJson, packageName, enableDirectorySearch)
 	if packageEntrypoints == nil {
 		return nil
@@ -1606,7 +1709,7 @@ func (b *registryBuilder) extractPackage(
 			result.isSymlinked = true
 		}
 		wg.Go(func() {
-			file := b.host.GetSourceFile(realpathFileName, realpathPath)
+			file := host.GetSourceFile(realpathFileName, realpathPath)
 			if file != nil {
 				binder.BindSourceFile(file)
 			}
@@ -1616,7 +1719,7 @@ func (b *registryBuilder) extractPackage(
 	wg.Wait()
 	rootFiles = slices.DeleteFunc(rootFiles, func(f *ast.SourceFile) bool { return f == nil })
 
-	aliasResolver := newAliasResolver(rootFiles, symlinks, b.host, resolver, func(source ast.HasFileName, moduleName string) {
+	aliasResolver := newAliasResolver(rootFiles, symlinks, host, resolver, func(source ast.HasFileName, moduleName string) {
 		result.failedAmbientModuleLookupTargets.Add(moduleName)
 		if _, exists := result.failedAmbientModuleLookupSources[source.PathKey()]; !exists {
 			result.failedAmbientModuleLookupSources[source.PathKey()] = &failedAmbientModuleLookupSource{
