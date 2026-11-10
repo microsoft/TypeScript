@@ -18,9 +18,9 @@ erasableEnumErrors.ts(28,50): error TS18126: Erasable enum member initializers m
 erasableEnumErrors.ts(31,48): error TS18126: Erasable enum member initializers must be constant expressions.
 erasableEnumErrors.ts(31,67): error TS18126: Erasable enum member initializers must be constant expressions.
 erasableEnumErrors.ts(34,28): error TS18130: Erasable enum member names must be identifiers or string literals.
-erasableEnumErrors.ts(35,29): error TS1164: Computed property names are not allowed in enums.
-erasableEnumErrors.ts(37,38): error TS1164: Computed property names are not allowed in enums.
-erasableEnumErrors.ts(38,38): error TS1164: Computed property names are not allowed in enums.
+erasableEnumErrors.ts(35,29): error TS18130: Erasable enum member names must be identifiers or string literals.
+erasableEnumErrors.ts(37,38): error TS18130: Erasable enum member names must be identifiers or string literals.
+erasableEnumErrors.ts(38,38): error TS18130: Erasable enum member names must be identifiers or string literals.
 erasableEnumErrors.ts(39,45): error TS2339: Property '__proto__' does not exist on type 'typeof ComputedPrototypeKey'.
 erasableEnumErrors.ts(42,24): error TS18127: Spread assignments are not allowed in erasable enums.
 erasableEnumErrors.ts(43,24): error TS18128: Erasable enums only allow property assignments.
@@ -133,14 +133,14 @@ erasableEnumErrors.ts(82,28): error TS18129: An 'enum' annotation requires a nam
 !!! error TS18130: Erasable enum member names must be identifiers or string literals.
     const ComputedKey: enum = { ["foo"]: 1 };
                                 ~~~~~~~
-!!! error TS1164: Computed property names are not allowed in enums.
+!!! error TS18130: Erasable enum member names must be identifiers or string literals.
     const key = "Known";
     const ComputedKeyReference: enum = { [key]: 1 };
                                          ~~~~~
-!!! error TS1164: Computed property names are not allowed in enums.
+!!! error TS18130: Erasable enum member names must be identifiers or string literals.
     const ComputedPrototypeKey: enum = { ["__proto__"]: 1 };
                                          ~~~~~~~~~~~~~
-!!! error TS1164: Computed property names are not allowed in enums.
+!!! error TS18130: Erasable enum member names must be identifiers or string literals.
     const prototypeValue = ComputedPrototypeKey.__proto__;
                                                 ~~~~~~~~~
 !!! error TS2339: Property '__proto__' does not exist on type 'typeof ComputedPrototypeKey'.
