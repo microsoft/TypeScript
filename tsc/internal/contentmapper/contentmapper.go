@@ -35,6 +35,7 @@ type Definition struct {
 	Extensions []string `json:"extensions"`
 	Include    []string `json:"include,omitzero"`
 	// OutputExtensions contains the resolved mapping after applying manifest defaults and project overrides.
+	// It determines declaration filenames and their module format; canonical virtual outputs must agree.
 	OutputExtensions map[string]string `json:"outputExtensions,omitzero"`
 	Options          json.Value        `json:"options,omitempty"`
 }

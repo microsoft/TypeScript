@@ -8960,9 +8960,13 @@
         "category": "Error",
         "code": 18123
     },
-    "Content mapper '{0}' must specify 'extensions' in tsconfig or its package manifest.": {
+    "The content mapper '{0}' returned virtual extension '{1}', whose module format does not match declaration output '{2}'.": {
         "category": "Error",
         "code": 18125
+    },
+    "Content mapper '{0}' must specify 'extensions' in tsconfig or its package manifest.": {
+        "category": "Error",
+        "code": 18141
     },
     "Content mapper '{0}' is also registered for the extension '{1}', but has a conflicting 'outputExtensions' mapping. Each registration for this extension must produce the same output file name.": {
         "category": "Error",

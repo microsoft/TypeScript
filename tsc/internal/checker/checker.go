@@ -15642,7 +15642,7 @@ func (c *Checker) resolveExternalModule(
 					resolvedModule.ResolvedUsingExtraExtensions && sourceFile.ContentMapper() != "" && mappedSource
 				if specifier.IsRelative() && sourceFile.ContentMapper() != "" &&
 					(caseSensitivity.Canonicalize(predictedSpecifier.AsString()) != caseSensitivity.Canonicalize(resolvedSpecifier.AsString()) ||
-						mappedSource && !resolvedSpecifierRewritten) {
+						mappedSource && !resolvedSpecifierRewritten && resolvedModule.ResolvedUsingExtraExtensions) {
 					hasRootDirs := len(c.compilerOptions.RootDirs) > 0
 					hasModuleSuffixes := len(c.compilerOptions.ModuleSuffixes) > 0
 					if (hasRootDirs || hasModuleSuffixes) && mappedSpecifier != mappedSource {
