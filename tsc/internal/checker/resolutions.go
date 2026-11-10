@@ -25,7 +25,10 @@ type resolution struct {
 	// A query records the effects of a memoized computation, for replay by
 	// reuse of its result; see memo.go.
 	memo      bool
-	resolving bool // The resolution is the one in Checker.resolving for key
+	resolving bool // The resolution is counted in Checker.resolving as computing key
+	// The resolution is hidden by a cycle yield and shadowed by one
+	// re-entering it, until the yield ends; see beginResolving.
+	shadowed  bool
 	fromCheck bool // The query began in a check; see recordFromCheck
 	// The computation read the incomplete result of a computation in
 	// progress, or was started by one that did; see effectsToDrop.
@@ -147,111 +150,47 @@ func (c *Checker) forgetResult() {
 // resolvingIndex returns 1 + the index in resolutions of the outermost
 // computation of key in progress, or 0.
 func (c *Checker) resolvingIndex(key memoKey) int {
-	if i, ok := c.resolving.get(key); ok && int(i) >= c.visibleStart {
+	if i, ok := c.resolvingGet(key); ok && int(i) >= c.visibleStart {
 		return int(i) + 1
 	}
 	return 0
 }
 
-// resolvingTable maps the keys of computations in progress to the index in
-// resolutions of the outermost one. It only holds keys on the resolution
-// stack, so it stays small, and it is looked up far more often than it
-// changes. It uses open addressing with linear probing, with zero marking an
-// empty slot, as no memo key is zero.
+// resolvingTable counts the computations of memo cells in progress whose
+// keys hash to each of its slots, so that finding none, which is nearly
+// always the case, is one load. A computation in progress is a resolution
+// with resolving set, which is found by searching the resolution stack only
+// when its slot is not empty. The keys of the computations in progress are
+// few, so the slots are rarely shared.
 type resolvingTable struct {
-	slots []resolvingSlot
-	count int
+	counts [1 << resolvingTableBits]uint16
+	count  int
 }
 
-type resolvingSlot struct {
-	key   memoKey
-	index int32
+const resolvingTableBits = 12
+
+func resolvingHome(key memoKey) uint64 {
+	return uint64(key) * 0x9E3779B97F4A7C15 >> (64 - resolvingTableBits)
 }
 
-func (t *resolvingTable) home(key memoKey) int {
-	return int(uint64(key) * 0x9E3779B97F4A7C15 >> 32 & uint64(len(t.slots)-1))
-}
-
-func (t *resolvingTable) get(key memoKey) (int32, bool) {
-	if t.count == 0 {
+// resolvingGet returns the index in resolutions of the computation of key
+// recorded as in progress: the outermost, unless a cycle yield hides it and
+// a computation re-entering it shadows it (see beginResolving).
+func (c *Checker) resolvingGet(key memoKey) (int32, bool) {
+	if c.resolving.count == 0 || c.resolving.counts[resolvingHome(key)] == 0 {
 		return 0, false
 	}
-	mask := len(t.slots) - 1
-	for i := t.home(key); ; i = (i + 1) & mask {
-		switch t.slots[i].key {
-		case key:
-			return t.slots[i].index, true
-		case 0:
-			return 0, false
-		}
-	}
+	return c.resolvingFind(key)
 }
 
-// slot returns the slot holding key, or else the empty slot where it would
-// be inserted, with room for the insertion.
-func (t *resolvingTable) slot(key memoKey) *resolvingSlot {
-	if 2*(t.count+1) > len(t.slots) {
-		t.grow()
-	}
-	mask := len(t.slots) - 1
-	for i := t.home(key); ; i = (i + 1) & mask {
-		if k := t.slots[i].key; k == key || k == 0 {
-			return &t.slots[i]
+//go:noinline
+func (c *Checker) resolvingFind(key memoKey) (int32, bool) {
+	for i := range c.resolutions {
+		if f := &c.resolutions[i]; f.resolving && f.key == key && !f.shadowed {
+			return int32(i), true
 		}
 	}
-}
-
-func (t *resolvingTable) set(key memoKey, index int32) {
-	if 2*(t.count+1) > len(t.slots) {
-		t.grow()
-	}
-	mask := len(t.slots) - 1
-	for i := t.home(key); ; i = (i + 1) & mask {
-		switch t.slots[i].key {
-		case key:
-			t.slots[i].index = index
-			return
-		case 0:
-			t.slots[i] = resolvingSlot{key, index}
-			t.count++
-			return
-		}
-	}
-}
-
-func (t *resolvingTable) delete(key memoKey) {
-	if t.count == 0 {
-		return
-	}
-	mask := len(t.slots) - 1
-	i := t.home(key)
-	for t.slots[i].key != key {
-		if t.slots[i].key == 0 {
-			return
-		}
-		i = (i + 1) & mask
-	}
-	// Shift later entries of the probe sequence back into the hole, so that
-	// lookups need no tombstones.
-	for j := (i + 1) & mask; t.slots[j].key != 0; j = (j + 1) & mask {
-		if h := t.home(t.slots[j].key); (j-h)&mask >= (j-i)&mask {
-			t.slots[i] = t.slots[j]
-			i = j
-		}
-	}
-	t.slots[i] = resolvingSlot{}
-	t.count--
-}
-
-func (t *resolvingTable) grow() {
-	old := t.slots
-	t.slots = make([]resolvingSlot, max(2*len(old), 64))
-	t.count = 0
-	for _, slot := range old {
-		if slot.key != 0 {
-			t.set(slot.key, slot.index)
-		}
-	}
+	return 0, false
 }
 
 // beginResolving records that the resolution about to be pushed computes key,
@@ -259,20 +198,22 @@ func (t *resolvingTable) grow() {
 // one re-enters it as memoReentry says for its kind. It reports whether the
 // resolution is recorded.
 func (c *Checker) beginResolving(key memoKey) bool {
-	slot := c.resolving.slot(key)
-	if slot.key == 0 {
-		*slot = resolvingSlot{key, int32(len(c.resolutions))}
-		c.resolving.count++
-		return true
+	h := resolvingHome(key)
+	if c.resolving.counts[h] != 0 {
+		if i, ok := c.resolvingFind(key); ok {
+			if int(i) >= c.visibleStart {
+				c.reenter(int(i), memoReentry[key.field()])
+				return false
+			}
+			// A cycle yield hides the computation in progress, so this one
+			// shadows it until the yield ends.
+			y := &c.cycleYields[len(c.cycleYields)-1]
+			y.shadowed = append(y.shadowed, shadowedResolving{key, i})
+			c.resolutions[i].shadowed = true
+		}
 	}
-	i := slot.index
-	if int(i) >= c.visibleStart {
-		c.reenter(int(i), memoReentry[key.field()])
-		return false
-	}
-	y := &c.cycleYields[len(c.cycleYields)-1]
-	y.shadowed = append(y.shadowed, shadowedResolving{key, i})
-	slot.index = int32(len(c.resolutions))
+	c.resolving.counts[h]++
+	c.resolving.count++
 	return true
 }
 
@@ -281,7 +222,7 @@ func (c *Checker) beginResolving(key memoKey) bool {
 // by a cycle yield is shadowed in Checker.resolving by one re-entering it,
 // until the yield ends, even once that one has ended.
 func (c *Checker) resolvingAnyIndex(key memoKey) (int, bool) {
-	if i, ok := c.resolving.get(key); ok {
+	if i, ok := c.resolvingGet(key); ok {
 		return int(i), true
 	}
 	for _, y := range slices.Backward(c.cycleYields) {
@@ -299,7 +240,8 @@ func (c *Checker) resolvingAnyIndex(key memoKey) (int, bool) {
 // restores the one it shadows, so it is still the one recorded.
 func (c *Checker) endResolving(f *resolution) {
 	if f.resolving {
-		c.resolving.delete(f.key)
+		c.resolving.counts[resolvingHome(f.key)]--
+		c.resolving.count--
 		f.resolving = false
 	}
 }
