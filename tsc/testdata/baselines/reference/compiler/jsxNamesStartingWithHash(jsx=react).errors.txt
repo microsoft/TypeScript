@@ -1,0 +1,38 @@
+jsxNamesStartingWithHash.tsx(9,12): error TS2304: Cannot find name '#a'.
+jsxNamesStartingWithHash.tsx(9,17): error TS2304: Cannot find name '#a'.
+jsxNamesStartingWithHash.tsx(14,16): error TS1003: Identifier expected.
+jsxNamesStartingWithHash.tsx(19,17): error TS2322: Type '{ "#x": number; x: number; }' is not assignable to type '{ x: number; }'.
+  Property '#x' does not exist on type '{ x: number; }'.
+
+
+==== jsxNamesStartingWithHash.tsx (4 errors) ====
+    declare const React: any;
+    declare namespace JSX {
+        interface IntrinsicElements {
+            [name: string]: any;
+        }
+    }
+    declare function Comp(props: { x: number }): any;
+    
+    const a = <#a></#a>;
+               ~~
+!!! error TS2304: Cannot find name '#a'.
+                    ~~
+!!! error TS2304: Cannot find name '#a'.
+    const b = <div #b />;
+    const c = <div #c="" />;
+    const d = <div #d:e />;
+    const e = <a:#f />;
+    const f = <a.#g />;
+                   
+!!! error TS1003: Identifier expected.
+    const g = <#h:i />;
+    const h = <div j:#k />;
+    const i = <#l-m></#l-m>;
+    const j = <div #n-o={1} />;
+    const k = <Comp #x={1} x={1} />;
+                    ~~
+!!! error TS2322: Type '{ "#x": number; x: number; }' is not assignable to type '{ x: number; }'.
+!!! error TS2322:   Property '#x' does not exist on type '{ x: number; }'.
+    const l = <div #p #q="" r="" />;
+    
