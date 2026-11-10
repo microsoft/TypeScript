@@ -1383,6 +1383,30 @@ func TestCancelledBuildKeepsExtractedPackages(t *testing.T) {
 		assert.Assert(t, reads.Load() > 1, "pkg-a should be extracted again after it changed")
 		assert.Equal(t, singleBucket(t, autoImportStats(t, session).NodeModulesBuckets).ExportCount, 3)
 	})
+
+	t.Run("bulk node_modules changes discard extracted packages", func(t *testing.T) {
+		t.Parallel()
+		session, utils, reads, cancelOnRead := setup(t)
+		session.DidOpenFile(context.Background(), indexURI, 1, "export {};\n", lsproto.LanguageKindTypeScript)
+
+		ctx, cancel := context.WithCancel(context.Background())
+		defer cancel()
+		cancelOnRead.Store(&cancel)
+		_, _ = session.GetCurrentLanguageServiceWithAutoImports(ctx, indexURI)
+		assert.Equal(t, reads.Load(), int32(1))
+
+		assert.NilError(t, utils.FS().WriteFile(tspath.RootedFilePathFromNormalized(pkgADeclaration), "export declare const fromA: number;\nexport declare const alsoFromA: number;\n"))
+		events := []*lsproto.FileEvent{{Uri: lsproto.DocumentUri("file://" + pkgADeclaration), Type: lsproto.FileChangeTypeChanged}}
+		for i := range 1000 {
+			events = append(events, &lsproto.FileEvent{Uri: lsproto.DocumentUri(fmt.Sprintf("file://%s/node_modules/pkg-a/generated/file%d.d.ts", root, i)), Type: lsproto.FileChangeTypeChanged})
+		}
+		session.DidChangeWatchedFiles(context.Background(), events)
+
+		_, err := session.GetCurrentLanguageServiceWithAutoImports(context.Background(), indexURI)
+		assert.NilError(t, err)
+		assert.Assert(t, reads.Load() > 1, "pkg-a should be extracted again after a bulk change")
+		assert.Equal(t, singleBucket(t, autoImportStats(t, session).NodeModulesBuckets).ExportCount, 3)
+	})
 }
 
 func TestCancelledBuildTracksExtractionDependencies(t *testing.T) {

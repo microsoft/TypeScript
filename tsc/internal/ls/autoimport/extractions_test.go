@@ -76,6 +76,38 @@ func TestPartialExtractionsInvalidation(t *testing.T) {
 		assert.Equal(t, *runs, 2)
 	})
 
+	t.Run("validated reuse advances the generation", func(t *testing.T) {
+		t.Parallel()
+		p, set, extract, runs := setup()
+		assert.Equal(t, extract(0).statsExports, 1)
+		g1 := p.recordChange(0, changeOf(other))
+		g2 := p.recordChange(g1, changeOf(other))
+		assert.Equal(t, extract(g2).statsExports, 1)
+		assert.Equal(t, set.results[key].generation, g2)
+		assert.Equal(t, *runs, 1)
+	})
+
+	t.Run("cancelled waiter does not start a new extraction", func(t *testing.T) {
+		t.Parallel()
+		p, set, extract, runs := setup()
+		assert.Equal(t, extract(0).statsExports, 1)
+		edited := p.recordChange(0, changeOf(pkgA+"/index.d.ts"))
+		ctx, cancel := context.WithCancel(context.Background())
+		cancel()
+		result := p.extract(ctx, set, key, edited, func() (*perPackageExtractionResult, *collections.Set[tspath.PathKey]) {
+			*runs++
+			return nil, nil
+		})
+		assert.Assert(t, result == nil)
+		assert.Equal(t, *runs, 1)
+	})
+
+	t.Run("invalidate all discards extractions", func(t *testing.T) {
+		t.Parallel()
+		assert.Assert(t, requiresNewPartialExtractions(RegistryChange{InvalidateAll: true}, tspath.CaseSensitive))
+		assert.Assert(t, !requiresNewPartialExtractions(RegistryChange{Changed: changeOf(other)}, tspath.CaseSensitive))
+	})
+
 	t.Run("replacement set stays reachable", func(t *testing.T) {
 		t.Parallel()
 		p, set, _, _ := setup()
