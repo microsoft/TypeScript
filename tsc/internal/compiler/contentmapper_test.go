@@ -250,6 +250,35 @@ func TestContentMapperDeclarationModuleFormat(t *testing.T) {
 	}
 }
 
+func TestContentMapperDeclarationModuleFormatSkipsJSON(t *testing.T) {
+	t.Parallel()
+	for _, packageType := range []string{"module", "commonjs"} {
+		t.Run(packageType, func(t *testing.T) {
+			t.Parallel()
+			program := newContentMapperProgramWithOptions(t, fakeContentMapperHost{
+				transform: func(fileName string, content string) (contentmapper.Result, error) {
+					return contentmapper.Result{Text: `{"value":1}`, VirtualExtension: ".json", Mappings: spanmap.New(nil)}, nil
+				},
+			}, map[string]string{
+				"/src/package.json":  `{"type":"` + packageType + `"}`,
+				"/src/Component.vue": "<template />",
+			}, []string{"/src/Component.vue"}, &core.CompilerOptions{
+				Module:            core.ModuleKindNodeNext,
+				ModuleResolution:  core.ModuleResolutionKindNodeNext,
+				ResolveJsonModule: core.TSTrue,
+				Declaration:       core.TSTrue,
+				OutDir:            "/dist",
+			})
+			file := program.GetSourceFile("/src/Component.vue")
+			assert.Assert(t, file != nil)
+			assert.Assert(t, ast.IsJsonSourceFile(file))
+			assert.Equal(t, len(program.GetSyntacticDiagnostics(t.Context(), file)), 0)
+			paths := outputpaths.GetOutputPathsFor(file, program.Options(), program, outputpaths.ForceEmitPaths{})
+			assert.Equal(t, paths.DeclarationFilePath(), tspath.RootedFilePath(""))
+		})
+	}
+}
+
 func TestContentMapperDeclarationModuleFormatWithoutNodeResolution(t *testing.T) {
 	t.Parallel()
 	for _, moduleResolution := range []core.ModuleResolutionKind{core.ModuleResolutionKindBundler, core.ModuleResolutionKindNode10} {

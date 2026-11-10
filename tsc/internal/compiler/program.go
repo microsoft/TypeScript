@@ -825,7 +825,7 @@ func (p *Program) GetSyntacticDiagnostics(ctx context.Context, sourceFile *ast.S
 }
 
 func (p *Program) getContentMapperModuleFormatDiagnostic(file *ast.SourceFile) *ast.Diagnostic {
-	if file.IsContentMapperFailureStub() || file.IsContentMapperSupplemental() {
+	if file.IsContentMapperFailureStub() || file.IsContentMapperSupplemental() || ast.IsJsonSourceFile(file) {
 		return nil
 	}
 	mapper := p.GetContentMapper(file)
