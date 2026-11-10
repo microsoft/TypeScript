@@ -90,18 +90,20 @@ import { Color, Numeric, Shade } from "./enums";
 >Numeric : typeof Numeric
 >Shade : typeof Color
 
-export const red: Color.Red = Color.Red;
+export const red: Color.Red = Color.Red as const;
 >red : Color.Red
 >Color : any
+>Color.Red as const : Color.Red
 >Color.Red : Color.Red
 >Color : typeof Color
 >Red : Color.Red
 
-export const shade: Shade = Color.Blue;
+export const shade: Shade = Color["Blue"] as const;
 >shade : Color
->Color.Blue : Color.Blue
+>Color["Blue"] as const : Color.Blue
+>Color["Blue"] : Color.Blue
 >Color : typeof Color
->Blue : Color.Blue
+>"Blue" : "Blue"
 
 export const numeric: Numeric = Numeric.Shifted;
 >numeric : Numeric

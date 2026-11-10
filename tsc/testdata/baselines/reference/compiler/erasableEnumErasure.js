@@ -16,6 +16,8 @@ const StringValues: enum = {
 let numeric: Numeric = Numeric.First;
 let member: Numeric.First = Numeric.First;
 let text: StringValues = StringValues.Second;
+const constMember = StringValues.First as const;
+const constIndexed = StringValues["First"] as const;
 const keys: keyof typeof StringValues = "First";
 const object: typeof StringValues = StringValues;
 function narrow(value: StringValues) {
@@ -66,6 +68,8 @@ const StringValues = {
 let numeric = Numeric.First;
 let member = Numeric.First;
 let text = StringValues.Second;
+const constMember = StringValues.First;
+const constIndexed = StringValues["First"];
 const keys = "First";
 const object = StringValues;
 function narrow(value) {
@@ -106,6 +110,8 @@ declare const StringValues: enum = {
 declare let numeric: Numeric;
 declare let member: Numeric.First;
 declare let text: StringValues;
+declare const constMember: StringValues.First;
+declare const constIndexed: StringValues.First;
 declare const keys: keyof typeof StringValues;
 declare const object: typeof StringValues;
 declare function narrow(value: StringValues): StringValues;

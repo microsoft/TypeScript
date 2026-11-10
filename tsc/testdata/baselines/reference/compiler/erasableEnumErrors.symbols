@@ -141,22 +141,31 @@ const Numeric: enum = { First: 1, Second: 2 };
 >First : Symbol(Numeric.First, Decl(erasableEnumErrors.ts, 40, 23))
 >Second : Symbol(Numeric.Second, Decl(erasableEnumErrors.ts, 40, 33))
 
+// Const assertions on member references still block constant evaluation in initializers.
+const MemberAssertionBoundary: enum = { Value: Numeric.First as const };
+>MemberAssertionBoundary : Symbol(MemberAssertionBoundary, Decl(erasableEnumErrors.ts, 42, 5))
+>Value : Symbol(MemberAssertionBoundary.Value, Decl(erasableEnumErrors.ts, 42, 39))
+>Numeric.First : Symbol(Numeric.First, Decl(erasableEnumErrors.ts, 40, 23))
+>Numeric : Symbol(Numeric, Decl(erasableEnumErrors.ts, 40, 5))
+>First : Symbol(Numeric.First, Decl(erasableEnumErrors.ts, 40, 23))
+>const : Symbol(const)
+
 const Spread: enum = { ...Numeric };
->Spread : Symbol(Spread, Decl(erasableEnumErrors.ts, 41, 5))
+>Spread : Symbol(Spread, Decl(erasableEnumErrors.ts, 43, 5))
 >Numeric : Symbol(Numeric, Decl(erasableEnumErrors.ts, 40, 5))
 
 const Method: enum = { method() {} };
->Method : Symbol(Method, Decl(erasableEnumErrors.ts, 42, 5))
->method : Symbol(method, Decl(erasableEnumErrors.ts, 42, 22))
+>Method : Symbol(Method, Decl(erasableEnumErrors.ts, 44, 5))
+>method : Symbol(method, Decl(erasableEnumErrors.ts, 44, 22))
 
 const Getter: enum = { get value() { return 1; } };
->Getter : Symbol(Getter, Decl(erasableEnumErrors.ts, 43, 5))
->value : Symbol(value, Decl(erasableEnumErrors.ts, 43, 22))
+>Getter : Symbol(Getter, Decl(erasableEnumErrors.ts, 45, 5))
+>value : Symbol(value, Decl(erasableEnumErrors.ts, 45, 22))
 
 const Setter: enum = { set value(value: number) {} };
->Setter : Symbol(Setter, Decl(erasableEnumErrors.ts, 44, 5))
->value : Symbol(value, Decl(erasableEnumErrors.ts, 44, 22))
->value : Symbol(value, Decl(erasableEnumErrors.ts, 44, 33))
+>Setter : Symbol(Setter, Decl(erasableEnumErrors.ts, 46, 5))
+>value : Symbol(value, Decl(erasableEnumErrors.ts, 46, 22))
+>value : Symbol(value, Decl(erasableEnumErrors.ts, 46, 33))
 
 // Members are readonly and numeric reverse mappings are absent.
 Numeric.First = Numeric.Second;
@@ -168,126 +177,126 @@ Numeric.First = Numeric.Second;
 >Second : Symbol(Numeric.Second, Decl(erasableEnumErrors.ts, 40, 33))
 
 const reverse = Numeric[1];
->reverse : Symbol(reverse, Decl(erasableEnumErrors.ts, 48, 5))
+>reverse : Symbol(reverse, Decl(erasableEnumErrors.ts, 50, 5))
 >Numeric : Symbol(Numeric, Decl(erasableEnumErrors.ts, 40, 5))
 
 const unknownKey = Numeric.Unknown;
->unknownKey : Symbol(unknownKey, Decl(erasableEnumErrors.ts, 49, 5))
+>unknownKey : Symbol(unknownKey, Decl(erasableEnumErrors.ts, 51, 5))
 >Numeric : Symbol(Numeric, Decl(erasableEnumErrors.ts, 40, 5))
 
 // Initializers use ordinary lexical bindings, without a scope for enum members.
 const Unqualified: enum = { A: 1, B: A };
->Unqualified : Symbol(Unqualified, Decl(erasableEnumErrors.ts, 52, 5))
->A : Symbol(Unqualified.A, Decl(erasableEnumErrors.ts, 52, 27))
->B : Symbol(Unqualified.B, Decl(erasableEnumErrors.ts, 52, 33))
+>Unqualified : Symbol(Unqualified, Decl(erasableEnumErrors.ts, 54, 5))
+>A : Symbol(Unqualified.A, Decl(erasableEnumErrors.ts, 54, 27))
+>B : Symbol(Unqualified.B, Decl(erasableEnumErrors.ts, 54, 33))
 
 const SelfReference: enum = { A: 1, B: SelfReference.A };
->SelfReference : Symbol(SelfReference, Decl(erasableEnumErrors.ts, 53, 5))
->A : Symbol(SelfReference.A, Decl(erasableEnumErrors.ts, 53, 29))
->B : Symbol(SelfReference.B, Decl(erasableEnumErrors.ts, 53, 35))
->SelfReference.A : Symbol(SelfReference.A, Decl(erasableEnumErrors.ts, 53, 29))
->SelfReference : Symbol(SelfReference, Decl(erasableEnumErrors.ts, 53, 5))
->A : Symbol(SelfReference.A, Decl(erasableEnumErrors.ts, 53, 29))
+>SelfReference : Symbol(SelfReference, Decl(erasableEnumErrors.ts, 55, 5))
+>A : Symbol(SelfReference.A, Decl(erasableEnumErrors.ts, 55, 29))
+>B : Symbol(SelfReference.B, Decl(erasableEnumErrors.ts, 55, 35))
+>SelfReference.A : Symbol(SelfReference.A, Decl(erasableEnumErrors.ts, 55, 29))
+>SelfReference : Symbol(SelfReference, Decl(erasableEnumErrors.ts, 55, 5))
+>A : Symbol(SelfReference.A, Decl(erasableEnumErrors.ts, 55, 29))
 
 var VarSelfReference: enum = { A: 1, B: VarSelfReference.A };
->VarSelfReference : Symbol(VarSelfReference, Decl(erasableEnumErrors.ts, 54, 3))
->A : Symbol(VarSelfReference.A, Decl(erasableEnumErrors.ts, 54, 30))
->B : Symbol(VarSelfReference.B, Decl(erasableEnumErrors.ts, 54, 36))
->VarSelfReference.A : Symbol(VarSelfReference.A, Decl(erasableEnumErrors.ts, 54, 30))
->VarSelfReference : Symbol(VarSelfReference, Decl(erasableEnumErrors.ts, 54, 3))
->A : Symbol(VarSelfReference.A, Decl(erasableEnumErrors.ts, 54, 30))
+>VarSelfReference : Symbol(VarSelfReference, Decl(erasableEnumErrors.ts, 56, 3))
+>A : Symbol(VarSelfReference.A, Decl(erasableEnumErrors.ts, 56, 30))
+>B : Symbol(VarSelfReference.B, Decl(erasableEnumErrors.ts, 56, 36))
+>VarSelfReference.A : Symbol(VarSelfReference.A, Decl(erasableEnumErrors.ts, 56, 30))
+>VarSelfReference : Symbol(VarSelfReference, Decl(erasableEnumErrors.ts, 56, 3))
+>A : Symbol(VarSelfReference.A, Decl(erasableEnumErrors.ts, 56, 30))
 
 // Deferred callbacks avoid initialization errors; calls are still nonconstant.
 const Deferred: enum = { A: ((f: () => number): number => 1)((): number => Deferred.B), B: 1 };
->Deferred : Symbol(Deferred, Decl(erasableEnumErrors.ts, 56, 5))
->A : Symbol(Deferred.A, Decl(erasableEnumErrors.ts, 56, 24))
->f : Symbol(f, Decl(erasableEnumErrors.ts, 56, 30))
->Deferred.B : Symbol(Deferred.B, Decl(erasableEnumErrors.ts, 56, 87))
->Deferred : Symbol(Deferred, Decl(erasableEnumErrors.ts, 56, 5))
->B : Symbol(Deferred.B, Decl(erasableEnumErrors.ts, 56, 87))
->B : Symbol(Deferred.B, Decl(erasableEnumErrors.ts, 56, 87))
+>Deferred : Symbol(Deferred, Decl(erasableEnumErrors.ts, 58, 5))
+>A : Symbol(Deferred.A, Decl(erasableEnumErrors.ts, 58, 24))
+>f : Symbol(f, Decl(erasableEnumErrors.ts, 58, 30))
+>Deferred.B : Symbol(Deferred.B, Decl(erasableEnumErrors.ts, 58, 87))
+>Deferred : Symbol(Deferred, Decl(erasableEnumErrors.ts, 58, 5))
+>B : Symbol(Deferred.B, Decl(erasableEnumErrors.ts, 58, 87))
+>B : Symbol(Deferred.B, Decl(erasableEnumErrors.ts, 58, 87))
 
 const Immediate: enum = { A: ((): number => Immediate.B)(), B: 1 };
->Immediate : Symbol(Immediate, Decl(erasableEnumErrors.ts, 57, 5))
->A : Symbol(Immediate.A, Decl(erasableEnumErrors.ts, 57, 25))
->Immediate.B : Symbol(Immediate.B, Decl(erasableEnumErrors.ts, 57, 59))
->Immediate : Symbol(Immediate, Decl(erasableEnumErrors.ts, 57, 5))
->B : Symbol(Immediate.B, Decl(erasableEnumErrors.ts, 57, 59))
->B : Symbol(Immediate.B, Decl(erasableEnumErrors.ts, 57, 59))
+>Immediate : Symbol(Immediate, Decl(erasableEnumErrors.ts, 59, 5))
+>A : Symbol(Immediate.A, Decl(erasableEnumErrors.ts, 59, 25))
+>Immediate.B : Symbol(Immediate.B, Decl(erasableEnumErrors.ts, 59, 59))
+>Immediate : Symbol(Immediate, Decl(erasableEnumErrors.ts, 59, 5))
+>B : Symbol(Immediate.B, Decl(erasableEnumErrors.ts, 59, 59))
+>B : Symbol(Immediate.B, Decl(erasableEnumErrors.ts, 59, 59))
 
 const OuterMember = 10;
->OuterMember : Symbol(OuterMember, Decl(erasableEnumErrors.ts, 58, 5))
+>OuterMember : Symbol(OuterMember, Decl(erasableEnumErrors.ts, 60, 5))
 
 const Lexical: enum = { OuterMember: 1, Value: OuterMember };
->Lexical : Symbol(Lexical, Decl(erasableEnumErrors.ts, 59, 5))
->OuterMember : Symbol(Lexical.OuterMember, Decl(erasableEnumErrors.ts, 59, 23))
->Value : Symbol(Lexical.Value, Decl(erasableEnumErrors.ts, 59, 39))
->OuterMember : Symbol(OuterMember, Decl(erasableEnumErrors.ts, 58, 5))
+>Lexical : Symbol(Lexical, Decl(erasableEnumErrors.ts, 61, 5))
+>OuterMember : Symbol(Lexical.OuterMember, Decl(erasableEnumErrors.ts, 61, 23))
+>Value : Symbol(Lexical.Value, Decl(erasableEnumErrors.ts, 61, 39))
+>OuterMember : Symbol(OuterMember, Decl(erasableEnumErrors.ts, 60, 5))
 
 const lexicalValue: Lexical.Value = 10; // ok: Value refers to the outer constant.
->lexicalValue : Symbol(lexicalValue, Decl(erasableEnumErrors.ts, 60, 5))
->Lexical : Symbol(Lexical, Decl(erasableEnumErrors.ts, 59, 5))
->Value : Symbol(Lexical.Value, Decl(erasableEnumErrors.ts, 59, 39))
+>lexicalValue : Symbol(lexicalValue, Decl(erasableEnumErrors.ts, 62, 5))
+>Lexical : Symbol(Lexical, Decl(erasableEnumErrors.ts, 61, 5))
+>Value : Symbol(Lexical.Value, Decl(erasableEnumErrors.ts, 61, 39))
 
 // Duplicate keys follow object literal rules; bindings cannot be redeclared.
 const Duplicate: enum = { A: 1, A: 2 };
->Duplicate : Symbol(Duplicate, Decl(erasableEnumErrors.ts, 63, 5))
->A : Symbol(Duplicate.A, Decl(erasableEnumErrors.ts, 63, 25), Decl(erasableEnumErrors.ts, 63, 31))
->A : Symbol(Duplicate.A, Decl(erasableEnumErrors.ts, 63, 25), Decl(erasableEnumErrors.ts, 63, 31))
+>Duplicate : Symbol(Duplicate, Decl(erasableEnumErrors.ts, 65, 5))
+>A : Symbol(Duplicate.A, Decl(erasableEnumErrors.ts, 65, 25), Decl(erasableEnumErrors.ts, 65, 31))
+>A : Symbol(Duplicate.A, Decl(erasableEnumErrors.ts, 65, 25), Decl(erasableEnumErrors.ts, 65, 31))
 
 const Repeated: enum = { A: 1 };
->Repeated : Symbol(Repeated, Decl(erasableEnumErrors.ts, 64, 5))
->A : Symbol(Repeated.A, Decl(erasableEnumErrors.ts, 64, 24))
+>Repeated : Symbol(Repeated, Decl(erasableEnumErrors.ts, 66, 5))
+>A : Symbol(Repeated.A, Decl(erasableEnumErrors.ts, 66, 24))
 
 const Repeated: enum = { B: 2 };
->Repeated : Symbol(Repeated, Decl(erasableEnumErrors.ts, 65, 5))
->B : Symbol(Repeated.B, Decl(erasableEnumErrors.ts, 65, 24))
+>Repeated : Symbol(Repeated, Decl(erasableEnumErrors.ts, 67, 5))
+>B : Symbol(Repeated.B, Decl(erasableEnumErrors.ts, 67, 24))
 
 // Only a null prototype setter is allowed, and it does not declare an enum member.
 const PrototypeKey: enum = { __proto__: 1 };
->PrototypeKey : Symbol(PrototypeKey, Decl(erasableEnumErrors.ts, 68, 5))
->__proto__ : Symbol(__proto__, Decl(erasableEnumErrors.ts, 68, 28))
+>PrototypeKey : Symbol(PrototypeKey, Decl(erasableEnumErrors.ts, 70, 5))
+>__proto__ : Symbol(__proto__, Decl(erasableEnumErrors.ts, 70, 28))
 
 const QuotedPrototypeKey: enum = { "__proto__": 1 };
->QuotedPrototypeKey : Symbol(QuotedPrototypeKey, Decl(erasableEnumErrors.ts, 69, 5))
->"__proto__" : Symbol("__proto__", Decl(erasableEnumErrors.ts, 69, 34))
+>QuotedPrototypeKey : Symbol(QuotedPrototypeKey, Decl(erasableEnumErrors.ts, 71, 5))
+>"__proto__" : Symbol("__proto__", Decl(erasableEnumErrors.ts, 71, 34))
 
 const PrototypeObject: enum = { __proto__: {} };
->PrototypeObject : Symbol(PrototypeObject, Decl(erasableEnumErrors.ts, 70, 5))
->__proto__ : Symbol(__proto__, Decl(erasableEnumErrors.ts, 70, 31))
+>PrototypeObject : Symbol(PrototypeObject, Decl(erasableEnumErrors.ts, 72, 5))
+>__proto__ : Symbol(__proto__, Decl(erasableEnumErrors.ts, 72, 31))
 
 const AssertedPrototype: enum = { __proto__: null as null };
->AssertedPrototype : Symbol(AssertedPrototype, Decl(erasableEnumErrors.ts, 71, 5))
->__proto__ : Symbol(__proto__, Decl(erasableEnumErrors.ts, 71, 33))
+>AssertedPrototype : Symbol(AssertedPrototype, Decl(erasableEnumErrors.ts, 73, 5))
+>__proto__ : Symbol(__proto__, Decl(erasableEnumErrors.ts, 73, 33))
 
 const NullPrototype: enum = { __proto__: null, A: 1 };
->NullPrototype : Symbol(NullPrototype, Decl(erasableEnumErrors.ts, 72, 5))
->__proto__ : Symbol(__proto__, Decl(erasableEnumErrors.ts, 72, 29))
->A : Symbol(NullPrototype.A, Decl(erasableEnumErrors.ts, 72, 46))
+>NullPrototype : Symbol(NullPrototype, Decl(erasableEnumErrors.ts, 74, 5))
+>__proto__ : Symbol(__proto__, Decl(erasableEnumErrors.ts, 74, 29))
+>A : Symbol(NullPrototype.A, Decl(erasableEnumErrors.ts, 74, 46))
 
 const nullPrototypeMember = NullPrototype.__proto__;
->nullPrototypeMember : Symbol(nullPrototypeMember, Decl(erasableEnumErrors.ts, 73, 5))
->NullPrototype : Symbol(NullPrototype, Decl(erasableEnumErrors.ts, 72, 5))
+>nullPrototypeMember : Symbol(nullPrototypeMember, Decl(erasableEnumErrors.ts, 75, 5))
+>NullPrototype : Symbol(NullPrototype, Decl(erasableEnumErrors.ts, 74, 5))
 
 const __proto__ = "own";
->__proto__ : Symbol(__proto__, Decl(erasableEnumErrors.ts, 74, 5))
+>__proto__ : Symbol(__proto__, Decl(erasableEnumErrors.ts, 76, 5))
 
 const PrototypeShorthand: enum = { __proto__ };
->PrototypeShorthand : Symbol(PrototypeShorthand, Decl(erasableEnumErrors.ts, 75, 5))
->__proto__ : Symbol(__proto__, Decl(erasableEnumErrors.ts, 75, 34))
+>PrototypeShorthand : Symbol(PrototypeShorthand, Decl(erasableEnumErrors.ts, 77, 5))
+>__proto__ : Symbol(__proto__, Decl(erasableEnumErrors.ts, 77, 34))
 
 // The annotation requires a named variable statement with an object literal initializer.
 let NoInitializer: enum;
->NoInitializer : Symbol(NoInitializer, Decl(erasableEnumErrors.ts, 78, 3))
+>NoInitializer : Symbol(NoInitializer, Decl(erasableEnumErrors.ts, 80, 3))
 
 const NonObject: enum = 1;
->NonObject : Symbol(NonObject, Decl(erasableEnumErrors.ts, 79, 5))
+>NonObject : Symbol(NonObject, Decl(erasableEnumErrors.ts, 81, 5))
 
 const { Destructuring }: enum = { Destructuring: 1 };
->Destructuring : Symbol(Destructuring, Decl(erasableEnumErrors.ts, 80, 7))
->Destructuring : Symbol(Destructuring, Decl(erasableEnumErrors.ts, 80, 33))
+>Destructuring : Symbol(Destructuring, Decl(erasableEnumErrors.ts, 82, 7))
+>Destructuring : Symbol(Destructuring, Decl(erasableEnumErrors.ts, 82, 33))
 
 for (const ForInitializer: enum = { A: 1 }; false; ) {}
->ForInitializer : Symbol(ForInitializer, Decl(erasableEnumErrors.ts, 81, 10))
->A : Symbol(A, Decl(erasableEnumErrors.ts, 81, 35))
+>ForInitializer : Symbol(ForInitializer, Decl(erasableEnumErrors.ts, 83, 10))
+>A : Symbol(A, Decl(erasableEnumErrors.ts, 83, 35))
 

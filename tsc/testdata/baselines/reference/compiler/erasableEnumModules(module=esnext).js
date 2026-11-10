@@ -23,8 +23,8 @@ export namespace Values {
 }
 //// [consumer.ts]
 import { Color, Numeric, Shade } from "./enums";
-export const red: Color.Red = Color.Red;
-export const shade: Shade = Color.Blue;
+export const red: Color.Red = Color.Red as const;
+export const shade: Shade = Color["Blue"] as const;
 export const numeric: Numeric = Numeric.Shifted;
 export function choose(color: Color): Color {
     return color;
@@ -66,7 +66,7 @@ export var Values;
 //// [consumer.js]
 import { Color, Numeric } from "./enums";
 export const red = Color.Red;
-export const shade = Color.Blue;
+export const shade = Color["Blue"];
 export const numeric = Numeric.Shifted;
 export function choose(color) {
     return color;

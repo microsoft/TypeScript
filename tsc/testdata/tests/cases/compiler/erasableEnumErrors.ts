@@ -42,6 +42,8 @@ const ComputedPrototypeKey: enum = { ["__proto__"]: 1 };
 const prototypeValue = ComputedPrototypeKey.__proto__;
 
 const Numeric: enum = { First: 1, Second: 2 };
+// Const assertions on member references still block constant evaluation in initializers.
+const MemberAssertionBoundary: enum = { Value: Numeric.First as const };
 const Spread: enum = { ...Numeric };
 const Method: enum = { method() {} };
 const Getter: enum = { get value() { return 1; } };

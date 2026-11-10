@@ -187,6 +187,16 @@ const Numeric: enum = { First: 1, Second: 2 };
 >Second : Numeric.Second
 >2 : 2
 
+// Const assertions on member references still block constant evaluation in initializers.
+const MemberAssertionBoundary: enum = { Value: Numeric.First as const };
+>MemberAssertionBoundary : typeof MemberAssertionBoundary
+>{ Value: Numeric.First as const } : typeof MemberAssertionBoundary
+>Value : any
+>Numeric.First as const : Numeric.First
+>Numeric.First : Numeric.First
+>Numeric : typeof Numeric
+>First : Numeric.First
+
 const Spread: enum = { ...Numeric };
 >Spread : typeof Spread
 >{ ...Numeric } : typeof Spread
