@@ -1812,6 +1812,9 @@ func (r *resolutionState) tryFile(fileName resolutionCandidate) (tspath.RootedFi
 	}
 
 	ext := tspath.RootedFilePathFromPath(fileName.path).Extension()
+	if ext == "" && len(r.resolver.extraExtensions) > 0 {
+		ext = tspath.RootedFilePathFromPath(fileName.path).LongestExtension(r.resolver.extraExtensions, tspath.CaseSensitive)
+	}
 	fileNameNoExtension := fileName.RemoveExtension(ext)
 	for _, suffix := range r.compilerOptions.ModuleSuffixes {
 		path := fileNameNoExtension.AppendSuffix(suffix + ext)
