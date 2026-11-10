@@ -14,7 +14,7 @@ import * as b from '../../beta/b'
 //// [/home/src/workspaces/project/beta/b.ts] *new* 
 export { }
 
-tsgo --p alpha/tsconfig.json
+tsc --p alpha/tsconfig.json
 ExitStatus:: DiagnosticsPresent_OutputsGenerated
 Output::
 [96malpha/src/a.ts[0m:[93m1[0m:[93m20[0m - [91merror[0m[90m TS6059: [0mFile '/home/src/workspaces/project/beta/b.ts' is not under 'rootDir' '/home/src/workspaces/project/alpha'. 'rootDir' is expected to contain all source files.

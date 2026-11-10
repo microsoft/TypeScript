@@ -45,7 +45,7 @@ import {} from "../../common/src/index.ts";
     ]
 }
 
-tsgo -p packages/main --pretty false
+tsc -p packages/main --pretty false
 ExitStatus:: DiagnosticsPresent_OutputsGenerated
 Output::
 packages/main/src/index.ts(1,16): error TS2878: This import path is unsafe to rewrite because it resolves to another project, and the relative path between the projects' output files is not the same as the relative path between its input files.

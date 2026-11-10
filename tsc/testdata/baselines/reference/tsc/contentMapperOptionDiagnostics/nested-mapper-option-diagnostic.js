@@ -20,7 +20,7 @@ export const value = 1;
     ]
 }
 
-tsgo --runExternalCode --pretty false
+tsc --runExternalCode --pretty false
 ExitStatus:: DiagnosticsPresent_OutputsGenerated
 Output::
 tsconfig.json(6,48): error mapper123: Option 'name' requires a string.

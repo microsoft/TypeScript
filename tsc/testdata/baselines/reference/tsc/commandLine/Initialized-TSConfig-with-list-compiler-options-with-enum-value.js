@@ -2,7 +2,7 @@ currentDirectory::/home/src/workspaces/project
 useCaseSensitiveFileNames::true
 Input::
 
-tsgo --init --lib es5,es2015.core
+tsc --init --lib es5,es2015.core
 ExitStatus:: Success
 Output::
 

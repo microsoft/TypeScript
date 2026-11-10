@@ -1,6 +1,7 @@
 package packagejson
 
 import (
+	"maps"
 	"sync"
 
 	"github.com/microsoft/TypeScript/tsc/internal/collections"
@@ -216,8 +217,13 @@ func (p *InfoCacheEntry) WithPackageDirectory(packageDirectory PackageDirectory)
 	}
 }
 
+// InfoCache reads from an immutable base map without locking (contention on a
+// shared lock is costly during parallel module resolution) and records new
+// entries in a concurrent overlay. Clone flattens both into a new base map,
+// which is much cheaper than copying a sync.Map entry by entry.
 type InfoCache struct {
-	cache           collections.SyncMap[tspath.PathKey, *InfoCacheEntry]
+	base            map[tspath.PathKey]*InfoCacheEntry
+	added           collections.SyncMap[tspath.PathKey, *InfoCacheEntry]
 	caseSensitivity tspath.CaseSensitivity
 }
 
@@ -228,12 +234,18 @@ func NewInfoCache(caseSensitivity tspath.CaseSensitivity) *InfoCache {
 }
 
 func (p *InfoCache) Clone() *InfoCache {
-	clone := NewInfoCache(p.caseSensitivity)
-	p.cache.Range(func(key tspath.PathKey, value *InfoCacheEntry) bool {
-		clone.cache.Store(key, value)
+	base := maps.Clone(p.base)
+	p.added.Range(func(key tspath.PathKey, value *InfoCacheEntry) bool {
+		if base == nil {
+			base = make(map[tspath.PathKey]*InfoCacheEntry)
+		}
+		base[key] = value
 		return true
 	})
-	return clone
+	return &InfoCache{
+		base:            base,
+		caseSensitivity: p.caseSensitivity,
+	}
 }
 
 func (p *InfoCache) PackageDirectory(directory tspath.RootedDirectoryPath) PackageDirectory {
@@ -245,17 +257,28 @@ func (p *InfoCache) CaseSensitivity() tspath.CaseSensitivity {
 }
 
 func (p *InfoCache) Get(directory PackageDirectory) *InfoCacheEntry {
-	if value, ok := p.cache.Load(directory.PathKey()); ok {
+	key := directory.PathKey()
+	if value, ok := p.base[key]; ok {
 		return value
 	}
-	return nil
+	value, _ := p.added.Load(key)
+	return value
 }
 
 func (p *InfoCache) Set(directory PackageDirectory, info *InfoCacheEntry) *InfoCacheEntry {
-	actual, _ := p.cache.LoadOrStore(directory.PathKey(), info)
+	key := directory.PathKey()
+	if existing, ok := p.base[key]; ok {
+		return existing
+	}
+	actual, _ := p.added.LoadOrStore(key, info)
 	return actual
 }
 
 func (p *InfoCache) Range(f func(key tspath.PathKey, value *InfoCacheEntry) bool) {
-	p.cache.Range(f)
+	for key, value := range p.base {
+		if !f(key, value) {
+			return
+		}
+	}
+	p.added.Range(f)
 }

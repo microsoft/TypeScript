@@ -1746,6 +1746,22 @@ func (s *Server) handleInitialized(ctx context.Context, params *lsproto.Initiali
 	}
 
 	workspaceRoots := getInitialWorkspaceRoots(s.initializeParams)
+	var workspaceFolders []ls.WorkspaceFolder
+	if s.initializeParams.WorkspaceFolders != nil && s.initializeParams.WorkspaceFolders.WorkspaceFolders != nil {
+		for _, folder := range *s.initializeParams.WorkspaceFolders.WorkspaceFolders {
+			workspaceFolders = append(workspaceFolders, ls.WorkspaceFolder{
+				Path: tspath.RootedDirectoryPathFromPath(lsproto.DocumentUri(folder.Uri).Path()),
+				Name: folder.Name,
+			})
+		}
+	} else {
+		for _, root := range workspaceRoots {
+			workspaceFolders = append(workspaceFolders, ls.WorkspaceFolder{
+				Path: root,
+				Name: root.BaseName(),
+			})
+		}
+	}
 
 	cwd := s.cwd
 	if s.clientCapabilities.Workspace.WorkspaceFolders &&
@@ -1770,17 +1786,18 @@ func (s *Server) handleInitialized(ctx context.Context, params *lsproto.Initiali
 	s.session = project.NewSession(&project.SessionInit{
 		BackgroundCtx: lsproto.WithClientCapabilities(s.backgroundCtx, &s.clientCapabilities),
 		Options: &project.SessionOptions{
-			CurrentDirectory:       cwd,
-			DefaultLibraryPath:     s.defaultLibraryPath,
-			TypingsLocation:        s.typingsLocation,
-			PositionEncoding:       s.positionEncoding,
-			WatchEnabled:           s.watchEnabled,
-			LoggingEnabled:         true,
-			TelemetryEnabled:       enableTelemetry,
-			DebounceDelay:          500 * time.Millisecond,
-			PushDiagnosticsEnabled: !disablePushDiagnostics,
-			RunExternalCode:        runExternalCode,
-			InitialWorkspaceRoots:  workspaceRoots,
+			CurrentDirectory:        cwd,
+			DefaultLibraryPath:      s.defaultLibraryPath,
+			TypingsLocation:         s.typingsLocation,
+			PositionEncoding:        s.positionEncoding,
+			WatchEnabled:            s.watchEnabled,
+			LoggingEnabled:          true,
+			TelemetryEnabled:        enableTelemetry,
+			DebounceDelay:           500 * time.Millisecond,
+			PushDiagnosticsEnabled:  !disablePushDiagnostics,
+			RunExternalCode:         runExternalCode,
+			InitialWorkspaceRoots:   workspaceRoots,
+			InitialWorkspaceFolders: workspaceFolders,
 		},
 		FS:                  s.fs,
 		Logger:              s.logger,
@@ -2429,7 +2446,7 @@ func (s *Server) handleInitializeAPISession(ctx context.Context, params *lsproto
 func (s *Server) generateAPIPipeName() string {
 	now := time.Now().UnixNano()
 	rnd := rand.Uint64()
-	return fmt.Sprintf("tsgo-api-%x-%x", now, rnd)
+	return fmt.Sprintf("typescript-api-%x-%x", now, rnd)
 }
 
 func (s *Server) removeAPISession(id string) {

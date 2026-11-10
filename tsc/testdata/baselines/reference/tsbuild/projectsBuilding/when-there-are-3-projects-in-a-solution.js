@@ -32,7 +32,7 @@ export const pkg2 = 2;
     ]
 }
 
-tsgo -b -v
+tsc -b -v
 ExitStatus:: Success
 Output::
 [[90mHH:MM:SS AM[0m] Projects in this build: 
@@ -355,7 +355,7 @@ Edit [0]:: dts doesn't change
 //// [/user/username/projects/myproject/pkg0/index.ts] *modified* 
 export const pkg0 = 0;const someConst2 = 10;
 
-tsgo -b -v
+tsc -b -v
 ExitStatus:: Success
 Output::
 [[90mHH:MM:SS AM[0m] Projects in this build: 
@@ -445,7 +445,7 @@ Signatures::
 
 Edit [1]:: no change
 
-tsgo -b -v
+tsc -b -v
 ExitStatus:: Success
 Output::
 [[90mHH:MM:SS AM[0m] Projects in this build: 
@@ -469,7 +469,7 @@ Edit [2]:: dts change
 //// [/user/username/projects/myproject/pkg0/index.ts] *modified* 
 export const pkg0 = 0;const someConst2 = 10;export const someConst = 10;
 
-tsgo -b -v
+tsc -b -v
 ExitStatus:: Success
 Output::
 [[90mHH:MM:SS AM[0m] Projects in this build: 
@@ -659,7 +659,7 @@ Signatures::
 
 Edit [3]:: no change
 
-tsgo -b -v
+tsc -b -v
 ExitStatus:: Success
 Output::
 [[90mHH:MM:SS AM[0m] Projects in this build: 

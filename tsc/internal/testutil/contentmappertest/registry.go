@@ -11,6 +11,7 @@ const (
 	TransformingMapper            = "compiler-test-mapper"
 	VerbatimMapper                = "verbatim-mapper"
 	ModuleVerbatimMapper          = "module-verbatim-mapper"
+	FormatVerbatimMapper          = "format-verbatim-mapper"
 	DynamicVerbatimMapper         = "dynamic-verbatim-mapper"
 	DiagnosticCodeCollisionMapper = "diagnostic-code-collision-mapper"
 	FailingMapper                 = "failing-mapper"
@@ -34,6 +35,7 @@ var mapperHandlers = map[string]handlerConstructor{
 	TransformingMapper:            func(*ProjectLifecycle) ipc.Handler { return &Handler{} },
 	VerbatimMapper:                func(*ProjectLifecycle) ipc.Handler { return verbatimHandler{} },
 	ModuleVerbatimMapper:          func(*ProjectLifecycle) ipc.Handler { return moduleVerbatimHandler{} },
+	FormatVerbatimMapper:          func(*ProjectLifecycle) ipc.Handler { return formatVerbatimHandler{} },
 	DynamicVerbatimMapper:         func(lifecycle *ProjectLifecycle) ipc.Handler { return dynamicVerbatimHandler{lifecycle: lifecycle} },
 	DiagnosticCodeCollisionMapper: func(*ProjectLifecycle) ipc.Handler { return diagnosticCodeCollisionHandler{} },
 	FailingMapper:                 func(*ProjectLifecycle) ipc.Handler { return failingHandler{} },

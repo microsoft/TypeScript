@@ -443,6 +443,8 @@ func (c *Checker) checkGrammarModifiers(node *ast.Node /*Union[HasModifiers, Has
 			case ast.KindDeclareKeyword:
 				if flags&ast.ModifierFlagsAmbient != 0 {
 					return c.grammarErrorOnNode(modifier, diagnostics.X_0_modifier_already_seen, "declare")
+				} else if flags&ast.ModifierFlagsAbstract != 0 && modifier.Flags&ast.NodeFlagsReparsed == 0 {
+					return c.grammarErrorOnNode(modifier, diagnostics.X_0_modifier_must_precede_1_modifier, "declare", "abstract")
 				} else if flags&ast.ModifierFlagsAsync != 0 {
 					return c.grammarErrorOnNode(modifier, diagnostics.X_0_modifier_cannot_be_used_in_an_ambient_context, "async")
 				} else if flags&ast.ModifierFlagsOverride != 0 {
@@ -830,9 +832,6 @@ func (c *Checker) checkGrammarIndexSignatureParameters(node *ast.IndexSignatureD
 	}
 	if !everyType(t, c.isValidIndexKeyType) {
 		return c.grammarErrorOnNode(parameter.Name(), diagnostics.An_index_signature_parameter_type_must_be_string_number_symbol_or_a_template_literal_type)
-	}
-	if node.Type == nil {
-		return c.grammarErrorOnNode(node.AsNode(), diagnostics.An_index_signature_must_have_a_type_annotation)
 	}
 	return false
 }

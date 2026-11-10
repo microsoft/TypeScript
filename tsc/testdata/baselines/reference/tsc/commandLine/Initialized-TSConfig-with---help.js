@@ -2,7 +2,7 @@ currentDirectory::/home/src/workspaces/project
 useCaseSensitiveFileNames::true
 Input::
 
-tsgo --init --help
+tsc --init --help
 ExitStatus:: Success
 Output::
 

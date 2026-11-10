@@ -1,0 +1,30 @@
+//// [tests/cases/compiler/typeArgumentConstraintDiagnostic.ts] ////
+
+=== typeArgumentConstraintDiagnostic.ts ===
+declare function constrained<T extends string>(): void;
+>constrained : Symbol(constrained, Decl(typeArgumentConstraintDiagnostic.ts, 0, 0))
+>T : Symbol(T, Decl(typeArgumentConstraintDiagnostic.ts, 0, 29))
+
+constrained<number>();
+>constrained : Symbol(constrained, Decl(typeArgumentConstraintDiagnostic.ts, 0, 0))
+
+declare function dependent<T extends U, U>(): void;
+>dependent : Symbol(dependent, Decl(typeArgumentConstraintDiagnostic.ts, 1, 22))
+>T : Symbol(T, Decl(typeArgumentConstraintDiagnostic.ts, 3, 27))
+>U : Symbol(U, Decl(typeArgumentConstraintDiagnostic.ts, 3, 39))
+>U : Symbol(U, Decl(typeArgumentConstraintDiagnostic.ts, 3, 39))
+
+dependent<number, string>();
+>dependent : Symbol(dependent, Decl(typeArgumentConstraintDiagnostic.ts, 1, 22))
+
+declare function dependentObject<T extends U, U>(): void;
+>dependentObject : Symbol(dependentObject, Decl(typeArgumentConstraintDiagnostic.ts, 4, 28))
+>T : Symbol(T, Decl(typeArgumentConstraintDiagnostic.ts, 6, 33))
+>U : Symbol(U, Decl(typeArgumentConstraintDiagnostic.ts, 6, 45))
+>U : Symbol(U, Decl(typeArgumentConstraintDiagnostic.ts, 6, 45))
+
+dependentObject<{ value: number }, { value: string }>();
+>dependentObject : Symbol(dependentObject, Decl(typeArgumentConstraintDiagnostic.ts, 4, 28))
+>value : Symbol(value, Decl(typeArgumentConstraintDiagnostic.ts, 7, 17))
+>value : Symbol(value, Decl(typeArgumentConstraintDiagnostic.ts, 7, 36))
+

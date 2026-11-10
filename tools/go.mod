@@ -4,10 +4,10 @@ go 1.27
 
 require (
 	github.com/anchore/quill v0.7.1
-	github.com/blacktop/go-macho v1.1.283
+	github.com/blacktop/go-macho v1.1.296
 	github.com/golangci/plugin-module-register v0.1.2
-	golang.org/x/mod v0.41.0
-	golang.org/x/tools v0.50.0
+	golang.org/x/mod v0.42.0
+	golang.org/x/tools v0.52.0
 	gotest.tools/v3 v3.5.2
 )
 
@@ -15,7 +15,7 @@ require (
 	github.com/anchore/go-logger v0.0.0-20251106021608-a5b0513fa9a9 // indirect
 	github.com/anchore/go-macholibre v0.0.0-20250826193721-3cd206ca93aa // indirect
 	github.com/bitfield/gotestdox v0.2.2 // indirect
-	github.com/blacktop/go-dwarf v1.0.14 // indirect
+	github.com/blacktop/go-dwarf v1.1.0 // indirect
 	github.com/dnephin/pflag v1.0.7 // indirect
 	github.com/fatih/color v1.18.0 // indirect
 	github.com/fsnotify/fsnotify v1.9.0 // indirect
@@ -28,11 +28,13 @@ require (
 	github.com/mattn/go-isatty v0.0.20 // indirect
 	github.com/pkg/errors v0.9.1 // indirect
 	github.com/scylladb/go-set v1.0.3-0.20200225121959-cc7b2070d91e // indirect
-	golang.org/x/crypto v0.57.0 // indirect
-	golang.org/x/sync v0.23.0 // indirect
-	golang.org/x/sys v0.48.0 // indirect
-	golang.org/x/term v0.46.0 // indirect
-	golang.org/x/text v0.42.0 // indirect
+	github.com/sirupsen/logrus v1.10.2 // indirect
+	github.com/stretchr/testify v1.12.1 // indirect
+	golang.org/x/crypto v0.58.0 // indirect
+	golang.org/x/sync v0.24.0 // indirect
+	golang.org/x/sys v0.49.0 // indirect
+	golang.org/x/term v0.47.0 // indirect
+	golang.org/x/text v0.43.0 // indirect
 	gotest.tools/gotestsum v1.13.0 // indirect
 	software.sslmate.com/src/go-pkcs12 v0.7.2 // indirect
 )

@@ -33,6 +33,10 @@ func (o *RawCompilerOptions) UnmarshalJSONFrom(dec *json.Decoder) error {
 	if o.values == nil {
 		o.values = collections.NewOrderedMapWithSizeHint[string, any](0)
 	}
+	return UnmarshalRawCompilerOptions(dec, o.values)
+}
+
+func UnmarshalRawCompilerOptions(dec *json.Decoder, values *collections.OrderedMap[string, any]) error {
 	token, err := dec.ReadToken()
 	if err != nil {
 		return err
@@ -58,7 +62,7 @@ func (o *RawCompilerOptions) UnmarshalJSONFrom(dec *json.Decoder) error {
 		} else if decodeErr := json.UnmarshalDecode(dec, &value); decodeErr != nil {
 			return decodeErr
 		}
-		o.values.Set(key, value)
+		values.Set(key, value)
 	}
 	_, err = dec.ReadToken()
 	return err

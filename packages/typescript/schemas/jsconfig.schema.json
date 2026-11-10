@@ -1428,6 +1428,19 @@
                     "default": false,
                     "markdownDescription": "Disable emitting comments.\n\nSee the [TSConfig reference](https://www.typescriptlang.org/tsconfig/#removeComments)."
                 },
+                "disableDynamicImportExtensionRewriting": {
+                    "anyOf": [
+                        {
+                            "type": "boolean"
+                        },
+                        {
+                            "type": "null"
+                        }
+                    ],
+                    "description": "Disable runtime rewriting of file extensions in non-literal 'import()' and 'require()' calls when 'rewriteRelativeImportExtensions' is enabled.",
+                    "default": false,
+                    "markdownDescription": "Disable runtime rewriting of file extensions in non-literal 'import()' and 'require()' calls when 'rewriteRelativeImportExtensions' is enabled.\n\nSee the [TSConfig reference](https://www.typescriptlang.org/tsconfig/#disableDynamicImportExtensionRewriting)."
+                },
                 "rewriteRelativeImportExtensions": {
                     "anyOf": [
                         {
