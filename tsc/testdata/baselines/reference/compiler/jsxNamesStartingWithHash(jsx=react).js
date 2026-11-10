@@ -24,15 +24,15 @@ const l = <# />;
 
 //// [jsxNamesStartingWithHash.js]
 "use strict";
-const a = React.createElement(#a, null);
-const b = React.createElement("div", { "#b": true });
-const c = React.createElement("div", { "#c": "" });
-const d = React.createElement("div", { "#d:e": true });
-const e = React.createElement("a:#f", null);
+const a = React.createElement(, null);
+const b = React.createElement("div", { "": true });
+const c = React.createElement("div", { "": "" });
+const d = React.createElement("div", { ":e": true });
+const e = React.createElement("a:", null);
 const f = React.createElement(a., null);
-const g = React.createElement("#h:i", null);
-const h = React.createElement("div", { "j:#k": true });
-const i = React.createElement("#l-m", null);
-const j = React.createElement("div", { "#n-o": 1 });
-const k = React.createElement("div", { "#p": true, "#q": "", r: "" });
-const l = React.createElement(#, null);
+const g = React.createElement(":i", null);
+const h = React.createElement("div", { "j:": true });
+const i = React.createElement(, null);
+const j = React.createElement("div", { "": 1 });
+const k = React.createElement("div", { "": true, "": "", r: "" });
+const l = React.createElement(, null);

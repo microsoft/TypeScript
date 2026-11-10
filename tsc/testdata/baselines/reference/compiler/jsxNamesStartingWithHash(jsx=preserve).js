@@ -24,15 +24,15 @@ const l = <# />;
 
 //// [jsxNamesStartingWithHash.jsx]
 "use strict";
-const a = <#a></#a>;
-const b = <div #b/>;
-const c = <div #c=""/>;
-const d = <div #d:e/>;
-const e = <a:#f />;
+const a = <></>;
+const b = <div />;
+const c = <div =""/>;
+const d = <div :e/>;
+const e = <a: />;
 const f = <a. />;
-const g = <#h:i />;
-const h = <div j:#k/>;
-const i = <#l-m></#l-m>;
-const j = <div #n-o={1}/>;
-const k = <div #p #q="" r=""/>;
-const l = <# />;
+const g = <:i />;
+const h = <div j:/>;
+const i = <></>;
+const j = <div ={1}/>;
+const k = <div  ="" r=""/>;
+const l = < />;

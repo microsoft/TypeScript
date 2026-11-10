@@ -14,34 +14,34 @@ declare namespace JSX {
 const a = <#a></#a>;
 >a : any
 ><#a></#a> : any
->#a : any
->#a : any
+> : any
+> : any
 
 const b = <div #b />;
 >b : any
 ><div #b /> : any
 >div : any
->#b : true
+> : true
 
 const c = <div #c="" />;
 >c : any
 ><div #c="" /> : any
 >div : any
->#c : string
+> : string
 
 const d = <div #d:e />;
 >d : any
 ><div #d:e /> : any
 >div : any
 >#d:e : true
->#d : any
+> : any
 >e : any
 
 const e = <a:#f />;
 >e : any
 ><a:#f /> : any
 >a : any
->#f : any
+> : any
 
 const f = <a.#g />;
 >f : any
@@ -53,7 +53,7 @@ const f = <a.#g />;
 const g = <#h:i />;
 >g : any
 ><#h:i /> : any
->#h : any
+> : any
 >i : any
 
 const h = <div j:#k />;
@@ -62,31 +62,31 @@ const h = <div j:#k />;
 >div : any
 >j:#k : true
 >j : any
->#k : any
+> : any
 
 const i = <#l-m></#l-m>;
 >i : any
 ><#l-m></#l-m> : any
->#l-m : any
->#l-m : any
+> : any
+> : any
 
 const j = <div #n-o={1} />;
 >j : any
 ><div #n-o={1} /> : any
 >div : any
->#n-o : number
+> : number
 >1 : 1
 
 const k = <div #p #q="" r="" />;
 >k : any
 ><div #p #q="" r="" /> : any
 >div : any
->#p : true
->#q : string
+> : true
+> : true
 >r : string
 
 const l = <# />;
 >l : any
 ><# /> : any
-># : any
+> : any
 

@@ -1,11 +1,21 @@
-jsxNamesStartingWithHash.tsx(8,12): error TS2304: Cannot find name '#a'.
-jsxNamesStartingWithHash.tsx(8,17): error TS2304: Cannot find name '#a'.
+jsxNamesStartingWithHash.tsx(8,12): error TS1003: Identifier expected.
+jsxNamesStartingWithHash.tsx(8,17): error TS1003: Identifier expected.
+jsxNamesStartingWithHash.tsx(9,16): error TS1003: Identifier expected.
+jsxNamesStartingWithHash.tsx(10,16): error TS1003: Identifier expected.
+jsxNamesStartingWithHash.tsx(11,16): error TS1003: Identifier expected.
+jsxNamesStartingWithHash.tsx(12,14): error TS1003: Identifier expected.
 jsxNamesStartingWithHash.tsx(13,16): error TS1003: Identifier expected.
+jsxNamesStartingWithHash.tsx(14,12): error TS1003: Identifier expected.
+jsxNamesStartingWithHash.tsx(15,18): error TS1003: Identifier expected.
+jsxNamesStartingWithHash.tsx(16,12): error TS1003: Identifier expected.
+jsxNamesStartingWithHash.tsx(16,19): error TS1003: Identifier expected.
+jsxNamesStartingWithHash.tsx(17,16): error TS1003: Identifier expected.
+jsxNamesStartingWithHash.tsx(18,16): error TS1003: Identifier expected.
+jsxNamesStartingWithHash.tsx(18,19): error TS1003: Identifier expected.
 jsxNamesStartingWithHash.tsx(19,12): error TS1127: Invalid character.
-jsxNamesStartingWithHash.tsx(19,12): error TS2304: Cannot find name '#'.
 
 
-==== jsxNamesStartingWithHash.tsx (5 errors) ====
+==== jsxNamesStartingWithHash.tsx (15 errors) ====
     declare const React: any;
     declare namespace JSX {
         interface IntrinsicElements {
@@ -15,24 +25,44 @@ jsxNamesStartingWithHash.tsx(19,12): error TS2304: Cannot find name '#'.
     
     const a = <#a></#a>;
                ~~
-!!! error TS2304: Cannot find name '#a'.
+!!! error TS1003: Identifier expected.
                     ~~
-!!! error TS2304: Cannot find name '#a'.
+!!! error TS1003: Identifier expected.
     const b = <div #b />;
+                   ~~
+!!! error TS1003: Identifier expected.
     const c = <div #c="" />;
+                   ~~
+!!! error TS1003: Identifier expected.
     const d = <div #d:e />;
+                   ~~
+!!! error TS1003: Identifier expected.
     const e = <a:#f />;
+                 ~~
+!!! error TS1003: Identifier expected.
     const f = <a.#g />;
                    
 !!! error TS1003: Identifier expected.
     const g = <#h:i />;
+               ~~
+!!! error TS1003: Identifier expected.
     const h = <div j:#k />;
+                     ~~
+!!! error TS1003: Identifier expected.
     const i = <#l-m></#l-m>;
+               ~~~~
+!!! error TS1003: Identifier expected.
+                      ~~~~
+!!! error TS1003: Identifier expected.
     const j = <div #n-o={1} />;
+                   ~~~~
+!!! error TS1003: Identifier expected.
     const k = <div #p #q="" r="" />;
+                   ~~
+!!! error TS1003: Identifier expected.
+                      ~~
+!!! error TS1003: Identifier expected.
     const l = <# />;
                ~
 !!! error TS1127: Invalid character.
-               ~
-!!! error TS2304: Cannot find name '#'.
     

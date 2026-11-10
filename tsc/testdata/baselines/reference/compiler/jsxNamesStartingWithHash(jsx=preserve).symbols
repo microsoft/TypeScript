@@ -21,12 +21,12 @@ const a = <#a></#a>;
 const b = <div #b />;
 >b : Symbol(b, Decl(jsxNamesStartingWithHash.tsx, 8, 5))
 >div : Symbol(JSX.IntrinsicElements.__index, Decl(jsxNamesStartingWithHash.tsx, 2, 33))
->#b : Symbol(#b, Decl(jsxNamesStartingWithHash.tsx, 8, 14))
+> : Symbol((Missing), Decl(jsxNamesStartingWithHash.tsx, 8, 14))
 
 const c = <div #c="" />;
 >c : Symbol(c, Decl(jsxNamesStartingWithHash.tsx, 9, 5))
 >div : Symbol(JSX.IntrinsicElements.__index, Decl(jsxNamesStartingWithHash.tsx, 2, 33))
->#c : Symbol(#c, Decl(jsxNamesStartingWithHash.tsx, 9, 14))
+> : Symbol((Missing), Decl(jsxNamesStartingWithHash.tsx, 9, 14))
 
 const d = <div #d:e />;
 >d : Symbol(d, Decl(jsxNamesStartingWithHash.tsx, 10, 5))
@@ -50,19 +50,17 @@ const h = <div j:#k />;
 
 const i = <#l-m></#l-m>;
 >i : Symbol(i, Decl(jsxNamesStartingWithHash.tsx, 15, 5))
->#l-m : Symbol(JSX.IntrinsicElements.__index, Decl(jsxNamesStartingWithHash.tsx, 2, 33))
->#l-m : Symbol(JSX.IntrinsicElements.__index, Decl(jsxNamesStartingWithHash.tsx, 2, 33))
 
 const j = <div #n-o={1} />;
 >j : Symbol(j, Decl(jsxNamesStartingWithHash.tsx, 16, 5))
 >div : Symbol(JSX.IntrinsicElements.__index, Decl(jsxNamesStartingWithHash.tsx, 2, 33))
->#n-o : Symbol(#n-o, Decl(jsxNamesStartingWithHash.tsx, 16, 14))
+> : Symbol((Missing), Decl(jsxNamesStartingWithHash.tsx, 16, 14))
 
 const k = <div #p #q="" r="" />;
 >k : Symbol(k, Decl(jsxNamesStartingWithHash.tsx, 17, 5))
 >div : Symbol(JSX.IntrinsicElements.__index, Decl(jsxNamesStartingWithHash.tsx, 2, 33))
->#p : Symbol(#p, Decl(jsxNamesStartingWithHash.tsx, 17, 14))
->#q : Symbol(#q, Decl(jsxNamesStartingWithHash.tsx, 17, 17))
+> : Symbol((Missing), Decl(jsxNamesStartingWithHash.tsx, 17, 14), Decl(jsxNamesStartingWithHash.tsx, 17, 17))
+> : Symbol((Missing), Decl(jsxNamesStartingWithHash.tsx, 17, 14), Decl(jsxNamesStartingWithHash.tsx, 17, 17))
 >r : Symbol(r, Decl(jsxNamesStartingWithHash.tsx, 17, 23))
 
 const l = <# />;

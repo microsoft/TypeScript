@@ -1377,7 +1377,11 @@ func (s *Scanner) ScanJsxIdentifier() ast.Kind {
 		// Any caller should be expecting this behavior and should only read the pos or token value after calling it.
 		// Here scanIdentifierParts is reused to ensure Unicode escapes are handled.
 		s.tokenValue += s.scanIdentifierParts(identifierVariantJSX)
-		s.token = GetIdentifierToken(s.tokenValue)
+		// '#' is not a valid JSX identifier character, so a private identifier (e.g. `#a-b`) keeps its kind
+		// and is left for the parser to report.
+		if s.token != ast.KindPrivateIdentifier {
+			s.token = GetIdentifierToken(s.tokenValue)
+		}
 	}
 	return s.token
 }
