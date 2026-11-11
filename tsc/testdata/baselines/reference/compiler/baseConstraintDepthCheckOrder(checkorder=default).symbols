@@ -136,6 +136,8 @@ function f<T0 extends T1, T1 extends T2, T2 extends T3, T3 extends T4, T4 extend
 >x : Symbol(x, Decl(baseConstraintDepthCheckOrder.ts, 5, 1015))
 
     y.length;
+>y.length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
 >y : Symbol(y, Decl(baseConstraintDepthCheckOrder.ts, 5, 1021))
+>length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
 }
 

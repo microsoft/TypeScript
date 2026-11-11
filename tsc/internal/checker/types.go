@@ -808,10 +808,12 @@ type Type struct {
 	objectFlags ObjectFlags
 	id          TypeId
 	kind        typeKind `customlint:"protected"`
-	generation  uint16   // see Checker.typeGeneration; zero until computed
-	symbol      *ast.Symbol
-	alias       *TypeAlias
-	checker     *Checker
+	// Depth of the walk for the cached base constraint; see "Base constraint walks"
+	baseConstraintHeight uint8
+	generation           uint16 // see Checker.typeGeneration; zero until computed
+	symbol               *ast.Symbol
+	alias                *TypeAlias
+	checker              *Checker
 }
 
 // Enforce the layout required by the pointer conversions, on every architecture.

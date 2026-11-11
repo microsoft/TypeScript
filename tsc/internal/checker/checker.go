@@ -67,6 +67,7 @@ const (
 	TypeSystemPropertyNameInitializerIsUndefined
 	TypeSystemPropertyNameAliasTarget
 	TypeSystemPropertyNameComputedPropertyName
+	TypeSystemPropertyNameBaseConstraintInWalk
 )
 
 type TypeResolution struct {
@@ -616,6 +617,7 @@ type Checker struct {
 	memberLayoutCount                           uint32
 	instantiationStack                          []*Type
 	conditionalConstraintDepth                  uint32
+	baseConstraintWalk                          baseConstraintWalk
 	inlineLevel                                 int
 	serializationLevel                          int
 	currentNode                                 *ast.Node
@@ -18056,10 +18058,11 @@ func (c *Checker) getConstraintFromIndexedAccess(t *Type) *Type {
 }
 
 func (c *Checker) getConstraintOfConditionalType(t *Type) *Type {
-	if c.hasNonCircularBaseConstraint(t) {
-		return c.getConstraintFromConditionalType(t)
-	}
-	return nil
+	// The constraint of a conditional type is computed from its branches one
+	// level at a time, so it is well defined even where following constraints
+	// from it leads back to it, which makes its base constraint circular.
+	// Callers following constraints further stop where they nest too deeply.
+	return c.getConstraintFromConditionalType(t)
 }
 
 func (c *Checker) getConstraintFromConditionalType(t *Type) *Type {
@@ -18108,7 +18111,14 @@ func (c *Checker) getConstraintOfDistributiveConditionalType(t *Type) *Type {
 		if d.root.isDistributive && c.cachedTypes[CachedTypeKey{kind: CachedTypeKindRestrictiveInstantiation, typeId: t.id}] != t {
 			constraint := c.getSimplifiedType(d.checkType, false /*writing*/)
 			if constraint == d.checkType {
-				constraint = c.getConstraintOfType(constraint)
+				// A conditional check type whose base constraint is circular
+				// has a constraint, but distributing over it leads back into
+				// the circularity, leaving this type without a usable one.
+				if constraint.flags&TypeFlagsConditional != 0 && !c.hasNonCircularBaseConstraint(constraint) {
+					constraint = nil
+				} else {
+					constraint = c.getConstraintOfType(constraint)
+				}
 			}
 			if constraint != nil && constraint != d.checkType {
 				instantiated := c.getConditionalTypeInstantiation(t, prependTypeMapping(d.root.checkType, constraint, d.mapper), true /*forConstraint*/, nil)
@@ -19741,6 +19751,8 @@ func (c *Checker) typeResolutionHasProperty(r *TypeResolution) bool {
 		return c.aliasSymbolLinks.Get(r.target.(*ast.Symbol)).aliasTarget != nil
 	case TypeSystemPropertyNameComputedPropertyName:
 		return c.typeNodeLinks.Get(r.target.(*ast.Node)).resolvedType != nil
+	case TypeSystemPropertyNameBaseConstraintInWalk:
+		return false
 	}
 	panic("Unhandled case in typeResolutionHasProperty")
 }
@@ -23764,7 +23776,7 @@ func (c *Checker) instantiateMappedType(t *Type, m *TypeMapper, alias *TypeAlias
 			return s
 		}
 		if d.declaration.NameType == nil {
-			if c.isArrayType(s) || s.flags&TypeFlagsAny != 0 && c.findResolutionCycleStartIndex(typeVariable, TypeSystemPropertyNameResolvedBaseConstraint) < 0 && c.hasArrayOrTypeTypeConstraint(typeVariable) {
+			if c.isArrayType(s) || s.flags&TypeFlagsAny != 0 && !c.isBaseConstraintInProgress(typeVariable) && c.hasArrayOrTypeTypeConstraint(typeVariable) {
 				return c.instantiateMappedArrayType(s, t, prependTypeMapping(typeVariable, s, m))
 			}
 			if isTupleType(s) {
@@ -28773,28 +28785,72 @@ func (c *Checker) getBaseConstraintOfType(t *Type) *Type {
 	return nil
 }
 
+// Base constraint walks
+//
+// A walk for a base constraint gives up on types nested 10 levels deep that
+// are already on its stack, or nested 50 levels deep, so a base constraint
+// computed inside a walk may depend on the types the walk came through. As
+// more types on the stack only make a walk give up sooner, a base constraint
+// whose own walk did not give up is the same wherever it is computed, and is
+// kept; one whose walk gave up is kept only if the walk was started for it.
+// A kept base constraint is reused inside a walk only where its own walk,
+// whose depth is kept with it, stays within the first 10 levels, where
+// nothing gives up. Elsewhere it is computed again inside that walk, as a
+// distinct resolution so that re-entering it is still a cycle.
+
+const (
+	baseConstraintFreeDepth = 10
+	baseConstraintMaxDepth  = 50
+)
+
+type baseConstraintWalk struct {
+	depth  int32 // Deepest level the walk has reached
+	gaveUp bool
+}
+
 func (c *Checker) getResolvedBaseConstraint(t *Type, stack []RecursionId) *Type {
 	constrained := t.AsConstrainedType()
 	if constrained == nil {
 		return t
 	}
 	if constrained.resolvedBaseConstraint != nil {
+		if len(stack) != 0 {
+			depth := int32(len(stack)) + int32(t.baseConstraintHeight)
+			if depth >= baseConstraintFreeDepth {
+				constraint, _, _ := c.resolveBaseConstraint(t, stack, TypeSystemPropertyNameBaseConstraintInWalk)
+				return constraint
+			}
+			c.baseConstraintWalk.depth = max(c.baseConstraintWalk.depth, depth)
+		}
 		return constrained.resolvedBaseConstraint
 	}
-	if !c.pushTypeResolution(t, TypeSystemPropertyNameResolvedBaseConstraint) {
-		return c.circularConstraintType
+	saveWalk := c.baseConstraintWalk
+	if len(stack) == 0 {
+		c.baseConstraintWalk = baseConstraintWalk{}
 	}
-	var constraint *Type
-	// We always explore at least 10 levels of nested constraints. Thereafter, we continue to explore
-	// up to 50 levels of nested constraints provided there are no "deeply nested" types on the stack
-	// (i.e. no types for which five instantiations have been recorded on the stack). If we reach 50
-	// levels of nesting, we are presumably exploring a repeating pattern with a long cycle that hasn't
-	// yet triggered the deeply nested limiter. We have no test cases that actually get to 50 levels of
-	// nesting, so it is effectively just a safety stop.
-	identity := getRecursionIdentity(t)
-	if len(stack) < 10 || len(stack) < 50 && !slices.Contains(stack, identity) {
-		constraint = c.computeBaseConstraint(c.getSimplifiedType(t /*writing*/, false), append(stack, identity))
+	constraint, height, gaveUp := c.resolveBaseConstraint(t, stack, TypeSystemPropertyNameResolvedBaseConstraint)
+	if len(stack) == 0 {
+		c.baseConstraintWalk = saveWalk
 	}
+	if gaveUp && len(stack) != 0 {
+		// Depends on the walk it was computed in.
+		return constraint
+	}
+	if constrained.resolvedBaseConstraint == nil {
+		t.baseConstraintHeight = uint8(min(height, math.MaxUint8))
+		constrained.resolvedBaseConstraint = constraint
+	}
+	return constraint
+}
+
+// resolveBaseConstraint computes the base constraint of t inside the walk
+// with stack as the resolution of propertyName, and returns it with the depth
+// its own walk reached and whether its own walk gave up.
+func (c *Checker) resolveBaseConstraint(t *Type, stack []RecursionId, propertyName TypeSystemPropertyName) (*Type, int32, bool) {
+	if !c.pushTypeResolution(t, propertyName) {
+		return c.circularConstraintType, 0, false
+	}
+	constraint, height, gaveUp := c.walkBaseConstraint(t, stack)
 	if !c.popTypeResolution() {
 		if t.flags&TypeFlagsTypeParameter != 0 {
 			errorNode := c.getConstraintDeclaration(t)
@@ -28810,10 +28866,35 @@ func (c *Checker) getResolvedBaseConstraint(t *Type, stack []RecursionId) *Type 
 	if constraint == nil {
 		constraint = c.noConstraintType
 	}
-	if constrained.resolvedBaseConstraint == nil {
-		constrained.resolvedBaseConstraint = constraint
+	return constraint, height, gaveUp
+}
+
+func (c *Checker) isBaseConstraintInProgress(t *Type) bool {
+	return c.findResolutionCycleStartIndex(t, TypeSystemPropertyNameResolvedBaseConstraint) >= 0 || c.findResolutionCycleStartIndex(t, TypeSystemPropertyNameBaseConstraintInWalk) >= 0
+}
+
+// walkBaseConstraint computes the base constraint of t inside the walk with
+// stack, and returns it with the depth its own walk reached and whether its
+// own walk gave up.
+func (c *Checker) walkBaseConstraint(t *Type, stack []RecursionId) (*Type, int32, bool) {
+	saveWalk := c.baseConstraintWalk
+	c.baseConstraintWalk = baseConstraintWalk{depth: int32(len(stack))}
+	var constraint *Type
+	// We always explore at least 10 levels of nested constraints. Thereafter, we continue to explore
+	// up to 50 levels of nested constraints provided there are no "deeply nested" types on the stack
+	// (i.e. no types for which five instantiations have been recorded on the stack). If we reach 50
+	// levels of nesting, we are presumably exploring a repeating pattern with a long cycle that hasn't
+	// yet triggered the deeply nested limiter. We have no test cases that actually get to 50 levels of
+	// nesting, so it is effectively just a safety stop.
+	identity := getRecursionIdentity(t)
+	if len(stack) < baseConstraintFreeDepth || len(stack) < baseConstraintMaxDepth && !slices.Contains(stack, identity) {
+		constraint = c.computeBaseConstraint(c.getSimplifiedType(t /*writing*/, false), append(stack, identity))
+	} else {
+		c.baseConstraintWalk.gaveUp = true
 	}
-	return constraint
+	walk := c.baseConstraintWalk
+	c.baseConstraintWalk = baseConstraintWalk{depth: max(saveWalk.depth, walk.depth), gaveUp: saveWalk.gaveUp || walk.gaveUp}
+	return constraint, walk.depth - int32(len(stack)), walk.gaveUp
 }
 
 func (c *Checker) computeBaseConstraint(t *Type, stack []RecursionId) *Type {
