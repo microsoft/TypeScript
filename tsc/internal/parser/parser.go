@@ -2526,6 +2526,7 @@ func (p *Parser) parseNamedImports() *ast.Node {
 
 func (p *Parser) parseImportSpecifier() *ast.Node {
 	pos := p.nodePos()
+	jsdoc := p.jsdocScannerInfo()
 	isTypeOnly, propertyName, name := p.parseImportOrExportSpecifier(ast.KindImportSpecifier)
 	var identifierName *ast.Node
 	if name.Kind == ast.KindIdentifier {
@@ -2535,7 +2536,9 @@ func (p *Parser) parseImportSpecifier() *ast.Node {
 		identifierName = p.newIdentifier("")
 		p.finishNode(identifierName, name.Pos())
 	}
-	result := p.checkJSSyntax(p.finishNode(p.factory.NewImportSpecifier(isTypeOnly, propertyName, identifierName), pos))
+	result := p.finishNode(p.factory.NewImportSpecifier(isTypeOnly, propertyName, identifierName), pos)
+	p.withJSDoc(result, jsdoc)
+	p.checkJSSyntax(result)
 	return result
 }
 
