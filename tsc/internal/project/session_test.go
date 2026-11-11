@@ -1081,6 +1081,44 @@ export const value = content;`,
 				refreshCount, baselineRefreshCount)
 		})
 
+		t.Run("change to a declaration file schedules diagnostics refresh", func(t *testing.T) {
+			t.Parallel()
+			files := map[string]any{
+				"/home/projects/TS/p1/tsconfig.json": `{
+					"compilerOptions": {
+						"noLib": true
+					},
+					"files": ["index.ts", "types.d.ts"]
+				}`,
+				"/home/projects/TS/p1/index.ts":   `export const value: Value = 1;`,
+				"/home/projects/TS/p1/types.d.ts": `type Value = string;`,
+			}
+			session, utils := projecttestutil.Setup(files)
+			session.DidOpenFile(context.Background(), "file:///home/projects/TS/p1/index.ts", 1, files["/home/projects/TS/p1/index.ts"].(string), lsproto.LanguageKindTypeScript)
+
+			_, err := session.GetLanguageService(context.Background(), "file:///home/projects/TS/p1/index.ts")
+			assert.NilError(t, err)
+			session.WaitForBackgroundTasks()
+
+			baselineRefreshCount := len(utils.Client().RefreshDiagnosticsCalls())
+
+			err = utils.FS().WriteFile("/home/projects/TS/p1/types.d.ts", `type Value = number;`)
+			assert.NilError(t, err)
+
+			session.DidChangeWatchedFiles(context.Background(), []*lsproto.FileEvent{
+				{
+					Type: lsproto.FileChangeTypeChanged,
+					Uri:  "file:///home/projects/TS/p1/types.d.ts",
+				},
+			})
+			session.WaitForBackgroundTasks()
+
+			refreshCount := len(utils.Client().RefreshDiagnosticsCalls())
+			assert.Assert(t, refreshCount > baselineRefreshCount,
+				"expected RefreshDiagnostics to be called after changing /home/projects/TS/p1/types.d.ts, got %d calls (baseline %d)",
+				refreshCount, baselineRefreshCount)
+		})
+
 		t.Run("delete sibling folder schedules diagnostics refresh after opening third file", func(t *testing.T) {
 			t.Parallel()
 			files := map[string]any{
