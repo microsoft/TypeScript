@@ -1,0 +1,28 @@
+//// [tests/cases/compiler/declareAbstractModifierOrder.ts] ////
+
+=== classes.ts ===
+declare abstract class A {}
+>A : Symbol(A, Decl(classes.ts, 0, 0))
+
+abstract declare class B {}
+>B : Symbol(B, Decl(classes.ts, 0, 27))
+
+export declare abstract class C {}
+>C : Symbol(C, Decl(classes.ts, 1, 27))
+
+export abstract declare class D {}
+>D : Symbol(D, Decl(classes.ts, 2, 34))
+
+=== classes.d.ts ===
+declare abstract class E {}
+>E : Symbol(E, Decl(classes.d.ts, 0, 0))
+
+abstract declare class F {}
+>F : Symbol(F, Decl(classes.d.ts, 0, 27))
+
+export declare abstract class G {}
+>G : Symbol(G, Decl(classes.d.ts, 1, 27))
+
+export abstract declare class H {}
+>H : Symbol(H, Decl(classes.d.ts, 2, 34))
+

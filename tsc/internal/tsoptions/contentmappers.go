@@ -15,8 +15,8 @@ import (
 	"github.com/microsoft/TypeScript/tsc/internal/vfs"
 )
 
-// resolveContentMapperManifest locates packageName in node_modules (walking up from the directory of
-// containingFile via node module resolution) and reads its package.json to produce the mapper's manifest
+// resolveContentMapperManifest locates packageName as a directory path relative to containingFile or in
+// node_modules (walking up via node module resolution) and reads its package.json to produce the mapper's manifest
 // and package directory. It never executes the package. On failure it returns a diagnostic describing why
 // the mapper could not be resolved; on success the diagnostic is nil.
 type contentMapperResolutionHost struct {

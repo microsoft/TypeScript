@@ -34,6 +34,7 @@ type Definition struct {
 	Package    string   `json:"package"`
 	Extensions []string `json:"extensions"`
 	// OutputExtensions contains the resolved mapping after applying manifest defaults and project overrides.
+	// It determines declaration filenames and their module format; canonical virtual outputs must agree.
 	OutputExtensions map[string]string `json:"outputExtensions,omitzero"`
 	Options          json.Value        `json:"options,omitempty"`
 }

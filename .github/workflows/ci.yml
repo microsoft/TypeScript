@@ -80,6 +80,18 @@ jobs:
           go test ./...
           go test -run=- -bench=. -benchtime=1x ./...
 
+  go-test-wasm:
+    if: ${{ github.event_name != 'merge_group' }}
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version: 'lts/*'
+      - uses: ./.github/actions/setup-go
+      - run: npm ci
+      - run: npx hereby test:wasm
+
   test:
     strategy:
       fail-fast: ${{ github.event_name == 'merge_group' }}
@@ -132,10 +144,10 @@ jobs:
       id-token: write
       contents: read
     env:
-      TSGO_HEREBY_RACE: ${{ (matrix.config.race && 'true') || 'false' }}
-      TSGO_HEREBY_NOEMBED: ${{ (matrix.config.noembed && 'true') || 'false' }}
-      TSGO_HEREBY_CONCURRENT_TEST_PROGRAMS: ${{ (matrix.config.concurrent-test-programs && 'true') || 'false' }}
-      TSGO_HEREBY_COVERAGE: ${{ (matrix.config.coverage && github.event_name != 'merge_group' && 'true') || 'false' }}
+      TS_HEREBY_RACE: ${{ (matrix.config.race && 'true') || 'false' }}
+      TS_HEREBY_NOEMBED: ${{ (matrix.config.noembed && 'true') || 'false' }}
+      TS_HEREBY_CONCURRENT_TEST_PROGRAMS: ${{ (matrix.config.concurrent-test-programs && 'true') || 'false' }}
+      TS_HEREBY_COVERAGE: ${{ (matrix.config.coverage && github.event_name != 'merge_group' && 'true') || 'false' }}
     steps:
       - run: git config --system core.longpaths true
         if: ${{ matrix.config.os == 'windows' }}
@@ -208,7 +220,7 @@ jobs:
       id-token: write
       contents: read
     env:
-      TSGO_HEREBY_COVERAGE: ${{ (matrix.config.coverage && github.event_name != 'merge_group' && 'true') || 'false' }}
+      TS_HEREBY_COVERAGE: ${{ (matrix.config.coverage && github.event_name != 'merge_group' && 'true') || 'false' }}
     steps:
       - run: git config --system core.longpaths true
         if: ${{ matrix.config.os == 'windows' }}
@@ -228,7 +240,12 @@ jobs:
       - run: npx hereby test:extension
       - run: npx hereby test:tools
       - run: npx hereby test:api
+      - run: npx hereby test:api:wasm
       - run: npx hereby test:benchmarks:api
+      - run: npx playwright install --with-deps chromium
+        if: ${{ matrix.config.main }}
+      - run: npx hereby test:api:browser-smoke
+        if: ${{ matrix.config.main }}
       - run: git add .
       - uses: codecov/codecov-action@303a32d7a59b442fa8d48b6a1cc6825c09c847a5 # v7.1.1
         if: ${{ always() && matrix.config.coverage && github.event_name != 'merge_group' }}
@@ -254,13 +271,34 @@ jobs:
             name: 'noembed'
             noembed: true
             skip: ${{ github.event_name == 'merge_group' }}
+          # Cross-lint OSes with build-tagged files we have no runner for.
+          - runner: ubuntu-latest
+            name: 'darwin'
+            goos: darwin
+            goarch: arm64
+            skip: ${{ github.event_name == 'merge_group' }}
+          - runner: ubuntu-latest
+            name: 'freebsd'
+            goos: freebsd
+            goarch: amd64
+            skip: ${{ github.event_name == 'merge_group' }}
+          - runner: ubuntu-latest
+            name: 'dragonfly'
+            goos: dragonfly
+            goarch: amd64
+            skip: ${{ github.event_name == 'merge_group' }}
+          - runner: ubuntu-latest
+            name: 'solaris'
+            goos: solaris
+            goarch: amd64
+            skip: ${{ github.event_name == 'merge_group' }}
         exclude:
           - config:
               skip: true
     name: lint (${{ matrix.config.name || matrix.config.runner }})
     runs-on: ${{ matrix.config.runner }}
     env:
-      TSGO_HEREBY_NOEMBED: ${{ (matrix.config.noembed && 'true') || 'false' }}
+      TS_HEREBY_NOEMBED: ${{ (matrix.config.noembed && 'true') || 'false' }}
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
       - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
@@ -276,6 +314,9 @@ jobs:
           echo "::remove-matcher owner=go::"
       - run: npm ci
       - run: npx hereby lint
+        env:
+          GOOS: ${{ matrix.config.goos }}
+          GOARCH: ${{ matrix.config.goarch }}
 
   format:
     runs-on: ubuntu-slim
@@ -361,6 +402,7 @@ jobs:
       - format
       - generate
       - go-test
+      - go-test-wasm
       - lint
       - misc
       - package-feed-proxy

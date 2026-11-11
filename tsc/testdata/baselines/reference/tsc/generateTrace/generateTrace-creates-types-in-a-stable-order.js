@@ -143,7 +143,7 @@ export declare const zeta: { name: "zeta" };
 import { Gadget } from "./gadget";
 export declare function makeWidget(): Gadget;
 
-tsgo --generateTrace /home/src/workspaces/project/trace --singleThreaded
+tsc --generateTrace /home/src/workspaces/project/trace --singleThreaded
 ExitStatus:: Success
 Output::
 //// [/home/src/tslibs/TS/Lib/lib.es2026.full.d.ts] *Lib*
@@ -200,7 +200,7 @@ export declare const widget: import("./gadget").Gadget;
 ]
 //// [/home/src/workspaces/project/trace/trace.json] *new* 
 [
-{"pid":1,"tid":1,"ph":"M","cat":"__metadata","ts":1,"name":"process_name","args":{"name":"tsgo"}},
+{"pid":1,"tid":1,"ph":"M","cat":"__metadata","ts":1,"name":"process_name","args":{"name":"tsc"}},
 {"pid":1,"tid":1,"ph":"M","cat":"__metadata","ts":1,"name":"thread_name","args":{"name":"Main"}},
 {"pid":1,"tid":1,"ph":"M","cat":"disabled-by-default-devtools.timeline","ts":1,"name":"TracingStartedInBrowser"},
 {"pid":1,"tid":1,"ph":"B","cat":"program","ts":2,"name":"createProgram","args":{"configFilePath":"/home/src/workspaces/project/tsconfig.json"}},
@@ -372,7 +372,9 @@ export declare const widget: import("./gadget").Gadget;
 {"pid":1,"tid":1,"ph":"B","cat":"emit","ts":136,"name":"emitDeclarationFileOrBundle","args":{"declarationFilePath":"/home/src/workspaces/project/out/main.d.ts"}},
 {"pid":1,"tid":1,"ph":"E","cat":"emit","ts":137,"name":"emitDeclarationFileOrBundle","args":{"declarationFilePath":"/home/src/workspaces/project/out/main.d.ts"}},
 {"pid":1,"tid":100209852,"ph":"E","cat":"emit","ts":138,"name":"emit","args":{"path":"/home/src/workspaces/project/main.ts"}},
-{"pid":1,"tid":1,"ph":"E","cat":"emit","ts":139,"name":"emit"}
+{"pid":1,"tid":100209852,"ph":"B","cat":"emit","ts":139,"name":"emitPrint","args":{"path":"/home/src/workspaces/project/main.ts"}},
+{"pid":1,"tid":100209852,"ph":"E","cat":"emit","ts":140,"name":"emitPrint","args":{"path":"/home/src/workspaces/project/main.ts"}},
+{"pid":1,"tid":1,"ph":"E","cat":"emit","ts":141,"name":"emit"}
 ]
 
 //// [/home/src/workspaces/project/trace/types_0.json] *new* 

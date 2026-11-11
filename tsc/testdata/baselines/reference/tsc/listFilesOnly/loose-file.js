@@ -4,7 +4,7 @@ Input::
 //// [/home/src/workspaces/project/test.ts] *new* 
 export const x = 1;
 
-tsgo test.ts --listFilesOnly
+tsc test.ts --listFilesOnly
 ExitStatus:: Success
 Output::
 /home/src/tslibs/TS/Lib/lib.es2026.full.d.ts

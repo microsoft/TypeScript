@@ -31,7 +31,7 @@ export const w = expand<typeof C>();
     "files": ["main.ts", "ambient.d.ts"]
 }
 
-tsgo --generateTrace /home/src/workspaces/project/trace --singleThreaded
+tsc --generateTrace /home/src/workspaces/project/trace --singleThreaded
 ExitStatus:: Success
 Output::
 //// [/home/src/tslibs/TS/Lib/lib.es2026.full.d.ts] *Lib*
@@ -104,7 +104,7 @@ export declare const w: {
 ]
 //// [/home/src/workspaces/project/trace/trace.json] *new* 
 [
-{"pid":1,"tid":1,"ph":"M","cat":"__metadata","ts":1,"name":"process_name","args":{"name":"tsgo"}},
+{"pid":1,"tid":1,"ph":"M","cat":"__metadata","ts":1,"name":"process_name","args":{"name":"tsc"}},
 {"pid":1,"tid":1,"ph":"M","cat":"__metadata","ts":1,"name":"thread_name","args":{"name":"Main"}},
 {"pid":1,"tid":1,"ph":"M","cat":"disabled-by-default-devtools.timeline","ts":1,"name":"TracingStartedInBrowser"},
 {"pid":1,"tid":1,"ph":"B","cat":"program","ts":2,"name":"createProgram","args":{"configFilePath":"/home/src/workspaces/project/tsconfig.json"}},
@@ -136,7 +136,9 @@ export declare const w: {
 {"pid":1,"tid":1,"ph":"B","cat":"emit","ts":24,"name":"emitDeclarationFileOrBundle","args":{"declarationFilePath":"/home/src/workspaces/project/out/main.d.ts"}},
 {"pid":1,"tid":1,"ph":"E","cat":"emit","ts":25,"name":"emitDeclarationFileOrBundle","args":{"declarationFilePath":"/home/src/workspaces/project/out/main.d.ts"}},
 {"pid":1,"tid":100209852,"ph":"E","cat":"emit","ts":26,"name":"emit","args":{"path":"/home/src/workspaces/project/main.ts"}},
-{"pid":1,"tid":1,"ph":"E","cat":"emit","ts":27,"name":"emit"}
+{"pid":1,"tid":100209852,"ph":"B","cat":"emit","ts":27,"name":"emitPrint","args":{"path":"/home/src/workspaces/project/main.ts"}},
+{"pid":1,"tid":100209852,"ph":"E","cat":"emit","ts":28,"name":"emitPrint","args":{"path":"/home/src/workspaces/project/main.ts"}},
+{"pid":1,"tid":1,"ph":"E","cat":"emit","ts":29,"name":"emit"}
 ]
 
 //// [/home/src/workspaces/project/trace/types_0.json] *new* 

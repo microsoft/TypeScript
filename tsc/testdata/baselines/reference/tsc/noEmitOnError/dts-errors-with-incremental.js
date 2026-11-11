@@ -21,7 +21,7 @@ export { }
     },
 }
 
-tsgo 
+tsc 
 ExitStatus:: Success
 Output::
 //// [/home/src/tslibs/TS/Lib/lib.es2026.full.d.ts] *Lib*
@@ -144,7 +144,7 @@ Signatures::
 
 Edit [0]:: no change
 
-tsgo 
+tsc 
 ExitStatus:: Success
 Output::
 
@@ -158,7 +158,7 @@ Edit [1]:: Fix error
 import { A } from "../shared/types/db";
 export const a = class { p = 10; };
 
-tsgo 
+tsc 
 ExitStatus:: Success
 Output::
 //// [/user/username/projects/noEmitOnError/dev-build/src/main.js] *rewrite with same content*
@@ -250,7 +250,7 @@ Signatures::
 
 Edit [2]:: no change
 
-tsgo 
+tsc 
 ExitStatus:: Success
 Output::
 

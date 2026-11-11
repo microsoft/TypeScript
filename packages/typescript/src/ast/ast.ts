@@ -13,7 +13,6 @@ import type {
     CaseClause,
     ComputedPropertyName,
     Decorator,
-    DefaultClause,
     DoStatement,
     EndOfFile,
     EntityName,
@@ -265,7 +264,6 @@ export type HasExpression =
     | WithStatement
     | SwitchStatement
     | CaseClause
-    | DefaultClause
     | ThrowStatement
     | AssertionExpression
     | TemplateSpan
