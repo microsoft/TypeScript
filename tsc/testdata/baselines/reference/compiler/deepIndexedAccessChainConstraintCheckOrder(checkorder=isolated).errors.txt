@@ -1,5 +1,5 @@
-deepIndexedAccessChainConstraintCheckOrder.ts(14,14): error TS2339: Property 'b' does not exist on type 'T'.
 deepIndexedAccessChainConstraintCheckOrder.ts(14,20): error TS2339: Property 'b' does not exist on type 'T["a"]["a"]["a"]["a"]["a"]["a"]["a"]["a"]["a"]["a"]'.
+deepIndexedAccessChainConstraintCheckOrder.ts(18,14): error TS2339: Property 'b' does not exist on type 'U["a"]["a"]["a"]["a"]["a"]["a"]["a"]["a"]["a"]["a"]'.
 
 
 ==== deepIndexedAccessChainConstraintCheckOrder.ts (2 errors) ====
@@ -17,13 +17,13 @@ deepIndexedAccessChainConstraintCheckOrder.ts(14,20): error TS2339: Property 'b'
         y: T["a"]["a"]["a"]["a"]["a"]["a"]["a"]["a"]["a"]["a"]
     ): string {
         return x.b + y.b;
-                 ~
-!!! error TS2339: Property 'b' does not exist on type 'T'.
                        ~
 !!! error TS2339: Property 'b' does not exist on type 'T["a"]["a"]["a"]["a"]["a"]["a"]["a"]["a"]["a"]["a"]'.
     }
     
     function lone<U extends Box>(y: U["a"]["a"]["a"]["a"]["a"]["a"]["a"]["a"]["a"]["a"]): string {
         return y.b;
+                 ~
+!!! error TS2339: Property 'b' does not exist on type 'U["a"]["a"]["a"]["a"]["a"]["a"]["a"]["a"]["a"]["a"]'.
     }
     

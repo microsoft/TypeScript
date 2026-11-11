@@ -1,9 +1,8 @@
-deepIndexedAccessChainConstraintCheckOrder.ts(14,14): error TS2339: Property 'b' does not exist on type 'T'.
 deepIndexedAccessChainConstraintCheckOrder.ts(14,20): error TS2339: Property 'b' does not exist on type 'T["a"]["a"]["a"]["a"]["a"]["a"]["a"]["a"]["a"]["a"]'.
 deepIndexedAccessChainConstraintCheckOrder.ts(18,14): error TS2339: Property 'b' does not exist on type 'U["a"]["a"]["a"]["a"]["a"]["a"]["a"]["a"]["a"]["a"]'.
 
 
-==== deepIndexedAccessChainConstraintCheckOrder.ts (3 errors) ====
+==== deepIndexedAccessChainConstraintCheckOrder.ts (2 errors) ====
     // The base constraint of a chain of indexed accesses is found through the
     // object type of each, all of which share the recursion identity of the
     // type parameter. The chain is finite, so the property access is valid
@@ -18,8 +17,6 @@ deepIndexedAccessChainConstraintCheckOrder.ts(18,14): error TS2339: Property 'b'
         y: T["a"]["a"]["a"]["a"]["a"]["a"]["a"]["a"]["a"]["a"]
     ): string {
         return x.b + y.b;
-                 ~
-!!! error TS2339: Property 'b' does not exist on type 'T'.
                        ~
 !!! error TS2339: Property 'b' does not exist on type 'T["a"]["a"]["a"]["a"]["a"]["a"]["a"]["a"]["a"]["a"]'.
     }

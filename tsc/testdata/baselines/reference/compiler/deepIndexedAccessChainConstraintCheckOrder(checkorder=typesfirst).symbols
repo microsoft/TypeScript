@@ -40,7 +40,9 @@ function victim<T extends Box>(
 
 ): string {
     return x.b + y.b;
+>x.b : Symbol(Box.b, Decl(deepIndexedAccessChainConstraintCheckOrder.ts, 5, 23))
 >x : Symbol(x, Decl(deepIndexedAccessChainConstraintCheckOrder.ts, 9, 31))
+>b : Symbol(Box.b, Decl(deepIndexedAccessChainConstraintCheckOrder.ts, 5, 23))
 >y : Symbol(y, Decl(deepIndexedAccessChainConstraintCheckOrder.ts, 10, 9))
 }
 
