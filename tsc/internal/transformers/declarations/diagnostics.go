@@ -150,7 +150,10 @@ func createGetSymbolAccessibilityDiagnosticForNode(node *ast.Node) GetSymbolAcce
 		return wrapSimpleDiagnosticSelector(node, getParameterDeclarationTypeVisibilityDiagnosticMessage)
 	} else if ast.IsTypeParameterDeclaration(node) {
 		return wrapSimpleDiagnosticSelector(node, getTypeParameterConstraintVisibilityDiagnosticMessage)
-	} else if ast.IsExpressionWithTypeArguments(node) {
+	} else if ast.IsExpressionWithTypeArguments(node) ||
+		(ast.IsTypeReferenceNode(node) &&
+			ast.IsHeritageClause(node.Parent) &&
+			!ast.IsClassExpression(node.Parent.Parent)) {
 		// unique node selection behavior, inline closure
 		return func(symbolAccessibilityResult printer.SymbolAccessibilityResult) *SymbolAccessibilityDiagnostic {
 			var diagnosticMessage *diagnostics.Message
@@ -158,7 +161,11 @@ func createGetSymbolAccessibilityDiagnosticForNode(node *ast.Node) GetSymbolAcce
 			if ast.IsClassDeclaration(node.Parent.Parent) {
 				// Class or Interface implemented/extended is inaccessible
 				if ast.IsHeritageClause(node.Parent) && node.Parent.AsHeritageClause().Token == ast.KindImplementsKeyword {
-					diagnosticMessage = diagnostics.Implements_clause_of_exported_class_0_has_or_is_using_private_name_1
+					if node.Parent.Parent.Name() != nil {
+						diagnosticMessage = diagnostics.Implements_clause_of_exported_class_0_has_or_is_using_private_name_1
+					} else {
+						diagnosticMessage = diagnostics.Default_export_of_the_module_has_or_is_using_private_name_0
+					}
 				} else {
 					if node.Parent.Parent.Name() != nil {
 						diagnosticMessage = diagnostics.X_extends_clause_of_exported_class_0_has_or_is_using_private_name_1
