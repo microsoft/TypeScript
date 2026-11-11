@@ -912,15 +912,19 @@ func TestDynamicContentMapperInProject(t *testing.T) {
 func TestDynamicContentMapperRefreshesForSavedOverlay(t *testing.T) {
 	t.Parallel()
 	for _, test := range []struct {
-		name          string
-		save          bool
-		watch         bool
-		editAfterSave bool
+		name           string
+		save           bool
+		watch          bool
+		editAfterSave  bool
+		openAfterWatch bool
+		closeAfterSave bool
 	}{
 		{name: "save", save: true},
 		{name: "watch", watch: true},
 		{name: "save and watch", save: true, watch: true},
 		{name: "save then edit", save: true, editAfterSave: true},
+		{name: "watch then open", watch: true, openAfterWatch: true},
+		{name: "save then close", save: true, closeAfterSave: true},
 	} {
 		t.Run(test.name, func(t *testing.T) {
 			t.Parallel()
@@ -947,20 +951,24 @@ func TestDynamicContentMapperRefreshesForSavedOverlay(t *testing.T) {
 			mainURI := lsproto.DocumentUri("file:///home/project/main.ts")
 			configURI := lsproto.DocumentUri("file:///home/project/mapper.config.json")
 			session.DidOpenFile(ctx, mainURI, 1, files["/home/project/main.ts"].(string), lsproto.LanguageKindTypeScript)
-			session.DidOpenFile(ctx, configURI, 1, files["/home/project/mapper.config.json"].(string), lsproto.LanguageKindJSON)
-			_, err := session.GetLanguageService(ctx, mainURI)
+			if !test.openAfterWatch {
+				session.DidOpenFile(ctx, configURI, 1, files["/home/project/mapper.config.json"].(string), lsproto.LanguageKindJSON)
+			}
+			languageService, err := session.GetLanguageService(ctx, mainURI)
 			assert.NilError(t, err)
 			opens := lifecycle.Opens.Load()
 			closes := lifecycle.Closes.Load()
 			assert.Assert(t, opens > 0)
 
 			const savedContent = `{ "version": 2 }`
-			session.DidChangeFile(ctx, configURI, 2, []lsproto.TextDocumentContentChangePartialOrWholeDocument{{
-				WholeDocument: &lsproto.TextDocumentContentChangeWholeDocument{Text: savedContent},
-			}})
-			// Flush the edit before saving; the mapper cannot observe unsaved overlay content.
-			languageService, err := session.GetLanguageService(ctx, mainURI)
-			assert.NilError(t, err)
+			if !test.openAfterWatch {
+				session.DidChangeFile(ctx, configURI, 2, []lsproto.TextDocumentContentChangePartialOrWholeDocument{{
+					WholeDocument: &lsproto.TextDocumentContentChangeWholeDocument{Text: savedContent},
+				}})
+				// Flush the edit before saving; the mapper cannot observe unsaved overlay content.
+				languageService, err = session.GetLanguageService(ctx, mainURI)
+				assert.NilError(t, err)
+			}
 			assert.Equal(t, lifecycle.Opens.Load(), opens)
 			assert.Equal(t, lifecycle.Closes.Load(), closes)
 			program := languageService.GetProgram()
@@ -976,6 +984,12 @@ func TestDynamicContentMapperRefreshesForSavedOverlay(t *testing.T) {
 				session.DidChangeFile(ctx, configURI, 3, []lsproto.TextDocumentContentChangePartialOrWholeDocument{{
 					WholeDocument: &lsproto.TextDocumentContentChangeWholeDocument{Text: `{ "version": 3 }`},
 				}})
+			}
+			if test.openAfterWatch {
+				session.DidOpenFile(ctx, configURI, 1, savedContent, lsproto.LanguageKindJSON)
+			}
+			if test.closeAfterSave {
+				session.DidCloseFile(ctx, configURI)
 			}
 			session.WaitForBackgroundTasks()
 			languageService, err = session.GetLanguageService(ctx, mainURI)

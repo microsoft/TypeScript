@@ -459,7 +459,6 @@ func (fs *overlayFS) processChanges(changes []FileChange) (FileChangeSummary, ma
 			events.watchChanged = false
 			events.changes = nil
 			events.saved = false
-			events.saveObserved = false
 			events.created = false
 			events.deleted = false
 		case FileChangeKindClose:
@@ -506,6 +505,10 @@ func (fs *overlayFS) processChanges(changes []FileChange) (FileChangeSummary, ma
 	for uri, events := range fileEventMap {
 		path := uri.PathKey(fs.caseSensitivity)
 		o := newOverlays[path]
+
+		if (o != nil || events.openChange != nil) && (events.watchObserved || events.saveObserved) {
+			result.DiskChanged.Add(uri)
+		}
 
 		if events.openChange != nil {
 			if result.Opened != "" || result.Reopened != "" {
@@ -568,7 +571,6 @@ func (fs *overlayFS) processChanges(changes []FileChange) (FileChangeSummary, ma
 		}
 
 		if o != nil && (events.watchObserved || events.saveObserved) {
-			result.DiskChanged.Add(uri)
 			if matchesDiskText, _ := o.computeMatchesDiskText(fs.host); matchesDiskText != o.MatchesDiskText() {
 				o = newOverlay(o.FileName(), o.Content(), o.Version(), o.kind)
 				o.matchesDiskText = matchesDiskText
