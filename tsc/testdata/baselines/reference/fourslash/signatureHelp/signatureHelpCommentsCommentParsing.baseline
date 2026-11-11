@@ -234,7 +234,6 @@
 //    ^
 // | ----------------------------------------------------------------------
 // | f1(**b: string**): any
-// | - `b: string`: about b
 // | fn f1 with number
 // | ----------------------------------------------------------------------
 // 
@@ -1126,11 +1125,7 @@ not aligned text about parameter will eat only one space
           },
           "parameters": [
             {
-              "label": "b: string",
-              "documentation": {
-                "kind": "markdown",
-                "value": "about b"
-              }
+              "label": "b: string"
             }
           ],
           "activeParameter": 0
@@ -1172,11 +1167,7 @@ not aligned text about parameter will eat only one space
           },
           "parameters": [
             {
-              "label": "b: string",
-              "documentation": {
-                "kind": "markdown",
-                "value": "about b"
-              }
+              "label": "b: string"
             }
           ],
           "activeParameter": 0

@@ -43,7 +43,7 @@
 // | ```typescript
 // | (parameter) b: string
 // | ```
-// | 
+// | inner parameter
 // | ----------------------------------------------------------------------
 //         var localVar = "Hello ";
 //             ^^^^^^^^
@@ -66,7 +66,7 @@
 // | ```typescript
 // | (parameter) b: string
 // | ```
-// | 
+// | inner parameter
 // | ----------------------------------------------------------------------
 //     }
 //     return lambdaVar("World") + a;
@@ -237,7 +237,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```typescript\n(parameter) b: string\n```\n"
+        "value": "```typescript\n(parameter) b: string\n```\ninner parameter"
       },
       "range": {
         "start": {
@@ -318,7 +318,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```typescript\n(parameter) b: string\n```\n"
+        "value": "```typescript\n(parameter) b: string\n```\ninner parameter"
       },
       "range": {
         "start": {
