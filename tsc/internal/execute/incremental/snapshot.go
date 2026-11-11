@@ -330,8 +330,9 @@ type snapshot struct {
 	// If semantic diagnostic check is pending
 	checkPending bool
 	// Looked up package.json files from
-	packageJsons        []tspath.RootedFilePath
-	missingPackageJsons []tspath.RootedFilePath
+	packageJsons            []tspath.RootedFilePath
+	missingPackageJsons     []tspath.RootedFilePath
+	linkedPackagesSignature string
 
 	// Additional fields that are not serialized but needed to track state
 

@@ -2,6 +2,7 @@ package tsctests
 
 import (
 	"fmt"
+	"slices"
 	"strings"
 	"testing"
 
@@ -598,6 +599,22 @@ func TestWatch(t *testing.T) {
 				}),
 			},
 		},
+		func() *tscInput {
+			input := linkedPackageDeclarationEmitTestInput(
+				"watch updates declaration emit when linked dependency is removed and added",
+				[]string{"--watch", "--incremental", "false"},
+			)
+			input.edits = slices.DeleteFunc(input.edits, func(edit *tscEdit) bool { return edit == noChange })
+			return input
+		}(),
+		func() *tscInput {
+			input := linkedPackageNestedManifestTestInput(
+				"watch updates declaration emit when nested manifest of linked package changes",
+				[]string{"--watch", "--incremental", "false"},
+			)
+			input.edits = slices.DeleteFunc(input.edits, func(edit *tscEdit) bool { return edit == noChange })
+			return input
+		}(),
 	}
 
 	for _, test := range testCases {
