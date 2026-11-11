@@ -1,0 +1,57 @@
+//// [tests/cases/compiler/globalAugmentationResolvingAliasToPatternAmbientModuleWithAttributes2.ts] ////
+
+=== /types.d.ts ===
+declare module "*.style" {
+>"*.style" : typeof import("*.style")
+
+    export interface Bar { kind: "plain" }
+>kind : "plain"
+}
+declare module "*.style" with { type: "css" } {
+>"*.style" : typeof import("*.style", { with: { type: "css" } })
+>type : "css"
+
+    export interface Bar { kind: "css" }
+>kind : "css"
+}
+
+=== /a.ts ===
+import * as NS from "./a.style" with { type: "css" };
+>NS : typeof NS
+>type : error
+
+declare global {
+>global : typeof global
+
+    namespace G {
+>G : typeof G
+
+        import Foo = NS.Bar;
+>Foo : any
+>NS : typeof NS
+>Bar : Foo
+
+        export { Foo };
+>Foo : any
+    }
+}
+
+=== /b.ts ===
+export {};
+declare global {
+>global : any
+
+    namespace G {
+        interface Foo {
+            x: number;
+>x : number
+        }
+    }
+}
+
+=== /c.ts ===
+export const kind: G.Foo["kind"] = "css";
+>kind : "css"
+>G : any
+>"css" : "css"
+
