@@ -397,7 +397,7 @@ func (r *Registry) Clone(ctx context.Context, change RegistryChange, host Regist
 	builder := newRegistryBuilder(r, host, currentDirectory)
 	if change.UserPreferences != nil {
 		builder.userPreferences = *change.UserPreferences
-		if !core.UnorderedEqual(builder.userPreferences.AutoImportSpecifierExcludeRegexes, r.userPreferences.AutoImportSpecifierExcludeRegexes) {
+		if !builder.userPreferences.ModuleSpecifierPreferences().Equal(r.userPreferences.ModuleSpecifierPreferences()) {
 			builder.specifierCache.Clear()
 		}
 	}
