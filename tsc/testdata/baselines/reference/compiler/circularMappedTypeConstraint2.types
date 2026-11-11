@@ -1,0 +1,59 @@
+//// [tests/cases/compiler/circularMappedTypeConstraint2.ts] ////
+
+=== circularMappedTypeConstraint2.ts ===
+// https://github.com/microsoft/TypeScript/issues/62176
+
+type Test = keyof {
+>Test : any
+
+    [P in keyof P]: unknown  // Error
+};
+
+declare const test: Test;
+>test : any
+
+export function getTest() {
+>getTest : () => any
+
+    return test;
+>test : any
+}
+
+type Cond<T> = T extends string ? { a: T } : { b: T };
+>Cond : Cond<T>
+>a : T
+>b : T
+
+type T1 = { [P in keyof P | "x"]: unknown };  // Error
+>T1 : T1
+
+type T2 = { [P in Extract<keyof P, string>]: unknown };  // Error
+>T2 : T2
+
+type T3 = { [P in keyof Cond<P>]: unknown };  // Error
+>T3 : T3
+
+type T4<T> = { [P in keyof P]: T };  // Error
+>T4 : T4<T>
+
+declare const t4: keyof T4<string>;
+>t4 : any
+
+export function getT4() {
+>getT4 : () => any
+
+    return t4;
+>t4 : any
+}
+
+// No errors
+
+type T5<T extends keyof T> = T;
+>T5 : T
+
+type T6 = { [P in keyof { [P in "a" | "b"]: P }]: P };
+>T6 : T6
+
+type T7<T> = { [P in keyof T as `get${P & string}`]: T[P] };
+>T7 : T7<T>
+
