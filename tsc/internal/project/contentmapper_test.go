@@ -912,13 +912,15 @@ func TestDynamicContentMapperInProject(t *testing.T) {
 func TestDynamicContentMapperRefreshesForSavedOverlay(t *testing.T) {
 	t.Parallel()
 	for _, test := range []struct {
-		name  string
-		save  bool
-		watch bool
+		name          string
+		save          bool
+		watch         bool
+		editAfterSave bool
 	}{
 		{name: "save", save: true},
 		{name: "watch", watch: true},
 		{name: "save and watch", save: true, watch: true},
+		{name: "save then edit", save: true, editAfterSave: true},
 	} {
 		t.Run(test.name, func(t *testing.T) {
 			t.Parallel()
@@ -969,6 +971,11 @@ func TestDynamicContentMapperRefreshesForSavedOverlay(t *testing.T) {
 			}
 			if test.watch {
 				session.DidChangeWatchedFiles(ctx, []*lsproto.FileEvent{{Uri: configURI, Type: lsproto.FileChangeTypeChanged}})
+			}
+			if test.editAfterSave {
+				session.DidChangeFile(ctx, configURI, 3, []lsproto.TextDocumentContentChangePartialOrWholeDocument{{
+					WholeDocument: &lsproto.TextDocumentContentChangeWholeDocument{Text: `{ "version": 3 }`},
+				}})
 			}
 			session.WaitForBackgroundTasks()
 			languageService, err = session.GetLanguageService(ctx, mainURI)

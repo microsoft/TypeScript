@@ -425,6 +425,7 @@ func (fs *overlayFS) processChanges(changes []FileChange) (FileChangeSummary, ma
 		watchChanged  bool
 		changes       []*FileChange
 		saved         bool
+		saveObserved  bool
 		created       bool
 		deleted       bool
 		watchObserved bool
@@ -458,6 +459,7 @@ func (fs *overlayFS) processChanges(changes []FileChange) (FileChangeSummary, ma
 			events.watchChanged = false
 			events.changes = nil
 			events.saved = false
+			events.saveObserved = false
 			events.created = false
 			events.deleted = false
 		case FileChangeKindClose:
@@ -474,6 +476,7 @@ func (fs *overlayFS) processChanges(changes []FileChange) (FileChangeSummary, ma
 			events.watchChanged = false
 		case FileChangeKindSave:
 			events.saved = true
+			events.saveObserved = true
 		case FileChangeKindWatchCreate:
 			if events.deleted {
 				// Delete followed by create becomes a change
@@ -564,7 +567,7 @@ func (fs *overlayFS) processChanges(changes []FileChange) (FileChangeSummary, ma
 			}
 		}
 
-		if o != nil && (events.watchObserved || events.saved) {
+		if o != nil && (events.watchObserved || events.saveObserved) {
 			result.DiskChanged.Add(uri)
 			if matchesDiskText, _ := o.computeMatchesDiskText(fs.host); matchesDiskText != o.MatchesDiskText() {
 				o = newOverlay(o.FileName(), o.Content(), o.Version(), o.kind)

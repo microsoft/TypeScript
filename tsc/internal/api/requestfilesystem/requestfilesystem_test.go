@@ -45,6 +45,27 @@ func newLayeredRequestFileSystem(params *RequestFileSystem, base vfs.FS, current
 	return fileSystem.(*requestFileSystem), nil
 }
 
+func TestRequestFileSystemExpandDiskChangedAliases(t *testing.T) {
+	t.Parallel()
+	fileSystem, err := newRequestFileSystem(&RequestFileSystem{
+		Kind: KindFull,
+		Files: map[string]string{
+			"/packages/pkg/package.json": `{"name":"pkg"}`,
+		},
+		Symlinks: map[string]RequestSymlink{
+			"/project/node_modules/pkg": {Target: "../../../packages/pkg"},
+		},
+	}, vfstest.FromMap(map[string]string{}, tspath.CaseSensitive), "/")
+	assert.NilError(t, err)
+
+	var change project.FileChangeSummary
+	change.DiskChanged.Add("file:///packages/pkg/package.json")
+	expanded := fileSystem.ExpandFileChanges(change)
+
+	assert.Assert(t, expanded.DiskChanged.Has("file:///packages/pkg/package.json"))
+	assert.Assert(t, expanded.DiskChanged.Has("file:///project/node_modules/pkg/package.json"))
+}
+
 func verifyCompactionWithoutHostReads(t *testing.T, layer *requestFileSystem, host *trackingvfs.FS, paths []string) {
 	t.Helper()
 	compacted, err := newRequestFileSystem(&RequestFileSystem{Kind: KindLayer}, layer, layer.currentDirectory.AsString())

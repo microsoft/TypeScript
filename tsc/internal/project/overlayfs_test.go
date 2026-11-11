@@ -163,6 +163,37 @@ func TestProcessChanges(t *testing.T) {
 		assert.Assert(t, fh.MatchesDiskText())
 	})
 
+	t.Run("save followed by edit records disk change", func(t *testing.T) {
+		t.Parallel()
+		fs := createOverlayFS()
+		const savedContent = "const x = 1;"
+		fs.processChanges([]FileChange{
+			{
+				Kind:         FileChangeKindOpen,
+				URI:          testURI1,
+				Version:      1,
+				Content:      savedContent,
+				LanguageKind: lsproto.LanguageKindTypeScript,
+			},
+		})
+		assert.NilError(t, fs.host.WriteFile(testURI1.FileName(), savedContent))
+
+		result, _ := fs.processChanges([]FileChange{
+			{Kind: FileChangeKindSave, URI: testURI1},
+			{
+				Kind:    FileChangeKindChange,
+				URI:     testURI1,
+				Version: 2,
+				Changes: []lsproto.TextDocumentContentChangePartialOrWholeDocument{{
+					WholeDocument: &lsproto.TextDocumentContentChangeWholeDocument{Text: "const x = 2;"},
+				}},
+			},
+		})
+
+		assert.Assert(t, result.DiskChanged.Has(testURI1))
+		assert.Assert(t, !fs.GetFile(testURI1.FileName()).MatchesDiskText())
+	})
+
 	t.Run("open falls back to file extension for unknown language kind", func(t *testing.T) {
 		t.Parallel()
 		fs := createOverlayFS()
