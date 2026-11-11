@@ -12,6 +12,7 @@ import (
 	"strings"
 	"sync"
 	"sync/atomic"
+	"unicode/utf8"
 
 	"github.com/microsoft/TypeScript/tsc/internal/ast"
 	"github.com/microsoft/TypeScript/tsc/internal/binder"
@@ -8774,7 +8775,11 @@ func (c *Checker) resolveCallExpression(node *ast.Node, candidatesOutArray *[]*S
 			if len(node.Arguments()) == 1 {
 				text := ast.GetSourceFileOfNode(node).Text()
 				options := scanner.SkipTriviaOptions{StopAfterLineBreak: true}
-				if stringutil.IsLineBreak(rune(text[scanner.SkipTriviaEx(text, node.Expression().End(), &options)-1])) {
+				end := scanner.SkipTriviaEx(text, node.Expression().End(), &options)
+				// Decode the last rune rather than indexing a single byte, so that
+				// multi-byte line terminators (U+2028, U+2029) are recognized.
+				lastChar, _ := utf8.DecodeLastRuneInString(text[:end])
+				if stringutil.IsLineBreak(lastChar) {
 					relatedInformation = createDiagnosticForNode(node.Expression(), diagnostics.Are_you_missing_a_semicolon)
 				}
 			}

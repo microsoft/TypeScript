@@ -1,0 +1,30 @@
+//// [tests/cases/compiler/accidentalCallWithLineSeparator.ts] ////
+
+=== accidentalCallWithLineSeparator.ts ===
+declare function foo(): string;
+>foo : () => string
+
+foo()
+>foo() (1 as number).toString() : any
+>foo() (1 as number).toString : any
+>foo() (1 as number) : any
+>foo() : string
+>foo : () => string
+
+(1 as number).toString();
+>1 as number : number
+>1 : 1
+>toString : any
+
+foo()
+>foo() (1 as number).toString() : any
+>foo() (1 as number).toString : any
+>foo() (1 as number) : any
+>foo() : string
+>foo : () => string
+
+(1 as number).toString();
+>1 as number : number
+>1 : 1
+>toString : any
+
