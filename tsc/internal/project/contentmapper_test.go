@@ -1014,7 +1014,7 @@ func TestDynamicContentMapperRefreshesForWatchedOverlayAlias(t *testing.T) {
 	const configContent = `{ "version": 1 }`
 	const mainContent = `import { value } from "./app.box"; value;`
 	files := map[string]any{
-		projectDirectory:                                vfstest.Symlink("/packages/pkg"),
+		projectDirectory: vfstest.Symlink("/packages/pkg"),
 		"/home/project/node_modules/mapper/package.json": contentmappertest.PackageJSON(contentmappertest.DynamicVerbatimMapper),
 		"/packages/pkg/tsconfig.json":                    `{ "compilerOptions": { "resolveJsonModule": true }, "files": ["main.ts", "mapper.config.json"], "contentMappers": [{ "package": "mapper", "extensions": [".box"] }] }`,
 		"/packages/pkg/mapper.config.json":               configContent,
